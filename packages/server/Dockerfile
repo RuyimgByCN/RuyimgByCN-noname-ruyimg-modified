@@ -29,10 +29,14 @@ COPY --from=build /app/dist /app/dist
 RUN set -eux \
     && groupadd --system --gid 999 nonroot \
     && useradd --system --gid 999 --uid 999 -m appuser \
+    && mkdir -p /app/data \
     && chown -R appuser:nonroot /app/
 
 USER appuser
 EXPOSE 8082
 WORKDIR /app
+
+# 挂载 /app/data 使 SQLite（账号/战绩/好友）跨重启持久化
+VOLUME ["/app/data"]
 
 CMD ["node", "dist/index.js"]

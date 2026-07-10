@@ -16,7 +16,33 @@ export default defineConfig({
 			noname: "/noname.js",
 		},
 	},
-	plugins: [vue()],
+	plugins: [
+		vue(),
+		{
+			// vite 返回 text/html 不带 charset，且 @vite/client 被注入到 <meta charset> 之前，
+			// 中文 locale 浏览器会锁定 GBK 编码，导致 UTF-8 classic 脚本里的中文乱码（SyntaxError）。
+			// 修复：① HTTP 层声明 charset=utf-8 绕过编码嗅探；
+			//       ② 剥离 HTML 请求的条件头，避免 304 命中浏览器缓存的旧（无 charset）响应头。
+			name: "force-html-utf8",
+			configureServer(server) {
+				server.middlewares.use((req, res, next) => {
+					if (req.url && /\.html?(?:$|\?)/.test(req.url)) {
+						delete req.headers["if-none-match"];
+						delete req.headers["if-modified-since"];
+					}
+					const end = res.end.bind(res);
+					(res as { end: (...args: unknown[]) => unknown }).end = (...args: unknown[]) => {
+						const ct = res.getHeader("content-type");
+						if (typeof ct === "string" && ct.includes("text/html") && !ct.includes("charset")) {
+							res.setHeader("content-type", "text/html; charset=utf-8");
+						}
+						return end(...args);
+					};
+					next();
+				});
+			},
+		},
+	],
 	server: {
 		host: "127.0.0.1",
 		port: port.client,

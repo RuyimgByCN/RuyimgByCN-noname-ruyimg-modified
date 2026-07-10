@@ -1,0 +1,4 @@
+
+# localhost 自签证书/私钥（dev 用，不入库）
+localhost.crt
+localhost.decrypted.key

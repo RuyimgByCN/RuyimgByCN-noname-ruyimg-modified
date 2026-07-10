@@ -1,0 +1,23 @@
+services:
+  noname-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    volumes:
+      - noname-data:/app/data
+    environment:
+      PORT: "8082"
+      HOST: "0.0.0.0"
+      # TLS_CERT: /certs/fullchain.pem
+      # TLS_KEY:  /certs/privkey.pem
+      # ALLOW_ORIGIN: https://game.example.com
+    # 如需直接 TLS，挂载证书目录：
+    # volumes:
+    #   - noname-data:/app/data
+    #   - /etc/letsencrypt/live/yourdomain.com:/certs:ro
+
+volumes:
+  noname-data:

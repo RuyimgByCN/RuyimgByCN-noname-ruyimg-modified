@@ -1,15 +1,46 @@
 audio/*.TXT
 image/*.TXT
 
-extension/**
-!extension/boss/**
-!extension/cardpile/**
-!extension/coin/**
-!extension/3D精选/**
-!extension/杀海拾遗/**
-!extension/欢乐卡牌/**
-!extension/玩点论杀/**
-!extension/英雄杀/**
+extension/*
+!extension/boss/
+!extension/cardpile/
+!extension/coin/
+!extension/3D精选/
+!extension/杀海拾遗/
+!extension/欢乐卡牌/
+!extension/玩点论杀/
+!extension/英雄杀/
+# ===== Liuli 整合扩展 (M4) =====
+!extension/AI优化/
+!extension/SJ Settings/
+!extension/boss_liuli/
+!extension/cardpile_liuli/
+!extension/coin_liuli/
+!extension/wuxing/
+!extension/wuxing_liuli/
+!extension/笨蛋插件/
+!extension/电脑适配/
+!extension/全能搜索/
+!extension/十周年UI/
+!extension/千幻聆音/
+!extension/史诗卡牌/
+!extension/太虚幻境/
+!extension/如真似幻/
+!extension/手杀MVP/
+!extension/手杀ui/
+!extension/手杀全扩/
+!extension/拖拽读取/
+!extension/斗转星移/
+!extension/更新保护/
+!extension/末日乱斗/
+!extension/标记补充/
+!extension/武皇争霸/
+!extension/段位制裁/
+!extension/皮肤切换/
+!extension/祖安武将/
+!extension/选将美化/
+!extension/雷霆万钧/
+!extension/龙血玄黄/
 
 dist
 dist-types

@@ -26,6 +26,24 @@ export default function nodeReady({ lib, game, get, _status, ui }) {
 				window.require[key] = value;
 			});
 		}
+		// 兼容皮肤切换扩展的 spine-pixi:Electron(nodeIntegration) 下其 __require
+		// 会走原生 require('pixi.js'),而 app 根无 pixi.js 模块会报错。
+		// 浏览器下 typeof require==="undefined" 才走 window.PIXI 分支,Electron 下需此短路。
+		// lib.init.js 保证 pixi.min.js 先加载,此处被调用时 window.PIXI 必定已就绪。
+		// 注:此 patch 不依赖 asar 路径判断,任何有 window.require 的 Electron 环境都生效。
+		if (typeof window.require === "function") {
+			const prevRequire = window.require;
+			// @ts-expect-error ignore
+			window.require = function (moduleId) {
+				if (typeof window.PIXI === "object" && (moduleId === "pixi.js" || moduleId.startsWith("@pixi/"))) {
+					return window.PIXI;
+				}
+				return prevRequire(moduleId);
+			};
+			Object.entries(prevRequire).forEach(([key, value]) => {
+				window.require[key] = value;
+			});
+		}
 		// 	// 增加导入ts的逻辑
 		// 	window.require.extensions[".ts"] = function (module, filename) {
 		// 		// @ts-expect-error ignore

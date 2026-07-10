@@ -1,4 +1,9 @@
 import { WebSocket, WebSocketServer } from "ws";
+import { register as doRegister, login as doLogin, verifyToken } from "./auth.ts";
+import * as roomApi from "./room.ts";
+import { stmts } from "./db.ts";
+import fs from "node:fs";
+import https from "node:https";
 
 interface Client extends WebSocket {
 	wsid: string;
@@ -6,6 +11,9 @@ interface Client extends WebSocket {
 	avatar: string;
 	clientIp: string;
 	onlineKey?: string;
+	uid?: number;
+	ready?: boolean;
+	isObserver?: boolean;
 	status?: string;
 	owner?: Client;
 	room?: Room;
@@ -107,7 +115,7 @@ const util = {
 	buildClientList(): any[] {
 		const out: any[] = [];
 		clients.forEach(c => {
-			out.push([c.nickname, c.avatar, !c.room, c.status, c.wsid, c.onlineKey]);
+			out.push([c.nickname, c.avatar, !c.room, c.status, c.wsid, c.onlineKey, c.uid ?? null]);
 		});
 		return out;
 	},
@@ -124,6 +132,13 @@ const util = {
 		const list = util.buildClientList();
 		clients.forEach(c => {
 			if (!c.room) util.sendl(c, "updateclients", list);
+		});
+	},
+
+	updateRoomListPublic() {
+		const list = roomApi.buildRoomListPublic();
+		clients.forEach(c => {
+			if (!c.room) util.sendl(c, "roomListUpdate", list);
 		});
 	},
 
@@ -302,9 +317,239 @@ const handlers = {
 		const target = clients.get(id);
 		if (target && target.owner === client) target.close();
 	},
+	register(client: Client, username: string, password: string) {
+		const r = doRegister(username, password);
+		if (r.ok) util.sendl(client, "registerResult", true, r.uid);
+		else util.sendl(client, "registerResult", false, r.error);
+	},
+	login(client: Client, username: string, password: string) {
+		const r = doLogin(username, password);
+		if (r.ok) {
+			client.uid = r.uid;
+			client.nickname = username;
+			util.sendl(client, "loginResult", true, r.token, r.uid);
+		} else {
+			util.sendl(client, "loginResult", false, r.error);
+		}
+	},
+	auth(client: Client, token: string) {
+		const r = verifyToken(token);
+		if (r.ok) {
+			client.uid = r.uid;
+			clearTimeout(client.keyCheck);
+			if (!client.nickname) {
+				const row = stmts.getUserById.get(r.uid) as { username: string } | undefined;
+				if (row) client.nickname = row.username;
+			}
+			util.sendl(client, "authResult", true, r.uid);
+		} else {
+			util.sendl(client, "authResult", false, r.error);
+		}
+	},
+	createRoom(client: Client, name: string, mode: string, maxPlayers: number, password: string | undefined, config: any) {
+		const r = roomApi.createRoom(client as any, { name, mode, maxPlayers, password: password || undefined, config });
+		if (r.ok) {
+			util.sendl(client, "createRoomResult", true, r.roomId, r.key, roomApi.buildRoomInfo(client.room as any));
+			util.updateRoomListPublic();
+		} else util.sendl(client, "createRoomResult", false, r.error);
+	},
+	joinRoom(client: Client, roomId: string, password?: string) {
+		const r = roomApi.joinRoom(client as any, roomId, password);
+		if (r.ok) {
+			util.sendl(client, "joinRoomResult", true, roomApi.buildRoomInfo(r.room));
+			util.updateRoomListPublic();
+		} else util.sendl(client, "joinRoomResult", false, r.error);
+	},
+	observe(client: Client, roomId: string, password?: string) {
+		const r = roomApi.observe(client as any, roomId, password);
+		if (r.ok) {
+			util.sendl(client, "observeResult", true, roomApi.buildRoomInfo(r.room));
+			util.updateRoomListPublic();
+		} else util.sendl(client, "observeResult", false, r.error);
+	},
+	leaveRoom(client: Client) {
+		const r = roomApi.leaveRoom(client as any);
+		util.sendl(client, "leaveRoomResult", r.ok, r.ok ? undefined : (r as any).error);
+		if (r.ok) util.updateRoomListPublic();
+	},
+	ready(client: Client, isReady: boolean) {
+		const r = roomApi.setReady(client as any, isReady);
+		if (!r.ok) util.sendl(client, "readyResult", false, r.error);
+	},
+	startGame(client: Client) {
+		const r = roomApi.startGame(client as any);
+		if (r.ok) {
+			// 为所有 slave 设置 relay（slave.owner = ownerClient），
+			// 游戏消息之后通过 send/onmessage/onclose 在 owner↔slave 间中继
+			for (const slave of r.slaves) {
+				const slaveClient = clients.get((slave as any).wsid) as Client | undefined;
+				if (slaveClient) slaveClient.owner = client;
+			}
+			util.sendl(client, "startGameResult", true);
+			util.updateRoomListPublic();
+		} else util.sendl(client, "startGameResult", false, r.error);
+	},
+	// owner 调用 waitForPlayer/createServer() 后通知服务器准备好了，
+	// 服务器此时才向 owner 发 onconnection，触发 lib.init.connection
+	ownerReady(client: Client) {
+		clients.forEach(c => {
+			if (c.owner === client) {
+				util.sendl(client, "onconnection", c.wsid);
+			}
+		});
+	},
+	kick(client: Client, targetWsid: string) {
+		const r = roomApi.kick(client as any, targetWsid);
+		if (!r.ok) util.sendl(client, "kickResult", false, r.error);
+		else util.updateRoomListPublic();
+	},
+	transferOwner(client: Client, targetWsid: string) {
+		const r = roomApi.transferOwner(client as any, targetWsid);
+		if (!r.ok) util.sendl(client, "transferOwnerResult", false, r.error);
+	},
+	setPassword(client: Client, password?: string) {
+		const r = roomApi.setPassword(client as any, password);
+		if (!r.ok) util.sendl(client, "setPasswordResult", false, r.error);
+	},
+	setConfig(client: Client, config: any) {
+		const r = roomApi.setConfig(client as any, config);
+		if (!r.ok) util.sendl(client, "setConfigResult", false, r.error);
+	},
+
+	// ===== M7 战绩/好友 =====
+
+	// owner 在游戏结束时上报结果，格式：results = [{wsid, role, outcome}]
+	// outcome: 'win' | 'lose' | 'draw'
+	gameResult(client: Client, mode: string, results: Array<{ wsid: string; role: string; outcome: string }>) {
+		if (!client.uid) return;
+		if (!Array.isArray(results)) return;
+		const now = Date.now();
+		for (const r of results) {
+			if (!r || typeof r.wsid !== "string" || typeof r.role !== "string") continue;
+			const target = clients.get(r.wsid);
+			const uid = target?.uid;
+			if (!uid) continue;
+			const outcome = r.outcome === "win" ? [1, 0, 0] : r.outcome === "draw" ? [0, 0, 1] : [0, 1, 0];
+			stmts.upsertWinrate.run(uid, mode || "identity", r.role || "unknown", ...outcome);
+		}
+	},
+
+	getStats(client: Client, targetUid?: number) {
+		const uid = targetUid || client.uid;
+		if (!uid) return util.sendl(client, "statsResult", false, "notLoggedIn");
+		const user = stmts.getUserById.get(uid) as any;
+		if (!user) return util.sendl(client, "statsResult", false, "userNotFound");
+		const stats = stmts.getWinrateByUid.all(uid) as any[];
+		util.sendl(client, "statsResult", true, {
+			uid,
+			username: user.username,
+			avatar: user.avatar,
+			stats,
+		});
+	},
+
+	getFriendList(client: Client) {
+		if (!client.uid) return util.sendl(client, "friendListResult", false, "notLoggedIn");
+		const rows = stmts.getFriendList.all(client.uid) as any[];
+		// 标记在线状态
+		const onlineUids = new Set<number>();
+		clients.forEach(c => { if (c.uid) onlineUids.add(c.uid); });
+		const friends = rows.map(r => ({
+			uid: r.id,
+			username: r.username,
+			avatar: r.avatar,
+			status: r.status,       // 'pending' | 'accepted'
+			online: onlineUids.has(r.id),
+		}));
+		util.sendl(client, "friendListResult", true, friends);
+	},
+
+	addFriend(client: Client, targetUid: number) {
+		if (!client.uid) return util.sendl(client, "addFriendResult", false, "notLoggedIn");
+		if (targetUid === client.uid) return util.sendl(client, "addFriendResult", false, "cannotAddSelf");
+		const target = stmts.getUserById.get(targetUid) as any;
+		if (!target) return util.sendl(client, "addFriendResult", false, "userNotFound");
+		// 检查反向是否已有好友申请（对方已先申请我 → 直接接受）
+		const reverse = stmts.getFriendStatus.get(targetUid, client.uid) as any;
+		if (reverse) {
+			if (reverse.status === "accepted") {
+				// 双方都已接受，重复操作
+				return util.sendl(client, "addFriendResult", false, "alreadyFriends");
+			}
+			// 对方已申请我 → 直接双向接受
+			stmts.acceptFriendRequest.run(targetUid, client.uid);
+			stmts.insertFriendAccepted.run(client.uid, targetUid, Date.now());
+			util.sendl(client, "addFriendResult", true, "accepted");
+			// 通知对方申请被接受
+			clients.forEach(c => {
+				if (c.uid === targetUid) util.sendl(c, "friendAccepted", client.uid);
+			});
+			return;
+		}
+		stmts.insertFriendRequest.run(client.uid, targetUid, Date.now());
+		util.sendl(client, "addFriendResult", true, "pending");
+		// 通知目标用户（如在线）
+		clients.forEach(c => {
+			if (c.uid === targetUid) util.sendl(c, "friendRequest", client.uid, (stmts.getUserById.get(client.uid) as any)?.username);
+		});
+	},
+
+	acceptFriend(client: Client, fromUid: number) {
+		if (!client.uid) return util.sendl(client, "acceptFriendResult", false, "notLoggedIn");
+		const req = stmts.getFriendStatus.get(fromUid, client.uid) as any;
+		if (!req || req.status !== "pending") return util.sendl(client, "acceptFriendResult", false, "noRequest");
+		stmts.acceptFriendRequest.run(fromUid, client.uid);
+		stmts.insertFriendAccepted.run(client.uid, fromUid, Date.now());
+		util.sendl(client, "acceptFriendResult", true);
+		clients.forEach(c => {
+			if (c.uid === fromUid) util.sendl(c, "friendAccepted", client.uid);
+		});
+	},
+
+	removeFriend(client: Client, targetUid: number) {
+		if (!client.uid) return util.sendl(client, "removeFriendResult", false, "notLoggedIn");
+		stmts.removeFriend.run(client.uid, targetUid, targetUid, client.uid);
+		util.sendl(client, "removeFriendResult", true);
+	},
 };
 
-const wss = new WebSocketServer({ port: 8082 });
+// ===== 启动配置（环境变量）=====
+// PORT: 监听端口（平台注入或自定义，默认 8082）
+// HOST: 监听地址（默认 0.0.0.0 对外开放；0.0.0.0 适合反向代理场景）
+// TLS_CERT / TLS_KEY: 启用 wss://，提供证书路径即开启（不提供则裸 ws://，建议配合反向代理）
+// ALLOW_ORIGIN: 允许的页面来源（逗号分隔，如 https://game.example.com）。不设则不校验
+const PORT = parseInt(process.env.PORT || "8082", 10);
+const HOST = process.env.HOST || "0.0.0.0";
+const TLS_CERT = process.env.TLS_CERT || "";
+const TLS_KEY = process.env.TLS_KEY || "";
+const ALLOW_ORIGINS = process.env.ALLOW_ORIGIN
+	? process.env.ALLOW_ORIGIN.split(",").map(s => s.trim()).filter(Boolean)
+	: [];
+
+// verifyClient: Origin 校验（防跨域滥用）
+function verifyClient(info: { origin: string; req: any }, cb: (ok: boolean) => void) {
+	if (ALLOW_ORIGINS.length === 0) return cb(true); // 未配置则放行
+	const origin = info.origin || "";
+	if (!origin || ALLOW_ORIGINS.includes(origin)) return cb(true);
+	cb(false);
+}
+
+let wss: WebSocketServer;
+if (TLS_CERT && TLS_KEY) {
+	// 服务器直接做 TLS 终结（wss://）
+	const server = https.createServer({
+		cert: fs.readFileSync(TLS_CERT),
+		key: fs.readFileSync(TLS_KEY),
+	});
+	wss = new WebSocketServer({ server, verifyClient });
+	server.listen(PORT, HOST, () => {
+		console.log(`Server listening on wss://${HOST}:${PORT} (TLS)`);
+	});
+} else {
+	// 裸 ws://（生产建议前置 nginx/Caddy 做 TLS 反代）
+	wss = new WebSocketServer({ port: PORT, host: HOST, verifyClient });
+	console.log(`Server listening on ws://${HOST}:${PORT}`);
+}
 
 wss.on("connection", (ws, req) => {
 	const client = ws as Client;
@@ -359,9 +604,17 @@ wss.on("connection", (ws, req) => {
 			return;
 		}
 
-		// forward from slave to owner
+		// forward from slave to owner (strip "server" prefix so owner's lib.message.server can dispatch)
 		if (client.owner) {
-			util.sendl(client.owner, "onmessage", client.wsid, raw);
+			let relayRaw = raw;
+			try {
+				const arr = JSON.parse(raw);
+				if (Array.isArray(arr) && arr[0] === "server") {
+					arr.shift();
+					relayRaw = JSON.stringify(arr);
+				}
+			} catch {}
+			util.sendl(client.owner, "onmessage", client.wsid, relayRaw);
 			return;
 		}
 
@@ -387,6 +640,9 @@ wss.on("connection", (ws, req) => {
 	// disconnect handler
 	//
 	client.on("close", () => {
+		// 新协议房间清理（房主转让 / 空房删除）
+		roomApi.handleDisconnect(client as any);
+
 		// remove rooms owned by this client
 		rooms.forEach((room, key) => {
 			if (room.owner === client) {
@@ -405,9 +661,10 @@ wss.on("connection", (ws, req) => {
 
 		clients.delete(client.wsid);
 
+		util.updateRoomListPublic();
 		if (client.room) util.updateRooms();
 		else util.updateClients();
 	});
 });
 
-console.log("Server listening on port 8082");
+export { wss };

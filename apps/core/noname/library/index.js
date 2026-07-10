@@ -1047,7 +1047,7 @@ export class Library {
 				},
 				ignore_error: {
 					name: "无视报错",
-					init: false,
+					init: import.meta.env.DEV,
 					intro: "不以弹窗形式报错。<br/>注：此选项仅保证部分不影响运行的错误不会令游戏卡死，不保证报错后结算正常。影响游戏运行的错误请通知扩展作者适配。",
 				},
 				confirm_exit: {
@@ -12604,6 +12604,22 @@ export class Library {
 								}
 							}
 						);
+						ui.quickCreateRoomButton = ui.create.div(
+							".forceopaque.menubutton.large.connectevents.pointerdiv.left3",
+							"快速开房",
+							ui.window,
+							function () {
+								lib.message.client._quickCreateRoom();
+							}
+						);
+						ui.loginButton = ui.create.div(
+							".forceopaque.menubutton.large.connectevents.pointerdiv.left4",
+							"登录/注册",
+							ui.window,
+							function () {
+								lib.message.client._loginDialog();
+							}
+						);
 						if (events.length) {
 							ui.connectEventsCount.innerHTML = events.filter(function (evt) {
 								return evt.creator == game.onlineKey || !get.is.banWords(evt.content);
@@ -12809,6 +12825,399 @@ export class Library {
 						_status.connectEventsCallback();
 					}
 				}
+			},
+			// ===== M3 新协议处理器 =====
+			roomListUpdate: function (list) {
+				// list: [[id, name, mode, playerCount, maxPlayers, state, hasPassword, ownerUid, key], ...]
+				if (!ui.roombase) return;
+				ui.rooms = ui.rooms || [];
+				for (var r of ui.rooms) r.remove();
+				ui.rooms = [];
+				var clickEv = lib.config.touchscreen ? "touchend" : "click";
+				for (var item of list) {
+					if (!item) continue;
+					(function (roomId, hasPwd, name, mode, count, max, state) {
+						var roomDiv = ui.create.div(
+							".popup.text.pointerdiv",
+							"",
+							ui.roombase,
+							function () {
+								if (_status.enteringRoom) return;
+								_status.enteringRoom = true;
+								if (hasPwd) {
+									game.prompt("请输入房间密码", function (pwd) {
+										if (pwd === false) { _status.enteringRoom = false; return; }
+										game.send("server", "joinRoom", roomId, pwd || "");
+									});
+								} else {
+									game.send("server", "joinRoom", roomId);
+								}
+							}
+						);
+						roomDiv.style.width = "calc(100% - 10px)";
+						roomDiv.style.display = "inline-flex";
+						roomDiv.style.alignItems = "center";
+						roomDiv.style.justifyContent = "space-between";
+						roomDiv.style.whiteSpace = "nowrap";
+						var stateText = state === "playing" ? '<span class="firetext">游戏中</span>' : '<span class="greentext">等待中</span>';
+						var pwdMark = hasPwd ? " 🔒" : "";
+						var modeText = get.translation(mode + "_mode") || mode;
+						var infoSpan = document.createElement("span");
+						infoSpan.innerHTML = name + "　" + modeText + "　" + stateText + "　人数：" + count + "/" + max + pwdMark;
+						roomDiv.appendChild(infoSpan);
+						// 观战入口（阻止冒泡，避免触发加入房间）
+						var observeBtn = ui.create.div(".menubutton", "观战", roomDiv);
+						observeBtn.style.cssText = "display:inline-block;font-size:12px;padding:2px 8px;margin-left:8px;";
+						observeBtn.addEventListener(clickEv, function (e) {
+							e.stopPropagation();
+							if (hasPwd) {
+								game.prompt("请输入房间密码（观战）", function (pwd) {
+									game.send("server", "observe", roomId, pwd || "");
+								});
+							} else {
+								game.send("server", "observe", roomId);
+							}
+						});
+						ui.rooms.push(roomDiv);
+					})(item[0], item[6], item[1], item[2], item[3], item[4], item[5]);
+				}
+			},
+			_loginDialog: function () {
+				var dialog = ui.create.dialog("登录 / 注册");
+				dialog.classList.add("fixed");
+				dialog.classList.add("noupdate");
+				dialog.add('<div class="caption">用户名（2-16字符）：</div>');
+				var nameField = document.createElement("input");
+				nameField.style.cssText = "display:block;width:80%;margin:5px auto;color:black;";
+				dialog.appendChild(nameField);
+				dialog.add('<div class="caption">密码（≥6位）：</div>');
+				var pwdField = document.createElement("input");
+				pwdField.type = "password";
+				pwdField.style.cssText = "display:block;width:80%;margin:5px auto;color:black;";
+				dialog.appendChild(pwdField);
+				var clickEv = lib.config.touchscreen ? "touchend" : "click";
+				var loginBtn = ui.create.div(".menubutton.highlight", "登录", dialog);
+				loginBtn.addEventListener(clickEv, function () {
+					if (!nameField.value || !pwdField.value) { alert("请输入用户名和密码"); return; }
+					game.send("server", "login", nameField.value, pwdField.value);
+					dialog.close();
+				});
+				var registerBtn = ui.create.div(".menubutton", "注册", dialog);
+				registerBtn.addEventListener(clickEv, function () {
+					if (!nameField.value || !pwdField.value) { alert("请输入用户名和密码"); return; }
+					game.send("server", "register", nameField.value, pwdField.value);
+					dialog.close();
+				});
+				var cancelBtn = ui.create.div(".menubutton", "取消", dialog);
+				cancelBtn.addEventListener(clickEv, function () { dialog.close(); });
+			},
+			registerResult: function (ok, uidOrError) {
+				if (ok) alert("注册成功，请登录");
+				else alert("注册失败：" + uidOrError);
+			},
+			loginResult: function (ok, tokenOrError, uid) {
+				if (ok) {
+					game.uid = uid;
+					game.onlineToken = tokenOrError;
+					alert("登录成功");
+				} else {
+					alert("登录失败：" + tokenOrError);
+				}
+			},
+			authResult: function (ok, uidOrError) {
+				if (ok) game.uid = uidOrError;
+			},
+			createRoomResult: function (ok, roomIdOrError, key, roomInfo) {
+				_status.creatingRoom = false;
+				if (!ok) {
+					alert("开房失败：" + roomIdOrError);
+					return;
+				}
+				game.currentRoomId = roomIdOrError;
+				game.roomKey = key;
+				if (roomInfo) {
+					game.roomInfo = roomInfo;
+					lib.message.client._renderRoomLobby(roomInfo);
+				}
+			},
+			_quickCreateRoom: function () {
+				if (_status.creatingRoom) return;
+				var dialog = ui.create.dialog("快速开房");
+				dialog.classList.add("fixed");
+				dialog.classList.add("noupdate");
+				dialog.add('<div class="caption">房间名：</div>');
+				var nameField = document.createElement("input");
+				nameField.style.cssText = "display:block;width:80%;margin:5px auto;color:black;";
+				nameField.placeholder = "（留空=未命名房间）";
+				dialog.appendChild(nameField);
+				dialog.add('<div class="caption">模式：</div>');
+				var modeSel = document.createElement("select");
+				modeSel.style.cssText = "display:block;width:80%;margin:5px auto;color:black;";
+				["identity", "guozhan", "doudizhu", "versus"].forEach(function (m) {
+					var opt = document.createElement("option");
+					opt.value = m; opt.innerHTML = m;
+					modeSel.appendChild(opt);
+				});
+				dialog.appendChild(modeSel);
+				dialog.add('<div class="caption">人数上限：</div>');
+				var numSel = document.createElement("select");
+				numSel.style.cssText = "display:block;width:80%;margin:5px auto;color:black;";
+				for (var n = 2; n <= 10; n++) {
+					var o = document.createElement("option");
+					o.value = n; o.innerHTML = n;
+					numSel.appendChild(o);
+				}
+				numSel.value = 8;
+				dialog.appendChild(numSel);
+				dialog.add('<div class="caption">密码（可选）：</div>');
+				var pwdField = document.createElement("input");
+				pwdField.style.cssText = "display:block;width:80%;margin:5px auto;color:black;";
+				dialog.appendChild(pwdField);
+				var confirmBtn = ui.create.div(".menubutton.highlight", "创建", dialog);
+				confirmBtn.addEventListener(lib.config.touchscreen ? "touchend" : "click", function () {
+					_status.creatingRoom = true;
+					dialog.close();
+					lib.configOL.mode = modeSel.value;
+					game.send("server", "createRoom", nameField.value || "未命名房间", modeSel.value, parseInt(numSel.value), pwdField.value || undefined, { mode: modeSel.value, number: parseInt(numSel.value) });
+				});
+				var cancelBtn = ui.create.div(".menubutton", "取消", dialog);
+				cancelBtn.addEventListener(lib.config.touchscreen ? "touchend" : "click", function () { dialog.close(); });
+			},
+			joinRoomResult: function (ok, roomInfoOrError) {
+				_status.enteringRoom = false;
+				if (!ok) {
+					alert("加入失败：" + roomInfoOrError);
+					ui.create.connecting(true);
+					return;
+				}
+				game.roomInfo = roomInfoOrError;
+				game.currentRoomId = roomInfoOrError.id;
+				lib.message.client._renderRoomLobby(roomInfoOrError);
+			},
+			roomInfo: function (info) {
+				game.roomInfo = info;
+				if (game.currentRoom) lib.message.client._renderRoomLobby(info);
+			},
+			gameStarted: function (config, isOwner) {
+				if (game.currentRoom) { game.currentRoom.close(); game.currentRoom = null; }
+				ui.create.connecting(true);
+				lib.configOL.mode = (config && config.mode) || lib.configOL.mode;
+				game.online = false;
+				game.onlineroom = true;
+				if (isOwner) {
+					// 房主：激活 host 模式，进入游戏内容后 waitForPlayer 会调 createServer()
+					// 并在之后发 ownerReady 通知服务器向本端发 onconnection
+					game.roomId = game.currentRoomId;
+					lib.node = {};
+					game.switchMode(lib.configOL.mode);
+				}
+				// slave/observer：不调 switchMode，等待 owner 通过 relay 发 init 启动
+			},
+			kicked: function () {
+				alert("你已被请出房间");
+				if (game.currentRoom) { game.currentRoom.close(); game.currentRoom = null; }
+				game.currentRoomId = null; game.roomInfo = null;
+			},
+			observeResult: function (ok, roomInfoOrError) {
+				if (!ok) {
+					alert("观战失败：" + roomInfoOrError);
+					return;
+				}
+				game.roomInfo = roomInfoOrError;
+				game.currentRoomId = roomInfoOrError.id;
+				lib.message.client._renderRoomLobby(roomInfoOrError);
+			},
+			ownerChanged: function (newOwnerUid) {
+				if (!game.roomInfo) return;
+				game.roomInfo.ownerUid = newOwnerUid;
+				if (game.roomInfo.players) {
+					for (var p of game.roomInfo.players) p.isOwner = (p.uid === newOwnerUid);
+				}
+				if (game.currentRoom) lib.message.client._renderRoomLobby(game.roomInfo);
+			},
+			roomClosed: function () {
+				alert("房间已解散");
+				if (game.currentRoom) { game.currentRoom.close(); game.currentRoom = null; }
+				game.currentRoomId = null; game.roomInfo = null;
+			},
+
+			// ===== M7 战绩/好友 =====
+			statsResult: function (ok, data) {
+				if (!ok) return;
+				var dialog = ui.create.dialog("hide");
+				dialog.classList.add("fixed");
+				var totalWin = 0, totalLose = 0, totalDraw = 0;
+				for (var s of (data.stats || [])) { totalWin += s.win; totalLose += s.lose; totalDraw += s.draw; }
+				var total = totalWin + totalLose + totalDraw;
+				var pct = total > 0 ? Math.round(totalWin / total * 100) + "%" : "—";
+				dialog.add('<div class="caption">' + data.username + ' 的战绩</div>');
+				dialog.add("<div>总场次：" + total + " 胜：" + totalWin + " 负：" + totalLose + " 平：" + totalDraw + " 胜率：" + pct + "</div>");
+				if (data.stats && data.stats.length) {
+					dialog.add('<div class="caption" style="margin-top:8px">按模式</div>');
+					for (var s2 of data.stats) {
+						var t2 = s2.win + s2.lose + s2.draw;
+						var p2 = t2 > 0 ? Math.round(s2.win / t2 * 100) + "%" : "—";
+						dialog.add("<div>" + (s2.mode || "?") + " [" + (s2.role || "?") + "] " + s2.win + "胜/" + t2 + "场 " + p2 + "</div>");
+					}
+				}
+				var closeBtn = ui.create.div(".menubutton", "关闭", dialog);
+				closeBtn.addEventListener(lib.config.touchscreen ? "touchend" : "click", function () { dialog.close(); });
+				dialog.open();
+			},
+			friendListResult: function (ok, friends) {
+				if (!ok) return;
+				var dialog = ui.create.dialog("hide");
+				dialog.classList.add("fixed");
+				dialog.add('<div class="caption">好友列表</div>');
+				var clickEv = lib.config.touchscreen ? "touchend" : "click";
+				if (!friends || !friends.length) {
+					dialog.add("<div>暂无好友，可通过 UID 添加</div>");
+				} else {
+					for (var f of friends) {
+						(function (friend) {
+							var row = ui.create.div("", friend.username + (friend.online ? " 🟢" : "") + (friend.status === "pending" ? " (待接受)" : ""), dialog);
+							if (friend.status === "pending") {
+								var acceptBtn = ui.create.div(".menubutton", "接受", dialog);
+								acceptBtn.addEventListener(clickEv, function () {
+									game.send("server", "acceptFriend", friend.uid);
+									dialog.close();
+								});
+							}
+							var removeBtn = ui.create.div(".menubutton", "删除", dialog);
+							removeBtn.addEventListener(clickEv, function () {
+								if (confirm("确定删除好友 " + friend.username + "？")) {
+									game.send("server", "removeFriend", friend.uid);
+									dialog.close();
+								}
+							});
+						})(f);
+					}
+				}
+				var addBtn = ui.create.div(".menubutton", "添加好友", dialog);
+				addBtn.addEventListener(clickEv, function () {
+					game.prompt("输入对方 UID（数字）", function (uid) {
+						if (!uid || isNaN(Number(uid))) return;
+						game.send("server", "addFriend", parseInt(uid));
+					});
+				});
+				var statsBtn = ui.create.div(".menubutton", "我的战绩", dialog);
+				statsBtn.addEventListener(clickEv, function () {
+					game.send("server", "getStats");
+					dialog.close();
+				});
+				var closeBtn = ui.create.div(".menubutton", "关闭", dialog);
+				closeBtn.addEventListener(clickEv, function () { dialog.close(); });
+				dialog.open();
+			},
+			addFriendResult: function (ok, detail) {
+				if (!ok) { alert("添加失败：" + detail); return; }
+				if (detail === "accepted") alert("已成为好友！");
+				else alert("好友申请已发送，等待对方确认");
+			},
+			acceptFriendResult: function (ok) {
+				if (!ok) alert("接受失败");
+				else alert("已接受好友请求");
+			},
+			removeFriendResult: function (ok) {
+				if (!ok) alert("删除失败");
+			},
+			friendRequest: function (fromUid, fromName) {
+				if (confirm(fromName + "（UID:" + fromUid + "）请求添加你为好友，是否接受？")) {
+					game.send("server", "acceptFriend", fromUid);
+				}
+			},
+			friendAccepted: function (uid) {
+				game.log && game.log("好友请求已被接受（UID:" + uid + "）");
+			},
+
+			_renderRoomLobby: function (info) {
+				if (game.currentRoom) game.currentRoom.close();
+				var dialog = ui.create.dialog();
+				dialog.classList.add("fixed");
+				dialog.classList.add("noupdate");
+				game.currentRoom = dialog;
+				var isOwner = (game.uid != null) && (info.ownerUid === game.uid);
+				var amObserver = (game.uid != null) && info.observers && info.observers.some(function (o) { return o.uid === game.uid; });
+				dialog.add('<div class="caption">房间 ' + info.id + "（" + info.name + "）" + (info.hasPassword ? " 🔒" : "") + (isOwner ? " - 你是房主" : (amObserver ? " - 观战中" : "")) + "</div>");
+				dialog.add('<div class="caption">玩家（' + info.players.length + "/" + info.maxPlayers + "）：</div>");
+				var clickEv = lib.config.touchscreen ? "touchend" : "click";
+				for (var p of info.players) {
+					(function (player) {
+						var mark = (player.isOwner ? " 👑" : "") + (player.ready ? " ✅" : "");
+						// 房主可对其他玩家显示踢人/转让按钮
+						if (isOwner && !player.isOwner) {
+							var row = ui.create.div(".popup.text.pointerdiv", "", dialog);
+							row.style.cssText = "width:calc(100% - 10px);display:flex;align-items:center;justify-content:space-between;padding:4px 6px;";
+							var nameSpan = document.createElement("span");
+							nameSpan.textContent = player.nickname + mark;
+							row.appendChild(nameSpan);
+							var btnBox = document.createElement("span");
+							var transferBtn = ui.create.div(".menubutton", "转让房主", btnBox);
+							transferBtn.style.cssText = "display:inline-block;font-size:12px;padding:2px 8px;margin-right:4px;";
+							transferBtn.addEventListener(clickEv, function () {
+								if (!confirm("确定把房主转让给「" + player.nickname + "」吗？")) return;
+								game.send("server", "transferOwner", player.wsid);
+							});
+							var kickBtn = ui.create.div(".menubutton", "踢出", btnBox);
+							kickBtn.style.cssText = "display:inline-block;font-size:12px;padding:2px 8px;";
+							kickBtn.addEventListener(clickEv, function () {
+								if (!confirm("确定踢出「" + player.nickname + "」吗？")) return;
+								game.send("server", "kick", player.wsid);
+							});
+							row.appendChild(btnBox);
+						} else {
+							dialog.add('<div class="text">' + player.nickname + mark + "</div>");
+						}
+					})(p);
+				}
+				if (info.observers && info.observers.length) {
+					dialog.add('<div class="caption">观战：' + info.observers.map(function (o) { return o.nickname; }).join("、") + "</div>");
+				}
+				var allReady = info.players.every(function (p) { return p.ready; });
+				if (!isOwner && !amObserver) {
+					var myInfo = info.players.find(function (p) { return p.uid === game.uid; });
+					var nowReady = myInfo ? myInfo.ready : false;
+					var readyBtn = ui.create.div(".menubutton.highlight", nowReady ? "取消准备" : "准备", dialog);
+					readyBtn.addEventListener(clickEv, function () { game.send("server", "ready", !nowReady); });
+				}
+				if (isOwner && info.state === "waiting") {
+					var startBtn = ui.create.div(allReady ? ".menubutton.highlight" : ".menubutton", allReady ? "开始游戏" : "等待全员准备", dialog);
+					if (allReady) {
+						startBtn.addEventListener(clickEv, function () { game.send("server", "startGame"); });
+					}
+				}
+				if (isOwner) {
+					var pwdBtn = ui.create.div(".menubutton", info.hasPassword ? "修改/清除密码" : "设置密码", dialog);
+					pwdBtn.addEventListener(clickEv, function () {
+						game.prompt(info.hasPassword ? "输入新密码（留空则清除密码）" : "设置房间密码（留空取消）", function (pwd) {
+							if (pwd === false) return;
+							game.send("server", "setPassword", pwd || "");
+						});
+					});
+				}
+				if (amObserver) {
+					dialog.add('<div class="text">观战中，等待房主开始游戏。</div>');
+				}
+				// 好友 / 战绩快捷按钮
+				if (game.uid) {
+					var friendBtn = ui.create.div(".menubutton", "好友列表", dialog);
+					friendBtn.addEventListener(clickEv, function () {
+						game.send("server", "getFriendList");
+					});
+					var statsBtn2 = ui.create.div(".menubutton", "我的战绩", dialog);
+					statsBtn2.addEventListener(clickEv, function () {
+						game.send("server", "getStats");
+					});
+				}
+				var leaveBtn = ui.create.div(".menubutton", amObserver ? "退出观战" : "离开房间", dialog);
+				leaveBtn.addEventListener(clickEv, function () {
+					game.send("server", "leaveRoom");
+					dialog.close();
+					game.currentRoom = null;
+					game.currentRoomId = null;
+					game.roomInfo = null;
+					game.reload();
+				});
 			},
 			eventsdenied: function (reason) {
 				var str = "创建约战失败";

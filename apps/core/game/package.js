@@ -35,6 +35,21 @@ window.noname_package = {
 		//DIY系列
 		diy: "DIY",
 		key: "Key",
+		// ===== Liuli 整合 (M4) =====
+		ddd: "点将DDD",
+		gujian: "古剑奇谭",
+		gwent: "巫师牌",
+		hearth: "炉石传说",
+		jiange: "守卫剑阁",
+		mtg: "万智牌",
+		ow: "守望先锋",
+		swd: "仙剑奇侠传",
+		xiake: "侠客风云",
+		xianjian: "仙剑奇侠",
+		xinghuoliaoyuan: "星火燎原",
+		yxs: "英雄杀",
+		zhuogui: "捉鬼",
+
 	},
 	card: {
 		standard: "标准",

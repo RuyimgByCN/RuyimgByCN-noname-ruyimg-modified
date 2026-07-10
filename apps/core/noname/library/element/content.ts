@@ -4399,6 +4399,11 @@ export const Content: Record<string, ContentFuncByAll | ContentFuncsByAll> = {
 		ui.pause.hide();
 
 		game.createServer();
+		// 通知服务器 host 端 lib.node/lib.wsOL 已初始化，
+		// 服务器收到后向本端发 onconnection，触发 slave 连入
+		if (game.onlineroom && lib.node) {
+			game.send("server", "ownerReady");
+		}
 		if (!lib.translate.zhu) {
 			lib.translate.zhu = "主";
 		}

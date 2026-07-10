@@ -24,7 +24,7 @@ export async function boot() {
 
 	await import("./polyfill.js");
 	// 设定游戏加载时间，超过时间未加载就提醒
-	const configLoadTime = parseInt(localStorage.getItem(lib.configprefix + "loadtime") || "10000");
+	const configLoadTime = parseInt(localStorage.getItem(lib.configprefix + "loadtime") || (import.meta.env.DEV ? "60000" : "10000"));
 	// 现在不暴露到全局变量里了，直接传给onload
 	const resetGameTimeout = setTimeout(lib.init.reset, configLoadTime);
 
@@ -497,7 +497,7 @@ export async function boot() {
 		if (!splashInRemoing) {
 			node.remove();
 		}
-		window.resetGameTimeout = setTimeout(lib.init.reset, 10000);
+		window.resetGameTimeout = setTimeout(lib.init.reset, import.meta.env.DEV ? 60000 : 10000);
 		delete window.inSplash;
 		game.saveConfig("mode", result);
 		await importMode(result);

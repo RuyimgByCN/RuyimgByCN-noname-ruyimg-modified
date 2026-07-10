@@ -3150,7 +3150,7 @@ export class Game {
 				}
 			} catch (e) {
 				console.error(`加载《${name}》扩展的precontent时出现错误。`, e);
-				if (!lib.config.ignore_error) {
+				if (!lib.config.ignore_error && !import.meta.env.DEV) {
 					alert(`加载《${name}》扩展的precontent时出现错误。
 该错误本身可能并不影响扩展运行。您可以在“设置→通用→无视扩展报错”中关闭此弹窗。
 错误信息: 
@@ -7893,6 +7893,7 @@ ${e instanceof Error ? e.stack : String(e)}`);
 			if (_status.connectMode && lib.mode[name].connect) {
 				game.saveConfig("connect_mode", name);
 				game.clearConnect();
+				if (!lib.configOL) lib.configOL = {};
 				lib.configOL.mode = name;
 				if (configx) {
 					for (let i in configx) {
@@ -7906,8 +7907,8 @@ ${e instanceof Error ? e.stack : String(e)}`);
 						lib.configOL[i.slice(8)] = get.config(i);
 					}
 					lib.configOL.zhinang_tricks = lib.config.connect_zhinang_tricks;
-					lib.configOL.characterPack = lib.connectCharacterPack.slice(0);
-					lib.configOL.cardPack = lib.connectCardPack.slice(0);
+					lib.configOL.characterPack = (lib.connectCharacterPack || []).slice(0);
+					lib.configOL.cardPack = (lib.connectCardPack || []).slice(0);
 					for (let i = 0; i < lib.config.connect_characters.length; i++) {
 						lib.configOL.characterPack.remove(lib.config.connect_characters[i]);
 					}
@@ -9066,14 +9067,22 @@ ${e instanceof Error ? e.stack : String(e)}`);
 			ui.roombase.remove();
 			delete ui.roombase;
 		}
+		if (ui.quickCreateRoomButton) {
+			ui.quickCreateRoomButton.remove();
+			delete ui.quickCreateRoomButton;
+		}
+		if (ui.loginButton) {
+			ui.loginButton.remove();
+			delete ui.loginButton;
+		}
 		if (!ui.connectEvents) {
 			return;
 		}
 		ui.connectEvents.remove();
-		ui.connectEventsCount.remove();
-		ui.connectClients.remove();
-		ui.connectClientsCount.remove();
-		ui.createRoomButton.remove();
+		if (ui.connectEventsCount) { ui.connectEventsCount.remove(); }
+		if (ui.connectClients) { ui.connectClients.remove(); }
+		if (ui.connectClientsCount) { ui.connectClientsCount.remove(); }
+		if (ui.createRoomButton) { ui.createRoomButton.remove(); }
 		delete ui.connectEvents;
 		delete ui.connectEventsCount;
 		delete ui.connectClients;

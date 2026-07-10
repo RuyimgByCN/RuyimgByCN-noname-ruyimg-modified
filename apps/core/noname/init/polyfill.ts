@@ -1,4 +1,72 @@
 import { lib, game, get, _status, ui } from "noname";
+
+// 兼容 Liuli 扩展:Chrome 版本检测函数
+// 上游 noname-liuli/noname/game/game.js:11 注入的全局函数,十周年UI 的 decadeModule.init()
+// 用它判断 Chrome 版本以加载兼容样式。缺失会导致 IIFE 中断 → decadeModule 未赋值 →
+// component.js/skill.js 等全部报 "decadeModule is not defined"。
+declare global {
+	function getChromeVersion(): number;
+}
+window.getChromeVersion = window.getChromeVersion || function (): number {
+	const userAgent = navigator.userAgent;
+	if (userAgent.indexOf("Chrome") > -1) {
+		const versionMatch = userAgent.match(/Chrome\/(\d+)/);
+		if (versionMatch && versionMatch[1]) {
+			return parseInt(versionMatch[1]);
+		}
+	}
+	return 0;
+};
+
+// 兼容 Liuli 扩展:技能强化判定函数
+// 上游 noname-liuli/noname/game/game.js:249 注入的全局函数,雷霆万钧等扩展
+// 在 character 字面量中同步调用 window.getStrength(...)。本仓库无此函数会 ReferenceError。
+// 逻辑复刻上游:本仓库无 'strengthen_skill' localStorage key,函数走「返回 to」分支(=未禁用强化)。
+declare global {
+	interface Window {
+		getStrength?: (from: any, to: any, name?: string) => any;
+	}
+}
+window.getStrength = function (from, to, name) {
+	var str = localStorage.getItem("strengthen_skill");
+	if (typeof str == "string" && str.indexOf("&off_strength") != -1) return from;
+	if (typeof name != "string") {
+		return localStorage.getItem("strengthen_skill") == "forbid" ? from : to;
+	}
+	return typeof str == "string" && str.indexOf("&" + name) != -1 ? from : to;
+};
+
+// 兼容 Liuli 扩展:game.createCss 注入 <style> 的工具函数
+// 上游 noname-liuli/noname/game/game.js:40959,千幻聆音等扩展用 game.createCss 注入样式。
+// 本仓库内核无此方法。实现复刻上游(含 createCssList 去重)。
+// @ts-expect-error game 上无 createCss 类型声明
+if (typeof game.createCss !== "function") {
+	// @ts-expect-error game 上无 createCssList 类型声明
+	game.createCssList = [];
+	// @ts-expect-error ignore
+	game.createCss = function (csstext: string, forced?: boolean) {
+		if (typeof csstext != "string") return false;
+		// @ts-expect-error ignore
+		if (!forced && game.createCssList.includes(csstext)) return false;
+		// @ts-expect-error ignore
+		if (!forced) game.createCssList.push(csstext);
+		var style = document.createElement("style");
+		style.innerHTML = csstext;
+		document.head.appendChild(style);
+		return style;
+	};
+}
+
+// 兼容 Liuli 扩展:诗笺(SJ)客户端接口守卫
+// 上游诗笺客户端注入 window.noname_shijianInterfaces(含 environment/openAssetFile 等方法)。
+// 本环境(Electron/Web)无此对象,SJ Settings 扩展访问 .environment 会 TypeError。
+// 提供空对象守卫,避免致命错误(扩展内部对 undefined 方法的调用仍可能非致命)。
+// @ts-expect-error 仅 Liuli/SJ 环境有此接口
+if (typeof window.noname_shijianInterfaces === "undefined") {
+	// @ts-expect-error ignore
+	window.noname_shijianInterfaces = {};
+}
+
 /**
  * 为元素添加右击或长按弹出的提示信息
  * @param {string} title 标题

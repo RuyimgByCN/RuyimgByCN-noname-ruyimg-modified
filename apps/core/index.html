@@ -19,7 +19,7 @@
 				str += `\n列号: ${column}`;
 				if (err && err.stack) str += "\n" + decodeURI(err.stack);
 				console.error(str);
-				alert(str);
+				if (location.hostname !== "localhost" && location.hostname !== "127.0.0.1") alert(str);
 			};
 			const STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m;
 			const errorList = [];

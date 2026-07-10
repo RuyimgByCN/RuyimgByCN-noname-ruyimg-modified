@@ -2,14 +2,37 @@
 import { lib, game, _status } from "noname";
 
 export async function importCardPack(name: string) {
-	await importFunction("card", `/card/${name}`);
+	await importFunction("card", `/card/${name}`).catch(e => {
+		const notFound = String(e).includes("Failed to fetch dynamically imported module");
+		if (notFound) {
+			// 卡牌包由扩展 precontent 自行加载，/card/ 目录下无独立文件时跳过
+			console.warn(`卡牌包《${name}》目录缺失，已跳过（由扩展自行注册时正常）`);
+			const all = lib.config.all?.cards;
+			if (Array.isArray(all) && all.includes(name)) {
+				const idx = all.indexOf(name);
+				if (idx > -1) all.splice(idx, 1);
+			}
+		} else {
+			console.error(`卡牌包《${name}》加载失败`, e);
+		}
+	});
 }
 
 export async function importCharacterPack(name: string) {
 	const alreadyModernCharacterPack = lib.config.moderned_characters || [];
 	const path = import.meta.env.DEV || !alreadyModernCharacterPack.includes(name) ? `/character/${name}/index` : `/character/${name}`;
 	await importFunction("character", path).catch(e => {
-		console.error(`武将包《${name}》加载失败`, e);
+		const notFound = String(e).includes("Failed to fetch dynamically imported module");
+		if (notFound) {
+			console.warn(`武将包《${name}》目录缺失，已跳过`);
+			const all = lib.config.all?.characters;
+			if (Array.isArray(all) && all.includes(name)) {
+				const idx = all.indexOf(name);
+				if (idx > -1) all.splice(idx, 1);
+			}
+		} else {
+			console.error(`武将包《${name}》加载失败`, e);
+		}
 		// 		alert(`武将包《${name}》加载失败
 		// 错误信息:
 		// ${e instanceof Error ? e.stack : String(e)}
