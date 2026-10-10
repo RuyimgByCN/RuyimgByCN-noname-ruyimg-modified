@@ -78,7 +78,7 @@
   - `library/element/content.ts`、`player.js`、`character.js` 和 `library/skill.js`；另有 `mode/{chess,single,tafang}.js`。
 
   扩展目录与 `card/standard.js` 没有改动。Liuli 有 10 个来源实例的字节变化，已转换的 wuxing、cardpile 不在其中。
-- **Liuli 本地修改**：9-23 与 10-06 都按工作区字节核验，当时 50 个文件有本地修改。10-08 执行 `git reset`（reflog 记为 `moving to HEAD`）后只剩 7 个，stash 为空。被丢弃的 43 个文件改动在 git 里没有记录，以哪种口径为准需要用户决定（主稿 D1）。
+- **Liuli 本地修改**：9-23 与 10-06 都按工作区字节核验，当时 50 个文件有本地修改。10-08 执行 `git reset`（reflog 记为 `moving to HEAD`）后只剩 7 个，stash 为空。被丢弃的 43 个文件改动在 git 里没有记录，以哪种口径为准需要用户决定（主稿 D1）。**同日更正**：复算表明其中 40 个只是换行（CRLF→LF）差异，内容与 9-23 一致，只有史诗卡牌 3 个文件有 148 字节无法由换行解释，见[文档清理核对](../2026-10-10-doc-cleanup/README.md)；主稿 D1 已据此改写。
 - **wasm 与前端工具**：本机已装 `wasm32-unknown-unknown` 目标，以及 `wasm-pack`、`pnpm`、`node`。磁盘余量 215 GiB。
 
 ## 5. 文档改动

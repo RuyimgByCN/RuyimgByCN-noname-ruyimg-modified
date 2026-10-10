@@ -1,6 +1,6 @@
 # 内容保真度明细清单（机器生成，勿手改）
 
-> 生成自 `python3 scripts/gen-fidelity-ledger.py`（2026-09-15）。
+> 生成自 `python3 scripts/gen-fidelity-ledger.py`（2026-10-10）。
 > 每个不完整 `.skill` 的 `// 近似` 或 `// TODO` 注释原文收录。complete 类只计数不列。
 
 **总计**：5595 个 `.skill`，其中近似 573、TODO 0、完整 5022。

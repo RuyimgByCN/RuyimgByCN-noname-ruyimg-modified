@@ -4,9 +4,7 @@
 > 本页 44 项是另一个 fork 的历史快照，不能替代当前清单；“非内容/不可迁移/全部处理完毕”不适用于本次原生目标。
 > 以 [两仓逐项重构计划](upstream-extension-reconstruction.md) 的功能、依赖、组合与验收为准，以下保留旧线证据。
 
-> 2026-09-22 更正：本页是旧线历史清点，44 项数量未在本轮重盘。用户要求保留原有扩展机制，
-> 以下“非内容/不可迁移/全部处理完毕”不能作为原生线豁免或完成依据。模式、配置、AI、界面、皮肤、工具应逐项重新登记能力适配和验收，
-> 见 [原生扩展机制](../architecture/native-extensions.md)。旧 JS 零改动兼容范围待确认。
+> 2026-09-22 更正（09-23 起由上段范围说明取代）：本页 44 项数量未重盘；“非内容/不可迁移/全部处理完毕”不能作为原生线豁免或完成依据。同名能力的适配与验收在两仓台账登记，扩展能力边界见 [原生扩展机制](../architecture/native-extensions.md)。
 
 > 目标：`archive/Noname-ruyimg-Modified/apps/core/extension` 下扩展迁移到本项目。
 > 审计快照：2026-08-05。共 **44** 个扩展目录。结论：**无新可迁移内容**——
@@ -37,7 +35,7 @@
 | UI | 十周年UI（27k 文件）、手杀ui、斗转星移、斗转露头、点绛唇（Bp）、全能搜索、拖拽读取、史诗卡牌（cardPhantom 卡面特效 + reguhuo/rangjie 技能补丁）、龙血玄黄（混淆 JS + 专属技能区 UI）、一将成名（招募/结算/背包系统，850 文件 302M） |
 | 皮肤/动画/音频 | 千幻聆音（58k 文件）、无名美化（技能动画补丁，修改既有技能如 tamo）、如真似幻、如真重置版、皮肤切换、标记补充、手杀MVP、选将美化、雷霆万钧、笨蛋插件、identity（身份图标） |
 
-## C. fork 角色层新内容（2026-08-05，ADR 0606/0607：jiange 见 omp 0606，shoulijian/gwent 见 0607）
+## C. fork 角色层新内容（2026-08-05：jiange 为 `ABI-COORDINATION.md` 领取表 0606，无 ADR 文件；shoulijian/gwent 见 [ADR 0607](../adr/0607-huanle-shoulijian-abi642-gwent.md)）
 
 - **jiange（剑阁）包**（`apps/core/character/jiange`，源自 Liuli M4）：8 将/15 技能
   已迁移投放 `extensions/jiange`（jizhen 激阵、sfanshi 反噬真实运行时，其余元数据

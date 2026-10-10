@@ -30,7 +30,7 @@
 | 33 | G1 3D精选：角色包管线（`Catalog.extension_generals` + `general_meta` 统一查询；`RestoreBounds.general_count` 槽位界）、装备技能生命周期（`CardDef.equip_skills` 装备授予/离场撤销 6 路径 + `EquipSkillMismatch` 恢复校验）、精彀宿主行为——ADR 0776 G1；14 golden 因目录与语义变化重录 |
 | 34 | G1 玩点论杀：`CardKind::WangmeiZhike` 锦囊（无懈窗口包装）+ `WangmeiZhikeCard` 宿主原语（最小体力/最小手牌条件增益）；卡牌派发机器 def_key 绑定按牌种在场判定——ADR 0776 G1；14 golden 因目录变化重录 |
 | 35 | G1 玩点论杀武将批：6 名武将元数据入包（角色包管线）；思继宿主原语（`CardsDiscarded` 可选触发、弃杀数×2 摸牌；`HostMachine.cards` 关联牌组入快照）——ADR 0776 G1；14 golden 因机器快照变化重录 |
-| 36 | G1 玩点论杀原语增补：三尖武器技（`SanjianWeaponDamage` 弃牌+目标两段选择）与莫守目标免疫（`blocks_delayed_trick_target` 原语钩子，乐/兵命令边界过滤）；`CardKind::Sanjian`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 36 | G1 玩点论杀原语增补：三尖武器技（`SanjianWeaponDamage` 弃牌+目标两段选择）与墨守目标免疫（`blocks_delayed_trick_target` 原语钩子，乐/兵命令边界过滤）；`CardKind::Sanjian`——ADR 0776 G1；14 golden 因目录变化重录 |
 | 37 | G1 运筹帷幄原语增补：水攻（`ShuigongCard` 多目标强制弃装备；`HostMachine.targets` 多目标入快照）与釜底抽薪（`FudichouxinCompare` 拼点两段选择，平局目标胜）；`CardKind::Shuigong`/`Fudichouxin`——ADR 0776 G1；14 golden 因目录与快照变化重录 |
 | 38 | G1 运筹帷幄切片扩展：趁火打劫（`ChenhuodajieCard` 获得目标手牌，无懈窗口包装）与索链甲（`CardKind::Suolianjia` + `CardDef.link_on_equip` 横置/重置钩子）——ADR 0776 G1；14 golden 因目录变化重录 |
 | 39 | G1 运筹帷幄切片扩展：洪水（`CardKind::HongShui` 自-target 延时锦囊，判定梅花 2–9 → 3 点雷伤）与偷梁换柱（`TouliangSwap` 三段选择换牌，同色摸 1；目标临时技暂缓）——ADR 0776 G1；14 golden 因目录变化重录 |
@@ -1141,7 +1141,7 @@ v12→**v13**。版本 138→139 入 canonical_hash——14 golden 重录。回�
 `heiying_yinshen_untargetable_until_own_judge`。证据见
 [ow 纵切批二十二](../operations/evidence/2026-10-09-ow-heiying-batch/README.md)。
 
-**规则 v140（2026-10-09，U05 ow 纵切批二十三：死神闪弹）**：闪弹
+**规则 v140（2026-10-09，U05 ow 纵切批二十三：死神霰弹）**：霰弹
 （xiandan→host:wudian_xiandan，tag 139 目录标记技；ShaResolve 内联钩）
 ——出杀结算开始（防具/闪询问前）来源可弃 1 张 he（可取消）：红=直击
 （emit_sha_damage 哨卫同款路径）；黑=本杀伤害 +1（emit 伤害式加项=
@@ -1214,7 +1214,7 @@ v15→**v16**。版本 144→**145** 入 canonical_hash——14 golden 重录。
 
 **规则 v146（2026-10-09，U05 xianjian 第五切片：温慧龙翔）**：龙翔
 （longxiang→host:xj_longxiang，tag 147 目录标记技；ShaResolve 内联钩
-——闪弹钩后）——出杀结算开始时目标手牌多于自己→目标 he 池随机弃差
+——霰弹钩后）——出杀结算开始时目标手牌多于自己→目标 he 池随机弃差
 值张（swap_remove 抽取；**杀在结算区不计入来源手牌**=上游 countCards
 同口径）。无询问零机器字段（每杀至多一次由 !asked 分支天然保证）。
 **登记差异**：上游 check=AI 姿态（内容强制）同口径。**登记暂缓**：huxi

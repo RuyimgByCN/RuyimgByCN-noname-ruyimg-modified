@@ -10,11 +10,12 @@
 > 45 名无同名立绘）与 `docs/content-fidelity-ledger.md`（5533 `.skill`：完整 5086 /
 > 近似 447 / TODO 0 / noop 2094）为准，host `RULE_VM_ABI_VERSION` = 651（ABI-MAX 651，
 > npack pin 不变：clan 649 / SP 647 / shahai 645 / TW 596 / offline 498）。
+> **2026-10-10 注**：上面括号内是 08-16 当日数字。10-08 已同步到上游 v1.11.7，当前值见 `catalog.json`、保真度清单、`crates/engine-api/src/version.rs` 与各 `*.npack.json`；旧线 ABI 账面未闭合项见[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) T15。
 
 ## 2026-08-15 复核快照
 
 对照 `content/original/catalog.json` 与 `content/original/ported/**/*.skill` 实测。
-下表是**当前活数字**（同日后续增量日记保留在后文，不再回写本表）：
+下表是**08-15 当日数字**（同日后续增量日记保留在后文，不再回写本表）：
 
 | 层 | 现状 |
 |---|---|
@@ -8513,33 +8514,14 @@ noop 池周期复评；或四类引擎缺口铸造专项。
 **下一步**：已解锁族逐件消化继续；或 approx/noop 池周期复评；或四类引擎
 缺口铸造专项。
 
-## 本轮：批 261——dcmoukui 谋溃状态机（2026-09-13，tag 734 / ABI 711）
-
-- **杀目标族状态机**：dcmoukui 谋溃（sp2 noop→approx）——杀指定目标后
-  chooseButton [1,2] 可双选：摸 1 张牌／弃置目标一张手牌（owner 从目标
-  手牌选）。既有过滤器 owner_source_sha_first_target 复用（对齐上游
-  isFirstTarget）；Custom [1,2] 双选 → 摸 1（draw_cards）+ SelectCards
-  owner 遍历目标手牌弃一张（Cont 312 两段）。
-- **测试**：original_dcmoukui_machine.rs 2 件全过（双选：摸 1+目标手牌
-  弃置／仅摸无弃置轮）。测试驱动沿用直派 CardUsed{targets}；补齐 optional
-  确认步。
-- **断言同步**：sp2 包 ABI 710→711 ×4 文件（trigger 69→70、modifier
-  236→235、modules 78→79 无冻结断言）。
-- **债（登记）**：both+未命中追罚面留 slice 2；多目标杀逐目标触发（超集）。
-
-回归（冻结终态，全部改动落盘后单次运行，exit 0）：workspace 全量
-**4458 通过/0 失败/1 忽略**（批 260 终态 4456 + 2 件净增）。缓存治理：批内
-清理 target/debug/incremental。
-
-**下一步**：已解锁族逐件消化继续（谋溃 slice 2 追罚面候选）；或 approx/
-noop 池周期复评；或四类引擎缺口铸造专项。
-
 ## 本轮：上游 v1.11.7 增量同步（5c02a745..df2682e6，2026-10-08）
 
 - **上游更新**：`archive/upstream/noname` git pull，2026-09-15（5c02a745）→
   2026-10-08（df2682e6），42 提交 / 378 文件（+30554/−22450）。上游版本
   v1.11.6 → **v1.11.7**。`noname-liuli` 无新提交（8485dbb 维持），本地
-  extension 改动 stash 后已还原。
+  extension 改动 stash 后已还原。2026-10-10 核对：reflog 记为 `reset: moving to HEAD`，
+  之后本地修改从 50 个文件降到 7 个；消失的 43 个文件中 40 个只是换行（CRLF→LF）差异，
+  内容与 9-23 一致，史诗卡牌 3 个文件有 148 字节无法由换行解释（[复算](../operations/evidence/2026-10-10-doc-cleanup/liuli-crlf-check.txt)）。
 - **内容面概况**：无新增 character 文件；15 个武将包（bingshi/clan/collab/
   huicui/jsrg/key/mobile/newjiang/sp/sp2/standard/sxrm/tw/xianding/yingbian）
   的 skill/character 修改；国战模式新增 jiubian/zifeng 文件（mode 层，不在
@@ -8556,4 +8538,5 @@ noop 池周期复评；或四类引擎缺口铸造专项。
   include_str 嵌入面不受影响；grep 无 catalog 总数硬编码断言。未跑全量
   cargo（并行会话在途 engine-native，避免 target 争用）。
 - **下一步**：19 将 39 技移植批（沿用 v1.11.6 批 146 流程：sync 残差清单→
-  .skill/characters.json→rebuild-pack→四副本部署→种子敏感三件套）。
+  .skill/characters.json→rebuild-pack→四副本部署→种子敏感三件套）。2026-10-10 起
+  该项登记在[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) T15。

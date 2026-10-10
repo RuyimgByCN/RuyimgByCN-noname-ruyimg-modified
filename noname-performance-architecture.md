@@ -4,7 +4,7 @@
 
 版本 3.3　原始评估日期 2026 年 9 月 15 日；扩展范围修订 2026 年 9 月 22 日；全量来源细化 2026 年 9 月 23 日
 
-本次按用户要求恢复原有扩展机制为必做能力，覆盖 v3.2 排除动态扩展的决定。源码评估依据沿用原记录，扩展实现仍待验收。本文是目标架构；实际开发状态与上游缺口以 [当前进度](docs/architecture/native-progress.md) 和 [两仓扩展台账](docs/migration/upstream-extension-reconstruction.md) 为准。配套 DOCX/PNG 是旧版导出。
+本次按用户要求恢复原有扩展机制为必做能力，覆盖 v3.2 排除动态扩展的决定。源码评估依据沿用原记录，扩展实现仍待验收。本文是目标架构；实际开发状态与上游缺口以 [当前进度](docs/architecture/native-progress.md) 和 [两仓扩展台账](docs/migration/upstream-extension-reconstruction.md) 为准。原配套 DOCX 是 v3.2 旧版导出，与本版扩展范围冲突，已于 2026-10-10 删除（可从 git 历史取回）；仓库中没有 PNG 导出。
 
 ## 1 决策摘要
 

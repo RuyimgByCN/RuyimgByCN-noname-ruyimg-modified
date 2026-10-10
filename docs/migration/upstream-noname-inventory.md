@@ -13,7 +13,7 @@
 > （`dd7d6916`）；**2026-08-15**（第二轮，`2eb3513b`）复核 catalog 为 **2524 / 2524
 > 武将、6064 / 6064 技能全部 `ported`**（v1.11.5 新增 9 将 15 技当轮全部移植闭包）。
 > 同日保真度：5529 个 `.skill`，完整 5171、近似 358、TODO **0**、noop 2181。
-> **2026-08-21 复核注**：当前活数字为 **2526 / 2526 武将、6068 / 6068 技能**，
+> **2026-08-21 复核注**：当日数字为 **2526 / 2526 武将、6068 / 6068 技能**，
 > `.skill` 5533，完整 5086、近似 447、TODO 0、noop 2094，
 > `missing_character_portraits` 45——以 `content/original/catalog.json` 与
 > [`../content-fidelity-ledger.md`](../content-fidelity-ledger.md) 为准。
@@ -21,6 +21,7 @@
 > 与 [`upstream-1.11.5-delta.md`](./upstream-1.11.5-delta.md)。
 > 另：catalog 的 `missing_character_portraits`（普查时 44，现 45）经逐项核对
 > **上游本就无对应头像图**（多为 pot_* 等活动/PVE 武将），无可迁移内容，维持登记。
+> **2026-10-10 注**：10-08 同步上游 v1.11.7 后，catalog 有 19 将 39 技为 `source_synced`（未移植），上游另新增 `card/jiubian.js`；本页“全部处理完毕”只适用于 08-21 时。见 [delta 10-08 节](upstream-1.11.5-delta.md)与[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) T15。
 
 ## 已迁移（npack + extensions 投放）
 
@@ -31,12 +32,12 @@
 | `apps/core/extension/英雄杀` | `extensions/yxs` | 43 武将 / 105 技能（C 段 omp，ADR 0530） |
 | `apps/core/extension/欢乐卡牌` | `extensions/huanle` | 5 装备卡 / 5 技能（C 段 omp，ADR 0531） |
 | `apps/core/extension/杀海拾遗` | `extensions/shahai` | 332 武将 / 1092 技能 / 41 装备卡（C 段 omp，ADR 0532） |
-| `apps/core/extension/3D精选` | `extensions/ddd` | 31 名 `ddd_*` 武将全部闭环（B 段 Codex 批次一~二十三 + C 段 omp 收尾批次 0581，ABI 617-640） |
+| `apps/core/extension/3D精选` | `extensions/ddd` | 31 名 `ddd_*` 武将全部闭环（B 段 Codex 批次一~二十三 + C 段 omp 收尾批次 0581——`ABI-COORDINATION.md` 领取记录，无 ADR 文件，ABI 617-640） |
 
 > 注：2026-08-03 全包一致性终验发现并修复 xianding 包 4 名完整武将（dc_shen_liubei/
 > dc_sb_liuzhang/dongxu/zhangjian）的 5 个失效技能引用（ADR 0540，E 段 Hermes）；
 > 重打包后 504 技能 / 196 武将不变，ABI 607，extensions 三份 npack 一致。diy 包
-> 84 个未解析引用经核实为元数据登记设计（ADR 0512，README 声明），非缺陷。
+> 84 个未解析引用经核实为元数据登记设计（ADR 0512，README 声明），非缺陷（0512 为 `ABI-COORDINATION.md` 领取记录，无 ADR 文件）。
 
 | 来源 | 目标包 | 历史交付 |
 |---|---|---|
@@ -79,7 +80,7 @@ identity/versus/stone/tafang/chess/boss/guozhan/doudizhu/brawl 等模式脚本
 全部为表现层资源；迁移原则「皮肤、CSS 与音频仅属表现层，不进入 npack 或运行时」
 （架构计划多处记录）。→ 不可迁移。
 
-## 角色索引补齐（2026-08-04，ADR 0582）
+## 角色索引补齐（2026-08-04，`ABI-COORDINATION.md` 领取表 0582；与同号文件 `0582-xianding-batch42.md` 无关）
 
 - 14 包 133 名缺失武将全部入角色索引（技能零未解析、零重复 ID），全局 2,896 唯一
   武将；standard 3 名（甘夫人/公孙瓒/旧界李典）因架构约束回退：引擎内嵌 standard

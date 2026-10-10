@@ -3,11 +3,11 @@
 > 配套明细：[`content-fidelity-ledger-detail.md`](content-fidelity-ledger-detail.md)
 > （机器生成：`python3 scripts/gen-fidelity-ledger.py`；含路径与省略说明原文）。
 >
-> 生成日期：2026-09-15。扫描范围：`content/original/ported/**/*.skill`（排除 `archive/` 子目录）。
+> 生成日期：2026-10-10。扫描范围：`content/original/ported/**/*.skill`（排除 `archive/` 子目录）。
 
 ## 背景
 
-架构计划 §47.4 要求内容例外「必须极少并走 ADR」。本清单按 `.skill` 源码注释
+原 v3.0 架构计划 §47.4（已删除，规则沿用见 ADR 0597）要求内容例外「必须极少并走 ADR」。本清单按 `.skill` 源码注释
 登记当前保真度边界：`// 近似` / `// TODO` 在编译期被 lexer 跳过，不进入 IR，
 不影响 `required_rule_vm_abi`。`INTENTIONAL_EMPTY_NOOP` 是另一条轴——目录可
 标 `ported`、npack 可装入，但运行时无规则面。
@@ -81,7 +81,7 @@ DSL 骨架已建，但核心逻辑仍是 `// TODO` 注释。触发时可能无�
 
 ## 建议的后续处理
 
-1. **本清单作为基线**：新移植技能若需近似，应走 ADR（§47.4），不得无声新增。
+1. **本清单作为基线**：新移植技能若需近似，应走 ADR（ADR 0597 沿用的原 §47.4 规则），不得无声新增。
    定期重跑 `python3 scripts/gen-fidelity-ledger.py` 核对数字变化。
 2. **TODO 专项**：已完成。清单内 `// TODO` 为 0；可运行合同用既有 Host 原语写完，
    需要 chooseToUse / gaintag / expansion / 额外回合等新原语的改为诚实 noop。

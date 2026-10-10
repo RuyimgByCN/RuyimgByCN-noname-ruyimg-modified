@@ -1,5 +1,7 @@
 # 阶段 9：旧扩展迁移工具链
 
+> 历史参考（2026-10-10 标注）：本页记录旧线 `legacy-analyzer` 工具链与旧线 ABI 批次语义日志，文中的“当前”、计数和“新引擎”均指当时的 `engine-core`。原生线 `engine-native` 是否兼容旧 JS 尚未决定（见[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) D2）；当前内容计数以 `content/original/catalog.json` 与[保真度清单](../content-fidelity-ledger.md)为准。最新入口见 [旧实现参考](../architecture/legacy-reference.md)。
+
 ## 原则
 
 - 旧引擎只用于**语义研究、清单提取、差分辅助**
@@ -44,9 +46,9 @@ node scripts/sync-original-content.mjs
 node scripts/sync-original-content.mjs --verify-only
 ```
 
-同步器使用 TypeScript AST 读取顶层定义，再复用 `legacy-analyzer` 生成能力画像。当前目录覆盖
-上游 **1.11.5** 的 26 个武将包、2526 名武将和 6068 个顶层技能（2026-08-16 复核，head
-`2eb3513b`，全部 `ported`）；详见 `content/original/README.md`。这一步只生成迁移输入和
+同步器使用 TypeScript AST 读取顶层定义，再复用 `legacy-analyzer` 生成能力画像。2026-08-16 复核时目录覆盖
+上游 **1.11.5** 的 26 个武将包、2526 名武将和 6068 个顶层技能（head
+`2eb3513b`，全部 `ported`）；此后已同步到 1.11.7，当前计数以 `content/original/catalog.json` 为准，见 `content/original/README.md`。这一步只生成迁移输入和
 证据，不会自动把 A 类或任何骨架标成可玩语义闭环。
 
 ## 输出
@@ -57,7 +59,7 @@ node scripts/sync-original-content.mjs --verify-only
 
 ## 实测：原仓库内容
 
-全仓目录包含 6068 个顶层技能，现有启发式分析器为其中 5982 个生成能力画像；保守分级当前
+全仓目录包含 6068 个顶层技能，启发式分析器当时为其中 5982 个生成能力画像；保守分级当时
 全部为 **B/C/D**，使用 `Math.random` 等的记为 **D**。catalog 已把 6068 项标为 `ported`
 （清单闭包），但可玩语义仍以保真度清单为准：5533 个 `.skill` 中完整 5086、近似 447、
 TODO 0、noop 2094。SP「功獒」是首个历史技能 Golden，四象标曹真「司敌」
@@ -1476,4 +1478,4 @@ ABI 586 补全 XIANDING 傅干「巧谏/析察」并闭合完整武将：「巧�
 
 ## Extension Studio
 
-阶段 9 提供分析 + 骨架 + 签名 CLI 作为工作室 后端；完整 GUI 可挂在 `apps/extension-studio`（后续 / 阶段 10 并行）。
+阶段 9 提供分析 + 骨架 + 签名 CLI 作为工作室 后端；完整 GUI 可挂在 `apps/extension-studio`（后续 / 阶段 10 并行）。2026-10-10 核对：`apps/extension-studio` 已是 headless CLI（analyze/publish/grade 子命令），GUI 仍未实现。

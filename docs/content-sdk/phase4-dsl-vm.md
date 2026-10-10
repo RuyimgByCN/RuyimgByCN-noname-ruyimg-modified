@@ -1,5 +1,7 @@
 # 阶段 4 / M0：DSL、Rule VM 与统一技能表面
 
+> 历史参考（2026-10-10 标注）：本页是旧线 `engine-core` 的 DSL 与 Rule VM 手册。原生线 `engine-native` 不使用这套 DSL/VM，技能由 Rust 实现，扩展执行后端尚未选定（见[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) T8）。最新入口见[旧实现参考](../architecture/legacy-reference.md)。
+
 ## 统一执行模型
 
 官方与社区技能默认编译到 **同一 Rule VM**。触发技（`trigger`）与主动技（`active`）共用：
@@ -402,8 +404,8 @@ DSL → Lex → Parse → Type/Capability/Termination Check
     → Trigger / Modifier / Active Index → ContentPackage
 ```
 
-当前内容 schema 为 v3、Rule VM ABI 为 v651，Rule IR 为 v129、Engine semantics 为
-v255（label `noname-next/semantics/v1`），`COMPILER_VERSION` 为
+当前内容 schema 为 v3、Rule IR 为 v129、Engine semantics 为
+v255（label `noname-next/semantics/v1`）；Rule VM ABI 本页原写 v651，已过时，以 `crates/engine-api/src/version.rs` 的 `RULE_VM_ABI_VERSION` 为准（2026-10-10 为 734，账面未闭合项见[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) T15），`COMPILER_VERSION` 为
 `0.5.0-active-selection`。模块 capability mask 由实际 opcode
 推导；包 manifest 聚合模块所需权限，不再默认申请全部权限。相同编译器版本 + 源码 →
 相同 `logic_hash`。
@@ -1561,6 +1563,6 @@ Engine semantics 提升至 249。
 `skill-capability-matrix.json` 是完整机器可读矩阵；`skill-capability-matrix.md` 是聚合摘要。
 当前由 `legacy-analyze matrix` 从 standard 与 shenhua 源码重建，覆盖 243 个技能，且明确
 标记 Trigger Point、Choice/Cost、Subskill State、Intent/Effect 和禁止 Host 的待办；它只做
-源码清单与交叉校验，不替代逐技能语义 Golden。全仓活清单（5988 个源码技能画像）见
+源码清单与交叉校验，不替代逐技能语义 Golden。全仓活清单（计数以该文件为准）见
 `content/original/skill-capability-matrix.md`，目录口径以
 `content/original/catalog.json` 为准。
