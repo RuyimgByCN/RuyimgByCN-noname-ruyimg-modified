@@ -37,7 +37,17 @@
 | E 段 | 562–599 | 本 agent（Hermes 会话，负责 standard/newjiang/clan/onlyOL/key/extra/yijiang 等未认领包；559-561 已被其他 agent 占用） |
 | 第二溢出段 | 600–699 | 原编号段全部耗尽后，继续按本表逐号串行领取 |
 
-ABI-MAX: 734
+ABI-MAX: 753
+
+> 2026-10-10 账面对齐（进度主稿 T15①）：735–753 批原语均已在
+> content-compiler（additive 常量 726…753，缺 743 与领取表一致）与
+> engine-core 宿主（如 `ResolveXiangshu`）落地，源 npack
+> `content/original/ported/{sp,sp2,xianding}` 分别要求 745/753/751，
+> 但 `RULE_VM_ABI_VERSION` 与 ABI-MAX 停在 734，按 compat
+> `package ∈ [3, host)` 判据被拒装。本次把 ABI-MAX 与
+> `RULE_VM_ABI_VERSION` 升至 753 并重打包部署这三包（部署副本
+> 714/713/706 → 745/753/751）；兼容判据对 host 单调，已部署低版本包
+> 不受影响。
 
 ## ABI 领取表（Claims）
 
