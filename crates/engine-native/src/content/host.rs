@@ -4919,8 +4919,10 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::MoshouImmunity => {
-                // TODO(事故恢复)：MoshouImmunity 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 墨守（玩点论杀/费诗，规则 v36）：锁定——延迟锦囊（乐不思蜀、
+                // 兵粮寸断）不能指定持有者为目标。上游仅 mod.targetEnabled；
+                // 效果在 `blocks_delayed_trick`（同文件 2755 行）与延迟锦囊目标
+                // 过滤，宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::ShuigongCard => {
@@ -5685,8 +5687,10 @@ impl crate::catalog::SkillMachine for HostMachine {
                 Flow::Done
             },
             HostBehavior::GujianFoodYuanbaorou => {
-                // TODO(事故恢复)：GujianFoodYuanbaorou 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 元宝肉（古剑食物，规则 v48）：出牌阶段可额外使用一张杀
+                // （每回合一次）。上游 cardUsable num+1 与 mark 回合递减；效果
+                // 在杀次数校验（engine.rs 2339 行读 once_used、2501 行用后置位）
+                // 与目标校验（engine.rs 3329 行），宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::GujianFoodGudonggeng => {
@@ -8869,8 +8873,10 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::WudianCiqiu => {
-                // TODO(事故恢复)：WudianCiqiu 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 刺酋（玩点论杀/韩龙，规则 v111）：锁定——你的杀对满血目标
+                // 伤害 +1；加成后达到目标体力则其本回合濒死即死、本技能移除。
+                // 上游 damageBegin1；效果在 commit_damage（kernel.rs 142 行）
+                // 与濒死处理（kernel.rs 3568 行），宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::WudianShuaiyan => match self.stage {
@@ -9208,8 +9214,10 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::WudianChezhen => {
-                // TODO(事故恢复)：WudianChezhen 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 车阵（玩点论杀/田豫，规则 v115）：锁定——持有者装备区有牌
+                // 时其到他人距离 -1；目标装备区为空时其被算到 +1。上游仅
+                // mod.globalFrom/globalTo；效果在距离计算（state.rs 700 行），
+                // 宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::WudianJuedao => {
@@ -9266,8 +9274,9 @@ impl crate::catalog::SkillMachine for HostMachine {
                 Flow::Done
             },
             HostBehavior::WudianTuji => {
-                // TODO(事故恢复)：WudianTuji 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 突击（ow/士兵76，规则 v118）：锁定——持有者回合内每已使用
+                // 一张牌，其进攻距离 -1。上游仅 mod.globalFrom；效果在距离
+                // 计算（state.rs 663 行），宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::WudianMujing => match self.stage {
@@ -9492,8 +9501,10 @@ impl crate::catalog::SkillMachine for HostMachine {
                 Flow::Done
             },
             HostBehavior::WudianGuangshuSpade => {
-                // TODO(事故恢复)：WudianGuangshuSpade 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 光塔·♠（ow，规则 v119）：锁定——持有者于下一个阶段结束时受
+                // 1 点无来源雷伤并移除本子技。上游 guangshu_spade trigger
+                // phaseEnd；效果在 commit_phase 的阶段结束直推（kernel.rs 768
+                // 行），宿主无机器步骤（TriggerMeta 仍注册 PhaseEnd 供过滤）。
                 Flow::Done
             },
             HostBehavior::WudianZiyu => match self.stage {
@@ -9616,8 +9627,9 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::WudianDuwen => {
-                // TODO(事故恢复)：WudianDuwen 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 毒吻（ow/黑白合，规则 v122）：锁定——造成伤害时若来源与受
+                // 伤害角色手牌数相等，伤害 +1。上游 duwen damageBegin；效果
+                // 在 commit_damage（kernel.rs 167 行），宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::WudianPaotai => match self.stage {
@@ -10194,8 +10206,11 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::WudianFeiren => {
-                // TODO(事故恢复)：WudianFeiren 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 飞刃（ow/源氏，规则 v129）：锁定——黑桃杀伤害 +1；杀无视
+                // 距离；梅花杀可多指定一个目标。上游 feiren damageBegin 与
+                // mod.targetInRange/selectTarget；效果在 commit_damage
+                // （kernel.rs 121 行）与出杀目标数/距离校验（engine.rs 2377、
+                // 2447 行），宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::WudianFeidan => match self.stage {
@@ -10723,14 +10738,20 @@ impl crate::catalog::SkillMachine for HostMachine {
                     Flow::Done
                 }
                 _ => Flow::Done,
-            },            HostBehavior::WudianXiandan => {
-                // TODO(事故恢复)：WudianXiandan 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+            },
+            HostBehavior::WudianXiandan => {
+                // 霰弹（ow/死神，规则 v140）：出杀时可弃一张 he——红牌使该杀
+                // 不可闪避，黑牌使该杀伤害 +1。上游 shaBegin direct 与
+                // xiandan2 damageBegin；效果在 ShaResolve 内联询问（kernel.rs
+                // 3152 行）与黑牌加伤折算（kernel.rs 2222 行），宿主无机器
+                // 步骤。
                 Flow::Done
             },
             HostBehavior::WudianJijia => {
-                // TODO(事故恢复)：WudianJijia 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 机甲（ow/D.Va，规则 v141）：初始 4 点机甲血，受伤 1:1 抵扣；
+                // 机甲血 >0 时手牌上限 +4。上游 jijia changeHp 拦截与
+                // mod.maxHandcard；效果在 commit_damage（kernel.rs 197 行）与
+                // 弃牌阶段手牌上限（kernel.rs 2006 行），宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::XianjianLingxue => match self.stage {
@@ -10794,8 +10815,10 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::WudianLongxiang => {
-                // TODO(事故恢复)：WudianLongxiang 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 龙翔（xianjian/温慧，规则 v146）：你使用杀时可令目标随机弃至
+                // 与你手牌数相同。上游 shaBegin（有 check，非强制）；原生在
+                // ShaResolve 内联、不询问（v146 已登记口径，kernel.rs 3047
+                // 行），宿主无机器步骤。
                 Flow::Done
             },
             HostBehavior::XianjianGuiyuan => match self.stage {
@@ -10849,8 +10872,11 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::XianjianTannang => {
-                // TODO(事故恢复)：XianjianTannang 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 探囊（xianjian/韩菱纱，规则 v148）：每回合限一次，梅花手牌当
+                // 顺手牵羊使用；此顺手牵羊无距离限制。上游 viewAs 与
+                // mod.targetInRange；效果在出牌转化（engine.rs 2165 行）与距离
+                // 豁免（engine.rs 2623 行），usable 走命令层 once_used，宿主无
+                // 机器步骤。
                 Flow::Done
             },
             HostBehavior::XianjianFeixu => match self.stage {
@@ -10965,8 +10991,10 @@ impl crate::catalog::SkillMachine for HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::XianjianXuanyan => {
-                // TODO(事故恢复)：XianjianXuanyan 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+                // 玄炎（xianjian/玄霄，规则 v152）：锁定——你造成火属性伤害时
+                // +1；受到雷属性伤害后回复 1。上游仅 group:[xuanyan2,
+                // xuanyan3]；子技效果在 XianjianXuanyan2/3（同文件 10930、
+                // 10939 行），本壳分支无机器步骤。
                 Flow::Done
             },
             HostBehavior::XianjianDiewu => match self.stage {
@@ -11093,9 +11121,13 @@ HostBehavior::XianjianLingyu => match self.stage {
                     Flow::Done
                 }
                 _ => Flow::Done,
-            },            HostBehavior::WudianLueying => {
-                // TODO(事故恢复)：WudianLueying 行为实现待重写（语义见该批证据 README）。
-                let _ = ctx;
+            },
+            HostBehavior::WudianLueying => {
+                // 掠影（xianjian/慕长兰，规则 v154）：你使用杀时获得目标 he 随机
+                // 一张；若另有其他有牌角色，目标另选一人供你随机弃其一张。
+                // 上游 shaBegin usable:1（可选发动）；效果在 ShaResolve 内联
+                // （kernel.rs 3087 行），宿主无机器步骤。差异：上游要求另有
+                // 其他有牌角色且可选发动，原生自动获得一张——登记见 T11。
                 Flow::Done
             },
             HostBehavior::XianjianAnwugu => match self.stage {

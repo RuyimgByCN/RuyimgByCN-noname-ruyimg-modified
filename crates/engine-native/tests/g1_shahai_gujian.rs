@@ -961,15 +961,30 @@ fn food_effects_batch_two() {
         e.debug_clear_hand(p);
     }
     let ybr = find(&e, "gj_yuanbaorou");
+    // 第三张杀：供每回合上限负例使用（取既非 sha 又非 sha2 的另一张杀）
+    let sha3 = {
+        let catalog = e.catalog();
+        catalog
+            .cards
+            .iter()
+            .enumerate()
+            .position(|(i, c)| c.kind == CardKind::Sha && i as u32 != sha && i as u32 != sha2)
+            .expect("第三张杀在目录") as u32
+    };
     let mut snap = e.save();
-    purge_all_zones(&mut snap, &[sha, sha2, ybr]);
+    purge_all_zones(&mut snap, &[sha, sha2, sha3, ybr]);
     snap.core.players[0].hand.push(ybr);
     snap.core.players[0].hand.push(sha);
     snap.core.players[0].hand.push(sha2);
+    snap.core.players[0].hand.push(sha3);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     let def_ybr = def_of(&e, engine_native::content::host::GJ_FOOD_YUANBAOROU_KEY);
     let out = submit(&mut e, 0, GameAction::PlayCard { card: ybr, targets: vec![0] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
+    assert!(
+        e.save().core.skills.contains_key(&(0, def_ybr)),
+        "元宝肉授予"
+    );
     e.debug_set_hp(1, 9);
     let out = submit(&mut e, 0, GameAction::PlayCard { card: sha, targets: vec![1] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
@@ -981,6 +996,16 @@ fn food_effects_batch_two() {
         matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
         "元宝肉额外杀放行: {out:?}"
     );
+    pass_nullify_window(&mut e);
+    drain_choices(&mut e);
+    // 每回合仅一张额外杀：再用一张被上限拒绝
+    let h0 = e.debug_hand(0).len();
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: sha3, targets: vec![1] });
+    assert!(
+        matches!(out, CommandOutcome::Rejected(RejectReason::ShaLimit)),
+        "元宝肉每回合仅一张额外杀: {out:?}"
+    );
+    assert_eq!(e.debug_hand(0).len(), h0, "上限后无额外摸牌");
     assert_zone_conservation(&e);
 
     // —— 咕咚羹：受杀伤害 -1 且状态立即移除 ——
