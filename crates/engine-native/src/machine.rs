@@ -515,18 +515,6 @@ impl<'a> Ctx<'a> {
             .filter(|((o, _), i)| *o == owner && i.enabled && i.expires_end_of_turn)
             .map(|((_, d), _)| *d)
             .collect();
-        if std::env::var("XLY_DBG").is_ok() {
-            eprintln!(
-                "DBG expire owner={owner} expired={:?} all0={:?}",
-                expired,
-                self.core
-                    .skills
-                    .iter()
-                    .filter(|((o, _), _)| *o == owner)
-                    .map(|((_, d), i)| (d, i.enabled, i.expires_end_of_turn))
-                    .collect::<Vec<_>>()
-            );
-        }
         for def in expired {
             if let Some(inst) = self.core.skills.get_mut(&(owner, def)) {
                 inst.enabled = false;

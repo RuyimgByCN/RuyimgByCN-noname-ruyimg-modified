@@ -97,9 +97,6 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
     res.next_event_id += 1;
     let parent = res.stack.last().map(|f| f.id);
     let kind = data.kind();
-    if std::env::var("PT_DBG2").is_ok() && matches!(kind, EventKind::Death) {
-        eprintln!("DBG push frame={id} kind=Death parent={parent:?}");
-    }
     let stage = match kind {
         EventKind::Damage => Stage::BeforeTriggers,
         // E03 翻面：前置取消窗口（漩涡面具等锁定技在 Commit 前派发）
@@ -284,12 +281,6 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
         (f.data.clone(), if before { before_kind } else { f.kind })
     };
     let mut entries: Vec<QueuedTrigger> = Vec::new();
-    if std::env::var("PT_DBG2").is_ok() {
-        eprintln!(
-            "DBG plan2 frame={frame_id} before={before} kind={kind:?} cands={}",
-            catalog.candidates(kind).len()
-        );
-    }
     let turn_current = core.turn.current;
     for &def_id in catalog.candidates(kind) {
         let def = &catalog.skills[def_id as usize];
@@ -321,15 +312,6 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
         }
     }
     entries.sort_by_key(|e| e.order);
-    if std::env::var("PT_DBG").is_ok() {
-        for e in &entries {
-            eprintln!(
-                "DBG plan frame={frame_id} before={before} kind={kind:?} def={} owner={}",
-                catalog.skills[e.def as usize].name,
-                e.owner
-            );
-        }
-    }
     let f = res.frame_mut(frame_id).expect("frame");
     f.queue = entries;
     f.planned = true;

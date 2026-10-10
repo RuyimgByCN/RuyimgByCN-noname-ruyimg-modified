@@ -908,7 +908,7 @@ fn huanle_xuelunyang_pass_declines_theft() {
 /// 诊断探针（ignore）：写轮眼窃取后推进多回合，逐步打印
 /// resolution.stack / parks / skills 的规模，定位状态膨胀源。
 #[test]
-#[ignore = "诊断探针：PT_DBG=1 观察规模曲线"]
+#[ignore = "诊断探针：手动运行观察规模曲线"]
 fn xly_state_growth_probe() {
     let root = repo_extensions_root();
     let dir = tempfile::tempdir().unwrap();
