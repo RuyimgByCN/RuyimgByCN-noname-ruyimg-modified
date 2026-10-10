@@ -1,18 +1,18 @@
 # 原生重写进度与下一步
 
-本页是当前状态主稿，按 **2026-10-10** [进度核对](../operations/evidence/2026-10-10-progress-check/README.md)更新（源码为本地 git 基线 `72583b2b`，规则 v192、NGSA 存档格式 v41）。目标见[性能架构 v3.3](../../noname-performance-architecture.md)；逐来源扩展状态见[两仓台账](../migration/upstream-extension-reconstruction.md)；逐版本规则语义见[规则基准](native-rules-baseline.md)；按批追加的历史流水与 10-10 事故恢复逐轮记录移至[批次流水存档](native-progress-history.md)，实现与决策过程见[证据目录](../operations/evidence/)和[ADR 索引](../adr/INDEX.md)。
+本页是当前状态主稿，按 **2026-10-10** [进度核对](../operations/evidence/2026-10-10-progress-check/README.md)更新（源码为本地 git 基线 `72583b2b`，规则 v192、NGSA 存档格式 v41）；同日按可领取的粒度重排了待做表（[待办整理核对](../operations/evidence/2026-10-10-todo-handoff/README.md)，只读源码，未重跑全量）。目标见[性能架构 v3.3](../../noname-performance-architecture.md)；逐来源扩展状态见[两仓台账](../migration/upstream-extension-reconstruction.md)；逐版本规则语义见[规则基准](native-rules-baseline.md)；按批追加的历史流水与 10-10 事故恢复逐轮记录移至[批次流水存档](native-progress-history.md)，实现与决策过程见[证据目录](../operations/evidence/)和[ADR 索引](../adr/INDEX.md)。
 
 ## 当前核验快照
 
-> **2026-10-10 事故与恢复**：v192（机关桶）批开发中 `crates/engine-native/src/content/host.rs` 被误截断为空。经会话记录回放与证据语义重建，九轮修复后全量转绿，14 golden 补齐 v191/v192 两批重录（[恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)，逐轮数字见[流水存档](native-progress-history.md#2026-10-10-hostrs-截断事故恢复记录)）。当日 `noname-next` 建立仅本地使用的 git 仓库（基线提交 `72583b2b`，pre-push 钩子拦截推送），此后以提交为回退点。恢复遗留项见下方“后续待做”P0/P3。
+> **2026-10-10 事故与恢复**：v192（机关桶）批开发中 `crates/engine-native/src/content/host.rs` 被误截断为空。经会话记录回放与证据语义重建，九轮修复后全量转绿，14 golden 补齐 v191/v192 两批重录（[恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)，逐轮数字见[流水存档](native-progress-history.md#2026-10-10-hostrs-截断事故恢复记录)）。当日 `noname-next` 建立仅本地使用的 git 仓库（基线提交 `72583b2b`，pre-push 钩子拦截推送），此后以提交为回退点。恢复遗留项见下方“后续待做”T1–T3。
 
 | 口径 | 实际结果（2026-10-10，git `72583b2b`） | 边界 |
 |---|---|---|
 | 当前版本 | 规则 **v192**（`STANDARD_RULESET_VERSION`）、NGSA 存档格式 **v41**（`ARCHIVE_FORMAT_VERSION`）；逐版本语义见[规则基准](native-rules-baseline.md)，v192 于本日补登 | 版本号只说明编码与语义已递增，不等于上游等价 |
-| 原生全量 | `cargo test --offline -p engine-native --no-fail-fast`：**525 通过、0 失败、1 ignore**（24 个测试目标，含 14 个 golden 场景、13 个包真实宿主生命周期测试、存档加固负例）——[日志](../operations/evidence/2026-10-10-progress-check/engine-native-tests.log) | 全绿限于现有测试；host.rs 14 个宿主行为分支是空实现（P0），效果靠内核钩子承担，未逐项对照批次证据 |
+| 原生全量 | `cargo test --offline -p engine-native --no-fail-fast`：**525 通过、0 失败、1 ignore**（24 个测试目标，含 14 个 golden 场景、13 个包真实宿主生命周期测试、存档加固负例）——[日志](../operations/evidence/2026-10-10-progress-check/engine-native-tests.log) | 全绿限于现有测试；host.rs 14 个宿主行为分支是空实现，效果靠内核钩子承担，未逐项对照批次证据（T1） |
 | 装载与包管理 | `content-runtime`+`engine-ai`+`content-native-loader` 合计 **63/0/0**（16 个目标）——[日志](../operations/evidence/2026-10-10-progress-check/deps-tests.log) | 正式客户端/服务端尚未接入原生装载与规则执行 |
-| CI 门禁 1b | `RUSTFLAGS="-D warnings" cargo check -p engine-native --lib`：**失败（exit 101）**，lib 12 条警告被拒——[日志](../operations/evidence/2026-10-10-progress-check/gate1b-check.log) | 10-07 记的“lib 零警告”已回退，P3 重开 |
-| 上游来源 | 清点脚本重跑与 9-23 基线**不一致**：noname HEAD 快进到 `df2682e6`（8 个扩展目录未改）；Liuli 10 个来源实例内容变化（10-08 `reset`，本地修改 50→7 个文件）；仍为 37 项，基线未重录——[清点复核](../operations/evidence/2026-10-10-progress-check/inventory-check.txt) | 变化来源的功能清单与切片影响待复核（P1） |
+| CI 门禁 1b | `RUSTFLAGS="-D warnings" cargo check -p engine-native --lib`：**失败（exit 101）**，lib 12 条警告被拒——[日志](../operations/evidence/2026-10-10-progress-check/gate1b-check.log) | 10-07 记的“lib 零警告”已回退，见 T3 |
+| 上游来源 | 清点脚本重跑与 9-23 基线**不一致**：noname HEAD 快进到 `df2682e6`（8 个扩展目录未改）；Liuli 10 个来源实例内容变化（10-08 `reset`，本地修改 50→7 个文件）；仍为 37 项，基线未重录——[清点复核](../operations/evidence/2026-10-10-progress-check/inventory-check.txt) | 变化来源的功能清单与切片影响待复核（T4） |
 
 全工作区 `cargo test --workspace`、conformance、跨目标哈希、前端构建、联机与目标设备本次未运行；最近一次全工作区结果仍是 9-23 第 48 轮（v59），只适用于当时源码。
 
@@ -39,21 +39,48 @@
 
 ## 后续待做（按阻塞关系）
 
-已完成的回放/目录、XiaoJi tag、存档解码加固和八份桥接迁移移至上表或标记完成。下列各项除注明“已完成”者外均为未完成或部分完成；按批次的历史流水见[批次流水存档](native-progress-history.md)。
+2026-10-10 第二次整理：本节只列未完成项，写到可以直接领取的程度，包括位置、做法和完成条件。逐处源码定位、警告逐条结论和上游对照见[待办整理核对](../operations/evidence/2026-10-10-todo-handoff/README.md)。整理前的原表（含已完成项的完整叙述）原样存于[批次流水存档](native-progress-history.md#2026-10-10-整理前的待做表原文)。性能项 O1–O5 见下一节。
 
-| 优先级 / 编号 | 当前状态 | 下一步及完成条件 |
-|---|---|---|
-| P0 / 事故恢复遗留（2026-10-10） | **待处理**：全量 525/0/1 通过，但重建代码尚未逐项复核 | ① `content/host.rs` 有 14 个宿主行为分支只有 `TODO(事故恢复)` 空实现（MoshouImmunity、GujianFoodYuanbaorou、WudianCiqiu/Chezhen/Tuji/GuangshuSpade/Duwen/Feiren/Xiandan/Jijia/Longxiang/Lueying、XianjianTannang/Xuanyan）。抽查刺猬、探囊两项，效果由内核钩子承担（如 `engine.rs` 探囊距离豁免）；13 项有同名回归测试通过，元宝肉无同名测试。需对照各批证据逐项确认空臂是否本就无事可做，确认后删除 TODO 或补实现。② 恢复期备份 `host.rs.pre_assembly`、`host.rs.recovered-v192` 仍在 `src/content/`（不参与编译，git 基线已含），可删。③ 恢复期调试探针：`machine.rs` 1 处、`resolution.rs` 3 处按环境变量输出 eprintln，其中 `push_frame` 每次压帧都读一次环境变量；建议删除或改为编译期开关。清单见[源码核对](../operations/evidence/2026-10-10-progress-check/source-checks.txt) |
-| P1 / E01 上游来源变化（2026-10-10） | **待复核** | noname 快进 42 个提交（扩展目录与 `card/standard.js` 未改，`character/standard/skill.js` 仅洛神判定回调签名改动）；Liuli 10 个来源实例内容变化。下一步：逐项判断是否影响 E01 功能清单与已转换切片（wuxing、cardpile 不在变化名单内），复核后重录或保留 9-23 基线并写明原因（[清点复核](../operations/evidence/2026-10-10-progress-check/inventory-check.txt)） |
-| P0 / N11 存档解码加固 | **已完成（2026-10-07）** | `card_kind_from_num` 可失败化（`UnknownCardKind(u32)` 不截断），4 处调用全部传播；`dec_snapshot` 后读尽检查（`TrailingBytes`）；未知编号改 255 与尾部夹带 4 字节两负例随测试运行；`CardKind::ALL` 86 牌种编码往返 + `enc_winner` 改走显式 `enc_faction`（往返与 BadTag 拒绝）。规则/格式不递增（合法 v2 字节不变，14 golden 通过）。证据见[本批核验](../operations/evidence/2026-10-07-unfinished-batch/README.md) |
-| P1 / C0、E02、G1 统一装载 | **八份测试桥接全部迁移完成（2026-10-07）；实际产品接入仍待做** | huanle/hearth/gwent/yunchou 补 `pack` 段（炉石键规范化、欢乐改 `skills[].mapping`、索链甲 `link_on_equip`）、d3 `character.json` 补 pack 段、wuxing 新增自描述 `cards.json`，六份测试改调装载器：6/6、7/7、6/6、12/12、3/3、3/3 全部保持原名/数/结果；A0 第 3 点 standard 46 技能编号声明表落地。装载器 `cards` 可选（纯武将包）、`generals` 合并、`link_on_equip` 解析。剩余：接入实际安装包→原生建局调用；新增唯一名称的上限/回收策略仍需确定。证据见[本批核验](../operations/evidence/2026-10-07-unfinished-batch/README.md) |
-| P1 / E01、G0 功能清单 | **来源清点与功能面基线完成（2026-10-07，37/37）；行为样本不完整** | 功能面基线已落盘（[E01 清点](../operations/evidence/2026-10-07-e01-feature-inventory/README.md)：入口规模/段计数/配置与设置引用/子插件/资源体量/混淆标记，龙血玄黄混淆特征已确认——1 行入口 + packed 标记，行为样本须动态观测）。剩余：逐来源旧行为样本（动态）、菜单/规则分支语义清单、目标接口与验证入口逐项登记；壳扩展 `const card = {}` 段计数为工具改进项。**龙血玄黄动态采样立项定案（2026-10-08）**：静态勘察完成（434KB 单行混淆=obfuscator.io 字符串表+debugger×2；子资源手杀 UI 补丁可读；存活明串→功能假说=手杀曹髦专属扩展：剑特效+「道心值」技能系统+UI 样式补丁）；三阶段方案 LX.1 静态可读化（Node 隔离解码+AST 还原，先中和 debugger）→ LX.2 隔离旧线勾桩采样 → LX.3 清单定案与规则/界面接口分配（执行混淆代码仅限隔离环境，产物须与静态读稿交叉印证）；方案与证据见[勘察立项](../operations/evidence/2026-10-08-e01-longxue-survey/README.md)、台账 L29/G0 行已同步。**LX.1 执行完成（2026-10-08）**：混淆判定修正为 jsjiami.com.v6 多字符串表（packed 假说被 stub 运行探针推翻——正文无 eval 载荷）；VM 隔离注入 28 函数+7 表声明+全字面量扫描代换，632/637 调用点解码（余 5 处动态键登记）；功能清单初稿=武将 mb_caomao×2+技能（乾龙四段/清正/酒诗/绝进/放逐/围通）+剑特效 CSS/UI 补丁（files 全空资源内联），规则面与界面面并存。证据见[LX.1 可读版](../operations/evidence/2026-10-08-e01-longxue-lx1/README.md)。**LX.2+LX.3 执行完成（2026-10-08）**：记录型 Proxy 桩隔离采样（config={} 与 {shengjian:true} 两轮）——规则面仅 2 技能（mbqianlong 无条件；_CMeffects 门控），静态清单两处修正（mbcm* 四技能与 mb_caomao×2 为 hasSkill/game.me.name 外部依赖引用，本包零武将/牌注册），界面面=剑特效 CSS/cmarea DOM/updateProgress；LX.3 定案：范围明确（2 技能+纯 UI），规则面若迁移走 G1 转换路径+逐技对照口径、界面面走宿主界面扩展，战斗内触发轨迹登记为迁移前置残余。证据见[LX.2/LX.3 采样定案](../operations/evidence/2026-10-08-e01-longxue-lx2/README.md)。**37/37 来源功能清单齐（G0 完成条件达成，龙血玄黄为样板）** |
-| P1 / E03、G1 开放规则宿主 | **E03 全链路验收完成（2026-10-07）：事件帧生命周期缺陷已定位修复，翻面/窃取/据守/面具 ignore 全部移除** | 猴子偷桃切片（2026-10-07）：使用前取消窗口全链路可用——确认窗口前移到使用提交的命令层挂起机器（`MonkeyStealMachine`，ActivateSkill 槽模式）：他人出桃 → 逐持有者确认门（挂起态可恢复，`active_ask` 派生校验一致）→ 确认：取消使用（无 CardUsed 帧）、桃收为持有者手牌、弃猴子离场撤销装备技；全部放弃：按普通桃结算（回血、入弃堆）——两种路径与恢复/回滚均有测试。`CardUseData.cancelled` 不入哈希（golden 不变）+ 格式 v3。与上游差异登记：原生取消发生在使用提交拦截（无 useCardToBegin 帧），多持有者按座位序逐个询问。证据见[E03 核验](../operations/evidence/2026-10-07-e03-monkey/README.md)。写轮眼切片（2026-10-07）：CardKind::Xuelunyang（88）+ HostBehavior::HuanleXuelunyangCard（76，多步宿主机器：确认→选目标→PickTag 选技能→`add_skill_until_turn_end` 临时授予）+ 欢乐包独立载荷；窃取流程、到期禁用、Pass 路径（OptionalGate 放弃 = 空选择取消）全部测试通过。曹仁「据守」技（真实翻面来源，2026-10-07）：结束阶段可选——翻面经 TurnOverBefore 子事件（面具可取消）+ 摸 1（登记差异：翻面被取消时摸牌仍执行）；`caoren_jushou_flips_and_mianju_cancels_flip` 通过（两次据守翻面/翻回 + 面具取消）。mianju（漩涡面具）翻面原语（2026-10-07）：PlayerState.face_down + TurnOverBefore/TurnOvered 事件对 + `debug_flip` 原语 + CardKind::Mianju（89）伴随表 + 面具取消/摘除后翻面测试；规则 v61 + 格式 v4（14 golden 重录）。**帧生命周期缺陷根因与修复（2026-10-07）**：`Ctx::emit` 曾把 TurnOverBefore 子事件以 Commit 阶段起步（Damage 之外一律 Commit），前置取消窗口从未执行——commit 以 cancelled=false 先行翻转，AfterTriggers 再按 f.kind 查候选把取消写回已提交的残留帧（旧 DBG「commit 先于写回、cur_frame 残留」与根因吻合）；修复 = emit 对 TurnOverBefore 子事件从 BeforeTriggers 起步 + TurnOverBefore 帧 after 窗口静默（目录无「翻面后」触发种类，避免取消技重复入队）+ `debug_flip` 事件驱动化（压帧→run 驱动到弹栈，非 Done 即 panic 回滚）。写轮眼状态膨胀（规模探针曲线已平坦）与面具取消失效确认同源。新增回归守卫 `flip_frame_lifecycle_no_residue`（翻面后 stack/parks 必须清空）；规模探针保留 ignore 诊断。**独立规则载荷验收完成（2026-10-07）**：上游 7 张实体牌逐张对照（list.js/card.js/skill.js，commit 5c02a745）——酒尾 ♥9 宝物补齐（`CardKind::Jiuwei` 编码 89 表尾追加 + 包声明映射既有 `host:phase_end_recover_or_draw`，真实装备驱动 + 受伤回血/满血摸牌/放弃三路径 + 恢复测试）；修正猴子花色点数（♥8→♦5）、面具花色点数与栏位（♠1→♣3、宝物栏→防具栏 equip2）；`huanle_pack_payload_matches_upstream_list` 守护 7 张清单与装备栏；苦无/写轮眼语义差异登记（见规则基准）。全量 engine-native 360/0/1、golden 不变（扩展牌种不入标准 golden）、content-runtime/loader/engine-ai 全绿、`-D warnings` 通过。证据见[帧生命周期核验](../operations/evidence/2026-10-07-e03-frame-lifecycle/README.md)与[载荷验收](../operations/evidence/2026-10-07-e03-payload-parity/README.md)。**跨牌组合矩阵完成（2026-10-07）**：`huanle_combo_*` 三测试——窃取×据守（窃得据守对窃得者真实触发翻面+摸 1，复制非转移）、窃取×据守×面具（前置窗口对窃得技同样生效、摸牌仍执行）、苦无×非杀伤害负例（手里剑伤害不触发苦无，两线一致）×雷杀（is_sha_like 超集行为面固化）；语义交互通道共四类（伤害来源联动/翻面前窗口/窃取/使用前取消），其余组合为无交互独立技并存（装备生命周期覆盖），台账 U06 据此关账组合项。全量 engine-native 363/0/1。剩余：mianju 验收的真实翻面来源仍归 P2/N08 曹仁条目装配（当前上游归档无标准曹仁/据守，`debug_flip` 验收驱动保留） |
-| P1 / E02、C3 生命周期 | **升级/回滚/依赖图/吊销/卸载场景已补（2026-10-07）** | 已有：跨层升级场景（v1 建局保存 → 错版恢复 `RuleVersionMismatch` 拒绝 → 回滚恢复续局，`e02_c3_lifecycle`）+ 依赖图五场景（激活强校验拒绝悬空依赖、吊销级联剪枝到不动点、升级受阻、激活失败原子性、revoke 重激活拒绝，`c3_dependency_conflict`）+ **卸载进行中对局**（`e03_c3_uninstall_during_active_game_lock_pinned`：宿主注册表卸载不影响活局——引擎持 Arc 目录无注册表回写通道，扩展内容仍可查、命令照常、锁指纹不变；卸载后标准目录恢复挂起对局被拒、原包集合恢复成功（存档自包含）——宿主须保留包字节直到无对局引用（宿主策略登记，引擎不感知引用计数）；卸载后新开局不含扩展内容）。**签名信任链与多级历史补齐（2026-10-08，`signature_trust_chain`）**：签名安装（正确密钥 signed=true 激活）→篡改字节拒绝→错钥签名拒绝→verify_key 模式未签名拒绝→多级版本历史（v1/v2 同槽并存、activate_version 切换、list_installed 双版本保留）→hash 撤销 v2（重装 Revoked）→v1 回激活（历史回退）。产品化策略仍登记：密钥分发/轮换与吊销名单分发属宿主运营面（引擎/宿主只验 keyed-blake3 v1 签名）。 |
-| P2 / N08、N11 规则对齐 | **局部修复；完整规则未验收**（2026-10-10 核对） | 已落地（各批语义与登记差异见[规则基准](native-rules-baseline.md)，逐批原文见[批次流水存档](native-progress-history.md#p2--n08n11-规则对齐批次流水2026-10-07--10-08)）：装配授予统一与 standard 缺失 8 将补齐；缺牌种清零与牌表逐张对照（标准目录 124 张）；九把命名武器与仁王盾（v64–v73）；花色点数对齐（v74）；逐技对照五批（v75–v79）；versus/斗地主/Boss（含 addFellow）/KOF 模式基线（v80–v84）。剩余：已登记的逐技能语义差异（含 v192 机关桶未实现「无人受伤则使用者摸一」与结算序）；各模式变体（versus 替补/4v4、斗地主特殊开局、Boss 专属技能包、KOF 多局连续会话在宿主层）；同命令、事件、随机流和恢复轨迹对照，语义变化递增规则版本 |
-| P2 / E04–E06、G2–G5 整包 | **整包 0/37** | 迁移剩余内容/角色/模式，接 AI、配置、界面、资源、战役档案和联机；逐来源完成全部功能、组合、保存恢复、安装升级及目标平台验收后才上调整包状态 |
-| P2 / N10、N12 AI 与产品 | **同步原型/历史样例** | AI 工作池、运行中取消、合法座位视图与策略质量；正式客户端/服务端原生接入、跨进程/目标平台和帧/延迟实测。旧线测试与性能数据单列 |
-| P3 / 维护：编译警告 | **回退，重开（2026-10-10）**：10-07 曾清零 lib 警告并在 CI 开启 Gate 1b（`RUSTFLAGS=-D warnings`），本日实测 lib 12 条、门禁失败 | lib 12 条：host.rs 未用导入/变量 5 条与字段自赋值 1 条（`self.card = self.card`）、`snap.rs` 流离 `liuli_card` 未用、`kernel.rs`/`engine.rs` Boss 字段未用、`presentation.rs` 未用变量等（[日志](../operations/evidence/2026-10-10-progress-check/gate1b-check.log)）。修复后重跑 Gate 1b 与 engine-native 全量。测试与示例另有约 576 条警告（24 个目标合计 588 条减去 lib 12 条），处理与否另议 |
+**接手方式**
+
+- **领取与回填**：
+  - 开工前用 `git status` 确认工作区干净并记下 HEAD，把下表该行“状态”改为“进行中（日期，执行者）”。
+  - 多个 agent 并行时，写入本页前先重读。
+  - 完成后按 [AGENTS.md](../../../AGENTS.md) 第 2–3 条回填结论、命令、结果和证据目录（`docs/operations/evidence/<日期>-<主题>/`），并同步规则基准、台账或覆盖清单里的对应条目。
+- **回退点**：`noname-next` 的 git 只在本地用，不 push、不加 remote（pre-push 钩子会拦截）。每批开工前和通过后各提交一次。`crates/engine-native/src/content/host.rs` 约 1.4 万行，10-10 曾被截断为空：只做定点编辑，提交前用 `git diff --stat` 核对改动规模。
+- **构建目录**：共享的 `target/` 可能有其他会话在用，不要执行 `cargo clean`。Gate 1b 这类要改 `RUSTFLAGS` 的检查放到独立的 `CARGO_TARGET_DIR`，用完删除。
+- **验证口径**：
+
+  | 改动 | 要跑的验证 |
+  |---|---|
+  | 原生内核 | `cargo test --offline -p engine-native --no-fail-fast`（10-10 为 525/0/1） |
+  | 装载或包管理 | 再加跑 `cargo test --offline -p content-runtime -p engine-ai -p content-native-loader --no-fail-fast`（63/0/0） |
+  | 规则语义 | 递增 `STANDARD_RULESET_VERSION`；14 个 golden 先按 AGENTS.md 第 4 条查明原因，再重录 |
+  | 存档编码 | 递增 `ARCHIVE_FORMAT_VERSION` |
+  | 覆盖清单 | `cargo test --offline -p engine-native --test replay_scenarios`（清单联动守护） |
+
+| 编号 | 优先级 / 领域 | 状态 | 任务、位置与做法 | 完成条件 |
+|---|---|---|---|---|
+| T1 | P0 / 事故恢复 | 待领取 | 核对 `content/host.rs` 里 14 个 `TODO(事故恢复)` 空分支（4922–11097 行）：墨守、元宝肉、刺酋、车阵、突击、光塔、毒吻、飞刃、霰弹、机甲、龙翔、探囊、玄炎、掠影。初查结果：规则基准把它们都记为目录标记技或内联钩，效果在 `kernel.rs`/`engine.rs`/`state.rs` 中按技能键实现；13 项有同名回归。事故前的会话回放版本里，墨守、元宝肉、刺酋本来就是 `Flow::Done`。逐项位置见核对 §1。元宝肉只验了“额外一张杀放行”，缺每回合一次上限的负例。建议与 T3 同批改 host.rs | 逐项对照规则条目和上游定义：无事可做的删除 TODO 并注明效果所在；确实需要行为的补实现和回归。元宝肉补上限负例。engine-native 全量通过，14 个 golden 不变 |
+| T2 | P0 / 事故恢复 | 待领取 | 清理残留。① `src/content/` 下的 `host.rs.pre_assembly`、`host.rs.recovered-v192` 两个备份不参与编译，git 基线已含，可以直接删。② 4 处按环境变量开关的 eprintln：`resolution.rs:100`（`push_frame`）、`resolution.rs:287` 和 `:324`（`plan_triggers`）、`machine.rs:518`（`expire_temporary_skills`）。前三处每次压帧或规划触发都会读一次环境变量。其中 PT_DBG 是 10-07 写轮眼规模诊断留下的，ignore 测试 `xly_state_growth_probe` 的说明提到它；该测试自己有输出，不依赖这里 | 删掉备份和 4 处输出，或改为编译期开关，并同步改那条 ignore 说明。`rg 'env::var' crates/engine-native/src` 无命中，全量通过 |
+| T3 | P3 / 维护 | 待领取 | CI Gate 1b 失败：lib 有 12 条警告（host.rs 7 条，kernel.rs 2 条，engine.rs、presentation.rs、snap.rs 各 1 条）。逐条看过，都是冗余绑定、多余 `mut` 或重建时留下的语句（例如 host.rs:14168 的 `self.card = self.card`），没有发现对应的逻辑缺失。逐条处理建议见核对 §2。另有 `tests/dbg4.rs`（9-16）只打印、没有断言，确认用途后删除或补断言 | `RUSTFLAGS="-D warnings" cargo check --offline -p engine-native --lib` 在独立 target 目录中通过，全量通过。测试与示例目标的约 576 条警告不在本项范围（见 D3） |
+| T4 | P1 / E01 | 待领取（先定 D1） | 复核上游变化。noname 10-08 快进了 42 个提交（`5c02a745..df2682e6`）。扩展目录和 `card/standard.js` 没改。变化集中在三处：`mode/guozhan`（33 个文件）；`card/{guozhan,huodong,jiubian}.js`；`library/element/{content.ts,player.js,character.js}` 与 `library/skill.js`。另有 `mode/{chess,single,tafang}.js` 有改动。标准武将只有 `standard/skill.js` 里洛神判定回调的签名变了。Liuli 有 10 个来源实例的字节变化（名单见台账），已转换的 wuxing、cardpile 不在其中 | 判断国战原型和已登记的标准结算语义是否受影响，必要时补登规则差异。10 个 Liuli 来源的 E01 功能清单按 D1 定下的口径复核。重录 `inventory.json` 基线，或在台账里写明保留 9-23 基线的理由 |
+| T5 | P1 / 验证 | 待领取 | 全工作区测试和 CI 其余门禁从 9-23（v59）起都没跑过：`cargo test --workspace`、`cargo run -p conformance`、`bash scripts/cross-target-hash.sh`、`node scripts/sync-original-content.mjs --verify-only`、`pnpm --dir apps/web-client build`。本机已装 wasm32 目标和 wasm-pack、pnpm、node。旧线 `engine-core` 构建量大，先看磁盘余量 | 各命令的结果和完整日志放进证据目录，并回填快照。失败项另立任务，旧线和原生线分开记 |
+| T6 | P1 / C0、E02 | 待领取 | 装载器收尾。① cardpile 的 `pile.json` 还由测试里的 `g1_cardpile.rs::parse_spec` 解析；`content-native-loader` 只有 `bridge_pack`/`bridge_generals`，要补 pile 入口，并让测试改调它。② 全局符号表永久保留首次出现的唯一名称和名单，要定总量上限或回收策略。③ 正式客户端/服务端接入“安装包 → 装载 → 原生建局”，和 T13 衔接 | ① 测试经装载器运行，包数据不变。② 策略写成 ADR，有重复装载和上限测试。③ 产品路径有实测证据 |
+| T7 | P1 / E02、C3 | 待领取 | ow（`shaai-ow-upstream-noname`）和 xianjian（`shaai-xianjian-upstream-noname`）两个武将包还没有真实宿主全生命周期测试；其余 13 个转换包 10-10 已通过。可参照现有的 `*_real_host_full_lifecycle` | 两个包补齐测试并通过（15/15），台账 U05 同步 |
+| T8 | P1 / E03、G1 | 可做原型，定案待 D2 | 开放规则。包里的技能现在只能映射到编译期的 `HostBehavior` 枚举（`host:*` 键），新规则必须改引擎再重编译，达不到[扩展契约](native-extensions.md)里“新包无需重编译客户端”的要求。按[演进提案 C1](architecture-evolution-plan.md#c1-扩展执行后端选择)，用同一个真实扩展比较各候选后端，再写 ADR | 不重编译就能安装含新技能或新牌的包；选择挂起/恢复、随机、内容锁与存档、超限和故障回滚都有实测 |
+| T9 | P1 / E01、G0 | 部分完成 | 37/37 来源的功能面基线已完成（10-07/08，含龙血玄黄 LX.1–LX.3）。剩余：每个来源的旧行为动态样本、菜单与规则分支的语义清单、目标接口和验证入口登记；龙血玄黄战斗内的触发轨迹（迁移前置项）；改进工具，让它能统计壳扩展的 `const card = {}` 段。逐来源状态见[台账](../migration/upstream-extension-reconstruction.md) | 台账里每个来源都有行为样本证据、目标接口和验证入口 |
+| T10 | P2 / N08 | 待领取 | v192 机关桶有两处已登记差异。① 上游 `jiguantong` 的 contentAfter 在没有人受到伤害时让使用者摸一张，原生没有实现。无手牌直接受伤和放弃弃牌都算受伤，被无懈抵消的目标不算。② 上游用 `reverseOrder` 逆序结算，原生按座位顺序。宿主机器在 host.rs 的 `SwdJiguantongCard` 分支（约 14127 行），回归测试是 `swd_jiguantong_aoe_discard_or_fire` | 补上摸牌分支和逆序，规则升到 v193，golden 按规则核对。回归覆盖“全员弃牌，使用者摸一”和“有人受伤，不摸”。撤销规则基准中这两条差异 |
+| T11 | P2 / N08、N11 | 长期 | 其余规则对齐：<br>• 规则基准已登记的逐技能差异。<br>• 模式变体：versus 替补和 4v4、斗地主特殊开局、Boss 专属技能包，以及在宿主层的 KOF 多局连续会话。<br>• 同一命令下的事件、随机流和恢复轨迹对照。<br>• 10-10 新发现一处未登记差异：掠影在 v154 记为“登记差异：无”，但上游要求另有其他有牌角色才能发动，而且是可选发动；原生 `kernel.rs:3087` 只要目标有牌就自动获得一张 | 逐项修复或登记；语义有变化就递增规则版本 |
+| T12 | P2 / E04–E06、G2–G5 | 整包 0/37 | 逐来源推进见台账。下一批切片已经明确：<br>• swd 机关术×2、机关妖术×2。<br>• mtg 其余的地。<br>• zhenfa 的 5 张 deferred。<br>• 玩点论杀 2 条未映射技能（duoqi/youzhan，暂缓）。<br>之后是模式、AI、配置、界面、资源、战役档案和联机 | 每个来源完成功能、组合、保存恢复、安装升级和目标平台验收后，才上调整包数 |
+| T13 | P2 / N10、N12 | 待领取 | 两部分：<br>• AI：工作池、运行中取消、合法座位视图、策略质量。<br>• 产品：正式客户端/服务端接入原生（含 T6③）；跨进程与目标平台运行；帧率和延迟实测 | 各项都有实测证据；旧线的测试和性能数据单列 |
+| T14 | P3 / 文档 | 待领取 | ① 覆盖清单 `kof_session` 行还写着“近似……会话矛盾仍接受、拒绝循环超时及真正恢复续跑待修”，和同页模式行、规则基准（`kof_session_consistency_and_midrestore` 已固化）矛盾。② 原生注释和规则基准把 moshou 写成“莫守”、xiandan 写成“闪弹”；上游 translate.js 里是“墨守”“霰弹” | ① 对照测试的实际覆盖改正该行，再跑 replay_scenarios 联动守护。② 统一用上游名称 |
+
+**需用户决定**
+
+- **D1 Liuli 来源以哪份为准**：9-23 和 10-06 的基线按工作区字节核验，当时 50 个文件有本地修改。10-08 执行 `git reset` 后只剩 7 个，stash 是空的，被丢弃的 43 个文件改动在 git 里查不到。E01 以 Liuli HEAD 提交为准，还是先设法找回当时的工作区修改？T4 依赖这个决定。
+- **D2 旧 JS 扩展兼容范围**：旧 JS 扩展零改动兼容到什么程度，还没有定（见[扩展契约](native-extensions.md)）。agent 可以按演进提案 C1 做对照原型、起草 ADR，但不要把 WASM、JS 或动态库预设为定案。T8 依赖这个决定。
+- **D3 测试代码警告**：测试与示例目标里约 576 条编译警告，要不要纳入清理？Gate 1b 只检查 lib。
 
 ## 性能优化核验后的待办（2026-09-24）
 
@@ -73,7 +100,7 @@ O1 已于 2026-10-07 完成；截至 2026-10-10，证据目录中没有 O2–O5 
 
 ## 证据与维护
 
-- 最新实跑是[2026-10-10 进度核对](../operations/evidence/2026-10-10-progress-check/README.md)（git `72583b2b`，规则 v192）；上一轮为[2026-10-07 进度核对](../operations/evidence/2026-10-07-progress-check/README.md)（v60），[2026-10-06 进度复核](../operations/evidence/2026-10-06-native-progress-audit/README.md)另含存档缺陷探针与来源清点。10-07 至 10-10 各批实现见对应日期的证据目录与[批次流水存档](native-progress-history.md)；更早[第 48 轮](../operations/evidence/2026-09-23-native-review-48/README.md)的全工作区结果只适用于当时 v59。历史数值只描述对应源码。
+- 最新实跑是[2026-10-10 进度核对](../operations/evidence/2026-10-10-progress-check/README.md)（git `72583b2b`，规则 v192）；同日[待办整理核对](../operations/evidence/2026-10-10-todo-handoff/README.md)只读源码定位 T1–T14，除覆盖清单联动守护外未重跑测试；上一轮为[2026-10-07 进度核对](../operations/evidence/2026-10-07-progress-check/README.md)（v60），[2026-10-06 进度复核](../operations/evidence/2026-10-06-native-progress-audit/README.md)另含存档缺陷探针与来源清点。10-07 至 10-10 各批实现见对应日期的证据目录与[批次流水存档](native-progress-history.md)；更早[第 48 轮](../operations/evidence/2026-09-23-native-review-48/README.md)的全工作区结果只适用于当时 v59。历史数值只描述对应源码。
 - `noname-next` 自 2026-10-10 起用本地 git 管理（不推送远端，`.git/hooks/pre-push` 拦截）；核验记录写明对应提交，回退以提交为准。
 - [规则基准](native-rules-baseline.md)记语义和版本，[覆盖清单](../native-coverage-manifest.md)记机制范围，[扩展台账](../migration/upstream-extension-reconstruction.md)记逐来源状态。新增实现同步源码、定向回归、全量结果和台账。
 - “反例已修”“已加测试”“子包切片完成”“整包验收通过”“上游规则等价”是不同结论；性能收益必须有同负载测量。

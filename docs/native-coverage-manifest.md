@@ -158,7 +158,7 @@ N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，�
 
 ## 范围 C：后续验收
 
-- 存档未知牌种编号与载荷读尽仍未修：2026-10-06 [诊断探针](operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)再次确认 panic 与多余字节被接受。已完成的 v60 golden、目录和 tag 修复不再列为当前待办。
+- 存档未知牌种编号与载荷读尽已于 2026-10-07 加固，回归 `archive_hardening_rejects_unknown_kind_and_trailing_bytes` 随全量运行，2026-10-10 通过。2026-10-06 的[诊断探针](operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。已完成的 v60 golden、目录和 tag 修复不再列为当前待办。
 - E01–E06 与两仓 37 个来源整包重构继续；现有 G1 样本和卡牌切片只证明相应路径。
 - 标准将/牌/模式、KOF 一致性、规则差异、扩展组合与 AI/客户端边界继续按[进度主稿](architecture/native-progress.md)逐项验收；正式客户端、目标平台和发布性能须有独立证据。
 
