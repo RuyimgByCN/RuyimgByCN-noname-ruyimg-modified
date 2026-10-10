@@ -1,0 +1,8 @@
+// 星魂（蒋琬系）：出牌阶段限一次，观看牌堆顶五张牌并选择任意张与你手牌
+// 交换。
+// 旧 JS 的「观星换牌」无对应原语，未建模（已注明）。
+skill mbxinghun(3479017041) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

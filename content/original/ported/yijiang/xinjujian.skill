@@ -1,0 +1,9 @@
+// 新举荐（阎圃）：结束阶段，若你的非基本牌多于基本牌，弃置一张非基本牌并选择一名其他角色，其选择回复1点体力或摸两张牌或重置（解除横置/翻面）。
+// 旧 JS 的弃牌种类判断+目标三选一（回复/摸牌/重置）无精确原语。
+// 以 choose_draw_or_recover 近似目标的回复/摸牌二选一，丢掉了重置选项和弃非基本牌的条件。
+skill xinjujian(3925582625) {
+  trigger phase_end owner_alive optional {
+    effect choose_draw_or_recover(event_player, 1, 1, 0);
+    // 未建模：弃非基本牌条件、重置选项（解除横置/翻面）
+  }
+}

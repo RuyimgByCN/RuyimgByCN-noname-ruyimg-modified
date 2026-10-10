@@ -1,0 +1,5 @@
+// zc26_bagua_skill：音效名:bagua_skill, player:chooseToRespondBegin, player:chooseToUseBegin, 需选择目标, 异步。
+skill zc26_bagua_skill(2841965400) {
+  trigger phase_any_end owner_alive {
+  }
+}

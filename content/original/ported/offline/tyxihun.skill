@@ -1,0 +1,5 @@
+// tyxihun：锁定技, global:roundEnd, 需弃牌, 多分支选择, 回复体力, 失去体力, 异步。
+skill tyxihun(2152080222) {
+  trigger phase_any_end owner_alive {
+  }
+}

@@ -1,0 +1,5 @@
+// jsrgqinrao（侵扰）：其他角色的出牌阶段开始时，你可以将一张牌当作【决斗】对其使用。此牌结算过程中，若其手牌中有可打出的【杀】，则其必须打出；否则其展示手牌。
+// 未建模：全局状态, addTempSkill, 展示手牌, chooseToRespond替出牌, charlotte延迟, storage状态 ...等8项（DSL无对应原语）
+skill jsrgqinrao(3413490010) {
+  view_as juedou play_phase any;
+}

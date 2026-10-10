@@ -1,0 +1,17 @@
+// 双雄（颜良文丑）：摸牌阶段，你可以放弃摸牌，改为进行判定，你获得此判定牌，然后
+// 本回合你可以将一张与此牌颜色不同的手牌当【决斗】使用。
+// 旧 JS 仅作语义证据；判定→获牌→颜色记录→视为用牌由 resolve_shuangxiong 权威状态机
+// 校验（ABI 511）。判定颜色以稳定 mark 记录；视为技能由本技授予至回合结束，回合结束
+// 自动移除（旧 JS addTempSkill 语义）。多张判定牌时新颜色覆盖旧记录（旧 JS 标记数组，
+// 每回合至多一次判定，文档化近似）。
+skill shuangxiong(3926154071) {
+  trigger phase_draw owner_is_target_draw_not_replaced optional {
+    effect resolve_shuangxiong(self);
+  }
+}
+
+// 双雄·视为：本回合内颜色不同于记录色的手牌可当【决斗】使用；由 resolve_shuangxiong
+// 授予，回合结束自动移除。
+skill shuangxiong_viewas(1761435131) {
+  view_as juedou any color_ne_shuangxiong from hand;
+}

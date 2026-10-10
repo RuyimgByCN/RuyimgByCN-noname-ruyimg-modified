@@ -1,0 +1,5 @@
+// yanxiao_global：锁定技, player:phase_judge。
+skill yanxiao_global(4248482153) {
+  trigger phase_judge owner_alive {
+  }
+}

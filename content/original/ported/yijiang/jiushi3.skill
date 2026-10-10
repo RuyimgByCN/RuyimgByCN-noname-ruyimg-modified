@@ -1,0 +1,6 @@
+// 酒诗3（曹植）：受到伤害后，若受伤时背面朝上，可翻回正面。
+skill jiushi3(4156803269) {
+  trigger damage owner_is_target_face_down optional {
+    effect turn_over(self);
+  }
+}

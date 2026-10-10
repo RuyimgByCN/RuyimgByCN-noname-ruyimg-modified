@@ -1,0 +1,7 @@
+// 毒躯（露西娅·锁定技）：受到/造成伤害时，对方获得「毒」；因「毒」失去体力改为回复等量体力。
+// 旧 JS 的「毒卡生成+毒伤转换」需衍生卡+伤害类型改写原语，未建模。
+skill lucia_duqu(2794121169) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 lucia_duqu = 标记型技能（charlotte，skill.js:12058），无规则面。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

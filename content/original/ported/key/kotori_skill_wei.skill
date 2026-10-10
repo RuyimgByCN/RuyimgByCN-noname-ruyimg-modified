@@ -1,0 +1,10 @@
+// 魏势（小鸟·魏附技）：回合开始时，弃置一张牌并选择一名其他角色，其选择弃置一张牌或让你摸一张牌。
+// 实现：回合开始时可选弃 1 张手牌并摸 1。
+// 近似：只保留「你弃后摸」分支；对方二选一未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kotori_skill_wei(3333120229) {
+  trigger phase_begin owner_is_target optional {
+    effect discard_hand(self, 1);
+    effect draw_cards(self, 1);
+  }
+}

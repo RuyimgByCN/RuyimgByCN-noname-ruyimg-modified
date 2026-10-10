@@ -1,0 +1,8 @@
+// 大攻车（装备技能）：装备"大攻车"时，出牌阶段可视为使用一张【杀】（无距离限制/+目标上限/造成伤害后弃目标牌）。
+// 装备技能含多个mod（targetInRange/selectTarget/canBeDiscarded）与子技能（damage后弃牌），DSL缺装备条件触发+动态mod表达。
+skill dagongche_skill(3322745246) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dagongche_skill（skill.js:39202）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

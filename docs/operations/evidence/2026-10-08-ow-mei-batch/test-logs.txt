@@ -1,0 +1,43 @@
+# U05 ow 纵切批十测试日志（2026-10-08，美双技+翻面跳回合，规则 v126→v127）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 445 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v126 基线 442 +3 新增美回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 32 passed; 0 failed（29 既有 + 3 新增 mei_*）
+
+$ cargo test --offline -p engine-native --test g1_huanle
+test result: ok. 19 passed; 1 ignored（caoren_jushou 测试基线更新：
+跳回合基建后第二次据守=再翻至背面；advance_to_play 升级门感知）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 123）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v126→v127 + PlayerState 两
+零值字段入 canonical_hash——14 场景全 mismatch，纯版本/零值字段位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- library/element/player.js turnOver(bool)（bool=目标朝向，幂等 resolve）
+- library/skill.js _turnover（phaseBefore 强制：翻回+phaseSkipped）
+- character/ow/skill.js baoxue（selectTarget [1,black] + contentBefore/
+  content/contentAfter 三段）、jidong（global phaseEnd + hp1 + turnOver
+  + recover 2 + jidong2 至 turnOverAfter）、jidong2（damageBefore cancel
+  + mod targetEnabled）
+
+## 测试迭代记录
+- 种子 9911 黑牌数=1：暴雪选 2 目标超 max 被拒（InvalidChoice）——按实
+  际上限构造应答
+- 急冻解除点修正：初版挂 commit_turn_ended——自己 End 前触发时 3 帧后
+  回合收束立即清位；改挂 commit_turn_over_before 翻回正面（turnOverAfter
+  口径），commit_phase 跳过路径的 TurnOverBefore 窗口翻回即解除
+- 跳回合仅限 Judge begin：初版任意 phase begin 检查会把自己回合内触发
+  急冻后的剩余阶段全部跳掉（上游 phaseBefore 仅回合开始判定）
+- g1_huanle caoren 测试随新基线更新：跳过回合插队翻回→第二次据守再翻
+  至背面；advance_to_play 门感知化（途中弃牌门 ChoicePending）
+- 伤害门控补插：第一轮脚本半途丢失 commit_damage 插入（只写 state.rs
+  即返回）——万箭 3→2 复现后补插

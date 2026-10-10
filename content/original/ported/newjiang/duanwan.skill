@@ -1,0 +1,13 @@
+// 断腕（吴安国）：限定技，濒死时回复至 2 点体力。
+// 旧 JS 仅作语义证据；「转换技切换」与觉醒分支未建模，
+// 限定技以技能标记近似（每局一次，标记不复位）。
+skill duanwan(3861411398) {
+  trigger dying owner_is_target {
+    if mark_count(self, 3861411398) == 0 {
+      if hp(self) < 2 {
+        effect recover_hp(self, 2 - hp(self));
+      }
+      effect add_mark(self, 3861411398, 1);
+    }
+  }
+}

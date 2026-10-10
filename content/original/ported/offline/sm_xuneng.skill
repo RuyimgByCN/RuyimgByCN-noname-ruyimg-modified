@@ -1,0 +1,5 @@
+// sm_xuneng：锁定技, player:card_used, 主动(phaseUse), 加技能, 含子技能, 异步。
+skill sm_xuneng(2983336803) locked {
+  trigger card_used always {
+  }
+}

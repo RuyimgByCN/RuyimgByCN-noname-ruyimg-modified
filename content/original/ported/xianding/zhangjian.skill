@@ -1,0 +1,13 @@
+// 张臶【技能A/技能B】（ABI 604）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dc_zj_a(2792442500) locked {
+  trigger damage_before owner_is_target_card_damage_before {
+    effect resolve_zhangjian(self, event_card, 0, 0);
+  }
+}
+
+skill dc_zj_b(3520470433) {
+  trigger phase_end owner_is_target_phase_end_hand_equip_nonempty_other_alive optional {
+    effect resolve_zhangjian(self, event_card, 2792442500, 1);
+  }
+}

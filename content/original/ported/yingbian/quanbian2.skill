@@ -1,0 +1,5 @@
+// 权变·2（权变系）：标记技能。记录已用过的牌名。
+// 旧 JS 的 storage 记录无对应原语，未建模（已注明）。
+skill quanbian2(2776394470) {
+  modifier hand_limit add 1;
+}

@@ -1,0 +1,6 @@
+// jdkanpo（触发技）：音效名:sbkanpo, player:game_started, global:phaseBefore, global:card_used, 摸牌, 移出游戏, 含子技能, 异步。
+skill jdkanpo(3145655306) {
+  trigger game_started owner_alive optional {
+    effect draw_cards(self, 3);
+  }
+}

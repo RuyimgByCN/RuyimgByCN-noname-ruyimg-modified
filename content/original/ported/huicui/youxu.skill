@@ -1,0 +1,7 @@
+// youxu：旧JS复杂效果。
+// 旧JS含多步选择，DSL无法精确建模。
+skill youxu(2466599617) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

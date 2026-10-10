@@ -1,0 +1,7 @@
+// 远忆：回合开始时按游戏轮数（至多三张）摸牌，并先执行一个独立的额外出牌阶段。
+skill godan_yuanyi(3610550580) locked {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, round_number_capped(3));
+    effect queue_opening_extra_play_phase(self);
+  }
+}

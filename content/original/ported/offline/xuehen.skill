@@ -1,0 +1,5 @@
+// xuehen：锁定技, global:phase_end, 多分支选择, 异步。
+skill xuehen(2788854525) {
+  trigger phase_end owner_alive {
+  }
+}

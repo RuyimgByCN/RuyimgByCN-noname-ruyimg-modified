@@ -1,0 +1,6 @@
+// 执笏
+skill zhihu(3057288085) locked {
+  trigger damage owner_source_other_twice {
+    effect draw_cards(self, 2);
+  }
+}

@@ -1,0 +1,11 @@
+// 决生（范疆张达）：限定技，出牌阶段可将一张牌当【决斗】使用；此决斗伤害改为
+// 目标本局使用【杀】次数（至少 1），且目标获得「决生」至其回合结束。
+// 上游 (sp/skill.js:27240)：limited viewAs juedou（isCard、不消耗实体牌），
+// precontent awakenSkill + 临时 juesheng_counter 改伤害并回授本技能。
+// 实现：`view_as juedou play_phase any from hand uses_per_turn 1`。
+// 近似：(1) 消耗一张手牌，而非零成本虚拟决斗；(2) 每回合一次近似限定技；
+// (3) 伤害保持 1，不按目标出杀史改写；(4) 不回授决生。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill juesheng(3463553348) {
+  view_as juedou play_phase any from hand uses_per_turn 1;
+}

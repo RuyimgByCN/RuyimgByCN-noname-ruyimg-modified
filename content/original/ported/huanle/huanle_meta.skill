@@ -1,0 +1,32 @@
+// 欢乐卡牌（huanle）包元数据登记：以下装备技能依赖整张牌使用取消、伤害后目标弃牌、
+// 动态技能复制等 DSL 不支持或未移植的机制，登记元数据并文档化近似（无运行时行为）。
+
+// 猴子偷桃（monkey，宝物）：其他角色使用【桃】时，你可以弃置此装备，取消该【桃】
+// 的结算并获得其已进入弃牌堆的牌。需要整张牌使用取消原语。
+skill monkey(1257566305) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 苦无（kuwu，武器）：锁定技，你使用【杀】造成伤害后，受伤角色弃置一张牌；此武器
+// 使你的攻击范围-1（武器距离以卡牌定义 distance_from 表达，伤害弃牌未建模）。
+skill kuwu(4122676548) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 血轮眼（xuelunyang，宝物）：准备阶段，你可以选择一名其他角色并选择其一项技能，
+// 本回合获得该技能。需要动态复制他人技能机制。
+skill xuelunyang(3406176655) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 手里剑（shoulijian，基本牌）：出牌阶段，对一名其他角色使用，其选择一项：弃置一张
+// 装备牌，或受到你造成的 1 点伤害。ABI 642（ADR 0607）新增 ResolveShoulijian 原语，
+// 复用「弃装备或伤害」choice 结算；卡牌本体以 CardKind::Other 入牌堆（huanle 牌堆）。
+skill shoulijian(2612562977) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_shoulijian(self, event_source);
+  }
+}

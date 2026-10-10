@@ -1,0 +1,5 @@
+// 膂力·无懈（文鸯膂力子技能）：可将任意牌当【无懈可击】使用。
+// 膂力主技能的总次数联动省略（独立移植）。
+skill lvli5(2862723587) {
+  view_as wuxie any any from hand_equip;
+}

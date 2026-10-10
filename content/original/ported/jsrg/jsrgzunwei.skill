@@ -1,0 +1,8 @@
+// jsrgzunwei（尊位）：出牌阶段限一次。你可以选择一名其他角色并选择执行一项，然后移除该选项：1.将手牌数摸至与该角色相同（最多摸五张）；2.将其装备牌移至你的装备区，直到你装备区的牌数不少于其；3.将体力值回复至与该角色相同。
+// 未建模：chooseButton, 翻译调用, storage状态（DSL无对应原语）
+skill jsrgzunwei(2441233363) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgzunwei（skill.js:4163）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

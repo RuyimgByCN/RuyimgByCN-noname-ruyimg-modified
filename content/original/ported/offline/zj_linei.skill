@@ -1,0 +1,5 @@
+// zj_linei：global:cards_moved, global:hp_lost, global:cards_moved, 回复体力, 含子技能, 异步。
+skill zj_linei(2255887335) {
+  trigger cards_moved owner_alive optional {
+  }
+}

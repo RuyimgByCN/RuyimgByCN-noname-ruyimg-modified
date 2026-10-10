@@ -1,0 +1,4 @@
+// 潜踞（程普）：锁定技。你与其他角色的距离 -（已损失体力值）。
+skill qianju(2828017083) locked {
+  modifier distance_from add -owner_lost_hp;
+}

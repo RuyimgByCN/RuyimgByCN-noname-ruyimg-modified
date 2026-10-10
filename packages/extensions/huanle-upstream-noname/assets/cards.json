@@ -1,0 +1,72 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/欢乐卡牌/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": {
+    "name": "huanle-upstream-noname",
+    "version": 1,
+    "description": "G1 欢乐卡牌",
+    "card_prefix": "hnl_"
+  },
+  "cards": [
+    {
+      "name": "kuwu",
+      "kind": "weapon",
+      "range": 2,
+      "equip_skills": [
+        "huanle_kuwu"
+      ],
+      "suit": "spade",
+      "rank": 6
+    },
+    {
+      "name": "shoulijian",
+      "kind": "shoulijian",
+      "suit": "diamond",
+      "rank": 4
+    },
+    {
+      "name": "shoulijian",
+      "kind": "shoulijian",
+      "suit": "spade",
+      "rank": 4
+    },
+    {
+      "name": "monkey",
+      "kind": "monkey",
+      "suit": "diamond",
+      "rank": 5
+    },
+    {
+      "name": "xuelunyang",
+      "kind": "xuelunyang",
+      "suit": "heart",
+      "rank": 2
+    },
+    {
+      "name": "mianju",
+      "kind": "mianju",
+      "suit": "club",
+      "rank": 3
+    },
+    {
+      "name": "jiuwei",
+      "kind": "jiuwei",
+      "suit": "heart",
+      "rank": 9,
+      "equip_skills": [
+        "huanle_jiuwei"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "huanle_kuwu",
+      "mapping": "host:sha_damage_force_discard"
+    },
+    {
+      "name": "huanle_jiuwei",
+      "mapping": "host:phase_end_recover_or_draw"
+    }
+  ]
+}

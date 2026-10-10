@@ -1,0 +1,7 @@
+// 刚骨（公孙修）
+skill dcgangu(3823814559) locked {
+  trigger hp_lost owner_alive_not_target_once {
+    effect draw_cards(self, 3);
+    effect lose_hp(self, 1);
+  }
+}

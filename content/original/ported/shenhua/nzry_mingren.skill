@@ -1,0 +1,7 @@
+// 明任（卢植）：游戏开始/每轮摸 2 并置一张入「任」。
+// 旧 JS 的「任 expansion」无对应原语；以回合开始摸一张近似（已注明）。
+skill nzry_mingren(4118177400) locked {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

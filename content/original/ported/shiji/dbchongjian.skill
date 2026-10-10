@@ -1,0 +1,7 @@
+// 重剑（标文鸯）：你可将装备区中的一张装备牌当【杀】或【酒】使用或打出。
+// 旧 JavaScript 仅作语义证据；装备当杀/酒由既有 view_as 管线权威结算。
+skill dbchongjian(4130288495) {
+  view_as sha play_phase any from equip uses_per_turn 1;
+  view_as sha response any from equip uses_per_turn 1;
+  view_as jiu any any from equip uses_per_turn 1;
+}

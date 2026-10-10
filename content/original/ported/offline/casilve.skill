@@ -1,0 +1,5 @@
+// casilve：音效名:xinfu_tunjun, player:phaseDrawBegin1, 需选择目标, 移出游戏, 异步。
+skill casilve(3719171744) {
+  trigger phase_draw owner_alive {
+  }
+}

@@ -1,0 +1,31 @@
+// 毅烈（SP陈登）：出牌阶段开始时，选择：本阶段使用【杀】的次数上限+1；
+// 本回合内你使用【杀】被【闪】抵消时摸一张牌；或背水：失去 1 点体力并依次执行上述所有选项。
+// 旧 JavaScript 仅作语义证据；选择与临时技能由权威状态机校验。
+skill spyilie(3923077723) {
+  trigger phase_play owner_is_target optional {
+    let pick = choose(0, 1, 2);
+    if pick == 0 {
+      effect add_skill_until_turn_end(self, 2315445528);
+    }
+    if pick == 1 {
+      effect add_skill_until_turn_end(self, 3355966982);
+    }
+    if pick == 2 {
+      effect lose_hp(self, 1);
+      effect add_skill_until_turn_end(self, 2315445528);
+      effect add_skill_until_turn_end(self, 3355966982);
+    }
+  }
+}
+
+// 毅烈·加杀：本回合使用【杀】的次数上限+1。
+skill spyilie_add(2315445528) {
+  modifier sha_use_limit add 1;
+}
+
+// 毅烈·摸牌：使用【杀】被【闪】抵消时摸一张牌。
+skill spyilie_miss(3355966982) {
+  trigger sha_dodged owner_source_sha {
+    effect draw_cards(self, 1);
+  }
+}

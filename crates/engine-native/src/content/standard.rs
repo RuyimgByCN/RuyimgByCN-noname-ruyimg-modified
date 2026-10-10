@@ -1,0 +1,4953 @@
+//! 一组覆盖复杂机制的代表技能，用于验证
+//! 「只读目录 + 紧凑状态 + 原生技能暂停恢复」链路：
+//!
+//! | 技能 | 机制覆盖 |
+//! |---|---|
+//! | 散财 | 可选触发（确认）→ 摸牌子事件 → 连续两个选择（嵌套选择链）|
+//! | 移伤 | 伤害前置窗口内改写帧载荷（伤害转移）|
+//! | 碎盾 | 每回合限一次的防止型技能 |
+//! | 肃清 | 在同一触发窗口内禁用他人技能（结算中途失效）|
+//! | 授艺 | 失去体力后动态获得临时技能（回合结束到期）|
+
+use crate::catalog::{
+    CardDef, CardKind, Catalog, Faction, QueryCtx, SkillBehavior, SkillDef, SkillLimits,
+    SkillMachine,
+    Suit, TriggerMeta,
+};
+use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
+use crate::event::{EventData, EventKind, Phase, Timing};
+use crate::ids::{CardId, PlayerId};
+use crate::machine::{Ctx, Flow, LogEvent};
+use crate::snap::{
+    FanJianStageSnap, GuanXingStageSnap, JiJiStageSnap, JieYinStageSnap, JijiangStageSnap,
+    KuRouStageSnap, LiJianStageSnap, MachineSnapshot, QingNangStageSnap, RendeStageSnap,
+    JiJieStageSnap, SanCaiStageSnap, ShuShenStageSnap, TongJiStageSnap, TuXiStageSnap, XiaoGuoStageSnap, XunXunStageSnap,
+    YaoWuStageSnap, YiShangStageSnap, ZhangbaStageSnap,
+    ZhiHengStageSnap,
+};
+
+/// 标准测试目录的规则版本：目录语义（牌表/技能表/规则机制）变化时递增。
+/// v29：护驾/激将逐人询问重构（Sha/Jijiang 机器快照字段与状态编码变化）、
+/// 仁德分次累计（TurnState.rende_given 入状态）、主动技阶段门控、
+/// 牌归属完整核算与字节存档 v2（ChoiceKind 显式编码）——ADR 0776。
+/// v30：G1 cardpile 前置——新增【酒】/【雷杀】牌种（出牌/濒死/杀结算
+/// 规则与 TurnState.jiu_used/jiu_active 状态），ADR 0776 G1。
+/// v31：G1 规则宿主原型——扩展机器载荷（MachineSnapshot::Host）、
+/// 手里剑牌种、宿主技能目录注册。
+/// v32：G1 wuxing——五行属性入状态（PlayerState.wunature /
+/// core.card_natures）、PickTag/Tag 选择原语、WuxingPan 宝物栏牌种。
+/// v33：G1 3D精选——角色包管线（catalog.extension_generals）、
+/// 精彀宿主行为、装备技能生命周期（装备授予/离场撤销 + 恢复一致性）。
+/// v34：G1 玩点论杀——望梅止渴牌种（CardKind::WangmeiZhike）与
+/// 同名宿主行为（最小体力/最小手牌条件增益）。
+/// v35：G1 玩点论杀武将批——思继宿主原语（弃杀数×2 摸牌，
+/// HostMachine.cards 关联牌组入快照）。
+/// v36：G1 玩点论杀原语增补——三尖武器技（弃牌+目标两段选择）
+/// 与莫守目标免疫（延时锦囊命令边界过滤）。
+/// v37：G1 运筹帷幄原语增补——水攻（多目标弃装备）与釜底抽薪
+/// （拼点比较两段选择）；HostMachine.targets 多目标入快照。
+/// v38：G1 运筹帷幄切片扩展——趁火打劫（获得目标手牌）与索链甲
+/// （防具 + link_on_equip 横置钩子）。
+/// v39：G1 运筹帷幄切片扩展——偷梁换柱（换牌双选）与洪水
+/// （自-target 延时锦囊判定：梅花 2–9 → 3 点雷伤）。
+/// v40：G1 杀海拾遗·炉石子包切片——灵魂之火/照明弹/急耗卡
+/// （CardKind 三种 + 宿主行为；shenenshu 等复杂牌暂缓）。
+/// v41：G1 玩点论杀余量原语——诱敌深入（杀响应转化：
+/// 打出后杀无效，来源受 1 点反噬；登记差异：无连用循环）。
+/// v42：G1 运筹帷幄余量原语——隔岸观火（双目标拼点链，
+/// 赢方获得输方一张手牌，平局目标一弃牌）。
+/// v43：G1 运筹帷幄余量原语——草船借箭（目标分支选择：
+/// 交出所有手牌杀并受反噬杀 / 展示手牌并被弃一张）。
+/// v44：G1 运筹帷幄收官——舌战群儒（确定性首轮拼点：
+/// 与所有有手牌的其他角色各拼一次，大者摸 1；登记差异：
+/// 简化上游多轮 Bool 响应链+随机牌池）。
+/// v45：G1 杀海拾遗·古剑子包切片——舒筋散（目标弃任意张手牌
+/// 摸等量）/面里金针（摸 1 后受 1 点伤害，登记差异：失去体力
+/// 简化为伤害）/飞镖（弃黑色手牌或受 1 点伤害，登记差异同前）。
+/// v46：G1 古剑续切片——金莲烛（伤害前置事件取消原语：持有者打出
+/// 防止此伤害、来源摸 1；登记差异：chooseToUse 选牌简化为确认后
+/// 确定性弃置首张）。
+/// v47：G1 古剑食物计时状态原语——摊黄冻（出牌阶段结束摸 1）/
+/// 有更（阶段开始已受伤且体力最少回 1，登记差异：原生无准备阶段，
+/// 挂判定阶段开始）；SkillInstance 增 rounds 倒计时字段（入哈希/
+/// 存档），效果触发点扣减、归零移除。
+/// v48：古剑食物效果面续补——青团（回合内首杀摸 1，once_per_turn）/
+/// 元宝肉（额外一张杀，杀次数校验钩子）/咕咚羹（受杀伤害 -1，一次
+/// 性移除）/麻婆豆腐（结束阶段弃牌，登记差异：随机改确定性）/
+/// 春饼（手牌上限 +1，弃牌校验钩子）。
+/// v49：护甲原语（PlayerState.hujia：伤害 1:1 先行抵扣，入哈希/存档；
+/// LogEvent::HujiaAbsorbed）——古剑食物鲤鱼汤（阶段开始体力最少得
+/// 1 护甲）/麻茶（黑色牌目标限制——出牌使用路径过滤）/菱角（摸牌
+/// 阶段额外摸 1 后弃 1，选择机）。
+/// v50：古剑食物簇收官——蜜链藕（红桃手牌当桃：出牌阶段 view-as
+/// 转化 + 濒死响应选项并入 is_tao_like）/卤玉羹（出牌阶段限一次
+/// 弃基本牌获得牌堆顶；登记差异：上游发现牌随机五选一）。
+/// v51：古剑机关簇——冰魄通（逐目标首张同色比对，同色弃+伤害；
+/// 登记差异：确定性首张；失去体力为规则 v77 原语）/乾坤镖（目标及邻座
+/// 各弃首张，登记差异：随机改确定性）/龙须钩（获得目标首张装备）/
+/// 神火飞鸦（目标及邻座需闪否则 1 火伤——逐目标响应循环）。
+/// v52：古剑余簇——紫阳丹（+3 护甲，结束阶段 -1 衰减；登记差异：
+/// 上游每阶段开始衰减）/玉女元神（濒死一次性回复标记）/石会粉
+/// （需闪否则禁用对其他角色用牌至其回合结束；登记差异：上游为
+/// 他人出牌阶段响应使用，原生为主动使用）/六风散（获得两张实体
+/// 闪；登记差异：虚拟牌生成改实体牌获得）。
+/// v53：古剑最后一批——砂糖（火伤+护甲）/黑龙鳞片（+1 护甲；登记
+/// 差异：防御距离临时技暂缓）/硫头阁（自己摸 1/他人弃首张；登记
+/// 差异：随机效果池简化为确定性）/木头面具（装备技：出牌阶段限一次
+/// 任意手牌当杀——view-as 装备技+once_used）。
+/// v54：古剑收官双卡——帝女玄霜（濒死特殊牌：is_tao_like 按桃
+/// 救回 + 主动使用回复+rider 弃任意摸等量；登记差异：濒死救援
+/// 骑乘暂缓）/玉衡（主动装备技确定性取黑桃；登记差异：升级机制
+/// +随机敌目标暂缓）。
+/// v55：炉石余量 6 种 9 张——盾牌格挡（+1 护甲摸 1 弃 1，登记差异：
+/// 确定性首张）/治疗波（判定红回 1 否则+1 护甲）/元素毁灭（逐目标
+/// 弃 1–2 每少弃一张受 1 雷伤）/星界沟通（体力上限+1 回 1 弃全部
+/// 手牌）/传送门（获得牌堆顶；登记差异：立即使用链暂缓）/坦蛇至人
+/// （座位序链式弃首张；登记差异：随机改确定性）。
+/// v56：炉石收官——世界树（牌堆自顶搜索两张不同槽位装备，目标
+/// 依次穿戴，同槽旧装备替换进弃牌堆并撤销/授予装备技）。
+/// v57：gwent 首切片 5 种 9 张——燕子药水（最小手牌数摸 2 否则 1）/
+/// 奥祖之雷（1 雷伤后摸 1）/瘟疫（弃首张或受伤；登记差异：随机改
+/// 首张、失去体力为规则 v77 原语）/置换军（反复失去体力上限）/暴雪药水
+/// （弃前两张摸 1；登记差异：确定性前两张）。
+/// v58：gwent 天气状态群——倾盆大雨（手牌上限 -1 至弃牌阶段结束，
+/// 手牌上限钩子读取）/碧日浓雾（不能使用杀至出牌阶段结束，杀次数
+/// 校验钩子读取）/刺骨寒霜（摸牌阶段结束弃首张；登记差异：等价净
+/// -1）——目标+距离 1 邻座，授予机跳过已持有者。
+/// v59：gwent 收官 3 种 4 张——昆恩法印（防止普通伤害，按防止次数
+/// 计数，初始 min(5, 存活数)；登记差异：上游按回合计数）/山崩术
+/// （弃其他角色前两件装备；登记差异：随机改座位序前二）/破晓 2
+/// （分支：清除天气+判定区牌 / 获得牌堆首张天气法术；登记差异：
+/// 随机改牌堆序首张）。
+/// v60：gwent 收官——祖墨手铠（封印：目标技能全部失效至其任意阶段
+/// 结束；登记差异：原生无锁定技区分，全部技能失效）。
+/// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
+/// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
+/// 不能被翻面，TurnOverBefore 强制取消）。
+pub const STANDARD_RULESET_VERSION: u64 = 192;
+
+// ---------------------------------------------------------------------------
+// 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
+// ---------------------------------------------------------------------------
+
+struct SanCaiBehavior;
+
+impl SkillBehavior for SanCaiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.target == owner && !d.prevented && d.amount > 0)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(SanCaiMachine {
+            owner,
+            stage: SanCaiStage::Draw,
+            target: None,
+        })
+    }}
+
+#[derive(Clone)]
+enum SanCaiStage {
+    /// 摸两张（子事件结算后继续）。
+    Draw,
+    /// 询问交给谁（恢复后读目标）。
+    Target,
+    /// 已知目标，询问交哪张牌（恢复后读牌）。
+    GiveCard,
+    /// 已知目标与牌，执行给予。
+    Finish,
+}
+
+#[derive(Clone)]
+struct SanCaiMachine {
+    owner: PlayerId,
+    stage: SanCaiStage,
+    target: Option<PlayerId>,
+}
+
+impl SkillMachine for SanCaiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::SanCai {
+            owner: self.owner,
+            stage: match self.stage {
+                SanCaiStage::Draw => SanCaiStageSnap::Draw,
+                SanCaiStage::Target => SanCaiStageSnap::Target,
+                SanCaiStage::GiveCard => SanCaiStageSnap::GiveCard,
+                SanCaiStage::Finish => SanCaiStageSnap::Finish,
+            },
+            target: self.target,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            SanCaiStage::Draw => {
+                ctx.draw_cards(self.owner, 2);
+                self.stage = SanCaiStage::Target;
+                Flow::Yield
+            }
+            SanCaiStage::Target => {
+                let others: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != self.owner)
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if others.is_empty() || ctx.core.player(self.owner).hand.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = SanCaiStage::GiveCard;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "sancai_target",
+                        options: others,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            SanCaiStage::GiveCard => {
+                match ctx.answer_first() {
+                    ChoiceOption::Player(p) => self.target = Some(p),
+                    _ => return Flow::Done,
+                }
+                let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = SanCaiStage::Finish;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "sancai_card",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            SanCaiStage::Finish => {
+                if let (Some(target), ChoiceOption::Card(c)) = (self.target, ctx.answer_first()) {
+                    ctx.give_hand_card(self.owner, target, c);
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 移伤：当你即将受到伤害时，你可以将其转移给另一名存活玩家。
+// ---------------------------------------------------------------------------
+
+struct YiShangBehavior;
+
+impl SkillBehavior for YiShangBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d) if d.target == owner && !d.prevented)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(YiShangMachine {
+            owner,
+            stage: YiShangStage::Target,
+        })
+    }
+}
+
+#[derive(Clone)]
+enum YiShangStage {
+    Target,
+    Apply,
+}
+
+#[derive(Clone)]
+struct YiShangMachine {
+    owner: PlayerId,
+    stage: YiShangStage,
+}
+
+impl SkillMachine for YiShangMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::YiShang {
+            owner: self.owner,
+            stage: match self.stage {
+                YiShangStage::Target => YiShangStageSnap::Target,
+                YiShangStage::Apply => YiShangStageSnap::Apply,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            YiShangStage::Target => {
+                let others: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != self.owner)
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if others.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = YiShangStage::Apply;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "yishang_target",
+                        options: others,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            YiShangStage::Apply => {
+                if let ChoiceOption::Player(p) = ctx.answer_first() {
+                    let d = ctx.current_damage_mut();
+                    d.redirect_chain.push(d.target);
+                    d.target = p;
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 反馈（司马懿）：受到 1 点伤害后，可获得伤害来源的一张牌（手牌优先，
+// 其次装备区）。来源死亡/无牌或无来源时不触发。
+#[derive(Clone)]
+struct FanKuiBehavior {
+    _p: (),
+}
+
+impl SkillBehavior for FanKuiBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.target == owner && !d.prevented && d.amount > 0)
+            && event_damage_source_stealable(ctx, event)
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let source = match event {
+            EventData::Damage(d) => d.source,
+            _ => None,
+        };
+        Box::new(FanKuiMachine {
+            owner,
+            source,
+            asked: false,
+        })
+    }
+}
+
+/// 来源存活且持有至少一张可取的牌。
+fn event_damage_source_stealable(ctx: &QueryCtx<'_>, event: &EventData) -> bool {
+    let Some(src) = (match event {
+        EventData::Damage(d) => d.source,
+        _ => None,
+    }) else {
+        return false;
+    };
+    let p = ctx.state.player(src);
+    p.alive && (!p.hand.is_empty() || !p.equips.is_empty())
+}
+
+#[derive(Clone)]
+struct FanKuiMachine {
+    owner: PlayerId,
+    source: Option<PlayerId>,
+    asked: bool,
+}
+
+impl SkillMachine for FanKuiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::FanKui {
+            owner: self.owner,
+            source: self.source,
+            asked: self.asked,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 可选触发由 OptionalGate 的 trigger_confirm 询问确认；
+        // 本机器被启动（gate 已确认）后直接执行取牌。
+        if !self.asked {
+            self.asked = true;
+            if let Some(src) = self.source {
+                if ctx.core.player(src).alive {
+                    let p = ctx.core.player(src);
+                    let card = p.hand.first().copied().or_else(|| p.equips.first().copied());
+                    if let Some(c) = card {
+                        ctx.give_hand_card(src, self.owner, c);
+                    }
+                }
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 奸雄（曹操）：受到伤害后，可获得造成此伤害的牌（牌已进弃牌堆）。
+#[derive(Clone)]
+struct JianXiongBehavior;
+
+impl SkillBehavior for JianXiongBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.target == owner && !d.prevented && d.amount > 0 && d.card.is_some())
+            && d_card_in_discard(ctx, event)
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let card = match event {
+            EventData::Damage(d) => d.card,
+            _ => None,
+        };
+        Box::new(JianXiongMachine {
+            owner,
+            card: card.expect("filtered"),
+            asked: false,
+        })
+    }
+}
+
+fn d_card_in_discard(ctx: &QueryCtx<'_>, event: &EventData) -> bool {
+    let Some(card) = (match event {
+        EventData::Damage(d) => d.card,
+        _ => None,
+    }) else {
+        return false;
+    };
+    ctx.state.discard.contains(&card)
+}
+
+#[derive(Clone)]
+struct JianXiongMachine {
+    owner: PlayerId,
+    card: CardId,
+    asked: bool,
+}
+
+impl SkillMachine for JianXiongMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::JianXiong {
+            owner: self.owner,
+            card: self.card,
+            asked: self.asked,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // OptionalGate 已确认；牌仍在弃牌堆时收入手牌（竞态防御：不在则跳过）
+        if !self.asked {
+            self.asked = true;
+            if let Some(pos) = ctx.core.discard.iter().position(|c| *c == self.card) {
+                ctx.core.discard.remove(pos);
+                ctx.core.player_mut(self.owner).hand.push(self.card);
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 刚烈（夏侯惇）：受到伤害后，可进行判定：若判定牌不为红桃，
+// 伤害来源受到你造成的 1 点伤害（递归由确认闸门天然限流）。
+#[derive(Clone)]
+struct GangLieBehavior;
+
+impl SkillBehavior for GangLieBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.target == owner && !d.prevented && d.amount > 0
+                && d.source.is_some() && d.source != Some(owner))
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let source = match event {
+            EventData::Damage(d) => d.source.expect("filtered"),
+            _ => unreachable!(),
+        };
+        Box::new(GangLieMachine { owner, source, asked: false })
+    }
+}
+
+#[derive(Clone)]
+struct GangLieMachine {
+    owner: PlayerId,
+    source: PlayerId,
+    asked: bool,
+}
+
+impl SkillMachine for GangLieMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::GangLie {
+            owner: self.owner,
+            source: self.source,
+            asked: self.asked,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if !self.asked {
+            self.asked = true;
+            let card = ctx.draw_judge_card();
+            let heart = ctx.catalog.cards[card as usize].suit.is_heart();
+            ctx.to_discard(card);
+            if !heart && ctx.core.player(self.source).alive {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(
+                    Some(self.owner),
+                    self.source,
+                    1,
+                )));
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 骁果（乐进，P2/N08 标准缺失将 2026-10-07）：其他角色的结束阶段
+// 开始时，可弃一张基本手牌，对其造成 1 点伤害（登记差异：上游
+// chooseToDiscard 自选，原生为确认门 + 手牌基本牌选择）。
+#[derive(Clone)]
+struct XiaoGuoBehavior;
+
+impl SkillBehavior for XiaoGuoBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase { player, phase: Phase::End, begin: true }
+            if *player != owner
+                && ctx.state.player(*player).alive
+                && ctx.state.player(owner).alive
+                && ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(ctx.catalog.card_kind(*c), crate::catalog::CardKind::Sha | crate::catalog::CardKind::Shan | crate::catalog::CardKind::Tao | crate::catalog::CardKind::Jiu)
+                }))
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let target = match event {
+            EventData::Phase { player, .. } => *player,
+            _ => unreachable!(),
+        };
+        Box::new(XiaoGuoMachine { owner, target, stage: XiaoGuoStage::Ask })
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum XiaoGuoStage {
+    /// 弃牌选择（挂起 = xiaoguo_discard_basic）。
+    Ask,
+    /// 恢复读应答：弃置所选基本牌并对目标造成 1 点伤害。
+    Read,
+}
+
+#[derive(Clone)]
+struct XiaoGuoMachine {
+    owner: PlayerId,
+    target: PlayerId,
+    stage: XiaoGuoStage,
+}
+
+impl SkillMachine for XiaoGuoMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::XiaoGuo {
+            owner: self.owner,
+            target: self.target,
+            stage: match self.stage {
+                XiaoGuoStage::Ask => XiaoGuoStageSnap::Ask,
+                XiaoGuoStage::Read => XiaoGuoStageSnap::Read,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            XiaoGuoStage::Ask => {
+                if !ctx.core.player(self.target).alive {
+                    return Flow::Done;
+                }
+                let options: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| {
+                        matches!(
+                            ctx.catalog.card_kind(*c),
+                            crate::catalog::CardKind::Sha
+                                | crate::catalog::CardKind::Shan
+                                | crate::catalog::CardKind::Tao
+                                | crate::catalog::CardKind::Jiu
+                        )
+                    })
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = XiaoGuoStage::Read;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: crate::choice::ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::SelectCards,
+                        prompt: "xiaoguo_discard_basic",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            XiaoGuoStage::Read => {
+                if let ChoiceOption::Card(card) = ctx.answer_first() {
+                    if ctx.core.player(self.owner).hand.contains(&card) {
+                        ctx.discard_from_hand(self.owner, card);
+                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+                            Some(self.owner),
+                            self.target,
+                            1,
+                        )));
+                    }
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 狂斧（潘凤，P2/N08 标准缺失将 2026-10-07）：出牌阶段用【杀】对目标
+// 造成伤害后触发（锁定）：目标体力值小于你则你摸两张牌，否则你失去
+// 1 点体力。每回合限一次（上游为出牌阶段限一次——temp 技能到阶段结束；
+// 因触发仅在自身出牌阶段，两者等价）。
+#[derive(Clone)]
+struct KuangFuBehavior;
+
+impl SkillBehavior for KuangFuBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.source == Some(owner)
+                && d.target != owner
+                && !d.prevented
+                && d.amount > 0
+                && d.card.map(|c| ctx.catalog.card_kind(c) == crate::catalog::CardKind::Sha).unwrap_or(false)
+                && ctx.state.turn.current == owner
+                && ctx.state.turn.phase == Phase::Play)
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let target = match event {
+            EventData::Damage(d) => d.target,
+            _ => unreachable!(),
+        };
+        Box::new(KuangFuMachine { owner, target })
+    }
+}
+
+#[derive(Clone)]
+struct KuangFuMachine {
+    owner: PlayerId,
+    target: PlayerId,
+}
+
+impl SkillMachine for KuangFuMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::KuangFu { owner: self.owner, target: self.target }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if !ctx.core.player(self.target).alive {
+            return Flow::Done;
+        }
+        if ctx.core.player(self.target).hp < ctx.core.player(self.owner).hp {
+            ctx.draw_cards(self.owner, 2);
+        } else {
+            // 失去 1 点体力（苦肉同款：濒死检查 + Dying 子事件）。
+            let p = ctx.core.player_mut(self.owner);
+            p.hp -= 1;
+            let entering = p.hp <= 0 && !p.dying;
+            if entering {
+                p.dying = true;
+                ctx.log(crate::LogEvent::DyingEntered { player: self.owner });
+                ctx.emit(EventData::Dying { player: self.owner, source: None });
+                return Flow::Yield;
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 耀武（华雄，P2/N08 标准缺失将 2026-10-07）：锁定技——你受到红色
+// 【杀】的伤害时，伤害来源须选择摸一张牌或回复 1 点体力（满血时无
+// 回复选项；登记差异：上游 chooseDrawRecover 由 AI/玩家确认，原生为
+// 强制二选）。
+#[derive(Clone)]
+struct YaoWuBehavior;
+
+impl SkillBehavior for YaoWuBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.target == owner
+                && !d.prevented
+                && d.amount > 0
+                && d.source.is_some()
+                && d.source != Some(owner)
+                && ctx.state.player(d.source.unwrap()).alive
+                && d.card.map(|c| {
+                    let def = &ctx.catalog.cards[c as usize];
+                    matches!(ctx.catalog.card_kind(c), crate::catalog::CardKind::Sha | crate::catalog::CardKind::FireSha | crate::catalog::CardKind::LeiSha)
+                        && matches!(def.suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond)
+                }).unwrap_or(false))
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let source = match event {
+            EventData::Damage(d) => d.source.expect("filtered"),
+            _ => unreachable!(),
+        };
+        Box::new(YaoWuMachine { owner, source, stage: YaoWuStage::Ask })
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum YaoWuStage {
+    /// 来源二选（挂起 = yaowu_draw_or_recover）。
+    Ask,
+    /// 恢复读应答：摸一张或回复 1 点体力。
+    Read,
+}
+
+#[derive(Clone)]
+struct YaoWuMachine {
+    owner: PlayerId,
+    source: PlayerId,
+    stage: YaoWuStage,
+}
+
+impl SkillMachine for YaoWuMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::YaoWu {
+            owner: self.owner,
+            source: self.source,
+            stage: match self.stage {
+                YaoWuStage::Ask => YaoWuStageSnap::Ask,
+                YaoWuStage::Read => YaoWuStageSnap::Read,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            YaoWuStage::Ask => {
+                let p = ctx.core.player(self.source);
+                let mut options = vec![ChoiceOption::Tag(0)];
+                if (p.hp as u32) < p.max_hp {
+                    options.push(ChoiceOption::Tag(1));
+                }
+                self.stage = YaoWuStage::Read;
+                Flow::WaitChoice {
+                    observer: self.source,
+                    spec: crate::choice::ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::PickTag,
+                        prompt: "yaowu_draw_or_recover",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            YaoWuStage::Read => {
+                match ctx.answer_first() {
+                    ChoiceOption::Tag(1) => {
+                        ctx.recover(self.source, 1, None);
+                    }
+                    _ => {
+                        ctx.draw_cards(self.source, 1);
+                    }
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 淑慎（甘夫人，P2/N08 标准缺失将第二批 2026-10-07）：回复体力后，
+// 可令一名其他角色摸牌——有手牌摸 1，无手牌摸 2。
+#[derive(Clone)]
+struct ShuShenBehavior;
+
+impl SkillBehavior for ShuShenBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Recover { player, amount, .. }
+            if *player == owner && *amount > 0 && ctx.state.player(owner).alive)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ShuShenMachine { owner, target: None, stage: ShuShenStage::Ask })
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum ShuShenStage {
+    /// 目标选择（挂起 = shushen_target）。
+    Ask,
+    /// 恢复读应答：目标摸 1（有手牌）或 2（无手牌）。
+    Read,
+}
+
+#[derive(Clone)]
+struct ShuShenMachine {
+    owner: PlayerId,
+    target: Option<PlayerId>,
+    stage: ShuShenStage,
+}
+
+impl SkillMachine for ShuShenMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::ShuShen {
+            owner: self.owner,
+            target: self.target,
+            stage: match self.stage {
+                ShuShenStage::Ask => ShuShenStageSnap::Ask,
+                ShuShenStage::Read => ShuShenStageSnap::Read,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            ShuShenStage::Ask => {
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != self.owner)
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = ShuShenStage::Read;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: crate::choice::ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::SelectPlayers,
+                        prompt: "shushen_target",
+                        options: candidates,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            ShuShenStage::Read => {
+                if let ChoiceOption::Player(target) = ctx.answer_first() {
+                    self.target = Some(target);
+                    if ctx.core.player(target).alive {
+                        let n = if ctx.core.player(target).hand.is_empty() { 2 } else { 1 };
+                        ctx.draw_cards(target, n);
+                    }
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 神智（甘夫人，P2/N08 标准缺失将第二批 2026-10-07）：准备阶段可弃置
+// 全部手牌，若数量不少于体力值则回复 1 点体力（登记差异：原生无准备
+// 阶段，以判定阶段开始为回合开始锚点——先于一切阶段结算）。
+#[derive(Clone)]
+struct ShenZhiBehavior;
+
+impl SkillBehavior for ShenZhiBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true }
+            if *player == owner && !ctx.state.player(owner).hand.is_empty())
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ShenZhiMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct ShenZhiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for ShenZhiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::ShenZhi { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let hand: Vec<crate::ids::CardId> = ctx.core.player(self.owner).hand.clone();
+        if hand.is_empty() {
+            return Flow::Done;
+        }
+        let enough = hand.len() as i32 >= ctx.core.player(self.owner).hp;
+        for card in hand {
+            ctx.discard_from_hand(self.owner, card);
+        }
+        if enough && ctx.core.player(self.owner).alive {
+            ctx.recover(self.owner, 1, None);
+        }
+        Flow::Done
+    }
+}
+
+// 恂恂（李典，P2/N08 标准缺失将第二批 2026-10-07）：摸牌阶段开始时
+// 观看牌堆顶四张，选两张置顶（先选先摸）其余置底，再正常摸牌。
+// 阶段机器在固定摸牌之后执行：先把固定摸的 2 张还回牌堆顶（恢复
+// 摸牌前牌序），此后与上游观看对象一致（净效果等价）。
+#[derive(Clone)]
+struct XunXunBehavior;
+
+impl SkillBehavior for XunXunBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase { player, phase: Phase::Draw, begin: true }
+            if *player == owner && ctx.state.deck.len() >= 4)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(XunXunMachine { owner, top: Vec::new(), stage: XunXunStage::Undo })
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum XunXunStage {
+    /// 还回固定摸牌并观看顶四张（打开选择）。
+    Undo,
+    /// 恢复读应答：两张置顶（先选先摸）其余置底，然后摸 2。
+    Arrange,
+}
+
+#[derive(Clone)]
+struct XunXunMachine {
+    owner: PlayerId,
+    top: Vec<crate::ids::CardId>,
+    stage: XunXunStage,
+}
+
+impl SkillMachine for XunXunMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::XunXun {
+            owner: self.owner,
+            stage: match self.stage {
+                XunXunStage::Undo => XunXunStageSnap::Undo,
+                XunXunStage::Arrange => XunXunStageSnap::Arrange,
+            },
+            top: self.top.iter().copied().map(|c| c as u32).collect(),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            XunXunStage::Undo => {
+                // 还回固定摸的 2 张（手牌末尾=刚摸的牌；按弹出序压回牌堆
+                // 即恢复摸牌前牌序，观星同款：牌库顶在末尾）。
+                for _ in 0..2 {
+                    if let Some(c) = ctx.core.player_mut(self.owner).hand.pop() {
+                        ctx.core.deck.push(c);
+                    }
+                }
+                let take = 4.min(ctx.core.deck.len());
+                let new_len = ctx.core.deck.len() - take;
+                self.top = ctx.core.deck.split_off(new_len);
+                let options: Vec<ChoiceOption> =
+                    self.top.iter().copied().map(ChoiceOption::Card).collect();
+                self.stage = XunXunStage::Arrange;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: crate::choice::ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::SelectCards,
+                        prompt: "xunxun_arrange",
+                        options,
+                        min: 2,
+                        max: 2,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            XunXunStage::Arrange => {
+                let chosen: Vec<CardId> = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    })
+                    .collect();
+                let rest: Vec<CardId> = self
+                    .top
+                    .iter()
+                    .copied()
+                    .filter(|c| !chosen.contains(c))
+                    .collect();
+                // 未选置底（原序前插）；选中的置顶（先选先摸 → 逆序压栈）。
+                for c in &rest {
+                    ctx.core.deck.insert(0, *c);
+                }
+                for c in chosen.iter().rev() {
+                    ctx.core.deck.push(*c);
+                }
+                ctx.draw_cards(self.owner, 2);
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 忘隙（李典，P2/N08 标准缺失将第二批 2026-10-07）：对其他角色造成
+// 伤害或受到其伤害后，可与该角色各摸一张牌（登记差异：摸牌顺序为
+// 座位号升序，上游按座位序自当前回合角色起算）。
+#[derive(Clone)]
+struct WangXiBehavior;
+
+impl SkillBehavior for WangXiBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.amount > 0 && !d.prevented
+                && d.source.is_some() && d.source != Some(d.target)
+                && (d.target == owner || d.source == Some(owner))
+                && ctx.state.player(d.target).alive
+                && ctx.state.player(d.source.unwrap()).alive)
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let other = match event {
+            EventData::Damage(d) => {
+                if d.target == owner { d.source.expect("filtered") } else { d.target }
+            }
+            _ => unreachable!(),
+        };
+        Box::new(WangXiMachine { owner, other })
+    }
+}
+
+#[derive(Clone)]
+struct WangXiMachine {
+    owner: PlayerId,
+    other: PlayerId,
+}
+
+impl SkillMachine for WangXiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::WangXi { owner: self.owner, other: self.other }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 各摸 1（座位号升序；目标已亡则只摸自己的）。
+        let mut order = vec![self.owner, self.other];
+        order.sort();
+        order.dedup();
+        for p in order {
+            if ctx.core.player(p).alive {
+                ctx.draw_cards(p, 1);
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 机捷（伊籍，P2/N08 标准缺失将第四批 2026-10-07）：出牌阶段限一次
+// 主动技——取牌堆底一张牌交给一名任意存活角色（上游 chooseTarget 无
+// 过滤器，AI 含自引加成，原生同允许自选）。
+#[derive(Clone)]
+struct JiJieBehavior;
+
+impl SkillBehavior for JiJieBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(JiJieMachine { owner, card: None, stage: JiJieStage::Ask })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        if !ctx.state.player(owner).alive || ctx.state.deck.is_empty() {
+            return None; // 无牌可授
+        }
+        Some(Box::new(JiJieMachine { owner, card: None, stage: JiJieStage::Ask }))
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum JiJieStage {
+    /// 目标选择（挂起 = jijie_give_target；牌堆底牌已取入手上）。
+    Ask,
+    /// 恢复读应答：交牌。
+    Read,
+}
+
+#[derive(Clone)]
+struct JiJieMachine {
+    owner: PlayerId,
+    card: Option<crate::ids::CardId>,
+    stage: JiJieStage,
+}
+
+impl SkillMachine for JiJieMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::JiJie {
+            owner: self.owner,
+            card: self.card,
+            stage: match self.stage {
+                JiJieStage::Ask => JiJieStageSnap::Ask,
+                JiJieStage::Read => JiJieStageSnap::Read,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            JiJieStage::Ask => {
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.is_empty() {
+                    return Flow::Done;
+                }
+                // 取牌堆底（deck 首位）。
+                self.card = Some(ctx.core.deck.remove(0));
+                self.stage = JiJieStage::Read;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: crate::choice::ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::SelectPlayers,
+                        prompt: "jijie_give_target",
+                        options: candidates,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            JiJieStage::Read => {
+                if let (ChoiceOption::Player(target), Some(card)) =
+                    (ctx.answer_first(), self.card)
+                {
+                    if ctx.core.player(target).alive {
+                        ctx.core.player_mut(target).hand.push(card);
+                        ctx.out.push(crate::LogEvent::CardsDrawn {
+                            player: target,
+                            cards: vec![card],
+                        });
+                    } else {
+                        ctx.to_discard(card);
+                    }
+                }
+                self.card = None;
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 急援（伊籍，P2/N08 标准缺失将第四批 2026-10-07）：一名角色进入濒死
+// 状态时，可令其摸一张牌（登记差异：仅濒死臂）。
+#[derive(Clone)]
+struct JiYuanBehavior;
+
+impl SkillBehavior for JiYuanBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Dying { .. }) && ctx.state.player(owner).alive
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(JiYuanMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct JiYuanMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for JiYuanMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::JiYuan { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 濒死者为事件目标（任一角色濒死时其摸 1）。
+        if let EventData::Dying { player, .. } =
+            ctx.res.stack.last().expect("dying frame").data
+        {
+            if ctx.core.player(player).dying {
+                ctx.draw_cards(player, 1);
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 妄尊（袁术，P2/N08 标准缺失将收尾批 2026-10-07）：锁定技——其他
+// 角色的回合开始（判定阶段开始锚点）时，若其体力值大于你，你摸一张；
+// 该角色为主公时再摸一张并给其「妄尊印」（手牌上限 -1 到其回合结束）。
+// 主公资格沿激将 ADR 0776 惯例（原型模式视为真）。
+#[derive(Clone)]
+struct WangZunBehavior;
+
+impl SkillBehavior for WangZunBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true }
+            if *player != owner
+                && ctx.state.player(*player).alive
+                && ctx.state.player(owner).alive
+                && ctx.state.player(*player).hp > ctx.state.player(owner).hp)
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let target = match event {
+            EventData::Phase { player, .. } => *player,
+            _ => unreachable!(),
+        };
+        Box::new(WangZunMachine { owner, target })
+    }
+}
+
+#[derive(Clone)]
+struct WangZunMachine {
+    owner: PlayerId,
+    target: PlayerId,
+}
+
+impl SkillMachine for WangZunMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::WangZun { owner: self.owner, target: self.target }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.draw_cards(self.owner, 1);
+        if ctx.core.is_lord(self.target) {
+            ctx.draw_cards(self.owner, 1);
+            if let Some(mark) = ctx.catalog.skill_by_name(WANG_ZUN_MARK) {
+                ctx.core.skills.insert(
+                    (self.target, mark),
+                    crate::state::SkillInstance {
+                        owner: self.target,
+                        enabled: true,
+                        once_used: false,
+                        expires_end_of_turn: true,
+                        rounds: 0,
+                    },
+                );
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 同疾（袁术，P2/N08 标准缺失将收尾批 2026-10-07）：锁定技——其他
+// 角色使用【杀】指定唯一目标（你不在目标内、目标对你 inRange）时，
+// 目标须选择弃置一张牌或取消：弃置则该杀转移指向你（改写 CardUsed
+// 帧载荷，sha 结算机器在 Intrinsic 阶段才读取目标）。
+#[derive(Clone)]
+struct TongJiBehavior;
+
+impl SkillBehavior for TongJiBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        let matches_sha = matches!(event, EventData::CardUsed(u)
+            if {
+                let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                matches!(kind, crate::catalog::CardKind::Sha | crate::catalog::CardKind::FireSha | crate::catalog::CardKind::LeiSha)
+                    && u.targets.len() == 1
+                    && u.player != owner
+                    && !u.targets.contains(&owner)
+            });
+        if !matches_sha {
+            return false;
+        }
+        let EventData::CardUsed(u) = event else { return false };
+        let target = u.targets[0];
+        let owner_alive = ctx.state.player(owner).alive;
+        let target_ok = ctx.state.player(target).alive
+            && (!ctx.state.player(target).hand.is_empty()
+                || !ctx.state.player(target).equips.is_empty());
+        let in_range = ctx
+            .state
+            .computed_distance(ctx.catalog, target, owner)
+            <= ctx.state.attack_range(ctx.catalog, target);
+        owner_alive && target_ok && in_range
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(TongJiMachine { owner, stage: TongJiStage::Ask })
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum TongJiStage {
+    /// 目标弃牌/取消（挂起 = tongji_transfer_discard）。
+    Ask,
+    /// 恢复读应答：弃置则转移目标。
+    Read,
+}
+
+#[derive(Clone)]
+struct TongJiMachine {
+    owner: PlayerId,
+    stage: TongJiStage,
+}
+
+impl SkillMachine for TongJiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::TongJi { owner: self.owner, stage: match self.stage {
+            TongJiStage::Ask => TongJiStageSnap::Ask,
+            TongJiStage::Read => TongJiStageSnap::Read,
+        } }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            TongJiStage::Ask => {
+                let Ok(u) = ctx.current_card_use() else { return Flow::Done };
+                let target = u.targets[0];
+                let mut options: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(target)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                options.extend(
+                    ctx.core.player(target).equips.iter().copied().map(ChoiceOption::Card),
+                );
+                if options.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = TongJiStage::Read;
+                Flow::WaitChoice {
+                    observer: target,
+                    spec: crate::choice::ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::SelectCards,
+                        prompt: "tongji_transfer_discard",
+                        options,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            TongJiStage::Read => {
+                let Ok(u) = ctx.current_card_use() else { return Flow::Done };
+                let target = u.targets[0];
+                // 空应答 = 目标取消（不弃牌不转移）。
+                if let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() {
+                    let hand = ctx.core.player(target).hand.contains(&card);
+                    if hand {
+                        ctx.discard_from_hand(target, card);
+                    } else if let Some(pos) = ctx
+                        .core
+                        .player(target)
+                        .equips
+                        .iter()
+                        .position(|c| *c == card)
+                    {
+                        let equip = ctx.core.player_mut(target).equips.remove(pos);
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, target, equip);
+                        ctx.to_discard(equip);
+                    } else {
+                        return Flow::Done;
+                    }
+                    // 转移：改写 CardUsed 帧载荷目标（sha 结算尚未开始）。
+                    let u = ctx.current_card_use_mut();
+                    u.targets[0] = self.owner;
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 丈八蛇矛（配套主动技，批③-b 第七把）：两张手牌当【杀】使用——
+// 出牌阶段限一次不限（上游同款）；Stage 1 选两张手牌，Stage 2 选目标
+//（射程内其他角色），首张作 declared-Sha 载荷进入杀结算，次张弃置。
+#[derive(Clone)]
+struct ZhangbaBehavior;
+
+impl SkillBehavior for ZhangbaBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ZhangbaMachine {
+            owner,
+            cards: Vec::new(),
+            stage: ZhangbaStage::Cards,
+        })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        // 资格：两张手牌 + 攻击范围内有其他角色。
+        if !ctx.state.player(owner).alive || ctx.state.player(owner).hand.len() < 2 {
+            return None;
+        }
+        let in_range = ctx.state.alive_players().any(|p| {
+            p != owner
+                && ctx.state.computed_distance(ctx.catalog, owner, p)
+                    <= ctx.state.attack_range(ctx.catalog, owner)
+        });
+        if !in_range {
+            return None;
+        }
+        Some(Box::new(ZhangbaMachine {
+            owner,
+            cards: Vec::new(),
+            stage: ZhangbaStage::Cards,
+        }))
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum ZhangbaStage {
+    /// 选两张手牌（打开询问）。
+    Cards,
+    /// 选目标（打开询问）。
+    Target,
+    /// 读目标应答 → 发射 declared-Sha CardUsed。
+    TargetRead,
+}
+
+#[derive(Clone)]
+struct ZhangbaMachine {
+    owner: PlayerId,
+    cards: Vec<crate::ids::CardId>,
+    stage: ZhangbaStage,
+}
+
+impl SkillMachine for ZhangbaMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::Zhangba {
+            owner: self.owner,
+            cards: self.cards.iter().copied().map(|c| c as u32).collect(),
+            stage: match self.stage {
+                ZhangbaStage::Cards => ZhangbaStageSnap::Cards,
+                ZhangbaStage::Target => ZhangbaStageSnap::Target,
+                ZhangbaStage::TargetRead => ZhangbaStageSnap::TargetRead,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            ZhangbaStage::Cards => {
+                let options: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.len() < 2 {
+                    return Flow::Done;
+                }
+                self.stage = ZhangbaStage::Target;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "zhangba_pick_two",
+                        options,
+                        min: 2,
+                        max: 2,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            ZhangbaStage::Target => {
+                // 恢复：读两张手牌应答 → 打开目标询问。
+                let picked: Vec<crate::ids::CardId> = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    })
+                    .collect();
+                if picked.len() != 2 {
+                    return Flow::Done;
+                }
+                self.cards = picked;
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != self.owner
+                            && ctx
+                                .core
+                                .computed_distance(ctx.catalog, self.owner, *p)
+                                <= ctx.core.attack_range(ctx.catalog, self.owner)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = ZhangbaStage::TargetRead;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "zhangba_sha_target",
+                        options: candidates,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            ZhangbaStage::TargetRead => {
+                if let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied()
+                {
+                    if ctx.core.player(target).alive {
+                        let [c1, c2] = self.cards.as_slice() else {
+                            return Flow::Done;
+                        };
+                        let (c1, c2) = (*c1, *c2);
+                        // 次张弃为转化素材；首张作 declared-Sha 载荷进入
+                        // 杀结算（出闪/贯石斧/麒麟弓/青龙全流程重走）。
+                        ctx.discard_from_hand(self.owner, c2);
+                        if ctx.core.player(self.owner).hand.contains(&c1) {
+                            ctx.core.declared_kinds.insert(c1, CardKind::Sha);
+                            ctx.emit(EventData::CardUsed(
+                                crate::machine::card_use_as(
+                                    c1,
+                                    self.owner,
+                                    vec![target],
+                                    Some(CardKind::Sha),
+                                ),
+                            ));
+                        }
+                    }
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 突袭（张辽）：摸牌阶段开始时，可放弃摸牌，改为获得至多两名
+// 其他角色的各一张手牌（各区首张，Dismantle 同款确定性取牌；
+// 目标询问弃权 = 不发动，保留摸牌）。
+#[derive(Clone)]
+struct TuXiBehavior;
+impl SkillBehavior for TuXiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase {
+            player,
+            phase: Phase::Draw,
+            begin: true,
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(TuXiMachine {
+            owner,
+            stage: TuXiStage::Ask,
+        })
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum TuXiStage {
+    /// 挂起询问 = tuxi_target（选择 1–2 名有手牌的其他角色）。
+    Ask,
+    /// 恢复读应答：弃固定摸牌并取牌。
+    Read,
+}
+
+#[derive(Clone)]
+struct TuXiMachine {
+    owner: PlayerId,
+    stage: TuXiStage,
+}
+
+impl SkillMachine for TuXiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::TuXi {
+            owner: self.owner,
+            stage: match self.stage {
+                TuXiStage::Ask => TuXiStageSnap::Ask,
+                TuXiStage::Read => TuXiStageSnap::Read,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            TuXiStage::Ask => {
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != self.owner && !ctx.core.player(*p).hand.is_empty()
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = TuXiStage::Read;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "tuxi_target",
+                        options: candidates,
+                        min: 1,
+                        max: 2,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            TuXiStage::Read => {
+                let targets: Vec<PlayerId> = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    })
+                    .collect();
+                if targets.is_empty() {
+                    return Flow::Done; // 弃权：保留本阶段摸牌
+                }
+                // 放弃摸牌：弃置本阶段固定摸到的牌（手牌末尾至多 2 张，
+                // 触发机器在阶段固定摸牌之后执行，末尾即刚摸的牌）
+                let mut dropped = Vec::new();
+                {
+                    let p = ctx.core.player_mut(self.owner);
+                    for _ in 0..2 {
+                        if let Some(c) = p.hand.pop() {
+                            dropped.push(c);
+                        }
+                    }
+                }
+                if !dropped.is_empty() {
+                    for c in &dropped {
+                        ctx.to_discard(*c);
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: dropped,
+                    });
+                }
+                let mut gained = Vec::new();
+                for t in targets {
+                    if t == self.owner || !ctx.core.player(t).alive {
+                        continue;
+                    }
+                    if let Some(c) = ctx.core.player(t).hand.first().copied() {
+                        ctx.give_hand_card(t, self.owner, c);
+                        gained.push(c);
+                    }
+                }
+                if !gained.is_empty() {
+                    ctx.log(LogEvent::CardsDrawn {
+                        player: self.owner,
+                        cards: gained,
+                    });
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 裸衣（许褚）：摸牌阶段开始时，可少摸一张牌，然后本回合
+// 【杀】或【决斗】造成的伤害 +1。加成旗标复用 once_per_turn 的
+// `once_used`（确认时置位；下回合判定阶段开始时随
+// `reset_turn_limits` 清除），伤害结算侧由 kernel `luoyi_bonus` 读取。
+#[derive(Clone)]
+struct LuoYiBehavior;
+
+impl SkillBehavior for LuoYiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase {
+            player,
+            phase: Phase::Draw,
+            begin: true,
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(LuoYiMachine { owner, asked: false })
+    }
+}
+
+#[derive(Clone)]
+struct LuoYiMachine {
+    owner: PlayerId,
+    asked: bool,
+}
+
+impl SkillMachine for LuoYiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::LuoYi { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if !self.asked {
+            self.asked = true;
+            // 少摸一张：弃置本阶段固定摸到的最后一张（手牌末尾）
+            let dropped = ctx.core.player_mut(self.owner).hand.pop();
+            if let Some(c) = dropped {
+                ctx.to_discard(c);
+                ctx.log(LogEvent::CardDiscarded {
+                    player: self.owner,
+                    cards: vec![c],
+                });
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 仁德（刘备）：出牌阶段限一次的主动技——将任意张手牌交给一名
+// 其他角色；给出的牌不少于两张时回复 1 点体力（体力已满则无效）。
+#[derive(Clone)]
+struct RendeBehavior;
+
+impl SkillBehavior for RendeBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false // 主动技：不随事件触发
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(RendeMachine {
+            owner,
+            stage: RendeStage::SelectCardsAsk,
+            cards: Vec::new(),
+        })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let p = ctx.state.player(owner);
+        if !p.alive || p.hand.is_empty() {
+            return None; // 无手牌可给：无法发动
+        }
+        Some(Box::new(RendeMachine {
+            owner,
+            stage: RendeStage::SelectCardsAsk,
+            cards: Vec::new(),
+        }))
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum RendeStage {
+    /// 挂起询问 = rende_cards（选择给出的手牌，空应答 = 放弃）。
+    SelectCardsAsk,
+    /// 消费 rende_cards 应答并挂起 rende_target 询问。
+    TargetAsk,
+    /// 消费 rende_target 应答并交付（≥2 张则回复 1 点体力）。
+    TargetRead,
+}
+
+#[derive(Clone)]
+struct RendeMachine {
+    owner: PlayerId,
+    stage: RendeStage,
+    /// SelectCards 应答选中的牌（待交付）。
+    cards: Vec<CardId>,
+}
+
+impl SkillMachine for RendeMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::Rende {
+            owner: self.owner,
+            stage: match self.stage {
+                RendeStage::SelectCardsAsk => RendeStageSnap::SelectCardsAsk,
+                RendeStage::TargetAsk => RendeStageSnap::TargetAsk,
+                RendeStage::TargetRead => RendeStageSnap::TargetRead,
+            },
+            cards: self.cards.clone(),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            RendeStage::SelectCardsAsk => {
+                if ctx.core.player(self.owner).hand.is_empty() {
+                    return Flow::Done;
+                }
+                let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                let max_cards = options.len();
+                self.stage = RendeStage::TargetAsk;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "rende_cards",
+                        options,
+                        min: 0,
+                        max: max_cards,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            RendeStage::TargetAsk => {
+                self.cards = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    })
+                    .collect();
+                if self.cards.is_empty() {
+                    return Flow::Done; // 空应答：放弃发动
+                }
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != self.owner)
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = RendeStage::TargetRead;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "rende_target",
+                        options: candidates,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            RendeStage::TargetRead => {
+                let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                    return Flow::Done; // 弃权：不交付
+                };
+                if !ctx.core.player(target).alive {
+                    return Flow::Done;
+                }
+                // 仁德累计（ADR 0776 对齐上游 rende1/content）：按本
+                // 出牌阶段累计给出数判定——此前 <2 且累计后 ≥2 时回复
+                // 1 点（每次发动都可给牌，无每回合一次限制）。
+                let num_before = ctx.core.turn.rende_given;
+                for c in &self.cards {
+                    ctx.give_hand_card(self.owner, target, *c);
+                }
+                let given = self.cards.len() as u8;
+                ctx.core.turn.rende_given = num_before.saturating_add(given);
+                if num_before < 2 && num_before + given > 1 {
+                    ctx.recover(self.owner, 1, None);
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 激将（刘备）：主公技，出牌阶段限一次——请求一名已声明蜀势力的
+// 其他角色打出一张杀（其确认后置入你的手牌，视为由你使用；
+// 原生简化：获得后走正常出杀流程与次数校验，见 ADR 0760）。
+#[derive(Clone)]
+struct JijiangBehavior;
+
+impl SkillBehavior for JijiangBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(JijiangMachine {
+            owner,
+            stage: JijiangStage::HelperAsk,
+            queue: None,
+            helper: None,
+            sha: None,
+            inner: None,
+        })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        // 资格（ADR 0776 对齐上游 zhuSkill + filter）：主公资格
+        // （身份局须主公身份）+ 存在蜀势力角色。**不以暗手牌预筛**——
+        // 有无杀由被询问者逐人应答时才知道。
+        if !ctx.state.is_lord(owner) {
+            return None;
+        }
+        let has_shu = ctx.state.alive_players().any(|p| {
+            p != owner && ctx.state.effective_faction(ctx.catalog, p) == Some(crate::catalog::Faction::Shu)
+        });
+        if !has_shu {
+            return None; // 无可请求的蜀势力角色
+        }
+        Some(Box::new(JijiangMachine {
+            owner,
+            stage: JijiangStage::HelperAsk,
+            queue: None,
+            helper: None,
+            sha: None,
+            inner: None,
+        }))
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum JijiangStage {
+    /// 逐人询问蜀势力角色（挂起 = jijiang_respond；helper 记当前被问者）。
+    HelperAsk,
+    /// 消费 jijiang_target 应答：借牌直结算（内嵌 ShaResolve，视为使用）。
+    TargetAsk,
+}
+
+struct JijiangMachine {
+    owner: PlayerId,
+    stage: JijiangStage,
+    /// 逐人询问队列（ADR 0776）：`None` = 未开始；`Some(q)` = 剩余待问
+    /// 的蜀势力角色（owner 下家起按座位序）；`Some(空)` = 全部拒绝。
+    /// 不以暗手牌预筛。
+    queue: Option<Vec<PlayerId>>,
+    /// 当前被询问/已响应的蜀势力角色。
+    helper: Option<PlayerId>,
+    /// 借出的杀（TargetAsk 起生效，置于桌面）。
+    sha: Option<CardId>,
+    /// 直结算内嵌机器（Launch 后委托）。
+    inner: Option<Box<dyn SkillMachine>>,
+}
+
+impl JijiangMachine {
+    /// 询问队列：owner 下家起按座位序的蜀势力存活角色。
+    fn build_queue(&self, ctx: &Ctx<'_>) -> Vec<PlayerId> {
+        ctx.core
+            .seat_order_from(ctx.core.next_alive(self.owner))
+            .into_iter()
+            .filter(|p| {
+                *p != self.owner
+                    && ctx.core.player(*p).alive
+                    && ctx.core.effective_faction(ctx.catalog, *p) == Some(crate::catalog::Faction::Shu)
+            })
+            .collect()
+    }
+}
+
+impl SkillMachine for JijiangMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(Self {
+            owner: self.owner,
+            stage: self.stage,
+            queue: self.queue.clone(),
+            helper: self.helper,
+            sha: self.sha,
+            inner: self.inner.as_ref().map(|m| m.fork()),
+        })
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::Jijiang {
+            owner: self.owner,
+            stage: match self.stage {
+                JijiangStage::HelperAsk => JijiangStageSnap::HelperAsk,
+                JijiangStage::TargetAsk => JijiangStageSnap::TargetAsk,
+            },
+            queue: self.queue.clone(),
+            helper: self.helper,
+            sha: self.sha,
+            inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 内嵌直结算机器存在即全权委托（OptionalGate 同款）
+        if let Some(inner) = self.inner.as_mut() {
+            let flow = inner.step(ctx);
+            if matches!(flow, Flow::Done) {
+                self.inner = None;
+                return Flow::Done;
+            }
+            return flow;
+        }
+        match self.stage {
+            JijiangStage::HelperAsk => {
+                // 本窗口首次进入：构建逐人询问队列
+                if self.queue.is_none() {
+                    self.queue = Some(self.build_queue(ctx));
+                }
+                // 消费当前被询问者应答（若有）
+                if let Some(helper) = self.helper.take() {
+                    let confirmed = ctx.answer().first() == Some(&ChoiceOption::Confirm);
+                    let alive = ctx.core.player(helper).alive;
+                    let has_sha = alive
+                        && ctx
+                            .core
+                            .player(helper)
+                            .hand
+                            .iter()
+                            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Sha);
+                    if confirmed && has_sha {
+                        // 响应：借杀上桌面并询问目标（同 ADR 0760 直结算）
+                        self.helper = Some(helper);
+                        let sha = ctx
+                            .core
+                            .player(helper)
+                            .hand
+                            .iter()
+                            .copied()
+                            .find(|c| ctx.catalog.card_kind(*c) == CardKind::Sha)
+                            .expect("has_sha checked above");
+                        {
+                            let p = ctx.core.player_mut(helper);
+                            p.hand.retain(|x| *x != sha);
+                        }
+                        ctx.core.table.push(sha);
+                        self.sha = Some(sha);
+                        // 目标候选：其他存活且距离 ≤ 射程（借牌仍守目标合法性）
+                        let candidates: Vec<ChoiceOption> = ctx
+                            .core
+                            .alive_players()
+                            .filter(|p| {
+                                *p != self.owner
+                                    && ctx
+                                        .core
+                                        .computed_distance(ctx.catalog, self.owner, *p)
+                                        <= ctx.core.attack_range(ctx.catalog, self.owner)
+                            })
+                            .map(ChoiceOption::Player)
+                            .collect();
+                        if candidates.is_empty() {
+                            // 无合法目标：借牌归还 helper，问下一位
+                            let c = self.sha.take().expect("sha set above");
+                            ctx.core.table.retain(|x| *x != c);
+                            ctx.core.player_mut(helper).hand.push(c);
+                        } else {
+                            self.stage = JijiangStage::TargetAsk;
+                            return Flow::WaitChoice {
+                                observer: self.owner,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::SelectPlayers,
+                                    prompt: "jijiang_target",
+                                    options: candidates,
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: true,
+                                },
+                            };
+                        }
+                    }
+                    // Pass / 确认但无杀：继续问下一位
+                }
+                // 逐人询问下一位
+                let queue = self.queue.as_mut().expect("queue built above");
+                if let Some(pos) = queue.iter().position(|p| ctx.core.player(*p).alive) {
+                    let next = queue.remove(pos);
+                    self.helper = Some(next);
+                    return Flow::WaitChoice {
+                        observer: next,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::Confirm,
+                            prompt: "jijiang_respond",
+                            options: vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    };
+                }
+                // 全部拒绝：取消本次发动（上游语义——无人响应则使用取消，
+                // 不消耗每回合一次）
+                let jj = ctx.catalog.skill_by_name(crate::content::standard::JI_JIANG);
+                if let Some(d) = jj {
+                    if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, d)) {
+                        inst.once_used = false;
+                    }
+                }
+                Flow::Done
+            }
+            JijiangStage::TargetAsk => {
+                // 消费 jijiang_target：借牌直结算（视为刘备使用杀）
+                let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                    // 弃权：借牌归还 helper
+                    if let Some(helper) = self.helper {
+                        if let Some(c) = self.sha.take() {
+                            ctx.core.table.retain(|x| *x != c);
+                            ctx.core.player_mut(helper).hand.push(c);
+                        }
+                    }
+                    return Flow::Done;
+                };
+                let sha = self.sha.take().expect("sha set at TargetAsk");
+                // card, source, target, nature, asked, armor_judged,
+                // dodges_used, tieji_red, liuli_done, liuli_stage, liuli_card,
+                // hujia_queue, hujia_holder, jiu_bonus, asking_qilin,
+                // qilin_horse, asking_hanbing, asking_guanshi, guanshi_cards,
+                // asking_qinglong, asking_cixiong, cixiong_done,
+                // extra_targets, hanbing_pending
+                // card, source, target, nature, asked, armor_judged,
+                // dodges, tieji, liuli_done, liuli_stage, liuli_card,
+                // hujia_queue, hujia_holder, jiu_bonus, asking_qilin,
+                // qilin_horse, asking_hanbing, asking_fengxueren,
+                // asking_guanshi, guanshi_cards, asking_qinglong,
+                // asking_cixiong, cixiong_done, extra_targets,
+                // hanbing_pending
+                let machine = crate::kernel::ShaResolveMachine::new(
+                    sha,
+                    self.owner,
+                    target,
+                    crate::event::DamageNature::Normal,
+                    false,
+                    false,
+                    0,
+                    None,
+                    false,
+                    0,
+                    None,
+                    None,
+                    None,
+                    false,
+                    false,
+                    None,
+                    false,
+                    false,
+                    false,
+                    Vec::new(),
+                    false,
+                    false,
+                    false,
+                    Vec::new(),
+                    0,
+                    false,
+                    false,
+                    false,
+                    false,
+                    None,
+                );
+                self.inner = Some(Box::new(machine));
+                let flow = self.inner.as_mut().expect("just set").step(ctx);
+                if matches!(flow, Flow::Done) {
+                    self.inner = None;
+                    return Flow::Done;
+                }
+                flow
+            }
+        }
+    }
+}
+
+
+/// 性别门控助手：指定座位的双将槽中任一武将为男性。
+fn seat_is_male(ctx: &Ctx<'_>, p: PlayerId) -> bool {
+    let slots = ctx.core.player(p).general_slots;
+    // 非国战局无将槽 → 门控不适用（默认 true）
+    if slots.iter().all(|s| s.is_none()) {
+        return true;
+    }
+    slots.iter().flatten().any(|g| {
+        crate::content::standard::general_gender(*g)
+            == Some(crate::content::standard::Gender::Male)
+    })
+}
+
+// 结姻（孙尚香）：出牌阶段限一次——弃两张手牌，与一名装备区有牌的
+// 其他角色各回复 1 点体力（登记差异：不限已婚男性，ADR 0770）。
+#[derive(Clone)]
+struct JieYinBehavior;
+
+impl SkillBehavior for JieYinBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(JieYinMachine { owner, stage: JieYinStage::CardsAsk, cards: Vec::new() })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let p = ctx.state.player(owner);
+        if !p.alive || p.hand.len() < 2 {
+            return None;
+        }
+        if !ctx
+            .state
+            .alive_players()
+            .any(|t| t != owner && !ctx.state.player(t).equips.is_empty())
+        {
+            return None;
+        }
+        Some(Box::new(JieYinMachine { owner, stage: JieYinStage::CardsAsk, cards: Vec::new() }))
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum JieYinStage {
+    /// 挂起询问 = jieyin_cards（弃两张手牌；不足两枚或取消 = 放弃）。
+    CardsAsk,
+    /// 消费 jieyin_cards 并挂起 jieyin_target 询问。
+    TargetAsk,
+    /// 消费 jieyin_target：双方各回复 1 点体力。
+    TargetRead,
+}
+
+#[derive(Clone)]
+struct JieYinMachine {
+    owner: PlayerId,
+    stage: JieYinStage,
+    cards: Vec<CardId>,
+}
+
+impl SkillMachine for JieYinMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::JieYin {
+            owner: self.owner,
+            stage: match self.stage {
+                JieYinStage::CardsAsk => JieYinStageSnap::CardsAsk,
+                JieYinStage::TargetAsk => JieYinStageSnap::TargetAsk,
+                JieYinStage::TargetRead => JieYinStageSnap::TargetRead,
+            },
+            cards: self.cards.clone(),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            JieYinStage::CardsAsk => {
+                let hand = ctx.core.player(self.owner).hand.clone();
+                if hand.len() < 2 {
+                    return Flow::Done;
+                }
+                let options: Vec<ChoiceOption> =
+                    hand.iter().copied().map(ChoiceOption::Card).collect();
+                self.stage = JieYinStage::TargetAsk;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "jieyin_cards",
+                        options,
+                        min: 2,
+                        max: 2,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            JieYinStage::TargetAsk => {
+                self.cards = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    })
+                    .collect();
+                if self.cards.len() < 2 {
+                    return Flow::Done;
+                }
+                // 性别门控：结姻限已婚男性（装备区有牌的男性角色，
+                // 登记简化：已婚=装备区有牌）
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|t| {
+                        *t != self.owner
+                            && !ctx.core.player(*t).equips.is_empty()
+                            && seat_is_male(ctx, *t)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = JieYinStage::TargetRead;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "jieyin_target",
+                        options: candidates,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            JieYinStage::TargetRead => {
+                let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                    return Flow::Done;
+                };
+                if !ctx.core.player(target).alive {
+                    return Flow::Done;
+                }
+                for c in &self.cards {
+                    ctx.discard_from_hand(self.owner, *c);
+                }
+                ctx.recover(self.owner, 1, None);
+                ctx.recover(target, 1, None);
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 反间（周瑜）：出牌阶段限一次——一名其他角色选择你的一张手牌获得之，
+// 然后受到你造成的 1 点伤害（登记差异：以看牌选牌承载花色选择）。
+#[derive(Clone)]
+struct FanJianBehavior;
+
+impl SkillBehavior for FanJianBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(FanJianMachine { owner, stage: FanJianStage::TargetAsk, target: None })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let p = ctx.state.player(owner);
+        if !p.alive || p.hand.is_empty() {
+            return None;
+        }
+        if !ctx.state.alive_players().any(|t| t != owner) {
+            return None;
+        }
+        Some(Box::new(FanJianMachine { owner, stage: FanJianStage::TargetAsk, target: None }))
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum FanJianStage {
+    /// 挂起询问 = fanjian_target（选择一名其他角色；取消 = 放弃）。
+    TargetAsk,
+    /// 挂起询问 = fanjian_pick（目标选周瑜一张手牌获得）。
+    PickAsk,
+    /// 消费 fanjian_pick：交牌并结算 1 点伤害。
+    Consume,
+}
+
+#[derive(Clone)]
+struct FanJianMachine {
+    owner: PlayerId,
+    stage: FanJianStage,
+    target: Option<PlayerId>,
+}
+
+impl SkillMachine for FanJianMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::FanJian {
+            owner: self.owner,
+            stage: match self.stage {
+                FanJianStage::TargetAsk => FanJianStageSnap::TargetAsk,
+                FanJianStage::PickAsk => FanJianStageSnap::PickAsk,
+                FanJianStage::Consume => FanJianStageSnap::Consume,
+            },
+            target: self.target,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            FanJianStage::TargetAsk => {
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|t| *t != self.owner)
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = FanJianStage::PickAsk;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "fanjian_target",
+                        options: candidates,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            FanJianStage::PickAsk => {
+                let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                    return Flow::Done;
+                };
+                if !ctx.core.player(target).alive {
+                    return Flow::Done;
+                }
+                self.target = Some(target);
+                let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = FanJianStage::Consume;
+                Flow::WaitChoice {
+                    observer: target,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "fanjian_pick",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            FanJianStage::Consume => {
+                let Some(target) = self.target else {
+                    return Flow::Done;
+                };
+                if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                    ctx.give_hand_card(self.owner, target, c);
+                    ctx.emit(EventData::Damage(crate::machine::damage_data(
+                        Some(self.owner),
+                        target,
+                        1,
+                    )));
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 离间（貂蝉）：出牌阶段限一次——弃一张手牌置于桌面作为载体，令两名
+// 其他角色决斗（登记差异：不限男性角色）；借牌直结算（内嵌决斗机器）。
+#[derive(Clone)]
+struct LiJianBehavior;
+
+impl SkillBehavior for LiJianBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(LiJianMachine {
+            owner,
+            stage: LiJianStage::DiscardAsk,
+            card: None,
+            inner: None,
+        })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let p = ctx.state.player(owner);
+        if !p.alive || p.hand.is_empty() {
+            return None;
+        }
+        if ctx.state.alive_players().count() < 3 {
+            return None;
+        }
+        Some(Box::new(LiJianMachine {
+            owner,
+            stage: LiJianStage::DiscardAsk,
+            card: None,
+            inner: None,
+        }))
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum LiJianStage {
+    /// 挂起询问 = lijian_discard（弃一张手牌作为离间载体；取消 = 放弃）。
+    DiscardAsk,
+    /// 消费 lijian_discard 并挂起 lijian_targets（两名其他角色）。
+    TargetsAsk,
+    /// 消费 lijian_targets：载体牌置桌并内嵌决斗直结算。
+    Launch,
+}
+
+struct LiJianMachine {
+    owner: PlayerId,
+    stage: LiJianStage,
+    /// 载体牌（弃置的手牌，置于桌面参与决斗结算）。
+    card: Option<CardId>,
+    inner: Option<Box<dyn SkillMachine>>,
+}
+
+impl SkillMachine for LiJianMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(Self {
+            owner: self.owner,
+            stage: self.stage,
+            card: self.card,
+            inner: self.inner.as_ref().map(|m| m.fork()),
+        })
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::LiJian {
+            owner: self.owner,
+            stage: match self.stage {
+                LiJianStage::DiscardAsk => LiJianStageSnap::DiscardAsk,
+                LiJianStage::TargetsAsk => LiJianStageSnap::TargetsAsk,
+                LiJianStage::Launch => LiJianStageSnap::Launch,
+            },
+            card: self.card,
+            inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 内嵌决斗存在即全权委托
+        if let Some(inner) = self.inner.as_mut() {
+            let flow = inner.step(ctx);
+            if matches!(flow, Flow::Done) {
+                self.inner = None;
+                return Flow::Done;
+            }
+            return flow;
+        }
+        match self.stage {
+            LiJianStage::DiscardAsk => {
+                if ctx.core.player(self.owner).hand.is_empty() {
+                    return Flow::Done;
+                }
+                let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                self.stage = LiJianStage::TargetsAsk;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "lijian_discard",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            LiJianStage::TargetsAsk => {
+                let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                    return Flow::Done;
+                };
+                self.card = Some(c);
+                // 性别门控：离间限男性角色
+                let candidates: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != self.owner && seat_is_male(ctx, *p)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if candidates.len() < 2 {
+                    return Flow::Done;
+                }
+                self.stage = LiJianStage::Launch;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "lijian_targets",
+                        options: candidates,
+                        min: 2,
+                        max: 2,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            LiJianStage::Launch => {
+                let Some(card) = self.card else {
+                    return Flow::Done;
+                };
+                let picks: Vec<PlayerId> = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    })
+                    .collect();
+                if picks.len() < 2 {
+                    // 弃权：载体牌离手入弃牌堆
+                    if ctx.core.player(self.owner).hand.contains(&card) {
+                        ctx.discard_from_hand(self.owner, card);
+                    }
+                    return Flow::Done;
+                }
+                // 载体牌从手牌置于桌面，作为决斗结算的牌
+                ctx.core.player_mut(self.owner).hand.retain(|x| *x != card);
+                ctx.core.table.push(card);
+                let duel = crate::kernel::DuelMachine::new(
+                    card, picks[0], picks[1], true, false, false,
+                );
+                self.inner = Some(Box::new(duel));
+                let flow = self.inner.as_mut().expect("just set").step(ctx);
+                if matches!(flow, Flow::Done) {
+                    self.inner = None;
+                    return Flow::Done;
+                }
+                flow
+            }
+        }
+    }
+}
+
+// 观星（诸葛亮）：回合开始（判定阶段占位）时，可观看牌库顶 X 张
+// （X = 存活角色数且至多 5）：所选牌按应答顺序置于牌库顶（先选先摸），
+// 未选牌按原序置于牌库底。
+#[derive(Clone)]
+struct GuanXingBehavior;
+
+impl SkillBehavior for GuanXingBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase {
+            player,
+            phase: Phase::Judge,
+            begin: true,
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(GuanXingMachine {
+            owner,
+            stage: GuanXingStage::Arrange,
+            top: Vec::new(),
+        })
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum GuanXingStage {
+    /// 挂起询问 = guanxing_arrange（从已展示的顶牌中选任意张）。
+    Arrange,
+    /// 恢复读应答并落位。
+    Place,
+}
+
+#[derive(Clone)]
+struct GuanXingMachine {
+    owner: PlayerId,
+    stage: GuanXingStage,
+    /// Arrange 阶段取出的牌库顶牌（原序，顶部在末尾）。
+    top: Vec<CardId>,
+}
+
+impl SkillMachine for GuanXingMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::GuanXing {
+            owner: self.owner,
+            stage: match self.stage {
+                GuanXingStage::Arrange => GuanXingStageSnap::Arrange,
+                GuanXingStage::Place => GuanXingStageSnap::Place,
+            },
+            top: self.top.clone(),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            GuanXingStage::Arrange => {
+                let x = ctx.core.alive_count().min(5);
+                let take = x.min(ctx.core.deck.len());
+                if take == 0 {
+                    return Flow::Done;
+                }
+                let new_len = ctx.core.deck.len() - take;
+                self.top = ctx.core.deck.split_off(new_len);
+                let options: Vec<ChoiceOption> =
+                    self.top.iter().copied().map(ChoiceOption::Card).collect();
+                self.stage = GuanXingStage::Place;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "guanxing_arrange",
+                        options,
+                        min: 0,
+                        max: take,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            GuanXingStage::Place => {
+                // 应答中的牌 = 置顶（按应答顺序，先选先摸：牌库顶在末尾，
+                // 故逆序压栈）；未选的按原序置于牌库底（前插）。
+                let chosen: Vec<CardId> = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    })
+                    .collect();
+                let rest: Vec<CardId> = self
+                    .top
+                    .iter()
+                    .copied()
+                    .filter(|c| !chosen.contains(c))
+                    .collect();
+                for c in &rest {
+                    ctx.core.deck.insert(0, *c);
+                }
+                for c in chosen.iter().rev() {
+                    ctx.core.deck.push(*c);
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 连营（陆逊）：失去最后一张手牌后，可摸一张牌。触发覆盖出牌
+// （CardUsed）、响应（CardResponded）、给出（CardsMoved）三条路径；
+// 弃牌阶段的批量弃置不产生事件，暂不触发（挂账覆盖清单）。
+#[derive(Clone)]
+struct LianYingBehavior;
+
+impl SkillBehavior for LianYingBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        if ctx.state.player(owner).hand.len() > 1 {
+            return false;
+        }
+        match event {
+            EventData::CardUsed(u) => u.player == owner,
+            EventData::CardResponded { player, .. } => *player == owner,
+            EventData::CardsMoved { from, .. } => *from == owner,
+            EventData::CardsDiscarded { player, .. } => *player == owner,
+            _ => false,
+        }
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(LianYingMachine { owner, asked: false })
+    }
+}
+
+#[derive(Clone)]
+struct LianYingMachine {
+    owner: PlayerId,
+    asked: bool,
+}
+
+impl SkillMachine for LianYingMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::LianYing { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if !self.asked {
+            self.asked = true;
+            if ctx.core.player(self.owner).alive && ctx.core.player(self.owner).hand.is_empty()
+            {
+                ctx.draw_cards(self.owner, 1);
+            }
+        }
+        Flow::Done
+    }
+}
+
+// 闭月（貂蝉）：结束阶段开始时摸一张牌。
+#[derive(Clone)]
+struct BiYueBehavior;
+
+impl SkillBehavior for BiYueBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase {
+            player,
+            phase: Phase::End,
+            begin: true,
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(BiYueMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct BiYueMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for BiYueMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BiYue { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.draw_cards(self.owner, 1);
+        Flow::Done
+    }
+}
+
+// 英姿（周瑜）：摸牌阶段摸牌时额外摸一张牌。
+#[derive(Clone)]
+struct YingZiBehavior;
+
+impl SkillBehavior for YingZiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase {
+            player,
+            phase: Phase::Draw,
+            begin: true,
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(YingZiMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct YingZiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for YingZiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::YingZi { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.draw_cards(self.owner, 1);
+        Flow::Done
+    }
+}
+
+// 枭姬（孙尚香）：失去装备区里的一张牌（替换/弃置）时摸两张牌。
+#[derive(Clone)]
+struct XiaoJiBehavior;
+
+impl SkillBehavior for XiaoJiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Equipped {
+            player,
+            replaced: Some(_),
+            ..
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(XiaoJiMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct XiaoJiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for XiaoJiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::XiaoJi { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.draw_cards(self.owner, 2);
+        Flow::Done
+    }
+}
+
+// 青囊（华佗）：出牌阶段限一次，弃一张手牌并令一名已受伤的其他角色回复
+// 1 点体力（Target → Discard 两阶段主动技）。
+#[derive(Clone)]
+struct QingNangBehavior;
+
+impl SkillBehavior for QingNangBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false // 主动技
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(QingNangMachine {
+            owner,
+            stage: QingNangStage::TargetAsk,
+            healed: None,
+        })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let p = ctx.state.player(owner);
+        if !p.alive || p.hand.is_empty() {
+            return None;
+        }
+        let wounded = ctx
+            .state
+            .players
+            .iter()
+            .enumerate()
+            .any(|(i, p)| {
+                p.alive && (p.hp as i64) < (p.max_hp as i64) && i as PlayerId != owner
+            });
+        if !wounded {
+            return None;
+        }
+        Some(Box::new(QingNangMachine {
+            owner,
+            stage: QingNangStage::TargetAsk,
+            healed: None,
+        }))
+    }
+}
+
+#[derive(Clone)]
+enum QingNangStage {
+    /// 挂起询问 = qingnang_target（恢复读目标）。
+    TargetAsk,
+    /// 挂起询问 = qingnang_card（恢复读牌并治疗）。
+    TargetRead,
+    /// 挂起询问 = qingnang_card（恢复读牌并给出）。
+    CardRead,
+}
+
+#[derive(Clone)]
+struct QingNangMachine {
+    owner: PlayerId,
+    stage: QingNangStage,
+    healed: Option<PlayerId>,
+}
+
+impl SkillMachine for QingNangMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::QingNang {
+            owner: self.owner,
+            stage: match self.stage {
+                QingNangStage::TargetAsk => QingNangStageSnap::TargetAsk,
+                QingNangStage::TargetRead => QingNangStageSnap::TargetRead,
+                QingNangStage::CardRead => QingNangStageSnap::CardRead,
+            },
+            healed: self.healed,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            QingNangStage::TargetAsk => {
+                // 构建 qingnang_target 询问（已受伤的其他角色）
+                let wounded: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != self.owner
+                            && {
+                                let pl = ctx.core.player(*p);
+                                pl.alive
+                                    && (pl.hp as i64) < (pl.max_hp as i64)
+                            }
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if wounded.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = QingNangStage::TargetRead;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "qingnang_target",
+                        options: wounded,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            QingNangStage::TargetRead => {
+                // 恢复：qingnang_target 的应答（Player 目标 / 空应答弃权）
+                let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                    return Flow::Done;
+                };
+                self.healed = Some(target);
+                let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.is_empty() {
+                    return Flow::Done;
+                }
+                self.stage = QingNangStage::CardRead;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "qingnang_card",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            QingNangStage::CardRead => {
+                // 恢复：qingnang_card 的应答——Card 则弃置并治疗
+                if let Some(&ChoiceOption::Card(c)) = ctx.answer().first() {
+                    ctx.discard_from_hand(self.owner, c);
+                    if let Some(target) = self.healed {
+                        ctx.recover(target, 1, None);
+                    }
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+
+
+
+// 洛神（甄姬）：判定阶段开始时可进行判定——黑色则获得此判定牌并再次判定
+// （循环至翻出红色；简化契约：整链一次确认，不分次放弃）。
+#[derive(Clone)]
+struct LuoShenBehavior;
+
+impl SkillBehavior for LuoShenBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase {
+            player,
+            phase: Phase::Judge,
+            begin: true,
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(LuoShenMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct LuoShenMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for LuoShenMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::LuoShen { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 单次判定：黑桃/梅花 → 获得此牌并再次判定（Yield 续行）；
+        // 红桃/方块 → 判定牌弃置，循环结束。
+        let card = ctx.draw_judge_card();
+        let black = matches!(
+            ctx.catalog.cards[card as usize].suit,
+            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+        );
+        if black {
+            ctx.core.player_mut(self.owner).hand.push(card);
+            ctx.log(LogEvent::CardsDrawn {
+                player: self.owner,
+                cards: vec![card],
+            });
+            Flow::Yield
+        } else {
+            ctx.to_discard(card);
+            Flow::Done
+        }
+    }
+}
+
+// 集智（黄月英）：使用普通锦囊时摸一张牌。
+#[derive(Clone)]
+struct JiZhiBehavior;
+
+impl SkillBehavior for JiZhiBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::CardUsed(u)
+            if u.player == owner
+                && matches!(
+                    u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card)),
+                    crate::catalog::CardKind::SavageAttack
+                        | crate::catalog::CardKind::ArcheryAttack
+                        | crate::catalog::CardKind::Duel
+                        | crate::catalog::CardKind::Chain
+                        | crate::catalog::CardKind::Nullify
+                ))
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(JiZhiMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct JiZhiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for JiZhiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::JiZhi { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.draw_cards(self.owner, 1);
+        Flow::Done
+    }
+}
+
+// 苦肉（黄盖）：出牌阶段主动技——失去 1 点体力，摸两张牌（每阶段限一次）。
+#[derive(Clone)]
+struct KuRouBehavior;
+
+impl SkillBehavior for KuRouBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false // 主动技：不随事件触发
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(KuRouMachine {
+            owner,
+            stage: KuRouStage::Lose,
+        })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let p = ctx.state.player(owner);
+        if !p.alive || p.dying {
+            return None;
+        }
+        Some(Box::new(KuRouMachine {
+            owner,
+            stage: KuRouStage::Lose,
+        }))
+    }
+}
+
+#[derive(Clone)]
+enum KuRouStage {
+    /// 失去 1 点体力（含濒死内联检查）。
+    Lose,
+    /// 摸两张牌。
+    Draw,
+}
+
+#[derive(Clone)]
+struct KuRouMachine {
+    owner: PlayerId,
+    stage: KuRouStage,
+}
+
+impl SkillMachine for KuRouMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::KuRou {
+            owner: self.owner,
+            stage: match self.stage {
+                KuRouStage::Lose => KuRouStageSnap::Lose,
+                KuRouStage::Draw => KuRouStageSnap::Draw,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            KuRouStage::Lose => {
+                let p = ctx.core.player_mut(self.owner);
+                p.hp -= 1;
+                let entering = p.hp <= 0 && !p.dying;
+                if entering {
+                    p.dying = true;
+                    ctx.log(LogEvent::DyingEntered { player: self.owner });
+                    ctx.emit(EventData::Dying {
+                        player: self.owner,
+                        source: None,
+                    });
+                }
+                self.stage = KuRouStage::Draw;
+                Flow::Yield
+            }
+            KuRouStage::Draw => {
+                ctx.draw_cards(self.owner, 2);
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 制衡（孙权）：出牌阶段主动技——弃置任意张手牌，然后摸等量的牌
+// （每回合限一次；空选择 = 不发动效果直接结束）。
+#[derive(Clone)]
+struct ZhiHengBehavior;
+
+impl SkillBehavior for ZhiHengBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false // 主动技：不随事件触发
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ZhiHengMachine {
+            owner,
+            stage: ZhiHengStage::Select,
+        })
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let p = ctx.state.player(owner);
+        if !p.alive || p.hand.is_empty() {
+            return None; // 无手牌可弃：无法发动
+        }
+        Some(Box::new(ZhiHengMachine {
+            owner,
+            stage: ZhiHengStage::Select,
+        }))
+    }
+}
+
+#[derive(Clone)]
+enum ZhiHengStage {
+    /// 询问弃置哪些手牌（空应答 = 放弃发动）。
+    Select,
+    /// 弃置后摸等量（同一次提交内完成，无需挂起）。
+    Draw,
+}
+
+#[derive(Clone)]
+struct ZhiHengMachine {
+    owner: PlayerId,
+    stage: ZhiHengStage,
+}
+
+impl SkillMachine for ZhiHengMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::ZhiHeng {
+            owner: self.owner,
+            stage: match self.stage {
+                ZhiHengStage::Select => ZhiHengStageSnap::Select,
+                ZhiHengStage::Draw => ZhiHengStageSnap::Draw,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            ZhiHengStage::Select => {
+                let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                let max = options.len();
+                // 挂起询问 = zhiheng_select；恢复由 Draw 分支执行弃置与摸牌
+                self.stage = ZhiHengStage::Draw;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::SelectCards,
+                        prompt: "zhiheng_select",
+                        options,
+                        min: 0,
+                        max,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            ZhiHengStage::Draw => {
+                let answer = ctx.answer().clone();
+                let n = answer.len();
+                for c in answer {
+                    if let ChoiceOption::Card(card) = c {
+                        ctx.discard_from_hand(self.owner, card);
+                    }
+                }
+                if n > 0 {
+                    ctx.draw_cards(self.owner, n);
+                }
+                Flow::Done
+            }
+        }
+    }
+}
+
+// 遗计（郭嘉）：受到 1 点伤害后，摸两张牌，然后可将至多两张手牌交给
+// 一至两名其他玩家（每张给牌均可放弃）。
+#[derive(Clone)]
+struct JiJiBehavior;
+
+impl SkillBehavior for JiJiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.target == owner && !d.prevented && d.amount > 0)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(JiJiMachine {
+            owner,
+            stage: JiJiStage::Draw,
+            target: None,
+            given: 0,
+        })
+    }
+}
+
+#[derive(Clone)]
+enum JiJiStage {
+    /// 摸两张（子事件结算后继续）。
+    Draw,
+    /// 挂起询问 = jiji_target（恢复读目标）。
+    Target,
+    /// 给牌后回到目标询问前的中转（行为同 Target：重新询问目标）。
+    /// 不再构造，但保留变体：v2 字节的 jiji 挂起可能携带 Retarget=2，
+    /// 恢复时映射回 Target；删除会破坏已落盘字节。
+    #[allow(dead_code)]
+    Retarget,
+    /// 挂起询问 = jiji_card（恢复读牌并给出）。
+    GiveCard,
+    /// 挂起询问 = jiji_card 的给牌（恢复执行给出）。
+    GiveChooseCard,
+}
+
+#[derive(Clone)]
+struct JiJiMachine {
+    owner: PlayerId,
+    stage: JiJiStage,
+    target: Option<PlayerId>,
+    given: u8,
+}
+
+impl SkillMachine for JiJiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::JiJi {
+            owner: self.owner,
+            stage: match self.stage {
+                JiJiStage::Draw => JiJiStageSnap::Draw,
+                JiJiStage::Target => JiJiStageSnap::Target,
+                JiJiStage::Retarget => JiJiStageSnap::Retarget,
+                JiJiStage::GiveCard => JiJiStageSnap::GiveCard,
+                JiJiStage::GiveChooseCard => JiJiStageSnap::GiveChooseCard,
+            },
+            target: self.target,
+            given: self.given,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            JiJiStage::Draw => {
+                ctx.draw_cards(self.owner, 2);
+                self.stage = JiJiStage::Target;
+                Flow::Yield
+            }
+            JiJiStage::Target | JiJiStage::Retarget => {
+                // 至多两张；无其他存活玩家或手牌已空则结束
+                if self.given >= 2 || ctx.core.player(self.owner).hand.is_empty() {
+                    return Flow::Done;
+                }
+                let others: Vec<ChoiceOption> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != self.owner)
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if others.is_empty() {
+                    return Flow::Done;
+                }
+                // 挂起询问 = jiji_target；恢复由 GiveCard 分支读取目标
+                self.stage = JiJiStage::GiveCard;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "jiji_target",
+                        options: others,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            JiJiStage::GiveCard => {
+                // 恢复：jiji_target 的应答（Player 目标 / 空应答弃权）
+                let to = match ctx.answer().first() {
+                    Some(ChoiceOption::Player(p)) => *p,
+                    _ => return Flow::Done,
+                };
+                self.target = Some(to);
+                let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.is_empty() {
+                    return Flow::Done;
+                }
+                // 挂起询问 = jiji_card；恢复由 GiveChooseCard 分支读牌并给出
+                self.stage = JiJiStage::GiveChooseCard;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "jiji_card",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            JiJiStage::GiveChooseCard => {
+                // 恢复：jiji_card 的应答——Card 则给出并计入；空应答则放弃并结束
+                if let Some(&ChoiceOption::Card(c)) = ctx.answer().first() {
+                    let Some(to) = self.target else {
+                        return Flow::Done;
+                    };
+                    ctx.give_hand_card(self.owner, to, c);
+                    self.given += 1;
+                } else {
+                    return Flow::Done;
+                }
+                if self.given >= 2 || ctx.core.player(self.owner).hand.is_empty() {
+                    return Flow::Done;
+                }
+                // 回到目标询问（第二轮，至多两张）
+                self.stage = JiJiStage::Target;
+                Flow::Yield
+            }
+        }
+    }
+}
+
+// 碎盾：每回合限一次，当你即将受到伤害时，防止之。
+// ---------------------------------------------------------------------------
+
+struct SuiDunBehavior;
+
+impl SkillBehavior for SuiDunBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d) if d.target == owner && !d.prevented)
+    }
+
+    fn start(&self, _owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(SuiDunMachine)
+    }
+}
+
+#[derive(Clone)]
+struct SuiDunMachine;
+
+impl SkillMachine for SuiDunMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::SuiDun
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.current_damage_mut().prevented = true;
+        Flow::Done
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 肃清：当其他玩家即将受到伤害时，其「碎盾」技能直到回合结束失效。
+// （在同一个伤害前置窗口内先行结算，验证队列运行前的重查。）
+// ---------------------------------------------------------------------------
+
+struct SuQingBehavior;
+
+impl SkillBehavior for SuQingBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d) if d.target != owner)
+    }
+
+    fn start(&self, _owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let target = match event {
+            EventData::Damage(d) => d.target,
+            _ => unreachable!("filter guarantees damage"),
+        };
+        Box::new(SuQingMachine { target })
+    }
+}
+
+#[derive(Clone)]
+struct SuQingMachine {
+    target: PlayerId,
+}
+
+impl SkillMachine for SuQingMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::SuQing { target: self.target }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let suidun = ctx.catalog.skill_by_name(SUI_DUN).expect("碎盾 in catalog");
+        ctx.set_skill_enabled(self.target, suidun, false);
+        Flow::Done
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 曹仁「据守」：结束阶段，你可以翻面并摸一张牌。
+// 登记差异：翻面被【漩涡面具】等取消时摸牌仍执行（效果独立）。
+// ---------------------------------------------------------------------------
+
+struct JushouBehavior;
+
+impl SkillBehavior for JushouBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase {
+            player,
+            phase: Phase::End,
+            begin: true,
+        } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(JushouMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct JushouMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for JushouMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::ShouYi { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 确认门（OptionalGate）通过后执行：翻面经 TurnOverBefore 子事件
+        // （面具等可取消）；摸牌独立执行（登记差异：取消翻面不影响摸牌）。
+        ctx.emit(EventData::TurnOverBefore {
+            player: self.owner,
+            cancelled: false,
+        });
+        ctx.draw_cards(self.owner, 1);
+        Flow::Done
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 授艺：当你受到伤害后，你获得「移伤」直到回合结束。
+// ---------------------------------------------------------------------------
+
+struct ShouYiBehavior;
+
+impl SkillBehavior for ShouYiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.target == owner && !d.prevented && d.amount > 0)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ShouYiMachine { owner })
+    }
+}
+
+#[derive(Clone)]
+struct ShouYiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for ShouYiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::ShouYi { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let yishang = ctx.catalog.skill_by_name(YI_SHANG).expect("移伤 in catalog");
+        ctx.add_skill_until_turn_end(self.owner, yishang);
+        Flow::Done
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 目录
+// ---------------------------------------------------------------------------
+
+/// 权限型能力（无触发时机）的空行为：判定流程经 skill_by_name 查询持有者，
+/// 该行为永不进入触发队列与挂起槽。
+struct NoopBehavior;
+
+impl SkillBehavior for NoopBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+    fn start(&self, _owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(crate::kernel::NoopMachine::new())
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 首组官方技能（N08，ADR 0712）：判定主题——张角「鬼道」+ 郭嘉「天妒」
+// 规则来源：标准包规则文本；鬼道改判流程对齐旧线 `query/mod.rs`
+// `judgment_black_rewrite_cards`（黑色手牌/装备）与 `command/judge.rs`
+// `judgment_rewriters`（自判定阶段拥有者起座位序、逐人一次）——
+// 原生本批改判资格仅取黑色手牌（装备区牌打出未接，差异登记）。
+// 天妒：旧线无实现（仅 `characters.rs::TIANDU` 常量），按标准包规则文本
+// 「每当一名角色的判定牌生效后，你可以将之收入手牌」实现。
+// ---------------------------------------------------------------------------
+
+/// 张角「鬼道」：判定牌生效前，可打出一张黑色手牌代替之。
+pub const GUI_DAO: &str = "鬼道";
+/// 郭嘉「天妒」：一名角色的判定牌生效后，可将之收入手牌。
+pub const TIAN_DU: &str = "天妒";
+
+pub const SAN_CAI: &str = "散财";
+pub const YI_SHANG: &str = "移伤";
+pub const SUI_DUN: &str = "碎盾";
+pub const SU_QING: &str = "肃清";
+pub const SHOU_YI: &str = "授艺";
+pub const JU_SHOU: &str = "据守";
+/// 乐进「骁果」：其他角色的结束阶段开始时，可弃一张基本手牌，对其
+/// 造成 1 点伤害（P2/N08 标准缺失将，2026-10-07）。
+pub const XIAO_GUO: &str = "骁果";
+/// 潘凤「狂斧」：出牌阶段用【杀】对目标造成伤害后，若其体力值小于你，
+/// 你摸两张牌，否则你失去 1 点体力（每回合限一次）。
+pub const KUANG_FU: &str = "狂斧";
+/// 华雄「耀武」：锁定技，你受到红色【杀】的伤害时，伤害来源选择摸一
+/// 张牌或回复 1 点体力。
+pub const YAO_WU: &str = "耀武";
+/// 甘夫人「淑慎」：回复体力后，可令一名其他角色摸牌（有手牌摸 1，
+/// 无手牌摸 2）（P2/N08 标准缺失将第二批，2026-10-07）。
+pub const SHU_SHEN: &str = "淑慎";
+/// 甘夫人「神智」：准备阶段（原生锚点：判定阶段开始）可弃置全部手牌，
+/// 若数量不少于体力值则回复 1 点体力。
+pub const SHEN_ZHI: &str = "神智";
+/// 李典「恂恂」：摸牌阶段开始时，观看牌堆顶四张，将其中两张置于牌堆顶
+/// （先选先摸）其余置于牌堆底，然后正常摸牌（P2/N08 标准缺失将第二批）。
+pub const XUN_XUN: &str = "恂恂";
+/// 李典「忘隙」：对其他角色造成伤害或受到其伤害后，可与该角色各摸一张牌。
+pub const WANG_XI: &str = "忘隙";
+/// 公孙瓒「义从」（refresh 改版，P2/N08 标准缺失将第三批）：锁定技——
+/// 你计算与其他角色的距离 -1；其他角色计算与你的距离 +1（你的体力值
+/// 不大于 2 时）。
+pub const YI_CONG: &str = "义从";
+/// 伊籍「机捷」：出牌阶段限一次，取牌堆底一张牌交给一名角色
+/// （P2/N08 标准缺失将第四批）。
+pub const JI_JIE: &str = "机捷";
+/// 伊籍「急援」：一名角色进入濒死状态时，可令其摸一张牌（登记差异：
+/// 仅濒死臂——上游赠牌/失去牌臂需要 giver 跟踪面，未建模）。
+pub const JI_YUAN: &str = "急援";
+/// 丈八蛇矛（配套主动技，批③-b 第七把）：两张手牌当【杀】使用。
+pub const ZHANGBA: &str = "丈八蛇矛";
+/// 雌雄双股剑（批③-b 第八把，equip1 随牌种接线）：对异性目标出杀后
+/// 目标弃一张手牌或令使用者摸一张牌。
+pub const CI_XIONG: &str = "雌雄双股剑";
+/// 袁术「妄尊」（P2/N08 标准缺失将收尾批）：锁定技——其他角色的回合
+/// 开始时，若其体力值大于你，你摸一张牌；若该角色为主公，你再摸一张
+/// 且其手牌上限 -1 直到回合结束（印记技「妄尊印」承载）。
+pub const WANG_ZUN: &str = "妄尊";
+/// 袁术「妄尊」的手牌上限印记（隐藏技能，弃牌阶段结算 -1）。
+pub const WANG_ZUN_MARK: &str = "妄尊印";
+/// 袁术「同疾」：锁定技——其他角色使用【杀】指定唯一目标时（你不在
+/// 目标内、你在其攻击范围内），其须选择弃置一张牌或取消：弃置则该杀
+/// 改为指向你（登记差异：目标合法域按上游 inRange=目标对你的攻击范围）。
+pub const TONG_JI: &str = "同疾";
+
+/// 司马懿「鬼才」：一名角色的判定牌生效前，可打出一张**任意花色**手牌代替之
+/// （区别于鬼道的黑色手牌/装备牌）。
+pub const GUI_CAI: &str = "鬼才";
+/// 司马懿「反馈」：受到 1 点伤害后，可获得伤害来源的一张牌（手牌或装备）。
+pub const FAN_KUI: &str = "反馈";
+/// 曹操「奸雄」：受到伤害后，可获得造成此伤害的牌。
+pub const JIAN_XIONG: &str = "奸雄";
+/// 貂蝉「闭月」：结束阶段开始时，摸一张牌。
+pub const BI_YUE: &str = "闭月";
+/// 甄姬「洛神」：判定阶段开始时，可进行判定——黑色则获得此牌并再次判定
+/// （循环至红桃或放弃）。
+pub const LUO_SHEN: &str = "洛神";
+/// 关羽「武圣」：可将任意红色手牌当杀使用。
+pub const WU_SHENG: &str = "武圣";
+/// 赵云「龙胆」：可将杀当闪、闪当杀使用。
+pub const LONG_DAN: &str = "龙胆";
+/// 大乔「国色」：可将方块牌当【乐不思蜀】使用。
+pub const GUO_SE: &str = "国色";
+/// 吕布「无双」：你的杀需连续两张闪抵消；与你决斗的角色每次需打出两张杀。
+pub const WU_SHUANG: &str = "无双";
+/// 周瑜「英姿」：摸牌阶段摸牌时额外摸一张牌。
+pub const YING_ZI: &str = "英姿";
+/// 孙尚香「枭姬」：失去装备区里的一张牌时，摸两张牌。
+pub const XIAO_JI: &str = "枭姬";
+/// 华佗「青囊」：出牌阶段限一次，弃一张手牌并令一名已受伤的其他角色回复 1 点体力。
+pub const QING_NANG: &str = "青囊";
+/// 黄月英「集智」：使用普通锦囊时摸一张牌。
+pub const JI_ZHI: &str = "集智";
+/// 吕蒙「克己」：若本回合未使用杀，则无需弃牌。
+pub const KE_JI: &str = "克己";
+/// 张飞「咆哮」：出牌阶段使用杀没有次数限制。
+pub const PAO_XIAO: &str = "咆哮";
+/// 甘宁「奇袭」：可将黑色牌当【过河拆桥】使用。
+pub const QI_XI: &str = "奇袭";
+/// 黄盖「苦肉」：出牌阶段，可失去 1 点体力，摸两张牌（每阶段限一次）。
+pub const KU_ROU: &str = "苦肉";
+/// 孙权「制衡」：出牌阶段限一次，可弃置任意张手牌，然后摸等量的牌。
+pub const ZHI_HENG: &str = "制衡";
+/// 郭嘉「遗计」：受到 1 点伤害后，摸两张牌，然后可将至多两张手牌交给其他玩家。
+pub const JI_JI: &str = "遗计";
+/// 夏侯惇「刚烈」：受到伤害后，可进行判定：若判定牌不为红桃，伤害来源受到你造成的 1 点伤害。
+pub const GANG_LIE: &str = "刚烈";
+/// 张辽「突袭」：摸牌阶段开始时，可放弃摸牌，改为获得至多两名其他角色的各一张手牌。
+pub const TU_XI: &str = "突袭";
+/// 许褚「裸衣」：摸牌阶段开始时，可少摸一张牌，然后本回合【杀】或【决斗】造成的伤害 +1。
+pub const LUO_YI: &str = "裸衣";
+/// 甄姬「倾国」：可将装备区里的黑色牌当【闪】使用（响应杀）。
+pub const QING_GUO: &str = "倾国";
+/// 黄月英「奇才」：锁定技，使用任何锦囊牌无距离限制。
+pub const QI_CAI: &str = "奇才";
+/// 孙权「救援」：主公技，锁定技，处于濒死状态时，其他角色对你使用的【桃】回复量 +1。
+pub const JIU_YUAN: &str = "救援";
+/// 华佗「急救」：锁定技，濒死结算时可将红色手牌当【桃】使用。
+pub const JI_JIU: &str = "急救";
+/// 曹操「护驾」：主公技，需要出闪时，其他存活角色的闪可代出（原生简化：跨玩家借闪响应）。
+pub const HU_JIA: &str = "护驾";
+/// 大乔「流离」：成为【杀】的目标时，可弃一张手牌将此杀转移给另一名其他角色。
+pub const LIU_LI: &str = "流离";
+/// 孙尚香「结姻」：出牌阶段限一次，弃两张手牌，与一名装备区有牌的其他角色各回复 1 点体力
+/// （原生简化：不限「已婚男性」，见 ADR 0770 登记表）。
+pub const JIE_YIN: &str = "结姻";
+/// 周瑜「反间」：出牌阶段限一次，一名其他角色选择你的一张手牌获得之，然后受到你造成的 1 点伤害
+/// （原生简化：以「看牌选牌」承载花色选择，见 ADR 0770 登记表）。
+pub const FAN_JIAN: &str = "反间";
+/// 貂蝉「离间」：出牌阶段限一次，弃一张手牌，令两名其他角色决斗
+/// （原生简化：不限男性角色，见 ADR 0770 登记表）。
+pub const LI_JIAN: &str = "离间";
+/// 诸葛亮「观星」：回合开始（判定阶段）时，可观看牌库顶 X 张（X=存活数且至多 5），
+/// 任意张以任意顺序置于牌库顶，其余置于牌库底。
+pub const GUAN_XING: &str = "观星";
+/// 诸葛亮「空城」：锁定技，没有手牌时不能成为【杀】和【决斗】的目标。
+pub const KONG_CHENG: &str = "空城";
+/// 陆逊「谦逊」：锁定技，不能成为【乐不思蜀】的目标（上游无【顺手牵羊】，挂账清单）。
+pub const QIAN_XUN: &str = "谦逊";
+/// 陆逊「连营」：失去最后一张手牌后（出牌/响应/给出路径），可摸一张牌。
+pub const LIAN_YING: &str = "连营";
+/// 刘备「仁德」：出牌阶段限一次，可将任意张手牌交给一名其他角色，
+/// 若给出的牌不少于两张，你回复 1 点体力。
+pub const REN_DE: &str = "仁德";
+/// 刘备「激将」主公技：出牌阶段限一次，可请求一名已声明蜀势力的其他角色
+/// 打出一张杀（经其确认后置入你的手牌，视为由你使用——原生简化：获得后
+/// 走正常出杀流程，见 ADR 0760）。
+pub const JI_JIANG: &str = "激将";
+/// 马超「马术」：锁定技，计算与其他角色的距离时始终 -1。
+pub const MA_SHU: &str = "马术";
+/// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
+/// 该角色不能使用闪响应此杀。
+pub const TIE_JI: &str = "铁骑";
+
+/// 完整武将授予（N08 内容扩面）：武将名 → 技能集。
+/// 授予武将即同时授予其全部技能。「张角」为官方技能迁移；
+/// 「样例」前缀条目为 ADR 0712 机制样例组合（不计官方技能迁移）。
+/// 武将性别（离间/结姻等性别门控用）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Gender {
+    Male,
+    Female,
+}
+
+pub const STANDARD_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
+    // 四元组：名称 / 势力 / 技能集 / 体力上限（N11 将领装配，ADR 0769）
+    ("样例·张角组合", Faction::Qun, &[GUI_DAO, TIAN_DU], 3, Gender::Male),
+    ("司马懿", Faction::Wei, &[GUI_CAI, FAN_KUI], 3, Gender::Male),
+    ("曹操", Faction::Wei, &[JIAN_XIONG, HU_JIA], 4, Gender::Male),
+    ("貂蝉", Faction::Qun, &[BI_YUE, LI_JIAN], 3, Gender::Female),
+    ("甄姬", Faction::Wei, &[LUO_SHEN, QING_GUO], 3, Gender::Female),
+    ("关羽", Faction::Shu, &[WU_SHENG], 4, Gender::Male),
+    ("赵云", Faction::Shu, &[LONG_DAN], 4, Gender::Male),
+    ("吕布", Faction::Qun, &[WU_SHUANG], 4, Gender::Male),
+    ("黄月英", Faction::Shu, &[JI_ZHI, QI_CAI], 3, Gender::Female),
+    ("大乔", Faction::Wu, &[GUO_SE, LIU_LI], 3, Gender::Female),
+    ("吕蒙", Faction::Wu, &[KE_JI], 4, Gender::Male),
+    ("甘宁", Faction::Wu, &[QI_XI], 4, Gender::Male),
+    ("张飞", Faction::Shu, &[PAO_XIAO], 4, Gender::Male),
+    ("周瑜", Faction::Wu, &[YING_ZI, FAN_JIAN], 3, Gender::Male),
+    ("孙尚香", Faction::Wu, &[XIAO_JI, JIE_YIN], 3, Gender::Female),
+    ("华佗", Faction::Qun, &[QING_NANG, JI_JIU], 3, Gender::Male),
+    ("黄盖", Faction::Wu, &[KU_ROU], 4, Gender::Male),
+    ("孙权", Faction::Wu, &[ZHI_HENG, JIU_YUAN], 4, Gender::Male),
+    ("郭嘉", Faction::Wei, &[TIAN_DU, JI_JI], 3, Gender::Male),
+    ("夏侯惇", Faction::Wei, &[GANG_LIE], 4, Gender::Male),
+    ("诸葛亮", Faction::Shu, &[GUAN_XING, KONG_CHENG], 3, Gender::Male),
+    ("陆逊", Faction::Wu, &[QIAN_XUN, LIAN_YING], 3, Gender::Male),
+    ("刘备", Faction::Shu, &[REN_DE, JI_JIANG], 4, Gender::Male),
+    ("马超", Faction::Shu, &[MA_SHU, TIE_JI], 4, Gender::Male),
+    ("张辽", Faction::Wei, &[TU_XI], 4, Gender::Male),
+    ("许褚", Faction::Wei, &[LUO_YI], 4, Gender::Male),
+    ("曹仁", Faction::Wei, &[JU_SHOU], 4, Gender::Male),
+    ("样例·策援", Faction::Qun, &[YI_SHANG, SHOU_YI], 4, Gender::Male),
+    ("样例·守财", Faction::Qun, &[SUI_DUN, SAN_CAI, SU_QING], 4, Gender::Female),
+    // P2/N08 标准缺失将补齐（2026-10-07，上游 standard/character.js 对齐）：
+    ("乐进", Faction::Wei, &[XIAO_GUO], 4, Gender::Male),
+    ("潘凤", Faction::Qun, &[KUANG_FU], 4, Gender::Male),
+    ("华雄", Faction::Qun, &[YAO_WU], 6, Gender::Male),
+    ("甘夫人", Faction::Shu, &[SHU_SHEN, SHEN_ZHI], 3, Gender::Female),
+    ("李典", Faction::Wei, &[XUN_XUN, WANG_XI], 3, Gender::Male),
+    ("公孙瓒", Faction::Qun, &[YI_CONG], 4, Gender::Male),
+    ("伊籍", Faction::Shu, &[JI_JIE, JI_YUAN], 3, Gender::Male),
+    ("袁术", Faction::Qun, &[WANG_ZUN, TONG_JI], 4, Gender::Male),
+];
+
+/// 武将目录下标 → 性别（越界返回 None）。
+pub fn general_gender(g: u16) -> Option<Gender> {
+    STANDARD_GENERALS.get(g as usize).map(|(_, _, _, _, gen)| *gen)
+}
+
+/// 武将目录下标 → 体力上限（越界返回 None）。
+pub fn general_hp(g: u16) -> Option<u32> {
+    STANDARD_GENERALS.get(g as usize).map(|(_, _, _, h, _)| *h)
+}
+
+/// 武将目录下标 → 技能集（越界返回空）。
+pub fn general_skills(g: u16) -> &'static [&'static str] {
+    STANDARD_GENERALS.get(g as usize).map(|(_, _, s, _, _)| *s).unwrap_or(&[])
+}
+
+/// 武将目录下标 → 势力（越界返回 None）。
+/// 国战明置门控：势力判定只认「已明置」的武将槽（ADR 0756/0757）。
+pub fn faction_of_general(g: u16) -> Option<crate::catalog::Faction> {
+    STANDARD_GENERALS.get(g as usize).map(|(_, f, _, _, _)| *f)
+}
+
+/// 由内容机器快照重建机器实例（`MachineSnapshot::restore` 的内容侧分派）。
+/// 返回 None 表示快照不属于本目录的机器类型。
+pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachine>> {
+    match s {
+        MachineSnapshot::FanKui {
+            owner,
+            source,
+            asked,
+        } => Some(Box::new(FanKuiMachine {
+            owner: *owner,
+            source: *source,
+            asked: *asked,
+        })),
+        MachineSnapshot::JianXiong {
+            owner,
+            card,
+            asked,
+        } => Some(Box::new(JianXiongMachine {
+            owner: *owner,
+            card: *card,
+            asked: *asked,
+        })),
+        MachineSnapshot::BiYue { owner } => {
+            Some(Box::new(BiYueMachine { owner: *owner }))
+        }
+        MachineSnapshot::JiZhi { owner } => {
+            Some(Box::new(JiZhiMachine { owner: *owner }))
+        }
+        MachineSnapshot::XiaoJi { owner } => {
+            Some(Box::new(XiaoJiMachine { owner: *owner }))
+        }
+        MachineSnapshot::QingNang { owner, stage, healed } => {
+            Some(Box::new(QingNangMachine {
+                owner: *owner,
+                stage: match stage {
+                    QingNangStageSnap::TargetAsk => QingNangStage::TargetAsk,
+                    QingNangStageSnap::TargetRead => QingNangStage::TargetRead,
+                    QingNangStageSnap::CardRead => QingNangStage::CardRead,
+                },
+                healed: *healed,
+            }))
+        }
+        MachineSnapshot::KuRou { owner, stage } => {
+            Some(Box::new(KuRouMachine {
+                owner: *owner,
+                stage: match stage {
+                    KuRouStageSnap::Lose => KuRouStage::Lose,
+                    KuRouStageSnap::Draw => KuRouStage::Draw,
+                },
+            }))
+        }
+        MachineSnapshot::ZhiHeng { owner, stage } => {
+            Some(Box::new(ZhiHengMachine {
+                owner: *owner,
+                stage: match stage {
+                    ZhiHengStageSnap::Select => ZhiHengStage::Select,
+                    ZhiHengStageSnap::Draw => ZhiHengStage::Draw,
+                },
+            }))
+        }
+        MachineSnapshot::Dismantle {
+            card,
+            source,
+            target,
+            asked,
+        } => Some(Box::new(crate::kernel::DismantleMachine {
+            card: *card,
+            source: *source,
+            target: *target,
+            asked: *asked,
+        })),
+        MachineSnapshot::MonkeySteal {
+            card,
+            user,
+            holders,
+            asked,
+        } => Some(Box::new(crate::kernel::MonkeyStealMachine {
+            card: *card,
+            user: *user,
+            holders: holders.clone(),
+            asked: *asked,
+        })),
+        MachineSnapshot::LuoShen { owner } => {
+            Some(Box::new(LuoShenMachine { owner: *owner }))
+        }
+        MachineSnapshot::YingZi { owner } => {
+            Some(Box::new(YingZiMachine { owner: *owner }))
+        }
+        MachineSnapshot::JiJi {
+            owner,
+            stage,
+            target,
+            given,
+        } => Some(Box::new(JiJiMachine {
+            owner: *owner,
+            stage: match stage {
+                JiJiStageSnap::Draw => JiJiStage::Draw,
+                JiJiStageSnap::Target => JiJiStage::Target,
+                JiJiStageSnap::Retarget => JiJiStage::Target,
+                JiJiStageSnap::GiveCard => JiJiStage::GiveCard,
+                JiJiStageSnap::GiveChooseCard => JiJiStage::GiveChooseCard,
+            },
+            target: *target,
+            given: *given,
+        })),
+        MachineSnapshot::SanCai { owner, stage, target } => Some(Box::new(SanCaiMachine {
+            owner: *owner,
+            stage: match stage {
+                SanCaiStageSnap::Draw => SanCaiStage::Draw,
+                SanCaiStageSnap::Target => SanCaiStage::Target,
+                SanCaiStageSnap::GiveCard => SanCaiStage::GiveCard,
+                SanCaiStageSnap::Finish => SanCaiStage::Finish,
+            },
+            target: *target,
+        })),
+        MachineSnapshot::YiShang { owner, stage } => Some(Box::new(YiShangMachine {
+            owner: *owner,
+            stage: match stage {
+                YiShangStageSnap::Target => YiShangStage::Target,
+                YiShangStageSnap::Apply => YiShangStage::Apply,
+            },
+        })),
+        MachineSnapshot::SuiDun => Some(Box::new(SuiDunMachine)),
+        MachineSnapshot::SuQing { target } => Some(Box::new(SuQingMachine { target: *target })),
+        MachineSnapshot::ShouYi { owner } => Some(Box::new(ShouYiMachine { owner: *owner })),
+        MachineSnapshot::GangLie {
+            owner,
+            source,
+            asked,
+        } => Some(Box::new(GangLieMachine {
+            owner: *owner,
+            source: *source,
+            asked: *asked,
+        })),
+        MachineSnapshot::TuXi { owner, stage } => Some(Box::new(TuXiMachine {
+            owner: *owner,
+            stage: match stage {
+                TuXiStageSnap::Ask => TuXiStage::Ask,
+                TuXiStageSnap::Read => TuXiStage::Read,
+            },
+        })),
+        MachineSnapshot::LuoYi { owner } => {
+            Some(Box::new(LuoYiMachine { owner: *owner, asked: false }))
+        }
+        MachineSnapshot::GuanXing { owner, stage, top } => {
+            Some(Box::new(GuanXingMachine {
+                owner: *owner,
+                stage: match stage {
+                    GuanXingStageSnap::Arrange => GuanXingStage::Arrange,
+                    GuanXingStageSnap::Place => GuanXingStage::Place,
+                },
+                top: top.clone(),
+            }))
+        }
+        MachineSnapshot::LianYing { owner } => {
+            Some(Box::new(LianYingMachine { owner: *owner, asked: false }))
+        }
+        MachineSnapshot::JieYin { owner, stage, cards } => Some(Box::new(JieYinMachine {
+            owner: *owner,
+            stage: match stage {
+                JieYinStageSnap::CardsAsk => JieYinStage::CardsAsk,
+                JieYinStageSnap::TargetAsk => JieYinStage::TargetAsk,
+                JieYinStageSnap::TargetRead => JieYinStage::TargetRead,
+            },
+            cards: cards.clone(),
+        })),
+        MachineSnapshot::FanJian { owner, stage, target } => Some(Box::new(FanJianMachine {
+            owner: *owner,
+            stage: match stage {
+                FanJianStageSnap::TargetAsk => FanJianStage::TargetAsk,
+                FanJianStageSnap::PickAsk => FanJianStage::PickAsk,
+                FanJianStageSnap::Consume => FanJianStage::Consume,
+            },
+            target: *target,
+        })),
+        MachineSnapshot::LiJian { owner, stage, card, inner } => Some(Box::new(LiJianMachine {
+            owner: *owner,
+            stage: match stage {
+                LiJianStageSnap::DiscardAsk => LiJianStage::DiscardAsk,
+                LiJianStageSnap::TargetsAsk => LiJianStage::TargetsAsk,
+                LiJianStageSnap::Launch => LiJianStage::Launch,
+            },
+            card: *card,
+            inner: match inner {
+                Some(m) => match m.restore() {
+                    Ok(r) => Some(r),
+                    Err(_) => return None,
+                },
+                None => None,
+            },
+        })),
+        MachineSnapshot::Rende { owner, stage, cards } => Some(Box::new(RendeMachine {
+            owner: *owner,
+            stage: match stage {
+                RendeStageSnap::SelectCardsAsk => RendeStage::SelectCardsAsk,
+                RendeStageSnap::TargetAsk => RendeStage::TargetAsk,
+                RendeStageSnap::TargetRead => RendeStage::TargetRead,
+            },
+            cards: cards.clone(),
+        })),
+        MachineSnapshot::Jijiang {
+            owner,
+            stage,
+            queue,
+            helper,
+            sha,
+            inner,
+        } => Some(Box::new(JijiangMachine {
+            owner: *owner,
+            stage: match stage {
+                JijiangStageSnap::HelperAsk => JijiangStage::HelperAsk,
+                JijiangStageSnap::TargetAsk => JijiangStage::TargetAsk,
+            },
+            queue: queue.clone(),
+            helper: *helper,
+            sha: *sha,
+            inner: match inner {
+                Some(m) => match m.restore() {
+                    Ok(r) => Some(r),
+                    Err(_) => return None,
+                },
+                None => None,
+            },
+        })),
+        MachineSnapshot::Snatch {
+            card,
+            source,
+            target,
+            asked,
+        } => Some(Box::new(crate::kernel::SnatchMachine {
+            card: *card,
+            source: *source,
+            target: *target,
+            asked: *asked,
+        })),
+        _ => None,
+    }
+}
+
+/// 标准测试目录：基础牌 × 各 12 张 + 五个代表技能。
+pub fn standard_catalog() -> Catalog {
+    let (cards, skills) = standard_catalog_parts();
+    let mut catalog = Catalog::build(cards, skills);
+    catalog.ruleset_version = STANDARD_RULESET_VERSION;
+    catalog
+}
+
+/// 带扩展的标准目录（E03 内容锁接线）：启用扩展的卡牌表经冲突校验
+/// 后合并；目录版本 = 标准版本与启用扩展集合指纹的组合——存档/恢复
+/// 以同一扩展集合校验，集合不同即恢复拒绝（内容锁绑定）。
+/// 返回 (目录, 错误)——扩展内容冲突时返回可处理错误。
+pub fn standard_catalog_with_extensions(
+    packs: &[&crate::content::extension::ExtensionPack],
+) -> Result<Catalog, crate::content::extension::ExtensionError> {
+    use crate::content::extension::{content_lock_id, merge_extension_cards, ExtensionError};
+    use crate::content::host::host_skill_def;
+    let (cards, skills) = standard_catalog_parts();
+    let mut ext_cards: Vec<CardDef> = Vec::new();
+    let mut base_names: std::collections::BTreeSet<&str> =
+        skills.iter().map(|s| s.name).collect();
+    let mut host_names: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
+    let mut ext_skills: Vec<crate::catalog::SkillDef> = Vec::new();
+    for pack in packs.iter().filter(|p| p.enabled) {
+        ext_cards.extend(pack.cards.iter().cloned());
+        for decl in &pack.host_skills {
+            if !base_names.insert(decl.name) {
+                return Err(ExtensionError::DuplicateSkill { name: decl.name.to_string() });
+            }
+            if !host_names.insert(decl.name.to_string()) {
+                return Err(ExtensionError::DuplicateSkill { name: decl.name.to_string() });
+            }
+            ext_skills.push(host_skill_def(decl.name.to_string(), decl.behavior));
+        }
+    }
+    let cards = merge_extension_cards(cards, &ext_cards)?;
+    let mut skills = skills;
+    skills.extend(ext_skills);
+    let mut catalog = Catalog::build(cards, skills);
+    catalog.extension_generals = packs
+        .iter()
+        .filter(|p| p.enabled)
+        .flat_map(|p| p.generals.iter().cloned())
+        .collect();
+    let lock = content_lock_id(packs);
+    catalog.ruleset_version = if lock == 0 {
+        STANDARD_RULESET_VERSION
+    } else {
+        STANDARD_RULESET_VERSION ^ (lock | (1 << 63))
+    };
+    Ok(catalog)
+}
+
+fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
+    let mut cards = Vec::new();
+    // Sha x30
+    for (st, rk, cnt) in [(Suit::Spade, 7u8, 1), (Suit::Spade, 8u8, 2), (Suit::Spade, 9u8, 2), (Suit::Spade, 10u8, 2), (Suit::Club, 2u8, 1), (Suit::Club, 3u8, 1), (Suit::Club, 4u8, 1), (Suit::Club, 5u8, 1), (Suit::Club, 6u8, 1), (Suit::Club, 7u8, 1), (Suit::Club, 8u8, 2), (Suit::Club, 9u8, 2), (Suit::Club, 10u8, 2), (Suit::Club, 11u8, 2), (Suit::Heart, 10u8, 2), (Suit::Heart, 11u8, 1), (Suit::Diamond, 6u8, 1), (Suit::Diamond, 7u8, 1), (Suit::Diamond, 8u8, 1), (Suit::Diamond, 9u8, 1), (Suit::Diamond, 10u8, 1), (Suit::Diamond, 13u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("sha", CardKind::Sha).with_suit_rank(st, rk));
+        }
+    }
+    // Shan x15
+    for (st, rk, cnt) in [(Suit::Heart, 2u8, 2), (Suit::Heart, 13u8, 1), (Suit::Diamond, 2u8, 2), (Suit::Diamond, 3u8, 1), (Suit::Diamond, 4u8, 1), (Suit::Diamond, 5u8, 1), (Suit::Diamond, 6u8, 1), (Suit::Diamond, 7u8, 1), (Suit::Diamond, 8u8, 1), (Suit::Diamond, 9u8, 1), (Suit::Diamond, 10u8, 1), (Suit::Diamond, 11u8, 2)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("shan", CardKind::Shan).with_suit_rank(st, rk));
+        }
+    }
+    // Tao x8
+    for (st, rk, cnt) in [(Suit::Heart, 3u8, 1), (Suit::Heart, 4u8, 1), (Suit::Heart, 6u8, 1), (Suit::Heart, 7u8, 1), (Suit::Heart, 8u8, 1), (Suit::Heart, 9u8, 1), (Suit::Heart, 12u8, 1), (Suit::Diamond, 12u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("tao", CardKind::Tao).with_suit_rank(st, rk));
+        }
+    }
+    // SavageAttack x3
+    for (st, rk, cnt) in [(Suit::Spade, 7u8, 1), (Suit::Spade, 13u8, 1), (Suit::Club, 7u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("savage", CardKind::SavageAttack).with_suit_rank(st, rk));
+        }
+    }
+    // Duel x3
+    for (st, rk, cnt) in [(Suit::Spade, 1u8, 1), (Suit::Club, 1u8, 1), (Suit::Diamond, 1u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("duel", CardKind::Duel).with_suit_rank(st, rk));
+        }
+    }
+    // Snatch x5
+    for (st, rk, cnt) in [(Suit::Spade, 3u8, 1), (Suit::Spade, 4u8, 1), (Suit::Spade, 11u8, 1), (Suit::Diamond, 3u8, 1), (Suit::Diamond, 4u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("snatch", CardKind::Snatch).with_suit_rank(st, rk));
+        }
+    }
+    // Dismantle x6
+    for (st, rk, cnt) in [(Suit::Spade, 3u8, 1), (Suit::Spade, 4u8, 1), (Suit::Spade, 12u8, 1), (Suit::Club, 3u8, 1), (Suit::Club, 4u8, 1), (Suit::Heart, 12u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("dismantle", CardKind::Dismantle).with_suit_rank(st, rk));
+        }
+    }
+    // Nullify x4
+    for (st, rk, cnt) in [(Suit::Spade, 11u8, 1), (Suit::Club, 12u8, 1), (Suit::Club, 13u8, 1), (Suit::Diamond, 12u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("nullify", CardKind::Nullify).with_suit_rank(st, rk));
+        }
+    }
+    // Le x3
+    for (st, rk, cnt) in [(Suit::Spade, 6u8, 1), (Suit::Club, 6u8, 1), (Suit::Heart, 6u8, 1)] {
+        for _ in 0..cnt {
+            cards.push(CardDef::basic("le", CardKind::Le).with_suit_rank(st, rk));
+        }
+    }
+    // ShanDian x2（批③-c：上游 ♠1/♥12 逐张落位；♥12 命名 shandian_safe）
+    for (st, rk, name) in [(Suit::Spade, 1u8, "shandian"), (Suit::Heart, 12u8, "shandian_safe")] {
+        cards.push(CardDef::basic(name, CardKind::ShanDian).with_suit_rank(st, rk));
+    }
+    // —— 原生扩充（G1 前置，上游无对应；花色点数为原生取值）——
+    for _ in 0..4 {
+        cards.push(CardDef::basic("horse_plus", CardKind::HorsePlus));
+    }
+    for _ in 0..2 {
+        cards.push(CardDef::basic("horse_minus", CardKind::HorseMinus));
+    }
+    cards.push(CardDef::basic("jiu", CardKind::Jiu).with_suit_rank(Suit::Spade, 3));
+    cards.push(CardDef::basic("jiu", CardKind::Jiu).with_suit_rank(Suit::Club, 9));
+    cards.push(CardDef::basic("leisha", CardKind::LeiSha).with_suit_rank(Suit::Spade, 4));
+    cards.push(CardDef::basic("leisha", CardKind::LeiSha).with_suit_rank(Suit::Club, 5));
+    let mut weapon2 = CardDef::basic("weapon2", CardKind::Weapon);
+    weapon2.range = 2;
+    cards.push(weapon2);
+    let mut weapon2b = CardDef::basic("weapon2b", CardKind::Weapon);
+    weapon2b.range = 2;
+    cards.push(weapon2b);
+    let mut weapon3 = CardDef::basic("weapon3", CardKind::Weapon);
+    weapon3.range = 3;
+    cards.push(weapon3);
+    for _ in 0..2 {
+        cards.push(CardDef::basic("armor", CardKind::Armor));
+    }
+    for _ in 0..4 {
+        cards.push(CardDef::basic("fire_sha", CardKind::FireSha));
+    }
+    for _ in 0..4 {
+        cards.push(CardDef::basic("chain", CardKind::Chain));
+    }
+    cards.push(CardDef::basic("archery", CardKind::ArcheryAttack).with_suit_rank(Suit::Heart, 1));
+    cards.push(
+        CardDef::basic("bing", CardKind::Bing).with_suit_rank(Suit::Club, 3),
+    );
+    // P2/N08 缺牌种批①（2026-10-07）：无中生有 ♥7/8/9/11、桃园结义 ♥1
+    //（上游 standard list 花色点数原样落位）。
+    for (st, rk) in [
+        (Suit::Heart, 7),
+        (Suit::Heart, 8),
+        (Suit::Heart, 9),
+        (Suit::Heart, 11),
+    ] {
+        cards.push(CardDef::basic("wuzhong", CardKind::Wuzhong).with_suit_rank(st, rk));
+    }
+    cards.push(CardDef::basic("taoyuan", CardKind::Taoyuan).with_suit_rank(Suit::Heart, 1));
+    // 批①-2（规则 v63）：五谷丰登 ♥3/♥4、借刀杀人 ♣12/♣13（上游落位）。
+    for rk in [3u8, 4] {
+        cards.push(CardDef::basic("wugu", CardKind::Wugu).with_suit_rank(Suit::Heart, rk));
+    }
+    for rk in [12u8, 13] {
+        cards.push(CardDef::basic("jiedao", CardKind::Jiedao).with_suit_rank(Suit::Club, rk));
+    }
+    // 批③-a（规则 v64）：仁王盾 ♣2（防具；锁定黑色杀无效）。
+    cards.push(CardDef::basic("renwang", CardKind::Renwang).with_suit_rank(Suit::Club, 2));
+    // 批③-b 第一把（规则 v65）：青釭剑 ♠6（武器射程 2；锁定无视目标防具）
+    //——命名武器牌种（特效按牌种接线，非泛型 Weapon）。
+    let mut qinggang = CardDef::basic("qinggang", CardKind::Qinggang)
+        .with_suit_rank(Suit::Spade, 6);
+    qinggang.range = 2;
+    cards.push(qinggang);
+    // 批③-b 第二把（规则 v66）：麒麟弓 ♥5（武器射程 5；杀伤害时可弃目标
+    // 一匹坐骑）。
+    let mut qilin = CardDef::basic("qilin", CardKind::Qilin).with_suit_rank(Suit::Heart, 5);
+    qilin.range = 5;
+    cards.push(qilin);
+    // 批③-b 第三把（规则 v67）：寒冰剑 ♠2（武器射程 2；杀伤害可防止改为
+    // 弃目标两张牌）。
+    let mut hanbing = CardDef::basic("hanbing", CardKind::Hanbing)
+        .with_suit_rank(Suit::Spade, 2);
+    hanbing.range = 2;
+    cards.push(hanbing);
+    // 批③-b 第四把（规则 v68）：诸葛连弩 ♣1/♦1（武器射程 1；出杀不限次）。
+    for (st, rk) in [(Suit::Club, 1u8), (Suit::Diamond, 1)] {
+        let mut zhuge = CardDef::basic("zhuge", CardKind::Zhuge).with_suit_rank(st, rk);
+        zhuge.range = 1;
+        cards.push(zhuge);
+    }
+    // 批③-b 第五把（规则 v69）：贯石斧 ♦5（武器射程 3；杀被闪后可弃
+    // 两张牌强制伤害）。
+    let mut guanshi = CardDef::basic("guanshi", CardKind::Guanshi)
+        .with_suit_rank(Suit::Diamond, 5);
+    guanshi.range = 3;
+    cards.push(guanshi);
+    // 批③-b 第六把（规则 v70）：青龙偃月刀 ♠5（武器射程 3；杀被闪后可
+    // 立即对相同目标再使用一张杀）。
+    let mut qinglong = CardDef::basic("qinglong", CardKind::Qinglong)
+        .with_suit_rank(Suit::Spade, 5);
+    qinglong.range = 3;
+    cards.push(qinglong);
+    // 批③-b 第七把（规则 v71）：丈八蛇矛 ♠12（武器射程 3；两张手牌当杀
+    // 的配套主动技随装备授予）。
+    let mut zhangba = CardDef::basic("zhangba", CardKind::Zhangba)
+        .with_suit_rank(Suit::Spade, 12);
+    zhangba.range = 3;
+    zhangba.equip_skills.push(ZHANGBA);
+    cards.push(zhangba);
+    // 批③-b 第八把（规则 v72）：雌雄双股剑 ♠2（武器射程 2；对异性目标
+    // 出杀：目标弃一张手牌或令使用者摸一张牌）。
+    let mut cixiong = CardDef::basic("cixiong", CardKind::Cixiong)
+        .with_suit_rank(Suit::Spade, 2);
+    cixiong.range = 2;
+    cards.push(cixiong);
+    // 批③-b 第九把（规则 v73）：方天画戟 ♦5（武器射程 4；最后手牌杀
+    // 可指定至多三个目标）。
+    let mut fangtian = CardDef::basic("fangtian", CardKind::Fangtian)
+        .with_suit_rank(Suit::Diamond, 5);
+    fangtian.range = 4;
+    cards.push(fangtian);
+    // 官方技能（鬼道/天妒）追加在样例技能之后：技能表追加保持既有
+    // SkillDefId 稳定（def id 入快照/哈希，插队会漂移样例技能编号）。
+    let skills = vec![
+        SkillDef {
+            name: SAN_CAI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(SanCaiBehavior),
+        },
+        SkillDef {
+            name: YI_SHANG,
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(YiShangBehavior),
+        },
+        SkillDef {
+            name: SUI_DUN,
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits {
+                once_per_turn: true,
+                ..SkillLimits::default()
+            },
+            behavior: Box::new(SuiDunBehavior),
+        },
+        SkillDef {
+            name: SU_QING,
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::First,
+                priority: 100,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(SuQingBehavior),
+        },
+        SkillDef {
+            name: SHOU_YI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ShouYiBehavior),
+        },
+        SkillDef {
+            name: FAN_KUI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(FanKuiBehavior {
+                _p: (),
+            }),
+        },
+        SkillDef {
+            name: JIAN_XIONG,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(JianXiongBehavior),
+        },
+        SkillDef {
+            name: JI_JI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(JiJiBehavior),
+        },
+        SkillDef {
+            name: GANG_LIE,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(GangLieBehavior),
+        },
+        SkillDef {
+            name: TU_XI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(TuXiBehavior),
+        },
+        SkillDef {
+            name: LUO_YI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(LuoYiBehavior),
+        },
+        SkillDef {
+            name: GUAN_XING,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(GuanXingBehavior),
+        },
+        // 空城/谦逊为锁定门控：无触发机器，出牌校验侧经 skill_by_name 查询。
+        SkillDef {
+            name: LIAN_YING,
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: vec![
+                    EventKind::CardResponded,
+                    EventKind::CardsMoved,
+                    EventKind::CardsDiscarded,
+                ],
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(LianYingBehavior),
+        },
+        SkillDef {
+            name: KONG_CHENG,
+            // 权限型能力：出牌校验经 skill_by_name 查询持有者（无触发时机）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: QIAN_XUN,
+            // 权限型能力：乐不思蜀目标校验经 skill_by_name 查询持有者
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: REN_DE,
+            // 主动技：出牌阶段可多次发动（上游 enable: phaseUse 无次数
+            // 限制）；累计给牌数入回合状态（跨过 2 张回复 1 点）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(RendeBehavior),
+        },
+        SkillDef {
+            name: JI_JIANG,
+            // 主公技主动化：激将上游入口是 chooseToUse/chooseToRespond
+            // （需要使用/打出杀时发动），不绑定出牌阶段——目录声明例外
+            // （once_per_turn 为原生逐回合限一次的登记约束）。
+            trigger: None,
+            limits: SkillLimits { once_per_turn: true, active_outside_play: true },
+            behavior: Box::new(JijiangBehavior),
+        },
+        SkillDef {
+            name: MA_SHU,
+            // 权限型能力：computed_distance 距离修正经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: QING_GUO,
+            // 权限型能力：杀响应选项并入黑色装备经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: QI_CAI,
+            // 权限型能力：锦囊距离限制豁免经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: JIU_YUAN,
+            // 权限型能力：濒死桃回复量修正经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: JI_JIU,
+            // 权限型能力：濒死结算桃判定扩面经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: HU_JIA,
+            // 权限型能力：出闪响应选项扩面（护驾借闪）经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: LIU_LI,
+            // 权限型能力：杀转移询问（ShaResolve 内嵌流离段）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: JIE_YIN,
+            // 主动技：出牌阶段限一次（activate 形态）
+            trigger: None,
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(JieYinBehavior),
+        },
+        SkillDef {
+            name: FAN_JIAN,
+            // 主动技：出牌阶段限一次（activate 形态）
+            trigger: None,
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(FanJianBehavior),
+        },
+        SkillDef {
+            name: LI_JIAN,
+            // 主动技：出牌阶段限一次（activate 形态，内嵌决斗直结算）
+            trigger: None,
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(LiJianBehavior),
+        },
+        SkillDef {
+            name: TIE_JI,
+            // 锁定式判定：ShaResolve 结算内经 skill_by_name 查询来源持有者
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: PAO_XIAO,
+            // 权限型能力：出牌阶段杀限检查经 skill_by_name 查询持有者
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: QI_XI,
+            // 权限型能力：出牌校验经 skill_by_name 查询持有者（无触发时机）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: WU_SHUANG,
+            // 修改型能力：杀结算/决斗机器经 skill_by_name 查询来源持有者
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: JI_ZHI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(JiZhiBehavior),
+        },
+        SkillDef {
+            name: KE_JI,
+            // 条件型手牌上限修正：判定阶段（弃牌）流程经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: GUO_SE,
+            // 权限型能力：出牌校验经 skill_by_name 查询持有者（无触发时机）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: WU_SHENG,
+            // 权限型能力：出牌校验经 skill_by_name 查询持有者（无触发时机）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: LONG_DAN,
+            // 权限型能力：出牌/出闪结算经 skill_by_name 查询持有者
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BI_YUE,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(BiYueBehavior),
+        },
+        SkillDef {
+            name: LUO_SHEN,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(LuoShenBehavior),
+        },
+        SkillDef {
+            name: KU_ROU,
+            // 主动技：经 GameAction::ActivateSkill 发动（每回合限一次）
+            trigger: None,
+            limits: SkillLimits {
+                once_per_turn: true,
+                ..SkillLimits::default()
+            },
+            behavior: Box::new(KuRouBehavior),
+        },
+        SkillDef {
+            name: ZHI_HENG,
+            // 主动技：经 GameAction::ActivateSkill 发动（每回合限一次）
+            trigger: None,
+            limits: SkillLimits {
+                once_per_turn: true,
+                ..SkillLimits::default()
+            },
+            behavior: Box::new(ZhiHengBehavior),
+        },
+        SkillDef {
+            name: YING_ZI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(YingZiBehavior),
+        },
+        SkillDef {
+            name: XIAO_JI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Equipped,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(XiaoJiBehavior),
+        },
+        SkillDef {
+            name: QING_NANG,
+            // 主动技：出牌阶段限一次
+            trigger: None,
+            limits: SkillLimits {
+                once_per_turn: true,
+                ..SkillLimits::default()
+            },
+            behavior: Box::new(QingNangBehavior),
+        },
+        SkillDef {
+            name: GUI_CAI,
+            // 权限型能力：判定流程经 skill_by_name 查询持有者（无触发时机）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: GUI_DAO,
+            // 权限型能力：判定流程经 skill_by_name 查询持有者（无触发时机）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: TIAN_DU,
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: JU_SHOU,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(JushouBehavior),
+        },
+        SkillDef {
+            name: XIAO_GUO,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(XiaoGuoBehavior),
+        },
+        SkillDef {
+            name: KUANG_FU,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(KuangFuBehavior),
+        },
+        SkillDef {
+            name: YAO_WU,
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(YaoWuBehavior),
+        },
+        SkillDef {
+            name: SHU_SHEN,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Recover,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ShuShenBehavior),
+        },
+        SkillDef {
+            name: SHEN_ZHI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ShenZhiBehavior),
+        },
+        SkillDef {
+            name: XUN_XUN,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(XunXunBehavior),
+        },
+        SkillDef {
+            name: WANG_XI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(WangXiBehavior),
+        },
+        SkillDef {
+            name: YI_CONG,
+            // 权限型能力：computed_distance 动态距离修正经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: JI_JIE,
+            trigger: None,
+            limits: SkillLimits { once_per_turn: true, ..SkillLimits::default() },
+            behavior: Box::new(JiJieBehavior),
+        },
+        SkillDef {
+            name: JI_YUAN,
+            trigger: Some(TriggerMeta {
+                event: EventKind::Dying,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(JiYuanBehavior),
+        },
+        SkillDef {
+            name: WANG_ZUN,
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(WangZunBehavior),
+        },
+        SkillDef {
+            name: WANG_ZUN_MARK,
+            // 权限型能力：弃牌阶段手牌上限 -1（妄尊授予的回合级印记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: TONG_JI,
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(TongJiBehavior),
+        },
+        SkillDef {
+            name: ZHANGBA,
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(ZhangbaBehavior),
+        },
+    ];
+    (cards, skills)
+}

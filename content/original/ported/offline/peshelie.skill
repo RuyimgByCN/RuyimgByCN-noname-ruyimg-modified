@@ -1,0 +1,5 @@
+// peshelie：音效名:shelie, player:phaseDrawBegin1, source:damage_before, 选牌UI, 异步。
+skill peshelie(3516543975) {
+  trigger damage_before owner_alive optional {
+  }
+}

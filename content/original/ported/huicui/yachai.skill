@@ -1,0 +1,5 @@
+// yachai：摸2牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill yachai(2901872903) {
+  modifier hand_limit add 1;
+}

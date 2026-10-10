@@ -1,0 +1,11 @@
+// liedan：锁定技；摸?牌；失去体力；增体力上限。
+skill liedan(3386668175) {
+  trigger phase_prepare owner_alive_not_target {
+    // 近似：摸1张牌；旧JS有额外条件/选择逻辑
+    effect draw_cards(self, 1);
+    // 近似：失去1点体力
+    effect lose_hp(self, 1);
+    // 近似：增加体力上限
+    effect change_max_hp(self, 1);
+  }
+}

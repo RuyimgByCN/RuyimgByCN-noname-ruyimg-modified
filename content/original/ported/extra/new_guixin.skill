@@ -1,0 +1,5 @@
+skill new_guixin(3519522126) {
+  trigger damage owner_is_target_per_damage_point_other_hand_equip_judge_nonempty optional {
+    effect choose_zone_priority_gain_random_card_from_each_other_then_turn_over(self);
+  }
+}

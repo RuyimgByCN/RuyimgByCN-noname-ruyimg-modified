@@ -1,0 +1,9 @@
+// 绝禋（JSRG）：当你于一回合内首次受到伤害后，你可以摸三张牌，然后本回合内所有角色受到的伤害+1。
+// 实现：本回合首次受伤后可选摸 3。
+// 近似：本回合全场受伤+1 未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgjueyin(2928968300) {
+  trigger damage owner_is_target_first_damage optional {
+    effect draw_cards(self, 3);
+  }
+}

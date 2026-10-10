@@ -1,0 +1,6 @@
+// zhiming（知命）：准备阶段开始时或弃牌阶段结束时，你摸一张牌，然后可以将一张牌置于牌堆顶。
+skill zhiming(2913205521) {
+  trigger phase_prepare owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,17 @@
+// 清雨（糜夫人）：使命技——受伤前你可弃置两张手牌或装备牌防止此伤害；准备阶段
+// 若你满血且手牌数小于当前轮数，使命成功并获得【选存】；你进入濒死状态时使命
+// 失败，减 1 点体力上限并令一名其他角色获得【勇决】。
+// 旧 JavaScript 仅作语义证据；防伤弃牌、使命成功/失败与授技由 ABI 431
+// resolve_qingyu 权威结算（使命状态以技能实例状态记录，唤醒后三分支均失效）；
+// “可弃牌数”条件在引擎内权威校验。
+skill qingyu(3126505108) {
+  trigger damage_before owner_is_target {
+    effect resolve_qingyu(self, 0, 2417220435, 4188437274);
+  }
+  trigger phase_prepare owner_is_target {
+    effect resolve_qingyu(self, 1, 2417220435, 4188437274);
+  }
+  trigger dying owner_is_target {
+    effect resolve_qingyu(self, 2, 2417220435, 4188437274);
+  }
+}

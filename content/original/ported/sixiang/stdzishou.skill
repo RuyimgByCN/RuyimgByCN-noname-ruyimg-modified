@@ -1,0 +1,7 @@
+// 自守：出牌阶段开始前可摸存活势力数张牌，然后跳过此阶段。
+skill stdzishou(2683293404) {
+  trigger phase_play owner_is_target optional {
+    effect draw_cards(self, alive_group_count());
+    effect skip_current_phase(self);
+  }
+}

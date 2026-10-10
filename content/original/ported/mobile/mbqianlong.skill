@@ -1,0 +1,7 @@
+// mbqianlong（潜龙）：潜龙标记触发。
+// 未建模：自定义事件 mbqianlong_beginAfter 与标记流转无 DSL 原语。
+skill mbqianlong(2193608450) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mbqianlong 含真实规则体（trigger、forced、group 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 158 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

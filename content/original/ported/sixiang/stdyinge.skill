@@ -1,0 +1,7 @@
+// 缨歌：出牌阶段，令一名角色交给你一张牌，然后其须对你或你攻击范围内的一名角色使用一张【杀】。
+// 旧 JS 的「强制交给」「强制使用杀并选择目标」为多步骤复杂交互流程，无可用的 DSL 原语。
+skill stdyinge(3942130611) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

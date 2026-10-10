@@ -1,0 +1,21 @@
+// 被坚（xianding 诸葛京 dcpijian）：锁定技，结束阶段开始时，若「安」数不小于
+// 存活角色数：将「安」全部置入弃牌堆，对一名角色造成 2 点伤害。
+// 上游 (xianding/skill.js dcpijian)：trigger player phaseEnd；locked；
+// filter getExpansions("dcyanzuo").length >= game.countPlayer()；cost chooseTarget
+//（任意角色）；content loseToDiscardpile(全部「安」) + target.damage(2)。
+// 实现（2026-09-09 第一百九十五批·S1-B 消费池，零新原语）：
+// skill_pile_count 门控（`alive_count() < N+1` 改写 `N >= alive_count()`）+
+// discard_skill_pile(self, self_skill, dcyanzuo def 3086522468) +
+// choose_other_damage(self, 2)。
+// 近似（登记债）：①目标「一名角色」（含自己）收窄为其他角色（choose_other
+// 家族语义）；②forced chooseTarget（强制目标）以内建选目标近似；③「安」堆
+// 供给依赖 dcyanzuo 置入面落地（dormant 契约）。
+// 注：locked 技触发不可标 optional（typecheck 门禁），锁定为 forced 语义。
+skill dcpijian(2217810417) locked {
+  trigger phase_end owner_skill_pile_nonempty_3086522468 {
+    if alive_count() < skill_pile_count(self, 3086522468) + 1 {
+      effect discard_skill_pile(self, self_skill, 3086522468);
+      effect choose_other_damage(self, 2);
+    }
+  }
+}

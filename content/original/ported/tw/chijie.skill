@@ -1,0 +1,12 @@
+// chijie（持节）：游戏开始时/每轮开始时，可变更势力为场上存在的任一势力。
+// 实现：`trigger round_started owner_alive optional`（游戏开始时近似为
+// 首轮 round_started）→ choose_group(self, self_skill)（ABI 664：选现存
+// 且不同于自己的势力并变更）。
+// 近似：上游另有 enterGame 时机，DSL 以首轮 round_started 覆盖；
+// 无可用势力时静默 no-op。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill chijie(3286369736) {
+  trigger round_started owner_alive optional {
+    effect choose_group(self, self_skill);
+  }
+}

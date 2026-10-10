@@ -1,0 +1,9 @@
+// 长姬（DC 清河公主）：锁定技，成为多目标牌的目标时，你摸 X 张牌（X 为此牌的其他目标数）。
+// 旧 JS 的“先结算此牌效果”排序调整未建模。
+skill dczhangji(2178808868) locked {
+  trigger card_targeted owner_alive_targeted_by_other {
+    if 1 < event_target_count {
+      effect draw_cards(self, event_target_count - 1);
+    }
+  }
+}

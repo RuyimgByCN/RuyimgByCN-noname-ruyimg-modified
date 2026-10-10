@@ -1,0 +1,5 @@
+// yjshicai（锁定技/主动技(phaseUse)/触发技）：音效名:spshicai, 锁定技, player:phaseBegin, player:hp_lost, global:cards_moved, 主动(phaseUse), 移出游戏, 加技能, 含子技能。
+skill yjshicai(3670494586) locked {
+  trigger hp_lost always {
+  }
+}

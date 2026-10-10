@@ -1,0 +1,7 @@
+// 质盟：准备阶段开始时，你可以将任意张牌交给一名其他角色，然后该角色交给你任意张牌。
+// 旧 JS 的「双向任意数量交牌」无可用的 DSL 原语（需双方选择交牌数量，无法用 choose_other_give_one_hand_equip 等单向原语表达）。
+skill stdzhiyinmeng(2780614037) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

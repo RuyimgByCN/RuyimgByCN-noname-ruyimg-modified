@@ -1,0 +1,5 @@
+skill wangxi(3936329432) {
+  trigger damage owner_is_source_or_target_other_alive_per_damage_point optional {
+    effect draw_each_by_seat(event_player, event_source, 1);
+  }
+}

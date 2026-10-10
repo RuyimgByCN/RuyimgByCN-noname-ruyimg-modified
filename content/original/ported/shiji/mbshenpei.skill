@@ -1,0 +1,8 @@
+// 神沛（蒋琬系）：限定技。你进入濒死时，获得技能〖回天〗并回复 1 点体力。
+// 旧 JS 的「按濒死次数分支」无对应原语；以濒死时回复 1 点近似
+// （授技未建模，已注明）。
+skill mbshenpei(4194762979) {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 1);
+  }
+}

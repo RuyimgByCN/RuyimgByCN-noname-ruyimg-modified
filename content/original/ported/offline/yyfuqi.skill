@@ -1,0 +1,7 @@
+// 伏骑：近距离角色不能响应你的牌；每指定一个远距离目标便摸一张牌。
+skill yyfuqi(3281236781) locked {
+  modifier card_use_unrespondable_within_responder_to_owner_distance override 1;
+  trigger card_targeted owner_source_target_distance_gt_one {
+    effect draw_cards(self, 1);
+  }
+}

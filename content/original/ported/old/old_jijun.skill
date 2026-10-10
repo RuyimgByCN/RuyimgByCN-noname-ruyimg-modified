@@ -1,0 +1,6 @@
+// 集军：出牌阶段可将任意张手牌置于自己的“方”扩展牌堆。
+skill old_jijun(2612231702) {
+  active play_phase select_hand 1 255 {
+    effect store_selected_in_skill_pile(self);
+  }
+}

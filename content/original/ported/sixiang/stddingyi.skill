@@ -1,0 +1,6 @@
+// 定仪：一名角色进入结束阶段时，若其装备区为空，由该角色决定是否摸一张牌。
+skill stddingyi(2968274563) {
+  trigger phase_end owner_alive_event_player_equip_empty optional by event_player {
+    effect draw_cards(event_player, 1);
+  }
+}

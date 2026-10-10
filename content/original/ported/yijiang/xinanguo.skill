@@ -1,0 +1,6 @@
+// 新安国：目标先依次执行其满足的最少手牌/体力/装备项，拥有者再执行剩余项。
+skill xinanguo(3075552814) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_xinanguo(self);
+  }
+}

@@ -1,0 +1,7 @@
+// xkbimeng：音效名:xkbimeng, 主动(phaseUse), 加技能, 含子技能。
+skill xkbimeng(3787875441) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

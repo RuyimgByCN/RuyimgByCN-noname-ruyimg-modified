@@ -1,0 +1,11 @@
+// 揽娇（嗔曹操）：出牌阶段限一次，你可以选择一名手牌数不小于二的其他角色（每名
+// 角色每回合限一次），查看其两张手牌，其可选择失去 1 点体力并摸一张牌令你重新
+// 选择；当你停止选择时，你获得最后查看的两张牌。
+// 旧 JS 仅作语义证据；循环查看与目标选择由 resolve_sxrmlanjiao 权威状态机校验
+// （ABI 479）；每目标每回合一次以技能 mark（key=目标 id）记录；查看以确定性取前
+// 两张近似。
+skill sxrmlanjiao(3315968200) {
+  trigger phase_play owner_is_target {
+    effect resolve_sxrmlanjiao(self);
+  }
+}

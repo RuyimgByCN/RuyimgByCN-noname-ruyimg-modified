@@ -1,0 +1,22 @@
+// 挽危/约俭：最低体力伤害保护、回合末牌堆首尾用牌与置顶置底阶梯收益。
+skill twwanwei(3733856593) {
+trigger damage_before owner_alive_damage_before_target_min_hp_unused {
+    effect resolve_twbianfuren(self, event_player, 3334690458, 0);
+  }
+}
+
+skill twwanwei_effect(3334690458) {
+trigger phase_end owner_alive_global_phase_end {
+    effect resolve_twbianfuren(self, event_player, 0, 1);
+  }
+}
+
+skill twyuejian(3308823251) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_twbianfuren(self, self, 2963412042, 2);
+  }
+}
+
+skill twyuejian_effect(2963412042) locked {
+  modifier hand_limit add owner_skill_mark;
+}

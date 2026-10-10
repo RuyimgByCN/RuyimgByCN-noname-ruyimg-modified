@@ -1,0 +1,7 @@
+// 勇略：其他角色判定阶段开始时，若其在攻击范围内，可弃置其一张判定牌并视为
+// 对其使用一张不计次数的虚拟【杀】；精确跟踪该【杀】，未造成伤害时摸一张牌。
+skill yonglve(2407381445) {
+  trigger phase_judge owner_alive_other_judge_phase_in_range_has_judge_card {
+    effect choose_discard_judge_use_virtual_sha_draw_if_no_damage(self, event_player);
+  }
+}

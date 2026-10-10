@@ -1,0 +1,9 @@
+// 济世（华歆系）：锁定技。你使用牌结算后，若该牌实体牌进入弃牌堆且未
+// 造成伤害，将这些牌置于「仁库」；「仁库」牌可被疏陈等技能使用。
+// 旧 JS 的「置入仁库」以 skill pile 表达；使用牌后未造成伤害时存入
+// 技能牌堆近似（条件未建模，已注明）。
+skill jishi(3611021397) locked {
+  trigger card_used owner_is_source {
+    effect store_selected_in_skill_pile(self);
+  }
+}

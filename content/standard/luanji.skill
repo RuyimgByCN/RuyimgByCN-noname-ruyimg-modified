@@ -1,0 +1,4 @@
+// Yuan Shao barrage
+skill luanji(63) {
+  modifier attack_range add 1;
+}

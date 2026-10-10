@@ -1,0 +1,4 @@
+// Hua Xiong
+skill weizi(64) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

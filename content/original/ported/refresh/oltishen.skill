@@ -1,0 +1,9 @@
+// 界张飞「替身」：旧 JS 仅作语义来源；限定发动后回复并摸等量牌。
+skill oltishen(3850927603) {
+  trigger phase_prepare owner_is_target_wounded optional {
+    let lost = max_hp(self) - hp(self);
+    effect recover_hp(self, lost);
+    effect draw_cards(self, lost);
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,10 @@
+// 音航（唯·锁定技）：体力变化时令至多两名角色各摸一张牌。
+// 同 iwasawa_yinhang，以 draw 近似。
+skill yui_yinhang(3807513032) {
+  trigger hp_lost owner_alive {
+    effect draw_cards(self, 1);
+  }
+  trigger hp_recovered owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

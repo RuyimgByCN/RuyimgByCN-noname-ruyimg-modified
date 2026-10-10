@@ -1,0 +1,5 @@
+// zhente2：旧JS复杂效果。
+// 旧JS含init初始化，DSL无法精确建模。
+skill zhente2(2489172030) {
+  modifier hand_limit add 1;
+}

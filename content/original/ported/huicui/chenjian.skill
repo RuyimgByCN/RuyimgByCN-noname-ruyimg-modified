@@ -1,0 +1,6 @@
+// 滕胤「陈见」：旧 JS 仅作语义来源；结算由可回放的类型化效果执行。
+skill chenjian(3452524123) {
+  trigger phase_prepare owner_is_target optional {
+    effect reveal_discard_suit_gain_or_use(self, 3452524123, 3, 2);
+  }
+}

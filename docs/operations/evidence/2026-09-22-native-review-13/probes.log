@@ -1,0 +1,18 @@
+FIXED_AUTH: cross-instance/old token rejected; fresh restored token accepted
+FIXED_ARCHIVE: mismatched header and overflowing length return Err
+FIXED_SNAPSHOT: bad general id and duplicated zone card rejected
+OPEN_MISSING_CARD: removed Card(40) from sole owning zone; restore accepted
+FIXED_PRIVATE_ANSWER: other seat sees ChoiceAnsweredHidden
+OPEN_LIULI_RESUME: direct=Accepted { state_hash: [191, 171, 164, 135, 118, 3, 126, 159, 82, 12, 225, 231, 41, 68, 174, 26, 240, 156, 0, 69, 125, 130, 224, 26, 62, 63, 57, 173, 13, 60, 11, 64] } hp2=3 restored=Pending { choice: OpenChoice { id: 2, observer: 1, spec: ChoiceSpec { kind: SelectPlayers, prompt: "liuli_transfer", options: [Player(2)], min: 0, max: 1, allow_cancel: true } } } hp2=4; identical saved hash diverges on same answer
+OPEN_HUJIA_PRIVATE_CARD: defender view=Own { id: 1, prompt: "respond_shan", options: [Pass, Card(16)], min: 1, max: 1, allow_cancel: false }; defender consumes attacker's private Shan without owner choice
+OPEN_AI_DEDUP: after accepted dedup=1000000 and restore, run_policy=Rejected(DuplicateCommand) apply_plan=Rejected(DuplicateCommand)
+OPEN_AI_HIDDEN_STATE: equal seat view/events/hand metadata but hidden Shan swap changes plan: PlayCard { card: 0, targets: [2] } -> PlayCard { card: 0, targets: [1] }
+OPEN_AI_OPTIONS: options=[Pass, Card(22)] max=1 candidate nodes=2 (Pass + invalid NextPhase); legal Shan never evaluated
+OPEN_GENERAL_WIRING: 曹操 exists but general_skills omits 护驾
+OPEN_GENERAL_WIRING: 貂蝉 exists but general_skills omits 离间
+OPEN_GENERAL_WIRING: 大乔 exists but general_skills omits 流离
+OPEN_GENERAL_WIRING: 周瑜 exists but general_skills omits 反间
+OPEN_GENERAL_WIRING: 孙尚香 exists but general_skills omits 结姻
+OPEN_GENERAL_WIRING: 华佗 exists but general_skills omits 急救
+CATALOG_COUNT ordinary=25 samples=3
+REVIEW13_PROBES_COMPLETE ruleset=26

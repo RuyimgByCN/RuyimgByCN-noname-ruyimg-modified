@@ -1,0 +1,18 @@
+// 狼灭（sp2 张横）：锁定技，当黑色牌进入或离开你的装备区/判定区后，你摸两张牌；
+// 若你的体力值大于 1，你失去 1 点体力。
+// 上游 (sp2/skill.js liangjue)：trigger player loseAfter + global 五事件全家桶；
+// getIndex 数黑色牌进出自己装备区(es)/判定区(js)的张数（进向 equip/addJudge 限
+// event.player==player），>0 触发；content = draw(2) + if hp>1 loseHp()。forced。
+// 实现（2026-09-05 第一百六十五批·零引擎改动重写，批 159 复核证伪池晋升）：
+// cards_moved 触发 + 本批新注册过滤器 owner_black_card_moved_equip_judge（六点
+// 注册，零 ABI；出向=from-zone owner 是自己且为装备/判定区，进向=to_zone 的
+// ZoneId 反查 owner 且为装备/判定区——TriggerContext.to_zone 存完整 ZoneId，eval
+// 侧直查，无需引擎扩展）→ draw_cards(self, 2) + if hp(self) > 1 lose_hp(self, 1)。
+skill liangjue(2187481060) {
+  trigger cards_moved owner_black_card_moved_equip_judge {
+    effect draw_cards(self, 2);
+    if hp(self) > 1 {
+      effect lose_hp(self, 1);
+    }
+  }
+}

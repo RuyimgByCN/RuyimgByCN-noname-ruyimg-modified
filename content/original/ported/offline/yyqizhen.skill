@@ -1,0 +1,6 @@
+// yyqizhen：锁定技, player:card_targeted, player:card_used, 摸牌, 加技能, 含子技能, 异步。
+skill yyqizhen(2216769727) locked {
+  trigger card_targeted always {
+    effect draw_cards(self, 1);
+  }
+}

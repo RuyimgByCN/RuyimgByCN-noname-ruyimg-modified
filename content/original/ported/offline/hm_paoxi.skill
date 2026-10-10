@@ -1,0 +1,5 @@
+// hm_paoxi：锁定技, player:card_targeted, target:card_targeted, source:damage_before, 加技能, 含子技能, 异步。
+skill hm_paoxi(4284383133) locked {
+  trigger card_targeted always {
+  }
+}

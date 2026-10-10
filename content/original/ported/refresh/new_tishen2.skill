@@ -1,0 +1,7 @@
+// new_tishen2（张郃·体神-转移）：当你成为【杀】目标且未受伤害，你获得此【杀】的牌。锁定技。
+// 旧JS子技能含 useCardAfter 触发 + filterInD 获得弃牌堆牌，DSL无对应原语，未建模。
+skill new_tishen2(4117716483) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 new_tishen2 = 标记型技能（charlotte，skill.js:14826），无规则面。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

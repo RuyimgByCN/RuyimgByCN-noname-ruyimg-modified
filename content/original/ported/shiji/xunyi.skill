@@ -1,0 +1,16 @@
+// 殉义（王甫赵累）：游戏开始时，选择一名其他角色，其获得“义”标记。你与“义”角色
+// 共轭守护：任何一方造成伤害时，另一方摸一张牌；任何一方受到伤害后，另一方须弃置
+// 一张手牌或装备牌。
+// 旧 JavaScript 仅作语义证据；目标选择、标记与伤害分流由 ABI 412 resolve_xunyi
+// 权威结算。
+// 注：旧 JS 的 dieAfter 重选“义”目标（被选角色死亡后）暂未建模，文档化近似。
+skill xunyi(2517009871) {
+  trigger phase_begin owner_is_target {
+    if 0 == mark_count(self, 2517009871) {
+      effect resolve_xunyi(self, 0);
+    }
+  }
+  trigger damage owner_alive {
+    effect resolve_xunyi(self, 1);
+  }
+}

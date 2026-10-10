@@ -1,0 +1,11 @@
+// 刃掣（OL谋祝融）：出牌阶段限 X 次，你可弃置 X 张牌并令至多 X 名其他角色各弃置
+// 一张牌（X 为本回合弃牌堆中【杀】的数量且至少为 1）。每有角色因此弃置牌不为
+// 【杀】，你便摸一张牌。
+// 上游 (onlyOL/skill.js:6-77)：usable/selectCard/selectTarget 全部随弃牌堆【杀】数
+// 动态变化，多目标按座次逐个强制弃牌并按牌名分支摸牌。
+// 「动态次数/张数」「多目标逐个强制弃牌」「按牌名条件摸牌」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597）。2026-08-15：随上游 v1.11.5 新武将 ol_sb_zhurong 移植。
+skill olsbrenche(3471442522) locked {
+  // INTENTIONAL_EMPTY_NOOP: dynamic-count multi-discard unavailable
+  modifier hand_limit add 0;
+}

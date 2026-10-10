@@ -1,0 +1,6 @@
+// 吕范·调度：旧 JavaScript 仅作语义证据；装备与目标选择均由权威状态机校验。
+skill mbdiaodu(2440438931) {
+  trigger phase_prepare owner_is_target_has_movable_equipment optional {
+    effect move_equipment_then_draw(self);
+  }
+}

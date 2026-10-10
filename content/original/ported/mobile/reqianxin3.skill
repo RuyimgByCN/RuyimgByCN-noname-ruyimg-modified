@@ -1,0 +1,3 @@
+skill reqianxin3(3536791091) {
+  modifier hand_limit add -owner_skill_mark;
+}

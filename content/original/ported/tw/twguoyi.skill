@@ -1,0 +1,11 @@
+/// 果毅：以杀或普通锦囊指定满足条件的其他角色后，令其选择禁用手牌或弃牌；
+/// 双条件同时满足或本回合两项均曾选择时，于原牌结算后对原目标重放同名同属性虚拟牌。
+skill twguoyi(3002953620) {
+trigger card_targeted owner_source_other_target_sha_or_ordinary_trick_twguoyi_condition {
+    effect resolve_twguoyi(self, event_player, event_card, 3564142122);
+  }
+}
+
+skill twguoyi_hand(3564142122) locked {
+  modifier hand_card_use_response_cancel override 1;
+}

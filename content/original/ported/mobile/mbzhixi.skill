@@ -1,0 +1,6 @@
+// mbzhixi（止息）：锁定技。出牌阶段，若你于此阶段使用过的牌数不小于X，你不能使用牌（X为你的体力值）；当你使用锦囊牌时，你结束此阶段。
+skill mbzhixi(4182412068) locked {
+  trigger card_used owner_alive {
+    effect add_mark(self, 0, 1);
+  }
+}

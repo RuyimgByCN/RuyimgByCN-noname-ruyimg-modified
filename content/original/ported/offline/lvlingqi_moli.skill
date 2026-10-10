@@ -1,0 +1,5 @@
+// lvlingqi_moli：觉醒技, player:game_started, global:phaseBefore, source:damage_before, 加技能, 含子技能, 异步。
+skill lvlingqi_moli(2154114966) {
+  trigger game_started owner_alive optional {
+  }
+}

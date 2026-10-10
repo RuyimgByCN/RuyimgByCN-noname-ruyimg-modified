@@ -1,0 +1,7 @@
+// anxian：音效名:anxian, source:damage_before, target:card_targeted, 需弃牌, 摸牌, 含子技能, 多步骤。
+skill anxian(4165304979) {
+  trigger damage_before owner_alive optional {
+    effect prevent_current_damage();
+    effect draw_cards(self, 1);
+  }
+}

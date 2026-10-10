@@ -1,0 +1,6 @@
+// 闭月 enhanced — 貂蝉: at phase end, draw 1 card.
+skill bixie(47) {
+  trigger phase_begin always {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 刺刃（王平）：其他角色的准备阶段开始时，其可交给你一张牌，然后你须
+// 交还其一张同花色牌，否则你摸一张牌。
+// 旧 JS 的「同花色交还」无对应原语，以准备阶段选一名其他角色交给你一张
+// 牌近似（交还分支未建模，已注明）。
+skill ciren(2293397590) {
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

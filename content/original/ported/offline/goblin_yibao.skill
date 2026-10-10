@@ -1,0 +1,7 @@
+// goblin_yibao：锁定技, player:damage, source:damageSource, 摸牌, 异步。
+skill goblin_yibao(2926576941) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

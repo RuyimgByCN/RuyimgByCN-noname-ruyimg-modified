@@ -1,0 +1,14 @@
+// 彭城（pxpengcheng，州郡技能）：当你获得此技能后，你可以令一名其他角色交给你一张
+// 牌，然后其回复 1 点体力。
+// 上游 (sp/skill.js:2397)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且存在有 he 牌的其他角色；content = chooseTarget → target.chooseToGive(he, forced)
+// → target.recover()。
+// 实现：skill_added + owner_skill_added_self_3892864153 → 可选确认 →
+// choose_other_give_one_hand_equip(self) + choose_other_recover(self, 1)。
+// 与上游差异：「目标必须满血/受伤偏好」AI 逻辑未建模。
+skill pxpengcheng(3892864153) {
+  trigger skill_added owner_skill_added_self_3892864153 optional {
+    effect choose_other_give_one_hand_equip(self);
+    effect choose_other_recover(self, 1);
+  }
+}

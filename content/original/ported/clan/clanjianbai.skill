@@ -1,0 +1,19 @@
+// 坚白（族荀谌/族荀采）：锁定技。上游 (clan/skill.js)：
+// trigger useCardAfter → 若本回合该类别首次使用，选择保留一花色，重铸其余花色的牌；
+//   保留牌按累计次数打 gaintag；回合结束把一张保留花色的牌交给其他角色。
+// 实现：在 owner 用牌后，以 key=kind_tag 记入 storage_map；若该 key 已记录 → 不触发（近似
+//   per-category-first-use）；否则记入并摸1。
+//   **未覆盖**：(1) chooseControl 选花色；(2) recast 重铸；(3) gaintag 累计计次；
+//   (4) 回合结束给牌+额外摸。if+HOST_EFFECT_EXT 条件分支已可用。
+//   差异记录于 docs/migration/upstream-1.11.5-delta.md。
+skill clanjianbai(3207476732) locked {
+  trigger card_used owner_source {
+    let key = card_attribute(event_card, 0);
+    if storage_get(self_skill, key) > 0 {
+      effect storage_set(self_skill, key, 2);
+    } else {
+      effect storage_set(self_skill, key, 1);
+      effect draw_cards(self, 1);
+    }
+  }
+}

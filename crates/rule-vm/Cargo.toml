@@ -1,0 +1,16 @@
+[package]
+name = "rule-vm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Stack-based, pausable, deterministic Rule VM"
+
+[dependencies]
+engine-api = { workspace = true }
+rule-api = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+blake3 = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

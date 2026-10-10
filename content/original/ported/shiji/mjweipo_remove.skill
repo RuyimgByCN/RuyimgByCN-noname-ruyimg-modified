@@ -1,0 +1,7 @@
+// 瞑瞑·移除（马谡）：回合开始时移除「瞑瞑」临时效果。
+// 旧 JS 的 sourceSkill 临时技能清理语义，无独立规则行为。
+skill mjweipo_remove(2179856186) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

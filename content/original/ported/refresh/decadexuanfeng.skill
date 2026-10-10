@@ -1,0 +1,8 @@
+// decadexuanfeng（凌统·旋风）：失去装备/弃牌阶段弃>=2牌时，可弃置1-2名角色各1-2张牌；若为当前回合角色，可再对其中一人造成1点伤害。
+// 旧JS含复杂触发条件（loseAfter/equipAfter等6事件） + chooseTarget(1-2) + 每目标1-2次弃牌 + 可选伤害，DSL无对应原语，未建模。
+skill decadexuanfeng(3409956215) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 decadexuanfeng（skill.js:9096）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

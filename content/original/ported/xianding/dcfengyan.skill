@@ -1,0 +1,8 @@
+// 讽言（丁尚婉）①：出牌阶段限一次，选择一名体力值不大于你的其他角色，令其交给你一张
+// 手牌（以获得其一张手牌/装备牌近似）。②“视为对一名手牌数不大于你的角色使用一张【杀】”
+// 无对应目标约束原语，未建模。
+skill dcfengyan(2692338281) {
+  active play_phase uses_per_turn 1 targets 1 1 hp_lte_owner {
+    effect take_one_card(event_source, self, hand_equip);
+  }
+}

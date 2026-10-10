@@ -1,0 +1,9 @@
+// 兴邦（新杀费祎）：出牌阶段限一次，摸一张并交给其他角色一张，再获得其一张手牌；
+// 若拿回的是刚交给的那张则视为对其使用【杀】，否则可重复获牌至多三次。
+// 近似：摸一并强制交一张 he + 获一张手牌；循环比牌与虚拟杀未建模。
+skill dcxingbang(3735974633) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect draw_then_give_one(self, event_source, 1, any_hand_equip);
+    effect take_one_card(event_source, self, hand_equip);
+  }
+}

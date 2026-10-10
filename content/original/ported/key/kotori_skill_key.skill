@@ -1,0 +1,10 @@
+// Key势（小鸟·Key附技）：出牌阶段摸一张并+1护甲，回合结束时失去1点体力。
+// 实现：出牌阶段限一次摸 1 并失去 1 体力。
+// 近似：护甲未建模；扣体力与摸牌同时发生，非回合结束延迟。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kotori_skill_key(4028878707) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+    effect lose_hp(self, 1);
+  }
+}

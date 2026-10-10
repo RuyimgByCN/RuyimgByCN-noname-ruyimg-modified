@@ -1,0 +1,3 @@
+skill hongyan(3138402391) locked {
+  modifier card_suit(spade) override heart;
+}

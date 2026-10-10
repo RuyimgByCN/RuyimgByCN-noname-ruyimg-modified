@@ -1,0 +1,6 @@
+// 禅慧：旧 JS 已为空定义，预留。
+skill chanhui2(3287352558) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

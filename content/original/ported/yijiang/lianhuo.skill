@@ -1,0 +1,9 @@
+// 连火：锁定技。你处于横置状态时,你受到的伤害+1。
+// 旧 JS 仅作语义证据;「非传导」与「仅火焰伤害」条件未建模（无事件属性查询与
+// 横置+火焰组合过滤器）,以横置时全伤害+1 近似,略强。
+// ABI 562 modify_current_damage 在 damage_before 窗口修改当前伤害量。
+skill lianhuo(3754060328) locked {
+  trigger damage_before owner_is_target_linked {
+    effect modify_current_damage(self, 1);
+  }
+}

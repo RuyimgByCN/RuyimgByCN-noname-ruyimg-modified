@@ -1,0 +1,20 @@
+// 水盟：出牌阶段结束时可与一名角色拼点；赢则对自己使用无中生有，否则对方对自己使用过河拆桥。
+skill shuimeng(2224403544) {
+  trigger phase_play_end owner_is_target_can_compare_other optional {
+    effect choose_hand_compare(self, 3468190177, 2380613144);
+  }
+}
+
+skill shuimeng_win(3468190177) {
+  trigger hand_compare_finished owner_is_target {
+    effect remove_skill(self_skill);
+    effect use_virtual_card_on(self, wuzhong, self);
+  }
+}
+
+skill shuimeng_lose(2380613144) {
+  trigger hand_compare_finished owner_is_target {
+    effect remove_skill(self_skill);
+    effect use_virtual_card_on(event_source, guohe, self);
+  }
+}

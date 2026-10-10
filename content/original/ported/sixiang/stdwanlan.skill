@@ -1,0 +1,6 @@
+// 挽澜：限定救援，交出全部手牌，并在所有移动触发结算后将另一名濒死角色回复至 1。
+skill stdwanlan(3664427038) {
+  trigger dying owner_alive_other_dying_hand_nonempty_once_per_game optional {
+    effect give_all_hand_recover_to_one(self, event_player);
+  }
+}

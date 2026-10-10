@@ -1,0 +1,10 @@
+// 新婉仪（杨芷）：你成为其他角色使用牌的目标后，你可以获得其一张手牌，置于你的
+// 武将牌上。
+// 旧 JS 仅作语义证据；选牌与置入由 choose_other_hand_store_skill_pile 权威校验
+// （ABI 567 既有原语，ABI 596 包批次）；目标数为 1 与来源手牌非空条件在效果内
+// 以可选集合为空自然短路。
+skill xinwanyi(4141410003) {
+  trigger card_targeted owner_is_target_sha_or_trick optional {
+    effect choose_other_hand_store_skill_pile(self, event_source);
+  }
+}

@@ -1,0 +1,10 @@
+// 驻岸：弃一张【杀】获得一名其他角色的一张装备；任意装备牌使用后可摸一张。
+skill tyzhuan(2515374814) {
+  trigger card_used owner_alive_equip_used optional {
+    effect draw_cards(self, 1);
+  }
+  active play_phase targets 1 1 other has_equip select_he 1 1 card_sha {
+    effect discard_selected(self);
+    effect take_one_card(event_source, self, equip);
+  }
+}

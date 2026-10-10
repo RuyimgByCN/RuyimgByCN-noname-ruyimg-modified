@@ -1,0 +1,5 @@
+// olfengji：触发+修改技（phaseDrawBegin2）
+skill olfengji(2710663668) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

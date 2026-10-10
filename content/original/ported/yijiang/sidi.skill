@@ -1,0 +1,9 @@
+// 司敌：闪积累公开牌；其他角色出牌阶段开始时移去一张，令其本阶段少用一张杀。
+skill sidi(3456311904) {
+  trigger card_used owner_alive_shan_used_by_owner_or_during_owner_turn optional {
+    effect gain_top_card_to_skill_pile(self);
+  }
+  trigger phase_play owner_alive_other_phase_play_skill_pile_nonempty optional {
+    effect choose_discard_skill_pile_card_add_marked_skill(self, event_player, 3364392152);
+  }
+}

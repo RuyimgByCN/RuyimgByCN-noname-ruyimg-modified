@@ -1,0 +1,7 @@
+// 业炎：限定技。小业炎对至多三名角色各造成一点火焰伤害；大业炎弃四种花色手牌，
+// 失去三点体力，再向至多两名角色分配共三点火焰伤害。
+skill yeyan(3293607680) {
+  active play_phase once_per_game {
+    effect resolve_yeyan(self);
+  }
+}

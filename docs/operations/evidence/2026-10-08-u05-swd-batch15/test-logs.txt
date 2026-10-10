@@ -1,0 +1,26 @@
+# U05 swd 第十五批测试日志（2026-10-08，蓝格怪衣，规则 v98→v99）
+
+$ cargo test --offline -p engine-native
+engine-native: 414 passed / 0 failed / 1 ignored（v98 基线 413 +1 新增龙帆回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_swd
+test result: ok. 16 passed; 0 failed（15 既有 + swd_langeguaiyi_longfan_suit_branches）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 121、HostBehavior ALL 83、伴随技能 30 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v98→v99 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js:12 `["diamond", 1, "langeguaiyi"]`
+- translate.js:305 `langeguaiyi: "蓝格怪衣"`；translate.js:308 `longfan: "龙帆"`（源码校正：非「乱番」）
+- skill.js longfan：equipSkill/phaseUse/usable 1/judge+switch 花色四分支
+- card.js langeguaiyi onLose 清 getStat.skill.longfan（usable 簿记，once_per_turn 等价）
+
+## 测试迭代记录
+- 龙帆六子局测试首跑即绿
+- 护符/草药注入（既有测试）+1 张后撞多区域 → 补全区域 purge
+- 随机弃牌区登记差异：randomDiscard() 默认区归档不可核验 → 手牌优先/无手牌退装备

@@ -1,0 +1,7 @@
+// gz_jianxiong（国战·奸雄）：当你受到伤害后，你可以获得对你造成伤害的牌。
+// 旧 JS 为二选一（摸牌或拿牌），此处先实现拿伤害牌（与身份局一致），摸牌分支留后续。
+skill gz_jianxiong(2398363843) {
+  trigger damage owner_is_target_card_in_processing optional {
+    effect move_card(event_card, zone(self, 3), zone(0, 6));
+  }
+}

@@ -1,0 +1,7 @@
+// dcsilve：获临时技；弃牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcsilve(3497560863) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

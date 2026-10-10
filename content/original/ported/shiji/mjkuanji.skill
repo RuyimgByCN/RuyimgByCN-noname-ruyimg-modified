@@ -1,0 +1,9 @@
+// 瞑瞑·宽济（马谡系）：你弃置牌后（每回合一次），可令一名其他角色获得
+// 其中一张牌。
+// 旧 JS 的「弃牌堆选牌赠予」无对应原语；以弃牌后摸一张近似（赠予未
+// 建模，已注明）。
+skill mjkuanji(2696262519) {
+  trigger cards_moved owner_alive_other_discarded_in_discard_phase optional {
+    effect draw_cards(self, 1);
+  }
+}

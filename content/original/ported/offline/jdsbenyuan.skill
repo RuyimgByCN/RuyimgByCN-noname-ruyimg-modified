@@ -1,0 +1,6 @@
+// jdsbenyuan：音效名:sbenyuan, 回复体力, 失去体力, 异步。
+skill jdsbenyuan(3811347812) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

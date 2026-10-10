@@ -1,0 +1,5 @@
+// wn_zhuijiang：global:die, 需选择目标, 异步。
+skill wn_zhuijiang(2832533431) {
+  trigger phase_any_end owner_alive {
+  }
+}

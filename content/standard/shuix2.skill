@@ -1,0 +1,4 @@
+// Skill shuix2(165) - modifier distance variant
+skill shuix2(165) {
+  modifier distance_from add -1;
+}

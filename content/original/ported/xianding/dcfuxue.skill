@@ -1,0 +1,8 @@
+// 复学（陆奕）②：结束阶段，可摸 X 张牌（X 为你的体力值）。
+// 旧 JS 额外要求“手牌区中没有因复学①得到的牌”（标记条件省略）；①（准备阶段从弃牌堆
+// 选择获得至多 X 张非因使用进入弃牌堆的牌）未建模。
+skill dcfuxue(3597057421) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, hp(self));
+  }
+}

@@ -1,0 +1,9 @@
+// 独仗（神钟会）：锁定技，成为非红牌的唯一目标后，获得 1 枚“凛”标记并摸一张牌；
+// 手牌上限 +X（X 为“凛”标记数）。旧 JS 的“使用黑牌指定唯一目标”场景未建模。
+skill dcduzhang(3539290738) locked {
+  modifier hand_limit add owner_skill_mark;
+  trigger card_targeted owner_is_target_nonred_card {
+    effect add_mark(self, 3067413516, 1);
+    effect draw_cards(self, 1);
+  }
+}

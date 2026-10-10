@@ -1,0 +1,8 @@
+// 绘卷（诗织·锁定技）：其他角色回合结束时，若使用了基本或锦囊牌，可视为使用其中一张。
+// 旧 JS 的 使用历史追踪+自选复制 需历史与虚拟卡选择原语，未建模。
+skill shiori_huijuan(2322569990) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shiori_huijuan（skill.js:7194）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

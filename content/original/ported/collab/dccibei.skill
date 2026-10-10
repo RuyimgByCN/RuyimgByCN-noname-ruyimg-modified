@@ -1,0 +1,9 @@
+// 慈悲（无名）：当你造成伤害时，你可以取消此伤害，然后摸五张牌。
+// 旧JS的"不对自己造成伤害"检查和"每目标限一次"过滤未建模（已注明）；owner_is_source无法排除自伤，
+// 且无once_per_target过滤器。核心效果（取消伤害+摸5）精确保留。
+skill dccibei(2743940715) {
+  trigger damage_before owner_is_source optional {
+    effect prevent_current_damage();
+    effect draw_cards(self, 5);
+  }
+}

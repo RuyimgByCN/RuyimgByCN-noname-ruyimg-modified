@@ -1,0 +1,4 @@
+skill yicong(4025383419) locked {
+  modifier distance_from add -owner_hp_gt_two;
+  modifier distance_to add owner_hp_le_two;
+}

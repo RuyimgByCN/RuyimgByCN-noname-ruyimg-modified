@@ -1,0 +1,13 @@
+// 醇醪（程普）：结束阶段开始时,你可将任意张手牌置于武将牌上,称为「醇醪」;
+// 其他角色进入濒死状态时,你可弃置一张「醇醪」牌,视为对其使用一张【酒】。
+// 旧 JS 仅作语义证据;「仅限【杀】/无牌堆时」条件未建模（存牌由玩家自控,
+// store_selected_in_skill_pile 不限杀）;濒死救援复用
+// choose_spend_skill_pile_for_dying_jiu 现成管线。
+skill chunlao(3165720039) {
+  trigger phase_end owner_is_target_hand_nonempty optional {
+    effect choose_store_hand_sha_in_skill_pile(self);
+  }
+  trigger dying owner_alive_dying_has_skill_pile_cards optional {
+    effect choose_spend_skill_pile_for_dying_jiu(self, event_player);
+  }
+}

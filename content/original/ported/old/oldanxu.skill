@@ -1,0 +1,7 @@
+// 安恤：选择两名手牌数不同的其他角色，少者获得多者一张手牌；
+// 若该牌不是黑桃，技能拥有者摸一张牌。
+skill oldanxu(2342781658) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_oldanxu(self);
+  }
+}

@@ -1,0 +1,9 @@
+// 背水（谋徐荣）：觉醒技，准备阶段，若手牌数与体力值均小于2，减1点体力上限，获得"请降"。
+// 近似：用 phase_prepare + owner_alive_not_target_once 限制单次触发，以 change_max_hp + add_skill 模拟觉醒效果。
+// 缺失：min(hp,hand)<2 条件无精确DSL filter；awakenSkill 标记无原语。
+skill beishui(2226665932) locked {
+  trigger phase_prepare owner_alive_not_target_once {
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 3331433172);
+  }
+}

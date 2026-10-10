@@ -1,0 +1,5 @@
+// smdue：觉醒技, 限定技, player:changeHpAfter, 异步。
+skill smdue(2850503542) {
+  trigger phase_any_end owner_alive {
+  }
+}

@@ -1,0 +1,10 @@
+// 应图（陈珪）：其他角色获得牌后（非其摸牌阶段），若其为你的上家或下家，你可以
+// 获得其一张手牌或装备区里的牌，然后将一张牌交给其对位角色；若你交给其的牌为
+// 装备牌，其使用之。
+// 旧 JS 仅作语义证据；邻位判定、取予与装备使用由 resolve_dcyingtu 权威状态机校验
+// （ABI 487）。
+skill dcyingtu(3170147690) {
+  trigger cards_moved owner_alive_neighbor_gained_cards_outside_own_draw_once_per_turn optional {
+    effect resolve_dcyingtu(self);
+  }
+}

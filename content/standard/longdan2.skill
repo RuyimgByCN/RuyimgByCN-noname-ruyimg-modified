@@ -1,0 +1,4 @@
+// Skill longdan2(136) - standard variant
+skill longdan2(136) {
+  modifier distance_from add -1;
+}

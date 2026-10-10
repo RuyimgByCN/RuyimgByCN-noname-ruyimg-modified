@@ -1,0 +1,14 @@
+// 戒宣（族王允/族王淩）：限定技，转换技。可将一张红色牌当【顺手牵羊】或一张黑色牌当
+// 【过河拆桥】使用（转换技状态决定当前形态）。
+// 上游 (clan/skill.js)：zhuanhuanji number + limited + viewAs(shunshou/guohe 按状态) +
+// filterCard 按状态取红/黑（position "hes"）。
+// 实现：双 view_as（red→shunshou / black→guohe，两形态同时开放）。
+// 近似：(1) 转换技☯状态门控未建模——上游同一时刻只有一种形态，DSL 双开；
+// (2) 限定技每局一次未建模（view_as 无 once_per_game）；(3) 上游 position "hes" 以
+// hand_equip 近似。转换技状态本身可用 storage_get/set 表达（08-10 批），但 view_as
+// 静态双开下无门控消费方，暂不引入状态翻转。
+// 2026-08-15 转换技/家族批次（零新原语：guohe/shunshou 均在 VIEW_AS_KINDS）。
+skill clanjiexuan(2854725517) {
+  view_as shunshou play_phase red from hand_equip;
+  view_as guohe play_phase black from hand_equip;
+}

@@ -1,0 +1,7 @@
+// 征荣（毌丘俭系）：造成伤害后目标手牌多于你时，取其一牌入「荣」。
+// 旧 JS 的「荣 expansion」无对应原语；以造成伤害后摸一张近似（已注明）。
+skill drlt_zhenrong(3683557061) locked {
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// boss_juejing2：音效名:juejing, 锁定技, player:hp_lost, global:cards_moved, global:cards_moved, 需弃牌, 摸牌, 移出游戏, 异步。
+skill boss_juejing2(3773967599) locked {
+  trigger hp_lost always {
+    effect draw_cards(self, 1);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

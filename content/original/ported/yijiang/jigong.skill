@@ -1,0 +1,8 @@
+// 急攻：出牌阶段开始时，你可以摸两张牌，然后本回合获得"急攻2"。
+// 旧 JS 的 check 返回 false 时跳过，此处以 optional 近似（可选发动）。
+skill jigong(2776333113) {
+  trigger phase_play owner_alive optional {
+    effect draw_cards(self, 2);
+    effect add_skill_until_turn_end(self, 3671794947);
+  }
+}

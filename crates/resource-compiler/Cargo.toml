@@ -1,0 +1,12 @@
+[package]
+name = "resource-compiler"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Build-time resource compiler: multi-size variants, content hashes, deps, priorities (architecture §28.1)"
+
+[dependencies]
+resource-schema = { path = "../resource-schema" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+blake3 = { workspace = true }

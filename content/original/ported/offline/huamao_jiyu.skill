@@ -1,0 +1,7 @@
+// huamao_jiyu：锁定技, 主动(phaseUse), 需弃牌, 失去体力, 加技能, 含子技能, 异步。
+skill huamao_jiyu(3406039112) locked {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

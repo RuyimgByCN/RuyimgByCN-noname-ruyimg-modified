@@ -1,0 +1,5 @@
+// pksanchen：音效名:spsanchen, 觉醒技, 锁定技, player:phase_end, 回复体力, 加技能。
+skill pksanchen(2913412076) {
+  trigger phase_end owner_alive {
+  }
+}

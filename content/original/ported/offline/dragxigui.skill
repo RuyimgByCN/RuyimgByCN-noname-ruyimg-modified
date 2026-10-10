@@ -1,0 +1,6 @@
+// dragxigui：觉醒技, 限定技, global:roundEnd, player:dying, 异步。
+skill dragxigui(2564737891) {
+  trigger dying owner_alive optional {
+    effect recover_hp(self, 1);
+  }
+}

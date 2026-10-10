@@ -1,0 +1,5 @@
+// 血战：普通锦囊视为【决斗】，且自己使用的【决斗】跳过【无懈可击】响应窗口。
+skill yyxuezhan(3105237184) locked {
+  modifier card_name(ordinary_trick) override juedou;
+  modifier card_use_unrespondable(juedou) override 1;
+}

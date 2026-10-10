@@ -1,0 +1,6 @@
+// ylygxiangxing_biyue。
+skill ylygxiangxing_biyue(2412788694) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

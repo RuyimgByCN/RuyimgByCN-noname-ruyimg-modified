@@ -1,0 +1,8 @@
+// 夺计·新（蒋琬系）：出牌阶段限一次，将一张手牌/装备牌交给一名其他
+// 角色，其获得「夺计」标记。
+// 旧 JS 的「交牌标记」无对应原语；以交一张手牌并摸一张近似（已注明）。
+skill reduoji(3863428609) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 1 {
+    effect give_selected_then_recover_target(self, event_source, 1);
+  }
+}

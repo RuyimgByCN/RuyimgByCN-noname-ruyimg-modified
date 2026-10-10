@@ -1,0 +1,14 @@
+// 新陷阵2（拼点严格获胜后的临时技）：本回合对绑定目标使用牌无距离限制、
+// 超出通常次数后仍可对其使用【杀】且无视其防具；使用单目标杀或普通锦囊时
+// 可令绑定目标也成为目标；回合结束自移除。
+skill xinxianzhen2(2960051687) {
+  modifier distance_from_skill_bound_target override 1;
+  modifier sha_use_unlimited_for_skill_bound_target override 1;
+  modifier ignore_armor_for_skill_bound_target override 1;
+  trigger card_used owner_source_single_target_sha_or_ordinary_trick_current_turn {
+    effect choose_add_skill_bound_card_target(self, event_card);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

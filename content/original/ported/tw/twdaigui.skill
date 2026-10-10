@@ -1,0 +1,20 @@
+// 待归：出牌阶段结束时若所有手牌颜色相同，选择至多手牌数名角色，亮出牌堆底
+// 等量牌，令这些角色依次选择并获得其中一张。
+// 上游 (tw/skill.js twdaigui L9147)：trigger player phaseUseEnd；filter 手牌
+// 非空且同色；cost chooseTarget [1, maxLimit]（可含自己）；content
+// get.bottomCards(目标数) → cardsGotoOrdering 亮出 → 各目标按座次依次
+// chooseButton 选获一张，余牌归弃牌堆。
+// 实现（2026-09-12 第二百四十七/四十八批·多段选择链状态机专项 slice 1+2，
+// ADR 0641 §8.40）：trigger phase_play_end owner_is_target optional →
+// resolve_twdaigui(self, self_skill, 0, 0)（ABI 701 / tag 724 / Cont 306）：
+// stage 0 机内权威校验（存活+手牌非空+红黑同色）→ SelectTargets [1, 手牌数]
+// 任意存活角色可取消 → stage 2 亮出牌堆底等量牌（RevealCards 公开）→ slice 2
+// 逐目标按座次依次选获（异观察者 SelectCards 1/1 强制，选获即入手；死亡目标
+// 跳过）→ 余牌归弃牌堆。
+// 近似（登记债）：①选获为机内 SelectCards 单选（上游 chooseButton 拖拽 UI）
+// ；②optional 确认先于机内同色门控（手牌异色时确认空开，quanjia 族债）。
+skill twdaigui(3051286273) {
+  trigger phase_play_end owner_is_target optional {
+    effect resolve_twdaigui(self, self_skill, 0, 0);
+  }
+}

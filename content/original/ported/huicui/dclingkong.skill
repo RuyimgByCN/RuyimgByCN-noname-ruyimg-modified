@@ -1,0 +1,5 @@
+// dclingkong：锁定技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dclingkong(3554939849) {
+  modifier hand_limit add 1;
+}

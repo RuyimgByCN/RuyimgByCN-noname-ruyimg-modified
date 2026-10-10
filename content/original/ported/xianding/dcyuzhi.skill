@@ -1,0 +1,7 @@
+// 逾制（崔氏）：锁定技，成为【杀】的目标时，此【杀】伤害+1。
+// 旧 JS 的二选一（弃装备自动出闪）分支未建模，以固定伤害+1 近似。
+skill dcyuzhi(3271796686) locked {
+  trigger card_targeted owner_is_target_event_card_sha {
+    effect increase_current_card_base_damage(self, event_card, 1);
+  }
+}

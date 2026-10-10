@@ -1,0 +1,7 @@
+// 泣梓（dcqizi）— 锁定技。你不能对至其的距离大于2且正在进行濒死流程的角色使用【桃】。
+// 旧 JS（huicui/dcqizi）：mod cardSavable — get.distance(player,target) > 2 && card.name=="tao" && target==dying → false。
+// 本包以新增 modifier tao_use_save_cancel_for_dying_beyond_distance 表达：在 card_save_cancelled_without_hand_source
+// 中检查拥有者是否携带该 modifier 且与濒死方基础距离 > 2；旧 JavaScript 不进入运行时。
+skill dcqizi(4219986012) locked {
+  modifier tao_use_save_cancel_for_dying_beyond_distance override 1;
+}

@@ -1,0 +1,3 @@
+skill duanliang3(4145070079) {
+  modifier card_distance_unlimited_if_target_hand_gte_owner(bingliang) override 1;
+}

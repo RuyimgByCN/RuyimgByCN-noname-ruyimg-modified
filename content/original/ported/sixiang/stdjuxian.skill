@@ -1,0 +1,5 @@
+// 拒献（？）：锁定技。其他角色获得你手牌区的牌时取消之；你不能将非装备牌交给其他角色。
+// 旧 JS 的「gainBefore 事件拦截取消 + cardGiftable 限制」无对应 DSL 原语。完全无法表达。
+skill stdjuxian(3158150047) {
+  modifier hand_limit add 1;
+}

@@ -1,0 +1,6 @@
+// wxdl_kejie：player:phase_draw_end, 二选一, 加技能, 含子技能, 异步。
+skill wxdl_kejie(4201480138) {
+  trigger phase_draw_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

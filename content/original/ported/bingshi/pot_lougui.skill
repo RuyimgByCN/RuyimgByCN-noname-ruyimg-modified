@@ -1,0 +1,26 @@
+// 势娄圭：旧 JavaScript 作为语义规格，实体牌与重置状态由确定性宿主管理。
+skill potguansha(2542568623) {
+  trigger phase_play_end owner_phase_play_end_potguansha_available_once_per_game optional {
+    effect resolve_potguansha(self, 2542568624);
+  }
+}
+
+skill potguansha_hand(2542568624) locked {
+  modifier hand_limit add owner_skill_mark;
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 2542568624, 0);
+    effect remove_skill(self_skill);
+  }
+}
+
+skill potjiyu(3103425312) locked {
+  active play_phase uses_per_turn 1 select_hand 1 1 {
+    effect resolve_potjiyu(self, 0);
+  }
+  trigger cards_moved owner_alive {
+    effect resolve_potjiyu(self, 1);
+  }
+  trigger phase_play_end owner_is_target {
+    effect resolve_potjiyu(self, 2);
+  }
+}

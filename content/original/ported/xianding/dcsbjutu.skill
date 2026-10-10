@@ -1,0 +1,8 @@
+// 聚土（界刘璋）②：每回合结束时，若你本回合未受到过伤害，可摸两张牌。
+// 旧 JS 额外要求“手牌数不大于体力值”（无精确过滤器，省略）；①（手牌数大于体力值时
+// 受伤害可弃一张红色牌防止伤害）未建模（无红牌防伤原语）。
+skill dcsbjutu(2559409828) {
+  trigger phase_end owner_is_target_no_turn_damage optional {
+    effect draw_cards(self, 2);
+  }
+}

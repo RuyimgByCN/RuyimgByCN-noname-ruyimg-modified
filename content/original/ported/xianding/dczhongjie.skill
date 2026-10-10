@@ -1,0 +1,8 @@
+// 忠节（赵昂）：其他角色进入濒死状态时，可令其回复 1 点体力并摸一张牌。
+// 旧 JS 限定“因失去体力而濒死”（reason == loseHp），DSL 以每轮一次近似。
+skill dczhongjie(2275941720) {
+  trigger dying owner_alive_other_dying_once_per_round optional {
+    effect recover_hp(event_player, 1);
+    effect draw_cards(event_player, 1);
+  }
+}

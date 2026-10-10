@@ -1,0 +1,9 @@
+// 湖海笔（offline 春秋罗贯中 huhaibi_skill）：装备技——相邻势力关系的角色间伤害时
+// 触发笔墨效果（装备卡附带技能，equipSkill 族）。
+// 上游 (offline/skill huhaibi_skill)：equipSkill + equipAfter/phaseJieshuBegin/
+// damageBegin1 + storage 势力环序 |index1-index2|==1 条件。
+// INTENTIONAL_EMPTY_NOOP: equipSkill 装备附带技能族与势力环序存储条件无原语；
+// 2026-09-09 上游增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill huhaibi_skill(3066118312) {
+  modifier hand_limit add 0;
+}

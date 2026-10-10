@@ -1,0 +1,8 @@
+// 强袭（典韦）：弃武器/失体力造成伤害。
+// 旧 JS 的「二选一代价」无对应原语；以弃一张手牌并造成 1 点伤害近似（已注明）。
+skill qiangxi(2714909772) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect choose_other_damage(self, 1);
+  }
+}

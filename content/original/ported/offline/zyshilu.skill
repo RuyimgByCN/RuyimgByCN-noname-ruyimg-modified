@@ -1,0 +1,7 @@
+// zyshilu：音效名:zyshilu, global:death, player:phase_prepare, 需弃牌, 摸牌, 含子技能, 多步骤。
+skill zyshilu(4014529063) {
+  trigger death owner_alive optional {
+    effect draw_cards(self, 1);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

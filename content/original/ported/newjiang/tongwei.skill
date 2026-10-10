@@ -1,0 +1,8 @@
+// 同威（张飞）：出牌阶段限一次，弃置一张牌并重铸任意张手牌，然后摸一张牌。
+// 旧 JS 的「重铸任意张」以弃一张手牌并摸一张近似（重铸未建模，已注明）。
+skill tongwei(3894012006) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

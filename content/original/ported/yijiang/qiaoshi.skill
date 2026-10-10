@@ -1,0 +1,8 @@
+// 樵拾（夏侯氏）
+// 旧 JS 语义：其他存活角色进入结束阶段时，若双方手牌数相同，拥有者可令双方各摸一张牌。
+skill qiaoshi(2607312044) {
+  trigger phase_end owner_alive_not_target_equal_hand optional {
+    effect draw_cards(event_player, 1);
+    effect draw_cards(self, 1);
+  }
+}

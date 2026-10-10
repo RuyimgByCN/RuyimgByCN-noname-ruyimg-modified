@@ -1,0 +1,4 @@
+// 严整：手牌数大于体力值时，装备区的牌可当【无懈可击】使用。
+skill yanzheng(2899287996) {
+  view_as wuxie response owner_hand_gt_hp from equip;
+}

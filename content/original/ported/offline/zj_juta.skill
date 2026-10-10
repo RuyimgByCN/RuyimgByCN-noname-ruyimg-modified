@@ -1,0 +1,5 @@
+// zj_juta：target:useCardToTarget, player:card_used, 需弃牌, 异步。
+skill zj_juta(2865419682) {
+  trigger card_targeted owner_is_target_once {
+  }
+}

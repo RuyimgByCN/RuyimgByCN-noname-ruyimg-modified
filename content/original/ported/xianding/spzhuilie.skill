@@ -1,0 +1,7 @@
+// 追猎（sp 王双）：锁定技，你使用【杀】无距离限制并无视防具。
+// 旧 JS 的“使用【杀】指定攻击范围外的目标后判定：装备牌则此【杀】伤害基数改为目标
+// 体力值且不计次数、其他非基本牌则你失去 1 点体力并获得判定牌”未建模。
+skill spzhuilie(3774269941) locked {
+  modifier card_distance_unlimited(sha) override 1;
+  modifier ignore_armor override 1;
+}

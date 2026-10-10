@@ -1,0 +1,16 @@
+// 烈武：旧 JavaScript 仅作为语义证据；运行时只加载该类型化规则。
+skill chihaya_liewu(3721191175) locked {
+  modifier card_use_unlimited(sha) override 1;
+  modifier card_distance_unlimited(sha) override 1;
+  modifier card_target_limit(ordinary_trick) add 1;
+  trigger equip_slot_disabled owner_is_event_player_no_enabled_equip_slot_once_per_game {
+    effect change_max_hp(self, -4);
+    effect add_skill(self, 3695539048);
+  }
+}
+
+// 旧版 group 助手已折叠进父技能；稳定定义 ID 继续随包发布。
+skill chihaya_liewu2(2978088269) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

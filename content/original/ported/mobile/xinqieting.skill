@@ -1,0 +1,5 @@
+skill xinqieting(3722360517) {
+  trigger turn_ended owner_alive_other_turn_ended_no_damage_other {
+    effect choose_draw_view_two_gain_or_move_equipment(self, event_player);
+  }
+}

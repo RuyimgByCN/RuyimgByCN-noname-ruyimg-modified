@@ -1,0 +1,7 @@
+// 烈音（唯·锁定技）：出牌阶段开始时，令红色牌视为【杀】或所有【杀】视为【决斗】。
+// 实现：红色牌牌名视为【杀】（复用 yui_lieyin0 的 card_name 改写）。
+// 近似：全程强制红牌当杀，不选手选分支、不限出牌阶段、杀当决斗未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yui_lieyin(2976604975) locked {
+  modifier card_name(red) override sha;
+}

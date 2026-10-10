@@ -1,0 +1,9 @@
+Reviewed source snapshot: 2026-09-20 14:25 UTC+8
+macOS 27.0 (26A428), arm64
+rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)
+cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)
+Hardware model, RAM, power and thermal conditions: not recorded
+Native tests: cargo test --offline -p engine-native; exit 0; 118 passed
+Runner: cargo run --offline --release -p engine-native --example n09_runner -- 20 9000; exit 101
+Runner source sha256: 0b177722668cb40ac7142c55e5d8ed6f620625056c3ac8d383f06bc2c0fc931a
+Library source hashes: see source-hashes.json

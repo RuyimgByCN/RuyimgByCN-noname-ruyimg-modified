@@ -1,0 +1,7 @@
+// 弘雅（星诸葛瑾）：上游 (v1.11.5+ 7ed3facb 增量)。
+// 旧 JS 的「被指定目标时可重铸点数更大的手牌（点数比较 + 重铸）」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-08-15 上游增量同步批次迁移。
+skill starhongya(3418384384) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,6 @@
+// 骑钺：旧 JavaScript 只作为语义证据；运行时使用统一的武将牌状态变化事件。
+skill nsqiyue(2381587208) locked {
+  trigger character_state_changed owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

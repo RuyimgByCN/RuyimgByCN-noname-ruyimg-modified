@@ -1,0 +1,7 @@
+// 承启（族荀攸）：将至少两张手牌当本回合未使用过的任意基本/锦囊牌使用；若牌名字数恰好匹配，可令一名角色摸一张牌。
+// 旧 JS 的「view_as 动态牌名选择」「牌名字数和匹配」「子技能效果触发」无对应原语。
+// 空定义：需 expansion 支持动态 view_as 牌名选择和卡牌名字数长度匹配。
+skill clanchengqi(3766559733) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

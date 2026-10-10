@@ -1,0 +1,6 @@
+// 酒仙（酒仙）：将非单目标锦囊牌当【酒】使用，且【酒】使用次数无上限。
+// 近似：view_as 将普通锦囊当酒使用，但丢失了「仅限多目标锦囊」的精确
+// 筛选条件和【酒】无次数限制的 modifier（DSL 无 jiu_use_limit 修饰符）。
+skill dclbjiuxian(3973107911) {
+  view_as jiu any any from hand_equip;
+}

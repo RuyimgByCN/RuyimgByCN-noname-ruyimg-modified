@@ -1,0 +1,13 @@
+// 昭文（阮籍）：出牌阶段开始可展示当前全部手牌；本回合展示过的黑牌可各自作为材料，
+// 将每种普通锦囊牌名至多声明一次；使用展示过的红牌时，每张摸一张牌。
+skill dczhaowen(829715916) {
+  trigger phase_play owner_is_target_hand_nonempty optional {
+    effect resolve_ruanji(self, event_source, event_card, 0);
+  }
+
+  trigger card_used owner_source_active_dczhaowen_tracked_red {
+    effect resolve_ruanji(self, event_source, event_card, 1);
+  }
+
+  view_as ordinary_trick any any from none cost dczhaowen;
+}

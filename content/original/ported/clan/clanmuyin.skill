@@ -1,0 +1,16 @@
+// 穆荫（族吴匡/族吴班/族吴乔/族吴苋，陈留吴氏宗族技）：准备阶段，你可以令一名手牌上限
+// 非全场最高的宗族角色（或自己）手牌上限 +1（永久）。
+// 上游 (clan/skill.js)：phaseBegin + isMax（无其他角色手牌上限更高）过滤 +
+// chooseTarget(自己或陈留吴氏) → chenliuwushi.change(target, 1) 持久加成。
+// 实现：`trigger phase_begin owner_is_target optional` → 新原语
+// `choose_clan_not_max_hand_limit_gain(self, self_skill)`（ABI 648，tag 667/Cont 268）：
+// 候选=存活且（自己或与拥有者共享任一族名）且手牌上限非全场最高；选中者
+// GameState.hand_limit_bonus 持久 +1（HandLimit 查询计入）。
+// 近似：上游族限定为字面「陈留吴氏」，DSL 以「与拥有者共享任一族」泛化（对单族武将
+// 等价）；每回合可重复发动（上游无次数限制，一致）。
+// 2026-08-15 穆荫批次（全链路 15 处注册 + ABI 648 领号）。
+skill clanmuyin(2666909205) {
+  trigger phase_begin owner_is_target optional {
+    effect choose_clan_not_max_hand_limit_gain(self, self_skill);
+  }
+}

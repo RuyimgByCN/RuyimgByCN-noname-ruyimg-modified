@@ -1,0 +1,9 @@
+// 新灭计（李儒）：出牌阶段，将一张黑色锦囊牌置于牌堆顶，令一名其他角色弃置一张锦囊牌或依次弃置两张非锦囊牌。
+// 旧 JS 的展示牌+置顶+目标选择弃牌类别（锦囊优先→两张非锦囊）无法精确表达。
+// 以 discard_selected 近似弃牌效果，丢掉了黑色锦囊牌置顶和类别分支。
+skill xinmieji(3925944266) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 1 {
+    effect discard_selected(event_source);
+    // 未建模：黑色锦囊牌置顶、目标弃锦囊或两张非锦囊的分支
+  }
+}

@@ -1,0 +1,8 @@
+// xinfu_zhaoxin（昭心）：出牌阶段限一次，你可以将任意张牌置于武将牌上并摸等量的牌，称之为“望”（你至多拥有三张“望”）。你或你攻击范围内的角色的摸牌阶段结束后，其可以获得一张“望”，然后你可以对其造成1点伤害。
+// 未建模：subSkill, expansion 等机制无 DSL 原语。
+skill xinfu_zhaoxin(2402295354) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinfu_zhaoxin（skill.js:30630）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

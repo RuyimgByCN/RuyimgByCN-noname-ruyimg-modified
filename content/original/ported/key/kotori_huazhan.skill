@@ -1,0 +1,7 @@
+// 花绽（小鸟）：消耗一个「魔物」标记，视为使用「开花」。
+// 旧 JS 的「chooseControl 选势力标记+viewAs 开花+标记消耗」需多势力标记+衍生卡原语，未建模。
+skill kotori_huazhan(4066525476) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kotori_huazhan = 标记型技能（charlotte，skill.js:6650），无规则面。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

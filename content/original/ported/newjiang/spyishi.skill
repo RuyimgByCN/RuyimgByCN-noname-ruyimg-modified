@@ -1,0 +1,10 @@
+// 一石（司马孚）：其他角色受到你造成的伤害前，若其装备区有牌，伤害-1，
+// 并获得其装备区一张牌。
+// 旧 JS 的「目标装备区有牌」前提在 take_one_card 内部校验时以目标无装备
+// 自动跳过近似；伤害-1 与取牌按旧 JS 语义精确表达。
+skill spyishi(2807392704) {
+  trigger damage_before owner_is_source {
+    effect modify_current_damage(self, -1);
+    effect take_one_card(event_player, self, equip);
+  }
+}

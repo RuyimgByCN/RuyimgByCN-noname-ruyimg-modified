@@ -1,0 +1,8 @@
+// 界关平「龙吟」：沿用龙吟弃牌、退还杀次数与红杀摸牌，并在点数相同时重置竭忠。
+skill relongyin(2474771514) {
+  trigger card_used owner_alive_play_phase_sha_user_has_discardable_hand_equip optional {
+    effect choose_discard_one_for_sha_refund_and_draw_if_red_restore_if_equal_rank(
+      self, event_source, event_card, 2811249808
+    );
+  }
+}

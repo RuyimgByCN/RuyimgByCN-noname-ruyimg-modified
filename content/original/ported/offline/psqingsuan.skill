@@ -1,0 +1,8 @@
+// 清算（主公技·锁定技）
+// 上游：对本局对你造成过伤害且势力不同的角色使用牌无距离/次数限制。
+// 当前引擎无「历史伤害来源 + 异势力」目标选择器；以全局无距离/无限次数近似，
+// 保留主公技语义（lord_only），待 damage-history filter 落地后收紧。
+skill psqingsuan(4016041748) locked lord_only {
+  modifier card_distance_unlimited override 1;
+  modifier card_use_unlimited override 1;
+}

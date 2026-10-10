@@ -1,0 +1,6 @@
+// 绝境（神赵云）
+// 原语义：摸牌阶段额外摸已损失体力值张牌，手牌上限 +2。
+skill juejing(3977263126) locked {
+  modifier draw_count add owner_lost_hp;
+  modifier hand_limit add 2;
+}

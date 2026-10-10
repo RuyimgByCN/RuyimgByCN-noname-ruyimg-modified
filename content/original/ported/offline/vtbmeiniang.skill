@@ -1,0 +1,5 @@
+// vtbmeiniang：global:phase_play。
+skill vtbmeiniang(3428287701) {
+  trigger phase_play owner_alive {
+  }
+}

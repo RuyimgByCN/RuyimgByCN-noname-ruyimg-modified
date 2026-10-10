@@ -1,0 +1,5 @@
+// tyxunshi：音效名:xunshi, 锁定技, player:useCard2, player:cards_moved, global:cards_moved, 需选择目标, 加技能, 含子技能, 多步骤。
+skill tyxunshi(3905834001) locked {
+  trigger cards_moved always {
+  }
+}

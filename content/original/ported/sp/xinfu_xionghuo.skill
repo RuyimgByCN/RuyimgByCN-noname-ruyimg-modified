@@ -1,0 +1,17 @@
+// 凶祸（xinfu_xionghuo）：锁定技。①游戏开始时，你获得3枚「暴戾」标记。
+// ②出牌阶段，你可以交给一名其他角色1枚「暴戾」标记。
+// ③当你对有「暴戾」标记的其他角色造成伤害时，此伤害+1。
+skill xinfu_xionghuo(3787720298) locked {
+  trigger game_started owner_alive {
+    effect add_mark(self, 3787720298, 3);
+  }
+  active play_phase targets 1 1 other {
+    effect remove_mark(self, 3787720298, 1);
+    effect add_mark(event_source, 3787720298, 1);
+  }
+  trigger damage_before owner_source {
+    if 0 < mark_count(event_player, 3787720298) {
+      effect modify_current_damage(self, 1);
+    }
+  }
+}

@@ -1,0 +1,16 @@
+// SP 横江；旧 JavaScript 仅作语义合同。
+skill rehengjiang(2552200673) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect resolve_rehengjiang(self, event_player, 0, 4200000582, 4200000583);
+  }
+}
+
+skill rehengjiang_effect(4200000582) locked {
+  modifier hand_limit add -owner_skill_state_u32;
+}
+
+skill rehengjiang_draw(4200000583) locked {
+  trigger turn_ended owner_alive_turn_ended_rehengjiang_pending {
+    effect resolve_rehengjiang(self, event_player, 1, 4200000582, 4200000583);
+  }
+}

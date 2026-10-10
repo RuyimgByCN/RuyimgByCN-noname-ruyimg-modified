@@ -1,0 +1,6 @@
+// 行殇：死亡事件记录清理前的手牌和装备；发动后获得其中仍在弃牌堆的牌。
+skill xingshang(2937826132) {
+  trigger death owner_alive_event_cards_nonempty optional {
+    effect gain_event_cards(self);
+  }
+}

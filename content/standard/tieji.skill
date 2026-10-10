@@ -1,0 +1,6 @@
+// 铁骑：使用杀指定目标后可判定，红色则该目标不能响应此杀。
+skill tieji(3561072419) {
+  trigger card_targeted owner_source_sha optional {
+    effect judge_make_current_sha_target_unrespondable_on_red(self, event_card, event_player);
+  }
+}

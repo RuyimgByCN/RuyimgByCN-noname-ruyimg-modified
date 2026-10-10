@@ -1,0 +1,6 @@
+// 合志（江山如故·合）：主公技。仅声明锁定主公技身份，规则由引用它的
+// 技能处理（旧 JS 为空壳 zhuSkill+locked）。
+skill jsrghezhi(3166949420) locked lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

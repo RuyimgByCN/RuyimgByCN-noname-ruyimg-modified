@@ -1,0 +1,6 @@
+// olxiangzuo
+skill olxiangzuo(2896025401) {
+  trigger dying owner_alive optional {
+    // give cards — 需手动建模
+  }
+}

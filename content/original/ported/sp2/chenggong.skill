@@ -1,0 +1,7 @@
+// 成攻（SP2 成济）
+// 原语义：一名角色使用目标数大于一的牌时，可令使用者摸一张牌。
+skill chenggong(2957700161) {
+  trigger card_used owner_alive_card_targets_gt_one optional {
+    effect draw_cards(event_source, 1);
+  }
+}

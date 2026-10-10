@@ -1,0 +1,14 @@
+// 溃阵（公孙修）：出牌阶段限一次，你可以选择一名手牌数不小于你或体力值不小于你的
+// 其他角色，其视为对你使用一张【决斗】；若你因此受到伤害，你获得其所有手牌中的
+// 【杀】，否则其失去 1 点体力。
+// 旧 JS 仅作语义证据；目标过滤由 resolve_dckuizhen 权威状态机校验，决斗结果分支由
+// resolve_dckuizhen_resolve 在 DuelResolved 事件中结算（ABI 477）。phase_play 每回合
+// 触发一次，天然满足「限一次」；待结算决斗以技能 mark（count=发起者 id）记录。
+skill dckuizhen(2730814674) {
+  trigger phase_play owner_is_target {
+    effect resolve_dckuizhen(self);
+  }
+  trigger duel_resolved owner_alive {
+    effect resolve_dckuizhen_resolve(self, event_player, event_source);
+  }
+}

@@ -1,0 +1,9 @@
+// reshizhi：刷新包技能。
+// triggers: source:damageEnd
+// forced/locked: 锁定技
+skill reshizhi(3446801887) {
+    // 近似：旧JS事件 damageEnd → DSL事件 damage
+    trigger damage owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

@@ -1,0 +1,11 @@
+// 诛咒（张角）：当一名角色造成伤害后，若伤害来源手牌数唯一最多且受伤角色有手牌，
+//   你可令伤害来源获得受伤角色的一张手牌。
+// 旧JS的伤害来源手牌数唯一最多（isMaxHandcard）检测无DSL对应过滤器。
+// 以owner_alive_not_target（拥有者存活且非事件目标）过滤，然后取牌保留核心收益。
+// 缺失unique_max_hand_for_source过滤器导致可能在来源非手牌最多时也触发，
+// 待source_unique_max_hand过滤器后补齐。
+skill zhuzhou(4126031177) {
+  trigger damage owner_alive_not_target optional {
+    effect take_one_card(event_player, event_source, hand_equip);
+  }
+}

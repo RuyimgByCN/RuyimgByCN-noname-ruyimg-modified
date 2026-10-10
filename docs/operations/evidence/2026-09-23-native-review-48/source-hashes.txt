@@ -1,0 +1,8 @@
+073983ed06596782615e71130a660ddcf90c4d70d68971701cd31edb2ad92807  crates/engine-native/src/catalog.rs
+ccc5f83d3701b9c0a7f9af85698365c29bb0f59ee75e2ef13332da6f8af59187  crates/engine-native/src/engine.rs
+80083c3ab178f8640cf62433a1efcaf9e4116c0f09e61e18d0c21a980b6da1c4  crates/engine-native/src/kernel.rs
+86871fa771b608d5460c961b7ef60a42df70eac191488118b4d3e45fb6a10b27  crates/engine-native/src/content/host.rs
+2e06fa4c7bf6cd7a5064f963dead45dd809308e97c42cc0edb8daefa92dcb9e3  crates/engine-native/src/snap.rs
+bd0eeb1e95251d6ec324a7124a55e94c8ef96d016c656f0969965063e4d682f7  crates/engine-native/src/archive.rs
+c14643be9d863fd79c34d2005e251a7f4fe3ca9b1fc32e86ae4d3ba218a3bd25  crates/engine-native/src/content/standard.rs
+480698554a8e4585934f82bf8a9689459367d065a416633433303c0fe2856c99  crates/engine-native/src/state.rs

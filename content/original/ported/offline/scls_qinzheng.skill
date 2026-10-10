@@ -1,0 +1,9 @@
+// 勤政：每次使用或打出牌后，按本局累计次数命中的 3/5/8 倍数项数摸牌。
+skill scls_qinzheng(3270401551) locked {
+  trigger card_used owner_lifetime_card_action {
+    effect draw_for_lifetime_card_action_divisors(self, 3, 5, 8);
+  }
+  trigger card_responded owner_lifetime_card_action {
+    effect draw_for_lifetime_card_action_divisors(self, 3, 5, 8);
+  }
+}

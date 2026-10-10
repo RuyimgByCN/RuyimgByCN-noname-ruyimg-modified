@@ -1,0 +1,8 @@
+// 驭魔·收获（小鸟·锁定技）：其他角色受到伤害后，若没有对应势力的魔物标记，获得一个该势力魔物标记。
+// 旧 JS 的「势力判定+条件标记获取」需势力检测+标记管理原语，未建模。
+skill kotori_yumo_damage(3950994006) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kotori_yumo_damage（skill.js:6357）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：受伤后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

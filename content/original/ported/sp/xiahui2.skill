@@ -1,0 +1,7 @@
+// xiahui2：触发+修改技（hp_lost）
+skill xiahui2(2163209815) locked {
+  trigger hp_lost owner_alive {
+    effect remove_skill(self_skill);
+  }
+  // modifier: cardEnabled 需手动分析;
+}

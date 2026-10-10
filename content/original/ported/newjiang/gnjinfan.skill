@@ -1,0 +1,7 @@
+// 矜繁（孙綝）：弃牌阶段开始时，你可将任意张不同花色手牌置于武将牌上
+// 作为「铃」（每花色至多一张）；你的「铃」可用于 gnjinfan_gain 获得牌。
+// 旧 JS 的「置于武将牌上的花色去重集合」无对应原语（需按花色 skill pile），
+// 未建模（已注明）；保留定义框架供 gnjinfan_gain 联动引用。
+skill gnjinfan(3592510454) {
+  modifier hand_limit add 1;
+}

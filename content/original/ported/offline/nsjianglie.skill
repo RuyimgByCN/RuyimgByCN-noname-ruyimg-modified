@@ -1,0 +1,6 @@
+// 将烈：旧 JS 中由【杀】的目标展示手牌并自行选择弃置一种颜色。
+skill nsjianglie(3311281717) {
+  trigger card_targeted owner_source_sha_target_alive_hand_nonempty optional {
+    effect reveal_hand_choose_discard_color(event_player);
+  }
+}

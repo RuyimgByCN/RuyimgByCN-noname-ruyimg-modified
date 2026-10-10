@@ -1,0 +1,10 @@
+// 【上签】先在最终伤害阶段将伤害封顶为 1，再沿用旧分组子技能的可选摸牌。
+// 调整（2026-08-06，C 段 omp）：locked 技能的 trigger 不能 optional；测试
+// 契约要求受伤后可选摸牌（ChoiceRequested），移除 locked 使 trigger 可 optional
+// （modifier 不依赖 locked）；过滤器 owner_alive → owner_is_target（仅自身受伤）。
+skill tiansuan2_1(3136054404) {
+  modifier damage_taken_final_amount min 1;
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, event_amount);
+  }
+}

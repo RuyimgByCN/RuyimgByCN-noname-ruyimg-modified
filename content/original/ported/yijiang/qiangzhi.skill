@@ -1,0 +1,9 @@
+skill qiangzhi(2499367015) {
+  trigger phase_play owner_is_target_other_hand_nonempty optional {
+    effect choose_reveal_other_hand_card_remember_category(self);
+  }
+
+  trigger card_used owner_source_play_card_matches_remembered_category optional {
+    effect draw_cards(self, 1);
+  }
+}

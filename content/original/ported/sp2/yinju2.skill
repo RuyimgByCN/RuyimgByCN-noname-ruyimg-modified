@@ -1,0 +1,8 @@
+// yinju2：待从旧 JS 技能完整迁移。
+// 旧 JS 实现较复杂，DSL 原语暂不足以精确建模。
+skill yinju2(2318202464) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yinju2（skill.js:15410）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：受伤后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,6 @@
+// psoldshiyin：锁定技, player:cards_moved, global:cards_moved, player:card_used, 摸牌, 加技能, 含子技能, 多步骤。
+skill psoldshiyin(2775534340) locked {
+  trigger cards_moved always {
+    effect draw_cards(self, 1);
+  }
+}

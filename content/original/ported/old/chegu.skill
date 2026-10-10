@@ -1,0 +1,7 @@
+// 彻骨：当前回合使用有目标的非装备牌时，可取消全部目标，改为弃置一名角色多张牌，
+// 或多名角色各一张；弃牌同色或同类别时，本回合两项数值均加一。
+skill chegu(4294592545) {
+  trigger card_targeted owner_source_current_turn_first_target_non_equip optional {
+    effect resolve_chegu(self);
+  }
+}

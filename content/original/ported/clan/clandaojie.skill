@@ -1,0 +1,7 @@
+// 蹈节（族荀爽/族荀谌/族荀采/族荀粲/族荀攸/族荀彧/族荀淑）：锁定技。每回合首次使用非伤害锦囊后，选择失去一个锁定技或失去1点体力；然后将此锦囊交给一名宗族角色。
+// 旧 JS 的「宗族判定（颍川荀氏）」「从锁定技列表中选择失去」「锦囊牌分配」无对应原语。
+// 空定义：需 expansion 支持 hasClan、技能选择移除、牌分配。
+skill clandaojie(4288623528) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

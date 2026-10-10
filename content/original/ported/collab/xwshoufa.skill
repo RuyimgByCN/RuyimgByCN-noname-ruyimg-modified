@@ -1,0 +1,12 @@
+// 授法（南华老仙）：出牌阶段，选择一种花色，将所有该花色手牌交给一名其他角色，
+//   其获得对应技能（黑桃→天妒/红桃→天香/梅花→倾国/方块→武圣）；
+//   你下回合开始时移除全场的xwshoufa衍生技能。
+// 旧JS的花色对照技能表（tiandu/retianxiang/reqingguo/new_rewusheng）、
+//   addAdditionalSkills给其他角色加技能、xwshoufa_clear全局清理子技能
+//   无DSL对应原语（需suit_to_skill_map + grant_skill_to_other + deferred_cleanup）。
+// 以空定义保留编译占位，待技能授予与延时清理原语后补齐。
+skill xwshoufa(4082717809) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

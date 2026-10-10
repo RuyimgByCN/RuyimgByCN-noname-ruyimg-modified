@@ -1,0 +1,4 @@
+// Skill niepan2(104) - standard variant
+skill niepan2(104) {
+  modifier attack_range add 1;
+}

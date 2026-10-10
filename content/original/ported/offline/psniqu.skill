@@ -1,0 +1,6 @@
+// psniqu：音效名:scsniqu, global:card_used, global:respondAfter, 摸牌, 异步。
+skill psniqu(2540754860) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

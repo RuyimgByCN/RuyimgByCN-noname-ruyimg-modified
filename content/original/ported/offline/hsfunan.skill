@@ -1,0 +1,5 @@
+// hsfunan（锁定技/主动技(multi)/转化技(视作sha)/触发技）：锁定技, player:useCardBegin, player:respondBegin, 主动(multi), 视作sha, 摸牌, 失去体力, 加技能, 含子技能, 异步。
+skill hsfunan(2178821253) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

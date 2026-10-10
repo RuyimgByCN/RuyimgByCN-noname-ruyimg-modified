@@ -1,0 +1,5 @@
+// yyqishe：global:phaseBefore, player:game_started, player:phase_end, 二选一。
+skill yyqishe(2635065459) {
+  trigger phase_begin owner_alive {
+  }
+}

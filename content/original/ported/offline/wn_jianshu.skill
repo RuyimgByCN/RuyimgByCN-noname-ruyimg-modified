@@ -1,0 +1,7 @@
+// wn_jianshu：音效名:jianshu, 主动(phaseUse), 需弃牌, 需拼点, 失去体力, 异步。
+skill wn_jianshu(3478200958) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

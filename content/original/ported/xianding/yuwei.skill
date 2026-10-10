@@ -1,0 +1,7 @@
+// 隅泣·群主：锁定技，当「势援」可发动且当前回合角色为群势力时生效。
+// 仅作为「势援」的联动标记技，无独立效果。
+// 旧 JS 无实质逻辑，空定义。
+skill yuwei(3414942371) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

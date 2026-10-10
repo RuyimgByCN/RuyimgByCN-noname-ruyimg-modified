@@ -1,0 +1,5 @@
+// shinin_haiyou：global:useCardToTarget, 异步。
+skill shinin_haiyou(2266031688) {
+  trigger card_targeted owner_alive {
+  }
+}

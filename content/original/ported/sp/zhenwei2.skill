@@ -1,0 +1,15 @@
+// 威位·终段（sp zhenwei2）：结束阶段开始时，你将「威」全部置入手牌，并移去
+// 〖威位〗（本技）。
+// 上游 (sp/skill.js zhenwei2)：trigger global phaseEnd；forced charlotte；
+// content gain(cards, "gain2") + removeSkill("zhenwei2")。
+// 实现（2026-09-10 第二百零四批·gain_whole_skill_pile 首件消费，新原语
+// ABI 687/tag 710）：trigger phase_end owner_is_target →
+// gain_whole_skill_pile(self, self_skill, zhenwei2 def 2813405573) +
+// remove_skill_by_def(self, 2813405573)。
+// 注：上游 zhenwei2 的堆即自身命名堆（self-referential），pile_def 用本技 def。
+skill zhenwei2(2813405573) {
+  trigger phase_end owner_is_target {
+    effect gain_whole_skill_pile(self, self_skill, 2813405573);
+    effect remove_skill_by_def(self, 2813405573);
+  }
+}

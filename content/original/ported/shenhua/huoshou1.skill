@@ -1,0 +1,4 @@
+// 【祸首】的目标保护效果：【南蛮入侵】不能选择拥有者。
+skill huoshou1(2951836249) locked {
+  modifier card_target_cancel(nanman) override 1;
+}

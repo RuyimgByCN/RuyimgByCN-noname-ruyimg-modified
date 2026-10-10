@@ -1,0 +1,5 @@
+// 界奇才：锦囊牌无距离限制；防具和宝物不能被其他角色弃置。
+skill reqicai(2792486309) locked {
+  modifier card_distance_unlimited(trick) override 1;
+  modifier card_discard_protected(armor_or_treasure) override 1;
+}

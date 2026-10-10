@@ -1,0 +1,9 @@
+// 密备（刘巴系）：职责技。你使用牌后，若「备」牌覆盖三种类别，你回复
+// 1 点体力；否则使命失败。
+// 旧 JS 的「备」expansion 类别统计无对应原语；以使用牌后摸一张近似
+// （类别判定未建模，已注明）。
+skill mibei(2889618430) {
+  trigger card_used owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}

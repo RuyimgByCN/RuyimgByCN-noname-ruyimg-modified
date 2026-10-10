@@ -1,0 +1,9 @@
+// 利傍（蒋济）：出牌阶段，弃一张牌并选择两名角色，依次获得其各一张牌；判定：
+// 若与其中同花色则获得判定牌并视为对其中一名使用杀；否则给其中一名两张牌或失去体力。
+// 旧 JS 含 active 多目标 + gainPlayerCard + judge + color match 分支 + useCard 虚拟杀 + give/loseHp。
+// DSL 无多阶段 judge + 分支 + 动态 useCard 的复合原语。
+skill dclibang(3448023564) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dclibang 含真实规则体（enable、filterCard、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

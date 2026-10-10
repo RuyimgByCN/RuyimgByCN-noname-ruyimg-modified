@@ -1,0 +1,19 @@
+// 翼算（sp2 司马懿）：出牌阶段限一次，你使用普通锦囊牌结算结束后，可以减 1 点
+// 体力上限，然后获得此牌对应牌堆里的实体牌（已进弃牌堆者）。
+// 上游 (sp2/skill.js xinfu_yisuan)：trigger player useCardEnd usable 1；
+// filter = isPhaseUsing && type(card)=="trick" && cards.filterInD().length>0；
+// content = loseMaxHp() + gain(trigger.cards.filterInD())。
+// 实现（2026-09-03 第一百六十一批·新过滤器+既有原语重写，批 159 复核证伪池晋升）：
+// card_resolved 触发 + 本批新注册过滤器 owner_source_trick_resolved_own_play_
+// phase_once_per_turn（六点注册，零 ABI）→ change_max_hp(self, 0 - 1)（nsdunxing
+// 负向惯例）+ gain_event_cards(self)（olhaizhu/jsrgzhenglve 同款，card_resolved
+// 时点实体牌已进弃牌堆，恰合 filterInD 语义）。
+// 近似：①上游 filterInD 取「结算区+弃牌堆」中属于此牌的实体牌，引擎
+// gain_event_cards 只取已进弃牌堆者（批 155 已定界的原语边界）；②延时锦囊/
+// 无实体牌虚拟牌角落由过滤器 card_is_ordinary_trick 边界近似（仅普通锦囊）。
+skill xinfu_yisuan(4087417398) {
+  trigger card_resolved owner_source_trick_resolved_own_play_phase_once_per_turn optional {
+    effect change_max_hp(self, 0 - 1);
+    effect gain_event_cards(self);
+  }
+}

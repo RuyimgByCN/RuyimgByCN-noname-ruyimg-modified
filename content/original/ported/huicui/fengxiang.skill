@@ -1,0 +1,5 @@
+// fengxiang：摸?牌。
+// 旧JS含subSkill、gaintag标记、全局技能、init初始化、expansion区，DSL无法精确建模。
+skill fengxiang(2915100103) {
+  modifier hand_limit add 1;
+}

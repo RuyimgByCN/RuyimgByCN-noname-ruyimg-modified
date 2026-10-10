@@ -1,0 +1,6 @@
+// 诏缚（孙休）：锁定技，主将技，全局效果见zhaofu2。
+// 旧JS为locked+zhuSkill+global引用。DSL以locked空定义保留，实际距离计算由zhaofu2 modifier实现。
+skill zhaofu(3850962659) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

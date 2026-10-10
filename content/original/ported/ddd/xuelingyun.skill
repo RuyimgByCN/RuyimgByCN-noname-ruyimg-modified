@@ -1,0 +1,27 @@
+// 3D精选 薛灵芸「涟洏/暗织」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddlianer(1083711762) {
+  trigger card_resolved owner_alive_ddd_lianer_available optional {
+    effect resolve_ddd_xuelingyun(self, event_source, event_card, 0);
+  }
+  trigger turn_ended owner_alive_ddd_lianer_ceiling {
+    effect resolve_ddd_xuelingyun(self, event_player, event_card, 1);
+  }
+}
+
+skill dddanzhi(1654153098) {
+  trigger card_used owner_alive_ddd_anzhi_tracking {
+    effect resolve_ddd_xuelingyun(self, event_player, event_card, 2);
+  }
+  trigger card_responded owner_alive_ddd_anzhi_tracking {
+    effect resolve_ddd_xuelingyun(self, event_player, event_card, 2);
+  }
+  trigger phase_begin owner_alive_ddd_anzhi_available optional {
+    effect resolve_ddd_xuelingyun(self, event_player, event_card, 3);
+  }
+  trigger card_targeted owner_alive_ddd_anzhi_target_black {
+    effect resolve_ddd_xuelingyun(self, event_player, event_card, 4);
+  }
+  trigger turn_ended owner_alive_ddd_anzhi_turn_end {
+    effect resolve_ddd_xuelingyun(self, event_player, event_card, 5);
+  }
+}

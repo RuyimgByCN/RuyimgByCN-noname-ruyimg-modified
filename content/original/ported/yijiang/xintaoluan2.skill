@@ -1,0 +1,7 @@
+// 新滔乱2（神司马懿）：使用〖滔乱〗转化牌后，令一名其他角色选择：交给你X张类别不同的牌，或你失去X点体力且本回合滔乱无效（X=本回合已发动滔乱次数）。
+// 旧 JS 的递增标记+目标给牌/体力流失分支+临时禁用技能；DSL 无法精确表达。
+skill xintaoluan2(2361831579) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

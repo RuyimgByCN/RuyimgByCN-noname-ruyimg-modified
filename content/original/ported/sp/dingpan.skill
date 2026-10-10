@@ -1,0 +1,5 @@
+skill dingpan(3739676314) {
+  active play_phase uses_per_turn living_rebel_count targets 1 1 has_equip {
+    effect resolve_dingpan(self, event_source);
+  }
+}

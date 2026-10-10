@@ -1,0 +1,9 @@
+// 龙魂：以当前体力值（至少一张）同花色牌转换为对应基本牌或无懈可击。
+skill longhun(3422266115) {
+  view_as tao play_phase heart from hand_equip_expansion owner_hp_min_one_cards;
+  view_as tao response heart from hand_equip_expansion owner_hp_min_one_cards;
+  view_as sha play_phase diamond from hand_equip_expansion owner_hp_min_one_cards nature fire;
+  view_as sha response diamond from hand_equip_expansion owner_hp_min_one_cards nature fire;
+  view_as wuxie response spade from hand_equip_expansion owner_hp_min_one_cards;
+  view_as shan response club from hand_equip_expansion owner_hp_min_one_cards;
+}

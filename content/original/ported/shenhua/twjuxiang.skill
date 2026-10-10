@@ -1,0 +1,9 @@
+// 踞襄（张绣，主公技）：其他群势力角色的出牌阶段限一次，其可以将一张装备牌置入你的
+// 装备区（栏位空闲或已废除时直接装备并恢复对应装备栏），否则你获得之。
+// 旧 JS 仅作语义证据；目标集合与“限一次”以回合 flag 位掩码表达（ABI 590），
+// 旧 JS 的 usable:1 为每轮一次，DSL 以触发时引擎校验表达。
+skill twjuxiang(1234567907) lord_only {
+  trigger phase_play owner_alive_event_player_group_qun optional {
+    effect resolve_twjuxiang(self, event_player, 0);
+  }
+}

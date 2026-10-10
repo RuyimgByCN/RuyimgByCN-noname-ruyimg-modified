@@ -1,0 +1,4 @@
+// 复咒计数：同名状态标记每层令手牌上限 +1。
+skill nsfuzhou_num(3040816625) {
+  modifier hand_limit add owner_skill_mark;
+}

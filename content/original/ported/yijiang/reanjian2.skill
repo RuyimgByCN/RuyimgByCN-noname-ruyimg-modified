@@ -1,0 +1,7 @@
+// 暗箭2(旧版丁奉)：subskill of reanjian。追踪暗箭加伤效果的卡牌，伤害结算后清除。
+// 纯追踪/清理用技能，DSL中此类副作用管理由引擎处理，仅占位。
+skill reanjian2(4220651350) locked {
+  // ponytail: storage追踪和临时技能清理逻辑无DSL原语，引擎层管理副作用。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

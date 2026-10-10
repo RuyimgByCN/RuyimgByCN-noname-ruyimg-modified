@@ -1,0 +1,13 @@
+// 合肥（pxhefei，州郡技能）：当你获得此技能后，你可以弃置至多两张牌，然后摸等量
+// 的牌。
+// 上游 (sp/skill.js:2647)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且有 he 牌；content = chooseToDiscard([1,2], he) → draw(弃牌数)。
+// 实现：skill_added + owner_skill_added_self_3666201428 → 可选确认 →
+// discard_hand_equip_count(self, 1) + draw_cards(self, 1)。
+// 与上游差异：「至多两张弃牌摸等量」以弃 1 摸 1 近似（DSL 无动态弃牌数原语）。
+skill pxhefei(3666201428) {
+  trigger skill_added owner_skill_added_self_3666201428 optional {
+    effect discard_hand_equip_count(self, 1);
+    effect draw_cards(self, 1);
+  }
+}

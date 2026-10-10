@@ -1,0 +1,8 @@
+// 向镇（SP花曼）：你不能成为【南蛮入侵】的目标；
+// 【南蛮入侵】造成伤害后，伤害来源与你各摸一张牌。
+// 旧 JavaScript 仅作语义证据；南蛮取消由权威 modifier 响应。
+// 注：第二部分“南蛮造成伤害后摸牌”需要按伤害来源区分的全局事件，暂以
+// owner_alive_other_normal_damage_target_unlinked 近似（南蛮伤害事件为无来源牌伤害）。
+skill spxiangzhen(2216375930) locked {
+  modifier card_target_cancel(nanman) override 1;
+}

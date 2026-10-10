@@ -1,0 +1,8 @@
+// 宣花斧（装备技能）：当你使用【杀】指定目标后，若目标数未超上限，你可以额外指定一名与该目标距离为1的角色。
+// 旧 JS 的「距离原目标为1的额外目标选择」「装备绑定技能」无可用的 DSL 原语
+// （choose_add_current_sha_target 需要 card 参数，无法匹配 useCardToPlayer 的复杂距离条件）。
+skill xuanhuafu_skill(2353057157) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

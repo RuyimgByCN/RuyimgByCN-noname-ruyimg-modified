@@ -1,0 +1,7 @@
+// 礼让（邹氏）：其他角色的弃牌阶段结束时，可交给其一张牌，然后获得此阶段弃置的所有红色牌。
+// 旧 JS 的「交牌→获得该阶段弃置的全部红色牌」跨阶段事件牌回收无对应 DSL 原语。完全无法表达。
+skill stdlirang(2794455899) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 凌弱：造成伤害后，若受伤角色仍存活且有牌，获得其手牌区或装备区的一张牌。
+skill goblin_lingruo(3044957580) locked {
+  trigger damage owner_source_target_alive_has_hand_or_equip {
+    effect take_one_card(event_player, self, hand_equip);
+  }
+}

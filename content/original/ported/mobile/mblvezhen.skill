@@ -1,0 +1,6 @@
+// mblvezhen（掠阵）：出牌阶段开始时，你可以令所有其他角色依次选择一项：1.展示X张手牌（X为其选择此选项的次数+1）；2.令你视为对其使用一张无距离和次数限制的【杀】。
+skill mblvezhen(2761738785) {
+  trigger phase_play owner_alive {
+    effect add_mark(self, 0, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 滔乱2(董白)：锁定技。subskill of taoluan。当你使用"滔乱"牌后，
+// 你选择一名其他角色，令其选择一项：交给你一张类别不同的牌；或你失去1点体力且"滔乱"本回合无效。
+// 注：强制chooseTarget + target chooseCard特定类别+tempBanSkill连锁，完全无法用现有原语链表达。
+skill taoluan2(4051173528) locked {
+  // ponytail: chooseTarget+chooseCard指定类别+loseHp+tempBanSkill连锁无DSL原语。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,5 @@
+// caweijue（锁定技/触发技）：锁定技, player:phase_prepare, global:phaseEnd, 移出游戏, 加技能, 含子技能, 异步。
+skill caweijue(2956140838) locked {
+  trigger phase_prepare always {
+  }
+}

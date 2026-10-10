@@ -1,0 +1,8 @@
+// psquanyi（主动技(phaseUse)）：音效名:psquanyi, 主动(phaseUse), 需弃牌, 需拼点, 造成伤害, 失去体力, 含子技能, 多步骤。
+// 未建模：子技能机制、step流多步骤、拼点，DSL 无对应原语。
+// 空定义保留占位。
+skill psquanyi(2832355304) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

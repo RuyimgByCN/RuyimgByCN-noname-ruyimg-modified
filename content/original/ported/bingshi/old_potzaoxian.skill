@@ -1,0 +1,9 @@
+// 旧·凿险（势邓艾）：锁定技。结束阶段，若「蓄力」数为 0 或 3，回复 1 点
+// 体力。
+// 旧 JS 的「蓄力计数判定」无对应原语；以结束阶段回复 1 点近似（条件
+// 未建模，已注明）。
+skill old_potzaoxian(2997825621) locked {
+  trigger phase_end owner_is_target {
+    effect recover_hp(self, 1);
+  }
+}

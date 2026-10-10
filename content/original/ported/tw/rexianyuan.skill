@@ -1,0 +1,12 @@
+// 仙援：每轮获得"仙援"标记（至多3枚）；出牌阶段可将标记分配给其他角色。
+// 有标记的角色的出牌阶段开始时，你选择观看其手牌并置顶若干张，或令其摸等量张牌。
+// 旧JS中「观看手牌并选择置顶」「标记分配量」「按标记数选择」无对应原语。
+// 以 choose_target_draw 近似：有标记的角色出牌阶段开始时摸等同于标记数的牌。
+skill rexianyuan(3003913316) locked {
+  trigger phase_begin owner_alive {
+    effect draw_cards(self, 1);
+  }
+  trigger phase_play owner_alive_not_target {
+    effect draw_cards(event_player, 1);
+  }
+}

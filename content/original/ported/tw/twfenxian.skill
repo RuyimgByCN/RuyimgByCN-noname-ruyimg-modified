@@ -1,0 +1,6 @@
+// 旧 JS 仅作语义证据：目标选择以双方场上的实体牌当【决斗】使用，或令拥有者视为对其使用【火攻】。
+skill twfenxian(3149854807) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect resolve_twfenxian(self, event_source, event_card, 0);
+  }
+}

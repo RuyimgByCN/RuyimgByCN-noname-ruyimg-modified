@@ -1,0 +1,8 @@
+// 三头（夏侯恩）：锁定技，防止受到的伤害；根据体力值有条件地改为失去体力。
+// 近似：无条件防止伤害（以 prevent_current_damage 表达），丢失了体力值
+// 条件分支的「改为失去体力」惩罚（已注明）。
+skill dcsantou(2490248894) locked {
+  trigger damage_before owner_is_target {
+    effect prevent_current_damage();
+  }
+}

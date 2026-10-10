@@ -1,0 +1,9 @@
+// 有义（华歆系）：出牌阶段限一次，将仁库所有牌置入弃牌堆，令所有角色
+// 各回复 1 点体力。
+// 旧 JS 的「仁库」expansion 无对应原语；以选择所有角色各回复 1 点近似
+// （仁库弃牌未建模，已注明）。
+skill youyi(2756997026) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_recover(self, 1);
+  }
+}

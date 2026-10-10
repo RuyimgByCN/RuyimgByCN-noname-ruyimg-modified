@@ -1,0 +1,6 @@
+// jxfujing：锁定技, player:phaseDrawBefore, player:card_targeted, 需弃牌, 加技能, 含子技能, 异步, 条件计数。
+skill jxfujing(4101669596) locked {
+  // 无简单DSL映射，保留占位
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

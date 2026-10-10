@@ -1,0 +1,5 @@
+// zyxiongnve（锁定技/触发技）：音效名:zyxiongnve, 锁定技, player:phase_play, source:damage_before, source:damage_before, 多分支选择, 加技能, 含子技能, 多步骤, 条件计数。
+skill zyxiongnve(2388538768) locked {
+  trigger phase_play always {
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main",
+  "description": "Local bundled battle UI with core window APIs only; no filesystem, shell, or HTTP plugins.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

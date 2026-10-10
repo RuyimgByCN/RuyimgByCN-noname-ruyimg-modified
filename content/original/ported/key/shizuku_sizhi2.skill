@@ -1,0 +1,9 @@
+// 丝织·标记（滴）：黑色丝织牌无距无次，红色不计入手牌上限。
+// 实现：黑色牌无距离、不计次数；红色牌不计入手牌上限。
+// 近似：不限带「丝织」标记的牌，改为全体黑/红牌。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shizuku_sizhi2(3470603700) locked {
+  modifier card_ignored_hand_limit(red) override 1;
+  modifier card_distance_unlimited(black) override 1;
+  modifier card_use_unlimited(black) override 1;
+}

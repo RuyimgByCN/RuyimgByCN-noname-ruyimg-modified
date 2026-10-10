@@ -1,0 +1,9 @@
+// 敦煌（pxdunhuang，州郡技能）：锁定技，你的【杀】被抵消后，你摸一张牌。
+// 上游 (sp/skill.js:1629)：trigger player:shaMiss；forced: true；content = player.draw()。
+// 实现：sha_dodged + owner_source_sha_dodged（自己使用的【杀】被响应抵消）→
+// draw_cards(self, 1)。
+skill pxdunhuang(3965660786) {
+  trigger sha_dodged owner_source_sha_dodged {
+    effect draw_cards(self, 1);
+  }
+}

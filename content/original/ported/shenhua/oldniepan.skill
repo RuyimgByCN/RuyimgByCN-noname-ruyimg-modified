@@ -1,0 +1,12 @@
+// 旧版涅槃：濒死时限一次弃置区域内所有牌，复原武将牌，摸三张并回复至三点。
+skill oldniepan(3136864229) {
+  trigger dying owner_is_target optional {
+    effect remove_skill(self_skill);
+    effect discard_all_hand_equip_judge(self);
+    effect restore_character_state(self);
+    effect draw_cards(self, 3);
+    if hp(self) < 3 {
+      effect recover_hp(self, 3 - hp(self));
+    }
+  }
+}

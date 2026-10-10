@@ -1,0 +1,8 @@
+// retishen：刷新包技能。
+// triggers: player:phaseZhunbeiBegin
+skill retishen(2862728329) {
+    // 近似：旧JS事件 phaseZhunbeiBegin → DSL事件 phase_prepare
+    trigger phase_prepare owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

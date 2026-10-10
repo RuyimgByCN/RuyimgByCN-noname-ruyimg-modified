@@ -1,0 +1,5 @@
+// 国战断粮：旧 JS 仅组合断粮的转换与距离 2 效果，直接用同一技能声明。
+skill gzduanliang(2148140249) {
+  view_as bingliang play_phase black_basic_equip from hand_equip;
+  modifier card_distance_limit(bingliang) override 2;
+}

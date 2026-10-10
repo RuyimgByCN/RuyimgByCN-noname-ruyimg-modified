@@ -1,0 +1,6 @@
+// 界突袭：少摸所选人数的牌，并依座次获得这些角色各一张手牌。
+skill new_retuxi(3295460539) {
+  trigger phase_draw owner_is_target_positive_draw_other_hand_nonempty optional {
+    effect choose_other_hand_targets_gain_one_reduce_draw(self);
+  }
+}

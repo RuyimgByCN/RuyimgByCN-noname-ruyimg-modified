@@ -1,0 +1,25 @@
+// 3D精选 轲比能「枭行/狼志/附义」：旧 JavaScript 仅作语义证据，不进入运行时。
+// 枭行：锁定技。①你的初始手牌、攻击范围和手牌上限+3；②进入濒死时失去〖枭行〗；
+// ③获得〖枭行〗后摸三张牌。
+// DSL 近似：初始手牌+3、濒死失去与获得后摸牌依赖开局/濒死/技能授予钩子，未建模；
+// 摸牌阶段+3 与攻击范围/手牌上限+3 以修正器精确表达。
+skill dddxiaoxing(714534557) locked {
+  modifier draw_count add 3;
+  modifier attack_range add 3;
+  modifier hand_limit add 3;
+}
+
+// 狼志：结束阶段，你可展示攻击范围内所有角色各一张牌，然后选择一项：1.用任意张牌
+// 替换其中等量张牌；2.获得所有展示牌，失去〖狼志〗。需要多目标展示与等量替换/
+// 全取分支状态机。
+skill dddlangzhi(976865375) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 附义（主公技，锁定技）：①群势力角色使用【杀】的次数上限+1；②群势力角色杀死角色
+// 后可弃两张牌，令你获得武将牌上的一个技能。需要主公技全局次数修正与跨角色技能授予。
+skill dddfuyi(4136574431) lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

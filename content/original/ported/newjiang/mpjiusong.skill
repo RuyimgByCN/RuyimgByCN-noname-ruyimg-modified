@@ -1,0 +1,5 @@
+// 酒颂（刘玲）：可将一张锦囊牌当【酒】使用。
+// 旧 JS 仅作语义证据；「醉」标记计数（每回合至多三次）与酕醄联动未建模。
+skill mpjiusong(3354704994) {
+  view_as jiu any card_trick from hand_expansion;
+}

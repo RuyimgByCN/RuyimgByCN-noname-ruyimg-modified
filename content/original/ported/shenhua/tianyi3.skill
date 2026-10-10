@@ -1,0 +1,9 @@
+// 天义失败临时效果（太史慈）
+// 原语义：不能使用【杀】。
+skill tianyi3(2573090805) {
+  modifier sha_use_cancel override 1;
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

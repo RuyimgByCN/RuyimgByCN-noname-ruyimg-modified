@@ -1,0 +1,9 @@
+// 绝义（吉野）：出牌阶段开始时选一名其他角色，本回合对该角色使用的第一张牌伤害+1且不可响应。
+// 实现：对其他角色造成伤害前此伤害 +1。
+// 近似：不选绑定目标、不限本回合第一张；不可响应未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yoshino_jueyi(3841113685) locked {
+  trigger damage_before owner_source_other_damage_before {
+    effect modify_current_damage(self, 1);
+  }
+}

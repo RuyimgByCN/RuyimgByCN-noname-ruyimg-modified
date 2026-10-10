@@ -1,0 +1,12 @@
+// 承望（族诸葛瞻）：转换技，每回合限一次。当你需要使用牌时（无懈可击除外），你可将
+// 手牌：阳，摸至全场最多，然后若你使用了牌，你可令一名角色弃置两张牌；阴，弃至全场
+// 最少，然后若你使用了牌，你可令一名角色摸两张牌。若你未使用牌，你与当前回合角色各
+// 失去 1 点体力。
+// 上游 (clan/skill.js:157-215)：zhuanhuanji 转换技 + drawTo/discardTo 全场极值 +
+// chooseToUse 嵌套 + buff1/buff2 子技。
+// 「转换技状态」「摸至/弃至全场极值」「需要使用牌时的嵌套用牌」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill clanchengwang(2831451765) locked {
+  // INTENTIONAL_EMPTY_NOOP: conversion-skill draw-to-extreme unavailable
+  modifier hand_limit add 0;
+}

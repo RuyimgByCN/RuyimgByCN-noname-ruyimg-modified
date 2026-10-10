@@ -1,0 +1,6 @@
+// hm_dafu：player:card_targeted, 摸牌, 异步。
+skill hm_dafu(2780230349) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,11 @@
+// 军势（幻曹丕）：锁定技。造成伤害后摸一张牌，受到伤害后弃置一张牌。
+// 旧 JS 中「每回合限两次」「镜像对决检测（双方均有军势时仅对持有者生效）」无对应原语，
+// 近似为：每次造成伤害摸1，每次受到伤害弃1（不限次）。
+skill twjunsi(3755314719) locked {
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+  trigger damage owner_is_target {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

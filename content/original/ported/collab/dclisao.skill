@@ -1,0 +1,10 @@
+// 离骚（名将吴懿）：出牌阶段选择1-2名角色进行《离骚》上下句问答，
+// 答对者展示手牌，答错/未答者受到「无法响应+伤害翻倍」的负面效果。
+// 旧 JS 设计了完整的问答 UI、多人交互等待、Promise.any 竞赛等，
+// DSL 无交互式问答原语，无法建模。
+// 空定义：需 expansion 支持 interactive_quiz 原语。
+skill dclisao(3914512866) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

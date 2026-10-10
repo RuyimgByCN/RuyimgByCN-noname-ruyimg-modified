@@ -1,0 +1,8 @@
+// jsrgqiluan（起乱）：每回合限两次。当你需要使用【杀】或【闪】时，你可以弃置任意张牌，并令至多等量名其他角色选择是否代替你使用之。若有角色响应，则你摸等同与你弃置牌数的牌。
+// 未建模：addExpose, chooseButton, 翻译调用, hiddenCard, chooseCardTarget, 全局状态 ...等11项（DSL无对应原语）
+skill jsrgqiluan(3145711668) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgqiluan（skill.js:7）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

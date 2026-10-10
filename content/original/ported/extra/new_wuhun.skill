@@ -1,0 +1,10 @@
+// 新武魂（神关羽）
+skill new_wuhun(3278077669) locked {
+  trigger damage owner_is_target_source_alive {
+    effect add_mark(event_source, 3278077669, event_amount);
+  }
+
+  trigger death owner_is_target {
+    effect choose_max_mark_other_judge_kill_unless_tao_or_taoyuan(self, 3278077669);
+  }
+}

@@ -1,0 +1,5 @@
+// 洞察：旧 JavaScript 只保留为语义与审计证据；运行时由服务器投影策略授权可见信息。
+skill akiko_dongcha(2799956315) locked {
+  modifier observer_foreign_hand_faces_visible override 1;
+  modifier observer_hidden_identities_visible override 1;
+}

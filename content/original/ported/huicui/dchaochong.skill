@@ -1,0 +1,5 @@
+// dchaochong：摸?牌。
+// 旧JS含多步选择，DSL无法精确建模。
+skill dchaochong(2434155718) {
+  modifier hand_limit add 1;
+}

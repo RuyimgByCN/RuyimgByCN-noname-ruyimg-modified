@@ -1,0 +1,18 @@
+// 溃围：结束阶段可翻面并摸 2+场上武器数张牌；下个摸牌阶段按当时武器数弃牌。
+skill kuiwei(2977201770) {
+  trigger phase_end owner_is_target optional {
+    effect turn_over(self);
+    effect draw_cards(self, 2 + field_equipment_kind_count(weapon));
+    effect add_skill(self, 4087547393);
+  }
+}
+
+// 一次性延迟结算：强制弃置手牌/装备，数量不足则全弃，完成后移除自身。
+skill kuiwei2(4087547393) {
+  trigger phase_draw owner_is_target {
+    effect choose_discard_hand_equip_then_remove_self_skill(
+      self,
+      field_equipment_kind_count(weapon)
+    );
+  }
+}

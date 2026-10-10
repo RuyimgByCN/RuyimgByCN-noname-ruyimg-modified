@@ -1,0 +1,7 @@
+// shezang：旧JS复杂效果。
+skill shezang(2918310530) {
+  trigger dying owner_alive optional {
+    // 旧JS含复杂条件逻辑，效果已简化
+    effect draw_cards(self, 1);
+  }
+}

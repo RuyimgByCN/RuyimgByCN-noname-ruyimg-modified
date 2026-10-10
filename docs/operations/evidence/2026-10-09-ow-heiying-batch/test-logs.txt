@@ -1,0 +1,29 @@
+# U05 ow 纵切批二十二测试日志（2026-10-09，黑影隐匿，规则 v138→v139）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 460 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v138 基线 459 +1 新增隐匿回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 48 passed; 0 failed（47 既有 + 1 新增 heiying_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 138）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v138→v139 + yinshen_active
+零值字段入 canonical_hash——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- yinshen（trigger loseEnd forced；original=="h" 基本牌+手牌无基本牌；
+  tempHide()）
+- tempHide→qianxing（mod targetEnabled player!=target false；至
+  phaseBeginStart）
+
+## 测试迭代记录
+- 弃牌门在进入弃牌阶段的 NextPhase 挂起（ChoicePending）——应答时序
+  前移
+- 0 号收束三段补齐（Discard→End→收束，NotYourTurn 修正）

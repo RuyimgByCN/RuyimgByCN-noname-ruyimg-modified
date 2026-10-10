@@ -1,0 +1,23 @@
+// 惬诣（族王昶/族王浑/族王昌/族王琛）：出牌阶段开始观看牌堆顶2张；此后每次使用牌时
+// （每花色本阶段首次），展示牌堆顶1张，若与所用牌同色或同类则获得之，否则将一张手牌
+// 或装备牌置于牌堆顶。
+// 上游 (clan/skill.js): trigger phaseUseBegin + useCardAfter; phaseUse → chooseBool +
+// addTempSkill(clanqieyi_effect) + viewCards(顶2); useCardAfter → 每花色首次（_effect
+// 记录已用花色）+ showCards(顶1) → 同色/同类 gain 否则 chooseCard("he") 置牌堆顶。
+// 实现：phase_play（出牌阶段开始，强制锁定技）→ 清空花色计数 storage + 私览牌堆顶2；
+// card_used owner_source → 按 effective_card_suit 的花色计数（storage key 10+花色），
+// 首次使用时展示牌堆顶1（CardsRevealed 公开），同色（红/黑掩码相等）或同类
+// （effective_card_kind 相等）→ 移入手牌；否则两段续体选一张手牌/装备牌置于牌堆顶
+// （牌堆顶 = 抽牌区末元素，move 追加即置顶）。
+// **近似与未覆盖**：(1) 上游 phaseUse 的 chooseBool 确认与临时技能制改为强制触发，
+// 符合锁定技迁移约定；(2) 「观看」以仅向拥有者展示（CardsRevealed to=[player]）近似；
+// (3) 花色计数以 storage 记，本阶段开始清零（跨回合不残留）。
+// 差异记录于 docs/migration/upstream-1.11.5-delta.md。
+skill clanqieyi(3347941832) locked {
+  trigger phase_play owner_is_target {
+    effect qieyi_phase_start(self, self_skill);
+  }
+  trigger card_used owner_source {
+    effect qieyi_use_after(self, event_card, self_skill);
+  }
+}

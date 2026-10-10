@@ -1,0 +1,27 @@
+# U05 mtg 第三批测试日志（2026-10-08，水没墓穴，规则 v101→v102）
+
+$ cargo test --offline -p engine-native
+engine-native: 418 passed / 0 failed / 1 ignored（v101 基线 417 +1 新增水没回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_mtg
+test result: ok. 4 passed; 0 failed（3 既有 + mtg_shuimomuxue_land_effect）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 124、HostBehavior ALL 86、伴随技能 33 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v101→v102 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js:3 `["spade", 11, "mtg_shuimomuxue"]`
+- translate.js:7-9 水没墓穴文案
+- card.js:315-335 content（countDiscardableCards 守卫/chooseToDiscard/draw2）
+- skill.js mtg_shuimomuxue_skill：mod maxHandcard -1 + phaseDiscardEnd forced
+
+## 测试迭代记录
+- ② 空手无取消路径（上游 countDiscardableCards 守卫直接 finish）→ 布牌后取消
+- ④ 体力 4 时上限 3 未超手牌 3 → 压体力 2（上限 1）
+- 摸一钩子初版误放 PhaseBegin 臂（计数恒 0）→ 移至 PhaseEnd 离开弃牌阶段处
+- ②/④/⑤ 三处注入/计数断言随 +1 张调整

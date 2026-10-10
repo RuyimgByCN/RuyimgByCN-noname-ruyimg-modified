@@ -1,0 +1,7 @@
+// 审时（蒯良蒯越转换技）：交牌伤害/受指观手。
+// 旧 JS 的「转换技状态」无对应原语；以受伤后摸一张近似（已注明）。
+skill nzry_shenshi(2844053208) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

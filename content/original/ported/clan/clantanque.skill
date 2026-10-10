@@ -1,0 +1,8 @@
+// 探雀（族王广/族王明山/族王允/族王淩/族王昶/族王浑/族王昌/族王琛）：每回合限一次。连续使用牌时，若点数差为N，可对体力值或手牌数为N的角色造成1点伤害。
+// 旧 JS 的「点数差计算」「体力和手牌数匹配目标」「伤害」无对应原语。
+// 以 deal_damage 近似保留伤害，缺少点数差和条件匹配。
+skill clantanque(3262352195) {
+  trigger card_used owner_is_source optional {
+    effect choose_other_damage(self, 1);
+  }
+}

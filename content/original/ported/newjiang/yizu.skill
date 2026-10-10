@@ -1,0 +1,5 @@
+skill yizu(3120129590) locked {
+  trigger card_used owner_targeted_by_sha_or_juedou_damaged_hp_le_source_once {
+    effect recover_hp(self, 1);
+  }
+}

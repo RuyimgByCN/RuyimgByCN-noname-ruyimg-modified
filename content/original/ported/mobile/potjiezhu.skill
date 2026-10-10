@@ -1,0 +1,6 @@
+// potjiezhu（竭逐）：每回合限一次，你可将手牌弃置至最接近的唯一值，视为使用一张指定至多X名角色为目标，无距离限制的普通【杀】（X为弃置牌数）。此【杀】结算后，若此【杀】目标数为X且对所有目标造成伤害，你将手牌摸至最接近的唯一值。
+skill potjiezhu(3357989251) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect draw_cards(event_source, 1);
+  }
+}

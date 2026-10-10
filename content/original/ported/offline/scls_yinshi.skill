@@ -1,0 +1,39 @@
+// 隐士：锁定技，跳过判定阶段。
+skill scls_yinshi(3553948732) locked {
+  modifier skip_judge_phase override 1;
+}
+
+// 以下均为上游无规则面的标记型技能（charlotte / mark 标记 / audio-only），
+// DSL 无可移植规则；以 hand_limit +0 空体保留 catalog 条目（与
+// sp/starzhonggu.skill 同约定）。上游定义位置：content/original/legacy-source/character/offline/skill/。
+skill chixin3(3465719856) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 chixin3 = { charlotte: true }（offline_star.js:302），无规则面。
+  modifier hand_limit add 0;
+}
+skill dcjuejing(3354729126) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcjuejing = { audio: 2 }（extra_offline.js:3053），无规则面。
+  modifier hand_limit add 0;
+}
+skill sm_mabian_skill(3721940371) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sm_mabian_skill = { equipSkill, onremove, charlotte }（extra_offline.js:1675），无规则面。
+  modifier hand_limit add 0;
+}
+skill tanhu2(2642618323) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 tanhu2 = { mark, intro }（offline_star.js:1123），纯“探虎目标”标记；
+  // 规则效果在 tanhu3 中。无独立规则面。
+  modifier hand_limit add 0;
+}
+skill ylyghuinu(2190987534) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 ylyghuinu = { locked, mark, intro }（offline_yanling.js:986），纯标记，无规则面。
+  modifier hand_limit add 0;
+}
+skill poker_record(2992768306) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 poker_record = { mark, marktext, intro, charlotte }（offline_qingshi.js:762），
+  // 纯扑克牌堆展示标记，无规则面。
+  modifier hand_limit add 0;
+}
+
+// 明识：防具栏为空时，属性【杀】不能选择拥有者。
+skill zymingshi(4161488331) locked {
+  modifier card_target_cancel(sha_elemental) override owner_armor_empty;
+}

@@ -1,0 +1,10 @@
+// 驰应（高翔）：出牌阶段限一次，你可以选择一名体力不大于你的其他角色，其可以循环
+// 选择其攻击范围内一名未选过的角色并弃置其一张牌；当其停止时，其获得以此法弃置的
+// 所有基本牌。
+// 旧 JS 仅作语义证据；目标选择、范围内循环弃牌与夺基由 resolve_dcchiying 权威状态机
+// 校验（ABI 484）。phase_play 每回合触发一次，天然满足「限一次」。
+skill dcchiying(4106504641) {
+  trigger phase_play owner_is_target {
+    effect resolve_dcchiying(self);
+  }
+}

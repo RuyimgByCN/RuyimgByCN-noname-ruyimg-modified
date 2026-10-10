@@ -1,0 +1,5 @@
+// wxdl_huamao：锁定技, global:game_started, global:washCard, 加技能, 含子技能, 异步。
+skill wxdl_huamao(3196871451) locked {
+  trigger game_started always {
+  }
+}

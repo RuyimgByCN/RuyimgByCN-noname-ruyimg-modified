@@ -1,0 +1,4 @@
+// 蛮裔：锁定技，【南蛮入侵】不能选择你为目标。
+skill manyi(3456707526) locked {
+  modifier card_target_cancel(nanman) override 1;
+}

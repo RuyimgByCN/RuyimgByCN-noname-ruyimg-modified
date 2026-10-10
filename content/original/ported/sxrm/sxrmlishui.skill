@@ -1,0 +1,7 @@
+// 利水（sxrm 鲁肃）：你成为黑色牌的目标后，你摸一张牌。
+// 与万利（放贷角色）的联动（摸牌后可选择与未还贷角色拼点）以文档化近似省略。
+skill sxrmlishui(3539390003) {
+  trigger card_targeted owner_is_target_nonred_card optional {
+    effect draw_cards(self, 1);
+  }
+}

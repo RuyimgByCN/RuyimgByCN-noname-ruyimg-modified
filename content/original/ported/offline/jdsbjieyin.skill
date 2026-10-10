@@ -1,0 +1,5 @@
+// jdsbjieyin：音效名:sbjieyin, player:phase_play, 需选择目标, 二选一, 回复体力, 异步。
+skill jdsbjieyin(3705444845) {
+  trigger phase_play owner_alive {
+  }
+}

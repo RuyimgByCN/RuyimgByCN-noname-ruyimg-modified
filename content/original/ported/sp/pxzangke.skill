@@ -1,0 +1,11 @@
+// 牂牁（pxzangke，州郡技能）：当你受到伤害后，你可以弃置你与伤害来源各一张牌。
+// 上游 (sp/skill.js:2816)：trigger player:damageEnd；filter = 来源存活且自己可弃；
+// content = chooseToDiscard(he) → discardPlayerCard(source, he, forced)。
+// 实现：damage + owner_is_target → 可选确认 → discard_hand_equip_count(self, 1)
+// （弃自己一张）+ choose_other_discard_target_card(self, hand_equip)（弃伤害来源一张）。
+skill pxzangke(3744135692) {
+  trigger damage owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

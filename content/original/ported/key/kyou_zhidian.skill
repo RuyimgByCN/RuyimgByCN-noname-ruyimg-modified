@@ -1,0 +1,5 @@
+// 置典（京）：可将一张锦囊牌当做【杀】使用，以此法使用的【杀】无距离限制。
+// 以 view_as sha 近似，缺失「仅限锦囊牌」过滤与无距 modifier。
+skill kyou_zhidian(3361165728) {
+  view_as sha play_phase any from hand_equip;
+}

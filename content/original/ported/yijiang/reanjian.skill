@@ -1,0 +1,11 @@
+// 暗箭(旧版)(旧版丁奉)：锁定技。你使用【杀】对不在你攻击范围内的角色造成伤害时，此伤害+1。
+// 注：extraDamage+1逻辑通过customArgs实现，DSL无increase_current_sha_base_damage条件判断。
+// 近似：用damage_before + modify_current_damage近似+1，条件过滤用owner_is_target_per_damage_point。
+skill reanjian(4263740335) locked {
+  // 近似：使用时对不在攻击范围内的目标伤害+1
+  // 注：实际需要判断!inRange条件，DSL filter中无直接"不在范围内"的判断
+  trigger damage_before owner_is_source {
+    effect modify_current_damage(event_player, 1);
+    // 注：未区分是否在攻击范围内，是对所有sha伤害+1的近似
+  }
+}

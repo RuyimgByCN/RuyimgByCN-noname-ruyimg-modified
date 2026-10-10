@@ -1,0 +1,8 @@
+skill redanxin(2528063581) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    if mark_count(self, 380579933) < 2 {
+      effect add_mark(self, 380579933, 1);
+    }
+  }
+}

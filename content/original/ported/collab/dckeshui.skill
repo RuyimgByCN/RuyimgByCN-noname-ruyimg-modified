@@ -1,0 +1,10 @@
+// 可睡（许攸）：跳过除准备/结束外的阶段，使用牌堆顶一张牌并额外结算一次；
+// 若不可使用则获得之并跳过下个阶段，可再次发动。
+// 旧 JS 涉及阶段取消、牌堆顶使用、虚拟复制、子技能自动跳阶段等复杂原语，
+// DSL 无阶段跳过+使用牌堆顶+二次结算的组合原语，无法建模。
+// 空定义：需 expansion 支持 phase_skip_and_play_top 原语。
+skill dckeshui(3937814829) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

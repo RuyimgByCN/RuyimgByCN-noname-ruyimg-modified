@@ -1,0 +1,8 @@
+// jsrgzhaobing（诏兵）：结束阶段，你可以弃置所有手牌，然后令至多X名其他角色依次选择一项：1.正面向上交给你一张【杀】；2.失去1点体力（X为你本次弃置的牌数）。
+// 未建模：存活计数, 翻译调用（DSL无对应原语）
+skill jsrgzhaobing(2275213391) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgzhaobing（skill.js:9258）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

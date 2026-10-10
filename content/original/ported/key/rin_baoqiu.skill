@@ -1,0 +1,5 @@
+// 棒球（铃·锁定技）：攻击范围+2。使用【杀】指定目标后判定：红色伤害+1，黑色不可响应，黑桃/红桃不计次数。
+// 以 attack_range modifier 近似保留攻击范围+2，缺失判定分支效果。
+skill rin_baoqiu(2693168345) {
+  modifier attack_range add 2;
+}

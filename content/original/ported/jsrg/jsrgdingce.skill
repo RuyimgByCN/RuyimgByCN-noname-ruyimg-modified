@@ -1,0 +1,18 @@
+// jsrgdingce（定策）：当你受到伤害后，你可以依次弃置你与伤害来源的各一张
+// 手牌。若这两张牌颜色相同，你视为使用一张【洞烛先机】。
+// 上游 (jsrg/skill.js jsrgdingce L4440)：trigger player damageEnd（source
+// 在场、owner 有可弃手牌）；cost chooseToDiscard 自身一张手牌（可取消）→
+// content 弃置 → discardPlayerCard({target, forced, "h"}) owner 代来源选一张
+// 手牌弃置 → 同色则 chooseUseTarget 虚拟【洞烛先机】。
+// 实现（2026-09-14 第二百八十一批·伤害后续族状态机，ADR 0641 §8.69）：
+// trigger damage owner_is_target_source_alive →
+// resolve_dingce(self, event_source)（ABI 730 / tag 752 / Cont 326 两段
+// 续体）：选自己一张手牌（可取消）→ 弃置 → owner 代来源选一张手牌弃置。
+// 近似（登记债）：①同色分支的虚拟【洞烛先机】未结算——该牌不在引擎牌池
+// （jsrg 无 cards.json 条目），触发面为死代码，待卡牌入库后补建；
+// ②position "h" 的来源弃牌面以 he（手牌+装备）口径近似（owner 代选）。
+skill jsrgdingce(2518986694) {
+  trigger damage owner_is_target_source_alive {
+    effect resolve_dingce(self, event_source);
+  }
+}

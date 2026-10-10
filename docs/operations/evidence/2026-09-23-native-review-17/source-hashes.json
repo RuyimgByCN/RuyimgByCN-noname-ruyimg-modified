@@ -1,0 +1,17 @@
+{
+  "round": 17,
+  "date": "2026-09-23",
+  "ruleset_version": 29,
+  "archive_format_version": 2,
+  "files": {
+    "crates/engine-native/src/engine.rs": "44960d6c489d36aecb1fee6deea8f1a33354dbb0cc06555ee33e25289b5c9130",
+    "crates/engine-native/src/kernel.rs": "5e138d04248545e82417d23ce0dde81d09d3ac75c7a65eb5e32ffca7be44d397",
+    "crates/engine-native/src/snap.rs": "015d317a0a5fd6d03b1e4d1e93ee83fb680f6114097536e7a8b92d5049785034",
+    "crates/engine-native/src/archive.rs": "24592aabbf9cdff4d5b6484361e41f1a71e3b26a73e83b48f09e71571e8f5cc1",
+    "crates/engine-native/src/content/standard.rs": "3760394926c3a7cb6a1fc5015f0ae4996c545a48bd13c1bd36c7a80502fd94d4",
+    "crates/engine-native/src/content/extension.rs": "efcbf24ead3fc6827942b8168a205ab5f50a03352dc2d0a463b743d318f65695",
+    "crates/engine-native/src/ai.rs": "690a54de19ab4542df469f4bc2e5d2f354fb34f8082fa28bcf9b5a3ef21cadfc",
+    "crates/engine-native/src/state.rs": "83fa44ed0a5faf0ebbd5ff94709b7b53c7d19bb2ff98d0f486ffd9525aa70e8b",
+    "crates/engine-native/src/catalog.rs": "33d8a9a6fe765dd4a12340c6c6e8ffac6e67e2d6288f94babd0bea1f67fd210a"
+  }
+}

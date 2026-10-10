@@ -1,0 +1,9 @@
+// 索命·续（王粲系）：锁定技。有「檄」标记的角色回复体力后，其交给你两张
+// 牌或失去 1 点体力。
+// 旧 JS 的「檄标记与二选一」无对应原语；以其回复体力后你摸一张近似
+// （交牌/失体分支未建模，已注明）。
+skill spshanxi_suoming(2372339810) locked {
+  trigger hp_recovered owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

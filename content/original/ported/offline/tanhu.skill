@@ -1,0 +1,19 @@
+// 探虎（offline 袁术?）：出牌阶段限一次，你可以与一名角色拼点：若你赢，其获得
+// 「探虎」标记（tanhu2，catalog 正定 def 2642618323，声明见 scls_yinshi.skill）；拼点牌进入弃牌堆。
+// 上游 (offline skill tanhu)：enable phaseUse usable 1 filterTarget canCompare；
+// content = chooseToCompare(target) → if result.bool（发起者赢）target.addTempSkill("tanhu2")。
+// 实现（2026-09-05 第一百六十六批·拼点族胜负挂钩引擎批，ABI 678 领号）：
+// active play_phase uses_per_turn 1 targets 1 1 other →
+// choose_hand_compare_grant_target_on_win(self, TANHU2_DEF, 0)——发起者严格胜则
+// **目标**获挂 tanhu2（AddSkill 到目标侧，本批新原语参数化）；负/平无操作。
+// tanhu2（上游 mark/intro 标记技，无规则面）登记为诚实终态占位（行为面在
+// tanhu3 的 mod：对 tanhu2 持有者距离-∞+无懈免疫——tanhu3 属独立 group 技，
+// 另批评审）。
+skill tanhu(2881975017) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect choose_hand_compare_grant_target_on_win(self, 2642618323, 0);
+  }
+}
+// tanhu2：上游 (offline skill tanhu2) 仅 mark/intro 标记展示键，无规则面——
+// 诚实终态（批 166 确证，非保真度债）；「已成为探虎目标」标记持有者的行为
+// 效果由 tanhu3（group 技）的 mod 承载。

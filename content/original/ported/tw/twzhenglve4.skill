@@ -1,0 +1,8 @@
+// 征略4（神·郭淮）：〖征略〗衍生。出牌阶段使用首张以"猎"标记角色为目标的牌时，
+// 获得〖征略3〗并使该牌不计入次数。
+// 旧 JS 的「猎标记检测」「不计次数联动」无对应原语。
+skill twzhenglve4(3041017254) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twzhenglve4 = 标记型技能（charlotte，skill.js:1751），无规则面。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

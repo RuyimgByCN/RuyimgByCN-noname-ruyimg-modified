@@ -1,0 +1,5 @@
+// xinfu_yanyu2：global:hp_lost, global:cardsDiscardAfter, global:cards_moved, 需选择目标, 选牌UI, 多步骤。
+skill xinfu_yanyu2(2211707360) {
+  trigger hp_lost owner_alive optional {
+  }
+}

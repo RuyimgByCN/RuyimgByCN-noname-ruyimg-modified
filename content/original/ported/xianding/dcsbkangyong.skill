@@ -1,0 +1,21 @@
+// 谋典韦「亢勇」：旧 JS 仅作语义来源；记录回合开始实际补回的体力，回合末至多扣至 1。
+skill dcsbkangyong(3080902597) locked {
+  trigger phase_begin owner_is_target_wounded {
+    let recovered = max_hp(self) - hp(self);
+    effect recover_hp(self, recovered);
+    effect remove_mark(self, 3080902597, 0);
+    effect add_mark(self, 3080902597, recovered);
+  }
+  trigger phase_end owner_is_target_mark_positive_3080902597 {
+    let recovered = mark_count(self, 3080902597);
+    let safe_loss = hp(self) - 1;
+    if 1 < hp(self) {
+      if safe_loss < recovered {
+        effect lose_hp(self, safe_loss);
+      } else {
+        effect lose_hp(self, recovered);
+      }
+    }
+    effect remove_mark(self, 3080902597, 0);
+  }
+}

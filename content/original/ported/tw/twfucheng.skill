@@ -1,0 +1,22 @@
+// 浮沉（twfucheng，tw 谋曹操？——锁定技）：准备阶段，若你的手牌全为红色，你获得
+// 「璧月」（sb sbbiyue 4152380059）；若全为黑色，你获得「武神」（sb sbwushuang
+// 4242421006）。已拥有对应技能且手牌仍为对应颜色时不重复触发（上游 filter 细节）。
+// 上游 (tw/skill.js:645)：trigger player:phaseZhunbeiBegin，forced；filter = 手牌全红
+// 或全黑（且未因已有技能而排除）；content = addSkills("sbbiyue"/"sbwushuang")。
+// 实现：phase_prepare + owner_is_target → if 手牌全红（hand_color_count(self, red) ==
+// hand_count(self)）→ add_skill(self, 4152380059)；if 全黑 → add_skill(self, 4242421006)。
+// 与上游差异：上游「已拥有 sbwushuang 且手牌全黑则不触发」的排除分支未建模（重复
+// add_skill 对已拥有者无效，行为等价）；空手牌时上游 every() 恒真会同时获得双技
+// （上游边界行为），DSL 以 hand_count > 0 守卫跳过（已注明差异）。
+skill twfucheng(3898925066) locked {
+  trigger phase_prepare owner_is_target {
+    if hand_count(self) > 0 {
+      if hand_color_count(self, red) == hand_count(self) {
+        effect add_skill(self, 4152380059);
+      }
+      if hand_color_count(self, black) == hand_count(self) {
+        effect add_skill(self, 4242421006);
+      }
+    }
+  }
+}

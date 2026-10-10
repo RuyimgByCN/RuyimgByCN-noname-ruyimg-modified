@@ -1,0 +1,4 @@
+// Skill yingx2(190) - modifier range variant
+skill yingx2(190) {
+  modifier attack_range add 1;
+}

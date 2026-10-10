@@ -1,0 +1,9 @@
+// 明策（陈宫）：出牌阶段限一次，将一张杀或装备牌交给一名角色，再选另一名其攻击范围内的角色。
+// 该角色选择：对后者使用一张杀，或摸一张牌。
+// 旧 JS 的双目标+选择分支（出杀/摸牌）无精确原语。
+// 以 give_selected_then_target_may_use_draw_owner 无法匹配此流程，空定义。
+skill mingce(3502388906) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

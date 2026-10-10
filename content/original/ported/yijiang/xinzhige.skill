@@ -1,0 +1,8 @@
+// 新止戈（荀彧）：出牌阶段，选择两名角色（出杀人和出杀目标），出杀人需交给你一张【杀】或武器牌，否则视为对出杀目标使用一张【杀】。
+// 旧 JS 的双目标+选择给牌/视为出杀分支；DSL 无法精确表达。
+skill xinzhige(3802510609) {
+  active play_phase uses_per_turn 1 targets 2 2 other {
+    // 未建模：出杀人给牌/视为出杀分支
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

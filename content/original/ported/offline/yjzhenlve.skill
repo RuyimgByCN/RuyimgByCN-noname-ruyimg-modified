@@ -1,0 +1,6 @@
+// 缜略：普通锦囊及其无懈链不可被响应；拥有者不能成为延时锦囊的目标。
+
+skill yjzhenlve(2568267200) locked {
+  modifier card_use_unrespondable(ordinary_trick) override 1;
+  modifier card_target_cancel(delayed_trick) override 1;
+}

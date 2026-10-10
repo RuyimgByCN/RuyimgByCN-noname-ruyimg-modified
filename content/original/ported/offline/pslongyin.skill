@@ -1,0 +1,5 @@
+// pslongyin：音效名:pslongyin, 主动(multi), 加技能, 含子技能。
+skill pslongyin(3921777559) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

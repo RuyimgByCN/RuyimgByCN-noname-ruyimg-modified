@@ -1,0 +1,7 @@
+// 游骑（主公技）：准备阶段开始时，你可以将一名群势力角色装备区的一张武器/防具/宝物牌移至你的装备区。
+// 旧 JS 的「移动装备牌」「限定群势力角色」「装备子类型筛选（武器/防具/宝物）」无可用的 DSL 原语（move_card 不存在于效果列表）。
+skill stdyouji(3279532774) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

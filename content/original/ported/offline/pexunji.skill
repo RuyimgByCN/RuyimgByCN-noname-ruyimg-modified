@@ -1,0 +1,5 @@
+// pexunji：player:cards_moved, global:cards_moved, 异步。
+skill pexunji(2426388661) {
+  trigger cards_moved owner_alive {
+  }
+}

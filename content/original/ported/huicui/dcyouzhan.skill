@@ -1,0 +1,5 @@
+// dcyouzhan：锁定技；摸?牌；获临时技。
+// 旧JS含subSkill、gaintag标记、expansion区，DSL无法精确建模。
+skill dcyouzhan(3578665611) {
+  modifier hand_limit add 1;
+}

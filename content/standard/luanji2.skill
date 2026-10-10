@@ -1,0 +1,4 @@
+// Skill luanji2(100) - standard variant
+skill luanji2(100) {
+  modifier distance_from add -1;
+}

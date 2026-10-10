@@ -1,0 +1,8 @@
+// 赤血刃（神黄忠）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：武器技：每回合首次以【杀】造成伤害时伤害+1（由 shenyu 动态创建的装备携带）
+// 旧 JS 的「动态创建装备 + 全局历史首次门控」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill chixueren_skill(2246731022) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

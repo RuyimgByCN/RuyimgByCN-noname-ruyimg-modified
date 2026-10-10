@@ -1,0 +1,10 @@
+// 襄吕（刘禅·OL）：锁定技。游戏开始时将每种基本牌各一张置于扩展区；
+// 获得辅臣时从扩展区随机获得等量牌。
+//
+// 扩展区（expansion zone）为自定义区域，DSL 仅支持 skill_pile/手牌/装备区；
+// 自定义 gainFuchen 事件非 DSL 标准事件——空定义。
+skill olxianglv(3869405852) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

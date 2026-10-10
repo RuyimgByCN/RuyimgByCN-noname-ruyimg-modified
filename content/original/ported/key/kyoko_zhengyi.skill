@@ -1,0 +1,8 @@
+// 争议（恭子·锁定技）：根据装备区牌的花色种类数提供精策/涉猎/制衡的条件参数。
+// 旧 JS 纯辅助计数技能，无独立可建模效果，未建模。
+skill kyoko_zhengyi(4174281098) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kyoko_zhengyi（skill.js:7869）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

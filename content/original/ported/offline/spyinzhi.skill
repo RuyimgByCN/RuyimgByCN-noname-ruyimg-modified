@@ -1,0 +1,6 @@
+// spyinzhi：受到伤害后的效果。
+skill spyinzhi(2919357689) {
+  trigger damage owner_is_target_once optional {
+    effect draw_cards(self, 1);
+  }
+}

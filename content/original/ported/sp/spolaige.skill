@@ -1,0 +1,20 @@
+// 霸业（spolaige·觉醒技）：全局第二次濒死结算后，你失去〖西向〗并获得
+// 〖朔北〗，然后将手牌摸至体力上限（若手牌数小于体力上限），并回复体力
+// 至体力上限（若体力值小于体力上限）。
+// 上游 (sp/skill.js 10243)：trigger global dyingAfter + juexingji + forced，
+// filter = getGlobalHistory("dying").indexOf(event)==1（第二次濒死）；
+// content = awakenSkill + changeSkills([spolzhubei],[spolxixiang]) +
+// drawTo(maxHp) + recoverTo(maxHp)。
+// 实现（2026-09-15 第二百九十三批·觉醒换技族状态机，ADR 0641 §8.77）：
+// resolve_spolaige(self)（ABI 737 / tag 758，单发无续体）——换技由
+// add_skill(3309571556 朔北) + remove_skill_by_def(2531785939 西向) 复合；
+// 摸/回至上限以机内差值表达。「第二次濒死」由新过滤器
+// owner_alive_second_global_dying（DyingAfter + lifetime_dying_events==2，
+// 批 293 新增全局濒死计数器）承载，天然一次性。
+// 登记债：获得的〖朔北〗本体尚为空表面（待后续批次重写）。
+// 保真度：完整（换技/摸至/回至/一次性全建模）。
+skill spolaige(4158403560) {
+  trigger dying_after owner_alive_second_global_dying {
+    effect resolve_spolaige(self);
+  }
+}

@@ -1,0 +1,7 @@
+$ 炉石子包定向：真实宿主全生命周期（六步同模板，第四例）
+test hearth_real_host_full_lifecycle ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.03s
+
+$ 全量 engine-native 单线程（391/0/1）+ 依赖包（62/0，DEPS_EXIT=0）；无引擎代码改动、无 golden 变化
+$ 身份：upstream-noname/shahai-hearth@1.0.0（U05 炉石子包，17 卡切片）；生命周期=安装+激活→安装包→原生建局→对局中 revoke_slot 卸载→锁定副本续玩→重装 Revoked 守卫→重新 import 被拒
+$ 计数口径：U05 子包验收第四例（gwent 第二/古剑第三）；来源计数仍为欢乐包 1/37

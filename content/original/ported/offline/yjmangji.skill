@@ -1,0 +1,6 @@
+// yjmangji：锁定技, player:hp_lost, player:changeHpAfter, 移出游戏, 异步, 弃牌。
+skill yjmangji(2155812873) locked {
+  trigger hp_lost always {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

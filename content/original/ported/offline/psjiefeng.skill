@@ -1,0 +1,7 @@
+// psjiefeng：主动(phaseUse), 多步骤。
+skill psjiefeng(2188035162) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

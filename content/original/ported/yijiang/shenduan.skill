@@ -1,0 +1,7 @@
+// 慎断：因弃置进入弃牌堆的有效黑色基本牌，可逐张、反复选择并当作无距离限制的
+// 【兵粮寸断】使用。候选牌、目标和每次继续选择都会在选择屏障后重新校验。
+skill shenduan(2370759068) {
+  trigger cards_moved owner_discarded_black_basic_to_discard {
+    effect choose_discarded_black_basic_as_bingliang(self);
+  }
+}

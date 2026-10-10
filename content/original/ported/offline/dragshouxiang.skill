@@ -1,0 +1,5 @@
+// dragshouxiang（锁定技/触发技）：锁定技, player:phaseDrawBegin2, player:phase_discard, 需选择目标, 多分支选择, 含子技能, 异步, 条件计数。
+skill dragshouxiang(2989873309) locked {
+  trigger phase_discard always {
+  }
+}

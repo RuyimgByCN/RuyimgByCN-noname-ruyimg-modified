@@ -1,0 +1,7 @@
+// 庇祸：限定技，有角色脱离濒死时，令其摸max(3,存活人数)张牌并获得"其他角色至其距离+X"效果直到下轮开始。
+// 以 draw_cards 近似（固定摸3张），注释注明差异：旧JS摸牌数=存活人数且附加距离效果。
+skill twbihuo(3965313946) {
+  trigger dying_after owner_alive_event_player_alive {
+    effect draw_cards(event_player, 3);
+  }
+}

@@ -1,0 +1,15 @@
+// 听弦（诗织/深雪）：出牌阶段开始时，自选摸 1/2/3 张（均加「听弦」标记）并回复
+// 1 点体力；出牌阶段结束时未使用的标记牌每张失去 1 点体力（子技 tingxian2）。
+// 实现：`phase_play owner_is_target optional` → choose(1,2,3) → 按分支摸牌 + 回复 1。
+// 近似：标记牌与「未使用扣血」负面分支未建模，只保留收益面；临时技补授未建模。
+// 修正：此前 noop 注记误标为 audio-only（上游 skill.js:7481 有真实规则体）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shiorimiyuki_tingxian(2995156497) {
+  trigger phase_play owner_is_target optional {
+    let n = choose(1, 2, 3);
+    if n == 1 { effect draw_cards(self, 1); }
+    if n == 2 { effect draw_cards(self, 2); }
+    if n == 3 { effect draw_cards(self, 3); }
+    effect recover_hp(self, 1);
+  }
+}

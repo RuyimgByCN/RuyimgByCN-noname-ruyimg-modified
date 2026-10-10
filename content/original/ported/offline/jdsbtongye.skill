@@ -1,0 +1,8 @@
+// 通夜（jdsbtongye）：锁定技。若牌堆未洗过牌，你视为拥有〖英姿〗和〖固政〗
+// （以游戏开始时获得近似——开局牌堆必然未洗过；后续洗牌后的条件撤销未建模）。
+skill jdsbtongye(2312805637) locked {
+  trigger game_started owner_alive {
+    effect add_skill(self, 20);
+    effect add_skill(self, 4159731006);
+  }
+}

@@ -1,0 +1,5 @@
+// 长安大舰的装备技能
+// 原语义：装备者的手牌上限加二。
+skill changandajian_equip5(3727522753) locked {
+  modifier hand_limit add 2;
+}

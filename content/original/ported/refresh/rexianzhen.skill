@@ -1,0 +1,7 @@
+// 界陷阵：出牌阶段限一次，与一名其他角色拼点。
+// 严格获胜绑定目标；否则本回合不能使用【杀】。发起拼点牌为【杀】时，本回合不计入手牌上限。
+skill rexianzhen(2329837371) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 3751763590, 4037147006);
+  }
+}

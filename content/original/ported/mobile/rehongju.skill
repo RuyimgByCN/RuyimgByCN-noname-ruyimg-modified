@@ -1,0 +1,8 @@
+// 鸿举（rehongju）：觉醒技：准备阶段若「荣」≥3 且有角色死亡，摸等同「荣」数的牌，可用手牌交换等量「荣」，减 1 体力上限并获得谦策。
+// 上游描述引自 translate.js；此前占位头（旧批量批次未写描述）已重记。
+skill rehongju(4127000047) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rehongju（skill.js:28174）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

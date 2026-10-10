@@ -1,0 +1,6 @@
+// 旧 JS 语义：拥有者死亡时，可令一名非击杀者回复 1 点体力并摸三张牌。
+skill zhuiyi(3427217715) {
+  trigger death owner_is_target {
+    effect resolve_zhuiyi(self, event_source);
+  }
+}

@@ -1,0 +1,18 @@
+// 挑衅（姜维）：出牌阶段限一次，你可以选择一名攻击范围内含有你的角色，令其对你
+// 使用一张【杀】；若其不如此做，你弃置其一张牌。目标合法性（攻击范围含持有者且
+// 有手牌/装备）由 resolve_tiaoxin 权威校验（ABI 537）；目标二选一、受迫杀源选择与
+// 拒绝弃牌复用乱武 prompt_sha 与通用弃牌续体，目标恢复时重校验。
+skill tiaoxin(695232805) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_tiaoxin(self);
+  }
+}
+
+// 志继（姜维）：觉醒技，准备阶段，若你没有手牌，你摸两张牌、回复 1 点体力、减 1 点
+// 体力上限，然后获得「观星」。观星复用标准包既有定义（ABI 538）。
+// 旧 JS 仅作语义证据；觉醒由 resolve_zhiji 权威校验；已持有观星时不再重复结算。
+skill zhiji(1739094753) locked {
+  trigger phase_prepare owner_phase_begin_hand_empty {
+    effect resolve_zhiji(self, 32);
+  }
+}

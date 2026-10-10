@@ -1,0 +1,7 @@
+// 信颂·摸（xinyongsi1）：锁定技。摸牌阶段，你改为摸 X 张牌（X 为场上存活势力数），
+// 而不是正常摸两张（上游 phaseDrawBegin1，changeToZero + draw(countGroup)）。
+// 实现：draw_count override alive_group_count（固定摸牌数路径不应用 modifier，
+// 与上游 !numFixed 分支一致；stdcanshi 同管线）。
+skill xinyongsi1(3518300522) locked {
+  modifier draw_count override alive_group_count;
+}

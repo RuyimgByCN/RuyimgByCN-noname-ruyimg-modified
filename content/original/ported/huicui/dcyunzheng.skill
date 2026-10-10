@@ -1,0 +1,5 @@
+// dcyunzheng：锁定技。
+// 旧JS含subSkill、全局技能、init初始化、expansion区，DSL无法精确建模。
+skill dcyunzheng(4160479044) {
+  modifier hand_limit add 1;
+}

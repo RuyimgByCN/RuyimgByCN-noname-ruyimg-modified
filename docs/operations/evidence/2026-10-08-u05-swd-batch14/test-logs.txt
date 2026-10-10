@@ -1,0 +1,30 @@
+# U05 swd 第十四批测试日志（2026-10-08，带火风轮+霞云彩绫，规则 v97→v98）
+
+$ cargo test --offline -p engine-native
+engine-native: 413 passed / 0 failed / 1 ignored（v97 基线 412 +1 新增距离对回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_swd
+test result: ok. 15 passed; 0 failed（14 既有 + swd_daihuo_xiayun_distance_pair）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 120 守卫过）
+
+$ cargo test --offline -p engine-native --test native_kernel
+test result: ok. 204 passed（含 equip_distance 矩阵参照模型全对全——标准牌堆无新卡，不受影响）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v97→v98 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js:13 `["heart", 1, "daihuofenglun", "fire"]`；list.js:15 `["diamond", 2, "xiayuncailing"]`
+- card.js:1621 daihuofenglun equip4 distance {globalFrom:-2, globalTo:-1}（无 skills）
+- card.js:1633 xiayuncailing equip3 distance {globalFrom:1, globalTo:2}（无 skills）
+- translate.js:288-295 info 文案与 distance 字段一致
+
+## 测试迭代记录
+- 距离对测试两处注入缺全区域 purge（card_in_multiple_zones got 147）→ 补 purge
+- 尾部「手牌占位拒绝」断言块前提不成立（同 id 单实体 + is_equip 提前路径
+  使占位臂不可达）→ 删除，改为装备区在场/离手断言
+- 风雪刃注入（既有测试）+2 张后撞弃堆 → 补全区域 purge

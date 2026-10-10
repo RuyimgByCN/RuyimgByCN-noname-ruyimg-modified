@@ -1,0 +1,10 @@
+// 孤骊（陆抗）：出牌阶段限一次，弃置一张装备牌并视为使用一张【杀】；
+// 使用后摸牌至体力上限，若该【杀】未造成伤害则你失去 1 点体力。
+// 旧 JS 的「使用后摸至上限与未伤失体」无对应原语，以弃一张手牌并摸一张
+// 近似（已注明）。
+skill mbguli(4225144787) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

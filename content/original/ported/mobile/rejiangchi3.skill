@@ -1,0 +1,8 @@
+// 界将驰的“摸牌”临时效果
+// 原语义：本阶段内不能主动使用【杀】。
+skill rejiangchi3(2242073380) {
+  modifier sha_use_cancel override 1;
+  trigger phase_play_end owner_alive {
+    effect remove_skill(self_skill);
+  }
+}

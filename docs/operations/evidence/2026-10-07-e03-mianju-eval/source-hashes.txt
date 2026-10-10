@@ -1,0 +1,2 @@
+38e70ccc5a7ec28b14df8d011e4b5182f56dc6a649e23af47f4033973ae7182f  docs/architecture/native-progress.md
+9d20be9a204f8187b8995f12fe093e72fcc193c9ba7dfa5ddfedc82ae406de90  docs/operations/evidence/2026-10-07-e03-mianju-eval/README.md

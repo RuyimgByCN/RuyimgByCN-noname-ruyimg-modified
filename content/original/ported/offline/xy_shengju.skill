@@ -1,0 +1,5 @@
+// xy_shengju：锁定技, player:phaseDrawBegin2, 异步, 条件计数。
+skill xy_shengju(2940773179) {
+  trigger phase_any_end owner_alive {
+  }
+}

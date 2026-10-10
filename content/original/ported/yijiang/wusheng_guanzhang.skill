@@ -1,0 +1,6 @@
+// 武圣（关兴张苞版）：旧 JS 仅音效占位，无独立游戏逻辑。
+skill wusheng_guanzhang(3879208712) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

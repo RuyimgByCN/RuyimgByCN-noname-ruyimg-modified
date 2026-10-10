@@ -1,0 +1,8 @@
+// jsrglianzhu（连诛）：出牌阶段限一次。你可以展示一张黑色手牌并交给一名其他角色，然后视为你对所有与其势力相同的其他角色依次使用一张【过河拆桥】。
+// 未建模：翻译调用, 延迟动画（DSL无对应原语）
+skill jsrglianzhu(3628561920) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrglianzhu（skill.js:10017）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

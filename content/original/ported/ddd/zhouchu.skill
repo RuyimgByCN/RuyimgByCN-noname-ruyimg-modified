@@ -1,0 +1,6 @@
+// 3D精选 周处「侠横」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddxiaheng(3492764267) locked {
+  trigger phase_play owner_is_target {
+    effect resolve_dddxiaheng(self, 0);
+  }
+}

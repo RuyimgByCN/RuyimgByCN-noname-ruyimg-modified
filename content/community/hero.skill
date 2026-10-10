@@ -1,0 +1,8 @@
+// 示例技（community 示例包）：出牌阶段限一次，你摸一张牌。
+// 这是 M5 验收门「至少一个非官方示例包装载进标准局」的示例内容：
+// 演示一个最小的、带 golden 测试的社区包如何定义、打包并加载进标准身份局。
+skill hero_example(4200000901) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

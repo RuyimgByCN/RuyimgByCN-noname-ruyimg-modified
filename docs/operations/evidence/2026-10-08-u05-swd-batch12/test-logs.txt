@@ -1,0 +1,37 @@
+# U05 swd 第十二批测试日志（2026-10-08，御夫录，规则 v95→v96）
+
+$ cargo test --offline -p engine-native
+engine-native: 411 passed / 0 failed / 1 ignored（v95 基线 410 +1 新增御夫录回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_swd
+test result: ok. 13 passed; 0 failed（12 既有 + swd_yufulu_give_weapon_and_damage）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v95→v96 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包（DEPS_EXIT=0）：
+content-runtime: 33/0
+engine-ai: 29/0
+content-native-loader: 1/0
+合计 63/0（与 batch11 同口径）
+
+$ cargo build --offline -p engine-native（各阶段）
+0 errors（行为臂/守卫/派生/usable:1/注释修正五轮）
+
+## 发牌敏感测试修复（改牌堆构成 +1 张后）
+- swd 计数断言 19→20 三处（g1_shahai_swd.rs:123/213/228）
+- 天仙酒/潜偷注入改全区域 purge（hand/deck/discard/table）：
+  card_in_multiple_zones（got 133/138）消除
+- 御夫录测试往返②曾报 card_missing_from_all_zones（got 89）：
+  根因 = 武器在 SelectCard 段即离区、仅存 HostMachine.card，而
+  MachineSnapshot::Host 不入 machine_held_cards（他臂存区域内存牌或
+  伪 id，不能盲并）。修复 = 移动时机后移到 TargetChoice 段
+  （上游 prepare:"give" 同口径：content 执行时才移动），悬空牌消除。
+
+## 源码校正（对上游 archive/qita/.../card/swd/ 源码）
+- 卡名：translate.js:314 `yufulu: "御夫录"`（此前「伏符录」为误记，
+  代码注释已全部改正；键名 yufulu 本就正确）
+- 花色点数：list.js:31 `["spade", 6, "yufulu"]` → ♠6（此前误记 ♠5）
+- 语义：skill.js:2580 `touzhi` equipSkill/phaseUse/usable 1/
+  filterCard equip1/discard:false/prepare:"give"/target≠player/
+  content target.damage(); target.gain(cards, player) —— 实现同序

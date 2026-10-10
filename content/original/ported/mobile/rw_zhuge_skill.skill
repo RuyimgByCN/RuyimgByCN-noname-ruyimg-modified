@@ -1,0 +1,5 @@
+// 诸葛连弩（重铸版装备技能）
+// 原语义：出牌阶段使用【杀】无次数限制。
+skill rw_zhuge_skill(4056524183) locked {
+  modifier sha_use_limit override 2147483647;
+}

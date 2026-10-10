@@ -1,0 +1,5 @@
+// smmobian：锁定技, player:SmrumoAfter, 异步。
+skill smmobian(3919338057) {
+  trigger phase_any_end owner_alive {
+  }
+}

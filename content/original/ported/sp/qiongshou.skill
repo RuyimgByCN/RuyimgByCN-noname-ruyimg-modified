@@ -1,0 +1,8 @@
+// 穷守：旧 JavaScript 仅作为语义证据；运行时只加载该类型化规则。
+skill qiongshou(2792246343) locked {
+  trigger game_started owner_has_enabled_equip_slot {
+    effect disable_all_equip_slots(self);
+    effect draw_cards(self, 4);
+  }
+  modifier hand_limit add 4;
+}

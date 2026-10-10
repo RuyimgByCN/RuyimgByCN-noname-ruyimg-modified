@@ -1,0 +1,7 @@
+// 涪陵（pxfuling，州郡技能）：你的装备牌不能被其他角色弃置。
+// 上游 (sp/skill.js:1817)：mod.canBeDiscarded，装备区牌且弃置者非本人 → false。
+// 实现：modifier card_discard_protected(equip) override 1（其他角色不能弃置本角色的
+// 装备牌；引擎 card_discard_protected_from 已排除本人弃置自身牌）。
+skill pxfuling(3616870464) {
+  modifier card_discard_protected(equip) override 1;
+}

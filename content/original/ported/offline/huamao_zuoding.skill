@@ -1,0 +1,6 @@
+// huamao_zuoding：global:card_targeted, 需选择目标, 摸牌, 异步, 条件计数。
+skill huamao_zuoding(3090486641) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

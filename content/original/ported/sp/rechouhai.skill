@@ -1,0 +1,4 @@
+// 仇海：没有手牌时，受到逻辑【杀】造成的伤害 +1。
+skill rechouhai(4121233014) locked {
+  modifier sha_damage_taken add owner_hand_empty;
+}

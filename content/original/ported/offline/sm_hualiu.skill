@@ -1,0 +1,5 @@
+// sm_hualiu：锁定技, player:phaseDrawBegin2, 异步。
+skill sm_hualiu(2819055468) {
+  trigger phase_any_end owner_alive {
+  }
+}

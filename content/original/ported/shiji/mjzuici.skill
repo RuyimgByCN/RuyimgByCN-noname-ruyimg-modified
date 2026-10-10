@@ -1,0 +1,9 @@
+// 瞑瞑·罪辞（马谡系）：你受到伤害后，若来源有「定义」标记技能，移去其一
+// 个并令其失去 1 点体力。
+// 旧 JS 的「定义标记追踪」无对应原语；以受伤后对来源造成 1 点伤害近似
+// （标记移除未建模，已注明）。
+skill mjzuici(3101540907) {
+  trigger damage owner_is_target optional {
+    effect choose_other_damage(self, 1);
+  }
+}

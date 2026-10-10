@@ -1,0 +1,4 @@
+// Xiahou Yuan march
+skill shensu2(72) {
+  modifier distance_from add -1;
+}

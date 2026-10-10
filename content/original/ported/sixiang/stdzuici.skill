@@ -1,0 +1,6 @@
+// 罪辞：受到伤害后，可将伤害来源以外角色的一张场上牌移入伤害来源区域。
+skill stdzuici(2244504256) {
+  trigger damage owner_is_target_source_movable_field_card optional {
+    effect choose_move_field_card_to(self, event_source);
+  }
+}

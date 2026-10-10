@@ -1,0 +1,5 @@
+// 界放权的临时手牌上限效果
+// 原语义：本回合手牌上限的基数改为体力上限。
+skill refangquan2(2792995788) {
+  modifier hand_limit_base_max_hp override 1;
+}

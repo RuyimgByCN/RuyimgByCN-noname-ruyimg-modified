@@ -1,0 +1,17 @@
+// 竭节（刘馥）：结束阶段可弃一张牌并选一名有牌的角色，其选择：将一张牌置于你的武将牌上，或你弃置其一张牌。
+// 旧 JS 的子技能「黑色手牌当无懈」「红色手牌当闪」「准备阶段获得武将牌上的牌」无对应原语。
+// 「获得武将牌上的牌」（准备阶段锁定）以 gain_all_skill_pile_cards 近似保留。
+// 「弃牌选目标→目标选给牌或你弃其牌」为交互分支，无法精确；以 discard_selected+target choose 无法表达。
+skill jieyue(2223885348) {
+  // 结束阶段：弃一张牌，选一名其他角色
+  trigger phase_end owner_is_target optional {
+    // 近似：弃一张手牌/装备，取目标一张手牌到技能堆叠区
+    effect discard_hand_equip_count(self, 1);
+    effect store_selected_in_skill_pile(self);
+  }
+
+  // 准备阶段锁定：获得技能堆叠区所有牌
+  trigger phase_prepare owner_is_target {
+    effect gain_all_skill_pile_cards(self);
+  }
+}

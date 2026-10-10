@@ -1,0 +1,10 @@
+// 潜曜（宗预）：限定技。回合开始时，摸等同于轮数的牌，然后使用一张虚拟【杀】。
+// 旧JS的round_number≥1时额外目标、≥2时伤害+1、≥3时不可响应等条件子触发器未建模（已注明）。
+// 近似保留核心：按轮数摸牌 + 虚拟【杀】。缺失三项轮数门槛增益，
+// 待子触发器/条件性bonus原语后补齐。
+skill renqianyao(2535675826) {
+  trigger phase_begin owner_is_target_once {
+    effect draw_cards(self, round_number_capped(99));
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

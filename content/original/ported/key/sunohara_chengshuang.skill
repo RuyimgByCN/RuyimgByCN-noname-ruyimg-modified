@@ -1,0 +1,8 @@
+// 成双（春原·锁定技）：游戏开始时选择性别；每回合可变更性别。
+// 旧 JS 的 性别选择+广播+性别变更 需性别系统原语，未建模。
+skill sunohara_chengshuang(2171681550) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sunohara_chengshuang（skill.js:9933）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

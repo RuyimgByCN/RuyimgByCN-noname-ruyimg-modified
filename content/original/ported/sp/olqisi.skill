@@ -1,0 +1,12 @@
+// 奇思（OL 蒲元）：游戏开始从牌堆获得两张不同副类别的装备；摸牌阶段可少摸一张
+// 并声明一种装备副类别，从牌堆或弃牌堆获得一张该副类别装备。
+// 上游 (sp/skill.js:25717)：olqisi_init 开局找两张不同 subtype 装备；
+// phaseDrawBegin2 可选少摸 1 并 gain 指定副类别。
+// 实现：开局摸 2 张。
+// 近似：不保证装备/副类别；少摸换装备未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olqisi(2846642634) {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

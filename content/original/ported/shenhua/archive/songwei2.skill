@@ -1,0 +1,7 @@
+// 颂威·2（曹丕主公技辅助）：魏势力角色判定后你摸牌。
+// 旧 JS 的「势力判定」无对应原语；以任意角色判定后摸一张近似（已注明）。
+skill songwei2(3491187195) {
+  trigger judgment_resolved owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

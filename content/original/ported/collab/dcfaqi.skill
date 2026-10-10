@@ -1,0 +1,8 @@
+// 法器（隅泣曹操）：当你于出牌阶段使用装备牌后，你可以视为使用一张本回合未以此法使用过的普通锦囊牌。
+// 旧JS的"记录已使用锦囊名"避免重复、虚拟卡选择列表（get.inpileVCardList过滤trick）无对应原语。
+// 以使用装备后摸1牌近似保留收益；缺少play_phase+equip专用过滤器，用card_used+equip近似（非出牌阶段也触发）。
+skill dcfaqi(4188941361) {
+  trigger card_used owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

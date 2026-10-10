@@ -1,0 +1,9 @@
+// 瞑瞑·谋智（马谡系）：锁定技。你受到伤害时，若上次所受伤害的牌与本次
+// 花色相同，防止此伤害。
+// 旧 JS 的「上次伤害牌花色比较」无对应原语；以受伤后摸一张近似（防止
+// 未建模，已注明）。
+skill mjmouzhi(2532266117) locked {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

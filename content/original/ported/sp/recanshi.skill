@@ -1,0 +1,17 @@
+// Rewritten from legacy `recanshi`; old JavaScript is semantic reference only.
+skill recanshi(2466532461) {
+  trigger phase_draw owner_is_target_alive_wounded_or_guiming_wu_exists optional {
+    effect increase_current_draw_count(self, alive_wounded_or_guiming_wu_count(self));
+    effect add_skill(self, 2932254333);
+  }
+}
+
+skill recanshi2(2932254333) locked {
+  trigger card_used owner_source_sha_or_ordinary_trick_has_discardable_hand_equip {
+    effect discard_one_hand_or_equip(self);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

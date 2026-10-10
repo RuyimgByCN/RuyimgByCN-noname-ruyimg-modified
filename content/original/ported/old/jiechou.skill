@@ -1,0 +1,8 @@
+// 竭雠（仇渊灵雎）：每回合限一次，有角色失去手牌中最后一张伤害牌后，
+// 可选对其造成 1 伤，或摸一张并交给其一张。
+// 近似：每回合限一次可选择造成 1 点伤害（失去最后伤害牌触发未建模）。
+skill jiechou(4205656144) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_damage(self, 1);
+  }
+}

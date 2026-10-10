@@ -1,0 +1,10 @@
+// 受责（董贵人）：锁定技，结束阶段若你有“绞”标记，弃 1 枚“绞”，随机获得弃牌堆中的
+// 一张牌并失去 1 点体力。旧 JS 的“黑色牌”约束以“【杀】”近似（DSL 无按颜色取牌原语）；
+// “绞”标记复用 dclingfang 的定义。
+skill dcshouze(3027710363) locked {
+  trigger phase_end owner_is_target_mark_positive_3884646990 {
+    effect remove_mark(self, 3884646990, 1);
+    effect choose_gain_discard_card_by_kind(self, sha);
+    effect lose_hp(self, 1);
+  }
+}

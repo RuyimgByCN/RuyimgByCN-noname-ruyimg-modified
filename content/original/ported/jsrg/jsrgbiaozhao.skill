@@ -1,0 +1,8 @@
+// jsrgbiaozhao（表召）：准备阶段，你可以选择一名其他角色。直到你的下回合开始时或你进入濒死时，其以外的角色对其使用牌无次数限制，且其对你使用的牌造成的伤害+1。
+// 未建模：存活计数, charlotte延迟, 翻译调用, addTempSkill（DSL无对应原语）
+skill jsrgbiaozhao(4058946730) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgbiaozhao（skill.js:8556）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

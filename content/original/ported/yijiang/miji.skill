@@ -1,0 +1,8 @@
+// 密计（王异）：结束阶段若已受伤，摸已损失体力值张牌，然后可将手牌和装备区的牌分配给其他角色。
+// 旧 JS 的分批多轮交互+AI 评估最优分配方案（givetag 防重复）过于复杂。
+// 以 draw_cards + 可选 discard_hand_equip_count(他人得牌) 无法表达精确分配。
+skill miji(3652941219) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, max_hp(self) - hp(self));
+  }
+}

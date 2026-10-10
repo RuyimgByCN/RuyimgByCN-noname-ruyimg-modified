@@ -1,0 +1,7 @@
+// 当先：回合开始时，从弃牌堆选择一张【杀】获得，并先执行一个独立的额外出牌阶段。
+skill tydangxian(3099116192) locked {
+  trigger phase_begin owner_is_target_once {
+    effect choose_gain_discard_card_by_kind(self, sha);
+    effect queue_opening_extra_play_phase(self);
+  }
+}

@@ -1,0 +1,5 @@
+// mark_shouli（主动技(multi)/触发技）：音效名:shouli, source:damage_before, player:game_started, global:phaseBefore, 主动(multi), 加技能, 含子技能, 异步, 条件计数。
+skill mark_shouli(2680273064) {
+  trigger damage_before owner_alive optional {
+  }
+}

@@ -1,0 +1,8 @@
+// 往烈的前两张对他人用牌计数器；阶段触发次数由通用规则状态维护。
+skill dcwanglie_effect(4183988931) locked {
+  modifier card_distance_unlimited override owner_skill_play_phase_fire_count_below_2;
+  trigger card_used owner_source_card_has_other_target_current_play_phase_first_two {}
+  trigger phase_play_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

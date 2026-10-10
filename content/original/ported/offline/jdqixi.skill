@@ -1,0 +1,6 @@
+// jdqixi：音效名:sbqixi, 多分支选择, 异步, 弃牌。
+skill jdqixi(2767176337) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

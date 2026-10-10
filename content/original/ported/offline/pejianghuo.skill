@@ -1,0 +1,7 @@
+// 降祸（PE神钟会）：占位升级为可用近似 — 出牌阶段限一次选人造成 1 点伤害。
+// （完整上游语义若更复杂，以注释为准继续精化。）
+skill pejianghuo(2517750949) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_damage(self, 1);
+  }
+}

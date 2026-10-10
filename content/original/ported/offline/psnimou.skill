@@ -1,0 +1,5 @@
+// psnimou（锁定技/限定技/触发技）：觉醒技, 限定技, 锁定技, player:phase_prepare, global:dieEnd, global:phase_any_end, 需选择目标, 加技能, 含子技能, 异步。
+skill psnimou(2522592058) locked {
+  trigger phase_prepare always {
+  }
+}

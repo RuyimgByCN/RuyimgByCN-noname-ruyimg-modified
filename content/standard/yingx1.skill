@@ -1,0 +1,4 @@
+// Skill yingx1(189) - modifier distance variant
+skill yingx1(189) {
+  modifier distance_from add -1;
+}

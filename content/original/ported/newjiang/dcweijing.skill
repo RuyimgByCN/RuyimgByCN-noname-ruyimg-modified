@@ -1,0 +1,9 @@
+// 威靖（威孙策）：其他角色回合开始时，你可二选一：对其造成 1 点伤害；或
+// 令其交给你一张牌，然后其可发动一次【猘锋】。
+// 旧 JS 的「二选一」与「交牌后发动猘锋」无对应原语，以对其造成 1 点伤害
+// 近似（交牌分支未建模，已注明）。
+skill dcweijing(3130813925) {
+  trigger phase_begin owner_alive_once_per_round optional {
+    effect choose_other_damage(self, 1);
+  }
+}

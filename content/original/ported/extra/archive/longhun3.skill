@@ -1,0 +1,5 @@
+// 龙魂·3（神关羽系）：将黑桃牌当【无懈可击】使用。
+// 旧 JS 的「黑桃转化」以手牌当【无懈可击】近似（花色条件未建模，已注明）。
+skill longhun3(2700560066) {
+  view_as wuxie any spade from hand_equip;
+}

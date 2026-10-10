@@ -1,0 +1,6 @@
+// 短兵：使用【杀】时，可额外指定一名距离不大于 1 的合法目标。
+skill duanbing(4181445466) {
+  trigger card_used owner_source_sha {
+    effect choose_add_current_sha_target_within_distance(self, event_card, 1);
+  }
+}

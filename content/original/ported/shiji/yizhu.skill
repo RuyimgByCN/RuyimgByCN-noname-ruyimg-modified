@@ -1,0 +1,9 @@
+// 遗驻（董卓系）：锁定技。结束阶段开始时，你摸两张牌，然后将手牌调整
+// 至两张（多余弃置，不足摸牌）。
+// 旧 JS 的「调整至两张」以摸两张后弃置两张近似（调整未建模，已注明）。
+skill yizhu(2299054251) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 2);
+    effect discard_hand_equip_count(self, 2);
+  }
+}

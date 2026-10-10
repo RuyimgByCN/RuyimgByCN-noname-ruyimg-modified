@@ -1,0 +1,6 @@
+// 陷嗣X：旧 JS 为空对象，仅作标记。
+skill xiansix(3144074560) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

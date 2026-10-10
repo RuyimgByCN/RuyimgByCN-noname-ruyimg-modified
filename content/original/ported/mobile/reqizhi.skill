@@ -1,0 +1,6 @@
+// reqizhi（奇制）：蓄力技（1/3），出牌阶段，你可以消耗1点蓄力点令一名角色摸三张牌，然后本回合你使用基本牌或普通锦囊牌指定目标后，你依次观看本回合因此摸牌的角色的手牌并弃置其中一张。
+skill reqizhi(3399326984) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

@@ -1,0 +1,6 @@
+// xinrenjie（忍戒）：锁定技。①当你需要响应一张延时锦囊牌或其他角色使用的牌时，若你未响应此牌，你获得1枚“忍”标记（你每轮以此法至多获得4枚“忍”标记）。②游戏开始时，若你为神势力且你未执行神武将势力选择，则你可以变更势力。
+skill xinrenjie(3103867673) locked {
+  trigger card_used owner_alive {
+    effect add_mark(self, 0, 1);
+  }
+}

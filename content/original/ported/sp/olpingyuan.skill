@@ -1,0 +1,15 @@
+// 平远（OL 刘晔）：游戏开始若没有霹雳车，可将霹雳车置入装备区并摸一张；
+// 回合开始时，若已有霹雳车，可移动之或视为使用一张【杀】。
+// 上游 (sp/skill.js:3845)：enterGame/phaseBefore 可选装备 ol_piliche 并摸 1；
+// phaseBegin 已装备则可移动霹雳车或视为杀。
+// 实现：开局可选摸 1；回合开始可选视为无距离【杀】。
+// 近似：霹雳车装备/移动未建模；视为杀不检验已装备霹雳车。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olpingyuan(3423099864) {
+  trigger game_started owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+  trigger phase_begin owner_is_target optional {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

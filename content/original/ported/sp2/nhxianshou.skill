@@ -1,0 +1,10 @@
+// 仙授：旧 JS 语义重写；目标未受伤时摸二，否则摸一。
+skill nhxianshou(2305482906) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    if hp(event_source) == max_hp(event_source) {
+      effect draw_cards(event_source, 2);
+    } else {
+      effect draw_cards(event_source, 1);
+    }
+  }
+}

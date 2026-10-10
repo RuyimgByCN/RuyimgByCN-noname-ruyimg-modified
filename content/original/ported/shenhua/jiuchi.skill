@@ -1,0 +1,4 @@
+skill jiuchi(2316672021) {
+  view_as jiu play_phase spade;
+  view_as jiu response spade;
+}

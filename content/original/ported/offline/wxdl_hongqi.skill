@@ -1,0 +1,5 @@
+// wxdl_hongqi：觉醒技, 限定技, player:phase_prepare, 异步。
+skill wxdl_hongqi(3562752696) {
+  trigger phase_prepare owner_alive {
+  }
+}

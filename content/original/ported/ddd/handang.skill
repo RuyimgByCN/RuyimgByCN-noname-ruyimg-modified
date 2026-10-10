@@ -1,0 +1,9 @@
+// 3D精选 韩当「险袭」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddxianxi(3400504078) {
+  trigger card_used owner_source_play_phase_sha_has_additional_target_ignoring_distance optional {
+    effect resolve_dddxianxi(self, event_card, 0);
+  }
+  trigger card_resolved owner_source_card_resolved_tracked_dddxianxi {
+    effect resolve_dddxianxi(self, event_card, 1);
+  }
+}

@@ -1,0 +1,4 @@
+// Sima Zhao
+skill jieming2(78) {
+  trigger phase_begin always { effect draw_cards(self, 1); }
+}

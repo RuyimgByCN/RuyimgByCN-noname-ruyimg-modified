@@ -1,0 +1,5 @@
+skill yaoming(2608199273) {
+  trigger damage owner_source_or_target_hand_count_differs_once_per_turn optional {
+    effect choose_hand_count_different_target_draw_or_random_discard(self);
+  }
+}

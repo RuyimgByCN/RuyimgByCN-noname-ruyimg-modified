@@ -1,0 +1,12 @@
+// 姝勇（TW鲍三娘）：当你使用或打出【杀】时，你可以获得一名其他角色区域里的一张
+// 牌，若本轮你以此法获得其区域里的牌数大于 2，其摸一张牌。
+// 上游 (tw/skill.js:164-192)：useCard/respond 双触发 + gainPlayerCard(hej) +
+// 本轮同目标获得计数 > 2 令其摸牌。
+// 核心近似：使用【杀】后可选获得一名其他角色一张手牌（gain_target_hand_card 原语，
+// ABI 647）；但 tw 包当前 ABI 562，引入会使全部 tw 冻结 ABI 断言连锁升级，故本轮
+// 仍登记为诚实 noop（「打出响应半边」「本轮计数摸牌」「装备/判定区」未建模）。
+// 2026-08-15：随上游 v1.11.5 新武将 tw_baosanniang 移植。
+skill twshuyong(3531640726) locked {
+  // INTENTIONAL_EMPTY_NOOP: gain-target-card deferred (ABI ladder cost)
+  modifier hand_limit add 0;
+}

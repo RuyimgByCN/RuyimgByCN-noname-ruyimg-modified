@@ -1,0 +1,7 @@
+// casuibian：音效名:xinfu_lveming, global:card_used, 需选择目标, 摸牌, 造成伤害, 失去体力, 异步。
+skill casuibian(2522699144) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

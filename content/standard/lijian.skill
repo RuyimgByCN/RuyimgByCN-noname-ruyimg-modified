@@ -1,0 +1,9 @@
+// 离间：弃置一张牌，令第二名男性角色视为对第一名男性角色使用决斗。
+skill lijian(2292478631) {
+  active play_phase uses_per_turn 1
+    targets 2 2 other male second_can_use_juedou_on_first
+    select_he 1 1 {
+      effect discard_selected(self);
+      effect use_virtual_juedou_second_on_first();
+    }
+}

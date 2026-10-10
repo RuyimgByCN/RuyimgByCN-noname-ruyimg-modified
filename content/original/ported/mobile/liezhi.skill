@@ -1,0 +1,6 @@
+// liezhi（烈直）：准备阶段，你可以依次弃置至多两名其他角色区域内的各一张牌。当你受到伤害时，此技能失效直至你的下个结束阶段。
+skill liezhi(2610084083) {
+  trigger phase_prepare owner_alive {
+    effect discard_selected(self);
+  }
+}

@@ -1,0 +1,15 @@
+// 舟济：出牌阶段限当前体力值次，与一名角色拼点；仅该角色严格获胜时其摸两张牌。
+skill jyzhouji(3583953669) {
+  active play_phase uses_per_turn owner_hp targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 4259159799, 4259159799);
+  }
+}
+
+skill jyzhouji_result(4259159799) {
+  trigger hand_compare_finished owner_is_target_once {
+    if 1 < event_amount {
+      effect draw_cards(event_source, 2);
+    }
+    effect remove_skill(self_skill);
+  }
+}

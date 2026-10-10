@@ -1,0 +1,17 @@
+// 正争·终段（mobile zhengjing2）：准备阶段开始时，你将「争」全部置入手牌，
+// 跳过本回合的判定阶段和摸牌阶段，然后移去〖正争〗（本技）。
+// 上游 (mobile/skill.js zhengjing2)：trigger player phaseZhunbeiBegin；forced；
+// content gain(pile) + skip("phaseJudge") + skip("phaseDraw") + removeSkill。
+// 实现（2026-09-10 第二百零五批·gain_whole 消费池散批）：
+// gain_whole_skill_pile(self, self_skill, 自身堆) + skip_next_judge_phase(self)
+// + remove_skill_by_def(self)。
+// 近似（登记债）：①「跳过摸牌阶段」无 draw-skip 原语（skip_next_discard_phase
+// 为弃牌阶段专用），未建模——摸牌照常执行；②「争」堆供给依赖 zhengjing 置入
+// 面落地（dormant 契约）。
+skill zhengjing2(4211882480) {
+  trigger phase_prepare owner_is_target {
+    effect gain_whole_skill_pile(self, self_skill, 4211882480);
+    effect skip_next_judge_phase(self);
+    effect remove_skill_by_def(self, 4211882480);
+  }
+}

@@ -1,0 +1,6 @@
+// pejixin：锁定技, player:card_used, player:useCard1, player:useCard0, 摸牌, 加技能, 含子技能, 异步。
+skill pejixin(4030475860) locked {
+  trigger card_used always {
+    effect draw_cards(self, 1);
+  }
+}

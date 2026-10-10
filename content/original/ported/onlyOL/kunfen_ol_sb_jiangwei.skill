@@ -1,0 +1,6 @@
+// 困奋（OL·SB姜维版）：旧 JS 为空定义（仅含 audio 标记）。
+skill kunfen_ol_sb_jiangwei(2941274740) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kunfen_ol_sb_jiangwei = 标记型技能（audio-only，skill.js:14718），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

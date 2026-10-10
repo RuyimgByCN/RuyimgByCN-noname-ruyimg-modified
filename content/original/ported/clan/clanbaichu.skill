@@ -1,0 +1,19 @@
+// 百出（族荀攸）：锁定技。上游 (clan/skill.js)：
+// trigger useCardAfter → 若本次用牌的花色+类别已被记录（storage 有该 key），获得「奇策」
+//   并摸1或回复1（chooseDrawRecover）；否则选一种普通锦囊牌名记入 storage（chooseButton）。
+// 实现：在 owner 用普通锦囊后，以 key = suit*100+kind 记入 storage_map；
+//   若该 key 已记录 → 摸1；否则记入。
+//   **未覆盖**：(1) chooseButton 选记录牌名（自动记 key=1 占位，而非选牌名）；
+//   (2) 动态获得奇策（addTempSkills）；(3) chooseDrawRecover 的回复分支。
+//   if+HOST_EFFECT_EXT 条件分支已由 codegen 修复（patch_jumps_in_bytes）可用。
+//   差异记录于 docs/migration/upstream-1.11.5-delta.md。
+skill clanbaichu(4194820394) locked {
+  trigger card_used owner_source_ordinary_trick {
+    let key = card_attribute(event_card, 2) * 100 + card_attribute(event_card, 0);
+    if storage_get(self_skill, key) > 0 {
+      effect draw_cards(self, 1);
+    } else {
+      effect storage_set(self_skill, key, 1);
+    }
+  }
+}

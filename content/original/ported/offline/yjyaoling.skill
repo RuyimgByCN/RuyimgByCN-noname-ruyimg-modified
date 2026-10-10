@@ -1,0 +1,5 @@
+// yjyaoling：player:phase_play_end, 需选择目标, 多步骤。
+skill yjyaoling(3328690381) {
+  trigger phase_play_end owner_alive {
+  }
+}

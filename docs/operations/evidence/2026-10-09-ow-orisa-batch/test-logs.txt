@@ -1,0 +1,28 @@
+# U05 ow 纵切批十九测试日志（2026-10-09，奥丽莎强固，规则 v135→v136）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 457 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v135 基线 456 +1 新增强固回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 45 passed; 0 failed（44 既有 + 1 新增 orisa_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 134）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v135→v136 + qianggu_active
+零值字段入 canonical_hash——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- qianggu（usable:1 selectCard 2 → changeHujia(2)+addTempSkill qianggu2）
+- qianggu2（target useCardToBefore forced；使用者 chooseToDiscard basic
+  否则无效；至 phaseBegin）
+
+## 测试迭代记录
+- 守卫询问发生在攻击者回合：0 号收束需三次 NextPhase（Play→Discard→
+  End→收束）后 1 号才开局——NotYourTurn 两次修正
+- kernel.rs 与 engine.rs 的锚点混用（commit_phase 在 kernel）——分开落位

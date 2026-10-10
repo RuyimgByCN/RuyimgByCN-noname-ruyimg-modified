@@ -1,0 +1,8 @@
+// 俭吝（王荣）：任意角色弃置牌进入弃牌堆后，你可获得其中一张牌。
+// 旧 JS 的「弃牌堆任意一张获得」以获得弃牌堆一张牌近似（复用
+// choose_gain_discard_card_by_kind 通用管线，已注明）。
+skill mpjianlin(3760096848) {
+  trigger cards_moved owner_alive_other_discarded_in_discard_phase optional {
+    effect choose_gain_discard_card_by_kind(self, sha);
+  }
+}

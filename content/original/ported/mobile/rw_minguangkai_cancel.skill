@@ -1,0 +1,13 @@
+// rw_minguangkai_cancel（耀光铠）：锁定技，当你成为【火烧连营】、【火攻】或火【杀】的目标时，或即将被横置时，取消之。
+// 实现：`card_target_cancel(sha_fire) override 1` + `card_target_cancel(huogong)
+// override 1`（火杀/火攻不可指定）+ `link_loss_cancel override 1`（横置取消）。
+// 近似：【火烧连营】（huoshaolianying）目标取消缺专用选择器（fire-trick
+// 组合缺口 +1 例），未覆盖。
+// 修正：原「保真度债」注记经 2026-08-22 复核解冻——sha_fire/huogong 选择器
+// 与 link_loss_cancel 均已存在。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill rw_minguangkai_cancel(3033064688) locked {
+  modifier card_target_cancel(sha_fire) override 1;
+  modifier card_target_cancel(huogong) override 1;
+  modifier link_loss_cancel override 1;
+}

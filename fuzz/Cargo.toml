@@ -1,0 +1,65 @@
+[package]
+name = "noname-next-fuzz"
+version = "0.1.0"
+edition = "2021"
+authors = ["noname-next"]
+publish = false
+description = "libFuzzer harnesses for the deterministic core (architecture §37.7)"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+content-compiler = { path = "../crates/content-compiler" }
+content-schema = { path = "../crates/content-schema" }
+engine-api = { path = "../crates/engine-api" }
+engine-core = { path = "../crates/engine-core" }
+rule-vm = { path = "../crates/rule-vm" }
+libfuzzer-sys = "0.4"
+serde_json = "1"
+
+# Prevent this from being included in the default workspace build (it needs
+# nightly + cargo-fuzz; CI invokes it explicitly).
+[workspace]
+
+[[bin]]
+name = "fuzz_dsl_parser"
+path = "fuzz_targets/fuzz_dsl_parser.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_bytecode_module"
+path = "fuzz_targets/fuzz_bytecode_module.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_snapshot_decode"
+path = "fuzz_targets/fuzz_snapshot_decode.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_replay_decode"
+path = "fuzz_targets/fuzz_replay_decode.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_command_json"
+path = "fuzz_targets/fuzz_command_json.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_content_package"
+path = "fuzz_targets/fuzz_content_package.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_bytecode_verify"
+path = "fuzz_targets/fuzz_bytecode_verify.rs"
+test = false
+doc = false

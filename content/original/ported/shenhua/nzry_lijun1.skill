@@ -1,0 +1,7 @@
+// 立军·1（孙亮主公技辅助）：吴势力用杀后主公获牌。
+// 旧 JS 的「获牌」无对应原语；以其他角色用牌后摸一张近似（已注明）。
+skill nzry_lijun1(3096056888) {
+  trigger card_used owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

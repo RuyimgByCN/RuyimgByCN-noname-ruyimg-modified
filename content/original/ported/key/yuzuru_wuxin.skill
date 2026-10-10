@@ -1,0 +1,17 @@
+// 无心（音无）：回合结束时弃一张牌或令一名其他角色摸一张牌。
+// 上游 (key/skill.js:8303)：phaseJieshuBegin chooseCardTarget 二择一。
+// 实现：`phase_end owner_is_target optional` → 确认后 choose(1,2)：
+// 1 = discard_hand_equip_count(self,1)；2 = choose_other_draw_or_recover(self,1,0,1)。
+// 近似：弃牌为确定性前 1 张（上游手选）。
+// 2026-08-15 陈旧缺口清点批次（choose(1,2)/choose_other_draw_or_recover 早已可用）。
+skill yuzuru_wuxin(3940257990) {
+  trigger phase_end owner_is_target optional {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect discard_hand_equip_count(self, 1);
+    }
+    if option == 2 {
+      effect choose_other_draw_or_recover(self, 1, 0, 1);
+    }
+  }
+}

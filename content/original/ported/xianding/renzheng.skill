@@ -1,0 +1,7 @@
+// 仁政：锁定技，当伤害被取消/减少至0/受到伤害后（若伤害量被减少），你摸两张牌。
+// 以 damage_prevented 近似（仅覆盖伤害被防止/取消/归零，不覆盖减伤后仍造成伤害的情况）。
+skill renzheng(3495755850) locked {
+    trigger damage_prevented owner_is_target {
+        effect draw_cards(self, 2);
+    }
+}

@@ -1,0 +1,7 @@
+// cuijian：摸2牌。
+skill cuijian(3832074230) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    // 旧JS含复杂目标选择逻辑，已简化
+    effect choose_target_draw(self, 1, other);
+  }
+}

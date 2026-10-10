@@ -1,0 +1,7 @@
+// 界绝情：对其他角色造成非传导伤害前，可失去等量体力令伤害翻倍；
+// 该次失去体力结算完成后，永久改为“造成伤害视为等量失去体力”。
+skill rejueqing(4234607754) {
+  trigger damage_before owner_source_other_direct_damage_before optional {
+    effect lose_hp_double_current_damage_then_replace(self, 3481582878);
+  }
+}

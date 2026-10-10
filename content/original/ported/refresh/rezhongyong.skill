@@ -1,0 +1,6 @@
+// 界忠勇：将本次杀与所有响应闪一并交出，并按所得牌颜色结算后续奖励。
+skill rezhongyong(3348933734) {
+  trigger sha_resolved owner_source_sha_resolved_has_gainable_cards_and_recipient optional {
+    effect choose_gain_all_resolved_sha_shan_then_color_rewards(self, event_card);
+  }
+}

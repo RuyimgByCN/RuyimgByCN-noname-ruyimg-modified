@@ -1,0 +1,3 @@
+skill shixin(3071284185) locked {
+modifier damage_taken_cancel(fire) override 1;
+}

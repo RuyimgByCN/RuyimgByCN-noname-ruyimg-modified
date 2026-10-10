@@ -1,0 +1,18 @@
+// jsrgyaoyan（邀宴）：准备阶段，你可以令所有角色依次选择是否于回合结束时议事，若议事结果为：红色，你获得任意名未议事的角色各一张手牌；黑色，你可以对一名议事的角色造成2点伤害。
+// 实现（ADR 0645 延迟议事族，部分迁移）：`trigger phase_prepare
+// owner_is_target optional` → register_turn_end_debate(self, self_skill)
+// （ABI 663：选参与者登记为回合末议事名单）+
+// `trigger phase_end owner_is_target optional` →
+// resolve_turn_end_debates(self, self_skill)（对名单发议事）。
+// 近似（未建模）：①逐角色 chooseBool 同意→以发起者一次多选代替；
+// ②红分支「获任意名未议事者各一张手牌」需未议事集合原语；③黑分支
+// 「对一名议事者 2 伤」可后续加 debate_resolved 触发。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgyaoyan(3932516749) {
+  trigger phase_prepare owner_is_target optional {
+    effect register_turn_end_debate(self, self_skill);
+  }
+  trigger phase_end owner_is_target optional {
+    effect resolve_turn_end_debates(self, self_skill);
+  }
+}

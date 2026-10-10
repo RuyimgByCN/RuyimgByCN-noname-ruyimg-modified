@@ -1,0 +1,7 @@
+// 界遗计：每受到 1 点伤害后，可摸两张牌，再将至多两张当前手牌分配给其他角色。
+// 对齐 new_reyiji；使用 per_damage_point 过滤器与分配原语。
+skill reyiji(3725142879) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect draw_then_optionally_distribute_hand_cards(self, 2, 2);
+  }
+}

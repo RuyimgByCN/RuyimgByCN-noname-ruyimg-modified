@@ -1,0 +1,9 @@
+// 凉州（pxliangzhou，州郡技能）：你可以将一张黑色牌当【杀】使用。
+// 上游 (sp/skill.js:1572)：enable chooseToUse；viewAs = sha；filterCard = 黑色；
+// position = hes。实现：view_as sha play_phase black from hand_equip（手牌/装备区
+// 黑色牌当【杀】使用）。
+// 与上游差异：上游可用于「打出」响应，此处仅使用阶段（view_as 无 response 变体时
+// 以 play_phase 近似）；黑色牌包含锦囊（上游 position hes 同含）。
+skill pxliangzhou(2433321161) {
+  view_as sha play_phase black from hand_equip;
+}

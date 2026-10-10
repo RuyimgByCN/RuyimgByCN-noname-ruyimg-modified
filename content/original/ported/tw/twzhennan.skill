@@ -1,0 +1,11 @@
+// 镇南（TW鲍三娘）：一名角色使用普通锦囊牌指定第一个目标后，若目标数量大于 X 且
+// 包含你（X 为使用者的体力值，至少为 1），你可以对一名角色造成 1 点伤害。
+// 上游 (tw/skill.js:380-406)：useCardToPlayered + isFirstTarget + 目标数 > max(1,hp)
+// 且含自己的过滤 + chooseTarget 伤害。
+// 「首个目标时机 + 目标数与使用者体力值比较且含自己」无对应 trigger filter。
+// 诚实 noop（保真度债，ADR 0597）。与 sp 包 xinzhengnan 镇南机制相近但过滤条件不同。
+// 2026-08-15：随上游 v1.11.5 新武将 tw_baosanniang 移植。
+skill twzhennan(2965552389) locked {
+  // INTENTIONAL_EMPTY_NOOP: trick-target-count-vs-hp filter unavailable
+  modifier hand_limit add 0;
+}

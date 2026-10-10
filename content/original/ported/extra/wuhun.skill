@@ -1,0 +1,6 @@
+// 武魂（神关羽）
+skill wuhun(4260309017) locked {
+  trigger death owner_is_target_source_alive {
+    effect lose_hp(event_source, hp(event_source));
+  }
+}

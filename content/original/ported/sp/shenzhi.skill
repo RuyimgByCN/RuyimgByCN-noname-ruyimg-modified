@@ -1,0 +1,10 @@
+// SP 甘夫人「神智」：旧 JS 仅作语义来源；冻结手牌数后弃置全部手牌，再判断是否回复。
+skill shenzhi(2944037719) {
+  trigger phase_prepare owner_is_target_hand_nonempty optional {
+    let cards = hand_count(self);
+    effect discard_hand(self, 2147483647);
+    if hp(self) < cards + 1 {
+      effect recover_hp(self, 1);
+    }
+  }
+}

@@ -1,0 +1,8 @@
+// jsrgtuwei（突围）：魏势力技。出牌阶段开始时，你可以获得攻击范围内任意名角色各一张牌。然后此回合结束时，这些角色中未于本回合受到过伤害的角色依次获得你的一张牌。
+// 未建模：历史查询, 全局状态, addTempSkill, charlotte延迟, 势力技能, 攻击范围判断（DSL无对应原语）
+skill jsrgtuwei(3175728891) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgtuwei（skill.js:8474）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

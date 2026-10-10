@@ -1,0 +1,10 @@
+// 精艺（马钧）：锁定技。装备牌置入装备区后，摸与装备区牌数等量的牌，
+// 然后弃置两张手牌/装备牌。
+// 旧 JS 仅作语义证据；「每类装备副类别每回合一次」限制与 viewAs 子牌计数未建模，
+// 装备区牌数以 5 - 空装备栏近似。
+skill jingyi(2771636758) locked {
+  trigger card_used owner_alive_equip_used {
+    effect draw_cards(self, 5 - empty_equip_slots(self));
+    effect discard_hand_equip_count(self, 2);
+  }
+}

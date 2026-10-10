@@ -1,0 +1,20 @@
+// 躁厉（孙翊，锁定技）：你使用或打出牌后获得一枚“躁厉”标记（至多四枚）。
+// 你的回合开始时，若你有“躁厉”标记：弃置至少一张牌（可弃置全部），然后摸
+// （标记数+弃置牌数）张牌；若该总数大于 2，你失去 1 点体力。
+// 你的出牌阶段，你只能使用或打出本回合获得的牌。
+// 旧 JavaScript 仅作语义证据；标记结算由 ABI 446 resolve_zaoli 权威结算，
+// “仅可用本回合获得牌”由 hand_card_gained_this_turn_only 修饰符表达
+// （与 TW 孙翊的躁厉变体区分：本技能以标记驱动阶段开始结算）。
+skill zaoli(2486461241) locked {
+  trigger phase_begin owner_is_target {
+    if 0 < mark_count(self, 2486461241) {
+      effect resolve_zaoli(self, 0);
+    }
+  }
+  trigger card_used owner_is_source {
+    if mark_count(self, 2486461241) < 4 {
+      effect add_mark(self, 2486461241, 1);
+    }
+  }
+  modifier hand_card_gained_this_turn_only override 1;
+}

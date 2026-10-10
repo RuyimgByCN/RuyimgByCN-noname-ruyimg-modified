@@ -1,0 +1,5 @@
+// tyfansheng：觉醒技, 锁定技, player:dying, 多分支选择, 异步。
+skill tyfansheng(2596429073) {
+  trigger dying owner_alive {
+  }
+}

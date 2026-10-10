@@ -1,0 +1,8 @@
+// 魂尽（魔姜维）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：限定技：回合结束时你可以减少任意点体力上限并进行等量个额外回合，所有额外回合结束后你死亡
+// 旧 JS 的「chooseNumbers + 额外回合 + 死亡分支」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill pshunjin(3775947457) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

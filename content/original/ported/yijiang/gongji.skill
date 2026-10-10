@@ -1,0 +1,7 @@
+// 攻技（张让）：出牌阶段弃一张牌（若为装备牌则可再弃置一名其他角色一张牌），并获得一个一次性 buff。
+// 旧 JS 的分步交互（弃牌后可选继续目标弃牌）+临时技能授予无对应原语，暂留空定义。
+skill gongji(4016285307) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,15 @@
+// 3D精选 于禁「整军」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddzhengjun(2986915915) {
+  trigger damage owner_play_dddzhengjun_hp_available optional {
+    effect resolve_ddd_yujin(self, event_player, 0);
+  }
+  trigger hp_lost owner_play_dddzhengjun_hp_available optional {
+    effect resolve_ddd_yujin(self, event_player, 0);
+  }
+  trigger hp_recovered owner_play_dddzhengjun_hp_available optional {
+    effect resolve_ddd_yujin(self, event_player, 0);
+  }
+  trigger cards_moved owner_play_dddzhengjun_cards_moved_available optional {
+    effect resolve_ddd_yujin(self, event_player, 1);
+  }
+}

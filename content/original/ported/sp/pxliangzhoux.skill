@@ -1,0 +1,10 @@
+// 梁州（pxliangzhoux，州郡技能）：当你成为【杀】的目标后，使用者弃置一张牌。
+// 上游 (sp/skill.js:1711)：trigger target:useCardToTargeted；filter = sha 且使用者
+// 有 he 牌且存活；forced；content = event.targets[0].chooseToDiscard(he, forced)。
+// 实现：card_targeted + owner_targeted_by_other_sha（被其他角色【杀】指定为目标）→
+// choose_discard_target_card(self, event_source, hand_equip)（弃置使用者一张手牌/装备）。
+skill pxliangzhoux(2317213965) {
+  trigger card_targeted owner_targeted_by_other_sha optional {
+    effect choose_discard_target_card(self, event_source, hand_equip);
+  }
+}

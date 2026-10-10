@@ -1,0 +1,23 @@
+// 排异（refresh 钟会 gzpaiyi）：出牌阶段限一次，弃置一张「权」并选一名角色，
+// 其摸 X 张牌（X=剩余权数，最多 7）；若其手牌数多于你，其受到 1 点伤害。
+// 上游 (refresh/skill.js gzpaiyi)：enable phaseUse usable 1；chooseButton 选堆内
+// 单卡 + chooseTarget 任意角色；content loseToDiscardpile(选卡) + target.draw
+// (min(7, 剩余权数)) + 手牌比较伤害。
+// 实现（2026-09-10 第二百零二批·pile 内选卡弃置原语铸造，新原语
+// choose_one_from_skill_pile_discard(player, self_skill, pile_def)——tag 709 /
+// ABI 686 领号，选择续体 SelectCards 1/1）：
+// active play_phase targets 1 1 other → choose_one_from_skill_pile_discard
+// (self, self_skill, 3651179843) → choose_other_draw_or_recover(self,
+// skill_pile_count(self, 3651179843), 0, 1)（弃后剩余数）。
+// 升级（2026-09-10 第二百三十一批）：摸牌上限 7 已用 min(7, N) 表达清偿
+// （批 227 后 min() 表达式既有，weipo 先例）；②「其手牌多于你则受 1 点伤害」
+// 条件伤害未建模（目标手牌比较缺原语）；③「权」堆供给依赖 gzquanji 置入面
+// 落地（dormant 契约）。
+skill gzpaiyi(3781404802) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    if skill_pile_count(self, 3651179843) > 0 {
+      effect choose_one_from_skill_pile_discard(self, self_skill, 3651179843);
+      effect choose_other_draw_or_recover(self, min(7, skill_pile_count(self, 3651179843)), 0, 1);
+    }
+  }
+}

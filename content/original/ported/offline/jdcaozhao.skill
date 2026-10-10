@@ -1,0 +1,5 @@
+// jdcaozhao：音效名:caozhao, global:phase_play, 失去体力, 异步。
+skill jdcaozhao(3437099895) {
+  trigger phase_play owner_alive {
+  }
+}

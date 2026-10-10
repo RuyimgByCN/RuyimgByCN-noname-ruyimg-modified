@@ -1,0 +1,7 @@
+skill sidi3(3364392152) {
+  modifier sha_use_limit add -owner_skill_mark;
+  trigger phase_play_end owner_is_target {
+    effect remove_mark(self, 3364392152, 0);
+    effect remove_skill(self_skill);
+  }
+}

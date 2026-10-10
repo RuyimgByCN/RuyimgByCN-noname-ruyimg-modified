@@ -1,0 +1,6 @@
+// dcgumai：旧JS复杂效果。
+skill dcgumai(3541000719) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

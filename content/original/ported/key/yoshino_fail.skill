@@ -1,0 +1,3 @@
+skill yoshino_fail(3956929622) {
+  modifier card_target_cancel_from_current(any) override 1;
+}

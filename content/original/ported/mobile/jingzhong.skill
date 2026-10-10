@@ -1,0 +1,6 @@
+// jingzhong（敬重）：弃牌阶段结束时，若你于本阶段内弃置过至少两张黑色牌，则你可以选择一名其他角色并获得如下效果直到其回合结束：每阶段限三次，其于出牌阶段内使用的牌结算结束后，你获得此牌对应的实体牌。
+skill jingzhong(3362571121) {
+  trigger phase_discard_end owner_alive {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

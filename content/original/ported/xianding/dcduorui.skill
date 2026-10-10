@@ -1,0 +1,7 @@
+// 夺锐（DC 神张辽）：你造成伤害时，可令此伤害 -1。
+// 旧 JS 的“获得目标一个技能直到其下回合结束”未建模。
+skill dcduorui(2823548533) {
+  trigger damage_before owner_is_source optional {
+    effect modify_current_damage(self, -1);
+  }
+}

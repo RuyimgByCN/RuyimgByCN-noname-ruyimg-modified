@@ -1,0 +1,9 @@
+// 兴汉（刘禅·OL）：限定技。出牌阶段移去任意数量战法，改为获得等量指定战法（东风/巧骑），
+// 并获得等量「免消耗」标记（后续购买战法免消耗）。
+//
+// 战法（zhanfa）为完全自定义体系（含稀有度、购买、效果），DSL 无任何对应原语——空定义。
+skill olxinghan(3479764762) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

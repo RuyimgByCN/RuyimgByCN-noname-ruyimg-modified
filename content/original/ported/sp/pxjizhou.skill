@@ -1,0 +1,10 @@
+// 冀州（pxjizhou，州郡技能）：当你获得此技能后，你从牌堆中获得一张【万箭齐发】。
+// 上游 (sp/skill.js:1290)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// forced；content = gain(cardPile2("wanjian"))。
+// 实现：skill_added + owner_skill_added_self_2256193085 → gain_card_by_kind(self,
+// wanjian)（从牌堆/弃牌堆检索一张【万箭齐发】）。
+skill pxjizhou(2256193085) {
+  trigger skill_added owner_skill_added_self_2256193085 {
+    effect gain_card_by_kind(self, wanjian);
+  }
+}

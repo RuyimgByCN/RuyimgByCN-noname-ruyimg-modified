@@ -1,0 +1,6 @@
+// vtbyanli：global:dying, 摸牌, 回复体力, 加技能, 含子技能, 多步骤。
+skill vtbyanli(3706138123) {
+  trigger dying owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

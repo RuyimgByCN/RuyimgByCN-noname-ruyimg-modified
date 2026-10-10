@@ -1,0 +1,20 @@
+// 压军（崔琰）：出牌阶段开始时，若你手牌中有本回合获得的牌，你可选一张本回合
+// 新获得的牌与一名其他角色拼点；你赢则可将拼点牌置于牌堆顶，否则获得“戒”标记
+// （手牌上限减戒标记数；摸牌阶段多摸一张由 spyajun_draw 表达）。
+// 旧 JavaScript 仅作语义证据；选牌、拼点、置顶与标记由 ABI 428 resolve_spyajun
+// 权威结算，“弃置的两张拼点牌任选置顶”以“自己的拼点牌置顶”为文档化近似。
+skill spyajun(3556581945) {
+  trigger phase_play owner_alive_hand_gained_this_turn_can_compare_other optional {
+    effect resolve_spyajun(self, 3133511516, 0);
+  }
+}
+
+// 压军·戒：手牌上限减戒标记数。
+skill spyajun_less(3133511516) {
+  modifier hand_limit add -owner_skill_mark;
+}
+
+// 压军·势：摸牌阶段多摸一张（旧 JS 的 phaseDrawBegin2 num++）。
+skill spyajun_draw(2196336858) {
+  modifier draw_count add 1;
+}

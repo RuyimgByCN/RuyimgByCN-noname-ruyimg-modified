@@ -1,0 +1,12 @@
+// 迅势（dcsbxunshi）：锁定技，雷【杀】无距离、无次数限制；你造成雷【杀】伤害后，
+// 目标弃置一张手牌或装备区的牌，你摸两张牌。
+// 旧 JS 的「目标随机弃置」以目标自选弃一张近似。
+skill dcsbxunshi(4112740389) locked {
+  modifier card_use_unlimited(sha_thunder) override 1;
+  modifier card_distance_unlimited(sha_thunder) override 1;
+
+  trigger damage owner_source_thunder {
+    effect discard_one_hand_or_equip(event_player);
+    effect draw_cards(self, 2);
+  }
+}

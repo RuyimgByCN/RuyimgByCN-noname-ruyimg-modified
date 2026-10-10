@@ -1,0 +1,7 @@
+// 绝途（族荀淑/族荀爽/族荀绲/族荀靖/族荀彧/族荀谌/族荀衍/族荀悦）：锁定技。弃牌阶段改为：保留每种花色至多一张手牌弃掉其余；然后令一名角色弃一张手牌，若花色与你剩余手牌均不同则受1点伤害。
+// 旧 JS 的「弃牌阶段改写」「花色保留机制」「花色不匹配伤害」无对应原语。
+// 空定义：需 expansion 支持阶段改写和花色集合操作。
+skill clanjuetu(2228092802) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

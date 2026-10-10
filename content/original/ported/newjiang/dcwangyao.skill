@@ -1,0 +1,9 @@
+// 妄爻（王粲）：游戏开始时获得「爻」标记（阴阳爻）；其他角色使用【杀】或
+// 锦囊指定你为目标后，你可翻转一枚爻；两枚爻状态相同时你摸一张牌。
+// 旧 JS 的「阴阳爻双标记状态」无对应原语，未建模（已注明）；
+// 以成为其他角色用牌目标后摸一张近似保留收益。
+skill dcwangyao(2607402888) {
+  trigger card_targeted owner_targeted_by_other_card_once_per_turn optional {
+    effect draw_cards(self, 1);
+  }
+}

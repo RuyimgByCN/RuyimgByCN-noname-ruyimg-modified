@@ -1,0 +1,24 @@
+// 界将驰：出牌阶段开始时可取消，或选择摸一、摸二禁杀、弃一强化杀。
+skill xinjiangchi(3041318040) {
+  trigger phase_play owner_is_target {
+    effect choose_three_way_draw_or_discard_add_skill(
+      self, 2327944393, 3884080518
+    );
+  }
+}
+
+skill xinjiangchi_less(2327944393) {
+  modifier sha_use_cancel override 1;
+  modifier sha_response_cancel override 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}
+
+skill xinjiangchi_more(3884080518) {
+  modifier card_distance_unlimited(sha) override 1;
+  modifier sha_use_limit add 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

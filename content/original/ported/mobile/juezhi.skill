@@ -1,0 +1,6 @@
+// juezhi（爵制）：出牌阶段，你可以弃置至少两张牌，然后从牌堆中获得一张点数为Y的牌（Y为这些牌的点数和对13取余，余数为0时Y取13）。
+skill juezhi(3873951037) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

@@ -1,0 +1,4 @@
+// Zhurong predator
+skill lieren(90) {
+  modifier distance_from add -1;
+}

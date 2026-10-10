@@ -1,0 +1,23 @@
+// OL 魂姿（olhunzi）— OL/界孙坚觉醒技：准备阶段体力不大于 1 时，减 1 点体力上限，
+// 获得「英姿」（reyingzi）、「英魂」（gzyinghun），并授予本回合结束阶段的 olhunzi_effect。
+// 旧 JS（refresh/olhunzi）继承 SHENHUA「魂姿」的触发与 filter，仅覆盖 content：在父规则基础上
+// 额外 addTempSkill("olhunzi_effect")。这里直接发布完整规则（触发器复用 owner_is_target_hp_le_one
+// 过滤器），以 remove_skill 表达一次性觉醒；旧 JavaScript 不进入运行时。
+skill olhunzi(3768713377) locked {
+  trigger phase_prepare owner_is_target_hp_le_one {
+    effect remove_skill(self_skill);
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 2412932912);
+    effect add_skill(self, 2790748306);
+    effect add_skill_until_turn_end(self, 2816262560);
+  }
+}
+
+// OL 魂姿·效：本回合结束阶段，强制选择摸两张牌或回复一点体力。
+// 旧 JS（olhunzi 子技能 effect）：phaseJieshuBegin 时 chooseDrawRecover(2, true)。
+// 由 olhunzi 以 add_skill_until_turn_end 授予，回合结束自动移除。
+skill olhunzi_effect(2816262560) locked {
+  trigger phase_end owner_is_target {
+    effect choose_draw_or_recover(self, 2, 1, 0);
+  }
+}

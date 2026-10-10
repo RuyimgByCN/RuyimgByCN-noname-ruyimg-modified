@@ -1,0 +1,8 @@
+// 兴作·二（xingzuo2）：结束阶段开始时，可令一名角色将其手牌与牌堆底三张牌交换；
+// 若其手牌数 > 3，你失去1点体力。
+// 旧 JS 的「手牌换底」「体力流失cost」无对应原语，未建模。
+skill xingzuo2(2651024912) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xingzuo2 = 标记型技能（charlotte，skill.js:42835），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,10 @@
+// 还阴（族荀采）
+skill clanhuanyin(2722285495) locked {
+  trigger dying owner_is_target {
+    loop 4 {
+      if hand_count(self) < 4 {
+        effect draw_cards(self, 1);
+      }
+    }
+  }
+}

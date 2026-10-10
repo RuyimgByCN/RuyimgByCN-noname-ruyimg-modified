@@ -1,0 +1,4 @@
+// 兴棹：全场无人受伤或至少四人受伤时，来源伤害 +1。
+skill xinfu_xingzhao3(2896246690) locked {
+  modifier damage_amount add alive_wounded_count_zero_or_at_least_four;
+}

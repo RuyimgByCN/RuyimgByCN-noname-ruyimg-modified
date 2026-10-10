@@ -1,0 +1,19 @@
+// jsrgchushi（出师）：出牌阶段限一次。若你不为主公，你可以与主公议事。若结果为：红色，你与其各摸一张牌，若你与其手牌数之和小于7，重复此流程；黑色，当你于本轮内造成属性伤害时，此伤害+1。
+// 实现（部分迁移）：`active play_phase uses_per_turn 1` + body
+// `!owner_is_lord` 不可达（DSL 无 ! 运算符）——以 `owner_is_lord` 作为
+// 过滤的取反缺失，改走 start_debate_targets（选主公议事，Cont 272）+
+// `debate_resolved debate_owner_is_initiator_result_red` optional →
+// draw_cards(self, 1) + draw_cards(event_player, 1)（各摸一张）。
+// 近似（未建模）：①非主公门槛（取反不可达，改为可选发动自律）；②
+// 「手牌和<7 重复议事」循环（DSL 无 while——固定单轮展开）；③黑分支
+// 「本轮属性伤害+1」需轮内标记 modifier。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgchushi(3259850167) {
+  active play_phase uses_per_turn 1 {
+    effect start_debate_targets(self, self_skill);
+  }
+  trigger debate_resolved debate_owner_is_initiator_result_red optional {
+    effect draw_cards(self, 1);
+    effect draw_cards(event_player, 1);
+  }
+}

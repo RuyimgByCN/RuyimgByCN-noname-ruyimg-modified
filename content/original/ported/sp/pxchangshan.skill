@@ -1,0 +1,11 @@
+// 常山（pxchangshan，州郡技能）：当你获得此技能后，你从牌堆中获得两张【闪】。
+// 上游 (sp/skill.js:1338)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// forced；content = gain(cardPile2("shan") ×2)。
+// 实现：skill_added + owner_skill_added_self_4243325414 → gain_card_by_kind(self, shan)
+// ×2（每次从牌堆/弃牌堆检索一张【闪】）。
+skill pxchangshan(4243325414) {
+  trigger skill_added owner_skill_added_self_4243325414 {
+    effect gain_card_by_kind(self, shan);
+    effect gain_card_by_kind(self, shan);
+  }
+}

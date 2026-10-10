@@ -1,0 +1,11 @@
+// 龙跃：一名角色于一回合内首次使用普通锦囊牌时，你可令其摸一张牌。
+skill nslongyue(2643354275) {
+  trigger card_used owner_alive_source_first_card_ordinary_trick optional {
+    effect draw_cards(event_source, 1);
+  }
+}
+
+// 旧版仅含客户端 AI 排序与清理逻辑，权威规则为空。
+skill nslongyue_ai(3436136112) {
+  modifier hand_limit add 1;
+}

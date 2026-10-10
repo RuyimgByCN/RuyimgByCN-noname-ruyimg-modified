@@ -1,0 +1,5 @@
+// jdtaishi：觉醒技, 限定技, global:phaseBeginStart, 异步。
+skill jdtaishi(2786120224) {
+  trigger phase_begin owner_alive {
+  }
+}

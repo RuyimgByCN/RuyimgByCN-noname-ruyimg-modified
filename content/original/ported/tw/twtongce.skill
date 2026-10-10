@@ -1,0 +1,20 @@
+// 通策（幻法正）：游戏开始时，你获得〖遗计〗，你可令一名其他角色交给你一张牌
+// 并获得〖遗计〗。
+// 上游 (tw/skill.js twtongce)：forced；trigger player enterGame + global
+// phaseBefore（开局窗口）；content = 自身 addSkills(遗计) + chooseTarget(其他角色，
+// 可取消) → 其交给你一张牌（he，若有）→ 其 addSkills(遗计)。
+// 实现（2026-09-03 第一百五十一批·零新原语重写）：
+// game_started 触发（等价开局窗口，xiaoxi 先例）+ add_skill(self, 遗计def) +
+// choose_other_add_skill(self, 遗计def)（ABI 675 选其他角色授指定技，批 150 确认
+// 正向语义；选择可取消与上游一致）。
+// 近似：①交牌臂（其交给你一张牌）无「选定角色交牌」通用原语，省略；
+// ①′choose_other_add_skill 目标选择为强制（resolver 拒收 cancelled，与原消费者
+// hfjieying 语义一致），上游 chooseTarget 可取消；
+// ②被授〖遗计〗本体当前为诚实 noop（转换技分支债，twyishi 同池）——授予关系
+// 真实，本体重写后自动生效。
+skill twtongce(2501855754) {
+  trigger game_started owner_alive {
+    effect add_skill(self, 4055710510);
+    effect choose_other_add_skill(self, 4055710510);
+  }
+}

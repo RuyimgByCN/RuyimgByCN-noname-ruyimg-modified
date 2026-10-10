@@ -1,0 +1,7 @@
+// 印技（伊莉雅）：锁定技，出牌阶段开始时，将手牌摸至17张并加标记；有标记的牌不可使用。
+// 旧 JS 的「drawTo+gaintag禁止使用 modifier」需手牌标记+使用禁止原语，未建模。
+skill iriya_yinji(2532336475) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 iriya_yinji = 标记型技能（charlotte，skill.js:3055），无规则面。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

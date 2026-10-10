@@ -1,0 +1,6 @@
+// 界英姿
+// 原语义：摸牌阶段额定摸牌数加一，手牌上限的基数改为体力上限。
+skill reyingzi(2412932912) locked {
+  modifier draw_count add 1;
+  modifier hand_limit_base_max_hp override 1;
+}

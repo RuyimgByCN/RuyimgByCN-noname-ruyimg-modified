@@ -1,0 +1,4 @@
+// 桐油百韧甲：防具有效时，未横置的拥有者不能被横置。
+skill rw_tengjia3(4247798542) locked {
+  modifier armor_link_gain_cancel override 1;
+}

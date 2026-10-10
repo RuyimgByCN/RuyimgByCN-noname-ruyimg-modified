@@ -1,0 +1,8 @@
+// 守户（凌烈）：出牌阶段限一次，你视为对一名其他角色使用一张无距离限制的【杀】。
+// 旧 JS 的“结算后本回合你与其计算距离+1”、“若其因此濒死你摸体力上限张牌”、
+// “本阶段有角色进入你的攻击范围时此技能视为未发动过”未建模。
+skill dcshouhu(3777360870) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

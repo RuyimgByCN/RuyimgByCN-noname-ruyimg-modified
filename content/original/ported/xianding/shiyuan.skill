@@ -1,0 +1,12 @@
+// 势援：你成为其他角色使用牌的目标后：若伤害来源的体力值大于你，摸三张牌；否则摸一张牌。
+// 旧 JS 的“摸 (2 + sgn(来源体力 - 你的体力)) 张”以 3/1 两档近似；
+// “当前回合角色是群势力且你拥有隅泣时每回合至多两次”省略。
+skill shiyuan(4115301600) {
+  trigger card_targeted owner_is_target_other_source_alive optional {
+    if hp(self) < hp(event_source) {
+      effect draw_cards(self, 3);
+    } else {
+      effect draw_cards(self, 1);
+    }
+  }
+}

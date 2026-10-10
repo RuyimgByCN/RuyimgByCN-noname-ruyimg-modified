@@ -1,0 +1,9 @@
+// sppanqin
+// 触发事件：useCard, phaseUseEnd, phaseDiscardEnd
+// sppanqin：上游有真实规则体，现有 host filter/effect 不足以表达
+// （chooseToUse / gaintag / expansion / 额外回合 / 判定改判 / 阶段插入 / 动态 view_as）。
+// 诚实空实现（保真度债，ADR 0597）。旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill sppanqin(3787455612) {
+  // INTENTIONAL_EMPTY_NOOP: existing primitives cannot express the old-JS contract
+  modifier hand_limit add 0;
+}

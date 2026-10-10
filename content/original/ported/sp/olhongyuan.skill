@@ -1,0 +1,11 @@
+// 弘援（olhongyuan）：你一次性获得或失去至少两张牌后，可弃置一张牌令一名其他角色摸一张牌。
+// 上游 (sp/skill.js:22979)：gainAfter/loseAsyncAfter，filter = 获得/失去 ≥2 张且 blocker 未挂；
+// content = 挂 blocker（本回合不能再发动），选至多两名其他角色各给一张牌。
+// 实现：cards_moved owner_gained_or_lost_at_least_two optional → choose_give_hand_equip_to_event_player(self)。
+// 与上游差异：上游至多两名目标、每名一张牌，DSL 单目标单张近似；blocker 每回合一次未建模；
+// event_player 为牌移动玩家（与上游 trigger.player 一致），已注明。
+skill olhongyuan(2470217214) {
+  trigger cards_moved owner_gained_or_lost_at_least_two optional {
+    effect choose_give_hand_equip_to_event_player(self);
+  }
+}

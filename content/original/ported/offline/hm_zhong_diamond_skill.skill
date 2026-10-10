@@ -1,0 +1,6 @@
+// 【众】装备技：受到伤害后摸两张牌。
+skill hm_zhong_diamond_skill(2520096911) locked {
+  trigger damage owner_is_target_once {
+    effect draw_cards(self, 2);
+  }
+}

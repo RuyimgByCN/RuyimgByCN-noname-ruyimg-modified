@@ -1,0 +1,7 @@
+// 界乱武：先结算经典乱武；结算完成后可无距离限制使用一张虚拟【杀】。
+skill reluanwu(2626196598) {
+  active play_phase once_per_game {
+    effect force_others_use_sha_on_nearest_or_lose_hp(self);
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

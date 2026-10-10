@@ -1,0 +1,5 @@
+// zj_jieyi：global:game_started, 需选择目标, 二选一, 失去体力, 加技能, 异步。
+skill zj_jieyi(4190186405) {
+  trigger game_started owner_alive {
+  }
+}

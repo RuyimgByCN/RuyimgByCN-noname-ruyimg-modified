@@ -1,0 +1,7 @@
+// 绍威（威关银屏）：每回合每项限一次。失去方片后随机获得至多三张牌堆红牌；
+// 失去红桃后回复 1 点体力并恢复一个已废除装备栏。
+skill dcshaowei(3440541593) {
+  trigger cards_moved owner_is_target {
+    effect resolve_dcshaowei(self, 0);
+  }
+}

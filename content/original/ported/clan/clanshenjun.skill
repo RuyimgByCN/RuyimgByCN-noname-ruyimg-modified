@@ -1,0 +1,18 @@
+// 神君（族杨修/族杨彪/族杨赐/族杨忠）：锁定技。有角色使用【杀】或锦囊牌时，若你
+// 手牌中有同名牌，展示之（gaintag 标记）；本阶段结束时可将这些牌当展示牌中的一张
+// 使用。
+// 上游 (clan/skill.js): trigger useCard forced; filter=「手牌有同名牌」;
+// content=showCards(同名牌) + addGaintag; 触发阶段结束时 view_as 使用。
+// 实现：同名牌以 effective_card_kind 相等近似（基础牌名与类别一一对应，转化牌取
+// 生效类别）；gaintag 用技能 def id；「本阶段结束时」近似为拥有者自己的出牌阶段
+// 结束（phase_end owner_is_target 可选触发 + 有标记牌过滤）。使用走普通用牌管线
+// （play_as_kind），目标选择后按牌自身规则结算；「当展示牌中的一张使用」因同名牌
+// 即同类别，等价于按自身类别使用。差异已记录于 docs/migration/upstream-1.11.5-delta.md。
+skill clanshenjun(2483457953) locked {
+  trigger card_used owner_alive_hand_same_kind_event_card {
+    effect clanshenjun_reveal(self, event_card, self_skill);
+  }
+  trigger phase_end owner_alive_has_skill_tagged_cards {
+    effect clanshenjun_use(self, self_skill);
+  }
+}

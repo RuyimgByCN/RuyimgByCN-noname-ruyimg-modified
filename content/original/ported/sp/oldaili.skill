@@ -1,0 +1,6 @@
+// oldaili：触发+修改技（cards_drawn）
+skill oldaili(2359295672) locked {
+  trigger cards_drawn owner_alive {
+    effect turn_over(self);
+  }
+}

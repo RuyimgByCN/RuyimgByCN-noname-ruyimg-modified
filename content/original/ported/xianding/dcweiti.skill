@@ -1,0 +1,15 @@
+// 伪涕（吴质）：出牌阶段限两次，选择一项令一名角色执行：
+// 1. 受到 1 点伤害并随机获得两张与其手牌点数均不同的牌；2. 回复 1 点体力并弃置两张点数不同的牌。
+// 旧 JS 的“点数不同”选牌约束未建模，以摸两张牌近似。
+skill dcweiti(2856634800) {
+  active play_phase uses_per_turn 2 {
+    let pick = choose(0, 1);
+    if pick == 0 {
+      effect choose_other_damage(self, 1);
+      effect draw_cards(self, 2);
+    }
+    if pick == 1 {
+      effect choose_other_recover(self, 1);
+    }
+  }
+}

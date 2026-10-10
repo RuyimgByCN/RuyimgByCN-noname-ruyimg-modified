@@ -1,0 +1,8 @@
+// 覆秦（项羽）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：出牌阶段开始：摸 1+牌堆与场上 13 点牌数张牌，本阶段使用的前 N 张牌无次数限制
+// 旧 JS 的「牌堆点数查询 + cardUsable 无限临时技」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill pefuqin(3321642760) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

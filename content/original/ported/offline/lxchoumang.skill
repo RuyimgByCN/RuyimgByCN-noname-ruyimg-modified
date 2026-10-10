@@ -1,0 +1,8 @@
+// 仇铓（文钦）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：你使用【杀】指定目标后，可三选一：伤害+1 / 令一名其他角色成为额外目标 / 全部执行并废除一个装备栏
+// 旧 JS 的「背水选择 + 额外目标」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxchoumang(3626921231) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

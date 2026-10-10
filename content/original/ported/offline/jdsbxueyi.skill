@@ -1,0 +1,5 @@
+// jdsbxueyi：音效名:sbxueyi, 锁定技, global:card_used, global:respondAfter, 加技能, 含子技能, 异步, 条件计数。
+skill jdsbxueyi(4238768172) locked {
+  trigger card_used always {
+  }
+}

@@ -1,0 +1,6 @@
+// pezhenguan：锁定技, global:game_started, global:roundEnd, 需选择目标, 摸牌, 异步, 条件计数。
+skill pezhenguan(3092614427) {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

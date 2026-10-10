@@ -1,0 +1,18 @@
+// 苦谏：交给一名其他角色至多三张手牌并追踪实体牌；其使用/打出时双方摸牌，其他失去时双方弃牌。
+skill twkujian(2903587563) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 3 {
+    effect resolve_twkujian(self, event_source, 0);
+  }
+  trigger card_used owner_alive_other_twkujian_used_or_responded {
+    effect resolve_twkujian(self, event_source, 1);
+  }
+  trigger card_responded owner_alive_other_twkujian_used_or_responded {
+    effect resolve_twkujian(self, event_source, 1);
+  }
+  trigger cards_moved owner_alive_other_twkujian_used_or_responded {
+    effect resolve_twkujian(self, event_source, 1);
+  }
+  trigger cards_moved owner_alive_other_twkujian_lost {
+    effect resolve_twkujian(self, event_source, 2);
+  }
+}

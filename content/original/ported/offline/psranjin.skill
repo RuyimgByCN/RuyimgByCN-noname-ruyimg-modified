@@ -1,0 +1,8 @@
+// 燃尽（神姜维）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：限定技：回合结束时执行一个使用牌无次数限制的额外回合；其结束时若你杀死过其他角色重新发动，否则你死亡
+// 旧 JS 的「额外回合缺口（ADR 0646）+ 死亡分支」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill psranjin(3527102136) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

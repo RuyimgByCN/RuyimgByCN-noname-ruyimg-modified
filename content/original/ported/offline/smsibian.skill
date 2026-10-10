@@ -1,0 +1,5 @@
+// smsibian：觉醒技, 锁定技, player:phaseBegin, 异步。
+skill smsibian(2885061226) {
+  trigger phase_any_end owner_alive {
+  }
+}

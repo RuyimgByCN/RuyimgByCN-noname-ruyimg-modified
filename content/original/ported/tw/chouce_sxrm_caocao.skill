@@ -1,0 +1,6 @@
+// 来源：archive/upstream/noname legacy-source/character/character/tw/skill.js L29561
+skill chouce_sxrm_caocao(3218932758) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 chouce_sxrm_caocao = 标记型技能（audio-only，skill.js:29561），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

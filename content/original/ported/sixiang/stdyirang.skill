@@ -1,0 +1,7 @@
+// 揖让：准备阶段开始时，将所有手牌交给手牌数最大的角色，然后摸等同于给出牌中不同类别数的牌。
+// 旧 JS 的「交给所有手牌」「按不同类别数摸牌」「选择手牌数最大的目标」均为复杂流程，无可用的 DSL 原语。
+skill stdyirang(2186586220) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

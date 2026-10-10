@@ -1,0 +1,14 @@
+// 卯兔：任意角色脱离濒死后，直到拥有者下个回合开始，体力不低于拥有者的其他角色
+// 不能对其使用牌。辅助技能只保存确定性的生命周期与通用目标修正器。
+skill olmaotu(2889501326) locked {
+  trigger dying_after owner_alive {
+    effect add_skill(self, 3563166419);
+  }
+}
+
+skill olmaotu_effect(3563166419) locked {
+  modifier card_target_cancel_if_other_user_hp_gte_target override 1;
+  trigger phase_begin owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

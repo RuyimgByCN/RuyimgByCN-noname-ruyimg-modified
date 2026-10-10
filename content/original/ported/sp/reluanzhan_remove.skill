@@ -1,0 +1,14 @@
+// 乱战·减（reluanzhan_remove）：你使用【杀】或黑色锦囊牌指定首个目标后，若目标数
+// 未达标记数，移除 ceil(标记数/2) 枚「乱战」标记。
+// 上游 (sp/skill.js:30610)：useCardToPlayered，filter = isFirstTarget 且（杀 或 黑锦囊）
+// 且标记>0 且非多目标锦囊 且 目标数<标记数；content = removeMark(ceil(count/2))。
+// 实现：card_targeted + owner_source_sha_or_black_trick_mark_positive_4251489811
+// （复用 batch L 参数化过滤器）→ remove_mark(self, 4251489811, 标记半数)。
+// 与上游差异：ceil/2 无 DSL 除法原语，近似移除全部标记（安全上界，行为更强）；
+// 「目标数<标记数」「首个目标」门槛未建模，已注明。
+skill reluanzhan_remove(2198542863) {
+  trigger card_targeted owner_source_sha_or_black_trick_mark_positive_4251489811 {
+    let marks = mark_count(self, 4251489811);
+    effect remove_mark(self, 4251489811, marks);
+  }
+}

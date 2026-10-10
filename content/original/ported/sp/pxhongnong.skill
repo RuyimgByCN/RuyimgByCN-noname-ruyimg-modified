@@ -1,0 +1,12 @@
+// 弘农（pxhongnong，州郡技能）：当你获得此技能后，你可以重铸任意张装备牌并回复
+// 1 点体力。
+// 上游 (sp/skill.js:2303)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且有可重铸装备；content = chooseCard(equip, 可选) → recast → recover。
+// 实现：skill_added + owner_skill_added_self_4043252708 → 可选确认 →
+// recover_hp(self, 1)。
+// 与上游差异：装备重铸环节未建模（无「选装备重铸」原语），仅回复 1 点体力。
+skill pxhongnong(4043252708) {
+  trigger skill_added owner_skill_added_self_4043252708 optional {
+    effect recover_hp(self, 1);
+  }
+}

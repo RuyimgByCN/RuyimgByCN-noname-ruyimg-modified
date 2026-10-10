@@ -1,0 +1,9 @@
+// 锻体（界左慈·锁定技）：摸牌阶段摸牌后，受到1点无来源伤害。
+// 旧JS还有chengxiangShowBegin时根据体力上限/下限从牌堆检索特定牌展示的派生效果，
+// 该部分无DSL对应原语（需card_pile_search_by_subtype），未建模（已注明）。
+// 以精准保留摸牌→自伤核心惩罚。伤害以lose_hp近似（无来源伤害≈体力流失）。
+skill strongduanti(4054950640) locked {
+  trigger phase_draw owner_alive {
+    effect lose_hp(self, 1);
+  }
+}

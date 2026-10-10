@@ -1,0 +1,8 @@
+// 接缨（神刘备）：结束阶段，你横置一名其他角色，然后令所有已横置的角色各摸一张牌。
+// 旧 JS 的“锁定技，你始终处于横置状态”与“已横置角色手牌上限+2”未建模。
+skill dcjieying(3849335872) {
+  trigger phase_end owner_is_target optional {
+    effect choose_link_other(self);
+    effect draw_linked_players(1);
+  }
+}

@@ -1,0 +1,6 @@
+// 菜筐·判定区（菜筐系）：将判定区唯一牌当任意牌使用。
+// 旧 JS 的「判定区唯一牌转化」无对应原语，未建模（已注明）。
+skill recaiwang_judge(3245153079) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

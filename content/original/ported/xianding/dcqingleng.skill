@@ -1,0 +1,8 @@
+// 清棱（董?）：你成为其他角色使用黑色牌的目标后，可弃置一名角色一张牌。
+// 旧 JS 的“若弃置的牌为装备牌则该黑色牌对你无效 / 不为装备牌则令你下次〖酖毒〗使用牌
+// 可视为使用此黑色牌”分支未建模（酖毒联动依赖记录机制）。
+skill dcqingleng(2507120853) {
+  trigger card_targeted owner_is_target_nonred_card optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

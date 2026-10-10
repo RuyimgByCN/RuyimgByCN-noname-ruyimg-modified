@@ -1,0 +1,9 @@
+// 烈骧（SP 刘备）：出牌阶段限一次，摸至多五张牌，然后对一名其他角色造成 1 点伤害。
+// 旧 JS 的“摸至多五张”以摸五张近似、手牌数比较三分支（伤害/获牌/失体）与
+// “本回合出【杀】次数+1、可交给角色至多 X 张牌”等联动未建模。
+skill dcliexiang(3778727333) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 5);
+    effect choose_targets_damage(self, 1, 1, other, 1);
+  }
+}

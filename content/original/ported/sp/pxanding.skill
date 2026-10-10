@@ -1,0 +1,11 @@
+// 安定（pxanding，州郡技能）：锁定技，当你受到因传导（铁索连环）造成的属性伤害时，
+// 防止之。
+// 上游 (sp/skill.js:2909)：trigger player:damageBegin4；filter = hasNature() &&
+// !notLink()（传导属性伤害）；forced；content = trigger.cancel()。
+// 实现：damage_before + owner_is_target_chain_damage_linked（传导伤害触发）→
+// prevent_current_damage()。
+skill pxanding(3330093204) locked {
+  trigger damage_before owner_is_target_chain_damage_linked {
+    effect prevent_current_damage();
+  }
+}

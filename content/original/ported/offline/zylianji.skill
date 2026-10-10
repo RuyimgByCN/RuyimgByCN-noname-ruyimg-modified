@@ -1,0 +1,21 @@
+// 连计（zj 系）：出牌阶段结束时，若本阶段使用过牌（类别数≥1），你令一名
+// 角色摸一张牌；若本阶段使用过≥2 类别牌且你受伤，你回复 1 点体力；若使用过
+// ≥3 类别牌，你跳过本回合剩余阶段并令一名其他角色执行一个仅含剩余阶段的
+// 额外回合。上游 offline_piracyE_zy.js zylianji（phaseUseEnd + getHistory
+// 类别数递进）。
+// 实现（第一百一十九批·§6 S2）：
+// `phase_play_end owner_alive_play_end_used_categories_positive optional` →
+// choose_other_draw_or_recover(self,1,0,1)（令一名角色摸 1）+
+// skip_remaining_phases(self, 20=Draw|Discard, self_skill)（跳自己剩余）+
+// queue_extra_phases(self, 8, self_skill)（仅 Play 的额外回合）。
+// 近似：①三段递进合并为单次触发（摸1+跳剩余+仅Play额外回合，原「受伤回复」
+// 与「≥3 才跳」档位未建模）；②额外回合为仅 Play 的裁剪回合。
+// 新过滤器 `owner_alive_play_end_used_categories_positive`（5 处注册）：读
+// 引擎既有 play_card_category_history 位掩码（CardUsed 路径自动记录）。
+skill zylianji(4062778093) {
+  trigger phase_play_end owner_alive_play_end_used_categories_positive optional {
+    effect choose_other_draw_or_recover(self, 1, 0, 1);
+    effect skip_remaining_phases(self, 20, self_skill);
+    effect queue_extra_phases(self, 8, self_skill);
+  }
+}

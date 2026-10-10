@@ -1,0 +1,7 @@
+// spwanggui：摸?牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill spwanggui(3884796936) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

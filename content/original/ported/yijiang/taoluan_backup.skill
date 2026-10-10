@@ -1,0 +1,6 @@
+// 滔乱后备：旧 JS 为空对象，viewAs backup 标记。
+skill taoluan_backup(4289683031) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

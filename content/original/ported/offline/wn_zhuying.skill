@@ -1,0 +1,5 @@
+// wn_zhuying：锁定技, global:phase_end, 异步。
+skill wn_zhuying(3782511013) {
+  trigger phase_end owner_alive {
+  }
+}

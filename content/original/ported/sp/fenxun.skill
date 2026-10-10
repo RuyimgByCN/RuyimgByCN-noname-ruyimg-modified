@@ -1,0 +1,16 @@
+// 奋迅（SP 包）：出牌阶段限一次，弃置一张手牌或装备牌，令一名其他角色本回合内
+// 你对其使用【杀】无视距离。
+// 旧 JavaScript 以 fenxun2 标记「到标记角色距离视为 1」；DSL 以
+// add_skill_until_turn_end + card_distance_unlimited(sha) 近似（本回合杀无视距离）。
+skill fenxun(3362200043) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_he 1 1 {
+    effect discard_selected(self);
+    effect add_skill_until_turn_end(self, 3152146054);
+  }
+}
+skill fenxun2(3152146054) {
+  modifier card_distance_unlimited(sha) override 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

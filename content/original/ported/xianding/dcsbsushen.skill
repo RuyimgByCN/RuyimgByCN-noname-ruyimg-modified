@@ -1,0 +1,7 @@
+// 苏慎（dcsbsushen）：限定技，出牌阶段，获得「覆谋」（dcsbrushi）并记录当前状态。
+// 旧 JS 的「记录手牌数/体力/覆谋状态」省略；「覆谋」本身为未建模空壳（仅授予）。
+skill dcsbsushen(3864585121) {
+  active play_phase once_per_game {
+    effect add_skill(self, 4089348607);
+  }
+}

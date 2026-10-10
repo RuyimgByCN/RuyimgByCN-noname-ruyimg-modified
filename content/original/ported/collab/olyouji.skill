@@ -1,0 +1,3 @@
+skill olyouji(2389723895) locked {
+  modifier draw_count add round_number_capped_five;
+}

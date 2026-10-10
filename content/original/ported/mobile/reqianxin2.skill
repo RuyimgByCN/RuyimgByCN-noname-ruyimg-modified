@@ -1,0 +1,6 @@
+// reqianxin2（见 translate.js）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill reqianxin2(2524736472) locked {
+  trigger phase_prepare owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

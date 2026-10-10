@@ -1,0 +1,9 @@
+// 赛马（田忌）：使用坐骑牌或宝物牌后，可与一名角色拼点三次，获胜两场以上
+// 则对其造成 1 点伤害。
+// 旧 JS 的「三次拼点 + 二胜条件」无对应原语；以使用装备后摸一张近似
+// （拼点与伤害未建模，已注明）。
+skill dcsaima(3614564652) {
+  trigger card_used owner_alive_equip_used optional {
+    effect draw_cards(self, 1);
+  }
+}

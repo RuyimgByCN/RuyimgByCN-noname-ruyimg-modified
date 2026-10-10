@@ -1,0 +1,4 @@
+// 一将成名：禁酒。旧 JS 中对应的 use/respond 触发仅播放音效，规则语义全部在 cardname modifier。
+skill jinjiu(2885443165) locked {
+  modifier card_name(jiu) override sha;
+}

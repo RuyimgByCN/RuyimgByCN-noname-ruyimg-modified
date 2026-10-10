@@ -1,0 +1,9 @@
+// 连枝（董贵人）②：每回合限一次，你进入濒死状态时，回复 1 点体力并摸一张牌。
+// 旧 JS 为“与连枝①所选角色各摸一张牌”——连枝①（游戏开始秘密选角）与③
+// （连枝角色死亡后授予受责）未建模；此处简化为自己回 1 体并摸 1 张。
+skill dclianzhi(2871252462) {
+  trigger dying owner_is_target optional {
+    effect recover_hp(self, 1);
+    effect draw_cards(self, 1);
+  }
+}

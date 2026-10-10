@@ -1,0 +1,7 @@
+// 蛊惑·猜（于吉系辅助）：蛊惑前记录牌名。
+// 旧 JS 的 storage 记录无对应原语，未建模（已注明）。
+skill guhuo_guess(2154436165) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

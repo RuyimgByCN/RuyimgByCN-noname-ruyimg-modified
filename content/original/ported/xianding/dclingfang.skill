@@ -1,0 +1,10 @@
+// 绞（董贵人）：锁定技，准备阶段或成为非红牌目标时，获得 1 枚“绞”标记。
+// 旧 JS 的“自己使用黑色牌且非目标”分支未建模。
+skill dclingfang(3884646990) locked {
+  trigger phase_prepare owner_is_target {
+    effect add_mark(self, 3884646990, 1);
+  }
+  trigger card_targeted owner_is_target_nonred_card {
+    effect add_mark(self, 3884646990, 1);
+  }
+}

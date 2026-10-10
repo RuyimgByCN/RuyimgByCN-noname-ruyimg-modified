@@ -1,0 +1,4 @@
+// Skill fankui3(127) - standard variant
+skill fankui3(127) {
+  modifier distance_from add -1;
+}

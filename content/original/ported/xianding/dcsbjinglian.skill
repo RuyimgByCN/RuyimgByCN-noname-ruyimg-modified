@@ -1,0 +1,10 @@
+// 精练（新杀谋钟会）：每个回合结束时（global phaseEnd），若你本回合至少失去过两张牌，
+// 可摸三张；若摸到装备或多目标锦囊可弃之并对等量其他角色各造成 1 点伤害。
+// 旧 JS 仅作语义证据。
+// 门槛：owner_alive_phase_end_lost_cards_at_least_two（回合失牌计数 ≥ 2，任意座位 phase_end）。
+// 仍近似：弃装备/多目标锦囊造成伤害分支未建模（仅摸三张）。
+skill dcsbjinglian(3379088720) {
+  trigger phase_end owner_alive_phase_end_lost_cards_at_least_two optional {
+    effect draw_cards(self, 3);
+  }
+}

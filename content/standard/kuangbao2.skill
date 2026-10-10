@@ -1,0 +1,4 @@
+// Skill kuangbao2(148) - standard variant
+skill kuangbao2(148) {
+  modifier distance_from add -1;
+}

@@ -1,0 +1,5 @@
+// 怀资（糜竺）
+// 原语义：手牌上限的基数改为体力上限。
+skill huaizi(4199126566) locked {
+  modifier hand_limit_base_max_hp override 1;
+}

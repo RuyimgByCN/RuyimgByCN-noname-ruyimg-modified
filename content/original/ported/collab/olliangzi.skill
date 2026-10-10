@@ -1,0 +1,6 @@
+// 梁姿（OL乐曹丕）：锁定技，装备牌只能当【酒】使用；每回合前 X 张酒无次数限制（X=魏势力数）。
+// 近似：装备当酒；无次数限制与势力计数未建模。
+skill olliangzi(2161294289) locked {
+  view_as jiu play_phase any from equip;
+  view_as jiu response any from equip;
+}

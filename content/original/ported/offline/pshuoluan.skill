@@ -1,0 +1,5 @@
+// 惑乱：群势力拥有者与蜀势力角色互相造成的伤害均增加一点。
+skill pshuoluan(3905746106) locked {
+  modifier damage_amount add owner_qun_other_shu;
+  modifier damage_taken_amount add owner_qun_other_shu;
+}

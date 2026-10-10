@@ -1,0 +1,8 @@
+// 力让（张让系）：出牌阶段限一次，弃置所有手牌，然后摸等量牌。
+// 旧 JS 的「弃置所有手牌」以 discard_all_hand_and_equip 表达。
+skill splirang(3366695549) {
+  active play_phase uses_per_turn 1 select_hand 1 255 {
+    effect discard_selected(self);
+    effect draw_selected(self);
+  }
+}

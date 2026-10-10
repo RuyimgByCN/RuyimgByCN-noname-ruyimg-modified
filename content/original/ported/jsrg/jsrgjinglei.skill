@@ -1,0 +1,7 @@
+// jsrgjinglei（惊雷）：准备阶段，你可以选择一名其他角色Ａ，然后选择任意名手牌数之和小于Ａ的角色，令这些角色依次对Ａ造成１点雷属性伤害。
+skill jsrgjinglei(2695101489) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgjinglei（skill.js:1373）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

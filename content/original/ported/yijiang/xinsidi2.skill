@@ -1,0 +1,10 @@
+// 新死地2：记录颜色并禁止使用/打出/救回对应颜色牌（card_color_lock 状态由
+// choose_discard_matching_equip_color_add_skill 写入）；出牌阶段结束时若未出杀
+// 则自动使用虚拟杀，然后自移除。
+skill xinsidi2(3172356775) {
+  modifier card_action_cancel_for_skill_color_mask override 1;
+  trigger phase_play_end owner_is_target {
+    effect use_virtual_sha_from_card_color_lock_source_if_no_sha(self);
+    effect remove_skill(self_skill);
+  }
+}

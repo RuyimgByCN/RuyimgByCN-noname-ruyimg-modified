@@ -1,0 +1,164 @@
+// 2026-09-24 审查探针源码存档（均为临时测试文件，运行后删除；输出见 experiments.log）。
+// 复现：把对应段落存为 crates/engine-native/tests/<名>.rs（探针一放在隔离副本 <iso>/tests/），
+// 运行 experiments.log 中的命令。
+
+// ===== 探针一：<iso>/tests/probe_review.rs（旧代码，出牌阶段主动使用只能响应的牌）=====
+//! 审查探针（隔离副本，不进入工作树）：出牌阶段主动使用只能响应的牌。
+
+use std::sync::atomic::{AtomicU64, Ordering};
+
+use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+
+static DEDUP: AtomicU64 = AtomicU64::new(1);
+
+fn submit_cmd(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
+    let expected_revision = e.revision();
+    e.submit(GameCommand {
+        actor,
+        expected_revision,
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action,
+    })
+}
+
+fn advance_to_play(e: &mut Engine, player: u8) {
+    for _ in 0..64 {
+        let turn = e.turn();
+        if turn.current == player && turn.phase == Phase::Play {
+            return;
+        }
+        let actor = e.turn().current;
+        match submit_cmd(e, actor, GameAction::NextPhase) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Pending { choice } => {
+                let sel: Vec<ChoiceOption> = choice
+                    .spec
+                    .options
+                    .iter()
+                    .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                    .copied()
+                    .take(choice.spec.min.max(1))
+                    .collect();
+                let c = e.open_choice().expect("choice open").clone();
+                submit_cmd(e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+            }
+            other => panic!("advance: {other:?}"),
+        }
+    }
+    panic!("advance_to_play did not converge");
+}
+
+fn play_named(name: &str, targets: Vec<u8>) -> CommandOutcome {
+    let mut e = Engine::new(7, 4);
+    let p = e.turn().current;
+    advance_to_play(&mut e, p);
+    let card = e.debug_move_named_card_to_hand(p, name);
+    submit_cmd(&mut e, p, GameAction::PlayCard { card, targets })
+}
+
+#[test]
+fn probe_play_nullify_no_target() {
+    let out = play_named("nullify", vec![]);
+    println!("nullify / no target => {out:?}");
+}
+
+#[test]
+fn probe_play_nullify_with_target() {
+    let out = play_named("nullify", vec![1]);
+    println!("nullify / target 1 => {out:?}");
+}
+
+#[test]
+fn probe_play_shan_control() {
+    let out = play_named("shan", vec![]);
+    println!("shan (control) => {out:?}");
+}
+
+// ===== 探针二：crates/engine-native/tests/zz_review_probe_archive_kind.rs（当前源码）=====
+//! 审查探针（临时文件，跑完即删）：伪造存档载荷中的未知牌种编号并重算
+//! blake3 校验和，观察 decode_archive 是返回错误还是 panic。
+use engine_native::archive::{decode_archive, encode_archive};
+use engine_native::catalog::CardKind;
+use engine_native::Engine;
+
+#[test]
+fn probe_unknown_card_kind_in_archive() {
+    let e = Engine::new(7, 4);
+    let mut a = e.save();
+    a.core.declared_kinds.insert(0, CardKind::Sha);
+    let mut b = a.clone();
+    b.core.declared_kinds.insert(0, CardKind::Tao);
+    let ba = encode_archive(&a);
+    let bb = encode_archive(&b);
+    assert_eq!(ba.len(), bb.len());
+    let payload_len = u64::from_le_bytes(ba[14..22].try_into().unwrap()) as usize;
+    let diff: Vec<usize> = (22..22 + payload_len).filter(|&i| ba[i] != bb[i]).collect();
+    println!("kind byte offsets: {diff:?}");
+    assert_eq!(diff.len(), 1);
+    let mut forged = ba.clone();
+    forged[diff[0]] = 0xFF;
+    let sum = blake3::hash(&forged[22..22 + payload_len]);
+    forged[22 + payload_len..].copy_from_slice(sum.as_bytes());
+    let r = std::panic::catch_unwind(|| decode_archive(&forged).map(|_| ()));
+    println!("catch_unwind: {r:?}");
+    assert!(r.is_err(), "decode_archive 未 panic（问题不存在）: {r:?}");
+}
+
+// ===== 探针三：crates/engine-native/tests/zz_review_probe_xiaoji_old_bytes.rs（当前源码）=====
+//! 审查探针（临时文件，跑完即删）：旧版 XiaoJi 挂起字节（tag 29 + 1 字节
+//! pid，与现 tag 43 编码只差 tag）在现解码表下的实际结果。
+use engine_native::archive::{decode_archive, encode_archive};
+use engine_native::resolution::Slot;
+use engine_native::{Engine, MachineSnapshot, ParkSnapshot, StateSnapshot};
+
+fn with_parks(ms: Vec<MachineSnapshot>) -> StateSnapshot {
+    let mut snap = Engine::new(7, 2).save();
+    snap.resolution.parks = ms
+        .into_iter()
+        .map(|m| ParkSnapshot { resume_depth: 0, slot: Slot::Intrinsic { frame: 0 }, machine: m })
+        .collect();
+    snap
+}
+
+fn forge(mut data: Vec<u8>) -> Vec<u8> {
+    let n = data.len() - 22 - 32;
+    let sum = blake3::hash(&data[22..22 + n]);
+    data[22 + n..].copy_from_slice(sum.as_bytes());
+    data
+}
+
+/// 把首个 XiaoJi 的 tag 43 改回旧表的 29（owner 1 与 owner 0 两份编码只差 pid 字节，
+/// pid 前一字节即 tag）。
+fn old_bytes(rest: Vec<MachineSnapshot>) -> Vec<u8> {
+    let mut a_ms = vec![MachineSnapshot::XiaoJi { owner: 1 }];
+    a_ms.extend(rest.clone());
+    let mut b_ms = vec![MachineSnapshot::XiaoJi { owner: 0 }];
+    b_ms.extend(rest);
+    let a = encode_archive(&with_parks(a_ms));
+    let b = encode_archive(&with_parks(b_ms));
+    let diff: Vec<usize> = (22..a.len() - 32).filter(|&i| a[i] != b[i]).collect();
+    assert_eq!(diff.len(), 1, "{diff:?}");
+    let tag = diff[0] - 1;
+    assert_eq!(a[tag], 43);
+    let mut old = a;
+    old[tag] = 29;
+    forge(old)
+}
+
+#[test]
+fn probe_old_xiaoji_bytes() {
+    let cases: Vec<(&str, Vec<MachineSnapshot>)> = vec![
+        ("XiaoJi 单挂起（末尾）", vec![]),
+        ("XiaoJi + XiaoJi", vec![MachineSnapshot::XiaoJi { owner: 0 }]),
+        (
+            "XiaoJi + Dismantle",
+            vec![MachineSnapshot::Dismantle { card: 3, source: 0, target: 1, asked: true }],
+        ),
+    ];
+    for (label, rest) in cases {
+        match decode_archive(&old_bytes(rest)) {
+            Ok(s) => println!("{label}: Ok, parks = {:?}", s.resolution.parks),
+            Err(e) => println!("{label}: Err({e:?})"),
+        }
+    }
+}

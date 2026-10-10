@@ -1,0 +1,8 @@
+skill chongzhen(4144500448) {
+  trigger card_targeted owner_longdan_view_as_first_counterpart_hand_nonempty optional {
+    effect take_one_event_target_hand(self);
+  }
+  trigger card_responded owner_longdan_view_as_first_counterpart_hand_nonempty optional {
+    effect take_one_event_target_hand(self);
+  }
+}

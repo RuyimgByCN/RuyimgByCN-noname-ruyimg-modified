@@ -1,0 +1,9 @@
+// 简议（江庆）：锁定技。其他角色的结束阶段开始时，若本回合有防具牌进入弃牌堆，
+// 你获得弃牌堆中的防具牌。
+// 旧 JavaScript 仅作语义证据；防具检索由 ABI 424 resolve_spjianyi 权威结算
+// （弃牌堆扫描近似本回合历史，文档化）。
+skill spjianyi(2525303245) locked {
+  trigger phase_end owner_alive_not_target {
+    effect resolve_spjianyi(self);
+  }
+}

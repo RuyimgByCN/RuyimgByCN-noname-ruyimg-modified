@@ -1,0 +1,9 @@
+// 婵离（南华老仙·主动技）：出牌阶段，可将任意张手牌交给一名角色，该角色可将至多等量手牌当决斗使用；
+// 此决斗造成伤害后使用者摸等量牌，受到伤害后你弃所有手牌。
+// 旧 JS 含 chooseToUse 动态 viewAs 备份、自定义决斗事件追踪、conditional addTempSkill 子技能触发。
+// DSL 无动态 viewAs（数量由给出牌数决定）、无 useCard 事件追踪子技能，无法建模。
+skill channi(3572835169) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 channi 含真实规则体（enable、filterCard、filterTarget 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

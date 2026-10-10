@@ -1,0 +1,16 @@
+// 势程普：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI515 原语。
+skill potduzuo(3906103687) {
+  trigger cards_moved owner_gained_cards_potduzuo optional {
+    effect resolve_potchengpu(self, event_player, 0);
+  }
+
+  trigger cards_drawn owner_gained_cards_potduzuo optional {
+    effect resolve_potchengpu(self, event_player, 0);
+  }
+}
+
+skill potbihan(4060934534) {
+  trigger damage_before owner_sha_damage_before_potbihan_available optional {
+    effect resolve_potchengpu(self, event_player, 2);
+  }
+}

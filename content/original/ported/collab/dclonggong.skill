@@ -1,0 +1,7 @@
+// 龙宫：每回合一次，防止有存活来源的伤害，并令来源从牌堆获得一张装备牌。
+skill dclonggong(3209573631) {
+  trigger damage_before owner_is_target_source_alive_once optional {
+    effect prevent_current_damage();
+    effect gain_equipment_from_draw_pile(event_source);
+  }
+}

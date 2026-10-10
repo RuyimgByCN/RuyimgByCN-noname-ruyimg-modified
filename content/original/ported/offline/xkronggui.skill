@@ -1,0 +1,5 @@
+// xkronggui：global:card_targeted, 异步, 弃牌。
+skill xkronggui(4044150436) {
+  trigger card_targeted owner_alive {
+  }
+}

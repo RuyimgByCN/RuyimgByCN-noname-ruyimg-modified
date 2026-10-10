@@ -1,0 +1,8 @@
+// 冠宠（孙和）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：每回合限一次：其他角色在摸牌阶段外单次获得牌数超过 1 时，可令其交给你 1 张指定类型手牌，没有则你从牌堆获得
+// 旧 JS 的「获牌事件拦截 + 牌堆按类型取牌」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill guanchong(3215387882) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

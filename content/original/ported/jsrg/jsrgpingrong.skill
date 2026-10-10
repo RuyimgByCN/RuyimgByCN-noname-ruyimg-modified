@@ -1,0 +1,28 @@
+// jsrgpingrong（平戎）：每轮限一次。一名角色的回合结束时，你可以移去一名角色的
+// “猎”，然后你于此回合后执行一个额外回合。该回合结束后，若你于此回合未造成过伤害，
+// 你失去1点体力。上游 jsrg/skill.js:11613（addTempSkill jsrgpingrong_used 至
+// roundStart）。
+// 实现（猎族 S1/S3，ADR 0646 §1）：S3 起「移猎后执行一个额外回合」经
+// queue_extra_turn（ABI 669/tag 692）入引擎既有 extra_turn_queue 消费管线；
+// 尾随失去体力 check 由引擎结算——该额外回合结束时 DAMAGE_DEALT==0 则失 1 体
+// （continue_turn_advance 头部，EXTRA_TURN_ACTIVE 标记驱动）。`phase_end owner_alive_someone_mark_positive_
+// 1167524380 optional` + storage 每轮门槛（round_started 清零≈temp 技 roundStart
+// 移除）→ choose_other_add_mark(self, 1167524380, -1) 负 delta 移去一个“猎”
+// （引擎负 delta 已按目标现有计数钳位；候选只列有标记者——primitive 负路径过滤）。
+// 近似：死亡等场景下挂起额外回合的引擎默认顺序处理；尾随 check 读聚合
+// DAMAGE_DEALT 而非逐事件 sourceDamage 口径。
+// 「猎」每人至多 1 枚（政略授标不叠加）⇒ 移 1 = 上游 removeMark 全部。
+// 未建模：额外回合 insertPhase + 尾随失去体力 check 子技——引擎无 ExtraTurn
+// 子系统（ADR 0646 §1 S3 立项对象），本批为「移去一猎」部分迁移。
+skill jsrgpingrong(2770992068) {
+  trigger round_started owner_alive {
+    effect storage_set(self_skill, 1, 0);
+  }
+  trigger phase_end owner_alive_someone_mark_positive_1167524380 optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect choose_other_add_mark(self, 1167524380, -1);
+      effect queue_extra_turn(self, 1, self_skill);
+    }
+  }
+}

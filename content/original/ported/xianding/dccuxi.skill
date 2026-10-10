@@ -1,0 +1,9 @@
+// 猝袭（DC 曹节）：其他角色的回合开始时，可弃置两张手牌并对其造成 1 点伤害。
+// 旧 JS 的“令其选择：让你执行其本回合摸牌阶段 / 受到你造成的 1 点伤害”二选一
+// 以固定造成 1 点伤害近似。
+skill dccuxi(4093257724) {
+  trigger phase_begin owner_alive_not_target optional {
+    effect discard_hand(self, 2);
+    effect deal_damage(self, event_player, 1);
+  }
+}

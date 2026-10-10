@@ -1,0 +1,6 @@
+// 劝酒（辛评）
+// 旧 JS 语义：实体【酒】视为【杀】，且由实体【酒】转化出的【杀】不计入使用次数。
+skill quanjiu(2358780202) locked {
+  modifier card_name(jiu) override sha;
+  modifier card_use_unlimited(physical_jiu) override 1;
+}

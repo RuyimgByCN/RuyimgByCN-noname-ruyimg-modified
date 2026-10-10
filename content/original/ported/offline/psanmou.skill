@@ -1,0 +1,5 @@
+// psanmou：锁定技, player:game_started, global:phaseBefore, 需选择目标, 加技能, 含子技能, 异步。
+skill psanmou(2169653693) locked {
+  trigger game_started always {
+  }
+}

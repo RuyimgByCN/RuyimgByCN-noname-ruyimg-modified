@@ -1,0 +1,9 @@
+// 悍勇：旧 JS 作为语义证据；当前牌的挂起结算由引擎重新校验。
+skill hanyong(3661917608) {
+  trigger card_used owner_source_wounded_nanman_wanjian_or_normal_spade_sha optional {
+    effect increase_current_card_base_damage(self, event_card, 1);
+    if round_number_capped(2147483647) < hp(self) + 1 {
+      effect add_mark(self, 638947751, 1);
+    }
+  }
+}

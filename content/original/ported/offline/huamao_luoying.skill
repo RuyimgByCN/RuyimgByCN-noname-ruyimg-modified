@@ -1,0 +1,5 @@
+// huamao_luoying：global:cardsDiscardAfter, global:hp_lost, global:cards_moved, 含子技能, 异步。
+skill huamao_luoying(2569357585) {
+  trigger hp_lost owner_alive optional {
+  }
+}

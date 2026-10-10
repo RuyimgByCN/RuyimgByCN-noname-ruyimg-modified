@@ -1,0 +1,8 @@
+// 攘异②（侠典韦相关）：配合「攘异」。使用牌时强制将gaintag标记的手牌
+// 交给「攘异」使用者。
+// 缺跨技能gaintag强制交牌原语，空定义。
+skill twrangyi2(3102444684) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twrangyi2 = 标记型技能（charlotte，skill.js:28267），无规则面。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

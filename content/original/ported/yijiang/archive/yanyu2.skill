@@ -1,0 +1,7 @@
+// 燕语2（夏侯氏）：出牌阶段结束时，若本阶段发动过至少2次"燕语"，可令一名男性角色摸两张牌。
+// 旧JS依赖yanyu技能状态计数，DSL以phase_play_end触发近似。
+skill yanyu2(3571996359) {
+    trigger phase_play_end owner_alive {
+        effect choose_target_draw(self, 2, male_other);
+    }
+}

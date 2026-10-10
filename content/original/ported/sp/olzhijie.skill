@@ -1,0 +1,18 @@
+// 直谏（olzhijie·锁定技）：一名角色的结束阶段，若你本回合使用或打出过
+// 牌、且本回合你被选择为牌的目标，你可以（上游 forced + locked）选择你
+// 攻击范围内的一名角色，对其造成 1 点伤害。
+// 上游 (sp/skill.js 4312)：trigger global phaseEnd + locked + forced，
+// filter = hasHistory(useCard||respond) + hasGlobalHistory(useCard 被指
+// 定目标) + hasPlayer(inRange)；content = 选射程内目标 damage()。
+// 实现（2026-09-15 第二百九十四批·结束阶段射程伤害状态机，ADR 0641
+// §8.78）：resolve_olzhijie(self)（ABI 738 / tag 759，Cont 329 单段续体）
+// ——选射程内目标（player_in_attack_range 过滤）→ DealDamage 1。
+// 过滤器 owner_used_and_was_targeted_this_turn_in_range 复用既有
+// card_action_count（用/打出双计）+ 新 track card_targeted_count
+// （CardTargeted 事件记录，registry track 门控）+ 射程查询。
+// 保真度：完整（伤害来源=owner，上游 damage() 默认来源同口径）。
+skill olzhijie(3419173958) {
+  trigger phase_end owner_used_and_was_targeted_this_turn_in_range {
+    effect resolve_olzhijie(self);
+  }
+}

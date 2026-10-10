@@ -1,0 +1,5 @@
+// tyzhongen：global:phase_end, 多分支选择, 异步。
+skill tyzhongen(2314902456) {
+  trigger phase_end owner_alive {
+  }
+}

@@ -1,0 +1,6 @@
+// hefeiheyuzhangliao（合御）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill hefeiheyuzhangliao(3129673047) locked {
+  // 语义复杂，待补充
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

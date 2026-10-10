@@ -1,0 +1,8 @@
+// jsrglonglin（龙临）：其他角色于其出牌阶段内首次使用【杀】指定第一个目标后，你可以弃置一张牌令此【杀】无效，然后其可以视为对你使用一张【决斗】，你以此法造成伤害后，其本阶段不能再使用手牌。
+// 未建模：翻译调用, 延迟动画, addTempSkill, charlotte延迟, storage状态, chooseBool（DSL无对应原语）
+skill jsrglonglin(2221874144) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrglonglin（skill.js:2561）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

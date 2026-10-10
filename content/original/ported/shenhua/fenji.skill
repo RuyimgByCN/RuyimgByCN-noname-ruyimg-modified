@@ -1,0 +1,7 @@
+// 奋激（鲁肃系）：弃牌阶段后获得弃牌。
+// 旧 JS 的「弃牌堆获牌」无对应原语；以弃牌阶段后摸一张近似（已注明）。
+skill fenji(3961596407) locked {
+  trigger phase_discard_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 浑天仪：装备技能。受到伤害时，失去装备区的【浑天仪】防止此伤害。失去【浑天仪】后从牌堆获取2张同点数锦囊牌。
+// 旧 JS 的「装备区检测」「伤害防止+失去装备」「同点数锦囊检索」无对应原语。
+// 空定义：需 expansion 支持装备检测、伤害防止、点数匹配检索。
+skill huntianyi_skill(4074881621) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,26 @@
+# U05 swd 第十三批测试日志（2026-10-08，羊皮卷，规则 v96→v97）
+
+$ cargo test --offline -p engine-native
+engine-native: 412 passed / 0 failed / 1 ignored（v96 基线 411 +1 新增羊皮卷回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_swd
+test result: ok. 14 passed; 0 failed（13 既有 + swd_yangpijuan_discover_from_deck）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 82、CardKind ALL 118 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v96→v97 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0，与既有口径同）
+
+## 上游源码核验（关键行）
+- list.js:40 `["spade", 9, "yangpijuan"]`；list.js:53 `["club", 7, "yangpijuan"]`
+- translate.js:77-78 `yangpijuan: "羊皮卷"` + info
+- card.js yangpijuan content 三步：chooseControl(basic/trick/equip) →
+  get.inpile + randomGets(3) + chooseButton(true) → createCard + gain
+- 无懈窗口：trick enable 使用时开窗（流星火雨/望梅止渴同口径）
+
+## 测试迭代记录
+- 首跑即绿（swd_yangpijuan_discover_from_deck 1/1）；计数断言 20→22 后
+  swd 14/14；无新增发牌敏感破坏（既有注入已全区域 purge）

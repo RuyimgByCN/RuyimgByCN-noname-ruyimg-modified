@@ -1,0 +1,5 @@
+// pszhonghu：锁定技, global:death, player:phaseBeforeStart, 含子技能, 多步骤。
+skill pszhonghu(2544167032) locked {
+  trigger death always {
+  }
+}

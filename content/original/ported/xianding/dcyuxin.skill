@@ -1,0 +1,17 @@
+// 御心：限定技，一名角色进入濒死时，可令其回复至 1（自己）或自己的非负体力值（他人）。
+skill dcyuxin(4174094056) {
+  trigger dying owner_is_target optional {
+    effect recover_hp(self, 1 - hp(self));
+    effect remove_skill(self_skill);
+  }
+
+  trigger dying owner_alive_not_target_nonnegative_hp_gt_target optional {
+    if hp(self) < 1 {
+      effect recover_hp(event_player, 0 - hp(event_player));
+    }
+    if 0 < hp(self) {
+      effect recover_hp(event_player, hp(self) - hp(event_player));
+    }
+    effect remove_skill(self_skill);
+  }
+}

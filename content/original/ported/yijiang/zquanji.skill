@@ -1,0 +1,7 @@
+// 权计（旧版钟会）：其他角色的回合开始时，可与其拼点。若赢，其跳过准备阶段和判定阶段。
+// 旧JS含chooseToCompare+skip phaseZhunbei+phaseJudge。DSL拼点无对应原语，以空定义保留。
+skill zquanji(3498256085) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

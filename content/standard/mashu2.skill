@@ -1,0 +1,4 @@
+// Skill mashu2(137) - standard variant
+skill mashu2(137) {
+  modifier attack_range add 1;
+}

@@ -1,0 +1,5 @@
+// liunian：锁定技；回复1体力；增体力上限。
+// 旧JS含subSkill，DSL无法精确建模。
+skill liunian(4222176506) {
+  modifier hand_limit add 1;
+}

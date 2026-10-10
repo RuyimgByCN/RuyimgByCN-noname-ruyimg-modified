@@ -1,0 +1,21 @@
+// 谏直（族王昶/族王浑/族王昌/族王琛）：锁定技。结束阶段，若本回合发动过「惬诣」，
+// 选择进行至多 X 次判定（X = 惬诣本回合发动次数）；将判定牌中与本回合使用过花色
+// 相同的牌分配给角色，不同的花色每张对你造成 1 点雷属性伤害。
+// 上游 (clan/skill.js): trigger phaseJieshuBegin forced; filter=getHistory("useSkill",
+// clanqieyi).length>0; content=chooseControl(1..X) → X 次 judge()（判定牌不入弃牌堆）→
+// 用牌历史花色集合 → 花色匹配的判定牌 chooseButtonTarget 分配（gaincardMultiple）→
+// 任一判定牌花色不匹配 → damage("nosource","thunder")。
+// 实现：phase_end owner_is_target → 跨技能状态查询（惬诣实例 turn_fire_count，
+// 触发分发器每次发动 +1，近似 useSkill 历史）→ 选 1..X（Custom 选择）→ 原始判定
+// （公开揭示牌堆顶并保留，不移动）→ 出牌阶段花色掩码（play_phase_card_suit_mask，
+// Spade=1/Heart=2/Club=4/Diamond=8）匹配分组 → 匹配牌逐个选目标移入其手牌 →
+// 结束时有任一不匹配判定牌 → 1 点雷属性伤害（无来源）。
+// **近似与未覆盖**：(1) 判定为原始揭示，不经判定改写原语（无鬼道/改判干扰）；
+// (2) 花色集合取本出牌阶段（turn 级 useCard 历史未建模，判定/其他阶段用牌不计）；
+// (3) 分配一次一张（上游可多选批量分配）；(4) 判定牌数量上限 16。
+// 差异记录于 docs/migration/upstream-1.11.5-delta.md。
+skill clanjianzhi(2209164637) locked {
+  trigger phase_end owner_is_target {
+    effect jianzhi_phase_end(self, self_skill);
+  }
+}

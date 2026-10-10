@@ -1,0 +1,4 @@
+// 国色 (guose) — 大乔: distance from owner -1 (beauty's grace).
+skill guose(32) {
+  modifier distance_from add -1;
+}

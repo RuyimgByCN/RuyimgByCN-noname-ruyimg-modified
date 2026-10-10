@@ -1,0 +1,8 @@
+// 宗祚（旧版）：锁定技，游戏开始时，增加X点体力上限并回复X点体力（X为势力数）。
+// 当某个势力的最后一名角色死亡时，你减1点体力上限。
+// 旧JS含gainMaxHp+recover+dieAfter loseMaxHp。DSL以phase_begin触发+change_max_hp近似，缺势力消亡检测。
+skill zongzuo(2501458606) locked {
+    trigger phase_begin owner_alive {
+        effect change_max_hp(self, 1);
+    }
+}

@@ -1,0 +1,8 @@
+// 棒球（佐佐美）：继承 rin_baoqiu——攻击范围+2；使用【杀】指定目标后判定
+// （红色伤害+1 / 黑色不可响应 / 黑桃红桃不计次数）。
+// 实现：与父技 rin_baoqiu 同款 `modifier attack_range add 2` 近似。
+// 近似：上游 inherit 继承机制无 DSL 对应；判定三分支效果未建模（与父技注记同源）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill sasami_baoqiu(3822498729) {
+  modifier attack_range add 2;
+}

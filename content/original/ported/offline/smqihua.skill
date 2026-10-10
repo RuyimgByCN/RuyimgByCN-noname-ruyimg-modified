@@ -1,0 +1,6 @@
+// smqihua：global:damage_before, 需选择目标, 二选一, 失去体力, 加技能, 含子技能, 异步。
+skill smqihua(2602749382) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

@@ -1,0 +1,4 @@
+// 携手状态：同名状态标记每层令手牌上限 +1。
+skill dcxieshoux(3326879274) {
+  modifier hand_limit add owner_skill_mark;
+}

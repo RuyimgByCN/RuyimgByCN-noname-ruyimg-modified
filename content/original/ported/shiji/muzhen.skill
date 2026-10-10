@@ -1,0 +1,10 @@
+// 睦阵（向宠系）：出牌阶段，三选一：装备换手牌 / 给牌换装备 / 睦阵摸牌，
+// 每项每回合各一次。
+// 旧 JS 的「三选一分支」无对应原语；以弃一张手牌并摸一张近似
+// （分支未建模，已注明）。
+skill muzhen(4170522307) {
+  active play_phase select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

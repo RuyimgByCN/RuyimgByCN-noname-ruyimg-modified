@@ -1,0 +1,8 @@
+// lihun2（离魂·标记）：锁定技。出牌阶段结束时移除本技能并弃置所有手牌。
+// 旧 JS 的「弃手牌」以 discard_all_hand_and_equip 表达。
+skill lihun2(3214526685) locked {
+  trigger phase_play_end owner_alive {
+    effect remove_skill(self_skill);
+    effect discard_all_hand_and_equip(self);
+  }
+}

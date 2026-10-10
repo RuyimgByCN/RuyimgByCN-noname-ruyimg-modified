@@ -1,0 +1,96 @@
+// jiange（剑阁）包元数据登记：以下技能依赖多目标横置/翻牌分配/天气状态/判定分支/
+// 全场伤害/摸牌替换等 DSL 不支持或未移植的机制，登记元数据并文档化近似（无运行时
+// 行为）。来源：Noname-ruyimg-Modified（Liuli M4）。
+
+// 奇雾（浴火士元·庞统）：上游引用但本包未定义（跨包遗留），登记占位。
+skill qiwu(386246179) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 天狱（浴火士元·庞统）：结束阶段，你可以将任意名未横置的其他角色横置。需要任意
+// 多目标横置选择原语。
+skill tianyu(2127296099) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 智囊（工神月英·黄月英）：准备阶段，你可以亮出牌堆顶的三张牌，将其中锦囊或装备牌
+// 交给一名角色。需要翻顶展示与分类赠牌状态机。
+skill zhinang(2234674759) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 精妙（工神月英·黄月英）：每当有一名其他角色使用无懈可击，你可以弃置其一张牌。
+// 需要「他人使用无懈」事件过滤器。
+skill jingmiao(2123242344) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 变天（天侯孔明·诸葛亮）：锁定技，准备阶段判定：红色则可选至多三名角色进入
+// 「狂风」状态，黑桃则自身进入「大雾」状态直到下一回合开始。需要天气状态机。
+skill biantian(3651814505) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 灵锋（烈帝玄德·刘备）：摸牌阶段，你可以弃置摸牌，改为亮出牌堆顶的两张牌并获得
+// 之；若两张牌颜色不同，你可以弃置一名角色的一张牌。需要摸牌替换与亮牌联动。
+skill lingfeng(1528955911) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 绝尘（绝尘妙才·夏侯渊）：每当你使用一张杀，可以弃置一名其他角色的一张牌（不能
+// 是杀的目标）。需要「非杀目标」选牌约束。
+skill juechen(882766764) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 持盈（佳人子丹·曹真）：每当一名角色受到多于 1 点伤害时，你可以令其防止其余伤害，
+// 然后令伤害来源摸一张牌。需要多段伤害防止原语。
+skill chiying(1498596844) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 惊帆（佳人子丹·曹真）：回合内每使用一张卡牌，你的进攻距离+1；出牌阶段结束时将
+// 手牌数补至 X 并指定至多 X 名角色进攻距离+1 直到其下一回合结束（X 为本回合用牌
+// 数）。需要用牌计数驱动的距离修正与回合末补牌状态机。
+skill jingfan(1666515245) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 惑敌（巧魁儁乂·张郃）：结束阶段，若你本回合内没有使用过指定其他角色为目标的
+// 卡牌，你可以弃置一名其他角色的一张牌。需要「本回合未指定他人」过滤器。
+skill huodi(517866804) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 绝汲（巧魁儁乂·张郃）：其他角色的摸牌阶段开始时，若其已受伤，你可以弃置一张牌
+// 令其摸牌数-1。需要目标摸牌数削减与弃牌代价串联。
+skill jueji(3402005750) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 玄雷（断狱仲达·司马懿）：锁定技，准备阶段，你令所有判定区内有牌的其他角色受到
+// 1 点雷电伤害。需要「判定区有牌的全场角色」伤害原语。
+skill xuanlei(1633666137) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 控魂（断狱仲达·司马懿）：出牌阶段开始时，若你的体力值不大于 1（存活角色数不小于
+// 6 时改为 2），你可以对至多 X 名角色各造成 1 点雷电伤害，然后你恢复等量体力
+// （X 为其他存活角色数的一半，向下取整且至多为 4）。需要多目标雷伤+等量回复状态机。
+skill konghun(827342815) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

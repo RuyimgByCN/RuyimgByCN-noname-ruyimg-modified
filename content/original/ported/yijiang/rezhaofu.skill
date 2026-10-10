@@ -1,0 +1,8 @@
+// 诏缚(旧版)(曹操)：锁定技，主公技。你的攻击范围+X（X为吴势力角色数）。
+// 旧JS由rezhaofu2的mod.inRangeOf实现：吴势力角色以有诏缚的主公作为跳板计算攻击范围。
+// DSL中无对应的范围修改modifier原语（global_attack_range/global_distance_to仅对全局生效）。
+skill rezhaofu(2502280239) locked lord_only {
+  // ponytail: 基于势力(吴)的inRangeOf范围扩展逻辑无DSL modifier原语，空定义占位。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

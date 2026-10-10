@@ -1,0 +1,12 @@
+// 制略（陶璜）：锁定技，其他角色计算与你的距离 +2；你造成伤害后，
+// 若手牌数小于体力上限则摸至体力上限，并禁用本技能至你的回合结束。
+// 旧 JS 的 tempBanSkill 以 ban_active_until_turn_end 近似。
+skill dczhijue(2161260760) locked {
+  modifier distance_from add -2;
+  trigger damage owner_source {
+    if hand_count(self) < max_hp(self) {
+      effect adjust_hand_to(self, max_hp(self));
+    }
+    effect ban_active_until_turn_end(self, self_skill);
+  }
+}

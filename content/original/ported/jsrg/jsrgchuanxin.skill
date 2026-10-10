@@ -1,0 +1,5 @@
+// jsrgchuanxin（穿心）：一名角色的结束阶段，你可以将一张牌当【杀】使用。当一名角色受到渠道为此【杀】的伤害时，此伤害+Y（Y为其本回合回复过的体力值）。
+// 未建模：chooseToUse转化, charlotte延迟, storage状态, addTempSkill（DSL无对应原语）
+skill jsrgchuanxin(3487080389) {
+  view_as sha play_phase any;
+}

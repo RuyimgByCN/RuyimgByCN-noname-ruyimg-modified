@@ -1,0 +1,4 @@
+d0a98f40b29d6b87e4329f6ac8a764a5e5658b1444bfd4cff835b7c9378782d0  crates/engine-native/tests/g1_huanle.rs
+ce51460203086b794f5c97fec213ade6d02c2f4c8bd21e7ef55cfdd42068f68a  docs/architecture/native-progress.md
+8e8c8bdb392639cb49caf05de937d6985de582aec70b138889209245d423a3b2  docs/native-coverage-manifest.md
+5195f8ece2d28388be70f0041af96656582fbdd13fd4b85852ae86dd214b422f  docs/migration/upstream-extension-reconstruction.md

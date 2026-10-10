@@ -1,0 +1,7 @@
+// 羁绊·标记（鸥）：临时技能标记，防止同回合重复发动羁绊。
+// 旧 JS 纯标记技能，无独立效果，未建模。
+skill kamome_jieban_phase(2777321167) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kamome_jieban_phase = 标记型技能（charlotte，skill.js:1482），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

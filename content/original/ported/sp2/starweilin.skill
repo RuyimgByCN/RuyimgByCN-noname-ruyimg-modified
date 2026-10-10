@@ -1,0 +1,17 @@
+// 威临（starweilin·SP 群陈到?）：锁定技。你的回合内，当你对一名本局未
+// 受受过伤害的角色造成伤害时，此伤害 +1（你本局使用牌数 ≥ 其体力值）。
+// 上游 (sp2/skill.js 4034)：trigger source damageBegin1 + forced；filter
+// = currentPhase==player && 目标无受伤历史 && getHistory(useCard).length
+// >= target.hp；content = trigger.num++。
+// 实现（2026-09-15 第三百零四批·威临三条件过滤器，ADR 0641 §8.89）：
+// owner_source_in_turn_target_unharmed_card_actions_ge_target_hp（五点
+// 注册；damage_history 集合 + card_action_totals 值源）+
+// modify_current_damage(self, 1) 既有 DSL。
+// 登记债：用牌计数以 card_action_totals（用/打出双计）近似上游
+// useCard-only。
+// 保真度：完整（三条件 + 伤害增补全建模）。
+skill starweilin(3176127729) locked {
+  trigger damage_before owner_source_in_turn_target_unharmed_card_actions_ge_target_hp {
+    effect modify_current_damage(self, 1);
+  }
+}

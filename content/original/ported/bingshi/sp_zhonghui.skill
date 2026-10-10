@@ -1,0 +1,53 @@
+// 势钟会：俟资 / 挟志 / 狱难 / 克昌（旧 JavaScript 仅作语义参考）。
+skill mbsizi(2212391997) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_mbzhonghui(self, self, 0, 0, 2212391997, 2942773382);
+  }
+
+  trigger game_started owner_alive {
+    effect resolve_mbzhonghui(self, self, 1, 0, 2212391997, 2942773382);
+  }
+
+  trigger phase_end owner_alive {
+    effect resolve_mbzhonghui(self, event_player, 2, 0, 2212391997, 2942773382);
+  }
+
+  trigger damage_before owner_alive {
+    effect resolve_mbzhonghui(self, event_player, 3, event_amount, 2212391997, 2942773382);
+  }
+}
+
+skill mbxiezhi(3797490396) locked {
+  modifier hand_limit add owner_skill_state_u32;
+  modifier sha_use_limit add owner_skill_state_u32;
+
+  trigger damage owner_is_target {
+    effect resolve_mbzhonghui(self, self, 4, event_amount, 2212391997, 2942773382);
+  }
+
+  trigger hp_lost owner_is_target {
+    effect resolve_mbzhonghui(self, self, 4, event_amount, 2212391997, 2942773382);
+  }
+
+  trigger hp_recovered owner_is_target {
+    effect resolve_mbzhonghui(self, self, 4, event_amount, 2212391997, 2942773382);
+  }
+}
+
+skill mbyunan(3604534562) locked {
+  trigger death owner_alive {
+    effect resolve_mbzhonghui(self, event_player, 5, 0, 2212391997, 2942773382);
+  }
+
+  trigger dying owner_is_source {
+    effect resolve_mbzhonghui(self, event_player, 6, 0, 2212391997, 2942773382);
+  }
+}
+
+skill mbkechang(2942773382) locked lord_only {
+  modifier card_distance_unlimited(sha) override queried_player_qun_owner_lord_alive;
+
+  trigger card_targeted owner_is_source {
+    effect resolve_mbzhonghui(self, event_player, 7, event_card, 2212391997, 2942773382);
+  }
+}

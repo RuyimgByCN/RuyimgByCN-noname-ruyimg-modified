@@ -1,0 +1,6 @@
+// wuyuan（武缘）：出牌阶段限一次，你可将一张【杀】交给一名其他角色，然后你回复1点体力，其摸一张牌。若此【杀】为：红色【杀】，其回复1点体力；属性【杀】，其改为摸两张牌。
+skill wuyuan(2230788132) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect recover_hp(event_source, 1);
+  }
+}

@@ -1,0 +1,10 @@
+// 佯解（朱儁）：出牌阶段限一次，你可与一名其他角色拼点（点数小者胜）；
+// 若你拼点失败，你可选择另一名其他角色，令其视为对拼点目标使用一张火【杀】。
+// 旧 JavaScript 仅作语义证据；拼点（小者胜）、失败选人与虚拟火【杀】由
+// ABI 430 resolve_xinyangjie 权威结算；“火杀来源可选”以距离与存活重校验
+// （攻击范围内）为文档化近似。
+skill xinyangjie(3719893345) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare {
+    effect resolve_xinyangjie(self, event_source);
+  }
+}

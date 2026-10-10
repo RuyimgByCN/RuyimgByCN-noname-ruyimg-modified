@@ -1,0 +1,11 @@
+// 设恐（有纪宁）：出牌阶段弃置任意张牌，选一名其他角色弃置等量牌；或目标摸1张你摸等量牌。
+// 实现：出牌阶段限一次弃置任意手牌/装备，自己摸等量，并令一名其他角色摸 1。
+// 近似：只保留「你摸等量、其摸 1」分支；对方弃等量未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill nk_shekong(3537526857) {
+  active play_phase uses_per_turn 1 select_he 1 255 {
+    effect discard_selected(self);
+    effect draw_selected(self);
+    effect choose_target_draw(self, 1, other);
+  }
+}

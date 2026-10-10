@@ -1,0 +1,9 @@
+skill xinfu_xingzhao(2244503587) locked {
+  trigger cards_moved owner_equip_zone_changed_alive_wounded_at_least_two {
+    effect draw_cards(self, 1);
+  }
+  modifier draw_phase_scry_four_split_two max alive_wounded_count_at_least_1;
+  modifier skip_judge_phase max alive_wounded_count_at_least_3;
+  modifier skip_discard_phase max alive_wounded_count_at_least_3;
+  modifier damage_amount add alive_wounded_count_zero_or_at_least_four;
+}

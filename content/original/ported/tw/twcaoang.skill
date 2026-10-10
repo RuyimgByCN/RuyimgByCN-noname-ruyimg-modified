@@ -1,0 +1,13 @@
+// 孝廉：替换他人的单目标杀；若因此受伤，可将自己的牌作为“马”置于原目标。
+skill twxiaolian(2735068140) {
+trigger card_targeted owner_alive_other_source_single_sha_target_other {
+    effect resolve_twcaoang(self, event_player, event_source, event_card, 2420900957, 0);
+  }
+  trigger damage owner_is_target_twxiaolian_redirected_damage {
+    effect resolve_twcaoang(self, event_player, event_source, event_card, 2420900957, 1);
+  }
+}
+
+skill twxiaolian_distance(2420900957) locked {
+  modifier global_distance_to add owner_skill_pile_count_2420900957;
+}

@@ -1,0 +1,6 @@
+// mbmowang（殁亡）：锁定技。①当你死亡前，若你有未亮出的“常侍”牌且体力上限大于0，你将死亡改为修整至你的下个回合开始前，然后你复原武将牌，且不于此次死亡事件中进行展示身份牌、检测游戏胜利条件与执行奖惩的流程。②回合结束后，你死亡。
+skill mbmowang(3059899102) locked {
+  trigger dying owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

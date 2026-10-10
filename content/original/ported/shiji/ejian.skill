@@ -1,0 +1,11 @@
+// 恶荐（许靖）：锁定技。你因博明将牌交给一名其他角色后，若其除该牌外仍有同类型
+// （基本/锦囊/装备）的手牌或装备牌，其须二选一：受到 1 点伤害，或展示手牌并弃置
+// 所有同类牌。
+// 旧 JavaScript 仅作语义证据；同类判定与二选一由 ABI 414 resolve_ejian 权威结算。
+// 注：旧 JS 每名目标仅触发一次（storage 记录），DSL 以 CardsGiven 事件逐次触发，
+// 文档化近似。
+skill ejian(4172706421) locked {
+  trigger cards_given owner_alive_gave_cards_to_other_alive {
+    effect resolve_ejian(self, event_player);
+  }
+}

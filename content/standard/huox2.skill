@@ -1,0 +1,4 @@
+// Skill huox2(160) - modifier range variant
+skill huox2(160) {
+  modifier attack_range add 1;
+}

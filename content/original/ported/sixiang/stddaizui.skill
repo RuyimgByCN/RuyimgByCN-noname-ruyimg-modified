@@ -1,0 +1,8 @@
+// 待罪（锁定技）：当你受到伤害后，若【盗书】被暂时禁用，你重置【盗书】。
+// 旧 JS 为锁定技，监听 damageEnd 事件清除 temp_ban 标记。DSL 无「清除其他技能的临时禁用」效果原语。
+// 此技能为 stddaoshu 的附属技能，无法独立建模。
+skill stddaizui(2313292615) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

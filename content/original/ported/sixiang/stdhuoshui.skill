@@ -1,0 +1,4 @@
+// 【祸水】在 damageBegin3 对应的普通受伤修正阶段，为判定区有牌的其他角色增加伤害。
+skill stdhuoshui(3517180722) locked {
+  modifier global_damage_taken_amount add queried_player_judge_nonempty_other_than_owner;
+}

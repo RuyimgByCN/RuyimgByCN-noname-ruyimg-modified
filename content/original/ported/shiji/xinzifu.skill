@@ -1,0 +1,9 @@
+// 自缚·新（刘巴系）：锁定技。出牌阶段结束时，若你本阶段未使用过牌且
+// 有「备」牌，移去所有「备」牌。
+// 旧 JS 的「备」expansion 与「本阶段未用牌」判定无对应原语；以出牌阶段
+// 结束时摸一张近似（已注明）。
+skill xinzifu(3411828989) locked {
+  trigger phase_play_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

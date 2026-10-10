@@ -1,0 +1,6 @@
+// psmiaoyu：音效名:scsmiaoyu, 锁定技, global:recoverEnd, global:phaseEnd, 失去体力, 加技能, 含子技能, 异步。
+skill psmiaoyu(3111315822) locked {
+  // 无简单DSL映射，保留占位
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

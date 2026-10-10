@@ -1,0 +1,1129 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "repo": "noname",
+      "name": "3D精选",
+      "entries": [
+        {
+          "entry": "extension/3D精选/extension.js",
+          "entry_lines": 23,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 0,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        },
+        {
+          "entry": "3D精选/main/precontent.js",
+          "entry_lines": 6,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "image": {
+          "files": 31,
+          "bytes": 2756115
+        }
+      },
+      "shell_characters": null
+    },
+    {
+      "repo": "noname",
+      "name": "boss",
+      "entries": [
+        {
+          "entry": "extension/boss/extension.js",
+          "entry_lines": 148,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname",
+      "name": "cardpile",
+      "entries": [
+        {
+          "entry": "extension/cardpile/extension.js",
+          "entry_lines": 100,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname",
+      "name": "coin",
+      "entries": [
+        {
+          "entry": "extension/coin/extension.js",
+          "entry_lines": 1354,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname",
+      "name": "杀海拾遗",
+      "entries": [
+        {
+          "entry": "extension/杀海拾遗/extension.js",
+          "entry_lines": 22,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        },
+        {
+          "entry": "杀海拾遗/main/precontent.js",
+          "entry_lines": 76,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "audio": {
+          "files": 4,
+          "bytes": 56333
+        },
+        "image": {
+          "files": 573,
+          "bytes": 40858369
+        }
+      }
+    },
+    {
+      "repo": "noname",
+      "name": "欢乐卡牌",
+      "entries": [
+        {
+          "entry": "extension/欢乐卡牌/extension.js",
+          "entry_lines": 22,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 0,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        },
+        {
+          "entry": "欢乐卡牌/main/precontent.js",
+          "entry_lines": 19,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 1,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "audio": {
+          "files": 14,
+          "bytes": 729954
+        },
+        "image": {
+          "files": 6,
+          "bytes": 4830867
+        }
+      },
+      "shell_cards": null,
+      "shell_skills": null
+    },
+    {
+      "repo": "noname",
+      "name": "玩点论杀",
+      "entries": [
+        {
+          "entry": "extension/玩点论杀/extension.js",
+          "entry_lines": 21,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 0,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        },
+        {
+          "entry": "玩点论杀/main/precontent.js",
+          "entry_lines": 14,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "audio": {
+          "files": 1,
+          "bytes": 10291
+        },
+        "image": {
+          "files": 12,
+          "bytes": 763497
+        }
+      },
+      "shell_cards": null,
+      "shell_skills": null,
+      "shell_characters": null
+    },
+    {
+      "repo": "noname",
+      "name": "英雄杀",
+      "entries": [
+        {
+          "entry": "extension/英雄杀/extension.js",
+          "entry_lines": 23,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 0,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        },
+        {
+          "entry": "英雄杀/main/precontent.js",
+          "entry_lines": 6,
+          "game_import": false,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "image": {
+          "files": 44,
+          "bytes": 1534828
+        }
+      },
+      "shell_characters": null
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "AI优化",
+      "entries": [
+        {
+          "entry": "extension/AI优化/extension.js",
+          "entry_lines": 10967,
+          "game_import": true,
+          "skills": 2,
+          "cards": 1,
+          "characters": 2,
+          "translations": 0,
+          "config_items": 64,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 6,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "SJ Settings",
+      "entries": [
+        {
+          "entry": "extension/SJ Settings/extension.js",
+          "entry_lines": 737,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 5,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "SJ Settings"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 1,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "boss",
+      "entries": [
+        {
+          "entry": "extension/boss/extension.js",
+          "entry_lines": 138,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "cardpile",
+      "entries": [
+        {
+          "entry": "extension/cardpile/extension.js",
+          "entry_lines": 97,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "coin",
+      "entries": [
+        {
+          "entry": "extension/coin/extension.js",
+          "entry_lines": 1375,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "wuxing",
+      "entries": [
+        {
+          "entry": "extension/wuxing/extension.js",
+          "entry_lines": 229,
+          "game_import": true,
+          "skills": 2,
+          "cards": 1,
+          "characters": null,
+          "translations": 18,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "全能搜索",
+      "entries": [
+        {
+          "entry": "extension/全能搜索/extension.js",
+          "entry_lines": 2354,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 5,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 1,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "十周年UI",
+      "entries": [
+        {
+          "entry": "extension/十周年UI/extension.js",
+          "entry_lines": 12724,
+          "game_import": true,
+          "skills": 0,
+          "cards": 1,
+          "characters": 2,
+          "translations": 0,
+          "config_items": 44,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "十周年UI"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 1,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "image": {
+          "files": 4,
+          "bytes": 3890829
+        }
+      }
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "千幻聆音",
+      "entries": [
+        {
+          "entry": "extension/千幻聆音/extension.js",
+          "entry_lines": 15970,
+          "game_import": true,
+          "skills": 0,
+          "cards": 0,
+          "characters": 2,
+          "translations": 0,
+          "config_items": 3,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "千幻聆音"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 4,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "image": {
+          "files": 2,
+          "bytes": 1124833
+        },
+        "theme": {
+          "files": 18,
+          "bytes": 368487
+        }
+      }
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "史诗卡牌",
+      "entries": [
+        {
+          "entry": "extension/史诗卡牌/extension.js",
+          "entry_lines": 2975,
+          "game_import": true,
+          "skills": 6,
+          "cards": null,
+          "characters": 2,
+          "translations": 8,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 1,
+            "packed_header": false,
+            "very_long_lines": 1
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "太虚幻境",
+      "entries": [
+        {
+          "entry": "extension/太虚幻境/extension.js",
+          "entry_lines": 6461,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": 0,
+          "settings_refs": 5,
+          "external_extension_refs": [
+            "太虚幻境"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "image": {
+          "files": 2,
+          "bytes": 20614014
+        }
+      }
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "如真似幻",
+      "entries": [
+        {
+          "entry": "extension/如真似幻/extension.js",
+          "entry_lines": 9502,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": 0,
+          "settings_refs": 16,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 1,
+            "packed_header": false,
+            "very_long_lines": 1
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "手杀MVP",
+      "entries": [
+        {
+          "entry": "extension/手杀MVP/extension.js",
+          "entry_lines": 2773,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 8,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "手杀MVP"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 3,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "手杀ui",
+      "entries": [
+        {
+          "entry": "extension/手杀ui/extension.js",
+          "entry_lines": 7480,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": 38,
+          "settings_refs": 13,
+          "external_extension_refs": [
+            "手杀ui"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 4,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [
+        "fonts/extension.js"
+      ],
+      "resources": {
+        "audio": {
+          "files": 4,
+          "bytes": 80190
+        }
+      }
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "手杀全扩",
+      "entries": [
+        {
+          "entry": "extension/手杀全扩/extension.js",
+          "entry_lines": 1706,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": null,
+          "settings_refs": 48,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "拖拽读取",
+      "entries": [
+        {
+          "entry": "extension/拖拽读取/extension.js",
+          "entry_lines": 781,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 3,
+          "settings_refs": 2,
+          "external_extension_refs": [
+            "拖拽读取"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 2,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "斗转星移",
+      "entries": [
+        {
+          "entry": "extension/斗转星移/extension.js",
+          "entry_lines": 1864,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": null,
+          "settings_refs": 6,
+          "external_extension_refs": [
+            "斗转星移"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 3,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "更新保护",
+      "entries": [
+        {
+          "entry": "extension/更新保护/extension.js",
+          "entry_lines": 2084,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": 19,
+          "settings_refs": 4,
+          "external_extension_refs": [
+            "更新保护"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 6,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "末日乱斗",
+      "entries": [
+        {
+          "entry": "extension/末日乱斗/extension.js",
+          "entry_lines": 3411,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 4,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 1,
+            "packed_header": false,
+            "very_long_lines": 1
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "标记补充",
+      "entries": [
+        {
+          "entry": "extension/标记补充/extension.js",
+          "entry_lines": 6519,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "标记补充"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "武皇争霸",
+      "entries": [
+        {
+          "entry": "extension/武皇争霸/extension.js",
+          "entry_lines": 1367,
+          "game_import": true,
+          "skills": 1,
+          "cards": 3,
+          "characters": 2,
+          "translations": 8,
+          "config_items": 9,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "武皇"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "段位制裁",
+      "entries": [
+        {
+          "entry": "extension/段位制裁/extension.js",
+          "entry_lines": 521,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "电脑适配",
+      "entries": [
+        {
+          "entry": "extension/电脑适配/extension.js",
+          "entry_lines": 121,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "皮肤切换",
+      "entries": [
+        {
+          "entry": "extension/皮肤切换/extension.js",
+          "entry_lines": 11956,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": 18,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "十周年UI",
+            "千幻聆音",
+            "皮肤切换"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "祖安武将",
+      "entries": [
+        {
+          "entry": "extension/祖安武将/extension.js",
+          "entry_lines": 51474,
+          "game_import": true,
+          "skills": 1,
+          "cards": 3,
+          "characters": 3,
+          "translations": 120,
+          "config_items": 10,
+          "settings_refs": 0,
+          "external_extension_refs": [],
+          "obfuscation_markers": {
+            "eval_calls": 1,
+            "packed_header": false,
+            "very_long_lines": 4
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "笨蛋插件",
+      "entries": [
+        {
+          "entry": "extension/笨蛋插件/extension.js",
+          "entry_lines": 1671,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "笨蛋插件"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "audio": {
+          "files": 1,
+          "bytes": 253514
+        }
+      }
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "选将美化",
+      "entries": [
+        {
+          "entry": "extension/选将美化/extension.js",
+          "entry_lines": 9094,
+          "game_import": true,
+          "skills": 2,
+          "cards": 3,
+          "characters": 2,
+          "translations": 0,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "选将美化"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": true,
+            "very_long_lines": 4
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "雷霆万钧",
+      "entries": [
+        {
+          "entry": "extension/雷霆万钧/extension.js",
+          "entry_lines": 9187,
+          "game_import": true,
+          "skills": 39,
+          "cards": 1,
+          "characters": 14,
+          "translations": 85,
+          "config_items": 19,
+          "settings_refs": 4,
+          "external_extension_refs": [
+            "雷霆万钧"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": false,
+            "very_long_lines": 0
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {
+        "image": {
+          "files": 2,
+          "bytes": 5675743
+        }
+      }
+    },
+    {
+      "repo": "noname-liuli",
+      "name": "龙血玄黄",
+      "entries": [
+        {
+          "entry": "extension/龙血玄黄/extension.js",
+          "entry_lines": 1,
+          "game_import": true,
+          "skills": null,
+          "cards": null,
+          "characters": null,
+          "translations": null,
+          "config_items": null,
+          "settings_refs": 0,
+          "external_extension_refs": [
+            "龙血玄黄"
+          ],
+          "obfuscation_markers": {
+            "eval_calls": 0,
+            "packed_header": true,
+            "very_long_lines": 1
+          }
+        }
+      ],
+      "subplugins": [],
+      "resources": {}
+    }
+  ]
+}

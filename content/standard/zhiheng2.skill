@@ -1,0 +1,4 @@
+// Skill zhiheng2(118) - standard variant
+skill zhiheng2(118) {
+  modifier distance_from add -1;
+}

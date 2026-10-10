@@ -1,0 +1,6 @@
+// rezhenxing（镇行）：结束阶段开始时或当你受到伤害后，你可以观看牌堆顶的三张牌，然后你获得其中与其余牌花色均不相同的一张牌，将剩余牌以原顺序放回牌堆顶。
+skill rezhenxing(2456224886) {
+  trigger damage owner_alive {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

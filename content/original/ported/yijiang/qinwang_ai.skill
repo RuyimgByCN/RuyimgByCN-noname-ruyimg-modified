@@ -1,0 +1,6 @@
+// 勤王AI：旧 JS 为空对象，仅作技能标记。
+skill qinwang_ai(3055175046) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

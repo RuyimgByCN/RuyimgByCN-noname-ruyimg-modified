@@ -1,0 +1,15 @@
+// 3D精选 牵招「远振/制戍」：旧 JavaScript 仅作语义证据，不进入运行时。
+// 远振（锁定技）：使用牌指定其他角色为唯一目标后，若你至其距离不为 1，其选择一项：
+// 弃置一张牌，或令你摸一张牌。需要单目标距离判定与目标侧二选一状态机。
+skill dddyuanzhen(3253084640) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 制戍：出牌阶段开始时，可移动场上的一张装备牌，然后以此法失去牌的角色视为对
+// 装备区被置入牌的角色使用一张【过河拆桥】。需要装备移动与虚拟锦囊串联状态机。
+skill dddzhishu(561904033) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

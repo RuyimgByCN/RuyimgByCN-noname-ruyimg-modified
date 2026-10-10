@@ -1,0 +1,16 @@
+// 掩杀（offline 春秋罗贯中 ymfriendyance）：每轮开始时，你可以摸五张牌并将等量
+// （五）张手牌以任意顺序置于武将牌上直到本轮结束。当一张牌被使用时，你移去
+// 武将牌上首张牌，每满足一项你便摸一张牌：1.两张牌花色相同；2.两张牌类型相同。
+// 上游 offline_chunqiu.js L757（chooseToGuanxing 式多卡移动 + useCard 联动消耗）。
+// 实现（2026-09-10 第二百一十七批·变张置入原语消费）：主面 trigger round_started
+// owner_is_target optional → draw_cards(self,5) + choose_hand_cards_to_skill_pile
+// (self, self_skill, 5, 5)（等量=恰好五张，tag 714 / ABI 691 续体 Cont 298）。
+// 近似（登记债）：①消耗面（useCard 时移去首张 + 花色/类型判定摸牌）未建模；
+// ②「直到本轮结束」的本轮级归还未建模（牌留存堆内）；③置入顺序语义简化为
+// 所选顺序落堆。
+skill ymfriendyance(3114639769) {
+  trigger round_started owner_is_target optional {
+    effect draw_cards(self, 5);
+    effect choose_hand_cards_to_skill_pile(self, self_skill, 5, 5);
+  }
+}

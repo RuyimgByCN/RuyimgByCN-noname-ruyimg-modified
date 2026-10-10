@@ -1,0 +1,15 @@
+// 疠火（onlyOL）：使用【杀】时可将其转为火属性并增加一个目标；若此【杀】造成伤害，
+// 须弃一张牌或失去 1 点体力。
+// 上游 (onlyOL/skill.js)：转火 + useCard2 加目标 + 伤害后弃牌/失去体力分支。
+// 实现：`modifier card_nature(sha) override fire`（转火，全程近似）+
+// `trigger card_used owner_source_fire_sha optional →
+// choose_add_or_remove_current_card_target`（转火后用杀即火杀，过滤器命中）。
+// 近似：(1) 转火全程强制（上游可选）；(2) 「伤害后弃一或失去体力」分支未建模；
+// (3) 加目标在合成事件中静默 no-op。同族 refresh/ollihuo4 体未核，留待。
+// 2026-08-15 nature 写入批次——零新原语。
+skill dclihuo(2601425521) {
+  modifier card_nature(sha) override fire;
+  trigger card_used owner_source_fire_sha optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

@@ -1,0 +1,5 @@
+// rekuangcai：锁定技；摸?牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill rekuangcai(3565025494) {
+  modifier hand_limit add 1;
+}

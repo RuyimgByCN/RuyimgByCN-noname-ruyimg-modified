@@ -1,0 +1,8 @@
+// dragzhawang（触发技）：player:phaseBegin, player:phaseChange, 多分支选择, 失去体力, 加技能, 含子技能, 异步。
+// 未建模：多分支选择、子技能机制、异步await，DSL 无对应原语。
+// 空定义保留占位。
+skill dragzhawang(3873810458) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

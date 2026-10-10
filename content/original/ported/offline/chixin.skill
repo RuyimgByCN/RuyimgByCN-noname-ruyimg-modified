@@ -1,0 +1,5 @@
+// chixin：player:card_targeted, 加技能。
+skill chixin(2777509304) {
+  trigger card_targeted owner_alive {
+  }
+}

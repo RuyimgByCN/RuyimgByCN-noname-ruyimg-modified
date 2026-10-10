@@ -1,0 +1,6 @@
+// yjjiechu（锁定技/主动技(phaseUse)/转化技(视作shunshou)/触发技）：锁定技, target:useCardToTarget, player:card_used, 主动(phaseUse), 视作shunshou, 需弃牌, 加技能, 含子技能, 异步, 弃牌。
+skill yjjiechu(2226722340) locked {
+  trigger card_used always {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

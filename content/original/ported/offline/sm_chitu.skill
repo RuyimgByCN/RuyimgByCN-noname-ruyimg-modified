@@ -1,0 +1,6 @@
+// sm_chitu：锁定技, source:damage_before, 异步。
+skill sm_chitu(4288939530) {
+  trigger damage_before owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

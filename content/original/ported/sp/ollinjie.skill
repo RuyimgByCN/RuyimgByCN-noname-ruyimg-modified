@@ -1,0 +1,13 @@
+// 临界·OL（ollinjie，OL貂蝉）：你受到伤害后，伤害来源须弃置一张手牌；若弃置的牌为
+// 【杀】，你摸一张牌。
+// 上游 (sp/skill.js:7389)：trigger player:damageEnd；filter = 来源存活且可弃手牌数 > 0；
+// forced；content = source.chooseToDiscard(true) → 若弃牌为【杀】则 player.draw()。
+// 实现：damage + owner_is_target（受伤后）→ resolve_ollinjie(self, event_source)
+// （ABI 608 新原语：来源强制弃一张手牌；弃牌为【杀】则拥有者摸 1，弃牌与条件摸牌
+// 在同一调度队列内串行结算）。
+// 与上游差异：上游「来源可弃手牌数 > 0」门槛由原语内无牌即静默跳过近似。
+skill ollinjie(4117878839) {
+  trigger damage owner_is_target {
+    effect resolve_ollinjie(self, event_source);
+  }
+}

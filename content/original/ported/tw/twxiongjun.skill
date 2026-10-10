@@ -1,0 +1,11 @@
+// 雄军（袁谭）：锁定技。当你造成伤害后，每名拥有〖雄军〗的角色各摸一张牌。
+// 上游 (tw/skill.js twxiongjun)：trigger source damage（每实例独立触发）。
+// 实现（2026-09-15 第二百八十七批·批量摸牌族状态机，ADR 0641 §8.72）：
+// trigger damage owner_is_source → resolve_twxiongjun(self)（ABI 733 /
+// tag 754，单发无续体）：按 def 遍历存活持有者各摸 1。
+// 保真度：完整（无省略面）。
+skill twxiongjun(2909562544) {
+  trigger damage owner_is_source {
+    effect resolve_twxiongjun(self);
+  }
+}

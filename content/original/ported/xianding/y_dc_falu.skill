@@ -1,0 +1,8 @@
+// 法箓（y版）：锁定技，失去手牌时记录花色（最多3个）——
+// 若3个花色相同：清除记录，获得其他3种花色各一张；
+// 若3个花色不同：清除记录，选择一名角色失去或回复1点体力。
+// 旧 JS 的「花色滑动窗口」「同花色/异花色分支」无对应原语，未建模。
+skill y_dc_falu(3427680505) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

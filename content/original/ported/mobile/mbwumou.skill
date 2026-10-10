@@ -1,0 +1,11 @@
+// 无谋（手杀神吕布）：锁定技，你的普通锦囊牌只能当普通【杀】使用或打出，
+// 此【杀】的目标改为原锦囊牌的目标。
+// 上游 (mobile/skill.js:6-71)：cardname/selectTarget/cardEnabled/playerEnabled/
+// targetInRange 一组 mod，在 chooseToUse/chooseToRespond 窗口把单张锦囊牌改判为
+// 【杀】并沿用原牌目标集。
+// 「卡牌名替换/目标集改判」无对应 DSL 原语（view_as 只支持固定种类转化）。
+// 诚实 noop（保真度债，ADR 0597）。2026-08-15：随上游 v1.11.5 新武将 mb_shen_lvbu 移植。
+skill mbwumou(2447927801) locked {
+  // INTENTIONAL_EMPTY_NOOP: cardname retarget mod unavailable
+  modifier hand_limit add 0;
+}

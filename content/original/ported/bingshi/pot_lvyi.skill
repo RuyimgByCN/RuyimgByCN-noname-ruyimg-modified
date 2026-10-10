@@ -1,0 +1,42 @@
+// 势吕壹：隳律 / 颂谳 / 势施。旧 JavaScript 仅作语义合同。
+skill pothuilv(4200000570) {
+  trigger phase_play owner_alive_other_play_phase_pothuilv_available optional by owner {
+    effect resolve_potlvyi(self, event_player, event_card, 0);
+  }
+  trigger card_used owner_alive {
+    effect resolve_potlvyi(self, event_source, event_card, 1);
+  }
+  trigger phase_play_end owner_alive {
+    effect resolve_potlvyi(self, event_player, event_card, 2);
+  }
+}
+
+skill potsongyan(4200000571) {
+  trigger cards_moved owner_alive_discard_batch {
+    effect resolve_potlvyi(self, event_player, event_card, 3);
+  }
+  trigger phase_prepare owner_is_target_can_use_wuzhong optional {
+    effect resolve_potlvyi(self, event_player, event_card, 4);
+  }
+  trigger damage owner_is_target_can_use_wuzhong optional {
+    effect resolve_potlvyi(self, event_player, event_card, 4);
+  }
+  trigger card_resolved owner_is_source {
+    effect resolve_potlvyi(self, event_player, event_card, 5);
+  }
+}
+
+skill potshishi(4200000572) locked {
+  trigger damage owner_is_target_other_source_alive_per_damage_point {
+    effect resolve_potlvyi(self, event_source, event_card, 6);
+  }
+  trigger card_used owner_is_source {
+    effect resolve_potlvyi(self, event_player, event_card, 7);
+  }
+  trigger card_responded owner_alive_other_responded_to_owner {
+    effect resolve_potlvyi(self, event_player, event_card, 8);
+  }
+  trigger card_resolved owner_is_source {
+    effect resolve_potlvyi(self, event_player, event_card, 9);
+  }
+}

@@ -1,0 +1,7 @@
+// 新破军2（徐盛）：回合结束时，收回所有被〖破军〗移出的牌。
+// 旧 JS 的 expansion 回收逻辑；DSL 以 gain_all_skill_pile_cards 近似。
+skill xinpojun2(3345836850) {
+  trigger phase_end owner_alive {
+    effect gain_all_skill_pile_cards(self);
+  }
+}

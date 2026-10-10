@@ -1,0 +1,5 @@
+// dcdehua：锁定技；失技能。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcdehua(3668500950) {
+  modifier hand_limit add 1;
+}

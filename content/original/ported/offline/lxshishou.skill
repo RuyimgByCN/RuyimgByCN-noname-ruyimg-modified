@@ -1,0 +1,8 @@
+// 侍守（李昭焦伯）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：一名角色的结束阶段，若你于此回合造成或受到过伤害，可令一名与你势力相同的角色获得 1 点护甲
+// 旧 JS 的「护甲」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxshishou(2779797311) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

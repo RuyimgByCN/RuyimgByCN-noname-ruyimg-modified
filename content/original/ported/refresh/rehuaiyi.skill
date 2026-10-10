@@ -1,0 +1,5 @@
+skill rehuaiyi(4054411167) {
+  active play_phase uses_per_play_phase 2 hand_nonempty {
+    effect resolve_rehuaiyi(self);
+  }
+}

@@ -1,0 +1,23 @@
+$ 定向：载荷验收 + 酒尾（2026-10-07 批次）
+test huanle_bridge_builds_pack ... ok
+test huanle_mianju_blocks_flip_while_equipped ... ok
+test huanle_pack_payload_matches_upstream_list ... ok
+test huanle_monkey_cancels_peach_and_takes_it ... ok
+test huanle_jiuwei_recovers_or_draws_at_turn_end ... ok
+test huanle_xuelunyang_steals_target_skill_until_turn_end ... ok
+test g1_huanle_vertical_host_behaviors_and_restore ... ok
+test huanle_xuelunyang_pass_declines_theft ... ok
+test huanle_jiuwei_optional_confirm_and_restore ... ok
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.04s
+
+$ a0 牌种注册表（Jiuwei=89）
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+$ 全量：cargo test --offline -p engine-native
+合计 passed=360 failed=0 ignored=1
+
+$ golden / 依赖 crate / lib -D warnings
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+content-runtime passed=32 failed=0
+engine-ai passed=29 failed=0
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s

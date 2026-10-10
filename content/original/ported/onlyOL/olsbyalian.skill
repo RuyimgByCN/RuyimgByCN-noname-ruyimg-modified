@@ -1,0 +1,12 @@
+// 牙镰（OL谋祝融）：每阶段结束时，若你此阶段不因使用失去过【杀】，你可以视为对
+// 任意名手牌数小于等于 X 的角色使用一张火【杀】（X 为本回合弃牌堆中【杀】的数量
+// 且至少为 1）。
+// 上游 (onlyOL/skill.js:79-122)：phaseAnyEnd 触发 + hasHistory(lose) 阶段历史校验 +
+// 手牌数 ≤ N 目标过滤 + 火【杀】虚拟使用。
+// 「阶段失去历史」「手牌数上限目标过滤」「火属性虚拟杀」均无对应原语
+// （choose_use_virtual_sha 仅普杀）。诚实 noop（保真度债，ADR 0597）。
+// 2026-08-15：随上游 v1.11.5 新武将 ol_sb_zhurong 移植。
+skill olsbyalian(2345586433) locked {
+  // INTENTIONAL_EMPTY_NOOP: history-gated fire virtual sha unavailable
+  modifier hand_limit add 0;
+}

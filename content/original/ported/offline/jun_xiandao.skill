@@ -1,0 +1,6 @@
+// jun_xiandao：音效名:xinguidao, global:judge, 摸牌, 异步。
+skill jun_xiandao(4038503561) {
+  trigger phase_judge owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

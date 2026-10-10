@@ -1,0 +1,7 @@
+// 激词（钟会）：拼点时，失去1点体力并将己方拼点点数改为13。
+// 旧 JS 的「拼点点数改为13」无对应 DSL 效果。以 lose_hp 近似保留损失体力部分。点数篡改未建模。
+skill stdjici(2265158938) {
+  trigger hand_compare_started owner_hand_compare_participant {
+    effect lose_hp(self, 1);
+  }
+}

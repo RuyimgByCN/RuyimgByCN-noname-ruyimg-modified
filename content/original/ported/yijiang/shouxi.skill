@@ -1,0 +1,10 @@
+// 守玺(旧版)(曹节)：当你成为【杀】的目标后，你可以从牌堆中选择一种基本牌或锦囊牌声明。
+// 若如此做，此杀使用者须弃置一张与声明牌名相同的牌，否则此杀对你无效，
+// 且你获得其一张牌。
+// 旧JS含chooseButton从牌堆选牌名声明、storage记录已声明牌名、target chooseToDiscard特定牌名等逻辑。
+// 注：牌堆中选择声明牌名、指定牌名弃牌、storage防重复声明均无DSL原语。
+skill shouxi(3081703772) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

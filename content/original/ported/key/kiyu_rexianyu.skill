@@ -1,0 +1,7 @@
+// 热鲜鱼（妃优）：出牌阶段结束时，将本阶段使用牌的结果告知一名其他角色，其获得技能后也可使用相同牌。
+// 旧 JS 的「使用历史展示+授予使用相同牌技能」需信息传递+技能授予原语，未建模。
+skill kiyu_rexianyu(3690249911) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kiyu_rexianyu = 标记型技能（charlotte，skill.js:2239），无规则面。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

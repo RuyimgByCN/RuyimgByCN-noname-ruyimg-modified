@@ -1,0 +1,5 @@
+// eu_juedou：global:card_used, 异步。
+skill eu_juedou(3559352571) {
+  trigger card_used owner_alive {
+  }
+}

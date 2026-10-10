@@ -1,0 +1,4 @@
+skill dcyuxiang(3515326729) locked {
+  modifier distance_from add -2;
+  modifier sha_unrespondable_within_distance override 2;
+}

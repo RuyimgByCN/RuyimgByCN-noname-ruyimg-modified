@@ -1,0 +1,14 @@
+// 势陈矫：旧 JavaScript 仅作语义合同；规则由 ABI 544 权威结算。
+skill potqingyan(4232147498) {
+  view_as shan response any from hand up_to 5 cost potqingyan;
+  view_as wuxie response any from hand up_to 5 cost potqingyan;
+}
+
+skill potceduan(4257587443) {
+  active play_phase uses_per_turn 1 targets 1 1 other owner_in_target_attack_range {
+    effect resolve_potceduan(self, event_source, 0);
+  }
+  trigger sha_resolved owner_source_sha_resolved_tracked_potceduan_dealt_damage {
+    effect resolve_potceduan(self, event_source, 1);
+  }
+}

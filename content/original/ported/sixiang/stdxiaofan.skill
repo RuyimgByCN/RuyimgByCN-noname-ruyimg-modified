@@ -1,0 +1,6 @@
+// 嚣翻：锁定技，使用牌后根据外部技能 olxiaofan.getNum 计算需弃置的装备/手牌区。
+// 旧 JS 依赖另一个技能的计算结果（olxiaofan.getNum），且按区逐个弃置，无可用的 DSL 原语。
+skill stdxiaofan(3180249035) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

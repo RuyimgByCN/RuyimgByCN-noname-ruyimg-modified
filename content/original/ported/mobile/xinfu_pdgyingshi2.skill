@@ -1,0 +1,4 @@
+// 【隐世】的分组效果：跳过拥有者的判定阶段。
+skill xinfu_pdgyingshi2(2785649758) locked {
+  modifier skip_judge_phase override 1;
+}

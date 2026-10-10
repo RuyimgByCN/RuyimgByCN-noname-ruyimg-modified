@@ -1,0 +1,6 @@
+// huamao_ninghan：受到伤害后的效果。
+skill huamao_ninghan(3974719006) {
+  trigger damage owner_is_target_once  {
+    effect draw_cards(self, 1);
+  }
+}

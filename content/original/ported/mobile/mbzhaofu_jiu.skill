@@ -1,0 +1,4 @@
+// mbzhaofu_jiu（照抚）：每回合限一次，你可弃置所有手牌视为使用一张【酒】。发动后或你的回合结束时失去该技能。
+skill mbzhaofu_jiu(3784364275) {
+  view_as jiu play_phase any;
+}

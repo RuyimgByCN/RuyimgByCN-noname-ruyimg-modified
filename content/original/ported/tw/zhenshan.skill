@@ -1,0 +1,4 @@
+// 振赡：每回合一次，交换整手牌后将一种合法基本牌使用或打出。
+skill zhenshan(2898394319) {
+  view_as basic any any from none uses_per_turn 1 cost swap_lower_hand;
+}

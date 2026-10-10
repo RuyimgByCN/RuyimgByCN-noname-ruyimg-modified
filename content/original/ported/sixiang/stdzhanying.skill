@@ -1,0 +1,7 @@
+// 战影（锁定技）：你的回合内，红色牌对当前手牌数大于本回合开始时手牌数的角色无效；
+// 你对当前手牌数大于本回合开始时手牌数的角色造成的伤害+1。
+// 旧 JS 的「标记记录回合开始时手牌数」「回合内动态比较手牌数」「红色牌无效 modifier」「伤害+1」涉及标记追踪与复杂 modifier，无可用的 DSL 原语。
+skill stdzhanying(3709759828) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

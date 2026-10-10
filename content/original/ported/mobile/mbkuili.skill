@@ -1,0 +1,5 @@
+skill mbkuili(2909034781) locked {
+trigger damage owner_is_target_source_alive_disabled_weapon {
+    effect enable_equip_slot(event_source, 1, self);
+  }
+}

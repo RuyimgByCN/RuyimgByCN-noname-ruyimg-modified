@@ -1,0 +1,7 @@
+$ U01 3D精选来源级验收定向：真实宿主全生命周期（第四来源）
+test d3_real_host_full_lifecycle ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（396/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；无引擎代码改动、无 golden 变化
+$ 身份：upstream-noname/d3-select@1.0.0（角色包：扩展武将 ddd刘冲 入目录、末焱登记暂缓）；生命周期=安装+激活→安装包→原生建局→对局中 revoke_slot 卸载→锁定副本续玩（general_meta 可查）→重装 Revoked→重新 import 被拒
+$ 计数口径：来源级第四包（4/37）；技能内容面（32 将重写/末焱原语/资源映射）为 G3 前置，不阻生命周期验收

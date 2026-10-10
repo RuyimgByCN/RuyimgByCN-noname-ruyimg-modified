@@ -1,0 +1,6 @@
+// psqianjing（主动技(chooseToUse)/触发技）：player:damage, source:damageSource, 主动(chooseToUse), 多分支选择, 摸牌, 含子技能, 异步。
+skill psqianjing(4222710652) {
+  trigger damage owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

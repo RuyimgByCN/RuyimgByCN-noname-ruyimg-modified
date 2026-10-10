@@ -1,0 +1,7 @@
+// 浮海：出牌阶段限一次，其他角色按从下家开始的座次私密选择「潮起」或「潮落」，
+// 全部选择完成后统一公开；若开头连续相同的选择数大于一，摸等量牌。
+skill refuhai(2797180006) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_refuhai(self);
+  }
+}

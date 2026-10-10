@@ -1,0 +1,4 @@
+// 断粮：黑色基本牌或装备牌可当【兵粮寸断】使用。
+skill duanliang1(3934371847) {
+  view_as bingliang play_phase black_basic_equip from hand_equip;
+}

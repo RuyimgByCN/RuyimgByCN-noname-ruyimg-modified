@@ -1,0 +1,5 @@
+// yjshicha：锁定技, player:phase_discard, 加技能, 含子技能。
+skill yjshicha(3645978753) {
+  trigger phase_discard owner_alive {
+  }
+}

@@ -1,0 +1,4 @@
+// 公清（潘濬）
+skill xinfu_gongqing(3566698689) locked {
+  modifier damage_taken_source_range_threshold override 3;
+}

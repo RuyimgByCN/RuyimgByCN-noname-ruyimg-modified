@@ -1,0 +1,9 @@
+// 断绁：旧 JS 语义重写；目标必须未横置，目标与自己均设置为横置状态。
+skill dcduanxie(4278513633) {
+  active play_phase uses_per_turn 1 targets 1 1 other unlinked {
+    effect remove_mark(event_source, 2, 0);
+    effect add_mark(event_source, 2, 1);
+    effect remove_mark(self, 2, 0);
+    effect add_mark(self, 2, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 行动（百合）：跳过判定/摸牌阶段后从牌堆获得一张杀或锦囊；出牌阶段开始时可从弃牌堆获得一张基本牌并在使用后造成伤害判定。
+// 旧 JS 的 multi-trigger+牌堆检索+判定+多子技能 需多事件与检索原语，未建模。
+skill yuri_xingdong(2936998904) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yuri_xingdong 含真实规则体（enable、filterTarget、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

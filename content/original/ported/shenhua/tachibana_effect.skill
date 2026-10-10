@@ -1,0 +1,7 @@
+// 花橘·效果（nzry_huaiju 辅助）：受创/摸牌阶段触发。
+// 旧 JS 的「花橘 expansion」无对应原语；以受伤后摸一张近似（已注明）。
+skill tachibana_effect(3035475686) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "native_source_hashes_match_review15": true,
+  "native_source_hashes": {
+    "crates/engine-native/src/ai.rs": "e818851f569a668ae23eb639a60314d2c3021ac87d138026ec997510401b6447",
+    "crates/engine-native/src/archive.rs": "826e0a2abd8303dc4bcee8cc2ca2b710644cf5c47cd8ee20886cdbb42cf0dbe6",
+    "crates/engine-native/src/engine.rs": "4baa8b7a1f736b3ae20e6833ad10f9b4cdec42636d267b91b78b5ab72b979f2b",
+    "crates/engine-native/src/content/extension.rs": "02698f87ce852988884b1390dd04e83b3c007533a7b7b94ac37b57f1c279431c",
+    "crates/engine-native/src/snap.rs": "832b47ff407ed849e116808dd7d2101ef234e74cf6c25ac402788f67cbb91aab",
+    "crates/engine-native/src/kernel.rs": "fb2d55be0ea2d569d3cadd09d8a50e2d9af7d2273ea56d9ceca5c0deb3660c77",
+    "crates/engine-native/src/content/standard.rs": "065e81137f927000d2bafc7e5eeb292c4e9fb62bfd7146c709d8408052c7eb40",
+    "crates/engine-native/tests/native_kernel.rs": "31778e1af5cab1ba344dc74187e05c9f64ae2eaaf0a681589ecf39f72f6291a9"
+  },
+  "extension_inventory_matches_baseline": true,
+  "upstream": [
+    {
+      "name": "noname",
+      "head": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+      "dirty_paths": 0,
+      "extension_directories": 8,
+      "directly_discoverable": []
+    },
+    {
+      "name": "noname-liuli",
+      "head": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "dirty_paths": 50,
+      "extension_directories": 29,
+      "directly_discoverable": []
+    }
+  ],
+  "upstream_standard_general_entries": 33,
+  "native_general_entries": 28,
+  "native_non_sample_generals": 25,
+  "upstream_standard_physical_cards": 108,
+  "upstream_top_level_mode_entries": 12
+}

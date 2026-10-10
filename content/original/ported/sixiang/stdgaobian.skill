@@ -1,0 +1,11 @@
+// 高变（标王沈）：其他角色回合结束时，若本回合内恰好有一名角色受到过伤害，该角色
+// 选择一项：1.视为对一名其他角色使用一张【杀】；2.重置你的【安忍】摸牌计数。
+// 旧 JS 仅作语义证据；受损者二选与结算由 resolve_stdgaobian 权威状态机校验
+// （ABI 468）。注：旧 JS 的【杀】取本回合进入弃牌堆的具体【杀】实体，DSL 以
+// UseVirtualCardOn 虚拟【杀】表达（实体身份文档化近似）；重置目标为标王沈
+// stdanran 的计数标记（mark 221181016）。
+skill stdgaobian(4024217730) {
+  trigger phase_end owner_alive_not_target {
+    effect resolve_stdgaobian(self);
+  }
+}

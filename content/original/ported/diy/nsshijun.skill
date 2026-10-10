@@ -1,0 +1,8 @@
+// 弑君：造成的伤害 +1；该伤害完成结算后失去 1 点体力。
+skill nsshijun(3960662326) locked {
+  modifier damage_amount add 1;
+
+  trigger damage owner_is_source {
+    effect lose_hp(self, 1);
+  }
+}

@@ -1,0 +1,14 @@
+// “咆”临时效果：下一次杀的伤害增加全部层数并消费；回合结束也清空。
+skill olpaoxiao2(3946229744) locked {
+  modifier damage_amount(sha) add owner_skill_mark;
+
+  trigger damage_before owner_source_sha {
+    effect remove_mark(self, 3946229744, 0);
+    effect remove_skill(self_skill);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 3946229744, 0);
+    effect remove_skill(self_skill);
+  }
+}

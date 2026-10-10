@@ -1,0 +1,7 @@
+// 锦绘（？）：准备阶段，亮出三张牌。可以与一名其他角色依次使用其中的牌，但不可连续使用同色牌。
+// 旧 JS 的「亮牌→轮流使用→同色限制」流程无对应 DSL 原语。完全无法表达。
+skill stdjinhui(2589219019) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

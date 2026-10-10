@@ -1,0 +1,8 @@
+// 探锋（族王允/族王淩/族王昶/族王浑/族王昌/族王琛）：出牌阶段限一次。视为使用【杀】；造成伤害后摸双方装备数之差张牌；未造成伤害则目标可视为对你使用【杀】。
+// 旧 JS 的「虚拟杀+延时伤害/未伤害分支」「装备数比较摸牌」「目标反击杀」无对应原语。
+// 以 choose_use_virtual_sha 近似保留出杀，缺少伤害分支逻辑。
+skill clantanfeng(2231075583) {
+  active play_phase uses_per_turn 1 {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

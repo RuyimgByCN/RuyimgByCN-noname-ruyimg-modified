@@ -1,0 +1,8 @@
+// 胡车儿「盗戟」
+// 成本与目标由通用主动技协议原子选择；获得、装备和武器伤害按嵌套触发边界分段。
+skill daoji(4263252675) {
+  active play_phase uses_per_turn 1 targets 1 1 other has_gainable_equip select_he 1 1 card_nonbasic {
+    effect discard_selected(self);
+    effect resolve_daoji(self, event_source);
+  }
+}

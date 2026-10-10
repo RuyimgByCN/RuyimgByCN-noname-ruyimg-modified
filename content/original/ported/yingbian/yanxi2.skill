@@ -1,0 +1,5 @@
+// 掩饰·2（掩饰系）：标记技能。带标记牌不计入手牌上限。
+// 旧 JS 的 gaintag 标记无对应原语，未建模（已注明）。
+skill yanxi2(3727807051) {
+  modifier hand_limit add 1;
+}

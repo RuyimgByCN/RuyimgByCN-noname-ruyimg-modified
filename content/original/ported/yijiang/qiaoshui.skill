@@ -1,0 +1,7 @@
+// 巧说（简雍）：出牌阶段开始时可拼点一次；严格获胜获得下一张牌的目标调整，
+// 平局或失败则本回合不能使用锦囊牌。
+skill qiaoshui(3955213386) {
+  trigger phase_play owner_is_target_can_compare_other optional {
+    effect choose_hand_compare(self, 2260792673, 2280240537);
+  }
+}

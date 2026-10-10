@@ -1,0 +1,9 @@
+// 曲迪（标文鸯）：你使用【杀】或【决斗】指定唯一目标后，可三选一：获得其一张
+// 手牌 / 弃置一张基本牌并令此牌对其伤害 +1 / 背水（减 1 点体力上限并依次执行
+// 上述所有选项）。
+// 旧 JavaScript 仅作语义证据；三选一与分支由 ABI 420 resolve_dbquedi 权威结算。
+skill dbquedi(2328150606) {
+  trigger card_targeted owner_source_sha_or_juedou_single_target optional {
+    effect resolve_dbquedi(self, event_player, event_card);
+  }
+}

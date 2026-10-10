@@ -1,0 +1,7 @@
+// dctaji：锁定技；摸?牌；回复1体力；弃牌。
+// 旧JS含subSkill、expansion区，DSL无法精确建模。
+skill dctaji(3104482637) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

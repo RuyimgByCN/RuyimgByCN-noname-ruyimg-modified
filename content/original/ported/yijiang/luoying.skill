@@ -1,0 +1,8 @@
+// 落英（何太后）：其他角色弃置的梅花牌或梅花判定牌进入弃牌堆后，你可获得之。
+// 旧 JS 含两个独立子技能（discard 和 judge），均有牌选择 UI。
+// DSL 无法同时过滤「弃置牌堆区」和「梅花花色」和「非判定牌/判定牌来源」，空定义。
+skill luoying(3247922965) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

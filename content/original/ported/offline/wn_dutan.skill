@@ -1,0 +1,7 @@
+// Legacy contract: phaseUse, usable once, no physical card, virtual Duel,
+// and one or more distinct other targets selected by the active invocation.
+skill wn_dutan(4152033537) {
+  active play_phase uses_per_turn 1 targets 1 255 other {
+    effect use_virtual_card_on_selected_targets(self, juedou);
+  }
+}

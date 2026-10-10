@@ -1,0 +1,18 @@
+// 秉壹（xinbingyi）：结束阶段，你可展示所有手牌。若这些牌的颜色均相同，你可以
+// 令至多 X 名角色各摸一张牌（X 为你的手牌数）。（上游另有「类型均相同」维度。）
+// 上游 (mobile/skill.js xinbingyi)：trigger player phaseJieshuBegin；filter
+// 手牌>0；filterx = 颜色 unique==1 或 类型 unique==1；chooseTarget [1, 手牌数]
+// 各摸一张。
+// 实现（2026-09-10 第二百二十七批·既有面清账）：单臂 optional 触发 + 乘积判零
+// 表达颜色均匀 OR（红数×黑数==0 ⇔ 至少一色为 0；DSL 无 ||）+ 手牌>0 门控 →
+// choose_optional_targets_draw(self, 1, 1, 8, any)（ABI 106 系既有原语；
+// choose_targets_draw 为恰好 N 选、不足 N 目标静默 no-op，至多语义须用 optional 变体）。
+// 近似（登记债）：①「类型均相同」维度未建模（类型计数无表达式）；②动态上限
+// X=手牌数收窄为字面量 8；③展示表现面未建模。
+skill xinbingyi(2667046411) {
+  trigger phase_end owner_is_target optional {
+    if hand_count(self) > 0 && hand_color_count(self, red) * hand_color_count(self, black) == 0 {
+      effect choose_optional_targets_draw(self, 1, 1, 8, any);
+    }
+  }
+}

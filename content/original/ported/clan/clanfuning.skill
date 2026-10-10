@@ -1,0 +1,8 @@
+// 扶宁（族韩韶/族韩融/族韩馥）：每回合首次体力变化后，可弃至少已损失体力值张牌并交给一名其他角色；若牌同色则回复1点体力；若牌数超过本回合受伤角色数，调整手牌至体力上限。
+// 旧 JS 的「同色判定」「体力变化追踪」「手牌上限调整」无对应原语。
+// 空定义：需 expansion 支持同色判定和手牌上限比较。
+skill clanfuning(3185766498) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

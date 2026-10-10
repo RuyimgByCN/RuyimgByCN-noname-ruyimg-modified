@@ -1,0 +1,43 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/content/standard.rs:408:9
+    |
+408 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1033:19
+     |
+ 958 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+1033 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1034:19
+     |
+ 958 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+1034 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1035:19
+     |
+ 986 |                 CardKind::ShanDian => {
+     |                 ------------------ matches all the relevant values
+...
+1035 |                 | CardKind::ShanDian => unreachable!("handled above"),
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: `engine-native` (lib) generated 4 warnings (run `cargo fix --lib -p engine-native` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 4.67s
+     Running `target/release/examples/n09_runner 20 9000`

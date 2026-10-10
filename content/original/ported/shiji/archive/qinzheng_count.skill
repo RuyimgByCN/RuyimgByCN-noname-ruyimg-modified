@@ -1,0 +1,7 @@
+// 勤政·计数（马良）：使用或打出牌后记录本回合累计次数。
+// 旧 JS 的 sourceSkill 计数语义，无独立规则行为。
+skill qinzheng_count(4265897455) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

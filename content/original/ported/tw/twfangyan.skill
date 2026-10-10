@@ -1,0 +1,8 @@
+// 芳妍（幻小乔）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：锁定技：准备阶段或体力减少后获得武将牌上“芳妍”牌并摸等量张牌；除芳妍花色外你的牌均视为♥️
+// 旧 JS 的「花色改写 mod + expansion 区」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill twfangyan(2396397186) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,8 @@
+// 龙颂（刘晔）：出牌阶段开始时，可将一张红色牌交给一名角色，临时禁用/获得其出牌阶段技能。
+// 旧 JS 含 give + skill search(getSkills) + disableSkill + addTempSkills 多技能操作。
+// DSL 无可搜索他人技能、无 disable/enable/skill transfer 的原语组合。
+skill dclongsong(2997188792) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dclongsong 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

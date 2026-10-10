@@ -1,0 +1,33 @@
+// 法箓（xinfu_falu，sp 袁术妻）：锁定技。①游戏开始时，你获得四种花色标记
+//（黑桃/红桃/梅花/方块法箓各一枚）。②当你区域内一张牌移至弃牌堆时，若你没有
+// 该牌花色的法箓标记，你获得该花色法箓标记。
+// 上游 (sp/skill.js xinfu_falu)：lose/enterGame/loseAsyncAfter/phaseBefore 四触发
+// + getl(player).cards2 按花色 addMark("xinfu_falu_<suit>")；enterGame/phaseBefore
+// 分支补齐全部未拥有标记。
+// 实现（2026-09-08 第一百八十三批·花色化标记族落地，ABI 683 领号）：
+// game_started owner_alive → add_mark 四花色 def 各 1（初始全有）；
+// cards_moved + owner_discard_suit_no_own_mark_<suit> 四过滤器（批 165 cards_moved
+// 模式：to=discard + 含花色 X + owner 无 X 标记）→ add_mark(self, X_def, 1)。
+// 近似（登记债）：enterGame 补齐分支并入 game_started；loseAsyncAfter 多区域
+// 变动归并为 cards_moved（同事件族）。
+// 法箓标记 def：spade=3540560359 heart=3540560360 club=3540560361 diamond=3540560362。
+skill xinfu_falu(3540560358) locked {
+  trigger game_started owner_alive {
+    effect add_mark(self, 3540560359, 1);
+    effect add_mark(self, 3540560360, 1);
+    effect add_mark(self, 3540560361, 1);
+    effect add_mark(self, 3540560362, 1);
+  }
+  trigger cards_moved owner_discard_suit_no_own_mark_spade_falu {
+    effect add_mark(self, 3540560359, 1);
+  }
+  trigger cards_moved owner_discard_suit_no_own_mark_heart_falu {
+    effect add_mark(self, 3540560360, 1);
+  }
+  trigger cards_moved owner_discard_suit_no_own_mark_club_falu {
+    effect add_mark(self, 3540560361, 1);
+  }
+  trigger cards_moved owner_discard_suit_no_own_mark_diamond_falu {
+    effect add_mark(self, 3540560362, 1);
+  }
+}

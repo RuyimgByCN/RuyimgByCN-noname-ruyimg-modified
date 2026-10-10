@@ -1,0 +1,7 @@
+// Legacy `olzishu`: the first larger-hand target is mandatory; after every
+// completed gain the owner may choose another until tying for maximum hand.
+skill olzishu(2483133612) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_gt_owner {
+    effect take_target_hand_then_repeat_until_max(self, event_source, self_skill);
+  }
+}

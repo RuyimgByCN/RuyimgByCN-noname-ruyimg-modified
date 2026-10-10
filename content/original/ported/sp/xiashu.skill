@@ -1,0 +1,5 @@
+skill xiashu(2873874515) {
+  trigger phase_play owner_is_target_hand_nonempty optional {
+    effect choose_other_xiashu(self);
+  }
+}

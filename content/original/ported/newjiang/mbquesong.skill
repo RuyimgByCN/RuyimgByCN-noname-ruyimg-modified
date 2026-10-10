@@ -1,0 +1,9 @@
+// 缺松（陆抗）：结束阶段，你可选择至多三名角色，每名角色依次二选一：
+// 摸 4-N 张牌并翻转武将牌；或弃置 N-1 张牌并回复 1 点体力。
+// 旧 JS 的「多目标逐个二选一」无对应原语，以选择一名角色摸一张近似
+// （已注明）。
+skill mbquesong(2330988664) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// xinzhizheng（掣政）：锁定技，你的出牌阶段内，攻击范围内不包含你的其他角色不能成为你使用牌的目标。出牌阶段结束时，若你本阶段内使用的牌数小于这些角色的数量，则你弃置其中一名角色的一张牌。
+skill xinzhizheng(3168417539) locked {
+  trigger phase_play_end owner_alive {
+    effect discard_selected(self);
+  }
+}

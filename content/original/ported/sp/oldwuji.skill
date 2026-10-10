@@ -1,0 +1,9 @@
+// 武继：结束阶段累计造成至少三点伤害时觉醒，失去虎啸、加上限并回复。
+skill oldwuji(3438545283) locked {
+  trigger phase_end owner_is_target_turn_damage_at_least_three {
+    effect remove_skill_by_def(self, 3615190640);
+    effect change_max_hp(self, 1);
+    effect recover_hp(self, 1);
+    effect remove_skill(self_skill);
+  }
+}

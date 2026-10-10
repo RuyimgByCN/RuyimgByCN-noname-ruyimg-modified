@@ -1,0 +1,6 @@
+// 闭月 — at end phase, draw 1 card.
+skill biyue(4) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

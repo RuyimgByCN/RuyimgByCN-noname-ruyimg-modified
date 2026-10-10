@@ -1,0 +1,12 @@
+// 滇池（pxdianchi，州郡技能）：每回合限一次。当你造成火焰伤害后，你可以令受伤角色
+// 失去 1 点体力。
+// 上游 (sp/skill.js:1852)：trigger source:damageEnd；filter = 目标存活且伤害带火焰
+// 属性；usable: 1；content = event.targets[0].loseHp()。
+// 实现：damage + owner_source_fire（造成火焰伤害的 DamageDealt）→ 可选确认 →
+// lose_hp(event_player, 1)。
+// 与上游差异：「每回合限一次」以可选触发近似。
+skill pxdianchi(4289301860) {
+  trigger damage owner_source_fire optional {
+    effect lose_hp(event_player, 1);
+  }
+}

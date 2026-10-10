@@ -1,0 +1,4 @@
+// Lu Meng patience
+skill keji3(70) {
+  trigger phase_begin always { effect draw_cards(self, 1); }
+}

@@ -1,0 +1,7 @@
+// 设伏：结束阶段，将一张手牌置于武将牌上作「伏兵」；他人使用同名牌时弃伏兵使其无效。
+// 旧 JS 的「技能牌堆（伏兵）+ 牌名匹配 + 令牌无效」无对应原语（需 expansion + name match + nullify），未建模。
+skill stdshefu(3144101769) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

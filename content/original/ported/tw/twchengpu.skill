@@ -1,0 +1,22 @@
+// 疠火/醇醪：普通杀改火并可加目标；以全场唯一“醇”增伤或救援。
+skill twlihuo(2910350044) {
+trigger card_used owner_source_normal_sha {
+    effect resolve_twchengpu(self, event_player, event_source, event_card, 2257064269, 0);
+    effect choose_add_current_sha_target(self, event_card);
+  }
+  trigger card_used owner_source_fire_sha {
+    effect choose_add_current_sha_target(self, event_card);
+  }
+}
+
+skill twchunlao(2257064269) {
+trigger phase_prepare owner_is_target_any_field_card_no_skill_pile_2257064269 {
+    effect resolve_twchengpu(self, event_player, event_source, event_card, 2257064269, 1);
+  }
+trigger card_used owner_alive_source_sha_hand_equip_skill_pile_2257064269 {
+    effect resolve_twchengpu(self, event_player, event_source, event_card, 2257064269, 2);
+  }
+trigger dying owner_alive_dying_skill_pile_2257064269 {
+    effect resolve_twchengpu(self, event_player, event_source, event_card, 2257064269, 3);
+  }
+}

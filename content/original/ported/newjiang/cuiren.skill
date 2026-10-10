@@ -1,0 +1,11 @@
+// 摧刃（黄祖）：出牌阶段限一次，弃置一张装备牌：武器牌→本回合使用牌无
+// 距离与次数限制；防具牌→本回合使用牌不可被响应；宝物牌→无事发生；
+// 其他副类别→出牌阶段结束时摸一张牌。
+// 旧 JS 的「按装备副类别授予临时状态」无对应原语，分支效果未建模（已注明）；
+// 以弃装备后摸一张近似保留收益。
+skill cuiren(2515764734) {
+  active play_phase uses_per_turn 1 select_he 1 1 card_equip {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

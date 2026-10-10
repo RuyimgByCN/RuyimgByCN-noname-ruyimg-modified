@@ -1,0 +1,7 @@
+// yjjianshu：音效名:jianshu, 主动(phaseUse), 需拼点, 失去体力, 多步骤。
+skill yjjianshu(3769555799) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

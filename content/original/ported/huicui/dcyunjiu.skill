@@ -1,0 +1,7 @@
+// dcyunjiu：回复1体力；增体力上限。
+// 旧JS含多步选择，DSL无法精确建模。
+skill dcyunjiu(3835373770) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

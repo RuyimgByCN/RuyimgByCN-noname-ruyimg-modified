@@ -1,0 +1,8 @@
+// 神视·应变（雏）：使用带有神视标记的牌时，强制触发全部应变效果。
+// 旧 JS 的 yingbian 强制触发+temporaryYingbian 机制无对应 DSL 原语，未建模。
+skill hina_shenshi_yingbian(2484005524) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hina_shenshi_yingbian（skill.js:2630）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

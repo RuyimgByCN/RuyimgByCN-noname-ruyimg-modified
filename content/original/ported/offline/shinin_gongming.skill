@@ -1,0 +1,5 @@
+// shinin_gongming：player:removeMark, player:loseHpAfter, 异步。
+skill shinin_gongming(3517932405) {
+  trigger phase_any_end owner_alive {
+  }
+}

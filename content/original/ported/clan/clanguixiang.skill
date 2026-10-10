@@ -1,0 +1,7 @@
+// 归向（族王允/族王淩）：锁定技。阶段变化时，若当前阶段序号等于手牌上限-1，将当前阶段改为出牌阶段。
+// 旧 JS 的「阶段列表修改」「手牌上限条件」无对应原语。
+// 空定义：需 expansion 支持阶段动态改写和手牌上限查询。
+skill clanguixiang(2789915698) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

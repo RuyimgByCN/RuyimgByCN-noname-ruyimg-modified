@@ -1,0 +1,5 @@
+skill stdqiansu(2964345042) {
+  trigger card_used owner_targeted_by_trick_equip_empty optional {
+    effect draw_cards(self, 1);
+  }
+}

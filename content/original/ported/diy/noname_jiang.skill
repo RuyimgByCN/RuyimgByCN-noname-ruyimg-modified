@@ -1,0 +1,6 @@
+// 小无·激昂（继承“激昂”的规则语义）
+skill noname_jiang(4012037429) {
+  trigger card_used owner_source_or_targeted_by_juedou_or_red_sha optional {
+    effect draw_cards(self, 1);
+  }
+}

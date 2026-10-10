@@ -1,0 +1,5 @@
+// dragjuesui（主动技(multi)/转化技(视作sha)/触发技）：global:dying, 主动(multi), 视作sha, 二选一, 加技能, 含子技能, 异步。
+skill dragjuesui(3588320063) {
+  trigger dying owner_alive optional {
+  }
+}

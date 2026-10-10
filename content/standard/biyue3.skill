@@ -1,0 +1,4 @@
+// Skill biyue3(130) - standard variant
+skill biyue3(130) {
+  modifier distance_from add -1;
+}

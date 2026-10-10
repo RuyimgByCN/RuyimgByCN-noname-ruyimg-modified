@@ -1,0 +1,8 @@
+// 杜君（夏侯徽）②：你每回合首次造成或受到伤害后，可摸两张牌。
+// 旧 JS 为“你与连枝角色每回合首次造成或受到伤害后各摸两张，可将牌交给一名角色”——
+// 连枝角色部分与交牌部分未建模。
+skill dcdujun(3784866267) {
+  trigger damage owner_source_or_target_first_damage_this_turn optional {
+    effect draw_cards(self, 2);
+  }
+}

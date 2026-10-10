@@ -1,0 +1,6 @@
+// jixu_sha：使用杀后可摸一张牌
+skill jixu_sha(3315339823) {
+  trigger card_used owner_source_sha optional {
+    effect draw_cards(self, 1);
+  }
+}

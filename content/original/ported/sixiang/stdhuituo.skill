@@ -1,0 +1,7 @@
+// 恢拓（？）：造成伤害后，亮出牌堆顶两张牌，可任意交换手牌与亮出牌。
+// 旧 JS 的「手牌与亮出牌双向交换若干张」无可对应的 DSL 原语（chooseToMove 多区域交换）。完全无法表达。
+skill stdhuituo(3943395710) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

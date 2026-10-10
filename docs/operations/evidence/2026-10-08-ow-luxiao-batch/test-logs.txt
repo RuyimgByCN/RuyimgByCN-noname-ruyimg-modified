@@ -1,0 +1,34 @@
+# U05 ow 纵切批九测试日志（2026-10-08，卢西奥三技，规则 v125→v126）
+
+$ cargo test --offline -p engine-native
+engine-native: 442 passed / 0 failed / 1 ignored（24 测试二进制逐项实测；
+v125 基线 438 +4 新增卢西奥回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 29 passed; 0 failed（25 既有 + 4 新增 luxiao_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（host_behavior_tags_unique + 编码冲突守卫；HostBehavior ALL 121）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v125→v126 + 存档 v7 TurnState
+三零值字段入 canonical_hash——14 场景全 mismatch，纯版本/零值字段位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/ow/skill.js kuoyin2（silent phaseBegin storage 重置）、
+  kuoyin（selectCard 存量定 1/2 张 + content 分支 num+=2/eff++）、
+  huhuan（恰 2 张→storage.yuedong_recover=true）、yuedong（phaseUseEnd
+  direct chooseTarget [1,1+num]；recover 分支 sort seat 逐个 recover；
+  draw 分支 asyncDraw）
+
+## 测试迭代记录
+- npack 资产哈希：新增 examples/rehash_cards_asset（asset entry
+  source_hash=blake3(文件)）+ 既有 rehash_npack（logic/asset_hash）
+- 取消编码：SelectPlayers/SelectCards 应答空 selection（Pass 非 options
+  成员 → accepts=false → InvalidChoice）
+- 存档恢复断言改按增量（中途他玩家固定摸牌使手牌基数变化）
+- 编译守卫：a0_tag_registry 穷尽 match + engine.rs 三处 TurnState 字面量
+  （新建/两处哈希测试）同步补字段

@@ -1,0 +1,4 @@
+// Gongsun Zan cavalry
+skill yicong(81) {
+  modifier distance_from add -1;
+}

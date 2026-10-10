@@ -1,0 +1,9 @@
+// 封结·标记（王粲系）：锁定技。关联角色结束阶段，你调整手牌至其体力值
+// （多于则弃，少于则摸至 min(4, 其体力)）。
+// 旧 JS 的「按关联角色体力调整手牌」无对应原语；以结束阶段摸一张近似
+// （调整方向未建模，已注明）。
+skill fengjie2(3440392641) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 流离：成为【杀】目标时，可弃一张手牌或装备牌，将目标转移给攻击范围内的其他合法角色。
+skill liuli(3733125857) {
+  trigger card_targeted owner_sha_target_can_discard_redirect_to_other_in_attack_range {
+    effect choose_discard_redirect_current_sha(self, event_source, event_card);
+  }
+}

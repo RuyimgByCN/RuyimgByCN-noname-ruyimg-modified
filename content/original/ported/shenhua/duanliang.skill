@@ -1,0 +1,5 @@
+// 断粮：旧 JS 的 grouped `duanliang1`/`duanliang3` 已折叠到主技能。
+skill duanliang(2757928964) {
+  view_as bingliang play_phase black_basic_equip from hand_equip;
+  modifier card_distance_unlimited_if_target_hand_gte_owner(bingliang) override 1;
+}

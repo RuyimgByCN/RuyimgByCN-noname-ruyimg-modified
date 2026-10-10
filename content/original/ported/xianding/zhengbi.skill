@@ -1,0 +1,11 @@
+// 征辟（崔琰毛玠）：旧 JavaScript 仅作语义证据；目标、分支、赠牌、回礼及阶段末
+// 分区获牌均由 ABI 585 的权威状态机结算。
+skill zhengbi(2512758877) {
+  trigger phase_play owner_is_target optional {
+    effect resolve_zhengbi(self, event_source, 0);
+  }
+
+  trigger phase_play_end owner_alive_phase_play_end_zhengbi_pending {
+    effect resolve_zhengbi(self, event_source, 1);
+  }
+}

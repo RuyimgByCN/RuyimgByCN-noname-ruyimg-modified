@@ -1,0 +1,7 @@
+// 天义（太史慈）
+// 出牌阶段限一次，双方各选一张手牌拼点；严格获胜获得成功效果，平局或失败获得失败效果。
+skill tianyi(3117995535) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 4028521539, 2573090805);
+  }
+}

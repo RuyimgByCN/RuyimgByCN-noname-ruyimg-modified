@@ -1,0 +1,6 @@
+// 暴虐：旧 JS 的 grouped `baonue2` 折叠进主公技；伤害来源负责选择并判定。
+skill baonue(3659854073) lord_only {
+  trigger damage owner_alive_other_damage_source_group_qun optional by event_source {
+    effect judge_recover_other_on_suit(event_source, self, spade, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// psliaozou：主动(phaseUse), 摸牌, 加技能, 含子技能, 多步骤。
+skill psliaozou(2878582235) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

@@ -1,0 +1,9 @@
+// 咆哮（界张飞）：杀无次数限制；每次杀被完全闪避后积累一枚“咆”。
+skill olpaoxiao(2829854661) locked {
+  modifier sha_use_limit override 2147483647;
+
+  trigger sha_dodged owner_source_sha {
+    effect add_skill(self, 3946229744);
+    effect add_mark(self, 3946229744, 1);
+  }
+}

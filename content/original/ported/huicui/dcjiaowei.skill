@@ -1,0 +1,5 @@
+// dcjiaowei：锁定技；获临时技。
+// 旧JS含subSkill、gaintag标记、expansion区，DSL无法精确建模。
+skill dcjiaowei(2939430586) {
+  modifier hand_limit add 1;
+}

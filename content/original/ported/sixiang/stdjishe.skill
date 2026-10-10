@@ -1,0 +1,8 @@
+// 极奢：出牌阶段可反复令本回合手牌上限-1并摸一张牌，直到手牌上限降至零。
+skill stdjishe(2148577926) {
+  active play_phase hand_limit_positive {
+    effect draw_cards(self, 1);
+  }
+
+  modifier hand_limit add -owner_skill_use_count;
+}

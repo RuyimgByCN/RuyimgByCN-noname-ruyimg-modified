@@ -1,0 +1,10 @@
+// 乱溃（袁绍&袁术）：本回合第二次造成伤害时，弃一张「袁绍」牌令下次伤害翻倍；
+// 本回合第二次获得牌时，弃一张「袁术」牌令下次摸牌翻倍。
+// 旧 JS 依赖 dclieti 的 gaintag 系统识别「袁绍」「袁术」标记牌，
+// 且涉及跨事件的「第二次」计数，DSL 无 gaintag 过滤器，无法建模。
+// 空定义：需 expansion 支持 gaintag_filter 与 damage_gain_second_trigger 原语。
+skill dcluankui(2808579434) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

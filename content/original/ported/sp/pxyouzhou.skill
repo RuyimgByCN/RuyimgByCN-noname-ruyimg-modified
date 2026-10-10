@@ -1,0 +1,9 @@
+// 幽州（pxyouzhou，州郡技能）：当你获得此技能后，你增加 1 点体力上限。
+// 上游 (sp/skill.js:2974)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// forced；content = gainMaxHp。
+// 实现：skill_added + owner_skill_added_self_3102513552 → change_max_hp(self, 1)。
+skill pxyouzhou(3102513552) {
+  trigger skill_added owner_skill_added_self_3102513552 {
+    effect change_max_hp(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// draglianying（锁定技/触发技）：锁定技, player:hp_lost, target:useCardToBefore, global:cards_moved, 需弃牌, 摸牌, 移出游戏, 加技能, 含子技能, 异步。
+skill draglianying(2374553180) locked {
+  trigger hp_lost always {
+    effect draw_cards(self, 2);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

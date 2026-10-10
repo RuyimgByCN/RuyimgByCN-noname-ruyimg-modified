@@ -1,0 +1,6 @@
+// friendpangtonggongli（共砺）：锁定技，若友诸葛亮在场且确认与你阵营一致，你发动〖养名〗亮出牌的张数+1；若友徐庶在场且确认与你阵营一致，你发动〖养名〗后，获得一张本次亮出牌中未使用过的花色的牌。
+skill friendpangtonggongli(3733193377) locked {
+  // 语义复杂，待补充
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,4 @@
+// 界倾国：响应【杀】时，可将一张黑色手牌或装备牌当【闪】使用。
+skill reqingguo(2359932684) {
+  view_as shan response black from hand_equip;
+}

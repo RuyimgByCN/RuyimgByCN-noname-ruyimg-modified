@@ -1,0 +1,13 @@
+// 笃良（标鲍三娘）
+// 原语义：受到伤害后，可先摸一张牌；若此时手牌数等于体力值且已受伤，再回复 1 点体力。
+skill stdduliang(2231518236) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    // VM 先生成效果队列再依次执行，因此这里用 +1 表示前一项摸牌结算后的手牌数。
+    if hand_count(self) + 1 == hp(self) {
+      if hp(self) < max_hp(self) {
+        effect recover_hp(self, 1);
+      }
+    }
+  }
+}

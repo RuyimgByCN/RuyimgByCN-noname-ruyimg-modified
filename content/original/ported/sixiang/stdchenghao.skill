@@ -1,0 +1,8 @@
+// 称号：当有属性伤害发生时（每回合限一次），你可以观看牌堆顶一张牌并交给任意一名角色。
+// 近似：用 draw_cards(self, 1) 代替「观看牌堆顶并交给任意角色」——收益接近（均从牌堆获得1牌），
+// 但丢失了目标选择权、属性伤害条件、每回合限一次。
+skill stdchenghao(2328004621) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

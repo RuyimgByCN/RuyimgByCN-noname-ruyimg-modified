@@ -1,0 +1,6 @@
+// calvedao：音效名:xinfu_tanbei, source:damage_before, 加技能, 异步。
+skill calvedao(3502523312) {
+  trigger damage_before owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

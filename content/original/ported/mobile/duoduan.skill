@@ -1,0 +1,24 @@
+// duoduan（度断）：每回合限一次，当你成为【杀】的目标后，你可以重铸一张牌。
+// 若如此做，你选择一项：①令使用者摸两张牌，且此【杀】无效。②令使用者弃置
+// 一张牌，且你不能响应此【杀】。
+// 上游 (mobile/skill.js duoduan L28099)：trigger target useCardToTargeted（杀）；
+// usable 1；cost chooseCard("he", cardRecastable) 可取消；content：
+// recast(cards) → 使用者有可弃牌时 chooseControl 双选（否则强制 index 0）；
+// ①trigger.player.draw(2) + trigger.excluded.add(player)（此杀对 owner 无效）；
+// ②trigger.player chooseToDiscard(true) + trigger.directHit.add(player)
+// （owner 不可响应）。
+// 实现（2026-09-13 第二百七十二批·杀目标多段族状态机，ADR 0641 §8.60）：
+// trigger card_targeted owner_is_target_sha_source_alive_hand_equip_nonempty_once_per_turn →
+// resolve_duoduan(self, event_source, event_card)（ABI 721 / tag 745 /
+// Cont 320 三段续体）：0=选重铸牌 → 1=RecastCards+Custom 双选（使用者无可
+// 弃牌强制①）→ 2=①draw 2+CancelIncomingCardUse／②为使用者开弃牌选择 →
+// 3=DiscardCards+make_saved_sha_target_unrespondable。三既有原语复用
+// （RecastCards/CancelIncomingCardUse/unrespondable flag）。
+// 近似（登记债）：①「无效」以 CancelIncomingCardUse 近似（上游 excluded
+// 仅对本杀结算面，语义同向）；②recastable 以全部可弃手牌/装备近似（未建
+// 卡面白名单）。
+skill duoduan(3357409325) {
+  trigger card_targeted owner_is_target_sha_source_alive_hand_equip_nonempty_once_per_turn {
+    effect resolve_duoduan(self, event_source, event_card);
+  }
+}

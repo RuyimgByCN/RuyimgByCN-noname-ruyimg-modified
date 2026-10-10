@@ -1,0 +1,6 @@
+// 忠义：限定技，将一张手牌或装备牌置于武将牌上；本轮己方角色的【杀】伤害 +1。
+skill zhongyi(2818590263) {
+  active play_phase once_per_game select_he 1 1 {
+    effect resolve_zhongyi(self, 0, 3789127080);
+  }
+}

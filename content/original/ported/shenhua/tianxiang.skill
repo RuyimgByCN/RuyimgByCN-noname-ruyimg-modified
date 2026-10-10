@@ -1,0 +1,26 @@
+// 天香（旧小乔）：受到伤害时，可弃置一张红桃手牌并选择一名其他角色，将此伤害
+// 转移给该角色；该角色于伤害结算后摸 X 张牌（X 为其已损失体力值）。
+// 旧 JS 仅作语义证据；弃红桃选目标与伤害重定向由权威状态机校验（ABI 456）。
+// 注 1：旧 JS 于 damageBegin3 改写 trigger.player 转移伤害；DSL 以取消原伤害 +
+//       同源/同量/同属性/同牌重新结算表达（沿用 ABI 374 共患先例），并置
+//       damage_redirect_in_progress 防链式重定向。
+// 注 2：重定向后新目标不再重新评估护甲/受伤修正（文档化近似）。
+// 注 3：旧 JS 的 tianxiang2 于 damageAfter/damageCancelled/damageZero 触发摸牌，
+//       DSL 以 damage / damage_prevented 双触发近似，摸牌量 = 已损失体力值。
+skill tianxiang(3182807327) {
+  trigger damage_before owner_is_target optional {
+    effect choose_discard_heart_redirect_current_damage(self, 4111110111);
+  }
+}
+
+// 天香·摸牌：伤害结算后按已损失体力值摸牌，随后移除自身。
+skill tianxiang2(4111110111) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, max_hp(self) - hp(self));
+    effect remove_skill(self_skill);
+  }
+  trigger damage_prevented owner_is_target {
+    effect draw_cards(self, max_hp(self) - hp(self));
+    effect remove_skill(self_skill);
+  }
+}

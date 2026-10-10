@@ -1,0 +1,51 @@
+// 势曹爽：典易 / 奢权 / 渐专 / 溺尊。旧 JavaScript 仅作语义合同。
+skill potdianyi(4200000573) locked {
+  trigger damage owner_source_damage_potcaoshuang_assigned_untriggered {
+    effect resolve_potcaoshuang(self, event_player, event_card, 3);
+  }
+  trigger damage owner_target_damage_potcaoshuang_assigned_untriggered {
+    effect resolve_potcaoshuang(self, event_source, event_card, 4);
+  }
+  trigger dying owner_alive_dying_potcaoshuang_assigned_untriggered {
+    effect resolve_potcaoshuang(self, event_player, event_card, 5);
+  }
+}
+
+skill potshequan(4200000574) locked {
+  trigger damage owner_source_damage_potcaoshuang_assigned_untriggered {
+    effect resolve_potcaoshuang(self, event_player, event_card, 6);
+  }
+  trigger damage owner_target_damage_potcaoshuang_assigned_untriggered {
+    effect resolve_potcaoshuang(self, event_source, event_card, 7);
+  }
+  trigger dying owner_alive_dying_potcaoshuang_assigned_untriggered {
+    effect resolve_potcaoshuang(self, event_player, event_card, 8);
+  }
+}
+
+skill potjianzhuan(4200000575) locked {
+  trigger damage owner_source_damage_potjianzhuan_available {
+    effect resolve_potcaoshuang(self, event_player, event_card, 0);
+  }
+  trigger damage owner_target_damage_potjianzhuan_available {
+    effect resolve_potcaoshuang(self, event_source, event_card, 1);
+  }
+  trigger dying owner_alive_dying_potjianzhuan_available {
+    effect resolve_potcaoshuang(self, event_player, event_card, 2);
+  }
+}
+
+skill potnizun(4200000576) locked {
+  trigger turn_ended owner_alive_turn_ended_used_card_tagged_discard {
+    effect resolve_potcaoshuang(self, event_player, event_card, 9);
+  }
+  trigger damage_before owner_target_damage_before_potnizun_used {
+    effect resolve_potcaoshuang(self, event_source, event_card, 10);
+  }
+  trigger card_used owner_used_potnizun_pile_card {
+    effect resolve_potcaoshuang(self, event_source, event_card, 11);
+  }
+  trigger card_responded owner_used_potnizun_pile_card {
+    effect resolve_potcaoshuang(self, event_player, event_card, 11);
+  }
+}

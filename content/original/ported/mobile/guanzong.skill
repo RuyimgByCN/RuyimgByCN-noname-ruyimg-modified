@@ -1,0 +1,8 @@
+// guanzong（惯纵）：出牌阶段限一次。你可以令一名其他角色视为对另一名其他角色造成过1点伤害。
+// 未建模：效果逻辑复杂，无合适 DSL 原语匹配。
+skill guanzong(4069810787) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 guanzong（skill.js:19804）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,6 @@
+// sptuji：phase_prepare时摸牌。
+skill sptuji(2345189161) {
+  trigger phase_prepare owner_alive  {
+    effect draw_cards(self, 1);
+  }
+}

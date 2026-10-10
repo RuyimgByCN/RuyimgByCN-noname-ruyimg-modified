@@ -1,0 +1,5 @@
+// hm_shuiqu：锁定技, global:phase_discard, 需弃牌, 多分支选择, 回复体力, 异步。
+skill hm_shuiqu(3417724851) {
+  trigger phase_discard owner_alive {
+  }
+}

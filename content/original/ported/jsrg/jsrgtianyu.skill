@@ -1,0 +1,8 @@
+// jsrgtianyu（天予）：当一张具有“伤害”标签的牌或装备牌被置入弃牌堆时，若此牌本回合内未处于过任何角色的手牌区或装备区，则你可以获得之。
+// 未建模：翻译调用（DSL无对应原语）
+skill jsrgtianyu(4018334053) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgtianyu（skill.js:1750）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

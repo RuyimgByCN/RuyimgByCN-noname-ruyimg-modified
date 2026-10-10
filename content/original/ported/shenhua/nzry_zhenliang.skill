@@ -1,0 +1,7 @@
+// 贞良（卢植转换技）：弃同色牌伤害/回合外摸牌。
+// 旧 JS 的「转换技状态」无对应原语；以受伤后摸一张近似（已注明）。
+skill nzry_zhenliang(3929142586) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 旧 JS 语义：其他角色使用仅以你为目标的牌后，若你有手牌或装备牌，强制选择并弃置一张。
+skill dcyiju(3976872382) locked {
+  trigger card_used owner_alive_targeted_by_other_single_card_discardable {
+    effect discard_one_hand_or_equip(self);
+  }
+}

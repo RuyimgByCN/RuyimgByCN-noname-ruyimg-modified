@@ -1,0 +1,8 @@
+// 武威（智代）：将未以此法使用过的花色的牌当做【杀】使用或打出。
+// 实现：手牌可当【杀】使用或打出。
+// 近似：不记录「已以此法使用过的花色」，任意花色均可转化。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill tomoyo_wuwei(2212519004) {
+  view_as sha play_phase any from hand;
+  view_as sha response any from hand;
+}

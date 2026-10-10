@@ -1,0 +1,15 @@
+// 3D精选 夏侯玄「朗怀/玄论」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddlanghuai(4025119557) {
+  trigger phase_draw owner_is_target {
+    effect resolve_ddd_xiahouxuan(self, 0);
+  }
+}
+
+skill dddxuanlun(3478177951) {
+  trigger damage owner_is_target optional {
+    effect resolve_ddd_xiahouxuan(self, 1);
+  }
+  trigger turn_ended owner_alive_ddd_xuanlun_pending {
+    effect resolve_ddd_xiahouxuan(self, 2);
+  }
+}

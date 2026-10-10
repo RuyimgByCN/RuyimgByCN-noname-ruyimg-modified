@@ -1,0 +1,4 @@
+// Chen Gong plan
+skill mingce(87) {
+  modifier distance_from add -1;
+}

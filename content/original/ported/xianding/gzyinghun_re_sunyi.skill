@@ -1,0 +1,6 @@
+// 夺魂（re孙翊）：衍生技能，仅音频标记。
+skill gzyinghun_re_sunyi(3445128282) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 gzyinghun_re_sunyi = 标记型技能（audio-only，skill.js:41731），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

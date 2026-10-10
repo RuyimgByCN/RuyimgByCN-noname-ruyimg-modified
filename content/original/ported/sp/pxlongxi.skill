@@ -1,0 +1,10 @@
+// 陇西（pxlongxi，州郡技能）：当你获得此技能后，你从牌堆中获得一张防御坐骑牌。
+// 上游 (sp/skill.js:1987)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// forced；content = gain(cardPile2(equip3 坐骑))。
+// 实现：skill_added + owner_skill_added_self_4087538948 → gain_card_by_kind(self,
+// horse_def)（防御马从牌堆/弃牌堆检索；equip3 子类型包含进攻/防御坐骑，以防御马近似）。
+skill pxlongxi(4087538948) {
+  trigger skill_added owner_skill_added_self_4087538948 {
+    effect gain_card_by_kind(self, horse_def);
+  }
+}

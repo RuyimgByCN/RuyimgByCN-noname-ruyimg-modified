@@ -1,0 +1,9 @@
+// 单骑：刘备不为主公且手牌多于体力时觉醒，减一点体力上限并获得马术、怒斩。
+skill danji(2150258599) locked {
+  trigger phase_prepare owner_is_target_hand_above_hp_no_liubei_lord {
+    effect remove_skill(self_skill);
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 2);
+    effect add_skill(self, 2974830679);
+  }
+}

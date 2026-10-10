@@ -1,0 +1,16 @@
+[package]
+name = "content-schema"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Content package schema, Rule IR, and versioned formats"
+
+[dependencies]
+engine-api = { workspace = true }
+rule-api = { workspace = true }
+rule-vm = { workspace = true }
+licensing-schema = { workspace = true }
+resource-schema = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+blake3 = { workspace = true }

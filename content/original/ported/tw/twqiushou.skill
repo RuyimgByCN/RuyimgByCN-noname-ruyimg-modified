@@ -1,0 +1,7 @@
+// 求狩（刘协相关）：主公技。【南蛮入侵】结算后若有人死亡或总伤害>3，
+// 所有蜀和群势力角色各摸一张牌。
+// 缺南蛮结算后条件检测与势力定向摸牌原语，空定义。
+skill twqiushou(3776378812) lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

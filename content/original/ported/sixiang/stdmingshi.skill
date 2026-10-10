@@ -1,0 +1,7 @@
+// 明识：限定技，四选一（摸2牌/回复1体力/造成1伤害/移动场上牌）。
+// 旧 JS 的「多选项限定技 + moveCard」无对应原语，未建模。
+skill stdmingshi(3469127834) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

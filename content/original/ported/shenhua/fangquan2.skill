@@ -1,0 +1,17 @@
+// 放权·2（刘禅系标记源技）：你的回合结束时，你可以弃置一张手牌并令一名其他
+// 角色获得一个额外回合（上游 shenhua/skill.js fangquan2：cost chooseToDiscard
+// 一张手牌 + chooseTarget(notMe, forced) → target.insertPhase()；mark 联动）。
+// 实现（第九十二批·choose_others_insert_extra_turn ABI 671/tag 694/Cont 281）：
+// `turn_ended owner_is_target optional` → discard_hand_equip_count(self, 1)
+// （cost 弃一手牌以确定性取最前一张表达）→ choose_others_insert_extra_turn
+// (self, 0, self_skill)（check=0 无尾随代价）。
+// 近似：①弃一张手牌走引擎既有选择屏障（与上游 chooseToDiscard 等价）；
+// ②mark/fangquan3 联动与 getIndex 多次发动省略。
+skill fangquan2(4075257478) {
+  trigger turn_ended owner_is_target optional {
+    if hand_count(self) > 0 {
+      effect discard_hand_equip_count(self, 1);
+      effect choose_others_insert_extra_turn(self, 0, self_skill);
+    }
+  }
+}

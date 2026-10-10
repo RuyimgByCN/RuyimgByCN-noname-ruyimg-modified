@@ -1,0 +1,20 @@
+// 三陈（杜预）：觉醒技，结束阶段开始时，若“武库”标记大于 2，加 1 点体力上限、
+// 回复 1 点体力并获得【灭吴】。
+// 旧 JavaScript 仅作语义证据；标记计数、上限、回复与技能授予由权威原语响应。
+skill spsanchen(3539331531) locked {
+  trigger phase_end owner_is_target {
+    if 2 < mark_count(self, 2480520461) {
+      effect change_max_hp(self, 1);
+      effect recover_hp(self, 1);
+      effect add_skill(self, 3162101299);
+      effect remove_skill(self_skill);
+    }
+  }
+}
+
+// 灭吴：每回合限一次，消耗一枚“武库”并将一张手牌或装备牌当任意基本牌或锦囊牌；
+// 该牌使用或打出后摸一张牌。
+skill spmiewu(3162101299) {
+  view_as basic any any from none uses_per_turn 1 cost hand_equip_mark mark_cost 2480520461 post_draw 1;
+  view_as trick any any from none uses_per_turn 1 cost hand_equip_mark mark_cost 2480520461 post_draw 1;
+}

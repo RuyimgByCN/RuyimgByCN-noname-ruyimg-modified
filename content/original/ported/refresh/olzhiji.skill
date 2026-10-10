@@ -1,0 +1,30 @@
+// 志继（refresh OL姜维 olzhiji）：觉醒技，准备阶段或结束阶段开始时，若你没有手牌：
+// 你减 1 点体力上限，然后摸两张牌或回复 2 点体力，获得〖观星〗。
+// 上游 (refresh/skill.js olzhiji)：trigger player [phaseZhunbeiBegin,
+// phaseJieshuBegin] + hand 空；forced juexingji；chooseDrawRecover(2, true) →
+// loseMaxHp → addSkills("reguanxing")。
+// 实现（2026-09-09 第一百八十四批，零新原语）：双臂 phase_prepare/phase_end +
+// owner_hand_empty（forced）→ once-per-game 以自身 def 标记门控（mark_count==0
+// 时执行并 add_mark 1）。效果顺序：引擎选择型 effect 之后的 effect 不执行
+// （批 182 惯例），故 change_max_hp/add_skill/add_mark 置于
+// choose_draw_or_recover 之前。
+// 近似（登记债）：①效果顺序对调——先减上限后摸/回（上游先摸/回再减上限；
+// 终态一致，回复上限边缘差以引擎钳位吸收）；②觉醒动画未建模。
+skill olzhiji(4244253651) {
+  trigger phase_prepare owner_hand_empty {
+    if mark_count(self, 4244253651) == 0 {
+      effect change_max_hp(self, -1);
+      effect add_skill(self, 4220147649);
+      effect add_mark(self, 4244253651, 1);
+      effect choose_draw_or_recover(self, 2, 2, 0);
+    }
+  }
+  trigger phase_end owner_hand_empty {
+    if mark_count(self, 4244253651) == 0 {
+      effect change_max_hp(self, -1);
+      effect add_skill(self, 4220147649);
+      effect add_mark(self, 4244253651, 1);
+      effect choose_draw_or_recover(self, 2, 2, 0);
+    }
+  }
+}

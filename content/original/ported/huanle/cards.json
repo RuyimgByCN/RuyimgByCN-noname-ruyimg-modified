@@ -1,0 +1,40 @@
+[
+  {
+    "card_def_id": 2478745350,
+    "name": "monkey",
+    "name_length": 4,
+    "kind": "treasure"
+  },
+  {
+    "card_def_id": 1574587899,
+    "name": "jiuwei",
+    "name_length": 2,
+    "kind": "treasure",
+    "equip_skills": [
+      2113011807
+    ]
+  },
+  {
+    "card_def_id": 3209653595,
+    "name": "xuelunyang",
+    "name_length": 3,
+    "kind": "treasure"
+  },
+  {
+    "card_def_id": 1931593191,
+    "name": "mianju",
+    "name_length": 2,
+    "kind": "armor",
+    "equip_skills": [
+      916192355
+    ]
+  },
+  {
+    "card_def_id": 1163056752,
+    "name": "kuwu",
+    "name_length": 2,
+    "kind": "weapon",
+    "weapon_range": 1,
+    "distance_from": -1
+  }
+]

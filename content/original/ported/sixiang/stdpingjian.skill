@@ -1,0 +1,6 @@
+// 评鉴：将手牌当做「访客」扩展区中的同名花色牌使用，移去一张访客牌。
+// 旧 JS 的「扩展区牌名花色索引 + virtual card + 移去扩展牌」无对应原语，未建模。
+skill stdpingjian(3842568799) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

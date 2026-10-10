@@ -1,0 +1,5 @@
+// sphantong_gain：global:phaseBegin, 多分支选择, 加技能, 多步骤。
+skill sphantong_gain(3585711553) {
+  trigger phase_any_end owner_alive {
+  }
+}

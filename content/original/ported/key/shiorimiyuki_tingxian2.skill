@@ -1,0 +1,7 @@
+// 听弦·弃（诗织/深雪·锁定技）：出牌阶段结束时，失去未使用的听弦标记牌等量体力。
+// 旧 JS 的 标记计数+失去体力 需标记追踪原语，未建模。
+skill shiorimiyuki_tingxian2(2535888925) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shiorimiyuki_tingxian2 含真实规则体（trigger、mod 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

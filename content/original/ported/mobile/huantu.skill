@@ -1,0 +1,7 @@
+// huantu（缓图）：每轮限一次。一名角色的摸牌阶段开始前，若其在你攻击范围内，则你可以交给其一张牌并令其跳过此阶段。然后你于此回合的结束阶段选择一项：①令其回复1点体力并摸两张牌。②你摸三张牌，然后交给其两张手牌。
+skill huantu(2772198298) {
+  trigger phase_draw owner_alive {
+    effect draw_cards(self, 2);
+    effect recover_hp(self, 1);
+  }
+}

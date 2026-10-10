@@ -1,0 +1,25 @@
+# U05 mtg 第十批测试日志（2026-10-08，邻地溪流，规则 v108→v109）
+
+$ cargo test --offline -p engine-native
+engine-native: 425 passed / 0 failed / 1 ignored（v108 基线 424 +1 新增邻地溪流回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_mtg
+test result: ok. 11 passed; 0 failed（10 既有 + mtg_lindixiliu_land_effect）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 131、HostBehavior ALL 96、伴随技能 43 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v108→v109 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js:10 `["spade", 11, "mtg_lindixiliu"]`
+- card.js lindixiliu：cardPile2(♥)+chooseToDiscard([1,∞),♥)+addJudge(inpile("delay") 未持有)
+- 藏宝海湾 enable mode_derivation 守卫（上游自身禁用）→ 暂缓
+- 毒沼 createCard("du") 衍生实体 → 暂缓
+
+## 测试迭代记录
+- options mut/moved 三连修（extend 前置 mut、max 预计算）
+- 首版宿主补丁在 host.rs 锚点断言（枚举注释锚过期）→ 分步重做

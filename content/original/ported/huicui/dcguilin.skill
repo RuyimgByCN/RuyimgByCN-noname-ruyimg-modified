@@ -1,0 +1,7 @@
+// dcguilin：觉醒技；限定技；失技能。
+skill dcguilin(3613677978) {
+  trigger dying owner_is_target optional {
+    // 旧JS含复杂条件逻辑，效果已简化
+    effect draw_cards(self, 1);
+  }
+}

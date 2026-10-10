@@ -1,0 +1,6 @@
+// zhuahuang_jipao。
+skill zhuahuang_jipao(3684346716) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

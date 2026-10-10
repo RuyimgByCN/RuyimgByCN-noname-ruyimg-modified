@@ -1,0 +1,25 @@
+# U05 mtg 第五批测试日志（2026-10-08，依夏兰，规则 v103→v104）
+
+$ cargo test --offline -p engine-native
+engine-native: 420 passed / 0 failed / 1 ignored（v103 基线 419 +1 新增依夏兰回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_mtg
+test result: ok. 6 passed; 0 failed（5 既有 + mtg_yixialan_land_and_recast）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 126、HostBehavior ALL 89、伴随技能 36 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v103→v104 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js:1 `["club", 12, "mtg_yixialan"]`
+- translate.js:3-5 依夏兰文案
+- card.js chooseControl + createCard(inpile.randomGet())；skill.js mtg_yixialan_skill recast 回调
+- canRecast：引擎内置（归档仅见调用点），原生取手牌基本牌并登记
+
+## 测试迭代记录
+- yangpijuan_class 改 pub(crate)（snap 派生复用类别池）
+- 五台既有地机器 Act 统一插 sync_land_skill（换地授予/撤销地附技）

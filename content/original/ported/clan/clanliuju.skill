@@ -1,0 +1,8 @@
+// 留驹（族韩韶/族韩融/族韩馥）：出牌阶段结束时，与一名角色拼点；输者可使用拼点牌中的非基本牌；使用后若双方距离改变，重置「恤民」。
+// 旧 JS 的「拼点+输者使用拼点牌」「距离变化检测」「重置限定技」无对应原语。
+// 空定义：需 expansion 支持拼点和牌使用、跨技能状态重置。
+skill clanliuju(2776787807) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

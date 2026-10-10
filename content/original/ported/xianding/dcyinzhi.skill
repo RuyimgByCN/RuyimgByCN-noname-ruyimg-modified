@@ -1,0 +1,6 @@
+// dcyinzhi：<li>回合内只能使用或打出本回合获得的牌<br><li>对$造成伤害后移除效果。DSL缺多项原语，无法精确表达。
+skill dcyinzhi(3276713775) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcyinzhi 含真实规则体（enable、filterTarget、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

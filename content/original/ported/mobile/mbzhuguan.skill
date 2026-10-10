@@ -1,0 +1,6 @@
+// mbzhuguan（筑关）：锁定技。①当你使用红色基本牌时，你摸一张牌（不计入手牌上限）。②回合开始时，你弃置所有“筑关”牌。
+skill mbzhuguan(2485202823) locked {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

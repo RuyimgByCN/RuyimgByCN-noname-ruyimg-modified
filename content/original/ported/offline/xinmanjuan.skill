@@ -1,0 +1,5 @@
+// xinmanjuan：音效名:manjuan, 锁定技, player:cards_moved, global:cards_moved, 多步骤。
+skill xinmanjuan(4223878865) {
+  trigger cards_moved owner_alive {
+  }
+}

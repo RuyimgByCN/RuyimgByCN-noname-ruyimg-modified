@@ -1,0 +1,7 @@
+// 远逐：出牌阶段，弃置一名角色一张牌，然后该角色对你使用一张【火攻】（若无法使用则跳过）。
+// 旧 JS 的「强制目标对 skill 拥有者使用特定牌」「目标可否使用的判断」无可用的 DSL 原语。
+skill stdyuanzhuo(3569246870) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

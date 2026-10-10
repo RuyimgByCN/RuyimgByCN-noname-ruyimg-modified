@@ -1,0 +1,12 @@
+// 雷劫（releijie）：出牌阶段限一次，选择一名角色判定——黑桃2-9则其摸两张牌，否则对其使用两张雷【杀】。
+// 上游 (sp/skill.js:19804)：active phaseUse usable 1 filterTarget:true；content = target.judge
+// （黑桃2-9有利）→ 成功 target.draw(2)，失败 player 对其使用至多两张雷【杀】（每次可用才用）。
+// 实现：active play_phase uses_per_turn 1 targets 1 1（任意角色）→
+// judge_spade_two_to_nine_draw_two_or_thunder_sha_twice(self, event_source)。
+// 新增效果原语 JudgeSpadeTwoToNineDrawTwoOrThunderShaTwice（ABI 602，tag 658；
+// rule-api/bytecode/vm/IR/codegen/typecheck/primitives/hash/vm_host 全链路注册）。
+skill releijie(3971138184) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect judge_spade_two_to_nine_draw_two_or_thunder_sha_twice(self, event_source);
+  }
+}

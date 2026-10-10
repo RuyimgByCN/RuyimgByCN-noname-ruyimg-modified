@@ -1,0 +1,7 @@
+// 死孝（王荣）：锁定技。游戏开始时选择一名其他角色作为「孝子」；当孝子
+// 需要使用或打出牌时，你可观看其手牌并使用或打出其中一张牌，然后其摸一张。
+// 旧 JS 的「选择孝子与跨角色代用牌」无对应原语，未建模（已注明）。
+skill mpsixiao(3232777627) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

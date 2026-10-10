@@ -1,0 +1,9 @@
+// olweifu
+// 触发事件：useCard1, useCard2
+// 含有 enable — 需主动技原语
+// 含有 mod — 需修改技原语
+skill olweifu(2203281377) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olweifu 含真实规则体（enable、subSkill 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 148 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

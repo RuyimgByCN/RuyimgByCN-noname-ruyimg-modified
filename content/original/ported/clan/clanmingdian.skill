@@ -1,0 +1,11 @@
+// 铭典（族杨修/族杨彪/族杨赐/族杨忠）：出牌阶段/受到伤害后。重铸任意张本回合未重铸过的同名基本牌，若因此使用过同名牌，从牌堆获得一张手牌中没有的基本牌。
+// 旧 JS 的「同名基本牌重铸」「牌名记录」「牌堆检索」无对应原语。
+// 以主动+触发技近似：受到伤害后重铸基本牌。
+skill clanmingdian(3187934288) {
+  active play_phase {
+    effect recast_selected(self);
+  }
+  trigger damage owner_is_target {
+    effect recast_selected(self);
+  }
+}

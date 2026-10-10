@@ -1,0 +1,6 @@
+// dragchaojue：phase_prepare时摸牌。
+skill dragchaojue(4047206272) {
+  trigger phase_prepare owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

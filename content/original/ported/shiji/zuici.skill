@@ -1,0 +1,10 @@
+// 罪辞（刘巴系）：你进入濒死时，可废除一个装备栏；若仍濒死则回复至 1 点
+// 体力。
+// 旧 JS 的「选择废除装备栏」无对应原语；以废除全部装备栏近似
+// （选择未建模，已注明）。
+skill zuici(3523624614) {
+  trigger dying owner_is_target {
+    effect disable_all_equip_slots(self);
+    effect recover_hp(self, 1);
+  }
+}

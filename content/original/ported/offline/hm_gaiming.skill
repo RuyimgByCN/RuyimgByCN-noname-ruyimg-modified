@@ -1,0 +1,5 @@
+// hm_gaiming：player:judge, 异步。
+skill hm_gaiming(3301388642) {
+  trigger phase_judge owner_alive {
+  }
+}

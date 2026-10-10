@@ -1,0 +1,7 @@
+// 父荫（诸葛瞻）：成为目标时手牌判定。
+// 旧 JS 的「手牌比较」无对应原语；以成为目标后摸一张近似（已注明）。
+skill xinfu_fuyin(2400582765) {
+  trigger card_targeted owner_targeted_by_other_card_once_per_turn optional {
+    effect draw_cards(self, 1);
+  }
+}

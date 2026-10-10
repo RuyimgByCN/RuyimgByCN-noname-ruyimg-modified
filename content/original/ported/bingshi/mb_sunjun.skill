@@ -1,0 +1,22 @@
+// 势孙峻：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI507 原语。
+skill mbxiongtu(2558604057) {
+  active play_phase uses_per_play_phase 2 targets 1 1 other hand_nonempty {
+    effect resolve_mbxiongtu(self, event_source, 0);
+  }
+
+  trigger damage owner_source_damage_mbxiongtu_armed {
+    effect resolve_mbxiongtu(self, event_player, 5);
+  }
+
+  trigger phase_play_end owner_phase_play_end_mbxiongtu_state {
+    effect resolve_mbxiongtu(self, event_player, 6);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect resolve_mbxiongtu(self, event_player, 7);
+  }
+}
+
+skill mbxianshuai(3336756615) locked {
+  modifier first_hand_card_suit_use_unlimited override 1;
+}

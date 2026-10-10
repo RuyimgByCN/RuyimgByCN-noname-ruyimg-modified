@@ -1,0 +1,7 @@
+// 一灭·2（一灭系）：受伤后触发辅助。
+// 旧 JS 的「伤害计数」无对应原语；以受伤后摸一张近似（已注明）。
+skill yimie2(3988340454) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

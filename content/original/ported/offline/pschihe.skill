@@ -1,0 +1,7 @@
+// pschihe：音效名:scschihe, player:card_targeted, target:card_targeted, 需弃牌, 需拼点, 摸牌, 异步。
+skill pschihe(2920234300) {
+  trigger card_targeted owner_alive optional {
+    effect draw_cards(self, 2);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

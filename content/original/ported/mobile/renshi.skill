@@ -1,0 +1,6 @@
+// renshi（仁释）：锁定技，当你受到【杀】的伤害时，若你已受伤，则你防止此伤害并获得此【杀】对应的所有实体牌，然后减1点体力上限。
+skill renshi(3385729750) locked {
+  trigger damage_before owner_is_target_wounded {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

@@ -1,0 +1,4 @@
+ccd2fdd297180b16b1ec9ada9b38fb2414cf5244163c86e913b897b948252c95  crates/engine-native/tests/g1_wudian.rs
+7d5c547b3247b1b4c16643348f3f0f9f2d02d7c5682f324e2ef09477c0942fbd  docs/migration/upstream-extension-reconstruction.md
+66cac096613f8f8ad633d67898bdb2986cb6faff47b50316b1baa866862669bf  docs/architecture/native-progress.md
+9ca6125c65bc4f65e83db44623174b36c86af6e4c6a70bf63a22a6e70372aac5  docs/native-coverage-manifest.md

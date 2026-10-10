@@ -1,0 +1,4 @@
+// mbzhaofu_shan（照抚）：每回合限一次，你可弃置所有手牌视为使用一张【闪】。发动后或你的回合结束时失去该技能。
+skill mbzhaofu_shan(4015388416) {
+  view_as shan play_phase any;
+}

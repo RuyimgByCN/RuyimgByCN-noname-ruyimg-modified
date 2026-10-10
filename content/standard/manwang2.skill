@@ -1,0 +1,4 @@
+// Skill manwang2(147) - standard variant
+skill manwang2(147) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

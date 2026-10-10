@@ -1,0 +1,12 @@
+// 3D精选 鲍三娘「枝连/赍剑」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddzhilian(3056536406) {
+  trigger phase_end owner_alive_dddzhilian_available optional {
+    effect resolve_ddd_baosanniang(self, 0);
+  }
+}
+
+skill dddjijian(887278272) {
+  active play_phase uses_per_turn 1 targets 1 1 other male select_hand 1 1 card_sha {
+    effect resolve_ddd_baosanniang(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 新无言（徐庶/王异版）：锁定技，你使用的锦囊牌对其他角色无效，其他角色
+// 使用的锦囊牌对你无效。
+// 旧 JS 的双向取消锦囊牌；以 card_target_cancel(trick) 表达「锦囊不能指定
+// 拥有者」方向（使用锦囊对他人无效方向未建模，已注明）。
+skill xswuyan(2641167570) locked {
+  modifier card_target_cancel(trick) override 1;
+}

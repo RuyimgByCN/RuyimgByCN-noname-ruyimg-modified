@@ -1,0 +1,19 @@
+// 秉纪（王威·谋攻篇）：出牌阶段，若你的手牌数大于 0 且所有手牌花色相同，且本回合
+// 内未使用过该花色的牌，你可以展示所有手牌并视为使用一张【杀】或【桃】（该花色
+// 本回合记为已用，转化牌无使用次数限制）。
+// 上游 (sp2/skill.js dcbingji)：enable phaseUse；filter = 全手牌同花色 + storage
+// dcbingji_used 不含该花色；chooseButton sha|tao；mod cardUsable/cardEnabled
+// Infinity；useCard 后 markAuto 记录花色。
+// 实现（2026-09-10 第二百三十五批·专属 host 状态机，resolve_xinxingluan/ABI 476
+// 工艺）：active play_phase targets 0 0 → resolve_dcbingji(self, self_skill, 0, 0)
+// （ABI 692 / tag 715 / Custom 续体 Cont 300 三阶段：校验→杀/桃双选→目标选择/
+// 自用，物化虚拟牌 play_as_kind(ignore_use_count=true)，花色史经
+// used_card_suit_history 位记录）。
+// 近似（登记债）：①展示所有手牌表现面未建模；②sha 目标合法性按「其他存活角色」
+// 宽口径（上游走通用 useCard 合法性含距离判定）；③取消语义与上游 chooseButton
+// 取消对齐（allow_cancel=true）。
+skill dcbingji(2598388567) {
+  active play_phase targets 0 0 {
+    effect resolve_dcbingji(self, self_skill, 0, 0);
+  }
+}

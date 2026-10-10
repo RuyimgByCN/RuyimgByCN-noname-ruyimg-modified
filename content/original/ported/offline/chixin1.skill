@@ -1,0 +1,5 @@
+// 赤心①：方片手牌或装备牌可当【杀】使用或打出。
+skill chixin1(4208743202) {
+  view_as sha play_phase diamond from hand_equip;
+  view_as sha response diamond from hand_equip;
+}

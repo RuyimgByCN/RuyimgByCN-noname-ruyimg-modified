@@ -1,0 +1,18 @@
+// mbqiangyong（羌勇）：锁定技，你使用【杀】造成伤害时，弃置受伤角色的X张牌
+// （X为本回合你使用【杀】的次数），然后若其没有手牌，此【杀】伤害+1。
+// 上游 (mobile/skill.js mbqiangyong L237)：forced，trigger source
+// damageBegin2（event.card.name=sha）；num=countHistory("useCard",sha)；
+// discardPlayerCard({selectButton:num, forced, "he"}) → 若目标无手牌
+// trigger.num++。
+// 实现（2026-09-14 第二百七十八批·伤害门控+点数比较族状态机，ADR 0641
+// §8.66）：trigger damage_before owner_is_source_sha_card_damage_before →
+// resolve_qiangyong(self, event_player)（ABI 727 / tag 751 / Cont 325 单段
+// 续体）：X=SHA_PLAYED 旗 → owner 从目标 he 区选 X 张强制弃置 → 目标无手牌
+// 则 ModifyCurrentDamage(+1)。近义件：ModifyCurrentDamage 既有原语。
+// 近似（登记债）：①X 以 SHA_PLAYED 回合旗近似（owner 出牌回合内等价；
+// 非出牌回合的跨回合残留伤害场景不区分）。
+skill mbqiangyong(3316930446) locked {
+  trigger damage_before owner_is_source_sha_card_damage_before {
+    effect resolve_qiangyong(self, event_player);
+  }
+}

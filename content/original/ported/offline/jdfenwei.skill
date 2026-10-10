@@ -1,0 +1,5 @@
+// jdfenwei（限定技/触发技）：音效名:sbfenwei, 觉醒技, 限定技, global:card_targeted, global:phaseEnd, 需选择目标, 加技能, 含子技能, 异步。
+skill jdfenwei(3004643119) {
+  trigger card_targeted owner_alive optional {
+  }
+}

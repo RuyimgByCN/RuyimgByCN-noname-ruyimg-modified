@@ -1,0 +1,4 @@
+skill jiaozi(2415897133) locked {
+  modifier damage_amount add owner_unique_max_hand;
+  modifier damage_taken_amount add owner_unique_max_hand;
+}

@@ -1,0 +1,6 @@
+// 张采·全点数（dczhangcai_all）：标记技能，「儒贤」授予，回合结束时移除。
+skill dczhangcai_all(3424574524) locked {
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

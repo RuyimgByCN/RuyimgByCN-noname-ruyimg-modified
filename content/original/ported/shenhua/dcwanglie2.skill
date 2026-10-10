@@ -1,0 +1,8 @@
+// 往烈临时效果：保存精确不可响应牌，并令本阶段后续用牌只能指定自己。
+skill dcwanglie2(2388106243) {
+  modifier card_targets_self_only override 1;
+  modifier card_use_unrespondable_for_skill_card_policy override 1;
+  trigger phase_play_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,293 @@
+//! E01–E03 扩展运行时基础（ADR 0776）。
+//!
+//! 扩展包 = 额外武将（元数据）+ 额外卡牌（可入局）。
+//! 生命周期：安装（校验冲突）→ 启用（合并入目录并绑定内容锁版本）→
+//! 禁用（后续开局不再合并）→ 卸载。
+//! 内容锁：启用扩展集合参与目录 `ruleset_version` 派生——存档/恢复
+//! 按同一扩展集合校验，集合不同即 `RuleVersionMismatch` 拒绝。
+//! 冲突一律返回可处理错误，不再 panic。
+
+use crate::catalog::CardDef;
+use crate::catalog::Faction;
+use crate::content::standard::{Gender, STANDARD_GENERALS};
+
+/// 扩展包元数据。
+#[derive(Debug, Clone)]
+pub struct ExtensionDef {
+    pub name: &'static str,
+    pub version: u32,
+    pub description: &'static str,
+}
+
+/// 扩展生命周期/内容错误（可处理，不再 panic）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ExtensionError {
+    /// 启用/禁用/卸载未安装的扩展。
+    NotInstalled { name: &'static str },
+    /// 重复安装同名扩展（先卸载再安装，或走升级入口）。
+    AlreadyInstalled { name: &'static str },
+    /// 包内/包间重复卡牌名。
+    DuplicateCard { name: &'static str },
+    /// 包内/包间重复武将名。
+    DuplicateGeneral { name: &'static str },
+    /// 包内/包间重复技能名。
+    DuplicateSkill { name: String },
+}
+
+/// 扩展提供的额外武将条目。
+#[derive(Debug, Clone)]
+pub struct ExtensionGeneral {
+    pub name: &'static str,
+    pub faction: Faction,
+    pub skills: &'static [&'static str],
+    pub max_hp: u32,
+    pub gender: Gender,
+}
+
+/// 开局初始化钩子（G1：扩展声明的对局初始化行为）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum InitHook {
+    #[default]
+    None,
+    /// wuxing：开局为每名角色随机五行属性，牌堆按比例随机获得属性。
+    WuxingNatures,
+}
+
+impl InitHook {
+    /// 扩展包数据 `init_hook` 键（宿主 ABI，只增不改）。
+    pub const fn key(self) -> &'static str {
+        match self {
+            InitHook::None => "none",
+            InitHook::WuxingNatures => "wuxing_natures",
+        }
+    }
+
+    pub fn from_key(key: &str) -> Option<Self> {
+        [InitHook::None, InitHook::WuxingNatures]
+            .into_iter()
+            .find(|h| h.key() == key)
+    }
+}
+
+/// 扩展包：元数据 + 额外内容。
+pub struct ExtensionPack {
+    pub def: ExtensionDef,
+    pub generals: Vec<ExtensionGeneral>,
+    pub cards: Vec<CardDef>,
+    /// G1 规则宿主：包声明的宿主原语技能（数据 → 目录 SkillDef）。
+    pub host_skills: Vec<crate::content::host::HostSkillDecl>,
+    /// 开局初始化钩子（影响对局随机流，进入内容锁语义）。
+    pub init_hook: InitHook,
+    pub enabled: bool,
+}
+
+impl ExtensionPack {
+    /// 合并后目录中的额外武将数。
+    pub fn general_count(&self) -> usize {
+        self.generals.len()
+    }
+
+    /// 合并后目录中的额外卡牌数。
+    pub fn card_count(&self) -> usize {
+        self.cards.len()
+    }
+}
+
+/// 扩展注册表：管理已安装扩展的启用/禁用状态。
+#[derive(Debug, Clone, Default)]
+pub struct ExtensionRegistry {
+    /// 已安装扩展（按安装序）。
+    pub installed: Vec<ExtensionDef>,
+    /// 已启用扩展名集合。
+    pub enabled: std::collections::BTreeSet<&'static str>,
+}
+
+impl ExtensionRegistry {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 安装扩展（默认启用）。重复安装同名扩展返回错误（升级须显式
+    /// 卸载后安装，不静默覆盖）。
+    pub fn install(&mut self, def: ExtensionDef) -> Result<(), ExtensionError> {
+        if self.installed.iter().any(|d| d.name == def.name) {
+            return Err(ExtensionError::AlreadyInstalled { name: def.name });
+        }
+        self.enabled.insert(def.name);
+        self.installed.push(def);
+        Ok(())
+    }
+
+    /// 禁用扩展（未安装返回错误——拒绝启用/操作未安装包）。
+    pub fn disable(&mut self, name: &'static str) -> Result<(), ExtensionError> {
+        if !self.is_installed(name) {
+            return Err(ExtensionError::NotInstalled { name });
+        }
+        self.enabled.remove(name);
+        Ok(())
+    }
+
+    /// 启用扩展（未安装返回错误——此前可启用未安装名，已修复）。
+    pub fn enable(&mut self, name: &'static str) -> Result<(), ExtensionError> {
+        if !self.is_installed(name) {
+            return Err(ExtensionError::NotInstalled { name });
+        }
+        self.enabled.insert(name);
+        Ok(())
+    }
+
+    /// 查询扩展是否启用。
+    pub fn is_enabled(&self, name: &'static str) -> bool {
+        self.is_installed(name) && self.enabled.contains(name)
+    }
+
+    /// 查询扩展是否已安装。
+    pub fn is_installed(&self, name: &'static str) -> bool {
+        self.installed.iter().any(|d| d.name == name)
+    }
+
+    /// 卸载扩展（未安装返回错误）。
+    pub fn uninstall(&mut self, name: &'static str) -> Result<(), ExtensionError> {
+        if !self.is_installed(name) {
+            return Err(ExtensionError::NotInstalled { name });
+        }
+        self.installed.retain(|d| d.name != name);
+        self.enabled.remove(name);
+        Ok(())
+    }
+}
+
+/// 内容锁标识：启用扩展集合的确定性指纹（FNV-1a over 排序后的
+/// `name:version;` 串）。空集合 = 0（与纯标准目录一致）。
+pub fn content_lock_id(packs: &[&ExtensionPack]) -> u64 {
+    let mut names: Vec<(&str, u32)> = packs
+        .iter()
+        .filter(|p| p.enabled)
+        .map(|p| (p.def.name, p.def.version))
+        .collect();
+    names.sort_unstable();
+    if names.is_empty() {
+        return 0; // 空集合 = 纯标准目录
+    }
+    let mut h: u64 = 0xcbf2_9ce4_8422_2325;
+    for (n, v) in names {
+        for b in n.as_bytes() {
+            h ^= *b as u64;
+            h = h.wrapping_mul(0x1000_0000_01b3);
+        }
+        h ^= b':' as u64;
+        h = h.wrapping_mul(0x1000_0000_01b3);
+        for b in v.to_string().as_bytes() {
+            h ^= *b as u64;
+            h = h.wrapping_mul(0x1000_0000_01b3);
+        }
+        h ^= b';' as u64;
+        h = h.wrapping_mul(0x1000_0000_01b3);
+    }
+    h
+}
+
+/// 将扩展包内容合并到基础目录数据中。
+/// 冲突检测：扩展卡牌与基础目录、以及扩展**包内**重复 → 可处理错误。
+pub fn merge_extension_cards(
+    base_cards: Vec<CardDef>,
+    extension_cards: &[CardDef],
+) -> Result<Vec<CardDef>, ExtensionError> {
+    let base_names: std::collections::BTreeSet<&str> =
+        base_cards.iter().map(|c| c.name).collect();
+    let mut seen: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
+    for ext in extension_cards {
+        if base_names.contains(ext.name) {
+            return Err(ExtensionError::DuplicateCard { name: ext.name });
+        }
+        if !seen.insert(ext.name) {
+            return Err(ExtensionError::DuplicateCard { name: ext.name });
+        }
+    }
+    let mut all = base_cards;
+    all.extend(extension_cards.iter().cloned());
+    Ok(all)
+}
+
+/// 冲突检测：扩展武将与基础武将表、以及扩展**包内**重复 → 可处理错误。
+pub fn check_general_conflicts(
+    extension_generals: &[ExtensionGeneral],
+) -> Result<(), ExtensionError> {
+    let base_names: std::collections::BTreeSet<&str> =
+        STANDARD_GENERALS.iter().map(|(g, _, _, _, _)| *g).collect();
+    let mut seen: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
+    for ext in extension_generals {
+        if base_names.contains(ext.name) {
+            return Err(ExtensionError::DuplicateGeneral { name: ext.name });
+        }
+        if !seen.insert(ext.name) {
+            return Err(ExtensionError::DuplicateGeneral { name: ext.name });
+        }
+    }
+    Ok(())
+}
+
+/// 将扩展武将条目追加到标准武将表（运行时查询用）。
+pub fn extension_general_count(extensions: &[&ExtensionPack]) -> usize {
+    extensions.iter().filter(|e| e.enabled).map(|e| e.general_count()).sum()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn extension_registry_lifecycle() {
+        let mut reg = ExtensionRegistry::new();
+        let def = ExtensionDef {
+            name: "test_ext",
+            version: 1,
+            description: "测试扩展",
+        };
+        assert!(!reg.is_installed("test_ext"));
+        reg.install(def);
+        assert!(reg.is_installed("test_ext"));
+        assert!(reg.is_enabled("test_ext"));
+        reg.disable("test_ext");
+        assert!(!reg.is_enabled("test_ext"));
+        reg.enable("test_ext");
+        assert!(reg.is_enabled("test_ext"));
+        reg.uninstall("test_ext");
+        assert!(!reg.is_installed("test_ext"));
+    }
+}
+
+/// 示例扩展包：追加一张「闪电·赤」（红桃闪电，伤害改为火焰 2 点）
+/// 与两名扩展武将（带技能集引用基础目录已有技能）。
+pub fn example_extension() -> ExtensionPack {
+    ExtensionPack {
+        def: ExtensionDef {
+            name: "example_ext",
+            version: 1,
+            description: "示例扩展：赤闪电 + 扩展武将",
+        },
+        generals: vec![
+            ExtensionGeneral {
+                name: "样例·赤将",
+                faction: Faction::Wei,
+                skills: &["奸雄"],
+                max_hp: 4,
+                gender: Gender::Male,
+            },
+            ExtensionGeneral {
+                name: "样例·青将",
+                faction: Faction::Wu,
+                skills: &["克己"],
+                max_hp: 3,
+                gender: Gender::Female,
+            },
+        ],
+        cards: vec![
+            CardDef::basic("shandian_red", crate::catalog::CardKind::ShanDian)
+                .with_suit_rank(crate::catalog::Suit::Heart, 5),
+        ],
+        host_skills: Vec::new(),
+        init_hook: InitHook::None,
+        enabled: true,
+    }
+}

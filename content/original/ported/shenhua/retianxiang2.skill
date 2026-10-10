@@ -1,0 +1,7 @@
+// 天香·2（界小乔系）：天香伤害后清理辅助。
+// 旧 JS 的清理语义，无独立规则行为。
+skill retianxiang2(2519383985) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

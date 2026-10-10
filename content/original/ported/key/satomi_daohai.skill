@@ -1,0 +1,7 @@
+// 蹈海（里美）：回合结束时若弃过牌，可视为使用五谷；获得牌后可选其中一张当乐使用。
+// 实现：出牌阶段限一次，手牌可当【乐不思蜀】使用。
+// 近似：结束阶段视为五谷未建模；不限「本回合获得的牌」。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill satomi_daohai(2215481549) {
+  view_as le play_phase any from hand uses_per_turn 1;
+}

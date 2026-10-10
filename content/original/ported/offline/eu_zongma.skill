@@ -1,0 +1,5 @@
+// eu_zongma：锁定技, player:phase_play, source:damage_before, player:damage_before, 含子技能, 异步。
+skill eu_zongma(3907654725) locked {
+  trigger phase_play always {
+  }
+}

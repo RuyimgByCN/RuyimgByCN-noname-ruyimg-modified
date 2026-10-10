@@ -1,0 +1,22 @@
+// 潮时（无名）：锁定技。每当你受到或造成伤害后，摸一张牌并将一张牌置于武将牌上
+// （expansion）；回合结束时，若 expansion 牌点数之和 ≥100，获得所有 expansion 牌并
+// 插入额外回合。
+// 上游 (collab/skill.js)。实现：damage 双向触发 → draw_cards(1) +
+// place_hand_card_to_expansion（ABI 650，本会话）；phase_end optional →
+// gain_from_skill_pile（ABI 651，本会话）。
+// 近似：(1)「点数之和≥100」门槛未建模（expansion 点数求和原语缺失，见缺口登记）；
+// (2)「获得所有」以取一张近似；(3) 额外回合插入（insert_phase）未建模。
+// 2026-08-16 expansion P1 取用批次（用户批准门槛降至实面 2）。
+skill dchaoshi(3952022861) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+    effect place_hand_card_to_expansion(self, self_skill);
+  }
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+    effect place_hand_card_to_expansion(self, self_skill);
+  }
+  trigger phase_end owner_is_target optional {
+    effect gain_from_skill_pile(self, self_skill);
+  }
+}

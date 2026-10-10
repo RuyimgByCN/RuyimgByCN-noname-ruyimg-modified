@@ -1,0 +1,4 @@
+// 八阵：旧 JS 的 grouped `bazhen_bagua` 折叠到主技能；无实体防具时提供虚拟八卦响应。
+skill bazhen(3741926095) locked {
+  modifier virtual_bagua_if_armor_slot_empty override 1;
+}

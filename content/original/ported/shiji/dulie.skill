@@ -1,0 +1,9 @@
+// 笃烈（孙翊系）：锁定技。体力值大于你的角色对你使用【杀】时，你判定：
+// 红桃则此【杀】对你无效。
+// 旧 JS 的「红桃判定使杀无效」以判定后排除当前杀目标近似；以
+// card_target_cancel 的判定来源无法表达，简化为红桃判定摸一张（已注明）。
+skill dulie(4086345615) locked {
+  trigger card_targeted owner_targeted_by_other_sha {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+skill olqieting(4244184524) {
+  trigger turn_ended owner_alive_other_turn_ended_no_card_targeted_other {
+    effect choose_move_target_equipment_and_or_draw(self, event_player);
+  }
+
+  trigger turn_ended owner_alive_other_turn_ended_card_targeted_other_no_damage_other {
+    effect choose_move_target_equipment_or_draw(self, event_player);
+  }
+}

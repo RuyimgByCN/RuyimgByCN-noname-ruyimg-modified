@@ -1,0 +1,8 @@
+// 司敌2(旧版)(徐晃)：subskill of sidi。当其他角色的出牌阶段开始时，
+// 若你有"司敌"牌，你可以弃置其中一张，令其获得"sidi3"并获得1个sidi3标记。
+// 注：expansion牌管理、特定标记addTempSkill均为父技能sidi的子机制，本技能为触发+消耗expansion。
+skill sidi2(4086481129) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

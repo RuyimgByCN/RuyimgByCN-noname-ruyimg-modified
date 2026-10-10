@@ -1,0 +1,7 @@
+// 桃园望歌（暗藏系统技能）：旧 JS 的隐藏触发技能，无独立权威规则行为，
+// 保留稳定定义 ID（已注明）。
+skill _taoyuanwange(3760400121) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

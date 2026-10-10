@@ -1,0 +1,8 @@
+// 蹒襄（司马孚）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：同势力角色造成或受到伤害时，你可选择：其交给你一张牌此伤害+1 / 你弃置一张牌此伤害-1（每项每回合限一次）
+// 旧 JS 的「伤害进行时 ±1 修正 + 每项限次 storage」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxpanxiang(3364834382) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

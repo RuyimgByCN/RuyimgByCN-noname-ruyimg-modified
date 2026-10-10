@@ -1,0 +1,9 @@
+// 伐柱（王粲）：准备阶段开始时，你可重铸任意张非伤害牌（含判定区牌），
+// 然后摸等量牌。
+// 旧 JS 的「重铸任意张非伤害牌」以弃一张手牌并摸一张近似（判定区与
+// 多张未建模，已注明）。
+skill fazhu(3348906410) {
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

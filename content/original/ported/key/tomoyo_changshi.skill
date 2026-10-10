@@ -1,0 +1,14 @@
+// 长视（智代·锁定技）：在你攻击范围内的角色获得牌≥2时你摸一张牌；回复体力时你+1护甲。
+// 旧 JS 的 攻击范围检测+护甲机制 需范围与护甲原语，未建模。
+// 长视（智代·锁定技）：在你攻击范围内的角色获得牌≥2时你摸一张牌；
+// 在你攻击范围内的角色回复体力时，你获得 1 点护甲。
+// 实现：`trigger hp_recovered owner_alive → add_mark(self, 3, 1)`
+// （护甲=MARK_HUJIA 标记 def 3；引擎伤害管线原生吸收）。
+// 近似：「攻击范围内」条件未建模（任意角色回复均触发，含自己）；获得牌≥2 摸牌
+// 子句（gainAfter 历史对照）未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill tomoyo_changshi(3488868404) locked {
+  trigger hp_recovered owner_alive {
+    effect add_mark(self, 3, 1);
+  }
+}

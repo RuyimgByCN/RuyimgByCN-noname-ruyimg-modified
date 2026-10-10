@@ -1,0 +1,8 @@
+// 清蛮：每个存活角色的回合结束时，将手牌补至该角色的空装备栏数。
+skill qingman(2536693396) locked {
+  trigger turn_ended owner_alive_event_player_alive {
+    if hand_count(self) < empty_equip_slots(event_player) {
+      effect draw_cards(self, empty_equip_slots(event_player) - hand_count(self));
+    }
+  }
+}

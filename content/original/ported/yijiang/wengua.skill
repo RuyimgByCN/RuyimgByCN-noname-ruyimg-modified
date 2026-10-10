@@ -1,0 +1,17 @@
+// 问卦（王粲）：锁定技。游戏开始时获得「问卦」标记；出牌阶段限一次，将
+// 一张牌置于牌堆顶或牌堆底；其他角色出牌阶段可交给你一张牌。
+// 旧 JS 的「全局授予问卦2」「跨角色交牌」复合未建模；以 resolve_wengua
+// 驱动主动技（置牌堆顶/底近似为弃一张手牌并摸一张），游戏开始授权保留
+// 框架（已注明）。
+skill wengua(4068014439) {
+  trigger game_started owner_alive {
+    effect resolve_wengua_setup(self, 2716743244);
+  }
+  trigger skill_added owner_alive_event_player_alive {
+    effect resolve_wengua_setup(self, 2716743244);
+  }
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

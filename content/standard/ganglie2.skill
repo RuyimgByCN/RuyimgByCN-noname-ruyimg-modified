@@ -1,0 +1,6 @@
+// 刚烈 (ganglie) — 夏侯惇: after taking damage, draw 1 card (iron will).
+skill ganglie2(38) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

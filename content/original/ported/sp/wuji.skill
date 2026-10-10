@@ -1,0 +1,16 @@
+// 武继（wuji，关银屏）：锁定技。结束阶段开始时，若你本回合累计造成至少 3 点伤害，
+// 你失去「虎啸」、加 1 点体力上限并回复 1 点体力，然后觉醒。
+// 上游 (sp/skill.js:42961)：trigger player:phaseJieshuBegin；filter = getStat("damage")
+// >= 3；content = removeSkills("huxiao") + gainMaxHp + recover + awakenSkill。
+// 实现：phase_end + owner_is_target_turn_damage_at_least_three（当前回合角色造成伤害
+// ≥3，语义等价上游 getStat("damage")）→ remove_skill_by_def(self, huxiao) +
+// change_max_hp(self, 1) + recover_hp(self, 1) + remove_skill(self_skill)。
+// 与上游差异：场上【青龙偃月刀】获得未建模（oldwuji 同款近似）。
+skill wuji(2966745164) locked {
+  trigger phase_end owner_is_target_turn_damage_at_least_three {
+    effect remove_skill_by_def(self, 3796089056);
+    effect change_max_hp(self, 1);
+    effect recover_hp(self, 1);
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,6 @@
+// 拒祥：主公技。其他群势力角色出牌阶段可将一张装备牌置入你的装备区
+// 或恢复你的对应装备栏。缺装备栏状态恢复与势力限定选目标原语，空定义。
+skill twjuxiang(3686047677) lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

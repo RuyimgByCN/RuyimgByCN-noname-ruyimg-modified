@@ -1,0 +1,11 @@
+// 巧说失败后的临时效果
+// 原语义：普通锦囊牌不计入手牌上限，且不能在弃牌阶段弃置。
+skill qiaoshui4(3521041512) {
+  modifier card_ignored_hand_limit(trick) override 1;
+  trigger hand_compare_finished owner_is_target {
+    effect skip_current_phase(self);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

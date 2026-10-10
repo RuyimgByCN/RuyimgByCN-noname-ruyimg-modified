@@ -1,0 +1,8 @@
+// 逢主（OL逢主）：锁定技，准备阶段选择一名男性角色为「义父」，摸其体力值张牌。
+// 旧 JS 含目标选择、义父标记存储、改名广播（战神X布），DSL 中 locked 技能不可有 optional trigger，故无法保留目标选择交互。
+// 近似为非锁定、可选触发，摸1张牌（略去体力值计数与标记改名）。
+skill olfengzhu(3672929372) {
+  trigger phase_prepare owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

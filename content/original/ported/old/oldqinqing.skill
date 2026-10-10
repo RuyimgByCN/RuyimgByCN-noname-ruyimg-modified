@@ -1,0 +1,7 @@
+// 寝情：结束阶段选择一名攻击范围覆盖主公的其他角色，弃其一牌并令其摸一张；
+// 若结算后其手牌数大于主公，技能拥有者摸一张。
+skill oldqinqing(2296564419) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_oldqinqing(self);
+  }
+}

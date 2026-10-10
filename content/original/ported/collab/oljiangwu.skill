@@ -1,0 +1,7 @@
+// 讲武：每轮开始和结束时，从战法商店中购买战法（首轮免费获得三个不同品质的）。
+// 旧 JS 的「战法（zhanfa）商店 UI」「联网多人同步」「虎符货币系统」无对应原语，未建模。
+skill oljiangwu(3718591883) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+skill guixiu(2533816770) {
+  trigger card_used owner_targeted_by_sha_hand_below_hp optional {
+    effect draw_cards(self, 1);
+  }
+}

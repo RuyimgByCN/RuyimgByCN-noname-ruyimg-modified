@@ -1,0 +1,11 @@
+// 穹闪（纵横神张角）：每轮限一次，其他角色的判定牌生效前，你可以获得此判定牌，
+// 然后选择花色与点数修改判定结果。
+// 上游 (offline_zongheng.js:84-137)：global judge 触发 + 判定牌获得 +
+// chooseButton 花色/点数双选改写判定。
+// 「判定结果任意改写（花色+点数）」「判定牌获得」均无对应原语（flip_judgment 仅
+// 支持 Neutral 换牌）。诚实 noop（保真度债，ADR 0597）。
+// 2026-08-15：随上游 v1.11.5 新武将 zh_shen_zhangjiao 移植。
+skill zhqiongshan(3780094143) locked {
+  // INTENTIONAL_EMPTY_NOOP: judge-result rewrite unavailable
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,38 @@
+// 宽释：结束阶段开始时，你选择一名其他角色，其获得「宽释」保护：其下一次受
+// 到大于 1 点的伤害时，防止此伤害（每名角色保护一次性）。
+// 上游 (sp/skill.js kuanshi L35181)：trigger player phaseJieshuBegin；
+// chooseTarget（可含自己）→ addTempSkill(kuanshi_effect, phaseBegin 移除) +
+// markAuto(target)；subSkill effect：global damageBegin4 forced → num>1 且
+// 受伤者 ∈ storage → trigger.cancel()（防止）+ 该目标移出 storage +
+// player.skip("phaseDraw")（授予者跳过下个摸牌阶段）。
+// 头注更正（批 228 发现「弃牌回复体力」系引写失实，本批据上游实读重写）。
+// 实现（2026-09-12 第二百四十四批·零铸造散批，zhafu/rebiaozhao 模板）：
+// 主面 trigger phase_end owner_is_target optional → choose_other_add_mark(self,
+// 30507535, 1)（「宽释」标记，blake2b("kuanshi_effect_mark")=30507535）；
+// 预防臂 trigger damage_before owner_alive_damage_before_event_target_mark_positive_30507535
+// forced → body 级 event_amount > 1 门控 → prevent_current_damage() +
+// remove_mark(event_player, 30507535, 1)（一次性消耗）；过期臂 trigger
+// phase_begin owner_alive_phase_begin_event_target_mark_positive_30507535 forced → 移除
+// 该目标全部标记。
+// 近似（登记债）：①授予者跳过摸牌阶段未建模——引擎无 per-player 未来回合
+// 跳过面（skip_remaining_phases 为全局 turn flag，会误指当前回合角色；
+// skip_next_* 仅限自身当前回合）；②保护到期时点按目标回合开始收窄（上游为
+// 授予者下回合开始全部失效）；③上游可选自己，choose_other_add_mark 收窄为
+// 其他角色；④预防臂 forced 直防（上游 forced 同口径 ✓）。
+skill kuanshi(2742461307) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_add_mark(self, 30507535, 1);
+  }
+
+  trigger damage_before owner_alive_damage_before_event_target_mark_positive_30507535 {
+    if event_amount > 1 {
+      effect prevent_current_damage();
+      effect remove_mark(event_player, 30507535, 1);
+    }
+  }
+
+  trigger phase_begin owner_alive_phase_begin_event_target_mark_positive_30507535 {
+    let marks = mark_count(event_player, 30507535);
+    effect remove_mark(event_player, 30507535, marks);
+  }
+}

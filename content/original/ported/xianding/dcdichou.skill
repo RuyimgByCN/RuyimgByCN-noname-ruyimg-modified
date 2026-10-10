@@ -1,0 +1,23 @@
+// 涤仇（威关银屏）：其他角色对你用牌获得仇；回合开始废除装备栏并弃仇角色牌，
+// 按牌名字数增加本回合攻击范围与杀次数；对仇角色用牌摸一并移除一仇；结束阶段
+// 选择任意名仇角色，各造成一点火焰伤害并移除其全部仇。
+skill dcdichou(3304378096) locked {
+  trigger card_targeted owner_is_target_other_source_alive {
+    effect add_mark(event_source, 3304378096, 1);
+  }
+  trigger phase_begin owner_is_target {
+    effect resolve_dcdichou(self, 0, 2754298115);
+  }
+  trigger card_targeted owner_source_target_mark_positive_3304378096 {
+    effect draw_cards(self, 1);
+    effect remove_mark(event_player, 3304378096, 1);
+  }
+  trigger phase_end owner_is_target {
+    effect resolve_dcdichou(self, 10, 2754298115);
+  }
+}
+
+skill dcdichou_eff(2754298115) locked {
+  modifier attack_range add owner_skill_mark;
+  modifier sha_use_limit add owner_skill_mark;
+}

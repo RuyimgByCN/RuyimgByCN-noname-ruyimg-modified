@@ -1,0 +1,7 @@
+// 诬诽：准备阶段，选一名有手牌的女性角色，展示其手牌，你选一种颜色，其弃所有该色手牌并摸一张。
+// 旧 JS 的「展示手牌 + 颜色分类 + 单色全弃 + 摸1」无对应原语（需 reveal + color-filtered mass discard），未建模。
+skill stdwufei(2430940463) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

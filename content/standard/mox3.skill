@@ -1,0 +1,4 @@
+// Skill mox3(196) - modifier range variant
+skill mox3(196) {
+  modifier attack_range add 1;
+}

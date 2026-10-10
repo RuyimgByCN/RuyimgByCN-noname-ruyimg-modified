@@ -1,0 +1,5 @@
+// jsrgxianzhu（先著）：魏势力技。你可以将一张普通锦囊牌当无次数限制的【杀】使用。当此牌对唯一目标造成伤害后，你视为对该角色使用一张此普通锦囊牌。
+// 未建模：势力技能, 全局状态, addTempSkill, 延迟动画, charlotte延迟, storage状态 ...等7项（DSL无对应原语）
+skill jsrgxianzhu(2631075901) {
+  view_as sha play_phase any;
+}

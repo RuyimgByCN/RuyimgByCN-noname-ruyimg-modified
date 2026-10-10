@@ -1,0 +1,4 @@
+// 刚直：你与其他角色之间的伤害改为等量体力流失。
+skill gangzhi(3573807347) locked {
+  modifier damage_between_owner_and_other_as_hp_loss override 1;
+}

@@ -1,0 +1,8 @@
+// 解巡（徐庶）：结束阶段，选择一名角色令其弃置一张手牌；若弃置方块牌则该角色摸两张牌。
+// 旧 JS 的「方块花色判定并conditional摸2」无对应 DSL 条件分支原语，未建模。
+// 以 choose_other_discard_target_card 近似保留弃牌部分收益。
+skill stdjiexun(3802443963) {
+  trigger phase_end owner_alive {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

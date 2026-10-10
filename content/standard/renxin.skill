@@ -1,0 +1,4 @@
+// Cao Chong compassion
+skill renxin(75) {
+  modifier distance_from add -1;
+}

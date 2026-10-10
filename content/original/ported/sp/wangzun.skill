@@ -1,0 +1,12 @@
+// wangzun（妄尊）：当一名其他角色的准备阶段开始时，你可以摸一张牌，然后该角色本回合手牌上限-1。
+// 上游 filter: event.player != player && !storage.wangzun；content: player.draw(); markSkill("wangzun");
+//   storage.wangzun = trigger.player; trigger.player.addTempSkill("wangzun3");
+// 使用 add_skill_by_name 编译时解析 wangzun3。
+// 近似：markSkill/storage.wangzun（一次性标记）+ 触发者手牌上限-1 需 mark modifier 原语，
+//   本定义实现核心摸牌 + 给触发者 wangzun3 临时技能；省略一次性标记（会多次触发）。
+skill wangzun(2507807617) {
+  trigger phase_begin owner_alive_not_target optional {
+    effect draw_cards(self, 1);
+    effect add_skill_by_name(event_player, wangzun3);
+  }
+}

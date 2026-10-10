@@ -1,0 +1,5 @@
+// caxiaoxiong：锁定技, player:turnOverBegin, 失去体力, 异步。
+skill caxiaoxiong(3123856117) {
+  trigger character_state_changed owner_alive {
+  }
+}

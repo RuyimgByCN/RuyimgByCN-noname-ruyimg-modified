@@ -1,0 +1,17 @@
+// jiange（剑阁）包：可表达技能的真实 DSL 实现。
+// 来源：Noname-ruyimg-Modified/apps/core/character/jiange（源自 Noname-Liuli-Modified M4）。
+// 旧 JS 仅作语义证据，不进入 npack 或运行时；未移植机制见 jiange_meta.skill。
+
+// 激阵（烈帝玄德·刘备）：结束阶段，你可以令至多两名已受伤角色各摸一张牌。
+skill jizhen(421562282) {
+  trigger phase_end owner_is_target optional {
+    effect choose_optional_targets_draw(self, 1, 1, 2, wounded);
+  }
+}
+
+// 反噬（断狱仲达·司马懿）：锁定技，结束阶段，你失去 1 点体力。
+skill sfanshi(122113180) locked {
+  trigger phase_end owner_is_target {
+    effect lose_hp(self, 1);
+  }
+}

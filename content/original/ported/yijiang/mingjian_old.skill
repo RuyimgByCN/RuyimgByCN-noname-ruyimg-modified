@@ -1,0 +1,7 @@
+// 明鉴（旧版·孙亮）：出牌阶段开始前取消阶段，将所有手牌交给一名其他角色并令其获得额外出牌阶段。
+// 旧 JS 取消当前阶段+全手牌转让+目标获得 mingjian2_old 的插入阶段机制，无对应原语链。
+skill mingjian_old(3231432967) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

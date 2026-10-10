@@ -1,0 +1,8 @@
+// 虎啸（huxiao）：锁定技。当你造成火焰伤害后，受伤角色摸一张牌；
+// 然后你于此回合内对其使用牌没有次数限制（上游 huxiao3 临时技能）——
+// 次数限制豁免无对应 modifier 原语，未建模。
+skill huxiao(3796089056) locked {
+  trigger damage owner_source_fire {
+    effect draw_cards(event_player, 1);
+  }
+}

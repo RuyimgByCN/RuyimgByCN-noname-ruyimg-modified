@@ -1,0 +1,8 @@
+// 界鞬出：旧 JS 只保留为语义证据；目标牌与当前【杀】在续程中重新校验。
+skill rejianchu(3270398373) {
+  trigger card_targeted owner_source_sha_target_alive_has_discardable_hand_equip optional {
+    effect choose_discard_target_card_resolve_current_sha_nonbasic_bonus(
+      self, event_card, event_player, 3848225310
+    );
+  }
+}

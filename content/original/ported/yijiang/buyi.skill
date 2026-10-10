@@ -1,0 +1,7 @@
+// 补益（吴国太）：有角色濒死时，可观看其手牌并选择一张；若非基本牌则弃置并令其回复体力。
+// 旧 JS 的「选濒死者手牌+条件判类型+分支回复」多步交互无对应原语，暂留空定义。
+skill buyi(3576094285) {
+  trigger dying owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

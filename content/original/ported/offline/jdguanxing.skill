@@ -1,0 +1,5 @@
+// jdguanxing：音效名:sbguanxing, player:phase_prepare, 主动(phaseUse), 含子技能, 异步。
+skill jdguanxing(4242979712) {
+  trigger phase_prepare owner_alive optional {
+  }
+}

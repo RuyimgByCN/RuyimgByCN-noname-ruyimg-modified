@@ -1,0 +1,5 @@
+// zc26_haoshi：player:phaseDrawBegin2, 需选择目标, 异步。
+skill zc26_haoshi(3509302612) {
+  trigger phase_any_end owner_alive {
+  }
+}

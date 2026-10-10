@@ -1,0 +1,9 @@
+// 书法字锦官（shufazijinguan_skill，装备技）：准备阶段开始时，你可对一名其他角色造成1点伤害。
+// 上游 (sp/skill.js:25888)：equipSkill phaseZhunbeiBegin，chooseTarget(notMe) → damage()。
+// 实现：phase_prepare owner_is_target optional → choose_other_damage(self, 1)。
+// 与上游差异：装备技绑定未建模。
+skill shufazijinguan_skill(3390731241) {
+  trigger phase_prepare owner_is_target optional {
+    effect choose_other_damage(self, 1);
+  }
+}

@@ -1,0 +1,14 @@
+// 预兆（key shiroha_yuzhao）：开局时，将牌堆顶 X 张牌置于你的武将牌上，称为「兆」
+//（X 为势力数）。「兆」牌数为 0 时移去〖预兆·里〗。
+// 上游 (key/skill.js shiroha_yuzhao)：trigger enterGame/phaseBefore(game.phaseNumber
+// == 0)；addToExpansion(get.cards(game.countGroup()))。
+// 实现（2026-09-10 第二百批·P2-var 置入面铸造，零新原语）：
+// game_started owner_alive → place_top_deck_to_expansion(self, self_skill,
+// 4263927867, alive_group_count())。
+// 近似（登记债）：①enterGame/phaseBefore 开局窗口以 game_started 近似
+// （xiaoxi 先例）；②「兆」可视性（仅自己可见的暗置）未建模——堆内牌公开。
+skill shiroha_yuzhao(4263927867) {
+  trigger game_started owner_alive {
+    effect place_top_deck_to_expansion(self, self_skill, 4263927867, alive_group_count());
+  }
+}

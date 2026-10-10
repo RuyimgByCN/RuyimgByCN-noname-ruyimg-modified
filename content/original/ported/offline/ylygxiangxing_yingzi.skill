@@ -1,0 +1,7 @@
+// 象刑·英姿（global / inherit reyingzi）
+// 上游：场上有其他角色拥有 ylygxiangxing 时，视为拥有界英姿
+// （摸牌+1，手牌上限基数=体力上限）。全局技在授予后由本 skill 自身生效。
+skill ylygxiangxing_yingzi(3190971665) locked {
+  modifier draw_count add 1;
+  modifier hand_limit_base_max_hp override 1;
+}

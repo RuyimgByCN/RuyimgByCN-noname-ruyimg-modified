@@ -1,0 +1,8 @@
+// scls_chongxu（主动技(phaseUse)）：音效名:chongxu, 主动(phaseUse), 选牌UI, 加技能, 含子技能, 异步。
+// 未建模：子技能机制、异步await，DSL 无对应原语。
+// 空定义保留占位。
+skill scls_chongxu(3155945281) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

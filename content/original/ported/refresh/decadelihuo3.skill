@@ -1,0 +1,10 @@
+// 厉火-损（程普·疠火子技）：火【杀】指定多名目标并造成伤害后，失去 1 点体力。
+// 上游 (refresh/skill.js)：damageSource + 火杀 + 多目标（targets>1）门槛 → loseHp。
+// 实现：`trigger damage owner_source_fire optional`（既有过滤器）→ lose_hp(self, 1)。
+// 近似：「指定多名目标」门槛未建模（单目标火杀伤害亦触发）；伤害属性由过滤器保证。
+// 2026-08-15 火杀体查询批次——零新原语。
+skill decadelihuo3(4165258449) {
+  trigger damage owner_source_fire optional {
+    effect lose_hp(self, 1);
+  }
+}

@@ -1,0 +1,18 @@
+// 神速（夏侯渊）：判定阶段开始时，可跳过判定阶段和摸牌阶段，视为对攻击范围内一名
+// 其他角色使用一张【杀】；出牌阶段开始时，可弃置一张装备牌并跳过出牌阶段，视为使用
+// 一张【杀】。
+// 旧 JS（shensu group: shensu1/shensu2）仅作语义证据；旧 group 行为折叠进同一定义。
+// 注：神速·二的弃牌成本旧 JS 限定装备牌，DSL 以 discard_hand_equip(1) 放宽为任意
+// 手牌/装备牌，属文档化近似。
+skill shensu(3358716580) {
+  trigger phase_judge owner_is_target optional {
+    effect skip_judge_and_draw_phases(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+
+  trigger phase_play owner_is_target optional {
+    effect discard_hand_equip(self, 1);
+    effect skip_current_phase(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

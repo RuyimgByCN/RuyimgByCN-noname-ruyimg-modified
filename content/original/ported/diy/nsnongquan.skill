@@ -1,0 +1,6 @@
+// nsnongquan（弄权）：出牌阶段，若你仅有一张手牌，可将此牌当【无中生有】使用。
+// 上游：enable phaseUse + filter countCards("h")==1 && canUse("wuzhong") +
+// useCard({name:"wuzhong"}, 唯一手牌, self)。
+skill nsnongquan(2685398351) {
+  view_as wuzhong play_phase owner_single_hand;
+}

@@ -1,0 +1,7 @@
+// 慎行：出牌阶段可弃置1-2张牌摸一张牌，每次使用后下次需弃牌数+1（至多2）。
+// 以 active + discard_hand_equip + draw 近似核心效果，注释注明差异：旧JS每用一次需额外弃牌（1→2→上限2）。
+skill twgyshenxing(3274493253) {
+  active play_phase select_he 1 2 {
+    effect draw_cards(self, 1);
+  }
+}

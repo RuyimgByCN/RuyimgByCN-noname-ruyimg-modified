@@ -1,0 +1,17 @@
+// 踏鹤（psdaohe）：出牌阶段限一次，你选择一名有手牌的其他角色，其将任意张
+// 手牌交给你，然后其回复 1 点体力。
+// 上游 (offline_piracyE.js psdaohe)：enable phaseUse usable 1 filterTarget 有手牌
+// 其他角色；content = target.chooseToGive(player,"h",[1,∞],allowChooseAll) +
+// target.recover()。
+// 实现（2026-09-08 第一百八十批·新原语 ChooseOtherGiveThenRecover，ABI 682 领号）：
+// active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty →
+// choose_other_give_then_recover(self)——选一名有手牌的其他角色，其交给你一张
+// 手牌，然后其回复 1 点体力。
+// 近似（登记债）：①上游任意张 [1,∞] allowChooseAll 由其自选——原语为固定 1 张
+// （单消费者不达 give-then-recover-N 变体门槛）；②回复固定 1 点（上游 recover()
+// 同为 1 点 ✓）。
+skill psdaohe(2073952815) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty {
+    effect choose_other_give_then_recover(self);
+  }
+}

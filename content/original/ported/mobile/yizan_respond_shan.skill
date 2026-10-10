@@ -1,0 +1,6 @@
+// yizan_respond_shan（翊赞）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill yizan_respond_shan(2151924321) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yizan_respond_shan = 标记型技能（audio-only，skill.js:31731），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

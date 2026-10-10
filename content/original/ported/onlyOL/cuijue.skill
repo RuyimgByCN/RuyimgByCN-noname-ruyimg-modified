@@ -1,0 +1,9 @@
+// 摧决：出牌阶段弃置一张牌，选择攻击范围内距离最远的一名角色，造成1点伤害。
+// 旧 JS 的「选择攻击范围内距离最远的角色」逻辑无对应 target 筛选原语（需距离比较），
+// 以下用 choose_other_damage 近似，差异：无法确保选择距离最远者。
+skill cuijue(2149631884) {
+  active play_phase uses_per_turn 1 targets 0 1 other select_he 1 1 {
+    effect discard_selected(self);
+    effect choose_other_damage(self, 1);
+  }
+}

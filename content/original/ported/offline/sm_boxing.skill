@@ -1,0 +1,5 @@
+// sm_boxing：锁定技, target:useCardToTarget, 需弃牌, 异步。
+skill sm_boxing(2997087051) {
+  trigger card_targeted owner_is_target_once {
+  }
+}

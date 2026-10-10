@@ -1,0 +1,6 @@
+// zhiyi（执义）：锁定技，当你于一回合内使用或打出第一张基本牌时，你选择一项：1.摸一张牌。2.于此牌A（若此牌是因响应牌B而使用或打出的，则改为牌B）的使用或打出流程结算完成后，视为使用一张与此牌名称和属性相同的卡牌。
+skill zhiyi(4077304123) locked {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

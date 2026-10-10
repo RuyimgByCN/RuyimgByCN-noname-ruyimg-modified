@@ -1,0 +1,5 @@
+// 同心（界关羽张飞）
+// 原语义：攻击范围 +2。
+skill retongxin(2855175601) locked {
+  modifier attack_range add 2;
+}

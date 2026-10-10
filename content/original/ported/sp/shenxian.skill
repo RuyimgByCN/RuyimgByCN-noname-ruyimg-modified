@@ -1,0 +1,6 @@
+// 甚贤：每名角色的回合限一次，自己的回合外，其他角色因弃置失去基本牌后可摸一张牌。
+skill shenxian(3316671408) {
+  trigger cards_moved owner_alive_other_discarded_basic_outside_turn_once optional {
+    effect draw_cards(self, 1);
+  }
+}

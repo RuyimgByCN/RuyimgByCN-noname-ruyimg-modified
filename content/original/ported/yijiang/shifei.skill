@@ -1,0 +1,10 @@
+// 饰非(旧版)(郭图逢纪)：当你需要使用或打出【闪】时，你可以令当前回合角色摸一张牌。
+// 若其不是唯一手牌最多的角色，你弃置手牌最多的一名角色的一张牌，视为使用或打出【闪】。
+// 否则你重复此流程。
+// 旧JS含respondShan、currentPhase draw、chooseTarget弃牌、redo/goto循环等复杂逻辑。
+// 注：respond窗口、currentPhase、手牌最多判定、redo循环均无DSL原语。
+skill shifei(3008841141) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

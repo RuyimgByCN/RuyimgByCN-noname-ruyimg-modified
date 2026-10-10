@@ -1,0 +1,4 @@
+// Xiahou Yuan archery
+skill shensu3(73) {
+  modifier attack_range add 1;
+}

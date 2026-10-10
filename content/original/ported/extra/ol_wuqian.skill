@@ -1,0 +1,8 @@
+// 无前：每个目标每回合限一次；消耗两枚暴怒，本回合获得标准包的无双。
+skill ol_wuqian(4021373467) {
+  active play_phase mark_at_least 1252226867 2 targets 1 1 other unused_by_skill_this_turn {
+    effect remove_mark(self, 1252226867, 2);
+    effect add_skill_until_turn_end(self, 18);
+    effect record_active_target(self, event_source);
+  }
+}

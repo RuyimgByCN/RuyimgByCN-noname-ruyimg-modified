@@ -1,0 +1,12 @@
+// 决堰·宝物：仅供绝岩授予，规则行为与界集智相同，避免反向依赖 REFRESH。
+skill drlt_jueyan_rejizhi(2811682656) {
+  modifier hand_limit add owner_skill_mark;
+
+  trigger card_used owner_source_physical_ordinary_trick optional {
+    effect resolve_rejizhi(self);
+  }
+
+  trigger turn_ended owner_alive {
+    effect remove_mark(self, 2811682656, 0);
+  }
+}

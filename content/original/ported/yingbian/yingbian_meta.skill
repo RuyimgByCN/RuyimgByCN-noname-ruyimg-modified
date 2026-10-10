@@ -1,0 +1,357 @@
+// yingbian（应变，晋势力）包元数据登记：以下技能依赖显示武将牌（showCharacter）、
+// 应变牌、使命技、跨回合标记、冰属性伤害、声明牌名等 DSL 不支持或未移植机制，
+// 登记元数据并文档化近似（无运行时行为）。详见包 README。
+
+// 偷髓（成济成倅）：你可以将一张黑色牌当【酒】使用（触发后失去体力上限）。
+skill oltousui(4141410101) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 出命（成济成倅）：你造成伤害或受到伤害时……需要伤害替换状态机。
+skill olchuming(4141410102) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 冰心（王祥）：你可以将一张牌当【无懈可击】使用（应变牌）。
+skill bingxin(4141410103) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 折福（王祥）：你使用/响应牌后，若你不是当前回合角色……需要跨回合追踪。
+skill zhefu(4141410104) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 疑渡（王祥）：你使用【杀】或锦囊后，目标展示至多三张手牌，你获得其中之一点数牌。
+// 需要目标侧展示与选牌原语。
+skill yidu(4141410105) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 卫戍（王祥）：你获得牌后，可令一名角色摸一张牌。
+skill weishu(4141410106) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 得丈（王祥）：觉醒技，准备阶段若你武将牌上没有「丈」……失去 1 点体力上限并
+// 获得「卫戍」。
+skill dezhang(4141410107) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 怀远（司马懿）：你失去牌或其他角色装备/横置/弃置判定牌后……需要全局牌动追踪。
+skill huaiyuan(4141410108) {
+  modifier hand_limit add 1;
+}
+// 重铸（司马懿）：出牌阶段限一次，重铸一张牌并令一名角色重铸一张牌。
+skill chongxin2(4141410109) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 婉仪（杨芷旧版）：出牌阶段限四次，你可以摸两张牌并弃置一张牌，否则失去 1 点
+// 体力上限。需要次数与二选一状态机。
+skill wanyi(4141410110) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 买祸（杨艳）：你成为其他角色使用牌的目标后，其可将其一张牌置于你的武将牌上并
+// 你摸一张牌。需要目标侧选择与技能牌堆。
+skill maihuo(4141410111) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 宣北（杨艳）：回合开始或你进入游戏时……应变牌与使用/弃置分支。
+skill xuanbei(4141410112) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 闲婉（杨艳）：你可以将一张应变牌当【无懈可击】/【闪】使用。
+skill xianwan(4141410113) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 纳象（司马周）：你造成/受到伤害后，选择一名角色获得其一张牌，然后你摸一张牌。
+// 需要伤害后取牌原语。
+skill naxiang(4141410114) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 纳降（司马周）：任意角色使用/响应牌后，其可令你获得其一张牌。
+skill caiwang(4141410115) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 草诏（ol华歆）：出牌阶段限一次，声明一种牌名……其将一张牌置于弃牌堆，你获得之。
+// 需要声明牌名状态机。
+skill caozhao(4141410116) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 惜兵（ol华歆）：你受到伤害后，可弃置一张手牌并令伤害来源摸一张牌。
+skill olxibing(4141410117) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 波澜（钟繇）：出牌阶段限一次，展示三张随机武将牌并选择其一，获得其一个技能。
+// 需要动态技能获得。
+skill bolan(4141410118) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 依法（钟繇）：你成为【杀】或锦囊目标后，令使用者获得「依法」标记（其本回合内
+// 使用牌结算后……）。需要标记追踪。
+skill yifa(4141410119) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 不臣（司马懿）：你展示武将牌后……需要显示武将牌机制。
+skill buchen(4141410120) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 应势（司马懿）：出牌阶段开始时……需要回合阶段状态机。
+skill smyyingshi(4141410121) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 雄志（司马懿）：出牌阶段限一次，选择一名角色拼点……需要拼点链。
+skill xiongzhi(4141410122) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 权变（司马懿）：你使用/响应牌时……需要使用牌时二选一状态机。
+skill xinquanbian(4141410123) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 忠允（卫瓘）：你受到伤害或回复体力后，若你的体力值与手牌数相同，可回复 1 点
+// 体力或对攻击范围内一名角色造成 1 点伤害。需要攻击范围与伤害选择。
+skill zhongyun(4141410124) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 审品（卫瓘）：任意角色判定时，你可打出牌响应……需要响应判定管线。
+skill shenpin(4141410125) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 彻旋（车胄）：出牌阶段限一次，装备一件宝物牌；你失去装备牌后可……需要宝物牌
+// 与派生技能。
+skill chexuan(4141410126) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 巧言（李肃）：你受到伤害前，若你武将牌上有「巧言」牌，交给来源并获得之……需要
+// 技能牌堆与伤害替换。
+skill qiaoyan(4141410128) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 献主（李肃）：出牌阶段开始时，若你武将牌上有「巧言」牌，将一张交给一名角色……
+// 需要技能牌堆目标选择。
+skill xianzhu(4141410129) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 惠容（晋杨艳）：你展示武将牌后，回复 1 点体力。
+skill huirong(4141410130) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 慈威（晋杨艳）：任意角色使用牌后……需要全局使用追踪。
+skill ciwei(4141410131) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 擢升（石苞）：你使用牌指定目标后，可增加或减少一个目标。
+skill zhuosheng(4141410132) {
+  modifier hand_limit add 1;
+}
+// 韬隐（司马师）：你展示武将牌后，摸一张牌。
+skill taoyin(4141410133) {
+  modifier hand_limit add 1;
+}
+// 遗灭（司马师）：你造成伤害前，若伤害值小于受伤角色体力值……需要伤害替换。
+skill yimie(4141410134) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 睿略（司马师）：使命技……需要使命状态机。
+skill ruilve(4141410135) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 泰然（司马师）：结束阶段开始时，若你体力值小于上限或手牌数小于上限，摸牌至
+// 体力上限或手牌数上限。需要二选一摸牌。
+skill tairan(4141410136) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 宝笈（夏侯徽）：你展示武将牌后，获得一张应变牌。
+skill baoqie(4141410137) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 积石（夏侯徽）：任意角色失去牌后……需要全局失牌追踪。
+skill jyishi(4141410138) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 拾掇（夏侯徽）：出牌阶段限一次，与一名角色拼点，你赢则获得其所有手牌。
+// 需要拼点后全手获得。
+skill shiduo(4141410139) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 退师（司马昭）：你展示武将牌后……需要显示武将牌机制。
+skill tuishi(4141410140) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 仇伐（司马昭）：限定技，出牌阶段……需要限定技与目标选择。
+skill xinchoufa(4141410141) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 昭然（司马昭）：出牌阶段开始时……需要阶段追踪。
+skill zhaoran(4141410142) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 成务（司马昭）：使命技……需要使命状态机。
+skill chengwu(4141410143) {
+  modifier hand_limit add 1;
+}
+// 施仁（王元姬）：你展示武将牌后，令一名角色摸一张牌。
+skill shiren(4141410144) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 衍袭（王元姬）：出牌阶段限一次，与一名角色拼点，你赢则获得其一张牌并展示
+// 牌堆顶两张牌。需要拼点链。
+skill yanxi(4141410145) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 析决（张虎乐綝）：回合开始或你进入游戏后……需要全局追踪。
+skill xijue(4141410146) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 三陈（杜预）：出牌阶段限一次，与一名角色拼点……三次递增拼点链。
+skill sanchen(4141410147) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 招讨（杜预）：准备阶段开始时，若你的「三陈」标记大于 2……需要跨技能标记。
+skill zhaotao(4141410148) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 破竹（杜预）：出牌阶段限一次……需要额外回合。
+skill pozhu(4141410149) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 惠识（张春华）：摸牌阶段开始时，展示牌堆顶余数张牌并分配至牌堆底/获得。
+// 需要展示与分配原语。
+skill huishi(4141410150) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 清冷（张春华）：其他角色结束阶段开始时，你可视为对其使用一张冰属性【杀】。
+// 需要冰属性伤害。
+skill qingleng(4141410151) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 玄穆（张春华）：你展示武将牌后……需要显示武将牌机制。
+skill xuanmu(4141410152) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 高陵（宣公主）：你展示武将牌后，令一名角色回复 1 点体力。
+skill gaoling(4141410153) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 齐眉（宣公主）：准备阶段开始时，选择一名角色；其于本回合内获得牌后你摸一张牌。
+// 需要跨回合标记。
+skill qimei(4141410154) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 出命·缓（成济成倅）：
+skill olchuming2(4141410156) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 参谋（辛敞）：手牌数最多的角色使用牌后，你也成为其目标。
+skill canmou(4141410157) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 从谏（辛敞）：其他角色使用单体牌指定目标后，你也成为其目标。
+skill congjian(4141410158) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 纳象（司马周旧）：出牌阶段限一次，展示牌堆顶两张牌并选择一张获得。
+skill recaiwang(4141410159) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 新宣北（杨艳）：出牌阶段限一次，获得一名角色一张牌并令其视为对你使用一张【杀】。
+skill xinxuanbei(4141410160) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

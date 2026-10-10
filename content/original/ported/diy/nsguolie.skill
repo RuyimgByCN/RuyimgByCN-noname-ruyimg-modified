@@ -1,0 +1,17 @@
+// 国裂（孙翊）：摸牌阶段开始时，可跳过摸牌阶段，本回合红色手牌可当【杀】使用、
+// 黑色手牌可当【过河拆桥】使用，使用次数无限制。
+// 旧 JS 仅作语义证据；阶段跳过、转化与次数上限由权威状态机校验。
+// 注：旧 JS 的 nsguolie2 以 phaseJieshuBegin 清理临时效果，DSL 以 turn_ended 移除等价。
+skill nsguolie(3456830571) {
+  trigger phase_draw owner_is_target optional {
+    effect skip_current_phase(self);
+    effect add_skill_until_turn_end(self, 4032663402);
+  }
+}
+
+// 国裂·转化：红色手牌当【杀】，黑色手牌当【过河拆桥】，使用次数无限制。
+skill nsguolie2(4032663402) {
+  view_as sha play_phase red from hand;
+  view_as guohe play_phase black from hand;
+  modifier card_use_unlimited override 1;
+}

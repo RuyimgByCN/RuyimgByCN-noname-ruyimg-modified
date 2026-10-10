@@ -1,0 +1,4 @@
+// 裸衣 (luoyi) — 许褚: draw one fewer card to empower Sha and Duel damage this turn.
+skill luoyi(29) {
+  modifier draw_replacement_damage add 1;
+}

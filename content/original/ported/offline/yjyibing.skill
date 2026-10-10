@@ -1,0 +1,5 @@
+// yjyibing：player:cards_moved, global:cards_moved。
+skill yjyibing(2472436195) {
+  trigger cards_moved owner_alive {
+  }
+}

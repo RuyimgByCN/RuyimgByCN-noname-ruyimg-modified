@@ -1,0 +1,6 @@
+// zj_zhaofu：锁定技, player:card_used, player:damage_before, 异步。
+skill zj_zhaofu(2841435187) {
+  trigger card_used owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

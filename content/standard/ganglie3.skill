@@ -1,0 +1,4 @@
+// Skill ganglie3(113) - standard variant
+skill ganglie3(113) {
+  modifier attack_range add 1;
+}

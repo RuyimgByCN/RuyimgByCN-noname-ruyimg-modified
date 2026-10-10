@@ -1,0 +1,9 @@
+// 瞑瞑·陈氏（马谡）：全局技能组，随 mjweipo 授予；player/target 两个
+// 子技能承载「受指目标摸牌」与「指定目标摸牌」联动。
+// 旧 JS 的全局授予 + 子技能联动无对应原语，未建模（已注明）；保留定义
+// 框架供 mjweipo 引用。
+skill mjchenshi(2567339006) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

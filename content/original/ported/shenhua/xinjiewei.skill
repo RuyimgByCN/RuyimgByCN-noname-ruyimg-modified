@@ -1,0 +1,5 @@
+// 解围（界邓艾）：装备当无懈。
+// 旧 JS 的「装备转化」以装备当【无懈可击】近似（已注明）。
+skill xinjiewei(2837602534) {
+  view_as wuxie any any from equip;
+}

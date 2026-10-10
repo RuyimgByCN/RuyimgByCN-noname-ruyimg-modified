@@ -1,0 +1,6 @@
+// 完杀：你的回合内，其他角色进入濒死时立即死亡。
+skill sclwansha(3972375066) locked {
+  trigger dying owner_alive_current_turn_other_event_player {
+    effect kill_player(event_player, event_source);
+  }
+}

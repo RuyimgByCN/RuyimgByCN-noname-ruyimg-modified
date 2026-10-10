@@ -1,0 +1,7 @@
+// 界生息（费祎）
+// 旧 JS 语义：结束阶段开始时，若本回合未造成过伤害，可摸两张牌。
+skill reshengxi(2846213948) {
+  trigger phase_end owner_is_target_no_turn_damage optional {
+    effect draw_cards(self, 2);
+  }
+}

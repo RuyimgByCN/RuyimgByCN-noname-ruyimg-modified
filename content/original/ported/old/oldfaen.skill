@@ -1,0 +1,6 @@
+// 旧法恩：旧 JavaScript 仅作为语义证据；横置仅在进入连环状态时触发。
+skill oldfaen(3151099816) {
+  trigger character_state_changed owner_alive_event_player_turn_changed_or_became_linked optional {
+    effect draw_cards(event_player, 1);
+  }
+}

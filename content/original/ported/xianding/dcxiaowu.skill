@@ -1,0 +1,8 @@
+// 笑武（dcxiaowu）：出牌阶段限一次，弃置一张手牌或装备区的牌，从牌堆获得一张【杀】。
+// 旧 JS 的「本局发动过则获得两张」以固定一张近似。
+skill dcxiaowu(4153740280) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect gain_card_by_kind(self, sha);
+  }
+}

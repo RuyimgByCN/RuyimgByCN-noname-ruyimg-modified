@@ -1,0 +1,12 @@
+// 廷机·OL（oltingji）：你的回合内，你使用牌指定一名未受伤的其他角色为目标后，
+// 该角色不能响应此牌。
+// 上游 (sp/skill.js:42946)：trigger global:useCardToTargeted；filter = 目标非自己、
+// 存活、未受伤，且当前回合角色是自己；forced；content = directHit.add(目标)。
+// 实现：card_targeted + owner_source_current_phase_card_targeted_other_healthy（新增
+// 过滤器，5 处注册：自己回合内以牌指定未受伤其他角色为目标）→
+// make_current_card_unrespondable(self, event_card, 4244206396)（该牌不可被响应）。
+skill oltingji(4244206396) {
+  trigger card_targeted owner_source_current_phase_card_targeted_other_healthy {
+    effect make_current_card_unrespondable(self, event_card, 4244206396);
+  }
+}

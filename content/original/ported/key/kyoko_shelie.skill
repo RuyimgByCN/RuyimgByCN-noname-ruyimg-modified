@@ -1,0 +1,9 @@
+// 涉猎（恭子）：摸牌阶段改为亮出牌堆顶五张，获得花色各不相同的牌。
+// 实现：自己的摸牌阶段以 replace_draw_with_distinct_suit_selection(5) 替换摸牌。
+// 近似：不检验装备区花色种类 > 1（争议计数）门控。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kyoko_shelie(3597507893) {
+  trigger phase_draw owner_is_target {
+    effect replace_draw_with_distinct_suit_selection(self, 5);
+  }
+}

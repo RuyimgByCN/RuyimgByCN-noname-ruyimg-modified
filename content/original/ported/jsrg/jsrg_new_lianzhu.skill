@@ -1,0 +1,5 @@
+// jsrg_new_lianzhu（连诛）：结束阶段，你可视为使用一张【过河拆桥】，结算后此牌唯一目标须选择一项：1.失去1点体力；2.令你对其下家发动〖连诛〗。
+// 未建模：翻译调用（DSL无对应原语）
+skill jsrg_new_lianzhu(2218494001) {
+  view_as guohe play_phase any;
+}

@@ -1,0 +1,3 @@
+skill clbshuiyong(4055999596) locked {
+  modifier damage_taken_cancel(fire) override 1;
+}

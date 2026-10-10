@@ -1,0 +1,6 @@
+// shinin_henghui：锁定技, player:transformCharacter, source:damage_before, 摸牌, 加技能, 含子技能, 异步。
+skill shinin_henghui(2513782657) locked {
+  trigger damage_before always {
+    effect draw_cards(self, 5);
+  }
+}

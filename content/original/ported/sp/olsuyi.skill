@@ -1,0 +1,20 @@
+// 俗义（olsuyi）：出牌阶段限一次，你可以选择一名其他角色，从牌堆中检索
+// 一张其可以装备的装备牌，令其获得并装备之；然后你视为对其使用一张
+// 【杀】（完整结算，无来源消耗）。
+// 上游 (sp/skill.js 6136)：enable phaseUse + usable 1 + filterTarget
+// notMe；content = get.cardPile(装备 && hasUseTarget) → $gain2 +
+// chooseUseTarget(forced) → canUse("sha") 则 useCard({name:"sha",
+// isCard:true})。
+// 实现（2026-09-15 第二百九十五批·牌堆装备检索组合状态机，ADR 0641
+// §8.79）：resolve_olsuyi(self, event_source)（ABI 739 / tag 760，单发
+// 无续体）——检索复用 yixiang 牌堆顶向下工艺 + equip_slot_enabled 槽位
+// 门控；获得+装备 = MoveCards 入手牌区 + use_equipment_from_hand（jiebing
+// 同款）；视为杀 = UseVirtualCardOnSelectedTargets（CardKind::Sha 完整
+// 结算管道）。
+// 登记债：上游 get.cardPile 为随机检索，以牌堆顶向下顺序检索近似。
+// 保真度：完整（三段全建模；无装备可用时跳过装备段，杀段照常）。
+skill olsuyi(4134784601) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_olsuyi(self, event_source);
+  }
+}

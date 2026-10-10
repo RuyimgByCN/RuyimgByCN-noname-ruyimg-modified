@@ -1,0 +1,4 @@
+// 决堰·武器：本回合可多使用三张杀。
+skill drlt_jueyan1(3194432315) {
+  modifier sha_use_limit add 3;
+}

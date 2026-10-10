@@ -1,0 +1,7 @@
+// 界奸雄（旧版强制语义）：伤害实体牌仍在处理区时获得之，然后摸一张牌。
+skill rejianxiong(2280204341) locked {
+  trigger damage owner_is_target_card_in_processing {
+    effect move_card(event_card, zone(self, 3), zone(0, 6));
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// dcyongdi：觉醒技；限定技；令目标摸1牌。
+skill dcyongdi(3812159744) {
+  active play_phase targets 1 1 other {
+    // 近似：令目标摸1张牌
+    effect choose_target_draw(self, 1, other);
+  }
+}

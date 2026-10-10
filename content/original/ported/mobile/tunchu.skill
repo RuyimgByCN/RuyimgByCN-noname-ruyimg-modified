@@ -1,0 +1,22 @@
+// tunchu（屯储）：摸牌阶段，若你没有「粮」，你可以多摸两张牌。若如此做，你可以
+// 将任意张（至少一张）手牌置于你的武将牌上，称为「粮」。只要你的武将牌上有
+// 「粮」，你便不能使用【杀】。
+// 上游 (mobile/skill.js tunchu)：trigger player phaseDrawBegin2（num+2 + 挂
+// tunchu_choose temp）；sub choose phaseDrawEnd forced chooseCard("h",[1,nh],
+// allowChooseAll) → addToExpansion gaintag tunchu；mod cardEnabled 禁杀面。
+// 实现（2026-09-10 第二百一十七批·变张置入原语铸造，choose_hand_cards_to_skill_pile
+// (player, self_skill, min, max)——tag 714 / ABI 691 领号，SelectCards [min,max]
+// 续体 Cont 298，可取消=不置入）：trigger phase_draw owner_is_target optional +
+// body 级 if skill_pile_count(self, 3943350142) == 0（无粮门控）→ draw_cards(self,2)
+// + 变张置入 [1, hand_count(self)]。
+// 近似（登记债）：①「有粮不能使用【杀】」mod 面未建模（无 cardEnabled 原语）；
+// ②置入时点由摸牌阶段结束提前为本臂结算内；③多摸两张为独立摸牌结算、非
+// trigger.num 修改；④onremove 清堆未建模。
+skill tunchu(3943350142) {
+  trigger phase_draw owner_is_target optional {
+    if skill_pile_count(self, 3943350142) == 0 {
+      effect draw_cards(self, 2);
+      effect choose_hand_cards_to_skill_pile(self, self_skill, 1, hand_count(self));
+    }
+  }
+}

@@ -1,0 +1,6 @@
+// 旧宗室：成为其他角色单目标锦囊牌的目标时可摸一张牌。
+skill jyzongshi_old(2968553132) {
+  trigger card_targeted owner_targeted_by_other_single_target_trick optional {
+    effect draw_cards(self, 1);
+  }
+}

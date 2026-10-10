@@ -1,0 +1,6 @@
+// mbshouyue（授乐）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill mbshouyue(2170379463) {
+  trigger phase_draw owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

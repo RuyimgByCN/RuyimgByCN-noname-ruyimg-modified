@@ -1,0 +1,5 @@
+// shanduan：触发+修改技（damage,phaseDrawBegin,phaseUseBegin,phaseDiscardBegin）
+skill shanduan(2359992787) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

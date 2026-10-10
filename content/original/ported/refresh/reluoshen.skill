@@ -1,0 +1,6 @@
+// 界洛神：准备阶段反复判定并获得黑色结果；所得牌本回合不计入手牌上限。
+skill reluoshen(3265545896) {
+  trigger phase_prepare owner_is_target optional {
+    effect judge_black_gain_repeat_protect_hand_limit(self);
+  }
+}

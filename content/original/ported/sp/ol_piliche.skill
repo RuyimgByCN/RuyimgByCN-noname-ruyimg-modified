@@ -1,0 +1,11 @@
+// 霹雳车（ol_piliche，装备技）：你造成伤害后，可弃置受伤角色的一张手牌/装备牌/判定区牌。
+// 上游 (sp/skill.js:4003)：equipSkill source damageSource，filter = event.player != player 且
+// 受伤角色有可弃牌；content = discardPlayerCard(hej)。
+// 实现：damage + owner_is_source optional → choose_discard_target_card(event_player, self, hand_equip_judge)。
+// 与上游差异：装备技绑定未建模；自伤亦会触发（上游过滤 event.player != player，DSL 无对应
+// 过滤器，极端场景差异已注明）。
+skill ol_piliche(2743752239) {
+  trigger damage owner_is_source optional {
+    effect choose_discard_target_card(event_player, self, hand_equip_judge);
+  }
+}

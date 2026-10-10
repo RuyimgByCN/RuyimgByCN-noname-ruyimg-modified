@@ -1,0 +1,8 @@
+// qingjian：刷新包技能。
+// triggers: player:gainAfter
+skill qingjian(2977430013) {
+    // 近似：旧JS事件 gainAfter → DSL事件 gainAfter
+    trigger cards_drawn owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

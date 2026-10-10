@@ -1,0 +1,10 @@
+// 新峻刑（满宠）：继承〖峻刑〗。出牌阶段，弃置目标一张与指定类别均不同的牌
+// 或将武将牌翻面，翻面后补至四张手牌。
+// 旧 JS 的「弃牌类别判断」「翻面补牌」无对应原语；以弃一张手牌并摸一张
+// 近似（类别匹配与翻面未建模，已注明）。
+skill xinjunxing(3444884061) {
+  active play_phase uses_per_turn 1 select_he 1 1 targets 1 1 other {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

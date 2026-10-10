@@ -1,0 +1,8 @@
+// Legacy contract: choose one equipment card of another player, return it to
+// that player's hand, then draw only if the move reduced that player's
+// attack-range population.
+skill anguo(3231604344) {
+  active play_phase uses_per_turn 1 targets 1 1 other has_equip {
+    effect choose_target_reclaim_equipment_draw_if_range_reduced(self, event_source, self_skill);
+  }
+}

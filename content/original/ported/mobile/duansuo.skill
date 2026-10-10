@@ -1,0 +1,17 @@
+// duansuo（断索）：出牌阶段限一次。你可以重置任意名处于连环状态的角色，然后
+// 对这些角色各造成1点火焰伤害。
+// 上游 (mobile/skill.js duansuo L19074)：enable phaseUse；usable 1；
+// selectTarget [1, Infinity]；filterTarget target.isLinked()（含自己）；
+// content 先对 targets 全体 link(false) 重置，再对全体 damage("fire")——
+// 两遍循环，重置完成后伤害不再经铁索传导。
+// 实现（2026-09-13 第二百七十批·连环状态族原语，ADR 0641 §8.58）：active
+// play_phase uses_per_turn 1 targets 1 255 linked →
+// reset_linked_selected_targets(self)（ABI 719 / tag 743，无续体）：原语内
+// 先移除所选全部 MARK_CHAIN，再逐目标 deal_damage fire 1。
+// 保真度：完整（无省略面；目标候选集由 linked 过滤器承接，含自己与上游
+// filterTarget 一致）。
+skill duansuo(2917815938) {
+  active play_phase uses_per_turn 1 targets 1 255 linked {
+    effect reset_linked_selected_targets(self);
+  }
+}

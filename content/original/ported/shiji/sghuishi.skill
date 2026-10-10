@@ -1,0 +1,9 @@
+// 归市（张让系）：出牌阶段限一次，令一名角色摸一张牌；若其有未觉醒的
+// 觉醒技，改为其觉醒。
+// 旧 JS 的「按觉醒技分支」无对应原语；以选择一名角色摸一张近似
+// （觉醒分支未建模，已注明）。
+skill sghuishi(3553567542) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_draw_or_recover(self, 1, 0, 0);
+  }
+}

@@ -1,0 +1,22 @@
+// jsrgshacheng（沙城）：①游戏开始时，你将牌堆顶的两张牌置于武将牌上，称为
+// “城”。②当一名角色使用【杀】结算结束后，你可以移去一张“城”，令此牌的其中一名
+// 目标角色摸X张牌（X为该角色本回合失去过的牌数且至多为5）。上游 jsrg/card 侧
+// skill.js:5026（build 子技 enterGame/首次 phaseBefore forced；主技 global useCardAfter）。
+// 实现（城族 S2a，ADR 0646 §2）：
+// 筑城 `trigger game_started owner_alive`（forced，enterGame 等价时点）→
+// place_deck_top_expansion(self, 2, self_skill)（ABI 667/tag 690：堆顶两张明置
+// 移入以本技 def 键控的扩张堆——skill_piles 惯例按需创建）。
+// ②消耗已接（S2b）：`sha_resolved` optional → city_consume（ABI 668/Cont 279：
+// 移去城堆最后一张、令一名本回合失去过牌的其他角色摸 min(5, 失去数)）；
+// 「目标本回合失去过的牌数」经 opt-in 计数实现（SkillPileRef.wants_lost_count）。
+// 近似：②目标域为「任一本回合失去过牌的其他角色」宽于上游的「此杀目标之一」；
+// （引擎无 per-player lose 计数）+ 城牌/目标双选续体，S2b 领号立项（见 ADR 0646 §2）。
+// onremove 清算与 marktext 展示面为 UI 层债务。
+skill jsrgshacheng(2976683213) {
+  trigger game_started owner_alive {
+    effect place_deck_top_expansion(self, 2, self_skill);
+  }
+  trigger sha_resolved owner_alive_sha_resolved_city_2976683213 optional {
+    effect city_consume(self, self_skill);
+  }
+}

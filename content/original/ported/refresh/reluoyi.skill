@@ -1,0 +1,8 @@
+// reluoyi：刷新包技能。
+// triggers: player:phaseDrawBegin1
+skill reluoyi(2511128268) {
+    // 近似：旧JS事件 phaseDrawBegin1 → DSL事件 phaseDrawBegin1
+    trigger phase_draw owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

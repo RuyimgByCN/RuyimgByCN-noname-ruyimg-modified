@@ -1,0 +1,11 @@
+// 析察（傅干）：每受到一点伤害可查看来源手牌并秘密标记至多两张；该来源下一次
+// 用牌即消费监听，若包含标记实体牌则整张牌无效并由傅干获得其全部实体材料。
+skill xicha(2494439810) {
+  trigger damage owner_is_target_source_hand_nonempty_per_damage_point optional {
+    effect resolve_xicha(self, event_source, event_card, 0);
+  }
+
+  trigger card_used owner_xicha_watched_source_card_used {
+    effect resolve_xicha(self, event_source, event_card, 1);
+  }
+}

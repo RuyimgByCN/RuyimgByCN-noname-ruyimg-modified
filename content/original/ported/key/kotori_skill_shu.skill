@@ -1,0 +1,8 @@
+// 小鸟·蜀势力技
+skill kotori_skill_shu(4206024959) locked {
+  modifier sha_use_limit add 1;
+
+  trigger phase_play_end owner_sha_used_at_least_two {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 涉猎：摸牌阶段改为亮出牌堆顶五张，获得每种花色各一张，其余置入弃牌堆。
+skill shelie(4211343786) {
+  trigger phase_draw owner_is_target {
+    effect replace_draw_with_distinct_suit_selection(self, 5);
+  }
+}

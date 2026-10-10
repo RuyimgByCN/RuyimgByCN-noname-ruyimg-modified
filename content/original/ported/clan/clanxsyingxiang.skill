@@ -1,0 +1,17 @@
+// 英襄（族荀谌/族荀采）：锁定技，衍生于「清绝」。上游 (clan/skill.js)：
+// trigger useCardAfter → 若本次用牌的 lose 历史含 clanxsyingxiang gaintag 牌，
+//   则用牌者与持有同名牌者各摸一张；trigger loseAfter → 若失牌带 clanxsyingxiang
+//   gaintag，触发一次「清绝」。
+// 实现：以 gaintag_map 基础设施（turn.lost_card_tags）近似「本回合失带标牌」，
+//   在 card_used 上 owner_alive_tagged_card_lost_this_turn 触发，
+//   draw_all_event_targets(1) 让用牌者与各事件目标各摸 1（跨角色各摸分支已补全）。
+//   **近似与未覆盖**：(1) per-turn 而非 per-useEvent 关联（引擎无事件父子 id）；
+//   (2) 「持有同名牌者」精确为目标集需同名牌检测（当前以事件目标近似）；
+//   (3) loseAfter→触发 clanqingjue 需跨技能触发原语（未实现）。
+//   差异已记录于 docs/migration/upstream-1.11.5-delta.md。标记来源（mark 子技能）依赖
+//   跨角色 gain/lose 追踪，本轮暂以 tag_event_cards 在用牌时对本技能事件牌打标为占位。
+skill clanxsyingxiang(3188595142) locked {
+  trigger card_used owner_alive_tagged_card_lost_this_turn {
+    effect draw_all_event_targets(1);
+  }
+}

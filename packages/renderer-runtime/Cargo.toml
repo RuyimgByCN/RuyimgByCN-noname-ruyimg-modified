@@ -1,0 +1,10 @@
+[package]
+name = "renderer-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Battle renderer runtime: DOM node budget, frame aggregation, animation degradation (architecture §27)"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }

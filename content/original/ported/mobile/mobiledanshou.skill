@@ -1,0 +1,6 @@
+// 胆守：其他角色结束阶段，按其本回合指定过你的用牌次数结算摸牌或弃牌伤害。
+skill mobiledanshou(2790027559) {
+  trigger phase_end owner_alive_other_phase_end_mobiledanshou {
+    effect resolve_mobiledanshou(self, event_player);
+  }
+}

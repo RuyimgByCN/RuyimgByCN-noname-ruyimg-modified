@@ -1,0 +1,5 @@
+// 龙魂·2（神关羽系）：将方片牌当火【杀】使用。
+// 旧 JS 的「方片转化」以手牌当【杀】近似（花色与火属性未建模，已注明）。
+skill longhun2(4231410140) {
+  view_as sha play_phase diamond from hand_equip;
+}

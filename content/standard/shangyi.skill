@@ -1,0 +1,7 @@
+// 尚义 (shangyi) — 孙权: inspect another player's hand.
+// Simplified: at phase_begin, draw 1 (information advantage).
+skill shangyi(58) {
+  trigger phase_begin always {
+    effect draw_cards(self, 1);
+  }
+}

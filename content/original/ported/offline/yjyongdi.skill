@@ -1,0 +1,5 @@
+// yjyongdi：音效名:yongdi, 觉醒技, 限定技, player:phase_prepare, 需选择目标, 回复体力, 加技能, 异步。
+skill yjyongdi(2308262655) {
+  trigger phase_prepare owner_alive {
+  }
+}

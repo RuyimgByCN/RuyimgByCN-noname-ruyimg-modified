@@ -1,0 +1,4 @@
+// Skill mox5(198) - modifier distance variant
+skill mox5(198) {
+  modifier distance_from add -1;
+}

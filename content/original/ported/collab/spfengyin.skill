@@ -1,0 +1,9 @@
+// 封印（SP伏完）：其他角色的准备阶段开始时，若其体力值不小于你，你可交给其一张
+// 【杀】，令其跳过本回合的出牌阶段和弃牌阶段。
+// 旧 JS 仅作语义证据；选【杀】授予与跳阶段由 resolve_spfengyin 权威状态机校验
+// （ABI 471）。体力条件在复合体内校验（DSL 无 <= 比较）。
+skill spfengyin(3552373198) {
+  trigger phase_prepare owner_alive_not_target {
+    effect resolve_spfengyin(self, event_player);
+  }
+}

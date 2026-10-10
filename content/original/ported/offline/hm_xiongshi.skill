@@ -1,0 +1,8 @@
+// hm_xiongshi（主动技(phaseUse)）：音效名:hm_xiongshi, 主动(phaseUse), 移出游戏, 加技能, 含子技能, 异步。
+// 未建模：子技能机制、异步await、移出游戏(expansion)，DSL 无对应原语。
+// 空定义保留占位。
+skill hm_xiongshi(4196323167) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,10 @@
+// 邀仙（寿星）：出牌阶段限一次。选择两名角色，第一名摸两张牌，
+//   然后须对第二名使用【杀】，否则失去1点体力。
+// 旧JS的双目标选择+第一名强制对第二名出杀否则受惩罚的连锁无DSL对应原语
+//   （需multi_target_delegate和forced_action_or_punish）。
+// 以空定义保留编译占位，待target_delegate原语后补齐。
+skill yaoxian(3239571822) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 裂穹（星袁绍？）：造成伤害时，可选择击伤目标的一个身体部位（头/手/腿/胸/腹），
+// 不同部位产生不同效果（失去体力&上限+1、随机弃半手牌、下次受伤+1、下张牌无效、禁用红桃牌）。
+// 旧 JS 的「部位选择UI」「多部位分支效果」「目标状态追踪」无对应原语，未建模。
+skill new_dclieqiong(4186028706) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

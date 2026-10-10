@@ -1,0 +1,6 @@
+// 纳蛮：其他角色打出的实体【杀】进入弃牌堆后，可获得这些实体牌。
+skill naman(4147868153) {
+  trigger card_responded owner_alive_other_responded_sha_gainable optional {
+    effect gain_card_if_discard(self, event_card);
+  }
+}

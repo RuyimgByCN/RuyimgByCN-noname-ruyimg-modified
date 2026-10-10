@@ -1,0 +1,6 @@
+// 义指（界刘璋主公技）：出牌阶段限一次，视为对群势力角色使用一张【五谷丰登】。
+// 旧 JS 为无牌代价（selectCard 0），此处以弃一张手牌近似（view_as wugu from hand）；
+// 群目标约束由五谷丰登自身的多目标结算处理。
+skill dcsbyizhi(3294916313) lord_only {
+  view_as wugu play_phase any from hand uses_per_turn 1;
+}

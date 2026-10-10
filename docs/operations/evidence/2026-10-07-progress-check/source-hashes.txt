@@ -1,0 +1,11 @@
+c64589237008b6b700a303400685d17049aab9d8f722c1290c0fa83ceda17e91  docs/architecture/native-progress.md
+85d39f87294b7ccf4af9cae3c133cdada7bdda65c714c0471135d2ee0cf0a560  docs/architecture/architecture-evolution-plan.md
+e3a126937b420608dbea30a5525fe54cc5e9d5b8c784dccfc5da94a8b05cf681  docs/operations/evidence/2026-10-07-progress-check/README.md
+ad856c83cc969bb08760353c7bf084c6d5754063cb75977607104dbbb9f24c54  docs/operations/evidence/2026-10-07-progress-check/environment.txt
+7c05ce6856921b16248141ef67f8e0ba328bb33b992552472c8471aaf2b53134  docs/operations/evidence/2026-10-07-progress-check/timings.txt
+37b2d1659ed69b41f9c4bc3830f3918e5b1459a96e8af65370814e0f7ba15676  docs/operations/evidence/2026-10-07-progress-check/hash-check-before.log
+74067b36d68995d2b8dac028663252aa770dbdf273998917edca8088c86c8202  docs/operations/evidence/2026-10-07-progress-check/hash-check-after.log
+c8a2e53a994d52e401554ee3a493b27f06acb3de92112475125ff76d68874ea5  docs/operations/evidence/2026-10-07-progress-check/engine-native-tests.log
+8a8ee24e3043b612f4cca24df018a6c56a354df374cedf3e02fd4375f3dbefe7  docs/operations/evidence/2026-10-07-progress-check/content-native-loader-tests.log
+2fc57346485f913659c81d1d7198f022a855ba41ea6a8e13e02f3a8a93186843  docs/operations/evidence/2026-10-07-progress-check/content-runtime-tests.log
+12916c202a9e3c653729adf4899b845019722d418f581f00d8f2e81e11ecedab  docs/operations/evidence/2026-10-07-progress-check/doc-checks.txt

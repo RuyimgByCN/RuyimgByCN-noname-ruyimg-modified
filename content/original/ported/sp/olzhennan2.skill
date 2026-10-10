@@ -1,0 +1,4 @@
+// 【镇南】的分组效果：【南蛮入侵】不能选择拥有者。
+skill olzhennan2(2917646531) {
+  modifier card_target_cancel(nanman) override 1;
+}

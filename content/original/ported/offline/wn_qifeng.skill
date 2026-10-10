@@ -1,0 +1,5 @@
+skill wn_qifeng(3930492591) {
+  trigger phase_end owner_alive_global_phase_end_lost_cards_target_other_alive optional {
+    effect resolve_wn_qifeng(self, event_player);
+  }
+}

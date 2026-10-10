@@ -1,0 +1,6 @@
+// shinin_fengshou：锁定技, player:transformCharacter, player:damage_before, 需选择目标, 加技能, 含子技能, 异步, 条件计数。
+skill shinin_fengshou(2339927294) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

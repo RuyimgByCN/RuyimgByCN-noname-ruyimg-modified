@@ -1,0 +1,6 @@
+// sm_xianxing：锁定技, global:game_started, 需拼点, 造成伤害, 异步。
+skill sm_xianxing(3533101021) {
+  trigger game_started owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// decadepojun（徐盛·破军）：使用【杀】指定目标后，可扣置其至多X张牌（X=体力值），然后弃其中装备牌或摸牌。
+// 旧JS含「选牌→expansion扣置→分类处理装备/锦囊→弃装备/摸牌→子技能阶段结束归还」多步结算，无完整DSL原语，未建模。
+skill decadepojun(3795064461) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 decadepojun 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

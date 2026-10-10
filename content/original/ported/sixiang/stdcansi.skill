@@ -1,0 +1,7 @@
+// 残肆：准备阶段，你可以令攻击范围内的一名角色获得你一张牌，然后你视为依次对其使用【杀】和【决斗】。
+// 旧 JS 涉及连锁：目标获得你的牌→视为使用杀→视为使用决斗。DSL 缺少「目标获得 owner 牌后依次使用虚拟牌」的链式原语，无法建模。
+skill stdcansi(2763125648) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

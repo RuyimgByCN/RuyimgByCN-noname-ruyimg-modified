@@ -1,0 +1,23 @@
+[package]
+name = "legacy-analyzer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Legacy noname JS skill analyzer and migration tools (Phase 9)"
+
+[[bin]]
+name = "legacy-analyze"
+path = "src/main.rs"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+blake3 = { workspace = true }
+regex = "1"
+clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]
+content-compiler = { path = "../content-compiler" }
+engine-api = { workspace = true }
+engine-core = { workspace = true }

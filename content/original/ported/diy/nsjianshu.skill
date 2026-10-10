@@ -1,0 +1,3 @@
+skill nsjianshu(2657107569) locked {
+  modifier response_count add owner_has_weapon;
+}

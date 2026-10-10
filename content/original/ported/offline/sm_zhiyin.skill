@@ -1,0 +1,5 @@
+// sm_zhiyin：global:phase_prepare, 失去体力, 异步。
+skill sm_zhiyin(2837327002) {
+  trigger phase_prepare owner_alive {
+  }
+}

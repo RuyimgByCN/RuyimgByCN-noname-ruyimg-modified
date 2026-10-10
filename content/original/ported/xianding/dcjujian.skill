@@ -1,0 +1,10 @@
+// 据谏（dcjujian）：主公技，出牌阶段限一次，选择一名其他角色，其摸一张牌，
+// 然后本回合其不能对你使用牌。
+// 旧 JS 的「魏势力」目标限定无对应原语（任意其他角色近似）；「不能使用锦囊牌」
+// 以 ban_use_against 全牌禁用近似。
+skill dcjujian(3730191152) lord_only {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect draw_selected_targets(1);
+    effect ban_use_against(event_source, self);
+  }
+}

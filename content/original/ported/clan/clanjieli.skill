@@ -1,0 +1,8 @@
+// 诫厉（族王明山/族王允/族王广/族王淩/族王昶/族王浑/族王昌/族王琛）：结束阶段，观看一名角色牌名字数最多的手牌；若本回合使用过牌，观看牌堆顶K张并可交换（K=使用过的牌的最大牌名字数）。
+// 旧 JS 的「牌名字数排序」「牌堆顶查看+交换」无对应原语。
+// 空定义：需 expansion 支持牌名字数和牌堆顶操作。
+skill clanjieli(4146626078) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

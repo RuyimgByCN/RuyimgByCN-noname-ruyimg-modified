@@ -1,0 +1,9 @@
+// 立刃（施蛾）：锁定技，你的攻击范围始终为 2；当你的【杀】被抵消后，你摸一张牌。
+// 旧 JS 的“【杀】造成伤害后获得此【杀】”无基础杀伤害过滤器未建模，
+// “每回合至多以此法获得 3 张牌”限次省略。
+skill liren(3368059686) {
+  modifier attack_range override 2;
+  trigger sha_dodged owner_source_sha_dodged {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 恩怨（法正）回复分支
+// 旧 JS 语义：其他存活角色每令你回复 1 点体力，其摸一张牌。
+skill enyuan2(3002282592) locked {
+  trigger hp_recovered owner_is_target_other_source_alive {
+    effect draw_cards(event_source, event_amount);
+  }
+}

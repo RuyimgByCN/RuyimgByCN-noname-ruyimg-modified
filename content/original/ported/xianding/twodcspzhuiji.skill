@@ -1,0 +1,7 @@
+// 追击（twodc版）：锁定技，使用牌指定目标后，标记这些目标。
+// 你计算与有标记角色的距离视为1。
+// 旧 JS 的「每牌目标标记」「全局距离修改」无对应原语，未建模。
+skill twodcspzhuiji(2938441520) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

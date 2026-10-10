@@ -1,0 +1,24 @@
+# U07 技能批四测试日志（2026-10-08，抗yin，规则 v113→v114）
+
+$ cargo test --offline -p engine-native
+engine-native: 431 passed / 0 failed / 1 ignored（v113 基线 430 +1 新增抗yin回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 13 passed; 0 failed（12 既有 + liuzan_kangyin_losehp_discard_and_branch）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 101 守卫过；抗yin 走 mapping 通道不入伴随表，计数 43）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v113→v114 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/skill.js:344 kangyin（loseHp/discardPlayerCard/双分支）
+- skill.js:384 kangyin2（globalFrom/selectTarget 双 mod）
+
+## 测试迭代记录
+- LoseHp 异步子事件致分支读旧体力 → commit_lose_hp 转 pub(crate) 同步提交
+- 脚本半途断言中断=后续未写（重复踩坑）→ 分步小补丁
+- computed_distance minus 需 mut

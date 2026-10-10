@@ -1,0 +1,12 @@
+// 邢氏（xingshen）：受到伤害后，摸一张牌（手牌最少时摸两张）；「严教」下次展示数 +1/2
+// （封顶 4）。
+// 上游 (sp2/skill.js:14708)：trigger player:damageEnd；frequent；content = draw(最少
+// 手牌 ? 2 : 1) + storage.xingshen += (最少体力 ? 2 : 1，封顶 4)。
+// 实现：damage + owner_is_target → draw_cards(self, 1)。
+// 与上游差异：「手牌最少时摸 2」条件分支未建模（固定摸 1）；「严教」展示数 storage
+// 累加未建模。
+skill xingshen(3761126799) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

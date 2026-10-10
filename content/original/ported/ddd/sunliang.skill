@@ -1,0 +1,23 @@
+// 3D精选 孙亮「迭宕/暗流/归萤」：旧 JavaScript 仅作语义证据，不进入运行时。
+// 迭宕：出牌阶段限一次，摸三张牌并弃置一张牌；若你的手牌数为全场最多或最少，交换
+// 上述“摸”与“弃”。需要手牌极值判定与摸弃切换状态机。
+skill ddddiedang(1372639926) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 暗流：结束阶段，可与一名其他角色依次观看并选择对方一张手牌，然后交换；颜色相同
+// 时可逾期交换，红则你回复 1 点体力，黑则其摸两张牌。需要双人私密选牌、交换与
+// 颜色分支状态机。
+skill dddanliu(4256693878) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 归萤（主公技）：准备阶段，其他吴势力角色可依次展示一张手牌，将点数最大的一张牌
+// 交给你，然后其可获得场上点数最小的一张牌。需要主公技逐座次展示、点数极值比较
+// 与获得状态机。
+skill dddguiying(2593674233) lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,45 @@
+// 雪衣（雪衣·锁定技）：其他群势力角色数使你的手牌上限+（重复项为上游同条款两次叠加，
+// 与 sp/starzhonggu 同约定保留）。
+skill xueyi(3178128297) locked lord_only {
+  modifier hand_limit add alive_other_qun_count;
+  modifier hand_limit add alive_other_qun_count;
+}
+
+// 以下均为上游无规则面的标记型技能（charlotte / audio-only / 空体 {}），
+// DSL 无可移植规则；以 hand_limit +0 空体保留 catalog 条目（与
+// sp/starzhonggu.skill 同约定）。上游定义位置：content/original/legacy-source/character/shenhua/skill.js。
+skill fangzhu_new_simayi(3603690441) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 fangzhu_new_simayi = { audio: 1 }（5634），无规则面。
+  modifier hand_limit add 0;
+}
+skill guhuo_phase(3873869084) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 guhuo_phase = {}（9242），空体，无规则面。
+  modifier hand_limit add 0;
+}
+skill huangtian3(2723334828) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 huangtian3 = {}（8898），空体，无规则面。
+  modifier hand_limit add 0;
+}
+skill huashen2(2876573338) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 huashen2 = { audio: 2 }（5346），无规则面。
+  modifier hand_limit add 0;
+}
+skill rejizhi_lukang(3908452971) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rejizhi_lukang = { audio: 1 }（1359），无规则面。
+  modifier hand_limit add 0;
+}
+skill shensu1_xiahouba(3559180509) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shensu1_xiahouba = { audio: 2 }（7616），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill tiaoxin_xiahouba(2548908119) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 tiaoxin_xiahouba = { audio: 2 }（3909），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill yinghun_ol_sunjian(3776576557) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yinghun_ol_sunjian = { audio: 2 }（6140），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

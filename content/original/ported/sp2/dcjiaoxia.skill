@@ -1,0 +1,10 @@
+// 角黠（王威）：出牌阶段，所有手牌视为杀，且可指定本阶段未指定过的额外目标；
+// 对每个新目标首次杀不计次数，且使用过的杀可再次使用一次。
+// 旧 JS 含 gaintag + mod cardUsableTarget/targetInRange + 新目标追踪 + addCount 管理。
+// DSL 无 gaintag/手牌全视为杀的原语；无动态 target 去重 + addCount 管理。
+skill dcjiaoxia(2794953622) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcjiaoxia（skill.js:4848）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

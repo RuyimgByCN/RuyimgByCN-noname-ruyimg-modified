@@ -1,0 +1,6 @@
+// 旧 JS 语义：自己的出牌阶段内，每次因其他效果摸牌后锁定再摸一张；自身追加的摸牌不递归触发。
+skill xinfu_zhanji(4089086847) locked {
+  trigger cards_drawn owner_draws_during_own_play_not_self {
+    effect draw_cards(self, 1);
+  }
+}

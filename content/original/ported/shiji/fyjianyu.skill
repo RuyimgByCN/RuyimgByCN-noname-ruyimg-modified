@@ -1,0 +1,13 @@
+// 谏喻（费祎）：出牌阶段限一次，选择两名其他角色，其获得“喻”标记；每轮限一次，
+// 每名角色至多一次。出牌阶段的角色若拥有“喻”标记并指定另一名有“喻”标记的角色
+// 为目标，该目标摸一张牌。
+// 旧 JavaScript 仅作语义证据；标记授予与触发摸牌由 ABI 425 resolve_fyjianyu
+// 权威结算。
+skill fyjianyu(2248481428) {
+  active play_phase uses_per_turn 1 targets 2 2 other {
+    effect resolve_fyjianyu(self, event_source, 0);
+  }
+  trigger card_targeted owner_alive_card_targeted_marked_peer_2248481428 {
+    effect resolve_fyjianyu(self, event_source, event_player);
+  }
+}

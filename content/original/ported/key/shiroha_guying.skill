@@ -1,0 +1,12 @@
+// 孤影（白羽·锁定技）：受到伤害时判定红色则此伤害-1；造成伤害时判定黑色则此伤害+1。
+// 实现：自己受伤前伤害-1；对其他角色造成伤害前伤害+1。
+// 近似：不判定花色；获得「预兆」后改为可选未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shiroha_guying(2209884612) locked {
+  trigger damage_before owner_is_target {
+    effect modify_current_damage(self, -1);
+  }
+  trigger damage_before owner_source_other_damage_before {
+    effect modify_current_damage(self, 1);
+  }
+}

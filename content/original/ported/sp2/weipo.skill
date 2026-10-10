@@ -1,0 +1,12 @@
+// 威迫（韩馥）：成为其他角色使用的【杀】或锦囊牌的目标后，若手牌数不足
+// min(5, 体力上限) 张，则摸至该数量。
+// 旧 JS 仅作语义证据；目标牌类过滤（ABI 452）与手牌补足（ABI 451 min）由权威状态机校验。
+// 注：旧 JS 为 forced 锁定技并记录补足前手牌数供 weipo2（用牌后手牌减少则目标弃牌）
+// 使用；weipo2 的跨事件记录未移植，本定义为威迫的摸牌部分。
+skill weipo(3483198633) locked {
+  trigger card_targeted owner_is_target_sha_or_trick {
+    if hand_count(self) < min(5, max_hp(self)) {
+      effect adjust_hand_to(self, min(5, max_hp(self)));
+    }
+  }
+}

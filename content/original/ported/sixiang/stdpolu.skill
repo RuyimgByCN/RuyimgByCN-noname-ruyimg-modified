@@ -1,0 +1,11 @@
+// 破戮：造成或受到伤害后，弃受伤角色一张装备牌；若为己身，摸一张牌。
+// 近似：choose_other_discard_target_card 用 hand_equip（含手牌）而非仅 equip 区，
+// 旧 JS 只弃装备，此处扩大到手牌装备区。自伤摸牌条件保留。
+skill stdpolu(3982993266) {
+  trigger damage owner_is_source_or_target {
+    effect choose_other_discard_target_card(self, hand_equip);
+    if self == event_player {
+      effect draw_cards(self, 1);
+    }
+  }
+}

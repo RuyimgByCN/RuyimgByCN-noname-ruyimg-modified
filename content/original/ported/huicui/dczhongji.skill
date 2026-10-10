@@ -1,0 +1,11 @@
+// 忠继（谋曹丕）：你使用牌时，若手牌数小于体力上限，你摸牌至手牌数等于
+// 体力上限（至多补 20 张）。上游 huicui/skill.js dczhongji（useCard +
+// countCards("h") < maxHp → draw min(20, maxHp-hand)）。
+// 实现（第一百二十五批·近似晋升）：既有近似「无条件摸1」晋升为精确——
+// filter `owner_is_target_hand_below_max_hp`（手牌<maxHp，引擎既有）+
+// draw_cards(self, min(20, max_hp(self) - hand_count(self)))（min 表达式）。
+skill dczhongji(3617393468) {
+  trigger card_used owner_is_target_hand_below_max_hp optional {
+    effect draw_cards(self, min(20, max_hp(self) - hand_count(self)));
+  }
+}

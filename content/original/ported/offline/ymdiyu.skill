@@ -1,0 +1,10 @@
+// 低语（春秋友甘夫人）：每轮开始时，你可以令一名角色本轮造成的伤害 +1，然后你选择
+// 【崩坏】/【痛击】/【OL璧魂】/【dc绮语】中一个未选择过的技能令其获得。
+// 上游 (offline_chunqiu.js:520-604)：roundStart + 临时伤害加成标记 +
+// derivation 去重chooseButton 授技。
+// 「本轮伤害加成」「去重授技选择」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill ymdiyu(3928311265) locked {
+  // INTENTIONAL_EMPTY_NOOP: round-damage-buff grant chain unavailable
+  modifier hand_limit add 0;
+}

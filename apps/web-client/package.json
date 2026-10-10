@@ -1,0 +1,31 @@
+{
+  "name": "noname-next-web-client",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:wasm": "node scripts/build-wasm.mjs",
+    "build:desktop": "node scripts/build-desktop.mjs",
+    "desktop": "node scripts/run-tauri.mjs dev",
+    "desktop:build": "node scripts/run-tauri.mjs build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@tauri-apps/cli": "^2.0.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7",
+    "vite-plugin-wasm": "^3.4.1",
+    "vite-plugin-top-level-await": "^1.4.4",
+    "vue-tsc": "^2.2.0"
+  }
+}

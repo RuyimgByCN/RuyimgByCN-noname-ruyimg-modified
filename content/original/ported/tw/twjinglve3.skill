@@ -1,0 +1,8 @@
+// 经略③（谋曹丕）：记录目标使用「死士」牌时，无效该牌；
+// 或阶段结束时若该牌仍在场上/手牌中，获得之。
+// 缺特定牌追踪与原效果覆盖原语，空定义。
+skill twjinglve3(2636191835) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twjinglve3 = 标记型技能（charlotte，skill.js:3486），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

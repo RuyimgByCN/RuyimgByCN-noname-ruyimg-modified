@@ -1,0 +1,8 @@
+// 放赈（族韩韶/族韩融/族韩馥）：出牌阶段，横置一名未横置角色，选择摸2张牌并交给其2张，或令其回复1点体力。
+// 旧 JS 的「横置+分支选择（摸牌给牌 vs 回复）」「双人资源交换」无对应原语。
+// 空定义：需 expansion 支持 link、give 原语和分支选择。
+skill clanfangzhen(2275172325) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

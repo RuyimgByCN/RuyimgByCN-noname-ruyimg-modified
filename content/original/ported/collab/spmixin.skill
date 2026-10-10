@@ -1,0 +1,9 @@
+// 密信（王允）：出牌阶段限一次。交给一名角色一张手牌，其须对另一名角色使用【杀】，
+//   否则后者观看并获得其一张手牌。
+// 旧JS的多目标选择→给牌→目标A对目标B出杀或目标B看牌拿牌的连锁交互无DSL对应原语。
+// 以空定义保留编译占位，待chain_action/multi_target_delegate原语后补齐。
+skill spmixin(2905641044) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

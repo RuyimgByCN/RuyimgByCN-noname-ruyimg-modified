@@ -1,0 +1,9 @@
+// 勤王1(曹操)：subskill of qinwang。当你发动"勤王"使用杀时，从下家开始每名蜀势力角色
+// 可选择替你打出一张杀，打出后其摸一张牌。若无人响应，你获得"激将3"并取消此杀。
+// 旧JS含锁定技、轮询chooseToRespond、draw奖励、cancel+goto回退等复杂逻辑。
+// 注：DSL无轮询respond机制，无goto/cancel原语，无法精确建模。仅作占位。
+skill qinwang1(3380375264) locked {
+  // ponytail: 蜀势力代出杀轮询、draw奖励、jijiang3 fallback均无DSL原语，空定义占位。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

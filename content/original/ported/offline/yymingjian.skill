@@ -1,0 +1,5 @@
+// yymingjian（锁定技/触发技）：音效名:mingjian, 锁定技, global:phase_play, player:card_used, 多分支选择, 加技能, 含子技能, 异步。
+skill yymingjian(3956295613) locked {
+  trigger phase_play always {
+  }
+}

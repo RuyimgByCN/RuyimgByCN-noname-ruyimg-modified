@@ -1,0 +1,13 @@
+// 摧怀（cihuai）：出牌阶段开始时，若你没有手牌【杀】，可展示所有手牌并视为使用一张
+// 【杀】。
+// 上游 (sp/skill.js:40876)：trigger player:phaseUseBegin；filter = countCards("h","sha")==0；
+// content = chooseTarget(canUse(virtual sha)) → showHandcards + useCard(virtual sha, targets)。
+// 实现：phase_play + owner_is_target_play_phase_hand_no_sha（新增过滤器：自己出牌阶段且
+// 手牌无【杀】）→ 可选确认 → choose_use_virtual_sha(self, normal_distance)。
+// 与上游差异：上游先展示手牌（showHandcards，仅信息暴露无规则效果）省略；虚拟杀按
+// 正常距离与次数规则结算。
+skill cihuai(4115676072) {
+  trigger phase_play owner_is_target_play_phase_hand_no_sha optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

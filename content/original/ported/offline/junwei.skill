@@ -1,0 +1,5 @@
+// junwei：player:phase_end, 需选择目标, 二选一, 失去体力, 移出游戏, 加技能, 多步骤。
+skill junwei(3495886620) {
+  trigger phase_end owner_alive {
+  }
+}

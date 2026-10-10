@@ -1,0 +1,9 @@
+// 坚忍（春原）：受到伤害后，令一名角色摸牌（不同性别来源摸 3 张，否则摸 1 张）。
+// 实现：受伤后可选 `choose_target_draw` 令一名角色摸 1。
+// 近似：不按来源性别改摸牌数，一律摸 1。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill sunohara_jianren(3420828175) {
+  trigger damage owner_is_target optional {
+    effect choose_target_draw(self, 1, any);
+  }
+}

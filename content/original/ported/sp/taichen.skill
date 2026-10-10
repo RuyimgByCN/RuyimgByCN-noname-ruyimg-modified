@@ -1,0 +1,11 @@
+// 太沉（taichen）：出牌阶段限一次，你可以失去1点体力，视为对一名其他角色使用一张【杀】。
+// 上游 (sp/skill.js:41048)：enable phaseUse usable 1；content = loseHp() + useCard(virtual sha)。
+// 实现：active play_phase uses_per_turn 1 targets 1 1 other → lose_hp(self, 1) +
+// choose_use_virtual_sha(self, normal_distance)。与上游差异：上游需目标可被普通杀指定
+// （filterTarget = canUse("sha")），DSL 未建模该门槛（若有角色不可被指定则仍可选，仅提示）。
+skill taichen(3277821116) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect lose_hp(self, 1);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

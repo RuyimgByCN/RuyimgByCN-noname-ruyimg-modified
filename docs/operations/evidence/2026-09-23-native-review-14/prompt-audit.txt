@@ -1,0 +1,8 @@
+Literal prompt strings absent from KNOWN_PROMPTS (source inspection, not all dynamically exercised):
+duel_sha crates/engine-native/src/snap.rs:558, crates/engine-native/src/kernel.rs:1035
+nullify_window crates/engine-native/src/snap.rs:578, crates/engine-native/src/kernel.rs:1399
+aoe_response crates/engine-native/src/snap.rs:598, crates/engine-native/src/kernel.rs:2028
+tian_du_gain crates/engine-native/src/snap.rs:672
+jijiang_target crates/engine-native/src/snap.rs:934, crates/engine-native/src/content/standard.rs:971
+jiji_target crates/engine-native/src/content/standard.rs:2259
+jiji_card crates/engine-native/src/content/standard.rs:2289

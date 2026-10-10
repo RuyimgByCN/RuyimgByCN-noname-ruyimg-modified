@@ -1,0 +1,5 @@
+// 红颜（界甄姬）：黑桃视为红桃。
+// 旧 JS 的「花色改写」以 card_suit modifier 表达。
+skill xinhongyan(3104002761) locked {
+  modifier card_suit(spade) override heart;
+}

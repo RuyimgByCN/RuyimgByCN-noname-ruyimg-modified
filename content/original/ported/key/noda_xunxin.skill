@@ -1,0 +1,18 @@
+// 寻衅：旧 JavaScript 仅作为语义证据；运行时只加载该类型化规则。
+skill noda_xunxin(3836596548) {
+  active play_phase uses_per_turn owner_hp targets 1 1 other hp_at_least_owner {
+    effect use_virtual_card_on(self, juedou, event_source);
+  }
+
+  trigger duel_resolved owner_initiated_duel_target_alive_loser_has_hand_or_equip {
+    effect draw_then_give_one(event_source, event_player, 0, any_hand_equip);
+  }
+}
+
+// 旧版 group 助手已折叠进父技能；保留稳定定义 ID 供审计和引用解析。
+skill noda_xunxin2(2159749553) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 noda_xunxin2（skill.js:9137）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

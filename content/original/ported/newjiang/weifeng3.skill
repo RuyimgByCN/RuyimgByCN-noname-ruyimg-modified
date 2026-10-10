@@ -1,0 +1,7 @@
+// 威风·移除辅助：拥有「惧」标记的角色对你造成伤害后移除标记并弃置其一张牌。
+// 旧 JS 的「跨角色标记移除」无对应原语，未建模（已注明）。
+skill weifeng3(2665155983) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

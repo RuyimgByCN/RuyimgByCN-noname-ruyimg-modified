@@ -1,0 +1,6 @@
+// 突袭 (tuxi) — 张辽: gain from one or two other hands instead of the deck.
+skill tuxi(15) {
+  trigger phase_draw owner_is_target_other_hand_nonempty optional {
+    effect choose_other_hand_targets_gain_one_replace_draw(self);
+  }
+}

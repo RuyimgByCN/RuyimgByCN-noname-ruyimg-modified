@@ -1,0 +1,5 @@
+// eu_nagong：player:phase_prepare, 含子技能, 异步。
+skill eu_nagong(2677598611) {
+  trigger phase_prepare owner_alive {
+  }
+}

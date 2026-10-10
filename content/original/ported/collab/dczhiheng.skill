@@ -1,0 +1,10 @@
+// 制衡（经典孙权）：出牌阶段限一次，你可以弃置任意张牌（手牌或装备区里的牌），
+// 然后摸等量的牌；若你以此法弃置了所有手牌，则额外摸一张牌。
+// 旧 JS 仅作语义证据；弃牌→摸牌由 resolve_dczhiheng 权威状态机校验（ABI 467）。
+// 注：collab 特化的「本回合对未命中过的其他角色造成伤害后，本回合内此技能可发动
+//      次数 +1」机制依赖每回合多段发动次数（DSL 暂无 usable 计数），文档化延后。
+skill dczhiheng(2730395750) {
+  trigger phase_play owner_is_target {
+    effect resolve_dczhiheng(self);
+  }
+}

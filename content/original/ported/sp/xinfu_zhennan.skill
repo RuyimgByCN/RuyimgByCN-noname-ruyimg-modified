@@ -1,0 +1,12 @@
+// 镇南：当你成为【南蛮入侵】的目标时，你可以对一名其他角色造成 1-3 点随机伤害。
+// 上游 (sp/skill.js xinfu_zhennan)：trigger target useCardToTargeted，filter
+// event.card.name == "nanman"；content = chooseTarget(其他角色) + randomGet(1-3) 伤害。
+// 实现（2026-09-03 第一百五十二批·零新原语重写，批 148 误标复核晋升）：
+// card_targeted 触发 + 本批新注册过滤器 owner_targeted_by_nanman（CardTargeted +
+// TrickNanman）→ choose_other_damage(self, 1)（选一名其他角色造成伤害，batch G 先例）。
+// 近似：随机 1-3 点伤害定为固定 1 点（引擎无随机数原语）。
+skill xinfu_zhennan(4152984845) {
+  trigger card_targeted owner_targeted_by_nanman optional {
+    effect choose_other_damage(self, 1);
+  }
+}

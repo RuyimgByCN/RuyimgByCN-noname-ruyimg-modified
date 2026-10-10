@@ -1,0 +1,4 @@
+// 耀光铠横置子技能：防具有效时，未横置的拥有者不能被横置。
+skill rw_minguangkai_link(2481253205) locked {
+  modifier armor_link_gain_cancel override 1;
+}

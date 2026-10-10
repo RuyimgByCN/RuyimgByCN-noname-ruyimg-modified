@@ -1,0 +1,8 @@
+// oljiaoyu：触发+修改技（phase_end,phaseUseBegin）
+skill oljiaoyu(2789660446) locked {
+  trigger phase_end owner_alive {
+    // addSkill("oljiaoyu_ban") — def_id 未找到
+  }
+  // modifier: cardEnabled 需手动分析;
+  // modifier: cardSavable 需手动分析;
+}

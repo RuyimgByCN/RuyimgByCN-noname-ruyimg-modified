@@ -1,0 +1,5 @@
+// 诏缚2（距离修正）：吴势力角色的攻击范围可通过其他拥有"诏缚"的角色计算——若该角色与目标的距离≤1，则视为在攻击范围内。
+// 旧JS为mod.inRangeOf，根据拥有zhaofu且距离目标≤1的第三方来扩展攻击范围。DSL以global_attack_range modifier近似。
+skill zhaofu2(3864540104) locked {
+    modifier global_attack_range add 1;
+}

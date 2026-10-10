@@ -1,0 +1,11 @@
+// 飞辩（OL 祢衡）：当你于回合内使用牌后，或成为其他角色使用牌的目标后，该角色随机弃一张手牌
+// 且其出牌时限 -1 秒。
+// 上游 (sp/skill.js:6496)：useCardAfter，logTarget 为使用者，discard 随机 1 张手牌。
+// 实现：自己使用牌后强制弃 1 张手牌。
+// 近似：不覆盖「成为目标」窗口；弃牌由自己选择而非随机；出牌时限未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olfeibian(3525562624) {
+  trigger card_used owner_is_source {
+    effect choose_discard_hand_range(self, 1, 1);
+  }
+}

@@ -1,0 +1,13 @@
+// 推演（xianding 管辂 tuiyan）：出牌阶段开始时（frequent），你观看牌堆顶的三张牌，
+// 然后以任意顺序放回牌堆顶。
+// 上游 (xianding/skill.js tuiyan)：trigger player phaseUseBegin；frequent；
+// get.cards(3, true) → viewCards → cardsGotoPile(cards.reverse(), "insert")。
+// 实现（2026-09-09 第一百八十四批·观星原语外溢，零新原语）：
+// phase_play + owner_is_target（frequent 口径锁定无确认）→ guanxing_top(self, 3)。
+// 近似（登记债）：上游为纯观看+逆序放回（无选择收益）；guanxing_top 允许逐张
+// 顶/底重排（pxlangya 同债）——能力超集，信息面等价。
+skill tuiyan(2256277010) {
+  trigger phase_play owner_is_target {
+    effect guanxing_top(self, 3);
+  }
+}

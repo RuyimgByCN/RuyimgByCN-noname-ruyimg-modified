@@ -1,0 +1,12 @@
+// 厉火-增（程普·疠火子技）：使用火【杀】时可增加一个目标。
+// 上游 (refresh/skill.js)：useCard2 火杀 + chooseTarget 动态加目标。
+// 实现：`trigger card_used owner_source_fire_sha optional`（既有过滤器）→
+// `choose_add_or_remove_current_card_target(self, event_card)`（batch V 原语，
+// 须在真实结算中，合成事件中静默 no-op）。
+// 2026-08-15 火杀体查询批次——零新原语（owner_source_fire_sha 白名单早已在位，
+// 「缺 nature 索引」登记经核查不成立，第七次清单解体）。
+skill decadelihuo2(3239729881) {
+  trigger card_used owner_source_fire_sha optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

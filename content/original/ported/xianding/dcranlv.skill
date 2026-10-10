@@ -1,0 +1,8 @@
+// 燃缕（崔芷）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：有角色受到非属性伤害后，你可三选一执行后移除该项：横置或重置至多两名角色 / 摸两张牌 / 弃置一名角色两张牌
+// 旧 JS 的「三选项各一次 storage 状态机 + 横置批量」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill dcranlv(2735088853) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

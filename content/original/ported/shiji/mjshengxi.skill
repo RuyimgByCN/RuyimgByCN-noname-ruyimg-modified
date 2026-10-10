@@ -1,0 +1,8 @@
+// 生息（费祎）：结束阶段开始时，若本回合使用过牌且未造成伤害，你可获得一张智囊
+// （无中生有/过河拆桥/无懈可击）或摸一张牌。
+// 旧 JavaScript 仅作语义证据；智囊选择复用 TW 生息管线（resolve_twfeiyi stage 1）。
+skill mjshengxi(3376134207) {
+  trigger phase_end owner_alive_phase_end_used_card_no_damage optional {
+    effect resolve_twfeiyi(self, 1);
+  }
+}

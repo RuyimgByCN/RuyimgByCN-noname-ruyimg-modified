@@ -1,0 +1,6 @@
+// hongyuan：锁定技，每回合限一次，造成伤害后摸一张牌
+skill hongyuan(3865318297) {
+  trigger damage owner_source_once_per_turn optional {
+    effect draw_cards(self, 1);
+  }
+}

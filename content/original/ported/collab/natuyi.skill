@@ -1,0 +1,10 @@
+// 义（那兔关羽）：出牌阶段限一次，令至多两名其他角色各交一张牌，然后可选
+// 将这些牌当无距离次数杀对其中一人使用，或分配给未成为目标者。
+// 近似：选 1–2 名有牌目标后各获其一张 he，再可选视为使用无距离【杀】。
+// 颜色禁手、分配牌与 gaintag 未建模。
+skill natuyi(4024327301) {
+  active play_phase uses_per_turn 1 targets 1 2 other hand_equip_nonempty {
+    effect take_one_card(event_source, self, hand_equip);
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

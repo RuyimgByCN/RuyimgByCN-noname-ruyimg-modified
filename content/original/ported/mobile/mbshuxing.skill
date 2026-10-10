@@ -1,0 +1,6 @@
+// mbshuxing（束刑）：你的回合内每名角色限一次，一名其他角色成为【杀】的目标时，你可令此【杀】对其无效并展示其手牌，若其中有【闪】，你令其选择一项：1.失去1点体力；2.交给你其手牌中【闪】和其下次〖秉法〗的投票权。
+skill mbshuxing(3890234118) {
+  trigger card_targeted owner_alive {
+    effect lose_hp(self, 1);
+  }
+}

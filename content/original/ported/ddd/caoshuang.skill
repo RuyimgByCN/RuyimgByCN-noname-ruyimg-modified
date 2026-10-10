@@ -1,0 +1,18 @@
+// 3D精选 曹爽「专摄/危秋」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddzhuanshe(902778848) {
+  trigger phase_play owner_alive_ddd_zhuanshe_gift optional {
+    effect resolve_ddd_caoshuang(self, event_player, event_card, 0);
+  }
+  trigger card_used owner_alive_ddd_zhuanshe_card_used {
+    effect resolve_ddd_caoshuang(self, event_player, event_card, 1);
+  }
+  trigger phase_end owner_alive_ddd_zhuanshe_phase_end {
+    effect resolve_ddd_caoshuang(self, event_player, event_card, 2);
+  }
+}
+
+skill dddweiqiu(208021574) locked {
+  trigger recover_before owner_alive_ddd_weiqiu {
+    effect resolve_ddd_caoshuang(self, event_player, event_card, 3);
+  }
+}

@@ -1,0 +1,6 @@
+// 张翼·执义：旧 JavaScript 仅作语义证据；按角色记录本回合实际使用的【杀】。
+skill stdzhiyi(3959114365) {
+  trigger phase_end owner_alive_used_sha_this_turn {
+    effect choose_use_virtual_sha_or_draw(self);
+  }
+}

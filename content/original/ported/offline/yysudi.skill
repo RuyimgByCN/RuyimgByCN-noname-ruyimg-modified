@@ -1,0 +1,6 @@
+// 肃敌：攻击范围包含你的角色响应你使用的牌后，你摸一张牌。
+skill yysudi(3521654010) locked {
+  trigger card_responded owner_card_responded_to_by_player_in_range {
+    effect draw_cards(self, 1);
+  }
+}

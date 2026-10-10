@@ -1,0 +1,10 @@
+// 反馈 — after taking damage, optionally take one card from the source.
+skill fankui(5) {
+  trigger damage owner_is_target_source_alive_gainable_card optional {
+    if self == event_source {
+      effect take_one_card(event_source, self, equip);
+    } else {
+      effect take_one_card(event_source, self, hand_equip);
+    }
+  }
+}

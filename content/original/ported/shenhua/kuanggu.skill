@@ -1,0 +1,7 @@
+// 原仓库 character/shenhua/skill.js：狂骨。
+
+skill kuanggu(3700078390) locked {
+  trigger damage owner_source_wounded_distance_le_one {
+    effect recover_hp(self, event_amount);
+  }
+}

@@ -1,0 +1,5 @@
+// ylyg_juxiang：锁定技, global:card_used, source:damage_before, 二选一, 加技能, 含子技能, 异步。
+skill ylyg_juxiang(3781602048) locked {
+  trigger card_used always {
+  }
+}

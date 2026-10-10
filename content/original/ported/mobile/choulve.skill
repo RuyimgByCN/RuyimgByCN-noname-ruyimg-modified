@@ -1,0 +1,6 @@
+// choulve（筹略）：出牌阶段开始时，你可以令一名其他角色交给你一张牌，若其如此做，视为你使用上一张对你造成过伤害且不为延时锦囊牌的牌。
+skill choulve(3535236074) {
+  trigger phase_play owner_alive {
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

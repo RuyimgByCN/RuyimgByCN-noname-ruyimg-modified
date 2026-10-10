@@ -1,0 +1,6 @@
+// dragpojun：音效名:repojun, player:card_targeted, 摸牌, 移出游戏, 加技能, 异步。
+skill dragpojun(3273083407) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,4 @@
+// 奇策 range stub — attack range +1 (matches bootstrap BOOTSTRAP_QICAO = 3).
+skill qicao(3) {
+  modifier attack_range add 1;
+}

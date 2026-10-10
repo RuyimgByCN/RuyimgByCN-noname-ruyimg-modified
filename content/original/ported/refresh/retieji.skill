@@ -1,0 +1,6 @@
+// 界铁骑：判定并封印目标非锁定技；目标交同花色牌，否则本杀直击且对其伤害+1。
+skill retieji(3731623167) {
+  trigger card_targeted owner_source_sha optional {
+    effect resolve_retieji(self, event_card, event_player);
+  }
+}

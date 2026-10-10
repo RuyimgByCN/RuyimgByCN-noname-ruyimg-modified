@@ -1,0 +1,8 @@
+// jsrgzhuiming（追命）：当你使用【杀】指定唯一目标后，你可以声明一种颜色并令目标角色弃置任意张牌，然后你展示目标角色一张牌。若此牌颜色与你声明的颜色相同，则此【杀】不计入次数限制、不可被响应且伤害+1。
+// 未建模：choosePlayer, 强命directHit, 翻译调用（DSL无对应原语）
+skill jsrgzhuiming(2667338993) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgzhuiming（skill.js:4903）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：用牌后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

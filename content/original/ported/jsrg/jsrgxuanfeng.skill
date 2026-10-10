@@ -1,0 +1,5 @@
+// jsrgxuanfeng（选锋）：蜀势力技。你可以将一张【影】当无距离和次数限制的刺【杀】使用。
+// 未建模：chooseToUse转化, storage状态, 势力技能（DSL无对应原语）
+skill jsrgxuanfeng(2493029761) {
+  view_as sha play_phase any;
+}

@@ -1,0 +1,28 @@
+// 辅袁（辛评）：你于回合外使用或打出/响应一张牌后，若当前回合角色手牌数少于你，
+// 其摸一张牌，否则你摸一张牌。
+// 上游 (sp2/skill.js fuyuan)：trigger player useCard/respond；filter = 当前回合角色
+// 存活且非你；logTarget = 其手牌 < 你手牌 ? 其 : 你；content = 该角色摸一张。
+// 实现（2026-09-03 第一百六十批·零新原语重写，批 159 复核证伪池晋升）：
+// card_used / card_responded 双臂（批 147 教训：按事件源拆臂）+ 既有过滤器
+// owner_source_outside_turn_card_used_or_responded（catalog 既有，单过滤器内含
+// CardUsed|CardResponded 双事件判定 + 回合外门槛）→ body 内
+// hand_count(current_phase_player()) 比较分支决定摸牌对象
+// （draw_cards 表达式位，current_phase_player() 查询表达式首用于效果参数位）。
+// 近似：上游 respond 含打出（如被借刀回应）与响应两类窗口，DSL card_responded
+// 事件面以引擎 CardResponded 为准，角落窗口差异登记观察。
+skill fuyuan(2389825863) {
+  trigger card_used owner_source_outside_turn_card_used_or_responded optional {
+    if hand_count(current_phase_player()) < hand_count(self) {
+      effect draw_cards(current_phase_player(), 1);
+    } else {
+      effect draw_cards(self, 1);
+    }
+  }
+  trigger card_responded owner_source_outside_turn_card_used_or_responded optional {
+    if hand_count(current_phase_player()) < hand_count(self) {
+      effect draw_cards(current_phase_player(), 1);
+    } else {
+      effect draw_cards(self, 1);
+    }
+  }
+}

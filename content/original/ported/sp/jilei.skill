@@ -1,0 +1,7 @@
+// jilei：锁定技，手牌上限+2。
+// 实现（2026-09-15 第二百九十批·modifier-only 补面）：
+// modifier hand_limit add 2（纯 DSL 零 bytecode 零新原语）。
+// 保真度：完整。
+skill jilei(3011568950) locked {
+  modifier hand_limit add 2;
+}

@@ -1,0 +1,8 @@
+// 闭月（界貂蝉）：结束阶段开始时，你摸 min(4, 本回合内受到伤害的不同角色数 + 1) 张牌。
+// 旧 JS 仅作语义证据；受伤角色计数与摸牌由 resolve_sbbiyue 权威状态机校验
+// （ABI 599）。
+skill sbbiyue(4152380059) {
+  trigger phase_end owner_alive {
+    effect resolve_sbbiyue(self);
+  }
+}

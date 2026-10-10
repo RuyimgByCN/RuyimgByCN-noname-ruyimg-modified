@@ -1,0 +1,6 @@
+// dcjiangxian：本回合因使用〖连捷〗摸的牌造成的伤害+X（X为你本回合造成伤害的次数且至多为5），回合结束后失去〖连捷〗或〖朝镇〗。DSL缺多项原语，无法精确表达。
+skill dcjiangxian(3165806139) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcjiangxian 含真实规则体（enable、limited 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

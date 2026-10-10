@@ -1,0 +1,14 @@
+// 小西·OL（olxiaoxi，韩遂）：一轮开始时，若你能使用【杀】且全场无人有过任何行动
+// （跳过/使用/打出均无），可视为使用一张无距离限制的【杀】。
+// 上游 (sp/skill.js:17892)：trigger global phaseBegin（每轮首名角色回合开始）；filter =
+// 拥有者 canUseTarget(sha) 且全场本回合均无 actionHistory 行动；content = 视为使用一张
+// 无距离限制的【杀】。
+// 实现：round_started + owner_alive（RoundStart 事件每轮第一人触发）→ 可选确认
+// → choose_use_virtual_sha(self, ignore_distance)。
+// 与上游差异：「全场无人有过行动」过滤未建模（无对应过滤器），每轮开始都会触发；
+// 虚拟杀按无距离限制、正常次数规则结算。
+skill olxiaoxi(3429531288) {
+  trigger round_started owner_alive optional {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

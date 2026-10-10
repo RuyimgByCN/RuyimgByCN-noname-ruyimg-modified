@@ -1,0 +1,345 @@
+// 杀海拾遗（shahai）包：可表达技能的真实 DSL 实现（8 系跨界包中语义可移植的部分）。
+// 旧 JS 仅作语义证据，不进入 npack 或运行时；各技能近似已逐条注明；其余技能
+// 见 shahai_meta.skill 元数据登记。
+
+// ===== gujian（古剑奇谭）=====
+
+// 醉饮（zuiji）：出牌阶段，你可以将一张手牌或装备牌当作【酒】使用。
+skill zuiji(405939204) {
+  view_as jiu any any from hand_equip;
+}
+
+// 魅狐（meihu）：当你受到伤害后，你可以令伤害来源交给你一张手牌。
+// 近似：旧 JS 仅手牌，DSL 以手牌/装备区近似。
+skill meihu(29011260) {
+  trigger damage owner_is_target optional {
+    effect take_one_card(event_source, self, hand_equip);
+  }
+}
+
+// 黑龙鳞片（heilonglinpian）：锁定技，其他角色计算与你的距离+1。
+skill heilonglinpian(2989667523) locked {
+  modifier distance_to add 1;
+}
+
+// 木杀（mutoumianju_skill）：出牌阶段限一次，你可以将一张手牌当作【杀】使用。
+skill mutoumianju_skill(3697229674) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+}
+
+// ===== gwent（巫师）=====
+
+// 狼噬（gwlangshi）：你造成伤害后，可以选择另一名角色对其造成 1 点伤害。
+// 近似：旧 JS 目标须体力不小于受伤角色且非受伤者/自己，DSL 以任意其他角色近似。
+skill gwlangshi(1278203610) {
+  trigger damage owner_is_source optional {
+    effect choose_other_damage(self, 1);
+  }
+}
+
+// ===== hearth（炉石）=====
+
+// 火球术（yushou_huofu）：出牌阶段，你可以将一张黑色手牌或装备牌当作【决斗】使用。
+skill yushou_huofu(3587241051) {
+  view_as juedou play_phase black from hand_equip;
+}
+
+// 奥术（aoshu）：出牌阶段限一次，你可以将一张黑桃手牌或装备牌当作【无中生有】使用。
+skill aoshu(1234312918) {
+  view_as wuzhong play_phase spade from hand_equip uses_per_turn 1;
+}
+
+// 雷欧克（yushou_leiouke）：锁定技，你造成伤害时，此伤害+1。
+// 近似：旧 JS 每回合限一次，DSL 未限次（文档化近似）。
+skill yushou_leiouke(904056875) locked {
+  trigger damage_before owner_is_source {
+    effect modify_current_damage(self, 1);
+  }
+}
+
+// 法反（fbeifa）：每当你失去最后一张手牌，你可以视为对一名角色使用一张【杀】。
+// 近似：旧 JS 每回合至多 3 次且使用真实【杀】，DSL 以虚拟【杀】且未限次表达。
+skill fbeifa(1484942683) {
+  trigger cards_moved owner_from_hand_empty optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}
+
+// 交汇（jiaohui）：结束阶段，若你本回合未造成伤害，你可以选择一名角色，其摸一张牌
+// 或回复 1 点体力。
+// 近似：旧 JS 以「本回合未造成伤害」判定，DSL 过滤器要求本回合使用过牌（近似）。
+skill jiaohui(4185162719) {
+  trigger phase_end owner_alive_phase_end_used_card_no_damage optional {
+    effect choose_other_draw_or_recover(self, 1, 1, 0);
+  }
+}
+
+// 新希（xshixin）：锁定技，你造成伤害后，受伤角色与你各失去 1 点体力。
+// 近似：旧 JS 要求受伤角色存活且非自己，DSL 未过滤（文档化近似）。
+skill xshixin(4260058223) locked {
+  trigger damage owner_is_source {
+    effect lose_hp(event_player, 1);
+    effect lose_hp(self, 1);
+  }
+}
+
+// 图腾·伤害抽牌（tuteng2）：锁定技，每当你造成一次伤害，你摸一张牌。
+skill tuteng2(2614038782) locked {
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 图腾·回合结束抽牌（tuteng5）：锁定技，结束阶段，你摸一张牌。
+skill tuteng5(379724188) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 图腾·进攻距离（tuteng8）：锁定技，你的进攻距离+1。
+skill tuteng8(1999077708) locked {
+  modifier distance_from add -1;
+}
+
+// 图腾·手牌上限（tuteng_h）：锁定技，你的手牌上限-1。
+skill tuteng_h(3402106009) locked {
+  modifier hand_limit add -1;
+}
+
+// ===== mtg（万智牌）=====
+
+// 冰河要塞（mtg_bingheyaosai_skill）：锁定技，你使用【杀】后，弃置一张手牌或装备牌。
+skill mtg_bingheyaosai_skill(988994848) locked {
+  trigger card_used owner_source_sha {
+    effect discard_hand_equip_count(self, 1);
+  }
+}
+
+// 龙颅山峰（mtg_longlushanfeng_skill）：锁定技，你每回合使用【杀】的次数上限+1。
+skill mtg_longlushanfeng_skill(3530681526) locked {
+  modifier sha_use_limit add 1;
+}
+
+// ===== ow（守望先锋）=====
+
+// 夕阳（xiyang）：结束阶段，若你已受伤，你可以翻面并回复 2 点体力。
+// 近似：旧 JS 要求未翻面才可发动（翻面守卫），DSL 未建模。
+skill xiyang(3568366664) {
+  trigger phase_end owner_is_target_wounded optional {
+    effect turn_over(self);
+    effect recover_hp(self, 2);
+  }
+}
+
+// 目镜（mujing）：你可以将一张黑色手牌或装备牌当作【杀】使用或打出。
+// 近似：旧 JS 的「杀未命中时返还使用次数」未建模。
+skill mujing(3158097871) {
+  view_as sha any black from hand_equip;
+}
+
+// 守护（shouhu）：锁定技，你不能使用【杀】；出牌阶段，你可以弃置一张【杀】并令一名
+// 已受伤的其他角色回复 1 点体力。
+skill shouhu(1534072376) locked {
+  modifier card_use_cancel(sha) override 1;
+  active play_phase targets 1 1 other wounded select_hand 1 1 card_sha {
+    effect discard_selected(self);
+    effect recover_hp(event_source, 1);
+  }
+}
+
+// ===== swd（轩辕剑）=====
+
+// 凌波（hlingbo）：每当你使用或打出一张【闪】，你可以摸两张牌。
+skill hlingbo(2628799893) {
+  trigger card_responded owner_responded_shan optional {
+    effect draw_cards(self, 2);
+  }
+}
+
+// 流虹（swdliuhong）：你使用【杀】后，可以摸一张牌。
+skill swdliuhong(1820316119) {
+  trigger card_used owner_source_sha optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 疾影（jiying）：锁定技，你的【杀】无距离限制。
+skill jiying(1362221450) locked {
+  modifier card_distance_unlimited(sha) override 1;
+}
+
+// 暗恋影（anlianying）：每当你失去最后一张手牌，你可以摸两张牌。
+skill anlianying(4137882582) {
+  trigger cards_moved owner_from_hand_empty optional {
+    effect draw_cards(self, 2);
+  }
+}
+
+// 血衣（miles_xueyi）：锁定技，你防止即将受到的伤害，改为失去 1 点体力。
+skill miles_xueyi(2088632576) locked {
+  trigger damage_before owner_is_target {
+    effect prevent_current_damage();
+    effect lose_hp(self, 1);
+  }
+}
+
+// 断岳（duanyue）：出牌阶段限一次，你可以弃置一张装备牌，对一名其他角色造成 1 点
+// 伤害。
+skill duanyue(2592147555) {
+  active play_phase uses_per_turn 1 select_he 1 1 card_equip {
+    effect discard_selected(self);
+    effect choose_other_damage(self, 1);
+  }
+}
+
+// 乾坤袋（qiankundai）：锁定技，你的手牌上限+1。
+skill qiankundai(318131316) locked {
+  modifier hand_limit add 1;
+}
+
+// 青龙之诡 部件（qinglongzhigui_equip1-5）：锁定技，结束阶段，你摸一张牌。
+skill qinglongzhigui_equip1(2038063758) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+skill qinglongzhigui_equip2(2685625720) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+skill qinglongzhigui_equip3(4122627559) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+skill qinglongzhigui_equip4(1687986331) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+skill qinglongzhigui_equip5(2504685514) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 刑天改造 部件（hslingjian_xingtigaizao_equip3-5）：距离与手牌上限/摸牌修正。
+skill hslingjian_xingtigaizao_equip3(3885632392) locked {
+  modifier distance_to add 1;
+  modifier distance_from add 1;
+}
+skill hslingjian_xingtigaizao_equip4(383264025) locked {
+  modifier distance_to add -1;
+  modifier distance_from add -1;
+}
+skill hslingjian_xingtigaizao_equip5(1402102019) locked {
+  modifier hand_limit add -1;
+  modifier draw_count add 1;
+}
+
+// ===== xianjian（仙剑奇侠传）=====
+
+// 寻影（xunying）：你使用【杀】后，可以再使用一张【杀】。
+// 近似：旧 JS 要求对同一目标且手牌有【杀】，DSL 以虚拟【杀】自由选择目标近似。
+skill xunying(3535380435) {
+  trigger card_used owner_source_sha optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}
+
+// 探囊（tannang）：出牌阶段限一次，你可以将一张梅花手牌当作【顺手牵羊】使用，
+// 无距离限制。
+skill tannang(2288414167) {
+  view_as shunshou any club from hand uses_per_turn 1;
+  modifier card_distance_unlimited(shunshou) override 1;
+}
+
+// ===== yunchou（云愁·DIY）=====
+
+// 吸才（xicai）：锁定技，你受到伤害后，获得造成此伤害的牌。
+skill xicai(1394145853) locked {
+  trigger damage owner_is_target {
+    effect gain_event_cards(self);
+  }
+}
+
+// 蛊惑（diyguhuo）：锁定技，准备阶段，你摸两张牌，然后弃置两张手牌或装备牌。
+// 近似：旧 JS 要求手/装/判区有牌且弃置区含判定区，DSL 未过滤（无手牌时仍摸牌）且仅弃手/装。
+skill diyguhuo(2005998275) locked {
+  trigger phase_prepare owner_is_target {
+    effect draw_cards(self, 2);
+    effect discard_hand_equip_count(self, 2);
+  }
+}
+
+// ===== gwent（昆特牌）=====
+
+// 雾妖（gw_wuyao，特殊卡）：在你行动时可当作【杀】使用；回合结束后，从手牌中消失。
+// 近似：旧 JS 为卡牌 autoViewAs + vanish（phaseAfter 移除）；DSL 以技能 view_as 近似
+// 卡牌，vanish 以 `trigger phase_end` + remove_skill_by_def 表达（技能即卡之代理，
+// 回合结束移除自身 = 卡片从持有者处消失；gwyewu 造卡入口见 shahai_meta 登记）。
+skill gw_wuyao_skill(784509644) {
+  view_as sha play_phase any from hand;
+  trigger phase_end owner_is_target {
+    effect remove_skill_by_def(self, 784509644);
+  }
+}
+
+// 狼（gw_lang，特殊卡）：在你行动时可当作【酒】使用；回合结束后，从手牌中消失。
+// 近似：同上，以技能 view_as + phase_end 移除近似（vanish）。
+skill gw_lang_skill(2836710318) {
+  view_as jiu play_phase any from hand;
+  trigger phase_end owner_is_target {
+    effect remove_skill_by_def(self, 2836710318);
+  }
+}
+
+// 杜达元帅1（gw_dudayuanshuai1，特殊卡「小伙伴」）：当你成为其他角色使用牌的目标时，
+// 你可以使用此牌取消之，然后获得对你使用的牌。
+// 近似：旧 JS 为 useCardToBefore 取消事件（evt.cancel + gain）；DSL 以
+// `trigger card_targeted` + ABI 643 `cancel_incoming_card_use` 原语表达——把持有者从
+// 当前牌结算目标中排除（杀走 sha 记录、锦囊走 Wuxie resume_payload）并获取对你使用
+// 的实体牌；无法被排除的牌型（如无中生有类全目标锦囊）视为未发动。
+skill gw_dudayuanshuai1_skill(3583584906) {
+  trigger card_targeted owner_alive_targeted_by_other optional {
+    effect cancel_incoming_card_use(self, event_source, event_card);
+  }
+}
+
+// 杜达元帅2（gw_dudayuanshuai2，特殊卡「捣蛋鬼」）：你不能使用、打出或弃置此牌；
+// 结束阶段，若此牌在你手牌中，你弃置之并随机弃置一张手牌。
+// 近似：旧 JS 的 per-card 禁使用/打出/弃置为 hupeng2 的 cardDiscardable/cardEnabled/
+// cardUsable/cardRespondable mods，引擎 modifier 仅支持类别/花色选择器（无按自定义卡
+// def 的禁用门禁），且杜达元帅以技能近似（无实体牌可门禁），该面省略（ADR 0628）；
+// 「结束阶段弃此牌并随机弃一张其他手牌」以 `trigger phase_end` + 弃置两张手牌近似
+// （上游两弃均为手牌：此牌本身 + 随机一张其他手牌；ADR 0628 收窄弃牌域为手牌）。
+skill gw_dudayuanshuai2_skill(3832623127) {
+  trigger phase_end owner_is_target {
+    effect discard_hand(self, 2);
+  }
+}
+
+// 呼朋（hupeng）：出牌阶段限一次，你可以弃置一张牌并将一张杜达元帅置入一名角色的
+// 手牌。
+// 近似：杜达元帅为特殊卡，本引擎以技能近似（gw_dudayuanshuai1_skill/2_skill 即卡之
+// 运行时）；「择一杜达元帅1/2」以 ABI 644 `choose_other_gain_one_of_two_skills` 二选一
+// 置入目标表达（等价上游 chooseVCardButton）。hupeng2/3/4 机制已在两技能内落地/登记。
+skill hupeng(3607688462) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_he 1 1 {
+    effect discard_selected(self);
+    effect choose_other_gain_one_of_two_skills(self, event_source, 3583584906, 3832623127);
+  }
+}
+
+// 叶舞（gwyewu）：出牌阶段限一次，你可以弃置一张手牌，并弃置一名随机敌人的一张随机
+// 牌；若目标弃置的牌与你弃置的牌颜色相同，则重复发动；每以此法弃置一张敌方角色的
+// 手牌，你获得一张【雾妖】；每以此法弃置一张敌方角色的装备牌，你获得一张【狼】。
+// 近似：随机选敌/随机选牌在宿主原语内以种子 RNG 确定性完成（ABI 645）；雾妖/狼为
+// 特殊卡，以技能近似（add_skill 即造卡入口，随 phase_end vanish 消失，ADR 0627）。
+skill gwyewu(2444009580) {
+  active play_phase uses_per_turn 1 select_hand 1 1 {
+    effect gwyewu_random_discard_chain(self, 784509644, 2836710318);
+  }
+}

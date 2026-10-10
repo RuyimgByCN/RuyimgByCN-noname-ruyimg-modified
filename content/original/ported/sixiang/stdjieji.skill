@@ -1,0 +1,8 @@
+// 借机（姜婕）：锁定技，使用杀造成伤害后，获得受伤角色装备区一张牌；然后该角色可对你使用一张无视距离的杀。
+// 旧 JS 的「受伤角色对你使用杀」无对应 DSL 原语，未建模。sha-only 过滤因单过滤器限制无法添加，实际会响应所有伤害。
+// 以 take_one_card 近似保留获得装备部分收益。
+skill stdjieji(2992783967) locked {
+  trigger damage owner_alive {
+    effect take_one_card(event_player, self, equip);
+  }
+}

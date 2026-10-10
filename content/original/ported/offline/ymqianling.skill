@@ -1,0 +1,9 @@
+// 潜聆（春秋赵襄）：出牌阶段限两次，令至多三名有手牌角色与你展示手牌，
+// 然后可与黑色手牌数相同者交换手牌。
+// 近似：对一名其他角色摸一张（展示/比色/交换未建模）。
+skill ymqianling(2200537072) {
+  active play_phase uses_per_turn 2 targets 1 1 other hand_nonempty {
+    effect draw_cards(self, 1);
+    effect draw_cards(event_source, 1);
+  }
+}

@@ -1,0 +1,42 @@
+// 势周瑜：炽沄 / 焰洄 / 焚涛 / 雄姿（旧 JavaScript 仅作语义参考）。
+skill potchiyun(4200000566) {
+  trigger cards_drawn owner_gained_cards_potzhouyu {
+    effect resolve_potzhouyu(self, event_player, event_card, 0);
+  }
+  trigger cards_moved owner_gained_cards_potzhouyu {
+    effect resolve_potzhouyu(self, event_player, event_card, 0);
+  }
+  trigger phase_any_end owner_alive {
+    effect resolve_potzhouyu(self, event_player, event_card, 7);
+  }
+}
+
+skill potyanhui(4200000567) {
+  trigger card_targeted owner_source_first_target_has_hand_potyanhui {
+    effect resolve_potzhouyu(self, event_player, event_card, 1);
+  }
+  trigger phase_any_end owner_alive {
+    effect resolve_potzhouyu(self, event_player, event_card, 2);
+  }
+  trigger turn_ended owner_alive {
+    effect resolve_potzhouyu(self, event_player, event_card, 5);
+  }
+}
+
+skill potfentao(4200000568) locked {
+  trigger damage_before owner_alive_fire_damage_potfentao {
+    effect resolve_potzhouyu(self, event_player, event_card, 3);
+  }
+  trigger damage owner_alive_potfentao_pending_damage {
+    effect resolve_potzhouyu(self, event_player, event_card, 4);
+  }
+  trigger damage_prevented owner_alive_potfentao_pending_damage {
+    effect resolve_potzhouyu(self, event_player, event_card, 4);
+  }
+}
+
+skill potxiongzi(4200000569) {
+  trigger phase_begin owner_is_target {
+    effect resolve_potzhouyu(self, event_player, event_card, 6);
+  }
+}

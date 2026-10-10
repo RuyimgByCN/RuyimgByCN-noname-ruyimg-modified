@@ -1,0 +1,13 @@
+// 张介（zhongjie）：当你死亡时，你可以令一名其他角色加 1 点体力上限，
+// 回复 1 点体力，然后摸一张牌。
+// 上游 (sp2/skill.js 张宁)：trigger player die + forceDie（死亡后仍可发
+// 动）+ chooseTarget notMe；content = gainMaxHp + recover + draw。
+// 实现（2026-09-15 第三百零四批·死亡赠礼状态机，ADR 0641 §8.88）：
+// resolve_zhongjie(self)（ABI 748 / tag 765 / Cont 332 两段续体）——选
+// 目标（可取消）→ ChangeMaxHp(+1) + RecoverHp + DrawCards 三连。
+// 保真度：完整（owner_is_target 无 alive 检查承接 forceDie 语义）。
+skill zhongjie(2821141991) {
+  trigger death owner_is_target {
+    effect resolve_zhongjie(self);
+  }
+}

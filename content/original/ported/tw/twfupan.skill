@@ -1,0 +1,6 @@
+// 复叛：造成或受到伤害后，可按伤害点数摸牌并交牌；同一目标的首次/再次交牌分别奖励摸牌/可选伤害并封锁。
+skill twfupan(2667455987) {
+trigger damage owner_is_source_or_target {
+    effect resolve_twfupan(self, event_amount);
+  }
+}

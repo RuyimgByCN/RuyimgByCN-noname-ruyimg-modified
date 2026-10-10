@@ -1,0 +1,9 @@
+// 神速4（城次郎）：弃牌阶段开始前，可翻面并跳过弃牌阶段，视为对一名其他角色使用【杀】。
+// 以 turn_over + skip_current_phase + choose_use_virtual_sha 近似，保留了翻面+出杀的核心收益。
+skill jojiro_shensu4(3172740603) {
+  trigger phase_discard owner_alive optional {
+    effect turn_over(self);
+    effect skip_current_phase(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

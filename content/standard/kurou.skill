@@ -1,0 +1,7 @@
+// 苦肉：出牌阶段可反复失去 1 点体力并摸两张牌。
+skill kurou(12) {
+  active play_phase {
+    effect lose_hp(self, 1);
+    effect draw_cards(self, 2);
+  }
+}

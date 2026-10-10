@@ -1,0 +1,5 @@
+// psjianwei：觉醒技, 限定技, player:phaseBegin, 需选择目标, 需拼点, 失去体力, 多步骤。
+skill psjianwei(3516026555) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,10 @@
+// 却敌（DB文鸯）：你杀死角色后，加 1 点体力上限并摸两张牌。
+// 旧 JavaScript 仅作语义证据；上限变化与摸牌由权威原语响应。
+// 注：旧 JS 还授予临时技能使“曲迪”本回合可用次数+1，需跨技能状态联动，
+// 待“曲迪”（dbquedi）移植后补全。
+skill dbchoujue(2410320112) locked {
+  trigger death owner_is_source {
+    effect change_max_hp(self, 1);
+    effect draw_cards(self, 2);
+  }
+}

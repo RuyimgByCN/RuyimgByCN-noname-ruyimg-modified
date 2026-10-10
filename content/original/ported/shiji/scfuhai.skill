@@ -1,0 +1,13 @@
+// 覆海（神孙策）：你使用牌指定拥有「应霸」标记（yingba_mark）的角色为目标时，
+// 该角色不能响应此牌（上游 directHit 为任意牌通用直击），然后你摸一张牌
+// （上游每回合前两次）。
+// 实现：`make_current_card_unrespondable` 通用直击原语（natuxing 同款，
+// 此前 sha 专用近似已随原语就位晋升）+ 摸 1。
+// 近似：每回合前两次的摸牌限次未建模（每次指定均摸）；触发保留 optional
+// （上游 forced），已注明。
+skill scfuhai(3159082317) {
+  trigger card_targeted owner_source_target_mark_positive_3219705664 optional {
+    effect make_current_card_unrespondable(self, event_card, 3159082317);
+    effect draw_cards(self, 1);
+  }
+}

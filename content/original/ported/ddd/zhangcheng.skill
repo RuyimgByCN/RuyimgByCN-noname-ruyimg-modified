@@ -1,0 +1,17 @@
+// 3D精选 张承「聚贤/隽轨」：旧 JavaScript 仅作语义证据，不进入运行时。
+// 聚贤：出牌阶段每项各限一次。可展示一张牌，然后：1.置于牌堆顶并获其他角色一张牌
+// 展示之；2.交给一名其他角色并摸一张牌展示之；若两次展示颜色不同，本回合失效。
+// 需要双分支选择、展示/置顶/获牌与颜色失效状态机。
+skill dddjuxian(3107004868) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 隽轨：结束阶段，可令一名角色摸两张牌并展示所有手牌，你选择不大于 X 的值；Y 大于
+// 0 时令其弃 Y 张花色各不同的手牌（X 为本回合使用牌的花色数，Y 为其手牌花色数-X）。
+// 需要展示手牌、花色计数与逐花色强制弃牌状态机。
+skill dddjungui(2331182565) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

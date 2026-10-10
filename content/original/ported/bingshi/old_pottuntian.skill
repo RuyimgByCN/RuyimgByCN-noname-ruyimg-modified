@@ -1,0 +1,8 @@
+// 旧·屯田（势邓艾）：锁定技。你失去牌后获得「蓄力」标记（至多 3 个）。
+// 旧 JS 的「蓄力 expansion + charge 计数」无对应原语；以失去牌后摸一张
+// 近似（蓄力未建模，已注明）。
+skill old_pottuntian(3325845469) locked {
+  trigger cards_moved owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

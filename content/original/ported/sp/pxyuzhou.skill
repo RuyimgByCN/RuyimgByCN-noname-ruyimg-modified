@@ -1,0 +1,16 @@
+// 豫州（pxyuzhou，州郡技能）：当你获得此技能后，你可以进入连环状态，令一名体力值
+// 小于你的角色回复 1 点体力。
+// 上游 (sp/skill.js:3087)：trigger player:changeSkillsAfter；filter = addSkill 含本技、
+// 自己未横置且存在体力小于自己的受伤角色；content = chooseTarget(hp < self 且受伤)
+// → player.link(true) + target.recover()。
+// 实现：skill_added + owner_skill_added_self_4075358047 → 可选确认 →
+// add_mark(self, 2, 1)（MARK_CHAIN=2 铁索标记，count>0 即横置并派发
+// PlayerLinkedChanged）+ choose_other_recover(self, 1)。
+// 与上游差异：「目标体力小于自己且受伤」过滤未建模（choose_other_recover 自动跳过
+// 满血目标）；「自己未横置」未建模（重复触发会累加标记）。
+skill pxyuzhou(4075358047) {
+  trigger skill_added owner_skill_added_self_4075358047 optional {
+    effect add_mark(self, 2, 1);
+    effect choose_other_recover(self, 1);
+  }
+}

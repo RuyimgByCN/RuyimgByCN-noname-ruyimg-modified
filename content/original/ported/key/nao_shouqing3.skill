@@ -1,0 +1,12 @@
+// nao_shouqing3（守琴·标记，直井）：锁定技。当你使用〖守琴〗（nao_shouqing2）转化的牌后，
+// 你摸一张牌；你的手牌上限+〖守琴〗标记数。
+// 上游 filter: event.skill == "nao_shouqing2"；content: player.draw()；
+// mod: maxHandcard += countMark("nao_shouqing3")。
+// 使用 Phase 3 skill-provenance 过滤族 event_view_as_skill_<DEF>（事件牌源自该 view-as 技能）。
+// 近似：「手牌上限+标记数」modifier + 标记累计需 mark modifier 原语（countMark 作为 hand_limit
+// modifier value_source），本定义实现 useCard 后摸牌核心行为；modifier 另册登记。
+skill nao_shouqing3(2830362724) locked {
+  trigger card_used event_view_as_skill_4259091944 {
+    effect draw_cards(self, 1);
+  }
+}

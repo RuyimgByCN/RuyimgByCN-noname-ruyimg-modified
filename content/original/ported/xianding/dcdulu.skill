@@ -1,0 +1,8 @@
+// 毒露（DC 曹节）：出牌阶段限一次，对至多三名其他角色各造成 1 点伤害。
+// 旧 JS 的“选择本回合对你使用过牌的角色”历史筛选与“随机弃一张手牌、
+// 其濒死时你获得其黑色牌”省略。
+skill dcdulu(2779276477) {
+  active play_phase uses_per_turn 1 targets 1 3 other {
+    effect deal_damage(self, event_source, 1);
+  }
+}

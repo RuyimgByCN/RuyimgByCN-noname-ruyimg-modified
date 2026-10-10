@@ -1,0 +1,10 @@
+// 旧 JS 的死亡后“粮”上限校正子技能；主技能已内联此逻辑，本定义保留独立兼容语义。
+skill recangchu3(3636591775) locked {
+  trigger death owner_alive {
+    let grains = mark_count(self, 2058376721);
+    let alive = alive_count();
+    if alive < grains {
+      effect remove_mark(self, 2058376721, grains - alive);
+    }
+  }
+}

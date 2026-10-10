@@ -1,0 +1,8 @@
+// 猎神（申公豹，限定技）：游戏开始时记录所有角色的体力值与手牌数；
+// 出牌阶段选择一名状态发生变化的目标，将其体力值与手牌数还原至记录值。
+// 状态快照与还原机制需要 per-player 状态存储与比较，DSL 无对应原语。
+skill lieshen(2994226011) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

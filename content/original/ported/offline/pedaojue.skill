@@ -1,0 +1,5 @@
+// pedaojue：player:card_targeted, 加技能, 含子技能, 异步。
+skill pedaojue(3186458259) {
+  trigger card_targeted owner_alive {
+  }
+}

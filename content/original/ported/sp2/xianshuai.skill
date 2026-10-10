@@ -1,0 +1,9 @@
+// 先率：每轮第一次有存活来源造成伤害后，你摸一张牌；若来源是你，再令受伤角色受到一点无来源伤害。
+skill xianshuai(3228501791) locked {
+  trigger damage owner_alive_source_alive_once_per_round {
+    effect draw_cards(self, 1);
+    if self == event_source {
+      effect deal_damage(0, event_player, 1);
+    }
+  }
+}

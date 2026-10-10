@@ -1,0 +1,8 @@
+// chengzhang（孙坚·成长）：觉醒技，准备阶段若整局累计造成+受到伤害>=7，标记 rejiushi_mark 并回复1体力摸1牌。
+// 旧JS 用 getAllHistory("sourceDamage") + getAllHistory("damage") 累计全盘伤害数。
+// DSL 无「全盘累计伤害计数」原语，未建模。
+skill chengzhang(2257298674) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 chengzhang 含真实规则体（trigger、juexingji 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,11 @@
+// 句町（pxquting，州郡技能）：当你获得此技能后，你可以失去 1 点体力，然后摸三张牌。
+// 上游 (sp/skill.js:1913)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// content = loseHp() + draw(3)。
+// 实现：skill_added + owner_skill_added_self_2515073240 → 可选确认 →
+// lose_hp(self, 1) + draw_cards(self, 3)。
+skill pxquting(2515073240) {
+  trigger skill_added owner_skill_added_self_2515073240 optional {
+    effect lose_hp(self, 1);
+    effect draw_cards(self, 3);
+  }
+}

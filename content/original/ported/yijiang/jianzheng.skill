@@ -1,0 +1,7 @@
+// 谏诤（董允）：其他角色使用【杀】指定目标时，可用一张手牌置于牌堆顶，取消所有目标（若为黑色则改为目标为你）。
+// 旧 JS 的「置顶牌堆+取消目标+条件重定向」多步管线无对应原语，暂留空定义。
+skill jianzheng(3986863840) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

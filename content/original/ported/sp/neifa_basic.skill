@@ -1,0 +1,16 @@
+// 内伐·基本（neifa_basic，元谭元尚的子技能）：本回合内不能使用锦囊牌和装备牌；
+// 使用【杀】指定目标后可为它额外指定一个目标；使用【杀】的次数上限 + 标记数。
+// 上游 (sp/skill.js:32091)：mod cardEnabled(card) 锦囊/装备 false + cardUsable 杀
+// num + countMark；trigger useCard2（杀）→ chooseTarget 加一个目标。
+// 实现：card_use_cancel(trick) + card_use_cancel(equip)（禁用锦囊/装备）+ sha_use_limit
+// add owner_skill_mark（杀次数上限 + 自身标记数）→ trigger card_used owner_source_sha
+// optional → choose_add_or_remove_current_card_target(self, event_card)。
+// 与上游差异：本回合限制以技能存活期近似（子技由父技 neifa 授予）；cardSavable 未建模。
+skill neifa_basic(3242431242) {
+  modifier card_use_cancel(trick) override 1;
+  modifier card_use_cancel(equip) override 1;
+  modifier sha_use_limit add owner_skill_mark;
+  trigger card_used owner_source_sha optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

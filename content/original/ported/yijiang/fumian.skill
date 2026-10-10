@@ -1,0 +1,7 @@
+// 伏冕（曹宇）：准备阶段二选一——摸牌阶段多摸牌，或使用红色牌可多选目标（限一次）。交替选择有加成。
+// 旧 JS 的交替选择状态机+记忆上次选择+加成逻辑无对应原语，暂留空定义。
+skill fumian(2857787673) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

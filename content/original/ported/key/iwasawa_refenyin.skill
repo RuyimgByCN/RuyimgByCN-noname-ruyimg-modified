@@ -1,0 +1,7 @@
+// 复奋音（岩泽·锁定技）：回合内牌进入弃牌堆时，若出现新花色则摸牌并记录，用于标记展示。
+// 旧 JS 的「花色差分追踪+历史去重+标记展示」无对应 DSL 原语，未建模。
+skill iwasawa_refenyin(4017550121) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 iwasawa_refenyin 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

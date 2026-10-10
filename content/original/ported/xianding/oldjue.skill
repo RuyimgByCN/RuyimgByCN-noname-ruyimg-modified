@@ -1,0 +1,7 @@
+// 决（旧版）：准备阶段开始时，可视为对一名体力值或手牌数大于你的一名角色使用一张【杀】。
+// 旧 JS 的「条件筛选目标」（体力值或手牌数大于你）无对应原语，以任意目标近似。
+skill oldjue(2642038327) {
+  trigger phase_prepare owner_is_target optional {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

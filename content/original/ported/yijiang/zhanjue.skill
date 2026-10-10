@@ -1,0 +1,6 @@
+// 战绝（旧版）：出牌阶段，可将所有手牌当【决斗】使用。每阶段限两次（通过zhanjue_draw计数）。
+// 旧JS含viewAs juedou(selectCard:-1)+zhanjue4 draw触发。DSL view_as不支持selectCard:-1全手牌转化，以空定义保留。
+skill zhanjue(3839017876) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,8 @@
+// 颂威（神·魏）：魏势力角色的回合开始时，若本回合内仍有角色未进行过回合，你摸X张牌（X=min(3, 未进行回合的角色数)）。
+// 旧 JS 的「遍历全局 phase 历史统计未行动角色」无对应原语，无法建模。
+skill twsbsongwei(4054571366) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twsbsongwei（skill.js:3948）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

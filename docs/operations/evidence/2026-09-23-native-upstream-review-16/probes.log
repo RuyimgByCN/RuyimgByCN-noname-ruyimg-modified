@@ -1,0 +1,14 @@
+FIXED_AI_DEDUP: policy=accepted; plan=accepted
+FIXED_ARCHIVE_CHOICE: duel_sha byte roundtrip restores
+FIXED_ARCHIVE_CHOICE: aoe_response byte roundtrip restores
+OPEN_ARCHIVE_CHOICE: nullify_window byte restore rejected: OpenChoiceMismatch { observer: 1 }
+FIXED_LIULI_ARCHIVE: byte roundtrip restores
+OPEN_TRAILING_MISSING: Card(79) absent, restore accepted
+OPEN_AI_SAMPLED_OWNERSHIP: IdOutOfBounds { what: "card_duplicate", got: 37 }
+OPEN_AI_CANDIDATES: legal Shan omitted; selected Answer { choice_id: 1, selection: [Pass] }
+OPEN_AI_SIM_DEDUP: low=PlayCard { card: 7, targets: [1] }, high=NextPhase
+HUJIA_HOLDER_RESTORE: OpenChoiceMismatch { observer: 0 }
+HUJIA_INVALID_HOLDER_ACCEPTED: true
+HUJIA_SECOND_HOLDER_ASKED: false; defender_hp=3
+LIJIAN_GENDER_RESTORE: OpenChoiceMismatch { observer: 0 }
+OPEN_EXTENSION_VALIDATION: uninstalled enabled; duplicate extension cards accepted

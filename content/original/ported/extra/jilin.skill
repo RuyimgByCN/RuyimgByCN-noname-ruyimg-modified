@@ -1,0 +1,25 @@
+// 戢鳞：以逐张可见性的通用技能牌堆保存“志”。
+skill jilin(3993974385) {
+  trigger game_started owner_alive {
+    effect resolve_hidden_skill_pile(self, 3993974385, 0, event_card);
+  }
+
+  trigger card_targeted owner_alive_targeted_by_other_hidden_skill_pile_3993974385 optional {
+    effect resolve_hidden_skill_pile(self, 3993974385, 1, event_card);
+  }
+
+  trigger phase_begin owner_is_target_hand_nonempty_hidden_skill_pile_3993974385 optional {
+    effect resolve_hidden_skill_pile(self, 3993974385, 2, event_card);
+  }
+}
+
+// 英猷：明置一张暗“志”并按已明置数量摸牌；失去同花色牌时等量摸牌。
+skill yingyou(2877848391) {
+  trigger phase_play owner_is_target_hand_nonempty_hidden_skill_pile_3993974385 optional {
+    effect resolve_hidden_skill_pile(self, 3993974385, 3, event_card);
+  }
+
+  trigger cards_moved owner_lost_matching_revealed_skill_pile_suit_3993974385 {
+    effect resolve_hidden_skill_pile(self, 3993974385, 4, event_card);
+  }
+}

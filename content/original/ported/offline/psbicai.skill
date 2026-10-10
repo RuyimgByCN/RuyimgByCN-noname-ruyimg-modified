@@ -1,0 +1,7 @@
+// psbicai：音效名:scspicai, 主动(phaseUse), 摸牌, 异步, 条件计数。
+skill psbicai(3666390083) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

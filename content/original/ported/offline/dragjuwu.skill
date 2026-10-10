@@ -1,0 +1,5 @@
+// dragjuwu：锁定技, target:card_targeted, 条件计数。
+skill dragjuwu(3122754133) {
+  trigger card_targeted owner_is_target_once {
+  }
+}

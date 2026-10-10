@@ -1,0 +1,6 @@
+// changbiao（钟会·长飙）：可将任意张手牌/装备当普通【杀】使用；出牌阶段结束时，摸等量于本阶段以此法造成伤害的牌数。
+// 旧JS view_as 拼 sha + 子技能 changbiao_draw 在 phaseUseEnd 统计 sourceDamage 摸牌。
+// DSL 的 view_as 可表达拼杀，但「按子技能追踪造成伤害摸牌」无对应原语，仅保留拼杀部分。
+skill changbiao(4169863590) {
+    view_as sha play_phase any from hand_equip;
+}

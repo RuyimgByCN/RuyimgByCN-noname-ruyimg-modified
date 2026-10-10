@@ -1,0 +1,23 @@
+// 诈降：每失去一点体力摸三张；出牌阶段失去体力时累积本回合红杀强化。
+skill zhaxiang(3298876867) locked {
+  trigger hp_lost owner_is_target {
+    effect draw_cards(self, event_amount * 3);
+  }
+
+  trigger hp_lost owner_alive_is_target_current_play_phase {
+    effect add_skill(self, 4056078041);
+    effect add_mark(self, 4056078041, event_amount);
+  }
+}
+
+// 诈降的回合内强化；标记数对应本出牌阶段失去的体力点数。
+skill zhaxiang_effect(4056078041) locked {
+  modifier sha_use_limit add owner_skill_mark;
+  modifier card_distance_unlimited(sha_red) override 1;
+  modifier sha_unrespondable(red) override 1;
+
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 4056078041, 0);
+    effect remove_skill(self_skill);
+  }
+}

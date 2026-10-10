@@ -1,0 +1,10 @@
+// 暗询（旧版·满宠）：出牌阶段限一次，选两名手牌数不同的角色，手牌数少的角色从手牌数多的角色处获得一张手牌。
+// 若此牌不为黑桃，你摸一张牌。
+// 旧 JS 的强制获得+花色检测+后续摸牌无精确原语。
+// 以 take_one_card + draw_cards 近似保留部分收益。
+skill old_anxu(4083237515) {
+  active play_phase targets 2 2 other {
+    effect take_one_card(event_player, self, hand_equip);
+    effect draw_cards(self, 1);
+  }
+}

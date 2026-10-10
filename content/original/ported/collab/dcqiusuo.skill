@@ -1,0 +1,7 @@
+// 原仓库 character/collab/skill.js：求索。
+
+skill dcqiusuo(4105095171) {
+  trigger damage owner_is_source_or_target optional {
+    effect gain_card_by_kind(self, tiesuo);
+  }
+}

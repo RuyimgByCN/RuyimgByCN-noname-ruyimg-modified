@@ -1,0 +1,7 @@
+// 天佐（张让系）：锁定技。游戏开始时，若牌堆无【奇正相生】，将四张
+// 「奇正相生」洗入牌堆。
+// 旧 JS 的「衍生牌洗入牌堆」无对应原语，未建模（已注明）。
+skill tianzuo(3078972018) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

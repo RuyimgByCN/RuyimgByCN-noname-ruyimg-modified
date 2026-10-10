@@ -1,0 +1,7 @@
+// 全守（孙玉）①：其他角色的回合开始时，可令其将手牌摸至体力上限（至多摸五张）。
+// 旧 JS 的“手牌数不大于体力上限”条件与二选一（摸至上限-杀次数 或 抵消后你摸）未建模。
+skill dcquanshou(2462490450) {
+  trigger phase_begin owner_alive_not_target optional {
+    effect choose_target_draw_to_max_hp_cap(self, 5);
+  }
+}

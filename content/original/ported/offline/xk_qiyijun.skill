@@ -1,0 +1,7 @@
+// xk_qiyijun（锁定技/触发技）：锁定技, player:phaseEnd, player:card_used, 多分支选择, 失去体力, 加技能, 含子技能, 异步, 条件计数, 弃牌。
+skill xk_qiyijun(3064784072) locked {
+  trigger card_used always {
+    effect lose_hp(self, 1);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

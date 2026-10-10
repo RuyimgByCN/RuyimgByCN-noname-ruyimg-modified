@@ -1,0 +1,10 @@
+// 猛进（spmengjin）：你使用【杀】指定目标后，可弃置其一张手牌/装备牌。
+// 上游 (sp/skill.js:41234)：shaBegin，filter = 目标有手牌/装备；content = 选弃目标一张
+// he 牌 + addTempSkill(mengjin2)（上游 mengjin2 无规则定义，仅挂载）。
+// 实现：card_targeted owner_source_sha optional → choose_discard_target_card(event_player, self, hand_equip)
+// （moukui/ol_piliche 同款弃目标牌管线）。与上游差异：mengjin2 临时技无规则面，未建模。
+skill spmengjin(4088994109) {
+  trigger card_targeted owner_source_sha optional {
+    effect choose_discard_target_card(event_player, self, hand_equip);
+  }
+}

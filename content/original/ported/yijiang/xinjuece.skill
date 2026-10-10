@@ -1,0 +1,6 @@
+// 绝策：旧 JS 仅作语义依据；运行时只执行类型化规则。
+skill xinjuece(3145104894) {
+  trigger phase_end owner_is_target_any_alive_hand_empty optional {
+    effect choose_targets_damage(self, 1, 1, hand_empty, 1);
+  }
+}

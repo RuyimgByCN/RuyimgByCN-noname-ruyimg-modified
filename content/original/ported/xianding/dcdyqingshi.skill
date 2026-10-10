@@ -1,0 +1,8 @@
+// 清识（DC 曹节）：回合内使用【杀】或普通锦囊牌指定唯一目标后，可对一名角色造成 1 点
+// 伤害。旧 JS 的“目标角色限此牌的目标”与“此牌为你本回合使用的第 X 张牌（X=手牌数）”
+// 条件省略。
+skill dcdyqingshi(4110806243) {
+  trigger card_used owner_source_single_target_sha_or_ordinary_trick_current_turn optional {
+    effect choose_targets_damage(self, 1, 1, any, 1);
+  }
+}

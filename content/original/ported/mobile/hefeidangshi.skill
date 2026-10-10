@@ -1,0 +1,8 @@
+// hefeidangshi（荡势）：当你使用伤害牌结算结束后，你可令一名其他目标角色选择一项：1.对你使用一张非转化、非虚拟且与此牌牌名相同的伤害牌；2.弃置X张牌（X为所有角色本轮选择此项的次数且至少为1）；3.受到你造成的1点伤害。若其选择了本阶段未被执行过的选项，你摸一张牌且本阶段出【杀】次数+1。
+skill hefeidangshi(3523786701) locked {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+    effect choose_other_damage(self, 1);
+    effect discard_selected(self);
+  }
+}

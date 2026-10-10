@@ -1,0 +1,14 @@
+// 穿云（南华老仙）：「传术」衍生技。杀指定目标后若其装备区有牌：随机弃置
+// 其中一张。
+// 上游 (sp2/skill.js chuanyun L9102)：trigger player useCardToPlayered；
+// filter 事件牌为【杀】+ 目标装备区有牌；content 随机取目标装备一张 →
+// target.discard。
+// 实现（2026-09-13 第二百五十八批·衍生技族状态机，ADR 0641 §8.47，quanjia
+// 单发精简模板复用）：trigger card_targeted owner_is_source →
+// resolve_chuanyun(self, self_skill, event_player, event_card)（ABI 708 /
+// tag 731，单发无续体）：机内校验杀牌+目标装备区非空 → RNG 随机弃置其一。
+skill chuanyun(2334949774) {
+  trigger card_targeted owner_is_source {
+    effect resolve_chuanyun(self, self_skill, event_player, event_card);
+  }
+}

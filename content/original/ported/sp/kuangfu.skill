@@ -1,0 +1,5 @@
+skill kuangfu(2689128355) {
+  trigger damage owner_source_sha_damage_target_alive_has_discardable_equip optional {
+    effect resolve_kuangfu(self, event_player);
+  }
+}

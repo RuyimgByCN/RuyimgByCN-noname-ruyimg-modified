@@ -1,0 +1,5 @@
+// yyyaoming（主动技(phaseUse)/触发技）：音效名:sbyaoming, player:damage, 主动(phaseUse), 需选择目标, 多分支选择, 摸牌, 加技能, 含子技能, 异步。
+skill yyyaoming(2457674236) {
+  trigger damage owner_alive optional {
+  }
+}

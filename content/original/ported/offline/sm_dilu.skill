@@ -1,0 +1,5 @@
+// sm_dilu：player:hp_lost, global:cards_moved, global:cards_moved, 移出游戏, 异步。
+skill sm_dilu(2483237632) locked {
+  trigger hp_lost always {
+  }
+}

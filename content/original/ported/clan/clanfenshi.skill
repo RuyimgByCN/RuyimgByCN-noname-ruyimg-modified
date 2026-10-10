@@ -1,0 +1,17 @@
+// 纷势（族诸葛果/族诸葛瞻共用，宗族技）：每回合限一次，当你使用普通锦囊牌时，
+// 若你或一名琅琊诸葛氏角色的手牌数等于场上势力数，你可令此牌额外结算一次。
+// 上游 (clan/skill.js:133-154)：trigger player:useCard，filter = trick +
+// hasPlayer(自己或琅琊诸葛氏 countCards("h") == countGroup())，usable:1，
+// content = trigger.effectCount++。
+// 实现：新原语 `extra_resolve_current_trick(self, event_card, self_skill)`
+// （ABI 649，tag 668）：在 card_used 触发体内为挂起中的锦囊（WuxieWindow）追加一次
+// 效果结算（apply_deferred_trick_with_extras 循环执行，上限 2 次）。
+// 近似：(1) 「每回合限一次」无对应 trigger 次数原语，以 optional 确认近似（玩家可
+// 每次锦囊都发动，强于上游）；(2) 「手牌数等于势力数」子条件未建模（上游增益条件
+// 被放宽）。后续 trigger uses_per_turn 原语落地后收紧。
+// 2026-08-15 额外结算家族批次（解锁 clanfenshi/fuyu/olufuyou/twchengxi/dckeshui）。
+skill clanfenshi(2827730630) {
+  trigger card_used owner_source_ordinary_trick optional {
+    effect extra_resolve_current_trick(self, event_card, self_skill);
+  }
+}

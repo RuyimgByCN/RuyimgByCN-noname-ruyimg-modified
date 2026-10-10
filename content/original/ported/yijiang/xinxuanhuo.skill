@@ -1,0 +1,8 @@
+// 新炫惑（孙皓）：摸牌阶段，你可放弃摸牌，选择一名其他角色摸两张牌，然后指定其【杀】的目标；若其未出【杀】，你获得其两张牌。
+// 旧 JS 的放弃摸牌+目标摸牌+指定杀目标+未出杀拿牌四阶段；DSL 无法精确表达。
+skill xinxuanhuo(2209568482) {
+  trigger phase_draw owner_alive optional {
+    effect draw_cards(event_player, 2);
+    // 未建模：放弃自身摸牌、指定杀目标、未出杀则拿牌
+  }
+}

@@ -1,0 +1,11 @@
+// 界裸衣：亮出牌堆顶三张牌；可放弃摸牌并获得其中的基本牌、决斗和武器。
+skill new_reluoyi(3935960913) {
+  trigger phase_draw owner_is_target_draw_not_replaced {
+    effect resolve_new_reluoyi(self, 3768135792);
+  }
+}
+
+// 裸衣伤害效果：自己的【杀】或【决斗】伤害 +1；由引擎在本人下回合开始前移除。
+skill reluoyi2(3768135792) locked {
+  modifier sha_damage add 1;
+}

@@ -1,0 +1,8 @@
+// retuxi：刷新包技能。
+// triggers: player:phaseDrawBegin2
+skill retuxi(2409144267) {
+    // 近似：旧JS事件 phaseDrawBegin2 → DSL事件 phaseDrawBegin2
+    trigger phase_draw owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

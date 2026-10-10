@@ -1,0 +1,7 @@
+// 节钺（徐晃）
+// 其他角色跳过或取消摸牌阶段后，拥有者摸一张牌。
+skill jiezi(2177948990) locked {
+  trigger phase_draw_skipped owner_alive_not_target {
+    effect draw_cards(self, 1);
+  }
+}

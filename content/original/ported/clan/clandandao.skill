@@ -1,0 +1,11 @@
+// 弹道（荀爽）：锁定技。任意角色本局首次判定结算后，你增加 1 点体力上限。
+// 旧 JS 仅作语义证据；「每名角色整局仅一次」以判定者身上的技能标记近似：
+// 判定结算时若该角色从未被本技能标记（即本局首次判定）则生效并打标记。
+skill clandandao(2693545350) locked {
+  trigger judgment_resolved owner_alive {
+    if mark_count(event_player, 2693545350) == 0 {
+      effect change_max_hp(self, 1);
+      effect add_mark(event_player, 2693545350, 1);
+    }
+  }
+}

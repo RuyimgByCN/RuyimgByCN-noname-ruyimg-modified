@@ -1,0 +1,7 @@
+// dcqinghuang：减体力上限；获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcqinghuang(2229296730) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

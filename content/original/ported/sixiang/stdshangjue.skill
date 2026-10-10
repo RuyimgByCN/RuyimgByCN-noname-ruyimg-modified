@@ -1,0 +1,6 @@
+// 殇决：限定技；濒死时回复至体力上限，结算后可失去“铿锵”以重置本技能。
+skill stdshangjue(3835885608) {
+  trigger dying owner_is_target optional {
+    effect recover_to_max_then_optional_exchange_skill(self, 3956037825);
+  }
+}

@@ -1,0 +1,5 @@
+skill jiaohua(4264685853) {
+  active play_phase uses_per_play_phase 2 {
+    effect resolve_jiaohua(self);
+  }
+}

@@ -1,0 +1,6 @@
+// 翦羽：其他角色于拥有者回合内失去装备区牌后，拥有者摸一张牌。
+skill starjianyu(2340348064) locked {
+  trigger cards_moved owner_current_turn_other_equipment_lost {
+    effect draw_cards(self, 1);
+  }
+}

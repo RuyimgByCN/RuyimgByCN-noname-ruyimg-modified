@@ -1,0 +1,6 @@
+// 旧 JS 仅作语义证据：受到男性角色造成的伤害前，可弃置手牌区或装备区的一张有效装备牌令伤害减一。
+skill jiaojin(2809119976) {
+  trigger damage_before owner_is_target_male_source_has_discardable_equipment optional {
+    effect choose_discard_equipment_reduce_current_damage(self);
+  }
+}

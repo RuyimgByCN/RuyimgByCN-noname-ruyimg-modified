@@ -1,0 +1,6 @@
+// 蔽日：每回合第一次有角色非因摸牌获得牌后，你摸一张牌。
+skill olbiri(3834015931) locked {
+  trigger cards_moved owner_alive_first_cards_moved_to_hand {
+    effect draw_cards(self, 1);
+  }
+}

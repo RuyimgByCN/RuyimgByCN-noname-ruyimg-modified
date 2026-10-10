@@ -1,0 +1,16 @@
+// 势夏侯霸：旧 JavaScript 仅作为语义规格，运行时使用确定性 DSL/宿主复合。
+skill potlibing(2358132416) locked {
+  modifier attack_range add owner_skill_state_u32;
+  trigger card_used owner_is_source {
+    effect resolve_potlibing(self, event_card, 1);
+  }
+  trigger card_resolved owner_is_source {
+    effect resolve_potlibing(self, event_card, 0);
+  }
+}
+
+skill potpoxi(4156018278) locked {
+  trigger cards_moved owner_discarded_sha_to_discard {
+    effect resolve_potpoxi(self);
+  }
+}

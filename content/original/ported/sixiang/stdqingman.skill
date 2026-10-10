@@ -1,0 +1,14 @@
+// 清蛮：每个回合结束时，将手牌补至自身空装备栏数与 3 中的较小值。
+skill stdqingman(3965321062) locked {
+  trigger turn_ended owner_alive {
+    if empty_equip_slots(self) < 4 {
+      if hand_count(self) < empty_equip_slots(self) {
+        effect draw_cards(self, empty_equip_slots(self) - hand_count(self));
+      }
+    } else {
+      if hand_count(self) < 3 {
+        effect draw_cards(self, 3 - hand_count(self));
+      }
+    }
+  }
+}

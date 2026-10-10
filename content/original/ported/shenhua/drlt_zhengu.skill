@@ -1,0 +1,20 @@
+// 镇骨（郝昭）：出牌阶段限一次，选择一名其他角色；其回合结束时，其将手牌数调至与你
+// 相同（至多摸至五张，多则弃置）。
+// 旧 JS 仅作语义证据；目标绑定与手牌调整由权威状态机校验。
+// 注 1：旧 JS 的 sync 以 target.drawTo(min(5, 拥有者手牌)) 表达摸牌上限，DSL 以
+//       min(5, hand_count(self)) 表达式（ABI 451）等价表达；弃牌分支无上限。
+// 注 2：旧 JS 同时在拥有者回合结束时结算，DSL 以 add_bound_skill 的目标回合结束
+//       结算表达（bound skill 触发时 event_source=目标、self=拥有者）；拥有者回合
+//       结束分支依赖 bound_target 玩家表达式，未移植（文档化近似）。
+skill drlt_zhengu(3942271682) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect add_bound_skill(self, 3509249751, event_source);
+  }
+}
+
+// 镇骨·调整：被记录目标的回合结束时，其手牌调至与拥有者相同（至多五张）。
+skill drlt_zhengu_sync(3509249751) {
+  trigger phase_end owner_alive_skill_bound_target_is_event_player {
+    effect adjust_hand_to(event_source, min(5, hand_count(self)));
+  }
+}

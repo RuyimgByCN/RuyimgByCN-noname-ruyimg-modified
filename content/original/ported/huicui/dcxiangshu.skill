@@ -1,0 +1,14 @@
+// 相术（张闿）：其他角色的出牌阶段开始时，若其手牌数不小于其体力值，你可以选择
+// 一个 0 至 5 的数字（可弃一张手牌保密，近似省略）；该角色的出牌阶段结束时，若其
+// 手牌数与所选数字之差的绝对值不大于 1，你获得其一张牌；若恰好等于 0，你对其造成
+// 1 点伤害。
+// 旧 JS 仅作语义证据；数字选择与差值结算由 resolve_dcxiangshu /
+// resolve_dcxiangshu_lottery 权威状态机校验（ABI 486）；秘密数字以技能 mark 记录。
+skill dcxiangshu(3579538404) {
+  trigger phase_play owner_alive_not_target {
+    effect resolve_dcxiangshu(self, event_player);
+  }
+  trigger phase_play_end owner_alive_not_target {
+    effect resolve_dcxiangshu_lottery(self, event_player);
+  }
+}

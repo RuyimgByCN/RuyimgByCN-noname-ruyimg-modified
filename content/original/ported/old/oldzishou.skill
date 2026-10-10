@@ -1,0 +1,7 @@
+// 旧自守：受伤时可按已损失体力增加本次摸牌数，并跳过随后出牌阶段。
+skill oldzishou(2477599277) {
+  trigger phase_draw owner_is_target_wounded optional {
+    effect increase_current_draw_count(self, max_hp(self) - hp(self));
+    effect skip_next_play_phase(self);
+  }
+}

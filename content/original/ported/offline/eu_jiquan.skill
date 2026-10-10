@@ -1,0 +1,10 @@
+// 集权：西势力角色的回合开始时，拥有者回复一点体力并摸一张牌。
+// 过滤器补全（2026-08-06，C 段 omp）：原 owner_alive 对任何角色回合开始都触发
+// （非西势力回合也摸牌）；改用 owner_alive_event_player_group_western
+// （仅西势力回合开始触发，与测试契约一致）。
+skill eu_jiquan(2434098210) locked lord_only {
+  trigger phase_begin owner_alive_event_player_group_western {
+    effect recover_hp(self, 1);
+    effect draw_cards(self, 1);
+  }
+}

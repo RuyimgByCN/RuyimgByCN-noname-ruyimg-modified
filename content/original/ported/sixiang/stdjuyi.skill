@@ -1,0 +1,7 @@
+// 据益（薛总）：主公技。群势力角色每回合首次对你造成伤害时，可以防止此次伤害并获得你一张牌；本回合后续不可再对你发动。
+// 旧 JS 的「群势力限定+伤害防止+获得牌+每回合每来源限一次」条件链无对应 DSL 原语。完全无法表达。
+skill stdjuyi(2923916901) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

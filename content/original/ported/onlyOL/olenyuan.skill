@@ -1,0 +1,7 @@
+// 恩怨（OL版）：组合技能，由 olnyuan1/olenyuan2 子技能构成。
+// 旧 JS 为技能组（group），继承 xinenyuan 系列，以下给空定义。
+skill olenyuan(2493452496) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olenyuan 为组/继承壳（group 指向子技承载，子技另评），原「audio-only 无规则面」注记系 2026-09-03 批 159 复核改判——壳维持 noop。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

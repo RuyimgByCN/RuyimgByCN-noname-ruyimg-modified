@@ -1,0 +1,10 @@
+// 制衡（JD 孙权）：出牌阶段限一次，弃置任意张手牌或装备并摸等量牌。
+// 实现：复用标准制衡 `select_he` + `discard_selected` + `draw_selected`。
+// 近似：弃光手牌额外摸 1 未建模（上游若有则省略）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jdsbzhiheng(3562347415) {
+  active play_phase uses_per_turn 1 select_he 1 255 {
+    effect discard_selected(self);
+    effect draw_selected(self);
+  }
+}

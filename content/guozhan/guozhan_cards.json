@@ -1,0 +1,62 @@
+[
+  {
+    "card_def_id": 758699665,
+    "name": "zhaoshu",
+    "kind": "treasure"
+  },
+  {
+    "card_def_id": 1489210249,
+    "name": "liulongcanjia",
+    "kind": "treasure"
+  },
+  {
+    "card_def_id": 1656435907,
+    "name": "minguangkai",
+    "kind": "armor"
+  },
+  {
+    "card_def_id": 656581934,
+    "name": "dinglanyemingzhu",
+    "kind": "treasure"
+  },
+  {
+    "card_def_id": 1889742276,
+    "name": "feilongduofeng",
+    "kind": "weapon"
+  },
+  {
+    "card_def_id": 1349057915,
+    "name": "taipingyaoshu",
+    "kind": "armor"
+  },
+  {
+    "card_def_id": 90703909,
+    "name": "jilinqianyi",
+    "kind": "weapon"
+  },
+  {
+    "card_def_id": 3066146995,
+    "name": "yuxi",
+    "kind": "treasure"
+  },
+  {
+    "card_def_id": 139064334,
+    "name": "huxinjing",
+    "kind": "armor"
+  },
+  {
+    "card_def_id": 78445685,
+    "name": "wuliu",
+    "kind": "weapon"
+  },
+  {
+    "card_def_id": 1614279018,
+    "name": "sanjian",
+    "kind": "weapon"
+  },
+  {
+    "card_def_id": 333389019,
+    "name": "jingfanma",
+    "kind": "horse_off"
+  }
+]

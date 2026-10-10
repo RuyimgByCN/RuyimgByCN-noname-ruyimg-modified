@@ -1,0 +1,5 @@
+skill beige(2536833640) {
+  trigger damage owner_alive_sha_damage_source_target_alive_owner_hand_equip_nonempty optional {
+    effect resolve_beige(self, event_player, event_source);
+  }
+}

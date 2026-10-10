@@ -1,0 +1,6 @@
+// 原仓库 character/tw/skill.js：扫讨。
+
+skill twsaotao(4248892988) locked {
+  modifier sha_unrespondable(any) override 1;
+  modifier card_use_unrespondable(ordinary_trick) override 1;
+}

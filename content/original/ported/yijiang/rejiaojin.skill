@@ -1,0 +1,10 @@
+// 骄矜（旧版·孙鲁班）：你成为其他角色使用【杀】或普通锦囊牌的目标后，
+// 可弃置一张装备牌，令此牌对你无效，然后获得弃牌堆里与此牌同类型的所有牌。
+// 旧 JS 的「弃牌堆同类牌获取」「女性使用者禁用」无对应原语；以弃一张装备
+// 并摸一张近似（无效化与同类获牌未建模，已注明）。
+skill rejiaojin(3816939102) {
+  trigger card_targeted owner_is_target_sha_or_trick optional {
+    effect discard_hand_equip_count(self, 1);
+    effect draw_cards(self, 1);
+  }
+}

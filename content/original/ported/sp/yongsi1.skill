@@ -1,0 +1,6 @@
+// 雍嗣·摸（yongsi1）：锁定技。摸牌阶段，你额外摸 X 张牌（X 为场上存活势力数）。
+skill yongsi1(3190419615) locked {
+  trigger phase_draw owner_is_target {
+    effect increase_current_draw_count(self, alive_group_count());
+  }
+}

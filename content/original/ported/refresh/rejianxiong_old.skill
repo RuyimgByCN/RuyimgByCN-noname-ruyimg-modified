@@ -1,0 +1,21 @@
+// 旧奸雄：受伤后可摸一张牌；若伤害牌仍在处理区，也可改为获得该牌。
+skill rejianxiong_old(2626908745) {
+  trigger damage owner_is_target optional {
+    if 0 < event_card {
+      let old_zone = card_zone(event_card);
+      let processing = zone(0, 6);
+      if old_zone == processing {
+        let option = choose(1, 2);
+        if option == 1 {
+          effect draw_cards(self, 1);
+        } else {
+          effect move_card(event_card, zone(self, 3), processing);
+        }
+      } else {
+        effect draw_cards(self, 1);
+      }
+    } else {
+      effect draw_cards(self, 1);
+    }
+  }
+}

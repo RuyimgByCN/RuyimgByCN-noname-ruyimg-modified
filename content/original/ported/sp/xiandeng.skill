@@ -1,0 +1,4 @@
+skill xiandeng(2439633691) locked {
+  modifier sha_use_limit add 1;
+  modifier card_distance_unlimited(sha) override owner_sha_used_zero;
+}

@@ -1,0 +1,9 @@
+// 兴学（孙休）：结束阶段，选择至多X名角色（X=体力值，若无〖宴诛〗则为体力上限），每名目标摸一张牌并可将一张牌置于牌堆顶。
+// 旧 JS 的批量目标选择+摸牌+牌堆顶操控+条件参数（hp vs maxHp）；DSL 无法精确表达。
+// 以 draw_cards 给目标摸牌近似，丢掉了牌堆顶放置和动态目标数限制。
+skill xingxue(2323375121) {
+  trigger phase_end owner_alive optional {
+    effect draw_cards(event_player, 1);
+    // 未建模：选多目标各摸1+放牌顶，动态X参数
+  }
+}

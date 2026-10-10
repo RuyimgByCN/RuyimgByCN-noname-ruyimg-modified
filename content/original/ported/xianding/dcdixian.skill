@@ -1,0 +1,7 @@
+// 地陷（DC神曹操）：限定技，出牌阶段，选择一个点数。若牌堆有小于此点数的牌→摸等量牌+小于等于此点数的牌无次数距离限制；否则获得点数K的牌。
+// DSL缺限定技+点数选择+条件分支+cardUsable modifier 原语，无法表达。
+skill dcdixian(2662032447) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcdixian 含真实规则体（enable、limited、chooseButton 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

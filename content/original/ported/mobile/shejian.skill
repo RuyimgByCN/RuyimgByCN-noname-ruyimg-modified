@@ -1,0 +1,6 @@
+// shejian（舌剑）：弃牌阶段结束时，若你于此阶段弃置过至少两张牌且这些牌花色均不相同，则你可以弃置一名其他角色的一张牌。
+skill shejian(2390056465) {
+  trigger phase_discard_end owner_alive {
+    effect discard_selected(self);
+  }
+}

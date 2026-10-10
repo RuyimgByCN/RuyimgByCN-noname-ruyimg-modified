@@ -1,0 +1,7 @@
+// 驱虎拼点未获胜（失败或平局）的一次性结算：拼点目标对拥有者造成伤害。
+skill quhu_lose(4142452028) {
+  trigger hand_compare_finished owner_is_target {
+    effect deal_damage(event_source, self, 1);
+    effect remove_skill(self_skill);
+  }
+}

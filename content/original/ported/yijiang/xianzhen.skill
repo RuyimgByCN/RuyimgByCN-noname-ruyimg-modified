@@ -1,0 +1,7 @@
+// 陷阵（高顺）
+// 出牌阶段限一次，双方各选一张手牌拼点；严格获胜绑定该目标，平局或失败均禁用【杀】。
+skill xianzhen(3382226057) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 3706320139, 2499130347);
+  }
+}

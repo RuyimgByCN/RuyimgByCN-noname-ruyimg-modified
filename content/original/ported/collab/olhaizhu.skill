@@ -1,0 +1,11 @@
+// Legacy `olhaizhu`: gain only other players' raw black cards from the exact
+// discard movement batch; ties count as having the largest hand.
+skill olhaizhu(2513379804) locked {
+  trigger cards_moved owner_alive_other_discarded_black_to_discard {
+    effect gain_event_cards(self);
+  }
+
+  trigger phase_prepare owner_is_target_tied_max_hand {
+    effect lose_hp(self, 1);
+  }
+}

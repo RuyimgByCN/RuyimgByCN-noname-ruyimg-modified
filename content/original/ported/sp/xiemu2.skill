@@ -1,0 +1,13 @@
+// 协穆·指定（xiemu2）：你成为其他角色使用的黑色牌的目标后，摸两张牌。
+// 上游 (sp/skill.js:41155)：target useCardToTargeted，filter = 黑牌 且 使用者非自己 且
+// 使用者势力 ∈ 已声明势力；content = draw(2)。
+// 实现：card_targeted + owner_alive_targeted_by_other_black_card（新增参数化过滤器，
+// 5 处注册：catalog 枚举尾部/registry map_filter/dispatch eval（CardTargeted +
+// owner_is_player + 来源非自己 + card_is_black）/typecheck 允许名/lsp doc）
+// → draw_cards(self, 2)。与上游差异：「使用者势力 ∈ 已声明势力」门槛（由父技 xiemu
+// 维护的声明列表）未建模，已注明。
+skill xiemu2(3238781068) locked {
+  trigger card_targeted owner_alive_targeted_by_other_black_card {
+    effect draw_cards(self, 2);
+  }
+}

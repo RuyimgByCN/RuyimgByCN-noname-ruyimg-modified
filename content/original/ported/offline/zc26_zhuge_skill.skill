@@ -1,0 +1,5 @@
+// zc26_zhuge_skill：音效名:zhuge_skill, player:useCard1, player:card_targeted, 需选择目标, 选牌UI, 异步。
+skill zc26_zhuge_skill(3475196031) locked {
+  trigger card_targeted always {
+  }
+}

@@ -1,0 +1,5 @@
+// tycangshen：锁定技, player:card_used, 异步。
+skill tycangshen(2957806249) {
+  trigger card_used owner_alive {
+  }
+}

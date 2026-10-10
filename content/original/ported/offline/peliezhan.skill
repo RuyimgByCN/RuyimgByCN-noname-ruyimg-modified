@@ -1,0 +1,5 @@
+// peliezhan：锁定技, 主动(multi), 摸牌, 含子技能。
+skill peliezhan(3386833308) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

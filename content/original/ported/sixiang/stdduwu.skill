@@ -1,0 +1,8 @@
+// 独武：出牌阶段，你可以弃置任意张手牌，然后对攻击范围内的一名角色造成1点伤害。
+// 近似：active 弃手牌→造成1点伤害。丢失：①攻击范围内的目标约束（active targets 不可按距离过滤）
+// ②弃牌数可任意选择（DSL select_hand max 用较大值近似）。
+skill stdduwu(3966967304) {
+  active play_phase uses_per_turn 1 select_hand 1 20 targets 1 1 other {
+    effect deal_damage(self, event_source, 1);
+  }
+}

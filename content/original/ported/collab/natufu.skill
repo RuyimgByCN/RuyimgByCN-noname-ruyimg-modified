@@ -1,0 +1,7 @@
+// 抚（那兔诸葛亮）：使用锦囊后按兴/同名用牌条件回复最低体力或造成火伤。
+// 近似：使用普通锦囊后可选摸 1 或选人造成 1 点伤害（条件分支与火焰属性未建模）。
+skill natufu(2601550070) {
+  trigger card_used owner_source_ordinary_trick optional {
+    effect draw_cards(self, 1);
+  }
+}

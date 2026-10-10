@@ -1,0 +1,5 @@
+// ylyglianhuan（锁定技/主动技(phaseUse)/转化技(视作tiesuo)/触发技）：锁定技, player:card_used, 主动(phaseUse), 视作tiesuo, 需拼点, 加技能, 含子技能, 异步。
+skill ylyglianhuan(3329886061) locked {
+  trigger card_used always {
+  }
+}

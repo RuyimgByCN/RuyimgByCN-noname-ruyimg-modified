@@ -1,0 +1,34 @@
+// 势辛宪英：诫节 / 清识（旧 JavaScript 仅作语义参考）。
+skill potjiejie(3788885537) {
+  trigger phase_play owner_alive_play_phase_actor_hand_nonempty_potjiejie_unused optional by event_player {
+    effect resolve_potjiejie(self, event_player, 4200000554, 4200000555, 4200000556, 4200000557, 4200000558, 2678891040);
+  }
+}
+
+skill potqingshi(2678891040) {
+  trigger damage owner_is_target optional {
+    effect resolve_potqingshi(self);
+  }
+}
+
+// 诫节每个出牌阶段只能由当前回合角色调用一次；该 helper 于回合结束自动移除。
+skill potjiejie_used(4200000554) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}
+
+skill potjiejie_spade(4200000555) locked {
+  modifier card_use_unlimited(spade) override 1;
+}
+
+skill potjiejie_heart(4200000556) locked {
+  modifier card_use_unlimited(heart) override 1;
+}
+
+skill potjiejie_club(4200000557) locked {
+  modifier card_use_unlimited(club) override 1;
+}
+
+skill potjiejie_diamond(4200000558) locked {
+  modifier card_use_unlimited(diamond) override 1;
+}

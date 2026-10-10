@@ -1,0 +1,14 @@
+// inari_baiwei_draw（摆尾·补牌，稻荷）：锁定技。使用/打出〖摆尾〗（inari_baiwei）转化的牌后，
+// 你摸一张牌。
+// 上游 filter: event.skill && event.skill.indexOf("inari_baiwei")==0；content: player.draw()。
+// 使用 Phase 3 skill-provenance 过滤族 event_view_as_skill_<DEF>（事件牌源自 inari_baiwei view-as）。
+// 近似：上游匹配 indexOf==0（含 inari_baiwei* 变体），本定义精确匹配主 inari_baiwei(3124826192)；
+// 若有其他 inari_baiwei* 变体转化源，需各自声明 trigger（当前仅主变体）。
+skill inari_baiwei_draw(3132210861) locked {
+  trigger card_used event_view_as_skill_3124826192 {
+    effect draw_cards(self, 1);
+  }
+  trigger card_responded event_view_as_skill_3124826192 {
+    effect draw_cards(self, 1);
+  }
+}

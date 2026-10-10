@@ -1,0 +1,10 @@
+// 昭汉（杨彪）
+// 原语义：准备阶段，牌堆未重洗且已受伤则回复 1 点；重洗过则失去 1 点体力。
+skill jsrgzhaohan(3529273369) locked {
+  trigger phase_prepare owner_is_target_draw_reshuffle_zero_wounded {
+    effect recover_hp(self, 1);
+  }
+  trigger phase_prepare owner_is_target_draw_reshuffle_positive {
+    effect lose_hp(self, 1);
+  }
+}

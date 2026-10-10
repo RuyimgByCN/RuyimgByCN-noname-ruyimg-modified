@@ -1,0 +1,22 @@
+// 伤逝：个人区域或体力状态变化后，若手牌少于已损失体力，可补至该数量。
+skill shangshi(3386412611) {
+  trigger cards_moved owner_hand_below_lost_hp_after_relevant_change optional {
+    effect draw_cards(self, max_hp(self) - hp(self) - hand_count(self));
+  }
+
+  trigger damage owner_hand_below_lost_hp_after_relevant_change optional {
+    effect draw_cards(self, max_hp(self) - hp(self) - hand_count(self));
+  }
+
+  trigger hp_lost owner_hand_below_lost_hp_after_relevant_change optional {
+    effect draw_cards(self, max_hp(self) - hp(self) - hand_count(self));
+  }
+
+  trigger hp_recovered owner_hand_below_lost_hp_after_relevant_change optional {
+    effect draw_cards(self, max_hp(self) - hp(self) - hand_count(self));
+  }
+
+  trigger max_hp_changed owner_hand_below_lost_hp_after_relevant_change optional {
+    effect draw_cards(self, max_hp(self) - hp(self) - hand_count(self));
+  }
+}

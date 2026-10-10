@@ -1,0 +1,10 @@
+// 矜祸（新杀谋钟会·纵恣分支）：获得其他角色/其他角色获得你的牌时，
+// 可将手牌摸至体力上限；若手牌更多则其本回合非锁定技失效。
+// 近似：出牌阶段结束时若手牌少于上限则摸至上限；失效非锁定技未建模。
+skill dcsbjinhuo(4230927701) {
+  trigger phase_play_end owner_is_target {
+    if hand_count(self) < max_hp(self) {
+      effect adjust_hand_to(self, max_hp(self));
+    }
+  }
+}

@@ -1,0 +1,7 @@
+// 寒英：准备阶段展示牌堆顶侧首张非赠物装备牌，并令与自己手牌数相同的角色直接使用。
+// 装备从牌堆经普通用牌/替换管线进入装备区，不伪造手牌获得。旧 JavaScript 只作语义证据。
+skill dchanying(2250842878) {
+  trigger phase_prepare owner_is_target optional {
+    effect resolve_zhugemengxue(self, 10);
+  }
+}

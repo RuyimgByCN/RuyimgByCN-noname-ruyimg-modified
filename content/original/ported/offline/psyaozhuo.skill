@@ -1,0 +1,6 @@
+// psyaozhuo（主动技(phaseUse)/触发技）：音效名:scsyaozhuo, player:damage, global:chooseToCompareAfter, global:compareMultipleAfter, 主动(phaseUse), 需选择目标, 需拼点, 回复体力, 加技能, 含子技能, 异步。
+skill psyaozhuo(2830519444) {
+  trigger damage owner_alive optional {
+    effect recover_hp(self, 1);
+  }
+}

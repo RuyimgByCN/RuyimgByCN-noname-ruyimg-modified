@@ -1,0 +1,6 @@
+// 旧 JS 语义：每回合限一次，成为其他角色【杀】的目标后，可摸两张并交给使用者一张牌。
+skill stdshiren(2834902877) {
+  trigger card_targeted owner_targeted_by_other_sha_once optional {
+    effect draw_then_give_one(self, event_source, 2, any_hand_equip);
+  }
+}

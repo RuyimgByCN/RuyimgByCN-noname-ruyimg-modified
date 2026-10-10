@@ -1,0 +1,9 @@
+// 天机：限定技，其他角色进入濒死时，可减 1 点体力上限，令其回复至 1 点体力并增加 1 点体力上限。
+skill nstianji(2425767664) {
+  trigger dying owner_alive_not_target optional {
+    effect change_max_hp(self, -1);
+    effect recover_hp(event_player, 1 - hp(event_player));
+    effect change_max_hp(event_player, 1);
+    effect remove_skill(self_skill);
+  }
+}

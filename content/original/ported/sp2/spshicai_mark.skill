@@ -1,0 +1,8 @@
+// spshicai_mark（sp2/skill.js:13838）：spshicai 的 sourceSkill 子技——出牌阶段开始
+// 时挂上 spshicai2（临时技能，phaseUseEnd 移除）；spshicai2 为 mark/intro 展示。
+// 规则效果由父技 spshicai 承担；DSL 无可独立移植面。
+skill spshicai_mark(2902028636) {
+  // INTENTIONAL_EMPTY_NOOP: 上游为挂临时技能的 silent 子技，效果在父技 spshicai 中；
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

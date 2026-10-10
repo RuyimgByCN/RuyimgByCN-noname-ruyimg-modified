@@ -1,0 +1,17 @@
+// 率言：弃牌阶段开始时，若你的手牌数大于 1，你可以展示所有手牌，然后令
+// 一名其他角色交给你一张牌（手牌或装备区）。
+// 上游 (mobile/skill.js shuaiyan L27799)：trigger player phaseDiscardBegin；
+// filter 手牌 > 1；showHandcards 展示所有手牌 → chooseTarget forced（其他
+// 有牌角色）→ target.chooseCard "he" forced → target.give(cards, player)。
+// 实现（2026-09-13 第二百六十六批·简单主动族状态机，ADR 0641 §8.54，
+// qiantun 分段模板复用）：trigger phase_discard owner_is_target optional →
+// resolve_shuaiyan(self, self_skill, 0)（ABI 715 / tag 738 / Cont 315 两段）：
+// 选其他有牌角色（可取消）→ 其从手牌/装备区选一张交给 owner。
+// 批 283（2026-09-15）债面收窄：补「展示所有手牌」——body 前置
+// reveal_hand(self)（既有 ABI 336 原语），shuaiyan approx→complete。
+skill shuaiyan(2856434937) {
+  trigger phase_discard owner_is_target optional {
+    effect reveal_hand(self);
+    effect resolve_shuaiyan(self, self_skill, 0);
+  }
+}

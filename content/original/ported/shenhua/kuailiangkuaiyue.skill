@@ -1,0 +1,22 @@
+// 蒯良蒯越【荐相/审时】— shenhua 旧 JS 语义参考（nzry_jianxiang/nzry_shenshi）：
+// 荐相：你成为其他角色使用牌的目标后，令场上手牌数最少的一名角色摸一张牌。
+// 审时（转换技）：阳——出牌阶段限一次，将一张牌交给一名手牌数最多的角色，然后对其
+// 造成 1 点伤害，若该角色因此死亡，可令一名角色将手牌摸至四张；
+// 阴——其他角色对你造成伤害后，观看该角色的手牌并交给其一张牌，其回合结束时若此牌
+// 仍在其手牌区或装备区，你将手牌摸至四张。
+skill jianxiang(300846397) {
+  trigger card_targeted owner_is_target optional {
+    effect resolve_jianxiang(self);
+  }
+}
+skill shenshi(3785166504) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_shenshi(self, event_source, 0);
+  }
+  trigger damage owner_is_target optional {
+    effect resolve_shenshi(self, event_source, 1);
+  }
+  trigger turn_ended owner_alive optional {
+    effect resolve_shenshi(self, event_source, 4);
+  }
+}

@@ -1,0 +1,6 @@
+/// 御严：高体力角色以实体杀指定你后，其交高点数/非基本牌，否则取消该目标。
+skill twyuyan(3341156482) locked {
+  trigger card_targeted owner_target_physical_sha_source_hp_gt_owner {
+    effect resolve_twyuyan(self, event_source, event_card);
+  }
+}

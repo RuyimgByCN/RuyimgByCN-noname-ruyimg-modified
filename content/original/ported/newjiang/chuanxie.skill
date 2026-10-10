@@ -1,0 +1,8 @@
+// 穿鞋（王粲）：任意角色使用牌后，你记录其花色；当你记录四种花色时，
+// 你获得一张牌堆顶牌。
+// 旧 JS 的「花色集合记录」无对应原语，以使用牌后摸一张近似（已注明）。
+skill chuanxie(4232322326) {
+  trigger card_used owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

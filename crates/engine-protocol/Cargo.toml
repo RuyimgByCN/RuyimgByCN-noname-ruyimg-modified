@@ -1,0 +1,12 @@
+[package]
+name = "engine-protocol"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Versioned network protocol (JSON wire format; Protobuf-ready schemas)"
+
+[dependencies]
+engine-api = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

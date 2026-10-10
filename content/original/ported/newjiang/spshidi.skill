@@ -1,0 +1,9 @@
+// 势敌（刘备）：转换技。阳：准备阶段开始时，你摸一张牌并令一名其他角色
+// 弃置一张牌；阴：结束阶段开始时，你弃置一张牌并令一名其他角色摸一张牌。
+// 旧 JS 的「转换技状态」无对应原语，以准备阶段摸一张近似（阴分支未建模，
+// 已注明）。
+skill spshidi(3370277881) {
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

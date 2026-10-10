@@ -1,0 +1,7 @@
+// 涅槃（庞统限定技）：濒死时重置并回复。
+// 旧 JS 的「重置武将牌」无对应原语；以濒死时回复 1 点近似（已注明）。
+skill niepan(2816098302) {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 1);
+  }
+}

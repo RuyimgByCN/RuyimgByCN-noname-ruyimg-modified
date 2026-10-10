@@ -1,0 +1,6 @@
+// 【浴火】在 damageBegin4 对应的最终受伤修正阶段，按属性调整已横置的其他角色所受伤害。
+skill jyyuhuo(2185491588) locked {
+  modifier global_damage_taken_final_amount(normal) add -queried_player_linked_other_than_owner;
+  modifier global_damage_taken_final_amount(fire) add queried_player_linked_other_than_owner;
+  modifier global_damage_taken_final_amount(thunder) add queried_player_linked_other_than_owner;
+}

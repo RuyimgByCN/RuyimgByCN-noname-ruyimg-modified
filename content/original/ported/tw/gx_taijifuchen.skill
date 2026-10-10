@@ -1,0 +1,9 @@
+// 太极伏尘（装备技）：锁定技，你使用【杀】指定目标后，目标需弃置一张牌，
+// 否则不能响应此【杀】。
+// 旧 JS 的「弃牌或不可响应」分支无对应原语；以目标弃置一张手牌近似
+// （不可响应分支未建模，已注明）。
+skill gx_taijifuchen(2681136128) locked {
+  trigger card_targeted owner_source_sha {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

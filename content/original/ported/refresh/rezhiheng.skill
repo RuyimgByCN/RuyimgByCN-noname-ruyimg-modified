@@ -1,0 +1,5 @@
+skill rezhiheng(2455708599) {
+  active play_phase uses_per_turn 1 select_he 1 255 {
+    effect discard_selected_draw_all_hand_bonus(self);
+  }
+}

@@ -1,0 +1,5 @@
+// pslongxin：player:phase_judge, 需弃牌, 多步骤。
+skill pslongxin(2770551095) {
+  trigger phase_judge owner_alive {
+  }
+}

@@ -1,0 +1,10 @@
+// 玉玉（刘禅·OL）：锁定技。回合结束时选择一名义父（来自 olfengzhu 存储的角色列表），
+// 令其获得「恨」标记；附加 effect 子技能在该义父回合内受伤或失去牌时累加标记。
+//
+// 跨技能存储依赖（读取 olfengzhu 的 storage）、动态子技能授予与多事件监听、
+// 「当前回合角色」检测——均无 DSL 对应原语——空定义。
+skill olyuyu(3362722796) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

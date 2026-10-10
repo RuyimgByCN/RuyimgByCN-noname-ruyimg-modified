@@ -1,0 +1,6 @@
+// 望橹：出牌阶段限一次，弃置一名角色的一张装备；若为武器，其摸攻击范围张牌。
+skill stdwanglu(3938702468) {
+  active play_phase uses_per_turn 1 targets 1 1 has_discardable_equip {
+    effect discard_target_equipment_draw_weapon_range(self, event_source);
+  }
+}

@@ -1,0 +1,7 @@
+// 自守：摸牌阶段可增加存活势力数张牌；若接受，本回合使用牌只能指定自己。
+skill zishou(3804877958) {
+  trigger phase_draw owner_is_target optional {
+    effect increase_current_draw_count(self, alive_group_count());
+    effect add_skill(self, 4152430403);
+  }
+}

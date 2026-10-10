@@ -1,0 +1,6 @@
+// 邀名2：旧 JS 为空对象，仅作标记技能。
+skill yaoming2(3927558222) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

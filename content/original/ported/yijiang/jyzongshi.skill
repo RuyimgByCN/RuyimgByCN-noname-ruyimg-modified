@@ -1,0 +1,6 @@
+// 纵适（简雍）：旧 JS 仅作为语义基准；由引擎校验拼点参与者、胜者与实体牌区域。
+skill jyzongshi(2485328360) {
+  trigger hand_compare_finished owner_hand_compare_participant_result_card_in_discard optional {
+    effect gain_hand_compare_result_card(self);
+  }
+}

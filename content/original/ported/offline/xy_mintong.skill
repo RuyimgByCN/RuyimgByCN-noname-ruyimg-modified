@@ -1,0 +1,5 @@
+// xy_mintong：global:card_used, 异步。
+skill xy_mintong(3710683827) {
+  trigger card_used owner_alive {
+  }
+}

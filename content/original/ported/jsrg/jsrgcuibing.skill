@@ -1,0 +1,8 @@
+// jsrgcuibing（摧冰）：锁定技，出牌阶段结束时，你将手牌摸或弃至X张（X为你攻击范围内的角色且至多为5）。若你因此弃置了牌，你弃置场上至多等量张牌，否则跳过本回合弃牌阶段。
+// 未建模：存活计数, 攻击范围判断, charlotte延迟, addTempSkill（DSL无对应原语）
+skill jsrgcuibing(4259005344) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgcuibing（skill.js:13190）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

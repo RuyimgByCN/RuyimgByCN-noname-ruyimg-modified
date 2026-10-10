@@ -1,0 +1,5 @@
+// psqijin：player:phaseDrawBegin1, 多分支选择, 多步骤。
+skill psqijin(4056766822) {
+  trigger phase_draw owner_alive {
+  }
+}

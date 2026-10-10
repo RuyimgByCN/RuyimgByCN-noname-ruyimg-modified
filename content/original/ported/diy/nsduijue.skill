@@ -1,0 +1,20 @@
+skill nsduijue(4088249173) {
+  trigger phase_play owner_is_target {
+    effect remove_skill_by_def(self, 3607483734);
+    effect remove_skill_by_def(self, 3115572483);
+    effect choose_discard_hand_add_skill_by_color(self, 3607483734, 3115572483);
+  }
+
+  trigger phase_play_end owner_is_target {
+    effect remove_skill_by_def(self, 3607483734);
+    effect remove_skill_by_def(self, 3115572483);
+  }
+}
+
+skill nsduijue_use_after_red(3607483734) {
+  view_as juedou play_phase black uses_per_turn 2;
+}
+
+skill nsduijue_use_after_black(3115572483) {
+  view_as juedou play_phase red uses_per_turn 2;
+}

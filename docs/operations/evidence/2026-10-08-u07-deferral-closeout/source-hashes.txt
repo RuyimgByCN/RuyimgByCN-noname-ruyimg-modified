@@ -1,0 +1,6 @@
+f1a5fe53b0ff7be107d6594f8e2ac303709876090398214866f152565021bcfd  packages/extensions/wudian-upstream-noname/assets/cards.json
+a7448ebeb6549bd9d785292eda1f1c471bd5364c446e4571a263cfa196e59a95  packages/extensions/wudian-upstream-noname/package.npack.json
+6fb87286aefc8d3514d5c5b372b2992b5e5a6b832954f8836af324261a6fc612  docs/architecture/native-progress.md
+d09ac0596fcf48d70bd1d4dd52a81fcbcbc5c55d24a8a1d5c125cdd557ac0003  docs/migration/upstream-extension-reconstruction.md
+654d18f067c8ea928f3a8cf5343955f9d45f4dbc5a58789735c8ad878fe87686  docs/operations/evidence/2026-10-08-u07-deferral-closeout/README.md
+b5b423130a4eec1ef7193206b03e842cf48fa005ca26b17f7c951ea5e3604b20  docs/operations/evidence/2026-10-08-u07-deferral-closeout/test-logs.txt

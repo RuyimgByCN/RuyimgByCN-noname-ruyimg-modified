@@ -1,0 +1,5 @@
+// jdshiren：音效名:shiren, player:showCharacterAfter。
+skill jdshiren(3218198516) {
+  trigger phase_any_end owner_alive {
+  }
+}

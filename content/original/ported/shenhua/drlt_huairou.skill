@@ -1,0 +1,6 @@
+// 怀柔：旧 JavaScript 仅作为语义证据；运行时只加载该类型化规则。
+skill drlt_huairou(3699262389) {
+  active play_phase select_he 1 1 card_equip {
+    effect recast_selected(self);
+  }
+}

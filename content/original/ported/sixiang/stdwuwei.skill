@@ -1,0 +1,7 @@
+// 武威：受到伤害后，将一张装备牌置入其他角色装备区；若其攻击范围因此增加，弃其等量张牌。
+// 旧 JS 的「给装备→计算攻击范围差→弃目标对应数量牌」无对应原语（需 equip transfer + 范围差值计算），未建模。
+skill stdwuwei(2772409106) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 挟术（新杀谋钟会）：每回合限一次，使用牌指定其他角色为目标后，
+// 可令此牌对其中一个目标无效并获得其一张牌。
+// 近似：本回合首个非装备牌目标处获其一张 he；令目标无效未建模。
+skill dcsbxieshu(2937379558) {
+  trigger card_targeted owner_source_current_turn_first_target_non_equip optional {
+    effect take_one_card(event_player, self, hand_equip);
+  }
+}

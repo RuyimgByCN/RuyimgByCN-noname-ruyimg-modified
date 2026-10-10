@@ -1,0 +1,8 @@
+// 恩遇（DC 王允）：锁定技，你成为其他角色使用牌的目标后，摸一张牌，并可交给此牌使用者
+// 一张牌。旧 JS 的“每回合每项各限一次”限次省略。
+skill dcenyu(3753328944) locked {
+  trigger card_targeted owner_is_target {
+    effect draw_cards(self, 1);
+    effect choose_give_hand_equip_to_event_player(self);
+  }
+}

@@ -1,0 +1,18 @@
+// 表召（rebiaozhao·手杀张鲁）：结束阶段，若武将牌上没有"表"，可将一张手牌/
+// 装备区牌置于武将牌上作为"表"。同点数牌入弃牌堆后"表"置入弃牌堆并失去1体力；
+// 准备阶段有"表"则移去并令一名角色摸至全场最高手牌数（至多5）并回复1点体力。
+// 上游 (mobile/skill.js rebiaozhao)：trigger player phaseJieshuBegin；direct；
+// filter he>0 且堆空；content chooseCard("he") → addToExpansion gaintag。
+// 实现（2026-09-10 第二百一十九批·A0 复测散批）：主面 trigger phase_end
+// owner_is_target optional + body 级 if skill_pile_count(self, 4210066284) == 0 →
+// store_selected_in_skill_pile(self)（批 215 修复后续体 Cont 297）。
+// 近似（登记债）：①同点数入弃失体力面未建模；②准备阶段移去+摸至全场最高手牌
+// 数（≤5，全场手牌上限查询不可表达）+回复1面未建模；③选牌域 "he" 收窄为手牌；
+// ④direct+chooseCard(bool) 口径锁定为 optional 确认+必选；⑤onremove 清堆未建模。
+skill rebiaozhao(4210066284) {
+  trigger phase_end owner_is_target optional {
+    if skill_pile_count(self, 4210066284) == 0 {
+      effect store_selected_in_skill_pile(self);
+    }
+  }
+}

@@ -1,0 +1,5 @@
+// smshifeng：音效名:xinfu_guanwei, 锁定技, player:equipBegin, 加技能, 含子技能, 异步。
+skill smshifeng(4146244232) {
+  trigger cards_moved owner_alive {
+  }
+}

@@ -1,0 +1,7 @@
+// dcmingfa：旧JS复杂效果。
+// 旧JS含subSkill、gaintag标记、expansion区，DSL无法精确建模。
+skill dcmingfa(4053835055) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

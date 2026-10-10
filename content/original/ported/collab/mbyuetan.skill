@@ -1,0 +1,7 @@
+// 悦弹（高达木牛流马）：距离1内角色被伤害牌指定时，可交牌保护，结算后未受伤则摸1；偶数次交牌回复1。
+// 旧 JS 含交牌→等结算→条件摸牌→计次回复的多阶段异步流程，DSL 无异步等待及条件判断原语。
+skill mbyuetan(2237205808) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

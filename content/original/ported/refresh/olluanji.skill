@@ -1,0 +1,6 @@
+// olluanji（OL袁绍·乱击）：继承自 luanji 的乱击效果，OL版本。旧JS含 inherit:"luanji"，具体逻辑见 luanji。
+skill olluanji(2356909880) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olluanji 为组/继承壳（group 指向子技承载，子技另评），原「audio-only 无规则面」注记系 2026-09-03 批 159 复核改判——壳维持 noop。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

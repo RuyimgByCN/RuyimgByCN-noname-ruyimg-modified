@@ -1,0 +1,6 @@
+// jdjizhu。
+skill jdjizhu(3360037264) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

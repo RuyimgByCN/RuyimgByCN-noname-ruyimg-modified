@@ -1,0 +1,38 @@
+// 追击（宣公主）：出牌阶段开始时，可选择摸两张牌（出牌阶段结束时失去 1 点体力）；
+// 若已受伤，可选择回复 1 点体力（出牌阶段结束时弃置两张牌）。
+// 旧 JS 仅作语义证据；选择、临时效果与阶段末结算由权威状态机校验。
+// 注：旧 JS 用 addTempSkill(...,"phaseUseAfter") 绑定阶段末效果，DSL 以
+// add_skill_until_turn_end 临时技能 + phase_play_end 触发等价表达。
+skill ybzhuiji(3463543744) {
+  trigger phase_play owner_is_target optional {
+    if hp(self) < max_hp(self) {
+      let pick = choose(0, 1);
+      if pick == 0 {
+        effect draw_cards(self, 2);
+        effect add_skill_until_turn_end(self, 2726345451);
+      }
+      if pick == 1 {
+        effect recover_hp(self, 1);
+        effect add_skill_until_turn_end(self, 2840957682);
+      }
+    }
+    if hp(self) == max_hp(self) {
+      effect draw_cards(self, 2);
+      effect add_skill_until_turn_end(self, 2726345451);
+    }
+  }
+}
+
+// 追击·弃牌分支：出牌阶段结束时弃置两张牌。
+skill ybzhuiji_discard(2840957682) locked {
+  trigger phase_play_end owner_is_target {
+    effect discard_hand_equip(self, 2);
+  }
+}
+
+// 追击·失体分支：出牌阶段结束时失去 1 点体力。
+skill ybzhuiji_losehp(2726345451) locked {
+  trigger phase_play_end owner_is_target {
+    effect lose_hp(self, 1);
+  }
+}

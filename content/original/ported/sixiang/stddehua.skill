@@ -1,0 +1,8 @@
+// 德华：其他角色的回合结束时，若你本回合失去了恰好两张牌，你可以从基本牌堆中选择一张基本牌并使用之。
+// 旧 JS 涉及「从全基本牌池选牌→虚拟使用」，DSL 缺少通用虚拟牌选择原语（choose_use_virtual_sha 仅限杀，不含桃/闪等）。
+// 无法精确建模。
+skill stddehua(2770973565) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

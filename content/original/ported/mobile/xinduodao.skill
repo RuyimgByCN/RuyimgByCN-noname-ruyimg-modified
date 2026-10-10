@@ -1,0 +1,5 @@
+skill xinduodao(3614910583) {
+  trigger damage owner_is_target_source_has_weapon optional {
+    effect gain_target_equipment(self, event_source, weapon);
+  }
+}

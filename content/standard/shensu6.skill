@@ -1,0 +1,4 @@
+// Skill shensu6(140) - standard variant
+skill shensu6(140) {
+  modifier attack_range add 1;
+}

@@ -1,0 +1,7 @@
+// 苦肉：旧 JS 的弃牌成本与失去体力按原顺序执行。
+skill rekurou(2651237190) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect lose_hp(self, 1);
+  }
+}

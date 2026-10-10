@@ -1,0 +1,27 @@
+// 勤勉（王皑）：锁定技。准备阶段开始时，或受到伤害后，你摸一张「勤勉」牌
+// （受到伤害时按伤害点数摸牌，摸得牌打上「勤勉」标记）；一名角色的结束阶段，
+// 你可弃置手牌中全部「勤勉」牌，对当前回合角色造成等量伤害（若你的手牌全部
+// 为「勤勉」牌，伤害值改为你的手牌数）。
+// 上游 (sp/skill.js qinmian L6)：trigger player [phaseZhunbeiBegin, damageEnd]
+// getIndex=num frequent draw(1, gaintag "qinmian")；group qinmian_damage：
+// global phaseJieshuBegin → isAllQinmian ? countCards : 1 点伤害。
+// 实现（2026-09-13 第二百六十五批·gaintag 族状态机第三件，ADR 0641 §8.53，
+// dcniji 双触发共调模式复用）：resolve_qinmian(self, self_skill, mode, amount)
+// （ABI 714 / tag 737，单发无续体）：mode 0 = prepare(1)/damage(amount) 摸牌
+// 打标（blake2b("qinmian") gaintag，content_card_tags）；mode 1 = phase_end
+// optional：弃全部标记牌 + 对当前回合角色 deal_damage(isAll ? n : 1)。
+// 近似（登记债）：①frequent 锁定为强制自动（Prepare/damage 直摸）；
+// ②「手牌全部为标记牌」判定为结算时口径（与上游一致 ✓）。
+skill qinmian(4117221194) {
+  trigger phase_prepare owner_is_target {
+    effect resolve_qinmian(self, self_skill, 0, 1);
+  }
+
+  trigger damage owner_is_target {
+    effect resolve_qinmian(self, self_skill, 0, event_amount);
+  }
+
+  trigger phase_end owner_alive optional {
+    effect resolve_qinmian(self, self_skill, 1, 0);
+  }
+}

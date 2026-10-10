@@ -1,0 +1,8 @@
+// 令法·桃（张让相关）：配合「令法」。其他角色使用【桃】后，若其有牌，
+// 需交给你一张牌，否则你对其造成1点伤害。
+// 缺条件强制交牌与否则伤害原语，空定义。
+skill twlingfa_tao(2239524942) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twlingfa_tao = 标记型技能（charlotte，skill.js:25294），无规则面。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

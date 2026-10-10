@@ -1,0 +1,8 @@
+$ swd 第六批定向：吸血鬼指环（杀伤吸血/满血不触发）
+test swd_xixue_lifesteal_on_sha_damage ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（405/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v89→v90，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Xixueguizhihuan 编码 109（equip5 宝物/archive/a0/ALL 同步）；commit_damage 杀伤害后吸血——来源存活+已受伤+伤害牌为【杀】→ recover(amount, None)；非杀/满血不触发（上游 xixue damageEnd filter 同口径）
+$ 上游核验：card/swd/card.js xixueguizhihuan（equip5/skills xixue）；skill.js xixue（equipSkill/trigger source damageEnd/forced/filter event.card.name==sha && hp<maxHp/content recover(trigger.num)）
+$ 测试脚手架：两局间 sha_used_play_phase 快照重置（同回合连杀两验证）

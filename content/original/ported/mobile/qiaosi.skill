@@ -1,0 +1,6 @@
+// qiaosi（巧思）：出牌阶段限一次，你可以表演「大键角色图」并根据表演结果获得相应的牌。然后，你选择一项：1.弃置X张牌。2.将X张牌交给一名其他角色。（X为你以此法得到的牌数）
+skill qiaosi(2680589473) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

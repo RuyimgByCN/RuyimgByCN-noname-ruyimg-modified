@@ -1,0 +1,16 @@
+// 蛮肆（花鬘）：当【南蛮入侵】对任意角色造成伤害后，你摸一张牌。出牌阶段可将
+// 所有手牌当【南蛮入侵】使用（限一次）。
+// 上游 (xianding/skill.js mansi)：trigger global damageEnd；filter = event.card?.name
+// == "nanman"（不限目标）；frequent；content = addMark(mansi,1,false) + draw(1)。
+// 实现（2026-09-03 第一百六十三批·近似重写，2026-08-11 旧头注「无精确 nanman-only
+// filter」已失效——批 152/163 先例）：damage 触发 + 本批新注册过滤器
+// owner_alive_damage_card_nanman（六点注册，零 ABI；Damage 事件 + TrickNanman）→
+// draw_cards(self, 1)（frequent 口径省略 optional 确认，标注近似）。
+// 近似（登记债）：①上游计数标记（intro「已因此技能得到了#张牌」纯展示面）省略；
+// ②viewas 子技「出牌阶段限一次将所有手牌当【南蛮入侵】使用」——动态全手牌
+// view_as 语法缺口，维持债（与批 157 sbjiang_qiben 同池）。
+skill mansi(3673557022) {
+  trigger damage owner_alive_damage_card_nanman {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,4 @@
+// Skill anx4(182) - trigger variant
+skill anx4(182) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

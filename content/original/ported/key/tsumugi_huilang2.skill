@@ -1,0 +1,16 @@
+// 隐廊·终段（key tsumugi_huilang2）：锁定技，回合开始时，你将「隐」全部置入
+// 手牌，然后可以令至多等量角色各摸一张牌。
+// 上游 (key/skill.js tsumugi_huilang2)：trigger player phaseBegin；forced；
+// filter pile>0；content gain(cards, "draw") + chooseTarget([1, num]) 各摸 1。
+// 实现（2026-09-10 第二百零四批·gain_whole_skill_pile 消费；2026-09-11 第二百
+// 三十八批·单债升级）：gain_whole_skill_pile(self, self_skill, 3040619945) +
+// choose_targets_draw(self, 1, 8, any)（ABI 106 系既有原语；至多等量角色分支
+// 恢复）。
+// 近似（登记债）：①动态上限 num=置入张数收窄为字面量 8（choose_targets_draw
+// 的 target_count 为字面量 u8）；②各摸 1 与上游一致。
+skill tsumugi_huilang2(3040619945) {
+  trigger phase_begin owner_is_target {
+    effect gain_whole_skill_pile(self, self_skill, 3040619945);
+    effect choose_targets_draw(self, 1, 8, any);
+  }
+}

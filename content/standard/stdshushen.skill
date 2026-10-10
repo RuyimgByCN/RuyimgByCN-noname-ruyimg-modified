@@ -1,0 +1,6 @@
+// 标准甘夫人「淑慎」：每回复一点体力，均可独立选择一名其他角色摸牌。
+skill stdshushen(3504783479) {
+  trigger hp_recovered owner_is_target {
+    effect choose_other_draw_by_hand_count(self, 1, 2, event_amount);
+  }
+}

@@ -1,0 +1,6 @@
+// jsrgdangren（当仁）：转换技。阳：当你需要对自己使用【桃】时，你可以视为使用之。阴：当你可以对其他角色使用【桃】时，你须视为使用之。
+// 类型：转换技
+// 未建模：转换技切换, hiddenCard, 转换技, 全局状态, storage状态, chooseToUse转化 ...等10项（DSL无对应原语）
+skill jsrgdangren(3125402676) {
+  view_as tao play_phase any;
+}

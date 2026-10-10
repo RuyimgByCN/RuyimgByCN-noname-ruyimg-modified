@@ -1,0 +1,11 @@
+// 忠勇（关平）：你使用的【杀】被其他角色闪避后,可将该【闪】交给一名其他角色,
+// 然后可对闪避者使用一张【杀】。
+// 旧 JS 仅作语义证据;「交给目标不可为杀目标」约束未建模（choose_other_gain_event_cards
+// 仅限其他角色）,「可对闪避者使用杀」以无条件虚拟杀近似（略强）。
+// sha_dodged 事件 + gain_event_cards 组合的首个用例。
+skill zhongyong(2156569821) {
+  trigger sha_dodged owner_source_sha_dodged optional {
+    effect choose_other_gain_event_cards(self);
+    effect use_virtual_card_on(self, sha, event_player);
+  }
+}

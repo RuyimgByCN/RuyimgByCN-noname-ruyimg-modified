@@ -1,0 +1,29 @@
+# U05 mtg 首切片测试日志（2026-10-08，龙颅山峰，规则 v99→v100）
+
+$ cargo test --offline -p engine-native
+engine-native: 416 passed / 0 failed / 1 ignored（v99 基线 414 +2 新增 mtg 回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_mtg
+test result: ok. 2 passed; 0 failed（mtg_longshanfeng_land_flow + mtg_real_host_full_lifecycle）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 122、HostBehavior ALL 84、伴随技能 31 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v99→v100 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js 12 张全 land；type.js `land: 0.6`
+- game/index.js:1674 changeLand：UI 覆盖 + addGlobalSkill（全局技）+ addTempSkill("land_used")
+- card.js mtg_longlushanfeng：换地 + chooseControl 获得杀/闪 + createCard；skill.js mod cardUsable 杀 +1
+- translate.js:40 `mtg_longlushanfeng: "龙颅山峰"`（源码校正：非「龙颅山脊」）
+- 来源勘误：ow/xianjian 为 character/ 武将子目录（archive/upstream/.../character/ow、character/xianjian）
+
+## 测试迭代记录
+- cards.json `pack` 字段须为对象（桥接校验 InvalidField 修正）
+- asset_manifest.package_id 须与 manifest.package_id 一致（validate 报错修正）
+- 挂起往返 UnknownMachine → card_kind_host_skills 注册地机器定义（def_key 解析）
+- land_used 初版漏置位（机器 Act 补）；sha 提交初版双标记吃掉加成（改为额外杀才置 land_sha_used）
+- 换回合重置 land_used/land_sha_used（两处 turn-switch 站点；同回合 Play 重入站点不重置）

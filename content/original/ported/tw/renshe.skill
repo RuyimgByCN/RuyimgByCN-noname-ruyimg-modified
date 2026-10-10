@@ -1,0 +1,9 @@
+// 任涉：受到伤害后，可选择①变更势力、②令〖外使〗发动次数+1、③与另一名
+// 角色各摸一张牌。
+// 旧 JS 的「三选一分叉」「变更势力」无对应原语；以选项③近似（与另一名
+// 角色各摸一张牌，已注明）。
+skill renshe(4095603820) {
+  trigger damage owner_is_target {
+    effect choose_other_draw_or_recover(self, 1, 0, 0);
+  }
+}

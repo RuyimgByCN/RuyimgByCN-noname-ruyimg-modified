@@ -1,0 +1,21 @@
+// 魂姿（offline 雁翎孙策 ylyg_hunzi）：觉醒技，当你的体力为 1 时：加 1 点体力上限，
+// 获得〖英姿〗与〖英魂〗。
+// 上游 (offline/skill ylyg_hunzi)：trigger changeHp + hp==1；juexingji；
+// gainMaxHp(1) + addSkills([reyingzi, yinghun])。
+// 实现（2026-09-09 第一百八十八批，零新原语）：hp_lost owner_is_target + body
+// hp==1 门控 + once 标记（kud_buhui 同款）→ change_max_hp(+1) + 跨包 add_skill
+// 字面量（twfucheng 先例；refresh reyingzi=2412932912、shenhua yinghun=3072887319，
+// 两包均为 offline 声明依赖）。
+// 近似（登记债）：触发面收窄为体力流失（上游 changeHp 含回复至 1 的路径）。
+skill ylyg_hunzi(2262123725) {
+  trigger hp_lost owner_is_target {
+    if mark_count(self, 2262123725) == 0 {
+      if hp(self) == 1 {
+        effect change_max_hp(self, 1);
+        effect add_skill(self, 2412932912);
+        effect add_skill(self, 3072887319);
+        effect add_mark(self, 2262123725, 1);
+      }
+    }
+  }
+}

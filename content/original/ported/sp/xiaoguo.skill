@@ -1,0 +1,5 @@
+skill xiaoguo(3124297312) {
+  trigger phase_end owner_alive_other_phase_end_hand_nonempty {
+    effect resolve_sp_xiaoguo(self, event_player);
+  }
+}

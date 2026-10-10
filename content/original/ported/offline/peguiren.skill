@@ -1,0 +1,6 @@
+// peguiren：锁定技, source:damageSource, 需选择目标, 加技能, 含子技能, 异步。
+skill peguiren(2389630215) {
+  trigger damage owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

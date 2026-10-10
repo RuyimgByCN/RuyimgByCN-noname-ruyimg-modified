@@ -1,0 +1,5 @@
+// 【乡害】把自己的装备牌视为【酒】，并由存活拥有者让其他角色的手牌上限各减一。
+skill xianghai(3356961773) {
+  modifier card_name(equip) override jiu;
+  modifier global_hand_limit add -queried_player_other_than_owner;
+}

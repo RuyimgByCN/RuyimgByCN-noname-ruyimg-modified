@@ -1,0 +1,536 @@
+{
+  "source": "qita/sanguosha/noname/extension/杀海拾遗/character/ow",
+  "upstream_path": "extension/杀海拾遗/character/ow/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": {
+    "name": "shaai-ow-upstream-noname",
+    "version": 1,
+    "description": "G1 纵切：上游 ow 士兵76（突击+目镜）",
+    "card_prefix": "ow_"
+  },
+  "cards": [],
+  "host_skills": [],
+  "deferred": [],
+  "skills": [
+    {
+      "name": "guangshu",
+      "general": "ow_zhixuzhiguang",
+      "mapping": "host:wudian_guangshu"
+    },
+    {
+      "name": "guangshu_heart",
+      "general": "ow_zhixuzhiguang",
+      "mapping": "host:wudian_guangshu_heart"
+    },
+    {
+      "name": "guangshu_diamond",
+      "general": "ow_zhixuzhiguang",
+      "mapping": "host:wudian_guangshu_diamond"
+    },
+    {
+      "name": "guangshu_club",
+      "general": "ow_zhixuzhiguang",
+      "mapping": "host:wudian_guangshu_club"
+    },
+    {
+      "name": "guangshu_spade",
+      "general": "ow_zhixuzhiguang",
+      "mapping": "host:wudian_guangshu_spade"
+    },
+    {
+      "name": "ziyu",
+      "general": "ow_chanyata",
+      "mapping": "host:wudian_ziyu"
+    },
+    {
+      "name": "shouhu",
+      "general": "ow_tianshi",
+      "mapping": "host:wudian_shouhu"
+    },
+    {
+      "name": "duwen",
+      "general": "ow_heibaihe",
+      "mapping": "host:wudian_duwen"
+    },
+    {
+      "name": "paotai",
+      "general": "ow_tuobiang",
+      "mapping": "host:wudian_paotai"
+    },
+    {
+      "name": "paotai2",
+      "general": "ow_tuobiang",
+      "mapping": "host:wudian_paotai_fire"
+    },
+    {
+      "name": "bshaowei",
+      "general": "ow_baolei",
+      "mapping": "host:wudian_baolei_switch"
+    }
+  ],
+  "generals": [
+    {
+      "name": "士兵76",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "tuji",
+          "mapping": "host:wudian_tuji"
+        },
+        {
+          "name": "mujing",
+          "mapping": "host:wudian_mujing"
+        },
+        {
+          "name": "lichang",
+          "mapping": null,
+          "reason": "下准备阶段子回合时点未建模——2026-10-08 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "虚无之光",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "guangshu",
+          "mapping": "host:wudian_guangshu"
+        }
+      ]
+    },
+    {
+      "name": "禅雅塔",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "ziyu",
+          "mapping": "host:wudian_ziyu"
+        }
+      ]
+    },
+    {
+      "name": "天使",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "shouhu",
+          "mapping": "host:wudian_shouhu"
+        },
+        {
+          "name": "ziyu",
+          "mapping": "host:wudian_ziyu"
+        },
+        {
+          "name": "feiying",
+          "mapping": null,
+          "reason": "源定义不在 ow/skill.js（共享技能文件）——2026-10-08 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "黑百合",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "duwen",
+          "mapping": "host:wudian_duwen"
+        }
+      ]
+    },
+    {
+      "name": "托比昂",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "paotai",
+          "mapping": "host:wudian_paotai"
+        },
+        {
+          "name": "paotai2",
+          "mapping": "host:wudian_paotai_fire"
+        },
+        {
+          "name": "maoding",
+          "mapping": null,
+          "reason": "零件牌池（hslingjian）不在原生目录——2026-10-08 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "堡垒",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "bshaowei",
+          "mapping": "host:wudian_baolei_switch"
+        },
+        {
+          "name": "zhencha",
+          "mapping": "host:wudian_baolei_switch"
+        },
+        {
+          "name": "zhencha_draw",
+          "mapping": "host:wudian_zhencha_draw"
+        }
+      ]
+    },
+    {
+      "name": "卢西奥",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "yuedong",
+          "mapping": "host:wudian_yuedong"
+        },
+        {
+          "name": "kuoyin",
+          "mapping": "host:wudian_kuoyin"
+        },
+        {
+          "name": "huhuan",
+          "mapping": "host:wudian_huhuan"
+        }
+      ]
+    },
+    {
+      "name": "美",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "jidong",
+          "mapping": "host:wudian_jidong"
+        },
+        {
+          "name": "baoxue",
+          "mapping": "host:wudian_baoxue"
+        },
+        {
+          "name": "bingqiang",
+          "mapping": null,
+          "reason": "座位相邻/距离修饰多目标（bingqiang2-5 子技族+changeTarget 相邻扩展）——2026-10-08 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "路霸",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "liangou",
+          "mapping": "host:wudian_liangou"
+        },
+        {
+          "name": "xiyang",
+          "mapping": "host:wudian_xiyang"
+        }
+      ]
+    },
+    {
+      "name": "源氏",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "feiren",
+          "mapping": "host:wudian_feiren"
+        },
+        {
+          "name": "lianpo",
+          "mapping": null,
+          "reason": "源定义不在 ow/skill.js（共享技能文件，feiying 同款）——2026-10-09 暂缓"
+        },
+        {
+          "name": "zhanlong",
+          "mapping": null,
+          "reason": "limited+createCard 凭空造牌 3 杀+zhanlong2 临时技链——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "法老之鹰",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "feidan",
+          "mapping": "host:wudian_feidan"
+        },
+        {
+          "name": "huoyu",
+          "mapping": null,
+          "reason": "limited+虚拟 useCard（chiyuxi 凭空用牌×2）——虚拟用牌原语同 youzhan 缺口，2026-10-09 暂缓"
+        },
+        {
+          "name": "feiying",
+          "mapping": null,
+          "reason": "源定义不在 ow/skill.js（共享技能文件）——2026-10-08 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "安娜",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "zhiyuan",
+          "mapping": "host:wudian_zhiyuan"
+        },
+        {
+          "name": "mianzhen",
+          "mapping": null,
+          "reason": "目标侧 chooseToRespond 响应询问+mianzhen2 永久子技——2026-10-09 暂缓"
+        },
+        {
+          "name": "aqianghua",
+          "mapping": null,
+          "reason": "给牌+护甲+aqianghua2 子技链——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "麦克雷",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "shenqiang",
+          "mapping": "host:wudian_shenqiang"
+        },
+        {
+          "name": "shanguang",
+          "mapping": null,
+          "reason": "shanguang2 全卡牌禁用子技（mod cardEnabled/cardUsable/cardRespondable/cardSavable 全 false）——2026-10-09 暂缓"
+        },
+        {
+          "name": "tiandan",
+          "mapping": null,
+          "reason": "createCard 凭空造杀×N+主动跳过出牌/弃牌阶段（skip）——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "狂鼠",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "shihuo",
+          "mapping": "host:wudian_shihuo"
+        },
+        {
+          "name": "liudan",
+          "mapping": null,
+          "reason": "杀使用时 50% 概率随机追加合法目标（RNG 目标追加+lib.filter.targetEnabled 复用）——2026-10-09 暂缓"
+        },
+        {
+          "name": "shoujia",
+          "mapping": null,
+          "reason": "给牌+shoujia2 挂牌子技（storage 双向）——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "莱因哈特",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "mengji",
+          "mapping": "host:wudian_mengji"
+        },
+        {
+          "name": "zhongdun",
+          "mapping": null,
+          "reason": "init2 开局 +8 护甲（无 GameStart 事件种类=开局事件基建缺口）+主动转甲技——2026-10-09 暂缓；mengji 的 storage.zhongdun 置位以持技等价"
+        }
+      ]
+    },
+    {
+      "name": "半藏",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "yinbo",
+          "mapping": "host:wudian_yinbo"
+        },
+        {
+          "name": "bfengshi",
+          "mapping": null,
+          "reason": "shaBegin Math.random 概率直击+countUsed 攻距+组技 bfengshi2/3/4——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "奥丽莎",
+      "faction": "wu",
+      "hp": 4,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "qianggu",
+          "mapping": "host:wudian_qianggu"
+        },
+        {
+          "name": "qianggu2",
+          "mapping": "host:wudian_qianggu_guard"
+        },
+        {
+          "name": "woliu",
+          "mapping": null,
+          "reason": "回合结束选 1-2 目标共挂 woliu2 组距离/杀限定+dieBegin/phaseBegin 清除组——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "温斯顿",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "feitiao",
+          "mapping": "host:wudian_feitiao"
+        },
+        {
+          "name": "dianji",
+          "mapping": null,
+          "reason": "viewAs 惊雷杀（jingleishan 牌种不在原生目录）+距离 2 限定——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "查莉娅",
+      "faction": "wei",
+      "hp": 4,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "pingzhang",
+          "mapping": "host:wudian_pingzhang"
+        },
+        {
+          "name": "owliyong",
+          "mapping": "host:wudian_owliyong"
+        }
+      ]
+    },
+    {
+      "name": "黑影",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "yinshen",
+          "mapping": "host:wudian_yinshen"
+        },
+        {
+          "name": "qinru",
+          "mapping": null,
+          "reason": "useCardToBegin 判定+跨回合目标存储列表（qinru_turn 分档）——2026-10-09 暂缓"
+        },
+        {
+          "name": "maichong",
+          "mapping": null,
+          "reason": "qinru 存储链（对已入侵者随机弃）——随 qinru 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "死神",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "xiandan",
+          "mapping": "host:wudian_xiandan"
+        },
+        {
+          "name": "yihun",
+          "mapping": null,
+          "reason": "虚拟 useCard（useCard({name:sha}) 指定目标回合）——虚拟用牌原语同 youzhan/huoyu 缺口，2026-10-09 暂缓"
+        },
+        {
+          "name": "shouge",
+          "mapping": null,
+          "reason": "createCard 治疗波（牌种跨包依赖炉石）——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "D.Va",
+      "faction": "shu",
+      "hp": 2,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "jijia",
+          "mapping": "host:wudian_jijia"
+        },
+        {
+          "name": "tuijin",
+          "mapping": null,
+          "reason": "机甲血>0 时距离>1 目标推移（tuijin2 距离限定子技）——2026-10-09 暂缓"
+        },
+        {
+          "name": "zihui",
+          "mapping": null,
+          "reason": "自爆 AOE（chooseToDiscard n 张或 2 火伤，机甲血=弃牌数）——2026-10-09 暂缓"
+        },
+        {
+          "name": "chongzhuang",
+          "mapping": null,
+          "reason": "重装累计（机甲血归零后伤害计数 4 复活）——2026-10-09 暂缓"
+        }
+      ]
+    },
+    {
+      "name": "猎空",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "shanxian",
+          "mapping": null,
+          "reason": "区域离场（he 区牌入 storage 离场区，shanhui 回归复活含位置 s 的 createCard 重造）——牌守恒纪律结构性依赖，2026-10-09 暂缓"
+        },
+        {
+          "name": "shanhui",
+          "mapping": null,
+          "reason": "随 shanxian 离场存储链——2026-10-09 暂缓"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+// 势杨弘：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI509 原语。
+skill mbjianji(3226006705) {
+  active play_phase uses_per_turn 1 targets 2 2 select_hand 1 1 {
+    effect resolve_mbjianji(self);
+  }
+}
+
+skill mbyuanmo(4112615395) {
+  trigger phase_prepare owner_is_target_can_move_field_card_mbyuanmo_twice_per_turn optional {
+    effect resolve_mbyuanmo(self);
+  }
+
+  trigger damage owner_is_target_can_move_field_card_mbyuanmo_twice_per_turn optional {
+    effect resolve_mbyuanmo(self);
+  }
+}

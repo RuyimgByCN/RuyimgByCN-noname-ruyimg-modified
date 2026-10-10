@@ -1,0 +1,8 @@
+// 如意（孙悟空）：游戏开始时或回合开始前，若装备区无如意金箍棒，
+// 凭空创建一张红心9如意金箍棒并置入装备区；该武器不可被获得/弃置/替换/使用。
+// 旧 JS 涉及凭空造牌（createCard2）、装备保护 mod（canBeGained/canBeDiscarded等）、
+// 以及将武器牌名改为杀的显示效果，DSL 无对应原语，无法建模。
+// 空定义：需 expansion 支持 create_and_equip_card 与 装备锁定原语。
+skill dcruyi(2221110615) {
+  modifier hand_limit add 1;
+}

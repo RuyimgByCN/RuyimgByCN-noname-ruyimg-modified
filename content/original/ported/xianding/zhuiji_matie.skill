@@ -1,0 +1,7 @@
+// 追击·马铁（装备技）：你使用【杀】指定目标后摸一张牌。
+// 旧 JS 的「距离判定」无对应原语；以使用【杀】后摸一张近似（已注明）。
+skill zhuiji_matie(2420806234) {
+  trigger card_used owner_source_sha {
+    effect draw_cards(self, 1);
+  }
+}

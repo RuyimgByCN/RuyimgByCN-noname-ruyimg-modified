@@ -1,0 +1,6 @@
+// chixueqingfeng2：修改技
+skill chixueqingfeng2(3431665489) locked {
+  // modifier: cardEnabled 需手动分析;
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

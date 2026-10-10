@@ -1,0 +1,11 @@
+// 试锋（王越）：每回合每项限一次：1. 其他角色对你使用伤害牌结算后，你可以视为
+// 对其使用一张【决斗】；2. 其他角色使用【决斗】指定目标后，若目标不为你，你可
+// 获得此牌并将目标更改为你。
+// 上游 (xianding/skill.js:3260-3333)：useCardAfter 虚拟【决斗】+ useCardToPlayered
+// 决斗目标抢夺（gain 牌 + evt.targets 改写）。
+// 「虚拟【决斗】」「决斗目标更改/抢夺」均无对应原语（虚拟杀/南蛮已有，决斗无）。
+// 诚实 noop（保真度债，ADR 0597）。2026-08-15：随上游 v1.11.5 新武将 dc_xia_wangyue 移植。
+skill shifeng(2444776157) locked {
+  // INTENTIONAL_EMPTY_NOOP: virtual juedou + target steal unavailable
+  modifier hand_limit add 0;
+}

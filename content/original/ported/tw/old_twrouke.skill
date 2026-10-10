@@ -1,0 +1,9 @@
+// 柔克：摸牌阶段外一次得到超过一张牌后摸一张牌。
+skill old_twrouke(3805481666) locked {
+  trigger cards_drawn owner_gains_multiple_outside_own_draw {
+    effect draw_cards(self, 1);
+  }
+  trigger cards_moved owner_gains_multiple_outside_own_draw {
+    effect draw_cards(self, 1);
+  }
+}

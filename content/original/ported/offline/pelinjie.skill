@@ -1,0 +1,8 @@
+// 凛诫（PE神钟会）：每轮开始可对一名角色造成 1 伤并给 1 凛；有凛者受伤后须弃手牌，
+// 弃尽则你再对其造成 1 伤。
+// 近似：每轮首次准备阶段选人造成 1 点伤害（凛标记与连锁弃牌伤未建模）。
+skill pelinjie(2233203037) {
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect choose_other_damage(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 机巧辅助（曹仁）：出牌阶段开始/结束时清空 storage，重置可禁用花色。
+// 旧 JS 为 silent helper，DSL 无法精确建模 storage 清理逻辑。
+skill jiyu2(3065120605) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

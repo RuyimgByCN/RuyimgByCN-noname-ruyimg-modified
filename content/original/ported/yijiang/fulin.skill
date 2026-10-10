@@ -1,0 +1,7 @@
+// 福临：弃牌阶段开始时记录此后获得的牌（gaintag），此阶段内不计入手牌上限且不可弃置。
+// 旧 JS 的自定义 gaintag 系统+条件手牌上限修改无对应原语，暂留空定义。
+skill fulin(3056726213) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

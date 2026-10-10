@@ -1,0 +1,8 @@
+// 缔盟（界鲁肃）：弃 X 张牌交换两角色手牌。
+// 旧 JS 的「整手交换」无对应原语；以弃一张手牌并摸一张近似（交换未建模，已注明）。
+skill redimeng(3250945912) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

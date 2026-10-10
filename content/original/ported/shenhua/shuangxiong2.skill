@@ -1,0 +1,5 @@
+// 双雄·2（颜良文丑）：手牌当【决斗】。
+// 旧 JS 的「颜色条件」无对应原语；以手牌当【决斗】近似（花色条件未建模，已注明）。
+skill shuangxiong2(3514128447) {
+  view_as juedou play_phase any from hand;
+}

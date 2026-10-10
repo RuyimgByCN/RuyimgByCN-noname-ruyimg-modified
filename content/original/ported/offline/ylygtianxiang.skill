@@ -1,0 +1,7 @@
+// ylygtianxiang（锁定技/触发技）：音效名:retianxiang, 锁定技, player:damage_before, target:compare, global:phaseEnd, 需弃牌, 需选择目标, 需拼点, 失去体力, 移出游戏, 加技能, 含子技能, 异步。
+skill ylygtianxiang(2514166064) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+    effect lose_hp(self, 1);
+  }
+}

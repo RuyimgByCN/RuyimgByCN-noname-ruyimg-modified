@@ -1,0 +1,9 @@
+// 振锋（黄祖）：其他角色使用牌后（每回合一次），你可选择一种花色，弃置
+// 其一张该花色手牌/装备牌，然后你摸与「振锋」标记数等量的牌并增加标记。
+// 旧 JS 的「按花色弃目标牌」无对应原语，以目标弃一张牌近似（花色选择与
+// 标记计数未建模，已注明）。
+skill zhenfeng(3185291894) {
+  trigger card_used owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

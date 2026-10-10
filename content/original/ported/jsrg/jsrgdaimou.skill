@@ -1,0 +1,30 @@
+// jsrgdaimou（殆谋）：每回合各限一次。当一名角色使用【杀】指定其他角色为目标后，
+// 你可以用牌堆顶的牌蓄谋；当【杀】指定你为目标时，你须弃置你区域里的一张蓄谋牌。
+// 上游 jsrg/skill.js:3086（trigger.global useCardToPlayer + storage jsrgdaimou_used）。
+// 实现（切片 3b）：`card_targeted` 双分支——
+// ①「他人」：optional confirm → storage key 1 门槛 → place_deck_top_xumou
+//   （ABI 666，牌堆顶实体牌真实移入判定区并打 XUMOU_TAG）；
+// ②「我」：forced（上游「你须」无 confirm）→ storage key 2 门槛 →
+//   discard_one_own_xumou（确定性弃判定区最后一张蓄谋牌）；
+// ③ turn_ended 清零两键（近似上游 addTempSkill jsrgdaimou_used 回合末移除）。
+// 近似：②弃置不开放选择盘（上游 chooseButton 强制选一张，此处置换为确定性取最后
+// 一张）；「蓄谋牌结算=视为使用原牌」由引擎 XUMOU_TAG 判定管线承担（切片 2，
+// code 55 事件）；判定区被禁用（isDisabledJudge）门槛未建模。
+skill jsrgdaimou(2351858276) {
+  trigger card_targeted owner_alive_other_targeted_by_sha optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect place_deck_top_xumou(self, self_skill);
+    }
+  }
+  trigger card_targeted owner_alive_targeted_by_other_sha_judge_xumou {
+    if storage_get(self_skill, 2) == 0 {
+      effect storage_set(self_skill, 2, 1);
+      effect discard_one_own_xumou(self, self_skill);
+    }
+  }
+  trigger turn_ended owner_alive {
+    effect storage_set(self_skill, 1, 0);
+    effect storage_set(self_skill, 2, 0);
+  }
+}

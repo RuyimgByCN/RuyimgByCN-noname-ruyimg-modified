@@ -1,0 +1,14 @@
+// baonvezhi（暴虐值）：受到伤害或造成伤害时获得等量暴虐值标记（上限5）。
+// 旧 JS 使用 charlotte + addSkill + change() 动态累计标记，含 addMark/removeMark 双路径；
+// DSL 中无 charlotte 等效原语，以 damage 触发 + add_mark 近似，上限检查依赖引擎标记上限。
+skill baonvezhi(2181556867) {
+  // 过滤器修正（2026-08-06，C 段 omp）：原 per_damage_point 按伤害点数多次
+  // 触发且每次携带完整量，add_mark(event_amount) 会重复累计（伤害 3 加 9 而非 3）；
+  // 上游 damageEnd 每伤害事件一次 + trigger.num 完整量，改用 owner_is_target。
+  trigger damage owner_is_target {
+    effect add_mark(self, 2181556867, event_amount);
+  }
+  trigger damage owner_is_source {
+    effect add_mark(self, 2181556867, event_amount);
+  }
+}

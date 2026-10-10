@@ -1,0 +1,8 @@
+// 蛇子（魔蛇）：准备阶段，选择一名有牌的角色，选择其一个区域，获得其中的装备牌。
+// 旧 JS 的「区域选择（手牌/装备/判定）」与「按区域取装备」无精确原语；
+// 近似为出牌阶段直接获取目标一张装备牌。
+skill mbshezi(3414403317) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect take_one_card(event_source, self, equip);
+  }
+}

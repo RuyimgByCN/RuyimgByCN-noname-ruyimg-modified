@@ -1,0 +1,8 @@
+// 联对（李典）：任意角色使用牌后，若上一张使用牌的角色与本次不同，且
+// 其中一方为你，另一方为其他角色，当前用牌角色可令上一张用牌角色摸两张牌。
+// 旧 JS 的「上一张用牌者历史比较」无对应原语，未建模（已注明）。
+skill liandui(2305395418) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// dcmurui：摸2牌。
+skill dcmurui(2329694005) {
+  trigger phase_any_end owner_alive_not_target optional {
+    // 旧JS含复杂条件逻辑，效果已简化
+    effect draw_cards(self, 1);
+  }
+}

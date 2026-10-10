@@ -1,0 +1,8 @@
+// 结姻：出牌阶段限一次，弃置两张手牌，令自己与一名受伤男性角色各回复 1。
+skill jieyin(25) {
+  active play_phase uses_per_turn 1 targets 1 1 other wounded male select_hand 2 2 {
+    effect discard_selected(self);
+    effect recover_hp(self, 1);
+    effect recover_hp(event_source, 1);
+  }
+}

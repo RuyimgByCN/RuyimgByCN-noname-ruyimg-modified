@@ -1,0 +1,222 @@
+warning: unused imports: `CardId` and `EventId`
+  --> crates/engine-native/src/archive.rs:20:18
+   |
+20 | use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+   |                  ^^^^^^  ^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `crate::machine::LogEvent`
+  --> crates/engine-native/src/archive.rs:21:5
+   |
+21 | use crate::machine::LogEvent;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/src/view.rs:10:25
+   |
+10 | use crate::{GameAction, CommandOutcome};
+   |                         ^^^^^^^^^^^^^^
+
+warning: unreachable pattern
+    --> crates/engine-native/src/archive.rs:1433:9
+     |
+1421 |         29 => {
+     |         -- matches all the relevant values
+...
+1433 |         29 => {
+     |         ^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/src/content/standard.rs:2811:9
+     |
+2811 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+     |         ----^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1728:19
+     |
+1641 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+1728 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1729:19
+     |
+1641 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+1729 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1730:19
+     |
+1681 |                 CardKind::ShanDian => {
+     |                 ------------------ matches all the relevant values
+...
+1730 |                 | CardKind::ShanDian => unreachable!("handled above"),
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/presentation.rs:269:9
+    |
+269 |     let mut line = |txt: &str, s: &mut String| {
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unreachable pattern
+    --> crates/engine-native/src/snap.rs:1064:13
+     |
+1038 | /             MachineSnapshot::Sha { card, .. }
+1039 | |             | MachineSnapshot::Duel { card, .. }
+1040 | |             | MachineSnapshot::NullifyWindow { card, .. }
+1041 | |             | MachineSnapshot::PlaceDelayed { card, .. }
+...    |
+1047 | |             | MachineSnapshot::Snatch { card, .. }
+1048 | |             | MachineSnapshot::Jijiang { sha: Some(card), .. } => out.push(*card),
+     | |______________________________________________________________- matches all the relevant values
+...
+1064 | /             MachineSnapshot::Aoe { inner: Some(m), .. }
+1065 | |             | MachineSnapshot::NullifyWindow { effect: Some(m), .. } => {
+     | |____________________________________________________________________^ no value can reach this
+
+warning: method `opt_u8` is never used
+  --> crates/engine-native/src/archive.rs:87:8
+   |
+56 | impl W {
+   | ------ method in this implementation
+...
+87 |     fn opt_u8(&mut self, v: Option<u8>) {
+   |        ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `opt_u8` is never used
+   --> crates/engine-native/src/archive.rs:150:8
+    |
+115 | impl<'a> R<'a> {
+    | -------------- method in this implementation
+...
+150 |     fn opt_u8(&mut self) -> Result<Option<u8>, ArchiveError> {
+    |        ^^^^^^
+
+warning: function `enc_faction` is never used
+   --> crates/engine-native/src/archive.rs:367:4
+    |
+367 | fn enc_faction(w: &mut W, f: &crate::catalog::Faction) {
+    |    ^^^^^^^^^^^
+
+warning: variant `Retarget` is never constructed
+    --> crates/engine-native/src/content/standard.rs:2174:5
+     |
+2168 | enum JiJiStage {
+     |      --------- variant in this enum
+...
+2174 |     Retarget,
+     |     ^^^^^^^^
+     |
+     = note: `JiJiStage` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/src/engine.rs:1319:13
+     |
+1319 |             drop(p);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&mut PlayerState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+1319 -             drop(p);
+1319 +             let _ = p;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/src/kernel.rs:733:25
+    |
+733 |                         drop(p);
+    |                         ^^^^^-^
+    |                              |
+    |                              argument has type `&mut PlayerState`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+733 -                         drop(p);
+733 +                         let _ = p;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/src/kernel.rs:737:25
+    |
+737 |                         drop(p);
+    |                         ^^^^^-^
+    |                              |
+    |                              argument has type `&mut PlayerState`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+737 -                         drop(p);
+737 +                         let _ = p;
+    |
+
+warning: `engine-native` (lib) generated 17 warnings (run `cargo fix --lib -p engine-native` to apply 5 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.06s
+     Running `target/release/examples/n09_runner 5 9000`
+mode=load games=5 seed_base=9000 ruleset=26 engine=native counting=on
+checkpoint save_avg_ns=144 restore_avg_ns=1039 samples=2000 sink=128000 (save=StateSnapshot 全量克隆)
+game=ffa g=0 rounds=4 outcome=Some(Player(3)) commands=313 accepted=312 rejected=1 rejects={"sha_limit": 1} events=822 wall_us=817 p50_ns=2541 p95_ns=3834 p99_ns=5292
+digest ffa game=0 seed=9000 hash=cc1c9dc7a62761c77abc2d8f2e7dee03d19f879215ae983a5e451a6ea9de087e
+game=ffa g=1 rounds=3 outcome=Some(Player(2)) commands=232 accepted=229 rejected=3 rejects={"sha_limit": 3} events=600 wall_us=528 p50_ns=2417 p95_ns=3083 p99_ns=4083
+digest ffa game=1 seed=9001 hash=44b383932d37142c52e7a0f70aedc654921f7373b100ed70b44b8c437c54536d
+game=ffa g=2 rounds=4 outcome=Some(Player(3)) commands=304 accepted=303 rejected=1 rejects={"sha_limit": 1} events=796 wall_us=671 p50_ns=2417 p95_ns=2958 p99_ns=3792
+digest ffa game=2 seed=9002 hash=a6e4bbef946b641f35836d00704c35ef31cef06f34c5b340c2430eae95142021
+game=ffa g=3 rounds=4 outcome=Some(Player(0)) commands=259 accepted=257 rejected=2 rejects={"sha_limit": 2} events=672 wall_us=552 p50_ns=2375 p95_ns=2834 p99_ns=3000
+digest ffa game=3 seed=9003 hash=0a25b3c1f5664a796bf44c876da39493ea8ed785034abfbf5dc9d0c510065850
+game=ffa g=4 rounds=4 outcome=Some(Player(2)) commands=285 accepted=282 rejected=3 rejects={"sha_limit": 3} events=742 wall_us=638 p50_ns=2458 p95_ns=3000 p99_ns=3334
+digest ffa game=4 seed=9004 hash=bf217d1630b4b22f799db696fe832c750db17229ddae728e8f9a25bc97abad70
+mode=ffa-aggregate commands=1393 accepted=1383 rejected=10 rejects={"sha_limit": 10} events=3632 wall_us=3207 p50_ns=2458 p95_ns=3208 p99_ns=4333 alloc_delta_bytes=3804540
+game=identity g=0 converged=true outcome=Some(Rebels) commands=239 accepted=234 rejected=5 rejects={"sha_limit": 5} events=611 wall_us=584 p50_ns=2666 p95_ns=3208 p99_ns=4167
+digest identity g=0 seed=10000 hash=917edb4dc8d1890d866be2b7da5c6ef72328687bef31e7b0c60e8b111fd9562e
+game=identity g=1 converged=true outcome=Some(Rebels) commands=386 accepted=380 rejected=6 rejects={"sha_limit": 6} events=1002 wall_us=995 p50_ns=2792 p95_ns=3625 p99_ns=5000
+digest identity g=1 seed=10001 hash=6adce4658cc6c8921feb8c71922139f935348a61d5ac2287bd8bc5b7f0bb7612
+game=identity g=2 converged=true outcome=Some(Rebels) commands=207 accepted=204 rejected=3 rejects={"sha_limit": 3} events=536 wall_us=528 p50_ns=2833 p95_ns=3416 p99_ns=3875
+digest identity g=2 seed=10002 hash=c28c302e3476335f7c4b36dfafe039a562aa6dd01944c3e7045155da5d600be9
+game=identity g=3 converged=true outcome=Some(LordSide) commands=379 accepted=373 rejected=6 rejects={"sha_limit": 6} events=987 wall_us=878 p50_ns=2542 p95_ns=3125 p99_ns=3333
+digest identity g=3 seed=10003 hash=37ad3b08270e9431c01ee14ffda3e59b254eb892074260ab1eef228fa58ae2f4
+game=identity g=4 converged=true outcome=Some(Rebels) commands=293 accepted=287 rejected=6 rejects={"sha_limit": 6} events=753 wall_us=663 p50_ns=2458 p95_ns=2959 p99_ns=3416
+digest identity g=4 seed=10004 hash=a5eb1343d0159e7b778ac4d4926e3b54e69156fc87d95a7238e34dc7271c057d
+mode=identity-aggregate commands=1504 accepted=1478 rejected=26 rejects={"sha_limit": 26} events=3889 wall_us=3650 p50_ns=2625 p95_ns=3334 p99_ns=4083 finished=5
+game=judgement g=0 outcome=None commands=48 accepted=48 rejected=0 rejects={} events=136 wall_us=103 p50_ns=2167 p95_ns=2792 p99_ns=3166
+digest judgement g=0 seed=11000 hash=7071c173dc7d39e1b3153cdf7247d62e332a343085810c4415222e8ba300e7d9 rewrites=5 finalized=6 gained=2
+game=judgement g=1 outcome=None commands=49 accepted=49 rejected=0 rejects={} events=138 wall_us=100 p50_ns=2208 p95_ns=2541 p99_ns=2666
+digest judgement g=1 seed=11001 hash=f5f4e81c747c837f8a063b55c5222eb380b3e011f85edbb2038b806658974047 rewrites=6 finalized=6 gained=2
+game=judgement g=2 outcome=None commands=49 accepted=49 rejected=0 rejects={} events=139 wall_us=98 p50_ns=2167 p95_ns=2625 p99_ns=2833
+digest judgement g=2 seed=11002 hash=cfbc2d0adfae9beeb229febe97621cb892eb0d7bbc911341d73873f1389b8974 rewrites=6 finalized=6 gained=2
+game=judgement g=3 outcome=None commands=49 accepted=49 rejected=0 rejects={} events=139 wall_us=100 p50_ns=2208 p95_ns=2584 p99_ns=2791
+digest judgement g=3 seed=11003 hash=28460a8b52ec17b12e53e9d9084e4a07df811cf65e24e25fdf5ed3937452c4a9 rewrites=6 finalized=6 gained=2
+game=judgement g=4 outcome=None commands=49 accepted=49 rejected=0 rejects={} events=138 wall_us=99 p50_ns=2167 p95_ns=2500 p99_ns=2583
+digest judgement g=4 seed=11004 hash=fd0f7542623f0dc86d10b0971831b4bfc84b3b16db940c66953bc17d84a3da63 rewrites=6 finalized=6 gained=2
+game=judgement g=5 outcome=None commands=49 accepted=49 rejected=0 rejects={} events=138 wall_us=99 p50_ns=2208 p95_ns=2500 p99_ns=2542
+digest judgement g=5 seed=11005 hash=681fe81c15561fee2b561e0fe569bdfe8813897e890395609c7431cb38e0d1fd rewrites=6 finalized=6 gained=2
+game=judgement g=6 outcome=None commands=47 accepted=47 rejected=0 rejects={} events=133 wall_us=98 p50_ns=2209 p95_ns=2667 p99_ns=2792
+digest judgement g=6 seed=11006 hash=43b89e29ea892368798ac36746463f9e9a3e1bcb43d05dde50d32c7518af2375 rewrites=4 finalized=6 gained=2
+game=judgement g=7 outcome=None commands=49 accepted=49 rejected=0 rejects={} events=139 wall_us=105 p50_ns=2333 p95_ns=2708 p99_ns=2834
+digest judgement g=7 seed=11007 hash=4e423e3f1c66878b1c2746a935d9dbf8589853ecf5cde4ad3eda60e741b70be3 rewrites=6 finalized=6 gained=2
+game=judgement g=8 outcome=None commands=49 accepted=49 rejected=0 rejects={} events=138 wall_us=104 p50_ns=2292 p95_ns=2625 p99_ns=2750
+digest judgement g=8 seed=11008 hash=0a471b0270e059a43381900bcdc85f55c2a0507899e6649584a40e8ebfd89b04 rewrites=6 finalized=6 gained=2
+game=judgement g=9 outcome=None commands=47 accepted=47 rejected=0 rejects={} events=133 wall_us=104 p50_ns=2375 p95_ns=2708 p99_ns=2959
+digest judgement g=9 seed=11009 hash=fd9aed9c634e88762c592887aba2ac8c2a7e857a386fa7533eb27925924477df rewrites=4 finalized=6 gained=2
+mode=judgement-aggregate commands=485 accepted=485 rejected=0 rejects={} events=1371 wall_us=1014 p50_ns=2250 p95_ns=2625 p99_ns=2792
+alloc total_bytes=32262433 total_count=150101 peak_live_bytes=164334 live_at_exit_bytes=94812 (进程累计，含 runner 自身开销)
+mode=summary games=5 exit=ok

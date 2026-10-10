@@ -1,0 +1,13 @@
+// 击倒（年兽·OL）：锁定技。当你造成伤害后，你摸一张牌并令受伤角色获得1枚
+// 「击倒」标记。标记≥3时该角色被击倒（取消出牌阶段并开始倒数脱离）。
+//
+// 近似：伤害来源→摸牌+加标记已精确表达。
+// 旧 JS 的「olhuaquan_wrong」自定义事件（非标事件）未建模。
+// 旧 JS 的 debuff 子技能（击倒状态：取消出牌阶段 + 全局事件拦截倒数计数）
+// 涉及 phaseUseBefore 取消 + 多层 gain/lose/discard 事件监听，无 DSL 对应原语——未建模。
+skill olsanou(3847269073) locked {
+  trigger damage owner_alive_is_source {
+    effect draw_cards(self, 1);
+    effect add_mark(event_player, 3847269073, 1);
+  }
+}

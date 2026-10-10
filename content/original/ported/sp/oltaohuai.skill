@@ -1,0 +1,7 @@
+// 讨怀（OL段煨）：转换技，使用手牌中点数最大/最小的牌时摸一张，否则可弃一张。
+// 近似：使用牌后摸一张（点数极值判定、转换技阴阳与可选弃牌未建模）。
+skill oltaohuai(4147821330) locked {
+  trigger card_used owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}

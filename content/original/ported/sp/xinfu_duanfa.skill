@@ -1,0 +1,8 @@
+// 断发（xinfu_duanfa）：出牌阶段，你可以弃置任意张黑色牌，然后摸等量的牌。
+// （每回合内限X张，X为你的体力上限——以每次至多5张 + 每回合限一次近似。）
+skill xinfu_duanfa(3504403856) {
+  active play_phase uses_per_turn 1 select_hand 1 5 card_black {
+    effect discard_selected(self);
+    effect draw_selected(self);
+  }
+}

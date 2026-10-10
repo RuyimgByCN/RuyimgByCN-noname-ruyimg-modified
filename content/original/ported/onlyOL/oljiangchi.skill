@@ -1,0 +1,6 @@
+// OL界曹彰「将驰」：摸牌阶段结束后，可取消或选择摸牌/重铸分支。
+skill oljiangchi(3424528555) {
+  trigger phase_draw_end owner_is_target {
+    effect choose_draw_or_recast_add_skill(self, 2381340383, 4245625871);
+  }
+}

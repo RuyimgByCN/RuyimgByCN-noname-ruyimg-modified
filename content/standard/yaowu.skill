@@ -1,0 +1,6 @@
+// 耀武：红色【杀】造成伤害前，存活的伤害来源强制选择摸一张牌或回复 1 点体力。
+skill yaowu(3872761084) locked {
+  trigger damage_before owner_is_target_red_sha_source_alive {
+    effect choose_draw_or_recover(event_source, 1, 1, 0);
+  }
+}

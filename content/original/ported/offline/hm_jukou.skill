@@ -1,0 +1,7 @@
+// hm_jukou：主动(phaseUse), 摸牌, 加技能, 含子技能, 异步。
+skill hm_jukou(3893910391) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

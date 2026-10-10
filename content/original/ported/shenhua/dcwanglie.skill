@@ -1,0 +1,10 @@
+// 往烈：出牌阶段对其他角色使用的前两张牌无距离限制；使用杀或锦囊时，
+// 可令当前实体牌不能被响应，随后本阶段只能使用牌指定自己。
+skill dcwanglie(3434983038) {
+  trigger phase_play owner_is_target {
+    effect add_skill(self, 4183988931);
+  }
+  trigger card_used owner_source_sha_or_trick_current_play_phase optional {
+    effect make_current_card_unrespondable(self, event_card, 2388106243);
+  }
+}

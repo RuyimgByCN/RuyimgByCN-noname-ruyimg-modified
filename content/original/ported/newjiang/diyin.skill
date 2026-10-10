@@ -1,0 +1,9 @@
+// 笛音（荀勖）：锁定技。你失去牌时记录「笛音」标记（至多 7 个）；
+// 标记达到 7 时获得进入弃牌堆的本次失去牌；你受到伤害后，所有体力值
+// 与你相同的角色各摸一张牌。
+// 旧 JS 的「失去牌记录与弃牌堆取牌」无对应原语，获牌部分未建模（已注明）；
+// 受伤后同体力角色摸牌以摸牌阶段近似省略，标记计数保留定义框架。
+skill diyin(3701749545) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

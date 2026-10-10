@@ -1,0 +1,6 @@
+// scls_lianhua：音效名:shhlianhua, 锁定技, target:card_targeted, 需弃牌, 摸牌, 异步。
+skill scls_lianhua(3903479015) {
+  trigger card_targeted owner_is_target_once {
+    effect draw_cards(self, 1);
+  }
+}

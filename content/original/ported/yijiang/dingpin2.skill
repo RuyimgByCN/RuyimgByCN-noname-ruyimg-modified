@@ -1,0 +1,6 @@
+// 定品2：旧 JS 为 charlotte 标记，无独立游戏逻辑。
+skill dingpin2(3450540745) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

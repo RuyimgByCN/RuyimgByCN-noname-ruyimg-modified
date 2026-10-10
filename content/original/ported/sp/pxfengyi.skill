@@ -1,0 +1,12 @@
+// 冯翊（pxfengyi，州郡技能）：当你获得此技能后，你可以回复 1 点体力。
+// 上游 (sp/skill.js:2922)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且已受伤；content = recover。
+// 实现：skill_added + owner_skill_added_self_4070224935 → 可选确认 →
+// if hp(self) < max_hp(self)（已受伤守卫）→ recover_hp(self, 1)。
+skill pxfengyi(4070224935) {
+  trigger skill_added owner_skill_added_self_4070224935 optional {
+    if hp(self) < max_hp(self) {
+      effect recover_hp(self, 1);
+    }
+  }
+}

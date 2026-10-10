@@ -1,0 +1,4 @@
+// 避乱状态：同名状态标记每层修正其他角色计算与拥有者的距离，可为负数。
+skill rebiluan2(3075740841) {
+  modifier distance_to add owner_skill_mark;
+}

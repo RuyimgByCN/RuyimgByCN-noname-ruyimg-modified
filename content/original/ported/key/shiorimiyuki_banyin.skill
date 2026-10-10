@@ -1,0 +1,12 @@
+// 伴音（诗织/深雪）：受到伤害或回复体力后，令一名受伤的其他角色回复 1 点体力。
+// 实现：受伤或回体后可选 `choose_other_draw_or_recover` 令一名其他角色回复 1。
+// 近似：不筛选「已受伤」目标；任意其他角色均可。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shiorimiyuki_banyin(3141719441) {
+  trigger damage owner_is_target optional {
+    effect choose_other_draw_or_recover(self, 0, 1, 1);
+  }
+  trigger hp_recovered owner_is_target optional {
+    effect choose_other_draw_or_recover(self, 0, 1, 1);
+  }
+}

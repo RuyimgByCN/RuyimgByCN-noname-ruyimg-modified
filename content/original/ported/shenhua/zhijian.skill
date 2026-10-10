@@ -1,0 +1,10 @@
+// 直谏（张昭张纮）：出牌阶段限一次，你可以将一张手牌区里的装备牌置于一名其他角色
+// 的装备区里（其须可装备此牌），然后摸一张牌。
+// 旧 JS 仅作语义证据；选牌、目标可装备性与赠予摸牌由 resolve_zhijian 权威状态机校验
+// （ABI 512）。目标须有启用且空闲的对应装备栏（旧 JS canEquip 对已占栏位返回否，
+// 等价近似）；赠予经通用移牌管线并等待移动触发结算。
+skill zhijian(2679144247) {
+  active play_phase uses_per_turn 1 select_hand 1 1 card_equip {
+    effect resolve_zhijian(self);
+  }
+}

@@ -1,0 +1,5 @@
+skill pingkou(3823456872) {
+  trigger phase_end owner_is_target_skipped_phase_count_positive optional {
+    effect choose_other_targets_by_skipped_phase_count_damage(self, 1);
+  }
+}

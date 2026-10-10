@@ -1,0 +1,5 @@
+// hm_daicui（锁定技/触发技）：锁定技, global:card_targeted, global:phaseEnd, 移出游戏, 加技能, 含子技能, 异步。
+skill hm_daicui(3203030609) locked {
+  trigger card_targeted always {
+  }
+}

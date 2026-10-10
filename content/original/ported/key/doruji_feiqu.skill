@@ -1,0 +1,6 @@
+// 绯驱（多鲁基）
+// 使用【杀】时所有目标不可响应；成为【杀】的目标时自己不可响应。
+skill doruji_feiqu(3475207521) locked {
+  modifier sha_unrespondable(any) override 1;
+  modifier sha_target_unrespondable override 1;
+}

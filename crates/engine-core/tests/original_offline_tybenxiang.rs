@@ -1,0 +1,147 @@
+//! Golden for 桃范疆「奔襄」rewritten from legacy JavaScript.
+
+use engine_api::{
+    ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, PlayerId,
+    SkillDefId,
+};
+use engine_core::command::apply_command;
+use engine_core::effect::{run_effects, EffectError};
+use engine_core::state::ContinuationKind;
+use engine_core::transaction::Transaction;
+use engine_core::Engine;
+use rule_api::EffectRequest;
+
+const TYBENXIANG: u32 = 2_210_204_269;
+const SOURCE: &str = include_str!("../../../content/original/ported/offline/tybenxiang.skill");
+const PACKAGE: &[u8] =
+    include_bytes!("../../../content/original/ported/offline/offline.npack.json");
+
+fn setup(seed: u64) -> (Transaction, Vec<PlayerId>) {
+    let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
+    let mut engine = Engine::new();
+    engine.load_package(&package).unwrap();
+    assert!(matches!(
+        engine.submit(Command {
+            actor: PlayerId::NONE,
+            expected_revision: ExpectedRevision(0),
+            idempotency_key: IdempotencyKey(seed),
+            kind: CommandKind::StartGame {
+                player_count: 3,
+                rng_seed: seed,
+                ruleset: "identity-standard".into(),
+            },
+        }),
+        CommandResult::Accepted { .. }
+    ));
+    let seats = engine.state().players.alive_by_seat();
+    let mut tx = Transaction::begin(engine.state().clone());
+    let existing = tx
+        .state()
+        .skills
+        .sorted_live()
+        .into_iter()
+        .map(|skill| EffectRequest::RemoveSkill { skill: skill.id })
+        .collect();
+    run_effects(&mut tx, existing).unwrap();
+    (tx, seats)
+}
+
+fn grant(tx: &mut Transaction, player: PlayerId) {
+    run_effects(
+        tx,
+        vec![EffectRequest::AddSkill {
+            player,
+            skill_def: SkillDefId::new(TYBENXIANG),
+        }],
+    )
+    .unwrap();
+}
+
+#[test]
+fn package_exposes_forced_source_death_contract_without_new_abi() {
+    let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
+    assert_eq!(package.manifest.rule_vm_abi_version, 691);
+    assert_eq!(package.skill_index.len(), 838);
+    assert_eq!(package.character_index.len(), 382);
+    assert_eq!(package.trigger_index.len(), 587);
+    assert_eq!(package.active_index.len(), 137);
+    assert_eq!(package.modifier_index.len(), 128);
+    assert_eq!(package.modules.len(), 724);
+    assert!(package
+        .skill_index
+        .iter()
+        .any(|skill| skill.skill_def_id == TYBENXIANG && skill.locked));
+    let trigger = package
+        .trigger_index
+        .iter()
+        .find(|trigger| trigger.skill_def_id == TYBENXIANG)
+        .unwrap();
+    assert_eq!(trigger.event, "death");
+    assert_eq!(trigger.filter, "owner_is_source");
+    assert!(!trigger.optional);
+
+    let compiled = content_compiler::compile_source_named("tybenxiang", SOURCE).unwrap();
+    assert_eq!(compiled.manifest.rule_vm_abi_version, 41);
+    assert_eq!(
+        package
+            .modules
+            .iter()
+            .find(|module| module.name == "tybenxiang_death"),
+        compiled.modules.first()
+    );
+}
+
+#[test]
+fn killer_must_choose_another_living_player_to_draw_three() {
+    let (mut tx, seats) = setup(TYBENXIANG as u64);
+    let (killer, victim, recipient) = (seats[0], seats[1], seats[2]);
+    grant(&mut tx, killer);
+    let before = tx.state().hand_count(recipient);
+    assert_eq!(
+        run_effects(
+            &mut tx,
+            vec![EffectRequest::KillPlayer {
+                player: victim,
+                killer,
+            }],
+        )
+        .unwrap_err(),
+        EffectError::ChoiceRequested
+    );
+    assert_eq!(tx.state().resolution.pending_observer, killer.raw());
+    assert_eq!(
+        tx.state().resolution.continuation_kind,
+        ContinuationKind::ChooseTargetDraw
+    );
+
+    let revision = tx.state().revision;
+    let choice_id = ChoiceId::new(tx.state().resolution.pending_choice_id);
+    let (state, pipe) = apply_command(
+        tx.state().clone(),
+        Command {
+            actor: killer,
+            expected_revision: ExpectedRevision(revision),
+            idempotency_key: IdempotencyKey(1),
+            kind: CommandKind::ResolveChoice {
+                choice_id,
+                selections: vec![recipient.raw()],
+                cancelled: false,
+            },
+        },
+    );
+    assert!(matches!(pipe.result, CommandResult::Accepted { .. }));
+    assert_eq!(state.hand_count(recipient), before + 3);
+
+    let (mut tx, seats) = setup(TYBENXIANG as u64 + 1);
+    let (owner, victim, other_killer) = (seats[0], seats[1], seats[2]);
+    grant(&mut tx, owner);
+    run_effects(
+        &mut tx,
+        vec![EffectRequest::KillPlayer {
+            player: victim,
+            killer: other_killer,
+        }],
+    )
+    .unwrap();
+    assert!(!tx.state().has_pending_choice());
+}

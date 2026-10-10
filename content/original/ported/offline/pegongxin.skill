@@ -1,0 +1,6 @@
+// pegongxin：音效名:gongxin, player:damage_before, 主动(phaseUse), 异步。
+skill pegongxin(4068297694) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

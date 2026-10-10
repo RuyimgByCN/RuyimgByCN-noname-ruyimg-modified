@@ -1,0 +1,9 @@
+// 荣悲（蒋琬系）：限定技。出牌阶段，选择一名有空的装备栏的角色，令其
+// 获得一张装备牌并装备。
+// 旧 JS 的「按空装备栏补装备」无对应原语；以选择一名角色摸一张近似
+// （装备获取未建模，已注明）。
+skill rongbei(3928100527) {
+  active play_phase once_per_game {
+    effect choose_other_draw_or_recover(self, 1, 0, 0);
+  }
+}

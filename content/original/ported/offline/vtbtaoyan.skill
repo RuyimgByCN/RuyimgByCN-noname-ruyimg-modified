@@ -1,0 +1,5 @@
+// vtbtaoyan：锁定技, player:phaseBegin, global:hp_lost, global:cards_moved, 需选择目标, 摸牌, 加技能, 含子技能, 多步骤。
+skill vtbtaoyan(2552665969) locked {
+  trigger hp_lost always {
+  }
+}

@@ -1,0 +1,5 @@
+// pejiwei：觉醒技, 锁定技, global:phaseEnd, 加技能, 异步。
+skill pejiwei(2992020214) {
+  trigger phase_any_end owner_alive {
+  }
+}

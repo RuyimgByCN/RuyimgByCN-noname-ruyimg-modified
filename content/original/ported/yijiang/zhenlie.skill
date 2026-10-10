@@ -1,0 +1,8 @@
+// 贞烈（王异）：当你成为其他角色使用杀或普通锦囊的目标时，可失去1点体力，令此牌对你无效，然后弃置来源一张牌。
+// 旧JS含loseHp+excluded.add+discardPlayerCard三段式。DSL以lose_hp+discard_selected近似，缺令卡牌对自身无效的原语。
+skill zhenlie(3007693022) {
+    trigger card_targeted owner_is_target_sha_or_trick {
+        effect lose_hp(self, 1);
+        effect discard_hand_equip_count(event_source, 1);
+    }
+}

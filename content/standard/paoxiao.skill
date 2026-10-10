@@ -1,0 +1,4 @@
+// 咆哮 (paoxiao) — 张飞: unlimited 杀 (Sha) per turn.
+skill paoxiao(23) locked {
+  modifier sha_use_limit override 2147483647;
+}

@@ -1,0 +1,7 @@
+// xinkuizhu（溃诛）：弃牌阶段结束后，你可以选择一项：1.令至多X名角色各摸一张牌。2.对任意名体力值之和为X的角色造成1点伤害，若你以此法选择的角色数不小于2，你失去1点体力。（X为你此阶段弃置的牌数）
+skill xinkuizhu(4057189051) {
+  trigger phase_discard_end owner_alive {
+    effect choose_other_damage(self, 1);
+    effect lose_hp(self, 1);
+  }
+}

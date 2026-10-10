@@ -1,0 +1,19 @@
+// 集兵（mobile jibing）：①摸牌阶段开始时，若你的「兵」数小于势力数，则你可以
+// 改为将牌堆顶的两张牌置于你的武将牌上，称为「兵」。②你可以将一张「兵」当做
+// 【杀】或【闪】使用或打出。
+// 上游 (mobile/skill.js jibing)：trigger drawBegin + gate 兵数<势力数；place top
+// 2 cards to expansions("jibing")；mod 兵当杀/闪。
+// 实现（2026-09-10 第二百批·P2-var 置入面铸造，新原语
+// place_top_deck_to_expansion(player, self_skill, pile_def, count)——tag 708 /
+// ABI 685 领号，纯同步零选择续体）：
+// trigger phase_draw owner_is_target optional + 门控（兵数<势力数）→
+// place_top_deck_to_expansion(self, self_skill, 3194681807, 2)。
+// 近似（登记债）：①「改为」摸牌替代语义未建模（摸牌照常执行）；②「兵」当
+// 【杀】/【闪】使用或打出未建模（usable_as_hand 语义无 DSL 面）；③动画未建模。
+skill jibing(3194681807) {
+  trigger phase_draw owner_is_target optional {
+    if alive_group_count() < skill_pile_count(self, 3194681807) + 1 {
+      effect place_top_deck_to_expansion(self, self_skill, 3194681807, 2);
+    }
+  }
+}

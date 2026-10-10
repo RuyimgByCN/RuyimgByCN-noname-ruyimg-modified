@@ -1,0 +1,7 @@
+// 荆扬黄盖：造成的伤害改为火焰；伤害结算前目标已横置时，按最终伤害值摸牌。
+skill jyliezhou(3307262280) locked {
+  modifier damage_nature override 1;
+  trigger damage owner_alive_source_target_was_linked {
+    effect draw_cards(self, event_amount);
+  }
+}

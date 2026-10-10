@@ -1,0 +1,19 @@
+[package]
+name = "engine-native"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "干净原生内核原型：只读规则目录 + 紧凑对局状态 + 显式事件栈与类型化技能暂停恢复"
+
+[dependencies]
+blake3 = { workspace = true }
+
+[dev-dependencies]
+serde = { workspace = true }
+content-runtime = { path = "../content-runtime" }
+content-native-loader = { path = "../content-native-loader" }
+content-schema = { path = "../content-schema" }
+resource-schema = { path = "../resource-schema" }
+serde_json = { workspace = true }
+tempfile = { workspace = true }

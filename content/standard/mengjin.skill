@@ -1,0 +1,4 @@
+// Yu Jin discipline
+skill mengjin(60) {
+  modifier distance_from add -1;
+}

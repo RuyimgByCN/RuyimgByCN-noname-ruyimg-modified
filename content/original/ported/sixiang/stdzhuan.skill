@@ -1,0 +1,6 @@
+// 旧 JS 语义：每回合首次受到伤害后摸三张牌，仍存活的伤害来源获得你一张手牌或装备牌。
+skill stdzhuan(4034502794) locked {
+  trigger damage owner_is_target_once {
+    effect draw_then_take_one(self, event_source, 3);
+  }
+}

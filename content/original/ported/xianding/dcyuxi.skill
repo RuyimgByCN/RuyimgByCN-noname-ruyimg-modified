@@ -1,0 +1,7 @@
+// 虞袭（张辽）：造成或受到伤害时，可摸一张牌。
+// 旧 JS 的“以此法获得的牌无次数限制”未建模。
+skill dcyuxi(3133735666) {
+  trigger damage owner_is_source_or_target optional {
+    effect draw_cards(self, 1);
+  }
+}

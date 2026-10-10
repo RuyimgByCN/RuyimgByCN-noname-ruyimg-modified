@@ -1,0 +1,8 @@
+// 尊帝（崔琰）：出牌阶段限一次，弃置一张手牌交给一名其他角色，然后判定：若为
+// 黑色，其摸三张牌；若为红色，其移动一张牌。
+// 旧 JavaScript 仅作语义证据；判定与分支由 ABI 429 resolve_spzundi 权威结算。
+skill spzundi(4234395954) {
+  active play_phase uses_per_turn 1 select_hand 1 1 targets 1 1 other {
+    effect resolve_spzundi(self, event_source);
+  }
+}

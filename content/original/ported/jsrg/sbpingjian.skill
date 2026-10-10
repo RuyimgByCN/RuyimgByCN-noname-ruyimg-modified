@@ -1,0 +1,8 @@
+// sbpingjian（评鉴）：你可以于满足你“访客”上的一个无技能标签或仅有锁定技标签的技能条件的时机发动此技能，然后你选择移去一张“访客”。若移去的是本次发动技能的“访客”，则你于此技能结算结束时摸一张牌。
+// 未建模：chooseButton, 翻译调用, 全局状态, addTempSkill, charlotte延迟, untrigger ...等7项（DSL无对应原语）
+skill sbpingjian(4142519133) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbpingjian（skill.js:8931）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,11 @@
+// 心星乱（樊稠）：出牌阶段，当你使用牌后（每回合限一次），你可选择一项：
+// ①观看牌堆中两张点数为 6 的牌并获得其中一张（若没有则摸六张牌）；
+// ②获得一名其他角色装备区或判定区里的一张点数为 6 的牌；
+// ③令一名其他角色弃置一张点数为 6 的手牌，或交给你一张牌。
+// 旧 JS 仅作语义证据；三分支结算由 resolve_xinxingluan 权威状态机校验（ABI 476）；
+// 每回合一次以过滤器 owner_source_once_per_turn（turn_fires==0）表达。
+skill xinxingluan(3806437757) {
+  trigger card_used owner_source_once_per_turn {
+    effect resolve_xinxingluan(self);
+  }
+}

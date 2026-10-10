@@ -1,0 +1,5 @@
+// 烈音·阳（仲村由理临时效果）
+// 原语义：红色牌的牌名视为【杀】。
+skill yui_lieyin0(3080747547) {
+  modifier card_name(red) override sha;
+}

@@ -1,0 +1,8 @@
+// 咄咄·视为杀（oldcihuai2）：可视为使用一张【杀】（无手牌消耗）。
+// 上游 (sp/skill.js:40842)：enable chooseToUse，viewAs virtual sha，filterCard=false，
+// selectCard=-1；由 oldcihuai 在无手牌杀时授予，oldcihuai3 在手牌变化时移除。
+// 实现：本子技已被 oldcihuai 的 choose_use_virtual_sha 直接近似（出牌阶段开始时一次），
+// 授予/移除机制折叠进父技；保持诚实 noop。
+skill oldcihuai2(3117733201) {
+  modifier hand_limit add 0;
+}

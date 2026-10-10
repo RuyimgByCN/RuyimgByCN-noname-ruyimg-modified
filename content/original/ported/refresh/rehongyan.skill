@@ -1,0 +1,8 @@
+// rehongyan：刷新包技能。
+// triggers: player:loseEnd
+skill rehongyan(2409870744) {
+    // 近似：旧JS事件 loseEnd → DSL事件 loseEnd
+    trigger cards_moved owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

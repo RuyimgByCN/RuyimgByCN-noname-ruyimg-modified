@@ -1,0 +1,14 @@
+// 内伐·非基本（neifa_nobasic，元谭元尚的子技能）：本回合内不能使用基本牌；
+// 使用普通锦囊牌指定目标后可为它增加或减少一个目标。
+// 上游 (sp/skill.js:32153)：mod cardEnabled 基本 false；trigger useCard2（普通锦囊）
+// → chooseTarget 加/减一个目标（已含目标则移除，否则增加）。
+// 实现：card_use_cancel(basic)（禁用基本牌）→ trigger card_used
+// owner_source_ordinary_trick optional → choose_add_or_remove_current_card_target
+// （engine 同时计算可加/可删目标并开选择）。
+// 与上游差异：本回合限制以技能存活期近似；「装备牌摸牌」group（neifa_use）单独建模。
+skill neifa_nobasic(3552802810) {
+  modifier card_use_cancel(basic) override 1;
+  trigger card_used owner_source_ordinary_trick optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

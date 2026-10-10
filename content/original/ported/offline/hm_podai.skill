@@ -1,0 +1,6 @@
+// hm_podai：global:phaseBegin, global:phaseEnd, 摸牌, 造成伤害, 加技能, 含子技能, 异步。
+skill hm_podai(3049242180) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 绝策：结束阶段可选择一名手牌数不大于自己的其他角色，对其造成1点伤害。
+skill oljuece(2978424418) {
+  trigger phase_end owner_is_target_other_hand_lte_owner optional {
+    effect choose_targets_damage(self, 1, 1, hand_lte_chooser, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 当先：回合开始时先执行额外出牌阶段；伏枥未发动时必须失去体力并获得弃牌堆中的杀，发动后可取消。
+skill xindangxian(3456939183) locked {
+  trigger phase_begin owner_is_target {
+    effect queue_opening_extra_play_phase(self);
+  }
+  trigger phase_play owner_is_target {
+    effect lose_hp_gain_discard_card_for_opening_extra_play(self, sha, 3062292376);
+  }
+}

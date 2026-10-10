@@ -1,0 +1,13 @@
+// 肃州（pxsizhou，州郡技能）：当你获得此技能后，你可以获得一名其他角色的一张手牌。
+// 上游 (sp/skill.js:2216)：trigger player:changeSkillsAfter；filter = addSkill 含本技且
+// 存在手牌可被你获得的其他角色；cost = chooseTarget；content = gainPlayerCard(target,
+// "h", forced)——由你从其手牌中获得一张。
+// 实现：skill_added + owner_skill_added_self_3079253303 → 可选确认 →
+// gain_target_hand_card(self, self_skill)（新原语，ABI 647）：两阶段选择——先选一名
+// 有手牌的其他角色（可取消），再由你从其手牌中选一张获得（GiveCards 转移）。
+// 与上游差异：无（选择链语义与 gainPlayerCard 一致；目标手牌为空时不可选）。
+skill pxsizhou(3079253303) {
+  trigger skill_added owner_skill_added_self_3079253303 optional {
+    effect gain_target_hand_card(self, self_skill);
+  }
+}

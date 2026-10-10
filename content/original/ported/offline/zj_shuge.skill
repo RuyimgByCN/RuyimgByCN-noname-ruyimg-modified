@@ -1,0 +1,5 @@
+// zj_shuge：global:phaseEnd, 需选择目标, 异步。
+skill zj_shuge(4149294931) {
+  trigger phase_any_end owner_alive {
+  }
+}

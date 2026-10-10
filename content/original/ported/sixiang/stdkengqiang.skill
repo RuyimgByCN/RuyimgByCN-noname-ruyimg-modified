@@ -1,0 +1,13 @@
+// 铿锵：每回合限一次，使用伤害牌时选择摸两张牌，或失去 1 点体力并令此牌伤害基数 +1。
+skill stdkengqiang(3956037825) {
+  trigger card_used owner_source_damage_card_once_per_turn optional {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect draw_cards(self, 2);
+    }
+    if option == 2 {
+      effect lose_hp(self, 1);
+      effect increase_current_card_base_damage(self, event_card, 1);
+    }
+  }
+}

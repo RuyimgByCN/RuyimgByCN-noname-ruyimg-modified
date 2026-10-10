@@ -1,0 +1,16 @@
+// 震袭/扬师：杀目标弃手牌或迁移场上牌；受伤后成长攻击范围或获得杀。
+skill twzhenxi(3713822964) {
+trigger card_targeted owner_source_sha_target_twzhenxi_available_once_per_turn {
+    effect resolve_twtianyu(self, event_player, 3547506137, 0);
+  }
+}
+
+skill twyangshi(4235144837) locked {
+  trigger damage owner_is_target {
+    effect resolve_twtianyu(self, self, 3547506137, 1);
+  }
+}
+
+skill twyangshi_distance(3547506137) locked {
+  modifier attack_range add owner_skill_mark;
+}

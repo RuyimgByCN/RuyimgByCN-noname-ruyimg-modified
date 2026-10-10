@@ -1,0 +1,4 @@
+// 酒诗1（曹植）：正面朝上时翻面，视为使用一张无实体牌的【酒】。
+skill jiushi1(3647393232) {
+  view_as jiu any any from none cost turn_over;
+}

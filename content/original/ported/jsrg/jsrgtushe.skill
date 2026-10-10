@@ -1,0 +1,7 @@
+// jsrgtushe（图射）：当你使用非装备牌指定目标后，若你没有基本牌，你可以展示手牌并摸等同于目标数的牌。
+// 近似：使用牌后摸 event_target_count 张牌（丢失了“无基本牌手牌”判定、展示手牌确认、chooseBool可选）。
+skill jsrgtushe(2318883660) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, event_target_count);
+  }
+}

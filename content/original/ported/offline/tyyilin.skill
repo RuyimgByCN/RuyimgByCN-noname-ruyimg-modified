@@ -1,0 +1,5 @@
+// tyyilin：global:cards_moved, global:cards_moved, 异步。
+skill tyyilin(3467345963) {
+  trigger cards_moved owner_alive {
+  }
+}

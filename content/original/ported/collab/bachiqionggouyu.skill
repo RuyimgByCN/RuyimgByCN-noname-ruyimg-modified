@@ -1,0 +1,10 @@
+// 八尺琼勾玉：出牌阶段结束时，若已受伤则回复 1 点体力；
+// 满体力时摸牌阶段额外摸两张牌。
+skill bachiqionggouyu_skill(2812865529) locked {
+  trigger phase_play_end owner_is_target_wounded {
+    effect recover_hp(self, 1);
+  }
+
+  modifier draw_count add owner_healthy;
+  modifier draw_count add owner_healthy;
+}

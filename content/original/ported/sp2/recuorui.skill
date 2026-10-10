@@ -1,0 +1,6 @@
+// 摧锐：限定技，出牌阶段依次获得至多当前体力值名其他角色的各一张手牌。
+skill recuorui(4246379136) {
+  active play_phase once_per_game targets 1 255 other max_by_owner_hp hand_nonempty {
+    effect gain_one_hand_from_selected_targets(self);
+  }
+}

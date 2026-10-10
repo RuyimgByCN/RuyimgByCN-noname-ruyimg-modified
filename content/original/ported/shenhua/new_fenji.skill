@@ -1,0 +1,6 @@
+skill new_fenji(3465257033) {
+  trigger turn_ended owner_alive_event_player_hand_empty optional {
+    effect draw_cards(event_player, 2);
+    effect lose_hp(self, 1);
+  }
+}

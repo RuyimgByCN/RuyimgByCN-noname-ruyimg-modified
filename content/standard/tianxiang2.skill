@@ -1,0 +1,4 @@
+// Skill tianxiang2(131) - standard variant
+skill tianxiang2(131) {
+  modifier attack_range add 1;
+}

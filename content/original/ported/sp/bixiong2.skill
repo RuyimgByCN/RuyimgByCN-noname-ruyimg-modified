@@ -1,0 +1,7 @@
+// bixiong2：锁定技，不能成为其他角色存储花色牌的目标
+// 含有 mod — 需修改技原语
+skill bixiong2(3271182843) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 bixiong2（skill.js:29562）含真实规则体，DSL 原语暂不足以精确建模（见文件头注释）；
+  // 原“批量最小近似：手牌上限 +1”为保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

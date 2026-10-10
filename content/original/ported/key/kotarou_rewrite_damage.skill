@@ -1,0 +1,6 @@
+// 改写·增伤（小太郎·锁定技）：下一次造成的伤害值增加对应标记数。以 modify_current_damage 近似。
+skill kotarou_rewrite_damage(3507796747) {
+  trigger damage_before owner_is_source {
+    effect modify_current_damage(self, 1);
+  }
+}

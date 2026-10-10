@@ -1,0 +1,18 @@
+// 荐简（陆通）：你造成或受到伤害时，可防止该伤害（每类各限一次）。
+// 旧 JS 以 damageBegin2/damageBegin4 双触发 + storage 记录“source/player”两类各一次；
+// DSL 以两个触发分支 + 标记（0=未用，1=来源已用，2=目标已用，3=皆用）等价表达。
+skill stdjinjian(4177959969) {
+  trigger damage_before owner_source {
+    if mark_count(self, 4177959969) == 0 {
+      effect add_mark(self, 4177959969, 1);
+      effect prevent_current_damage();
+    }
+  }
+
+  trigger damage_before owner_is_target {
+    if mark_count(self, 4177959969) < 2 {
+      effect add_mark(self, 4177959969, 2);
+      effect prevent_current_damage();
+    }
+  }
+}

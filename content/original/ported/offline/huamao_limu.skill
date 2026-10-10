@@ -1,0 +1,5 @@
+// huamao_limu：主动(phaseUse), 视作lebu, 回复体力。
+skill huamao_limu(2173323485) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

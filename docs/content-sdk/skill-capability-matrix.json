@@ -1,0 +1,5924 @@
+{
+  "schema_version": 1,
+  "total_skills": 243,
+  "source_counts": {
+    "shenhua": 174,
+    "standard": 69
+  },
+  "skills": [
+    {
+      "source": "shenhua",
+      "name": "baonue",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "baonue2",
+      "grade": "B",
+      "triggers": [
+        "global:damageSource"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "recover_hp"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "bazhen",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "bazhen_bagua",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "beige",
+      "grade": "C",
+      "triggers": [
+        "global:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "recover_hp",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "draw_cards",
+        "recover_hp",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "benghuai",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "buqu",
+      "grade": "B",
+      "triggers": [
+        "player:chooseToUseBefore"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "recover_hp"
+      ],
+      "required_surfaces": [
+        "intent_modifier",
+        "recover_hp"
+      ],
+      "gaps": [
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "chanyuan",
+      "grade": "B",
+      "triggers": [
+        "player:changeHp"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "dcwanglie",
+      "grade": "B",
+      "triggers": [
+        "player:useCard"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "intent_modifier",
+        "subskill_state",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "dcwanglie2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "dimeng",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_congjian",
+      "grade": "C",
+      "triggers": [
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_hongju",
+      "grade": "C",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_huairou",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_jueyan",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "draw_cards",
+        "intent_modifier",
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_jueyan1",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_jueyan2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_jueyan3",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_poshi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_qianjie",
+      "grade": "B",
+      "triggers": [
+        "player:linkBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier",
+        "subskill_state",
+        "trigger:link"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_qingce",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_wanglie",
+      "grade": "C",
+      "triggers": [
+        "player:useCard"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "intent_modifier",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_wanglie2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_weidi",
+      "grade": "C",
+      "triggers": [
+        "player:phaseDiscardBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phaseDiscard"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_xiongluan",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "intent_modifier",
+        "subskill_state"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_yongsi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBegin2"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "subskill_state",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_yongsi1",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_zhengu",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "subskill_state",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "drlt_zhenrong",
+      "grade": "B",
+      "triggers": [
+        "source:damageSource"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "duanchang",
+      "grade": "B",
+      "triggers": [
+        "player:die"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:death"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "duanliang",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "duanliang1",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "duanliang2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "duanliang3",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "fangquan",
+      "grade": "C",
+      "triggers": [
+        "player:phaseUseBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "fangquan2",
+      "grade": "B",
+      "triggers": [
+        "player:phaseEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "fangquan3",
+      "grade": "B",
+      "triggers": [
+        "player:phaseAfter,phaseCancelled"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:phase"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "fangzhu",
+      "grade": "D",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "nondeterministic_rng",
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "fangzhu_new_simayi",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "fenji",
+      "grade": "B",
+      "triggers": [
+        "global:gainAfter,loseAfter,loseAsyncAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:gain",
+        "trigger:lose",
+        "trigger:loseAsync"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "guhuo",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "guhuo_guess",
+      "grade": "D",
+      "triggers": [
+        "player:useCardBefore,respondBefore"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "async_timer",
+        "nondeterministic_rng",
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "guidao",
+      "grade": "B",
+      "triggers": [
+        "global:judge"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "guzheng",
+      "grade": "C",
+      "triggers": [
+        "global:phaseDiscardAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "trigger:phaseDiscard"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "gzbuqu",
+      "grade": "C",
+      "triggers": [
+        "player:changeHp"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "subskill_state"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "gzduanliang",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "gzyinghun",
+      "grade": "C",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "draw_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "draw_cards",
+        "intent_modifier",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "haoshi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBegin2"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "haoshi2",
+      "grade": "C",
+      "triggers": [
+        "player:phaseDrawEnd"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:phaseDraw"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "hongju",
+      "grade": "C",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "hongyan",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "huangtian",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "huangtian2",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "huashen",
+      "grade": "C",
+      "triggers": [
+        "global:phaseBefore",
+        "player:enterGame,phaseBegin,phaseEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "async_timer",
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "huashen2",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "hunzi",
+      "grade": "C",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "huoji",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "huoshou",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "huoshou1",
+      "grade": "B",
+      "triggers": [
+        "target:useCardToBefore"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "huoshou2",
+      "grade": "B",
+      "triggers": [
+        "global:useCard"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "jianchu",
+      "grade": "C",
+      "triggers": [
+        "player:useCardToPlayered"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "jiang",
+      "grade": "B",
+      "triggers": [
+        "player:useCardToPlayered",
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "intent_modifier"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "jieming",
+      "grade": "C",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "jiewei",
+      "grade": "C",
+      "triggers": [
+        "player:turnOverEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:turnOver"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "jiezi",
+      "grade": "B",
+      "triggers": [
+        "global:phaseDrawSkipped,phaseDrawCancelled"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards"
+      ],
+      "gaps": [
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "jiuchi",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "jixi",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "subskill_state",
+        "view_as"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "jushou",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "juxiang",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "juxiang1",
+      "grade": "B",
+      "triggers": [
+        "target:useCardToBefore"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "juxiang2",
+      "grade": "B",
+      "triggers": [
+        "global:useCardAfter"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "kanpo",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "intent_modifier",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "kongsheng",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "kongsheng2",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "kuanggu",
+      "grade": "B",
+      "triggers": [
+        "source:damageSource"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp"
+      ],
+      "required_surfaces": [
+        "recover_hp"
+      ],
+      "gaps": [
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "leiji",
+      "grade": "B",
+      "triggers": [
+        "player:useCard,respond"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "liangyin",
+      "grade": "B",
+      "triggers": [
+        "global:loseAfter,addToExpansionAfter,cardsGotoSpecialAfter,loseAsyncAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "draw_cards",
+        "subskill_state",
+        "trigger:addToExpansion",
+        "trigger:cardsGotoSpecial",
+        "trigger:lose",
+        "trigger:loseAsync"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "lianhuan",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "view_as"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "liegong",
+      "grade": "B",
+      "triggers": [
+        "player:useCardToPlayered"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "intent_modifier"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "lieren",
+      "grade": "B",
+      "triggers": [
+        "source:damageSource"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "luanji",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "luanwu",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "mengjin",
+      "grade": "B",
+      "triggers": [
+        "player:shaMiss"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "moon_jushou",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "new_fenji",
+      "grade": "B",
+      "triggers": [
+        "global:phaseAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:phase"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "niepan",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "recover_hp",
+        "discard"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "discard",
+        "draw_cards",
+        "recover_hp"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_binglve",
+      "grade": "B",
+      "triggers": [
+        "player:nzry_feijunAfter"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "trigger:nzry_feijun"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_chenglve",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "draw_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "discard",
+        "draw_cards",
+        "intent_modifier",
+        "subskill_state"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_cunmu",
+      "grade": "B",
+      "triggers": [
+        "player:drawBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:draw"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_feijun",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "discard"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_huaiju",
+      "grade": "B",
+      "triggers": [
+        "global:phaseBefore",
+        "player:enterGame"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_huaiju_ai",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_jianxiang",
+      "grade": "B",
+      "triggers": [
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_juzhan",
+      "grade": "B",
+      "triggers": [
+        "player:useCardToPlayered",
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "intent_modifier",
+        "subskill_state"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_kuizhu",
+      "grade": "C",
+      "triggers": [
+        "player:phaseDiscardAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "trigger:phaseDiscard"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_lijun",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_lijun1",
+      "grade": "C",
+      "triggers": [
+        "player:useCardAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "gain_cards",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_lijun2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_mingren",
+      "grade": "C",
+      "triggers": [
+        "global:phaseBefore",
+        "player:enterGame"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "gain_cards",
+        "subskill_state"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_shenshi",
+      "grade": "B",
+      "triggers": [
+        "global:damageSource"
+      ],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "deal_damage",
+        "draw_cards",
+        "subskill_state"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_shicai",
+      "grade": "C",
+      "triggers": [
+        "player:useCardAfter,useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "intent_modifier",
+        "subskill_state",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_yili",
+      "grade": "C",
+      "triggers": [
+        "player:phaseUseBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_zhenglun",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_zhenliang",
+      "grade": "C",
+      "triggers": [
+        "player:useCardAfter,respondAfter"
+      ],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "deal_damage",
+        "draw_cards",
+        "subskill_state",
+        "trigger:card_used",
+        "trigger:respond"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "nzry_zhizheng",
+      "grade": "C",
+      "triggers": [
+        "player:phaseUseEnd"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier",
+        "subskill_state",
+        "trigger:phaseUse"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "oldniepan",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "recover_hp",
+        "discard"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "discard",
+        "draw_cards",
+        "recover_hp"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "olkongsheng",
+      "grade": "C",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "subskill_state",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "olliangyin",
+      "grade": "C",
+      "triggers": [
+        "global:loseAfter,addToExpansionAfter,cardsGotoSpecialAfter,loseAsyncAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "recover_hp",
+        "subskill_state",
+        "trigger:addToExpansion",
+        "trigger:cardsGotoSpecial",
+        "trigger:lose",
+        "trigger:loseAsync"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "qiangxi",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "deal_damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "qiangxix",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "deal_damage",
+        "intent_modifier"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "qiaobian",
+      "grade": "C",
+      "triggers": [
+        "player:phaseJudgeBefore,phaseDrawBefore,phaseUseBefore,phaseDiscardBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "gain_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "qimou",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "qimou2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "qingce",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "gain_cards"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "quhu",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "deal_damage"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "rechezheng",
+      "grade": "B",
+      "triggers": [
+        "source:damageBegin2"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:damage"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "redimeng",
+      "grade": "D",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "gain_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "dom",
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "rejizhi_lukang",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "releiji",
+      "grade": "C",
+      "triggers": [
+        "player:useCard,respond"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage",
+        "recover_hp"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "recover_hp",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "reluanji",
+      "grade": "C",
+      "triggers": [
+        "player:phaseAfter"
+      ],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": true,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "draw_cards",
+        "subskill_state",
+        "trigger:phase",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "retianxiang",
+      "grade": "C",
+      "triggers": [
+        "player:damageBegin4"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "deal_damage",
+        "gain_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "discard",
+        "draw_cards",
+        "gain_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "retianxiang2",
+      "grade": "B",
+      "triggers": [
+        "player:damageAfter"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "retianxiang3",
+      "grade": "B",
+      "triggers": [
+        "player:loseHpAfter"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:loseHp"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "roulin",
+      "grade": "B",
+      "triggers": [
+        "player:useCardToPlayered",
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "ruoyu",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp",
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "recover_hp",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "shensu",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "shensu1",
+      "grade": "C",
+      "triggers": [
+        "player:phaseJudgeBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "shensu1_xiahouba",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "shensu2",
+      "grade": "C",
+      "triggers": [
+        "player:phaseUseBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "shensu4",
+      "grade": "C",
+      "triggers": [
+        "player:phaseDiscardBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "shuangxiong",
+      "grade": "C",
+      "triggers": [
+        "player:phaseDrawBegin1"
+      ],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "gain_cards",
+        "subskill_state",
+        "trigger:phase_begin",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "shuangxiong1",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBegin1"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "shuangxiong2",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "songwei",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "songwei2",
+      "grade": "B",
+      "triggers": [
+        "global:judgeEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:judge"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "tachibana_effect",
+      "grade": "B",
+      "triggers": [
+        "global:damageBegin4,phaseDrawBegin2"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:damage",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "tianxiang",
+      "grade": "C",
+      "triggers": [
+        "player:damageBegin3"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "tianxiang2",
+      "grade": "A",
+      "triggers": [
+        "player:damageAfter,damageCancelled,damageZero"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "tianyi",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "tianyi2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "tianyi3",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "tiaoxin",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "tiaoxin_xiahouba",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "tuntian",
+      "grade": "C",
+      "triggers": [
+        "player:loseAfter",
+        "global:equipAfter,addJudgeAfter,gainAfter,loseAsyncAfter,addToExpansionAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "intent_modifier",
+        "subskill_state",
+        "trigger:addJudge",
+        "trigger:addToExpansion",
+        "trigger:equip",
+        "trigger:gain",
+        "trigger:lose",
+        "trigger:loseAsync"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "wansha",
+      "grade": "C",
+      "triggers": [
+        "global:dying"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:dying"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "wansha2",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "weimu",
+      "grade": "B",
+      "triggers": [
+        "global:useCard1"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xiangle",
+      "grade": "C",
+      "triggers": [
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "discard"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xinfu_fuyin",
+      "grade": "B",
+      "triggers": [
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xinfu_guhuo",
+      "grade": "D",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse",
+        "chooseToRespond"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "nondeterministic_rng",
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xinfu_zuilun",
+      "grade": "C",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xingshang",
+      "grade": "B",
+      "triggers": [
+        "global:die"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:death"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xinhongyan",
+      "grade": "C",
+      "triggers": [
+        "global:judge"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "intent_modifier"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xinjiewei",
+      "grade": "C",
+      "triggers": [
+        "player:turnOverEnd"
+      ],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "discard",
+        "subskill_state",
+        "trigger:turnOver",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xinjushou",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "discard",
+        "draw_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xinkuanggu",
+      "grade": "C",
+      "triggers": [
+        "source:damageSource"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xinliegong",
+      "grade": "B",
+      "triggers": [
+        "player:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "intent_modifier"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xinqiangxi",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "deal_damage",
+        "subskill_state"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xinsheng",
+      "grade": "B",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xinshensu",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xintianxiang",
+      "grade": "C",
+      "triggers": [
+        "player:damageBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xintianxiang2",
+      "grade": "C",
+      "triggers": [
+        "player:damageAfter,damageCancelled,damageZero"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "xintianxiang3",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin,dieBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:die",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xintianxiang4",
+      "grade": "B",
+      "triggers": [
+        "source:damageBefore",
+        "player:damageBefore"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "xueyi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDiscardBefore"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "yinghun",
+      "grade": "C",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "draw_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "draw_cards",
+        "intent_modifier",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "yinghun_ol_sunjian",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "zaiqi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBegin1"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp",
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "recover_hp",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "zaiqixx",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "zaoxian",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "zhengrong",
+      "grade": "C",
+      "triggers": [
+        "player:useCardToPlayered"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "shenhua",
+      "name": "zhiba",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "gain_cards",
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "zhiji",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "shenhua",
+      "name": "zhijian",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "draw_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "biyue",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "fanjian",
+      "grade": "D",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "deal_damage"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "nondeterministic_rng"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "fankui",
+      "grade": "B",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "feiying",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "ganglie",
+      "grade": "D",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "discard",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "nondeterministic_rng"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "ganglie_three",
+      "grade": "C",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "discard",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "guanxing",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "guicai",
+      "grade": "B",
+      "triggers": [
+        "global:judge"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "guose",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "hujia",
+      "grade": "C",
+      "triggers": [
+        "player:chooseToRespondBefore,chooseToUseBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "jianxiong",
+      "grade": "B",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "jieyin",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "recover_hp"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "jijiang",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse",
+        "chooseToRespond"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "subskill_state",
+        "view_as"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "jijiang1",
+      "grade": "B",
+      "triggers": [
+        "player:useCardBegin,respondBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:respond",
+        "trigger:useCard"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "jijiang3",
+      "grade": "B",
+      "triggers": [
+        "global:useCardAfter,useSkillAfter,phaseAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:card_used",
+        "trigger:phase",
+        "trigger:useSkill"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "jijiu",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "intent_modifier",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "jijiu_re_huatuo",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "jiuyuan",
+      "grade": "B",
+      "triggers": [
+        "target:taoBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:tao"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "jizhi",
+      "grade": "B",
+      "triggers": [
+        "player:useCard"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "keji",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDiscardBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "kongcheng",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier",
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "kongcheng1",
+      "grade": "B",
+      "triggers": [
+        "player:loseEnd"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:lose"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "kurou",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "draw_cards"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "lianying",
+      "grade": "B",
+      "triggers": [
+        "player:loseAfter",
+        "global:equipAfter,addJudgeAfter,gainAfter,loseAsyncAfter,addToExpansionAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:addJudge",
+        "trigger:addToExpansion",
+        "trigger:equip",
+        "trigger:gain",
+        "trigger:lose",
+        "trigger:loseAsync"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "lijian",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "liuli",
+      "grade": "C",
+      "triggers": [
+        "target:useCardToTarget"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "longdan",
+      "grade": "B",
+      "triggers": [
+        "player:useCard,respond"
+      ],
+      "active_windows": [
+        "chooseToUse",
+        "chooseToRespond"
+      ],
+      "locked": true,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "draw_cards",
+        "subskill_state",
+        "trigger:card_used",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "longdan_sha_re_zhaoyun",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "luoshen",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "luoyi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBegin2"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "luoyi2",
+      "grade": "B",
+      "triggers": [
+        "source:damageBegin1"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:damage"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "mashu",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "new_jiangchi",
+      "grade": "C",
+      "triggers": [
+        "player:phaseDrawEnd"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard",
+        "draw_cards",
+        "trigger:phaseDraw"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "new_jiangchi3",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "paoxiao",
+      "grade": "B",
+      "triggers": [
+        "player:useCard1"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "paoxiao_xiahouba",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "qianxun",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "qicai",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "qingguo",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToRespond",
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "intent_modifier",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "qingnang",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "recover_hp"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "qixi",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "rende",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "recover_hp"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "recover_hp"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "rende1",
+      "grade": "B",
+      "triggers": [
+        "player:phaseUseBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "retongji",
+      "grade": "C",
+      "triggers": [
+        "global:useCardToTarget"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "discard"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "rewangzun",
+      "grade": "B",
+      "triggers": [
+        "global:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "rewangzun2",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "shenji",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "stdkuangfu",
+      "grade": "B",
+      "triggers": [
+        "source:damageSource"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "stdqingjiao",
+      "grade": "B",
+      "triggers": [
+        "player:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "stdshushen",
+      "grade": "B",
+      "triggers": [
+        "player:recoverEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "stdxiaoguo",
+      "grade": "C",
+      "triggers": [
+        "global:phaseJieshuBegin"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage",
+        "discard"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "discard",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "tiandu",
+      "grade": "B",
+      "triggers": [
+        "player:judgeEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "trigger:judge"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "tieji",
+      "grade": "C",
+      "triggers": [
+        "player:useCardToPlayered"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "tuxi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBegin1"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "gain_cards",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "wusheng",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "chooseToRespond",
+        "chooseToUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "wusheng_re_guanyu",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "wushuang",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "wushuang1",
+      "grade": "B",
+      "triggers": [
+        "player:useCardToPlayered"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "wushuang2",
+      "grade": "B",
+      "triggers": [
+        "player:useCardToPlayered",
+        "target:useCardToTargeted"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "xiaoji",
+      "grade": "B",
+      "triggers": [
+        "player:loseAfter",
+        "global:equipAfter,addJudgeAfter,gainAfter,loseAsyncAfter,addToExpansionAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:addJudge",
+        "trigger:addToExpansion",
+        "trigger:equip",
+        "trigger:gain",
+        "trigger:lose",
+        "trigger:loseAsync"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "xinfu_jijie",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "gain_cards"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "xinfu_jiyuan",
+      "grade": "B",
+      "triggers": [
+        "global:dying,gainAfter,loseAsyncAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:dying",
+        "trigger:gain",
+        "trigger:loseAsync"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "yaowu",
+      "grade": "B",
+      "triggers": [
+        "player:damageBegin3"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "yiji",
+      "grade": "C",
+      "triggers": [
+        "player:damageEnd"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "standard",
+      "name": "yingzi",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBegin2"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "zhanshen",
+      "grade": "B",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "discard"
+      ],
+      "required_surfaces": [
+        "discard",
+        "trigger:phase_begin"
+      ],
+      "gaps": [
+        "semantic_manual_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "zhiheng",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "draw_cards",
+        "intent_modifier"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "zhongyi",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "standard",
+      "name": "zhongyi2",
+      "grade": "B",
+      "triggers": [
+        "global:damageBegin1"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "trigger:damage"
+      ],
+      "gaps": [
+        "effect_or_intent_review"
+      ],
+      "capability_hits": []
+    }
+  ],
+  "disclaimer": "Heuristic source inventory only; each row still requires semantic Golden tests before migration is complete."
+}

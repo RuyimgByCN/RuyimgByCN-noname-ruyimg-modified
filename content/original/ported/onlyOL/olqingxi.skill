@@ -1,0 +1,5 @@
+skill olqingxi(3468570040) {
+  trigger damage_before owner_source_sha_direct_damage_before optional {
+    effect choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both(self, event_player);
+  }
+}

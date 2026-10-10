@@ -1,0 +1,15 @@
+// 消元：觉醒技；体力减少后低于 4 时减 3 点体力上限、摸三张牌并失去“绯驱”。
+skill godan_xiaoyuan(2543675799) locked {
+  trigger damage owner_is_target_hp_below_4 {
+    effect change_max_hp(self, -3);
+    effect draw_cards(self, 3);
+    effect remove_skill_by_def(self, 3490863084);
+    effect remove_skill(self_skill);
+  }
+  trigger hp_lost owner_is_target_hp_below_4 {
+    effect change_max_hp(self, -3);
+    effect draw_cards(self, 3);
+    effect remove_skill_by_def(self, 3490863084);
+    effect remove_skill(self_skill);
+  }
+}

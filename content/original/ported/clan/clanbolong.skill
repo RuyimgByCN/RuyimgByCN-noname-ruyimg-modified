@@ -1,0 +1,8 @@
+// 驳龙（族王广/族王明山/族王允/族王伦/族王昶/族王淩）：出牌阶段限一次，交给目标N张牌后视为对其使用【酒】，或目标拒绝后你交其1张并视为对其使用雷【杀】。
+// 旧 JS 的「目标选择分支（给牌+酒 vs 拒绝+雷杀）」「虚拟酒/雷杀使用」无对应原语。
+// 空定义：需 expansion 支持双边选择机制（choose for target）和虚拟属性杀。
+skill clanbolong(2956985907) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

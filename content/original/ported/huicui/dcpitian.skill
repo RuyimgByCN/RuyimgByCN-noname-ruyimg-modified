@@ -1,0 +1,5 @@
+// dcpitian：锁定技；摸?牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcpitian(2464025529) {
+  modifier hand_limit add 1;
+}

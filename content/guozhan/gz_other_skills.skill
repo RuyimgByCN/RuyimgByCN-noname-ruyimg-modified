@@ -1,0 +1,79 @@
+// 国战·蜀/吴/群核心技能首批（简化语义，标注近似）。
+// 旧 JS 仅作语义证据，不执行旧 JS。
+
+// === 蜀 ===
+
+// gz_kongcheng（国战·空城）：弃牌阶段弃置手牌后，不能被选为杀/决斗目标。
+// 近似：结束阶段若手牌为 0 摸一张（空城免疫省略）。
+skill gz_kongcheng(750540806) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jizhi（国战·集智）：使用非延时锦囊后摸一张牌。
+skill gz_jizhi(1598832956) {
+  trigger card_used owner_source_ordinary_trick optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_keji（国战·克己）：弃牌阶段若弃置了牌，可弃置一张装备获得一张杀。
+// 近似：弃牌阶段摸一张（获得杀省略）。
+skill gz_keji(3401644208) {
+  trigger phase_discard owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// === 吴 ===
+
+// gz_shushen（国战·淑慎）：回复体力后可令一名其他角色摸一张牌。
+// 近似：自己回复后摸一张（令他人摸牌省略）。
+skill gz_shushen(3168907575) {
+  trigger hp_recovered owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_mouduan（国战·谋断）：结束阶段若手牌不小于体力值，视为使用一张杀。
+// 近似：结束阶段摸一张（视为杀省略）。
+skill gz_mouduan(727317533) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_tianxiang（国战·天香）：受到伤害时可弃一张牌将伤害转移给他人。
+// 近似：受伤后摸一张（转移省略）。
+skill gz_tianxiang(3764950058) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// === 群 ===
+
+// gz_duanchang（国战·断肠）：死亡时令击杀者失去所有技能。
+// 近似：死亡时令来源流失 1 点体力（失去技能省略）。
+skill gz_duanchang(3358602185) {
+  trigger death always {
+    effect lose_hp(event_source, 1);
+  }
+}
+
+// gz_mingshi（国战·名士）：受到伤害时若来源体力大于你，伤害-1。
+// 近似：受伤后摸一张（伤害-1 modifier 省略）。
+skill gz_mingshi(3014542373) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_kuangfu（国战·狂腐）：使用杀指定目标后可弃其一张牌。
+// 近似：使用杀后摸一张（弃牌省略）。
+skill gz_kuangfu(3399422409) {
+  trigger card_targeted owner_source_sha optional {
+    effect draw_cards(self, 1);
+  }
+}

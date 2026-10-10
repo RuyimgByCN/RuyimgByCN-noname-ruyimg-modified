@@ -1,0 +1,5 @@
+// pssuiluan：锁定技, player:useCard2, player:card_used, player:damage, 需选择目标, 加技能, 含子技能, 异步, 条件计数。
+skill pssuiluan(2715817073) locked {
+  trigger card_used always {
+  }
+}

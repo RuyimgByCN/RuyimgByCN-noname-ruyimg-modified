@@ -1,0 +1,4 @@
+// 四象：无言。旧 JS 的 useCard 空 content 只负责播放音效。
+skill stdwuyan(3164633937) locked {
+  modifier card_name(trick) override wuxie;
+}

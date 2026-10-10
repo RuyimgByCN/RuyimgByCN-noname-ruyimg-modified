@@ -1,0 +1,12 @@
+// 兴学(旧版)(旧版孙休)：结束阶段，你可以选择至多X名角色（X为你的体力值，
+// 若有宴诛标记则为体力上限），令这些角色依次摸一张牌，然后其中手牌数大于体力值的角色
+// 依次将一张牌置于牌堆顶。
+// 近似：用phase_end触发，以draw_selected模拟摸牌，手牌>体力的top-deck逻辑无法分段处理。
+skill rexingxue(3371558238) {
+  trigger phase_end owner_alive {
+    // 近似：摸X张牌（X=体力值），分配给人
+    // 注：旧JS的逐个draw后逐个top-deck（仅对手牌>体力值者）无法用DSL分步表达
+    effect draw_cards(event_player, hp(self));
+    // 注：手牌>体力值时置牌堆顶的逻辑未建模，且reyanzhu标记下的maxHp替代未处理
+  }
+}

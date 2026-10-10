@@ -1,0 +1,22 @@
+// 势黄祖：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI505 原语。
+skill mbchizhang(3712476166) {
+  trigger card_targeted owner_source_first_target_hand_damage_card_discardable optional {
+    effect resolve_mbchizhang(self, event_card);
+  }
+
+  modifier card_distance_unlimited(damage_card) override 1;
+}
+
+skill mbduanyang(2631325253) {
+  trigger cards_moved owner_lost_hand_ownerless_sha_not_use_once_per_turn optional {
+    effect resolve_mbduanyang(self, event_player, event_card, 0);
+  }
+
+  trigger phase_any_end owner_alive_phase_any_end_originating_skill_pile_nonempty {
+    effect resolve_mbduanyang(self, event_player, event_card, 1);
+  }
+
+  trigger damage owner_source_damage_tracked_mbduanyang_target_recastable optional {
+    effect resolve_mbduanyang(self, event_player, event_card, 2);
+  }
+}

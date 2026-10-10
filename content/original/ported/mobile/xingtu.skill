@@ -1,0 +1,6 @@
+// xingtu（行图）：锁定技。你使用点数为X的倍数的牌无次数限制，你使用点数为X的约数的牌时摸一张牌（X为你本局游戏使用的上一张牌的点数）。
+skill xingtu(2760133760) locked {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 致用（想学刘禅）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：每局每项限一次：弃对应数量牌视为使用普通【杀】（手牌数 / 2 / 惘数三档）
+// 旧 JS 的「动态消耗分档 + 虚拟牌 + 局级限次」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill zhiyong(2151383594) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

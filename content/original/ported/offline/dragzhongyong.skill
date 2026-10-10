@@ -1,0 +1,6 @@
+// dragzhongyong：音效名:mobilezhongyong, global:useCardToTarget, 摸牌, 失去体力, 异步。
+skill dragzhongyong(4069235369) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

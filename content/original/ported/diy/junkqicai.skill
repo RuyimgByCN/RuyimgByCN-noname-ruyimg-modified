@@ -1,0 +1,5 @@
+// 奇才：锦囊牌无距离限制；非坐骑装备不能被其他角色弃置。
+skill junkqicai(2508459447) locked {
+  modifier card_distance_unlimited(trick) override 1;
+  modifier card_discard_protected(equip_non_mount) override 1;
+}

@@ -1,0 +1,15 @@
+// 生息/宽济：准备阶段获得调剂盐梅；无伤用牌回合末获智囊摸牌；非使用弃牌可转赠。
+skill twshengxi(3391342890) {
+trigger phase_prepare owner_is_target {
+    effect resolve_twfeiyi(self, 0);
+  }
+trigger phase_end owner_alive_phase_end_used_card_no_damage {
+    effect resolve_twfeiyi(self, 1);
+  }
+}
+
+skill twkuanji(3010237936) {
+trigger cards_moved owner_cards_entered_discard_not_use_unused {
+    effect resolve_twfeiyi(self, 2);
+  }
+}

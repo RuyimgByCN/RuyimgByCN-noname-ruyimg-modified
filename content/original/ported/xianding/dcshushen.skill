@@ -1,0 +1,7 @@
+// 淑慎（DC 甘夫人）：回复体力后，可令一名其他角色摸两张牌或回复 1 点体力。
+// 按 ADR 0176 / ABI 101 的 choose_other_draw_or_recover 语义重写，逐点触发。
+skill dcshushen(2888857366) {
+  trigger hp_recovered owner_is_target optional {
+    effect choose_other_draw_or_recover(self, 2, 1, event_amount);
+  }
+}

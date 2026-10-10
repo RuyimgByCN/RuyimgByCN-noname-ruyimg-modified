@@ -1,0 +1,4 @@
+// Skill bingx5(158) - trigger variant
+skill bingx5(158) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

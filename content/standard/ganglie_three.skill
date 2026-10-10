@@ -1,0 +1,6 @@
+// 刚烈（国战三版）：受伤后可选择一名敌方角色判定；非红桃时其弃两张牌或受到 1 点伤害。
+skill ganglie_three(3884116323) {
+  trigger damage owner_is_target optional {
+    effect resolve_ganglie_three(self);
+  }
+}

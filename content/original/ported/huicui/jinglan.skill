@@ -1,0 +1,22 @@
+// 惊澜（jinglan）— 锁定技。当你造成伤害后，若你的手牌数：大于体力值，你弃置四张手牌；
+// 等于体力值，你弃置一张牌并回复1点体力；小于体力值，你受到1点火焰伤害并摸五张牌。
+// 旧 JS（huicui/jinglan）：trigger source damageSource，forced；content 按 hand-hp 三分支。
+// 本包用 owner_is_source 过滤器 + DSL if/else 三分支表达（先判 < 和 ==，else 即 >）：
+// discard_hand(>0) / discard_hand_equip(==0)+recover / deal_damage(<0,fire)+draw。
+// discard_hand_equip 为新增原语（ABI 350）；旧 JS 的 damage("fire","nosource") 用
+// deal_damage(self,self,1,fire) 近似（来源为技能拥有者自身）。旧 JavaScript 不进入运行时。
+skill jinglan(3782183327) locked {
+  trigger damage owner_is_source {
+    if hand_count(self) < hp(self) {
+      effect deal_damage(self, self, 1, fire);
+      effect draw_cards(self, 5);
+    } else {
+      if hand_count(self) == hp(self) {
+        effect discard_hand_equip(self, 1);
+        effect recover_hp(self, 1);
+      } else {
+        effect discard_hand(self, 4);
+      }
+    }
+  }
+}

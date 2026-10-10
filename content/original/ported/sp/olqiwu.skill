@@ -1,0 +1,8 @@
+// 齐舞（olqiwu）：出牌阶段限一次，你可以将任意张手牌/装备牌当【杀】使用。
+// 上游 (sp/skill.js:4324)：enable phaseUse usable 1，position he，filterCard 任意可弃牌，
+// selectCard [1,Infinity]，viewAs sha。
+// 实现：view_as sha play_phase any from hand_equip uses_per_turn 1。与上游差异：
+// 任意多张牌计为一张虚拟牌（1 张素材），未建模 multi-card 数量语义，已注明。
+skill olqiwu(2221901766) {
+  view_as sha play_phase any from hand_equip uses_per_turn 1;
+}

@@ -1,0 +1,7 @@
+// 天香（界小乔）：受伤前弃红桃转移伤害。
+// 旧 JS 的「红桃弃牌转移」无对应原语；以受伤后摸一张近似（转移未建模，已注明）。
+skill xintianxiang(3958768891) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

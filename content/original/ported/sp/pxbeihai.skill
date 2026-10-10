@@ -1,0 +1,11 @@
+// 北海（pxbeihai，州郡技能）：当你获得此技能后，你将手牌摸至体力上限。
+// 上游 (sp/skill.js:2203)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且手牌数 < 体力上限；forced；content = drawTo(maxHp)。
+// 实现：skill_added + owner_skill_added_self_3401654349（新增参数化过滤器：拥有者刚
+// 获得指定 def 的技能）→ draw_cards(self, max_hp(self) - hand_count(self))。
+// 与上游差异：手牌 ≥ 上限时不摸（draw_cards 差值为 0 自动 no-op，语义等价）。
+skill pxbeihai(3401654349) {
+  trigger skill_added owner_skill_added_self_3401654349 {
+    effect draw_cards(self, max_hp(self) - hand_count(self));
+  }
+}

@@ -1,0 +1,7 @@
+// 淑丽（小杀）
+// 旧 JS 语义：每回合限两次，其他角色使用【杀】造成伤害后，可令其与你各摸一张牌。
+skill vtbshuli(3163490927) {
+  trigger damage owner_alive_other_source_sha_twice optional {
+    effect draw_each_by_seat(self, event_source, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 矢北：本回合第一次受到伤害后回复一点体力，之后每次受到伤害后失去一点体力。
+skill shibei(2648030702) locked {
+  trigger damage owner_is_target_first_damage {
+    effect recover_hp(self, 1);
+  }
+  trigger damage owner_is_target_after_first_damage {
+    effect lose_hp(self, 1);
+  }
+}

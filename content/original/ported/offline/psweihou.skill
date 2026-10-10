@@ -1,0 +1,5 @@
+// psweihou：player:judgeBegin, 多步骤。
+skill psweihou(4060860798) {
+  trigger phase_judge owner_alive {
+  }
+}

@@ -1,0 +1,11 @@
+// 势臧洪：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI516 原语。
+skill pot_liezhi(3956687454) {
+  view_as tao any any from none cost lose_max_hp_1 uses_per_turn 1;
+  view_as jiu any any from none cost lose_max_hp_1 uses_per_turn 1;
+}
+
+skill pot_jugu(4277593099) {
+  trigger card_targeted owner_alive_card_targeted_healthy optional {
+    effect resolve_potjugu(self);
+  }
+}

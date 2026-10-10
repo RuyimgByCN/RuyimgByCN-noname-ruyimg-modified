@@ -1,0 +1,15 @@
+// 遗世（文心雕龙曹丕）：限定技，出牌阶段，你可对所有其他角色发动一次「放逐」
+// （各摸你已损失体力张并翻面），然后这些角色获得仅能对你发动的「放逐」。
+// 上游 (offline_wenxindiaolong.js)：limited phaseUse，selectTarget=-1 全体其他，
+// useSkill wxdlfangzhu 后 addSkills + markAuto 指向自己。
+// 实现：`once_per_game targets 1 255 other` 令所选角色摸 `max_hp(self)-hp(self)` 张，
+// 再 `choose_other_add_skill` 授予已改写的 wxdlfangzhu(2892907842)。
+// **近似**：(1) 所选角色不自动翻面（无「对所选目标逐人翻面」原语）；
+// (2) 授予放逐需再选一名，而非全体自动获得；(3) 授予后「只能对你发动」未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill wxdlyishi(3108822644) {
+  active play_phase once_per_game targets 1 255 other {
+    effect draw_selected_targets(max_hp(self) - hp(self));
+    effect choose_other_add_skill(self, 2892907842);
+  }
+}

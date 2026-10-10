@@ -1,0 +1,7 @@
+// 影兵（xin版）：锁定技，使用牌指定拥有「咒缚」扩张区的角色为目标后，
+// 摸两张牌（每名角色限一次）。
+// 旧 JS 的「扩张区条件检查」「每角色限一次追踪」无对应原语，未建模。
+skill xinyingbing(3650143830) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,7 @@
+// 二圣（武曌）：一号位非以此法获得牌时你摸等量；其回合结束可视为使用其本回合用过的牌。
+// 近似：其他角色获得牌/摸牌阶段你摸 1（一号位与视为用牌未建模）。
+skill peersheng(4142397479) {
+  trigger cards_drawn owner_alive_not_target optional {
+    effect draw_cards(self, 1);
+  }
+}

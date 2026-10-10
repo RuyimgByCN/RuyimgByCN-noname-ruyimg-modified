@@ -1,0 +1,8 @@
+// 僻境（dcpijing）：结束阶段开始时，可令一名其他角色获得「自牧」（dczimu）。
+// 旧 JS 的「任意名角色获得、其余角色失去自牧」全场重分配以单目标授予近似
+// （省略失去部分）。
+skill dcpijing(3114639778) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_add_skill(self, 4186409591);
+  }
+}

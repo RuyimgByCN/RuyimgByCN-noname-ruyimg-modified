@@ -1,0 +1,7 @@
+// 驱虎（荀彧）
+// 出牌阶段限一次，与一名体力值严格大于自己的角色拼点；胜负后由一次性助手结算伤害。
+skill quhu(4267019884) {
+  active play_phase uses_per_turn 1 targets 1 1 other hp_gt_owner can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 2288140413, 4142452028);
+  }
+}

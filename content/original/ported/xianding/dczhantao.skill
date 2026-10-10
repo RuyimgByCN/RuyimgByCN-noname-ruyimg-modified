@@ -1,0 +1,7 @@
+// 斩涛（胡遵）：自己或攻击范围内角色受到有数字点数的牌造成的伤害后，可判定；
+// 判定点数大于原牌点数（转化牌为全部实体材料点数之和）时，视为对伤害来源使用【杀】。
+skill dczhantao(4294211147) {
+  trigger damage owner_alive_damage_target_self_or_in_range_other_source_numeric_card optional {
+    effect resolve_huzun(self, event_source, event_card, 0);
+  }
+}

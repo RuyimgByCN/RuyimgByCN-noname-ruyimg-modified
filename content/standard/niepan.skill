@@ -1,0 +1,4 @@
+// Pang Tong rebirth
+skill niepan(61) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

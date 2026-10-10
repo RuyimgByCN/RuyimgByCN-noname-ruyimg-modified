@@ -1,0 +1,7 @@
+// 矜繁·获牌（孙綝）：锁定技。你的「铃」离开武将牌后，从牌堆顶获得一张
+// 与每张「铃」花色相同的牌。
+// 旧 JS 的「铃」expansion 状态（依赖矜繁）无对应原语，未建模（已注明）。
+skill gnjinfan_gain(2436454547) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

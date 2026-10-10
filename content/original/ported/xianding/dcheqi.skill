@@ -1,0 +1,8 @@
+// 合骑（威马腾）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：游戏开始时获得 3 个“骑”；你不以此法使用【杀】结算后，可视为对拥有“骑”的其他角色使用 X 张【杀】
+// 旧 JS 的「虚拟多杀 + 标记查询」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill dcheqi(3795613143) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

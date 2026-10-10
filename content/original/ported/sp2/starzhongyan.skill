@@ -1,0 +1,17 @@
+// 忠言（星张昭）：出牌阶段限一次，亮出牌堆顶三张牌，一名有手牌的角色以其
+// 中一张与其一张手牌交换。
+// 上游 (sp2/skill.js starzhongyan L2812)：enable phaseUse usable 1；目标有
+// 手牌角色（可含自己）；content get.cards(3) 亮出 → chooseToMove 1:1 交换
+// （亮牌与目标手牌互换，未换 2 张留在牌堆顶）。
+// 实现（2026-09-13 第二百六十二批·chooseToMove 族状态机，ADR 0641 §8.51，
+// twdaigui 分段模板复用）：active play_phase uses_per_turn 1 →
+// resolve_zhongyan(self, self_skill, 0)（ABI 712 / tag 735 / Cont 313 三段）：
+// 选目标（有手牌任意角色）→ 亮牌堆顶 3 张（RevealCards）→ 目标选亮牌 1 张
+// → 目标选自己手牌 1 张 → 交换（亮牌入手牌，手牌置回牌堆顶原亮牌位置）。
+// 近似（登记债）：①交换次序为机内固定（亮牌原位换入手牌牌），上游
+// chooseToMove 拖拽自由排列未建模；②「有手牌角色」含自己（上游同口径 ✓）。
+skill starzhongyan(3150768048) {
+  active play_phase uses_per_turn 1 targets 0 0 {
+    effect resolve_zhongyan(self, self_skill, 0);
+  }
+}

@@ -1,0 +1,9 @@
+// olfangquan2：刷新包技能。
+// triggers: player:phaseDiscardBegin
+// forced/locked: 锁定技
+skill olfangquan2(2276462046) {
+    // 近似：旧JS事件 phaseDiscardBegin → DSL事件 phase_discard
+    trigger phase_discard owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

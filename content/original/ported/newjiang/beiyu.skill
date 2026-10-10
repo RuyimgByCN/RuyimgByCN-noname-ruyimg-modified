@@ -1,0 +1,9 @@
+// 备预（司马孚）：出牌阶段限一次，手牌数小于体力上限时，摸牌至体力上限。
+// 旧 JS 仅作语义证据；「将一种花色的手牌置于牌堆底」分支未建模。
+skill beiyu(2304954077) {
+  active play_phase uses_per_turn 1 {
+    if hand_count(self) < max_hp(self) {
+      effect draw_cards(self, max_hp(self) - hand_count(self));
+    }
+  }
+}

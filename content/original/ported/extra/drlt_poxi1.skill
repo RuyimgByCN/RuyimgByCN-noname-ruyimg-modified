@@ -1,0 +1,5 @@
+// 魄袭临时效果（神甘宁）
+// 原语义：本回合手牌上限减一。
+skill drlt_poxi1(2484371675) {
+  modifier hand_limit add -1;
+}

@@ -1,0 +1,30 @@
+// 狭威/穷技：维护可如手牌使用或打出的“威”，并结算妄行代价与空堆加伤。
+skill twxiawei(3007668730) {
+  trigger game_started owner_alive {
+    effect resolve_twxiawei(self, 3476660685, 0);
+  }
+  trigger phase_begin owner_phase_begin_playable_skill_pile_nonempty {
+    effect resolve_twxiawei(self, 3476660685, 1);
+  }
+  trigger phase_prepare owner_is_target {
+    effect resolve_twxiawei(self, 3476660685, 2);
+  }
+}
+
+skill twqiongji(2723606029) locked {
+  trigger damage_before owner_target_damage_before_playable_skill_piles_empty {
+    effect resolve_twxiawei(self, 3476660685, 3);
+  }
+  trigger card_used owner_used_playable_skill_pile_card_unused {
+    effect draw_cards(self, 1);
+  }
+  trigger card_responded owner_used_playable_skill_pile_card_unused {
+    effect draw_cards(self, 1);
+  }
+}
+
+skill wangxing(3476660685) locked {
+  trigger phase_end owner_is_target_mark_positive_3476660685 {
+    effect resolve_twxiawei(self, 3476660685, 4);
+  }
+}

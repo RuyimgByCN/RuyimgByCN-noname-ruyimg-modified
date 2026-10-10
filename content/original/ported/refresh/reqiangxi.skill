@@ -1,0 +1,8 @@
+// 强袭：同一出牌阶段内每名目标限一次；弃武器或失去一点体力后造成一点伤害。
+skill reqiangxi(2185312161) {
+  active play_phase targets 1 1 other in_attack_range unused_by_skill_this_play_phase {
+    effect choose_discard_weapon_or_lose_hp(self);
+    effect record_active_target(self, event_source);
+    effect deal_damage(self, event_source, 1);
+  }
+}

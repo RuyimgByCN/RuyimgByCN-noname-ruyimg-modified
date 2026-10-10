@@ -1,0 +1,6 @@
+// 原仓库 character/sp2/skill.js：追袭。
+
+skill lxzhuixi(2387115210) locked {
+  modifier damage_amount add owner_turned_over_diff_other;
+  modifier damage_taken_amount add owner_turned_over_diff_other;
+}

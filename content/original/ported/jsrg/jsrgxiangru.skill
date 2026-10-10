@@ -1,0 +1,8 @@
+// jsrgxiangru（相濡）：当一名已受伤的其他角色／你受到致命伤害时，你／已受伤的其他角色可以交给伤害来源两张牌，然后防止此伤害。
+// 未建模：翻译调用, 全局状态（DSL无对应原语）
+skill jsrgxiangru(2333103995) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgxiangru（skill.js:1209）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：受伤后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

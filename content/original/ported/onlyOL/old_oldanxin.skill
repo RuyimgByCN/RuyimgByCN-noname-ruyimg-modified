@@ -1,0 +1,8 @@
+skill old_oldanxin(4026350658) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    if mark_count(self, 1878867010) < 2 {
+      effect add_mark(self, 1878867010, 1);
+    }
+  }
+}

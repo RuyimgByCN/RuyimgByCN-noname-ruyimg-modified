@@ -1,0 +1,7 @@
+skill reshishou2(2672855040) locked {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2058376721) == 0 {
+      effect lose_hp(self, 1);
+    }
+  }
+}

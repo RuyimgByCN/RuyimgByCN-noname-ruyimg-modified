@@ -1,0 +1,8 @@
+// 树捋（SP 包，制衡变体）：手牌数大于体力值时，出牌阶段限一次，弃置一张手牌或
+// 装备牌并摸一张牌。
+skill shulv(2586462603) {
+  active play_phase uses_per_turn 1 hand_gt_hp select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

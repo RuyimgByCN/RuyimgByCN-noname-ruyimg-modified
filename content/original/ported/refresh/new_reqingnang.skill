@@ -1,0 +1,10 @@
+// new_reqingnang（华佗·青囊-新版）：出牌阶段，弃一张牌令一名角色回复1体力。
+// 黑色牌则本回合不可再发动；目标获得 new_reqingnang_off 标记防重复回复。
+// 旧 JS 的「黑色自ban/防重复标记」无对应原语；以弃一张手牌并选择一名
+// 角色回复 1 点近似（已注明）。
+skill new_reqingnang(4267485180) {
+  active play_phase select_hand 1 1 targets 1 1 other {
+    effect discard_selected(self);
+    effect recover_hp(event_source, 1);
+  }
+}

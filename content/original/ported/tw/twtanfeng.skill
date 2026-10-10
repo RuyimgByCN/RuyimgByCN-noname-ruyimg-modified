@@ -1,0 +1,6 @@
+/// 探锋：弃置一名其他角色区域内一张牌；其以牌当杀或受火焰伤害并令你跳过阶段。
+skill twtanfeng(4187893298) {
+  trigger phase_prepare owner_is_target {
+    effect resolve_twtanfeng(self);
+  }
+}

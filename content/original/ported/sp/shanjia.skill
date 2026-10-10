@@ -1,0 +1,8 @@
+skill shanjia(3876659100) {
+  trigger card_used owner_source_equip_used_skill_mark_below_seven {
+    effect add_mark(self, 3876659100, 1);
+  }
+  trigger phase_play owner_is_target_mark_positive_3876659100 optional {
+    effect resolve_shanjia(self, mark_count(self, 3876659100));
+  }
+}

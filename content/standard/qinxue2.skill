@@ -1,0 +1,4 @@
+// Skill qinxue2(110) - standard variant
+skill qinxue2(110) {
+  modifier attack_range add 1;
+}

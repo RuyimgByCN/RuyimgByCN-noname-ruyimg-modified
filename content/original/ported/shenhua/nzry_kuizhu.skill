@@ -1,0 +1,7 @@
+// 溃诛（孙亮）：弃牌阶段后按弃牌数摸牌/伤害。
+// 旧 JS 的「按弃牌数分支」无对应原语；以弃牌阶段后摸一张近似（已注明）。
+skill nzry_kuizhu(2578758812) {
+  trigger phase_discard_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

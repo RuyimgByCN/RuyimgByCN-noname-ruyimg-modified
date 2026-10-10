@@ -1,0 +1,7 @@
+// jianyan（孙茹·荐言）：出牌阶段限一次，选择一种类别（颜色/牌类型），从牌堆顶找对应牌展示并交给一名男性角色。
+// 旧JS含 chooseControl(5选项) + getCardPile(条件查找) + showCards + chooseTarget(仅男性)，DSL无对应原语，未建模。
+skill jianyan(4290659581) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jianyan 含真实规则体（enable、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

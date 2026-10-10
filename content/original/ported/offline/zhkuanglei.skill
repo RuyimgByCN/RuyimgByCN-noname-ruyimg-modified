@@ -1,0 +1,11 @@
+// 狂雷（纵横神张角）：锁定技，你成为其他角色使用伤害牌的目标时，除非其交给你一张
+// 牌，否则其进行一次〖雷击〗判定（梅花：你回复 1 点体力且其受 1 点雷电伤害；黑桃：
+// 其受 2 点雷电伤害）。
+// 上游 (offline_zongheng.js:49-82)：useCardToTarget + chooseToGive 二选一 +
+// inherit releiji 的判定伤害链（derivation zhkuanglei_leiji）。
+// 「目标给牌否则触发判定链」的组合原语、「按判定花色分支伤害」均无对应 DSL 原语。
+// 诚实 noop（保真度债，ADR 0597）。2026-08-15：随上游 v1.11.5 新武将 zh_shen_zhangjiao 移植。
+skill zhkuanglei(3714615114) locked {
+  // INTENTIONAL_EMPTY_NOOP: give-or-judgment-chain unavailable
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,4 @@
+// 违忤：出牌阶段限一次，红色手牌或装备牌可当无距离限制的【顺手牵羊】使用。
+skill spweiwu(4254049099) {
+  view_as shunshou play_phase red from hand_equip uses_per_turn 1 ignore_distance;
+}

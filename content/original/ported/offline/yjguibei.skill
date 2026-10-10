@@ -1,0 +1,6 @@
+// yjguibei：锁定技, global:phaseBefore, player:game_started, 摸牌, 异步。
+skill yjguibei(3048234003) {
+  trigger phase_begin owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

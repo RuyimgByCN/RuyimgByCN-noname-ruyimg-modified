@@ -1,0 +1,6 @@
+// 凶算：准备阶段若体力并列全场最高，须对至少一名与自己体力相等的角色各造成 1 点伤害。
+skill stdxiongsuan(3084450928) locked {
+  trigger phase_prepare owner_is_target_tied_max_hp {
+    effect choose_targets_damage(self, 1, 255, same_hp, 1);
+  }
+}

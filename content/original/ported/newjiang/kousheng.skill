@@ -1,0 +1,11 @@
+// 口舌（王朗）：出牌阶段开始时，你可展示一张手牌并选择「挑衅/拒战/调离」
+// 三种言锋之一：使用该牌名时无次数限制或摸牌，成为该牌目标时可弃一张牌
+// 使其无效。
+// 旧 JS 的「言锋状态与按牌名效果」无对应原语，未建模（已注明）；
+// 以展示一张手牌并摸一张近似保留收益。
+skill kousheng(3036093631) {
+  active play_phase uses_per_turn 1 select_hand 1 1 {
+    effect reveal_hand(self);
+    effect draw_cards(self, 1);
+  }
+}

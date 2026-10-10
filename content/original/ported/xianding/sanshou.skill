@@ -1,0 +1,22 @@
+// 三首（sanshou）：每当你即将受到伤害时，你可以亮出牌堆顶的三张牌。若
+// 其中存在类型在本局未被任何角色使用过的牌，你防止此伤害。亮出的牌移
+// 入弃牌堆。
+// 上游 (xianding/skill.js 7323)：trigger damageBegin4 + check（AI）；content
+// = 亮顶 3 → types=全局 useCard type2 集合 → 存在全新类型则 trigger.cancel。
+// 实现（2026-09-15 第三百零七批·类型位图防伤状态机，ADR 0641 §8.92）：
+// resolve_sanshou(self)（ABI 751 / tag 767，单发无续体，专属 filter
+// owner_is_target_sanshou_type_tracked 携带位图 track 信号）——新状态
+// lifetime_used_type_groups（3 位组类型位图，CardUsed 排水 track 门控
+// 维护，skip-if-zero 保 hash 稳定）+ PreventDamage（damage_before 窗口
+// 取消当前伤害）+ 亮牌入弃。
+// forced 化说明（第三百零七批实测）：上游 check 为 AI 决策（非玩家交互
+// 确认）；optional confirm 会消费 damage_before 窗口致使 PreventDamage
+// 出窗失效——DSL forced + 机器内「有全新类型才发动」与上游 AI 最优决策
+// 等价。
+// 登记债：亮牌展示表现面未建模（结果语义等价：牌移入弃牌堆）。
+// 保真度：完整（类型判定/防伤/亮牌去向全建模）。
+skill sanshou(3583301051) locked {
+  trigger damage_before owner_is_target_sanshou_type_tracked {
+    effect resolve_sanshou(self);
+  }
+}

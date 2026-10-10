@@ -1,0 +1,8 @@
+// jxtuwei（主动技(phaseUse)）：主动(phaseUse), 多分支选择, 摸牌, 造成伤害, 含子技能, 异步。
+// 未建模：多分支选择、子技能机制、异步await，DSL 无对应原语。
+// 空定义保留占位。
+skill jxtuwei(3615215050) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

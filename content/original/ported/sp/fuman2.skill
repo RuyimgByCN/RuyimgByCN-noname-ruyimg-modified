@@ -1,0 +1,7 @@
+// fuman2：（内部标记技：伏蛮牌视为杀）
+// 含有 mod — 需修改技原语
+skill fuman2(2563252460) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 fuman2 = 标记型技能（charlotte，skill.js:35562），无规则面。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

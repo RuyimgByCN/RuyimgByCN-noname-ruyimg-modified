@@ -1,0 +1,7 @@
+// 烽燎（谋李儒）：转换技，锁定技，你使用牌指定唯一目标后，交替执行：令目标摸一张牌/对其造成1点火焰伤害。
+// DSL缺 zhuanhuanji 状态机原语，无法表达交替触发。
+skill fengliao(2687295950) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 fengliao 含真实规则体（trigger、mod 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

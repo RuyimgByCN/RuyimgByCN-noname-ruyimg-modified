@@ -1,0 +1,6 @@
+// 鸣雁（olmiuyan）：转换技。你可以将一张黑色手牌/装备牌当【火攻】使用。
+// 阳/阴状态切换与使用后分支（阳：获得本阶段展示牌；阴：失效至本轮结束）
+// 无转换技状态原语，未建模。
+skill olmiuyan(3010058014) locked {
+  view_as huogong play_phase black from hand_equip;
+}

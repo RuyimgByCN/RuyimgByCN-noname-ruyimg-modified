@@ -1,0 +1,5 @@
+// 刺踽临时效果：手牌上限为 0，用牌无次数限制（直至回合结束由父技能挂载）。
+skill ciju_temp(2360497961) {
+  modifier hand_limit override 0;
+  modifier card_use_unlimited override 1;
+}

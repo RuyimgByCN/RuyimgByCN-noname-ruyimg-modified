@@ -1,0 +1,8 @@
+// 遁形
+skill nsdunxing(4203825879) {
+  trigger damage_before owner_is_target_wounded optional {
+    effect prevent_current_damage();
+    effect change_max_hp(self, 0 - event_amount);
+    effect draw_cards(self, event_amount);
+  }
+}

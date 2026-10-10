@@ -1,0 +1,6 @@
+// 淑慎：非己回合、手牌数超上限时，将超出的手牌当【桃】使用。
+// 旧 JS 的「非己回合 + 超手牌上限时 view_as 桃」无对应原语（view_as 条件无法表达 turn + hand_limit 复合判断），未建模。
+skill stdshuchen(3698377600) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

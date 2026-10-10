@@ -1,0 +1,8 @@
+// 强袭：每回合每名目标限一次；弃置一张武器或失去一点体力后造成一点伤害。
+skill qiangxix(3151452629) {
+  active play_phase uses_per_turn 2 targets 1 1 other unused_by_skill_this_turn {
+    effect choose_discard_weapon_or_lose_hp(self);
+    effect record_active_target(self, event_source);
+    effect deal_damage(self, event_source, 1);
+  }
+}

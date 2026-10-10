@@ -1,0 +1,12 @@
+// 凶算：旧 JS 语义重写；弃牌输入、目标数与每回合次数均由引擎校验。
+skill xiongsuan(3088500344) {
+  active play_phase uses_per_turn 1 targets 1 1 select_hand 1 1 {
+    effect discard_selected(self);
+    effect deal_damage(self, event_source, 1);
+    effect draw_cards(self, 3);
+    if self == event_source {
+    } else {
+      effect lose_hp(self, 1);
+    }
+  }
+}

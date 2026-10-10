@@ -1,0 +1,21 @@
+// 良姻：①当有牌被置于武将牌上时，你可令一名角色摸一张牌。②当有角色获得
+// 一名角色武将牌上的牌时，你可令一名角色弃置一张牌。
+// 上游 (mobile/skill.js reliangyin)：cards_moved 入/出 expansion 区双触发。
+// 实现（2026-09-13 第二百六十八批·expansion 移动族状态机，ADR 0641 §8.56）：
+// 两个静态过滤器 cards_moved_into_expansion / cards_moved_out_of_expansion
+// （4 点注册零 ABI）+ 双触发块共调 resolve_reliangyin(self, self_skill, mode)
+// （ABI 717 / tag 740 / Cont 317）：mode 0=入区 → SelectTargets 任意角色摸 1；
+// mode 1=出区 → SelectTargets 有手牌角色 → 其自选一张手牌弃置。
+// 批 284（2026-09-15）债面更正：原登记债「置入/取出次数不设限（上游每回合
+// 一次）」经上游定义复核（mobile/skill.js reliangyin L915-1050 全文检索）
+// 证伪——上游 def 无 usable/limited/once 字段，触发次数本就不设限，引擎
+// 行为与上游一致。债面清空，approx→complete。
+skill reliangyin(2998022560) {
+  trigger cards_moved cards_moved_into_expansion optional {
+    effect resolve_reliangyin(self, self_skill, 0);
+  }
+
+  trigger cards_moved cards_moved_out_of_expansion optional {
+    effect resolve_reliangyin(self, self_skill, 1);
+  }
+}

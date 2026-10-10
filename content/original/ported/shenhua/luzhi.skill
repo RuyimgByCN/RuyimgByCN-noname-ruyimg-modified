@@ -1,0 +1,25 @@
+// 卢植【明任/贞良】— shenhua 旧 JS 语义参考（nzry_mingren/nzry_zhenliang）：
+// 明任：游戏开始时（首轮准备阶段），你摸两张牌，然后将一张手牌置于武将牌上称为
+// 「任」；出牌阶段结束时，你可以用一张手牌替换「任」。
+// 贞良（转换技）：阴——出牌阶段限一次，弃置一张与「任」同色的牌，对攻击范围内的一名
+// 角色造成 1 点伤害；阳——回合外你使用或打出的牌结算完成后，若此牌与「任」同色，
+// 可令一名角色摸一张牌。
+skill mingren(1039189468) {
+  trigger phase_prepare owner_is_target {
+    effect resolve_mingren(self, 0);
+  }
+  trigger phase_end owner_is_target optional {
+    effect resolve_mingren(self, 2);
+  }
+}
+skill zhenliang(279698051) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_zhenliang(self, event_source, event_card, 1039189468);
+  }
+  trigger card_used owner_is_source optional {
+    effect resolve_zhenliang(self, event_source, event_card, 1039189468);
+  }
+  trigger card_responded owner_is_source optional {
+    effect resolve_zhenliang(self, event_source, event_card, 1039189468);
+  }
+}

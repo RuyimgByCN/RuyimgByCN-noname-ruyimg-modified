@@ -1,0 +1,7 @@
+// 双雄·1（颜良文丑）：摸牌阶段改判并记录花色。
+// 旧 JS 的「判定记录」无对应原语；以摸牌阶段摸一张近似（已注明）。
+skill shuangxiong1(3319082661) {
+  trigger phase_draw owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

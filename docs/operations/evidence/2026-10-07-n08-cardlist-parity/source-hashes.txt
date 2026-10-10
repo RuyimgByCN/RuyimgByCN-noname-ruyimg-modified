@@ -1,0 +1,3 @@
+cdf912076ad7b9cefb58533e0ccbfe2700c1d629e5722c0078e60fa972cd50cc  docs/architecture/native-progress.md
+ccdef42999880ac1c830dcad1e3bdeb95f074a35fff5bee5ce53f84529d82c9a  docs/architecture/native-rules-baseline.md
+9a33199a05a43ae9b5f5e8f52f5eeb3cf04b291f09f6ce8d9d0efd62e69de9c7  ../archive/upstream/noname/apps/core/card/standard.js

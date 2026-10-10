@@ -1,0 +1,5 @@
+// psqibu：觉醒技, 限定技, player:dying, 回复体力, 多步骤。
+skill psqibu(4181604691) {
+  trigger dying owner_alive {
+  }
+}

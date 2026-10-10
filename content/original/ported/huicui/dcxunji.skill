@@ -1,0 +1,7 @@
+// dcxunji：锁定技；获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcxunji(2513507535) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

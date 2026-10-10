@@ -1,0 +1,13 @@
+// 勇决（由存嗣授予）：出牌阶段首次使用【杀】后，可选择令此【杀】不计入次数，
+// 或获得此【杀】的实体牌。旧 JS 的“获得此牌”以事件实体牌获得近似。
+skill dcyongjue(2297054445) {
+  trigger card_used owner_source_first_sha_this_play_phase optional {
+    let pick = choose(0, 1);
+    if pick == 0 {
+      effect refund_current_sha_use(self, event_card);
+    }
+    if pick == 1 {
+      effect gain_event_cards(self);
+    }
+  }
+}

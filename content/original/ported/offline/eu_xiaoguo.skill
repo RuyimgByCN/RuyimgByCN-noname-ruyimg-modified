@@ -1,0 +1,9 @@
+// Legacy contract: discard one basic hand card, deal 1 source-free normal
+// damage to another player, and only ban this active for the current turn when
+// this exact damage makes that target enter dying.
+skill eu_xiaoguo(2461210777) {
+  active play_phase targets 1 1 other select_hand 1 1 card_basic {
+    effect discard_selected(self);
+    effect deal_damage_ban_active_if_dying(self, event_source, 1, self_skill);
+  }
+}

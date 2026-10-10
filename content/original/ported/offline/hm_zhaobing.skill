@@ -1,0 +1,5 @@
+// hm_zhaobing（锁定技/触发技）：锁定技, player:loseEnd, player:dying, player:phaseBefore, 移出游戏, 加技能, 含子技能, 多步骤。
+skill hm_zhaobing(2855165520) locked {
+  trigger dying always {
+  }
+}

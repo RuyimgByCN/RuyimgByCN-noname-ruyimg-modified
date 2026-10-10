@@ -1,0 +1,7 @@
+$ 批② 取舍评估（纯文档切片，零代码改动）——基线一致性确认
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+全量 passed=371 failed=0 ignored=1
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s

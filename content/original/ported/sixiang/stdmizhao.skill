@@ -1,0 +1,7 @@
+// 密诏：结束阶段，选两名其他角色，将所有手牌装备交给第一名，其选择是否与第二名各失去1体力。
+// 旧 JS 的「双人选 + 全部给牌 + 目标决定双人扣血」无对应原语，未建模。
+skill stdmizhao(2729454422) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

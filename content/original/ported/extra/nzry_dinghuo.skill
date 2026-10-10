@@ -1,0 +1,9 @@
+// 绽火：限定技，清空“军略”，依次弃置至多等量名横置角色的装备，再对其中一名造成火焰伤害。
+skill nzry_dinghuo(3907113145) {
+  active play_phase once_per_game mark_at_least 1681567279 1
+    targets 1 255 linked max_by_owner_mark 1681567279 {
+    let marks = mark_count(self, 1681567279);
+    effect remove_mark(self, 1681567279, marks);
+    effect resolve_selected_equipment_discard_then_choose_damage(self, 1, fire);
+  }
+}

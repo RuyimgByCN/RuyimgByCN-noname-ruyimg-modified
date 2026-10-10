@@ -1,0 +1,15 @@
+// 论道（nhlundao·南华老仙）：当你受到伤害后，若伤害来源存活且其手牌数
+// 与你不同：你的手牌数多于其，你摸一张牌；否则你弃置其一张牌（其手牌/
+// 装备区，你选择）。
+// 上游 (sp2/skill.js 9366)：trigger damageEnd；filter = source 存活 &&
+// 手牌数不同；content = 手牌比较分支 draw / discardPlayerCard(forced)。
+// 实现（2026-09-15 第三百零八批·手牌比较双分支状态机，ADR 0641 §8.94）：
+// resolve_nhlundao(self, event_source)（ABI 752 / tag 768 / Cont 333 单段
+// 续体）——机器内 gate（来源存活+手牌数不同）+ 比较分支（摸 1 直结 /
+// owner 从来源 he 区强制选 1 弃，dcmoukui 选弃工艺）。
+// 保真度：完整（双分支+gate+选弃全建模）。
+skill nhlundao(3109389590) {
+  trigger damage owner_is_target {
+    effect resolve_nhlundao(self, event_source);
+  }
+}

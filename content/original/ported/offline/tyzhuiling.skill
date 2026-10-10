@@ -1,0 +1,5 @@
+// tyzhuiling：锁定技, global:loseHpEnd, 异步。
+skill tyzhuiling(2735674670) {
+  trigger phase_any_end owner_alive {
+  }
+}

@@ -1,0 +1,9 @@
+// 庇祸（秦宜禄）：受到伤害后或造成伤害后，可选择一名角色令其下回合额定摸牌数+1/-1。
+// 旧 JS 含 storage 存储修饰值 + addTempSkill + markSkill + phaseDrawBegin2 trigger.num 修改。
+// DSL 无 increase_current_draw_count 对他人下回合生效的跨回合原语（需指定本回合生效）。
+// 近似：本回合内对玩家增加当前回合摸牌数（但语义错位 — 旧 JS 是下回合）。
+skill dcbihuo(3679725063) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcbihuo 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

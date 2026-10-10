@@ -1,0 +1,7 @@
+// 春晖：其他角色成为伤害类锦囊目标时，若你的体力值小于其且距离≤1，交给其一张手牌；此牌未造成伤害则你摸一张牌。
+// 以 draw_cards 近似（被锦囊指定时摸一张牌），注释注明差异：失去给牌交互和体力/距离条件。
+skill twchunhui(3527320718) {
+  trigger card_targeted owner_alive_not_target {
+    effect draw_cards(self, 1);
+  }
+}

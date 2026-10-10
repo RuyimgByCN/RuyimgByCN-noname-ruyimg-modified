@@ -1,0 +1,8 @@
+// 貌桃（王荣）：其他角色使用牌指定目标后，若你手牌数不大于其体力值，你可
+// 移去一张「酒」标记并获得其使用的实体牌；然后你可视为对其使用该牌。
+// 旧 JS 的「移标记获牌与虚拟重放」无对应原语，未建模（已注明）。
+skill mpmaotao(3612919103) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

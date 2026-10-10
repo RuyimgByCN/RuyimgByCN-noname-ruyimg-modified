@@ -1,0 +1,13 @@
+// 当先：回合开始时执行额外出牌阶段；可获得一张无距离限制的杀，未造成伤害则自伤。
+skill oldangxian(4090178594) locked {
+  trigger phase_begin owner_is_target {
+    effect queue_opening_extra_play_phase(self);
+  }
+  trigger phase_play owner_is_target {
+    effect choose_gain_sha_for_opening_extra_play(self);
+  }
+  trigger phase_play_end owner_is_target {
+    effect finish_opening_extra_play_sha_gain(self);
+  }
+  modifier card_distance_unlimited_for_skill_card_policy override 1;
+}

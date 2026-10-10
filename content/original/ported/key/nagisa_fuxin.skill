@@ -1,0 +1,9 @@
+// 复心（渚）：回合内其他角色受到伤害/被弃牌/获得牌时，可选择令其摸牌并复原武将牌。
+// 实现：其他角色受到伤害后可选令其摸 1。
+// 近似：不限自己回合；不覆盖弃牌/获牌；复原武将牌未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill nagisa_fuxin(2871163155) {
+  trigger damage owner_alive_not_target optional {
+    effect draw_cards(event_player, 1);
+  }
+}

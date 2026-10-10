@@ -1,0 +1,15 @@
+// olcuipo（摧破）：锁定技。你使用一张牌时，若此牌为你本回合使用的第 N 张牌，且该牌名长度为 N（
+// 即按名长 1→2→… 的顺序依次使用），你获得一个「摧破」标记；若该牌为【杀】或伤害类锦囊，
+// 此牌下一次造成的伤害+1，否则你摸一张牌。
+// 上游 filter: cardNameLength(event.card) == useCardHistory.indexOf(event) + 1（即 == 当前用牌计数）；
+// content: sha/damage-trick → baseDamage++，else → draw()。
+// 使用 Phase 3 card_name_length 查询 + card_action_count（indexOf+1 == 本回合用牌计数）。
+// 近似：「baseDamage++」（伤害修正）需新 modifier 原语，本定义实现 filter + 非伤害牌的摸牌分支；
+// 杀/伤害锦囊的增伤分支另册登记。filter 用 ==（cardNameLength == card_action_count）精确表达。
+skill olcuipo(4085235149) locked {
+  trigger card_used owner_is_source {
+    if card_name_length(self, event_card) == card_action_count(self) {
+      effect draw_cards(self, 1);
+    }
+  }
+}

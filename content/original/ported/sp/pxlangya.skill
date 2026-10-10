@@ -1,0 +1,15 @@
+// 狼牙（彭城 pxlangya）：锁定技，你的技能增加后，你观看牌堆顶的五张牌，
+// 并将其中任意张置于牌堆顶，其余置于牌堆底。
+// 上游 (sp/skill.js pxlangya)：trigger changeSkillsAfter filter addSkill includes
+// pxlangya forced locked；content = chooseToGuanxing(5)。
+// 实现（2026-09-06 第一百七十六批·观星族首原语，ABI 681 领号）：
+// 触发事件：引擎 SkillAdded（上游 changeSkillsAfter 的 addSkill 子集，addSkill
+// includes pxlangya ⇔ 自己获得 pxlangya 技能）+ 既有过滤器 owner_skill_added_self_
+// <def>（registry 前缀族）→ guanxing_top(self, 5)。
+// 近似（登记债）：逐张二选（顶/底）近似上游拖拽任意排列——堆内自由序未建模
+// （排列自由度收窄）；「任意张置顶其余置底」由五轮独立顶/底选择覆盖全部组合。
+skill pxlangya(3999958998) {
+  trigger skill_added owner_skill_added_self_3999958998 {
+    effect guanxing_top(self, 5);
+  }
+}

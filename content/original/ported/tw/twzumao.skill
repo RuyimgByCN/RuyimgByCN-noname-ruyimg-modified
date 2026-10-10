@@ -1,0 +1,10 @@
+// 替巾：改指攻击范围内其他角色的单目标杀；该杀结算后弃置使用者一张牌。
+skill twtijin(3420559729) {
+trigger card_targeted owner_alive_other_source_single_sha_target_other_owner_in_attack_range {
+    effect resolve_twcaoang(self, event_player, event_source, event_card, 0, 0);
+  }
+  trigger sha_resolved owner_alive_other_source_sha_resolved_twxiaolian_redirect_has_hand_equip {
+    effect choose_discard_target_card(self, event_source, hand_equip);
+    effect resolve_twcaoang(self, self, event_source, event_card, 0, 2);
+  }
+}

@@ -1,0 +1,6 @@
+// hm_zhong_heart_skill：受到伤害后的效果。
+skill hm_zhong_heart_skill(2896930693) {
+  trigger damage owner_is_target_once  {
+    effect draw_cards(self, 1);
+  }
+}

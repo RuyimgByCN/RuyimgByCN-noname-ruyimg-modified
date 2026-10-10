@@ -1,0 +1,7 @@
+// 器乐：锁定技，游戏开始时及每轮开始时，若装备区有空位，获得【玄华斧】（方片5）。
+// 旧 JS 的「创建特定命名卡牌（玄华斧）」无对应原语，未建模。
+skill stdqiyue(2168165090) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

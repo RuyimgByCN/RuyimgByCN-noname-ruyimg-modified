@@ -1,0 +1,4 @@
+// 暗箭：以逻辑【杀】造成伤害时，若目标的攻击范围不包含拥有者，伤害 +1。
+skill anjian(3402374234) locked {
+  modifier sha_damage_if_outside_target_range add 1;
+}

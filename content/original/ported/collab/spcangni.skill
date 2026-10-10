@@ -1,0 +1,10 @@
+// 藏匿（郑姜）：弃牌阶段开始时，可选择摸两张牌或回复1点体力，然后将武将牌翻面。
+// 旧JS的spcangni_gain（翻面时他人获得牌→令当前回合角色摸牌）和spcangni_lose
+// （翻面时他人失去牌→令当前回合角色弃牌）子技能无DSL对应原语，未建模（已注明）。
+// 主技能精准建模；子技能需action_delegate/callback_on_flip原语后补齐。
+skill spcangni(3678243754) {
+  trigger phase_discard owner_is_target optional {
+    effect choose_draw_or_recover(self, 2, 1, 1);
+    effect turn_over(self);
+  }
+}

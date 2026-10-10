@@ -1,0 +1,11 @@
+// 寄春：每个出牌阶段“给牌摸牌”和“双双弃牌”各限一次；名字数由卡牌规则元数据提供。
+// 展示、给牌/弃牌及其嵌套触发均结束后再继续后续结算。旧 JavaScript 只作语义证据。
+skill dcjichun(3609714118) {
+  active play_phase uses_per_turn 2 select_he 1 1 {
+    effect resolve_zhugemengxue(self, 0);
+  }
+
+  trigger phase_play_end owner_is_target {
+    effect resolve_zhugemengxue(self, 2);
+  }
+}

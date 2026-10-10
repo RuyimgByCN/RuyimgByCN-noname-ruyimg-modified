@@ -1,0 +1,7 @@
+// 义父·标记（朱音）：临时技能标记，义父效果结算后附加，出牌阶段结束时移除，防止重复触发。
+// 旧 JS 纯标记技能（charlotte: true），无独立效果，未建模。
+skill akane_yifu3(4201649019) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 akane_yifu3 = 标记型技能（charlotte，skill.js:9731），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

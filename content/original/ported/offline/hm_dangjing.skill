@@ -1,0 +1,6 @@
+// hm_dangjing：player:hm_zongfuAfter, player:hm_dangjing_callback, 需选择目标, 造成伤害, 异步。
+skill hm_dangjing(2761967237) {
+  trigger phase_any_end owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

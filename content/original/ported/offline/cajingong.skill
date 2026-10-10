@@ -1,0 +1,8 @@
+// cajingong：音效名:jingong, 锁定技, player:phaseEnd, 主动(phaseUse), 失去体力, 加技能, 含子技能, 异步。
+skill cajingong(2826803144) locked {
+  // 近似：视为使用【杀】的能力未建模（含子技能/失去体力分支），以主动摸牌
+  // 保留基础收益（已注明）。
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}

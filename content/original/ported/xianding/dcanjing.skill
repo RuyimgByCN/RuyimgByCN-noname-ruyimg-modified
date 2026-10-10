@@ -1,0 +1,7 @@
+// 安境（胡遵）：每回合限一次，造成伤害后可选择至多 X 名已受伤角色（X 为本局发动次数），
+// 按座次各摸一张牌，然后其中当前体力值最少的随机一名回复 1 点体力。
+skill dcanjing(2716085756) {
+  trigger damage owner_source_wounded_exists_once_per_turn optional {
+    effect resolve_huzun(self, 0, 0, 1);
+  }
+}

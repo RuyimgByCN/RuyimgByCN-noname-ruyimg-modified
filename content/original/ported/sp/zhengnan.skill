@@ -1,0 +1,7 @@
+// 征南：其他角色死亡后，可摸三张牌并从尚未拥有的武圣、当先、制蛮中获得一项。
+skill zhengnan(3435011424) {
+  trigger death owner_alive_not_target optional {
+    effect draw_cards(self, 3);
+    effect choose_add_missing_skill(self, 3038912803, 4090178594, 3521391741);
+  }
+}

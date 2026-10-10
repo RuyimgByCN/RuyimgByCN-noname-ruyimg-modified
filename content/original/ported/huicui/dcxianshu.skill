@@ -1,0 +1,7 @@
+// dcxianshu：摸?牌。
+skill dcxianshu(2185207300) {
+  active play_phase targets 1 1 other {
+    // 旧JS含复杂目标选择逻辑，已简化
+    effect choose_target_draw(self, 1, other);
+  }
+}

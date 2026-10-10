@@ -1,0 +1,5 @@
+// dragyinglong（锁定技/触发技）：锁定技, global:card_used, player:card_used, 多分支选择, 加技能, 含子技能, 异步。
+skill dragyinglong(2417094028) locked {
+  trigger card_used always {
+  }
+}

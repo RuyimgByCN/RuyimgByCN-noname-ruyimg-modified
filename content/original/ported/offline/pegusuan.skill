@@ -1,0 +1,6 @@
+// pegusuan：音效名:dcgusuan, 觉醒技, 锁定技, player:pegeyuanAfter, 需选择目标, 摸牌, 加技能, 含子技能, 异步。
+skill pegusuan(4201821357) {
+  trigger phase_any_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

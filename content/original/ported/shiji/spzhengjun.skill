@@ -1,0 +1,9 @@
+// 整肃·SP（张让系）：出牌阶段开始时，选择一种整肃类型（垒金/变阵/明志）
+// 并开始整肃。
+// 旧 JS 的「整肃类型选择」以出牌阶段摸一张近似（整肃判定未建模，
+// 已注明）。
+skill spzhengjun(3886621239) {
+  trigger phase_play owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 谋溃：旧 JS 仅作语义合同；当前【杀】/目标关联由 Sha 结算记录托管。
+skill moukui(2368472328) {
+  trigger card_targeted owner_source_sha {
+    effect choose_draw_or_discard_target_card_record_sha(self, event_card, event_player);
+  }
+  trigger sha_dodged owner_source_sha_dodged_target_recorded_by_skill_has_discardable_hand_equip {
+    effect choose_discard_target_card(event_player, self, hand_equip);
+  }
+}

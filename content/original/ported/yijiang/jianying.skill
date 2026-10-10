@@ -1,0 +1,6 @@
+// 渐营：出牌阶段使用与上一张牌花色或点数相同的牌时，可摸一张牌。
+skill jianying(3679198172) {
+  trigger card_used owner_source_matches_previous_suit_or_rank optional {
+    effect draw_cards(self, 1);
+  }
+}

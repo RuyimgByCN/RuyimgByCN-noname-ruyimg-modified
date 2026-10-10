@@ -1,0 +1,5 @@
+// tywuhun：音效名:wuhun2, 觉醒技, 锁定技, player:damage, player:die, 需选择目标, 含子技能, 多步骤。
+skill tywuhun(2653564359) locked {
+  trigger damage always {
+  }
+}

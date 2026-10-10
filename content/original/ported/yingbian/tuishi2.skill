@@ -1,0 +1,7 @@
+// 退势·2（退势系）：回合结束时的触发辅助。
+// 旧 JS 的「范围内目标」判定无对应原语；以结束阶段摸一张近似（已注明）。
+skill tuishi2(2963104954) {
+  trigger phase_end owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

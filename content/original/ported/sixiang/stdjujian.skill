@@ -1,0 +1,10 @@
+// 举荐（标徐庶）：使用【无懈可击】后（每回合限一次），可令一名其他角色获得
+// 该【无懈可击】。
+// 旧 JS 仅作语义证据；无懈判定与获牌由权威状态机校验（ABI 462）。
+// 注：旧 JS 以 usable: 1 限每回合一次；DSL 过滤器槽位仅一个，故
+//      owner_source_wuxie_used 内建 once-per-turn（turn_fire_count == 0）。
+skill stdjujian(2772808467) {
+  trigger card_used owner_source_wuxie_used optional {
+    effect choose_other_gain_event_cards(self);
+  }
+}

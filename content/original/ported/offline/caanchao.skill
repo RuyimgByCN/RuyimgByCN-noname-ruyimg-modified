@@ -1,0 +1,6 @@
+// caanchao：phase_any_end时摸牌。
+skill caanchao(3822230937) {
+  trigger phase_any_end owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

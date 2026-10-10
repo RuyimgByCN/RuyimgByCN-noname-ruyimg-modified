@@ -1,0 +1,23 @@
+FIXED_ARCHIVE_CHOICE: duel_sha byte roundtrip restores
+FIXED_ARCHIVE_CHOICE: aoe_response byte roundtrip restores
+FIXED_ARCHIVE_NULLIFY: nullify_window byte roundtrip restores
+FIXED_ARCHIVE_V2: v1 bytes rejected by format gate
+FIXED_OWNERSHIP: trailing Card(87) absent, restore rejected
+FIXED_OWNERSHIP: all-cards-missing, restore rejected
+FIXED_AI_SIM_DEDUP: high-water 2M plan simulates Sha (not NextPhase)
+FIXED_AI_DEDUP_EXHAUST: u64::MAX clean DuplicateCommand (no overflow)
+FIXED_HUJIA_QUEUE: first Pass continues to second Wei helper
+FIXED_HUJIA_RESTORE: holder wait state restores (memory+byte)
+FIXED_HUJIA_BOUNDS: holder=254 rejected
+FIXED_HUJIA_LEAK: swapped hidden shan keeps identical public asks
+FIXED_JIJIANG_QUEUE: refusal continues; borrowed sha resolves same channel
+FIXED_PHASE_GATE: rende in Judge phase rejected WrongPhase
+FIXED_RENDE_CUMULATIVE: 1+1 second activation heals once
+FIXED_LIJIAN_GENDER_RESTORE: gender-filtered targets restore
+FIXED_EXTENSION_VALIDATION: uninstalled enable rejected
+FIXED_EXTENSION_VALIDATION: duplicate extension cards rejected
+FIXED_EXTENSION_CONTENT_LOCK: extension set bound into ruleset version
+FIXED_AI_SAMPLE_OWNERSHIP: pool-reshuffle conserves ownership; restore accepted
+FIXED_AI_SAMPLE_PIPELINE: plan→apply works with hidden opponent cards
+FIXED_AI_CANDIDATES: single-choice enumerates shan; planner dodges
+ROUND17_PROBES_DONE

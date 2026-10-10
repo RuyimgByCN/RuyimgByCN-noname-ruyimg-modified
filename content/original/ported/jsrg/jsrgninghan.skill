@@ -1,0 +1,8 @@
+// jsrgninghan（凝寒）：锁定技。①所有角色手牌中的♣【杀】均视为冰【杀】。②当一名角色受到冰冻伤害后，你将造成此伤害的牌对应的实体牌置入“城”。
+// 未建模：存活计数（DSL无对应原语）
+skill jsrgninghan(2950387664) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgninghan（skill.js:5161）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

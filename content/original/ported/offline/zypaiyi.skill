@@ -1,0 +1,18 @@
+// 排异（offline zypaiyi）：出牌阶段限一次，弃置一张「权」并选一名角色，其摸
+// 剩余权数的等量牌（上限 7）。
+// 上游 (offline/skill.js zypaiyi)：enable phaseUse usable 1；chooseButton 选堆内
+// 单卡 + chooseTarget 任意角色；content 依剩余权数分支。
+// 实现（2026-09-10 第二百零二批·pile 内选卡弃置原语消费，新原语
+// choose_one_from_skill_pile_discard——tag 709 / ABI 686）：
+// active play_phase targets 1 1 other → 选堆内单卡弃置 →
+// choose_other_draw_or_recover(self, 剩余权数, 0, 1)。
+// 升级（2026-09-10 第二百三十一批）：摸牌上限 7 已用 min(7, N) 清偿；
+// ②「权」堆供给依赖置入面落地（dormant 契约）。
+skill zypaiyi(2736566536) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    if skill_pile_count(self, 2450434483) > 0 {
+      effect choose_one_from_skill_pile_discard(self, self_skill, 2450434483);
+      effect choose_other_draw_or_recover(self, min(7, skill_pile_count(self, 2450434483)), 0, 1);
+    }
+  }
+}

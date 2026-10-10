@@ -1,0 +1,6 @@
+// 褪皮：不能成为顺手牵羊或过河拆桥的目标；弃牌阶段将装备区一并计入并可从中弃牌。
+skill ryoichi_tuipi(3426318690) locked {
+  modifier card_target_cancel(shunshou) override 1;
+  modifier card_target_cancel(guohe) override 1;
+  modifier discard_phase_includes_equip override 1;
+}

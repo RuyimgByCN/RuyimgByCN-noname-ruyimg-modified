@@ -1,0 +1,12 @@
+// 开济/慑叛：按整局濒死角色数协助摸牌；被他人牌指定后摸牌或将其区域牌置顶。
+skill twkaiji(3117219235) {
+trigger phase_prepare owner_is_target {
+    effect resolve_twwangchang(self, self, event_card, 0);
+  }
+}
+
+skill twshepan(3217560878) {
+trigger card_targeted owner_targeted_by_other_card_once_per_turn {
+    effect resolve_twwangchang(self, event_source, event_card, 1);
+  }
+}

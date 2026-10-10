@@ -1,0 +1,5 @@
+// hm_zongfu：global:game_started, global:damageSource, 摸牌, 加技能, 含子技能, 异步。
+skill hm_zongfu(3217923431) {
+  trigger game_started owner_alive optional {
+  }
+}

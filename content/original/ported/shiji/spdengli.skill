@@ -1,0 +1,6 @@
+// 登历：使用【杀】指定目标或成为【杀】目标后，若使用者与目标体力相等，可以摸一张牌。
+skill spdengli(3419124885) {
+  trigger card_targeted owner_source_or_targeted_by_sha_equal_hp optional {
+    effect draw_cards(self, 1);
+  }
+}

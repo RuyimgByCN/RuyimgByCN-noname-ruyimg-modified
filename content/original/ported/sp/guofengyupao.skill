@@ -1,0 +1,4 @@
+// 国风玉袍：防具有效时，其他角色的普通锦囊不能指定拥有者。
+skill guofengyupao(3538236867) locked {
+  modifier armor_card_target_cancel(ordinary_trick) override 1;
+}

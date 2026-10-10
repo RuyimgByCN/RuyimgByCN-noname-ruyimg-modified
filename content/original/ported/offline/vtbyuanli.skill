@@ -1,0 +1,5 @@
+// vtbyuanli：global:phaseUseSkipped, global:phaseUseCancelled, 需选择目标, 多步骤。
+skill vtbyuanli(3089915079) {
+  trigger phase_any_end owner_alive {
+  }
+}

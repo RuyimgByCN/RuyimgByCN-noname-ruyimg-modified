@@ -1,0 +1,6 @@
+// relianji（连计）：出牌阶段限一次，你可以选择两名其他角色A和B。第一名角色A随机使用牌堆中的一张武器牌，然后A视为对另一名角色B随机使用一张下列的牌名的牌：【决斗】、【火攻】、【南蛮入侵】、【万箭齐发】或普【杀】。然后若此牌造成伤害且A为伤害来源，你获得X枚“连计”（X为此次扣减的体力值点数）
+skill relianji(3766250006) {
+  active play_phase uses_per_turn 1 targets 2 2 other {
+    effect add_mark(self, 0, 1);
+  }
+}

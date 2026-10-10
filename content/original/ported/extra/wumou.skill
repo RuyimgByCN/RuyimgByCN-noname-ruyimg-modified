@@ -1,0 +1,17 @@
+// 无谋：使用普通锦囊后，移去一枚暴怒或失去一点体力；没有暴怒时只能失去体力。
+skill wumou(4039474555) locked {
+  trigger card_used owner_source_ordinary_trick {
+    if mark_count(self, 1252226867) == 0 {
+      effect lose_hp(self, 1);
+    }
+    if 0 < mark_count(self, 1252226867) {
+      let option = choose(0, 1);
+      if option == 0 {
+        effect remove_mark(self, 1252226867, 1);
+      }
+      if option == 1 {
+        effect lose_hp(self, 1);
+      }
+    }
+  }
+}

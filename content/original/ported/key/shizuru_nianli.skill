@@ -1,0 +1,14 @@
+// 念力（静流）：展示一张花色手牌，按其花色视为对应牌使用或打出
+// （♣→【闪】/ ♦→雷【杀】/ ♥→【桃】/ ♠→【无懈可击】）。
+// 实现：四路 `view_as ... from hand`（longhun 同款模板，雷杀带 nature thunder）。
+// 近似：每轮一次限制（nianli_round）与展示流程未建模；修正此前误标
+// （noop 注记称 charlotte 无规则面，上游 skill.js:7543 有真实 viewAs 体）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shizuru_nianli(2833421901) {
+  view_as sha play_phase diamond from hand nature thunder;
+  view_as sha response diamond from hand nature thunder;
+  view_as shan response club from hand;
+  view_as tao play_phase heart from hand;
+  view_as tao response heart from hand;
+  view_as wuxie response spade from hand;
+}

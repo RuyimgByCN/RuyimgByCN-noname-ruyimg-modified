@@ -1,0 +1,5 @@
+// 【天香】的临时效果：防止拥有者造成和受到的一切非失去体力伤害。
+skill xintianxiang4(3553506611) locked {
+  modifier damage_cancel override 1;
+  modifier damage_taken_cancel override 1;
+}

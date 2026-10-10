@@ -1,0 +1,8 @@
+// 义父（朱音·主公技）：出牌阶段可以将手牌交给拥有此主公技的其他角色，其摸牌后可返还一张。
+// 旧 JS 仅作 global/skill 路由，实际逻辑在 akane_yifu2，未建模。
+skill akane_yifu(2935807142) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 akane_yifu（skill.js:9664）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

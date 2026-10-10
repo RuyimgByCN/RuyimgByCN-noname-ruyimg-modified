@@ -1,0 +1,13 @@
+// 垦伤（马休马铁·OL）：出牌阶段，你可以将任意张牌当无来源消耗的【杀】
+// 使用，并可将此牌目标改为攻击范围外的所有其他角色。
+// 上游 (sp/skill.js 21116)：viewAs sha，filterCard true，selectCard [1,
+// Infinity]，position hes；effect 子技同 rekenshang。
+// 实现（2026-09-15 第二百九十八批·view_as 不封顶张数语法落地，ADR 0641
+// §8.82）：`view_as sha play_phase any from hand_equip at_least 1`。
+// 登记债：「改目标为攻击范围外所有其他角色」子技未建模——引擎 view_as
+// 转换管道为同步结算，无 CardUsed 触发窗口与 saved 挂起（批 299 实测；
+// 待转换管道支持使用期挂起）。原 saved-sha 替换路径仅覆盖主动出杀挂起
+// 窗口（gaoyuan/wandianlunsha 场景），不适用于 ActivateSkill 转换流。
+skill olkenshang(3699245274) {
+  view_as sha play_phase any from hand_equip at_least 1;
+}

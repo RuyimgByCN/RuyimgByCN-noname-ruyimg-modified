@@ -1,0 +1,4 @@
+// 逆乱：黑色手牌、装备牌或扩展牌当【杀】；本次【杀】未造成伤害则退还使用次数。
+skill spniluan(4063477590) {
+  view_as sha play_phase black from hand_equip_expansion refund_use_count_if_no_damage;
+}

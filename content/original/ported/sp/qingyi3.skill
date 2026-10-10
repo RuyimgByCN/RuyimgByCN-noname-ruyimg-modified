@@ -1,0 +1,5 @@
+// 轻逸的临时效果
+// 原语义：临时效果存在时，使用所有牌均无距离限制。
+skill qingyi3(3610775756) {
+  modifier card_distance_unlimited override 1;
+}

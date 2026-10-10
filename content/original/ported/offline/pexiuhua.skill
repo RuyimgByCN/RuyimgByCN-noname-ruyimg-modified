@@ -1,0 +1,6 @@
+// pexiuhua：锁定技, global:cards_moved, player:cards_moved, player:PeyichuanAfter, 摸牌, 回复体力, 异步。
+skill pexiuhua(3281928200) {
+  trigger cards_moved owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

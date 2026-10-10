@@ -1,0 +1,9 @@
+// 小鸟·吴势力技
+skill kotori_skill_wu(2195433348) locked {
+  trigger phase_end owner_is_target {
+    if hand_count(self) == hp(self) {
+    } else {
+      effect draw_cards(self, 1);
+    }
+  }
+}

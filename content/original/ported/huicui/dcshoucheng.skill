@@ -1,0 +1,6 @@
+// 蒋琬费祎·守成：旧 JavaScript 只作为语义证据；限次由权威回合触发计数维护。
+skill dcshoucheng(4099961254) {
+  trigger cards_moved owner_alive_event_player_outside_turn_from_hand_empty_once optional {
+    effect draw_cards(event_player, 2);
+  }
+}

@@ -1,0 +1,6 @@
+skill oljingce(3351317413) {
+  trigger phase_play_end owner_alive_play_phase_card_category_count_positive optional {
+    effect draw_by_play_phase_card_category_count(self);
+  }
+  modifier hand_limit add owner_distinct_hand_card_suits_used_this_turn;
+}

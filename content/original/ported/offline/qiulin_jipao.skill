@@ -1,0 +1,6 @@
+// qiulin_jipao。
+skill qiulin_jipao(3408407743) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

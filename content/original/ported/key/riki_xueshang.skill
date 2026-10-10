@@ -1,0 +1,7 @@
+// 血殇·续（理树·锁定技）：小鞠发动血殇濒死时，失去血殇+加体力上限+回复体力。
+// 旧 JS 的 技能链追踪+连锁响应 需技能间联动原语，未建模。
+skill riki_xueshang(2717364788) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 riki_xueshang = 标记型技能（charlotte，skill.js:11554），无规则面。
+  // 原“批量最小近似：濒死时可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,8 @@
+// jsrgjuxiang（拒降）：当你不于摸牌阶段得到牌后，你可以弃置之，令当前回合角色于此回合额定的出牌阶段内使用【杀】的次数上限+X（X为你以此法弃置的牌的花色数）。
+// 未建模：翻译调用, 全局状态, addTempSkill, 标记计数, charlotte延迟, 标记技（DSL无对应原语）
+skill jsrgjuxiang(3280490538) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgjuxiang（skill.js:10949）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

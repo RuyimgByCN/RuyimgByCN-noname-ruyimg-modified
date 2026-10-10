@@ -1,0 +1,6 @@
+// 蛊惑：扣置一张手牌声明为基本牌或普通锦囊使用/打出，其他角色依次质疑；
+// 无人质疑时生效，有人质疑则按牌名/杀属性验真并执行摸牌、失去体力和红桃生效规则。
+skill old_guhuo(3484005747) {
+  view_as basic any any from none cost guhuo;
+  view_as ordinary_trick any any from none cost guhuo;
+}

@@ -1,0 +1,7 @@
+// 驱虎拼点成功的一次性结算：拥有者选择拼点目标攻击范围内的一人，由拼点目标造成伤害。
+skill quhu_win(2288140413) {
+  trigger hand_compare_finished owner_is_target {
+    effect choose_bound_source_attack_range_damage(self, event_source, 1);
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,5 @@
+// peyichuan（主动技(phaseUse)/触发技）：音效名:peyichuan, global:card_used, 主动(phaseUse), 多分支选择, 加技能, 含子技能, 异步。
+skill peyichuan(4191755532) {
+  trigger card_used owner_alive optional {
+  }
+}

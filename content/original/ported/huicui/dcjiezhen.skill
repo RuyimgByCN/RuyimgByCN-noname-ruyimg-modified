@@ -1,0 +1,7 @@
+// dcjiezhen：旧JS复杂效果。
+// 旧JS含subSkill、init初始化，DSL无法精确建模。
+skill dcjiezhen(2300057972) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

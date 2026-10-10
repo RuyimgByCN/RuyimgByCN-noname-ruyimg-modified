@@ -1,0 +1,4 @@
+// 【中签】旧 group 使用的独立改火属性子技能。
+skill tiansuan2_fire(2872385566) locked {
+  modifier damage_taken_nature override 1;
+}

@@ -1,0 +1,9 @@
+// 爆衣（良一·锁定技）：失去装备牌时，摸等量牌并循环选择女性或有牌角色弃置牌。
+// 实现：失去装备区牌后摸 1。
+// 近似：按失去一张计；循环弃牌与性别筛选未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill ryoichi_baoyi(2396712868) locked {
+  trigger cards_moved owner_from_equip {
+    effect draw_cards(self, 1);
+  }
+}

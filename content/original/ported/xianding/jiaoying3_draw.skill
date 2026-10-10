@@ -1,0 +1,7 @@
+// 醮影·摸牌（教缨子技能）：结束阶段，可令一名角色将手牌摸至五张。
+// 旧 JS 的“手牌数<5 的目标约束”与“重复至没有合法目标”省略。
+skill jiaoying3_draw(4012724406) {
+  trigger phase_end owner_is_target optional {
+    effect choose_target_draw_to_max_hp_cap(self, 5);
+  }
+}

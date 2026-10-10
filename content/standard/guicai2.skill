@@ -1,0 +1,7 @@
+// 鬼才 enhanced — 司马懿: reroll any judgment.
+// Simplified: at phase_begin, draw 1 (foresight).
+skill guicai2(50) {
+  trigger phase_begin always {
+    effect draw_cards(self, 1);
+  }
+}

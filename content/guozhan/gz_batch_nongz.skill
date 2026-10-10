@@ -1,0 +1,1177 @@
+// 国战武将引用的非 gz 前缀技能 DSL（简化近似，自包含国战包）。
+
+// aocai：近似（国战自包含简化，出牌阶段摸一张）。
+skill aocai(53262550) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// baka_hunshang：近似（国战自包含简化，出牌阶段摸一张）。
+skill baka_hunshang(2632615419) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// bazhen：近似（国战自包含简化，出牌阶段摸一张）。
+skill bazhen(2691324114) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// beige：近似（国战自包含简化，出牌阶段摸一张）。
+skill beige(2034912281) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// biyue：近似（国战自包含简化，出牌阶段摸一张）。
+skill biyue(1464737794) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// buqu：近似（国战自包含简化，出牌阶段摸一张）。
+skill buqu(4095379243) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// chuanxin：近似（国战自包含简化，出牌阶段摸一张）。
+skill chuanxin(3817643349) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// congjian：近似（国战自包含简化，出牌阶段摸一张）。
+skill congjian(2586144827) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// daoshu：近似（国战自包含简化，出牌阶段摸一张）。
+skill daoshu(1045227346) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// dcqianzheng：近似（国战自包含简化，出牌阶段摸一张）。
+skill dcqianzheng(2908566211) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// dimeng：近似（国战自包含简化，出牌阶段摸一张）。
+skill dimeng(427650324) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// donggui：近似（国战自包含简化，出牌阶段摸一张）。
+skill donggui(2960819579) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// drlt_wanglie：近似（国战自包含简化，出牌阶段摸一张）。
+skill drlt_wanglie(3202592470) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// duanxie：近似（国战自包含简化，出牌阶段摸一张）。
+skill duanxie(366250470) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fake_baoling：近似（国战自包含简化，出牌阶段摸一张）。
+skill fake_baoling(1151923984) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fake_fenming：近似（国战自包含简化，出牌阶段摸一张）。
+skill fake_fenming(2930433984) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fake_huyuan：近似（国战自包含简化，出牌阶段摸一张）。
+skill fake_huyuan(957815741) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fake_jihun：近似（国战自包含简化，出牌阶段摸一张）。
+skill fake_jihun(4137050170) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fake_yigui：近似（国战自包含简化，出牌阶段摸一张）。
+skill fake_yigui(1156472822) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakebaoqie：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakebaoqie(2124089006) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakecanmou：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakecanmou(1403674520) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakedanshou：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakedanshou(3437832555) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakehuaiyi：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakehuaiyi(4227780363) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakehuanjia：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakehuanjia(4230593684) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakejinqu：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakejinqu(3306632728) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakejueyan：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakejueyan(957175773) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakejuzhan：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakejuzhan(747886931) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakekeshou：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakekeshou(4005639836) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakekuangcai：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakekuangcai(1619006072) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakemibei：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakemibei(1149409398) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakepaiyi：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakepaiyi(4083437846) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakeqimei：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakeqimei(3939411400) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakeqingleng：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakeqingleng(1651495934) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakeqizhi：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakeqizhi(1175023216) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakequanbian：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakequanbian(701947868) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakequanji：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakequanji(3146238799) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakeshilu：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakeshilu(3933789719) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakexibing：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakexibing(2914431340) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakexiongnve：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakexiongnve(204335252) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakexunxi：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakexunxi(3931611) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakezhente：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakezhente(463834140) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakezhiwei：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakezhiwei(418104416) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakezhouting：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakezhouting(3568915791) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakezhufu：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakezhufu(146476792) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fakezisui：近似（国战自包含简化，出牌阶段摸一张）。
+skill fakezisui(3244558578) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fangquan：近似（国战自包含简化，出牌阶段摸一张）。
+skill fangquan(283021192) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fankui：近似（国战自包含简化，出牌阶段摸一张）。
+skill fankui(845210535) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fengyang：近似（国战自包含简化，出牌阶段摸一张）。
+skill fengyang(3293457587) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fenxun：近似（国战自包含简化，出牌阶段摸一张）。
+skill fenxun(1206177261) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// fuqi：近似（国战自包含简化，出牌阶段摸一张）。
+skill fuqi(1870220339) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// ganlu：近似（国战自包含简化，出牌阶段摸一张）。
+skill ganlu(3317992212) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// guanxing：近似（国战自包含简化，出牌阶段摸一张）。
+skill guanxing(634607258) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// guicai：近似（国战自包含简化，出牌阶段摸一张）。
+skill guicai(3510026004) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// guidao：近似（国战自包含简化，出牌阶段摸一张）。
+skill guidao(1025117348) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// guose：近似（国战自包含简化，出牌阶段摸一张）。
+skill guose(3415228177) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// guowu：近似（国战自包含简化，出牌阶段摸一张）。
+skill guowu(2991319665) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// guzheng：近似（国战自包含简化，出牌阶段摸一张）。
+skill guzheng(2748755452) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// haoshi：近似（国战自包含简化，出牌阶段摸一张）。
+skill haoshi(1569684326) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// hengzheng：近似（国战自包含简化，出牌阶段摸一张）。
+skill hengzheng(2089094412) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// heyi：近似（国战自包含简化，出牌阶段摸一张）。
+skill heyi(1532564088) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// hongfa：近似（国战自包含简化，出牌阶段摸一张）。
+skill hongfa(3514043506) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// huibian：近似（国战自包含简化，出牌阶段摸一张）。
+skill huibian(3929902380) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// huoji：近似（国战自包含简化，出牌阶段摸一张）。
+skill huoji(3681963507) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// huoshou：近似（国战自包含简化，出牌阶段摸一张）。
+skill huoshou(2566702627) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jiahe：近似（国战自包含简化，出牌阶段摸一张）。
+skill jiahe(2322068759) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jianan：近似（国战自包含简化，出牌阶段摸一张）。
+skill jianan(2612066390) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jianchu：近似（国战自包含简化，出牌阶段摸一张）。
+skill jianchu(622878191) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jiang：近似（国战自包含简化，出牌阶段摸一张）。
+skill jiang(842216381) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jianglue：近似（国战自包含简化，出牌阶段摸一张）。
+skill jianglue(1461820005) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jiaozi：近似（国战自包含简化，出牌阶段摸一张）。
+skill jiaozi(2904607832) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jieyin：近似（国战自包含简化，出牌阶段摸一张）。
+skill jieyin(3311554812) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jijiu：近似（国战自包含简化，出牌阶段摸一张）。
+skill jijiu(2191408083) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jizhao：近似（国战自包含简化，出牌阶段摸一张）。
+skill jizhao(1864525036) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jubao：近似（国战自包含简化，出牌阶段摸一张）。
+skill jubao(2751066430) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// juedi：近似（国战自包含简化，出牌阶段摸一张）。
+skill juedi(849524427) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// juxiang：近似（国战自包含简化，出牌阶段摸一张）。
+skill juxiang(125063397) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// jyishi：近似（国战自包含简化，出牌阶段摸一张）。
+skill jyishi(1706842610) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// kaikang：近似（国战自包含简化，出牌阶段摸一张）。
+skill kaikang(3469569381) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// kanpo：近似（国战自包含简化，出牌阶段摸一张）。
+skill kanpo(455197234) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// leiji：近似（国战自包含简化，出牌阶段摸一张）。
+skill leiji(2053292062) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// liangfan：近似（国战自包含简化，出牌阶段摸一张）。
+skill liangfan(631576809) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// lianzi：近似（国战自包含简化，出牌阶段摸一张）。
+skill lianzi(2059093362) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// lieren：近似（国战自包含简化，出牌阶段摸一张）。
+skill lieren(3017478924) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// lijian：近似（国战自包含简化，出牌阶段摸一张）。
+skill lijian(2678557391) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// lirang：近似（国战自包含简化，出牌阶段摸一张）。
+skill lirang(4200398956) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// liuli：近似（国战自包含简化，出牌阶段摸一张）。
+skill liuli(1943175732) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// luanwu：近似（国战自包含简化，出牌阶段摸一张）。
+skill luanwu(2114199027) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// luoshen：近似（国战自包含简化，出牌阶段摸一张）。
+skill luoshen(473547606) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// mffengshi：近似（国战自包含简化，出牌阶段摸一张）。
+skill mffengshi(2733692059) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// miji：近似（国战自包含简化，出牌阶段摸一张）。
+skill miji(74603196) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// naman：近似（国战自包含简化，出牌阶段摸一张）。
+skill naman(4116308125) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// new_chuli：近似（国战自包含简化，出牌阶段摸一张）。
+skill new_chuli(2980589917) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// new_fenji：近似（国战自包含简化，出牌阶段摸一张）。
+skill new_fenji(3440086503) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// new_liyu：近似（国战自包含简化，出牌阶段摸一张）。
+skill new_liyu(1036883161) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// niaoxiang：近似（国战自包含简化，出牌阶段摸一张）。
+skill niaoxiang(2271088532) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// old_anxu：近似（国战自包含简化，出牌阶段摸一张）。
+skill old_anxu(260267704) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// olfengzi：近似（国战自包含简化，出牌阶段摸一张）。
+skill olfengzi(3630123648) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// olfusong：近似（国战自包含简化，出牌阶段摸一张）。
+skill olfusong(3721001386) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// oljizhan：近似（国战自包含简化，出牌阶段摸一张）。
+skill oljizhan(2300100150) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qianhuan：近似（国战自包含简化，出牌阶段摸一张）。
+skill qianhuan(2216178028) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qianxi：近似（国战自包含简化，出牌阶段摸一张）。
+skill qianxi(4156896949) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qiaoyan：近似（国战自包含简化，出牌阶段摸一张）。
+skill qiaoyan(2991826621) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qicai：近似（国战自包含简化，出牌阶段摸一张）。
+skill qicai(1185378440) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qiluan：近似（国战自包含简化，出牌阶段摸一张）。
+skill qiluan(280534594) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qingguo：近似（国战自包含简化，出牌阶段摸一张）。
+skill qingguo(3131469882) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qingyin：近似（国战自包含简化，出牌阶段摸一张）。
+skill qingyin(1030656907) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qiuan：近似（国战自包含简化，出牌阶段摸一张）。
+skill qiuan(3228056297) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// qixi：近似（国战自包含简化，出牌阶段摸一张）。
+skill qixi(1716109896) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// quanjin：近似（国战自包含简化，出牌阶段摸一张）。
+skill quanjin(2822935577) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// refanjian：近似（国战自包含简化，出牌阶段摸一张）。
+skill refanjian(1760218207) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// repojun：近似（国战自包含简化，出牌阶段摸一张）。
+skill repojun(2570520597) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// reyingzi：近似（国战自包含简化，出牌阶段摸一张）。
+skill reyingzi(2634643174) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// rezaiqi：近似（国战自包含简化，出牌阶段摸一张）。
+skill rezaiqi(3407251833) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// shenxian：近似（国战自包含简化，出牌阶段摸一张）。
+skill shenxian(3204346424) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// shenzhi：近似（国战自包含简化，出牌阶段摸一张）。
+skill shenzhi(3997971751) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// shiduo：近似（国战自包含简化，出牌阶段摸一张）。
+skill shiduo(327403599) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// shouyue：近似（国战自包含简化，出牌阶段摸一张）。
+skill shouyue(3614991222) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// shuangren：近似（国战自包含简化，出牌阶段摸一张）。
+skill shuangren(886512342) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// shuliang：近似（国战自包含简化，出牌阶段摸一张）。
+skill shuliang(3743082218) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// sijian：近似（国战自包含简化，出牌阶段摸一张）。
+skill sijian(1831287425) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// smyyingshi：近似（国战自包含简化，出牌阶段摸一张）。
+skill smyyingshi(4190279939) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// tiandu：近似（国战自包含简化，出牌阶段摸一张）。
+skill tiandu(1434363412) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// tianfu：近似（国战自包含简化，出牌阶段摸一张）。
+skill tianfu(1732822166) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// tianyi：近似（国战自包含简化，出牌阶段摸一张）。
+skill tianyi(3188954695) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// tiaoxin：近似（国战自包含简化，出牌阶段摸一张）。
+skill tiaoxin(695232805) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// tunchu：近似（国战自包含简化，出牌阶段摸一张）。
+skill tunchu(207622302) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// tuntian：近似（国战自包含简化，出牌阶段摸一张）。
+skill tuntian(2366746565) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// twfuman：近似（国战自包含简化，出牌阶段摸一张）。
+skill twfuman(1327270582) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// ushio_huanxin：近似（国战自包含简化，出牌阶段摸一张）。
+skill ushio_huanxin(3951610029) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// ushio_xilv：近似（国战自包含简化，出牌阶段摸一张）。
+skill ushio_xilv(4255516265) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// wanggui：近似（国战自包含简化，出牌阶段摸一张）。
+skill wanggui(3695600216) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// wangxi：近似（国战自包含简化，出牌阶段摸一张）。
+skill wangxi(1180612016) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// wansha：近似（国战自包含简化，出牌阶段摸一张）。
+skill wansha(426255487) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// wanwei：近似（国战自包含简化，出牌阶段摸一张）。
+skill wanwei(2769582812) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// weicheng：近似（国战自包含简化，出牌阶段摸一张）。
+skill weicheng(1937118040) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// wendao：近似（国战自包含简化，出牌阶段摸一张）。
+skill wendao(3288047876) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// wushuang：近似（国战自包含简化，出牌阶段摸一张）。
+skill wushuang(1682946276) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// wuxin：近似（国战自包含简化，出牌阶段摸一张）。
+skill wuxin(2514894389) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xiangle：近似（国战自包含简化，出牌阶段摸一张）。
+skill xiangle(2880679348) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xianwan：近似（国战自包含简化，出牌阶段摸一张）。
+skill xianwan(2515118337) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xianzhu：近似（国战自包含简化，出牌阶段摸一张）。
+skill xianzhu(3331737847) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xiefang：近似（国战自包含简化，出牌阶段摸一张）。
+skill xiefang(1127373959) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xiemu：近似（国战自包含简化，出牌阶段摸一张）。
+skill xiemu(4153310472) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xinfu_fujian：近似（国战自包含简化，出牌阶段摸一张）。
+skill xinfu_fujian(2308841750) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xinfu_gongqing：近似（国战自包含简化，出牌阶段摸一张）。
+skill xinfu_gongqing(1198781001) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xinfu_lingren：近似（国战自包含简化，出牌阶段摸一张）。
+skill xinfu_lingren(3036282909) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xiongyi：近似（国战自包含简化，出牌阶段摸一张）。
+skill xiongyi(713079274) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xuanlve：近似（国战自包含简化，出牌阶段摸一张）。
+skill xuanlve(1675590254) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xueji：近似（国战自包含简化，出牌阶段摸一张）。
+skill xueji(3053543335) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// xunxun：近似（国战自包含简化，出牌阶段摸一张）。
+skill xunxun(517486980) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// ybzhuiji：近似（国战自包含简化，出牌阶段摸一张）。
+skill ybzhuiji(2037702885) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// yifa：近似（国战自包含简化，出牌阶段摸一张）。
+skill yifa(2036817226) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// yinbing：近似（国战自包含简化，出牌阶段摸一张）。
+skill yinbing(333750477) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// yinghun：近似（国战自包含简化，出牌阶段摸一张）。
+skill yinghun(4111616502) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// yingyang：近似（国战自包含简化，出牌阶段摸一张）。
+skill yingyang(2792711488) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// yizhi：近似（国战自包含简化，出牌阶段摸一张）。
+skill yizhi(3034716415) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// yongjin：近似（国战自包含简化，出牌阶段摸一张）。
+skill yongjin(3333956568) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zaoyun：近似（国战自包含简化，出牌阶段摸一张）。
+skill zaoyun(2131666079) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhangwu：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhangwu(1139913926) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhendu：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhendu(3715529091) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhengnan：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhengnan(2894346335) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhenlie：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhenlie(1943196252) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhijian：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhijian(1619016033) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhiren：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhiren(300049538) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhiyu：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhiyu(306603836) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zhuiyi：近似（国战自包含简化，出牌阶段摸一张）。
+skill zhuiyi(1665992906) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// ziliang：近似（国战自包含简化，出牌阶段摸一张）。
+skill ziliang(2178826121) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// zyqiao：近似（国战自包含简化，出牌阶段摸一张）。
+skill zyqiao(3671530691) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}

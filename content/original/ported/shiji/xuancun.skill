@@ -1,0 +1,9 @@
+skill xuancun(2417220435) {
+  trigger phase_end owner_alive_not_target_hand_below_hp optional {
+    if hand_count(self) + 1 < hp(self) {
+      effect draw_cards(event_player, 2);
+    } else {
+      effect draw_cards(event_player, 1);
+    }
+  }
+}

@@ -1,0 +1,8 @@
+// 兴替（刘巴系）：锁定技。你使用非延时牌后，记录其牌名作为「备」牌。
+// 旧 JS 的「备」expansion 记录无对应原语；以使用牌后摸一张近似
+// （记录未建模，已注明）。
+skill xingqi(4041585395) locked {
+  trigger card_used owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}

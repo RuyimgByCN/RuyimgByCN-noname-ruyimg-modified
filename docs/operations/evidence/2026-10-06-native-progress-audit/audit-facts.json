@@ -1,0 +1,223 @@
+{
+  "audit_date": "2026-10-06",
+  "ruleset_version": 60,
+  "archive_format_version": 2,
+  "previous_implementation_hashes_matched": 29,
+  "previous_implementation_hashes_changed": [],
+  "inventory_equals_baseline": true,
+  "upstream": [
+    {
+      "name": "noname",
+      "head": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+      "modified_paths": 0
+    },
+    {
+      "name": "noname-liuli",
+      "head": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "modified_paths": 50
+    }
+  ],
+  "converted_package_count": 10,
+  "packages": [
+    {
+      "directory": "cardpile-upstream-liuli",
+      "assets": [
+        {
+          "file": "packages/extensions/cardpile-upstream-liuli/assets/pile.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "total",
+            "entries"
+          ]
+        }
+      ]
+    },
+    {
+      "directory": "cardpile-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/cardpile-upstream-noname/assets/pile.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "total",
+            "entries"
+          ]
+        }
+      ]
+    },
+    {
+      "directory": "d3-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/d3-upstream-noname/assets/character.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "generals"
+          ],
+          "generals": 1
+        }
+      ]
+    },
+    {
+      "directory": "huanle-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/huanle-upstream-noname/assets/cards.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "cards",
+            "host_skills"
+          ],
+          "cards": 3
+        }
+      ]
+    },
+    {
+      "directory": "shahai-gujian-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/shahai-gujian-upstream-noname/assets/cards.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "pack",
+            "cards",
+            "deferred"
+          ],
+          "cards": 40,
+          "deferred": 0
+        }
+      ]
+    },
+    {
+      "directory": "shahai-gwent-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/shahai-gwent-upstream-noname/assets/cards.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "cards",
+            "deferred"
+          ],
+          "cards": 21,
+          "deferred": 0
+        }
+      ]
+    },
+    {
+      "directory": "shahai-hearth-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/shahai-hearth-upstream-noname/assets/cards.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "cards",
+            "deferred"
+          ],
+          "cards": 17,
+          "deferred": 0
+        }
+      ]
+    },
+    {
+      "directory": "shahai-yunchou-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "cards",
+            "deferred"
+          ],
+          "cards": 23,
+          "deferred": 0
+        }
+      ]
+    },
+    {
+      "directory": "wudian-upstream-noname",
+      "assets": [
+        {
+          "file": "packages/extensions/wudian-upstream-noname/assets/cards.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "pack",
+            "cards",
+            "deferred",
+            "skills",
+            "generals"
+          ],
+          "cards": 14,
+          "deferred": 1,
+          "generals": 6,
+          "skills": 3
+        }
+      ]
+    },
+    {
+      "directory": "wuxing-upstream-liuli",
+      "assets": [
+        {
+          "file": "packages/extensions/wuxing-upstream-liuli/assets/wuxing.json",
+          "keys": [
+            "source",
+            "upstream_path",
+            "upstream_commit",
+            "nature_fraction",
+            "natures",
+            "wuxingpan"
+          ]
+        }
+      ]
+    }
+  ],
+  "original_catalog_counts": {
+    "packs": 26,
+    "characters": 2560,
+    "migrated_characters": 2560,
+    "skills": 6152,
+    "migrated_skills": 6152,
+    "profiled_skills": 6066,
+    "portraits": 2658,
+    "missing_character_portraits": 46,
+    "static_skins": 0,
+    "dynamic_skins": 0,
+    "substitutes": 76,
+    "skin_aliases": 0,
+    "dynamic_skin_aliases": 0,
+    "unresolved_skill_references": 0
+  },
+  "wudian_general_skill_declarations": 11,
+  "wudian_unmapped_general_skills": [
+    "nsshuaiyan",
+    "moshou",
+    "ciqiu",
+    "zhucheng",
+    "duoqi",
+    "juedao",
+    "geju",
+    "kangyin",
+    "chezhen",
+    "youzhan"
+  ],
+  "wudian_mapped_general_skills": [
+    "siji"
+  ]
+}

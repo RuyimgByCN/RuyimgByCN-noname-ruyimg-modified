@@ -1,0 +1,7 @@
+// 和合（张翼）：锁定技，摸牌阶段结束时，选择至多两名手牌数与你相同的其他角色令其各摸一张牌。
+// 旧 JS 的「手牌数相同的目标筛选」无对应 DSL 过滤器；动态选择目标并令其摸牌无单效果原语。完全无法表达。
+skill stdhehe(2484630223) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 屯江（SP张温）：结束阶段，若出牌阶段未使用牌指定过其他角色为目标，摸等于现存势力数的牌。
+// 近似：保留摸 alive_group_count() 张牌核心收益；「出牌阶段未指定其他角色」条件无对应 filter。
+skill sptunjiang(4083251717) {
+  trigger phase_end owner_alive {
+    effect draw_cards(self, alive_group_count());
+    // 旧 JS 条件：出牌阶段未 useCard 指定过他人，需 phaseUse history 检查，无对应 filter
+  }
+}

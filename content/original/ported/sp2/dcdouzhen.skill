@@ -1,0 +1,9 @@
+// 斗阵（穆顺·转换技）：回合内转换效果 — 奇数：红色基本牌视为普杀且无次数限制；
+// 偶数：黑色基本牌视为决斗且使用时获得目标一张牌。
+// 旧 JS 含 zhuanhuanji 转换技状态 + mod cardname/cardnature/cardUsable + trigger useCard 效果。
+// DSL 无转换技状态机、无动态 cardname 过滤原语。
+skill dcdouzhen(2647940461) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcdouzhen 含真实规则体（trigger、mod 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

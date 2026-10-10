@@ -1,0 +1,6 @@
+// 兴伐（标钟会）：旧 JS 语义重写。准备阶段手牌不少于体力时，可选择一名其他角色造成伤害。
+skill stdxingfa(2490051933) {
+  trigger phase_prepare owner_is_target_hand_at_least_hp_other_alive optional {
+    effect choose_other_damage(self, 1);
+  }
+}

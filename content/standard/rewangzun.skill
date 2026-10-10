@@ -1,0 +1,18 @@
+skill rewangzun(3817957374) locked {
+  trigger phase_prepare owner_alive_prepare_player_hp_gt_owner {
+    effect draw_cards(self, 1);
+  }
+  trigger phase_prepare owner_alive_prepare_lord_hp_gt_owner {
+    effect draw_cards(self, 1);
+    effect add_skill(event_player, 2737456606);
+    effect add_mark(event_player, 2737456606, 1);
+  }
+}
+
+skill rewangzun2(2737456606) {
+  modifier hand_limit add -owner_skill_mark;
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 2737456606, 0);
+    effect remove_skill(self_skill);
+  }
+}

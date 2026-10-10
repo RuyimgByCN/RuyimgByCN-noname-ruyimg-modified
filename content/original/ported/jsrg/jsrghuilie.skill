@@ -1,0 +1,15 @@
+// jsrghuilie（会猎）：觉醒技。准备阶段，若有“猎”的角色数大于2，你减1点体力上限，
+// 然后获得〖平戎〗和〖飞影〗。上游 jsrg/skill.js:11593（juexingji forced）。
+// 实现（猎族 S1，ADR 0646 §1）：`phase_prepare
+// owner_alive_marked_alive_above_two_1167524380`（forced，wuji 觉醒同模板）→
+// change_max_hp(self, -1) + add_skill 平戎/飞影 + remove_skill(self_skill)
+// 自移除即觉醒一次。飞影属 standard 包（2669566023），跨包授技走 def 字面量
+// （twfucheng 批先例）；「有‘猎’的角色数>2」由参数化过滤器在 Rust 侧计数。
+skill jsrghuilie(2465016316) {
+  trigger phase_prepare owner_alive_marked_alive_above_two_1167524380 {
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 2770992068);
+    effect add_skill(self, 2669566023);
+    effect remove_skill(self_skill);
+  }
+}

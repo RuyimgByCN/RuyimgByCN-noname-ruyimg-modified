@@ -1,0 +1,7 @@
+// eu_zhitong：player:card_used, 摸牌, 回复体力, 造成伤害, 异步。
+skill eu_zhitong(3659921007) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

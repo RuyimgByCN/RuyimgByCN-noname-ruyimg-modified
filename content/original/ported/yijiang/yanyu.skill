@@ -1,0 +1,8 @@
+skill yanyu(2263835600) {
+  active play_phase select_hand 1 1 card_sha {
+    effect recast_selected(self);
+  }
+  trigger phase_play_end owner_is_target_active_used_at_least_2_this_play_phase optional {
+    effect choose_target_draw(self, 2, male_other);
+  }
+}

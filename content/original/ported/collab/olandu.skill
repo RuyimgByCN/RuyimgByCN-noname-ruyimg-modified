@@ -1,0 +1,7 @@
+// 杜（OL读）：使用阴平声（第一声）牌名的牌后，随机获得其他角色手牌中一张阴平声牌。
+// 旧 JS 依赖汉语拼音分析（get.pinyin + get.yunmu）判断声调，DSL 无语言学分析原语。
+skill olandu(3082934869) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

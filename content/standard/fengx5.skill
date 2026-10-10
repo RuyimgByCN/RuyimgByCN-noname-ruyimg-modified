@@ -1,0 +1,4 @@
+// Skill fengx5(173) - trigger variant
+skill fengx5(173) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

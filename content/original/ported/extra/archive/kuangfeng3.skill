@@ -1,0 +1,7 @@
+// 狂风·3（神诸葛系）：锁定技。你造成火焰伤害时防止之。
+// 旧 JS 的「标记追踪」无对应原语；以造成伤害后摸一张近似（防止未建模，已注明）。
+skill kuangfeng3(3554350613) locked {
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// dcfeibai：摸2牌。
+// 旧JS含gaintag标记，DSL无法精确建模。
+skill dcfeibai(2986479181) {
+  modifier hand_limit add 1;
+}

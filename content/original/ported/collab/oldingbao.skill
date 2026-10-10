@@ -1,0 +1,7 @@
+// 锭宝（OL锭宝）：限定技，跳过出牌阶段，觉醒并随机生成一张带强化词条的牌。
+// 旧 JS 含随机花色点数生成、随机基本/锦囊类型、随机强化词条（直伤/伤害+1），DSL 无动态卡牌生成及词条附加原语。
+skill oldingbao(2404015576) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

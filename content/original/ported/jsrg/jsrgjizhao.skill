@@ -1,0 +1,8 @@
+// jsrgjizhao（急召）：准备阶段或结束阶段，你可以令一名角色选择一项：1.使用一张手牌；2.令你可以移动其区域里的一张牌。
+// 未建模：choosePlayer, chooseToUse转化, 翻译调用, 全局状态（DSL无对应原语）
+skill jsrgjizhao(4235868619) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgjizhao（skill.js:10272）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

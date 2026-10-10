@@ -1,0 +1,9 @@
+// 宴诛2(孙休)：subskill of reyanzhu。锁定技。当你受到伤害时，伤害值+N（N为你拥有的宴诛标记数），
+// 然后移除此技能。
+// 近似：damage_before时increase damage（无法追踪mark计数）。
+skill reyanzhu2(3965305961) locked {
+  trigger damage_before owner_is_target {
+    // 近似：伤害+1（旧JS精确为+countMark("reyanzhu2")，可能>1）
+    effect modify_current_damage(event_player, 1);
+  }
+}

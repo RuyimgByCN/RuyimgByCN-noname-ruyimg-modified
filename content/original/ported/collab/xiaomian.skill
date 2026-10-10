@@ -1,0 +1,9 @@
+// 黜面（刘宏）：当你使用牌时，若装备区有与此牌花色相同的牌，摸等量牌，然后弃置一张装备牌。
+// 旧JS的按装备区同花色数量动态摸牌、花色匹配检测无DSL对应原语（需suit_match_equip_count表达式）。
+// 以摸1牌+弃1装备近似保留收益循环骨架，花色匹配与动态数量待表达式扩展后补齐。
+skill xiaomian(2492897889) {
+  trigger card_used owner_alive optional {
+    effect draw_cards(self, 1);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

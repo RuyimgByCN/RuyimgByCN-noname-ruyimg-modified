@@ -1,0 +1,8 @@
+// 绢缕（王允&貂蝉双头）：继承雌雄双股剑的异性目标过滤器。
+// 旧 JS 通过 inherit "cixiong_skill" 实现，DSL 无技能继承机制，无法建模。
+// 空定义：需 expansion 支持 equipSkill 继承原语。
+skill dcjuanlv(2608743501) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

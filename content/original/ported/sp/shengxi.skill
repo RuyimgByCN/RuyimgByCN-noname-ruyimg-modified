@@ -1,0 +1,5 @@
+skill shengxi(2200786615) {
+  trigger phase_discard owner_is_target_no_turn_damage optional {
+    effect draw_cards(self, 2);
+  }
+}

@@ -1,0 +1,10 @@
+// 天义拼点胜利临时效果（太史慈）：杀无距离限制，目标数和次数上限各 +1。
+skill tianyi2(4028521539) {
+  modifier card_distance_unlimited(sha) override 1;
+  modifier sha_target_limit add 1;
+  modifier sha_use_limit add 1;
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

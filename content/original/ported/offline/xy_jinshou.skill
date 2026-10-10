@@ -1,0 +1,5 @@
+// xy_jinshou：player:phase_end, 失去体力, 加技能, 含子技能, 异步, 弃牌。
+skill xy_jinshou(3001233331) {
+  trigger phase_end owner_alive {
+  }
+}

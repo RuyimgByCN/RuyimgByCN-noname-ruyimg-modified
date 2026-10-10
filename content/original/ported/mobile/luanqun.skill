@@ -1,0 +1,5 @@
+skill luanqun(3119764480) {
+  active play_phase uses_per_turn 1 hand_nonempty {
+    effect resolve_luanqun(self, 3973186966, 3537894821);
+  }
+}

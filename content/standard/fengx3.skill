@@ -1,0 +1,4 @@
+// Skill fengx3(171) - modifier distance variant
+skill fengx3(171) {
+  modifier distance_from add -1;
+}

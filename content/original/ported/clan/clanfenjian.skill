@@ -1,0 +1,9 @@
+// 奋剑（族王昶）：出牌阶段限一次。弃一张牌当无距离限制且不计入次数的【杀】对攻击范围不等你的角色使用；此【杀】造成伤害后你攻击范围-1。
+// 旧 JS 的「攻击范围比较（sign）」「攻击范围衰减 debuff」无对应原语。
+// 以虚拟杀近似保留出杀能力；2026-08-15 跟进上游 targetInRange 修复改用
+// ignore_distance（转化杀无距离限制），但缺少攻击范围比较和 debuff。
+skill clanfenjian(4032210875) {
+  active play_phase uses_per_turn 1 {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

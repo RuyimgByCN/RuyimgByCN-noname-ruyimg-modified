@@ -1,0 +1,6 @@
+// 遗计 (yiji) — 郭嘉: for each damage point, distribute the top two cards.
+skill yiji(26) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect distribute_top_two_cards(self);
+  }
+}

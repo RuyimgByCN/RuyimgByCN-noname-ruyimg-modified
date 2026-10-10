@@ -1,0 +1,41 @@
+// 新礼让（孔融）：其他角色摸牌阶段开始时，若你没有“谦”标记，可令其多摸两张牌，
+// 你获得一枚“谦”标记并临时获得“礼让·截获”；你的回合开始时，若有“谦”标记则
+// 跳过判定与摸牌阶段并清空标记。
+// 旧 JavaScript 仅作语义证据；摸牌加成、标记、跳过与临时技能由权威原语响应。
+// 注：截获子技能复用 ABI 461 劫粮管线（当前回合角色弃牌阶段弃牌后选一张弃牌获得，
+// 旧 JS 为至多两张，文档化近似）；谦标记兼作 xinlirang 自身的定义 ID；
+// 旧 JS 的让渡仅跳过摸牌阶段（判定照常），引擎以 ABI 450 同时跳过判定近似，文档化。
+skill xinlirang(2286538070) {
+  trigger phase_draw owner_alive_not_target optional {
+    if mark_count(self, 2286538070) == 0 {
+      effect add_skill(event_source, 2510487746);
+      effect add_mark(self, 2286538070, 1);
+      effect add_skill(self, 3887425911);
+    }
+  }
+  trigger phase_judge owner_is_target {
+    if 0 < mark_count(self, 2286538070) {
+      effect skip_judge_and_draw_phases(self);
+      effect remove_mark(self, 2286538070, 0);
+    }
+  }
+}
+
+// 礼让·增益：摸牌数 +2；拥有者回合结束时移除。
+skill xinlirang_more(2510487746) {
+  modifier draw_count add 2;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}
+
+// 礼让·截获：当前回合角色弃牌阶段弃牌后，可选一张仍处弃牌堆的弃牌获得；
+// 拥有者回合结束时移除。
+skill xinlirang_gain(3887425911) {
+  trigger cards_moved owner_alive_not_target {
+    effect resolve_jieliang_gain(self);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

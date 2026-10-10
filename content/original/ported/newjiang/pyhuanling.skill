@@ -1,0 +1,14 @@
+// 平原灵（马谡）：出牌阶段开始时或你受到伤害后，重铸一张可重铸牌，获得
+// 牌堆中一张同花色装备牌，然后选择一名角色获得其从装备牌名映射的随机技能
+// （柄烛）。
+// 旧 JS 的「按牌堆同花色装备取牌」「柄烛随机技能授予」无对应原语，
+// 未建模（已注明）；以弃置一张手牌并摸一张近似保留收益。
+skill pyhuanling(2444920930) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 定法（贾充）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：锁定技：弃牌阶段结束时，若本回合有伤害牌进入弃牌堆，你弃置一名其他角色一张牌
+// 旧 JS 的「弃牌堆回合内查询」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxdingfa(4146646932) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,7 @@
+// 尚义：旧 JS 仅作为语义合同；目标观看拥有者手牌，拥有者再可弃置目标一张手牌。
+skill zyshangyi(2778115845) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect reveal_hand_to_player(self, event_source);
+    effect choose_optional_discard_target_card(self, event_source, hand);
+  }
+}

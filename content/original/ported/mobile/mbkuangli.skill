@@ -1,0 +1,6 @@
+// mbkuangli（狂戾）：锁定技。①出牌阶段开始时，你随机令场上任意名其他角色获得“狂戾”标记。②出牌阶段限两次，当你使用牌指定有“狂戾”的角色为目标后，你随机弃置你与其各一张牌，然后你摸两张牌。③回合结束时，你移除所有角色的“狂戾”。
+skill mbkuangli(2726247276) locked {
+  trigger phase_play owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

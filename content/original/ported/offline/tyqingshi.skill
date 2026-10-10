@@ -1,0 +1,6 @@
+// tyqingshi：phase_prepare时摸牌。
+skill tyqingshi(2252271088) {
+  trigger phase_prepare owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

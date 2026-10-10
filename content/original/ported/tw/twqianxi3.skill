@@ -1,0 +1,7 @@
+// 钳袭③（TW牛金）：配合「钳袭」。反转限制：只能使用/打出记录花色的手牌。
+// 缺反花色限制原语，空定义。
+skill twqianxi3(3519769383) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twqianxi3 = 标记型技能（charlotte，skill.js:17766），无规则面。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

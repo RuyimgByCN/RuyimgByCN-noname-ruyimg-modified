@@ -1,0 +1,7 @@
+// 改写·封锁（小太郎·锁定技）：回合结束时，若改写发动过三次，失去改写和极光，体力上限恢复至3。
+// 旧 JS 的「技能移除+体力上限调整」需状态追踪+技能删除原语，未建模。
+skill kotarou_rewrite_block(3153277975) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kotarou_rewrite_block = 标记型技能（charlotte，skill.js:544），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

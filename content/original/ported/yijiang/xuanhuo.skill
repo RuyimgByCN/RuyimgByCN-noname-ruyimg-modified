@@ -1,0 +1,7 @@
+// 炫惑（旧版）：出牌阶段，将一张红桃手牌交给一名其他角色，获得其一张牌，然后可将此牌再交给另一名角色。
+// 旧JS含三段式操作（给牌→拿牌→转交），DSL无可匹配的复合原语，以空定义保留。
+skill xuanhuo(2154024375) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

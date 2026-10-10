@@ -1,0 +1,6 @@
+// yjqingzheng：音效名:sbqingzheng, 造成伤害, 异步, 弃牌。
+skill yjqingzheng(4101012492) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

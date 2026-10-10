@@ -1,0 +1,8 @@
+// mbbenyu（贲育）：当你受到伤害后，若你的手牌数：小于X，你可以将手牌摸至X张（至多摸五张）；大于X，你可以弃置至少X+1张手牌，对伤害来源造成1点伤害（X为伤害来源的手牌数）。
+skill mbbenyu(4071727604) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+    effect choose_other_damage(self, 1);
+    effect discard_selected(self);
+  }
+}

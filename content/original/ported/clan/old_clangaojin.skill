@@ -1,0 +1,7 @@
+// 高劲（旧版，族王允/族王淩）：锁定技。任意角色到你的距离变化后，你摸一张牌。你的手牌上限使计算距离-N（N=手牌上限）。
+// 旧 JS 的「全图距离变化检测」「手牌上限减免全局距离 modifier」无对应原语。
+// 空定义：需 expansion 支持距离变化事件和全局距离 modifier。
+skill old_clangaojin(2824672054) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,5 @@
+// 旧 JS：统计装备区或判定区至少有一张 K 的存活角色数，而不是 K 的牌数。
+skill cz_liulongcanjia_skill(3011623709) {
+  modifier distance_from add -alive_field_rank_thirteen_player_count;
+  modifier distance_to add alive_field_rank_thirteen_player_count;
+}

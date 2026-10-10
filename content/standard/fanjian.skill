@@ -1,0 +1,6 @@
+// 反间 (fanjian) — 周瑜: target guesses a suit, then gains one owner hand card.
+skill fanjian(36) {
+  active play_phase uses_per_turn 1 hand_nonempty targets 1 1 other {
+    effect target_choose_suit_gain_owner_hand_damage_if_mismatch(self, event_source);
+  }
+}

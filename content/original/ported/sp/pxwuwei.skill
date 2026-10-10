@@ -1,0 +1,12 @@
+// 武威（pxwuwei，州郡技能）：每回合限一次。你使用伤害牌时可以额外指定一个目标。
+// 上游 (sp/skill.js:1673)：trigger player:useCard2；filter = 伤害牌且存在合法可加
+// 目标；usable: 1；content = chooseTarget → 加为目标。
+// 实现：card_used + owner_source_damage_card_once_per_turn（每回合首次使用伤害牌，
+// 语义等价上游 usable:1）→ 可选确认 → choose_add_or_remove_current_card_target(self,
+// event_card)（为当前牌增加一个目标）。
+// 与上游差异：「目标必须合法」由效果内校验；上游可加多个目标（单次一个近似）。
+skill pxwuwei(3519997787) {
+  trigger card_used owner_source_damage_card_once_per_turn optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

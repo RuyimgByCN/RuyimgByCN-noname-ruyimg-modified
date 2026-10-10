@@ -1,0 +1,5 @@
+// 无双：杀的目标需两张闪；决斗中，对手每轮需连续打出两张杀。
+skill wushuang(18) locked {
+  modifier response_count add 1;
+  modifier duel_opponent_response_count add 1;
+}

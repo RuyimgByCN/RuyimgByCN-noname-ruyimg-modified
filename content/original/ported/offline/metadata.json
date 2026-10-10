@@ -1,0 +1,59 @@
+{
+ "dependencies": [
+  {
+   "namespace": "official",
+   "package_id": "sp",
+   "version": "0.1.0"
+  },
+  {
+   "namespace": "official",
+   "package_id": "shenhua",
+   "version": "0.1.0"
+  },
+  {
+   "namespace": "official",
+   "package_id": "standard",
+   "version": "0.1.0"
+  },
+  {
+   "namespace": "official",
+   "package_id": "old",
+   "version": "0.1.0"
+  },
+  {
+   "namespace": "official",
+   "package_id": "refresh",
+   "version": "0.1.0"
+  },
+  {
+   "namespace": "official",
+   "package_id": "yijiang",
+   "version": "0.1.0"
+  },
+  {
+   "namespace": "official",
+   "package_id": "yingbian",
+   "version": "0.1.0"
+  }
+ ],
+ "license": {
+  "schema_version": 1,
+  "code_license": {
+   "type": "Gpl3"
+  },
+  "default_asset_license": {
+   "type": "Gpl3"
+  },
+  "asset_sources": [],
+  "redistribution": "FreeRedistribution",
+  "trademark_notes": null,
+  "changelog": [
+   {
+    "version": "0.1.0",
+    "date": "2026-07-30",
+    "author": "noname-next",
+    "description": "规则语义重写自 archive/upstream/noname（GNU GPL v3）；旧 JavaScript 不进入运行时。"
+   }
+  ]
+ }
+}

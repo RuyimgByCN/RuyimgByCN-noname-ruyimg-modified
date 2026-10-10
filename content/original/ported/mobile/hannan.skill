@@ -1,0 +1,22 @@
+// 悍难：出牌阶段限一次，与一名角色拼点，严格胜者对没赢的角色造成一点伤害。
+skill hannan(3756118415) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 3519200299, 4002168244);
+  }
+}
+
+skill hannan_win(3519200299) {
+  trigger hand_compare_finished owner_alive {
+    effect deal_damage(self, event_source, 1);
+    effect remove_skill(self_skill);
+  }
+}
+
+skill hannan_lose(4002168244) {
+  trigger hand_compare_finished owner_alive {
+    if 1 < event_amount {
+      effect deal_damage(event_source, self, 1);
+    }
+    effect remove_skill(self_skill);
+  }
+}

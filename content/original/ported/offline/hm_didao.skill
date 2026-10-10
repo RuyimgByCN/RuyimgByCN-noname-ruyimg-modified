@@ -1,0 +1,5 @@
+// hm_didao（限定技/转化技(视作sha)/触发技）：觉醒技, 限定技, player:phase_play, 视作sha, 含子技能, 异步。
+skill hm_didao(4009480432) {
+  trigger phase_play owner_alive optional {
+  }
+}

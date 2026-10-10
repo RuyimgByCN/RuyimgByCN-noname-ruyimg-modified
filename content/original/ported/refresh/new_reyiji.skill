@@ -1,0 +1,6 @@
+// 遗计：每受到一点伤害后，可摸两张牌，再将至多两张当前手牌分配给其他角色。
+skill new_reyiji(3740567047) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect draw_then_optionally_distribute_hand_cards(self, 2, 2);
+  }
+}

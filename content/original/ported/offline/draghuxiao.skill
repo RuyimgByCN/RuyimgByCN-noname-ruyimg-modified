@@ -1,0 +1,7 @@
+// draghuxiao：音效名:huxiao, 锁定技, source:damageSource, 摸牌, 加技能, 含子技能, 异步。
+skill draghuxiao(3476538899) {
+  trigger damage owner_is_target_once {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

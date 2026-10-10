@@ -1,0 +1,8 @@
+// oltongxin：触发+修改技（damage,damageSource）
+skill oltongxin(3327739056) {
+  trigger damage owner_alive optional {
+    effect deal_damage(self, event_source, 1);
+    // addSkill("oltongxin_limit") — def_id 未找到
+    // markAuto("oltongxin_used") — 需查 def_id
+  }
+}

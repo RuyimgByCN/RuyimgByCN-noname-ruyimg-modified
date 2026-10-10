@@ -1,0 +1,7 @@
+// 罡拳：装备牌可当火杀使用，锦囊牌可当决斗使用；
+// 根据上次使用的牌是否含起始手牌决定可转化的牌。旧 JS 的「条件viewAs+标记切换」无对应原语，以下给空定义。
+skill olgangquan(3462990218) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olgangquan 含真实规则体（enable、mod、chooseButton 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

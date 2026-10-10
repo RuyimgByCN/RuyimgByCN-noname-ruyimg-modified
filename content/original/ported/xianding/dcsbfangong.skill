@@ -1,0 +1,8 @@
+// 返攻（谋王平）：限定技，回复至体力上限，然后摸至多五张牌。
+// 旧 JavaScript 仅作语义证据；限定技次数由 active once_per_game 权威管理。
+skill dcsbfangong(4167621774) {
+  active play_phase once_per_game {
+    effect recover_hp(self, max_hp(self) - hp(self));
+    effect draw_cards(self, min(5, hand_count(self)));
+  }
+}

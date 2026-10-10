@@ -1,0 +1,5 @@
+// jun_fuxiang：音效名:refangquan, player:phaseUseBefore, 需选择目标, 异步。
+skill jun_fuxiang(2896617371) {
+  trigger phase_any_end owner_alive {
+  }
+}

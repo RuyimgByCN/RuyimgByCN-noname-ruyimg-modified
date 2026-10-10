@@ -1,0 +1,18 @@
+// 征建/众斥：选择出牌阶段检查条件，累计不同交牌角色后改为伤害。
+skill twzhengjian(3256371970) locked {
+  trigger game_started owner_alive {
+    effect resolve_twzhengjian(self, self, 2937107858, 0);
+  }
+  trigger phase_play_end owner_alive_other_phase_play_end_twzhengjian_condition {
+    effect resolve_twzhengjian(self, event_player, 2937107858, 1);
+  }
+}
+
+skill twzhongchi(3545702086) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}
+
+skill twzhongchi_effect(2937107858) locked {
+  modifier sha_damage_taken add 1;
+}

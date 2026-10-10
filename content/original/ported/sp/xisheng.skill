@@ -1,0 +1,4 @@
+// 牺牲：每名其他角色的回合限一次，将两张手牌、装备牌或扩展牌当【桃】使用。
+skill xisheng(4243619960) {
+  view_as tao response owner_outside_turn from hand_equip_expansion uses_per_turn 1 exactly 2;
+}

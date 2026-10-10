@@ -1,0 +1,12 @@
+// 疠火（refresh 变体·主技）：普通【杀】可改为火【杀】（造成过伤害则失去 1 体力）；
+// 火【杀】可多选一个目标。首杀置入条款由子技 ollihuo4 承载（sourceSkill 派生）。
+// 实现：`modifier card_nature(sha) override fire`（转火，与 dclihuo 同款）+
+// `trigger card_used owner_source_fire_sha optional → choose_add_or_remove_current_card_target`
+// （火杀加目标）。近似：转火全程强制（上游可选）；「造成过伤害失去1体力」分支未建模。
+// 2026-08-15 疠火三技重组批次（条款各归其位）。
+skill ollihuo(4066393641) {
+  modifier card_nature(sha) override fire;
+  trigger card_used owner_source_fire_sha optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

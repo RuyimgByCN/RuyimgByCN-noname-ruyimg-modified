@@ -1,0 +1,6 @@
+// pexiuluo：锁定技, source:damage_before, player:damage_before, player:useCard1, 异步。
+skill pexiuluo(3107301055) {
+  trigger damage_before owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

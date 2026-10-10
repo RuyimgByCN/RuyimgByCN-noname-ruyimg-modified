@@ -1,0 +1,8 @@
+// 龙魂（神赵云）：将♦牌当火【杀】、♥牌当【桃】、♣牌当【闪】、♠牌当【无懈可击】使用或打出。
+// 旧 JS 根据牌花色动态决定转化目标，DSL 的 view_as 仅支持单一 kind，
+// 无法表达「按花色四选一」的视作逻辑。
+// 空定义：需 expansion 支持 suit_conditional_view_as 或 view_as 列表原语。
+skill dclonghun(2256846144) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

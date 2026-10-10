@@ -1,0 +1,13 @@
+// 武神（TW神·关羽）：锁定技。你的红桃手牌视为【杀】（无距离限制、无使用次数限制）。
+// 当你使用【杀】时，若为红桃牌转化或你本回合首次使用，此【杀】不可响应；
+// 若为红桃牌，此【杀】额外指定所有拥有"梦魇"标记的角色。
+// 实现：复用 extra/wushen 的红桃改名/无限距离/无限次数/不可响应 modifier。
+// 近似：不限手牌区（全区域红桃均改写）；梦魇额外目标与「本回合首次使用」门控未单独建模
+// （不可响应覆盖所有红桃杀）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill twwushen(2977352429) locked {
+  modifier card_name(heart) override sha;
+  modifier card_distance_unlimited(heart) override 1;
+  modifier card_use_unlimited(heart) override 1;
+  modifier sha_unrespondable(heart) override 1;
+}

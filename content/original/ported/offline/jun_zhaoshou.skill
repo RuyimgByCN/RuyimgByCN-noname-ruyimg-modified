@@ -1,0 +1,24 @@
+// 昭算（offline）：出牌阶段限一次，你可以将所有手牌交给一名其他角色，然后其
+// 选择一名角色（不含你）拼点：非平局时，胜方对败方使用一张无距离限制的【杀】
+// （由胜方自选目标，引擎近似固定为败方）；拼点牌进入弃牌堆。
+// 上游 (offline skill jun_zhaoshou)：enable phaseUse filterCard true selectCard -1
+// filterTarget notMe；content = give(全部手牌, target) → target.chooseTarget 拼点
+// 对象（!==player）→ target.chooseToCompare(targetx) → 非平局 user=胜方 对败方
+// VCard sha chooseUseTarget(nodistance)。
+// 实现（2026-09-06 第一百七十四批·第三方拼点原语，ABI 680 领号，批 171 组合
+// 原语批首件）：active play_phase uses_per_turn 1 targets 1 1 other →
+// give_all_hand(self, event_source)（既有原语）+ choose_hand_compare_between
+// (self, event_source)（本批新原语：first 选对手 → 双方各选一张手牌 → 非平局
+// 胜方对败方虚拟【杀】）。
+// 虚拟杀目标由胜方经 VirtualShaTargets 选择链自选（2026-09-07 第一百七十八批
+// 尾债消除，与上游 chooseUseTarget(nodistance) 对齐）。历史近似（已消除）：上游胜方自选拼点杀目标（chooseUseTarget），引擎曾固定以败方
+// 为唯一目标（nodistance）；②上游 target 无手牌/无可比对象时静默返回——原语
+// 对应分支返回空；③give_all_hand 原语 typecheck 要求
+// hand_nonempty face_up targets 1 1 other male 完整约束——male（仅男性目标）为
+// 原语校验的额外近似（上游无此限定）。
+skill jun_zhaoshou(3399079236) {
+  active play_phase uses_per_turn 1 hand_nonempty face_up targets 1 1 other male {
+    effect give_all_hand(self, event_source);
+    effect choose_hand_compare_between(self, event_source);
+  }
+}

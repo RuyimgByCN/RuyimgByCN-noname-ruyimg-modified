@@ -1,0 +1,5 @@
+// pkmiewu：音效名:spmiewu, 主动(multi), 摸牌, 加技能, 含子技能。
+skill pkmiewu(3518611938) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

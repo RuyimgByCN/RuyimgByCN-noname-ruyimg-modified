@@ -1,0 +1,11 @@
+// 酒遁（阮籍）：以你为目标的【酒】改为令你获得下一张【杀】伤害基数 +1；
+// 其他角色以黑牌指定你后，未饮酒则可摸一并饮酒，已饮酒则可弃一张手牌令该牌无效。
+skill dcjiudun(2926675148) {
+  trigger card_targeted owner_is_target_event_card_jiu {
+    effect resolve_ruanji(self, event_source, event_card, 2);
+  }
+
+  trigger card_targeted owner_is_target_other_source_black_dcjiudun_available {
+    effect resolve_ruanji(self, event_source, event_card, 3);
+  }
+}

@@ -1,0 +1,11 @@
+// 黠策：每回合每项各限一次；造成伤害后可令一名其他角色的非锁定技本回合失效，
+// 受到伤害后可弃置一张手牌/装备牌并回复 1 点体力。
+skill dcxiace(2254753634) {
+  trigger damage owner_is_target {
+    effect resolve_bailingyun(self, 11);
+  }
+
+  trigger damage owner_source {
+    effect resolve_bailingyun(self, 10);
+  }
+}

@@ -1,0 +1,4 @@
+// Skill bingx3(156) - modifier distance variant
+skill bingx3(156) {
+  modifier distance_from add -1;
+}

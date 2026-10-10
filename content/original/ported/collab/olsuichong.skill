@@ -1,0 +1,10 @@
+// 岁崇（年兽·OL）：准备阶段发起「拼手气红包」小游戏，所有角色随机抢金币/欢乐豆，
+// 手气最佳者从三个未拥有的生肖兽技能中选择一个令你获得。
+//
+// 涉及金币系统、多人联网同步、自定义对话框、随机红包分配算法、技能列表选择 UI——
+// 完全超出 DSL 表达能力——空定义。
+skill olsuichong(3453218399) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

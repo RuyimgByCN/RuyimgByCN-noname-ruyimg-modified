@@ -1,0 +1,5 @@
+skill reanguo(3231751411) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_reanguo(self);
+  }
+}

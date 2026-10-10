@@ -1,0 +1,13 @@
+mode=native-table games=10 seed_base=7000 engine=native
+table g=0 outcome=Some(Rebels) cmds=994 median_ns=2084 p95_ns=3083
+table g=1 outcome=Some(Rebels) cmds=1762 median_ns=2041 p95_ns=2375
+table g=2 outcome=Some(Rebels) cmds=1443 median_ns=2084 p95_ns=2583
+table g=3 outcome=Some(Rebels) cmds=871 median_ns=1958 p95_ns=2250
+table g=4 outcome=Some(Rebels) cmds=785 median_ns=2042 p95_ns=2417
+table g=5 outcome=Some(Rebels) cmds=937 median_ns=2042 p95_ns=2375
+table g=6 outcome=Some(Rebels) cmds=1619 median_ns=2000 p95_ns=2458
+table g=7 outcome=Some(Rebels) cmds=767 median_ns=1958 p95_ns=2625
+table g=8 outcome=Some(Rebels) cmds=590 median_ns=1917 p95_ns=2291
+table g=9 outcome=Some(Rebels) cmds=592 median_ns=1875 p95_ns=2209
+mode=table-aggregate finished=10 samples=10360 p50_ns=2000 p95_ns=2500 p99_ns=3167
+mode=summary games=10 exit=ok

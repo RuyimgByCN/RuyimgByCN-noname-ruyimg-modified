@@ -1,0 +1,111 @@
+name: ci
+
+# M7 多端门禁：三桌面平台构建矩阵 + 四道门禁。
+# - macOS / Windows / Linux 各跑一遍 `cargo build --workspace`（安装包产出见 build-desktop）。
+# - Linux 额外跑全部四道门禁（含 Native/WASM 哈希一致性）。
+on:
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: build-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Build workspace
+        run: cargo build --workspace
+      - name: Unit tests
+        run: cargo test --workspace --lib
+
+  gates:
+    name: gates-ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Gate 1 — cargo test --workspace
+        run: cargo test --workspace
+      - name: Gate 1b — engine-native lib warnings denied
+        # P3 尾项：lib 已零警告，用 -D warnings 防死代码信号回流；
+        # 只限定 engine-native lib（旧线工程仍有存量警告，不宜全局开启）。
+        run: cargo check -p engine-native --lib
+        env:
+          RUSTFLAGS: -D warnings
+      - name: Gate 2 — conformance
+        run: cargo run -p conformance
+      - name: Gate 3 — cross-target hash (Native vs WASM)
+        run: bash scripts/cross-target-hash.sh
+      - name: Gate 4 — original content sync verify
+        run: node scripts/sync-original-content.mjs --verify-only
+
+  # M7 gate 1: produce desktop installers on all three platforms (tauri build).
+  # The desktop shell is a thin Tauri 2 wrapper over the shared Web/WASM client;
+  # rule hashes are platform-independent (cross-target-hash gate above).
+  desktop:
+    name: desktop-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2" --locked
+      - name: Produce installer (tauri beforeBuildCommand builds the web client)
+        working-directory: apps/desktop-client
+        run: cargo tauri build
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.os }}
+          path: |
+            apps/desktop-client/src-tauri/target/release/bundle/**
+          if-no-files-found: error
+
+  # M7 gate 3: multi-platform performance tier measurement.
+  perf:
+    name: perf-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Tier list
+        run: cargo run -q -p benchmark-runner -- tiers
+      - name: Tier report (server-baseline budget)
+        run: cargo run -q -p benchmark-runner -- tier-report server-baseline

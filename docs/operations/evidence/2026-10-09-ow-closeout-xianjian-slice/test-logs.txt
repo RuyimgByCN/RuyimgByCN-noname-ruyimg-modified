@@ -1,0 +1,29 @@
+# U05 ow 收官 + xianjian 首切片测试日志（2026-10-09，规则 v141→v142）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 463 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v141 基线 462 +1 新增灵雪回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 51 passed; 0 failed（50 既有 + 1 新增 xingxuan_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 141）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v141→142 入 canonical_hash
+——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- lingxue（recoverEnd forced changeHujia()）
+- shanxian/shanhui（he 入 storage 离场+回归 createCard 重造——结构性
+  deferred）
+- character.js 24 武将（口径勘误：非 25）
+
+## 测试迭代记录
+- 桃自回复 targets 空数组（[0] → IllegalTargets）
+- Recover 载荷 by_card 字段（filter `..`）
+- xianjian npack 由 ow 模板复制改标识+rehash（零值哈希占位后重算）

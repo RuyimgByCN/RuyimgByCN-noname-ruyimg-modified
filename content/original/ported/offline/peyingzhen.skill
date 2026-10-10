@@ -1,0 +1,5 @@
+// peyingzhen：global:phaseBefore, player:game_started, 需选择目标, 异步, 条件计数。
+skill peyingzhen(3146213094) {
+  trigger phase_begin owner_alive {
+  }
+}

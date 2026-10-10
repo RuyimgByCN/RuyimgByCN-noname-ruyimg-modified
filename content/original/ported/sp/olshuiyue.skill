@@ -1,0 +1,6 @@
+// olshuiyue
+skill olshuiyue(2772781790) locked {
+  trigger phase_end owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

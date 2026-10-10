@@ -1,0 +1,6 @@
+// 施仇（OL版）：可将一张牌当【决斗】使用。
+// 旧 JS 的「使用【杀】未造成伤害后」触发条件与「对此杀的目标使用」限定无对应
+// 原语，以常驻 view_as 近似。
+skill onedcspshichou(3653300696) {
+  view_as juedou play_phase any from hand_equip;
+}

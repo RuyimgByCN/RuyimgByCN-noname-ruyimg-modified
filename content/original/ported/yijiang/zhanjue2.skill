@@ -1,0 +1,7 @@
+// 战绝2（标记辅助）：回合开始前重置zhanjue计数为0。
+// 旧JS设player.storage.zhanjue=0，DSL以remove_mark近似。
+skill zhanjue2(3596141288) locked {
+    trigger phase_begin owner_alive {
+        effect remove_mark(self, 3839017876, 99);
+    }
+}

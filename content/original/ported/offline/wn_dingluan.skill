@@ -1,0 +1,8 @@
+// wn_dingluan（锁定技/主动技(phaseUse)）：主动(phaseUse), 多分支选择, 失去体力, 加技能, 含子技能, 异步, 条件计数。
+// 未建模：多分支选择、子技能机制、异步await、动态计数条件，DSL 无对应原语。
+// 空定义保留占位。
+skill wn_dingluan(4080563784) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,12 @@
+// 界完杀：拥有者回合内，非濒死的其他角色不能使用【桃】；
+// 濒死结算期间，濒死角色以外的其他角色非锁定技失效。
+skill rewansha(3382466194) locked {
+  modifier tao_use_save_cancel_for_non_dying_others_during_owner_turn override 1;
+
+  trigger dying owner_alive_current_turn {
+    effect set_non_locked_skill_suppression(self, 1);
+  }
+  trigger dying_after owner_alive_current_turn {
+    effect set_non_locked_skill_suppression(self, 0);
+  }
+}

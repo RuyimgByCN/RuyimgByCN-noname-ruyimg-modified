@@ -1,0 +1,7 @@
+// psxiaolu：音效名:scsxiaolu, 主动(phaseUse), 需选择目标, 加技能, 含子技能, 异步, 条件计数。
+skill psxiaolu(3513051183) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

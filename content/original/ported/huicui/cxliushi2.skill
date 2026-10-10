@@ -1,0 +1,3 @@
+skill cxliushi2(3314624992) {
+  modifier hand_limit add -owner_skill_mark;
+}

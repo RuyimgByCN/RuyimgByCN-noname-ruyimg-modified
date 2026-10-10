@@ -1,0 +1,7 @@
+// 三略装备技能
+// 原语义：手牌上限、攻击范围和【杀】使用次数上限各加一。
+skill sanlve_skill(3136590309) {
+  modifier hand_limit add 1;
+  modifier attack_range add 1;
+  modifier sha_use_limit add 1;
+}

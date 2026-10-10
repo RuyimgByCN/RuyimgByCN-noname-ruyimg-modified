@@ -1,0 +1,10 @@
+// 排异（钟会）：出牌阶段可将一张「权」置入弃牌堆，令一名角色摸两张牌。
+// 若其手牌数多于你，其受到1点伤害。
+// 旧 JS 依赖「权」扩展区（quanji 技能堆叠）+次数限制+手牌数比较+伤害判定。
+// 以 draw_cards + deal_damage 近似保留核心收益。
+skill paiyi(3328467830) {
+  active play_phase targets 1 1 other {
+    effect draw_cards(event_player, 2);
+    effect deal_damage(self, event_player, 1);
+  }
+}

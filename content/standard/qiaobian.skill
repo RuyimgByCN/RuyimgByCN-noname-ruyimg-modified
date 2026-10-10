@@ -1,0 +1,4 @@
+// 巧变 (qiaobian) — 张郃: attack range +1 (tactical flexibility).
+skill qiaobian(41) {
+  modifier attack_range add 1;
+}

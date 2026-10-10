@@ -1,0 +1,8 @@
+// 翦魇（幻孙策）：游戏开始令全场获得【虎踞】；有人濒死时可收回虎踞并回复/获非伤害牌/入幻。
+// 近似：有角色濒死时你回复 1 点体力；虎踞分发与入幻未建模。
+// 锁定技但旧 JS 濒死支为可选确认，故不用 locked。
+skill twjianyan(2903455152) {
+  trigger dying owner_alive optional {
+    effect recover_hp(self, 1);
+  }
+}

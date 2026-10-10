@@ -1,0 +1,13 @@
+// 诫训：结束阶段按场上方片数摸牌，再按发动前标记数弃牌；弃尽时转化复难。
+skill jiexun(2662349862) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_jiexun(self, 4079819056);
+  }
+}
+
+// 诫训完成后的复难增强标识，具体交互由复难读取。
+skill funan_jiexun(4079819056) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

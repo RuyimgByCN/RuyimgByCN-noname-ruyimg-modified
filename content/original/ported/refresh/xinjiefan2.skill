@@ -1,0 +1,9 @@
+// xinjiefan2：刷新包技能。
+// triggers: player:phaseEnd
+// forced/locked: 锁定技
+skill xinjiefan2(2537228789) {
+    // 近似：旧JS事件 phaseEnd → DSL事件 phaseEnd
+    trigger phase_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

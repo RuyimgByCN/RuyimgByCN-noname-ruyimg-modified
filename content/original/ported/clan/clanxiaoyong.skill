@@ -1,0 +1,7 @@
+// 啸咏（族荀粲）：锁定技，衍生自「观骨」。使用牌名字数等于上一次【观骨】观看牌数的牌后，重置【观骨】使用次数。
+// 旧 JS 的「跨技能状态查询（clanguangu viewedCount）」「牌名字数匹配」「技能重置」无对应原语。
+// 空定义：需 expansion 支持跨技能状态和牌名字数。
+skill clanxiaoyong(2271745486) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

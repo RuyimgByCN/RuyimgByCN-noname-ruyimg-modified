@@ -1,0 +1,6 @@
+// yongsi：音频/辅助技能
+skill yongsi(2205158568) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yongsi 为组/继承壳（group 指向子技承载，子技另评），原「audio-only 无规则面」注记系 2026-09-03 批 159 复核改判——壳维持 noop。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

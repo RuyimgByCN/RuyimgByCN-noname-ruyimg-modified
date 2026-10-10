@@ -1,0 +1,5 @@
+// jdsbguose：音效名:sbguose, 异步。
+skill jdsbguose(3137570523) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

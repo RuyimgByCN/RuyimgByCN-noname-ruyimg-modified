@@ -1,0 +1,9 @@
+// dctujue：觉醒技；限定技；摸?牌；回复1体力。
+skill dctujue(2583640530) {
+  trigger dying owner_is_target optional {
+    // 近似：摸1张牌；旧JS有额外条件/选择逻辑
+    effect draw_cards(self, 1);
+    // 近似：回复1点体力
+    effect recover_hp(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// zj_zhuhui：global:phaseBegin, 造成伤害, 加技能, 异步。
+skill zj_zhuhui(2231575206) {
+  trigger phase_any_end owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

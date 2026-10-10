@@ -1,0 +1,12 @@
+skill xinfu_guanchao(3040931439) {
+  trigger phase_play owner_is_target optional {
+    let mode = choose(1, 2);
+    effect add_mark(self, 3040931439, mode);
+  }
+  trigger card_used owner_source_play_skill_mark_mode_3040931439 {
+    effect resolve_guanchao_rank(self, event_card);
+  }
+  trigger phase_play_end owner_is_target {
+    effect remove_mark(self, 3040931439, 3);
+  }
+}

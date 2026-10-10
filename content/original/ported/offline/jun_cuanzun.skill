@@ -1,0 +1,5 @@
+// jun_cuanzun：音效名:sbxingshang, global:die, 回复体力, 异步。
+skill jun_cuanzun(4181141768) {
+  trigger phase_any_end owner_alive {
+  }
+}

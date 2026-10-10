@@ -1,0 +1,12 @@
+// 清绝（族荀谌/族荀采）：锁定技。上游 (clan/skill.js)：
+// trigger changeHpAfter → 若本局首次体力变化，弃置花色不唯一的手牌；选择把弃牌交给他人和/或
+//   从牌堆获得未拥有花色牌各一张；花色唯一牌不计入手牌上限且不可弃。
+// 实现（可验证子集）：在 owner 受伤后摸1（近似「从未拥有花色获得」的资源收益）。
+//   **未覆盖**：(1) 首次体力变化的 history 过滤；(2) 花色唯一判定与 chooseToDiscard；
+//   (3) chooseButton give/gain 双选项；(4) 手牌上限豁免 modifier；(5) 弃牌阶段豁免。
+//   差异记录于 docs/migration/upstream-1.11.5-delta.md。
+skill clanqingjue(3860800298) locked {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

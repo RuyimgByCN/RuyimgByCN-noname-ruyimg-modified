@@ -1,0 +1,10 @@
+// 根源（无名）：锁定技。进入濒死状态时，回复1点体力并增加1点体力上限。手牌上限等于体力上限。
+// 旧JS的"每回合首次濒死"限制（getRoundHistory过滤）、recoverTo(1)（回复至1非回复1点）、最多增加3次上限未建模（已注明）。
+// modifier hand_limit_base max owner_max_hp 无法精确表达手牌上限=体力上限的效果。
+// 以dying触发回复+增加上限近似核心机制。
+skill dcgunyuan(2619819145) locked {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 1);
+    effect change_max_hp(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// hsshezuo（锁定技/主动技(phaseUse)/触发技）：锁定技, player:phase_prepare, global:chooseToCompareAfter, global:compareMultipleAfter, 主动(phaseUse), 需弃牌, 需拼点, 多分支选择, 摸牌, 造成伤害, 失去体力, 加技能, 含子技能, 异步。
+skill hsshezuo(2516912790) locked {
+  trigger phase_prepare always {
+    effect draw_cards(self, 1);
+    effect lose_hp(event_source, 1);
+  }
+}

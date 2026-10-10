@@ -1,0 +1,22 @@
+// 旧 JavaScript 仅作语义证据；运行时只执行下列确定性规则。
+// 旧代码的 filter 令“有筑时获得所有筑”分支不可达，因此这里按实际可执行语义保留。
+skill zhucheng(2400116759) {
+  trigger phase_end owner_phase_end_originating_skill_pile_empty optional {
+    effect resolve_wdb_liufu(self, 0, 0, 2400116759, 0);
+  }
+  trigger card_targeted owner_is_target_sha_skill_pile_nonempty_2400116759 optional {
+    effect resolve_wdb_liufu(self, event_source, event_card, 2400116759, 1);
+  }
+}
+
+// 旧 group helper 已折叠进父技能，保留稳定定义 ID 供审计。
+skill zhucheng2(3898919118) non_gainable {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}
+
+skill duoqi(2671845513) {
+  trigger cards_moved owner_alive_other_play_discard_skill_pile_nonempty_2400116759 optional {
+    effect resolve_wdb_liufu(self, event_player, 0, 2400116759, 2);
+  }
+}

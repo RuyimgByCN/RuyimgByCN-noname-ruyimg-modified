@@ -1,0 +1,7 @@
+// 反馈 enhanced — 司马懿: when damaged, take a card from attacker.
+// Simplified: after damage, draw 1 (counter-resource).
+skill fankui2(51) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,13 @@
+// 遁勇（藤甲）：锁定技。①你造成伤害时，你受到等量伤害；
+// ②任意角色进入濒死时，你摸其体力上限张牌，本回合使用牌无次数与距离限制。
+// 旧 JS 仅作语义证据；「体力不为全场最少/最多」豁免未建模；
+// ①的镜像伤害来源以自身近似（旧 JS 为无来源无牌）。
+skill dunyong(2517879735) locked {
+  trigger damage_before owner_source_other_damage_before {
+    effect deal_damage(self, self, event_amount);
+  }
+  trigger dying owner_alive {
+    effect draw_cards(self, max_hp(event_player));
+    effect add_skill_until_turn_end(self, 3140406282);
+  }
+}

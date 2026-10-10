@@ -1,0 +1,5 @@
+// 弓骑：手牌或装备区中的装备牌可当无距离限制的【杀】使用或打出。
+skill oldgongji(4171347410) {
+  view_as sha play_phase card_equip from hand_equip ignore_distance;
+  view_as sha response card_equip from hand_equip;
+}

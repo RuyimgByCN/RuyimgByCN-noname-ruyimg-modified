@@ -1,0 +1,7 @@
+// dclongyuan：觉醒技；锁定技；摸2牌；回复1体力。
+skill dclongyuan(3976533846) {
+  trigger phase_any_end owner_alive_not_target {
+    // 近似：回复1点体力
+    effect recover_hp(self, 1);
+  }
+}

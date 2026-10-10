@@ -1,0 +1,14 @@
+AUTH_CROSS_ENGINE: same seed and issuance order generate equal tokens; A token accepted by B: Accepted { state_hash: [248, 223, 202, 245, 204, 49, 173, 73, 68, 29, 237, 213, 227, 194, 253, 173, 243, 95, 47, 106, 95, 203, 251, 11, 230, 28, 149, 176, 243, 244, 6, 120] }
+AUTH_RESTART: old token becomes valid after reissue at restored state: Accepted { state_hash: [248, 223, 202, 245, 204, 49, 173, 73, 68, 29, 237, 213, 227, 194, 253, 173, 243, 95, 47, 106, 95, 203, 251, 11, 230, 28, 149, 176, 243, 244, 6, 120] }
+ARCHIVE_HEADER: ruleset header 24->999 accepted, decoded state still identical
+
+thread 'main' (23992174) panicked at crates/engine-native/src/archive.rs:2050:22:
+attempt to add with overflow
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+ARCHIVE_LENGTH: u64::MAX payload length panics in debug decoder instead of Err
+SNAPSHOT_GENERAL: invalid general index 65535 with revealed=true accepted
+SNAPSHOT_OWNERSHIP: same physical card in hand and discard accepted
+QUOTA_PROGRESS: first=Accepted { state_hash: [248, 223, 202, 245, 204, 49, 173, 73, 68, 29, 237, 213, 227, 194, 253, 173, 243, 95, 47, 106, 95, 203, 251, 11, 230, 28, 149, 176, 243, 244, 6, 120] }, next=Rejected(QuotaExhausted); round=1 current seat=0 phase=Draw, automatic round reset cannot advance without host intervention
+HOST_ASSEMBLER: 8 general slots filled but active skill instances=0 (metadata only)
+AI_HIDDEN_CHOICE: opponent AI receives private guanxing answer Some(Public(ChoiceAnswered { id: 2, options: ["card:60"] })); selected=Card(60)
+REVIEW12_PROBES_COMPLETE

@@ -1,0 +1,6 @@
+// 奉承：旧 JavaScript 仅作为语义证据；运行时只加载该类型化规则。
+skill noda_fengcheng(2452779390) locked {
+  trigger cards_moved owner_received_gift_from_other {
+    effect draw_cards(event_source, 1);
+  }
+}

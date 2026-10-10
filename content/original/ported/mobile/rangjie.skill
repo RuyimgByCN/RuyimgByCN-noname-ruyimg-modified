@@ -1,0 +1,6 @@
+// rangjie（让节）：当你受到1点伤害后，你可以选择一项并摸一张牌：获得牌堆或弃牌堆里你选择的类型的一张牌，或移动场上的一张牌。
+skill rangjie(4158068977) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

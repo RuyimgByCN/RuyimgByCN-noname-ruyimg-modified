@@ -1,0 +1,4 @@
+// Skill jieyin2(124) - standard variant
+skill jieyin2(124) {
+  modifier distance_from add -1;
+}

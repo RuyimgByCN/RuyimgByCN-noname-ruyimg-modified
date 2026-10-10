@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "command": "cargo test --offline -p engine-native",
+      "exit_code": 0,
+      "seconds": 31.861,
+      "log": "engine-native-tests.log",
+      "passed": 345,
+      "failed": 0
+    },
+    {
+      "command": "cargo test --offline -p content-native-loader",
+      "exit_code": 0,
+      "seconds": 0.718,
+      "log": "content-native-loader-tests.log",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "command": "cargo test --offline -p content-runtime",
+      "exit_code": 0,
+      "seconds": 63.481,
+      "log": "content-runtime-tests.log",
+      "passed": 31,
+      "failed": 0
+    }
+  ],
+  "source_file_count": 106,
+  "source_changes_during_run": []
+}

@@ -1,0 +1,4 @@
+// 旧 JS 语义：一张梅花手牌可当【铁索连环】使用，也可在出牌阶段以零目标重铸。
+skill lianhuan(2921824505) {
+  view_as tiesuo play_phase club from hand;
+}

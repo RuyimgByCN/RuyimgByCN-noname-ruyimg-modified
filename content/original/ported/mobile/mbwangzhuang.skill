@@ -1,0 +1,6 @@
+// mbwangzhuang（妄专）：一名角色受到非牌造成的伤害后，若你是伤害来源或受伤角色，你可以摸一张牌，令当前回合角色本回合非锁定技失效。
+skill mbwangzhuang(3021217161) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

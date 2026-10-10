@@ -1,0 +1,6 @@
+// mbzuoyou（佐佑）：转换技。出牌阶段限一次，阳：你可以令一名角色摸三张牌，然后其弃置两张手牌；阴：你可以令一名角色获得1点护甲。
+skill mbzuoyou(3055447004) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect draw_cards(event_source, 3);
+  }
+}

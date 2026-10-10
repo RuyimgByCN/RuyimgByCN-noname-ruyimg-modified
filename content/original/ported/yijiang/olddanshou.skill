@@ -1,0 +1,7 @@
+// 胆守：造成伤害后可摸一张牌，随后清空处理区并终止当前阶段的剩余结算。
+skill olddanshou(3778601240) {
+  trigger damage owner_source optional {
+    effect draw_cards(self, 1);
+    effect finish_current_phase_abort_resolution(self);
+  }
+}

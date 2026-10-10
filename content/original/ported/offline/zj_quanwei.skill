@@ -1,0 +1,5 @@
+// zj_quanwei：player:phase_prepare, 需选择目标, 二选一, 回复体力, 异步。
+skill zj_quanwei(3734274154) {
+  trigger phase_prepare owner_alive {
+  }
+}

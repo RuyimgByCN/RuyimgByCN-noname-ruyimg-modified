@@ -1,0 +1,10 @@
+// 神速·一（夏侯渊）：判定阶段开始时，可跳过判定阶段和摸牌阶段，视为对攻击范围内
+// 一名其他角色使用一张【杀】。
+// 旧 JS 仅作语义证据；阶段跳过与虚拟【杀】由权威状态机校验。
+// ABI 450 的 skip_judge_and_draw_phases 一次性设置 pending_judge_skips 与 SKIP_DRAW。
+skill shensu1(2385964521) {
+  trigger phase_judge owner_is_target optional {
+    effect skip_judge_and_draw_phases(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

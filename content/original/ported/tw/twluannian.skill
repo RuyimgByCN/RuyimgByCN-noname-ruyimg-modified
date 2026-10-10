@@ -1,0 +1,7 @@
+// 乱年（鲍信相关）：主公技。其他群势力角色出牌阶段可弃置X张牌
+// （X逐次递增），对「凶政」记录的目标造成1点伤害。
+// 缺递增消耗与跨技能目标追踪原语，空定义。
+skill twluannian(2374735039) lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

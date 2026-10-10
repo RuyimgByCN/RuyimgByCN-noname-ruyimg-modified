@@ -1,0 +1,6 @@
+// 横江·续（辅助技）：charlotte技，〖横江〗改目标的牌结算后若有人响应则摸等同响应人数的牌。空定义。
+skill twhengjiang2(2484846035) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twhengjiang2 = 标记型技能（charlotte，skill.js:26218），无规则面。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

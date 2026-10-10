@@ -1,0 +1,9 @@
+// ollihuo3：刷新包技能。
+// triggers: player:useCardEnd
+// forced/locked: 锁定技
+skill ollihuo3(3198802705) {
+    // 近似：旧JS事件 useCardEnd → DSL事件 useCardEnd
+    trigger card_resolved owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

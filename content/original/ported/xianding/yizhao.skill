@@ -1,0 +1,7 @@
+// 异兆：锁定技，使用/打出牌时，增加等同于该牌点数的「遗诏」标记。
+// 当标记十位数变化时，从牌堆获得一张点数个位数等于新十位数的牌。
+// 旧 JS 的「点数累加标记」「十进制进位检测」「按点数获得牌」无对应原语，未建模。
+skill yizhao(3482142715) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

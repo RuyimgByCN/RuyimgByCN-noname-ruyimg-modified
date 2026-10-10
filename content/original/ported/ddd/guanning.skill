@@ -1,0 +1,15 @@
+// 3D精选 管宁「游学/承经」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddyouxue(2449657606) locked {
+  trigger phase_begin owner_alive_ddd_youxue_round_pending {
+    effect resolve_ddd_guanning(self, event_player, 0);
+  }
+}
+
+skill dddchengjing(4114032104) {
+  trigger phase_end owner_alive_ddd_chengjing_available {
+    effect resolve_ddd_guanning(self, event_player, 1);
+  }
+  active play_phase uses_per_play_phase 1 select_he 1 1 {
+    effect resolve_ddd_guanning(self, self, 2);
+  }
+}

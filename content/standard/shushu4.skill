@@ -1,0 +1,4 @@
+// Skill shushu4(152) - trigger variant
+skill shushu4(152) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

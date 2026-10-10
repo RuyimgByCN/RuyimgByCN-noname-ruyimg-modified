@@ -1,0 +1,6 @@
+// jxyongrong：source:damage_before, player:damage_before, 异步。
+skill jxyongrong(4259758753) {
+  trigger damage_before owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// jsrgliedu（烈妒）：锁定技，其他女性角色和手牌数大于你的角色不能响应你使用的牌。
+// 未建模：强命directHit（DSL无对应原语）
+skill jsrgliedu(3769840384) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgliedu（skill.js:12045）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

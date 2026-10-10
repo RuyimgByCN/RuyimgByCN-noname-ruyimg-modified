@@ -1,0 +1,3 @@
+skill ttt(3286554904) {
+  modifier card_target_cancel(tao) override 1;
+}

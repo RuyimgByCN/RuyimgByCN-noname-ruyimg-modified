@@ -1,0 +1,6 @@
+// 溃击：出牌阶段限一次，将一张黑色基本/装备牌当【兵粮寸断】使用。
+// 旧 JS 的“置于自己判定区后摸一张牌并对体力最大的敌方角色造成 2 点伤害、
+// 目标濒死时可选择体力最大的己方角色回复 1 点体力”未建模。
+skill kuiji(2248505393) {
+  view_as bingliang play_phase black_basic_equip from hand_equip uses_per_turn 1;
+}

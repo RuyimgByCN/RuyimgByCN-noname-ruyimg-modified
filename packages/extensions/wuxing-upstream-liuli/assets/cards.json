@@ -1,0 +1,13 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/wuxing/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "pack": { "name": "wuxing-upstream-liuli", "version": 1, "description": "G1 wuxing：五行属性与生克", "card_prefix": "wxl_", "init_hook": "wuxing_natures" },
+  "cards": [
+    { "name": "wuxingpan", "kind": "wuxingpan", "suit": "spade", "rank": 5 }
+  ],
+  "skills": [
+    { "name": "wuxing_shengke", "mapping": "host:shengke_check" },
+    { "name": "wuxingpan_skill", "mapping": "host:change_card_nature" }
+  ]
+}

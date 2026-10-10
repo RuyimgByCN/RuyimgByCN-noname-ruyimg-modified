@@ -1,0 +1,7 @@
+// sm_kulian（锁定技/触发技）：锁定技, player:game_started, global:phaseBefore, source:damageSource, 需选择目标, 摸牌, 移出游戏, 加技能, 含子技能, 异步。
+skill sm_kulian(2750233514) locked {
+  trigger game_started always {
+    effect draw_cards(self, 5);
+    effect recover_hp(self, 1);
+  }
+}

@@ -1,0 +1,4 @@
+skill dcyicong(3742694356) locked {
+  modifier distance_from add -1;
+  modifier distance_to add owner_lost_hp_at_least_two;
+}

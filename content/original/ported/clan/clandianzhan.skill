@@ -1,0 +1,8 @@
+// 点绽（族荀采）：锁定技。每回合首次使用各花色的牌后，若目标数为1且未横置则横置之，并重铸同花色手牌；若两者均执行，摸一张牌。
+// 旧 JS 的「每回合每花色首次」「横置+重铸+额外摸牌联动」「花色存储追踪」无对应原语。
+// 以 locked 近似：使用牌后重铸同花色牌。缺少横置和花色追踪逻辑。
+skill clandianzhan(2892723846) locked {
+  trigger card_used owner_is_source {
+    effect recast_selected(self);
+  }
+}

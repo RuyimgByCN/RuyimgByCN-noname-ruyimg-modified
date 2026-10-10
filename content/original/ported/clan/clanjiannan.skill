@@ -1,0 +1,8 @@
+// 间难（族王允）：出牌阶段开始，摸2张牌（带 gaintag），获得临时技能：有角色失去手牌中的间难牌时，可令其执行本回合未执行过的一项（弃2张、摸2张、重铸装备、置锦囊牌堆顶或流失体力）。
+// 旧 JS 的「gaintag 追踪」「四项选择」「每回合不重复选择」「跨角色条件触发」无对应原语。
+// 空定义：需 expansion 支持 gaintag 和动态选项系统。
+skill clanjiannan(3793365787) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

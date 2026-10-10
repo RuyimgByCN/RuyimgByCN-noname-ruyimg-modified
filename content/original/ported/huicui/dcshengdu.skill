@@ -1,0 +1,7 @@
+// dcshengdu：摸?牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcshengdu(3114952408) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

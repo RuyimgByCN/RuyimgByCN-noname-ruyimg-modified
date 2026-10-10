@@ -1,0 +1,6 @@
+/// 直辩：出牌阶段开始可拼点，胜后移动牌、回复或背水，未胜失去体力。
+skill twzhibian(4091292152) {
+  trigger phase_play owner_is_target_can_compare_other {
+    effect resolve_twzhibian(self);
+  }
+}

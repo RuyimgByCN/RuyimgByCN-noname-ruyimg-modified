@@ -1,0 +1,8 @@
+// jsrgjinmie（烬灭）：魏势力技。出牌阶段限一次。你可以选择一名手牌数大于你的角色，你视为对其使用一张火【杀】。当此牌造成伤害后，你将其手牌数弃置至与你相同。
+// 未建模：势力技能, charlotte延迟, storage状态, addTempSkill（DSL无对应原语）
+skill jsrgjinmie(2770391310) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgjinmie（skill.js:7216）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

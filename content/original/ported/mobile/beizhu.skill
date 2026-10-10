@@ -1,0 +1,6 @@
+skill beizhu(2346585902) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty {
+    effect reveal_hand_to_player(event_source, self);
+    effect resolve_beizhu(self, event_source);
+  }
+}

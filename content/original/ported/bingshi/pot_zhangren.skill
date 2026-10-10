@@ -1,0 +1,26 @@
+// 势张任：旧 JavaScript 仅作语义合同；规则由 ABI 525 权威结算。
+skill potfuan(2955537231) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_potfuan(self, event_card, 0, 2955537232, 2595028433);
+  }
+  trigger phase_end owner_alive_other_turn_discarded_recorded_potfuan_suit optional {
+    effect resolve_potfuan(self, event_card, 2, 2955537232, 2595028433);
+  }
+  trigger sha_resolved owner_source_sha_resolved_potfuan_dealt_damage {
+    effect resolve_potfuan(self, event_card, 3, 2955537232, 2595028433);
+  }
+}
+
+skill potfuan_range(2955537232) locked {
+  modifier attack_range override 0;
+}
+
+skill potyinxian(2595028433) locked {
+  modifier attack_range add owner_skill_state_u32;
+  trigger card_used owner_is_source {
+    effect resolve_potyinxian(self, event_card, 0);
+  }
+  trigger card_resolved owner_is_source {
+    effect resolve_potyinxian(self, event_card, 1);
+  }
+}

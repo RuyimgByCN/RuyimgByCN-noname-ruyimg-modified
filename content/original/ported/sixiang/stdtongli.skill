@@ -1,0 +1,7 @@
+// 统理：出牌阶段，使用的第N张牌额外结算一次（N=场上装备/判定区花色种类数）。
+// 旧 JS 的「花色种类计数 + 额外结算（effectCount++）」无对应原语，未建模。
+skill stdtongli(4152360167) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

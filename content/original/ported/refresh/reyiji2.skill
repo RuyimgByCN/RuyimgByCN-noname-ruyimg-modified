@@ -1,0 +1,9 @@
+// reyiji2：刷新包技能。
+// triggers: player:phaseDrawBegin
+// forced/locked: 锁定技
+skill reyiji2(3900073137) {
+    // 近似：旧JS事件 phaseDrawBegin → DSL事件 phase_draw
+    trigger phase_draw owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

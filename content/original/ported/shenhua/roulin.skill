@@ -1,0 +1,4 @@
+// 肉林：拥有者与女性角色之间的【杀】逐目标要求额外一张【闪】。
+skill roulin(3168437611) locked {
+  modifier sha_response_count_if_other_female add 1;
+}

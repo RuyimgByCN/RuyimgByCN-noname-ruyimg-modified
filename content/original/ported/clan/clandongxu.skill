@@ -1,0 +1,7 @@
+// 洞续（族王允/族王淩）：转换技，出牌阶段。可将装备牌置于其他角色装备区（替换），或补手牌至攻击范围（最多5），然后视为使用【闪】或令被抵消的【杀】仍造成伤害。
+// 旧 JS 的「转换技」「装备转移」「补牌至攻击范围」「杀命中改写」无对应原语。
+// 空定义：需 expansion 支持 zhuanhuanji、装备转移、杀豁免改写。
+skill clandongxu(3412149237) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

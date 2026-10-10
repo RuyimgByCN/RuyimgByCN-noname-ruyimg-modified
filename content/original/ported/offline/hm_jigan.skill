@@ -1,0 +1,5 @@
+// hm_jigan：global:phase_any_end, global:phaseBefore, player:game_started, 需选择目标, 含子技能, 异步。
+skill hm_jigan(4178940975) {
+  trigger phase_any_end owner_alive optional {
+  }
+}

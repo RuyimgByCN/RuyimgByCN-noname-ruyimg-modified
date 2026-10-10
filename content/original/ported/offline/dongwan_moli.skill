@@ -1,0 +1,5 @@
+// dongwan_moli：觉醒技, player:phase_end, player:removeMark, player:game_started, 加技能, 含子技能, 异步。
+skill dongwan_moli(2689328796) {
+  trigger phase_end owner_alive optional {
+  }
+}

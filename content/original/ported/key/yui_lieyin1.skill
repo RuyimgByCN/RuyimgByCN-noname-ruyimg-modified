@@ -1,0 +1,5 @@
+// 烈音·阴（仲村由理临时效果）
+// 原语义：【杀】的牌名视为【决斗】。
+skill yui_lieyin1(3727853068) {
+  modifier card_name(sha) override juedou;
+}

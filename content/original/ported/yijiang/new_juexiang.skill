@@ -1,0 +1,8 @@
+// 绝响（新版·嵇康）：死亡时，伤害来源弃置所有装备并失去1点体力。
+// 你可令一名其他角色获得「残韵」，而后其可弃置场上一张梅花牌获得「绝响」。
+// 旧 JS 链式死亡结算+技能继承+梅花牌选择+再次获得绝响的传递机制无对应原语。
+skill new_juexiang(2474879012) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

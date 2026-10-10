@@ -1,0 +1,10 @@
+// 仁骨兴（董卓·OL）：限定技。回合开始时根据当前轮次数（最多3），
+// 从牌堆和弃牌堆中检索与〖惑乱〗记录牌相同/同花色点数/同牌名的所有牌并获得（同名牌至多5张）。
+//
+// 跨技能存储读取（renhuoluan 记录的牌）、多层级条件检索牌堆+弃牌堆、
+// 轮次数上限控制——均无 DSL 对应原语——空定义。
+skill renguxing(3603449552) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

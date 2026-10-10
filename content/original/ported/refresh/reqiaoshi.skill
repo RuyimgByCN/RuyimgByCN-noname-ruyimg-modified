@@ -1,0 +1,8 @@
+// reqiaoshi：刷新包技能。
+// triggers: global:phaseJieshuBegin
+skill reqiaoshi(3128835301) {
+    // 近似：旧JS事件 phaseJieshuBegin → DSL事件 phase_end
+    trigger phase_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

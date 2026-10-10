@@ -1,0 +1,8 @@
+// 锐袭：回合结束阶段，若本回合失去过牌，可将一张牌当无视距离的【杀】使用。
+// 近似：phase_any_end + choose_use_virtual_sha(ignore_distance) 保留无视距离出杀；
+// 旧 JS 的「本回合失去牌」条件未精确建模（owner_lost_cards_outside_turn 可能不完全匹配）。
+skill stdruixi(3305517837) {
+  trigger phase_any_end owner_lost_cards_outside_turn {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

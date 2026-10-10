@@ -1,0 +1,5 @@
+// jdsbduanliang：音效名:sbduanliang, 视作bingliang, 摸牌, 含子技能, 异步。
+skill jdsbduanliang(3970066669) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

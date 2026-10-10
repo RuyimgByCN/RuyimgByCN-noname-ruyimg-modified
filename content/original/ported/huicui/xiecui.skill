@@ -1,0 +1,5 @@
+// xiecui：旧JS复杂效果。
+// 旧JS含subSkill，DSL无法精确建模。
+skill xiecui(3697008445) {
+  modifier hand_limit add 1;
+}

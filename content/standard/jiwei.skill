@@ -1,0 +1,4 @@
+// Yang Xiu
+skill jiwei(85) {
+  trigger phase_begin always { effect draw_cards(self, 1); }
+}

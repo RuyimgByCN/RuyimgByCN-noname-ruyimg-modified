@@ -1,0 +1,6 @@
+// 龙吟（longyin）— 关平：弃一张牌令当前出牌阶段的杀至多退还一次计数；红杀再摸一张。
+skill longyin(3578226944) {
+  trigger card_used owner_alive_play_phase_sha_user_has_discardable_hand_equip optional {
+    effect choose_discard_one_for_sha_refund_and_draw_if_red(self, event_source, event_card);
+  }
+}

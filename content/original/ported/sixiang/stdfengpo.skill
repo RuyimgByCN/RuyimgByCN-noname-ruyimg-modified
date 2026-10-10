@@ -1,0 +1,10 @@
+skill stdfengpo(2400535495) {
+  trigger damage_before owner_source_sha_damage_before_endpoint_discardable_hand_equip optional {
+    effect choose_discard_damage_endpoint_card_increase_if_suit(
+      self,
+      event_player,
+      diamond,
+      1
+    );
+  }
+}

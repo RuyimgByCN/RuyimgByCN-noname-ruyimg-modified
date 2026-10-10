@@ -1,0 +1,7 @@
+// 炬湮
+skill twjuyan(2964355463) locked {
+  trigger damage owner_source_fire {
+    effect draw_cards(self, 1);
+    effect change_max_hp(event_player, -1);
+  }
+}

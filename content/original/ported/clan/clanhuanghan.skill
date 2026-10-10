@@ -1,0 +1,20 @@
+// 惶汗（族钟琰/族钟繇/族钟会）：受到伤害后，摸伤害牌名字数张牌；若已受伤，弃已损失
+// 体力值张牌；若本局已发动过且「保族」已消耗，可恢复「保族」。
+// 上游 (clan/skill.js)：damageEnd + 伤害牌存在过滤 + cardNameLength 摸牌 +
+// isDamaged 强制弃 getDamagedHp 张（he）+ 保族恢复分支。
+// 实现：damage owner_is_target（无 optional，对齐上游自动发动）→ n>0 时
+// draw(n) → if hp < max_hp { discard_hand_equip_expr(self, lost) }。
+// 近似：(1) 保族恢复/已发动计数未建模（需跨技能状态）；(2) 弃牌为确定性前 n 张
+// （上游手选）；(3) 伤害无牌时上游整体不触发，以 n>0 守卫等价。
+// 零新原语批次（2026-08-15，cardNameLength 家族）。
+skill clanhuanghan(4234060719) {
+  trigger damage owner_is_target {
+    let n = card_name_length(self, event_card);
+    if n > 0 {
+      effect draw_cards(self, n);
+      if hp(self) < max_hp(self) {
+        effect discard_hand_equip_expr(self, max_hp(self) - hp(self));
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+// 鸟翔：拥有者使用【杀】时，每名目标均需额外使用一张【闪】响应。
+
+skill zniaoxiang(3916851836) locked {
+  modifier response_count add 1;
+}

@@ -1,0 +1,7 @@
+// pstousuan：锁定技, global:damage_before, 摸牌, 异步。
+skill pstousuan(2292759536) {
+  trigger damage_before owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

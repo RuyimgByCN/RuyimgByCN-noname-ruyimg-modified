@@ -1,0 +1,5 @@
+// psquanmou：global:card_used, 需弃牌, 多步骤。
+skill psquanmou(3832423703) {
+  trigger card_used owner_alive {
+  }
+}

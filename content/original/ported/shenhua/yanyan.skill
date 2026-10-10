@@ -1,0 +1,13 @@
+// 严颜【拒战】— shenhua 旧 JS 语义参考（nzry_juzhan，转换技）：
+// 阴：你成为其他角色【杀】的目标后，与其各摸一张牌，然后其本回合内不能再对你使用牌；
+// 阳：你使用【杀】指定一名角色为目标后，获得其一张牌，然后你本回合内不能再对其使用牌。
+// 转换技分支以技能状态翻转位表达；用牌禁以回合禁用对 + card_target_cancel 修正器表达。
+skill juzhan(3174379257) {
+  trigger card_targeted owner_is_target optional {
+    effect resolve_juzhan(self, event_source, event_card);
+  }
+  trigger card_used owner_is_source optional {
+    effect resolve_juzhan(self, event_source, event_card);
+  }
+  modifier card_target_cancel_owner_turn_banned(any) override 1;
+}

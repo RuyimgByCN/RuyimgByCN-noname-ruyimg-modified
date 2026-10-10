@@ -1,0 +1,9 @@
+// 滔乱(董白)：你可以将一张牌当任意基本牌或非延时锦囊牌使用（每种类牌名限一次）。
+// 使用后须令一名其他角色选择一项：1.交给你一张与此牌类别不同的牌；2.令你失去1点体力且本回合"滔乱"无效。
+// 旧JS含chooseButton从inpile选牌名、markAuto记录已用牌名、taoluan_backup的viewAs、
+// taoluan2的chooseTarget+chooseCard+tempBanSkill等复杂逻辑链。
+// 注：动态牌名选择+限种类次数+使用后强奖惩机制无法用view_as或active单独表达。
+skill taoluan(2975766196) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

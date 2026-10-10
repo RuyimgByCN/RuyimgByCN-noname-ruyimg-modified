@@ -1,0 +1,13 @@
+// 旧客户端国战暗置武将威胁度提示；无权威规则行为。
+skill g_hidden_ai(3812331059) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 旧 JS 仅保存父技能展示信息并在移除时清理存储。
+skill naxiang2(2214935798) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

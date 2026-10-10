@@ -1,0 +1,9 @@
+// 招祸（陶谦）
+skill zhaohuo(2173746528) locked {
+  trigger dying owner_alive_not_target {
+    if 1 < max_hp(self) {
+      effect change_max_hp(self, 1 - max_hp(self));
+      effect draw_cards(self, max_hp(self) - 1);
+    }
+  }
+}

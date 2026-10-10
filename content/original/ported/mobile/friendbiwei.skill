@@ -1,0 +1,19 @@
+// friendbiwei（鄙位）：出牌阶段限一次，你可以弃置手牌中点数最大的手牌并令
+// 一名其他角色弃置大于等于此牌点数的所有手牌，若其未因此弃牌，则你重置此
+// 技能。
+// 上游 (mobile/skill.js friendbiwei L9775)：enable phaseUse；usable 1；
+// filterCard 点数≥其余手牌最大值（即最大点数牌）；filterTarget 其他有手牌
+// 角色；content 弃成本牌 → target 弃置所有点数≥该牌的手牌（无则
+// delete getStat("skill") 重置使用计数）。
+// 实现（2026-09-13 第二百七十五批·点数比较族状态机，ADR 0641 §8.63）：
+// active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty
+// select_hand 1 1 → resolve_friendbiwei(self, event_source)（ABI 724 /
+// tag 748，单发无续体）：机器校验成本牌为最大点数 → 弃成本 → 目标弃置所有
+// 点数≥成本牌的手牌（无则 play_phase_use_count=0 重置，可再次发动）。
+// 近似（登记债）：①「最大点数」约束在机器入口校验（选择器无该过滤面，
+// 多张同为最大点数时任选其一，与上游 filterCard 行为一致）。
+skill friendbiwei(2799409601) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty select_hand 1 1 {
+    effect resolve_friendbiwei(self, event_source);
+  }
+}

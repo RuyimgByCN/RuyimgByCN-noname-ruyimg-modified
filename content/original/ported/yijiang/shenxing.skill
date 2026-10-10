@@ -1,0 +1,7 @@
+// 旧 JS 语义：出牌阶段可反复发动，弃置两张手牌或装备，然后摸一张牌。
+skill shenxing(3283042324) {
+  active play_phase select_he 2 2 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

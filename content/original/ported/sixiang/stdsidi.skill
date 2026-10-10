@@ -1,0 +1,7 @@
+// 司敌（标曹真）
+// 原语义：任意角色打出【杀】响应后，存活的技能拥有者可以摸一张牌。
+skill stdsidi(4128943540) {
+  trigger card_responded owner_alive_card_is_sha optional {
+    effect draw_cards(self, 1);
+  }
+}

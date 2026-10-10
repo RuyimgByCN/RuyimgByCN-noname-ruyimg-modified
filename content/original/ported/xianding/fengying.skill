@@ -1,0 +1,13 @@
+// 奉迎（崔琰毛玠）：限定技弃置全部手牌并插入额外回合；辅助技能只在本次额外
+// 回合开始时，按全场最低体力条件补手牌至体力上限。旧 JavaScript 不进入运行时。
+skill fengying(3395124491) {
+  active play_phase once_per_game {
+    effect resolve_fengying(self, 597375372, 0);
+  }
+}
+
+skill fengying_effect(597375372) locked {
+  trigger phase_begin owner_is_target {
+    effect resolve_fengying(self, 597375372, 2);
+  }
+}

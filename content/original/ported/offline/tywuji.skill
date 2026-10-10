@@ -1,0 +1,6 @@
+// tywuji：phase_end时摸牌。
+skill tywuji(3633769450) {
+  trigger phase_end owner_alive  {
+    effect draw_cards(self, 1);
+  }
+}

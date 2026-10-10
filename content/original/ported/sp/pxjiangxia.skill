@@ -1,0 +1,14 @@
+// 江夏（pxjiangxia，州郡技能）：当你获得此技能后，你可以令一名其他角色摸两张牌，
+// 然后交给你一张牌。
+// 上游 (sp/skill.js:1541)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且存在其他角色；content = chooseTarget → target.draw(2) → target.chooseToGive(he,
+// forced)。
+// 实现：skill_added + owner_skill_added_self_2687838381 → 可选确认 →
+// choose_other_draw_or_recover(self, 2, 0, 1)（令一名其他角色摸 2）+
+// choose_other_give_one_hand_equip(self)（令其交一张手牌/装备）。
+skill pxjiangxia(2687838381) {
+  trigger skill_added owner_skill_added_self_2687838381 optional {
+    effect choose_other_draw_or_recover(self, 2, 0, 1);
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

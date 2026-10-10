@@ -1,0 +1,7 @@
+// 锻币：结束阶段可弃置所有手牌，然后令两名不同角色依座次各摸两张牌。
+skill stdduanbi(3811377323) {
+  trigger phase_end owner_is_target_hand_nonempty optional {
+    effect discard_hand(self, 2147483647);
+    effect choose_targets_draw(self, 2, 2, any);
+  }
+}

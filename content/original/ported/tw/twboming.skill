@@ -1,0 +1,10 @@
+// 博明：出牌阶段限两次，将一张牌交给一名其他角色；结束阶段若其他角色本回合累计获得牌数>1，摸两张牌。
+// 以 choose_other_give_one_hand_equip + draw_cards 近似，注释注明差异：旧JS结束阶段有条件判断「其他角色获得牌数>1」。
+skill twboming(2461314891) {
+  active play_phase uses_per_turn 2 targets 1 1 other select_he 1 1 {
+    effect choose_other_give_one_hand_equip(self);
+  }
+  trigger phase_end owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

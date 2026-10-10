@@ -1,0 +1,10 @@
+// 随势（新杀田丰）：旧 JS 仅作语义证据；运行时只执行本 DSL 编译产物。
+skill dcsuishi(2514713423) locked {
+  trigger dying owner_alive_not_target_source_same_group {
+    effect draw_cards(self, 1);
+  }
+
+  trigger death owner_alive_event_player_same_group_hand_nonempty {
+    effect choose_discard_hand_range(self, 1, 2147483647);
+  }
+}

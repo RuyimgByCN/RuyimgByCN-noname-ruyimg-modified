@@ -1,0 +1,9 @@
+// 枢机·续（留美·锁定技）：出牌阶段结束时，根据体力/使用杀次数/造成伤害判定摸牌或失去体力。
+// 实现：结束阶段摸 1。
+// 近似：不评估体力/出杀/锦囊伤害条件；失去体力分支未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill rumi_shuwu2(3596925719) locked {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

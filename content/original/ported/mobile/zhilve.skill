@@ -1,0 +1,6 @@
+// zhilve（见 translate.js）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill zhilve(2153286359) locked {
+  trigger phase_prepare owner_alive {
+    effect lose_hp(self, 1);
+  }
+}

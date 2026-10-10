@@ -1,0 +1,7 @@
+// yjzhian：音效名:twzhian, global:card_used, 需弃牌, 多分支选择, 回复体力, 造成伤害, 加技能, 含子技能, 异步。
+skill yjzhian(3039635766) {
+  trigger card_used owner_alive optional {
+    effect recover_hp(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

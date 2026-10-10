@@ -1,0 +1,6 @@
+// mbpanxiang（蹒襄）：当一名角色受到伤害时，你可以选择一项（不能与上次你因其发动此技能时选择的选项相同）：⒈令此伤害-1，伤害来源摸两张牌；⒉令此伤害+1，其摸三张牌。
+skill mbpanxiang(3631191911) {
+  trigger damage_before owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

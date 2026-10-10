@@ -1,0 +1,9 @@
+// 厉火-转（程普·疠火子技）：使用非属性【杀】时可将其改为火属性。
+// 上游 (refresh/skill.js)：useCard 非属性杀 + 可选改火。
+// 实现：`modifier card_nature(sha) override fire`（既有 modifier 目标——key/
+// xianding 的 kami/normal 先例；第八次白名单解体：「缺 nature 写入」登记不成立）。
+// 近似：modifier 为全程生效（上游为每次使用可选），所有【杀】视为火。
+// 2026-08-15 nature 写入批次——零新原语。
+skill decadelihuo(2548121026) {
+  modifier card_nature(sha) override fire;
+}

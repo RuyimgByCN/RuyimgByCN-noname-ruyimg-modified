@@ -1,0 +1,7 @@
+// zj_liefa：音效名:zj_liefa, 主动(chooseToUse), 需弃牌, 多分支选择, 失去体力, 含子技能。
+skill zj_liefa(4097601805) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

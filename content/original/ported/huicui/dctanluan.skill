@@ -1,0 +1,7 @@
+// dctanluan：获临时技；弃牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dctanluan(2569239609) locked {
+  // 旧JS含subSkill，需新原语支持
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

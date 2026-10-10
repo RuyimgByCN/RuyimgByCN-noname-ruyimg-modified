@@ -1,0 +1,11 @@
+// 决堰：废除一个仍可用的装备栏，并获得对应的首次永久/后续临时效果。
+skill drlt_jueyan(3834102895) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_drlt_jueyan(self, 2863335974, 3194432315, 3629461497, 4232768410, 2811682656);
+  }
+}
+
+// 决堰首次废除武器栏后的永久【杀】次数增益。
+skill drlt_jueyan_sha(2863335974) {
+  modifier sha_use_limit add 1;
+}

@@ -1,0 +1,10 @@
+// 伤觉：觉醒技；濒死时回复至 1、增加体力上限、获得“困励”，并记录“铿锵”升级状态。
+skill dcshangjue(2632217594) locked {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 1 - hp(self));
+    effect change_max_hp(self, 1);
+    effect add_skill(self, 4133766049);
+    effect add_mark(self, 2632217594, 1);
+    effect remove_skill(self_skill);
+  }
+}

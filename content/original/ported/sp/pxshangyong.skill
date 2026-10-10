@@ -1,0 +1,12 @@
+// 上庸（pxshangyong，州郡技能）：当你获得此技能后，你可以与一名其他角色各摸一张牌。
+// 上游 (sp/skill.js:1503)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且存在其他角色；content = chooseTarget(notMe) → asyncDraw([player, target])。
+// 实现：skill_added + owner_skill_added_self_2310331473 → 可选确认 →
+// choose_other_draw_or_recover(self, 1, 0, 1)（令一名其他角色摸 1）+ draw_cards(self, 1)。
+// 与上游差异：上游「与目标各摸一张」以两段效果近似（先他人摸 1 再自己摸 1）。
+skill pxshangyong(2310331473) {
+  trigger skill_added owner_skill_added_self_2310331473 optional {
+    effect choose_other_draw_or_recover(self, 1, 0, 1);
+    effect draw_cards(self, 1);
+  }
+}

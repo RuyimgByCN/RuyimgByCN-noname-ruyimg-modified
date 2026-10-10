@@ -1,0 +1,10 @@
+// 铤险（孙狼）：你使用【杀】指定目标后（每回合限一次），摸 X+1 张牌
+// （X 为你装备区牌数），并令此【杀】对其中至多 X+1 个目标无效。
+// 旧 JS 仅作语义证据；摸牌与目标排除由权威状态机校验（ABI 464）。
+// 注：旧 JS 于最后一个目标结算时触发；DSL 以 owner_source_sha_once_per_turn
+//      于首次目标指定时触发（每回合一次），排除仍作用于同一【杀】的完整目标集。
+skill dctingxian(3933341702) {
+  trigger card_targeted owner_source_sha_once_per_turn {
+    effect resolve_dctingxian(self);
+  }
+}

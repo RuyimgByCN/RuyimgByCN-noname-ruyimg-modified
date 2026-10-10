@@ -1,0 +1,6 @@
+// 虚妄之冕装备技能
+// 原语义：摸牌阶段额外摸两张牌，手牌上限减一。
+skill xuwangzhimian(3228154738) locked {
+  modifier draw_count add 2;
+  modifier hand_limit add -1;
+}

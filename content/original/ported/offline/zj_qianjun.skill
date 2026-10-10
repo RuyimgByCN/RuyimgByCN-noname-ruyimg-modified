@@ -1,0 +1,5 @@
+// zj_qianjun：global:card_used, 异步。
+skill zj_qianjun(3111930935) {
+  trigger card_used owner_alive {
+  }
+}

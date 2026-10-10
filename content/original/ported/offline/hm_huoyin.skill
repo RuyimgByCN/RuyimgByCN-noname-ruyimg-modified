@@ -1,0 +1,7 @@
+// hm_huoyin：锁定技, source:damageSource, 摸牌, 含子技能, 异步。
+skill hm_huoyin(3080688350) {
+  trigger damage owner_is_target_once {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

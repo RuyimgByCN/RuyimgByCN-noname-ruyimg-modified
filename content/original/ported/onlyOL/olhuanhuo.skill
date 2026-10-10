@@ -1,0 +1,7 @@
+// 幻惑：锁定技，每轮开始时摸2张牌并选至多2名角色弃置等量牌；
+// 目标下回合出牌阶段受debuff限制。旧 JS 的「debuff标记+强制选牌+随机弃牌」无对应原语，以下给空定义。
+skill olhuanhuo(3234222752) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olhuanhuo 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

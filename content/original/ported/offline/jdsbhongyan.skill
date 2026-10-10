@@ -1,0 +1,6 @@
+// jdsbhongyan：音效名:xinhongyan, 锁定技, player:hp_lost, global:cards_moved, global:cards_moved, 摸牌, 移出游戏, 异步。
+skill jdsbhongyan(3155343398) locked {
+  trigger hp_lost always {
+    effect draw_cards(self, 1);
+  }
+}

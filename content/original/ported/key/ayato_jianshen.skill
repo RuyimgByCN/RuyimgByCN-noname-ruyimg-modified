@@ -1,0 +1,4 @@
+// 【僭神】令拥有者使用的逻辑【杀】统一造成神属性伤害。
+skill ayato_jianshen(3383654000) {
+  modifier card_nature(sha) override kami;
+}

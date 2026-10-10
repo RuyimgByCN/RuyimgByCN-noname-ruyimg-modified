@@ -1,0 +1,5 @@
+// ylyg_lieren：锁定技, player:card_targeted, 需拼点, 异步。
+skill ylyg_lieren(4146584541) {
+  trigger card_targeted owner_alive {
+  }
+}

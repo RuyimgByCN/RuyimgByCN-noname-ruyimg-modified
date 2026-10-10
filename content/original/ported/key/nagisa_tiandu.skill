@@ -1,0 +1,6 @@
+// 天妒：自己的最终判定牌生效后，可获得仍在弃牌堆中的该实体牌。
+skill nagisa_tiandu(4094577149) {
+  trigger judgment_resolved owner_is_target optional {
+    effect gain_event_cards(self);
+  }
+}

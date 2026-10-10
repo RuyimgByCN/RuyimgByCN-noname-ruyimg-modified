@@ -1,0 +1,9 @@
+// 智盟（华歆系）：回合结束后，选择一名其他角色，双方各摸一张牌并展示
+// 手牌。
+// 旧 JS 的「双方摸牌展示」无对应原语；以回合结束后你摸一张近似
+// （双人交互未建模，已注明）。
+skill zhimeng(2760037292) {
+  trigger turn_ended owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

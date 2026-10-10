@@ -1,0 +1,9 @@
+// 天荫（蔡贞姬）：锁定技。结束阶段开始时，若牌堆中有你本阶段未使用过类型
+// （基本/锦囊/装备）的牌，你获得牌堆顶每类此类牌的第一张。
+// 旧 JavaScript 仅作语义证据；类型记录与牌堆扫描由 ABI 418 resolve_tianyin
+// 权威结算（以回合级 owner_card_category_mask 近似本阶段，文档化）。
+skill tianyin(2264320121) locked {
+  trigger phase_end owner_is_target {
+    effect resolve_tianyin(self);
+  }
+}

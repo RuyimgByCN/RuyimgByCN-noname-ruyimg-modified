@@ -1,0 +1,15 @@
+// 蝶归（直井文人）：出牌阶段，将一张「七影蝶」扩展区牌交给一名角色，其摸两张牌并
+// 复原武将牌（解除横置与翻面）。
+// 上游 (key/skill.js)。实现：active play_phase uses_per_turn 1 →
+// draw_cards(self, 2) + gain_from_skill_pile（ABI 651，本会话）+ remove_mark(2)
+// 复原（MARK_CHAIN=2）。
+// 近似：(1)「七影蝶交给一名角色」以自己取回近似（give-to-other 原语缺失）；
+// (2) 翻面（face-up）未建模，仅解除横置。
+// 2026-08-16 expansion P1 取用批次（用户批准门槛降至实面 2）。
+skill ao_diegui(3867140701) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 2);
+    effect gain_from_skill_pile(self, self_skill);
+    effect remove_mark(self, 2, 1);
+  }
+}

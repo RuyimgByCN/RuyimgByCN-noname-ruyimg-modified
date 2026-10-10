@@ -1,0 +1,6 @@
+// wanlan（挽澜）：限定技，当一名角色进入濒死状态时，你可以弃置所有手牌（无牌可不弃）。其回复体力至1点，然后你对当前回合角色造成1点伤害。
+skill wanlan(3914816898) {
+  trigger dying owner_alive {
+    effect choose_other_damage(self, 1);
+  }
+}

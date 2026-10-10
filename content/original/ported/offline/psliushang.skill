@@ -1,0 +1,6 @@
+// psliushang（锁定技/触发技）：锁定技, player:phaseDrawBegin1, global:phase_prepare, source:damage_before, 多分支选择, 摸牌, 移出游戏, 加技能, 含子技能, 多步骤, 条件计数。
+skill psliushang(4122651779) locked {
+  trigger phase_prepare always {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 天香·2（界小乔辅助）：伤害后清理。
+// 旧 JS 的清理语义，无独立规则行为。
+skill xintianxiang2(2502597531) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

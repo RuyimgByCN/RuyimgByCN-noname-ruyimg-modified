@@ -1,0 +1,7 @@
+// 三恇（族韩韶/族韩融/族韩馥）：锁定技。每回合首次使用各类别牌后，选择一名其他角色，其须交给你至少X张牌（X=其满足：有装备/已受伤/体力值小于手牌数），然后获得此牌（若在弃牌堆）。
+// 旧 JS 的「多条件计数X」「强制交牌」「装备/手牌比较」无对应原语。
+// 空定义：需 expansion 支持多条件计数和强制交牌。
+skill clansankuang(2599885757) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

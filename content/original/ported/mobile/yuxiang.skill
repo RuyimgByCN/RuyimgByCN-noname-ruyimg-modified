@@ -1,0 +1,12 @@
+// 玉箱：锁定技，若你有护甲值：①你计算与其他角色的距离-1，其他角色计算与你的
+// 距离+1；②当你受到火焰伤害时，此伤害+1。
+// 实现：护甲=MARK_HUJIA 标记（def 3，引擎 commit_damage 原生吸收管线）；
+// `modifier distance_from add -owner_mark_3`（globalFrom 出向）+
+// `modifier distance_to add owner_mark_3`（globalTo 入向），无护甲时值源为 0 自动失效。
+// 近似：上游为布尔 ±1，此处 ±护甲值（护甲≥2 时偏强）；火焰伤害+1 子句因无
+// 「受击火焰」过滤器未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuxiang(2271957513) locked {
+  modifier distance_from add -owner_mark_3;
+  modifier distance_to add owner_mark_3;
+}

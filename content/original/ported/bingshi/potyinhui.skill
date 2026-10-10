@@ -1,0 +1,10 @@
+// 音洄（势小乔）：每轮一次，你可以失去一个因〖音洄〗获得的技能，然后获得
+// 一名其他存活角色技能名单中的一个（§7 技能夺取设施 S0+S1：
+// lose_gained_skill → choose_gain_other_skill）。
+// 实现为完整上游语义：失去臂可取消（无可失去技能时静默），获得链照常结算。
+skill potyinhui(3278616702) {
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect lose_gained_skill(self, self_skill);
+    effect choose_gain_other_skill(self, self_skill);
+  }
+}

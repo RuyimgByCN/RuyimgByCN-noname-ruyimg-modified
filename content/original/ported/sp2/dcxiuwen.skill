@@ -1,0 +1,8 @@
+// 修文（郑玄）：使用牌时，若本局首次使用此牌名，摸一张牌并记录此牌名。
+// 近似：保留摸1牌核心收益。本局首次使用去重条件(牌名storage追踪)无原语，未建模。
+skill dcxiuwen(4139848204) {
+  trigger card_used owner_is_source {
+    effect draw_cards(self, 1);
+    // 旧 JS 每次牌名只触发一次，需 storage 追踪已使用牌名，无对应原语
+  }
+}

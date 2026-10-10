@@ -1,0 +1,7 @@
+// 归心：回合结束时，从未上场武将携带的可获得主公技中获得一个，
+// 或改变一名其他角色的势力。
+skill junkguixin(4267439357) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_junkguixin(self);
+  }
+}

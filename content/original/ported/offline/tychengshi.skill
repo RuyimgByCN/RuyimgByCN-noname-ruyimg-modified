@@ -1,0 +1,6 @@
+// tychengshi：锁定技, source:damageSource, 加技能, 含子技能, 异步。
+skill tychengshi(4167240516) {
+  trigger damage owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

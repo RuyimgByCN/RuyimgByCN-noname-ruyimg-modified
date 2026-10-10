@@ -1,0 +1,18 @@
+// 预兆·里（key shiroha_yuzhao_umi）：锁定技，距离 1 以内角色回合开始时，若你有
+// 「兆」：将势力数张牌加入「兆」，然后将等量手牌置于牌堆顶。
+// 上游 (key/skill.js shiroha_yuzhao_umi)：trigger global phaseBegin；forced；
+// filter = 「兆」堆非空 + 距离门控；content addToExpansion(牌堆顶 N) +
+// chooseToMove(手牌 N → 牌堆顶)。
+// 实现（2026-09-10 第二百一十三批·chooseToMove 堆重排原语铸造，ABI 689 领号）：
+// ①place_top_deck_to_expansion(self, self_skill, shiroha_yuzhao def 4263927867,
+// alive_group_count())——牌堆顶 N 张置入「兆」堆（批 200 原语）；
+// ②place_hand_cards_to_deck_top(self, self_skill, alive_group_count())——选
+// N 张手牌置牌堆顶（批 211 原语，两段选择续体）。
+// 近似（登记债）：①距离 ≤1 门控以 alive_group_count? 不可表达——省略（上游
+// 距离约束依赖 event.player 位置）；②「兆」可视性未建模；③动画未建模。
+skill shiroha_yuzhao_umi(2346259355) locked {
+  trigger phase_begin owner_is_target {
+    effect place_top_deck_to_expansion(self, self_skill, 4263927867, alive_group_count());
+    effect place_hand_cards_to_deck_top(self, self_skill, alive_group_count());
+  }
+}

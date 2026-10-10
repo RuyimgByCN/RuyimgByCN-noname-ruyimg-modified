@@ -1,0 +1,6 @@
+// jdsbzhiji：音效名:sbzhiji, 觉醒技, 锁定技, player:dying, 摸牌, 加技能, 异步。
+skill jdsbzhiji(2496058276) {
+  trigger dying owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

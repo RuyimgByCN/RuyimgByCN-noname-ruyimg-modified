@@ -1,0 +1,7 @@
+// 才媛（晋杨艳）：结束阶段开始时，若你的回合数大于 1，你摸两张牌。
+// 旧 JS 仅作语义证据；回合数条件以近似省略（ABI 596 包批次）。
+skill caiyuan(4141410001) {
+  trigger phase_end owner_alive optional {
+    effect draw_cards(self, 2);
+  }
+}

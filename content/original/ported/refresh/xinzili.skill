@@ -1,0 +1,23 @@
+// 自立（refresh xinzili）：觉醒技，准备阶段，若你的“权”数大于 2：回复 1 点体力，
+// 摸两张牌，减 1 点体力上限，获得〖排溢〗。
+// 上游 (refresh/skill.js xinzili)：trigger phaseZhunbeiBegin；forced juexingji；
+// filter getExpansions("xinquanji").length > 2；content recover + draw(2) +
+// loseMaxHp + addSkills("xinpaiyi")。
+// 实现（2026-09-09 第一百八十九批·ADR 0641 §8 S1-A 首批，零新原语）：
+// skill_pile_count(self, xinquanji def) > 2 门控 + once 标记 → recover_hp +
+// draw_cards + change_max_hp(-1) + add_skill(排溢 def)。
+// 近似（登记债）：①觉醒动画未建模；②“权”堆供给依赖 xinquanji 置入面（S1-B）
+// 落地，落地前 dormant——门控契约真实。
+skill xinzili(4072748511) {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 4072748511) == 0 {
+      if skill_pile_count(self, 3444777027) > 2 {
+        effect recover_hp(self, 1);
+        effect draw_cards(self, 2);
+        effect change_max_hp(self, -1);
+        effect add_skill(self, 3639231394);
+        effect add_mark(self, 4072748511, 1);
+      }
+    }
+  }
+}

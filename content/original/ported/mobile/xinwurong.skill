@@ -1,0 +1,6 @@
+// xinwurong（怃戎）：出牌阶段限一次，你可以与一名其他角色进行谋弈：<br><li>若你选择“镇压”且其选择“反抗”，你对其造成1点伤害，然后你摸一张牌。<br><li>若你选择“安抚”且其选择“归顺”，其须交给你两张牌（若其牌数不足两张，则改为令其跳过其下个摸牌阶段）。<br><li>若你选择“镇压”且其选择“归顺”，你获得其一张牌，然后你交给其两张牌。<br><li>若你选择“安抚”且其选择“反抗”，你受到1点伤害，然后你摸一张牌。
+skill xinwurong(3235898794) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect deal_damage(self, event_source, 1);
+  }
+}

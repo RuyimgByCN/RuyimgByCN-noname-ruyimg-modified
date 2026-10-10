@@ -1,0 +1,6 @@
+// 福照：旧 JavaScript 仅作为语义证据；运行时只加载该类型化规则。
+skill fuzhao(3351225946) {
+  trigger dying owner_alive optional {
+    effect judge_recover_on_suit(event_player, heart, 1);
+  }
+}

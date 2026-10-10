@@ -1,0 +1,7 @@
+// 谮毁：当你使用杀或普通锦囊牌指定目标后，你可以选择一名不在此牌目标中的角色代替你成为此牌的使用者。
+// 旧 JS 的「转移牌的使用者身份」无可用的 DSL 效果原语（需修改 useCard 的 player 属性）。
+skill stdzenhui(2531584432) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

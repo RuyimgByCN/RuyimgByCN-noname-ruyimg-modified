@@ -1,0 +1,8 @@
+// 樗奕：每轮限一次，其他角色对攻击范围内有你的一名角色造成伤害时，你可以令此伤害+1。
+// 近似：用 modify_current_damage(self, 1) 在 damage_before 非目标时增加伤害。
+// 丢失：①「伤害来源不是你」的约束 ②「你在受伤角色攻击范围内」的判定 ③每轮限一次（无可组合的 once_per_round 过滤器）。
+skill stdchuyi(3364283852) {
+  trigger damage_before owner_alive_not_target {
+    effect modify_current_damage(self, 1);
+  }
+}

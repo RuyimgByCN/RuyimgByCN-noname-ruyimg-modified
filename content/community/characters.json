@@ -1,0 +1,12 @@
+[
+  {
+    "id": 4200000902,
+    "name_key": "hero_example",
+    "max_hp": 4,
+    "skills": [
+      4200000901
+    ],
+    "sex": "male",
+    "group": "qun"
+  }
+]

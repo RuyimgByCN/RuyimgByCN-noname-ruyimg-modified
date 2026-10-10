@@ -1,0 +1,7 @@
+// 南蛮：出牌阶段，将任意张基本牌当【南蛮入侵】使用。
+// 近似：view_as 将手牌+装备区基本牌转南蛮；旧 JS 的 complexSelect（选牌数=目标数）未保留，
+// view_as 的 filter 用 basic 近似，若 basic 不在 VIEW_AS_FILTERS 中需改为 any。
+skill stdnaman(2945432594) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,7 @@
+// 酷嘲（olkouchao）：你可以将一张手牌/装备牌当【杀】/【火攻】/【过河拆桥】使用，
+// 每轮每项限一次（以每回合每项限一次近似）。
+skill olkouchao(2986388793) locked {
+  view_as sha play_phase any from hand_equip uses_per_turn 1;
+  view_as huogong play_phase any from hand_equip uses_per_turn 1;
+  view_as guohe play_phase any from hand_equip uses_per_turn 1;
+}

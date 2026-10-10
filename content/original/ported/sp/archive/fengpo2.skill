@@ -1,0 +1,10 @@
+// 风魄·伤（凤魄衍生）：造成伤害时伤害+n（n 为风魄记录的出杀次数）。
+// 上游 (sp/skill.js:40166)：source:damageBegin1 按 storage 增加伤害。
+// 实现：造成伤害前 `modify_current_damage +1`。
+// 近似：固定 +1，不读风魄出杀计数。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill fengpo2(2712711471) locked {
+  trigger damage_before owner_source_other_damage_before {
+    effect modify_current_damage(self, 1);
+  }
+}

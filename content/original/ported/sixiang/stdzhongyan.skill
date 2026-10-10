@@ -1,0 +1,6 @@
+// 忠言
+skill stdzhongyan(3353809882) lord_only {
+  trigger death owner_wounded_event_player_group_qun optional {
+    effect recover_hp(self, 1);
+  }
+}

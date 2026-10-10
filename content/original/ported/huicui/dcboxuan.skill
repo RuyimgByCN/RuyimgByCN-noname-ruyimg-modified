@@ -1,0 +1,7 @@
+// dcboxuan：摸?牌；弃牌。
+// 旧JS含多步选择，DSL无法精确建模。
+skill dcboxuan(4290570007) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

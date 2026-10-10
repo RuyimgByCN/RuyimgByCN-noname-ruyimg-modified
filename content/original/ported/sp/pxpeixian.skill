@@ -1,0 +1,7 @@
+// 沛县（pxpeixian，州郡技能）：你的普通锦囊牌不能被响应。
+// 上游 (sp/skill.js:3162)：trigger player:useCard；filter = type == "trick"；forced；
+// content = directHit.addArray(all)（不可响应）。
+// 实现：modifier card_use_unrespondable(trick) override 1（锦囊不可被响应）。
+skill pxpeixian(4115824913) {
+  modifier card_use_unrespondable(trick) override 1;
+}

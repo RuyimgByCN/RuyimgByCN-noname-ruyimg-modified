@@ -1,0 +1,6 @@
+// 界法恩：翻面双向触发；横置仅在进入连环状态时触发。
+skill refaen(3292191694) {
+  trigger character_state_changed owner_alive_event_player_turn_changed_or_became_linked optional {
+    effect draw_cards(event_player, 1);
+  }
+}

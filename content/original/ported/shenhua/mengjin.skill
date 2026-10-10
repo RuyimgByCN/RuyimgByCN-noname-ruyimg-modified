@@ -1,0 +1,6 @@
+// 猛进：只订阅完整【杀】闪避事件；【万箭齐发】等普通【闪】响应不会进入此时机。
+skill mengjin(2910124062) {
+  trigger sha_dodged owner_source_sha_dodged_target_alive_has_discardable_hand_equip optional {
+    effect choose_discard_target_card(self, event_player, hand_equip);
+  }
+}

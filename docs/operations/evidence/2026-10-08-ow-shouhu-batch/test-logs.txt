@@ -1,0 +1,24 @@
+# U05 ow 纵切批四测试日志（2026-10-08，守护，规则 119→121 合并跳变）
+
+$ cargo test --offline -p engine-native
+engine-native: 439 passed / 0 failed / 1 ignored（+1 新增守护回归；含 v120 批语义）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 21 passed; 0 failed（20 既有 + tianshi_shouhu_discard_heal_and_sha_ban）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 113 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；119→121 合并跳变入 canonical_hash）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 版本号勘误
+- v120 批（自愈）遗漏提交版本号——发现时常量仍为 119。本批 119→121
+  合并跳变重录（v120 语义+守护语义一次入哈希），主稿版本链登记注明。
+
+## 测试迭代记录
+- 枚举 doc 锚含不可见字符差（第三次）→ 枚举尾部锚（WudianZiyu,\\n    WudianKang）
+- 半途断言中断脚本未写盘（第五次）→ 分步小补丁
+- 守护禁杀初版漏加杀门控钩（测试②捕获）→ 补 PlayCard Sha 臂检查

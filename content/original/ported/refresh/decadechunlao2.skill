@@ -1,0 +1,15 @@
+// decadechunlao2（程普·醇醪-解）：造成 >1 点伤害后若已横置，可重置（解锁）。
+// 上游 (refresh/skill.js:9584)：damageSource/damageEnd + num>1 + isLinked → link(false)。
+// 实现：`damage owner_is_source optional` → body 守卫 `event_amount > 1` +
+// `mark_count(self,2) > 0`（已横置）→ remove_mark(self,2,1) 重置（MARK_CHAIN=2）。
+// 近似：上游受伤侧亦可触发（本实现仅来源侧）；amount 守卫在 body（不满足仍弹确认）。
+// 2026-08-15 陈旧缺口清点批次（原语 remove_mark/mark_count 早已可用，旧登记未同步）。
+skill decadechunlao2(3527886704) {
+  trigger damage owner_is_source optional {
+    if event_amount > 1 {
+      if mark_count(self, 2) > 0 {
+        effect remove_mark(self, 2, 1);
+      }
+    }
+  }
+}

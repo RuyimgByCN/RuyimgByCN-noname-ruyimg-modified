@@ -1,0 +1,7 @@
+// 车争（界曹仁）：出牌阶段伤害目标不在范围内时伤害+1。
+// 旧 JS 的「范围判定」无对应原语；以造成伤害后摸一张近似（已注明）。
+skill rechezheng(3698472146) locked {
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}

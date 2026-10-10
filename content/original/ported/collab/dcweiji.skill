@@ -1,0 +1,8 @@
+// 危计（可爱之神）：使用牌指定其他角色为目标时，可另选一名目标。
+// 双方各暗选1~3的数字，若不同则你摸等量牌。
+// 暗选数字 mini-game 无法建模；近似为使用牌时摸2张牌。
+skill dcweiji(3852157036) {
+  trigger card_used always {
+    effect draw_cards(self, 2);
+  }
+}

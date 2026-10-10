@@ -1,0 +1,9 @@
+// 谋立（孟获系）：出牌阶段限一次，将一张手牌交给一名其他角色，其获得
+// 「谋」标记；你关联该角色。
+// 旧 JS 的「关联角色追踪」无对应原语；以交一张手牌并摸一张近似
+// （关联未建模，已注明）。
+skill mouli(3230093387) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 1 {
+    effect give_selected_then_recover_target(self, event_source, 1);
+  }
+}

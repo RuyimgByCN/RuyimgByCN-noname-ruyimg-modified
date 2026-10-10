@@ -1,0 +1,5 @@
+// xinfu_yanyu：global:phase_play, 需弃牌, 加技能, 多步骤。
+skill xinfu_yanyu(2410881419) {
+  trigger phase_play owner_alive {
+  }
+}

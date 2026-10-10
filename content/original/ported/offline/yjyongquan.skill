@@ -1,0 +1,5 @@
+// yjyongquan：player:phase_end, 多步骤。
+skill yjyongquan(3873590506) {
+  trigger phase_end owner_alive {
+  }
+}

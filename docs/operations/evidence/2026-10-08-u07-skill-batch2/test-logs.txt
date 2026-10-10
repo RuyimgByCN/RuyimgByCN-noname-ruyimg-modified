@@ -1,0 +1,24 @@
+# U07 技能批二测试日志（2026-10-08，率言，规则 v111→v112）
+
+$ cargo test --offline -p engine-native
+engine-native: 429 passed / 0 failed / 1 ignored（v111 基线 428 +1 新增率言回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 11 passed; 0 failed（10 既有 + feishi_shuaiyan_recover_trigger_two_choice）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 98 守卫过；率言/刺猬走将领 mapping 通道不入伴随表，计数回 43）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v111→v112 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/skill.js:3 nsshuaiyan（global recoverAfter/二选一/discardPlayerCard）
+
+## 测试迭代记录
+- 首驱 NotYourTurn：率言须在 1 号回合驱动（owner 0 非当前回合+回复者=1）
+- filter 臂重复 false（脚本插臂与既有臂撞）→ 删重复
+- mapping 接线后费诗目录技能断言三处同步（[moshou]→[nsshuaiyan,moshou]）、
+  unmapped 字面量 8→7

@@ -1,0 +1,5 @@
+// 龙魂·4（神关羽系）：将梅花牌当【闪】使用。
+// 旧 JS 的「梅花转化」以手牌当【闪】近似（花色条件未建模，已注明）。
+skill longhun4(4147843787) {
+  view_as shan response club from hand_equip;
+}

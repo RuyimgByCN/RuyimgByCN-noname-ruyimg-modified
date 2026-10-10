@@ -1,0 +1,5 @@
+// dczuowei：摸2牌；获临时技。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dczuowei(3072604126) {
+  modifier hand_limit add 1;
+}

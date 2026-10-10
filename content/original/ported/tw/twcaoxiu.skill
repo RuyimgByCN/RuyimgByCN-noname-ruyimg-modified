@@ -1,0 +1,13 @@
+// 前驱乐/倾袭：装备缩短距离，近距伤害后补装备；首杀目标二选一。
+skill twqianju(2546046607) locked {
+  trigger damage owner_source_damage_target_distance_at_most_one_empty_equip_slot_unused {
+    effect resolve_twqianju(self, event_player);
+  }
+  modifier distance_from add -owner_equip_count;
+}
+
+skill twqingxi(2467573737) {
+trigger card_targeted owner_source_first_sha_target_this_turn {
+    effect resolve_twqingxi(self, event_player, event_card);
+  }
+}

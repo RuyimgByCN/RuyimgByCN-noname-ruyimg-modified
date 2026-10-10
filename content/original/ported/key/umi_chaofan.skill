@@ -1,0 +1,11 @@
+// 炒饭（海未）：出牌阶段弃两张不同花色手牌，选一名其他角色；自己摸 1，再按体力令其回复 / 摸 2 / 受到火焰伤害。
+// 实现：出牌阶段限一次弃 2 张手牌、自己摸 1，再令一名其他角色摸 2 或回复 1。
+// 近似：不检验花色不同；无体力分支；火焰伤害未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill umi_chaofan(2428039328) {
+  active play_phase uses_per_turn 1 {
+    effect discard_hand(self, 2);
+    effect draw_cards(self, 1);
+    effect choose_other_draw_or_recover(self, 2, 1, 1);
+  }
+}

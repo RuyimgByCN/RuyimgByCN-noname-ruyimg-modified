@@ -1,0 +1,6 @@
+// xinshenxing（慎行）：出牌阶段限X次（X为你的体力值），你可以弃置两张牌，然后摸一张牌。若这两张牌颜色不同，则改为摸两张牌。
+skill xinshenxing(3464240651) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect draw_cards(event_source, 1);
+  }
+}

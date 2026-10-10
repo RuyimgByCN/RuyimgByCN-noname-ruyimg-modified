@@ -1,0 +1,12 @@
+// 念义（乐诸葛亮）：距离无限；准备阶段弃两张判定牌；其他角色回合结束时若本回合失去牌≥3，对敌人各造成1伤害。
+// 「弃判定牌」以弃手牌+装备近似；「失去≥3牌」以 owner_gained_or_lost_at_least_two 近似（含获得）；
+// 「敌人判定」无法建模，以全体其他角色近似。
+skill olnianyi(2577722438) locked {
+  modifier attack_range override 999;
+  trigger phase_prepare always {
+    effect discard_hand_equip_count(self, 2);
+  }
+trigger phase_any_end owner_alive_not_target {
+    effect choose_targets_damage(self, 1, 1, any, 1);
+  }
+}

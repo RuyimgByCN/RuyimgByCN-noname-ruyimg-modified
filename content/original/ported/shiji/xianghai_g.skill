@@ -1,0 +1,4 @@
+// 旧 JS 的全局助手；权威手牌上限光环已折叠进父技能 xianghai
+// （`global_hand_limit add -queried_player_other_than_owner`）。按 covered_by
+// 政策不生成重复运行时技能，仅保留 skill_index 元数据条目。
+skill xianghai_g(3747474489) {}

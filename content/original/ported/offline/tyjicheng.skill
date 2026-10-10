@@ -1,0 +1,6 @@
+// tyjicheng：受到伤害后的效果。
+skill tyjicheng(3627478153) {
+  trigger damage owner_is_target_once optional {
+    effect draw_cards(self, 1);
+  }
+}

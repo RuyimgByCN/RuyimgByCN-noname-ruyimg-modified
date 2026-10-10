@@ -1,0 +1,6 @@
+// oljinghua
+skill oljinghua(3546327770) locked {
+  trigger phase_begin owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

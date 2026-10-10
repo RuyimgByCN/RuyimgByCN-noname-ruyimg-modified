@@ -1,0 +1,5 @@
+// sphantong：player:loseEnd。
+skill sphantong(3154792073) {
+  trigger phase_any_end owner_alive {
+  }
+}

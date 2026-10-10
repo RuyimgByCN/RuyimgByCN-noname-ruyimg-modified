@@ -1,0 +1,25 @@
+# U05 ow 纵切批二十四测试日志（2026-10-09，D.Va 机甲，规则 v140→v141）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 462 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v140 基线 461 +1 新增机甲回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 50 passed; 0 failed（49 既有 + 1 新增 dva_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 140）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v140→v141 + jijia_hp 零值
+字段入 canonical_hash——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- jijia（init storage=4；changeHp forced 拦截=体力回补+机甲血同扣；
+  mod maxHandcard +storage.jijia）
+
+## 测试迭代记录
+- 0 号收束三段纪律复用（首轮 Play→Discard 单段即出杀 NotYourTurn）

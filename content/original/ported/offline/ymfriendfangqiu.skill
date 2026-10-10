@@ -1,0 +1,10 @@
+// 方遒（春秋友诸葛亮）：限定技，当你因【宴策】放置牌后，你可以展示武将牌上的所有
+// 「演策」牌，直到本轮结束你因【宴策】获得的牌翻倍。
+// 上游 (offline_chunqiu.js:863-888)：ymfriendyance_minigame 自定义事件触发 +
+// expansion 展示 + storage 翻倍标记。
+// 「自定义事件触发」「expansion 展示/翻倍标记」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill ymfriendfangqiu(2274880187) locked {
+  // INTENTIONAL_EMPTY_NOOP: expansion-show doubling unavailable
+  modifier hand_limit add 0;
+}

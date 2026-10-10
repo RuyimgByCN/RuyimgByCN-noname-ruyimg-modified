@@ -1,0 +1,7 @@
+// 战孤：回合开始时，若体力上限大于一且手牌区或装备区为空，减一点体力上限并摸两张。
+skill xy_zhangu(3458676792) locked {
+  trigger phase_prepare owner_max_hp_gt_one_hand_or_equip_empty {
+    effect change_max_hp(self, -1);
+    effect draw_cards(self, 2);
+  }
+}

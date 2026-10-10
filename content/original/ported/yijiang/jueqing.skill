@@ -1,0 +1,4 @@
+// 绝情：你造成的伤害改为等量失去体力。
+skill jueqing(3481582878) locked {
+  modifier damage_as_hp_loss override 1;
+}

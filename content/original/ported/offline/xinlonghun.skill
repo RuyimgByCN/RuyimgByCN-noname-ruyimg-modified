@@ -1,0 +1,5 @@
+// xinlonghun：音效名:longhun, 主动(multi)。
+skill xinlonghun(2570070724) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

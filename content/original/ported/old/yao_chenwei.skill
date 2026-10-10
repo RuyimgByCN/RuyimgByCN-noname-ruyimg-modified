@@ -1,0 +1,7 @@
+// 谶纬：使用背置牌后，可在“由一名角色翻转自己一张手牌”和
+// “获得其他角色一张牌并背置”之间交替执行。
+skill yao_chenwei(2387616429) {
+  trigger card_used owner_source_face_down_view_as_chenwei_available optional {
+    effect resolve_yao_chenwei(self);
+  }
+}

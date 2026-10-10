@@ -1,0 +1,5 @@
+// 诗显（龙王）：使用牌时若与上一张牌名押韵，可摸1张牌并令该牌额外结算一次。
+// 押韵检测依赖中文拼音分析；额外结算需修改 effectCount，DSL 均无对应原语。
+skill dcshixian(3145539902) {
+  modifier hand_limit add 1;
+}

@@ -1,0 +1,7 @@
+// zhiwei2：锁定技；摸?牌；弃牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill zhiwei2(3501597833) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

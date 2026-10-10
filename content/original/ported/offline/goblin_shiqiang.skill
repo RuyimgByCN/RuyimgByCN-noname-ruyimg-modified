@@ -1,0 +1,5 @@
+// 恃强：造成伤害时手牌多于目标，或受到伤害时手牌少于来源，伤害增加一点。
+skill goblin_shiqiang(2912868664) locked {
+  modifier damage_amount add owner_hand_gt_other;
+  modifier damage_taken_amount add owner_hand_lt_other;
+}

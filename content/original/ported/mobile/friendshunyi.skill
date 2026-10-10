@@ -1,0 +1,8 @@
+// friendshunyi（顺逸）：当你使用点数最小的手牌时，若此牌为红桃且此牌点数大于你本回合发动此技能的次数，则你可以将所有与此花色相同的手牌扣置于武将牌上直到回合结束（无此花色手牌则跳过此步骤），然后摸一张牌。
+// 未建模：subSkill, expansion 等机制无 DSL 原语。
+skill friendshunyi(3205183182) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 friendshunyi（skill.js:9520）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

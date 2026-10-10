@@ -1,0 +1,32 @@
+// M0 unified sample pack (subset of M1; ids align with catalog).
+skill jianxiong(1) {
+  trigger damage owner_is_target_card_in_processing optional {
+    effect move_card(event_card, zone(self, 3), zone(0, 6));
+  }
+}
+skill mashu(2) {
+  modifier distance_from add -1;
+}
+skill qicao(3) {
+  modifier attack_range add 1;
+}
+skill biyue(4) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill fankui(5) {
+  trigger damage owner_is_target_source_alive_gainable_card optional {
+    if self == event_source {
+      effect take_one_card(event_source, self, equip);
+    } else {
+      effect take_one_card(event_source, self, hand_equip);
+    }
+  }
+}
+skill zhiheng(10) {
+  active play_phase uses_per_turn 1 select_he 1 255 {
+    effect discard_selected(self);
+    effect draw_selected(self);
+  }
+}

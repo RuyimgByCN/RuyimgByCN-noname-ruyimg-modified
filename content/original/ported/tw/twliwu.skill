@@ -1,0 +1,10 @@
+// 励伍（幻孙策）：有角色体力/上限变化时摸一张；若摸到基本牌则本轮下次伤害+1。
+// 近似：自己造成或受到伤害后摸一张；基本牌判定与轮次伤害加成未建模。
+skill twliwu(3456113882) locked {
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

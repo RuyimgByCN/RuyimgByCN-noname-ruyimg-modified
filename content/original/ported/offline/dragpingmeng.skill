@@ -1,0 +1,6 @@
+// dragpingmeng（触发技）：global:phase_end, player:hp_lost, player:card_used, 多分支选择, 移出游戏, 加技能, 含子技能, 异步。
+skill dragpingmeng(2857509276) {
+  trigger phase_end owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

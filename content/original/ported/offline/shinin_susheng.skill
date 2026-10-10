@@ -1,0 +1,6 @@
+// shinin_susheng：global:dying, 摸牌, 回复体力, 异步。
+skill shinin_susheng(2544692284) {
+  trigger dying owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

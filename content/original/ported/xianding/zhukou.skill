@@ -1,0 +1,9 @@
+// 诛寇（周夷）②：你的结束阶段，若你本回合未造成伤害，可对两名其他角色各造成 1 点伤害。
+// 旧 JS 无“本回合使用过牌”要求，此处以 owner_alive_phase_end_used_card_no_damage 近似
+// （本回合未使用任何牌时不触发）；分支①（首次造成伤害后摸已用牌数）与周夷另一技
+// mengqing（觉醒）未建模。
+skill zhukou(4022084191) {
+  trigger phase_end owner_alive_phase_end_used_card_no_damage optional {
+    effect choose_targets_damage(self, 2, 2, other, 1);
+  }
+}

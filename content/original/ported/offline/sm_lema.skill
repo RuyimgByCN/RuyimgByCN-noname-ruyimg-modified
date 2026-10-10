@@ -1,0 +1,7 @@
+// sm_lema：音效名:sm_lema, 主动(chooseToUse), 摸牌, 含子技能, 条件计数。
+skill sm_lema(2984557780) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

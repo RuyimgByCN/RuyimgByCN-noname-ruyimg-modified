@@ -1,0 +1,17 @@
+// jsrgxiongbao（凶暴）：你参与议事时，可以额外展示一张手牌，若如此做，其他角色改为随机展示手牌。
+// 实现（ADR 0644 P3 首消费者）：`trigger debate_started owner_debate_participant
+// optional` + body `hand_count(self) > 1` 守卫 →
+// pin_debate_opinions(self, self_skill)（ABI 658：自选 2 张为双意见，
+// 其他参与者随机钉死一张——上游 fixedResult 双 push + randomGet 等价）。
+// 近似：上游「额外展示一张」实为固定两意见（fixedResult 双条目）；
+// 上游已钉死者不可重钉（fixedResult.some 排除），DSL 无该守卫（单窗口
+// 一次性，等价）；P1 旗舰议事（chaozheng/sheju 路径）不经 DebateStarted
+// 窗口，凶暴对其不生效（上游会生效——窗口覆盖面近似）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgxiongbao(2169841522) {
+  trigger debate_started owner_debate_participant optional {
+    if hand_count(self) > 1 {
+      effect pin_debate_opinions(self, self_skill);
+    }
+  }
+}

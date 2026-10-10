@@ -1,0 +1,7 @@
+// 奇奇（狂李儒）：每轮限一次，使用牌指定首个目标时若牌名字数≥体力值，摸2+额外结算，判定红桃减体力上限。
+// 旧 JS 的「牌名字数≥体力值」「额外结算」「判定→减体力上限」无对应原语，未建模。
+skill olqiqi(2598737869) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

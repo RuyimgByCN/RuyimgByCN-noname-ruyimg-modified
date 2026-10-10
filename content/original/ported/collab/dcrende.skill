@@ -1,0 +1,10 @@
+// 仁德（会玩孙权）：出牌阶段，获得一名其他角色两张手牌（每名角色限一次），
+// 然后可视为使用一张基本牌。
+// 近似：take_one_card 仅拿1张（原为2张），choose_use_virtual_sha 仅限杀（原为任意基本牌），
+// 丢失了同 phase 内不可重复选择同一目标的限制。
+skill dcrende(3025519655) {
+  active play_phase {
+    effect take_one_card(event_source, self, hand_equip);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

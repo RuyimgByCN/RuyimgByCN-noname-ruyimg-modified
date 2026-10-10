@@ -1,0 +1,4 @@
+// 割发：仅自己濒死时，可将一张梅花手牌或装备牌当【桃】使用。
+skill nsgefa(2990982842) {
+  view_as tao response owner_dying_club from hand_equip;
+}

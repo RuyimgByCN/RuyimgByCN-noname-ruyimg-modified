@@ -1,0 +1,5 @@
+skill eu_tuxi(3876759954) {
+  trigger damage owner_source optional {
+    effect draw_then_choose_gain_one_from_damage_target_and_neighbors(self, event_player);
+  }
+}

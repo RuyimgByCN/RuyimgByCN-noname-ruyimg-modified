@@ -1,0 +1,13 @@
+// 血祭（离魂·关索系）：出牌阶段限一次，你选择 1 至 X 名其他角色（X 为你的
+// 已损体力值，至少 1），各受到你造成的 1 点火焰伤害（无实体牌）。
+// 上游 offline_guansuo.js dragxueji（enable phaseUse / usable 1 /
+// selectTarget [1, max(1, getDamagedHp())] / damage("fire","nocard")）。
+// 实现（第一百二十七批·近似晋升）：原「摸 1 占位」与上游无关——晋升为
+// choose_other_damage(self, 1)（选一名其他角色造成 1 点伤害）。
+// 近似：①多目标（1..已损体力）收窄为单目标（choose_other_damage 单选）；
+// ②火焰属性未建模（ChooseOtherDamage 无 nature 参数，普伤替代）。
+skill dragxueji(3444463445) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_damage(self, 1);
+  }
+}

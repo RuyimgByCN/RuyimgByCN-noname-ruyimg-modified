@@ -1,0 +1,7 @@
+// 祸首·2（孟获系）：南蛮伤害来源视为你。
+// 旧 JS 的「伤害来源改写」无对应原语；以南蛮结算后摸一张近似（已注明）。
+skill huoshou2(2759609215) locked {
+  trigger card_resolved owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

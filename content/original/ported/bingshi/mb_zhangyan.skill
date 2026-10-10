@@ -1,0 +1,19 @@
+// 势张燕：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI510 原语。
+skill mbfeijing(2916762074) {
+  view_as sha play_phase damage_trick from hand_equip_expansion;
+  view_as sha response damage_trick from hand_equip_expansion;
+
+  trigger card_targeted owner_source_first_single_target_sha_mbfeijing_twice_per_turn optional {
+    effect resolve_mbfeijing(self, event_player, event_card);
+  }
+}
+
+skill mbxiaoge(3431894905) locked {
+  trigger damage_before owner_source_damage_before_mbfeijing_extra {
+    effect resolve_mbxiaoge(self, event_player, event_card, 0);
+  }
+
+  trigger card_resolved owner_source_sha_resolved_original_single_mbxiaoge {
+    effect resolve_mbxiaoge(self, event_player, event_card, 1);
+  }
+}

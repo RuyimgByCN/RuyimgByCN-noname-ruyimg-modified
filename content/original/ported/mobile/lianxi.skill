@@ -1,0 +1,8 @@
+// 连袭：【杀】不计入你的手牌上限；当你的【杀】因弃置进入弃牌堆时，
+// 你可以视为使用一张无距离和任何次数限制的【杀】。
+// 实现：`modifier sha_ignored_hand_limit override 1`（首句；oljiangchi_less 同款）。
+// 近似：第二句「杀被弃置后视为使用无距无次杀」无对应触发过滤器/原语，未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill lianxi(2899657484) locked {
+  modifier sha_ignored_hand_limit override 1;
+}

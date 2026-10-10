@@ -1,0 +1,11 @@
+// 自新（钟会）：你造成或受到伤害后,可摸一张牌置于武将牌上,称为「自新」。
+// 旧 JS 仅作语义证据;「自伤时双事件各触发一次」以两个 trigger 近似,
+// 摸牌入堆复用 gain_top_card_to_skill_pile。
+skill zyexin(3289308596) {
+  trigger damage owner_is_target optional {
+    effect gain_top_card_to_skill_pile(self);
+  }
+  trigger damage owner_source optional {
+    effect gain_top_card_to_skill_pile(self);
+  }
+}

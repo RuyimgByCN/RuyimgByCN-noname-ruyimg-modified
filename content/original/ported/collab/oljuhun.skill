@@ -1,0 +1,8 @@
+// 拘魂（OL牛头马面）：上游 collab/skill.js oljuhun = { audio: 5 } 纯音频壳，
+// 无规则面（扑克组合玩法仅存在于 translate.js 的 info 文本描述，JS 未实装）。
+skill oljuhun(4288825474) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 oljuhun = 音频壳（audio-only，skill.js:9），无规则面。
+  // 第一百零九批纠错：撤销无上游依据的「出牌阶段开始摸两张」近似（三不信：上游
+  // def 体为准），回归诚实 audio-only 终态。
+  modifier hand_limit add 0;
+}

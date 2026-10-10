@@ -1,0 +1,9 @@
+// 矢北：只处理每回合第一、第二次受伤；第三次及以后不再触发。
+skill dcshibei(2817420663) locked {
+  trigger damage owner_is_target_first_damage {
+    effect recover_hp(self, 1);
+  }
+  trigger damage owner_is_target_second_damage {
+    effect lose_hp(self, 1);
+  }
+}

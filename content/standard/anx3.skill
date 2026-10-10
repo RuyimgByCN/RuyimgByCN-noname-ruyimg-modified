@@ -1,0 +1,4 @@
+// Skill anx3(181) - modifier range variant
+skill anx3(181) {
+  modifier attack_range add 1;
+}

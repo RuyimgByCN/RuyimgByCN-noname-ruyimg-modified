@@ -1,0 +1,8 @@
+// spdaizui2（戴罪）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+// 未建模：expansion 等机制无 DSL 原语。
+skill spdaizui2(3845359697) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 spdaizui2（skill.js:21082）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 charlotte 无规则面注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

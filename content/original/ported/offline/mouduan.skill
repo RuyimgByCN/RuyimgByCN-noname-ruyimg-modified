@@ -1,0 +1,5 @@
+// mouduan：锁定技, player:loseEnd。
+skill mouduan(3151657029) {
+  trigger phase_any_end owner_alive {
+  }
+}

@@ -1,0 +1,8 @@
+// 遗尺（族王允/族王淩）：结束阶段，与一名角色拼点；若赢且本局发动过「间难」，依次执行间难的选项（弃2张/摸2张/重铸装备/置锦囊牌堆顶或流失体力）。
+// 旧 JS 的「拼点+跨技能计数（clanjiannan）」「依次执行多选项」无对应原语。
+// 空定义：需 expansion 支持拼点和跨技能状态。
+skill clanyichi(2340208706) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

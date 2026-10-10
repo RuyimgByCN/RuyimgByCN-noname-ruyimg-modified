@@ -1,0 +1,6 @@
+// 绝策：拥有者回合内，其他角色失去最后的手牌后，可对其造成一点伤害。
+skill juece(2465882550) {
+  trigger cards_moved owner_alive_current_turn_other_event_player_from_hand_empty optional {
+    effect deal_damage(self, event_player, 1);
+  }
+}

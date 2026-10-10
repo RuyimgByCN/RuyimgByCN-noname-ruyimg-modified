@@ -1,0 +1,3 @@
+// 醇醪2·旧版：上游旧版 storage 驱动。按折叠政策保留空定义以稳定 def_id，
+// 语义由父技 chunlao 承载。
+skill chunlao2_old(2157793817) {}

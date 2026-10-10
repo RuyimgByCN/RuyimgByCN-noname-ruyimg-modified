@@ -1,0 +1,7 @@
+// 轻惩：出牌阶段，将两张红色非锦囊牌当【乐不思蜀】分别置于自己和一名其他角色的判定区。
+// 旧 JS 的「双牌转双乐（一自一他）」无对应原语（需双目标+延时锦囊转化+分别判定），未建模。
+skill stdqingcheng(2934365555) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

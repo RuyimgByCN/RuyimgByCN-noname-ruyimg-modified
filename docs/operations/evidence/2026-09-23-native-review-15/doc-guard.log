@@ -1,0 +1,181 @@
+warning: unused import: `std::sync::atomic::AtomicU64`
+  --> crates/engine-native/src/ai.rs:10:5
+   |
+10 | use std::sync::atomic::AtomicU64;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardId` and `EventId`
+  --> crates/engine-native/src/archive.rs:21:18
+   |
+21 | use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+   |                  ^^^^^^  ^^^^^^^
+
+warning: unused import: `crate::machine::LogEvent`
+  --> crates/engine-native/src/archive.rs:22:5
+   |
+22 | use crate::machine::LogEvent;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Catalog` and `SkillDef`
+ --> crates/engine-native/src/content/extension.rs:7:31
+  |
+7 | use crate::catalog::{CardDef, Catalog, SkillDef};
+  |                               ^^^^^^^  ^^^^^^^^
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/src/view.rs:10:25
+   |
+10 | use crate::{GameAction, CommandOutcome};
+   |                         ^^^^^^^^^^^^^^
+
+warning: unreachable pattern
+    --> crates/engine-native/src/archive.rs:1455:9
+     |
+1443 |         29 => {
+     |         -- matches all the relevant values
+...
+1455 |         29 => {
+     |         ^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/src/content/standard.rs:2848:9
+     |
+2848 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+     |         ----^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1733:19
+     |
+1646 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+1733 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1734:19
+     |
+1646 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+1734 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1735:19
+     |
+1686 |                 CardKind::ShanDian => {
+     |                 ------------------ matches all the relevant values
+...
+1735 |                 | CardKind::ShanDian => unreachable!("handled above"),
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/presentation.rs:269:9
+    |
+269 |     let mut line = |txt: &str, s: &mut String| {
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unreachable pattern
+    --> crates/engine-native/src/snap.rs:1070:13
+     |
+1044 | /             MachineSnapshot::Sha { card, .. }
+1045 | |             | MachineSnapshot::Duel { card, .. }
+1046 | |             | MachineSnapshot::NullifyWindow { card, .. }
+1047 | |             | MachineSnapshot::PlaceDelayed { card, .. }
+...    |
+1053 | |             | MachineSnapshot::Snatch { card, .. }
+1054 | |             | MachineSnapshot::Jijiang { sha: Some(card), .. } => out.push(*card),
+     | |______________________________________________________________- matches all the relevant values
+...
+1070 | /             MachineSnapshot::Aoe { inner: Some(m), .. }
+1071 | |             | MachineSnapshot::NullifyWindow { effect: Some(m), .. } => {
+     | |____________________________________________________________________^ no value can reach this
+
+warning: method `opt_u8` is never used
+  --> crates/engine-native/src/archive.rs:88:8
+   |
+57 | impl W {
+   | ------ method in this implementation
+...
+88 |     fn opt_u8(&mut self, v: Option<u8>) {
+   |        ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `opt_u8` is never used
+   --> crates/engine-native/src/archive.rs:151:8
+    |
+116 | impl<'a> R<'a> {
+    | -------------- method in this implementation
+...
+151 |     fn opt_u8(&mut self) -> Result<Option<u8>, ArchiveError> {
+    |        ^^^^^^
+
+warning: function `enc_faction` is never used
+   --> crates/engine-native/src/archive.rs:368:4
+    |
+368 | fn enc_faction(w: &mut W, f: &crate::catalog::Faction) {
+    |    ^^^^^^^^^^^
+
+warning: variant `Retarget` is never constructed
+    --> crates/engine-native/src/content/standard.rs:2199:5
+     |
+2193 | enum JiJiStage {
+     |      --------- variant in this enum
+...
+2199 |     Retarget,
+     |     ^^^^^^^^
+     |
+     = note: `JiJiStage` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/src/engine.rs:1324:13
+     |
+1324 |             drop(p);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&mut PlayerState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+1324 -             drop(p);
+1324 +             let _ = p;
+     |
+
+warning: `engine-native` (lib) generated 17 warnings (run `cargo fix --lib -p engine-native` to apply 7 suggestions)
+warning: unused variable: `sha3`
+   --> crates/engine-native/tests/replay_scenarios.rs:358:9
+    |
+358 |     let sha3 = e.debug_place(3, "sha");
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_sha3`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `shan1`
+   --> crates/engine-native/tests/replay_scenarios.rs:364:9
+    |
+364 |     let shan1 = e.debug_place(1, "shan");
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_shan1`
+
+warning: `engine-native` (test "replay_scenarios") generated 2 warnings (run `cargo fix --test "replay_scenarios" -p engine-native` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-925f8d51460bf997)
+
+running 2 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios_match_golden ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

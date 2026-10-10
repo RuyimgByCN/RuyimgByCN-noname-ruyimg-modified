@@ -1,0 +1,9 @@
+// 共患（张让系）：锁定技。有「姻」标记的角色受到伤害时（每回合一次），
+// 将伤害转移给你。
+// 旧 JS 的「伤害转移」无对应原语；以受伤时你摸一张近似（转移未建模，
+// 已注明）。
+skill gonghuan(3226731259) locked {
+  trigger damage owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

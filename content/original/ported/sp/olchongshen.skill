@@ -1,0 +1,5 @@
+// 宠慎（olchongshen）：你可以将本轮得到的红色手牌当作【闪】使用。
+// 「本轮得到」的 gaintag 来源限定无对应 view_as 原语，以红色手牌近似。
+skill olchongshen(4123829304) locked {
+  view_as shan any red from hand;
+}

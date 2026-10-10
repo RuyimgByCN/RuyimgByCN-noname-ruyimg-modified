@@ -1,0 +1,6 @@
+// jianliang：旧JS复杂效果。
+skill jianliang(4101440469) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

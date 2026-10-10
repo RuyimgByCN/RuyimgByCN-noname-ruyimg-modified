@@ -1,0 +1,4 @@
+// Zuo Ci transformation
+skill huashen(98) {
+  modifier distance_from add -1;
+}

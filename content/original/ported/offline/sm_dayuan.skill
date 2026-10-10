@@ -1,0 +1,6 @@
+// sm_dayuan：phase_play时摸牌。
+skill sm_dayuan(3619337136) {
+  trigger phase_play owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

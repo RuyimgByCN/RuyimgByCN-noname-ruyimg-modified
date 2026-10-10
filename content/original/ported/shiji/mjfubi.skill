@@ -1,0 +1,10 @@
+// 瞑瞑·缚辔（马谡系）：出牌阶段，选择一名有「定义」标记的角色，其获得
+// 「缚辔」效果。
+// 旧 JS 的「定义标记授予」无对应原语；以弃一张手牌并摸一张近似
+// （已注明）。
+skill mjfubi(3103649839) {
+  active play_phase select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

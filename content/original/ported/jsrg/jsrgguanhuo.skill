@@ -1,0 +1,5 @@
+// jsrgguanhuo（观火）：出牌阶段，你可以视为使用一张【火攻】。你以此法使用的未造成过伤害的【火攻】结算结束后，若你此阶段发动〖观火〗的次数：为1，则你于此阶段使用【火攻】造成的伤害+1；不为1，你失去〖观火〗。
+// 未建模：历史查询, 全局状态, addTempSkill, 标记计数, charlotte延迟, storage状态 ...等7项（DSL无对应原语）
+skill jsrgguanhuo(3392173544) {
+  view_as huogong play_phase any;
+}

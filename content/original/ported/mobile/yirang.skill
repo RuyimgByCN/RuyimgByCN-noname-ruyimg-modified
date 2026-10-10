@@ -1,0 +1,6 @@
+// yirang（揖让）：出牌阶段开始时，你可以将所有非基本牌交给一名体力上限大于你的其他角色，然后调整体力上限至与该角色相同并回复X点体力（X为你以此法交给其的牌的类别数）。
+skill yirang(3725135454) {
+  trigger phase_play owner_alive {
+    effect recover_hp(self, 1);
+  }
+}

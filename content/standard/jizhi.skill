@@ -1,0 +1,6 @@
+// 集智：使用普通锦囊牌后摸一张牌；延时锦囊不触发。
+skill jizhi(14) {
+  trigger card_used owner_source_ordinary_trick optional {
+    effect draw_cards(self, 1);
+  }
+}

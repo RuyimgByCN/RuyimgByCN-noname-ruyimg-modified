@@ -1,0 +1,18 @@
+// 失守：使用酒移去一枚“粮”；受到火焰伤害后按伤害点数移去“粮”；无“粮”时准备阶段失去体力。
+skill reshishou(2341206262) locked {
+  trigger card_used owner_source_jiu {
+    if 0 < mark_count(self, 2058376721) {
+      effect remove_mark(self, 2058376721, 1);
+    }
+  }
+  trigger damage owner_target_fire {
+    if 0 < mark_count(self, 2058376721) {
+      effect remove_mark(self, 2058376721, event_amount);
+    }
+  }
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2058376721) == 0 {
+      effect lose_hp(self, 1);
+    }
+  }
+}

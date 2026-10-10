@@ -1,0 +1,6 @@
+// “威风”的“惧”标记展示身份；旧 JS 仅负责 UI 展示与清理客户端 storage，不进入权威规则运行时。
+skill weifeng2(2853992972) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

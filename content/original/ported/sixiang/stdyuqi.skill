@@ -1,0 +1,6 @@
+// 隅泣：任意角色受到伤害后，若其至你的距离不大于你的体力值，可令其摸一张牌。
+skill stdyuqi(3561403597) {
+  trigger damage owner_alive_event_player_distance_le_owner_hp optional {
+    effect draw_cards(event_player, 1);
+  }
+}

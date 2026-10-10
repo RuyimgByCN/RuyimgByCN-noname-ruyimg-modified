@@ -1,0 +1,8 @@
+// 赐肖（董卓）：准备阶段，若场上无「叛弑」角色则令一名角色获得叛弑；否则可弃牌转移叛弑标记。
+// 旧 JS 含 direct + chooseTarget + addSkills(授予技能) + removeSkills(移除技能) 操作。
+// DSL 无 add_skill/remove_skill 对他人操作的灵活 chooseTarget 组合原语。
+skill cixiao(3854812272) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 cixiao 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

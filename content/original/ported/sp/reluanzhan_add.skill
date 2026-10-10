@@ -1,0 +1,13 @@
+// 乱战·增（reluanzhan_add）：你使用【杀】或黑色锦囊牌指定目标后，可为其增加至多
+// 「乱战」标记数个目标。
+// 上游 (sp/skill.js:30610)：useCard2，filter = （杀 或 黑锦囊）且 countMark("reluanzhan")>0 且
+// 允许加目标且有可加目标；content = chooseTarget([1, num]) 增加至多 num 个目标。
+// 实现：card_used + owner_source_sha_or_black_trick_mark_positive_4251489811（新增参数化过滤器，
+// 5 处注册：catalog 枚举尾部/registry map_filter/dispatch eval/typecheck 允许名/lsp doc）
+// optional → choose_add_or_remove_current_card_target(self, event_card)。
+// 与上游差异：单次只加一个目标（上游至多标记数个）；「可加目标存在」门槛由效果内校验。
+skill reluanzhan_add(4002502989) {
+  trigger card_used owner_source_sha_or_black_trick_mark_positive_4251489811 optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

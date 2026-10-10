@@ -1,0 +1,17 @@
+// 明任（TW张鲁）：游戏开始时（首个阶段前），你摸一张牌并将一张手牌置于武将牌上，
+// 称为「任」。出牌阶段开始/结束时，你可以用手牌/装备区牌替换「任」。
+// 上游 (tw/skill.js twmingren)：trigger global phaseBefore（filter game.
+// phaseNumber==0 即仅开局首个阶段前）+ player enterGame；forced；堆空门控；
+// content draw(1) + chooseCard("h", forced) → addToExpansion gaintag；
+// group twmingren_change 为置换面。
+// 实现（2026-09-10 第二百一十九批·A0 复测散批）：主面 trigger game_started
+// owner_alive（jsrgshacheng 等价时点先例）forced → draw_cards(self,1) +
+// store_selected_in_skill_pile(self)（批 215 修复后续体 Cont 297，必选）。
+// 近似（登记债）：①置换面（出牌阶段开始/结束时用手牌/装备替换「任」）未建模；
+// ②enterGame 后入场的时点未建模（仅 game_started）；③onremove 清堆未建模。
+skill twmingren(2729616872) {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 1);
+    effect store_selected_in_skill_pile(self);
+  }
+}

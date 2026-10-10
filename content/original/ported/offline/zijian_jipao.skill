@@ -1,0 +1,6 @@
+// zijian_jipao。
+skill zijian_jipao(2912879104) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 款曲（族陆昙）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：出牌阶段限一次，你可将两张牌当【杀】或【桃】对一名角色使用，然后若你或其手牌数等于体力值，你获得其一张牌
+// 旧 JS 的「虚拟牌名转化（同 pecaishi 债池）+ 手牌数等于体力值条件查询」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill clankuanqu(2442131509) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

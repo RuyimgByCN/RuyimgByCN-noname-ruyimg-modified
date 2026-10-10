@@ -1,0 +1,6 @@
+skill moon_jushou(3308685907) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+    effect turn_over(self);
+  }
+}

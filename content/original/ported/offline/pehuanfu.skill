@@ -1,0 +1,7 @@
+// pehuanfu：锁定技, player:card_targeted, target:card_targeted, global:damage_before, 需弃牌, 摸牌, 加技能, 含子技能, 异步。
+skill pehuanfu(4143359871) locked {
+  trigger card_targeted always {
+    effect draw_cards(self, 1);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 约俭（卞夫人）：手牌上限基数等于体力上限；当你进入濒死状态时，可以弃置两张手牌/装备牌并回复1点体力。
+skill spyuejian(2751500626) {
+  modifier hand_limit_base_max_hp override 1;
+
+  trigger dying owner_is_target_discardable_hand_equip_gte_two optional {
+    effect discard_hand_equip(self, 2);
+    effect recover_hp(self, 1);
+  }
+}

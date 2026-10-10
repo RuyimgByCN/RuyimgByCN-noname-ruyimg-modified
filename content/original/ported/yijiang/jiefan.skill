@@ -1,0 +1,7 @@
+// 解烦（韩当）：限定技。出牌阶段选择一名角色，其攻击范围内每名其他角色须弃置一张武器牌或令该角色摸一张牌。
+// 通过 resolve_oldjiefan 驱动旧版解烦逻辑（近似，可能与新版有差异）。
+skill jiefan(2791679072) {
+  active play_phase targets 1 1 {
+    effect resolve_oldjiefan(self, 0);
+  }
+}

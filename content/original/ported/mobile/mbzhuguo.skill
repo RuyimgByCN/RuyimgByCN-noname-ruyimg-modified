@@ -1,0 +1,7 @@
+// 助国 (mbzhuguo) — 吴珂: adjust one hand to min(max HP, 5); a non-draw
+// branch recovers 1, while a maximum-hand draw may offer a count/range-free Sha.
+skill mbzhuguo(2303782932) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect resolve_mbzhuguo(self, event_source);
+  }
+}

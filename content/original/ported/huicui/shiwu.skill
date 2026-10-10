@@ -1,0 +1,8 @@
+// 恃武（新杀夏侯恩）：其他角色回合开始时可视为对其使用【决斗】；
+// 成功造成伤害则从牌堆底获得一张伤害牌，失败则本回合对方夺走【持剑】。
+// 近似：仅保留「视为决斗」主收益；伤害后获牌与夺剑/死后授剑未建模。
+skill shiwu(3773213822) {
+  trigger phase_begin owner_alive_not_target optional {
+    effect use_virtual_card_on(self, juedou, event_player);
+  }
+}

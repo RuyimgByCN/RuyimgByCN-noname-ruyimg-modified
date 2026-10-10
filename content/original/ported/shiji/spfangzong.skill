@@ -1,0 +1,16 @@
+// 放纵（SP花曼）：结束阶段开始时，若手牌数小于存活角色数（至多 8），摸至该数；
+// 当前回合角色不能对你使用伤害牌。
+// 旧 JavaScript 仅作语义证据；摸牌补足与伤害牌禁用由权威原语响应。
+// 注：旧 JS 的伤害牌禁用范围包含全部伤害牌，此处用 card_target_cancel_from_current 近似，
+// 该通道按当前回合角色统一取消，不区分牌类。
+skill spfangzong(2304282956) locked {
+  trigger phase_end owner_alive_hand_below_alive_count_capped_eight {
+    if alive_count() < 8 {
+      effect draw_cards(self, alive_count() - hand_count(self));
+    } else {
+      effect draw_cards(self, 8 - hand_count(self));
+    }
+  }
+
+  modifier card_target_cancel_from_current(any) override 1;
+}

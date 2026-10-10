@@ -1,0 +1,13 @@
+// 岸然（族钟繇/族钟会）：出牌阶段开始或受伤后，选择：摸X张牌，或令至多X名角色各摸一张牌（X=min(4,已发动次数+1)）。
+// 旧 JS 的「摸上的牌本回合不可使用（gaintag）」和「动态次数递增」无对应原语；
+// 以 draw_cards 近似保留摸牌收益，缺少牌不可用限制和选择分支。
+skill clananran(2387045511) {
+  trigger phase_play owner_is_target {
+    effect draw_cards(self, mark_count(self, 2387045511) + 1);
+    effect add_mark(self, 2387045511, 1);
+  }
+  trigger damage owner_is_target {
+    effect draw_cards(self, mark_count(self, 2387045511) + 1);
+    effect add_mark(self, 2387045511, 1);
+  }
+}

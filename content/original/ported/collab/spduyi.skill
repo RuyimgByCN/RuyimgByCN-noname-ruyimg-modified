@@ -1,0 +1,8 @@
+// 毒翼（董白）：出牌阶段限一次。展示牌堆顶一张牌，交给一名角色；若为黑色，其获得spduyi2技能。
+// 旧JS的随机展示牌堆顶、获牌后条件性加技能（spduyi2）、addTempSkill等无DSL对应原语。
+// 以空定义保留编译占位，待reveal_random_from_pile和conditional_add_temp_skill原语后补齐。
+skill spduyi(2443017416) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,18 @@
+// 妆梳·锦囊（zhuangshu_trick，三奇装梳的锦囊分支）：判定阶段开始时，可跳过本回合的
+// 判定阶段或弃牌阶段。
+// 上游 (sp/skill.js:28330)：trigger player:phaseJudgeBefore；content = chooseControl
+// （判定阶段/弃牌阶段/cancel2）→ 对应 skip(judge|discard)。
+// 实现：phase_judge + owner_is_target（判定阶段开始时）→ 可选确认 →
+// choose(1, 2)：1 = skip_next_judge_phase(self)，2 = skip_next_discard_phase(self)。
+// 与上游差异：上游单次三选（含取消）以「可选确认 + 二选一」两步近似。
+skill zhuangshu_trick(2226439241) {
+  trigger phase_judge owner_is_target optional {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect skip_next_judge_phase(self);
+    }
+    if option == 2 {
+      effect skip_next_discard_phase(self);
+    }
+  }
+}

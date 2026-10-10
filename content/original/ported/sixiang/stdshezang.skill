@@ -1,0 +1,7 @@
+// 奢葬：濒死时，可移动场上牌，至多四次。
+// 旧 JS 的「移动场上牌（moveCard）+ 濒死时多次循环」无对应原语，未建模。
+skill stdshezang(2237381178) {
+  trigger dying owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,33 @@
+// 甜口（小鞠·锁定技）：红色非伤害基本/锦囊牌使用时或指定目标后，可选择增加一个
+// 合法目标或摸一张牌。
+// 上游 (key/skill.js:11464)：useCard/useCardToTarget 双事件 + 红色非伤害过滤 +
+// chooseControl（加目标 via useCard2 或摸一）。
+// 实现：`card_used owner_is_source optional`（锁定技内部含自选分支，以 optional 确认
+// 近似上游 chooseControl 的发动权）→ 花色守卫（红桃=2/方片=4，card_attribute 属性 2）→
+// choose(1,2)：1 = choose_add_or_remove_current_card_target(self, event_card)
+// （须在真实结算中）；2 = draw_cards(self, 1)。
+// 近似：「非伤害」类别未过滤（红色杀亦满足花色守卫）；加目标分支在合成事件中静默
+// no-op；双事件以用牌后单事件近似。
+// 2026-08-15 陈旧缺口清点批次（加目标原语自 batch V 起可用）。
+skill komari_tiankou(2861751685) {
+  trigger card_used owner_is_source optional {
+    if card_attribute(event_card, 2) == 2 {
+      let option = choose(1, 2);
+      if option == 1 {
+        effect choose_add_or_remove_current_card_target(self, event_card);
+      }
+      if option == 2 {
+        effect draw_cards(self, 1);
+      }
+    }
+    if card_attribute(event_card, 2) == 4 {
+      let option = choose(1, 2);
+      if option == 1 {
+        effect choose_add_or_remove_current_card_target(self, event_card);
+      }
+      if option == 2 {
+        effect draw_cards(self, 1);
+      }
+    }
+  }
+}

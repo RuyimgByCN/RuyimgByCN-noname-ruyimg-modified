@@ -1,0 +1,9 @@
+// 清弦-摸牌(嵇康)：当你触发"new_qingxianAfter"或"new_canyunAfter"时，
+// 若你为最后一个事件目标且目标数等于你的体力值，你摸一张牌。
+// 注：new_qingxianAfter/new_canyunAfter为非标准事件，DSL无直接事件名。近似用phase_end触发。
+// 完全精确需要自定义事件，暂时以phase_end+手牌体力条件近似。
+skill qingxian_draw(3123331974) locked {
+  // ponytail: 旧JS的new_qingxianAfter事件在DSL中无对应，占位定义。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,8 @@
+// 天辩(诸葛瑾)：你可以用牌堆顶的牌进行拼点。当你拼点时，若拼点牌为红桃，此牌点数视为K。
+// 旧JS含onCompare替代拼点牌(从牌堆顶)、tianbian_number subskill修改红桃点数。
+// 注：chooseCard窗口(replace拼点牌来源)、onCompare钩子、拼点牌点数重写均无DSL原语。
+skill tianbian(3757297646) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

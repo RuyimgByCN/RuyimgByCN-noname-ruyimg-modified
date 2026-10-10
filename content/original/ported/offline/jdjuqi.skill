@@ -1,0 +1,6 @@
+// jdjuqi：锁定技, global:phase_prepare, source:damage_before, 摸牌, 加技能, 含子技能, 异步。
+skill jdjuqi(3050372577) locked {
+  trigger phase_prepare always {
+    effect draw_cards(self, 3);
+  }
+}

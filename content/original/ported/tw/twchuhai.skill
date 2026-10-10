@@ -1,0 +1,9 @@
+// 除害：使命成功后废除判定区并依次收取其他角色一张牌；获得他人牌后弃置其中一张。
+skill twchuhai(3782702310) {
+  trigger phase_end owner_alive_phase_end_caused_two_distinct_dying {
+    effect resolve_twchuhai(self, 0);
+  }
+  trigger cards_moved owner_gained_event_cards_from_other_personal_zone {
+    effect resolve_twchuhai(self, 1);
+  }
+}

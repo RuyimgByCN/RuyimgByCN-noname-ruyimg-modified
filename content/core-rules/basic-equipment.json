@@ -1,0 +1,33 @@
+{
+  "module_id": "basic-equipment",
+  "description": "基础装备牌配置（武器 + 防具 + 坐骑）",
+  "equipment_types": {
+    "weapons": {
+      "zhuge_liannu": { "name": "诸葛连弩", "attack_range": 1, "effect": "unlimited_sha_per_turn", "count": 2 },
+      "qing_gang_jian": { "name": "青釭剑", "attack_range": 2, "effect": "sha_ignores_armor", "count": 1 },
+      "han_bing_jian": { "name": "寒冰剑", "attack_range": 2, "effect": "discard_on_sha_hit", "count": 1 },
+      "cixiong_shuang_gu_jian": { "name": "雌雄双股剑", "attack_range": 2, "effect": "gender_based_effect", "count": 1 },
+      "qing_long_yan_yue_dao": { "name": "青龙偃月刀", "attack_range": 3, "effect": "追加杀_on_shan", "count": 1 },
+      "zhang_ba_she_mao": { "name": "丈八蛇矛", "attack_range": 3, "effect": "two_cards_as_sha", "count": 1 },
+      "guan_shi_fu": { "name": "贯石斧", "attack_range": 3, "effect": "discard_two_force_hit", "count": 1 },
+      "qi_lin_gong": { "name": "麒麟弓", "attack_range": 5, "effect": "discard_mount_on_hit", "count": 1 },
+      "fang_tian_hua_ji": { "name": "方天画戟", "attack_range": 4, "effect": "multi_target_when_last_card", "count": 1 }
+    },
+    "armor": {
+      "ba_gua_zhen": { "name": "八卦阵", "effect": "judgment_as_shan", "count": 2 },
+      "ren_wang_dun": { "name": "仁王盾", "effect": "immune_black_sha", "count": 1 },
+      "teng_jia": { "name": "藤甲", "effect": "immune_normal_sha_and_aoe", "count": 1 },
+      "bai_yin_shi_zi": { "name": "白银狮子", "effect": "heal_on_equip_and_reduce_fire", "count": 1 }
+    },
+    "offensive_mount": {
+      "dalu": { "name": "大宛", "distance_from": -1, "count": 3 },
+      "chi_tu": { "name": "赤兔", "distance_from": -1, "count": 3 },
+      "zhua_huang_fei_dian": { "name": "爪黄飞电", "distance_from": -1, "count": 2 }
+    },
+    "defensive_mount": {
+      "jue_ying": { "name": "绝影", "distance_to": 1, "count": 2 },
+      "di_lu": { "name": "的卢", "distance_to": 1, "count": 3 },
+      "zhua_huang_fei_dian_def": { "name": "紫骍", "distance_to": 1, "count": 2 }
+    }
+  }
+}

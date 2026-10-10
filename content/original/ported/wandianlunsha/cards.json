@@ -1,0 +1,20 @@
+[
+  {
+    "card_def_id": 2993295392,
+    "name": "youdishenru",
+    "name_length": 4,
+    "kind": "youdishenru"
+  },
+  {
+    "card_def_id": 2631024706,
+    "name": "diaobingqianjiang",
+    "name_length": 4,
+    "kind": "diaobingqianjiang"
+  },
+  {
+    "card_def_id": 2738715878,
+    "name": "wangmeizhike",
+    "name_length": 4,
+    "kind": "wangmeizhike"
+  }
+]

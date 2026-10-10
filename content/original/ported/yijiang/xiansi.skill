@@ -1,0 +1,9 @@
+// 陷嗣（刘封）：准备阶段，选择一至两名有手牌或装备区的角色，将其各一张牌置于武将牌上（称为"逆"）。
+// 旧 JS 的 expansion 机制以 store_selected_in_skill_pile 近似，但原版是从目标处移牌；DSL 无「选择他人牌移入自己技能牌堆」原语。
+// 以 take_one_card 近似（将目标一张手牌或装备移至自己处），无法精确区分 expansion 语义。
+skill xiansi(4194607775) {
+  trigger phase_prepare owner_alive {
+    // 近似：选1-2个目标各取一张手牌或装备。原版是移入expansion区，非手牌。
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

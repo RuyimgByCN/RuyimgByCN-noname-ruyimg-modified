@@ -1,0 +1,8 @@
+// 浓音（观铃）：红色非锦囊牌当做【桃】使用，然后将被转化的牌置于判定区视为【乐】。
+// 实现：红色手牌可当【桃】使用或打出。
+// 近似：不排除锦囊；转化牌进判定区当乐未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill misuzu_nongyin(2333084601) {
+  view_as tao play_phase red from hand;
+  view_as tao response red from hand;
+}

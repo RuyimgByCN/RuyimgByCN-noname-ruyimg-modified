@@ -1,0 +1,10 @@
+// 藤骨（庞统）：锁定技。你进入濒死时（非火焰伤害导致），失去 1 点体力上限
+// 并回复至体力上限；你不能装备防具（副类别装备 2）。
+// 旧 JS 的「非火焰伤害」前提未建模（已注明）；「不能装备防具」与衍生防具
+// 藤甲未建模（需衍生卡原语）；「回复至体力上限」以恢复 1 点近似。
+skill tenggu(3841469312) locked {
+  trigger dying owner_is_target {
+    effect change_max_hp(self, -1);
+    effect recover_hp(self, 1);
+  }
+}

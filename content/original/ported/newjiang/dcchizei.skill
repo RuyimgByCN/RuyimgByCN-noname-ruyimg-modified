@@ -1,0 +1,9 @@
+// 锉刀（张飞）：你受到伤害后，可与伤害来源连续拼点：赢可继续拼点并计数，
+// 输则弃置等量手牌；至少赢一次后结束可令其弃置牌。
+// 旧 JS 的「连续拼点循环」无对应原语，未建模（已注明）；以受伤后对其
+// 造成 1 点伤害近似保留收益。
+skill dcchizei(2814294262) {
+  trigger damage owner_is_target optional {
+    effect choose_other_damage(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 歃盟：旧 JS 语义重写；同色手牌、其他角色目标与次数均由引擎校验。
+skill shameng(3467425391) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 2 2 same_color {
+    effect discard_selected(self);
+    effect draw_cards(event_source, 2);
+    effect draw_cards(self, 3);
+  }
+}

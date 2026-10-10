@@ -1,0 +1,26 @@
+// 巧谏（傅干）：出牌阶段对每名其他角色限一次，双方暗中选择任意张牌同时弃置，
+// 再按点数和进入回复/下回合策略或收回弃牌分支。旧 JavaScript 仅作语义证据。
+skill qiaojian(105744963) {
+  active play_phase targets 1 1 other unused_by_skill_this_play_phase {
+    effect resolve_qiaojian(self, event_source, 9694479, 0);
+  }
+
+  trigger cards_moved owner_qiaojian_tracked_card_left_hand {
+    effect resolve_qiaojian(self, self, 9694479, 9);
+  }
+
+  modifier card_ignored_hand_limit(skill_tracked) override 1;
+}
+
+// 目标下回合开始时激活：可同时承载“首张杀/普通锦囊额外结算”和“禁用伤害牌”。
+skill qiaojian_effect(9694479) locked {
+  trigger phase_begin owner_is_target {
+    effect resolve_qiaojian(self, self, 9694479, 5);
+  }
+
+  trigger card_used owner_source_qiaojian_extra_available {
+    effect resolve_qiaojian(self, self, 9694479, 6);
+  }
+
+  modifier card_use_cancel(damage_card) override owner_skill_state_u32;
+}

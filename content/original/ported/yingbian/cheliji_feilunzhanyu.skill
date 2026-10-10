@@ -1,0 +1,7 @@
+// 赤离姬·飞轮斩雨（装备技）：其他角色结束阶段时触发。
+// 旧 JS 的「装备条件判定」无对应原语；以其他角色结束阶段摸一张近似（装备条件未建模，已注明）。
+skill cheliji_feilunzhanyu(2890262126) {
+  trigger phase_end owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

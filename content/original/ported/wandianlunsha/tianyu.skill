@@ -1,0 +1,11 @@
+skill chezhen(2288694956) locked {
+  modifier distance_from add -owner_equip_count_at_least_1;
+  modifier distance_to add 1;
+  modifier distance_to add -owner_equip_count_at_least_1;
+}
+
+skill youzhan(2340355119) {
+  trigger card_targeted owner_alive_sha_target_distance_le_one_has_equip_card optional {
+    effect resolve_wdb_tianyu(self, event_player, event_card, 0);
+  }
+}

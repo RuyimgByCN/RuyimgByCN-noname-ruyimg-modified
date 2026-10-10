@@ -1,0 +1,10 @@
+// 定州（蔡瑁）：出牌阶段限一次，你可以选择一名其他角色，随机获得其一张手牌、装备
+// 区或判定区里的牌，然后摸一张牌；若获得牌与摸牌的花色颜色不同，你失去 1 点体力。
+// 旧 JS 仅作语义证据；目标选择、取牌、摸牌与比色由 resolve_nsdingzhou 权威状态机
+// 校验（ABI 478）。随机取牌以确定性取首张近似。phase_play 每回合触发一次，天然
+// 满足「限一次」。
+skill nsdingzhou(2793593832) {
+  trigger phase_play owner_is_target {
+    effect resolve_nsdingzhou(self);
+  }
+}

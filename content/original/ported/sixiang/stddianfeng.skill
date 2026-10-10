@@ -1,0 +1,6 @@
+// 典封：一名角色确实失去装备区内的最后一批牌后，拥有者可摸一张牌。
+skill stddianfeng(3414143685) {
+  trigger cards_moved owner_alive_event_player_from_equip_empty optional {
+    effect draw_cards(self, 1);
+  }
+}

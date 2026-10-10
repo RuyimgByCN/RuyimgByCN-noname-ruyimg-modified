@@ -1,0 +1,10 @@
+// 逆乱（JSRG）：准备阶段，你可以选择任意项：1.弃置一张牌，对一名未对你造成过伤害的角色造成1点伤害；
+// 2.令一名对你造成过伤害的角色摸两张牌。
+// 实现：准备阶段可选对一名其他角色造成 1 点伤害。
+// 近似：不消耗弃牌；不筛选「未对你造成过伤害」；摸两张牌分支未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgniluan(3518365032) {
+  trigger phase_prepare owner_is_target optional {
+    effect choose_targets_damage(self, 1, 1, other, 1);
+  }
+}

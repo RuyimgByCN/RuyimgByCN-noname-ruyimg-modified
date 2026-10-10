@@ -1,0 +1,7 @@
+// 敛容（？）：其他角色弃牌阶段弃置的红桃牌进入弃牌堆时，你可以获得之。
+// 旧 JS 的「弃牌阶段红桃牌进弃牌堆」特定花色+阶段+区域组合过滤无对应 DSL 过滤器。完全无法表达。
+skill stdlianrong(4092673930) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// reyanyu2：刷新包技能。
+// triggers: player:phaseUseEnd
+skill reyanyu2(3555538584) {
+    // 近似：旧JS事件 phaseUseEnd → DSL事件 phase_play_end
+    trigger phase_play_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

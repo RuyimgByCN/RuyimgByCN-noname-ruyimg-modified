@@ -1,0 +1,8 @@
+// 自守临时效果：本回合使用牌不能指定其他角色。
+skill zishou2(4152430403) {
+  modifier card_targets_self_only override 1;
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

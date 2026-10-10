@@ -1,0 +1,19 @@
+[package]
+name = "engine-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Headless CLI for engine debug, replay, and golden cases"
+
+[[bin]]
+name = "engine-cli"
+path = "src/main.rs"
+
+[dependencies]
+engine-api = { workspace = true }
+engine-core = { workspace = true }
+content-compiler = { path = "../../crates/content-compiler" }
+content-schema = { path = "../../crates/content-schema" }
+rule-api = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

@@ -1,0 +1,7 @@
+// huamao_lianhuan：主动(chooseToUse), 异步。
+skill huamao_lianhuan(3655055059) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

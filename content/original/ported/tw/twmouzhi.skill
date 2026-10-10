@@ -1,0 +1,23 @@
+// 谋制（蒋钦）：锁定技。当你受到伤害时，若此牌颜色与你上一次受到伤害的牌颜色
+// 相同，防止此伤害（防止的伤害不进入记录）；每次受到伤害后记录此牌颜色
+// （无牌/无色则清除记录，清除后需重新建立记录才可再次触发）。
+// 上游 (tw/skill.js twmouzhi L17425)：trigger player damageBegin4 forced →
+// filter 事件牌有色 且 getAllHistory("damage") 末条牌同色 → trigger.cancel()；
+// group twmouzhi_mark：damage silent firstDo → storage 记色/无色清除。
+// 实现（2026-09-12 第二百四十五批·专属 host 状态机第九件，quanjia 单发精简
+// 模板）：双触发共调 resolve_twmouzhi(self, self_skill, mode, event_card)
+// （ABI 700 / tag 723，单发无续体）：mode 0 = damage_before 校验+防止
+// （颜色存于技能 content_storage，红=1/黑=2，无=0）；mode 1 = damage 记录。
+// 上游语义保真说明：防止的伤害经 trigger.cancel() 不进入 history，故「上次
+// 受伤牌颜色」保持不变——连续同色伤害均被防止，机内存储口径与之一致。
+// 近似（登记债）：①存储为机内 content_storage 而非上游 history 末条推导
+// （全场重置/回放口径差异登记）；②上游 mark 表现面（「谋」字变色标记）未建模。
+skill twmouzhi(2608393664) locked {
+  trigger damage_before owner_is_target {
+    effect resolve_twmouzhi(self, self_skill, 0, event_card);
+  }
+
+  trigger damage owner_is_target {
+    effect resolve_twmouzhi(self, self_skill, 1, event_card);
+  }
+}

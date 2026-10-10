@@ -1,0 +1,11 @@
+// 分钗（族钟琰/族钟繇/族钟会）：锁定技。发动技能指定异性角色后记录之；你的判定牌
+// 花色改为红桃（若有异性记录）或黑桃（若无）。
+// 上游 (clan/skill.js)：技能目标性别追踪 + judge 前判定牌花色改写（红桃/黑桃二态）。
+// 实现：`modifier judgment_rewrite_red_hand_equip_expansion add 1`（既有判定改写
+// modifier 族——获得以红色牌替换判定牌的资格，RewriteJudgment 窗引擎原生）。
+// 近似：(1)「改为红桃」以「可用红色牌替换」近似（红桃为红子集，实际可选方片）；
+// (2)「异性记录」二态（无记录改黑桃）未建模——改写资格全程开放；(3) 性别追踪未建模。
+// 2026-08-15 终极合并反向扫描批次（第十一次白名单命中：judgment_rewrite 变体族）。
+skill clanfenchai(2281018381) {
+  modifier judgment_rewrite_red_hand_equip_expansion add 1;
+}

@@ -1,0 +1,20 @@
+// 挽弓：使用基本牌后，下一张牌获得临时强化；旧 JS 只作为语义证据。
+skill wangong(3743761196) locked {
+  trigger card_used owner_source_basic {
+    effect add_skill(self, 3164390759);
+  }
+}
+
+// 下一张牌使用后消耗；若连续使用基本牌，则父技能在同一事件重新获得本效果。
+skill wangong2(3164390759) locked {
+  modifier sha_use_limit override 2147483647;
+  modifier card_distance_unlimited(sha) override 1;
+
+  trigger card_used owner_source_sha {
+    effect increase_current_sha_base_damage(self, event_card, 1);
+  }
+
+  trigger card_used owner_source_non_basic {
+    effect remove_skill(self_skill);
+  }
+}

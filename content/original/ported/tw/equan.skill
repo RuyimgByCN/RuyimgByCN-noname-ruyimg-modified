@@ -1,0 +1,8 @@
+// 恶泉（毒）：锁定技，你的回合内造成伤害时，受伤角色获得等量"毒"标记。
+// 旧JS中「准备阶段所有有毒标记角色失去等量体力并移除标记」无对应原语，未建模。
+// 旧JS中「濒死触发时添加"白板"技能」也无对应原语，未建模。
+skill equan(3306479291) locked {
+  trigger damage owner_alive_current_turn {
+    effect add_mark(event_player, 3306479291, event_amount);
+  }
+}

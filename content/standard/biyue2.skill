@@ -1,0 +1,6 @@
+// 闭月 (biyue) — 貂蝉: at phase begin, draw 1 card (moonlit elegance).
+skill biyue2(35) {
+  trigger phase_begin always {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,12 @@
+// 崩坏：结束阶段若体力值不为全场最低，强制选择失去体力或体力上限。
+skill benghuai(3365741831) locked {
+  trigger phase_end owner_is_target_not_min_hp {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect lose_hp(self, 1);
+    }
+    if option == 2 {
+      effect change_max_hp(self, -1);
+    }
+  }
+}

@@ -1,0 +1,5 @@
+skill stdshangjian(4047696367) {
+  trigger phase_end owner_is_target_lost_cards_at_most_hp_gainable optional {
+    effect choose_gain_own_lost_discard_card_this_turn(self);
+  }
+}

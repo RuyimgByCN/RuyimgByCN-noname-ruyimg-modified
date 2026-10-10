@@ -1,0 +1,6 @@
+// xy_jizheng：player:drawBegin, 需选择目标, 异步。
+skill xy_jizheng(3718808633) {
+  trigger phase_draw owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

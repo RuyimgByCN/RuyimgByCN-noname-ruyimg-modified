@@ -1,0 +1,5 @@
+// zj_linze：锁定技, player:changeHpAfter, player:gainMaxHpAfter, player:max_hp_changed, 异步。
+skill zj_linze(3089308170) {
+  trigger phase_any_end owner_alive {
+  }
+}

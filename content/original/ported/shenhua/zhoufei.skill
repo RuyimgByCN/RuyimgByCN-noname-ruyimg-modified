@@ -1,0 +1,25 @@
+// 周妃【良姻/箜声】— shenhua 旧 JS 语义参考（olliangyin/olkongsheng）：
+// 良姻：其他角色失去牌后，每回合一次，你可选择一名其他角色，你与其各摸一张牌；若其中
+// 一名角色手牌数等于「箜」数且已受伤，可令其中一名角色回复 1 点体力。其他角色获得牌后，
+// 每回合一次，你可弃置一张牌，令一名其他角色弃置一张牌。
+// 箜声：准备阶段，你可以将任意张牌作为「箜」置于武将牌上；结束阶段开始时，非装备的
+// 「箜」回到你手中，剩余的装备「箜」令一名角色依次使用。
+skill liangyin(4194727596) {
+  trigger cards_moved owner_lost_cards_outside_turn optional {
+    effect resolve_liangyin(self, 0, 3654831984);
+  }
+  trigger cards_moved owner_alive_hand_gained_this_turn_can_compare_other optional {
+    effect resolve_liangyin(self, 3, 3654831984);
+  }
+  trigger cards_drawn owner_alive_hand_gained_this_turn_can_compare_other optional {
+    effect resolve_liangyin(self, 3, 3654831984);
+  }
+}
+skill kongsheng(3654831984) {
+  trigger phase_prepare owner_is_target optional {
+    effect resolve_kongsheng(self, 0);
+  }
+  trigger phase_end owner_is_target {
+    effect resolve_kongsheng(self, 2);
+  }
+}

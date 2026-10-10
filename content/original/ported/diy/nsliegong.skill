@@ -1,0 +1,12 @@
+// 烈弓：旧 JS 纯继承 SHENHUA「新烈弓」，以本技能稳定 ID 发布同一规则。
+skill nsliegong(4133432161) {
+  trigger card_targeted owner_source_sha_target_hand_lte_owner_or_hp_gte_owner optional {
+    if hand_count(event_player) < hand_count(self) + 1 {
+      effect make_current_sha_target_unrespondable(self, event_card, event_player);
+    }
+    if hp(self) < hp(event_player) + 1 {
+      effect increase_current_sha_target_damage(self, event_card, event_player, 1);
+    }
+  }
+  modifier sha_distance_unlimited_if_target_distance_lte_rank override 1;
+}

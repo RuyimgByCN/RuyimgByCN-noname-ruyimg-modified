@@ -1,0 +1,9 @@
+// 瞑瞑·威迫·效果（马谡系）：弃一张【杀】并获得一张牌。
+// 旧 JS 的「弃杀获牌」以弃一张手牌并摸一张近似（【杀】限定未建模，
+// 已注明）。
+skill mjweipo_effect(2205043417) {
+  active play_phase select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

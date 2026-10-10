@@ -1,0 +1,6 @@
+// psbianchi（锁定技/限定技/触发技）：觉醒技, 限定技, 锁定技, player:phaseJieshuEnd, player:phaseUseBefore, 多分支选择, 失去体力, 加技能, 含子技能, 异步。
+skill psbianchi(2459126252) locked {
+  trigger phase_end always {
+    effect lose_hp(event_source, 1);
+  }
+}

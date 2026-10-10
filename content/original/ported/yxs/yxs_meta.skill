@@ -1,0 +1,602 @@
+// 英雄杀（yxs）包元数据登记：以下技能依赖目标替换、标记生命周期、动态技能复制、
+// 判定分支、全局用牌限制、座次交换、多目标分支等 DSL 不支持或未移植的机制，登记
+// 元数据并文档化近似（无运行时行为）。详见包 README 的可表达性清单。
+
+// 烽火（褒姒）：你可以将一张装备区内的牌当作【南蛮入侵】使用。view_as 种类不支持
+// 南蛮入侵，登记元数据。
+skill fenghuo(2311199132) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 底力（鲁智深）：锁定技，摸牌阶段，你额外摸 X 张牌，X 为你已损失的体力值的一半，
+// 向上取整且最多为 2。DSL 表达式无除法/向上取整，无法表达，登记元数据。
+skill yxsdili(305151117) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 门神（秦琼）：结束阶段，你可选择一名其他角色；直到你的下回合开始，所有角色对该
+// 角色使用的【杀】或【决斗】均视为对你使用。需要事件目标替换机制。
+skill yxs_menshen(2280812565) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill yxs_menshen2(3906540055) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill yxs_menshen3(312837147) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 鬼面（兰陵王）：锁定技，每当你在出牌阶段使用【杀】造成伤害，本阶段内出【杀】次数
+// 上限+1。需要出牌阶段杀伤害后的次数回退（guimian 以 refund 语义近似不可行，因无
+// 当前阶段判定过滤器）。
+skill guimian(3337152544) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 浴血（兰陵王）：锁定技，你造成伤害后目标获得「浴血」标记；标记移除时其失去 1 点
+// 体力；准备阶段若标记数不少于存活数一半则清空；死亡时清空。需要标记生命周期与
+// 清空规则状态机。
+skill lyuxue(1543273518) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill lyuxue2(3352724528) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 妖姬（妺喜）：每当你受到一次伤害，你可以将一张【乐不思蜀】置入伤害来源的判定区。
+// 需要凭空创建延时锦囊牌原语。
+skill yaoji(313367600) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 裂帛（妺喜）：出牌阶段限一次，你可以将你的手牌与一名其他角色交换（手牌数之差
+// 不能多于 1）。需要带手牌差约束的双目标整手交换原语。
+skill liebo(2695674930) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 诛心（魏忠贤）：出牌阶段限一次，你可以与一名其他角色拼点，若你赢，你对其造成
+// 1 点伤害。需要拼点胜负分支伤害原语。
+skill zhuxin(2352238134) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 连环（魏忠贤）：你使用【杀】造成伤害时，可以弃置一张装备区内的牌并令伤害+1。
+// 需要弃装备后伤害加值串联原语。
+skill wlianhuan(3046333499) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 先驱（南丁格尔）：锁定技，你不能成为点数小于 8 的【杀】的目标。需要按点数排除
+// 目标的原语。
+skill xianqu(1295790157) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 风流（唐伯虎）：锁定技，摸牌阶段，你额外摸 X 张牌，X 为存活女性角色数且不超过
+// 2。需要存活女性计数表达式。
+skill fengliu(263549040) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 弑亲（杨广）：锁定技，其他群势力角色濒死时，你令其立即死亡。需要濒死即死原语。
+skill shiqin(1195602545) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 徭役（杨广）：每当你受到一次伤害，你可以令至多 2 名非群势力角色交给你一张手牌。
+// 需要多目标逐个交牌原语。
+skill yaoyi(2411573874) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 胡服（赵雍）：锁定技，当你的装备区内没有防具牌时，你摸牌阶段额外摸一张牌；当你
+// 装备区内有防具牌时，你的手牌上限+5。需要防具空/非空条件修正原语。
+skill zyhufu(1828946545) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 捍北（赵雍）：锁定技，你的装备区有马时，你的【杀】不可闪避。需要「有坐骑」条件
+// 过滤器。
+skill hanbei(700608131) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 狂禅（鲁智深）：锁定技，你做主公时，不增加体力上限。需要主公身份开局上限修正。
+skill kuangchan(3722822797) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 捭阖（鬼谷子）：出牌阶段限一次，你可以弃置一张牌，选择以下 1 项执行：(1) 横置
+// 1 名未横置角色，该角色摸一张牌；(2) 重置一名已横置角色，该角色弃置一张手牌。
+// 需要按横置状态分支的选择原语。
+skill baihe(3206155416) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 阴阳（鬼谷子）：出牌阶段限一次，你可以弃置两张手牌并选择 3 名角色，分别横置或
+// 重置这些角色。需要多目标横置/重置选择原语。
+skill yinyang(3264849562) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 修身（鬼谷子）：锁定技，出牌阶段结束时，若场上有横置角色，你摸两张牌。需要
+// 「场上有横置角色」过滤器。
+skill xiushen(2835673245) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 演绎（福尔摩斯）：出牌阶段限一次，你可以弃置一张黑色牌，指定 1 名角色和 1 种
+// 花色，若被指定角色的手牌中含有此花色，则其受到 1 点伤害。需要展示手牌与花色
+// 判定原语。
+skill yanyi(3248070814) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 结案（福尔摩斯）：每当【演绎】造成伤害时，你可以摸 X 张牌，并以任意数量分配给
+// 任意角色（X 为受伤角色的已损失体力值）。需要跨技能事件绑定与分配原语。
+skill jiean(327251107) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 霸图（嬴政）：结束阶段，你可以将手牌数补至 X，X 为现存的势力数。需要势力数
+// 表达式与条件补牌。
+skill batu(2506166954) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 刺酋（项羽）：锁定技，你使用【杀】对未受伤目标造成伤害时伤害+1；若其因此进入
+// 濒死，你令其死亡，然后你失去「刺酋」。需要濒死即死与技能移除原语。
+skill yxsciqiu(2954700472) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill yxsciqiu_dying(1418442433) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 舍身（虞姬）：每当你受到 1 点伤害，可以观看牌堆顶的两张牌，并将其交给任意
+// 1~2 名角色。需要翻顶分配状态机。
+skill ysheshen(273197252) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 长念（虞姬）：你死亡时，可以将所有牌交给一名其他角色，令其获得技能「追思」
+// （结束阶段摸一张牌）。需要死亡移交与技能授予原语。
+skill yxschangnian(2709409990) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill yxschangnian2(304304843) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 三板斧（程咬金）：当你对其他角色使用【杀】时，你可以使此【杀】有如下效果：若
+// 对方没有出【闪】，其受到 2 点伤害；若对方打出了一张【闪】，你与其各受到 1 点
+// 伤害；若对方打出了两张【闪】，你受到 1 点伤害。需要按响应结果分支结算的
+// 状态机。
+skill sanbanfu(1859430097) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill sanbanfu2(3956899026) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill sanbanfu3(1598728924) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 兵圣（孙武）：出牌阶段限一次，你可以弃置两张花色不同的手牌，指定一名其他角色
+// 使其体力值与你相同（体力最多变化 2 点）。需要按体力差伤害/回复分支原语。
+skill bingsheng(616605412) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 神探（狄仁杰）：出牌阶段限一次，你可以弃置一张牌，获得距离 2 以内的一名角色的
+// 手牌，并可以将其交给任意一名角色。需要距离目标取牌与转交原语。
+skill shentan(2238464233) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 寒枪（罗成）：锁定技，当你没装备武器时，攻击范围+1。需要「无武器」条件修正。
+skill hanqiang(2534113005) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 骠骑（罗成）：锁定技，当你出【杀】指定目标后，若你的攻击范围大于目标体力值，
+// 则此【杀】不可闪避；若你的攻击范围小于目标体力值，你摸一张牌。需要攻击范围与
+// 目标体力比较分支原语。
+skill biaoqi(1659214067) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 和亲（王昭君）：限定技，你可以与场上一名男性角色形成【和亲】状态，你与该男性
+// 角色于摸牌阶段摸牌数+1；任一方阵亡时状态消失。需要双人绑定标记原语。
+skill heqin(852124925) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill heqin2(4061689112) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill heqin3(3607144737) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 察觉（明成皇后）：锁定技，你的回合外，你每受到一次伤害，任何【杀】或普通锦囊牌
+// 均对你无效，直到你的回合开始。需要「回合外受伤」过滤器与临时目标取消。
+skill chajue(1822097701) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill chajue2(2053187890) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 铁腕（明成皇后）：每当其他角色使用延时类锦囊牌时，你可以立即将一张红色牌当作
+// 【乐不思蜀】使用。需要延时锦囊响应窗口原语。
+skill tiewan(2851973941) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 强掠（成吉思汗）：每当你的【杀】被闪避时，你可以进行一次判定，若结果为黑色，
+// 你可以获得对方的一张牌。需要判定分支获牌原语。
+skill qianglue(4271594806) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 侠盗（罗宾汉）：每当你造成一次伤害，你可以令一名手牌数不少于受伤害角色的另一名
+// 角色获得其一张手牌。需要手牌数比较目标与随机取牌原语。
+skill xiadao(3511144248) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 机敏（罗宾汉）：当你的装备区内没有牌时，你可以将一张手牌当作【闪】使用或打出。
+// 需要「无装备」条件的视为闪。
+skill jimin(467103034) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 统御（罗宾汉）：出牌阶段，你可以弃置一张牌，并转变为罗宾汉（每回合只能转变
+// 一次）。需要动态技能组切换状态机。
+skill tongyu(1697503040) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 归隐（罗宾汉）：出牌阶段，若你本回合内未造成伤害，你可以摸一张牌，并转变为汉丁
+// 顿伯爵（每回合只能转变一次）。需要动态技能组切换状态机。
+skill lguiyin(869574466) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 仗义（罗宾汉）：你可以将你弃置的卡牌交给一名其他角色。需要弃牌事件卡选择转交
+// 原语。
+skill lzhangyi(1264268099) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 易装（花木兰）：准备阶段，你可以弃置一张牌并选择一名男性角色，获得其所有技能，
+// 直到你首次受到伤害。需要动态复制他人技能机制。
+skill yizhuang(3366675788) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill yizhuang2(2619077455) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 控局（李世民）：锁定技，你的手牌上限为你的体力上限；当你的手牌数小于体力上限
+// 时，你不能成为过河拆桥或顺手牵羊的目标；当你的手牌数大于体力上限时，你不能
+// 成为乐不思蜀的目标。需要按手牌数条件的目标取消修正器。
+skill kongju(2918381399) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 鸩杀（吕雉）：当场上有角色进入濒死状态时，你可以弃置一张【酒】或两张黑色手牌，
+// 则该角色立即死亡。需要濒死即死与复合弃牌代价原语。
+skill zhensha(3629938017) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 独裁（凯撒）：出牌阶段限一次，你可以弃置一张牌，则本轮内除你外的角色不能使用
+// 或打出与该手牌花色相同的手牌。需要全局花色使用禁用状态机。
+skill ducai(2459573631) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill ducai2(2914594697) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill ducai3(316800909) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 统领（拿破仑）：锁定技，每当一名友方角色造成一次伤害，你获得 1 个统领标记
+// （标记上限为 3）。需要友方伤害计数标记。
+skill tongling(4245422482) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 反扑（拿破仑）：出牌阶段限一次，你可以移去 3 枚统领标记并视为对攻击范围内的
+// 至多 3 名角色使用一张【杀】。需要标记消耗与多目标虚拟杀原语。
+skill fanpu(1605378455) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 挟令（曹操）：出牌阶段，弃掉两张手牌，将任意一名角色装备区或判定区的牌移动到
+// 另一名角色对应的区域。需要跨角色区域牌移动原语。
+skill xieling(2608614817) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 女权（武则天）：你对男性角色使用【杀】或【决斗】时，对方需连续打出两张【闪】或
+// 【杀】响应；你不能成为男性角色的决斗目标。需要按目标性别调整响应数与决斗目标
+// 取消原语。
+skill nvquan(593383842) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nvquan1(2121686438) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nvquan2(3718444968) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nvquan3(789681065) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 迁都（武则天）：出牌阶段，你可以弃一张黑色手牌，和一名存活的玩家交换位置。每
+// 回合限一次。需要座次交换原语。
+skill qiandu(2112254898) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 非攻（墨子）：其他角色使用【杀】时，若你不是【杀】的目标，可以弃置一张【杀】
+// 取消之。需要整张【杀】使用取消原语。
+skill feigong(2944460215) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 兼爱（墨子）：每当你回复 1 点体力，可以令所有其他角色回复 1 点体力。需要全场
+// 其他角色依次回复原语。
+skill jianai(2816946105) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 慧眼（伯乐）：当一名有手牌的其他角色成为来源不为你的【杀】的目标时，你可以预言
+// 此【杀】能否命中；预言正确你摸一张牌，否则你须弃置一张牌。每回合限一次。需要
+// 结果预测状态机。
+skill bolehuiyan(609908156) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill bolehuiyan2(2792141248) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill bolehuiyan3(3396582339) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill bolehuiyan4(3095183816) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 色诱（埃及艳后）：限定技，出牌阶段，你可以指定任意 1 名角色，其他所有男性角色
+// 需选择 1 项执行：(1) 对你指定的角色出【杀】；(2) 令你获得其一张牌。需要多目标
+// 逐个二选一状态机。
+skill seyou(3314563534) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 蛇噬（埃及艳后）：每受到 1 次伤害，可以指定 1 种花色，依次展示牌堆顶的牌，直到
+// 出现指定花色的牌为止，你获得与指定花色不同花色的所有牌（最多展示四张牌）。
+// 需要按花色翻顶取牌状态机。
+skill sheshi(3346302416) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 婉歌（貂蝉）：摸牌时，你可以少摸一张牌，则结束阶段你可以获得一名其他角色的手
+// 牌，至少一张，至多 X 张（X 为你当前的掉血量）。需要多目标逐个取牌原语。
+skill wange(3333871576) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill wange2(49803736) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 霓裳（杨玉环）：摸牌时，你可以选择不摸牌，并在结束阶段展示手牌，每少一种花色
+// 摸一张牌。需要摸牌替换与花色计数联动状态机。
+skill nichang(992008166) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nichang2(2230526441) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 丰艳（杨玉环）：你可以获得其他男性角色的红色判定牌。需要男性角色判定弃牌事件
+// 过滤与获得原语。
+skill fengyan(3717003247) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 逐鹿（曹操）：回合外，当有普通锦囊牌结算完毕后，你可以立即弃掉一张相同花色手牌
+// 或装备区的牌，获得这张锦囊牌。需要花色匹配弃牌后获牌串联原语。
+skill zhulu(2663243760) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill zhulu2(2532661744) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 节用（墨子）：你使用的卡牌结算完成后，你可以弃置一张黑色牌并重新获得之。（每
+// 回合限一次）。需要弃黑牌后回收事件牌串联原语。
+skill jieyong(4077548530) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill jieyong2(4057324531) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 刺客（荆轲）：你对其他角色出【杀】时可以选择做一次判定：若判定牌为红色花色，
+// 则此【杀】不可回避，直接命中；若判定牌为黑色花色，你可以选择弃掉对方一张牌。
+// 需要判定分支原语。
+skill cike(2922571126) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 妙笔（李白）：出牌阶段限一次，你可以弃置一名其他角色的一张牌，若此牌是基本牌或
+// 普通锦囊，你可以将一张手牌当此牌使用；否则你须弃置一张牌。需要动态视为用牌
+// 状态机。
+skill miaobi(1035759472) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill miaobix(2285428597) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 神工（鲁班）：出牌阶段限一次，你可以选择一张手牌复制一名角色装备区的一张非特殊
+// 牌，然后你可以将以此法复制的装备置入一名角色的装备区。需要装备复制与再装备
+// 状态机。
+skill lshengong(3905729891) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 辅助技能登记（内部 helper，旧 JS 中由父技能临时授予；父技能已登记元数据，辅助
+// 一并登记以保证上游 113 个技能名全覆盖）。
+// 反击·红杀直击（yxs_fanji2）：反击使用的红色【杀】不可闪避——需要临时技能门控。
+skill yxs_fanji2(2584302082) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 统御/归隐 每回合一次标记（tongyu_guiyin）：旧 JS 以空技能作 temp-skill 占位。
+skill tongyu_guiyin(107611269) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 节用·临时视为（jieyong3）：节用收回的牌以红桃视为原牌使用——需要临时视为技。
+skill jieyong3(1785201005) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill jieyong4(1198854734) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill jieyong5(1523473241) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill jieyong6(1569247807) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 旧慧眼（oldbolehuiyan/oldbolehuiyan2）：上游废弃定义（预测判定花色），无角色引用，
+// 与「请勿引用」的 guhuo 同类，不登记。

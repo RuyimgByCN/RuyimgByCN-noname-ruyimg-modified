@@ -1,0 +1,863 @@
+{
+ "source": "qita/sanguosha/noname/extension/杀海拾遗/character/xianjian",
+ "upstream_path": "extension/杀海拾遗/character/xianjian/",
+ "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+ "pack": {
+  "name": "shaai-xianjian-upstream-noname",
+  "version": 1,
+  "description": "G1 纵切：上游 xianjian 星璇（灵雪）",
+  "card_prefix": "xj_"
+ },
+ "cards": [],
+ "host_skills": [],
+ "deferred": [],
+ "skills": [
+  {
+   "name": "lingxue",
+   "general": "pal_xingxuan",
+   "mapping": "host:xj_lingxue"
+  },
+  {
+   "name": "huimeng",
+   "general": "pal_zhaoliner",
+   "mapping": "host:xj_huimeng"
+  },
+  {
+   "name": "tianshe",
+   "general": "pal_zhaoliner",
+   "mapping": "host:xj_tianshe"
+  },
+  {
+   "name": "tianshe2",
+   "general": "pal_zhaoliner",
+   "mapping": "host:xj_tianshe2"
+  },
+  {
+   "name": "fanling",
+   "general": "pal_xia",
+   "mapping": "host:xj_fanling"
+  },
+  {
+   "name": "guiyuan",
+   "general": "pal_linyueru",
+   "mapping": "host:xj_guiyuan"
+  },
+  {
+   "name": "tannang",
+   "general": "pal_hanlingsha",
+   "mapping": "host:xj_tannang"
+  },
+  {
+   "name": "feixu",
+   "general": "pal_wangpengxu",
+   "mapping": "host:xj_feixu"
+  },
+  {
+   "name": "feng",
+   "general": "pal_leiyuange",
+   "mapping": "host:xj_feng"
+  },
+  {
+   "name": "ya",
+   "general": "pal_leiyuange",
+   "mapping": "host:xj_ya"
+  },
+  {
+   "name": "song",
+   "general": "pal_leiyuange",
+   "mapping": "host:xj_song"
+  },
+  {
+   "name": "xjyufeng",
+   "general": "pal_lixiaoyao",
+   "mapping": "host:xj_xjyufeng"
+  },
+  {
+   "name": "xuanyan",
+   "general": "pal_xuanxiao",
+   "mapping": "host:xj_xuanyan"
+  },
+  {
+   "name": "xuanyan2",
+   "general": "pal_xuanxiao",
+   "mapping": "host:xj_xuanyan2"
+  },
+  {
+   "name": "xuanyan3",
+   "general": "pal_xuanxiao",
+   "mapping": "host:xj_xuanyan3"
+  },
+  {
+   "name": "ningbin",
+   "general": "pal_xuanxiao",
+   "mapping": "host:xj_ningbin"
+  },
+  {
+   "name": "diewu",
+   "general": "pal_longkui",
+   "mapping": "host:xj_diewu"
+  },
+  {
+   "name": "lingyu",
+   "general": "pal_longkui",
+   "mapping": "host:xj_lingyu"
+  },
+  {
+   "name": "lueying",
+   "general": "pal_muchanglan",
+   "mapping": "host:xj_lueying"
+  },
+  {
+   "name": "anwugu",
+   "general": "pal_anu",
+   "mapping": "host:xj_anwugu"
+  },
+  {
+   "name": "anwugu2",
+   "general": "pal_anu",
+   "mapping": "host:xj_anwugu2"
+  },
+  {
+   "name": "txianqu",
+   "general": "pal_tangyurou",
+   "mapping": "host:xj_txianqu"
+  }
+ ],
+ "generals": [
+  {
+   "name": "星璇",
+   "faction": "qun",
+   "hp": 3,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "lingxue",
+     "mapping": "host:xj_lingxue"
+    },
+    {
+     "name": "feizhua",
+     "mapping": null,
+     "reason": "useCard 杀单目标+纯距 1 内玩家询问换位——2026-10-09 暂缓"
+    },
+    {
+     "name": "leiyu",
+     "mapping": null,
+     "reason": "phaseEnd 雷域存储列表+跨回合标记——2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "沈欺霜",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "binxin",
+     "mapping": "host:xj_binxin"
+    },
+    {
+     "name": "qixia",
+     "mapping": null,
+     "reason": "花色集集齐 4 色 insertPhase 额外回合（引擎缺口 ADR0646）——2026-10-09 暂缓"
+    },
+    {
+     "name": "jianzhen",
+     "mapping": null,
+     "reason": "shaAfter 逐人 chooseToUse 对同一目标用杀询问链——2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "赵灵儿",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "huimeng",
+     "mapping": "host:xj_huimeng"
+    },
+    {
+     "name": "tianshe",
+     "mapping": "host:xj_tianshe"
+    },
+    {
+     "name": "tianshe2",
+     "mapping": "host:xj_tianshe2"
+    }
+   ]
+  },
+  {
+   "name": "瑕",
+   "faction": "wu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "xjzongyu",
+     "mapping": null,
+     "reason": "虚拟 useCard 飞镖（useCard({name:feibiao}) 随机 2 敌）——虚拟用牌原语缺口，2026-10-09 暂缓"
+    },
+    {
+     "name": "fanling",
+     "mapping": "host:xj_fanling"
+    }
+   ]
+  },
+  {
+   "name": "温慧",
+   "faction": "wei",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "longxiang",
+     "mapping": "host:xj_longxiang"
+    },
+    {
+     "name": "huxi",
+     "mapping": null,
+     "reason": "chooseToUse viewAs sha（无实体牌虚拟用牌）+respondSha——虚拟用牌原语缺口，2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "林月如",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "guiyuan",
+     "mapping": "host:xj_guiyuan"
+    },
+    {
+     "name": "qijian",
+     "mapping": null,
+     "reason": "phaseDiscardEnd 弃牌→虚拟 useCard 杀（无实体牌）——虚拟用牌原语缺口，2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "韩菱纱",
+   "faction": "qun",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "tannang",
+     "mapping": "host:xj_tannang"
+    },
+    {
+     "name": "tuoqiao",
+     "mapping": null,
+     "reason": "黑牌当石会粉（石会粉为古剑卡片——跨包牌种依赖）——2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "王蓬絮",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "feixu",
+     "mapping": "host:xj_feixu"
+    },
+    {
+     "name": "duxinshu",
+     "mapping": null,
+     "reason": "读心：看目标手牌 chooseCardButton 选一张用自己的手牌替换（按钮选择+双向换牌）——2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "雷元戈",
+   "faction": "qun",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "feng",
+     "mapping": "host:xj_feng"
+    },
+    {
+     "name": "ya",
+     "mapping": "host:xj_ya"
+    },
+    {
+     "name": "song",
+     "mapping": "host:xj_song"
+    }
+   ]
+  },
+  {
+   "name": "李逍遥",
+   "faction": "qun",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "xjyufeng",
+     "mapping": "host:xj_xjyufeng"
+    },
+    {
+     "name": "tianjian",
+     "mapping": null,
+     "reason": "viewAs 万箭齐发（杀牌当 AOE）+tianjian_discard 伤害归属——AOE 虚拟用牌+归属缺口，2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "玄霄",
+   "faction": "qun",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "xuanyan",
+     "mapping": "host:xj_xuanyan"
+    },
+    {
+     "name": "xuanyan2",
+     "mapping": "host:xj_xuanyan2"
+    },
+    {
+     "name": "xuanyan3",
+     "mapping": "host:xj_xuanyan3"
+    },
+    {
+     "name": "ningbin",
+     "mapping": "host:xj_ningbin"
+    },
+    {
+     "name": "xfenxin",
+     "mapping": null,
+     "reason": "changeHp 事件（掉血/回复增量抽牌）——原生无 changeHp 事件种（jijia 用 commit_damage 拦截替代口径），2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "龙葵",
+   "faction": "wu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "diewu",
+     "mapping": "host:xj_diewu"
+    },
+    {
+     "name": "lingyu",
+     "mapping": "host:xj_lingyu"
+    },
+    {
+     "name": "fenxing",
+     "mapping": null,
+     "reason": "双形态变身（Math.random 切换 avatar+衍生技组）——结构性依赖，2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "慕长兰",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "lueying",
+     "mapping": "host:xj_lueying"
+    },
+    {
+     "name": "feixia",
+     "mapping": null,
+     "reason": "虚拟 useCard 杀（随机敌）——虚拟用牌原语缺口，2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "阿奴",
+   "faction": "wu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "anwugu",
+     "mapping": "host:xj_anwugu"
+    },
+    {
+     "name": "anwugu2",
+     "mapping": "host:xj_anwugu2"
+    },
+    {
+     "name": "lingdi",
+     "mapping": null,
+     "reason": "距离递增目标+花色去重存储——多钩存储系，2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "唐雨柔",
+   "faction": "wu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "txianqu",
+     "mapping": "host:xj_txianqu"
+    },
+    {
+     "name": "qiongguang",
+     "mapping": null,
+     "reason": "纯表现技（line/expose/delay，无机制本体）——表现层 noop，2026-10-09 登记不转"
+    }
+   ]
+  },
+  {
+   "name": "姜城",
+   "faction": "qun",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "yanzhan",
+     "mapping": null,
+     "reason": "红牌转火杀 usable:1+目标 yanzhan3 响应花色 mod+yanzhan2→4 杀限次 mod——viewAs/mod 系，2026-10-09 暂缓"
+    },
+    {
+     "name": "fenshi",
+     "mapping": "host:xj_fenshi"
+    },
+    {
+     "name": "longhuo",
+     "mapping": "host:xj_longhuo",
+     "reason_ref": "衍生技常驻实例+PlayerState.jiangcheng_longhuo 门控建模（上游 addSkill 动态获得），见规则基准登记"
+    }
+   ]
+  },
+  {
+   "name": "景天",
+   "faction": "wu",
+   "hp": 3,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "sajin",
+     "mapping": "host:xj_sajin"
+    },
+    {
+     "name": "jtjubao",
+     "mapping": "host:xj_jtjubao"
+    }
+   ]
+  },
+  {
+   "name": "龙幽",
+   "faction": "wei",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "yuexing",
+     "mapping": "host:xj_yuexing"
+    },
+    {
+     "name": "minsha",
+     "mapping": "host:xj_minsha"
+    }
+   ]
+  },
+  {
+   "name": "明绣",
+   "faction": "shu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "linghuo",
+     "mapping": "host:xj_linghuo"
+    },
+    {
+     "name": "guijin",
+     "mapping": "host:xj_guijin"
+    },
+    {
+     "name": "chengxin",
+     "mapping": "host:xj_chengxin"
+    }
+   ]
+  },
+  {
+   "name": "云天河",
+   "faction": "wu",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "longxi",
+     "mapping": null,
+     "reason": "chooseToRespond/chooseToUse 响应询问前置钩缺口（询问链改写族），2026-10-09 暂缓"
+    },
+    {
+     "name": "zhuyue",
+     "mapping": "host:xj_zhuyue"
+    },
+    {
+     "name": "guanri",
+     "mapping": "host:xj_guanri"
+    }
+   ]
+  },
+  {
+   "name": "紫萱",
+   "faction": "shu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "shuiyun",
+     "mapping": "host:xj_shuiyun"
+    },
+    {
+     "name": "shuiyun5",
+     "mapping": "host:xj_shuiyun5",
+     "reason_ref": "shuiyun 子技常驻实例化（上游 subSkill 不列将表），濒死救援通道首例"
+    },
+    {
+     "name": "wangyou",
+     "mapping": "host:xj_wangyou"
+    },
+    {
+     "name": "wangyou2",
+     "mapping": "host:xj_wangyou2",
+     "reason_ref": "wangyou 子技常驻实例化（silent 标记）"
+    },
+    {
+     "name": "changnian",
+     "mapping": "host:xj_changnian"
+    }
+   ]
+  },
+  {
+   "name": "小蛮",
+   "faction": "shu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "anwugu",
+     "mapping": "host:xj_anwugu",
+     "reason_ref": "与阿奴同技——mapping 复用"
+    },
+    {
+     "name": "lingquan",
+     "mapping": "host:xj_lingquan"
+    },
+    {
+     "name": "shenwu",
+     "mapping": "host:xj_shenwu"
+    }
+   ]
+  },
+  {
+   "name": "雪见",
+   "faction": "shu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "xshuangren",
+     "mapping": "host:xj_xshuangren"
+    },
+    {
+     "name": "shenmu",
+     "mapping": "host:xj_shenmu"
+    },
+    {
+     "name": "duci",
+     "mapping": "host:xj_duci"
+    },
+    {
+     "name": "xshuangren2",
+     "mapping": "host:xj_xshuangren2",
+     "reason_ref": "xshuangren 子技常驻实例化（dieBegin 弃置）"
+    }
+   ]
+  },
+  {
+   "name": "柳梦璃",
+   "faction": "shu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "tianxian",
+     "mapping": "host:xj_tianxian"
+    },
+    {
+     "name": "runxin",
+     "mapping": "host:xj_runxin"
+    },
+    {
+     "name": "xjzhimeng",
+     "mapping": "host:xj_xjzhimeng"
+    },
+    {
+     "name": "xjzhimeng2",
+     "mapping": "host:xj_xjzhimeng2",
+     "reason_ref": "xjzhimeng 子技常驻实例化（目标 runtime 授技 def 源）"
+    },
+    {
+     "name": "changnian2",
+     "mapping": "host:xj_changnian2",
+     "reason_ref": "changnian 子技常驻实例化（runtime 授技 def 源）"
+    }
+   ]
+  },
+  {
+   "name": "南宫煌",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "zhaoyao",
+     "mapping": "host:xj_zhaoyao"
+    },
+    {
+     "name": "sheling",
+     "mapping": "host:xj_sheling"
+    },
+    {
+     "name": "zhangmu",
+     "mapping": "host:xj_zhangmu"
+    }
+   ]
+  },
+  {
+   "name": "王小虎",
+   "faction": "qun",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "husha_count",
+     "mapping": "host:xj_husha_count",
+     "reason_ref": "husha 子技常驻实例化（source damageEnd 集标记）"
+    },
+    {
+     "name": "husha",
+     "mapping": "host:xj_husha",
+     "reason_ref": "元素毁灭（3 枚选项）牌种不存在目录登记不转"
+    }
+   ]
+  },
+  {
+   "name": "月琦",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "tianwu",
+     "mapping": null,
+     "reason": "纯表现技（getDebuff+addTempSkill tianwu2 空壳）——表现层 noop，2026-10-09 登记不转"
+    },
+    {
+     "name": "liguang",
+     "mapping": "host:xj_liguang"
+    },
+    {
+     "name": "shiying",
+     "mapping": "host:xj_shiying"
+    }
+   ]
+  },
+  {
+   "name": "夏侯瑾轩",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "xuanmo",
+     "mapping": "host:xj_xuanmo"
+    },
+    {
+     "name": "danqing",
+     "mapping": null,
+     "reason": "四花色收集→getBuff(false) 纯表现目标选择，无机制本体——表现层登记不转，2026-10-09"
+    }
+   ]
+  },
+  {
+   "name": "苏媚",
+   "faction": "shu",
+   "hp": 3,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "sheying",
+     "mapping": "host:xj_sheying"
+    },
+    {
+     "name": "dujiang",
+     "mapping": null,
+     "reason": "获得【毒】牌——毒牌种不在目录（createCard 实体发现亦不可用），2026-10-09 暂缓"
+    },
+    {
+     "name": "huahu",
+     "mapping": "host:xj_huahu"
+    }
+   ]
+  },
+  {
+   "name": "仙卿",
+   "faction": "qun",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "xtanxi",
+     "mapping": "host:xj_xtanxi"
+    },
+    {
+     "name": "xiaoyue",
+     "mapping": null,
+     "reason": "roundStart 事件缺口+自动虚拟用牌（useCard 杀+无距离限制 mod）复合缺口，2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "罗招嫣",
+   "faction": "shu",
+   "hp": 4,
+   "gender": "female",
+   "skills": [
+    {
+     "name": "fenglue",
+     "mapping": "host:xj_fenglue"
+    },
+    {
+     "name": "tanhua",
+     "mapping": null,
+     "reason": "Recover 前置窗口缺口（回复改为摸牌需回复取消语义）——2026-10-09 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "姜云凡",
+   "faction": "wei",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "xunying",
+     "mapping": "host:xj_xunying"
+    },
+    {
+     "name": "liefeng",
+     "mapping": "host:xj_liefeng"
+    },
+    {
+     "name": "tianjian",
+     "mapping": "host:xj_tianjian",
+     "reason_ref": "liefeng runtime 授技目标 def 源（目录经 mapping 注册）"
+    }
+   ]
+  },
+  {
+   "name": "慕容紫英",
+   "faction": "wei",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "poyun",
+     "mapping": "host:xj_poyun"
+    },
+    {
+     "name": "qianfang",
+     "mapping": "host:xj_qianfang"
+    },
+    {
+     "name": "xuanning",
+     "mapping": null,
+     "reason": "计数标记获得路径上游缺失（storage.xuanning 无技能写入）——原生仅支持调试/宿主注入，2026-10-09 登记差异"
+    }
+   ]
+  },
+  {
+   "name": "越今朝",
+   "faction": "wei",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "ywuhun",
+     "mapping": null,
+     "reason": "回合开始前额外回合+回合后复原场上及牌堆全部牌——双引擎缺口（额外回合=ADR0646 登记），2026-10-10 暂缓"
+    },
+    {
+     "name": "xjyingfeng",
+     "mapping": "host:xj_xjyingfeng"
+    }
+   ]
+  },
+  {
+   "name": "居十方",
+   "faction": "shu",
+   "hp": 3,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "xiepan",
+     "mapping": "host:xj_xiepan"
+    },
+    {
+     "name": "yujia",
+     "mapping": null,
+     "reason": "机关牌种不在目录（观看/计数依赖机关牌实体池）——dujiang 同族缺口，2026-10-10 暂缓"
+    },
+    {
+     "name": "yanshi",
+     "mapping": null,
+     "reason": "机关牌种不在目录（累计使用机关牌计数+随机装备填满可挂实体发现，前置=机关牌种基建），2026-10-10 暂缓"
+    }
+   ]
+  },
+  {
+   "name": "长卿",
+   "faction": "wei",
+   "hp": 4,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "luanjian",
+     "mapping": "host:xj_luanjian"
+    },
+    {
+     "name": "luanjian2",
+     "mapping": "host:xj_luanjian2",
+     "reason_ref": "luanjian 增伤 subskill（DamageBefore forced 50%，载体牌锚定）"
+    },
+    {
+     "name": "ctianfu",
+     "mapping": "host:xj_ctianfu"
+    },
+    {
+     "name": "ctianfu2",
+     "mapping": "host:xj_ctianfu2",
+     "reason_ref": "天符·反噬 subskill（Damage 伤害后窗，挂附标记+实例成对）"
+    },
+    {
+     "name": "ctianfu3",
+     "mapping": "host:xj_ctianfu3",
+     "reason_ref": "天符·清挂 subskill（Death 窗清理）"
+    }
+   ]
+  }
+ ]
+}

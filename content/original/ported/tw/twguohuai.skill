@@ -1,0 +1,42 @@
+// 精策/御章：第 X 张牌摸二并蓄策；受伤后消耗策限制来源，或跳过自己的阶段。
+skill twjingce(3238855457) {
+  trigger phase_play owner_is_target {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 2);
+  }
+trigger card_used owner_source_play_card_count_eq_hp {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 0);
+  }
+  trigger damage owner_source_event_card_policy_draw {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 1);
+  }
+}
+
+skill yuzhang(2473230123) {
+trigger damage owner_is_target_source_alive_mark_positive_2473230123 {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 3);
+  }
+trigger phase_prepare owner_is_target_mark_positive_2473230123 {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 4);
+  }
+trigger phase_judge owner_is_target_mark_positive_2473230123 {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 4);
+  }
+trigger phase_draw owner_is_target_mark_positive_2473230123 {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 4);
+  }
+trigger phase_play owner_is_target_mark_positive_2473230123 {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 4);
+  }
+trigger phase_discard owner_is_target_mark_positive_2473230123 {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 4);
+  }
+trigger phase_end owner_is_target_mark_positive_2473230123 {
+    effect resolve_twguohuai(self, event_player, event_source, event_card, 2473230123, 3964351777, 4);
+  }
+}
+
+skill yuzhang_dontuse(3964351777) locked {
+  modifier card_use_cancel override 1;
+  modifier card_response_cancel override 1;
+  modifier card_save_cancel override 1;
+}

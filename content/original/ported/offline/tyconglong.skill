@@ -1,0 +1,7 @@
+// tyconglong：global:card_used, global:damage_before, global:phaseEnd, 需弃牌, 二选一, 摸牌, 异步, 弃牌。
+skill tyconglong(2459626970) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

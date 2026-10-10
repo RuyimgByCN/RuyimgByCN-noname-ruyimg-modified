@@ -1,0 +1,10 @@
+// 音航（岩泽·锁定技）：体力值变化时，令至多两名角色各摸一张牌。
+// 以 hp_lost/hp_recovered 事件近似，缺失「玩家自选至多两个目标」原语。
+skill iwasawa_yinhang(2832623148) locked {
+  trigger hp_lost owner_alive {
+    effect choose_targets_draw(self, 1, 2, any);
+  }
+  trigger hp_recovered owner_alive {
+    effect choose_targets_draw(self, 1, 2, any);
+  }
+}

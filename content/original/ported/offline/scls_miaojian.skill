@@ -1,0 +1,7 @@
+// scls_miaojian：音效名:miaojian, 主动(phaseUse), 含子技能。
+skill scls_miaojian(2204467908) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

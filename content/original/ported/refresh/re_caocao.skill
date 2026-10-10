@@ -1,0 +1,24 @@
+// 界奸雄：受伤后可获得仍在处理区中的伤害牌，并摸一张牌。
+skill new_rejianxiong(3449956505) {
+  trigger damage owner_is_target optional {
+    if 0 < event_card {
+      let old_zone = card_zone(event_card);
+      let processing = zone(0, 6);
+      if old_zone == processing {
+        effect move_card(event_card, zone(self, 3), processing);
+      }
+    }
+    effect draw_cards(self, 1);
+  }
+}
+
+// 界护驾：沿用魏势力委托出闪，并补充魏将回合外出闪后的可选摸牌。
+skill rehujia(3691667990) lord_only {
+  view_as shan response any from group_wei;
+  trigger card_used owner_alive_other_shan_outside_turn_group_wei_once_per_turn optional by event_player {
+    effect draw_cards(self, 1);
+  }
+  trigger card_responded owner_alive_other_shan_outside_turn_group_wei_once_per_turn optional by event_player {
+    effect draw_cards(self, 1);
+  }
+}

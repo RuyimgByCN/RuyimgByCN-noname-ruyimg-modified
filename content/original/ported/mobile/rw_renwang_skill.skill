@@ -1,0 +1,5 @@
+// 仁王金刚盾：防具有效时，黑色杀和红桃杀不能指定拥有者。
+skill rw_renwang_skill(4083737417) {
+  modifier armor_card_target_cancel(sha_black) override 1;
+  modifier armor_card_target_cancel(sha_heart) override 1;
+}

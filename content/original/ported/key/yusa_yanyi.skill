@@ -1,0 +1,9 @@
+// 演仪（游佐）：出牌阶段选至多攻击范围名其他角色（距离≤体力）；满血则你摸牌，否则其选择你摸 1 或回 1 并交给你一张。
+// 实现：出牌阶段限一次令一名其他角色摸 1 或回复 1。
+// 近似：单目标；不限距离/攻击范围；满血你摸牌与交牌未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yusa_yanyi(4076446163) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_draw_or_recover(self, 1, 1, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 神锋（黄祖）：你使用牌指定目标后，弃置一张牌，令目标二选一：弃置两张牌
+// 或失去 1 点体力；若你使用【杀】，本回合该角色不能响应你的牌。
+// 旧 JS 的「目标二选一弃两张或失体」与「不可响应」无对应原语，未建模（已注明）；
+// 以选择一名其他角色造成 1 点伤害近似。
+skill shenfeng(2699483261) {
+  trigger card_targeted owner_is_source optional {
+    effect choose_other_damage(self, 1);
+  }
+}

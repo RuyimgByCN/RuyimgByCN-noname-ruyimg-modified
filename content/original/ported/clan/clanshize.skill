@@ -1,0 +1,32 @@
+// 矢仄（族陈群）：宗族技，锁定技。你的回合内，首次有角色响应你的牌时，可令一名宗族
+// 角色（或自己）攻击范围 +1（受伤后失去）。
+// 上游 (clan/skill.js)：global useCard/respond + currentPhase==player + 本回合首次
+// respondTo[0]==player + hasClan 颍川陈氏目标存在 → chooseTarget(宗族/自己) →
+// addMark 攻击范围 +1；受伤后失去。
+// 实现：`trigger card_responded owner_is_respond_to optional`（本批新增过滤器——
+// CardResponded 事件中 ctx.source 是响应者、被响应者在 respond_to）→ body 守卫
+// `current_phase_player() == self`（回合内）+ `storage_get(self_skill,1)==0`（本回合
+// 首次门槛，turn_ended 强制清零）→ add_mark(自身def,1) 驱动
+// `modifier attack_range add owner_skill_mark`（attack_range+1）；
+// `trigger damage owner_is_target` → remove_mark（受伤后失去）。
+// 近似：(1) 攻击范围增益仅作用于自己（上游可选宗族角色——modifier 值源只随技能
+// 拥有者，跨目标增益需新值源）；(2) 受伤失去的是增益；首次门槛以 storage 表达，
+// 引擎无 per-turn respondTo 历史快照。
+// 2026-08-15 矢仄批次（零 ABI 变动：字符串过滤器 + 既有原语/storage）。
+skill clanshize(3304769267) {
+  trigger card_responded owner_is_respond_to optional {
+    if current_phase_player() == self {
+      if storage_get(self_skill, 1) == 0 {
+        effect storage_set(self_skill, 1, 1);
+        effect add_mark(self, 3304769267, 1);
+      }
+    }
+  }
+  trigger turn_ended owner_alive {
+    effect storage_set(self_skill, 1, 0);
+  }
+  trigger damage owner_is_target {
+    effect remove_mark(self, 3304769267, 1);
+  }
+  modifier attack_range add owner_skill_mark;
+}

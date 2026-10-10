@@ -1,0 +1,9 @@
+// 绝凯（张飞）：觉醒技。准备阶段开始时，若你本回合获得过牌，你减 1 点体力
+// 上限并获得「忠锷」；本回合你使用牌时若有角色获得过牌，你摸一张牌。
+// 旧 JS 的「觉醒条件与本回合获得牌历史」无对应原语，未建模（已注明）；
+// 以准备阶段摸一张近似保留收益。
+skill dcjuekai(3172351691) {
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

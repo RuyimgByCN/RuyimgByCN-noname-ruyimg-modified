@@ -1,0 +1,6 @@
+// mbtongwei（统围）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill mbtongwei(2798696301) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

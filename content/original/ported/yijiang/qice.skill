@@ -1,0 +1,4 @@
+// 奇策：出牌阶段限一次，以全部手牌作为任意普通锦囊牌使用。
+skill qice(3567101194) {
+  view_as ordinary_trick play_phase any from none uses_per_turn 1 cost all_hand;
+}

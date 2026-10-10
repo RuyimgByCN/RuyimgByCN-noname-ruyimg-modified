@@ -1,0 +1,9 @@
+// 旧 JS 的回合外得牌子技能；主技能已内联此逻辑，本定义保留独立兼容语义。
+skill recangchu2(2551663610) locked {
+  trigger cards_moved owner_gains_outside_turn_mark_below_alive_once_2058376721 {
+    effect add_mark(self, 2058376721, 1);
+  }
+  trigger cards_drawn owner_gains_outside_turn_mark_below_alive_once_2058376721 {
+    effect add_mark(self, 2058376721, 1);
+  }
+}

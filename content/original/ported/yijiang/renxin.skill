@@ -1,0 +1,12 @@
+// 仁心（曹冲）：其他角色受到伤害时,若其体力值为 1,你可以弃置一张装备牌并将武将牌
+// 翻面,然后防止其受到的伤害。
+// 旧 JS 仅作语义证据;「体力值为 1」以 if 表达式检查,「弃装备+防伤」复用 ABI 398
+// 骄矜管线,翻面复用既有 turn_over;未建模:旧 JS 排除「受伤者为拥有者自身」的场景。
+skill renxin(3389183077) {
+  trigger damage_before owner_alive optional {
+    if hp(event_player) == 1 {
+      effect choose_discard_equipment_prevent_current_damage(self);
+      effect turn_over(self);
+    }
+  }
+}

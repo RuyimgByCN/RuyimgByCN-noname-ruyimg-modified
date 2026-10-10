@@ -1,0 +1,13 @@
+// jsrgxuchong（虚宠）：当你成为牌的目标后，你可以选择一项：⒈摸一张牌；⒉令当前回合角色本回合的手牌上限+2。选择完成后，你获得一张【影】。
+// 实现（jsrg 影族切片 2，部分迁移）：`trigger card_targeted
+// owner_alive_targeted_by_other optional` → draw_cards(self, 1) +
+// gain_shadow_cards(self, 1, self_skill)（ABI 660）。
+// 近似（未建模⒉分支）：令当前回合角色本回合手牌上限+2 需跨目标临时
+// modifier，取上游 AI 默认分支（摸牌）固定执行。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgxuchong(3660367661) {
+  trigger card_targeted owner_alive_targeted_by_other optional {
+    effect draw_cards(self, 1);
+    effect gain_shadow_cards(self, 1, self_skill);
+  }
+}

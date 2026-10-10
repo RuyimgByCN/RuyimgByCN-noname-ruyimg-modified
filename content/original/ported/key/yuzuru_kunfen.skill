@@ -1,0 +1,10 @@
+// 困愤（音无·锁定技）：回合结束时若未度过往生则扣 1 体力，摸 2 张牌并可选给其他角色 2 张牌。
+// 实现：结束阶段失去 1 点体力并摸 2。
+// 近似：不检验往生标记；交给其他角色 2 张未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuzuru_kunfen(2231368330) locked {
+  trigger phase_end owner_is_target {
+    effect lose_hp(self, 1);
+    effect draw_cards(self, 2);
+  }
+}

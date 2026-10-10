@@ -1,0 +1,8 @@
+// 经世（offline 春秋罗贯中 ymjingshi）：一名角色的回合开始，你可以根据「著魂」武将牌
+// 提示选择一张武将牌（涉及化身技能获得与 expansion 上的牌数比较）。
+// 上游 (offline/skill ymjingshi)：global phaseBegin + storage/expansions 对话选择。
+// INTENTIONAL_EMPTY_NOOP: expansion 置牌系统与化身技能授予缺口（同著魂）；
+// 2026-09-09 上游增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill ymjingshi(2592092136) {
+  modifier hand_limit add 0;
+}

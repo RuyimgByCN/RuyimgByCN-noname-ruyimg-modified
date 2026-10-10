@@ -1,0 +1,13 @@
+// 辰龙：出牌阶段限一次，选择 1/2 点先由自己失去，再对另一名角色造成等量伤害。
+// 只有这次自损首次令自己进入濒死时才减 1 点体力上限；后续伤害等待完整濒死流程结束。
+skill olchenlong(2779773800) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    let amount = choose_range(1, 2);
+    effect lose_hp_then_damage_other_lose_max_hp_if_dying(
+      self,
+      event_source,
+      amount,
+      self_skill
+    );
+  }
+}

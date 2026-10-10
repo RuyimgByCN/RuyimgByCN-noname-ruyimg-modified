@@ -1,0 +1,6 @@
+// 利驭 (liyu) — 吕布: when dealt damage, draw 1 card (exploit weakness).
+skill liyu(45) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

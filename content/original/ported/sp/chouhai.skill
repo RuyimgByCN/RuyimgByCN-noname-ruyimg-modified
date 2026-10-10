@@ -1,0 +1,3 @@
+skill chouhai(2265775915) locked {
+  modifier damage_taken_amount add owner_hand_empty;
+}

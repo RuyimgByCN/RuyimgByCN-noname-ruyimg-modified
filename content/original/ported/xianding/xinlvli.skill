@@ -1,0 +1,12 @@
+// 新膂力（文鸯）：每回合限一次，当你造成伤害后，若体力值大于手牌数则摸差值张牌，
+// 若手牌数大于体力值则回复差值点体力。旧 JS 的“已受伤”条件未建模。
+skill xinlvli(3655535745) {
+  trigger damage owner_source_once_per_turn optional {
+    if hand_count(self) < hp(self) {
+      effect draw_cards(self, hp(self) - hand_count(self));
+    }
+    if hp(self) < hand_count(self) {
+      effect recover_hp(self, hand_count(self) - hp(self));
+    }
+  }
+}

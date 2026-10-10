@@ -1,0 +1,3 @@
+engine-native seconds=24
+content-native-loader seconds=0
+content-runtime seconds=67

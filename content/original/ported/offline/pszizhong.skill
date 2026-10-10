@@ -1,0 +1,6 @@
+// pszizhong：锁定技, player:card_used, player:respond, 摸牌, 异步。
+skill pszizhong(3252583408) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

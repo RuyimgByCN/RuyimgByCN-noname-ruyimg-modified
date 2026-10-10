@@ -1,0 +1,6 @@
+// 弓骑（辅助技）：charlotte技，〖弓骑〗的花色记录和杀无视次数限制。旧JS中「花色存储+杀免限」无对应原语，空定义。
+skill twgongji2(4047608361) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twgongji2 = 标记型技能（charlotte，skill.js:17185），无规则面。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

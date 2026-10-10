@@ -1,0 +1,9 @@
+skill dcxurui(3352309555) locked {
+  trigger phase_end owner_is_target_no_turn_damage {
+    if attack_range(self) < 5 {
+      effect draw_cards(self, attack_range(self));
+    } else {
+      effect draw_cards(self, 5);
+    }
+  }
+}

@@ -1,0 +1,14 @@
+// 妆梳装备技能
+skill zhuangshu_equip(2527325512) locked {
+  trigger phase_play_end owner_is_target {
+    if hand_count(self) < hand_limit(self) {
+      if hand_limit(self) < 5 {
+        effect draw_cards(self, hand_limit(self) - hand_count(self));
+      } else {
+        if hand_count(self) < 5 {
+          effect draw_cards(self, 5 - hand_count(self));
+        }
+      }
+    }
+  }
+}

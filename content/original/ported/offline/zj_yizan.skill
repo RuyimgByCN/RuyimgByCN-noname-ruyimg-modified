@@ -1,0 +1,5 @@
+// zj_yizan：音效名:yizan_respond_shan, 主动(multi)。
+skill zj_yizan(3709855666) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

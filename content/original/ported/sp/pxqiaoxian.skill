@@ -1,0 +1,9 @@
+// 谯县（pxqiaoxian，州郡技能）：当你受到伤害后，你可以摸一张牌。
+// 上游 (sp/skill.js:3195)：trigger player:damageEnd；无 filter 限制，可选；
+// content = player.draw()。
+// 实现：damage + owner_is_target（DamageDealt 后触发）→ 可选确认 → draw_cards(self, 1)。
+skill pxqiaoxian(2589677698) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,4 @@
+// Skill bingx1(154) - modifier range variant
+skill bingx1(154) {
+  modifier attack_range add 1;
+}

@@ -1,0 +1,7 @@
+// jun_henglv：音效名:rezhiheng, 主动(phaseUse), 需选择目标, 摸牌, 失去体力, 异步, 弃牌。
+skill jun_henglv(3386306148) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

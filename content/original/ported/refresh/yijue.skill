@@ -1,0 +1,23 @@
+// 义绝：出牌阶段限一次，与一名有手牌的其他角色拼点。
+skill yijue(3159500535) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 3572578464, 3300215091);
+  }
+}
+
+// 严格获胜：被拼点者的非锁定技失效且不能使用或打出手牌，均持续到回合结束。
+skill yijue_win(3572578464) {
+  trigger hand_compare_finished owner_is_target {
+    effect remove_skill(self_skill);
+    effect suppress_non_locked_skills_until_turn_end(event_source);
+    effect add_skill_until_turn_end(event_source, 2542175146);
+  }
+}
+
+// 平局或失败：发起者可令被拼点者回复一点体力。
+skill yijue_lose(3300215091) {
+  trigger hand_compare_finished owner_is_target {
+    effect remove_skill(self_skill);
+    effect choose_recover_target(self, event_source, 1);
+  }
+}

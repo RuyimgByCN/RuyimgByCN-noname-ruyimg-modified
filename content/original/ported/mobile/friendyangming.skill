@@ -1,0 +1,8 @@
+// friendyangming（养名）：出牌阶段结束时，若你本阶段失去过至少两张手牌，则你可以将牌堆顶的四张牌置于你的武将牌上，然后使用其中任意张花色各不相同的牌（无次数限制），将剩余牌置入弃牌堆。
+// 未建模：subSkill, expansion 等机制无 DSL 原语。
+skill friendyangming(3418349762) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 friendyangming（skill.js:10440）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

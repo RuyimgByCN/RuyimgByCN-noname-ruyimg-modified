@@ -1,0 +1,13 @@
+// 许身（olxushen，限定技）：你濒死且体力为0时，回复至1点体力，获得「镇南」。
+// 上游 (sp/skill.js:29743)：limited dying，filter hp<1；content = awaken + addSkills(olzhennan)
+// + recover(1-hp) + 可选许身换将（复杂，未建模）。
+// 实现：trigger dying owner_alive optional（owner 即濒死者，dying 时 hp≤0 恒满足上游 hp<1）
+// → recover_hp(self, max_hp(self) - hp(self)) + add_skill(self, 3516136840)。
+// 与上游差异：限定技每局限一次未建模（optional 可重复）；「令一名男性角色换将关索」
+// 未建模；「回复至1点」以上游 recover(1-hp) 语义近似为回满，已注明。
+skill olxushen(4033253376) {
+  trigger dying owner_alive optional {
+    effect recover_hp(self, max_hp(self) - hp(self));
+    effect add_skill(self, 3516136840);
+  }
+}

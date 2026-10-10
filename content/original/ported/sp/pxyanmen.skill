@@ -1,0 +1,12 @@
+// 雁门（pxyanmen，州郡技能）：当你获得此技能后，你从牌堆中获得一张武器牌和一张
+// 进攻坐骑牌。
+// 上游 (sp/skill.js:1117)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// forced；content = gain(cardPile2(equip1 武器) + cardPile2(equip4 进攻坐骑))。
+// 实现：skill_added + owner_skill_added_self_3339454948 → gain_card_by_kind(self,
+// weapon) + gain_card_by_kind(self, horse_off)（武器与进攻马分别从牌堆/弃牌堆检索）。
+skill pxyanmen(3339454948) {
+  trigger skill_added owner_skill_added_self_3339454948 {
+    effect gain_card_by_kind(self, weapon);
+    effect gain_card_by_kind(self, horse_off);
+  }
+}

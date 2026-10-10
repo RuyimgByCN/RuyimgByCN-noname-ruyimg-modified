@@ -1,0 +1,9 @@
+// 滔乱·SP（张让系）：任意角色判定结果为黑桃时（每回合一次），你可重铸
+// 判定牌。
+// 旧 JS 的「判定黑桃重铸」无对应原语；以判定结算后摸一张近似（重铸未
+// 建模，已注明）。
+skill sptaoluan(3985077108) {
+  trigger judgment_resolved owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

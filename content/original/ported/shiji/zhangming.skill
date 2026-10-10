@@ -1,0 +1,7 @@
+// 彰名（战海使命成功获得）：你使用梅花牌时，此牌不可被响应。
+// 旧 JavaScript 仅作语义证据；不可响应由现有原语权威结算。
+skill zhangming(3550704513) {
+  trigger card_used owner_source_club {
+    effect make_current_card_unrespondable(self, event_card, 3550704513);
+  }
+}

@@ -1,0 +1,7 @@
+// 解围（刘禅系）：翻面后摸牌并可视为用牌。
+// 旧 JS 的「翻面触发」无对应原语；以受伤后摸一张近似（已注明）。
+skill jiewei(4045427531) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,14 @@
+// 战海（周处，职责技）：出牌阶段限一次，你可摸一张牌并与一名其他角色拼点
+// （你的装备区每少一张牌，你的拼点牌点数 +1，至多 +3）；若你赢，展示其手牌并
+// 按牌堆中每种类别各获得一张；若你输且拼点牌点数小于 7，使命失败；若你的装备
+// 数不小于 3，使命成功：回复至体力上限，以【彰名】替换【乡害】。
+// 旧 JavaScript 仅作语义证据；拼点（点数修正）、展示取牌与使命判定由
+// ABI 435 resolve_rechuhai 权威结算；使命状态以技能实例状态记录。
+skill rechuhai(4266017884) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare {
+    effect resolve_rechuhai(self, event_source, 0, 0, 0);
+  }
+  trigger card_used owner_alive_equip_used {
+    effect resolve_rechuhai(self, 0, 0, 0, 3);
+  }
+}

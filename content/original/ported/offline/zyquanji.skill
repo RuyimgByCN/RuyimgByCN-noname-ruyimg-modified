@@ -1,0 +1,6 @@
+// zyquanji：音效名:gzquanji, player:damage, source:damageSource, 摸牌, 移出游戏, 异步。
+skill zyquanji(2450434483) {
+  trigger damage owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

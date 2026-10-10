@@ -1,0 +1,6 @@
+// 远步：手牌上限和双向距离增加其他存活角色数，至多为四。
+skill twyuanbu(3356399020) {
+  modifier hand_limit add alive_other_count_capped_four;
+  modifier distance_from add alive_other_count_capped_four;
+  modifier distance_to add alive_other_count_capped_four;
+}

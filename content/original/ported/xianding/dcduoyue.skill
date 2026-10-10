@@ -1,0 +1,20 @@
+// 夺月（DC 神张辽）：出牌阶段开始时，可选一名角色拼点；若你赢，本回合你使用【杀】
+// 无距离限制且次数上限 +999（近似不计次数），结束阶段移除。
+// 旧 JS 的“拼点赢后可继续、输的后续”未建模。
+skill dcduoyue(3729672764) {
+  trigger phase_play owner_is_target optional {
+    effect choose_hand_compare(self, 2807627648, 3534328335);
+  }
+}
+skill dcduoyue_win(2807627648) {
+  modifier card_distance_unlimited(sha) override 1;
+  modifier sha_use_limit add 999;
+  trigger phase_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}
+skill dcduoyue_lose(3534328335) {
+  trigger hand_compare_finished owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

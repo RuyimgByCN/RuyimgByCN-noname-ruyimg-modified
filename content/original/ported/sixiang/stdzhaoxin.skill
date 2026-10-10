@@ -1,0 +1,6 @@
+// 昭心：准备阶段展示所有手牌；若颜色相同，选择任意一名角色造成一点伤害。
+skill stdzhaoxin(2955343028) locked {
+  trigger phase_prepare owner_is_target_hand_nonempty {
+    effect reveal_uniform_hand_choose_damage(self, 1);
+  }
+}

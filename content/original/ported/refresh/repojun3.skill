@@ -1,0 +1,5 @@
+// 原仓库 character/refresh/skill.js：破军的伤害子技能。
+
+skill repojun3(2423810510) locked {
+  modifier damage_amount(sha) add owner_hand_equip_gte_other;
+}

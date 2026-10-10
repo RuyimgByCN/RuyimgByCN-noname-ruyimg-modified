@@ -1,0 +1,5 @@
+// OL 看破：黑色手牌或装备牌可响应为【无懈可击】，且该【无懈可击】不可被响应。
+skill olkanpo(4205693026) {
+  view_as wuxie response black from hand_equip;
+  modifier card_use_unrespondable(wuxie) override 1;
+}

@@ -1,0 +1,7 @@
+// 鬼才 (guicai) — 司马懿: reroll judgment.
+// Simplified: after taking damage, draw 1 card (resourcefulness).
+skill guicai(19) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

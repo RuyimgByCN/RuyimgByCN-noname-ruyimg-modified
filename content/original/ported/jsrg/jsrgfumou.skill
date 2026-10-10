@@ -1,0 +1,12 @@
+// jsrgfumou（复谋）：魏势力技。当你议事结算结束后，与你意见不同的角色本回合不能使用或打出与其意见颜色相同的牌，你可以将一张【影】当【出其不意】对一名与你意见不同的角色使用。
+// 未建模：chooseToUse转化, charlotte延迟, 势力技能, addTempSkill（DSL无对应原语）
+// jsrgfumou（复谋）：魏势力技。当你议事结算结束后，与你意见不同的角色本回合不能使用或打出与其意见颜色相同的牌，你可以将一张【影】当【出其不意】对一名与你意见不同的角色使用。
+// 实现（jsrg 影族切片 3，部分迁移）：`view_as chuqibuyi play_phase card_ying from hand`
+// （【影】当【出其不意】——TrickChuqibuyi 牌种本批落地）。
+// 近似（未建模）：①议事意见不同者的颜色禁打（跨目标颜色禁令）；②目标
+// 限定「与你意见不同的角色」——view_as 目标按出其不意通用合法性
+// （其他有手牌角色）；③魏势力技限定。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgfumou(3002614318) {
+  view_as chuqibuyi play_phase card_ying from hand;
+}

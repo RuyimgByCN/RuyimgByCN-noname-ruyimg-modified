@@ -1,0 +1,19 @@
+// 如意金箍棒·形态切换（孙悟空）：出牌阶段限一次。从四种形态中选择一个：
+//   1:【杀】无次数限制  2:【杀】伤害+1  3:【杀】不可响应  4:【杀】目标+1。
+// 旧JS的chooseButton四选一对话框无DSL对应原语；以嵌套choose二级菜单近似（第一层选大类，
+//   第二层选具体形态）。已选形态以mark_count记录供ruyijingubang_effect读取。
+// 注：形态1的sha_use_limit Infinity无直接modifier原语，仅保留选形态功能。
+skill ruyijingubang_skill(2848854029) {
+  active play_phase uses_per_turn 1 {
+    effect remove_mark(self, 2848854029, 100);
+    let group = choose(1, 2);
+    if group == 1 {
+      let mode = choose(1, 2);
+      effect add_mark(self, 2848854029, mode);
+    }
+    if group == 2 {
+      let mode = choose(3, 4);
+      effect add_mark(self, 2848854029, mode);
+    }
+  }
+}

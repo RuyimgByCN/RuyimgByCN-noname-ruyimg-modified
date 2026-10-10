@@ -1,0 +1,8 @@
+// 奉斩（锁定技）：游戏开始时或每轮开始时，你获得一张【白毦双匕】（黑桃2，武器）。
+// 旧 JS 通过 createCard2 生成特定命名卡牌。DSL 无「创建特定装备牌」原语。
+// game_started / phase_begin 事件虽可触发，但无法精准获得指定装备。无法建模。
+skill stdfengzhan(2650908422) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

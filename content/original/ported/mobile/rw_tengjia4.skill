@@ -1,0 +1,4 @@
+// 桐油百韧甲之四：防具有效时免疫普通杀。
+skill rw_tengjia4(4041276943) {
+  modifier armor_card_target_cancel(sha_normal) override 1;
+}

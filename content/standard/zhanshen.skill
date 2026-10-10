@@ -1,0 +1,10 @@
+// 战神：受伤且已有友方阵亡时觉醒，弃武器、减 1 点体力上限并获得马术和神戟。
+skill zhanshen(3834202888) locked {
+  trigger phase_prepare owner_is_target_wounded_dead_ally {
+    effect discard_equipment_slot(self, weapon);
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 2);
+    effect add_skill(self, 3515984232);
+    effect remove_skill(self_skill);
+  }
+}

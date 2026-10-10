@@ -1,0 +1,7 @@
+// TW 胡车儿「盗戟」
+skill twdaoji(3856876988) {
+  active play_phase uses_per_turn 1 targets 1 1 other has_gainable_hand_equip in_attack_range select_he 1 1 card_nonbasic {
+    effect discard_selected(self);
+    effect resolve_tw_daoji(self, event_source);
+  }
+}

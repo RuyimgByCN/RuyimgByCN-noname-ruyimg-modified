@@ -1,0 +1,6 @@
+// mbgeyuan（割圆）：当你使用点数为X的牌时（X为圆周率中小数点后第一位的值），你可以摸Y张牌并令X改为后移一位的值（Y为你本回合本技能发动的次数+1，且至多为π)。
+skill mbgeyuan(2480704838) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

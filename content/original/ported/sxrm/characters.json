@@ -1,0 +1,322 @@
+[
+  {
+    "id": 3011387565,
+    "name_key": "sxrm_liubei",
+    "max_hp": 4,
+    "skills": [
+      3193035603
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_sxrm_liubei.jpg"
+  },
+  {
+    "id": 3686299582,
+    "name_key": "sxrm_chen_caocao",
+    "max_hp": 4,
+    "skills": [
+      3315968200
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_sxrm_chen_caocao.jpg"
+  },
+  {
+    "id": 3539390100,
+    "name_key": "sxrm_zhouyu",
+    "max_hp": 4,
+    "skills": [
+      3539390011,
+      3539390012,
+      3539390013
+    ],
+    "sex": "male",
+    "group": "devil",
+    "portrait_asset": "character_sxrm_zhouyu.jpg"
+  },
+  {
+    "id": 3539390101,
+    "name_key": "sxrm_sunshangxiang",
+    "max_hp": 3,
+    "skills": [
+      3539390014,
+      3539390015
+    ],
+    "sex": "female",
+    "group": "wu",
+    "portrait_asset": "character_sxrm_sunshangxiang.jpg"
+  },
+  {
+    "id": 3539390102,
+    "name_key": "sxrm_zhangzhao",
+    "max_hp": 3,
+    "skills": [
+      3539390016,
+      3539390017
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_sxrm_zhangzhao.jpg"
+  },
+  {
+    "id": 3539390103,
+    "name_key": "sxrm_lusu",
+    "max_hp": 3,
+    "skills": [
+      3539390018,
+      3539390003
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_sxrm_lusu.jpg"
+  },
+  {
+    "id": 3539390104,
+    "name_key": "sxrm_zhugeliang",
+    "max_hp": 3,
+    "skills": [
+      3539390019,
+      3539390020
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_sxrm_zhugeliang.jpg"
+  },
+  {
+    "id": 3539390105,
+    "name_key": "sxrm_jiahua",
+    "max_hp": 5,
+    "skills": [
+      3539390004,
+      3539390021
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_sxrm_jiahua.jpg"
+  },
+  {
+    "id": 3539390106,
+    "name_key": "sxrm_zhaoyun",
+    "max_hp": 4,
+    "skills": [
+      3539390022
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_sxrm_zhaoyun.jpg"
+  },
+  {
+    "id": 3539390107,
+    "name_key": "sxrm_caoren",
+    "max_hp": 4,
+    "skills": [
+      3539390023,
+      3539390024
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_sxrm_caoren.jpg"
+  },
+  {
+    "id": 3539390108,
+    "name_key": "sxrm_guanyu",
+    "max_hp": 5,
+    "skills": [
+      3539390025,
+      3539390026
+    ],
+    "sex": "male",
+    "group": "devil",
+    "portrait_asset": "character_sxrm_guanyu.jpg"
+  },
+  {
+    "id": 3539390109,
+    "name_key": "sxrm_guanyinping",
+    "max_hp": 4,
+    "skills": [
+      3539390027,
+      3539390028
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_sxrm_guanyinping.jpg"
+  },
+  {
+    "id": 3539390110,
+    "name_key": "sxrm_yujin",
+    "max_hp": 4,
+    "skills": [
+      3539390029,
+      3539390030
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_sxrm_yujin.jpg"
+  },
+  {
+    "id": 3539390111,
+    "name_key": "sxrm_mifang",
+    "max_hp": 3,
+    "skills": [
+      3539390031,
+      3539390032
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_sxrm_mifang.jpg"
+  },
+  {
+    "id": 3539390112,
+    "name_key": "sxrm_liufeng",
+    "max_hp": 4,
+    "skills": [
+      3539390033
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_sxrm_liufeng.jpg"
+  },
+  {
+    "id": 3539390113,
+    "name_key": "sxrm_luxun",
+    "max_hp": 3,
+    "skills": [
+      3539390034,
+      3539390035
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_sxrm_luxun.jpg"
+  },
+  {
+    "id": 3539390114,
+    "name_key": "sxrm_lvmeng",
+    "max_hp": 4,
+    "initial_hp": 3,
+    "skills": [
+      3539390036,
+      3539390037
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_sxrm_lvmeng.jpg"
+  },
+  {
+    "id": 3539390115,
+    "name_key": "sxrm_pangde",
+    "max_hp": 4,
+    "skills": [
+      3539390038
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_sxrm_pangde.jpg"
+  },
+  {
+    "id": 3539390116,
+    "name_key": "sxrm_yanwen",
+    "max_hp": 5,
+    "skills": [
+      3539390039,
+      3539390001
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_sxrm_yanwen.jpg"
+  },
+  {
+    "id": 3539390117,
+    "name_key": "sxrm_caocao",
+    "max_hp": 3,
+    "skills": [
+      3539390040,
+      3539390041
+    ],
+    "sex": "male",
+    "group": "devil",
+    "portrait_asset": "character_sxrm_caocao.jpg"
+  },
+  {
+    "id": 3539390118,
+    "name_key": "sxrm_caopi",
+    "max_hp": 3,
+    "skills": [
+      3539390052,
+      3539390053
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_sxrm_caopi.jpg"
+  },
+  {
+    "id": 3539390119,
+    "name_key": "sxrm_wanghou",
+    "max_hp": 4,
+    "skills": [
+      3539390054
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_sxrm_wanghou.jpg"
+  },
+  {
+    "id": 3539390120,
+    "name_key": "sxrm_jianggan",
+    "max_hp": 3,
+    "skills": [
+      3539390043,
+      3539390044
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_sxrm_jianggan.jpg"
+  },
+  {
+    "id": 3539390121,
+    "name_key": "sxrm_huatuo",
+    "max_hp": 4,
+    "skills": [
+      3539390045
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_sxrm_huatuo.jpg"
+  },
+  {
+    "id": 3539390122,
+    "name_key": "sxrm_lvboshe",
+    "max_hp": 4,
+    "skills": [
+      3539390046
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_sxrm_lvboshe.jpg"
+  },
+  {
+    "id": 3539390123,
+    "name_key": "sxrm_fuhuanghou",
+    "max_hp": 4,
+    "initial_hp": 3,
+    "skills": [
+      3539390048,
+      3539390002
+    ],
+    "sex": "female",
+    "group": "qun",
+    "portrait_asset": "character_sxrm_fuhuanghou.jpg"
+  },
+  {
+    "id": 3539390124,
+    "name_key": "sxrm_xunyu",
+    "max_hp": 3,
+    "skills": [
+      3539390049,
+      3539390050,
+      3539390051
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_sxrm_xunyu.jpg"
+  }
+]

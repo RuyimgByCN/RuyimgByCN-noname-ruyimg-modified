@@ -1,0 +1,8 @@
+// 赴难：每回合限一次，当一张牌被抵消或【杀】被闪避后，若此牌进入了弃牌堆，你可以获得之。
+// 旧 JS 监听 shaMiss + eventNeutralized，条件是牌进入弃牌堆 (someInD)。
+// DSL 缺少「牌被抵消/闪避后进入弃牌堆」的精确事件与过滤条件。无法建模。
+skill stdfunan(2484471662) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

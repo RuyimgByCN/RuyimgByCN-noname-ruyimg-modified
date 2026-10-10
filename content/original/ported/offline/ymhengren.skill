@@ -1,0 +1,12 @@
+// 横刃（春秋张星彩）：转换技，其他角色出牌阶段开始/结束时，若其本阶段仍有杀的次数，
+// 你可使用一张杀（计入其次数且伤害+1）。
+// 近似：其他角色出牌阶段开始（phase_play）与结束均可选择视为使用【杀】；
+// 转换技切换、实体杀、计入对方次数与伤害+1 未建模。
+skill ymhengren(3517923618) {
+  trigger phase_play owner_alive_not_target optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+  trigger phase_play_end owner_alive_not_target optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

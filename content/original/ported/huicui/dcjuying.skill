@@ -1,0 +1,5 @@
+// dcjuying：摸3牌；获临时技；弃牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcjuying(2460999362) {
+  modifier hand_limit add 1;
+}

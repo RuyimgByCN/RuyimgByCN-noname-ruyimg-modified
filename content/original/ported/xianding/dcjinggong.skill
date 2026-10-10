@@ -1,0 +1,5 @@
+// 精弓（DC 黄祖）：出牌阶段，可将一张装备牌当无距离限制的【杀】使用。
+// 旧 JS 的伤害值基数改为与首目标距离（至多 5）未建模。
+skill dcjinggong(3793668177) {
+  view_as sha play_phase card_equip from hand_equip ignore_distance;
+}

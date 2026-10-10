@@ -1,0 +1,11 @@
+// 游佐绝情：与界绝情共享“失去等量体力、伤害翻倍、随后永久改写”语义；
+// 旧版未排除连环传导伤害，因此保留该差异。
+skill abyusa_jueqing(3981540585) {
+  trigger damage_before owner_source_other_damage_before optional {
+    effect lose_hp_double_current_damage_then_replace(self, 3148657445);
+  }
+}
+
+skill abyusa_jueqing_rewrite(3148657445) locked {
+  modifier damage_as_hp_loss override 1;
+}

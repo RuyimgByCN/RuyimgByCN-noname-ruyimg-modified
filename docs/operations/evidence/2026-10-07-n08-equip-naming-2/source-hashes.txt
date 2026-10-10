@@ -1,0 +1,2 @@
+4bb988ff5b32e7164a1859ea679d668a1d86e09aa7758657cd6741a3530debf6  docs/architecture/native-progress.md
+f07d967ee8ecbe8ca53ebb2f3f387948b7a9016d2e27c5ad12772e80b71abf57  docs/architecture/native-rules-baseline.md

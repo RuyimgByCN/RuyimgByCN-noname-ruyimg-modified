@@ -1,0 +1,12 @@
+// 摆尾（稻荷）：可将一张♦牌当做任意基本牌（除「毒」外）使用或打出。
+// 实现：♦ 手牌可当【杀/闪/桃/酒】使用或打出。
+// 近似：不提供动态牌名按钮，固定四条基本牌通道；毒本就不在通道内。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill inari_baiwei(3124826192) {
+  view_as sha play_phase diamond from hand;
+  view_as sha response diamond from hand;
+  view_as shan response diamond from hand;
+  view_as tao play_phase diamond from hand;
+  view_as tao response diamond from hand;
+  view_as jiu play_phase diamond from hand;
+}

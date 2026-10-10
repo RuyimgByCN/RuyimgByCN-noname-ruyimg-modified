@@ -1,0 +1,12 @@
+// 送丧：其他角色死亡后可发动一次；旧 JS 仅作为语义规范，运行时只执行此 DSL。
+skill xinfu_songsang(2272181771) {
+  trigger death owner_alive optional {
+    effect remove_skill(self_skill);
+    if hp(self) < max_hp(self) {
+      effect recover_hp(self, 1);
+    } else {
+      effect change_max_hp(self, 1);
+    }
+    effect add_skill(self, 4089086847);
+  }
+}

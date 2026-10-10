@@ -1,0 +1,6 @@
+// 命运签（上签的受伤后子技能）
+skill tiansuan2_damage(2231135297) {
+  trigger damage owner_alive optional {
+    effect draw_cards(self, event_amount);
+  }
+}

@@ -1,0 +1,8 @@
+// 神智（DC 甘夫人）：准备阶段，手牌数大于体力值时，弃置一张手牌并回复 1 点体力。
+// 旧 JavaScript 仅作语义证据；弃牌与回复由权威原语响应。
+skill dcshenzhi(2981440225) {
+  trigger phase_prepare owner_is_target_hand_above_hp optional {
+    effect discard_hand(self, 1);
+    effect recover_hp(self, 1);
+  }
+}

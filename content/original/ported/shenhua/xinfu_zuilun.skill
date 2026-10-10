@@ -1,0 +1,7 @@
+// 罪论（诸葛瞻）：结束阶段按条件摸牌。
+// 旧 JS 的「多条件计数」无对应原语；以结束阶段摸一张近似（已注明）。
+skill xinfu_zuilun(2498790987) {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

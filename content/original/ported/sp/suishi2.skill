@@ -1,0 +1,13 @@
+// 随势·亡（suishi2）：其他角色死亡后，其伤害来源可选择令你失去1点体力。
+// 上游 (sp/skill.js:42610)：global dieAfter，filter = 死者非自己且来源非自己非死者；
+// content = trigger.source.chooseBool() → player.loseHp()。
+// 实现：death owner_alive_not_target_source_same_group 不适用——用死亡触发 + 来源选择原语：
+// trigger death owner_alive → choose_source_confirm_owner_lose_hp(self, event_source, 1)。
+// 新增效果原语 ChooseSourceConfirmOwnerLoseHp（ABI 603，tag 659，ContinuationKind 264；
+// 10 效果处 + 4 续延处全链路注册）。与上游差异：「死者非自己且来源非自己非死者」门槛由
+// 原语内校验（source≠NONE/≠owner）；来源死亡后不可确认。
+skill suishi2(3233154442) {
+  trigger death owner_alive {
+    effect choose_source_confirm_owner_lose_hp(self, event_source, 1);
+  }
+}

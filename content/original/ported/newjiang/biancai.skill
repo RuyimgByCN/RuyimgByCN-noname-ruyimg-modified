@@ -1,0 +1,6 @@
+// 旧 JS 语义：每名角色回合开始时可判定；红色从牌堆、黑色从弃牌堆获得最靠近牌堆顶的一张装备牌。
+skill biancai(2285861837) {
+  trigger phase_begin owner_alive optional {
+    effect judge_gain_equipment_by_color(self);
+  }
+}

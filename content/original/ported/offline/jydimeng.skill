@@ -1,0 +1,5 @@
+// jydimeng：global:compareCardShowBefore, 需选择目标, 异步。
+skill jydimeng(2472754592) {
+  trigger phase_any_end owner_alive {
+  }
+}

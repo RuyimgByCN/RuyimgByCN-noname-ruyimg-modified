@@ -1,0 +1,13 @@
+# U07 收尾测试日志（2026-10-08，登记+清点，无语义变化）
+
+$ cargo test --offline -p engine-native
+engine-native: 435 passed / 0 failed / 1 ignored（与批七持平）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 17 passed; 0 failed（wudian unmapped=2 断言保持）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（63/0）
+
+## ow/xianjian 清点
+- ow：24 武将/107 技能；xianjian：36 武将/128 技能；均无 mode 限定
+- 建议纵切：单武将 1-2 技能（ow_liekong 山现/闪回先例式）

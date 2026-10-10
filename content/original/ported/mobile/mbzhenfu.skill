@@ -1,0 +1,14 @@
+// 镇抚（mb）：结束阶段，若你本回合因弃置失去过牌，你可以令一名其他角色
+// 获得 1 点护甲。
+// 实现：`trigger phase_end owner_phase_end_lost_cards optional` →
+// `choose_other_add_mark(self, 3, 1)`（ABI 652 新原语；护甲=MARK_HUJIA def 3）。
+// 批 279（2026-09-14）：门槛已建模——新过滤器 owner_phase_end_lost_cards
+// （own 结束阶段 + card_loss_count>0，loss 计数为既有回合级失牌历史）。
+// 近似（登记债）：①「因弃置失去」以「本回合失去过牌」超集近似
+// （card_loss_count 含赠予/被获得等失去方式，口径略宽）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill mbzhenfu(4040497433) {
+  trigger phase_end owner_phase_end_lost_cards optional {
+    effect choose_other_add_mark(self, 3, 1);
+  }
+}

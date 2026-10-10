@@ -1,0 +1,5 @@
+// 克己 enhanced — 吕蒙: skip discard phase (can hoard cards).
+// Simplified: distance_from -1 (patient positioning).
+skill keji2(48) {
+  modifier distance_from add -1;
+}

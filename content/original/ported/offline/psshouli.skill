@@ -1,0 +1,6 @@
+// psshouli（锁定技/主动技(multi)/触发技）：音效名:shouli, 锁定技, player:damage_before, global:phaseBefore, player:game_started, 主动(multi), 摸牌, 加技能, 含子技能, 多步骤。
+skill psshouli(2181287322) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

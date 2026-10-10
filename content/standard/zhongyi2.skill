@@ -1,0 +1,9 @@
+// 忠义的扩展牌、友方【杀】增伤与下轮开始清理。
+skill zhongyi2(3789127080) locked {
+  trigger damage_before owner_alive_source_ally_sha_damage_before {
+    effect resolve_zhongyi(self, 1, 3789127080);
+  }
+  trigger phase_prepare owner_alive {
+    effect resolve_zhongyi(self, 2, 3789127080);
+  }
+}

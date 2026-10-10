@@ -1,0 +1,6 @@
+// hm_difeng（锁定技/触发技）：锁定技, player:damage_before, source:damage_before, global:hp_lost, 选牌UI, 移出游戏, 含子技能, 异步。
+skill hm_difeng(2274791888) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

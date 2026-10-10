@@ -1,0 +1,7 @@
+// wn_chiyuan：音效名:wn_chiyuan, global:damage_before, 主动(phaseUse), 需弃牌, 造成伤害, 含子技能, 异步, 弃牌。
+skill wn_chiyuan(2717697309) {
+  trigger damage_before owner_alive optional {
+    effect prevent_current_damage();
+    effect discard_hand_equip_count(self, 1);
+  }
+}

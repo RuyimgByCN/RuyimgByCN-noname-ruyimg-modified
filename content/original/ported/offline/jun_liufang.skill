@@ -1,0 +1,5 @@
+// jun_liufang：音效名:sbfangzhu, player:damage, 主动(phaseUse), 需选择目标, 摸牌, 加技能, 含子技能, 异步, 条件计数。
+skill jun_liufang(3476224424) {
+  trigger damage owner_alive optional {
+  }
+}

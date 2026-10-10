@@ -1,0 +1,9 @@
+// jsrgbaowei（暴威）：结束阶段，若其他角色本回合使用或打出过牌，你选择一项：
+// 1. 若此类角色数≤2，对其中一名角色造成2点伤害；
+// 2. 若此类角色数>2，你失去2点体力。
+// 近似：默认对事件来源造成伤害（丢失了目标选择分支和人数判断逻辑）。
+skill jsrgbaowei(3914522334) {
+  trigger phase_end owner_is_target {
+    effect choose_other_damage(self, 2);
+  }
+}

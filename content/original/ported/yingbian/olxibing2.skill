@@ -1,0 +1,5 @@
+// 悉兵·2（OL 悉兵系）：标记技能。记录使用过的目标。
+// 旧 JS 的 storage 记录无对应原语，未建模（已注明）。
+skill olxibing2(4064406893) {
+  modifier hand_limit add 1;
+}

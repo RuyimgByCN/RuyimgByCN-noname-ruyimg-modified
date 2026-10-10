@@ -1,0 +1,6 @@
+skill jushou(3729566871) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 3);
+    effect turn_over(self);
+  }
+}

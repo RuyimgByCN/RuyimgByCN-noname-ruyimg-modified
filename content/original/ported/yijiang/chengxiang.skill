@@ -1,0 +1,7 @@
+// 称象（曹冲）：受到伤害后亮出4张牌，选择其中任意张（点数和不大于13）获得。
+// 旧 JS 的点数求和筛选+多选 UI 无对应原语，暂留空定义。
+skill chengxiang(4163842738) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

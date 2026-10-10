@@ -1,0 +1,15 @@
+// 誓仇·DC（dc_olshichou，界马超）：你使用【杀】指定目标后，若你已受伤，可令至多
+// min(已受伤点数, 可加目标数) 名其他角色也成为此【杀】的目标。
+// 上游 (sp/skill.js:33022)：trigger player:useCard2；filter = 杀 且 isDamaged 且存在
+// 合法可加目标；content = chooseTarget([1, min(受伤点数, 可加目标数)]) 加目标。
+// 实现：card_used + owner_source_sha → 可选确认 → if hp(self) < max_hp(self)（已受伤）
+// → choose_add_or_remove_current_card_target(self, event_card)。
+// 与上游差异：单次只加一个目标（上游至多受伤点数个）；「可加目标存在」门槛由效果内校验；
+// 锁定技以可选触发近似。
+skill dc_olshichou(2535213152) {
+  trigger card_used owner_source_sha optional {
+    if hp(self) < max_hp(self) {
+      effect choose_add_or_remove_current_card_target(self, event_card);
+    }
+  }
+}

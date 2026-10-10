@@ -1,0 +1,7 @@
+// 观骨（族荀粲/族荀彧/族荀谌/族荀攸）：转换技，出牌阶段限一次。观看牌堆顶至多四张牌或一名角色至多四张手牌，可使用其中一张。
+// 旧 JS 的「转换技」「牌堆顶/手牌观看选择」「卡牌名字数联动（与 clanxiaoyong）」无对应原语。
+// 空定义：需 expansion 支持 zhuanhuanji、观顶、选牌使用。
+skill clanguangu(4021158504) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

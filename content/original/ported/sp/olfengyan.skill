@@ -1,0 +1,11 @@
+// 讽言（OL）：受到其他角色伤害后，或响应/使用牌应答其他角色后，选择一项：
+// 摸 1 并交给对方 1 张 he；或令其摸 1 再弃 2 张 he。
+// 上游 (sp/skill.js:15469)：damageEnd / useCard / respond。
+// 实现：受伤后摸 1 张。
+// 近似：用牌/打出窗口与二选一交弃未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olfengyan(4005200434) locked {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// tylengjian：锁定技, player:card_targeted, 异步。
+skill tylengjian(3588727396) {
+  trigger card_targeted owner_alive {
+  }
+}

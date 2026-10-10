@@ -1,0 +1,15 @@
+// 登极（OL 曹丕）：觉醒技。准备阶段,若你的「储」不小于 3 张,你减 1 点体力上限,
+// 然后获得全部「储」牌。
+// 旧 JS 仅作语义证据;「获得天行/界奸雄」未建模（目标技能未移植）;
+// 觉醒仅一次以觉醒标记近似;取回用 ABI 569 gain_all_skill_pile_cards 首个用例。
+skill dengji(2782294164) {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2782294164) == 0 {
+      if 2 < skill_pile_count(self, 3324653503) {
+        effect change_max_hp(self, -1);
+        effect gain_all_skill_pile_cards(self);
+        effect add_mark(self, 2782294164, 1);
+      }
+    }
+  }
+}

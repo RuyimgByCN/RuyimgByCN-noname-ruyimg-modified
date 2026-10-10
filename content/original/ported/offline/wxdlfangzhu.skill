@@ -1,0 +1,13 @@
+// 放逐（文心雕龙曹丕「遗世」衍生 / 授予技）：当你受到伤害后，你可令一名其他角色
+// 摸 X 张牌（X 为你当前已损失体力），然后该角色翻面。
+// 上游 (offline_wenxindiaolong.js)：inherit fangzhu；cost=chooseTarget 其他角色
+// （若 storage 非空则只能选授予者）；content=draw(getDamagedHp) 后 turnOver。
+// 实现：复用神话「放逐」同一权威合同
+// `choose_other_draw_owner_lost_hp_turn_over`（ABI 85）。
+// **近似**：遗世授予后 `markAuto`「只能对授予者发动」未建模；无其他角色时不询问。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill wxdlfangzhu(2892907842) {
+  trigger damage owner_is_target_other_alive optional {
+    effect choose_other_draw_owner_lost_hp_turn_over(self);
+  }
+}

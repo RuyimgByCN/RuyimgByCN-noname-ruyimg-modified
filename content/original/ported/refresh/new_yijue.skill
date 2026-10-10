@@ -1,0 +1,7 @@
+// new_yijue（关羽·义绝-新版）：出牌阶段限一次，弃一张牌并选一名有手牌角色。其展示一张手牌，若为黑：封其非锁定技+回合内禁用/红桃【杀】伤害+X；若为红：你获得该牌，可选回复其体力。
+// 旧JS含 initSkill 动态创建技能+黑色封技+红色获得/回复，DSL无对应原语，未建模。
+skill new_yijue(2383731472) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 new_yijue = 标记型技能（charlotte，skill.js:14594），无规则面。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

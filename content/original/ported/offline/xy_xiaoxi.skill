@@ -1,0 +1,5 @@
+// xy_xiaoxi：锁定技, global:phaseBefore, player:game_started, player:phaseDrawBegin1, 异步。
+skill xy_xiaoxi(3621625582) {
+  trigger phase_begin owner_alive {
+  }
+}

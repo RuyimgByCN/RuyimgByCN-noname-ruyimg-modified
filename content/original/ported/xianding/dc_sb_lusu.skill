@@ -1,0 +1,25 @@
+// 新杀谋鲁肃【明势/盟谋】（ABI 603）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dcsbmingshi(4288768048) {
+  trigger phase_draw_end owner_is_target optional {
+    effect resolve_dc_sb_lusu(self, self, event_card, 0);
+  }
+}
+
+skill dcsbmengmou(2188556454) conversion {
+  trigger game_started owner_alive optional {
+    effect resolve_dc_sb_lusu(self, self, event_card, 10);
+  }
+
+  trigger cards_moved owner_hand_transfer_other_dcsbmengmou_branch_available optional {
+    effect resolve_dc_sb_lusu(self, event_source, event_card, 11);
+  }
+
+  trigger damage dcsbmengmou_tracked_sha_damage {
+    effect resolve_dc_sb_lusu(self, event_source, event_card, 20);
+  }
+
+  trigger card_resolved dcsbmengmou_tracked_sha_resolved {
+    effect resolve_dc_sb_lusu(self, event_source, event_card, 21);
+  }
+}

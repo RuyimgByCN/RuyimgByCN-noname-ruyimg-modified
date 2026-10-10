@@ -1,0 +1,34 @@
+$ cargo run --offline -q -p content-runtime --example gen_cardpile_packages
+$ diff -rq <改动前 packages/extensions 备份> packages/extensions
+Files <before>/shahai-gujian-upstream-noname/assets/cards.json and packages/extensions/shahai-gujian-upstream-noname/assets/cards.json differ
+Files <before>/shahai-gujian-upstream-noname/package.npack.json and packages/extensions/shahai-gujian-upstream-noname/package.npack.json differ
+Files <before>/wudian-upstream-noname/assets/cards.json and packages/extensions/wudian-upstream-noname/assets/cards.json differ
+Files <before>/wudian-upstream-noname/package.npack.json and packages/extensions/wudian-upstream-noname/package.npack.json differ
+
+$ diff <before>/wudian-upstream-noname/assets/cards.json packages/extensions/wudian-upstream-noname/assets/cards.json
+4a5
+>   "pack": { "name": "wudian-upstream-noname", "version": 2, "description": "G1 玩点论杀", "card_prefix": "wd_" },
+18c19
+<     { "name": "sanjian", "kind": "sanjian", "suit": "club", "rank": 5 },
+---
+>     { "name": "sanjian", "kind": "sanjian", "suit": "club", "rank": 5, "range": 3, "equip_skills": ["wd_sanjian"] },
+
+# wudian-upstream-noname/package.npack.json 变化字段（逗号拆行后比对，截断 60 字符）
+< "asset_hash":[28,44,36,176,194,244,169,255,48,32,70,240,12
+> "asset_hash":[36,160,61,198,229,65,150,117,145,114,99,151,
+< "source_hash":[172,227,220,155,240,11,59,73,210,7,194,40,1
+> "source_hash":[229,222,246,136,44,101,236,71,143,190,228,1
+
+$ diff <before>/shahai-gujian-upstream-noname/assets/cards.json packages/extensions/shahai-gujian-upstream-noname/assets/cards.json
+4a5
+>   "pack": { "name": "shahai-gujian-upstream-noname", "version": 1, "description": "G1 杀海拾遗·古剑切片", "card_prefix": "gj_" },
+
+# shahai-gujian-upstream-noname/package.npack.json 变化字段（逗号拆行后比对，截断 60 字符）
+< "asset_hash":[231,206,156,171,23,219,145,254,22,201,163,17
+> "asset_hash":[64,167,122,159,149,48,209,126,144,16,221,246
+< "source_hash":[119,22,20,140,114,149,70,210,159,136,224,22
+> "source_hash":[59,14,97,152,140,199,211,59,2,113,112,213,2
+
+# 确定性复核：先备份当前 packages/extensions，再运行生成器，比对备份与新输出
+$ cp -R packages/extensions <regen-check> && cargo run --offline -q -p content-runtime --example gen_cardpile_packages && diff -rq <regen-check> packages/extensions
+diff-exit=0

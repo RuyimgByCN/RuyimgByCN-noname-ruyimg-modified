@@ -1,0 +1,7 @@
+// naxue（纳学）：你可以跳过出牌阶段。若如此做，你可以弃置任意张牌并摸等量的牌，然后你可以交给至多两名其他角色各一张手牌。
+skill naxue(3621619771) {
+  trigger phase_play owner_alive {
+    effect draw_cards(self, 1);
+    effect discard_selected(self);
+  }
+}

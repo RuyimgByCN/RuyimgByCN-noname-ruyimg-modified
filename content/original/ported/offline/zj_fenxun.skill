@@ -1,0 +1,13 @@
+// 奋迅：无弃牌成本；每回合选择一名其他角色，本回合对其使用牌无距离限制。
+skill zj_fenxun(3362692932) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect add_bound_skill(self, 3251234145, event_source);
+  }
+}
+
+skill zj_fenxun2(3251234145) {
+  modifier card_distance_unlimited_for_skill_bound_target add 1;
+  trigger turn_ended owner_is_target_once {
+    effect remove_skill(self_skill);
+  }
+}

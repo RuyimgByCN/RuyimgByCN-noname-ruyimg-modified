@@ -1,0 +1,20 @@
+[package]
+name = "extension-studio"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Headless extension studio: legacy analyze + pack + install (Phase 11)"
+
+[[bin]]
+name = "extension-studio"
+path = "src/main.rs"
+
+[dependencies]
+legacy-analyzer = { path = "../../crates/legacy-analyzer" }
+content-compiler = { path = "../../crates/content-compiler" }
+content-schema = { path = "../../crates/content-schema" }
+content-runtime = { path = "../../crates/content-runtime" }
+resource-compiler = { workspace = true }
+licensing-schema = { workspace = true }
+clap = { version = "4", features = ["derive"] }
+serde_json = { workspace = true }

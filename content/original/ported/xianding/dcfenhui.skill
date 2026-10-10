@@ -1,0 +1,7 @@
+// 焚毁（DC王允）：出牌阶段，可将任意张牌当伤害牌使用并摸等量牌，但需弃置所有同名牌。
+skill dcfenhui(2411546607) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcfenhui（skill.js:25921）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

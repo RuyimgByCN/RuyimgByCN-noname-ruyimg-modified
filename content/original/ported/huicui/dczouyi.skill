@@ -1,0 +1,7 @@
+// dczouyi：摸2牌；回复1体力；令目标摸2牌；弃牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dczouyi(3004204887) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,16 @@
+// 回浪（紬）：回合结束时，你可以选择任意张（至少一张）牌置于武将牌上；下回合
+// 可移去这些牌为使用牌赋予额外效果（获得「回浪2」，本包 tsumugi_huilang2 已实现）。
+// 上游 (key/skill.js tsumugi_huilang)：trigger player phaseEnd；charlotte；
+// filter he>0；cost chooseCard("he",[1,N],allowChooseAll)；content 置入 gaintag
+// huilang2 + addSkill tsumugi_huilang2。
+// 实现（2026-09-10 第二百一十七批·变张置入原语消费）：trigger phase_end
+// owner_is_target optional → choose_hand_cards_to_skill_pile(self, self_skill,
+// 1, hand_count(self))（tag 714 / ABI 691 续体 Cont 298，可取消=不置入）。
+// 近似（登记债）：①置入域 "he"（手+装备）收窄为手牌；②消耗面（移去赋使用牌
+// 额外效果 + 回浪2 动态授予链）未建模——回浪2 本体（批 204 gain_whole）已就绪，
+// 供给依赖本面；③onremove 清堆未建模。
+skill tsumugi_huilang(4008390212) {
+  trigger phase_end owner_is_target optional {
+    effect choose_hand_cards_to_skill_pile(self, self_skill, 1, hand_count(self));
+  }
+}

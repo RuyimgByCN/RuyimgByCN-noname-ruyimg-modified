@@ -1,0 +1,27 @@
+# U05 xianjian 第七切片测试日志（2026-10-09，韩菱纱探囊，规则 v147→v148）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 469 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v147 基线 468 +1 新增探囊回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 57 passed; 0 failed（56 既有 + 1 新增 hanlingsha_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 149）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v147→148 入 canonical_hash
+——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- tannang（usable:1；filterCard club；viewAs shunshou；mod targetInRange
+  shunshou→true）
+
+## 测试迭代记录
+- view-as 链仅对非杀类开放：梅花杀路由仍为杀（登记：杀形态不可选）—
+  —测试改用梅花借刀
+- 借刀本体目标校验要求目标有武器——给 2 号装连弩

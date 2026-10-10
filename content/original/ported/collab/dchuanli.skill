@@ -1,0 +1,8 @@
+// 唤理（屈原）：结束阶段，若本回合使用牌指定自己≥3次，令一名其他角色获得〖直谏〗〖固政〗；若指定其他角色≥3次，令其获得〖英姿〗〖反间〗。均满足时你获得〖制衡〗。目标角色其他技能失效。
+// 旧JS的skillBlocker（全部技能失效）、使用牌次数按目标统计、衍生技能（derivation）机制、临时标记角色（markSkillCharacter）均无对应原语。
+// 以draw_cards近似保留收益；add_skill_until_turn_end理论上可给技能但需目标技能的def_id且无跨包引用机制。
+skill dchuanli(2785186090) {
+  trigger phase_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

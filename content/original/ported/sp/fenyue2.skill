@@ -1,0 +1,3 @@
+skill fenyue2(2246618728) {
+  modifier hand_card_use_response_cancel override 1;
+}

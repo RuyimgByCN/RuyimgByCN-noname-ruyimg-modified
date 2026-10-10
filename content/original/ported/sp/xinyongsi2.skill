@@ -1,0 +1,11 @@
+// 庸肆·弃（xinyongsi2）：锁定技。弃牌阶段开始时，你弃置一张手牌/装备牌，或取消并失去1点体力。
+// 上游 (sp/skill.js:36262)：phaseDiscardBegin forced；chooseToDiscard("he", "弃置一张牌，或取消并失去1点体力")，
+// 取消则 loseHp()。
+// 实现：phase_discard owner_is_target → choose_discard_one_he_or_lose_hp(self, 1)。
+// 新增效果原语 ChooseDiscardOneHeOrLoseHp（ABI 601，tag 657；rule-api/bytecode/vm/IR/
+// codegen/typecheck/ContinuationKind 263/primitives/resolve_choice/hash/vm_host 全链路注册）。
+skill xinyongsi2(3077331699) locked {
+  trigger phase_discard owner_is_target {
+    effect choose_discard_one_he_or_lose_hp(self, 1);
+  }
+}

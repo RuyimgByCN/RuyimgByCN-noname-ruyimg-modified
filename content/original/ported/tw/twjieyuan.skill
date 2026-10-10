@@ -1,0 +1,19 @@
+// 竭缘（TW 伏完）：当你对体力≥你的其他角色造成伤害时，可弃一张黑色手牌令此伤害+1；
+// 当你受到体力≥你的其他角色造成的伤害时，可弃一张红色手牌令此伤害-1。
+// 上游 (tw/skill.js:957) 有完整 damageBegin2/4 规则体，并非 audio-only；此前
+// 空实现误判已纠正。
+// 实现：damage_before 双窗口，先 `modify_current_damage` 再强制弃一张手牌
+// （Custom 弃牌续体不恢复 VM，故必须先改伤害）。
+// **近似**：(1) 不检验「目标体力≥你」；(2) 弃任意手牌而非指定黑/红；
+// (3) 焚心成功后的 he 重铸改写未建模；(4) 无手牌时弃牌空操作，增/减伤仍生效。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill twjieyuan(4287464553) {
+  trigger damage_before owner_source_other_damage_before optional {
+    effect modify_current_damage(self, 1);
+    effect choose_discard_hand_range(self, 1, 1);
+  }
+  trigger damage_before owner_is_target_other_source_alive optional {
+    effect modify_current_damage(self, -1);
+    effect choose_discard_hand_range(self, 1, 1);
+  }
+}

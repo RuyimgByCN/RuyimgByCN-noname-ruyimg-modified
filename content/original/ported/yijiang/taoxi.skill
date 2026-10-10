@@ -1,0 +1,8 @@
+// 讨袭(旧版)(旧版诸葛恪)：出牌阶段，当你使用牌指定唯一目标后，你可以观看目标的手牌并选择其中一张牌，
+// 将此牌置于你的武将牌上（视为"讨袭"牌）。你可以将此牌如手牌般使用或打出。
+// 出牌阶段结束时，若你仍有"讨袭"牌，你失去1点体力。
+// 旧JS含choosePlayerCard+showCards+directgains虚拟牌区、taoxi_use/taoxi_lose/taoxi_list/taoxi_used等5个subskill。
+// 注：虚拟牌区(非技能牌堆)、卡牌代理使用、出走牌自动清理、loseHp惩罚等连锁机制完全无法用现有DSL表达。
+skill taoxi(3691529167) {
+  modifier hand_limit add 1;
+}

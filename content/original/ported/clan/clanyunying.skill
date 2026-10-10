@@ -1,0 +1,11 @@
+// 云影（族诸葛瑾）：锁定技，每个结束阶段，上次「追迹」目标角色每满足一项，你便执行
+// 一项：1. 本回合扣减过体力，你将所有黑色手牌当无距离限制的【杀】使用；2. 本回合失去
+// 过手牌，你将手牌摸至 X 张（X 为本回合进入弃牌堆的黑色牌数且至多为 5）。
+// 上游 (clan/skill.js:319-352)：storage.clanzhuiji 跨技能目标查询 + 全局 changeHp/
+// lose 历史 + 黑色手牌集合虚拟杀 + drawTo(min(5, 弃牌堆黑牌数))。
+// 「跨技能 storage 查询」「全局历史」「手牌集合虚拟杀」「动态 drawTo」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill clanyunying(2287954346) locked {
+  // INTENTIONAL_EMPTY_NOOP: cross-skill-history virtual sha unavailable
+  modifier hand_limit add 0;
+}

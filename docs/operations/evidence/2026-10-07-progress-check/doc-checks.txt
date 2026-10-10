@@ -1,0 +1,14 @@
+# 2026-10-07 11:04:56 本地链接与锚点检查（GitHub 风格锚点，跳过代码块与外链）
+files=12 local_links=353 anchored_links=24 problems=0
+  checked: README.md
+  checked: docs/architecture/overview.md
+  checked: docs/architecture/native-progress.md
+  checked: docs/architecture/architecture-evolution-plan.md
+  checked: docs/architecture/native-rules-baseline.md
+  checked: docs/architecture/native-extensions.md
+  checked: docs/architecture/legacy-reference.md
+  checked: docs/native-coverage-manifest.md
+  checked: docs/migration/upstream-extension-reconstruction.md
+  checked: docs/adr/INDEX.md
+  checked: docs/operations/evidence/2026-10-06-native-progress-audit/README.md
+  checked: docs/operations/evidence/2026-10-07-progress-check/README.md

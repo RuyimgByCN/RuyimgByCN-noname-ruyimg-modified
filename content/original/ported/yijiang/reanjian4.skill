@@ -1,0 +1,7 @@
+// 暗箭4(旧版丁奉)：subskill of reanjian。当你进入濒死且此伤害曾被暗箭buff时，获得reanjian3直到濒死结束或回合结束。
+// 注：追踪buff标记和addTempSkill条件逻辑无DSL原语，仅占位。
+skill reanjian4(2409453067) locked {
+  // ponytail: getParent条件判断和addTempSkill无对应原语。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

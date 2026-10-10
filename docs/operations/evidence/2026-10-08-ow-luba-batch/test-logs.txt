@@ -1,0 +1,34 @@
+# U05 ow 纵切批十一测试日志（2026-10-08，路霸双技+v126 修复，规则 v127→v128）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 448 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v127 基线 445 +4 新增（luba×2 + 缺陷回归×1……实测 +4：含 luxiao 存量
+回归与路霸两例及分隔注释计入的 golden 位移无关项））
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 36 passed; 0 failed（32 既有 + 4 新增）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 125）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v127→v128 + TurnState 两零
+值字段入 canonical_hash——14 场景全 mismatch，纯版本/零值字段位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- liangou（usable:1 + judge suit!=="heart" + addTempSkill liangou2）
+- liangou2（mod globalTo -Infinity + trigger damageBegin usable:1
+  trigger.num++，无 source 条件）
+- xiyang（player phaseEnd + isDamaged && !isTurnedOver + turnOver +
+  recover 2；无 forced 有 check=运行时确认）
+
+## 测试迭代记录
+- v126 缺陷发现路径：链钩「换回合解除」断言失败（Some(2) 未清）——
+  排查=TurnState 换回合为原地改字段（commit_turn_ended），yuedong 三
+  字段自 v126 起同样从未清零；两分支补显式复位+定向回归锁定
+- 链钩两段询问机首版把目标应答落到空 Act 臂（前移约定错位）——重写
+  为标准两段（挂起 stage=应答臂）
+- 判定牌确定性：rig_next_judge 助手（save→指定花色移堆顶→restore）

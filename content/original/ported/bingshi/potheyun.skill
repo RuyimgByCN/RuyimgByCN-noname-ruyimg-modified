@@ -1,0 +1,10 @@
+// 合韵（势小乔）：出牌阶段限两次，选择一名与你拥有共同可获得技能的角色，
+// 你失去一个你们共同的技能，然后令其摸两张牌（§7 技能夺取设施 S2：
+// resolve_potheyun 三段链——选目标→选共同技能→失去+目标摸2）。
+// 近似：上游 charlotte 排除以 locked/non_gainable/lord_only 过滤近似
+// （元数据无 charlotte 标志），已注明。
+skill potheyun(2439155128) {
+  active play_phase uses_per_turn 2 {
+    effect resolve_potheyun(self, self_skill);
+  }
+}

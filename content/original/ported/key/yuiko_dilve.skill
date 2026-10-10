@@ -1,0 +1,11 @@
+// 底略（唯子）：拼点时从牌堆底取牌代替；拼点结束后获得拼点牌中进入弃牌堆的牌。
+// 实现：`hand_compare_finished owner_hand_compare_finished_participant optional` →
+// `gain_event_cards(self)`（HandCompareFinished 的 event cards 即双方拼点牌，
+// gain 原语只取已进弃牌堆的）。
+// 近似：牌堆底替换拼点牌（onCompare bottomCards）未建模；训诫变体分支未区分。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuiko_dilve(3357924726) {
+  trigger hand_compare_finished owner_hand_compare_finished_participant optional {
+    effect gain_event_cards(self);
+  }
+}

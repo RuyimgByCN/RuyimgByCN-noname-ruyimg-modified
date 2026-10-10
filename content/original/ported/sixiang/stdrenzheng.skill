@@ -1,0 +1,7 @@
+// 仁政：有伤害被防止时，当前回合角色摸一张牌。
+// 旧 JS 以 _status.currentPhase 为目标；DSL 以 current_phase_player()（ABI 453）等价表达。
+skill stdrenzheng(3020306305) locked {
+  trigger damage_prevented owner_alive_event_player_alive {
+    effect draw_cards(current_phase_player(), 1);
+  }
+}

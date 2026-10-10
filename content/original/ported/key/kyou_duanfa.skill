@@ -1,0 +1,14 @@
+// 断罚（京·限定技）：受到致命伤害时弃置所有手牌，回复 1 点体力并防止此伤害；本回合成为杀/伤害锦囊目标时摸一张。
+// 实现：受伤前若体力 ≤ 伤害值，可选弃全部手牌、回复 1、防止此伤害并卸除此技。
+// 近似：非限定技标记，靠卸技实现一次；本回合被指定后摸牌未建模；任意伤害只要体力不够都会弹出。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kyou_duanfa(2857414296) {
+  trigger damage_before owner_is_target optional {
+    if hp(self) < event_amount + 1 {
+      effect discard_hand_expr(self, hand_count(self));
+      effect recover_hp(self, 1);
+      effect prevent_current_damage();
+      effect remove_skill(self_skill);
+    }
+  }
+}

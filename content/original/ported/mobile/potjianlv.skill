@@ -1,0 +1,6 @@
+// potjianlv（兼虑）：你一次性弃置至少X张牌时（X为本技能已触发次数+1），你可对一名其他角色造成1点伤害。若其因此死亡，你选择一项：1.重置此技能的X；2.对一名其他角色造成1点伤害。
+skill potjianlv(3061320714) {
+  trigger cards_moved owner_alive {
+    effect choose_other_damage(self, 1);
+  }
+}

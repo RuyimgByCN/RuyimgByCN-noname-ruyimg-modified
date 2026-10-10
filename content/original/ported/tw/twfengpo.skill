@@ -1,0 +1,36 @@
+// 旧 JS 语义：每次单目标【杀】/【决斗】均观看目标手牌，按方片数摸牌或增加本牌基础伤害；杀人后改按红色数。
+skill twfengpo(4055936832) {
+trigger card_targeted owner_source_sha_or_juedou_single_target_hand_nonempty {
+    effect reveal_hand_to_player(event_player, self);
+    if skill_content_flag(self, 4055936832, 0) == 0 {
+      let count = hand_suit_count(event_player, diamond);
+      if 0 < count {
+        let option = choose(1, 2);
+        if option == 1 {
+          effect draw_cards(self, count);
+        }
+        if option == 2 {
+          effect increase_current_card_base_damage(self, event_card, count);
+        }
+      }
+    }
+    if 0 < skill_content_flag(self, 4055936832, 0) {
+      let count = hand_color_count(event_player, red);
+      if 0 < count {
+        let option = choose(1, 2);
+        if option == 1 {
+          effect draw_cards(self, count);
+        }
+        if option == 2 {
+          effect increase_current_card_base_damage(self, event_card, count);
+        }
+      }
+    }
+  }
+
+  trigger death owner_is_source {
+    if skill_content_flag(self, 4055936832, 0) == 0 {
+      effect set_skill_content_flag(self, 0, 1);
+    }
+  }
+}

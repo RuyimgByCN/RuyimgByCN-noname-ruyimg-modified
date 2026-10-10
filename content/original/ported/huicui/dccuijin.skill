@@ -1,0 +1,11 @@
+// 崔进（界沮授）：任意角色使用【杀】或【决斗】时，若使用者是你或你与其距离不超过
+// 1，可弃置一张手牌或装备牌，使该牌造成的伤害 +1。
+// 旧 JS 仅作语义证据；目标过滤（ABI 454）与基础伤害加成由权威状态机校验。
+// 注：旧 JS 手动选择弃牌（chooseToDiscard），DSL 以 discard_hand_equip(1) 由引擎
+// 自动选择，属文档化近似。
+skill dccuijin(3710121415) {
+  trigger card_used owner_source_or_within_distance_one_sha_or_juedou optional {
+    effect discard_hand_equip(self, 1);
+    effect increase_current_card_base_damage(self, event_card, 1);
+  }
+}

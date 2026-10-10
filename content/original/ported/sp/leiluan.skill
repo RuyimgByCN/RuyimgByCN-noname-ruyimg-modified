@@ -1,0 +1,10 @@
+// 累卵（孔淑）：你可将 X 张牌当本轮未使用过的基本牌使用（X 为横置角色数且至少 1）。
+// 上游 (sp/skill.js:11156)：chooseToUse 选未用过的基本牌，selectCard=getNum()。
+// 实现：同时提供手牌/装备转杀、闪、桃。
+// 近似：不按轮次剔除已用基本牌名；张数固定 1 而非横置数；无酒；无后续效果。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill leiluan(3861314381) {
+  view_as sha play_phase any from hand_equip;
+  view_as shan response any from hand_equip;
+  view_as tao any any from hand_equip;
+}

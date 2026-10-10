@@ -1,0 +1,4 @@
+// 界火计：可将一张红色手牌或装备牌当【火攻】使用。
+skill rehuoji(4176322956) {
+  view_as huogong play_phase red from hand_equip;
+}

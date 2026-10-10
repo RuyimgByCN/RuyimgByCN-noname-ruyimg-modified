@@ -1,0 +1,6 @@
+// pewuan：音效名:pewuan, 锁定技, source:damageSource, source:damage_before, player:useCard1, 加技能, 含子技能, 异步。
+skill pewuan(4286976123) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

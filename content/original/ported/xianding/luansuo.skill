@@ -1,0 +1,7 @@
+// 乱锁（谋李儒）：锁定技，回合开始时，所有有手牌的角色手牌视为【铁索连环】且无属性，在你的回合内手牌不可弃置。
+// DSL缺 gaintag+cardname替换+花色追踪解除 原语，无法表达。
+skill luansuo(3225755369) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 luansuo 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

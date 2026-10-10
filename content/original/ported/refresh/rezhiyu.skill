@@ -1,0 +1,8 @@
+// 界智愚：受到伤害后，可摸一张牌并展示手牌；若手牌均为同色则伤害来源弃牌。
+// 展示+摸牌已建模；「同色→来源弃牌」分支仍缺组合原语，记缺口。
+skill rezhiyu(3303821019) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    effect reveal_hand(self);
+  }
+}

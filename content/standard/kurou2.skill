@@ -1,0 +1,4 @@
+// Skill kurou2(120) - standard variant
+skill kurou2(120) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

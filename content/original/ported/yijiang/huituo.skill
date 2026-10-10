@@ -1,0 +1,8 @@
+// 恢拓（曹叡）：受到伤害后，选择一名角色判定——红色回复1点体力，黑色摸等于伤害值张牌。
+// 旧 JS 的 direct 选目标+两分支判定（红回血/黑摸N）无对应原语，暂留空定义。
+// 注：judge_recover_on_suit 仅处理红色回复分支，缺少黑色摸N的配套原语。
+skill huituo(4179636963) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

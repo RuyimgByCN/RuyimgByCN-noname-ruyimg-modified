@@ -1,0 +1,12 @@
+// 矜贤（陈泰）：重铸当前手牌数的一半（向上取整），再通过普通锦囊管线使用一张
+// 技能来源【决斗】；该决斗对原目标造成伤害后，可令其攻击范围内一名非技能拥有者
+// 的受伤角色回复 1。旧 JavaScript 仅作语义证据，不进入运行时。
+skill dcctjiuxian(3598325442) {
+  active play_phase uses_per_turn 1 hand_nonempty {
+    effect resolve_dcctjiuxian(self, self, 0);
+  }
+
+  trigger damage owner_tracked_juedou_original_target_damage_recoverable_in_range optional {
+    effect resolve_dcctjiuxian(self, event_player, 2);
+  }
+}

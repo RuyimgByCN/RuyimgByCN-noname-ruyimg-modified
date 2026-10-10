@@ -1,0 +1,10 @@
+// 天弓；旧 group: tiangong2 的行为合并在同一定义中
+skill tiangong(3918974780) locked {
+  trigger damage_before owner_target_thunder {
+    effect prevent_current_damage();
+  }
+
+  trigger damage owner_source_thunder {
+    effect draw_cards(self, 1);
+  }
+}

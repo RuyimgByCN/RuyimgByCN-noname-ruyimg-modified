@@ -1,0 +1,8 @@
+// olniepan：刷新包技能。
+// 旧JS含: chooseControl, turnOver 等复杂原语，DSL未覆盖。
+// active: 出牌阶段主动技能
+skill olniepan(4093453220) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olniepan 含真实规则体（enable、limited 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,11 @@
+[package]
+name = "rule-api"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "VM-visible stable IDs, Query/Effect requests, host capabilities (no GameState layout)"
+
+[dependencies]
+engine-api = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }

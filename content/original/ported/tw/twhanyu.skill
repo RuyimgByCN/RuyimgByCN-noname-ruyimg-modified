@@ -1,0 +1,7 @@
+// 汉祚：锁定技，游戏开始时/每轮开始前，从牌堆中各获得一张基本牌、锦囊牌、装备牌。
+// 以 phase_prepare + draw_cards(3) 近似，注释注明差异：旧JS从牌堆精确检索三种类型各一张。
+skill twhanyu(4134782241) locked {
+  trigger phase_prepare owner_alive {
+    effect draw_cards(self, 3);
+  }
+}

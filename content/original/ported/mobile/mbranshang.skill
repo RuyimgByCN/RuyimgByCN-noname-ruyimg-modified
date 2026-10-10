@@ -1,0 +1,73 @@
+// 燃殇：火焰伤害按点数积累“燃”；结束阶段按标记失去体力，标记大于一时再减体力上限并摸牌。
+skill mbranshang(3354404150) locked {
+  trigger damage owner_target_fire {
+    effect add_mark(self, 1206920502, event_amount);
+  }
+
+  trigger phase_end owner_is_target {
+    let burns = mark_count(self, 1206920502);
+    effect lose_hp(self, burns);
+    if 1 < burns {
+      effect change_max_hp(self, -2);
+      effect draw_cards(self, 2);
+    }
+  }
+}
+
+// 以下均为上游无规则面的标记型技能（charlotte / audio-only / 空体 {}），
+// DSL 无可移植规则；以 hand_limit +0 空体保留 catalog 条目（与
+// sp/starzhonggu.skill 同约定）。上游定义位置：content/original/legacy-source/character/mobile/skill.js。
+skill xinzhuikong2(3488279449) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinzhuikong2 = { charlotte: true }（25169），无规则面。
+  modifier hand_limit add 0;
+}
+skill dangxian_re_baosanniang(2952425146) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dangxian_re_baosanniang = { audio: 1 }（7660），无规则面。
+  modifier hand_limit add 0;
+}
+skill disordersidi(3907004338) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 disordersidi = { audio: 2 }（22631）；行为在 discretesidi 中，
+  // 已有独立移植。无独立规则面。
+  modifier hand_limit add 0;
+}
+skill qc_mingzhe(4251859363) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 qc_mingzhe = { audio: true }（30828），无规则面。
+  modifier hand_limit add 0;
+}
+skill qc_weimu(3806850548) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 qc_weimu = { audio: true }（30827），无规则面。
+  modifier hand_limit add 0;
+}
+skill taomie2(3112365591) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 taomie2 = { audio: true }（25578），无规则面。
+  modifier hand_limit add 0;
+}
+skill taomie3(2974142581) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 taomie3 = { audio: true }（25579），无规则面。
+  modifier hand_limit add 0;
+}
+skill wusheng_re_baosanniang(2379349009) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 wusheng_re_baosanniang = { audio: 1 }（7658），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill xinzenhui2(2484762372) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinzenhui2 = {}（23009），空体，无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill zhengjing3(3202330468) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 zhengjing3 = {}（27634），空体，无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill zhengjing_guanju(3132668115) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 zhengjing_guanju = { audio: true }（27274），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill zhiman_re_baosanniang(2560193147) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 zhiman_re_baosanniang = { audio: 1 }（7659），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

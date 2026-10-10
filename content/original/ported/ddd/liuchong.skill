@@ -1,0 +1,15 @@
+// 3D精选 刘宠「精彀/末焱」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddjinggou(3419786472) locked {
+  trigger card_resolved owner_source {
+    effect resolve_ddd_liuchong(self, event_player, event_card, 2);
+  }
+}
+
+skill dddmoyan(4038206557) {
+  trigger phase_begin owner_alive {
+    effect resolve_ddd_liuchong(self, event_player, 0, 0);
+  }
+  trigger damage_before owner_is_target {
+    effect resolve_ddd_liuchong(self, event_player, 0, 1);
+  }
+}

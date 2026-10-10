@@ -1,0 +1,40 @@
+// 3D精选 刘宏「失兴/党锢/覆宗」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddshixing(42478118) locked {
+  trigger game_started owner_alive_ddd_shixing_turn_refresh {
+    effect resolve_ddd_liuhong(self, event_player, 0);
+  }
+  trigger phase_begin owner_alive_ddd_shixing_turn_refresh {
+    effect resolve_ddd_liuhong(self, event_player, 0);
+  }
+  trigger damage owner_alive_ddd_shixing_female_changed {
+    effect resolve_ddd_liuhong(self, event_player, 1);
+  }
+  trigger hp_lost owner_alive_ddd_shixing_female_changed {
+    effect resolve_ddd_liuhong(self, event_player, 1);
+  }
+  trigger hp_recovered owner_alive_ddd_shixing_female_changed {
+    effect resolve_ddd_liuhong(self, event_player, 1);
+  }
+  trigger max_hp_changed owner_alive_ddd_shixing_female_changed {
+    effect resolve_ddd_liuhong(self, event_player, 1);
+  }
+  trigger card_used owner_alive_ddd_shixing_first_trick {
+    effect resolve_ddd_liuhong(self, event_player, 2);
+  }
+}
+
+skill ddddanggu(1734030406) locked {
+  trigger phase_end owner_alive_ddd_danggu_available {
+    effect resolve_ddd_liuhong(self, event_player, 3);
+  }
+  modifier discard_phase_includes_equip override queried_player_linked_other_than_owner;
+}
+
+skill dddfuzong(1289813886) lord_only locked {
+  trigger game_started owner_alive {
+    effect resolve_ddd_liuhong(self, event_player, 4);
+  }
+  trigger death owner_alive_ddd_fuzong_death {
+    effect resolve_ddd_liuhong(self, event_player, 5);
+  }
+}

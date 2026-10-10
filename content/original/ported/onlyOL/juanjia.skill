@@ -1,0 +1,8 @@
+// 卷甲：锁定技，废除防具栏，增加一个装备栏。
+// 旧 JS 的「废除防具栏并增加一个装备栏」以废弃全部装备栏近似
+// （旧 JS 是废除防具栏 + 新增一栏，DSL 侧以全部废除近似，已注明）。
+skill juanjia(2382048937) locked {
+  trigger game_started owner_alive {
+    effect disable_all_equip_slots(self);
+  }
+}

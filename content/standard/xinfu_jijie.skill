@@ -1,0 +1,14 @@
+skill xinfu_jijie(4028496128) {
+  active play_phase uses_per_turn 1 {
+    effect choose_target_gain_bottom_card(self);
+  }
+}
+
+skill xinfu_jiyuan(2449404379) {
+  trigger dying owner_alive optional {
+    effect draw_cards(event_player, 1);
+  }
+  trigger cards_given owner_alive_gave_cards_to_other_alive optional {
+    effect draw_cards(event_player, 1);
+  }
+}

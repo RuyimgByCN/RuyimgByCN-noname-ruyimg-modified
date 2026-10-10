@@ -1,0 +1,14 @@
+// 复魂（refuhan，觉醒技）：准备阶段开始时，若你拥有「方魂」标记，摸等量牌并移除之，
+// 然后替换武将牌为一名蜀势力角色。
+// 上游 (sp/skill.js:35870)：limited phaseZhunbeiBegin，filter countMark("fanghun")>0；
+// content = draw(num) + removeMark + awaken + 换将（蜀）。
+// 实现：phase_prepare + owner_is_target_mark_positive_3479603365（fanghun 标记 def）
+// → draw_cards(mark_count) + remove_mark。与上游差异：换将/觉醒一次未建模（可选触发
+// 近似限定一次）；fanghun 标记由方魂技能维护（def 3479603365）。
+skill refuhan(3778064756) {
+  trigger phase_prepare owner_is_target_mark_positive_3479603365 optional {
+    let n = mark_count(self, 3479603365);
+    effect draw_cards(self, n);
+    effect remove_mark(self, 3479603365, n);
+  }
+}

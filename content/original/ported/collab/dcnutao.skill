@@ -1,0 +1,10 @@
+// 怒涛（桃神）：你使用目标数大于一的锦囊牌指定目标后，对其中一名其他角色造成 1 点
+// 雷属性伤害。
+// 旧 JS 仅作语义证据；目标选择与伤害由权威状态机校验。
+// 注：旧 JS 以 randomGet 随机选择一名非你目标，DSL 以 choose_targets_damage 由
+// 拥有者选择目标（AI 引导随机），属文档化近似。
+skill dcnutao(3716839681) {
+  trigger card_targeted owner_alive_non_multitarget_trick_targets_gt_one {
+    effect choose_targets_damage(self, 1, 1, other, 1);
+  }
+}

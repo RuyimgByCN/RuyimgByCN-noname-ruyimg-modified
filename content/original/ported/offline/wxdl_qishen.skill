@@ -1,0 +1,6 @@
+// wxdl_qishen：锁定技, player:phaseEnd, source:damage_before, 需选择目标, 加技能, 含子技能, 异步。
+skill wxdl_qishen(3811634576) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

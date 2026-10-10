@@ -1,0 +1,5 @@
+skill nsshuangxiong(2353402107) {
+  trigger card_used owner_source_or_targeted_by_juedou optional {
+    effect turn_over(self);
+  }
+}

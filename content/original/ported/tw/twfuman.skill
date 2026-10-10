@@ -1,0 +1,22 @@
+// 抚蛮：每个出牌阶段向每名其他角色各赠一张手牌并追踪；追踪牌视为杀，结算后按伤害摸牌。
+skill twfuman(2838266052) {
+  modifier card_name(skill_tracked) override sha;
+  active play_phase targets 1 1 other unused_by_skill_this_play_phase select_hand 1 1 {
+    effect resolve_twfuman(self, event_source, 0);
+  }
+  trigger sha_resolved owner_alive_other_sha_resolved_tracked_skill_card_dealt_damage {
+    effect draw_cards(self, 2);
+    effect resolve_twfuman(self, event_source, 1);
+  }
+  trigger sha_resolved owner_alive_other_sha_resolved_tracked_skill_card_no_damage {
+    effect draw_cards(self, 1);
+    effect resolve_twfuman(self, event_source, 1);
+  }
+  trigger card_responded owner_alive_other_twkujian_used_or_responded {
+    effect draw_cards(self, 1);
+    effect resolve_twfuman(self, event_source, 1);
+  }
+  trigger cards_moved owner_tracked_skill_card_left_hand_not_use_or_respond {
+    effect resolve_twfuman(self, event_source, 2);
+  }
+}

@@ -1,0 +1,4 @@
+// 乐不思蜀 countermeasure — passive: distance from owner -1.
+skill lebu_passive(37) {
+  modifier distance_from add -1;
+}

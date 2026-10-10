@@ -1,0 +1,12 @@
+// 界郭淮「精忠」：旧 JS 仅作语义来源；限定发动后把手牌补至体力上限，至多摸五张。
+skill jiezhong(2811249808) {
+  trigger phase_play owner_is_target_hand_below_max_hp optional {
+    let missing = max_hp(self) - hand_count(self);
+    if missing < 6 {
+      effect draw_cards(self, missing);
+    } else {
+      effect draw_cards(self, 5);
+    }
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,6 @@
+// zc26_dangmo：player:card_used, 造成伤害, 异步, 条件计数。
+skill zc26_dangmo(2702080230) {
+  trigger card_used owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

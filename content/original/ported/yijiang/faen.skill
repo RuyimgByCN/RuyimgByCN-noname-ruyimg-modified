@@ -1,0 +1,6 @@
+// 法恩：仅翻至正面或进入连环状态时触发。
+skill faen(2817547947) {
+  trigger character_state_changed owner_alive_event_player_became_face_up_or_linked optional {
+    effect draw_cards(event_player, 1);
+  }
+}

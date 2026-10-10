@@ -1,0 +1,11 @@
+// 厉火②（TW程普）：使用火【杀】时，可增加一个额外目标。
+// 实现：`trigger card_used owner_source_fire_sha optional`（增目标原语门禁
+// 在 card_used）→ choose_add_or_remove_current_card_target(self, event_card)
+// （reluanzhan_add/pxwuwei 同款目标调整原语；火杀过滤器既有）。
+// 近似：上游 useCard 阶段增目标；DSL 在指定后窗口调整（须处于真实杀结算）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill twlihuo2(2376916887) {
+  trigger card_used owner_source_fire_sha optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

@@ -1,0 +1,12 @@
+// 南涪（pxnanfu，州郡技能）：当你获得此技能后，你可以失去 1 点体力，然后视为使用
+// 一张【杀】。
+// 上游 (sp/skill.js:1929)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// content = loseHp() + chooseUseTarget("sha")。
+// 实现：skill_added + owner_skill_added_self_2422439050 → 可选确认 →
+// lose_hp(self, 1) + choose_use_virtual_sha(self, normal_distance)。
+skill pxnanfu(2422439050) {
+  trigger skill_added owner_skill_added_self_2422439050 optional {
+    effect lose_hp(self, 1);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

@@ -1,0 +1,6 @@
+// jdyanxi：音效名:yanxi, 异步。
+skill jdyanxi(3455143761) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

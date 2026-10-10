@@ -1,0 +1,7 @@
+// 奇幻（海未·限定技）：濒死时变身 key_umi2，回复等于势力数体力，并从已死亡角色获取技能。
+// 旧 JS 的 reinitCharacter+skill获取 需角色变换与技能发现原语，未建模。
+skill umi_qihuan(4032616438) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 umi_qihuan = 标记型技能（charlotte，skill.js:11650），无规则面。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

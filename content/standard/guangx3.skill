@@ -1,0 +1,4 @@
+// Skill guangx3(186) - modifier distance variant
+skill guangx3(186) {
+  modifier distance_from add -1;
+}

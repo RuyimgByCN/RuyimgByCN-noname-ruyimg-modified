@@ -1,0 +1,20 @@
+// 退锋·终段（sp tuifeng2）：准备阶段开始时，若有「风」：摸「风」数的两倍张牌，
+// 获得「退锋3」并得其等量标记，然后「风」全部置入弃牌堆。
+// 上游 (sp/skill.js tuifeng2)：trigger player phaseZhunbeiBegin；forced；
+// filter getExpansions("tuifeng").length > 0；content draw(2N) + addTempSkill
+// tuifeng3 + addMark(tuifeng3, N) + loseToDiscardpile(全部「风」)。
+// 实现（2026-09-09 第一百九十四批·S1-B 消费池，零新原语）：
+// skill_pile_count 门控 → draw_cards(2N) + add_skill(退锋3) + add_mark(等量) +
+// discard_skill_pile(self, self_skill, tuifeng def 2854026704)。
+// 近似（登记债）：①addTempSkill（回合级临时）以永久 add_skill 近似；②动画
+// 未建模；③堆供给依赖 tuifeng 置入面落地（dormant 契约）。
+skill tuifeng2(2717343011) {
+  trigger phase_prepare owner_is_target {
+    if skill_pile_count(self, 2854026704) > 0 {
+      effect draw_cards(self, skill_pile_count(self, 2854026704) * 2);
+      effect add_skill(self, 3847747290);
+      effect add_mark(self, 3847747290, skill_pile_count(self, 2854026704));
+      effect discard_skill_pile(self, self_skill, 2854026704);
+    }
+  }
+}

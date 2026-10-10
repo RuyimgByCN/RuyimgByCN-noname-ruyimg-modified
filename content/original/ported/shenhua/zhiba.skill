@@ -1,0 +1,10 @@
+// 制霸（孙策，主公技）：其他吴势力角色的出牌阶段限一次，其可以与你拼点；若你没赢，
+// 你可以获得两张拼点牌（若你已觉醒，你可以先拒绝其拼点）。
+// 旧 JS 仅作语义证据；觉醒拒绝、拼点与取牌由 resolve_zhiba / resolve_zhiba_settle 权威
+// 状态机校验（ABI 523）。觉醒判定以魂姿/界魂姿技能是否仍存在为据（旧 JS storage 等价）；
+// 拼点获胜的发起方不提供取牌分支（旧 JS 语义）。
+skill zhiba(3467542721) lord_only {
+  trigger phase_play owner_alive_other_wu_play_phase_can_compare_owner optional by event_player {
+    effect resolve_zhiba(self, event_player);
+  }
+}

@@ -1,0 +1,6 @@
+// 遁勇·无限制（藤甲）：遁勇②授予的回合级临时效果；
+// 使用牌无次数限制且无视距离（旧 JS targetInRange → true 近似）。
+skill dunyong_effect(3140406282) {
+  modifier card_use_unlimited override 1;
+  modifier card_distance_unlimited override 1;
+}

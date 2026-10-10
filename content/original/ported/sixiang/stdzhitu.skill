@@ -1,0 +1,6 @@
+// 制图：你可以将至少两张点数和为13的牌当任意一张普通锦囊牌使用。
+// 旧 JS 的「点数之和=13 的卡牌选择约束」「从所有普通锦囊中选择一种使用」无可用的 DSL 原语（view_as 卡牌数量条件受限，无法表达点数求和约束）。
+skill stdzhitu(3023197177) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

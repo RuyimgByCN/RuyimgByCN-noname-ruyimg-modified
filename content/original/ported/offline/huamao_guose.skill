@@ -1,0 +1,7 @@
+// huamao_guose：主动(phaseUse), 摸牌, 异步, 弃牌。
+skill huamao_guose(3407416728) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

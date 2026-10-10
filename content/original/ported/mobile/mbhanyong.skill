@@ -1,0 +1,13 @@
+// 悍勇：多目标用牌时，在摸牌、增加当前牌基础伤害、背水三项中选择。
+skill mbhanyong(2639258372) {
+  trigger card_used owner_alive_wounded_card_targets_gt_one optional {
+    effect choose_draw_or_increase_current_card_damage_or_both_mark(
+      self,
+      event_card,
+      2,
+      1,
+      1206920502,
+      1
+    );
+  }
+}

@@ -1,0 +1,4 @@
+// 毒逝·诅咒（弘农王）：锁定技，你不能成为其他角色【桃】的目标。
+skill dushi2(2743495682) locked {
+  modifier card_target_cancel(tao) override 1;
+}

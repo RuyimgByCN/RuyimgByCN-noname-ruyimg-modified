@@ -1,0 +1,5 @@
+// xkxijun（锁定技/主动技(multi)/触发技）：音效名:xkxijun, 锁定技, player:damage, player:recoverBefore, global:damage, 主动(multi), 加技能, 含子技能, 异步。
+skill xkxijun(3260028527) locked {
+  trigger damage always {
+  }
+}

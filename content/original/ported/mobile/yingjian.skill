@@ -1,0 +1,6 @@
+// 影箭：准备阶段可视为使用一张无距离限制的无实体【杀】。
+skill yingjian(3382160794) {
+  trigger phase_prepare owner_alive {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

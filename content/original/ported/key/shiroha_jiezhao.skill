@@ -1,0 +1,11 @@
+// 解兆（白羽）：判定时，可用「预兆」扩展区的牌替换判定牌。
+// 上游 (key/skill.js:6140)：judge 时以 expansion 区「预兆」牌替换判定牌。
+// 实现：`modifier judgment_rewrite override 1`——引擎判定改写窗原生支持（前会话为
+// 鬼道系建造）：RewriteJudgment 续体按座次询问改写者，选项=手/装备/扩展区（ZoneKind::
+// Expansion）全部牌，选中者替换判定牌结算。
+// 近似：替换选项未限定「预兆」区（含手/装备），且需改写资格回合内全程开放（上游仅
+// 判定时机）。限定于预兆区需 per-pile 过滤变体（judgment_rewrite 现为全区）。
+// 2026-08-15 判定交互迷你批——零新原语（引擎判定改写系统早已在位，§6d 铸造解体）。
+skill shiroha_jiezhao(4008645358) {
+  modifier judgment_rewrite override 1;
+}

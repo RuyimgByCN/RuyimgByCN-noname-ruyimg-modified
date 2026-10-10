@@ -1,0 +1,5 @@
+// dcjigu：锁定技；摸?牌；获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcjigu(2357777820) {
+  modifier hand_limit add 1;
+}

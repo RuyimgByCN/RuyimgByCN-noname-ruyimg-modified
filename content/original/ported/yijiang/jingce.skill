@@ -1,0 +1,5 @@
+skill jingce(2443825940) {
+  trigger phase_play_end owner_is_target_card_used_at_least_hp optional {
+    effect draw_cards(self, 2);
+  }
+}

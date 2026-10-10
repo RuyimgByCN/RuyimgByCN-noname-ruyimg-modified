@@ -1,0 +1,7 @@
+// 剑柔：每轮限一次，受到伤害前可弃置两张手牌/装备牌并防止此伤害；
+// 两牌同色或同为基本/锦囊/装备牌时摸一张，并退还本轮次数。
+skill jianrou(4238996080) {
+  trigger damage_before owner_is_target_discardable_hand_equip_gte_two_once_per_round optional {
+    effect resolve_jianrou(self);
+  }
+}

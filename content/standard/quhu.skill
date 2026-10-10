@@ -1,0 +1,4 @@
+// Xun Yu drive tiger
+skill quhu(77) {
+  modifier distance_from add -1;
+}

@@ -1,0 +1,10 @@
+// 霆威（神马超）：你使用【杀】指定目标后（首个目标），可获得 4 枚“霆”标记并选择
+// 一名该【杀】的目标角色，其从四项中任选一项：非锁定技失效至其下个回合结束 /
+// 交给你一张装备牌 / 此【杀】对其伤害 +1 / 随机弃一张牌；若其均未选择，其横置。
+// 旧 JavaScript 仅作语义证据；目标选择与四选一由 ABI 410 resolve_tingwei 权威结算，
+// “霆”标记与寂灭（jimie）共用标记定义 4145075227。
+skill tingwei(4145075227) {
+  trigger card_targeted owner_source_sha_first_target optional {
+    effect resolve_tingwei(self, 0);
+  }
+}

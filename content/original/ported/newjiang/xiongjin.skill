@@ -1,0 +1,10 @@
+// 雄进（姜维）：出牌阶段开始时，若本回合尚未对当前回合角色发动过，
+// 令其摸 X 张牌（X = min(4, max(1, 你已损失体力)）），并令其本回合弃牌阶段
+// 开始时弃置所有基本牌（非本人时）或所有非基本牌（本人时）。
+// 旧 JS 的「弃置所有基本/非基本牌」无对应原语，弃牌限制未建模（已注明）；
+// 摸牌数以 1 张近似（X 依赖已损失体力查询，未建模）。
+skill xiongjin(2691736328) {
+  trigger phase_play owner_alive_not_target_once optional {
+    effect draw_cards(event_player, 1);
+  }
+}

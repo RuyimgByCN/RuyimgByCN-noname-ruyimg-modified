@@ -1,0 +1,4 @@
+// 公清（笹濑川佐佐美）
+skill sasami_gongqing(4263354141) locked {
+  modifier damage_taken_source_range_threshold override 3;
+}

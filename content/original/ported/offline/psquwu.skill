@@ -1,0 +1,5 @@
+// psquwu：锁定技, target:useCardToBefore。
+skill psquwu(2907920985) {
+  trigger card_targeted owner_is_target_once {
+  }
+}

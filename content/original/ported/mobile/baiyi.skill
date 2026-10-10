@@ -1,0 +1,8 @@
+// baiyi（败移）：限定技，出牌阶段，若你已受伤，你可以交换两名其他角色的座次。
+// 未建模：swapSeat 等机制无 DSL 原语。
+skill baiyi(4265935142) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 baiyi（skill.js:25824）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

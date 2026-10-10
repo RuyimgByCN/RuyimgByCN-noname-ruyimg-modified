@@ -1,0 +1,6 @@
+// zj_jueyan：音效名:drlt_jueyan, 锁定技, player:card_used, 主动(phaseUse), 摸牌, 加技能, 含子技能, 异步。
+skill zj_jueyan(4080649896) locked {
+  trigger card_used always {
+    effect draw_cards(self, 3);
+  }
+}

@@ -1,0 +1,5 @@
+// 【中签】旧分组的改火属性规则与末段伤害封顶合并为一个权威定义。
+skill tiansuan2_2(2298819832) locked {
+  modifier damage_taken_nature override 1;
+  modifier damage_taken_final_amount min 1;
+}

@@ -1,0 +1,9 @@
+// decadezishou_zhiheng（孙权·制衡-追加）：回合结束时若未使用过以他人为目标的牌，可弃置任意张花色不同的手牌摸等量牌。
+// 实现：结束阶段可选 `recast_selected`。
+// 近似：不检验「本回合未指定他人」；不要求弃牌花色互异（重铸任意已选手牌）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill decadezishou_zhiheng(3869142148) {
+  trigger phase_end owner_is_target optional {
+    effect recast_selected(self);
+  }
+}

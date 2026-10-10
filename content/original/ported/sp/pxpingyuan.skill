@@ -1,0 +1,11 @@
+// 平原（pxpingyuan，州郡技能）：每回合限一次。当你失去最后的手牌后，你摸一张牌。
+// 上游 (sp/skill.js:1389)：trigger player:loseAfter + global 系列；filter = 失去手牌后
+// 手牌为空；usable: 1；forced；content = draw()。
+// 实现：cards_moved + owner_lost_hand_now_empty（新增过滤器，5 处注册：CardsMoved
+// 从手牌弃出且手牌已空）→ draw_cards(self, 1)。
+// 与上游差异：「每回合限一次」以强制触发近似（手牌空后摸 1 后不再为空，天然一次）。
+skill pxpingyuan(2911898950) {
+  trigger cards_moved owner_lost_hand_now_empty {
+    effect draw_cards(self, 1);
+  }
+}

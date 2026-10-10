@@ -1,0 +1,10 @@
+// 夺刀（旧版·徐盛）：你成为【杀】的目标后，可弃置一张牌，然后获得此杀
+// 使用者装备区里的一张武器牌（若有）。
+// 旧 JS 的「精确限定武器牌」无对应原语；以弃一张手牌并从来源取一张装备
+// 近似（武器限定未建模，已注明）。
+skill reduodao(3897533431) {
+  trigger card_targeted owner_targeted_by_other_sha optional {
+    effect discard_hand_equip_count(self, 1);
+    effect gain_target_equipment(self, event_source, weapon);
+  }
+}

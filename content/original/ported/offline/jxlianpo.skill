@@ -1,0 +1,5 @@
+// jxlianpo：音效名:jxlianpo, 锁定技, global:death, global:game_started, player:death, 含子技能, 异步, 条件计数。
+skill jxlianpo(4053139133) locked {
+  trigger death always {
+  }
+}

@@ -1,0 +1,7 @@
+// 旋风：失去装备区里的牌后，可选择一名其他角色；对其使用一张不计次数的虚拟【杀】，
+// 或在其距离为 1 时直接造成 1 点伤害。
+skill oldxuanfeng(2240977101) {
+  trigger cards_moved owner_from_equip optional {
+    effect resolve_oldxuanfeng(self);
+  }
+}

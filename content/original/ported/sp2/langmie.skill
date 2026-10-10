@@ -1,0 +1,10 @@
+// 狼灭：观察其他角色精确的出牌阶段与本回合伤害历史。
+skill langmie(3392096402) {
+  trigger phase_play_end owner_alive_other_play_phase_duplicate_card_category_has_hand_equip optional {
+    effect draw_cards(self, 1);
+  }
+  trigger phase_end owner_alive_other_phase_end_damage_gt_one_has_hand_equip optional {
+    effect discard_one_hand_or_equip(self);
+    effect deal_damage(self, event_player, 1);
+  }
+}

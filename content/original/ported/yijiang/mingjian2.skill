@@ -1,0 +1,5 @@
+// 明鉴临时效果：每层同时增加手牌上限与出杀次数。
+skill mingjian2(3163507862) {
+  modifier hand_limit add owner_skill_mark;
+  modifier sha_use_limit add owner_skill_mark;
+}

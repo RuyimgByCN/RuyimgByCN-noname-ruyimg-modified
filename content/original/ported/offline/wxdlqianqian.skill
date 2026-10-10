@@ -1,0 +1,15 @@
+// 慊慊（文心雕龙曹丕）：锁定技，你每回合使用的首张牌不能为♥️。
+// 上游 (offline_wenxindiaolong.js)：mod cardEnabled/cardSavable —
+// `!player.hasHistory("useCard") && get.suit(card) == "heart"` 则禁止。
+// 实现：`card_use_cancel(heart)` 在技能有效时禁止红桃使用；自己使用任意牌后
+// `disable_skill_by_def_until_turn_end` 撤下该限制，当前回合结束时随
+// `turn_disabled` 清零自动恢复。
+// **近似**：cardSavable（红桃【桃】/【酒】救援）未单独建模；历史窗口以当前回合
+// `turn_disabled` 生命周期近似，而非旧 JS 的 getHistory 数组。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill wxdlqianqian(3312200979) locked {
+  modifier card_use_cancel(heart) override 1;
+  trigger card_used owner_is_source {
+    effect disable_skill_by_def_until_turn_end(self, 3312200979);
+  }
+}

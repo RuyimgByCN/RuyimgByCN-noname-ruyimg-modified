@@ -1,0 +1,9 @@
+// 上游描述：锁定技，回合开始时，或你绘制了一幅“地图”的所有城市，你将手牌中的花色补至4，并展开一幅“地图”。回合结束时，你获得一个本回合已展开的“地图”技能，直到你下回合结束。
+// 来源：archive/upstream/noname legacy-source/character/character/sp/skill.js L6
+// olremaozhu：上游有真实规则体，现有 host filter/effect 不足以表达
+// （chooseToUse / gaintag / expansion / 额外回合 / 判定改判 / 阶段插入 / 动态 view_as）。
+// 诚实空实现（保真度债，ADR 0597）。旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olremaozhu(3222463179) {
+  // INTENTIONAL_EMPTY_NOOP: existing primitives cannot express the old-JS contract
+  modifier hand_limit add 0;
+}

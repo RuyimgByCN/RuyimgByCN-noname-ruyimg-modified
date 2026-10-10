@@ -1,0 +1,23 @@
+# U07 技能批六测试日志（2026-10-08，绝道，规则 v115→v116）
+
+$ cargo test --offline -p engine-native
+engine-native: 432 passed / 0 failed / 1 ignored（v115 基线 432 → 431+1 后持平：+1 新增绝道回归；合计 432）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 15 passed; 0 failed（14 既有 + liuyan_juedao_link_and_distance）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 103 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v115→v116 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/skill.js:252 juedao（link()/mod globalFrom+globalTo 持技者限定）
+
+## 测试迭代记录
+- 初版钩子「任意横置者 +1」→ 铁索传导测试距离炸裂（fire sha 出界被拒）
+  → 修正为持技者限定（上游 mod 作用域）
+- 1 号发动需在其自己回合（ActivateSkill 授权限当前回合玩家）

@@ -1,0 +1,9 @@
+// 潜流（sxrm 伏皇后）：你成为其他角色使用【杀】的目标后，你可以观看牌堆底四张牌；
+// 若其花色数大于 3，你可以展示并获得之；否则将其以任意顺序置于牌堆顶或底。
+// 旧 JS 仅作语义证据；牌堆底取牌与花色判定由 resolve_sxrmqianliu 权威状态机校验
+// （ABI 596）；获得与置顶分支自动结算，旧 JS 的拖动排序以置顶近似。
+skill sxrmqianliu(3539390002) {
+  trigger card_targeted owner_is_target_event_card_sha optional {
+    effect resolve_sxrmqianliu(self, event_source, 0);
+  }
+}

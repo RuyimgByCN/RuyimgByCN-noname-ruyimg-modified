@@ -1,0 +1,5 @@
+skill reqiaomeng(2397519504) {
+  trigger damage owner_source_sha_target_alive_has_discardable_region_card optional {
+    effect discard_target_card_gain_mount(self, event_player, hand_equip_judge);
+  }
+}

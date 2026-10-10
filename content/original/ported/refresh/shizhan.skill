@@ -1,0 +1,6 @@
+// 势斩：旧 JavaScript 只作为语义证据；目标必须能合法地对拥有者使用虚拟【决斗】。
+skill shizhan(3879999347) {
+  active play_phase uses_per_turn 2 targets 1 1 other can_use_on_owner juedou {
+    effect use_virtual_card_on(event_source, juedou, self);
+  }
+}

@@ -1,0 +1,8 @@
+// 定仪（手杀孙邵）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：游戏开始：选择一项效果（摸牌+1/手牌上限+2/攻击范围+1/脱离濒死回复1）令任意名角色获得
+// 旧 JS 的「开局多目标增益授予状态机」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill mbdingyi(4173802254) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

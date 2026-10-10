@@ -1,0 +1,7 @@
+// dcsuchou：锁定技；失去体力；减体力上限；失技能；获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcsuchou(3629845932) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

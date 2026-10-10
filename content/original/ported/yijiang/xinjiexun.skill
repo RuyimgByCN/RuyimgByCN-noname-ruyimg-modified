@@ -1,0 +1,9 @@
+// 新节巡（诸葛瑾）：结束阶段，选择一名其他角色，其摸X张牌（X=场上所有角色的方块装备/判定区牌总数），然后弃置Y张牌（Y=已发动次数）。
+// 旧 JS 的全局方块装备计数+标记递增+条件弃牌+技能加入；DSL 无法精确表达。
+// 以 draw_cards 近似摸牌收益，丢掉了全局方块计数和递增弃牌逻辑。
+skill xinjiexun(3559802500) {
+  trigger phase_end owner_alive optional {
+    effect draw_cards(event_player, 1);
+    // 未建模：全局方块装备计数、标记递增、弃牌分支、技能添加
+  }
+}

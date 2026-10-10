@@ -1,0 +1,6 @@
+// 巧说（界简雍）：旧 JS 仅作为语义基准；胜利可继续发动，平局或失败跳过出牌阶段。
+skill reqiaoshui(3083818598) {
+  active play_phase targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 2260792673, 3521041512);
+  }
+}

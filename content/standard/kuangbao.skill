@@ -1,0 +1,4 @@
+// Xu Chu frenzy
+skill kuangbao(94) {
+  modifier attack_range add 1;
+}

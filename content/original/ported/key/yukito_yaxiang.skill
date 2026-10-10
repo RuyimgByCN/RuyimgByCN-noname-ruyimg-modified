@@ -1,0 +1,16 @@
+// 鸦翔（往人·限定技）：其他角色濒死时变身为乌鸦，令其回复至 3 体力并弃置判定区牌，获得终愿。
+// 实现：其他角色濒死时可选令其回复至 3、弃置其判定区全部牌、令其获得〖终愿〗
+// （add_skill(event_player, misuzu_zhongyuan def)，2026-09-03 批 153 补授臂——
+// 批 150 确认 add_skill 支持任意目标），并卸除此技。
+// 近似：不变身（reinit 无原语）；靠卸技实现一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yukito_yaxiang(2428947588) {
+  trigger dying owner_alive_not_target optional {
+    if hp(event_player) < 3 {
+      effect recover_hp(event_player, 3 - hp(event_player));
+    }
+    effect discard_all_own_judge(event_player, self_skill);
+    effect add_skill(event_player, 2446245954);
+    effect remove_skill(self_skill);
+  }
+}

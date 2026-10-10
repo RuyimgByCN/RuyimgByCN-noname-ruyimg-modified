@@ -1,0 +1,11 @@
+// 旧仁心（曹冲）：其他角色进入濒死状态时,若你的手牌数大于 0,你可以将武将牌翻面,
+// 交给你所有手牌,令其回复 1 点体力。
+// 旧 JS 仅作语义证据;「每局限一次」以 once_per_game 过滤器近似（旧 JS 无明确次数
+// 限制,实际受手牌约束）。
+skill oldrenxin(3471128220) {
+  trigger dying owner_alive_other_dying_hand_nonempty_once_per_game optional {
+    effect turn_over(self);
+    effect give_all_hand(self, event_player);
+    effect recover_hp(event_player, 1);
+  }
+}

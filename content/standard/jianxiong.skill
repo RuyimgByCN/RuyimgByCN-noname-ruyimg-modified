@@ -1,0 +1,7 @@
+// 奸雄 — after taking damage, draw 1 card.
+// 奸雄 — after damage, optionally gain its physical carrier while it remains in processing.
+skill jianxiong(1) {
+  trigger damage owner_is_target_card_in_processing optional {
+    effect move_card(event_card, zone(self, 3), zone(0, 6));
+  }
+}

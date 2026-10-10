@@ -1,0 +1,7 @@
+// 霸之禁（装备技）：锁定技。记录对你造成过伤害的牌名，防止同名牌对你造成的伤害。
+// 旧JS的牌名记录与跨伤害事件同名免疫无对应原语（需damage_before中比较event_card.name与已记录集合）。
+// 以空定义保留编译占位，待expansion/card_name_tracking原语支持后补齐。
+skill bazhijing_skill(3907010605) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

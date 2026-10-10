@@ -1,0 +1,4 @@
+104e1343d436653e48c35b51a3b396dcc390cf4101b98ed387f1fc426f49a3dd  crates/engine-native/tests/native_kernel.rs
+50fe60f46a9f1b0121c699d8d235cfab10fcff95b59b35fa273a5683efea55a4  docs/architecture/native-progress.md
+8a595001ae58f1bb2cea1b9e3aac67daa5da260aec7eeae6919be3bcec2842d8  docs/architecture/native-rules-baseline.md
+22a7caff8940d3a26458fef7d978b13d3012f56cae0681d576fa8e3877ed7804  docs/native-coverage-manifest.md

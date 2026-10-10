@@ -1,0 +1,5 @@
+// vtbshanwu：global:useCardToTarget, 需弃牌, 多步骤。
+skill vtbshanwu(3751098660) {
+  trigger card_targeted owner_alive {
+  }
+}

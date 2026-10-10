@@ -1,0 +1,19 @@
+// 西向（SP OL 曹操）：出牌阶段，你可以将至少 X 张牌当【杀】或【决斗】
+// 使用（无距离和次数限制；X 为本局所有角色使用基本牌的次数+1）；每种
+// 牌名每回合限一次。
+// 上游 (sp/skill.js 10123)：chooseButton sha/juedou 二选一，selectCard =
+// [1+getGlobalHistory(useCard basic).len, Infinity]；storage used +
+// addTempSkill phaseUseAfter 每回合每牌名一次；转换牌无距离/次数限制。
+// 实现（2026-09-15 第二百九十七批·view_as 动态张数原语落地，ADR 0641
+// §8.81）：owner_basic_uses_plus_one_cards 新 spec 字段（min_cards =
+// 1+lifetime_basic_card_uses，上限不封顶；新全局基本牌用牌计数器 +
+// registry track 门控）；ignore_distance + no_use_count 表达无距离/次
+// 数限制。
+// 限次（2026-09-15 第三百批·per-branch turn gate 原语落地，ADR 0641
+// §8.84）：once_per_turn_per_branch——每条规则（按牌名）每回合限一次，
+// 以规则索引位记账（实体转换适用）。
+// 保真度：完整（动态张数/二选一/无距离/无次数/限次全建模）。
+skill spolxixiang(2531785939) {
+  view_as sha play_phase any from hand_equip ignore_distance no_use_count once_per_turn_per_branch owner_basic_uses_plus_one_cards;
+  view_as juedou play_phase any from hand_equip ignore_distance once_per_turn_per_branch owner_basic_uses_plus_one_cards;
+}

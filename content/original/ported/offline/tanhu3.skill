@@ -1,0 +1,16 @@
+// 探虎·距离子技（group of tanhu）
+// 上游 (offline skill tanhu3)：mod globalFrom(from,to){ if (to.hasSkill("tanhu2"))
+// return -Infinity; } mod wuxieRespondable(card,player,target){ if (target.hasSkill
+// ("tanhu2")) return false; }——任何角色对「探虎」标记（tanhu2）持有者无距离限制，
+// 且对其使用锦囊不可被无懈响应。
+// 实现（2026-09-06 第一百七十批·无懈面落地，两个内容层 modifier 变体）：
+// ①距离：card_distance_unlimited_skill_on_owner_<tanhu2def> override 1（批 168，
+// 目标拥有 tanhu2 技能时任意使用者无视距离）。
+// ②无懈：card_use_unrespondable_skill_on_owner_<tanhu2def> override 1（本批）——
+// wuxie 窗口 advance 门控解析统一 effect_args 布局
+// [MAGIC, card, actor, kind, suit, effect_tag, 0, len, targets...]，目标集合含
+// 拥有 tanhu2 技能的角色即清空该响应者的无懈 token。
+skill tanhu3(4019583040) locked {
+  modifier card_distance_unlimited_skill_on_owner_2642618323 override 1;
+  modifier card_use_unrespondable_skill_on_owner_2642618323 override 1;
+}

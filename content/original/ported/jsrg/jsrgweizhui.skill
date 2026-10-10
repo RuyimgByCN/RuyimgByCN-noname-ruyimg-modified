@@ -1,0 +1,9 @@
+// jsrgweizhui（危坠）：主公技。其他魏势力角色的结束阶段，其可以将一张黑色手牌当【过河拆桥】对你使用。
+// 类型：主公技
+// 未建模：主公技, 主公技判断, 翻译调用（DSL无对应原语）
+skill jsrgweizhui(2767693378) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgweizhui（skill.js:3407）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

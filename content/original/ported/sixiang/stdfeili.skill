@@ -1,0 +1,9 @@
+// 诽议：当你受到伤害时（伤害结算前），你可以选择一项防止此伤害：
+// ①弃置两张牌；②令【谮构】本轮失效。
+// 旧 JS 涉及防伤时的二选一费用（弃牌或禁技）。DSL prevent_current_damage 无法附加条件选择原语。
+// 无费用防伤会改变技能强度，不宜近似。空定义。
+skill stdfeili(3700086664) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

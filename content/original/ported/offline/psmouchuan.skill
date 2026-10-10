@@ -1,0 +1,6 @@
+// psmouchuan：锁定技, global:game_started, 摸牌, 加技能, 异步。
+skill psmouchuan(3535188004) {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

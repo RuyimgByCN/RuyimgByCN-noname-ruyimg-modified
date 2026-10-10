@@ -1,0 +1,12 @@
+// 范阳（pxfanyang，州郡技能）：当你获得此技能后，你可以对攻击范围内的一名角色造成
+// 1 点伤害。
+// 上游 (sp/skill.js:3029)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且存在攻击范围内角色；content = chooseTarget(inRange) → damage。
+// 实现：skill_added + owner_skill_added_self_3972961518 → 可选确认 →
+// choose_other_damage(self, 1)。
+// 与上游差异：「目标必须在攻击范围内」过滤未建模（choose_other_damage 任意其他角色）。
+skill pxfanyang(3972961518) {
+  trigger skill_added owner_skill_added_self_3972961518 optional {
+    effect choose_other_damage(self, 1);
+  }
+}

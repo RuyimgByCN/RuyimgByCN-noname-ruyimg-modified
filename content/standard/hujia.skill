@@ -1,0 +1,4 @@
+// 护驾：需要响应【闪】时，可依次请求其他魏势力角色代为打出。
+skill hujia(3353250727) lord_only {
+  view_as shan response any from group_wei;
+}

@@ -1,0 +1,6 @@
+// 界反间：展示并交给其他角色一张手牌；其弃同花色牌或失去体力。
+skill refanjian(2975386328) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 1 {
+    effect give_selected_then_target_choose_discard_same_suit_or_lose_hp(self, event_source);
+  }
+}

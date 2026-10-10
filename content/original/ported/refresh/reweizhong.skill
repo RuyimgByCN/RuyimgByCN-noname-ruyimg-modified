@@ -1,0 +1,6 @@
+// 界威重：体力上限变化后摸两张牌。
+skill reweizhong(4262017394) locked {
+  trigger max_hp_changed owner_is_target {
+    effect draw_cards(self, 2);
+  }
+}

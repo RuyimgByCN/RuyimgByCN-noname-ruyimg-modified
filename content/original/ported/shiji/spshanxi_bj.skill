@@ -1,0 +1,7 @@
+// 擅袭·全局（王粲系）：死亡后清理全局索命技能。
+// 旧 JS 的 removeGlobalSkill 清理语义，无独立规则行为。
+skill spshanxi_bj(2560248361) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

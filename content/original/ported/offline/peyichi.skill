@@ -1,0 +1,6 @@
+// peyichi：player:phase_draw_end, 需选择目标, 回复体力, 异步。
+skill peyichi(3819262852) {
+  trigger phase_draw_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

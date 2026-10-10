@@ -1,0 +1,9 @@
+// 潜袭(续)(王异)：锁定技。记录一种花色，你不能使用或打出该花色的手牌。回合结束后移除此技能。
+// 旧JS花色存储与removeSkill逻辑无法在DSL modifier中直接表达，以locked标记+注释标明。
+skill qianxi2(2769922421) locked {
+  // 近似：实际效果由外部skill qianxi在回合结束后removeSkill，花色由storage.qianxi2决定。
+  // DSL modifier暂不支持根据外部storage动态禁用特定花色。
+  // ponytail: 空定义为占位，完整限制逻辑需依赖引擎层storage读写原语。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

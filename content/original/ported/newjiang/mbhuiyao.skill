@@ -1,0 +1,9 @@
+// 挥曜（陆抗）：出牌阶段限一次，选择一名其他角色：其摸两张牌并翻转武将牌，
+// 然后你对其造成 1 点伤害。
+// 旧 JS 的「目标摸牌翻面后受伤害」以选择目标造成 1 点伤害近似（摸牌翻面
+// 未建模，已注明）。
+skill mbhuiyao(2982126295) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_damage(self, 1);
+  }
+}

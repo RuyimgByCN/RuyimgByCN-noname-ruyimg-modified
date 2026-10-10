@@ -1,0 +1,6 @@
+// old_mbcmqingzheng（见 translate.js）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill old_mbcmqingzheng(4072081071) {
+  trigger phase_play owner_alive {
+    effect choose_other_damage(self, 1);
+  }
+}

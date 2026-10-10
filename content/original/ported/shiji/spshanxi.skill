@@ -1,0 +1,11 @@
+// 擅袭（王粲）：出牌阶段开始时，你可选择一名没有“檄”标记的其他角色，令其获得
+// “檄”标记（檄标记全局唯一，授予时其他角色的檄标记全部移除）。
+// 旧 JavaScript 仅作语义证据；选人与标记授予由 ABI 440 resolve_spshanxi 权威结算。
+skill spshanxi(2378382374) {
+  trigger phase_play owner_is_target optional {
+    effect resolve_spshanxi(self, 0, 0);
+  }
+  trigger hp_recovered owner_alive_other_marked_xi {
+    effect resolve_spshanxi_suoming(self, event_player, 0);
+  }
+}

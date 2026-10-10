@@ -1,0 +1,6 @@
+// 淑慎：每回合结束时，若本回合获得至少三张牌，可令一名其他角色回复 1 点体力。
+skill stdshushenx(3633500345) {
+  trigger phase_end owner_alive_gained_three_this_turn_other_alive optional {
+    effect choose_other_draw_or_recover(self, 0, 1, 1);
+  }
+}

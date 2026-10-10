@@ -1,0 +1,5 @@
+// psshiyin（锁定技/触发技）：锁定技, global:phaseBefore, player:game_started, player:phase_play, 移出游戏, 含子技能, 多步骤。
+skill psshiyin(2885164232) locked {
+  trigger game_started always {
+  }
+}

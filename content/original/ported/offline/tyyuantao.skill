@@ -1,0 +1,5 @@
+// tyyuantao：global:card_used, 失去体力, 异步。
+skill tyyuantao(3394849016) {
+  trigger card_used owner_alive {
+  }
+}

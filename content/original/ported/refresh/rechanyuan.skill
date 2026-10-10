@@ -1,0 +1,9 @@
+// rechanyuan：刷新包技能。
+// triggers: player:changeHp
+// forced/locked: 锁定技
+skill rechanyuan(2478763707) {
+    // 近似：旧JS事件 changeHp → DSL事件 changeHp
+    trigger hp_lost owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

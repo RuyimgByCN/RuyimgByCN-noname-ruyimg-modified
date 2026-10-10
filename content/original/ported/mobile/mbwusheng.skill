@@ -1,0 +1,8 @@
+// mbwusheng（武圣）：你可以将任意张牌当无距离限制的任意【杀】使用或打出。此【杀】结算结束后，若你本回合首次以此数量转化牌，则你摸两张牌且此【杀】不计入次数限制。
+// 未建模：subSkill, chooseButton 等机制无 DSL 原语。
+skill mbwusheng(2664730745) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mbwusheng（skill.js:2523）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

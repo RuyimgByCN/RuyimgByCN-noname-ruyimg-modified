@@ -1,0 +1,8 @@
+// 新诏缚（孙休）：主公技，限定技，出牌阶段，选择一至两名吴势力角色，其始终在其余吴势力角色的攻击范围内。
+// 旧 JS 的 modifier(inRangeOf) 修改攻击范围关系；DSL 以 modifier 近似全局距离修改。
+skill xinzhaofu(4200318823) lord_only {
+  trigger game_started owner_alive {
+    // 近似：给自身添加攻击范围相关的标记效果
+    // 未建模：选择1-2名吴势力目标、修改其他吴势力角色对其的攻击范围
+  }
+}

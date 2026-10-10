@@ -1,0 +1,7 @@
+// 自异2（交换）：出牌阶段，可用任意数量的手牌与等量的"权"（zyexin expansion牌）交换。
+// 旧JS含addToExpansion+chooseCardButton(gain expansion)自定义扩展区牌交换。DSL以空定义保留。
+skill zyexin2(2974340943) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

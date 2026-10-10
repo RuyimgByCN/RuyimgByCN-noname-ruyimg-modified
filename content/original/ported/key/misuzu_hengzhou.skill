@@ -1,0 +1,6 @@
+// 恒咒（观铃·锁定技）：体力变化/回合事件积累诅咒标记，摸牌阶段摸牌数+标记数（上限4），回合结束清标记扣1体力。手牌上限+标记数。
+// 旧 JS 的 多事件标记累加+上限限制+清标记扣血+手牌上限 modifier 需标记系统与多事件响应原语。
+// 手牌上限+省略号以 modifier 近似。
+skill misuzu_hengzhou(2448354282) {
+  modifier hand_limit add owner_skill_mark;
+}

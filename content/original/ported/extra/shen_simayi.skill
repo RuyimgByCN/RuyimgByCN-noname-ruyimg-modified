@@ -1,0 +1,93 @@
+skill renjie(3085167840) locked {
+  trigger damage owner_is_target {
+    effect add_mark(self, 3085167840, event_amount);
+  }
+  trigger phase_discard_end owner_is_target {
+    effect resolve_shen_simayi(self, event_player, 0, 3085167840, 0);
+  }
+}
+
+skill renjie2(2678110361) locked non_gainable {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}
+
+skill sbaiyin(2725045502) locked non_gainable {
+  trigger phase_prepare owner_is_target {
+    if 3 < mark_count(self, 3085167840) {
+      effect change_max_hp(self, -1);
+      effect add_skill(self, 4138291948);
+      effect add_skill(self, 3991027258);
+      effect add_skill(self, 3045250601);
+      effect add_skill(self, 2747240883);
+      effect add_skill(self, 3079429948);
+      effect add_skill(self, 3522766701);
+      effect remove_skill(self_skill);
+    }
+  }
+}
+
+skill lianpo(2556576493) {
+  trigger turn_ended owner_alive_killed_this_turn optional {
+    effect resolve_shen_simayi(self, event_player, 0, 3085167840, 1);
+  }
+}
+
+skill jilue(4138291948) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+skill jilue_guicai(3991027258) {
+  modifier judgment_rewrite_hand_equip_cost_mark_3085167840 override 1;
+}
+
+skill jilue_fangzhu(3045250601) {
+  trigger damage owner_is_target_mark_positive_3085167840 optional {
+    effect remove_mark(self, 3085167840, 1);
+    effect choose_other_draw_owner_lost_hp_turn_over(self);
+  }
+}
+
+skill jilue_jizhi(2747240883) {
+  modifier hand_limit add owner_skill_mark;
+
+  trigger card_used owner_source_ordinary_trick_mark_positive_3085167840 optional {
+    effect resolve_shen_simayi(self, event_player, 0, 3085167840, 4);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 2747240883, 0);
+  }
+}
+
+skill jilue_zhiheng(3079429948) {
+  active play_phase uses_per_turn 1 mark_at_least 3085167840 1 select_he 1 255 {
+    effect resolve_shen_simayi(self, self, 0, 3085167840, 3);
+  }
+}
+
+skill jilue_wansha(3522766701) {
+  modifier tao_use_save_cancel_for_non_dying_others_during_owner_turn override owner_skill_mark;
+
+  trigger dying owner_alive_current_turn {
+    if 0 < mark_count(self, 3522766701) {
+      effect set_non_locked_skill_suppression(self, 1);
+    }
+  }
+
+  trigger dying_after owner_alive_current_turn {
+    if 0 < mark_count(self, 3522766701) {
+      effect set_non_locked_skill_suppression(self, 0);
+    }
+  }
+
+  active play_phase uses_per_turn 1 mark_at_least 3085167840 1 {
+    effect resolve_shen_simayi(self, self, 0, 3085167840, 2);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 3522766701, 0);
+  }
+}

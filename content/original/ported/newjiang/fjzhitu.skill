@@ -1,0 +1,9 @@
+// 飞智图（羊祜）：你使用基本牌或单目标锦囊指定目标后，可为该牌增加任意个
+// 与你距离等于其当前目标距离的其他角色为目标。
+// 旧 JS 的「等距追加目标」无对应原语，以选目标摸牌近似省略；用牌后摸一张
+// 近似保留收益（已注明）。
+skill fjzhitu(2996443353) {
+  trigger card_targeted owner_source_once_per_turn optional {
+    effect draw_cards(self, 1);
+  }
+}

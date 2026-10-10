@@ -1,0 +1,13 @@
+// 崔锐（cuorui）：锁定技。游戏开始时，你摸X张牌（X为你的体力上限与5的较小值）；
+// 判定阶段开始前，若你的判定区有牌，你跳过此阶段（限定技，以觉醒标记近似一次性）。
+skill cuorui(4002191084) locked {
+  trigger game_started owner_alive {
+    effect draw_cards(self, min(5, max_hp(self)));
+  }
+  trigger phase_prepare owner_is_target_judge_nonempty {
+    if mark_count(self, 4002191084) == 0 {
+      effect skip_current_phase(self);
+      effect add_mark(self, 4002191084, 1);
+    }
+  }
+}

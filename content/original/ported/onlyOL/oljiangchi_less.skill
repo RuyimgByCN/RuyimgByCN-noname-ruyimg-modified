@@ -1,0 +1,8 @@
+// 「将驰」摸牌分支：本回合【杀】次数上限 -1，且【杀】不计入手牌上限。
+skill oljiangchi_less(2381340383) {
+  modifier sha_use_limit add -1;
+  modifier sha_ignored_hand_limit override 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

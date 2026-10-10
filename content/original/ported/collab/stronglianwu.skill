@@ -1,0 +1,10 @@
+// 炼武（张角三兄弟）：当你使用【杀】指定唯一目标后/成为【杀】的唯一目标后，
+//   若使用者的装备区有牌或此【杀】有酒效果，可弃置目标1~2张牌。
+// 旧JS的cost→content两段交互（由出杀方选择弃置目标的牌并由目标执行弃置）、
+// 双向触发（useCardToPlayered/useCardToTargeted）、equip+jiu双条件无DSL对应原语。
+// 以空定义保留编译占位，待interactive_cost和dual_direction_trigger原语后补齐。
+skill stronglianwu(3680056165) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

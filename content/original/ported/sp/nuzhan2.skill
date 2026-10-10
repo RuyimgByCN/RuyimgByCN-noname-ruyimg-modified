@@ -1,0 +1,9 @@
+// 怒斩2（nuzhan2）：锁定技。你使用的仅以一张装备牌为素材的【杀】基础伤害+1。
+// 上游 (sp/skill.js)：useCard1，filter = sha 且素材为单张装备；content = trigger.baseDamage++。
+// 父技 nuzhan 已含同条款（nuzhan2 为上游 group 子技，sourceSkill: nuzhan），此处为
+// catalog 独立 def 保留等价语义；无角色同时持有二者。
+skill nuzhan2(3186808257) locked {
+  trigger card_used owner_source_sha_single_equip_source_card {
+    effect increase_current_card_base_damage(self, event_card, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 枭姬 (xiaoji) — 孙尚香: for each lost equipment card, may draw two cards.
+skill xiaoji(22) {
+  trigger cards_moved owner_from_equip_per_card optional {
+    effect draw_cards(self, 2);
+  }
+}

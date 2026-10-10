@@ -1,0 +1,181 @@
+warning: unused imports: `CardId` and `EventId`
+  --> crates/engine-native/src/archive.rs:20:18
+   |
+20 | use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+   |                  ^^^^^^  ^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `crate::machine::LogEvent`
+  --> crates/engine-native/src/archive.rs:21:5
+   |
+21 | use crate::machine::LogEvent;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unreachable pattern
+    --> crates/engine-native/src/archive.rs:1391:9
+     |
+1379 |         29 => {
+     |         -- matches all the relevant values
+...
+1391 |         29 => {
+     |         ^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/src/content/standard.rs:2302:9
+     |
+2302 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+     |         ----^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1646:19
+     |
+1559 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+1646 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1647:19
+     |
+1559 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+1647 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1648:19
+     |
+1599 |                 CardKind::ShanDian => {
+     |                 ------------------ matches all the relevant values
+...
+1648 |                 | CardKind::ShanDian => unreachable!("handled above"),
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/kernel.rs:554:17
+    |
+554 |             let mut shans: Vec<ChoiceOption> = ctx.core.player(self.target)
+    |                 ----^^^^^
+    |                 |
+    |                 help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/presentation.rs:269:9
+    |
+269 |     let mut line = |txt: &str, s: &mut String| {
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: method `opt_u8` is never used
+  --> crates/engine-native/src/archive.rs:85:8
+   |
+54 | impl W {
+   | ------ method in this implementation
+...
+85 |     fn opt_u8(&mut self, v: Option<u8>) {
+   |        ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `opt_u8` is never used
+   --> crates/engine-native/src/archive.rs:148:8
+    |
+113 | impl<'a> R<'a> {
+    | -------------- method in this implementation
+...
+148 |     fn opt_u8(&mut self) -> Result<Option<u8>, ArchiveError> {
+    |        ^^^^^^
+
+warning: function `enc_faction` is never used
+   --> crates/engine-native/src/archive.rs:365:4
+    |
+365 | fn enc_faction(w: &mut W, f: &crate::catalog::Faction) {
+    |    ^^^^^^^^^^^
+
+warning: variant `Retarget` is never constructed
+    --> crates/engine-native/src/content/standard.rs:1731:5
+     |
+1725 | enum JiJiStage {
+     |      --------- variant in this enum
+...
+1731 |     Retarget,
+     |     ^^^^^^^^
+     |
+     = note: `JiJiStage` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: `engine-native` (lib) generated 13 warnings (run `cargo fix --lib -p engine-native` to apply 5 suggestions)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: unused import: `view::HandView`
+  --> crates/engine-native/examples/n10_render_host.rs:11:38
+   |
+11 |     Engine, GameAction, GameCommand, view::HandView,
+   |                                      ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (example "n10_render_host") generated 1 warning (run `cargo fix --example "n10_render_host" -p engine-native` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 3.63s
+     Running `target/release/examples/n10_render_host 3 99`
+=== 宿主渲染器原型：PresentationEvent 消费 ===
+--- 局 1（seed=99）：座位2 胜；表现事件 423 条，渲染帧 27 次 ---
++----------------------------------------------------------------+
+| 回合:2 阶段:出牌 第10轮 规则v24                                         |
++----------------------------------------------------------------+
+| 座位0 体力0/4 手牌0(暗) 将:无将 [阵亡]                                    |
+| 座位1 体力0/4 手牌0(暗) 将:无将 [阵亡]                                    |
+| 座位2 体力2/4 手牌4(暗) 将:无将                                         |
++----------------------------------------------------------------+
+| 座位2 使用sha → ["座位1"]                                           |
+| 座位1 待选择（respond_shan）                                         |
+| 座位1 受 1 点伤害（来源：座位2，牌：sha）                                     |
+| 座位1 濒死                                                        |
+| 座位2 待选择（dying_save）                                           |
+| 座位1 阵亡（凶手：座位2）                                                |
++----------------------------------------------------------------+
+| 终局：座位2 胜                                                      |
++----------------------------------------------------------------+
+--- 局 2（seed=199）：座位0 胜；表现事件 424 条，渲染帧 27 次 ---
++----------------------------------------------------------------+
+| 回合:0 阶段:出牌 第11轮 规则v24                                         |
++----------------------------------------------------------------+
+| 座位0 体力2/4 手牌3(暗) 将:无将                                         |
+| 座位1 体力0/4 手牌0(暗) 将:无将 [阵亡]                                    |
+| 座位2 体力0/4 手牌0(暗) 将:无将 [阵亡]                                    |
++----------------------------------------------------------------+
+| 座位0 使用sha → ["座位1"]                                           |
+| 座位1 待选择（respond_shan）                                         |
+| 座位1 受 1 点伤害（来源：座位0，牌：sha）                                     |
+| 座位1 濒死                                                        |
+| 座位0 待选择（dying_save）                                           |
+| 座位1 阵亡（凶手：座位0）                                                |
++----------------------------------------------------------------+
+| 终局：座位0 胜                                                      |
++----------------------------------------------------------------+
+--- 局 3（seed=299）：座位0 胜；表现事件 411 条，渲染帧 26 次 ---
++----------------------------------------------------------------+
+| 回合:0 阶段:出牌 第11轮 规则v24                                         |
++----------------------------------------------------------------+
+| 座位0 体力1/4 手牌2(暗) 将:无将                                         |
+| 座位1 体力0/4 手牌0(暗) 将:无将 [阵亡]                                    |
+| 座位2 体力0/4 手牌0(暗) 将:无将 [阵亡]                                    |
++----------------------------------------------------------------+
+| 座位0 出牌阶段开始                                                    |
+| 座位0 使用sha → ["座位1"]                                           |
+| 座位1 待选择（respond_shan）                                         |
+| 座位1 受 1 点伤害（来源：座位0，牌：sha）                                     |
+| 座位1 濒死                                                        |
+| 座位1 阵亡（凶手：座位0）                                                |
++----------------------------------------------------------------+
+| 终局：座位0 胜                                                      |
++----------------------------------------------------------------+
+=== 全部局完成：PresentationEvent 消费端契约成立 ===

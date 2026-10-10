@@ -1,0 +1,9 @@
+// 斥弊（星蒋琬）：其他角色使用牌指定距离>1的唯一目标时，可与其拼点；
+// 赢则取消目标并获得牌，输则你成为额外目标。
+// 旧 JS 含拼点 chooseToCompare + 赢/输双分支 + 取消目标(cancel targets) + 增加目标。
+// DSL 无拼点原语、无动态修改牌目标列表的原语。
+skill dcchibi(4240665390) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcchibi 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

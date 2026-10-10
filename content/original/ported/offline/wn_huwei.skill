@@ -1,0 +1,5 @@
+// wn_huwei：锁定技, player:phaseDrawBegin2, 异步。
+skill wn_huwei(2364608261) {
+  trigger phase_any_end owner_alive {
+  }
+}

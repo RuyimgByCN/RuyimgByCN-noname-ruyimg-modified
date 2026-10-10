@@ -1,0 +1,5 @@
+// hm_kunjun：锁定技, global:card_used, global:gameDrawBegin, 含子技能, 异步。
+skill hm_kunjun(2176336219) locked {
+  trigger card_used always {
+  }
+}

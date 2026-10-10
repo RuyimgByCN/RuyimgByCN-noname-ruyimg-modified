@@ -1,0 +1,18 @@
+// 铁轮（oltielun）：锁定技。其他角色计算与你的距离-X（X 为本回合你使用过的牌数，
+// 每轮开始清零）。
+// 上游 (sp/skill.js:13239)：mod globalFrom(from→to=owner) = distance - countMark("oltielun_mark")；
+// 子技 mark：useCard1 → addMark(1)，roundStart → clearMark。
+// 实现：distance_to add -owner_skill_mark（mark 键 = 本技能 def）；card_used → add_mark(1)；
+// round_started → 清零。与上游差异：mark 子技的 firstDo/silent 不建模。
+skill oltielun(2476158656) locked {
+  modifier distance_to add -owner_skill_mark;
+
+  trigger card_used owner_is_source {
+    effect add_mark(self, 2476158656, 1);
+  }
+
+  trigger round_started owner_alive {
+    let marks = mark_count(self, 2476158656);
+    effect remove_mark(self, 2476158656, marks);
+  }
+}

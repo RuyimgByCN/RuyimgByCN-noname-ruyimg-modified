@@ -1,0 +1,5 @@
+// xkyizhong：锁定技, global:becomeQiyi, 异步。
+skill xkyizhong(2869046896) {
+  trigger phase_any_end owner_alive {
+  }
+}

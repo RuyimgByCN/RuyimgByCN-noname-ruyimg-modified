@@ -1,0 +1,22 @@
+// 勤学（qinxue）— 界吕蒙：准备或结束阶段，若手牌数至少比体力值多二，
+// 失去一点体力上限，然后强制选择摸两张牌或回复一点体力，并获得攻心。
+// ponytail: 当前沿用觉醒技的 remove_skill 惯例；迁移 restoreSkill 时改为持久 awakened 状态。
+skill qinxue(2693472089) locked {
+  trigger phase_prepare owner_is_target {
+    if hp(self) + 1 < hand_count(self) {
+      effect remove_skill(self_skill);
+      effect change_max_hp(self, -1);
+      effect choose_draw_or_recover(self, 2, 1, 0);
+      effect add_skill(self, 3100453257);
+    }
+  }
+
+  trigger phase_end owner_is_target {
+    if hp(self) + 1 < hand_count(self) {
+      effect remove_skill(self_skill);
+      effect change_max_hp(self, -1);
+      effect choose_draw_or_recover(self, 2, 1, 0);
+      effect add_skill(self, 3100453257);
+    }
+  }
+}

@@ -1,0 +1,10 @@
+// 渊临（纵横神张角）：锁定技，每轮开始时/其他角色的判定阶段，令所有其他角色依次
+// （或该角色）判定【闪电】；每有一名角色受到雷电伤害，你摸一张牌或回复 1 点体力。
+// 上游 (offline_zongheng.js:7-47)：roundStart/phaseJudgeBegin/damageEnd 三重触发 +
+// executeDelayCardEffects("shandian") 延时锦囊执行 + chooseDrawRecover。
+// 「执行【闪电】延时效果」「任意角色受雷电伤害触发」「自选摸牌或回复」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597）。2026-08-15：随上游 v1.11.5 新武将 zh_shen_zhangjiao 移植。
+skill zhyuanlin(4116831900) locked {
+  // INTENTIONAL_EMPTY_NOOP: delayed-shandian execution unavailable
+  modifier hand_limit add 0;
+}

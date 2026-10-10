@@ -1,0 +1,14 @@
+=== KOF 会话：将池 A=[2, 15, 9] B=[10, 18, 17] ===
+KOF_DIAGNOSTIC seed=88 commands=2048 rejected=1998 last=Rejected(ShaLimit) actual_outcome=None
+第1局：曹操 vs 吕蒙 → 座位1（吕蒙）胜；命令数 2048
+  淘汰：曹操（座位0 剩池 [15, 9]）
+  会话存档续跑校验: OK（KOF1 15,9 18,17,10 0 1 1）
+KOF_DIAGNOSTIC seed=165 commands=53 rejected=0 last= actual_outcome=Some(Outcome { winner: Player(1) })
+第2局：华佗 vs 郭嘉 → 座位1（郭嘉）胜；命令数 53
+  淘汰：华佗（座位0 剩池 [9]）
+KOF_DIAGNOSTIC seed=242 commands=125 rejected=0 last= actual_outcome=Some(Outcome { winner: Player(1) })
+第3局：大乔 vs 孙权 → 座位1（孙权）胜；命令数 125
+  淘汰：大乔（座位0 剩池 []）
+=== 会话终局：选手1 胜（0:3，共 3 局）===
+FIXED_KOF_PARSER: actual parser roundtrips empty pool, rejects bad format/out-of-range
+OPEN_KOF_SESSION_INVARIANTS: repeated general across pools and games!=sum(wins) accepted: KOF1 1,1 1 0 0 99

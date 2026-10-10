@@ -1,0 +1,7 @@
+// 豪放（春子·锁定技）：你的延时锦囊牌名均视为【无中生有】；无中生效时你多摸两张牌。
+// 实现：delayed_trick 牌名改写为 wuzhong。
+// 近似：无中额外摸两张未建模（card-name-scoped 过滤器无 wuzhong）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill haruko_haofang(2831053102) locked {
+  modifier card_name(delayed_trick) override wuzhong;
+}

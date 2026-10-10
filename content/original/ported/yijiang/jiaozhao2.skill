@@ -1,0 +1,6 @@
+// 矫诏2：矫诏的后续使用入口（charlotte），依赖 storage 状态。
+// 旧 JS 的 storage.jiaozhao + gaintag 追踪无对应原语，暂留空定义。
+skill jiaozhao2(3468781394) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

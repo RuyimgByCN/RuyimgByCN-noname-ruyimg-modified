@@ -1,0 +1,5 @@
+// peyuanjue：player:phaseDrawBefore, 含子技能, 异步。
+skill peyuanjue(3869786215) {
+  trigger phase_draw owner_alive {
+  }
+}

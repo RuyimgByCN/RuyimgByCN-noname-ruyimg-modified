@@ -1,0 +1,5 @@
+// hm_fudao：player:game_started, global:phaseBefore, global:useSkill_hm_fudao, 多分支选择, 异步。
+skill hm_fudao(3157642830) {
+  trigger game_started owner_alive optional {
+  }
+}

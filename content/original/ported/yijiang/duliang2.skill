@@ -1,0 +1,7 @@
+// 督粮2：下个摸牌阶段额外摸牌（从督粮累积），然后失去此技能。
+// 旧 JS 的累积计数+self-remove 无对应原语；increase_current_draw_count + remove_skill 需验证可用性，暂留空定义。
+skill duliang2(2264157659) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

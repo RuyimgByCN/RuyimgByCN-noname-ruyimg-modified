@@ -1,0 +1,4 @@
+// 旧 JS 只调整客户端出牌顺序估值；权威规则与状态均无行为。
+skill ciwei_ai(2502548812) {
+  modifier hand_limit add 1;
+}

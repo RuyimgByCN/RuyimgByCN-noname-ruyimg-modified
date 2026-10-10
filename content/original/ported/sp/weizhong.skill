@@ -1,0 +1,11 @@
+// 威重（诸葛诞）
+// 原语义：体力上限变化后，若手牌数为全场最少则一次摸两张，否则摸一张。
+skill weizhong(2998881378) locked {
+  trigger max_hp_changed owner_target_min_hand {
+    effect draw_cards(self, 2);
+  }
+
+  trigger max_hp_changed owner_target_not_min_hand {
+    effect draw_cards(self, 1);
+  }
+}

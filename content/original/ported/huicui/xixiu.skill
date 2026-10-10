@@ -1,0 +1,8 @@
+// 旧 JS 语义：他人使用与自己装备同花色的牌指定自己时摸一张；唯一装备不能被他人弃置。
+skill xixiu(3425169185) locked {
+  trigger card_targeted owner_alive_targeted_by_other_matching_equip_suit {
+    effect draw_cards(self, 1);
+  }
+
+  modifier card_discard_protected(equip) override owner_equip_count_exactly_one;
+}

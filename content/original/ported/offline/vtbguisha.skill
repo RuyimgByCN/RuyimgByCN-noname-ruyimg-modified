@@ -1,0 +1,6 @@
+// vtbguisha：锁定技, global:card_used, source:damage_before, 需弃牌, 加技能, 含子技能, 多步骤。
+skill vtbguisha(3024161203) locked {
+  trigger card_used always {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

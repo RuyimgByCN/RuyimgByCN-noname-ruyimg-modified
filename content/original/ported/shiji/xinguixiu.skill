@@ -1,0 +1,9 @@
+// 新闺秀：结束阶段开始时，体力为奇数则摸一张；否则若已受伤则回复一点。
+skill xinguixiu(3238150014) locked {
+  trigger phase_end owner_is_target_hp_odd {
+    effect draw_cards(self, 1);
+  }
+  trigger phase_end owner_is_target_hp_even_wounded {
+    effect recover_hp(self, 1);
+  }
+}

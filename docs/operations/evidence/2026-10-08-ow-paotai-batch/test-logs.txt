@@ -1,0 +1,24 @@
+# U05 ow 纵切批六测试日志（2026-10-08，炮台，规则 v122→v123）
+
+$ cargo test --offline -p engine-native
+engine-native: 436 passed / 0 failed / 1 ignored（v122 基线 435 +1 新增炮台回归；存档 v5→v6）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 23 passed; 0 failed（22 既有 + tuobiang_paotai_stack_fire_and_downgrade）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 116 守卫过；mapping 通道不入伴随表，计数 43）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v122→v123 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/ow/skill.js paotai（弃杀存层≤3）/paotai2（phaseEnd forced 概率火伤）/paotai3（damageEnd 降级）
+
+## 测试迭代记录
+- mapping 键勘误：paotai2 的 mapping 行为键=paotai_fire（group 子技显式化同筑城批）
+- 未知行为键 UnknownBehaviorKey 提示 mapping 拼写（第 2 次）
+- filter/step 臂在多脚本去重中丢失/重复（Fire matches 0→恢复、false 重复→删）
+- paotai2 触发需 SkillInstance（debug_grant paotai2 补）

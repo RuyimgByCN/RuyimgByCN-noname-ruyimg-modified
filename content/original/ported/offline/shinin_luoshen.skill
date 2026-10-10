@@ -1,0 +1,5 @@
+// shinin_luoshen：音效名:luoshen, player:phase_prepare, 二选一, 加技能, 含子技能, 异步。
+skill shinin_luoshen(3499507710) {
+  trigger phase_prepare owner_alive {
+  }
+}

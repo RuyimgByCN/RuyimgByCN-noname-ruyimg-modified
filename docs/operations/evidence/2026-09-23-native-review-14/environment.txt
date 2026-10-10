@@ -1,0 +1,16 @@
+$ date -Iseconds
+2026-09-23T09:05:10+08:00
+
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		27.0
+BuildVersion:		26A428
+
+$ uname -m
+arm64
+
+$ /opt/homebrew/bin/rustc --version
+rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)
+
+$ /opt/homebrew/bin/cargo --version
+cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)

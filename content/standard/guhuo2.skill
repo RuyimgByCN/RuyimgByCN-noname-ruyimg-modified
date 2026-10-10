@@ -1,0 +1,4 @@
+// Skill guhuo2(103) - standard variant
+skill guhuo2(103) {
+  modifier distance_from add -1;
+}

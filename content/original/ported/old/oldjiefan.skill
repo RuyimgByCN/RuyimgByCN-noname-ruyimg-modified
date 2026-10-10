@@ -1,0 +1,10 @@
+// 解烦：回合外有其他角色濒死时，可对当前回合角色使用一张实体或转化【杀】；
+// 此【杀】造成伤害时防止之，并视为对该濒死角色使用一张【桃】。
+skill oldjiefan(3185096783) {
+  trigger dying owner_alive_other_dying_outside_turn_can_sha_current optional {
+    effect resolve_oldjiefan(self, 0);
+  }
+  trigger damage_before owner_source_oldjiefan_sha {
+    effect resolve_oldjiefan(self, 2);
+  }
+}

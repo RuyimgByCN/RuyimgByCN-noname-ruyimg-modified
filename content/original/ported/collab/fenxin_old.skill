@@ -1,0 +1,7 @@
+// 焚心（波仔，限定技）：有其他角色死亡时（非主公），可与其交换身份牌。
+// 身份交换机制不存在于 DSL 规则内核中。
+skill fenxin_old(3606421338) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

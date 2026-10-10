@@ -1,0 +1,11 @@
+// 风石（zfengshi）：你使用【杀】指定目标后，可弃置其一张装备牌。
+// 上游 (sp/skill.js:34791)：trigger player:useCardToPlayered；filter = sha 且目标有
+// 装备；content = trigger.target.chooseToDiscard("e", true)（强制弃一张装备）。
+// 实现：card_targeted + owner_source_sha_target_alive_has_discardable_equip（新增
+// 过滤器，5 处注册）→ choose_discard_target_card(self, event_player, equip)。
+// 与上游差异：上游直接强制弃置（无选择），此处以 choose_ 开选择询问近似。
+skill zfengshi(3436733477) {
+  trigger card_targeted owner_source_sha_target_alive_has_discardable_equip optional {
+    effect choose_discard_target_card(self, event_player, equip);
+  }
+}

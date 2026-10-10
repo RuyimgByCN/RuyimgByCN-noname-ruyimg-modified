@@ -1,0 +1,10 @@
+// 猘横（JSRG 孙策）：锁定技。当你因执行牌的效果对目标造成伤害时，若其于此回合
+// 响应过你使用过的牌，此伤害+1。
+// 实现：对其他角色造成伤害前 `modify_current_damage +1`。
+// 近似：不检验「因牌的效果」与「目标本回合响应过你」。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgzhiheng(2952364897) locked {
+  trigger damage_before owner_source_other_damage_before {
+    effect modify_current_damage(self, 1);
+  }
+}

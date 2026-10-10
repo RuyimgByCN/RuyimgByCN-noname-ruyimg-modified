@@ -1,0 +1,9 @@
+// 疗疫（华歆系）：其他角色回合开始时，若其手牌数少于体力值且仁库有
+// 足够牌，令其摸牌至体力值。
+// 旧 JS 的「按体力补牌」无对应原语；以其他角色回合开始时其摸一张近似
+// （补至体力未建模，已注明）。
+skill liaoyi(3106345202) {
+  trigger phase_begin owner_alive_once_per_round optional {
+    effect choose_target_draw(self, 1, any);
+  }
+}

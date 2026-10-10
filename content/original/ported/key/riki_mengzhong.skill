@@ -1,0 +1,13 @@
+// 梦终（理树·觉醒技）：准备阶段若通过问计获得过牌≥3张，失去问计获冲阵。
+// 实现：准备阶段一次：卸问计、授冲阵。
+// 近似：不检验「问计获得过牌≥3」；以 mark_count 门控。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill riki_mengzhong(2200887116) locked {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2200887116) == 0 {
+      effect remove_skill_by_def(self, 2666301691);
+      effect add_skill(self, 4103807065);
+      effect add_mark(self, 2200887116, 1);
+    }
+  }
+}

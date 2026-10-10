@@ -1,0 +1,5 @@
+// dz_mantianguohai（蛮天过海）：此牌不计入手牌上限，且弃牌阶段不能被弃置。
+// modifier 仅能表达手牌上限豁免（弃牌阶段不可弃置部分无对应原语，已注明）。
+skill dz_mantianguohai(2437877699) {
+  modifier hand_limit add 1;
+}

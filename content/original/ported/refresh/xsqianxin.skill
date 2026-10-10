@@ -1,0 +1,9 @@
+// xsqianxin：刷新包技能。
+// triggers: source:damageSource
+// forced/locked: 锁定技
+skill xsqianxin(3844234581) {
+    // 近似：旧JS事件 damageSource → DSL事件 damage
+    trigger damage owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

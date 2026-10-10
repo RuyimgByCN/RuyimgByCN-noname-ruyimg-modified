@@ -1,0 +1,7 @@
+// zombieshibao：主动(phaseUse), 造成伤害, 失去体力, 异步, 条件计数。
+skill zombieshibao(2964182404) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

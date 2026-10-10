@@ -1,0 +1,27 @@
+# U05 mtg 第四批测试日志（2026-10-08，废墟，规则 v102→v103）
+
+$ cargo test --offline -p engine-native
+engine-native: 419 passed / 0 failed / 1 ignored（v102 基线 418 +1 新增废墟回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_mtg
+test result: ok. 5 passed; 0 failed（4 既有 + mtg_feixu_land_effect）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 125、HostBehavior ALL 87、伴随技能 34 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v102→v103 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js:6 `["club", 8, "mtg_feixu"]`
+- translate.js:11-14 废墟文案（发现一张牌/准备阶段随机上顶）
+- card.js content 换地+discoverCard(ui.discardPile)；skill.js phaseBegin silent 随机上顶
+
+## 测试迭代记录
+- 地图效果初版误写 engine.rs（commit_phase 在 kernel.rs）→ 移正
+- 「空弃堆空发」前提错误（clear_hand 弃牌在弃堆）→ 重构为：首出发现
+  → 跨回合观测地图效果 → 清弃堆后注回再出验证空发
+- 单实体复用（上游废墟仅 ♣8 一张，无第二实体）
+- 常量名 DISCOVER（测试首版误写 DISCARD）

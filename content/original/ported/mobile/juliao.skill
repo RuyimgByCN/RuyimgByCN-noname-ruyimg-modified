@@ -1,0 +1,5 @@
+// 聚粮：其他角色计算与技能拥有者的距离时，增加存活角色势力数减一。
+skill juliao(4062961693) {
+  modifier distance_to add alive_group_count;
+  modifier distance_to add -1;
+}

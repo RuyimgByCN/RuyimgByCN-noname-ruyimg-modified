@@ -1,0 +1,10 @@
+// 谗毁(旧版)(郭图逢纪)：当你使用【杀】或普通锦囊牌指定唯一目标后，
+// 你可以选择一名不为此牌目标的角色，令其选择一项：1.交给你一张牌，然后其成为此牌的使用者；
+// 2.成为此牌的额外目标。此技能发动后，你本回合不能再次发动。
+// 旧JS含chooseTarget、chooseCard、untrigger+替换使用者等复杂逻辑。
+// 注：替换使用者(untrigger+player=target)和tempBanSkill无DSL原语，仅作占位+注释。
+skill rechanhui(3344777404) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

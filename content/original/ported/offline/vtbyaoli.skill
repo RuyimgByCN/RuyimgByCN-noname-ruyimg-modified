@@ -1,0 +1,5 @@
+// vtbyaoli：音效名:vtbyaoli, 锁定技, global:card_used, player:useCard2, 需选择目标, 加技能, 含子技能, 异步。
+skill vtbyaoli(3413332114) locked {
+  trigger card_used always {
+  }
+}

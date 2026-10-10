@@ -1,0 +1,8 @@
+// jsrgzonghai（纵害）：每轮限一次。当有其他角色进入濒死状态时，你可以令其选择至多两名角色。未被选择的角色不能于此次濒死结算中使用牌，且此次濒死状态结算结束后，你对其选择的角色各造成１点伤害。
+// 未建模：翻译调用, 全局状态, addTempSkill, charlotte延迟, storage状态, 存活计数（DSL无对应原语）
+skill jsrgzonghai(4226342722) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgzonghai（skill.js:1529）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

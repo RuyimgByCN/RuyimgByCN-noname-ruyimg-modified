@@ -1,0 +1,20 @@
+// chulao（费祎·黜老）：出牌阶段限一次，弃一张牌，选择多名势力各异的角色，
+// 弃其一张牌。若弃置的牌为黑桃，该牌拥有者摸一张牌（自己或目标分别判定）。
+// 上游 (refresh/skill.js chulao)：enable phaseUse；usable 1；selectTarget
+// [1, Infinity]（filterTarget 势力各异、非 unknown、有牌可弃）；cost 弃一张
+// 牌（he）；content step0 成本牌黑桃 → player.draw(1)，逐目标
+// choosePlayerCard(he, true) → target.discard(links[0])，被弃牌黑桃 →
+// target.draw(1)。
+// 实现（2026-09-13 第二百七十四批·简单主动逐目标族状态机，ADR 0641 §8.62）：
+// active play_phase uses_per_turn 1 targets 1 255 other →
+// resolve_chulao(self)（ABI 723 / tag 747 / Cont 322 逐目标循环续体）：入口
+// 校验势力各异（player_group 非空且互异）→ owner 选成本牌（可取消，黑桃摸 1）
+// → 逐目标 owner 选弃其一张牌（黑桃则目标摸 1，无可弃目标跳过）。
+// 近似（登记债）：①目标选择器未提供「势力各异」过滤面（机器入口校验，
+// 激活即拒）；②choosePlayerCard 不可中断表现面（上游 result.bool=false
+// 分支）以跳过无牌目标近似。
+skill chulao(3352443727) {
+  active play_phase uses_per_turn 1 targets 1 255 other {
+    effect resolve_chulao(self);
+  }
+}

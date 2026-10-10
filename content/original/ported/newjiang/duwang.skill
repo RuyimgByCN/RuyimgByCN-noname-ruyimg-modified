@@ -1,0 +1,15 @@
+// 度望（徐庶）：锁定技。游戏开始时，将牌堆顶 5 张非【杀】牌置于武将牌上
+// 作为「刺」；其他角色计算至你的距离 +1（你有「刺」时）。
+// 上游 (newjiang/skill.js duwang)：global phaseBefore(phaseNumber==0)/enterGame
+// forced；content 扫牌堆顶取前 5 张非【杀】置入 expansion gaintag duwang；
+// mod globalFrom/globalTo = +min(1, 非杀刺数)。
+// 实现（2026-09-11 第二百三十九批·专属 host 状态机第四件，quanjia 工艺复用）：
+// trigger game_started owner_alive forced → resolve_duwang(self, self_skill)
+// （ABI 695 / tag 718，单发：牌堆顶扫非杀取 5 置入自身「刺」堆）。
+// 近似（登记债）：①距离修正面保守省略（上游有刺即 +1，DSL 无 min(1,count)
+// 修饰源，按 +N 超集不建原则省略）；②enterGame 时点以 game_started 单点近似。
+skill duwang(3777977845) locked {
+  trigger game_started owner_alive {
+    effect resolve_duwang(self, self_skill);
+  }
+}

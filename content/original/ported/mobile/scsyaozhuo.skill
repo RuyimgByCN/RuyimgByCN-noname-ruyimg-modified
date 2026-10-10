@@ -1,0 +1,29 @@
+// 谣诼：出牌阶段限一次，与一名其他角色拼点。
+skill scsyaozhuo(2736759716) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 3825030276, 3028413936);
+  }
+}
+
+// 严格获胜：令拼点目标跳过下一个摸牌阶段。
+skill scsyaozhuo_win(3825030276) {
+  trigger hand_compare_finished owner_alive {
+    effect add_skill(event_source, 4154258460);
+    effect remove_skill(self_skill);
+  }
+}
+
+// 未获胜（失败或平局）：弃置两张手牌或装备牌，不足则全部弃置。
+skill scsyaozhuo_lose(3028413936) {
+  trigger hand_compare_finished owner_alive {
+    effect choose_discard_hand_equip_then_remove_self_skill(self, 2);
+  }
+}
+
+// 一次性延迟结算：进入下个摸牌阶段时移除自身并跳过该阶段。
+skill scsyaozhuo_skip(4154258460) {
+  trigger phase_draw owner_alive {
+    effect remove_skill(self_skill);
+    effect skip_current_phase(self);
+  }
+}

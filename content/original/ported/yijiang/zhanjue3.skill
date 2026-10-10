@@ -1,0 +1,7 @@
+// 战绝3（标记辅助）：战绝造成伤害后，令受伤角色获得"战绝5"临时技能。
+// 旧JS给trigger.player加zhanjue5临时技能。DSL以add_skill_until_turn_end近似。
+skill zhanjue3(4046088793) locked {
+    trigger damage owner_is_source {
+        effect add_skill_until_turn_end(event_player, 2204515087);
+    }
+}

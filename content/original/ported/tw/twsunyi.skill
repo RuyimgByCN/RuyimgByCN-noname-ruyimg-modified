@@ -1,0 +1,7 @@
+// 躁厉：出牌阶段仅可使用本回合获得的手牌，并在阶段开始重铸装备与手牌。
+skill twzaoli(2591520200) locked {
+  trigger phase_play owner_is_target {
+    effect resolve_twzaoli(self);
+  }
+  modifier hand_card_gained_this_turn_only override 1;
+}

@@ -1,0 +1,7 @@
+// hm_qianwei：主动(phaseUse), 摸牌, 选牌UI, 异步。
+skill hm_qianwei(3067931230) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

@@ -1,0 +1,6 @@
+// 方统：结束阶段若“方”不少于36，立即以自己的阵营获胜。
+skill old_fangtong(2714288558) locked {
+  trigger phase_end owner_is_target {
+    effect end_match_for_player_camp_if_skill_pile_at_least(self, 2612231702, 36);
+  }
+}

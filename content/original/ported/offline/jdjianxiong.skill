@@ -1,0 +1,6 @@
+// jdjianxiong：音效名:sbjianxiong, 二选一, 摸牌, 多步骤。
+skill jdjianxiong(2838306954) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

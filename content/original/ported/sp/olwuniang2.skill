@@ -1,0 +1,3 @@
+skill olwuniang2(4020090823) {
+  modifier sha_use_limit add owner_skill_mark;
+}

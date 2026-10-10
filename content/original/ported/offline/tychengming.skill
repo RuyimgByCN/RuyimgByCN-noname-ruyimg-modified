@@ -1,0 +1,5 @@
+// tychengming：觉醒技, 限定技, player:dying, 需选择目标, 加技能, 异步。
+skill tychengming(2620266407) {
+  trigger dying owner_alive {
+  }
+}

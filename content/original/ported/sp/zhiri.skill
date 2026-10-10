@@ -1,0 +1,15 @@
+// 炙日（zhiri）：觉醒技。准备阶段开始时，若你的「焚」牌堆不小于3张，你减1点体力上限，
+// 然后获得技能〖心惔〗。
+// 觉醒仅一次以觉醒标记近似；「焚」计数用 ABI 565 skill_pile_count（fentian 牌堆，
+// 由「焚天」技能维护）。上游 skillAnimation/audio 表现层未建模。
+skill zhiri(2217683305) locked {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2217683305) == 0 {
+      if 2 < skill_pile_count(self, 3669648107) {
+        effect change_max_hp(self, -1);
+        effect add_skill(self, 2185342847);
+        effect add_mark(self, 2217683305, 1);
+      }
+    }
+  }
+}

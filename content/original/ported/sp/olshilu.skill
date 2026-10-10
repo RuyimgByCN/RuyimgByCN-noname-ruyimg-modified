@@ -1,0 +1,7 @@
+// 识露（olshilu）：锁定技。当你受到伤害后，你摸X张牌（X为你的体力值且至多为5）。
+// ②展示攻击范围内一名角色一张手牌并视为无属性【杀】的分支未建模。
+skill olshilu(2791913057) locked {
+  trigger damage owner_is_target {
+    effect draw_cards(self, min(5, hp(self)));
+  }
+}

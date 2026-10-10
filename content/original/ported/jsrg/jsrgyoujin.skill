@@ -1,0 +1,8 @@
+// jsrgyoujin（诱进）：出牌阶段开始时，你可以与一名角色拼点，你与其本回合不能使用或打出点数小于自己拼点牌的手牌，且赢的角色视为对没赢的角色使用一张【杀】。
+// 未建模：charlotte延迟, addTempSkill（DSL无对应原语）
+skill jsrgyoujin(4115280379) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgyoujin（skill.js:2421）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,9 @@
+// 异勇（王双）：锁定技。你受到【杀】造成的伤害后，获得此【杀】进入弃牌堆的实体牌；
+// 若伤害来源存活、你手牌中有全部这些牌且可对其使用【杀】（无视距离），你立即用
+// 这些牌对来源使用一张【杀】，若来源没有武器则此【杀】伤害基数 2。
+// 旧 JavaScript 仅作语义证据；获牌与反击由 ABI 415 resolve_yiyong 权威结算。
+skill yiyong(3278613015) locked {
+  trigger damage owner_is_target {
+    effect resolve_yiyong(self);
+  }
+}

@@ -1,0 +1,6 @@
+// petongkai：global:card_targeted, 摸牌, 异步。
+skill petongkai(2820367646) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

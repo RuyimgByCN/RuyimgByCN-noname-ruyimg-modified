@@ -1,0 +1,6 @@
+// tiansuan2（见 translate.js）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill tiansuan2(2647155823) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 tiansuan2 = 标记型技能（charlotte，skill.js:23908），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

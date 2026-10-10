@@ -1,0 +1,7 @@
+// zj_tuizhi：主动(chooseToUse), 摸牌, 弃牌。
+skill zj_tuizhi(2286988805) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

@@ -1,0 +1,16 @@
+// 催进：弃牌强化自己或攻击范围内角色的杀；未造成伤害时反噬使用者。
+skill cuijin(2582559793) {
+trigger card_used owner_alive_sha_used_by_self_or_in_range_discardable_hand_equip {
+    effect discard_one_hand_or_equip(self);
+    effect increase_current_sha_base_damage(event_source, event_card, 1);
+    effect resolve_cuijin(self, event_source, event_card, 0);
+  }
+  trigger sha_resolved owner_alive_tracked_cuijin_sha_resolved_no_damage {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+    effect resolve_cuijin(self, event_source, event_card, 1);
+  }
+  trigger sha_resolved owner_alive_tracked_cuijin_sha_resolved_dealt_damage {
+    effect resolve_cuijin(self, event_source, event_card, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 上游描述：准备阶段和结束阶段，你可以摸一张牌并与一名角色延时拼点，然后视为对其使用一张【决斗】，直到此【决斗】结算结束，此【决斗】结算过程中各限X次（X为各自手牌数的一半，向下取整），当你或目标角色需要打出【杀】响应此【决斗】时，可以将一张手牌当【杀】打出。结算后公开结果，拼点赢的角色将手牌摸至体力上限。你的拼点牌点数+X（X为当前游戏轮数且至多为4）。
+// 来源：archive/upstream/noname legacy-source/character/character/tw/skill.js L29185
+// twchengbian：上游有真实规则体，现有 host filter/effect 不足以表达
+// （chooseToUse / gaintag / expansion / 额外回合 / 判定改判 / 阶段插入 / 动态 view_as）。
+// 诚实空实现（保真度债，ADR 0597）。旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill twchengbian(2259147729) {
+  // INTENTIONAL_EMPTY_NOOP: existing primitives cannot express the old-JS contract
+  modifier hand_limit add 0;
+}

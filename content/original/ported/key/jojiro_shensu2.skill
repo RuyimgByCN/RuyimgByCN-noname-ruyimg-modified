@@ -1,0 +1,8 @@
+// 神速2（城次郎）：出牌阶段开始前，可弃置一张装备牌并跳过出牌阶段，视为对一名其他角色使用【杀】。
+// 以 skip_current_phase + choose_use_virtual_sha 近似，缺失「弃置装备牌为条件」的过滤。
+skill jojiro_shensu2(2276029996) {
+  trigger phase_play owner_alive optional {
+    effect skip_current_phase(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

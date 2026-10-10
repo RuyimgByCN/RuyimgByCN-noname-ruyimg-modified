@@ -1,0 +1,18 @@
+// 坚卫（谋程普）：锁定技：摸牌阶段，若你的手牌数小于 2，多摸 4 张牌。
+// （上游另有起始手牌数+4 面。）
+// 上游 (xianding/skill.js dcsbjianwei)：主技 global gameDrawBegin 改写起始
+// 摸牌数（trigger.num 改写）；group dcsbjianwei_draw：phaseDrawBegin2 forced
+// filter 手牌<2 → trigger.num += 4。
+// 实现（2026-09-10 第二百二十三批·v1.11.6 增量层散批）：补牌面 trigger
+// phase_draw owner_is_target（locked forced）+ body 级 if hand_count(self) < 2
+// → draw_cards(self, 4)（tunchu 同款建模）。
+// 近似（登记债）：①起始手牌数+4 面（gameDrawBegin 数值改写）未建模——
+// bootstrap 摸牌数无原语；②多摸 4 张为独立摸牌结算、非 trigger.num 改写
+// （与正常摸牌合并为同阶段总量，净效果一致）。
+skill dcsbjianwei(2772977525) locked {
+  trigger phase_draw owner_is_target {
+    if hand_count(self) < 2 {
+      effect draw_cards(self, 4);
+    }
+  }
+}

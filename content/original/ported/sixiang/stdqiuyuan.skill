@@ -1,0 +1,7 @@
+// 求援：成为牌目标时，目标可选择交给你一张牌，或成为该牌的额外目标。
+// 旧 JS 的「牌结算中途新增目标」无对应原语（需修改 trigger.targets 数组），未建模。
+skill stdqiuyuan(4205227085) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

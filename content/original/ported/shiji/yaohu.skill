@@ -1,0 +1,9 @@
+// 耀虎（董卓系）：锁定技。回合开始时，选择一种势力并关联；你使用的牌
+// 对关联势力角色无效。
+// 旧 JS 的「势力关联」无对应原语；以回合开始摸一张近似（势力关联未
+// 建模，已注明）。
+skill yaohu(2311702621) locked {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

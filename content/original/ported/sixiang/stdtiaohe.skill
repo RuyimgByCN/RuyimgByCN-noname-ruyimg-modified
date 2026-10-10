@@ -1,0 +1,6 @@
+// 费祎·调和：旧 JavaScript 仅作语义证据；权威目标与弃牌选择由通用状态机完成。
+skill stdtiaohe(2595769846) {
+  active play_phase uses_per_turn 1 targets 2 2 equipment_pair_with_armor {
+    effect discard_equipment_pair_with_armor(self);
+  }
+}

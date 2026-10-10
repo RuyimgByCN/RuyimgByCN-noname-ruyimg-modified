@@ -1,0 +1,5 @@
+// hm_zhouyuan（锁定技/主动技(phaseUse)/触发技）：锁定技, global:phase_play_end, 主动(phaseUse), 移出游戏, 加技能, 含子技能, 异步。
+skill hm_zhouyuan(3452481497) locked {
+  trigger phase_play_end always {
+  }
+}

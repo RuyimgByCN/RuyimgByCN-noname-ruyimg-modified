@@ -1,0 +1,12 @@
+// 新宗祚（刘谌）：锁定技，游戏开始时或你登场时，增加体力上限并回复（数值=场上势力数）。当场上一势力的最后一名角色死亡时，你减1点体力上限并摸两张牌。
+// 旧 JS 的势力计数+体力上限/回复+死亡监听；DSL 以 change_max_hp + recover_hp 近似初始效果，死亡触发用 death 事件。
+skill xinzongzuo(2305038950) locked {
+  trigger game_started owner_alive {
+    effect change_max_hp(self, alive_count());
+    effect recover_hp(self, alive_count());
+  }
+  trigger death owner_alive {
+    effect draw_cards(self, 2);
+    // 未精确：仅当某势力最后一人死亡时才触发，此处任何角色死亡都触发
+  }
+}

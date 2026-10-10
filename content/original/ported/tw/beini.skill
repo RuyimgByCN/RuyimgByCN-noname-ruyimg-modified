@@ -1,0 +1,10 @@
+// beini（悖逆）：出牌阶段，选择一名体力不小于你的角色，选择一项：
+// 1.摸两张牌，令其视为对你使用【杀】；2.令其摸两张牌，你视为对其使用【杀】。
+// 旧 JS 含双分支 chooseControl 选择；DSL 无 choose_two_branch 等效原语，无虚拟【杀】分支原语。
+// 以 choose_other_damage 近似保留部分收益，不完整。
+skill beini(3809600946) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect draw_cards(event_source, 2);
+    effect choose_other_damage(event_source, 1);
+  }
+}

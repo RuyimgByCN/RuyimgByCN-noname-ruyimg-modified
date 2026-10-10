@@ -1,0 +1,12 @@
+// 追还·二（SP 周泰）：锁定技，你受到伤害后，若伤害来源的体力值大于你，你对其造成
+// 1 点伤害；否则其随机弃置一张手牌/装备牌。
+// DSL 仅支持 ==/< 操作符，以 hp(self) < hp(event_source) 反向表达“来源体力>你”。
+skill zhuihuan2(3807480043) locked {
+  trigger damage owner_is_target_other_source_alive_per_damage_point {
+    if hp(self) < hp(event_source) {
+      effect deal_damage(self, event_source, 1);
+    } else {
+      effect discard_one_hand_or_equip(event_source);
+    }
+  }
+}

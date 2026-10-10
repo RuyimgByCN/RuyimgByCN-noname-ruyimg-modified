@@ -1,0 +1,4 @@
+// Skill leix2(175) - modifier range variant
+skill leix2(175) {
+  modifier attack_range add 1;
+}

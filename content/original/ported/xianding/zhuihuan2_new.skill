@@ -1,0 +1,7 @@
+// 追还·二（new版）：锁定技，准备阶段开始时，统计本回合所有对你造成过伤害的角色——
+// 对每名来源：若其体力值 > 你则造成2点伤害，否则随机弃置两张手牌。
+// 旧 JS 的「本回合伤害来源批量统计」「逐人处理」无对应原语，未建模。
+skill zhuihuan2_new(2673779471) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

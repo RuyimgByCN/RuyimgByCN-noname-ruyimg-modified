@@ -1,0 +1,7 @@
+// 奸雄 enhanced — 曹操: after damage, take the damage card.
+// Simplified: after damage, draw 1 (scheming resource).
+skill jianxiong2(55) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

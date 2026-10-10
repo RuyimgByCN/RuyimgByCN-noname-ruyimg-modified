@@ -1,0 +1,8 @@
+// jsrgxiezheng（挟征）：结束阶段，你可以令至多三名角色依次将一张手牌置于牌堆顶，然后视为你使用一张【兵临城下】；此牌结算完成后若未造成伤害，你失去1点体力。
+// 未建模：历史查询（DSL无对应原语）
+skill jsrgxiezheng(2520436963) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgxiezheng（skill.js:12804）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

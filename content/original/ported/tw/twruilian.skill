@@ -1,0 +1,12 @@
+// 睿敛：每轮选择一名角色，记录其回合内弃牌，并在其回合结束按类别获得弃牌堆牌。
+skill twruilian(3419838857) {
+  trigger phase_begin owner_alive_twruilian_round_unprompted {
+    effect resolve_twruilian(self, event_player, 0);
+  }
+  trigger cards_moved owner_alive_twruilian_selected_target_discarded {
+    effect resolve_twruilian(self, event_player, 1);
+  }
+  trigger turn_ended owner_alive_twruilian_selected_target_turn_ended {
+    effect resolve_twruilian(self, event_player, 2);
+  }
+}

@@ -1,0 +1,10 @@
+// 闺秀（DC 糜夫人）：锁定技，回合开始时若未发动过本效果，摸两张牌。
+// 发动【存嗣】后的回复由 resolve_dccunsi 在完整连锁结算后处理。
+skill dcguixiu(2370422642) locked {
+  trigger phase_begin owner_is_target {
+    if mark_count(self, 2370422642) == 0 {
+      effect add_mark(self, 2370422642, 1);
+      effect draw_cards(self, 2);
+    }
+  }
+}

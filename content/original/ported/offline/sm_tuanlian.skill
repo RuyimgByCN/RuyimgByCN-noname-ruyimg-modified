@@ -1,0 +1,7 @@
+// sm_tuanlian：锁定技, global:phaseBefore, source:damageSource, player:game_started, 摸牌, 异步。
+skill sm_tuanlian(3739148603) {
+  trigger phase_begin owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

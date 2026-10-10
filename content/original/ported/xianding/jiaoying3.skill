@@ -1,0 +1,7 @@
+// 醮影（谋孙翊衍生）：子技能，记录获得你手牌的角色，其使用牌时移除记录。
+// DSL缺 cross-skill state tracking 原语，无法表达。
+skill jiaoying3(2503168814) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jiaoying3 = 标记型技能（charlotte，skill.js:43239），无规则面。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

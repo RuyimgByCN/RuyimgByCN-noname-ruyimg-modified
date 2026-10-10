@@ -1,0 +1,6 @@
+// 益州（pxyizhou）：锁定技。你不能成为延时锦囊牌的目标。
+// 上游 (sp/skill.js:2751)：mod.targetEnabled，若牌为延时锦囊（get.type == "delay"）返回 false。
+// 实现：card_target_cancel(delayed_trick) override 1（与 sp/zhenlue 同管线）。
+skill pxyizhou(2941177736) locked {
+  modifier card_target_cancel(delayed_trick) override 1;
+}

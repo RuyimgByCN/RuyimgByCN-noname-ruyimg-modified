@@ -1,0 +1,8 @@
+// 祸结（刘协曹节）：出牌阶段开始时，若「鼎玺」区牌数大于场上角色数，依次执行闪电判定；
+// 若受到伤害，回收全部「鼎玺」区牌。
+// 「鼎玺（oldingxi）扩张区」与「闪电延时判定执行循环」无对应原语，未建模。
+skill olhuojie(3810927519) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

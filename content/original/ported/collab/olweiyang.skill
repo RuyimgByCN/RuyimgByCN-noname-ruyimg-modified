@@ -1,0 +1,10 @@
+// 未羊：出牌阶段限一次，弃置 1~3 张基本牌/锦囊牌/装备牌类别互不相同的牌，
+// 选择等量已受伤角色，各回复 1 点体力。旧 JavaScript 只用于语义核对。
+skill olweiyang(4199352428) {
+  active play_phase uses_per_turn 1
+    targets 1 3 wounded match_selected_card_count
+    select_he 1 3 distinct_categories {
+    effect discard_selected(self);
+    effect recover_selected_targets(1);
+  }
+}

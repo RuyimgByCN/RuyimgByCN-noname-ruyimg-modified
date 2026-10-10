@@ -1,0 +1,6 @@
+// peqinyi：source:damageSource, player:damage, 异步。
+skill peqinyi(2754914212) {
+  trigger damage owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

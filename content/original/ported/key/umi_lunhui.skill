@@ -1,0 +1,26 @@
+// 轮回（海未）：其他角色的回合结束后，若手牌数小于体力值且“轮回”未被绑定，
+// 你扣 1 点体力、摸两张牌并获得一个额外回合；绑定持续到你的回合结束。
+// 上游 key/skill.js:11616（charlotte，storage umi_shiroha + addTempSkill）。
+// 实现（第八十四批，跨包复用 queue_extra_turn check=0 形态）：
+// 候选触发 `turn_ended owner_alive_not_target optional`——storage key 1 为
+// 「绑定中」标记（自己回合结束置 1？反向：触发成功时置 1，自己的回合结束
+// 清零；上游在触发时绑定、其自身 phaseAfter 解除）。body-if 条件过滤
+// hand_count(self) < hp(self)；效果链 lose_hp(1) + draw_cards(2) +
+// queue_extra_turn(check=0，无尾随代价)。
+// 近似：①候选确认在条件不满足的回合仍会打开（引擎 optional 语义，confirm 后
+// 静默）；②「绑定」以 storage 一位布尔而非角色绑定关系表达。
+skill umi_lunhui(2932731107) {
+  trigger turn_ended owner_is_target {
+    effect storage_set(self_skill, 1, 0);
+  }
+  trigger turn_ended owner_alive_not_target optional {
+    if storage_get(self_skill, 1) == 0 {
+      if hand_count(self) < hp(self) {
+        effect storage_set(self_skill, 1, 1);
+        effect lose_hp(self, 1);
+        effect draw_cards(self, 2);
+        effect queue_extra_turn(self, 0, self_skill);
+      }
+    }
+  }
+}

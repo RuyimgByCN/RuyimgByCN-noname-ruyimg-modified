@@ -1,0 +1,5 @@
+// 易型（哈基术）：出牌阶段将装备牌置于武将牌上为「器」，获得对应装备技能，且「器」影响距离。
+// 旧 JS 依赖 expansion（武将牌上牌）系统及动态技能附加（addAdditionalSkill），DSL 无对应原语。
+skill mbyixing(3914782518) {
+  modifier hand_limit add 1;
+}

@@ -1,0 +1,5 @@
+// eu_sashan：锁定技, global:phaseBefore, player:game_started, 异步。
+skill eu_sashan(3981346943) {
+  trigger phase_begin owner_alive {
+  }
+}

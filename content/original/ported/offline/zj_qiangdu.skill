@@ -1,0 +1,6 @@
+// zj_qiangdu：phase_play时摸牌。
+skill zj_qiangdu(3016855580) {
+  trigger phase_play owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

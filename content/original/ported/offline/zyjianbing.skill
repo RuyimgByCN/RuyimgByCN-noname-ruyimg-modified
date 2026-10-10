@@ -1,0 +1,6 @@
+// zyjianbing：global:damage_before, 回复体力, 多步骤。
+skill zyjianbing(3615344936) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

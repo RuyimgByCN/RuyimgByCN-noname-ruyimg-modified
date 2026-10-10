@@ -1,0 +1,4 @@
+skill kotarou_rewrite_sha(3115638476) {
+  modifier hand_limit add owner_skill_mark;
+  modifier sha_use_limit add owner_skill_mark;
+}

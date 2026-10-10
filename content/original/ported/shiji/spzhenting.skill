@@ -1,0 +1,9 @@
+// 镇庭（张让系）：任意角色使用【杀】或延时锦囊指定目标后（每回合一次），
+// 你可令其摸一张牌。
+// 旧 JS 的「目标限制」无对应原语；以任意角色用牌后你摸一张近似
+// （已注明）。
+skill spzhenting(3786485342) {
+  trigger card_targeted owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

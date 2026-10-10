@@ -1,0 +1,7 @@
+// 父魂（关兴张苞）：可将两张手牌当【杀】使用或打出。
+// 旧 JS 的「父魂杀造成伤害后获得武圣+咆哮」部分因需检查父事件技能名
+// 且临时技能 def_id 未知，未建模；仅保留转化部分。
+// view_as 窗口：use_card 覆盖使用阶段；出牌阶段外响应需 respond 窗口暂不支持，略弱。
+skill fuhun(4081639862) {
+  view_as sha play_phase any from hand up_to 2;
+}

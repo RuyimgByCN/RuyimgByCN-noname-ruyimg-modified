@@ -1,0 +1,4 @@
+skill reyicong(3426755583) locked {
+  modifier distance_from add -1;
+  modifier distance_to add owner_hp_le_two;
+}

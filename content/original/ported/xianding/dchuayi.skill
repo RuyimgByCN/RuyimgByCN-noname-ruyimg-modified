@@ -1,0 +1,8 @@
+// 华衣：一名角色的回合结束时，你摸一张牌。
+// 旧 JS 的“结束阶段判定：红色则直到你的下回合开始每名角色回合结束时摸一张、
+// 黑色则受伤后摸两张”以固定“其他角色回合结束时摸一张”近似。
+skill dchuayi(2287394739) {
+  trigger phase_end owner_alive_not_target optional {
+    effect draw_cards(self, 1);
+  }
+}

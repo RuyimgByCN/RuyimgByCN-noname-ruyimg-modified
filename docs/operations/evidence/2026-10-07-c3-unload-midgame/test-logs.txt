@@ -1,0 +1,12 @@
+$ 定向：C3 卸载进行中对局（2026-10-07 批次）
+test e03_c3_uninstall_during_active_game_lock_pinned ... ok
+test e02_c3_upgrade_rebinds_lock_and_rollback_restores_v1 ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+$ 全量：cargo test --offline -p engine-native
+合计 passed=358 failed=0 ignored=1
+
+$ golden / 依赖 crate / lib -D warnings
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+content-runtime passed=32 failed=0
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s

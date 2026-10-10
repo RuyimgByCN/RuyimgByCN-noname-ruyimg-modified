@@ -1,0 +1,7 @@
+// 举讹（杨彪）：每轮限一次，一名角色的结束阶段，按本回合因弃置且仍在弃牌堆的
+// 实体牌数与目标体力上限的较小值，依次随机使用【杀】/【过河拆桥】/【五谷丰登】。
+skill dcjue(2849188079) {
+  trigger phase_end owner_alive_global_phase_end_discarded_cards_available {
+    effect resolve_dcjue(self, event_player);
+  }
+}

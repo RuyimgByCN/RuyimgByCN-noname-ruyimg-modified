@@ -1,0 +1,9 @@
+// 武娘（newwuniang）：你可以将一张非基本牌当【杀】使用或打出（无视防具）。
+// 上游 (sp/skill.js:5325)：enable chooseToUse，filterCard 非基本牌，viewAs sha，precontent
+// directHit.addArray(all)（无视防具）。
+// 实现：view_as sha play_phase/response non_basic from hand_equip。与上游差异：
+// directHit（无视防具）未建模，已注明。
+skill newwuniang(3700934480) {
+  view_as sha play_phase non_basic from hand_equip;
+  view_as sha response non_basic from hand_equip;
+}

@@ -1,0 +1,3 @@
+skill nsxiuxin(3579127646) {
+  modifier card_target_cancel_if_target_lacks_matching_suit override 1;
+}

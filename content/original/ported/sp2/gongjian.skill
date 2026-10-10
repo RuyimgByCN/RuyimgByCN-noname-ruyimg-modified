@@ -1,0 +1,10 @@
+// 拱坚（朱儁）：出牌阶段限一次，当你使用的【杀】与本回合你上一张使用的【杀】存在
+// 共同目标时，你对每个共同目标弃置 1-2 张手牌或装备区里的牌，然后获得其中被弃置的
+// 【杀】。
+// 旧 JS 仅作语义证据；共同目标判定（引擎记录上一张【杀】目标 LAST_SHA_TARGETS）与
+// 逐目标弃牌→夺【杀】由 resolve_gongjian 权威状态机校验（ABI 473）。
+skill gongjian(3309202552) {
+  trigger card_used owner_source_sha_repeats_previous_sha_targets {
+    effect resolve_gongjian(self);
+  }
+}

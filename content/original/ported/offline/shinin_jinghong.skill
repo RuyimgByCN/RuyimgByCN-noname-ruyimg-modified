@@ -1,0 +1,5 @@
+// shinin_jinghong：player:useCard1, global:cards_moved, global:cards_moved, 含子技能, 异步。
+skill shinin_jinghong(4149173757) {
+  trigger cards_moved owner_alive optional {
+  }
+}

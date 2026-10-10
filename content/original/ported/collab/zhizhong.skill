@@ -1,0 +1,8 @@
+// 置重（博学曹冲）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：出牌阶段限一次：观看所有其他角色手牌，获得点数和≤你手牌点数和的任意子集，然后弃置等量张牌
+// 旧 JS 的「数值和约束的任意子集选择（complexSelect）」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill zhizhong(3753963071) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

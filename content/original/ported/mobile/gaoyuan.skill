@@ -1,0 +1,20 @@
+// gaoyuan（告援）：当你成为【杀】的目标时，你可弃置一张牌将此【杀】转移给
+// 一名有“诤”且不是此【杀】使用者的其他角色。
+// 上游 (mobile/skill.js gaoyuan L27164)：trigger target useCardToTarget（杀）；
+// filter 自身有牌可弃且存在持 zhengjian_mark 的合法目标；chooseCardTarget
+// （he 弃牌 + filterTarget 有诤标非使用者 targetEnabled）→ 先 discard 再把
+// player 换成 target（转移）。
+// 实现（2026-09-13 第二百七十一批·杀目标转移族状态机，ADR 0641 §8.59）：
+// trigger card_targeted owner_sha_target_can_discard_redirect_to_zhengjian_marked →
+// resolve_gaoyuan(self, event_source, event_card)（ABI 720 / tag 744 /
+// Cont 319 两段续体）：选弃牌（0..1 可取消）→ 选转移目标（1..1 可取消，
+// 候选=source 射程内合法目标∩持「诤」标）→ 弃牌 + redirect_saved_sha_target
+// （尾随 CommitGaoyuanRedirect 提交，弃牌先于转移，与上游一致）。
+// 近似（登记债）：①targetEnabled 以「使用者射程内 + 未被取消」近似（未含
+// 上游全部 targetEnabled 分支，如空城等由既有合法性检查承接）；②技能名台词
+// logSkill 表现面未建模。
+skill gaoyuan(3635381901) {
+  trigger card_targeted owner_sha_target_can_discard_redirect_to_zhengjian_marked {
+    effect resolve_gaoyuan(self, event_source, event_card);
+  }
+}

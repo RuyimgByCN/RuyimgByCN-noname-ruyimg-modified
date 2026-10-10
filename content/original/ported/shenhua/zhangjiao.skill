@@ -1,0 +1,24 @@
+// 雷击（张角）：当你使用或打出【闪】时，你可以令一名其他角色判定；若判定结果为
+// 黑桃，你对其造成 2 点雷电伤害；若为梅花，你回复 1 点体力并对其造成 1 点雷电
+// 伤害。目标选择与判定分支由 resolve_releiji 权威校验（ABI 549）。
+skill releiji(48412566) {
+  trigger card_responded owner_responded_shan optional {
+    effect resolve_releiji(self);
+  }
+}
+
+// 鬼道（张角）：当一名角色的判定牌生效前，你可以打出一张黑色手牌或装备牌替换之。
+// 复用引擎判定改写机制：黑色手/装备牌经 judgment_rewrite_black_hand_equip 修正器
+// 进入改写候选（ABI 550），判定流程统一征询。
+skill guidao(1025117348) {
+  modifier judgment_rewrite_black_hand_equip override 1;
+}
+
+// 黄天（张角，主公技）：其他群势力角色的出牌阶段限一次，其可以将一张【闪】或
+// 【闪电】交给你。触发以 by event_player 将选择权交给群势力角色（ABI 551，
+// 复用制霸主公技模式）；每回合一次由 once_per_round 过滤守卫。
+skill huangtian(2761489181) lord_only {
+  trigger phase_play owner_alive_other_qun_play_phase_can_give_owner optional by event_player {
+    effect resolve_huangtian(self, event_player);
+  }
+}

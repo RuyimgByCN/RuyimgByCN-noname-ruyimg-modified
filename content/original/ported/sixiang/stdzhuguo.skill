@@ -1,0 +1,6 @@
+// 助国：出牌阶段限一次，令一名手牌少于两张的角色将手牌补至两张。
+skill stdzhuguo(3147233152) {
+  active play_phase uses_per_turn 1 targets 1 1 hand_lt 2 {
+    effect draw_cards(event_source, 2 - hand_count(event_source));
+  }
+}

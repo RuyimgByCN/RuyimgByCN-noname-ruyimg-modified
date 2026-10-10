@@ -1,0 +1,6 @@
+// tyjinzhong：player:phase_play, player:damage, 需选择目标, 多分支选择, 回复体力, 失去体力, 异步。
+skill tyjinzhong(3855076362) {
+  trigger phase_play owner_alive optional {
+    effect lose_hp(self, 1);
+  }
+}

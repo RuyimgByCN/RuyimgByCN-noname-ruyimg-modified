@@ -1,0 +1,9 @@
+// resilv（恃势）：锁定技。受到伤害后，你摸一张牌（带 resilv gaintag，由 _restore 子技能
+// 在该牌被弃置时回血消费）。上游 content(): player.draw(); next.gaintag.add("resilv")。
+// 近似：gaintag 标记与 _restore 弃置回血子技能需 expansion 支持，本定义实现主技能的摸牌
+// 核心行为（上游唯一 content 副作用）。
+skill resilv(4240519728) locked {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

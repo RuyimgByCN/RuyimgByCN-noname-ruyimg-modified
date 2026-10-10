@@ -1,0 +1,6 @@
+// 恩怨（法正）：锁定技，组合技入口，包含恩怨1和恩怨2。
+// 旧 JS 为纯 group 组装，DSL 中留空锁定定义以标记锁定技属性。
+skill enyuan(4265043596) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

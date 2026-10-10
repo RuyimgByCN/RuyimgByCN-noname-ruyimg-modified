@@ -1,0 +1,5 @@
+// pschiyan（锁定技/触发技）：音效名:scschiyan, 锁定技, player:card_targeted, global:phaseEnd, player:damage_before, 移出游戏, 加技能, 含子技能, 异步。
+skill pschiyan(4133351407) locked {
+  trigger card_targeted always {
+  }
+}

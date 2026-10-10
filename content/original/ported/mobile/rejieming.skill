@@ -1,0 +1,6 @@
+// 手杀界节命：每受到一点伤害，均可令一名角色摸两张牌；若其手牌仍少于体力上限，自己摸一张。
+skill rejieming(4088661605) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect choose_target_draw_then_owner_if_below_max_hp(self, 2);
+  }
+}

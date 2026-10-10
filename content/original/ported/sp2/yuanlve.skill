@@ -1,0 +1,5 @@
+skill yuanlve(3073596171) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 1 card_non_equip {
+    effect give_selected_then_target_may_use_draw_owner(self, event_source);
+  }
+}

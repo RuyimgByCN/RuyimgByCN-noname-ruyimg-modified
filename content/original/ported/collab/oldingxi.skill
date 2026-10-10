@@ -1,0 +1,8 @@
+// 锭玺（OL锭玺）：弃牌阶段，若上家本回合使用过伤害牌且弃牌中有伤害牌，可使用其中一张，用后收入武将牌上；结束阶段摸等于武将牌上牌数的牌。
+// 旧 JS 含跨回合状态追踪、弃牌堆中选牌使用、expansion 武将牌存储，DSL 无对应原语。
+// 近似为弃牌阶段结束时摸1张牌。
+skill oldingxi(2405661740) {
+  trigger phase_discard_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

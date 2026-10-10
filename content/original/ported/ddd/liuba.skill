@@ -1,0 +1,25 @@
+// 3D精选 刘巴「丰政/玉律」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddfengzheng(986583704) {
+  trigger game_started owner_alive {
+    effect resolve_ddd_liuba(self, self, 2);
+  }
+  trigger phase_begin owner_alive_ddd_fengzheng_round_pending {
+    effect resolve_ddd_liuba(self, event_player, 1);
+  }
+}
+
+skill dddfengzheng_global(1253882292) non_gainable {
+  active play_phase uses_per_play_phase 1
+      select_hand 1 255 sum_effective_number_exact 13 {
+    effect resolve_ddd_liuba(self, self, 0);
+  }
+}
+
+skill dddyulv(694263366) locked {
+  trigger game_started owner_alive {
+    effect resolve_ddd_liuba(self, self, 3);
+  }
+  trigger cards_moved owner_alive_ddd_yulv_discard_matches {
+    effect resolve_ddd_liuba(self, self, 4);
+  }
+}

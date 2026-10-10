@@ -1,0 +1,12 @@
+// 负剑：无武器时从牌堆随机装备武器；回合外失去武器后失去体力。
+skill twfujian(2940701334) locked {
+  trigger game_started owner_alive {
+    effect equip_weapon_from_draw_pile(self);
+  }
+  trigger phase_prepare owner_is_target {
+    effect equip_weapon_from_draw_pile(self);
+  }
+  trigger cards_moved owner_alive_lost_weapon_outside_turn {
+    effect lose_hp(self, 1);
+  }
+}

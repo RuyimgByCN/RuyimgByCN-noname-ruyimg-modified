@@ -1,0 +1,7 @@
+// 骄宠（贾逵）：其他男性角色的结束阶段，你可以对其发动"五妃"（stdwufei）。
+// 旧 JS 的「引用并发动另一个技能（stdwufei）」无对应 DSL 原语。完全无法表达。
+skill stdjiaochong(4106551920) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

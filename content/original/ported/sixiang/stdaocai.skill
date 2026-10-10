@@ -1,0 +1,8 @@
+// 傲才：任意角色回合结束时，若你没有手牌，你可以观看牌堆顶两张牌并选择一张获得。
+// 近似：用 draw_cards(self, 1) 代替「观看两张选一张」——收益接近（均得1牌），但少了选择权与牌堆顶控制。
+// 使用 once_per_round 丢失：旧 JS 每回合结束时均可发动。
+skill stdaocai(3856842003) {
+  trigger phase_end owner_hand_empty {
+    effect draw_cards(self, 1);
+  }
+}

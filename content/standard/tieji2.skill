@@ -1,0 +1,4 @@
+// Skill tieji2(139) - standard variant
+skill tieji2(139) {
+  modifier distance_from add -1;
+}

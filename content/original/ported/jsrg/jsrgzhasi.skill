@@ -1,0 +1,13 @@
+// 诈死（JSRG 孙策）：限定技。当你受到伤害值不小于你的体力值的伤害时，你可以防止此伤害，
+// 然后失去〖猘横〗并获得〖制衡〗。
+// 实现：受伤前可选、每局一次 `prevent_current_damage`（mark_count 门控）。
+// 近似：不检验伤害≥体力；不换制衡/猘横；不进入「不计入距离和座次」。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgzhasi(2253086418) {
+  trigger damage_before owner_is_target optional {
+    if mark_count(self, 2253086418) == 0 {
+      effect prevent_current_damage();
+      effect add_mark(self, 2253086418, 1);
+    }
+  }
+}

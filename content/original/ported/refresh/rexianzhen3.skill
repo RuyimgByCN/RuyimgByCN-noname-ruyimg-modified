@@ -1,0 +1,12 @@
+// 陷阵失败临时效果（界高顺）
+// 原语义：不能使用【杀】。
+skill rexianzhen3(4037147006) {
+  modifier sha_use_cancel override 1;
+
+  trigger hand_compare_finished owner_is_target_event_card_sha {
+    effect add_skill_until_turn_end(self, 3222374511);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

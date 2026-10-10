@@ -1,0 +1,16 @@
+// 化身（左慈）：游戏开始时随机获得两张化身牌并选择其一声明技能，拥有该技能且性别/势力
+// 同步；回合开始/结束时重新选择。该技能为元技能（动态复制其他武将技能与身份属性），
+// DSL/引擎不支持动态技能复制，仅登记元数据（文档化近似：无运行时行为）。
+skill huashen(1234567909) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 新生（左慈）：每次失去体力后获得一张化身牌（至多三张）。依赖化身的化身牌池机制，
+// 同上仅登记元数据（文档化近似）。
+skill xinsheng(1234567910) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

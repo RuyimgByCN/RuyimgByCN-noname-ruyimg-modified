@@ -1,0 +1,22 @@
+{
+  "audit_date": "2026-10-06",
+  "checked_files": [
+    "AGENTS.md",
+    "noname-next/README.md",
+    "noname-next/noname-performance-architecture.md",
+    "noname-next/docs/architecture/overview.md",
+    "noname-next/docs/architecture/native-extensions.md",
+    "noname-next/docs/architecture/legacy-reference.md",
+    "noname-next/docs/architecture/architecture-evolution-plan.md",
+    "noname-next/docs/architecture/phase6-web-client.md",
+    "noname-next/docs/architecture/native-rules-baseline.md",
+    "noname-next/docs/architecture/native-progress.md",
+    "noname-next/docs/native-coverage-manifest.md",
+    "noname-next/docs/migration/upstream-extension-reconstruction.md",
+    "noname-next/docs/operations/evidence/2026-10-06-native-progress-audit/README.md"
+  ],
+  "local_links_checked": 269,
+  "missing_local_links_or_anchors": [],
+  "identical_second_level_sections": [],
+  "source_changes_after_audit": []
+}

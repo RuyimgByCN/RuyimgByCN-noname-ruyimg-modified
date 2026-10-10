@@ -1,0 +1,15 @@
+// 贞辨（徐琨）：任意角色因弃置进入弃牌堆后，记录其花色；记录四种花色后
+// 增加 1 点体力上限并摸一张牌；你的手牌上限基数改为体力上限。
+// 旧 JS 的「花色去重记录」无对应原语，以进入弃牌堆事件计数近似（达到 4 次触发）；
+// 花色区分未建模，已注明。
+skill zhenbian(3153463618) locked {
+  trigger cards_moved owner_cards_entered_discard_not_use_unused {
+    effect add_mark(self, 3153463618, 1);
+    if 3 < mark_count(self, 3153463618) {
+      effect change_max_hp(self, 1);
+      effect draw_cards(self, 1);
+      effect remove_mark(self, 3153463618, 4);
+    }
+  }
+  modifier hand_limit_base_max_hp override 1;
+}

@@ -1,0 +1,21 @@
+// 谋篡（mobile moucuan）：觉醒技，准备阶段，若你的“兵”数不小于势力数：减 1 点体力
+// 上限，获得〖兵火〗。
+// 上游 (mobile/skill.js moucuan)：trigger phaseZhunbeiBegin；forced juexingji；
+// filter getExpansions("jibing").length >= game.countGroup()；content loseMaxHp +
+// addSkills("binghuo")。
+// 实现（2026-09-09 第一百八十九批·ADR 0641 §8 S1-A 首批，零新原语）：
+// skill_pile_count(self, jibing def) >= alive_group_count() 门控 + once 标记
+// （kud_buhui 惯例）→ change_max_hp(-1) + add_skill(兵火 def)。
+// 近似（登记债）：①觉醒动画未建模；②“兵”堆供给依赖 jibing 置入面（S1-B
+// pile→expansion 原语批次）落地，落地前计数恒 0、觉醒 dormant——门控契约真实。
+skill moucuan(2965767294) {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2965767294) == 0 {
+      if alive_group_count() < skill_pile_count(self, 3194681807) + 1 {
+        effect change_max_hp(self, -1);
+        effect add_skill(self, 4199054322);
+        effect add_mark(self, 2965767294, 1);
+      }
+    }
+  }
+}

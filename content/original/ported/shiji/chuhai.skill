@@ -1,0 +1,9 @@
+// 除害（孙权系）：出牌阶段限一次，摸一张牌并与一名其他角色拼点；你赢则
+// 其判定区废除（后续由 chuhai2 装备收益承接）。
+// 旧 JS 的「拼点赢废除判定区」无对应原语；以摸一张并拼点近似（废除未
+// 建模，已注明）。
+skill chuhai(3981921827) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

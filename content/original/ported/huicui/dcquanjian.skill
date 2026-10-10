@@ -1,0 +1,5 @@
+// dcquanjian：获临时技；令目标摸1牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcquanjian(3772671609) {
+  modifier hand_limit add 1;
+}

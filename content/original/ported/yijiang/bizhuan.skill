@@ -1,0 +1,5 @@
+// 笔篆（孙皓）：黑桃牌使用/成为目标时获得一张“笔篆”标记牌；手牌上限+标记数。
+// 旧 JS 的自定义 expansion 区（bizhuan）与摸牌堆随机生成牌逻辑无对应原语，暂留空定义。
+skill bizhuan(3750278531) {
+  modifier hand_limit add 1;
+}

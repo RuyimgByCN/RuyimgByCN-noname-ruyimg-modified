@@ -1,0 +1,5 @@
+// 巧力（qiaoli）：出牌阶段，你可以将一张装备牌当【决斗】使用，每回合至多两次
+// （上游为武器牌/非武器装备牌各限一次，以总量两次近似）。
+skill qiaoli(3514459394) locked {
+  view_as juedou play_phase card_equip from hand_equip uses_per_turn 2;
+}

@@ -1,0 +1,33 @@
+// 七星：开局将牌堆顶七张牌作为公开“星”，并可在开局及摸牌阶段结束后等量交换手牌与“星”。
+skill qixing(2771819420) {
+  trigger game_started owner_alive {
+    effect resolve_qixing(self, 1);
+  }
+
+  trigger phase_draw_end owner_is_target {
+    effect resolve_qixing(self, 0);
+  }
+}
+
+// 狂风：结束阶段可弃一枚“星”并选择一名角色；直到来源的下回合开始，其受到的火焰伤害 +1。
+skill kuangfeng(4216995242) {
+  trigger phase_end owner_is_target {
+    effect resolve_qixing_weather(self, 2771819420, 4154289782, 1);
+  }
+}
+
+// 大雾：结束阶段可弃任意枚“星”并选择等量角色；直到来源的下回合开始，防止其受到的非雷电伤害。
+skill dawu(2545944631) {
+  trigger phase_end owner_is_target {
+    effect resolve_qixing_weather(self, 2771819420, 3348547572, 255);
+  }
+}
+
+skill dawu2(3348547572) {
+  modifier damage_taken_cancel override 1;
+  modifier damage_taken_cancel(thunder) override 0;
+}
+
+skill kuangfeng2(4154289782) {
+  modifier damage_taken_amount(fire) add 1;
+}

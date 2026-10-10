@@ -1,0 +1,29 @@
+{
+  "dependencies": [
+    {
+      "namespace": "official",
+      "package_id": "sp",
+      "version": "0.1.0"
+    }
+  ],
+  "license": {
+    "schema_version": 1,
+    "code_license": {
+      "type": "Gpl3"
+    },
+    "default_asset_license": {
+      "type": "Gpl3"
+    },
+    "asset_sources": [],
+    "redistribution": "FreeRedistribution",
+    "trademark_notes": "本包不授予“三国杀”及相关名称、标识的商标权；相关权利归其权利人所有。",
+    "changelog": [
+      {
+        "version": "0.1.0",
+        "date": "2026-07-30",
+        "author": "noname-next",
+        "description": "规则、角色和卡牌数据语义重写自 archive/upstream/noname（GNU GPL v3）；未包含外部皮肤、音频或图片资产，旧 JavaScript 不进入运行时。"
+      }
+    ]
+  }
+}

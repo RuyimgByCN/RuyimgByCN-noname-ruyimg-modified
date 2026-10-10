@@ -1,0 +1,8 @@
+// 佛祐（乐诸葛亮）：使用红色锦囊牌额外结算一次；通过红色锦囊牌造成伤害时摸一张牌。
+// 旧 JS 的「额外结算（effectCount++）」「同时检查颜色（红）和类型（锦囊）」无对应原语；
+// 依赖 dcshixian 外部过滤器；均未建模。
+skill olfuyou(2659859915) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

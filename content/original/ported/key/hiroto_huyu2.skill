@@ -1,0 +1,7 @@
+// 虎驭·续（弘人）：回合结束时，失去虎驭相关技能，将本回合获得的牌交给虎驭发起者。
+// 旧 JS 的「技能移除+追溯获得牌转移」需历史追踪+跨回合状态原语，未建模。
+skill hiroto_huyu2(2266388672) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hiroto_huyu2 = 标记型技能（charlotte，skill.js:5681），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

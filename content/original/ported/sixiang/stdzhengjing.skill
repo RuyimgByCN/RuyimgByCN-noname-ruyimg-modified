@@ -1,0 +1,7 @@
+// 整经：摸牌阶段开始时，你可以展示手牌和牌堆顶等量牌，将其中一种花色的牌交给一名其他角色，然后获得剩余的牌。
+// 旧 JS 的「展示手牌+牌堆顶」「按花色分组」「选择花色和目标」「分来源的给牌/摸牌动画」为极其复杂的多步骤交互流程，无可用的 DSL 原语。
+skill stdzhengjing(3316415962) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

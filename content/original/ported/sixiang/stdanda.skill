@@ -1,0 +1,6 @@
+// Rewritten from legacy `stdanda`; old JavaScript is semantic reference only.
+skill stdanda(3646320211) {
+  trigger dying owner_alive_source_alive_event_player_dying_once_per_round optional {
+    effect choose_give_one_hand_equip_or_recover(self, event_source, event_player);
+  }
+}

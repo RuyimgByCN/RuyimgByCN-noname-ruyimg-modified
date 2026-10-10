@@ -1,0 +1,8 @@
+// 新恩怨1（法正）：其他角色一次性交给你至少两张牌后，你令其摸一张牌。
+// 旧 JS 的 getIndex 按 seat 排序目标+精确条件（gainAfter/loseAsyncAfter），DSL 无「他人给你≥2张牌后触发」的精确 filter。
+// 以 cards_given 触发近似，但无法精确判断「一次性≥2张」。
+skill xinenyuan1(3145296590) {
+  trigger cards_given owner_alive optional {
+    effect draw_cards(event_player, 1);
+  }
+}

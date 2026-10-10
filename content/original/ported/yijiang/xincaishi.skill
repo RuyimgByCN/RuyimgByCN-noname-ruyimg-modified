@@ -1,0 +1,8 @@
+// 新采诗（孙皓）：摸牌阶段开始时，选择一项：少摸一张且本回合〖忠鉴〗多展示自己一张牌；手牌上限-1且本回合〖忠鉴〗多展示目标一张牌；多摸两张但本回合不能发动〖忠鉴〗。
+// 旧 JS 的三选项+动态修改 temp skill 状态，DSL 无对应复杂选择+技能状态联动原语。
+// 以 choose_draw_or_recover 近似保底：选项三摸两张（但丢掉了前两个选项的〖忠鉴〗加成）。
+skill xincaishi(2458633418) {
+  trigger phase_draw owner_alive optional {
+    effect draw_cards(self, 2);
+  }
+}

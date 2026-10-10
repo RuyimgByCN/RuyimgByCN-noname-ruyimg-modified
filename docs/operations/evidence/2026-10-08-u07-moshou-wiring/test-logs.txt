@@ -1,0 +1,14 @@
+$ U07 玩点论杀定向：莫守装配接线（费诗声明 mapping:null → host:moshou_immunity）
+test feishi_moshou_declaration_wired_to_host_behavior ... ok
+test g1_wudian_content_lock_and_byte_restore ... ok
+test g1_wudian_generals_and_siji_discard_draw ... ok
+test moshou_blocks_delayed_trick_target ... ok
+test sanjian_weapon_skill_two_stage_choice_with_restore ... ok
+test wangmeizhike_draws_min_hand_target ... ok
+test wangmeizhike_recovers_min_hp_damaged_target ... ok
+test youdishenru_cancels_sha_with_reprisal ... ok
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+$ 全量 engine-native 单线程（397/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v84 不变（数据接线，无 golden 变化）
+$ 改动：cards.json 费诗.moshou mapping 接线 + npack cards source_hash/asset_hash 重算（blake3）；回归 feishi_moshou_declaration_wired_to_host_behavior（目录元数据 skills=moshou）+ 既有 7 测试全绿
+$ 剩余：其余 9 条技能声明转换批（G3/大）

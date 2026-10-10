@@ -1,0 +1,10 @@
+// 委屈（可爱之神）：成为牌的目标时，可选择：（1）弃置装备区所有牌，令此牌无效；
+// （2）弃置所有手牌，摸等量牌。若两项子技能均已拥有，额外摸2张牌。
+// 选项(1)的"令牌无效"无直接原语；以弃手牌摸等量近似，略去装备选项与二次触发奖励。
+skill dcweiqu(3449280513) {
+  trigger card_targeted owner_is_target_discardable_hand_equip {
+    let hand = hand_count(self);
+    effect discard_hand_equip_count(self, 1);
+    effect draw_cards(self, hand);
+  }
+}

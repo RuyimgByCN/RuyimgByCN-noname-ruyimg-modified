@@ -1,0 +1,39 @@
+// 巨象（祝融）：锁定技，【南蛮入侵】对你无效；当其他角色使用的【南蛮入侵】结算结束后，
+// 你获得之。
+// 旧 JS 仅作语义证据；南蛮目标取消以通用修正器表达，结算后获牌以 card_resolved 触发 +
+// gain_card_if_discard 表达（ABI 530 过滤器 owner_alive_other_nanman_cards_discard 仅在
+// 结算后实体牌仍处弃牌堆时触发）。
+skill juxiang(4234952102) locked {
+  modifier card_target_cancel(nanman) override 1;
+  trigger card_resolved owner_alive_other_nanman_cards_discard {
+    effect gain_card_if_discard(self, event_card);
+  }
+}
+
+// 烈刃（祝融）：每当你使用【杀】造成伤害后，你可以与受伤害角色拼点；若你赢，你获得
+// 其一张手牌或装备区里的牌。
+// 旧 JS 仅作语义证据；杀伤害过滤、拼点与胜者取牌由通用拼点管线 + 绑定辅助技能表达
+// （ABI 530）：胜者辅助技能绑定拼点目标，仅在绑定目标为本次拼点第二参与者时取牌；
+// 失败辅助技能仅负责回合末自清理。
+skill lieren(3941156292) {
+  trigger damage owner_source_sha_damage_target_alive_both_hand optional {
+    effect resolve_lieren(self, event_player, 1258122096, 4123315779);
+  }
+}
+
+// 烈刃·胜：与绑定目标拼点获胜后获得其一张手牌/装备牌；回合结束自清理。
+skill lieren_win(1258122096) {
+  trigger hand_compare_finished owner_alive_skill_bound_target_is_event_source {
+    effect take_one_card(event_source, self, hand_equip);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}
+
+// 烈刃·负：拼点未胜无事发生；回合结束自清理。
+skill lieren_lose(4123315779) {
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

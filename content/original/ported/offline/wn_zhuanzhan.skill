@@ -1,0 +1,5 @@
+// wn_zhuanzhan：global:phase_prepare, 多分支选择, 异步。
+skill wn_zhuanzhan(4262738138) {
+  trigger phase_prepare owner_alive {
+  }
+}

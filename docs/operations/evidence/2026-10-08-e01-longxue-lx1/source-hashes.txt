@@ -1,0 +1,2 @@
+3113aa84f6fbbd773b6de6549b5c8dfe2643e09bd2cf716e09631f8c6a13a50b  ../../../../../archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js  （去混淆输入）
+d39f2277ff3a7ba5a054a565e0b088dbaaae4753d202f3736136670a54158c1b  extension.readable.js  （LX.1 可读版产出）

@@ -1,0 +1,11 @@
+// 成都（pxchengdu，州郡技能）：每回合限一次。当你对自己使用牌后，你摸一张牌。
+// 上游 (sp/skill.js:2762)：trigger player:useCardAfter；filter = targets 包含自己；
+// usable: 1；forced；content = player.draw()。
+// 实现：card_used + owner_source_card_used_targets_self（新增过滤器，5 处注册：自己
+// 使用牌且自己为目标）→ 可选确认 → draw_cards(self, 1)。
+// 与上游差异：「每回合限一次」以可选触发近似。
+skill pxchengdu(2164643288) {
+  trigger card_used owner_source_card_used_targets_self optional {
+    effect draw_cards(self, 1);
+  }
+}

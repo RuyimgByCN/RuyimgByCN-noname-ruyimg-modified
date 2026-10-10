@@ -1,0 +1,10 @@
+// 劫刀（忙牙长）：当你于本回合首次造成伤害且你已受伤时，你可选择弃置 X 张手牌或
+// 装备区里的牌，令此伤害 +X（X 为 1 至你已损失的体力值，可取消）。
+// 旧 JS 仅作语义证据；选 X → 增幅 → 弃牌由 resolve_spjiedao 权威状态机校验
+// （ABI 469）。注：旧 JS 在本次伤害结算后才弃牌（绑定 damageEnd），DSL 将弃牌
+// 前置到增幅同时，文档化近似。
+skill spjiedao(4242283768) {
+  trigger damage_before owner_is_source optional {
+    effect resolve_spjiedao(self);
+  }
+}

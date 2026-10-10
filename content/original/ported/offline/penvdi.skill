@@ -1,0 +1,9 @@
+// 上游描述：主公技，锁定技，女性角色摸牌数+1，每回合首次受到伤害时防止之；你对对你使用过伤害牌的角色使用牌无次数限制，且你用牌每次指定其时，其减X点体力上限（X为你与其互相指定为目标的次数之和）。
+// 来源：archive/upstream/noname legacy-source/character/character/offline/skill/offline_piracyE.js L129
+// penvdi：上游有真实规则体，现有 host filter/effect 不足以表达
+// （chooseToUse / gaintag / expansion / 额外回合 / 判定改判 / 阶段插入 / 动态 view_as）。
+// 诚实空实现（保真度债，ADR 0597）。旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill penvdi(4284200538) {
+  // INTENTIONAL_EMPTY_NOOP: existing primitives cannot express the old-JS contract
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,7 @@
+// 陷戮：出牌阶段，弃置一名角色装备区一张牌，若为红色则将之当【乐不思蜀】置于其判定区并造成1点伤害。
+// 旧 JS 的「根据弃置牌颜色分叉（红色→贴乐+伤害，黑色→无事）」无可用的分叉原语，仅保留弃装备收益。
+skill stdxianlu(4246649361) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

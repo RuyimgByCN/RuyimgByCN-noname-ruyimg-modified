@@ -1,0 +1,5 @@
+skill gzyinghun(2790748306) {
+  trigger phase_prepare owner_is_target_wounded optional {
+    effect choose_other_yinghun(self);
+  }
+}

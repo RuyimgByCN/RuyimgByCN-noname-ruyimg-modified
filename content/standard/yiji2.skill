@@ -1,0 +1,7 @@
+// 遗计 enhanced — 郭嘉: after damage, draw 2 (strategic genius).
+// Simplified: draw 1 per trigger (VM primitive limit).
+skill yiji2(49) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

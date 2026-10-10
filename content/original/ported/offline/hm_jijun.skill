@@ -1,0 +1,5 @@
+// hm_jijun：target:card_targeted, 多分支选择, 移出游戏, 异步。
+skill hm_jijun(3840391510) {
+  trigger card_targeted owner_alive optional {
+  }
+}

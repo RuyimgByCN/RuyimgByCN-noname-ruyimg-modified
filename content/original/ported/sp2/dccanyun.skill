@@ -1,0 +1,19 @@
+// 残殒（董翓）：出牌阶段，可弃置一张牌并选择 1-2 名其他角色，比较装备数：
+// 你多则其回复 1 体力，相等则其摸 1 张牌，其多则其失去 1 体力；其体力为 1 时
+// 你摸一张牌。
+// 上游 (sp2/skill.js dccanyun)：enable phaseUse；cost 弃 1 牌 + chooseTarget
+// [1,2]（每目标每回合一次）；content 逐目标比较装备区数量三分支结算 +
+// 体力 1 判定 owner 摸牌。
+// 实现（2026-09-12 第二百五十五批·装备比较族状态机，ADR 0641 §8.44，qiantun
+// 分段模板复用）：active play_phase uses_per_turn 1 → resolve_canyun(self,
+// self_skill)（ABI 705 / tag 728 / Cont 310 三段）：弃牌（SelectCards 强制）→
+// SelectTargets [1,2] 其他角色可取消 → 逐目标装备数比较三分支（recover_hp /
+// draw_cards / deal_damage is_lose_hp）→ 目标体力为 1 时 owner 摸 1。
+// 近似（登记债）：①「本回合未选过的角色」跨激活去重未建模（单次激活内
+// 1-2 目标天然互异；同回合多次激活可重复选择同一目标）；②体力为 1 的判定
+// 时点按效果结算后（上游为结算中触发序差，影响极小）。
+skill dccanyun(3523035260) {
+  active play_phase uses_per_turn 1 targets 0 0 {
+    effect resolve_canyun(self, self_skill);
+  }
+}

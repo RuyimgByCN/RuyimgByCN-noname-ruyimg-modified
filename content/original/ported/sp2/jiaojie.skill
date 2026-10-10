@@ -1,0 +1,7 @@
+// 狡黠
+// 旧 JS 语义：红牌不计入手牌上限且不能在弃牌阶段弃置；黑牌无距离和次数限制。
+skill jiaojie(3299853333) locked {
+  modifier card_ignored_hand_limit(red) override 1;
+  modifier card_distance_unlimited(black) override 1;
+  modifier card_use_unlimited(black) override 1;
+}

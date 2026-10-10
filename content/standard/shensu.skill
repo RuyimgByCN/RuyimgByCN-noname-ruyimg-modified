@@ -1,0 +1,4 @@
+// 神速 (shensu) — 夏侯渊: distance from owner -1 (lightning speed).
+skill shensu(31) {
+  modifier distance_from add -1;
+}

@@ -1,0 +1,5 @@
+skill hengzheng(3568349953) {
+  trigger phase_draw owner_is_target_draw_not_fixed_hp_one_or_hand_empty optional {
+    effect choose_gain_card_from_each_other_replace_draw(self);
+  }
+}

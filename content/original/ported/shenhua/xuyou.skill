@@ -1,0 +1,21 @@
+// 许攸【成略/恃才/寸目】— shenhua 旧 JS 语义参考（nzry_chenglve/nzry_shicai/nzry_cunmu）：
+// 成略（转换技）：出牌阶段限一次，翻面后摸一张并弃置两张手牌（阳）或摸两张并弃置
+// 一张手牌（阴），本回合你使用与弃置牌花色相同的牌无距离和次数限制。
+// 恃才：使用结算后，若本回合你首次使用该类别牌且实体牌进入弃牌堆，可将它们以任意
+// 顺序置于牌堆顶，然后摸一张牌。
+// 寸目（主公技）：锁定技，你的摸牌阶段改为从牌堆底摸牌。
+skill chenglve(1234567901) conversion {
+  active play_phase uses_per_turn 1 {
+    effect resolve_chenglve(self, 0);
+  }
+}
+skill shicai(1234567902) {
+  trigger card_used owner_is_source optional {
+    effect resolve_shicai(self, event_card, 0);
+  }
+}
+skill cunmu(1234567903) lord_only {
+  trigger phase_draw owner_is_target {
+    effect set_draw_phase_bottom(self);
+  }
+}

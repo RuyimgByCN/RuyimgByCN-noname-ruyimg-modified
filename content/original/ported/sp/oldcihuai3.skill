@@ -1,0 +1,8 @@
+// 咄咄·移除（oldcihuai3）：失去/获得手牌后移除临时技能 oldcihuai2。
+// 上游 (sp/skill.js:40857)：trigger player:loseAfter + global 多种获得事件，silent，
+// content = removeSkill(oldcihuai2)。
+// 实现：本子技的授予/移除机制已被 oldcihuai 的 choose_use_virtual_sha 直接近似，
+// 无独立运行时语义；保持诚实 noop。
+skill oldcihuai3(2332799385) {
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,6 @@
+// 流离：旧 JS 纯继承 STANDARD「流离」，以大乔小乔的稳定技能 ID 发布同一规则。
+skill liuli_daxiaoqiao(3661036669) {
+  trigger card_targeted owner_sha_target_can_discard_redirect_to_other_in_attack_range {
+    effect choose_discard_redirect_current_sha(self, event_source, event_card);
+  }
+}

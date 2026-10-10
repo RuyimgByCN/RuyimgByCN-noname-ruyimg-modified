@@ -1,0 +1,5 @@
+// dcbeifen：锁定技。
+// 旧JS含gaintag标记、expansion区，DSL无法精确建模。
+skill dcbeifen(3160436745) {
+  modifier hand_limit add 1;
+}

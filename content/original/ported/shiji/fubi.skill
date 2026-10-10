@@ -1,0 +1,9 @@
+// 缚辔（徐晃系）：游戏开始时选择一名其他角色作为关联角色；其存活时你
+// 手牌上限 +3（由 fubi2 承载）。
+// 旧 JS 的「选择关联角色」无对应原语；以游戏开始时选择一名角色获得标记
+// 近似（fubi2 加成为无条件，已注明）。
+skill fubi(4063055537) {
+  trigger game_started owner_alive {
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

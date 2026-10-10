@@ -1,0 +1,10 @@
+// 督持（荀勖）：成为其他角色使用牌的目标时（每回合一次）从牌堆底摸一张牌，
+// 展示手牌；若手牌颜色全相同，则此牌对你无效。
+// 旧 JS 的「颜色全相同则无效」需手牌同色判定与当前牌目标排除，未建模；
+// 摸牌与展示按旧 JS 语义精确表达。
+skill duchi(2548414177) {
+  trigger card_targeted owner_targeted_by_other_card_once_per_turn optional {
+    effect draw_cards_from_bottom(self, 1);
+    effect reveal_hand(self);
+  }
+}

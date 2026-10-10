@@ -1,0 +1,9 @@
+// 手杀界曹彰「将驰」
+// 出牌阶段开始时可摸一张并禁用本阶段的【杀】，或弃一张牌强化本阶段的【杀】。
+skill rejiangchi(3537053421) {
+  // 过滤器修正（2026-08-06，C 段 omp）：owner_alive 对任何角色出牌阶段都触发；
+  // 上游 trigger player phaseUseBegin（仅自身），改用 owner_is_target。
+  trigger phase_play owner_is_target optional {
+    effect choose_draw_or_discard_add_skill(self, 2242073380, 4168410091);
+  }
+}

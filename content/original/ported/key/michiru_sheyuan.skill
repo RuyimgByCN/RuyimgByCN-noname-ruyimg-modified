@@ -1,0 +1,7 @@
+// 舍愿（美知留）：将全部手牌当做任意基本牌或非延时锦囊使用，使用后摸等量牌。每轮限一次。
+// 旧 JS 的 chooseButton 动态选牌名+全手牌 viewAs+补牌，需动态卡名选择原语，未建模。
+skill michiru_sheyuan(2944352738) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 michiru_sheyuan = 标记型技能（charlotte，skill.js:1855），无规则面。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,4 @@
+// Skill yizhong2(107) - standard variant
+skill yizhong2(107) {
+  modifier attack_range add 1;
+}

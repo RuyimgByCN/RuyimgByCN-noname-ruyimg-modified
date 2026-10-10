@@ -1,0 +1,80 @@
+$ cargo test --offline -p engine-native  (全部目标，2026-10-07 会话批次)
+     Running unittests src/lib.rs (target/debug/deps/engine_native-9047af6e158f8447)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/a0_tag_registry.rs (target/debug/deps/a0_tag_registry-caf1eeec67a6630b)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/ai_planner.rs (target/debug/deps/ai_planner-3581577643bda424)
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/auth_archive.rs (target/debug/deps/auth_archive-c681ab0962caad27)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/boundary_snapshot.rs (target/debug/deps/boundary_snapshot-b427554586239e74)
+test result: ok. 70 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/dbg4.rs (target/debug/deps/dbg4-9e092811c0e5a71d)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/e02_c3_lifecycle.rs (target/debug/deps/e02_c3_lifecycle-05820bfd556c206b)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/g1_cardpile.rs (target/debug/deps/g1_cardpile-9d661e912666f5d8)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/g1_d3.rs (target/debug/deps/g1_d3-0f914d2026010cca)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/g1_hearth.rs (target/debug/deps/g1_hearth-efb8b66233b8eeeb)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/g1_huanle.rs (target/debug/deps/g1_huanle-95fa6f1e36ac1d10)
+test result: ok. 13 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.06s
+     Running tests/g1_shahai_gujian.rs (target/debug/deps/g1_shahai_gujian-0b5fe82afe01ed9c)
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+     Running tests/g1_shahai_gwent.rs (target/debug/deps/g1_shahai_gwent-ea0b5f134f828b9d)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+     Running tests/g1_shahai_yunchou.rs (target/debug/deps/g1_shahai_yunchou-e91f00ea4bebf572)
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+     Running tests/g1_wudian.rs (target/debug/deps/g1_wudian-72e92f0e62ce98a0)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/g1_wuxing.rs (target/debug/deps/g1_wuxing-dc59a1b50eab11e9)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-8285df63cb92cc1c)
+test result: ok. 179 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-b00fca999b6941d6)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/standard_catalog_inventory.rs (target/debug/deps/standard_catalog_inventory-d5d15a37383d1fb4)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/view_isolation.rs (target/debug/deps/view_isolation-76a8fdddc4be81a2)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+$ cargo test --offline -p engine-native --test g1_huanle  (帧生命周期批次定向)
+test xly_state_growth_probe ... ignored, 诊断探针：PT_DBG=1 观察规模曲线
+test flip_primitive_toggles_facing_without_mask ... ok
+test huanle_monkey_cancels_peach_and_takes_it ... ok
+test flip_frame_lifecycle_no_residue ... ok
+test huanle_mianju_blocks_flip_while_equipped ... ok
+test huanle_bridge_builds_pack ... ok
+test huanle_xuelunyang_steals_target_skill_until_turn_end ... ok
+test caoren_jushou_flips_and_mianju_cancels_flip ... ok
+test host_skill_restore_rejects_without_pack ... ok
+test huanle_xuelunyang_pass_declines_theft ... ok
+test huanle_jiuwei_optional_confirm_and_restore ... ok
+test g1_huanle_vertical_host_behaviors_and_restore ... ok
+test equip_skill_lifecycle_grant_and_revoke ... ok
+test equip_skill_snapshot_mismatch_rejected ... ok
+test result: ok. 13 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+$ cargo test --offline -p content-native-loader / -p content-runtime / -p engine-ai
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 20.04s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.65s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 20.03s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+$ RUSTFLAGS="-D warnings" cargo build --offline -p engine-native
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.65s

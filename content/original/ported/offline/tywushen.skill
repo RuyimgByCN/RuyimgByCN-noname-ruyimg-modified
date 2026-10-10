@@ -1,0 +1,5 @@
+// tywushen：音效名:wushen, 锁定技, player:card_used, 主动(multi), 视作sha, 含子技能。
+skill tywushen(2306432157) locked {
+  trigger card_used always {
+  }
+}

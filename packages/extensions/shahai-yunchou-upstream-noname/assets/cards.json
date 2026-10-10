@@ -1,0 +1,32 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/杀海拾遗/card/yunchou/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": { "name": "shahai-yunchou-upstream-noname", "version": 2, "description": "G1 杀海拾遗·运筹帷幄切片", "card_prefix": "yc_" },
+  "cards": [
+    { "name": "huoshan", "kind": "huosha", "suit": "heart", "rank": 6 },
+    { "name": "guohe", "kind": "guohe", "suit": "diamond", "rank": 3 },
+    { "name": "guohe", "kind": "guohe", "suit": "club", "rank": 8 },
+    { "name": "guohe", "kind": "guohe", "suit": "spade", "rank": 13 },
+    { "name": "shuigong", "kind": "shuigong", "suit": "club", "rank": 7 },
+    { "name": "shuigong", "kind": "shuigong", "suit": "club", "rank": 7 },
+    { "name": "shuigong", "kind": "shuigong", "suit": "spade", "rank": 9 },
+    { "name": "fudichouxin", "kind": "fudichouxin", "suit": "diamond", "rank": 4 },
+    { "name": "fudichouxin", "kind": "fudichouxin", "suit": "club", "rank": 6 },
+    { "name": "fudichouxin", "kind": "fudichouxin", "suit": "spade", "rank": 1 },
+    { "name": "chenhuodajie", "kind": "chenhuodajie", "suit": "diamond", "rank": 6 },
+    { "name": "chenhuodajie", "kind": "chenhuodajie", "suit": "diamond", "rank": 9 },
+    { "name": "chenhuodajie", "kind": "chenhuodajie", "suit": "club", "rank": 3 },
+    { "name": "suolianjia", "kind": "suolianjia", "suit": "club", "rank": 13, "link_on_equip": true },
+    { "name": "hongshui", "kind": "hongshui", "suit": "club", "rank": 7 },
+    { "name": "toulianghuanzhu", "kind": "toulianghuanzhu", "suit": "heart", "rank": 9 },
+    { "name": "toulianghuanzhu", "kind": "toulianghuanzhu", "suit": "club", "rank": 10 },
+    { "name": "geanguanhuo", "kind": "geanguanhuo", "suit": "heart", "rank": 1 },
+    { "name": "geanguanhuo", "kind": "geanguanhuo", "suit": "spade", "rank": 6 },
+    { "name": "caochuanjiejian", "kind": "caochuanjiejian", "suit": "spade", "rank": 7 },
+    { "name": "caochuanjiejian", "kind": "caochuanjiejian", "suit": "spade", "rank": 7 },
+    { "name": "shezhanqunru", "kind": "shezhanqunru", "suit": "heart", "rank": 4 },
+    { "name": "shezhanqunru", "kind": "shezhanqunru", "suit": "club", "rank": 8 }
+  ],
+  "deferred": []
+}

@@ -1,0 +1,19 @@
+// 纯刚：游戏开始或出牌阶段，选择至多两名角色各摸一张牌；这些角色使用以此法
+// 摸到的牌时需弃置一张牌。
+// 上游 (tw/skill.js twchungang)：global phaseBefore(phaseNumber==0)/enterGame
+// 双开局时点 + enable phaseUse（twchungang_used temp 每阶段一次）；selectTarget
+// [1,2]（含自己）；content 逐目标 draw + twchungang_effect 附加。
+// 实现（2026-09-10 第二百二十六批·既有面清账）：开局臂 trigger game_started +
+// active play_phase uses_per_turn 1 targets 0 2 →
+// choose_targets_draw(self, 1, 2, any)（ABI 106 系既有原语，任意目标至多 2 名
+// 各摸 1）。
+// 近似（登记债）：①「使用以此法摸到的牌时需弃置一张」附加面未建模；
+// ②enterGame 时点以 game_started 单点近似（开局等价）。
+skill twchungang(2318633930) {
+  trigger game_started owner_alive {
+    effect choose_targets_draw(self, 1, 2, any);
+  }
+  active play_phase uses_per_turn 1 targets 0 2 {
+    effect choose_targets_draw(self, 1, 2, any);
+  }
+}

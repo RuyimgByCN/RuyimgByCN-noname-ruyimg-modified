@@ -1,0 +1,11 @@
+// 神甲（olshanjia）：锁定技。①游戏开始时，你获得3枚「损」标记。
+// ②当你因弃置而失去一张装备牌后，你失去1枚「损」标记（弃置事件原语未建模）。
+// ③出牌阶段限一次，你可以摸三张牌。
+skill olshanjia(3933707186) locked {
+  trigger game_started owner_alive {
+    effect add_mark(self, 3933707186, 3);
+  }
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 3);
+  }
+}

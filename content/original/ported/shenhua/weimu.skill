@@ -1,0 +1,3 @@
+skill weimu(4145129024) locked {
+  modifier card_target_cancel(black_trick) override 1;
+}

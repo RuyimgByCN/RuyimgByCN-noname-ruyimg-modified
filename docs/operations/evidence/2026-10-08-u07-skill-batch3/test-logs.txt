@@ -1,0 +1,28 @@
+# U07 技能批三测试日志（2026-10-08，筑城双技，规则 v112→v113）
+
+$ cargo test --offline -p engine-native
+engine-native: 430 passed / 0 failed / 1 ignored（v112 基线 429 +1 新增筑城双技回归；存档 v4→v5）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 12 passed; 0 failed（11 既有 + liufu_zhucheng_toggle_and_sha_guard）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 100 守卫过；筑城双技走 mapping 通道不入伴随表，计数回 43）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v112→v113 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/skill.js:160 zhucheng（phaseEnd 开关/max(1,maxHp-hp)）
+- character/skill.js:213 zhucheng2（target shaBefore/chooseToDiscard 或 cancel）
+- skill.js:109 duoqi（依赖 zhucheng 标记+phaseUse skipped）→ 暂缓
+
+## 测试迭代记录
+- kernel anchor 缩进差（8 空格非 12）；包编辑在断言中断脚本后段被跳过
+  （mapping 漏发，第二次踩同坑——已记记忆 #17）
+- OptionalGate 应答=ChoiceOption::Confirm（非 Tag）
+- 原生无 begin:false 帧 → 开关直推 OptionalGate（commit_phase PhaseEnd 段）
+- 守卫代抽双重移除 panic（hand.remove 后又 discard_from_hand）→ to_discard
+- 代抽池排除正在结算的杀；费诗/韩龙断言计数随 mapping 更新（unmapped 7→6）

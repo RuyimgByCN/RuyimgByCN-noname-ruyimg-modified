@@ -1,0 +1,8 @@
+skill new_yajiao(3751106523) {
+  trigger card_used owner_source_outside_turn_card_used_or_responded optional {
+    effect resolve_new_yajiao(self, event_card);
+  }
+  trigger card_responded owner_source_outside_turn_card_used_or_responded optional {
+    effect resolve_new_yajiao(self, event_card);
+  }
+}

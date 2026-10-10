@@ -1,0 +1,161 @@
+// 英雄杀（yxs）包：可表达技能的真实 DSL 实现。
+// 旧 JS 仅作语义证据，不进入 npack 或运行时；未移植机制见 yxs_meta.skill。
+
+// 反击（秦琼）：每当你受到【杀】或【决斗】造成的伤害后，你可以对伤害来源使用一张
+// 【杀】；若此【杀】为红色，其不可闪避。
+// 近似 1：旧 JS 限定伤害来源为【杀】/【决斗】且你手牌有【杀】，DSL 以任意伤害触发
+//         并以虚拟【杀】表达（无手牌要求）；
+// 近似 2：旧 JS 目标限定为伤害来源，DSL 虚拟杀允许任选目标；
+// 近似 3：「红杀不可闪避」需临时技能门控，未建模。
+skill yxs_fanji(2190700560) {
+  trigger damage owner_is_target optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}
+
+// 威仪（武则天）：每当你受到一次伤害，可以令伤害来源弃置两张牌。
+skill yxsweiyi(1740591516) {
+  trigger damage owner_is_target optional {
+    effect discard_hand_equip_count(event_source, 2);
+  }
+}
+
+// 图强（勾践）：每当你使用或打出一张【闪】，你可以摸一张牌。
+skill tuqiang(3956601179) {
+  trigger card_responded owner_responded_shan optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 太极（张三丰）：每当你使用或打出一张【闪】，你可以使用一张【杀】。
+// 近似：旧 JS 从手牌使用真实【杀】且需有【杀】可出，DSL 以虚拟【杀】表达。
+skill taiji(259539037) {
+  trigger card_responded owner_responded_shan optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}
+
+// 蓄谋（吕雉）：结束阶段，你可以将武将牌翻面并摸三张牌。
+skill xumou(3759997791) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 3);
+    effect turn_over(self);
+  }
+}
+
+// 韬略（孙武）：锁定技，你的手牌上限+1。
+skill taolue(1074962662) {
+  modifier hand_limit add 1;
+}
+
+// 武穆（岳飞）：锁定技，你的黑色【杀】无视距离，红色【杀】不计入回合内的出杀限制。
+// 近似：红色【杀】不计次数以 card_use_unlimited(sha_red) 表达；若引擎选择器不支持
+//       该组合则编译期报错回退（见 yxs_meta.skill）。
+skill wumu(3871833772) locked {
+  modifier card_distance_unlimited(sha_black) override 1;
+  modifier card_use_unlimited(sha_red) override 1;
+}
+
+// 落雁（王昭君）：锁定技，你防止即将受到的伤害，改为失去 1 点体力。
+skill wluoyan(337724667) locked {
+  trigger damage_before owner_is_target {
+    effect prevent_current_damage();
+    effect lose_hp(self, 1);
+  }
+}
+
+// 相马（伯乐）：锁定技，只要你的体力值大于 2 点，你的进攻距离+1；只要你的体力值为
+// 2 点或更低，你的防御距离+1。
+skill xiangma(524529100) locked {
+  modifier distance_from add -owner_hp_gt_two;
+  modifier distance_to add owner_hp_le_two;
+}
+
+// 凤仪（貂蝉）：出牌阶段限一次，你可以弃一张手牌，令任意一名角色摸两张牌。
+skill fengyi(4267717590) {
+  active play_phase uses_per_turn 1 select_hand 1 1 targets 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(event_source, 2);
+  }
+}
+
+// 知节（小乔）：出牌阶段限一次，你的红桃手牌可以当做【无中生有】使用。
+skill zhijie(3900290195) {
+  view_as wuzhong play_phase heart from hand uses_per_turn 1;
+}
+
+// 护理（南丁格尔）：出牌阶段，你可以将一张红桃手牌当作【桃】对距离 1 以内的角色使用。
+// 近似：旧 JS 限定目标距离不大于 1，DSL view_as 无距离约束，未建模。
+skill huli(4231933503) {
+  view_as tao play_phase heart from hand;
+}
+
+// 射术（罗宾汉）：锁定技，你的【杀】无视距离；体力值不小于 3 的角色不能闪避你的
+// 【杀】。
+// 近似：「体力值不小于 3 的目标不可闪避」需目标体力比较过滤器，未建模。
+skill sheshu(3224990524) locked {
+  modifier card_distance_unlimited(sha) override 1;
+}
+
+// 初嫁（小乔）：出牌阶段限一次，你可以弃置两张相同颜色的手牌，指定任意一名已受伤
+// 角色摸 X 张牌（X 为其已损失的体力值）。
+skill chujia(1787830415) {
+  active play_phase uses_per_turn 1 select_hand 2 2 same_color targets 1 1 wounded {
+    effect discard_selected(self);
+    effect draw_cards(event_source, max_hp(event_source) - hp(event_source));
+  }
+}
+
+// 医心（南丁格尔）：限定技，你可以弃置两张牌，然后令一名已受伤角色回复 X 点体力并
+// 摸 4-X 张牌（X 为该角色已损失的体力值且不超过 4）。
+skill yixin(2459552326) {
+  active play_phase once_per_game select_he 2 2 targets 1 1 other wounded {
+    effect discard_selected(self);
+    effect recover_hp(event_source, min(4, max_hp(event_source) - hp(event_source)));
+    effect draw_cards(event_source, 4 - min(4, max_hp(event_source) - hp(event_source)));
+  }
+}
+
+// 布道（张三丰）：摸牌阶段，你可以额外摸一张牌，然后将摸到的牌中的一张交给一名
+// 其他角色。
+// 近似：「将摸到的牌中的一张交给一名其他角色」需摸牌结果联动，未建模。
+skill zbudao(3446318675) {
+  trigger phase_draw owner_is_target optional {
+    effect increase_current_draw_count(self, 1);
+  }
+}
+
+// 落笔（唐伯虎）：结束阶段，你可以摸数量等同于已损失体力值的牌，并以任意方式分配
+// 给任意角色。
+// 近似：「分配给任意角色」需分配状态机，未建模。
+skill luobi(3607730272) {
+  trigger phase_end owner_is_target_wounded optional {
+    effect draw_cards(self, max_hp(self) - hp(self));
+  }
+}
+
+// 鬼斧（鲁班）：出牌阶段限一次，你可以弃置一名角色装备区内的一张牌，并与其各摸
+// 一张牌。
+skill guifu(77939555) {
+  active play_phase uses_per_turn 1 targets 1 1 other has_equip {
+    effect choose_discard_target_card(self, event_source, equip);
+    effect draw_cards(self, 1);
+    effect draw_cards(event_source, 1);
+  }
+}
+
+// 强运（朱元璋）：每当你失去最后一张手牌，你可以摸两张牌。
+skill qiangyun(3800740223) {
+  trigger cards_moved owner_from_hand_empty optional {
+    effect draw_cards(self, 2);
+  }
+}
+
+// 谪仙（李白）：当你于一名其他角色的回合内首次失去牌时，你可以摸一张牌。
+// 近似：旧 JS 每回合限一次，DSL 以 owner_lost_cards_outside_turn 触发但未限次
+//       （文档化近似）。
+skill zhexian(2256829294) {
+  trigger cards_moved owner_lost_cards_outside_turn optional {
+    effect draw_cards(self, 1);
+  }
+}

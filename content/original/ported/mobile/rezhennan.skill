@@ -1,0 +1,19 @@
+// rezhennan（镇南）：当你成为其他角色使用的牌的目标后，若此牌的目标数大于
+// 该角色的体力值，则你可以弃置一张牌并对其造成1点伤害。
+// 上游 (mobile/skill.js mbzhennan L30093)：trigger global useCardToPlayered；
+// filter isFirstTarget、targets 含 owner、type2=trick、
+// targets.length > max(1, source.hp)；cost chooseCardTarget（he 可弃牌 +
+// filterTarget true=任意角色）→ 弃牌 + 对所选角色造成 1 点伤害。
+// 实现（2026-09-13 第二百七十六批·杀目标目标数门槛族状态机，ADR 0641
+// §8.64）：trigger card_targeted
+// owner_is_target_trick_targets_gt_source_hp_hand_equip_nonempty →
+// resolve_mbzhenann(self)（ABI 725 / tag 749 / Cont 323 两段续体）：
+// 选成本牌（可取消）→ 选任意存活角色（强制）→ 弃牌 + DealDamage 1。
+// 近似（登记债）：①锦囊类型以 CardKind::is_trick 近似（上游 type2 含延迟
+// 锦囊与否由事件面决定）；②伤害目标含 owner 本人在内（与上游
+// filterTarget:true 一致，非债）。
+skill rezhennan(3738117601) {
+  trigger card_targeted owner_is_target_trick_targets_gt_source_hp_hand_equip_nonempty {
+    effect resolve_mbzhenann(self);
+  }
+}

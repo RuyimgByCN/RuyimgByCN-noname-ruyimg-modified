@@ -1,0 +1,11 @@
+// 奇谋临时效果：同名标记数等于发动时失去的体力值。
+skill qimou2(2727616630) {
+  modifier distance_from add -owner_skill_mark;
+  modifier sha_use_limit add owner_skill_mark;
+
+  trigger turn_ended owner_is_target {
+    let amount = mark_count(self, 2727616630);
+    effect remove_mark(self, 2727616630, amount);
+    effect remove_skill(self_skill);
+  }
+}

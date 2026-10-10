@@ -1,0 +1,6 @@
+// wn_qiaobian（触发技）：音效名:sbqiaobian, global:phase_prepare, global:card_used, 摸牌, 选牌UI, 移出游戏, 加技能, 含子技能, 异步。
+skill wn_qiaobian(4079044168) {
+  trigger phase_prepare owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

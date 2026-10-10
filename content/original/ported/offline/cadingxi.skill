@@ -1,0 +1,7 @@
+// cadingxi（锁定技/主动技(chooseToUse)/触发技）：锁定技, player:game_started, global:phaseBefore, 主动(chooseToUse), 摸牌, 造成伤害, 含子技能, 异步。
+skill cadingxi(4128582628) locked {
+  trigger game_started always {
+    effect draw_cards(self, 1);
+    effect recover_hp(self, 1);
+  }
+}

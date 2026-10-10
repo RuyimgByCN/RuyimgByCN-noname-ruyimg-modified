@@ -1,0 +1,23 @@
+// 救援（jd_sb_sunquan 界司马炎·主公技）：出牌阶段限一次，你可以获得一名吴势力
+// 角色装备区里的所有牌，然后你回复 1 点体力。
+// 上游 (offline_piracyE_jb.js jdsbjiuyuan)：enable phaseUse usable 1 zhuSkill；
+// filterTarget = target !== player && target.group === "wu" && target 装备区有可获
+// 得的牌 && hasZhuSkill；content = player.gain(target 装备区全部, target) + player.
+// recover()。
+// 实现（2026-09-06 第一百七十三批·零新原语重写，active 占位晋升）：
+// active play_phase uses_per_turn 1 targets 1 1 other has_gainable_equip →
+// gain_target_equipment 五槽位（weapon/armor/horse_def/horse_off/treasure，既有
+// 原语，xinduodao/reduodao 同款）+ recover_hp(self, 1)。
+// 近似（登记债）：①吴势力限定未建模——active targets 声明无势力过滤（parse.rs
+// targets 约束清单无 group 项）；②主公技 zhuSkill 面（仅主公可用+身份校验）未
+// 建模。两者均为选目标面收窄，主行为（获装备+自回）精确。
+skill jdsbjiuyuan(2733343101) {
+  active play_phase uses_per_turn 1 targets 1 1 other has_gainable_equip {
+    effect gain_target_equipment(self, event_source, weapon);
+    effect gain_target_equipment(self, event_source, armor);
+    effect gain_target_equipment(self, event_source, horse_def);
+    effect gain_target_equipment(self, event_source, horse_off);
+    effect gain_target_equipment(self, event_source, treasure);
+    effect recover_hp(self, 1);
+  }
+}

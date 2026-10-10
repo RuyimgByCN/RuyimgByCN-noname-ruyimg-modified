@@ -1,0 +1,10 @@
+// 襄阳（pxxiangyang，州郡技能）：当你获得此技能后，你可以移动场上一张牌。
+// 上游 (sp/skill.js:1529)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且 player.canMoveCard()；content = moveCard()。
+// 实现：skill_added + owner_skill_added_self_4133746261 → 可选确认 →
+// choose_move_field_card_to(self, self)（移动一张装备区牌至自己的另一栏位）。
+skill pxxiangyang(4133746261) {
+  trigger skill_added owner_skill_added_self_4133746261 optional {
+    effect choose_move_field_card_to(self, self);
+  }
+}

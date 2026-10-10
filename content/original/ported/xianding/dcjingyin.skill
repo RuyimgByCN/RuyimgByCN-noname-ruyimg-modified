@@ -1,0 +1,7 @@
+// 静隐（李潭）：其他角色回合外使用【杀】结算后，可令一名使用者外的角色获得其实体牌。
+// 复用 ABI 151 sha_resolved 过滤器；旧 JS 的“获牌者使用这些牌无次数限制”未建模。
+skill dcjingyin(3501643698) {
+  trigger sha_resolved owner_alive_other_source_sha_resolved_not_target_gainable_once_per_turn optional {
+    effect gain_card_if_discard(self, event_card);
+  }
+}

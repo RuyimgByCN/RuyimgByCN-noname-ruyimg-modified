@@ -1,0 +1,5 @@
+// pewushen：音效名:wushen, 锁定技, player:card_used, global:hp_lost, global:cards_moved, 含子技能, 异步。
+skill pewushen(2247579532) locked {
+  trigger card_used always {
+  }
+}

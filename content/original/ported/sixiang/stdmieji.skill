@@ -1,0 +1,7 @@
+// 灭计（王允）：出牌阶段限一次，将一张黑色锦囊牌交给其他角色，然后弃置其1-2张牌。
+// 旧 JS 的「交黑色锦囊→弃置目标1-2张牌」顺序操作在 active 中需要先 give 后 discard，无可直接对应的单个 DSL 效果。完全无法表达。
+skill stdmieji(3858425568) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

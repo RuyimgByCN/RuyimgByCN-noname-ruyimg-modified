@@ -1,0 +1,8 @@
+// 破袭（族王广/族王明山/族王允/族王淩/族王昶）：出牌阶段限一次。弃置距离1以内角色一张牌，若为基本/装备牌，视为对其使用【杀】；可令此【杀】不可响应；造成伤害后你计算距离+N。
+// 旧 JS 的「距离限制弃牌」「虚拟杀」「不可响应」「距离debuff」无对应原语。
+// 以 choose_use_virtual_sha 近似保留出杀收益，缺少距离限制和debuff。
+skill clanpoxi(2840761021) {
+  active play_phase uses_per_turn 1 {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

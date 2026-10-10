@@ -1,0 +1,175 @@
+   Compiling find-msvc-tools v0.1.9
+   Compiling shlex v2.0.1
+   Compiling cfg-if v1.0.4
+   Compiling constant_time_eq v0.4.2
+   Compiling arrayvec v0.7.8
+   Compiling arrayref v0.3.9
+   Compiling cc v1.2.66
+   Compiling blake3 v1.8.5
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/content/standard.rs:408:9
+    |
+408 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1020:19
+     |
+ 945 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+1020 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1021:19
+     |
+ 945 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+1021 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1022:19
+     |
+ 973 |                 CardKind::ShanDian => {
+     |                 ------------------ matches all the relevant values
+...
+1022 |                 | CardKind::ShanDian => unreachable!("handled above"),
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: `engine-native` (lib) generated 4 warnings (run `cargo fix --lib -p engine-native` to apply 1 suggestion)
+warning: function `advance_to_play_judgement` is never used
+   --> crates/engine-native/examples/n09_runner.rs:441:4
+    |
+441 | fn advance_to_play_judgement(e: &mut Engine, m: &mut Metrics) {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `submit_answer_j` is never used
+   --> crates/engine-native/examples/n09_runner.rs:464:4
+    |
+464 | fn submit_answer_j(
+    |    ^^^^^^^^^^^^^^^
+
+warning: `engine-native` (example "n09_runner") generated 2 warnings
+    Finished `release` profile [optimized] target(s) in 6.20s
+     Running `target/release/examples/n09_runner 20 9000`
+mode=load games=20 ruleset=5 engine=native
+checkpoint_cost_avg_ns=142 samples=2000 sink=104000 (save=StateSnapshot 全量克隆)
+game=ffa g=0 rounds=3 outcome=Some(Player(0)) commands=249 accepted=249 rejected=0 rejects={} events=652 wall_us=425 p50_ns=2000 p95_ns=3000 p99_ns=5000
+game=ffa g=1 rounds=4 outcome=Some(Player(3)) commands=330 accepted=330 rejected=0 rejects={} events=870 wall_us=399 p50_ns=1000 p95_ns=2000 p99_ns=3000
+game=ffa g=2 rounds=3 outcome=Some(Player(1)) commands=259 accepted=259 rejected=0 rejects={} events=680 wall_us=399 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=ffa g=3 rounds=3 outcome=Some(Player(0)) commands=254 accepted=254 rejected=0 rejects={} events=666 wall_us=328 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=4 rounds=3 outcome=Some(Player(0)) commands=219 accepted=219 rejected=0 rejects={} events=576 wall_us=253 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=5 rounds=4 outcome=Some(Player(1)) commands=299 accepted=299 rejected=0 rejects={} events=787 wall_us=309 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=6 rounds=4 outcome=Some(Player(0)) commands=345 accepted=345 rejected=0 rejects={} events=907 wall_us=403 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=7 rounds=4 outcome=Some(Player(2)) commands=349 accepted=349 rejected=0 rejects={} events=920 wall_us=365 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=8 rounds=3 outcome=Some(Player(0)) commands=269 accepted=269 rejected=0 rejects={} events=704 wall_us=295 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=9 rounds=4 outcome=Some(Player(1)) commands=313 accepted=313 rejected=0 rejects={} events=824 wall_us=336 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=10 rounds=4 outcome=Some(Player(1)) commands=321 accepted=321 rejected=0 rejects={} events=848 wall_us=353 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=11 rounds=4 outcome=Some(Player(3)) commands=311 accepted=311 rejected=0 rejects={} events=820 wall_us=341 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=12 rounds=3 outcome=Some(Player(1)) commands=281 accepted=281 rejected=0 rejects={} events=736 wall_us=322 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=13 rounds=3 outcome=Some(Player(3)) commands=236 accepted=236 rejected=0 rejects={} events=618 wall_us=298 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=14 rounds=3 outcome=Some(Player(2)) commands=218 accepted=218 rejected=0 rejects={} events=570 wall_us=291 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=ffa g=15 rounds=3 outcome=Some(Player(3)) commands=235 accepted=235 rejected=0 rejects={} events=616 wall_us=348 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=ffa g=16 rounds=4 outcome=Some(Player(1)) commands=312 accepted=312 rejected=0 rejects={} events=822 wall_us=368 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=ffa g=17 rounds=3 outcome=Some(Player(0)) commands=197 accepted=197 rejected=0 rejects={} events=516 wall_us=283 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=ffa g=18 rounds=3 outcome=Some(Player(2)) commands=218 accepted=218 rejected=0 rejects={} events=570 wall_us=325 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=ffa g=19 rounds=3 outcome=Some(Player(2)) commands=232 accepted=232 rejected=0 rejects={} events=606 wall_us=322 p50_ns=2000 p95_ns=2000 p99_ns=2000
+mode=ffa-aggregate commands=5447 accepted=5447 rejected=0 rejects={} events=14308 wall_us=6763 p50_ns=1000 p95_ns=2000 p99_ns=2000
+digest ffa game=0 seed=9000 hash=a00b5f6ba20d08e82decdfca906337b15e971da89d397a70ff7ef63649069f13
+digest ffa game=1 seed=9001 hash=675d5bebf7f918c9a12ae62e26b7b34cf6d0f919ba1d6c4b0584d2f2aa328b7f
+digest ffa game=2 seed=9002 hash=654f15c748db3e0318235eccbc794a9dc523d8463000489c305c7646e7754c8f
+digest ffa game=3 seed=9003 hash=4683478009ceffecc2e44b29bfeb94c44c8e53fe522b629d40ff45860b452897
+digest ffa game=4 seed=9004 hash=6ecd4aa738e66d0576520ad4504dc49bca9706615e77582670148cad17741a13
+digest ffa game=5 seed=9005 hash=3ab260649ace4fca76eed48517792c5c99d72f598bc490b045aefd0cf2bf1aac
+digest ffa game=6 seed=9006 hash=de879581018a7695a7c15b2ba473706fb336785fc4a7abd9e91276114ac688e0
+digest ffa game=7 seed=9007 hash=1689c4a37307951e03db77e0d487bc7cf8bbd25cd1d6fb918ba27fb940eabf59
+digest ffa game=8 seed=9008 hash=70ad1db32afb4126996a03fbc8d2fec2c62877db6d6c0fbddc96fc92e919d911
+digest ffa game=9 seed=9009 hash=cafc628fe3b85bbd0e1593f6ab06b0baeef1b51c39665c495d2969fff0c847d0
+digest ffa game=10 seed=9010 hash=ba57df7e7a4f8a2a8541c6263f3d25c97dc04c714bc77741391598b3f24c9910
+digest ffa game=11 seed=9011 hash=4095439891c3d08defee78aa55416165a4da45fa0396882d7f573f32746892b0
+digest ffa game=12 seed=9012 hash=34c5f54010693c01150ada3caad69b162e45c11c763c64d3bb9a730eb073c223
+digest ffa game=13 seed=9013 hash=c8c9698efe3cfbb585c3c785196c55a93d603dd3c9f00664815dfc1ffa180af3
+digest ffa game=14 seed=9014 hash=fd4fc78a1a12c887a480bcaa13874534c9840ac4f4f2c43e05f7ed8185815cd0
+digest ffa game=15 seed=9015 hash=27a59d306d776df1a62ab9e1d82c6e17e86f1b5e664bbb694b6fbb43f2f34424
+digest ffa game=16 seed=9016 hash=cae9137f0803701c461612f2be486e149853d14d487168b768690c32baf7ba07
+digest ffa game=17 seed=9017 hash=2052faebe7b0ef1028dd0ffeb2b748c0369bb5f1e21cd23a14c5443627c1837a
+digest ffa game=18 seed=9018 hash=47d430b49abd150503b7c0901b51136cdfe98ccdd746c7717078c54e13622f62
+digest ffa game=19 seed=9019 hash=003170acc9888ecdcc6975c348aca0af4835fa4f4e5591ec5e663e5d8942e8c5
+game=identity g=0 converged=true outcome=Some(Rebels) commands=539 accepted=534 rejected=5 rejects={"sha_limit": 5} events=1412 wall_us=680 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=identity g=1 converged=true outcome=Some(Rebels) commands=290 accepted=288 rejected=2 rejects={"sha_limit": 2} events=752 wall_us=472 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=2 converged=true outcome=Some(LordSide) commands=335 accepted=330 rejected=5 rejects={"sha_limit": 5} events=871 wall_us=538 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=3 converged=true outcome=Some(Rebels) commands=289 accepted=287 rejected=2 rejects={"sha_limit": 2} events=753 wall_us=481 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=4 converged=false outcome=None commands=7211 accepted=7205 rejected=6 rejects={"sha_limit": 6} events=19252 wall_us=11602 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=5 converged=true outcome=Some(LordSide) commands=451 accepted=447 rejected=4 rejects={"sha_limit": 4} events=1182 wall_us=533 p50_ns=1000 p95_ns=2000 p99_ns=2000
+game=identity g=6 converged=true outcome=Some(Rebels) commands=368 accepted=366 rejected=2 rejects={"sha_limit": 2} events=966 wall_us=577 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=7 converged=true outcome=Some(Rebels) commands=384 accepted=381 rejected=3 rejects={"sha_limit": 3} events=1005 wall_us=620 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=8 converged=true outcome=Some(Rebels) commands=192 accepted=189 rejected=3 rejects={"sha_limit": 3} events=493 wall_us=308 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=9 converged=true outcome=Some(LordSide) commands=487 accepted=481 rejected=6 rejects={"sha_limit": 6} events=1270 wall_us=769 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=10 converged=true outcome=Some(LordSide) commands=264 accepted=263 rejected=1 rejects={"sha_limit": 1} events=691 wall_us=418 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=11 converged=true outcome=Some(Rebels) commands=333 accepted=331 rejected=2 rejects={"sha_limit": 2} events=873 wall_us=545 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=12 converged=true outcome=Some(Rebels) commands=263 accepted=258 rejected=5 rejects={"sha_limit": 5} events=676 wall_us=418 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=13 converged=false outcome=None commands=7205 accepted=7203 rejected=2 rejects={"sha_limit": 2} events=19242 wall_us=11498 p50_ns=2000 p95_ns=2000 p99_ns=2000
+game=identity g=14 converged=true outcome=Some(LordSide) commands=307 accepted=304 rejected=3 rejects={"sha_limit": 3} events=802 wall_us=491 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=15 converged=true outcome=Some(Rebels) commands=207 accepted=203 rejected=4 rejects={"sha_limit": 4} events=530 wall_us=319 p50_ns=2000 p95_ns=3000 p99_ns=3000
+game=identity g=16 converged=true outcome=Some(LordSide) commands=301 accepted=298 rejected=3 rejects={"sha_limit": 3} events=783 wall_us=451 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=17 converged=true outcome=Some(Rebels) commands=490 accepted=489 rejected=1 rejects={"sha_limit": 1} events=1290 wall_us=693 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=18 converged=true outcome=Some(Rebels) commands=289 accepted=288 rejected=1 rejects={"sha_limit": 1} events=754 wall_us=464 p50_ns=2000 p95_ns=2000 p99_ns=3000
+game=identity g=19 converged=true outcome=Some(LordSide) commands=362 accepted=358 rejected=4 rejects={"sha_limit": 4} events=943 wall_us=485 p50_ns=2000 p95_ns=2000 p99_ns=2000
+mode=identity-aggregate commands=20567 accepted=20503 rejected=64 rejects={} events=54540 wall_us=32362 p50_ns=2000 p95_ns=2000 p99_ns=3000 finished=18
+digest ffa game=0 seed=9000 hash=a00b5f6ba20d08e82decdfca906337b15e971da89d397a70ff7ef63649069f13
+digest ffa game=1 seed=9001 hash=675d5bebf7f918c9a12ae62e26b7b34cf6d0f919ba1d6c4b0584d2f2aa328b7f
+digest ffa game=2 seed=9002 hash=654f15c748db3e0318235eccbc794a9dc523d8463000489c305c7646e7754c8f
+digest ffa game=3 seed=9003 hash=4683478009ceffecc2e44b29bfeb94c44c8e53fe522b629d40ff45860b452897
+digest ffa game=4 seed=9004 hash=6ecd4aa738e66d0576520ad4504dc49bca9706615e77582670148cad17741a13
+digest ffa game=5 seed=9005 hash=3ab260649ace4fca76eed48517792c5c99d72f598bc490b045aefd0cf2bf1aac
+digest ffa game=6 seed=9006 hash=de879581018a7695a7c15b2ba473706fb336785fc4a7abd9e91276114ac688e0
+digest ffa game=7 seed=9007 hash=1689c4a37307951e03db77e0d487bc7cf8bbd25cd1d6fb918ba27fb940eabf59
+digest ffa game=8 seed=9008 hash=70ad1db32afb4126996a03fbc8d2fec2c62877db6d6c0fbddc96fc92e919d911
+digest ffa game=9 seed=9009 hash=cafc628fe3b85bbd0e1593f6ab06b0baeef1b51c39665c495d2969fff0c847d0
+digest ffa game=10 seed=9010 hash=ba57df7e7a4f8a2a8541c6263f3d25c97dc04c714bc77741391598b3f24c9910
+digest ffa game=11 seed=9011 hash=4095439891c3d08defee78aa55416165a4da45fa0396882d7f573f32746892b0
+digest ffa game=12 seed=9012 hash=34c5f54010693c01150ada3caad69b162e45c11c763c64d3bb9a730eb073c223
+digest ffa game=13 seed=9013 hash=c8c9698efe3cfbb585c3c785196c55a93d603dd3c9f00664815dfc1ffa180af3
+digest ffa game=14 seed=9014 hash=fd4fc78a1a12c887a480bcaa13874534c9840ac4f4f2c43e05f7ed8185815cd0
+digest ffa game=15 seed=9015 hash=27a59d306d776df1a62ab9e1d82c6e17e86f1b5e664bbb694b6fbb43f2f34424
+digest ffa game=16 seed=9016 hash=cae9137f0803701c461612f2be486e149853d14d487168b768690c32baf7ba07
+digest ffa game=17 seed=9017 hash=2052faebe7b0ef1028dd0ffeb2b748c0369bb5f1e21cd23a14c5443627c1837a
+digest ffa game=18 seed=9018 hash=47d430b49abd150503b7c0901b51136cdfe98ccdd746c7717078c54e13622f62
+digest ffa game=19 seed=9019 hash=003170acc9888ecdcc6975c348aca0af4835fa4f4e5591ec5e663e5d8942e8c5
+digest identity g=0 seed=10000 hash=a6f6f26125af95ddbfb371d7d1bd172cc3f2680f5a3d3061afa3b16665fb8076
+digest identity g=1 seed=10001 hash=dfd452a7bf21bafcac434a33a60fd5c6ed701cbca937e9871e10be4db1da7885
+digest identity g=2 seed=10002 hash=424e6b9db21a6aaab52e83b9c3a5392cd24574b6d1e4af48131477149cd416c4
+digest identity g=3 seed=10003 hash=dff379ac954c99408678a9043b2f179ef0830f54421a50f8101b57f17426329e
+digest identity g=4 seed=10004 hash=fc314f9f01f9db6e15f5be0f817e68699f95fb1b258d1b87c28de349d2d9f05b
+digest identity g=5 seed=10005 hash=23b125b7b10b01d5ad3b643c69900d7be1bdf5ff89e9979fc752f40df64ddfc0
+digest identity g=6 seed=10006 hash=32b5810058cfd951884a866b26bb8f779a35c56d3c648556ddafc5c48e910241
+digest identity g=7 seed=10007 hash=517fe7d5c364924d453afaf6445859dd221e458c351c89785b74689533f37b60
+digest identity g=8 seed=10008 hash=7e4b366c0f05268b74b1568ca742768ac18538635e74b15b516218460d2ed332
+digest identity g=9 seed=10009 hash=b6afd34c2cd0adf6cd76cd47a73fe4c61d99531841d1c00222f97596a35b8631
+digest identity g=10 seed=10010 hash=f9f29efa6cd7350fa8ef11468e7bef92971f1dfe1fed53643d66b44e5cbf9d25
+digest identity g=11 seed=10011 hash=76280be1177fefd71a62726cdd3f857a4d255aeffad72789a1da8198e55b7aa7
+digest identity g=12 seed=10012 hash=348ea41d26cb8555e9c549f59c4ca55e165a18db900f08103d4e1bf304a10222
+digest identity g=13 seed=10013 hash=91bb635aaf9bde70f74e6d50054619850cb13ea998e546399118fc872c372e0d
+digest identity g=14 seed=10014 hash=f7535ef9e07ee4d75359364794377becf9c3ee91feba732357b2e81af40f978e
+digest identity g=15 seed=10015 hash=b2e7ae06377ad3ba498cdef00a72fe69604fde1cf9c63b6ccaa7b8de3d223ff5
+digest identity g=16 seed=10016 hash=e33442ae0400934ae700b6bfd6029b80554907cc9ee3ba18e05627934c99141a
+digest identity g=17 seed=10017 hash=a01abafc3d2d3a3742c880114bb42c550d376d560057eccd644d663211c8f34f
+digest identity g=18 seed=10018 hash=60a0a22fcf788871a661612044ca8248437491b9eaff7011dd98ac72810eb57f
+digest identity g=19 seed=10019 hash=1702327c72c72127090ef92258e26e1cae1e0b28e70c5fb04cf6fe4c1d8382ac
+alloc total_bytes=62227402 total_count=582576 (进程累计，含 runner 自身开销)
+
+thread 'main' (21259848) panicked at crates/engine-native/examples/n09_runner.rs:425:30:
+judgement load unexpected Pending { choice: OpenChoice { id: 1, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: "gui_dao_rewrite", options: [Pass, Card(14), Card(64)], min: 1, max: 1, allow_cancel: false } } }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

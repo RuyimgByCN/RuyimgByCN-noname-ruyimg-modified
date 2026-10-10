@@ -1,0 +1,14 @@
+// 得势（秦宜禄·锁定技）：你受伤状态下受到【杀】的伤害时，取消此伤害，
+// 从弃牌堆或牌堆获得一张【杀】，然后减1点体力上限。
+// 上游 (sp2/skill.js)：damageBegin4，filter = player.isDamaged() && 伤害牌为杀；
+// content = trigger.cancel() + 从 discardPile/cardPile 获取一张杀 + loseMaxHp()。
+// 实现：damage_before + owner_is_target_wounded_sha → prevent_current_damage() +
+// gain_card_by_kind(self, sha) + change_max_hp(self, -1)。与上游差异：获牌检索
+// 顺序为牌堆→弃牌堆（上游为弃牌堆→牌堆，均保证优先有牌可用）。
+skill dcdeshi(4143976690) locked {
+  trigger damage_before owner_is_target_wounded_sha {
+    effect prevent_current_damage();
+    effect gain_card_by_kind(self, sha);
+    effect change_max_hp(self, -1);
+  }
+}

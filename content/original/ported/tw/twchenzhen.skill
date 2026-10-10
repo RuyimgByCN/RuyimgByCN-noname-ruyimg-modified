@@ -1,0 +1,29 @@
+// 睦约/察异：声明牌名获牌及记录目标手牌变化后的延迟分支切换。
+skill twmuyue(2544676263) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_twchenzhen(self, self, 2739628855, 0, 0);
+  }
+}
+
+skill twmuyue_effect(2739628855) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}
+
+skill twchayi(3796108342) {
+trigger phase_end owner_is_target {
+    effect resolve_twchenzhen(self, event_player, 4076811438, 3724540361, 1);
+  }
+}
+
+skill twchayi_effect(4076811438) locked {
+  trigger card_used owner_source {
+    effect resolve_twchenzhen(self, event_player, 4076811438, 0, 2);
+  }
+}
+
+skill twchayi_re(3724540361) locked {
+  trigger phase_end owner_is_target {
+    effect resolve_twchenzhen(self, event_player, 4076811438, 0, 3);
+  }
+}

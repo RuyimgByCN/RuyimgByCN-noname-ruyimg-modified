@@ -1,0 +1,3 @@
+skill refuqi(4088557780) locked {
+  modifier card_use_unrespondable_within_owner_to_responder_distance override 1;
+}

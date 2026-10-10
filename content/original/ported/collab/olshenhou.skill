@@ -1,0 +1,7 @@
+// 申猴：成为其他角色使用【杀】的目标时，可以判定；若结果为红色，此【杀】对拥有者无效。
+
+skill olshenhou(2393323694) {
+  trigger card_targeted owner_targeted_by_other_sha optional {
+    effect judge_cancel_current_sha_target_on_red(self, event_card, event_player);
+  }
+}

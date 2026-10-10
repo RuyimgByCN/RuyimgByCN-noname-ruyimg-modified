@@ -1,0 +1,5 @@
+// huoxin2：锁定技, global:phaseBeforeStart, player:phase_any_end, player:death, 异步。
+skill huoxin2(2300774513) {
+  trigger phase_any_end owner_alive {
+  }
+}

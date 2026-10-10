@@ -1,0 +1,7 @@
+// 张既·B：旧 JS 按卡牌稀有度计算数值并执行效果。
+// 旧 JS 的「稀有度数值」无对应原语，未建模（已注明）。
+skill skill_zhangji_B(3673051725) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 skill_zhangji_B（skill.js:15952）含真实规则体，DSL 原语暂不足以精确建模（见文件头注释）；
+  // 原“批量最小近似：濒死时可选摸一张”为保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

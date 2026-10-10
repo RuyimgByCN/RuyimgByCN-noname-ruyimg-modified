@@ -1,0 +1,13 @@
+// 渐营（TW界沮授）：①当你使用与你使用的上一张牌点数或花色相同的牌时，你可以摸
+// 一张牌。②每回合限一次，你可以将一张牌当做你使用的上一张非装备牌使用且无次数
+// 限制（沿用上一张牌花色）。
+// 上游 (tw/skill.js:6-163)：getAllHistory("useCard") 上一张牌依赖的动态 view_as +
+// suit 传递 + cardUsable Infinity。
+// 实现：复用 dcjianying 的 `owner_source_matches_last_used_suit_or_rank` + 摸 1。
+// 近似：跨回合比较上一张使用牌的花色/点数；动态 view_as 与不计次数未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill twjianying(3378394717) {
+  trigger card_used owner_source_matches_last_used_suit_or_rank optional {
+    effect draw_cards(self, 1);
+  }
+}

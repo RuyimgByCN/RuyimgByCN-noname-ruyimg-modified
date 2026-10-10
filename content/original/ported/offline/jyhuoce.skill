@@ -1,0 +1,7 @@
+// jyhuoce：主动(phaseUse), 需选择目标, 造成伤害, 异步。
+skill jyhuoce(3977296140) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

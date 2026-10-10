@@ -1,0 +1,6 @@
+// 势夏侯尚「探锋」：旧 JS 仅作语义来源；交互由可回放的类型化效果执行。
+skill mbtanfeng(4191284417) {
+  trigger phase_prepare owner_is_target {
+    effect choose_discard_or_fire_damage_skip_phases(self, 2, 1);
+  }
+}

@@ -1,0 +1,10 @@
+// 泣别（严夫人）：其他角色死亡时，若所有手牌均可弃置，弃所有手牌并回复1体力，摸等量+2张牌。
+// 近似：保留弃所有手牌+回血+摸牌核心收益（摸牌量固定为2，旧JS为弃牌数+2）。
+skill qibie(3260275947) {
+  trigger death owner_alive_not_target {
+    effect discard_all_hand_and_equip(self);
+    effect recover_hp(self, 1);
+    effect draw_cards(self, 2);
+    // 旧 JS 摸牌数 = 原手牌数 + 2，且需判定所有手牌均可弃置（有 undiscardable 牌则不触发）
+  }
+}

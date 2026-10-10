@@ -1,0 +1,5 @@
+// 弓骑：锁定技，攻击范围无限。出牌阶段限一次，弃置一张牌记录花色，本回合该花色【杀】无次数限制；若弃装备牌可额外弃置一名角色一张牌。
+// 以 modifier global_attack_range 近似攻击范围无限部分，花色记录联动无法表达。
+skill twgongji(2789881936) {
+  modifier global_attack_range override 999;
+}

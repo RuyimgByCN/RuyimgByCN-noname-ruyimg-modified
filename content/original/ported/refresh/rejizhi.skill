@@ -1,0 +1,12 @@
+// 界集智：实体普通锦囊触发；摸到基本牌时可弃置之，令本回合手牌上限加一。
+skill rejizhi(3401109480) {
+  modifier hand_limit add owner_skill_mark;
+
+  trigger card_used owner_source_physical_ordinary_trick optional {
+    effect resolve_rejizhi(self);
+  }
+
+  trigger turn_ended owner_alive {
+    effect remove_mark(self, 3401109480, 0);
+  }
+}

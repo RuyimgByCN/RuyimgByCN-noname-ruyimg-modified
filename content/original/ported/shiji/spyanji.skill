@@ -1,0 +1,9 @@
+// 燕集（吕范）：出牌阶段开始时，若你缺少至少一种整肃，你可选择一种未拥有的
+// 整肃令自己进行；你的弃牌阶段结束时若整肃成功，你摸两张牌或回复一点体力。
+// 旧 JavaScript 仅作语义证据；整肃类型选择与成功奖励由 ABI 433 resolve_houfeng
+// （mode 1 自身授予）/ ABI 432 resolve_zhengsu 权威结算。
+skill spyanji(3519161628) {
+  trigger phase_play owner_is_target_missing_zhengsu optional {
+    effect resolve_houfeng(self, self, 1, 0);
+  }
+}

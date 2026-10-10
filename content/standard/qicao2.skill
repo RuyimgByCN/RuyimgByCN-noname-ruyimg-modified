@@ -1,0 +1,4 @@
+// Skill qicao2(138) - standard variant
+skill qicao2(138) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

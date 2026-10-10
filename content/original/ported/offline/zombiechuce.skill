@@ -1,0 +1,6 @@
+// zombiechuce：global:card_used, 主动(chooseToUse), 摸牌, 含子技能, 异步。
+skill zombiechuce(2959637650) {
+  trigger card_used owner_alive optional {
+    effect draw_cards(self, 3);
+  }
+}

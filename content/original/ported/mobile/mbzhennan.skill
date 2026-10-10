@@ -1,0 +1,6 @@
+// mbzhennan（镇南）：一名角色使用普通锦囊牌指定首个目标后，若此牌目标包含你且此牌目标数大于X（X为此牌使用者的体力值且至少为1），则你可以弃置一张牌并对一名角色造成1点伤害。
+skill mbzhennan(3713373831) {
+  trigger card_targeted owner_alive {
+    effect choose_other_damage(self, 1);
+  }
+}

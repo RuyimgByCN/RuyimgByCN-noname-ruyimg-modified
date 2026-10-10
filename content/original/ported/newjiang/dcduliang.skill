@@ -1,0 +1,25 @@
+// 督粮（薛综）：出牌阶段限一次，获得一名其他角色一张手牌/装备牌，然后二选一：
+// ①观看牌堆顶两张牌并令其获得其中任意数量的基本牌，其余置入牌堆底；
+// ②令其于下回合的摸牌阶段额外摸一张牌（以 dcduliang2 标记表达）。
+// 旧 JS 的①「观看牌堆顶两张并选基本牌」无对应选牌原语，以目标摸两张牌近似；
+// ②按旧 JS 语义以标记 + dcduliang2 精确表达；取牌以手牌近似（装备分支未建模）。
+skill dcduliang(2887956468) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect take_one_event_target_hand(self);
+    let pick = choose(1, 2);
+    if pick == 1 {
+      effect draw_cards(event_source, 2);
+    }
+    if pick == 2 {
+      effect add_mark(event_source, 2281020973, 1);
+      effect add_skill_until_turn_end(event_source, 2281020973);
+    }
+  }
+}
+
+// 督粮②的标记：拥有者下回合摸牌阶段额外摸标记数张牌。
+skill dcduliang2(2281020973) locked {
+  trigger phase_draw owner_is_target {
+    effect increase_current_draw_count(self, mark_count(self, 2281020973));
+  }
+}

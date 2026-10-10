@@ -1,0 +1,9 @@
+// 界陷阵失败后的保留【杀】效果
+// 原语义：【杀】不计入手牌上限，且不能在弃牌阶段弃置。
+skill rexianzhen4(3222374511) {
+  modifier sha_ignored_hand_limit override 1;
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

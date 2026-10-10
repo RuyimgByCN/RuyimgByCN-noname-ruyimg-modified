@@ -1,0 +1,12 @@
+// jsrgfayi（法一?）：当你议事结算结束后，你可以对任意名意见与你不同的角色
+// 造成 1 点伤害。
+// 实现：`trigger debate_resolved debate_owner_participated optional` →
+// choose_other_damage(self, 1)（ADR 0644 P2：DebateResolved 事件 + 参与过滤器）。
+// 近似：上游「任意名意见不同角色」以单目标近似；意见异同约束未在目标选择中
+// 体现（P3 表达式族后可精化）；发起议事本身由上游其余技能承担。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgfayi(3169881772) {
+  trigger debate_resolved debate_owner_participated optional {
+    effect choose_other_damage(self, 1);
+  }
+}

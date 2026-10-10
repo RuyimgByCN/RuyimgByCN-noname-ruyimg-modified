@@ -1,0 +1,6 @@
+// 奋命：结束阶段，横置的拥有者可依座次弃置每名横置角色的一张手牌或装备。
+skill fenming(4273591874) {
+  trigger phase_end owner_is_target_linked optional {
+    effect choose_discard_one_from_each_linked(self, self_skill);
+  }
+}

@@ -1,0 +1,5 @@
+// 爻疑：初始手牌背置；每回合每种牌名限一次，将一张背置手牌当基本牌或普通锦囊使用/打出。
+skill yao_yaoyi(2523033082) {
+  view_as basic any any from none cost face_down_hand;
+  view_as ordinary_trick any any from none cost face_down_hand;
+}

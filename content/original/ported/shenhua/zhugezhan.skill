@@ -1,0 +1,16 @@
+// 诸葛瞻【罪论/父荫】— shenhua 旧 JS 语义参考：
+// 罪论 phaseJieshuBegin：揭示牌堆顶三张；按「本回合弃置过牌 / 手牌非最少 / 本回合未
+// 受伤」计数 0-3；0 获全部，N 置 N 张于牌堆顶并获其余，3 置顶并选择一名其他角色
+// 一起失去 1 点体力。
+// 父荫 useCardToTargeted（锁定技）：其他角色以不小于你手牌数的【杀】指定你为目标
+// 且本回合首次时，此杀对你无效（经保存杀目标排除）。
+skill zuilun(3588795290) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_zuilun(self);
+  }
+}
+skill fuyin(3383028272) {
+  trigger card_targeted owner_is_target {
+    effect resolve_fuyin(self, event_source, event_card);
+  }
+}

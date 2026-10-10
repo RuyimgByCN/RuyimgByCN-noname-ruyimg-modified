@@ -1,0 +1,4 @@
+// 马术 — distance from owner -1 (matches bootstrap BOOTSTRAP_MASHU = 2).
+skill mashu(2) {
+  modifier distance_from add -1;
+}

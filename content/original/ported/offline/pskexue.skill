@@ -1,0 +1,7 @@
+// pskexue：音效名:pskexue, source:damageSource, 主动(chooseToUse), 含子技能, 异步。
+skill pskexue(3367236272) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

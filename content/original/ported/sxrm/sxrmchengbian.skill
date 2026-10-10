@@ -1,0 +1,30 @@
+// 逞变（界刘备）：准备阶段或结束阶段开始时，可与一名其他角色拼点；若你严格获胜，
+// 视为对拼点对手使用一张【决斗】；否则视为拼点对手对你使用一张【决斗】。
+// 旧 JS 仅作语义证据；拼点胜负与虚拟【决斗】由权威状态机校验。
+// 注：旧 JS 在决斗结算后还会二次拼点，最终胜者摸至体力上限；二次拼点需跨事件
+// 链式拼点原语，未移植（文档化近似）。DSL 以 choose_hand_compare 的胜负分支表达。
+skill sxrmchengbian(3193035603) {
+  trigger phase_prepare owner_is_target_can_compare_other optional {
+    effect choose_hand_compare(self, 2536586505, 3960895664);
+  }
+
+  trigger phase_end owner_is_target_can_compare_other optional {
+    effect choose_hand_compare(self, 2536586505, 3960895664);
+  }
+}
+
+// 逞变·胜：严格获胜后，视为对拼点对手使用【决斗】。
+skill sxrmchengbian_win(2536586505) {
+  trigger hand_compare_finished owner_is_target {
+    effect use_virtual_card_on(self, juedou, event_source);
+    effect remove_skill(self_skill);
+  }
+}
+
+// 逞变·败：未获胜时，视为拼点对手对你使用【决斗】。
+skill sxrmchengbian_lose(3960895664) {
+  trigger hand_compare_finished owner_is_target {
+    effect use_virtual_card_on(event_source, juedou, self);
+    effect remove_skill(self_skill);
+  }
+}

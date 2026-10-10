@@ -1,0 +1,10 @@
+// 夺计（蒋琬系）：限定技。出牌阶段，弃置两张手牌，获得一名其他角色装备区
+// 里的一张牌。
+// 旧 JS 的「弃两张取装备」以弃两张手牌并从目标取一张装备近似（装备槽
+// 选择未建模，已注明）。
+skill duoji(3707846492) {
+  active play_phase once_per_game targets 1 1 other select_hand 2 2 {
+    effect discard_selected(self);
+    effect take_one_card(event_source, self, equip);
+  }
+}

@@ -1,0 +1,10 @@
+// 张既·A：出牌阶段你使用牌指定目标后（每体力值限一次），观看目标手牌并
+// 三选一：弃其一张牌（火焰牌则你摸一）/ 重铸其所有【杀】【决斗】/ 双方
+// 互造成 1 点伤害。
+// 旧 JS 的「三选一交互」无对应原语；以弃一张手牌近似（交互未建模，
+// 已注明）。
+skill skill_zhangji_A(3062869172) {
+  trigger card_targeted owner_source_once_per_turn optional {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

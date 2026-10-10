@@ -1,0 +1,18 @@
+[package]
+name = "engine-ai"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Isolated AI simulation: information set, fork, heuristic/beam/MCTS"
+
+[dependencies]
+engine-api = { workspace = true }
+engine-core = { workspace = true }
+rule-api = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+content-compiler = { path = "../content-compiler" }
+serde_json = { workspace = true }

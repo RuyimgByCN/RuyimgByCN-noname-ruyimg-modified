@@ -1,0 +1,4 @@
+// Skill tiandu2(114) - standard variant
+skill tiandu2(114) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

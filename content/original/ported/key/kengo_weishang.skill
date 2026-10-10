@@ -1,0 +1,11 @@
+// 伪伤（健吾）：废除武器栏则出杀次数+1；废除-1马则距离-1；废除+1马则别人距你+1。出牌阶段可主动废除一个装备栏。
+// 实现：出牌阶段限一次废除全部装备栏；出杀次数 +1、距离 -1。
+// 近似：一次废除全部栏而非自选一栏；加成常驻，不按已废栏种类分别生效。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kengo_weishang(2671352658) {
+  active play_phase uses_per_turn 1 {
+    effect disable_all_equip_slots(self);
+  }
+  modifier sha_use_limit add 1;
+  modifier distance_from add -1;
+}

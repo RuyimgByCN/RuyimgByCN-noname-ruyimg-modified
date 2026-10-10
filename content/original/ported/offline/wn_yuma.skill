@@ -1,0 +1,5 @@
+// wn_yuma：global:hp_lost, global:cards_moved, global:cardsDiscardAfter, 异步。
+skill wn_yuma(3894126155) {
+  trigger hp_lost owner_alive {
+  }
+}

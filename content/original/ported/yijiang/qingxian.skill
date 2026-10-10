@@ -1,0 +1,16 @@
+// 清弦（旧版·嵇康）：你回复体力后、受到伤害后或角色濒死结算完毕后，可
+// 选择一名其他角色，令其执行一项：失去 1 点体力并随机使用一张装备牌，
+// 或回复 1 点体力并弃置一张装备牌。
+// 旧 JS 的双向选择、随机装备使用与梅花追踪无对应原语；以选择一名其他
+// 角色造成 1 点伤害近似（回复分支未建模，已注明）。
+skill qingxian(2653825100) {
+  trigger hp_recovered owner_alive optional {
+    effect choose_other_damage(self, 1);
+  }
+  trigger damage owner_is_target optional {
+    effect choose_other_damage(self, 1);
+  }
+  trigger dying_after owner_alive optional {
+    effect choose_other_damage(self, 1);
+  }
+}

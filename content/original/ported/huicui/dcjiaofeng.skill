@@ -1,0 +1,6 @@
+// dcjiaofeng：锁定技；摸?牌；回复1体力。
+skill dcjiaofeng(3579717822) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

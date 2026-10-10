@@ -1,0 +1,48 @@
+$ 模式入口批四定向：KOF 会话推进（队首淘汰/队首轮转/比分局数）/存档往返/出线形态
+test kof_engine_mode_session_advance ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 202 filtered out; finished in 0.00s
+
+$ 全量 engine-native 单线程（cargo test --offline -p engine-native -- --test-threads=1）
+src/lib.rs(unittests): test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+tests/a0_tag_registry.rs: test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+tests/ai_planner.rs: test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+tests/auth_archive.rs: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+tests/boundary_snapshot.rs: test result: ok. 70 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+tests/dbg4.rs: test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+tests/e02_c3_lifecycle.rs: test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+tests/g1_cardpile.rs: test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+tests/g1_d3.rs: test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+tests/g1_hearth.rs: test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+tests/g1_huanle.rs: test result: ok. 18 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.33s
+tests/g1_shahai_gujian.rs: test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+tests/g1_shahai_gwent.rs: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+tests/g1_shahai_yunchou.rs: test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+tests/g1_wudian.rs: test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+tests/g1_wuxing.rs: test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+tests/native_kernel.rs: test result: ok. 203 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+tests/replay_scenarios.rs: test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+tests/standard_catalog_inventory.rs: test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+tests/view_isolation.rs: test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+汇总：passed=386 failed=0 ignored=1
+
+$ 依赖包（content-runtime + engine-ai + content-native-loader）
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 19.85s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.61s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 20.03s
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+DEPS_EXIT=0（62 passed / 0 failed）
+
+$ golden：版本 82→83 入 canonical_hash，14 场景全 mismatch 重录后 replay_scenarios 2/2（标准场景无 KOF 局，纯版本位移）
+$ 语义接线：GameMode::Kof{pools,wins,games}（存档 tag 6/哈希 tag 7）+ DeathMachine Kof 臂（唯一存活者胜→败者队首淘汰/胜者队首轮转/比分局数+1）+ 快照 2 人局与 outcome 一致性检查；与示例/测试层内联 KOF1 会话语义同构
+$ 边界：多局连续会话循环（终局自动开局下一局）仍在宿主层——引擎终局即停，会话推进结果随终局态可读

@@ -1,0 +1,7 @@
+// 明鉴（旧版附技·孙亮）：移除时插入一个额外的出牌阶段。
+// 旧 JS：phaseAfter 触发→插入额外 phaseUse。queue_opening_extra_play_phase 可近似额外阶段。
+skill mingjian2_old(3115844420) {
+  trigger phase_end owner_is_target {
+    effect queue_opening_extra_play_phase(self);
+  }
+}

@@ -1,0 +1,16 @@
+// 送枢（SP张温）：其他角色摸牌阶段开始时，若其体力值大于你且仁库非空，
+// 将其摸牌数置零，令其从仁库（你的“割卜”技能牌堆）选至多 min(5, 你的体力, 仁库牌数)
+// 张获得，并临时获得“不能指定其他角色”技能。
+// 旧 JavaScript 仅作语义证据；摸牌数置零、仁库选牌与禁用由 ABI 404 resolve_spsongshu 权威结算。
+// 注：旧 JS 的“摸牌角色体力大于你”条件以 resolve_spsongshu 内部校验近似
+// （拥有者存活且有仁库牌），不单独做事件级过滤器。
+skill spsongshu(3260607740) {
+  trigger phase_draw owner_alive {
+    effect resolve_spsongshu(self, event_player, 4127984813, 2373945789);
+  }
+}
+
+// 送枢·禁：不能指定其他角色为目标。
+skill spsongshu_block(2373945789) {
+  modifier card_targets_self_only override 1;
+}

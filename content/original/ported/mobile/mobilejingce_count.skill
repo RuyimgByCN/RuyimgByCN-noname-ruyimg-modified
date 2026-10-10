@@ -1,0 +1,7 @@
+// mobilejingce_count（见 translate.js）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+// 未建模：效果逻辑复杂，无合适 DSL 原语匹配。
+skill mobilejingce_count(3753058142) locked {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mobilejingce_count（skill.js:25464）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-helper 注记经 2026-08-21 上游体复核证伪）。
+  modifier hand_limit add 0;
+}

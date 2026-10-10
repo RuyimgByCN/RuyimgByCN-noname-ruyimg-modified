@@ -1,0 +1,16 @@
+// 邢神（olxingshen，张昌蒲）：受到伤害后，摸一张牌（50%概率摸两张），并增加
+// 「严教」展示计数标记（受伤害点数，封顶 6）。
+// 上游 (sp/skill.js:31362)：trigger player:damageEnd，frequent（自动）；
+// content = draw(1 或 2，50% 随机) + addMark(min(6-num, getDamagedHp))。
+// 实现：damage + owner_is_target（DamageDealt 后自动触发）→ draw_cards(self, 1)
+// + 若标记 < 6 则 add_mark(min(6-标记, max_hp-hp))。
+// 与上游差异：「50% 随机摸 2」为随机分支，确定性引擎固定摸 1，已注明。
+skill olxingshen(2814304936) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+    let marks = mark_count(self, 2814304936);
+    if marks < 6 {
+      effect add_mark(self, 2814304936, min(6 - marks, max_hp(self) - hp(self)));
+    }
+  }
+}

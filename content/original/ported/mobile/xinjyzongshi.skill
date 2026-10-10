@@ -1,0 +1,6 @@
+// xinjyzongshi（纵适）：当你拼点后，你可以观看牌堆顶的一张牌，然后选择一项：获得此牌，或获得两张拼点牌中点数较小的一张。
+skill xinjyzongshi(2179786652) {
+  trigger hand_compare_finished owner_alive {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

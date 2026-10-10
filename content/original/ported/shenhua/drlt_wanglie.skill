@@ -1,0 +1,8 @@
+// 往烈：出牌阶段使用第一张牌时无距离限制；使用杀或锦囊后可令其不可响应，
+// 代价是本阶段不能再主动使用牌。
+skill drlt_wanglie(3599509027) {
+  modifier card_distance_unlimited override owner_play_phase_card_use_count_zero;
+  trigger card_used owner_source_sha_or_trick_current_play_phase optional {
+    effect add_skill(self, 2154023320);
+  }
+}

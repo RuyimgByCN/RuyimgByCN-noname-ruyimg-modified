@@ -1,0 +1,5 @@
+// 奇门八卦：防具效果生效时，【杀】不能指定拥有者；无视防具可绕过。
+
+skill qimenbagua(2757055338) locked {
+  modifier armor_card_target_cancel(sha) override 1;
+}

@@ -1,0 +1,7 @@
+// 明鉴：出牌阶段，将任意张手牌交给一名其他角色，其可使用这些牌。
+// 旧 JS 的「交给目标牌后目标选择使用」无对应原语（give + chooseToUse 链），未建模。
+skill stdmingjian(3696278834) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

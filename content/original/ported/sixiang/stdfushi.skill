@@ -1,0 +1,8 @@
+// 赴势：你可以将任意张【杀】当一张【杀】使用（可指定至多等量目标）。
+// 其他技能：距离1以内的角色首次使用【杀】后，你可以获得之。
+// 旧 JS view_as 为「多张杀合成一张多目标杀」，子技能为回合内首次杀后获得该杀的牌。
+// DSL view_as up_to 不支持「必须是杀牌」的 filterCard 类型约束；子技能「距离1内获得使用过的杀牌」无精确对应原语。
+skill stdfushi(2857742844) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

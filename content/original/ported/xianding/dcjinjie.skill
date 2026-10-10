@@ -1,0 +1,14 @@
+// 尽节（杨彪）：每轮限一次，任意角色进入濒死时声明 X∈[0,3]；其摸 X 张后，
+// 可弃置等量手牌/装备令其回复 1 点体力。X=0 时跳过摸牌和弃牌，直接询问是否回复。
+skill dcjinjie(2966946872) {
+  trigger dying owner_alive_once_per_round optional {
+    let amount = choose_range(0, 3);
+    if amount == 0 {
+      effect choose_recover_target(self, event_player, 1);
+    }
+    if 0 < amount {
+      effect draw_cards(event_player, amount);
+      effect choose_discard_hand_equip_then_recover_target(self, event_player, amount, 1);
+    }
+  }
+}

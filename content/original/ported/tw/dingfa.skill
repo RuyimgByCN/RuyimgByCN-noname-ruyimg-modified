@@ -1,0 +1,8 @@
+// dingfa（定伐）：弃牌阶段后，选择一名角色：若为自己则回复1点体力；若为其他角色则造成1点伤害。
+// 旧 JS 含双分支（自选回复/他选伤害）；DSL 无 choose_recover_or_damage 等效二选一原语。
+// 以 choose_other_damage 近似保留伤害路径。
+skill dingfa(2493786642) {
+trigger phase_discard_end owner_alive {
+    effect choose_other_damage(self, 1);
+  }
+}

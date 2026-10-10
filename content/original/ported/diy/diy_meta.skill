@@ -1,0 +1,531 @@
+// diy 包元数据登记：ns_/junk_ 系技能多数依赖南唐/斗地主等专属机制，登记元数据并文档化近似。
+skill noname_gongchuang(3934300000) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill huan_duocai(3934300001) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nspianwu(3934300002) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxingyun(3934300003) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+skill nshanlang(3934300004) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nskuanhuai(3934300005) {
+  modifier hand_limit add 1;
+}
+skill nsdingbian(3934300006) {
+  modifier hand_limit add 1;
+}
+skill nstuilun(3934300007) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsshizui(3934300008) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxiaoye(3934300009) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsshimeng(3934300010) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill noname_zhuyuan(3934300013) {
+  modifier hand_limit add 1;
+}
+skill noname_duocai(3934300016) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsbizhao(3934300017) {
+  modifier hand_limit add 1;
+}
+skill nsqingde(3934300018) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsyidi(3934300019) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfuzhou(3934300020) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsguidao(3934300022) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nstaiping(3934300023) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsweiyuan(3934300024) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsweiyuan2(3934300025) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsweiyuan_use_backup(3934300026) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsweiyuan_use(3934300027) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+skill nsjuxian(3934300028) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsjuxian2(3934300029) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsdiewu(3934300030) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+skill nspojian(3934300032) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nszhenyin(3934300038) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxianhai(3934300039) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxianhai_round(3934300040) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxingchu(3934300041) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsshengyan(3934300042) {
+  modifier hand_limit add 1;
+}
+skill nsdaizhan(3934300043) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+skill nsjiquan(3934300044) {
+  modifier hand_limit add 1;
+}
+skill nsjiquan_mark(3934300045) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfuwei(3934300046) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nszhihuang(3934300048) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nszhihuang_damage(3934300049) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junksijun(3934300050) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junkshicai(3934300051) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junklangmie(3934300052) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junktaoluan(3934300057) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+skill junktaoluan2(3934300058) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junktaoluan_backup(3934300060) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfengli(3934300062) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfengli_draw(3934300063) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfengli_clear(3934300064) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfengli2(3934300065) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfengli_use(3934300066) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+skill ns_xiandao(3934300067) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill ns_chuanshu(3934300068) {
+  trigger dying owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill ns_chuanshu2(3934300069) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill ns_chuanshu3(3934300070) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill ns_xiuzheng(3934300071) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsanruo(3934300072) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxunshan(3934300073) {
+  modifier hand_limit add 1;
+}
+skill nskaicheng(3934300074) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsjuanli(3934300075) {
+  modifier hand_limit add 1;
+}
+skill nsguhuo(3934300077) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsbaiyi(3934300078) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsqinxue(3934300079) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// nsfuge（复归）晋升：第八十九批 queue_extra_turn 第四消费者（storage 自锁一次性，
+// check=0 纯额外回合）。上游 phaseAfter + !storage.nsfuge + insertPhase；近似：
+// frequent 自动发动以 optional 确认表达。
+skill nsfuge(3934300080) {
+  trigger turn_ended owner_is_target optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect queue_extra_turn(self, 0, self_skill);
+    }
+  }
+}
+skill nsbaiming(3934300081) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxinzhan(3934300082) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nstanbing(3934300083) {
+  modifier hand_limit add 1;
+}
+skill nsfuhuo(3934300085) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsfuhuo2(3934300086) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nshunji(3934300087) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+skill nsbaquan(3934300088) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nschangshi(3934300089) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsjianning(3934300090) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nscuanquan(3934300091) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsbugua(3934300093) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nstuiyan(3934300094) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nszhaoxin(3934300096) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nscangxi(3934300098) {
+  modifier hand_limit add 1;
+}
+skill nscangxi2(3934300099) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nswulie(3934300100) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nshunyou(3934300101) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsgongjian(3934300102) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nscaijian(3934300103) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsdongcha(3934300104) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsjianxiong(3934300105) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsxionglue(3934300106) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nshuanhuo(3934300107) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsyaowang(3934300108) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsyunxing(3934300111) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsguanxing(3934300112) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nshaoling(3934300113) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nscaiyi(3934300115) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nspinmin(3934300116) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsshishou(3934300117) {
+  modifier hand_limit add 1;
+}
+// nsjihui（集计）晋升：第九十五批·queue_extra_turn 第五消费者（每回合一次
+// storage 自锁；check=0 纯额外回合）。近似：①目标限制子技（额外回合内用牌只能
+// 指定自己与弃牌者）未建模；②每回合一次自锁收窄上游事件流语义；③frequent。
+skill nsjihui(3934300121) {
+  trigger turn_ended owner_is_target {
+    effect storage_set(self_skill, 1, 0);
+  }
+  trigger cards_moved cards_moved_discard_at_least_three optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect queue_extra_turn(self, 0, self_skill);
+    }
+  }
+}
+skill nsmouyun(3934300122) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill nscongjun(3934300123) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nstaiping_nh(3934300124) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsshoudao(3934300125) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nshuanxian(3934300126) {
+  modifier hand_limit add 1;
+}
+skill nsdufu(3934300128) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill liangji(3934300129) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+skill jugong(3934300130) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill chengmou(3934300131) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junkyuheng(3934300137) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junkdili(3934300138) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junkshengzhi(3934300139) {
+  modifier hand_limit add 1;
+}
+skill junkquandao(3934300140) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill junkchigang(3934300141) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill nsmanzhi(3934300142) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// dualside（双面武将系统标记）：上游 双面武将（dualSideCharacter）切换机制未移植，
+// 登记元数据 stub 闭合角色技能引用（无运行时行为）。
+skill dualside(2750719950) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

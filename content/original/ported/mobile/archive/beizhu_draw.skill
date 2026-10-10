@@ -1,0 +1,6 @@
+// beizhu_draw（备诛）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill beizhu_draw(3093882534) locked {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

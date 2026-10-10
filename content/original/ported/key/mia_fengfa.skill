@@ -1,0 +1,9 @@
+// 风阀（米娅）：锁定技，摸牌阶段摸牌数增加上回合自己使用牌的数量。
+// 实现：摸牌阶段摸牌数 +1。
+// 近似：不统计上回合使用牌数，固定 +1。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill mia_fengfa(2660197008) locked {
+  trigger phase_draw owner_is_target {
+    effect increase_current_draw_count(self, 1);
+  }
+}

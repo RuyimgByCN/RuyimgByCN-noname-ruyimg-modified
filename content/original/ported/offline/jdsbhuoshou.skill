@@ -1,0 +1,5 @@
+// jdsbhuoshou：音效名:sbhuoshou, 锁定技, player:phase_play_end, 异步, 弃牌。
+skill jdsbhuoshou(2616672692) {
+  trigger phase_play_end owner_alive {
+  }
+}

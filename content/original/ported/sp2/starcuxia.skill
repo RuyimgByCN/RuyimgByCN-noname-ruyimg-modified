@@ -1,0 +1,18 @@
+// 粗遐（starcuxia·星文丑）：锁定技。当其他角色使用牌指定你为目标后，若
+// 其体力值大于你，或其本局对你造成过伤害：其随机弃置一张手牌；若此时
+// 其体力值仍大于你且其本局对你造成过伤害，你摸一张牌。
+// 上游 (sp2/skill.js 1672)：trigger global useCard + forced；filter =
+// targets 含 player && (source.hp > player.hp || getRoundHistory
+// (sourceDamage 伤 player))；content = source.randomDiscard("h") + 条件
+// 复验摸 1。
+// 实现（2026-09-15 第三百零五批·孪生随机弃牌状态机，ADR 0641 §8.91）：
+// resolve_starcuxia_weiming(self, event_source, 0)（ABI 750 / tag 766，
+// 单发无续体）——RuleRng shuffle 随机弃 1 + 条件复验摸 1。filter
+// owner_is_target_source_hp_gt_owner_or_source_damaged_owner。
+// 登记债：round 级伤害历史以 lifetime damage_history 放宽。
+// 保真度：完整（含随机弃/条件复验；历史粒度放宽为债）。
+skill starcuxia(3366017041) locked {
+  trigger card_targeted owner_is_target_source_hp_gt_owner_or_source_damaged_owner {
+    effect resolve_starcuxia_weiming(self, event_source, 0);
+  }
+}

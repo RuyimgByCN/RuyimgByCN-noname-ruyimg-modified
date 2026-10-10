@@ -1,0 +1,13 @@
+// 贞良（TW谋卢植，转换技）：阳：出牌阶段限一次，弃置与「任」颜色相同的 X 张牌对
+// 攻击范围内一名角色造成 1 点伤害（X 为体力值差且至少 1）；阴：回合外一名角色
+// 使用/打出牌结算后，若与「任」类别相同，你可令至多两名角色各摸两张牌。
+// 上游 (tw/skill.js:412-460)：inherit nzry_zhenliang（drawNum: 2）+「任」expansion
+// 颜色/类别联动。
+// 与 shenhua:nzry_zhenliang 同款近似（转换技/「任」联动无对应原语，以受伤后摸一
+// 张近似）。见 nzry_zhenliang.skill 注释。
+// 2026-08-15：随上游 v1.11.5 新武将 tw_sb_yl_luzhi 移植。
+skill twsbzhenliang(2391311551) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// friendlunxiong（论雄）：当你造成或受到伤害后，你可以弃置手牌中点数最大的牌并摸三张牌，本局游戏你再次发动此技能弃置牌的点数须大于等于此牌的点数。
+skill friendlunxiong(2963122738) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 3);
+  }
+}

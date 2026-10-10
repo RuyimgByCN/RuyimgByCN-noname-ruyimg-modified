@@ -1,0 +1,8 @@
+// 想学（想学刘禅）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：锁定技：每使用两张未使用过牌名的牌，获得等量“惘”并摸牌；惘=6 交换两个数字、=9 …、=12 失失此技
+// 旧 JS 的「全局历史牌名去重 + 阈值状态机 + 技能自移除」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill xiangxue(3831665535) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

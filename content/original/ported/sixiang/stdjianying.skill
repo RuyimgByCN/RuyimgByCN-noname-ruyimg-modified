@@ -1,0 +1,7 @@
+// 荐英（？）：出牌阶段开始时，可移动场上的一张装备牌。若移动了，本回合首次使用的与移动牌同花色或同点数的牌时摸一张牌。
+// 旧 JS 的「记忆移动牌→同花色/点数使用触发摸牌」跨事件状态追踪无可对应的 DSL 原语。完全无法表达。
+skill stdjianying(3605822905) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

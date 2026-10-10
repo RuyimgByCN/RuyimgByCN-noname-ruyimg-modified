@@ -1,0 +1,6 @@
+// zj_qingming：phase_play时摸牌。
+skill zj_qingming(3794245281) {
+  trigger phase_play owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

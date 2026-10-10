@@ -1,0 +1,8 @@
+// 血祭（关银屏，旧版）：出牌阶段限一次，弃置一张红色手牌或装备牌，对至多
+// 已损失体力值名（且不超过 2 名）其他角色各造成 1 点伤害并各摸一张牌。
+skill xueji_old(3528622023) {
+  active play_phase uses_per_turn 1 targets 1 2 other max_by_owner_lost_hp select_he 1 1 card_red {
+    effect discard_selected(self);
+    effect damage_then_draw_selected_targets(self, 1, 1);
+  }
+}

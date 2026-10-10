@@ -1,0 +1,7 @@
+// 观星 (guanxing) — 诸葛亮: inspect top cards of deck.
+// Simplified: at phase begin, draw 1 card (insight advantage).
+skill guanxing(27) {
+  trigger phase_begin always {
+    effect draw_cards(self, 1);
+  }
+}

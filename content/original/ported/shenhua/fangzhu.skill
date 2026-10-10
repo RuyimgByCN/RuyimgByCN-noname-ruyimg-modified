@@ -1,0 +1,6 @@
+// 放逐：受到伤害后，可令一名其他角色按自己当前已损失体力摸牌，然后翻面。
+skill fangzhu(2335755764) {
+  trigger damage owner_is_target_other_alive optional {
+    effect choose_other_draw_owner_lost_hp_turn_over(self);
+  }
+}

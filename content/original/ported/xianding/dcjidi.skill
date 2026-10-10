@@ -1,0 +1,13 @@
+// 诋敌（孙霸）：成为伤害目标时，若来源体力大于你，令其失去 1 点体力；
+// 若来源手牌数大于你，令其弃置两张手牌。伤害未被取消才结算。
+// 旧 JS 的随机弃置以手牌区顺序弃置近似。
+skill dcjidi(4136170419) locked {
+  trigger damage_before owner_is_target_source_alive {
+    if hp(self) < hp(event_source) {
+      effect lose_hp(event_source, 1);
+    }
+    if hand_count(self) < hand_count(event_source) {
+      effect discard_hand(event_source, 2);
+    }
+  }
+}

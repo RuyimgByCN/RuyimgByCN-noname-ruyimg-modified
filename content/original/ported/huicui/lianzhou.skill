@@ -1,0 +1,14 @@
+// 链舟（蔡瑁张允）：准备阶段开始时，锁定横置自己，然后选择任意名体力值与
+// 自己相同且未横置的其他角色，横置这些角色。
+// 旧 JS 仅作语义证据；同体力过滤与横置由权威状态机校验（ABI 458）。
+// 注：旧 JS 过滤“存在同体力未横置角色”才触发且未横置时先自链；DSL 以
+//      phase_prepare 触发 + 自链 add_mark(MARK_CHAIN) + choose_link_other_same_hp
+//      表达，无候选时原语自行空转。
+skill lianzhou(3041401308) locked {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2) == 0 {
+      effect add_mark(self, 2, 1);
+    }
+    effect choose_link_other_same_hp(self);
+  }
+}

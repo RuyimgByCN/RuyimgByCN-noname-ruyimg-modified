@@ -1,0 +1,1268 @@
+// 国战 gz_ 技能 DSL 批量生成（简化近似语义，旧 JS 仅作语义证据）。
+
+// gz_beiluan：近似（trigger damage，简化为摸一张）。
+skill gz_beiluan(472841726) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_bingxin：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_bingxin(3469508559) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_caishi：近似（trigger phase_draw，简化为摸一张）。
+skill gz_caishi(2514983199) {
+  trigger phase_draw owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_caiyuan：近似（trigger phase_begin，简化为摸一张）。
+skill gz_caiyuan(1175393265) {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_chengliu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_chengliu(3045258013) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_chengxi：近似（trigger phase_begin，简化为摸一张）。
+skill gz_chengxi(1945668539) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_chihe：近似（trigger card_targeted，简化为摸一张）。
+skill gz_chihe(4248180010) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_chiyan：近似（trigger card_targeted，简化为摸一张）。
+skill gz_chiyan(3670429778) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_chongjian：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_chongjian(3020855871) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_chujue：近似（trigger card_used，简化为摸一张）。
+skill gz_chujue(1729473409) {
+  trigger card_used owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ciwei：近似（trigger card_used，简化为摸一张）。
+skill gz_ciwei(4012559955) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_cuike：近似（trigger phase_begin，简化为摸一张）。
+skill gz_cuike(1953024427) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_cunsi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_cunsi(4203350876) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_danggu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_danggu(2642663986) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_dawu：近似（trigger phase_end，简化为摸一张）。
+skill gz_dawu(2126999657) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_dengli：近似（trigger card_targeted，简化为摸一张）。
+skill gz_dengli(2683763062) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_diancai：近似（trigger phase_end，简化为摸一张）。
+skill gz_diancai(344637844) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_diaodu_best：近似（trigger phase_begin，简化为摸一张）。
+skill gz_diaodu_best(1809804236) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_duanbing：近似（trigger card_targeted，简化为摸一张）。
+skill gz_duanbing(2939326538) {
+  trigger card_targeted owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_duanliang：近似（trigger phase_end，简化为摸一张）。
+skill gz_duanliang(4074554237) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_duanqiu：近似（trigger phase_begin，简化为摸一张）。
+skill gz_duanqiu(2749669933) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_duorui：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_duorui(3326591250) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_duoshi：近似（trigger phase_begin，简化为摸一张）。
+skill gz_duoshi(954844985) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ejue：近似（trigger damage_before，简化为摸一张）。
+skill gz_ejue(3853486603) {
+  trigger damage_before owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_fangzhu：近似（trigger damage，简化为摸一张）。
+skill gz_fangzhu(1177220466) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_feiying：近似（trigger phase_discard_end，简化为摸一张）。
+skill gz_feiying(1692303423) {
+  trigger phase_discard_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_fengshi：近似（trigger card_targeted，简化为摸一张）。
+skill gz_fengshi(3328954532) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_fengying：近似（trigger phase_begin，简化为摸一张）。
+skill gz_fengying(4053208003) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_fujian：近似（trigger phase_begin，简化为摸一张）。
+skill gz_fujian(485006924) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_fushou：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_fushou(618465292) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_gn_jieying：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_gn_jieying(1512400585) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_gongao：近似（trigger phase_begin，简化为摸一张）。
+skill gz_gongao(253708289) {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_gongxin：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_gongxin(1252897653) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_gongzhi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_gongzhi(3461792761) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_guikuang：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_guikuang(3335758890) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_guixin：近似（trigger damage，简化为摸一张）。
+skill gz_guixin(272408904) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_guixiu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_guixiu(2589550756) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_hanzhan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_hanzhan(4033021142) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_hengjiang：近似（trigger damage，简化为摸一张）。
+skill gz_hengjiang(911529411) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_hongyan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_hongyan(1979589539) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_huaiyuan：近似（trigger phase_begin，简化为摸一张）。
+skill gz_huaiyuan(652048372) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_huoshui：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_huoshui(2558943383) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_huxiao：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_huxiao(2884980926) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jiantong：近似（trigger damage，简化为摸一张）。
+skill gz_jiantong(1798897715) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jianzhi：近似（trigger damage_before，简化为摸一张）。
+skill gz_jianzhi(2256574847) {
+  trigger damage_before owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jiaping：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_jiaping(2579771003) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jieying：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_jieying(290244401) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jieyue：近似（trigger phase_begin，简化为摸一张）。
+skill gz_jieyue(855873871) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jilve：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_jilve(2584800522) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jixi：近似（trigger damage，简化为摸一张）。
+skill gz_jixi(59905634) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_juejing：近似（trigger dying，简化为摸一张）。
+skill gz_juejing(670367136) {
+  trigger dying owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jugu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_jugu(3488947879) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jungong：近似（trigger card_targeted，简化为摸一张）。
+skill gz_jungong(2797824222) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_junlve：近似（trigger damage，简化为摸一张）。
+skill gz_junlve(1892832917) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_kuangfeng：近似（trigger phase_end，简化为摸一张）。
+skill gz_kuangfeng(98534711) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_kuanggu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_kuanggu(3548651656) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_kuiji：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_kuiji(1421213440) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_kurou：近似（trigger card_targeted，简化为摸一张）。
+skill gz_kurou(766516123) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_lianhuan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_lianhuan(1483498334) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_lianpo：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_lianpo(4008920491) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_liegong：近似（trigger card_targeted，简化为摸一张）。
+skill gz_liegong(3336023573) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_limeng：近似（trigger phase_end，简化为摸一张）。
+skill gz_limeng(1927979551) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_limu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_limu(88994789) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_lingren：近似（trigger card_targeted，简化为摸一张）。
+skill gz_lingren(1070714440) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_liyu：近似（trigger phase_begin，简化为摸一张）。
+skill gz_liyu(736306352) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_longdan：近似（trigger card_used，简化为摸一张）。
+skill gz_longdan(2504996755) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_longhun：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_longhun(3002800546) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_longnu：近似（trigger phase_begin，简化为摸一张）。
+skill gz_longnu(522345847) {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_luanchang：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_luanchang(1944621521) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_luanji：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_luanji(313352390) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_lvxian：近似（trigger damage，简化为摸一张）。
+skill gz_lvxian(12802286) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_mashu：近似（trigger card_used，简化为摸一张）。
+skill gz_mashu(856216067) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_mb_duoshi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_mb_duoshi(2535319501) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_mb_qianxun：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_mb_qianxun(1001045695) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_md_mashu：近似（trigger card_used，简化为摸一张）。
+skill gz_md_mashu(2934136720) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_miaoyu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_miaoyu(147701258) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_miewu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_miewu(592260016) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_mowang：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_mowang(240884541) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_mt_mashu：近似（trigger card_used，简化为摸一张）。
+skill gz_mt_mashu(3376268126) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_neiji：近似（trigger phase_begin，简化为摸一张）。
+skill gz_neiji(3427543023) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_new_kuanggu：近似（trigger damage，简化为摸一张）。
+skill gz_new_kuanggu(838418779) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_new_weidi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_new_weidi(2663614506) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_new_yongsi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_new_yongsi(1649359301) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_niepan：近似（trigger hp_recovered，简化为摸一张）。
+skill gz_niepan(507506187) {
+  trigger hp_recovered owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_niqu：近似（trigger card_used，简化为摸一张）。
+skill gz_niqu(1228105267) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_benxi：近似（trigger card_used，简化为摸一张）。
+skill gz_ol_benxi(2552653873) {
+  trigger card_used owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_chenggong：近似（trigger card_targeted，简化为摸一张）。
+skill gz_ol_chenggong(990493160) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_chenglve：近似（trigger phase_begin，简化为摸一张）。
+skill gz_ol_chenglve(1752485648) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_chunlao：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_ol_chunlao(459683455) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_daohuo：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_ol_daohuo(1065183619) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_fushi：近似（trigger card_targeted，简化为摸一张）。
+skill gz_ol_fushi(1669577500) {
+  trigger card_targeted owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_paiyi：近似（trigger phase_discard_end，简化为摸一张）。
+skill gz_ol_paiyi(288365632) {
+  trigger phase_discard_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_quanji：近似（trigger damage，简化为摸一张）。
+skill gz_ol_quanji(963472323) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_zezhu：近似（trigger card_targeted，简化为摸一张）。
+skill gz_ol_zezhu(2371547584) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ol_zhuanzheng：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_ol_zhuanzheng(21626255) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_paoxiao：近似（trigger card_used，简化为摸一张）。
+skill gz_paoxiao(1174302181) {
+  trigger card_used owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_pd_mashu：近似（trigger card_used，简化为摸一张）。
+skill gz_pd_mashu(1230863210) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_picai：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_picai(3072978345) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_pojing：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_pojing(494097538) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_poxi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_poxi(951835947) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_pozhu：近似（trigger phase_begin，简化为摸一张）。
+skill gz_pozhu(1148636556) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qiangwu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_qiangwu(788280249) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qiangxi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_qiangxi(3177542457) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qianxun：近似（trigger card_targeted，简化为摸一张）。
+skill gz_qianxun(2178251930) {
+  trigger card_targeted owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qiaobian：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_qiaobian(4164146276) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qice：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_qice(604651853) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qingcheng：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_qingcheng(3544029550) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qingzhong：近似（trigger phase_begin，简化为摸一张）。
+skill gz_qingzhong(3009079627) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qinyin：近似（trigger phase_discard_end，简化为摸一张）。
+skill gz_qinyin(4239812803) {
+  trigger phase_discard_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_qixing：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_qixing(2743070099) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_quedi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_quedi(3917259977) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_quhu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_quhu(3480605430) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_rende：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_rende(4213582412) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ruilve：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_ruilve(42004186) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_sanchen：近似（trigger phase_begin，简化为摸一张）。
+skill gz_sanchen(3704033779) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_sanyao：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_sanyao(1053833367) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shangshi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_shangshi(1221069155) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shangyi：近似（trigger card_targeted，简化为摸一张）。
+skill gz_shangyi(4173168884) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shanjia：近似（trigger phase_begin，简化为摸一张）。
+skill gz_shanjia(3028060612) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_sheju：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_sheju(3142388010) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shelie：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_shelie(3592478570) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shenfen：近似（trigger damage，简化为摸一张）。
+skill gz_shenfen(1961657597) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shengxi：近似（trigger phase_end，简化为摸一张）。
+skill gz_shengxi(338040693) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shezang：近似（trigger dying，简化为摸一张）。
+skill gz_shezang(888157151) {
+  trigger dying owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shiren：近似（trigger damage，简化为摸一张）。
+skill gz_shiren(2972284972) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shoucheng：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_shoucheng(3641186642) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shuangxiong：近似（trigger card_targeted，简化为摸一张）。
+skill gz_shuangxiong(3753766954) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shujuan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_shujuan(3781319685) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_shunfu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_shunfu(529682480) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_suishi：近似（trigger dying，简化为摸一张）。
+skill gz_suishi(55683782) {
+  trigger dying owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_taoluan：近似（trigger card_targeted，简化为摸一张）。
+skill gz_taoluan(217179068) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_tieji：近似（trigger card_targeted，简化为摸一张）。
+skill gz_tieji(2781933072) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_tongli：近似（trigger card_targeted，简化为摸一张）。
+skill gz_tongli(3599819596) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_tushe：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_tushe(2620716892) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_tuxi：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_tuxi(2791861466) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_weijing：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_weijing(3889950516) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_weimu：近似（trigger card_targeted，简化为摸一张）。
+skill gz_weimu(4210825364) {
+  trigger card_targeted owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_wuchang：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_wuchang(178744381) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_wuhun：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_wuhun(2740548745) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_wuku：近似（trigger card_used，简化为摸一张）。
+skill gz_wuku(3241402089) {
+  trigger card_used owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_wuqian：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_wuqian(1400545260) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_wushen：近似（trigger card_used，简化为摸一张）。
+skill gz_wushen(2631792724) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_wusheng：近似（trigger card_used，简化为摸一张）。
+skill gz_wusheng(1833849699) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_wushuang：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_wushuang(1602604588) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xiace：近似（trigger card_used，简化为摸一张）。
+skill gz_xiace(3210566831) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xiaoguo：近似（trigger phase_begin，简化为摸一张）。
+skill gz_xiaoguo(3431762679) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xiaoji：近似（trigger damage_before，简化为摸一张）。
+skill gz_xiaoji(775434495) {
+  trigger damage_before owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xiaolu：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_xiaolu(1818479414) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xiejian：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_xiejian(1575294668) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xijue：近似（trigger phase_end，简化为摸一张）。
+skill gz_xijue(2945451673) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xingshang：近似（trigger death，简化为摸一张）。
+skill gz_xingshang(410456171) {
+  trigger death owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xiongsuan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_xiongsuan(1847329804) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xiyan：近似（trigger damage，简化为摸一张）。
+skill gz_xiyan(143398253) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_xunji：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_xunji(1991902423) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yanxi：近似（trigger phase_begin，简化为摸一张）。
+skill gz_yanxi(3965033852) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yaopan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_yaopan(1596028813) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yaozhuo：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_yaozhuo(1426283999) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yeyan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_yeyan(2134541157) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yicheng_new：近似（trigger card_targeted，简化为摸一张）。
+skill gz_yicheng_new(4282180292) {
+  trigger card_targeted owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yidu：近似（trigger card_used，简化为摸一张）。
+skill gz_yidu(3007901441) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yimie：近似（trigger dying，简化为摸一张）。
+skill gz_yimie(1908958449) {
+  trigger dying owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yingshi：近似（trigger phase_begin，简化为摸一张）。
+skill gz_yingshi(541064440) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yingwei：近似（trigger phase_end，简化为摸一张）。
+skill gz_yingwei(2459445865) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yinsha：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_yinsha(2497069992) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yuanyu：近似（trigger damage，简化为摸一张）。
+skill gz_yuanyu(878243379) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_yuejian：近似（trigger phase_discard，简化为摸一张）。
+skill gz_yuejian(2407980952) {
+  trigger phase_discard owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhanhuo：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhanhuo(598698019) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhaoran：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhaoran(3540766243) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhefu：近似（trigger card_used，简化为摸一张）。
+skill gz_zhefu(451421271) {
+  trigger card_used owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhengbi：近似（trigger phase_begin，简化为摸一张）。
+skill gz_zhengbi(831760509) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhengnan：近似（trigger death，简化为摸一张）。
+skill gz_zhengnan(2538491543) {
+  trigger death owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhiheng：近似（trigger phase_discard，简化为摸一张）。
+skill gz_zhiheng(2575412421) {
+  trigger phase_discard owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhilve：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhilve(1990410116) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhiman：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhiman(3845130413) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhiti：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhiti(2131227055) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhuanzhan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhuanzhan(3663610009) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhuifeng：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhuifeng(1813363955) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhulan：近似（trigger damage_before，简化为摸一张）。
+skill gz_zhulan(4265446077) {
+  trigger damage_before owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zhuosheng：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_zhuosheng(1957223158) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_zimou：近似（trigger phase_begin，简化为摸一张）。
+skill gz_zimou(2105911747) {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_ziyuan：近似（无明确 trigger 映射，简化为出牌阶段摸一张）。
+skill gz_ziyuan(2591851594) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}

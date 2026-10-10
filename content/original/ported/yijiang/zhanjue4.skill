@@ -1,0 +1,7 @@
+// 战绝4（补牌）：使用战绝后，自己摸一张牌；所有因该决斗受伤的角色也各摸一张牌。
+// 旧JS含zhanjue_draw计数+根据damage history找受伤角色逐人摸牌。DSL以draw_cards近似自身补牌，缺多目标条件摸牌原语。
+skill zhanjue4(3059117831) locked {
+    trigger card_resolved owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

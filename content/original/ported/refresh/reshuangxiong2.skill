@@ -1,0 +1,8 @@
+// reshuangxiong2：刷新包技能。
+// triggers: player:damageEnd
+skill reshuangxiong2(3268490378) {
+    // 近似：旧JS事件 damageEnd → DSL事件 damage
+    trigger damage owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

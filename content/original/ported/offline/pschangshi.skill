@@ -1,0 +1,6 @@
+// pschangshi：锁定技, global:phaseBefore, player:game_started, player:removeMark, 需选择目标, 二选一, 摸牌, 造成伤害, 加技能, 含子技能, 异步。
+skill pschangshi(2150759835) locked {
+  trigger game_started always {
+    effect draw_cards(self, 1);
+  }
+}

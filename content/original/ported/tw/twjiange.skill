@@ -1,0 +1,6 @@
+// 剑歌：可将一张非基本牌当【杀】使用或打出。
+// 旧 JS 中「非自身回合内使用后摸牌」「距离无视」「不计次数」无对应原语，未建模。
+// non_basic 过滤器可能不在 VIEW_AS_FILTERS 集合内，若编译失败需改为 any。
+skill twjiange(2772527547) {
+  view_as sha play_phase non_basic from hand_equip;
+}

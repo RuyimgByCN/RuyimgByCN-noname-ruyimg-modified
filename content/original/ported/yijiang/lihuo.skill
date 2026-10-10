@@ -1,0 +1,12 @@
+// 疠火（lihuo）— 程普。
+// 普通【杀】可改为火【杀】；火【杀】可额外指定一个合法目标。
+// 转换后的整次【杀】若实际造成过伤害，全部目标结算完毕后使用者失去 1 点体力。
+skill lihuo(3289572540) {
+  trigger card_used owner_source_normal_sha optional {
+    effect convert_current_sha_to_fire_lose_hp_if_damage(self, event_card);
+    effect choose_add_current_sha_target(self, event_card);
+  }
+  trigger card_used owner_source_fire_sha {
+    effect choose_add_current_sha_target(self, event_card);
+  }
+}

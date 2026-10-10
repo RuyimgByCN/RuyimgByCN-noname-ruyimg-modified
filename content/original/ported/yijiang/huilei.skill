@@ -1,0 +1,6 @@
+// 旧 JS 语义：拥有者死亡时，仍存活的击杀者弃置全部手牌和装备牌。
+skill huilei(2889506960) locked {
+  trigger death owner_is_target_source_alive {
+    effect discard_all_hand_and_equip(event_source);
+  }
+}

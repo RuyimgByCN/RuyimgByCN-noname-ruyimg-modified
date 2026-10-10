@@ -1,0 +1,27 @@
+// 虚吓（TW 张飞）：你使用的【杀】被目标闪避后，其选择一项：受到你造成的 1 点伤害；
+// 或获得「虚吓·威吓」：本回合内其受到伤害 +2。
+// 旧 JS 仅作语义证据；伤害与临时技能由权威状态机校验。
+// 注 1：旧 JS 由闪避目标 chooseControl 选择分支，DSL 的 choose 以技能拥有者作为
+//       选择者（文档化近似）。
+// 注 2：旧 JS 仅对使用者下一张牌对目标造成的伤害 +2 并以该牌使用/结算为消解条件；
+//       DSL 以 damage_taken_amount 修饰符（目标受伤 +2，任意来源）与目标回合结束
+//       移除近似表达。
+skill twxuhe(3586311917) {
+  trigger sha_dodged owner_source_sha_dodged {
+    let option = choose(0, 1);
+    if option == 0 {
+      effect deal_damage(self, event_player, 1);
+    }
+    if option == 1 {
+      effect add_skill(event_player, 3796539642);
+    }
+  }
+}
+
+// 虚吓·威吓：受到伤害 +2；目标回合结束时移除。
+skill twxuhe_damage(3796539642) {
+  modifier damage_taken_amount add 2;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

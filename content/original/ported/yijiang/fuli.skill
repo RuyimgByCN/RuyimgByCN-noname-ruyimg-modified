@@ -1,0 +1,7 @@
+skill fuli(3748306630) {
+  trigger dying owner_is_target optional {
+    effect recover_hp(self, alive_group_count() - hp(self));
+    effect turn_over(self);
+    effect remove_skill(self_skill);
+  }
+}

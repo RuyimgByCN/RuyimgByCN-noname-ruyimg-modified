@@ -1,0 +1,7 @@
+// 裂体（袁绍&袁术双头）：开局手牌翻倍并打上 gaintag 分属二人，
+// 各自标记的牌仅对应角色可使用/弃置，且获得牌时自动标记。
+// 旧 JS 重度依赖 gaintag 系统和手牌标记分裂，DSL 无对应原语，无法建模。
+// 空定义：需 expansion 支持 card_tag_split 与 手牌标记过滤原语。
+skill dclieti(3132796826) {
+  modifier hand_limit add 1;
+}

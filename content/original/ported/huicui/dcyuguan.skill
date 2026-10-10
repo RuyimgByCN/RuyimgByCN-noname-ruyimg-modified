@@ -1,0 +1,7 @@
+// dcyuguan：减体力上限；令目标摸1牌。
+skill dcyuguan(3432487202) {
+  trigger phase_any_end owner_alive_not_target optional {
+    // 近似：减少体力上限
+    effect change_max_hp(self, -1);
+  }
+}

@@ -1,0 +1,20 @@
+// 单骑（新杀SP关羽）：觉醒技，准备阶段，若你的手牌数、装备区和判定区里的牌数之
+// 和大于你的体力值，你减 1 点体力上限，回复/摸牌至体力上限，获得【马术】与【怒嗔】。
+// 旧 JS 仅作语义证据；hej 计数过滤由权威过滤器 owner_is_target_hej_above_hp 校验，
+// 觉醒结算（减上限 → 依新上限求值回复/摸牌）由 resolve_dcdanji 权威状态机顺序执行
+// （ABI 466）。
+skill dcdanji(3851102612) locked {
+  trigger phase_prepare owner_is_target_hej_above_hp {
+    effect resolve_dcdanji(self, self_skill);
+  }
+}
+
+// 怒嗔：出牌阶段限一次，令一名有手牌的其他角色展示一张手牌，然后你选择弃置至少
+// 一张该花色牌（手牌或装备），对其造成等量伤害；或取消，获得其所有该花色手牌。
+// 旧 JS 仅作语义证据；揭示→弃置/获得分支由 resolve_dcnuchen 权威状态机校验
+// （ABI 466）。phase_play 每回合触发一次，天然满足「限一次」。
+skill dcnuchen(2960451206) {
+  trigger phase_play owner_is_target {
+    effect resolve_dcnuchen(self);
+  }
+}

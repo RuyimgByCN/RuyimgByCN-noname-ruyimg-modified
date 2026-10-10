@@ -1,0 +1,8 @@
+// jsrgfennan（奋难）：出牌阶段限两次，你可以令一名角色选择一项：①令你将武将牌翻面，然后你移动其场上一张本回合未被移动过的牌；②令你观看其手牌并可以重铸其中至多三张牌。
+// 未建模：choosePlayer, 翻译调用, 全局状态（DSL无对应原语）
+skill jsrgfennan(2861877495) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgfennan（skill.js:13768）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

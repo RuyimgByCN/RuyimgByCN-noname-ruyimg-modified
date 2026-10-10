@@ -1,0 +1,5 @@
+// zj_zhengui：global:phaseEnd, 异步。
+skill zj_zhengui(2999633487) {
+  trigger phase_any_end owner_alive {
+  }
+}

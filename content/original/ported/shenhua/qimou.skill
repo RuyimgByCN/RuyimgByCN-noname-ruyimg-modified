@@ -1,0 +1,9 @@
+// 奇谋：出牌阶段限一次，失去任意点体力，本回合获得等量距离与出杀次数增益。
+skill qimou(3084798293) {
+  active play_phase once_per_game {
+    let amount = choose_range(1, hp(self));
+    effect add_skill(self, 2727616630);
+    effect add_mark(self, 2727616630, amount);
+    effect lose_hp(self, amount);
+  }
+}

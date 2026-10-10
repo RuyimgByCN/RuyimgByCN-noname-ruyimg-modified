@@ -1,0 +1,7 @@
+// mbchengxiong（惩凶）：你使用锦囊牌仅指定其他角色为目标后，可选择一名牌数不小于X的其他角色，弃置其一张牌（X为你此阶段使用的牌数）。若此牌颜色与你使用的锦囊牌相同，你对其造成1点伤害。
+skill mbchengxiong(2697950967) {
+  trigger card_targeted owner_alive {
+    effect choose_other_damage(self, 1);
+    effect discard_selected(self);
+  }
+}

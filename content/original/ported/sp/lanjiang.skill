@@ -1,0 +1,5 @@
+skill lanjiang(3473961755) {
+  trigger phase_end owner_is_target {
+    effect resolve_lanjiang(self);
+  }
+}

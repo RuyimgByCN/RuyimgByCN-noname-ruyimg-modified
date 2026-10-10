@@ -1,0 +1,5 @@
+// jdtairan：音效名:tairan, player:phase_end, 需弃牌, 失去体力, 异步。
+skill jdtairan(2875057529) {
+  trigger phase_end owner_alive {
+  }
+}

@@ -1,0 +1,5 @@
+// xkhaokou：锁定技, global:phaseBefore, player:game_started, player:removeQiyi, 含子技能, 异步。
+skill xkhaokou(3109652003) locked {
+  trigger game_started always {
+  }
+}

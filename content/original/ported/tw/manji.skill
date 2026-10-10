@@ -1,0 +1,16 @@
+// 蛮汲（TW 忙牙长）
+// 原语义：其他角色失去体力后，按结算后的体力比较分别回复或摸牌；相等时两项依次执行。
+skill manji(3959991082) locked {
+  trigger hp_lost owner_alive_not_target {
+    if hp(self) < hp(event_player) {
+      effect recover_hp(self, 1);
+    } else {
+      if hp(self) == hp(event_player) {
+        effect recover_hp(self, 1);
+        effect draw_cards(self, 1);
+      } else {
+        effect draw_cards(self, 1);
+      }
+    }
+  }
+}

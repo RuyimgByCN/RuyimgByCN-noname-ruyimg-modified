@@ -1,0 +1,6 @@
+// 狂骨：距离一以内每造成一点伤害，均可独立选择回复一点体力或摸一张牌。
+skill xinkuanggu(4089972415) {
+  trigger damage owner_source_distance_le_one_per_damage_point {
+    effect choose_draw_or_recover(self, 1, 1, 1);
+  }
+}

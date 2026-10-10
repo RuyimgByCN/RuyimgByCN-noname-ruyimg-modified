@@ -1,0 +1,4 @@
+// Skill mengjin2(102) - standard variant
+skill mengjin2(102) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

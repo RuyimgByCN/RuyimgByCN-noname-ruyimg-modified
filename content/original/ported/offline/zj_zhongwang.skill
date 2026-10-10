@@ -1,0 +1,6 @@
+// zj_zhongwang：player:phase_prepare, player:phaseEnd, 摸牌, 失去体力, 异步。
+skill zj_zhongwang(2813485466) {
+  trigger phase_prepare owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

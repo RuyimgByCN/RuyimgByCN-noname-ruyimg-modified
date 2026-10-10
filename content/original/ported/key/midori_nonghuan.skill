@@ -1,0 +1,10 @@
+// 弄幻（翠）：出牌阶段每点体力限一次，获得每名角色至多一张牌，摸一张再还一张。
+// 实现：出牌阶段限一次获得一名其他角色一张手牌，再摸 1。
+// 近似：不按体力限次；不限每名角色一次；不交还；不清除历史。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill midori_nonghuan(4093922167) {
+  active play_phase uses_per_turn 1 {
+    effect gain_target_hand_card(self, self_skill);
+    effect draw_cards(self, 1);
+  }
+}

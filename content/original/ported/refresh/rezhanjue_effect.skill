@@ -1,0 +1,9 @@
+// rezhanjue_effect：刷新包技能。
+// triggers: player:useCardAfter
+// forced/locked: 锁定技
+skill rezhanjue_effect(2903462870) {
+    // 近似：旧JS事件 useCardAfter → DSL事件 card_used
+    trigger card_used owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

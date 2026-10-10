@@ -1,0 +1,5 @@
+// 原仓库 character/sixiang/skill.js：荫族。
+
+skill stdyinzu(3812447605) locked {
+  modifier global_attack_range add queried_player_hand_gt_hp_signed;
+}

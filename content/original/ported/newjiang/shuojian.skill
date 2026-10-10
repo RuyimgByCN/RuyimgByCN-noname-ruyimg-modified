@@ -1,0 +1,9 @@
+// 说剑（刘备）：出牌阶段限三次，可将一张手牌交给一名其他角色；若其体力
+// 值大于你，你摸一张牌；否则其弃置一张牌，然后你摸一张牌。
+// 旧 JS 的「按体力比较分支」无对应原语，以交一张牌并摸一张近似（分支
+// 未建模，已注明）。
+skill shuojian(4005257207) {
+  active play_phase uses_per_turn 3 targets 1 1 other select_hand 1 1 {
+    effect give_selected_then_recover_target(self, event_source, 1);
+  }
+}

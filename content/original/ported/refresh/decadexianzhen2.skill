@@ -1,0 +1,7 @@
+// decadexianzhen2（凌统·先阵-赢）：拼点赢后对目标【杀】无距离/次数限制，且伤害+1。
+// 旧JS子技能含 modifier targetInRange/cardUsableTarget + 伤害+1，DSL无对应组合原语，未建模。
+skill decadexianzhen2(4002550019) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 decadexianzhen2 = 标记型技能（charlotte，skill.js:4707），无规则面。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,5 @@
+// jdsbyijue：音效名:sbyijue, 锁定技, player:phase_prepare, global:damage_before, 加技能, 含子技能, 异步。
+skill jdsbyijue(2669032659) locked {
+  trigger phase_prepare always {
+  }
+}

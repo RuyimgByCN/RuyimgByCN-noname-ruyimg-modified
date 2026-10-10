@@ -1,0 +1,7 @@
+// 奔战（奏）：其他角色响应牌时，可令一名角色摸/弃两张牌（基本牌响应）或回复/造成1点伤害（非基本牌）。
+// 旧 JS 的「respondTo 检测+按牌类型分支+目标自选」需响应链追踪+条件分支原语，未建模。
+skill kanade_benzhan(3488581057) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kanade_benzhan 含真实规则体（trigger、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

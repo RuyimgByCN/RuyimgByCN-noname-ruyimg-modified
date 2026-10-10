@@ -1,0 +1,14 @@
+skill xiantu(2670783458) {
+  trigger phase_play owner_alive_not_target optional {
+    effect draw_then_give_exact_record_phase_target(self, event_player, 2);
+  }
+
+  trigger death owner_phase_gift_target_is_source {
+    effect clear_phase_gift_target(self);
+  }
+
+  trigger phase_play_end owner_phase_gift_target_is_target {
+    effect clear_phase_gift_target(self);
+    effect lose_hp(self, 1);
+  }
+}

@@ -1,0 +1,11 @@
+// 无双方天画戟（wushuangfangtianji_skill，装备技）：你使用【杀】造成伤害后，可令受伤角色
+// 摸一张牌，或弃置其一张手牌/装备牌。
+// 上游 (sp/skill.js:26231)：equipSkill source damageSource，filter = 伤害牌为杀；
+// content = chooseControl("摸一张牌" / "弃置其一张牌")。
+// 实现：damage + owner_source_sha optional → choose_draw_or_discard_target_card_record_sha(self, event_card, event_player)。
+// 与上游差异：装备技绑定未建模；「弃置其一张牌」限定手牌/装备牌（上游 he 同义）。
+skill wushuangfangtianji_skill(3620526961) {
+  trigger damage owner_source_sha optional {
+    effect choose_draw_or_discard_target_card_record_sha(self, event_card, event_player);
+  }
+}

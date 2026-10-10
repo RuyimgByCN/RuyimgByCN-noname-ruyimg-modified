@@ -1,0 +1,18 @@
+// 星舞（神·大乔）：弃牌阶段开始时，你可以将一张牌作为"星舞"置于武将牌上。
+// 当你有至少三张"星舞"牌时，你可以移去三张并选择一名其他角色：弃置其装备区的
+// 所有牌，然后对其造成2点伤害（若其性别包含女性则改为1点）。
+// 上游 (tw/skill.js twxingwu)：trigger player phaseDiscardBegin；direct；
+// filter he>0；content chooseCard("he") → addToExpansion gaintag twxingwu；
+// step2+ = 移去三张星舞 → 弃目标全部装备 → 性别分支伤害。
+// 实现（2026-09-10 第二百一十六批·A0 置入面散批）：主面 trigger phase_discard
+// owner_is_target optional → store_selected_in_skill_pile(self)（批 215 修复后
+// 自开 SelectCards 1/1 必选续体 Cont 297，选当前手牌置入本技「星舞」堆）。
+// 近似（登记债）：①消耗面（≥3 张移去三张+弃装备区全部+性别分支伤害）未建模
+// ——部分移去原语与性别查询缺失；②上游选牌域 "he"（手+装备）收窄为手牌；
+// ③direct+chooseCard(bool) 口径锁定为 optional 确认+必选（交互等价）；④onremove
+// 清堆未建模。
+skill twxingwu(2550622152) {
+  trigger phase_discard owner_is_target optional {
+    effect store_selected_in_skill_pile(self);
+  }
+}

@@ -1,0 +1,8 @@
+// 暴袭（刘备）：任意角色弃置牌进入弃牌堆后，若其中有至少两张基本牌，你可
+// 弃一张手牌并失去 1 点体力上限，视为使用一张【决斗】；若其中有至少两张
+// 非基本牌，视为使用一张【杀】。每项每轮一次。
+// 旧 JS 的「按弃牌类别分支视为用牌」无对应原语，未建模（已注明）。
+skill baoxi(2360067307) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,8 @@
+// 空舞（往人）：出牌阶段限一次，玩一个小游戏（空舞），根据得分获得收益。
+// 旧 JS 的 小游戏+分数系统 需交互小游戏原语，未建模。
+skill yukito_kongwu(3912900297) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yukito_kongwu（skill.js:4650）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

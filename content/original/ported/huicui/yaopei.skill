@@ -1,0 +1,7 @@
+// yaopei：摸2牌；回复1体力；令目标摸2牌；弃牌。
+skill yaopei(3103396510) {
+  trigger phase_discard_end owner_alive_not_target optional {
+    // 近似：回复1点体力
+    effect recover_hp(self, 1);
+  }
+}

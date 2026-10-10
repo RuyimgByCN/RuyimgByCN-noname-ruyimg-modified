@@ -1,0 +1,36 @@
+// 势陈到：旧 JavaScript 仅作为语义规格，运行时使用确定性 DSL/宿主复合。
+skill potwanglie(3694841232) {
+  modifier card_use_unrespondable_for_skill_card_policy override 1;
+  modifier card_distance_unlimited_for_skill_card_policy override 1;
+  trigger phase_play owner_is_target_hand_nonempty optional {
+    effect resolve_potwanglie(self, event_card, 3694841233, 0);
+  }
+  trigger card_resolved owner_source_card_resolved_phase_policy {
+    effect resolve_potwanglie(self, event_card, 3694841233, 1);
+  }
+  trigger phase_play_end owner_is_target {
+    effect resolve_potwanglie(self, event_card, 3694841233, 2);
+  }
+}
+
+skill potwanglie_debuff(3694841233) locked {
+  modifier card_targets_self_only override 1;
+  trigger phase_play_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}
+
+skill pothongyi(3733552053) locked {
+  trigger game_started owner_alive {
+    effect resolve_pothongyi(self, 0);
+  }
+  trigger damage owner_is_source_or_target {
+    effect resolve_pothongyi(self, 1);
+  }
+  trigger phase_prepare owner_is_target_mark_positive_3733552053 {
+    effect resolve_pothongyi(self, 2);
+  }
+  trigger phase_end owner_is_target {
+    effect resolve_pothongyi(self, 3);
+  }
+}

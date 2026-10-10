@@ -1,0 +1,12 @@
+// 胆决（春秋张星彩）：距离 1 内角色成为【杀】目标后，可令此【杀】不计次数，
+// 然后其摸一张并可交给你一张牌。
+// 近似：复用距离 1 杀目标过滤器；目标摸一并强制交一张 he（可选交牌与不计次数未建模）。
+skill ymdanjue(2155647580) {
+  trigger card_targeted owner_alive_sha_target_distance_le_one optional {
+    if self == event_player {
+      effect draw_cards(self, 1);
+    } else {
+      effect draw_then_give_one(event_player, self, 1, any_hand_equip);
+    }
+  }
+}

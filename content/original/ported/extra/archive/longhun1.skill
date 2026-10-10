@@ -1,0 +1,5 @@
+// 龙魂·1（神关羽系）：将红桃牌当【桃】使用。
+// 旧 JS 的「红桃转化」以手牌当【桃】近似（花色条件未建模，已注明）。
+skill longhun1(3949363100) {
+  view_as tao play_phase heart from hand_equip;
+}

@@ -1,0 +1,6 @@
+// 奋威：限定技，选择当前非固定多目标锦囊的任意名目标，令该牌对这些目标无效。
+skill fenwei(3203648912) {
+  trigger card_used owner_alive_non_multitarget_trick_targets_gt_one {
+    effect choose_current_trick_targets_to_nullify(self, event_source, event_card);
+  }
+}

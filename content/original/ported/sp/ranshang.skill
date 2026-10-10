@@ -1,0 +1,6 @@
+// 燃殇：受到火焰伤害后，按伤害点数获得“燃”。
+skill ranshang(3675767094) locked {
+  trigger damage owner_target_fire {
+    effect add_mark(self, 638947751, event_amount);
+  }
+}

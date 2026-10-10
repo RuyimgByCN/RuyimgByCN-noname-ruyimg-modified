@@ -1,0 +1,8 @@
+// 亢惠（袁术）：锁定技。你受到伤害时,若伤害来源不是你,此伤害+1。
+// 旧 JS 仅作语义证据;「双爻标记均未翻转」条件未建模（需妄爻联动）。
+// ABI 562 modify_current_damage 在 damage_before 窗口修改当前伤害量。
+skill dckanghui(2593115558) locked {
+  trigger damage_before owner_is_target_other_source_alive {
+    effect modify_current_damage(self, 1);
+  }
+}

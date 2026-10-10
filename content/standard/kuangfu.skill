@@ -1,0 +1,4 @@
+// Dong Zhuo reach
+skill kuangfu(65) {
+  modifier distance_from add -1;
+}

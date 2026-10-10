@@ -1,0 +1,7 @@
+// reyingshui：旧JS复杂效果。
+skill reyingshui(3493556236) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    // 旧JS含复杂目标选择逻辑，已简化
+    effect choose_target_draw(self, 1, other);
+  }
+}

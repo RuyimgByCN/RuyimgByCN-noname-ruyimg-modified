@@ -1,0 +1,5 @@
+// jun_zhiyang：音效名:jun_zhiyang, 锁定技, player:damage, player:compare, target:compare, 需拼点, 含子技能, 异步。
+skill jun_zhiyang(2365438656) locked {
+  trigger damage always {
+  }
+}

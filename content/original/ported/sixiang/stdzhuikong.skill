@@ -1,0 +1,7 @@
+// 追恐：其他角色的准备阶段开始时，你可以使用一张【杀】与其拼点，然后拼点赢的角色可以使用没赢的角色拼点牌。
+// 旧 JS 的「指定杀为拼点牌」「固定拼点结果」「胜者使用败者拼点牌」为复杂拼点+使用牌的交互流程，无可用的 DSL 原语。
+skill stdzhuikong(3191613893) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

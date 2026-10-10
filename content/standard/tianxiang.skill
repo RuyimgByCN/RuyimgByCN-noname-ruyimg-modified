@@ -1,0 +1,6 @@
+// 天香 (tianxiang) — 小乔: after taking damage, draw 1 card (heavenly charm).
+skill tianxiang(33) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

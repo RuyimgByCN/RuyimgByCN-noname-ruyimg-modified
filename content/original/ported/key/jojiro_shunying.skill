@@ -1,0 +1,7 @@
+// 瞬影（城次郎·锁定技）：回合结束时，本回合每跳过1个阶段，可移动对应格数或失去1点体力；若移动则摸等同于跳过阶段数的牌。
+// 旧 JS 的「跳阶段计数+下棋移动+二择一」需棋盘机制与多阶段计数原语，未建模。
+skill jojiro_shunying(2559047969) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jojiro_shunying = 标记型技能（charlotte，skill.js:6315），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

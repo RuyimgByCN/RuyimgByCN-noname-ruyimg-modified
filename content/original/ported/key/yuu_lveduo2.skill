@@ -1,0 +1,7 @@
+// 掠夺·续（优）：翻面结束时若正面朝上，交换回控制权。
+// 旧 JS 的 控制权交换+swapPlayerAuto 需双人控制原语，未建模。
+skill yuu_lveduo2(2313486334) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yuu_lveduo2 = 标记型技能（charlotte，skill.js:6889），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

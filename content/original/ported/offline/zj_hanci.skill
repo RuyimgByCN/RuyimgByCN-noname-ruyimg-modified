@@ -1,0 +1,6 @@
+skill zj_hanci(3201112152) locked {
+  trigger skill_added owner_alive_event_player_alive {
+    effect draw_cards(self, 1);
+    effect draw_cards(event_player, 1);
+  }
+}

@@ -1,0 +1,4 @@
+// Skill yingx3(191) - trigger variant
+skill yingx3(191) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

@@ -1,0 +1,4 @@
+// Xun You tactics
+skill qice2(84) {
+  modifier attack_range add 1;
+}

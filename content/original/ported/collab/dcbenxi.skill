@@ -1,0 +1,7 @@
+// 本兮（无名高达）：锁定技，转换技。失去手牌后切换阴阳状态。阳：随机念出含"wu,yi"拼音台词并记录对应技能；阴：获得记录的技能（或已拥有时对所有其他角色各造成1点伤害）。
+// 旧JS的转换技状态、拼音解析（get.pinyin）、跨全部角色数据库搜索台词音频、随机技能获取、群体伤害均无对应原语。
+// 以空定义保留编译占位。
+skill dcbenxi(2517184111) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

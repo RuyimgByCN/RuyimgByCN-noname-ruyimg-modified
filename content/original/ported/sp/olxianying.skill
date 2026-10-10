@@ -1,0 +1,15 @@
+// 贤膺（OL 秦朗）：准备阶段或受到伤害后，你可以摸两张牌，再弃任意张牌
+// （本轮弃牌张数不可重复），若弃牌同名则本回合结束时可视为使用之。
+// 上游 (sp/skill.js:8430)：damageEnd / phaseZhunbeiBegin，content 先 draw(2)
+// 再按本轮已弃张数过滤 chooseToDiscard，同名则回合末视为使用。
+// 实现：两处可选窗口各摸 2 张。
+// 近似：弃牌张数去重、同名回合末视为使用未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olxianying(2869635574) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 2);
+  }
+  trigger phase_prepare owner_is_target optional {
+    effect draw_cards(self, 2);
+  }
+}

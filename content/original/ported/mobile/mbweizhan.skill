@@ -1,0 +1,6 @@
+// mbweizhan（诿战）：其他角色出牌阶段开始时，若你计算与其距离为1，你可以摸一张牌并交给其至多三张牌，本回合结束时若其本回合造成伤害值：不小于X，你摸两张牌；小于X，你获得其区域里两张牌（X为你交给其的牌数）。
+skill mbweizhan(4047218785) {
+  trigger phase_play owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

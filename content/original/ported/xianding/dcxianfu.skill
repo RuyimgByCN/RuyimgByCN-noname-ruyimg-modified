@@ -1,0 +1,8 @@
+// 娴辅（李昭仪）：每回合限一次成为牌目标时，可跳过下一非准备/结束阶段令此牌无效，
+// 再与明节角色互看手牌并可获至多三张。
+// 近似：成为其他角色牌的目标时获来源一张 he（跳过阶段、无效与互看未建模）。
+skill dcxianfu(2922040307) {
+  trigger card_targeted owner_is_target_once optional {
+    effect take_one_card(event_source, self, hand_equip);
+  }
+}

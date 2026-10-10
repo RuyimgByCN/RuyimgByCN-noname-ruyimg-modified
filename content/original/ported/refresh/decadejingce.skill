@@ -1,0 +1,6 @@
+// 精策：结束阶段按本回合用牌数与有效花色数执行完整的额外摸牌/出牌阶段。
+skill decadejingce(2705593131) {
+  trigger phase_end owner_is_target_card_used_at_least_hp optional {
+    effect choose_end_extra_draw_or_play_by_used_suits(self);
+  }
+}

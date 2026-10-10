@@ -1,0 +1,12 @@
+// 旧 JavaScript 仅作语义证据；运行时只执行下列确定性规则。
+skill choudu(4166492495) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect resolve_wdb_yangyi(self, 0, event_card, 0);
+  }
+}
+
+skill liduan(2934618094) {
+  trigger cards_moved owner_alive_other_gained_single_equip_to_hand_outside_turn_usable optional {
+    effect resolve_wdb_yangyi(self, 0, 0, 1);
+  }
+}

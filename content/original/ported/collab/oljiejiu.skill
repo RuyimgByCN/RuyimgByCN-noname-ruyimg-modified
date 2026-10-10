@@ -1,0 +1,7 @@
+// 戒酒（卫青）：可将一张【酒】当任意基本牌使用或打出（不可正常使用【酒】）。
+// 旧 JS 的「仅限酒牌作为转化源」无法在 view_as 中精确限制源牌名，以任意手牌+装备近似。
+// 「戒色」子技能（将女性角色技能替换为离间）无对应原语，未建模。
+skill oljiejiu(4062002542) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

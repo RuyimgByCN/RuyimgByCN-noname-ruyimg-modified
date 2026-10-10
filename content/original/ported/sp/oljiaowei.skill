@@ -1,0 +1,6 @@
+// 骄巍（oljiaowei）：锁定技。①你的黑色牌不计入手牌上限。
+// ②手牌数大于体力值时对体力值不大于你的角色使用黑色牌无距离限制且不可响应
+// （条件 modifier 未建模）。
+skill oljiaowei(2764079934) locked {
+  modifier card_ignored_hand_limit(black) override 1;
+}

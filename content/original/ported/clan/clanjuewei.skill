@@ -1,0 +1,8 @@
+// 绝围（族荀衍/族荀悦）：每回合限一次。当伤害牌被使用时，可重铸一张装备牌并于结算后视为对一名其他角色使用此牌，或弃一张装备牌令此牌无效。
+// 旧 JS 的「重铸/弃置装备双选择」「延时视为使用伤害牌」「牌无效化」无对应原语。
+// 空定义：需 expansion 支持装备重铸、延时牌使用、牌无效化。
+skill clanjuewei(4122989176) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

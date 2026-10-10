@@ -1,0 +1,7 @@
+// 将驰（夏侯霸）：摸牌阶段可二选一——少摸一张（本回合杀无距离限制且不计次数）；或多摸一张（本回合杀的伤害-1或不可被闪响应）。
+// 旧 JS 的二分叉选择+不同修饰技能（jiangchi2/jiangchi3）分配无对应原语，暂留空定义。
+skill jiangchi(2779386252) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

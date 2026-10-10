@@ -1,0 +1,4 @@
+// 醇醪2（程普）：上游为 chooseToUse+自定义 expansion 区操作（标记牌当【酒】
+// 对濒死角色使用）。DSL 无对应原语；按折叠政策保留空定义以稳定 def_id，
+// 语义由父技 chunlao 承载。
+skill chunlao2(4198967784) {}

@@ -1,0 +1,18 @@
+// 拳甲（小猫·OL）：一名角色（当前回合角色）对另一角色造成伤害后（来源非你且
+// 有手牌），你可以随机观看其 (2+标记数) 张手牌：其中有【杀】则对其使用虚拟
+// 【杀】；否则获得 1 枚「拳甲」标记（下次多看一张）。
+// 上游 (collab/skill.js quanjia)：trigger global damageSource；filter = source
+// 非owner/目标非source/来源为当前回合角色/存活/有手牌；content 随机取样 →
+// 逐张 sha useCard → 无杀 addMark。
+// 实现（2026-09-11 第二百三十七批·专属 host 状态机第三件，dcbingji/pxqixian
+// 工艺复用）：trigger damage owner_alive optional → resolve_quanjia(self,
+// self_skill, event_source, event_player)（ABI 694 / tag 717，机内权威校验 +
+// RNG Fisher–Yates 取样 + 物化虚拟杀/加标记，单发无续体）。
+// 近似（登记债）：①机内校验在 optional 确认之后——确认可能空开（filter 未含
+// 来源=当前回合角色条件）；②使用物化虚拟杀而非来源实际手牌那张；③多张杀
+// 仅使用第一张（上游逐张 while）；④取消=放弃对齐上游 check 意愿控制。
+skill quanjia(3913289765) {
+  trigger damage owner_alive optional {
+    effect resolve_quanjia(self, self_skill, event_source, event_player);
+  }
+}

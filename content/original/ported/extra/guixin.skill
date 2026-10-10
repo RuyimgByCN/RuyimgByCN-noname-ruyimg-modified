@@ -1,0 +1,6 @@
+// 归心：每受到一点伤害，可依次从每名其他角色的手牌、装备区或判定区获得一张牌，然后翻面。
+skill guixin(3519219618) {
+  trigger damage owner_is_target_per_damage_point_other_hand_equip_judge_nonempty optional {
+    effect choose_gain_card_from_each_other_then_turn_over(self);
+  }
+}

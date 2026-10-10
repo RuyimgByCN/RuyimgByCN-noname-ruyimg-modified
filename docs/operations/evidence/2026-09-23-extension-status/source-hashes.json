@@ -1,0 +1,5 @@
+{
+  "crates/engine-native/src/content/extension.rs": "c4a60ecb5a96e3955102783c121847bb72d4b2ef489ad64fc9fd8db19fa320fb",
+  "crates/engine-native/src/content/mod.rs": "e751ee14bea440aada35fec6a04ca0f4ba4639803c37aac1da6b4d949e816a43",
+  "crates/engine-native/tests/native_kernel.rs": "dad9cf9402998d4a657c7f12704192e7c194e854b0eb1f1f3fd3a6d6f2f1ee0c"
+}

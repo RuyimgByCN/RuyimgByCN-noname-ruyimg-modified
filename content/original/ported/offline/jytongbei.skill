@@ -1,0 +1,6 @@
+// 统北：对非魏角色造成伤害前，可声明类别；其交同类别牌，否则伤害 +1。
+skill jytongbei(2908493496) {
+  trigger damage_before owner_alive optional {
+    effect choose_category_then_target_give_matching_or_damage_plus_one(self, event_player);
+  }
+}

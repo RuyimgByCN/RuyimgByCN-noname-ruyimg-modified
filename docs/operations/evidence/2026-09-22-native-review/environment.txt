@@ -1,0 +1,15 @@
+Independent review: 2026-09-22 08:57-09:02 UTC+8 source and execution window
+macOS 27.0 (26A428), arm64
+rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)
+cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)
+Hardware model, RAM, power and thermal conditions: not recorded
+Ruleset version: 24; archive format version: 1
+Native tests: cargo test --offline -p engine-native; exit 0; 213 passed
+Runner: N09_SAMPLES=<csv> cargo run --offline --release -p engine-native --example n09_runner -- 20 9000; exit 0
+Counter comparison: same command with N09_PLAIN=1; exit 0; one run per setting
+CSV: no header, four columns load,game,seq,ns; 11758 rows per run
+Examples: n12_crossproc write/read, host_assembler 4 42 7, n10_render_host 3 99, n11_kof 8 8000, n10_table 10 7000; all exit 0
+Writer/reader archive: 679 bytes; H25 and H35 independently compared equal
+Probes: compiled with /opt/homebrew/bin/rustc against current debug engine_native rlib; exit 0
+The archive-length panic is caught deliberately; its backtrace text in probes.log is an observed defect, not a failed probe process.
+No production source/tests/examples were modified by this review.

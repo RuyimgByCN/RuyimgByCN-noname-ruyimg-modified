@@ -1,0 +1,7 @@
+// hsdianmo：player:phase_prepare, player:damage, 摸牌, 异步。
+skill hsdianmo(3108013082) {
+  trigger phase_prepare owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

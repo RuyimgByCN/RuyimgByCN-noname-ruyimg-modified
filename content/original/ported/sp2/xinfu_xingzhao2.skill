@@ -1,0 +1,4 @@
+skill xinfu_xingzhao2(4254469941) locked {
+  modifier skip_judge_phase max alive_wounded_count_at_least_3;
+  modifier skip_discard_phase max alive_wounded_count_at_least_3;
+}

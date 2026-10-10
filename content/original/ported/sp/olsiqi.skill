@@ -1,0 +1,11 @@
+// 思泣（OL 薛灵芸）：受到伤害后，若牌堆底为红色，可亮出连续至多三张红牌并使用
+// 其中的【桃】【无中生有】或装备。
+// 上游 (sp/skill.js:7899)：damageEnd，filter 牌堆底红色；content 亮出连续红牌并使用。
+// 实现：受伤后可选摸 1 张。
+// 近似：不检验牌堆底颜色；亮出并使用红牌改为摸 1。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olsiqi(2641086803) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

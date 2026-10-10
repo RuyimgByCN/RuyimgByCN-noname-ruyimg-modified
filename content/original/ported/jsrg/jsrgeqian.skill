@@ -1,0 +1,15 @@
+// jsrgeqian（遏前）：①结束阶段，你可以蓄谋任意次；②当你使用【杀】或蓄谋牌指定
+// 其他角色为唯一目标后，你可以令此牌不计入次数限制并获得目标一张牌，然后其可以令
+// 你本回合至其的距离+2。上游 jsrg/skill.js:2957。
+// 实现（切片 3b，仅①）：`phase_end owner_is_target_hand_nonempty optional`
+// → choose_place_hand_xumou（ABI 666/Cont 278：SelectCards 手牌一张真实移入判定区
+// 打 XUMOU_TAG；cancel=停止蓄谋）。上游 chooseCard while 循环（任意次）以单次激活
+// 近似——再次发动需等下个结束阶段。
+// ②保持诚实债务：唯一目标过滤器、免次数、gain_target_hand_card(forced)、其可选拒绝
+// 后的 distance_from+2 标记均可达，但「蓄谋牌指定目标」尚无使用管线（切片 2 仅覆盖
+// 判定结算事件透传），待切片 4 选择盘一并接入。
+skill jsrgeqian(3425800404) {
+  trigger phase_end owner_is_target_hand_nonempty optional {
+    effect choose_place_hand_xumou(self, self_skill);
+  }
+}

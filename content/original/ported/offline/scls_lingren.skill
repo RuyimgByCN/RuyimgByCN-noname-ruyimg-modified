@@ -1,0 +1,6 @@
+// scls_lingren：音效名:xinfu_lingren, 摸牌, 加技能, 异步。
+skill scls_lingren(2383358320) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

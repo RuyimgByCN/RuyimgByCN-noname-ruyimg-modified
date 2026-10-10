@@ -1,0 +1,8 @@
+// 连诛（mblianzhu）：出牌阶段限一次：展示一张牌交给一名其他角色，对其无距离次数限制且造成伤害后可获得此牌；其获得后须交还其他牌传递此牌。
+// 上游描述引自 translate.js；此前占位头（旧批量批次未写描述）已重记。
+skill mblianzhu(4062730667) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mblianzhu（skill.js:1806）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,53 @@
+// 红颜：你的黑桃牌视为红桃牌；装备区有红桃装备牌时手牌上限+1。
+skill olhongyan(3860377728) locked {
+  modifier card_suit(spade) override heart;
+  modifier hand_limit_base_max_hp override owner_has_heart_equip;
+}
+
+// 以下均为上游无规则面的标记型技能（charlotte / audio-only / 空体 {}），
+// DSL 无可移植规则；以 hand_limit +0 空体保留 catalog 条目（与
+// sp/starzhonggu.skill 同约定）。上游定义位置：content/original/legacy-source/character/refresh/skill.js。
+skill redingpin2(3354420413) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 redingpin2 = { charlotte: true }（7423），无规则面。
+  modifier hand_limit add 0;
+}
+skill gzquanji2(3066807981) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 gzquanji2 = { charlotte: true }（7988），无规则面。
+  modifier hand_limit add 0;
+}
+skill benghuai_re_zhugedan(3595675704) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 benghuai_re_zhugedan = { audio: 1 }（572），无规则面。
+  modifier hand_limit add 0;
+}
+skill olzhiba3(3830661286) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olzhiba3 = {}（12560），空体，无规则面。
+  modifier hand_limit add 0;
+}
+skill paoxiao_ol_guanzhang(2430349982) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 paoxiao_ol_guanzhang = { audio: 1 }（10731），无规则面。
+  modifier hand_limit add 0;
+}
+skill paoxiao_re_zhangfei(3461125915) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 paoxiao_re_zhangfei = { audio: 2 }（14736），无规则面。
+  modifier hand_limit add 0;
+}
+skill rejizhi_new_simayi(3792343002) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rejizhi_new_simayi = { audio: 1 }（15490），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill rezhiheng_new_simayi(2651973796) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rezhiheng_new_simayi = { audio: 1 }（15412），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill wusheng_ol_guanzhang(3314847715) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 wusheng_ol_guanzhang = { audio: 1 }（14593），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill xinhuangtian3(3252325968) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinhuangtian3 = {}（5876），空体，无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

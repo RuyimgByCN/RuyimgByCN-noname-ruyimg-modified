@@ -1,0 +1,5 @@
+skill stdbaobian(3406574661) {
+  trigger phase_play owner_is_target_any_alive_self_discardable_hand optional {
+    effect choose_target_lose_hp_discard_hand_sha_if_basic(self);
+  }
+}

@@ -1,0 +1,8 @@
+$ swd 第八批定向：潜偷面具（装备主动技：弃代价→判定→偷牌）
+test swd_shentou_active_steal_with_club_judge ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（407/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v91→v92，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Shentoumianju 编码 111（equip5 宝物/archive/a0/ALL 同步）+ HostBehavior::SwdShentouEquipSkill（tag 80/ALL 79→80/a0 index 79）；ActivateSkill 路径（filter=有代价可弃+存在手牌更多者；Act 问代价 min=1 → 判定：梅花无事/非梅花随机偷手牌更多者一张）
+$ 装备注入同步授予技能实例（快照 EquipSkillMismatch 校验首跑捕获）；无懈窗口不适用（主动技非锦囊）
+$ 上游核验：card/swd/card.js shentoumianju（equip5/skills shentou/onLose 清 stat）；skill.js shentou（equipSkill/enable phaseUse/usable 1/filterCard true/filter 手牌更多者/judge 梅花失败/randomGet）

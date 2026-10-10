@@ -1,0 +1,11 @@
+skill olyinji(2633842541) locked {
+  trigger phase_end owner_is_target_not_unique_max_current_hp {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect recover_hp(self, 1);
+    }
+    if option == 2 {
+      effect change_max_hp(self, 1);
+    }
+  }
+}

@@ -1,0 +1,9 @@
+// jsrgshenchong（甚宠）：上游 translate.js 无独立 info 条目，描述见父技/相邻条目。
+// 类型：限定技
+// 未建模：charlotte延迟, 觉醒技, 限定技（DSL无对应原语）
+skill jsrgshenchong(4169019837) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgshenchong（skill.js:9101）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

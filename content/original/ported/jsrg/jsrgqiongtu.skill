@@ -1,0 +1,8 @@
+// jsrgqiongtu（穷途）：群势力技。每回合限一次。你可以将一张非基本牌置于武将牌上视为使用一张【无懈可击】。若此牌生效，你摸一张牌，否则你变更势力为魏并获得所有“穷途”牌。
+// 未建模：storage状态, 全局状态, addTempSkill, 延迟动画, changeGroup, charlotte延迟 ...等9项（DSL无对应原语）
+skill jsrgqiongtu(3758113365) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgqiongtu（skill.js:7435）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

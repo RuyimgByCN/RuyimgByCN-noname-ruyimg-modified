@@ -1,0 +1,5 @@
+// hm_tuntian：锁定技, player:phase_prepare, player:phaseDrawBegin2, player:damage_before, 加技能, 含子技能, 异步。
+skill hm_tuntian(4201993185) locked {
+  trigger phase_prepare always {
+  }
+}

@@ -1,0 +1,18 @@
+== cargo test --offline -p engine-native --test g1_wudian zixuan（定向回归）==
+test zixuan_shuiyun5_dying_rescue_channel ... ok
+test zixuan_shuiyun_off_court_and_type_dedup ... ok
+test zixuan_wangyou_roundstamp_and_draw ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 74 filtered out; finished in 0.06s
+
+
+== cargo test --offline -p engine-native --test replay_scenarios（golden）==
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+== cargo test --offline -p engine-native（全量）==
+engine-native 合计: 490 passed / 0 failed / 1 ignored
+
+== 依赖包 ==
+deps 合计: 63 passed / 0 failed

@@ -1,0 +1,10 @@
+// 冰凌（黄祖）：你使用【杀】指定目标后，弃置其两张手牌/装备牌；若两张牌
+// 类型相同你获得之，花色相同你回复 1 点体力，字长相同你摸等量牌，点数相同
+// 其失去等量体力；若均不相同，你受到 1 点火焰伤害。
+// 旧 JS 的「弃两张后多维比较」无对应原语，以弃目标一张牌近似（比较与
+// 分支未建模，已注明）。
+skill bingling(3062227586) {
+  trigger card_targeted owner_source_sha optional {
+    effect take_one_event_target_hand(self);
+  }
+}

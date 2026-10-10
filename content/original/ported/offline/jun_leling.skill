@@ -1,0 +1,5 @@
+// jun_leling：音效名:xiangle_re_liushan, 锁定技, target:useCardToTarget, 异步。
+skill jun_leling(4269134228) {
+  trigger card_targeted owner_is_target_once {
+  }
+}

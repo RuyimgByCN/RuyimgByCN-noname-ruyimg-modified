@@ -1,0 +1,8 @@
+// jsrgjishan（积善）：每回合每项各限一次。①当一名角色受到伤害时，你可以失去1点体力并防止此伤害，然后你与其各摸一张牌。②当你造成伤害后，你可以令一名体力值最小且你对其发动过〖积善①〗的角色回复1点体力。
+// 未建模：charlotte延迟, chooseBool, 全局状态, addTempSkill（DSL无对应原语）
+skill jsrgjishan(3543467492) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgjishan（skill.js:11062）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

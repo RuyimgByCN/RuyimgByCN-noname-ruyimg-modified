@@ -1,0 +1,7 @@
+// dcjini：获临时技。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcjini(2581590868) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

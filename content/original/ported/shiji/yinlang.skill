@@ -1,0 +1,9 @@
+// 阴狼（董卓系）：锁定技。回合开始时，选择一种势力并关联；你的手牌上限
+// 按关联势力角色数加成。
+// 旧 JS 的「势力关联 + 上限加成」无对应原语；以回合开始摸一张近似
+// （势力关联未建模，已注明）。
+skill yinlang(3077471325) locked {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

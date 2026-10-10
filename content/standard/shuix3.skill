@@ -1,0 +1,4 @@
+// Skill shuix3(166) - modifier range variant
+skill shuix3(166) {
+  modifier attack_range add 1;
+}

@@ -1,0 +1,5 @@
+// zj_buji：player:cards_moved, global:hp_lost, global:cards_moved, 失去体力, 异步。
+skill zj_buji(3233597399) {
+  trigger cards_moved owner_alive {
+  }
+}

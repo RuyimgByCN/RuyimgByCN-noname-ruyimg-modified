@@ -1,0 +1,7 @@
+// 遗秉：当一名其他角色进入濒死状态时，你可以获得其一张手牌或装备牌。
+// 近似：用 take_one_event_target_hand 取濒死角色一张手牌，无法区分手牌区/装备区自选。
+skill stdyibing(2275530895) {
+  trigger dying owner_alive_not_target optional {
+    effect take_one_event_target_hand(self);
+  }
+}

@@ -1,0 +1,5 @@
+// zhenji_moli：觉醒技, player:cards_moved, global:cards_moved, player:phase_end, 加技能, 含子技能, 异步。
+skill zhenji_moli(2695206186) {
+  trigger cards_moved owner_alive optional {
+  }
+}

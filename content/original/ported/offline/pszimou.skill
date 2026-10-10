@@ -1,0 +1,6 @@
+// pszimou：音效名:scszimou, 锁定技, player:phase_play, 需弃牌, 造成伤害, 异步。
+skill pszimou(3835673051) {
+  trigger phase_play owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

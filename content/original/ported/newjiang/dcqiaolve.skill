@@ -1,0 +1,18 @@
+// 巧略（羊祜）：你使用牌指定目标后，若该牌为目标首次被指定的同名牌，你
+// 可弃置一张牌并选择其中一名可获牌角色，获得其一张手牌/装备牌。
+// 上游 (collab/skill.js dcqiaolve L2067)：trigger useCardToPlayered
+//（isFirstTarget、同名牌首次指定该目标）；cost 弃一张牌 + 多目标时
+// chooseTarget；content gainPlayerCard(target,"he",true)。
+// 实现（2026-09-15 第二百八十六批·弃牌代价补全，ADR 0641 §8.71）：
+// trigger card_targeted owner_is_source optional →
+// resolve_dcqiaolve(self)（ABI 732 / tag 753 / Cont 327 单段续体）：
+// owner 选成本牌（强制）→ 弃置 → 取事件目标一张随机手牌
+//（TakeOneHandCard 既有原语）。
+// 近似（登记债）：①首现同名牌过滤未建模（全局历史判定无原语）；
+// ②多目标 chooseTarget 未建模（取单事件目标）；③取牌为随机手牌近似
+//（上游 owner 自选 he 区）。
+skill dcqiaolve(3810555923) {
+  trigger card_targeted owner_is_source optional {
+    effect resolve_dcqiaolve(self, event_player);
+  }
+}

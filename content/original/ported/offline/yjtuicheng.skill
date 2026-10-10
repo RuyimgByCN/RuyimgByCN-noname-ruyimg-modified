@@ -1,0 +1,5 @@
+// yjtuicheng：主动(phaseUse), 视作tuixinzhifu, 失去体力。
+skill yjtuicheng(3215617892) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

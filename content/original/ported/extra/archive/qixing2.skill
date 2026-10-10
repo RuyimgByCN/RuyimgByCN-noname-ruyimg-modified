@@ -1,0 +1,7 @@
+// 七星·2（神诸葛系）：摸牌阶段后，将「星」牌与手牌交换。
+// 旧 JS 的「星 expansion 交换」无对应原语；以摸一张近似（交换未建模，已注明）。
+skill qixing2(3605969722) {
+  trigger phase_draw_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

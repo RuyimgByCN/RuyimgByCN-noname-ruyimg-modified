@@ -1,0 +1,9 @@
+// 星钓（风子）：游戏开始/每轮开始前将手牌摸至 8 并展示为「星」；「星」不计入手牌上限且弃牌阶段不可弃。
+// 实现：对局开始时将手牌摸至 8。
+// 近似：不展示为「星」；不计入手牌上限/不可弃未建模；其他角色取「星」未建模；每轮开始前不再摸至。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill fuuko_xingdiao(3398320463) locked {
+  trigger game_started owner_alive {
+    effect adjust_hand_to(self, 8);
+  }
+}

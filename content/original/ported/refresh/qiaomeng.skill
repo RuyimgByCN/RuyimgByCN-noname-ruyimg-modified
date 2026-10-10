@@ -1,0 +1,5 @@
+skill qiaomeng(2724752546) {
+  trigger damage owner_source_black_sha_target_alive_has_discardable_equip optional {
+    effect discard_target_card_gain_mount(self, event_player, equip);
+  }
+}

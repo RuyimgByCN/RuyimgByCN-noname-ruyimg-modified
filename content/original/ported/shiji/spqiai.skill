@@ -1,0 +1,8 @@
+// 弃哀（王粲）：出牌阶段限一次，将一张非基本牌交给一名其他角色；若你已受伤，
+// 其须二选一：令你回复 1 点体力，或令你摸两张牌；若你未受伤，你直接摸两张牌。
+// 旧 JavaScript 仅作语义证据；赠牌与二选一由 ABI 439 resolve_spqiai 权威结算。
+skill spqiai(2235926361) {
+  active play_phase uses_per_turn 1 select_hand 1 1 card_nonbasic targets 1 1 other {
+    effect resolve_spqiai(self, event_source);
+  }
+}

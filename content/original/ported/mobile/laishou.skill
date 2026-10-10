@@ -1,0 +1,24 @@
+// 来守（王平系）：锁定技。你受到伤害时，若体力值小于伤害值，增加等量
+// 体力上限并防止此伤害；若体力上限不小于 9，准备阶段死亡。
+// 过滤器修正（2026-08-06，C 段 omp）：原 owner_is_target_per_damage_point
+// 按伤害点数多次触发且每次携带完整伤害量，导致 change_max_hp(event_amount)
+// 重复累计（伤害 3 会加 6）；改用 owner_is_target 每伤害事件触发一次，
+// 与上游 damageBegin4「每事件一次 + trigger.num 完整量」一致。
+// 击杀分支补全（2026-08-06，C 段 omp）：上游 phaseZhunbeiBegin 时
+// maxHp >= 9 → player.die()；DSL 以 kill_player(self, self) 表达
+// （仅支持 < 比较，以 9 < max_hp(self) + 1 表达 max_hp >= 9）。
+skill laishou(2235144457) locked {
+  trigger damage_before owner_is_target {
+    if hp(self) < event_amount + 1 {
+      if max_hp(self) < 9 {
+        effect change_max_hp(self, event_amount);
+        effect prevent_current_damage();
+      }
+    }
+  }
+  trigger phase_begin owner_is_target {
+    if 9 < max_hp(self) + 1 {
+      effect kill_player(self, self);
+    }
+  }
+}

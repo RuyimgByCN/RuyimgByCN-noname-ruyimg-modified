@@ -1,0 +1,23 @@
+// jsrgshelun（社论?）：出牌阶段限一次，若你有手牌，你可以选择一名其他角色，
+// 然后令除其外所有手牌数不大于你的角色议事。若结果为：红色，你弃置其两张牌；
+// 黑色，你对其造成 2 点伤害。
+// 实现：`active play_phase uses_per_turn 1` → `start_debate_all_others(self,
+// self_skill)`（ABI 655）；两个 `debate_resolved` 触发按结果分支：
+// 红 → choose_other_discard_target_card×2（弃两张）；黑 → choose_other_damage(self, 2)。
+// 近似（P2 表达力边界，逐点注明）：①议事参与者为「所有其他有手牌角色」，
+// 上游限「手牌数不大于你且排除选定目标」；②红/黑分支的惩罚对象为结算时重选
+// 的一名其他角色，上游为发动时选定的同一目标（跨阶段状态无 DSL 载体）；
+//③上游发动需自己有手牌，此处不校验。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgshelun(3401330142) {
+  active play_phase uses_per_turn 1 {
+    effect start_debate_all_others(self, self_skill);
+  }
+  trigger debate_resolved debate_owner_is_initiator_result_red optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+  trigger debate_resolved debate_owner_is_initiator_result_black optional {
+    effect choose_other_damage(self, 2);
+  }
+}

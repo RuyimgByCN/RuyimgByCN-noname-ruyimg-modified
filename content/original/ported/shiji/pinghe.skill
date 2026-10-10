@@ -1,0 +1,17 @@
+// 冯河（神孙策）：当你受到伤害时（来源存活且非你、体力上限大于 1、有手牌），
+// 防止此伤害，失去 1 点体力上限，并选择一张手牌交给一名其他角色。
+// 旧 JavaScript 仅作语义证据；防伤害、上限变化与交牌由权威原语响应。
+// 注：旧 JS 的“手牌上限基数等于已损失体力”需要 hand_limit_base 的动态值源，
+// 当前 DSL 不支持（仅支持 owner_turn_damage_dealt），该 modifier 未建模；
+// “若拥有【英霸】则伤害来源获平定标记”需要“拥有某技能”条件判断，亦未建模。
+skill pinghe(2176317369) locked {
+  trigger damage_before owner_is_target {
+    if 1 < max_hp(self) {
+      if 0 < hand_count(self) {
+        effect prevent_current_damage();
+        effect change_max_hp(self, -1);
+        effect choose_other_give_one_hand_equip(self);
+      }
+    }
+  }
+}

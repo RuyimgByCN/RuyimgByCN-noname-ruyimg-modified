@@ -1,0 +1,6 @@
+// 矫诏（孙亮）：出牌阶段展示一张手牌，选距离最近的一名角色声明牌名；声明者随后可使用此牌。
+// 旧 JS 的多步交互（展示→选最近目标→目标声明→目标使用）无对应原语，暂留空定义。
+skill jiaozhao(3943730575) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,11 @@
+// mingzhe（明哲，sp 经典版）：锁定技。非你的出牌阶段内，当你失去牌后，你摸一张牌。
+// 上游与 olmingzhe 同义（audio:"mingzhe"）；filter: !isPhaseUsing() && 失去的牌中有红色；
+// content: draw()。
+// 近似同 olmingzhe（ADR 0637）：放宽「红色牌筛选」为「任意牌」（副作用良性）。
+skill mingzhe(3722900488) locked {
+  trigger cards_moved owner_is_target {
+    if event_card_count > 0 && in_play_phase() == 0 {
+      effect draw_cards(self, 1);
+    }
+  }
+}

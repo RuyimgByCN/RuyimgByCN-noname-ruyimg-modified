@@ -1,0 +1,6 @@
+// 佩娘（dcpeiniang）：可将一张手牌或装备区的牌当【酒】使用，且【酒】无使用次数限制。
+// 旧 JS 的「dcyitong 记录花色」过滤与「濒死时亦可使用」联动未建模。
+skill dcpeiniang(3794638462) {
+  view_as jiu play_phase any from hand_equip;
+  modifier card_use_unlimited(jiu) override 1;
+}

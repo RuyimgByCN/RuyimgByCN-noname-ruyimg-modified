@@ -1,0 +1,18 @@
+// 旧 JavaScript 仅作语义证据；运行时只执行下列确定性规则。
+skill siji(2867665051) {
+  trigger phase_discard_end owner_is_target_discarded_sha_in_discard_phase optional {
+    effect resolve_wdb_hanlong(self, 0, 0, 3613978472, 0);
+  }
+}
+
+skill ciqiu(3777188862) locked {
+  trigger damage_before owner_source_sha_damage_before_target_healthy {
+    effect resolve_wdb_hanlong(self, event_player, event_card, 3613978472, 1);
+  }
+}
+
+skill ciqiu_dying(3613978472) locked {
+  trigger dying owner_is_target {
+    effect kill_player(self, event_source);
+  }
+}

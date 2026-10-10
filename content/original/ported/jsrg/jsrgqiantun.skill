@@ -1,0 +1,20 @@
+// 谦吞：出牌阶段限一次，你可以令一名其他角色展示任意张手牌（其拼点只能从
+// 展示牌中选），然后与其拼点：若你赢，你获得其展示的手牌；若你没赢（含平
+// 点），你获得其其余手牌。
+// 上游 (jsrg/skill.js jsrgqiantun L12743)：enable phaseUse usable 1；目标其他
+// 有手牌角色；target.chooseCard 展示 [1,∞] → addGaintag("jsrgqiantun_tag") →
+// chooseToCompare（filterCard：目标手中有展示牌则只能用展示牌）→ winner==
+// player 则 give 展示牌，否则 give 非展示牌。
+// 实现（2026-09-12 第二百五十二批·拼点族状态机，ADR 0641 §8.42，twmitu
+// slice 2 拼点工艺复用）：active play_phase uses_per_turn 1 →
+// resolve_qiantun(self, self_skill)（ABI 703 / tag 726 / Cont 308 四段）：
+// 选目标 → 目标展示任意张（SelectCards 强制）→ owner 选拼点牌（不受限）→
+// 目选拼点牌（手中有展示牌则限展示牌）→ rank 比较 → 双向获得结算。
+// 近似（登记债）：①拼点双方依次明选（上游 chooseToCompare 暗选同时亮出，
+// 顺序信息差异登记）；②展示牌 gaintag 以上下文传参表达（未落
+// content_card_tags，牌上无可见标记，表现面债）；③showHandcards 表现面未建模。
+skill jsrgqiantun(4020601661) {
+  active play_phase uses_per_turn 1 targets 0 0 {
+    effect resolve_qiantun(self, self_skill);
+  }
+}

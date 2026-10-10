@@ -1,0 +1,8 @@
+// 勇略2（旧版）：勇略造成伤害后设置标记，供后续技能状态追踪。
+// 旧 JS 设 player.storage.yonglve=true；DSL 以 add_mark 近似状态记录
+// （「仅勇略造成的伤害」前提以来源伤害近似，已注明）。
+skill yonglve2(2151823566) locked {
+  trigger damage owner_is_source {
+    effect add_mark(self, 2151823566, 1);
+  }
+}

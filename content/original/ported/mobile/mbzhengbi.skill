@@ -1,0 +1,7 @@
+// mbzhengbi（征辟）：准备阶段，你可以选择至多一名其他角色，其选择令你获得其区域里的一至三张牌，然后你交给其等量张牌。每名角色限一次，若其选择三，此技能可选择的角色数+1。
+skill mbzhengbi(3025468831) locked {
+  trigger phase_prepare owner_alive {
+    effect add_mark(self, 0, 1);
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

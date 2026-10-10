@@ -1,0 +1,4 @@
+// Skill zaixiang2(143) - standard variant
+skill zaixiang2(143) {
+  modifier attack_range add 1;
+}

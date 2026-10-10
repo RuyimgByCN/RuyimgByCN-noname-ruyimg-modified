@@ -1,0 +1,7 @@
+// 忠佐：一名角色的回合结束时，若拥有者本回合造成或受到过伤害，当前角色先摸一张，拥有者再摸一张。
+skill stdzhongzuo(3465971059) locked {
+  trigger turn_ended owner_alive_dealt_or_received_damage_this_turn {
+    effect draw_cards(event_player, 1);
+    effect draw_cards(self, 1);
+  }
+}

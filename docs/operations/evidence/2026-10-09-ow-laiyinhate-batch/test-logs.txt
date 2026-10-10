@@ -1,0 +1,28 @@
+# U05 ow 纵切批十七测试日志（2026-10-09，莱因哈特猛击，规则 v133→v134）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 455 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v133 基线 454 +1 新增猛击回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 43 passed; 0 failed（42 既有 + 1 新增 laiyinhate_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 131）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v133→v134 入 canonical_hash
+——14 场景全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- mengji（trigger source damageBegin forced unique；filter storage.
+  zhongdun && !hujia && sha && notLink；content trigger.num++）
+
+## 测试迭代记录
+- 无距离豁免：第二张杀打距离 2 被拒——改距离 1 的 1 号
+- 测试侧护甲 setter 缺失——新增 Engine::debug_set_hujia（debug_set_hp
+  先例）
+- 首次追加测试的 heredoc 因 cwd 错误未落盘——测试计数 0 匹配暴露后补写

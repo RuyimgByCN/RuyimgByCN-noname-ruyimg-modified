@@ -1,0 +1,13 @@
+// 马伶俐【硝引】（ABI 607）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dcxiaoyin(3398996453) {
+  trigger phase_prepare owner_is_target optional {
+    effect resolve_malingli(self, event_card, 3398996454, 0);
+  }
+}
+
+skill dcxiaoyin_effect(3398996454) locked non_gainable {
+  trigger damage_before owner_is_target_source_alive {
+    effect resolve_malingli(self, event_card, 3398996454, 10);
+  }
+}

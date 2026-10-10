@@ -1,0 +1,5 @@
+// yiguzuoqi_effect：锁定技, player:card_used, 异步。
+skill yiguzuoqi_effect(4251275168) {
+  trigger card_used owner_alive {
+  }
+}

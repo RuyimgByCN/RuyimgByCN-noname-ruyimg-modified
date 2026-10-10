@@ -1,0 +1,5 @@
+// fulu：player:useCard1。
+skill fulu(4170791884) {
+  trigger card_used owner_alive {
+  }
+}

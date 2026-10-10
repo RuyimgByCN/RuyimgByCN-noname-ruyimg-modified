@@ -1,0 +1,21 @@
+// 复纂/宠齐/非服：切换转换技；全场授予非服；单目标【杀】双方按分支交牌。
+skill twfuzuan(3482762704) {
+  active play_phase uses_per_play_phase 1 {
+    effect resolve_twcaozhao(self, self, self, 0, 3482762704, 3948553827, 0);
+  }
+trigger damage owner_is_source_or_target {
+    effect resolve_twcaozhao(self, self, self, event_card, 3482762704, 3948553827, 0);
+  }
+}
+
+skill twchongqi(4284388882) locked {
+  trigger game_started owner_alive {
+    effect resolve_twcaozhao(self, self, self, 0, 3482762704, 3948553827, 1);
+  }
+}
+
+skill twfeifu(3948553827) locked conversion {
+  trigger card_targeted owner_twfeifu_single_sha_party_target_has_hand_equip {
+    effect resolve_twcaozhao(self, event_player, event_source, event_card, 3482762704, 3948553827, 2);
+  }
+}

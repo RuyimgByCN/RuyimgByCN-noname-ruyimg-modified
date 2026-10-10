@@ -1,0 +1,8 @@
+// 活气：旧 JS 语义重写；弃置一张手牌或装备牌，令最低体力角色回复并摸牌。
+skill nhhuoqi(2275957194) {
+  active play_phase uses_per_turn 1 targets 1 1 lowest_hp select_he 1 1 {
+    effect discard_selected(self);
+    effect recover_hp(event_source, 1);
+    effect draw_cards(event_source, 1);
+  }
+}

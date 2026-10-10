@@ -1,0 +1,6 @@
+// 双锐：准备阶段，将任意张手牌当【杀】使用；若目标手牌数与你相等，此杀不可响应。
+// 旧 JS 的「多牌合一杀 + 手牌数相等则不可响应」无对应原语（需 unrespondable 条件绑定手牌数），未建模。
+skill stdshuangrui(2664238222) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

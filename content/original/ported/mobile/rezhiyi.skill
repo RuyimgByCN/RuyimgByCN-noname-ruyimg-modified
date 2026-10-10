@@ -1,0 +1,6 @@
+// rezhiyi（执义）：锁定技，一名角色的结束阶段开始时，若你本回合内使用或打出过基本牌，则你选择一项：1.摸一张牌。2.视为使用一张你本回合内使用或打出过的基本牌。
+skill rezhiyi(2251346439) locked {
+  trigger phase_discard owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

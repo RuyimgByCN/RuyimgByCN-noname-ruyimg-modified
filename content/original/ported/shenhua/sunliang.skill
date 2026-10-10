@@ -1,0 +1,22 @@
+// 孙亮【溃诛/掣政/立军】— shenhua 旧 JS 语义参考（nzry_kuizhu/nzry_zhizheng/nzry_lijun）：
+// 溃诛：弃牌阶段结束后，若你本回合弃置过牌，可令至多 X 名角色各摸一张牌，或对任意名
+// 体力值之和为 X 的角色各造成 1 点伤害（X = 本回合弃牌数）。
+// 掣政：出牌阶段结束时，若你本回合使用牌数少于攻击范围不包含你的角色数，弃置其中一名
+// 角色的一张牌。
+// 立军（主公技）：吴势力角色于其出牌阶段使用实体【杀】后，你获得该牌，然后其可令你摸
+// 一张牌。
+skill kuizhu(1891631254) {
+  trigger phase_discard_end owner_is_target optional {
+    effect resolve_kuizhu(self);
+  }
+}
+skill zhizheng(3830747834) {
+  trigger phase_play_end owner_is_target optional {
+    effect resolve_zhizheng(self);
+  }
+}
+skill lijun(1640782530) lord_only {
+  trigger card_used owner_alive optional {
+    effect resolve_lijun(self, event_source, event_card);
+  }
+}

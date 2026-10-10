@@ -1,0 +1,11 @@
+// 荆州（pxjingzhou，州郡技能）：当你获得此技能后，你可以交给一名角色任意张手牌。
+// 上游 (sp/skill.js:1433)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且有手牌及其他角色；content = chooseCardTarget(任意手牌, notMe) → give。
+// 实现：skill_added + owner_skill_added_self_2589712461 → 可选确认 →
+// choose_other_give_one_hand_equip(self)（令自己交给一名其他角色一张手牌/装备）。
+// 与上游差异：「任意张手牌」以一张近似（DSL 无「选任意牌交给目标」原语）。
+skill pxjingzhou(2589712461) {
+  trigger skill_added owner_skill_added_self_2589712461 optional {
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

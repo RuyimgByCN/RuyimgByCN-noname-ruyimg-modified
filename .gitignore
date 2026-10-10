@@ -1,0 +1,19 @@
+/target
+/content/original/assets/
+**/*.rs.bk
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# 本地工具与运行时状态（可再生，不进 git）
+node_modules/
+/.codegraph/
+/.npack-store/
+/.scratch/
+
+# cargo-fuzz artifacts (§37.7)
+/fuzz/target
+/fuzz/artifacts
+/fuzz/corpus/*/crash-*
+/fuzz/corpus/*/slow-unit-*

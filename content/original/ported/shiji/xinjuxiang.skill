@@ -1,0 +1,15 @@
+// 拒降（界周姬）
+// 旧 JS 语义：限定技，其他存活角色脱离濒死状态后，可对其造成 1 点伤害。
+skill xinjuxiang(3450353814) {
+  trigger dying_after owner_alive_not_target optional {
+    effect remove_skill(self_skill);
+    effect deal_damage(self, event_player, 1);
+  }
+}
+
+// 旧 JS 仅以 onremove: true 清理父技能存储，无独立规则行为。
+skill hxrenshi2(2232581391) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

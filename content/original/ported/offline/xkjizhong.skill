@@ -1,0 +1,5 @@
+// xkjizhong：锁定技, player:phaseDrawBegin2, 含子技能, 异步, 条件计数。
+skill xkjizhong(3460603683) {
+  trigger phase_any_end owner_alive {
+  }
+}

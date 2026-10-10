@@ -1,0 +1,3 @@
+skill reanjian3(4203756175) {
+  modifier card_save_cancel(tao) override 1;
+}

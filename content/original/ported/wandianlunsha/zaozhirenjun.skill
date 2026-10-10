@@ -1,0 +1,19 @@
+// 旧 JavaScript 仅作语义证据；运行时只执行下列确定性规则。
+skill liangce(3473735644) {
+  view_as wugu play_phase card_basic from hand uses_per_turn 1;
+  trigger cards_moved owner_alive_wugu_remained_in_discard optional {
+    effect resolve_wdb_zaozhirenjun(self, 0, 0, 0);
+  }
+}
+
+skill jianbi(3452664776) {
+  trigger card_targeted owner_is_target_non_multitarget_trick_multiple_targets optional {
+    effect resolve_wdb_zaozhirenjun(self, event_source, event_card, 1);
+  }
+}
+
+skill diyjuntun(2307382183) {
+  active play_phase select_he 1 1 card_equip {
+    effect recast_selected(self);
+  }
+}

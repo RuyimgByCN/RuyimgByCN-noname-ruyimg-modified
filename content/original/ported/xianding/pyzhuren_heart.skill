@@ -1,0 +1,8 @@
+// 铸刃·红桃（PY）：装备技能，造成【杀】伤害后判定——
+// 红色：回复1点体力；黑色：摸两张牌。每回合限一次。
+// 旧 JS 的「装备技能」「判定分支」无对应原语，未建模。
+skill pyzhuren_heart(4046331836) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 pyzhuren_heart 含真实规则体（trigger、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

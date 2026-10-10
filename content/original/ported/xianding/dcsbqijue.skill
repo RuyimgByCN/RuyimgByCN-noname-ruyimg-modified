@@ -1,0 +1,8 @@
+// 奇绝（界杨奉）：限定技，有角色进入濒死状态后，可令其摸两张牌并回复 2 点体力。
+// 旧 JS 的“将〖烛帛〗中的造成替换为受到、若濒死者是你则修改时机”未建模。
+skill dcsbqijue(2527119333) {
+  trigger dying owner_alive_other_dying_once_per_round optional {
+    effect choose_target_draw(self, 2, any);
+    effect choose_recover_target(self, event_player, 2);
+  }
+}

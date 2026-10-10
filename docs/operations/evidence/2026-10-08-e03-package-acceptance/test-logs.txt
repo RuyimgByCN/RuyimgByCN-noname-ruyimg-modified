@@ -1,0 +1,8 @@
+$ 整包验收首包定向：欢乐卡牌真实宿主全生命周期
+test huanle_real_host_full_lifecycle ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（388/0/1）+ 依赖包（content-runtime 32 + engine-ai 29 + loader 1 = 62/0，DEPS_EXIT=0）
+
+$ 生命周期六步：①独立安装+激活集 ②安装包→原生建局（7 卡目录）③对局中 revoke_slot(deactivate)（撤销表+移出激活集）④在局锁定副本续玩（restore+提交不受撤销影响）⑤撤销后重装被拒（RuntimeError::Revoked）⑥重新 import 被拒
+$ 验收对照（U06 升 G3 剩余条件）：独立安装✓ 卸载全生命周期✓（引擎级 C3 已有+本批真实宿主）——整包完成条件=功能✓(E03 六卡+U06 载荷) 配置✓(门控) 依赖✓(C3 依赖冲突测试) 组合✓(U06 跨牌矩阵) 保存恢复✓(字节恢复+锁定副本续玩) 规则差异✓(登记)；平台=宿主界面通道另计

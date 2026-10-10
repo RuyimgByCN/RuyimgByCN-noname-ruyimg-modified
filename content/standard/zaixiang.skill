@@ -1,0 +1,4 @@
+// Meng Huo revival
+skill zaixiang(93) {
+  trigger phase_begin always { effect draw_cards(self, 1); }
+}

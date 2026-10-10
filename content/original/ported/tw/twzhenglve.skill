@@ -1,0 +1,9 @@
+// 征略（神·郭淮）：继承自jsrgzhenglve。摸牌阶段你可改为摸两张牌并令至多两名角色获得"猎"标记。
+// 你对有"猎"标记的角色使用牌无距离限制。
+// 旧 JS 的「继承+标记系统+距离mod」为复杂继承链，无对应原语。
+skill twzhenglve(3583124339) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twzhenglve（skill.js:1677）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

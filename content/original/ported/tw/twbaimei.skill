@@ -1,0 +1,6 @@
+// 白眉：没有手牌时，防止属性伤害或普通锦囊牌造成的伤害。
+skill twbaimei(3304922519) locked {
+  trigger damage_before owner_target_hand_empty_elemental_or_trick_damage_before {
+    effect prevent_current_damage();
+  }
+}

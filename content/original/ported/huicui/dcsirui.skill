@@ -1,0 +1,6 @@
+// dcsirui：旧JS复杂效果。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcsirui(3621982520) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

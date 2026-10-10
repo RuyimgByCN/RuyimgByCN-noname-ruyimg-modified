@@ -1,0 +1,10 @@
+// 远筹（范疆张达）：锁定技，黑色【杀】指定目标后，该【杀】无视目标防具。
+// 上游 (sp/skill.js:27203)：useCardToPlayered / useCardToTargeted，
+// filter 为黑色杀，content 给目标挂 qinggang2 绑定此杀。
+// 实现：复用 `ignore_armor`（与持剑同一穿透通道）。
+// 近似：不限黑色【杀】、也不区分「你使用 / 你成为目标」两向，
+// 拥有者作为来源的牌一律无视防具。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuanchou(3016188154) locked {
+  modifier ignore_armor override 1;
+}

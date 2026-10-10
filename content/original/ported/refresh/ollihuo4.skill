@@ -1,0 +1,20 @@
+// 疠火·子技（ollihuo4，sourceSkill: ollihuo）：每回合使用的第一张【杀】结算完毕后，
+// 将此【杀】的实体牌（弃牌堆中）置于武将牌上（gaintag 醇醪）。
+// 上游 (refresh/skill.js)：useCardAfter + 本回合 useCard 首张杀 + filterInD 实体牌
+// → addToExpansion(gaintag "rechunlao")。
+// 实现：`card_used owner_source_sha optional` → storage 首杀门槛（turn_ended 清零）→
+// `place_hand_card_to_expansion`（ABI 650）。
+// 近似：置入手牌一张而非结算后的那张杀实体（原语无从结算区直置，与旧 ollihuo 注记
+// 同源）；gaintag 醇醪标记未建模。条款自此归位于子技（原误挂主技）。
+// 2026-08-15 疠火三技重组批次。
+skill ollihuo4(3911445524) {
+  trigger card_used owner_source_sha optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect place_hand_card_to_expansion(self, self_skill);
+    }
+  }
+  trigger turn_ended owner_alive {
+    effect storage_set(self_skill, 1, 0);
+  }
+}

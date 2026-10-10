@@ -1,0 +1,13 @@
+// 勤政：使用或打出牌后，按本局累计次数从牌堆顶优先获得对应牌组。
+skill qinzheng(3099323686) locked {
+  trigger card_used owner_lifetime_card_action {
+    effect gain_draw_cards_for_lifetime_card_action_divisors(
+      self, 3, sha_or_shan, 5, tao_or_jiu, 8, juedou_or_wuzhong
+    );
+  }
+  trigger card_responded owner_lifetime_card_action {
+    effect gain_draw_cards_for_lifetime_card_action_divisors(
+      self, 3, sha_or_shan, 5, tao_or_jiu, 8, juedou_or_wuzhong
+    );
+  }
+}

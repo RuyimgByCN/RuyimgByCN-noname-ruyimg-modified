@@ -1,0 +1,6 @@
+// hefeiheyulidian（合御）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill hefeiheyulidian(3143944667) locked {
+  trigger card_used owner_alive {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

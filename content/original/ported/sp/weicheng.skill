@@ -1,0 +1,9 @@
+// 微城（weicheng）：当牌从你的手牌区移动至其他角色的手牌区后，若你的手牌数小于体力值，
+// 你可以摸一张牌。
+skill weicheng(4091204654) {
+  trigger cards_given owner_alive_gave_cards_to_other_alive optional {
+    if hand_count(self) < hp(self) {
+      effect draw_cards(self, 1);
+    }
+  }
+}

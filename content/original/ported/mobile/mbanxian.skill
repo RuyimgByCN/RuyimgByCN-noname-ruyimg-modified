@@ -1,0 +1,7 @@
+// 暗弦：旧 JavaScript 仅作语义参考；首个手牌弃置事件由权威回合历史判定，
+// 选中的实体【杀】获得后沿统一出牌流程强制使用，并忽略通常距离与次数限制。
+skill mbanxian(2708680147) {
+  trigger cards_moved owner_first_hand_discard_has_sha_in_discard optional {
+    effect resolve_mbanxian(self);
+  }
+}

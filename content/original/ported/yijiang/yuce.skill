@@ -1,0 +1,7 @@
+// 御策（满宠）：受到伤害后，展示一张手牌；伤害来源需弃置一张不同类型的手牌，否则你回复1点体力。
+// 旧JS含showCards+对手chooseToDiscard二选一，DSL以choose_discard_hand_equip_then_recover_target近似（对手弃牌则回复）。
+skill yuce(2186076413) {
+    trigger damage owner_is_target_hand_nonempty {
+        effect choose_discard_hand_equip_then_recover_target(self, event_source, 1, 1);
+    }
+}

@@ -1,0 +1,12 @@
+// 殃众（赵忠）：你造成或受到伤害后，伤害来源可弃置两张牌（手牌或装备），
+// 令受伤角色失去 1 点体力。
+// 旧 JS 仅作语义证据；来源弃牌与失体由权威状态机校验（ABI 460）。
+// 注：旧 JS 以 trigger.source.chooseToDiscard 表达来源弃牌；DSL 以
+//      `optional by event_source`（伤害来源确认）+ discard_hand_equip_count(event_source, 2)
+//      等价表达；伤害目标以 event_player 引用。
+skill yangzhong(4088525000) {
+  trigger damage owner_is_source_or_target optional by event_source {
+    effect discard_hand_equip_count(event_source, 2);
+    effect lose_hp(event_player, 1);
+  }
+}

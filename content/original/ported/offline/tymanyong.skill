@@ -1,0 +1,5 @@
+// tymanyong：player:phase_prepare, player:phase_end, 异步, 弃牌。
+skill tymanyong(2618333319) {
+  trigger phase_prepare owner_alive {
+  }
+}

@@ -1,0 +1,5 @@
+// ylyghongyan：音效名:hongyan, 锁定技, player:game_started, global:phaseBefore, 需选择目标, 加技能, 异步。
+skill ylyghongyan(4176969572) {
+  trigger game_started owner_alive {
+  }
+}

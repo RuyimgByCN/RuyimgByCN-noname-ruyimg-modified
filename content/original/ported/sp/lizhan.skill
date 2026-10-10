@@ -1,0 +1,6 @@
+// 励战：结束阶段可令任意名已受伤角色依座次各摸一张牌。
+skill lizhan(2790547004) {
+  trigger phase_end owner_is_target_any_alive_wounded {
+    effect choose_optional_targets_draw(self, 1, 1, 255, wounded);
+  }
+}

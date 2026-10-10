@@ -1,0 +1,22 @@
+// shuliang（输粮·孙邵）：一名角色的结束阶段开始时，若其手牌数小于体力值且你的
+// 武将牌上有「粮」，你可以移去一张「粮」，然后该角色摸两张牌。
+// 上游 (mobile/skill.js shuliang)：trigger global phaseJieshuBegin；direct；
+// filter = getExpansions("tunchu") 非空 + event player 手牌<hp + 存活；
+// content chooseCardButton(粮堆) bool → loseToDiscardpile + trigger.player.draw(2)。
+// 实现（2026-09-10 第二百一十八批·零铸造散批）：trigger phase_end owner_alive
+// （owner_skill_pile_nonempty 过滤器含 owner_is_player 限定、只能守己方回合——
+// 本技为全场结束阶段，堆门控下沉 body）→ body 级 if hand_count(event_player) <
+// hp(event_player) && skill_pile_count(self, 3943350142) > 0（粮堆=tunchu 技能堆，
+// 跨技 def 字面量）→ choose_one_from_skill_pile_discard(self, self_skill,
+// 3943350142)（ABI 686 SelectCards 1/1，取消=不发动）→ draw_cards(event_player, 2)。
+// 近似（登记债）：①上游 direct+chooseCardButton(bool) 单点决断拆分为触发确认
+// +选卡两步（确认后取消选卡仍会摸牌——边角语义宽于上游）；②direct 无确认口径
+// 以 optional 确认近似；③onremove 清堆未建模。
+skill shuliang(3563189871) {
+  trigger phase_end owner_alive optional {
+    if hand_count(event_player) < hp(event_player) && skill_pile_count(self, 3943350142) > 0 {
+      effect choose_one_from_skill_pile_discard(self, self_skill, 3943350142);
+      effect draw_cards(event_player, 2);
+    }
+  }
+}

@@ -1,0 +1,6 @@
+// huamao_fengpo：player:card_targeted, 多分支选择, 摸牌, 异步。
+skill huamao_fengpo(3410996631) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

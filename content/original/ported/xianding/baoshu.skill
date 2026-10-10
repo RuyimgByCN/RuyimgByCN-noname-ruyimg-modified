@@ -1,0 +1,8 @@
+// 报梳（王荣）：准备阶段，可令至多X名角色重置武将牌并获得"梳"标记（X=体力上限）。
+// 其子技能"梳"在摸牌阶段增加摸牌量（等于标记数）并移除标记。
+// 旧JS的多目标选择+循环标记+子技能摸牌替换无法用DSL原语表达，缺 choose_multi_target + per_target_add_mark + mark_based_draw_increase。
+skill baoshu(2293521758) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 baoshu 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,12 @@
+// 雍嗣·弃（yongsi2）：锁定技。弃牌阶段开始时，你弃置 X 张手牌/装备牌（X 为场上
+// 存活势力数）。
+// 上游 (sp/skill.js:43662)：trigger player:phaseDiscardBegin；forced；content =
+// chooseToDiscard(countGroup(), he, forced)。
+// 实现：phase_discard + owner_is_target → discard_hand_equip_count(self, 1)。
+// 与上游差异：「弃置势力数张」以弃 1 张近似（discard_hand_equip_count 只收正整数
+// 字面量，无法表达 alive_group_count() 动态值）。
+skill yongsi2(4237803231) {
+  trigger phase_discard owner_is_target {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

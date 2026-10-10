@@ -1,0 +1,7 @@
+// zc26_qiaobian：global:game_started, global:phaseJudgeBefore, global:phaseDrawBefore, 需弃牌, 需选择目标, 加技能, 含子技能, 异步, 弃牌。
+skill zc26_qiaobian(2342041757) {
+  trigger game_started owner_alive optional {
+    effect discard_hand_equip_count(self, 1);
+    effect skip_current_phase(self);
+  }
+}

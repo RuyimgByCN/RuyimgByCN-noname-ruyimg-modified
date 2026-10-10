@@ -1,0 +1,26 @@
+// 势田丰：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI508 原语。
+skill mbganggeng(2184967024) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 2 255 {
+    effect resolve_mbganggeng(self, event_source, 0);
+  }
+
+  trigger phase_end owner_phase_end_mbganggeng_target_alive {
+    effect resolve_mbganggeng(self, event_player, 1);
+  }
+}
+
+skill mbsijian(2168498663) {
+  trigger cards_moved owner_from_hand_empty_or_dying_mbsijian_twice_per_turn {
+    effect resolve_mbsijian(self, 2654683932);
+  }
+
+  trigger dying owner_from_hand_empty_or_dying_mbsijian_twice_per_turn {
+    effect resolve_mbsijian(self, 2654683932);
+  }
+}
+
+skill mbsijian_discard(2654683932) locked {
+  trigger card_used owner_is_source {
+    effect choose_discard_hand_equip_then_remove_self_skill(self, 1);
+  }
+}

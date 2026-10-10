@@ -1,0 +1,6 @@
+// 原仓库 character/sixiang/skill.js：短兵。
+
+skill stdduanbing(2170694873) locked {
+  modifier attack_range override 1;
+  modifier damage_amount(sha) add owner_sha_damage_dealt_zero_this_turn;
+}

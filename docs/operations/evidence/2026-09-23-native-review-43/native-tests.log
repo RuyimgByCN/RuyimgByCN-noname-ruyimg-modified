@@ -1,0 +1,1806 @@
+warning: unused import: `std::sync::atomic::AtomicU64`
+  --> crates/engine-native/src/ai.rs:10:5
+   |
+10 | use std::sync::atomic::AtomicU64;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardId` and `EventId`
+  --> crates/engine-native/src/archive.rs:21:18
+   |
+21 | use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+   |                  ^^^^^^  ^^^^^^^
+
+warning: unused import: `crate::machine::LogEvent`
+  --> crates/engine-native/src/archive.rs:22:5
+   |
+22 | use crate::machine::LogEvent;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostBehavior`
+    --> crates/engine-native/src/content/standard.rs:2930:48
+     |
+2930 |     use crate::content::host::{host_skill_def, HostBehavior};
+     |                                                ^^^^^^^^^^^^
+
+warning: unused imports: `Catalog` and `SkillDef`
+  --> crates/engine-native/src/content/extension.rs:10:31
+   |
+10 | use crate::catalog::{CardDef, Catalog, SkillDef};
+   |                               ^^^^^^^  ^^^^^^^^
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/src/view.rs:10:25
+   |
+10 | use crate::{GameAction, CommandOutcome};
+   |                         ^^^^^^^^^^^^^^
+
+warning: unused variable: `max`
+   --> crates/engine-native/src/ai.rs:136:17
+    |
+136 |             let max = max.max(min);
+    |                 ^^^ help: if this is intentional, prefix it with an underscore: `_max`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/archive.rs:1499:9
+     |
+1487 |         29 => {
+     |         -- matches all the relevant values
+...
+1499 |         29 => {
+     |         ^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/src/content/standard.rs:2970:9
+     |
+2970 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+     |         ----^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `cards`
+   --> crates/engine-native/src/content/host.rs:682:45
+    |
+682 |                 EventData::CardsDiscarded { cards, .. } => (None, None),
+    |                                             ^^^^^ help: try ignoring the field: `cards: _`
+
+warning: unused variable: `oc`
+    --> crates/engine-native/src/content/host.rs:1302:33
+     |
+1302 |                     if let Some(oc) = own_card {
+     |                                 ^^ help: if this is intentional, prefix it with an underscore: `_oc`
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/engine.rs:215:47
+    |
+215 |     fn new_with_mode(seed: u64, seats: usize, mut mode: GameMode) -> Self {
+    |                                               ----^^^^
+    |                                               |
+    |                                               help: remove this `mut`
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2201:19
+     |
+2108 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+2201 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2202:19
+     |
+2108 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+2202 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2203:19
+     |
+2154 |                 CardKind::ShanDian | CardKind::HongShui => {
+     |                 ------------------ matches all the relevant values
+...
+2203 |                 | CardKind::ShanDian
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2204:19
+     |
+2154 |                 CardKind::ShanDian | CardKind::HongShui => {
+     |                                      ------------------ matches all the relevant values
+...
+2204 |                 | CardKind::HongShui
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2240:17
+     |
+2196 | /                 CardKind::HorsePlus
+2197 | |                 | CardKind::HorseMinus
+2198 | |                 | CardKind::Weapon
+2199 | |                 | CardKind::Armor
+...    |
+2206 | |                 | CardKind::WuxingPan
+2207 | |                 | CardKind::Sanjian => unreachable!("handled above"),
+     | |___________________________________- matches all the relevant values
+...
+2240 |                   CardKind::WuxingPan => {
+     |                   ^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2267:17
+     |
+2196 | /                 CardKind::HorsePlus
+2197 | |                 | CardKind::HorseMinus
+2198 | |                 | CardKind::Weapon
+2199 | |                 | CardKind::Armor
+...    |
+2206 | |                 | CardKind::WuxingPan
+2207 | |                 | CardKind::Sanjian => unreachable!("handled above"),
+     | |___________________________________- matches all the relevant values
+...
+2267 |                   CardKind::Sanjian | CardKind::Suolianjia => {
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/presentation.rs:275:9
+    |
+275 |     let mut line = |txt: &str, s: &mut String| {
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: function `enc_faction` is never used
+   --> crates/engine-native/src/archive.rs:370:4
+    |
+370 | fn enc_faction(w: &mut W, f: &crate::catalog::Faction) {
+    |    ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variant `Retarget` is never constructed
+    --> crates/engine-native/src/content/standard.rs:2269:5
+     |
+2263 | enum JiJiStage {
+     |      --------- variant in this enum
+...
+2269 |     Retarget,
+     |     ^^^^^^^^
+     |
+     = note: `JiJiStage` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/src/engine.rs:1670:13
+     |
+1670 |             drop(p);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&mut PlayerState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+1670 -             drop(p);
+1670 +             let _ = p;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/src/machine.rs:263:13
+    |
+263 |             drop(p);
+    |             ^^^^^-^
+    |                  |
+    |                  argument has type `&mut PlayerState`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+263 -             drop(p);
+263 +             let _ = p;
+    |
+
+warning: `engine-native` (lib) generated 23 warnings (run `cargo fix --lib -p engine-native` to apply 12 suggestions)
+warning: unused variable: `sha3`
+   --> crates/engine-native/tests/replay_scenarios.rs:358:9
+    |
+358 |     let sha3 = e.debug_place(3, "sha");
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_sha3`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `shan1`
+   --> crates/engine-native/tests/replay_scenarios.rs:364:9
+    |
+364 |     let shan1 = e.debug_place(1, "shan");
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_shan1`
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/examples/n11_kof.rs:13:41
+   |
+13 |     CardKind, ChoiceOption, ChoiceView, CommandOutcome, Engine, GameAction, GameCommand, Phase,
+   |                                         ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `save_line` is never read
+   --> crates/engine-native/examples/n11_kof.rs:191:25
+    |
+191 |     let mut save_line = String::new();
+    |                         ^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::collections::BTreeMap`
+  --> crates/engine-native/tests/g1_huanle.rs:13:5
+   |
+13 | use std::collections::BTreeMap;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `RejectReason`
+  --> crates/engine-native/tests/g1_huanle.rs:23:75
+   |
+23 |     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason,
+   |                                                                           ^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/g1_shahai_yunchou.rs:92:9
+   |
+92 |     let mut host_skills = Vec::new();
+   |         ----^^^^^^^^^^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `h1`
+    --> crates/engine-native/tests/g1_shahai_yunchou.rs:1283:9
+     |
+1283 |     let h1 = e.debug_hand(1).len();
+     |         ^^ help: if this is intentional, prefix it with an underscore: `_h1`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `h2`
+    --> crates/engine-native/tests/g1_shahai_yunchou.rs:1284:9
+     |
+1284 |     let h2 = e.debug_hand(2).len();
+     |         ^^ help: if this is intentional, prefix it with an underscore: `_h2`
+
+warning: struct `CardJson` is never constructed
+  --> crates/engine-native/tests/g1_shahai_yunchou.rs:42:8
+   |
+42 | struct CardJson {
+   |        ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_yunchou.rs:417:5
+    |
+417 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+    = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+417 -     drop(c);
+417 +     let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_yunchou.rs:895:9
+    |
+895 |         drop(c);
+    |         ^^^^^-^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+895 -         drop(c);
+895 +         let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_yunchou.rs:1075:13
+     |
+1075 |             drop(c);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1075 -             drop(c);
+1075 +             let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_yunchou.rs:1085:5
+     |
+1085 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1085 -     drop(c);
+1085 +     let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_yunchou.rs:1172:5
+     |
+1172 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1172 -     drop(c);
+1172 +     let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_yunchou.rs:1291:9
+     |
+1291 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1291 -         drop(c);
+1291 +         let _ = c;
+     |
+
+warning: unused import: `std::collections::BTreeMap`
+ --> crates/engine-native/tests/g1_wudian.rs:9:5
+  |
+9 | use std::collections::BTreeMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `CardJson` is never constructed
+  --> crates/engine-native/tests/g1_wudian.rs:48:8
+   |
+48 | struct CardJson {
+   |        ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_wudian.rs:194:5
+    |
+194 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+    = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+194 -     drop(c);
+194 +     let _ = c;
+    |
+
+warning: unused variable: `sha_t2`
+    --> crates/engine-native/tests/native_kernel.rs:1168:9
+     |
+1168 |     let sha_t2 = e.debug_place(2, "sha");
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_sha_t2`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `total`
+    --> crates/engine-native/tests/native_kernel.rs:3230:9
+     |
+3230 |     let total = ids.len();
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_total`
+
+warning: unused variable: `cmd`
+    --> crates/engine-native/tests/native_kernel.rs:3243:9
+     |
+3243 |     for cmd in 0..600 {
+     |         ^^^ help: if this is intentional, prefix it with an underscore: `_cmd`
+
+warning: unused variable: `out`
+    --> crates/engine-native/tests/native_kernel.rs:3365:9
+     |
+3365 |     let out = e.submit(GameCommand {
+     |         ^^^ help: if this is intentional, prefix it with an underscore: `_out`
+
+warning: unused variable: `total`
+    --> crates/engine-native/tests/native_kernel.rs:3386:9
+     |
+3386 |     let total = ids.len();
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_total`
+
+warning: unused variable: `out`
+    --> crates/engine-native/tests/native_kernel.rs:3431:9
+     |
+3431 |     let out = next_phase(&mut e);
+     |         ^^^ help: if this is intentional, prefix it with an underscore: `_out`
+
+warning: variable `cmds` is assigned to, but never used
+    --> crates/engine-native/tests/native_kernel.rs:5368:9
+     |
+5368 |     let mut cmds = 0;
+     |         ^^^^^^^^
+     |
+     = note: consider using `_cmds` instead
+
+warning: value assigned to `cmds` is never read
+    --> crates/engine-native/tests/native_kernel.rs:5373:9
+     |
+5373 |         cmds += 1;
+     |         ^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+     = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:5434:9
+     |
+5434 |     let mut e = Engine::new(751, 4);
+     |         ----^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:5440:9
+     |
+5440 |     let mut r = Engine::restore(&s0).expect("restore");
+     |         ----^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:5515:13
+     |
+5515 |         let mut e = Engine::new(seed, 3);
+     |             ----^
+     |             |
+     |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:5630:13
+     |
+5630 |         let mut e = Engine::new(seed, 3);
+     |             ----^
+     |             |
+     |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:5730:13
+     |
+5730 |         let mut e = Engine::new(seed, 3);
+     |             ----^
+     |             |
+     |             help: remove this `mut`
+
+warning: value assigned to `gate_seen` is never read
+    --> crates/engine-native/tests/native_kernel.rs:5995:21
+     |
+5995 |                     gate_seen = true;
+     |                     ^^^^^^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: unused variable: `t2`
+    --> crates/engine-native/tests/native_kernel.rs:6190:9
+     |
+6190 |     let t2 = e.open_choice().expect("rende_target 应挂起");
+     |         ^^ help: if this is intentional, prefix it with an underscore: `_t2`
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:6636:13
+     |
+6636 |         let mut e = Engine::new(42, 3);
+     |             ----^
+     |             |
+     |             help: remove this `mut`
+
+warning: unused variable: `actor`
+    --> crates/engine-native/tests/native_kernel.rs:6673:13
+     |
+6673 |         let actor = e.turn().current;
+     |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:6798:9
+     |
+6798 |     let mut e = Engine::new(443, 4);
+     |         ----^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/native_kernel.rs:6829:9
+     |
+6829 |     let mut e = Engine::new(443, 4);
+     |         ----^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `t`
+    --> crates/engine-native/tests/native_kernel.rs:7197:9
+     |
+7197 |     let t = e.open_choice().expect("jieyin_target 应挂起");
+     |         ^ help: if this is intentional, prefix it with an underscore: `_t`
+
+warning: unused variable: `t`
+    --> crates/engine-native/tests/native_kernel.rs:7218:9
+     |
+7218 |     let t = e.open_choice().expect("fanjian_target 应挂起");
+     |         ^ help: if this is intentional, prefix it with an underscore: `_t`
+
+warning: unused variable: `d`
+    --> crates/engine-native/tests/native_kernel.rs:7245:9
+     |
+7245 |     let d = e.open_choice().expect("lijian_discard 应挂起");
+     |         ^ help: if this is intentional, prefix it with an underscore: `_d`
+
+warning: unused variable: `ok`
+    --> crates/engine-native/tests/native_kernel.rs:7755:9
+     |
+7755 |     let ok = "KOF1  18,17,10 0 1 1";
+     |         ^^ help: if this is intentional, prefix it with an underscore: `_ok`
+
+warning: trait `OutcomeExt` is never used
+   --> crates/engine-native/tests/native_kernel.rs:366:7
+    |
+366 | trait OutcomeExt {
+    |       ^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `answer_first_legal` is never used
+    --> crates/engine-native/tests/native_kernel.rs:2231:4
+     |
+2231 | fn answer_first_legal(choice: &OpenChoice) -> Vec<ChoiceOption> {
+     |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `advance_one_phase` is never used
+    --> crates/engine-native/tests/native_kernel.rs:2279:8
+     |
+2279 |     fn advance_one_phase(e: &mut Engine) {
+     |        ^^^^^^^^^^^^^^^^^
+
+warning: struct `AttackPolicy` is never constructed
+    --> crates/engine-native/tests/native_kernel.rs:7599:8
+     |
+7599 | struct AttackPolicy;
+     |        ^^^^^^^^^^^^
+
+warning: variable `Shan1` should have a snake case name
+    --> crates/engine-native/tests/native_kernel.rs:4833:9
+     |
+4833 |     let Shan1 = e.debug_hand(1)[0];
+     |         ^^^^^ help: convert the identifier to snake case (notice the capitalization): `shan1`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: variable `Shan2` should have a snake case name
+    --> crates/engine-native/tests/native_kernel.rs:4845:9
+     |
+4845 |     let Shan2 = e.debug_hand(1).iter().copied().find(|c| e.catalog().card_kind(*c) == CardKind::Shan).expect("第二张闪");
+     |         ^^^^^ help: convert the identifier to snake case (notice the capitalization): `shan2`
+
+warning: unused `Result` that must be used
+    --> crates/engine-native/tests/native_kernel.rs:7802:5
+     |
+7802 |     reg.install(def);
+     |     ^^^^^^^^^^^^^^^^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+7802 |     let _ = reg.install(def);
+     |     +++++++
+
+warning: unused `Result` that must be used
+    --> crates/engine-native/tests/native_kernel.rs:7805:5
+     |
+7805 |     reg.disable("ext_a");
+     |     ^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+     |
+7805 |     let _ = reg.disable("ext_a");
+     |     +++++++
+
+warning: unused `Result` that must be used
+    --> crates/engine-native/tests/native_kernel.rs:7807:5
+     |
+7807 |     reg.enable("ext_a");
+     |     ^^^^^^^^^^^^^^^^^^^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+     |
+7807 |     let _ = reg.enable("ext_a");
+     |     +++++++
+
+warning: unused `Result` that must be used
+    --> crates/engine-native/tests/native_kernel.rs:7809:5
+     |
+7809 |     reg.uninstall("ext_a");
+     |     ^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+     |
+7809 |     let _ = reg.uninstall("ext_a");
+     |     +++++++
+
+warning: unused variable: `owner`
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:918:11
+    |
+918 |     for ((owner, def), inst) in snap.core.skills.iter_mut() {
+    |           ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `def_ybr`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1110:9
+     |
+1110 |     let def_ybr = def_of(&e, engine_native::content::host::GJ_FOOD_YUANBAOROU_KEY);
+     |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_def_ybr`
+
+warning: unused variable: `find`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1229:9
+     |
+1229 |     let find = |e: &Engine, prefix: &str| {
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_find`
+
+warning: unused variable: `find`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1475:9
+     |
+1475 |     let find = |e: &Engine, prefix: &str| {
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_find`
+
+warning: unused variable: `shan_c`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1867:15
+     |
+1867 |     let (zyd, shan_c) = {
+     |               ^^^^^^ help: if this is intentional, prefix it with an underscore: `_shan_c`
+
+warning: unused variable: `catalog`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1868:13
+     |
+1868 |         let catalog = e.catalog();
+     |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_catalog`
+
+warning: unused variable: `catalog`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1899:13
+     |
+1899 |         let catalog = e.catalog();
+     |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_catalog`
+
+warning: unused variable: `catalog`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1965:13
+     |
+1965 |         let catalog = e.catalog();
+     |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_catalog`
+
+warning: unused variable: `catalog`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:2133:13
+     |
+2133 |         let catalog = e.catalog();
+     |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_catalog`
+
+warning: unused variable: `catalog`
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:2183:13
+     |
+2183 |         let catalog = e.catalog();
+     |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_catalog`
+
+warning: struct `CardJson` is never constructed
+  --> crates/engine-native/tests/g1_shahai_gujian.rs:46:8
+   |
+46 | struct CardJson {
+   |        ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:297:9
+    |
+297 |         drop(c);
+    |         ^^^^^-^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+    = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+297 -         drop(c);
+297 +         let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:503:5
+    |
+503 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+503 -     drop(c);
+503 +     let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:535:5
+    |
+535 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+535 -     drop(c);
+535 +     let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:603:5
+    |
+603 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+603 -     drop(c);
+603 +     let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:629:5
+    |
+629 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+629 -     drop(c);
+629 +     let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:790:5
+    |
+790 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+790 -     drop(c);
+790 +     let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_shahai_gujian.rs:820:5
+    |
+820 |     drop(c);
+    |     ^^^^^-^
+    |          |
+    |          argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+820 -     drop(c);
+820 +     let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1086:9
+     |
+1086 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1086 -         drop(c);
+1086 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1120:9
+     |
+1120 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1120 -         drop(c);
+1120 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1177:9
+     |
+1177 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1177 -         drop(c);
+1177 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1284:9
+     |
+1284 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1284 -         drop(c);
+1284 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1334:9
+     |
+1334 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1334 -         drop(c);
+1334 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1369:9
+     |
+1369 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1369 -         drop(c);
+1369 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1446:5
+     |
+1446 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1446 -     drop(c);
+1446 +     let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1554:13
+     |
+1554 |             drop(c);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1554 -             drop(c);
+1554 +             let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1569:13
+     |
+1569 |             drop(c);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1569 -             drop(c);
+1569 +             let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1585:13
+     |
+1585 |             drop(c);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1585 -             drop(c);
+1585 +             let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1640:5
+     |
+1640 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1640 -     drop(c);
+1640 +     let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1806:5
+     |
+1806 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1806 -     drop(c);
+1806 +     let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1818:9
+     |
+1818 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1818 -         drop(c);
+1818 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1885:9
+     |
+1885 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1885 -         drop(c);
+1885 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:1946:9
+     |
+1946 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+1946 -         drop(c);
+1946 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:2004:5
+     |
+2004 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+2004 -     drop(c);
+2004 +     let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:2216:9
+     |
+2216 |         drop(c);
+     |         ^^^^^-^
+     |              |
+     |              argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+2216 -         drop(c);
+2216 +         let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:2291:5
+     |
+2291 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+2291 -     drop(c);
+2291 +     let _ = c;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/g1_shahai_gujian.rs:2399:5
+     |
+2399 |     drop(c);
+     |     ^^^^^-^
+     |          |
+     |          argument has type `&OpenChoice`
+     |
+help: use `let _ = ...` to ignore the expression or result
+     |
+2399 -     drop(c);
+2399 +     let _ = c;
+     |
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/tests/boundary_snapshot.rs:1917:13
+     |
+1917 |         let mut m = snap.clone();
+     |             ----^
+     |             |
+     |             help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "replay_scenarios") generated 2 warnings (run `cargo fix --test "replay_scenarios" -p engine-native` to apply 2 suggestions)
+warning: `engine-native` (example "n11_kof") generated 2 warnings (run `cargo fix --example "n11_kof" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "g1_huanle") generated 2 warnings (run `cargo fix --test "g1_huanle" -p engine-native` to apply 2 suggestions)
+warning: `engine-native` (test "g1_shahai_yunchou") generated 10 warnings (run `cargo fix --test "g1_shahai_yunchou" -p engine-native` to apply 3 suggestions)
+warning: `engine-native` (test "g1_wudian") generated 3 warnings (run `cargo fix --test "g1_wudian" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "native_kernel") generated 33 warnings (run `cargo fix --test "native_kernel" -p engine-native` to apply 20 suggestions)
+warning: `engine-native` (test "g1_shahai_gujian") generated 37 warnings (run `cargo fix --test "g1_shahai_gujian" -p engine-native` to apply 10 suggestions)
+warning: `engine-native` (test "boundary_snapshot") generated 1 warning (run `cargo fix --test "boundary_snapshot" -p engine-native` to apply 1 suggestion)
+warning: unused import: `Winner`
+ --> crates/engine-native/examples/probe_seed.rs:1:101
+  |
+1 | use engine_native::{CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, Winner};
+  |                                                                                                     ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `drive` is never used
+ --> crates/engine-native/examples/probe_seed.rs:6:4
+  |
+6 | fn drive(e: &mut Engine, cap: usize) -> bool {
+  |    ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `engine_native::catalog::CardKind`
+  --> crates/engine-native/tests/g1_cardpile.rs:18:5
+   |
+18 | use engine_native::catalog::CardKind;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceOption`
+  --> crates/engine-native/tests/g1_cardpile.rs:20:5
+   |
+20 |     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, SnapshotError,
+   |     ^^^^^^^^^^^^
+
+warning: unused import: `RejectReason`
+  --> crates/engine-native/tests/g1_hearth.rs:15:75
+   |
+15 |     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason,
+   |                                                                           ^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/g1_hearth.rs:210:10
+    |
+210 |     let (mut e, pack) = setup();
+    |          ----^
+    |          |
+    |          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `e` is never read
+   --> crates/engine-native/tests/g1_hearth.rs:277:5
+    |
+277 |     e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
+    |     ^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `CardJson` is never constructed
+  --> crates/engine-native/tests/g1_hearth.rs:43:8
+   |
+43 | struct CardJson {
+   |        ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `inject` is never used
+   --> crates/engine-native/tests/g1_hearth.rs:141:4
+    |
+141 | fn inject(e: &Engine, pack: &ExtensionPack, ids: &[u32], to: u8) -> Engine {
+    |    ^^^^^^
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_hearth.rs:197:9
+    |
+197 |         drop(c);
+    |         ^^^^^-^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+    = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+197 -         drop(c);
+197 +         let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/tests/g1_hearth.rs:243:9
+    |
+243 |         drop(c);
+    |         ^^^^^-^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+243 -         drop(c);
+243 +         let _ = c;
+    |
+
+warning: unused import: `view::HandView`
+  --> crates/engine-native/examples/n10_render_host.rs:11:38
+   |
+11 |     Engine, GameAction, GameCommand, view::HandView,
+   |                                      ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `HandView`
+  --> crates/engine-native/examples/n10_table.rs:14:32
+   |
+14 |     GameCommand, Phase, view::{HandView, PolicyInput, SeatPolicy},
+   |                                ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused `Result` that must be used
+   --> crates/engine-native/src/content/extension.rs:232:9
+    |
+232 |         reg.install(def);
+    |         ^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+    |
+232 |         let _ = reg.install(def);
+    |         +++++++
+
+warning: unused `Result` that must be used
+   --> crates/engine-native/src/content/extension.rs:235:9
+    |
+235 |         reg.disable("test_ext");
+    |         ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+    |
+235 |         let _ = reg.disable("test_ext");
+    |         +++++++
+
+warning: unused `Result` that must be used
+   --> crates/engine-native/src/content/extension.rs:237:9
+    |
+237 |         reg.enable("test_ext");
+    |         ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+    |
+237 |         let _ = reg.enable("test_ext");
+    |         +++++++
+
+warning: unused `Result` that must be used
+   --> crates/engine-native/src/content/extension.rs:239:9
+    |
+239 |         reg.uninstall("test_ext");
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+    |
+239 |         let _ = reg.uninstall("test_ext");
+    |         +++++++
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/src/engine.rs:1670:13
+     |
+1670 |             drop(p);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&mut state::PlayerState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+1670 -             drop(p);
+1670 +             let _ = p;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/src/machine.rs:263:13
+    |
+263 |             drop(p);
+    |             ^^^^^-^
+    |                  |
+    |                  argument has type `&mut state::PlayerState`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+263 -             drop(p);
+263 +             let _ = p;
+    |
+
+warning: unused import: `ChoiceKind`
+  --> crates/engine-native/tests/g1_wuxing.rs:18:5
+   |
+18 |     ChoiceKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
+   |     ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `tao`
+   --> crates/engine-native/tests/g1_wuxing.rs:157:9
+    |
+157 |     let tao = e.debug_place(0, "tao"); // debug_place 已将 tao 置入 0 号手牌
+    |         ^^^ help: if this is intentional, prefix it with an underscore: `_tao`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `CardKind`
+  --> crates/engine-native/tests/g1_d3.rs:14:39
+   |
+14 | use engine_native::catalog::{CardDef, CardKind, Faction};
+   |                                       ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/g1_d3.rs:157:9
+    |
+157 |     let mut e = Engine::new_with_extensions(3401, 3, &[&pack]).expect("建局");
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/g1_d3.rs:231:9
+    |
+231 |     let mut e =
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `store`
+   --> crates/engine-native/tests/g1_d3.rs:363:5
+    |
+363 |     store: &PackageStore,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_store`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `SkillJson` is never constructed
+  --> crates/engine-native/tests/g1_d3.rs:46:8
+   |
+46 | struct SkillJson {
+   |        ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `GeneralJson` is never constructed
+  --> crates/engine-native/tests/g1_d3.rs:52:8
+   |
+52 | struct GeneralJson {
+   |        ^^^^^^^^^^^
+
+warning: `engine-native` (example "probe_seed") generated 2 warnings (run `cargo fix --example "probe_seed" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "g1_cardpile") generated 2 warnings (run `cargo fix --test "g1_cardpile" -p engine-native` to apply 2 suggestions)
+warning: `engine-native` (test "g1_hearth") generated 7 warnings (run `cargo fix --test "g1_hearth" -p engine-native` to apply 2 suggestions)
+warning: `engine-native` (example "n10_render_host") generated 1 warning (run `cargo fix --example "n10_render_host" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (example "n10_table") generated 1 warning (run `cargo fix --example "n10_table" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (lib test) generated 27 warnings (21 duplicates)
+warning: `engine-native` (test "g1_wuxing") generated 2 warnings (run `cargo fix --test "g1_wuxing" -p engine-native` to apply 2 suggestions)
+warning: `engine-native` (test "g1_d3") generated 6 warnings (run `cargo fix --test "g1_d3" -p engine-native` to apply 4 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s
+     Running unittests src/lib.rs (target/debug/deps/engine_native-643b7dfbcc94b232)
+
+running 5 tests
+test content::pile::tests::pile_spec_rejects_invalid_entries ... ok
+test content::pile::tests::pile_spec_builds_unique_cards ... ok
+test content::extension::tests::extension_registry_lifecycle ... ok
+test engine::tests::ruleset_version_changes_digest ... ok
+test engine::tests::park_machine_state_changes_digest ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ai_planner.rs (target/debug/deps/ai_planner-2ddb6f40d7e96916)
+
+running 9 tests
+test plan_enumerates_confirm_and_cancel_fallbacks ... ok
+test policy_and_plan_reject_cleanly_at_dedup_exhaustion ... ok
+test redact_shuffles_unknown_pool_when_deck_present ... ok
+test plan_pipeline_works_with_hidden_opponent_cards ... ok
+test plan_enumerates_single_choice_fallbacks ... ok
+test redact_preserves_card_ownership_and_multiset ... ok
+test plan_apply_roundtrip_at_high_water ... ok
+test redact_deterministic_with_empty_deck_fallback ... ok
+test plan_sim_uses_session_high_water ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/auth_archive.rs (target/debug/deps/auth_archive-c42a87548d4ca67a)
+
+running 6 tests
+test auth_token_reissue_revokes_old ... ok
+test authed_submit_rejects_impersonation_and_unknown_token ... ok
+test archive_detects_tampering_and_version ... ok
+test auth_tokens_do_not_survive_archive ... ok
+test snapshot_archive_roundtrip_rest_and_window ... ok
+test session_layer_reconnect_out_of_order_and_dedup ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/boundary_snapshot.rs (target/debug/deps/boundary_snapshot-179c2823f01c4135)
+
+running 68 tests
+test duplicate_selection_rejected_by_spec ... ok
+test answer_without_open_choice_rejected ... ok
+test open_segment_checkpoint_association_positive ... ok
+test duplicate_and_zero_dedup_rejected ... ok
+test commands_by_non_current_player_rejected ... ok
+test abort_segment_truncates_log ... ok
+test archive_rejects_unknown_prompt_and_v1_bytes ... ok
+test archive_choice_kind_duel_sha_roundtrip ... ok
+test archive_choice_kind_discard_to_limit_roundtrip ... ok
+test archive_choice_kind_jiji_target_roundtrip ... ok
+test archive_choice_kind_nullify_window_roundtrip ... ok
+test out_of_bounds_actor_rejected ... ok
+test answer_by_wrong_player_rejected ... ok
+test out_of_bounds_ids_rejected_not_panic ... ok
+test archive_choice_kind_tian_du_gain_roundtrip ... ok
+test guidao_rewrite_with_real_black_equip_only ... ok
+test pause_roundtrip_discard_to_limit ... ok
+test pause_roundtrip_duel_respond ... ok
+test pause_roundtrip_aoe_mid_queue ... ok
+test pause_roundtrip_active_nullify_chain ... ok
+test guidao_rewrite_mixed_hand_and_equip_options ... ok
+test pause_roundtrip_guidao_active_rewrite ... ok
+test pause_roundtrip_dying_save ... ok
+test pause_roundtrip_judge_window ... ok
+test pause_roundtrip_guidao_rewrite ... ok
+test pause_roundtrip_judge_lightning_dying_save ... ok
+test pause_roundtrip_nullify_reshuffle_chain ... ok
+test pause_roundtrip_guidao_pass ... ok
+test pause_roundtrip_sha_respond ... ok
+test pending_state_hash_stable_across_save_restore ... ok
+test restore_carries_dedup_high_water ... ok
+test pause_roundtrip_tiandu_confirm ... ok
+test pause_roundtrip_tiandu_decline ... ok
+test pause_roundtrip_rewrite_then_tiandu_combo ... ok
+test restore_rejects_all_cards_missing ... ok
+test restore_accepts_park_depth_below_stack ... ok
+test pause_roundtrip_negative_hp_multi_tao_rescue ... ok
+test restore_rejects_broken_frame_parent_chain ... ok
+test restore_rejects_choice_id_overrun ... ok
+test pause_roundtrip_yishang_chain ... ok
+test restore_rejects_choice_without_machine ... ok
+test restore_rejects_lord_not_at_first_seat ... ok
+test restore_rejects_dangling_park_frame ... ok
+test restore_at_every_choice_point_continues_identically ... ok
+test restore_rejects_middle_card_missing ... ok
+test restore_rejects_duplicate_frame_id ... ok
+test restore_guidao_rewrite_equips_options ... ok
+test restore_rejects_forward_referencing_frame_parent ... ok
+test restore_guidao_rewrite_mid_window ... ok
+test restore_rejects_inconsistent_skill_instance_owner ... ok
+test restore_rejects_nested_checkpoint ... ok
+test restore_rejects_oob_queue_trigger ... ok
+test restore_rejects_oob_event_payload ... ok
+test restore_rejects_rewrite_asked_with_empty_rewriters ... ok
+test restore_rejects_out_of_bounds_ids ... ok
+test restore_rejects_segment_checkpoint_mismatches ... ok
+test restore_rejects_sha_asked_tamper ... ok
+test restore_rejects_park_depth_overrun ... ok
+test restore_rejects_outcome_mode_mismatch ... ok
+test restore_rejects_trailing_card_missing ... ok
+test restore_rejects_rule_version_mismatch ... ok
+test restore_rejects_tampered_identity_roles ... ok
+test restore_rejects_self_referencing_frame_parent ... ok
+test stale_revision_rejected_then_retry_same_dedup ... ok
+test restore_rejects_tampered_core_ruleset_version ... ok
+test restore_rejects_tampered_gate_event_payload ... ok
+test save_restore_at_rest_continues_identically ... ok
+test savage_multi_nullify_judge_reshuffle_restore ... ok
+
+test result: ok. 68 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/dbg4.rs (target/debug/deps/dbg4-41880cc1169cc9d2)
+
+running 1 test
+test dbg_nullify ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/g1_cardpile.rs (target/debug/deps/g1_cardpile-b574dc20fa1be9b4)
+
+running 3 tests
+test pile_bridge_rejects_invalid_spec ... ok
+test converted_packages_match_generator ... ok
+test g1_cardpile_vertical_install_enable_newgame_saverestore ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/g1_d3.rs (target/debug/deps/g1_d3-b28db8424d243819)
+
+running 3 tests
+test g1_d3_install_bridge_and_metadata ... ok
+test g1_d3_content_lock_and_bounds ... ok
+test g1_d3_vertical_reveal_jinggou_and_restore ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/g1_hearth.rs (target/debug/deps/g1_hearth-0b343c370a4e5737)
+
+running 4 tests
+test jihuocard_self_draw ... ok
+test linghunzhihuo_fire_damage_and_self_discard ... ok
+test hearth_content_lock_saverestore ... ok
+test zhaomingdan_forced_discard_and_draws ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/g1_huanle.rs (target/debug/deps/g1_huanle-24b961174fc1fd1c)
+
+running 6 tests
+test huanle_bridge_builds_pack ... ok
+test host_skill_restore_rejects_without_pack ... ok
+test huanle_jiuwei_optional_confirm_and_restore ... ok
+test g1_huanle_vertical_host_behaviors_and_restore ... ok
+test equip_skill_snapshot_mismatch_rejected ... ok
+test equip_skill_lifecycle_grant_and_revoke ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/g1_shahai_gujian.rs (target/debug/deps/g1_shahai_gujian-56b6da9c285285c4)
+
+running 13 tests
+test g1_gujian_vertical_existing_kinds_and_lock ... ok
+test feibiao_discard_black_or_damage ... ok
+test jiguan_batch_four_kinds ... ok
+test shujinsan_discard_any_draws_equal_with_restore ... ok
+test dinvxuanshuang_and_gjyuheng_closeout ... ok
+test jinlianzhu_cancels_damage_with_holder_confirm ... ok
+test hujia_primitive_and_food_batch_three ... ok
+test gujian_rejects_illegal_targets ... ok
+test food_effects_batch_two ... ok
+test food_state_grant_tick_and_expire ... ok
+test final_batch_shatang_heilong_liutouge_mutou ... ok
+test mizhilianou_viewas_and_luyugeng_discover ... ok
+test remaining_clusters_batch ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/g1_shahai_yunchou.rs (target/debug/deps/g1_shahai_yunchou-101e5015fd7a4bd7)
+
+running 12 tests
+test geanguanhuo_two_target_compare_chain ... ok
+test g1_yunchou_vertical_existing_kinds_and_lock ... ok
+test chenhuodajie_gains_target_hand_card ... ok
+test suolianjia_links_on_equip_resets_on_leave ... ok
+test touliang_swap_two_stage_with_restore ... ok
+test caochuan_no_sha_branch_shows_and_discards ... ok
+test fudichouxin_compare_two_stage_with_restore ... ok
+test caochuan_branch_zero_gives_shas_and_reprisal ... ok
+test shuigong_multi_target_forced_equip_discard ... ok
+test hongshui_self_delayed_trick_thunder_damage ... ok
+test geanguanhuo_rejects_wrong_target_count ... ok
+test shezhanqunru_compares_all_responders ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/g1_wudian.rs (target/debug/deps/g1_wudian-7d648f7792b035ca)
+
+running 7 tests
+test wangmeizhike_recovers_min_hp_damaged_target ... ok
+test wangmeizhike_draws_min_hand_target ... ok
+test youdishenru_cancels_sha_with_reprisal ... ok
+test moshou_blocks_delayed_trick_target ... ok
+test g1_wudian_content_lock_and_byte_restore ... ok
+test g1_wudian_generals_and_siji_discard_draw ... ok
+test sanjian_weapon_skill_two_stage_choice_with_restore ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/g1_wuxing.rs (target/debug/deps/g1_wuxing-d165ab6923a80d1f)
+
+running 3 tests
+test wuxingpan_card_equips_via_treasure_slot ... ok
+test wuxingpan_skill_change_nature_with_restore ... ok
+test g1_wuxing_vertical_natures_shengke_saverestore ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-ab43e180cb5e0edd)
+
+running 178 tests
+test abort_requires_open_segment_and_nonsliced_rollback_unchanged ... ok
+test aborted_segment_restores_pre_command_state ... ok
+test aoe_continues_after_midqueue_death ... ok
+test activate_skill_without_grant_rejected ... ok
+test catalog_shared_across_commands ... ok
+test aoe_target_freeze_at_commit ... ok
+test archery_attack_all_pass_takes_damage ... ok
+test caocao_jianxiong_takes_damaging_card ... ok
+test abort_contract_direct_vs_restored_identical ... ok
+test abort_after_restore_restores_segment_start ... ok
+test activate_skill_rejected_outside_play_phase ... ok
+test chain_can_be_nullified ... ok
+test chain_card_toggles_link ... ok
+test bing_judgement_skips_draw_phase ... ok
+test death_clears_judge_zone ... ok
+test chain_propagation_preserves_source ... ok
+test budget_exhaustion_rolls_back ... ok
+test dead_skill_holder_excluded_from_rewrite ... ok
+test daqiao_guose_diamond_as_le ... ok
+test distance_clamp_to_minimum_1 ... ok
+test duel_can_be_nullified ... ok
+test discard_phase_enforces_hand_limit ... ok
+test duel_damage_can_kill ... ok
+test duel_alternating_sha_until_pass ... ok
+test delayed_trick_play_time_nullify_window ... ok
+test e01_extension_registry_lifecycle ... ok
+test e02_registry_rejects_uninstalled_operations ... ok
+test duel_no_sha_immediate_loss ... ok
+test duel_does_not_consume_sha_limit ... ok
+test e03_extension_cards_in_catalog_and_game ... ok
+test e06_extension_general_metadata ... ok
+test e05_extension_card_in_game ... ok
+test diaochan_biyue_draws_at_end_phase ... ok
+test dying_save_with_jiu_derivation_restores ... ok
+test e04_extension_conflict_detection ... ok
+test fire_sha_propagates_through_chain ... ok
+test ganning_qixi_black_card_as_dismantle ... ok
+test fire_sha_shares_sha_limit ... ok
+test equip_distance_skips_dead_players ... ok
+test e03_extension_catalog_content_lock_in_game_and_restore ... ok
+test general_bundle_grant_full_skill_set ... ok
+test guanyu_wusheng_red_card_as_sha ... ok
+test guojia_jiji_draws_and_gives_one_card ... ok
+test guidao_rewrite_replaces_judgment ... ok
+test guozhan_compensatory_reveal_during_targeting ... ok
+test dying_rescue_and_death ... ok
+test guozhan_general_slots_roundtrip ... ok
+test armor_bagua_judgement_semantics ... ok
+test huanggai_kurou_lose_hp_draw_two ... ok
+test guozhan_reveal_gating_view_isolation ... ok
+test guidao_tiandu_combo_final_card_gained ... ok
+test host_assembler_prototype_contract ... ok
+test huangyueying_jizhi_draws_on_trick ... ok
+test hujia_asks_wei_helpers_in_seat_order_and_continues_after_pass ... ok
+test general_faction_mapping_complete ... ok
+test hujia_skips_non_wei_helpers ... ok
+test guozhan_m3_faction_victory ... ok
+test equip_horses_weapon_range_and_replacement ... ok
+test general_table_grants_all_bundles ... ok
+test hujia_pending_ask_byte_roundtrip_restores ... ok
+test identity_lord_killing_loyalist_discards_all ... ok
+test hujia_public_asks_do_not_leak_hidden_shan ... ok
+test hujia_shan_counts_toward_wushuang_requirement ... ok
+test huatuo_qingnang_heals_wounded_player ... ok
+test identity_lord_penalty_discards_equips ... ok
+test identity_lord_death_decides_by_faction ... ok
+test identity_lord_side_wins_when_rebels_and_traitor_dead ... ok
+test guidao_two_holders_asked_in_seat_order ... ok
+test jijiang_activate_not_phase_locked ... ok
+test identity_rebel_death_rewards_killer ... ok
+test jijiang_pending_ask_restore_continues ... ok
+test jiu_boosts_next_sha_once_per_turn ... ok
+test jiu_bonus_survives_byte_restore ... ok
+test judge_zone_same_name_limit ... ok
+test judge_lightning_saved_by_enough_taos ... ok
+test jiu_saves_dying_player ... ok
+test judgement_event_order_rewrite_then_tiandu ... ok
+test judge_order_delayed_first_then_lightning_hit_kills ... ok
+test last_rebel_reward_precedes_victory ... ok
+test judgement_no_rewrite_single_finalized ... ok
+test leisha_resolves_as_sha_and_shares_limit ... ok
+test lightning_miss_to_next_with_same_name_discards ... ok
+test lightning_damage_has_no_card ... ok
+test leisha_pending_ask_byte_roundtrip ... ok
+test lightning_miss_transfer_skips_dead_seat ... ok
+test judge_owner_death_settles_zones_and_conservation ... ok
+test liubei_jijiang_borrows_sha_from_shu_helper ... ok
+test identity_matrix_for_supported_seats ... ok
+test luoshen_repeat_judgement_gains_black_cards ... ok
+test luxun_qianxun_blocks_le_target ... ok
+test lvbu_wushuang_sha_needs_two_dodges ... ok
+test lvmeng_keji_skips_discard_without_sha ... ok
+test luxun_lianying_triggers_on_forced_discard ... ok
+test le_judgement_skips_play_phase ... ok
+test luxun_lianying_draws_after_losing_last_card ... ok
+test liubei_rende_gives_cards_and_heals ... ok
+test n04f_snapshot_association_validation ... ok
+test lvbu_wushuang_duel_needs_double_sha ... ok
+test n08_fanjian_give_and_damage ... ok
+test machao_tieji_judgement_blocks_shan_on_red ... ok
+test n08_lijian_forces_duel ... ok
+test n08_jijiu_red_card_as_tao ... ok
+test machao_mashu_distance_minus_one ... ok
+test n08_liuli_transfers_sha_target ... ok
+test n08_hujia_borrows_shan_from_others ... ok
+test n10_planner_cancel_and_deadline ... ok
+test n11_kof_session_parse_negatives ... ok
+test n10_planner_stale_rejection ... ok
+test n08_jieyin_heals_both ... ok
+test n11_reveal_grants_skills_and_hp ... ok
+test n11b_archive_header_and_length_validation ... ok
+test n10_policy_input_isolation ... ok
+test n08_qingguo_qicai_jiuyuan ... ok
+test n10_planner_isolation_and_budget ... ok
+test n11a_auth_token_instance_and_generation_binding ... ok
+test no_paoxiao_second_sha_rejected ... ok
+test negative_hp_rescued_by_three_taos ... ok
+test nullify_cancels_savage ... ok
+test no_nullify_window_for_basic_card ... ok
+test guozhan_m3_victory_regression_matrix ... ok
+test normal_damage_does_not_propagate ... ok
+test nullify_on_nullify_reverses ... ok
+test propagated_damage_is_full_resolution ... ok
+test p2_death_with_machine_held_cards ... ok
+test n10a_private_choice_answer_hidden_from_others ... ok
+test p2_new_choice_points_per_submission_conservation ... ok
+test presentation_visibility_and_render_determinism ... ok
+test rejections_leave_state_unchanged ... ok
+test identity_full_match_replay_reaches_lord_side_victory ... ok
+test render_frame_guozhan_generals_isolation ... ok
+test rende_cumulative_crosses_two_across_activations ... ok
+test savage_attack_response_skip_and_pass ... ok
+test savage_nullified_target_discards_once ... ok
+test replay_different_seed_diverges ... ok
+test replay_determinism_same_seed_identical ... ok
+test savage_per_target_nullify ... ok
+test sha_damage_dealt_carries_card ... ok
+test sha_dodge_damage_limit_and_range ... ok
+test seat_quota_bounds_commands_and_resets_per_round ... ok
+test simayi_fankui_decline_takes_nothing ... ok
+test simayi_fankui_steals_from_damage_source ... ok
+test sancai_nested_choice_chain_and_decline ... ok
+test simayi_guicai_rewrites_with_any_suit_card ... ok
+test shandian_hits_and_transfers ... ok
+test snatch_steals_card_within_distance ... ok
+test sun_xiangxiang_jixiang_draws_on_equip_loss ... ok
+test shouyi_grants_temporary_yishang_until_owner_turn_end ... ok
+test sunquan_zhiheng_discard_n_draw_n ... ok
+test suidun_prevents_once_per_turn ... ok
+test skill_disabled_gate_excludes_rewriter ... ok
+test snapshot_roundtrip_while_suspended ... ok
+test suspended_segment_rejects_commands_and_resume_requires_open_segment ... ok
+test tiandu_other_holder_not_asked ... ok
+test thunder_damage_propagates_and_unlinks_all ... ok
+test tiandu_gain_own_judge_card_only ... ok
+test suqing_disables_queued_suidun_mid_resolution ... ok
+test kof_m1_two_player_pure_command_endgame ... ok
+test zhangfei_paoxiao_removes_sha_limit ... ok
+test xiahoudun_ganglie_non_heart_reflects ... ok
+test yishang_redirects_damage_in_before_window ... ok
+test zhaoyun_longdan_sha_as_dodge ... ok
+test zhiheng_decline_draws_nothing ... ok
+test time_slice_resumes_to_identical_result ... ok
+test zhangliao_tuxi_replaces_draw ... ok
+test xuchu_luoyi_boosts_sha_damage ... ok
+test zhugeliang_kongcheng_blocks_sha_and_duel_targets ... ok
+test weapon_replacement_terminates_old_range ... ok
+test zhouyu_yingzi_extra_draw_at_draw_phase ... ok
+test zhugeliang_guanxing_reorders_deck_top ... ok
+test zhu_skills_require_lord_role_in_identity_mode ... ok
+test savage_nullify_after_deck_drain_conserves ... ok
+test replay_and_restore_per_command_parity ... ok
+test reshuffle_conserves_every_card_exactly_once ... ok
+test identity_pure_command_traitor_victory ... ok
+test distance_range_reference_differential ... ok
+test identity_pure_command_match_reaches_outcome ... ok
+test n10_planner_baseline_completes_games ... ok
+test p2_identity_endgame_per_submission_parity ... ok
+
+test result: ok. 178 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-daa0c189ace1cd7b)
+
+running 2 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios_match_golden ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/view_isolation.rs (target/debug/deps/view_isolation-594e37c5768c8e7a)
+
+running 7 tests
+test seat_views_hide_opponent_hands_and_deck ... ok
+test view_public_fields_match_authoritative_state ... ok
+test choice_options_visible_only_to_observer ... ok
+test ai_session_non_observer_sees_limited_choice ... ok
+test ai_session_is_seat_bound_readonly_projection ... ok
+test event_view_hides_other_players_drawn_cards ... ok
+test isolation_holds_across_game_progress ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_native
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

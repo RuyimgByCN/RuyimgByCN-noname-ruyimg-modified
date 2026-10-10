@@ -1,0 +1,7 @@
+// 初山（无名）：锁定技。游戏开始时，从随机6名角色中各选姓氏和名字组合成新名，获得对应的两个技能。
+// 旧JS的角色数据库搜索（get.gainableCharacters）、姓氏/名字拆分（get.characterSurname）、显示名称修改（node.name.innerHTML）、随机技能获取均无对应原语。
+// 以空定义保留编译占位。
+skill dcchushan(2819492204) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

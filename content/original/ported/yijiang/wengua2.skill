@@ -1,0 +1,10 @@
+// 问卦2：出牌阶段，将一张手牌或装备牌交给拥有"问卦"技能的目标，
+// 目标选择将牌置于牌堆顶或牌堆底，然后摸一张牌。
+// 缺：目标筛选（仅"问卦"持有者且无"问卦3"）、牌堆顶/底二选一分支；
+// 以 choose_other_give_one_hand_equip + draw_cards 近似保留核心收益。
+skill wengua2(2716743244) {
+  active play_phase select_he 1 1 {
+    effect choose_other_give_one_hand_equip(self);
+    effect draw_cards(self, 1);
+  }
+}

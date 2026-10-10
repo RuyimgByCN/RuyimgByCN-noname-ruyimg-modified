@@ -1,0 +1,6 @@
+// scsmiaoyu（妙语）：你可以将至多两张相同花色的牌按照以下规则使用或打出：♦牌当作火【杀】，♥牌当作【桃】，♣牌当作【闪】，♠牌当作【无懈可击】。若你以此法使用了两张红色牌，则此牌回复值或伤害值+1。若你以此法使用了两张黑色牌，则你弃置当前回合角色一张牌。
+skill scsmiaoyu(4191535349) {
+  trigger card_used owner_alive {
+    effect discard_selected(self);
+  }
+}

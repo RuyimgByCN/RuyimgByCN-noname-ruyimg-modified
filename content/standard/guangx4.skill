@@ -1,0 +1,4 @@
+// Skill guangx4(187) - modifier range variant
+skill guangx4(187) {
+  modifier attack_range add 1;
+}

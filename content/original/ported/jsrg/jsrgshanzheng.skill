@@ -1,0 +1,18 @@
+// jsrgshanzheng（擅政?）：出牌阶段限一次，你可以与任意名角色议事，若结果为：
+// 红色，你可对一名未参加议事的角色造成 1 点伤害；黑色，你获得所有意见牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `start_debate_targets(self, self_skill)`（ABI 656，Cont 272 选 1..N 参与者）；
+// 红分支 `debate_resolved debate_owner_is_initiator_result_red optional` →
+// choose_other_damage(self, 1)。
+// 近似（P2 表达力边界，逐点注明）：①上游参与者含自己（自己也是意见方），此处
+// 仅选其他角色；②红分支「未参加议事」约束未建模（任意其他角色）；③黑分支
+// 「获得所有意见牌」需意见牌快照（P2 意见牌不移动），未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgshanzheng(3264543475) {
+  active play_phase uses_per_turn 1 {
+    effect start_debate_targets(self, self_skill);
+  }
+  trigger debate_resolved debate_owner_is_initiator_result_red optional {
+    effect choose_other_damage(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 箜声（OL 周妃）：准备阶段置牌为「箜」。
+// 旧 JS 的「箜 expansion」无对应原语；以准备阶段摸一张近似（已注明）。
+skill olkongsheng(2470629973) {
+  trigger phase_prepare owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

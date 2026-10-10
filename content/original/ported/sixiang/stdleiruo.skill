@@ -1,0 +1,7 @@
+// 羸弱（毛皇后）：结束阶段，获得其他角色装备区一张牌；然后该角色可对你使用一张无视距离的杀。
+// 旧 JS 的「选目标→获装备→目标反出杀」流程中的「目标反出杀」无对应 DSL 原语，且选择目标获装备无可直接对应的 trigger 效果。完全无法表达。
+skill stdleiruo(3768424876) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

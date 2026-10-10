@@ -1,0 +1,6 @@
+// mbshizhong（势众）：锁定技，结束阶段，你摸一张牌并展示所有手牌；准备阶段，你摸X张牌（X为你手牌中剩余以此法展示过的牌数），若X与你上次以此法展示牌数相等，本回合你造成伤害时，将伤害值改为十万！
+skill mbshizhong(3780166098) locked {
+  trigger phase_discard owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

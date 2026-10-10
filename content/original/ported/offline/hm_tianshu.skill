@@ -1,0 +1,5 @@
+// hm_tianshu：音效名:tianshu, player:phase_play, 异步, 弃牌。
+skill hm_tianshu(3441390793) {
+  trigger phase_play owner_alive {
+  }
+}

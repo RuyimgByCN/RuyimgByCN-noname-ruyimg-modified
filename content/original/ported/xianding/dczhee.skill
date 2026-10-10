@@ -1,0 +1,20 @@
+// dczhee（苏越·限定锦囊技？）：锁定技。你进入游戏后/游戏开始时，从牌堆
+// 中检索一张【闪电】将之置于你的判定区；每名角色的结束阶段，从弃牌堆
+// 中检索一张【闪电】将之置于你的判定区。
+// 上游 (xianding/skill.js 13954)：trigger enterGame/phaseBefore(首次)/
+// phaseEnd(global) + forced；filter = 对应区域有闪电 && canAddJudge；
+// content = 取第一张闪电 addJudge。
+// 实现（2026-09-15 第三百零二批·闪电挂判定状态机，ADR 0641 §8.86）：
+// resolve_dczhee(self, mode)（ABI 746 / tag 763，单发无续体，双触发臂
+// game_started/phase_end）——检索区顶向下首张 TrickShandian + owner 判
+// 定区无闪电（canAddJudge 近似）→ MoveCards 入判定区（引擎判定管道自
+// 然结算）。零新 filter（机器内 gate，forced 静默无害）。
+// 保真度：完整（双臂/检索区切换/唯一性门控全建模）。
+skill dczhee(2349242461) locked {
+  trigger game_started owner_alive {
+    effect resolve_dczhee(self, 0);
+  }
+  trigger phase_end owner_alive {
+    effect resolve_dczhee(self, 1);
+  }
+}

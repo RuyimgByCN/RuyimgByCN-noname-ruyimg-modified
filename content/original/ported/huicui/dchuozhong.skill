@@ -1,0 +1,7 @@
+// dchuozhong：旧JS复杂效果。
+skill dchuozhong(4017445886) {
+  active play_phase uses_per_turn 2 targets 1 1 other {
+    // 旧JS含复杂目标选择逻辑，已简化
+    effect choose_target_draw(self, 1, other);
+  }
+}

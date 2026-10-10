@@ -1,0 +1,7 @@
+// 花火（马伶俐，ABI 607）：红牌火杀不计杀次数；可把目标改为全部有“硝引”的合法角色。
+skill dchuahuo(2857165081) {
+  view_as sha play_phase red from hand nature fire uses_per_turn 1 no_use_count;
+  trigger card_targeted owner_source_own_view_as_card_targeted_target_skill_pile_3398996454 optional {
+    effect resolve_malingli(self, event_card, 3398996454, 20);
+  }
+}

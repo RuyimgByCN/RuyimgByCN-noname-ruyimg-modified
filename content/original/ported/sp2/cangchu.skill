@@ -1,0 +1,12 @@
+// 藏储（张鲁）：锁定技。游戏开始时，你获得3枚「粮」标记；每当你受到火焰伤害后，
+// 移去等量「粮」标记（至多为现有标记数）。
+// 上游在标记移尽时触发自定义事件 cangchuAwaken（供「良营」联动），
+// 自定义事件机制无对应原语，该觉醒联动未建模（不影响本技能自身的标记增减语义）。
+skill cangchu(2861531568) locked {
+  trigger game_started owner_alive {
+    effect add_mark(self, 2861531568, 3);
+  }
+  trigger damage owner_target_fire {
+    effect remove_mark(self, 2861531568, event_amount);
+  }
+}

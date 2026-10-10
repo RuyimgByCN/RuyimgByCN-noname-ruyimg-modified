@@ -1,0 +1,11 @@
+// 闪袭（bingshi 势贺齐 potshanxi）：出牌阶段限一次，你可以将一张「应机牌」（绮胄
+// 标记的手牌）当【决斗】使用（每名角色限一次；回合结束弃置未用的应机牌）。
+// 上游 (bingshi/skill.js potshanxi)：enable phaseUse；viewAs juedou；filterCard =
+// hasGaintag("potshanxi_tag")；precontent 记录 potshanxi_used 目标去重；subSkill tag
+// 于 phaseEnd 弃置全部带标手牌。
+// INTENTIONAL_EMPTY_NOOP: 「gaintag 应机牌标记」机制族缺口（展示/明置族，批 187
+// 普查第 8 族）——标记注入、按标取牌、目标去重存储均无原语；2026-09-09 上游增量
+// （ad3bc6ca..d6081fd1）新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill potshanxi(2372417115) {
+  modifier hand_limit add 0;
+}

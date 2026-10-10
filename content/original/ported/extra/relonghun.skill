@@ -1,0 +1,10 @@
+// 龙魂（神赵云）
+// 旧 JS 仅作语义参考；运行时只加载本声明编译出的确定性规则。
+skill relonghun(2722411221) {
+  view_as sha play_phase diamond from hand_equip up_to 2 same_suit nature fire multi_card_bonus damage_1;
+  view_as sha response diamond from hand_equip up_to 2 same_suit nature fire multi_card_bonus damage_1;
+  view_as tao play_phase heart from hand_equip up_to 2 same_suit multi_card_bonus recover_1;
+  view_as tao response heart from hand_equip up_to 2 same_suit multi_card_bonus recover_1;
+  view_as shan response club from hand_equip up_to 2 same_suit multi_card_bonus discard_current_hand_equip;
+  view_as wuxie response spade from hand_equip up_to 2 same_suit multi_card_bonus discard_current_hand_equip;
+}

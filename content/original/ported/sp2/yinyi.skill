@@ -1,0 +1,17 @@
+// 隐翼（sp2）：锁定技，每回合限一次，当你受到伤害时，若来源体力值与你不同且
+// 其手牌数与你不同，防止此伤害。
+// 上游 (sp2/skill.js yinyi)：trigger player damageBegin1 forced usable 1；
+// filter = source && source.hp != player.hp && !hasNature("linked") &&
+//          source.countCards("h") != player.countCards("h")；content = trigger.cancel()。
+// 实现（2026-09-03 第一百六十批·新过滤器+既有原语重写，批 159 复核证伪池晋升）：
+// damage_before 触发 + 本批新注册过滤器 owner_targeted_source_hp_hand_differ_
+// once_per_turn（六点注册：catalog 尾追/registry/dispatch eval/turn_limit 名单/
+// typecheck 允许名/lsp；零 ABI——过滤器以字符串入 npack）→
+// prevent_current_damage()（dccibei/dclonggong 同款，无参）。
+// 近似：上游 hasNature("linked") 排除（铁索连环传导伤害不触发）未建模——引擎
+// 无 linked-nature 判定面，登记债；锁定技 forced → 无 optional 确认。
+skill yinyi(3441826579) {
+  trigger damage_before owner_targeted_source_hp_hand_differ_once_per_turn {
+    effect prevent_current_damage();
+  }
+}

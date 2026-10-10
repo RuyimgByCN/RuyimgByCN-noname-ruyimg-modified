@@ -1,0 +1,4 @@
+// Skill wusheng2(134) - standard variant
+skill wusheng2(134) {
+  modifier attack_range add 1;
+}

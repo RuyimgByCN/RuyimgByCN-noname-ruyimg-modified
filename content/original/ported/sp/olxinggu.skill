@@ -1,0 +1,12 @@
+// 行贾（张世平）：游戏开始将至多三张坐骑置于武将牌上；结束阶段可将一张「贾」交给
+// 一名角色并令其使用，你摸一张。
+// 上游 (sp/skill.js:19956)：enterGame 从牌堆取 equip3/4/6 各尽可能 1 张进 expansion；
+// phaseJieshu 选一张交给他人使用后自己摸 1。
+// 实现：开局摸 3 张。
+// 近似：坐骑区与结束阶段交易未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olxinggu(2689779795) {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 3);
+  }
+}

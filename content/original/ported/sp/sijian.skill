@@ -1,0 +1,6 @@
+// 死谏（田丰）：旧 JS 语义重写。失去最后的手牌后，可弃置一名其他角色的一张手牌或装备牌。
+skill sijian(3832046646) {
+  trigger cards_moved owner_from_hand_empty_other_discardable_hand_equip optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

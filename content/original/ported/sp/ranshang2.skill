@@ -1,0 +1,13 @@
+// 燃殇结算子技能
+skill ranshang2(3932018676) locked {
+  trigger phase_end owner_is_target {
+    let burns = mark_count(self, 638947751);
+    if 0 < burns {
+      effect lose_hp(self, burns);
+      if 2 < burns {
+        effect change_max_hp(self, -2);
+        effect draw_cards(self, 2);
+      }
+    }
+  }
+}

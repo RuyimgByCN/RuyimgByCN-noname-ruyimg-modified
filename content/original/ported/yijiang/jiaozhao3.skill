@@ -1,0 +1,6 @@
+// 矫诏3：矫诏的额外主动入口（chooseButton 虚拟卡选择）。
+// 旧 JS 的 chooseButton dialog + 虚拟卡生成无对应原语，暂留空定义。
+skill jiaozhao3(4079597417) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

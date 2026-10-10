@@ -1,0 +1,8 @@
+// 冲阵（理树）：出牌阶段开始时拼点，赢则从不同区域各取一张牌。
+// 旧 JS 的 拼点+多区域选牌 需拼点与区域遍历原语，未建模。
+skill riki_chongzhen(4103807065) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 riki_chongzhen（skill.js:9409）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

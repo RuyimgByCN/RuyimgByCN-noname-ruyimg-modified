@@ -1,0 +1,110 @@
+[
+  {
+    "id": 2227382412,
+    "name_key": "wdb_feishi",
+    "max_hp": 3,
+    "skills": [
+      2978279193,
+      4042669588
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_wdb_feishi.jpg"
+  },
+  {
+    "id": 4082905817,
+    "name_key": "wdb_hanlong",
+    "max_hp": 4,
+    "skills": [
+      2867665051,
+      3777188862
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_wdb_hanlong.jpg"
+  },
+  {
+    "id": 3857174889,
+    "name_key": "wdb_liufu",
+    "max_hp": 3,
+    "skills": [
+      2400116759,
+      2671845513
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_wdb_liufu.jpg"
+  },
+  {
+    "id": 4053361006,
+    "name_key": "wdb_liuyan",
+    "max_hp": 3,
+    "skills": [
+      3304739063,
+      4049779435
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_wdb_liuyan.jpg"
+  },
+  {
+    "id": 3844268588,
+    "name_key": "wdb_liuzan",
+    "max_hp": 4,
+    "skills": [
+      2250380873
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_wdb_liuzan.jpg"
+  },
+  {
+    "id": 3972209824,
+    "name_key": "wdb_tianyu",
+    "max_hp": 4,
+    "skills": [
+      2288694956,
+      2340355119
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_wdb_tianyu.jpg"
+  },
+  {
+    "id": 2196609533,
+    "name_key": "wdb_xizhenxihong",
+    "max_hp": 4,
+    "skills": [
+      3890431595,
+      3563375486
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_wdb_xizhenxihong.jpg"
+  },
+  {
+    "id": 3210186788,
+    "name_key": "wdb_yangyi",
+    "max_hp": 3,
+    "skills": [
+      4166492495,
+      2934618094
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_wdb_yangyi.jpg"
+  },
+  {
+    "id": 2265349363,
+    "name_key": "wdb_zaozhirenjun",
+    "max_hp": 3,
+    "skills": [
+      3473735644,
+      3452664776,
+      2307382183
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_wdb_zaozhirenjun.jpg"
+  }
+]

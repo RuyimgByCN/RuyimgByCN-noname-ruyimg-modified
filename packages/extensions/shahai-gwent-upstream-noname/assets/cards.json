@@ -1,0 +1,30 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/杀海拾遗/card/gwent/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": { "name": "shahai-gwent-upstream-noname", "version": 1, "description": "G1 杀海拾遗·gwent 切片", "card_prefix": "gw_" },
+  "cards": [
+    { "name": "yanziyaoshui", "kind": "yanziyaoshui", "suit": "heart", "rank": 8 },
+    { "name": "yanziyaoshui", "kind": "yanziyaoshui", "suit": "club", "rank": 7 },
+    { "name": "aozuzhilei", "kind": "aozuzhilei", "suit": "spade", "rank": 9 },
+    { "name": "aozuzhilei", "kind": "aozuzhilei", "suit": "club", "rank": 3 },
+    { "name": "wenyi", "kind": "wenyi", "suit": "club", "rank": 5 },
+    { "name": "zhihuanjun", "kind": "zhihuanjun", "suit": "club", "rank": 1 },
+    { "name": "zhihuanjun", "kind": "zhihuanjun", "suit": "spade", "rank": 3 },
+    { "name": "baoxueyaoshui", "kind": "baoxueyaoshui", "suit": "heart", "rank": 4 },
+    { "name": "baoxueyaoshui", "kind": "baoxueyaoshui", "suit": "spade", "rank": 8 },
+    { "name": "qinpendayu", "kind": "qinpendayu", "suit": "diamond", "rank": 5 },
+    { "name": "qinpendayu", "kind": "qinpendayu", "suit": "club", "rank": 7 },
+    { "name": "birinongwu", "kind": "birinongwu", "suit": "spade", "rank": 9 },
+    { "name": "birinongwu", "kind": "birinongwu", "suit": "heart", "rank": 13 },
+    { "name": "ciguhanshuang", "kind": "ciguhanshuang", "suit": "diamond", "rank": 11 },
+    { "name": "ciguhanshuang", "kind": "ciguhanshuang", "suit": "club", "rank": 7 },
+    { "name": "kunenfayin", "kind": "kunenfayin", "suit": "spade", "rank": 11 },
+    { "name": "shanbengshu", "kind": "shanbengshu", "suit": "spade", "rank": 8 },
+    { "name": "poxiao", "kind": "poxiao", "suit": "heart", "rank": 7 },
+    { "name": "poxiao", "kind": "poxiao", "suit": "diamond", "rank": 4 },
+    { "name": "zumoshoukao", "kind": "zumoshoukao", "suit": "spade", "rank": 2 },
+    { "name": "zumoshoukao", "kind": "zumoshoukao", "suit": "club", "rank": 5 }
+  ],
+  "deferred": []
+}

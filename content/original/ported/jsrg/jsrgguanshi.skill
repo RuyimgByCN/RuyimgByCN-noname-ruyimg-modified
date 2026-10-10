@@ -1,0 +1,5 @@
+// jsrgguanshi（观势）：出牌阶段限一次，你可以将【杀】当作【火攻】对任意名角色使用。当此【火攻】对一名目标角色结算结束后，若未对其造成伤害，则此牌对其余目标角色改为以【决斗】的形式结算。
+// 未建模：全局状态, addTempSkill, charlotte延迟, storage状态, 存活计数（DSL无对应原语）
+skill jsrgguanshi(3968928981) {
+  view_as huogong play_phase any uses_per_turn 1;
+}

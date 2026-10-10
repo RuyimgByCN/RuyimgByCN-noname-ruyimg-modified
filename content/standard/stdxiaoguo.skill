@@ -1,0 +1,6 @@
+// 骁果：其他角色结束阶段，可弃基本牌，令其弃装备牌，否则受到 1 点伤害。
+skill stdxiaoguo(3757481350) {
+  trigger phase_end owner_alive_other_phase_end_has_discardable_basic_hand {
+    effect choose_discard_basic_then_target_discard_equip_or_damage(self, event_player);
+  }
+}

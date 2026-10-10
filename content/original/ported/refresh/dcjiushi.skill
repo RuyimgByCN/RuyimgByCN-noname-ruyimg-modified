@@ -1,0 +1,8 @@
+// dcjiushi（OL界黄忠·酒诗）：使用【酒】后本回合【杀】使用次数+1。子技能含翻面状态出【酒】、受伤翻面等。
+// 旧JS含三子技能（use/damage/sha）+标记驱动【杀】次数，DSL无翻面/标记联动子技能原语，仅保留使用【酒】后增益核心。
+skill dcjiushi(4264500868) {
+    trigger card_used owner_source_jiu {
+        effect add_mark(self, 4264500868, 1);
+    }
+    modifier sha_use_limit add owner_skill_mark;
+}

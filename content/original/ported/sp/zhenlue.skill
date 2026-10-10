@@ -1,0 +1,4 @@
+skill zhenlue(3469981264) locked {
+  modifier card_use_unrespondable(ordinary_trick) override 1;
+  modifier card_target_cancel(delayed_trick) override 1;
+}

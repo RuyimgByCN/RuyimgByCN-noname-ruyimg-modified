@@ -1,0 +1,6 @@
+// “淘乱”未交给目标牌时获得的临时惩罚子技能。
+skill junktaoluan3(3391710812) locked {
+  trigger phase_end owner_is_target {
+    effect lose_hp(self, 1);
+  }
+}

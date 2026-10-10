@@ -1,0 +1,9 @@
+// 蚕食（卑弥呼）：当使用基本/锦囊牌指定唯一目标且场上有纵傀标记角色可成为额外目标时，
+// 可增加/移除纵傀标记角色为额外目标。
+// 旧 JS 含 useCard 与 useCardToTarget 双触发、chooseTarget 多选、标记增删等复杂交互。
+// DSL 无 choose_target_for_card 类原语。
+skill bmcanshi(2970848102) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 bmcanshi 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

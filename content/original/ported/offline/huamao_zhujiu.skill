@@ -1,0 +1,5 @@
+// huamao_zhujiu：主动(chooseToUse), 视作jiu。
+skill huamao_zhujiu(4140782733) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,9 @@
+// 负背（sxrm 贾诩）：出牌阶段限一次，你可以摸牌至你的体力上限；然后若你的手牌数
+// 不小于二，选择两张手牌置于牌堆顶（旧 JS 可选择插入位置，以置顶近似）。
+// 旧 JS 仅作语义证据；摸至体力上限由 adjust_hand_to 表达（至多摸至，不弃置多余）；
+// 置顶部分需位置选择原语，未移植（文档化近似）。
+skill sxrmfubei(3539390004) {
+  active play_phase uses_per_turn 1 {
+    effect adjust_hand_to(self, max_hp(self));
+  }
+}

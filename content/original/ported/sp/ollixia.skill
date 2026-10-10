@@ -1,0 +1,23 @@
+// 礼下·OL（ollixia，dc士燮）：一名其他角色的结束阶段开始时，若其不在你的攻击范围内，
+// 令你或该角色摸牌（自己摸 1 或对方摸 2），且你获得 1 层「避乱」负距离标记。
+// 上游 (sp/skill.js:40331)：trigger global phaseJieshuBegin，forced；filter = 事件角色存活、
+// 非自己、且不在其攻击范围内；content = chooseTarget(self 或 source) → 选自己摸 1 否则
+// 对方摸 2 → addSkill(rebiluan2) + storage.rebiluan2--。
+// 实现：phase_end + owner_alive_other_phase_end_player_outside_owner_range（新增过滤器：
+// 其他角色结束阶段、该角色不在拥有者攻击范围内）→ 可选触发（近似 forced，由 AI/玩家确认）
+// → choose(1, 2)：1 = draw_cards(self, 1)，2 = draw_cards(event_player, 2)
+// → add_skill_by_name(self, rebiluan2) → add_mark(self, 3075740841, -1)。
+// 与上游差异：上游「目标选择」二选一以 choose 数值分支近似；rebiluan2 标记 -1 减距离。
+skill ollixia(3877304106) {
+  trigger phase_end owner_alive_other_phase_end_player_outside_owner_range optional {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect draw_cards(self, 1);
+    }
+    if option == 2 {
+      effect draw_cards(event_player, 2);
+    }
+    effect add_skill_by_name(self, rebiluan2);
+    effect add_mark(self, 3075740841, -1);
+  }
+}

@@ -1,0 +1,5 @@
+// 雄侠：可将两张牌当【决斗】使用。若此决斗对所有目标均造成了伤害，此技能本回合失效。
+// view_as 部分可建模；「所有目标均受伤后禁用技能」无可用的条件触发原语。
+skill stdxiongxia(3622573583) {
+  view_as juedou play_phase any from hand_equip up_to 2;
+}

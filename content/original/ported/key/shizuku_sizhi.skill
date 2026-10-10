@@ -1,0 +1,7 @@
+// 丝织（滴）：出牌阶段弃置任意张牌，弃牌点数之和等于13时，获得这些牌并声明一种花色，本回合使用同花色牌无距无次。
+// 旧 JS 的 点数求和+花色声明+gaintag modifier 需点数计算与花色原语，未建模。
+skill shizuku_sizhi(3437097254) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shizuku_sizhi 含真实规则体（enable、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

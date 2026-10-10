@@ -1,0 +1,5 @@
+// zj_zhongjue：global:phaseBefore, player:game_started, 需选择目标, 加技能, 含子技能, 异步。
+skill zj_zhongjue(2725804284) {
+  trigger game_started owner_alive optional {
+  }
+}

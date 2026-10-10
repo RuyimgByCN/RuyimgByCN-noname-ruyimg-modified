@@ -1,0 +1,14 @@
+// 武魂（新杀神关羽）：伤害双方中的另一方按伤害点数获得梦魇；死亡时令梦魇最多者判定。
+skill dcwuhun(4234333270) locked {
+  trigger damage owner_is_source_or_target_other_alive_per_damage_point {
+    if event_source == self {
+      effect add_mark(event_player, 3698112918, 1);
+    } else {
+      effect add_mark(event_source, 3698112918, 1);
+    }
+  }
+
+  trigger death owner_is_target {
+    effect choose_max_mark_other_judge_kill_unless_tao_or_taoyuan(self, 3698112918);
+  }
+}

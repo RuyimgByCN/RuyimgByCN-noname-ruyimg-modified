@@ -1,0 +1,7 @@
+// 佐定3（状态追踪）：全局有角色造成伤害后，令佐定技能拥有者获得"佐定2"临时技能。
+// 旧JS为silent trigger，addTempSkill("zuoding2")。DSL以add_skill_until_turn_end近似。
+skill zuoding3(2390079209) locked {
+    trigger damage owner_alive {
+        effect add_skill_until_turn_end(self, 3230057064);
+    }
+}

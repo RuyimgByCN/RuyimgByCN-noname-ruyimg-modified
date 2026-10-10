@@ -1,0 +1,7 @@
+// dcxiongyi：觉醒技；限定技；回复1体力。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcxiongyi(2273359457) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

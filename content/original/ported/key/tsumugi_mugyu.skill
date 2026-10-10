@@ -1,0 +1,6 @@
+// 姆啾：成为牌的目标且手牌数小于体力上限时，可以摸一张牌。
+skill tsumugi_mugyu(3191570097) {
+  trigger card_used owner_targeted_hand_below_max_hp optional {
+    effect draw_cards(self, 1);
+  }
+}

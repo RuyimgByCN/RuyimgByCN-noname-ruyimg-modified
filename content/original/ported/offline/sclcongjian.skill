@@ -1,0 +1,22 @@
+// 从谏（王战张绣）：锁定技。你于回合外造成伤害，或于回合内受到伤害时，此伤害+1。
+// 上游 (v1.11.6 增量 7ed3facb..ad3bc6ca, offline_scl.js sclcongjian)：
+// damageBegin1（source 且 _status.currentPhase != player）num++；
+// damageBegin3（player 且 _status.currentPhase == player）num++。
+// 实现（2026-09-03 第一百四十七批·零新原语真实语义重写）：
+// damage_before 双臂（owner_is_target / owner_source）+ current_phase_player() 比较
+// + modify_current_damage(self, 1)（ABI 562，damage_before 窗口修改当前伤害量）。
+// DSL 无不等算符，回合外臂以空 then + else 反转表达（rezishou 惯例）。
+// 完整建模，无残差。
+skill sclcongjian(2538416032) {
+  trigger damage_before owner_is_target {
+    if current_phase_player() == self {
+      effect modify_current_damage(self, 1);
+    }
+  }
+  trigger damage_before owner_source {
+    if current_phase_player() == self {
+    } else {
+      effect modify_current_damage(self, 1);
+    }
+  }
+}

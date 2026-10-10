@@ -1,0 +1,14 @@
+// 破降（绝勇伴侣技）：出牌阶段限一次，将一张牌交给一名其他角色，摸三张牌
+// （不计入本回合手牌上限），移去所有「绝」，然后失去 1 点体力。
+// 实现：active → choose_other_give_one_hand_equip + draw_cards(3) + lose_hp(1)
+// （clanyunshen 同款主动技混排效果模式）。
+// 近似：所交之牌由原语流程选定（上游自选）；「摸三张不计入手牌上限」未建模；
+// 「移去所有绝标记」未建模；需有牌才能发动由原语无牌静默保证。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill poxiang(3023488106) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_give_one_hand_equip(self);
+    effect draw_cards(self, 3);
+    effect lose_hp(self, 1);
+  }
+}

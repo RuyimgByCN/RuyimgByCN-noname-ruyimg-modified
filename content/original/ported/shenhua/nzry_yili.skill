@@ -1,0 +1,14 @@
+// 遗礼（陆绩）：出牌阶段限一次，移去一枚「橘」或失去 1 点体力，然后令一名其他角色获得一枚「橘」。
+// 旧 JS 仅作语义证据；「橘」标记的移去/获得与失去体力分支由权威状态机校验。
+skill nzry_yili(4055632991) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    let pick = choose(0, 1);
+    if pick == 0 {
+      effect lose_hp(self, 1);
+    }
+    if pick == 1 {
+      effect remove_mark(self, 2906906473, 1);
+    }
+    effect add_mark(event_source, 2906906473, 1);
+  }
+}

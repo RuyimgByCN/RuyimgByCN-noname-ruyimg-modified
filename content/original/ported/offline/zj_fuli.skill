@@ -1,0 +1,19 @@
+// zj_fuli（极乐·界扶利）：限定技，你濒死时可发动：回复至 2 点体力、摸两张牌，
+// 并执行一个仅有出牌阶段的额外回合。上游 offline_juedai.js zj_fuli（enable
+// chooseToUse dying + recoverTo(2) + draw(2) + insertPhase 且 phaseList=[play]）。
+// 实现（第九十八批·§6 S0/S1 首个消费者）：
+// `trigger dying owner_is_target optional`（limited 以 storage key1 锁一次性）→
+// recover_hp(self, 2 - hp(self))（表达式差值，引擎负数钳位）→ draw_cards(2) →
+// queue_extra_phases(self, 8, self_skill)（bit3=Play，phaseList=["phaseUse"]）。
+// 近似：①濒死 enable 门以 dying 触发器自律表达；②上游 limited/awaken 以 storage
+// 一次性近似。
+skill zj_fuli(2494001087) {
+  trigger dying owner_is_target optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect recover_hp(self, 2 - hp(self));
+      effect draw_cards(self, 2);
+      effect queue_extra_phases(self, 8, self_skill);
+    }
+  }
+}

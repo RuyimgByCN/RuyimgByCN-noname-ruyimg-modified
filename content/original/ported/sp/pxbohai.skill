@@ -1,0 +1,12 @@
+// 渤海（pxbohai，州郡技能）：当你获得此技能后，你可以弃置一张武器牌，然后摸两张牌。
+// 上游 (sp/skill.js:1306)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且有武器；content = chooseToDiscard(equip1) → draw(2)。
+// 实现：skill_added + owner_skill_added_self_2568108187 → 可选确认 →
+// discard_hand_equip_count(self, 1) + draw_cards(self, 2)。
+// 与上游差异：「必须弃武器」约束未建模（弃任意手牌/装备）；以弃 1 摸 2 近似。
+skill pxbohai(2568108187) {
+  trigger skill_added owner_skill_added_self_2568108187 optional {
+    effect discard_hand_equip_count(self, 1);
+    effect draw_cards(self, 2);
+  }
+}

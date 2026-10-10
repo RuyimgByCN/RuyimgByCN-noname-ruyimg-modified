@@ -1,0 +1,8 @@
+// 勘律（勘律荀勖 / old:yj_y_xunxu）
+// 上游：受到伤害后，可亮出牌堆顶四张牌与手牌；依次将四花色各一张交给其他角色，其余自取。
+// 四花色展示/交付原语未齐：以受伤后可选摸 1 近似保留收益，便于角色闭包可加载。
+skill kanlv(2212101609) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,10 @@
+// 荡疆（幻孙策派生）：转换技，阳：非伤害牌当【无中生有】；阴：非伤害牌当无距离【杀】。
+// 若以此法指定未受伤角色，你摸一张。
+// 上游 (tw/skill.js:730)：zhuanhuanji chooseToUse，filterCard 非伤害牌；并非 audio-only。
+// 实现：同时提供手牌/装备转无中生有与无视距离杀（与扫庭同一近似）。
+// 近似：阴阳切换未建模；不限非伤害牌；指定未受伤摸牌未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill twdangjiang(2498780514) {
+  view_as wuzhong play_phase any from hand_equip;
+  view_as sha play_phase any from hand_equip ignore_distance;
+}

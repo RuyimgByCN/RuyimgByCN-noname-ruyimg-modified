@@ -1,0 +1,10 @@
+// 神速·四（夏侯渊）：弃牌阶段开始时，可跳过弃牌阶段并将武将牌翻面，视为对攻击
+// 范围内一名其他角色使用一张【杀】。
+// 旧 JS 仅作语义证据；翻面、阶段跳过与虚拟【杀】由权威状态机校验。
+skill shensu4(4133384668) {
+  trigger phase_discard owner_is_target optional {
+    effect turn_over(self);
+    effect skip_current_phase(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

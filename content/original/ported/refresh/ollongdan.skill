@@ -1,0 +1,7 @@
+// 龙胆：旧 JS 的 hs 只允许手牌与扩展牌，不含装备区。
+skill ollongdan(2506574121) {
+  view_as shan response card_sha from hand_expansion;
+  view_as sha any card_shan from hand_expansion;
+  view_as jiu any card_tao from hand_expansion;
+  view_as tao any card_jiu from hand_expansion;
+}

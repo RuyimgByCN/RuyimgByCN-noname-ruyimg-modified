@@ -1,0 +1,10 @@
+// 狂斧：每个独立出牌阶段限一次；杀伤害结算后按双方当前体力分支。
+skill stdkuangfu(4213747779) locked {
+  trigger damage owner_source_play_sha_other_alive_once_per_play_phase {
+    if hp(event_player) < hp(self) {
+      effect draw_cards(self, 2);
+    } else {
+      effect lose_hp(self, 1);
+    }
+  }
+}

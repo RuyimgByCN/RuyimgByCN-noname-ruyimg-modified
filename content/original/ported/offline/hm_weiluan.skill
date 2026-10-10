@@ -1,0 +1,5 @@
+// hm_weiluan：锁定技, player:phase_prepare, player:phaseDrawBegin2, player:phase_play, 加技能, 含子技能, 异步。
+skill hm_weiluan(3064357516) locked {
+  trigger phase_prepare always {
+  }
+}

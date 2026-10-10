@@ -1,0 +1,22 @@
+[package]
+name = "content-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Content package install store: atomic upgrade, rollback, revoke, lock (Phase 10)"
+
+[dependencies]
+content-schema = { path = "../content-schema" }
+resource-schema = { workspace = true }
+engine-api = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+blake3 = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3"
+content-schema = { path = "../content-schema" }
+rule-vm = { path = "../rule-vm" }
+resource-schema = { workspace = true }
+blake3 = { workspace = true }

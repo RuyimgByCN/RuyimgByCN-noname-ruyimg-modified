@@ -1,0 +1,11 @@
+// 界品第：目标与牌类按当前出牌阶段去重；次数仍按本回合累计。
+skill repindi(3416188911) {
+  active play_phase
+    targets 1 1 unused_by_skill_this_play_phase
+    select_he 1 1 unused_category_by_skill_this_play_phase {
+    effect discard_selected_record_unique_category_target(self, event_source);
+    effect choose_target_draw_or_discard_by_skill_use_count_toggle_link_if_wounded(
+      self, event_source
+    );
+  }
+}

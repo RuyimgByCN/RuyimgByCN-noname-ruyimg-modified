@@ -1,0 +1,9 @@
+// rw_lanyinjia（精银甲）：你可以将一张手牌当做【闪】使用或打出。锁定技，【精银甲】不会无效。
+// 实现：`view_as shan any any from hand`（上游 lanyinjia equipSkill：
+// enable chooseToUse+chooseToRespond、filterCard 任意手牌 viewAs shan）。
+// 近似：lanyinjia2「受杀伤弃置此甲」与「不会无效」锁由装备卡侧承担，技能块不迁移。
+// 修正：原「保真度债」注记经 2026-08-22 复核解冻——view_as 现成模板可表达。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill rw_lanyinjia(2437994609) {
+  view_as shan any any from hand;
+}

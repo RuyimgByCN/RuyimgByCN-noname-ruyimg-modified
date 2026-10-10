@@ -1,0 +1,5 @@
+// psguanxing：音效名:guanxing, player:phase_prepare, 加技能, 异步。
+skill psguanxing(3608450710) {
+  trigger phase_prepare owner_alive {
+  }
+}

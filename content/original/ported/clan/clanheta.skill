@@ -1,0 +1,8 @@
+// 壑拓（族荀谌）：出牌阶段开始，若未横置，横置自己并获得临时技能：使用第一张非装备/延时/多目标牌时，可增减目标（增减之前使用过的目标）。
+// 旧 JS 的「横置+临时技能」「动态增减牌目标」「使用历史追踪」无对应原语。
+// 空定义：需 expansion 支持 link、动态目标修改、使用历史查询。
+skill clanheta(3492628830) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

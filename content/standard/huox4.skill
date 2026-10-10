@@ -1,0 +1,4 @@
+// Skill huox4(162) - modifier distance variant
+skill huox4(162) {
+  modifier distance_from add -1;
+}

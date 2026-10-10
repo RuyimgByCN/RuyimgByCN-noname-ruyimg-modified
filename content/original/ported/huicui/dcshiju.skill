@@ -1,0 +1,5 @@
+// dcshiju：获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcshiju(3592804477) {
+  modifier hand_limit add 1;
+}

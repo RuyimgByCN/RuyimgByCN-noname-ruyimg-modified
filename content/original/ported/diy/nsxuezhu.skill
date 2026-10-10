@@ -1,0 +1,7 @@
+// 恤助：旧 JS 语义重写；造成或受到伤害后，可令受伤角色摸两张牌并翻面。
+skill nsxuezhu(2233994945) {
+  trigger damage owner_is_source_or_target optional {
+    effect draw_cards(event_player, 2);
+    effect turn_over(event_player);
+  }
+}

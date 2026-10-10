@@ -1,0 +1,7 @@
+// 拒战（严颜转换技）：受杀各摸一/用杀获牌。
+// 旧 JS 的「转换技状态」无对应原语；以使用【杀】后摸一张近似（已注明）。
+skill nzry_juzhan(2407446413) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

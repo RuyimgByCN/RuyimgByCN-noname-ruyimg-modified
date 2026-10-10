@@ -1,0 +1,12 @@
+// 荆扬黄盖：出牌阶段限一次，减一点体力上限，本回合使用的牌均不可响应。
+skill jyzhaxiang(2988024345) {
+  active play_phase uses_per_turn 1 {
+    effect change_max_hp(self, -1);
+    effect add_skill_until_turn_end(self, 3250673088);
+  }
+}
+
+skill jyzhaxiang_effect(3250673088) locked {
+  modifier sha_unrespondable(any) override 1;
+  modifier card_use_unrespondable(any) override 1;
+}

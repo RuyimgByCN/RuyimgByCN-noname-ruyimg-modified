@@ -1,0 +1,7 @@
+// jxzhaoluan（锁定技/限定技/主动技(phaseUse)/触发技）：音效名:jxzhaoluan, 觉醒技, 限定技, global:dieBegin, 主动(phaseUse), 需选择目标, 摸牌, 回复体力, 造成伤害, 加技能, 含子技能, 异步。
+skill jxzhaoluan(3514639593) locked {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

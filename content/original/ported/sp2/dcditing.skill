@@ -1,0 +1,9 @@
+// 谛听（董翓）：其他角色出牌阶段开始时，观看其至多X张手牌(X=你的体力值)并选择一张；
+// 若其使用此牌，你免做目标/摸2牌；出牌阶段结束若还在手你获得之。
+// 旧 JS 含 chooseButton 观看手牌 + storage 记忆 + addTempSkill 多子技能追踪 useCard/phaseUseEnd。
+// DSL 无观察手牌/记忆特定牌/多阶段追踪的原语组合。
+skill dcditing(2370952836) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcditing 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

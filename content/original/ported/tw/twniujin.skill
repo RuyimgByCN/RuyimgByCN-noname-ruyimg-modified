@@ -1,0 +1,12 @@
+// 挫锐/裂围：限定补牌并废除判定区；击杀后摸牌或重置挫锐。
+skill twcuorui(3369253433) {
+trigger phase_prepare owner_is_target_other_higher_hand_once_per_game {
+    effect resolve_twniujin(self, 3369253433, 0);
+  }
+}
+
+skill twliewei(2387969096) locked {
+  trigger death owner_is_source {
+    effect resolve_twniujin(self, 3369253433, 1);
+  }
+}

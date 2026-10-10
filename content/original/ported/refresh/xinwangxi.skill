@@ -1,0 +1,5 @@
+skill xinwangxi(4161732730) {
+  trigger damage owner_is_source_or_target_other_alive_per_damage_point optional {
+    effect draw_then_give_one(self, event_player + event_source - self, 2, any_hand_equip);
+  }
+}

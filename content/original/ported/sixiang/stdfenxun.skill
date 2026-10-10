@@ -1,0 +1,14 @@
+// Rewritten from legacy `stdfenxun`; old JavaScript is semantic reference only.
+skill stdfenxun(2579637455) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_he 1 1 card_armor {
+    effect discard_selected(self);
+    effect add_bound_skill(self, 3372226216, event_source);
+  }
+}
+
+skill stdfenxun_effect(3372226216) {
+  modifier card_distance_unlimited_for_skill_bound_target add 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

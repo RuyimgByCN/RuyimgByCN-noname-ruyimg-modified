@@ -1,0 +1,5 @@
+// 毅重（锁定技）：若你的防具栏为空，黑色【杀】不能指定你为目标。
+// 旧 JS 仅作语义证据；以 card_target_cancel 条件修饰符表达（ABI 557 既有原语）。
+skill yizhong(2156296205) locked {
+  modifier card_target_cancel(sha_black) override owner_armor_empty;
+}

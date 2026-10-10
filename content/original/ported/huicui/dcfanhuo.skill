@@ -1,0 +1,7 @@
+// 泛祸（新杀费祎）：限定技，本回合「兴邦」改为限三次，回合结束失去 3 点体力。
+// 近似：限定发动后立即失去 3 点体力；兴邦次数提升与回合末延后失体未建模。
+skill dcfanhuo(2598339084) {
+  active play_phase once_per_game {
+    effect lose_hp(self, 3);
+  }
+}

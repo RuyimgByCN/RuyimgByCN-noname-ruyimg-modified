@@ -1,0 +1,11 @@
+$ 定向：公孙瓒义从（2026-10-07 第三批）
+test gongsunzan_assembly_yicong_distance ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 183 filtered out; finished in 0.00s
+
+$ a0（技能编号 54 义从）
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+$ 全量 + golden + lib -D warnings
+合计 passed=367 failed=0 ignored=1
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s

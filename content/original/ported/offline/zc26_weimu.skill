@@ -1,0 +1,7 @@
+// zc26_weimu（锁定技/主动技(chooseToUse)/转化技(视作jiedao)/触发技）：锁定技, target:useCardToTarget, player:addJudgeBefore, 主动(chooseToUse), 视作jiedao, 含子技能, 异步。
+skill zc26_weimu(3205641272) locked {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

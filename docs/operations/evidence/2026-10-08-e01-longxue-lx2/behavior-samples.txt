@@ -1,0 +1,7 @@
+call lib.version.includes() <benign stub>
+call lib.changeLog.some() <benign stub>
+set lib.skill.mbqianlong <obj {audio,derivation,trigger,priority,forced,locked,forever,init,…}>
+call lib.version.includes() <benign stub>
+call lib.changeLog.some() <benign stub>
+set lib.skill._CMeffects <obj {trigger,forced,charlotte,content}>
+set lib.skill.mbqianlong <obj {audio,derivation,trigger,priority,forced,locked,forever,init,…}>

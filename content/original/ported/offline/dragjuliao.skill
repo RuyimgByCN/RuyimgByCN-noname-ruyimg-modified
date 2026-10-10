@@ -1,0 +1,5 @@
+// dragjuliao：锁定技, player:loseHpBegin, global:card_targeted, 二选一, 异步。
+skill dragjuliao(3208429361) {
+  trigger hp_lost owner_alive {
+  }
+}

@@ -1,0 +1,8 @@
+// 藏拙生效至本回合结束的临时效果（由 cangzhuo 在弃牌阶段开始时授予）。
+// 原语义对应旧 cangzhuo2 的两个 mod：
+//   ignoredHandcard(card) —— 锦囊牌不计入手牌上限；
+//   cardDiscardable(name=="phaseDiscard") —— 弃牌阶段不能弃置锦囊牌。
+skill cangzhuo2(3573995787) {
+  modifier card_ignored_hand_limit(trick) override 1;
+  modifier card_discard_protected(trick) override 1;
+}

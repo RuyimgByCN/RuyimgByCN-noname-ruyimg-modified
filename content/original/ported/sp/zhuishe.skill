@@ -1,0 +1,5 @@
+// 追摄（蔡阳）
+// 原语义：使用【杀】的次数上限 +1。
+skill zhuishe(2536634542) locked {
+  modifier sha_use_limit add 1;
+}

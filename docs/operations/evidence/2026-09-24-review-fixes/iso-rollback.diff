@@ -1,0 +1,129 @@
+--- crates/engine-native/src/content/standard.rs	2026-09-24 14:09:26
++++ <iso>/src/content/standard.rs	2026-09-24 19:28:29
+@@ -119,7 +119,7 @@
+ /// 随机改牌堆序首张）。
+ /// v60：gwent 收官——祖墨手铠（封印：目标技能全部失效至其任意阶段
+ /// 结束；登记差异：原生无锁定技区分，全部技能失效）。
+-pub const STANDARD_RULESET_VERSION: u64 = 60;
++pub const STANDARD_RULESET_VERSION: u64 = 59;
+ 
+ // ---------------------------------------------------------------------------
+ // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
+@@ -3010,7 +3010,6 @@
+     }
+     for _ in 0..2 {
+         cards.push(CardDef::basic("dismantle", CardKind::Dismantle));
+-    }
+     for _ in 0..4 {
+         cards.push(CardDef::basic("snatch", CardKind::Snatch));
+     }
+@@ -3020,6 +3019,7 @@
+     cards.push(CardDef::basic("jiu", CardKind::Jiu).with_suit_rank(Suit::Club, 9));
+     cards.push(CardDef::basic("leisha", CardKind::LeiSha).with_suit_rank(Suit::Spade, 4));
+     cards.push(CardDef::basic("leisha", CardKind::LeiSha).with_suit_rank(Suit::Club, 5));
++    }
+     cards.push(CardDef::weapon("weapon2", 2));
+     cards.push(CardDef::weapon("weapon2b", 2));
+     cards.push(CardDef::weapon("weapon3", 3));
+--- crates/engine-native/tests/replay_scenarios.rs	2026-09-24 14:14:06
++++ <iso>/tests/replay_scenarios.rs	2026-09-24 19:28:33
+@@ -452,85 +452,85 @@
+         "sha_dodge_then_damage",
+         scenario_sha_dodge_then_damage,
+         &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
+-        "70047618df51430933d7da6a1cc483feeb211a8c87e60a0200dd94caf46d4750",
++        "a6f61e3ebe8bd5d771b33038b278e2e70b10c9083b5d5f86d47ddd343165da45",
+     ),
+     (
+         "death_terminal_single",
+         scenario_death_terminal_single,
+         &["dying", "death", "victory"],
+-        "a5261bfa44b48ddc7ff9497c8598630e74761a639ce7017a0f61727b257016d2",
++        "1f3212c829a0c1dc30d57ee3b10ffdfd6a60044e5d861ec28490da6df1cc3247",
+     ),
+     (
+         "sancai_nested_chain",
+         scenario_sancai_nested_chain,
+         &["optional_trigger", "nested_choice", "draw", "give_cards"],
+-        "bd797c707b910fd63d5bf96edc00c7874ccad261da27fc3b4fb92acb066cf822",
++        "925bf38ef2616a5a1d17f2adb09674f7265db9fb3420bd64e55d72761517b52b",
+     ),
+     (
+         "yishang_redirect",
+         scenario_yishang_redirect,
+         &["damage_before_window", "payload_rewrite_redirect"],
+-        "f5592998e03f6475dc109a9581ab56f38e5169c3fd2083ef02ba155a2af53eb2",
++        "8d7df18900fb774590bc47e1c6e8f77deece212fcdb77b6388a49eccde4b1789",
+     ),
+     (
+         "suidun_window_matrix",
+         scenario_suidun_window_matrix,
+         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
+-        "d5a70bfa8d475af351abbbb7f3b728221406a60d4359871457ffd2576f931a9c",
++        "5547ac325199c4cacb1354e50bb47b82a0d474719127ce1ed6aafecd18aa91be",
+     ),
+     (
+         "shouyi_dynamic_skill",
+         scenario_shouyi_dynamic_skill,
+         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
+-        "1a28a100386d0f90a0210591e3acca1cb5f205f4eb3adf1e2efb0d23bebd9001",
++        "77d644e73d94e4be4bcca526fc94c6df64364c9d57ab2c765546c017a9057909",
+     ),
+     (
+         "discard_to_limit",
+         scenario_discard_to_limit,
+         &["hand_limit", "intrinsic_machine"],
+-        "868a934f1aa8002dee41c224ed504777ccbb3286097f9a55a4b0712e12f599e4",
++        "58d64ad8ee3908dc60d4a5b9ecb3507fcc554d5ae9fd1bfeea21effe355771ab",
+     ),
+     (
+         "rollback_invariants",
+         scenario_rollback_invariants,
+         &["reject_rollback", "budget_rollback"],
+-        "ad4e304a6c088d689ea4c6595c683bbd2bdb5919231ace5d902fb29416081c78",
++        "a0f30e695442fda6b5a4e4bf7cb922ec2b2f790320556ad425071c63eb01f8ae",
+     ),
+     (
+         "equip_distance_matrix",
+         scenario_equip_distance_matrix,
+         &["equip_slots", "distance_modifier", "attack_range", "equip_replace"],
+-        "452604d431a400a5d3e3d464bd9400154c07caf6511552e3f50a240b1aa6f329",
++        "4326a1f20bf0177d2aa9d7b7fdc53b61b48ea99edae316f5e817a6a5405a67a3",
+     ),
+     (
+         "chain_fire_propagation",
+         scenario_chain_fire_propagation,
+         &["chain_state", "damage_nature", "chain_propagation"],
+-        "24c6e1f7c6bb3c743cb0e2291e72fecc8367fb245718956d4bd3bbf22d938954",
++        "633c51fbde630fc395207c61d037f4a09fb5d8554fb02bfd511b4b696f6dd953",
+     ),
+     (
+         "aoe_response_queue",
+         scenario_aoe_response_queue,
+         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
+-        "fa5035a70705265135e0d67568a29ba07a7b8fdc0579a82c1af2664ef00342ab",
++        "48e21474ae37149a58e1c03204560ef7b69d5791368fae7c78573f4b468037b0",
+     ),
+     (
+         "duel_alternating_response",
+         scenario_duel_alternating_response,
+         &["duel_alternating", "duel_no_distance_limit"],
+-        "fa5b19d4ca09a57c49e573e2a3a8ca02c402971a0c6155be19a8180a645e23ef",
++        "365adf8e008526e9b6d23ac0498ad58d1acd08d64bf8df9ac3923cd78b0ae4bb",
+     ),
+     (
+         "nullify_chain_on_savage",
+         scenario_nullify_chain_on_savage,
+         &["nullify_window", "nullify_chain", "nullify_scope"],
+-        "7aae20a56442627b8e77000d78d7ed652f05c75d177de7e6adbbd9c4baa44381",
++        "af8b6f199045f2d11cc019cbccc9077e834f6111ff342bdd4dad493c710e6dbc",
+     ),
+     (
+         "judge_phase_delayed_tricks",
+         scenario_judge_phase_delayed_tricks,
+         &["judge_zone", "delayed_trick", "phase_skip"],
+-        "5fd111380b67407fe819f9363cd44d3f28c7ee79a5a59bfd30f7fd78c1a2ecac",
++        "ee52de3b4ab9d4d376c8a008a99c21fc8d91295051e624cc823bfd19a3669033",
+     ),
+ ];
+ 

@@ -1,0 +1,8 @@
+// jsrgfenjian（奋剑）：每回合各限一次。当你需要对其他角色使用【决斗】或【桃】时，你可以令你本回合受到的伤害+1，视为使用之。
+// 未建模：chooseButton, 翻译调用, hiddenCard, 全局状态, addTempSkill, 标记计数 ...等10项（DSL无对应原语）
+skill jsrgfenjian(4174514326) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgfenjian（skill.js:5638）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

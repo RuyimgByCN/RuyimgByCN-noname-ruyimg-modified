@@ -1,0 +1,7 @@
+// 陷嗣（视为杀）：弃置一名有【逆】角色的两张"逆"，视为对其使用【杀】。
+// 旧 JS 依赖 xiansi expansion 牌堆和复杂的 viewAs 逻辑；DSL 无 expansion 操作 + 条件 viewAs 原语。
+// 完全无法精确表达，给空定义。
+skill xiansi2(4013817325) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

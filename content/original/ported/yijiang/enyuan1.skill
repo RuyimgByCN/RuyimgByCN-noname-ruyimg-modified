@@ -1,0 +1,7 @@
+// 恩怨1（法正）：受到伤害后，伤害来源须交给你一张红桃手牌或失去1点体力。
+// 旧 JS 的「选择交红桃牌/失去体力」二分叉+花色限定无对应原语，暂留空定义。
+skill enyuan1(3795203814) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

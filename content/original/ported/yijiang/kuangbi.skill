@@ -1,0 +1,13 @@
+// 匡弼（管宁）：出牌阶段限一次，选一名有牌的其他角色，其将至多三张牌置于你的武将牌上。
+// 准备阶段获得这些牌，并令原主人摸等量牌。
+// 旧 JS 双步骤+存储数组（记录来源和数量）无精确对应。
+// 以 store_selected_in_skill_pile + gain_all_skill_pile_cards 近似。
+skill kuangbi(4062009975) {
+  active play_phase targets 1 1 other {
+    effect store_selected_in_skill_pile(self);
+  }
+
+  trigger phase_prepare owner_is_target {
+    effect gain_all_skill_pile_cards(self);
+  }
+}

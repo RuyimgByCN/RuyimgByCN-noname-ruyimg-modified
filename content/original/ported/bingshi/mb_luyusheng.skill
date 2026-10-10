@@ -1,0 +1,20 @@
+// 势陆郁生：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI506 原语。
+skill mbrunwei(3010472386) {
+  active play_phase uses_per_play_phase 2 {
+    effect resolve_mbrunwei(self, self, 0);
+  }
+
+  trigger cards_moved owner_mbrunwei_loss_threshold {
+    effect resolve_mbrunwei(self, event_player, 4);
+  }
+
+  trigger phase_play_end owner_phase_play_end_mbrunwei_tracked_hand {
+    effect resolve_mbrunwei(self, event_player, 5);
+  }
+}
+
+skill mbshuanghuai(4109631346) {
+  trigger damage_before owner_alive_damage_before_target_distance_le_one_once_per_turn optional {
+    effect resolve_mbshuanghuai(self, event_player);
+  }
+}

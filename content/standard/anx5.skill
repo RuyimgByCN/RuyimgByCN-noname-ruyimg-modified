@@ -1,0 +1,4 @@
+// Skill anx5(183) - modifier distance variant
+skill anx5(183) {
+  modifier distance_from add -1;
+}

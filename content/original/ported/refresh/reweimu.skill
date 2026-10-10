@@ -1,0 +1,8 @@
+// 界帷幕：不能成为黑色锦囊牌的目标；自己的回合内防止受到的伤害并摸伤害值两倍的牌。
+skill reweimu(2589015751) locked {
+  modifier card_target_cancel(black_trick) override 1;
+  trigger damage_before owner_is_target_current_turn {
+    effect prevent_current_damage();
+    effect draw_cards(self, event_amount * 2);
+  }
+}

@@ -1,0 +1,4 @@
+// Skill hujia2(129) - standard variant
+skill hujia2(129) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

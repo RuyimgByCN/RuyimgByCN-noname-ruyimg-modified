@@ -1,0 +1,8 @@
+// 急攻·标记（郭图/逢纪）：本回合手牌上限基数改为造成的伤害值，回合结束移除。
+skill jigong2(3671794947) {
+  modifier hand_limit_base override owner_turn_damage_dealt;
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

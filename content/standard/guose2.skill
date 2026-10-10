@@ -1,0 +1,4 @@
+// Skill guose2(132) - standard variant
+skill guose2(132) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

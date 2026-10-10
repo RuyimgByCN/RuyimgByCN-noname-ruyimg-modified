@@ -1,0 +1,20 @@
+// 啖酪（杨修）：当你成为【杀】或普通锦囊牌的目标后，若此牌的目标数大于 1，
+// 你可以摸一张牌，然后令此牌对你无效。
+// 上游 (sp/skill.js danlao)：trigger target useCardToTargeted；
+// filter = (card.name=="sha" || type=="trick") && targets.length > 1；
+// content = trigger.getParent().excluded.add(player) + player.draw()。
+// 实现（2026-09-03 第一百五十五批·组合引擎补全后重写）：
+// card_targeted 触发 + owner_in_multitarget_sha_or_trick_targets 过滤器（批 149
+// 注册）→ draw_cards(self, 1) + cancel_incoming_card_use(self, event_source,
+// event_card)（ABI 643）。批 155 引擎补齐两点：①current_card_target_adjustments
+// 补 NANMAN/WANJIAN 挂起载荷的 removable 计算；②不可即时排除时经
+// GameState.deferred_card_exclusions 暂存、advance_aoe_queue 逐目标消费跳过
+// （藤甲式）。「令此牌对你无效」完整建模。
+// 近似：cancel_incoming 与杜达元帅（ADR 0608）共用原语——额外获得被免除的
+// 实体牌（上游啖酪无获得效果），纯排除需新变体原语（登记债）。
+skill danlao(3326219495) {
+  trigger card_targeted owner_in_multitarget_sha_or_trick_targets optional {
+    effect draw_cards(self, 1);
+    effect cancel_incoming_card_use(self, event_source, event_card);
+  }
+}

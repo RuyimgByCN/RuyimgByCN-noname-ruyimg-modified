@@ -1,0 +1,16 @@
+// 纵恣（新杀谋钟会）：觉醒技，准备阶段若累计受到+造成伤害≥3，加体力上限并回复，
+// 然后二选一：失去精练获得矜祸并再加上限 / 令挟术无限次。
+// 近似：仅以 lifetime_damage_dealt≥3 判定（不含受伤累计）；固定走「换矜祸+再加上限」分支；
+// 挟术取消次数限制未建模；remove_skill 表达一次性觉醒。
+skill dcsbzongzi(4054358233) locked {
+  trigger phase_prepare owner_is_target {
+    if 2 < lifetime_damage_dealt(self) {
+      effect remove_skill(self_skill);
+      effect change_max_hp(self, 1);
+      effect recover_hp(self, 1);
+      effect change_max_hp(self, 1);
+      effect remove_skill_by_def(self, 3379088720);
+      effect add_skill(self, 4230927701);
+    }
+  }
+}

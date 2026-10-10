@@ -1,0 +1,8 @@
+// dczhangcai：当你使用牌时，你可以摸一张牌。
+// 旧 JS 的「使用或打出」以使用触发近似；「点数 8 过滤（或 dczhangcai_all 任意）」与
+// 「摸 X 张（X=手牌中与此牌同点数的牌数且至少为 1）」以固定摸一张近似。
+skill dczhangcai(4008750021) {
+  trigger card_used owner_source optional {
+    effect draw_cards(self, 1);
+  }
+}

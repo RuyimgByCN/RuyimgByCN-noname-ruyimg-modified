@@ -1,0 +1,4 @@
+// 旧 JS 语义：出牌阶段每回合限一次，可将一张黑色手牌或装备牌当【借刀杀人】使用。
+skill zymoucheng(3584095001) {
+  view_as jiedao play_phase black from hand_equip uses_per_turn 1;
+}

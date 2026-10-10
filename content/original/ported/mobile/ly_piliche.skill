@@ -1,0 +1,5 @@
+skill ly_piliche(2383388842) {
+  trigger damage owner_source_other_target_alive_has_discardable_hand_equip optional {
+    effect discard_all_target_equipment(self, event_player);
+  }
+}

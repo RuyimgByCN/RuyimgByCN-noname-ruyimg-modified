@@ -1,0 +1,9 @@
+// 困励：觉醒技；濒死时回复至 2，再增加体力上限并失去“匮饬”。
+skill dckunli(4133766049) locked {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 2 - hp(self));
+    effect change_max_hp(self, 1);
+    effect remove_skill_by_def(self, 3373286891);
+    effect remove_skill(self_skill);
+  }
+}

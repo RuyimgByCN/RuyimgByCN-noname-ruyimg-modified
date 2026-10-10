@@ -1,0 +1,12 @@
+// 曲继（音无）：出牌阶段弃置已损失体力值张牌，选等量受伤目标各回复 1 点体力。
+// 实现：出牌阶段限一次弃 1~4 张牌，令等量受伤其他角色各回复 1。
+// 近似：弃牌数不强制等于已损体力；弃黑不失去体力。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuzuru_quji(2805568225) {
+  active play_phase uses_per_turn 1
+    targets 1 4 other wounded match_selected_card_count
+    select_he 1 4 {
+    effect discard_selected(self);
+    effect recover_selected_targets(1);
+  }
+}

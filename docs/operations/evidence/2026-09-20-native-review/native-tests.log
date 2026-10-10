@@ -1,0 +1,268 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/content/standard.rs:408:9
+    |
+408 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1020:19
+     |
+ 945 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+1020 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1021:19
+     |
+ 945 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+1021 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1022:19
+     |
+ 973 |                 CardKind::ShanDian => {
+     |                 ------------------ matches all the relevant values
+...
+1022 |                 | CardKind::ShanDian => unreachable!("handled above"),
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: `engine-native` (lib) generated 4 warnings (2 duplicates) (run `cargo fix --lib -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (lib test) generated 4 warnings (2 duplicates)
+warning: unused variable: `sha3`
+   --> crates/engine-native/tests/replay_scenarios.rs:358:9
+    |
+358 |     let sha3 = e.debug_place(3, "sha");
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_sha3`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `shan1`
+   --> crates/engine-native/tests/replay_scenarios.rs:364:9
+    |
+364 |     let shan1 = e.debug_place(1, "shan");
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_shan1`
+
+warning: function `advance_to_play_judgement` is never used
+   --> crates/engine-native/examples/n09_runner.rs:441:4
+    |
+441 | fn advance_to_play_judgement(e: &mut Engine, m: &mut Metrics) {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `submit_answer_j` is never used
+   --> crates/engine-native/examples/n09_runner.rs:464:4
+    |
+464 | fn submit_answer_j(
+    |    ^^^^^^^^^^^^^^^
+
+warning: unused variable: `shan`
+   --> crates/engine-native/tests/native_kernel.rs:804:9
+    |
+804 |     let shan = e.debug_place(1, "shan");
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_shan`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sha_t2`
+    --> crates/engine-native/tests/native_kernel.rs:1114:9
+     |
+1114 |     let sha_t2 = e.debug_place(2, "sha");
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_sha_t2`
+
+warning: `engine-native` (test "replay_scenarios") generated 2 warnings (run `cargo fix --test "replay_scenarios" -p engine-native` to apply 2 suggestions)
+warning: unused variable: `total`
+    --> crates/engine-native/tests/native_kernel.rs:3165:9
+     |
+3165 |     let total = ids.len();
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_total`
+
+warning: unused variable: `cmd`
+    --> crates/engine-native/tests/native_kernel.rs:3178:9
+     |
+3178 |     for cmd in 0..600 {
+     |         ^^^ help: if this is intentional, prefix it with an underscore: `_cmd`
+
+warning: trait `OutcomeExt` is never used
+   --> crates/engine-native/tests/native_kernel.rs:362:7
+    |
+362 | trait OutcomeExt {
+    |       ^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `answer_first_legal` is never used
+    --> crates/engine-native/tests/native_kernel.rs:2177:4
+     |
+2177 | fn answer_first_legal(choice: &OpenChoice) -> Vec<ChoiceOption> {
+     |    ^^^^^^^^^^^^^^^^^^
+
+warning: `engine-native` (example "n09_runner") generated 2 warnings
+warning: `engine-native` (test "native_kernel") generated 6 warnings (run `cargo fix --test "native_kernel" -p engine-native` to apply 4 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.39s
+     Running unittests src/lib.rs (target/debug/deps/engine_native-800daac1312b1c0b)
+
+running 2 tests
+test engine::tests::ruleset_version_changes_digest ... ok
+test engine::tests::park_machine_state_changes_digest ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/boundary_snapshot.rs (target/debug/deps/boundary_snapshot-0256a4377e0b01c1)
+
+running 45 tests
+test duplicate_selection_rejected_by_spec ... ok
+test out_of_bounds_actor_rejected ... ok
+test answer_without_open_choice_rejected ... ok
+test duplicate_and_zero_dedup_rejected ... ok
+test out_of_bounds_ids_rejected_not_panic ... ok
+test commands_by_non_current_player_rejected ... ok
+test guidao_rewrite_with_black_equip ... ok
+test answer_by_wrong_player_rejected ... ok
+test pause_roundtrip_duel_respond ... ok
+test pause_roundtrip_discard_to_limit ... ok
+test pause_roundtrip_judge_window ... ok
+test pause_roundtrip_aoe_mid_queue ... ok
+test pause_roundtrip_sha_respond ... ok
+test pause_roundtrip_judge_lightning_dying_save ... ok
+test restore_accepts_park_depth_below_stack ... ok
+test pause_roundtrip_dying_save ... ok
+test pending_state_hash_stable_across_save_restore ... ok
+test restore_carries_dedup_high_water ... ok
+test pause_roundtrip_active_nullify_chain ... ok
+test pause_roundtrip_guidao_rewrite ... ok
+test restore_rejects_lord_not_at_first_seat ... ok
+test restore_rejects_choice_without_machine ... ok
+test restore_rejects_broken_frame_parent_chain ... ok
+test restore_rejects_dangling_park_frame ... ok
+test restore_rejects_choice_id_overrun ... ok
+test restore_rejects_duplicate_frame_id ... ok
+test restore_rejects_forward_referencing_frame_parent ... ok
+test restore_rejects_inconsistent_skill_instance_owner ... ok
+test pause_roundtrip_yishang_chain ... ok
+test restore_rejects_nested_checkpoint ... ok
+test restore_rejects_rewrite_asked_with_empty_rewriters ... ok
+test restore_rejects_oob_event_payload ... ok
+test restore_rejects_outcome_mode_mismatch ... ok
+test restore_rejects_park_depth_overrun ... ok
+test restore_rejects_out_of_bounds_ids ... ok
+test restore_rejects_oob_queue_trigger ... ok
+test restore_rejects_sha_asked_tamper ... ok
+test restore_rejects_tampered_identity_roles ... ok
+test stale_revision_rejected_then_retry_same_dedup ... ok
+test restore_rejects_tampered_core_ruleset_version ... ok
+test restore_rejects_tampered_gate_event_payload ... ok
+test restore_at_every_choice_point_continues_identically ... ok
+test restore_rejects_self_referencing_frame_parent ... ok
+test restore_rejects_rule_version_mismatch ... ok
+test save_restore_at_rest_continues_identically ... ok
+
+test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/dbg4.rs (target/debug/deps/dbg4-b1952058ccef513e)
+
+running 1 test
+test dbg_nullify ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-fd31ce2a3902d0d3)
+
+running 68 tests
+test aborted_segment_restores_pre_command_state ... ok
+test abort_requires_open_segment_and_nonsliced_rollback_unchanged ... ok
+test aoe_continues_after_midqueue_death ... ok
+test chain_card_toggles_link ... ok
+test abort_after_restore_restores_segment_start ... ok
+test armor_occupies_slot_without_protection ... ok
+test chain_can_be_nullified ... ok
+test archery_attack_all_pass_takes_damage ... ok
+test catalog_shared_across_commands ... ok
+test death_clears_judge_zone ... ok
+test abort_contract_direct_vs_restored_identical ... ok
+test delayed_trick_play_time_nullify_window ... ok
+test budget_exhaustion_rolls_back ... ok
+test bing_judgement_skips_draw_phase ... ok
+test duel_alternating_sha_until_pass ... ok
+test duel_can_be_nullified ... ok
+test duel_damage_can_kill ... ok
+test discard_phase_enforces_hand_limit ... ok
+test duel_does_not_consume_sha_limit ... ok
+test duel_no_sha_immediate_loss ... ok
+test fire_sha_shares_sha_limit ... ok
+test fire_sha_propagates_through_chain ... ok
+test equip_distance_skips_dead_players ... ok
+test identity_lord_killing_loyalist_discards_all ... ok
+test guidao_tiandu_combo_final_card_gained ... ok
+test guidao_rewrite_replaces_judgment ... ok
+test identity_lord_penalty_discards_equips ... ok
+test identity_lord_death_decides_by_faction ... ok
+test identity_rebel_death_rewards_killer ... ok
+test judge_lightning_saved_by_enough_taos ... ok
+test identity_lord_side_wins_when_rebels_and_traitor_dead ... ok
+test identity_matrix_for_supported_seats ... ok
+test dying_rescue_and_death ... ok
+test equip_horses_weapon_range_and_replacement ... ok
+test judge_zone_same_name_limit ... ok
+test judge_order_delayed_first_then_lightning_hit_kills ... ok
+test lightning_miss_to_next_with_same_name_discards ... ok
+test no_nullify_window_for_basic_card ... ok
+test guidao_two_holders_asked_in_seat_order ... ok
+test lightning_miss_transfer_skips_dead_seat ... ok
+test normal_damage_does_not_propagate ... ok
+test nullify_cancels_savage ... ok
+test propagated_damage_is_full_resolution ... ok
+test savage_attack_response_skip_and_pass ... ok
+test savage_nullified_target_discards_once ... ok
+test savage_per_target_nullify ... ok
+test le_judgement_skips_play_phase ... ok
+test nullify_on_nullify_reverses ... ok
+test rejections_leave_state_unchanged ... ok
+test sha_dodge_damage_limit_and_range ... ok
+test replay_different_seed_diverges ... ok
+test suqing_disables_queued_suidun_mid_resolution ... ok
+test replay_determinism_same_seed_identical ... ok
+test thunder_damage_propagates_and_unlinks_all ... ok
+test tiandu_gain_own_judge_card_only ... ok
+test suspended_segment_rejects_commands_and_resume_requires_open_segment ... ok
+test snapshot_roundtrip_while_suspended ... ok
+test shouyi_grants_temporary_yishang_until_owner_turn_end ... ok
+test tiandu_other_holder_not_asked ... ok
+test sancai_nested_choice_chain_and_decline ... ok
+test yishang_redirects_damage_in_before_window ... ok
+test suidun_prevents_once_per_turn ... ok
+test shandian_hits_and_transfers ... ok
+test time_slice_resumes_to_identical_result ... ok
+test identity_full_match_replay_reaches_lord_side_victory ... ok
+test reshuffle_conserves_every_card_exactly_once ... ok
+test identity_pure_command_traitor_victory ... ok
+test identity_pure_command_match_reaches_outcome ... ok
+
+test result: ok. 68 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-925f8d51460bf997)
+
+running 2 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios_match_golden ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_native
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

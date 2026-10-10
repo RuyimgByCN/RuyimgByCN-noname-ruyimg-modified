@@ -1,0 +1,7 @@
+// 帷幕 (weimu) — 贾诩: immune to black tricks.
+// Simplified: after taking damage, draw 1 (shadow defense).
+skill weimu(54) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

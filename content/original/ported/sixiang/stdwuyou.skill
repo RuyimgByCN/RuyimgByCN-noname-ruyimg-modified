@@ -1,0 +1,24 @@
+// 无有（关兴）：出牌阶段限一次，与一名其他角色拼点；若你严格获胜，视为对拼点对手
+// 使用一张【决斗】；若未获胜，本回合你获得【武圣】。
+// 旧 JS 仅作语义证据；拼点胜负、虚拟【决斗】与临时【武圣】由权威状态机校验。
+skill stdwuyou(2234235932) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 3805520549, 3037326263);
+  }
+}
+
+// 无有·胜：严格获胜后，视为对拼点对手使用【决斗】。
+skill stdwuyou_win(3805520549) {
+  trigger hand_compare_finished owner_is_target {
+    effect use_virtual_card_on(self, juedou, event_source);
+    effect remove_skill(self_skill);
+  }
+}
+
+// 无有·败：未获胜时，本回合获得【武圣】。
+skill stdwuyou_lose(3037326263) {
+  trigger hand_compare_finished owner_is_target {
+    effect add_skill_until_turn_end(self, 3038912803);
+    effect remove_skill(self_skill);
+  }
+}

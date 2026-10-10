@@ -1,0 +1,5 @@
+// remumu：获临时技；弃牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill remumu(3742392832) {
+  modifier hand_limit add 1;
+}

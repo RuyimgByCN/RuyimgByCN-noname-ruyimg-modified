@@ -1,0 +1,12 @@
+// jsrgfangjie（芳洁）：准备阶段，若你没有蓄谋牌，你回复1点体力并摸一张牌，否则你可以弃置你区域里的任意张蓄谋牌并失去〖芳洁〗。
+// 实现（①段，蓄谋族切片 3）：`trigger phase_prepare owner_is_target
+// optional` → recover_hp(self, 1) + draw_cards(self, 1)。
+// 近似（未建模②段）：蓄谋牌存在性取反不可达（DSL 无 !），无蓄谋牌分支
+// 以可选发动自律；「弃置蓄谋牌并失去技能」待蓄谋牌选择盘。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgfangjie(2803992112) {
+  trigger phase_prepare owner_is_target optional {
+    effect recover_hp(self, 1);
+    effect draw_cards(self, 1);
+  }
+}

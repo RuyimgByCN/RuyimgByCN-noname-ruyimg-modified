@@ -1,0 +1,6 @@
+// mbyuanhu（援护）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill mbyuanhu(3500219305) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect draw_cards(event_source, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// boss_juejing：音效名:juejing, 锁定技, player:phaseDrawBefore, 异步。
+skill boss_juejing(3427432136) {
+  trigger phase_draw owner_alive {
+  }
+}

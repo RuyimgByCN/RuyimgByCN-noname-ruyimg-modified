@@ -1,0 +1,1055 @@
+[
+  {
+    "id": 2615825963,
+    "name_key": "key_lucia",
+    "max_hp": 3,
+    "initial_hp": 2,
+    "skills": [
+      2794121169,
+      3777419907
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_lucia.jpg"
+  },
+  {
+    "id": 2948656204,
+    "name_key": "key_kyousuke",
+    "max_hp": 4,
+    "skills": [
+      3537526857,
+      2802218609
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_kyousuke.jpg"
+  },
+  {
+    "id": 3781148169,
+    "name_key": "key_yuri",
+    "max_hp": 3,
+    "skills": [
+      2936998904,
+      2802218609,
+      3609597994
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_yuri.jpg"
+  },
+  {
+    "id": 4016199819,
+    "name_key": "key_haruko",
+    "max_hp": 4,
+    "skills": [
+      2831053102,
+      4090156426
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_haruko.jpg"
+  },
+  {
+    "id": 3847943298,
+    "name_key": "key_umi",
+    "max_hp": 3,
+    "skills": [
+      2428039328,
+      2932731107,
+      4032616438
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_umi.jpg"
+  },
+  {
+    "id": 3704599094,
+    "name_key": "key_komari",
+    "max_hp": 3,
+    "skills": [
+      2861751685,
+      2613841923
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_komari.jpg"
+  },
+  {
+    "id": 2687516822,
+    "name_key": "key_yukine",
+    "max_hp": 3,
+    "skills": [
+      2557229217
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_yukine.jpg"
+  },
+  {
+    "id": 3443283810,
+    "name_key": "key_yusa",
+    "max_hp": 3,
+    "skills": [
+      4076446163,
+      2586501002
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_yusa.jpg"
+  },
+  {
+    "id": 3116908270,
+    "name_key": "key_misa",
+    "max_hp": 3,
+    "skills": [
+      3057987316,
+      2987563501
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_misa.jpg"
+  },
+  {
+    "id": 2270763259,
+    "name_key": "key_masato",
+    "max_hp": 8,
+    "initial_hp": 4,
+    "skills": [
+      3870573152
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_masato.jpg"
+  },
+  {
+    "id": 3719874031,
+    "name_key": "key_iwasawa",
+    "max_hp": 3,
+    "skills": [
+      2832623148,
+      3834003763
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_iwasawa.jpg"
+  },
+  {
+    "id": 4249060806,
+    "name_key": "key_kengo",
+    "max_hp": 4,
+    "skills": [
+      2671352658,
+      3185675503
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_kengo.jpg"
+  },
+  {
+    "id": 3011981226,
+    "name_key": "key_yoshino",
+    "max_hp": 4,
+    "skills": [
+      3841113685
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_yoshino.jpg"
+  },
+  {
+    "id": 3703083711,
+    "name_key": "key_yui",
+    "max_hp": 3,
+    "skills": [
+      2788570580,
+      2976604975,
+      3352203313
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_yui.jpg"
+  },
+  {
+    "id": 2210257438,
+    "name_key": "key_tsumugi",
+    "max_hp": 3,
+    "skills": [
+      3191570097,
+      4008390212
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_tsumugi.jpg"
+  },
+  {
+    "id": 3747917091,
+    "name_key": "key_saya",
+    "max_hp": 3,
+    "skills": [
+      2260854311,
+      2933109951
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_saya.jpg"
+  },
+  {
+    "id": 3817569995,
+    "name_key": "key_harukakanata",
+    "max_hp": 3,
+    "skills": [
+      3525679965
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_harukakanata.jpg"
+  },
+  {
+    "id": 2205535959,
+    "name_key": "key_inari",
+    "max_hp": 2,
+    "skills": [
+      3124826192,
+      2733421794
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_inari.jpg"
+  },
+  {
+    "id": 4002712490,
+    "name_key": "key_shiina",
+    "max_hp": 3,
+    "skills": [
+      3997315757,
+      3287429204
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_shiina.jpg"
+  },
+  {
+    "id": 3101495954,
+    "name_key": "key_sunohara",
+    "max_hp": 3,
+    "skills": [
+      2171681550,
+      2494271280,
+      3420828175
+    ],
+    "sex": "double",
+    "group": "key",
+    "portrait_asset": "character_key_sunohara.jpg"
+  },
+  {
+    "id": 3262408910,
+    "name_key": "key_rin",
+    "max_hp": 3,
+    "skills": [
+      2693168345
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_rin.jpg"
+  },
+  {
+    "id": 2767970055,
+    "name_key": "key_sasami",
+    "max_hp": 3,
+    "skills": [
+      3097071788
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_sasami.jpg"
+  },
+  {
+    "id": 3277074044,
+    "name_key": "key_akane",
+    "max_hp": 3,
+    "skills": [
+      2452932850,
+      2806428173,
+      2935807142
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_akane.jpg"
+  },
+  {
+    "id": 3708960048,
+    "name_key": "key_doruji",
+    "max_hp": 16,
+    "skills": [
+      3475207521
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_doruji.jpg"
+  },
+  {
+    "id": 3928418509,
+    "name_key": "key_yuiko",
+    "max_hp": 3,
+    "skills": [
+      3729037306,
+      3357924726
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_yuiko.jpg"
+  },
+  {
+    "id": 3377864274,
+    "name_key": "key_riki",
+    "max_hp": 3,
+    "skills": [
+      2666301691,
+      3571736403,
+      2200887116
+    ],
+    "sex": "double",
+    "group": "key",
+    "portrait_asset": "character_key_riki.jpg"
+  },
+  {
+    "id": 2387604022,
+    "name_key": "key_hisako",
+    "max_hp": 3,
+    "skills": [
+      3078155020,
+      3818579103
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_hisako.jpg"
+  },
+  {
+    "id": 2896505740,
+    "name_key": "key_hinata",
+    "max_hp": 4,
+    "skills": [
+      3761656212,
+      3138640587
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_hinata.jpg"
+  },
+  {
+    "id": 3057217957,
+    "name_key": "key_noda",
+    "max_hp": 4,
+    "skills": [
+      2452779390,
+      3836596548
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_noda.jpg"
+  },
+  {
+    "id": 4144400146,
+    "name_key": "key_tomoya",
+    "max_hp": 4,
+    "skills": [
+      2372159959,
+      3865938350
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_tomoya.jpg"
+  },
+  {
+    "id": 3304351943,
+    "name_key": "key_nagisa",
+    "max_hp": 3,
+    "skills": [
+      4094577149,
+      2871163155
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_nagisa.jpg"
+  },
+  {
+    "id": 3495224280,
+    "name_key": "key_ayato",
+    "max_hp": 3,
+    "skills": [
+      3383654000,
+      3974222253
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_ayato.jpg"
+  },
+  {
+    "id": 3694586282,
+    "name_key": "key_ao",
+    "max_hp": 3,
+    "skills": [
+      4100198765,
+      3209605261,
+      2364015708
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_ao.jpg"
+  },
+  {
+    "id": 4030725549,
+    "name_key": "key_yuzuru",
+    "max_hp": 5,
+    "skills": [
+      3940257990,
+      3890409763
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_yuzuru.jpg"
+  },
+  {
+    "id": 3329210957,
+    "name_key": "sp_key_kanade",
+    "max_hp": 3,
+    "skills": [
+      2630265019,
+      3488581057
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_sp_key_kanade.jpg"
+  },
+  {
+    "id": 3700855148,
+    "name_key": "key_mio",
+    "max_hp": 3,
+    "skills": [
+      3496176961,
+      4056753334
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_mio.jpg"
+  },
+  {
+    "id": 2741566561,
+    "name_key": "key_midori",
+    "max_hp": 3,
+    "skills": [
+      4093922167,
+      2348148371
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_midori.jpg"
+  },
+  {
+    "id": 3611401555,
+    "name_key": "key_kyoko",
+    "max_hp": 3,
+    "skills": [
+      3943238762,
+      4174281098
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kyoko.jpg"
+  },
+  {
+    "id": 3698996302,
+    "name_key": "key_shizuru",
+    "max_hp": 3,
+    "skills": [
+      2833421901,
+      3458157310
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_shizuru.jpg"
+  },
+  {
+    "id": 3320958908,
+    "name_key": "key_shiorimiyuki",
+    "max_hp": 3,
+    "skills": [
+      3141719441,
+      2995156497
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_shiorimiyuki.jpg"
+  },
+  {
+    "id": 2316260155,
+    "name_key": "key_miki",
+    "max_hp": 3,
+    "skills": [
+      3366656759,
+      3160941024,
+      2539237675
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_miki.jpg"
+  },
+  {
+    "id": 2457753788,
+    "name_key": "key_shiori",
+    "max_hp": 3,
+    "initial_hp": 2,
+    "skills": [
+      2322569990
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_shiori.jpg"
+  },
+  {
+    "id": 3455462269,
+    "name_key": "key_kaori",
+    "max_hp": 4,
+    "initial_hp": 3,
+    "skills": [
+      3294082017
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kaori.jpg"
+  },
+  {
+    "id": 3018824106,
+    "name_key": "key_akiko",
+    "max_hp": 3,
+    "skills": [
+      2799956315
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_akiko.jpg"
+  },
+  {
+    "id": 4288818948,
+    "name_key": "key_abyusa",
+    "max_hp": 3,
+    "skills": [
+      3981540585,
+      3195600790
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_abyusa.jpg"
+  },
+  {
+    "id": 2955525500,
+    "name_key": "key_godan",
+    "max_hp": 6,
+    "skills": [
+      3610550580,
+      3490863084,
+      2543675799
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_godan.jpg"
+  },
+  {
+    "id": 3189420813,
+    "name_key": "key_yuu",
+    "max_hp": 3,
+    "skills": [
+      4116340395
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_yuu.jpg"
+  },
+  {
+    "id": 2561765522,
+    "name_key": "key_ryoichi",
+    "max_hp": 4,
+    "skills": [
+      2396712868,
+      3426318690
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_ryoichi.jpg"
+  },
+  {
+    "id": 2504837093,
+    "name_key": "key_kotori",
+    "max_hp": 3,
+    "skills": [
+      4064348582,
+      4066525476
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kotori.jpg"
+  },
+  {
+    "id": 4028727836,
+    "name_key": "key_jojiro",
+    "max_hp": 4,
+    "skills": [
+      2879208191,
+      2559047969
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_jojiro.jpg"
+  },
+  {
+    "id": 3739976519,
+    "name_key": "key_shiroha",
+    "max_hp": 3,
+    "skills": [
+      4263927867,
+      2209884612,
+      4008645358
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_shiroha.jpg"
+  },
+  {
+    "id": 3511512114,
+    "name_key": "key_shizuku",
+    "max_hp": 3,
+    "skills": [
+      3437097254,
+      3359506652,
+      3952218459
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_shizuku.jpg"
+  },
+  {
+    "id": 3480234896,
+    "name_key": "key_hiroto",
+    "max_hp": 3,
+    "skills": [
+      2586716910,
+      2920912067
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_hiroto.jpg"
+  },
+  {
+    "id": 2778966950,
+    "name_key": "key_sakuya",
+    "max_hp": 3,
+    "skills": [
+      3117721243,
+      3760442077,
+      2303757214
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_sakuya.jpg"
+  },
+  {
+    "id": 3614350699,
+    "name_key": "key_rumi",
+    "max_hp": 4,
+    "initial_hp": 3,
+    "skills": [
+      2556717025
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_rumi.jpg"
+  },
+  {
+    "id": 4054734317,
+    "name_key": "key_chihaya",
+    "max_hp": 3,
+    "skills": [
+      3721191175,
+      2842065522
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_chihaya.jpg"
+  },
+  {
+    "id": 3605284387,
+    "name_key": "key_yukito",
+    "max_hp": 4,
+    "skills": [
+      3912900297,
+      2428947588
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_yukito.jpg"
+  },
+  {
+    "id": 2918428479,
+    "name_key": "key_asara",
+    "max_hp": 3,
+    "skills": [
+      4161128201,
+      3603696455
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_asara.jpg"
+  },
+  {
+    "id": 3929923342,
+    "name_key": "key_kotomi",
+    "max_hp": 3,
+    "skills": [
+      2541277613,
+      2505788354
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kotomi.jpg"
+  },
+  {
+    "id": 3123313986,
+    "name_key": "key_mia",
+    "max_hp": 3,
+    "skills": [
+      3357314746,
+      2319632885
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_mia.jpg"
+  },
+  {
+    "id": 3399582942,
+    "name_key": "key_kano",
+    "max_hp": 3,
+    "skills": [
+      3815378594,
+      3198124645
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kano.jpg"
+  },
+  {
+    "id": 2252489927,
+    "name_key": "db_key_liyingxia",
+    "max_hp": 3,
+    "skills": [
+      3091825769,
+      3556873289,
+      2506272675
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_db_key_liyingxia.jpg"
+  },
+  {
+    "id": 2658881539,
+    "name_key": "key_erika",
+    "max_hp": 3,
+    "skills": [
+      2366255007,
+      4101732913
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_erika.jpg"
+  },
+  {
+    "id": 4220209276,
+    "name_key": "key_satomi",
+    "max_hp": 3,
+    "skills": [
+      2815308566,
+      2215481549
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_satomi.jpg"
+  },
+  {
+    "id": 4250721628,
+    "name_key": "key_iriya",
+    "max_hp": 3,
+    "skills": [
+      2532336475,
+      4276952722
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_iriya.jpg"
+  },
+  {
+    "id": 3940751866,
+    "name_key": "key_fuuko",
+    "max_hp": 3,
+    "skills": [
+      3398320463,
+      2626814538
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_fuuko.jpg"
+  },
+  {
+    "id": 2189117413,
+    "name_key": "key_kagari",
+    "max_hp": 3,
+    "skills": [
+      2299228246
+    ],
+    "sex": "female",
+    "group": "shen",
+    "portrait_asset": "character_key_kagari.jpg"
+  },
+  {
+    "id": 3634185107,
+    "name_key": "key_shiki",
+    "max_hp": 5,
+    "initial_hp": 3,
+    "skills": [
+      3634693320
+    ],
+    "sex": "female",
+    "group": "shen",
+    "portrait_asset": "character_key_shiki.jpg"
+  },
+  {
+    "id": 2852068324,
+    "name_key": "db_key_hina",
+    "max_hp": 3,
+    "skills": [
+      3019937721,
+      3635099818
+    ],
+    "sex": "female",
+    "group": "shen",
+    "portrait_asset": "character_db_key_hina.jpg"
+  },
+  {
+    "id": 3476154138,
+    "name_key": "key_kud",
+    "max_hp": 3,
+    "skills": [
+      3126836455,
+      4166321790
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kud.jpg"
+  },
+  {
+    "id": 2930470146,
+    "name_key": "key_misuzu",
+    "max_hp": 3,
+    "skills": [
+      2448354282,
+      2333084601,
+      2334379613
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_misuzu.jpg"
+  },
+  {
+    "id": 3707818445,
+    "name_key": "key_kamome",
+    "max_hp": 3,
+    "skills": [
+      3575287643,
+      3440411698,
+      3079516847
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kamome.jpg"
+  },
+  {
+    "id": 3932486537,
+    "name_key": "key_nao",
+    "max_hp": 3,
+    "skills": [
+      2852031014,
+      2978438530,
+      4031731017
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_nao.jpg"
+  },
+  {
+    "id": 2781079651,
+    "name_key": "key_yuuki",
+    "max_hp": 3,
+    "skills": [
+      3821992888
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_yuuki.jpg"
+  },
+  {
+    "id": 2797728963,
+    "name_key": "key_kotarou",
+    "max_hp": 3,
+    "skills": [
+      2282236310,
+      2361486336
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_kotarou.jpg"
+  },
+  {
+    "id": 2265763106,
+    "name_key": "key_tenzen",
+    "max_hp": 4,
+    "skills": [
+      4267881001,
+      4288550568
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_tenzen.jpg"
+  },
+  {
+    "id": 2361872336,
+    "name_key": "key_kyouko",
+    "max_hp": 3,
+    "skills": [
+      2560936418,
+      3855939821
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kyouko.jpg"
+  },
+  {
+    "id": 2684584909,
+    "name_key": "key_kyou",
+    "max_hp": 3,
+    "skills": [
+      3361165728,
+      2857414296
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kyou.jpg"
+  },
+  {
+    "id": 3877213522,
+    "name_key": "key_seira",
+    "max_hp": 3,
+    "skills": [
+      2932217435,
+      3512520583
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_seira.jpg"
+  },
+  {
+    "id": 3354709725,
+    "name_key": "key_kiyu",
+    "max_hp": 3,
+    "skills": [
+      2787517889,
+      3690249911
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_kiyu.jpg"
+  },
+  {
+    "id": 2497243412,
+    "name_key": "key_tomoyo",
+    "max_hp": 4,
+    "skills": [
+      2212519004,
+      3769830951
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_tomoyo.jpg"
+  },
+  {
+    "id": 2350905693,
+    "name_key": "key_minagi",
+    "max_hp": 3,
+    "skills": [
+      3941246023,
+      2316758231
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_minagi.jpg"
+  },
+  {
+    "id": 3995695636,
+    "name_key": "key_michiru",
+    "max_hp": 3,
+    "skills": [
+      2944352738
+    ],
+    "sex": "female",
+    "group": "key",
+    "portrait_asset": "character_key_michiru.jpg"
+  },
+  {
+    "id": 3271138322,
+    "name_key": "key_youta",
+    "max_hp": 4,
+    "skills": [],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_youta.jpg"
+  },
+  {
+    "id": 3690014139,
+    "name_key": "key_crow",
+    "max_hp": 4,
+    "skills": [],
+    "sex": "male",
+    "group": "key"
+  },
+  {
+    "id": 1759987914,
+    "name_key": "sp_key_yuri",
+    "max_hp": 4,
+    "skills": [
+      3004071206,
+      3148440139,
+      2756459474
+    ],
+    "sex": "female",
+    "group": "qun",
+    "portrait_asset": "character_sp_key_yuri.jpg"
+  },
+  {
+    "id": 3471626821,
+    "name_key": "key_rei",
+    "max_hp": 4,
+    "skills": [
+      2439633691,
+      2586462603,
+      4243619960
+    ],
+    "sex": "male",
+    "group": "key",
+    "portrait_asset": "character_key_rei.jpg"
+  },
+  {
+    "id": 2205139348,
+    "name_key": "key_umi2",
+    "max_hp": 3,
+    "skills": [],
+    "sex": "female",
+    "group": "key"
+  }
+]

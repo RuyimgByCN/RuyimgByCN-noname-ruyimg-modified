@@ -1,0 +1,6 @@
+// 驻营：其他未横置角色即将受到普通伤害时，可令其横置。
+skill stdzhuying(2174724909) {
+  trigger damage_before owner_alive_other_normal_damage_target_unlinked optional {
+    effect add_mark(event_player, 2, 1);
+  }
+}

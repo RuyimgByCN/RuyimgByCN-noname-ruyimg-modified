@@ -1,0 +1,8 @@
+// 霹雳投石车（装备技能）：锁定技，使用/打出基本牌时——
+// 若在你的回合内：此牌伤害+1且无距离限制；
+// 若在你的回合外：摸一张牌。
+// 旧 JS 的「装备技能」「回合内外不同效果」「基础牌距离限制解除」无对应原语，未建模。
+skill pilitoushiche(3578870314) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,9 @@
+// 点才（SP朱儁）：其他角色的结束阶段开始时，若你本回合失去过手牌，
+// 可令至多 X 名角色各摸一张牌（X 为你本回合失去的手牌数，至多存活角色数）。
+// 旧 JavaScript 仅作语义证据；触发由 ABI 405 owner_alive_lost_hand_this_turn 权威判定，
+// 目标数上限以 255 近似（实际失去手牌数极少超过存活人数）。
+skill spdiancai(3762161361) {
+  trigger phase_end owner_alive_lost_hand_this_turn optional {
+    effect choose_optional_targets_draw(self, 1, 1, 255, any);
+  }
+}

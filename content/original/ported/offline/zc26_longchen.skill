@@ -1,0 +1,7 @@
+// zc26_longchen：音效名:wengua, 主动(phaseUse), 需选择目标, 摸牌, 回复体力, 造成伤害, 含子技能, 异步。
+skill zc26_longchen(2940269526) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

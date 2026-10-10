@@ -1,0 +1,5 @@
+// jdfengtu：锁定技, global:death, global:phaseOver, 需选择目标, 加技能, 含子技能, 异步。
+skill jdfengtu(2438784136) locked {
+  trigger death always {
+  }
+}

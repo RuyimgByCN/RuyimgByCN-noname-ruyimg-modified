@@ -1,0 +1,10 @@
+// 制蛮（旧版）：你造成伤害时，可防止此伤害，改为获得受伤角色装备区或
+// 判定区里的一张牌。
+// 旧 JS 在 damageBegin2 中 cancel + gainPlayerCard("ej")；以伤害-1 并从
+// 目标获取一张装备牌近似（判定区获取未建模，已注明）。
+skill zhiman(2743566790) {
+  trigger damage_before owner_is_source optional {
+    effect modify_current_damage(self, -1);
+    effect take_one_card(event_player, self, equip);
+  }
+}

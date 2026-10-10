@@ -1,0 +1,9 @@
+// 寝情（孙鲁班）：出牌阶段限一次，选择一名在主公攻击范围内的其他角色，
+// 弃置其一张牌，然后其摸一张牌。
+// 旧 JS 的多目标逐个弃牌摸牌与主公手牌比较无对应原语；以出牌阶段弃目标
+// 一张牌近似（摸牌分支未建模，已注明）。
+skill qinqing(3189821394) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

@@ -1,0 +1,4 @@
+// Skill lianying2(122) - standard variant
+skill lianying2(122) {
+  modifier attack_range add 1;
+}

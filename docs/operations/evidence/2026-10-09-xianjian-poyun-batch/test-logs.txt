@@ -1,0 +1,18 @@
+== cargo test --offline -p engine-native --test g1_wudian poyun（定向回归）==
+
+running 1 test
+test murongziying_poyun_discard_and_decrement ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 98 filtered out; finished in 0.05s
+
+
+== cargo test --offline -p engine-native --test replay_scenarios（golden）==
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+== cargo test --offline -p engine-native（全量）==
+engine-native 合计: 512 passed / 0 failed / 1 ignored
+
+== 依赖包 ==
+deps 合计: 63 passed / 0 failed

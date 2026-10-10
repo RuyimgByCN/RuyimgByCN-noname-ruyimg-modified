@@ -1,0 +1,8 @@
+// jsrgjingju（惊惧）：当你需要使用任意一种基本牌时，你可以将其他角色判定区里的一张牌移动至你的判定区，视为你使用之。
+// 未建模：chooseButton, 翻译调用, 主公技判断, 全局状态, 延迟动画, chooseToUse转化 ...等7项（DSL无对应原语）
+skill jsrgjingju(3038727269) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgjingju（skill.js:3267）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

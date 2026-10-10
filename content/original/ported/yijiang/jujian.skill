@@ -1,0 +1,9 @@
+// 举荐（伊籍）：出牌阶段限一次，弃置至多三张牌，令一名其他角色摸等量的牌。
+// 若弃置三张且类别全相同，你回复1点体力。
+// 旧 JS 的三类别类型检测无对应原语，以弃牌+目标摸牌近似，不建模回复。
+skill jujian(4152297000) {
+  active play_phase targets 1 1 other select_hand 1 3 {
+    effect discard_selected(self);
+    effect draw_cards(event_player, event_amount);
+  }
+}

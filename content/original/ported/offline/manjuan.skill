@@ -1,0 +1,5 @@
+// manjuan：global:hp_lost, 需弃牌, 多步骤。
+skill manjuan(4186781741) {
+  trigger hp_lost owner_alive {
+  }
+}

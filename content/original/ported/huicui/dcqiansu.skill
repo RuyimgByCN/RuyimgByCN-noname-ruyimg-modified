@@ -1,0 +1,9 @@
+// 谦素（新杀费祎）：其他角色结束阶段，若其手牌多于你，可摸三张并交给其一张。
+// 旧 JS 仅作语义证据；draw_then_give_one 在摸牌触发结算后再强制交一张 he。
+skill dcqiansu(4169409504) {
+  trigger phase_end owner_alive_not_target optional {
+    if hand_count(self) < hand_count(event_player) {
+      effect draw_then_give_one(self, event_player, 3, any_hand_equip);
+    }
+  }
+}

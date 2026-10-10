@@ -1,0 +1,7 @@
+// mbfeili（诽离）：当你受到伤害时，若你拥有〖谮构〗，则你可以弃置两张牌并防止此伤害；若此伤害存在来源且伤害来源拥有“诬”标记，则你可以改为移去其“诬”标记并防止此伤害，你摸四张牌且你不能再对其发动〖谮构〗。
+skill mbfeili(3200179357) {
+  trigger damage_before owner_alive {
+    effect draw_cards(self, 4);
+    effect discard_selected(self);
+  }
+}

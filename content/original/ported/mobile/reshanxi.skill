@@ -1,0 +1,6 @@
+// reshanxi（闪袭）：出牌阶段限一次，你可以弃置一张基本牌，然后弃置一名其他角色的一张手牌。若你弃置的牌为红色，你获得其弃置的牌；若其因此弃置的牌名未因此技能弃置过，你对其造成1点伤害。
+skill reshanxi(3550536130) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect deal_damage(self, event_source, 1);
+  }
+}

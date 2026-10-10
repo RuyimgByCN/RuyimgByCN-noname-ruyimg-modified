@@ -1,0 +1,27 @@
+skill drlt_duorui(4266461274) {
+  trigger damage owner_is_source optional {
+    effect resolve_drlt_duorui(self, event_player, 4193490776, 0);
+  }
+}
+
+skill drlt_duorui1(4193490776) locked non_gainable {
+  trigger turn_ended owner_is_target {
+    effect resolve_drlt_duorui(self, event_player, 4193490776, 3);
+  }
+  trigger death owner_is_target {
+    effect resolve_drlt_duorui(self, event_player, 4193490776, 3);
+  }
+}
+
+skill drlt_zhiti(3298844877) locked {
+  modifier global_hand_limit add -queried_player_wounded_in_owner_attack_range_other;
+  trigger hand_compare_finished owner_hand_compare_participant {
+    effect resolve_drlt_zhiti(self, event_player, event_source, event_amount, 0);
+  }
+  trigger duel_resolved owner_is_target {
+    effect resolve_drlt_zhiti(self, event_player, event_source, 0, 1);
+  }
+  trigger damage owner_is_target {
+    effect resolve_drlt_zhiti(self, event_player, event_source, 0, 2);
+  }
+}

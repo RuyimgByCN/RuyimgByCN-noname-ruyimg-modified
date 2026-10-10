@@ -1,0 +1,34 @@
+{
+  "mode_id": "identity-standard",
+  "display_name": "身份局",
+  "description": "标准身份模式：主公、忠臣、反贼、内奸",
+  "min_players": 2,
+  "max_players": 8,
+  "identity_distribution": {
+    "2": ["lord", "rebel"],
+    "3": ["lord", "loyalist", "rebel"],
+    "4": ["lord", "loyalist", "rebel", "rebel"],
+    "5": ["lord", "loyalist", "rebel", "rebel", "renegade"],
+    "6": ["lord", "loyalist", "loyalist", "rebel", "rebel", "renegade"],
+    "7": ["lord", "loyalist", "loyalist", "rebel", "rebel", "rebel", "renegade"],
+    "8": ["lord", "loyalist", "loyalist", "loyalist", "rebel", "rebel", "rebel", "renegade"]
+  },
+  "ruleset_modules": [
+    "core-rules/base-deck",
+    "core-rules/basic-equipment",
+    "standard/characters"
+  ],
+  "win_conditions": {
+    "loyalist_win": "lord_alive_and_all_rebels_renegade_dead",
+    "rebel_win": "lord_dead",
+    "renegade_win": "renegade_last_one_standing"
+  },
+  "initial_hp": {
+    "lord": 4,
+    "other": 3
+  },
+  "lord_bonus_hp": 1,
+  "hand_size_base": "current_hp",
+  "phases_per_turn": ["judge", "draw", "play", "discard"],
+  "draw_per_turn": 2
+}

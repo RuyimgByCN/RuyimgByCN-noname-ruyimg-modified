@@ -1,0 +1,6 @@
+// 界全琮·邀名：每回合三个分支各限一次，伤害结算后选择目标与仍可用的分支。
+skill xinyaoming(3897075796) {
+  trigger damage owner_is_source_or_target_xinyaoming_available optional {
+    effect resolve_xinyaoming(self);
+  }
+}

@@ -1,0 +1,9 @@
+// 踏墨（董卓系）：主公技。回合开始时，你选择一名其他角色，其获得「踏墨」
+// 效果。
+// 旧 JS 的「主公技选择授予」无对应原语；以回合开始摸一张近似（授予
+// 未建模，已注明）。
+skill tamo(2290049279) lord_only {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

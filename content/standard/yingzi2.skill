@@ -1,0 +1,4 @@
+// Skill yingzi2(121) - standard variant
+skill yingzi2(121) {
+  modifier distance_from add -1;
+}

@@ -1,0 +1,7 @@
+// cachuxiong：player:phase_play, 需选择目标, 多分支选择, 造成伤害, 选牌UI, 异步, 弃牌。
+skill cachuxiong(2876630426) {
+  trigger phase_play owner_alive optional {
+    effect deal_damage(self, event_source, 1);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

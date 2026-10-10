@@ -1,0 +1,9 @@
+// 海德洛格拉迪尔特·改（美希·锁定技）：造成【杀】伤害后，弃置伤害目标两张牌或弃置距离 1 角色各一张。
+// 实现：【杀】造成伤害后可选令受伤角色弃置两张手牌或装备。
+// 近似：弃牌为确定性前两张；距离 1 群体弃牌未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill miki_hydrogladiator_skill(3782739325) {
+  trigger damage owner_source_sha optional {
+    effect discard_hand_equip_count(event_player, 2);
+  }
+}

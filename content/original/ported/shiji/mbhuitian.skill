@@ -1,0 +1,9 @@
+// 回天（蒋琬系）：锁定技。回合开始时，若本局你使用过此技能，获得技能
+// 效果；结束阶段若有角色体力值大于你，你回复 1 点体力。
+// 旧 JS 的「按濒死次数分支」无对应原语；以受伤角色回复 1 点近似
+// （已注明）。
+skill mbhuitian(3293959058) locked {
+  trigger phase_end owner_is_target {
+    effect recover_hp(self, 1);
+  }
+}

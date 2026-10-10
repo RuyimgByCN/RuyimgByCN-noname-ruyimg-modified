@@ -1,0 +1,10 @@
+// 兖州（pxyanzhou，州郡技能）：每回合限一次。当你回复体力后，你摸一张牌。
+// 上游 (sp/skill.js:2488)：trigger player:recoverAfter；usable: 1；forced: true；
+// content = player.draw()。
+// 实现：hp_recovered + owner_is_target → 可选确认 → draw_cards(self, 1)。
+// 与上游差异：「每回合限一次」以可选触发近似（玩家可放弃）。
+skill pxyanzhou(4070969920) {
+  trigger hp_recovered owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

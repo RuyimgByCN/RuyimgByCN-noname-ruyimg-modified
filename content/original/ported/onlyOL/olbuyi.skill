@@ -1,0 +1,9 @@
+// 补益：当一名角色进入濒死状态时，你可选择其一张牌并展示；
+// 若非基本牌，其弃置此牌并回复1点体力。
+// 旧 JS 的「濒死时选牌+展示+弃置+回复」部分可近似为 dying 触发+目标回复。
+// 差异：未建模「非基本牌判定」条件，直接回复为近似。
+skill olbuyi(3370335752) {
+  trigger dying owner_alive_other_dying_hand_nonempty_once_per_game optional {
+    effect recover_hp(event_player, 1);
+  }
+}

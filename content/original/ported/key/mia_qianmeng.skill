@@ -1,0 +1,9 @@
+// 潜梦（米娅·使命技）：游戏开始时摸一张牌，将一张牌置于牌堆中部；该牌被获得时使命成功，否则失败。
+// 实现：对局开始时摸 1。
+// 近似：不把牌插入牌堆中部；使命成败与衍生技未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill mia_qianmeng(2319632885) locked {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

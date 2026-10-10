@@ -1,0 +1,726 @@
+{
+  "module_id": "base-deck",
+  "description": "标准基础牌堆配置 — 引擎直接读取的逐张卡牌定义",
+  "cards": [
+    {
+      "def": 11,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 1
+    },
+    {
+      "def": 12,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 2
+    },
+    {
+      "def": 13,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 3
+    },
+    {
+      "def": 14,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 4
+    },
+    {
+      "def": 15,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 5
+    },
+    {
+      "def": 16,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 6
+    },
+    {
+      "def": 17,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 7
+    },
+    {
+      "def": 18,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 8
+    },
+    {
+      "def": 19,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 9
+    },
+    {
+      "def": 20,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 10
+    },
+    {
+      "def": 21,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 11
+    },
+    {
+      "def": 22,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 12
+    },
+    {
+      "def": 23,
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 13
+    },
+    {
+      "def": 31,
+      "kind": "tao",
+      "suit": "heart",
+      "rank": 1
+    },
+    {
+      "def": 32,
+      "kind": "tao",
+      "suit": "heart",
+      "rank": 2
+    },
+    {
+      "def": 33,
+      "kind": "tao",
+      "suit": "heart",
+      "rank": 3
+    },
+    {
+      "def": 34,
+      "kind": "tao",
+      "suit": "heart",
+      "rank": 4
+    },
+    {
+      "def": 35,
+      "kind": "tao",
+      "suit": "heart",
+      "rank": 5
+    },
+    {
+      "def": 46,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 6
+    },
+    {
+      "def": 47,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 7
+    },
+    {
+      "def": 48,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 8
+    },
+    {
+      "def": 49,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 9
+    },
+    {
+      "def": 50,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 10
+    },
+    {
+      "def": 51,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 11
+    },
+    {
+      "def": 52,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 12
+    },
+    {
+      "def": 53,
+      "kind": "sha",
+      "suit": "heart",
+      "rank": 13
+    },
+    {
+      "def": 51,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 1
+    },
+    {
+      "def": 52,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 2
+    },
+    {
+      "def": 53,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 3
+    },
+    {
+      "def": 54,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 4
+    },
+    {
+      "def": 55,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 5
+    },
+    {
+      "def": 56,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 6
+    },
+    {
+      "def": 57,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 7
+    },
+    {
+      "def": 58,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 8
+    },
+    {
+      "def": 59,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 9
+    },
+    {
+      "def": 60,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 10
+    },
+    {
+      "def": 61,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 11
+    },
+    {
+      "def": 62,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 12
+    },
+    {
+      "def": 63,
+      "kind": "shan",
+      "suit": "club",
+      "rank": 13
+    },
+    {
+      "def": 71,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 1
+    },
+    {
+      "def": 72,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 2
+    },
+    {
+      "def": 73,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 3
+    },
+    {
+      "def": 74,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 4
+    },
+    {
+      "def": 75,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 5
+    },
+    {
+      "def": 76,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 6
+    },
+    {
+      "def": 77,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 7
+    },
+    {
+      "def": 78,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 8
+    },
+    {
+      "def": 79,
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 9
+    },
+    {
+      "def": 90,
+      "kind": "jiu",
+      "suit": "diamond",
+      "rank": 10
+    },
+    {
+      "def": 91,
+      "kind": "jiu",
+      "suit": "diamond",
+      "rank": 11
+    },
+    {
+      "def": 92,
+      "kind": "jiu",
+      "suit": "diamond",
+      "rank": 12
+    },
+    {
+      "def": 93,
+      "kind": "jiu",
+      "suit": "diamond",
+      "rank": 13
+    },
+    {
+      "def": 90,
+      "kind": "sha_fire",
+      "suit": "heart",
+      "rank": 4
+    },
+    {
+      "def": 91,
+      "kind": "sha_fire",
+      "suit": "heart",
+      "rank": 7
+    },
+    {
+      "def": 92,
+      "kind": "sha_fire",
+      "suit": "diamond",
+      "rank": 5
+    },
+    {
+      "def": 93,
+      "kind": "sha_thunder",
+      "suit": "spade",
+      "rank": 5
+    },
+    {
+      "def": 94,
+      "kind": "sha_thunder",
+      "suit": "spade",
+      "rank": 6
+    },
+    {
+      "def": 95,
+      "kind": "sha_thunder",
+      "suit": "club",
+      "rank": 5
+    },
+    {
+      "def": 96,
+      "kind": "sha_thunder",
+      "suit": "club",
+      "rank": 6
+    },
+    {
+      "def": 100,
+      "kind": "weapon",
+      "suit": "spade",
+      "rank": 6,
+      "weapon_range": 2
+    },
+    {
+      "def": 101,
+      "kind": "weapon",
+      "suit": "spade",
+      "rank": 2,
+      "weapon_range": 2
+    },
+    {
+      "def": 102,
+      "kind": "weapon",
+      "suit": "diamond",
+      "rank": 5,
+      "weapon_range": 3
+    },
+    {
+      "def": 103,
+      "kind": "weapon",
+      "suit": "spade",
+      "rank": 12,
+      "weapon_range": 3
+    },
+    {
+      "def": 104,
+      "kind": "weapon",
+      "suit": "diamond",
+      "rank": 12,
+      "weapon_range": 4
+    },
+    {
+      "def": 105,
+      "kind": "weapon",
+      "suit": "heart",
+      "rank": 5,
+      "weapon_range": 5
+    },
+    {
+      "def": 110,
+      "kind": "armor",
+      "suit": "spade",
+      "rank": 2
+    },
+    {
+      "def": 111,
+      "kind": "armor",
+      "suit": "club",
+      "rank": 2
+    },
+    {
+      "def": 120,
+      "kind": "horse_off",
+      "suit": "heart",
+      "rank": 5
+    },
+    {
+      "def": 121,
+      "kind": "horse_off",
+      "suit": "diamond",
+      "rank": 13
+    },
+    {
+      "def": 122,
+      "kind": "horse_def",
+      "suit": "spade",
+      "rank": 5
+    },
+    {
+      "def": 123,
+      "kind": "horse_def",
+      "suit": "club",
+      "rank": 5
+    },
+    {
+      "def": 130,
+      "kind": "trick_wuzhong",
+      "suit": "heart",
+      "rank": 7
+    },
+    {
+      "def": 131,
+      "kind": "trick_wuzhong",
+      "suit": "heart",
+      "rank": 8
+    },
+    {
+      "def": 132,
+      "kind": "trick_wuzhong",
+      "suit": "heart",
+      "rank": 9
+    },
+    {
+      "def": 133,
+      "kind": "trick_wuzhong",
+      "suit": "heart",
+      "rank": 11
+    },
+    {
+      "def": 140,
+      "kind": "trick_guohe",
+      "suit": "spade",
+      "rank": 3
+    },
+    {
+      "def": 141,
+      "kind": "trick_guohe",
+      "suit": "spade",
+      "rank": 4
+    },
+    {
+      "def": 142,
+      "kind": "trick_guohe",
+      "suit": "spade",
+      "rank": 12
+    },
+    {
+      "def": 143,
+      "kind": "trick_guohe",
+      "suit": "club",
+      "rank": 3
+    },
+    {
+      "def": 144,
+      "kind": "trick_guohe",
+      "suit": "club",
+      "rank": 4
+    },
+    {
+      "def": 145,
+      "kind": "trick_guohe",
+      "suit": "heart",
+      "rank": 12
+    },
+    {
+      "def": 150,
+      "kind": "trick_shunshou",
+      "suit": "spade",
+      "rank": 3
+    },
+    {
+      "def": 151,
+      "kind": "trick_shunshou",
+      "suit": "spade",
+      "rank": 4
+    },
+    {
+      "def": 152,
+      "kind": "trick_shunshou",
+      "suit": "spade",
+      "rank": 11
+    },
+    {
+      "def": 153,
+      "kind": "trick_shunshou",
+      "suit": "diamond",
+      "rank": 3
+    },
+    {
+      "def": 154,
+      "kind": "trick_shunshou",
+      "suit": "diamond",
+      "rank": 4
+    },
+    {
+      "def": 160,
+      "kind": "trick_juedou",
+      "suit": "spade",
+      "rank": 1
+    },
+    {
+      "def": 161,
+      "kind": "trick_juedou",
+      "suit": "club",
+      "rank": 1
+    },
+    {
+      "def": 162,
+      "kind": "trick_juedou",
+      "suit": "diamond",
+      "rank": 1
+    },
+    {
+      "def": 170,
+      "kind": "trick_nanman",
+      "suit": "spade",
+      "rank": 7
+    },
+    {
+      "def": 171,
+      "kind": "trick_nanman",
+      "suit": "spade",
+      "rank": 13
+    },
+    {
+      "def": 172,
+      "kind": "trick_nanman",
+      "suit": "club",
+      "rank": 7
+    },
+    {
+      "def": 180,
+      "kind": "trick_wanjian",
+      "suit": "heart",
+      "rank": 1
+    },
+    {
+      "def": 190,
+      "kind": "trick_taoyuan",
+      "suit": "heart",
+      "rank": 1
+    },
+    {
+      "def": 191,
+      "kind": "trick_wugu",
+      "suit": "heart",
+      "rank": 3
+    },
+    {
+      "def": 192,
+      "kind": "trick_wugu",
+      "suit": "heart",
+      "rank": 4
+    },
+    {
+      "def": 200,
+      "kind": "trick_le",
+      "suit": "spade",
+      "rank": 6
+    },
+    {
+      "def": 201,
+      "kind": "trick_le",
+      "suit": "heart",
+      "rank": 6
+    },
+    {
+      "def": 202,
+      "kind": "trick_le",
+      "suit": "club",
+      "rank": 6
+    },
+    {
+      "def": 210,
+      "kind": "trick_bingliang",
+      "suit": "spade",
+      "rank": 10
+    },
+    {
+      "def": 211,
+      "kind": "trick_bingliang",
+      "suit": "club",
+      "rank": 4
+    },
+    {
+      "def": 220,
+      "kind": "trick_shandian",
+      "suit": "spade",
+      "rank": 1
+    },
+    {
+      "def": 221,
+      "kind": "trick_shandian",
+      "suit": "heart",
+      "rank": 12
+    },
+    {
+      "def": 230,
+      "kind": "trick_jiedao",
+      "suit": "club",
+      "rank": 12
+    },
+    {
+      "def": 231,
+      "kind": "trick_jiedao",
+      "suit": "club",
+      "rank": 13
+    },
+    {
+      "def": 240,
+      "kind": "trick_tiesuo",
+      "suit": "spade",
+      "rank": 11
+    },
+    {
+      "def": 241,
+      "kind": "trick_tiesuo",
+      "suit": "spade",
+      "rank": 12
+    },
+    {
+      "def": 242,
+      "kind": "trick_tiesuo",
+      "suit": "club",
+      "rank": 10
+    },
+    {
+      "def": 243,
+      "kind": "trick_tiesuo",
+      "suit": "club",
+      "rank": 11
+    },
+    {
+      "def": 244,
+      "kind": "trick_tiesuo",
+      "suit": "club",
+      "rank": 12
+    },
+    {
+      "def": 245,
+      "kind": "trick_tiesuo",
+      "suit": "club",
+      "rank": 13
+    },
+    {
+      "def": 250,
+      "kind": "trick_huogong",
+      "suit": "heart",
+      "rank": 2
+    },
+    {
+      "def": 251,
+      "kind": "trick_huogong",
+      "suit": "heart",
+      "rank": 3
+    },
+    {
+      "def": 252,
+      "kind": "trick_huogong",
+      "suit": "heart",
+      "rank": 4
+    },
+    {
+      "def": 253,
+      "kind": "trick_huogong",
+      "suit": "diamond",
+      "rank": 12
+    },
+    {
+      "def": 260,
+      "kind": "trick_wuxie",
+      "suit": "spade",
+      "rank": 11
+    },
+    {
+      "def": 261,
+      "kind": "trick_wuxie",
+      "suit": "club",
+      "rank": 12
+    },
+    {
+      "def": 262,
+      "kind": "trick_wuxie",
+      "suit": "club",
+      "rank": 13
+    },
+    {
+      "def": 263,
+      "kind": "trick_wuxie",
+      "suit": "diamond",
+      "rank": 12
+    }
+  ]
+}

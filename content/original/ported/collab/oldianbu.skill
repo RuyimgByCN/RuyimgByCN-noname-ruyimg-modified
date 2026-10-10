@@ -1,0 +1,7 @@
+// 点簿（OL牛头马面）：首回合开始获得十三张；首次打出拘魂组合后视为无中生有。
+// 近似：游戏开始摸 5 张（十三张与扑克组合未建模）。
+skill oldianbu(2200972455) locked {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 5);
+  }
+}

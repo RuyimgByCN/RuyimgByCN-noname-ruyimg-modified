@@ -1,0 +1,4 @@
+skill inari_huhun(2733421794) locked {
+  modifier card_suit(club) override diamond;
+  modifier hand_limit add 1;
+}

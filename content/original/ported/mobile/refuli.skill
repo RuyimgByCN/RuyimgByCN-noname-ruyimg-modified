@@ -1,0 +1,19 @@
+skill refuli(2837551482) {
+  // 过滤器修正（2026-08-06，C 段 omp）：owner_alive 对任何角色濒死都触发
+  // （他人濒死时自回血）；上游 filter 要求 player == event.dying，改用
+  // owner_is_target（仅自身濒死触发）。
+  trigger dying owner_is_target optional {
+    let groups = alive_group_count();
+    effect recover_hp(self, groups - hp(self));
+    if max_hp(self) < groups {
+      if unique_max_current_hp_at(self, max_hp(self)) == 1 {
+        effect turn_over(self);
+      }
+    } else {
+      if unique_max_current_hp_at(self, groups) == 1 {
+        effect turn_over(self);
+      }
+    }
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,12 @@
+// 新陷阵（高顺）：出牌阶段限一次，双方各选一张手牌拼点。严格获胜后，
+// 本回合绑定该目标：对其使用牌无距离限制，超出通常次数后仍可对其使用
+// 【杀】，且无视其防具；使用仅指定一个目标的【杀】或普通锦囊时，可令
+// 该目标也成为目标。平局按失败处理。
+// 旧 JS 的「拼点绑定目标追踪 + 额外目标添加」无对应原语；以
+// choose_compare_selected_hand_card 拼点后绑定近似，绑定后的距离/次数/
+// 防具豁免与额外目标添加未建模（已注明）。
+skill xinxianzhen(3226686922) {
+  active play_phase uses_per_turn 1 targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 2960051687, 3077071581);
+  }
+}

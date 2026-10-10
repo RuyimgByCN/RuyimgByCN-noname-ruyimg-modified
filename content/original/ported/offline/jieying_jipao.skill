@@ -1,0 +1,6 @@
+// jieying_jipao。
+skill jieying_jipao(2881716822) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

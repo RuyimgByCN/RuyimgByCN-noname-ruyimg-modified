@@ -1,0 +1,6 @@
+// 神愤：限定技，消耗六枚暴怒，依次伤害其他角色并令其弃置四张手牌/装备牌。
+skill shenfen(2409921791) {
+  active play_phase once_per_game mark_at_least 1252226867 6 {
+    effect resolve_mass_damage_discard_hand_equip(self, 1252226867, 6, 1, 4);
+  }
+}

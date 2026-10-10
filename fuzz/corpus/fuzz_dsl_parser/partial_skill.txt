@@ -1,0 +1,1 @@
+skill jianxiong { trigger damage_applied { } }

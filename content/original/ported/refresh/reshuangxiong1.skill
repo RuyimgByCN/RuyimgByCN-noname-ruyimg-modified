@@ -1,0 +1,8 @@
+// reshuangxiong1：刷新包技能。
+// triggers: player:phaseDrawBegin1
+skill reshuangxiong1(3798594359) {
+    // 近似：旧JS事件 phaseDrawBegin1 → DSL事件 phaseDrawBegin1
+    trigger phase_draw owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

@@ -1,0 +1,13 @@
+// 新绝境（神赵云）
+// 原语义：手牌上限 +2；进入或被救离濒死状态时各摸一张牌。
+skill xinjuejing(2679563700) locked {
+  modifier hand_limit add 2;
+
+  trigger dying owner_is_target {
+    effect draw_cards(self, 1);
+  }
+
+  trigger dying_after owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

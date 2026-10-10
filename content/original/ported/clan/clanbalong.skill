@@ -1,0 +1,19 @@
+// 八龙：每回合首次体力变化后，若锦囊牌为手牌中唯一最多类别，展示手牌并补至存活角色数。
+skill clanbalong(2722267819) locked {
+  trigger damage owner_is_target_first_hp_change_turn_unique_trick_majority {
+    effect reveal_hand(self);
+    effect draw_cards(self, alive_count() - hand_count(self));
+  }
+  trigger hp_lost owner_is_target_first_hp_change_turn_unique_trick_majority {
+    effect reveal_hand(self);
+    effect draw_cards(self, alive_count() - hand_count(self));
+  }
+  trigger hp_recovered owner_is_target_first_hp_change_turn_unique_trick_majority {
+    effect reveal_hand(self);
+    effect draw_cards(self, alive_count() - hand_count(self));
+  }
+  trigger max_hp_changed owner_is_target_first_hp_change_turn_unique_trick_majority {
+    effect reveal_hand(self);
+    effect draw_cards(self, alive_count() - hand_count(self));
+  }
+}

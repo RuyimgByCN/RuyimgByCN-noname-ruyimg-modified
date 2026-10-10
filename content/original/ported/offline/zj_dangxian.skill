@@ -1,0 +1,5 @@
+// zj_dangxian：音效名:dangxian, 锁定技, player:phaseBegin, 异步。
+skill zj_dangxian(4011979787) {
+  trigger phase_any_end owner_alive {
+  }
+}

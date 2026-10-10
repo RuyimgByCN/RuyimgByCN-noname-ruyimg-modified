@@ -1,0 +1,7 @@
+// 武库（杜预）：有角色使用装备牌时，若拥有者的“武库”标记少于三枚，锁定获得一枚。
+// 旧 JavaScript 仅作语义证据；装备牌使用与标记上限由权威过滤器校验。
+skill spwuku(2480520461) locked {
+  trigger card_used owner_alive_equip_used_skill_mark_below_three {
+    effect add_mark(self, 2480520461, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 鬼助
+// 旧 JS 语义：任意角色进入濒死状态时，每回合限一次，拥有者可摸两张牌。
+skill nhguizhu(2454936215) {
+  trigger dying once_per_turn optional {
+    effect draw_cards(self, 2);
+  }
+}

@@ -1,0 +1,7 @@
+// friendfangqiu（放囚）：颜澈小游戏事件。
+// 未建模：自定义小游戏 friendyance_minigame 事件无 DSL 原语。
+skill friendfangqiu(4103389271) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 friendfangqiu 含真实规则体（limited、trigger、content 等键——宴策小游戏的预测分支），本行原「audio-only 无规则面」注记系 2026-09-03 批 158 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

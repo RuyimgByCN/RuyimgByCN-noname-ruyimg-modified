@@ -1,0 +1,7 @@
+// mbweitong（威统）：潜龙联动子技能。
+// 未建模：自定义事件 mbqianlong_beginBegin 无 DSL 原语。
+skill mbweitong(3678485539) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mbweitong 键面为 zhuSkill+trigger 但 content 为空体（无规则效果），批 158 复核维持终态——「无规则面」成立，措辞改判空体。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

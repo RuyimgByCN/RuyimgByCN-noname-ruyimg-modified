@@ -1,0 +1,17 @@
+// 襄戍（xiangshu·限定技）：结束阶段，若你本回合造成过伤害，你可以令一
+// 名已受伤的角色回复 X 点体力并摸 X 张牌（X 为你本回合造成的伤害次数，
+// 至多为 5）。
+// 上游 (sp2/skill.js 7877)：limited + trigger phaseJieshuBegin + filter
+// 本回合造成伤害>0 && 有受伤角色；content = target.recover(num) +
+// target.draw(num)，num=min(5, getStat("damage"))。
+// 实现（2026-09-15 第三百零九批·限定支援状态机，ADR 0641 §8.94）：
+// resolve_xiangshu(self, event_target)（ABI 753 / tag 769，单发无续体）
+// ——once_per_game 承接 limited；伤害次数 damage_dealt_count 机内直读
+// （狐魅同款）；wounded 目标 spec；回复上限钳制至体力上限差。
+// 登记债：无。
+// 保真度：完整。
+skill xiangshu(2433141736) {
+  active play_phase once_per_game targets 1 1 wounded {
+    effect resolve_xiangshu(self);
+  }
+}

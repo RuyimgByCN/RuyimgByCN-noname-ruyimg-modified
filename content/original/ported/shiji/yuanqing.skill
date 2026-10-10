@@ -1,0 +1,19 @@
+// 怨清（华歆，锁定技）：出牌阶段结束时，你本阶段用过的每种类别（基本/锦囊/
+// 装备），从弃牌堆随机获得一张该类别牌并置入仁库。
+// 旧 JavaScript 仅作语义证据；类别扫描、随机取牌与仁库置入由 ABI 443
+// resolve_yuanqing 权威结算（仁库以怨清技能牌堆表达）。
+skill yuanqing(3702802540) {
+  trigger phase_play_end owner_is_target {
+    effect resolve_yuanqing(self);
+  }
+}
+
+// 疏陈（华歆，锁定技）：其他角色进入濒死状态时，若仁库牌数大于三张，你获得
+// 仁库中所有牌，并令其回复 1 点体力（每轮一次）。
+// 旧 JavaScript 仅作语义证据；濒死响应与仁库获得由 ABI 444 resolve_shuchen
+// 权威结算。
+skill shuchen(3570664782) {
+  trigger dying owner_alive_other_dying_once_per_round {
+    effect resolve_shuchen(self, event_player, 3702802540);
+  }
+}

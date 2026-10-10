@@ -1,0 +1,8 @@
+// 直击（配合凤翥+玉宇）：使用牌指定「凤翥」记录中的角色为目标时，若其有「玉宇」标记：
+// 伤害牌则伤害+N并清标记；非伤害牌则判定N次，装备→神技，杀/决斗→无双+获得判定牌。
+// 旧 JS 的「跨技能存储依赖（olfengzhu/olyuyu）」「循环判定」无对应原语，未建模。
+skill ollbzhiji(4022751363) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

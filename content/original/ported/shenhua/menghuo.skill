@@ -1,0 +1,28 @@
+// 祸首（孟获）：锁定技，南蛮入侵对你无效；当其他角色使用南蛮入侵造成伤害时，
+// 伤害来源视为你。南蛮目标取消以通用修正器表达；来源重定向以
+// nanman_damage_source_as_owner 修正器 + prepare_damage 钩子表达（ABI 541），
+// 仅在伤害牌为南蛮实体牌时生效。
+skill huoshou(2566702627) locked {
+  modifier card_target_cancel(nanman) override 1;
+  modifier nanman_damage_source_as_owner override 1;
+}
+
+// 再起（孟获）：摸牌阶段，若你已受伤，你可以放弃摸牌，改为依次亮出牌堆顶 X 张牌
+// （X 为你已损失的体力值 + 1），每亮出一张红桃牌，你回复 1 点体力，然后获得其余
+// 亮出的牌。摸牌替换与翻亮/回复/获得由 resolve_zaiqi 权威校验（ABI 540）。
+skill zaiqi(3013017329) {
+  trigger phase_draw owner_is_target_draw_not_replaced optional {
+    effect resolve_zaiqi(self, 1);
+  }
+}
+
+// 求首（孟获，主公技）：锁定技，其他角色使用的南蛮入侵结算完毕后，若其目标中有
+// 角色死亡或造成伤害的目标数超过 3，所有蜀/群势力角色各摸一张牌。触发与群体摸牌
+// 由过滤器 owner_alive_nanman_resolved_target_dead_or_damaged_gt_three 与
+// resolve_twqiushou 权威校验（ABI 542）；受创目标数以 CardResolved 位掩码近似
+// 伤害总数。
+skill twqiushou(1145148285) lord_only locked {
+  trigger card_resolved owner_alive_nanman_resolved_target_dead_or_damaged_gt_three {
+    effect resolve_twqiushou(self);
+  }
+}

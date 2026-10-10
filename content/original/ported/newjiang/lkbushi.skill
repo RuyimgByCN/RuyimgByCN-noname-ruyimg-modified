@@ -1,0 +1,9 @@
+// 裸卜（陆抗）：准备阶段，你可选择四种花色的顺序：「无次数限制牌名」/
+// 「使用打出摸牌花色」/「成为目标可弃牌无效花色」/「结束阶段获得花色」。
+// 旧 JS 的「四花色顺序映射四种效果」无对应原语，未建模（已注明）；
+// 以准备阶段摸一张近似保留收益。
+skill lkbushi(2924579875) {
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

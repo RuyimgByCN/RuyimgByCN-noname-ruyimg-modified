@@ -1,0 +1,6 @@
+// 募讨：准备阶段可公开一名角色的手牌；若其中有逻辑【杀】，对其造成 1 点伤害。
+skill stdmutao(3513095743) {
+  trigger phase_prepare owner_is_target_any_alive_hand_nonempty optional {
+    effect choose_target_reveal_hand_damage_if_sha(self, 1);
+  }
+}

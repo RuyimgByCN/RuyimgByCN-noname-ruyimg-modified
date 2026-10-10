@@ -1,0 +1,6 @@
+// caxingwei：音效名:xinfu_xingluan, player:cards_moved, global:cards_moved, player:phase_prepare, 摸牌, 含子技能, 异步。
+skill caxingwei(4290938977) {
+  trigger cards_moved owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

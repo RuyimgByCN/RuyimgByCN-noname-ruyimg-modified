@@ -1,0 +1,9 @@
+skill luanqun_effect(3973186966) locked {
+  trigger card_used owner_source_sha_current_play_phase {
+    effect remove_skill(self_skill);
+  }
+
+  trigger phase_play_end owner_alive {
+    effect remove_skill(self_skill);
+  }
+}

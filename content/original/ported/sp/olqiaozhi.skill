@@ -1,0 +1,20 @@
+// 巧织（olqiaozhi）：出牌阶段，你可以弃置一张牌，亮出牌堆顶两张牌，
+// 获得其中一张（所得牌打上「巧织」标记）；你的手牌中有「巧织」牌时，
+// 不能发动〖巧织〗。
+// 上游 (sp/skill.js 8157)：enable phaseUse + filterCard 弃置成本 +
+// position he；filter = 有可弃牌 && 手牌无 gaintag("olqiaozhi")；
+// content = 亮顶 2 选 1（cardsGotoOrdering 未选入弃）→ gaintag。
+// 实现（2026-09-15 第二百九十六批·亮顶选获 gaintag 状态机，ADR 0641
+// §8.80）：resolve_olqiaozhi(self, 0)（ABI 740 / tag 761 / Cont 330）
+// stage 0=弃成本 → 1=弃置+亮顶 2 选 1 → 2=所得打标
+// （blake2b("olqiaozhi")=1909178934）入手牌、未选入弃。
+// 发动门控（2026-09-15 第三百零一批·gaintag gate 原语落地，ADR 0641
+// §8.85）：hand_missing_gaintag 1909178934——命令级声明门控（手牌有
+// 巧织牌时发动被拒），按钮可见性债面清偿；机器内防御性 gate 保留。
+// 登记债：可弃区含装备（hand_nonempty 仅作命令级近似）。
+// 保真度：完整（成本/亮牌/选获/打标/未选去向/门控全建模）。
+skill olqiaozhi(3591197180) {
+  active play_phase hand_nonempty hand_missing_gaintag 1909178934 {
+    effect resolve_olqiaozhi(self, 0);
+  }
+}

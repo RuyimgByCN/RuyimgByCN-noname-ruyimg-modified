@@ -1,0 +1,11 @@
+// 女装（直枝理树）
+// 双性由 character 元数据承载；结束阶段按当前手牌数摸牌。
+skill riki_nvzhuang(3571736403) locked {
+  trigger phase_end owner_is_target {
+    if hand_count(self) == 0 {
+      effect draw_cards(self, 2);
+    } else {
+      effect draw_cards(self, 1);
+    }
+  }
+}

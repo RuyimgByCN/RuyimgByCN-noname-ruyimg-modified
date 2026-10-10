@@ -1,0 +1,6 @@
+// mbgxchiyuan（驰援）：出牌阶段限一次，你可以交给一名体力值小于你的角色一张牌，然后视为对攻击范围内包含其的一名角色使用一张【杀】。此【杀】结算后，若造成过伤害，其回复1点体力值；若未造成过伤害，目标角色依次视为对你使用一张【杀】。
+skill mbgxchiyuan(3987648657) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect recover_hp(event_source, 1);
+  }
+}

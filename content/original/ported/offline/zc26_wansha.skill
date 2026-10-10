@@ -1,0 +1,6 @@
+// zc26_wansha：音效名:zc26_wansha, 锁定技, player:phaseBegin, global:card_used, 摸牌, 加技能, 含子技能, 异步。
+skill zc26_wansha(2581060712) locked {
+  trigger card_used always {
+    effect draw_cards(self, 2);
+  }
+}

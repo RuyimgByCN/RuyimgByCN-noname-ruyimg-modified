@@ -1,0 +1,15 @@
+// 界举义：受伤且体力上限大于存活人数时觉醒，补牌至体力上限并获得崩坏、界威重。
+skill rejuyi(2754242355) locked {
+  trigger phase_prepare owner_is_target {
+    if hp(self) < max_hp(self) {
+      if alive_count() < max_hp(self) {
+        effect remove_skill(self_skill);
+        if hand_count(self) < max_hp(self) {
+          effect draw_cards(self, max_hp(self) - hand_count(self));
+        }
+        effect add_skill(self, 3365741831);
+        effect add_skill(self, 4262017394);
+      }
+    }
+  }
+}

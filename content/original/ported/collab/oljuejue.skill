@@ -1,0 +1,7 @@
+// 绝决（刘宏伏皇后）：首次使用每种基本牌伤害+1且不计次数，使用后可回收因使用弃置的牌。
+// 「每种牌名独立首次追踪」「回收特定弃置牌」无对应原语，以每回合首次用杀增伤近似核心收益。
+skill oljuejue(2788270326) locked {
+  trigger card_used owner_source_sha_once_per_turn {
+    effect increase_current_sha_base_damage(self, event_card, 1);
+  }
+}

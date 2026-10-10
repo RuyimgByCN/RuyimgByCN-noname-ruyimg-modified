@@ -1,0 +1,7 @@
+// shefujing（锁定技/触发技）：锁定技, global:game_started, player:damage, source:damageSource, 需选择目标, 多分支选择, 摸牌, 失去体力, 加技能, 含子技能, 异步。
+skill shefujing(2515975528) locked {
+  trigger game_started always {
+    effect draw_cards(self, 3);
+    effect lose_hp(event_source, 1);
+  }
+}

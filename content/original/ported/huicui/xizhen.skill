@@ -1,0 +1,10 @@
+// 袭阵（高览）：出牌阶段开始时，你可以选择一名其他角色，视为对其使用一张【杀】
+// 或【决斗】。
+// 旧 JS 仅作语义证据；目标选择与视杀/决斗由 resolve_xizhen 权威状态机校验
+// （ABI 482）。注：旧 JS 的响应代偿子技能（你被要求响应时目标回复 + 你摸牌）依赖
+// 响应窗口事件，文档化省略。
+skill xizhen(4003133285) {
+  trigger phase_play owner_is_target {
+    effect resolve_xizhen(self);
+  }
+}

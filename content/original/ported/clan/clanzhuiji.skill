@@ -1,0 +1,10 @@
+// 追迹（族诸葛瑾）：锁定技，当你每回合首次使用黑色牌后，你令一名角色用一张手牌交换
+// 此牌（并记录其为「追迹」目标，供【云影】联动）。
+// 上游 (clan/skill.js:278-317)：useCardAfter + 本回合黑色牌首用过滤 +
+// chooseTarget/chooseCard 双选择换牌 + storage 目标记录。
+// 「实体牌交换」「本回合花色首用过滤」「storage 目标记录」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill clanzhuiji(3653654561) locked {
+  // INTENTIONAL_EMPTY_NOOP: card-swap primitive unavailable
+  modifier hand_limit add 0;
+}

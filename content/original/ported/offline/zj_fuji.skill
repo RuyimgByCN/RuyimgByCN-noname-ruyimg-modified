@@ -1,0 +1,7 @@
+// zj_fuji（锁定技/限定技/触发技）：觉醒技, 限定技, 锁定技, player:phase_end, source:death, 摸牌, 加技能, 含子技能, 异步。
+skill zj_fuji(4288722569) locked {
+  trigger phase_end always {
+    effect draw_cards(self, 3);
+    effect recover_hp(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// jdsbzaiqi：音效名:sbzaiqi, player:phase_discard_end, 需弃牌, 需选择目标, 摸牌, 回复体力, 异步。
+skill jdsbzaiqi(3176035041) {
+  trigger phase_discard_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,25 @@
+// 七弦（OL 周妃）
+// 原语义：手牌上限的基数视为 7，其他手牌上限修正仍可继续叠加。
+skill qixian(3046538003) locked {
+  modifier hand_limit_base override 7;
+}
+
+// 以下均为上游无规则面的标记型技能（audio-only），DSL 无可移植规则；
+// 以 hand_limit +0 空体保留 catalog 条目（与 sp/starzhonggu.skill 同约定）。
+// 上游定义位置：content/original/legacy-source/character/onlyOL/skill.js。
+skill olluanji_shen_caopi(2592341109) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olluanji_shen_caopi = { audio: 1 }（1741），无规则面。
+  modifier hand_limit add 0;
+}
+skill rerende_shen_caopi(3332359081) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rerende_shen_caopi = { audio: 1 }（1739），无规则面。
+  modifier hand_limit add 0;
+}
+skill rezhiheng_shen_caopi(2386368371) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rezhiheng_shen_caopi = { audio: 1 }（1740），无规则面。
+  modifier hand_limit add 0;
+}
+skill zhaxiang_ol_sb_jiangwei(3720547544) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 zhaxiang_ol_sb_jiangwei = { audio: 1 }（14719），无规则面。
+  modifier hand_limit add 0;
+}

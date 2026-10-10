@@ -1,0 +1,9 @@
+// 索舟：使用或成为梅花牌的目标时，每回合共享一次，令所有横置角色各摸一张。
+skill jysuozhou(2628091225) {
+  trigger card_used owner_source_or_targeted_club_linked_exists_once_per_turn optional {
+    effect draw_linked_players(1);
+  }
+  trigger card_targeted owner_source_or_targeted_club_linked_exists_once_per_turn optional {
+    effect draw_linked_players(1);
+  }
+}

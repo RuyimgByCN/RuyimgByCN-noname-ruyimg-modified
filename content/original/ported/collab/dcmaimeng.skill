@@ -1,0 +1,10 @@
+// 卖萌（体重之神）：体力变化后，选择一项：摸N张并防止下次伤害，
+// 或令一名其他角色交N张牌且其下一张牌无效（N=本局发动次数+1）。
+// 旧 JS 涉及自定义二选一按钮、跨技能临时效果（dcmaimeng_effect/dcmaimeng_deEffect）、
+// 递增计数，DSL 无对应原语组合，无法建模。
+// 空定义：需 expansion 支持 custom_choice_branch 与 递增计数原语。
+skill dcmaimeng(3048748485) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

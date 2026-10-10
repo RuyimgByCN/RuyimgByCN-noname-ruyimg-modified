@@ -1,0 +1,8 @@
+// 止戈（旧版）：出牌阶段，手牌数大于体力值时，可选择攻击范围内的一名其他角色。
+// 其须使用一张杀，否则将装备区里的一张牌交给你。
+// 旧JS含对手chooseToUse(杀)+否则chooseCard(装备)二选一。DSL以空定义保留。
+skill zhige(2905316901) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// retiaoxin（挑衅）：出牌阶段限一次，你可以指定一名有牌的其他角色，该角色需对你使用一张【杀】，否则你弃置其一张牌。
+skill retiaoxin(2570229794) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

@@ -1,0 +1,12 @@
+// 阑干：其他角色死亡后回复 1 点体力、摸两张牌，攻击范围累计 -1（至多 -3）。
+skill jsrglangan(3013648901) locked {
+  trigger death owner_alive {
+    effect recover_hp(self, 1);
+    effect draw_cards(self, 2);
+    if mark_count(self, 3013648901) < 3 {
+      effect add_mark(self, 3013648901, 1);
+    }
+  }
+
+  modifier attack_range add -owner_skill_mark;
+}

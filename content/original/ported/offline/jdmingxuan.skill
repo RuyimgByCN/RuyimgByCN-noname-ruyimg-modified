@@ -1,0 +1,6 @@
+// jdmingxuan：phase_play时摸牌。
+skill jdmingxuan(2770538745) {
+  trigger phase_play owner_alive  {
+    effect draw_cards(self, 1);
+  }
+}

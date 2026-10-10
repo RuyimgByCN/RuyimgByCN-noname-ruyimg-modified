@@ -1,0 +1,5771 @@
+//! 内核固有机制：帧提交动作与内核流程机器。
+//!
+//! 原则：移动牌、扣血、摸牌、事件推进、濒死/死亡/出牌结算等**规则机制**
+//! 归内核；具体技能的条件与流程归内容模块（`content`），两者通过同一套
+//! 事件帧 + 机器接口协作。
+
+use crate::catalog::{CardKind, SkillMachine};
+use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
+use crate::event::{EventData, Phase};
+use crate::ids::EventId;
+use crate::ids::PlayerId;
+use crate::machine::{damage_data, damage_data_with, Ctx, Flow, LogEvent};
+
+/// 帧提交阶段的一次性内核动作。
+pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
+    let (kind, data) = {
+        let f = ctx.res.frame(frame_id).expect("commit frame");
+        (f.kind, f.data.clone())
+    };
+    match data {
+        EventData::Damage(d) => commit_damage(ctx, frame_id, d),
+        EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
+        EventData::CardUsed(u) => commit_card_used(ctx, u),
+        EventData::Equipped { player, card, .. } => commit_equip(ctx, frame_id, player, card),
+        EventData::Linked { player, .. } => commit_linked(ctx, frame_id, player),
+        EventData::Phase { player, phase, begin } => commit_phase(ctx, player, phase, begin),
+        EventData::TurnEnded { player } => commit_turn_ended(ctx, player),
+        EventData::TurnOverBefore { player, cancelled } => {
+            commit_turn_over_before(ctx, player, cancelled)
+        }
+        // CardsDrawn/Recover/CardsMoved 等在构造时已由助手完成区移动作。
+        _ => {
+            let _ = kind;
+        }
+    }
+}
+
+/// 伤害提交：读最终帧载荷（转移/防止已生效），扣血并内联濒死检查。
+fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageData) {
+    if d.prevented {
+        ctx.log(LogEvent::DamagePrevented { target: d.target });
+        return;
+    }
+    if d.amount == 0 {
+        return;
+    }
+    // 急冻冰封（U05 ow 美，规则 v127）：锁定——冰封目标受所有伤害无
+    // 效（上游 jidong2 damageBefore trigger.cancel() 同口径；铁索传导
+    // 的独立事件同门控）。置于各伤害增幅钩前：伤害已整体取消，
+    // damageBegin 类增幅同上游一样不再结算。
+    if ctx.core.player(d.target).jidong_active {
+        ctx.log(LogEvent::DamagePrevented { target: d.target });
+        return;
+    }
+    // 诚信免伤（U05 xianjian 明绣，规则 v164）：锁定——免伤状态目标受
+    // 所有伤害无效（上游 chengxin2 damageBefore trigger.cancel 同口径）
+    if ctx.core.player(d.target).chengxin_active {
+        ctx.log(LogEvent::DamagePrevented { target: d.target });
+        return;
+    }
+    let mut amount = d.amount;
+    // 赤龙牙（U05 swd 第四批，规则 v88）：锁定——来源装备赤龙牙时
+    // 火属性伤害 +1（上游 damageBegin num++；非铁索传导照常）
+    if d.nature == crate::event::DamageNature::Fire {
+        if let Some(src) = d.source {
+            if ctx.core.player(src).alive
+                && ctx
+                    .core
+                    .player(src)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Chilongya)
+            {
+                amount += 1;
+            }
+        }
+    }
+    // 星君眼（U05 swd 第九批，规则 v93）：锁定——你的【杀】伤害 +1
+    //（上游 damageBegin num++；card==sha 同口径；铁索传导为独立事件
+    // 照常 +1）
+    if d.card
+        .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
+        .unwrap_or(false)
+    {
+        if let Some(src) = d.source {
+            if ctx.core.player(src).alive
+                && ctx
+                    .core
+                    .player(src)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Xingjunyan)
+            {
+                amount += 1;
+            }
+        }
+    }
+    // 链钩（U05 ow 路霸，规则 v128）：本回合被钩者首次受伤害 +1
+    //（上游 liangou2 damageBegin trigger.num++ usable:1 同口径；来源
+    // 不限=上游无 source 条件；仅路霸出牌阶段可钩住，换回合解除）
+    if let Some(t) = ctx.core.turn.liangou_hook {
+        if d.target == t && !ctx.core.turn.liangou_bonus_used {
+            amount += 1;
+            ctx.core.turn.liangou_bonus_used = true;
+        }
+    }
+    // 飞刃（U05 ow 源氏，规则 v129）：锁定——你的黑桃杀伤害 +1（非
+    // 铁索传导；上游 damageBegin trigger.num++ notLink 同口径；花色按
+    // 实体牌——火/雷杀为黑桃时同样命中）
+    if d.card
+        .map(|c| {
+            ctx.catalog.card_kind(c).is_sha_like()
+                && ctx.catalog.cards[c as usize].suit == crate::catalog::Suit::Spade
+        })
+        .unwrap_or(false)
+        && !d.from_chain
+    {
+        if let Some(src) = d.source {
+            let has_feiren = ctx
+                .catalog
+                .skill_by_name(crate::content::host::WUDIAN_FEIREN_KEY)
+                .map(|def| ctx.core.has_skill(src, def))
+                .unwrap_or(false);
+            if has_feiren && ctx.core.player(src).alive {
+                amount += 1;
+            }
+        }
+    }
+    // 刺猬（U07 玩点论杀韩龙，规则 v111）：锁定——你的杀对满血目标伤
+    // 害 +1；加后 ≥ 目标体力则目标获本回合濒死即死标记（上游
+    // addTempSkill("ciqiu_dying")）且本技能移除（一次性）
+    if d.card
+        .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
+        .unwrap_or(false)
+    {
+        if let Some(src) = d.source {
+            if ctx.core.player(d.target).alive
+                && ctx.core.player(d.target).hp == ctx.core.player(d.target).max_hp as i32
+            {
+                if let Some(def) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::host::WUDIAN_CIQIU_KEY)
+                {
+                    if ctx.core.has_skill(src, def) {
+                        amount += 1;
+                        if amount >= ctx.core.player(d.target).hp as u32 {
+                            ctx.core
+                                .turn
+                                .ciqiu_dying
+                                .push(d.target);
+                            ctx.core.skills.remove(&(src, def));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // 毒瘟（U07 ow，规则 v122）：锁定——造成伤害时若你手牌数与受伤害
+    // 角色相等，伤害 +1（上游 duwen damageBegin num++ 同口径；铁索传
+    // 导为独立事件照常判定）
+    if let Some(src) = d.source {
+        if ctx.core.player(src).alive
+            && ctx.core.player(src).hand.len() == ctx.core.player(d.target).hand.len()
+        {
+            if let Some(def) = ctx
+                .catalog
+                .skill_by_name(crate::content::host::WUDIAN_DUWEN_KEY)
+            {
+                if ctx.core.has_skill(src, def) {
+                    amount += 1;
+                }
+            }
+        }
+    }
+    // 炮台降级（U05 ow，规则 v123）：炮台持有者受伤 1 点降 1 级（上游
+    // paotai3 damageEnd forced：storage -= trigger.num；下限 0）
+    if ctx.core.player(d.target).paotai_lv > 0 && d.amount > 0 && !d.prevented {
+        let lv = ctx.core.player(d.target).paotai_lv;
+        ctx.core.player_mut(d.target).paotai_lv = lv.saturating_sub(d.amount as u8);
+    }
+    // 护甲（G1 扩展）：1:1 抵扣伤害，先于体力扣减
+    let hujia = ctx.core.player(d.target).hujia;
+    if hujia > 0 {
+        let absorbed = (hujia as u32).min(amount);
+        ctx.core.player_mut(d.target).hujia = hujia - absorbed as u8;
+        amount -= absorbed;
+        ctx.log(LogEvent::HujiaAbsorbed {
+            player: d.target,
+            amount: absorbed,
+        });
+    }
+    // 机甲血（U05 ow D.Va，规则 v141）：1:1 抵扣伤害（体力不损）——
+    // 上游 changeHp 拦截（体力回补+机甲血同扣）观察等价；归零后照常
+    // 扣体力（chongzhuang 重装累计登记暂缓）。
+    let has_jijia = ctx
+        .catalog
+        .skill_by_name(crate::content::host::WUDIAN_JIJIA_KEY)
+        .map(|def| ctx.core.has_skill(d.target, def))
+        .unwrap_or(false);
+    if has_jijia {
+        let j = ctx.core.player(d.target).jijia_hp;
+        if j > 0 {
+            let absorbed = (j as u32).min(amount);
+            ctx.core.player_mut(d.target).jijia_hp = j - absorbed as u8;
+            amount -= absorbed;
+            ctx.log(LogEvent::HujiaAbsorbed {
+                player: d.target,
+                amount: absorbed,
+            });
+        }
+    }
+    if amount == 0 {
+        return;
+    }
+    // 回合伤害统计（U05 xianjian 明绣，规则 v160 灵火门控）：来源本回
+    // 合已造成伤害 +实际量（护甲/机甲吸收后；上游 getStat("damage") 按
+    // damageEnd num 同口径）
+    if let Some(src) = d.source {
+        if src != d.target {
+            let p = ctx.core.player_mut(src);
+            p.turn_damage = p.turn_damage.saturating_add(amount.min(255) as u8);
+        }
+    }
+    let p = ctx.core.player_mut(d.target);
+    p.hp -= amount as i32;
+    ctx.log(LogEvent::DamageDealt {
+        source: d.source,
+        target: d.target,
+        amount: d.amount,
+        redirected_from: d.redirect_chain.clone(),
+        card: d.card,
+    });
+    // 吸血鬼指环（U05 swd 第六批，规则 v90）：锁定——你的【杀】造成
+    // 伤害后，若你已受伤，回复等量体力（上游 xixue：damageEnd sha &&
+    // hp<maxHp → recover(num)）
+    if let Some(src) = d.source {
+        if src != d.target
+            && ctx.core.player(src).alive
+            && ctx.core.player(src).hp < ctx.core.player(src).max_hp as i32
+            && d.card
+                .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
+                .unwrap_or(false)
+            && ctx
+                .core
+                .player(src)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Xixueguizhihuan)
+        {
+            ctx.recover(src, d.amount, None);
+        }
+    }
+    // 青龙令珠（U05 swd 第九批，规则 v93）：你对其他角色造成属性伤害
+    // 后（目标存活），获得其一张牌（上游 damageEnd hasNature + alive →
+    // gainPlayerCard he；RNG 口径同批四代抽）
+    if d.nature != crate::event::DamageNature::Normal {
+        if let Some(src) = d.source {
+            let t = d.target;
+            if src != t
+                && ctx.core.player(src).alive
+                && ctx.core.player(t).alive
+                && ctx.core.player(src).equips.iter().any(|c| {
+                    ctx.catalog.card_kind(*c) == CardKind::Qinglonglingzhu
+                })
+            {
+                let he_len = ctx.core.player(t).hand.len()
+                    + ctx.core.player(t).equips.len();
+                if he_len > 0 {
+                    let pick = ctx.core.rng.gen_range(he_len as u32) as usize;
+                    let hand_n = ctx.core.player(t).hand.len();
+                    let c = if pick < hand_n {
+                        ctx.core.player(t).hand[pick]
+                    } else {
+                        ctx.core.player(t).equips[pick - hand_n]
+                    };
+                    if ctx.core.player(t).hand.contains(&c) {
+                        ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                    } else {
+                        ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            t,
+                            c,
+                        );
+                    }
+                    ctx.core.player_mut(src).hand.push(c);
+                    ctx.log(LogEvent::CardsGiven {
+                        from: t,
+                        to: src,
+                        cards: vec![c],
+                    });
+                }
+            }
+        }
+    }
+    // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
+    let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
+    if entering {
+        ctx.core.player_mut(d.target).dying = true;
+        ctx.log(LogEvent::DyingEntered { player: d.target });
+        ctx.emit(EventData::Dying {
+            player: d.target,
+            source: d.source,
+        });
+    }
+    // 铁索连环传导：属性伤害结算后，传导给其余被链存活玩家（座位顺序），
+    // 随后全部解除连环。被防止/零点伤害不传导；传导伤害是完全的伤害结算
+    // （可被转移/响应/再触发濒死），且因链已先解除而不再级联——语义取舍
+    // 见覆盖清单行为差异表。
+    if d.nature != crate::event::DamageNature::Normal {
+        let target = d.target;
+        let chained: Vec<crate::ids::PlayerId> = ctx
+            .core
+            .seat_order_from(target)
+            .into_iter()
+            .filter(|p| *p != target && ctx.core.player(*p).linked)
+            .collect();
+        if !chained.is_empty() {
+            // 先解除全部连环（含目标自身）
+            for p in ctx
+                .core
+                .alive_players()
+                .filter(|p| ctx.core.player(*p).linked)
+                .collect::<Vec<_>>()
+            {
+                ctx.core.player_mut(p).linked = false;
+                ctx.log(LogEvent::Linked {
+                    player: p,
+                    linked: false,
+                });
+            }
+            for p in chained {
+                ctx.emit(EventData::Damage(crate::event::DamageData {
+                    source: d.source,
+                    target: p,
+                    amount: d.amount,
+                    nature: d.nature,
+                    prevented: false,
+                    redirect_chain: vec![],
+                    card: d.card,
+                    from_chain: true,
+                }));
+            }
+        }
+    }
+}
+
+/// 失去体力提交（逐技对照批三 v77）：直接扣减体力——不经护甲抵扣、
+/// 无伤害前置窗口/铁索传导/伤害来源触发技（LoseHp 是独立事件种）；
+/// 体力 ≤0 与伤害同口径进入濒死（上游 loseHp 语义）。
+pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, amount: u32) {
+    if amount == 0 {
+        return;
+    }
+    let p = ctx.core.player_mut(player);
+    p.hp -= amount as i32;
+    ctx.log(LogEvent::HpLost { player, amount });
+    let entering = ctx.core.player(player).hp <= 0 && !ctx.core.player(player).dying;
+    if entering {
+        ctx.core.player_mut(player).dying = true;
+        ctx.log(LogEvent::DyingEntered { player });
+        ctx.emit(EventData::Dying {
+            player,
+            source: None,
+        });
+    }
+}
+
+/// 连环切换提交：翻转横置状态并写回帧载荷。
+fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId) {
+    let next = !ctx.core.player(player).linked;
+    ctx.core.player_mut(player).linked = next;
+    if let Some(f) = ctx.res.frame_mut(frame_id) {
+        if let EventData::Linked { linked, .. } = &mut f.data {
+            *linked = next;
+        }
+    }
+    ctx.log(LogEvent::Linked {
+        player,
+        linked: next,
+    });
+}
+
+/// 出牌提交：牌离开手牌区。杀置桌面等待结算；桃立即回复。
+/// 猴子偷桃（E03）取消的使用的牌已在确认机器中移走，跳过结算。
+fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
+    if u.cancelled {
+        // 取消痕迹已在猴子机器的 CardsGiven/CardsDiscarded 中观测。
+        return;
+    }
+    ctx.take_hand_card(u.player, u.card);
+    // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游
+    // getHistory("useCard") 同口径——未被取消的使用全计）
+    ctx.core.player_mut(u.player).total_used += 1;
+    ctx.log(LogEvent::CardPlayed {
+        card: u.card,
+        player: u.player,
+        targets: u.targets.clone(),
+    });
+    // view-as 声明持久化：延时锦囊转化（国色）需跨阶段保存声明牌种，
+    // 判定生效时按声明牌种执行（目录牌种不再可靠）。
+    if let Some(as_kind) = u.use_as {
+        ctx.core.declared_kinds.insert(u.card, as_kind);
+    }
+    // view-as 转化（武圣/龙胆）：以声明牌种结算，而非目录牌种
+    let effective = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+    match effective {
+        CardKind::Tao => {
+            ctx.to_discard(u.card);
+            ctx.recover(u.player, 1, Some(u.card));
+        }
+        CardKind::Zhufangshenshi => {
+            // 贴房绅视（U05 swd 第十批，规则 v94）：本回合无视距离指定
+            // 该目标（sha 距离校验豁免）并摸一张牌。登记差异：上游为
+            // 锦囊可被无懈（AI 权重 0 实战不戒），原生简化为直接结算。
+            let t = *u.targets.first().expect("zhufangshenshi has one target");
+            ctx.core.turn.zhufangshenshi_target = Some(t);
+            ctx.to_discard(u.card);
+            ctx.draw_cards(u.player, 1);
+        }
+        CardKind::Caoyao => {
+            // 草药（U05 swd 第三批，规则 v87）：为受伤目标回复 1 点体力
+            //（目标合法性在 PlayCard 门控：距离 1 + hp<maxHp）
+            ctx.to_discard(u.card);
+            let t = *u.targets.first().expect("caoyao has one target");
+            ctx.recover(t, 1, Some(u.card));
+        }
+        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
+            // 出牌阶段限用一次（普通/火/雷杀共享）；龙颅山峰地图效果
+            //（mtg 首切片，规则 v100）下第二张杀走额外标记——若本次为
+            // 加成额外杀则置 land_sha_used，否则置常规已用
+            if ctx.core.turn.sha_used_play_phase {
+                if ctx.core.current_land
+                    == Some(crate::catalog::CardKind::Longlushanfeng)
+                {
+                    ctx.core.turn.land_sha_used = true;
+                }
+            } else {
+                ctx.core.turn.sha_used_play_phase = true;
+            }
+            // 冰河要塞地图效果（mtg 第八批，规则 v107）：锁定全局——使
+            // 用杀时若有牌须弃一张（上游 chooseToDiscard 可取消+玩家选；
+            // 原生 RNG 代抽不可取消，登记差异）。当前弃牌阶段的水没计数
+            // 不受影响（非弃牌阶段）。
+            if ctx.core.current_land == Some(crate::catalog::CardKind::Bingheyaosai) {
+                let p = ctx.core.player(u.player);
+                let has_cards = !p.hand.is_empty() || !p.equips.is_empty();
+                if has_cards {
+                    let from_hand = if p.hand.is_empty() {
+                        false
+                    } else if p.equips.is_empty() {
+                        true
+                    } else {
+                        ctx.core.rng.gen_range(2u32) == 0
+                    };
+                    if from_hand {
+                        let n = ctx.core.player(u.player).hand.len() as u32;
+                        let j = ctx.core.rng.gen_range(n) as usize;
+                        let c = ctx.core.player_mut(u.player).hand.remove(j);
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: u.player,
+                            cards: vec![c],
+                        });
+                    } else {
+                        let n = ctx.core.player(u.player).equips.len() as u32;
+                        let j = ctx.core.rng.gen_range(n) as usize;
+                        let c = ctx.core.player_mut(u.player).equips.remove(j);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            u.player,
+                            c,
+                        );
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: u.player,
+                            cards: vec![c],
+                        });
+                    }
+                }
+            }
+            ctx.core.table.push(u.card);
+        }
+        CardKind::Jiu | CardKind::Tianxianjiu => {
+            // 酒/天仙酒：命令边界已校验每回合一次——置本回合已用 + 待
+            // 消耗效果（天仙酒为酒的 swd 变体，规则 v89；登记差异：与酒
+            // 共享每回合一次计数）
+            ctx.to_discard(u.card);
+            ctx.core.turn.jiu_used = true;
+            ctx.core.turn.jiu_active = true;
+        }
+        // Le/Bing/ShanDian：先置桌面，经无懈窗口（使用时开窗，对齐旧线）
+        // 由 PlaceDelayedMachine 放入判定区或弃置。
+        _ => {
+            ctx.core.table.push(u.card);
+        }
+    }
+    // 突击计数（U07 ow，规则 v118）：出牌阶段使用任意牌 +1（取消不计；
+    // 等值牌种分支已各自置 table，此处只累计）
+    ctx.core.turn.cards_used_play_phase += 1;
+}
+
+/// 装备提交：牌入手牌区到对应装备栏，同栏旧牌替换入弃牌堆；
+/// 替换结果写回帧载荷（哈希可见）。
+/// G1 装备技能生命周期：装备 `card` 时授予其声明的目录技能。
+pub(crate) fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {
+    let names: Vec<&'static str> = ctx.catalog.cards[card as usize].equip_skills.clone();
+    for name in names {
+        if let Some(def) = ctx.catalog.skill_by_name(name) {
+            ctx.core.skills.entry((player, def)).or_insert(crate::state::SkillInstance {
+                owner: player,
+                enabled: true,
+                once_used: false,
+                expires_end_of_turn: false,
+                rounds: 0,
+            });
+        }
+    }
+}
+
+/// G1 装备技能生命周期：装备 `card` 离场时撤销其技能——若该技能不同时
+/// 由玩家剩余的其他装备提供（跨槽同名技能共存）。
+pub(crate) fn revoke_equip_skills(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) {
+    let names: Vec<&'static str> = catalog.cards[card as usize].equip_skills.clone();
+    for name in names {
+        let Some(def) = catalog.skill_by_name(name) else { continue };
+        let still_provided = core
+            .player(player)
+            .equips
+            .iter()
+            .any(|c| catalog.cards[*c as usize].equip_skills.contains(&name));
+        if !still_provided {
+            core.skills.remove(&(player, def));
+        }
+    }
+    // G1 索链甲：离场装备声明横置且玩家无其他同类装备 → 重置横置
+    if catalog.cards[card as usize].link_on_equip {
+        let still = core
+            .player(player)
+            .equips
+            .iter()
+            .any(|c| catalog.cards[*c as usize].link_on_equip);
+        if !still {
+            core.player_mut(player).linked = false;
+        }
+    }
+}
+
+fn commit_equip(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId, card: crate::ids::CardId) {
+    let kind = ctx.catalog.card_kind(card);
+    let Some(_slot) = kind.equip_slot() else {
+        panic!("commit_equip on non-equip card");
+    };
+    ctx.take_hand_card(player, card);
+    let replaced = ctx
+        .core
+        .player(player)
+        .equips
+        .iter()
+        .copied()
+        .find(|c| ctx.catalog.card_kind(*c) == kind);
+    if let Some(old) = replaced {
+        ctx.core.player_mut(player).equips.retain(|c| *c != old);
+        revoke_equip_skills(ctx.core, ctx.catalog, player, old);
+        ctx.to_discard(old);
+    }
+    ctx.core.player_mut(player).equips.push(card);
+    grant_equip_skills(ctx, player, card);
+    // G1 索链甲：装备时横置
+    if ctx.catalog.cards[card as usize].link_on_equip {
+        let was = ctx.core.player(player).linked;
+        ctx.core.player_mut(player).linked = true;
+        if !was {
+            ctx.log(LogEvent::Linked { player, linked: true });
+        }
+    }
+    if let Some(f) = ctx.res.frame_mut(frame_id) {
+        if let EventData::Equipped { replaced: r, .. } = &mut f.data {
+            *r = replaced;
+        }
+    }
+    ctx.log(LogEvent::Equipped {
+        player,
+        card,
+        replaced,
+    });
+}
+
+/// 阶段帧提交：PhaseEnd 推进阶段或转入回合收束；PhaseBegin 执行入场效果。
+fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) {
+    // 翻面角色回合跳过（E03 翻面 + U05 ow 美，规则 v127）：翻面者回合
+    // 的首个阶段帧改为「先经翻面前置取消窗口翻回（上游 _turnover
+    // phaseBefore 强制取消 + turnOver 翻回同口径），再直达回合收束」
+    // ——整回合无任何阶段帧（摸牌/出牌/弃牌全跳过），座位/轮次计数
+    // 不变（回合槽照常消耗）。
+    if begin
+        && phase == Phase::Judge
+        && ctx.core.player(player).face_down
+    {
+        ctx.emit(EventData::TurnOverBefore { player, cancelled: false });
+        ctx.emit(EventData::TurnEnded { player });
+        return;
+    }
+    // 强固解除（U05 ow 奥丽莎，规则 v136）：自己回合判定阶段开始——
+    // 上游 addTempSkill("qianggu2") 至 phaseBegin 同口径
+    if begin && phase == Phase::Judge && ctx.core.player(player).qianggu_active {
+        ctx.core.player_mut(player).qianggu_active = false;
+    }
+    // 潜行解除（U05 ow 黑影，规则 v139）：自己回合判定阶段开始——上游
+    // tempHide 至 phaseBeginStart 同口径
+    if begin && phase == Phase::Judge && ctx.core.player(player).yinshen_active {
+        ctx.core.player_mut(player).yinshen_active = false;
+    }
+    // 蛊舞递减（U05 xianjian 阿奴，规则 v154）：自己每阶段结束 -1（上游
+    // anwugu2 phaseAfter 递减同口径）；归 0 后移除（出牌受限/手牌上限随
+    // 之解除）。
+    if !begin && ctx.core.player(player).anwugu_count > 0 {
+        ctx.core.player_mut(player).anwugu_count -= 1;
+    }
+    // 月行（U05 xianjian 龙幽，规则 v159）：出牌阶段结束解除距离基数交
+    // 换（双向互指一并清除；上游 yuexing2 临时技 phaseUseAfter 同口径）
+    if !begin && phase == Phase::Play {
+        if ctx.core.player(player).yuexing_pair.is_some() {
+            if let Some(pair) = ctx.core.player_mut(player).yuexing_pair.take() {
+                if ctx.core.player(pair).yuexing_pair == Some(player) {
+                    ctx.core.player_mut(pair).yuexing_pair = None;
+                }
+            }
+        }
+    }
+    // 逐月（U05 xianjian 云天河，规则 v161）：出牌阶段结束清白名单
+    //（上游 zhuyue2 phaseUseEnd silent 同口径）
+    if !begin && phase == Phase::Play {
+        ctx.core.turn.zhuyue_targets.clear();
+    }
+    // 诚信免伤清除（U05 xianjian 明绣，规则 v164）：本人 End 阶段结束
+    //（登记差异：上游 chengxin2 存活至最近阶段结束）
+    if !begin && phase == Phase::End && ctx.core.player(player).chengxin_active {
+        ctx.core.player_mut(player).chengxin_active = false;
+    }
+    // 屏障标志转计数（U05 ow 查莉娅，规则 v138）：自己回合判定阶段开
+    // 始——上回合两标志各计一次并清除（上游 pingzhang_count phaseBegin
+    // silent 同口径；应用技在随后摸牌阶段读计数）
+    if begin && phase == Phase::Judge {
+        let used = u8::from(ctx.core.player(player).pingzhang_self_used)
+            + u8::from(ctx.core.player(player).pingzhang_other_used);
+        let p = ctx.core.player_mut(player);
+        p.pingzhang_count = used;
+        p.pingzhang_self_used = false;
+        p.pingzhang_other_used = false;
+    }
+    ctx.log(LogEvent::PhaseChanged {
+        player,
+        phase,
+        begin,
+    });
+    // 全局阶段计数（U07 ow 自愈，规则 v120）：每阶段开始 +1（上游
+    // game.phaseNumber 同口径）
+    if begin {
+        ctx.core.turn.phase_number += 1;
+    }
+    if begin {
+        match phase {
+            Phase::Judge => {
+                if !ctx.core.turn.turn_opened {
+                    ctx.reset_turn_limits(player);
+                    ctx.core.turn.turn_opened = true;
+                    // 回合伤害统计清零（U05 xianjian 明绣，规则 v160 灵火
+                    // 门控；上游 getStat 每回合重置同口径）——在本人回合
+                    // 开始清（PhaseEnd 触发晚于收束提交，见规则基准）
+                    ctx.core.player_mut(player).turn_damage = 0;
+                    // 忘忧戳清零（U05 xianjian 紫萱，规则 v162）：存活至
+                    // 标记者自己下回合开始（上游 addTempSkill 当前回合结
+                    // 束——登记差异：保留期延长）
+                    ctx.core.player_mut(player).wangyou3_round = 0;
+                    // 摄灵回合次数清零（U05 xianjian 南宫煌，规则 v168）
+                    ctx.core.turn.sheling_used = 0;
+                    // 射影回合清零（U05 xianjian 苏媚，规则 v175）
+                    ctx.core.turn.sheying_used = false;
+                    // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
+                    ctx.core.turn.zhangmu_used = false;
+                    ctx.core.turn.yingfeng_chain = false;
+                    ctx.core.turn.luanjian_card = None;
+                    ctx.core.turn.mujiaren_used = false;
+                }
+                // 废墟地图效果（mtg 第四批，规则 v103）：锁定全局——回合
+                // 开始（准备阶段）随机将弃牌堆一张置于牌堆顶（上游
+                // phaseBegin silent 同口径；RNG 真消除口径）
+                if ctx.core.current_land == Some(crate::catalog::CardKind::Feixu)
+                    && !ctx.core.discard.is_empty()
+                {
+                    let n = ctx.core.discard.len() as u32;
+                    let i = ctx.core.rng.gen_range(n) as usize;
+                    let c = ctx.core.discard.remove(i);
+                    ctx.core.deck.push(c);
+                }
+            }
+            Phase::Draw => {
+                if ctx.core.turn.skip_draw_phase {
+                    // 兵粮寸断：跳过摸牌
+                    ctx.core.turn.skip_draw_phase = false;
+                } else if ctx.core.player(player).skip_next_draw {
+                    // 归烬牌（U05 xianjian 明绣，规则 v160）：跳过本次摸
+                    // 牌阶段（上游 skip("phaseDraw") 同口径）
+                    ctx.core.player_mut(player).skip_next_draw = false;
+                } else {
+                    ctx.draw_cards(player, 2);
+                }
+            }
+            Phase::Play => {
+                ctx.core.turn.sha_used_play_phase = false;
+                // 突击计数（U07 ow，规则 v118）：出牌阶段开始清零
+                ctx.core.turn.cards_used_play_phase = 0;
+            }
+            Phase::Discard => {
+                // 水没墓穴计数（mtg 第三批，规则 v102）：弃牌阶段开始清零
+                ctx.core.turn.discard_phase_discarded = 0;
+            }
+            Phase::End => {}
+        }
+        return;
+    }
+    // PhaseEnd
+    // 筑城开关（U07 批三，规则 v113）：刘馥自己每阶段结束确认翻转（上
+    // 游 player:"phaseEnd" optional 同口径；原生无 begin:false 帧，直推
+    // OptionalGate）
+    if let Some(def) = ctx
+        .catalog
+        .skill_by_name(crate::content::host::WUDIAN_ZHUCHENG_KEY)
+    {
+        if ctx.core.has_skill(player, def) {
+            let event = EventData::Phase {
+                player,
+                phase,
+                begin: false,
+            };
+            ctx.res.parks.push(crate::resolution::Park {
+                resume_depth: ctx.res.stack.len(),
+                slot: crate::resolution::Slot::Trigger { frame: crate::resolution::NO_FRAME },
+                machine: Box::new(crate::resolution::OptionalGate::new(
+                    player, def, event, false, None,
+                )),
+            });
+        }
+    }
+    // 水没墓穴地图效果（mtg 第三批，规则 v102）：锁定——本弃牌阶段弃
+    // 置过牌则阶段结束摸一（上游 phaseDiscardEnd forced 同口径）
+    if phase == Phase::Discard {
+        if ctx.core.current_land == Some(crate::catalog::CardKind::Shuimomuxue)
+            && ctx.core.turn.discard_phase_discarded > 0
+        {
+            ctx.draw_cards(player, 1);
+        }
+        ctx.core.turn.discard_phase_discarded = 0;
+    }
+    // 光塔（U07 ow，规则 v119）：♠子技持有者于下阶段结束受 1 无源雷伤
+    //（一次性移除；原生无 PhaseEnd 帧——直推同水没墓穴口径）
+    {
+        if let Some(def) = ctx
+            .catalog
+            .skill_by_name(crate::content::host::WUDIAN_GUANGSHU_SPADE_KEY)
+        {
+            if ctx.core.has_skill(player, def) {
+                ctx.core.skills.remove(&(player, def));
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    None,
+                    player,
+                    1,
+                    crate::event::DamageNature::Thunder,
+                    None,
+                )));
+            }
+        }
+    }
+    // 乐不思蜀生效：摸牌阶段结束时若跳过出牌旗标在位，
+    // 直接进入弃牌阶段（跳过 Play 的 End/Begin 事件对——挂账见清单）。
+    if phase == Phase::Draw && ctx.core.turn.skip_play_phase {
+        ctx.core.turn.skip_play_phase = false;
+        ctx.core.turn.phase = Phase::Discard;
+        ctx.emit(EventData::Phase {
+            player,
+            phase: Phase::Discard,
+            begin: true,
+        });
+        return;
+    }
+    match phase.next() {
+        Some(next) => {
+            ctx.core.turn.phase = next;
+            ctx.emit(EventData::Phase {
+                player,
+                phase: next,
+                begin: true,
+            });
+        }
+        None => {
+            ctx.emit(EventData::TurnEnded { player });
+        }
+    }
+}
+
+/// E03 翻面提交：取消位为真则跳过翻转（漩涡面具等锁定技）；
+/// 否则翻转武将牌朝向并发出完成事件。
+fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool) {
+    if cancelled {
+        return;
+    }
+    let face_down = !ctx.core.player(player).face_down;
+    ctx.core.player_mut(player).face_down = face_down;
+    // 急冻冰封解除（U05 ow 美，规则 v127）：翻回正面即冰封结束——上游
+    // jidong2 至 turnOverAfter 到期同口径（含翻面跳回合的翻回；急冻
+    // 自身翻至背面为内联翻转不经此处）
+    if !face_down {
+        ctx.core.player_mut(player).jidong_active = false;
+    }
+    ctx.emit(EventData::TurnOvered { player, face_down });
+}
+
+/// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
+fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
+    ctx.log(LogEvent::TurnEnded { player });
+    ctx.expire_temporary_skills(player);
+    // 清残留跳阶段旗标（正常流程已被消费）
+    ctx.core.turn.skip_draw_phase = false;
+    ctx.core.turn.skip_play_phase = false;
+    // Boss 模式（P2/N08 模式入口批三-a，规则 v82）：死亡座位不跳过——
+    // 轮到其回合时执行重整 tick（上游 bossPhaseLoop）：计数 +1、hp<上限
+    // 则 +1（否则手牌 <4 摸 1），计数达阈值复活；连续死亡座位逐个 tick
+    // 后落在下一存活座位。
+    if let Some((boss, threshold)) = ctx.core.boss_mode() {
+        let seats = ctx.core.players.len() as u8;
+        let mut next = (player + 1) % seats;
+        loop {
+            if ctx.core.player(next).alive {
+                break;
+            }
+            if threshold == 0 {
+                // 上游 game.bossinfo.chongzheng 未设：无复活模式，跳过 tick
+                next = (next + 1) % seats;
+                if next == (player + 1) % seats {
+                    break;
+                }
+                continue;
+            }
+            // 重整 tick
+            let cnt = ctx.core.player(next).boss_chongzheng + 1;
+            ctx.core.player_mut(next).boss_chongzheng = cnt;
+            if (ctx.core.player(next).hp as u32) < ctx.core.player(next).max_hp {
+                ctx.core.player_mut(next).hp += 1;
+            } else if ctx.core.player(next).hand.len() < 4 {
+                ctx.draw_cards(next, 1);
+            }
+            ctx.log(LogEvent::BossChongzhengTick { player: next, count: cnt });
+            if cnt >= threshold {
+                let p = ctx.core.player_mut(next);
+                p.alive = true;
+                p.dying = false;
+                p.boss_chongzheng = 0;
+                ctx.log(LogEvent::BossRevived { player: next });
+            }
+            next = (next + 1) % seats;
+            if next == (player + 1) % seats {
+                break; // 全场死亡（终局判负已在死亡结算处理）
+            }
+        }
+        if next <= player {
+            ctx.core.turn.round += 1;
+        }
+        ctx.core.turn.current = next;
+        ctx.core.turn.phase = Phase::Judge;
+        ctx.core.turn.sha_used_play_phase = false;
+        ctx.core.turn.land_used = false;
+        ctx.core.turn.land_sha_used = false;
+        ctx.core.turn.turn_opened = false;
+        // 回合级存量清零（v128 修复 v126 遗留：TurnState 换回合为原地
+        // 改字段而非重建——乐动三角/链钩必须显式复位）
+        ctx.core.turn.yuedong_num = 0;
+        ctx.core.turn.yuedong_eff = 0;
+        ctx.core.turn.yuedong_recover = false;
+        ctx.core.turn.liangou_hook = None;
+        ctx.core.turn.liangou_bonus_used = false;
+        ctx.core.turn.feitiao_target = None;
+        ctx.core.turn.fanling_used = false;
+        ctx.core.turn.xjyufeng_used = 0;
+        ctx.core.turn.diewu_draw_used = false;
+        ctx.core.turn.lueying_used = false;
+        ctx.core.turn.txianqu_used = false;
+        ctx.core.turn.jtjubao_used = false;
+        ctx.emit(EventData::Phase {
+            player: next,
+            phase: Phase::Judge,
+            begin: true,
+        });
+        return;
+    }
+    let next = ctx.core.next_alive(player);
+    if next <= player {
+        ctx.core.turn.round += 1;
+    }
+    ctx.core.turn.current = next;
+    ctx.core.turn.phase = Phase::Judge;
+    ctx.core.turn.sha_used_play_phase = false;
+    ctx.core.turn.land_used = false;
+    ctx.core.turn.land_sha_used = false;
+    ctx.core.turn.turn_opened = false;
+    // 回合级存量清零（v128 修复 v126 遗留：TurnState 换回合为原地
+    // 改字段而非重建——乐动三角/链钩必须显式复位）
+    ctx.core.turn.yuedong_num = 0;
+    ctx.core.turn.yuedong_eff = 0;
+    ctx.core.turn.yuedong_recover = false;
+    ctx.core.turn.liangou_hook = None;
+    ctx.core.turn.liangou_bonus_used = false;
+    ctx.core.turn.feitiao_target = None;
+    ctx.core.turn.fanling_used = false;
+    ctx.core.turn.xjyufeng_used = 0;
+    ctx.core.turn.diewu_draw_used = false;
+    ctx.core.turn.lueying_used = false;
+    ctx.core.turn.txianqu_used = false;
+    ctx.core.turn.jtjubao_used = false;
+    ctx.emit(EventData::Phase {
+        player: next,
+        phase: Phase::Judge,
+        begin: true,
+    });
+}
+
+/// 帧固有流程机器（`Intrinsic` 阶段启动）。
+pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
+    let data = ctx.res.frame(frame_id).expect("frame").data.clone();
+    match data {
+        EventData::LoseHp { .. } => None,
+        EventData::DyingSaved { .. } => None,
+        EventData::Dying { player, source } => Some(Box::new(DyingSaveMachine {
+            dying: player,
+            source,
+            responders: ctx.core.seat_order_from(ctx.core.turn.current),
+            asked: false,
+            round_used: false,
+        })),
+        EventData::CardUsed(u) => {
+            // 筑城守卫（U07 批三，规则 v113）等 AfterTriggers 机器写回的
+            // 取消：跳过结算（杀已由守卫归还手牌）
+            if u.cancelled {
+                return None;
+            }
+            let effective_kind = u
+                .use_as
+                .unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+            match effective_kind {
+            CardKind::Dismantle => {
+                let effect = DismantleMachine {
+                    card: u.card,
+                    source: u.player,
+                    target: *u.targets.first().expect("dismantle has one target"),
+                    asked: false,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            // 无中生有（P2/N08 缺牌种批①）：使用后摸 2（无懈窗口包装）。
+            CardKind::Wuzhong => Some(Box::new(wrap_nullify_window(
+                ctx,
+                u.card,
+                u.player,
+                Box::new(WuzhongMachine { owner: u.player, card: Some(u.card) }),
+            ))),
+            // 桃园结义（P2/N08 缺牌种批①）：所有其他存活角色回复 1 点
+            // 体力（无懈窗口包装）。
+            CardKind::Taoyuan => Some(Box::new(wrap_nullify_window(
+                ctx,
+                u.card,
+                u.player,
+                Box::new(TaoyuanMachine { owner: u.player, card: Some(u.card) }),
+            ))),
+            // 五谷丰登（批①-2）：亮存活角色数的牌，从使用者起按座位序
+            // 逐人择一（无懈窗口包装）。
+            CardKind::Wugu => Some(Box::new(wrap_nullify_window(
+                ctx,
+                u.card,
+                u.player,
+                Box::new(WuguMachine {
+                    owner: u.player,
+                    cards: Vec::new(),
+                    pickers: Vec::new(),
+                    stage: WuguStage::Init,
+                }),
+            ))),
+            // 借刀杀人（批①-2）：武器持有者出杀（登记差异：直接伤害
+            // 结算，无出闪窗口）或交出武器（无懈窗口包装）。
+            CardKind::Jiedao => {
+                let holder = *u.targets.first().expect("jiedao two targets");
+                let victim = *u.targets.get(1).expect("jiedao two targets");
+                Some(Box::new(wrap_nullify_window(
+                    ctx,
+                    u.card,
+                    u.player,
+                    Box::new(JiedaoMachine {
+                        owner: u.player,
+                        holder,
+                        victim,
+                        card: Some(u.card),
+                        stage: JiedaoStage::Ask,
+                    }),
+                )))
+            }
+            CardKind::Snatch => {
+                let effect = SnatchMachine {
+                    card: u.card,
+                    source: u.player,
+                    target: *u.targets.first().expect("snatch has one target"),
+                    asked: false,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
+                // 方天画戟（批③-b 第九把）：多目标队列（首目标即期结算，
+                // 其余入队列逐目标推进）。
+                let mut it = u.targets.iter().copied();
+                let first = it.next().expect("sha has one target");
+                let extra: Vec<PlayerId> = it.collect();
+                Some(Box::new(ShaResolveMachine {
+                card: u.card,
+                source: u.player,
+                target: first,
+                nature: u.nature,
+                asked: false,
+                armor_judged: false,
+                dodges_used: 0,
+                tieji_red: None,
+                liuli_done: false,
+                liuli_stage: 0,
+                liuli_card: None,
+                asking_qilin: false,
+                qilin_horse: None,
+                asking_hanbing: false,
+                asking_fengxueren: false,
+                asking_guanshi: false,
+                guanshi_cards: Vec::new(),
+                asking_qinglong: false,
+                asking_cixiong: false,
+                cixiong_done: false,
+                hanbing_pending: 0,
+                asking_xiandan: false,
+                xiandan_done: false,
+                xiandan_bonus: false,
+                asking_lueying: false,
+                lueying_victim: None,
+                extra_targets: extra,
+                hujia_queue: None,
+                hujia_holder: None,
+                // 酒效果在杀派发（=使用）时捕获并消耗——「下一张杀」
+                jiu_bonus: std::mem::take(&mut ctx.core.turn.jiu_active),
+            }))
+            }
+            CardKind::Shuigong => {
+                // 水攻（G1 运筹帷幄，锦囊）：无懈窗口 + 多目标强制弃装备
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::WD_SHUIGONG_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::ShuigongCard,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: u.targets.clone(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Shezhanqunru => {
+                // 舌战群儒（G1 运筹帷幄，锦囊）：与所有有手牌的其他角色拼点
+                //（登记差异：确定性首轮拼点，简化多轮 Bool 链）
+                let targets: Vec<u8> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != u.player && !ctx.core.player(*p).hand.is_empty())
+                    .collect();
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::WD_SHEZHAN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::ShezhanqunruCompare,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets,
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Shujinsan => {
+                // 舒筋散（G1 古剑，锦囊）：目标弃任意张手牌（可取消）摸等量
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::GJ_SHUJINSAN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::GujianShujinsanCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("shujinsan has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::SelectCard,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Tanhuadong
+            | CardKind::Yougeng
+            | CardKind::Qingtuan
+            | CardKind::Yuanbaorou
+            | CardKind::Gudonggeng
+            | CardKind::Mapodoufu
+            | CardKind::Chunbing
+            | CardKind::Liyutang
+            | CardKind::Molicha
+            | CardKind::Xiajiao
+            | CardKind::Mizhilianou
+            | CardKind::Luyugeng
+            | CardKind::Ziyangdan
+            | CardKind::Yunvyuanshen => {
+                // 古剑食物（G1）：授予目标监听技实例并弃置食物牌
+                //（上游食物无 wuxieable，无懈窗口不包）
+                let key = match effective_kind {
+                    CardKind::Tanhuadong => crate::content::host::GJ_TANHUADONG_CARD_KEY,
+                    CardKind::Qingtuan => crate::content::host::GJ_QINGTUAN_CARD_KEY,
+                    CardKind::Yuanbaorou => crate::content::host::GJ_YUANBAOROU_CARD_KEY,
+                    CardKind::Gudonggeng => crate::content::host::GJ_GUDONGGENG_CARD_KEY,
+                    CardKind::Mapodoufu => crate::content::host::GJ_MAPODOUFU_CARD_KEY,
+                    CardKind::Chunbing => crate::content::host::GJ_CHUNBING_CARD_KEY,
+                    CardKind::Liyutang => crate::content::host::GJ_LIYUTANG_CARD_KEY,
+                    CardKind::Molicha => crate::content::host::GJ_MOLICHA_CARD_KEY,
+                    CardKind::Xiajiao => crate::content::host::GJ_XIAJIAO_CARD_KEY,
+                    CardKind::Mizhilianou => crate::content::host::GJ_MIZHLIANOU_CARD_KEY,
+                    CardKind::Luyugeng => crate::content::host::GJ_LUYUGENG_CARD_KEY,
+                    CardKind::Bingpotong => crate::content::host::GJ_BINGPOTONG_CARD_KEY,
+                    CardKind::Qiankunbiao => crate::content::host::GJ_QIANKUNBIAO_CARD_KEY,
+                    CardKind::Longxugou => crate::content::host::GJ_LONGXUGOU_CARD_KEY,
+                    CardKind::Shenhuofeiya => crate::content::host::GJ_SHENHUOFEIYA_CARD_KEY,
+                    CardKind::Ziyangdan => crate::content::host::GJ_ZIYANGDAN_CARD_KEY,
+                    CardKind::Yunvyuanshen => crate::content::host::GJ_YUNVYUANSHEN_CARD_KEY,
+                    _ => crate::content::host::GJ_YOUGENG_CARD_KEY,
+                };
+                let behavior = crate::content::host::HostBehavior::GujianFoodGrant;
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("food has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Dinvxuanshuang => {
+                // 帝女玄霜（G1 古剑）：主动使用——回复 1 + 弃任意摸等量
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::GJ_DINVXUANSHUANG_CARD_KEY
+                        .to_string(),
+                    behavior: crate::content::host::HostBehavior::JiguanDinvCard,
+                    owner: u.player,
+                    target: Some(u.player),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Qinpendayu | CardKind::Birinongwu | CardKind::Ciguhanshuang => {
+                // gwent 天气（G1）：目标 + 距离 1 邻座（座位序，已持有
+                // 者授予时跳过）；无懈窗口包装
+                let t = *u.targets.first().expect("weather has one target");
+                let mut q = vec![t];
+                for p in ctx.core.alive_players() {
+                    if p != t && ctx.core.computed_distance(ctx.catalog, t, p) == 1 {
+                        q.push(p);
+                    }
+                }
+                let (key, behavior) = match effective_kind {
+                    CardKind::Qinpendayu => (
+                        crate::content::host::GW_QINPEN_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentWeatherGrant,
+                    ),
+                    CardKind::Birinongwu => (
+                        crate::content::host::GW_BIRIN_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentWeatherGrant,
+                    ),
+                    _ => (
+                        crate::content::host::GW_CIGU_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentWeatherGrant,
+                    ),
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: q,
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Zumoshoukao => {
+                // 祖墨手铠（G1 gwent）：无懈窗口 + 封印授予机
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::GW_ZUMO_CARD_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::GwentZumoCard,
+                    owner: u.player,
+                    target: u.targets.first().copied(),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Kunenfayin | CardKind::Shanbengshu | CardKind::Poxiao => {
+                // gwent 收官（G1）：无懈窗口包装 + 各自机器
+                let (key, behavior) = match effective_kind {
+                    CardKind::Kunenfayin => (
+                        crate::content::host::GW_KUNEN_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentKunenCard,
+                    ),
+                    CardKind::Shanbengshu => (
+                        crate::content::host::GW_SHANBENG_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentShanbengCard,
+                    ),
+                    _ => (
+                        crate::content::host::GW_POXIAO_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentPoxiaoCard,
+                    ),
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: Some(u.player),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Yanziyaoshui
+            | CardKind::Aozuzhilei
+            | CardKind::Wenyi
+            | CardKind::Zhihuanjun
+            | CardKind::Baoxueyaoshui => {
+                // gwent 法术（G1）：无懈窗口包装 + 各自机器
+                let (key, behavior) = match effective_kind {
+                    CardKind::Yanziyaoshui => (
+                        crate::content::host::GW_YANZHI_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentYanzhiCard,
+                    ),
+                    CardKind::Aozuzhilei => (
+                        crate::content::host::GW_AOZU_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentAozuCard,
+                    ),
+                    CardKind::Wenyi => (
+                        crate::content::host::GW_WENYI_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentWenyiCard,
+                    ),
+                    CardKind::Zhihuanjun => (
+                        crate::content::host::GW_ZIHUAN_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentZhihuanCard,
+                    ),
+                    _ => (
+                        crate::content::host::GW_BAOXUE_CARD_KEY,
+                        crate::content::host::HostBehavior::GwentBaoxueCard,
+                    ),
+                };
+                // 暴雪药水先开目标选牌询问（逐技对照批五 v79），其余直接执行
+                let stage = if behavior == crate::content::host::HostBehavior::GwentBaoxueCard {
+                    crate::content::host::HostStage::SelectCard
+                } else {
+                    crate::content::host::HostStage::Act
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: u.targets.first().copied(),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Shatang | CardKind::Heilonglinpian | CardKind::Liutouge => {
+                // 古剑最后机关/锦囊（G1）
+                let (key, behavior, target) = match effective_kind {
+                    CardKind::Shatang => (
+                        crate::content::host::GJ_SHATANG_CARD_KEY,
+                        crate::content::host::HostBehavior::JiguanShatangCard,
+                        u.targets.first().copied(),
+                    ),
+                    CardKind::Heilonglinpian => (
+                        crate::content::host::GJ_HEILONGLINPIAN_CARD_KEY,
+                        crate::content::host::HostBehavior::JiguanHeilongCard,
+                        Some(u.player),
+                    ),
+                    _ => (
+                        crate::content::host::GJ_LIUTOUGE_CARD_KEY,
+                        crate::content::host::HostBehavior::JiguanLiutougeCard,
+                        u.targets.first().copied(),
+                    ),
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Dunpaigedang
+            | CardKind::Zhiliaobo
+            | CardKind::Yuansuhuimie
+            | CardKind::Xingjiegoutong
+            | CardKind::Chuansongmen
+            | CardKind::Tanshezhiren
+            | CardKind::Shijieshu => {
+                // 炉石余量（G1）：无懈窗口包装 + 各自机器
+                let (key, behavior, target, targets) = match effective_kind {
+                    CardKind::Dunpaigedang => (
+                        crate::content::host::HH_DUNPAI_CARD_KEY,
+                        crate::content::host::HostBehavior::HearthDunpaiCard,
+                        Some(u.player),
+                        Vec::new(),
+                    ),
+                    CardKind::Zhiliaobo => (
+                        crate::content::host::HH_ZHILIAOBO_CARD_KEY,
+                        crate::content::host::HostBehavior::HearthZhiliaoboCard,
+                        u.targets.first().copied(),
+                        Vec::new(),
+                    ),
+                    CardKind::Yuansuhuimie => (
+                        crate::content::host::HH_YUANSU_CARD_KEY,
+                        crate::content::host::HostBehavior::HearthYuansuCard,
+                        None,
+                        ctx.core
+                            .alive_players()
+                            .filter(|p| *p != u.player)
+                            .collect(),
+                    ),
+                    CardKind::Xingjiegoutong => (
+                        crate::content::host::HH_XINGJIE_CARD_KEY,
+                        crate::content::host::HostBehavior::HearthXingjieCard,
+                        Some(u.player),
+                        Vec::new(),
+                    ),
+                    CardKind::Chuansongmen => (
+                        crate::content::host::HH_CHUANSONG_CARD_KEY,
+                        crate::content::host::HostBehavior::HearthChuansongCard,
+                        Some(u.player),
+                        Vec::new(),
+                    ),
+                    CardKind::Shijieshu => (
+                        crate::content::host::HH_SHIJIE_CARD_KEY,
+                        crate::content::host::HostBehavior::HearthShijieshuCard,
+                        Some(u.player),
+                        Vec::new(),
+                    ),
+                    _ => (
+                        crate::content::host::HH_TANSHE_CARD_KEY,
+                        crate::content::host::HostBehavior::HearthTansheCard,
+                        Some(u.player),
+                        Vec::new(),
+                    ),
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets,
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Shihuifen | CardKind::Liufengsan => {
+                // 古剑锦囊（G1）：石会粉（响应拒绝）/六风散（获得闪）
+                let (key, behavior) = match effective_kind {
+                    CardKind::Shihuifen => (
+                        crate::content::host::GJ_SHIHUIFEN_CARD_KEY,
+                        crate::content::host::HostBehavior::GujianShihuifenCard,
+                    ),
+                    _ => (
+                        crate::content::host::GJ_LIUFENGSAN_CARD_KEY,
+                        crate::content::host::HostBehavior::GujianLiufengsanCard,
+                    ),
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: u.targets.first().copied(),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Bingpotong
+            | CardKind::Qiankunbiao
+            | CardKind::Longxugou
+            | CardKind::Shenhuofeiya => {
+                // 古剑机关（G1）：无懈窗口包装 + 各自机器
+                let (key, behavior, targets) = match effective_kind {
+                    CardKind::Bingpotong => (
+                        crate::content::host::GJ_BINGPOTONG_CARD_KEY,
+                        crate::content::host::HostBehavior::JiguanBingpoCard,
+                        u.targets.clone(),
+                    ),
+                    CardKind::Qiankunbiao => (
+                        crate::content::host::GJ_QIANKUNBIAO_CARD_KEY,
+                        crate::content::host::HostBehavior::JiguanQiankunCard,
+                        Vec::new(),
+                    ),
+                    CardKind::Longxugou => (
+                        crate::content::host::GJ_LONGXUGOU_CARD_KEY,
+                        crate::content::host::HostBehavior::JiguanLongxuCard,
+                        Vec::new(),
+                    ),
+                    _ => {
+                        // 神火飞鸦：目标 + 距离 1 邻座（座位序）响应队列
+                        let t = *u.targets.first().expect("shenhuo has one target");
+                        let mut q = vec![t];
+                        for p in ctx.core.alive_players() {
+                            if p != t
+                                && p != u.player
+                                && ctx.core.computed_distance(ctx.catalog, t, p) == 1
+                            {
+                                q.push(p);
+                            }
+                        }
+                        (
+                            crate::content::host::GJ_SHENHUOFEIYA_CARD_KEY,
+                            crate::content::host::HostBehavior::JiguanShenhuoCard,
+                            q,
+                        )
+                    }
+                };
+                // 冰魄通先开使用者展示询问（逐技对照批五 v79），其余直接执行
+                let stage = if behavior == crate::content::host::HostBehavior::JiguanBingpoCard {
+                    crate::content::host::HostStage::ComparePlayerPick
+                } else if behavior == crate::content::host::HostBehavior::JiguanLongxuCard {
+                    crate::content::host::HostStage::SelectCard
+                } else {
+                    crate::content::host::HostStage::Act
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: u.targets.first().copied(),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets,
+                    stage,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Liuxinghuoyu => {
+                // 流星火雨（U05 swd 首批，规则 v86）：无懈窗口包装 + 目标
+                // 自选弃两张 he 或受 1 点火伤
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::SWD_LIUXING_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::SwdLiuxinghuoyuCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("liuxinghuoyu has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Jiguan => {
+                // 机关牌（swd 第十六/十七批，规则 v189/v190）：同 kind
+                // 异行为按目录名分流（指路小虎=随机敌虚拟杀；木甲人=
+                // 弃非基本换随机机关牌）——无懈窗口包装共享。
+                let name = &ctx.catalog.cards[u.card as usize].name;
+                let (behavior, def_key, target) = if name.contains("mujiaren") {
+                    (
+                        crate::content::host::HostBehavior::SwdMujiarenCard,
+                        crate::content::host::SWD_MUJIAREN_KEY,
+                        None,
+                    )
+                } else if name.contains("gouhunluo") {
+                    (
+                        crate::content::host::HostBehavior::SwdGouhunluoCard,
+                        crate::content::host::SWD_GOUHUNLUO_KEY,
+                        u.targets.first().copied(),
+                    )
+                } else if name.contains("jiguantong") {
+                    (
+                        crate::content::host::HostBehavior::SwdJiguantongCard,
+                        crate::content::host::SWD_JIGUANTONG_KEY,
+                        None,
+                    )
+                } else {
+                    (
+                        crate::content::host::HostBehavior::SwdZhiluxiaohuCard,
+                        crate::content::host::SWD_ZHILUXIAOHU_KEY,
+                        None,
+                    )
+                };
+                let targets_for_machine = if behavior
+                    == crate::content::host::HostBehavior::SwdJiguantongCard
+                {
+                    u.targets.clone()
+                } else {
+                    Vec::new()
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: def_key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: targets_for_machine,
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Yangpijuan => {
+                // 羊皮卷（U05 swd 第十三批，规则 v97）：无懈窗口包装 +
+                // 选类别 → 牌堆随机亮 3 张 → 选一张入手
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::SWD_YANGPIJUAN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::SwdYangpijuanCard,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Longlushanfeng => {
+                // 龙颅山峰（U05 mtg 首切片，规则 v100）：换地 + 二选一
+                // 获得杀/闪（上游 createCard 凭空造牌→原生牌堆取，登记
+                // 差异）；地非锦囊，无无懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_LONGSHANFENG_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgLongshanfengLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Haidao => {
+                // 海岛（U05 mtg 第二批，规则 v101）：地机器——满血加护
+                // 甲/受伤弃牌回血或取消得护甲；地非锦囊，无无懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_HAIDAO_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgHaidaoLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Shuimomuxue => {
+                // 水没墓穴（U05 mtg 第三批，规则 v102）：地机器——可弃
+                // 一张摸二（可取消）；地非锦囊，无无懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_SHUIMOMUXUE_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgShuimomuxueLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Feixu => {
+                // 废墟（U05 mtg 第四批，规则 v103）：地机器——从弃牌堆
+                // 发现一张牌；地非锦囊，无无懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_FEIXU_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgFeixuLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Yixialan => {
+                // 依夏兰（U05 mtg 第五批，规则 v104）：地机器——选类型
+                // 随机获得基本/锦囊牌一张；地附主动技（重铸）经换地授予
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_YIXIALAN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgYixialanLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Shamolvzhou => {
+                // 沙漠绿洲（U05 mtg 第六批，规则 v105）：地机器——从牌堆
+                // 基本牌发现一张；地非锦囊，无无懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_SHAMOLVZHOU_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgShamolvzhouLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Linzhongjianta => {
+                // 林中尖塔（U05 mtg 第七批，规则 v106）：地机器——发现
+                // 武器并直接装备；地非锦囊，无无懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_LINZHONGJIANTA_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgLinzhongjiantaLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Bingheyaosai => {
+                // 冰河要塞（U05 mtg 第八批，规则 v107）：地机器——摸二
+                // 弃二（强制）；地非锦囊，无无懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_BINGHEYAOSAI_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgBingheyaosaiLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Youlin => {
+                // 幽林（U05 mtg 第九批，规则 v108）：地机器——随机使用
+                // 一张普通锦囊（池收窄登记见 catalog）；地非锦囊，无无
+                // 懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_YOULIN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgYoulinLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Lindixiliu => {
+                // 邻地溪流（U05 mtg 第十批，规则 v109）：地机器——♥入
+                // 手 + 任意张♥弃 → 每张随机敌方置延时；地非锦囊，无无
+                // 懈窗口
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::MTG_LINDIXILIU_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::MtgLindixiliuLand,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Dizaizhen => {
+                // 地载阵（U05 zhenfa 首切片，规则 v110）：无懈窗口包装
+                // + 所有非大势力存活角色各摸一张
+                let effect = Box::new(DizaizhenMachine { owner: u.player });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Mianlijinzhen => {
+                // 面里金针（G1 古剑，机关）：目标摸 1 然后失去 1 点体力
+                //（规则 v77 对齐上游 loseHp；上游无 wuxieable，不包无懈窗口）
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::GJ_MIANLI_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::GujianMianliCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("mianlijinzhen has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(effect)
+            }
+            CardKind::Feibiao => {
+                // 飞镖（G1 古剑，机关）：目标弃一张黑色手牌或受 1 点伤害
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::GJ_FEIBIAO_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::GujianFeibiaoCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("feibiao has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::SelectCard,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Chenhuodajie => {
+                // 趁火打劫（G1 运筹帷幄，锦囊）：获得目标一张手牌
+                //（登记差异：上游为目标任选可见牌，原生取首张确定性获得）
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::WD_CHENHUO_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::ChenhuodajieCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("chenhuodajie has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Fudichouxin => {
+                // 釜底抽薪（G1 运筹帷幄，锦囊）：无懈窗口 + 拼点（两段选择）
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::WD_FUDI_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::FudichouxinCompare,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("fudichouxin has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::CompareTargetPick,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::WangmeiZhike => {
+                // 望梅止渴（G1 玩点论杀，锦囊）：无懈窗口 + 目标最小体力/
+                // 最小手牌条件增益（宿主原语）
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::WD_WANGMEIZHIKE_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::WangmeiZhikeCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("wangmeizhike has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::ShouLiJian => {
+                // 手里剑（G1 欢乐卡牌）：目标弃 1 张装备或受 1 点伤害
+                //（嵌套选择恢复样本，ADR 0776 规则宿主）
+                Some(Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::HOST_SHOULIJIAN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::TargetDiscardEquipOrDamage,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("shoulijian has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::TargetChoice,
+                }))
+            }
+            kind if kind.aoe_need().is_some() => {
+                // AOE 的无懈窗口为**逐目标**（由 AoeResolveMachine 对每个目标
+                // 自行开窗），外层不再包整牌级窗口——旧包裹会吞掉应答并把
+                // 整张牌作废（本批修复，ADR 0705）。
+                Some(Box::new(AoeResolveMachine {
+                    card: u.card,
+                    source: u.player,
+                    need: kind.aoe_need().expect("checked"),
+                    targets: u.targets,
+                    idx: 0,
+                    inner: None,
+                }))
+            }
+            CardKind::Chain => {
+                let effect = ChainMachine {
+                    card: u.card,
+                    source: u.player,
+                    targets: u.targets,
+                    emitted: 0,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            CardKind::Duel => {
+                let effect = DuelMachine {
+                    card: u.card,
+                    source: u.player,
+                    target: *u.targets.first().expect("duel has one target"),
+                    on_target: true,
+                    asked: false,
+                    second_pending: false,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            CardKind::Zhufangshenshi => {
+                // 贴房绅视（U05 swd 第十批，规则 v94）：他人锦囊——本回合
+                // 无视距离指定该目标并摸一张牌。效果在 intrinsic 提交段
+                // 同步执行（无需机器）；此处仅占位以透过穷尽 match。
+                None
+            }
+            CardKind::Guiyoujie => {
+                // 归有界（U05 swd，规则 v91）：他人延时锦囊——判定为黑色
+                // 则失去 1 点体力 + 随机弃一张牌（上游 loseHp+randomDiscard）
+                let target = *u.targets.first().expect("guiyoujie has one target");
+                let effect = PlaceDelayedMachine {
+                    card: u.card,
+                    target,
+                    placed: false,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            CardKind::Le | CardKind::Bing => {
+                // 延时锦囊使用时即开无懈窗口（对齐旧线：牌先入桌面，
+                // 无懈后入判定区、被无懈则弃置），窗口未抵消由
+                // PlaceDelayedMachine 置入目标判定区。
+                let target = *u.targets.first().expect("delayed trick has one target");
+                let effect = PlaceDelayedMachine {
+                    card: u.card,
+                    target,
+                    placed: false,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            CardKind::ShanDian => {
+                let effect = PlaceDelayedMachine {
+                    card: u.card,
+                    target: u.player,
+                    placed: false,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            CardKind::HongShui => {
+                // 洪水：自-target 延时锦囊（判定：梅花 2–9 → 3 点雷伤）
+                let effect = PlaceDelayedMachine {
+                    card: u.card,
+                    target: u.player,
+                    placed: false,
+                };
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+            }
+            CardKind::Caochuanjiejian => {
+                // 草船借箭（G1 运筹帷幄，锦囊）：无懈窗口 + 目标分支选择
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::WD_CAOCHUAN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::CaochuanCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("caochuan has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::SelectNature,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Geanguanhuo => {
+                // 隔岸观火（G1 运筹帷幄，锦囊）：双目标拼点链
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::YC_GEAN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::GeanguanhuoCompare,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: u.targets.clone(),
+                    stage: crate::content::host::HostStage::CompareTargetPick,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Linghunzhihuo => {
+                // 灵魂之火（G1 炉石，锦囊）：目标 1 点火焰伤害，使用者弃一张手牌
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::HT_LINGHUN_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::LinghunzhihuoCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("linghunzhihuo has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Zhaomingdan => {
+                // 照明弹（G1 炉石，锦囊）：弃目标一张手牌，双方各摸 1
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::HT_ZHAOMING_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::ZhaomingdanCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("zhaomingdan has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Jihuocard => {
+                // 急耗卡（G1 炉石，锦囊）：自-target 摸 1（临时技暂缓）
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::HT_JIHUO_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::JihuocardDraw,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Toulianghuanzhu => {
+                // 偷梁换柱（G1 运筹帷幄，锦囊）：无懈窗口 + 换牌双选
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: crate::content::host::WD_TOULIANG_KEY.to_string(),
+                    behavior: crate::content::host::HostBehavior::TouliangSwap,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("touliang has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::SelectCard,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            _ => None,
+            }
+        }
+        EventData::Phase { player, phase: Phase::Judge, begin: true } => {
+            let judge = std::mem::take(&mut ctx.core.player_mut(player).judge);
+            if judge.is_empty() {
+                None
+            } else {
+                // 判定排序分组（N06-a，对齐旧线 pending_delayed_cards）：
+                // 非闪电延时锦囊按放置序在前、闪电在后，队首先消费。
+                let mut queue: Vec<crate::ids::CardId> = judge
+                    .iter()
+                    .copied()
+                    .filter(|c| ctx.catalog.card_kind(*c) != CardKind::ShanDian)
+                    .collect();
+                queue.extend(
+                    judge
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.card_kind(*c) == CardKind::ShanDian),
+                );
+                Some(Box::new(JudgePhaseMachine { owner: player, queue, current: None }))
+            }
+        }
+        EventData::Phase { player, phase: Phase::Discard, begin: true } => {
+            // 克己（吕蒙）：本回合未使用杀则无需弃牌（手牌上限视为无限）
+            let keji = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::KE_JI)
+                .map(|d| ctx.core.has_skill(player, d))
+                .unwrap_or(false);
+            if keji && !ctx.core.turn.sha_used_play_phase {
+                None
+            } else {
+                let mut limit = ctx.core.hand_limit(player);
+                // 机甲（U05 ow D.Va，规则 v141）：机甲血>0 时手牌上限 +4
+                //（上游 mod maxHandcard storage.jijia 同口径）
+                if ctx
+                    .catalog
+                    .skill_by_name(crate::content::host::WUDIAN_JIJIA_KEY)
+                    .map(|def| ctx.core.has_skill(player, def))
+                    .unwrap_or(false)
+                    && ctx.core.player(player).jijia_hp > 0
+                {
+                    limit += 4;
+                }
+                // 蛊舞·缚（U05 xianjian 阿奴，规则 v154）：蛊舞生效中手牌
+                // 上限 -1（上游 anwugu2 mod maxHandcard 同口径）
+                if ctx.core.player(player).anwugu_count > 0 {
+                    limit = limit.saturating_sub(1);
+                }
+                // 春饼（G1 古剑食物）：手牌上限 +1（持有状态即生效）
+                if let Some(def) = ctx.catalog.skill_by_name(crate::content::host::GJ_FOOD_CHUNBING_KEY)
+                {
+                    if ctx
+                        .core
+                        .skills
+                        .get(&(player, def))
+                        .map(|i| i.enabled)
+                        .unwrap_or(false)
+                    {
+                        limit += 1;
+                    }
+                }
+                // 倾盆大雨（gwent 天气）：手牌上限 -1
+                if let Some(def) = ctx.catalog.skill_by_name(crate::content::host::GW_QINPEN_STATE_KEY)
+                {
+                    if ctx
+                        .core
+                        .skills
+                        .get(&(player, def))
+                        .map(|i| i.enabled)
+                        .unwrap_or(false)
+                    {
+                        limit = limit.saturating_sub(1);
+                    }
+                }
+                // 妄尊印（袁术妄尊授予的回合级印记）：手牌上限 -1
+                if let Some(def) = ctx.catalog.skill_by_name(crate::content::standard::WANG_ZUN_MARK) {
+                    if ctx
+                        .core
+                        .skills
+                        .get(&(player, def))
+                        .map(|i| i.enabled)
+                        .unwrap_or(false)
+                    {
+                        limit = limit.saturating_sub(1);
+                    }
+                }
+                // 水没墓穴地图效果（mtg 第三批，规则 v102）：锁定全局——
+                // 手牌上限 -1（current_land 状态直读，同倾盆大雨口径）
+                if ctx.core.current_land == Some(crate::catalog::CardKind::Shuimomuxue) {
+                    limit = limit.saturating_sub(1);
+                }
+                // 沙漠绿洲地图效果（mtg 第六批，规则 v105）：基本牌不
+                // 计入手牌上限——需弃数按非基本手牌数计（上游
+                // ignoredHandcard basic 同口径）
+                let shamolvzhou =
+                    ctx.core.current_land == Some(crate::catalog::CardKind::Shamolvzhou);
+                let hand = if shamolvzhou {
+                    ctx.core
+                        .player(player)
+                        .hand
+                        .iter()
+                        .filter(|c| {
+                            crate::content::host::yangpijuan_class(
+                                ctx.catalog.card_kind(**c),
+                            ) != Some(0)
+                        })
+                        .count()
+                } else {
+                    ctx.core.player(player).hand.len()
+                };
+                if hand > limit {
+                    Some(Box::new(DiscardToLimitMachine {
+                        player,
+                        need: hand - limit,
+                        asked: false,
+                    }))
+                } else {
+                    None
+                }
+            }
+        }
+        EventData::Death { player, killer } => Some(Box::new(DeathMachine { player, killer })),
+        _ => None,
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 内核机器
+// ---------------------------------------------------------------------------
+
+/// 杀的结算：询问目标闪，未闪则造成伤害子事件。
+/// 裸衣伤害加成：来源本回合已发动裸衣（`once_used` 旗标，判定阶段
+/// 开始时随 `reset_turn_limits` 清除）→ 杀/决斗伤害 +1。
+fn luoyi_bonus(ctx: &Ctx<'_>, source: Option<PlayerId>) -> u32 {
+    let Some(s) = source else { return 0 };
+    let Some(def) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::LUO_YI)
+    else {
+        return 0;
+    };
+    match ctx.core.skills.get(&(s, def)) {
+        Some(inst) if inst.enabled && inst.once_used => 1,
+        _ => 0,
+    }
+}
+
+/// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
+fn is_tao_like(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    card: crate::ids::CardId,
+    dying: PlayerId,
+) -> bool {
+    if ctx.catalog.card_kind(card) == CardKind::Tao {
+        return true;
+    }
+    // 酒（G1 cardpile 前置）：濒死时对自身使用回复 1 点体力
+    if ctx.catalog.card_kind(card) == CardKind::Jiu {
+        return true;
+    }
+    // 护符（U05 swd 首切片，规则 v85）：仅濒死者本人的桃形救援
+    //（上游 savable: dying === player）
+    if ctx.catalog.card_kind(card) == CardKind::Hufu {
+        return responder == dying;
+    }
+    // 天仙酒（U05 swd 第五批，规则 v89）：酒的 swd 变体——濒死自救
+    if ctx.catalog.card_kind(card) == CardKind::Tianxianjiu {
+        return true;
+    }
+    let jijiu = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::JI_JIU)
+        .map(|d| ctx.core.has_skill(responder, d))
+        .unwrap_or(false);
+    if jijiu
+        && matches!(
+            ctx.catalog.cards[card as usize].suit,
+            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+        )
+    {
+        return true;
+    }
+    // 蜜链藕（G1 古剑食物）：持有者红桃手牌可当桃（濒死响应）
+    let mizhilianou = ctx
+        .catalog
+        .skill_by_name(crate::content::host::GJ_FOOD_MIZHLIANOU_KEY)
+        .map(|d| ctx.core.has_skill(responder, d))
+        .unwrap_or(false);
+    if mizhilianou && ctx.catalog.cards[card as usize].suit == crate::catalog::Suit::Heart {
+        return true;
+    }
+    // 帝女玄霜（G1 古剑，濒死可救基本牌）：按桃结算回复 1 体力
+    //（弃摸骑乘由 DyingSaveMachine rider 承担）
+    ctx.catalog.card_kind(card) == CardKind::Dinvxuanshuang
+}
+
+#[derive(Clone)]
+pub struct ShaResolveMachine {
+    card: crate::ids::CardId,
+    source: PlayerId,
+    target: PlayerId,
+    nature: crate::event::DamageNature,
+    asked: bool,
+    /// 八卦阵判定是否已做（每次杀结算至多一次）。
+    armor_judged: bool,
+    /// 已使用的闪数（无双：需要连续两张）。
+    dodges_used: u8,
+    /// 铁骑判定结果：None=未判定/无铁骑；Some(true)=红色（不能出闪）。
+    tieji_red: Option<bool>,
+    /// 流离（大乔）状态（入快照，ADR 0774：消除恢复分歧）。
+    liuli_done: bool,
+    /// 流离两段询问（逐技对照批二 v76）：1=弃牌选择挂起，2=转移目标挂起。
+    liuli_stage: u8,
+    /// 流离已选定的待弃牌（stage 2 期间暂存）。
+    liuli_card: Option<crate::ids::CardId>,
+    /// 护驾（曹操）逐人询问队列（入快照）：`None` = 本响应窗口尚未
+    /// 开始逐人询问；`Some(q)` = 剩余待问的魏势力角色（目标下家起
+    /// 按座位序）；`Some(空)` = 已全部问完（拒绝/无人合格）。
+    /// 不以暗手牌预筛。
+    hujia_queue: Option<Vec<PlayerId>>,
+    /// 护驾当前被询问的持牌者（Some = 等待其 Confirm/Pass）。
+    hujia_holder: Option<PlayerId>,
+    /// 酒效果（派发时从回合状态捕获）：本次杀伤害 +1。
+    jiu_bonus: bool,
+    /// 麒麟弓（批③-b 第二把）：弃马询问挂起中。
+    asking_qilin: bool,
+    qilin_horse: Option<crate::ids::CardId>,
+    /// 寒冰剑（批③-b 第三把）：防止伤害确认挂起中。
+    asking_hanbing: bool,
+    /// 风雪刃（U05 swd 第十一批，规则 v95）：命中后翻面+摸牌询问挂起中。
+    asking_fengxueren: bool,
+    /// 贯石斧（批③-b 第五把）：杀被闪后弃二强伤询问挂起中
+    ///（Some = 待弃的牌；None = 询问未开）。
+    asking_guanshi: bool,
+    guanshi_cards: Vec<crate::ids::CardId>,
+    /// 青龙偃月刀（批③-b 第六把）：被闪后「再杀」询问挂起中
+    ///（Some = 选中的新杀牌，来自来源手牌）。
+    asking_qinglong: bool,
+    /// 雌雄双股剑（批③-b 第八把）：弃牌/令摸询问挂起中。
+    asking_cixiong: bool,
+    /// 雌雄双股剑：本杀已问过标志。
+    cixiong_done: bool,
+    /// 寒冰剑（逐技对照批一，规则 v75）：目标自选弃牌剩余次数
+    ///（来源确认防止后为 2，逐次扣减；上游逐张强制弃）。
+    hanbing_pending: u8,
+    /// 方天画戟（批③-b 第九把）：当前目标之后的剩余目标队列。
+    extra_targets: Vec<PlayerId>,
+    /// 闪弹（U05 ow 死神，规则 v140）：弃牌询问挂起中。
+    asking_xiandan: bool,
+    /// 闪弹：本杀已问过标志（每杀至多一次）。
+    xiandan_done: bool,
+    /// 闪弹：黑牌分支——本杀伤害 +1（上游 xiandan2 damageBegin num++
+    /// 同口径，一次性随本杀）。
+    xiandan_bonus: bool,
+    /// 掠影（U05 xianjian 慕长兰，规则 v154）：目标选人询问挂起中。
+    asking_lueying: bool,
+    /// 掠影：目标已选定的受害者（等来源随机弃其一张）。
+    lueying_victim: Option<PlayerId>,
+}
+
+impl ShaResolveMachine {
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn new(
+        card: crate::ids::CardId,
+        source: PlayerId,
+        target: PlayerId,
+        nature: crate::event::DamageNature,
+        asked: bool,
+        armor_judged: bool,
+        dodges_used: u8,
+        tieji_red: Option<bool>,
+        liuli_done: bool,
+        liuli_stage: u8,
+        liuli_card: Option<crate::ids::CardId>,
+        hujia_queue: Option<Vec<PlayerId>>,
+        hujia_holder: Option<PlayerId>,
+        jiu_bonus: bool,
+        asking_qilin: bool,
+        qilin_horse: Option<crate::ids::CardId>,
+        asking_hanbing: bool,
+        asking_fengxueren: bool,
+        asking_guanshi: bool,
+        guanshi_cards: Vec<crate::ids::CardId>,
+        asking_qinglong: bool,
+        asking_cixiong: bool,
+        cixiong_done: bool,
+        extra_targets: Vec<PlayerId>,
+        hanbing_pending: u8,
+        asking_xiandan: bool,
+        xiandan_done: bool,
+        xiandan_bonus: bool,
+        asking_lueying: bool,
+        lueying_victim: Option<PlayerId>,
+    ) -> Self {
+        Self {
+            card,
+            source,
+            target,
+            nature,
+            asked,
+            armor_judged,
+            dodges_used,
+            tieji_red,
+            liuli_done,
+            liuli_stage,
+            liuli_card,
+            hujia_queue,
+            hujia_holder,
+            jiu_bonus,
+            asking_qilin,
+            qilin_horse,
+            asking_hanbing,
+            asking_fengxueren,
+            asking_guanshi,
+            guanshi_cards,
+            asking_qinglong,
+            asking_cixiong,
+            cixiong_done,
+            extra_targets,
+            hanbing_pending,
+            asking_xiandan,
+            xiandan_done,
+            xiandan_bonus,
+            asking_lueying,
+            lueying_victim,
+        }
+    }
+
+    /// 流离转移候选：存活、非自己、非此杀使用者、在（被转移者）攻击
+    /// 范围内且为该杀合法目标（空城不可）——上游 filter/filterTarget 同口径。
+    fn liuli_candidates(&self, ctx: &Ctx<'_>) -> Vec<ChoiceOption> {
+        ctx.core
+            .alive_players()
+            .filter(|p| self.liuli_candidate_ok(ctx, *p))
+            .map(ChoiceOption::Player)
+            .collect()
+    }
+
+    fn liuli_candidate_ok(&self, ctx: &Ctx<'_>, p: PlayerId) -> bool {
+        if p == self.target || p == self.source || !ctx.core.player(p).alive {
+            return false;
+        }
+        let kongcheng = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::KONG_CHENG)
+            .map(|d| ctx.core.has_skill(p, d))
+            .unwrap_or(false);
+        if kongcheng && ctx.core.player(p).hand.is_empty() {
+            return false;
+        }
+        ctx.core.computed_distance(ctx.catalog, self.target, p)
+            <= ctx.core.attack_range(ctx.catalog, self.target)
+    }
+
+    /// 方天画戟（批③-b 第九把）：当前目标结算完毕 → 队列取下一目标
+    ///（逐目标状态复位，重开该目标的防具/出闪询问）；队列空 → 弃置杀
+    /// 本体结束。
+    fn advance_target(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if let Some(next) = self.extra_targets.first().copied() {
+            self.extra_targets.remove(0);
+            self.target = next;
+            self.asked = false;
+            self.armor_judged = false;
+            self.dodges_used = 0;
+            self.tieji_red = None;
+            self.liuli_done = false;
+            self.liuli_stage = 0;
+            self.liuli_card = None;
+            self.hujia_queue = None;
+            self.hujia_holder = None;
+            self.asking_hanbing = false;
+            self.asking_qilin = false;
+            self.asking_guanshi = false;
+            self.asking_fengxueren = false;
+            self.hanbing_pending = 0;
+            return Flow::Yield;
+        }
+        let card = self.card;
+        ctx.to_discard(card);
+        ctx.core.table.retain(|c| *c != card);
+        Flow::Done
+    }
+
+    /// 结算杀伤害（裸衣/酒加成）并推进目标/弃置杀本体。
+    fn emit_sha_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if ctx.core.player(self.target).alive {
+            ctx.emit(EventData::Damage(damage_data_with(
+                Some(self.source),
+                self.target,
+                1 + luoyi_bonus(ctx, Some(self.source))
+                    + self.jiu_damage_bonus()
+                    + u32::from(self.xiandan_bonus),
+                self.nature,
+                Some(self.card),
+            )));
+        }
+        self.xiandan_bonus = false;
+        self.advance_target(ctx)
+    }
+
+    /// 来源是否持有无双（需要连续两张闪）。
+    fn source_has_wushuang(&self, ctx: &Ctx<'_>) -> bool {
+        ctx.catalog
+            .skill_by_name(crate::content::standard::WU_SHUANG)
+            .map(|d| ctx.core.has_skill(self.source, d))
+            .unwrap_or(false)
+    }
+
+    /// 酒伤害加成（派发时已捕获）。
+    fn jiu_damage_bonus(&self) -> u32 {
+        if self.jiu_bonus { 1 } else { 0 }
+    }
+
+    /// 护驾是否可发动：目标持技 + 主公资格（身份局须主公）。
+    fn hujia_active(&self, ctx: &Ctx<'_>) -> bool {
+        let hujia = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::HU_JIA)
+            .map(|d| ctx.core.has_skill(self.target, d))
+            .unwrap_or(false);
+        hujia && ctx.core.is_lord(self.target)
+    }
+
+    /// 护驾询问队列：目标下家起按座位序的魏势力存活角色
+    /// （不以暗手牌预筛——询问资格公开，应答私密）。
+    fn build_hujia_queue(&self, ctx: &Ctx<'_>) -> Vec<PlayerId> {
+        ctx.core
+            .seat_order_from(ctx.core.next_alive(self.target))
+            .into_iter()
+            .filter(|p| {
+                *p != self.target
+                    && ctx.core.player(*p).alive
+                    && ctx.core.effective_faction(ctx.catalog, *p) == Some(crate::catalog::Faction::Wei)
+            })
+            .collect()
+    }
+}
+
+impl ShaResolveMachine {
+    /// 堡垒哨卫（U05 ow，规则 v125）：来源持 bshaowei 且哨卫模式——
+    /// 杀无视距离/防具、无次数限制、不可闪避。
+    fn baolei_sentinel(&self, ctx: &Ctx<'_>) -> bool {
+        ctx.catalog
+            .skill_by_name(crate::content::host::WUDIAN_BAOLEI_KEY)
+            .map(|def| {
+                ctx.core.has_skill(self.source, def)
+                    && ctx.core.player(self.source).baolei_mode == 1
+            })
+            .unwrap_or(false)
+    }
+
+    /// 寒冰剑可发动（来源装备寒冰剑且目标有手牌/装备）。
+    fn hanbing_can_fire(&self, ctx: &Ctx<'_>) -> bool {
+        let has_hanbing = ctx
+            .core
+            .player(self.source)
+            .equips
+            .iter()
+            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Hanbing);
+        has_hanbing
+            && ctx.core.player(self.target).alive
+            && (!ctx.core.player(self.target).hand.is_empty()
+                || !ctx.core.player(self.target).equips.is_empty())
+    }
+
+    /// 目标「手牌+装备」是否仍有可弃牌（上游 hasDiscardableCards("he")）。
+    fn target_has_he(&self, ctx: &Ctx<'_>) -> bool {
+        !ctx.core.player(self.target).hand.is_empty()
+            || !ctx.core.player(self.target).equips.is_empty()
+    }
+
+    /// 寒冰剑目标自选弃牌询问：手牌+装备逐张强选（min=1 不可取消）。
+    fn open_hanbing_target_ask(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let mut options: Vec<ChoiceOption> = ctx
+            .core
+            .player(self.target)
+            .hand
+            .iter()
+            .copied()
+            .map(ChoiceOption::Card)
+            .collect();
+        options.extend(
+            ctx.core
+                .player(self.target)
+                .equips
+                .iter()
+                .copied()
+                .map(ChoiceOption::Card),
+        );
+        Flow::WaitChoice {
+            observer: self.target,
+            spec: ChoiceSpec {
+                kind: ChoiceKind::SelectCards,
+                prompt: "hanbing_target_discard",
+                options,
+                min: 1,
+                max: 1,
+                allow_cancel: false,
+            },
+        }
+    }
+
+    /// 麒麟弓可弃目标坐骑列表（来源装备麒麟弓且目标有马）。
+    fn qilin_horses(&self, ctx: &Ctx<'_>) -> Vec<ChoiceOption> {
+        let has_qilin = ctx
+            .core
+            .player(self.source)
+            .equips
+            .iter()
+            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qilin);
+        if !has_qilin {
+            return Vec::new();
+        }
+        ctx.core.player(self.target)
+            .equips
+            .iter()
+            .filter(|c| {
+                matches!(
+                    ctx.catalog.card_kind(**c),
+                    CardKind::HorsePlus | CardKind::HorseMinus
+                )
+            })
+            .copied()
+            .map(ChoiceOption::Card)
+            .collect()
+    }
+
+}
+
+impl crate::catalog::SkillMachine for ShaResolveMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Sha {
+            card: self.card,
+            source: self.source,
+            target: self.target,
+            nature: self.nature,
+            asked: self.asked,
+            armor_judged: self.armor_judged,
+            dodges_used: self.dodges_used,
+            tieji_red: self.tieji_red,
+            liuli_done: self.liuli_done,
+            liuli_stage: self.liuli_stage,
+            liuli_card: self.liuli_card.map(|c| c as u32),
+            hujia_queue: self.hujia_queue.clone(),
+            hujia_holder: self.hujia_holder,
+            jiu_bonus: self.jiu_bonus,
+            asking_qilin: self.asking_qilin,
+            qilin_horse: self.qilin_horse,
+            asking_hanbing: self.asking_hanbing,
+            asking_fengxueren: self.asking_fengxueren,
+            asking_guanshi: self.asking_guanshi,
+            guanshi_cards: self.guanshi_cards.iter().copied().collect(),
+            asking_qinglong: self.asking_qinglong,
+            asking_cixiong: self.asking_cixiong,
+            cixiong_done: self.cixiong_done,
+            extra_targets: self.extra_targets.iter().copied().map(|c| c as u32).collect(),
+            hanbing_pending: self.hanbing_pending,
+            asking_xiandan: self.asking_xiandan,
+            xiandan_done: self.xiandan_done,
+            xiandan_bonus: self.xiandan_bonus,
+            asking_lueying: self.asking_lueying,
+            lueying_victim: self.lueying_victim.map(|c| c as u32),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 寒冰剑（逐技对照批一，规则 v75）：目标自选弃牌恢复——上游
+        // discardPlayerCard("he", forced) 逐张强制弃，目标从手牌+装备
+        // 自选；次数用尽或目标无牌可弃后跳过伤害。
+        // 闪弹（U05 ow 死神，规则 v140）：弃牌应答——红=直击（哨卫同
+        // 款直中路径）；黑=本杀伤害 +1；取消=照常进入防具/闪询问。
+        if self.asking_xiandan {
+            self.asking_xiandan = false;
+            if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                let red = matches!(
+                    ctx.catalog.cards[c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                );
+                let in_hand = ctx.core.player(self.source).hand.contains(&c);
+                if in_hand {
+                    ctx.discard_from_hand(self.source, c);
+                } else if ctx.core.player(self.source).equips.contains(&c) {
+                    ctx.core.player_mut(self.source).equips.retain(|x| *x != c);
+                    ctx.to_discard(c);
+                }
+                ctx.log(LogEvent::CardDiscarded {
+                    player: self.source,
+                    cards: vec![c],
+                });
+                if red {
+                    if ctx.core.player(self.target).alive {
+                        return self.emit_sha_damage(ctx);
+                    }
+                    return self.advance_target(ctx);
+                }
+                self.xiandan_bonus = true;
+            }
+            // 黑弃/取消：复位 asked 落回 !asked 分支重开出闪询问（青龙
+            // 再杀 reboot 同款——否则闪弹应答会被门控应答区误读）。
+            self.asked = false;
+        }
+        // 掠影（U05 xianjian 慕长兰，规则 v154）：目标选人应答——来源随
+        // 机弃受害者 he 一张，随后复位 asked 重开闪询问。
+        if self.asking_lueying {
+            self.asking_lueying = false;
+            if let Some(ChoiceOption::Player(v)) = ctx.answer().first().copied() {
+                self.lueying_victim = Some(v);
+                let pool: Vec<crate::ids::CardId> = {
+                    let p = ctx.core.player(v);
+                    p.hand
+                        .iter()
+                        .copied()
+                        .chain(p.equips.iter().copied())
+                        .collect()
+                };
+                if !pool.is_empty() {
+                    let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                    let dc = pool[k];
+                    ctx.take_owned_card(v, dc);
+                    ctx.to_discard(dc);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: v,
+                        cards: vec![dc],
+                    });
+                }
+            }
+            self.asked = false;
+        }
+        if self.hanbing_pending > 0 {
+            let pick = ctx.answer().first().and_then(|o| match o {
+                ChoiceOption::Card(c) => Some(*c),
+                _ => None,
+            });
+            self.hanbing_pending -= 1;
+            if let Some(c) = pick {
+                if ctx.core.player(self.target).hand.contains(&c) {
+                    ctx.discard_from_hand(self.target, c);
+                } else if ctx.core.player(self.target).equips.contains(&c) {
+                    ctx.core
+                        .player_mut(self.target)
+                        .equips
+                        .retain(|x| *x != c);
+                    crate::kernel::revoke_equip_skills(
+                        ctx.core,
+                        ctx.catalog,
+                        self.target,
+                        c,
+                    );
+                    ctx.to_discard(c);
+                }
+            }
+            if self.hanbing_pending > 0 && self.target_has_he(ctx) {
+                return self.open_hanbing_target_ask(ctx);
+            }
+            self.hanbing_pending = 0;
+            return self.advance_target(ctx);
+        }
+        // 寒冰剑（批③-b 第三把）：来源防止伤害确认恢复——确认后转入
+        // 目标自选弃牌（两次；逐技对照批一消除「自动依次」差异）。
+        // 风雪刃恢复：确认→目标翻面+摸 1（无伤害）；放弃→照常伤害
+        if self.asking_fengxueren {
+            self.asking_fengxueren = false;
+            let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
+            if confirmed {
+                let flipped = {
+                    let t = ctx.core.player_mut(self.target);
+                    t.face_down = !t.face_down;
+                    t.face_down
+                };
+                ctx.emit(EventData::TurnOvered {
+                    player: self.target,
+                    face_down: flipped,
+                });
+                ctx.draw_cards(self.target, 1);
+                return self.advance_target(ctx);
+            }
+            return self.emit_sha_damage(ctx);
+        }
+        if self.asking_hanbing {
+            self.asking_hanbing = false;
+            let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
+            if confirmed {
+                self.hanbing_pending = 2;
+                if self.target_has_he(ctx) {
+                    return self.open_hanbing_target_ask(ctx);
+                }
+                self.hanbing_pending = 0;
+                return self.advance_target(ctx);
+            }
+            // 放弃：照常进入麒麟弓/伤害结算（单武器互斥，实际直接伤害）。
+            return self.emit_sha_damage(ctx);
+        }
+        // 贯石斧（批③-b 第五把）：弃二询问恢复——按应答弃牌，强制伤害。
+        if self.asking_guanshi {
+            self.asking_guanshi = false;
+            let picks: Vec<crate::ids::CardId> = ctx
+                .answer()
+                .iter()
+                .filter_map(|c| match c {
+                    ChoiceOption::Card(card) => Some(*card),
+                    _ => None,
+                })
+                .collect();
+            let fired = picks.len() == 2;
+            for card in picks {
+                let in_hand = ctx.core.player(self.source).hand.contains(&card);
+                if in_hand {
+                    ctx.discard_from_hand(self.source, card);
+                } else if ctx.core.player(self.source).equips.contains(&card) {
+                    ctx.core.player_mut(self.source).equips.retain(|x| *x != card);
+                    ctx.to_discard(card);
+                }
+            }
+            self.guanshi_cards.clear();
+            // 恰弃两张 → 强制伤害（被闪仍命中）；放弃 → 无伤。
+            if fired && ctx.core.player(self.target).alive {
+                ctx.emit(EventData::Damage(damage_data_with(
+                    Some(self.source),
+                    self.target,
+                    1,
+                    self.nature,
+                    Some(self.card),
+                )));
+            }
+            return self.advance_target(ctx);
+        }
+        // 青龙偃月刀（批③-b 第六把）：再杀询问恢复——弃置选中的杀并
+        // 以其重启对同一目标的杀结算（防/闪/贯石斧/麒麟弓流程全部重走）。
+        if self.asking_qinglong {
+            self.asking_qinglong = false;
+            if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
+                if ctx.core.player(self.source).hand.contains(&new_sha) {
+                    ctx.discard_from_hand(self.source, new_sha);
+                    ctx.emit(EventData::CardResponded {
+                        card: new_sha,
+                        player: self.source,
+                    });
+                    self.card = new_sha;
+                    self.asked = false;
+                    self.armor_judged = false;
+                    self.dodges_used = 0;
+                    self.tieji_red = None;
+                    self.liuli_done = false;
+                    self.liuli_stage = 0;
+                    self.liuli_card = None;
+                    return Flow::Yield;
+                }
+            }
+            // 放弃：当前目标按被闪结算（无伤）→ 推进队列/结束。
+            return self.advance_target(ctx);
+        }
+        // 雌雄双股剑（批③-b 第八把；逐技对照批一 v75 消除首张差异）：
+        // 弃牌/令摸恢复——上游 chooseToDiscard 一张手牌、可取消（取消=
+        // 令来源摸 1），随后照常进入防具/出闪流程。
+        if self.asking_cixiong {
+            self.asking_cixiong = false;
+            self.asked = false;
+            let pick = ctx.answer().first().and_then(|o| match o {
+                ChoiceOption::Card(c) => Some(*c),
+                _ => None,
+            });
+            if let Some(c) = pick.filter(|c| ctx.core.player(self.target).hand.contains(c)) {
+                ctx.discard_from_hand(self.target, c);
+            } else if ctx.core.player(self.source).alive {
+                ctx.draw_cards(self.source, 1);
+            }
+            // 落入下方 !asked 分支重开出闪询问（防具判定已由
+            // armor_judged 标记幂等）。
+        }
+        // 麒麟弓（批③-b 第二把）：弃马询问恢复——按应答弃马，随后结算伤害。
+        if self.asking_qilin {
+            self.asking_qilin = false;
+            // 空应答 = 来源放弃弃马。
+            if let Some(ChoiceOption::Card(horse)) = ctx.answer().first().copied() {
+                if ctx.core.player(self.target).equips.contains(&horse) {
+                    ctx.core.player_mut(self.target).equips.retain(|x| *x != horse);
+                    ctx.to_discard(horse);
+                }
+            }
+            self.qilin_horse = None;
+            self.emit_sha_damage(ctx);
+            return Flow::Done;
+        }
+        // 青釭剑（P2/N08 批③-b）：锁定——无视目标防具（来源装备青釭时
+        // 八卦阵判定与仁王盾免疫均不生效）。
+        let qinggang_pierce = ctx
+            .core
+            .player(self.source)
+            .equips
+            .iter()
+            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang);
+        // 八卦阵：受击者装备防具时，出闪询问前先做防具判定（每杀至多一次）
+        // ——红桃视为已出闪（伤害免除），否则照常进入出闪询问。
+        if !self.armor_judged {
+            self.armor_judged = true;
+            let has_armor = !qinggang_pierce
+                && ctx.core.player(self.target).alive
+                && ctx
+                    .core
+                    .player(self.target)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Armor);
+            if has_armor {
+                let judged = ctx.draw_judge_card();
+                let success = matches!(
+                    ctx.catalog.cards[judged as usize].suit,
+                    crate::catalog::Suit::Heart
+                );
+                ctx.log(LogEvent::ArmorJudged {
+                    player: self.target,
+                    card: judged,
+                    success,
+                });
+                // 判定牌判定后即弃置（八卦阵判定无获得路径）
+                ctx.to_discard(judged);
+                if success {
+                    let card = self.card;
+                    ctx.to_discard(card);
+                    ctx.core.table.retain(|c| *c != card);
+                    return Flow::Done;
+                }
+            }
+        }
+        // 流离（大乔；逐技对照批二 v76 对齐上游 chooseCardTarget）：成为
+        // 杀目标时可自选弃置一张牌（手牌+装备）并将此杀转移给攻击范围内
+        // 的一名其他角色（非此杀使用者、非自己、且为该杀合法目标——空城
+        // 不可）。整体可取消：弃牌询问空应答=不发动；先选牌后选目标，
+        // 转移生效后弃置暂存牌（上游 content 顺序）。
+        if !self.liuli_done {
+            self.liuli_done = true;
+            let liuli = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::LIU_LI)
+                .map(|d| ctx.core.has_skill(self.target, d))
+                .unwrap_or(false);
+            let has_he = !ctx.core.player(self.target).hand.is_empty()
+                || !ctx.core.player(self.target).equips.is_empty();
+            if liuli && has_he && !self.liuli_candidates(ctx).is_empty() {
+                let mut options: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(self.target)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                options.extend(
+                    ctx.core
+                        .player(self.target)
+                        .equips
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card),
+                );
+                self.liuli_stage = 1;
+                return Flow::WaitChoice {
+                    observer: self.target,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "liuli_discard_choose",
+                        options,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
+            }
+        } else if self.liuli_stage == 1 {
+            self.liuli_stage = 0;
+            let pick = ctx.answer().first().and_then(|o| match o {
+                ChoiceOption::Card(c) => Some(*c),
+                _ => None,
+            });
+            if let Some(c) = pick.filter(|c| {
+                ctx.core.player(self.target).hand.contains(c)
+                    || ctx.core.player(self.target).equips.contains(c)
+            }) {
+                self.liuli_card = Some(c);
+                let candidates = self.liuli_candidates(ctx);
+                if !candidates.is_empty() {
+                    self.liuli_stage = 2;
+                    return Flow::WaitChoice {
+                        observer: self.target,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "liuli_transfer",
+                            options: candidates,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    };
+                }
+                self.liuli_card = None;
+            }
+        } else if self.liuli_stage == 2 {
+            self.liuli_stage = 0;
+            let from = self.target;
+            if let Some(ChoiceOption::Player(new_target)) = ctx.answer().first().copied() {
+                if self.liuli_candidate_ok(ctx, new_target) {
+                    self.target = new_target;
+                    // 新目标重新判定八卦/铁骑；护驾窗口对新目标重开
+                    self.armor_judged = false;
+                    self.tieji_red = None;
+                    self.asked = false;
+                    self.hujia_queue = None;
+                    self.hujia_holder = None;
+                }
+            }
+            // 上游 content：转移生效后弃置所选牌（手牌或装备；牌在
+            // 被转移者 from 的区域——self.target 已指向新目标）。
+            if let Some(c) = self.liuli_card.take() {
+                let in_hand = ctx.core.player(from).hand.contains(&c);
+                if in_hand {
+                    ctx.discard_from_hand(from, c);
+                } else if ctx.core.player(from).equips.contains(&c) {
+                    ctx.core.player_mut(from).equips.retain(|x| *x != c);
+                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, from, c);
+                    ctx.to_discard(c);
+                }
+                ctx.log(LogEvent::CardDiscarded {
+                    player: from,
+                    cards: vec![c],
+                });
+            }
+        }
+        // 护驾（曹操主公技，ADR 0776 重构对齐上游）：目标需出闪时，
+        // 先按座位顺序逐人询问魏势力角色「是否替其打出一张闪」——
+        // 不以暗手牌预筛（询问资格公开、应答私密，不向攻击者泄漏
+        // 谁持闪）；拒绝继续问下一位，任一人确认即代出一张闪
+        // （计入无双需求），全部拒绝后回到目标本人询问。
+        let needed: u8 = if self.source_has_wushuang(ctx) { 2 } else { 1 };
+        if self.dodges_used >= needed {
+            let card = self.card;
+            ctx.to_discard(card);
+            ctx.core.table.retain(|c| *c != card);
+            return Flow::Done;
+        }
+        if self.hujia_active(ctx) {
+            // 本响应窗口首次进入：构建逐人询问队列
+            if self.hujia_queue.is_none() {
+                self.hujia_queue = Some(self.build_hujia_queue(ctx));
+            }
+            // 消费当前被询问者应答（若有）
+            if let Some(holder) = self.hujia_holder.take() {
+                if ctx.answer().first() == Some(&ChoiceOption::Confirm) {
+                    if let Some(shan) = ctx
+                        .core
+                        .player(holder)
+                        .hand
+                        .iter()
+                        .copied()
+                        .find(|c| ctx.catalog.card_kind(*c) == CardKind::Shan)
+                    {
+                        ctx.discard_from_hand(holder, shan);
+                        ctx.emit(EventData::CardResponded {
+                            card: shan,
+                            player: holder,
+                        });
+                        self.dodges_used += 1;
+                        if self.dodges_used >= needed {
+                            let card = self.card;
+                            ctx.to_discard(card);
+                            ctx.core.table.retain(|c| *c != card);
+                            return Flow::Done;
+                        }
+                        // 无双还需第二张：新响应窗口——重开逐人询问
+                        //（含目标本人的再次询问）
+                        self.hujia_queue = Some(self.build_hujia_queue(ctx));
+                        self.asked = false;
+                        return Flow::Yield;
+                    }
+                    // 确认但请求期间已无闪：视为拒绝，问下一位
+                }
+            }
+            // 逐人询问下一位（Pass 后继续）
+            let queue = self.hujia_queue.as_mut().expect("queue built above");
+            if let Some(pos) = queue
+                .iter()
+                .position(|p| ctx.core.player(*p).alive)
+            {
+                let next = queue.remove(pos);
+                self.hujia_holder = Some(next);
+                return Flow::WaitChoice {
+                    observer: next,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::Confirm,
+                        prompt: "hujia_respond",
+                        options: vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                };
+            }
+            // 队列问完（全部拒绝或无人合格）：Some(空) 固定，
+            // 进入目标本人询问；后续恢复重入不再重建。
+        }
+        if !self.asked {
+            self.asked = true;
+            // 天弦（U05 xianjian 柳梦璃，规则 v184）：锁定——杀对每目标
+            // 结算前目标判定（上游 useCardToBefore 同窗口，priority 5.5
+            // 先于结算技），黑色则取消对该目标的结算（不进入闪询问；每
+            // 目标一次=asked 每目标复位）。**登记差异**：同铁骑内联判定
+            // 口径=确定性判定，无鬼道/天妒改判窗。
+            {
+                let tianxian = ctx
+                    .catalog
+                    .skill_by_name(crate::content::host::WUDIAN_XJ_TIANXIAN_KEY)
+                    .map(|d| ctx.core.has_skill(self.source, d))
+                    .unwrap_or(false);
+                if tianxian {
+                    let judged = ctx.draw_judge_card();
+                    let black = matches!(
+                        ctx.catalog.cards[judged as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    );
+                    ctx.to_discard(judged);
+                    if black {
+                        return self.advance_target(ctx);
+                    }
+                }
+            }
+            // 铁骑（马超）：锁定式判定——判定牌为红色则目标不能出闪响应
+            let tieji = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::TIE_JI)
+                .map(|d| ctx.core.has_skill(self.source, d))
+                .unwrap_or(false);
+            if tieji && self.tieji_red.is_none() {
+                let judged = ctx.draw_judge_card();
+                let red = matches!(
+                    ctx.catalog.cards[judged as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                );
+                ctx.to_discard(judged);
+                self.tieji_red = Some(red);
+            }
+            // 仁王盾（P2/N08 批③-a）：锁定——黑色【杀】对装备者无效
+            //（先于八卦阵判定；红杀/无盾照常进入判定与出闪询问）。
+            let renwang_blocks = !qinggang_pierce && {
+                let black = matches!(
+                    ctx.catalog.cards[self.card as usize].suit,
+                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                );
+                black
+                    && ctx
+                        .core
+                        .player(self.target)
+                        .equips
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang)
+            };
+            if renwang_blocks {
+                let card = self.card;
+                ctx.to_discard(card);
+                ctx.core.table.retain(|c| *c != card);
+                return Flow::Done;
+            }
+            // 堡垒哨卫（U05 ow，规则 v125）：哨卫模式的杀不可闪避/无视
+            // 防具——直接结算伤害（上游 bshaowei_sha directHit 同口径）
+            if self.baolei_sentinel(ctx) && ctx.core.player(self.target).alive {
+                return self.emit_sha_damage(ctx);
+            }
+            // 闪弹（U05 ow 死神，规则 v140）：shaBegin direct——来源可弃
+            // 1 张 he：红=直击（跳过闪询问）；黑=本杀伤害 +1；取消=照常
+            //（he 空不询问；每杀至多一次——上游 shaBegin 每杀事件同口径）。
+            // 龙翔（U05 xianjian 温慧，规则 v146）：shaBegin forced——
+            // 目标手牌多于自己时随机弃差值张（上游 randomGets(diff) 同
+            // 口径；无询问零字段）。
+            {
+                let has_longxiang = ctx
+                    .catalog
+                    .skill_by_name(crate::content::host::WUDIAN_LONGXIANG_KEY)
+                    .map(|d| ctx.core.has_skill(self.source, d))
+                    .unwrap_or(false);
+                if has_longxiang
+                    && ctx.core.player(self.target).alive
+                    && ctx.core.player(self.target).hand.len()
+                        > ctx.core.player(self.source).hand.len()
+                {
+                    let diff = ctx.core.player(self.target).hand.len()
+                        - ctx.core.player(self.source).hand.len();
+                    let hs: Vec<crate::ids::CardId> = ctx
+                        .core
+                        .player(self.target)
+                        .hand
+                        .iter()
+                        .copied()
+                        .collect();
+                    let mut pool = hs;
+                    for _ in 0..diff {
+                        if pool.is_empty() {
+                            break;
+                        }
+                        let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                        let dc = pool.swap_remove(k);
+                        let t = self.target;
+                        ctx.take_owned_card(t, dc);
+                        ctx.to_discard(dc);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: t,
+                            cards: vec![dc],
+                        });
+                    }
+                }
+            }
+            // 掠影（U05 xianjian 慕长兰，规则 v154）：shaBegin usable:1
+            // ——获得目标 he 随机一张；若另有其他有牌者→目标选人、来源
+            // 随机弃其一张（TurnState.lueying_used 每回合限一次）。
+            {
+                let has_lueying = ctx
+                    .catalog
+                    .skill_by_name(crate::content::host::WUDIAN_LUEYING_KEY)
+                    .map(|d| ctx.core.has_skill(self.source, d))
+                    .unwrap_or(false);
+                let t_he = !ctx.core.player(self.target).hand.is_empty()
+                    || !ctx.core.player(self.target).equips.is_empty();
+                if has_lueying
+                    && !ctx.core.turn.lueying_used
+                    && ctx.core.player(self.source).alive
+                    && ctx.core.player(self.target).alive
+                    && t_he
+                {
+                    ctx.core.turn.lueying_used = true;
+                    // 获得目标 he 随机一张
+                    let pool: Vec<crate::ids::CardId> = {
+                        let p = ctx.core.player(self.target);
+                        p.hand
+                            .iter()
+                            .copied()
+                            .chain(p.equips.iter().copied())
+                            .collect()
+                    };
+                    if !pool.is_empty() {
+                        let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                        let card = pool[k];
+                        ctx.take_owned_card(self.target, card);
+                        ctx.core.player_mut(self.source).hand.push(card);
+                        ctx.log(LogEvent::CardsGiven {
+                            from: self.target,
+                            to: self.source,
+                            cards: vec![card],
+                        });
+                    }
+                    // 另有其他有牌者→目标选人（后续来源随机弃其一张）
+                    let others: Vec<PlayerId> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.source
+                                && *p != self.target
+                                && (!ctx.core.player(*p).hand.is_empty()
+                                    || !ctx.core.player(*p).equips.is_empty())
+                        })
+                        .collect();
+                    if !others.is_empty() {
+                        self.asking_lueying = true;
+                        let options: Vec<ChoiceOption> = others
+                            .into_iter()
+                            .map(ChoiceOption::Player)
+                            .collect();
+                        return Flow::WaitChoice {
+                            observer: self.target,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectPlayers,
+                                prompt: "lueying_choose_victim",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
+                }
+            }
+            let has_xiandan = ctx
+                .catalog
+                .skill_by_name(crate::content::host::WUDIAN_XIANDAN_KEY)
+                .map(|d| ctx.core.has_skill(self.source, d))
+                .unwrap_or(false);
+            if has_xiandan
+                && !self.xiandan_done
+                && ctx.core.player(self.source).alive
+                && ctx.core.player(self.target).alive
+                && (!ctx.core.player(self.source).hand.is_empty()
+                    || !ctx.core.player(self.source).equips.is_empty())
+            {
+                self.xiandan_done = true;
+                self.asking_xiandan = true;
+                let options: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(self.source)
+                    .hand
+                    .iter()
+                    .copied()
+                    .chain(ctx.core.player(self.source).equips.iter().copied())
+                    .map(ChoiceOption::Card)
+                    .collect();
+                return Flow::WaitChoice {
+                    observer: self.source,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "xiandan_discard",
+                        options,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
+            }
+            // 雌雄双股剑（批③-b 第八把）：杀指定异性目标后（性别有槽取
+            // 武将性别、无槽默认男），目标选择：弃一张手牌（自选，逐技
+            // 对照批一 v75 对齐上游 chooseToDiscard）或取消令使用者摸 1；
+            // 无手牌则仅可令摸（上游同：!hasCards("h") 直接 draw）。
+            if !self.cixiong_done
+                && !self.asking_cixiong
+                && ctx
+                    .core
+                    .player(self.source)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Cixiong)
+                && ctx.core.player(self.target).alive
+                && ctx.core.effective_gender(self.source)
+                    != ctx.core.effective_gender(self.target)
+            {
+                self.cixiong_done = true;
+                let has_hand = !ctx.core.player(self.target).hand.is_empty();
+                if has_hand {
+                    self.asking_cixiong = true;
+                    // 上游 chooseToDiscard：目标自选一张手牌，空应答（取消）
+                    // = 令使用者摸 1（逐技对照批一 v75）。
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.target)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    return Flow::WaitChoice {
+                        observer: self.target,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "cixiong_discard_choose",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    };
+                }
+                // 无手牌：唯一可选 = 令使用者摸 1。
+                ctx.draw_cards(self.source, 1);
+            }
+            // 龙胆：杀可当闪打出——响应选项并入目标手牌中的杀
+            let longdan = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::LONG_DAN)
+                .map(|d| ctx.core.has_skill(self.target, d))
+                .unwrap_or(false);
+            let tieji_blocks = self.tieji_red == Some(true);
+            // 倾国（甄姬）：装备区黑色牌可当闪打出——并入响应选项
+            let qingguo = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::QING_GUO)
+                .map(|d| ctx.core.has_skill(self.target, d))
+                .unwrap_or(false);
+            // 堡垒哨卫（U05 ow，规则 v125）目标侧：持有者不能闪避杀
+            let target_sentinel = ctx
+                .catalog
+                .skill_by_name(crate::content::host::WUDIAN_BAOLEI_KEY)
+                .map(|def| {
+                    ctx.core.has_skill(self.target, def)
+                        && ctx.core.player(self.target).baolei_mode == 1
+                })
+                .unwrap_or(false);
+            let mut shans: Vec<ChoiceOption> = ctx.core.player(self.target)
+                .hand
+                .iter()
+                .filter(|c| {
+                    !tieji_blocks
+                        && !target_sentinel
+                        && {
+                            let kind = ctx.catalog.card_kind(**c);
+                            kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
+                        }
+                })
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            // 诱敌深入（G1 玩点论杀）：打出后杀无效，来源受 1 点反噬
+            //（登记差异：上游为强制来源连用杀，原生简化为单次反噬）
+            for c in ctx.core.player(self.target).hand.iter().copied() {
+                if ctx.catalog.card_kind(c) == CardKind::Youdishenru {
+                    shans.push(ChoiceOption::Card(c));
+                    break;
+                }
+            }
+            if qingguo && !tieji_blocks {
+                for c in ctx.core.player(self.target).equips.iter().copied() {
+                    let black = matches!(
+                        ctx.catalog.cards[c as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    );
+                    if black {
+                        shans.push(ChoiceOption::Card(c));
+                    }
+                }
+            }
+
+            if shans.is_empty() || !ctx.core.player(self.target).alive {
+                // 风雪刃（U05 swd 第十一批，规则 v95）：命中后可选择——
+                // 防止伤害，目标翻面并摸一张牌（上游 shaHit → unhurt +
+                // turnOver + draw；Confirm 可放弃则照常伤害）
+                if !self.asking_fengxueren
+                    && ctx.core.player(self.target).alive
+                    && !ctx.core.player(self.target).face_down
+                    && ctx
+                        .core
+                        .player(self.source)
+                        .equips
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Fengxueren)
+                {
+                    self.asking_fengxueren = true;
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::Confirm,
+                            prompt: "fengxueren_flip_confirm",
+                            options: vec![ChoiceOption::Confirm],
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    };
+                }
+                // 寒冰剑：目标有牌时来源可防止伤害，改为目标自选弃两张
+                //（逐技对照批一 v75 对齐上游 discardPlayerCard）。
+                if self.hanbing_can_fire(ctx) {
+                    self.asking_hanbing = true;
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::Confirm,
+                            prompt: "hanbing_prevent_confirm",
+                            options: vec![ChoiceOption::Confirm],
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    };
+                }
+                // 麒麟弓：伤害结算前来源可弃目标一匹坐骑。
+                let horses = self.qilin_horses(ctx);
+                if !horses.is_empty() && ctx.core.player(self.target).alive {
+                    self.asking_qilin = true;
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "qilin_discard_horse",
+                            options: horses,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    };
+                }
+                return self.emit_sha_damage(ctx);
+            }
+            let mut options = vec![ChoiceOption::Pass];
+            options.extend(shans);
+            return Flow::WaitChoice {
+                observer: self.target,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::RespondCard,
+                    prompt: "respond_shan",
+                    options,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: false,
+                },
+            };
+        }
+        // 已恢复：读取应答
+        let answer = ctx.answer_first();
+        // 诱敌深入应答：杀无效（弃置），来源受 1 点反噬伤害
+        if let ChoiceOption::Card(yd) = answer {
+            if ctx.catalog.card_kind(yd) == CardKind::Youdishenru {
+                let in_hand = ctx.core.player(self.target).hand.contains(&yd);
+                if in_hand {
+                    ctx.discard_from_hand(self.target, yd);
+                }
+                ctx.emit(EventData::CardResponded {
+                    card: yd,
+                    player: self.target,
+                });
+                if ctx.core.player(self.source).alive {
+                    ctx.emit(EventData::Damage(damage_data_with(
+                        Some(self.target),
+                        self.source,
+                        1,
+                        crate::event::DamageNature::Normal,
+                        Some(yd),
+                    )));
+                }
+                let card = self.card;
+                ctx.to_discard(card);
+                ctx.core.table.retain(|c| *c != card);
+                return Flow::Done;
+            }
+        }
+        if let ChoiceOption::Card(shan) = answer {
+            // 倾国应答可能来自装备区：按实际所在区移除
+            let in_hand = ctx.core.player(self.target).hand.contains(&shan);
+            if in_hand {
+                ctx.discard_from_hand(self.target, shan);
+            } else {
+                ctx.core
+                    .player_mut(self.target)
+                    .equips
+                    .retain(|x| *x != shan);
+                ctx.to_discard(shan);
+            }
+            ctx.emit(EventData::CardResponded {
+                card: shan,
+                player: self.target,
+            });
+            self.dodges_used += 1;
+            // 无双：还需第二张闪 → 新响应窗口（重开护驾逐人询问 +
+            // 目标本人询问；不弃杀、不受伤）
+            let needed: u8 = if self.source_has_wushuang(ctx) { 2 } else { 1 };
+            if self.dodges_used < needed {
+                self.hujia_queue = None;
+                self.hujia_holder = None;
+                self.asked = false;
+                return Flow::Yield;
+            }
+            // 青龙偃月刀（批③-b 第六把）：杀被闪后，来源可立即对相同
+            // 目标再使用一张【杀】（从手牌选择；放弃则不再追问——每杀
+            // 至多追问一次，防止连环杀循环）。
+            let has_qinglong = ctx
+                .core
+                .player(self.source)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinglong);
+            let hand_shas: Vec<ChoiceOption> = ctx
+                .core
+                .player(self.source)
+                .hand
+                .iter()
+                .filter(|c| {
+                    matches!(
+                        ctx.catalog.card_kind(**c),
+                        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
+                    )
+                })
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            if has_qinglong && !hand_shas.is_empty() && !self.asking_qinglong {
+                self.asking_qinglong = true;
+                return Flow::WaitChoice {
+                    observer: self.source,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "qinglong_replay_sha",
+                        options: hand_shas,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
+            }
+            // 贯石斧（批③-b 第五把）：杀被闪后，来源可弃两张牌强制伤害
+            //（登记差异：可弃牌池不含贯石斧本体；不足两张则无法发动）。
+            let has_guanshi = ctx
+                .core
+                .player(self.source)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Guanshi);
+            if has_guanshi && ctx.core.player(self.source).alive {
+                let mut pool: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(self.source)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                pool.extend(
+                    ctx.core
+                        .player(self.source)
+                        .equips
+                        .iter()
+                        .filter(|c| ctx.catalog.card_kind(**c) != CardKind::Guanshi)
+                        .copied()
+                        .map(ChoiceOption::Card),
+                );
+                if pool.len() >= 2 {
+                    self.asking_guanshi = true;
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "guanshi_force_damage",
+                            options: pool,
+                            min: 2,
+                            max: 2,
+                            allow_cancel: true,
+                        },
+                    };
+                }
+            }
+        } else if ctx.core.player(self.target).alive {
+            if self.hanbing_can_fire(ctx) {
+                self.asking_hanbing = true;
+                return Flow::WaitChoice {
+                    observer: self.source,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::Confirm,
+                        prompt: "hanbing_prevent_confirm",
+                        options: vec![ChoiceOption::Confirm],
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
+            }
+            let horses = self.qilin_horses(ctx);
+            if !horses.is_empty() {
+                self.asking_qilin = true;
+                return Flow::WaitChoice {
+                    observer: self.source,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "qilin_discard_horse",
+                        options: horses,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
+            }
+            return self.emit_sha_damage(ctx);
+        }
+        // 目标已死等无伤害路径：推进队列/弃置杀本体。
+        return self.advance_target(ctx);
+    }
+}
+
+/// 濒死救援：按座位顺序询问持桃者；无人救则进入死亡子事件。
+#[derive(Clone)]
+pub struct DyingSaveMachine {
+    dying: PlayerId,
+    source: Option<PlayerId>,
+    responders: Vec<PlayerId>,
+    asked: bool,
+    /// 本轮是否已有人用桃（整轮无人用桃 → 濒死结算死亡，不再循环询问）。
+    round_used: bool,
+}
+
+impl DyingSaveMachine {
+    pub(crate) fn new(
+        dying: PlayerId,
+        source: Option<PlayerId>,
+        responders: Vec<PlayerId>,
+        asked: bool,
+        round_used: bool,
+    ) -> Self {
+        Self { dying, source, responders, asked, round_used }
+    }
+}
+
+impl crate::catalog::SkillMachine for DyingSaveMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::DyingSave {
+            dying: self.dying,
+            source: self.source,
+            responders: self.responders.clone(),
+            asked: self.asked,
+            round_used: self.round_used,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 刺猬（U07 玩点论杀韩龙，规则 v111）：濒死即死标记在位——跳
+        // 过救援询问直接死亡（上游 ciqiu_dying dyingBegin firstDo die
+        // 同口径）
+        if ctx.core.turn.ciqiu_dying.contains(&self.dying) {
+            ctx.core.turn.ciqiu_dying.retain(|p| *p != self.dying);
+            ctx.emit(EventData::Death {
+                player: self.dying,
+                killer: self.source,
+            });
+            return Flow::Done;
+        }
+        loop {
+            let p = ctx.core.player(self.dying);
+            if p.hp > 0 && !p.dying {
+                // 救援成功（dyingAfter 等价，规则 v157）：发射救回事件，
+                // 觉醒技（姜城·焚逝）等触发挂在该事件的 AfterTriggers 窗
+                // 口——时序在固有救援机之后，与上游 dyingAfter 一致。
+                ctx.emit(EventData::DyingSaved {
+                    player: self.dying,
+                    source: self.source,
+                });
+                return Flow::Done; // 已被救回
+            }
+            // 跳过已死亡或无桃的应答者；队列耗尽即一轮问完——
+            // 本轮有人用桃且场上仍有桃 → 开新一轮（负体力可由同一
+            // 持桃者跨轮连续多张救回）；否则无人愿救，落至死亡。
+            loop {
+                while let Some(r) = self.responders.first() {
+                    let alive = ctx.core.player(*r).alive;
+                    let has_tao =
+                        alive && ctx.core.player(*r).hand.iter().any(|c| {
+                            is_tao_like(ctx, *r, *c, self.dying)
+                        });
+                    if !has_tao {
+                        self.responders.remove(0);
+                    } else {
+                        break;
+                    }
+                }
+                if !self.responders.is_empty() || !self.round_used {
+                    break;
+                }
+                let any_tao = ctx.core.players.iter().enumerate().any(|(i, p)| {
+                    p.alive && p.hand.iter().any(|c| is_tao_like(ctx, i as PlayerId, *c, self.dying))
+                });
+                if !any_tao {
+                    break;
+                }
+                self.responders = ctx.core.seat_order_from(self.dying);
+                self.round_used = false;
+            }
+            let Some(responder) = self.responders.first().copied() else {
+                ctx.emit(EventData::Death {
+                    player: self.dying,
+                    killer: self.source,
+                });
+                return Flow::Done;
+            };
+            if self.asked {
+                self.asked = false;
+                self.responders.remove(0);
+                let answer = ctx.answer().clone();
+                if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
+                    ctx.discard_from_hand(responder, tao);
+                    // 救援（孙权主公技，锁定）：濒死时其他角色的桃回复 +1
+                    let jiuyuan = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::JIU_YUAN)
+                        .map(|d| ctx.core.has_skill(self.dying, d))
+                        .unwrap_or(false);
+                    let amount = if jiuyuan && responder != self.dying { 2 } else { 1 };
+                    ctx.recover(self.dying, amount, Some(tao));
+                    ctx.emit(EventData::CardResponded {
+                        card: tao,
+                        player: responder,
+                    });
+                    ctx.log(LogEvent::DyingSaved {
+                        player: self.dying,
+                        by_card: tao,
+                    });
+                    self.round_used = true;
+                }
+                continue; // 无论用桃或放弃，继续处理队列（轮转见队首过滤）
+            }
+            self.asked = true;
+            let mut options = vec![ChoiceOption::Pass];
+            options.extend(
+                ctx.core.player(responder)
+                    .hand
+                    .iter()
+                    .filter(|c| is_tao_like(ctx, responder, **c, self.dying))
+                    .copied()
+                    .map(ChoiceOption::Card),
+            );
+            return Flow::WaitChoice {
+                observer: responder,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::RespondCard,
+                    prompt: "dying_save",
+                    options,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: false,
+                },
+            };
+        }
+    }
+}
+
+/// 决斗：目标先出杀，双方交替出杀；轮到某方其无杀（不询问）或放弃时，
+/// 该方受对方造成的 1 点伤害，决斗结束。响应杀不占出牌阶段限一次；
+/// 无距离限制——轮转起手/跳过语义/来源归属见覆盖清单行为差异表。
+#[derive(Clone)]
+pub struct DuelMachine {
+    card: crate::ids::CardId,
+    source: PlayerId,
+    target: PlayerId,
+    /// true = 轮到目标出杀；false = 轮到来源出杀。
+    on_target: bool,
+    asked: bool,
+    /// 无双：对手需再次出杀（本轮已出一张）。
+    second_pending: bool,
+}
+
+impl DuelMachine {
+    pub(crate) fn new(
+        card: crate::ids::CardId,
+        source: PlayerId,
+        target: PlayerId,
+        on_target: bool,
+        asked: bool,
+        second_pending: bool,
+    ) -> Self {
+        Self { card, source, target, on_target, asked, second_pending }
+    }
+}
+
+impl crate::catalog::SkillMachine for DuelMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Duel {
+            card: self.card,
+            source: self.source,
+            target: self.target,
+            on_target: self.on_target,
+            asked: self.asked,
+            second_pending: self.second_pending,
+        }
+    }
+
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        loop {
+            let responder = if self.on_target {
+                self.target
+            } else {
+                self.source
+            };
+            let opponent = if self.on_target {
+                self.source
+            } else {
+                self.target
+            };
+            let shas: Vec<crate::ids::CardId> = ctx.core.player(responder)
+                .hand
+                .iter()
+                .copied()
+                .filter(|c| ctx.catalog.card_kind(*c) == CardKind::Sha)
+                .collect();
+            if !self.asked {
+                if shas.is_empty() || !ctx.core.player(responder).alive {
+                    // 轮到方无杀：不询问，直接受伤，决斗结束
+                    ctx.emit(EventData::Damage(damage_data(
+                        Some(opponent),
+                        responder,
+                        1 + luoyi_bonus(ctx, Some(opponent)),
+                    )));
+                    return self.finish(ctx);
+                }
+                self.asked = true;
+                let mut options = vec![ChoiceOption::Pass];
+                options.extend(shas.into_iter().map(ChoiceOption::Card));
+                return Flow::WaitChoice {
+                    observer: responder,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::RespondCard,
+                        prompt: "duel_sha",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                };
+            }
+            // 应答消费
+            self.asked = false;
+            let answer = ctx.answer().clone();
+            if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                ctx.discard_from_hand(responder, c);
+                ctx.emit(EventData::CardResponded {
+                    card: c,
+                    player: responder,
+                });
+                // 无双：与无双持有者决斗的角色每次需连续打出两张杀——
+                // 第一张后不轮转，同一响应者再次询问（second_pending）
+                let wushuang_holder = if self.on_target { self.source } else { self.target };
+                let opponent_has_wushuang = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::WU_SHUANG)
+                    .map(|d| ctx.core.has_skill(wushuang_holder, d))
+                    .unwrap_or(false);
+                if opponent_has_wushuang && !self.second_pending {
+                    self.second_pending = true;
+                    continue; // 同一响应者再次询问第二张杀
+                }
+                self.second_pending = false;
+                self.on_target = !self.on_target;
+                continue;
+            }
+            // 放弃 → 受伤，决斗结束（重置无双标记）
+            self.second_pending = false;
+            ctx.emit(EventData::Damage(damage_data(
+                Some(opponent),
+                responder,
+                1 + luoyi_bonus(ctx, Some(opponent)),
+            )));
+            return self.finish(ctx);
+        }
+    }
+}
+
+impl DuelMachine {
+    fn finish(&self, ctx: &mut Ctx<'_>) -> Flow {
+        let card = self.card;
+        ctx.to_discard(card);
+        ctx.core.table.retain(|c| *c != card);
+        Flow::Done
+    }
+}
+
+/// 无中生有结算：使用者摸 2。
+#[derive(Clone)]
+pub struct WuzhongMachine {
+    pub owner: PlayerId,
+    pub card: Option<crate::ids::CardId>,
+}
+
+impl crate::catalog::SkillMachine for WuzhongMachine {
+    fn fork(&self) -> Box<dyn crate::catalog::SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Wuzhong { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.draw_cards(self.owner, 2);
+        // 弃置锦囊本体（按牌种扫表：恢复期安全，不依赖快照携带 card）。
+        if let Some(pos) = ctx
+            .core
+            .table
+            .iter()
+            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Wuzhong)
+        {
+            let card = ctx.core.table.remove(pos);
+            ctx.to_discard(card);
+        }
+        Flow::Done
+    }
+}
+
+/// 桃园结义结算：所有其他存活角色回复 1 点体力。
+#[derive(Clone)]
+pub struct TaoyuanMachine {
+    pub owner: PlayerId,
+    pub card: Option<crate::ids::CardId>,
+}
+
+impl crate::catalog::SkillMachine for TaoyuanMachine {
+    fn fork(&self) -> Box<dyn crate::catalog::SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Taoyuan { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let others: Vec<PlayerId> = ctx
+            .core
+            .alive_players()
+            .filter(|p| *p != self.owner)
+            .collect();
+        for p in others {
+            let (hp, max) = {
+                let pl = ctx.core.player(p);
+                (pl.hp, pl.max_hp)
+            };
+            if hp < max as i32 {
+                ctx.recover(p, 1, None);
+            }
+        }
+        if let Some(pos) = ctx
+            .core
+            .table
+            .iter()
+            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Taoyuan)
+        {
+            let card = ctx.core.table.remove(pos);
+            ctx.to_discard(card);
+        }
+        Flow::Done
+    }
+}
+
+/// 地载阵结算（zhenfa 首切片，规则 v110）：所有非大势力存活角色各摸
+/// 一张（上游 target.draw(false) 同口径；大势力=is_major_faction）。
+#[derive(Clone)]
+pub struct DizaizhenMachine {
+    pub owner: PlayerId,
+}
+
+impl crate::catalog::SkillMachine for DizaizhenMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        // 无询问机器（逐目标摸牌，Noop 同款快照形态）
+        crate::snap::MachineSnapshot::Noop
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let targets: Vec<PlayerId> = ctx
+            .core
+            .alive_players()
+            .filter(|p| !ctx.core.is_major_faction(ctx.catalog, *p))
+            .collect();
+        for t in targets {
+            ctx.draw_cards(t, 1);
+        }
+        // 本体牌离结算区入弃堆（Wugu 同款收尾）
+        if let Some(pos) = ctx
+            .core
+            .table
+            .iter()
+            .position(|c| ctx.catalog.card_kind(*c) == CardKind::Dizaizhen)
+        {
+            let c = ctx.core.table.remove(pos);
+            ctx.to_discard(c);
+        }
+        Flow::Done
+    }
+}
+
+/// 五谷丰登结算：亮 min(存活数, 牌堆) 张，从使用者起按座位序逐人择一。
+#[derive(Clone)]
+pub struct WuguMachine {
+    pub owner: PlayerId,
+    pub cards: Vec<crate::ids::CardId>,
+    pub pickers: Vec<PlayerId>,
+    pub stage: WuguStage,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum WuguStage {
+    /// 亮牌并确定择序（首个询问）。
+    Init,
+    /// 逐人读应答/开下一询问。
+    Pick,
+}
+
+impl crate::catalog::SkillMachine for WuguMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Wugu {
+            owner: self.owner,
+            cards: self.cards.iter().copied().map(|c| c as u32).collect(),
+            pickers: self.pickers.clone(),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            WuguStage::Init => {
+                let alive: Vec<PlayerId> = ctx.core.alive_players().collect();
+                let take = alive.len().min(ctx.core.deck.len());
+                if take == 0 || self.cards.is_empty() == false {
+                    return Flow::Done;
+                }
+                let new_len = ctx.core.deck.len() - take;
+                self.cards = ctx.core.deck.split_off(new_len);
+                self.pickers = alive;
+                self.stage = WuguStage::Pick;
+                self.open_pick(ctx)
+            }
+            WuguStage::Pick => {
+                // 读当前择牌者应答，交牌并推进。
+                let picker = match self.pickers.first().copied() {
+                    Some(p) => p,
+                    None => return self.finish_wugu(ctx),
+                };
+                if let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() {
+                    if let Some(pos) = self.cards.iter().position(|c| *c == card) {
+                        self.cards.remove(pos);
+                        if ctx.core.player(picker).alive {
+                            ctx.core.player_mut(picker).hand.push(card);
+                            ctx.out.push(crate::LogEvent::CardsDrawn {
+                                player: picker,
+                                cards: vec![card],
+                            });
+                        }
+                    }
+                }
+                self.pickers.remove(0);
+                if self.pickers.is_empty() || self.cards.is_empty() {
+                    return self.finish_wugu(ctx);
+                }
+                self.open_pick(ctx)
+            }
+        }
+    }
+}
+
+impl WuguMachine {
+    fn open_pick(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let Some(picker) = self.pickers.first().copied() else {
+            return self.finish_wugu(ctx);
+        };
+        if !ctx.core.player(picker).alive || self.cards.is_empty() {
+            self.pickers.remove(0);
+            if self.pickers.is_empty() {
+                return self.finish_wugu(ctx);
+            }
+            return self.open_pick(ctx);
+        }
+        let options: Vec<ChoiceOption> =
+            self.cards.iter().copied().map(ChoiceOption::Card).collect();
+        Flow::WaitChoice {
+            observer: picker,
+            spec: crate::choice::ChoiceSpec {
+                kind: crate::choice::ChoiceKind::SelectCards,
+                prompt: "wugu_pick",
+                options,
+                min: 1,
+                max: 1,
+                allow_cancel: false,
+            },
+        }
+    }
+    fn finish_wugu(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        for c in self.cards.drain(..) {
+            ctx.to_discard(c);
+        }
+        if let Some(c) = ctx.core.table.iter().position(|c| {
+            ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Wugu
+        }) {
+            let card = ctx.core.table.remove(c);
+            ctx.to_discard(card);
+        }
+        Flow::Done
+    }
+}
+
+/// 借刀杀人结算：武器持有者出杀（登记差异：直接伤害，无出闪窗口）
+/// 或把武器交給另一名目标。
+#[derive(Clone)]
+pub struct JiedaoMachine {
+    pub owner: PlayerId,
+    pub holder: PlayerId,
+    pub victim: PlayerId,
+    pub card: Option<crate::ids::CardId>,
+    pub stage: JiedaoStage,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum JiedaoStage {
+    Ask,
+    Read,
+}
+
+impl crate::catalog::SkillMachine for JiedaoMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Jiedao {
+            owner: self.owner,
+            holder: self.holder,
+            victim: self.victim,
+            stage: match self.stage {
+                JiedaoStage::Ask => crate::snap::JiedaoStageSnap::Ask,
+                JiedaoStage::Read => crate::snap::JiedaoStageSnap::Read,
+            },
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            JiedaoStage::Ask => {
+                // 资格复核：持有者仍在且武器仍在。
+                let has_weapon = ctx
+                    .core
+                    .player(self.holder)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Weapon);
+                if !ctx.core.player(self.holder).alive || !has_weapon {
+                    return self.finish_jiedao(ctx);
+                }
+                self.stage = JiedaoStage::Read;
+                Flow::WaitChoice {
+                    observer: self.holder,
+                    spec: crate::choice::ChoiceSpec {
+                        kind: crate::choice::ChoiceKind::PickTag,
+                        prompt: "jiedao_sha_or_give",
+                        options: vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            JiedaoStage::Read => {
+                match ctx.answer_first() {
+                    // 出杀：直接伤害结算（登记差异：无出闪窗口）。
+                    ChoiceOption::Tag(0) => {
+                        if ctx.core.player(self.victim).alive {
+                            ctx.emit(crate::event::EventData::Damage(
+                                crate::machine::damage_data(
+                                    Some(self.holder),
+                                    self.victim,
+                                    1,
+                                ),
+                            ));
+                        }
+                    }
+                    // 交出武器：武器移入另一目标装备区（原武器若有则替换
+                    // 入弃牌堆）。
+                    _ => {
+                        let weapon = ctx
+                            .core
+                            .player(self.holder)
+                            .equips
+                            .iter()
+                            .copied()
+                            .find(|c| {
+                                ctx.catalog.card_kind(*c)
+                                    == crate::catalog::CardKind::Weapon
+                            });
+                        if let Some(w) = weapon {
+                            ctx.core.player_mut(self.holder).equips.retain(|c| *c != w);
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.holder,
+                                w,
+                            );
+                            let victim = self.victim;
+                            let old = ctx
+                                .core
+                                .player_mut(victim)
+                                .equips
+                                .iter()
+                                .copied()
+                                .find(|c| {
+                                    ctx.catalog.card_kind(*c)
+                                        == crate::catalog::CardKind::Weapon
+                                });
+                            if let Some(old_w) = old {
+                                ctx.core.player_mut(victim).equips.retain(|c| *c != old_w);
+                                crate::kernel::revoke_equip_skills(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    victim,
+                                    old_w,
+                                );
+                                ctx.to_discard(old_w);
+                            }
+                            ctx.core.player_mut(victim).equips.push(w);
+                        }
+                    }
+                }
+                self.finish_jiedao(ctx)
+            }
+        }
+    }
+}
+
+impl JiedaoMachine {
+    fn finish_jiedao(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        self.card = None;
+        if let Some(pos) = ctx
+            .core
+            .table
+            .iter()
+            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Jiedao)
+        {
+            let card = ctx.core.table.remove(pos);
+            ctx.to_discard(card);
+        }
+        Flow::Done
+    }
+}
+
+/// 过河拆桥：弃置目标角色一张牌（手牌优先，其次装备区，再次判定区）。
+#[derive(Clone)]
+pub struct DismantleMachine {
+    pub(crate) card: crate::ids::CardId,
+    pub(crate) source: PlayerId,
+    pub(crate) target: PlayerId,
+    pub(crate) asked: bool,
+}
+
+impl crate::catalog::SkillMachine for DismantleMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Dismantle {
+            card: self.card,
+            source: self.source,
+            target: self.target,
+            asked: self.asked,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if !self.asked {
+            self.asked = true;
+            // 选牌：手牌优先，其次装备区，再次判定区
+            let t = ctx.core.player(self.target);
+            let pick = t
+                .hand
+                .first()
+                .copied()
+                .or_else(|| t.equips.first().copied())
+                .or_else(|| t.judge.first().copied());
+            if let Some(c) = pick {
+                // 从所在区移除
+                let from_hand = t.hand.contains(&c);
+                {
+                    let was_equip = ctx.catalog.card_kind(c).is_equip();
+                    let p = ctx.core.player_mut(self.target);
+                    p.hand.retain(|x| *x != c);
+                    p.equips.retain(|x| *x != c);
+                    p.judge.retain(|x| *x != c);
+                    if was_equip {
+                        revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
+                    }
+                }
+                ctx.to_discard(c);
+                ctx.log(LogEvent::CardDiscarded {
+                    player: self.target,
+                    cards: vec![c],
+                });
+                if from_hand {
+                    // 弃置事件：连营类「失去手牌」触发依赖此事件（ADR 0763）
+                    ctx.emit(EventData::CardsDiscarded {
+                        player: self.target,
+                        cards: vec![c],
+                    });
+                }
+            }
+            let card = self.card;
+            ctx.to_discard(card);
+            ctx.core.table.retain(|x| *x != card);
+        }
+        Flow::Done
+    }
+}
+
+/// 顺手牵羊结算：获得一名其他角色的一张牌（手牌优先、其次装备，
+/// 各区首张确定性取牌；获得进来源手牌——与拆桥弃置不同）。
+#[derive(Clone)]
+pub struct SnatchMachine {
+    pub(crate) card: crate::ids::CardId,
+    pub(crate) source: PlayerId,
+    pub(crate) target: PlayerId,
+    pub(crate) asked: bool,
+}
+
+impl crate::catalog::SkillMachine for SnatchMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Snatch {
+            card: self.card,
+            source: self.source,
+            target: self.target,
+            asked: self.asked,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if !self.asked {
+            self.asked = true;
+            let t = ctx.core.player(self.target);
+            let pick = t
+                .hand
+                .first()
+                .copied()
+                .or_else(|| t.equips.first().copied());
+            if let Some(c) = pick {
+                {
+                    let was_equip = ctx.catalog.card_kind(c).is_equip();
+                    let p = ctx.core.player_mut(self.target);
+                    p.hand.retain(|x| *x != c);
+                    p.equips.retain(|x| *x != c);
+                    if was_equip {
+                        revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
+                    }
+                }
+                ctx.core.player_mut(self.source).hand.push(c);
+                ctx.emit(EventData::CardsMoved {
+                    cards: vec![c],
+                    from: self.target,
+                    to: self.source,
+                });
+                ctx.log(LogEvent::CardsGiven {
+                    from: self.target,
+                    to: self.source,
+                    cards: vec![c],
+                });
+            }
+            let card = self.card;
+            ctx.to_discard(card);
+            ctx.core.table.retain(|x| *x != card);
+        }
+        Flow::Done
+    }
+}
+
+/// 铁索连环结算：无懈窗口未抵消后，逐存活目标翻转横置
+/// （每目标一个 Linked 子帧，走 commit 翻转并写回载荷）。
+/// 牌在出牌提交时已入手牌→桌面，本机器结算后一次性弃置——
+/// 旧实现只推 Linked 帧而牌从未离手，本批修复（ADR 0705）。
+#[derive(Clone)]
+pub struct ChainMachine {
+    card: crate::ids::CardId,
+    source: PlayerId,
+    targets: Vec<PlayerId>,
+    /// 已发出 Linked 帧的目标数。
+    emitted: usize,
+}
+
+impl ChainMachine {
+    pub(crate) fn new(
+        card: crate::ids::CardId,
+        source: PlayerId,
+        targets: Vec<PlayerId>,
+        emitted: usize,
+    ) -> Self {
+        Self { card, source, targets, emitted }
+    }
+}
+
+impl crate::catalog::SkillMachine for ChainMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Chain {
+            card: self.card,
+            source: self.source,
+            targets: self.targets.clone(),
+            emitted: self.emitted,
+        }
+    }
+
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        while self.emitted < self.targets.len() {
+            let t = self.targets[self.emitted];
+            self.emitted += 1;
+            if !ctx.core.player(t).alive {
+                continue; // 窗口期间死亡的目标跳过
+            }
+            ctx.emit(EventData::Linked {
+                player: t,
+                linked: false,
+            });
+            return Flow::Yield;
+        }
+        // 收尾：铁索离桌入弃牌堆（唯一弃置点）
+        let card = self.card;
+        ctx.to_discard(card);
+        ctx.core.table.retain(|c| *c != card);
+        Flow::Done
+    }
+}
+
+/// 无懈可击响应窗口：包裹锦囊效果机器。
+/// 自来源下家起按座位顺序询问持无懈者；出无懈即反转「抵消」状态并自其下家
+/// 重新询问；窗口关闭时未抵消则委托效果机器，已抵消则锦囊入弃牌堆。
+/// 窗口适用范围/整牌级窗口/跳过语义见覆盖清单行为差异表。
+pub struct NullifyWindowMachine {
+    card: crate::ids::CardId,
+    source: PlayerId,
+    nullified: bool,
+    queue: Vec<PlayerId>,
+    asked: bool,
+    /// false = 窗口已关闭，进入效果委托阶段。
+    window_open: bool,
+    /// 抵消关闭时是否由本窗口弃置锦囊：单次结算锦囊（决斗/铁索/延时锦囊）
+    /// 为 true；AOE 逐目标窗口为 false——由外层机器在全部目标结算后
+    /// 统一弃置（N01：否则「抵消一个目标」路径同一牌进弃牌堆两次）。
+    owns_disposal: bool,
+    effect: Option<Box<dyn crate::catalog::SkillMachine>>,
+}
+
+impl NullifyWindowMachine {
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn new(
+        card: crate::ids::CardId,
+        source: PlayerId,
+        nullified: bool,
+        queue: Vec<PlayerId>,
+        asked: bool,
+        window_open: bool,
+        owns_disposal: bool,
+        effect: Option<Box<dyn crate::catalog::SkillMachine>>,
+    ) -> Self {
+        Self { card, source, nullified, queue, asked, window_open, owns_disposal, effect }
+    }
+}
+
+impl crate::catalog::SkillMachine for NullifyWindowMachine {
+    fn fork(&self) -> Box<dyn crate::catalog::SkillMachine> {
+        Box::new(Self {
+            card: self.card,
+            source: self.source,
+            nullified: self.nullified,
+            queue: self.queue.clone(),
+            asked: self.asked,
+            window_open: self.window_open,
+            owns_disposal: self.owns_disposal,
+            effect: self.effect.as_ref().map(|m| m.fork()),
+        })
+    }
+
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::NullifyWindow {
+            card: self.card,
+            source: self.source,
+            nullified: self.nullified,
+            queue: self.queue.clone(),
+            asked: self.asked,
+            window_open: self.window_open,
+            owns_disposal: self.owns_disposal,
+            effect: self.effect.as_ref().map(|m| Box::new(m.snapshot())),
+        }
+    }
+
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 窗口阶段
+        if self.window_open {
+            // 询问队列清理：跳过死亡/无无懈持有者
+            while let Some(p) = self.queue.first().copied() {
+                let has_nullify = ctx.core.player(p).alive
+                    && ctx
+                        .core
+                        .player(p)
+                        .hand
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Nullify);
+                if !has_nullify {
+                    self.queue.remove(0);
+                } else {
+                    break;
+                }
+            }
+            let Some(responder) = self.queue.first().copied() else {
+                // 队列耗尽：窗口关闭。弃牌责任唯一化（ADR 0705 修复）：抵消时
+                // 由窗口弃置锦囊；未抵消时效果机器（决斗 finish / AOE 收尾 /
+                // 铁索机器）结算结束弃置——旧实现在此无条件弃牌，叠加效果
+                // 机器的弃置使非抵消路径同一牌进弃牌堆两次。
+                if self.nullified {
+                    // 弃置责任唯一化（ADR 0705/0706）：owns_disposal 的窗口
+                    // 抵消时弃置；AOE 逐目标窗口不弃置（外层收尾统一弃置）。
+                    if self.owns_disposal {
+                        let card = self.card;
+                        ctx.to_discard(card);
+                        ctx.core.table.retain(|c| *c != card);
+                    }
+                    ctx.log(LogEvent::CardNullified {
+                        card: self.card,
+                        player: self.source,
+                    });
+                    return Flow::Done;
+                }
+                self.window_open = false;
+                return self.step(ctx); // 未抵消：委托效果机器
+            };
+            if self.asked {
+                self.asked = false;
+                self.queue.remove(0);
+                let answer = ctx.answer().clone();
+                if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                    // 出无懈：弃牌、反转抵消状态、自其下家重新询问
+                    ctx.discard_from_hand(responder, c);
+                    ctx.emit(EventData::CardResponded {
+                        card: c,
+                        player: responder,
+                    });
+                    self.nullified = !self.nullified;
+                    self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
+                }
+                return self.step(ctx);
+            }
+            self.asked = true;
+            let mut options = vec![ChoiceOption::Pass];
+            options.extend(
+                ctx.core.player(responder)
+                    .hand
+                    .iter()
+                    .filter(|c| ctx.catalog.card_kind(**c) == CardKind::Nullify)
+                    .copied()
+                    .map(ChoiceOption::Card),
+            );
+            return Flow::WaitChoice {
+                observer: responder,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::Confirm,
+                    prompt: "nullify_window",
+                    options,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: false,
+                },
+            };
+        }
+        // 窗口已关闭且未抵消：全权委托效果机器
+        if let Some(inner) = self.effect.as_mut() {
+            let flow = inner.step(ctx);
+            if matches!(flow, Flow::Done) {
+                self.effect = None;
+                return Flow::Done;
+            }
+            return flow;
+        }
+        Flow::Done
+    }
+
+}
+
+/// 为锦囊构造无懈窗口并预载询问队列（无懈持有者过滤在运行时进行）。
+fn wrap_nullify_window(
+    ctx: &Ctx<'_>,
+    card: crate::ids::CardId,
+    source: PlayerId,
+    effect: Box<dyn crate::catalog::SkillMachine>,
+) -> NullifyWindowMachine {
+    // 询问队列自来源起按座位顺序（含来源本人）——对齐旧线 alive_from_seat(actor)。
+    NullifyWindowMachine {
+        card,
+        source,
+        nullified: false,
+        queue: ctx.core.seat_order_from(source),
+        asked: false,
+        window_open: true,
+        owns_disposal: true,
+        effect: Some(effect),
+    }
+}
+
+/// 延时锦囊置入机器（使用时无懈窗口未抵消后启动）：
+/// 将桌面上的锦囊置入目标判定区；目标在窗口期间死亡则弃置
+/// （同名牌限制已在命令期校验，窗口期无改判类技能，不复查）。
+#[derive(Clone)]
+pub struct PlaceDelayedMachine {
+    card: crate::ids::CardId,
+    target: PlayerId,
+    placed: bool,
+}
+
+impl PlaceDelayedMachine {
+    pub(crate) fn new(card: crate::ids::CardId, target: PlayerId, placed: bool) -> Self {
+        Self { card, target, placed }
+    }
+}
+
+impl crate::catalog::SkillMachine for PlaceDelayedMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::PlaceDelayed {
+            card: self.card,
+            target: self.target,
+            placed: self.placed,
+        }
+    }
+
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.placed {
+            return Flow::Done;
+        }
+        self.placed = true;
+        let card = self.card;
+        ctx.core.table.retain(|c| *c != card);
+        if !ctx.core.player(self.target).alive {
+            ctx.to_discard(card);
+            return Flow::Done;
+        }
+        ctx.core.player_mut(self.target).judge.push(card);
+        Flow::Done
+    }
+}
+
+/// 权限型能力（无触发时机，如「鬼道」「天妒」）的空机器：
+/// 永不进入触发队列与挂起槽，启动即直接结束。
+#[derive(Clone)]
+pub struct NoopMachine;
+
+impl NoopMachine {
+    pub(crate) fn new() -> Self {
+        Self
+    }
+}
+
+impl crate::catalog::SkillMachine for NoopMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(NoopMachine)
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Noop
+    }
+    fn step(&mut self, _ctx: &mut Ctx<'_>) -> Flow {
+        Flow::Done
+    }
+}
+
+/// 判定阶段机器：对判定区延时锦囊逐张判定。
+/// 排序对齐旧线 `pending_delayed_cards`（ADR 0711）：非闪电延时锦囊按
+/// 放置序在前、闪电在后，**队首先消费**（先放入先判）。
+///
+/// 单次判定的流程（N08 首组官方技能，ADR 0712）：
+/// 1. 翻判定牌；
+/// 2. **改判询问**（张角「鬼道」）：持有者自判定阶段拥有者起按座位顺序
+///    （含本人）逐人询问一次，可打出一张**黑色手牌**代替当前判定牌
+///    （旧线含装备区牌，原生本批仅手牌，差异登记）；被替换的判定牌弃置；
+/// 3. 判定牌生效（乐/兵/闪电）；
+/// 4. **天妒询问**（郭嘉「天妒」）：持有者按座位顺序逐人询问，
+///    可将最终判定牌收入手牌（一人获得后不再询问）。
+///
+/// 拥有者判定中途死亡：队列与当前判定牌逐张弃置（防御路径）。
+pub struct JudgePhaseMachine {
+    owner: PlayerId,
+    /// 待判锦囊队列（已排序：非闪电放置序在前、闪电在后；队首先消费）。
+    queue: Vec<crate::ids::CardId>,
+    /// 当前判定的进行态（翻牌后到生效/获得前）。
+    current: Option<JudgementProgress>,
+}
+
+/// 单次判定的进行态。
+#[derive(Clone)]
+pub struct JudgementProgress {
+    trick: crate::ids::CardId,
+    judge_card: crate::ids::CardId,
+    /// 鬼道改判询问队列（座位序，自拥有者起含本人）。
+    rewriters: Vec<PlayerId>,
+    /// 当前改判者是否已被询问（等待应答）。
+    asked: bool,
+    /// 天妒持有人队列（座位序）。
+    tian_du: Vec<PlayerId>,
+    /// 判定牌是否已被天妒获得。
+    gained: bool,
+    /// 是否处于改判询问阶段（false = 天妒阶段）。
+    in_rewrite: bool,
+    /// Finalized 是否已记（恰好一次，效果生效前，N08-d）。
+    finalized: bool,
+    /// 判定牌是否仍由机器持有（未弃置、未进入手牌）。
+    judge_held: bool,
+}
+
+impl Clone for JudgePhaseMachine {
+    fn clone(&self) -> Self {
+        Self {
+            owner: self.owner,
+            queue: self.queue.clone(),
+            current: self.current.clone(),
+        }
+    }
+}
+
+impl JudgePhaseMachine {
+    pub(crate) fn new(
+        owner: PlayerId,
+        queue: Vec<crate::ids::CardId>,
+        current: Option<JudgementProgress>,
+    ) -> Self {
+        Self { owner, queue, current }
+    }
+}
+
+impl JudgementProgress {
+    pub(crate) fn from_snap(s: &crate::snap::JudgementProgressSnap) -> Self {
+        Self {
+            trick: s.trick,
+            judge_card: s.judge_card,
+            rewriters: s.rewriters.clone(),
+            asked: s.asked,
+            tian_du: s.tian_du.clone(),
+            gained: s.gained,
+            in_rewrite: s.in_rewrite,
+            finalized: s.finalized,
+            judge_held: s.judge_held,
+        }
+    }
+}
+
+impl crate::catalog::SkillMachine for JudgePhaseMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::JudgePhase {
+            owner: self.owner,
+            queue: self.queue.clone(),
+            current: self.current.as_ref().map(|c| {
+                Box::new(crate::snap::JudgementProgressSnap {
+                    trick: c.trick,
+                    judge_card: c.judge_card,
+                    rewriters: c.rewriters.clone(),
+                    asked: c.asked,
+                    tian_du: c.tian_du.clone(),
+                    gained: c.gained,
+                    in_rewrite: c.in_rewrite,
+                    finalized: c.finalized,
+                    judge_held: c.judge_held,
+                })
+            }),
+        }
+    }
+
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        loop {
+            // 拥有者死亡（防御路径：对齐排序下能致死的闪电在队尾）：
+            // 待判队列与进行中的判定牌逐张弃置。
+            if !ctx.core.player(self.owner).alive {
+                let mut leftover = std::mem::take(&mut self.queue);
+                if let Some(cur) = self.current.take() {
+                    // 仅机器仍持有的判定牌需要随死亡清理弃置；
+                    // 已被天妒获得（手牌）或已随效果弃置的不重复入弃牌堆。
+                    if cur.judge_held {
+                        leftover.push(cur.judge_card);
+                    }
+                }
+                if !leftover.is_empty() {
+                    ctx.core.discard.extend(leftover.iter().copied());
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: std::mem::take(&mut leftover),
+                    });
+                }
+                return Flow::Done;
+            }
+
+            // 当前判定的进行态
+            if let Some(cur) = &mut self.current {
+                if cur.in_rewrite {
+                    // 应答消费：当前改判者出黑色手牌替换或放弃
+                    if cur.asked {
+                        cur.asked = false;
+                        // 运行时防御：改判队列已空（正常不会出现——asked 与
+                        // 非空队列同置）则跳过改判直接进入后续阶段（N04-d）。
+                        if cur.rewriters.is_empty() {
+                            cur.in_rewrite = false;
+                            continue;
+                        }
+                        let rewriter = cur.rewriters.remove(0);
+                        let answer = ctx.answer().clone();
+                        if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                            // 打出的牌离开手牌或装备区、由判定流程持有（成为新判定牌）；
+                            // 被替换的旧判定牌由改判者**获得**（对齐上游，ADR 0714）。
+                            ctx.take_owned_card(rewriter, c);
+                            let old = cur.judge_card;
+                            ctx.core.player_mut(rewriter).hand.push(old);
+                            cur.judge_card = c;
+                            ctx.log(LogEvent::JudgementRewritten {
+                                player: rewriter,
+                                card: c,
+                                replaced: old,
+                            });
+                        }
+                        if cur.rewriters.is_empty() {
+                            cur.in_rewrite = false;
+                        }
+                        continue;
+                    }
+                    // 询问下一个可用改判者（跳过死亡/无黑色牌者——手牌与
+                    // 装备区均可，N08-c：仅装备区黑牌者也保持询问资格）
+                    while let Some(r) = cur.rewriters.first().copied() {
+                        if !ctx.core.player(r).alive {
+                            cur.rewriters.remove(0);
+                            continue;
+                        }
+                        let is_black_card = |c: crate::ids::CardId| {
+                            matches!(
+                                ctx.catalog.cards[c as usize].suit,
+                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                            )
+                        };
+                        let p = ctx.core.player(r);
+                        // 鬼才：任意手牌可改判（不依赖黑色）
+                        let gui_cai = ctx.catalog.skill_by_name(crate::content::standard::GUI_CAI);
+                        let has_gui_cai = gui_cai
+                            .map(|d| ctx.core.has_skill(r, d))
+                            .unwrap_or(false);
+                        let has_any_hand = has_gui_cai && !p.hand.is_empty();
+                        let has_black = p
+                            .hand
+                            .iter()
+                            .chain(p.equips.iter())
+                            .copied()
+                            .any(is_black_card);
+                        if !has_black && !has_any_hand {
+                            cur.rewriters.remove(0);
+                            continue;
+                        }
+                        break;
+                    }
+                    if cur.rewriters.is_empty() {
+                        cur.in_rewrite = false;
+                        continue;
+                    }
+                    let rewriter = cur.rewriters[0];
+                    cur.asked = true;
+                    // 黑色手牌 + 黑色装备牌均可改判（对齐旧线
+                    // `judgment_black_rewrite_cards`：hand + equip）。
+                    let mut options = vec![ChoiceOption::Pass];
+                    let is_black = |id: crate::ids::CardId| {
+                        matches!(
+                            ctx.catalog.cards[id as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        )
+                    };
+                    // 鬼才持有者：全部手牌可打（不限花色）
+                    let gui_cai = ctx.catalog.skill_by_name(crate::content::standard::GUI_CAI);
+                    let gui_cai_holders_any = gui_cai
+                        .map(|d| ctx.core.has_skill(rewriter, d))
+                        .unwrap_or(false);
+                    for c in ctx.core.player(rewriter).hand.iter().copied() {
+                        if gui_cai_holders_any || is_black(c) {
+                            options.push(ChoiceOption::Card(c));
+                        }
+                    }
+                    // 装备区黑色牌仅鬼道路径可用（鬼才限手牌，对齐官方）
+                    for c in ctx.core.player(rewriter).equips.iter().copied() {
+                        if is_black(c) {
+                            options.push(ChoiceOption::Card(c));
+                        }
+                    }
+                    return Flow::WaitChoice {
+                        observer: rewriter,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::RespondCard,
+                            prompt: "gui_dao_rewrite",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    };
+                }
+                // 判定牌确定（N08-d 顺序：Rewritten×N → Finalized → 效果 →
+                // 天妒 Gained）：Finalized 恰好记一次、在效果与天妒询问前。
+                if !cur.finalized {
+                    cur.finalized = true;
+                    let trick = cur.trick;
+                    let judge_card = cur.judge_card;
+                    // 天妒待询问时判定牌由机器持有，不在此弃置；
+                    // 否则随效果弃置（judge_held 置否）。
+                    if cur.gained || cur.tian_du.is_empty() {
+                        cur.judge_held = false;
+                    }
+                    let machine_holds = cur.judge_held;
+                    ctx.log(LogEvent::JudgementFinalized {
+                        player: self.owner,
+                        card: judge_card,
+                    });
+                    Self::apply_judgement(self.owner, ctx, trick, judge_card, machine_holds);
+                    continue;
+                }
+                // 天妒阶段（效果生效后）：跳过死亡持有者；有人获得后不再询问
+                while let Some(h) = cur.tian_du.first().copied() {
+                    if !ctx.core.player(h).alive || cur.gained {
+                        cur.tian_du.remove(0);
+                    } else {
+                        break;
+                    }
+                }
+                // 天妒应答消费
+                if !cur.tian_du.is_empty() && cur.asked && !cur.gained && cur.judge_held {
+                    cur.asked = false;
+                    cur.judge_held = false;
+                    let holder = cur.tian_du.remove(0);
+                    if let ChoiceOption::Confirm = ctx.answer().first().copied().unwrap_or(ChoiceOption::Pass) {
+                        let card = cur.judge_card;
+                        ctx.core.player_mut(holder).hand.push(card);
+                        cur.gained = true;
+                        ctx.log(LogEvent::JudgementGained { player: holder, card });
+                    } else {
+                        // 放弃获得：机器持有的判定牌弃置
+                        ctx.to_discard(cur.judge_card);
+                    }
+                    self.current = None;
+                    continue;
+                }
+                if cur.tian_du.is_empty() || cur.gained || !cur.judge_held {
+                    // 完结：机器仍持有的判定牌（天妒者死亡等防御路径）弃置
+                    if cur.judge_held && !cur.gained {
+                        cur.judge_held = false;
+                        ctx.to_discard(cur.judge_card);
+                    }
+                    self.current = None;
+                    continue;
+                }
+                // 询问天妒持有者
+                let holder = cur.tian_du[0];
+                cur.asked = true;
+                return Flow::WaitChoice {
+                    observer: holder,
+                    spec: ChoiceSpec::confirm("tian_du_gain"),
+                };
+            }
+
+            // 取下一锦囊并翻判定牌
+            if self.queue.is_empty() {
+                return Flow::Done;
+            }
+            let trick = self.queue.remove(0);
+            let judge_card = ctx.draw_judge_card();
+            ctx.log(LogEvent::Judged {
+                player: self.owner,
+                card: judge_card,
+            });
+            let gui_dao = ctx.catalog.skill_by_name(crate::content::standard::GUI_DAO);
+            let gui_cai = ctx.catalog.skill_by_name(crate::content::standard::GUI_CAI);
+            let tian_du = ctx.catalog.skill_by_name(crate::content::standard::TIAN_DU);
+            // 天妒（owner_is_target，对齐旧线内容定义/标准包文本「你的判定牌」）：
+            // 仅判定阶段拥有者本人持有时由本人询问。
+            let tian_du_self = tian_du
+                .map(|d| ctx.core.has_skill(self.owner, d))
+                .unwrap_or(false);
+            // 改判者：自判定阶段拥有者起按座位序（含本人），逐人一次——
+            // 鬼道（黑色牌改判）或鬼才（任意手牌改判）持有者均入队（对齐旧线
+            // judgment_rewriters(tx, owner)；同座位双技能只入队一次）。
+            let rewriters: Vec<PlayerId> = ctx
+                .core
+                .seat_order_from(self.owner)
+                .into_iter()
+                .filter(|p| {
+                    let has = |d: Option<crate::ids::SkillDefId>| {
+                        d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
+                    };
+                    has(gui_dao) || has(gui_cai)
+                })
+                .collect();
+            self.current = Some(JudgementProgress {
+                trick,
+                judge_card,
+                rewriters,
+                asked: false,
+                tian_du: if tian_du_self {
+                    vec![self.owner]
+                } else {
+                    Vec::new()
+                },
+                gained: false,
+                in_rewrite: true,
+                finalized: false,
+                judge_held: true,
+            });
+        }
+    }
+}
+
+impl JudgePhaseMachine {
+    /// 判定牌生效：按锦囊种类套用效果（`machine_holds` 为真时判定牌仍由
+    /// 机器持有——天妒未决——不随效果弃置）。
+    fn apply_judgement(
+        owner: PlayerId,
+        ctx: &mut Ctx<'_>,
+        trick: crate::ids::CardId,
+        judge_card: crate::ids::CardId,
+        machine_holds: bool,
+    ) {
+        // 国色等 view-as 转化：声明牌种优先于目录牌种（N08 迁移）
+        let trick_kind = ctx
+            .core
+            .declared_kinds
+            .get(&trick)
+            .copied()
+            .unwrap_or_else(|| ctx.catalog.card_kind(trick));
+        // 声明消费后移除（牌已结算，残留条目会在后续洗回场景误判）
+        ctx.core.declared_kinds.remove(&trick);
+        let (suit, rank) = {
+            let def = &ctx.catalog.cards[judge_card as usize];
+            (def.suit, def.rank)
+        };
+        match trick_kind {
+            CardKind::Le => {
+                if !suit.is_heart() {
+                    ctx.core.turn.skip_play_phase = true;
+                }
+                ctx.to_discard(trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::Bing => {
+                if !suit.is_club() {
+                    ctx.core.turn.skip_draw_phase = true;
+                }
+                ctx.to_discard(trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::HongShui => {
+                // 洪水：梅花 2–9 → 3 点雷伤（登记差异：上游未标注属性）
+                ctx.to_discard(trick);
+                if suit.is_club() && (2..=9).contains(&rank) {
+                    if !machine_holds {
+                        ctx.to_discard(judge_card);
+                    }
+                    ctx.emit(EventData::Damage(damage_data_with(
+                        None,
+                        owner,
+                        3,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                } else if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::Guiyoujie => {
+                // 归有界判定（上游 judge 黑色 -3 / effect loseHp+randomDiscard）
+                if matches!(
+                    suit,
+                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                ) {
+                    ctx.to_discard(trick);
+                    ctx.emit(EventData::LoseHp {
+                        player: owner,
+                        amount: 1,
+                    });
+                    // 随机弃一张牌（手牌+装备均匀抽取；逐技对照批四口径）
+                    let he_len = ctx.core.player(owner).hand.len()
+                        + ctx.core.player(owner).equips.len();
+                    if he_len > 0 {
+                        let pick = ctx.core.rng.gen_range(he_len as u32) as usize;
+                        let hand_n = ctx.core.player(owner).hand.len();
+                        let c = if pick < hand_n {
+                            ctx.core.player(owner).hand[pick]
+                        } else {
+                            ctx.core.player(owner).equips[pick - hand_n]
+                        };
+                        let in_hand = ctx.core.player(owner).hand.contains(&c);
+                        if in_hand {
+                            ctx.discard_from_hand(owner, c);
+                        } else {
+                            ctx.core
+                                .player_mut(owner)
+                                .equips
+                                .retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                owner,
+                                c,
+                            );
+                            ctx.to_discard(c);
+                        }
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: owner,
+                            cards: vec![c],
+                        });
+                    }
+                }
+                ctx.to_discard(trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::ShanDian => {
+                if suit.is_spade() && (2..=9).contains(&rank) {
+                    ctx.to_discard(trick);
+                    if !machine_holds {
+                        ctx.to_discard(judge_card);
+                    }
+                    ctx.emit(EventData::Damage(damage_data_with(
+                        None,
+                        owner,
+                        3,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                    return;
+                }
+                // 未命中：传给下一位存活玩家；其判定区已有闪电则直接弃置
+                // （对齐旧线 pass_lightning）。
+                let next = ctx.core.next_alive(owner);
+                let next_has_shandian = ctx
+                    .core
+                    .player(next)
+                    .judge
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::ShanDian);
+                if next_has_shandian {
+                    ctx.to_discard(trick);
+                } else {
+                    ctx.core.player_mut(next).judge.push(trick);
+                }
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            _ => {
+                ctx.to_discard(trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+        }
+    }
+}
+
+/// AOE 单目标段（南蛮入侵/万箭齐发）：询问响应牌（杀/闪），Pass 或无牌
+/// 则受 1 点伤害（完整伤害帧）。无牌者不询问直接受伤（跳过语义挂账见清单）。
+#[derive(Clone)]
+pub struct AoeTargetMachine {
+    source: PlayerId,
+    target: PlayerId,
+    /// 响应需求（南蛮=杀，万箭=闪）。
+    need: CardKind,
+    asked: bool,
+    /// 造成伤害的锦囊牌（DamageData.card 透传）。
+    card: crate::ids::CardId,
+}
+
+impl AoeTargetMachine {
+    pub(crate) fn new(
+        source: PlayerId,
+        target: PlayerId,
+        need: CardKind,
+        asked: bool,
+        card: crate::ids::CardId,
+    ) -> Self {
+        Self { source, target, need, asked, card }
+    }
+}
+
+impl crate::catalog::SkillMachine for AoeTargetMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::AoeTarget {
+            source: self.source,
+            target: self.target,
+            need: self.need,
+            asked: self.asked,
+            card: self.card,
+        }
+    }
+
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.asked {
+            self.asked = false;
+            let answer = ctx.answer().clone();
+            if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                // 出响应牌免伤
+                ctx.discard_from_hand(self.target, c);
+                ctx.emit(EventData::CardResponded {
+                    card: c,
+                    player: self.target,
+                });
+            } else {
+                // 放弃 → 1 点伤害（完整结算）
+                ctx.emit(EventData::Damage(damage_data_with(
+                    Some(self.source),
+                    self.target,
+                    1,
+                    crate::event::DamageNature::Normal,
+                    Some(self.card),
+                )));
+            }
+            return Flow::Done;
+        }
+        let holders: Vec<crate::ids::CardId> = ctx.core.player(self.target)
+            .hand
+            .iter()
+            .copied()
+            .filter(|c| ctx.catalog.card_kind(*c) == self.need)
+            .collect();
+        if holders.is_empty() {
+            // 无响应牌：不询问，直接受伤（跳过语义挂账见清单）
+            ctx.emit(EventData::Damage(damage_data_with(
+                Some(self.source),
+                self.target,
+                1,
+                crate::event::DamageNature::Normal,
+                Some(self.card),
+            )));
+            return Flow::Done;
+        }
+        self.asked = true;
+        let mut options = vec![ChoiceOption::Pass];
+        options.extend(holders.into_iter().map(ChoiceOption::Card));
+        Flow::WaitChoice {
+            observer: self.target,
+            spec: ChoiceSpec {
+                kind: ChoiceKind::RespondCard,
+                prompt: "aoe_response",
+                options,
+                min: 1,
+                max: 1,
+                allow_cancel: false,
+            },
+        }
+    }
+}
+
+/// AOE 多目标外层机器：按冻结目标顺序逐个结算；每个目标结算前先开
+/// **独立的无懈窗口**（逐目标窗口，抵消只作用于该目标——旧实现为整牌级
+/// 单窗口，见覆盖清单已关闭的行为差异行）。目标中途死亡由存活过滤跳过，
+/// 队列继续。AOE 牌由本机器在全部目标结算后一次性弃置。
+pub struct AoeResolveMachine {
+    card: crate::ids::CardId,
+    source: PlayerId,
+    /// 响应需求（南蛮=杀，万箭=闪）。
+    need: CardKind,
+    targets: Vec<PlayerId>,
+    idx: usize,
+    /// 当前目标的无懈窗口（内含响应段机器）。
+    inner: Option<Box<dyn SkillMachine>>,
+}
+
+impl Clone for AoeResolveMachine {
+    fn clone(&self) -> Self {
+        Self {
+            card: self.card,
+            source: self.source,
+            need: self.need,
+            targets: self.targets.clone(),
+            idx: self.idx,
+            inner: self.inner.as_ref().map(|m| m.fork()),
+        }
+    }
+}
+
+impl AoeResolveMachine {
+    pub(crate) fn new(
+        card: crate::ids::CardId,
+        source: PlayerId,
+        need: CardKind,
+        targets: Vec<PlayerId>,
+        idx: usize,
+        inner: Option<Box<dyn SkillMachine>>,
+    ) -> Self {
+        Self { card, source, need, targets, idx, inner }
+    }
+
+    fn spawn_window(&self, ctx: &Ctx<'_>) -> Box<dyn SkillMachine> {
+        let target = self.targets[self.idx];
+        // AOE 逐目标窗口不拥有弃置权（N01）：外层在全部目标结算后统一弃置。
+        // 询问队列自来源起（含本人），对齐旧线 alive_from_seat(actor)。
+        Box::new(NullifyWindowMachine::new(
+            self.card,
+            self.source,
+            false,
+            ctx.core.seat_order_from(self.source),
+            false,
+            true,
+            false,
+            Some(Box::new(AoeTargetMachine::new(
+                self.source, target, self.need, false, self.card,
+            ))),
+        ))
+    }
+}
+
+impl crate::catalog::SkillMachine for AoeResolveMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(Self {
+            card: self.card,
+            source: self.source,
+            need: self.need,
+            targets: self.targets.clone(),
+            idx: self.idx,
+            inner: self.inner.as_ref().map(|m| m.fork()),
+        })
+    }
+
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Aoe {
+            card: self.card,
+            source: self.source,
+            need: self.need,
+            targets: self.targets.clone(),
+            idx: self.idx,
+            inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
+        }
+    }
+
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        loop {
+            // 跳过已死亡目标（窗口未开启时）
+            while self.inner.is_none()
+                && self.idx < self.targets.len()
+                && !ctx.core.player(self.targets[self.idx]).alive
+            {
+                self.idx += 1;
+            }
+            if self.idx >= self.targets.len() {
+                // 收尾：AOE 牌离桌入弃牌堆（唯一弃置点）
+                let card = self.card;
+                ctx.to_discard(card);
+                ctx.core.table.retain(|c| *c != card);
+                return Flow::Done;
+            }
+            if self.inner.is_none() {
+                self.inner = Some(self.spawn_window(ctx));
+            }
+            let flow = self.inner.as_mut().expect("checked").step(ctx);
+            if matches!(flow, Flow::Done) {
+                self.inner = None;
+                self.idx += 1;
+                continue;
+            }
+            return flow;
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct DiscardToLimitMachine {
+    player: PlayerId,
+    need: usize,
+    asked: bool,
+}
+
+impl DiscardToLimitMachine {
+    pub(crate) fn new(player: PlayerId, need: usize, asked: bool) -> Self {
+        Self { player, need, asked }
+    }
+}
+
+impl crate::catalog::SkillMachine for DiscardToLimitMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::DiscardToLimit {
+            player: self.player,
+            need: self.need,
+            asked: self.asked,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if !self.asked {
+            self.asked = true;
+            // 沙漠绿洲（mtg 第六批，规则 v105）：基本牌不计上限——弃牌
+            // 选项排除基本牌（不计入即不会被要求弃）
+            let shamolvzhou =
+                ctx.core.current_land == Some(crate::catalog::CardKind::Shamolvzhou);
+            let options: Vec<ChoiceOption> = ctx.core.player(self.player)
+                .hand
+                .iter()
+                .copied()
+                .filter(|c| {
+                    !shamolvzhou
+                        || crate::content::host::yangpijuan_class(
+                            ctx.catalog.card_kind(*c),
+                        ) != Some(0)
+                })
+                .map(ChoiceOption::Card)
+                .collect();
+            return Flow::WaitChoice {
+                observer: self.player,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::SelectCards,
+                    prompt: "discard_to_limit",
+                    options,
+                    min: self.need,
+                    max: self.need,
+                    allow_cancel: false,
+                },
+            };
+        }
+        let answer = ctx.answer().clone();
+        let mut discarded: Vec<crate::ids::CardId> = Vec::new();
+        for opt in answer {
+            if let ChoiceOption::Card(c) = opt {
+                ctx.discard_from_hand(self.player, c);
+                discarded.push(c);
+            }
+        }
+        if !discarded.is_empty() {
+            // 水没墓穴计数（mtg 第三批，规则 v102）：弃牌阶段内弃牌
+            ctx.core.turn.discard_phase_discarded += discarded.len() as u32;
+            // 弃牌事件：连营类「失去手牌」触发依赖此事件（ADR 0763）
+            ctx.emit(EventData::CardsDiscarded {
+                player: self.player,
+                cards: discarded,
+            });
+        }
+        Flow::Done
+    }
+}
+
+/// 死亡结算：清空牌区（手牌/装备/判定区）、移除技能实例、
+/// 身份局奖惩与胜负判定。
+///
+/// 奖惩（身份局，ADR 0705）：杀死反贼摸三张；主公杀死忠臣弃掉全部手牌与
+/// 装备。奖惩先于胜负判定（先结算再判终局，口径挂账见清单）。
+/// 胜负（身份局正式规则）：主公死亡 → 内奸是唯一存活则内奸胜，否则反贼胜；
+/// 反贼与内奸全灭 → 主公方胜。原型模式维持存活数 ≤ 1。
+#[derive(Clone)]
+pub struct DeathMachine {
+    player: PlayerId,
+    killer: Option<PlayerId>,
+}
+
+impl DeathMachine {
+    pub(crate) fn new(player: PlayerId, killer: Option<PlayerId>) -> Self {
+        Self { player, killer }
+    }
+}
+
+impl crate::catalog::SkillMachine for DeathMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::Death {
+            player: self.player,
+            killer: self.killer,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 死亡拦截（规则 v171 死亡取消型基建）：标记置位则跳过死亡执
+        // 行（存活态保持——前置窗口技已重置体力；上游 dieBefore
+        // trigger.cancel 同口径）。
+        if ctx.core.player(self.player).death_cancelled {
+            ctx.core.player_mut(self.player).death_cancelled = false;
+            return Flow::Done;
+        }
+        let p = ctx.core.player_mut(self.player);
+        p.alive = false;
+        p.dying = false;
+        p.hp = 0;
+        let mut leftover = std::mem::take(&mut p.hand);
+        leftover.extend(std::mem::take(&mut p.equips));
+        leftover.extend(std::mem::take(&mut p.judge));
+        for c in leftover {
+            ctx.to_discard(c);
+        }
+        let removed: Vec<crate::ids::SkillDefId> = ctx
+            .core
+            .skills
+            .keys()
+            .filter(|(o, _)| *o == self.player)
+            .map(|(_, d)| *d)
+            .collect();
+        for def in removed {
+            ctx.core.skills.remove(&(self.player, def));
+            ctx.log(LogEvent::SkillToggled {
+                player: self.player,
+                skill: ctx.catalog.skill_name(def),
+                enabled: false,
+            });
+        }
+        ctx.log(LogEvent::PlayerDied {
+            player: self.player,
+            killer: self.killer,
+        });
+        // 身份局奖惩：先于胜负判定
+        if let Some(roles) = ctx.core.identity_roles() {
+            let dead_role = roles[self.player as usize];
+            if let Some(k) = self.killer {
+                if k != self.player && ctx.core.player(k).alive {
+                    match dead_role {
+                        crate::state::Role::Rebel => {
+                            ctx.draw_cards(k, 3);
+                        }
+                        crate::state::Role::Loyalist
+                            if roles[k as usize] == crate::state::Role::Lord =>
+                        {
+                            // 主公杀忠臣：弃掉全部手牌与装备
+                            let lord = ctx.core.player_mut(k);
+                            let mut cards = std::mem::take(&mut lord.hand);
+                            let lord_equips = std::mem::take(&mut lord.equips);
+                            for c in &lord_equips {
+                                revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
+                            }
+                            cards.extend(lord_equips);
+                            ctx.core.discard.extend(cards.clone());
+                            if !cards.is_empty() {
+                                ctx.log(LogEvent::CardDiscarded { player: k, cards });
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+        // 对决 2v2 奖惩（P2/N08 模式入口批一，规则 v80）：先于胜负判定——
+        // 杀死敌方摸三张；杀死友方弃掉自己全部手牌与装备（上游 versus
+        // 2v2 基线；替补机制未建模）。
+        if let Some(teams) = ctx.core.versus_teams().map(|t| t.to_vec()) {
+            if let Some(k) = self.killer {
+                if k != self.player && ctx.core.player(k).alive {
+                    let dead_team = teams.iter().position(|t| t.contains(&self.player));
+                    let killer_team = ctx.core.versus_team_of(k);
+                    if let (Some(dt), Some(kt)) = (dead_team, killer_team) {
+                        if dt != kt {
+                            ctx.draw_cards(k, 3);
+                        } else {
+                            // 杀友方：弃掉自己全部手牌与装备
+                            let killer = ctx.core.player_mut(k);
+                            let mut cards = std::mem::take(&mut killer.hand);
+                            let killer_equips = std::mem::take(&mut killer.equips);
+                            for c in &killer_equips {
+                                revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
+                            }
+                            cards.extend(killer_equips);
+                            ctx.core.discard.extend(cards.clone());
+                            if !cards.is_empty() {
+                                ctx.log(LogEvent::CardDiscarded { player: k, cards });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // 胜负判定
+        match ctx.core.mode.clone() {
+            crate::state::GameMode::Prototype => {
+                let last = ctx.core.alive_players().next();
+                if ctx.core.alive_count() <= 1 {
+                    if let Some(w) = last {
+                        ctx.core.outcome = Some(crate::state::Outcome {
+                            winner: crate::state::Winner::Player(w),
+                        });
+                    }
+                }
+            }
+            crate::state::GameMode::Identity { roles } => {
+                let lord = roles
+                    .iter()
+                    .position(|r| *r == crate::state::Role::Lord)
+                    .expect("identity mode has a lord");
+                let lord_alive = ctx.core.player(lord as PlayerId).alive;
+                if !lord_alive {
+                    // 主公死亡：内奸是唯一存活 → 内奸胜；否则反贼胜
+                    let traitor_sole = ctx.core.alive_count() == 1
+                        && roles.iter().enumerate().any(|(i, r)| {
+                            *r == crate::state::Role::Traitor
+                                && ctx.core.player(i as PlayerId).alive
+                        });
+                    ctx.core.outcome = Some(crate::state::Outcome {
+                        winner: if traitor_sole {
+                            crate::state::Winner::Traitor
+                        } else {
+                            crate::state::Winner::Rebels
+                        },
+                    });
+                } else {
+                    // 反贼与内奸全灭 → 主公方胜
+                    let rebels_gone = !roles.iter().enumerate().any(|(i, r)| {
+                        matches!(
+                            r,
+                            crate::state::Role::Rebel | crate::state::Role::Traitor
+                        ) && ctx.core.player(i as PlayerId).alive
+                    });
+                    if rebels_gone {
+                        ctx.core.outcome = Some(crate::state::Outcome {
+                            winner: crate::state::Winner::LordSide,
+                        });
+                    }
+                }
+            }
+            crate::state::GameMode::Kingdoms => {
+                // 国战（N11 M3 门控，ADR 0756/0757）：存活角色全部同一
+                // **已声明**势力（主将明置优先，主暗副明按副将）→ 该势力胜；
+                // 任一存活角色势力未定（双暗置/槽空）→ 不判负，对局继续。
+                let mut factions: Vec<crate::catalog::Faction> = Vec::new();
+                for p in ctx.core.alive_players() {
+                    let Some(f) = ctx.core.declared_faction(ctx.catalog, p) else {
+                        return Flow::Done;
+                    };
+                    if !factions.contains(&f) {
+                        factions.push(f);
+                    }
+                }
+                if factions.len() == 1 {
+                    ctx.core.outcome = Some(crate::state::Outcome {
+                        winner: crate::state::Winner::Faction(factions[0]),
+                    });
+                }
+            }
+            crate::state::GameMode::Versus { teams } => {
+                // 对决（P2/N08 模式入口批一）：任一队伍全灭 → 对方队伍胜
+                for (i, t) in teams.iter().enumerate() {
+                    if t.iter().all(|p| !ctx.core.player(*p).alive) {
+                        ctx.core.outcome = Some(crate::state::Outcome {
+                            winner: crate::state::Winner::Versus(1 - i),
+                        });
+                        break;
+                    }
+                }
+            }
+            crate::state::GameMode::Doudizhu { lord } => {
+                // 斗地主（P2/N08 模式入口批二）：地主死亡 → 农民胜；
+                // 农民全灭 → 地主胜（上游 game.over(me===game.zhu) 语义；
+                // 无击杀奖惩——dieAfter 仅 UI+判负）
+                let lord_alive = ctx.core.player(lord).alive;
+                if !lord_alive {
+                    ctx.core.outcome = Some(crate::state::Outcome {
+                        winner: crate::state::Winner::Doudizhu { lord_won: false },
+                    });
+                } else {
+                    let farmers_gone = ctx
+                        .core
+                        .alive_players()
+                        .all(|p| p == lord);
+                    if farmers_gone {
+                        ctx.core.outcome = Some(crate::state::Outcome {
+                            winner: crate::state::Winner::Doudizhu { lord_won: true },
+                        });
+                    }
+                }
+            }
+            crate::state::GameMode::Kof { mut pools, mut wins, mut games } => {
+                // KOF 引擎层（P2/N08 模式入口批四，规则 v83）：2 人局，
+                // 唯一存活者胜并推进会话——败者队首淘汰、胜者队首轮转
+                //（移至队尾）、比分/局数 +1。无存活者（理论不可达）不推进。
+                let last = ctx.core.alive_players().next();
+                if let Some(w) = last {
+                    ctx.core.outcome = Some(crate::state::Outcome {
+                        winner: crate::state::Winner::Player(w),
+                    });
+                    let wi = w as usize;
+                    let li = 1 - wi;
+                    if !pools[li].is_empty() {
+                        pools[li].remove(0);
+                    }
+                    if !pools[wi].is_empty() {
+                        let kept = pools[wi].remove(0);
+                        pools[wi].push(kept);
+                    }
+                    wins[wi] += 1;
+                    // games 经可变借用直接更新
+                    ctx.core.mode = crate::state::GameMode::Kof {
+                        pools,
+                        wins,
+                        games: games + 1,
+                    };
+                }
+            }
+            crate::state::GameMode::Boss { boss, fellows, .. } => {
+                // Boss（P2/N08 模式入口批三-a）：boss 死亡 → 挑战者胜；
+                // 挑战者全灭 → boss 胜（上游 checkResult 同构）。
+                let boss_alive = ctx.core.player(boss).alive;
+                if !boss_alive {
+                    ctx.core.outcome = Some(crate::state::Outcome {
+                        winner: crate::state::Winner::Boss { boss_won: false },
+                    });
+                } else {
+                    let challengers_gone = ctx
+                        .core
+                        .alive_players()
+                        .all(|p| p == boss || fellows.contains(&p));
+                    if challengers_gone {
+                        ctx.core.outcome = Some(crate::state::Outcome {
+                            winner: crate::state::Winner::Boss { boss_won: true },
+                        });
+                    }
+                }
+            }
+        }
+        Flow::Done
+    }
+}
+
+/// E03 猴子偷桃：使用前取消窗口（命令层挂起机器，ActivateSkill 槽模式）。
+/// 他人出桃且装备猴子时拦截提交：逐持有者确认——确认者弃猴子并把桃收为
+/// 手牌（使用不发生，无 CardUsed 帧）；全部放弃则按普通桃结算（回血、
+/// 入弃牌堆）。持有者死亡或失猴即跳过。
+#[derive(Clone)]
+pub struct MonkeyStealMachine {
+    pub(crate) card: crate::ids::CardId,
+    pub(crate) user: PlayerId,
+    pub(crate) holders: Vec<PlayerId>,
+    pub(crate) asked: bool,
+}
+
+impl MonkeyStealMachine {
+    pub(crate) fn new(
+        card: crate::ids::CardId,
+        user: PlayerId,
+        holders: Vec<PlayerId>,
+    ) -> Self {
+        Self { card, user, holders, asked: false }
+    }
+}
+
+impl crate::catalog::SkillMachine for MonkeyStealMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> crate::snap::MachineSnapshot {
+        crate::snap::MachineSnapshot::MonkeySteal {
+            card: self.card,
+            user: self.user,
+            holders: self.holders.clone(),
+            asked: self.asked,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        loop {
+            // 跳过死亡或已失去猴子的持有者。
+            while let Some(h) = self.holders.first().copied() {
+                let def = ctx
+                    .catalog
+                    .skill_by_name(crate::content::host::HUANLE_MONKEY_KEY);
+                let armed = def.is_some_and(|d| ctx.core.has_skill(h, d));
+                if !ctx.core.player(h).alive || !armed {
+                    self.holders.remove(0);
+                } else {
+                    break;
+                }
+            }
+            let Some(holder) = self.holders.first().copied() else {
+                // 全部放弃：按普通桃结算（回血、入弃牌堆）。
+                ctx.to_discard(self.card);
+                ctx.recover(self.user, 1, Some(self.card));
+                return Flow::Done;
+            };
+            if self.asked {
+                self.asked = false;
+                self.holders.remove(0);
+                let confirmed = ctx
+                    .answer()
+                    .first()
+                    .map(|o| *o == ChoiceOption::Confirm)
+                    .unwrap_or(false);
+                if confirmed {
+                    // 取消使用：桃从使用者手牌收为持有者手牌，弃猴子
+                    //（离场撤销装备技）。
+                    let user_hand = &mut ctx.core.players[self.user as usize].hand;
+                    let pos = user_hand
+                        .iter()
+                        .position(|c| *c == self.card)
+                        .expect("被拦截的桃应在使用者手牌");
+                    let peach = user_hand.remove(pos);
+                    ctx.core.players[holder as usize].hand.push(peach);
+                    ctx.log(LogEvent::CardsGiven {
+                        from: self.user,
+                        to: holder,
+                        cards: vec![peach],
+                    });
+                    if let Some(pos) = ctx.core.players[holder as usize]
+                        .equips
+                        .iter()
+                        .position(|c| {
+                            ctx.catalog.card_kind(*c) == CardKind::Monkey
+                        })
+                    {
+                        let monkey = ctx.core.players[holder as usize].equips.remove(pos);
+                        revoke_equip_skills(
+                            &mut ctx.core,
+                            ctx.catalog,
+                            holder,
+                            monkey,
+                        );
+                        ctx.core.discard.push(monkey);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: holder,
+                            cards: vec![monkey],
+                        });
+                    }
+                    return Flow::Done; // 使用被取消：无 CardUsed 帧。
+                }
+                continue; // 放弃 → 队列下一持有者。
+            }
+            self.asked = true;
+            return Flow::WaitChoice {
+                observer: holder,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::RespondCard,
+                    prompt: "huanle_monkey_confirm",
+                    options: vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                    min: 1,
+                    max: 1,
+                    allow_cancel: false,
+                },
+            };
+        }
+    }
+}

@@ -1,0 +1,4 @@
+// 雉盗临时效果：本回合使用牌不能指定其他角色。
+skill zhidao2(3431866609) {
+  modifier card_targets_self_only override 1;
+}

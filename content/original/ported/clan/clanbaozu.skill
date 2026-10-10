@@ -1,0 +1,18 @@
+// 保族（族钟会/族钟繇/族钟琰）：限定技，宗族技。有角色（自己或颍川钟氏成员）濒死且
+// 其未横置时，可横置其并令其回复 1 点体力。
+// 上游 (clan/skill.js)：global dying + filter(濒死者==自己或同族 且 hp<=0 且未横置) →
+// link(true) + recover()。
+// 实现：`trigger dying owner_alive_event_player_self_or_clan_颍川钟氏 optional`
+// （本批新增的参数化族过滤器；hp<=0 由濒死事件本身保证）→ body 以 mark_count(event_player,2)
+// 表达「未横置」守卫 → add_mark(2,1) 横置 + recover_hp(event_player, 1)。
+// 近似：限定技每局一次以 optional 近似（olxushen/batch P 同款）；已横置时仍弹确认
+// 但效果被守卫拦下（optional+body-guard 既定语义）。
+// 2026-08-15 转换技/家族批次（零 ABI 变动——过滤器以字符串入 npack）。
+skill clanbaozu(3600751244) {
+  trigger dying owner_alive_event_player_self_or_clan_颍川钟氏 optional {
+    if mark_count(event_player, 2) == 0 {
+      effect add_mark(event_player, 2, 1);
+      effect recover_hp(event_player, 1);
+    }
+  }
+}

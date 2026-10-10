@@ -1,0 +1,9 @@
+// 赴命（秦宜禄）：使用牌时，可摸两张牌然后弃置（1+本回合已发动次数）张牌。
+// 旧 JS 含 useCard 触发 + draw(2) + discard(递增数量: 1+skill history length)。
+// 近似：保留 draw_cards(2) 基础收益，递增弃牌与 history 追踪无法表达。
+skill dcfuning(2716593997) {
+  trigger card_used owner_is_source {
+    effect draw_cards(self, 2);
+    // 旧 JS 弃置 1+history 张牌，增量弃牌无对应原语
+  }
+}

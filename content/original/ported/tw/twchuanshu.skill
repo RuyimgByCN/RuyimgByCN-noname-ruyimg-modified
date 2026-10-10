@@ -1,0 +1,7 @@
+// 传术：出牌阶段限一次，令一名角色获得"传术"标记：拼点牌点数+5，下一张杀对被标记角色外伤害+X并对标记来源方摸牌。
+// 旧JS中「标记交互」「拼点加成」「标记层数」「跨角色摸牌」无对应原语，无法表达。
+skill twchuanshu(2785475960) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twchuanshu 含真实规则体（enable、filterTarget、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

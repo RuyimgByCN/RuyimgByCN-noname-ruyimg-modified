@@ -1,0 +1,6 @@
+// 骑射：装备牌可当【酒】使用；手牌上限增加装备区牌数。
+skill spqishe(2801887664) {
+  view_as jiu play_phase card_equip from hand_equip;
+  view_as jiu response card_equip from hand_equip;
+  modifier hand_limit add owner_equip_count;
+}

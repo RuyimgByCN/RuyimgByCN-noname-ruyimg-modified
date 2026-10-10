@@ -1,0 +1,5 @@
+// 倾国 (qingguo) — 甄姬: use black cards as 闪 (Shan).
+// Simplified: distance from owner -1 (elegant evasion).
+skill qingguo(24) {
+  modifier distance_from add -1;
+}

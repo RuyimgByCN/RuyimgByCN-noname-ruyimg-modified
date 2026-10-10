@@ -1,0 +1,8 @@
+// 「将驰」重铸分支：本回合【杀】无距离限制且次数上限 +1。
+skill oljiangchi_more(4245625871) {
+  modifier card_distance_unlimited(sha) override 1;
+  modifier sha_use_limit add 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

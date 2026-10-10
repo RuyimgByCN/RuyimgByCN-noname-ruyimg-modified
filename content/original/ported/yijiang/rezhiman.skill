@@ -1,0 +1,7 @@
+// 制蛮：可防止自己对其他角色造成的伤害，并获得其区域内一张牌。
+skill rezhiman(3521391741) {
+  trigger damage_before owner_source_other_damage_before optional {
+    effect take_one_card(event_player, self, hand_equip_judge);
+    effect prevent_current_damage();
+  }
+}

@@ -1,0 +1,22 @@
+// 夺爵（离魂 cajujun）：限定技，锁定技。准备阶段（recoverBefore 触发：你即将
+// 回复体力时），若体力与手牌数均小于体力上限，你回复体力至体力上限、摸牌至
+// 体力上限，且本局游戏你不能回复体力（cajujun_norecover 子技）。
+// 上游 offline_changan.js cajujun（recoverBefore + recoverTo/drawTo(maxHp) +
+// norecover temp dieAfter）。
+// 实现（第一百二十一批·近似晋升）：
+// `trigger hp_recovered owner_is_target optional`（recoverBefore 等价触发面：
+// 即将回复时）→ limited 以 storage key1 锁一次性 →
+// recover_hp(self, max_hp(self) - hp(self)) + draw_cards(self, max_hp(self) - hp(self))
+// （表达式差值，引擎负数钳位）。
+// 近似：①「本局不能回复体力」的 norecover 子技未建模（需 recover-cancel
+// 修饰符）；②触发面以 hp_recovered 近似 recoverBefore（先回血再触发，口径
+// 已注记）；③drawTo 与 recoverTo 的上限均为体力上限，与上游一致。
+skill cajujun(4167161470) {
+  trigger hp_recovered owner_is_target optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect recover_hp(self, max_hp(self) - hp(self));
+      effect draw_cards(self, max_hp(self) - hp(self));
+    }
+  }
+}

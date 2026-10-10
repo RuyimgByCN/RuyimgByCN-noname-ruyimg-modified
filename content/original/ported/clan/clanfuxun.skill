@@ -1,0 +1,7 @@
+// 抚巡（族王允/族王淩/族王昶）：出牌阶段限一次。选择一名其他角色，交1张手牌并获得其一张牌；若手牌数相等且其本阶段未获得/失去过牌，可将一张牌当基本牌使用。
+// 旧 JS 的「双向牌交换」「手牌数相等+阶段追踪」「动态基本牌转换」无对应原语。
+// 空定义：需 expansion 支持双向牌交换和动态基本牌选择。
+skill clanfuxun(4099635322) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

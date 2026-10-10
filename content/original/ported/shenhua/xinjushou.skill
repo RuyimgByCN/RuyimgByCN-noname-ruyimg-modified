@@ -1,0 +1,7 @@
+// 据守（界曹仁）：结束阶段摸四翻面。
+// 旧 JS 的「摸四翻面」以摸两张近似（翻面未建模，已注明）。
+skill xinjushou(4083163736) {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 2);
+  }
+}

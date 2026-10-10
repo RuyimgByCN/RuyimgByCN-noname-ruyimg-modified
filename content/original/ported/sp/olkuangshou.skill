@@ -1,0 +1,7 @@
+// olkuangshou
+skill olkuangshou(2617770042) locked {
+  trigger damage owner_alive {
+    effect draw_cards(self, 3);
+    // chooseToDiscard — 需手动建模
+  }
+}

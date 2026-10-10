@@ -1,0 +1,10 @@
+// 逝功（袁绍&袁术）：锁定技，本回合首次使用手牌时，若弃置的牌中
+// 仅含单一势力的 gaintag（袁绍或袁术），则触发对应效果：
+// 袁绍→视为使用万箭齐发，袁术→摸2张牌，并切换皮肤。
+// 旧 JS 标记为 locked + direct，重度依赖 dclieti 的 gaintag 系统识别势力，
+// 且涉及皮肤切换、跨技能联动，DSL 无 gaintag 原语，无法建模。
+// 空定义：需 expansion 支持 gaintag_detect 与 皮肤切换原语。
+skill dcshigong(3961952546) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

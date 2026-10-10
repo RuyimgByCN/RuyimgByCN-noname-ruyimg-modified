@@ -1,0 +1,6 @@
+// zlhuji：触发+修改技（damage）
+skill zlhuji(2962185645) locked {
+  trigger damage owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

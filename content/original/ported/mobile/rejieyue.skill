@@ -1,0 +1,6 @@
+// rejieyue（节钺）：结束阶段开始时，你可以将一张牌交给一名其他角色。然后其选择一项：令你摸三张牌：或其保留一张手牌和装备区的牌，然后弃置其余的牌。
+skill rejieyue(2431003561) {
+  trigger phase_discard owner_alive {
+    effect draw_cards(self, 3);
+  }
+}

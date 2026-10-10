@@ -1,0 +1,12 @@
+// jsrgbazheng（霸政）：当你参与的议事展示意见时，本回合受到过你伤害的角色意见视为与你相同。
+// 实现（ADR 0644 P3 第二切片）：`trigger debate_started owner_debate_participant`
+// forced → align_debate_opinions(self, self_skill)（ABI 659：逐源受伤座位
+// 位图 turn flag 查询，受我伤者意见钉死为我的意见牌）。
+// 近似：上游 debateShowOpinion 时点按颜色改写（同色即同票）；DSL 钉死为
+// 我的意见牌引用（票色等价，意见牌物理归属不同）；P1 旗舰议事不经窗口。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgbazheng(3673401409) locked {
+  trigger debate_started owner_debate_participant {
+    effect align_debate_opinions(self, self_skill);
+  }
+}

@@ -1,0 +1,6 @@
+// 谮构：出牌阶段，展示一名角色所有或两张手牌，然后你可以视为使用一张基本牌（不能与展示牌同名）。
+// 旧 JS 的「查看/展示目标手牌」「排除已展示牌名选择基本牌使用」为多步骤复杂交互流程，无可用的 DSL 原语。
+skill stdzengou(4070538945) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,27 @@
+// 魄袭：观看一名其他角色的手牌，可弃置双方手牌中四张花色各异的牌，
+// 再按自己的弃牌数结算。
+skill drlt_poxi(3008932273) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty {
+    effect resolve_drlt_poxi(self, event_source, 2484371675);
+  }
+}
+
+// 劫营：维持唯一“营”，按拥有者数量叠加其摸牌、杀次数和手牌上限收益；
+// 可在结束阶段转交，其他角色携营回合结束时由首个结算者收走其全部手牌。
+skill drlt_jieying(2400922959) {
+  trigger phase_begin owner_is_target {
+    effect resolve_drlt_jieying(self, event_player, 2172383355, 0);
+  }
+
+  trigger phase_end owner_is_target_mark_positive_2172383355 optional {
+    effect resolve_drlt_jieying(self, event_player, 2172383355, 1);
+  }
+
+  trigger turn_ended owner_alive {
+    effect resolve_drlt_jieying(self, event_player, 2172383355, 2);
+  }
+
+  modifier global_draw_count add queried_player_mark_positive_2172383355;
+  modifier global_sha_use_limit add queried_player_mark_positive_2172383355;
+  modifier global_hand_limit add queried_player_mark_positive_2172383355;
+}

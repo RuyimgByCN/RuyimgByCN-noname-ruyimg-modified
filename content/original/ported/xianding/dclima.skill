@@ -1,0 +1,3 @@
+skill dclima(2775722447) locked {
+  modifier distance_from add -alive_mounted_player_count_min_one;
+}

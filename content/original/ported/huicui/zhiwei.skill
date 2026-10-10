@@ -1,0 +1,6 @@
+// zhiwei：旧JS复杂效果。
+skill zhiwei(3728383150) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

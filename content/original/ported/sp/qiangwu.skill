@@ -1,0 +1,11 @@
+// 枪舞：判定点数写入技能同名标记；低点杀无距离，高点杀不计次数。
+skill qiangwu(2563176834) {
+  active play_phase uses_per_turn 1 {
+    effect judge_set_skill_mark_to_rank(self, self_skill);
+  }
+  modifier sha_distance_unlimited_if_rank_lt_skill_mark override 1;
+  modifier sha_no_use_count_if_rank_gt_skill_mark override 1;
+  trigger phase_play_end owner_is_target {
+    effect remove_mark(self, 2563176834, 0);
+  }
+}

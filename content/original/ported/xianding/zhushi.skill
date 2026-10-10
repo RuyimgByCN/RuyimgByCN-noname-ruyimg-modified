@@ -1,0 +1,15 @@
+// 助势（xianding 曹髦 zhushi）：主公技，每回合限一次，当其他魏势力角色于其回合内
+// 回复体力后，其可令你摸一张牌。
+// 上游 (xianding/skill.js zhushi)：trigger global recoverEnd；filter = 事件角色非
+// 拥有者、group wei、为当前回合角色、hasZhuSkill；usable 1；cost 由回复角色确认。
+// 实现（2026-09-09 第一百八十五批）：新过滤器
+// owner_alive_other_wei_recovery_own_phase_once_per_turn（HpRecovered + 事件角色
+// 非拥有者 + wei 势力 + 当前回合角色；六点注册零 ABI——含 turn_limit 每回合一次
+// 名单）→ draw_cards(self, 1)。
+// 近似（登记债）：①「其可令你摸牌」的确认方为回复的魏角色，DSL optional 确认固定
+// 由拥有者做出；②zhuSkill 主公身份门未建模（引擎无主公技概念）。
+skill zhushi(3044650156) {
+  trigger hp_recovered owner_alive_other_wei_recovery_own_phase_once_per_turn optional {
+    effect draw_cards(self, 1);
+  }
+}

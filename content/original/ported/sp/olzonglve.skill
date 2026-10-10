@@ -1,0 +1,13 @@
+// 纵掠（OL 牛辅）：出牌阶段限一次，可将一张牌当【杀】使用；当你以此法或非实体杀
+// 造成伤害后，获得受伤角色每个区域各一张牌。
+// 上游 (sp/skill.js:10832)：olzonglve_wusheng viewAs sha usable 1；
+// damageSource 后 gainPlayerCard hej 每区至多一张。
+// 实现：`view_as sha ... uses_per_turn 1`；造成伤害后 `take_one_card` 一张 he。
+// 近似：获牌不限「此杀/非实体杀」、也不分区域各一张。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olzonglve(3052953425) {
+  view_as sha play_phase any from hand_equip uses_per_turn 1;
+  trigger damage owner_source_target_alive_has_hand_or_equip {
+    effect take_one_card(event_player, self, hand_equip);
+  }
+}

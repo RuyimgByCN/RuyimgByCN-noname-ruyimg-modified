@@ -1,0 +1,6 @@
+// mbkubai（枯白）：你于回合内使用每种颜色的第一张牌时，摸一张牌；你的回合内，其他角色只能使用你使用过的颜色的牌。
+skill mbkubai(2791633221) locked {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// zj_wuzhe（限定技/主动技(phaseUse)/触发技）：音效名:dczhizhe, 觉醒技, 限定技, global:card_used, 主动(phaseUse), 加技能, 含子技能, 异步。
+skill zj_wuzhe(3031296468) {
+  trigger card_used owner_alive optional {
+  }
+}

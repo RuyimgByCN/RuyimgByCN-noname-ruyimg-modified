@@ -1,0 +1,10 @@
+// 钻袋（赤兔）：出牌阶段开始时，若牌堆有可使用的装备牌，则使用之，
+// 摸1张牌，然后跳过出牌阶段。
+// 牌堆中搜索并使用装备牌需 search+use 联动，以摸装备+跳阶段近似。
+// 近似：出牌阶段开始时摸1张牌并跳过出牌阶段（omit 装备牌使用）。
+skill dczuandai(3424282724) {
+  trigger phase_play always {
+    effect draw_cards(self, 1);
+    effect skip_current_phase(self);
+  }
+}

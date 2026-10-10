@@ -1,0 +1,11 @@
+// 界反馈：每受到一点有来源的伤害，可获得来源的一张牌。
+// 自伤时旧规则只允许把自己的装备牌收回手牌；其他来源可选手牌或装备牌。
+skill refankui(3719484801) {
+  trigger damage owner_is_target_source_alive_gainable_card_per_damage_point optional {
+    if self == event_source {
+      effect take_one_card(event_source, self, equip);
+    } else {
+      effect take_one_card(event_source, self, hand_equip);
+    }
+  }
+}

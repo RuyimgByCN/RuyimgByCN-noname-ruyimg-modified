@@ -1,0 +1,8 @@
+// 盈门：出牌阶段，摸两张牌，然后将两张基本牌或普通锦囊牌置于武将牌上称为「访客」（一次性）。
+// 旧 JS 的「先摸牌再从手牌/装备区选牌存为 expansion」流程与 DSL 的 active 先选牌后执行效果的顺序冲突；
+// 「基本牌或普通锦囊牌」的卡牌类型过滤也无可用的 select 原语。无法精确建模。
+skill stdyingmen(3533715618) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

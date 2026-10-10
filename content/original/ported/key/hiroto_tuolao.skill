@@ -1,0 +1,14 @@
+// 托老（弘人·觉醒技）：回合结束后，若本回合未因虎驭续失去过牌且回合数>1，摸三张牌并将「虎驭」替换为「纵略」。
+// 实现：结束阶段一次：摸 3、卸虎驭、授纵略。
+// 近似：不检验回合数与虎驭失去历史；以 mark_count 门控；时机取结束阶段而非 phaseAfter。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hiroto_tuolao(2920912067) locked {
+  trigger phase_end owner_is_target {
+    if mark_count(self, 2920912067) == 0 {
+      effect draw_cards(self, 3);
+      effect remove_skill_by_def(self, 2586716910);
+      effect add_skill(self, 3175747508);
+      effect add_mark(self, 2920912067, 1);
+    }
+  }
+}

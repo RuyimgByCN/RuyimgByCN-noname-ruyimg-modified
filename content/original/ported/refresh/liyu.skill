@@ -1,0 +1,7 @@
+// liyu（界祝融·利驭）：【杀】造成伤害后，获得受伤角色一张牌，然后受伤角色选一名其他角色，视为你对其使用【决斗】。
+// 旧JS含「获得牌+目标选决斗对象+useCard决斗」三步，DSL无对应原语，未建模。
+skill liyu(3975526531) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 liyu 含真实规则体（trigger、content、mod 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

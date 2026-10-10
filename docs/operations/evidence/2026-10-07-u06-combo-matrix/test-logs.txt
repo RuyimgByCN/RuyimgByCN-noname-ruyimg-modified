@@ -1,0 +1,15 @@
+$ 定向：跨牌组合矩阵三测试（2026-10-07 批次）
+test huanle_combo_kuwu_sha_like_and_non_sha_damage ... ok
+test huanle_combo_stolen_jushou_fires_for_thief ... ok
+test huanle_combo_stolen_jushou_flip_cancelled_by_mask ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.03s
+
+$ g1_huanle 全组
+test result: ok. 18 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+$ 全量：cargo test --offline -p engine-native
+合计 passed=363 failed=0 ignored=1
+
+$ golden / lib -D warnings
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s

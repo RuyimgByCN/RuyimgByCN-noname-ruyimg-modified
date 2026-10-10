@@ -1,0 +1,8 @@
+// 伤神（族王广/族王明山）：有角色受到属性伤害后，若本回合首次属性伤害，可发动【闪电】效果，然后受伤角色补手牌至4。
+// 旧 JS 的「首次属性伤害检测」「闪电效果执行」「补牌至指定数」无对应原语。
+// 空定义：需 expansion 支持属性伤害首次检测、闪电效果、drawTo。
+skill clanshangshen(3010360006) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

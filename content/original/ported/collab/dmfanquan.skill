@@ -1,0 +1,8 @@
+// 反拳：受到伤害后，可选择一名其他角色造成1点伤害；
+// 若你与该角色互相在攻击范围内，改为造成本次受伤等量的伤害并增加距离 debuff。
+// 互相攻击范围条件+等量伤害+距离debuff无法精确建模；以选择其他角色造成1伤近似。
+skill dmfanquan(2953684524) {
+  trigger damage owner_is_target_other_alive {
+    effect choose_other_damage(self, 1);
+  }
+}

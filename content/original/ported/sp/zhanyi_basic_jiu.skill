@@ -1,0 +1,5 @@
+// 战酒：手牌中的基本牌可当【酒】使用，也可在濒死时自救。
+skill zhanyi_basic_jiu(3922392848) {
+  view_as jiu play_phase card_basic;
+  view_as jiu response card_basic;
+}

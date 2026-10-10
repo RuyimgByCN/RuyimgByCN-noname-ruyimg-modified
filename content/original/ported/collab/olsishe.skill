@@ -1,0 +1,7 @@
+// 巳蛇（巳蛇）
+// 原语义：受到伤害后，可对仍存活的伤害来源造成等量伤害。
+skill olsishe(2380847221) {
+  trigger damage owner_is_target_source_alive optional {
+    effect deal_damage(self, event_source, event_amount);
+  }
+}

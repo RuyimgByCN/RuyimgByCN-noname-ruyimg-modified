@@ -1,0 +1,8 @@
+// 往烈的临时效果：令触发它的当前牌不可响应，并在本阶段禁止继续主动用牌。
+skill drlt_wanglie2(2154023320) {
+  modifier card_use_cancel override 1;
+  modifier card_use_unrespondable(any) override 1;
+  trigger phase_play_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

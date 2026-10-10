@@ -1,0 +1,20 @@
+// 好施（鲁肃）：摸牌阶段，你可以额外摸两张牌；摸牌阶段结束时，若你的手牌数大于
+// 5，则将一半手牌（向下取整）交给手牌数最少的一名其他角色。摸牌替换与赠予由
+// resolve_haoshi 权威校验（ABI 555）。
+skill haoshi(1569684326) {
+  trigger phase_draw owner_is_target_draw_not_replaced optional {
+    effect resolve_haoshi(self, 0);
+  }
+  trigger phase_draw_end owner_is_target {
+    effect resolve_haoshi(self, 1);
+  }
+}
+
+// 缔盟（鲁肃）：出牌阶段限一次，你可以选择两名其他角色并弃置 X 张牌（X 为这两名
+// 角色手牌数之差），然后交换其手牌。选人、弃牌与交换由 resolve_dimeng 权威校验
+// （ABI 556）；势鲁肃兵势变体的 ≤3 差约束不适用。
+skill dimeng(427650324) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_dimeng(self);
+  }
+}

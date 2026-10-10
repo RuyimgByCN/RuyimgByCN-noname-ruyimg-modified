@@ -1,0 +1,17 @@
+// 分明（SP 陈董）：出牌阶段限一次，选择一名体力值不大于你的角色；
+// 若其未横置则横置之，否则获得其一张牌（对自己仅限装备区）。
+// 旧 JavaScript 仅作语义证据；体力约束由 ABI 402 的 hp_lte_owner 权威校验，
+// 横置与获牌复用 MARK_CHAIN / take_one_card。
+skill spfenming(2351231725) {
+  active play_phase uses_per_turn 1 targets 1 1 hp_lte_owner {
+    if mark_count(event_source, 2) == 0 {
+      effect add_mark(event_source, 2, 1);
+    } else {
+      if self == event_source {
+        effect take_one_card(event_source, self, equip);
+      } else {
+        effect take_one_card(event_source, self, hand_equip);
+      }
+    }
+  }
+}

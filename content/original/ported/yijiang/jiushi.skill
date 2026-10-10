@@ -1,0 +1,7 @@
+// 酒诗（曹植）：含两个附技「酒诗1」（翻面当酒）和「酒诗3」（受伤后翻回）。
+// 旧 JS 视此技为组合技（group: jiushi1, jiushi3），DSL 空定义。
+skill jiushi(4293489189) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

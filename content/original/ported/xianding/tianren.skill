@@ -1,0 +1,7 @@
+// 天任（tianren）：锁定技，当基本牌/锦囊牌进入弃牌堆时，增加等量「天任」标记。
+// 标记数 >= 体力上限时：移除体力上限个标记，增加1点体力上限并摸两张牌。
+// 旧 JS 的「牌类型识别」「标记累加/消耗」「体力上限增长」无对应原语，未建模。
+skill tianren(3298335102) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

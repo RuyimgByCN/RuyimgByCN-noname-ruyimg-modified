@@ -1,0 +1,5 @@
+skill rebotu(2231312450) {
+  trigger phase_end owner_is_event_player_discard_pile_four_suits_below_alive_cap optional {
+    effect resolve_rebotu(self);
+  }
+}

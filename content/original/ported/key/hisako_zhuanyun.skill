@@ -1,0 +1,4 @@
+// 转运：旧 JavaScript 遍历牌堆并把当前判定分数最高的牌设为直接结果。
+skill hisako_zhuanyun(3818579103) locked {
+  modifier judgment_best_from_draw_pile override 1;
+}

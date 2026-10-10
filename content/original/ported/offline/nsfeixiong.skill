@@ -1,0 +1,24 @@
+// 飞熊：出牌阶段开始时可与一名其他角色拼点，严格胜者对败者造成一点伤害。
+skill nsfeixiong(3328516321) {
+  trigger phase_play owner_is_target_can_compare_other optional {
+    effect choose_hand_compare(self, 3810557850, 4078033373);
+  }
+}
+
+// 飞熊拼点胜利的一次性结算。
+skill nsfeixiong_win(3810557850) {
+  trigger hand_compare_finished owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+    effect remove_skill(self_skill);
+  }
+}
+
+// 飞熊拼点未胜的一次性结算；event_amount == 1 表示平局。
+skill nsfeixiong_lose(4078033373) {
+  trigger hand_compare_finished owner_is_target_once {
+    if 1 < event_amount {
+      effect deal_damage(event_source, self, 1);
+    }
+    effect remove_skill(self_skill);
+  }
+}

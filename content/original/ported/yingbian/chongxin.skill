@@ -1,0 +1,8 @@
+// 崇信（石苞）：出牌阶段限一次，你可以重铸一张牌；然后目标角色可重铸一张牌。
+// 旧 JS 仅作语义证据；自身重铸由 recast_selected 权威校验（ABI 596 包批次），
+// 目标侧重铸与可重铸筛选以文档化近似省略（任意手牌/装备均可选）。
+skill chongxin(4141410002) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect recast_selected(self);
+  }
+}

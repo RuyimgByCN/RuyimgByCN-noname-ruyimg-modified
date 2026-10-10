@@ -1,0 +1,5 @@
+skill luoshen(3972660146) {
+  trigger phase_prepare owner_is_target optional {
+    effect judge_black_gain_repeat(self);
+  }
+}

@@ -1,0 +1,7 @@
+// 敏善（徐信）：当你受到 1 点伤害后，可令一名角色从牌堆中获得两张牌。
+// 旧 JS 的“若育贤存在记录花色则改为获得该花色牌”联动未建模。
+skill dcminshan(2275391703) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect choose_target_draw(self, 2, any);
+  }
+}

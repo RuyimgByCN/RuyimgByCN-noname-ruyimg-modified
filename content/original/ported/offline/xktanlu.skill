@@ -1,0 +1,6 @@
+// Deterministic rewrite of OFFLINE 崔廉「贪赂」; legacy JavaScript is reference-only.
+skill xktanlu(4005608784) {
+  trigger phase_begin owner_alive_not_target optional {
+    effect resolve_tanlu(self, event_player);
+  }
+}

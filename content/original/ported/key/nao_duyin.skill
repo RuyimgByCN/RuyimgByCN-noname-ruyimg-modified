@@ -1,0 +1,7 @@
+// 独吟（直井）：其他角色回合开始时，弃置一张牌或翻面；其本回合不能指定你为目标，你对其无距离和次数限制使用牌。
+// 旧 JS 的 双角色交互+双向 modifier+存储标记 需双人绑定原语，未建模。
+skill nao_duyin(2852031014) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 nao_duyin = 标记型技能（charlotte，skill.js:1484），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

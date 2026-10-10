@@ -1,0 +1,6 @@
+// 善身
+skill stdshanshen(2423225569) {
+  trigger death owner_wounded_not_event_source optional {
+    effect recover_hp(self, 1);
+  }
+}

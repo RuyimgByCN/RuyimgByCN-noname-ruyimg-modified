@@ -1,0 +1,6 @@
+// 遏质（族王昶/族王浑）：其他角色（含距离内）受到伤害后，可与来源各弃一张牌，弃置的牌分配给其他角色；若牌类别不同，本回合限制使用类别。
+// 旧 JS 的「距离判断」「双方各弃」「牌分配（assignCards）」「类别限制 debuff」无对应原语。
+// 空定义：需 expansion 支持牌分配、类别限制 modifier。
+skill clangezhi(4168157895) {
+  modifier hand_limit add 1;
+}

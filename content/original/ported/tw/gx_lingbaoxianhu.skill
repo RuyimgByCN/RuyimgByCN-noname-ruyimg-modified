@@ -1,0 +1,13 @@
+// 灵宝仙壶（装备技能）
+// 原语义：造成大于 1 点的伤害后，或任意角色死亡后，加 1 点体力上限并回复 1 点体力。
+skill gx_lingbaoxianhu(2267146098) locked {
+  trigger damage owner_source_amount_gt_one {
+    effect change_max_hp(self, 1);
+    effect recover_hp(self, 1);
+  }
+
+  trigger death owner_alive {
+    effect change_max_hp(self, 1);
+    effect recover_hp(self, 1);
+  }
+}

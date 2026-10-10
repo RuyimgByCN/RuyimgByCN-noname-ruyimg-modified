@@ -1,0 +1,6 @@
+// mbchenjie（臣节）：锁定技。当一名角色死亡后，若你有〖蹒襄〗且其成为过你〖蹒襄〗的目标，你弃置区域里的所有牌，摸四张牌。
+skill mbchenjie(2286728532) locked {
+  trigger death owner_alive {
+    effect draw_cards(self, 4);
+  }
+}

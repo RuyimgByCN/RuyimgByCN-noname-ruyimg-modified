@@ -1,0 +1,8 @@
+// 兴功（年兽）：出牌阶段限一次，从弃牌堆获得任意张牌；
+// 若获得的牌数大于体力值，受到超过数量的伤害。
+// "从弃牌堆获得任意张牌"需自定义选牌界面，DSL 无对应原语。
+skill dcxinggong(2168750699) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

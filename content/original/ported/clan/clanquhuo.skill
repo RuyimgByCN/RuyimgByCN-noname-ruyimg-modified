@@ -1,0 +1,8 @@
+// 曲惑（族杨赐/族杨修/族杨彪/族杨忠）：宗族技。每回合首次因非使用/打出/弃置失去装备或【酒】时，可令一名受伤的宗族角色回复1点体力。
+// 旧 JS 的「宗族判定（hasClan 弘农杨氏）」「非使用/打出/弃置检测」「条件触发回复」无对应原语。
+// 空定义：需 expansion 支持 hasClan 和精确原因检测。
+skill clanquhuo(3125419757) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 鸣伐（董卓系）：出牌阶段开始时，若你有关联牌且可拼点，与一名其他角色
+// 拼点，赢则摸一张牌。
+// 旧 JS 的「关联牌拼点」无对应原语；以出牌阶段摸一张近似（拼点未建模，
+// 已注明）。
+skill mingfa(3826467988) {
+  trigger phase_play owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

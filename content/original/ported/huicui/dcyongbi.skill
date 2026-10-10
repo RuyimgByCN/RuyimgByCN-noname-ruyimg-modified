@@ -1,0 +1,5 @@
+// dcyongbi：觉醒技；限定技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcyongbi(3450938124) {
+  modifier hand_limit add 1;
+}

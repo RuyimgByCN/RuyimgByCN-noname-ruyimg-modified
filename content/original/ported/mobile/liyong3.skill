@@ -1,0 +1,11 @@
+// liyong3（厉勇·子臂）：锁定技——你以【杀】对目标造成伤害后（liyong2 链路
+// 标记成立时），对目标执行追加分结算（source damage + sha 名 + liyong2 联动
+// 过滤）。
+// 头注更正（2026-09-10 第二百三十四批·头注漂移抽查扩样）：原「无独立 info
+// 条目，语义复杂待补充」系省略型漂移，据上游实读补记（liyong 家族链式技能，
+// 单独建模无意义，随父技 liyong 重写批一并处理）。
+skill liyong3(2681409219) locked {
+  // 语义复杂，待补充
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

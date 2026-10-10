@@ -1,0 +1,6 @@
+// 武库：有角色使用装备牌时，若“武库”少于三枚，你获得一枚“武库”。
+skill pkwuku(3003644541) locked {
+  trigger card_used owner_alive_equip_used_skill_mark_below_three {
+    effect add_mark(self, 3003644541, 1);
+  }
+}

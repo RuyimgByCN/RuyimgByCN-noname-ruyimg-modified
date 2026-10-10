@@ -1,0 +1,9 @@
+// 谋立·新（刘巴系）：出牌阶段限一次，令一名其他角色从你的「备」牌中
+// 获得一张牌。
+// 旧 JS 的「备」expansion 选择无对应原语；以选择一名其他角色摸一张
+// 近似（备牌指定未建模，已注明）。
+skill xinmouli(2166028907) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_draw_or_recover(self, 1, 0, 0);
+  }
+}

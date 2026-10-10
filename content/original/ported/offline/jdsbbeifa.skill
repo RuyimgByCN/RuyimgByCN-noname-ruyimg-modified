@@ -1,0 +1,7 @@
+// jdsbbeifa：主动(phaseUse), 需选择目标, 异步。
+skill jdsbbeifa(2713936874) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

@@ -1,0 +1,7 @@
+$ swd 第二批定向：流星火雨（弃二或火伤）三路径 + 往返
+test swd_liuxinghuoyu_discard2_or_fire ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（401/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v85→v86，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Liuxinghuoyu 编码 105（archive/a0 同步）+ HostBehavior::SwdLiuxinghuoyuCard（tag 79；ALL 78→79；a0 index 78=tag-1 口径）；SelectCard 两段：he≥2 目标自选两张（可取消）→弃置；取消/不足两张→1 点火伤（DamageNature::Fire，铁索传导照常）；无懈窗口包装；弃牌入 discard（首跑发现 to_discard 缺失）
+$ 上游核验：card/swd/card.js liuxinghuoyu（chooseToDiscard("he",2)+damage("fire")；directfalse 不足两张）；list ♦3/♥6/♥9 三张

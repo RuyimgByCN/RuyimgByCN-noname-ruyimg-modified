@@ -1,0 +1,6 @@
+// fuji：global:damage_before。
+skill fuji(4200295982) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 琴音：弃牌阶段结束时，若本阶段弃置过至少两张牌，可令所有角色各失去或回复一点体力。
+skill qinyin(3841403199) {
+  trigger phase_discard_end owner_is_target_discarded_at_least_two_in_discard_phase {
+    effect choose_all_lose_hp_or_recover(self);
+  }
+}

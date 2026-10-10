@@ -1,0 +1,13 @@
+skill juedao(3304739063) {
+  active play_phase owner_unlinked select_hand 1 1 {
+    effect resolve_wdb_liuyan(self, 0, 0);
+  }
+  modifier distance_from add owner_linked;
+  modifier distance_to add owner_linked;
+}
+
+skill geju(4049779435) {
+  trigger phase_begin owner_prepare_group_outside_attack_range_exists optional {
+    effect resolve_wdb_liuyan(self, 0, 1);
+  }
+}

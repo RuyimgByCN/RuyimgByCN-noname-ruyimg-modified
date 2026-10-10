@@ -1,0 +1,6 @@
+// 节命：每受到一点伤害，均可令一名角色将手牌补至其体力上限（至多五张）。
+skill jieming(3579069878) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect choose_target_draw_to_max_hp_cap(self, 5);
+  }
+}

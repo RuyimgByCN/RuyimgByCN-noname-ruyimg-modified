@@ -1,0 +1,6 @@
+// 淑慎：每回复一点体力，均可独立选择另一名角色；该角色强制摸二或回复一。
+skill shushen(3835991174) {
+  trigger hp_recovered owner_is_target {
+    effect choose_other_draw_or_recover(self, 2, 1, event_amount);
+  }
+}

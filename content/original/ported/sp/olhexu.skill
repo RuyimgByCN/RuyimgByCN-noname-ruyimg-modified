@@ -1,0 +1,3 @@
+skill olhexu(3135057536) {
+  modifier hand_limit add owner_non_damage_hand_type_count;
+}

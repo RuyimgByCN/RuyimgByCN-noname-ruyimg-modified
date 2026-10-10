@@ -1,0 +1,4 @@
+// 福临2：福临的标记牌忽略与不可弃置修饰器，旧 JS 的 gaintag 判定无对应原语。
+skill fulin2(2739194328) {
+  modifier hand_limit add 1;
+}

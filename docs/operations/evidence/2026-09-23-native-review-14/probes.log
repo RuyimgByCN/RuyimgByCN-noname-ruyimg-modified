@@ -1,0 +1,21 @@
+FIXED_MIDDLE_MISSING: removed Card(40) rejected
+OPEN_TRAILING_MISSING: highest Card(79) removed from all zones; restore accepted
+OPEN_EMPTY_OWNERSHIP: all physical cards removed; restore accepted
+OPEN_LIULI_ARCHIVE: decoded own archive cannot restore: OpenChoiceMismatch { observer: 1 }; choice kind SelectPlayers -> Confirm
+FIXED_LIULI: transfer answer direct/memory hp2=3, full hashes and event suffix equal
+OPEN_HUJIA_RESTORE: valid holder confirmation snapshot rejected: OpenChoiceMismatch { observer: 0 }
+FIXED_HUJIA_OWNER: private card id not offered to defender; holder must confirm
+OPEN_HUJIA_QUEUE: first holder 2 passes; holder 3 never asked, defender takes damage
+OPEN_HUJIA_WUSHUANG: single helper Shan ends Wushuang attack requiring two dodges
+STILL_AI_DEDUP: run_policy=Rejected(DuplicateCommand), apply_plan=Rejected(DuplicateCommand) after dedup=1000000 and restore
+OPEN_AI_EMPTY_DECK: equal visible states, hidden Shan swap changes plan PlayCard { card: 0, targets: [2] } -> PlayCard { card: 0, targets: [1] }
+OPEN_AI_SAMPLED_OWNERSHIP: sampled hands copy deck IDs without removal; restore=IdOutOfBounds { what: "card_duplicate", got: 37 }
+STILL_AI_CANDIDATES: [Pass, Shan], max=1; nodes=2 (Pass and NextPhase), legal Shan omitted
+OPEN_ARCHIVE_VALID_PROMPT: generated "duel_sha" memory restore works; own encoded archive rejected BadTag("prompt_unknown", 0)
+OPEN_ARCHIVE_VALID_PROMPT: generated "aoe_response" memory restore works; own encoded archive rejected BadTag("prompt_unknown", 0)
+OPEN_ARCHIVE_VALID_PROMPT: generated "nullify_window" memory restore works; own encoded archive rejected BadTag("prompt_unknown", 0)
+FIXED_UNKNOWN_PROMPT: unknown prompt rejected, fixed registry replaces unbounded pool
+OPEN_HUJIA_HOLDER_BOUNDS: hujia_holder=254 accepted in a 3-player snapshot
+OPEN_GENDER_RESTORE: male-only targets [Player(1), Player(3)]; restoring legitimate choice rejected OpenChoiceMismatch { observer: 0 }
+FIXED_GENERAL_WIRING: six skill arrays now contain registered skills; end-to-end gameplay coverage separate
+REVIEW14_PROBES_COMPLETE ruleset=28

@@ -1,0 +1,7 @@
+// rexiansi（刘封·陷嗣-重制）：继承自 xiansi 的陷嗣效果，含 rexiansi2 和 xiansix 子技能。DSL未建模。
+skill rexiansi(2609023334) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rexiansi（skill.js:2969）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

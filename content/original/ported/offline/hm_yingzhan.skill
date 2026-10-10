@@ -1,0 +1,6 @@
+skill hm_yingzhan(2176897227) locked {
+  modifier damage_amount(fire) add 1;
+  modifier damage_amount(thunder) add 1;
+  modifier damage_taken_amount(fire) add 1;
+  modifier damage_taken_amount(thunder) add 1;
+}

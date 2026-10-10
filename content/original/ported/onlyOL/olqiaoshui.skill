@@ -1,0 +1,17 @@
+// OL 界巧说：胜利后可继续发动；平局或失败后本回合禁用锦囊并移除本技能。
+skill olqiaoshui(2828774708) {
+  active play_phase targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 2260792673, 2540060947);
+  }
+}
+
+skill olqiaoshui_used(2540060947) {
+  modifier card_use_cancel(trick) override 1;
+  trigger hand_compare_finished owner_is_target {
+    effect remove_skill_by_def(self, 2828774708);
+  }
+  trigger turn_ended owner_is_target {
+    effect add_skill(self, 2828774708);
+    effect remove_skill(self_skill);
+  }
+}

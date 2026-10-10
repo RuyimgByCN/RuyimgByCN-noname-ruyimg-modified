@@ -1,0 +1,23 @@
+// 诈附：限定技（觉醒式），出牌阶段，选择一名其他角色，其获得一枚「诈附」标记。
+// 该角色的弃牌阶段开始时，移去一枚「诈附」标记，若其手牌数>1，须保留一张手牌、
+// 其余手牌交给你。
+// 上游 (xianding/skill.js zhafu)：enable phaseUse；limited；filterTarget notMe；
+// content awakenSkill + addSkill(zhafu_effect) + target.addMark(zhafu_effect,1)；
+// subSkill effect：global phaseDiscardBegin forced → removeMark + 保留一张其余
+// 交给授予者。
+// 实现（2026-09-10 第二百二十一批·标记授予面散批）：主面 active play_phase
+// targets 1 1 other + body 级 if mark_count(self, 1309895272) == 0（限定≈自身
+// 封门标记，blake2b("zhafu_mark")=1309895272，猎族同工艺）→
+// choose_other_add_mark(self, 448647394, 1)（授「诈附」标记，
+// blake2b("zhafu_effect_mark")=448647394）+ add_mark(self, 1309895272, 1)。
+// 近似（登记债）：①负担面（标记角色弃牌阶段保留一张、其余交给授予者）未建模
+// ——「保留一张交出其余」无对应原语；②limited 原语义（awakenSkill 移除技能）
+// 以自身封门标记近似（技能本体仍在、门控后不可再发动）；③skillAnimation 未建模。
+skill zhafu(3934304011) {
+  active play_phase targets 1 1 other {
+    if mark_count(self, 1309895272) == 0 {
+      effect choose_other_add_mark(self, 448647394, 1);
+      effect add_mark(self, 1309895272, 1);
+    }
+  }
+}

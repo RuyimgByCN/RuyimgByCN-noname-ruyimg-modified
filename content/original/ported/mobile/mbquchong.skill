@@ -1,0 +1,6 @@
+// mbquchong（渠冲）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill mbquchong(2223950433) {
+  trigger phase_play owner_alive {
+    effect add_mark(self, 0, 1);
+  }
+}

@@ -1,0 +1,12 @@
+// 暗箭：使用【杀】指定攻击范围不包含自己的目标后，强制选择其不可响应或仅对其伤害 +1。
+skill xinanjian(2652033709) locked {
+  trigger card_targeted owner_source_sha_target_alive_owner_outside_target_attack_range {
+    let pick = choose(1, 2);
+    if pick == 1 {
+      effect make_current_sha_target_unrespondable(self, event_card, event_player);
+    }
+    if pick == 2 {
+      effect increase_current_sha_target_damage(self, event_card, event_player, 1);
+    }
+  }
+}

@@ -1,0 +1,7 @@
+// 灭计（黄祖）：当使用一张黑色锦囊牌且目标仅有一名时，可为该牌增加一名额外目标。
+// choose_add_or_remove_current_card_target 可增加锦囊牌目标。
+skill mieji(2376002488) {
+  trigger card_used owner_is_target optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

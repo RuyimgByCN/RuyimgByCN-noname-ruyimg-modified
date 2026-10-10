@@ -1,0 +1,7 @@
+// friendmanjuan（漫卷）：每轮限五次。当你不因本技能一次性获得至少两张牌后，你可以将这些牌中的任意张牌以任意顺序置于牌堆顶。若如此做，你每放置一张牌，便从弃牌堆中随机获得一张与此牌类别不同的牌（至多获得五张）。
+skill friendmanjuan(2382459797) {
+  trigger cards_moved owner_alive {
+    effect add_mark(self, 0, 1);
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

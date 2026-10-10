@@ -1,0 +1,6 @@
+// sm_chongji：player:card_used, player:recoverEnd, 需选择目标, 二选一, 摸牌, 回复体力, 异步。
+skill sm_chongji(3829002061) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

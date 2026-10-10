@@ -1,0 +1,5 @@
+skill shiyong(2676469853) locked {
+  trigger damage owner_is_target_red_or_jiu_sha {
+    effect change_max_hp(self, -1);
+  }
+}

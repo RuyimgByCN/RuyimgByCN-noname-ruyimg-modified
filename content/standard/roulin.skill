@@ -1,0 +1,4 @@
+// Dong Zhuo oppression
+skill roulin(66) {
+  modifier distance_from add -1;
+}

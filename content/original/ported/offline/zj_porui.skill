@@ -1,0 +1,5 @@
+// zj_porui：音效名:dcporui, global:phase_end, 加技能, 含子技能, 异步, 条件计数。
+skill zj_porui(2974284242) {
+  trigger phase_end owner_alive {
+  }
+}

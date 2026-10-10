@@ -1,0 +1,22 @@
+# U05 ow 纵切批八测试日志（2026-10-08，哨卫模式效果，规则 v124→v125）
+
+$ cargo test --offline -p engine-native
+engine-native: 438 passed / 0 failed / 1 ignored（v124 基线 437 +1 新增哨卫模式回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 25 passed; 0 failed（24 既有 + baolei_mode_effects_on_sha）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 118 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v124→v125 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/ow/skill.js bshaowei_sha subSkill（mod targetInRange/cardUsable + shaBegin directHit）
+
+## 测试迭代记录
+- sentinel 直中复用 emit_sha_damage（sha_damage_base 不存在——初版误引）
+- 目标侧闪过滤：target_sentinel 时 shans 过滤（目标持技+mode1 才禁闪）

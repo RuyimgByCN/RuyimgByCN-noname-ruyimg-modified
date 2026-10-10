@@ -1,0 +1,3 @@
+skill qingjian_add(3547066515) {
+  modifier hand_limit add owner_skill_mark;
+}

@@ -1,0 +1,8 @@
+// 美步（周鲂）：其他角色使用杀时，若其有可弃置的手牌且有装备，你可弃置其一张手牌。
+// 旧 JS 的「sha专用过滤+手牌/装备条件检查」因单过滤器限制无法精确匹配（仅用 owner_alive_not_target 响应所有出牌）。
+// 以 discard_hand_equip_count 强制弃牌近似；sha-only 过滤和手牌+装备前置条件均未建模。
+skill stdmeibu(2253258045) {
+  trigger card_used owner_alive_not_target {
+    effect discard_hand_equip_count(event_player, 1);
+  }
+}

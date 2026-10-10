@@ -1,0 +1,15 @@
+// 反转：旧 JS 语义重写；每轮限频由触发器契约统一执行。
+skill dcfanzhuan(2353467697) {
+  trigger phase_begin owner_alive_once_per_round optional {
+    let delta = max_hp(self) - hp(self) - hp(self);
+    if 0 < delta {
+      effect recover_hp(self, delta);
+      effect draw_cards(self, delta);
+    } else {
+      if delta < 0 {
+        effect lose_hp(self, 0 - delta);
+        effect draw_cards(self, 0 - delta);
+      }
+    }
+  }
+}

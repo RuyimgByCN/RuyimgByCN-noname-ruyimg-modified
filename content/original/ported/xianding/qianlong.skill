@@ -1,0 +1,16 @@
+// 潜龙（qianlong）：锁定技（frequent 口径）。受到伤害后，观看牌堆顶三张牌，
+// 获得至多已损失体力值张牌，其余置于牌堆底。
+// 上游 (xianding/skill.js qianlong)：trigger player damageEnd；frequent；
+// content get.cards(3) show + chooseToMove（获得至多 min(3, 已损失体力) 张，
+// 其余置牌堆底）。
+// 实现（2026-09-11 第二百四十一批·专属 host 状态机第六件，quanjia 单发 +
+// jsrgdaoren 续体混合工艺）：trigger damage owner_is_target optional →
+// resolve_qianlong(self, self_skill)（ABI 697 / tag 720 / 7 槽续体 Cont 303
+// 两阶段：顶三张 SelectCards 0..min(3,已损失) 可取消 → 获得/余者置底）。
+// 近似（登记债）：①frequent 自动口径锁定为 optional 确认；②chooseToMove
+// 拖拽分配 UI 以 SelectCards 0..cap 近似（分配语义等价：选=获得、未选=置底）。
+skill qianlong(4122694957) {
+  trigger damage owner_is_target optional {
+    effect resolve_qianlong(self, self_skill);
+  }
+}

@@ -1,0 +1,8 @@
+// 简援（族荀谌/族荀采）：继承「陈雅」。有角色发动含"出牌阶段限一次"的技能后，若其本阶段已使用过牌，其可重铸牌名字数等于已用牌数的牌。
+// 旧 JS 的「阶段内使用牌计数」「牌名字数匹配重铸」无对应原语。
+// 空定义：需 expansion 支持阶段追踪和牌名字数。
+skill clanjianyuan(4214125831) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

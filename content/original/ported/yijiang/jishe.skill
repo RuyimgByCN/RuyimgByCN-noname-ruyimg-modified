@@ -1,0 +1,9 @@
+// 济河（王允）：出牌阶段可重复发动：摸一张牌，本回合手牌上限减1（此效果可叠加）。
+// uses_per_turn 20 近似「无限次」，每发动一次手牌上限-1。
+skill jishe(4243143469) {
+  active play_phase uses_per_turn 20 {
+    effect draw_cards(self, 1);
+    effect add_mark(self, 3510775701, 1);
+    effect add_skill(self, 3510775701);
+  }
+}

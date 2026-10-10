@@ -1,0 +1,6 @@
+// 旧甚贤继承甚贤的弃置检测，但旧 JS 不添加 shenxian2，故没有每回合一次限制。
+skill oldshenxian(2584430535) {
+  trigger cards_moved owner_alive_other_discarded_basic_outside_turn optional {
+    effect draw_cards(self, 1);
+  }
+}

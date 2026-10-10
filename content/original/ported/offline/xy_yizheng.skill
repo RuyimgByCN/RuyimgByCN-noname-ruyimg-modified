@@ -1,0 +1,5 @@
+// xy_yizheng：音效名:csyizheng, 锁定技, player:phase_end, global:recoverBegin, global:damage_before, 需选择目标, 加技能, 含子技能, 异步。
+skill xy_yizheng(4047616121) locked {
+  trigger phase_end always {
+  }
+}

@@ -1,0 +1,5 @@
+// 妄尊临时效果
+// 原语义：手牌上限减一。
+skill wangzun3(4107407259) {
+  modifier hand_limit add -1;
+}

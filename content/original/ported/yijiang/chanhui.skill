@@ -1,0 +1,6 @@
+// 旧 JS 仅作语义证据：出牌阶段限一次，单目标【杀】或黑色普通锦囊可选另一合法角色；其交手牌并接管使用者，或成为额外目标。
+skill chanhui(2955673837) {
+  trigger card_used owner_source_single_target_sha_or_black_ordinary_trick_current_play_phase_unused optional {
+    effect choose_card_user_or_add_target(self, event_card);
+  }
+}

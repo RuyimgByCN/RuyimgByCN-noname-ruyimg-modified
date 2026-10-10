@@ -1,0 +1,8 @@
+// mbdieyin（叠音）：出牌阶段限一次，你可将武将牌翻至背面，于此阶段结束后执行一个指定的额外阶段。
+// 未建模：subSkill, chooseButton 等机制无 DSL 原语。
+skill mbdieyin(2687821271) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mbdieyin（skill.js:5048）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

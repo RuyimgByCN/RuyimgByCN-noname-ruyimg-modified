@@ -1,0 +1,7 @@
+// 伤逝2(旧版)(旧版孙皓)：subskill of reshangshi。当你受到伤害时，你可以弃置一张牌。
+// 旧JS为伤逝的弃牌子技能，仅在玩家选择弃牌时触发。
+skill reshangshi_2nd(3032131616) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

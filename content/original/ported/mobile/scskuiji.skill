@@ -1,0 +1,11 @@
+// 试探（scskuiji）— 出牌阶段限一次，选择一名有手牌的其他角色：你从你与其的手牌中
+// 共计选择至多四张花色互异的牌，然后弃置这些牌。
+// 旧 JS（mobile/scskuiji）：enable phaseUse，usable 1，filterTarget=其他有手牌；
+// content=chooseButton(4, 双方手牌，花色互异过滤) → 按归属 split 弃置。
+// 本包以新增 choice 续体原语 choose_scskuiji_discard 表达：续体在 resolve 时校验花色互异并按归属弃置；
+// 旧 JavaScript 不进入运行时。
+skill scskuiji(3524248148) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty {
+    effect choose_scskuiji_discard(self, event_source, 4);
+  }
+}

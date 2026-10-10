@@ -1,0 +1,6 @@
+// 当先（dangxian）— 廖化：回合开端先执行一个独立的额外出牌阶段。
+skill dangxian(2393638375) locked {
+  trigger phase_begin owner_is_target {
+    effect queue_opening_extra_play_phase(self);
+  }
+}

@@ -1,0 +1,17 @@
+// 避乱·新（rebiluan，dc士燮）：结束阶段开始时，可弃置一张手牌/装备牌，获得
+// 「避乱」状态标记，数值为 min(4, 存活角色数)（其他角色计算与你的距离时叠加该值）。
+// 上游 (sp/skill.js:40397)：trigger player:phaseJieshuBegin；filter = 手牌/装备非空
+// 且存在距你 ≤1 的其他角色；content = chooseToDiscard(he, 可选) →
+// addSkill(rebiluan2) + storage.rebiluan2 += min(4, countPlayer) + 标记。
+// 实现：phase_end + owner_is_target_phase_end_hand_equip_nonempty_other_alive
+// → 可选触发 → discard_hand_equip_count(1) → add_skill_by_name(self, rebiluan2)
+// → add_mark(rebiluan2, min(4, alive_count))。
+// 与上游差异：「存在距你 ≤1 的其他角色」距离子门槛未建模（无对应过滤器）；
+// min(4, alive_count) 以 min(4, alive_count()) 表达（上游 countPlayer 为存活计数）。
+skill rebiluan(3478138593) {
+  trigger phase_end owner_is_target_phase_end_hand_equip_nonempty_other_alive optional {
+    effect discard_hand_equip_count(self, 1);
+    effect add_skill_by_name(self, rebiluan2);
+    effect add_mark(self, 3075740841, min(4, alive_count()));
+  }
+}

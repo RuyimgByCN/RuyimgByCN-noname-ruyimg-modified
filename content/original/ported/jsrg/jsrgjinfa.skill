@@ -1,0 +1,23 @@
+// jsrgjinfa（矜伐）：出牌阶段限一次。你可以展示一张手牌，然后令所有体力上限不大于你的角色议事。若结果与此牌颜色：相同，你令其中至多两名角色将手牌摸至体力上限；不同，你获得两张【影】。然后若没有其他角色与你意见相同，你可以变更势力。
+// 实现（部分迁移，jsrg 势力族）：`active play_phase uses_per_turn 1` →
+// discard_hand_equip_count(self, 1)（展示一张手牌的确定性近似）+ 
+// start_debate_all_others(self, self_skill)（体力上限门槛由上游
+// chooseToDebate 目标过滤承担，DSL 全其他角色）+ body 守卫
+// `debate_owner_is_initiator_result_black` 尾段未挂。
+// 近似（未建模）：①展示牌颜色 vs 议事结果比色分支（需 DebateResolved
+// 上下文带展示牌色）；②「至多两名摸至上限」选择；③「无意见相同者
+// 变更势力」——change_group 原语已落地（ABI 661），但「无意见相同」
+// 判定需 DebateResolved 意见分布表达式，尾段挂起。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgjinfa(4139928729) {
+  active play_phase uses_per_turn 1 {
+    effect discard_hand_equip_count(self, 1);
+    effect start_debate_all_others(self, self_skill);
+  }
+  trigger debate_resolved debate_owner_is_initiator_result_black optional {
+    effect gain_shadow_cards(self, 2, self_skill);
+  }
+  trigger debate_resolved debate_owner_is_initiator_result_red optional {
+    effect change_group(self, wei, self_skill);
+  }
+}

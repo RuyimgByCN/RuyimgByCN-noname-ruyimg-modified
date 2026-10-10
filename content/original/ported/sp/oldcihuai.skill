@@ -1,0 +1,15 @@
+// 咄咄·旧（oldcihuai，旧马超）：出牌阶段开始时，展示所有手牌；若没有手牌【杀】，
+// 获得临时技能「咄咄·视为杀」（可将一张虚拟【杀】无消耗使用），直到手牌变化。
+// 上游 (sp/skill.js:40826)：trigger player:phaseUseBegin；filter = countCards("h")>0；
+// content = showHandcards() + 若无手牌【杀】 addTempSkill(oldcihuai2)；
+// oldcihuai3 在手牌失去/获得时移除 oldcihuai2。
+// 实现：phase_play + owner_is_target_play_phase_hand_no_sha（新增过滤器，与 cihuai 共用）
+// → 可选确认 → choose_use_virtual_sha(self, normal_distance) 直接使用虚拟杀。
+// 与上游差异：上游授予的是持续整个出牌阶段的临时技能（手牌变化前可多次使用），
+// 本实现仅在出牌阶段开始时触发一次；展示手牌（信息暴露）省略；oldcihuai2/oldcihuai3
+// 的临时技能授予与移除机制被折叠进本近似，故该两子技保持诚实 noop。
+skill oldcihuai(4216219987) {
+  trigger phase_play owner_is_target_play_phase_hand_no_sha optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

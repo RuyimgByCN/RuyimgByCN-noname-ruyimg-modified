@@ -1,0 +1,5 @@
+// zc26_shenxie：global:card_used, 需选择目标, 异步。
+skill zc26_shenxie(2822478895) {
+  trigger card_used owner_alive {
+  }
+}

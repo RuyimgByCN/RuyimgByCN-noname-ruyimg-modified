@@ -1,0 +1,6 @@
+// 奋武：结束阶段可失去1点体力并使用无距离限制的虚拟【杀】；本回合基本牌变体超过一种时伤害+1。
+skill twfenwu(2254911276) {
+trigger phase_end owner_is_target {
+    effect choose_lose_hp_use_virtual_sha_by_basic_variants(self);
+  }
+}

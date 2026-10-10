@@ -1,0 +1,7 @@
+// xkkanpo：锁定技, source:damageSource, 摸牌, 异步, 条件计数。
+skill xkkanpo(3602656208) {
+  trigger damage owner_is_target_once {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

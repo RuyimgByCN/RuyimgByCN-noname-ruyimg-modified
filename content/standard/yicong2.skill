@@ -1,0 +1,4 @@
+// Gongsun Zan riders
+skill yicong2(82) {
+  modifier distance_from add -1;
+}

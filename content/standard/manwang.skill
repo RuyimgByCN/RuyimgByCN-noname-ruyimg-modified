@@ -1,0 +1,4 @@
+// Meng Huo king
+skill manwang(91) {
+  modifier attack_range add 1;
+}

@@ -1,0 +1,9 @@
+// 著魂（offline 春秋罗贯中 ymzhuhun）：开局随机获得四张武将牌（化身/随想系统），
+// 展示并置于武将牌上。
+// 上游 (offline/skill ymzhuhun)：enterGame/phaseBefore → characterlist randomGets(4)
+// → createCard(huashen_card) → expansions。
+// INTENTIONAL_EMPTY_NOOP: 化身/随机武将牌生成与 expansion 置牌系统（旗舰族）
+// 缺口；2026-09-09 上游增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill ymzhuhun(4223627323) locked {
+  modifier hand_limit add 0;
+}

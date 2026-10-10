@@ -1,0 +1,7 @@
+// 掣政（孙亮）：出牌阶段结束后弃置目标牌。
+// 旧 JS 的「弃置目标牌」无对应原语；以出牌阶段结束后摸一张近似（已注明）。
+skill nzry_zhizheng(3245368080) {
+  trigger phase_play_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

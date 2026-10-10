@@ -1,0 +1,6 @@
+// 沾丁（族吴苋/族吴班/族吴匡/族吴乔）：可将任意张牌当【杀】使用，发动后手牌上限-1。此【杀】造成伤害后补手牌至上限，未造成伤害则不占使用次数。
+// 旧 JS 的「view_as sha 任意张」「手牌上限修改（chenliuwushi.change）」「伤害后补牌+未伤害不占次数」无对应原语。
+// 以 view_as sha 近似保留出杀能力，缺少手牌上限和伤害分支逻辑。
+skill clanzhanding(3237716030) {
+  view_as sha play_phase any from hand_equip;
+}

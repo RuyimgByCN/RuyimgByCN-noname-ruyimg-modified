@@ -1,0 +1,6 @@
+// 枢机（留美）：【杀】无次数与距离限制，锦囊牌可增加一个额外目标。
+// 以 modifier 近似保留杀的无次（override 大数），缺失锦囊加目标效果。
+skill rumi_shuwu(2556717025) {
+  modifier sha_use_limit override 2147483647;
+  modifier sha_distance_unlimited_if_target_distance_lte_rank override 1;
+}

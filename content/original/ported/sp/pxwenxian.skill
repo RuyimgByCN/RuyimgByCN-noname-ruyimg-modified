@@ -1,0 +1,13 @@
+// 温县（pxwenxian，州郡技能）：当你获得此技能后，你加 1 点体力上限并回复 1 点体力，
+// 然后获得一张【虚妄之冕】。
+// 上游 (sp/skill.js:2329)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// forced；content = gainMaxHp + recover + gain(createCard("xuwangzhimian"))。
+// 实现：skill_added + owner_skill_added_self_4051127169 → change_max_hp(self, 1) +
+// recover_hp(self, 1)。
+// 与上游差异：「获得一张【虚妄之冕】」卡牌创造未建模（无 createCard 原语）。
+skill pxwenxian(4051127169) {
+  trigger skill_added owner_skill_added_self_4051127169 {
+    effect change_max_hp(self, 1);
+    effect recover_hp(self, 1);
+  }
+}

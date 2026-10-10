@@ -1,0 +1,9 @@
+// TW 王粲「典仪」：旧 JS 仅作语义来源；造成伤害则弃光手牌，否则精确调整至四张。
+skill twdianyi(3416973271) locked {
+  trigger phase_end owner_is_target_turn_damage {
+    effect discard_hand(self, 2147483647);
+  }
+  trigger phase_end owner_is_target_no_turn_damage {
+    effect adjust_hand_to(self, 4);
+  }
+}

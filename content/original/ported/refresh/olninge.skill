@@ -1,0 +1,12 @@
+// 凝厄（olninge）— 锁定技。一名角色于一回合内第二次受到伤害后，若受伤方或伤害来源为你，
+// 你摸一张牌，然后弃置其装备区或判定区内的一张牌。
+// 旧 JS（refresh/olninge）trigger: global damageEnd，filter: owner 是 event.player 或 event.source
+// 且 event.player 本回合第二次受伤（getHistory('damage').indexOf(event)==1）；content: draw + discardPlayerCard(ej)。
+// 这里复用 owner_source_or_target_second_damage_this_turn 过滤器（依赖 ABI 347 的每角色受伤计数），
+// 弃置 ej 区域用新增的 equip_judge 选牌作用域；旧 JavaScript 不进入运行时。
+skill olninge(3480307518) locked {
+  trigger damage owner_source_or_target_second_damage_this_turn {
+    effect draw_cards(self, 1);
+    effect choose_discard_target_card(self, event_player, equip_judge);
+  }
+}

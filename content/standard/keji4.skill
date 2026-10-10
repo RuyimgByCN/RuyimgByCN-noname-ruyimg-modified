@@ -1,0 +1,4 @@
+// Skill keji4(109) - standard variant
+skill keji4(109) {
+  modifier distance_from add -1;
+}

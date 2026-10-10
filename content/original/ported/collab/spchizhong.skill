@@ -1,0 +1,8 @@
+// 持重（SP伏完）
+// 原语义：手牌上限等于体力上限；其他角色死亡后增加 1 点体力上限。
+skill spchizhong(3386846056) locked {
+  modifier hand_limit_base_max_hp override 1;
+  trigger death owner_alive {
+    effect change_max_hp(self, 1);
+  }
+}

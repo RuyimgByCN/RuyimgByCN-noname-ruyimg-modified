@@ -1,0 +1,13 @@
+// 朝争（olchaozheng）：准备阶段发起议事（继承 jsrgchaozheng）。若结果为：红色，
+// 意见为红色的角色各回复 1 点体力；黑色，意见为红色的角色各失去 1 点体力。
+// 实现（部分迁移）：`trigger phase_prepare owner_is_target optional` →
+// `resolve_jsrgchaozheng(self, self_skill)`（ADR 0644 P1，ABI 653——
+// 上游 inherit jsrgchaozheng，基座议事分支完全一致）。
+// 近似（未建模尾段）：①按意见组人数摸至多 2 张（callback 追加）；
+// ②olchaozheng_debate 子技（debateShowOpinion 意见联动）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olchaozheng(4062226857) {
+  trigger phase_prepare owner_is_target optional {
+    effect resolve_jsrgchaozheng(self, self_skill);
+  }
+}

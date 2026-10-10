@@ -1,0 +1,5 @@
+// zj_zhaoe：觉醒技, 限定技, global:phaseEnd, 需选择目标, 异步。
+skill zj_zhaoe(4095724839) {
+  trigger phase_any_end owner_alive {
+  }
+}

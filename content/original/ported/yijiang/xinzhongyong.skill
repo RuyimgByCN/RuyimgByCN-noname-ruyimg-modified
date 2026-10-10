@@ -1,0 +1,5 @@
+skill xinzhongyong(3382820136) {
+  trigger sha_resolved owner_source_sha_resolved_has_gainable_cards_and_recipient optional {
+    effect choose_gain_resolved_sha_or_shan_then_optional_use_sha(self, event_card);
+  }
+}

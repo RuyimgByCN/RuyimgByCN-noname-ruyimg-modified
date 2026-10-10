@@ -1,0 +1,32 @@
+// 仓储：旧 JS 的主技能、recangchu2 与 recangchu3 行为统一折叠在此技能中。
+skill recangchu(2416555605) locked {
+  modifier hand_limit add owner_mark_2058376721;
+
+  trigger game_started owner_alive {
+    let grains = mark_count(self, 2058376721);
+    let alive = alive_count();
+    if grains < alive {
+      let room = alive - grains;
+      if 3 < room {
+        effect add_mark(self, 2058376721, 3);
+      } else {
+        effect add_mark(self, 2058376721, room);
+      }
+    }
+  }
+
+  trigger cards_moved owner_gains_outside_turn_mark_below_alive_once_2058376721 {
+    effect add_mark(self, 2058376721, 1);
+  }
+  trigger cards_drawn owner_gains_outside_turn_mark_below_alive_once_2058376721 {
+    effect add_mark(self, 2058376721, 1);
+  }
+
+  trigger death owner_alive {
+    let grains = mark_count(self, 2058376721);
+    let alive = alive_count();
+    if alive < grains {
+      effect remove_mark(self, 2058376721, grains - alive);
+    }
+  }
+}

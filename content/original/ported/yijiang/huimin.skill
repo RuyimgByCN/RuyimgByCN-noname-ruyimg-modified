@@ -1,0 +1,7 @@
+// 惠民：结束阶段，摸等于手牌数小于体力值的角色数张牌，然后依次分配给这些角色（每人一张）。
+// 旧 JS 的展示分配流程（多轮 chooseButton + 动态对话框）无对应原语，暂留空定义。
+skill huimin(3933080321) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

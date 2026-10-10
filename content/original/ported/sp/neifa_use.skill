@@ -1,0 +1,15 @@
+// 内伐·用（neifa_use）：锁定技。你使用装备牌后，若「内伐·无基本」标记数大于0，摸等量牌。
+// 上游：trigger player:useCard，filter get.type(event.card)=="equip" && countMark("neifa_nobasic")>0，
+// content 摸 countMark 张。上游 usable:2（每回合限两次）无对应次数过滤原语，
+// 以每回合不限次近似（标记数量与「内伐」主技能的消耗约束实际收益）。
+skill neifa_use(2442423886) locked {
+  trigger card_used owner_source {
+    let kind = card_attribute(event_card, 0);
+    if kind > 9 && kind < 15 {
+      let n = mark_count(self, 3552802810);
+      if n > 0 {
+        effect draw_cards(self, n);
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+// 乱武 (luanwu) — 贾诩: force all players to attack their neighbors.
+// Simplified: distance_from -1 (chaos positioning).
+skill luanwu(53) {
+  modifier distance_from add -1;
+}

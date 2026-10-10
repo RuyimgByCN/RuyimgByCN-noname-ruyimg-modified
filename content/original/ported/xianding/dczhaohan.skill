@@ -1,0 +1,18 @@
+// 昭汉（DC 杨彪）：摸牌阶段，可多摸两张牌；摸牌结束后交两张手牌给一名
+// 没有手牌的角色，或弃置两张手牌。
+skill dczhaohan(2818087075) {
+  trigger phase_draw owner_is_target_draw_not_replaced optional {
+    effect increase_current_draw_count(self, 2);
+    effect add_skill(self, 3308549699);
+  }
+}
+
+skill dczhaohan_choose(3308549699) locked {
+  trigger phase_draw_end owner_is_target {
+    effect choose_give_or_discard_hand(self, 2, hand_empty);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,24 @@
+# U07 技能批七测试日志（2026-10-08，割据，规则 v116→v117）
+
+$ cargo test --offline -p engine-native
+engine-native: 435 passed / 0 failed / 1 ignored（v116 基线 433 +2 新增割据正负例）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 17 passed; 0 failed（15 既有 + 割据正负两例）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 104 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v116→v117 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/skill.js:302 geju（phaseBegin frequent/势力集-杀范围内他势力/draw）
+
+## 测试迭代记录
+- 初版 step 臂误用 owner 的攻距作全体 in_range 判据 → 修正为各攻击者
+  自身 attack_range（上游 targetInRange 逐攻击者口径）
+- filter false 重复臂清理（脚本插臂撞 witness 表既有 false——同款第五次）
+- 负例断言错位（Judge begin 先于 Draw：hand=2 非 0）→ 按 Draw 摸 2 校准

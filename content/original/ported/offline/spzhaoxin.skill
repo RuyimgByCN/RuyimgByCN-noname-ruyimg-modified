@@ -1,0 +1,6 @@
+// spzhaoxin：player:phase_draw_end, 多步骤。
+skill spzhaoxin(3409975707) {
+  trigger phase_draw_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

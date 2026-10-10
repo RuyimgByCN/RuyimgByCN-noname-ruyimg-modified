@@ -1,0 +1,10 @@
+// 连篇（苏飞）：出牌阶段，当你使用的牌与本阶段你上一张使用的牌存在共同目标时，
+// 你可以摸一张牌，然后将此牌交给其中一名目标角色（除你以外）。
+// 旧 JS 仅作语义证据；共同目标判定（引擎记录上一张牌目标 LAST_CARD_TARGETS）与
+// 摸牌授牌由 resolve_xinfu_lianpian 权威状态机校验（ABI 472）。每回合至多三次
+// （过滤器折叠 turn_fires < 3）。
+skill xinfu_lianpian(3795462236) {
+  trigger card_used owner_source_play_card_repeats_previous_targets {
+    effect resolve_xinfu_lianpian(self);
+  }
+}

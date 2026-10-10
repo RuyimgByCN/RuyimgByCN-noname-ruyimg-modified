@@ -1,0 +1,5 @@
+skill duanchang(2554836650) locked {
+  trigger death owner_is_target_source_alive {
+    effect remove_all_skills(event_source);
+  }
+}

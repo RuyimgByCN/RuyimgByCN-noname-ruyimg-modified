@@ -1,0 +1,8 @@
+// 义争（SP张鲁·改）：结束阶段，选择一名其他角色，下回合开始时触发义争·续效果。
+// 旧 JS 为状态设置技，存储目标到 csyizheng2，由 csyizheng2 在下次 phaseBegin 触发。
+// DSL 无跨回合目标存储 + 延迟触发类原语。
+skill csyizheng(2698310271) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 csyizheng 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

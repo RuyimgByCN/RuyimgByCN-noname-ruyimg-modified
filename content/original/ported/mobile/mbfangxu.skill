@@ -1,0 +1,8 @@
+// mbfangxu（芳许）：每回合限两次，你可以将一张本回合获得的牌当作【杀】或【闪】使用，你因此使用牌时选择一项（不公开选择）：①若此牌造成伤害，弃置受伤角色至多两张牌；②若此牌未造成伤害，当前回合角色摸两张牌。
+// 未建模：subSkill, chooseButton 等机制无 DSL 原语。
+skill mbfangxu(2430932300) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mbfangxu（skill.js:7699）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

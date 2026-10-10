@@ -1,0 +1,7 @@
+// 避尊：你可以将一张装备牌当【杀】或【闪】使用。使用后，手牌数唯一最多的角色可以移动场上一张牌。
+// 旧 JS 核心为 view_as（装备→杀/闪）+ 后置移牌。DSL view_as 不支持 filterCard 类型限制（仅限装备牌），
+// 且「手牌最多者移动场上一张牌」无对应效果原语。无法精确建模。
+skill stdbizun(3457703613) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

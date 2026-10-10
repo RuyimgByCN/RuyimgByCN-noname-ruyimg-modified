@@ -1,0 +1,8 @@
+// 神速1（城次郎）：判定阶段开始前，可跳过判定阶段和摸牌阶段，视为对一名其他角色使用【杀】。
+// 以 skip_judge_and_draw_phases + choose_use_virtual_sha 近似，缺失「可取消阶段」的时机控制。
+skill jojiro_shensu1(3680846803) {
+  trigger phase_judge owner_alive optional {
+    effect skip_judge_and_draw_phases(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

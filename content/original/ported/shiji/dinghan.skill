@@ -1,0 +1,9 @@
+// 定寒（张辽系）：锁定技。你成为锦囊牌目标后，记录其牌名；此后你使用
+// 或成为同名牌目标时摸一张牌。
+// 旧 JS 的「牌名记录集合」无对应原语；以成为锦囊目标后摸一张近似
+// （记录未建模，已注明）。
+skill dinghan(3938112359) locked {
+  trigger card_targeted owner_targeted_by_other_card_once_per_turn {
+    effect draw_cards(self, 1);
+  }
+}

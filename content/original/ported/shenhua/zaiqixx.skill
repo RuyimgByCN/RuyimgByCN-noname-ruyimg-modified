@@ -1,0 +1,7 @@
+// 再起·新（孟获）：继承再起的别名技能。
+// 旧 JS 纯 inherit 声明，DSL 无继承原语；以空定义保留稳定 ID（已注明）。
+skill zaiqixx(2683239057) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

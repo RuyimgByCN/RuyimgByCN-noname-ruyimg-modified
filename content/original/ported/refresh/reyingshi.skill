@@ -1,0 +1,8 @@
+// reyingshi：刷新包技能。
+// triggers: player:phaseUseBegin
+skill reyingshi(3062387466) {
+    // 近似：旧JS事件 phaseUseBegin → DSL事件 phaseUseBegin
+    trigger phase_play owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

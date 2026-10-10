@@ -1,0 +1,10 @@
+// 天公（张角·OL）：锁定技。回合开始时可使用虚拟【雷公】；回合结束时可使用虚拟【有难】；
+// 当场上有黑桃判定结果时，可对一名角色造成1点雷电伤害。
+//
+// 虚拟卡【雷公】【有难】非标准卡牌，DSL 无通用虚拟卡使用原语（choose_use_virtual_sha
+// 仅限【杀】）；判定结果花色过滤（仅黑桃）无 suit 专用过滤器——空定义。
+skill oltiangong(4071188022) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

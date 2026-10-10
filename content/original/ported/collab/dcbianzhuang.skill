@@ -1,0 +1,8 @@
+// 变装（小约翰可汗）：出牌阶段限一次。随机展示角色并获得对应技能，然后可无视距离使用一张杀。累计3次后切换皮肤。
+// 旧JS的角色映射表（characterMap/12个武将→技能）、随机角色选择、技能临时获取、皮肤切换、使用装备牌后重置次数未建模（已注明）。
+// 以choose_use_virtual_sha(ignore_distance)近似保留"使用杀"部分收益。
+skill dcbianzhuang(3619380631) {
+  active play_phase uses_per_turn 1 {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

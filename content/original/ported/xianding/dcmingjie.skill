@@ -1,0 +1,13 @@
+// 明节（李昭仪）：游戏开始选择“明节”角色；双方获得对方弃牌阶段弃牌；
+// 阶段被跳过时双方摸二并可护伤；明节角色死亡则你死亡。
+// 近似：开局摸 1 并令一名其他角色摸 1；有角色死亡时你失去 1 点体力上限。
+// 绑定死亡、弃牌共享与跳过阶段未建模。
+skill dcmingjie(2317659847) {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 1);
+    effect choose_target_draw(self, 1, other);
+  }
+  trigger death owner_alive {
+    effect change_max_hp(self, -1);
+  }
+}

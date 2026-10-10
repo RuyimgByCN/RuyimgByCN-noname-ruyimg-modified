@@ -1,0 +1,7 @@
+// 存嗣（DC 糜夫人）：限定技，授予【勇决】；目标非自己时摸两张牌；
+// 完成授技/摸牌及其连锁结算后，再结算【闺秀】的受伤回复。旧 JavaScript 仅作语义证据。
+skill dccunsi(4233990625) {
+  active play_phase once_per_game targets 1 1 {
+    effect resolve_dccunsi(self, event_source, 2370422642, 2297054445, 0);
+  }
+}

@@ -1,0 +1,7 @@
+// 界放逐：受到伤害后，可令一名其他角色摸 X 张牌（X=你已损失体力），然后翻面。
+// 对齐 shenhua 放逐；使用 choose_other_draw_owner_lost_hp_turn_over。
+skill refangzhu(2376653837) {
+  trigger damage owner_is_target_other_alive optional {
+    effect choose_other_draw_owner_lost_hp_turn_over(self);
+  }
+}

@@ -1,0 +1,7 @@
+// 矜伐：弃置所选手牌/装备牌后，目标可交给你一张装备牌；取消则由你获得其一张牌。
+// 交出的装备按目标视角为黑桃时，目标对你使用一张无距离虚拟【杀】。
+skill gzjinfa(2401974486) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_equip_nonempty select_he 1 1 {
+    effect resolve_gzjinfa(self, event_source);
+  }
+}

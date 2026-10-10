@@ -1,0 +1,7 @@
+// yjjielve：锁定技, source:damageSource, 主动(phaseUse), 视作chenghuodajie, 加技能, 含子技能。
+skill yjjielve(4274149066) locked {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

@@ -1,0 +1,6 @@
+// 施仇（twodc 版，SP 马超）：出牌阶段，可将手牌/装备牌当【杀】使用（不计次数限制）。
+// 旧 JS 的“每次需使用不同颜色的牌转化、必须指定相同的目标、红杀需目标弃装备否则不可
+// 响应、黑杀需目标弃黑色手牌否则不可响应”未建模。
+skill twodcspshichou(3276628911) {
+  view_as sha play_phase any from hand_equip no_use_count;
+}

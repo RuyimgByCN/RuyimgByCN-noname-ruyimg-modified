@@ -1,0 +1,8 @@
+// 巡使：锁定技，锦囊牌均视为【杀】，无距离、无次数限制。
+// 旧 JS 的「仅手牌中的锦囊」「无花色」「使用无色牌时神裁标记+1、额外目标」未建模
+// （card_name(trick) 作用于所有区域，近似已注明）。
+skill xunshi(4189180642) locked {
+  modifier card_name(trick) override sha;
+  modifier card_distance_unlimited(trick) override 1;
+  modifier card_use_unlimited(trick) override 1;
+}

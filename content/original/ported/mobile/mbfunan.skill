@@ -1,0 +1,6 @@
+// mbfunan（复难）：其他角色使用或打出牌响应你使用的牌时，你可以获得其使用或打出的牌。
+skill mbfunan(3595387982) {
+  trigger card_responded owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

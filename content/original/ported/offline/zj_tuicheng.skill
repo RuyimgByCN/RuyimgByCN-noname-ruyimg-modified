@@ -1,0 +1,7 @@
+// zj_tuicheng：音效名:zj_tuicheng, 主动(phaseUse), 需选择目标, 条件计数。
+skill zj_tuicheng(2291640355) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

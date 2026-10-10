@@ -1,0 +1,5 @@
+// pshuying：锁定技, player:game_started, global:phaseBefore, global:death, 异步。
+skill pshuying(3576751454) {
+  trigger game_started owner_alive {
+  }
+}

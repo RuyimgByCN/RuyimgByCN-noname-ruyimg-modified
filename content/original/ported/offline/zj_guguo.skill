@@ -1,0 +1,6 @@
+// zj_guguo：target:card_targeted, 摸牌, 异步。
+skill zj_guguo(3805876626) {
+  trigger card_targeted owner_is_target_once {
+    effect draw_cards(self, 1);
+  }
+}

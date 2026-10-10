@@ -1,0 +1,8 @@
+// 儒贤（dcruxian）：限定技，出牌阶段，本回合内「张采」可对所有点数的牌发动。
+// 旧 JS 的「addTempSkill dczhangcai_all」以 add_skill + 回合结束移除近似；
+// 因「张采」的 DSL 近似实现本身不区分点数，该标记无实际效果（联动保留）。
+skill dcruxian(3734967277) {
+  active play_phase once_per_game {
+    effect add_skill(self, 3424574524);
+  }
+}

@@ -1,0 +1,15 @@
+// 配券（美凪）：出牌阶段赠予一张「米券」，从未选选项中执行一项：造成 1 伤害 / 摸 2 / 弃其 2 / 亮牌堆顶可使用。
+// 实现：出牌阶段限一次对一名其他角色二选一：造成 1 点伤害，或自己摸 2。
+// 近似：不消耗米券；不记录已选选项；弃牌与亮牌使用未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill minagi_peiquan(3941246023) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect deal_damage(self, event_source, 1);
+    }
+    if option == 2 {
+      effect draw_cards(self, 2);
+    }
+  }
+}

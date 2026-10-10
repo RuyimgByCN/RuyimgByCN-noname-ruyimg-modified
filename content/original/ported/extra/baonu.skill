@@ -1,0 +1,17 @@
+// 暴怒：开局获得两枚标记；每造成或受到一点伤害，再获得一枚。
+skill baonu(3399710515) locked {
+  trigger game_started owner_alive {
+    effect add_mark(self, 1252226867, 2);
+  }
+
+  trigger damage owner_is_source_or_target {
+    effect add_mark(self, 1252226867, event_amount);
+  }
+}
+
+// Legacy audio-only metadata; no rule behavior.
+skill wuhun2(2372718781) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}

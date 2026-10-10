@@ -1,0 +1,7 @@
+// 天命：成为【杀】目标时，弃所有手牌装备，摸两张牌；体力值最高的角色可同样弃置并摸牌。
+// 旧 JS 的「弃全部牌→摸2→最大体力角色可选效仿」无对应原语（需链式触发 + 条件复制效果），未建模。
+skill stdtianming(4230431189) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

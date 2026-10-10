@@ -1,0 +1,8 @@
+// friendxiaxing（侠行）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+// 未建模：subSkill, expansion 等机制无 DSL 原语。
+skill friendxiaxing(4180588276) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 friendxiaxing（skill.js:10545）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

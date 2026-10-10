@@ -1,0 +1,16 @@
+// 藏储（jsrg）：一名角色的结束阶段，你可以令至多 X 名角色各摸一张牌（X 为你
+// 于此回合得到的牌数；若 X 大于存活角色数则改为各摸两张）。
+// 上游 (jsrg/skill.js jsrgcangchu)：global phaseJieshuBegin；direct；
+// filter = getHistory("gain") 非空；chooseTarget [1, num]；asyncDraw
+// (num > countPlayer ? 2 : 1)。
+// 实现（2026-09-10 第二百二十六批·既有面清账）：trigger phase_end
+// owner_alive_hand_gained_this_turn_can_compare_other（既有过滤器：本回合
+// 获得手牌近似）optional → choose_optional_targets_draw(self, 1, 1, 5, any)
+// （ABI 106 系既有原语，至少 1 至多 5 名各摸 1）。
+// 近似（登记债）：①动态上限 X=回合获得牌数（无 DSL 表达式）收窄为字面量 5；
+// ②各摸 1/2 条件量固定为 1；③门控以「获得手牌且仍在手」近似「任意获得」。
+skill jsrgcangchu(3882391104) {
+  trigger phase_end owner_alive_hand_gained_this_turn_can_compare_other optional {
+    effect choose_optional_targets_draw(self, 1, 1, 5, any);
+  }
+}

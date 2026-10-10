@@ -1,0 +1,11 @@
+// 小西（xiaoxi，韩遂）：游戏开始时，可视为使用一张【杀】。
+// 上游 (sp/skill.js:31011)：trigger player:enterGame + global:phaseBefore（仅
+// phaseNumber == 0 首轮）；content = chooseUseTarget("sha")。
+// 实现：game_started + owner_alive optional → choose_use_virtual_sha(self,
+// normal_distance)。「每轮首名角色回合开始」以开局 GameStarted 事件近似（上游 phase
+// Number 0 即开局首轮）。
+skill xiaoxi(2994468828) {
+  trigger game_started owner_alive optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

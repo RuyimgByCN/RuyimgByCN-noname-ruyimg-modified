@@ -1,0 +1,9 @@
+// 嘲风（南华老仙）：出牌阶段内造成伤害时，可弃一张手牌并摸一张牌；若弃牌与伤害牌同花色则摸二，同类型则伤害+1。
+// 近似：按弃牌摸牌基础收益建模，花色/类型条件加成未建模（需 expansion 或运行时花色检查）。
+skill chaofeng(3525888785) {
+  trigger damage_before owner_is_source {
+    effect discard_hand_equip_count(self, 1);
+    effect draw_cards(self, 1);
+    // 旧 JS 若弃牌同花色则改为摸2张，同类型则伤害+1，需运行时 card 属性检查无对应原语
+  }
+}

@@ -1,0 +1,441 @@
+
+> @1.0.0 build /Users/ruyimg/Documents/Claude/sanguosha/archive/Noname-ruyimg-Modified
+> tsx scripts/build.ts
+
+
+> @noname/fs@1.0.0 build /Users/ruyimg/Documents/Claude/sanguosha/archive/Noname-ruyimg-Modified/packages/fs
+> tsup
+
+CLI Building entry: src/entry.ts, src/index.ts
+CLI Using tsconfig: ../../tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/ruyimg/Documents/Claude/sanguosha/archive/Noname-ruyimg-Modified/packages/fs/tsup.config.ts
+CLI Target: esnext
+CLI Cleaning output folder
+ESM Build start
+CJS Build start
+CJS dist/index.cjs     6.88 KB
+CJS dist/entry.cjs     6.65 KB
+CJS dist/index.cjs.map 10.06 KB
+CJS dist/entry.cjs.map 10.50 KB
+CJS ⚡️ Build success in 7ms
+ESM dist/entry.js              300.00 B
+ESM dist/chunk-GHCMFIRZ.js     4.72 KB
+ESM dist/index.js              153.00 B
+ESM dist/chunk-GHCMFIRZ.js.map 9.83 KB
+ESM dist/entry.js.map          547.00 B
+ESM dist/index.js.map          71.00 B
+ESM ⚡️ Build success in 7ms
+DTS Build start
+DTS ⚡️ Build success in 2712ms
+DTS dist/entry.d.ts  20.00 B
+DTS dist/index.d.ts  873.00 B
+DTS dist/entry.d.cts 20.00 B
+DTS dist/index.d.cts 873.00 B
+Scope: 3 of 7 workspace projects
+packages/fs build$ tsup
+packages/jit build$ tsx build.ts
+packages/fs build: CLI Building entry: src/entry.ts, src/index.ts
+packages/fs build: CLI Using tsconfig: ../../tsconfig.json
+packages/fs build: CLI tsup v8.5.1
+packages/fs build: CLI Using tsup config: /Users/ruyimg/Documents/Claude/sanguosha/archive/Noname-ruyimg-Modified/packages/fs/tsup.config.ts
+packages/fs build: CLI Target: esnext
+packages/fs build: CLI Cleaning output folder
+packages/fs build: ESM Build start
+packages/fs build: CJS Build start
+packages/fs build: ESM dist/entry.js              300.00 B
+packages/fs build: ESM dist/chunk-GHCMFIRZ.js     4.72 KB
+packages/fs build: ESM dist/index.js              153.00 B
+packages/fs build: ESM dist/entry.js.map          547.00 B
+packages/fs build: ESM dist/chunk-GHCMFIRZ.js.map 9.83 KB
+packages/fs build: ESM dist/index.js.map          71.00 B
+packages/fs build: ESM ⚡️ Build success in 6ms
+packages/fs build: CJS dist/entry.cjs     6.65 KB
+packages/fs build: CJS dist/index.cjs     6.88 KB
+packages/fs build: CJS dist/entry.cjs.map 10.50 KB
+packages/fs build: CJS dist/index.cjs.map 10.06 KB
+packages/fs build: CJS ⚡️ Build success in 6ms
+packages/fs build: DTS Build start
+packages/jit build: (node:19752) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+packages/jit build: (Use `node --trace-deprecation ...` to show where the warning was created)
+packages/jit build: CLI Building entry: src/index.ts
+packages/jit build: CLI Using tsconfig: tsconfig.json
+packages/jit build: CLI tsup v8.5.1
+packages/jit build: CLI Target: esnext
+packages/jit build: CLI Cleaning output folder
+packages/jit build: ESM Build start
+packages/jit build: ESM dist/index.js 1.03 KB
+packages/jit build: ESM ⚡️ Build success in 11ms
+packages/jit build: DTS Build start
+packages/jit build: DTS ⚡️ Build success in 447ms
+packages/jit build: DTS dist/index.d.ts 112.00 B
+packages/jit build: CLI Building entry: src/entry.ts
+packages/jit build: CLI Using tsconfig: tsconfig.json
+packages/jit build: CLI tsup v8.5.1
+packages/jit build: CLI Target: esnext
+packages/jit build: ESM Build start
+packages/jit build: ESM dist/entry.js 2.15 KB
+packages/jit build: ESM ⚡️ Build success in 3ms
+packages/jit build: CLI Building entry: src/service-worker/index.ts
+packages/jit build: CLI Using tsconfig: tsconfig.json
+packages/jit build: CLI tsup v8.5.1
+packages/jit build: CLI Target: esnext
+packages/jit build: ESM Build start
+packages/fs build: DTS ⚡️ Build success in 1701ms
+packages/fs build: DTS dist/entry.d.ts  20.00 B
+packages/fs build: DTS dist/index.d.ts  873.00 B
+packages/fs build: DTS dist/entry.d.cts 20.00 B
+packages/fs build: DTS dist/index.d.cts 873.00 B
+packages/fs build: Done
+packages/jit build: TERSER Minifying with Terser
+packages/jit build: TERSER Terser Minification success
+packages/jit build: ESM dist/service-worker/index.js 4.10 MB
+packages/jit build: ESM ⚡️ Build success in 8557ms
+packages/jit build: Done
+apps/core build$ tsx scripts/build.ts
+apps/core build: (node:19796) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+apps/core build: (Use `node --trace-deprecation ...` to show where the warning was created)
+apps/core build: vite v7.3.1 building client environment for production...
+apps/core build: transforming...
+apps/core build: ✓ 278 modules transformed.
+apps/core build: rendering chunks...
+apps/core build: computing gzip size...
+apps/core build: dist/index.html                                                                                                      30.91 kB │ gzip:   4.95 kB
+apps/core build: dist/_virtual/utf8.js                                                                                                 0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/util.js                                                                                                 0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/utils.js                                                                                                0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/flate.js                                                                                                0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/trees.js                                                                                                0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/base64.js                                                                                               0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/common.js                                                                                               0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/base642.js                                                                                              0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/support.js                                                                                              0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/deflate.js                                                                                              0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/inflate.js                                                                                              0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/deflate2.js                                                                                             0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/strings.js                                                                                              0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/inflate2.js                                                                                             0.05 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/defaults.js                                                                                             0.06 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/array-set.js                                                                                            0.06 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/signature.js                                                                                            0.06 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/md5.js                                                                                                  0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/aes.js                                                                                                  0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/rc4.js                                                                                                  0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/base64-vlq.js                                                                                           0.06 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/quick-sort.js                                                                                           0.06 kB │ gzip:   0.06 kB
+apps/core build: dist/_virtual/core.js                                                                                                 0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/sha1.js                                                                                                 0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/sha3.js                                                                                                 0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/hmac.js                                                                                                 0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/compressions.js                                                                                         0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/sha256.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/sha224.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/sha512.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/sha384.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/pbkdf2.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/evpkdf.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/rabbit.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/index6.js                                                                                               0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/binary-search.js                                                                                        0.06 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/x64-core.js                                                                                             0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/mode-cfb.js                                                                                             0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/mode-ctr.js                                                                                             0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/mode-ofb.js                                                                                             0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/mode-ecb.js                                                                                             0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/index5.js                                                                                               0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/enc-utf16.js                                                                                            0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/blowfish.js                                                                                             0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/enc-base64.js                                                                                           0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/ripemd160.js                                                                                            0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/format-hex.js                                                                                           0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/tripledes.js                                                                                            0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/nodeBuffer.js                                                                                           0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/cipher-core.js                                                                                          0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/stackframe2.js                                                                                          0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/pad-ansix923.js                                                                                         0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/pad-iso10126.js                                                                                         0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/pad-iso97971.js                                                                                         0.07 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/source-map-consumer.js                                                                                  0.07 kB │ gzip:   0.07 kB
+apps/core build: dist/_virtual/enc-base64url.js                                                                                        0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/pad-nopadding.js                                                                                        0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/rabbit-legacy.js                                                                                        0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/stacktrace-gps2.js                                                                                      0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/lib-typedarrays.js                                                                                      0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/mode-ctr-gladman.js                                                                                     0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/pad-zeropadding.js                                                                                      0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/deprecatedPublicUtils.js                                                                                0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/_virtual/__vite-browser-external.js                                                                              0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/noname/init/onload/OnloadSplash.vue.js                                                                           0.08 kB │ gzip:   0.09 kB
+apps/core build: dist/_virtual/error-stack-parser2.js                                                                                  0.08 kB │ gzip:   0.08 kB
+apps/core build: dist/noname/library/experimental/symbol.js                                                                            0.10 kB │ gzip:   0.10 kB
+apps/core build: dist/noname/get/promises.js                                                                                           0.15 kB │ gzip:   0.13 kB
+apps/core build: dist/noname/library/update-urls.js                                                                                    0.17 kB │ gzip:   0.14 kB
+apps/core build: dist/noname/init/onload/index.js                                                                                      0.19 kB │ gzip:   0.13 kB
+apps/core build: dist/noname/init/onload/wide-splash.js                                                                                0.19 kB │ gzip:   0.16 kB
+apps/core build: dist/_virtual/___vite-browser-external.js                                                                             0.25 kB │ gzip:   0.18 kB
+apps/core build: dist/_virtual/_commonjs-dynamic-modules.js                                                                            0.28 kB │ gzip:   0.21 kB
+apps/core build: dist/noname/util/sandbox.js                                                                                           0.29 kB │ gzip:   0.16 kB
+apps/core build: dist/_virtual/index2.js                                                                                               0.30 kB │ gzip:   0.21 kB
+apps/core build: dist/noname/library/experimental/index.js                                                                             0.33 kB │ gzip:   0.21 kB
+apps/core build: dist/_virtual/index4.js                                                                                               0.35 kB │ gzip:   0.22 kB
+apps/core build: dist/_virtual/stackframe.js                                                                                           0.35 kB │ gzip:   0.21 kB
+apps/core build: dist/_virtual/index.js                                                                                                0.35 kB │ gzip:   0.22 kB
+apps/core build: dist/_virtual/stacktrace-gps.js                                                                                       0.38 kB │ gzip:   0.22 kB
+apps/core build: dist/_virtual/error-stack-parser.js                                                                                   0.41 kB │ gzip:   0.22 kB
+apps/core build: dist/noname/library/element/nodeWS.js                                                                                 0.42 kB │ gzip:   0.25 kB
+apps/core build: dist/noname/library/element/GameEvent/compilers/AsyncCompiler.js                                                      0.44 kB │ gzip:   0.22 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/gzheader.js                                            0.54 kB │ gzip:   0.25 kB
+apps/core build: dist/noname/library/element/index.js                                                                                  0.55 kB │ gzip:   0.21 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/zstream.js                                             0.59 kB │ gzip:   0.26 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/nodeBuffer.js                                              0.60 kB │ gzip:   0.26 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/signature.js                                               0.63 kB │ gzip:   0.30 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/defaults.js                                                0.64 kB │ gzip:   0.27 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/adler32.js                                             0.66 kB │ gzip:   0.33 kB
+apps/core build: dist/noname.js                                                                                                        0.71 kB │ gzip:   0.32 kB
+apps/core build: dist/noname/library/cache/childNodesWatcher.js                                                                        0.72 kB │ gzip:   0.33 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/compressions.js                                            0.73 kB │ gzip:   0.31 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/index.js                                                        0.74 kB │ gzip:   0.30 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/crc32.js                                               0.76 kB │ gzip:   0.38 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/messages.js                                            0.80 kB │ gzip:   0.38 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/nodeBufferReader.js                                        0.92 kB │ gzip:   0.36 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/stringWriter.js                                            0.93 kB │ gzip:   0.41 kB
+apps/core build: dist/node_modules/.pnpm/crelt@1.0.6/node_modules/crelt/index.js                                                       0.98 kB │ gzip:   0.46 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/uint8ArrayReader.js                                        0.99 kB │ gzip:   0.38 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/flate.js                                                   0.99 kB │ gzip:   0.43 kB
+apps/core build: dist/_virtual/index3.js                                                                                               1.00 kB │ gzip:   0.52 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/compressedObject.js                                        1.09 kB │ gzip:   0.37 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/pad-nopadding.js                                       1.11 kB │ gzip:   0.40 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/uint8ArrayWriter.js                                        1.11 kB │ gzip:   0.46 kB
+apps/core build: dist/node_modules/.pnpm/source-map@0.5.6/node_modules/source-map/lib/quick-sort.js                                    1.13 kB │ gzip:   0.45 kB
+apps/core build: dist/noname/library/element/GameEvent/compilers/ArrayCompiler.js                                                      1.14 kB │ gzip:   0.52 kB
+apps/core build: dist/_virtual/modulepreload-polyfill.js                                                                               1.19 kB │ gzip:   0.50 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/support.js                                                 1.20 kB │ gzip:   0.46 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/stringReader.js                                            1.26 kB │ gzip:   0.46 kB
+apps/core build: dist/node_modules/.pnpm/source-map@0.5.6/node_modules/source-map/lib/base64.js                                        1.28 kB │ gzip:   0.55 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/pad-iso97971.js                                        1.31 kB │ gzip:   0.49 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/mode-ecb.js                                            1.37 kB │ gzip:   0.48 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/constants.js                                           1.43 kB │ gzip:   0.68 kB
+apps/core build: dist/noname/library/element/GameEvent/GameEventManager.js                                                             1.44 kB │ gzip:   0.52 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/pad-iso10126.js                                        1.49 kB │ gzip:   0.54 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/arrayReader.js                                             1.49 kB │ gzip:   0.55 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_lang-json@6.0.2/node_modules/@codemirror/lang-json/dist/index.js                  1.56 kB │ gzip:   0.71 kB
+apps/core build: dist/noname/util/utils.js                                                                                             1.57 kB │ gzip:   0.42 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/load.js                                                    1.60 kB │ gzip:   0.60 kB
+apps/core build: dist/_virtual/_commonjsHelpers.js                                                                                     1.60 kB │ gzip:   0.58 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/pad-zeropadding.js                                     1.60 kB │ gzip:   0.56 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/pad-ansix923.js                                        1.61 kB │ gzip:   0.56 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/mode-ofb.js                                            1.65 kB │ gzip:   0.59 kB
+apps/core build: dist/noname/util/index.js                                                                                             1.68 kB │ gzip:   0.71 kB
+apps/core build: dist/noname/library/element/GameEvent/compilers/ContentCompilerBase.js                                                1.71 kB │ gzip:   0.71 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/sha224.js                                              1.71 kB │ gzip:   0.64 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/mode-ctr.js                                            1.76 kB │ gzip:   0.62 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/index.js                                                   1.84 kB │ gzip:   0.63 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/base64.js                                                  1.85 kB │ gzip:   0.65 kB
+apps/core build: dist/noname/game/PauseManager.js                                                                                      1.85 kB │ gzip:   0.64 kB
+apps/core build: dist/node_modules/.pnpm/source-map@0.5.6/node_modules/source-map/lib/binary-search.js                                 1.88 kB │ gzip:   0.60 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/deprecatedPublicUtils.js                                   1.90 kB │ gzip:   0.50 kB
+apps/core build: dist/node_modules/.pnpm/source-map@0.5.6/node_modules/source-map/lib/base64-vlq.js                                    1.90 kB │ gzip:   0.71 kB
+apps/core build: dist/node_modules/.pnpm/source-map@0.5.6/node_modules/source-map/lib/array-set.js                                     1.96 kB │ gzip:   0.67 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_json@1.0.3/node_modules/@lezer/json/dist/index.js                                      2.04 kB │ gzip:   1.18 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/sha384.js                                              2.09 kB │ gzip:   0.74 kB
+apps/core build: dist/noname/library/element/button.js                                                                                 2.09 kB │ gzip:   0.80 kB
+apps/core build: dist/node_modules/.pnpm/w3c-keyname@2.2.8/node_modules/w3c-keyname/index.js                                           2.21 kB │ gzip:   0.92 kB
+apps/core build: dist/node_modules/.pnpm/codemirror@6.0.2/node_modules/codemirror/dist/index.js                                        2.22 kB │ gzip:   0.66 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/mode-cfb.js                                            2.25 kB │ gzip:   0.67 kB
+apps/core build: dist/noname/init/onload/default-splash.js                                                                             2.26 kB │ gzip:   0.89 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/lib-typedarrays.js                                     2.27 kB │ gzip:   0.71 kB
+apps/core build: dist/_virtual/preload-helper.js                                                                                       2.29 kB │ gzip:   0.97 kB
+apps/core build: dist/noname/util/config.js                                                                                            2.30 kB │ gzip:   0.71 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/format-hex.js                                          2.38 kB │ gzip:   0.70 kB
+apps/core build: dist/noname/library/element/GameEvent/compilers/ContentCompiler.js                                                    2.40 kB │ gzip:   1.01 kB
+apps/core build: dist/noname/init/onload/OnloadSplash.vue2.js                                                                          2.44 kB │ gzip:   0.97 kB
+apps/core build: dist/noname/library/element/client.js                                                                                 2.53 kB │ gzip:   0.93 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/mode-ctr-gladman.js                                    2.80 kB │ gzip:   0.82 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/utils/common.js                                             2.92 kB │ gzip:   0.91 kB
+apps/core build: dist/noname/util/sandbox/initRealms.js                                                                                2.98 kB │ gzip:   1.06 kB
+apps/core build: dist/noname/ai/index.js                                                                                               3.17 kB │ gzip:   1.30 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/rc4.js                                                 3.26 kB │ gzip:   1.03 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/sha1.js                                                3.28 kB │ gzip:   1.09 kB
+apps/core build: dist/noname/library/announce/index.js                                                                                 3.44 kB │ gzip:   1.12 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/dataReader.js                                              3.55 kB │ gzip:   1.11 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/evpkdf.js                                              3.60 kB │ gzip:   1.09 kB
+apps/core build: dist/noname/library/init/promises.js                                                                                  3.61 kB │ gzip:   1.19 kB
+apps/core build: dist/noname/status/index.js                                                                                           3.61 kB │ gzip:   1.09 kB
+apps/core build: dist/node_modules/.pnpm/@marijn_find-cluster-break@1.0.2/node_modules/@marijn/find-cluster-break/src/index.js         3.77 kB │ gzip:   1.53 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/hmac.js                                                3.85 kB │ gzip:   1.10 kB
+apps/core build: dist/node_modules/.pnpm/dedent@1.7.1/node_modules/dedent/dist/dedent.js                                               4.04 kB │ gzip:   1.48 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/pbkdf2.js                                              4.07 kB │ gzip:   1.21 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/index.js                                               4.09 kB │ gzip:   0.99 kB
+apps/core build: dist/noname/library/element/GameEvent/compilers/StepCompiler.js                                                       4.09 kB │ gzip:   1.65 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/utils/strings.js                                            4.12 kB │ gzip:   1.22 kB
+apps/core build: dist/node_modules/.pnpm/nosleep.js@0.12.0/node_modules/nosleep.js/src/index.js                                        4.13 kB │ gzip:   1.37 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/enc-base64.js                                          4.19 kB │ gzip:   1.20 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/enc-utf16.js                                           4.23 kB │ gzip:   0.93 kB
+apps/core build: dist/noname/init/import.js                                                                                            4.38 kB │ gzip:   1.56 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/utf8.js                                                    4.41 kB │ gzip:   1.31 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/sha256.js                                              4.51 kB │ gzip:   1.37 kB
+apps/core build: dist/noname/library/element/control.js                                                                                4.57 kB │ gzip:   1.32 kB
+apps/core build: dist/noname/get/pinyins/noname-dict.js                                                                                4.64 kB │ gzip:   2.09 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/enc-base64url.js                                       4.73 kB │ gzip:   1.28 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/crc32.js                                                   4.89 kB │ gzip:   1.99 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_lang-vue@0.1.3/node_modules/@codemirror/lang-vue/dist/index.js                    5.11 kB │ gzip:   2.04 kB
+apps/core build: dist/node_modules/.pnpm/style-mod@4.1.3/node_modules/style-mod/src/style-mod.js                                       5.17 kB │ gzip:   2.04 kB
+apps/core build: dist/node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js                                        5.17 kB │ gzip:   1.39 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/deflate.js                                                  5.23 kB │ gzip:   1.50 kB
+apps/core build: dist/noname/library/element/vcard.js                                                                                  5.25 kB │ gzip:   1.47 kB
+apps/core build: dist/noname/game/promises.js                                                                                          5.66 kB │ gzip:   1.69 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/inftrees.js                                            5.68 kB │ gzip:   1.57 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/rabbit-legacy.js                                       5.72 kB │ gzip:   1.48 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/rabbit.js                                              5.76 kB │ gzip:   1.49 kB
+apps/core build: dist/noname/game/dynamic-style/index.js                                                                               5.82 kB │ gzip:   1.91 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/inflate.js                                                  6.16 kB │ gzip:   1.64 kB
+apps/core build: dist/noname/init/browser.js                                                                                           6.33 kB │ gzip:   1.66 kB
+apps/core build: dist/noname/game/check.js                                                                                             6.49 kB │ gzip:   1.71 kB
+apps/core build: dist/noname/library/cache/cacheContext.js                                                                             6.52 kB │ gzip:   2.14 kB
+apps/core build: dist/noname/ai/basic.js                                                                                               7.06 kB │ gzip:   1.25 kB
+apps/core build: dist/noname/util/sandbox/error.js                                                                                     7.16 kB │ gzip:   2.33 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/aes.js                                                 7.35 kB │ gzip:   1.70 kB
+apps/core build: dist/noname/util/error.js                                                                                             7.38 kB │ gzip:   2.43 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/utils.js                                                   7.55 kB │ gzip:   1.81 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/inffast.js                                             7.64 kB │ gzip:   1.42 kB
+apps/core build: dist/node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js                7.75 kB │ gzip:   1.94 kB
+apps/core build: dist/node_modules/.pnpm/source-map@0.5.6/node_modules/source-map/lib/util.js                                          7.95 kB │ gzip:   1.80 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/md5.js                                                 8.15 kB │ gzip:   1.85 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/sha3.js                                                8.16 kB │ gzip:   2.03 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/x64-core.js                                            8.89 kB │ gzip:   1.62 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/ripemd160.js                                           9.84 kB │ gzip:   1.95 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/zipEntries.js                                              9.91 kB │ gzip:   2.37 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/zipEntry.js                                               10.66 kB │ gzip:   2.33 kB
+apps/core build: dist/noname/library/hooks/index.js                                                                                   11.59 kB │ gzip:   3.00 kB
+apps/core build: dist/node_modules/.pnpm/stacktrace-gps@3.1.2/node_modules/stacktrace-gps/stacktrace-gps.js                           11.85 kB │ gzip:   2.90 kB
+apps/core build: dist/noname/init/node.js                                                                                             12.01 kB │ gzip:   2.92 kB
+apps/core build: dist/node_modules/.pnpm/path-browserify-esm@1.0.6/node_modules/path-browserify-esm/index.esm.js                      12.05 kB │ gzip:   2.65 kB
+apps/core build: dist/noname/util/pagination.js                                                                                       12.09 kB │ gzip:   3.02 kB
+apps/core build: dist/noname/library/element/character.js                                                                             12.10 kB │ gzip:   2.86 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/sha512.js                                             12.35 kB │ gzip:   3.31 kB
+apps/core build: dist/node_modules/.pnpm/nosleep.js@0.12.0/node_modules/nosleep.js/src/media.js                                       12.76 kB │ gzip:   5.49 kB
+apps/core build: dist/noname/get/audio.js                                                                                             13.13 kB │ gzip:   3.15 kB
+apps/core build: dist/noname/library/update.js                                                                                        13.20 kB │ gzip:   4.27 kB
+apps/core build: dist/noname/library/element/dialog.js                                                                                13.60 kB │ gzip:   3.49 kB
+apps/core build: dist/noname/ui/create/menu/pages/startMenu.js                                                                        13.67 kB │ gzip:   3.27 kB
+apps/core build: dist/noname/entry.js                                                                                                 13.80 kB │ gzip:   3.46 kB
+apps/core build: dist/noname/library/poptip.js                                                                                        14.45 kB │ gzip:   5.37 kB
+apps/core build: dist/noname/ui/create/menu/index.js                                                                                  15.67 kB │ gzip:   3.98 kB
+apps/core build: dist/noname/init/polyfill.js                                                                                         16.01 kB │ gzip:   3.61 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_lang-css@6.3.1/node_modules/@codemirror/lang-css/dist/index.js                   16.30 kB │ gzip:   5.15 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_lang-javascript@6.2.4/node_modules/@codemirror/lang-javascript/dist/index.js     16.61 kB │ gzip:   4.85 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_css@1.3.0/node_modules/@lezer/css/dist/index.js                                       17.27 kB │ gzip:   7.37 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/trees.js                                              17.67 kB │ gzip:   4.08 kB
+apps/core build: dist/noname/ui/create/menu/pages/characterPackMenu.js                                                                17.70 kB │ gzip:   3.87 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_lang-markdown@6.5.0/node_modules/@codemirror/lang-markdown/dist/index.js         17.89 kB │ gzip:   5.17 kB
+apps/core build: dist/noname/init/cordova.js                                                                                          17.92 kB │ gzip:   4.49 kB
+apps/core build: dist/noname/get/is.js                                                                                                18.43 kB │ gzip:   4.48 kB
+apps/core build: dist/noname/init/loading.js                                                                                          18.47 kB │ gzip:   4.10 kB
+apps/core build: dist/noname/util/sandbox/security.js                                                                                 19.21 kB │ gzip:   5.50 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_html@1.3.13/node_modules/@lezer/html/dist/index.js                                    20.54 kB │ gzip:   7.25 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_highlight@1.2.3/node_modules/@lezer/highlight/dist/index.js                           20.60 kB │ gzip:   5.54 kB
+apps/core build: dist/node_modules/.pnpm/jszip@2.7.0/node_modules/jszip/lib/object.js                                                 20.75 kB │ gzip:   5.15 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/core.js                                               20.78 kB │ gzip:   3.97 kB
+apps/core build: dist/noname/library/init/index.js                                                                                    22.60 kB │ gzip:   6.01 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/tripledes.js                                          22.84 kB │ gzip:   4.93 kB
+apps/core build: dist/node_modules/.pnpm/source-map@0.5.6/node_modules/source-map/lib/source-map-consumer.js                          23.10 kB │ gzip:   4.38 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_lang-html@6.4.11/node_modules/@codemirror/lang-html/dist/index.js                24.07 kB │ gzip:   6.68 kB
+apps/core build: dist/noname/ui/create/menu/pages/cardPackMenu.js                                                                     24.27 kB │ gzip:   5.21 kB
+apps/core build: dist/noname/ui/index.js                                                                                              24.83 kB │ gzip:   5.42 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/cipher-core.js                                        25.41 kB │ gzip:   4.33 kB
+apps/core build: dist/noname/library/element/card.js                                                                                  28.97 kB │ gzip:   6.81 kB
+apps/core build: dist/node_modules/.pnpm/crypto-js@4.2.0/node_modules/crypto-js/blowfish.js                                           29.79 kB │ gzip:   7.94 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_lint@6.9.4/node_modules/@codemirror/lint/dist/index.js                           30.15 kB │ gzip:   8.17 kB
+apps/core build: dist/noname/init/compatible.js                                                                                       31.91 kB │ gzip:   6.82 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/deflate.js                                            32.54 kB │ gzip:   5.85 kB
+apps/core build: dist/noname/library/element/gameEvent.js                                                                             32.94 kB │ gzip:   7.77 kB
+apps/core build: dist/noname/ui/create/menu/pages/otherMenu.js                                                                        37.46 kB │ gzip:   8.39 kB
+apps/core build: dist/node_modules/.pnpm/pako@1.0.11/node_modules/pako/lib/zlib/inflate.js                                            37.55 kB │ gzip:   5.78 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_search@6.6.0/node_modules/@codemirror/search/dist/index.js                       39.57 kB │ gzip:   9.85 kB
+apps/core build: dist/noname/ui/create/menu/pages/optionsMenu.js                                                                      40.16 kB │ gzip:   8.11 kB
+apps/core build: dist/noname/init/index.js                                                                                            49.13 kB │ gzip:  10.88 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_lr@1.4.8/node_modules/@lezer/lr/dist/index.js                                         54.80 kB │ gzip:  14.18 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_commands@6.10.2/node_modules/@codemirror/commands/dist/index.js                  57.98 kB │ gzip:  12.61 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_common@1.5.1/node_modules/@lezer/common/dist/index.js                                 64.52 kB │ gzip:  16.04 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_markdown@1.6.3/node_modules/@lezer/markdown/dist/index.js                             69.48 kB │ gzip:  17.41 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_autocomplete@6.20.0/node_modules/@codemirror/autocomplete/dist/index.js          71.91 kB │ gzip:  18.55 kB
+apps/core build: dist/noname/library/skill.js                                                                                         76.78 kB │ gzip:  15.17 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_language@6.12.1/node_modules/@codemirror/language/dist/index.js                  77.87 kB │ gzip:  20.85 kB
+apps/core build: dist/node_modules/.pnpm/@lezer_javascript@1.5.4/node_modules/@lezer/javascript/dist/index.js                         80.79 kB │ gzip:  31.20 kB
+apps/core build: dist/noname/library/zhanfa.js                                                                                        86.50 kB │ gzip:  15.64 kB
+apps/core build: dist/noname/util/sandbox/sandbox.js                                                                                 101.76 kB │ gzip:  20.48 kB
+apps/core build: dist/noname/ui/create/menu/pages/exetensionMenu.js                                                                  109.25 kB │ gzip:  18.41 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_state@6.5.4/node_modules/@codemirror/state/dist/index.js                        111.59 kB │ gzip:  27.81 kB
+apps/core build: dist/noname/ui/create/index.js                                                                                      140.50 kB │ gzip:  28.33 kB
+apps/core build: dist/noname/ui/click/index.js                                                                                       168.16 kB │ gzip:  29.00 kB
+apps/core build: dist/noname/get/index.js                                                                                            237.63 kB │ gzip:  52.97 kB
+apps/core build: dist/noname/game/index.js                                                                                           335.66 kB │ gzip:  69.17 kB
+apps/core build: dist/node_modules/.pnpm/@codemirror_view@6.39.14/node_modules/@codemirror/view/dist/index.js                        377.01 kB │ gzip:  93.72 kB
+apps/core build: dist/noname/library/element/content.js                                                                              434.55 kB │ gzip:  75.66 kB
+apps/core build: dist/node_modules/.pnpm/pinyin-pro@3.28.0/node_modules/pinyin-pro/dist/index.js                                     449.38 kB │ gzip: 153.96 kB
+apps/core build: dist/noname/library/index.js                                                                                        494.51 kB │ gzip:  89.47 kB
+apps/core build: dist/noname/library/element/player.js                                                                               496.56 kB │ gzip:  86.65 kB
+apps/core build: dist/node_modules/.pnpm/vue@3.5.28/node_modules/vue/dist/vue.esm-browser.js                                         542.94 kB │ gzip: 127.94 kB
+apps/core build: dist/node_modules/.pnpm/core-js-bundle@3.48.0/node_modules/core-js-bundle/index.js                                  970.13 kB │ gzip: 141.76 kB
+apps/core build: dist/node_modules/.pnpm/eslint-linter-browserify@9.39.2/node_modules/eslint-linter-browserify/linter.js           3,214.35 kB │ gzip: 573.52 kB
+apps/core build: [vite-plugin-static-copy] Copied 37 items.
+apps/core build: ✓ built in 2.42s
+apps/core build: vite v7.3.1 building client environment for production...
+apps/core build: transforming...
+apps/core build: ✓ 209 modules transformed.
+apps/core build: rendering chunks...
+apps/core build: computing gzip size...
+apps/core build: dist/character/old.js        81.26 kB │ gzip:  20.19 kB
+apps/core build: dist/character/standard.js   95.01 kB │ gzip:  24.28 kB
+apps/core build: dist/character/sxrm.js      123.75 kB │ gzip:  27.91 kB
+apps/core build: dist/character/extra.js     152.99 kB │ gzip:  31.61 kB
+apps/core build: dist/character/yingbian.js  188.29 kB │ gzip:  43.91 kB
+apps/core build: dist/character/sixiang.js   263.45 kB │ gzip:  53.60 kB
+apps/core build: dist/character/bingshi.js   296.77 kB │ gzip:  67.19 kB
+apps/core build: dist/character/newjiang.js  315.08 kB │ gzip:  75.35 kB
+apps/core build: dist/character/clan.js      326.81 kB │ gzip:  73.42 kB
+apps/core build: dist/character/diy.js       339.35 kB │ gzip:  68.04 kB
+apps/core build: dist/character/shenhua.js   353.31 kB │ gzip:  78.19 kB
+apps/core build: dist/character/collab.js    388.29 kB │ gzip:  94.72 kB
+apps/core build: dist/character/key.js       461.18 kB │ gzip:  94.75 kB
+apps/core build: dist/character/jsrg.js      532.92 kB │ gzip: 115.52 kB
+apps/core build: dist/character/yijiang.js   550.79 kB │ gzip: 114.77 kB
+apps/core build: dist/character/refresh.js   667.69 kB │ gzip: 141.79 kB
+apps/core build: dist/character/huicui.js    773.78 kB │ gzip: 174.60 kB
+apps/core build: [vite-plugin-static-copy] Copied 26 items.
+apps/core build: ✓ built in 1.35s
+apps/core build: vite v7.3.1 building client environment for production...
+apps/core build: transforming...
+apps/core build: "ai" is imported from external module "noname" but never used in "mode/identity.js".
+apps/core build: ✓ 1 modules transformed.
+apps/core build: rendering chunks...
+apps/core build: computing gzip size...
+apps/core build: dist/mode/identity.js  204.41 kB │ gzip: 36.38 kB
+apps/core build: [vite-plugin-static-copy] Copied 11 items.
+apps/core build: ✓ built in 87ms
+apps/core build: vite v7.3.1 building client environment for production...
+apps/core build: transforming...
+apps/core build: ✓ 12 modules transformed.
+apps/core build: Generated an empty chunk: "thunder_card".
+apps/core build: Generated an empty chunk: "太虚幻境".
+apps/core build: Generated an empty chunk: "欢乐卡牌".
+apps/core build: rendering chunks...
+apps/core build: computing gzip size...
+apps/core build: dist/card/thunder_card.js    0.00 kB │ gzip:  0.02 kB
+apps/core build: dist/card/太虚幻境.js            0.00 kB │ gzip:  0.02 kB
+apps/core build: dist/card/欢乐卡牌.js            0.00 kB │ gzip:  0.02 kB
+apps/core build: dist/card/sp.js             22.43 kB │ gzip:  5.50 kB
+apps/core build: dist/card/yongjian.js       30.54 kB │ gzip:  7.03 kB
+apps/core build: dist/card/zhulu.js          33.08 kB │ gzip:  6.98 kB
+apps/core build: dist/card/xianxia.js        33.80 kB │ gzip:  7.51 kB
+apps/core build: dist/card/yingbian.js       37.24 kB │ gzip:  7.87 kB
+apps/core build: dist/card/extra.js          48.21 kB │ gzip: 10.03 kB
+apps/core build: dist/card/huodong.js        80.38 kB │ gzip: 16.61 kB
+apps/core build: dist/card/guozhan.js        81.79 kB │ gzip: 16.30 kB
+apps/core build: dist/card/standard.js      174.68 kB │ gzip: 29.36 kB
+apps/core build: ✓ built in 115ms
+apps/core build: Done
+No projects matched the filters in "/Users/ruyimg/Documents/Claude/sanguosha/archive/Noname-ruyimg-Modified"
+合并打包结果
+(node:19652) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)

@@ -1,0 +1,8 @@
+// 重英神斧（装备技）：锁定技，你受到伤害后记录伤害牌名；之后受到同名牌伤害时伤害-1。
+// 旧JS中「按牌名记录/查重」无对应储存原语，无法精确表达。
+// 以 modify_current_damage 近似（每次伤害-1），注释注明差异：旧JS仅对已见过的牌名生效。
+skill gx_chongyingshenfu(4183953870) locked {
+  trigger damage_before owner_is_target {
+    effect modify_current_damage(self, -1);
+  }
+}

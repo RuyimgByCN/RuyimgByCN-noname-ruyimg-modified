@@ -1,0 +1,8 @@
+// 叛弑·伤（董卓·锁定技）：出牌阶段内造成杀的伤害时伤害+1，并跳过出牌阶段剩余时间。
+// 旧 JS 含 sourceSkill 寄生触发、panshi_damage 为 panshi 的子技能自动托管。
+// 近似：伤害+1效果，跳过出牌阶段无原语未建模。
+skill panshi_damage(3869610783) locked {
+  trigger damage_before owner_is_source {
+    effect modify_current_damage(self, 1);
+  }
+}

@@ -1,0 +1,11 @@
+// 必失（zji 系）：其他角色对你使用【杀】时，该杀对你无效，使用者摸一张牌。
+// 上游 extra_offline.js zybishi（target useCardToTargeted + 杀判定 + 使用者摸1
+// + evt.all_excluded=true 牌目标取消）。
+// 第一百零九批纠错：原移植「自己摸1」方向写反——上游是*使用者*摸1；「牌对该
+// 目标取消」由引擎既有的目标取消事件面承接（此处触发器为 useCardToTargeted 的
+// 目标侧等价），已按上游方向修正。
+skill zybishi(4265724085) {
+  trigger card_targeted owner_is_target_once {
+    effect draw_cards(event_source, 1);
+  }
+}

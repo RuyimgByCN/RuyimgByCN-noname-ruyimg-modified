@@ -1,0 +1,19 @@
+// 狭赏（olxiasheng）：锁定技。若你手牌中红色牌较多，你使用黑色牌时摸一张牌；
+// 若你手牌中黑色牌较多，你使用红色牌可多指定一个目标。
+// useCard 分支（红多于黑 + 使用黑牌 → 摸一张）已建模（黑色 = 黑桃/梅花，suit 1/3）；
+// useCard2 分支（黑多于红 + 使用红牌 → 增加一个目标）需 add-target 对话框原语，未建模。
+skill olxiasheng(2354381667) locked {
+  trigger card_used owner_source {
+    let red = hand_color_count(self, red);
+    let black = hand_color_count(self, black);
+    let suit = card_attribute(event_card, 2);
+    if red > black {
+      if suit == 1 {
+        effect draw_cards(self, 1);
+      }
+      if suit == 3 {
+        effect draw_cards(self, 1);
+      }
+    }
+  }
+}

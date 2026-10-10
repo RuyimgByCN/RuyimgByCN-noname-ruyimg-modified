@@ -1,0 +1,5 @@
+// jsrgzhangdeng（帐灯）：①当一名武将牌背面朝上的角色需要使用【酒】时，若你的武将牌背面朝上，其可以视为使用之。②当一名角色于一回合第二次发动〖帐灯①〗时，你将武将牌翻面至正面朝上。
+// 未建模：chooseToUse转化, 历史查询（DSL无对应原语）
+skill jsrgzhangdeng(4029648514) {
+  view_as jiu play_phase any;
+}

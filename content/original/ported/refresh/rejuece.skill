@@ -1,0 +1,8 @@
+// rejuece：刷新包技能。
+// triggers: player:phaseJieshuBegin
+skill rejuece(3793372931) {
+    // 近似：旧JS事件 phaseJieshuBegin → DSL事件 phase_end
+    trigger phase_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

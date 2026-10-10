@@ -1,0 +1,19 @@
+// 疾刺·亡（rejici2，OL 界徐盛「疾刺」的死亡分支，锁定技）：你死亡时，令伤害来源
+// 弃置 (7 − 你的「觚舌」标记数) 张牌，然后其失去 1 点体力。
+// 上游 (sp/skill.js:37280)：trigger { player: "die" }，forced；filter = source 存活；
+// content = num = 7 - countMark("regushe")；若 num > 0 则 source.chooseToDiscard
+// (num, true, "he")；然后 source.loseHp()。
+// 实现：death + owner_is_target_source_alive（source 存活守卫，dcjuexiang 同款）；
+// let n = 7 - mark_count(self, 3913395307)（regushe 标记在濒死的拥有者身上，计划期求值）；
+// n > 0 时 discard_hand_equip_expr(event_source, n)（表达式张数弃牌，含手牌/装备，
+// 上游 "he"）；然后 lose_hp(event_source, 1)。
+// 与上游差异：无（上游 chooseToDiscard 强制选牌，引擎原语确定性弃前 n 张）。
+skill rejici2(3976772344) locked {
+  trigger death owner_is_target_source_alive {
+    let n = 7 - mark_count(self, 3913395307);
+    if n > 0 {
+      effect discard_hand_equip_expr(event_source, n);
+    }
+    effect lose_hp(event_source, 1);
+  }
+}

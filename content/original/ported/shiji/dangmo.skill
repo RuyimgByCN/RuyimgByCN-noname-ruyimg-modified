@@ -1,0 +1,11 @@
+// 当陌（神太史慈）：出牌阶段使用第一张【杀】时（体力大于 1），
+// 可为其增加至多 hp-1 个其他合法目标。
+// 旧 JavaScript 仅作语义证据；首杀判定由 ABI 407 owner_source_first_sha_this_play_phase 权威校验，
+// 目标数量上限以 choose_add_current_sha_target 的玩家自选近似。
+skill dangmo(3677887018) {
+  trigger card_used owner_source_first_sha_this_play_phase optional {
+    if 1 < hp(self) {
+      effect choose_add_current_sha_target(self, event_card);
+    }
+  }
+}

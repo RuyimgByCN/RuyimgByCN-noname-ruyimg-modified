@@ -1,0 +1,5 @@
+// meihun：player:phase_end, target:card_targeted, 需选择目标, 多分支选择, 异步。
+skill meihun(2358497058) {
+  trigger phase_end owner_alive optional {
+  }
+}

@@ -1,0 +1,5 @@
+03971ea4691b03e7772179f431d81f24a04f5a87588f7c4472f63192c8aff09a  docs/operations/evidence/2026-10-07-e01-feature-inventory/feature_inventory.py
+22a65af5d1f8718a4f5cb2ce9afc130a3290fe17d847876c58ecca2da50a34e7  docs/operations/evidence/2026-10-07-e01-feature-inventory/feature-inventory.json
+9c263397145962aa8285620aa08ffa812abc1d8fd0cdb42214ac7deb5d34a4cb  docs/operations/evidence/2026-10-07-e01-feature-inventory/feature-summary.json
+c9966decac85c7294b0d28265e83552cea8540c5d2a67c1ccaebeeac8af5eecd  docs/operations/evidence/2026-10-07-e01-feature-inventory/README.md
+c1112b85c446c2d413d0a767b4cd9d2e5f396c2e55ea58cec2b6cf16e8c4f0e2  docs/architecture/native-progress.md

@@ -1,0 +1,9 @@
+// 忠魂：使用或打出红色牌后，可展示牌堆顶；若仍为红色则获得，否则置入弃牌堆。
+skill pszhonghun(4055252724) {
+    trigger card_used owner_source_red optional {
+        effect reveal_top_gain_if_color(self, red);
+    }
+    trigger card_responded owner_source_red optional {
+        effect reveal_top_gain_if_color(self, red);
+    }
+}

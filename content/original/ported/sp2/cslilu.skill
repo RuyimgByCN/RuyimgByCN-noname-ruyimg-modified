@@ -1,0 +1,9 @@
+// 从谏·礼赂（SP张鲁·改）：摸牌阶段，改为将手牌摸至 min(maxHp,5)，至少将一张手牌交给一名角色；
+// 若给出的牌大于"礼赂"标记数，加体力上限并回复1体力。
+// 旧 JS 含 drawTo、custom give + mark_count 比较、gainMaxHp + recover。
+// DSL 无 drawTo 指定数目原语、无 mark 条件比较分支。
+skill cslilu(3463225460) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 cslilu 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

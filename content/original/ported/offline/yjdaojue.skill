@@ -1,0 +1,5 @@
+// yjdaojue（锁定技/触发技）：音效名:yjdaojue, 觉醒技, 锁定技, player:card_used, player:cards_moved, global:cards_moved, 多分支选择, 加技能, 含子技能, 异步。
+skill yjdaojue(3524827484) locked {
+  trigger card_used always {
+  }
+}

@@ -1,0 +1,10 @@
+// 诗诵（艾莉卡）：回合内使用牌时，若与上回合同位序的牌类型相同，摸一张牌。手牌上限+护甲值。
+// 旧 JS 的「历史回合同位序类型比较+护甲值 modifier」无对应 DSL 原语，未建模。
+// 诗诵（艾莉卡）：回合内使用牌时，若与上回合同位序的牌类型相同，摸一张牌。
+// 手牌上限+护甲值。
+// 实现：`modifier hand_limit add owner_mark_3`（护甲=MARK_HUJIA 标记 def 3）。
+// 近似：同位序同类型摸牌子句（跨回合 useCard 历史对照）未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill erika_shisong(2366255007) locked {
+  modifier hand_limit add owner_mark_3;
+}

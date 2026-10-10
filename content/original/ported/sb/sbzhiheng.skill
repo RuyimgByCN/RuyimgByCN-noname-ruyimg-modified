@@ -1,0 +1,9 @@
+// 制衡（界孙权）：出牌阶段限一次，你可以弃置任意张牌，然后摸等量的牌；若你弃置的
+// 牌中包含所有类别，额外摸一张。
+// 旧 JS 仅作语义证据；弃置与摸牌复用既有 discard_selected_draw_all_hand_bonus
+// 管线（界制衡同构近似，ABI 包批次 0501）。
+skill sbzhiheng(4242420001) {
+  active play_phase uses_per_turn 1 select_he 1 255 {
+    effect discard_selected_draw_all_hand_bonus(self);
+  }
+}

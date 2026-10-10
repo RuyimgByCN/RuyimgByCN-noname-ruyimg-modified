@@ -1,0 +1,6 @@
+// zhongzuo（忠佐）：一名角色的结束阶段开始时，若你于此回合内造成或受到过伤害，则你可以令一名角色摸两张牌。若该角色已受伤，则你摸一张牌。
+skill zhongzuo(3174196098) {
+  trigger phase_discard owner_alive {
+    effect draw_cards(self, 2);
+  }
+}

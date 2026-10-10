@@ -1,0 +1,5 @@
+// psjiefa：player:card_targeted, 需选择目标, 多分支选择, 失去体力, 异步。
+skill psjiefa(2151533525) {
+  trigger card_targeted owner_alive {
+  }
+}

@@ -1,0 +1,5 @@
+// tyqianshou：global:phaseBegin, 二选一, 失去体力, 加技能, 含子技能, 异步。
+skill tyqianshou(2788394654) {
+  trigger phase_any_end owner_alive {
+  }
+}

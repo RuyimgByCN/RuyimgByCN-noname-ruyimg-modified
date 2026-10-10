@@ -1,0 +1,5 @@
+// zhenge：旧JS复杂效果。
+// 旧JS含subSkill，DSL无法精确建模。
+skill zhenge(3605359021) {
+  modifier hand_limit add 1;
+}

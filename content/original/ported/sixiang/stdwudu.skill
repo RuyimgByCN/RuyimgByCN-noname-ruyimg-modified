@@ -1,0 +1,7 @@
+// 无度：一名没有手牌的角色将受到伤害时，可减1点体力上限并防止此伤害。
+skill stdwudu(4151205179) {
+  trigger damage_before owner_alive_event_player_hand_empty optional {
+    effect prevent_current_damage();
+    effect change_max_hp(self, -1);
+  }
+}

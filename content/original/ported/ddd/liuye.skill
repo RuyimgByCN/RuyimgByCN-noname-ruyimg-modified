@@ -1,0 +1,21 @@
+// 3D精选 刘晔「察势/齐策」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddchashi(2811969013) {
+  trigger phase_play owner_alive_other_phase_play_dddchashi_available optional {
+    effect resolve_ddd_liuye(self, event_player, event_card, 0);
+  }
+  trigger card_used dddchashi_matching_card {
+    effect resolve_ddd_liuye(self, event_source, event_card, 1);
+  }
+  trigger phase_play_end dddchashi_pending_phase_play_end {
+    effect resolve_ddd_liuye(self, event_player, event_card, 4);
+  }
+}
+
+skill dddqice(4207915436) {
+  trigger phase_begin owner_alive_dddqice_ready optional {
+    effect resolve_ddd_liuye(self, event_player, event_card, 2);
+  }
+  trigger card_used owner_source_trick {
+    effect resolve_ddd_liuye(self, event_source, event_card, 3);
+  }
+}

@@ -1,0 +1,15 @@
+$ LX.1 去混淆执行记录（2026-10-08，工具 /tmp/lx1_deob3.js 自含式 Node 脚本）
+方法：VM 隔离注入 28 个 _0x 函数（表/解码器/访问器/包装）+ 7 张 jsjiami v6 字符串表声明；正文从不执行；单遍扫描全字面量调用解码代换，缺件自动提取重试
+结果：substitutions=632 / fails=5（4 Invalid character + 1 动态属性访问，均非字符串表路径）/ skipped=45（非字面量参数调用）
+debugger 陷阱中和：2 处 → 空语句
+
+$ 可读版段落清单
+武将注册: mb_caomao（手杀曹髦）, mb_caomao2（两形态）
+技能注册: mbpvbm4, mb_caomao, mb_caomao2, mbqianlong, mbcmqingzheng, mbcmjiushi, mbjuejin, mbcmfangzhu, mb_, mbweitong, mbqianlong_refresh, mbqianlong_1, mbqianlong_2, mbqianlong_3
+<style> 块: 1；@keyframes: 1（剑特效/西瓜标签动画 CSS）
+updateProgress 调用: 11（加载进度 UI）
+config 元数据: diskURL/forumURL/version=1.0；files.character/card/skill 均为空数组（资源全内联）
+
+$ 残留未解码调用样本（fails 细节）
+Invalid character ×4：RC4 解码产出控制字符（非 UTF-8 路径，或为二进制/装饰串）
+动态属性访问 ×1：_0x2ddfbc[_0x5d58(...)]（键由运行时计算，静态不可代换）

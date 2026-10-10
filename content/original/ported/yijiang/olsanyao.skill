@@ -1,0 +1,9 @@
+// 散谣（OL马谡 改版）：出牌阶段可对「手牌最多」或「体力最大」的一名角色造成1点伤害。
+// 每阶段最多两次且两项各可选一次。
+// 旧 JS 的 ChooseButton（选择模式：手牌最多/体力最大）+选择目标+伤害无精确原语。
+// max_hand / max_hp 目标选定向无对应 filter，空定义。
+skill olsanyao(3683330010) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

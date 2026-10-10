@@ -1,0 +1,5 @@
+// 压阵：装备区内任意一张牌可当【杀】使用或打出。
+skill yyyazhen(3406865651) {
+  view_as sha play_phase any from equip;
+  view_as sha response any from equip;
+}

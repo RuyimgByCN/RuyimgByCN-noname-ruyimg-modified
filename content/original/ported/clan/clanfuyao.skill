@@ -1,0 +1,11 @@
+// 扶摇（族诸葛果）：转换技。出牌阶段，你可以将手牌中展示过和未展示过的牌：阳，展示
+// 未展示过的手牌至两者数量相同；阴，弃置任意手牌至两者数量相同。然后你视为使用一张
+// 本阶段未以此法使用过的单目标普通锦囊牌。
+// 上游 (clan/skill.js:6-131)：gaintag「clanfuyao_shown」展示追踪 + 单目标普通锦囊
+// 虚拟使用 + 使用历史去重。
+// 「手牌展示 gaintag 追踪」「任意单目标普通锦囊虚拟使用」「阶段使用历史」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill clanfuyao(2431139064) locked {
+  // INTENTIONAL_EMPTY_NOOP: shown-gaintag + virtual trick unavailable
+  modifier hand_limit add 0;
+}

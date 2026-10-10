@@ -1,0 +1,6 @@
+// 勤王：主公技，响应打出虚拟【杀】，蜀势力角色可弃基本牌来让该杀生效。
+// 旧 JS 的「主公技虚拟响应 + 势力友方轮流弃牌确认」无对应原语，未建模。
+skill stdqinwang(3349429139) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

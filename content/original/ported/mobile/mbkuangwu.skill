@@ -1,0 +1,8 @@
+// mbkuangwu（诳武）：其他角色的出牌阶段开始时，你可将手牌调整至与其手牌数相同（至多摸至五张，弃至一张），然后视为对其使用一张【决斗】。此【决斗】结算结束后，若其未因此牌受到伤害，则你失去1点体力且此技能失效直到本轮结束。
+skill mbkuangwu(4062891569) {
+  trigger phase_play owner_alive {
+    effect draw_cards(self, 1);
+    effect discard_selected(self);
+    effect lose_hp(self, 1);
+  }
+}

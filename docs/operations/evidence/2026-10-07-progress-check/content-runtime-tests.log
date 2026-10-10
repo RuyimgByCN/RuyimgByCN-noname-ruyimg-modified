@@ -1,0 +1,83 @@
+# 2026-10-07 10:57:59 CST  cargo test --offline -p content-runtime --no-fail-fast
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.23s
+     Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/cursor-sandbox-cache/9e50ce9418aa7177f838e7e5015fd945/cargo-target/debug/deps/content_runtime-c01df1716b80e653)
+
+running 11 tests
+test compat::tests::additive_hosts_accept_older_additive_packages ... ok
+test compat::tests::previous_host_rejects_current_package ... ok
+test compat::tests::abi8_host_rejects_abi9_package ... ok
+test compat::tests::abi7_host_rejects_abi8_package ... ok
+test compat::tests::abi3_host_rejects_abi4_package ... ok
+test compat::tests::abi5_host_rejects_abi6_package ... ok
+test compat::tests::abi4_host_rejects_abi5_package ... ok
+test compat::tests::abi6_host_rejects_abi7_package ... ok
+test lock::tests::lock_hash_stable ... ok
+test sign::tests::roundtrip ... ok
+test channel::tests::plan_and_apply_channel ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/active_catalog.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/cursor-sandbox-cache/9e50ce9418aa7177f838e7e5015fd945/cargo-target/debug/deps/active_catalog-2cdaabbe7d00a2fc)
+
+running 5 tests
+test catalog_pages_are_bounded_and_keep_page_aliases_and_names ... ok
+test skin_index_changes_only_asset_hash_and_round_trips_at_package_root ... ok
+test package_rejects_bad_skin_resources_and_unsafe_renderer_values ... ok
+test catalog_rejects_missing_targets_and_duplicate_active_skin_ids ... ok
+test active_store_aggregates_cross_package_skins_and_legacy_assets ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/atomic_install.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/cursor-sandbox-cache/9e50ce9418aa7177f838e7e5015fd945/cargo-target/debug/deps/atomic_install-107eb1c4160ea969)
+
+running 7 tests
+test lock_empty_stable ... ok
+test staging_gc_clears_orphan ... ok
+test bad_signature_rejected ... ok
+test unsigned_rejected_unless_allowed ... ok
+test revoke_blocks_activate ... ok
+test activation_requires_exact_dependencies ... ok
+test signed_install_activate_rollback ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/cold_import_all_26.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/cursor-sandbox-cache/9e50ce9418aa7177f838e7e5015fd945/cargo-target/debug/deps/cold_import_all_26-1dd80c394db45f77)
+
+running 1 test
+test cold_import_all_26 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.00s
+
+     Running tests/extension_import.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/cursor-sandbox-cache/9e50ce9418aa7177f838e7e5015fd945/cargo-target/debug/deps/extension_import-107537f972b23236)
+
+running 5 tests
+test bad_asset_leaves_staging_and_active_unchanged ... ok
+test catalog_validation_failure_does_not_change_active ... ok
+test drop_in_directories_import_dependencies_metadata_and_assets ... ok
+test exact_dependency_cycle_imports_as_an_atomic_group ... ok
+test reconcile_removes_deleted_disabled_and_broken_dependents ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/offline_npack.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/cursor-sandbox-cache/9e50ce9418aa7177f838e7e5015fd945/cargo-target/debug/deps/offline_npack-de2ce7b0b232f83b)
+
+running 1 test
+test offline_package_imports_with_current_host_and_exact_dependencies ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.71s
+
+     Running tests/standard_npack.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/cursor-sandbox-cache/9e50ce9418aa7177f838e7e5015fd945/cargo-target/debug/deps/standard_npack-f8a79906381ef02f)
+
+running 1 test
+test standard_npack_parses_installs_and_activates ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.15s
+
+   Doc-tests content_runtime
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+exit=0

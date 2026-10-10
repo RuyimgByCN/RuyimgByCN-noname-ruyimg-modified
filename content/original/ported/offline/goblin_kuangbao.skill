@@ -1,0 +1,6 @@
+// goblin_kuangbao：锁定技, player:damage_before, source:damage_before, 异步。
+skill goblin_kuangbao(2227176529) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

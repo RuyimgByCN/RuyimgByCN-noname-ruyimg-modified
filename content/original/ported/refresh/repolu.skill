@@ -1,0 +1,9 @@
+// 破虏：击杀后须仍存活；自身死亡分支允许死亡拥有者完成目标选择。
+skill repolu(2820205777) {
+  trigger death owner_alive_is_source {
+    effect choose_repolu_targets_draw(self);
+  }
+  trigger death owner_is_target {
+    effect choose_repolu_targets_draw(self);
+  }
+}

@@ -1,0 +1,8 @@
+// 离论（族荀淑）：出牌阶段限一次。重铸两张同名牌，然后可使用其中一张（进入弃牌堆的）。本回合内不能再重铸此牌名。
+// 旧 JS 的「同名重铸」「使用弃牌堆中的牌」「本回合牌名禁用」无对应原语。
+// 空定义：需 expansion 支持同名卡牌、弃牌堆使用。
+skill clanlilun(2919327705) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

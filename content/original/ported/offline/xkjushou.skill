@@ -1,0 +1,5 @@
+// xkjushou：锁定技, global:phaseBefore, player:game_started, 需选择目标, 二选一, 异步。
+skill xkjushou(3558488793) {
+  trigger phase_begin owner_alive {
+  }
+}

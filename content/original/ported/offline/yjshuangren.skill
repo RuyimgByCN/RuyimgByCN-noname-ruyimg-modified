@@ -1,0 +1,6 @@
+// yjshuangren（主动技(phaseUse)）：音效名:shuangren, 主动(phaseUse), 需拼点, 加技能, 含子技能, 异步。
+// 未建模：子技能机制、异步await、拼点，DSL 无对应原语。
+// 空定义保留占位。
+skill yjshuangren(2319949115) {
+  modifier hand_limit add 1;
+}

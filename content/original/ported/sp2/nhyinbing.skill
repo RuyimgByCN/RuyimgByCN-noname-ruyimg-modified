@@ -1,0 +1,7 @@
+skill nhyinbing(2701847677) locked {
+  modifier damage_as_hp_loss(sha) override 1;
+
+  trigger hp_lost owner_alive_not_target {
+    effect draw_cards(self, 1);
+  }
+}

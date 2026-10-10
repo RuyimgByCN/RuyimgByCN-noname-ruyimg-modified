@@ -1,0 +1,7 @@
+// 诡诘：你可以弃置两张红色牌，摸一张牌，然后视为使用或打出一张【闪】。
+// 近似：view_as shan from 2 张手牌/装备区牌。丢失：
+// ①「红色牌」约束（DSL view_as filter 不支持颜色过滤）
+// ②「先弃牌再摸1再视为出闪」的中间摸牌环节——旧 JS precontent 中弃2摸1，view_as 无 pre-content 钩子。
+skill stdguijie(3932110580) {
+  view_as shan response any from hand_equip up_to 2;
+}

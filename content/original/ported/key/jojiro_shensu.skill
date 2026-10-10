@@ -1,0 +1,7 @@
+// 神速（城次郎）：分组技能，包含神速1/2/4三种发动方式（跳过不同阶段出杀）。
+// 旧 JS 纯分组标记技能，无独立效果，未建模。
+skill jojiro_shensu(2879208191) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jojiro_shensu = 标记型技能（charlotte，skill.js:6216），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

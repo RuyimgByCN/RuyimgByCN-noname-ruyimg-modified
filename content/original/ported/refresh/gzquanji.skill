@@ -1,0 +1,26 @@
+// 权计（refresh 钟会 gzquanji）：当你受到或对其他角色造成伤害后，每回合限一次，
+// 你可以摸一张牌，然后将一张牌作为「权」置于武将牌上；你的手牌上限+X（X为「权」数）。
+// 上游 (refresh/skill.js gzquanji)：trigger player damageEnd + source damageSource；
+// frequent；filter = storage gzquanji_used 不含本触发名（addTempSkill 每回合过期
+// + markAuto 每分支去重）；content = draw(1) + chooseCard("he") → addToExpansion
+// gaintag gzquanji；mod maxHandcard + 权数；onremove 清堆入弃牌堆。
+// 实现（2026-09-10 第二百一十五批·store 死腿修复 + quanji 家族晋升）：
+// 双臂 optional → draw_cards(self,1) + store_selected_in_skill_pile(self)
+// （本批修复：该语句原 cards 恒空死腿——现自开 SelectCards 1/1 必选续体
+// Cont 297）；每分支限一次 = owner_is_target_once / owner_source_once_per_turn
+// （turn_limit 机制）。「权」堆 = 本技自身堆（3651179843，gzpaiyi 供给面就此闭合）。
+// 近似（登记债）：①上游每分支各限一次（triggername 去重）收窄为 skill 级共享
+// turn_fire_count——双臂合计每回合限一次（保守收窄）；②上游选牌域 "he"（手+装备）
+// 收窄为手牌（store 原语仅收手牌）；③frequent 自动口径锁定为 optional 确认；
+// ④onremove 清堆未建模。
+skill gzquanji(3651179843) {
+  trigger damage owner_is_target_once optional {
+    effect draw_cards(self, 1);
+    effect store_selected_in_skill_pile(self);
+  }
+  trigger damage owner_source_once_per_turn optional {
+    effect draw_cards(self, 1);
+    effect store_selected_in_skill_pile(self);
+  }
+  modifier hand_limit add owner_skill_pile_count;
+}

@@ -1,0 +1,11 @@
+// 武娘（olwuniang）：你使用【杀】指定唯一目标后，其可选择对你使用一张【杀】。
+// 上游 (sp/skill.js:29695)：useCardAfter，filter = 杀 且 单目标；content = 目标
+// chooseToUse(杀) 对拥有者使用（filterTarget 限定拥有者）。
+// 实现：card_used + owner_source_sha optional → choose_use_virtual_sha(event_player, normal_distance)。
+// 与上游差异：单目标限定未建模（多目标杀下每个目标都可反击）；目标可对任意合法角色使用
+// 而非仅拥有者（上游 filterTarget 限定）；无次数限制（上游 usable:1），已注明。
+skill olwuniang(3669301225) {
+  trigger card_used owner_source_sha optional {
+    effect choose_use_virtual_sha(event_player, normal_distance);
+  }
+}

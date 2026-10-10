@@ -1,0 +1,5 @@
+// 天枢：手牌上限增加存活角色势力数减一。
+skill stdtianshu(2266533034) {
+  modifier hand_limit add alive_group_count;
+  modifier hand_limit add -1;
+}

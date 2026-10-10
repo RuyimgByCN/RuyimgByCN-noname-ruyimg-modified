@@ -1,0 +1,7 @@
+// dcgonghu：锁定技。
+// 旧JS含subSkill、expansion区，DSL无法精确建模。
+skill dcgonghu(4027862832) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

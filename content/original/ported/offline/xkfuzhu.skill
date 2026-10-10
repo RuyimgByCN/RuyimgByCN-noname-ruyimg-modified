@@ -1,0 +1,5 @@
+// xkfuzhu：global:card_used, 异步。
+skill xkfuzhu(4106235614) {
+  trigger card_used owner_alive {
+  }
+}

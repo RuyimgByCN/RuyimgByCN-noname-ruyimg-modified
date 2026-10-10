@@ -1,0 +1,7 @@
+// 昭然·3（昭然系）：出牌阶段结束/获得牌时清理辅助。
+// 旧 JS 的清理语义，无独立规则行为。
+skill zhaoran3(3586348812) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

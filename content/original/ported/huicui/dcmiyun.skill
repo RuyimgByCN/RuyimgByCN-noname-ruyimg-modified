@@ -1,0 +1,5 @@
+// dcmiyun：锁定技；失去体力。
+// 旧JS含subSkill、gaintag标记、expansion区、多步选择，DSL无法精确建模。
+skill dcmiyun(3947158626) {
+  modifier hand_limit add 1;
+}

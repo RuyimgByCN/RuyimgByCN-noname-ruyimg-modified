@@ -1,0 +1,7 @@
+// 连环：每个出牌阶段限一次，先失去1点体力，再以普通流程使用无实体牌的【铁索连环】。
+skill jylianhuan(3727355012) {
+  active play_phase uses_per_play_phase 1 targets 1 2 {
+    effect lose_hp(self, 1);
+    effect use_virtual_card_on_selected_targets(self, tiesuo);
+  }
+}

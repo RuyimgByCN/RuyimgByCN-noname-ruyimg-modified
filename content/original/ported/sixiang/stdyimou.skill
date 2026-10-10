@@ -1,0 +1,6 @@
+// 毅谋：受到正数伤害后，可交给一名其他存活角色一张当前手牌或装备牌。
+skill stdyimou(4237148705) {
+  trigger damage owner_is_target_hand_equip_nonempty_other_alive optional {
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

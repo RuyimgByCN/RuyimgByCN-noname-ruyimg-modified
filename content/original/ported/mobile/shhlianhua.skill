@@ -1,0 +1,6 @@
+// 莲花（shhlianhua）：当你成为【杀】的目标时，你摸一张牌。
+skill shhlianhua(4132145816) locked {
+  trigger card_targeted owner_is_target_event_card_sha {
+    effect draw_cards(self, 1);
+  }
+}

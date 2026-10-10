@@ -1,0 +1,5 @@
+// 灵影：杀无距离限制，且每阶段使用上限加一。
+skill nslingying(4189702714) locked {
+  modifier attack_range override 2147483647;
+  modifier sha_use_limit add 1;
+}

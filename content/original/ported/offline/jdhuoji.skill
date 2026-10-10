@@ -1,0 +1,6 @@
+// jdhuoji（锁定技/主动技(phaseUse)/触发技）：音效名:sbhuoji, 觉醒技, 锁定技, player:phase_prepare, player:dying, source:damage, 主动(phaseUse), 造成伤害, 加技能, 含子技能, 多步骤, 异步。
+skill jdhuoji(3272980326) locked {
+  trigger phase_prepare always {
+    effect deal_damage(self, event_source, 1);
+  }
+}

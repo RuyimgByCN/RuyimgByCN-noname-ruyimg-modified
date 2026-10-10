@@ -1,0 +1,4 @@
+// 赤心②：方片手牌或装备牌可当【闪】使用或打出。
+skill chixin2(2383513879) {
+  view_as shan response diamond from hand_equip;
+}

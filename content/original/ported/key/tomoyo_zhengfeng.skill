@@ -1,0 +1,8 @@
+// 征风（智代·使命技）：准备阶段选攻击范围内一名角色判定，其下回合前使用同颜色牌时你摸牌；使命达成/失败有后续效果。
+// 旧 JS 的 使命技+判定+颜色追踪+delay效果 需使命系统与多事件追踪原语，未建模。
+skill tomoyo_zhengfeng(3769830951) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 tomoyo_zhengfeng（skill.js:2062）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

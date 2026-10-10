@@ -1,0 +1,5 @@
+// jysashuang：player:phase_end, 异步。
+skill jysashuang(2923071087) {
+  trigger phase_end owner_alive {
+  }
+}

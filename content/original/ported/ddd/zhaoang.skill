@@ -1,0 +1,9 @@
+// 3D精选 赵昂「奋计」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddfenji(782265781) {
+  trigger phase_draw owner_alive_ddd_fenji_available optional {
+    effect resolve_ddd_zhaoang(self, 0);
+  }
+  trigger phase_discard owner_alive_ddd_fenji_available optional {
+    effect resolve_ddd_zhaoang(self, 1);
+  }
+}

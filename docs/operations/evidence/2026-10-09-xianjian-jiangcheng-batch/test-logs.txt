@@ -1,0 +1,18 @@
+== cargo test --offline --test g1_wudian jiangcheng（定向回归）==
+running 2 tests
+test jiangcheng_longhuo_fires_at_own_phase_end ... ok
+test jiangcheng_fenshi_awaken_once_on_rescue ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 64 filtered out; finished in 0.05s
+
+
+== cargo test --offline --test replay_scenarios（golden）==
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+== cargo test --offline -p engine-native（全量）==
+engine-native 合计: 479 passed / 0 failed / 1 ignored
+
+== 依赖包 ==
+deps 合计: 63 passed / 0 failed

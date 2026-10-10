@@ -1,0 +1,20 @@
+// 隐据（辛毗）：出牌阶段限一次，选择一名其他角色，其须二选一：对辛毗使用一张
+// 【杀】，或跳过其下回合的出牌阶段和弃牌阶段。
+// 旧 JavaScript 仅作语义证据；二选一由 ABI 421 resolve_spyinju 权威结算，
+// “跳过下回合”以目标获得跳过标记、其准备阶段消费表达（纯 DSL 辅助技能）。
+skill spyinju(3592329121) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_spyinju(self, event_source);
+  }
+}
+
+// 隐据·跳过：拥有者回合准备阶段开始时，若有跳过标记则跳过出牌与弃牌阶段并清空。
+skill spyinju_skip(2728392676) {
+  trigger phase_prepare owner_is_target {
+    if 0 < mark_count(self, 2728392676) {
+      effect skip_next_play_phase(self);
+      effect skip_next_discard_phase(self);
+      effect remove_mark(self, 2728392676, 0);
+    }
+  }
+}

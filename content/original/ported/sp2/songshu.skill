@@ -1,0 +1,21 @@
+// 颂蜀：可反复拼点；第一次未严格获胜时双方各摸两张牌，且本阶段不能再发动。
+skill songshu(3706775979) {
+  active play_phase targets 1 1 other can_compare select_hand 1 1 {
+    effect choose_compare_selected_hand_card(self, event_source, 4187252610, 2373662584);
+  }
+}
+
+skill songshu_win(4187252610) {
+  trigger hand_compare_finished owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}
+
+skill songshu_lose(2373662584) {
+  trigger hand_compare_finished owner_is_target {
+    effect draw_cards(self, 2);
+    effect draw_cards(event_source, 2);
+    effect disable_skill_by_def_until_turn_end(self, 3706775979);
+    effect remove_skill(self_skill);
+  }
+}

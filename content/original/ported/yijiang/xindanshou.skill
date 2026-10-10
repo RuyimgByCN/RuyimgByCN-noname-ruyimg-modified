@@ -1,0 +1,11 @@
+// 新胆守（陈矫）：结束阶段，若你不是当前回合角色且你的手牌装备数不小于其手牌数，你可弃X张牌对其造成1点伤害；或当你成为基本/锦囊牌目标时，你可摸X张牌（X=本局以此法成为目标的次数）。
+// 旧 JS 的双触发条件+复杂计数逻辑；DSL 无法精确表达。
+// 以 phase_end 触发造成伤害+card_targeted 摸牌近似，但丢掉了含条件计数的精确性。
+skill xindanshou(2614485424) {
+  trigger phase_end owner_alive_not_target optional {
+    effect deal_damage(self, event_player, 1);
+  }
+  trigger card_targeted owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

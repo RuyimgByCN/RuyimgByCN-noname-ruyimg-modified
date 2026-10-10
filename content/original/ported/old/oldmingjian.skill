@@ -1,0 +1,7 @@
+// 明鉴：出牌阶段开始时可将所有手牌交给一名其他角色并立即结束当前回合；
+// 该角色随后获得一个无视翻面状态、仅包含出牌阶段的额外阶段。
+skill oldmingjian(2370380501) {
+  trigger phase_play owner_is_target_hand_nonempty optional {
+    effect resolve_oldmingjian(self);
+  }
+}

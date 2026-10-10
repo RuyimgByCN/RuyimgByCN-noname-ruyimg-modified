@@ -1,0 +1,7 @@
+// 佯疾（族杨彪/族杨修/族杨赐/族杨忠）：准备阶段或体力值/体力上限变化后的阶段结束时。可使用一张牌；若未造成伤害，可将一张黑桃牌当【乐不思蜀】对当前回合角色使用。
+// 旧 JS 的「体力变化追踪」「未造成伤害+乐不思蜀转换」无对应原语。
+// 空定义：需 expansion 支持体力变化检测和条件性延时锦囊。
+skill clanyangji(2325212811) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

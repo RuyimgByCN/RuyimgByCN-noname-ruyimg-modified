@@ -1,0 +1,6 @@
+// 旧客户端“箜声”AI 出牌顺序提示；无权威规则行为。
+skill kongsheng_ai(3326150846) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

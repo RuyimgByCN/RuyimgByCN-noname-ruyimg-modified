@@ -1,0 +1,10 @@
+// 妙心·OL（olmiaoxin，桓舒君）：受到伤害后摸两张牌。
+// 上游 (sp/skill.js:4903)：trigger player:damageEnd；forced；content = 若「温宜」
+// 可用次数耗尽则 +1 限并摸 1，否则摸 2。实现：damage + owner_is_target（DamageDealt
+// 后自动触发）→ draw_cards(self, 2)。
+// 与上游差异：「温宜」次数联动分支未建模（olwenyi 标记不会出现），固定摸 2。
+skill olmiaoxin(3006386800) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 2);
+  }
+}

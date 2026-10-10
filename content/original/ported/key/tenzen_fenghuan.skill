@@ -1,0 +1,8 @@
+// 风环（天善）：成为杀/伤害锦囊唯一目标后，可弃置点数之和大于等于其点数2倍的牌视为使用同名牌。
+// 旧 JS 的 点数匹配+虚拟同名牌 需点数计算与复制原语，未建模。
+skill tenzen_fenghuan(4267881001) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 tenzen_fenghuan（skill.js:6）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：用牌后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

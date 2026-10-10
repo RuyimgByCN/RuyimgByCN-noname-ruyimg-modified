@@ -1,0 +1,5 @@
+// 新义从：至其他角色的距离减少当前体力减一，其他角色至你的距离增加已损体力减一，均不低于零。
+skill xinyicong(3328413812) {
+  modifier distance_from add -owner_hp_minus_one;
+  modifier distance_to add owner_lost_hp_minus_one;
+}

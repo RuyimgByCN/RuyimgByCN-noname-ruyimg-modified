@@ -1,0 +1,7 @@
+// 烈弓：国战“授钺”的攻击范围 +1 由模式包的全局 attack_range modifier 提供；
+// 此过滤器始终读取统一攻击范围查询，因此无需在技能里复制模式判断。
+skill liegong(2510589015) {
+  trigger card_targeted owner_source_sha_target_hand_gte_hp_or_lte_attack_range optional {
+    effect make_current_sha_target_unrespondable(self, event_card, event_player);
+  }
+}

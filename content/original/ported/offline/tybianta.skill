@@ -1,0 +1,5 @@
+// tybianta（主动技(multi)/触发技）：target:card_targeted, player:phase_end, 主动(multi), 移出游戏, 加技能, 含子技能, 异步。
+skill tybianta(2661325305) {
+  trigger card_targeted owner_alive optional {
+  }
+}

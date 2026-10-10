@@ -1,0 +1,8 @@
+// 【下下签】伤害 +1，且不能使用或以【桃】/【酒】自救。
+skill tiansuan2_4(3604116303) locked {
+  modifier damage_taken_amount add 1;
+  modifier card_use_cancel(tao) override 1;
+  modifier card_use_cancel(jiu) override 1;
+  modifier card_save_cancel(tao) override 1;
+  modifier card_save_cancel(jiu) override 1;
+}

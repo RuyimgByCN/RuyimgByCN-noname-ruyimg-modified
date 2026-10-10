@@ -1,0 +1,8 @@
+// 宝石（无名）：摸牌阶段结束后，重复亮出牌堆顶牌。若亮出牌名字数之和>10则停止；你可选择获得已亮出牌或继续亮出一张。
+// 旧JS的牌名字数计数（get.cardNameLength）、循环亮牌、玩家选择"获得/继续"流程均无对应原语。
+// 以空定义保留编译占位，需card_name_length表达式与循环交互新原语。
+skill dcbaoshi(2497698025) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

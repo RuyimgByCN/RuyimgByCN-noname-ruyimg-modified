@@ -1,0 +1,5 @@
+skill bizheng(3859813014) {
+  trigger phase_draw_end owner_is_target optional {
+    effect choose_other_bizheng(self);
+  }
+}

@@ -1,0 +1,10 @@
+// 武刃（由弦）：锁定技。其他角色的摸牌阶段开始时,若其为你的友方角色,其本阶段
+// 摸牌数+1。
+// 旧 JS 仅作语义证据;「友方」以 relation 表达式（盟友）判定,与旧 JS isFriendOf 近似。
+skill yuzuru_bujin(3769301121) locked {
+  trigger phase_draw owner_alive {
+    if relation(event_player, self) == 1 {
+      effect increase_current_draw_count(event_player, 1);
+    }
+  }
+}

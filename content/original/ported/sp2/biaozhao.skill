@@ -1,0 +1,22 @@
+// 表召（SP张鲁）：结束阶段，若武将牌上没有"表"，可将一张手牌/装备区牌置于
+// 武将牌上作为"表"。同点数牌入弃牌堆后"表"入弃牌堆并失去1体力；准备阶段
+// 有"表"则移去并令一名角色回复1点体力摸三张牌。
+// 上游 (sp2/skill.js biaozhao)：trigger player phaseJieshuBegin；direct；
+// filter he>0 且 !getExpansions.length（单张在场门控）；content chooseCard
+// ("he") → addToExpansion gaintag biaozhao；group biaozhao2/biaozhao3 为
+// 同点数消耗面。
+// 实现（2026-09-10 第二百一十六批·A0 置入面散批）：主面 trigger phase_end
+// owner_is_target optional + body 级 if skill_pile_count(self, 3640810944) == 0
+// （堆空门控）→ store_selected_in_skill_pile(self)（批 215 修复后自开
+// SelectCards 1/1 必选续体 Cont 297）。
+// 近似（登记债）：①biaozhao2/3 消耗面（同点数入弃失体力/准备阶段移去+摸至全场
+// 最高手牌数≤5+回复1）未建模——摸至量含全场手牌上限查询不可表达；
+// 未建模；②上游选牌域 "he"（手+装备）收窄为手牌；③direct+chooseCard(bool)
+// 口径锁定为 optional 确认+必选；④onremove 清堆未建模。
+skill biaozhao(3640810944) {
+  trigger phase_end owner_is_target optional {
+    if skill_pile_count(self, 3640810944) == 0 {
+      effect store_selected_in_skill_pile(self);
+    }
+  }
+}

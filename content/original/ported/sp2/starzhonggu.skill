@@ -1,0 +1,59 @@
+skill starzhonggu(2431837100) locked lord_only {
+  modifier draw_count add round_at_least_alive_qun_count;
+  modifier draw_count add round_at_least_alive_qun_count;
+  modifier draw_count add -round_below_alive_qun_count;
+}
+
+// Legacy metadata-only placeholders (`charlotte`, empty, or audio-only); no rule behavior.
+skill xianshuai2(2692324278) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}
+skill songshu_ai(2944942931) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}
+skill longdan_tongyuan(2457056828) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}
+skill ocongjian_tongyuan(3630222571) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}
+skill refenyin_wufan(3683024082) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}
+skill xinfu_sidaoy(2636822668) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}
+skill xpchijie4(2540098888) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xpchijie4 = 标记型技能（空体 {}，skill.js:15369），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill spshicai2(4276564870) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 spshicai2（skill.js:13847）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill mubing_rewrite(3805289066) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 mubing_rewrite（skill.js:13193）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill yechou2(3899060351) locked {
+  trigger turn_ended owner_alive {
+    effect lose_hp(self, 1);
+  }
+}

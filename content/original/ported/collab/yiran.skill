@@ -1,0 +1,3 @@
+skill yiran(3082356765) locked {
+  modifier damage_taken_amount(fire) add 1;
+}

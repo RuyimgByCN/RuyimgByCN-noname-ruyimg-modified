@@ -1,0 +1,4 @@
+skill oldjuejing(2511966880) locked {
+  modifier draw_count add owner_lost_hp;
+  modifier hand_limit add 2;
+}

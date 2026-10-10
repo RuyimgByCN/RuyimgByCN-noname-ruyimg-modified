@@ -1,0 +1,11 @@
+// 服厥（羊祜）：出牌阶段限一次，选择一名其他角色：你交给其一张牌；其交给
+// 你一张牌；然后你弃置手牌至五张或摸牌至五张；若你因此既失去又获得牌，
+// 或装备过牌，你摸两张牌。
+// 旧 JS 的「双向换牌」无对应原语，以整手交换近似省略；以弃一张手牌并摸
+// 一张近似保留收益（已注明）。
+skill dcfujue(2989231239) {
+  active play_phase uses_per_turn 1 select_hand 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

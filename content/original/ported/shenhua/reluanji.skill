@@ -1,0 +1,5 @@
+// 乱击（界袁绍）：任意张手牌当【万箭齐发】。
+// 旧 JS 的「花色去重」无对应原语；以手牌当【万箭齐发】近似（花色条件未建模，已注明）。
+skill reluanji(2188761889) {
+  view_as wanjian play_phase any from hand;
+}

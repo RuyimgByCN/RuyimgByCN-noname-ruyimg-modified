@@ -1,0 +1,8 @@
+// 锐略·2（锐略系）：出牌阶段的交牌辅助。
+// 旧 JS 的「交牌」无对应原语；以弃一张手牌并摸一张近似（已注明）。
+skill ruilve2(3293415817) {
+  active play_phase select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

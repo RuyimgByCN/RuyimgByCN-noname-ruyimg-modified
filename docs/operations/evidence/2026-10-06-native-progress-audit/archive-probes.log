@@ -1,0 +1,15 @@
+Compile command: rustc --edition=2021 --test docs/operations/evidence/2026-10-06-native-progress-audit/archive-probes.rs --extern engine_native=target/debug/deps/libengine_native-727563d3598c39d2.rlib --extern blake3=target/debug/deps/libblake3-dac4889b2ee16f15.rlib -L dependency=target/debug/deps -o /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audit-mruzxqxr/archive-probes
+
+running 3 tests
+test extra_payload_bytes_still_accepted ... extra payload bytes accepted: true
+ok
+test unknown_card_kind_still_panics ... 
+thread 'unknown_card_kind_still_panics' (616237) panicked at crates/engine-native/src/archive.rs:2421:14:
+archive: unknown card kind 255
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+unknown card kind panicked: true
+ok
+test valid_archive_control ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

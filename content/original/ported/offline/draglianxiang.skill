@@ -1,0 +1,6 @@
+// draglianxiang：target:useCardToTarget, 需弃牌, 需选择目标, 摸牌, 异步, 弃牌。
+skill draglianxiang(3934253324) {
+  trigger card_targeted owner_is_target_once {
+    effect draw_cards(self, 1);
+  }
+}

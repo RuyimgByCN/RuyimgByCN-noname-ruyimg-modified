@@ -1,0 +1,9 @@
+// 散华（滴）：死亡时选择一名其他角色，从牌堆中找四种不同名基本牌交给其。
+// 实现：进入濒死时令一名其他角色摸 4 张。
+// 近似：时机取濒死而非死亡（死亡后无法选目标）；不从牌堆检索四种不同名基本牌。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shizuku_sanhua(3952218459) {
+  trigger dying owner_is_target {
+    effect choose_target_draw(self, 4, other);
+  }
+}

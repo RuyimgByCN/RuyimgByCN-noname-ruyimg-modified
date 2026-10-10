@@ -1,0 +1,7 @@
+// 英姿 (yingzi) — 周瑜: draw extra card each turn.
+// Simplified: at phase begin, draw 1 card (extra resource).
+skill yingzi(20) {
+  trigger phase_begin always {
+    effect draw_cards(self, 1);
+  }
+}

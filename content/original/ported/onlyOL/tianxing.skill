@@ -1,0 +1,35 @@
+// 天行（onlyOL tianxing）：觉醒技，准备阶段，若你的“蛊”数不小于 3：减 1 点体力上限，
+// 获得「蛊囤」的所有牌并移去〖雏囤〗，然后选择获得〖仁德〗/〖制衡〗/〖乱击〗/〖丕动〗之一。
+// 上游 (onlyOL/skill.js tianxing)：trigger phaseZhunbeiBegin；forced juexingji；
+// filter getExpansions("chuyuan").length >= 3；content loseMaxHp + gain(chuyuan) +
+// removeSkills(chuyuan) + chooseControl 四技 → addSkills。
+// 实现（2026-09-09 第一百八十九批·ADR 0641 §8 S1-A 首批，零新原语）：
+// skill_pile_count(self, chuyuan def) >= 3 门控 + once 标记 → change_max_hp(-1) +
+// remove_skill(雏囤 def) + choose(1,2,3,4) 四选一 add_skill（跨包字面量：
+// refresh 仁德/制衡/乱击，onlyOL 丕动）。
+// 近似（登记债）：①「获得蛊囤所有牌」（pile→手牌整取）未建模——S1-B 原语批次；
+// ②觉醒动画未建模。
+skill tianxing(2406413222) {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2406413222) == 0 {
+      if 2 < skill_pile_count(self, 3324653503) {
+        effect change_max_hp(self, -1);
+        effect remove_skill_by_def(self, 3324653503);
+        effect add_mark(self, 2406413222, 1);
+        let option = choose(1, 2, 3, 4);
+        if option == 1 {
+          effect add_skill(self, 2246702546);
+        }
+        if option == 2 {
+          effect add_skill(self, 2455708599);
+        }
+        if option == 3 {
+          effect add_skill(self, 2356909880);
+        }
+        if option == 4 {
+          effect add_skill(self, 2309539860);
+        }
+      }
+    }
+  }
+}

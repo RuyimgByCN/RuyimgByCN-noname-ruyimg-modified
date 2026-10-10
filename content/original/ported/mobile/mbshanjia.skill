@@ -1,0 +1,20 @@
+// 手杀曹纯「缮甲」
+// 装备区失牌按每张移动事件累计；主动结算只读取标记，不保存旧 JS actionHistory。
+skill mbshanjia(3457547943) {
+  trigger cards_moved owner_from_equip_per_card {
+    effect add_mark(self, 3457547943, 1);
+  }
+
+  active play_phase uses_per_turn 1 {
+    effect resolve_mbshanjia(self, mark_count(self, 3457547943), 4049419240);
+  }
+}
+
+// 本出牌阶段使用牌无距离限制；由主技能只在未弃置锦囊牌时授予。
+skill mbshanjia_nodis(4049419240) locked non_gainable {
+  modifier card_distance_unlimited override 1;
+
+  trigger phase_play_end owner_alive {
+    effect remove_skill(self_skill);
+  }
+}

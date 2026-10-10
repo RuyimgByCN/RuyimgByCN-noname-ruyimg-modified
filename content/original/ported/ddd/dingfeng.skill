@@ -1,0 +1,9 @@
+// 3D精选 丁奉「短兵」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddduanbing(2748520735) {
+  active play_phase {
+    effect resolve_ddd_duanbing(self, 0, 0, 0);
+  }
+  trigger damage owner_source_card_damage_target_can_receive_owner_bingliang optional {
+    effect resolve_ddd_duanbing(self, event_player, event_card, 1);
+  }
+}

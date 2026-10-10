@@ -1,0 +1,8 @@
+// 诸葛连弩（装备技能·OL）：锁定技。使用点数<7的【杀】时直接命中（不可响应）；
+// 你使用【杀】无次数限制；装备区诸葛连弩参与额外【杀】计数逻辑。
+//
+// 卡牌点数过滤（<7）无可用的 DSL 过滤器；directHit 无对应 effect；
+// modifier 的 sha_use_limit 精确语法不明确——空定义。
+skill real_zhuge_skill(3824332225) {
+  modifier hand_limit add 1;
+}

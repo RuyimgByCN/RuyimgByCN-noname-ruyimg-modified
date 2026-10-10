@@ -1,0 +1,5 @@
+// eu_wanwang：global:phase_play, 异步。
+skill eu_wanwang(3049011860) {
+  trigger phase_play owner_alive {
+  }
+}

@@ -1,0 +1,4 @@
+// 界鬼才：旧 JavaScript 只作为语义证据；改判牌可来自手牌区或装备区。
+skill reguicai(2369807074) {
+  modifier judgment_rewrite_hand_equip add 1;
+}

@@ -1,0 +1,8 @@
+// jsrgpianchong（偏宠）：一名角色的结束阶段，若你于此回合内失去过牌，你可以判定。若结果为红色/黑色，你摸此回合进入弃牌堆的红色/黑色牌数量的牌。
+// 未建模：历史查询（DSL无对应原语）
+skill jsrgpianchong(2691990510) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgpianchong（skill.js:4140）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

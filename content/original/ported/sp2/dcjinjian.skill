@@ -1,0 +1,10 @@
+// 劲健（穆顺）：受伤后或造成伤害后，获得"劲"标记（攻击范围+1）；可选择与伤害来源拼点，赢则回复1体力。
+// 旧 JS 含 addMark + attackRange modifier + chooseToCompare + recover。
+// DSL 无拼点原语（chooseToCompare）；标记攻击范围 modifier 可使用但拼点赢后回复无法表达。
+// 近似：保留 add_mark 标记累积和受伤/造成伤害触发。
+skill dcjinjian(3071007841) {
+  trigger damage owner_is_target_per_damage_point {
+    effect add_mark(self, 3071007841, 1);
+    // 旧 JS 还有与伤害来源拼点赢则回复体力，无拼点原语
+  }
+}

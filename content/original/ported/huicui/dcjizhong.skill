@@ -1,0 +1,7 @@
+// dcjizhong：令目标摸2牌。
+skill dcjizhong(4207371660) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    // 近似：令目标摸2张牌
+    effect choose_target_draw(self, 2, other);
+  }
+}

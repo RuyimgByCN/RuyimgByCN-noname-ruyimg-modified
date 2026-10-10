@@ -1,0 +1,7 @@
+// 法箓（x版）：锁定技，记录花色——进入弃牌堆的弃置牌花色、成为目标牌的牌花色、
+// 游戏开始时记录所有花色。用于「点化」和「真仪」。
+// 旧 JS 的「多事件花色记录」「标记存储」无对应原语，未建模。
+skill x_dc_falu(3395154310) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

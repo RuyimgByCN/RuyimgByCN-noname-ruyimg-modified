@@ -1,0 +1,6 @@
+// spdaoshu（盗书）：每轮限一次。一名敌方角色的出牌阶段开始时，若其有手牌，则你可以令其视为使用一张【酒】。其须声明一个基本牌的牌名，然后你判断其手牌区内是否有该牌名的牌。若你判断正确，则你获得其两张手牌。
+skill spdaoshu(2289873337) {
+  trigger phase_play owner_alive {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

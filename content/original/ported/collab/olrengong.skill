@@ -1,0 +1,7 @@
+// 人公（烈袁绍袁术）：使用与上一张牌类型不同的牌后，可弃一张牌从牌堆获得缺失类型牌。
+// 旧 JS 的「与上一张牌类型比较」「缺失类型动态选取」「牌堆检索特定类型」无对应原语，未建模。
+skill olrengong(2572748526) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

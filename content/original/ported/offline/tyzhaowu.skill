@@ -1,0 +1,6 @@
+// tyzhaowu（主动技(chooseToUse)/转化技(视作sha)/触发技）：音效名:new_rewusheng, player:damage, 主动(chooseToUse), 视作sha, 需弃牌, 加技能, 含子技能, 异步, 弃牌。
+skill tyzhaowu(2549999578) {
+  trigger damage owner_alive optional {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

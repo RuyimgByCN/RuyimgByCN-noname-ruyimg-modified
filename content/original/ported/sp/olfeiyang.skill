@@ -1,0 +1,15 @@
+// 飞杨·OL（olfeiyang，限定技）：准备阶段开始时，若你至少有两张可弃置的手牌且有判定区
+// 牌，可弃置两张手牌，然后弃置你判定区的所有牌。
+// 上游 (sp/skill.js:14975)：limited phaseZhunbeiBegin；filter = 可弃置手牌 ≥ 2 且
+// countCards("j") > 0；content = 弃 2 + awaken + discardPlayerCard(player, "j", true)。
+// 实现：phase_prepare + owner_is_target_judge_nonempty（判定区非空）→ 可选确认（近似限定
+// 技仅一次）→ discard_hand_equip_count(self, 2) → discard_all_own_judge(self, self_skill)
+// （ABI 606 新原语，弃置判定区全部牌）。
+// 与上游差异：上游 filter 含「可弃置手牌 ≥ 2」门槛（本实现以 discard_hand_equip_count
+// 静默 no-op 近似——不足 2 张时不弃牌也不弃判定区）；限定技仅一次以可选触发近似。
+skill olfeiyang(2973432445) {
+  trigger phase_prepare owner_is_target_judge_nonempty optional {
+    effect discard_hand_equip_count(self, 2);
+    effect discard_all_own_judge(self, self_skill);
+  }
+}

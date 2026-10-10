@@ -1,0 +1,13 @@
+// 归队（健吾·锁定技）：准备阶段，若装备栏被废除，恢复所有被废除的装备栏。
+// 实现：准备阶段依次恢复武器/防具/-1马/+1马/宝物栏。
+// 近似：不先检验是否已废除，每回合都尝试恢复五栏。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kengo_guidui(3185675503) locked {
+  trigger phase_prepare owner_is_target {
+    effect enable_equip_slot(self, 1, self);
+    effect enable_equip_slot(self, 2, self);
+    effect enable_equip_slot(self, 3, self);
+    effect enable_equip_slot(self, 4, self);
+    effect enable_equip_slot(self, 5, self);
+  }
+}

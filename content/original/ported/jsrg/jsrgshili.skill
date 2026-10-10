@@ -1,0 +1,4 @@
+// 恃力：出牌阶段限一次，手牌中的装备牌可当【决斗】使用。
+skill jsrgshili(2444554979) {
+  view_as juedou play_phase card_equip uses_per_turn 1;
+}

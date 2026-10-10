@@ -1,0 +1,11 @@
+// chixueqingfeng（赤血青锋）：锁定技，装备技。当你使用【杀】指定目标后，该目标获得
+// 「chixueqingfeng2」临时技能（记录此杀，使用与此杀同名的牌时需先弃一张）。
+// 上游 trigger: player:useCardToPlayered; filter: card.name=="sha";
+//   content: target.addTempSkill("chixueqingfeng2"); target.markAuto("chixueqingfeng2", [trigger.card]);
+// 使用 Phase 3 card-name-scoped 过滤族 owner_source_card_sha + add_skill_by_name 编译时解析 chixueqingfeng2。
+// 近似：markAuto（记录特定杀）需 expansion 原语，本定义实现 addTempSkill 核心行为。
+skill chixueqingfeng(2457409329) locked {
+  trigger card_targeted owner_source_card_sha {
+    effect add_skill_by_name(event_player, chixueqingfeng2);
+  }
+}

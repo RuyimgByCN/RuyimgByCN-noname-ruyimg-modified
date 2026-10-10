@@ -1,0 +1,9 @@
+// 奋迅·距（refenxun2）：拥有者至绑定目标距离视为1；回合结束移除。
+// 上游 (sp/skill.js:30549)：refenxun 的临时子技，globalFrom 距离视为1，onremove。
+// 实现：distance_from_skill_bound_target override 1（weikui 同款管线）。
+skill refenxun2(3372440036) {
+  modifier distance_from_skill_bound_target override 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

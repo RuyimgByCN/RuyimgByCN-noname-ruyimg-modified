@@ -1,0 +1,646 @@
+[
+  {
+    "id": 2366498251,
+    "name_key": "clan_chenqun",
+    "max_hp": 3,
+    "skills": [
+      4168157895,
+      3187934288,
+      3304769267
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_chenqun.jpg",
+    "clans": [
+      "颍川陈氏"
+    ]
+  },
+  {
+    "id": 4211923911,
+    "name_key": "clan_chentai",
+    "max_hp": 4,
+    "skills": [
+      4032210875,
+      3412149237,
+      3304769267
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_chentai.jpg",
+    "clans": [
+      "颍川陈氏"
+    ]
+  },
+  {
+    "id": 2655515960,
+    "name_key": "clan_hanfu",
+    "max_hp": 4,
+    "initial_hp": 3,
+    "skills": [
+      3492628830,
+      3618595521,
+      2932264074
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_hanfu.jpg",
+    "clans": [
+      "颍川韩氏"
+    ]
+  },
+  {
+    "id": 4036628753,
+    "name_key": "clan_hanrong",
+    "max_hp": 3,
+    "skills": [
+      3490578020,
+      2173291427,
+      2932264074
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_hanrong.jpg",
+    "clans": [
+      "颍川韩氏"
+    ]
+  },
+  {
+    "id": 2884842217,
+    "name_key": "clan_hanshao",
+    "max_hp": 3,
+    "skills": [
+      2275172325,
+      2776787807,
+      2932264074
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_hanshao.jpg",
+    "clans": [
+      "颍川韩氏"
+    ]
+  },
+  {
+    "id": 3743719645,
+    "name_key": "clan_luji",
+    "max_hp": 3,
+    "skills": [
+      3482004496,
+      2456774233,
+      2462428583
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_clan_luji.jpg",
+    "clans": [
+      "吴郡陆氏"
+    ]
+  },
+  {
+    "id": 2734262878,
+    "name_key": "clan_lujing",
+    "max_hp": 4,
+    "skills": [
+      2231075583,
+      4122989176,
+      2462428583
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_clan_lujing.jpg",
+    "clans": [
+      "吴郡陆氏"
+    ]
+  },
+  {
+    "id": 3299121045,
+    "name_key": "clan_luyusheng",
+    "max_hp": 3,
+    "skills": [
+      4047498820,
+      3207476732,
+      2462428583
+    ],
+    "sex": "female",
+    "group": "wu",
+    "portrait_asset": "character_clan_luyusheng.jpg",
+    "clans": [
+      "吴郡陆氏"
+    ]
+  },
+  {
+    "id": 3580915327,
+    "name_key": "clan_wangchang",
+    "max_hp": 4,
+    "skills": [
+      3765037426,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_wangchang.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 4013729819,
+    "name_key": "clan_wangguang",
+    "max_hp": 3,
+    "skills": [
+      2919327705,
+      2893930110,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_wangguang.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 2668062488,
+    "name_key": "clan_wanghun",
+    "max_hp": 3,
+    "skills": [
+      4099635322,
+      4221789348,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_clan_wanghun.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 2803794166,
+    "name_key": "clan_wangling",
+    "max_hp": 4,
+    "skills": [
+      2956985907,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_wangling.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 3970498968,
+    "name_key": "clan_wanglun",
+    "max_hp": 3,
+    "skills": [
+      3837962377,
+      4214125831,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_wanglun.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 3743876014,
+    "name_key": "clan_wangmingshan",
+    "max_hp": 3,
+    "skills": [
+      3262352195,
+      2493777729,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_wangmingshan.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 2884998716,
+    "name_key": "clan_wangshen",
+    "max_hp": 3,
+    "skills": [
+      2387045511,
+      3810713237,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_wangshen.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 2828304207,
+    "name_key": "clan_wangyun",
+    "max_hp": 3,
+    "skills": [
+      2854725517,
+      2858149718,
+      3016047578
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_wangyun.jpg",
+    "clans": [
+      "太原王氏"
+    ]
+  },
+  {
+    "id": 2202016823,
+    "name_key": "clan_wuban",
+    "max_hp": 4,
+    "skills": [
+      3237716030,
+      2666909205
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_clan_wuban.jpg",
+    "clans": [
+      "陈留吴氏"
+    ]
+  },
+  {
+    "id": 2964364879,
+    "name_key": "clan_wukuang",
+    "max_hp": 4,
+    "skills": [
+      3035675518,
+      2666909205
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_wukuang.jpg",
+    "clans": [
+      "陈留吴氏"
+    ]
+  },
+  {
+    "id": 3042866889,
+    "name_key": "clan_wuqiao",
+    "max_hp": 4,
+    "skills": [
+      3568179340,
+      2666909205
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_wuqiao.jpg",
+    "clans": [
+      "陈留吴氏"
+    ]
+  },
+  {
+    "id": 2559232480,
+    "name_key": "clan_wuxian",
+    "max_hp": 3,
+    "skills": [
+      3570625585,
+      2789915698,
+      2666909205
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_clan_wuxian.jpg",
+    "clans": [
+      "陈留吴氏"
+    ]
+  },
+  {
+    "id": 2497500154,
+    "name_key": "clan_wuyi",
+    "max_hp": 4,
+    "skills": [
+      2197147080,
+      2666909205
+    ],
+    "sex": "male",
+    "group": "shu",
+    "clans": [
+      "陈留吴氏"
+    ]
+  },
+  {
+    "id": 2883079493,
+    "name_key": "clan_xuncai",
+    "max_hp": 3,
+    "skills": [
+      2467593527,
+      2892723846,
+      2722285495,
+      4288623528
+    ],
+    "sex": "female",
+    "group": "qun",
+    "portrait_asset": "character_clan_xuncai.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 2815325313,
+    "name_key": "clan_xuncan",
+    "max_hp": 3,
+    "skills": [
+      3260288351,
+      3010360006,
+      2281018381,
+      4288623528
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_xuncan.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 3595946507,
+    "name_key": "clan_xunchen",
+    "max_hp": 3,
+    "skills": [
+      2599885757,
+      3375592258,
+      4288623528
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_xunchen.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 3114770560,
+    "name_key": "clan_xunguan",
+    "max_hp": 4,
+    "skills": [
+      3653654561,
+      2287954346,
+      4288623528
+    ],
+    "sex": "female",
+    "group": "qun",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 4121307099,
+    "name_key": "clan_xunshi",
+    "max_hp": 3,
+    "skills": [
+      3860800298,
+      3188595142,
+      4288623528
+    ],
+    "sex": "female",
+    "group": "wei",
+    "portrait_asset": "character_clan_xunshi.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 3326400112,
+    "name_key": "clan_xunshu",
+    "max_hp": 3,
+    "skills": [
+      2483457953,
+      2722267819,
+      4288623528
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_xunshu.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 2511923709,
+    "name_key": "clan_xunshuang",
+    "max_hp": 3,
+    "skills": [
+      2325212811,
+      2693545350,
+      2992461968,
+      4288623528
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_xunshuang.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 2533109475,
+    "name_key": "clan_xunyou",
+    "max_hp": 3,
+    "skills": [
+      4194820394,
+      4288623528
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_xunyou.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 4136838971,
+    "name_key": "clan_xunyu",
+    "max_hp": 3,
+    "skills": [
+      3310762461,
+      3185766498,
+      4288623528
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_xunyu.jpg",
+    "clans": [
+      "颍川荀氏"
+    ]
+  },
+  {
+    "id": 2284845610,
+    "name_key": "clan_yangbiao",
+    "max_hp": 3,
+    "skills": [
+      3793365787,
+      2340208706,
+      3125419757
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_yangbiao.jpg",
+    "clans": [
+      "弘农杨氏"
+    ]
+  },
+  {
+    "id": 3692947883,
+    "name_key": "clan_yangci",
+    "max_hp": 3,
+    "skills": [
+      3347941832,
+      2209164637,
+      3125419757
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_yangci.jpg",
+    "clans": [
+      "弘农杨氏"
+    ]
+  },
+  {
+    "id": 3060558257,
+    "name_key": "clan_yangxiu",
+    "max_hp": 3,
+    "skills": [
+      2836972930,
+      3629471103,
+      3125419757
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_yangxiu.jpg",
+    "clans": [
+      "弘农杨氏"
+    ]
+  },
+  {
+    "id": 2835019927,
+    "name_key": "clan_yangzhong",
+    "max_hp": 4,
+    "skills": [
+      2228092802,
+      3024334893,
+      3125419757
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_clan_yangzhong.jpg",
+    "clans": [
+      "弘农杨氏"
+    ]
+  },
+  {
+    "id": 4120579194,
+    "name_key": "clan_zhonghui",
+    "max_hp": 4,
+    "initial_hp": 3,
+    "skills": [
+      2443866463,
+      2196874944,
+      3600751244
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_zhonghui.jpg",
+    "clans": [
+      "颍川钟氏"
+    ]
+  },
+  {
+    "id": 3002411959,
+    "name_key": "clan_zhongyan",
+    "max_hp": 3,
+    "skills": [
+      4021158504,
+      2271745486,
+      3600751244
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_clan_zhongyan.jpg",
+    "clans": [
+      "颍川钟氏"
+    ]
+  },
+  {
+    "id": 2952970409,
+    "name_key": "clan_zhongyao",
+    "max_hp": 3,
+    "skills": [
+      3766559733,
+      4146626078,
+      3600751244
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_zhongyao.jpg",
+    "clans": [
+      "颍川钟氏"
+    ]
+  },
+  {
+    "id": 3506500853,
+    "name_key": "clan_zhongyu",
+    "max_hp": 3,
+    "skills": [
+      3544602984,
+      4234060719,
+      3600751244
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_clan_zhongyu.jpg",
+    "clans": [
+      "颍川钟氏"
+    ]
+  },
+  {
+    "id": 3515504988,
+    "name_key": "clan_zhugeguo",
+    "max_hp": 3,
+    "skills": [
+      2431139064,
+      2827730630
+    ],
+    "sex": "female",
+    "group": "shu",
+    "clans": [
+      "琅琊诸葛氏"
+    ]
+  },
+  {
+    "id": 4147014673,
+    "name_key": "clan_zhugezhan",
+    "max_hp": 3,
+    "skills": [
+      2831451765,
+      2827730630
+    ],
+    "sex": "male",
+    "group": "shu",
+    "clans": [
+      "琅琊诸葛氏"
+    ]
+  },
+  {
+    "id": 3815094032,
+    "name_key": "clan_lutan",
+    "max_hp": 3,
+    "skills": [
+      2442131509,
+      3190529601,
+      2462428583
+    ],
+    "sex": "female",
+    "group": "wu"
+  }
+]

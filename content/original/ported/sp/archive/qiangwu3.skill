@@ -1,0 +1,6 @@
+// 强武（qiangwu3）：锁定技。点数小于「强武」标记的【杀】无距离限制；
+// 点数大于「强武」标记的【杀】无次数限制。
+skill qiangwu3(2828579326) locked {
+  modifier sha_distance_unlimited_if_rank_lt_skill_mark override 1;
+  modifier sha_no_use_count_if_rank_gt_skill_mark override 1;
+}

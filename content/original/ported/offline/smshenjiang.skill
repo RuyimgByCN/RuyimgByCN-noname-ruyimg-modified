@@ -1,0 +1,5 @@
+// smshenjiang：锁定技, player:SmhuashenAfter, 失去体力, 异步。
+skill smshenjiang(3412431648) {
+  trigger phase_any_end owner_alive {
+  }
+}

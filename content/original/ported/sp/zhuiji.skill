@@ -1,0 +1,4 @@
+// 追姬：体力值不小于目标时，与该目标的最终距离视为 1。
+skill zhuiji(3152159217) {
+  modifier distance_from_if_hp_gte_target override 1;
+}

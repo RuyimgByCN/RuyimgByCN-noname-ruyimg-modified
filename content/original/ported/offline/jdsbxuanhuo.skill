@@ -1,0 +1,6 @@
+// jdsbxuanhuo：音效名:sbxuanhuo, 含子技能, 异步。
+skill jdsbxuanhuo(2898734622) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// psquanpan：player:cards_moved, global:cards_moved, 异步。
+skill psquanpan(3964975032) {
+  trigger cards_moved owner_alive {
+  }
+}

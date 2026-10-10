@@ -1,0 +1,6 @@
+// hm_wuxiao：锁定技, source:damage_before, player:damage_before, global:hp_lost, 加技能, 含子技能, 异步。
+skill hm_wuxiao(2594255523) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

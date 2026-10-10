@@ -1,0 +1,6 @@
+// 刀姬临时效果
+// 原语义：本回合不能使用或打出【杀】。
+skill redaoji2(2389818943) {
+  modifier sha_use_cancel override 1;
+  modifier sha_response_cancel override 1;
+}

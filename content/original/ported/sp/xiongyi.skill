@@ -1,0 +1,6 @@
+skill xiongyi(2476017492) {
+  active play_phase once_per_game targets 1 255 {
+    effect draw_selected_targets(3);
+    effect recover_if_min_current_hp(self, 1);
+  }
+}

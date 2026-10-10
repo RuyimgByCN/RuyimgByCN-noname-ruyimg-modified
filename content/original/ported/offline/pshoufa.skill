@@ -1,0 +1,6 @@
+// 后发：每回合限一次，对座次更靠前的角色造成伤害前，可将手牌摸至其体力上限。
+skill pshoufa(3537513199) {
+  trigger damage_before owner_source_target_earlier_seat_hand_below_target_max_hp_once_per_turn optional {
+    effect draw_cards(self, max_hp(event_player) - hand_count(self));
+  }
+}

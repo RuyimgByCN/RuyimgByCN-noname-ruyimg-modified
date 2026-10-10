@@ -1,0 +1,8 @@
+// 丰祈（魔法技）：出牌阶段限一次，弃置一张黑色牌并选择延迟回合数，对应回合结束后摸延迟回合数x2张牌。
+// 旧JS中「延迟魔法」「延迟回合计数器」无对应原语，无法表达。
+skill twharvestinori(3964690448) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twharvestinori（skill.js:24795）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,18 @@
+// 界闭月：结束阶段可摸一张牌；若空手则改为两张。
+skill rebiyue(4285757447) {
+  trigger phase_end owner_is_target optional {
+    if hand_count(self) == 0 {
+      effect draw_cards(self, 2);
+    } else {
+      effect draw_cards(self, 1);
+    }
+  }
+}
+
+// 酒诗改写后的展示标记；实际规则仍由酒诗技能承担。
+skill rejiushi_mark(2351505709) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 rejiushi_mark（skill.js:11370）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

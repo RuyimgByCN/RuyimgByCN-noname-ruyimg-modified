@@ -1,0 +1,7 @@
+// 济河（王允 附技）：结束阶段若无手牌，可令至多min(存活未横置数, 体力值)名角色横置。
+// choose_link_other 无法指定横置人数上限=min(未横置数,体力值)，以横置一名目标近似。
+skill jishe3(3373861363) {
+  trigger phase_end owner_hand_empty optional {
+    effect choose_link_other(self);
+  }
+}

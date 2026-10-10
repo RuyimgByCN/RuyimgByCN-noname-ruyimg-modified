@@ -1,0 +1,15 @@
+// jsrgdaoren（蹈刃）：出牌阶段限一次，你可以将一张手牌交给一名其他角色，然后
+// 对你与其攻击范围内均包含的所有角色各造成 1 点无来源伤害。
+// 上游 (jsrg/skill.js jsrgdaoren L402)：enable phaseUse usable 1；chooseCard +
+// chooseTarget notMe；content give + inRange 交集逐角色 damage("nocard")。
+// 实现（2026-09-11 第二百四十批·专属 host 状态机第五件，pxqixian 工艺复用）：
+// active play_phase uses_per_turn 1 targets 0 0 → resolve_jsrgdaoren(self,
+// self_skill)（ABI 696 / tag 719 / 6 槽续体 Cont 302 三阶段：手牌选择→目标
+// 选择→交牌 + player_in_attack_range 交集逐角色 DealDamage(无来源)）。
+// 近似（登记债）：①伤害按无来源处理（上游 damage("nocard") 同口径 ✓）；②
+// 攻击范围交集用 player_in_attack_range 既有查询精确实现（非近似）。
+skill jsrgdaoren(2871166206) {
+  active play_phase uses_per_turn 1 targets 0 0 {
+    effect resolve_jsrgdaoren(self, self_skill);
+  }
+}

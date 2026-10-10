@@ -1,0 +1,32 @@
+// jsrgzhenglve（政略）：①主公的回合结束时，你可以摸一张牌，然后令一名角色获得
+// “猎”标记（若主公本回合没有造成过伤害则改为至多两名）。②你对有“猎”的角色使用
+// 牌无距离和次数限制。③每回合限一次。当你对有“猎”的角色造成伤害后，你可以摸一张
+// 牌并获得造成此伤害的牌。上游 jsrg/skill.js:11475。
+// 实现（猎族 S1+双授分支，ADR 0646 §1）：
+// ① 双分支落地：「主公本回合伤害过」单授 /「未伤害」至多两名——过滤器对
+//    owner_alive_event_player_lord_{damaged,no_damage}（DAMAGE_DEALT 回合聚合
+//    口径）+ choose_others_add_mark(player, mark, delta, max_count, self_skill)
+//    （ABI 670/tag 693/Cont 280）。「一号位」取 identity 模式主公语义。
+//    近似：授标不检查目标已有标记；允许放弃（上游 bool:true 强制选满）。
+// ③ `damage owner_source_damage_target_mark_positive_1167524380_once optional`
+//    → draw_cards(1) + gain_event_cards(self)。
+// “猎”标记 def = 合成铸造 blake2b("jsrgzhenglve_mark",4B)=1167524380
+// （pxlujiang_win 同工艺，catalog/jsrg npack 查重通过）。
+skill jsrgzhenglve(2636593306) {
+  // ② 有“猎”目标：无距离限制、出杀不计数（豁免值源由引擎 target 上下文过滤）。
+  modifier card_distance_unlimited_target_mark_1167524380 override 1;
+  modifier sha_use_unlimited_target_mark_1167524380 override 1;
+
+  trigger phase_end owner_alive_event_player_lord_damaged optional {
+    effect draw_cards(self, 1);
+    effect choose_others_add_mark(self, 1167524380, 1, 1, self_skill);
+  }
+  trigger phase_end owner_alive_event_player_lord_no_damage optional {
+    effect draw_cards(self, 1);
+    effect choose_others_add_mark(self, 1167524380, 1, 2, self_skill);
+  }
+  trigger damage owner_source_damage_target_mark_positive_1167524380_once optional {
+    effect draw_cards(self, 1);
+    effect gain_event_cards(self);
+  }
+}

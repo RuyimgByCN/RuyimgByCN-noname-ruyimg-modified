@@ -1,0 +1,25 @@
+// 庸肆（袁术）：锁定技，摸牌阶段，你改为摸 X 张牌（X 为存活势力数）；出牌阶段结束时，
+// 若你本回合未造成伤害，你摸一张牌（至体力值），否则你获得「庸肆弃牌阶段状态」。
+// 旧 JS 仅作语义证据；摸牌数替换、回合伤害判定与状态授予由 resolve_drlt_yongsi 权威
+// 状态机校验（ABI 527）。回合内伤害以 turn 计数近似（判定/摸牌阶段无法造成伤害，
+// 文档化近似）；临时状态以 add_skill_until_turn_end 授予既有 drlt_yongsi1 定义（旧 JS
+// 于弃牌阶段后移除，回合末移除为文档化近似）。
+skill drlt_yongsi(4168032997) locked {
+  trigger phase_draw owner_is_target_draw_not_replaced {
+    effect resolve_drlt_yongsi(self, 0);
+  }
+  trigger phase_play_end owner_is_target {
+    effect resolve_drlt_yongsi(self, 1);
+  }
+}
+
+// 伪帝（袁术，主公技）：锁定技，弃牌阶段开始时，你可以将至多 X 张手牌交给等量的其他
+// 群势力角色（X 为你的手牌数减手牌上限且不大于其他群势力角色数）；给出的牌离开手牌
+// 后，你的弃牌需求自然下降。
+// 旧 JS 仅作语义证据；选牌/选目标配对与赠予由 resolve_drlt_weidi 权威状态机校验
+// （ABI 528）。
+skill drlt_weidi(2524927368) lord_only {
+  trigger phase_discard owner_is_target_discard_phase_owe_limit_other_qun optional {
+    effect resolve_drlt_weidi(self);
+  }
+}

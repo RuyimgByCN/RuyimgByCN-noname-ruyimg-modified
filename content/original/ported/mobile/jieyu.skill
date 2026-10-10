@@ -1,0 +1,6 @@
+// jieyu（竭御）：结束阶段，你可以从弃牌堆中获得共X张不同牌名的基本牌（X为3-你上次发动〖竭御〗至今你成为其他角色使用伤害类卡牌目标的次数，且X至少为1）。
+skill jieyu(4124810538) {
+  trigger phase_discard owner_alive {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

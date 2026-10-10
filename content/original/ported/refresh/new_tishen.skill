@@ -1,0 +1,8 @@
+// new_tishen（张郃·体神-新版）：出牌阶段结束时，弃置所有锦囊/宝物/坐骑牌，获得 new_tishen2 直到下回合开始。
+// 旧JS含条件判断+特定装备弃置+临时技能，DSL无对应原语，未建模。
+skill new_tishen(2308264728) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 new_tishen（skill.js:14785）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

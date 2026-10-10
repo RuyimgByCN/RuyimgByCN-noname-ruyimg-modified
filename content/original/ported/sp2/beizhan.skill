@@ -1,0 +1,23 @@
+// 备战（SP 审配）：结束阶段，可令一名其他角色摸牌至 min(5, 其体力上限) 张；
+// 其获得「备战·待战」：其回合开始时若手牌数为全场最多（可并列），本回合内其
+// 使用牌不能指定其他角色为目标。
+// 旧 JS 仅作语义证据；摸牌上限与临时技能由权威状态机校验（ABI 455）。
+// 注：旧 JS 以 drawTo(min(5, maxHp)) 表达摸牌上限，引擎以 min(5, 体力上限) 等价
+//     计算；「待战」授予经由 choose_target_draw_to_max_hp_cap_then_add_skill 的
+//     目标选择后附加，触发由 DSL 侧 owner_is_target 过滤。
+skill beizhan(2840635277) {
+  trigger phase_end owner_is_target optional {
+    effect choose_target_draw_to_max_hp_cap_then_add_skill(self, 5, 4111010111);
+  }
+}
+
+// 备战·待战：回合开始时若手牌数为全场最多，获得「自守」（本回合内不能指定其他角色）；
+// 随后移除自身。
+skill beizhan2(4111010111) {
+  trigger phase_begin owner_is_target_tied_max_hand {
+    effect add_skill(self, 4152430403);
+  }
+  trigger phase_begin owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

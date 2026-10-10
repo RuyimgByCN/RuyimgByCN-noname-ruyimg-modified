@@ -1,0 +1,7 @@
+// 专对（旧版）：当你使用杀指定目标后，或成为杀的目标后，可与对方拼点。若你赢，此杀不可被闪响应（使用）或此杀对你无效（成为目标）。
+// 旧JS含双触发（use/respond）+拼点+directHit/excluded。DSL以空定义保留。
+skill zhuandui(3494037069) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

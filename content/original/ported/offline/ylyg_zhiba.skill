@@ -1,0 +1,9 @@
+// 制霸（offline 雁翎孙策 ylyg_zhiba）：主公技，一名其他吴势力角色的准备阶段，你可令其
+// 与另一名角色拼点。
+// 上游 (offline/skill ylyg_zhiba)：zhuSkill + global phaseZhunbeiBegin + 吴势力门 +
+// canCompare + chooseTarget + chooseToCompare。
+// INTENTIONAL_EMPTY_NOOP: 主公技身份门、第三方拼点对象选择与吴势力 gate 无原语
+// 组合；2026-09-09 上游增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill ylyg_zhiba(3770634947) {
+  modifier hand_limit add 0;
+}

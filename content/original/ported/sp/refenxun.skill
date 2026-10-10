@@ -1,0 +1,14 @@
+// 奋迅（refenxun）：出牌阶段限一次，你可以弃置一张牌并选择一名其他角色，本回合你至其距离视为1；
+// 结束阶段若本回合未对其造成伤害，则弃置一张牌。
+// 上游 (sp/skill.js:30502)：active phaseUse，position he，filterTarget notMe；content = markAuto(refenxun2)
+// + addTempSkill(refenxun2)；refenxun2 子技 globalFrom 距离视为1 + 结束阶段未伤害则强制弃一牌。
+// 实现：active play_phase uses_per_turn 1 select_hand 1 1 targets 1 1 other →
+// add_bound_skill(self, 3372440036, event_source)；子技 distance_from_skill_bound_target override 1
+// （至绑定目标距离视为1）+ turn_ended 移除。与上游差异：弃牌由 select_hand 表达；结束阶段
+// 未伤害强制弃牌未建模；多目标（上游可多选）按 1 目标近似，已注明。
+skill refenxun(3762143918) {
+  active play_phase uses_per_turn 1 select_hand 1 1 targets 1 1 other {
+    effect add_bound_skill(self, 3372440036, event_source);
+  }
+}
+

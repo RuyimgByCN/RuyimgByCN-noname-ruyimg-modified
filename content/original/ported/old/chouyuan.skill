@@ -1,0 +1,8 @@
+// 仇渊（仇渊灵雎）：出牌阶段限一次，弃置一名角色至多 X 张牌（X=正面朝上身份类别数），
+// 然后其从弃牌堆获得等量【杀】。
+// 近似：对目标弃一张 he；X 与弃牌堆获杀未建模。
+skill chouyuan(4202341824) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_equip_nonempty {
+    effect choose_discard_target_card(self, event_source, hand_equip);
+  }
+}

@@ -1,0 +1,8 @@
+// rejiuyuan：刷新包技能。
+// triggers: global:recoverBefore
+skill rejiuyuan(3794267832) {
+    // 近似：旧JS事件 recoverBefore → DSL事件 recoverBefore
+    trigger hp_recovered owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

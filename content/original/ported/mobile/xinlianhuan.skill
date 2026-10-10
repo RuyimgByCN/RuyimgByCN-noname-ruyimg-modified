@@ -1,0 +1,8 @@
+// xinlianhuan（连环）：你可以将一张♣手牌当【铁索连环】使用或重铸。你使用【铁索连环】选择目标后，可以给此牌增加一个目标。
+// 未建模：效果逻辑复杂，无合适 DSL 原语匹配。
+skill xinlianhuan(2603561617) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinlianhuan（skill.js:16081）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

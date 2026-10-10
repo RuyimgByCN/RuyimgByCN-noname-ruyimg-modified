@@ -1,0 +1,8 @@
+// 上议（江庆）：出牌阶段限一次，选择一名有手牌的其他角色，展示其手牌并获得其中
+// 一张牌。
+// 旧 JavaScript 仅作语义证据；展示与获牌由 ABI 423 resolve_spshangyi 权威结算。
+skill spshangyi(3102075230) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_spshangyi(self, event_source);
+  }
+}

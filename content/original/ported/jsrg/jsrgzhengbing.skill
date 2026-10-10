@@ -1,0 +1,8 @@
+// jsrgzhengbing（整兵）：群势力技。出牌阶段限三次。你可以重铸一张牌，若此牌为：【杀】，你本回合手牌上限+2；【闪】，你摸一张牌；【桃】，你变更势力为魏。
+// 未建模：全局状态, addTempSkill, changeGroup, 标记计数, charlotte延迟, 势力技能 ...等7项（DSL无对应原语）
+skill jsrgzhengbing(4091717919) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgzhengbing（skill.js:8419）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

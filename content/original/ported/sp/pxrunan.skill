@@ -1,0 +1,12 @@
+// 汝南（pxrunan，州郡技能）：当你获得此技能后，你可以令一名角色摸 X 张牌（X 为你
+// 的手牌上限）。
+// 上游 (sp/skill.js:3204)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且手牌上限 > 0；content = chooseTarget → target.draw(handcardLimit)。
+// 实现：skill_added + owner_skill_added_self_3675374846 → 可选确认 →
+// choose_other_draw_or_recover(self, hand_limit(self), 0, 1)（令一名其他角色摸手牌
+// 上限张）。
+skill pxrunan(3675374846) {
+  trigger skill_added owner_skill_added_self_3675374846 optional {
+    effect choose_other_draw_or_recover(self, hand_limit(self), 0, 1);
+  }
+}

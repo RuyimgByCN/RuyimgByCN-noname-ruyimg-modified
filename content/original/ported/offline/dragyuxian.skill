@@ -1,0 +1,5 @@
+// dragyuxian：觉醒技, 锁定技, global:phase_any_end, player:phase_prepare, player:dying, 加技能, 含子技能, 异步。
+skill dragyuxian(3951820680) locked {
+  trigger phase_any_end always {
+  }
+}

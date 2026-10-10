@@ -1,0 +1,8 @@
+// 淳刚（旧版）：锁定技，其他角色一次性获得超过一张牌时（摸牌阶段除外），其需弃置一张牌。
+// 旧JS中「除去摸牌阶段」的父事件检测无对应原语；全局技能 init/onremove 管理无对应原语。
+// 以 cards_given + owner_alive_not_target + discard_hand_equip_count 近似。
+skill old_twchungang(3205704802) locked {
+  trigger cards_given owner_alive_not_target {
+    effect discard_hand_equip_count(event_player, 1);
+  }
+}

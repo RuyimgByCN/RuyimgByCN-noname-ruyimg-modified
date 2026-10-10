@@ -1,0 +1,8 @@
+// 预言（宗预）：锁定技。你成为其他角色使用的实体【杀】的目标时，若其体力大于你，
+// 其须交给你一张点数大于此【杀】的牌（非闪/桃/酒），否则此【杀】对你无效。
+// 旧 JavaScript 仅作语义证据；交牌与取消目标复用 ABI 370 resolve_twyuyan 管线。
+skill yuyan(2770825567) locked {
+  trigger card_targeted owner_target_physical_sha_source_hp_gt_owner {
+    effect resolve_twyuyan(self, event_source, event_card);
+  }
+}

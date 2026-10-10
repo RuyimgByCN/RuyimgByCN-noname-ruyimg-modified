@@ -1,0 +1,5 @@
+// 原仓库 character/sixiang/skill.js：忠事。
+
+skill stdzhongshi(3843853491) locked {
+  modifier damage_amount add owner_linked_diff_other;
+}

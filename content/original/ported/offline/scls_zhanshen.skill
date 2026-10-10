@@ -1,0 +1,21 @@
+// 战神：每个准备阶段从尚未获得的三项永久强化中选择一项。
+// 过滤器修正（2026-08-06，C 段 omp）：owner_is_target_once 误加每回合限次
+// （同回合再次 dispatch 准备阶段不触发）；上游 phaseZhunbeiBegin 每次准备都触发
+// （只要还有缺失项），改回 owner_is_target。
+skill scls_zhanshen(3534164013) locked {
+  trigger phase_prepare owner_is_target {
+    effect choose_add_missing_skill(self, 2175496411, 2364944790, 2535182519);
+  }
+}
+
+skill scls_zhanshen_draw(2175496411) locked {
+  modifier draw_count add 1;
+}
+
+skill scls_zhanshen_damage(2364944790) locked {
+  modifier sha_damage add 1;
+}
+
+skill scls_zhanshen_target(2535182519) locked {
+  modifier sha_target_limit add 1;
+}

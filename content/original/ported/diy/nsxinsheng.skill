@@ -1,0 +1,7 @@
+// 新生
+skill nsxinsheng(2604261106) {
+  trigger damage owner_source_healthy optional {
+    effect change_max_hp(self, event_amount);
+    effect draw_cards(self, event_amount);
+  }
+}

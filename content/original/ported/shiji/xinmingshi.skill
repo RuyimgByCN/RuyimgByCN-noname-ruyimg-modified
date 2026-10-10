@@ -1,0 +1,12 @@
+// 新名士（孔融）：锁定技。你受到伤害后，若你有“谦”标记且伤害来源存活并拥有
+// 手牌/装备/判定区牌，来源须弃置一张该类牌：若弃置的是红色牌你回复 1 点体力，
+// 若弃牌进入弃牌堆你获得它。
+// 旧 JavaScript 仅作语义证据；强制弃牌与红/弃牌堆分支由 ABI 411 resolve_xinmingshi
+// 权威结算。
+skill xinmingshi(2976944922) locked {
+  trigger damage owner_is_target {
+    if 0 < mark_count(self, 2286538070) {
+      effect resolve_xinmingshi(self, event_source);
+    }
+  }
+}

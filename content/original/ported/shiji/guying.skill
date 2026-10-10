@@ -1,0 +1,9 @@
+// 孤影（向宠）：每回合限一次，你失去一张手牌或装备牌或判定区牌后，若当前回合
+// 角色是其他角色，其须二选一：随机交给你一张其可获得的牌；或令你收回你失去的
+// 那张牌（若其仍在弃牌堆中）。
+// 旧 JavaScript 仅作语义证据；二选一与结算由 ABI 447 resolve_guying 权威结算。
+skill guying(2534727648) {
+  trigger cards_moved owner_lost_one_hand_equip_judge_other_current_phase_once {
+    effect resolve_guying(self, event_player, event_card, 0);
+  }
+}

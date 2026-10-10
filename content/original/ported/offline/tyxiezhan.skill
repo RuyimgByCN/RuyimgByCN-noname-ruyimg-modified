@@ -1,0 +1,5 @@
+// tyxiezhan：音效名:juesheng, global:phaseBefore, player:phase_play, player:game_started, 多分支选择, 异步。
+skill tyxiezhan(4247852431) locked {
+  trigger phase_play always {
+  }
+}

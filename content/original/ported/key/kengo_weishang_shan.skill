@@ -1,0 +1,5 @@
+// 伪伤·化闪（健吾）：防具栏废除时，可将一张牌当做【闪】使用或打出。
+// 以 view_as shan 近似，缺失「防具栏废除」条件过滤。
+skill kengo_weishang_shan(2913895513) {
+  view_as shan response any from hand_equip;
+}

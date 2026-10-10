@@ -1,0 +1,9 @@
+// 晖云（OL 胡班）：出牌阶段可将一张牌当【火攻】使用；结算后可选三项之一
+// （用展示牌并重铸手牌 / 用手牌并重铸展示牌 / 摸一张）令目标执行，每轮每项限一次。
+// 上游 (sp/skill.js:20338)：viewAs huogong，position hes；after 子技能选执行项。
+// 实现：`view_as huogong play_phase any from hand_equip`。
+// 近似：结算后三项选择与每轮限次未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olhuiyun(4044368124) {
+  view_as huogong play_phase any from hand_equip;
+}

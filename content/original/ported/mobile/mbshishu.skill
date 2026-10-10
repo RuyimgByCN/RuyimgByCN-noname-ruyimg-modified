@@ -1,0 +1,6 @@
+// mbshishu（恃术）：锁定技，一名其他角色于其回合内获得你的牌后，你令其选择一项：1.弃置这些牌；2.交给你一张与这些牌类型均不同的牌。
+skill mbshishu(3582884683) locked {
+  trigger cards_moved owner_alive {
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

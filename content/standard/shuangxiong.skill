@@ -1,0 +1,4 @@
+// Yan Liang twin fury
+skill shuangxiong(62) {
+  modifier attack_range add 1;
+}

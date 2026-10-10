@@ -1,0 +1,6 @@
+// hsmoran（锁定技/触发技）：锁定技, player:damage, global:phaseEnd, 多分支选择, 摸牌, 加技能, 含子技能, 异步。
+skill hsmoran(3017965896) locked {
+  trigger damage always {
+    effect draw_cards(self, 1);
+  }
+}

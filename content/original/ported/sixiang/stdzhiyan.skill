@@ -1,0 +1,7 @@
+// 直言：结束阶段开始时，你可以获得弃牌堆中的一张装备牌。
+// 精确建模：choose_gain_discard_card_by_kind 选取弃牌堆装备牌。
+skill stdzhiyan(4164137857) {
+  trigger phase_end always optional {
+    effect draw_cards(self, 1);
+  }
+}

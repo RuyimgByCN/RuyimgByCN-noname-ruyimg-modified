@@ -1,0 +1,5 @@
+skill stdshuyong(4071785718) {
+  trigger card_used owner_alive_other_current_source_repeats_card_name optional {
+    effect draw_cards(self, 1);
+  }
+}

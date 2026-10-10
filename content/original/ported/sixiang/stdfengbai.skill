@@ -1,0 +1,8 @@
+// 奉拜（主公技）：当你获得群势力角色失去的牌时，该群势力角色摸一张牌。
+// 旧 JS 涉及追踪牌的来源（getg/getl 对应 gain/lose 事件索引），DSL 无跨事件追踪牌流转的原语。
+// 主公技 (zhuSkill) 特性也无法在 DSL 中标记。无法建模。
+skill stdfengbai(3617990819) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

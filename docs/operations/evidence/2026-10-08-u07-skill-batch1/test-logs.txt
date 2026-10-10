@@ -1,0 +1,26 @@
+# U07 技能批一测试日志（2026-10-08，刺猬，规则 v110→v111）
+
+$ cargo test --offline -p engine-native
+engine-native: 428 passed / 0 failed / 1 ignored（v110 基线 427 +1 新增刺猬回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 10 passed; 0 failed（9 既有 + hanlong_ciqiu_sha_healthy_bonus_and_dying_mark）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 97、伴随技能 43 守卫过——刺猬走将领 mapping 通道不入伴随表）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v110→v111 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/skill.js:75 ciqiu（damageBegin1/num++/ciqiu_dying 授予+自移除）
+- character/skill.js:99 ciqiu_dying（dyingBegin firstDo die）
+
+## 测试迭代记录
+- 目录技能名=cards.json skills name（"ciqiu"），行为键仅路由（host.rs
+  WUDIAN_CIQIU_KEY 改 "ciqiu"）
+- wudian npack 漏 entry source_hash（rehash 不碰 entry——记忆 #4 同款）
+- 三段出杀 ShaLimit → debug_grant("咆哮")；unmapped 断言字面量 9→8；
+  韩龙目录技能断言 siji→[siji,ciqiu]

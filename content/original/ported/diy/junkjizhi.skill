@@ -1,0 +1,6 @@
+// 旧界集智：仅实体普通锦囊触发；牌顶非基本牌直接获得，基本牌可用手牌交换。
+skill junkjizhi(2783324283) {
+  trigger card_used owner_source_physical_ordinary_trick optional {
+    effect reveal_top_gain_non_basic_or_swap_basic(self);
+  }
+}

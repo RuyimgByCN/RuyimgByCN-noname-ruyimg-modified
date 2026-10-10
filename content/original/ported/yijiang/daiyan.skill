@@ -1,0 +1,7 @@
+// 怠宴（刘禅）：结束阶段选一名角色从牌堆中获得红桃基本牌；若连续选同一角色则其失去体力。
+// 旧 JS 的牌堆检索+跨回合状态记忆无对应原语，暂留空定义。
+skill daiyan(4032055659) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

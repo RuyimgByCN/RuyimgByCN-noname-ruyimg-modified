@@ -1,0 +1,9 @@
+// 撼捷（张飞）：其他角色回合开始时，若其体力不低于你且你有黑色手牌/装备牌，
+// 你可将一张黑色牌当一张任意非延时伤害牌对其使用。
+// 旧 JS 的「任意非延时伤害锦囊动态转化」无对应原语，以黑色牌当【杀】近似
+// （锦囊分支未建模，已注明）。
+skill dchanjie(2717942062) {
+  trigger phase_begin owner_alive_not_target_once optional {
+    effect choose_use_virtual_sha(self, ignore_distance);
+  }
+}

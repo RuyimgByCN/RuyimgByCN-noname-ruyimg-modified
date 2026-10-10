@@ -1,0 +1,9 @@
+// wulie2：刷新包技能。
+// triggers: player:damageBegin3
+// forced/locked: 锁定技
+skill wulie2(4125943381) {
+    // 近似：旧JS事件 damageBegin3 → DSL事件 damageBegin3
+    trigger damage_before owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

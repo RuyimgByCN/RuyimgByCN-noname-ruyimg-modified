@@ -1,0 +1,12 @@
+// 锋捍/从击：伤害牌首目标后协助摸牌；回合外红色弃牌可转赠。
+skill twfenghan(3542733092) {
+trigger card_targeted owner_source_first_target_damage_card_once_per_turn {
+    effect resolve_twwujing(self, event_target_count, 0);
+  }
+}
+
+skill twcongji(3604610940) {
+  trigger cards_moved owner_outside_turn_discarded_red_cards_in_discard {
+    effect resolve_twwujing(self, 0, 1);
+  }
+}

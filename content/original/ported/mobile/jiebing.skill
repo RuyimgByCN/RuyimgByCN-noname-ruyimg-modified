@@ -1,0 +1,6 @@
+// 借兵：受到伤害后，强制从伤害来源之外的一名其他角色随机获得一张手牌或装备牌；装备牌立即使用。
+skill jiebing(3832378886) locked {
+  trigger damage owner_alive {
+    effect choose_other_excluding_source_random_gain_hand_equip_then_use_if_equip(self, event_source);
+  }
+}

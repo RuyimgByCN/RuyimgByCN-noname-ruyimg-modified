@@ -1,0 +1,6 @@
+// goblin_rulin：锁定技, source:damage_before, 回复体力, 异步。
+skill goblin_rulin(2373590063) {
+  trigger damage_before owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

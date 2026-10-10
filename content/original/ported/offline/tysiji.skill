@@ -1,0 +1,5 @@
+// tysiji：global:phaseEnd, 视作sha, 含子技能, 异步。
+skill tysiji(2447162917) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

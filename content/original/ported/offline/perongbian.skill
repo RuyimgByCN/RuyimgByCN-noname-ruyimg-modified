@@ -1,0 +1,6 @@
+// perongbian：锁定技, player:card_used, 摸牌, 加技能, 异步。
+skill perongbian(2541592377) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// zuixiang2：锁定技, player:phase_prepare, target:useCardToBefore, 移出游戏, 多步骤。
+skill zuixiang2(2373081595) locked {
+  trigger phase_prepare always {
+  }
+}

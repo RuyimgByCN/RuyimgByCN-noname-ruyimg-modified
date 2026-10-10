@@ -1,0 +1,7 @@
+skill cunsi(3184006504) {
+  active play_phase once_per_game hand_nonempty face_up targets 1 1 other male {
+    effect give_all_hand(self, event_source);
+    effect add_skill(event_source, 3901337090);
+    effect turn_over(self);
+  }
+}

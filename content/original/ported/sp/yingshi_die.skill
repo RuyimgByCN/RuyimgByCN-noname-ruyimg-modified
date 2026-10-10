@@ -1,0 +1,11 @@
+// 英逝（yingshi_die）：锁定技。其他角色死亡时，你获得其「应逝」技能牌堆（xinfu_yingshi）的全部牌。
+// 上游 (sp/skill.js:46898)：global "die"，filter = 死亡角色 xinfu_yingshi 牌堆非空；
+// content = player.gain(trigger.player.getExpansions("xinfu_yingshi"), trigger.player, "give", "bySelf")。
+// 实现：death + owner_alive → gain_other_skill_pile_cards(self, event_player, 3212702585)。
+// 新增效果原语 GainOtherSkillPileCards（ABI 600，tag 656；rule-api/bytecode/vm/IR/codegen/
+// typecheck/primitives/hash/vm_host 全链路注册）。
+skill yingshi_die(4161454313) locked {
+  trigger death owner_alive {
+    effect gain_other_skill_pile_cards(self, event_player, 3212702585);
+  }
+}

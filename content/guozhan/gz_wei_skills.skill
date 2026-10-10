@@ -1,0 +1,48 @@
+// 国战·魏国核心技能首批（简化语义，标注近似）。
+// 旧 JS 仅作语义证据，不执行旧 JS。
+
+// gz_ganglie（国战·刚烈）：受到伤害后可令伤害来源选择弃手牌或受 1 点伤害。
+// 近似：受伤后直接对来源造成 1 点伤害（二选一省略）。
+skill gz_ganglie(4233756705) {
+  trigger damage owner_is_target_other_source_alive optional {
+    effect deal_damage(self, event_source, 1);
+  }
+}
+
+// gz_luoyi（国战·裸衣）：摸牌阶段可少摸一张，本回合杀/决斗伤害+1。
+// 近似：摸牌阶段少摸一张（伤害+1 modifier 省略）。
+skill gz_luoyi(2214010416) {
+  modifier draw_count add -1;
+}
+
+// gz_yiji（国战·遗计）：受到伤害后摸两张牌，可分配给任意角色。
+// 近似：受伤后摸两张牌（分配省略）。
+skill gz_yiji(969580224) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 2);
+  }
+}
+
+// gz_shensu（国战·神速）：弃牌阶段开始时视为使用一张杀（无距离限制）。
+// 近似：弃牌阶段摸一张牌（视为杀省略）。
+skill gz_shensu(2017386939) {
+  trigger phase_discard owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// gz_jushou（国战·据守）：结束阶段摸三张牌，然后翻面。
+// 近似：结束阶段摸三张牌（翻面省略）。
+skill gz_jushou(1394591863) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 3);
+  }
+}
+
+// gz_jieming（国战·节命）：角色进入濒死时可令其摸两张牌。
+// 近似：自己受伤后摸两张牌。
+skill gz_jieming(3459713017) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 2);
+  }
+}

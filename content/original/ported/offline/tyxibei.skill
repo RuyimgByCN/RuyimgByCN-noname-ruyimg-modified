@@ -1,0 +1,6 @@
+// tyxibei：global:gainBefore, global:cards_moved, global:cards_moved, 摸牌, 加技能, 含子技能, 异步。
+skill tyxibei(2553518155) {
+  trigger cards_moved owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

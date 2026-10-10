@@ -1,0 +1,7 @@
+// mbzhijie（智诫）：每轮限一次，一名角色的出牌阶段开始时，你可以展示其一张手牌。本阶段其使用与此牌类别相同的牌后，其摸一张牌并弃置X张牌（X为其本回合使用此牌类型的次数-1）；此阶段结束时，若其阶段因此获得的牌数大于因此弃置的牌数，你与其各摸一张牌。
+skill mbzhijie(2201530614) {
+  trigger phase_play owner_alive {
+    effect draw_cards(self, 1);
+    effect discard_selected(self);
+  }
+}

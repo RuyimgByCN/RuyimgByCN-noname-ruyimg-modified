@@ -1,0 +1,5 @@
+// petaoge：音效名:petaoge, 主动(multi), 加技能, 含子技能。
+skill petaoge(3043279750) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

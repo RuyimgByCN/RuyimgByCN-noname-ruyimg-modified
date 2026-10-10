@@ -1,0 +1,5 @@
+// shichou（锁定技/限定技/触发技）：觉醒技, 限定技, 锁定技, player:phase_prepare, player:damage_before, global:dying, 摸牌, 造成伤害, 加技能, 含子技能, 异步。
+skill shichou(3519896912) locked {
+  trigger phase_prepare always {
+  }
+}

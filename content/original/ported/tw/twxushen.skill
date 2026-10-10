@@ -1,0 +1,14 @@
+// 许身（TW鲍三娘，限定技）：一轮开始时/出牌阶段，你可以摸至多四张牌并失去等量
+// 体力，然后本回合结束时若你处于濒死状态…（derivation twwushen/redangxian/rezhiman
+// 授技链）。
+// 上游 (tw/skill.js:193-379)：roundStart/phaseUse 双入口 + chooseControl 1-4 点 +
+// awakenSkill + draw/loseHp 等量 + 临时效果技。
+// 近似实现：每轮开始可选「摸 2 失 2」（choose 仅二支，1-4 点自选未建模；限定觉醒
+// 与后续授技链未建模）。与 olxushen（batch P）同以 optional 近似限定技。
+// 2026-08-15：随上游 v1.11.5 新武将 tw_baosanniang 移植。
+skill twxushen(2777227128) {
+  trigger round_started owner_alive optional {
+    effect draw_cards(self, 2);
+    effect lose_hp(self, 2);
+  }
+}

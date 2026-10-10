@@ -1,0 +1,24 @@
+// 承诏：任一角色结束阶段，若本回合获得至少两张牌，可与一名角色拼点。
+skill chengzhao(3452131931) {
+  trigger phase_end owner_alive_gained_two_this_turn_can_compare_other optional {
+    effect choose_hand_compare(self, 2503452290, 4247003544);
+  }
+}
+
+// 严格胜利后，以普通次数、无距离并无视防具的方式对拼点目标使用虚拟【杀】。
+skill chengzhao_win(2503452290) {
+  modifier card_distance_unlimited(sha) override 1;
+  modifier ignore_armor override 1;
+
+  trigger hand_compare_finished owner_alive {
+    effect use_virtual_card_on(self, sha, event_source);
+    effect remove_skill(self_skill);
+  }
+}
+
+// 平局或失败不产生后续效果。
+skill chengzhao_lose(4247003544) {
+  trigger hand_compare_finished owner_alive {
+    effect remove_skill(self_skill);
+  }
+}

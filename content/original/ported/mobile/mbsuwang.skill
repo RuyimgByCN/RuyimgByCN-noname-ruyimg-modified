@@ -1,0 +1,19 @@
+// mbsuwang（宿望·手杀）：一名角色的回合结束时，若其此回合对你使用过牌且你未
+// 受到过伤害，则你将牌堆顶的一张牌置于武将牌上。摸牌阶段开始时，你可以改为获得
+// 武将牌上的“宿望”牌，然后你可以令一名其他角色摸两张牌。
+// 上游 (mobile/skill.js mbsuwang)：trigger global phaseEnd；forced；filter =
+// event.player hasHistory useCard 含 owner + owner hasHistory damage 为空
+// （versus 双人模式变体忽略）；content addToExpansion(get.cards(1))。
+// 实现（2026-09-10 第二百二十批·历史查询过滤器）：trigger phase_end
+// owner_alive_other_phase_end_used_card_on_owner_undamaged_this_turn
+// （card_target_count(事件角色, owner)>0 + damage_taken_count(owner)==0，
+// target 计数需过滤器 opt-in）forced →
+// place_top_deck_to_expansion(self, self_skill, 2260438466, 1)（ABI 685）。
+// 近似（登记债）：①摸牌阶段改为获得宿望牌+令其他角色摸二面未建模；②useCard
+// 目标判定以 card_target_count 声明目标计数近似（stocktargets/重定向差异）；
+// ③onremove 清堆未建模。
+skill mbsuwang(2260438466) {
+  trigger phase_end owner_alive_other_phase_end_used_card_on_owner_undamaged_this_turn {
+    effect place_top_deck_to_expansion(self, self_skill, 2260438466, 1);
+  }
+}

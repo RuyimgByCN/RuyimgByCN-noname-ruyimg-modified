@@ -1,0 +1,6 @@
+// 逆取：旧 JS 语义重写；目标数、每回合次数与火焰伤害属性均由通用契约表达。
+skill scsniqu(2407745929) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect deal_damage(self, event_source, 1, fire);
+  }
+}

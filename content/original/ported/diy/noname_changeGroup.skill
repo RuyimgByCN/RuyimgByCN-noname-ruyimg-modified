@@ -1,0 +1,7 @@
+// noname_changeGroup（系统技能）：charlotte 强制技能，处理势力变化的
+// 系统级显示/清理，无独立权威规则行为（旧 JS 仅维护 UI 状态）。
+skill noname_changeGroup(3253144919) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

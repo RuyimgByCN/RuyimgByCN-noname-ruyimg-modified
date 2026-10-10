@@ -1,0 +1,17 @@
+// 雍州（pxyongzhou，州郡技能）：当你获得此技能后，你可以摸两张牌，然后将手牌弃至
+// 手牌上限。
+// 上游 (sp/skill.js:2877)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// content = draw(2) → num = 手牌数 - 手牌上限，超限则弃置超限张（仅手牌）。
+// 实现：skill_added + owner_skill_added_self_2600588951 → 可选确认 →
+// let n = hand_count(self) + 2 - hand_limit(self)（计划期求值，+2 计入随后的摸牌）→
+// draw_cards(self, 2) → n > 0 时 discard_hand_expr(self, n)。
+// 与上游差异：无（原「弃 1 张」近似已由表达式张数弃牌原语升级为精确语义）。
+skill pxyongzhou(2600588951) {
+  trigger skill_added owner_skill_added_self_2600588951 optional {
+    let n = hand_count(self) + 2 - hand_limit(self);
+    effect draw_cards(self, 2);
+    if n > 0 {
+      effect discard_hand_expr(self, n);
+    }
+  }
+}

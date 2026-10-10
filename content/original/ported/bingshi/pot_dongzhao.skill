@@ -1,0 +1,29 @@
+skill spmiaolve(2347949240) {
+  trigger game_started owner_alive {
+    effect resolve_spmiaolve(self, 0);
+  }
+
+  trigger damage owner_is_target optional {
+    effect resolve_spmiaolve(self, 1);
+  }
+}
+
+skill spyingjia(3012325144) {
+  trigger phase_begin owner_is_target {
+    effect resolve_spyingjia(self, 0, 3612952432);
+  }
+
+  trigger card_used owner_is_source {
+    effect resolve_spyingjia(self, 1, 3612952432);
+  }
+
+  trigger turn_ended owner_alive optional {
+    effect resolve_spyingjia(self, 2, 3612952432);
+  }
+}
+
+skill spyingjia_draw(3612952432) locked {
+  trigger phase_begin owner_is_target {
+    effect resolve_spyingjia(self, 3, 3612952432);
+  }
+}

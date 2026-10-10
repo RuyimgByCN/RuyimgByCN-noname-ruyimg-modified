@@ -1,0 +1,510 @@
+[
+  {
+    "id": 2320655108,
+    "name_key": "yxs_qinqiong",
+    "max_hp": 4,
+    "skills": [
+      2190700560,
+      2280812565
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_yxs_qinqiong.jpg"
+  },
+  {
+    "id": 650474248,
+    "name_key": "yxs_wuzetian",
+    "max_hp": 4,
+    "skills": [
+      593383842,
+      2112254898,
+      1740591516
+    ],
+    "sex": "female",
+    "group": "wu",
+    "portrait_asset": "character_yxs_wuzetian.jpg"
+  },
+  {
+    "id": 2045367306,
+    "name_key": "yxs_caocao",
+    "max_hp": 4,
+    "skills": [
+      2663243760,
+      2608614817
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_yxs_caocao.jpg"
+  },
+  {
+    "id": 879080852,
+    "name_key": "yxs_mozi",
+    "max_hp": 3,
+    "skills": [
+      4077548530,
+      2944460215,
+      2816946105
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_mozi.jpg"
+  },
+  {
+    "id": 2232755093,
+    "name_key": "yxs_bole",
+    "max_hp": 3,
+    "skills": [
+      609908156,
+      524529100
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_yxs_bole.jpg"
+  },
+  {
+    "id": 1882446614,
+    "name_key": "yxs_aijiyanhou",
+    "max_hp": 3,
+    "skills": [
+      3314563534,
+      3346302416
+    ],
+    "sex": "female",
+    "group": "qun",
+    "portrait_asset": "character_yxs_aijiyanhou.jpg"
+  },
+  {
+    "id": 2811804695,
+    "name_key": "yxs_diaochan",
+    "max_hp": 3,
+    "skills": [
+      4267717590,
+      3333871576
+    ],
+    "sex": "female",
+    "group": "qun",
+    "portrait_asset": "character_yxs_diaochan.jpg"
+  },
+  {
+    "id": 1024038426,
+    "name_key": "yxs_yangyuhuan",
+    "max_hp": 3,
+    "skills": [
+      3717003247,
+      992008166
+    ],
+    "sex": "female",
+    "group": "wu",
+    "portrait_asset": "character_yxs_yangyuhuan.jpg"
+  },
+  {
+    "id": 3755536539,
+    "name_key": "yxs_baosi",
+    "max_hp": 3,
+    "skills": [
+      2311199132
+    ],
+    "sex": "female",
+    "group": "wu",
+    "portrait_asset": "character_yxs_baosi.jpg"
+  },
+  {
+    "id": 3442042911,
+    "name_key": "yxs_napolun",
+    "max_hp": 4,
+    "skills": [
+      4245422482,
+      1605378455
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_yxs_napolun.jpg"
+  },
+  {
+    "id": 4109752352,
+    "name_key": "yxs_kaisa",
+    "max_hp": 4,
+    "skills": [
+      2459573631
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_yxs_kaisa.jpg"
+  },
+  {
+    "id": 449424416,
+    "name_key": "yxs_zhuyuanzhang",
+    "max_hp": 4,
+    "skills": [
+      3800740223
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_yxs_zhuyuanzhang.jpg"
+  },
+  {
+    "id": 1605839394,
+    "name_key": "yxs_jinke",
+    "max_hp": 3,
+    "skills": [
+      2922571126
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_jinke.jpg"
+  },
+  {
+    "id": 1018605987,
+    "name_key": "yxs_libai",
+    "max_hp": 3,
+    "skills": [
+      1035759472,
+      2256829294
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_libai.jpg"
+  },
+  {
+    "id": 364472354,
+    "name_key": "yxs_luban",
+    "max_hp": 3,
+    "skills": [
+      77939555,
+      3905729891
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_yxs_luban.jpg"
+  },
+  {
+    "id": 2268373675,
+    "name_key": "yxs_lvzhi",
+    "max_hp": 4,
+    "skills": [
+      3629938017,
+      3759997791
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_yxs_lvzhi.jpg"
+  },
+  {
+    "id": 306093104,
+    "name_key": "yxs_goujian",
+    "max_hp": 3,
+    "skills": [
+      3956601179
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_yxs_goujian.jpg"
+  },
+  {
+    "id": 2821828530,
+    "name_key": "yxs_lishimin",
+    "max_hp": 4,
+    "skills": [
+      2918381399
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_lishimin.jpg"
+  },
+  {
+    "id": 2113016502,
+    "name_key": "yxs_huamulan",
+    "max_hp": 3,
+    "skills": [
+      3366675788
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_yxs_huamulan.jpg"
+  },
+  {
+    "id": 2996424759,
+    "name_key": "yxs_luobinhan",
+    "max_hp": 4,
+    "skills": [
+      3511144248,
+      3224990524,
+      869574466
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_yxs_luobinhan.jpg"
+  },
+  {
+    "id": 238674105,
+    "name_key": "yxs_chengjisihan",
+    "max_hp": 4,
+    "skills": [
+      4271594806
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_chengjisihan.jpg"
+  },
+  {
+    "id": 2061162937,
+    "name_key": "yxs_mingchenghuanghou",
+    "max_hp": 3,
+    "skills": [
+      2851973941,
+      1822097701
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_yxs_mingchenghuanghou.jpg"
+  },
+  {
+    "id": 567914810,
+    "name_key": "yxs_wangzhaojun",
+    "max_hp": 3,
+    "skills": [
+      852124925,
+      337724667
+    ],
+    "sex": "female",
+    "group": "wei",
+    "portrait_asset": "character_yxs_wangzhaojun.jpg"
+  },
+  {
+    "id": 3844672957,
+    "name_key": "yxs_luocheng",
+    "max_hp": 4,
+    "skills": [
+      2534113005,
+      1659214067
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_yxs_luocheng.jpg"
+  },
+  {
+    "id": 324004034,
+    "name_key": "yxs_direnjie",
+    "max_hp": 3,
+    "skills": [
+      2238464233
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_yxs_direnjie.jpg"
+  },
+  {
+    "id": 3060404035,
+    "name_key": "yxs_sunwu",
+    "max_hp": 3,
+    "skills": [
+      616605412,
+      1074962662
+    ],
+    "sex": "male",
+    "group": "wu",
+    "portrait_asset": "character_yxs_sunwu.jpg"
+  },
+  {
+    "id": 1085217605,
+    "name_key": "yxs_chengyaojin",
+    "max_hp": 4,
+    "skills": [
+      1859430097
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_yxs_chengyaojin.jpg"
+  },
+  {
+    "id": 1539028422,
+    "name_key": "yxs_yujix",
+    "max_hp": 3,
+    "skills": [
+      273197252,
+      2709409990
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_yxs_yujix.jpg"
+  },
+  {
+    "id": 2854685770,
+    "name_key": "yxs_xiangyu",
+    "max_hp": 4,
+    "skills": [
+      2954700472
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_yxs_xiangyu.jpg"
+  },
+  {
+    "id": 2300399437,
+    "name_key": "yxs_yingzheng",
+    "max_hp": 4,
+    "skills": [
+      2506166954
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_yingzheng.jpg"
+  },
+  {
+    "id": 855384537,
+    "name_key": "yxs_yuefei",
+    "max_hp": 4,
+    "skills": [
+      3871833772
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_yuefei.jpg"
+  },
+  {
+    "id": 4145021661,
+    "name_key": "yxs_fuermosi",
+    "max_hp": 3,
+    "skills": [
+      3248070814,
+      327251107
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_yxs_fuermosi.jpg"
+  },
+  {
+    "id": 1953916637,
+    "name_key": "yxs_guiguzi",
+    "max_hp": 3,
+    "skills": [
+      3206155416,
+      3264849562,
+      2835673245
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_guiguzi.jpg"
+  },
+  {
+    "id": 2801632095,
+    "name_key": "yxs_xiaoqiao",
+    "max_hp": 3,
+    "skills": [
+      1787830415,
+      3900290195
+    ],
+    "sex": "female",
+    "group": "wu",
+    "portrait_asset": "character_yxs_xiaoqiao.jpg"
+  },
+  {
+    "id": 3960938465,
+    "name_key": "yxs_luzhishen",
+    "max_hp": 4,
+    "skills": [
+      305151117,
+      3722822797
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_yxs_luzhishen.jpg"
+  },
+  {
+    "id": 2362978274,
+    "name_key": "yxs_zhaoyong",
+    "max_hp": 3,
+    "skills": [
+      1828946545,
+      700608131
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_yxs_zhaoyong.jpg"
+  },
+  {
+    "id": 962155366,
+    "name_key": "yxs_yangguang",
+    "max_hp": 3,
+    "skills": [
+      1195602545,
+      2411573874
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_yangguang.jpg"
+  },
+  {
+    "id": 306113385,
+    "name_key": "yxs_tangbohu",
+    "max_hp": 3,
+    "skills": [
+      3607730272,
+      263549040
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_tangbohu.jpg"
+  },
+  {
+    "id": 471553268,
+    "name_key": "yxs_zhangsanfeng",
+    "max_hp": 4,
+    "skills": [
+      3446318675,
+      259539037
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_yxs_zhangsanfeng.jpg"
+  },
+  {
+    "id": 3697025269,
+    "name_key": "yxs_nandinggeer",
+    "max_hp": 3,
+    "skills": [
+      4231933503,
+      1295790157,
+      2459552326
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_yxs_nandinggeer.jpg"
+  },
+  {
+    "id": 3686675061,
+    "name_key": "yxs_weizhongxian",
+    "max_hp": 3,
+    "skills": [
+      2352238134,
+      3046333499
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_yxs_weizhongxian.jpg"
+  },
+  {
+    "id": 768872438,
+    "name_key": "yxs_meixi",
+    "max_hp": 3,
+    "skills": [
+      2695674930,
+      313367600
+    ],
+    "sex": "female",
+    "group": "shu",
+    "portrait_asset": "character_yxs_meixi.jpg"
+  },
+  {
+    "id": 3884061567,
+    "name_key": "yxs_lanlinwang",
+    "max_hp": 4,
+    "skills": [
+      3337152544,
+      1543273518
+    ],
+    "sex": "male",
+    "group": "shu",
+    "portrait_asset": "character_yxs_lanlinwang.jpg"
+  }
+]

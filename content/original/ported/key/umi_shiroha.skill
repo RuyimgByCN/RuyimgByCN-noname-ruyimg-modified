@@ -1,0 +1,5 @@
+// 白羽·绑定（海未）：到指定角色的距离视为1。
+// 旧 JS 纯 modifier 技能，需角色绑定原语，以 global_distance_to 近似。
+skill umi_shiroha(3142220924) {
+  modifier global_distance_to override 1;
+}

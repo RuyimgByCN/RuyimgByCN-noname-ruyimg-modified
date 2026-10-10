@@ -1,0 +1,4 @@
+// dcshuangjia：锁定技。
+skill dcshuangjia(2347924708) {
+  modifier hand_limit add 1;
+}

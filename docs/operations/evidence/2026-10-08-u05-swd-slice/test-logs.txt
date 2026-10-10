@@ -1,0 +1,9 @@
+$ U05 swd 首切片定向：护符 hufu 濒死自救（含他人濒死负例）+ 转换包生命周期
+test swd_hufu_self_dying_only ... ok
+test swd_real_host_full_lifecycle ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+$ 全量 engine-native 单线程（400/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v84→v85，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Hufu 编码 104（archive enc/dec+a0 variant 表同步，ALL 104→105）；is_tao_like 双镜像加 dying 参数——Hufu 仅 responder==dying（上游 savable dying===player 同口径）；PlayCard 门控 Hufu 需 p.dying（非濒死 IllegalTargets）
+$ 转换包：packages/extensions/shahai-swd-upstream-noname（护符 ♠1/♣1 两张；cards.json source_hash/asset_hash 重算——range 字段非武器不可声明， learn：非武器卡不带 range）
+$ 回归：swd_hufu_self_dying_only（自救成功/他人濒死负例=持符者选项不含护符+濒死者死亡）+ swd_real_host_full_lifecycle（六步生命周期）

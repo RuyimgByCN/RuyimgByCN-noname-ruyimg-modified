@@ -1,0 +1,6 @@
+// 劲镞：双方亮牌后按点数极值弃置并刷新；非唯一极值累积到本回合下一张杀。
+skill mbjinzu(3257523591) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 1 {
+    effect resolve_mbjinzu(self, event_source, 4156343864);
+  }
+}

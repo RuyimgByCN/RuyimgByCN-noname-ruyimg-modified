@@ -1,0 +1,11 @@
+// 寿春（pxshouchun，州郡技能）：当你获得此技能后，你可以令一名角色增加1点体力上限。
+// 上游 (sp/skill.js:2625)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// cost = chooseTarget（任意角色，含自己）；content = targets[0].gainMaxHp()。
+// 实现：skill_added + owner_skill_added_self_3720575836 → 可选确认 →
+// choose_target_gain_max_hp(self, self_skill)（SelectTargets 可取消选择，选中者 +1 上限）。
+// 注：原 noop 注释「audio-only 无规则面」与上游不符（px* 批量误标），已按上游原文重写。
+skill pxshouchun(3720575836) {
+  trigger skill_added owner_skill_added_self_3720575836 optional {
+    effect choose_target_gain_max_hp(self, self_skill);
+  }
+}

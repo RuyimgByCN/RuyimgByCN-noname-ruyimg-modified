@@ -1,0 +1,4 @@
+// Skill shushu2(150) - modifier distance variant
+skill shushu2(150) {
+  modifier distance_from add -1;
+}

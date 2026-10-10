@@ -1,0 +1,8 @@
+// 绝影（魔曹操坐骑）：使用杀时令目标需多一张闪；出牌阶段可摸连续红色牌数张。
+// 旧 JS 的「杀需多闪」无 DSL 原语；「连续红色牌计数」需全局历史分析无原语。
+// ponytail: 连续红牌计数不可建模，近似为出牌阶段摸2张（低于平均收益的保守值）。
+skill mbchiyuan(2796459825) {
+  active play_phase uses_per_turn 1 targets 0 0 other {
+    effect draw_cards(self, 2);
+  }
+}

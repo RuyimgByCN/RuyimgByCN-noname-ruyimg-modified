@@ -1,0 +1,10 @@
+// 音爆：旧 JavaScript 仅作为语义证据；运行时只加载该类型化规则。
+skill hisako_yinbao(3078155020) {
+  trigger damage owner_is_target optional {
+    effect judge_damage_other_on_suit(self, spade, 1, thunder);
+  }
+
+  trigger hp_recovered owner_is_target optional {
+    effect judge_damage_other_on_suit(self, spade, 1, thunder);
+  }
+}

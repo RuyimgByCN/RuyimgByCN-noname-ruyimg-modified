@@ -1,0 +1,18 @@
+// 界奔袭：沿用 OL 奔袭的通用卡牌策略，仅使用独立技能定义。
+skill xinbenxi(3506100401) locked {
+  modifier distance_from add -owner_current_turn_card_use_count;
+  trigger card_used owner_source_single_target_sha_or_ordinary_trick_current_turn {
+    effect choose_current_card_use_enhancements(self, event_card, 4250961579);
+  }
+}
+
+skill xinbenxi_effect(4250961579) {
+  modifier ignore_armor_for_skill_card_policy override 1;
+  modifier card_use_unrespondable_for_skill_card_policy override 1;
+  trigger damage owner_source_event_card_policy_draw {
+    effect draw_cards(self, 1);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

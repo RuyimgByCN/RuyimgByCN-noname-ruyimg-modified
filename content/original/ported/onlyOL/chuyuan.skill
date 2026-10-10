@@ -1,0 +1,13 @@
+// 储元（OL 曹丕）：任意角色受到伤害后,若其存活且你的「储」牌堆数量不足你的体力上限,
+// 其摸一张牌,然后将其一张手牌置于你的武将牌上,称为「储」。
+// 旧 JS 仅作语义证据;「选牌者为受伤者本人」以拥有者选择近似
+// （choose_other_hand_store_skill_pile,ABI 567 首个用例）;
+// 自己受伤时不触发存储（效果内 player==target 校验为安全空操作）。
+skill chuyuan(3324653503) {
+  trigger damage owner_alive optional {
+    if skill_pile_count(self, 3324653503) < max_hp(self) {
+      effect draw_cards(event_player, 1);
+      effect choose_other_hand_store_skill_pile(self, event_player);
+    }
+  }
+}

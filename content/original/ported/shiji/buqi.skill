@@ -1,0 +1,9 @@
+// 不弃（曹丕系）：锁定技。任意角色进入濒死时，若你有至少两张「仁」牌，
+// 移去两张并令其回复 1 点体力。
+// 旧 JS 的「仁」expansion 状态无对应原语；以濒死时回复 1 点近似
+// （移牌未建模，已注明）。
+skill buqi(3731750752) locked {
+  trigger dying owner_alive_other_dying_once_per_round {
+    effect recover_hp(event_player, 1);
+  }
+}

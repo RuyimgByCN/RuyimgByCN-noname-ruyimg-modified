@@ -1,0 +1,10 @@
+// 制衡（恭子）：出牌阶段限一次，弃置任意张牌并摸等量牌；若装备花色>=4且弃置所有手牌则额外摸一张。
+// 实现：复用标准制衡 `select_he` + `discard_selected` + `draw_selected`。
+// 近似：装备四花色且弃光手牌的额外摸 1 未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kyoko_zhiheng(2851376754) {
+  active play_phase uses_per_turn 1 select_he 1 255 {
+    effect discard_selected(self);
+    effect draw_selected(self);
+  }
+}

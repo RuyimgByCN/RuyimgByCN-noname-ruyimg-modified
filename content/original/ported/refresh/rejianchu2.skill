@@ -1,0 +1,8 @@
+skill rejianchu2(3848225310) {
+  modifier sha_use_limit add owner_skill_mark;
+
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 3848225310, 0);
+    effect remove_skill(self_skill);
+  }
+}

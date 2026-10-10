@@ -1,0 +1,7 @@
+// 尽瘁（张让系）：限定技。出牌阶段，与一名其他角色交换座次。
+// 旧 JS 的「换座次」无对应原语，未建模（已注明）。
+skill spjincui(3029984316) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

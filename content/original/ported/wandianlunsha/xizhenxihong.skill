@@ -1,0 +1,15 @@
+skill fuchou(3890431595) {
+  trigger card_targeted owner_is_target_sha_source_alive_hand_equip_nonempty optional {
+    effect resolve_wdb_xizhenxihong(self, event_source, event_card, 0);
+  }
+  trigger turn_ended owner_alive_wdb_fuchou_pending_living {
+    effect resolve_wdb_xizhenxihong(self, self, 0, 1);
+  }
+}
+
+skill jinyan(3563375486) locked {
+  modifier card_use_cancel(black_trick) override owner_hp_le_two;
+  modifier card_response_cancel(black_trick) override owner_hp_le_two;
+  view_as sha play_phase owner_hp_le_two_black_trick from hand;
+  view_as sha response owner_hp_le_two_black_trick from hand;
+}

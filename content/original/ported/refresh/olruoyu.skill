@@ -1,0 +1,9 @@
+// olruoyu：刷新包技能。
+// triggers: player:phaseZhunbeiBegin
+// forced/locked: 锁定技
+skill olruoyu(2218917858) {
+    // 近似：旧JS事件 phaseZhunbeiBegin → DSL事件 phase_prepare
+    trigger phase_prepare owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

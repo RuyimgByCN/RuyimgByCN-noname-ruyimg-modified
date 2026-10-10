@@ -1,0 +1,4 @@
+// 【宣穆】登场后的临时效果：防止拥有者受到的所有非失去体力伤害。
+skill xuanmu2(2561421451) locked {
+  modifier damage_taken_cancel override 1;
+}

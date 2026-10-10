@@ -1,0 +1,8 @@
+// 王抗（dcsbwankang）：濒死时，回复 1 点体力并摸两张牌。
+// 旧 JS 的「标记 +1」「回合结束时对伤害来源用【杀】（每名限一次）」子技能未建模。
+skill dcsbwankang(2153717747) {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 1);
+    effect draw_cards(self, 2);
+  }
+}

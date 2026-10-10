@@ -1,0 +1,20 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/cardpile/extension.js",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "total": 160,
+  "entries": [
+    {"card": "sha", "counts": {"diamond": 6, "club": 14, "heart": 3, "spade": 7}},
+    {"card": "huosha", "counts": {"diamond": 2, "heart": 3}},
+    {"card": "leisha", "counts": {"spade": 5, "club": 4}},
+    {"card": "shan", "counts": {"heart": 6, "diamond": 18}},
+    {"card": "jiu", "counts": {"diamond": 1, "spade": 2, "club": 2}},
+    {"card": "tao", "counts": {"heart": 9, "diamond": 3}},
+    {"card": "wanjian", "counts": {"heart": 1}},
+    {"card": "nanman", "counts": {"spade": 2, "club": 1}},
+    {"card": "guohe", "counts": {"spade": 3, "club": 2, "heart": 1}},
+    {"card": "shunshou", "counts": {"spade": 3, "diamond": 2}},
+    {"card": "wuxie", "counts": {"heart": 2, "diamond": 1, "spade": 2, "club": 2}},
+    {"card": "tiesuo", "counts": {"spade": 2, "club": 4}}
+  ]
+}

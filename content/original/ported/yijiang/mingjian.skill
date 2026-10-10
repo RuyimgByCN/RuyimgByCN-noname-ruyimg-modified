@@ -1,0 +1,9 @@
+// 明鉴（孙亮）：出牌阶段限一次，将至多任意张手牌交给一名其他角色。
+// 其本回合内手牌上限+X（X为给牌数）。
+// 旧 JS 的 addTempSkill+storage 计数（叠加层数）无对应原语；
+// 以 give_all_hand 近似，忽略上限调整（已注明）。
+skill mingjian(2274326317) {
+  active play_phase hand_nonempty face_up targets 1 1 other male {
+    effect give_all_hand(self, event_source);
+  }
+}

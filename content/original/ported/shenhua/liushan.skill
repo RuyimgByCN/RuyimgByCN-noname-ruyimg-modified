@@ -1,0 +1,22 @@
+// 刘禅【享乐/放权/若愚】— shenhua 旧 JS 语义参考：
+// 享乐 useCardToTargeted：杀使用者弃一张基本牌，否则此杀对刘禅无效（经保存杀目标排除）。
+// 放权 phaseUseBefore：跳过出牌阶段；phaseEnd：弃一张手牌并令一名其他角色进行一个额外回合。
+// 若愚 phaseZhunbeiBegin（主公技）：体力值为全场最少时觉醒，加上限、回复并授予激将。
+skill xiangle(2880679348) {
+  trigger card_targeted owner_is_target {
+    effect resolve_xiangle(self, event_source, event_card);
+  }
+}
+skill fangquan(283021192) {
+  trigger phase_play owner_is_target optional {
+    effect resolve_fangquan_skip(self);
+  }
+  trigger phase_end owner_is_target optional {
+    effect resolve_fangquan_grant(self);
+  }
+}
+skill ruoyu(2227756813) lord_only {
+  trigger phase_prepare owner_is_target {
+    effect resolve_ruoyu(self, 2377283906);
+  }
+}

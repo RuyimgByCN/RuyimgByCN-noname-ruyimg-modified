@@ -1,0 +1,6 @@
+// 长安大舰离场：销毁舰牌，二号舰回复体力，并逐舰处理一张场上牌。
+skill changandajian_destroy(4232406220) locked non_gainable {
+  trigger cards_moved owner_lost_package_card_from_equip {
+    effect resolve_dili_yuheng(self, 128, event_card);
+  }
+}

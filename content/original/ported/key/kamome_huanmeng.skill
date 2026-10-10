@@ -1,0 +1,14 @@
+// 幻梦（鸥）：准备阶段，可观看牌堆顶 1+装备区牌数的牌，任意调整顺序置于牌堆顶
+// 或牌堆底。（kamome_huanmeng，key 包）
+// 上游 (key/skill.js kamome_huanmeng)：trigger phaseZhunbeiBegin frequent；
+// content = chooseToGuanxing(1 + player.countCards("e"))。
+// 实现（2026-09-07 第一百七十七批·观星族第 2 件，复用批 176 guanxing_top 原语 +
+// 本批 EquippedCount 查询表达式）：trigger phase_prepare owner_is_target（frequent
+// 口径锁定无确认）→ guanxing_top(self, 1 + equipped_count(self))。
+// 近似（登记债）：逐张二选（顶/底）近似上游拖拽任意排列——堆内自由序未建模
+// （批 176 同款）。
+skill kamome_huanmeng(3440411698) {
+  trigger phase_prepare owner_is_target {
+    effect guanxing_top(self, 1 + equipped_count(self));
+  }
+}

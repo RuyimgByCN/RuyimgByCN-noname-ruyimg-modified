@@ -1,0 +1,285 @@
+// sxrm（三国杀日服变体）包元数据登记：以下技能依赖使命技/起定技状态机、动态技能移除、
+// 标记追踪、连接牌、额外回合、拼点链等 DSL 不支持或未移植的机制，登记元数据并文档化
+// 近似（无运行时行为）。详见包 README 的可表达性清单。
+
+// 劫火（嗔周瑜）：使命技，准备阶段可选择：本局下次你造成的伤害改为 3 点火焰伤害；
+// 非你造成的伤害结算后使命失败（失去 1 点体力上限）。需要伤害替换与使命失败状态机。
+skill sxrmjiehuo(3539390011) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 香饵（嗔周瑜）：出牌阶段限一次，令一名其他角色获得「香饵」标记（不能使用点数大于
+// 6 的牌；下个结束阶段其回复标记数体力并摸牌）。需要标记追踪与牌点数使用限制。
+skill sxrmxianger(3539390012) {
+  modifier hand_limit add 1;
+}
+// 灭国（嗔周瑜）：结束阶段可弃置一名其他角色至多三张牌并获得，其选择至多等同牌数的
+// 角色于你的额外回合内不能成为其目标。需要额外回合与目标豁免标记。
+skill sxrmmieguo(3539390013) {
+  modifier hand_limit add 1;
+}
+// 骄纵（嗔孙尚香）：准备阶段或你使用【杀】指定目标后，移动一名角色装备区的一张牌至
+// 另一名可装备角色。需要装备移动的目标与位置双选择原语。
+skill sxrmjiaozong(3539390014) {
+  modifier hand_limit add 1;
+}
+// 辅随（嗔孙尚香）：限定技，出牌阶段选择一名男性角色并令其失去一个技能，你与其获得
+// 「比翼」（本轮防止受到的伤害）。需要动态移除技能与派生技能授予。
+skill sxrmfusui(3539390015) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 携众（嗔张昭）：选择至多 ⌈存活数/2⌉ 名角色，其各自选择摸两张牌并失去 1 点体力或
+// 将两张牌当【杀】使用。需要多目标选择与目标侧分支选择。
+skill sxrmxiezhong(3539390016) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 起事（嗔张昭）：起定技，结束阶段可展示本回合其他角色进入弃牌堆的至多五张牌并
+// 获得；起定失败则失去 1 点体力上限。需要回合弃牌历史追踪与起定技状态机。
+skill sxrmqishi(3539390017) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 万利（嗔鲁肃）：第一回合开始选择一名其他角色，交给其任意张牌并标记「未还钱」；
+// 其后成为黑色牌目标可与其拼点，胜则其交还等量牌，负则摸至体力上限。需要贷款标记
+// 与跨阶段状态机。
+skill sxrmwanli(3539390018) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 兵驱（嗔诸葛亮）：准备阶段与一名其他角色各声明一种普通锦囊牌；此回合你与其使用
+// 被声明锦囊牌时，改为对对方使用。需要声明牌名与使用替换状态机。
+skill sxrmbingqu(3539390019) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 反心（嗔诸葛亮）：使命技，其他角色死亡后……需要使命失败与死亡追踪状态机。
+skill sxrmfanxin(3539390020) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 胆萃（嗔贾诩）：起定技，结束阶段选择至多两名角色各弃置一张牌；起定失败则失去
+// 1 点体力上限。需要起定技状态机。
+skill sxrmdancui(3539390021) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 诈堕（嗔赵云）：结束阶段获得两名其他角色各一张牌，然后可对其中角色使用【杀】。
+// 需要双目标逐个取牌与后续杀使用原语。
+skill sxrmzhaduo(3539390022) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 佯北（嗔曹仁）：准备/结束阶段可摸三张牌并翻面；你成为单体【杀】/锦囊目标时，其
+// 可弃置所有手牌令佯北本回合失效。需要回合技能失效标记。
+skill sxrmyangbei(3539390023) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 隐锋（嗔曹仁）：锁定技，你本局首次造成伤害后，受伤角色失去等量体力上限直至你的
+// 下个回合开始。需要首次伤害计数与上限恢复标记。
+skill sxrmyinfeng(3539390024) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 憾国（嗔关羽）：回合开始选择一名其他角色，直至你的下个回合开始前其受到伤害时你
+// 摸一张牌。需要跨回合标记与伤害联动。
+skill sxrmhanguo(3539390025) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 威我（嗔关羽）：限定技，结束阶段选择一名其他角色，其选择交给你一张牌并摸一张牌
+// 或失去 1 点体力。需要限定技与目标侧分支选择。
+skill sxrmweiwo(3539390026) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 阴谋（嗔关银屏）：其他角色获得/失去牌后，若其与你的牌数差……需要全局牌数差追踪。
+skill sxrmyinmou(3539390027) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 驱驰（嗔关银屏）：出牌阶段限一次，选择一名其他角色，其选择展示一张牌或失去 1 点
+// 体力；你与其各摸一张牌。需要目标侧展示选择。
+skill sxrmquchi(3539390028) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 素武（嗔于禁）：准备阶段或任意角色使用牌后，若你与其均无连接牌……需要连接牌概念。
+skill sxrmsuwu(3539390029) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 人望（嗔于禁）：你可以将一张连接牌当【桃】使用。需要连接牌概念。
+skill sxrmrenwang(3539390030) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 火厄（嗔糜芳）：结束阶段可视为对一名其他角色使用【火攻】。需要虚拟锦囊使用管线
+// 与火攻目标选择。
+skill sxrmhuoe(3539390031) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 贪堕（嗔糜芳）：锁定技，弃牌阶段开始时若你需弃置，你弃置所有手牌（否则弃置一张
+// 牌）。需要强制弃牌分支。
+skill sxrmtanduo(3539390032) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 怀兵（嗔刘封）：准备阶段选择一名手牌数不小于你的角色，其选择令你摸一张牌并翻面
+// 或弃置一张牌。需要目标侧分支选择。
+skill sxrmhuaibing(3539390033) {
+  modifier hand_limit add 1;
+}
+// 缠玉（嗔陆逊）：出牌阶段限一次与一名角色拼点（仅可用点数最小的手牌）；双方展示
+// 手牌，赢家对输家造成 1 点伤害并令其弃置两张牌。需要标记拼点牌与展示手牌原语。
+skill sxrmchanyu(3539390034) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 从风（嗔陆逊）：转换技，你使用牌或成为牌的目标后，可弃置使用者两张牌或与其各摸
+// 一张牌。需要转换技状态机。
+skill sxrmcongfeng(3539390035) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 控智（嗔吕蒙）：你成为锦囊目标或使用锦囊后……需要锦囊使用与目标追踪。
+skill sxrmkongzhi(3539390036) {
+  modifier hand_limit add 1;
+}
+// 鄙诈（嗔吕蒙）：结束阶段摸一张牌并与一名角色拼点；其未赢则失去 2 点体力，你可
+// 使用其至多两张点数较小的手牌。需要拼点后使用他人手牌管线。
+skill sxrmbizha(3539390037) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 诺战（嗔庞德）：准备阶段选择一名其他角色拼点；其未赢则不能使用手牌直至回合结束。
+// 需要拼点链与禁手牌标记。
+skill sxrmnuozhan(3539390038) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 海变（嗔严畯）：任一角色的回合开始时，若其上回合使用过牌或失去过牌，你可视为对
+// 其使用一张【过河拆桥】。需要上回合行动历史追踪。
+skill sxrmhaibian(3539390039) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 枯心（嗔曹操）：你受到伤害后，可令所有其他角色展示任意张手牌，你获得其中所有
+// 红桃牌。需要全局展示与获得红桃牌原语。
+skill sxrmkuxin(3539390040) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 死故（嗔曹操）：出牌阶段限一次，选择一名其他角色并拼点；其未赢则失去 1 点体力，
+// 你与其各摸一张牌。需要拼点链。
+skill sxrmsigu(3539390041) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 逞变（嗔刘备）：准备/结束阶段可与一名其他角色拼点；严格获胜视为对其使用【决斗】，
+// 否则视为其对你使用【决斗】。已以 choose_hand_compare 实现（sxrmchengbian.skill）。
+skill sxrmchengbian_meta(3539390042) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 纵横（嗔蒋干）：准备阶段选择两名手牌数不为零的其他角色，各获得其一张手牌。需要
+// 双目标取牌原语。
+skill sxrmzongheng(3539390043) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 对辩（嗔蒋干）：你受到伤害时与来源拼点；若你未赢……需要拼点与伤害替换状态机。
+skill sxrmduibian(3539390044) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 灭害（嗔华佗）：你可以将两张牌当【杀】使用（刺伤）。需要双牌视为杀与刺伤伤害。
+skill sxrmmiehai(3539390045) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}
+// 清军（嗔吕布射）：回合结束选择一名其他角色，其选择弃置一张牌或令你摸一张牌。
+// 需要目标侧分支选择。
+skill sxrmqingjun(3539390046) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 设伏（嗔吕布射）：结束阶段可将一张手牌置于牌堆顶（设伏）；你成为牌目标时可令其
+// 展示判定……需要设伏牌标记与展示判定管线。
+skill sxrmshefu(3539390047) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 迷途（嗔伏皇后）：准备阶段选择一名已受伤角色，其回复 1 点体力并弃置一张牌，然后
+// 你摸一张牌。需要目标侧回复与弃牌选择。
+skill sxrmmitu(3539390048) {
+  modifier hand_limit add 1;
+}
+// 迴策（嗔荀彧）：出牌阶段限一次与一名角色拼点；赢家对另一名角色造成 1 点伤害，
+// 输家弃置一张牌。需要双拼点链与伤害分配。
+skill sxrmhuice(3539390049) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 懿和（嗔荀彧）：任意角色造成伤害前，若你为当前回合角色且来源与受伤角色的手牌数
+// 与体力差异号……需要伤害前比较状态机。
+skill sxrmyihe(3539390050) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 急智（嗔荀彧）：你濒死时……需要濒死历史与目标侧响应。
+skill sxrmjizhi(3539390051) {
+  modifier hand_limit add 1;
+}
+// 争死（嗔曹丕）：出牌阶段选择任意名角色各拼点，赢家选择一项。需要多目标拼点链。
+skill sxrmzhengsi(3539390052) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}
+// 成名（嗔曹丕）：出牌阶段结束时，根据争死的胜负记录摸牌。需要跨技能记录追踪。
+skill sxrmchengming(3539390053) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 聚骨（嗔王侯）：准备阶段选择一名其他角色并弃置其一张牌，若为装备牌则你获得之。
+// 需要指定弃牌与装备获得原语。
+skill sxrmjugu(3539390054) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

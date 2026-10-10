@@ -1,0 +1,5 @@
+// xinfu_xiaode（锁定技/触发技）：锁定技, player:phase_any_end, global:death, 多分支选择, 加技能, 含子技能, 多步骤。
+skill xinfu_xiaode(2242777577) locked {
+  trigger phase_any_end always {
+  }
+}

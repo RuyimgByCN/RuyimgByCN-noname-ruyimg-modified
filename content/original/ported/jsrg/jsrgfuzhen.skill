@@ -1,0 +1,8 @@
+// jsrgfuzhen（赴阵）：准备阶段，你可以失去1点体力，视为使用一张雷【杀】（至多三名目标，第一名目标为秘密目标）。
+// 若此杀造成伤害，你摸等量牌。然后若秘密目标未受到此杀伤害，你可再使用一张雷【杀】。
+// 未建模：秘密目标机制、双【杀】连锁、chooseTarget（3目标）、damage计数触发、loseHp换出杀。
+skill jsrgfuzhen(2895972804) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgfuzhen 含真实规则体（trigger、filter、content 等键——准备阶段视为对至多三名角色使用雷【杀】），本行原「audio-only 无规则面」注记系 2026-09-03 批 158 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

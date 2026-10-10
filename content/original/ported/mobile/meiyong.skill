@@ -1,0 +1,20 @@
+// meiyong（姝勇）：当你使用或打出【杀】时，你可以获得一名其他角色区域内的
+// 一张牌，然后其摸一张牌。
+// 上游 (mobile/skill.js meiyong L30118，inherit xinfu_wuniang L45259)：
+// trigger player useCard/respond（card.name=sha）；chooseTarget 其他有牌角色
+// → gainPlayerCard(target,"hej",true) 获得其区域一张牌 → target.draw(1)。
+// 实现（2026-09-14 第二百七十七批·杀目标后续族状态机，ADR 0641 §8.65）：
+// 双触发块 card_used owner_is_source_sha / card_responded owner_is_responder_sha
+// → resolve_meiyong(self)（ABI 726 / tag 750 / Cont 324 两段续体）：
+// 选目标（其他 hej 区有牌者，可取消）→ owner 选其区域一张牌（强制）→
+// 移入 owner 手牌 + 目标摸 1。
+// 保真度：完整（hej 区=手牌+装备+判定，与上游一致；批 285 勘误——原
+// 「近似（登记债）：无」措辞触发 ledger 近似分类，与批 270 duansuo 同款）。
+skill meiyong(2290758444) {
+  trigger card_used owner_is_source_sha_used {
+    effect resolve_meiyong(self);
+  }
+  trigger card_responded owner_is_responder_sha {
+    effect resolve_meiyong(self);
+  }
+}

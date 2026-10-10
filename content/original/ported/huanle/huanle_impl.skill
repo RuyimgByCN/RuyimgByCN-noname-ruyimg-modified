@@ -1,0 +1,16 @@
+// 欢乐卡牌（huanle）包：装备卡技能的真实 DSL 实现。
+// 旧 JS 仅作语义证据，不进入 npack 或运行时；未移植机制见 huanle_meta.skill。
+
+// 面具（mianju，防具）：锁定技，你不能被翻面。
+skill mianju(916192355) locked {
+  modifier turn_over_cancel override 1;
+}
+
+// 九尾（jiuwei，宝物）：结束阶段，你可以回复 1 点体力或摸一张牌。
+// 近似：旧 JS 按已受伤自动选回复、否则摸牌；DSL 以 choose_draw_or_recover
+//       让拥有者自选（文档化近似）。
+skill jiuwei(2113011807) {
+  trigger phase_end owner_is_target optional {
+    effect choose_draw_or_recover(self, 1, 1, 0);
+  }
+}

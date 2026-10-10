@@ -1,0 +1,5 @@
+skill old_fuhun(4126064689) {
+  trigger phase_draw owner_is_target_draw_not_replaced optional {
+    effect replace_draw_gain_top_two_add_skills_if_different_colors(self, 16, 23);
+  }
+}

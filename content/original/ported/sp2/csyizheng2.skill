@@ -1,0 +1,8 @@
+// 义争·续（SP张鲁·改）：义争选择的目标造成伤害/回复体力时，若你的体力上限大于其，减1体力上限并使数值+1。
+// 旧 JS 含 storage 跨回合目标存储 + loseMaxHp + trigger.num 修改，sourceSkill 自动生命周期。
+// DSL 无跨回合目标存储、无 lose_max_hp 减上限、无动态 trigger.num 修改原语。
+skill csyizheng2(2346932588) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 csyizheng2 = 标记型技能（charlotte，skill.js:11335），无规则面。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

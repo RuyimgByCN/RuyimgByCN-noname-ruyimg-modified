@@ -1,0 +1,6 @@
+// xy_dishou：player:damage_before, 多分支选择, 失去体力, 异步。
+skill xy_dishou(4105031997) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

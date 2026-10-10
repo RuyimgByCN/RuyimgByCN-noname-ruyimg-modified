@@ -1,0 +1,315 @@
+warning: unused import: `std::sync::atomic::AtomicU64`
+  --> crates/engine-native/src/ai.rs:10:5
+   |
+10 | use std::sync::atomic::AtomicU64;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardId` and `EventId`
+  --> crates/engine-native/src/archive.rs:21:18
+   |
+21 | use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+   |                  ^^^^^^  ^^^^^^^
+
+warning: unused import: `crate::machine::LogEvent`
+  --> crates/engine-native/src/archive.rs:22:5
+   |
+22 | use crate::machine::LogEvent;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostBehavior`
+    --> crates/engine-native/src/content/standard.rs:2950:48
+     |
+2950 |     use crate::content::host::{host_skill_def, HostBehavior};
+     |                                                ^^^^^^^^^^^^
+
+warning: unused imports: `Catalog` and `SkillDef`
+  --> crates/engine-native/src/content/extension.rs:10:31
+   |
+10 | use crate::catalog::{CardDef, Catalog, SkillDef};
+   |                               ^^^^^^^  ^^^^^^^^
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/src/view.rs:10:25
+   |
+10 | use crate::{GameAction, CommandOutcome};
+   |                         ^^^^^^^^^^^^^^
+
+warning: unused variable: `max`
+   --> crates/engine-native/src/ai.rs:136:17
+    |
+136 |             let max = max.max(min);
+    |                 ^^^ help: if this is intentional, prefix it with an underscore: `_max`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/archive.rs:1499:9
+     |
+1487 |         29 => {
+     |         -- matches all the relevant values
+...
+1499 |         29 => {
+     |         ^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/src/content/standard.rs:2990:9
+     |
+2990 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+     |         ----^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `cards`
+   --> crates/engine-native/src/content/host.rs:841:45
+    |
+841 |                 EventData::CardsDiscarded { cards, .. } => (None, None),
+    |                                             ^^^^^ help: try ignoring the field: `cards: _`
+
+warning: unused variable: `oc`
+    --> crates/engine-native/src/content/host.rs:1492:33
+     |
+1492 |                     if let Some(oc) = own_card {
+     |                                 ^^ help: if this is intentional, prefix it with an underscore: `_oc`
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/engine.rs:215:47
+    |
+215 |     fn new_with_mode(seed: u64, seats: usize, mut mode: GameMode) -> Self {
+    |                                               ----^^^^
+    |                                               |
+    |                                               help: remove this `mut`
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2286:19
+     |
+2193 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+2286 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2287:19
+     |
+2193 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+2287 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2288:19
+     |
+2239 |                 CardKind::ShanDian | CardKind::HongShui => {
+     |                 ------------------ matches all the relevant values
+...
+2288 |                 | CardKind::ShanDian
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2289:19
+     |
+2239 |                 CardKind::ShanDian | CardKind::HongShui => {
+     |                                      ------------------ matches all the relevant values
+...
+2289 |                 | CardKind::HongShui
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2325:17
+     |
+2281 | /                 CardKind::HorsePlus
+2282 | |                 | CardKind::HorseMinus
+2283 | |                 | CardKind::Weapon
+2284 | |                 | CardKind::Armor
+...    |
+2291 | |                 | CardKind::WuxingPan
+2292 | |                 | CardKind::Sanjian => unreachable!("handled above"),
+     | |___________________________________- matches all the relevant values
+...
+2325 |                   CardKind::WuxingPan => {
+     |                   ^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:2352:17
+     |
+2281 | /                 CardKind::HorsePlus
+2282 | |                 | CardKind::HorseMinus
+2283 | |                 | CardKind::Weapon
+2284 | |                 | CardKind::Armor
+...    |
+2291 | |                 | CardKind::WuxingPan
+2292 | |                 | CardKind::Sanjian => unreachable!("handled above"),
+     | |___________________________________- matches all the relevant values
+...
+2352 |                   CardKind::Sanjian | CardKind::Suolianjia => {
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/presentation.rs:275:9
+    |
+275 |     let mut line = |txt: &str, s: &mut String| {
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: function `enc_faction` is never used
+   --> crates/engine-native/src/archive.rs:370:4
+    |
+370 | fn enc_faction(w: &mut W, f: &crate::catalog::Faction) {
+    |    ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variant `Retarget` is never constructed
+    --> crates/engine-native/src/content/standard.rs:2289:5
+     |
+2283 | enum JiJiStage {
+     |      --------- variant in this enum
+...
+2289 |     Retarget,
+     |     ^^^^^^^^
+     |
+     = note: `JiJiStage` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/src/engine.rs:1742:13
+     |
+1742 |             drop(p);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&mut PlayerState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+1742 -             drop(p);
+1742 +             let _ = p;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/src/machine.rs:263:13
+    |
+263 |             drop(p);
+    |             ^^^^^-^
+    |                  |
+    |                  argument has type `&mut PlayerState`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+263 -             drop(p);
+263 +             let _ = p;
+    |
+
+warning: unused import: `ExtensionDef`
+ --> crates/engine-native/examples/probe_review48.rs:8:60
+  |
+8 | use engine_native::content::extension::{example_extension, ExtensionDef, ExtensionRegistry};
+  |                                                            ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/examples/probe_review48.rs:301:13
+    |
+301 |         let mut e = Engine::new_with_extensions(3001, 3, &packs).unwrap();
+    |             ----^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/examples/probe_review48.rs:322:13
+    |
+322 |         let mut ms = |s: &engine_native::StateSnapshot| {
+    |             ----^^
+    |             |
+    |             help: remove this `mut`
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/examples/probe_review48.rs:147:9
+    |
+147 |         drop(c);
+    |         ^^^^^-^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+    = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+147 -         drop(c);
+147 +         let _ = c;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/examples/probe_review48.rs:218:9
+    |
+218 |         drop(r);
+    |         ^^^^^-^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+218 -         drop(r);
+218 +         let _ = r;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/examples/probe_review48.rs:223:9
+    |
+223 |         drop(r2);
+    |         ^^^^^--^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+223 -         drop(r2);
+223 +         let _ = r2;
+    |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/examples/probe_review48.rs:227:9
+    |
+227 |         drop(t);
+    |         ^^^^^-^
+    |              |
+    |              argument has type `&OpenChoice`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+227 -         drop(t);
+227 +         let _ = t;
+    |
+
+FIXED_ARCHIVE_CHOICE: duel_sha byte roundtrip restores
+FIXED_ARCHIVE_CHOICE: aoe_response byte roundtrip restores
+FIXED_ARCHIVE_NULLIFY: nullify_window byte roundtrip restores
+FIXED_ARCHIVE_V2: v1 bytes rejected by format gate
+FIXED_OWNERSHIP: trailing Card(87) absent, restore rejected
+FIXED_OWNERSHIP: all-cards-missing, restore rejected
+FIXED_AI_SIM_DEDUP: high-water 2M plan simulates Sha (not NextPhase)
+FIXED_AI_DEDUP_EXHAUST: u64::MAX clean DuplicateCommand (no overflow)
+FIXED_HUJIA_QUEUE: first Pass continues to second Wei helper
+FIXED_HUJIA_RESTORE: holder wait state restores (memory+byte)
+FIXED_HUJIA_BOUNDS: holder=254 rejected
+FIXED_HUJIA_LEAK: swapped hidden shan keeps identical public asks
+FIXED_JIJIANG_QUEUE: refusal continues; borrowed sha resolves same channel
+FIXED_PHASE_GATE: rende in Judge phase rejected WrongPhase
+FIXED_RENDE_CUMULATIVE: 1+1 second activation heals once
+FIXED_LIJIAN_GENDER_RESTORE: gender-filtered targets restore
+FIXED_EXTENSION_VALIDATION: uninstalled enable rejected
+FIXED_EXTENSION_VALIDATION: duplicate extension cards rejected
+FIXED_EXTENSION_CONTENT_LOCK: extension set bound into ruleset version
+FIXED_AI_SAMPLE_OWNERSHIP: pool-reshuffle conserves ownership; restore accepted
+FIXED_AI_SAMPLE_PIPELINE: plan→apply works with hidden opponent cards
+FIXED_AI_CANDIDATES: single-choice enumerates shan; planner dodges
+ROUND17_PROBES_DONE

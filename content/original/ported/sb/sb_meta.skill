@@ -1,0 +1,616 @@
+// sb（界限突破）包元数据登记：界武将技能与标准/界版本差异需逐技能对照，多数依赖
+// 转换技/使命技/合作标记等未移植机制，登记元数据并文档化近似。
+// 2026-09-03 批 156 全量复核：按名定位现上游 sb/skill.js 块复核 109 条 audio-only
+// 注记——105 件证伪（含真实规则体，待真实重写）、4 件改判组/继承壳（子技另评）；
+// 弃用注记内行号（快照漂移）。
+skill sbdengxian(4242421000) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbdengxian 含真实规则体（enable、chooseButton），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhejian(4242421001) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhejian 含真实规则体（enable、filterTarget、limited、selectCard），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhenwei(4242421002) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhenwei 含真实规则体（enable、filterTarget、usable、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbheyuan(4242421003) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbheyuan 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbqiaobian(4242421004) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqiaobian（skill.js:488）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbliaoshi(4242421005) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbliaoshi 含真实规则体（enable、usable、chooseButton），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbwushuang(4242421006) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbwushuang 含真实规则体（trigger、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbliyu(4242421007) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbliyu 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbshensu(4242421008) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbshensu 含真实规则体（trigger、mod），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhengzi(4242421009) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhengzi 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjingce(4242421010) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjingce 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbtuxi(4242421011) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbtuxi 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbdengfeng(4242421012) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbdengfeng 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbtiandu(4242421013) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbtiandu 含真实规则体（trigger、mark、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbyiji(4242421014) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbyiji 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbhuanshi(4242421015) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbhuanshi 含真实规则体（trigger、mod），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbhongyuan(4242421016) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbhongyuan 含真实规则体（trigger、chargeSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbmingzhe(4242421017) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbmingzhe 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbwansha(4242421018) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbwansha 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbluanwu(4242421019) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbluanwu 为组/继承壳（inherit 指向子技承载，子技另评），原「audio-only 无规则面」注记系 2026-09-03 批 156 复核改判——壳维持 noop。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbwansha_rewrite(4242421020) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbwansha_rewrite（skill.js:2232）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbweimu_rewrite(4242421021) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbweimu_rewrite（skill.js:2233）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbweimu(4242421022) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbweimu 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbgongqi(4242421023) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbgongqi 含真实规则体（trigger、mod），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjiefan(4242421024) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjiefan 含真实规则体（enable、filterTarget、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbyicong(4242421025) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbyicong 含真实规则体（trigger、chargeSkill、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbqiaomeng(4242421026) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqiaomeng 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbxianzhen(4242421027) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbxianzhen 含真实规则体（enable、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjinjiu(4242421028) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjinjiu 为组/继承壳（group 指向子技承载，子技另评），原「audio-only 无规则面」注记系 2026-09-03 批 156 复核改判——壳维持 noop。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbganglie(4242421029) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbganglie 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbqingjian(4242421030) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqingjian 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbquhu(4242421031) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbquhu 含真实规则体（enable、usable、selectTarget、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjieming(4242421032) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjieming 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbxingshang(4242421033) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbxingshang（skill.js:3752）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbfangzhu(4242421034) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbfangzhu（skill.js:3998）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbsongwei(4242421035) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbsongwei 含真实规则体（trigger、zhuSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbwusheng(4242421036) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbwusheng 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbyijue(4242421037) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbyijue 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbqicai(4242421038) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqicai 含真实规则体（enable、mod、usable、chooseButton 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjizhi(4242421039) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjizhi 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbhuoji(4242421040) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbhuoji 含真实规则体（dutySkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbkanpo(4242421041) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbkanpo 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbguanxing(4242421042) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbguanxing 含真实规则体（trigger、mod、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbkongcheng(4242421043) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbkongcheng 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbmingren(4242421044) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbmingren 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbweiliu(4242421045) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbweiliu（skill.js:5406）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill old_sbmingren(4242421046) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 old_sbmingren（skill.js:5552）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbzhenliang(4242421047) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhenliang 含真实规则体（trigger、selectCard、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbtianxiang(4242421048) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbtianxiang 含真实规则体（enable、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill old_sbqiaobian(4242421049) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 old_sbqiaobian 含真实规则体（trigger、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbhuoshou(4242421050) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbhuoshou 含真实规则体（trigger、mod），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzaiqi(4242421051) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzaiqi 含真实规则体（trigger、chargeSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sblieren(4242421052) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sblieren 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjuxiang(4242421053) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjuxiang 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+// 激昂（界孙策）：使用【决斗】或红色【杀】指定目标后，或成为【决斗】或红色【杀】
+// 的目标后，可以摸一张牌。
+// 上游 (sb/skill.js sbjiang)：trigger player useCardToPlayered + target useCardToTargeted；
+// filter = juedou || (sha && red)；content = draw 1（frequent）；
+// group = [sbjiang_add（决斗额外目标+失去体力）、sbjiang_qiben（全手牌当决斗 viewAs）]。
+// 实现（2026-09-03 第一百五十七批·零新原语重写，批 156 复核证伪池首件晋升）：
+// card_used 触发 + 既有过滤器 owner_source_or_targeted_by_juedou_or_red_sha（与
+// shenhua jiang 经典激昂同面，noname_jiang/yui_jiang 同款接线）→ draw_cards(self, 1)。
+// 近似：两个 group 子技未建模——sbjiang_add（决斗使用时加目标+失去1点体力）与
+// sbjiang_qiben（出牌阶段限 N 次将全部手牌当【决斗】使用，N 随「激昂」标记与吴势力
+// 存活数动态变化）依赖 card-target 追加与动态次数 view_as 设施，登记债；
+// 「激昂」标记仅由界制霸（sbzhiba）侧添加，本臂无需消费。
+skill sbjiang(4242421054) {
+  trigger card_used owner_source_or_targeted_by_juedou_or_red_sha optional {
+    effect draw_cards(self, 1);
+  }
+}
+skill sbhunzi(4242421055) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbhunzi 含真实规则体（trigger、juexingji），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：濒死时可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhiba(4242421056) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhiba 含真实规则体（trigger、limited、zhuSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：濒死时可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbguose(4242421057) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbguose 含真实规则体（enable、usable、selectCard），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbliuli(4242421058) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbliuli 为组/继承壳（group 指向子技承载，子技另评），原「audio-only 无规则面」注记系 2026-09-03 批 156 复核改判——壳维持 noop。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzishou(4242421059) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzishou 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzongshi(4242421060) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzongshi 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sblijian(4242421061) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sblijian 含真实规则体（enable、filterCard、filterTarget、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbmingce(4242421063) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbmingce 含真实规则体（enable、filterCard、filterTarget、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhichi(4242421064) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhichi 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbluanji(4242421065) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbluanji 含真实规则体（trigger、enable、viewAs、filterCard 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbxueyi(4242421066) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbxueyi 含真实规则体（trigger、mod、usable、zhuSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sblianhuan(4242421067) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sblianhuan 含真实规则体（enable、viewAs、filterCard、selectCard），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbniepan(4242421068) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbniepan 含真实规则体（enable、limited、mark），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbxuanhuo(4242421069) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbxuanhuo 含真实规则体（enable、filterCard、usable、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbenyuan(4242421070) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbenyuan 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbtiaoxin(4242421071) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbtiaoxin 含真实规则体（enable、usable、chooseButton），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhiji(4242421072) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhiji 含真实规则体（trigger、juexingji），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbbeifa(4242421073) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbbeifa 含真实规则体（enable、usable、chargeSkill、chooseButton 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbrende(4242421074) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbrende 含真实规则体（enable、chargeSkill、chooseButton、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhangwu(4242421075) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhangwu 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjijiang(4242421076) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjijiang 含真实规则体（trigger、zhuSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sblongdan(4242421077) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sblongdan 含真实规则体（enable、chargeSkill、chooseButton），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjizhu(4242421078) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjizhu 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbpaoxiao(4242421079) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbpaoxiao 含真实规则体（trigger、mod），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbxieji(4242421080) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbxieji 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbduanliang(4242421081) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbduanliang 含真实规则体（enable、filterTarget、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbshipo(4242421082) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbshipo 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbtieji(4242421083) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbtieji 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbqixi(4242421084) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqixi 含真实规则体（enable、filterTarget、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbfenwei(4242421085) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbfenwei 含真实规则体（enable、filterCard、filterTarget、limited 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbluoshen(4242421086) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbluoshen 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjianxiong(4242421087) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjianxiong 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbqingzheng(4242421088) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqingzheng 为组/继承壳（inherit 指向子技承载，子技另评），原「audio-only 无规则面」注记系 2026-09-03 批 156 复核改判——壳维持 noop。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbhujia(4242421089) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbhujia 含真实规则体（trigger、zhuSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbleiji(4242421090) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbleiji 含真实规则体（enable、filterTarget），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbguidao(4242421091) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbguidao 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbhuangtian(4242421092) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbhuangtian 含真实规则体（trigger、zhuSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbqiaoshi(4242421093) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqiaoshi 含真实规则体（trigger、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbyanyu(4242421094) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbyanyu 含真实规则体（enable、filterCard、usable、selectCard），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjushou(4242421095) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjushou 含真实规则体（enable、filterCard、usable、selectCard），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjiewei(4242421096) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjiewei 含真实规则体（enable、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbyingzi(4242421097) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbyingzi 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbfanjian(4242421098) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbfanjian 含真实规则体（enable、usable、chooseButton），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbkurou(4242421099) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbkurou 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbzhaxiang(4242421100) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbzhaxiang 含真实规则体（trigger、mod），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbtongye(4242421102) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbtongye 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjiuyuan(4242421103) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjiuyuan 含真实规则体（trigger、zhuSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjieyin(4242421104) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjieyin 含真实规则体（trigger、dutySkill、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbliangzhu(4242421105) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbliangzhu 含真实规则体（trigger、groupSkill），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbxiaoji(4242421106) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbxiaoji（skill.js:10691）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbkeji(4242421107) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbkeji 含真实规则体（enable、mod、filterCard、usable），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbdujiang(4242421108) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbdujiang 含真实规则体（trigger、juexingji），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbduojing(4242421109) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbduojing 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbxiayuan(4242421110) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbxiayuan 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbjieyue(4242421111) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbjieyue 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sbliegong(4242421113) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbliegong 含真实规则体（trigger、mod、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill splveying(4242421114) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 splveying 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill spyingwu(4242421115) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 spyingwu 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill spmingxuan(4242421116) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 spmingxuan 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill spxianchou(4242421117) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 spxianchou 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill new_spxianchou(4242421118) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 new_spxianchou（skill.js:11523）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：受伤后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+skill sbqianxun(4242421119) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sbqianxun 含真实规则体（trigger、intro），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}
+skill sblianying(4242421120) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sblianying 含真实规则体（trigger），本行原「audio-only 无规则面」注记系 2026-09-03 批 156 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

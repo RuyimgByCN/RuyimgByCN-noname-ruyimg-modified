@@ -1,0 +1,10 @@
+// 白马骁骑：装备数分层提升攻击范围、杀次数、距离与摸牌数。
+// 值源修正（2026-08-06，C 段 omp）：at_least_N 为 0/1 存在性语义（车阵等扁平
+// 修正用）；本技能为计数制阈值（上游 cardUsable/globalFrom/draw 均 +count），
+// 改用新增 owner_equip_count_floor_N（达到阈值后返回计数）。
+skill yy_baimaxiaoqi_skill(3935591090) locked {
+  modifier attack_range add owner_equip_count;
+  modifier sha_use_limit add owner_equip_count_floor_2;
+  modifier distance_from add -owner_equip_count_floor_3;
+  modifier draw_count add owner_equip_count_floor_4;
+}

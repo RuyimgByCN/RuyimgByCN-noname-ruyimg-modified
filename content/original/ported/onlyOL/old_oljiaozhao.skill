@@ -1,0 +1,8 @@
+// 矫诏（旧OL版）：出牌阶段展示手牌声明一张基本/锦囊牌名，本回合此手牌可当该牌使用。
+// 旧 JS 的「声明牌名+手牌转化+牌名记录+多重viewAs」复杂链路无对应原语，以下给空定义。
+skill old_oljiaozhao(2192109487) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 old_oljiaozhao（skill.js:6961）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

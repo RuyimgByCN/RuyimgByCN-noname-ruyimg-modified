@@ -1,0 +1,14 @@
+// 伪溃：出牌阶段限一次，失去1点体力并检查一名其他角色的手牌。
+// 旧 JavaScript 仅作为语义参考，不参与运行。
+skill weikui(3890756007) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty {
+    effect reveal_target_hand_sha_or_discard_bind(self, event_source, 2980539775);
+  }
+}
+
+skill weikui2(2980539775) {
+  modifier distance_from_skill_bound_target override 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

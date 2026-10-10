@@ -1,0 +1,13 @@
+// jsrgxushi（虚势）：出牌阶段限一次。你可以交给任意名角色各一张牌，然后你获得两倍数量的【影】。
+// 实现（jsrg 影族切片 2，部分迁移）：`active play_phase uses_per_turn 1` →
+// choose_other_give_one_hand_equip(self)（交一张）+
+// gain_shadow_cards(self, 2, self_skill)（两倍数量=2×1）。
+// 近似：上游为「卡牌-角色顺序配对、任意名」多目标给予，DSL 单目标
+// 单张近似；影数按实际给予 1 张计 2。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgxushi(3895848257) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_give_one_hand_equip(self);
+    effect gain_shadow_cards(self, 2, self_skill);
+  }
+}

@@ -1,0 +1,7 @@
+// 无前：未拥有无双时，可消耗两枚暴怒并获得无双直到回合结束。
+skill wuqian(2841820068) {
+  active play_phase mark_at_least 1252226867 2 owner_missing_skill 18 {
+    effect remove_mark(self, 1252226867, 2);
+    effect add_skill_until_turn_end(self, 18);
+  }
+}

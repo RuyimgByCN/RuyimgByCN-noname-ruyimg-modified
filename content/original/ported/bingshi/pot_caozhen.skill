@@ -1,0 +1,14 @@
+// 势曹真：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI517 原语。
+skill potsifeng(3809208030) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_potsifeng(self, self, event_card, 0);
+  }
+
+  trigger card_resolved owner_alive_card_resolved_source_current_potsifeng_pile {
+    effect resolve_potsifeng(self, event_source, event_card, 3);
+  }
+
+  trigger phase_end owner_alive_phase_end_player_potsifeng_pile {
+    effect resolve_potsifeng(self, event_player, event_card, 4);
+  }
+}

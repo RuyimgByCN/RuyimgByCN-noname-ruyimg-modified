@@ -1,0 +1,25 @@
+// 曹轶【蜜饴/寅君】（ABI 606）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dcmiyi(3041789306) {
+  trigger phase_prepare owner_is_target optional {
+    effect resolve_caoyi(self, event_card, 3041789307, 0);
+  }
+}
+
+skill dcmiyi_effect(3041789307) locked non_gainable {
+  trigger phase_end always {
+    effect resolve_caoyi(self, event_card, 3041789307, 10);
+  }
+  trigger turn_ended always {
+    effect resolve_caoyi(self, event_card, 3041789307, 11);
+  }
+}
+
+skill dcyinjun(4165081339) {
+  trigger card_resolved owner_source_single_target_sha_or_trick_all_materials_from_hand_can_sha optional {
+    effect resolve_caoyi(self, event_card, 3041789307, 20);
+  }
+  trigger card_resolved dcyinjun_tracked_sha_resolved {
+    effect resolve_caoyi(self, event_card, 3041789307, 21);
+  }
+}

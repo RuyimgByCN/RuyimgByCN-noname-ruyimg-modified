@@ -1,0 +1,5 @@
+// 诱敌：结束阶段开始时，你可以将一张红色牌当【顺手牵羊】使用。
+// 近似：view_as 红色牌当顺手牵羊。旧 JS 限定「结束阶段」的触发窗口 DSL 中无法与 view_as response 窗口结合表达。
+skill stdyoudi(2898274216) {
+  view_as shunshou any red from hand_equip;
+}

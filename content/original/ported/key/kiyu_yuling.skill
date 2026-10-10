@@ -1,0 +1,5 @@
+// 预铃（妃优·锁定技）：锦囊牌无距离限制。成为【杀】目标后，来源须弃置等同于其与你距离数值的牌。
+// 以 modifier global_distance_to 近似锦囊无距部分，缺失距离弃牌效果和精确的锦囊专属过滤。
+skill kiyu_yuling(2787517889) {
+  modifier global_distance_to override 0;
+}

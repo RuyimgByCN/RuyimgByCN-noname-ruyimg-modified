@@ -1,0 +1,8 @@
+// 宗室：手牌上限增加存活势力数；准备阶段手牌多于体力时，本回合出杀无次数限制。
+skill rezongshi(3490528973) locked {
+  modifier hand_limit add alive_group_count;
+
+  trigger phase_prepare owner_is_target_hand_above_hp {
+    effect add_skill(self, 2831909821);
+  }
+}

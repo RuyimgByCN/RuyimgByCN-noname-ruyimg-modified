@@ -1,0 +1,7 @@
+// dczhuiyi（OL界蔡文姬·追忆）：死亡时可选择一名非伤害来源的角色，令其回复1体力并摸等同于存活角色数的牌。
+// 旧JS含死亡时选目标（排除伤害来源）→回复→摸存活人数牌。DSL death trigger 选目标回复+存活数摸牌无精确组合原语，以空定义保留。
+skill dczhuiyi(2237963159) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dczhuiyi 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

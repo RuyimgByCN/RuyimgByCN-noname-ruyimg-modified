@@ -1,0 +1,17 @@
+[package]
+name = "content-compiler"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "DSL → IR → bytecode content compiler"
+
+[dependencies]
+content-schema = { path = "../content-schema" }
+rule-api = { workspace = true }
+rule-vm = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+blake3 = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

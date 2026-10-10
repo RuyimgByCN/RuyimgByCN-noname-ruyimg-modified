@@ -1,0 +1,11 @@
+// 旧不屈（旧周泰）：每当你扣减体力后，若你的体力值不大于 0，将牌堆顶牌置于武将牌上
+// 称为「创」（数量 = 本次流失量向下至 0 的公式近似）；若「创」牌点数均不同，你不会
+// 死亡（伤害链消费免死标记后跳过濒死）。回复体力后按回复量移除「创」牌（点数重复者
+// 优先），移除后点数均不同则救回当前濒死。
+// 旧 JS 仅作语义证据；「创」以技能牌堆表达，免死以 resolution 标记由引擎状态机
+// 校验（ABI 591）。
+skill gzbuqu(1234567908) {
+  trigger damage owner_alive { effect resolve_gzbuqu(self, event_amount, 0); }
+  trigger hp_lost owner_alive { effect resolve_gzbuqu(self, event_amount, 0); }
+  trigger hp_recovered owner_alive { effect resolve_gzbuqu_recover(self, 0); }
+}

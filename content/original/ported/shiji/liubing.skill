@@ -1,0 +1,9 @@
+// 流冰（吴懿）：锁定技。你于出牌阶段使用第一张实体【杀】时，将此【杀】的花色改为
+// 方块。
+// 旧 JavaScript 仅作语义证据；花色修改由 ABI 426 resolve_liubing 权威结算
+// （直接修改实体牌花色）。
+skill liubing(2597403716) locked {
+  trigger card_used owner_source_first_sha_this_play_phase {
+    effect resolve_liubing(self, event_card);
+  }
+}

@@ -1,0 +1,6 @@
+// mbbojian（博鉴）：锁定技。出牌阶段结束时，若你本阶段使用牌数与花色数与上个出牌阶段皆不同（没有上个出牌阶段则均视为0），你摸一张牌；否则你将一张弃牌堆中本阶段你因使用而失去的牌交给一名角色。
+skill mbbojian(2728905265) locked {
+  trigger phase_play_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 奋驽（族王淩/族王明山）：出牌阶段开始，弃置至多体力值名其他角色各一张牌，将弃置的牌移出游戏；出牌阶段使用的牌点数累计小于移出牌总点数时，下回合获得移出牌。
+// 旧 JS 的「expansion 移出游戏」「卡牌点数累计比较」「延时获得」无对应原语。
+// 空定义：需 expansion 支持 expansion 区域、点数系统。
+skill clanfennu(2456774233) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

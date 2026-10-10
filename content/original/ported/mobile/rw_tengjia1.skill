@@ -1,0 +1,5 @@
+// 桐油百韧甲之一：防具有效时免疫南蛮入侵和万箭齐发。
+skill rw_tengjia1(3160129602) {
+  modifier armor_card_target_cancel(nanman) override 1;
+  modifier armor_card_target_cancel(wanjian) override 1;
+}

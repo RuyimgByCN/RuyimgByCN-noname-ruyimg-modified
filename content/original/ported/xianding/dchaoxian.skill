@@ -1,0 +1,17 @@
+// 朝献（dchaoxian·限定技）：出牌阶段，你可以将弃牌堆中所有点数为 3 的
+// 牌洗入牌堆，然后获得其他所有角色手牌中的 3 点牌。
+// 上游 (xianding/skill.js 1981)：limited + enable phaseUse；content =
+// 弃牌堆 rank==3 洗回牌堆（随机插入）→ 逐其他角色 getGainableCards
+// (player,"h",rank==3) 收归 owner。
+// 实现（2026-09-15 第三百零三批·点数检索收集状态机，ADR 0641 §8.87）：
+// resolve_dchaoxian(self)（ABI 747 / tag 764，单发无续体）——弃牌堆扫
+// rank==3 MoveCards 入牌堆 + zone 内 reorder 至头部（堆底，随机插入近
+// 似）；逐其他角色手牌 rank==3 MoveCards 入 owner 手牌（give 语义）。
+// once_per_game 表达 limited。
+// 登记债：随机插入以牌堆底近似。
+// 保真度：完整（双段全建模）。
+skill dchaoxian(3403528397) {
+  active play_phase once_per_game {
+    effect resolve_dchaoxian(self);
+  }
+}

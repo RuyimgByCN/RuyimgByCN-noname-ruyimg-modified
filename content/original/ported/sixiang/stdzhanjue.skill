@@ -1,0 +1,5 @@
+// 战决：你可以将任意张手牌当【决斗】使用。你以此法使用【决斗】后摸一张牌。
+// 近似：view_as 决斗（所有手牌）。「使用后摸一张牌」的触发（useCardAfter + skill == stdzhanjue）需在 trigger 中匹配「此技能创建的决斗使用后」事件，但 DSL 无法按 skill 名过滤触发。
+skill stdzhanjue(2243841423) {
+  view_as juedou play_phase any from hand;
+}

@@ -1,0 +1,10 @@
+// 旧 JS 语义：成为锦囊目标后，唯一目标摸一张；多目标时若有手牌或装备牌则强制弃置一张。
+skill dccunwei(4022570059) locked {
+  trigger card_targeted owner_alive_targeted_by_trick_single_or_discardable {
+    if event_target_count == 1 {
+      effect draw_cards(self, 1);
+    } else {
+      effect discard_one_hand_or_equip(self);
+    }
+  }
+}

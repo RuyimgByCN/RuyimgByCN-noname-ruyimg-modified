@@ -1,0 +1,7 @@
+// 拒关（juguan）：出牌阶段限一次，你可将一张手牌当【杀】或【决斗】使用。
+// 若受到此牌伤害的角色未在你下回合开始前对你造成过伤害，你的下个摸牌阶段摸牌数+2
+// （该追伤判定未建模）；「杀或决斗」的选择以两个 view_as 各自限一次近似。
+skill juguan(4273039202) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as juedou play_phase any from hand uses_per_turn 1;
+}

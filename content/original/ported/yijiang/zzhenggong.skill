@@ -1,0 +1,9 @@
+// 争功（钟会）：你受到伤害后，可获得伤害来源装备区里的一张牌，然后若此牌
+// 在你手牌区，使用之。
+// 旧 JS 的「获得装备后使用」无对应原语；以从来源取一张装备近似（使用
+// 未建模，已注明）。
+skill zzhenggong(2283567045) {
+  trigger damage owner_is_target optional {
+    effect take_one_card(event_source, self, equip);
+  }
+}

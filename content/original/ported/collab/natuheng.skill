@@ -1,0 +1,8 @@
+// 恒（那兔赵云）：每轮限一次，手牌无非伤害牌时可视为使用/打出【闪】；
+// 无伤害牌时可视为使用/打出无次数限制的任意【杀】。
+// 近似：提供手牌 rep 闪与无次数限制出杀；「手牌构成门控」与每轮限一次未精确建模。
+skill natuheng(3098462691) {
+  view_as shan response any from hand;
+  view_as sha play_phase any from hand uses_per_turn 1 ignore_distance;
+  view_as sha response any from hand;
+}

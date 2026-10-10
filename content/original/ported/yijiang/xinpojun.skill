@@ -1,0 +1,8 @@
+// 新破军（徐盛）：出牌阶段使用【杀】指定目标后，将目标至多X张牌移出游戏（X=其体力值），这些牌于回合结束时归还。
+// 旧 JS 的 expansion 移出+回合结束归还机制；DSL 以 take_one_card + gain_all_skill_pile_cards 近似。
+skill xinpojun(2706595740) {
+  trigger card_targeted owner_is_target optional {
+    effect take_one_card(event_player, self, hand_equip);
+    // 未建模：移出至 expansion 区域、回合结束时归还（需配合 xinpojun2）
+  }
+}

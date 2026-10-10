@@ -1,0 +1,22 @@
+// 观星（refresh 界诸葛亮 reguanxing）：准备阶段开始时（frequent），你观看牌堆顶的
+// X 张牌（存活角色数小于 4 时为 3，否则为 5），将其中任意张置于牌堆顶，
+// 其余置于牌堆底。
+// 上游 (refresh/skill.js reguanxing)：trigger player phaseZhunbeiBegin +
+// phaseJieshuBegin（后者需 reguanxing_on 补偿门控）；frequent；
+// chooseToGuanxing(countPlayer()<4 ? 3 : 5)；取消或顶张全空时 addTempSkill
+// reguanxing_on（解锁结束阶段补偿观星）。
+// 实现（2026-09-09 第一百八十四批·观星原语外溢，零新原语）：
+// 准备阶段臂 → guanxing_top(self, 3|5 按存活数分支)。
+// 近似（登记债）：①逐张二选（顶/底）近似上游拖拽任意排列——堆内自由序未建模
+// （pxlangya 同债）；②结束阶段补偿臂（reguanxing_on 门控）不可表达——引擎无
+// 「上次观星取消」历史查询，未移植（上游取消后有第二次机会，此处省略）。
+skill reguanxing(4220147649) {
+  trigger phase_prepare owner_is_target {
+    if alive_count() < 4 {
+      effect guanxing_top(self, 3);
+    }
+    if alive_count() > 3 {
+      effect guanxing_top(self, 5);
+    }
+  }
+}

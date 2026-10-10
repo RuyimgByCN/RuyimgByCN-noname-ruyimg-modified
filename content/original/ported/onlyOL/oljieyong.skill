@@ -1,0 +1,5 @@
+// 竭勇：手牌中恰好只有一张红牌时，该红牌可当【杀】使用或打出。
+skill oljieyong(3193662455) {
+  view_as sha play_phase owner_single_red_hand from hand;
+  view_as sha response owner_single_red_hand from hand;
+}

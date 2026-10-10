@@ -1,0 +1,9 @@
+// 制裸（美希·锁定技）：其他角色回合结束时，若其无装备且在你攻击范围内，摸一张牌或视为对其使用【杀】。
+// 实现：其他角色结束阶段可选摸 1。
+// 近似：不检验装备空/攻击范围；视为【杀】分支未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill miki_zhiluo(2539237675) {
+  trigger phase_end owner_alive_not_target optional {
+    effect draw_cards(self, 1);
+  }
+}

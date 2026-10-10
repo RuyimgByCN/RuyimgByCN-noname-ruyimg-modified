@@ -1,0 +1,6 @@
+// zj_tongxin：锁定技, global:phase_draw_end, 摸牌, 异步。
+skill zj_tongxin(3020427557) {
+  trigger phase_draw_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

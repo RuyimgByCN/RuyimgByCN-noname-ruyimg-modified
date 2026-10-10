@@ -1,0 +1,8 @@
+// 育料（法正）：任意角色失去牌后，若你的「料」少于 8 张，你可将其中一张
+// 置于武将牌上作为「料」；「料」可被奇巧（qiqiao）使用。
+// 旧 JS 的「料」expansion 状态无对应原语（需技能牌堆），未建模（已注明）。
+skill yuliao(3297573958) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

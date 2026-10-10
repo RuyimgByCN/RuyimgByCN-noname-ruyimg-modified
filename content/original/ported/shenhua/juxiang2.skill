@@ -1,0 +1,7 @@
+// 巨象·2（孟获系）：南蛮结算后获得实体牌。
+// 旧 JS 的「获牌」无对应原语；以南蛮结算后摸一张近似（已注明）。
+skill juxiang2(4024268776) locked {
+  trigger card_resolved owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

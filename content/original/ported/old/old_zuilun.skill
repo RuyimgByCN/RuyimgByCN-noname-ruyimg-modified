@@ -1,0 +1,8 @@
+// 罪论（旧诸葛瞻）
+// 出牌阶段最多两次；每个出牌阶段从其他角色的手牌区、装备区各获得至多一张牌，
+// 每次获得后该角色摸一张牌。
+skill old_zuilun(2251707589) {
+  active play_phase uses_per_turn 2 targets 1 1 other hand_equip_nonempty {
+    effect choose_gain_target_card_alternate_zone_then_target_draw(self, event_source);
+  }
+}

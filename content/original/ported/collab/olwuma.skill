@@ -1,0 +1,7 @@
+skill olwuma(3608420255) locked {
+  trigger card_targeted owner_alive_targeted_by_other_trick {
+    effect draw_cards(self, 1);
+  }
+  modifier turn_face_down_cancel override 1;
+  modifier restore_skipped_phase override 1;
+}

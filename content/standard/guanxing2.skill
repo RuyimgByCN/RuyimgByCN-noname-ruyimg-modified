@@ -1,0 +1,6 @@
+// 观星 enhanced — 诸葛亮: at phase_begin, draw 1 (extended foresight).
+skill guanxing2(39) {
+  trigger phase_begin always {
+    effect draw_cards(self, 1);
+  }
+}

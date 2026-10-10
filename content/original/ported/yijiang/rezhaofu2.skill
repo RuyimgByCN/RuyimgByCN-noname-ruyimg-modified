@@ -1,0 +1,6 @@
+// 诏缚2(曹操)：subskill of rezhaofu。修改器：吴势力角色计算攻击范围时，
+// 可以将其有"诏缚"主公技的角色作为跳板（即只要主公在目标范围内，该吴势力角色也在范围内）。
+// DSL无per-faction per-lord跳板范围计算机制，仅占位。
+skill rezhaofu2(4163604176) {
+  modifier hand_limit add 1;
+}

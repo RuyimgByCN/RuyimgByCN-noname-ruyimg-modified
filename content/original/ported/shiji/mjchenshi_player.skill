@@ -1,0 +1,9 @@
+// 瞑瞑·陈氏·用牌方（马谡系）：你使用「冰临城下」指定首个目标后，选择
+// 一名其他角色弃置一张牌。
+// 旧 JS 的「牌名限定 + 目标选择」无对应原语；以使用牌后弃一张手牌近似
+// （牌名限定未建模，已注明）。
+skill mjchenshi_player(2223209652) {
+  trigger card_targeted owner_source_once_per_turn optional {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

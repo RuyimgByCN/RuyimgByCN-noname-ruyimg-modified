@@ -1,0 +1,10 @@
+// 许愿（刘禅）：出牌阶段，选择一种花色和一个装备副类别，
+//   从牌堆中随机检索匹配的装备牌并置入装备区；若无匹配则无效果。
+// 旧JS的花色+副类别双轴chooseButton对话框、牌堆随机检索匹配牌、条件性装备操作
+//   无DSL对应原语（需suit+subtype双维度选择和card_pile_search_by_suit_subtype）。
+// 以gain装备近似保留收益方向，具体匹配逻辑待原语扩展。
+skill xuyuan(3204131423) {
+  active play_phase uses_per_turn 1 {
+    effect gain_equipment_from_draw_pile(self);
+  }
+}

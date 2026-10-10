@@ -1,0 +1,9 @@
+// 整肃·明志（核心库通用系统）：你的弃牌阶段弃置的牌花色全部不同且不少于两张，
+// 弃牌阶段结束时整肃成功。
+// 旧 JavaScript 仅作语义证据；弃牌花色判定由 ABI 432 resolve_zhengsu 权威结算
+// （成功后受益者各自摸二或回复一，随后移除本临时技能）。
+skill zhengsu_mingzhi(3824072820) {
+  trigger phase_discard_end owner_is_target {
+    effect resolve_zhengsu(self, 2, 1, 0);
+  }
+}

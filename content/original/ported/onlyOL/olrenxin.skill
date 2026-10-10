@@ -1,0 +1,19 @@
+// 仁心（OL曹冲）：当其他角色进入濒死状态时，若你的手牌或装备区里有装备牌，
+// 你可以弃置一张装备牌并将武将牌翻面，然后其回复至 1 点体力。
+// 上游 (onlyOL/skill.js olrenxin)：trigger global dying；filter = event.player !=
+// player && countCards("he",{type:"equip"})>0；cost = chooseToDiscard(装备牌,"he")；
+// content = turnOver() + trigger.player.recoverTo(1)。
+// 实现（2026-09-03 第一百六十二批·近似重写，批 159 复核证伪池晋升）：
+// dying 触发 + 本批新注册过滤器 owner_alive_other_dying_has_equip_card（六点注册，
+// 零 ABI；濒死者存活且 hp<=0 + owner 手牌含装备类牌或装备区非空）→
+// turn_over(self)（kuiwei 同款）+ recover_hp(event_player, 1 - hp(event_player))
+// （nstianji「回复至 1」表达式惯例；濒死时点 hp<=0 故差值恒正）。
+// 近似（登记债）：①上游「弃置一张装备牌」代价未建模——optional 确认保留发动
+// 选择权，但确认后无代价（弃装备牌类别约束 + 弃置动作均缺）；②濒死者 hp<=0
+// 判定取引擎 Dying 事件时点口径。
+skill olrenxin(4255762868) {
+  trigger dying owner_alive_other_dying_has_equip_card optional {
+    effect turn_over(self);
+    effect recover_hp(event_player, 1 - hp(event_player));
+  }
+}

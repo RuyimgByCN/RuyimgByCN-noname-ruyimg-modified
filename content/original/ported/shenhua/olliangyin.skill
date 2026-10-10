@@ -1,0 +1,7 @@
+// 良姻（OL 周妃）：角色失去牌后摸牌。
+// 旧 JS 的「多触发源」无对应原语；以任意角色失去牌后摸一张近似（已注明）。
+skill olliangyin(3648180074) {
+  trigger cards_moved owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,4 @@
+// 运机：手牌或装备区中的装备牌可当【借刀杀人】使用。
+skill stdyunji(2318160114) {
+  view_as jiedao play_phase card_equip from hand_equip;
+}

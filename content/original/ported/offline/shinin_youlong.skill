@@ -1,0 +1,5 @@
+// shinin_youlong：锁定技, global:damage, source:damageBegin, player:card_used, 加技能, 含子技能, 异步, 条件计数。
+skill shinin_youlong(2200412467) locked {
+  trigger damage always {
+  }
+}

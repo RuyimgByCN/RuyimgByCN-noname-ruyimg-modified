@@ -1,0 +1,7 @@
+// 共励（春秋友诸葛亮）：上游仅有 audio + ai.combo 元数据（offline_chunqiu.js:757-760，
+// locked: true，无规则面），是 ymfriendyance 的关联标记技。上游真 no-op，
+// 非 approximated debt。
+skill ymfriendzhugelianggongli(2557181310) locked {
+  // INTENTIONAL_EMPTY_NOOP: upstream metadata-only skill (audio/combo marker)
+  modifier hand_limit add 0;
+}

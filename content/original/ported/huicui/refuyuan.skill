@@ -1,0 +1,6 @@
+// 陈登·扶援：旧 JavaScript 仅作语义证据；红牌目标历史由权威回合状态维护。
+skill refuyuan(2444177428) {
+  trigger card_targeted owner_alive_sha_target_no_other_red_card_this_turn optional {
+    effect draw_cards(event_player, 1);
+  }
+}

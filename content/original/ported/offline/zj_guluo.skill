@@ -1,0 +1,13 @@
+// 孤落
+skill zj_guluo(3452606144) locked {
+  trigger dying owner_hand_empty {
+    if 1 < max_hp(self) {
+      effect change_max_hp(self, -1);
+      if hp(self) < 1 {
+        effect recover_hp(self, 1 - hp(self));
+      }
+    } else {
+      effect change_max_hp(self, -1);
+    }
+  }
+}

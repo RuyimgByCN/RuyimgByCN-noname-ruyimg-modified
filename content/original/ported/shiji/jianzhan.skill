@@ -1,0 +1,10 @@
+// 渐战（张辽系）：出牌阶段限一次，选择两名手牌数不同的其他角色，令
+// 手牌多者对少者使用一张【杀】。
+// 旧 JS 的「按手牌数比较的双目标」无对应原语；以弃一张手牌并摸一张
+// 近似（已注明）。
+skill jianzhan(3140694863) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

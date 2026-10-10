@@ -1,0 +1,10 @@
+// 心照言（刘备）：出牌阶段，你可弃置至多（手牌数-体力值）张手牌，令一名
+// 其他角色获得等量标记；或摸牌至体力上限。每项每回合一次。
+// 旧 JS 的「两项各限一次与标记授予」无对应原语，以弃一张手牌并令一名
+// 其他角色摸一张近似（已注明）。
+skill xinxhzhiyan(3400809800) {
+  active play_phase uses_per_turn 2 select_hand 1 1 {
+    effect discard_selected(self);
+    effect choose_other_draw_or_recover(self, 1, 0, 1);
+  }
+}

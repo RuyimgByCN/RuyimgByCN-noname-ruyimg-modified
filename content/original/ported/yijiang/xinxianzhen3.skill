@@ -1,0 +1,9 @@
+// 新陷阵失败的临时效果
+// 原语义：不能主动使用【杀】；【杀】不计入手牌上限，且不能在弃牌阶段弃置。
+skill xinxianzhen3(3077071581) {
+  modifier sha_use_cancel override 1;
+  modifier sha_ignored_hand_limit override 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

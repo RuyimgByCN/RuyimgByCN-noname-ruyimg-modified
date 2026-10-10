@@ -1,0 +1,7 @@
+// 武圣 (wusheng) — 关羽: red cards can be used as 杀 (Sha).
+// Simplified: after damage dealt by owner, draw 1 card (passive advantage).
+skill wusheng(16) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

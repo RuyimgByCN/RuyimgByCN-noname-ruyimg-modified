@@ -1,0 +1,4 @@
+// Skill huox3(161) - trigger variant
+skill huox3(161) {
+  trigger damage owner_is_target { effect draw_cards(self, 1); }
+}

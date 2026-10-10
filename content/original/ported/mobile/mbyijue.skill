@@ -1,0 +1,6 @@
+// mbyijue（义绝）：锁定技，当你对一名角色造成到大于等于其体力值的伤害时，其选择交给你任意张牌，然后你选择一项：1.本回合其不能使用或打出牌，且你弃置所有与这些牌花色相同的牌；2.你防止此伤害，且本轮你与其使用牌指定对方为目标时，取消之。
+skill mbyijue(4292476694) locked {
+  trigger card_targeted owner_alive {
+    effect choose_other_give_one_hand_equip(self);
+  }
+}

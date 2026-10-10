@@ -1,0 +1,7 @@
+// 伏诛（孙休）：回合结束后对男性角色循环使用牌堆中的【杀】，直至牌堆数超上限。
+// 旧 JS 的循环杀+洗牌回调+动态退出条件无对应原语，暂留空定义。
+skill fuzhu(2312971788) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

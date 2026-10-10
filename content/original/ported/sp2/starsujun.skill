@@ -1,0 +1,6 @@
+// 肃军：使用牌后，剩余手牌中的基本牌与非基本牌数量相等时可摸两张。
+skill starsujun(4007048185) {
+  trigger card_used owner_source_hand_basic_equals_non_basic optional {
+    effect draw_cards(self, 2);
+  }
+}

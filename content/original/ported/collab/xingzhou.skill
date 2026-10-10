@@ -1,0 +1,11 @@
+// 星咒（张角）：当有角色受到伤害后，若伤害来源存活且你可以对其使用【杀】，
+//   且受伤角色手牌数最少，你可以弃置两张手牌，视为对其使用【杀】；
+//   若该角色因此死亡，重置lieshen技能。
+// 旧JS的cost阶段弃2牌+content阶段使用虚拟【杀】+死亡检测→技能重置的完整链、
+//   min_hand条件判断等无DSL对应原语（需interactive_cost + conditional_skill_restore）。
+// 以空定义保留编译占位，待cost_phase和post_action_skill_restore原语后补齐。
+skill xingzhou(2318825197) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

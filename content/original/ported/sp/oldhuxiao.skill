@@ -1,0 +1,6 @@
+// 虎啸：自己的【杀】被【闪】抵消后，返还该次普通出牌次数。
+skill oldhuxiao(3615190640) locked {
+  trigger sha_dodged owner_source_sha_dodged {
+    effect refund_current_sha_use(self, event_card);
+  }
+}

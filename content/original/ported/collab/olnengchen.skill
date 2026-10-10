@@ -1,0 +1,7 @@
+// 能臣（刘协曹节）：受到牌造成的伤害后，若「鼎玺」区有同名牌，获得其中一张。
+// 旧 JS 的「鼎玺（oldingxi）扩张区」无对应原语，未建模。
+skill olnengchen(2715619211) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

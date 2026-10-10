@@ -1,0 +1,8 @@
+// 悲歌（offline 雁翎蔡文姬 ylyg_beige）：一名角色因【杀】受到伤害后，你可弃置一张牌，
+// 依曲中互换状态令受伤者/伤害来源摸一张牌或你各弃置一张牌（上游含 quzhong 互换联动）。
+// 上游 (offline/skill ylyg_beige)：global damageEnd + sha 条件 + 弃牌成本 + 互换分支。
+// INTENTIONAL_EMPTY_NOOP: quzhong 互换存储、受益方判定与分支无原语组合；2026-09-09
+// 上游增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill ylyg_beige(3375422090) {
+  modifier hand_limit add 0;
+}

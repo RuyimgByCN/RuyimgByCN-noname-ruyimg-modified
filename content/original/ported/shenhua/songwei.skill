@@ -1,0 +1,6 @@
+// 颂威：旧 JS 的 grouped `songwei2` 已折叠到主公技本体；旧 JS 只作语义基准。
+skill songwei(2169124968) lord_only {
+  trigger judgment_resolved owner_alive_other_judgment_black_event_player_group_wei optional by event_player {
+    effect draw_cards(self, 1);
+  }
+}

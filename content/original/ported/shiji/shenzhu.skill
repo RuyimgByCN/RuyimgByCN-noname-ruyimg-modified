@@ -1,0 +1,28 @@
+// 神助（神太史慈）：使用【杀】后，选择：摸一张牌且本回合使用【杀】的次数上限+1，
+// 或摸三张牌且本回合不能再使用【杀】。
+// 旧 JavaScript 仅作语义证据；选择与临时技能由权威状态机校验。
+// 注：旧 JS 要求单张实体来源牌的【杀】；DSL 的 owner_source_sha 覆盖全部【杀】，
+// 轻微放宽来源牌数量限制。
+skill shenzhu(2414789814) {
+  trigger card_used owner_source_sha optional {
+    let pick = choose(0, 1);
+    if pick == 0 {
+      effect draw_cards(self, 1);
+      effect add_skill_until_turn_end(self, 2481415487);
+    }
+    if pick == 1 {
+      effect draw_cards(self, 3);
+      effect add_skill_until_turn_end(self, 2534900742);
+    }
+  }
+}
+
+// 神助·上限：本回合使用【杀】的次数上限+1。
+skill shenzhu_more(2481415487) {
+  modifier sha_use_limit add 1;
+}
+
+// 神助·禁用：本回合不能再使用【杀】。
+skill shenzhu_less(2534900742) {
+  modifier sha_use_cancel override 1;
+}

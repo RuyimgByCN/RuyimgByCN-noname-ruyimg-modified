@@ -1,0 +1,7 @@
+// 慎微（勘律荀勖 / old:yj_y_xunxu）
+// 上游：用牌后禁同花色；指定其他角色则自伤 1；需用桃且无可用牌时，可弃同花色手牌视为桃；
+// 若有角色因此脱离濒死则本轮失效。
+// 花色禁令/自伤/轮次失效未建模；以 view_as 桃（同花色 he 至多 2）近似「弃同花色视为桃」路径。
+skill yjshenwei(3627315775) {
+  view_as tao play_phase any from hand_equip up_to 2 same_suit;
+}

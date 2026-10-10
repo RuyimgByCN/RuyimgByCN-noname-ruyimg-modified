@@ -1,0 +1,13 @@
+// 庸略(旧版)(旧版郭淮)：当其他角色的判定阶段开始时，若其有判定区里的牌，
+// 你可以弃置其判定区里的一张牌。若你不在其攻击范围内且你可以对其使用【杀】，
+// 则你视为对其使用一张【杀】；否则你摸一张牌。
+// 旧JS含discardPlayerCard弃判定牌+inRange判断+useCard/摸牌分支。
+// 近似：phase_judge触发，弃判定牌后视条件使用杀或摸牌。
+skill reyonglve(3972178613) {
+  trigger phase_judge owner_is_target_judge_nonempty {
+    // 近似：弃目标判定区的牌（无法精确指定弃哪张），然后使用虚拟杀（或摸牌）
+    // 注：旧JS中inRange判断 → 不在范围内可出杀→useCard，否则draw，此分支无法精确表达
+    effect choose_use_virtual_sha(event_player, normal_distance);
+    // 注：分支逻辑（在范围内则摸牌）无法建模，统一近似为出虚拟杀
+  }
+}

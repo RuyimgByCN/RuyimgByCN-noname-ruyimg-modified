@@ -1,0 +1,10 @@
+// 终愿（观铃·限定技）：判定时修改判定结果的花色和点数。
+// 上游 (key/skill.js:4923)：judge 时 chooseButton 任意花色+点数改写。
+// 实现：`modifier judgment_rewrite override 1`——以持有的手/装备/扩展区任一牌替换
+// 判定牌＝以所选牌的花色点数改写判定结果。
+// 近似：(1) 花色点数受限于所持牌（上游任意 chooseButton）；(2) 限定技每局一次未建模
+// （modifier 资格全程开放）；(3) 需手上有牌方可用。
+// 2026-08-15 判定交互迷你批——零新原语。
+skill misuzu_zhongyuan(2446245954) {
+  modifier judgment_rewrite override 1;
+}

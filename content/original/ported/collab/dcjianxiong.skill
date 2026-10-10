@@ -1,0 +1,17 @@
+// 奸雄（经典曹操）：旧 JS 语义重写。获得仍在处理区的伤害牌，随后摸牌数逐次成长至五。
+skill dcjianxiong(3695091838) {
+  trigger damage owner_is_target optional {
+    if 0 < event_card {
+      let old_zone = card_zone(event_card);
+      let processing = zone(0, 6);
+      if old_zone == processing {
+        effect move_card(event_card, zone(self, 3), processing);
+      }
+    }
+    let marks = mark_count(self, 3695091838);
+    effect draw_cards(self, marks + 1);
+    if marks < 4 {
+      effect add_mark(self, 3695091838, 1);
+    }
+  }
+}

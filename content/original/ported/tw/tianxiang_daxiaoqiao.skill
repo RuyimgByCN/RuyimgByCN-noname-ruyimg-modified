@@ -1,0 +1,8 @@
+// 天香·大乔小乔（跨包辅助）：纯 inherit 声明，继承标准包【天香】。
+// 旧 JS 仅 `{ inherit: "tianxiang" }` 继承声明，DSL 无继承原语；
+// 以空定义保留稳定 ID（被天香本体的 modifier/trigger 语义覆盖，已注明）。
+skill tianxiang_daxiaoqiao(3361943884) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 tianxiang_daxiaoqiao = 标记型技能（audio-only，skill.js:18235），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

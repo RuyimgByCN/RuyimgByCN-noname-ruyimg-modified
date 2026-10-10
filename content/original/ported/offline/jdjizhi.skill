@@ -1,0 +1,13 @@
+// 集智：使用普通锦囊牌后摸一张牌；本回合每次发动令手牌上限加一。
+skill jdjizhi(3847328245) locked {
+  modifier hand_limit add owner_skill_mark;
+
+  trigger card_used owner_source_ordinary_trick {
+    effect draw_cards(self, 1);
+    effect add_mark(self, 3847328245, 1);
+  }
+
+  trigger turn_ended owner_alive {
+    effect remove_mark(self, 3847328245, 0);
+  }
+}

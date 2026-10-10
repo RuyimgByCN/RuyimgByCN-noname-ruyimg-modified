@@ -1,0 +1,6 @@
+// 乱武：限一次，其他角色按座次依次对最近角色使用【杀】，否则失去1点体力。
+skill luanwu(2772376501) {
+  active play_phase once_per_game {
+    effect force_others_use_sha_on_nearest_or_lose_hp(self);
+  }
+}

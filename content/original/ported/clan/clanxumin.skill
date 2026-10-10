@@ -1,0 +1,8 @@
+// 恤民（族韩韶/族韩融/族韩馥）：限定技，宗族技。出牌阶段，可将一张牌当
+// 【五谷丰登】使用。
+// 旧 JS 的「限定技」「宗族技」「五谷丰登转化」无对应原语（view_as kinds
+// 不含 wugu，limited 不支持），未建模（已注明）。
+skill clanxumin(2932264074) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

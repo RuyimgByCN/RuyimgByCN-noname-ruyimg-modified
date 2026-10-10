@@ -1,0 +1,7 @@
+// 掳掠：弃置与一名其他角色装备数相同的牌，然后对其造成一点无牌来源伤害。
+skill nslulve(2729205545) {
+  active play_phase uses_per_turn 1 targets 1 1 other has_equip selected_cards_match_target_equip_count select_he 1 255 {
+    effect discard_selected(self);
+    effect deal_damage(self, event_source, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 拾昔（族杨彪/族杨修/族杨赐/族杨忠）：每次使用普通锦囊牌记录花色→牌名映射（每种花色一次）；可将一种花色的所有牌置入弃牌堆视为使用对应记录的锦囊牌。
+// 旧 JS 的「花色→牌名存储」「花色牌批量弃置+view_as」无对应原语。
+// 空定义：需 expansion 支持花色映射存储和批量牌视为。
+skill clanshixi(4047498820) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

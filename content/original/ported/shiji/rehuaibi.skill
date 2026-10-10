@@ -1,0 +1,6 @@
+// 怀璧·新（董卓系）：主公技。你关联「耀虎」标记的势力角色数计入手牌上限。
+// 旧 JS 的「关联势力角色数」无对应原语；以存活角色数近似加成
+// （势力限定未建模，已注明）。
+skill rehuaibi(3459487063) lord_only {
+  modifier hand_limit add alive_group_count;
+}

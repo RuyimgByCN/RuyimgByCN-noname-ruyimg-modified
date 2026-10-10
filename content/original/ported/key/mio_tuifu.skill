@@ -1,0 +1,6 @@
+// 推腐
+skill mio_tuifu(3496176961) locked {
+  trigger damage owner_alive_source_target_same_sex {
+    effect draw_cards(self, 1);
+  }
+}

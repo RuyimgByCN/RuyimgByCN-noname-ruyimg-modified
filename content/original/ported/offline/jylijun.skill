@@ -1,0 +1,8 @@
+skill jylijun(2928426897) {
+  // 过滤器补全（2026-08-06，C 段 omp）：上游 global damageEnd + event.player.group
+  // == "wei"（仅魏势力受伤目标）；owner_alive 对任何伤害都触发，改用
+  // owner_alive_event_player_group_wei。
+  trigger damage owner_alive_event_player_group_wei optional {
+    effect draw_cards(event_player, 1);
+  }
+}

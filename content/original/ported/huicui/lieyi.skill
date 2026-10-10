@@ -1,0 +1,7 @@
+// lieyi：失去体力。
+// 旧JS含expansion区，DSL无法精确建模。
+skill lieyi(2499947792) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

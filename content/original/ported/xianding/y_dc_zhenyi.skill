@@ -1,0 +1,7 @@
+// 真仪（y版）：锁定技，使用法箓记录花色的牌时：不可被响应且无距离限制。
+// 当法箓触发「同花色」：记录该花色；「异花色」：标记+1（增加点化观看牌数）。
+// 旧 JS 的「花色记录」「不可响应+无视距离」「标记联动」无对应原语，未建模。
+skill y_dc_zhenyi(2839125009) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

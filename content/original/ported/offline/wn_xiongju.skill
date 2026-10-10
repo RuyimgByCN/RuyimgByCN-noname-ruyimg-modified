@@ -1,0 +1,5 @@
+// wn_xiongju：player:game_started, global:phaseBefore, global:changeGroupAfter, 异步。
+skill wn_xiongju(2557117282) {
+  trigger game_started owner_alive {
+  }
+}

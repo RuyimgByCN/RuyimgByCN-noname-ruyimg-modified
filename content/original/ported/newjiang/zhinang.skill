@@ -1,0 +1,8 @@
+// 智囊（王粲）：出牌阶段开始时，若你手牌数不大于体力值，你获得装备牌与
+// 锦囊牌类别各一张牌。
+// 旧 JS 的「按类别从牌堆取牌」无对应原语，以摸一张近似（已注明）。
+skill zhinang(2606484344) {
+  trigger phase_play owner_alive_once_per_round optional {
+    effect draw_cards(self, 1);
+  }
+}

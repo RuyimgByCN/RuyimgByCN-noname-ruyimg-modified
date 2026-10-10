@@ -1,0 +1,7 @@
+// 丹心：你受到伤害后,可摸一张牌。
+// 旧 JS 仅作语义证据;「更改矫诏描述」分支未建模,以固定摸一张牌近似。
+skill danxin(3073144676) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

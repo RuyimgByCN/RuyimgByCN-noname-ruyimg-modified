@@ -1,0 +1,6 @@
+// mbdingzhen（定镇）：每轮开始时，你可令与你距离X以内的至多X名其他角色依次选择一项（X为你的体力值）：1.弃一张【杀】；2.本轮其于回合内不能指定你为锦囊牌的目标。
+skill mbdingzhen(2411043482) {
+  trigger turn_ended owner_alive {
+    effect discard_selected(self);
+  }
+}

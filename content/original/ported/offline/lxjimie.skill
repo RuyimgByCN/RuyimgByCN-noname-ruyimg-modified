@@ -1,0 +1,8 @@
+// 寂灭（神马超）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：结束阶段：你可对本回合受到过伤害的一名角色造成 X 点伤害（X 为其本回合受伤数），然后你对其使用牌无次数限制
+// 旧 JS 的「动态伤害值源=回合历史查询」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxjimie(4220944213) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

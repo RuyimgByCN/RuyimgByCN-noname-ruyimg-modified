@@ -1,0 +1,12 @@
+// 界天香（小乔）：受到伤害时，可弃置一张红桃手牌并选择一名其他角色，取消此伤害；
+// 然后选择一项：1.该角色受到伤害来源对其造成的1点伤害，然后摸 X 张牌
+// （X 为其已损失体力值且至多为5）；2.该角色失去1点体力，然后获得你弃置的牌。
+// 旧 JS 仅作语义证据；取消伤害、弃红桃选目标与分支结算由权威状态机校验（ABI 457）。
+// 注 1：旧 JS 于 damageBegin4 触发并 cancel，DSL 以 prevent_current_damage 等价表达。
+// 注 2：旧 JS 以 chooseCardTarget 单对话框选牌+目标，DSL 分三段选择（红桃→目标→分支）。
+// 注 3：分支 2 的“获得弃置的牌”在弃牌堆中取回；若目标先死亡则不再取回（近似）。
+skill retianxiang(3203696812) {
+  trigger damage_before owner_is_target optional {
+    effect choose_discard_heart_cancel_damage_branch(self);
+  }
+}

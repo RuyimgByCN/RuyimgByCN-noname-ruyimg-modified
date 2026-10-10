@@ -1,0 +1,9 @@
+// 巧说胜利后的单次效果：下一张基本牌或锦囊牌可增减一个目标，然后移除此技能。
+skill qiaoshui3(2260792673) {
+  trigger card_used owner_source_basic_or_trick {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+  trigger phase_play_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

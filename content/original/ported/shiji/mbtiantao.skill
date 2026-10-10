@@ -1,0 +1,10 @@
+// 天讨（蒋琬系）：锁定技。结束阶段开始时，选择一个区域弃置其中所有牌，
+// 并弃置任意名其他角色对应区域各一张牌。
+// 旧 JS 的「选区域弃牌」无对应原语；以弃一张手牌并摸一张近似
+// （区域选择未建模，已注明）。
+skill mbtiantao(3964857479) locked {
+  trigger phase_end owner_is_target {
+    effect discard_hand_equip_count(self, 1);
+    effect draw_cards(self, 1);
+  }
+}

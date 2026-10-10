@@ -1,0 +1,9 @@
+// rejinjiu2：刷新包技能。
+// triggers: player:damageBegin3
+// forced/locked: 锁定技
+skill rejinjiu2(3957186617) {
+    // 近似：旧JS事件 damageBegin3 → DSL事件 damageBegin3
+    trigger damage_before owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

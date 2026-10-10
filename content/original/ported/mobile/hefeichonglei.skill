@@ -1,0 +1,6 @@
+// hefeichonglei（冲垒）：锁定技。①你的出牌阶段内，所有其他角色的非基本手牌均只能作为【闪】使用或打出。②出牌阶段限X次（X为其他角色数），当你使用的牌被其他角色响应后，或当你响应其他角色使用的牌后，你获得该角色一张手牌。
+skill hefeichonglei(4199491455) locked {
+  trigger card_used owner_alive {
+    effect add_mark(self, 0, 1);
+  }
+}

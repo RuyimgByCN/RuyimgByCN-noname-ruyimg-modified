@@ -1,0 +1,7 @@
+// 睦穆：准备阶段，弃一张手牌，移动场上牌。
+// 旧 JS 的「移动场上牌（moveCard）」无对应原语，未建模。
+skill stdmumu(2475718705) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

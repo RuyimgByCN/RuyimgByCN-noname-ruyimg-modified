@@ -1,0 +1,152 @@
+[
+  {
+    "id": 2268373161,
+    "name_key": "shen_guanyu",
+    "max_hp": 5,
+    "skills": [
+      2400906129,
+      3278077669
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_guanyu.jpg"
+  },
+  {
+    "id": 3839224428,
+    "name_key": "shen_caocao",
+    "max_hp": 3,
+    "skills": [
+      3519522126,
+      2669566023
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_caocao.jpg"
+  },
+  {
+    "id": 2412883799,
+    "name_key": "shen_lvbu",
+    "max_hp": 5,
+    "skills": [
+      3399710515,
+      4039474555,
+      4021373467,
+      2674950952
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_lvbu.jpg"
+  },
+  {
+    "id": 3606714722,
+    "name_key": "shen_luxun",
+    "max_hp": 4,
+    "skills": [
+      3829050927,
+      2516554182,
+      3907113145
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_luxun.jpg"
+  },
+  {
+    "id": 2338672614,
+    "name_key": "shen_lvmeng",
+    "max_hp": 3,
+    "skills": [
+      4211343786,
+      3100453257
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_lvmeng.jpg"
+  },
+  {
+    "id": 2166903732,
+    "name_key": "shen_zhouyu",
+    "max_hp": 4,
+    "skills": [
+      3293607680,
+      3841403199
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_zhouyu.jpg"
+  },
+  {
+    "id": 3401672399,
+    "name_key": "shen_zhaoyun",
+    "max_hp": 2,
+    "skills": [
+      2679563700,
+      2722411221
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_zhaoyun.jpg"
+  },
+  {
+    "id": 4215109649,
+    "name_key": "shen_zhugeliang",
+    "max_hp": 3,
+    "skills": [
+      2771819420,
+      4216995242,
+      2545944631
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_zhugeliang.jpg"
+  },
+  {
+    "id": 3081060085,
+    "name_key": "shen_liubei",
+    "max_hp": 6,
+    "skills": [
+      2666801006,
+      3363786286
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_liubei.jpg"
+  },
+  {
+    "id": 3481630433,
+    "name_key": "shen_ganning",
+    "max_hp": 6,
+    "initial_hp": 3,
+    "skills": [
+      3008932273,
+      2400922959
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_ganning.jpg"
+  },
+  {
+    "id": 3439287180,
+    "name_key": "shen_zhangliao",
+    "max_hp": 4,
+    "skills": [
+      4266461274,
+      3298844877
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_zhangliao.jpg"
+  },
+  {
+    "id": 4212877947,
+    "name_key": "shen_simayi",
+    "max_hp": 4,
+    "skills": [
+      3085167840,
+      2725045502,
+      2556576493
+    ],
+    "sex": "male",
+    "group": "shen",
+    "portrait_asset": "character_shen_simayi.jpg"
+  }
+]

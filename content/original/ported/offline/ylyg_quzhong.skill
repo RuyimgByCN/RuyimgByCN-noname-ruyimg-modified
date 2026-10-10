@@ -1,0 +1,9 @@
+// 曲终（offline 雁翎蔡文姬 ylyg_quzhong）：一名角色的结束阶段，你可以将本回合你弃置的
+// 一张牌当【杀】使用（与悲歌的互换联动存储）。
+// 上游 (offline/skill ylyg_quzhong)：global phaseJieshuBegin + getHistory("lose") 弃牌
+// 历史查询 + autoViewAs 虚拟杀 + storage 互换。
+// INTENTIONAL_EMPTY_NOOP: 回合弃牌历史查询与历史牌虚拟化无原语；2026-09-09 上游
+// 增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill ylyg_quzhong(2677972035) {
+  modifier hand_limit add 0;
+}

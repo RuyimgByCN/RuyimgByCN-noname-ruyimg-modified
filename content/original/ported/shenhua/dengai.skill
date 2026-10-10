@@ -1,0 +1,26 @@
+// 屯田（邓艾）：当你于回合外失去牌后，你可以进行判定；若判定结果不为红桃，则你将
+// 此判定牌置于你的武将牌上，称为「田」；你计算与其他角色的距离-X（X 为「田」的数
+// 量）。「田」映射为本技能牌堆；距离修正以 distance_from + 负牌堆计数表达
+// （ABI 533）。
+// 旧 JS 仅作语义证据；判定与置入由 resolve_tuntian 权威校验（ABI 533）。
+skill tuntian(2366746565) {
+  trigger cards_moved owner_lost_cards_outside_turn optional {
+    effect resolve_tuntian(self);
+  }
+  modifier distance_from add owner_skill_pile_count_negative_2366746565;
+}
+
+// 凿险（邓艾）：觉醒技，准备阶段，若你的「田」数量不小于 3，你减 1 点体力上限，然后
+// 获得「急袭」。田≥3 映射为本技能牌堆至少 3 张（ABI 534）。
+// 旧 JS 仅作语义证据；觉醒由 resolve_zaoxian 权威校验（ABI 534）；已持有急袭时不再
+// 重复结算。
+skill zaoxian(853475869) locked {
+  trigger phase_prepare owner_phase_begin_skill_pile_gte_three_2366746565 {
+    effect resolve_zaoxian(self, 3780186838, 2366746565);
+  }
+}
+
+// 急袭（邓艾）：你可以将一张「田」当【顺手牵羊】使用。
+skill jixi(3780186838) {
+  view_as shunshou play_phase any from hand_expansion;
+}

@@ -1,0 +1,5 @@
+// psjiaohu：锁定技, player:phaseDrawBegin2, 异步。
+skill psjiaohu(3277778840) {
+  trigger phase_any_end owner_alive {
+  }
+}

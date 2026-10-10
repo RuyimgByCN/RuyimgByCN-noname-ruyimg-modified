@@ -1,0 +1,10 @@
+// 义父·实装（朱音·主公技）：出牌阶段将一张手牌交给拥有此主公技的角色，其摸一张后再交给你一张。
+// 实现：出牌阶段限一次弃 1 张手牌，令一名其他角色摸 1。
+// 近似：交给改为弃置；不限主公技持有者；不返还手牌。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill akane_yifu2(3457576296) {
+  active play_phase uses_per_turn 1 select_hand 1 1 targets 1 1 other {
+    effect discard_selected(self);
+    effect draw_selected_targets(1);
+  }
+}

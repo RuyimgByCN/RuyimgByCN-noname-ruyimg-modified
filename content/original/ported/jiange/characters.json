@@ -1,0 +1,89 @@
+[
+ {
+  "id": 1519312738,
+  "name_key": "jg_pangtong",
+  "max_hp": 3,
+  "skills": [
+   386246179,
+   2127296099
+  ],
+  "sex": "male",
+  "group": "shu"
+ },
+ {
+  "id": 3453993445,
+  "name_key": "jg_huangyueying",
+  "max_hp": 3,
+  "skills": [
+   2234674759,
+   2123242344
+  ],
+  "sex": "female",
+  "group": "shu"
+ },
+ {
+  "id": 3261142220,
+  "name_key": "jg_zhugeliang",
+  "max_hp": 3,
+  "skills": [
+   3651814505
+  ],
+  "sex": "male",
+  "group": "shu"
+ },
+ {
+  "id": 667108109,
+  "name_key": "jg_liubei",
+  "max_hp": 4,
+  "skills": [
+   421562282,
+   1528955911
+  ],
+  "sex": "male",
+  "group": "shu"
+ },
+ {
+  "id": 446798449,
+  "name_key": "jg_xiahouyuan",
+  "max_hp": 4,
+  "skills": [
+   882766764
+  ],
+  "sex": "male",
+  "group": "wei"
+ },
+ {
+  "id": 3270389490,
+  "name_key": "jg_caozhen",
+  "max_hp": 4,
+  "skills": [
+   1498596844,
+   1666515245
+  ],
+  "sex": "male",
+  "group": "wei"
+ },
+ {
+  "id": 1351132918,
+  "name_key": "jg_zhanghe",
+  "max_hp": 4,
+  "skills": [
+   517866804,
+   3402005750
+  ],
+  "sex": "male",
+  "group": "wei"
+ },
+ {
+  "id": 2245746040,
+  "name_key": "jg_simayi",
+  "max_hp": 5,
+  "skills": [
+   1633666137,
+   122113180,
+   827342815
+  ],
+  "sex": "male",
+  "group": "wei"
+ }
+]

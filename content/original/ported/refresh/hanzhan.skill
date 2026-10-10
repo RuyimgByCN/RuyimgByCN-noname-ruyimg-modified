@@ -1,0 +1,18 @@
+// 酣战（界太史慈）
+// 拼点开始时可令对方的拼点牌改由确定性随机选择；拼点结束后可获得点数最大的杀。
+skill hanzhan(4071802825) {
+  trigger hand_compare_started owner_hand_compare_participant optional {
+    effect randomize_current_hand_compare_opponent(self);
+  }
+  trigger hand_compare_finished owner_hand_compare_participant_has_sha optional {
+    effect gain_highest_rank_sha_from_event_cards(self);
+  }
+}
+
+// 旧版 grouped 子技能已折叠进上面的完成事件。
+skill hanzhan_gain(3019387228) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hanzhan_gain（skill.js:10153）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

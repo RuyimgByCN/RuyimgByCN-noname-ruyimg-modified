@@ -1,0 +1,5 @@
+skill dcsbchensheng(2769678482) {
+  trigger turn_ended owner_alive_not_target_neither_unique_max_hand optional {
+    effect draw_cards(self, 1);
+  }
+}

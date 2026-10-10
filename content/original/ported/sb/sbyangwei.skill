@@ -1,0 +1,19 @@
+// 扬威（界华雄）：出牌阶段，可摸两张牌，然后本局内此技能失效，并使本局内使用【杀】
+// 无距离限制、次数上限 +1 且无视防具。
+// 旧 JS 仅作语义证据；永久禁用以 remove_skill_by_def 表达，效果以临时技能承载。
+// 注：旧 JS 的 counter 子技能管理 tempBan 生命周期，DSL 以 remove_skill_by_def 的
+// 永久移除等价表达，counter 无需移植。
+skill sbyangwei(3601751055) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 2);
+    effect remove_skill_by_def(self, 3601751055);
+    effect add_skill(self, 2849167933);
+  }
+}
+
+// 扬威·效果：使用【杀】无距离限制、次数上限 +1 且无视防具。
+skill sbyangwei_effect(2849167933) locked {
+  modifier card_distance_unlimited(sha) override 1;
+  modifier sha_use_limit add 1;
+  modifier ignore_armor override 1;
+}

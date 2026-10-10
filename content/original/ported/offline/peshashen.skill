@@ -1,0 +1,5 @@
+// peshashen：锁定技, source:dying, 异步。
+skill peshashen(2541164792) {
+  trigger dying owner_is_target_once {
+  }
+}

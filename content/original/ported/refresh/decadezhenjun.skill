@@ -1,0 +1,11 @@
+// 镇军（decadezhenjun）— 界于禁：准备或结束阶段弃置目标的手牌差额；
+// 若全为非装备牌，可自弃一张；取消或无牌可弃时，目标摸等量牌。
+skill decadezhenjun(2634318954) {
+  trigger phase_prepare owner_is_target_any_alive_discardable_by_owner_hand_equip optional {
+    effect resolve_decadezhenjun(self);
+  }
+
+  trigger phase_end owner_is_target_any_alive_discardable_by_owner_hand_equip optional {
+    effect resolve_decadezhenjun(self);
+  }
+}

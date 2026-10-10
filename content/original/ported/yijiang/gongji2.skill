@@ -1,0 +1,5 @@
+// 弓骑临时效果
+// 原语义：基础攻击范围视为无限。
+skill gongji2(2776126573) {
+  modifier attack_range override 2147483647;
+}

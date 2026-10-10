@@ -1,0 +1,15 @@
+// OL界黄忠·没矢：实体【杀】钉在受伤目标处；其失去防具或坐骑后收回。
+skill remoshi(3096399491) locked {
+  trigger damage owner_source_direct_sha_damage_target_armor_or_mount_card_gainable {
+    effect resolve_remoshi(self, event_player, event_card, 4090725192, 0);
+  }
+  trigger cards_moved owner_alive_event_player_lost_armor_or_mount_has_originating_skill_pile {
+    effect resolve_remoshi(self, event_player, event_card, 4090725192, 1);
+  }
+}
+
+// 目标持有“没矢”牌时的公开标记；牌堆本身由 remoshi 的稳定定义号管理。
+skill remoshi_stuck(4090725192) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

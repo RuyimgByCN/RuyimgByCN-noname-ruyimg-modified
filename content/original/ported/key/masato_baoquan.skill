@@ -1,0 +1,5 @@
+skill masato_baoquan(3870573152) locked {
+  trigger damage_before owner_source {
+    effect choose_prevent_damage_or_lose_max_hp_increase_damage(self, 2);
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/wuxing/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "nature_fraction": { "numerator": 1, "denominator": 3 },
+  "natures": ["metal", "wood", "water", "fire", "soil"],
+  "wuxingpan": { "suit": "spade", "rank": 5 }
+}

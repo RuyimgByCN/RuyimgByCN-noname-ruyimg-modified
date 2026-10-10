@@ -1,0 +1,6 @@
+// 旧客户端“怀橘”伤害评估提示；无权威规则行为。
+skill nzry_huaiju_ai(2329553925) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// 离间 full (lijian_full) — 貂蝉: force two males to duel.
+// Simplified: attack_range +1 and distance_from -1 (dual positioning).
+skill lijian_full(46) {
+  modifier attack_range add 1;
+}

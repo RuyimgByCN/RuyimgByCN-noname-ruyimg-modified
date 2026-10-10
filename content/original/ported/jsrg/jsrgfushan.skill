@@ -1,0 +1,8 @@
+// jsrgfushan（负山）：出牌阶段开始时，所有其他角色可以依次交给你一张牌并令你此阶段使用【杀】的次数上限+1。此阶段结束时，若你使用【杀】的次数未达到上限且此阶段以此法交给你牌的角色均存活，你失去2点体力，否则你将手牌摸至体力上限。
+// 未建模：历史查询, 翻译调用, addTempSkill, 标记计数, charlotte延迟, storage状态 ...等7项（DSL无对应原语）
+skill jsrgfushan(4067781919) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgfushan（skill.js:6701）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,7 @@
+// 寸目（许攸主公技）：摸牌改为从牌堆底摸。
+// 旧 JS 的「牌堆底摸牌」以 draw_cards_from_bottom 表达。
+skill nzry_cunmu(3752013920) lord_only {
+  trigger phase_draw owner_is_target {
+    effect set_draw_phase_bottom(self);
+  }
+}

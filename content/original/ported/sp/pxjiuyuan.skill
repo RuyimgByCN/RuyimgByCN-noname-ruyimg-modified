@@ -1,0 +1,12 @@
+// 九原（pxjiuyuan，州郡技能）：你使用【杀】可以额外指定任意名目标。
+// 上游 (sp/skill.js:1141)：trigger player:useCard2；filter = 杀且存在合法可加目标；
+// content = chooseTarget([1, Infinity]) 添加任意个合法目标。
+// 实现：card_used + owner_source_sha → 可选确认 →
+// choose_add_or_remove_current_card_target(self, event_card)（为当前杀添加一个目标）。
+// 与上游差异：单次只加一个目标（上游可加任意个）；「目标必须合法且未在现有目标中」
+// 由效果内校验。
+skill pxjiuyuan(2634282552) {
+  trigger card_used owner_source_sha optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

@@ -1,0 +1,7 @@
+// 告变（族荀彧/族荀攸）：锁定技。其他角色回合结束时，若本回合仅一名角色受过伤害，其选择：使用本回合进入弃牌堆的一张【杀】，或失去1点体力。
+// 旧 JS 的「全局伤害计数」「弃牌堆中特定牌选择和使用」「目标选择分支」无对应原语。
+// 空定义：需 expansion 支持弃牌堆内容查询和目标选择。
+skill clangaobian(3810713237) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

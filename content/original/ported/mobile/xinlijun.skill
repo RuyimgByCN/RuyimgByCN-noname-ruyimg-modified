@@ -1,0 +1,6 @@
+// xinlijun（立军）：主公技，其他吴势力角色于其回合内使用【杀】结算完毕后，其可以将此【杀】对应的实体牌交给你，然后你可以令其摸一张牌。
+skill xinlijun(3670186260) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

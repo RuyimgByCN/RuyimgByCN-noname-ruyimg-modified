@@ -1,0 +1,9 @@
+// 五脉（李映夏·蜀势力技）：每轮开始时可选获得八卦/集智/观星/游龙之一直到本轮结束，或摸 X 张（X=受伤角色数≤3）。
+// 实现：自己的回合开始时可选摸 1。
+// 近似：不限蜀势力；不授予技能；摸牌数不按受伤角色计数。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill liyingxia_wumai(2506272675) {
+  trigger phase_begin owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

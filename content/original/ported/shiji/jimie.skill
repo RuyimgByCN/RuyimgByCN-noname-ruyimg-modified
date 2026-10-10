@@ -1,0 +1,12 @@
+// 寂灭（神姜维）：限定技，出牌阶段结束时，若你的“霆”标记不少于 8，弃置 8 枚，
+// 对一名角色造成等于其体力上限的伤害，并清空【驭雳】的计数。
+// 旧 JavaScript 仅作语义证据；标记计数、弃置与按上限伤害由权威原语响应。
+skill jimie(2929748340) {
+  trigger phase_play_end owner_is_target {
+    if 7 < mark_count(self, 4145075227) {
+      effect remove_mark(self, 4145075227, 8);
+      effect choose_targets_damage(self, 1, 1, other, max_hp(event_source));
+      effect remove_skill(self_skill);
+    }
+  }
+}

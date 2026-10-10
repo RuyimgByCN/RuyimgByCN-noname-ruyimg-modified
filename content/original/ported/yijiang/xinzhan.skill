@@ -1,0 +1,6 @@
+// 心战：手牌数大于体力上限时，私看牌堆顶三张，可展示并获得任意张红桃牌。
+skill xinzhan(3275354148) {
+  active play_phase uses_per_turn 1 hand_gt_max_hp {
+    effect choose_gain_top_cards_by_suit(self, 3, heart);
+  }
+}

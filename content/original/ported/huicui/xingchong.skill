@@ -1,0 +1,7 @@
+// xingchong：摸?牌；获临时技。
+// 旧JS含subSkill、gaintag标记、expansion区、多步选择，DSL无法精确建模。
+skill xingchong(2174979821) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

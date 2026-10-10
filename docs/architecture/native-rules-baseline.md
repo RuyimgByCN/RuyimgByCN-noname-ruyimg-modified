@@ -1,0 +1,1881 @@
+# 原生线玩法规则基准（项目声明与版本约定）
+
+状态：活文档，2026-10-06 复核。源码仍为 `STANDARD_RULESET_VERSION = 60`、`ARCHIVE_FORMAT_VERSION = 2`；本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。v60 回放、标准目录和 XiaoJi tag 已于 9 月 24 日修复；存档未知牌种与载荷读尽仍未修，本次[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)再次复现。snap.rs 曾于第 43 轮发生截断事故并重建（记录见第 43 轮证据）。
+本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
+当前结果与反例以 [进度主稿](native-progress.md) 为准。
+
+## 版本约定与历史
+
+规则语义、目录或状态编码变化须递增规则版本，登记原因后更新 golden；不能仅重录哈希消除失败。
+版本 28 和第 48 轮的版本 59 均有 14 个 golden 通过记录；v60 差异核因与重录依据已记录于下表“回放修复”行，最新结果见主稿。golden 通过也不能证明未进入场景的技能/模式正确。
+
+| 版本 | 主要变化 / 决策 |
+|---|---|
+| 1–3 | 初始内核、逐目标无懈/身份局、使用时窗口与段预算，ADR 0704–0709 |
+| 4–5 | 判定稳定分组、鬼道/天妒目录与范围/旧牌归属，ADR 0712–0714 |
+| 6 | 真实装备资格/恢复、判定事件全序、finalized/judge_held 编码，ADR 0720 |
+| 7–8 | 濒死多轮救援、八卦阵判定，ADR 0726/0729 |
+| 9–14 | 鬼才/反馈、伤害牌来源、奸雄/遗计、阶段技能、转化、无双/集智，ADR 0736–0745 |
+| 15–19 | 主动技、制衡/英姿/克己、国色声明牌种、奇袭/咆哮，ADR 0746–0752 |
+| 20–23 | 双将/势力/明置、刚烈/突袭/裸衣、观星/连营、仁德/激将/马术/铁骑，ADR 0754–0760 |
+| 24 | 顺手牵羊、CardsDiscarded 事件、激将内嵌杀结算，ADR 0763 |
+| 25 | 令牌代次、校验、倾国/奇才/救援，ADR 0768；ADR 0769 明置装配沿用此版本 |
+| 26 | 六技能机器、提示词映射，ADR 0770；ADR 0771–0773 沿用此版本 |
+| 27 | Sha 流离/护驾五字段进入快照、字节与哈希；提示词注册表，ADR 0774 |
+| 28 | 武将性别字段及离间/结姻筛选，ADR 0775；14 golden 通过 |
+| 29 | 护驾/激将逐人询问重构（Sha/Jijiang 机器快照字段变化）、仁德阶段累计（`TurnState.rende_given` 入状态）、主动技阶段门控（`SkillLimits.active_outside_play` 例外）、存档 v2（OpenChoice 显式编码 ChoiceKind；v1 被门禁拒绝）、E03 扩展内容锁（启用扩展集合指纹参与目录版本派生）——ADR 0776；14 golden 因状态编码与语义变化重录 |
+| 30 | G1 cardpile 前置：新增 `CardKind::Jiu`（每回合限一次、下一杀 +1 伤害、濒死回血；`TurnState.jiu_used`/`jiu_active` 入状态）与 `CardKind::LeiSha`（雷属性杀、共享杀次数）；设计意图为基础目录加酒×2/雷杀×2（80→84 张），当前构造循环实际张数须复核——ADR 0776 G1；当轮 14 golden 因牌库与状态变化重录 |
+| 31 | G1 规则宿主原型：`MachineSnapshot::Host`（扩展机器载荷：def_key/行为标签/续行阶段，入快照/哈希/字节，恢复期绑定校验）、`CardKind::ShouLiJian`、宿主技能目录注册（`ExtensionPack.host_skills` → SkillDef）——ADR 0776 G1；14 golden 因目录与快照变化重录 |
+| 32 | G1 wuxing：五行属性入状态（`PlayerState.wunature` / `core.card_natures`，`InitHook::WuxingNatures` 经引擎 RNG 初始化）、`ChoiceKind::PickTag`/`ChoiceOption::Tag` 选择原语、`CardKind::WuxingPan` + `EquipSlot::Treasure`——ADR 0776 G1；14 golden 因状态变化重录 |
+| 33 | G1 3D精选：角色包管线（`Catalog.extension_generals` + `general_meta` 统一查询；`RestoreBounds.general_count` 槽位界）、装备技能生命周期（`CardDef.equip_skills` 装备授予/离场撤销 6 路径 + `EquipSkillMismatch` 恢复校验）、精彀宿主行为——ADR 0776 G1；14 golden 因目录与语义变化重录 |
+| 34 | G1 玩点论杀：`CardKind::WangmeiZhike` 锦囊（无懈窗口包装）+ `WangmeiZhikeCard` 宿主原语（最小体力/最小手牌条件增益）；卡牌派发机器 def_key 绑定按牌种在场判定——ADR 0776 G1；14 golden 因目录变化重录 |
+| 35 | G1 玩点论杀武将批：6 名武将元数据入包（角色包管线）；思继宿主原语（`CardsDiscarded` 可选触发、弃杀数×2 摸牌；`HostMachine.cards` 关联牌组入快照）——ADR 0776 G1；14 golden 因机器快照变化重录 |
+| 36 | G1 玩点论杀原语增补：三尖武器技（`SanjianWeaponDamage` 弃牌+目标两段选择）与莫守目标免疫（`blocks_delayed_trick_target` 原语钩子，乐/兵命令边界过滤）；`CardKind::Sanjian`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 37 | G1 运筹帷幄原语增补：水攻（`ShuigongCard` 多目标强制弃装备；`HostMachine.targets` 多目标入快照）与釜底抽薪（`FudichouxinCompare` 拼点两段选择，平局目标胜）；`CardKind::Shuigong`/`Fudichouxin`——ADR 0776 G1；14 golden 因目录与快照变化重录 |
+| 38 | G1 运筹帷幄切片扩展：趁火打劫（`ChenhuodajieCard` 获得目标手牌，无懈窗口包装）与索链甲（`CardKind::Suolianjia` + `CardDef.link_on_equip` 横置/重置钩子）——ADR 0776 G1；14 golden 因目录变化重录 |
+| 39 | G1 运筹帷幄切片扩展：洪水（`CardKind::HongShui` 自-target 延时锦囊，判定梅花 2–9 → 3 点雷伤）与偷梁换柱（`TouliangSwap` 三段选择换牌，同色摸 1；目标临时技暂缓）——ADR 0776 G1；14 golden 因目录变化重录 |
+| 40 | G1 杀海拾遗·炉石子包切片：灵魂之火/照明弹/急耗卡（`CardKind` 三种 + 宿主行为 tag 15–17，def_key 按牌种在场绑定）——ADR 0776 G1；14 golden 因目录变化重录 |
+| 41 | G1 玩点论杀余量原语：诱敌深入响应转化（`CardKind::Youdishenru`，杀响应选项并入，打出后杀无效 + 来源反噬 1 点；登记差异：无连用循环）——ADR 0776 G1；14 golden 因目录变化重录 |
+| 42 | G1 运筹帷幄余量原语：隔岸观火（`GeanguanhuoCompare` 双目标拼点链，赢方获得输方手牌，平局目标一弃牌）；`CardKind::Geanguanhuo`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 43 | G1 运筹帷幄余量原语：草船借箭（`CaochuanCard` 分支选择 PickTag——交出所有手牌杀+反噬杀 / 展示+被弃一张；登记差异：简化为直接伤害+确定性首张）；`CardKind::Caochuanjiejian`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 44 | G1 运筹帷幄收官：舌战群儒（`ShezhanqunruCompare` 全体确定性首轮拼点——使用者与所有有手牌的其他角色各比手牌首张，大者摸 1；登记差异：上游为多轮 Bool 问答链）；`CardKind::Shezhanqunru`；kernel 侧 AOE 目标展开（按座位序存活且有手牌）——ADR 0776 G1；14 golden 因目录变化重录 |
+| 45 | G1 杀海拾遗·古剑首切片：舒筋散（`GujianShujinsanCard` 目标弃任意张手牌摸等量，可取消；登记差异：原生仅手牌）/面里金针（`GujianMianliCard` 摸 1 后受 1 点伤害，登记差异：失去体力简化为伤害）/飞镖（`GujianFeibiaoCard` 弃黑色手牌或受伤，可取消=空选择）；`CardKind::Shujinsan`/`Mianlijinzhen`/`Feibiao`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 46 | G1 古剑续切片：金莲烛（`JinlianzhuCancel` damageBefore 事件取消——监听技授予全体角色、持烛者逐个确认、弃烛防止伤害、来源摸 1；登记差异：chooseToUse 简化为确认后确定性弃置）；`CardKind::Jinlianzhu`（响应牌拒主动使用）——ADR 0776 G1；14 golden 因目录变化重录 |
+| 47 | G1 古剑食物计时状态：`SkillInstance.rounds` 倒计时字段（入哈希/存档；效果触发点扣减归零移除）+ 授予机/监听技框架；摊黄冻（出牌阶段结束摸 1）/有更（已受伤且体力最少回 1，登记差异：挂判定阶段开始）；`CardKind::Tanhuadong`/`Yougeng`——ADR 0776 G1；14 golden 因状态编码与目录变化重录 |
+| 48 | G1 古剑食物效果面：青团（首杀摸 1，once_per_turn）/元宝肉（额外一张杀——杀次数校验钩子）/咕咚羹（受杀伤害 -1，一次性移除）/麻婆豆腐（结束阶段确定性弃牌，登记差异：随机改确定性）/春饼（手牌上限 +1——弃牌上限计算钩子）；`CardKind::Qingtuan`/`Yuanbaorou`/`Gudonggeng`/`Mapodoufu`/`Chunbing`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 49 | G1 护甲原语 + 食物第三批：`PlayerState.hujia`（伤害 1:1 先行抵扣，入哈希/存档；HujiaAbsorbed 日志）+ 鲤鱼汤（体力最少得护甲）/麻茶（黑色牌目标限制——出牌校验钩子，登记差异：不含响应路径）/菱角（摸牌阶段额外摸 1 后弃 1——选择机）；`CardKind::Liyutang`/`Molicha`/`Xiajiao`——ADR 0776 G1；14 golden 因状态编码与目录变化重录 |
+| 50 | G1 古剑食物簇收官：蜜链藕（红桃当桃——状态驱动 view-as：出牌转化链+通用尾部 use_as+濒死 is_tao_like 并入；登记差异：转化并存按既有优先级）/卤玉羹（出牌阶段限一次弃基本牌获得牌堆顶——主动型宿主监听技 activate；登记差异：发现牌简化为牌堆顶）；`CardKind::Mizhilianou`/`Luyugeng`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 51 | G1 古剑机关簇：冰魄通（逐目标首张同色比对——同色弃+伤害；登记差异：确定性首张+失去体力简化为伤害）/乾坤镖（目标及邻座各弃首张；登记差异：随机改确定性）/龙须钩（获得目标首张装备）/神火飞鸦（目标及邻座需闪否则 1 火伤——targets 响应队列逐目标循环+挂起派生）；`CardKind::Bingpotong`/`Qiankunbiao`/`Longxugou`/`Shenhuofeiya`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 52 | G1 古剑余簇：紫阳丹（+3 护甲可叠加，结束阶段 -1；登记差异：上游每阶段衰减）/玉女元神（Dying 触发一次性回复标记）/石会粉（需闪否则禁用对其他角色用牌——出牌校验钩子+expires_end_of_turn；登记差异：响应使用改主动使用）/六风散（获得两张实体闪；登记差异：虚拟牌改实体牌）；`CardKind::Ziyangdan`/`Yunvyuanshen`/`Shihuifen`/`Liufengsan`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 53 | G1 古剑最后一批：砂糖（1 火伤+1 护甲——emit/Yield 两段式时序）/黑龙鳞片（+1 护甲；登记差异：防御距离临时技暂缓）/硫头阁（自己摸 1/他人弃首张；登记差异：随机效果池简化为确定性）/木头面具（view-as 装备技——equip_skills+once_used，EquipSlot::Armor 注册）；`CardKind::Shatang`/`Heilonglinpian`/`Liutouge`/`Mutoumianju`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 54 | G1 古剑收官双卡：帝女玄霜（濒死特殊牌——is_tao_like 并入按桃救回 + 主动使用回复+rider 弃任意摸等量；登记差异：濒死救援弃摸骑乘暂缓）/玉衡（主动型装备技——确定性取其他角色首张黑桃；登记差异：升级机制+随机敌暂缓）；`CardKind::Dinvxuanshuang`/`Gjyuheng`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 55 | G1 炉石余量：盾牌格挡（+1 护甲摸 1 弃 1，登记差异：确定性首张）/治疗波（判定红回 1 否则+1 护甲）/元素毁灭（逐目标弃 1–2 每少弃一张受 1 雷伤——逐目标弃减伤循环）/星界沟通（上限+1 回 1 弃全部）/传送门（获得牌堆顶；登记差异：立即使用链暂缓）/坦蛇至人（座位序链式弃牌；登记差异：随机改确定性）；`CardKind` 67–72——ADR 0776 G1；14 golden 因目录变化重录 |
+| 56 | G1 炉石收官：世界树（`HearthShijieshuCard` 装备搜索+穿戴机——牌堆自顶扫描两张不同槽位装备，同槽替换+grant_equip_skills 授予；登记差异：按槽位去重近似上游 subtype、机器直穿不经 Equipped 帧）；`CardKind::Shijieshu` 73——ADR 0776 G1；14 golden 因目录变化重录 |
+| 57 | G1 gwent 首切片：燕子药水（最小手牌数摸 2 否则 1）/奥祖之雷（1 雷伤后摸 1）/瘟疫（弃首张或受伤；登记差异：随机改首张、失去体力简化为伤害）/置换军（反复失去体力上限）/暴雪药水（弃前两张摸 1；登记差异：确定性前两张）；`CardKind::Yanziyaoshui`/`Aozuzhilei`/`Wenyi`/`Zhihuanjun`/`Baoxueyaoshui`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 58 | G1 gwent 天气状态群：倾盆大雨（手牌上限 -1 至弃牌阶段结束，手牌上限钩子读取）/碧日浓雾（不能使用杀至出牌阶段结束，杀次数校验前置钩子）/刺骨寒霜（摸牌阶段结束弃首张；登记差异：等价净 -1）——授予机目标+邻座（含使用者）跳过已持有；`CardKind::Qinpendayu`/`Birinongwu`/`Ciguhanshuang`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 59 | G1 gwent 收官：昆恩法印（防止普通伤害——DamageBefore+prevented，按防止次数计数；登记差异：上游按回合计数）/山崩术（弃其他角色前两件装备；登记差异：随机改座位序前二）/破晓（PickTag 二选一——清除天气+判定区牌或获得牌堆首张天气法术；登记差异：随机改牌堆序）；`CardKind::Kunenfayin`/`Shanbengshu`/`Poxiao`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 60（初次引入） | gwent 祖墨手铠/封印原语使卡牌切片达 21/21；当时定向测试 6/6、`replay_scenarios` 有 1 项失败（14 个 golden 场景哈希不符）。这是修复前快照；后续处理与依据见下一行 |
+| 60（回放修复，2026-09-24） | 14 golden 重录并全量通过。差异核因：①规则版本 59→60 字段入 canonical_hash（`engine.rs`），必变全部哈希；v60 行为增量仅经 `CardKind::Zumoshoukao`（枚举末位追加）的 gwent 分支，标准场景目录无此牌、命令/事件/状态轨迹语义不变（14 场景脚本中途断言全部通过）；②`standard_catalog_parts` 拆牌循环体误含顺手牵羊/酒/雷杀入目录语句（实际产出顺 8、酒 4、雷杀 4，共 88 张），修正为[声明表](#标准目录构成声明表)的 80 张。证据见[回放与目录核验](../operations/evidence/2026-09-24-replay-golden-v60/README.md) |
+
+NGSA 已有字节格式版本及规则版本字段，内存 restore 会检查当前规则版本；v2 起开放选择显式编码
+ChoiceKind（机器种类为权威，不再由提示词推导），未知提示词仍被注册表拒绝，v1 字节被版本门禁拒绝。
+头部版本/长度、提示词无限增长池、流离内存标记原反例已修。决斗/AOE/流离/无懈/遗计两阶段/天妒/
+弃牌上限/护驾逐人/激将逐人的字节与内存恢复均已通过；
+牌归属完整核算（全集 ∪ 机器暂离）拒绝尾端/中段/全量缺失。
+ADR 0769 的明置实际行为、ADR 0771 的恢复映射变化沿用旧版本：后续需核对语义变更与版本递增的一致性。
+格式布局变更、规则语义变更与宿主日志扩展需分别说明，旧数据不因格式号相同就自动兼容。
+
+**N11 机器编码 tag 表（2026-09-24 修正，格式版本保持 v2）：**`MachineSnapshot` 的
+XiaoJi（枭姬摸牌机）原与 Dismantle 共用 tag 29，解码 XiaoJi 分支不可达——枭姬挂起
+无法恢复；修复为 XiaoJi=43（表尾追加），由 [A0 检查](../../crates/engine-native/tests/a0_tag_registry.rs)
+守护（42 变体 tag 唯一 + 编码→解码往返；`HostBehavior` 74 tag 唯一；`CardKind`
+86 变体 ↔ 0..=85 编码双射经静态核查确认）。兼容取舍：tag 29 的解码语义保持
+Dismantle，含 Dismantle 挂起的旧 v2 字节完全兼容，故不递增格式版本；XiaoJi 挂起的
+旧字节因字段错位从未可正确解码，属本来损坏的数据，不在兼容范围。未分配 tag（如
+23/24/255）解码拒绝并报 BadTag。
+
+**NGSA 格式 v3（2026-10-07，E03 使用前取消）：**`EventData::CardUsed` 载荷尾部
+追加 `cancelled: u8`（猴子偷桃的确认机器写回，提交阶段读到真值跳过结算）。
+取舍：该字段不入 canonical_hash（取消的最终状态——牌位置与体力——已可观测，
+路径标记无需入摘要），14 个 golden 不变；存档布局变更递增格式版本，旧 v2 字节
+被版本门禁拒绝（存档仅存在于测试与内部工具，无生产迁移数据）。同批 `CardKind`
+尾部追加 `Monkey`（编码 86、键 `monkey`、宝物栏），牌种伴随技能表登记
+欢乐猴子目录技能（装备技随真实穿戴/离场授予撤销）。
+
+**规则 v61 + 格式 v4（2026-10-07，E03 翻面原语）：**`PlayerState` 尾部追加
+`face_down`（武将牌朝向，E03 欢乐【漩涡面具】原语）——状态编码追加使
+14 golden 重录（face_down 初始 false，行为无变化，重录依据充分）；存档
+PlayerState 编码尾部追加同字段（格式 v3→v4，旧 v3 字节版本门禁拒绝）。
+翻面语义：`TurnOverBefore` 前置取消窗口（漩涡面具锁定技强制取消）→
+翻转 → `TurnOvered`；`debug_flip` 为测试驱动的翻面来源（真实翻面来源
+如据守类武将技另批）。同批 `CardKind::Mianju`（编码 88、键 `mianju`）
+伴随技能表登记欢乐面具目录技能。
+
+**翻面帧派发语义（2026-10-07 帧生命周期缺陷修复固化）：**机器
+`emit` 的 `TurnOverBefore` 子事件与直接压帧（`debug_flip`）一致从
+`BeforeTriggers` 起步——取消窗口先于 Commit 完整派发，取消写回后
+Commit 跳过翻转；翻面帧 after 窗口静默（目录无「翻面后」触发种类，
+取消技不重复入队）。曹仁「据守」（原生新增，上游标准包无此条目）的
+翻面走同一子事件通道：面具取消翻面时摸牌仍执行（登记差异）。
+
+**猴子偷桃语义（E03，与上游差异登记）：**上游在 `useCardToBegin` 帧后取消
+（事件有痕迹）；原生在出牌提交拦截——确认门挂起（`huanle_monkey_confirm`，
+逐持有者按座位序，确认者弃猴子、桃收为其手牌；全部放弃则按普通桃结算）。
+确认的使用不发 CardUsed 帧（连营等监听 CardUsed 的技能不触发——上游取消
+语义下触发亦不发生，一致）。多持有者顺序与放弃/确认组合有测试。
+
+**欢乐包独立规则载荷验收（2026-10-07，逐张对照上游 `card/list.js`+
+`card/card.js`+`card/skill.js`，commit 5c02a745）：**上游 7 张实体牌全部
+在册（`huanle_pack_payload_matches_upstream_list` 守护名称序/花色/点数/
+牌种/装备栏）：苦无 ♠6 武器、手里剑 ♦4/♠4 基础牌、猴子 ♦5 宝物、
+写轮眼 ♥2 宝物、面具 ♣3 **防具**（equip2；本批修正，曾误登记宝物栏）、
+酒尾 ♥9 宝物（本批补齐：`CardKind::Jiuwei` 编码 89 表尾追加，包声明
+映射既有 `host:phase_end_recover_or_draw`——结束阶段可选受伤回 1 否则
+摸 1，与上游 frequent 语义一致，真实装备驱动 + 确认/放弃/恢复测试）。
+本批修正：猴子 ♦5（曾 ♥8）、面具 ♣3（曾 ♠1）。苦无登记差异：上游
+`damageSource` 过滤 `card.name=="sha"`（精确杀名）+ notLink + 目标 he 区
+有牌、目标自选弃牌；原生为 Damage 帧来源过滤 + `is_sha_like()`（含火/雷
+杀，超集）+ 不查连环 + 确定性弃目标首张手牌（仅手牌、无牌静默）。
+写轮眼登记差异：原生无 charlotte 区分，全部技能实例可窃（上游滤除
+charlotte 技）。
+
+2026-09-24 审查更正：旧 XiaoJi 字节写的是 tag 29，现表下仍按 Dismantle 解码（不会报
+`BadTag("machine", 29)`），错位后才在后续字段报错。实测三种布局：单挂起、两个 XiaoJi
+为 `UnexpectedEof`，XiaoJi 后接 Dismantle 为 `BadTag("slot", 3)`。解码不校验载荷是否
+读尽，错位字节恰好可解析时会被接受，"显式报错"没有机制保证（[审查修复证据](../operations/evidence/2026-09-24-review-fixes/README.md)）。
+同批发现：存档牌种编号解码遇未知值直接 panic（伪造载荷重算 blake3 即可触发），
+与载荷读尽校验一起登记为主稿待做。2026-10-06 [探针复核](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)确认：未知编号 255 仍 panic，载荷尾部插入 4 字节并正确更新长度/校验和后仍被接受；合法存档对照正常往返。该探针的“通过”是缺陷复现，不是解码器验收。
+
+## 标准目录构成声明表
+
+`standard_catalog()` 是自造测试牌堆（非上游 `card/standard.js` 的 108 张），构成以
+`crates/engine-native/tests/standard_catalog_inventory.rs` 的显式声明表为准（A0 检查，
+测试守护）。**规则 v74 起共 124 张**，分四段：
+
+| 段 | 构成 | 花色点数口径 |
+|---|---|---|
+| 对齐段 79 张 | 杀 30/闪 15/桃 8/南蛮 3/决斗 3/顺牵 5/过拆 6/无懈 4/乐 3/闪电 2（♠1 + ♥12 `shandian_safe`） | **v74 起上游 standard list 逐张落位**（闪/桃全红） |
+| 原生扩充段 25 张 | ±马 6（无花色）/酒 2（♠3 ♣9）/雷杀 2（♠4 ♣5）/泛型武器 3（射程 2/2/3）/防具八卦 2/火杀 4/铁索 4/万箭 1（♥1 同上游）/兵粮 1（♣3） | 原生取值，登记花色差异（酒/雷杀入目录为 G1 cardpile 前置，v30 起） |
+| 批①新牌种 9 张 | 无中生有 4（♥7/8/9/11）/桃园 1（♥1）/五谷 2（♥3/♥4）/借刀 2（♣12/♣13） | v62/v63 上游落位 |
+| 命名装备 11 张 | 仁王盾 ♣2/青釭 ♠6/麒麟 ♥5/寒冰 ♠2/连弩 ♣1 ♦1/贯石斧 ♦5/青龙 ♠5/丈八 ♠12/雌雄 ♠2/方天 ♦5 | v64–v73 上游落位（射程面并行） |
+
+声明表变更 = 牌堆语义变化：须递增 `STANDARD_RULESET_VERSION` 并重录
+14 golden（v62–v74 均按此执行）。
+
+## 上游标准牌表对照
+
+上游 `card/standard.js` `list` 块实测 108 张物理牌、32 牌种（逐张清单见
+[牌表对照证据](../operations/evidence/2026-10-07-n08-cardlist-parity/README.md)）。
+原生 `standard_catalog()` 80 张声明测试牌（21 牌种功能）与之逐张对照：
+
+| 对照面 | 上游 | 原生现状 | 差距 |
+|---|---|---|---|
+| 基本牌 | 杀 30 / 闪 15 / 桃 8 | 杀 12（+火杀 4+雷杀 2）/ 闪 12 / 桃 12 | 数量差；酒/火杀/雷杀为原生扩充（上游军争） |
+| 锦囊 | 过拆 6、顺牵 5、无中 4、无懈 4、南蛮 3、决斗 3、乐 3、五谷 2、借刀 2、闪电 2、桃园 1、万箭 1 | 过拆 2、顺牵 4、无懈 4、决斗 4、闪电 2、万箭 1、南蛮 1、乐 1、兵粮 1（原生扩充） | **缺牌种 4：无中生有/五谷丰登/桃园结义/借刀杀人**；其余为数量差 |
+| 马 | 六匹命名马（绝影/的卢 -1，爪黄飞电/赤兔/大宛/紫骍 +1） | 泛型 HorsePlus/HorseMinus 各 4 | 命名化 vs 泛型建模（6 张数量差） |
+| 武器 | 9 把命名武器（诸葛连弩 2/雌雄/青釭/青龙/丈八/贯石斧/方天/麒麟/寒冰） | 泛型 Weapon 3（射程建模） | 命名特效未建模 |
+| 防具 | 八卦阵 2、仁王盾 1 | 泛型 Armor 1（八卦阵判定语义已实现） | 仁王盾缺、数量差 |
+
+**缺牌种补齐分批**：①技能牌种 4（无中/五谷/桃园/借刀）；②装备命名化
+取舍评估（17 张：维持泛型+数量对齐 或 逐把命名特效）；③数量对齐
+（声明表变更 = 递增 STANDARD_RULESET_VERSION + 重录 golden）。
+**三批全部完成**：批① v62 无中/桃园、v63 五谷/借刀；批② 取舍定案（马/八卦
+维持泛型、仁王盾+武器 9 把逐把特效）；批③-a v64 数量对齐+仁王盾（89→114 张）、
+③-b①~⑨ v65–v73 九把武器（114→124 张）、③-c v74 对齐段花色点数逐张落位
+（张数不变；马/八卦/原生扩充段花色为原生取值并登记，见[声明表](#标准目录构成声明表)）。
+
+### 方天画戟立项评估（批③-b⑨ 单独立项，2026-10-07）
+
+上游口径（`fangtian_skill`，useCard1 强制触发 + selectTarget mod）：
+使用【杀】时若**全部手牌均被选为该杀的卡牌**（= 杀为最后手牌；国战
+模式除外），该杀可选目标上限 +2（= 至多三个目标）；content 为空——
+多目标由杀卡自身结算逐目标处理。
+
+原生差距与工程范围（ShaResolveMachine 为单目标设计）：
+1. PlayCard Sha 臂：`targets.len() != 1` 门控放宽为 1..=3，条件=来源
+   装备方天且该杀为其最后手牌（手牌数==1 时使用）；目标逐个查距离/
+   空城/存活。
+2. ShaResolveMachine 目标队列化：现有单 target 字段改为目标队列，
+   逐目标完整走 仁王盾→铁骑→八卦→流离→护驾→出闪（含无双双闪）
+   →贯石斧/麒麟弓/寒冰→伤害；逐目标状态入快照（现 armor_judged/
+   dodges_used/tieji_red/liuli/hujia 均为单目标语义，需按目标索引）。
+3. 交互登记：无双=每个目标各需双闪；护驾逐人询问每目标各一轮；流离
+   可把目标转给其他角色后再继续队列；青龙再杀在队列耗尽后才追问。
+4. 快照/编码：Sha 快照结构改动大，规格随实现批一次递增（批③-b⑨ 一
+   次版本递增 + golden 重录）。
+5. 体量估计：最大单把（约为前七把总和）；建议独立批次一次成型，不
+   拆半成品入牌堆（沿用「未实现不落位」定案）。
+
+**定案**：方天画戟批③-b⑨ 单独立项，前置=批③-a/③-b①~⑧ 已合入
+（均已完成）；实现顺序上置于全部逐把武器之后作为收官批。
+
+### 装备命名化取舍（批②，2026-10-07 评估定案）
+
+上游 17 张装备的特效清单与原生建模对照（射程由 `distance.attackFrom`
+换算：青釭 2/雌雄 2/寒冰 2/青龙 3/丈八 3/贯石斧 3/方天 4/麒麟 5/连弩 1）：
+
+| 牌 | 上游特效 | 原生现状 | 决策 |
+|---|---|---|---|
+| 马 6（绝影/的卢 −1；爪黄飞电/赤兔/大宛/紫骍 +1） | 距离 ±1 | 泛型 Horse±（语义完全等价） | **维持泛型**，批③按 ±各 3 张落位；命名差异登记为展示层，不立项 |
+| 八卦阵 2 | 判定红色当闪 | 泛型 Armor=八卦阵语义已实现 | **维持泛型**，批③按 2 张落位 |
+| 仁王盾 1 | 锁定：黑色杀对你无效 | 无 | 随批③实现（sha 目标防具检查，小改动） |
+| 青釭剑 | 锁定：无视目标防具 | 仅射程 | 逐把特效批（先落射程+防具忽略门控） |
+| 麒麟弓 | 杀伤害时可弃目标一匹马 | 仅射程 5 | 逐把特效批 |
+| 寒冰剑 | 造成伤害时改为弃目标两张牌 | 仅射程 2 | 逐把特效批 |
+| 诸葛连弩 | 出杀不限次 | 仅射程 1 | 逐把特效批（sha_limit 豁免） |
+| 贯石斧 | 杀被闪后可弃两张牌强制伤害 | 仅射程 3 | 逐把特效批 |
+| 青龙偃月刀 | 杀被闪后可再出一张杀 | 仅射程 3 | 逐把特效批 |
+| 丈八蛇矛 | 两张手牌可当杀 | 仅射程 3 | 逐把特效批（view_as 转化） |
+| 雌雄双股剑 | 对异性目标出杀：目标弃手牌或令你摸牌 | 仅射程 2 | 逐把特效批（性别分支） |
+| 方天画戟 | 最后手牌杀可指定至多三个目标 | 仅射程 4 | **批③-b⑨ 单独立项（2026-10-07 评估定案，见下方「方天画戟立项评估」）** |
+
+**定案**：马与八卦阵维持泛型+数量对齐（零语义债）；仁王盾随批③实现；
+武器 9 把**逐把特效分批实现、每把落地才落位声明表**（未实现前不入牌堆
+——避免错误语义进牌堆），建议由简到繁：青釭 → 麒麟 → 寒冰 → 连弩 →
+贯石斧 → 青龙 → 丈八 → 雌雄 → 方天。批③相应拆分：③-a 无语义债部分
+（马 6/八卦 2 + 基本牌与锦囊数量对齐，一次版本递增+重录）；③-b 武器
+逐把落地各 +1~2 张。
+
+**规则 v62（2026-10-07，缺牌种批①-1）**：无中生有（♥7/8/9/11，使用后
+摸 2）与桃园结义（♥1，所有其他存活角色回复 1 点体力，满血跳过）落位
+声明表（80→85 张，inventory 同步），锦囊均经无懈窗口（Dismantle 同款
+包装）；14 golden 重录（牌堆构成变化、行为语义无变化，重录依据=确认
+语义后更新流程）；种子敏感级联三处实跑复核修复（洛神判定首张注入、
+传导测试无懈窗口排空、身份局终局阵营快照更新）。
+
+**规则 v63（2026-10-07，缺牌种批①-2）**：五谷丰登（♥3/♥4，亮存活角色
+数的牌、从使用者起按座位序逐人择一；机器快照含牌池与剩余择牌队列）与
+借刀杀人（♣12/♣13，恰两名目标[武器持有者,另一角色]：持有者装备区有
+武器且后者在其攻击范围内；持有者选出杀或交械——**出杀登记差异为直接
+伤害结算无出闪窗口**，上游 chooseToUse 完整通道未建模；交械含双方
+武器技能撤销与旧武器替换）。声明表 85→89 张；14 golden 重录；种子
+敏感级联四处实跑复核（身份局阵营、倾国测试八卦阵判定置黑、auth_archive
+鬼道黑杀注入与推进循环带应答）。**缺牌种清零**；补齐完成前仍非上游
+全量对齐（数量差与装备命名化见上表）。
+
+**规则 v64（2026-10-07，批③-a 数量对齐 + 仁王盾）**：非武器段数量对齐
+上游口径——杀 30/闪 15/桃 8/过拆 6/顺牵 5/南蛮 3/决斗 3/乐 3/八卦阵
+（Armor）2/-马 2/+马 4（花色点数沿用原生循环，逐张花色对齐另批）；
+**仁王盾**新牌种（编码 94，equip2 防具）：锁定黑色【杀】无效（先于八卦
+判定，红杀照常）。声明表 89→**114 张**（=上游 108 非武器段 + 原生扩充
+13 + 测试武器 3）；14 golden 重录；种子敏感级联八处实跑复核修复（马牌
+差分注入化、武器按名精确取、身份局阵营、倾国八卦置黑、auth_archive 鬼
+道注入、急援重构自救场景、裸衣决斗排空、cardpile 按牌种挑扩展牌）。
+批③-b 武器逐把落地后再增 9 张。
+
+**规则 v65（2026-10-07，批③-b 第一把）**：青釭剑（♠6，命名武器牌种
+编码 95，射程 2）：锁定——来源装备青釭时无视目标防具（八卦阵判定与
+仁王盾免疫双检查点穿透，ShaResolve 实现）。声明表 114→**115 张**；
+14 golden 重录；identity 阵营快照更新（v65 双种子均主公方）。剩余八把
+（麒麟→寒冰→连弩→贯石斧→青龙→丈八→雌雄→方天）逐把落地。
+
+**规则 v66（2026-10-07，批③-b 第二把）**：麒麟弓（♥5，命名武器牌种
+编码 96，射程 5——`named_weapon_range` 命名武器射程面接入 attack_range，
+与泛型 Weapon 的 CardDef.range 并行）：杀造成伤害时来源可弃目标装备区
+一张坐骑（可选可放弃；ShaResolve 两条伤害路径结算前挂询问，空应答=放弃）。
+声明表 115→**116 张**；14 golden 重录。剩余七把（寒冰→连弩→贯石斧→
+青龙→丈八→雌雄→方天）逐把落地。
+
+**规则 v67（2026-10-07，批③-b 第三把）**：寒冰剑（♠2，命名武器牌种
+编码 97，射程 2，named_weapon_range 登记为 2）：杀造成伤害时来源可防止
+此伤害，改为弃置目标两张牌（依次手牌→装备，不足则全弃；**登记差异：
+上游为目标牌自选次序，原生自动依次——已于 v75 消除，见下**；可选可放弃，min=0 空应答=放弃，
+放弃则照常伤害）。声明表 116→**117 张**；14 golden 重录；国色测试推进
+循环排空级联修复（v67 牌堆位移途中出现弃牌询问）。剩余六把（连弩→
+贯石斧→青龙→丈八→雌雄→方天）逐把落地。
+
+**规则 v68（2026-10-07，批③-b 第四把）**：诸葛连弩（♣1/♦1 ×2，命名
+武器牌种编码 98，射程 1）：装备时出牌阶段使用【杀】无次数限制
+（ShaLimit 检查的连弩装备豁免，与咆哮同口径）。声明表 117→**119 张**；
+14 golden 重录。剩余五把（贯石斧→青龙→丈八→雌雄→方天）逐把落地。
+
+**规则 v69（2026-10-07，批③-b 第五把）**：贯石斧（♦5，命名武器牌种
+编码 99，射程 3）：杀被目标出闪闪避后，来源可弃置两张自己的牌（手牌+
+装备，不含贯石斧本体）强制造成 1 点伤害（恰两张才发动，放弃无伤；
+**登记差异：强伤不带裸衣/酒加成，固定 1 点**）。声明表 119→**120 张**；
+14 golden 重录。剩余四把（青龙→丈八→雌雄→方天）逐把落地。
+
+**规则 v70（2026-10-07，批③-b 第六把）**：青龙偃月刀（♠5，命名武器
+牌种编码 100，射程 3）：杀被目标出闪闪避后（无双需求已满），来源可
+立即对相同目标再使用一张手牌中的杀（可选可放弃，min=0 空应答=放弃；
+新杀弃置后以全新状态重启杀结算，防具/仁王盾/闪/贯石斧/麒麟弓全流程
+重走；每次被闪都可再追问，手牌杀尽自然终止）。声明表 120→**121 张**；
+14 golden 重录。剩余三把（丈八→雌雄→方天）逐把落地。
+
+**规则 v71（2026-10-07，批③-b 第七把）**：丈八蛇矛（♠12，命名武器
+牌种编码 101，射程 3）：装备授予配套主动技「丈八蛇矛」（出牌阶段
+发动）：选两张手牌 → 选射程内其他角色 → 次张弃为素材、首张作
+declared-Sha 载荷进入杀结算（防具/贯石斧/麒麟弓/青龙全流程重走）。
+声明表 121→**122 张**；14 golden 重录。剩余两把（雌雄→方天）逐把
+落地。
+
+**规则 v72（2026-10-07，批③-b 第八把）**：雌雄双股剑（♠2，命名武器
+牌种编码 102，射程 2）：杀指定异性目标后（性别=主将槽武将性别、无槽
+默认男，effective_gender 辅助），目标选择：弃一张手牌 或 令使用者摸
+一张（可选不可放弃；**登记差异：原生弃目标手牌首张，上游目标自选——
+已于 v75 消除，见下**；目标无手牌仅可令摸）。声明表 122→**123 张**；
+14 golden 重录。**批③-b 八把全部落地。**
+
+**规则 v73（2026-10-07，批③-b 第九把）**：方天画戟（♦5，命名武器
+牌种编码 103，射程 4）：该杀为来源最后手牌时可指定 1..=3 个目标
+（逐目标独立合法性：距离/存活/空城/去重）。ShaResolveMachine 目标
+队列化：extra_targets 队列逐目标推进，每目标完整走 仁王盾→铁骑→八卦
+→流离→护驾→无双双闪→贯石斧/麒麟弓/寒冰→伤害（逐目标状态入快照）；
+青龙再杀询问优先于队列剩余目标（放弃后继续队列）。声明表 123→
+**124 张**；14 golden 重录。**批③-b 九把全部落地。**
+
+**规则 v74（2026-10-07，批③-c 存量花色点数对齐）**：对齐段 79 张（杀 30/
+闪 15/桃 8/南蛮 3/决斗 3/顺牵 5/过拆 6/无懈 4/乐 3/闪电 2）由原生循环
+花色改为上游 standard list **逐张落位**（花色+点数+数量三对齐；闪电 ♠1
+与 ♥12 同名，后者命名 `shandian_safe` 防目录重名）。**上游口径下闪 15 张
+与桃 8 张全红**（♥/♦），黑闪/黑桃自此不存在——测试布阵须按此取牌。
+原生扩充段 25 张（±马 6/酒 2/雷杀 2/泛型武器 3/防具八卦 2/火杀 4/铁索 4/
+万箭 1/兵粮 1）保留原生取值，登记为花色差异（万箭 ♥1 与上游同值）；
+批①新牌种 9 张与批③命名装备 11 张此前已按上游落位。张数不变（124 张），
+花色点数分布变化 + 版本 73→74 入 canonical_hash——14 golden 全部重录
+（场景脚本中途断言全过，仅终态哈希变）。级联修复：
+`ganning_qixi_black_card_as_dismantle` 取黑闪循环改为黑雷杀 ♠4。
+
+**规则 v75（2026-10-08，逐技能语义对照批一：杀结算目标侧选择类）**：
+消除两处既有登记差异，对齐上游 `card/standard.js`：
+1. **雌雄双股剑**（v72 差异消除）：目标弃牌由「手牌首张」改为目标
+   **自选**一张手牌（SelectCards 询问目标，可取消）——上游
+   `chooseToDiscard({prompt: 弃置一张手牌，或令X摸一张牌})` 可取消语义
+   = 空应答（取消）令使用者摸 1；无手牌直接令来源摸 1（上游
+   `!hasCards("h")` 分支同）。
+2. **寒冰剑**（v67 差异消除）：来源确认防止伤害后，弃牌由「自动依次
+   手牌→装备」改为**目标自选**——`hanbing_pending`（剩余次数 2）逐次
+   开目标 SelectCards 询问（手牌+装备，min=1 强制、不可取消），次数
+   用尽或目标 he 面无牌可弃即止；上游为 `discardPlayerCard("he",
+   forced)`×2（第二问前复查 hasDiscardableCards）。
+ShaResolveMachine 新增 `hanbing_pending: u8`（快照/存档/哈希三处接线，Sha 变体尾部追加）；版本 74→75 入 canonical_hash——14 golden 全部重录
+（无场景装备雌雄/寒冰，语义轨迹不变，纯版本位移）。回归更新：
+`cixiong_opposite_gender_discard_or_draw`（自选指定牌/取消令摸/同性
+不触发三路径）、`hanbing_prevents_damage_discards_two_cards`（目标先
+弃装备再弃手牌的选序断言/放弃路径）。
+
+**规则 v76（2026-10-08，逐技对照批二：流离弃牌自选+范围）**：对齐上游
+`character/standard/skill.js` `liuli`（chooseCardTarget 一体询问）：
+1. **弃牌自选**（选择类差异消除）：被转移者从「手牌首张」改为自选
+   弃置一张牌——**手牌+装备**（上游 position "he"）；SelectCards
+   询问目标（`liuli_discard_choose`，可取消=不发动）。
+2. **转移范围**（同批消除「不限距离」）：候选=在**被转移者攻击范围内**
+   （computed_distance ≤ attack_range，±马/武器射程照常折算）、非此杀
+   使用者、非自己、且为该杀合法目标（空城不可）——上游 inRange +
+   targetEnabled 同口径；第二段强制选一（`liuli_transfer`，min=1）。
+3. 两段式实现（先选牌后选目标，语义等价上游一体询问）：ShaResolve
+   `liuli_pending: bool` → `liuli_stage: u8`（1=弃牌挂起/2=目标挂起）
+   + `liuli_card`（暂存待弃牌）；转移生效后弃置暂存牌（上游 content
+   顺序——牌在被转移者区域）；取消路径=不发动照常出闪。快照/存档/
+   哈希/active_ask 派生（两段各自派生）同步；青龙再杀重启与方天队列
+   推进均复位。版本 75→76——14 golden 重录（无场景触及大乔，纯版本
+   位移）。回归更新：`n08_liuli_transfers_sha_target`（两段流断言：
+   选项=手牌+装备、候选=范围内合法目标、取消语义）；
+   `p2_new_choice_points_per_submission_conservation` 适配两段应答。
+
+**规则 v77（2026-10-08，逐技对照批三：失去体力原语）**：类级修复——
+新增「失去体力」原语并消除 G1 四处「失去体力简化为伤害」登记差异：
+1. **原语**：`EventData::LoseHp { player, amount }` + `EventKind::LoseHp`
+   + `LogEvent::HpLost`（表现层 `HpLost` 文本/事件投影）。commit 语义
+   （`commit_lose_hp`）：直接扣减体力——**不经护甲抵扣、无伤害前置
+   窗口、无铁索传导、Damage 触发技（遗计/反馈类）不响应**（LoseHp 是
+   独立事件种，天然不进伤害监听）；体力 ≤0 与伤害同口径进入濒死
+   （source=None）——对齐上游 loseHp。接线：帧数据 enc/dec（tag 16
+   表尾追加）、事件种 enc 18/dec 18（**顺修缺口**：dec_event_kind 此前
+   缺 TurnOverBefore=16/TurnOvered=17 两臂）、canonical_hash（tag 22）、
+   快照边界检查、presentation 双投影。近期存档兼容由规则版本门禁覆盖
+   （v76→77 拒绝旧规则存档）。
+2. **发射点替换（四处）**：面里金针（目标摸 1 后失去 1 点体力）、
+   飞镖（取消分支）、瘟疫（无手牌分支）、冰魄通（同色分支）——均由
+   Damage 改 LoseHp。
+3. **保留登记**：草船借箭/舌战群儒等「失去体力」与其他大差异（自选
+   展示/多轮问答链）捆绑的条目不在本批（单点替换会半对齐）；随机类
+   登记（瘟疫弃首张/乾坤镖/麻婆豆腐等「随机改确定性」）保留——引擎
+   无熵源，属确定性近似策略，见覆盖清单行为差异表。
+版本 76→77 入 canonical_hash——14 golden 重录（无场景触及四卡，纯
+版本位移）。回归更新：`g1_shahai_gujian` 面里金针/飞镖断言改失去体力
+口径并加「无 DamageDealt 日志/有 HpLost 日志」守卫、
+`g1_shahai_gwent` 瘟疫同口径。
+
+**规则 v78（2026-10-08，逐技对照批四：随机类逐项对照）**：勘察确认
+引擎有种子 RNG（`RuleRng::gen_range` Lemire 无偏采样，state+calls 入
+存档、洗牌既有消费方）——上游 `Math.random()` 类均匀随机可**语义等价
+消除**（原生种子均匀=可复放），不必登记为近似。逐项对照
+`杀海拾遗` 上游源码后的处置：
+
+| 项 | 上游语义（源码位置） | 处置 |
+|---|---|---|
+| 瘟疫（无手牌分支已 v77 失去体力） | `target.randomDiscard("h")` | **v78 消除**：随机手牌 |
+| 乾坤镖 | 每受害者 `he.randomGet()` | **v78 消除**：手牌+装备合集随机一张（he 空者跳过=changeTarget 同口径） |
+| 麻婆豆腐 | `list.randomGet()` 随机敌 + `he.randomGet()` | **v78 消除**：随机有牌其他角色（敌我阵营面按原型惯例）随机一张 |
+| 山崩术 | 敌装备合集 `randomGets(2)` 恰二才弃 | **v78 消除**：合集均匀无序对（i+j 越过法），恰二门控保留 |
+| 破晓分支二 | 随机一张铜卡法术（破晓除外） | **v78 消除**：牌堆铜法术集合均匀抽取，空则摸 1 不变 |
+| 玉衡 | 持黑桃敌 `list.randomGet()` + `randomGet()` | **v78 消除**：随机有黑桃手牌其他角色随机黑桃（升级机制仍登记暂缓） |
+| 弹射之刃 | 敌-友-敌交替阵营链随机 | **保留登记**：阵营链结构未实现（原型无阵营面） |
+| 六骰格/硫头阁 | 随机正/负面效果池 | **保留登记**：效果池未实现面 |
+| 舌战群儒 | 多轮 Bool 问答链+随机牌 | **保留登记**（结构差异捆绑） |
+| 草船借箭/金莲烛/卤玉羹 | 随机牌捆绑自选/发现机制 | **保留登记**（结构差异捆绑） |
+| 暴雪药水 | `chooseToDiscard("h",2,true)` **目标自选两张** | **更正归类**（自选类）→ **v79 消除**：目标 SelectCards 强制两张（不足全选）后摸 1 |
+| 冰魄通比对牌 | 双方**自选**展示一张手牌 | **更正归类**（自选类）→ **v79 消除**：双段展示（ComparePlayerPick/TargetPick 逐目标队列），同色弃展示牌+目标失去 1 体力（v77 原语），异色无事；任一方无手牌该目标跳过 |
+| 龙须钩 | 使用者自选目标装备区一张 | **v79 消除**：使用者 SelectCards 选目标装备（装备区明牌）；原登记「目标自选」系措辞不准，上游 `choosePlayerCard` 为使用者选 |
+
+随机抽取实现口径：`ctx.core.rng.gen_range(候选数)` 均匀抽取；rng 流
+入存档可复放，golden/恢复轨迹口径不变。版本 77→78 入 canonical_hash
+——14 golden 重录（无场景触及六卡，纯版本位移）。回归适配：
+破晓测试改集合成员断言（随机后不再唯一可指）；乾坤镖补 he 空守卫。
+定向 `g1_shahai_gujian` 13/0、`g1_shahai_gwent` 6/0。
+
+**规则 v79（2026-10-08，逐技对照批五：自选类遗留收尾）**：三卡消除，
+逐技对照主线标准/杀海范围内登记清账：
+1. **暴雪药水**：目标自选弃两张手牌（SelectCards 强制 min=max=min(2,手牌数)，
+   `gw_baoxue_discard`；不足则全选，无手牌跳过弃牌仍摸 1=上游 step1
+   draw 恒执行）——上游 `chooseToDiscard("h",2,true)`。
+2. **冰魄通**：双段自选展示——使用者选展示牌（暂存 `cards` 入快照）→
+   目标选展示牌 → 同色使用者弃展示牌+目标失去 1 体力（v77 原语）、
+   异色无事（展示不移动牌）；任一方无手牌该目标直接跳过（上游 step0
+   finish 条件）；复用拼点双段 stage（ComparePlayerPick/CompareTargetPick）
+   逐目标队列推进。
+3. **龙须钩**：使用者自选目标装备区一张获得（上游 `choosePlayerCard
+   ("e", target)`——装备区明牌由使用者选，原登记「目标自选」措辞更正）。
+派生面：三询问（暴雪/冰魄通两段/龙须钩）入 active_ask 派生表；创建
+stage 按 behavior 特例（暴雪=SelectCard、冰魄通=ComparePlayerPick、
+龙须钩=SelectCard）。版本 78→79 入 canonical_hash——14 golden 重录
+（无场景触及三卡，纯版本位移）。回归适配：冰魄通测试改双段应答
+（并覆盖「使用者无手牌后续目标跳过」分支、展示牌保留断言）、龙须钩
+加选牌询问断言、暴雪测试验证自选语义（选 s2/s3 保留 s1）。
+
+**规则 v80（2026-10-08，P2/N08 模式入口批一：对决 versus 2v2 基线）**：
+上游 `mode/versus.js`（9k 行 UI/流程脚本）的引擎可接核心=队伍表+胜负+
+奖惩，2v2 基线接入：
+1. `GameMode::Versus { teams: Vec<Vec<PlayerId>> }`（两队互斥、并集=
+   全部座位；存档 tag 3、canonical_hash 模式段 tag 4、快照结构检查=
+   队数 2/成员互斥/全覆盖）+ `Winner::Versus(usize)`（存档 tag 5、
+   哈希 tag 6——Traitor 已占 5，注意三套 tag 编号独立）+ 
+   `versus_teams()/versus_team_of()` 辅助 + `Engine::new_versus` 构造器。
+2. DeathMachine 奖惩（先于胜负）：杀死敌方摸三张；杀死友方弃掉自己
+   全部手牌与装备（同主公杀忠臣路径）。胜负：任一队伍全灭 → 对方
+   队伍胜（`Winner::Versus(对方下标)`）。
+3. **登记未建模**：替补武将上场、4v4 主公制/号位置换、间断/四国
+   变体（UI/流程面）。
+版本 79→80 入 canonical_hash——14 golden 重录（标准场景无 versus 局，
+纯版本位移）。回归：`versus_mode_team_victory_and_rewards`（杀敌摸三/
+杀友弃全部/存档往返/全灭终局）。
+
+**规则 v81（2026-10-08，P2/N08 模式入口批二：斗地主）**：上游
+`mode/doudizhu.js`（4k 行 UI/流程）引擎可接核心=身份组成+胜负，复用
+versus 接线模式接入：
+1. `GameMode::Doudizhu { lord: PlayerId }`（3 人局 zhu+fan+fan，地主
+   1 名；存档 tag 4、canonical_hash 模式段 tag 5）+ `Winner::Doudizhu
+   { lord_won: bool }`（存档 tag 6、哈希 tag 7）+ `doudizhu_lord()`
+   辅助 + `Engine::new_doudizhu` 构造器；快照检查=地主座位越界、
+   outcome-模式一致性。
+2. DeathMachine 胜负臂：地主死亡 → 农民胜；农民全灭 → 地主胜。
+   **无击杀奖惩**（上游 dieAfter 仅 dieidentity 展示+checkResult 判负）。
+3. **登记未建模**：特殊开局摸牌变体（binglin 地主 5/农民 4、按 infoHp
+   加成）、开黑/欢乐变体 UI 流程。
+版本 80→81 入 canonical_hash——14 golden 重录（标准场景无斗地主局，
+纯版本位移）。回归：`doudizhu_mode_victory_and_roundtrip`（无奖惩断言/
+存档往返/地主死农民胜/农民全灭地主胜）。
+
+### Boss 模式立项评估（P2/N08 模式入口批三，2026-10-08 评估定案）
+
+上游 `mode/boss.js`（11.5k 行，模式入口中体量最大）实测结构：
+
+1. **胜负本体与 doudizhu 同构**（单体对抗）：boss 持 zhu 身份
+   （`boss.setIdentity("zhu")`），`checkResult` = boss 死亡 → 挑战者
+   胜、挑战者全灭 → boss 胜（`game.over(!game.boss.isAlive())`）。
+2. **招牌机制=重整复活回环**（bossPhaseLoop 自定义回合循环）：死者
+   回合开始累加 `boss_chongzheng` 计数、每轮 hp+1（或手牌 <4 摸 1）、
+   计数达 `bossinfo.chongzheng` 阈值 `player.revive` 复活；boss 侧
+   `chongzheng` 标志跳过一回合。此为引擎新面（回合循环重写+复活计数
+   状态入快照），非四件套可复用。
+3. **addFellow 中途入队**：boss 助战（`fellow.side=true`、identity
+   zhong、directgain 4）——座位表运行时扩张，存档/座位扫描面需扩。
+4. **内容面**：boss 数值（maxHp 25–30）与专属技能包（boss_ 引用
+   1506 处）——属来源扩展内容，按 G1 转换路径，不入模式结构批。
+
+**定案**：不做「无重整复活的 Boss 贴皮接入」（boss 模式的定义性机制
+即重整回环，缺失即为半成品——沿「未实现不落位」先例）。拆批建议：
+批三-a Boss 基线=单体对抗接线（复用 Doudizhu 模式语义，映射登记）+
+重整复活回环（PhaseLoop 重写+复活计数快照/存档/哈希）；批三-b=
+addFellow 中途入队（座位扩张面）。立项待排期，未实现前 boss 不设
+GameMode 入口。
+
+**批三-a 执行（规则 v82，2026-10-08）**：
+1. `GameMode::Boss { boss: PlayerId, chongzheng: u8 }`（存档 tag 5、
+   canonical_hash 模式段 tag 6）+ `Winner::Boss { boss_won: bool }`
+   （存档 tag 7、哈希 tag 8）+ `boss_mode()/new_boss` + `PlayerState
+   .boss_chongzheng: u8` 计数字段（PlayerState enc/dec/哈希接线）。
+2. **重整复活回环**：`commit_turn_ended` Boss 分支——死亡座位不跳过，
+   轮到其回合执行重整 tick（计数 +1；hp<上限则 +1，否则手牌 <4 摸 1；
+   连续死亡座位逐个 tick 后落在下一存活座位）；计数达阈值复活
+   （alive 恢复、计数清零）；`chongzheng=0` 为无复活模式（上游
+   bossinfo.chongzheng 未设同口径）。新日志 BossChongzhengTick/
+   BossRevived（表现层映射 Recovered）。
+3. 胜负臂：boss 死亡 → 挑战者胜；挑战者全灭 → boss 胜。无击杀奖惩。
+4. **登记未建模**：boss 专属数值/技能包（内容面，G1）、
+   bossinfo.loopFirst/loopType 变体。
+版本 81→82 入 canonical_hash——14 golden 重录（标准场景无 Boss 局，
+纯版本位移）。回归：`boss_mode_chongzheng_revival_and_victory`
+（tick 计数/回血、阈值复活清零、双向往返、双终局）。
+
+**批三-b 执行（规则 v84，2026-10-08）**：addFellow 中途入队——
+`GameMode::Boss` 增 `fellows: Vec<PlayerId>`（存档/哈希/快照座位界
+接线）；`debug_add_fellow(hp)` 队尾追加新玩家（PlayerState 直接入
+players 向量，直授 4 张手牌=上游 directgain(4)，登记入 fellows）；
+胜负臂挑战者判定排除 fellow（fellow 属 boss 方）。**登记差异**：
+入队位置固定队尾（上游 `game.addFellow(position,…)` 可按位置插入；
+原生玩家 id=下标、插入会移动既有座位号，不可接受）。
+版本 83→84 入 canonical_hash——14 golden 重录（标准场景无 fellow，
+纯版本位移）。回归：`boss_mode_add_fellow_seat_expansion`（入队座位
+=队尾/直授 4 牌/座位表扩张/fellows 登记/存档往返/fellow 不算挑战者
+→boss 胜；濒死桃强制应答守卫）。
+
+**规则 v83（2026-10-08，P2/N08 模式入口批四：KOF 引擎层）**：示例/
+测试层的 KOF 会话语义升入引擎：
+1. `GameMode::Kof { pools: [Vec<u16>; 2], wins: [u32; 2], games: u32 }`
+   ——双方将池（GENERAL 下标）、比分、局数随引擎状态存档（mode tag 6）
+   /哈希（模式段 tag 7）；快照检查=2 人局 + outcome-模式一致性
+   （Winner::Player）。
+2. 单局终局自动推进会话（DeathMachine Kof 臂）：唯一存活者胜
+   （Winner::Player）→ 败者队首淘汰、胜者队首轮转（移至队尾）、
+   比分/局数 +1——与示例/测试层内联实现同构（KOF1 会话行的引擎态
+   版本）；无存活者不推进。
+3. `Engine::new_kof(seed, pools, wins, games)` 构造器（2 人局）。
+4. **边界登记**：多局连续会话循环（终局→自动开局下一局）仍在示例/
+   宿主层（引擎终局即停，会话推进结果随终局态可读）；单局内将领
+   授予仍按装配/授予原语。
+版本 82→83 入 canonical_hash——14 golden 重录（标准场景无 KOF 局，
+纯版本位移）。回归：`kof_engine_mode_session_advance`（两局推进：
+队首淘汰/队首轮转/比分局数、存档往返、败者池清空出线形态）。
+
+**规则 v96（2026-10-08，U05 swd 第十二批：御夫录）**：swd 转换批 +
+潜偷限一次补执行：
+1. `CardKind::Yufulu`（编码 116，equip5 宝物）+ `HostBehavior::SwdYufuluEquipSkill`
+   （tag 81）三段询问机「投掷」：出牌阶段限一次取一张武器（手牌/装备
+   区，`discard:false`）交给一名其他角色——其受 1 点普通伤害并获得该
+   武器（上游 content `damage(); gain(cards)` 同序）。**登记差异**：无
+   （语义等价；AI check() 不迁移同各批口径）。武器在目标应答后才离开
+   原区域（上游 `prepare:"give"` 同口径：content 执行时才移动）。
+2. **潜偷 `usable:1` 补执行**（v92 批遗漏）：`host_skill_def` 对
+   潜偷/御夫录设 `once_per_turn`（上游两者均 usable 1；once_used 于
+   拥有者回合开始重置为既有路径）。
+3. **源码校正**（对上游 swd/translate.js:314 与 list.js:31）：卡名
+   「御夫录」（此前工作记录误记「伏符录」；键名 yufulu 本就正确）、
+   花色点数 ♠6（此前误记 ♠5）。
+版本 95→96 入 canonical_hash——14 golden 重录（御夫录/潜偷均不在
+标准场景，纯版本位移）。回归：`swd_yufulu_give_weapon_and_damage`
+（无武器拒绝/两段询问×存档往返/1 伤+给牌/SkillAlreadyUsed）。
+证据见 [swd 第十二批](../operations/evidence/2026-10-08-u05-swd-batch12/README.md)。
+
+**规则 v97（2026-10-08，U05 swd 第十三批：羊皮卷）**：`CardKind::Yangpijuan`
+（编码 117，♠9/♣7 trick toself）+ `HostBehavior::SwdYangpijuanCard`
+（tag 82）三段询问机：选类别（0=基本/1=锦囊/2=装备，上游 chooseControl
+顺序）→ 牌堆部分 Fisher-Yates 随机亮该类别 ≤3 张（种子 RNG）→ 选一张
+从牌堆入手。**登记差异**：上游 `game.createCard` 凭空造牌不占牌堆实体，
+原生无自由牌 id——发现牌从牌堆实体取出，亮出的 3 张择定前留在牌堆；
+类别池按目录牌种枚举（基本 9 种/通用锦囊 26 种/装备=equip_slot 非空），
+gwent/炉石/古剑机关/食物/欢乐等专用牌种不入池；牌堆无该类别牌则空发；
+上游 AI 推荐/chooseButton ai 不迁移（玩家询问代替，各批同口径）。
+版本 96→97 入 canonical_hash——14 golden 重录（羊皮卷不在标准场景，
+纯版本位移）。回归：`swd_yangpijuan_discover_from_deck`（无目标门控/
+类别询问×往返/发现选项⊆牌堆且类别一致/入手守恒）。
+证据见 [swd 第十三批](../operations/evidence/2026-10-08-u05-swd-batch13/README.md)。
+
+**规则 v98（2026-10-08，U05 swd 第十四批：带火风轮+霞云彩绫距离对）**：
+命名距离修饰两张（无机器，纯数据卡）——带火风轮（编码 118，♥1，
+equip4→+1马栏）：持有者算到他人 -2（globalFrom）、他人算到持有者 -1
+（globalTo）；霞云彩绫（编码 119，♦2，equip3→-1马栏）：持有者算到他人
++1、他人算到持有者 +2。`computed_distance` 以命名牌种计数并入
+plus/minus（饱和下限 1 为既有路径；与马术/义从/基础马叠加）。
+**登记差异**：cardnature "fire" 仅上游主题标记不入结算；不与基础马做
+同栏跨 kind 替换（批②装备命名化取舍定案沿用）。
+版本 97→98 入 canonical_hash——14 golden 重录（两卡不在标准场景，纯
+版本位移）。回归：`swd_daihuo_xiayun_distance_pair`（6 人局对座双向/
+叠加/邻座下限饱和/装配路径）。
+证据见 [swd 第十四批](../operations/evidence/2026-10-08-u05-swd-batch14/README.md)。
+
+**规则 v99（2026-10-08，U05 swd 第十五批：蓝格怪衣「龙帆」）**：
+`CardKind::Langeguaiyi`（编码 120，♦1，equip5 宝物）+
+`HostBehavior::SwdLangeguaiyiEquipSkill`（tag 83）单段判定机：出牌
+阶段限一次（once_per_turn，onLose 清 getStat 为上游 usable 簿记等价），
+判定按花色——红桃回 1 体力（recover 饱和同钳制）/方片摸 1/梅花随机
+敌人随机弃一张（候选=其他存活且手牌∪装备区非空，上游 he filter 同
+口径）/黑桃无事。**登记差异**：上游 judge 花色提示函数为 AI 排序不
+迁移；`randomDiscard()` 默认弃牌区归档不可核验（现有调用点均显式
+"h"）——手牌优先、无手牌退随机装备；**源码校正**：技能名「龙帆」
+（translate.js:308），此前工作记录误作「乱番」。
+版本 98→99 入 canonical_hash——14 golden 重录（蓝格怪衣不在标准场景，
+纯版本位移）。回归：`swd_langeguaiyi_longfan_suit_branches`（六子局：
+红桃回血+限一次/满血饱和/方片摸 1/梅花弃 1/无候选/黑桃三不变）。
+证据见 [swd 第十五批](../operations/evidence/2026-10-08-u05-swd-batch15/README.md)。
+
+**规则 v100（2026-10-08，U05 mtg 首切片：龙颅山峰/land 地类）**：
+land 类基建——`CardKind::Longlushanfeng`（编码 121，♣10）+
+`GameStateCore.current_land`（换地覆盖、跨回合持续，入存档/哈希）+
+`TurnState.land_used/land_sha_used`（本回合限一张地；有地时第二张杀
+放行并标记）。地机器 `HostBehavior::MtgLongshanfengLand`（tag 84）：
+Act 换地 → 问获得杀/闪（PickTag，上游 chooseControl 顺序）→ 牌堆取该
+类牌入手。**登记差异**：上游 createCard 凭空造牌→原生牌堆实体取（取
+牌堆内首张该类，确定性）；地图效果全局（addGlobalSkill 同口径）；地
+非锦囊无无懈窗口；专用 LandChanged 日志暂缓（状态可观察）。**来源
+勘误**：台账所记 ow/xianjian 为 `character/` 武将子目录，非卡牌子包。
+版本 99→100 入 canonical_hash——14 golden 重录（mtg 不在标准场景，纯
+版本位移）。回归：`mtg_longshanfeng_land_flow`（换地/获得杀/本回合限
+一张/杀上限+1/跨回合持续）+ `mtg_real_host_full_lifecycle`（六步）。
+证据见 [mtg 首切片](../operations/evidence/2026-10-08-u05-mtg-slice/README.md)。
+
+**规则 v101（2026-10-08，U05 mtg 第二批：海岛）**：`CardKind::Haidao`
+（编码 122，♦5 land）+ `HostBehavior::MtgHaidaoLand`（tag 85）：换地后
+满血直接 +1 护甲（不受伤转换不触发）；受伤问弃一张（he=手牌∪装备区，
+可取消）——弃则回 1/取消得 1 护甲。**地图效果落在 `change_hujia`
+原语**：current_land=海岛时，任何玩家获护甲若已受伤改为回复等量体力
+（锁定、全局，上游 addGlobalSkill 同口径；失去护甲不触发）。
+**登记差异**：上游 chooseToDiscard 取消经 result.bool，原生空选择表达；
+`_temp_mtg_haidao` 抑制以取消路线直写字段（路径级）实现。
+版本 100→101 入 canonical_hash——14 golden 重录（海岛不在标准场景，
+纯版本位移）。回归：`mtg_haidao_land_effect`（满血/弃牌回血×往返/
+取消得甲/换地覆盖跨回合+杀加成消失/双包盾牌格挡全局转换）。
+证据见 [mtg 第二批](../operations/evidence/2026-10-08-u05-mtg-batch2/README.md)。
+
+**规则 v102（2026-10-08，U05 mtg 第三批：水没墓穴）**：`CardKind::
+Shuimomuxue`（编码 123，♠11 land）+ `HostBehavior::MtgShuimomuxueLand`
+（tag 86）：换地后 he 有牌可弃一张摸二（可取消，无牌空发）。地图效果
+锁定两钩：手牌上限 -1（弃牌阶段 limit 计算处，倾盆大雨/妄尊印同款）
++ `TurnState.discard_phase_discarded` 计数（弃牌阶段开始清零、上限弃
+牌机器累加、PhaseEnd 离开弃牌阶段时若 >0 摸一并清零；入存档/哈希）。
+**登记差异**：计数面仅弃牌阶段上限弃牌机器（与上游 event.cards 同为
+该阶段弃牌集合）。版本 101→102 入 canonical_hash——14 golden 重录
+（水没墓穴不在标准场景，纯版本位移）。回归：
+`mtg_shuimomuxue_land_effect`（弃一摸二×往返/取消/空发/上限-1 触发弃
+牌+弃后摸一/换地覆盖海岛转换消失）。
+证据见 [mtg 第三批](../operations/evidence/2026-10-08-u05-mtg-batch3/README.md)。
+
+**规则 v103（2026-10-08，U05 mtg 第四批：废墟）**：`CardKind::Feixu`
+（编码 124，♣8 land）+ `HostBehavior::MtgFeixuLand`（tag 87）：换地后
+从弃牌堆随机亮 ≤3 张三选一（选定才离弃堆，空弃堆空发）。地图效果落
+`commit_phase` Judge begin：current_land=废墟且弃堆非空 → RNG 随机一
+张弃堆→牌堆顶（锁定、全局，上游 phaseBegin silent 同口径）。
+**登记差异**：discoverCard 展示数量以原生 ≤3 为准（羊皮卷同口径）。
+版本 102→103 入 canonical_hash——14 golden 重录（废墟不在标准场景，
+纯版本位移）。回归：`mtg_feixu_land_effect`（发现三选一×往返/选定离
+弃堆/地图效果跨回合观测/空弃堆空发）。
+证据见 [mtg 第四批](../operations/evidence/2026-10-08-u05-mtg-batch4/README.md)。
+
+**规则 v104（2026-10-08，U05 mtg 第五批：依夏兰/首例地附主动技）**：
+`CardKind::Yixialan`（编码 125，♣12 land）+ `MtgYixialanLand`（tag 88）
+两段机（换地 → PickTag 类型 0=基本/1=锦囊 → 牌堆随机该类一张入手，
+`yangpijuan_class` 类别池复用）+ **地附主动技基建 `sync_land_skill`**：
+五台地机器 Act 统一调用——撤销旧地附技、授予新地附技（当前仅依夏兰
+附 `MtgYixialanRecast` tag 89 重铸技：出牌阶段限一次，基本牌放回牌堆
+→获得牌堆一张锦囊/无则摸一补偿；activate 守卫读 current_land；once_
+per_turn）。**登记差异**：createCard→牌堆实体取；canRecast 引擎内置
+不可核验→原生手牌基本牌；重铸放回牌堆顶；补偿分支回归未覆盖（构造
+无锦囊牌堆不可靠）。版本 103→104 入 canonical_hash——14 golden 重录
+（依夏兰不在标准场景，纯版本位移）。回归：
+`mtg_yixialan_land_and_recast`（无地无实例/类型获得×往返/重铸主路径/
+限一次/换地撤销）。
+证据见 [mtg 第五批](../operations/evidence/2026-10-08-u05-mtg-batch5/README.md)。
+
+**规则 v105（2026-10-08，U05 mtg 第六批：沙漠绿洲）**：`CardKind::
+Shamolvzhou`（编码 126，♥6 land）+ `MtgShamolvzhouLand`（tag 90）：换地
+后牌堆基本牌随机亮 ≤3 张三选一（选定才离牌堆，无基本牌空发）。地图
+效果锁定：current_land=沙漠绿洲时**基本牌不计入手牌上限**——弃牌阶段
+需弃数按非基本手牌数计 + DiscardToLimit 选项排除基本牌（上游
+ignoredHandcard basic 同口径）。**登记差异**：类口径以 yangpijuan_class
+为准（杀/闪/桃/酒/swd 基本牌均基本类）；上游弃牌选择集是否排除基本
+牌归档不可完全核验——原生排除（不计入即不要求弃）。
+版本 104→105 入 canonical_hash——14 golden 重录（沙漠绿洲不在标准场
+景，纯版本位移）。回归：`mtg_shamolvzhou_land_effect`（发现×往返/选
+项全基本类/地图效果非基本计数+选项排除）。
+证据见 [mtg 第六批](../operations/evidence/2026-10-08-u05-mtg-batch6/README.md)。
+
+**规则 v106（2026-10-08，U05 mtg 第七批：林中尖塔）**：`CardKind::
+Linzhongjianta`（编码 127，♥6 镜像组 land）+ `MtgLinzhongjiantaLand`
+（tag 91）：换地后牌堆武器亮 ≤3 三选一，选定**先入手再 emit Equipped**
+（commit_equip 从手牌取牌的原生适配；完整装配含同 kind 替换/装备技授
+予）。**地附技第二例**：`sync_land_skill` 映射表化（依夏兰→重铸、林
+中尖塔→`MtgLinzhongjiantaStrike` tag 92 塔击）——装备区有武器时出牌
+阶段限一次将一张基本牌当杀使用（`declared_kinds`+`card_use_as` 丈八
+TargetRead 同构，素材留手牌由杀结算消费，出闪/贯石斧/麒麟弓全流程重
+走）。**登记差异**：塔击上游 chooseToUse 响应+出牌双入口——原生仅出
+牌入口（同丈八登记）；"nogain" 直接装备以入手→Equipped 两步适配。
+版本 105→106 入 canonical_hash——14 golden 重录（林中尖塔不在标准场
+景，纯版本位移）。回归：`mtg_linzhongjianta_land_and_strike`（武器发
+现装备/塔击杀结算掉血/限一次/换地撤销）。
+证据见 [mtg 第七批](../operations/evidence/2026-10-08-u05-mtg-batch7/README.md)。
+
+**规则 v107（2026-10-08，U05 mtg 第八批：冰河要塞）**：`CardKind::
+Bingheyaosai`（编码 128，♦5 镜像组 land）+ `MtgBingheyaosaiLand`（tag
+93）：换地后摸 2 → 弃两张（he=手牌∪装备，min2 max2 强制不可取消）。
+地图效果落 commit_card_used Sha 臂：current_land=冰河要塞时，使用者
+手牌∪装备非空 → RNG 代抽弃一张（手牌/装备各半随机；装备离装撤销技）。
+**登记差异**：上游 chooseToDiscard 玩家自选+可取消——原生 RNG 代抽不
+可取消（青龙令珠代抽先例同口径；info「需弃置」与实现可取消的出入以
+实现为准）。版本 106→107 入 canonical_hash——14 golden 重录（冰河要
+塞不在标准场景，纯版本位移）。回归：`mtg_bingheyaosai_land_effect`
+（摸二弃二×往返/用杀代抽弃一/换地覆盖后效果消失）。
+证据见 [mtg 第八批](../operations/evidence/2026-10-08-u05-mtg-batch8/README.md)。
+
+**规则 v108（2026-10-08，U05 mtg 第九批：幽林）**：`CardKind::Youlin`
+（编码 129，♣10 land）+ `MtgYoulinLand`（tag 94）：换地后随机使用一张
+普通锦囊——实体牌入手后 emit CardUsed（内核各锦囊结算/无懈窗口自动复
+用），随机其他存活目标。**登记差异（最小闭环口径）**：随机池收窄为决
+斗/无中生有（内核结算已确证者，随覆盖逐批扩）；正收益目标判定为 AI
+不迁移；上游虚拟牌 → 原生牌堆实体。**地附技第三例**：
+`MtgYoulinDiscard`（tag 95，sync_land_skill 第三映射）——出牌阶段限一
+次弃一张锦囊并从牌堆亮 ≤3 三选一入手。版本 107→108 入 canonical_hash
+——14 golden 重录（幽林不在标准场景，纯版本位移）。回归：
+`mtg_youlin_land_and_discover`（随机使用离堆/地附技×往返/限一次/换地
+撤销）。证据见
+[mtg 第九批](../operations/evidence/2026-10-08-u05-mtg-batch9/README.md)。
+
+**规则 v109（2026-10-08，U05 mtg 第十批：邻地溪流+两暂缓）**：
+`CardKind::Lindixiliu`（编码 130，♠11 land）+ `MtgLindixiliuLand`
+（tag 96）：换地后牌堆♥首张入手，可弃任意张♥（he，可取消）——每张随
+机敌方判定区置入其未持有的延时锦囊（牌堆 Le→Bing→ShanDian 顺序实体；
+判定区直接 push，JudgePhase 取队；无专用日志登记）。
+**暂缓定案**：藏宝海湾（上游 enable 无 mode_derivation 即禁用——原生
+同禁用态）与毒沼（createCard("du") 衍生实体无毒结算）登记暂缓不入转
+换包；mtg 12 张上游清单全覆盖（10 转换 + 2 暂缓）。
+版本 108→109 入 canonical_hash——14 golden 重录（邻地溪流不在标准场
+景，纯版本位移）。回归：`mtg_lindixiliu_land_effect`（♥入手/弃♥×往返
+/置延时断言/取消路径）。证据见
+[mtg 第十批](../operations/evidence/2026-10-08-u05-mtg-batch10/README.md)。
+
+**规则 v110（2026-10-08，U05 zhenfa 首切片：地载阵）**：新转换包
+shahai-zhenfa-upstream-noname + `CardKind::Dizaizhen`（编码 131，♦3/
+♠3/♥3）+ `DizaizhenMachine`（无懈窗口包装，展开非大势力存活角色各摸
+1，本体离结算区）+ `GameStateCore::is_major_faction`——effective_
+faction 非空者按势力统计存活数、最大者并列同算为大。**登记差异**：
+forceMajor 技能标特例未建模；队列（inline）/围攻/swapSeat 体系未建模
+——长蛇/天覆/七星/鸟翔/破阵决 deferred；上游 mode:["guozhan"] 限定未
+建模（大势力按 effective_faction 推导：Kingdoms=明置势力、其余=主将
+势力）。版本 109→110 入 canonical_hash——14 golden 重录（地载阵不在
+标准场景，纯版本位移）。回归：`zf_dizaizhen_major_faction_draw`（魏
+魏蜀并列大势力判定/全魏负例）+ `zf_real_host_full_lifecycle`（六步）。
+证据见 [zhenfa 首切片](../operations/evidence/2026-10-08-u05-zhenfa-slice/README.md)。
+
+**规则 v111（2026-10-08，U07 技能批一：刺猬/韩龙）**：将领 mapping
+通道（cards.json skills[].mapping → host 行为）+ `WudianCiqiu`（tag
+97，权限型 Noop）：commit_damage 钩——来源持 ciqiu 实例 && 杀 && 目标
+满血 → 伤害 +1；加后 ≥ 目标体力 → `TurnState.ciqiu_dying` push（回合
+级，换回合清空）+ 来源技能实例移除（一次性）。**DyingSave 即死分
+支**：dying 者标记在位 → 跳过救援询问直接 Death（上游 ciqiu_dying
+dyingBegin firstDo die 同口径）。**键名口径**：mapping 通道目录技能名
+=cards.json skills name（"ciqiu"）。版本 110→111 入 canonical_hash
+——14 golden 重录（刺猬不在标准场景，纯版本位移）。回归：
+`hanlong_ciqiu_sha_healthy_bonus_and_dying_mark`（非满血不加成/满血
++1+濒死即死/移除后不加成）。证据见
+[U07 技能批一](../operations/evidence/2026-10-08-u07-skill-batch1/README.md)。
+
+**规则 v112（2026-10-08，U07 技能批二：率言/费诗）**：`WudianShuaiyan`
+（tag 98）——TriggerMeta Recover/Normal **global 触发**（plan_triggers
+按 (owner, def) 实例遍历）：他人回复体力后（filter 排除回复者=你/当前
+回合=你/回复者死亡），回复者二选一——Tag0 费诗摸 1 / Tag1 费诗弃其一张
+（被弃者自选 min1 不可取消=上游 discardPlayerCard forced 同义）。**登记
+差异**：chooseControl AI 默认项（attitude 推导）不迁移（玩家自选，各批
+同口径）。费诗目录技能=["nsshuaiyan","moshou"]。版本 111→112 入
+canonical_hash——14 golden 重录（率言不在标准场景，纯版本位移）。回归：
+`feishi_shuaiyan_recover_trigger_two_choice`（两分支+负例×2）。证据见
+[U07 技能批二](../operations/evidence/2026-10-08-u07-skill-batch2/README.md)。
+
+**规则 v113（2026-10-08，U07 技能批三：筑城双技/刘馥）**：`Wudian-
+Zhucheng`（tag 99）+ `WudianZhuchengGuard`（tag 100，上游 group 子技能
+zhucheng2 显式化）。**状态**：`PlayerState.zhucheng: Vec<CardId>`（跨
+回合持久标记；**存档格式 v4→v5**）。开关：commit_phase PhaseEnd 段直
+推 OptionalGate（原生无 begin:false 帧；拥有者自己每阶段结束确认）—
+无标记→牌堆顶存 max(1, maxHp-体力) 张；有标记→收回入手。守卫：杀指
+定且标记非空 → 使用者选一张=弃 n 张放行 / Pass=杀无效（帧 cancelled
+写回 + 杀归还手牌 + intrinsic cancelled 跳过结算——CardUsed:
+Commit→AfterTriggers→Intrinsic 时序允许 AfterTriggers 机器写回帧载
+荷）。**登记差异**：守卫弃牌上游一次性选 n 张——原生首张自选+余随机
+代抽（池排除在途杀）；夺启暂缓（phaseUse 中止未建模）。未映射 7→6。
+版本 112→113 入 canonical_hash——14 golden 重录（筑城不在标准场景，
+纯版本位移）。回归：`liufu_zhucheng_toggle_and_sha_guard`（存牌/杀无
+效回手/弃 n 放行/收回）。证据见
+[U07 技能批三](../operations/evidence/2026-10-08-u07-skill-batch3/README.md)。
+
+**规则 v114（2026-10-08，U07 技能批四：抗yin/留赞）**：`WudianKangyin`
+（tag 101，once_per_turn）四段机：目标（其他存活 he 非空）→ 失去 1 体
+力（commit_lose_hp **同步提交**——分支依赖 isDamaged 判定，异步子事件
+读旧体力）→ 被弃者自选弃一张（he）→ 已受伤时分支：基本（yangpijuan_
+class==0）=选至多 X 名各摸一（CardsAsk 多选）；非基本=授
+`TurnState.kangyin2: Option<(PlayerId, u32)>`（X=maxHp-体力，回合内；
+computed_distance 持有者算到他人 -X + 方天同款杀额外目标上限 +X；换回
+合清空）。未受伤无分支。**登记差异**：kangyin2 上游 mark+双 mod——原
+生状态项+上限扩展；无专用日志。未映射 6→5。版本 113→114 入
+canonical_hash——14 golden 重录（抗yin 不在标准场景，纯版本位移）。回
+归：`liuzan_kangyin_losehp_discard_and_branch`（失去体力/被弃/基本分
+支多摸/限一次/kangyin2 杀双目标）。证据见
+[U07 技能批四](../operations/evidence/2026-10-08-u07-skill-batch4/README.md)。
+
+**规则 v115（2026-10-08，U07 技能批五：车阵/田豫）**：`WudianChezhen`
+（tag 102，权限型 Noop）——锁定距离技：computed_distance 内查 (a,def)/
+(b,def) 实例 → a 有装备 minus+1（攻侧）/ b 无装备 plus+1（守侧）。
+**登记差异**：无（纯数据钩语义等价；距离下限 1 饱和为既有路径）。未映
+射 5→4（夺启暂缓）。版本 114→115 入 canonical_hash——14 golden 重录
+（车阵不在标准场景，纯版本位移）。回归：
+`tianyu_chezhen_distance_mod`（5 人局对座：关/开对比+卸装备消散+相邻
+基线不受影响）。证据见
+[U07 技能批五](../operations/evidence/2026-10-08-u07-skill-batch5/README.md)。
+
+**规则 v116（2026-10-08，U07 技能批六：绝道/刘焉）**：`WudianJuedao`
+（tag 103）——activate 守卫（未横置才可发动，上游
+filter isLinked()===false 同口径）+ 单步机（emit Linked 翻转，
+commit_linked 原语复用）+ `computed_distance` 绝道钩：**持技者**横置时
+双向 +1（上游 mod 挂在 juedao 技能上：globalFrom 查 from 的技能、
+globalTo 查 to 的技能——非持技者横置不影响距离；初版误为「任意横置
+者」致铁索传导距离炸裂，已修正并回归 native_kernel 传导三测）。
+**登记差异**：content 无弃牌代价——上游 filterCard/check 为转换技 AI
+残留未挂 content，原生按 content 实现无代价横置。未映射 4→3。版本
+115→116 入 canonical_hash——14 golden 重录（绝道不在标准场景，纯版本
+位移）。回归：`liuyan_juedao_link_and_distance`（横置/双向对座
+2→3/已横置拒绝/他人横置不影响/双横置叠加）。证据见
+[U07 技能批六](../operations/evidence/2026-10-08-u07-skill-batch6/README.md)。
+
+**规则 v117（2026-10-08，U07 技能批七：割据/刘焉）**：`WudianGeju`
+（tag 104，TriggerMeta PhaseBegin/Normal）——Judge begin 帧触发强制：
+收集他人 effective_faction 种数 → 按**各攻击者自身 attack_range** 逐个
+移除杀范围内他势力 → draw(剩余种数)。**登记差异**：势力判定
+effective_faction（与地载阵同口径）；frequent 无确认同上游。未映射
+11→2（duoqi/youzhan 暂缓）。版本 116→117 入 canonical_hash——14
+golden 重录（割据不在标准场景，纯版本位移）。回归：
+`liuyan_geju_out_of_range_faction_draw`（3 人局负例）+
+`liuyan_geju_out_of_range_counts`（4 人局正例：范围外蜀计入/范围内魏
+不计入）。证据见
+[U07 技能批七](../operations/evidence/2026-10-08-u07-skill-batch7/README.md)。
+
+**规则 v118（2026-10-08，U05 ow 纵切首切片：士兵76）**：新转换包
+shaai-ow-upstream-noname（**character 管线首例**：cards 空数组纯武将
+包，general_meta+mapping 通道）+ `WudianTuji`（tag 104 权限型）——
+`TurnState.cards_used_play_phase: u32`（Play begin 清零、
+commit_card_used 非取消 +1；computed_distance 持有者+当前回合 →
+minus+=计数，上游 tuji mod globalFrom countUsed 同口径）+
+`WudianMujing`（tag 105）三段机——黑牌当杀 declared-Sha（塔击同构）。
+**登记差异**：mujing 上游 chooseToRespond/chooseToUse 双入口——原生仅
+出牌入口（丈八同口径）；**lichang 暂缓**（下准备阶段子回合时点未建
+模，包内 deferred reason）。版本 117→118 入 canonical_hash——14 golden
+重录（ow 不在标准场景，纯版本位移）。回归：
+`ow_shibing_tuji_and_mujing`（目录技能断言/目镜当杀掉血/突击攻距
+-1/换回合计数清零）。证据见
+[ow 纵切首切片](../operations/evidence/2026-10-08-ow-shibing-slice/README.md)。
+
+**规则 v119（2026-10-08，U05 ow 纵切批二：光书/虚无之光）**：
+`WudianGuangshu`（tag 107）三段机（弃 he 一张 → 目标（四子技实例同查
+排除）→ 按弃牌花色授子技 SkillDefId 实例）+ 4 子行为（tag 108–112）：
+♥光盾 Damage 触发 recover 1 / ♦光流 source Damage 触发 draw 2 / ♣光井
+杀门控拒绝（PlayCard Sha 臂查实例，碧日浓雾先例）+ PhaseEnd 触发移除 /
+♠光塔 commit_phase PhaseEnd 段直推 1 无源雷伤（无 PhaseEnd 帧，水没墓
+穴/筑城第三例）。**登记差异**：♠上游"下个结束阶段"实为任一阶段结束即
+触发（trigger phaseEnd 逐阶段）——原生同口径；mark intro UI 不迁移。
+版本 118→119 入 canonical_hash——14 golden 重录（光书不在标准场景，纯
+版本位移）。回归：`zhixuzhiguang_guangshu_suit_marks`（♠全链：弃黑
+桃/授予断言/阶段结束雷伤）。证据见
+[ow 纵切批二](../operations/evidence/2026-10-08-ow-guangshu-batch/README.md)。
+
+**规则 v120（2026-10-08，U05 ow 纵切批三：自愈/禅雅塔）**：
+`WudianZiyu`（tag 112，TriggerMeta PhaseBegin/Normal optional——End 阶
+段开始帧）+ `TurnState.phase_number: u32`（每阶段开始 +1，入存档/哈
+希）+ filter（phase_number>0 && %4==0）+ OptionalGate 确认 + 两段机
+（Tag0 摸 1 / Tag1 回 1；满血仅摸牌；可取消=放弃）。**登记差异**：上
+游 phaseEnd 逐阶段 global——原生锁定 End 阶段开始；phaseNumber 从 0
+计（>0 防开局触发，微差登记）。版本 119→120 入 canonical_hash——14
+golden 重录（自愈不在标准场景，纯版本位移）。回归：
+`chanyata_ziyu_every_four_phases`（12 回合内 %4 至少触发一次/回 1）。
+证据见
+[ow 纵切批三](../operations/evidence/2026-10-08-ow-ziyu-batch/README.md)。
+
+**规则 v121（2026-10-08，U05 ow 纵切批四：守护/天使）**：
+`WudianShouhu`（tag 113，once_per_turn 不适用——上游无 usable 限制）
+三段机：弃手牌【杀】→ 选其他受伤角色 → recover 1（上游 target.recover
+同口径）+ **禁杀门控**：PlayCard Sha 臂查持有者实例拒绝（碧日浓雾/光
+井同款先例，上游 mod cardEnabled sha=false 同口径）。**版本号勘误**：
+v120 批遗漏提交版本号（常量实为 119）——本批 119→121 合并跳变重录。
+回归：`tianshi_shouhu_discard_heal_and_sha_ban`（弃杀救人/禁杀拒绝/无
+杀不可发动）。证据见
+[ow 纵切批四](../operations/evidence/2026-10-08-ow-shouhu-batch/README.md)。
+
+**规则 v122（2026-10-08，U05 ow 纵切批五：毒瘟/黑百合）**：
+`WudianDuwen`（tag 114，权限型 Noop）——commit_damage 钩：来源持 duwen
+实例 && 来源手牌数==受伤害角色手牌数 → 伤害 +1（上游 duwen damageBegin
+num++ 同口径；铁索传导为独立事件照常判定）。**登记差异**：无。未映射
+2 不变（duoqi/youzhan 暂缓）。版本 121→122 入 canonical_hash——14
+golden 重录（毒瘟不在标准场景，纯版本位移）。回归：
+`heibaihe_duwen_equal_hand_damage_bonus`（手牌相等+1/不等无加成）。证
+据见
+[ow 纵切批五](../operations/evidence/2026-10-08-ow-duwen-batch/README.md)。
+
+**规则 v123（2026-10-08，U05 ow 纵切批六：炮台/托比昂）**：
+`PlayerState.paotai_lv: u8`（跨回合持久；**存档格式 v5→v6**）+
+`WudianPaotai`（tag 115）主动技两段机（弃杀→lv+1 ≤3，activate 守卫
+lv<3）+ `WudianPaotaiFire`（tag 116，TriggerMeta PhaseBegin/Normal——
+End 阶段开始帧）触发臂：概率 30%×层（RuleRng）→ 随机存活敌人 1 点火
+焰伤害 + **commit_damage 炮台降级钩**（受伤 1 点降 1 级，下限 0；上游
+paotai3 同口径）。**登记差异**：上游 paotai2 入队前掷骰——原生结算时
+掷骰（等价分布）；mark intro UI 不迁移；maoding 暂缓（零件牌池不在原
+生目录）。版本 122→123 入 canonical_hash——14 golden 重录（炮台不在
+标准场景，纯版本位移）。回归：
+`tuobiang_paotai_stack_fire_and_downgrade`（三层布置/满级拒绝/100% 必
+中/受伤降级/跨回合持久）。证据见
+[ow 纵切批六](../operations/evidence/2026-10-08-ow-paotai-batch/README.md)。
+
+**规则 v124（2026-10-08，U05 ow 纵切批七：堡垒/侦察切换）**：
+`PlayerState.baolei_mode: u8`（0=无/1=哨卫/2=侦察，跨回合持久；存档
+v6 内追加）+ `WudianBaoleiSwitch`（tag 117）单步确认切换机（三态翻转：
+2→1 回哨卫、其余 +1——上游双技各 phaseEnd 确认的互斥切换合并为确认式
+翻转）。**登记暂缓（模式效果钩）**：哨卫四合一（杀无视距离/防具、无
+次数、不可闪避+持有者禁闪——ShaResolve/闪避门控深层多处）与侦察用杀
+摸回（CardUsed Sha 触发机）——留待后续批。mapping 双技同键
+（bshaowei/zhencha）。版本 123→124 入 canonical_hash——14 golden 重录
+（堡垒不在标准场景，纯版本位移）。回归：
+`baolei_switch_mode_cycle`（三态翻转/存档往返/跨回合持久）。证据见
+[ow 纵切批七](../operations/evidence/2026-10-08-ow-baolei-batch/README.md)。
+
+**规则 v125（2026-10-08，U05 ow 纵切批八：哨卫模式效果钩）**：消
+v124 待做登记——PlayCard Sha 门控：哨卫模式（来源持 bshaowei &&
+baolei_mode==1）①杀次数豁免（与 paoxiao/has_zhuge 并列）②距离豁免
+（baolei_range_free 与 zfs_free 并列）；ShaResolve ③哨卫源侧直中（仁
+王盾后复用 emit_sha_damage，跳过闪询问/防具/雌雄等）④目标侧闪选项过
+滤（目标持技+哨卫模式 → shans 空）。**登记差异**：directHit 同时无视
+防具（八卦/仁王盾不判定）——上游 directHit 同口径。版本 124→125 入
+canonical_hash——14 golden 重录（哨卫不在标准场景，纯版本位移）。回
+归：`baolei_mode_effects_on_sha`（源侧直中/目标侧非哨卫正常）。证据见
+[ow 纵切批八](../operations/evidence/2026-10-08-ow-mode-effects/README.md)。
+
+**规则 v126（2026-10-08，U05 ow 纵切批九：卢西奥三技）**：扩音
+（kuoyin→host:wudian_kuoyin，tag 120）——出牌阶段弃 he 区恰 1 张→乐动
+目标数 +2 / 恰 2 张→乐动摸/回量 +1（各限一次、双满 activate 拒绝；
+selectCard 张数按存量恰 1/恰 2/1–2 同上游 selectCard）；呼唤
+（huhuan→host:wudian_huhuan，tag 121）——弃 2 张本回合乐动改回复模式
+（限一次）；乐动（yuedong→host:wudian_yuedong，tag 119）——出牌阶段
+结束（PhaseEnd+Play/begin:false 同 GwentBirinState 通道）选至多 1+数
+增量名目标各摸 1+量增量张（呼唤后改各回复等量，目标须未满体力；可整
+体放弃=空选择；空选项直跳过）。`TurnState.yuedong_num/eff/recover` 三
+字段换回合清零=上游 kuoyin2 phaseBegin 静默重置等价（存量仅自己出牌
+阶段可积攒/消费）；存档 v6→**v7**。**登记差异**：逐目标顺序摸（上游
+asyncDraw 同时摸）；上游 storage 跨回合残留不可观察。版本 125→126 入
+canonical_hash——14 golden 重录（卢西奥不在标准场景，纯版本/零值字段
+位移）。回归：`luxiao_kuoyin_num_extends_yuedong_draw` 等 4 例。证据见
+[ow 纵切批九](../operations/evidence/2026-10-08-ow-luxiao-batch/README.md)。
+
+**规则 v127（2026-10-08，U05 ow 纵切批十：美双技+翻面跳回合基建）**：
+暴雪（baoxue→host:wudian_baoxue，tag 123）——出牌阶段 limited（每局一
+次）选至多「黑色 he 牌数」名其他角色：弃全部黑色 he 牌、逐目标其 he
+区随机弃 1+翻至背面、自己翻至背面（空选择=放弃不消耗；turnOver(true)
+幂等同口径）；急冻（jidong→host:wudian_jidong，tag 122）——任意角色
+阶段结束时 hp=1 且未翻面：翻面+回复 2+冰封（`PlayerState.jidong_
+active`：受所有伤害无效=commit_damage 入口 DamagePrevented、不能被其
+他角色的牌指定=PlayCard 目标拒绝——AOE 自动指向不受影响同上游
+targetEnabled mod），解除点=翻回正面（commit_turn_over_before，上游
+turnOverAfter 到期同口径）。**翻面跳回合基建**：Judge begin 且
+face_down 的回合=发 TurnOverBefore（前置取消窗口）后直达 TurnEnded，
+整回合无阶段帧、回合槽照常消耗；回合中翻面不跳剩余阶段（上游
+_turnover phaseBefore 仅回合开始判定）。bingqiang 冰墙登记暂缓（座位
+相邻+距离修饰子技族）。**登记差异**：暴雪/急冻翻面内联无窗口（风雪刃
+先例）；showHandcards 不建模。`PlayerState.baoxue_used/jidong_active`
+入存档 v7→**v8**。版本 126→127 入 canonical_hash——14 golden 重录
+（标准场景无翻面面，纯版本/零值字段位移；据守测试随跳回合新基线更新
+断言）。回归：`mei_baoxue_limited_discard_and_flips` 等 3 例。证据见
+[ow 纵切批十](../operations/evidence/2026-10-08-ow-mei-batch/README.md)。
+
+**规则 v128（2026-10-08，U05 ow 纵切批十一：路霸双技+v126 修复）**：
+链钩（liangou→host:wudian_liangou，tag 124，usable:1 走命令层
+once_used=发动即消耗）——弃 1 张 he+指定一名其他角色+判定（非红桃成
+功，龙帆判定形态）→挂钩：`TurnState.liangou_hook` 置位——本回合内①
+路霸算到被钩者距离恒 1（computed_distance 开头短路；上游 liangou2
+globalTo -Infinity 经距离下限钳制同口径）②被钩者本回合首次受伤 +1
+（commit_damage 增幅段，liangou_bonus_used 消耗位；来源不限=上游无
+source 条件）。换回合随 TurnState 清零解除。吸阳（xiyang→
+host:wudian_xiyang，tag 125）——本人回合结束（受伤且未翻面）确认门
+（optional:true=上游无 forced 有 check 同口径）→翻面+回复 2（内联翻
+面同急冻口径）。**v126 遗留缺陷修复**：TurnState 换回合为原地改字段
+而非重建——乐动三角（v126）从未清零、扩音存量跨回合残留；commit_turn_
+ended 两分支补显式复位（yuedong 三角+liangou 两字段）。**批十补记登
+记差异：急冻触发为直发（optional:false），上游无 forced 会弹确认**。
+`TurnState.liangou_hook/liangou_bonus_used` 入存档 v8→**v9**。版本
+127→128 入 canonical_hash——14 golden 重录（标准场景不触及，纯版本/
+零值字段位移+复位语义）。回归：`luba_liangou_hook_distance_and_damage`
+等 3 例+`luxiao_yuedong_storage_resets_next_turn` 缺陷回归。证据见
+[ow 纵切批十一](../operations/evidence/2026-10-08-ow-luba-batch/README.md)。
+
+**规则 v129（2026-10-09，U05 ow 纵切批十二：源氏飞刃）**：飞刃
+（feiren→host:wudian_feiren，tag 126，锁定被动无机器）三钩——①你的
+黑桃杀伤害 +1（commit_damage 增幅段；非铁索传导=**DamageData.from_
+chain** 新字段（传导 emit 置 true，随存档 v9 事件编解码首发）；花色按
+实体牌，火/雷杀为黑桃同样命中）②你的杀无视距离（PlayCard 首目标与
+方天多目标循环均豁免，上游 mod targetInRange 同口径）③梅花杀额外目
+标上限 +1（max_targets 加项；实体花色、转化声明牌种不影响=上游
+selectTarget range[1]++ 同口径）。**登记暂缓**：lianpo（源定义不在
+ow/skill.js=共享技能文件，feiying 同款）、zhanlong（limited+createCard
+凭空造牌 3 杀+zhanlong2 临时技链）。存档 v9（随批十一首发）。版本
+128→129 入 canonical_hash——14 golden 重录（标准场景 from_chain 恒
+false，纯版本/零值字段位移）。回归：`yuanshi_feiren_bonus_range_and_
+club_extra_target`、`yuanshi_feiren_chain_damage_not_bonused`。证据见
+[ow 纵切批十二](../operations/evidence/2026-10-09-ow-yuanshi-batch/README.md)。
+
+**规则 v130（2026-10-09，U05 ow 纵切批十三：法老之鹰飞弹）**：飞弹
+（feidan→host:wudian_feidan，tag 127，Damage after 窗口触发
+optional:false=上游 direct 同口径）——你的杀对一名角色造成伤害后（未
+防止有量、受伤者存活），可弃 1 张 he（可取消=不弃不弹）：受伤者距离
+1 内的其他存活角色各受 1 点无牌伤害（来源=持有者、按座位序、弹射目
+标自动全收含自己；弹射 card=None 不再触发飞弹）。杀无视距离（PlayCard
+豁免与飞刃通用化）。**登记口径**：受伤者死亡不触发（保守口径，登记）。
+**登记暂缓**：huoyu（limited+虚拟 useCard——chiyuxi 凭空用牌×2，
+youzhan 同款原语缺口）、feiying（共享技能文件）。无新状态字段——存档
+v9 不变。版本 129→130 入 canonical_hash——14 golden 重录（纯版本位
+移）。回归：`falaozhiying_feidan_splash_cancel_and_range`。证据见
+[ow 纵切批十三](../operations/evidence/2026-10-09-ow-falaozhiying-batch/README.md)。
+
+**规则 v131（2026-10-09，U05 ow 纵切批十四：安娜支援）**：支援
+（zhiyuan→host:wudian_zhiyuan，tag 128，EventKind::DamageBefore 前置窗
+口触发、optional:true 确认门=上游 check 询问式同口径）——当你即将对
+一名角色造成伤害时（来源=持有者、未防止、量>0）可确认：防止此伤害
+（current_damage_mut().prevented 直写=碎盾先例），受伤者回复等量体力
+（满血饱和同上游 recover）。**DamageBefore 前置窗口首个 ow 消费者**。
+**登记暂缓**：mianzhen（响应询问+子技）、aqianghua（子技链）。无新状
+态字段——存档 v9 不变。版本 130→131 入 canonical_hash——14 golden
+重录（纯版本位移）。回归：`ana_zhiyuan_cancel_damage_and_equal_recover`
+（确认=防止+等量回复、取消=照常伤害）。证据见
+[ow 纵切批十四](../operations/evidence/2026-10-09-ow-ana-batch/README.md)。
+
+**规则 v132（2026-10-09，U05 ow 纵切批十五：麦克雷神枪）**：神枪
+（shenqiang→host:wudian_shenqiang，tag 129，Damage after 窗口触发
+optional:false=上游 forced 同口径）——你的杀对一名角色造成伤害后（自
+己回合）本回合杀使用计数回退（`turn.sha_used_play_phase=false`），可
+再出一张杀；**无次数上限**——每次杀伤害各回退一次（链式解锁）。杀判
+定按实体牌口径（转化声明杀不触发，与飞刃/飞弹一致）；land 加成杀的
+额外标记不回退（登记）。**登记暂缓**：shanguang（shanguang2 全卡牌
+禁用子技）、tiandan（createCard 凭空造杀+主动跳阶段）。无新状态字段
+——存档 v9 不变。版本 131→132 入 canonical_hash——14 golden 重录
+（纯版本位移）。回归：`maikelei_shenqiang_sha_limit_refund`（链式回
+退三连断言）。证据见
+[ow 纵切批十五](../operations/evidence/2026-10-09-ow-maikelei-batch/README.md)。
+
+**规则 v133（2026-10-09，U05 ow 纵切批十六：狂鼠拾火）**：拾火
+（shihuo→host:wudian_shihuo，tag 130，Damage after 窗口 global 触发
+optional:false=上游 forced 同口径）——任何人受到火属性伤害后你摸一张
+牌（filter：DamageNature::Fire && 未防止 && 有量——prevented/零量不
+触发=上游 damageEnd 事件口径登记；传导的独立火伤事件照常，每次各摸
+1）。**登记暂缓**：liudan（杀 50% 概率随机追加合法目标）、shoujia
+（给牌+挂牌子技）。无新状态字段——存档 v9 不变。版本 132→133 入
+canonical_hash——14 golden 重录（纯版本位移）。回归：
+`kuangshu_shihuo_fire_damage_draw`（火伤摸 1/普通伤害不触发）。证据见
+[ow 纵切批十六](../operations/evidence/2026-10-09-ow-kuangshu-batch/README.md)。
+
+**规则 v134（2026-10-09，U05 ow 纵切批十七：莱因哈特猛击）**：猛击
+（mengji→host:wudian_mengji，tag 131，EventKind::DamageBefore 前置窗
+口触发 optional:false=上游 forced 同口径）——你无护甲时你的杀伤害 +1
+（非铁索传导=from_chain 字段；前置窗口直写帧量=伊籍改目标同机制）。
+上游 filter 的 storage.zhongdun 置位以**持技等价**（登记）。**登记暂
+缓**：zhongdun（init2 开局 +8 甲——无 GameStart 事件种类=开局事件基
+建缺口；主动转甲技）。测试基建：`Engine::debug_set_hujia`（debug_set_hp
+先例）。无新状态字段——存档 v9 不变。版本 133→134 入 canonical_hash
+——14 golden 重录（纯版本位移）。回归：
+`laiyinhate_mengji_no_armor_bonus`（无甲 +1/有甲不加成）。证据见
+[ow 纵切批十七](../operations/evidence/2026-10-09-ow-laiyinhate-batch/README.md)。
+
+**规则 v135（2026-10-09，U05 ow 纵切批十八：半藏音波）**：音波
+（yinbo→host:wudian_yinbo，tag 132，usable:1 走命令层 once_used）——
+出牌阶段弃 1 张黑桃（he 区必选）：随机 ≤3 名有牌的其他角色各随机弃 1
+张（swap_remove 抽取式取 ≤3+he 池随机弃=龙帆/暴雪同款）。**登记差异**：
+原型无阵营——上游 enemies=其他存活玩家（多阵营引入时重审）。**登记暂
+缓**：bfengshi（shaBegin 随机直击+countUsed 攻距+组技）。无新状态字段
+——存档 v9 不变。版本 134→135 入 canonical_hash——14 golden 重录
+（纯版本位移）。回归：`banzang_yinbo_random_discard_three`。证据见
+[ow 纵切批十八](../operations/evidence/2026-10-09-ow-banzang-batch/README.md)。
+
+**规则 v136（2026-10-09，U05 ow 纵切批十九：奥丽莎强固）**：强固
+（qianggu→host:wudian_qianggu，tag 133，usable:1）——出牌阶段弃 2 张
+he（必选）→+2 护甲+强固置位（`PlayerState.qianggu_active`）；强固守
+卫（qianggu2→host:wudian_qianggu_guard，tag 134，CardUsed after 窗口
+触发=**筑城守卫同款 cancelled 写回**）——强固生效中他人对持有者使用
+杀：使用者弃一张基本牌（Sha/Shan/Tao/Jiu=上游 basic 同口径）否则杀
+无效（Intrinsic 按 cancelled 跳过）。解除=自己回合判定阶段开始
+（commit_phase Judge begin 清位；翻面跳回合路径同清）。**登记暂缓**：
+woliu（组距离/杀限定子技+清除组）；D.Va 全系（机甲独立血条+changeHp
+拦截链，立项核验未入包）。存档 v9→**v10**（qianggu_active 追加）。版
+本 135→136 入 canonical_hash——14 golden 重录。回归：
+`orisa_qianggu_armor_and_guard_nullify`。证据见
+[ow 纵切批十九](../operations/evidence/2026-10-09-ow-orisa-batch/README.md)。
+
+**规则 v137（2026-10-09，U05 ow 纵切批二十：温斯顿跳跃）**：跳跃
+（feitiao→host:wudian_feitiao，tag 135，usable 无限制）——出牌阶段弃
+1 张 he（必选）并指定一名其他角色（必选）：其 he 池随机弃 1，本回合
+自己算到其距离恒 1（`TurnState.feitiao_target`；computed_distance 开
+头短路=链钩同款；上游 feitiao2 -Infinity 钳距同口径）。换回合随
+TurnState 复位（两分支显式）。**登记差异**：chooseCardTarget 复合拆两
+段。**登记暂缓**：dianji（jingleishan 牌种缺失）。存档 v10→**v11**。
+版本 136→137 入 canonical_hash——14 golden 重录。回归：
+`wensidun_feitiao_range_and_random_discard`。证据见
+[ow 纵切批二十](../operations/evidence/2026-10-09-ow-wensidun-batch/README.md)。
+
+**规则 v138（2026-10-09，U05 ow 纵切批二十一：查莉娅屏障+应用）**：
+屏障（pingzhang→host:wudian_pingzhang，tag 136，DamageBefore global 窗
+口 direct=取消在弃牌询问）——自己受伤弃 1 张红桃 / 他人受伤弃 1 张黑
+桃（各每回合一次，`PlayerState.pingzhang_self_used/other_used` 两标志
+=上游空壳 pingzhang2/3 等价）→伤害 -1（前置窗口直写 saturating_sub；
+上游 trigger.num--）。应用（owliyong→host:wudian_owliyong，tag 137，
+PhaseBegin+Draw/begin:true 过滤 forced）——摸牌阶段额外摸
+`pingzhang_count` 张；**标志转计数**=自己回合判定阶段开始（count=两标
+志和并清；上游 pingzhang_count phaseBegin silent 同口径），count 保持
+至下回合判定阶段（owliyong 只读不清=上游 storage 同口径）。无暂缓——
+查莉娅全技能闭环。存档 v11→**v12**（三字段追加）。版本 137→138 入
+canonical_hash——14 golden 重录。回归：
+`zhaliya_pingzhang_barrier_and_owliyong_draw`。证据见
+[ow 纵切批二十一](../operations/evidence/2026-10-09-ow-zhaliya-batch/README.md)。
+
+**规则 v139（2026-10-09，U05 ow 纵切批二十二：黑影隐匿）**：隐匿
+（yinshen→host:wudian_yinshen，tag 138，CardsDiscarded 帧触发 forced=
+思继先例同位）——弃置含基本牌（Sha/Shan/Tao/Jiu）且自己手牌无基本牌
+→潜行（`PlayerState.yinshen_active`；PlayCard 目标门控与急冻冰封并列
+一处条件；解除=自己回合判定阶段开始，kernel Judge begin 清位块）。
+上游 tempHide→qianxing 至 phaseBeginStart 同口径。**登记差异**：上游
+loseEnd 含所有失牌路径（original=="h" 区分），原生按弃置路径
+CardsDiscarded 覆盖。**登记暂缓**：qinru/maichong（跨回合列表）。存档
+v12→**v13**。版本 138→139 入 canonical_hash——14 golden 重录。回归：
+`heiying_yinshen_untargetable_until_own_judge`。证据见
+[ow 纵切批二十二](../operations/evidence/2026-10-09-ow-heiying-batch/README.md)。
+
+**规则 v140（2026-10-09，U05 ow 纵切批二十三：死神闪弹）**：闪弹
+（xiandan→host:wudian_xiandan，tag 139 目录标记技；ShaResolve 内联钩）
+——出杀结算开始（防具/闪询问前）来源可弃 1 张 he（可取消）：红=直击
+（emit_sha_damage 哨卫同款路径）；黑=本杀伤害 +1（emit 伤害式加项=
+xiandan2 damageBegin num++ 折算，随本杀一次性）；取消=照常（asked 复
+位=青龙再杀 reboot 同款）。ShaResolveMachine 三字段入快照/哈希。**登
+记差异**：xiandan2 触发形态折算为本杀 emit 加项（同一伤害事件观察等
+价）。**登记暂缓**：yihun（虚拟 useCard）、shouge（createCard 治疗波
+跨包牌种）。存档 v13→**v14**（Sha 快照三 bool）。版本 139→**140** 入
+canonical_hash——14 golden 重录（终态哈希不含挂起机器，位移来自版本
+——首轮漏 bump 由 golden 零位移暴露后补）。回归：
+`sishen_xiandan_red_direct_black_bonus`。证据见
+[ow 纵切批二十三](../operations/evidence/2026-10-09-ow-sishen-batch/README.md)。
+
+**规则 v141（2026-10-09，U05 ow 纵切批二十四：D.Va 机甲）**：机甲
+（jijia→host:wudian_jijia，tag 140 目录标记技）——初始 4 点机甲血
+（`PlayerState.jijia_hp`）：受伤时 1:1 抵扣（commit_damage 护甲块后拦
+截，体力不损、HujiaAbsorbed 日志复用；归零后照常扣体力=上游 changeHp
+拦截体力回补观察等价）；机甲血>0 时手牌上限 +4（弃牌阶段 limit 钩）。
+**登记差异**：上限 +4 常数简化（上游随剩余机甲血递减）；初始点数经测
+试助手/授予方设定（生产授予待开局事件基建）。**登记暂缓**：
+tuijin/zihui/chongzhuang。存档 v14→**v15**。版本 140→**141** 入
+canonical_hash——14 golden 重录。回归：
+`dva_jijia_absorbs_damage_and_hand_limit`。证据见
+[ow 纵切批二十四](../operations/evidence/2026-10-09-ow-dva-batch/README.md)。
+
+**规则 v142（2026-10-09，U05 ow 收官 + xianjian 首切片）**：① ow 来
+源纵切收官——猎空双技登记 deferred（区域离场=牌守恒纪律结构性依赖），
+ow 包 24/24 武将全部入包（23 闭环+1 结构性暂缓；**口径勘误：上游 24
+武将非 25**，与来源清点一致）。② xianjian 首切片——新转换包
+shaai-xianjian-upstream-noname（character 管线第二例）：灵雪
+（lingxue→host:xj_lingxue，tag 141，Recover 窗口触发 optional:false=
+上游 forced 同口径）——你回复体力后 +1 护甲（change_hujia 原语；多次
+回复各 +1）。**登记暂缓**：feizhua/leiyu。无新状态字段——存档 v15 不
+变。版本 141→**142** 入 canonical_hash——14 golden 重录。回归：
+`xingxuan_lingxue_recover_grants_hujia`。证据见
+[ow 收官 + xianjian 首切片](../operations/evidence/2026-10-09-ow-closeout-xianjian-slice/README.md)。
+
+**规则 v143（2026-10-09，U05 xianjian 第二切片：沈欺霜冰心）**：冰心
+（binxin→host:xj_binxin，tag 142，PhaseEnd global 窗口触发
+optional:true=上游 check 询问式同口径）——任何体力为 1 的角色阶段结束
+时（含自己）确认后其 +1 护甲（事件者经 machine() 分流带入）。**登记暂
+缓**：qixia（花色集集齐 4 色 insertPhase 额外回合——ADR0646 同源缺
+口）、jianzhen（shaAfter 逐人 chooseToUse 询问链）。无新状态字段——
+存档 v15 不变。版本 142→**143** 入 canonical_hash——14 golden 重录。
+回归：`shenqishuang_binxin_grants_hujia_at_low_hp`。证据见
+[ow xianjian 第二切片](../operations/evidence/2026-10-09-ow-shenqishuang-batch/README.md)。
+
+**规则 v144（2026-10-09，U05 xianjian 第三切片：赵灵儿回梦+蛇蜕）**：
+回梦（huimeng→host:xj_huimeng，tag 143，Recover after 直发=灵雪同位；
+**登记差异**：frequent 询问式原生直发——无选择面观察等价）——你回复体
+力后摸两张牌。蛇蜕（tianshe→host:xj_tianshe，tag 144，DamageBefore 前
+置窗口 forced）——属性伤害对你无效（prevented 直写=碎盾先例；传导事
+件同免疫=上游 hasNature 同口径）。蛇蜕·息（tianshe2→host:xj_tianshe2，
+tag 145，Damage after forced）——你造成属性伤害后回复 1（filter 收窄
+已受伤）。无暂缓——赵灵儿全技能闭环。无新状态字段——存档 v15 不变。
+版本 143→**144** 入 canonical_hash——14 golden 重录。回归：
+`zhaoliner_huimeng_tianshe_family`。证据见
+[xianjian 第三切片](../operations/evidence/2026-10-09-ow-zhaoliner-batch/README.md)。
+
+**规则 v145（2026-10-09，U05 xianjian 第四切片：瑕返灵）**：返灵
+（fanling→host:xj_fanling，tag 146，**EventKind::LoseHp after 窗口触
+发**=首个 LoseHp 消费者；forced）——他人失去体力后（有量）已受伤时回
+复 1；每回合限一次（`TurnState.fanling_used`——链钩 usable:1 同款
+TurnState bool）。**登记暂缓**：xjzongyu（虚拟 useCard 飞镖）。测试基
+建：`Engine::debug_place_judge_id`（按 ID 摆判——跨包无名牌）。存档
+v15→**v16**。版本 144→**145** 入 canonical_hash——14 golden 重录。
+回归：`xia_fanling_recover_on_others_hp_loss`（归有界失体力→回复 1/
+每回合一次）。证据见
+[xianjian 第四切片](../operations/evidence/2026-10-09-ow-xia-batch/README.md)。
+
+**规则 v146（2026-10-09，U05 xianjian 第五切片：温慧龙翔）**：龙翔
+（longxiang→host:xj_longxiang，tag 147 目录标记技；ShaResolve 内联钩
+——闪弹钩后）——出杀结算开始时目标手牌多于自己→目标 he 池随机弃差
+值张（swap_remove 抽取；**杀在结算区不计入来源手牌**=上游 countCards
+同口径）。无询问零机器字段（每杀至多一次由 !asked 分支天然保证）。
+**登记差异**：上游 check=AI 姿态（内容强制）同口径。**登记暂缓**：huxi
+（无实体牌虚拟用牌+respondSha）。无新状态字段——存档 v16 不变。版本
+145→**146** 入 canonical_hash——14 golden 重录。回归：
+`wenhui_longxiang_random_discard_diff`。证据见
+[xianjian 第五切片](../operations/evidence/2026-10-09-ow-wenhui-batch/README.md)。
+
+**规则 v147（2026-10-09，U05 xianjian 第六切片：林月如归元）**：归元
+（guiyuan→host:xj_guiyuan，tag 148，usable:1 走命令层 once_used）——
+出牌阶段已受伤时弃一张杀（he 区必选）→回复 1 点体力（满血饱和）+摸一
+张牌。**登记差异**：无。**登记暂缓**：qijian（虚拟用牌——phaseDiscard-
+End 弃牌→虚拟 useCard 杀）。无新状态字段——存档 v16 不变。版本
+146→**147** 入 canonical_hash——14 golden 重录。回归：
+`linyueru_guiyuan_discard_sha_recover_draw`。证据见
+[xianjian 第六切片](../operations/evidence/2026-10-09-ow-linyueru-batch/README.md)。
+
+**规则 v148（2026-10-09，U05 xianjian 第七切片：韩菱纱探囊）**：探囊
+（tannang→host:xj_tannang，tag 149 目录标记技；usable:1 走命令层 once_
+used）——持技者梅花手牌在 PlayCard view-as 链路由为顺手牵羊（奇袭同
+级分支）+ **Snatch 距离豁免**（实体牌非顺牵 && 持技→无距离限制=上游
+mod targetInRange 同口径；实体顺牵不受影响）。**登记差异**：上游
+chooseToUse 杀/顺牵双形态，原生无拆分入口——梅花杀路由为顺牵（杀形
+态不可选）。**登记暂缓**：tuoqiao（石会粉跨包牌种）。无新状态字段——
+存档 v16 不变。版本 147→**148** 入 canonical_hash——14 golden 重录。
+回归：`hanlingsha_tannang_snatch_unlimited_range`。证据见
+[xianjian 第七切片](../operations/evidence/2026-10-09-ow-hanlingsha-batch/README.md)。
+
+**规则 v149（2026-10-09，U05 xianjian 第八切片：王蓬絮废墟）**：废墟
+（feixu→host:xj_feixu，tag 150，CardUsed 主事件+
+extra_events=[CardResponded] 双事件同技；optional:true=上游 check 询问
+式同口径）——任意角色使用或打出闪后（filter 牌为闪）确认后该角色摸一
+张牌。**登记差异**：无（useCard/respond 双事件一一对应）。**登记暂
+缓**：duxinshu（按钮选择+双向换牌）。无新状态字段——存档 v16 不变。
+版本 148→**149** 入 canonical_hash——14 golden 重录。回归：
+`wangpengxu_feixu_shan_draw`。证据见
+[xianjian 第八切片](../operations/evidence/2026-10-09-ow-wangpengxu-batch/README.md)。
+
+**规则 v150（2026-10-09，U05 xianjian 第九切片：雷元戈风雅颂）**：三
+计数器技全闭环。风（feng→host:xj_feng，tag 151，CardsDrawn after
+forced）——累计摸 2 次牌后下一次摸牌后**额外摸 1** 并清零（**登记差
+异**：上游 drawBegin 前置改数量，原生 after 补摸——净效果同为每三次
+摸牌多摸一张）。雅（ya→host:xj_ya，tag 152，DamageBefore forced）——
+累计受伤 2 次后本次伤害 -1（saturating_sub；num>0 才减=上游同口径）。
+颂（song→host:xj_song，tag 153，DamageBefore forced source scope）——
+累计造成伤害 2 次后本次伤害 +1。三计数器=PlayerState 三 u8（存档
+v16→**v17**）。无暂缓——雷元戈全技能闭环。版本 149→**150** 入
+canonical_hash——14 golden 重录。回归：
+`leiyuange_feng_ya_song_counters`。证据见
+[xianjian 第九切片](../operations/evidence/2026-10-09-ow-leiyuange-batch/README.md)。
+
+**规则 v151（2026-10-09，U05 xianjian 第十切片：李逍遥御风）**：御风
+（xjyufeng→host:xj_xjyufeng，tag 154，CardsDiscarded 帧触发 forced，
+每回合限两次=TurnState.xjyufeng_used u8）——弃置含任意牌且手牌<2 时
+摸（2-手牌数）张（上游 loseEnd usable:2 同口径；弃置路径覆盖登记差异
+=隐匿同款）。**登记暂缓**：tianjian（viewAs 万箭 AOE+伤害归属双缺
+口）。存档 v17→**v18**。版本 150→**151** 入 canonical_hash——14 gol-
+den 重录。回归：`lixiaoyao_xjyufeng_draw_to_two_twice_per_turn`。证据
+见[xianjian 第十切片](../operations/evidence/2026-10-09-ow-lixiaoyao-batch/README.md)。
+
+**规则 v152（2026-10-09，U05 xianjian 第十一切片：玄霄玄炎+凝冰）**：
+玄炎·燃（xuanyan2→host:xj_xuanyan2，tag 155，DamageBefore forced source
+scope）——你的火属性伤害 +1（非铁索传导=from_chain，飞刃同款）。玄炎·
+烬（xuanyan3→host:xj_xuanyan3，tag 156，Damage after forced source）—
+—你造成火属性伤害后失去 1 点体力（LoseHp 独立事件=返灵同位）。凝冰
+（ningbin→host:xj_ningbin，tag 157，Damage after forced target scope）
+——你受到雷属性伤害后回复 1（满血饱和）。玄炎 group 壳（xuanyan→host:
+xj_xuanyan，tag 158 目录标记技=tianshe 系先例，xuanyan2/3 各自 mapping
+独立实例）。**登记差异**：无。**登记暂缓**：xfenxin（changeHp 事件缺口
+——jijia 用 commit_damage 拦截替代口径不同源）。无新状态字段——存档
+v18 不变。版本 151→**152** 入 canonical_hash——14 golden 重录。回归：
+`xuanxiao_xuanyan_ningbin_fire_thunder`。证据见
+[xianjian 第十一切片](../operations/evidence/2026-10-09-ow-xuanxiao-batch/README.md)。
+
+**规则 v153（2026-10-09，U05 xianjian 第十二切片：龙葵蝶舞+灵愈）**：
+蝶舞（diewu→host:xj_diewu，tag 159，usable 无限制）——出牌阶段将一张
+杀**直接转移**给一名其他角色（give_hand_card=discard:false prepare
+give 同口径）；本回合首次转移后摸 1（`TurnState.diewu_draw_used`=上游
+diewu2 临时技等价）。灵愈（lingyu→host:xj_lingyu，tag 160，PhaseEnd
+owner 触发）——令一名其他已受伤角色回复 1（可放弃=空目标）。**登记差
+异**：diewu2 上游 addTempSkill 原生 TurnState bool 等价。**登记暂缓**：
+fenxing（双形态变身结构性依赖）。存档 v18→**v19**。版本 152→**153** 入
+canonical_hash——14 golden 重录。回归：
+`longkui_diewu_give_and_lingyu_recover`。证据见
+[xianjian 第十二切片](../operations/evidence/2026-10-09-ow-longkui-batch/README.md)。
+
+**规则 v154（2026-10-09，U05 xianjian 第十三切片：慕长兰掠影）**：掠影
+（lueying→host:xj_lueying，tag 161 目录标记技；ShaResolve 内联钩，每回
+合限一次=TurnState.lueying_used）——出杀结算开始：获得目标 he 随机一
+张；另有其他有牌者→目标选人（询问 observer=目标）→来源随机弃受害者
+he 一张。**登记差异**：无（三步一一对应）。**登记暂缓**：feixia（虚拟
+用牌）。Sha 快照两字段（asking_lueying/lueying_victim）入存档 v19→
+**v20**。版本 153→**154** 入 canonical_hash——14 golden 重录。回归：
+`muchanglan_lueying_gain_and_victim_discard`。证据见
+[xianjian 第十三切片](../operations/evidence/2026-10-09-ow-muchanglan-batch/README.md)。
+
+**规则 v155（2026-10-09，U05 xianjian 第十四切片：阿奴蛊舞）**：蛊舞
+（anwugu→host:xj_anwugu，tag 162，Damage after 确认门=上游 check 同口
+径）——你伤害其他未中蛊的存活角色后，其获得蛊舞（`PlayerState.anwugu_
+count=3`）。蛊舞·缚（anwugu2→host:xj_anwugu2，tag 163 三钩无机器）——
+蛊舞生效中：①出牌受限（PlayCard WrongPhase 后 anwugu_count>0 && 卡片
+计数≥3 → CardLimit，**登记差异**：countUsed 以出牌阶段计数近似——上
+游跨阶段计 countUsed）②手牌上限 -1（弃牌阶段 limit 钩）③自己每阶段
+结束 -1（归 0 解除=上游 anwugu2 phaseAfter 递减同口径）。对同一目标唯
+一（filter anwugu_count==0=上游 !hasSkill 同口径）。**登记暂缓**：lingdi
+（距离递增+花色去重存储）。存档 v20→**v21**（anwugu_count 追加）。版
+本 154→**155** 入 canonical_hash——14 golden 重录。回归：
+`anu_anwugu_afflict_and_limits`。证据见
+[xianjian 第十四切片](../operations/evidence/2026-10-09-ow-anu-batch/README.md)。
+
+**规则 v156（2026-10-09，U05 xianjian 第十五切片：唐雨柔甜香去）**：甜
+香去（txianqu→host:xj_txianqu，tag 164，DamageBefore 前置窗口确认门
+optional=true=上游 check 同口径，每回合限一次=TurnState.txianqu_used）
+——你即将造成伤害（未防止有量）且在自己出牌阶段内时确认：防止此伤害
+（prevented 直写=安娜支援同款）+摸两张牌+自己回复 1 点体力（满血饱
+和）。**登记不转**：qiongguang（纯表现技 noop）。无新状态字段语义变化
+——存档 v21→**v22**（txianqu_used 追加）。版本 155→**156** 入 canon-
+ical_hash——14 golden 重录。回归：
+`tangyurou_txianqu_prevent_and_replenish`。证据见
+[xianjian 第十五切片](../operations/evidence/2026-10-09-ow-tangyurou-batch/README.md)。
+
+**规则 v157（2026-10-09，U05 xianjian 第十六切片：姜城焚逝+龙火）**：焚
+逝（fenshi→host:xj_fenshi，tag 165，DyingSaved 触发强制=上游 dyingAfter
+juexingji 同口径）——本次濒死救回后 +2 护甲+摸两张+获得龙火，觉醒一次。
+**新事件种 `EventKind::DyingSaved`**（九点接线：EventKind/EventData/
+kind()、snap 载荷校验、commit 空臂（catch-all）、intrinsic None、
+event_kind tag 19、EventData 编解码 tag 17、canonical_hash tag 23）——
+固有救援机（Intrinsic 段）在体力>0 且脱离濒死的出口发射，触发在
+AfterTriggers 窗口消费，时序与上游 dyingAfter（救援机之后）一致；此前
+若挂 Dying 入口则濒死者摸到的牌会参与自救（功能性偏离），故立新事件。
+龙火（longhuo→host:xj_longhuo，tag 166，PhaseEnd 确认门 optional=true）
+——对自己阶段结束对所有存活角色按座位序（座位号升序=上游 lib.sort.seat）
+各 1 点火伤（含自己），逐目标 `Flow::Yield` 后重查存活——铁索传导致死
+者不再向后结算（上游 redo isIn 同口径）。**登记差异**：衍生技以常驻实
+例+`PlayerState.jiangcheng_longhuo` 门控建模（上游 addSkill("longhuo")
+动态获得——cards.json longhuo 列入技能表但 flag 未置位不触发，语义等
+价）。**登记暂缓**：yanzhan 系（红牌转火杀 usable:1 viewAs+目标
+yanzhan3 响应花色限制 mod+yanzhan2→4 杀限次 +1 mod）。存档 v22→**v23**
+（jiangcheng_longhuo 追加至 PlayerState 段）。版本 156→**157** 入
+canonical_hash——14 golden 重录。回归：
+`jiangcheng_fenshi_awaken_once_on_rescue`、
+`jiangcheng_longhuo_fires_at_own_phase_end`。证据见
+[xianjian 第十六切片](../operations/evidence/2026-10-09-xianjian-jiangcheng-batch/README.md)。
+
+**规则 v158（2026-10-09，U05 xianjian 第十七切片：景天洒金+聚宝）**：
+洒金（sajin→host:xj_sajin，tag 167，出牌阶段限一次主动=usable:1 命令
+层 once_per_turn）——弃置一张手牌并指定任意名**已受伤**角色（上游
+filterTarget hp<maxHp 同口径）各判定，判定颜色与所弃牌相同者回复 1 点
+体力；逐目标 `Flow::Yield` 后重查存活（姜城龙火同款）。判定为无改判窗
+直读（蓝格怪衣 v99 同口径，**登记差异**）。聚宝（jtjubao→
+host:xj_jtjubao，tag 168，global CardsDiscarded 强制=上游
+discardAfter frequent 自动无确认）——其他角色于自己回合外弃非基本牌
+入弃堆时（本回合首次=`TurnState.jtjubao_used`，上游 jtjubao2 临时技
+等价、换回合复位）随机获得其中一张（此刻离弃堆，羊皮卷 v97 同款）。
+**登记差异**：触发面=CardsDiscarded 两发射点（弃牌阶段+选择弃置机器
+路径）——技能代价弃置路径（to_discard 直写不发事件）不触发，上游
+discardAfter 含全部入弃堆弃置。存档 v23→**v24**（jtjubao_used 追加至
+TurnState 段）。版本 157→**158** 入 canonical_hash——14 golden 重录。
+回归：`jingtian_sajin_judge_color_recover_and_once`、
+`jingtian_jtjubao_gains_nonbasic_and_gates`。证据见
+[xianjian 第十七切片](../operations/evidence/2026-10-09-xianjian-jingtian-batch/README.md)。
+
+**规则 v159（2026-10-09，U05 xianjian 第十八切片：龙幽月行+敏杀）**：
+月行（yuexing→host:xj_yuexing，tag 169，出牌阶段限一次主动）——指定一
+名其他角色，双方距离基数交换至自己出牌阶段结束：
+`PlayerState.yuexing_pair` 双向互指；`computed_distance` 增臂——a 持对
+偶时出距基数改用 seat_distance_alive(pair,b)（义从/链钩/跳跃同区）；
+commit_phase `!begin && Play` 双向解除（上游 yuexing2 临时技
+phaseUseAfter 同口径）。**登记差异**：上游 mod 为 pure 距离数值代换后
+其余修饰照算，原生=仅替换座位基数、马匹等修饰照常叠加。敏杀
+（minsha→host:xj_minsha，tag 170，出牌阶段限一次主动）——弃两张 he
+牌→指定体力>1 的其他角色受 1 雷伤→距其 1 内其他角色（除自己）按座位
+序各随机弃一张（逐目标 Flow::Yield 重查存活=上游 redo isIn 同口径；
+随机弃手牌优先退随机装备=蓝格怪衣 v99 同款**登记差异**）。存档 v24→
+**v25**（yuexing_pair 追加至 PlayerState 段）。版本 158→**159** 入
+canonical_hash——14 golden 重录。回归：
+`longyou_yuexing_distance_swap_and_clear`、
+`longyou_minsha_thunder_and_neighbor_discard`。证据见
+[xianjian 第十八切片](../operations/evidence/2026-10-09-xianjian-longyou-batch/README.md)。
+
+**规则 v160（2026-10-09，U05 xianjian 第十九切片：明绣灵火+归烬）**：
+灵火（linghuo→host:xj_linghuo，tag 171，global PhaseEnd 确认门=上游
+check 询问式）——本回合造成过伤害的其他角色阶段结束对其 1 火伤，每 2
+轮冷却（`PlayerState.linghuo_ready_round`=触发后 round+2，**登记差异**：
+以轮数冷却近似上游 round 标签）。回合伤害统计
+`PlayerState.turn_damage`（commit_damage 实扣后按来源累加，护甲/机甲吸
+收后口径）；**清零点=各玩家自己 Judge begin**——Phase{begin:false} 帧
+的 Commit（收束+下一回合开始）先于其 AfterTriggers 执行，收束清零会使
+阶段末触发读到已清零统计（机制登记）。归烬（guijin→host:xj_guijin，
+tag 172，出牌阶段主动每 3 轮冷却）——亮牌堆顶 4 张逐张交付任意角色
+（`PlayerState.skip_next_draw` 获得者跳下次摸牌阶段，Draw begin 消费；
+可取消弃置剩余；**登记差异**：逐张交付=上游 chooseCardButton 可批
+量）。**登记暂缓**：chengxin（濒死技能型救援通道缺口——
+DyingSaveMachine 仅询问桃类牌）。存档 v25→**v26**（turn_damage/
+linghuo_ready_round/guijin_ready_round/skip_next_draw 追加至
+PlayerState 段）。版本 159→**160** 入 canonical_hash——14 golden 重
+录。回归：`mingxiu_linghuo_round_cooldown_and_fire`、
+`mingxiu_guijin_deal_and_skip_draw`。证据见
+[xianjian 第十九切片](../operations/evidence/2026-10-09-xianjian-mingxiu-batch/README.md)。
+
+**规则 v161（2026-10-09，U05 xianjian 第二十切片：云天河逐月+贯日）**：
+逐月（zhuyue→host:xj_zhuyue，tag 173，出牌阶段限一次主动）——弃一张非
+基本牌，指定至多两名有牌其他角色各随机弃一张（手牌优先退随机装备=蓝
+格怪衣同款**登记差异**）；本出牌阶段你的杀须以逐月目标为目标且距离豁
+免——`TurnState.zhuyue_targets` 白名单（PlayCard 校验块白名单拒绝+距
+离豁免项，贴房绅视/飞刃同区；commit_phase Play 尾钩清=上游 zhuyue2
+phaseUseEnd 同口径）。贯日（guanri→host:xj_guanri，tag 174，limited
+一次性主动=`PlayerState.guanri_used`）——弃两张红手牌→失去 1 点体力
+→指定体力≥自己的其他角色受 2 火伤，存活则弃其装备区所有牌（
+revoke_equip_skills 逐张）。**登记暂缓**：longxi（chooseToRespond/
+chooseToUse 响应询问链缺口）。**新增缺口登记**：Recover 前置窗口（罗
+招嫣 tanhua——Recover 帧无取消语义）；离场区（武将牌上置牌区）缺口族
+合并指认：猎空/雪见双刃/紫萱水云/慕容紫英 xuanning。存档 v26→**v27**
+（zhuyue_targets Vec 追加至 TurnState 段、guanri_used 追加至
+PlayerState 段）。版本 160→**161** 入 canonical_hash——14 golden 重
+录。回归：`yuntianhe_zhuyue_whitelist_and_clear`、
+`yuntianhe_guanri_once_fire_and_equip_strip`。证据见
+[xianjian 第二十切片](../operations/evidence/2026-10-09-xianjian-yuntianhe-batch/README.md)。
+
+**规则 v162（2026-10-09，U05 xianjian 第二十一切片：离场区基建+紫萱
+水云系）**：**离场区基建**——`PlayerState.off_court: Vec<u32>` 武将牌
+上置牌区（实体牌守恒：离开全部正常区、随所有者存放；snap validate_core
+check_cards 纳入；machine `hand_to_off_court`/`off_court_discard` 助
+手；`debug_off_court_place` 布阵）。水云（shuiyun→host:xj_shuiyun，
+tag 175，player phaseEnd direct 机内取消）——从手中选一张与离场区类型
+（基本/锦囊/装备=yangpijuan_class 三分类）不重复的牌置入离场区（≤3）。
+水云·救（shuiyun5→host:xj_shuiyun5，tag 176，global Dying 确认门）——
+**濒死救援通道首例**（chengxin 同族后续接入）：确认后必选离场区一张牌
+弃置，濒死者回复 1，`shuiyun_count`++（小蛮 shenwu 链依赖；**登记差
+异**：触发时点=Dying 帧确认（救援机之前），上游=求桃询问内选项——功
+能等价机制登记）。忘忧（wangyou→tag 177+wangyou2→tag 178 global
+Damage after silent）——受伤者获回合戳 `wangyou3_round`；他人阶段末可
+弃一张手牌令标记者们各摸 1（**登记差异**：戳保留至标记者自己下回合
+开始——上游 addTempSkill 获标回合结束，原生 End 帧 Commit 先于
+AfterTriggers、收束清零会先于触发抹除）。**登记暂缓**：changnian（死
+亡拦截钩+跨将运行时授技复合缺口）。**勘误**：慕容紫英移出离场区缺口
+族（xuanning 为计数标记且上游无获得路径）。存档 v27→**v28**（
+off_court/shuiyun_count/wangyou3_round 追加至 PlayerState 段）。版本
+161→**162** 入 canonical_hash——14 golden 重录。回归：
+`zixuan_shuiyun_off_court_and_type_dedup`、
+`zixuan_shuiyun5_dying_rescue_channel`、
+`zixuan_wangyou_roundstamp_and_draw`。证据见
+[xianjian 第二十一切片](../operations/evidence/2026-10-09-xianjian-zixuan-batch/README.md)。
+
+**规则 v163（2026-10-09，U05 xianjian 第二十二切片：小蛮灵泉+神雾）**：
+灵泉（lingquan→host:xj_lingquan，tag 179，phaseEnd forced
+juexingji）——轮次≥3（TurnState.round）且全局用牌数>体力
+（`PlayerState.total_used`，commit_card_used 未取消使用递增=
+getHistory("useCard") 同口径）时觉醒：摸 3+**runtime 授水云实例**
+（skills.insert——跨将授技首例，石会粉禁牌同源；上游 addSkill 同口
+径）+内联水云置牌询问（类型去重可放弃=上游 createTrigger 立即触发同
+效）。神雾（shenwu→host:xj_shenwu，tag 180，global phaseEnd forced
+juexingji）——水云计数≥3 时觉醒：体力上限+1、回复 1、runtime 授回梦
+实例。anwugu 与阿奴同技 mapping 复用。存档 v28→**v29**（total_used/
+lingquan_awakened/shenwu_awakened 追加至 PlayerState 段）。版本
+162→**163** 入 canonical_hash——14 golden 重录。回归：
+`xiaoman_lingquan_awaken_grants_shuiyun`、
+`xiaoman_shenwu_awaken_grants_huimeng`。证据见
+[xianjian 第二十二切片](../operations/evidence/2026-10-09-xianjian-xiaoman-batch/README.md)。
+
+**规则 v164（2026-10-09，U05 xianjian 第二十三批：明绣诚信补完）**：
+诚信（chengxin→host:xj_chengxin，tag 181，global Dying 确认门=濒死救
+援通道第二例，round:4 冷却=`chengxin_ready_round`=触发后 round+4）——
+濒死者回复至 1（recover 量=1-当前体力，负体力一次拉回）+免伤
+（`chengxin_active`：commit_damage 急冻同区直钩，受所有伤害无效=上游
+chengxin2 damageBefore cancel 同口径；清钩=本人 End 阶段结束，**登记差
+异**：上游存活至最近阶段结束）。v160 暂缓消账，明绣升全闭环。存档
+v29→**v30**（chengxin_active/chengxin_ready_round 追加至 PlayerState
+段）。版本 163→**164** 入 canonical_hash——14 golden 重录。回归：
+`mingxiu_chengxin_rescue_and_immunity`。证据见
+[xianjian 第二十三批](../operations/evidence/2026-10-09-xianjian-chengxin-batch/README.md)。
+
+**规则 v165（2026-10-09，U05 xianjian 第二十四批切片：雪见神暮+毒
+刺）**：神暮（shenmu→host:xj_shenmu，tag 182，global Dying 确认门=濒
+死救援通道第三例）——弃全部红手牌，濒死者回复 1 并摸等量张（上游
+showHandcards 纯表现不迁移；**登记差异**：check 询问简化为红手牌有无
+filter）。毒刺（duci→host:xj_duci，tag 183，CardsDiscarded direct）——
+弃牌含装备 kind（yangpijuan_class=2）入弃堆时，询问距离 1 内一名其他
+角色受 1 伤害（chooseTarget 取消=放弃；**登记差异**：仅弃置路径触发
+（CardsDiscarded 两发射点），被获得/替换不触发=上游 loseEnd 全失去面
+收窄）。**登记暂缓**：xshuangren（失去武器置武将牌+addAdditionalSkill
+武器技能转移复合缺口）。无新状态字段。版本 164→**165** 入
+canonical_hash——14 golden 重录。回归：
+`xuejian_shenmu_red_discard_rescue`、
+`xuejian_duci_equip_discard_damage`。证据见
+[xianjian 第二十四批切片](../operations/evidence/2026-10-09-xianjian-xuejian-batch/README.md)。
+
+**规则 v166（2026-10-09，U05 xianjian 第二十五批切片：柳梦璃润心）**：
+润心（runxin→host:xj_runxin，tag 184，TriggerMeta **extra_events 双事
+件首例**：event=CardUsed+extra_events=[CardResponded]=废墟双事件同
+族）——自己使用/打出红桃牌（仅红桃，suit==Heart）后令一名已受伤角色
+回复 1（chooseTarget 取消=放弃）。**登记暂缓**：tianxian（杀距离/目标
+数 mod+useCardToBefore 逐目标判定取消——mod 系+逐目标窗口复合缺口）、
+xjzhimeng（暗牌标记+useCardToBegin 同类型消耗——跨玩家持牌暗标记缺
+口）。无新状态字段。版本 165→**166** 入 canonical_hash——14 golden
+重录。回归：`liumengli_runxin_heart_use_and_respond`。证据见
+[xianjian 第二十五批切片](../operations/evidence/2026-10-09-xianjian-liumengli-batch/README.md)。
+
+**规则 v167（2026-10-09，U05 xianjian 第二十六批切片：柳梦璃织梦系）**：
+织梦（xjzhimeng→host:xj_xjzhimeng，tag 185，player phaseEnd direct 机
+内取消）——牌堆顶一张暗置于一名其他角色武将牌上（off_court 离场区复
+用第二次消费）+runtime 授织梦·梦实例（灵泉同款）。织梦·梦
+（xjzhimeng2→host:xj_xjzhimeng2，tag 186，CardUsed frequent silent 自
+动）——暗牌持有者被使用同类型（yangpijuan_class 三分类）牌时摸 1（暗
+牌保留=上游 storage 不清除同口径；**登记差异**：自目标牌（无中类
+targets 空）以使用者为隐式目标=上游 target 事件含自目标）。柳梦璃升全
+闭环（仅 tianxian 仍暂缓）。无新状态字段。版本 166→**167** 入
+canonical_hash——14 golden 重录。回归：
+`liumengli_xjzhimeng_darkmark_and_draw`。证据见
+[xianjian 第二十六批切片](../operations/evidence/2026-10-09-xianjian-zhimeng-batch/README.md)。
+
+**规则 v168（2026-10-09，U05 xianjian 第二十七批切片：南宫煌摄灵）**：
+摄灵（sheling→host:xj_sheling，tag 187，TriggerMeta **三事件首例**：
+event=CardUsed+extra_events=[CardResponded, CardsDiscarded]，frequent
+silent 自动）——自己回合内、他人使用/打出/弃置的牌入弃堆时回收之
+（`TurnState.sheling_used` 每回合 3 次=上游 usable:3 同口径，Judge
+begin 清；羊皮卷同款离堆入手）。**登记差异**：仅三事件面（使用/打出/
+弃置），其他入弃堆路径（装备替换等）不触发=上游 position:"d" 全失去
+面收窄；上游 check 排除毒不迁移（毒牌种不在目录）。**登记暂缓**：
+zhaoyao（global phaseDrawBegin 拼点时序偏差——原生 PhaseBegin 触发晚
+于固定摸牌=摸后拼点功能性偏离）、zhangmu（响应询问链缺口）。存档
+v30→**v31**（sheling_used 追加至 TurnState 段）。版本 167→**168** 入
+canonical_hash——14 golden 重录。回归：
+`nangonghuang_sheling_three_event_reclaim`。已通基建批量解锁优先级排
+序见[台账](../migration/upstream-extension-reconstruction.md)与
+[本批证据](../operations/evidence/2026-10-09-xianjian-sheling-batch/README.md)。
+
+**规则 v169（2026-10-09，U05 xianjian 第二十八批切片：虚拟 useCard 原
+语+王小虎虎煞）**：**虚拟 useCard 原语**（machine
+`use_virtual_card(source, as_kind, targets)`）——以牌堆底一张实体为载
+体、use_as 声明牌种发起完整使用管线（响应/伤害/弃置走 commit
+effective 分派既有机制=武圣/龙胆 view-as 同路径；**登记差异**：载体
+实体结算后入弃堆[上游凭空造牌无实体不入弃堆]、载体取自牌堆底[确定非
+随机]）。虎煞·集（husha_count→tag 188，source Damage forced）——自己
+出牌回合内伤人 +伤害量虎煞标记（`PlayerState.husha_mark` ≤3=上游
+storage.husha 同口径）。虎煞（husha→tag 189，phaseEnd direct 机内取
+消）——消耗标记虚拟用牌：1 枚视为杀（chooseTarget）/2 枚视为南蛮入
+侵（AOE 全其他存活；use_virtual_card 首例）；3 枚元素毁灭牌种不存在
+目录=**登记不转**。存档 v31→**v32**（husha_mark 追加至 PlayerState
+段）。版本 168→**169** 入 canonical_hash——14 golden 重录。回归：
+`wangxiaohu_husha_marks_and_virtual_cards`、
+`wangxiaohu_husha_virtual_nanman`。证据见
+[xianjian 第二十八批切片](../operations/evidence/2026-10-09-xianjian-husha-batch/README.md)。
+
+**规则 v170（2026-10-09，U05 xianjian 第三十批：死亡前置窗口+紫萱长
+念）**：**死亡前置窗口基建**——Death 帧起步 Intrinsic→**BeforeTriggers**
+（四点改造=TurnOverBefore E03 同款：push_frame、**机器侧 Ctx::emit**
+[独立 stage 映射，漏改则 DyingSaveMachine 发射的 Death 绕过窗口——本
+批实测根因]、next_stage Before→After[静默]→Intrinsic→Done、
+plan_triggers before_kind 特判+After 对 Death 静默）。长念
+（changnian→host:xj_changnian，tag 190，Death Before 窗口 direct 机内
+取消）——死亡时选一名其他角色移交 hej 全部牌（全部入手，装备 revoke
+后）+runtime 授长念·思实例；DeathMachine 照常执行（遗言型不取消死
+亡）。长念·思（changnian2→tag 191，phaseEnd forced，runtime 授技实
+例）——结束阶段摸 1。**来源勘误**：changnian 属紫萱（v162 暂缓登记）
+非柳梦璃——紫萱升全闭环。**登记暂缓**：月琦 shiying（取消型：需
+PlayerState 死亡拦截标记+DeathMachine 直读跳过——窗口已通待单切）。
+无新状态字段。版本 169→**170** 入 canonical_hash——14 golden 重录。
+回归：`liumengli_changnian_death_bequest`。证据见
+[xianjian 第三十批](../operations/evidence/2026-10-09-xianjian-changnian-batch/README.md)。
+
+**规则 v171（2026-10-09，U05 xianjian 第二十九批切片：月琦适盈死亡取
+消型）**：适盈（shiying→host:xj_shiying，tag 192，Death Before 窗口
+limited forced）——**死亡取消型首例**：`PlayerState.death_cancelled`
+拦截标记（DeathMachine step 开头直读：置位则清除并跳过死亡执行=上游
+dieBefore trigger.cancel 同口径，存活态保持）+ limited 一次性
+（`shiying_used`）——确认后双方体力上限/体力置 3、clearSkills 双方
+（SkillToggled 日志；适盈实例自身也被清=上游同款）、弃 hej 全部（装备
+revoke）、各摸 3。**登记不转**：tianwu（纯表现+tianwu2 空壳）。**登记
+暂缓**：liguang（moveCard 移动场上装备/判定区牌基建）。存档 v32→
+**v33**（death_cancelled/shiying_used 追加至 PlayerState 段）。版本
+170→**171** 入 canonical_hash——14 golden 重录。回归：
+`yueqi_shiying_cancel_death_and_reset`。证据见
+[xianjian 第二十九批切片](../operations/evidence/2026-10-09-xianjian-shiying-batch/README.md)。
+
+**规则 v172（2026-10-09，U05 xianjian 第三十批切片：南宫煌照妖）**：
+照妖（zhaoyao→host:xj_zhaoyao，tag 193，global Draw-begin 确认门
+direct）——确定性首张拼点（舌战群儒同款**登记差异**：双方 hand.first
+比点，无选牌询问）→赢→摸 2+选两张手牌置牌堆顶（先选在上=后选的先压
+栈）；输/平无事。**登记差异**：上游 global phaseDrawBegin 在摸牌前拼
+点，原生线 PhaseBegin AfterTriggers 在固定摸牌后=摸后拼点（双方各含
+新摸 2 张）。南宫煌升全闭环（仅 zhangmu 响应链暂缓）。无新状态字段。
+版本 171→**172** 入 canonical_hash——14 golden 重录。回归：
+`nangonghuang_zhaoyao_compare_and_top`。证据见
+[xianjian 第三十批切片](../operations/evidence/2026-10-09-xianjian-zhaoyao-batch/README.md)。
+
+**规则 v173（2026-10-09，U05 xianjian 第三十一批切片：月琦离光
+moveCard 基建）**：**moveCard 基建首例**（host 步内确定性扫描）——装
+备→首个空同栏目的地（revoke_equip_skills+grant_equip_skills 技能随
+迁+Equipped 日志）；判定区→首个无同名牌目的地（CardsGiven 日志）；
+**登记差异**：上游 moveCard(true)=AI 自动选取，原生=确定性首张可移牌
++首个合法目的地（座位序）。离光（liguang→host:xj_liguang，tag 194，
+phaseEnd direct 机内取消）——弃一张手牌（可取消=放弃）并移动场上的
+一张牌。月琦升全闭环（tianwu 登记不转）。无新状态字段。版本 172→
+**173** 入 canonical_hash——14 golden 重录。回归：
+`yueqi_liguang_discard_and_move_equip`。证据见
+[xianjian 第三十一批切片](../operations/evidence/2026-10-09-xianjian-liguang-batch/README.md)。
+
+**规则 v174（2026-10-09，U05 xianjian 第三十二批切片：实体发现基建+
+夏侯瑾轩玄墨）**：**实体发现基建首例**（createCard 缺口族差异方案，
+台账待建排序③）——「凭空造牌」以「牌堆+弃堆实体池随机发现同类型
+（yangpijuan_class 三分类）实体」替代（RNG 洗牌；**登记差异**：上游
+createCard 凭空造牌无实体来源，原生从实体池发现；实体不足给余量）。
+玄墨（xuanmo→host:xj_xuanmo，tag 195，phaseUse usable:1 主动）——弃一
+张基本/装备/锦囊手牌置牌堆顶，随机获得实体池同类型 2 张入手（排除置
+顶牌；不足给余量）。**登记不转**：danqing（四花色收集→getBuff(false)
+纯表现目标选择，无机制本体）。无新状态字段。版本 173→**174** 入
+canonical_hash——14 golden 重录。回归：
+`xiahoujinxuan_xuanmo_discover_same_class`。证据见
+[xianjian 第三十二批切片](../operations/evidence/2026-10-09-xianjian-xuanmo-batch/README.md)。
+
+**规则 v175（2026-10-09，U05 xianjian 第三十三批切片：苏媚射影+花
+好）**：射影（sheying→host:xj_sheying，tag 196，source Damage forced
+每回合 1 次=`TurnState.sheying_used`，Judge begin 清）——伤害牌入弃堆
+时判定，黑色→从弃堆回收伤害牌入手（cards 分流带入=武圣/龙胆 view-as
+分流同路径）。花好（huahu→host:xj_huahu，tag 197，phaseUse limited
+多目标主动）——失 1 体力上限+clearSkills 自己（适盈同款 SkillToggled
+日志），令任意名其他角色各回复 1+获 1 护甲+摸 1（逐目标 Yield）；
+`PlayerState.huahu_used` 一次性。**登记暂缓**：dujiang（毒牌种不在目
+录，实体发现亦不可用）。存档 v33→**v34**（sheying_used 追加至
+TurnState 段、huahu_used 追加至 PlayerState 段）。版本 174→**175** 入
+canonical_hash——14 golden 重录。回归：
+`sumei_sheying_black_judge_reclaim`、
+`sumei_huahu_sacrifice_multi_target`。证据见
+[xianjian 第三十三批切片](../operations/evidence/2026-10-09-xianjian-sumei-batch/README.md)。
+
+**规则 v176（2026-10-09，U05 xianjian 第三十四批切片：仙卿探息）**：
+探息（xtanxi→host:xj_xtanxi，tag 198，phaseUse usable:1 主动）——弃一
+张手牌，持有同名牌手牌的其他角色中随机一名，随机获得其一张手牌（无同
+名牌持有者则牌照弃；**登记差异**：同名牌判定按牌种=上游 get.name 同口
+径、addExpose 亮牌纯表现不迁移）。**登记暂缓**：xiaoyue（roundStart
+事件缺口+自动虚拟用牌复合缺口）。无新状态字段。版本 175→**176** 入
+canonical_hash——14 golden 重录。回归：
+`xianqing_xtanxi_same_name_steal`、
+`xianqing_xtanxi_no_holder_cancel`。证据见
+[xianjian 第三十四批切片](../operations/evidence/2026-10-09-xianjian-xtanxi-batch/README.md)。
+
+**规则 v177（2026-10-09，U05 xianjian 第三十五批切片：罗招嫣凤略）**：
+凤略（fenglue→host:xj_fenglue，tag 199，Play-begin 确认门 direct 机内
+取消）——出牌阶段开始选一名其他角色，逐张自动对其使用手中可指定其的
+杀（距离内）与决斗（**真实牌自动使用首例**：emit CardUsed 真实牌，
+commit take_hand_card 自取——机器侧不预取；逐张 Yield 后重查存活）；
+**登记差异**：仅杀与决斗自动使用，其余锦囊不自动=上游 targetEnabled2
+全量收窄。**登记暂缓**：tanhua（Recover 前置窗口缺口——回复改摸牌需
+回复取消语义）。无新状态字段。版本 176→**177** 入 canonical_hash——
+14 golden 重录。回归：`luozhaoyan_fenglue_auto_use_sha_duel`。证据见
+[xianjian 第三十五批切片](../operations/evidence/2026-10-09-xianjian-fenglue-batch/README.md)。
+
+**规则 v178（2026-10-09，U05 xianjian 第三十六批切片：姜云凡疾风+天
+剑）**：疾风（liefeng→host:xj_liefeng，tag 200，CardUsed forced）——出
+牌回合内第 3/4 张使用牌时 runtime 授天剑/御风实例（灵泉同款；
+`cards_used_play_phase` 计数；**登记差异**：第 2 张授炎杀 yanzhan
+viewAs 暂缓不授）。天剑（tianjian→host:xj_tianjian，tag 201，phaseUse
+usable:1 主动，liefeng 授技实例）——弃一张手牌杀视为使用万箭齐发（
+**虚拟 AOE 原语消费**：use_virtual_card ArcheryAttack 全其他存活）+
+伤害目标随机弃 he 一张（**登记差异**：discard 子技直连=上游为
+damageEnd 子技）。**登记暂缓**：xunying（shaAfter 响应链缺口）。无新
+状态字段。版本 177→**178** 入 canonical_hash——14 golden 重录。回归：
+`jiangyunfan_liefeng_grant_and_tianjian_aoe`。证据见
+[xianjian 第三十六批切片](../operations/evidence/2026-10-09-xianjian-liefeng-batch/README.md)。
+
+**规则 v179（2026-10-09，U05 xianjian 第三十七批切片：慕容紫英破云）**：
+破云（poyun→host:xj_poyun，tag 202，source Damage forced direct）——玄
+砚计数>0 且受伤目标 he 有牌时，令目标自选弃 he 1-2 张并计数 -1
+（`PlayerState.xuanning_mark`；**登记差异**：xuanning 计数获得路径上
+游缺失——原生仅支持调试/宿主注入）。**登记暂缓**：qianfang（AOE 万箭
+虚拟已通但依赖 xuanning 获得路径）。无其他新状态字段。存档 v34→
+**v35**（xuanning_mark 追加至 PlayerState 段）。版本 178→**179** 入
+canonical_hash——14 golden 重录。回归：
+`murongziying_poyun_discard_and_decrement`。证据见
+[xianjian 第三十七批切片](../operations/evidence/2026-10-09-xianjian-poyun-batch/README.md)。
+
+**规则 v180（2026-10-09，U05 xianjian 第三十八批切片：雪见双刃系）**：
+双刃（xshuangren→host:xj_xshuangren，tag 203，CardsDiscarded forced）—
+—弃牌含武器 kind 时，从弃堆回收该武器置离场区（off_court）并
+grant_equip_skills 武器技能随迁；**登记差异**：仅弃置路径触发（被替
+换/被获得不触发=上游 loseEnd 全失去面收窄）、武器技能随迁按 grant 全
+量、殁清离场区全部=通用区共用语义。双刃·殁（xshuangren2→tag 204，
+Death 前置窗口 forced）——死亡时弃置离场区全部牌。无新状态字段
+（off_court 复用）。版本 179→**180** 入 canonical_hash——14 golden
+重录。回归：`xuejian_xshuangren_offcourt_and_death_discard`。证据见
+[xianjian 第三十八批切片](../operations/evidence/2026-10-09-xianjian-xshuangren-batch/README.md)。
+
+**规则 v181（2026-10-10，U05 xianjian 第三十九批切片：南宫煌张目）**：
+张目（zhangmu→host:xj_zhangmu，tag 205，DamageBefore forced 每回合 1 次
+=`TurnState.zhangmu_used`，Judge begin 清）——需要打出闪响应时弃一张手
+牌闪直接视为已响应（杀不命中）。**登记差异**：①响应询问改写简化为伤
+害前置直防（上游 chooseToRespondBegin untrigger+responded 语义在响应询
+问内，原生 DamageBefore 窗口 prevented 直写——杀不命中等价）②弃哪张
+闪确定性取首张闪（上游玩家自选）。无其他新状态字段。存档 v35→**v36**
+（zhangmu_used 追加至 TurnState 段）。版本 180→**181** 入
+canonical_hash——14 golden 重录。回归：
+`nangonghuang_zhangmu_flash_discard_prevent`。证据见
+[xianjian 第三十九批切片](../operations/evidence/2026-10-10-xianjian-zhangmu-batch/README.md)。
+
+**规则 v182（2026-10-10，U05 xianjian 第四十批切片：慕容紫英千方）**：
+千方（qianfang→host:xj_qianfang，tag 206，player phaseBegin[Judge] direct
+机内取消）——玄砚计数换弃牌：num=3-`xuanning_mark`（clamp≥0），num>0
+时弃 num 张 he（可取消=放弃）、num=0 直接 AOE；xuanning 清零后视为对
+全部其他角色使用万箭齐发（**虚拟 AOE 原语第三次消费**：use_virtual_
+card ArcheryAttack）；被伤敌人每名紫英摸 1（qianfang_draw 直连；**登
+记差异**：上游 damageEnd 逐目标即时，原生结算后统一摸）。**登记差
+异**：xuanning 计数获得路径上游缺失（v179 已登记）。无新状态字段。版
+本 181→**182** 入 canonical_hash——14 golden 重录。回归：
+`murongziying_qianfang_discard_and_aoe`。证据见
+[xianjian 第四十批切片](../operations/evidence/2026-10-10-xianjian-qianfang-batch/README.md)。
+
+**规则 v183（2026-10-10，U05 xianjian 第四十一批切片：姜云凡迅影）**：
+迅影（xunying→host:xj_xunying，tag 207，CardUsed AfterTriggers
+[shaAfter] direct）——杀结算后 filter（自己使用杀+目标存活+距离内+
+有手牌杀）成立时自动取手牌首张杀对同一目标 emit CardUsed 再杀（真实
+牌 commit 自取，机器不预取）；链式再杀终止于无杀/目标亡/超距。
+**登记差异**：①上游 chooseToUse 玩家自选可放弃，原生自动取首张杀直
+到无杀②上游 canUse 简化为 computed_distance≤attack_range③酒状态保
+留不迁移（上游 removeSkill jiu→chooseToUse 未用还原）④再杀不经
+PlayCard 限次校验（上游 chooseToUse 第 4 参 -1 同口径）。无新状态字
+段。版本 182→**183** 入 canonical_hash——14 golden 重录。回归：
+`jiangyunfan_xunying_auto_second_sha`。证据见
+[xianjian 第四十一批切片](../operations/evidence/2026-10-10-xianjian-xunying-batch/README.md)。
+
+
+**规则 v184（2026-10-10，U05 xianjian 第四十二批切片：柳梦璃天弦）**：
+天弦（tianxian→host:xj_tianxian，tag 208，锁定旗标行为=效果内联无机
+器，铁掠同款）三件：①杀无视距离（engine sha_range_free 臂，上游 mod
+targetInRange 同口径）②杀目标数上限无限（engine max_targets 臂，上游
+mod selectTarget range[1]=∞ 同口径——sha 有限上限必满足其 !==-1 条
+件）③逐目标判定黑取消（杀机器 !asked 臂顶=每目标窗口位，上游
+useCardToBefore 同窗口；**登记差异**：铁骑同款内联确定性判定，无鬼
+道/天妒改判窗）。无新状态字段。版本 183→**184** 入 canonical_hash
+——14 golden 重录。回归：
+`liumengli_tianxian_range_targets_and_judge_cancel`（无技距离/双目标
+双拒绝→授技距离 2 双目标合法；判红目标正常结算、判黑目标取消不问
+闪）。证据见
+[xianjian 第四十二批切片](../operations/evidence/2026-10-10-xianjian-tianxian-batch/README.md)。
+
+
+**规则 v185（2026-10-10，U05 xianjian 第四十三批切片：越今朝影锋）**：
+影锋（xjyingfeng→host:xj_xjyingfeng，tag 209，CardUsed AfterTriggers
+forced）——杀结算完毕后随机对一名非本杀目标的其他角色使用虚拟杀
+（use_virtual_card 原语第四次消费=牌堆底载体完整管线）。防递归：
+TurnState.yingfeng_chain 链挡旗标（影锋机器 emit 前置位→虚拟杀的
+AfterTriggers filter 拒→Judge begin 清；存档 v36→**v37**）。**登记
+差异**：①敌方=全部其他角色（prototype 无阵营）②上游 canUse 简化为
+距离口径③同回合多张真实杀仅首次触发（上游 parent.name 只挡影锋自
+己的杀——真杀 use_as 实测本为 Some(Sha)，转化声明挡递归不可行）。
+雾魂（额外回合+全局牌复原）暂缓登记。版本 184→**185** 入
+canonical_hash——14 golden 重录。回归：
+`yuejinzhao_xjyingfeng_random_virtual_sha`。证据见
+[xianjian 第四十三批切片](../operations/evidence/2026-10-10-xianjian-yingfeng-batch/README.md)。
+
+
+**规则 v186（2026-10-10，U05 xianjian 第四十四批切片：居十方械磐）**：
+械磐（xiepan→host:xj_xiepan，tag 210，CardsDiscarded forced 机内取
+消）——弃牌含基本牌+手牌已无基本牌+手牌非空（失去最后一张基本牌）
+时可取消询问弃一张手牌，实体发现随机装备入手（羊皮卷同款实体池=牌
+堆+弃堆 RNG 发现，**第二次消费**）。**登记差异**：①弃置路径触发
+（上游 loseEnd 覆盖一切失去路径=双刃同款收窄）②弃牌来源不分手牌/
+装备（CardsDiscarded 无 original 标记）③获得=实体池发现不足无（替
+代上游 createCard 凭空造牌）。无新状态字段。版本 185→**186** 入
+canonical_hash——14 golden 重录。回归：
+`jushifang_xiepan_discard_and_discover_equip`。证据见
+[xianjian 第四十四批切片](../operations/evidence/2026-10-10-xianjian-xiepan-batch/README.md)。
+
+
+**规则 v187（2026-10-10，U05 xianjian 第四十五批切片：长卿乱剑）**：
+乱剑（luanjian→host:xj_luanjian，tag 211，phaseUse once_per_turn 主
+动=天剑命令层结构）——两张杀弃置→虚拟杀任意名多目标（use_virtual_
+card 原语第五次消费；机器直发不经 PlayCard 校验=上游「无视距离+可
+指定任意多目标」同效果，**登记差异**：目标侧防具检查不适用、素材已
+弃不退[目标必选 allow_cancel=false]）。乱剑·增伤（luanjian2→host:
+xj_luanjian2，tag 212，DamageBefore forced）——载体牌锚定
+（TurnState.luanjian_card=乱剑虚拟杀载体，普通杀/其他虚拟技载体不
+命中）50% 伤害+1，每目标独立 roll（上游 Math.random 同 RNG 流）；存
+档 v37→**v38**。**登记暂缓**：天符（挂附实体+伤害后窗+死亡清理）。
+版本 186→**187** 入 canonical_hash——14 golden 重录。回归：
+`changqing_luanjian_dual_sha_viewas_multi_target`（seed 10062 混合
+roll：目标 1 无增伤/目标 2 增伤 2 点=臂真实执行+逐目标独立）。证据
+见[xianjian 第四十五批切片](../operations/evidence/2026-10-10-xianjian-luanjian-batch/README.md)。
+
+
+**规则 v188（2026-10-10，U05 xianjian 第四十六批切片：长卿天符）**：
+天符（ctianfu→host:xj_ctianfu，tag 213，phaseUse once_per_turn 主动）
+——选一张闪跨玩家置**目标**离场区（武将牌上承载=上游 discard:false
+同口径）+同授 ctianfu2/ctianfu3 双实例（上游 group 同授）+记来源
+（PlayerState.ctianfu_source/ctianfu_card；存档 v38→**v39**）。天
+符·反噬（ctianfu2，tag 214，Damage 帧 AfterTriggers forced）——挂附
+者造成伤害后受来源 1 雷伤（来源亡=无来源）+随机弃 he 一张+挂附闪入
+弃堆+清挂附；触发即清=双向挂附递归链天然终止。天符·清挂（ctianfu3
+，tag 215，Death 窗 forced）——死亡清挂附；**登记差异**：挂附闪入
+弃堆（上游凭空消失）。版本 187→**188** 入 canonical_hash——14
+golden 重录。回归：`changqing_ctianfu_attach_thunder_and_death_
+clear`（双场景：挂附断言[闪离手入目标离场区+双实例+来源]→挂附者杀
+人反噬雷伤+全清；死亡清挂）。证据见
+[xianjian 第四十六批切片](../operations/evidence/2026-10-10-xianjian-ctianfu-batch/README.md)。
+
+
+**规则 v189（2026-10-10，U05 swd 第十六批：机关牌种+指路小虎）**：
+`CardKind::Jiguan` 编码 **132**（swd 转换包 ♣4，花色点数手补=护符同
+口径）。指路小虎（SwdZhiluxiaohuCard，tag 216）——自目标使用
+（PlayCard 校验 targets==[current]，上游 selectTarget -1+filterTarget
+target===player 同口径）→无懈窗口包装→随机对一名其他存活角色使用
+虚拟杀（use_virtual_card 第六消费）。**登记差异**：①敌方=全部其他
+角色（prototype 无阵营）②上游 enable=能用杀门不校验。机关牌族解锁
+路径首格（御甲/偃师需木甲人等更多机关牌+计数，续暂缓）。swd 存量
+回归修复：发牌敏感注入补三区 retain（deck-composition-test-traps 同
+款）+计数 25→26。版本 188→**189** 入 canonical_hash——14 golden 重
+录。回归：`swd_zhiluxiaohu_random_enemy_virtual_sha`。证据见
+[xianjian 第四十六批同目录](../operations/evidence/2026-10-10-xianjian-ctianfu-batch/README.md)。
+
+
+**规则 v190（2026-10-10，U05 swd 第十七批：木甲人）**：
+木甲人（SwdMujiarenCard，tag 217，卡牌机器=无懈窗包装）——**同
+kind 异行为按目录名分流**（kernel Jiguan 臂含 mujiaren→木甲人，否
+则指路小虎）。usable:1（`TurnState.mujiaren_used`，Judge begin 清，
+存档 v39→**v40**；PlayCard CardLimit=酒口径）。效果：弃自己全部非
+基本手牌（静默移除=上游 lose _triggered=null 同口径，不触发弃牌事
+件）→随机机关牌 1+N 张入手（实体发现 Jiguan 池=牌堆+弃堆、排除本
+体、不足给余量=上游 createCard 凭空造牌登记差异）。花色点数 ♥4 手
+补。**登记差异**：机关牌池当前 2/4+（勾魂锣/机关桶待切片，发现池
+随切片扩充）。swd 存量计数 26→27。版本 189→**190** 入
+canonical_hash——14 golden 重录。回归：
+`swd_mujiaren_discard_nonbasic_discover_jiguan`。证据见
+[README-v190](../operations/evidence/2026-10-10-xianjian-ctianfu-batch/README-v190.md)。
+
+
+**规则 v191（2026-10-10，U05 swd 第十八批：勾魂锣）**：
+勾魂锣（SwdGouhunluoCard，tag 218，卡牌机器=无懈窗包装；♠9/♣7 上
+游原文花色）——目标恰 1 名无挂附角色（PlayCard 校验
+gouhunluo_rounds==0，上游 filterTarget !hasSkill 同口径）挂 3 阶段
+倒计时+授实例（PlayerState.gouhunluo_rounds/source；存档 v40→
+**v41**）。倒计时（SwdGouhunluoSub，tag 219，PhaseBegin forced
+global 定向）——来源回合各阶段开始-1，归 0=目标失去 1 体力
+（LoseHp）+弃全部手牌（真实弃置事件=械磐可触发）+清挂附清实例；
+kind 级 def 注册=card_kind_host_skills(Jiguan) 首例。**登记差异/说
+明**：①来源死亡后标记残留但 filter 不满足=永不触发（上游 dieBegin
+显式清除，效果等价）②上游 intro 文案称「轮」但实现按阶段计，原生
+跟随实现。机关牌池勘误：上游 6 种 13 张，已切 3 种 5 张。版本
+190→**191** 入 canonical_hash——14 golden 重录。回归：
+`swd_gouhunluo_countdown_lose_hp_discard`（挂附三断言+重复挂拒+循
+环推进至归 0 结算三断言）。证据见
+[README-v191](../operations/evidence/2026-10-10-xianjian-ctianfu-batch/README-v191.md)。
+
+
+## 当前声明与验证边界
+
+| 语义 | 当前行为/项目声明 | 验证边界 |
+|---|---|---|
+| 无懈 | 结算型锦囊生效前，延时锦囊使用时开窗；来源起问；AOE 逐目标 | 已有主动无懈×真实洗牌×恢复组合；全部轮次/死亡动态边界仍按覆盖清单 |
+| 判定排序/闪电 | 非闪电按放置序在前、闪电在后；黑桃 2–9 命中 3 雷伤，未中传下家、同名弃置 | 双放置序及转移用例已有；死亡剩余机器持牌路径不由终态测试完全覆盖 |
+| 鬼道/天妒 | 黑手牌或黑装备改判，改判者获得旧牌；天妒限本人最终牌 | 仅装备/混合/恢复、确认/放弃和原事件反例通过，N08-c/d 关闭 |
+| 判定事件 | Judged、逐次 Rewritten、Finalized 恰一次且先于 Gained | 原反例已回归；新增洛神/八卦/铁骑等判定路径需独立语义与事件覆盖 |
+| 濒死 | 整轮无人用桃才死亡；有桃且仍濒死继续新轮 | -2 血三桃救活与逐询问恢复已通过 |
+| 身份 | 4–8 人配置、阵营胜负、奖惩先于终局 | 配比/范围拒绝、三阵营终局、奖励回归已有；完整身份可见视图和所有终局逐提交恢复仍缺 |
+| 技能与武将 | 已注册补充技能；34 个非样例名称（含原生新增曹仁与 2026-10-07 五批补齐的八将，见下文对齐表）+ 3 样例；武将表有体力 | 六技能已接表；性别有槽时筛选、无槽默认通过；倾国/护驾/反间等语义仍有差异 |
+| 模式 | 国战明置实际授予表内技能/体力；KOF 引擎层（v83）：会话将池/比分/局数入 GameMode，单局终局自动推进（败者队首淘汰/胜者队首轮转）；对决 versus 2v2 基线（v80）；斗地主（v81）；Boss 基线+重整复活回环（v82） | KOF 空池解析已修；会话行往返/恢复续跑终局一致、单局中途快照恢复哈希轨迹一致、死亡清理已固化（`kof_session_consistency_and_midrestore`，2026-10-07）；versus 奖惩/终局/存档往返已固化（`versus_mode_team_victory_and_rewards`，2026-10-08）；doudizhu 终局/存档往返已固化（`doudizhu_mode_victory_and_roundtrip`，2026-10-08）；versus 替补/4v4 变体与斗地主特殊开局摸牌变体未建模（登记）；Boss addFellow 中途入队与 boss 专属技能包未建模（批三-b/内容面登记）；KOF 多局连续会话循环（终局自动开局下一局）仍在示例/宿主层——引擎只承载会话状态与单局推进；首局大量拒绝后超时判负为示例策略面问题（非内核） |
+| 可见性 | 原观星 ChoiceAnswered 脱敏已修；护驾/激将逐人询问不以暗手牌预筛——互换暗响应牌后攻击者视图与公开询问序列不变（v29）；规划信息集为未知池重分配，不复制真实牌堆 ID（v29） | 第 48 轮既有探针为 22 FIXED / 0 OPEN；这不代表所有询问类技能的信息隔离或策略质量已验收，继续按覆盖清单扩面 |
+| 预算/时间片 | 段预算/resume/abort 与同步规划节点/时限/预置取消已有回归；真实提交与规划模拟统一用会话高水位（u64::MAX 干净拒绝）；规划信息集为未知池确定性重分配——物理牌集合守恒、空牌堆退化确定（v29 修订） | 单选候选合法回退原反例已于 v31 修复；独立工作池未实现，命令配额阻塞及更广的策略质量仍待验收；令牌原代次反例已修 |
+
+## 扩展与规则版本
+
+v3.3 恢复原有扩展机制。单个 STANDARD_RULESET_VERSION 不足以标识任意第三方规则组合：
+本局还须固定扩展版本、逻辑哈希、依赖、规则配置与宿主接口版本，并纳入恢复/重放兼容检查。
+扩展机器状态和等待选择的续行数据必须编码、校验并参与状态摘要；更新只影响后续开局。
+历史或当前原生测试通过均不证明扩展整包已验收；v60 golden 修复已完成，独立执行、生命周期和逐来源功能仍按[扩展台账](../migration/upstream-extension-reconstruction.md)验收，能力边界见[扩展契约](native-extensions.md)。
+
+## 内容差异与后续验收
+
+本地 [standard 技能说明](../../../archive/upstream/noname/apps/core/character/standard/translate.js) 与实现存在明确差异：
+倾国应为黑色手牌而非装备；护驾须由有资格的魏角色自行应答；救援须校验主公/吴势力条件；
+反间应选花色并条件伤害；结姻目标是受伤男性（没有“已婚”条件）；急救限回合外；流离涉及弃牌选择与范围（弃牌选择与范围两项已于 v76 消除，见下）。
+完整差异和复现见 [进度主稿](native-progress.md)，登记差异不能算迁移完成。
+
+### 本地上游对齐的新增核查
+
+下表以当前本地 `archive/upstream/noname` 为规则和标准包参照；Liuli 的相应扩展与旧规则另见[两仓台账](../migration/upstream-extension-reconstruction.md)。[第 16 轮证据](../operations/evidence/2026-09-23-native-upstream-review-16/README.md)保留源码位置、清点口径和实际 API 探针。这里的数量只表示目录覆盖，不表示行为等价。
+
+| 对齐面 | 本地上游行为或范围 | 原生线当前状态与下一步 |
+|---|---|---|
+| 标准武将与牌堆 | `standard/character.js` 有 33 个武将条目，`card/standard.js` 有 108 张物理牌 | `STANDARD_GENERALS` 为 34 个非样例将（**上游 33 条目全对齐**——2026-10-07 五批补齐乐进/潘凤/华雄/甘夫人/李典/公孙瓒/伊籍/袁术 + **原生新增曹仁**「据守」为第 34 个）+ 3 个样例；缺失来源将清零（2026-10-07 补齐八将语义——狂斧每回合限一次等价于上游每出牌阶段限一次（触发仅在自身出牌阶段）、体力比较为伤害提交后口径（同上游 damageSource content）、耀武来源强制二选（满血无回复选项，同上游 chooseDrawRecover 满血自动摸）、神智以判定阶段开始为准备阶段锚点（原生无准备阶段，先于一切阶段结算）、恂恂把固定摸的 2 张还回牌堆顶再观看顶四调整两置顶两置底后摸 2（净效果与上游一致）、忘隙双方各摸 1 顺序为座位号升序（上游按座位序自当前回合角色起算）、义从采用上游唯一 reyicong 定义（refresh 改版）：外向距离无条件 -1、体力值≤2 时他人算向自己 +1（computed_distance 状态修饰，马术同款；与 ±马叠加且共享下限 1）、机捷为出牌阶段限一次主动技（牌堆底一张交任意存活角色含自选——上游 chooseTarget 无过滤器）、急援登记差异仅濒死臂（赠牌/失去牌臂需 giver 跟踪面未建模）、妄尊主公资格沿激将 ADR 0776 惯例（原型模式视为真；手牌上限 -1 以回合级「妄尊印」实例在弃牌结算生效，到该角色回合结束）、同疾杀目标转移（你在目标攻击范围内时目标可弃一张牌使杀改指向你；改写 CardUsed 帧载荷、sha 结算 Intrinsic 读取，inRange 口径=目标对你的攻击范围）；华雄体力 6 使武将表体力区间断言放宽到 ≤6）。装配授予：国战明置与原型装配原语（`debug_assemble_general`）共用 `apply_general_assembly`（2026-10-07 抽取，授予语义不分叉）；`debug_set_general` 仅装槽（势力/性别资格测试依赖）。`standard_catalog()` 现为 80 张自造测试牌，构成已按[声明表](#标准目录构成声明表)锁定（2026-09-24 修复拆牌循环重复入目录并加 A0 检查；此前 v59 golden 录在顺 8/酒 4/雷杀 4 的 88 张缺陷态）。五谷、桃园、无中、借刀等牌种仍缺，且声明表未逐张对照上游牌表；需逐将/逐牌固定来源版本和语义后再验整包 |
+| 主动技阶段 | 上游仁德限 `phaseUse` | **已修（v29）**：`ActivateSkill` 默认限出牌阶段；激将经目录 `active_outside_play` 声明例外（上游 `chooseToUse/chooseToRespond`）。回归：`activate_skill_rejected_outside_play_phase` |
+| 激将 | 上游有主公资格、出杀使用/响应入口，并按座位逐一询问蜀将 | **已重构（v29）**：按座位序逐人询问蜀势力（拒绝继续、全拒绝回滚 once_per_turn、借杀同一结算、身份局主公资格）。与上游剩余差异：借牌直结算非完整 chooseToRespond 通道；非国战模式以主将势力定资格 |
+| 护驾 | 上游向符合资格的魏将逐个询问，不以暗手牌预筛 | **已重构（v29）**：按座位序逐人询问魏势力（不以暗手牌预筛、身份局主公资格、代出闪计入无双需求、挂起态可恢复）。与上游剩余差异：代出闪为弃置+计数而非完整 respond 通道 |
+| 仁德累计 | 上游出牌阶段可多次给牌，累计跨过 2 张时回复一次 | **已修（v29）**：多次发动 + `TurnState.rende_given` 阶段累计（入快照/哈希/字节），跨 2 回复一次。回归：`rende_cumulative_crosses_two_across_activations` |
+| 模式入口 | 上游 `apps/core/mode` 有 12 个顶层模式入口；入口数不等于 12 套独立规则 | 原生 `GameMode` 只有 Prototype、Identity、Kingdoms 三类，KOF 仍在示例会话；boss、versus、doudizhu 等尚无同等模式接入与逐模式验收 |
+
+后续处理顺序和完成条件统一见[进度主稿](native-progress.md#后续待做按阻塞关系)，避免在本页保留另一套易过期待办。规则任务按本表固定来源与语义，逐技能/将/牌/模式比较命令、事件、随机流和中间恢复轨迹；逐来源扩展与组合验收见[两仓台账](../migration/upstream-extension-reconstruction.md)。
+
+[覆盖清单](../native-coverage-manifest.md) 登记机制证据；[ADR 索引](../adr/INDEX.md) 保留历史决策。

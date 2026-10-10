@@ -1,0 +1,7 @@
+$ swd 第十批定向：贴房绅视（标记+出杀+存档往返）
+test swd_zhufangshenshi_distance_waiver ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（409/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v93→v94，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Zhufangshenshi 编码 114（他人锦囊/archive tag 114/a0 115 变体）+ TurnState.zhufangshenshi_target: Option<PlayerId>（存档 opt_u8/哈希 match/快照豁免）；commit 同步结算=置目标+摸 1+弃牌；sha 距离校验豁免（zfs_free=上游 targetInRange mod 同口径）；登记差异=无懈不可触发（上游 wuxie AI 权重 0）
+$ 上游核验：card/swd/card.js zhufangshenshi（type trick/filterTarget target!==player/content storage mark+addTempSkill）；skill.js zhufangshenshi（mod targetInRange storage 命中→true）+ g_zhufangshenshi（useCardAfter draw）

@@ -1,0 +1,9 @@
+// 扼睨（rezhixi）— 锁定技，当你使用【杀】或普通锦囊牌时，你弃置一张手牌。
+// 旧 JS（huicui/rezhixi）：trigger player useCard，filter 为 sha 或 trick 且有手牌，content 强制 chooseToDiscard("h", true)。
+// 本包以新增 bare 过滤器 owner_source_sha_or_ordinary_trick（无额外装备前置）+ 既有 discard_hand 原语表达；
+// 旧 JavaScript 不进入运行时。
+skill rezhixi(2768142691) locked {
+  trigger card_used owner_source_sha_or_ordinary_trick {
+    effect discard_hand(self, 1);
+  }
+}

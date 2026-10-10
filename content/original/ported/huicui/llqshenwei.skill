@@ -1,0 +1,12 @@
+// 神威：摸牌阶段额外摸两张，手牌上限加二。
+skill llqshenwei(2271917703) locked {
+  modifier draw_count add 2;
+  modifier hand_limit add 2;
+}
+
+// Legacy audio-only metadata; no rule behavior.
+skill tongyuan(4116465362) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}

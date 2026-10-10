@@ -1,0 +1,11 @@
+// 舍医（蔡贞姬）：其他角色受到伤害前，每轮一次，若其体力小于你且你可弃置的手牌或
+// 装备牌数不少于 max(1, 你的体力)，你可交给其至少 max(1, 你的体力) 张手牌或装备牌，
+// 防止此伤害。
+// 旧 JavaScript 仅作语义证据；交牌与防伤由 ABI 417 resolve_sheyi 权威结算。
+skill sheyi(3236439408) {
+  trigger damage_before owner_alive optional {
+    if hp(event_player) < hp(self) {
+      effect resolve_sheyi(self, event_player);
+    }
+  }
+}

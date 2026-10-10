@@ -1,0 +1,10 @@
+// 覆载（OL版）：锁定技，可将一张装备牌当【借刀】或【无中】使用；
+// 无装备时按体力值虚拟装备攻击/防御马。
+// 实现：双路 `view_as ... card_equip from hand_equip`（借刀/无中均为出牌阶段牌）。
+// 近似：无装备时的虚拟坐骑子句未建模；修正此前误标（noop 注记称 audio-only，
+// 上游 skill.js:3142 有真实 chooseButton 转化体）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olfuzai(3863403605) locked {
+  view_as jiedao play_phase card_equip from hand_equip;
+  view_as wuzhong play_phase card_equip from hand_equip;
+}

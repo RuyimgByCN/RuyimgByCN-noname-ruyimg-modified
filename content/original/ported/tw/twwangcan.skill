@@ -1,0 +1,11 @@
+// 应机/商和：回合外空手牌摸一后声明牌；濒死时其他角色依次交牌。
+skill twyingji(2583490638) {
+  view_as basic any any from none cost draw_one_outside_turn_empty_hand;
+  view_as ordinary_trick any any from none cost draw_one_outside_turn_empty_hand;
+}
+
+skill twshanghe(4227896164) {
+trigger dying owner_dying_other_hand_equip_nonempty_once_per_game {
+    effect resolve_twshanghe(self);
+  }
+}

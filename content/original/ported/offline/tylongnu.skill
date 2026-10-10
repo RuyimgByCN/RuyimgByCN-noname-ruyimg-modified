@@ -1,0 +1,7 @@
+// tylongnu（主动技(multi)/转化技(视作sha)/触发技）：音效名:nzry_longnu, player:phase_play, global:phaseBefore, player:game_started, 主动(multi), 视作sha, 摸牌, 失去体力, 加技能, 含子技能, 异步。
+skill tylongnu(3187413317) {
+  trigger phase_play owner_alive optional {
+    effect draw_cards(self, 1);
+    effect lose_hp(self, 1);
+  }
+}

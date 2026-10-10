@@ -1,0 +1,20 @@
+// 逆击（孙狼）：锁定技。你成为非装备牌目标后，摸一张牌并为其打上「逆击」
+// 标记（摸得的牌）；结束阶段，弃置你手牌中全部「逆击」牌。
+// 上游 (sp2/skill.js dcniji)：trigger player useCardToTargeted（非装备牌）；
+// draw(1)+gaintag("dcniji")；phaseEnd 强制弃置全部标记牌（可先使用其中一张）。
+// 实现（2026-09-13 第二百六十批·gaintag 族状态机第二件，ADR 0641 §8.49，
+// twmouzhi 双触发共调 + twmitu gaintag 工艺复用）：resolve_dcniji(self,
+// self_skill, mode, event_card)（ABI 710 / tag 733，单发无续体）：
+// mode 0 = card_targeted（机内校验非装备牌）→ draw 1 + content_card_tags
+// 打标（blake2b("dcniji")=3628735017）；mode 1 = phase_end → 弃置手牌中
+// 全部标记牌。
+// 近似（登记债）：①「可先使用其中一张」未建模（结束阶段全部直接弃置）。
+skill dcniji(3061815608) locked {
+  trigger card_targeted owner_is_target {
+    effect resolve_dcniji(self, self_skill, 0, event_card);
+  }
+
+  trigger phase_end owner_is_target {
+    effect resolve_dcniji(self, self_skill, 1, 0);
+  }
+}

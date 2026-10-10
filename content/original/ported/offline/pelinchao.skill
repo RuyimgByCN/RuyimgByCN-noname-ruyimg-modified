@@ -1,0 +1,6 @@
+// 临朝（武曌）：占位升级 — 准备阶段摸一张。
+skill pelinchao(3992257389) {
+  trigger phase_prepare owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,20 @@
+// 如意金箍棒·效果（孙悟空）：锁定技。根据金箍棒当前形态修饰【杀】：
+//   形态2→伤害+1，形态3→不可响应，形态4→增加一个目标。
+// 旧 JS 以 player.storage 直接读写形态值；此处以 ruyijingubang_skill 的
+// mark_count 间接表达。形态 3/4 效果在 card_targeted 触发中表达，
+// 形态 2 伤害在 card_used 触发中表达（形态 1 无次数限制未建模，已注明）。
+skill ruyijingubang_effect(2610048461) locked {
+  trigger card_used owner_source_sha {
+    if mark_count(self, 2848854029) == 2 {
+      effect increase_current_sha_base_damage(self, event_card, 1);
+    }
+  }
+  trigger card_targeted owner_source_sha {
+    if mark_count(self, 2848854029) == 3 {
+      effect make_current_sha_target_unrespondable(self, event_card, event_player);
+    }
+    if mark_count(self, 2848854029) == 4 {
+      effect choose_add_current_sha_target(self, event_card);
+    }
+  }
+}

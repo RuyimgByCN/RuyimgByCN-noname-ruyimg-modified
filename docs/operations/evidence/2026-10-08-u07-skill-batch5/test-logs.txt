@@ -1,0 +1,24 @@
+# U07 技能批五测试日志（2026-10-08，车阵，规则 v114→v115）
+
+$ cargo test --offline -p engine-native
+engine-native: 432 passed / 0 failed / 1 ignored（v114 基线 431 +1 新增车阵回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 14 passed; 0 failed（13 既有 + tianyu_chezhen_distance_mod）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 102 守卫过；车阵走 mapping 通道不入伴随表，计数 43）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v114→v115 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/skill.js:408 chezhen（globalFrom 有装备 -1/globalTo 无装备 +1）
+
+## 测试迭代记录
+- 3 人局全员相邻（距离 1 被 .max(1) 饱和）→ 5 人局对座
+- 断言时机：装备+技能生效后「基线」已含加成 → 关/开对比式断言
+- verify-3 青釭转注需先卸 0 号装备（多区域）；尾随重复断言删除
+- unrendered anchor（枚举 doc l3 不可见字符差）→ 尾部锚

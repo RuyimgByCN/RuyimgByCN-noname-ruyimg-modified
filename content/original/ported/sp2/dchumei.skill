@@ -1,0 +1,18 @@
+// 狐魅（魏关羽）：出牌阶段，选择一名体力值不超过你本回合造成伤害总数的
+// 角色，令其执行一项（每项每次发动限选其一）：摸一张牌／交给你一张手牌／
+// 回复 1 点体力（仅受伤时可选）。
+// 上游 (sp2/skill.js dchumei L5132)：enable phaseUse；filterTarget 体力 ≤
+// sourceDamage 本阶段累计（dchumei_num）；chooseButton 三选一（give 需目标
+// 有手牌、recover 需目标受伤）；storage dchumei_used 每项限一次。
+// 实现（2026-09-13 第二百六十三批·狐魅族状态机，ADR 0641 §8.52，qiantun
+// 分段模板复用）：active play_phase uses_per_turn 1 → resolve_chumei(self,
+// self_skill, 0)（ABI 713 / tag 736 / Cont 314 三段）：机内门控
+// turn.damage_dealt_count > 0 且目标体力 ≤ 该值 → Custom 三选一 →
+// 摸 1 / give（SelectCards 异观察者）→ recover 1。
+// 近似（登记债）：①「每项限一次」收窄为每次发动限选一项（跨发动去重需
+// 回合级 storage，未建模）；②usable 无上限（与上游一致 ✓）。
+skill dchumei(3905424632) {
+  active play_phase uses_per_turn 1 targets 0 0 {
+    effect resolve_chumei(self, self_skill, 0);
+  }
+}

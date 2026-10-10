@@ -1,0 +1,19 @@
+// 仁望（pe_jun_liubei 界仁德族）：出牌阶段限一次，你可以将至少两张手牌/装备区
+// 牌交给一名其他角色，然后你回复 1 点体力；本回合你的出【杀】次数上限 +N
+// （N=本回合发动次数，jun_renwang_effect）。
+// 上游 (offline_piracyE_jb.js jun_renwang)：enable phaseUse selectCard [2,∞] position
+// "he" filterTarget notMe；content = give(cards, target) + player.recover() +
+// addTempSkill("jun_renwang_effect") + addMark(effect,1,false)；effect mod cardUsable
+// sha num+countMark。
+// 实现（2026-09-06 第一百七十二批·「交牌回自己族」首原语，ABI 679 领号）：
+// active play_phase uses_per_turn 1 targets 1 1 other select_he 2 255 →
+// give_selected_then_recover_self(self, target, 1)（selected_cards 注入同
+// GIVE_SELECTED_THEN_RECOVER_TARGET 机制）。
+// 近似（登记债）：①①式 effect 段（杀次数+N，owner_skill_mark 动态值源需
+// add_mark-to-skill 注入面验证）本轮省略；②上游 mark 面板（marktext「武」）无
+// 引擎展示面；③usable 语义上游无 usable 键（出牌阶段一次由 uses_per_turn 1 近似）。
+skill jun_renwang(3013147713) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_he 2 255 {
+    effect give_selected_then_recover_self(self, event_source, 1);
+  }
+}

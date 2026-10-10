@@ -1,0 +1,6 @@
+// quanfeng（劝封）：限定技。①其他角色死亡时，你可失去〖弘仪〗，然后获得其武将牌上的所有非主公技，非隐匿技和非Charlotte技，加1点体力上限并回复1点体力。②当你处于濒死状态时，你可以加2点体力上限，然后回复4点体力。
+skill quanfeng(2366844697) locked {
+  trigger death owner_alive {
+    effect recover_hp(self, 1);
+  }
+}

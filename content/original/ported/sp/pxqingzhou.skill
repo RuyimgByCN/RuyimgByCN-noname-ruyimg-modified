@@ -1,0 +1,14 @@
+// 青州（pxqingzhou，州郡技能）：当你获得此技能后，你可以弃置所有手牌，然后摸等量的牌。
+// 上游 (sp/skill.js:2075)：trigger player:changeSkillsAfter；filter = addSkill 含本技且
+// 手牌均可弃置；content = discard(全部手牌) → draw(等量张)。
+// 实现：skill_added + owner_skill_added_self_2570205671 → 可选确认 →
+// let count = hand_count(self)（计划期求值，弃牌前捕获）→ discard_hand(self, MAX) →
+// draw_cards(self, count)。
+// 与上游差异：「手牌均可弃置」的过滤未建模（手牌为空时效果等价于摸 0 张）。
+skill pxqingzhou(2570205671) {
+  trigger skill_added owner_skill_added_self_2570205671 optional {
+    let count = hand_count(self);
+    effect discard_hand(self, 2147483647);
+    effect draw_cards(self, count);
+  }
+}

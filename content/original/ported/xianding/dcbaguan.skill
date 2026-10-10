@@ -1,0 +1,7 @@
+// 霸关（DC关羽）：使用武器牌后，若上一张牌目标唯一，可将手牌当无次数限制的【杀】使用，伤害基数=实体牌数。
+// DSL缺上张牌追踪+动态伤害基数+cardUsable modifier 原语，无法表达。
+skill dcbaguan(3826078193) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcbaguan 含真实规则体（trigger、mod 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

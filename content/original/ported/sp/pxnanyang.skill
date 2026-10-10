@@ -1,0 +1,15 @@
+// 南阳（pxnanyang，州郡技能）：当你获得此技能后，你可以重铸一张锦囊牌，与一名角色
+// 各回复 1 点体力。
+// 上游 (sp/skill.js:1467)：trigger player:changeSkillsAfter；filter = addSkill 含本技
+// 且有可重铸锦囊；content = chooseCardTarget(trick) → recast → 自己与目标各 recover。
+// 实现：skill_added + owner_skill_added_self_3458061931 → 可选确认 →
+// discard_hand_equip_count(self, 1)（弃一张牌近似重铸）+ recover_hp(self, 1) +
+// choose_other_recover(self, 1)。
+// 与上游差异：「必须重铸锦囊」以弃任意一张近似；无重铸摸牌收益。
+skill pxnanyang(3458061931) {
+  trigger skill_added owner_skill_added_self_3458061931 optional {
+    effect discard_hand_equip_count(self, 1);
+    effect recover_hp(self, 1);
+    effect choose_other_recover(self, 1);
+  }
+}

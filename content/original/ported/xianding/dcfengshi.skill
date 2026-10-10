@@ -1,0 +1,7 @@
+// 风势（DC 张任）：使用【杀】指定目标后，若你不在其攻击范围内，可弃置该角色一张装备牌。
+// 旧 JS 的“防具或防御马”约束以“装备”近似（DSL 弃装备范围无防具专用 scope）。
+skill dcfengshi(2270426166) {
+  trigger card_targeted owner_source_sha_target_alive_owner_outside_target_attack_range optional {
+    effect choose_discard_target_card(self, event_source, equip);
+  }
+}

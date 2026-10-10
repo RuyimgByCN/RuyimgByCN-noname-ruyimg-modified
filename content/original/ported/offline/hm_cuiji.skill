@@ -1,0 +1,6 @@
+// hm_cuiji（转化技(视作sha)/触发技）：global:phase_play, player:card_used, 视作sha, 摸牌, 含子技能, 异步。
+skill hm_cuiji(2187128878) {
+  trigger phase_play owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

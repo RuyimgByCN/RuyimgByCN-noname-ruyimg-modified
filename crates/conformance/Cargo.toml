@@ -1,0 +1,20 @@
+[package]
+name = "conformance"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Golden-case and cross-target conformance suite (Phase 11)"
+
+[dependencies]
+engine-api = { workspace = true }
+engine-core = { workspace = true }
+rule-vm = { workspace = true }
+content-compiler = { path = "../content-compiler" }
+content-schema = { path = "../content-schema" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+blake3 = { workspace = true }
+
+[[bin]]
+name = "conformance"
+path = "src/main.rs"

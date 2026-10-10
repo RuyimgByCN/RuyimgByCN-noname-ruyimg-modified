@@ -1,0 +1,9 @@
+// 奸回（贾充）：伤害结算后——你作为伤害来源且受伤者与上次相同，你摸一张牌；
+// 你受到伤害且来源与上次相同（连续同一来源），其弃置一张手牌或装备牌。
+// 旧 JavaScript 仅作语义证据；连续来源/受伤者追踪与弃牌/摸牌由 ABI 437
+// resolve_jianhui 权威结算。
+skill jianhui(4269285584) {
+  trigger damage owner_is_source_or_target {
+    effect resolve_jianhui(self, event_source, event_player);
+  }
+}

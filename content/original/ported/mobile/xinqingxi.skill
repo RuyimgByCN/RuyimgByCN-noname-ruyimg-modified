@@ -1,0 +1,5 @@
+skill xinqingxi(2962941234) {
+  trigger damage_before owner_source_other_damage_before_once_per_turn optional {
+    effect choose_target_discard_distance_hand_or_increase_damage(self, event_player);
+  }
+}

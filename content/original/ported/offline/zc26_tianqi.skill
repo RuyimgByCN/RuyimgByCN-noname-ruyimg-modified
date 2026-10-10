@@ -1,0 +1,6 @@
+// zc26_tianqi：觉醒技, 锁定技, player:phase_prepare, player:dying, 造成伤害, 加技能, 异步。
+skill zc26_tianqi(3509888047) {
+  trigger phase_prepare owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

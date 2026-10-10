@@ -1,0 +1,9 @@
+// 四九（王粲）：结束阶段，若本回合有角色获得过你的牌，你摸一张牌，
+// 并可观看一名其他角色的手牌。
+// 旧 JS 的「本回合有角色获得过你的牌」前提与「观看手牌」选择无对应原语，
+// 近似为本回合他人获得牌后结束阶段摸一张（观看手牌省略，已注明）。
+skill mpsijiu(3801001475) {
+  trigger phase_end owner_alive_gave_cards_to_other_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 掠夺·清（优）：回合结束/死亡/新回合时清理掠夺状态并翻回正面。
+// 旧 JS 纯清理标记技能，无独立建模价值，未建模。
+skill yuu_lveduo3(2502611300) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yuu_lveduo3 = 标记型技能（charlotte，skill.js:6945），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

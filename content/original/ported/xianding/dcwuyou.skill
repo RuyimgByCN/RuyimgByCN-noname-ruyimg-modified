@@ -1,0 +1,6 @@
+// dcwuyou：出牌阶段技能。DSL缺多项原语，无法精确表达。
+skill dcwuyou(2884365289) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dcwuyou = 标记型技能（audio-only，skill.js:26291），无规则面。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

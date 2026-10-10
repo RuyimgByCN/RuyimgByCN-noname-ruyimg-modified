@@ -1,0 +1,8 @@
+// 霆威（神马超）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：你使用【杀】指定目标时，可令其所有技能失效直到其下次受到伤害结算后；其因此受到伤害则弃其装备区所有牌且此伤害+1
+// 旧 JS 的「临时停技挂载 + 伤害后继臂」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxtingwei(3263091739) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

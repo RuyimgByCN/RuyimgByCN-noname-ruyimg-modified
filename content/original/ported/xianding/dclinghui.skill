@@ -1,0 +1,7 @@
+// 灵慧：结束阶段满足当前回合为自己或本回合有人进入濒死时，观看顶三；可使用其中一张，
+// 再随机获得一张仍在处理区/弃牌堆的剩余牌，其余按原相对顺序置于牌堆顶。
+skill dclinghui(2581852991) {
+  trigger phase_end owner_alive optional {
+    effect resolve_bailingyun(self, 0);
+  }
+}

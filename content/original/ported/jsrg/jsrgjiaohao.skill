@@ -1,0 +1,22 @@
+// jsrgjiaohao（骄豪）：①其他角色的出牌阶段限一次。其可以将手牌中的一张装备牌置于你的装备区。②准备阶段，你获得X张【影】（X为你空置装备栏数的一半，向上取整）。
+// 实现（②段，jsrg 影族切片 1）：`trigger phase_prepare owner_is_target` forced →
+// `if empty_equip_slots(self) > 4 { gain 3 } else { if > 2 { gain 2 } else { if > 0 { gain 1 } } }`
+// （ceil(空栏/2) 的无除法 if 链；empty_equip_slots 含宝物栏共 5）→
+// gain_shadow_cards(self, n, self_skill)（ABI 660）。
+// 近似（未建模①段）：他人将装备置入你的装备区需 per-kind 装备转移原语。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgjiaohao(3011975358) {
+  trigger phase_prepare owner_is_target {
+    if empty_equip_slots(self) > 4 {
+      effect gain_shadow_cards(self, 3, self_skill);
+    } else {
+      if empty_equip_slots(self) > 2 {
+        effect gain_shadow_cards(self, 2, self_skill);
+      } else {
+        if empty_equip_slots(self) > 0 {
+          effect gain_shadow_cards(self, 1, self_skill);
+        }
+      }
+    }
+  }
+}

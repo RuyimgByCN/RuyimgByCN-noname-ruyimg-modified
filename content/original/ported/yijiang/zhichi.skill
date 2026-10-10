@@ -1,0 +1,7 @@
+// 智迟（陈宫）：锁定技，当你在回合外受到伤害后，获得"智迟2"直到当前回合结束或下个回合开始。
+// 旧JS含addTempSkill("zhichi2", ["phaseAfter", "phaseBefore"])。DSL以add_skill_until_turn_end近似。
+skill zhichi(3847600678) locked {
+    trigger damage owner_alive_not_target {
+        effect add_skill_until_turn_end(self, 3197261303);
+    }
+}

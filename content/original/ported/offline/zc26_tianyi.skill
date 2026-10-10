@@ -1,0 +1,5 @@
+// zc26_tianyi（锁定技/主动技(phaseUse)/触发技）：锁定技, player:card_used, 主动(phaseUse), 需拼点, 摸牌, 加技能, 含子技能, 异步。
+skill zc26_tianyi(2240436799) locked {
+  trigger card_used always {
+  }
+}

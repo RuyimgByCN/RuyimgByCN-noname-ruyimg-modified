@@ -1,0 +1,8 @@
+// 忿肆（曹丕）：准备阶段，可选一名其他角色并对其造成 1 点伤害。
+// 旧 JS 为锁定技且目标须体力不小于你、全场无体力不小于你的角色时改为对自己造成 1 点伤害
+// ——目标约束与自伤分支省略（无“体力≥你”过滤器），已注明。
+skill fensi(4137633788) {
+  trigger phase_begin owner_is_target optional {
+    effect choose_other_damage(self, 1);
+  }
+}

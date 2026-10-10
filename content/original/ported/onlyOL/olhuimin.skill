@@ -1,0 +1,7 @@
+// 惠民：出牌阶段可选择任意名手牌数不大于体力值的角色各摸1张；
+// 然后根据摸牌后手牌超体力值的角色数增加手牌上限。旧 JS 的「多目标摸牌+手牌上限递增标记」无对应原语，以下给空定义。
+skill olhuimin(2930635545) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olhuimin 含真实规则体（enable、usable、selectTarget 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

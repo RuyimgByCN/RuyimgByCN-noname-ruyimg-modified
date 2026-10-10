@@ -1,0 +1,5 @@
+// tyfenwei：音效名:fenwei, 觉醒技, global:card_targeted, 需选择目标, 二选一, 失去体力, 异步。
+skill tyfenwei(4119744962) {
+  trigger card_targeted owner_alive {
+  }
+}

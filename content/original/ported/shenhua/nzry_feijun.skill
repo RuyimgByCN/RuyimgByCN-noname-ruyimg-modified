@@ -1,0 +1,21 @@
+// 飞军（王平）：出牌阶段限一次，你可以弃置一张手牌或装备区里的牌，然后选择一项：
+// ①令一名手牌数大于你的角色交给你一张牌；②令一名装备区内牌数大于你的角色弃置一张
+// 装备牌。若两项均可执行则你二选一。
+// 旧 JS 仅作语义证据；分支可用性、目标约束与赠予/弃置由 resolve_nzry_feijun 权威
+// 状态机校验（ABI 526）；目标首次被选时置兵略旗标，出牌阶段结束时由 nzry_binglve
+// 摸两张牌（旧 JS 紧随飞军结算，阶段末结算为文档化近似）。
+skill nzry_feijun(2410819466) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect resolve_nzry_feijun(self);
+  }
+}
+
+// 兵略（王平）：锁定技，当你发动【飞军】选择一名此前未选择过的角色时，你摸两张牌。
+// 以回合旗标 + phase_play_end 触发表达（旧 JS 的自定义 feijunAfter 事件，结算时机
+// 阶段末为文档化近似）。
+skill nzry_binglve(3525767842) locked {
+  trigger phase_play_end owner_is_target_feijun_new_target {
+    effect draw_cards(self, 2);
+  }
+}

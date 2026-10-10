@@ -1,0 +1,32 @@
+// 3D精选 甄宓「淼形/浮世」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddmiaoxing(505834181) locked {
+  modifier initial_hand_count multiply 3;
+  trigger game_started owner_alive {
+    effect resolve_ddd_zhenji(self, 0);
+  }
+  trigger phase_draw_end owner_is_target {
+    effect resolve_ddd_zhenji(self, 1);
+  }
+}
+
+// 两组隐藏“水相”使用独立技能牌堆；仅作为稳定区域定义，不授予规则。
+// 上游（archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3569+）：
+// dddmiaoxing_1/_2 仅作为 addToExpansion 的 gaintag 区域名（getExpansions/countExpansions），
+// 无 skill def 规则面；全部行为已由 dddmiaoxing/dddfushi 的 resolve_ddd_zhenji 自定义效果表达。
+skill dddmiaoxing_1(919529013) locked non_gainable {
+  // INTENTIONAL_EMPTY_NOOP: 水相 1 号区域标记；无规则面。
+  modifier hand_limit add 0;
+}
+skill dddmiaoxing_2(2949101455) locked non_gainable {
+  // INTENTIONAL_EMPTY_NOOP: 水相 2 号区域标记；无规则面。
+  modifier hand_limit add 0;
+}
+
+skill dddfushi(1483827339) {
+  trigger card_resolved owner_alive_source_basic_dddfushi_available optional {
+    effect resolve_ddd_zhenji(self, 2);
+  }
+  trigger card_responded owner_alive_source_basic_dddfushi_available optional {
+    effect resolve_ddd_zhenji(self, 2);
+  }
+}

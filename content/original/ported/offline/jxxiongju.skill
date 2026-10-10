@@ -1,0 +1,5 @@
+// jxxiongju：锁定技, player:game_started, global:phaseBefore, global:gameDrawBegin, 回复体力, 异步。
+skill jxxiongju(2298959628) {
+  trigger game_started owner_alive {
+  }
+}

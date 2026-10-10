@@ -1,0 +1,7 @@
+// 军略：每造成或受到一点伤害，获得一枚“军略”。
+skill nzry_junlve(3829050927) locked {
+  trigger damage owner_is_source_or_target {
+    // Stable positive i32 mark ID derived from the skill definition ID.
+    effect add_mark(self, 1681567279, event_amount);
+  }
+}

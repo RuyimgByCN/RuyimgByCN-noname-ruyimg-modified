@@ -1,0 +1,5 @@
+// goblin_feisheng：锁定技, global:phaseEnd, 异步。
+skill goblin_feisheng(2886293798) {
+  trigger phase_any_end owner_alive {
+  }
+}

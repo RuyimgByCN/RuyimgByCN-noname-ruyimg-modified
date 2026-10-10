@@ -1,0 +1,12 @@
+// 3D精选 吴质「灵涌/虚孝」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddlingyong(2946205848) {
+  trigger phase_any_skipped owner_alive optional {
+    effect resolve_ddd_wuzhi(self, 0, 0);
+  }
+}
+
+skill dddxuxiao(3539713105) {
+  trigger cards_moved owner_alive_discarded_black_basic_to_discard {
+    effect resolve_ddd_wuzhi(self, 0, 10);
+  }
+}

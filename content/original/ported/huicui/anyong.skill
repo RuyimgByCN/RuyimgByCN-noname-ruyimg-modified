@@ -1,0 +1,7 @@
+// anyong：造成伤害。
+skill anyong(4291071501) {
+  trigger damage owner_alive optional {
+    // 近似：造成1点伤害
+    effect choose_other_damage(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 典军（oldianjun）：锁定技。回合结束时，你受到1点无来源伤害（以体力流失近似）；
+// 「然后执行一个额外的出牌阶段」需回合中阶段插入原语（引擎仅有回合开始插入原语），未建模。
+skill oldianjun(2275218678) locked {
+  trigger phase_end owner_is_target {
+    effect lose_hp(self, 1);
+  }
+}

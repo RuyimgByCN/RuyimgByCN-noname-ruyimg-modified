@@ -1,0 +1,5 @@
+// tyqixi：音效名:qixi, player:card_used, 含子技能, 异步。
+skill tyqixi(4147593519) {
+  trigger card_used owner_alive {
+  }
+}

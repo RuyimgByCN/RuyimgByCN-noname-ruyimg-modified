@@ -1,0 +1,17 @@
+// 祁县（pxqixian）：每回合限一次，你可以重铸一张装备牌（置入弃牌堆），视为
+// 使用一张【杀】或【过河拆桥】。
+// 上游 (sp/skill.js pxqixian L1179)：enable chooseToUse usable 1；chooseButton
+// sha|guohe；backup filterCard = 装备牌可重铸；viewAs 转化使用。
+// 实现（2026-09-10 第二百三十六批·专属 host 状态机第二件，dcbingji/ABI 692
+// 工艺复用）：active play_phase targets 0 0 → resolve_pxqixian(self, self_skill)
+// （ABI 693 / tag 716 / 7 槽 Custom 续体 Cont 301 四阶段：牌种双选→重铸素材
+// 选择（手牌+装备区装备牌）→目标选择→素材置入弃牌堆 + 物化虚拟牌
+// play_as_kind(ignore_use_count=true)）。
+// 近似（登记债）：①sha/guohe 使用合法性按「其他存活角色」宽口径（上游走
+// chooseToUse 通用合法性）；②重铸可否（canRecast）校验未建模（所有装备牌
+// 视为可重铸）。
+skill pxqixian(2340360569) {
+  active play_phase uses_per_turn 1 targets 0 0 {
+    effect resolve_pxqixian(self, self_skill, 0, 0);
+  }
+}

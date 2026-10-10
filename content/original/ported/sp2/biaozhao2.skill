@@ -1,0 +1,20 @@
+// 表召·应（SP张鲁）：任意角色弃置与「表」同花色同点数的牌时，将「表」交给
+// 该弃牌角色，你失去 1 点体力。
+// 上游 (sp2/skill.js biaozhao2 L14019)：trigger global [loseAsyncAfter,
+// loseAfter, cardsDiscardAfter] forced；filter getExpansions("biaozhao") 非空
+// 且弃牌中有与「表」同花色同点数者；content 若为一般弃置则弃牌者获得「表」，
+// 否则「表」入弃牌堆；player.loseHp()。
+// 实现（2026-09-13 第二百五十九批·表召族收官，ADR 0641 §8.48）：新参数化
+// 过滤器 owner_alive_discard_matches_own_pile_card_3640810944（5 点注册零
+// ABI：cards_moved→弃牌堆 + 弃牌中含与「表」堆首张同花色同点数者）+ 单发
+// 机器 resolve_biaozhao2(self, self_skill, event_player)（ABI 709 / tag 732，
+// quanjia 精简模板）：机内再校验堆非空 → 「表」交予弃牌者（无弃牌者时入
+// 弃牌堆）→ owner 失去 1 点体力。
+// 近似（登记债）：①上游区分「一般弃置→弃牌者获得」与「其他路径→表入弃牌
+// 堆」两分支，本实现统一为交予弃牌者（来源不可考时入弃牌堆）；②非一般
+// 弃置路径的 loseHp 同样触发（上游口径一致 ✓）。
+skill biaozhao2(3118576324) {
+  trigger cards_moved owner_alive_discard_matches_own_pile_card_3640810944 {
+    effect resolve_biaozhao2(self, self_skill, event_player);
+  }
+}

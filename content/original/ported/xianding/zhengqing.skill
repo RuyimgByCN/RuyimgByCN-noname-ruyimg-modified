@@ -1,0 +1,7 @@
+// 争擎（zhengqing）：锁定技，每轮结束时，上一轮造成伤害最多的角色获得等量「争擎」标记；
+// 若该角色是你且伤害量破纪录：你摸等量牌（最多5张）；否则你与目标各摸一张牌。
+// 旧 JS 的「全局伤害历史统计」「最高伤害者判定」「破纪录检测」无对应原语，未建模。
+skill zhengqing(2472262557) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

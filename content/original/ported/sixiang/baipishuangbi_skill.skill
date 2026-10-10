@@ -1,0 +1,7 @@
+// 白毦双匕（装备技能）：使用【杀】指定异性目标时，若手牌数为0，则此【杀】基础伤害+1。
+// 旧 JS 依赖装备技能绑定 (equipSkill)、异性判定 (differentSexFrom)、useCardToPlayered 事件，均无 DSL 对应原语，无法建模。
+skill baipishuangbi_skill(4065809231) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

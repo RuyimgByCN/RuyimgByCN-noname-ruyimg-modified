@@ -1,0 +1,8 @@
+// 扶乱：旧 JavaScript 只作语义参考，运行时不加载或执行旧代码。
+skill spfuluan(2671318114) {
+  active play_phase uses_per_turn 1 targets 1 1 in_attack_range select_he 3 3 allow_cancel same_suit {
+    effect discard_selected(self);
+    effect turn_over(event_source);
+    effect add_skill_until_turn_end(self, 4252815092);
+  }
+}

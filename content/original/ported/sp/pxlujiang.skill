@@ -1,0 +1,33 @@
+// 庐江（pxlujiang，州郡技能）：当你获得此技能后，你可以与一名角色拼点，
+// 拼点赢的角色摸两张牌。
+// 上游 (sp/skill.js:2703)：trigger player:changeSkillsAfter；filter = addSkill 含本技且
+// 存在可拼点角色；cost = chooseTarget(canCompare)；content = chooseToCompare(target) →
+// winner.draw(2)。
+// 实现：skill_added + owner_skill_added_self_3832025639 → 可选确认 →
+// choose_hand_compare(self, 1378056785, 1747940174)：拼点胜者获得 pxlujiang_win
+// （hand_compare_finished 时摸两张并移除自身）、败者获得 pxlujiang_lose（空结算、
+// 移除自身）——胜者可能是对方，摸牌归属与上游「赢的角色摸两张」一致；子技过滤器用
+// owner_hand_compare_finished_participant（发起者/被拼者皆可触发——既有
+// owner_hand_compare_participant 只匹配 Started 事件、shuimeng_win 的 owner_is_target 只覆盖发起者持技情形，故新增 Finished 参与者过滤器）。
+// 子技 def id 为合成铸造（blake2b(name,4B)，shuimeng_win 同工艺），已查重不与
+// catalog/sp npack 冲突。
+skill pxlujiang(3832025639) {
+  trigger skill_added owner_skill_added_self_3832025639 optional {
+    effect choose_hand_compare(self, 1378056785, 1747940174);
+  }
+}
+
+// 庐江拼点胜者结算：摸两张牌，然后移除本结算技。
+skill pxlujiang_win(1378056785) {
+  trigger hand_compare_finished owner_hand_compare_finished_participant {
+    effect draw_cards(self, 2);
+    effect remove_skill(self_skill);
+  }
+}
+
+// 庐江拼点败者结算：无效果，仅移除本结算技。
+skill pxlujiang_lose(1747940174) {
+  trigger hand_compare_finished owner_hand_compare_finished_participant {
+    effect remove_skill(self_skill);
+  }
+}

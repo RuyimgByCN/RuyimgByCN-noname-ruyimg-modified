@@ -1,0 +1,9 @@
+// 绮胄（bingshi 势贺齐 potqizhou）：你判定区/装备区变动后，将一名角色的一张手牌
+// 标记为「应机牌」（若为【杀】你于此后可使用之）。
+// 上游 (bingshi/skill.js potqizhou)：trigger addJudgeAfter/equipAfter → chooseTarget
+// + choosePlayerCard → target.addGaintag(cards, "potshanxi_tag")。
+// INTENTIONAL_EMPTY_NOOP: 「gaintag 应机牌标记」机制族缺口（同闪袭）；2026-09-09
+// 上游增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill potqizhou(2833735105) {
+  modifier hand_limit add 0;
+}

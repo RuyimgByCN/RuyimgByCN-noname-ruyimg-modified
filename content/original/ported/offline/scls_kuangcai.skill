@@ -1,0 +1,4 @@
+// scls_kuangcai：音效名:kuangcai, player:useCard1, player:useCard1, 摸牌, 加技能, 含子技能, 异步。
+skill scls_kuangcai(2235882514) {
+  modifier hand_limit add 1;
+}

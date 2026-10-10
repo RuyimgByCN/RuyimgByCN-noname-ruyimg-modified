@@ -1,0 +1,10 @@
+// 恩怨2（OL版）：受到伤害后，令伤害来源交给你一张红色手牌或失去 1 点体力。
+// 实现：同 xinenyuan2（本批）——`choose_give_hand_equip_to_event_player(event_source)`，
+// 来源选一张手牌/装备交给受伤的自己。
+// 近似：不限定红色/仅手牌；「或失去 1 点体力」分支未建模（无牌时静默跳过）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olenyuan2(2463972895) {
+  trigger damage owner_is_target optional {
+    effect choose_give_hand_equip_to_event_player(event_source);
+  }
+}

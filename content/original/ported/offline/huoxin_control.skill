@@ -1,0 +1,5 @@
+// huoxin_control：音效名:huoxin, 觉醒技, 锁定技, global:phaseBeginStart, 加技能, 异步。
+skill huoxin_control(3998820237) {
+  trigger phase_begin owner_alive {
+  }
+}

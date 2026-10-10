@@ -1,0 +1,6 @@
+// zombieganran：phase_end时摸牌。
+skill zombieganran(3446968431) {
+  trigger phase_end owner_alive  {
+    effect draw_cards(self, 1);
+  }
+}

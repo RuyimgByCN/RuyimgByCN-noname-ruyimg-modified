@@ -1,0 +1,5 @@
+// scls_shejian：音效名:shejian, player:phase_discard_end, 需选择目标, 异步。
+skill scls_shejian(2262025281) {
+  trigger phase_discard_end owner_alive {
+  }
+}

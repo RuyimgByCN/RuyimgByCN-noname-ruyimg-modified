@@ -1,0 +1,7 @@
+// 扫庭（幻孙策）：转换技，伤害牌当【决斗】/【酒】使用；指定已受伤角色则摸一张。
+// 近似：同时提供伤害牌转决斗与转酒（转换技阴阳切换未建模）；受伤目标摸牌未建模。
+// 伤害牌过滤器以 any 近似。
+skill twsaoting(4069321182) {
+  view_as juedou play_phase any from hand_equip;
+  view_as jiu play_phase any from hand_equip;
+}

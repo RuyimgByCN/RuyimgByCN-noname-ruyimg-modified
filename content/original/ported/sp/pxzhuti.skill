@@ -1,0 +1,16 @@
+// 朱提（pxzhuti，州郡技能）：每回合限一次。当你受到属性伤害时，你改为回复等量体力。
+// 上游 (sp/skill.js:2860)：trigger player:damageBegin4；filter = hasNature()；
+// usable: 1；forced；content = trigger.cancel() + recover(trigger.num)。
+// 实现：damage_before + owner_target_fire / owner_target_thunder 双触发 → 可选确认 →
+// prevent_current_damage() + recover_hp(self, event_amount)。
+// 与上游差异：「每回合限一次」以可选触发近似（可放弃）；属性伤害以火焰/雷电两路覆盖。
+skill pxzhuti(2771412426) {
+  trigger damage_before owner_target_fire optional {
+    effect prevent_current_damage();
+    effect recover_hp(self, event_amount);
+  }
+  trigger damage_before owner_target_thunder optional {
+    effect prevent_current_damage();
+    effect recover_hp(self, event_amount);
+  }
+}

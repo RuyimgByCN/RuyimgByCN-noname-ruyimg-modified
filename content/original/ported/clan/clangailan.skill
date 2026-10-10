@@ -1,0 +1,7 @@
+// 盖缆（族荀彧/族荀攸）：锁定技。游戏开始时，若牌堆无「浑天仪」，将方片1/3/10/12四张「浑天仪」洗入牌堆。你的准备阶段，若牌堆有浑天仪，将其置入装备区。
+// 旧 JS 的「牌堆内容检测」「自定义宝物创建」「准备阶段自动装备」无对应原语。
+// 空定义：需 expansion 支持牌堆内容检测和自定义宝物。
+skill clangailan(3482004496) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

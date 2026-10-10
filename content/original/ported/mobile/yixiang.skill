@@ -1,0 +1,16 @@
+// yixiang（义襄）：每名角色的回合限一次，当你成为一名角色使用牌的目标后，
+// 若该角色的体力值大于你的体力值，你可以随机获得牌堆里的一张你没有的基本牌。
+// 上游 (mobile/skill.js yixiang)：trigger target useCardToTargeted；每名角色
+// 回合限一次；filter source.hp > player.hp；content 随机获得牌堆中一张
+// 自己没有的基本牌（基本牌=杀/闪/桃/酒）。
+// 实现（2026-09-15 第二百八十八批·随机获得族状态机，ADR 0641 §8.73）：
+// trigger card_targeted owner_is_target_source_hp_gt_owner_per_role_turn
+// optional → resolve_yixiang(self)（ABI 734 / tag 755，单发无续体）：
+// 搜索牌堆顶向下第一张自己没有的基本牌，直接移入手牌区。
+// 近似（登记债）：①"你没有的基本牌"以手牌中不存在的 kind 去重近似
+// （不按牌名去重）；②"每名角色的回合限一次"由 turn_fires==0 自然承载。
+skill yixiang(2667775149) {
+  trigger card_targeted owner_is_target_source_hp_gt_owner_per_role_turn optional {
+    effect resolve_yixiang(self);
+  }
+}

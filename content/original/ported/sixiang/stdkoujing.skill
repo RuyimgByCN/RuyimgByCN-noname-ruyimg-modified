@@ -1,0 +1,6 @@
+// 寇旌（牛金）：出牌阶段，可将任意张手牌当杀使用（无次数限制、无距离限制）。若此杀造成伤害，受伤角色可选择与你交换手牌。
+// 旧 JS 的「任意张牌当杀+无次数/无距离+造成伤害后交换手牌」需要 view_as up_to INF + modifier + 子技能事件链，无可对应的 DSL 完整建模。
+skill stdkoujing(4190580016) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

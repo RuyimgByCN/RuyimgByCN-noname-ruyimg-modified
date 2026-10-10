@@ -1,0 +1,6 @@
+// jdsbliangzhu：音效名:sbliangzhu, 需选择目标, 回复体力, 移出游戏, 异步。
+skill jdsbliangzhu(3985665409) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

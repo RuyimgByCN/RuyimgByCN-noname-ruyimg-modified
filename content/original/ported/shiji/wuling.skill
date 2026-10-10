@@ -1,0 +1,9 @@
+// 五灵（董卓系）：出牌阶段限两次，选择一名角色传授「五禽戏」。
+// 旧 JS 的「传授技能」无对应原语；以弃一张手牌并摸一张近似（传授未
+// 建模，已注明）。
+skill wuling(3913025730) {
+  active play_phase uses_per_turn 2 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

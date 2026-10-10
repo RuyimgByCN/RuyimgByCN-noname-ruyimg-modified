@@ -1,0 +1,9 @@
+// zhuangrong：觉醒技；锁定技；回复1体力；减体力上限；获技能。
+skill zhuangrong(3803860907) {
+  trigger phase_any_end owner_alive_not_target {
+    // 近似：条件「hp==1 || hand==1」的逻辑或未建模（DSL 无逻辑或，登记）；回复1点体力
+    effect recover_hp(self, 1);
+    // 近似：减少体力上限
+    effect change_max_hp(self, -1);
+  }
+}

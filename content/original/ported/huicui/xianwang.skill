@@ -1,0 +1,4 @@
+// xianwang：旧JS复杂效果。
+skill xianwang(3617033619) {
+  modifier hand_limit add 1;
+}

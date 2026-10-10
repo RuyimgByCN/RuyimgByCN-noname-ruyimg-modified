@@ -1,0 +1,10 @@
+// 齐心（刘协&曹节双头）：转换技，出牌阶段切换性别（刘协男↔曹节女），
+// 记录并切换体力值；濒死时可触发切换免死一次。
+// 旧 JS 使用了 zhuanhuanji（转换技）系统、性别切换、双体力槽记录、
+// 濒死拦截等复杂机制，DSL 无转换技/双体力/濒死免死原语，无法建模。
+// 空定义：需 expansion 支持 zhuanhuanji_state 与 dual_hp 原语。
+skill dcqixin(2245127572) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

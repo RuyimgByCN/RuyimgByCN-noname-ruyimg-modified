@@ -1,0 +1,4 @@
+// Skill leix4(177) - modifier distance variant
+skill leix4(177) {
+  modifier distance_from add -1;
+}

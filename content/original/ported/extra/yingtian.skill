@@ -1,0 +1,35 @@
+// 应天：势力数不超过二时觉醒，获得四项内部等价能力。
+skill yingtian(4275778563) {
+  trigger death owner_alive_group_count_at_most_2 {
+    effect add_skill(self, 3066580555);
+    effect add_skill(self, 2431815904);
+    effect add_skill(self, 2204719707);
+    effect add_skill(self, 2579407392);
+    effect remove_skill_by_def(self, 2877848391);
+    effect remove_skill(self_skill);
+  }
+}
+
+skill yingtian_effect(3066580555) locked {
+  modifier card_distance_unlimited override 1;
+}
+
+skill yingtian_guicai(2431815904) {
+  modifier judgment_rewrite_hand_equip add 1;
+}
+
+skill yingtian_wansha(2204719707) locked {
+  modifier tao_use_save_cancel_for_non_dying_others_during_owner_turn override 1;
+  trigger dying owner_alive_current_turn {
+    effect set_non_locked_skill_suppression(self, 1);
+  }
+  trigger dying_after owner_alive_current_turn {
+    effect set_non_locked_skill_suppression(self, 0);
+  }
+}
+
+skill yingtian_lianpo(2579407392) {
+  trigger turn_ended owner_alive_killed_this_turn optional {
+    effect resolve_shen_simayi(self, event_player, 0, 3085167840, 1);
+  }
+}

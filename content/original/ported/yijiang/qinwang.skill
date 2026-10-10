@@ -1,0 +1,8 @@
+// 勤王(旧版)主公技(曹操)：你可以将一张牌当【杀】使用或打出。使用后从下家起每名蜀势力角色可替你打出【杀】。
+// 旧JS涉及viewAs主公技、蜀势力角色轮询respond、jijiang标记等复杂逻辑。
+// 近似：用view_as表达转化杀，后续蜀势力代打逻辑因无轮询机制无法建模。
+skill qinwang(3711256687) lord_only {
+  // 近似：主公技，将任意可弃置牌当杀使用
+  view_as sha play_phase any from hand_equip up_to 1;
+  // 注：蜀势力代出杀的轮询逻辑无DSL原语，无法建模
+}

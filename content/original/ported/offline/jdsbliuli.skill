@@ -1,0 +1,5 @@
+// jdsbliuli：音效名:sbliuli, 锁定技, player:logSkill, player:phaseBegin, 加技能, 含子技能, 条件计数。
+skill jdsbliuli(3502414380) {
+  trigger phase_any_end owner_alive {
+  }
+}

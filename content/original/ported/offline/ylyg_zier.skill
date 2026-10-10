@@ -1,0 +1,6 @@
+// ylyg_zier：global:phaseBegin, global:phaseAnyCancelled, global:phaseAnySkipped, 加技能, 含子技能, 异步。
+skill ylyg_zier(3504485890) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

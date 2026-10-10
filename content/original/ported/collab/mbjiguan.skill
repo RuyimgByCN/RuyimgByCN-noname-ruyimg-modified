@@ -1,0 +1,9 @@
+// 骥冠：游戏开始时移出所有坐骑牌；手牌上限 +2。
+skill mbjiguan(2860585832) locked {
+  trigger game_started owner_alive {
+    effect remove_cards_by_kind(horse_off);
+    effect remove_cards_by_kind(horse_def);
+  }
+
+  modifier hand_limit add 2;
+}

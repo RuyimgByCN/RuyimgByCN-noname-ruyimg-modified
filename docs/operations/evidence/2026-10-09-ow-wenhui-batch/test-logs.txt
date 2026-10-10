@@ -1,0 +1,25 @@
+# U05 xianjian 第五切片测试日志（2026-10-09，温慧龙翔，规则 v145→v146）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 467 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v145 基线 466 +1 新增龙翔回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 55 passed; 0 failed（54 既有 + 1 新增 wenhui_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 147）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v145→146 入 canonical_hash
+——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- longxiang（shaBegin；target.hand > source.hand → randomGets(diff)）
+
+## 测试迭代记录
+- 差值口径：杀在结算区不计入来源手牌（初版差值 3 断言失败→对齐上游
+  countCards 后为 4）

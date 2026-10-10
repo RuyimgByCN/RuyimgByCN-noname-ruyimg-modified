@@ -1,0 +1,63 @@
+// 势魏延：忠傲 / 壮誓 / 饮战 / 狂骨（旧 JavaScript 仅作语义参考）。
+skill potzhongao(4200000559) {
+  trigger game_started owner_alive {
+    effect resolve_potweiyan(self, event_player, event_card, 0);
+  }
+  trigger death owner_is_source {
+    effect resolve_potweiyan(self, event_player, event_card, 1);
+  }
+  trigger phase_play owner_is_target {
+    effect resolve_potweiyan(self, event_player, event_card, 2);
+  }
+  trigger dying owner_is_target {
+    effect resolve_potweiyan(self, event_player, event_card, 3);
+  }
+}
+
+// 壮誓的发动选择由忠傲在出牌阶段开始时统一结算。
+skill potzhuangshi(4200000560) {
+  modifier hand_limit add 1;
+}
+
+skill potyinzhan(4200000561) locked {
+  trigger damage_before owner_source_sha_damage_before_potyinzhan_condition {
+    effect resolve_potweiyan(self, event_player, event_card, 7);
+  }
+  trigger sha_resolved owner_is_source {
+    effect resolve_potweiyan(self, event_player, event_card, 8);
+  }
+}
+
+skill potkuanggu(4200000562) {
+  trigger damage owner_source_damage_within_one {
+    effect resolve_potweiyan(self, event_player, event_card, 9);
+  }
+}
+
+skill potzhuangshi_direct(4200000563) locked {
+  modifier card_use_unrespondable(any) override 1;
+  modifier card_distance_unlimited override 1;
+  trigger card_used owner_is_source {
+    effect resolve_potweiyan(self, event_player, event_card, 4);
+  }
+  trigger phase_any_end owner_alive {
+    effect resolve_potweiyan(self, event_player, event_card, 6);
+  }
+}
+
+skill potzhuangshi_limit(4200000564) locked {
+  modifier card_use_unlimited override 1;
+  trigger card_used owner_is_source {
+    effect resolve_potweiyan(self, event_player, event_card, 5);
+  }
+  trigger phase_any_end owner_alive {
+    effect resolve_potweiyan(self, event_player, event_card, 6);
+  }
+}
+
+skill potkuanggu_limit(4200000565) locked {
+  modifier sha_use_limit add owner_skill_mark;
+  trigger phase_any_end owner_alive {
+    effect resolve_potweiyan(self, event_player, event_card, 6);
+  }
+}

@@ -1,0 +1,12 @@
+// olshuangxiong：刷新包技能。
+// 旧JS含: subSkill 等复杂原语，DSL未覆盖。
+// triggers: player:phaseDrawEnd
+// active: 出牌阶段主动技能
+// view_as: 视为使用牌
+// forced/locked: 锁定技
+// 含子技能
+skill olshuangxiong(4068138118) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olshuangxiong 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

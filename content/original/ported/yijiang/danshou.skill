@@ -1,0 +1,7 @@
+// 胆守（朱然）：出牌阶段弃牌发动，效果随本局已发动次数变化（1弃目标牌/2目标给牌/3伤害目标/4+双方摸牌）。
+// 旧 JS 的累计使用次数状态机+四阶段不同效果无对应原语，暂留空定义。
+skill danshou(3791125544) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

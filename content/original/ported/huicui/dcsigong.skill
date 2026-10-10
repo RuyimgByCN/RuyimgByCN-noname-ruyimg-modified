@@ -1,0 +1,7 @@
+// dcsigong：摸?牌；获临时技。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcsigong(3363716913) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

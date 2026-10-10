@@ -1,0 +1,9 @@
+// 求援（旧版·鲁肃）：其他角色使用杀时，可选择一名手牌不为0的其他角色，令其交给自己一张牌。
+// 若此牌不为闪，其成为此杀的额外目标。
+// 旧 JS 的继承 qiuyuan+额外过滤+chooseToGive+非闪加目标逻辑复杂，给卡→加杀目标是核心。
+// 以 choose_add_current_sha_target_within_distance 近似加目标，无给牌环节。
+skill oldqiuyuan(2388207031) {
+  trigger card_used owner_alive_not_target optional {
+    effect choose_add_current_sha_target_within_distance(self, event_card, 1);
+  }
+}

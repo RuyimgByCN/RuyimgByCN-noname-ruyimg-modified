@@ -1,0 +1,3 @@
+skill jishe2(3510775701) {
+  modifier hand_limit add -owner_skill_mark;
+}

@@ -1,0 +1,7 @@
+// 雀影（春秋赵襄）：手牌数小于体力上限时，获得一张【影】并视为使用杀或闪。
+// 近似：提供视为杀/闪；【影】与手牌<上限门控未建模。
+skill ymqueying(3876820895) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+  view_as shan response any from hand;
+}

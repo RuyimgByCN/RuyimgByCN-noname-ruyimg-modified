@@ -1,0 +1,7 @@
+// 贿生：每名伤害来源限一次。受到其他角色伤害前，可展示任意张手牌/装备牌；
+// 来源获得其中一张并防止伤害，或弃置等量手牌/装备牌。
+skill oldhuisheng(2369548046) {
+  trigger damage_before owner_is_target_other_source_alive_hand_equip_nonempty_oldhuisheng_unused optional {
+    effect resolve_oldhuisheng(self);
+  }
+}

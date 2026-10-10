@@ -1,0 +1,8 @@
+// 正鹏（的卢）：每回合结束时，择一满足条件（受伤/弃装备/回合外得牌）的角色，根据满足项数摸牌并失去体力。
+// 旧 JS 含多条件判定（judge函数）、标记载体、动态摸牌数、三条件全满时跨类型检索，DSL 无动态条件判定原语。
+// 近似为回合结束时摸1张牌。
+skill mbzhengpeng(3762605537) {
+  trigger phase_any_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

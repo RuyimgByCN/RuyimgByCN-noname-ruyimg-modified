@@ -1,0 +1,5 @@
+// peduomo：觉醒技, 限定技, player:dying, 加技能, 异步。
+skill peduomo(3046532937) {
+  trigger dying owner_alive {
+  }
+}

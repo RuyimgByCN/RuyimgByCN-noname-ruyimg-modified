@@ -1,0 +1,15 @@
+// 温仁（olwenren）：出牌阶段限一次，任选任意名目标，每名目标若没有手牌
+// 摸 1 张，若其手牌数不大于你再摸 1 张（可叠加，可不摸）。
+// 上游 (sp/skill.js 7894)：enable phaseUse + usable 1 + filterTarget true +
+// selectTarget [1, Infinity]；content 逐目标 num = !countCards("h") +
+// (countCards("h") <= player.countCards("h"))，await target.draw(num)。
+// 实现（2026-09-15 第二百九十二批·条件多目标摸牌状态机，ADR 0641 §8.76，
+// draw_selected_targets 工艺扩展）：resolve_olwenren(self)（ABI 736 /
+// tag 757，单发无续体）——目标按座位序去重，逐目标先判后摸；
+// uses_per_turn 1 表达 usable:1；vm 臂经 host.selected_targets() 注入目标。
+// 保真度：完整。
+skill olwenren(4257407239) {
+  active play_phase uses_per_turn 1 targets 1 255 {
+    effect resolve_olwenren(self);
+  }
+}

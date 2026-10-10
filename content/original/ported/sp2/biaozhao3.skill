@@ -1,0 +1,21 @@
+// 表召·归（SP张鲁）：准备阶段，若武将牌上有「表」，弃置之，令一名角色将其
+// 手牌摸至全场最大手牌数（至多补 5 张）并回复 1 点体力。
+// 上游 (sp2/skill.js biaozhao3 L14062)：trigger player phaseZhunbeiBegin
+// forced；filter getExpansions("biaozhao") 非空；content loseToDiscardpile
+// 首张「表」→ num=全场最大手牌数 → chooseTarget（可含自己、可取消）→
+// draw(min(num-手牌,5))（>0 时）→ recover(1)。
+// 实现（2026-09-12 第二百五十七批·表召族消费面清偿，批 216 登记债清偿，
+// qiantun 分段模板复用）：trigger phase_prepare owner_is_target forced +
+// body 级 skill_pile_count 门控 → resolve_biaozhao3(self, self_skill)
+// （ABI 707 / tag 730 / Cont 311 两段）：机内弃置首张「表」（跨技堆
+// BIAOZHAO_PILE_DEF=3640810944，shuliang 跨技字面量先例）→ 机内计算全场
+// 最大手牌数 → SelectTargets 可取消 → 摸至 min(差值,5) + 回复 1。
+// 近似（登记债）：①仅弃置/结算首张「表」（上游 expansion 单张门控同口径 ✓）；
+// ②知情环节以可取消 SelectTargets 表达（取消=不发动 ✓）。
+skill biaozhao3(2299382536) {
+  trigger phase_prepare owner_is_target {
+    if skill_pile_count(self, 3640810944) > 0 {
+      effect resolve_biaozhao3(self, self_skill);
+    }
+  }
+}

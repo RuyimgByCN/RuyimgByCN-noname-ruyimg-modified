@@ -1,0 +1,6 @@
+// longyi：音效名:longyi, 锁定技, player:card_used, player:respond, 主动(multi), 摸牌, 含子技能。
+skill longyi(2616390256) locked {
+  trigger card_used always {
+    effect draw_cards(self, 1);
+  }
+}

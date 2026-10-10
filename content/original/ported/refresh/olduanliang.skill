@@ -1,0 +1,12 @@
+// 断粮（refresh OL徐晃 olduanliang）：你可以将一张黑色非锦囊牌当做【兵粮寸断】
+// 使用。若你于当前回合内未造成过伤害，则你使用【兵粮寸断】无距离限制。
+// 上游 (refresh/skill.js olduanliang)：enable chooseToUse；viewAs bingliang；
+// filterCard = 黑色非锦囊（position hes）；mod targetInRange 条件免距离。
+// 实现（2026-09-09 第一百八十五批，零新原语）：view_as bingliang play_phase
+// black_basic_equip from hand_equip（shenhua duanliang 同款源过滤器，非锦囊
+// = 基本+装备 精确匹配）。
+// 近似（登记债）：「本回合未造成伤害时无距离限制」的条件距离 mod 未建模
+// （回合伤害历史值源缺口）。
+skill olduanliang(3305084926) {
+  view_as bingliang play_phase black_basic_equip from hand_equip;
+}

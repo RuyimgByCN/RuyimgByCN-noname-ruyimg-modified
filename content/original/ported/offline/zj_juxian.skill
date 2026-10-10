@@ -1,0 +1,6 @@
+// zj_juxian：player:damage_before, player:loseBefore, 失去体力, 异步。
+skill zj_juxian(3667884213) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

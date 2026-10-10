@@ -1,0 +1,13 @@
+// 蛮智（孟优）：准备阶段或结束阶段开始时，你可选择一项并选择一名其他角色：
+// ①令其交给你至多两张牌，然后其视为使用一张无距离限制的【杀】；
+// ②你获得其区域内至多两张牌，然后交给其等量牌，若如此做你摸一张牌。
+// 每项每回合限一次（技能 mark 记录）。旧 JS 仅作语义证据；双分支结算由
+// resolve_dcmanzhi 权威状态机校验（ABI 475）。
+skill dcmanzhi(4194306664) {
+  trigger phase_prepare owner_is_target {
+    effect resolve_dcmanzhi(self);
+  }
+  trigger phase_end owner_is_target {
+    effect resolve_dcmanzhi(self);
+  }
+}

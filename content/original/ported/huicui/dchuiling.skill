@@ -1,0 +1,5 @@
+// dchuiling：锁定技；回复1体力；弃牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dchuiling(2999617548) {
+  modifier hand_limit add 1;
+}

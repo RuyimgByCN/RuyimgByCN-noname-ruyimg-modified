@@ -1,0 +1,7 @@
+// dcjianzhuan：锁定技；摸?牌；弃牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcjianzhuan(4105280604) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

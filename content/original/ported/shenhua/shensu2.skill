@@ -1,0 +1,12 @@
+// 神速·二（夏侯渊）：出牌阶段开始时，可弃置一张装备牌并跳过出牌阶段，视为对攻击
+// 范围内一名其他角色使用一张【杀】。
+// 旧 JS 仅作语义证据；弃牌、阶段跳过与虚拟【杀】由权威状态机校验。
+// 注：旧 JS 要求弃置的必须是装备牌（filterCard type==equip），DSL 以 discard_hand_equip(1)
+// 放宽为任意手牌/装备牌，属文档化近似。
+skill shensu2(3236580224) {
+  trigger phase_play owner_is_target optional {
+    effect discard_hand_equip(self, 1);
+    effect skip_current_phase(self);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

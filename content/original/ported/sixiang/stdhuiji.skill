@@ -1,0 +1,7 @@
+// 挥冀（羊祜）：使用杀时可额外选择至多两名合法目标；新增目标可在需要闪时替原始目标响应闪。
+// 旧 JS 的「新增目标替响应闪」的 chooseToUse 代理机制无对应 DSL 原语，未建模。以 choose_add_current_sha_target 近似保留增加杀目标部分。
+skill stdhuiji(3070963503) {
+  trigger card_used owner_source_sha {
+    effect choose_add_current_sha_target(self, event_card);
+  }
+}

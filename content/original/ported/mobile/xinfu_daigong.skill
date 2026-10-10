@@ -1,0 +1,8 @@
+// xinfu_daigong（怠攻）：每回合限一次。当你受到伤害时，你可以展示所有手牌，然后令伤害来源选择一项：交给你一张与你所有手牌花色均不相同的一张牌，或防止此伤害。
+// 未建模：效果逻辑复杂，无合适 DSL 原语匹配。
+skill xinfu_daigong(3775930981) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinfu_daigong（skill.js:30592）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：受伤后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

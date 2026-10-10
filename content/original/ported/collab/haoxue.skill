@@ -1,0 +1,21 @@
+// 好学（好学吕蒙）：锁定技。出牌阶段内，你获得牌后回复 1 点体力；
+// 出牌阶段外，你弃置牌后失去 1 点体力。
+// 上游 (collab/skill.js haoxue)：forced；trigger player gainAfter/loseAfter +
+// global loseAsyncAfter；isPhaseUsing → getg(player).length && isDamaged → recover；
+// else type==discard → getl(player).cards2.length → loseHp。
+// 实现（2026-09-03 第一百四十七批·零新原语真实语义重写）：
+// 获得臂按事件源拆双臂（cards_drawn 摸牌 / cards_moved 入手牌区——触发注册按事件键
+// 路由，单一 cards_moved 臂收不到 CardsDrawn）+ cards_moved 流失臂；过滤器
+// owner_gained_cards_during_play_phase_wounded / owner_discarded_outside_play_phase
+// 本批注册。完整建模，无残差。
+skill haoxue(4229967180) {
+  trigger cards_drawn owner_gained_cards_during_play_phase_wounded {
+    effect recover_hp(self, 1);
+  }
+  trigger cards_moved owner_gained_cards_during_play_phase_wounded {
+    effect recover_hp(self, 1);
+  }
+  trigger cards_moved owner_discarded_outside_play_phase {
+    effect lose_hp(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// 锁定助手保存各目标累计值；下一张杀统一消费，回合结束由临时技能生命周期兜底移除。
+skill mbjinzu_effect(4156343864) locked {
+  trigger card_used owner_source_sha {
+    effect apply_mbjinzu_next_sha(self, event_card);
+  }
+}

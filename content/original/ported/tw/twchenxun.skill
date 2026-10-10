@@ -1,0 +1,15 @@
+// 陈勋：每轮可连续对不同角色使用虚拟【决斗】；目标受伤则摸牌并可继续，否则失去体力。
+skill twchenxun(4060298774) {
+  trigger phase_begin owner_alive_twchenxun_round_unprompted {
+    effect resolve_twchenxun(self, self, event_card, 0);
+  }
+  trigger duel_resolved owner_alive_tracked_twchenxun_duel_target_damaged {
+    effect resolve_twchenxun(self, event_source, event_card, 1);
+  }
+  trigger duel_resolved owner_alive_tracked_twchenxun_duel_target_not_damaged {
+    effect resolve_twchenxun(self, event_source, event_card, 2);
+  }
+  trigger cards_moved owner_alive_tracked_twchenxun_card_left_processing {
+    effect resolve_twchenxun(self, event_player, event_card, 2);
+  }
+}

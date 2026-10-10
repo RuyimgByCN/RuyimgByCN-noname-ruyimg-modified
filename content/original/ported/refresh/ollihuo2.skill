@@ -1,0 +1,8 @@
+// ollihuo2：刷新包技能。
+// triggers: player:useCard2
+skill ollihuo2(3928799172) {
+    // 近似：旧JS事件 useCard2 → DSL事件 useCard2
+    trigger card_used owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

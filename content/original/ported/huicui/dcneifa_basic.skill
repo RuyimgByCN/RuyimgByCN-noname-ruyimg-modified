@@ -1,0 +1,4 @@
+// dcneifa_basic：旧JS复杂效果。
+skill dcneifa_basic(2629087093) {
+  modifier hand_limit add 1;
+}

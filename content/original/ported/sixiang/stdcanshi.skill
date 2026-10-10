@@ -1,0 +1,18 @@
+// 残蚀：摸牌数改为受伤角色数（至少一）；归命生效时还计其他吴势力角色。
+skill stdcanshi(2290683272) locked {
+  trigger phase_draw owner_is_target {
+    effect add_skill(self, 2335115700);
+  }
+}
+
+skill stdcanshi_effect(2335115700) locked {
+  modifier draw_count override alive_wounded_or_guiming_wu_count_min_one;
+
+  trigger card_targeted owner_source_sha_or_ordinary_trick_target_wounded_has_discardable_hand_equip {
+    effect discard_one_hand_or_equip(self);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

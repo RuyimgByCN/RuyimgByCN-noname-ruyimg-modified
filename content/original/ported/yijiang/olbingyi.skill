@@ -1,0 +1,6 @@
+// 旧 JS 仅作语义证据：弃置失牌后每阶段至多接受一次，展示当前全部手牌；同色时自己与至多手牌数名其他角色各摸一张。
+skill olbingyi(2703324677) {
+  trigger cards_moved owner_discarded_has_hand_once_per_phase optional {
+    effect reveal_uniform_hand_draw_self_choose_others(self);
+  }
+}

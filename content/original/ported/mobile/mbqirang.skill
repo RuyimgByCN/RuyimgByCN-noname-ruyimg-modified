@@ -1,0 +1,6 @@
+// mbqirang（祈禳）：当有装备牌进入你的装备区时，你可从牌堆中获得一张锦囊牌，你使用此锦囊牌时无距离限制并摸一张牌。
+skill mbqirang(3179868538) {
+  trigger character_state_changed owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

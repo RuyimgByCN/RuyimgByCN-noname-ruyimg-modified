@@ -1,0 +1,5 @@
+// ruiji_moli：觉醒技, global:phaseBefore, source:damage_before, player:removeMark, 加技能, 含子技能, 异步。
+skill ruiji_moli(3803772819) {
+  trigger damage_before owner_alive optional {
+  }
+}

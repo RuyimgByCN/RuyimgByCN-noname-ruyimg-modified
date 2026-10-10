@@ -1,0 +1,13 @@
+// 破军：旧 JS 语义重写；【杀】造成伤害后，令受伤角色按当前体力（至多 5）摸牌并翻面。
+skill pojun(2171911670) {
+  trigger damage owner_source_sha optional {
+    if 0 < hp(event_player) {
+      if hp(event_player) < 6 {
+        effect draw_cards(event_player, hp(event_player));
+      } else {
+        effect draw_cards(event_player, 5);
+      }
+    }
+    effect turn_over(event_player);
+  }
+}

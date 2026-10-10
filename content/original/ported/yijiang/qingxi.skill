@@ -1,0 +1,5 @@
+skill qingxi(3641969972) {
+  trigger damage_before owner_source_sha_has_weapon optional {
+    effect choose_target_discard_weapon_range_hand_or_increase_damage(self, event_player);
+  }
+}

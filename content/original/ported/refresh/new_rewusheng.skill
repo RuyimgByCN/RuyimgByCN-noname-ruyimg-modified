@@ -1,0 +1,7 @@
+// 界武圣：红色个人区域牌可当【杀】使用或打出；方片【杀】无距离限制。
+// 国战「授钺」对五虎技能的增强由模式包叠加，不在通用武将包硬编码。
+skill new_rewusheng(3038912803) {
+  view_as sha play_phase red from hand_equip_expansion;
+  view_as sha response red from hand_equip_expansion;
+  modifier card_distance_unlimited(sha_diamond) override 1;
+}

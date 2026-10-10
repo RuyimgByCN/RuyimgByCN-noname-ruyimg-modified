@@ -1,0 +1,6 @@
+// 旧潜袭：判定非红桃时，防止这次近距离逻辑【杀】伤害并令目标减一点体力上限。
+skill oldqianxi(3282621718) {
+  trigger damage_before owner_source_sha_target_alive_distance_le_one optional {
+    effect judge_prevent_damage_lose_max_hp_on_nonheart(self, event_player);
+  }
+}

@@ -1,0 +1,10 @@
+// jsrgshishou（恃守）：锁定技。你使用【酒】时，摸三张牌，且本回合不能使用牌。
+// 上游 filter(event): event.card.name == "jiu"；content(): player.draw(3); player.addTempSkill("jsrgshishou_nouse")。
+// 使用 Phase 3 card-name-scoped 过滤族 owner_source_card_jiu（卡牌名限定 useCard）。
+// 近似：「本回合不能使用牌」(jsrgshishou_nouse) 的 cardEnabled/cardUsable modifier + jsrgshishou_burn
+// 子技能需 modifier 扩展，另册登记；本定义实现主技能的摸 3 张核心行为。
+skill jsrgshishou(4088616961) locked {
+  trigger card_used owner_source_card_jiu {
+    effect draw_cards(self, 3);
+  }
+}

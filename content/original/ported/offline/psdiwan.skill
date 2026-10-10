@@ -1,0 +1,6 @@
+// 帝挽：使用杀指定目标后，可摸等同于目标数的牌。
+skill psdiwan(3273351282) {
+  trigger card_used owner_source_sha optional {
+    effect draw_cards(self, event_target_count);
+  }
+}

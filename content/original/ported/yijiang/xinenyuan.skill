@@ -1,0 +1,7 @@
+// 新恩怨（法正）：组合技能，包含〖新恩怨1〗和〖新恩怨2〗两个子技能。
+// 旧 JS 中仅包含 group 引用，实际效果由子技能实现。
+skill xinenyuan(3401109393) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

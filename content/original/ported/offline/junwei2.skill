@@ -1,0 +1,5 @@
+// junwei2：锁定技, player:phase_end, 多步骤。
+skill junwei2(2672188967) {
+  trigger phase_end owner_alive {
+  }
+}

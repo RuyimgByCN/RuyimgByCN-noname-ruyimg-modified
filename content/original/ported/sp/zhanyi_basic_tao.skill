@@ -1,0 +1,5 @@
+// 战桃：手牌中的基本牌可当【桃】使用。
+skill zhanyi_basic_tao(3584326530) {
+  view_as tao play_phase card_basic;
+  view_as tao response card_basic;
+}

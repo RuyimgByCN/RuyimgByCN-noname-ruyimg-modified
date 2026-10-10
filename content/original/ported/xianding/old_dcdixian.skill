@@ -1,0 +1,8 @@
+// 缔先（旧版）：觉醒技，出牌阶段弃任意张手牌，从牌堆顶获得等量牌；
+// 以此法获得的牌不计入手牌上限、弃牌阶段不能被弃置。
+// 旧 JS 的「觉醒标记」「gain tag 特殊属性」「mod 手牌上限/弃牌豁免」无对应原语，未建模。
+skill old_dcdixian(3078035007) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 old_dcdixian 含真实规则体（enable、filterCard、limited 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

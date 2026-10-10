@@ -1,0 +1,11 @@
+// jianjie：转化技，回合外可将两张手牌当无懈可击使用
+// 触发事件：phaseZhunbeiBegin, huogongBegin, useCard2
+// 含有 viewAs/hiddenCard — 需转化技原语
+// 含有 enable — 需主动技原语
+// jianjie：上游有真实规则体，现有 host filter/effect 不足以表达
+// （chooseToUse / gaintag / expansion / 额外回合 / 判定改判 / 阶段插入 / 动态 view_as）。
+// 诚实空实现（保真度债，ADR 0597）。旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jianjie(4199953619) {
+  // INTENTIONAL_EMPTY_NOOP: existing primitives cannot express the old-JS contract
+  modifier hand_limit add 0;
+}

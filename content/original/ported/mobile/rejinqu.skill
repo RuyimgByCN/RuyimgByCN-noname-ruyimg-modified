@@ -1,0 +1,6 @@
+// rejinqu（进趋）：锁定技，你每使用三张牌后，你令一名拥有蓄力技的角色获得1点蓄力点；结束阶段，你摸X张牌（X为本回合你蓄力点点数存在过的最高值）。
+skill rejinqu(3518557623) locked {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

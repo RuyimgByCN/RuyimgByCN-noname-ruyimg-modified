@@ -1,0 +1,8 @@
+// 镇军（旧版于禁）：准备阶段开始时，选择一名手牌数大于体力值的角色，弃置其（手牌数-体力值）张牌。
+// 若弃置的牌中有非装备牌，你需弃置等量的牌，否则其摸等量的牌。
+// 旧JS含动态数量计算+分类统计+二选一。DSL以choose_target_discard_excess_then_self_discard_or_target_draw近似。
+skill zhenjun(3140750905) {
+    trigger phase_prepare owner_alive {
+        effect choose_target_discard_excess_then_self_discard_or_target_draw(self);
+    }
+}

@@ -1,0 +1,8 @@
+// liejie
+skill liejie(3906999449) {
+  trigger damage owner_alive optional {
+    // chooseToDiscard — 需手动建模
+    effect deal_damage(self, event_source, 1);
+    // discardPlayerCard — 需手动建模
+  }
+}

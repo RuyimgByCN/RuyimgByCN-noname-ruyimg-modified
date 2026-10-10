@@ -1,0 +1,9 @@
+// 界节命：每受到一点伤害后或死亡时，可令一名角色摸至多五张、随后弃至同一上限。
+skill oljieming(2506669514) {
+  trigger damage owner_is_target_per_damage_point optional {
+    effect choose_target_draw_max_hp_cap_then_discard_excess(self, 5);
+  }
+  trigger death owner_is_target optional {
+    effect choose_target_draw_max_hp_cap_then_discard_excess(self, 5);
+  }
+}

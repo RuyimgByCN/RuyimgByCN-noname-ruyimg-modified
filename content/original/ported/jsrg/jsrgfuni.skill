@@ -1,0 +1,36 @@
+// jsrgfuni（伏匿）：锁定技。①你的攻击范围终值为0。②每轮开始时，你令任意名角色获得共计X张【影】（X为存活角色数的一半，向上取整）。③当有牌进入弃牌堆后，若其中有【影】，你于本回合使用牌无距离限制且不能被响应。
+// 实现（①段，jsrg 影族切片 4）：`modifier attack_range override 0`（终值 0，
+// pot_zhangren 同款）。
+// 近似/未建模（③段 buff 强命）：弃牌堆影联动后的「本回合使用牌无距离
+// 限制且不能被响应」需 useCard1 阶段的 directHit 注入——以「弃影入弃牌堆
+// 后本回合获得距离无限+不可响应」storage 门控近似（card_use 响应取消
+// modifier 对全部牌生效为近似）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgfuni(3773533412) locked {
+  modifier attack_range override 0;
+
+  trigger round_started owner_alive {
+    if alive_count() > 6 {
+      effect distribute_shadow_cards(self, 4, self_skill);
+    } else {
+      if alive_count() > 4 {
+        effect distribute_shadow_cards(self, 3, self_skill);
+      } else {
+        if alive_count() > 2 {
+          effect distribute_shadow_cards(self, 2, self_skill);
+        } else {
+          if alive_count() > 0 {
+            effect distribute_shadow_cards(self, 1, self_skill);
+          }
+        }
+      }
+    }
+  }
+
+  trigger cards_moved owner_cards_moved_contain_ying {
+    effect storage_set(self_skill, 1, 1);
+  }
+  trigger turn_ended owner_is_target {
+    effect storage_set(self_skill, 1, 0);
+  }
+}

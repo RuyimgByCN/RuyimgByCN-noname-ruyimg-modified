@@ -1,0 +1,8 @@
+// zlshoufu2：触发+修改技（damage,loseAfter）
+skill zlshoufu2(3567610566) locked {
+  trigger damage owner_alive {
+    effect remove_skill(self_skill);
+  }
+  // modifier: cardEnabled 需手动分析;
+  // modifier: cardSavable 需手动分析;
+}

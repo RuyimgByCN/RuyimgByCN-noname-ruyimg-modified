@@ -1,0 +1,7 @@
+// 逆拒（刘虞）：主公技。你参与的拼点中，可令一张拼点牌点数±场上群势力数。
+// 若因此出现平局，你摸等量张牌。
+// 缺拼点介入与点数修改+平局检测原语，空定义。
+skill twniju(2837397822) lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,13 @@
+// decadexushen（得雪·觉醒）：限定技。当你处于濒死状态时，你可以回复1点体力，然后
+// 获得「得雪·觉醒后」（decadexushen2）临时技能。
+// 上游 trigger: player:dying; filter: hp<1; content: awakenSkill + addSkills("decadezhennan")
+//   + addTempSkill("decadexushen2") + recover。
+// 近似：awakenSkill/addSkills 需限定技机制，本定义实现濒死回复 + addTempSkill 核心行为。
+skill decadexushen(4200045178) {
+  trigger dying owner_is_target optional {
+    if hp(self) < 1 {
+      effect recover_hp(self, 1);
+      effect add_skill_by_name(self, decadexushen2);
+    }
+  }
+}

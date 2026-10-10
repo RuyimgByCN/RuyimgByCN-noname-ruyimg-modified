@@ -1,0 +1,6 @@
+// 旧 JS 语义：每回合首次造成伤害时，若手牌数为全场最多（允许并列），令此伤害 +1。
+skill stdjiaozi(3194342337) locked {
+  trigger damage owner_source_once {
+  }
+  modifier damage_amount add owner_max_hand_before_skill_fires_this_turn;
+}

@@ -1,0 +1,5 @@
+// sm_feidian：锁定技, player:card_used, 含子技能, 异步。
+skill sm_feidian(2542060399) {
+  trigger card_used owner_alive {
+  }
+}

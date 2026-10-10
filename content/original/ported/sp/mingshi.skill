@@ -1,0 +1,16 @@
+// 名士（mingshi）：当你受到伤害前，若伤害来源体力大于你，你可以弃置一张黑色牌，
+// 令此伤害 -1。
+// 上游 (sp/skill.js:41702)：trigger player:damageBegin3；filter = source 存在且
+// source.hp > player.hp；content = chooseToDiscard(black) → trigger.num--。
+// 实现：damage_before + owner_is_target → 可选确认 → if hp(event_source) > hp(self)：
+// discard_hand_equip_count(self, 1) + modify_current_damage(self, -1)。
+// 与上游差异：「黑色牌」花色约束未建模（弃任意手牌/装备）；弃牌条件以 body if 守卫
+// （无独立 source_hp_gt_owner 过滤器）。
+skill mingshi(2979740696) {
+  trigger damage_before owner_is_target optional {
+    if hp(event_source) > hp(self) {
+      effect discard_hand_equip_count(self, 1);
+      effect modify_current_damage(self, -1);
+    }
+  }
+}

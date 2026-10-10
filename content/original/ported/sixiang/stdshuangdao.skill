@@ -1,0 +1,7 @@
+// 双刃：出牌阶段开始时，与一名角色拼点。赢则对至多两名与其距离1以内的角色使用【杀】；没赢获得技能「陷阵」。
+// 旧 JS 的「拼点 + 胜负分支（多目标杀/获技能）」无对应原语（需 hand_compare + 条件分支），未建模。
+skill stdshuangdao(4169508516) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

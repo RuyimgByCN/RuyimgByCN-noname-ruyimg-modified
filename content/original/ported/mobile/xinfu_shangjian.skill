@@ -1,0 +1,6 @@
+// xinfu_shangjian（尚俭）：锁定技。一名角色的结束阶段开始时，若你于此回合内不因使用装备牌而失去了X张或更少的牌，则你摸等量的牌（X为你的体力值）。
+skill xinfu_shangjian(2930663290) locked {
+  trigger phase_discard owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

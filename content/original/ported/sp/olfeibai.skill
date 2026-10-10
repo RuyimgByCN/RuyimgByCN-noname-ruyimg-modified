@@ -1,0 +1,10 @@
+// 飞白（OL）：转换技，阳：你使用的非黑色牌造成伤害+1；阴：你使用的非红色牌回复+1。
+// 上游 (sp/skill.js:22805)：damageBegin1 / recoverBegin 后 changeZhuanhuanji 并 num++。
+// 实现：造成伤害前 `modify_current_damage +1`。
+// 近似：不限非黑色；回复+1 与阴阳切换未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olfeibai(3111364655) locked {
+  trigger damage_before owner_source_other_damage_before {
+    effect modify_current_damage(self, 1);
+  }
+}

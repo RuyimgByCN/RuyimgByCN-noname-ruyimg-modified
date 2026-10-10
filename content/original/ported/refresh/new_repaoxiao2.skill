@@ -1,0 +1,4 @@
+// 新咆哮临时效果：杀无距离限制。
+skill new_repaoxiao2(2901743430) {
+  modifier attack_range override 2147483647;
+}

@@ -1,0 +1,10 @@
+// 直辩（宗预）：准备阶段开始时，你可与一名其他角色拼点。你赢则三选一：将其装备区/
+// 判定区中一张你可装备/可置入判定区的牌移动到你的区域内 / 回复 1 点体力 / 背水
+// （跳过摸牌阶段并依次执行上述所有选项）；你输则失去 1 点体力。
+// 旧 JavaScript 仅作语义证据；拼点与胜后分支复用 ABI 369 resolve_twzhibian
+// 管线（引擎阶段检查已放宽至 Prepare|Play 以支持准备阶段触发）。
+skill zhibian(3401315970) {
+  trigger phase_prepare owner_is_target_can_compare_other optional {
+    effect resolve_twzhibian(self);
+  }
+}

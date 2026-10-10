@@ -1,0 +1,6 @@
+// caliyu：音效名:liyu, 锁定技, source:damage_before, 主动(phaseUse), 加技能, 含子技能, 异步。
+skill caliyu(3404441188) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

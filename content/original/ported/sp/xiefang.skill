@@ -1,0 +1,4 @@
+// 协芳：至其他角色的距离减少场上女性角色数。
+skill xiefang(3450775931) {
+  modifier distance_from add -alive_female_count;
+}

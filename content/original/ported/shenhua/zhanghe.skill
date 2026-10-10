@@ -1,0 +1,17 @@
+// 张郃【巧变】— shenhua 旧 JS 语义参考：phaseJudgeBefore/phaseDrawBefore/phaseUseBefore/
+// phaseDiscardBefore 弃一张手牌并跳过该阶段；摸牌阶段可获至多两名其他角色各一张手牌；
+// 出牌阶段可移动场上的一张牌到另一名角色的同类别区域。
+skill qiaobian(3287917228) {
+  trigger phase_judge owner_is_target optional {
+    effect resolve_qiaobian(self, 0);
+  }
+  trigger phase_draw owner_is_target optional {
+    effect resolve_qiaobian(self, 1);
+  }
+  trigger phase_play owner_is_target optional {
+    effect resolve_qiaobian(self, 2);
+  }
+  trigger phase_discard owner_is_target optional {
+    effect resolve_qiaobian(self, 3);
+  }
+}

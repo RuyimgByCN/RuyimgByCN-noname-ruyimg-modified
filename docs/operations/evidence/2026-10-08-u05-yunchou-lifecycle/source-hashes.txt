@@ -1,0 +1,4 @@
+bd64800a3935ea1bacf570817c89b43d2e5886fe4081da10388c729b063fb17f  crates/engine-native/tests/g1_shahai_yunchou.rs
+da518c88b0f48f032995845b7669973d616d008c58d659791a5b2a4c5b68a8bf  docs/migration/upstream-extension-reconstruction.md
+a733ce016c05ce7bd464b751fcb1d375dcfd1925e3a0a5654471e45ccecc4298  docs/architecture/native-progress.md
+498561872894719107a905d9b5a3b6ae8d47cd60e250b5534948f6b5722bcfe8  docs/native-coverage-manifest.md

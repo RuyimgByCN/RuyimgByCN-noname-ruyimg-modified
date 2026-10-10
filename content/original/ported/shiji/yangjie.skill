@@ -1,0 +1,8 @@
+// 扬节（董卓系）：出牌阶段限一次，摸一张牌并与一名其他角色拼点。
+// 旧 JS 的「拼点胜负分支」无对应原语；以摸一张并选择一名角色拼点近似
+// （胜负分支未建模，已注明）。
+skill yangjie(3307636227) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

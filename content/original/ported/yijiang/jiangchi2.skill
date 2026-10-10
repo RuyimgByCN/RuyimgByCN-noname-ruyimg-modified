@@ -1,0 +1,9 @@
+// 将驰增益临时效果
+// 原语义：使用【杀】无距离限制且次数上限加一。
+skill jiangchi2(4168410091) {
+  modifier attack_range override 2147483647;
+  modifier sha_use_limit add 1;
+  trigger phase_play_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

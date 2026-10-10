@@ -1,0 +1,6 @@
+// mbyilie2（义烈）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill mbyilie2(2665414305) locked {
+  trigger damage_before owner_wounded_event_player_qun {
+    effect recover_hp(self, 1);
+  }
+}

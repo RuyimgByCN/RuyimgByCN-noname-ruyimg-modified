@@ -1,0 +1,6 @@
+// zhengjian_mark（诤荐）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill zhengjian_mark(3317553135) {
+  trigger card_used owner_alive {
+    effect add_mark(self, 0, 1);
+  }
+}

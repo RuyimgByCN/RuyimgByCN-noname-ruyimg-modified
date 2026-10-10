@@ -1,0 +1,5 @@
+skill benxi(2283450478) locked {
+  modifier distance_from add -owner_current_turn_card_use_count;
+  modifier sha_target_limit add owner_current_turn_all_others_distance_at_most_one;
+  modifier ignore_armor override owner_current_turn_all_others_distance_at_most_one;
+}

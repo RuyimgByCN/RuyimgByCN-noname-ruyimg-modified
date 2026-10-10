@@ -1,0 +1,5 @@
+// psjueyi：锁定技, player:phase_play, global:dying, 加技能, 含子技能, 异步。
+skill psjueyi(3351116736) locked {
+  trigger phase_play always {
+  }
+}

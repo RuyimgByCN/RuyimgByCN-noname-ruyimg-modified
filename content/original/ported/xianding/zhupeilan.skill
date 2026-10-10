@@ -1,0 +1,22 @@
+// 朱佩兰【辞虑/痛悼】（ABI 600）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dccilv(3468569693) {
+  trigger card_targeted owner_is_target_ordinary_trick_cilv_available optional {
+    effect resolve_zhupeilan(self, event_source, event_card, 3697675750, 0);
+  }
+}
+
+skill dccilv_effect(3697675750) non_gainable {
+  trigger damage_before cilv_tracked_card_damage_before {
+    effect resolve_zhupeilan(self, event_source, event_card, 3697675750, 1);
+  }
+  trigger card_resolved cilv_tracked_card_resolved {
+    effect resolve_zhupeilan(self, event_source, event_card, 3697675750, 2);
+  }
+}
+
+skill dctongdao(3625586472) {
+  trigger dying owner_dying_zhupeilan_once_per_game optional {
+    effect resolve_zhupeilan(self, self, event_card, 0, 10);
+  }
+}

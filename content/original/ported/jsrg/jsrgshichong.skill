@@ -1,0 +1,9 @@
+// jsrgshichong（恃宠）：转换技。当你使用牌指定其他角色为唯一目标后，阳：你可以获得目标角色一张手牌；阴：目标角色可以交给你一张手牌。
+// 类型：转换技
+// 未建模：转换技切换, 翻译调用, chooseBool, 转换技, 全局状态, storage状态 ...等7项（DSL无对应原语）
+skill jsrgshichong(3148483901) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgshichong（skill.js:9965）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：用牌后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

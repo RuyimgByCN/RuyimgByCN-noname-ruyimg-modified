@@ -1,0 +1,6 @@
+// 势魏延使命失败后获得的锁定【困奋】。
+skill kunfen_pot_weiyan(3536332483) locked {
+  trigger phase_end owner_is_target {
+    effect resolve_potweiyan(self, event_player, event_card, 10);
+  }
+}

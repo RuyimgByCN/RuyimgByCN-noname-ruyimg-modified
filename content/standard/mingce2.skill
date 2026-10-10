@@ -1,0 +1,4 @@
+// Skill mingce2(142) - standard variant
+skill mingce2(142) {
+  modifier distance_from add -1;
+}

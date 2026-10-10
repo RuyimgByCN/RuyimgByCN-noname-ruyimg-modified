@@ -1,0 +1,5 @@
+skill huangkong(2905812698) locked {
+  trigger card_used owner_targeted_outside_turn_by_sha_or_trick_hand_empty {
+    effect draw_cards(self, 2);
+  }
+}

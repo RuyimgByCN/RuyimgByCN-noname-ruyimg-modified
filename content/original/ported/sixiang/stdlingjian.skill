@@ -1,0 +1,7 @@
+// 灵鉴（？）：锁定技。出牌阶段首次使用的杀未造成伤害且你已觉醒"明识"，恢复技能"明识"。
+// 旧 JS 的「首次杀未造成伤害+觉醒技状态检查+恢复技能 restoreSkill」无可对应的 DSL 原语。完全无法表达。
+skill stdlingjian(4290100704) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

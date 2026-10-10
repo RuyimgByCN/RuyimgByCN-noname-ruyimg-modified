@@ -1,0 +1,5 @@
+// tyfuhan：锁定技, global:phaseEnd, global:cards_moved, global:cards_moved, 含子技能, 异步。
+skill tyfuhan(3327910516) locked {
+  trigger cards_moved always {
+  }
+}

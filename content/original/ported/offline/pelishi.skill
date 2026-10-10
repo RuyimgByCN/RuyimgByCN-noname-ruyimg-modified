@@ -1,0 +1,10 @@
+// 立世（裴秀）：结束阶段，若你没有「凛」，你受到 1 点雷电伤害；否则你可移去任意个
+// 「凛」并选择等量名角色，这些角色下回合开始前你可选择一个阶段令其跳过。
+// 上游 (extra_offline.js:105-150)：pelinjie 标记联动 + selectTarget 随标记数 +
+// 阶段跳过 markAuto 链。
+// 「跨技能标记联动」「等量多目标选择」「下回合阶段跳过」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill pelishi(4276278769) locked {
+  // INTENTIONAL_EMPTY_NOOP: mark-linked phase-skip chain unavailable
+  modifier hand_limit add 0;
+}

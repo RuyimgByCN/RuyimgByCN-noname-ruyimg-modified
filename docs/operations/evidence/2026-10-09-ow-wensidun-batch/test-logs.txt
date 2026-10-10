@@ -1,0 +1,29 @@
+# U05 ow 纵切批二十测试日志（2026-10-09，温斯顿跳跃，规则 v136→v137）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 458 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v136 基线 457 +1 新增跳跃回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 46 passed; 0 failed（45 既有 + 1 新增 wensidun_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 135）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v136→v137 + feitiao_target
+零值字段入 canonical_hash——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- feitiao（phaseUseBegin direct chooseCardTarget → discard+randomDiscard
+  +addTempSkill feitiao2；无 usable）
+- feitiao2（mod globalFrom -Infinity；至回合结束）
+
+## 测试迭代记录
+- 两段询问机目标应答落空 Act 臂（v128 链钩同病二次）——按挂起 stage
+  前移约定重构（TargetChoice 收牌→Act 收目标结算）
+- kernel.rs 两分支复位行缩进不同（8 空格 vs 4 空格）——合并 replace
+  count!=2 失败一次，分开锚定后落位

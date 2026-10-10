@@ -1,0 +1,8 @@
+// jsrgnianen（念恩）：你可以将一张牌当任意基本牌使用或打出，然后若此牌不为红色或你以此法使用或打出的牌不为普通【杀】，则直到此回合结束，该技能失效且你视为拥有〖马术〗。
+// 未建模：chooseButton, 翻译调用, hiddenCard, 全局状态, addTempSkill, chooseToRespond替出牌 ...等10项（DSL无对应原语）
+skill jsrgnianen(3179232554) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgnianen（skill.js:7798）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

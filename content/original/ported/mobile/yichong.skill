@@ -1,0 +1,7 @@
+// yichong（易宠）：①准备阶段，你可以选择一名其他角色并选择一个花色，然后你获得其所有此花色的牌，移除场上的所有“雀”标记，令其获得“雀”标记直到你的下个回合开始。②拥有“雀”标记的角色获得你最后一次发动〖易宠①〗选择的花色的牌后，你获得这些牌（你至多通过每个“雀”得到一张牌）。
+skill yichong(2364845002) {
+  trigger phase_prepare owner_alive {
+    effect add_mark(self, 0, 1);
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

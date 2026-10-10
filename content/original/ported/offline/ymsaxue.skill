@@ -1,0 +1,8 @@
+// 洒血（春秋关银屏）：准备阶段可横置两名角色，再令一名其他角色对你与其造成共 2 点火焰伤害。
+// 近似：横置一名其他角色 + 对其造成 1 点火焰伤害；双目标分配 2 点火伤未建模。
+skill ymsaxue(2428909536) {
+  trigger phase_prepare owner_is_target optional {
+    effect choose_link_other(self);
+    effect choose_other_damage(self, 1);
+  }
+}

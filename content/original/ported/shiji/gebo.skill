@@ -1,0 +1,7 @@
+// 割卜（SP张温）：任何角色回复体力后，牌堆顶一张牌进入“仁库”。
+// 旧 JavaScript 仅作语义证据；仁库在此映射为拥有者的技能牌堆。
+skill gebo(4127984813) locked {
+  trigger hp_recovered owner_alive_event_player_alive {
+    effect gain_top_card_to_skill_pile(self);
+  }
+}

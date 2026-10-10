@@ -1,0 +1,15 @@
+// 振良（TW张南）：继承自 nzry_zhenliang 转换技。出牌阶段：弃一张牌对攻击范围内角色
+// 造成 1 点伤害。回合外：你或你攻击范围内的角色受到伤害时，弃一张牌令伤害-1。
+// 若弃置的牌与「任」颜色相同则摸一张牌。
+// 实现：出牌阶段指定一名其他角色造成 1 点伤害；自己受伤前可选使当前伤害-1。
+// 近似：转换技阴阳与「任」颜色摸牌未建模；主动不检验攻击范围、不消耗弃牌；
+// 减伤仅覆盖自己受伤、不覆盖范围内其他角色，也不消耗弃牌。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill twzhenliang(3711733177) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect deal_damage(self, event_source, 1);
+  }
+  trigger damage_before owner_is_target_other_source_alive optional {
+    effect modify_current_damage(self, -1);
+  }
+}

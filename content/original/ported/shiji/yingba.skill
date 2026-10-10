@@ -1,0 +1,16 @@
+// 英霸（神孙策）：出牌阶段限一次，你可令一名体力上限大于 1 的其他角色失去 1 点体力上限，
+// 然后你失去 1 点体力上限。目标若存活则获得一枚“平定”标记。
+// 旧 JavaScript 仅作语义证据；上限变化与标记由权威原语响应。
+skill yingba(2187983153) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect change_max_hp(event_source, -1);
+    effect add_mark(event_source, 3219705664, 1);
+    effect change_max_hp(self, -1);
+  }
+}
+
+// 平定标记的手牌上限加成：每枚标记 × 拥有【英霸】的存活角色数。
+// 注意：DSL 的 owner_skill_mark 只表达拥有者自身标记数，跨角色计数在此近似为标记数。
+skill yingba_mark(3219705664) {
+  modifier hand_limit add owner_skill_mark;
+}

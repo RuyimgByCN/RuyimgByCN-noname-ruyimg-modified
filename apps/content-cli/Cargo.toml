@@ -1,0 +1,20 @@
+[package]
+name = "content-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "CLI for content package install, rollback, revoke, channel updates (Phase 10–11)"
+
+[[bin]]
+name = "content-cli"
+path = "src/main.rs"
+
+[dependencies]
+content-runtime = { path = "../../crates/content-runtime" }
+content-schema = { path = "../../crates/content-schema" }
+content-compiler = { path = "../../crates/content-compiler" }
+resource-compiler = { workspace = true }
+licensing-schema = { workspace = true }
+diagnostics = { path = "../../crates/diagnostics" }
+clap = { version = "4", features = ["derive"] }
+serde_json = { workspace = true }

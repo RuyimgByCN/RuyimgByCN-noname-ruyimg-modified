@@ -1,0 +1,8 @@
+// 博明（许靖）：出牌阶段限两次，将一张手牌或装备牌交给一名其他角色。
+// 旧 JavaScript 仅作语义证据；赠牌由 ABI 413 resolve_boming 权威结算
+// （触发 CardsGiven 事件供恶荐响应）。
+skill boming(4154330954) {
+  active play_phase uses_per_turn 2 targets 1 1 other select_hand 1 1 {
+    effect resolve_boming(self, event_source);
+  }
+}

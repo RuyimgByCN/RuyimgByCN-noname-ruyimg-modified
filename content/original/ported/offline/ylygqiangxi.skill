@@ -1,0 +1,7 @@
+// 强袭（雁翎典韦）
+// 同一回合目标不重复；严格拼赢后摸牌或弃牌，第二次未赢后失去体力并沿较短座次路径逐个造成伤害。
+skill ylygqiangxi(2647374576) {
+  active play_phase targets 1 1 other can_compare unused_by_skill_this_turn select_hand 1 1 {
+    effect choose_compare_selected_hand_card_second_failure_seat_damage(self, event_source, 1, 2, 1, 1);
+  }
+}

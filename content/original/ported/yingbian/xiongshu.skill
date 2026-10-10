@@ -1,0 +1,13 @@
+// 凶竖（贾充）：其他角色出牌阶段开始时，你可弃置 X 张牌（X 为你已发动本技能的
+// 次数）并展示其一张手牌，预测其是否会使用该牌；其出牌阶段结束时，若你预测
+// 正确，其受到 1 点伤害；否则你获得该牌（若仍在其区域内）或弃牌堆中的该牌。
+// 旧 JavaScript 仅作语义证据；弃牌、展示、预测与结算由 ABI 436 resolve_xiongshu
+// 权威结算（“是否使用”以牌是否离开目标区域近似）。
+skill xiongshu(3731458110) {
+  trigger phase_play owner_alive_other_play_phase_discardable_gte_mark optional {
+    effect resolve_xiongshu(self, event_source, 0, 0, 0);
+  }
+  trigger phase_play_end owner_alive_not_target {
+    effect resolve_xiongshu(self, event_source, 0, 0, 3);
+  }
+}

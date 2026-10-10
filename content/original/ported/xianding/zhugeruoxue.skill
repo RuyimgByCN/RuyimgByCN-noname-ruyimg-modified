@@ -1,0 +1,13 @@
+// 诸葛若雪【琼英/暖惠】（ABI 605）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dcqiongying(2641115727) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_zhugeruoxue(self, self, event_card, 0);
+  }
+}
+
+skill dcnuanhui(2308165295) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_zhugeruoxue(self, self, event_card, 10);
+  }
+}

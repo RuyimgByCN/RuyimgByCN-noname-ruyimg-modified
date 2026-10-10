@@ -1,0 +1,5 @@
+// yjdumou：锁定技, player:death, 含子技能。
+skill yjdumou(2452617730) {
+  trigger death owner_alive {
+  }
+}

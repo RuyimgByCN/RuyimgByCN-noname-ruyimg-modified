@@ -1,0 +1,8 @@
+// jsrglirang（礼让）：每轮限一次。其他角色的摸牌阶段开始时，你可以交给其两张牌。然后此回合的弃牌阶段结束时，你可以获得所有其于此阶段因弃置进入弃牌堆的牌。
+// 未建模：历史查询, charlotte延迟, 翻译调用, addTempSkill（DSL无对应原语）
+skill jsrglirang(3293965115) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrglirang（skill.js:10590）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

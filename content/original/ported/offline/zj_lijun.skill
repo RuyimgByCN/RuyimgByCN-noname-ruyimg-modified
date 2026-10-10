@@ -1,0 +1,5 @@
+// zj_lijun：player:phase_prepare, player:phase_end, 需选择目标, 二选一, 回复体力, 异步。
+skill zj_lijun(2753829195) {
+  trigger phase_prepare owner_alive {
+  }
+}

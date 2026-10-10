@@ -1,0 +1,7 @@
+// 散谣：弃置一张牌，对一名当前体力值全场最高（可并列）的角色造成伤害。
+skill sanyao(3737839931) {
+  active play_phase uses_per_turn 1 targets 1 1 highest_hp select_he 1 1 {
+    effect discard_selected(self);
+    effect deal_damage(self, event_source, 1);
+  }
+}

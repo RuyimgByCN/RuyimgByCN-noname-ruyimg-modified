@@ -1,0 +1,5 @@
+skill dccongshi(3668194449) locked {
+  trigger card_used owner_alive_equip_source_max_equip {
+    effect draw_cards(self, 1);
+  }
+}

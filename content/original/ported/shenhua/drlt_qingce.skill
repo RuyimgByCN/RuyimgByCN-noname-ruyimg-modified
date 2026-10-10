@@ -1,0 +1,7 @@
+// 清俭（毌丘俭系）：弃「荣」牌弃目标区域牌。
+// 旧 JS 的「荣 expansion 弃牌」无对应原语；以弃一张手牌近似（已注明）。
+skill drlt_qingce(3172944094) {
+  active play_phase select_he 1 1 {
+    effect discard_selected(self);
+  }
+}

@@ -1,0 +1,7 @@
+skill tybenxiang(2210204269) locked {
+  // 过滤器修正（2026-08-06，C 段 omp）：上游 trigger source die（owner 为死亡来源），
+  // owner_alive 对任何死亡都触发；改用 owner_is_source。
+  trigger death owner_is_source {
+    effect choose_target_draw(self, 3, other);
+  }
+}

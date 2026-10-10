@@ -1,0 +1,7 @@
+// 持剑（新杀夏侯恩）：虚拟青钢剑 + 出杀次数 +1。
+// 近似：以 ignore_armor + sha_use_limit 表达青钢穿透与额外出杀；
+// 虚拟装备占槽、攻击范围与死亡转移剑未建模。
+skill chijian(3230974968) {
+  modifier sha_use_limit add 1;
+  modifier ignore_armor override 1;
+}

@@ -1,0 +1,8 @@
+// 丹心：当你受到伤害后，你可以选择一名手牌数大于1的其他角色，视为对其发动【矫诏】。
+// 旧 JS 为 derivation，触发 damageEnd 后选择目标并使用 stdjiaozhao 技能。
+// DSL 缺少「对选定目标发动另一技能」的间接技能调用原语。无法建模。
+skill stddanxin(3165182114) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

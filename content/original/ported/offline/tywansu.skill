@@ -1,0 +1,6 @@
+// tywansu：锁定技, global:card_used, global:damageBefore, 失去体力, 异步。
+skill tywansu(3781017540) {
+  trigger card_used owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

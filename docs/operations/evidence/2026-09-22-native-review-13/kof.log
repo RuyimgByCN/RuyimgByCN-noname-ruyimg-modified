@@ -1,0 +1,17 @@
+=== KOF 会话：将池 A=[2, 15, 9] B=[10, 18, 17] ===
+KOF_DIAGNOSTIC seed=88 commands=2048 rejected=2028 last=Rejected(ShaLimit) actual_outcome=None
+第1局：曹操 vs 吕蒙 → 座位1（吕蒙）胜；命令数 2048
+  淘汰：曹操（座位0 剩池 [15, 9]）
+  会话存档续跑校验: OK（KOF1 15,9 18,17,10 0 1 1）
+KOF_DIAGNOSTIC seed=165 commands=53 rejected=0 last= actual_outcome=Some(Outcome { winner: Player(1) })
+第2局：华佗 vs 郭嘉 → 座位1（郭嘉）胜；命令数 53
+  淘汰：华佗（座位0 剩池 [9]）
+KOF_DIAGNOSTIC seed=242 commands=125 rejected=0 last= actual_outcome=Some(Outcome { winner: Player(1) })
+第3局：大乔 vs 孙权 → 座位1（孙权）胜；命令数 125
+  淘汰：大乔（座位0 剩池 []）
+=== 会话终局：选手1 胜（0:3，共 3 局）===
+
+thread 'main' (24646653) panicked at /tmp/noname-review13-kof-source.rs:84:25:
+index out of bounds: the len is 5 but the index is 5
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+OPEN_KOF_EMPTY_POOL: valid terminal save "KOF1  1,2,3 0 3 3" panics in restore

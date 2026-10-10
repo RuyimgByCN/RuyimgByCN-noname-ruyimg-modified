@@ -1,0 +1,8 @@
+// 举屠（董卓系）：锁定技。准备阶段开始时，若有关联势力角色，你获得
+// 「屠」牌并摸一张牌。
+// 旧 JS 的「屠」expansion 无对应原语；以准备阶段摸一张近似（已注明）。
+skill jutu(2306326298) locked {
+  trigger phase_prepare owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

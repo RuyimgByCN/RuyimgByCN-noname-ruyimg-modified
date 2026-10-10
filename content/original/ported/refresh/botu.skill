@@ -1,0 +1,13 @@
+// botu（孙皓·博图）：回合结束时，若本回合使用过的牌包含全部四种花色，
+// 你获得一个额外回合。上游 refresh/skill.js（botu，phaseAfter + 四花色判定 +
+// insertPhase）。
+// 实现（第八十五批·跨包复用 queue_extra_turn 第二消费者）：
+// `trigger turn_ended owner_is_target_turn_used_all_suits optional` →
+// queue_extra_turn(self, 0, self_skill)。「本回合四花色齐」由引擎既有
+// used_card_suit_history 位掩码（CardUsed 路径记录、包 ABI≥232 自动启用）
+// 经参数化过滤器在 Rust 侧计数。
+skill botu(3144154445) {
+  trigger turn_ended owner_alive_turn_used_all_suits optional {
+    effect queue_extra_turn(self, 0, self_skill);
+  }
+}

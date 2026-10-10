@@ -1,0 +1,9 @@
+// 纫霜（旧版）：锁定技，进入濒死时回复体力至 1 并增加体力上限。
+// 旧 JS 的「首次/最多 3 次」次数限制、「脱离濒死后解除连环/翻面、
+// 可视为使用一张锦囊牌」未建模（dckunli 同款 1 - hp(self) 模式）。
+skill old_dcrenshuang(3716618560) locked {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 1 - hp(self));
+    effect change_max_hp(self, 1);
+  }
+}

@@ -1,0 +1,14 @@
+// 镇南（xinzhengnan）：其他角色进入濒死状态后，你回复1点体力，并可从尚未拥有的
+// 武圣、当先、制蛮中获得一项（若全部拥有则摸三张牌）。
+// 上游 (sp/skill.js:37995)：global dying，frequent，filter = 未记录过该角色；content = 记录 +
+// recover() + 若无三项则 chooseControl 得一项（无则摸三张）。
+// 实现：trigger dying owner_alive optional → recover_hp(self, 1) + choose_add_missing_skill
+// （新武圣 3038912803 / 当先 3456939183 / 制蛮 3521391741）。与上游差异：每角色每回合
+// 一次记录未建模（optional 可重复）；「全部拥有则摸三张」由 choose_add_missing_skill
+// 的空列表语义近似（无可用项时不授予），已注明。
+skill xinzhengnan(2799539959) {
+  trigger dying owner_alive optional {
+    effect recover_hp(self, 1);
+    effect choose_add_missing_skill(self, 3038912803, 3456939183, 3521391741);
+  }
+}

@@ -1,0 +1,5 @@
+// mouduan2：global:phase_prepare, 需弃牌, 多步骤。
+skill mouduan2(3469334721) {
+  trigger phase_prepare owner_alive {
+  }
+}

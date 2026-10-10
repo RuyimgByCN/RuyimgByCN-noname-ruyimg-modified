@@ -1,0 +1,6 @@
+// 刚烈（标准夏侯惇）：受伤后可判定；非红桃时，伤害来源弃两张手牌或受到 1 点伤害。
+skill ganglie(7) {
+  trigger damage owner_is_target optional {
+    effect judge_source_discard_two_hand_or_damage(self, event_source);
+  }
+}

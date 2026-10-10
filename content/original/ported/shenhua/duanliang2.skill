@@ -1,0 +1,4 @@
+// 断粮：兵粮寸断的目标距离上限由 1 放宽到 2。
+skill duanliang2(2158464053) {
+  modifier card_distance_limit(bingliang) override 2;
+}

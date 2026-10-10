@@ -1,0 +1,9 @@
+// 姻缘（星罗）：出牌阶段获得一名姻缘者区域一张牌，其回复1点体力。手心牌对姻缘者可见。
+// 实现：出牌阶段限一次获得一名其他角色一张手牌。
+// 近似：不限姻缘绑定；不回复体力；手牌可见未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill seira_yinyuan(4047635802) {
+  active play_phase uses_per_turn 1 {
+    effect gain_target_hand_card(self, self_skill);
+  }
+}

@@ -1,0 +1,3 @@
+skill xunxun(43) {
+  modifier draw_phase_scry_four_split_two override 1;
+}

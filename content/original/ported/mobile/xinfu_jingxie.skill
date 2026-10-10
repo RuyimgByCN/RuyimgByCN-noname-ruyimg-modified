@@ -1,0 +1,6 @@
+// xinfu_jingxie（精械）：出牌阶段，你可以展示一张未强化过的【诸葛连弩】或标准包/军争包/SP包中的防具牌，然后对其进行强化。当你处于濒死状态时，你可以重铸一张防具牌，然后将体力回复至1点。
+skill xinfu_jingxie(3264230263) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect recover_hp(event_source, 1);
+  }
+}

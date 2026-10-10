@@ -1,0 +1,6 @@
+// psqizuo：global:damage_before, global:damage_before, 需弃牌, 多分支选择, 多步骤。
+skill psqizuo(3904128171) {
+  trigger damage_before owner_alive optional {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

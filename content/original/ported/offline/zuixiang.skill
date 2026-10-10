@@ -1,0 +1,5 @@
+// zuixiang：觉醒技, 限定技, player:phase_prepare, 移出游戏, 加技能, 多步骤。
+skill zuixiang(3590753157) {
+  trigger phase_prepare owner_alive optional {
+  }
+}

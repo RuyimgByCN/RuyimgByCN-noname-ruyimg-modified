@@ -1,0 +1,5 @@
+// dcxidi：锁定技；获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcxidi(3358505598) {
+  modifier hand_limit add 1;
+}

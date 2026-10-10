@@ -1,0 +1,11 @@
+// 梅影（fanghun）：当你造成或受到伤害后，你获得X个「梅影」标记（X为伤害点数；
+// 上游限定为【杀】造成的伤害，DSL 以任意伤害近似）。你可以移去1个「梅影」标记，
+// 将一张手牌/装备牌当【桃】或【酒】使用（龙胆）并摸一张牌。
+// 〖龙胆〗的杀↔闪转化与「濒死时」窗口无对应原语，未建模。
+skill fanghun(3479603365) locked {
+  trigger damage owner_is_source_or_target {
+    effect add_mark(self, 3479603365, event_amount);
+  }
+  view_as tao any any from none uses_per_turn 1 cost hand_equip_mark mark_cost 3479603365 post_draw 1;
+  view_as jiu any any from none uses_per_turn 1 cost hand_equip_mark mark_cost 3479603365 post_draw 1;
+}

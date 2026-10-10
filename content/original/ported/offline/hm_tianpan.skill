@@ -1,0 +1,5 @@
+// hm_tianpan：锁定技, player:judgeEnd, 多分支选择, 回复体力, 失去体力, 异步。
+skill hm_tianpan(4059024455) {
+  trigger judgment_resolved owner_alive {
+  }
+}

@@ -1,0 +1,11 @@
+// 明任（TW谋卢植）：①游戏开始时，你摸三张牌，然后将一张手牌置于你的武将牌上，
+// 称为「任」。②结束阶段，你可以用一张手牌替换「任」。
+// 上游 (tw/skill.js:407-410)：inherit nzry_mingren（drawNum: 3）。
+// 与 shenhua:nzry_mingren 同款近似（「任」expansion 无对应原语，以回合开始摸一张
+// 近似）；drawNum 3 与 2 的差异未区分。见 nzry_mingren.skill 注释。
+// 2026-08-15：随上游 v1.11.5 新武将 tw_sb_yl_luzhi 移植。
+skill twsbmingren(2926994600) locked {
+  trigger phase_begin owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,17 @@
+// 3D精选 李娥「冶身/巧锻」：旧 JavaScript 仅作语义证据，不进入运行时。
+// 冶身：一名角色的结束阶段，可亮出牌堆底三张牌，令其将一张黑色牌当最大目标数为
+// 牌名字数的【铁索连环】使用或重铸，其余置顶；亮出数-1，减至零或其中无黑牌时
+// 复原并对自己造成 1 点火焰伤害。需要牌堆底翻牌、按牌名字数目标数、自伤复位状态机。
+skill dddyeshen(760521315) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+// 巧锻：每回合限一次。有角色重置后，可令至多 X 名角色各摸一张牌；横置后，可将 X 张
+// 牌置于牌堆底并令一名角色回复 1 点体力（X 为横置角色数）。需要横置/重置事件分支
+// 与按横置数选牌/选目标状态机。
+skill dddqiaoduan(1493663150) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

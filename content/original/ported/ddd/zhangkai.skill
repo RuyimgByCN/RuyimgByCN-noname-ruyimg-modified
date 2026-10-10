@@ -1,0 +1,21 @@
+// 3D精选 张闿「劫行/拜泪」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddjiexing(3377566778) {
+  trigger recover_before owner_alive_ddd_jiexing_recover_once_per_game optional {
+    effect resolve_ddd_zhangkai(self, event_player, event_card, 0);
+  }
+  trigger card_used owner_alive_ddd_jiexing_equip_once_per_game optional {
+    effect resolve_ddd_zhangkai(self, event_player, event_card, 1);
+  }
+  trigger hp_recovered owner_alive_ddd_jiexing_recovery_reset {
+    effect resolve_ddd_zhangkai(self, event_player, event_card, 2);
+  }
+  trigger card_resolved owner_alive_ddd_jiexing_equip_reset {
+    effect resolve_ddd_zhangkai(self, event_player, event_card, 3);
+  }
+}
+
+skill dddbailei(2689073031) {
+  trigger phase_prepare owner_alive_ddd_bailei_available optional {
+    effect resolve_ddd_zhangkai(self, event_player, event_card, 4);
+  }
+}

@@ -1,0 +1,6 @@
+// 旧 JS 仅作语义证据：其他角色回合结束且本回合未使用牌指定其他角色时，可移动其一张可装备牌、摸一张或取消。
+skill qieting(4166951057) {
+  trigger turn_ended owner_alive_other_turn_ended_no_card_targeted_other {
+    effect choose_move_target_equipment_or_draw(self, event_player);
+  }
+}

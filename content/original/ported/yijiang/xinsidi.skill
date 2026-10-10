@@ -1,0 +1,14 @@
+// 新四谛（高顺）：出牌阶段限一次，选择一名其他角色拼点；你赢则本回合对其
+// 使用牌无距离与次数限制，其不能响应你的牌；你输则本回合不能对其使用牌。
+// 旧 JS 的「拼点胜负绑定目标」复合未建模；以 choose_discard_matching_equip
+// 系列原语近似保留弃牌收益，出牌阶段结束移除标记（已注明）。
+skill xinsidi(2768966746) {
+  trigger phase_play owner_alive_not_target {
+    effect choose_discard_matching_equip_color_add_skill(self, event_player, 3172356775);
+  }
+  modifier card_action_cancel_for_skill_color_mask override 1;
+  trigger phase_play_end owner_is_target {
+    effect use_virtual_sha_from_card_color_lock_source_if_no_sha(self);
+    effect remove_skill(self_skill);
+  }
+}

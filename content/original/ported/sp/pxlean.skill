@@ -1,0 +1,12 @@
+// 乐安（pxlean，州郡技能）：当你获得此技能后，你从牌堆获得一张属性【杀】和一张
+// 【铁索连环】。
+// 上游 (sp/skill.js:2098)：trigger player:changeSkillsAfter；filter = addSkill 含本技；
+// forced；content = gain(cardPile2(属性杀) + cardPile2("tiesuo"))。
+// 实现：skill_added + owner_skill_added_self_4240733007 → gain_card_by_kind(self,
+// sha_fire)（属性杀以火杀近似）+ gain_card_by_kind(self, tiesuo)。
+skill pxlean(4240733007) {
+  trigger skill_added owner_skill_added_self_4240733007 {
+    effect gain_card_by_kind(self, sha_fire);
+    effect gain_card_by_kind(self, tiesuo);
+  }
+}

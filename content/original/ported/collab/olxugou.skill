@@ -1,0 +1,6 @@
+// 虚构：红色【杀】对拥有者无效；拥有者使用红色【杀】无距离限制且伤害 +1。
+skill olxugou(2803220890) locked {
+  modifier card_target_cancel(sha_red) override 1;
+  modifier card_distance_unlimited(sha_red) override 1;
+  modifier sha_damage(sha_red) add 1;
+}

@@ -1,0 +1,5 @@
+// pekuangfeng：音效名:kuangfeng, 锁定技, player:phase_end, global:damage_before, 加技能, 含子技能, 异步, 条件计数。
+skill pekuangfeng(3544682962) locked {
+  trigger phase_end always {
+  }
+}

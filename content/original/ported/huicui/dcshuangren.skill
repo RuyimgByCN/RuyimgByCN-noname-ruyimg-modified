@@ -1,0 +1,5 @@
+// dcshuangren：获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcshuangren(2422429470) {
+  modifier hand_limit add 1;
+}

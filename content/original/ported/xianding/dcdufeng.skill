@@ -1,0 +1,12 @@
+// 独锋（凌操）：出牌阶段开始强制选择失去体力和/或废除一个装备栏，然后按已废栏数
+// 与损失体力之和（至多体力上限）摸牌，本回合攻击范围与杀次数上限均 +X-1。
+skill dcdufeng(2523630693) locked {
+  trigger phase_play owner_is_target {
+    effect resolve_dcdufeng(self, 0, 226166961);
+  }
+}
+
+skill dcdufeng_effect(226166961) locked {
+  modifier attack_range add owner_skill_mark;
+  modifier sha_use_limit add owner_skill_mark;
+}

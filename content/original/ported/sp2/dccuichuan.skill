@@ -1,0 +1,9 @@
+// 榱椽（杜夔）：出牌阶段，可弃一张牌并选择一名角色，从牌堆随机获得一件其空装备栏的装备并立刻使用；
+// 根据装备数你摸等量牌。若该角色装备数达到4，你失去榱椽、获得「左谏」并插入一个回合。
+// 旧 JS 含 chooseTarget + discard + random equip from draw + chooseUseTarget + changeSkills。
+// DSL 无随机装备从牌堆获得并使用的原语；无 changeSkills 替换技原语。
+skill dccuichuan(2161897813) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dccuichuan 含真实规则体（enable、filterCard、filterTarget 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：出牌阶段限一次摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

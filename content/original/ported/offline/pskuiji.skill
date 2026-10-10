@@ -1,0 +1,11 @@
+// 破试探（pskuiji）— 出牌阶段限一次，选择一名有手牌的其他角色：你从你与其的手牌中
+// 共计选择至多四张花色互异的牌并弃置；若双方弃置数不等，少弃方失去 1 点体力。
+// 旧 JS（offline/pskuiji）继承 scskuiji 的触发/启用，覆盖 content：在 scskuiji 弃牌基础上，
+// list1.length != list2.length 时少弃方 loseHp、另一方 addTempSkill("rechouai")。
+// 经核实 upstream 的 rechouai 从无定义（dangling），旧引擎 addTempSkill 实为 no-op，故不建模；
+// 仅忠实地保留非对称失去体力。本包以新增原语 choose_pskuiji_discard 表达；旧 JavaScript 不进入运行时。
+skill pskuiji(2377812112) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_nonempty {
+    effect choose_pskuiji_discard(self, event_source, 4);
+  }
+}

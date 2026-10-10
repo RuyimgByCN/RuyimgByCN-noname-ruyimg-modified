@@ -1,0 +1,7 @@
+// requji（华佗·去疾-重制）：继承自 quji 的去疾效果，重制版。旧JS含 inherit:"quji" + recover，DSL未建模。
+skill requji(2179487223) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 requji（skill.js:460）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

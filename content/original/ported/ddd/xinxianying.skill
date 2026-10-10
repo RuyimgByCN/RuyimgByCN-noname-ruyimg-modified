@@ -1,0 +1,18 @@
+// 3D精选 辛宪英「洞察/智解」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill ddddongcha(3036718178) {
+  trigger phase_begin owner_alive_other_phase_begin_both_hand_nonempty optional {
+    effect add_skill_until_turn_end(self, 4217095917);
+    effect resolve_ddd_xinxianying(self, event_player, 0);
+  }
+}
+
+skill ddddongcha_effect(4217095917) locked non_gainable {
+  trigger phase_end owner_alive_ddd_dongcha_pile_nonempty {
+    effect resolve_ddd_xinxianying(self, event_player, 1);
+  }
+}
+
+skill dddzhijie(1168942044) {
+  view_as shan response any from hand_expansion exactly 2 cost dddzhijie post_draw 2;
+  view_as wuxie response any from hand_expansion exactly 2 cost dddzhijie post_draw 2;
+}

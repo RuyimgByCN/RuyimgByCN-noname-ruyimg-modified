@@ -1,0 +1,15 @@
+// 绝响（董翓·锁定技）：你死亡时，伤害来源弃置所有装备牌并失去1点体力；
+// 你选择一名其他角色获得「残殒」（dccanyun 3523035260）。
+// 上游 (sp2/skill.js)：trigger { player: "die" }，forced；content = 若 source 存活则
+// source.discard(装备) + source.loseHp()；再 chooseTarget(notMe) 授予 dccanyun。
+// 实现：death + owner_is_target_source_alive（source 存活才触发，等价上游 isIn() 守卫）；
+// discard_all_target_equipment(event_source, event_source) + lose_hp(event_source, 1) +
+// choose_other_add_skill(self, 3523035260)。与上游差异：上游可选取消授予，DSL 强制选择
+// （与毒逝 dushi 相同近似）；dccanyun 的主动段由独立技能块表达。
+skill dcjuexiang(3898356517) locked {
+  trigger death owner_is_target_source_alive {
+    effect discard_all_target_equipment(event_source, event_source);
+    effect lose_hp(event_source, 1);
+    effect choose_other_add_skill(self, 3523035260);
+  }
+}

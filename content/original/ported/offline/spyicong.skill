@@ -1,0 +1,5 @@
+// spyicong：player:phase_discard_end, 移出游戏, 多步骤。
+skill spyicong(2564039450) {
+  trigger phase_discard_end owner_alive {
+  }
+}

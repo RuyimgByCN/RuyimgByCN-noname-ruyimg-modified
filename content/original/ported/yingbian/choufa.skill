@@ -1,0 +1,10 @@
+// 仇伐（辛敞）：出牌阶段限一次，选择一名有手牌的其他角色，选择一种类型，
+// 其该类型手牌视为【杀】。
+// 旧 JS 的「类型选择 + 牌名改写」无对应原语；以弃一张手牌并摸一张近似
+// （类型改写未建模，已注明）。
+skill choufa(3551575091) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

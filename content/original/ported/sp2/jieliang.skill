@@ -1,0 +1,35 @@
+// 劫粮（韩猛）：其他角色的摸牌阶段开始时，你可弃置一张手牌或装备牌，令其本回合
+// 摸牌数 -1 且手牌上限 -1；其于弃牌阶段弃牌后，你可获得其中一张仍处弃牌堆的牌。
+// 旧 JS 仅作语义证据；摸牌/手牌上限削减与弃牌获牌由权威状态机校验（ABI 461）。
+// 注 1：旧 JS 的 trigger.num-- 以授予目标的 draw_count -1 修饰符等价表达；
+//       旧 JS 的摸牌数 >1 守卫未移植（1 张时削为 0，文档化近似）。
+// 注 2：旧 JS 的 jieliang_gain 于目标弃牌阶段（phaseDiscard 父事件）触发；
+//       DSL 以 cards_moved + resolve_jieliang_gain 内部校验（当前回合角色弃牌阶段）
+//       等价表达。
+skill jieliang(4227370894) {
+  trigger phase_draw owner_alive_not_target_hand_equip_nonempty optional {
+    effect discard_one_hand_or_equip(self);
+    effect add_skill(event_source, 3795806305);
+    effect add_skill(self, 2999325050);
+  }
+}
+
+// 劫粮·削减：摸牌数 -1、手牌上限 -1；目标回合结束时移除。
+skill jieliang_less(3795806305) {
+  modifier draw_count add -1;
+  modifier hand_limit add -1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}
+
+// 劫粮·截获：当前回合角色弃牌阶段弃牌后，可选一张仍处弃牌堆的弃牌获得；
+// 拥有者回合结束时移除。
+skill jieliang_gain(2999325050) {
+  trigger cards_moved owner_alive_not_target {
+    effect resolve_jieliang_gain(self);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

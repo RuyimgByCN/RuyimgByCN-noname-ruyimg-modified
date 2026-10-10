@@ -1,0 +1,32 @@
+# U05 xianjian 第十四切片测试日志（2026-10-09，阿奴蛊舞，规则 v154→v155）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 476 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v154 基线 475 +1 新增蛊舞回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 64 passed; 0 failed（63 既有 + 1 新增 anu_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 163）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v154→155 + anwugu_count 零
+值字段入 canonical_hash——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- anwugu（source damageEnd check；target != player && !hasSkill(anwugu2)
+  → addSkill anwugu2）
+- anwugu2（mod cardEnabled countUsed>=storage；mod maxHandcard -1；
+  phaseAfter storage-- 归 0 remove）
+
+## 测试迭代记录
+- machine() 分流漏臂（Anwugu target 未带入→获蛊不生效）——补
+  Damage(d)→target 分流
+- 测试初版回合推进错位（NotYourTurn）——0 号收束三段补齐
+- usable 语义校准：上游 storage=3=「每回合最多 3 张」（第 4 张拒绝）
+  ——测试初版按「3 张后拒」误写第 3 张
+- PlayerState::new 双写去重（E0062，同 v150 批）

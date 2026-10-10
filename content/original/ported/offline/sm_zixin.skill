@@ -1,0 +1,5 @@
+// sm_zixin：player:cards_moved, global:cards_moved, 异步。
+skill sm_zixin(2383284750) {
+  trigger cards_moved owner_alive {
+  }
+}

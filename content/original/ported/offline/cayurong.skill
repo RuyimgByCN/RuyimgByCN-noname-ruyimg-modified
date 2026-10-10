@@ -1,0 +1,5 @@
+// cayurong：锁定技, target:useCardToTarget, 加技能, 含子技能, 异步。
+skill cayurong(2517024288) {
+  trigger card_targeted owner_is_target_once {
+  }
+}

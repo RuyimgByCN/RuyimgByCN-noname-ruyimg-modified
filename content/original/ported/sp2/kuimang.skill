@@ -1,0 +1,6 @@
+// 溃蟒：一名角色死亡后，若你曾对其造成过伤害，摸两张牌。
+skill kuimang(2972733766) locked {
+  trigger death owner_alive_damaged_event_player {
+    effect draw_cards(self, 2);
+  }
+}

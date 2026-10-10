@@ -1,0 +1,5 @@
+// splanggu_rewrite：player:judge, 多步骤。
+skill splanggu_rewrite(2429451315) {
+  trigger phase_judge owner_alive {
+  }
+}

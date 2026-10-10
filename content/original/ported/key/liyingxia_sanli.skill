@@ -1,0 +1,9 @@
+// 三礼（李映夏·锁定技）：其他角色回合内第 1/2 次指定你为目标时摸一张牌，第 3 次须交给其一张牌。
+// 实现：被其他角色指定为目标时（每回合一次）摸 1。
+// 近似：不按第 1/2/3 次分支；第 3 次交牌未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill liyingxia_sanli(3091825769) locked {
+  trigger card_targeted owner_targeted_by_other_card_once_per_turn {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// jun_tianze：音效名:tianming, target:card_targeted, 需弃牌, 需选择目标, 二选一, 异步, 弃牌。
+skill jun_tianze(2925042223) {
+  trigger card_targeted owner_is_target_once {
+  }
+}

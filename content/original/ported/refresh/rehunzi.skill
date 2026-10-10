@@ -1,0 +1,12 @@
+// 界魂姿（rehunzi）— 界孙坚觉醒技：准备阶段体力不大于 2 时，减 1 点体力上限，
+// 获得「英姿」（reyingzi）与「英魂」（gzyinghun）。
+// 旧 JS（refresh/rehunzi）继承 SHENHUA「魂姿」的触发与 content，仅把 filter 放宽为 hp<=2。
+// 这里发布完整规则：触发器用 owner_is_target_hp_le_two，content 与 hunzi 一致；旧 JavaScript 不进入运行时。
+skill rehunzi(3543073615) locked {
+  trigger phase_prepare owner_is_target_hp_le_two {
+    effect remove_skill(self_skill);
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 2412932912);
+    effect add_skill(self, 2790748306);
+  }
+}

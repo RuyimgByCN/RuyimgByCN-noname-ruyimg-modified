@@ -1,0 +1,11 @@
+skill potfaen(4194455770) {
+  trigger card_used owner_alive {
+    effect resolve_potchenqun(self, event_source, 0);
+  }
+}
+
+skill potdingpin(2518587448) {
+  trigger phase_end owner_alive_potdingpin_available_once_per_round optional {
+    effect resolve_potchenqun(self, event_player, 1);
+  }
+}

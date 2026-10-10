@@ -1,0 +1,8 @@
+skill oldimeng(2509094453) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_oldimeng(self, 0);
+  }
+  trigger phase_play_end owner_is_target {
+    effect resolve_oldimeng(self, 1);
+  }
+}

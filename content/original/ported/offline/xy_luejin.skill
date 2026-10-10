@@ -1,0 +1,6 @@
+// xy_luejin：global:phase_draw_end, 回复体力, 异步。
+skill xy_luejin(3938100174) {
+  trigger phase_draw_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

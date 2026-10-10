@@ -1,0 +1,5 @@
+skill tyyizhuang(3442202518) {
+  trigger phase_prepare owner_is_target_judge_nonempty optional {
+    effect damage_then_discard_all_judge(self);
+  }
+}

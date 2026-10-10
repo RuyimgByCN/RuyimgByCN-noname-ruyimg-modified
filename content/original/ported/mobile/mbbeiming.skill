@@ -1,0 +1,19 @@
+// mbbeiming（孛明）：游戏开始时，你可令至多两名角色各获得牌堆中一张攻击
+// 范围为X的武器牌（X为其手牌中的花色数；无 distance 信息的武器视作范围 1）。
+// 上游 (mobile/skill.js mbbeiming L12587)：trigger global phaseBefore
+// (phaseNumber==0) / player enterGame；cost chooseTarget [1,2] 任意角色
+// （可取消）；content 对每个目标统计手牌花色数，get.cardPile2 搜索
+// subtype equip1 且 1-distance.attackFrom == 花色数（无 distance 信息时
+// 要求花色数==1）的武器牌，target.gain(equip,"gain2")。
+// 实现（2026-09-13 第二百六十九批·游戏开始发放族状态机，ADR 0641 §8.57，
+// shuaiyan 分段模板复用）：trigger game_started always →
+// resolve_mbbeiming(self, self_skill, 0)（ABI 718 / tag 742 / Cont 318）：
+// 选至多两名任意存活角色（可取消）→ 逐目标按手牌花色数从牌堆顶搜索
+// weapon_range 相等的武器牌置入其手牌区，找不到则跳过。
+// 近似（登记债）：①gain2 展示表现面未建模；②牌堆顶向下的搜索顺序为引擎
+// 近似（上游 cardPile2 同为自顶向下 ✓）。
+skill mbbeiming(3072978888) {
+  trigger game_started always {
+    effect resolve_mbbeiming(self, self_skill, 0);
+  }
+}

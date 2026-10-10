@@ -1,0 +1,4 @@
+// 激将：需要使用或响应【杀】时，依次请求其他蜀势力角色代为打出。
+skill jijiang(2377283906) lord_only {
+  view_as sha any any from group_shu;
+}

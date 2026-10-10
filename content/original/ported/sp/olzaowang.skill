@@ -1,0 +1,9 @@
+// 早亡（olzaowang）：限定技。出牌阶段，你可以令一名角色加1点体力上限、
+// 回复1点体力并摸三张牌。
+skill olzaowang(3649255847) locked {
+  active play_phase once_per_game targets 1 1 {
+    effect change_max_hp(event_source, 1);
+    effect recover_hp(event_source, 1);
+    effect draw_cards(event_source, 3);
+  }
+}

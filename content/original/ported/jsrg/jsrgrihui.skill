@@ -1,0 +1,8 @@
+// jsrgrihui（日彗）：①当你使用【杀】对目标角色造成伤害后，你可以令判定区有牌的其他角色各摸一张牌。②你于一回合内对判定区没有牌的角色使用的第一张【杀】无任何次数限制。
+// 未建模：charlotte延迟, 翻译调用, addTempSkill（DSL无对应原语）
+skill jsrgrihui(3682716357) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgrihui（skill.js:6552）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：手牌上限 +1”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

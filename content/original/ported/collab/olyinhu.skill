@@ -1,0 +1,11 @@
+// 寅虎：出牌阶段内每种基本/锦囊/装备类别限一次，弃置一张手牌或装备牌，
+// 对一名其他角色造成 1 点普通伤害；若这次伤害令角色进入濒死，本回合禁用此技能。
+// 旧 JavaScript 只用于语义核对。
+skill olyinhu(4066124366) {
+  active play_phase targets 1 1 other
+    select_he 1 1 unused_category_by_skill_this_play_phase {
+    effect record_selected_play_phase_category(self_skill);
+    effect discard_selected(self);
+    effect deal_damage_ban_active_if_dying(self, event_source, 1, self_skill);
+  }
+}

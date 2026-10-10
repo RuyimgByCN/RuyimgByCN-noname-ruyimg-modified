@@ -1,0 +1,5 @@
+// 雄意 (xiongyi) — 袁绍: all cards can be used as arrow volley.
+// Simplified: attack_range +1 (overwhelming barrage).
+skill xiongyi(57) {
+  modifier attack_range add 1;
+}

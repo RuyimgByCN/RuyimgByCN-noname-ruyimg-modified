@@ -1,0 +1,27 @@
+# U05 xianjian 第十五切片测试日志（2026-10-09，唐雨柔甜香去，规则 v155→v156）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 477 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v155 基线 476 +1 新增甜香去回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 65 passed; 0 failed（64 既有 + 1 新增 tangyurou_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 164）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v155→156 + txianqu_used 零
+值字段入 canonical_hash——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- txianqu（source damageBefore check；cancel+draw(2)+recover()+
+  addTempSkill txianqu2；own phaseUse 限定）
+
+## 测试迭代记录
+- 甜香去回复的是自己（player.recover()）——初版断言误写受伤者不变
+- 版本号检出 153（v154/v155 批 bump 因多文件脚本中途失败未落）——重设
+  156 并全链复核（host/anwugu 钩完整）

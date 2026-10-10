@@ -1,0 +1,16 @@
+// 兴（那兔诸葛亮）：游戏开始获得各可指定目标锦囊各一张（兴）；造成伤害后解锁一张；
+// 手中无锁定兴时用牌无距离次数且不可被响应。
+// 近似：开局摸 5 张（兴区未建模，以手牌直增代替）；造成伤害后摸 1；
+// 「手中无锁定兴」门由 owner_source_hand_gaintag_absent_297116519 过滤器承接
+// （兴 tag=合成 blake2b("natuxing")=297116519；无距离/次数豁免仍未建模）。
+skill natuxing(4091854877) locked {
+  trigger game_started owner_alive {
+    effect draw_cards(self, 5);
+  }
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+  trigger card_used owner_source_hand_gaintag_absent_297116519 {
+    effect make_current_card_unrespondable(self, event_card, 4091854877);
+  }
+}

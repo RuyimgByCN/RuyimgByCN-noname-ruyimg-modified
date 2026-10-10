@@ -1,0 +1,5 @@
+// xkjuluan：锁定技, global:phaseBefore, player:game_started, source:damage_before, 需选择目标, 二选一, 含子技能, 异步。
+skill xkjuluan(3710747089) locked {
+  trigger game_started always {
+  }
+}

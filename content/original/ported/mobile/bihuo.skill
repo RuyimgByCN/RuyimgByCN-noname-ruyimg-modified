@@ -1,0 +1,6 @@
+// bihuo（避祸）：限定技。一名角色脱离濒死状态时，你可以令其摸三张牌，然后其他角色计算至其的距离时+X直到本轮结束（X为角色数）。
+skill bihuo(4286414414) {
+  trigger dying_after owner_alive {
+    effect draw_cards(self, 3);
+  }
+}

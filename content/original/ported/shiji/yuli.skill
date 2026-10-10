@@ -1,0 +1,11 @@
+// 驭雳（神马超）：锁定技。你造成伤害前，若此伤害无属性则改为雷属性，若已是雷属性则
+// 伤害 +1；你受到雷属性伤害前，取消此伤害并摸伤害点数张牌。
+// 旧 JavaScript 仅作语义证据；改雷/加伤重放与防递归由 ABI 409 resolve_yuli 权威结算。
+skill yuli(3155821166) locked {
+  trigger damage_before owner_is_source {
+    effect resolve_yuli(self, 0);
+  }
+  trigger damage_before owner_is_target {
+    effect resolve_yuli(self, 1);
+  }
+}

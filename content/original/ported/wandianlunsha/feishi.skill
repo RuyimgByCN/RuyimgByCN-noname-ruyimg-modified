@@ -1,0 +1,12 @@
+// 归档扩展“玩点论杀”费诗【率言/墨守】（ABI 608）。旧 JavaScript 仅作语义证据。
+
+skill nsshuaiyan(2978279193) {
+  trigger hp_recovered owner_alive_other_recovered_outside_owner_turn optional {
+    effect resolve_nsshuaiyan(self, event_player);
+  }
+}
+
+skill moshou(4042669588) locked {
+  modifier card_target_cancel(bingliang) override 1;
+  modifier card_target_cancel(lebu) override 1;
+}

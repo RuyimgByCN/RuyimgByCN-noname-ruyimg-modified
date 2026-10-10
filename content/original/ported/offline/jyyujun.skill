@@ -1,0 +1,7 @@
+// jyyujun：global:damage_before, 摸牌, 失去体力, 异步。
+skill jyyujun(3231914089) {
+  trigger damage_before owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

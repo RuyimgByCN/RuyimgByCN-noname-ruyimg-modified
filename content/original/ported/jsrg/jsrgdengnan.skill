@@ -1,0 +1,9 @@
+// jsrgdengnan（登难）：限定技。出牌阶段，你可以视为使用一张非伤害类普通锦囊牌。此回合结束时，若此牌的目标均于此回合受到过伤害，你重置武将牌上的所有技能。
+// 类型：限定技
+// 未建模：历史查询, chooseButton, 翻译调用, 限定技, 全局状态, 觉醒技 ...等7项（DSL无对应原语）
+skill jsrgdengnan(4044223898) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgdengnan（skill.js:5576）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,10 @@
+// mberdi（饵敌）：结束阶段，你可以指定一名手牌数大于你的角色，你失去1点体力值并摸一张牌，然后你与其同时弃置任意张手牌。此法弃置牌后，若你弃置的牌数：大于其，你回复1点体力值并对其造成1点伤害；小于其，你摸等同于其弃置的牌数。
+skill mberdi(2413494470) locked {
+  trigger phase_discard owner_alive {
+    effect draw_cards(self, 1);
+    effect choose_other_damage(self, 1);
+    effect recover_hp(self, 1);
+    effect discard_selected(self);
+    effect lose_hp(self, 1);
+  }
+}

@@ -1,0 +1,11 @@
+// 从俭（张绣）：当你成为其他角色使用锦囊牌的目标时（该锦囊目标数大于一），你可以
+// 交给其中一名其他目标一张手牌或装备区里的牌，然后摸一张牌；若你以此法给出的牌为
+// 装备牌，则你改为摸两张牌。
+// 旧 JS 仅作语义证据；目标集合来自触发事件并在屏障重校验，选牌与赠予摸牌由
+// resolve_drlt_congjian 权威状态机校验（ABI 524）。旧 JS 的 trigger 为 useCardToTargeted
+// 且不排除自己使用的多目标锦囊（如桃园），DSL 以 card_targeted 等价表达。
+skill drlt_congjian(3110735242) {
+  trigger card_targeted owner_is_target_multi_target_trick_has_hand_equip optional {
+    effect resolve_drlt_congjian(self);
+  }
+}

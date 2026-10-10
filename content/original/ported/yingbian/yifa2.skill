@@ -1,0 +1,10 @@
+skill yifa2(3192554646) {
+  modifier hand_limit add -owner_skill_mark;
+}
+
+// Legacy empty metadata; no rule behavior.
+skill ruilve3(2823565196) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

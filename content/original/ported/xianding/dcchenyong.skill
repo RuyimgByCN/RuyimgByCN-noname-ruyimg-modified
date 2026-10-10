@@ -1,0 +1,7 @@
+// 沉勇（陈泰）：出牌阶段结束时，按本出牌阶段使用过的逻辑牌类别数摸牌。
+// 旧 JavaScript 仅作语义证据；类别计数由权威阶段历史提供。
+skill dcchenyong(2745284067) {
+  trigger phase_end owner_is_target_play_phase_card_category_count_positive optional {
+    effect draw_by_play_phase_card_category_count(self);
+  }
+}

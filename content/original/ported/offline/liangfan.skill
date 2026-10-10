@@ -1,0 +1,5 @@
+// liangfan：锁定技, player:phase_prepare, 失去体力, 加技能, 多步骤。
+skill liangfan(2537365906) {
+  trigger phase_prepare owner_alive {
+  }
+}

@@ -1,0 +1,10 @@
+// 争论（陆绩）：摸牌阶段开始时，若你没有「橘」，则跳过摸牌阶段并获得一枚「橘」。
+// 旧 JS 仅作语义证据；摸牌阶段跳过与「橘」标记获得由权威状态机校验。
+skill nzry_zhenglun(3633467797) locked {
+  trigger phase_draw owner_is_target {
+    if mark_count(self, 2906906473) == 0 {
+      effect skip_current_phase(self);
+      effect add_mark(self, 2906906473, 1);
+    }
+  }
+}

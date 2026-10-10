@@ -1,0 +1,7 @@
+// 天匠（PY）：锁定技，游戏开始时，从牌堆获得一张装备牌。
+// 旧 JS 的“获得两种不同类别的装备牌并立即装备一张、每轮开始时重复”省略。
+skill pytianjiang(2167112704) locked {
+  trigger game_started owner_alive {
+    effect gain_equipment_from_draw_pile(self);
+  }
+}

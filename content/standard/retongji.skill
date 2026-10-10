@@ -1,0 +1,10 @@
+skill retongji(2773091493) {
+  trigger card_targeted owner_alive_other_sha_target_can_redirect_to_owner {
+    effect choose_current_sha_target_discard_redirect_to_owner(
+      self,
+      event_source,
+      event_card,
+      event_player
+    );
+  }
+}

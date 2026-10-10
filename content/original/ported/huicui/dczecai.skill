@@ -1,0 +1,7 @@
+// dczecai：觉醒技；限定技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dczecai(3389465604) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

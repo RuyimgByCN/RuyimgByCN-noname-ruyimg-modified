@@ -1,0 +1,8 @@
+// retishen2：刷新包技能。
+// triggers: player:phaseJieshuBegin
+skill retishen2(3767755651) {
+    // 近似：旧JS事件 phaseJieshuBegin → DSL事件 phase_end
+    trigger phase_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

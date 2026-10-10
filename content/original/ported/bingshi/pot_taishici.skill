@@ -1,0 +1,30 @@
+// 势太史慈：酣战 / 战烈 / 振锋（旧 JavaScript 仅作语义参考）。
+skill pothanzhan(2573360121) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_pottaishici(self, event_source, 3, 2573360121, 3829642123);
+  }
+}
+
+skill potzhanlie(3829642123) {
+  trigger phase_begin owner_alive {
+    effect resolve_pottaishici(self, self, 0, 2573360121, 3829642123);
+  }
+
+  trigger cards_moved owner_alive_sha_entered_discard_potzhanlie_available {
+    effect resolve_pottaishici(self, self, 1, 2573360121, 3829642123);
+  }
+
+  trigger phase_play_end owner_is_target optional {
+    effect resolve_pottaishici(self, self, 2, 2573360121, 3829642123);
+  }
+
+  trigger sha_resolved owner_source_sha_resolved_tracked_potzhanlie_draw {
+    effect resolve_pottaishici(self, self, 5, 2573360121, 3829642123);
+  }
+}
+
+skill potzhenfeng(2197448518) {
+  active play_phase once_per_game {
+    effect resolve_pottaishici(self, self, 4, 2573360121, 3829642123);
+  }
+}

@@ -1,0 +1,7 @@
+// 驰应（江山如故高翔）：旧 JavaScript 仅作语义证据；顺序弃牌和条件夺基由 ABI 501
+// 权威状态机结算。
+skill jsrgchiying(2375612422) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect resolve_jsrgchiying(self, event_source);
+  }
+}

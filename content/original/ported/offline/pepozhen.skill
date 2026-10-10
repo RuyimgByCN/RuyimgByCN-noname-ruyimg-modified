@@ -1,0 +1,5 @@
+// pepozhen：锁定技, source:damageSource, 多分支选择, 加技能, 含子技能, 异步。
+// 复杂度较高，保留占位。
+skill pepozhen(2375587100) {
+  modifier hand_limit add 1;
+}

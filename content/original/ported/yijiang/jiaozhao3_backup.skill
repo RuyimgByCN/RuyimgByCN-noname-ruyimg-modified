@@ -1,0 +1,6 @@
+// 矫诏3后备：旧 JS 仅音效映射，无独立游戏逻辑。
+skill jiaozhao3_backup(3967348169) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

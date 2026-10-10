@@ -1,0 +1,14 @@
+// 挫锐：旧 JS 语义重写；开局补至存活人数（至多八张），被延时锦囊指定后跳过下个判定阶段。
+skill olcuorui(2241852934) locked {
+  trigger game_started owner_alive_hand_below_alive_count_capped_eight {
+    if alive_count() < 8 {
+      effect draw_cards(self, alive_count() - hand_count(self));
+    } else {
+      effect draw_cards(self, 8 - hand_count(self));
+    }
+  }
+
+  trigger card_targeted owner_alive_delayed_trick_target_without_pending_judge_skip {
+    effect skip_next_judge_phase(self);
+  }
+}

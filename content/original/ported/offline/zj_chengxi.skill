@@ -1,0 +1,5 @@
+// zj_chengxi：player:card_targeted, 异步。
+skill zj_chengxi(4151689809) {
+  trigger card_targeted owner_alive {
+  }
+}

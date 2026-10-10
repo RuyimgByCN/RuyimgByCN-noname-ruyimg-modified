@@ -1,0 +1,13 @@
+// 邯郸（pxhandan，州郡技能）：每回合限一次。当你使用一张非伤害普通锦囊后，你令一名
+// 角色获得此牌。
+// 上游 (sp/skill.js:2260)：trigger player:useCardAfter；filter = 非伤害普通锦囊且实体
+// 牌进弃牌堆；usable: 1；content = chooseTarget → gain(实体牌)。
+// 实现：card_used + owner_source_ordinary_trick → 可选确认 →
+// choose_other_gain_event_cards(self)（令一名其他角色获得本事件实体牌）。
+// 与上游差异：「非伤害锦囊」「实体牌进弃牌堆」过滤未建模（普通锦囊含伤害锦囊）；
+// 「每回合限一次」以可选触发近似。
+skill pxhandan(3498155858) {
+  trigger card_used owner_source_ordinary_trick optional {
+    effect choose_other_gain_event_cards(self);
+  }
+}

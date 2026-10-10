@@ -1,0 +1,5 @@
+// peshuangfeng：player:phaseBegin, 多分支选择, 加技能, 异步。
+skill peshuangfeng(3632839403) {
+  trigger phase_any_end owner_alive {
+  }
+}

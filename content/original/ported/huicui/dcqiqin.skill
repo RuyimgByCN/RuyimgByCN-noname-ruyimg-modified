@@ -1,0 +1,5 @@
+// dcqiqin：锁定技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill dcqiqin(2235328417) {
+  modifier hand_limit add 1;
+}

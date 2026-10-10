@@ -1,0 +1,5 @@
+// zombiesangluan：player:card_used, 需选择目标, 回复体力, 失去体力, 异步。
+skill zombiesangluan(3847785171) {
+  trigger card_used owner_alive {
+  }
+}

@@ -1,0 +1,6 @@
+// fengji（丰积）：锁定技，回合结束时，你记录你的手牌数。回合开始时，若你的手牌数不小于你记录的手牌数，则你摸三张牌且本回合手牌上限为体力上限。
+skill fengji(2677748123) locked {
+  trigger phase_begin owner_alive {
+    effect draw_cards(self, 3);
+  }
+}

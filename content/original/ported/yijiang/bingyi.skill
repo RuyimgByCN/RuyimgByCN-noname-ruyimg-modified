@@ -1,0 +1,7 @@
+// 秉壹（顾雍）：结束阶段展示手牌；若颜色相同，可令至多手牌数名角色各摸一张。
+// 通过 resolve_rebingyi 驱动完整判定与选择逻辑。
+skill bingyi(3284056549) {
+  trigger phase_end owner_alive {
+    effect resolve_rebingyi(self);
+  }
+}

@@ -1,0 +1,5 @@
+// zhanjiang：player:phase_prepare, 异步。
+skill zhanjiang(2786466662) {
+  trigger phase_prepare owner_alive {
+  }
+}

@@ -1,0 +1,8 @@
+// 佑生（艾莉卡·使命技）：保护至多两名角色，为其抵挡杀/伤害锦囊；成功则摸牌，失败则失去护甲并弃牌。
+// 旧 JS 的使命技+护甲+目标重定向+多子技能无对应 DSL 原语，未建模。
+skill erika_yousheng(4101732913) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 erika_yousheng（skill.js:3996）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：用牌后可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

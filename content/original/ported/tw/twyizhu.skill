@@ -1,0 +1,15 @@
+// 遗珠：开局及结束阶段埋置实体牌；其被他人使用时修改目标并摸牌，弃置后解除追踪。
+skill twyizhu(2650180014) {
+  trigger game_started owner_alive {
+    effect resolve_twyizhu(self, self, event_card, 0);
+  }
+  trigger phase_end owner_is_target {
+    effect resolve_twyizhu(self, self, event_card, 0);
+  }
+  trigger card_targeted owner_alive_other_single_target_used_tracked_twyizhu {
+    effect resolve_twyizhu(self, event_source, event_card, 1);
+  }
+  trigger cards_moved owner_tracked_twyizhu_entered_discard {
+    effect resolve_twyizhu(self, self, event_card, 2);
+  }
+}

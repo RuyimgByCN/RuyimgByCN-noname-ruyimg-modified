@@ -1,0 +1,23 @@
+// 铁锁连环枪·双戟（bintieshuangji_skill，装备技）：当你使用【杀】被【闪】抵消后，
+// 可失去1点体力，然后获得此【杀】（若进入弃牌堆）、摸一张牌、本回合使用【杀】的次数上限+1。
+// 上游 (sp/skill.js:26104)：equipSkill shaMiss，filter hp>0，content = loseHp + gain(cards) +
+// draw + addTempSkill(bintieshuangji_skill_effect) + addMark(1)；effect 子技 charlotte mod
+// cardUsable(sha) = num + countMark。
+// 实现：modifier sha_use_limit add owner_skill_mark（mark 键 = 本技能 def，与上游 effect 标记
+// 同构）；sha_dodged → lose_hp(1) + gain_discard_card_by_kind(sha) + draw + add_mark(1)；
+// turn_ended 清零标记（跨回合重置）。与上游差异：装备技绑定未建模；可选确认按 optional。
+skill bintieshuangji_skill(4139600320) {
+  modifier sha_use_limit add owner_skill_mark;
+
+  trigger sha_dodged owner_source_sha_dodged optional {
+    effect lose_hp(self, 1);
+    effect gain_discard_card_by_kind(self, sha);
+    effect draw_cards(self, 1);
+    effect add_mark(self, 4139600320, 1);
+  }
+
+  trigger turn_ended owner_is_target {
+    let marks = mark_count(self, 4139600320);
+    effect remove_mark(self, 4139600320, marks);
+  }
+}

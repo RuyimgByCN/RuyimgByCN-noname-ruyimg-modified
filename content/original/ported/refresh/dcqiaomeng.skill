@@ -1,0 +1,13 @@
+// 趫猛：旧 JS 只保留为语义证据；完整目标列表和实体牌类别由引擎续程校验。
+skill dcqiaomeng(3871427916) {
+  trigger card_targeted owner_source_first_target_black_card_any_target_other_discardable_hand_equip optional {
+    effect resolve_dcqiaomeng(self, event_card, 2662675115);
+  }
+}
+
+skill dcqiaomeng_effect(2662675115) {
+  modifier card_use_unrespondable_for_skill_card_policy override 1;
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

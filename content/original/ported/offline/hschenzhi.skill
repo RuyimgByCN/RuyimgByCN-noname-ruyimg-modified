@@ -1,0 +1,6 @@
+// hschenzhi：锁定技, player:drawBegin, global:gameDrawBegin, global:replaceHandcardsBegin, 加技能。
+skill hschenzhi(2835646113) {
+  trigger phase_draw owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

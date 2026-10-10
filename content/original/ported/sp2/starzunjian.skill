@@ -1,0 +1,7 @@
+// 尊俭（星诸葛瑾）：上游 (v1.11.5+ 7ed3facb 增量)。
+// 旧 JS 的「出牌阶段按花色去重弃牌主动（storage suit 去重 + 弃牌衍生）」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-08-15 上游增量同步批次迁移。
+skill starzunjian(2494920718) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

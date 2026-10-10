@@ -1,0 +1,15 @@
+// 蛊惑（于吉）：你可以将一张手牌扣置于武将牌上，声明为任意基本牌或普通锦囊牌使用
+// 或打出；其他角色依次质疑，无人质疑则按声明生效，有人质疑则验真并结算。新蛊惑
+// 复用引擎 cost guhuo 质疑流程（纯 DSL，旧 JS 仅作语义证据）；「禅缘」存在时于吉
+// 不能质疑（文档化近似，未建模）。
+skill xinfu_guhuo(2102070101) {
+  view_as basic any any from none cost guhuo;
+  view_as ordinary_trick any any from none cost guhuo;
+}
+
+// 禅缘（于吉）：锁定技，你不能于蛊惑的结算流程中进行质疑；当你的体力值为 1 时，
+// 你的其他技能失效。体力值为 1 时非锁定技能失效以 skills_disabled_when_hp_one
+// 修正器 + skill_effectively_enabled 钩子表达（ABI 552）。
+skill chanyuan(4099161204) locked {
+  modifier skills_disabled_when_hp_one override 1;
+}

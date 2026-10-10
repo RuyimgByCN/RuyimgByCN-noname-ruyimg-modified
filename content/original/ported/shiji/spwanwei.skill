@@ -1,0 +1,10 @@
+// 挽危（卞夫人）：出牌阶段限一次或当其他角色进入濒死状态时，你可令其回复体力，然后你失去体力。
+skill spwanwei(3728402634) {
+  active play_phase uses_per_turn 1 targets 1 1 other wounded {
+    effect spwanwei_active(self, event_source);
+  }
+
+  trigger dying owner_alive_other_dying_once_per_round optional {
+    effect spwanwei_dying(self, event_player);
+  }
+}

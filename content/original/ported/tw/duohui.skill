@@ -1,0 +1,10 @@
+// duohui（堕洄）：其他角色准备阶段开始时，可将一张牌交给拥有此技能的角色，
+// 然后其须交还一张同花色牌，否则你摸一张牌。
+// 旧 JS 含 subSkill global + 双边选择 + 花色匹配 + 分支（交还/摸牌）；
+// DSL 无双边 give + 花色匹配回交原语，完全无法建模。
+skill duohui(3425337549) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 duohui（skill.js:28902）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

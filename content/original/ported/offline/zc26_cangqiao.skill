@@ -1,0 +1,5 @@
+// zc26_cangqiao：player:card_used, global:game_started, 二选一, 异步。
+skill zc26_cangqiao(4172644512) {
+  trigger card_used owner_alive {
+  }
+}

@@ -1,0 +1,5 @@
+// 绯驱（五段）继承多鲁基版本的双向不可响应语义。
+skill godan_feiqu(3490863084) locked {
+  modifier sha_unrespondable(any) override 1;
+  modifier sha_target_unrespondable override 1;
+}

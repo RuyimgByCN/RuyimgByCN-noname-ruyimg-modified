@@ -1,0 +1,5 @@
+// dcfuli：摸?牌；弃牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcfuli(3763434904) {
+  modifier hand_limit add 1;
+}

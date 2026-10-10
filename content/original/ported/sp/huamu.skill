@@ -1,0 +1,13 @@
+// 灵杉（huamu，曹宪曹华）：你使用牌后，若该牌进入了弃牌堆，可将它置于你的武将牌上。
+// 上游 (sp/skill.js:24085)：trigger player:useCardAfter；filter = 用牌有实体牌进入
+// 弃牌堆且与上一张全场使用的牌颜色不同；content = addToExpansion(cards).gaintag("huamu")。
+// 实现：card_resolved + owner_source（结算完成后触发，牌已在弃牌堆）→ 可选确认 →
+// store_event_card_in_skill_pile(self, event_card, self_skill)（ABI 607 新原语：若
+// event_card 在弃牌堆则移入拥有者武将牌）。
+// 与上游差异：颜色交替条件（与上一张全场用牌颜色不同）未建模（无 card_resolved 作用域的
+// 颜色交替过滤器）；gaintag（灵杉/玉树红黑计数展示）未建模。
+skill huamu(3881736086) {
+  trigger card_resolved owner_source optional {
+    effect store_event_card_in_skill_pile(self, event_card, self_skill);
+  }
+}

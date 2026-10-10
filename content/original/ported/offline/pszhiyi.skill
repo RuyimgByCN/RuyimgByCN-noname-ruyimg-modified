@@ -1,0 +1,7 @@
+// 志异：旧 JS 语义重写；每回合一次、单目标、摸牌与普通伤害均复用通用契约。
+skill pszhiyi(2980176526) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect draw_cards(event_source, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

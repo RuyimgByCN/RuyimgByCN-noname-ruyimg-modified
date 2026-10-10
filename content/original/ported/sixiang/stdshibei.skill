@@ -1,0 +1,8 @@
+// 矢北（标沮授）
+// 限定技：受到伤害后回复 1 点体力；移除自身实例表示本局已发动。
+skill stdshibei(2559343711) locked {
+  trigger damage owner_is_target {
+    effect recover_hp(self, 1);
+    effect remove_skill(self_skill);
+  }
+}

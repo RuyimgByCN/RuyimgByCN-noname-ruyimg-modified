@@ -1,0 +1,7 @@
+// zj_qiangyi（主动技(chooseToUse)/转化技(视作yushijiesui)/触发技）：player:cards_moved, 主动(chooseToUse), 视作yushijiesui, 含子技能, 异步。
+skill zj_qiangyi(3621884196) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

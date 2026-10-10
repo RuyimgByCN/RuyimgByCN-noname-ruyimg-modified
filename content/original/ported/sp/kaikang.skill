@@ -1,0 +1,9 @@
+skill kaikang(3829685432) {
+  trigger card_targeted owner_alive_sha_target_distance_le_one optional {
+    if self == event_player {
+      effect draw_cards(self, 1);
+    } else {
+      effect draw_then_give_one(self, event_player, 1, any_hand_equip_use_equipment);
+    }
+  }
+}

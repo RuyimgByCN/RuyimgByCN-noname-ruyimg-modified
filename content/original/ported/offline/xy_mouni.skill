@@ -1,0 +1,5 @@
+// xy_mouni：音效名:mouni, player:phaseBegin, 需选择目标, 异步。
+skill xy_mouni(3492621327) {
+  trigger phase_any_end owner_alive {
+  }
+}

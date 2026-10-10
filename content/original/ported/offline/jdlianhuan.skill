@@ -1,0 +1,7 @@
+// 九鼎庞统：梅花手牌可当铁索连环；铁索指定未横置且有牌的目标后可弃其一张牌。
+skill jdlianhuan(3773194665) {
+  view_as tiesuo play_phase club from hand;
+  trigger card_targeted owner_source_tiesuo_target_alive_unlinked_hand_equip_nonempty {
+    effect choose_optional_discard_target_card(self, event_player, hand_equip);
+  }
+}

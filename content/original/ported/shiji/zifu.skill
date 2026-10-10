@@ -1,0 +1,9 @@
+// 自缚（孟获/祝融系）：锁定技。你通过「谋略」标记关联的角色死亡后，
+// 你失去 2 点体力上限。
+// 旧 JS 的 storage 关联角色追踪无对应原语；以死亡事件后减 2 点上限近似
+// （关联条件未建模，已注明）。
+skill zifu(3117960799) locked {
+  trigger death owner_alive {
+    effect change_max_hp(self, -2);
+  }
+}

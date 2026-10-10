@@ -1,0 +1,7 @@
+// 攻阁：使用伤害牌指定首个目标后，选一个目标执行三选一（摸X张/弃X张牌/伤害+X），X=目标非charlotte技能数+1，各有后续副作用。
+// 旧JS中「按技能数计算X」「三选一含副作用」无对应原语，无法表达。
+skill twgongge(3012107064) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twgongge 含真实规则体（trigger、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

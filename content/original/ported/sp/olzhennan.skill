@@ -1,0 +1,10 @@
+// 镇南（olzhennan）：出牌阶段限一次，你可以将任意张牌当【南蛮入侵】使用（每张牌指定一名目标）。
+// 上游 (sp/skill.js:29798)：enable phaseUse usable 1；viewAs nanman；filterCard 任意；
+// selectCard = 目标数~目标数+1（结算本回合已受伤角色额外目标）；group = olzhennan2（本回合
+// 下一张牌+1目标）。
+// 实现：view_as nanman play_phase any from any uses_per_turn 1（新增 nanman 转化种类：
+// typecheck VIEW_AS_KINDS + 运行时 map_as_kind）。与上游差异：「已受伤角色额外目标」与
+// olzhennan2 子技（下张牌+1目标）未建模；任意数量卡片均计为 1 张虚拟牌，目标数恒 1。
+skill olzhennan(3516136840) {
+  view_as nanman play_phase any from hand_equip uses_per_turn 1;
+}

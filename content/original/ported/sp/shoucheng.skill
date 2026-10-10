@@ -1,0 +1,6 @@
+// 守成：非当前回合角色失去最后的手牌后，拥有者可令其摸一张牌。
+skill shoucheng(3263722944) {
+  trigger cards_moved owner_alive_event_player_outside_turn_from_hand_empty optional {
+    effect draw_cards(event_player, 1);
+  }
+}

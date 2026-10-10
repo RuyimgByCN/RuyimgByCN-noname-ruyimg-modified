@@ -1,0 +1,4 @@
+// 乱击：出牌阶段，可将两张相同花色的手牌当【万箭齐发】使用。
+skill luanji(2717757870) {
+  view_as wanjian play_phase any from hand exactly 2 same_suit;
+}

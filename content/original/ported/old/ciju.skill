@@ -1,0 +1,8 @@
+// 刺踽（仇渊灵雎）：受到伤害后，可令当前回合角色手牌上限本回合为 0，
+// 且用牌无次数限制直至其使用了不同牌名的牌。
+// 近似：给自己挂载本回合 hand_limit=0 + 用牌无限（目标应为当前回合角色；牌名切换解除未建模）。
+skill ciju(4165875370) {
+  trigger damage owner_is_target optional {
+    effect add_skill_until_turn_end(self, 2360497961);
+  }
+}

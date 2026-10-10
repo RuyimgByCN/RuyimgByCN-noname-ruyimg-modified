@@ -1,0 +1,12 @@
+// beOfOneHeart（同心）：你的回合开始时（phaseBegin），若你有带 oneHeart 标记的
+// 技能，选择同心角色（上游仅 phaseBegin 单时点）。
+// 旧 JS 含复杂 target 选择、storage 存储、markSkill/unmarkSkill 状态机；
+// DSL 无动态选择-存储-状态联动原语，完全无法建模。
+// 头注更正（2026-09-10 第二百三十三批·头注漂移抽查）：原「游戏开始时/准备
+// 阶段」双时点系误引，上游实为 phaseBegin 单时点 + oneHeart 技能信息过滤。
+skill beOfOneHeart(2375321356) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 beOfOneHeart（skill.js:8230）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

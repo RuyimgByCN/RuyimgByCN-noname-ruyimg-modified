@@ -1,0 +1,6 @@
+// 儒武：将本回合未以此法转化过的装备牌当【决斗】或【无中】使用。
+// 旧 JS 的「历史追踪（本回合未转化的装备）+ 双卡种选择（决斗/无中）」无对应原语，未建模。
+skill stdruwu(3805928844) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

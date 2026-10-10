@@ -1,0 +1,8 @@
+// 重骑：使用【杀】指定目标后，可弃置目标一张手牌或装备牌；
+// 若你在目标攻击范围内而目标不在你攻击范围内，此杀伤害+1。
+// 互相攻击范围条件无法精确表达；以弃置目标一张手牌/装备近似。
+skill dmchongqi(3381264659) {
+  trigger card_used owner_source_sha {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

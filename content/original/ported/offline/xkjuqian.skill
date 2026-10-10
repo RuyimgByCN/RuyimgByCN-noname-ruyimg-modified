@@ -1,0 +1,6 @@
+// xkjuqian：锁定技, global:phaseBefore, player:game_started, 需选择目标, 二选一, 造成伤害, 异步。
+skill xkjuqian(4123686471) {
+  trigger phase_begin owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

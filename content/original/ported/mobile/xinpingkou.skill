@@ -1,0 +1,7 @@
+// 界平寇：按本回合跳过阶段数选择其他角色依次造成伤害，随后从牌堆获得装备。
+skill xinpingkou(3441378011) {
+  trigger phase_end owner_is_target_skipped_phase_count_positive optional {
+    effect choose_other_targets_by_skipped_phase_count_damage(self, 1);
+    effect gain_equipment_from_draw_pile(self);
+  }
+}

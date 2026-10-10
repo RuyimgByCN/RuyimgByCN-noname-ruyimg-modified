@@ -1,0 +1,14 @@
+// 往生（音无·觉醒技）：死亡时阻止死亡，获得往生标记，可将全部牌交给其他角色。
+// 实现：进入濒死且尚未标记时回复至 1 体力。
+// 近似：以 mark_count 门控，非 awakenSkill；不阻止死亡结算本身；交给全部牌未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuzuru_wangsheng(3744539174) locked {
+  trigger dying owner_is_target {
+    if mark_count(self, 3744539174) == 0 {
+      if hp(self) < 1 {
+        effect recover_hp(self, 1 - hp(self));
+      }
+      effect add_mark(self, 3744539174, 1);
+    }
+  }
+}

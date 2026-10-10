@@ -1,0 +1,5 @@
+// tyansha：global:phaseBegin, player:card_used, 视作sha, 加技能, 含子技能。
+skill tyansha(4131345214) {
+  trigger card_used owner_alive optional {
+  }
+}

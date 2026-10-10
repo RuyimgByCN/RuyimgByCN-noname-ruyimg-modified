@@ -1,0 +1,10 @@
+// 庸肆（xinyongsi）：锁定技。你获得「庸肆·摸」（xinyongsi1）与「庸肆·弃」（xinyongsi2）。
+// 上游 (sp/skill.js:36244)：group = [xinyongsi1, xinyongsi2]。
+// 实现：开局/回合开始锁定授予两个子技（group 语义的 DSL 等价：子技为独立 def，
+// 由父技在准备阶段授予）。与上游差异：授予时机为每轮准备阶段（上游为持有即生效）。
+skill xinyongsi(2559297491) locked {
+  trigger phase_prepare owner_is_target {
+    effect add_skill(self, 3518300522);
+    effect add_skill(self, 3077331699);
+  }
+}

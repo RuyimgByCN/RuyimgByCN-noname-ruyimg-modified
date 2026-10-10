@@ -1,0 +1,24 @@
+// 千军（hm_guigu 鬼谷）：限定技，出牌阶段，你可以将装备区里的所有牌交给一名
+// 其他角色，然后你与其交换座位，你回复 1 点体力，并获得「乱击」（olluanji）。
+// 上游 (offline_hanmo.js hm_qianjun)：limited enable phaseUse filterTarget notMe
+// 有装备；content = target.gain(装备区全部) + game.swapSeat(player, target) +
+// player.recover() + player.addSkills("olluanji")；seatRelated changeSeat。
+// 实现（2026-09-08 第一百八十二批·零新原语近似重写，active 占位晋升）：
+// active play_phase once_per_game targets 1 1 other has_equip →
+// give_all_equipment_choose_recover_or_damage(self, event_source)
+// （xianzhou 同款既有原语：给光装备→owner 选回血或受伤——hm_qianjun 上游无条件
+// 回血，选回血即等价，choose 分支为语义超集）+ add_skill(self, OLLUANJI_DEF)。
+// 近似（登记债）：①game.swapSeat 座次交换未建模（引擎级：座次环为全局序，
+// swapSeat 原语缺，批 171 定性引擎级）；②olluanji（乱击）DSL 占位未建模
+// （interval 判定族）；③「选回血或受伤」choose 分支为超集（上游无条件回血）。
+skill hm_qianjun(3418823181) {
+  active play_phase equip_nonempty once_per_game targets 1 1 other {
+    effect add_skill(self, 3418823182);
+    effect give_all_equipment_choose_recover_or_damage(self, event_source);
+  }
+}
+// 乱击（olluanji）占位：上游 interval 出牌阶段限一次 AOE 延时结算（判定族），
+// 本批未建模——hm_qianjun 获得 olluanji 后的规则面待连带立项。
+skill olluanji_hmq(3418823182) {
+  modifier hand_limit add 0;
+}

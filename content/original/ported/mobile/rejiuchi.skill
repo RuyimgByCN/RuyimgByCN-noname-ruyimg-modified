@@ -1,0 +1,13 @@
+// rejiuchi（酒池·界）：黑桃手牌当【酒】使用；酒杀造成伤害时禁用崩坏至回合结束。
+// 触发分支补全（2026-08-06，C 段 omp）：原 DSL 仅 view_as 两条（丢失伤害触发器）；
+// 按上游 source damage + forced + filter（sha 且 jiu 加成且 benghuai 未禁用）+
+// tempBanSkill("benghuai") 实现为
+// `trigger damage owner_source_jiu_boosted_sha_damage_skill_3365741831_enabled`
+// + `disable_skill_by_def_until_turn_end(self, 3365741831)`。
+skill rejiuchi(3056787053) {
+  view_as jiu play_phase spade;
+  view_as jiu response spade;
+  trigger damage owner_source_jiu_boosted_sha_damage_skill_3365741831_enabled {
+    effect disable_skill_by_def_until_turn_end(self, 3365741831);
+  }
+}

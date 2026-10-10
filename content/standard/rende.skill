@@ -1,0 +1,6 @@
+// 仁德（标准刘备）：出牌阶段给其他角色任意张手牌；本阶段首次累计给出两张时回复 1。
+skill rende(11) {
+  active play_phase targets 1 1 other select_hand 1 255 {
+    effect give_selected_recover_after_phase_total_two(self, event_source);
+  }
+}

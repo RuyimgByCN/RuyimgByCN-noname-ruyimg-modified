@@ -1,0 +1,8 @@
+// repingkou：刷新包技能。
+// triggers: player:phaseEnd
+skill repingkou(3006379511) {
+    // 近似：旧JS事件 phaseEnd → DSL事件 phaseEnd
+    trigger phase_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

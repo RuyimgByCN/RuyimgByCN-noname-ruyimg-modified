@@ -1,0 +1,6 @@
+// 镇军（rezhenjun）— 于禁：准备阶段弃置目标的手牌差额，再自弃等量非装备数或令其摸牌。
+skill rezhenjun(4131625144) {
+  trigger phase_prepare owner_is_target_any_alive_hand_nonempty optional {
+    effect choose_target_discard_excess_then_self_discard_or_target_draw(self);
+  }
+}

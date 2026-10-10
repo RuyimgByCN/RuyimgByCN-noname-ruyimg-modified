@@ -1,0 +1,5 @@
+// pshuiqiang：player:shaMiss, player:eventNeutralized, 多步骤。
+skill pshuiqiang(3241514007) {
+  trigger phase_any_end owner_alive {
+  }
+}

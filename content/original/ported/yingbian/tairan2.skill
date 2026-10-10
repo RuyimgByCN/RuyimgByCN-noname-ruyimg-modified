@@ -1,0 +1,5 @@
+// 泰然·2（泰然系）：AI 排序辅助。
+// 旧 JS 仅 AI 提示，无权威规则行为。
+skill tairan2(3038044399) {
+  modifier hand_limit add 1;
+}

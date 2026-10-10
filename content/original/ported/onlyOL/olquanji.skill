@@ -1,0 +1,22 @@
+// 权计（onlyOL olquanji）：当你受到或对其他角色造成伤害后（frequent），你摸一张牌，
+// 然后将当前回合角色的一张手牌置于你的武将牌上，称为「权」。
+// 上游 (onlyOL/skill.js olquanji)：trigger damageEnd/source damageSource；
+// frequent getIndex=num；content draw(1) + current phase player hand → pile。
+// 实现（2026-09-10 第二百零七批·A1 他人置入原语消费，新原语
+// choose_target_hand_card_to_pile(player, self_skill, pile_def)——tag 711 /
+// ABI 688 领号，两段选择续体）：
+// damage owner_is_target + damage owner_is_source 双臂 optional → draw_cards
+// (self,1) + choose_target_hand_card_to_pile(self, self_skill, olquanji def
+// 3615325273)。pile_def 用本技自身堆（自引用，权计的「权」堆）。
+// 近似（登记债）：①上游 target=当前回合角色；原语目标为任意其他有手牌角色
+// （owner 二次自选）；②getIndex 逐点拆分未建模（num>1 时一次结算）。
+skill olquanji(3615325273) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    effect choose_target_hand_card_to_pile(self, self_skill, 3615325273);
+  }
+  trigger damage owner_is_source optional {
+    effect draw_cards(self, 1);
+    effect choose_target_hand_card_to_pile(self, self_skill, 3615325273);
+  }
+}

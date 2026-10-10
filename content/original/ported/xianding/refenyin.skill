@@ -1,0 +1,7 @@
+// 忿音（re）：锁定技，你的回合内，当牌进入弃牌堆时——
+// 若出现本回合尚未进入过弃牌堆的花色，你摸等量张牌。
+// 旧 JS 的「全回合花色追踪」「弃牌堆花色历史」「动态计数」无对应原语，未建模。
+skill refenyin(2686826846) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

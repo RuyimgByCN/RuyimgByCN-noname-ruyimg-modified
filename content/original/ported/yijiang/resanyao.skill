@@ -1,0 +1,10 @@
+// 三邀（旧版·张让）：出牌阶段限一次。可弃置任意张牌（至少一张），然后对
+// X 名角色各造成 1 点伤害（X 为弃牌数，目标为除你外体力值最小的角色）。
+// 旧 JS 的「目标为体力值最小的其他角色」无对应 filter 原语；以弃一张牌并
+// 选择一名其他角色造成 1 点伤害近似（体力最小限定未建模，已注明）。
+skill resanyao(2965049615) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect choose_other_damage(self, 1);
+  }
+}

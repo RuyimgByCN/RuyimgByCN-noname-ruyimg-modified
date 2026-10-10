@@ -1,0 +1,5 @@
+skill junkwangxi(2370802609) {
+  trigger damage owner_is_source_or_target_other_alive_per_damage_point optional {
+    effect draw_then_give_one(self, event_player + event_source - self, 2, drawn_only);
+  }
+}

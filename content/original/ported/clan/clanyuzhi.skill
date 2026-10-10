@@ -1,0 +1,22 @@
+// 迂志（族钟琰/族钟繇/族钟会）：锁定技。每轮开始时展示一张手牌，摸此牌牌名字数的牌
+// （gaintag 标记，记录本轮摸牌数）；轮结束时弃置标记牌，若本轮摸牌数多于上一轮且
+// 均大于 0，或本轮使用牌数少于牌名字数，则失去「保族」或受 1 点雷属性伤害。
+// 上游 (clan/skill.js): trigger global roundStart/roundEnd forced;
+// content=chooseCard(手牌) → showCards + addGaintag + draw(cardNameLength) +
+// storage.mark=cardNameLength; roundEnd → discard(gaintag 手牌) + 双轮摸牌数/用牌数
+// 判定 → chooseBool(失去保族 | 雷伤害)。
+// 实现：round_started/round_ended 为本轮新增引擎事件（回合顺序回到首位时发出，
+// 先 round_ended 后 round_started，见 command/turn.rs）；展示牌由拥有者自选，
+// 摸牌数 = 牌名字数（card_name_length 查询）；双轮摸牌数/用牌数记于 per-skill
+// keyed storage（storage_set/storage_get），用牌数取 cards_used_this_round。
+// **近似与未覆盖**：(1) 摸牌数判定用「本轮标记摸牌数」而非逐事件 round history 求和
+// (2) 无保族时直接受雷伤害（上游同样如此）；(3) 失去「保族」以 remove_skill_by_def
+// 移除 clanbaozu。差异已记录于 docs/migration/upstream-1.11.5-delta.md。
+skill clanyuzhi(2443866463) locked {
+  trigger round_started owner_alive {
+    effect clanyuzhi_reveal(self, self_skill);
+  }
+  trigger round_ended owner_alive {
+    effect clanyuzhi_round_end(self, self_skill);
+  }
+}

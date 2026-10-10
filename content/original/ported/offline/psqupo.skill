@@ -1,0 +1,6 @@
+// psqupo：锁定技, global:phaseBegin, player:card_targeted, player:damage_before, 失去体力, 加技能, 含子技能, 异步, 条件计数。
+skill psqupo(2235966210) locked {
+  trigger damage_before always {
+    effect lose_hp(self, 1);
+  }
+}

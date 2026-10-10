@@ -1,0 +1,6 @@
+// 还宫：失去装备区或判定区的最后一张牌后摸一张牌。
+skill stdhuangong(2543694356) locked {
+  trigger cards_moved owner_from_field_empty {
+    effect draw_cards(self, 1);
+  }
+}

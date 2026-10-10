@@ -1,0 +1,15 @@
+// 凤魄：旧 JS 语义重写；本回合首次单目标杀/决斗按目标当前方片数摸牌并提高本次伤害基数。
+skill fengpo(4276310203) {
+  trigger card_targeted owner_source_sha_or_juedou_single_target_first_same_name_this_turn optional {
+    let diamonds = hand_equip_suit_count(event_player, diamond);
+    let option = choose(1, 2);
+    if option == 1 {
+      effect draw_cards(self, diamonds);
+      effect increase_current_card_base_damage(self, event_card, 1);
+    }
+    if option == 2 {
+      effect draw_cards(self, 1);
+      effect increase_current_card_base_damage(self, event_card, diamonds);
+    }
+  }
+}

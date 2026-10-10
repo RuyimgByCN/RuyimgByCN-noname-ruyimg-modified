@@ -1,0 +1,9 @@
+// 熨身（族吴苋/族吴班）：出牌阶段限一次。令一名受伤的其他角色回复1点体力，选择视为其对你使用冰【杀】或你对其使用冰【杀】。
+// 旧 JS 的「回复+双向冰杀选择」「冰杀（ice 属性）」无对应原语。
+// 以 recover_hp + choose_other_damage 近似保留回复和伤害收益，缺少冰属性。
+skill clanyunshen(3260288351) {
+  active play_phase uses_per_turn 1 targets 1 1 other wounded {
+    effect recover_hp(event_source, 1);
+    effect choose_other_damage(self, 1);
+  }
+}

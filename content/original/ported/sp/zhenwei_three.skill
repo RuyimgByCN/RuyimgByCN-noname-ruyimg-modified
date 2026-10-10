@@ -1,0 +1,4 @@
+// 统率三军【镇卫】：存活拥有者令敌方计算到己方其他角色的距离增加一。
+skill zhenwei_three(3450139382) locked {
+  modifier global_distance_to add queried_source_enemy_owner_ally_target_other_than_owner;
+}

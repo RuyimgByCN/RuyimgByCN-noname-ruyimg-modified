@@ -1,0 +1,7 @@
+// 纵玄（旧版）：当你因弃置而失去牌后，可将其中进入弃牌堆的牌置于牌堆顶（可按任意顺序）。
+// 旧JS含chooseToMove+cardsGotoPile(insert)复杂牌堆操作。DSL以空定义保留。
+skill zongxuan(2623533806) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

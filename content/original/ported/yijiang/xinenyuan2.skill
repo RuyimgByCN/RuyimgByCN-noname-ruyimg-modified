@@ -1,0 +1,14 @@
+// 新恩怨2（法正）：受到伤害后，令伤害来源交给你一张手牌或失去 1 点体力。
+// 实现：`damage owner_is_target optional` →
+// `choose_give_hand_equip_to_event_player(event_source)`——来源选一张手牌/装备
+// 交给事件角色（即受伤的自己；stddechong 同原语，方向为 来源→自己）。
+// 近似：不限定红色/仅手牌（上游为红色手牌）；「或失去 1 点体力」分支未建模
+// （来源无牌可交时原语静默跳过，不再强制流失）。
+// 修正：此前误用 choose_other_give_one_hand_equip（方向相反——变成自己交来源
+// 一张牌，等价自我削弱），本批纠正为正确方向。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xinenyuan2(4121865946) {
+  trigger damage owner_is_target optional {
+    effect choose_give_hand_equip_to_event_player(event_source);
+  }
+}

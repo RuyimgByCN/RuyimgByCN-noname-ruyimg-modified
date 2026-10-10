@@ -1,0 +1,8 @@
+// 盖世（项羽）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：锁定技：座位数小于你的角色不能响应你的牌、大于你的角色受你伤害+1；体力为 1 时不受座位数限制
+// 旧 JS 的「座次数值比较过滤器 + directHit 门控」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill pegaishi(2406833974) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

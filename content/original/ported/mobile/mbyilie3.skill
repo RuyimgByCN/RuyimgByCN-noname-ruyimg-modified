@@ -1,0 +1,16 @@
+// mbyilie3（义烈·三）：有「烈」标记时，结束阶段摸一张牌、失去等量体力并清除标记。
+// 实现说明（2026-08-06，C 段 omp）：原空 stub 注释称
+// "owner_mark_positive_<def>" 无 DSL 对应过滤器——该过滤器现已注册
+// （typecheck.rs strip_prefix 与 engine registry 2699 均支持），按上游
+// phaseEnd + hasMark + forced + draw(1) + loseHp(num) + removeMark(num)
+// 语义实现。
+skill mbyilie3(2964107248) {
+  trigger phase_end owner_mark_positive_3247391666 {
+    effect draw_cards(self, 1);
+    let marks = mark_count(self, 3247391666);
+    if 0 < marks {
+      effect lose_hp(self, marks);
+      effect remove_mark(self, 3247391666, marks);
+    }
+  }
+}

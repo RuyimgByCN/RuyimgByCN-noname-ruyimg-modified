@@ -1,0 +1,10 @@
+// 铸币（OL 刘巴）：出牌阶段限体力上限次，令一名角色重铸一张牌。
+// 上游 (sp/skill.js:22288)：phaseUse usable=maxHp，目标 recast 一张 he。
+// 实现：出牌阶段令一名角色摸 1 张。
+// 近似：重铸改为摸 1；次数不按体力上限。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olzhubi(4168204873) {
+  active play_phase targets 1 1 {
+    effect draw_selected_targets(1);
+  }
+}

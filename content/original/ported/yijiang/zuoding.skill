@@ -1,0 +1,7 @@
+// 佐定（旧版钟繇）：其他角色于出牌阶段使用黑桃牌指定目标后，若本局游戏尚无角色受到过伤害，你可令其中一名目标角色摸一张牌。
+// 旧JS含spade suit+playPhase+noDamageThisGame多重条件。DSL以card_targeted近似。
+skill zuoding(2528591670) {
+    trigger card_targeted owner_alive {
+        effect choose_target_draw(self, 1, any);
+    }
+}

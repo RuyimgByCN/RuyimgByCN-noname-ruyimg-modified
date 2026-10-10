@@ -1,0 +1,8 @@
+// 铸刃·方片（PY）：装备技能，【杀】使用次数+1；
+// 造成【杀】伤害时可弃一张牌令伤害+1（每回合限两次）。
+// 旧 JS 的「装备技能」「杀使用次数修改」「伤害增加cost」无对应原语，未建模。
+skill pyzhuren_diamond(4126029347) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 pyzhuren_diamond 含真实规则体（trigger、mod、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

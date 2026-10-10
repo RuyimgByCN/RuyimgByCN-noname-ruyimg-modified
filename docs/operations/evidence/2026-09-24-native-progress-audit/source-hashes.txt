@@ -1,0 +1,4 @@
+2349078e4e938472b986185aec88e040a08feb70fa603767ca8b19b7b508cf9a  crates/engine-native/src/content/standard.rs
+165559b08621597fea8ae6508e99c84ce35a8026c40f9f94fdfab276927af4e6  crates/engine-native/src/archive.rs
+a21e6951873202b6f08c0368875de33859cc60b14ea784641955b6827ed30a18  crates/engine-native/tests/g1_shahai_gwent.rs
+b1e344fea965cd427e61fc0008436d7a4bc3d3890a170c3a406d51f97e9f5830  packages/extensions/shahai-gwent-upstream-noname/assets/cards.json

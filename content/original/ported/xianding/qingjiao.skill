@@ -1,0 +1,7 @@
+// 清剿（曹洪系）：出牌阶段开始时，若牌堆有牌，摸一张牌。
+// 旧 JS 的「牌堆判定」无对应原语；以出牌阶段摸一张近似（已注明）。
+skill qingjiao(3331433172) {
+  trigger phase_play owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

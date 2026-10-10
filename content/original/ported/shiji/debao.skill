@@ -1,0 +1,9 @@
+// 得宝（曹丕系）：锁定技。你获得牌后，将牌堆顶一张牌置于武将牌上作为
+// 「仁」牌（至多你的体力上限张）。
+// 旧 JS 的「置牌堆顶牌入 expansion」无对应原语；以摸一张近似（存牌
+// 未建模，已注明）。
+skill debao(3402829581) locked {
+  trigger cards_drawn owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

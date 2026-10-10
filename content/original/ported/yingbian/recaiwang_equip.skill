@@ -1,0 +1,5 @@
+// 菜筐·装备（菜筐系）：将装备区唯一牌当任意牌使用。
+// 旧 JS 的「唯一牌转化」以装备当【杀】近似（已注明）。
+skill recaiwang_equip(2805855783) {
+  view_as sha play_phase any from equip;
+}

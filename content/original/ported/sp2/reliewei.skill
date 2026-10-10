@@ -1,0 +1,6 @@
+// 烈围：自己的回合内不限次数；否则每回合至多发动当前体力值次。
+skill reliewei(3943534187) {
+  trigger dying owner_alive_current_or_turn_fires_below_hp optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// xinleiji_misa：刷新包技能。
+// triggers: player:judgeEnd
+skill xinleiji_misa(3143643261) {
+    // 近似：旧JS事件 judgeEnd → DSL事件 judgeEnd
+    trigger judgment_resolved owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

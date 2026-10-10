@@ -1,0 +1,7 @@
+// 决策（？）：结束阶段，可对一名本回合失去过至少两张牌的角色造成1点伤害。
+// 旧 JS 的「本回合失去≥2张牌」筛选无可直接对应的 DSL 过滤器。完全无法表达。
+skill stdjuece(3674944712) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

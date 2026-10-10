@@ -1,0 +1,8 @@
+// 幻梦（美希）：继承自 kamome_huanmeng，观星技能。
+// 旧 JS 的 inherit 继承机制无对应 DSL 原语，未建模。
+skill miki_huanmeng(3160941024) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 miki_huanmeng（skill.js:7328）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

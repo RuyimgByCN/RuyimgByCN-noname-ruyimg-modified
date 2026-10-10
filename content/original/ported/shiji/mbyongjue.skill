@@ -1,0 +1,11 @@
+// 勇决（羊祜）：当前回合角色使用其本回合第一张【杀】时，
+// 该【杀】结算后你获得其进入弃牌堆的实体牌。
+// 旧 JavaScript 仅作语义证据；触发与获得由权威原语响应。
+// 注：旧 JS 的 filter 是“事件角色=当前回合角色且其首杀”（无“自己非目标”约束）；
+// 当前复用 yongjue 的 owner_alive_other_source_sha_resolved_not_target_gainable_once_per_turn
+// 近似（要求自己非目标），“自己是被杀目标”的边缘场景不触发。
+skill mbyongjue(4188437274) {
+  trigger sha_resolved owner_alive_other_source_sha_resolved_not_target_gainable_once_per_turn optional {
+    effect gain_card_if_discard(self, event_card);
+  }
+}

@@ -1,0 +1,5 @@
+// rexiahui：锁定技；失去体力。
+// 旧JS含subSkill、gaintag标记，DSL无法精确建模。
+skill rexiahui(2660250875) {
+  modifier hand_limit add 1;
+}

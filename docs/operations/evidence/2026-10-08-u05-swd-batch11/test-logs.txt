@@ -1,0 +1,7 @@
+$ swd 第十一批定向：风雪刃（确认翻面+摸牌/放弃伤害/翻面目标不再询问）
+test swd_fengxueren_flip_or_damage ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（410/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v94→v95，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Fengxueren 编码 115（equip1 射程 2/archive tag 115/a0 116 变体）+ ShaResolve.asking_fengxueren（快照/存档/哈希接线）——shaHit 后 Confirm：确认→防止伤害+目标 face_down 翻转（TurnOvered）+摸 1；放弃→照常伤害；目标已翻面不再询问（上游 filter !isTurnedOver 同口径）
+$ 上游核验：card/swd/card.js fengxueren（equip1/distance attackFrom -1/skills fengxueren）；skill.js fengxueren（trigger player shaHit/filter !isTurnedOver/content unhurt+turnOver+draw；check 为 AI 选擇逻辑不迁移）

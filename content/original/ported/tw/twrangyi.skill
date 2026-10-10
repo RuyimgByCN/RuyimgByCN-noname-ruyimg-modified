@@ -1,0 +1,6 @@
+// 让驿：将所有手牌交给一名其他角色，其可使用其中一张；其余归还，否则其受到一点伤害。
+skill twrangyi(2884981024) {
+  active play_phase uses_per_turn 1 hand_nonempty targets 1 1 other {
+    effect give_all_hand_then_choose_use_one_or_damage(self, event_source);
+  }
+}

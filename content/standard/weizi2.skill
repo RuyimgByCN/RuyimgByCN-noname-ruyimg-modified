@@ -1,0 +1,4 @@
+// Skill weizi2(101) - standard variant
+skill weizi2(101) {
+  modifier attack_range add 1;
+}

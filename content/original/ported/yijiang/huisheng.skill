@@ -1,0 +1,7 @@
+// 慧生（黄皓）：受到伤害时，可弃置任意张牌，令伤害来源选择获得其中一张（防止伤害）或弃置等量牌。
+// 旧 JS 的「自选弃置N张→来源二选一（拿1防伤/弃N）」多步交互+防伤无对应原语，暂留空定义。
+skill huisheng(3444324619) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

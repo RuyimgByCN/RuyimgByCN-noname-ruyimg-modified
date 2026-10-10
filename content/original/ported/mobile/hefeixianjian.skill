@@ -1,0 +1,7 @@
+// hefeixianjian（陷坚）：你使用非转化且非虚拟的【杀】指定唯一目标后，可以选择一项：1.摸一张牌，其弃置X张牌（X为目标场上牌数且至少为1）；2.此【杀】结算结束后，你将此【杀】置入其一个空置装备栏，称为“陷坚”牌。
+skill hefeixianjian(3096127748) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+    effect discard_selected(self);
+  }
+}

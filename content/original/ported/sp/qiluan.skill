@@ -1,0 +1,21 @@
+// 起乱（qiluan，何太后）：一名角色的回合结束后，若本回合有角色使用过【杀】，
+// 按每名角色本回合的击杀数摸牌（自己击杀×3，他人击杀×1）；其他角色死亡时若
+// 非你击杀，你摸一张牌。
+// 上游 (sp/skill.js:42081)：trigger global phaseEnd（preHidden frequent），filter =
+// 有角色本回合 getStat("kill")>0；content = draw(Σ kill×(自己3/他人1))；
+// subSkill.draw = trigger global dieAfter，filter = player != event.source，content = draw(1)。
+// 实现：phase_end + owner_alive_global_phase_end（任意角色结束阶段、拥有者存活）
+// → resolve_qiluan(self, self_skill)（ABI 605 新原语，按击杀计数求和摸牌）。
+// 死亡子技：death + owner_alive_other_source_death（新增过滤器，拥有者存活、被击杀者
+// 非自己且来源非自己）→ draw_cards(self, 1)。
+// 与上游差异：上游 phaseEnd 有「本回合有角色使用过杀」过滤且为可选 frequent（AI 自动），
+// 本实现以强制触发近似（击杀数为 0 时 resolve_qiluan 内部静默 no-op）；frequent 自动
+// 分支不询问；死亡子技上游为「非你击杀」即触发（含你自己死亡场景，本实现仅存活拥有者）。
+skill qiluan(2783300002) {
+  trigger phase_end owner_alive_global_phase_end {
+    effect resolve_qiluan(self, self_skill);
+  }
+  trigger death owner_alive_other_source_death {
+    effect draw_cards(self, 1);
+  }
+}

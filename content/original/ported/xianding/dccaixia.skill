@@ -1,0 +1,7 @@
+// 才瑕（DC终会）：造成/受到伤害后，可摸至多X张牌（X=场上人数上限5），之后需使用等量牌才能再次发动。
+// DSL缺标记冷却计数+使用牌清除标记 原语，无法表达。
+skill dccaixia(2929523968) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dccaixia 含真实规则体（trigger、mod 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

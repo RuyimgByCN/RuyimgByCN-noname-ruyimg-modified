@@ -1,0 +1,10 @@
+// 饮风（赤血清风·OL）：锁定技。当其他角色获得你失去的牌（含「赤血清风」）时
+// 造成伤害；子技能在「赤血清风」进入弃牌堆时失去体力并回收之；游戏开始时获得一张「赤血清风」。
+//
+// 特定卡名（chixueqingfeng）全局事件过滤、卡名条件伤害、自定义卡牌生成——
+// DSL 无可用的卡名过滤器与条件原语——空定义。
+skill olyinfeng(3780618365) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// dcchengyan：摸?牌；获临时技。
+// 旧JS含subSkill、gaintag标记，DSL无法精确建模。
+skill dcchengyan(3056252037) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

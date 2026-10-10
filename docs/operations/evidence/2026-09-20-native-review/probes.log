@@ -1,0 +1,27 @@
+AOE target nullified: same savage appears 1 times in discard
+N03 latest behavior: occupied next judge zone leads to discard, no scan to player 3
+N04 original case fixed: empty identity roles rejected
+N04-a fixed: OptionalGate damage target 255 rejected
+N04-b fixed: self parent rejected
+N04-c fixed: choice without machine rejected
+N06 verified: try_new_identity rejects invalid seats without panic; ruleset 5 rejects v4 snapshot
+N07-b fixed: exhausted=false, prior_history=false; direct/restored abort returns pre-state+dedup, log contract correct, same-key retry completes; missing-checkpoint abort rejected, bad-checkpoint version restore rejected
+N07-b fixed: exhausted=true, prior_history=false; direct/restored abort returns pre-state+dedup, log contract correct, same-key retry completes; missing-checkpoint abort rejected, bad-checkpoint version restore rejected
+N07-b fixed: exhausted=false, prior_history=true; direct/restored abort returns pre-state+dedup, log contract correct, same-key retry completes; missing-checkpoint abort rejected, bad-checkpoint version restore rejected
+N07-b fixed: exhausted=true, prior_history=true; direct/restored abort returns pre-state+dedup, log contract correct, same-key retry completes; missing-checkpoint abort rejected, bad-checkpoint version restore rejected
+N04 fixed: 5-seat invalid loyalist/rebel mix rejected
+N06 sorting probe: lightning_first=false, player1_alive=true, judgments=2; stable grouping fixes both placement orders
+N06 sorting probe: lightning_first=true, player1_alive=true, judgments=2; stable grouping fixes both placement orders
+N05 rescue probe: existing seed209 fixture plays its only peach, player1 still dies (hp=0)
+N04-d FIXED: asked=true/in_rewrite=true/rewriters=[] rejected on restore
+N04-e FIXED: rewriter3 / observer2 mismatch rejected
+N08 probe own_tiandu=false, confirm=false: foreign holder0 excluded, old card to rewriter2, final card destination correct, skip_play true, direct/restored state+event suffix equal and conserved; judgment events now exist
+N08 probe own_tiandu=true, confirm=true: foreign holder0 excluded, old card to rewriter2, final card destination correct, skip_play true, direct/restored state+event suffix equal and conserved; judgment events now exist
+N08 probe own_tiandu=true, confirm=false: foreign holder0 excluded, old card to rewriter2, final card destination correct, skip_play true, direct/restored state+event suffix equal and conserved; judgment events now exist
+N08-d: one judgment without rewriters emits 2 JudgementFinalized events
+N08-d: active rewrite + Tiandu confirm order = ["Judged", "Rewritten", "Gained", "Finalized"]
+N08-c: only black equipped weapon, no black hand => Guidao not offered
+N08-c: black hand + equipped weapon option => self-produced snapshot rejected: OpenChoiceMismatch { observer: 2 }
+N08-c: direct equip rewrite consumes weapon and conserves all cards; restore alone fails
+N04 identity range gap: 3-seat snapshot with zero loyalists is still accepted
+N04 identity range gap: 9-seat snapshot with zero loyalists is still accepted

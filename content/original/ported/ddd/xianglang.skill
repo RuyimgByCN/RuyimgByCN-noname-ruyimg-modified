@@ -1,0 +1,28 @@
+// 3D精选 向朗「恰化/恂恂/腹笥/拓籍」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddqiahua(891363178) {
+  trigger phase_begin owner_alive_other_phase_begin_unshown_hand_gte_hp optional {
+    effect resolve_ddd_xianglang(self, event_player, 0);
+  }
+}
+
+skill dddxunxun(1673829014) locked non_gainable {
+  modifier draw_phase_scry_four_split_two override 1;
+}
+
+skill dddfusi(1632230116) locked {
+  trigger game_started owner_alive {
+    effect resolve_ddd_xianglang(self, self, 1);
+  }
+  modifier card_ignored_hand_limit(face_up) override 1;
+}
+
+skill dddfusi_global(2198174483) non_gainable {
+  view_as basic any any from none cost dddfusi;
+  view_as trick any any from none cost dddfusi;
+}
+
+skill dddtuoji(1700500735) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

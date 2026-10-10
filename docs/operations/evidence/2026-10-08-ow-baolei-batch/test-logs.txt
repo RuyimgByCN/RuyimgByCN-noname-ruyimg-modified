@@ -1,0 +1,25 @@
+# U05 ow 纵切批七测试日志（2026-10-08，堡垒/侦察切换，规则 v123→v124）
+
+$ cargo test --offline -p engine-native
+engine-native: 437 passed / 0 failed / 1 ignored（v123 基线 436 +1 新增堡垒切换回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 24 passed; 0 failed（23 既有 + baolei_switch_mode_cycle）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（HostBehavior ALL 117 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v123→v124 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- character/ow/skill.js bshaowei/zhencha（phaseEnd 确认切换/哨卫四合一/侦察用杀摸回）
+- translate.js bshaowei_info/zhencha_info
+
+## 测试迭代记录
+- 枚举 doc 锚不可见差（多次）→ 枚举尾锚
+- activate 臂首次脚本未落盘（第四次同坑）
+- 穷尽清单误插位置（Duwen 挂错点）→ 重建穷尽清单按 tag fn 权威序
+- **模式效果钩主动收缩为登记待做**（ShaResolve 深层多处，超出单切片预算）

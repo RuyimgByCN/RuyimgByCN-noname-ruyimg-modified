@@ -1,0 +1,12 @@
+// 神推（神张飞）：出牌阶段限一次，增加1点攻击范围标记，然后可使用一张虚拟【杀】。
+// 攻击范围加值=标记数；使用点数<攻击范围的杀无次数限制且强命，
+// 点数>攻击范围的杀伤害+1（子技能 dcshentui_effect）。
+// 近似：保留了主动加范围+虚拟杀的核心循环，丢失了「点数与攻击范围比较」
+// 的两种子效果（强命+不计次数 / 伤害+1），因 DSL 无法比较卡牌点数与攻击范围。
+skill dcshentui(3828954427) {
+  active play_phase {
+    effect add_mark(self, 3828954427, 1);
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+  modifier global_attack_range add 1;
+}

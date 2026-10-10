@@ -1,0 +1,6 @@
+// 神愤：出牌阶段限一次，消耗六枚暴怒；按座次逐人伤害、弃装备、弃手牌，最后翻面。
+skill ol_shenfen(2674950952) {
+  active play_phase uses_per_turn 1 mark_at_least 1252226867 6 {
+    effect resolve_mass_damage_discard_turn_over(self, 1252226867, 6, 1, 4);
+  }
+}

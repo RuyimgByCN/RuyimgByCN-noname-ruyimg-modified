@@ -1,0 +1,26 @@
+// 魔魇（offline 魔姜维 ps_devil_jiangwei psmoyan）：锁定技，你造成和受到的伤害
+// 改为体力流失；有角色失去体力后，你摸一张牌。
+// 上游 (offline/skill.js psmoyan)：global [loseHpAfter, damageBefore]；
+// damageBefore 分支 owner 为来源或目标 → trigger.cancel() + 等量 loseHp；
+// loseHpAfter 任意角色 → 摸 1。
+// 实现（2026-09-09 第一百八十六批·offline 占位池④散批，零新原语零新过滤器）：
+// ①trigger hp_lost owner_alive（OwnerAlive 事件面无关，任意角色失去体力）→
+// draw_cards(self, 1)；②③damage_before owner_is_source / owner_is_target 双臂
+// （pot_sunchen/dccibei 同款接线）→ prevent_current_damage() + lose_hp 等量
+// （pxningzhou 伤害转流失模板）。
+// 近似（登记债）：owner 同时为来源与目标的自伤事件双臂都会命中（转化一次 vs
+// 两次，极端边界）；转化产生的 lose_hp 反过来触发①摸牌，与上游 loseHpAfter
+// 联动一致，非债。
+skill psmoyan(2742008810) locked {
+  trigger hp_lost owner_alive {
+    effect draw_cards(self, 1);
+  }
+  trigger damage_before owner_is_source {
+    effect prevent_current_damage();
+    effect lose_hp(event_player, event_amount);
+  }
+  trigger damage_before owner_is_target {
+    effect prevent_current_damage();
+    effect lose_hp(self, event_amount);
+  }
+}

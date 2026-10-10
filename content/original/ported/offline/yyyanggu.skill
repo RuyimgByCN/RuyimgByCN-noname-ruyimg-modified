@@ -1,0 +1,6 @@
+// yyyanggu：player:damage, 主动(chooseToUse), 视作shengdong, 回复体力, 含子技能。
+skill yyyanggu(3916061735) {
+  trigger damage owner_alive optional {
+    effect recover_hp(self, 1);
+  }
+}

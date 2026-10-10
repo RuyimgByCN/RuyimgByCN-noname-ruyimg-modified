@@ -1,0 +1,7 @@
+// dcaishou：锁定技；摸?牌；增体力上限；减体力上限；弃牌。
+// 旧JS含subSkill、gaintag标记、expansion区，DSL无法精确建模。
+skill dcaishou(3919925738) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

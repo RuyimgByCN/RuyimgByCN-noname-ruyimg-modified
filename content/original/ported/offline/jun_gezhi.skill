@@ -1,0 +1,6 @@
+// jun_gezhi：音效名:twgezhi, 锁定技, player:card_used, player:useCard1, 回复体力, 造成伤害, 加技能, 含子技能, 异步。
+skill jun_gezhi(2356009256) locked {
+  trigger card_used always {
+    effect recover_hp(self, 1);
+  }
+}

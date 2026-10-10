@@ -1,0 +1,9 @@
+// 旧·缺松（陆抗）：结束阶段，你可选择至多三名角色，令每名角色摸一张牌
+// 并回复 1 点体力。
+// 旧 JS 的「多目标逐个摸牌回复」以选择一名角色摸一张近似（回复分支
+// 未建模，已注明）。
+skill old_mbquesong(3285848413) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

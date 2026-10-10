@@ -1,0 +1,7 @@
+// 陈留（pxchenliu，州郡技能）：锁定技，你跳过弃牌阶段。
+// 上游 (sp/skill.js:2581)：trigger player:phaseDiscardBefore；forced: true；
+// content = trigger.cancel()。
+// 实现：modifier skip_discard_phase override 1（每次进入弃牌阶段前跳过，语义等价）。
+skill pxchenliu(4259220755) {
+  modifier skip_discard_phase override 1;
+}

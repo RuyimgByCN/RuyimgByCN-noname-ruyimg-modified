@@ -1,0 +1,7 @@
+// 神尊（★神曹操）：造成伤害时若势力不同，可弃一张令伤害+1且不计次数。
+// 近似：造成伤害时可弃一张 he 并对当前目标再造成 1 点（势力与次数未建模）。
+skill psshenzun(4056782263) {
+  trigger damage owner_is_source optional {
+    effect choose_other_damage(self, 1);
+  }
+}

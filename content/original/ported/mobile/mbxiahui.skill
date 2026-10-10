@@ -1,0 +1,8 @@
+// 侠怀：锁定技，①黑色牌不计入你的手牌上限；②当其他角色获得“连诛”牌或你的
+// 黑色牌时，其不能使用、打出或弃置这些牌直到其体力值减少为止。
+// 实现：`modifier card_ignored_hand_limit(black) override 1`（第①句）。
+// 近似：第②句「连诛/黑色牌获得封禁」无对应原语，未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill mbxiahui(3915506793) locked {
+  modifier card_ignored_hand_limit(black) override 1;
+}

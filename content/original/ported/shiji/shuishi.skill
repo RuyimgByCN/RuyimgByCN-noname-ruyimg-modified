@@ -1,0 +1,9 @@
+// 水师（张辽系）：出牌阶段限一次（体力上限 <10 时），令一名角色摸牌直到
+// 出现两张同花色手牌。
+// 旧 JS 的「连续摸牌至同花色」无对应原语；以选择一名角色摸一张近似
+// （连续摸牌未建模，已注明）。
+skill shuishi(3057132354) {
+  active play_phase uses_per_turn 1 {
+    effect choose_other_draw_or_recover(self, 1, 0, 0);
+  }
+}

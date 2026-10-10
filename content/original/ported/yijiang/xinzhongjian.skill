@@ -1,0 +1,8 @@
+// 新忠鉴（孙皓）：出牌阶段，展示一至两张手牌，令一名其他角色展示至多三或四张手牌，然后依次结算：花色相同你摸一张；点数相同其受到1点伤害；均不相同你弃一张牌。
+// 旧 JS 的展示+花色/点数匹配+三分支结算；DSL 无精确原语。
+skill xinzhongjian(3232299017) {
+  active play_phase uses_per_turn 1 targets 1 1 other select_hand 1 2 {
+    // 未建模：双方展示牌+花色点数匹配三分支（摸牌/伤害/自弃）
+    effect reveal_hand(self);
+  }
+}

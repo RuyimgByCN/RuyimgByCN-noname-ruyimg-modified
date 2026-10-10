@@ -1,0 +1,6 @@
+// Rewritten from legacy `stdzaoli`; old JavaScript is semantic reference only.
+skill stdzaoli(2735843050) locked {
+  trigger phase_prepare owner_is_target {
+    effect choose_discard_all_hand_or_equip_draw_lost_hp_then_lose_hp(self);
+  }
+}

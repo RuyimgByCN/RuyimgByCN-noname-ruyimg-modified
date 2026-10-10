@@ -1,0 +1,9 @@
+// 怒斩：单张锦囊转化的【杀】不计次数；单张装备转化的【杀】基础伤害加一。
+skill nuzhan(2974830679) locked {
+  trigger card_used owner_source_sha_single_trick_source_card {
+    effect refund_current_sha_use(self, event_card);
+  }
+  trigger card_used owner_source_sha_single_equip_source_card {
+    effect increase_current_card_base_damage(self, event_card, 1);
+  }
+}

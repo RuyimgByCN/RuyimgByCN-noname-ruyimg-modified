@@ -1,0 +1,17 @@
+// Rewritten from legacy `stdfenyin`; old JavaScript is semantic reference only.
+skill stdfenyin(2225023788) {
+  trigger phase_draw owner_is_target optional {
+    effect increase_current_draw_count(self, 2);
+    effect add_skill(self, 3965200877);
+  }
+}
+
+skill stdfenyin_discard(3965200877) locked {
+  trigger card_used owner_source_repeats_color_has_discardable_hand_equip {
+    effect discard_one_hand_or_equip(self);
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

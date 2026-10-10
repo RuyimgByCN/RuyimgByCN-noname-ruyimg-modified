@@ -1,0 +1,7 @@
+// sm_dianteng：global:damageSource, 摸牌, 回复体力, 异步。
+skill sm_dianteng(3493875800) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

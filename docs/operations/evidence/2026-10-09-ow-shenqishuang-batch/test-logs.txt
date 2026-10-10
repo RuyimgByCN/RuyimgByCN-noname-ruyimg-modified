@@ -1,0 +1,28 @@
+# U05 xianjian 第二切片测试日志（2026-10-09，沈欺霜冰心，规则 v142→v143）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 464 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v142 基线 463 +1 新增冰心回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 52 passed; 0 failed（51 既有 + 1 新增 shenqishuang_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 142）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v142→143 入 canonical_hash
+——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- binxin（trigger global phaseEnd；check=询问式；filter hp===1；
+  changeHujia()）
+
+## 测试迭代记录
+- 1 号体力全程 1 → 每阶段结束都触发：改压至 1 血于弃牌阶段前
+- 弃牌门 Play→Discard 转换即挂起（抽 2>上限 1）——先应答
+- 弃牌应答后自动链至 Discard→End 冰心确认门（无需再 NextPhase）
+- 探测补丁残留重复应答块（第二个 expect 空）——去重

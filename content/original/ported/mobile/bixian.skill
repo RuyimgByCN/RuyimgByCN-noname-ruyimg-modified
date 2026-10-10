@@ -1,0 +1,7 @@
+// Legacy contract: at the end of any concrete phase in which the owner was named as a card
+// target and their actual HP did not change, they are forced to use a source-free Juedou.
+skill bixian(4274044152) locked {
+  trigger phase_any_end owner_alive_phase_targeted_hp_unchanged_can_use_juedou {
+    effect choose_use_virtual_card(self, juedou, self_skill);
+  }
+}

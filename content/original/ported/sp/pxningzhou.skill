@@ -1,0 +1,15 @@
+// 宁州（pxningzhou，州郡技能）：你使用的【杀】不能被抵消；且其造成的伤害均视为
+// 体力流失。
+// 上游 (sp/skill.js:1829)：trigger player:useCard（sha → directHit2 不可抵消）+
+// source:damageBefore（sha → trigger.cancel() + 目标 loseHp(num)）；forced。
+// 实现：modifier card_use_unrespondable(sha) override 1（【杀】不可被响应/抵消）+
+// damage_before + owner_source_sha → prevent_current_damage() + lose_hp(event_player,
+// event_amount)（伤害改为等量体力流失）。
+skill pxningzhou(2289560906) {
+  modifier card_use_unrespondable(sha) override 1;
+
+  trigger damage_before owner_source_sha {
+    effect prevent_current_damage();
+    effect lose_hp(event_player, event_amount);
+  }
+}

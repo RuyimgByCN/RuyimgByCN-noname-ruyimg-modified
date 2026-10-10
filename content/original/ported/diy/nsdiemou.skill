@@ -1,0 +1,26 @@
+// 谋谋（diy nsdiemou）：觉醒技，出牌阶段开始时，若你的「权」数不小于全场角色数：
+// 摸「权」数的等量牌，减 1 点体力上限，「权」全部置入弃牌堆；若「权」数大于 4，
+// 你的武将牌翻面。
+// 上游 (diy/skill.js nsdiemou)：trigger player phaseUseBegin；forced juexingji；
+// filter getExpansions("nsjiquan_mark").length > game.players.length；content
+// draw(N) + loseMaxHp + loseToDiscardpile + if(N>4) turnOver。
+// 实现（2026-09-09 第一百九十四批·S1-B 消费池，零新原语）：
+// skill_pile_count(nsjiquan_mark def) > alive_count() 门控 + once 标记 →
+// draw_cards(N) + change_max_hp(-1) + discard_skill_pile + if(N>4) turn_over。
+// 近似（登记债）：①game.players.length（含死亡？上游口径为存活）以 alive_count()
+// 表达；②「权」堆供给依赖 nsjiquan 置入面落地（dormant 契约）；③动画未建模。
+skill nsdiemou(3934300047) {
+  trigger phase_play owner_is_target {
+    if mark_count(self, 3934300047) == 0 {
+      if alive_count() < skill_pile_count(self, 3934300045) + 1 {
+        effect draw_cards(self, skill_pile_count(self, 3934300045));
+        effect change_max_hp(self, -1);
+        effect discard_skill_pile(self, self_skill, 3934300045);
+        effect add_mark(self, 3934300047, 1);
+        if skill_pile_count(self, 3934300045) > 4 {
+          effect turn_over(self);
+        }
+      }
+    }
+  }
+}

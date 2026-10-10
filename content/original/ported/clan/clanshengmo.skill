@@ -1,0 +1,7 @@
+// 剩墨（族杨修/族杨彪/族杨赐/族杨忠）：每回合限一次。当你需要使用基本牌时，可从弃牌堆获得一张本回合未以点数获得的牌；若点数介于本回合弃牌最小和最大之间，可视为使用一张本局未以剩墨使用过的基本牌。
+// 旧 JS 的「弃牌堆点数分析」「条件性基本牌转换」「点数范围判断」「本局牌名记录」无对应原语。
+// 空定义：需 expansion 支持弃牌堆点数系统和牌名记录。
+skill clanshengmo(2493777729) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

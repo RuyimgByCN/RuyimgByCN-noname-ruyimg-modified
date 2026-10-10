@@ -1,0 +1,8 @@
+skill gzjili(3565936884) {
+  trigger card_used owner_card_action_count_eq_attack_range optional {
+    effect draw_cards(self, card_action_count(self));
+  }
+  trigger card_responded owner_card_action_count_eq_attack_range optional {
+    effect draw_cards(self, card_action_count(self));
+  }
+}

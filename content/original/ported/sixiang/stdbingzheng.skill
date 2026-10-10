@@ -1,0 +1,6 @@
+// 秉正：结束阶段可令一名角色弃置一张牌；结算后其手牌数不等于体力值，则你失去1点体力。
+skill stdbingzheng(3798362737) {
+  trigger phase_end owner_is_target_any_alive_self_discardable_hand_equip optional {
+    effect choose_target_self_discard_then_owner_lose_hp_if_hand_ne_hp(self);
+  }
+}

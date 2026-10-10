@@ -1,0 +1,13 @@
+// 族望（荀谌）
+skill jsrgzuwang(3072062532) locked {
+  trigger phase_prepare owner_is_target {
+    if hand_count(self) < max_hp(self) {
+      effect draw_cards(self, max_hp(self) - hand_count(self));
+    }
+  }
+  trigger phase_end owner_is_target {
+    if hand_count(self) < max_hp(self) {
+      effect draw_cards(self, max_hp(self) - hand_count(self));
+    }
+  }
+}

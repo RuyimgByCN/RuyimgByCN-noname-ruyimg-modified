@@ -1,0 +1,4 @@
+// Skill shushu3(151) - modifier range variant
+skill shushu3(151) {
+  modifier attack_range add 1;
+}

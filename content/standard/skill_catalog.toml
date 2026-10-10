@@ -1,0 +1,171 @@
+# Declarative skill catalog — batch generation input for gen_skill_dsl.py
+# Templates expand into standard .skill DSL. Engine hard-code skills stay markers.
+
+[templates.damage_draw]
+# trigger damage owner_is_target { effect draw_cards(self, N); }
+kind = "damage_draw"
+dsl = """
+skill {name}({id}) {{
+  trigger damage owner_is_target {{
+    effect draw_cards(self, {n});
+  }}
+}}
+"""
+
+[templates.phase_end_draw]
+kind = "phase_end_draw"
+dsl = """
+skill {name}({id}) {{
+  trigger phase_end owner_is_target optional {{
+    effect draw_cards(self, {n});
+  }}
+}}
+"""
+
+[templates.modifier_add]
+kind = "modifier_add"
+dsl = """
+skill {name}({id}) {{
+  modifier {target} add {n};
+}}
+"""
+
+[templates.view_as]
+kind = "view_as"
+dsl = """
+skill {name}({id}) {{
+  view_as {as_kind} {window} {filter};
+}}
+"""
+
+[templates.cards_moved_draw]
+kind = "cards_moved_draw"
+dsl = """
+skill {name}({id}) {{
+  trigger cards_moved {filter} optional {{
+    effect draw_cards(self, {n});
+  }}
+}}
+"""
+
+[templates.card_used_draw]
+kind = "card_used_draw"
+dsl = """
+skill {name}({id}) {{
+  trigger card_used {filter} optional {{
+    effect draw_cards(self, {n});
+  }}
+}}
+"""
+
+[templates.marker_active]
+kind = "marker_active"
+dsl = """
+skill {name}({id}) {{
+  active play_phase {{
+    effect emit_note({id});
+  }}
+}}
+"""
+
+# --- Skill instances (template + params) ---
+
+[[skills]]
+name = "jianxiong"
+id = 1
+template = "damage_draw"
+n = 1
+note = "奸雄"
+
+[[skills]]
+name = "mashu"
+id = 2
+template = "modifier_add"
+target = "distance_from"
+n = -1
+note = "马术"
+
+[[skills]]
+name = "qicao"
+id = 3
+template = "modifier_add"
+target = "attack_range"
+n = 1
+note = "奇策 stub"
+
+[[skills]]
+name = "biyue"
+id = 4
+template = "phase_end_draw"
+n = 1
+note = "闭月"
+
+[[skills]]
+name = "tiandu"
+id = 6
+template = "damage_draw"
+n = 1
+note = "天妒(简化)"
+
+[[skills]]
+name = "jizhi"
+id = 14
+template = "card_used_draw"
+filter = "owner_source_ordinary_trick"
+n = 1
+note = "集智"
+
+[[skills]]
+name = "wusheng"
+id = 16
+template = "view_as"
+as_kind = "sha"
+window = "play_phase"
+filter = "red"
+note = "武圣"
+
+[[skills]]
+name = "yingzi"
+id = 20
+template = "modifier_add"
+target = "draw_count"
+n = 1
+note = "英姿"
+
+[[skills]]
+name = "lianying"
+id = 21
+template = "cards_moved_draw"
+filter = "owner_from_hand_empty"
+n = 1
+note = "连营"
+
+[[skills]]
+name = "xiaoji"
+id = 22
+template = "cards_moved_draw"
+filter = "owner_from_equip_per_card"
+n = 2
+note = "枭姬"
+
+[[skills]]
+name = "paoxiao"
+id = 23
+template = "marker_active"
+note = "咆哮"
+
+[[skills]]
+name = "qingguo"
+id = 24
+template = "view_as"
+as_kind = "shan"
+window = "any"
+filter = "black"
+note = "倾国"
+
+[[skills]]
+name = "yiji"
+id = 26
+template = "damage_draw"
+n = 2
+note = "遗计"

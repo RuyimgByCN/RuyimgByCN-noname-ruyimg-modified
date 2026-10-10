@@ -1,0 +1,9 @@
+skill stdanran(2536614283) {
+  trigger damage owner_is_target optional {
+    let upgrades = mark_count(self, 221181016);
+    effect draw_cards(self, upgrades + 1);
+    if upgrades < 3 {
+      effect add_mark(self, 221181016, 1);
+    }
+  }
+}

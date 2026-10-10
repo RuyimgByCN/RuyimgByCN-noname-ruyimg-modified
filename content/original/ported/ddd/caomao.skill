@@ -1,0 +1,26 @@
+// 3D精选 曹髦「太思/驱车/潜龙」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddtaisi(632127901) {
+  trigger phase_end owner_alive_hp_changed_this_turn_entered_discard_available optional {
+    effect resolve_ddd_caomao(self, 0);
+  }
+}
+
+skill dddquche(2669792322) {
+  active play_phase once_per_game targets 1 1 other select_he 1 1 card_red {
+    effect add_skill_until_turn_end(self, 3815717800);
+    effect resolve_ddd_caomao(self, 10);
+  }
+}
+
+skill dddquche_effect(3815717800) locked non_gainable {
+  trigger turn_ended owner_is_target {
+    effect remove_mark(self, 3815717800, 0);
+  }
+  modifier distance_from add -owner_skill_mark;
+}
+
+skill dddqianlong(3550796651) locked lord_only {
+  trigger death owner_is_source {
+    effect draw_cards(self, 3);
+  }
+}

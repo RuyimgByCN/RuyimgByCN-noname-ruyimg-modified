@@ -1,0 +1,33 @@
+// 神行：装备区没有坐骑牌时，至其他角色的距离 -1 且手牌上限 +1。
+skill twshenxing(4258102225) locked {
+  modifier distance_from add -owner_no_mount;
+  modifier hand_limit add owner_no_mount;
+}
+
+// 以下均为上游无规则面的标记型技能（charlotte / audio-only / 空体 {}），
+// DSL 无可移植规则；以 hand_limit +0 空体保留 catalog 条目（与
+// sp/starzhonggu.skill 同约定）。上游定义位置：content/original/legacy-source/character/tw/skill.js。
+skill twzenhui2(2484520516) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twzenhui2 = { charlotte: true }（5651），无规则面。
+  modifier hand_limit add 0;
+}
+skill baonvezhi_faq(2459801127) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 baonvezhi_faq = {}（13450），空体，无规则面。
+  modifier hand_limit add 0;
+}
+skill bingyi_xin_guyong(3719051260) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 bingyi_xin_guyong = { audio: 2 }（16946），无规则面。
+  modifier hand_limit add 0;
+}
+skill jiefan_re_handang(3240958049) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jiefan_re_handang = { audio: 2 }（17304），无规则面。
+  modifier hand_limit add 0;
+}
+skill shengxi_feiyi(3679218176) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shengxi_feiyi = { audio: 2 }（21112），无规则面。
+  modifier hand_limit add 0;
+}
+skill twdengjianx(2526321678) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twdengjianx = {}（9708），空体，无规则面。
+  modifier hand_limit add 0;
+}

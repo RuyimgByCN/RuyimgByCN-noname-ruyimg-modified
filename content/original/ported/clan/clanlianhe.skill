@@ -1,0 +1,8 @@
+// 连和（族荀淑/族荀爽/族荀绲/族荀靖/族荀彧/族荀谌/族荀衍/族荀悦）：出牌阶段开始，横置两名未横置角色；其回合结束时若未摸牌，选择交你N-1张牌或令你摸N+1张（N=本回合获得牌数，上限3）。
+// 旧 JS 的「横置多名角色」「延时触发+获得牌计数」「交牌/摸牌选择」无对应原语。
+// 空定义：需 expansion 支持 link、延时触发、阶段追踪。
+skill clanlianhe(3490578020) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

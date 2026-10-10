@@ -1,0 +1,7 @@
+// 甘露（孙亮）：出牌阶段选择两名装备数差不超过你已损体力值的角色，交换装备区。
+// 旧 JS 的 swapEquip + 动态条件过滤（装备数差 <= 已损体力）无对应原语，暂留空定义。
+skill ganlu(2911810301) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

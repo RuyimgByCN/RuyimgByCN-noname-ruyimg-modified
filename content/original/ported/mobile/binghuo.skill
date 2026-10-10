@@ -1,0 +1,6 @@
+// binghuo（兵祸）：一名角色的结束阶段开始时，若你本回合内因〖集兵〗而使用或打出过牌，则你可令一名角色判定。若判定结果为黑色，则你对其造成1点雷属性伤害。
+skill binghuo(4199054322) {
+  trigger phase_discard owner_alive {
+    effect choose_other_damage(self, 1);
+  }
+}

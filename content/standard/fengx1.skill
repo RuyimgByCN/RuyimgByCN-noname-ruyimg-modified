@@ -1,0 +1,4 @@
+// Skill fengx1(169) - modifier range variant
+skill fengx1(169) {
+  modifier attack_range add 1;
+}

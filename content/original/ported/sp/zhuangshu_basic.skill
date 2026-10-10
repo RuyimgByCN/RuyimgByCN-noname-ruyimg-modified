@@ -1,0 +1,15 @@
+// 妆梳·基本（zhuangshu_basic，三奇装梳的基本牌分支）：受到伤害前，可弃置手牌/装备区中
+// 的牌并防止此伤害。
+// 上游 (sp/skill.js:28284)：trigger player:damageBegin4；filter = 伤害点数 ≤ 可弃牌数
+// （不含装备区中的妆梳·基本）；cost = chooseToDiscard(he, trigger.num，排除该装备)；
+// content = 弃置所选牌并防止伤害。
+// 实现：damage_before + owner_is_target → 可选确认 → discard_hand_equip_count(self, 1)
+// → prevent_current_damage()。
+// 与上游差异：①弃牌数按 1 张近似（上游弃置伤害点数张）；②「排除装备区中的妆梳·基本」
+// 未建模；③「可弃牌数 ≥ 伤害点数」门槛由弃牌原语内无牌即静默跳过近似。
+skill zhuangshu_basic(3108569468) {
+  trigger damage_before owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect prevent_current_damage();
+  }
+}

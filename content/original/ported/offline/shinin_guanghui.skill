@@ -1,0 +1,6 @@
+// shinin_guanghui：锁定技, global:card_used, global:damage_before, 异步。
+skill shinin_guanghui(4217008322) {
+  trigger card_used owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

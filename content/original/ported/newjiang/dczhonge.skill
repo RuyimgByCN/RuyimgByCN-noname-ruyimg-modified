@@ -1,0 +1,11 @@
+// 忠锷（张飞）：出牌阶段限一次，选择一名其他角色：弃置手牌至体力上限张
+// 并令其摸一张；然后双方各二选一（摸一张 / 视为对对方使用【杀】），
+// 选择相同时你摸两张。
+// 旧 JS 的「双人同时二选一比较」无对应原语，未建模（已注明）；
+// 以弃一张手牌并令其摸一张近似保留收益。
+skill dczhonge(3702242394) {
+  active play_phase uses_per_turn 1 select_hand 1 1 {
+    effect discard_selected(self);
+    effect choose_other_draw_or_recover(self, 1, 0, 1);
+  }
+}

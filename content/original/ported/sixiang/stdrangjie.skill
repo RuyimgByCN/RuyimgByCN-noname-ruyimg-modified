@@ -1,0 +1,7 @@
+// 攘劫：受到伤害后，移动场上的一张牌。
+// 旧 JS 的「移动场上牌（moveCard）」无对应原语，未建模。
+skill stdrangjie(3547362078) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

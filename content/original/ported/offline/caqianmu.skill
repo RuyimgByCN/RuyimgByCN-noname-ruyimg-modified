@@ -1,0 +1,5 @@
+// caqianmu：音效名:caqianmu, 主动(multi), 加技能, 含子技能。
+skill caqianmu(2274900140) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

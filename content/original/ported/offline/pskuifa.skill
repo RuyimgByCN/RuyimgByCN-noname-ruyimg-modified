@@ -1,0 +1,7 @@
+// pskuifa：player:card_used, 多分支选择, 摸牌, 失去体力, 加技能, 含子技能, 异步, 条件计数。
+skill pskuifa(3805008499) {
+  trigger card_used owner_alive optional {
+    effect draw_cards(self, 1);
+    effect lose_hp(self, 1);
+  }
+}

@@ -1,0 +1,12 @@
+// 宽释（阚泽）：结束阶段开始时，你可选择一名其他角色标记；其后该角色于一回合内
+// 第二次受到伤害后，其回复 1 点体力（每回合限一次）。
+// 旧 JS 仅作语义证据；标记与二伤回复由 resolve_rekuanshi / resolve_rekuanshi_resolve
+// 权威状态机校验（ABI 480）；第 2 次伤害以 turn.damage_taken_count==2 判定。
+skill rekuanshi(3423208328) {
+  trigger phase_end owner_is_target {
+    effect resolve_rekuanshi(self);
+  }
+  trigger damage owner_alive_not_target {
+    effect resolve_rekuanshi_resolve(self, event_player);
+  }
+}

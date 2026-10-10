@@ -1,0 +1,10 @@
+// 界奇谋：限定技，失去任意点体力并摸等量牌，本回合获得等量距离与出杀次数增益。
+skill reqimou(3862622181) {
+  active play_phase once_per_game {
+    let amount = choose_range(1, hp(self));
+    effect lose_hp(self, amount);
+    effect draw_cards(self, amount);
+    effect add_skill(self, 2749452350);
+    effect add_mark(self, 2749452350, amount);
+  }
+}

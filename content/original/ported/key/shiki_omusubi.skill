@@ -1,0 +1,7 @@
+// 御结（志木）：每轮开始时可选择一名其他角色，获得其武将的一个未拥有技能。
+// 旧 JS 的 角色技能列表查询+技能获取 需技能发现原语，未建模。
+skill shiki_omusubi(3634693320) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shiki_omusubi 含真实规则体（trigger 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

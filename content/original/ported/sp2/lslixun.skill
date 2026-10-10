@@ -1,0 +1,13 @@
+// 李肃（lslixun）：锁定技。当你受到伤害前，防止之，改为获得等量「珠」标记。
+// 上游 (sp2/skill.js:15173)：trigger player:damageBegin4；forced；content =
+// trigger.cancel() + addMark("lslixun", trigger.num)；group = lslixun_fate（出牌阶段
+// 开始按珠数判定）。
+// 实现：damage_before + owner_is_target → prevent_current_damage() +
+// add_mark(self, 4094034720, event_amount)。
+// 与上游差异：「珠」判定结算（lslixun_fate 出牌阶段按珠数判定）未建模。
+skill lslixun(4094034720) locked {
+  trigger damage_before owner_is_target {
+    effect prevent_current_damage();
+    effect add_mark(self, 4094034720, event_amount);
+  }
+}

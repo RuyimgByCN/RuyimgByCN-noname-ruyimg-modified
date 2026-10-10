@@ -1,0 +1,5 @@
+// 手杀复刻：旧武神。规则音效触发不进入权威逻辑。
+skill old_wushen(3444544012) locked {
+  modifier card_name(heart) override sha;
+  modifier card_distance_unlimited(heart) override 1;
+}

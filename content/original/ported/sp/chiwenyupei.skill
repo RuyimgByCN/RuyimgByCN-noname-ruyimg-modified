@@ -1,0 +1,17 @@
+// 螭纹玉佩（chiwenyupei，装备技·锁定技）：出牌阶段结束时，你回复1点体力；
+// 摸牌阶段，若你未受伤，你多摸两张牌。
+// 上游 (sp/skill.js:2513)：equipSkill forced；phaseUseEnd→recover()；phaseDrawBegin2
+// 且 isHealthy() 且 !numFixed → trigger.num += 2。
+// 实现：phase_play_end + owner_is_target_wounded → recover_hp(self, 1)；
+// phase_draw + owner_is_target_healthy_draw_not_fixed（新增 TriggerFilter，尾部追加）
+// → draw_cards(self, 2)。与上游差异：+2 以独立摸牌表达（总数一致，事件结构不同）；
+// 无装备技原语，不绑定装备位。
+skill chiwenyupei(2463243907) locked {
+  trigger phase_play_end owner_is_target_wounded {
+    effect recover_hp(self, 1);
+  }
+
+  trigger phase_draw owner_is_target_healthy_draw_not_fixed {
+    effect draw_cards(self, 2);
+  }
+}

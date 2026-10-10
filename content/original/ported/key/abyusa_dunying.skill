@@ -1,0 +1,15 @@
+// 遁影（水濑秋子）
+// 已损失体力同时决定防御距离与准备/结束阶段摸牌数。
+skill abyusa_dunying(3195600790) locked {
+  modifier distance_to add owner_lost_hp;
+  trigger phase_prepare owner_is_target {
+    if hp(self) < max_hp(self) {
+      effect draw_cards(self, max_hp(self) - hp(self));
+    }
+  }
+  trigger phase_end owner_is_target {
+    if hp(self) < max_hp(self) {
+      effect draw_cards(self, max_hp(self) - hp(self));
+    }
+  }
+}

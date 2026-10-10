@@ -1,0 +1,5 @@
+skill old_fuyin(3976662486) {
+  modifier card_target_cancel_if_other_user_hand_gte_target_and_armor_empty(sha) override 1;
+  modifier card_target_cancel_if_other_user_hand_gte_target_and_armor_empty(juedou) override 1;
+  modifier card_target_cancel_if_other_user_hand_gte_target_and_armor_empty(huogong) override 1;
+}

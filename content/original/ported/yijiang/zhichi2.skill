@@ -1,0 +1,6 @@
+// 智迟·失效（曹植）：本回合你的【杀】或普通锦囊牌不能指定拥有者。
+// 旧 JS 的临时技能语义；以 card_target_cancel 表达。
+skill zhichi2(3197261303) locked {
+  modifier card_target_cancel(sha) override 1;
+  modifier card_target_cancel(ordinary_trick) override 1;
+}

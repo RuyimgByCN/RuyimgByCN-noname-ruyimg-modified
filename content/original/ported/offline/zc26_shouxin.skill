@@ -1,0 +1,7 @@
+// zc26_shouxin：target:useCardToTarget, source:damageSource, 二选一, 摸牌, 异步。
+skill zc26_shouxin(2483276066) {
+  trigger card_targeted owner_is_target_once {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

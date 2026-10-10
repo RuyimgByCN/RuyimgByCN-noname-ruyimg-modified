@@ -1,0 +1,9 @@
+// 落阳铲（装备技能）：出牌阶段，弃置一张黑色手牌/装备牌，弃置所有手牌并摸等量牌。
+// 旧 JS 的「弃置全部手牌→摸等量」手牌置换无对应原语；近似为弃置→摸手牌数。
+// ponytail: 无法限制只选黑色牌，无法实现手牌置换，近似弃1摸手牌数。
+skill luoyangchan_skill(3209408717) {
+  active play_phase uses_per_turn 1 select_he 1 1 targets 0 0 other {
+    effect discard_selected(self);
+    effect draw_cards(self, hand_count(self));
+  }
+}

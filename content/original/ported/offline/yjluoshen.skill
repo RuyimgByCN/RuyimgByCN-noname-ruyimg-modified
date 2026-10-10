@@ -1,0 +1,5 @@
+skill yjluoshen(3100602929) {
+  trigger phase_prepare owner_is_target_once optional {
+    effect judge_same_color_gain_repeat(self);
+  }
+}

@@ -1,0 +1,8 @@
+// chenjie（陈节）：有角色判定时，可弃置一张同花色牌改判，然后摸两张牌。
+// 旧 JS 的「改判」无对应原语；以判定结算后摸两张近似（改判未建模，
+// 已注明）。
+skill chenjie(2618907199) {
+  trigger judgment_resolved owner_alive optional {
+    effect draw_cards(self, 2);
+  }
+}

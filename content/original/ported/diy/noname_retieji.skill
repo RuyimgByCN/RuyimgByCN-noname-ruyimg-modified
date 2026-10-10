@@ -1,0 +1,7 @@
+// 小无·铁骑：旧 JS 仅继承 REFRESH「界铁骑」，以本技能稳定 ID 发布同一规则，
+// 供 noname_machao 运行时动态授予；旧 JavaScript 不进入运行时。
+skill noname_retieji(3767920596) {
+  trigger card_targeted owner_source_sha optional {
+    effect resolve_retieji(self, event_card, event_player);
+  }
+}

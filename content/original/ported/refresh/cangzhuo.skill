@@ -1,0 +1,9 @@
+// 藏拙：弃牌阶段开始时，若本回合未使用过锦囊牌，则锦囊牌不计入手牌上限且不能在此阶段弃置。
+// 旧 JS（refresh/cangzhuo）以 useCard 历史 filter 判定“本回合未用锦囊”，content 为 addTempSkill("cangzhuo2")。
+// 这里在 phase_discard 触发，filter 复用回合级锦囊使用位（弃牌阶段开始时该位只反映已使用牌），
+// 命中后以本回合结束为限授予 cangzhuo2 的两个 modifier；旧 JavaScript 不进入运行时。
+skill cangzhuo(2846937042) locked {
+  trigger phase_discard owner_is_target_trick_used_zero {
+    effect add_skill_until_turn_end(self, 3573995787);
+  }
+}

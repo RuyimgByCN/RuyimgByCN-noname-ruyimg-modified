@@ -1,0 +1,8 @@
+// 梅影枪（装备技）：回合外首次失去手牌/装备时，可使用一张【杀】。
+// 旧JS中「检测回合外首次失去」和「chooseToUse 弹出使用杀」无法精确迁移。
+// 以 discard_hand_equip_count + draw_cards 近似：失去牌后摸一张，注释注明差异。
+skill meiyingqiang(2389807353) {
+  trigger cards_moved owner_alive_not_target {
+    effect draw_cards(self, 1);
+  }
+}

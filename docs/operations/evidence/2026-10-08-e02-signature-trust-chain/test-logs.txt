@@ -1,0 +1,6 @@
+$ E02/C3 签名信任链定向：签名安装/篡改拒绝/错钥拒绝/未签名拒绝/多级历史/撤销/回退
+test signature_trust_chain_and_version_history ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+$ 全量回归：engine-native 393/0/1 + content-runtime（含新测试 33→?）/engine-ai/loader = 63/0，DEPS_EXIT=0；无引擎代码改动、无 golden 变化
+$ 语义：keyed-blake3 v1 签名（domain tag noname-next/package-sig/v1）；verify_key 模式强校验（allow_unsigned=false）；多级历史=同槽双版本 list_installed 保留 + activate_version 切换 + hash 撤销后 v1 回激活；产品化策略（密钥分发/轮换/吊销名单分发）登记为宿主运营面

@@ -1,0 +1,4 @@
+// 看破：响应锦囊时，可将一张黑色手牌当【无懈可击】使用。
+skill kanpo(2834927312) {
+  view_as wuxie response black;
+}

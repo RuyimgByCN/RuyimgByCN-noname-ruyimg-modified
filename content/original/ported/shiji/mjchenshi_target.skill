@@ -1,0 +1,9 @@
+// 瞑瞑·陈氏·目标方（马谡系）：你成为「冰临城下」的目标后，可选择一名
+// 其他角色弃置一张牌。
+// 旧 JS 的「牌名限定」无对应原语；以成为其他角色用牌目标后弃一张手牌
+// 近似（牌名限定未建模，已注明）。
+skill mjchenshi_target(3595625061) {
+  trigger card_targeted owner_targeted_by_other_card_once_per_turn optional {
+    effect discard_hand_equip_count(self, 1);
+  }
+}

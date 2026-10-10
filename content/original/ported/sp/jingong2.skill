@@ -1,0 +1,6 @@
+// 矜功惩罚子技能
+skill jingong2(3807235921) locked {
+  trigger phase_end owner_is_target_no_turn_damage {
+    effect lose_hp(self, 1);
+  }
+}

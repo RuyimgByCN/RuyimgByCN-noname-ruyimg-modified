@@ -1,0 +1,5 @@
+// 仇伐·2（辛敞系）：标记技能。非特定类型手牌视为【杀】。
+// 旧 JS 的 cardname 改写无对应原语；以手牌当【杀】使用近似（类型条件未建模，已注明）。
+skill choufa2(2697345366) {
+  view_as sha play_phase any from hand;
+}

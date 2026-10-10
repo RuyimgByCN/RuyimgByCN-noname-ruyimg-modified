@@ -1,0 +1,130 @@
+warning: unused imports: `CardId` and `EventId`
+  --> crates/engine-native/src/archive.rs:20:18
+   |
+20 | use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+   |                  ^^^^^^  ^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `crate::machine::LogEvent`
+  --> crates/engine-native/src/archive.rs:21:5
+   |
+21 | use crate::machine::LogEvent;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unreachable pattern
+    --> crates/engine-native/src/archive.rs:1391:9
+     |
+1379 |         29 => {
+     |         -- matches all the relevant values
+...
+1391 |         29 => {
+     |         ^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/src/content/standard.rs:2302:9
+     |
+2302 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+     |         ----^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1646:19
+     |
+1559 |                 CardKind::Le | CardKind::Bing => {
+     |                 ------------ matches all the relevant values
+...
+1646 |                 | CardKind::Le
+     |                   ^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1647:19
+     |
+1559 |                 CardKind::Le | CardKind::Bing => {
+     |                                -------------- matches all the relevant values
+...
+1647 |                 | CardKind::Bing
+     |                   ^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-native/src/engine.rs:1648:19
+     |
+1599 |                 CardKind::ShanDian => {
+     |                 ------------------ matches all the relevant values
+...
+1648 |                 | CardKind::ShanDian => unreachable!("handled above"),
+     |                   ^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/kernel.rs:554:17
+    |
+554 |             let mut shans: Vec<ChoiceOption> = ctx.core.player(self.target)
+    |                 ----^^^^^
+    |                 |
+    |                 help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/presentation.rs:269:9
+    |
+269 |     let mut line = |txt: &str, s: &mut String| {
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: method `opt_u8` is never used
+  --> crates/engine-native/src/archive.rs:85:8
+   |
+54 | impl W {
+   | ------ method in this implementation
+...
+85 |     fn opt_u8(&mut self, v: Option<u8>) {
+   |        ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `opt_u8` is never used
+   --> crates/engine-native/src/archive.rs:148:8
+    |
+113 | impl<'a> R<'a> {
+    | -------------- method in this implementation
+...
+148 |     fn opt_u8(&mut self) -> Result<Option<u8>, ArchiveError> {
+    |        ^^^^^^
+
+warning: function `enc_faction` is never used
+   --> crates/engine-native/src/archive.rs:365:4
+    |
+365 | fn enc_faction(w: &mut W, f: &crate::catalog::Faction) {
+    |    ^^^^^^^^^^^
+
+warning: variant `Retarget` is never constructed
+    --> crates/engine-native/src/content/standard.rs:1731:5
+     |
+1725 | enum JiJiStage {
+     |      --------- variant in this enum
+...
+1731 |     Retarget,
+     |     ^^^^^^^^
+     |
+     = note: `JiJiStage` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: `engine-native` (lib) generated 13 warnings (run `cargo fix --lib -p engine-native` to apply 5 suggestions)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `release` profile [optimized] target(s) in 3.39s
+     Running `target/release/examples/n11_kof 8 8000`
+mode=kof rounds=8 seed_base=8000 engine=native
+kof round=0 winner=seat1
+kof round=1 winner=seat1
+kof round=2 winner=seat0
+kof round=3 winner=seat1
+kof round=4 winner=seat1
+kof round=5 winner=seat1
+kof round=6 winner=seat0
+kof round=7 winner=seat0
+mode=kof-aggregate rounds=8 wins=[3, 5] match_score=3-5
+mode=summary exit=ok

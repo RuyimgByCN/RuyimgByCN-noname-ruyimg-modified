@@ -1,0 +1,9 @@
+// dcmouli：觉醒技；锁定技；回复1体力；增体力上限；获技能。
+skill dcmouli(2732270334) {
+  trigger phase_any_end owner_is_target {
+    // 近似：回复1点体力
+    effect recover_hp(self, 1);
+    // 近似：增加体力上限
+    effect change_max_hp(self, 1);
+  }
+}

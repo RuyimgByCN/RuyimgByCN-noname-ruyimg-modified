@@ -1,0 +1,4 @@
+// Skill yiji3(115) - standard variant
+skill yiji3(115) {
+  modifier distance_from add -1;
+}

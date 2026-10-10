@@ -1,0 +1,15 @@
+skill mpbishi(3233124559) locked {
+  modifier card_target_cancel(damage_trick) override 1;
+}
+
+// 与已验证的 regushe2 相同：仅用于临时存储清理，无独立规则行为。
+skill xinxhzhiyan_used(3953830754) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}
+
+// 知言失败后的临时效果：使用牌不能指定其他角色。
+skill xinxhzhiyan_false(3265620898) {
+  modifier card_targets_self_only override 1;
+}

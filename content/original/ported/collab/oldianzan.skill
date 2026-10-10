@@ -1,0 +1,7 @@
+// 点赞（OL点赞）：点击技能按钮向标记角色随机投掷互动道具（花/酒/蛋/鞋）。
+// 旧 JS 为纯 UI 互动机制：clickable 按钮 + throwEmotion 表情投掷，无游戏逻辑层面的牌/血量改动，DSL 无对应原语。
+skill oldianzan(2331953316) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

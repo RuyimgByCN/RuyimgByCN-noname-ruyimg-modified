@@ -1,0 +1,5 @@
+// 菜筐·手牌（菜筐系）：将手牌区唯一牌当任意牌使用。
+// 旧 JS 的「唯一牌转化」以手牌当【杀】近似（已注明）。
+skill recaiwang_hand(3519849652) {
+  view_as sha play_phase any from hand;
+}

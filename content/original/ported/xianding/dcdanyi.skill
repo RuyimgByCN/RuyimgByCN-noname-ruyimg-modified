@@ -1,0 +1,7 @@
+// 弹翼（DC 曹节）：使用牌指定目标后，若此牌与上一张牌有共同目标，可摸一张牌。
+// 旧 JS 的“摸共同目标数张牌（等量）”以固定摸一张近似。
+skill dcdanyi(2264670487) {
+  trigger card_used owner_source_play_card_repeats_previous_targets optional {
+    effect draw_cards(self, 1);
+  }
+}

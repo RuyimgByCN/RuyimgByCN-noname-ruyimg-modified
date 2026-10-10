@@ -1,0 +1,9 @@
+// 习事：使用、打出♦牌，或成为其他角色♦牌的目标后，摸一张牌。
+skill ao_xishi(4100198765) locked {
+  trigger card_used owner_source_or_targeted_by_other_diamond {
+    effect draw_cards(self, 1);
+  }
+  trigger card_responded owner_source_or_targeted_by_other_diamond {
+    effect draw_cards(self, 1);
+  }
+}

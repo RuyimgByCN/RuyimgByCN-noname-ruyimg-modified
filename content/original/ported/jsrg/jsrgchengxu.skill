@@ -1,0 +1,8 @@
+// 乘虚（JSRG）：蜀势力技。与你势力相同的其他角色不能响应你使用的牌。
+// 实现：复用扫讨的 `sha_unrespondable` / `card_use_unrespondable(ordinary_trick)`。
+// 近似：不限同势力，所有角色均不能响应你的杀与普通锦囊。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgchengxu(2667096470) locked {
+  modifier sha_unrespondable(any) override 1;
+  modifier card_use_unrespondable(ordinary_trick) override 1;
+}

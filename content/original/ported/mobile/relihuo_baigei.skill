@@ -1,0 +1,6 @@
+// relihuo_baigei（疠火）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill relihuo_baigei(3403328551) locked {
+  trigger card_used owner_alive {
+    effect lose_hp(self, 1);
+  }
+}

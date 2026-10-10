@@ -1,0 +1,7 @@
+// hssifen（主动技(phaseUse)/转化技(视作juedou)）：主动(phaseUse), 视作juedou, 摸牌, 加技能, 含子技能, 异步。
+skill hssifen(4126132032) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

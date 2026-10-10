@@ -1,0 +1,15 @@
+// 设变（refresh OL夏侯渊 shebian）：当你的武将牌翻面后，你可以移动场上的一张
+// 装备牌。
+// 上游 (refresh/skill.js shebian)：trigger player turnOverEnd；
+// filter canMoveCard(null, true)；content moveCard().set("nojudge", true)。
+// 实现（2026-09-09 第一百八十四批）：新注册过滤器 owner_turned_over
+// （CharacterStateChanged + 事件角色=拥有者 + 双向翻面；5 处注册零 ABI）
+// → choose_move_field_card_to(self, self)（批 AF 移场牌原语）。
+// 近似（登记债）：上游 moveCard 为装备牌口径的任意移动；原语可选集含判定区
+// 且目标固定为自己（场上→自己）——可移动集为上游超集、方向收窄，以引擎
+// movable 集为准。
+skill shebian(3980781998) {
+  trigger character_state_changed owner_turned_over optional {
+    effect choose_move_field_card_to(self, self);
+  }
+}

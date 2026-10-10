@@ -1,0 +1,8 @@
+// 归藻（张华）：弃牌阶段结束时，若弃置了至少两张花色不同的牌，可摸一张牌或回复1点体力。
+// 旧 JS 的「花色去重过滤」+chooseDrawRecover 二选一无对应组合原语；choose_draw_or_recover 效果存在
+// 但缺少弃牌花色集合判定过滤器，若直接触发会过于宽松，暂留空定义。
+skill guizao(4052541037) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

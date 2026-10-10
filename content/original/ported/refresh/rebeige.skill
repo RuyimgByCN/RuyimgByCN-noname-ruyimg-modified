@@ -1,0 +1,5 @@
+skill rebeige(3378605169) {
+  trigger damage owner_alive_sha_damage_source_target_alive_owner_hand_equip_nonempty optional {
+    effect resolve_beige_configured(self, event_player, event_source, event_amount, 3);
+  }
+}

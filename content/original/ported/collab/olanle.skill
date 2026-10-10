@@ -1,0 +1,8 @@
+// 乐（OL乐）：受伤后移除浮沉标记，摸1张牌；无标记时获得享乐技能。
+// 旧 JS 含浮沉标记系统、享乐技能附加/移除（addAdditionalSkill），DSL 无标记移除触发及动态技能附加原语。
+// 近似为受伤时摸1张牌。
+skill olanle(2371730162) {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

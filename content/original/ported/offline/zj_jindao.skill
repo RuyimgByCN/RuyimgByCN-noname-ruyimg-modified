@@ -1,0 +1,5 @@
+// zj_jindao：音效名:dcjincui, 锁定技, player:phaseDrawBegin1, 回复体力, 异步。
+skill zj_jindao(2891352132) {
+  trigger phase_draw owner_alive {
+  }
+}

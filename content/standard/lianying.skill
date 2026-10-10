@@ -1,0 +1,6 @@
+// 连营 (lianying) — 陆逊: after losing the last hand card, may draw one card.
+skill lianying(21) {
+  trigger cards_moved owner_from_hand_empty optional {
+    effect draw_cards(self, 1);
+  }
+}

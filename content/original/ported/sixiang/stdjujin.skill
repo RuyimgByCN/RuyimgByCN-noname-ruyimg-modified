@@ -1,0 +1,6 @@
+// 聚进：受到群势力角色造成的伤害后，可弃置两张手牌或装备牌并回复 1 点体力。
+skill stdjujin(3408182272) lord_only {
+  trigger damage owner_is_target_source_group_qun_discardable_hand_equip_gte_two optional {
+    effect choose_discard_hand_equip_then_recover(self, 2, 1);
+  }
+}

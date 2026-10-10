@@ -1,0 +1,8 @@
+// 枯笃（族荀淑/族荀爽/族荀绲/族荀靖/族荀彧/族荀谌/族荀衍/族荀悦）：限定技。结束阶段，重铸两张牌，令一名角色获得N个标记（N=min(5, 两牌点数差绝对值)），每个标记在其回合结束时摸1张牌，全部消耗后执行额外回合。
+// 旧 JS 的「限定技」「点数差计算」「标记递减+额外回合」无对应原语。
+// 空定义：需 expansion 支持 limited、点数系统、额外回合。
+skill clankudu(3024334893) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

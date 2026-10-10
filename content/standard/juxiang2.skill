@@ -1,0 +1,4 @@
+// Skill juxiang2(145) - standard variant
+skill juxiang2(145) {
+  modifier distance_from add -1;
+}

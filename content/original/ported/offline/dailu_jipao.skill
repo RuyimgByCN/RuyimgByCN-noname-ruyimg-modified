@@ -1,0 +1,6 @@
+// dailu_jipao。
+skill dailu_jipao(3854737478) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

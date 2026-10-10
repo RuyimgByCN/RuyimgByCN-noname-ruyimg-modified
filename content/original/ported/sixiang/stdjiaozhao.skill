@@ -1,0 +1,7 @@
+// 矫诏（？）：出牌阶段，选择有大于1张手牌的其他角色，展示两张手牌；若配合丹心则获得其中一张，否则与对方各选对方一张手牌交换。
+// 旧 JS 的「双人互选手牌交换」无对应 DSL 原语。完全无法表达。
+skill stdjiaozhao(2325093930) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

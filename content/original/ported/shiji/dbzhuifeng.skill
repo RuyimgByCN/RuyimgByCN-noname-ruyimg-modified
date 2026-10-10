@@ -1,0 +1,9 @@
+// 追锋（标文鸯）：出牌阶段限两次，你失去 1 点体力，然后对一名其他角色视为使用
+// 一张【决斗】。
+// 旧 JavaScript 仅作语义证据；失体力与虚拟决斗由 ABI 419 resolve_dbzhuifeng
+// 权威结算。
+skill dbzhuifeng(2625491865) {
+  active play_phase uses_per_turn 2 {
+    effect resolve_dbzhuifeng(self);
+  }
+}

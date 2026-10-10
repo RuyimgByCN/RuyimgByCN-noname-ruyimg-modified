@@ -1,0 +1,4 @@
+// Skill jianxiong3(128) - standard variant
+skill jianxiong3(128) {
+  modifier attack_range add 1;
+}

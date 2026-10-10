@@ -1,0 +1,7 @@
+// 上弦（朋也）：出牌阶段开始时,你摸一张牌并切换「与其他角色计算距离时的方向」。
+// 旧 JS 仅作语义证据;「距离计算方向切换」为标记级效果未建模,以固定摸一张牌近似。
+skill tomoya_shangxian(2372159959) locked {
+  trigger phase_play owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

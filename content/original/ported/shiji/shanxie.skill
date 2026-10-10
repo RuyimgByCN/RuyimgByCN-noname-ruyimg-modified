@@ -1,0 +1,9 @@
+// 善械（王双）：出牌阶段限一次，若牌堆中有武器牌，你获得其中一张；否则随机获得
+// 一名其他角色的武器牌。
+// 旧 JavaScript 仅作语义证据；牌堆检索与随机夺取由 ABI 416 resolve_shanxie
+// 权威结算（随机数只使用可回放 RuleRng）。
+skill shanxie(3557798177) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_shanxie(self);
+  }
+}

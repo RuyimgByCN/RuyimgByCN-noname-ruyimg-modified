@@ -1,0 +1,6 @@
+// mbshuyong（姝勇）：当你使用或打出【杀】时，你可以获得一名其他角色区域内的一张牌。若本轮你以此法获得其区域内的牌数大于1，其摸一张牌。
+skill mbshuyong(2696475469) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

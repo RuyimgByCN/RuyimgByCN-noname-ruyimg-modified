@@ -1,0 +1,8 @@
+// 博洽（荀勖）：出牌阶段限一次，弃置三张牌，视为使用一张任意基本牌或
+// 非伤害普通锦囊牌；若三张牌的类型或花色各不相同，使用结算后可令一名
+// 角色将手牌调整至体力上限。
+// 旧 JS 的「任意基本/非伤害锦囊」动态牌名选择无对应原语，未建模（已注明）。
+skill boqia(3168470853) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,8 @@
+// 带方（pxdaifang，州郡技能）：你的属性【杀】不能被响应。
+// 上游 (sp/skill.js:3054)：trigger player:useCard；filter = sha && hasNature；
+// forced；content = directHit.addArray(all)（不可响应）。
+// 实现：modifier card_use_unrespondable(sha_elemental) override 1（属性【杀】不可被
+// 响应，语义等价上游 directHit 全场）。
+skill pxdaifang(2175017211) {
+  modifier card_use_unrespondable(sha_elemental) override 1;
+}

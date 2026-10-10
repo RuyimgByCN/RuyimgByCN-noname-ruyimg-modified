@@ -1,0 +1,10 @@
+// 智语（虞翻）：你受到伤害后,可摸一张牌并展示手牌;若你的手牌均为同色,伤害来源
+// 弃置一张牌。
+// 旧 JS 仅作语义证据;「手牌均为同色→伤害来源弃牌」分支未建模（无按颜色判定与
+// 来源弃牌的组合原语）。
+skill zhiyu(3443788751) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    effect reveal_hand(self);
+  }
+}

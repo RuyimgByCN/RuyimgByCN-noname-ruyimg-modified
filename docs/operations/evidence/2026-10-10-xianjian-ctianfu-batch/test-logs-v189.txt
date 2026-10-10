@@ -1,0 +1,13 @@
+== cargo test --offline -p engine-native --test g1_wudian zhiluxiaohu（定向回归）==
+running 1 test
+test swd_zhiluxiaohu_random_enemy_virtual_sha ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 108 filtered out; finished in 0.04s
+
+== cargo test --offline -p engine-native --test g1_shahai_swd（swd 存量回归）==
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+== cargo test --offline -p engine-native（全量）==
+engine-native 合计: 522 passed / 0 failed / 1 ignored
+
+== 依赖包 ==
+deps 合计: 63 passed / 0 failed

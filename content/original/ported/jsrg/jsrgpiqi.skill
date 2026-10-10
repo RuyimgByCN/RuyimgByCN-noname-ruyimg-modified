@@ -1,0 +1,5 @@
+// jsrgpiqi（辟奇）：出牌阶段限两次，你可以视为使用一张无距离限制的【顺手牵羊】（不能指定相同目标），与目标距离1以内的角色本回合可以将【闪】当【无懈可击】使用。
+// 未建模：全局状态, addTempSkill, 标记计数, charlotte延迟, storage状态, chooseToUse转化 ...等7项（DSL无对应原语）
+skill jsrgpiqi(2184302561) {
+  view_as shunshou play_phase any;
+}

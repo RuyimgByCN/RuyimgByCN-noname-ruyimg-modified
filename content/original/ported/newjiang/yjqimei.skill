@@ -1,0 +1,10 @@
+// 齐眉（王粲）：出牌阶段限一次，选择一名其他角色：你与其各摸两张牌，
+// 双方各展示两张手牌，若四种花色俱全则双方各摸一张，否则各弃置一张。
+// 旧 JS 的「双人展示比较」无对应原语，以双方各摸两张近似（展示比较未
+// 建模，已注明）。
+skill yjqimei(2873844189) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 2);
+    effect choose_other_draw_or_recover(self, 2, 0, 1);
+  }
+}

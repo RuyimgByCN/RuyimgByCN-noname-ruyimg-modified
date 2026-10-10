@@ -1,0 +1,4 @@
+// Skill renxin2(106) - standard variant
+skill renxin2(106) {
+  modifier distance_from add -1;
+}

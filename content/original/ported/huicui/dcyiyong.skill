@@ -1,0 +1,6 @@
+// dcyiyong：摸?牌。
+skill dcyiyong(2514093073) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

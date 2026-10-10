@@ -1,0 +1,5 @@
+// smpoyu：音效名:smpoyu, 锁定技, player:equipBegin, player:card_used, 需选择目标, 加技能, 含子技能, 异步。
+skill smpoyu(3251518330) locked {
+  trigger card_used always {
+  }
+}

@@ -1,0 +1,12 @@
+// dckuichi（溃痴）：锁定技。回合结束时，若你本回合摸牌数与造成伤害数均不小于你的体力上限，
+// 你失去 1 点体力。上游 filter: getHistory("gain"→draw).cards.length >= maxHp &&
+// getHistory("sourceDamage").num之和 >= maxHp；content(): player.loseHp()。
+// 使用 Phase 3 history-count 查询族 cards_drawn_this_turn/damage_dealt_this_turn +
+// DSL 表达式扩展（>、&&）：drawn > maxHp-1 ⟺ drawn >= maxHp（整数）。
+skill dckuichi(3373286891) locked {
+  trigger phase_end owner_is_target {
+    if cards_drawn_this_turn(self) > max_hp(self) - 1 && damage_dealt_this_turn(self) > max_hp(self) - 1 {
+      effect lose_hp(self, 1);
+    }
+  }
+}

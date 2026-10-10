@@ -1,0 +1,8 @@
+// 仪容（族王允/族王淩）：出牌阶段限两次。若手牌数不等于手牌上限：手牌多时弃差值张并手牌上限+1；手牌少时摸差值张并手牌上限-1。
+// 旧 JS 的「手牌上限动态操作（chenliuwushi.change）」「手牌与上限差值计算」无对应原语。
+// 以 draw_cards + discard 近似保留资源调整，缺少手牌上限联动。
+skill clanyirong(3570625585) {
+  active play_phase uses_per_turn 2 {
+    effect draw_cards(self, 1);
+  }
+}

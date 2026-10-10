@@ -1,0 +1,19 @@
+// dcanxu（OL界李儒·暗蓄）：出牌阶段限一次，选两名手牌数不同的角色，手牌
+// 少者从多者处获得一张牌。若该牌非黑桃，你摸一张牌；若此后两名角色手牌数
+// 相等，你回复1体力。
+// 上游 (refresh/skill.js dcanxu)：enable phaseUse；usable 1；selectTarget 2
+// （multitarget，先选多后选少，content 内归一化）；gainner.gainPlayerCard
+// (giver, true, "h", "visibleMove") 少者明选多者一张手牌；所得牌非黑桃 →
+// player.draw(1)；结算后 gainner 与 giver 手牌数相等 → player.recover(1)。
+// 实现（2026-09-13 第二百七十三批·简单主动+手牌数比较族状态机，ADR 0641
+// §8.61）：active play_phase uses_per_turn 1 targets 2 2 other →
+// resolve_dcanxu(self)（ABI 722 / tag 746 / Cont 321 单段续体）：机器校验
+// 手牌数不同并归一化少者/多者 → 少者明选多者一张手牌 → 移牌 → 非黑桃 owner
+// 摸 1 / 手牌数相等 owner 回 1（同步结算）。
+// 近似（登记债）：①「手牌数不同」约束在机器入口校验（激活即拒），目标
+// 选择器未提供该过滤面；②visibleMove 明选表现面未建模（选牌天然可见）。
+skill dcanxu(3012521444) {
+  active play_phase uses_per_turn 1 targets 2 2 other {
+    effect resolve_dcanxu(self);
+  }
+}

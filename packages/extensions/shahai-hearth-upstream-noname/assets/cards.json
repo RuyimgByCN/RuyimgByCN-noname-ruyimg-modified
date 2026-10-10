@@ -1,0 +1,26 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/杀海拾遗/card/hearth/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": { "name": "shahai-hearth-upstream-noname", "version": 1, "description": "G1 炉石传说切片", "card_prefix": "ht_" },
+  "cards": [
+    { "name": "linghunzhihuo", "kind": "linghunzhihuo", "suit": "diamond", "rank": 2 },
+    { "name": "zhaomingdan", "kind": "zhaomingdan", "suit": "diamond", "rank": 5 },
+    { "name": "zhaomingdan", "kind": "zhaomingdan", "suit": "heart", "rank": 10 },
+    { "name": "jihuocard", "kind": "jihuocard", "suit": "diamond", "rank": 2 },
+    { "name": "shandianjian", "kind": "leisha", "suit": "club", "rank": 3 },
+    { "name": "shandianjian", "kind": "leisha", "suit": "spade", "rank": 1 },
+    { "name": "shenenshu", "kind": "jihuocard", "suit": "heart", "rank": 2 },
+    { "name": "shenenshu", "kind": "jihuocard", "suit": "diamond", "rank": 12 },
+    { "name": "dunpaigedang", "kind": "dunpaigedang", "suit": "club", "rank": 3 },
+    { "name": "zhiliaobo", "kind": "zhiliaobo", "suit": "club", "rank": 7 },
+    { "name": "zhiliaobo", "kind": "zhiliaobo", "suit": "spade", "rank": 1 },
+    { "name": "yuansuhuimie", "kind": "yuansuhuimie", "suit": "spade", "rank": 13 },
+    { "name": "xingjiegoutong", "kind": "xingjiegoutong", "suit": "spade", "rank": 13 },
+    { "name": "chuansongmen", "kind": "chuansongmen", "suit": "diamond", "rank": 2 },
+    { "name": "chuansongmen", "kind": "chuansongmen", "suit": "heart", "rank": 2 },
+    { "name": "tanshezhiren", "kind": "tanshezhiren", "suit": "diamond", "rank": 2 },
+    { "name": "shijieshu", "kind": "shijieshu", "suit": "spade", "rank": 7 }
+  ],
+  "deferred": []
+}

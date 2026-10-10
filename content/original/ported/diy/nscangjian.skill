@@ -1,0 +1,6 @@
+// 旧 JS 语义：造成伤害后，若受伤角色仍存活且装备区有牌，可获得其中一张。
+skill nscangjian(3998621536) {
+  trigger damage owner_source_target_alive_has_equip optional {
+    effect take_one_card(event_player, self, equip);
+  }
+}

@@ -1,0 +1,7 @@
+// xkxianxing：player:card_targeted, 多分支选择, 摸牌, 失去体力, 加技能, 含子技能, 异步。
+skill xkxianxing(4179215729) {
+  trigger card_targeted owner_alive optional {
+    effect draw_cards(self, 1);
+    effect lose_hp(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 通博(诸葛瑾)：摸牌阶段结束时，你可以用任意张手牌/装备牌交换等量的"书"(bizhuan expansion牌)。
+// 若"书"有四种花色，你可以将所有"书"交给任意名其他角色。
+// 旧JS含chooseToMove交换expansion与手牌、suits四色检测、chooseCardButton分批给出等极复杂交互。
+// 注：expansion牌区(bizhuan)管理、chooseToMove交换UI、花色集合检测、分批发牌均无DSL原语。
+skill tongbo(2999976915) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

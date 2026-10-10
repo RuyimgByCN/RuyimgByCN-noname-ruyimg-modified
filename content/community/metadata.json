@@ -1,0 +1,10 @@
+{
+  "dependencies": [
+    {
+      "namespace": "official",
+      "package_id": "standard",
+      "version": "0.1.0"
+    }
+  ],
+  "description": "M5 示例社区包：单个角色 + 单个示例技，验证非官方包可打包并载入标准身份局。"
+}

@@ -1,0 +1,6 @@
+// hanyong3：锁定技，造成伤害时伤害+1
+skill hanyong3(4284334369) locked {
+  trigger damage_before owner_source {
+    effect modify_current_damage(self, 1);
+  }
+}

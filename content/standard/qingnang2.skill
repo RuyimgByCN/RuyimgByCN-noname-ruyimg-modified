@@ -1,0 +1,4 @@
+// Skill qingnang2(116) - standard variant
+skill qingnang2(116) {
+  modifier attack_range add 1;
+}

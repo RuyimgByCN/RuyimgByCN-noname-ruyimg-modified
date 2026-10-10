@@ -1,0 +1,8 @@
+// 泽烈（族陆景/族陆郁生）：宗族技。有角色失去装备/判定区牌后，可令一名宗族角色获得标记：本回合下N次摸牌/弃牌后额外摸1张/弃1张。
+// 旧 JS 的「宗族判定（hasClan 吴郡陆氏）」「装备/判定牌失去检测」「标记递减多段触发」无对应原语。
+// 空定义：需 expansion 支持 hasClan 和多段标记系统。
+skill clanzelie(2462428583) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

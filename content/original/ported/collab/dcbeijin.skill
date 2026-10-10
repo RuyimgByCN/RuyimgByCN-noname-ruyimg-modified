@@ -1,0 +1,8 @@
+// 北进（姜子牙）：出牌阶段，摸一张牌。以此法得到的牌无次数限制；下次使用牌时若仍有此类牌则失去1体力。
+// 旧JS的gaintag标记与无次数限制（cardUsable=Infinity）、条件失去体力、buff子技能状态跟踪未建模（已注明）。
+// 以摸牌保留主要收益；失去体力的触发条件过于复杂无法近似。
+skill dcbeijin(2757563492) {
+  active play_phase {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,12 @@
+// 星舞（dcxingwu）：弃牌阶段开始时，可将一张手牌置于武将牌上称「星舞」；若「星舞」
+// 达三张，可移去三张，弃置一名其他角色装备区所有牌并对其造成 X 点伤害（X=移去牌
+// 花色数，对其为女性则改 1）。
+// 上游 (xianding/skill.js)。实现：前半句——`trigger phase_discard owner_is_target
+// optional → place_hand_card_to_expansion(self, self_skill)`（ABI 650 原语，本会话）。
+// 近似：「满三张弃装备+伤害」后半句未建模（需按堆花色集合查询+多目标弃装原语）。
+// 2026-08-15 终极合并反向扫描批次。
+skill dcxingwu(4112903133) {
+  trigger phase_discard owner_is_target optional {
+    effect place_hand_card_to_expansion(self, self_skill);
+  }
+}

@@ -1,0 +1,8 @@
+// xinjianying（渐营）：①当你使用与你使用的上一张牌点数或花色相同的牌时，你可以摸一张牌。②出牌阶段限一次，你可以将一张牌当做任意基本牌使用。若你于此阶段内使用的上一张牌有花色，则此牌的花色视为上一张牌的花色。
+// 未建模：subSkill, chooseButton 等机制无 DSL 原语。
+skill xinjianying(3101138365) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinjianying（skill.js:20596）含真实规则体，DSL 原语暂不足以
+  // 精确建模（保真度债；原 audio-only 注记经 2026-08-21 上游体复核证伪）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

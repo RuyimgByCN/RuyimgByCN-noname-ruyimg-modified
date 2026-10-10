@@ -1,0 +1,6 @@
+// SP2 严夫人「匿伏」：每名角色回合结束时都把自己的手牌精确调整至四张。
+skill nifu(2611616498) locked {
+  trigger phase_end owner_alive {
+    effect adjust_hand_to(self, 4);
+  }
+}

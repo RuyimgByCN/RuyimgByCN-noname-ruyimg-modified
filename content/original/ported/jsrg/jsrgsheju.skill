@@ -1,0 +1,15 @@
+// jsrgsheju（设居）：锁定技，当你使用【杀】指定唯一目标后，或成为【杀】的
+// 唯一目标后，你与对方议事，若结果为黑色，则双方各减 1 点体力上限。
+// 实现：双触发（攻方 owner_source_sha / 守方 owner_targeted_by_other_sha）→
+// `resolve_jsrgsheju(self, 对方, self_skill)`（ADR 0644 P1，ABI 654）。
+// 近似：P1 亮「首张手牌」为意见；「唯一目标」约束未建模（任意杀指定即触发）；
+// 双方须有手牌（原语内校验）；红色分支的附加效果未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgsheju(3229587644) locked {
+  trigger card_targeted owner_source_sha {
+    effect resolve_jsrgsheju(self, event_player, self_skill);
+  }
+  trigger card_targeted owner_targeted_by_other_sha {
+    effect resolve_jsrgsheju(self, event_source, self_skill);
+  }
+}

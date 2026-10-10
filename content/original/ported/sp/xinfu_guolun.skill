@@ -1,0 +1,6 @@
+// 过论：旧 JavaScript 仅作为语义规范，运行时只执行此 DSL。
+skill xinfu_guolun(2723622416) {
+  active play_phase uses_per_turn 1 hand_nonempty targets 1 1 other hand_nonempty {
+    effect resolve_xinfu_guolun(self, event_source);
+  }
+}

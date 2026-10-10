@@ -1,0 +1,10 @@
+// 严教（张让系）：出牌阶段限一次，将手牌按花色排列并令一名角色获得其中
+// 等量牌。
+// 旧 JS 的「按花色排列选牌」无对应原语；以弃一张手牌并摸一张近似
+// （已注明）。
+skill spyanjiao(2917890530) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

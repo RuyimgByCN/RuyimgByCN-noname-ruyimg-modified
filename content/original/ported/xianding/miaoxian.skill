@@ -1,0 +1,7 @@
+// 妙弦（谋孙资）：手牌唯一且为黑色时，可将其当任意锦囊牌使用。以此法失去红色手牌且手牌无红时可摸一张。
+// DSL缺 chooseButton 牌名选择+颜色条件追踪 原语，无法表达。
+skill miaoxian(3409812194) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 miaoxian 含真实规则体（enable、chooseButton 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：视为【杀】”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

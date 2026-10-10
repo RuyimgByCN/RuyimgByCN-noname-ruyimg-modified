@@ -1,0 +1,9 @@
+// 军屯
+skill juntun(3811889239) locked {
+  trigger phase_prepare owner_is_target {
+    if 1 < max_hp(self) {
+      effect change_max_hp(self, -1);
+      effect draw_cards(self, max_hp(self));
+    }
+  }
+}

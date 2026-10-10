@@ -1,0 +1,6 @@
+// sm_jueying：当你受到伤害后摸牌。
+skill sm_jueying(3159760538) {
+  trigger damage owner_is_target_once  {
+    effect draw_cards(self, 1);
+  }
+}

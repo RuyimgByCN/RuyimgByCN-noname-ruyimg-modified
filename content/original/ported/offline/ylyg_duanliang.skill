@@ -1,0 +1,6 @@
+// ylyg_duanliang（锁定技/主动技(chooseToUse)/转化技(视作bingliang)/触发技）：锁定技, player:card_used, 主动(chooseToUse), 视作bingliang, 摸牌, 加技能, 含子技能, 异步。
+skill ylyg_duanliang(3332810333) locked {
+  trigger card_used always {
+    effect draw_cards(self, 1);
+  }
+}

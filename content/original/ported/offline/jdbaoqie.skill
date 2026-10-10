@@ -1,0 +1,5 @@
+// jdbaoqie：音效名:baoqie, 锁定技, player:showCharacterAfter, 多步骤。
+skill jdbaoqie(2306788215) {
+  trigger phase_any_end owner_alive {
+  }
+}

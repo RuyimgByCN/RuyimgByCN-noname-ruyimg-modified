@@ -1,0 +1,7 @@
+// 破掳（孟获相关）：主公技。吴势力角色死亡或杀死其他角色后，
+// 你可令任意名角色各摸X张牌（X=本局已发动次数+1）。
+// 缺多次递增计数与任意人数定向摸牌原语，空定义。
+skill twpolu(2793261476) lord_only {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

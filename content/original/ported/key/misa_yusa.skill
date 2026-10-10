@@ -1,0 +1,7 @@
+// 优沙（美沙）：野火造成伤害后，若未翻面且可双面，翻面。
+// 旧 JS 的 双面技能翻面+dualside 机制 需双面武将原语，未建模。
+skill misa_yusa(2987563501) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 misa_yusa = 标记型技能（charlotte，skill.js:11304），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

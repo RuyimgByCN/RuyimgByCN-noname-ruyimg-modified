@@ -1,0 +1,219 @@
+//! Golden coverage for sb（界限突破）包批次一：制衡/闭月 + 全包契约。
+
+use engine_api::{
+    Command, CommandKind, DomainEvent, ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId,
+};
+use engine_core::command::apply_command;
+use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+use engine_core::state::{GameState, Phase, ZoneKind};
+use engine_core::transaction::Transaction;
+use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+use rule_api::EffectRequest;
+
+const SBZHIHENG: u32 = 4_242_420_001;
+const SBBIYUE: u32 = 4_152_380_059;
+const SBYANGWEI: u32 = 3_601_751_055;
+const SOURCE_BIYUE: &str = include_str!("../../../content/original/ported/sb/sbbiyue.skill");
+
+fn hand_count(state: &GameState, player: PlayerId) -> u32 {
+    state
+        .zones
+        .find(ZoneKind::Hand, player)
+        .map(|zone| {
+            state
+                .zones
+                .get(zone)
+                .map(|z| z.cards.len() as u32)
+                .unwrap_or(0)
+        })
+        .unwrap_or(0)
+}
+
+fn setup(source: &str, defs: &[u32]) -> (Transaction, PlayerId, PlayerId) {
+    let package = content_compiler::compile_source_named("sb-batch1", source).unwrap();
+    let mut tx = Transaction::begin(GameState::empty());
+    std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(&package).unwrap();
+    bootstrap_match(&mut tx, 2, 20_260_803, "identity-standard").unwrap();
+    let seats = tx.state().players.alive_by_seat();
+    let (owner, other) = (seats[0], seats[1]);
+    let mut effects: Vec<_> = tx
+        .state()
+        .skills
+        .sorted_live()
+        .into_iter()
+        .map(|skill| EffectRequest::RemoveSkill { skill: skill.id })
+        .collect();
+    effects.extend(seats.iter().map(|player| EffectRequest::DiscardFromHand {
+        player: *player,
+        count: u32::MAX,
+    }));
+    for def in defs {
+        effects.push(EffectRequest::AddSkill {
+            player: owner,
+            skill_def: SkillDefId::new(*def),
+        });
+    }
+    run_effects(&mut tx, effects).unwrap();
+    tx.state_mut().turn.current = owner;
+    tx.state_mut().turn.phase = Phase::Play;
+    (tx, owner, other)
+}
+
+#[test]
+fn package_exposes_sb_contract() {
+    let committed = content_schema::ContentPackage::from_json_bytes(include_bytes!(
+        "../../../content/original/ported/sb/sb.npack.json"
+    ))
+    .unwrap();
+    assert_eq!(committed.character_index.len(), 54);
+    for def in [SBZHIHENG, SBBIYUE, SBYANGWEI] {
+        assert!(
+            committed
+                .skill_index
+                .iter()
+                .any(|skill| skill.skill_def_id == def),
+            "skill {def} must exist"
+        );
+    }
+    assert!(committed.character_index.iter().any(
+        |character| character.name_key == "sb_sunquan" && character.skills.contains(&SBZHIHENG)
+    ));
+    assert!(committed.character_index.iter().any(
+        |character| character.name_key == "sb_diaochan" && character.skills.contains(&SBBIYUE)
+    ));
+    assert!(committed.character_index.iter().any(|character| {
+        character.name_key == "sb_huaxiong"
+            && character.skills == [2_159_889_222, SBYANGWEI]
+    }));
+}
+
+#[test]
+fn sbzhiheng_discards_and_draws_equal() {
+    let source = include_str!("../../../content/original/ported/sb/sbzhiheng.skill");
+    let (mut tx, owner, _other) = setup(source, &[SBZHIHENG]);
+    let hand = tx.state().zones.find(ZoneKind::Hand, owner).unwrap();
+    // 给两张手牌
+    for (suit, rank) in [
+        (engine_api::Suit::Spade, 5u8),
+        (engine_api::Suit::Heart, 6u8),
+    ] {
+        let card = tx.state_mut().cards.alloc(engine_core::state::Card {
+            id: engine_api::CardId::NONE,
+            def: engine_api::CardDefId::new(1),
+            kind: engine_core::state::CardKind::Sha,
+            suit,
+            rank,
+            weapon_range: 0,
+            zone: hand,
+            owner,
+            face_up: false,
+        });
+        tx.state_mut().zones.get_mut(hand).unwrap().cards.push(card);
+    }
+    let before = hand_count(&tx.state(), owner);
+    let skill = tx
+        .state()
+        .players
+        .get(owner)
+        .unwrap()
+        .skills
+        .iter()
+        .find(|skill| {
+            tx.state()
+                .skills
+                .get(**skill)
+                .is_some_and(|instance| instance.def.raw() == SBZHIHENG)
+        })
+        .copied()
+        .unwrap();
+    let state = tx.commit().state;
+    let cards: Vec<_> = state
+        .zones
+        .find(ZoneKind::Hand, owner)
+        .map(|zone| state.zones.get(zone).unwrap().cards.clone())
+        .unwrap();
+    let (state, result) = apply_command(
+        state,
+        Command {
+            actor: owner,
+            expected_revision: ExpectedRevision(0),
+            idempotency_key: IdempotencyKey(0x2410),
+            kind: CommandKind::ActivateSkill {
+                skill,
+                targets: vec![],
+                card_targets: cards.clone(),
+            },
+        },
+    );
+    assert!(
+        matches!(result.result, engine_api::CommandResult::Accepted { .. }),
+        "sbzhiheng must activate: {result:?}"
+    );
+    // 弃 2 摸 2（或更多）：手牌数与激活前一致或更多。
+    assert!(
+        hand_count(&state, owner) >= before,
+        "sbzhiheng draws at least as many as discarded"
+    );
+    // 弃置牌进入弃牌堆。
+    assert!(
+        state
+            .zones
+            .find(ZoneKind::DiscardPile, PlayerId::NONE)
+            .is_some_and(|zone| {
+                let z = state.zones.get(zone).unwrap();
+                cards.iter().all(|card| z.cards.contains(card))
+            }),
+        "discarded cards go to the discard pile"
+    );
+}
+
+#[test]
+fn sbbiyue_draws_one_at_end_phase() {
+    let source = include_str!("../../../content/original/ported/sb/sbbiyue.skill");
+    let (mut tx, owner, _other) = setup(source, &[SBBIYUE]);
+    let before = hand_count(&tx.state(), owner);
+    let state = tx.commit().state;
+    let mut tx = Transaction::begin(state);
+    tx.state_mut().turn.phase = Phase::End;
+    let fired = dispatch_for_events(
+        &mut tx,
+        &[DomainEvent::TurnStateChanged {
+            current: owner,
+            phase: engine_api::TurnPhaseTag::End,
+        }],
+        &mut TriggerFireRecord::new(),
+    );
+    let mut state = match fired {
+        Ok(effects) => match run_effects(&mut tx, effects) {
+            Ok(_) => tx.commit().state,
+            Err(EffectError::ChoiceRequested) => tx.commit().state,
+            Err(e) => panic!("run error: {e:?}"),
+        },
+        Err(EffectError::ChoiceRequested) => tx.commit().state,
+        Err(e) => panic!("dispatch error: {e:?}"),
+    };
+    if state.has_pending_choice() {
+        let pending = state.resolution.pending_choice_id;
+        let observer = PlayerId::new(state.resolution.pending_observer);
+        let (state2, result) = apply_command(
+            state,
+            Command {
+                actor: observer,
+                expected_revision: ExpectedRevision(0),
+                idempotency_key: IdempotencyKey(0x2411),
+                kind: CommandKind::ResolveChoice {
+                    choice_id: engine_api::ChoiceId::new(pending),
+                    selections: vec![1],
+                    cancelled: false,
+                },
+            },
+        );
+        assert!(
+            matches!(result.result, engine_api::CommandResult::Accepted { .. }),
+            "sbbiyue confirm: {result:?}"
+        );
+        state = state2;
+    }
+    assert_eq!(hand_count(&state, owner), before + 1, "sbbiyue draws one");
+    let _ = SOURCE_BIYUE;
+}

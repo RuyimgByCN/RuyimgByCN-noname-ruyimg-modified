@@ -1,0 +1,16 @@
+// 逆乱·OL（olniluan，韩遂）：一名其他角色的结束阶段开始时，若其体力值大于你且本回合
+// 使用过【杀】，你可将一张黑色手牌/装备牌当【杀】对其使用。
+// 上游 (sp/skill.js:17848)：trigger global phaseJieshuBegin；filter = 事件角色 hp > 拥有者
+// hp 且本回合使用过杀且拥有者有黑色牌可当杀对其使用；content = 选择黑色牌当杀对触发者使用
+// （不影响普通次数）。
+// 实现：phase_end + owner_alive_not_target（其他角色结束阶段）→ 可选确认 → if
+// hp(event_player) > hp(self) { effect choose_use_virtual_sha(self, normal_distance); }。
+// 与上游差异：「事件角色本回合使用过杀」「必须对触发者使用」「黑牌材质」条件未建模
+// （无对应过滤器/虚拟杀限定目标原语），虚拟杀按正常距离与次数规则结算。
+skill olniluan(3803313156) {
+  trigger phase_end owner_alive_not_target optional {
+    if hp(event_player) > hp(self) {
+      effect choose_use_virtual_sha(self, normal_distance);
+    }
+  }
+}

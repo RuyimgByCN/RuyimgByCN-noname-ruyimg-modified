@@ -1,0 +1,7 @@
+// 旅行箱（久岛鸥装备技能）
+// 原语义：跳过判定、弃牌阶段，并取消任何翻面。
+skill kamome_suitcase(3677089645) locked {
+  modifier skip_judge_phase override 1;
+  modifier skip_discard_phase override 1;
+  modifier turn_over_cancel override 1;
+}

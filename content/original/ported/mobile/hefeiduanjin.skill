@@ -1,0 +1,6 @@
+// hefeiduanjin（断津）：你使用基本牌结算结束后，可以弃置一名本回合使用过牌的其他角色一张牌。
+skill hefeiduanjin(2303823522) {
+  trigger card_used owner_alive {
+    effect discard_selected(self);
+  }
+}

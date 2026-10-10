@@ -1,0 +1,8 @@
+// 三哭（sanku）：锁定技。①当你进入濒死状态时，你减1点体力上限，然后将体力回复至体力上限。
+// ②当你加体力上限前，取消之（加体力上限取消无对应 modifier 原语，未建模）。
+skill sanku(2924465879) locked {
+  trigger dying owner_is_target {
+    effect change_max_hp(self, -1);
+    effect recover_hp(self, max_hp(self) - hp(self));
+  }
+}

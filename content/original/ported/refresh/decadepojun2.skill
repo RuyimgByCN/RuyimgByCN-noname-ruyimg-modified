@@ -1,0 +1,6 @@
+// decadepojun2（徐盛·破军-还）：阶段结束时，收回被扣置的牌并移除此技能。旧JS纯子技能管理，DSL 无需独立建模（由主技能管理）。
+skill decadepojun2(3716722740) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 decadepojun2 = 标记型技能（charlotte，skill.js:10077），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

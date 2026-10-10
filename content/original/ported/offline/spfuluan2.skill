@@ -1,0 +1,5 @@
+// 腹乱临时效果
+// 原语义：不能使用【杀】。
+skill spfuluan2(4252815092) {
+  modifier card_use_cancel(sha) override 1;
+}

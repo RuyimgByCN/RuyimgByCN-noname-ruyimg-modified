@@ -1,0 +1,17 @@
+// 旧 JavaScript 仅作语义证据；运行时只执行下列确定性规则。
+skill dddtongyu(2302761270) {
+  view_as wugu play_phase any from hand up_to 4 uses_per_turn 1 cost dddtongyu;
+  trigger card_used owner_source_own_view_as_ddd_tongyu_used {
+    effect resolve_ddd_liangxi(self, event_player, event_card, 0);
+  }
+  trigger card_targeted owner_source_own_view_as_ddd_tongyu_targeted {
+    effect resolve_ddd_liangxi(self, event_player, event_card, 1);
+  }
+  trigger cards_moved owner_alive_ddd_tongyu_remained optional {
+    effect resolve_ddd_liangxi(self, event_player, event_card, 2);
+  }
+}
+
+skill dddtongyu_blocker(3861572400) locked non_gainable {
+  modifier hand_card_use_response_cancel override 1;
+}

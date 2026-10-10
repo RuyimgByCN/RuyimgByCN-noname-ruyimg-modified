@@ -1,0 +1,13 @@
+// 未命（starweiming·星丁奉）：锁定技。当其他角色使用牌指定你为目标后，
+// 若你的体力值大于其，或其本局对你造成过伤害：其随机弃置一张手牌；若
+// 此时你的体力值仍大于其且其本局对你造成过伤害，你摸一张牌。
+// 上游 (sp2/skill.js 1842)：与 starcuxia 同构，条件反转。
+// 实现（2026-09-15 第三百零五批·孪生随机弃牌状态机，ADR 0641 §8.91）：
+// resolve_starcuxia_weiming(self, event_source, 1)（variant 反转条件）。
+// 登记债：round 级伤害历史以 lifetime damage_history 放宽。
+// 保真度：完整（含随机弃/条件复验；历史粒度放宽为债）。
+skill starweiming(4060945750) locked {
+  trigger card_targeted owner_is_target_owner_hp_gt_source_or_source_damaged_owner {
+    effect resolve_starcuxia_weiming(self, event_source, 1);
+  }
+}

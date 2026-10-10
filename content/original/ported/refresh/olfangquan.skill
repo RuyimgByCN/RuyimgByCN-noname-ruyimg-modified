@@ -1,0 +1,8 @@
+// olfangquan：刷新包技能。
+// triggers: player:phaseUseBefore
+skill olfangquan(3879930619) {
+    // 近似：旧JS事件 phaseUseBefore → DSL事件 phaseUseBefore
+    trigger phase_play owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

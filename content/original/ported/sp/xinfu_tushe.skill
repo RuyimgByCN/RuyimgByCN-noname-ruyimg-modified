@@ -1,0 +1,6 @@
+// 旧 JS 语义：使用有目标的非装备牌后，若手牌中没有基本牌，可摸等同目标数的牌。
+skill xinfu_tushe(2236248008) {
+  trigger card_used owner_source_non_equip_no_basic_hand_has_targets optional {
+    effect draw_cards(self, event_target_count);
+  }
+}

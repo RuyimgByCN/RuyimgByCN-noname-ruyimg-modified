@@ -1,0 +1,6 @@
+// mobilexingxue（兴学）：结束阶段开始时，你可以令至多X名角色依次摸一张牌并将一张牌置于牌堆顶（X为你的体力值）。
+skill mobilexingxue(3820682180) locked {
+  trigger phase_discard owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

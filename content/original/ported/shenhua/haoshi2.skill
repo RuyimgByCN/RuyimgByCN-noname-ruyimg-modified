@@ -1,0 +1,7 @@
+// 好施·2（鲁肃系）：摸牌阶段结束后清理。
+// 旧 JS 的清理语义，无独立规则行为。
+skill haoshi2(3041535233) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

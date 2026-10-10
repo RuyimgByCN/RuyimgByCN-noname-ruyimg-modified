@@ -1,0 +1,3 @@
+skill qiangshou(3061185460) locked {
+  modifier distance_from add -owner_has_treasure;
+}

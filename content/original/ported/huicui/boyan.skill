@@ -1,0 +1,5 @@
+// boyan：令目标摸1牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill boyan(2547738010) {
+  modifier hand_limit add 1;
+}

@@ -1,0 +1,11 @@
+// 困奋（kunfen，SP姜维）：结束阶段开始时，失去 1 点体力，然后摸两张牌。
+// 上游 (sp/skill.js:40744)：trigger player:phaseJieshuBegin；content = （无 storage.kunfen
+// 时强制）loseHp() → draw(2)。
+// 实现：phase_end + owner_is_target → lose_hp(self, 1) → draw_cards(self, 2)。
+// 与上游差异：storage.kunfen 置位时改为玩家可选的模式未建模，恒按强制结算。
+skill kunfen(2673970052) {
+  trigger phase_end owner_is_target {
+    effect lose_hp(self, 1);
+    effect draw_cards(self, 2);
+  }
+}

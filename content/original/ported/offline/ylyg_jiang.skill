@@ -1,0 +1,22 @@
+// 激昂（offline 雁翎孙策 ylyg_jiang）：任意角色使用【决斗】或红色【杀】指定目标后：
+// 若使用者是你，你摸两张牌；否则你与其各摸一张牌。你的点数为 13 的手牌可当【杀】
+// 使用或打出（mod cardname 按点数重写）。
+// 上游 (offline/skill ylyg_jiang)：global useCardToPlayered + isFirstTarget；
+// content 按 trigger.player 分支 draw(2) / asyncDraw 各 1；mod cardname number==13。
+// 实现（2026-09-09 第一百八十八批·上游增量新将批，零新原语，2 个新过滤器）：
+// 双臂 card_used + owner_alive_(other_)global_juedou_or_red_sha_used（5 点注册零 ABI，
+// sbjiang 依决斗红杀过滤器去 owner 介入版）。
+// 近似（登记债）：①respond/useCard 应答窗口未移植（card_responded 臂的「交给/令其
+// 弃置」需 respond_to 目标注入与 give-to-source 方向原语，均缺）；②点数 13 当杀的
+// cardname 重写 mod 未建模；③上游每目标 isFirstTarget 以 card_used 单次事件等价。
+skill ylyg_jiang(4118108424) {
+  trigger card_used owner_alive_global_juedou_or_red_sha_used {
+    if event_player == self {
+      effect draw_cards(self, 2);
+    }
+  }
+  trigger card_used owner_alive_other_global_juedou_or_red_sha_used {
+    effect draw_cards(event_player, 1);
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// jsrgdailao（待劳）：出牌阶段，当你没有可使用的手牌时，你可以展示手牌并摸两张牌，然后结束此回合。
+// 近似：摸两张牌并跳过剩余阶段（丢失了“无可用手牌”的前置条件、展示手牌、直接结束回合的精确语义）。
+skill jsrgdailao(4080176749) {
+  active play_phase {
+    effect draw_cards(self, 2);
+    effect skip_current_phase(self);
+  }
+}

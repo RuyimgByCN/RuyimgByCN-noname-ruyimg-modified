@@ -1,0 +1,4 @@
+// 宗室：手牌上限增加存活角色势力数。
+skill zongshi(2639072445) {
+  modifier hand_limit add alive_group_count;
+}

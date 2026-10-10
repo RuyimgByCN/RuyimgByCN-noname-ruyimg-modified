@@ -1,0 +1,15 @@
+// 势鲁肃：旧 JavaScript 仅作语义证据，不进入运行时或 npack。
+skill pothaoshi(3050076876) {
+  trigger phase_end owner_is_target {
+    effect resolve_pothaoshi(self, 0);
+  }
+  trigger phase_begin owner_is_target {
+    effect resolve_pothaoshi(self, 1);
+  }
+}
+
+skill potdimeng(2916721654) {
+  active play_phase uses_per_turn 1 targets 2 2 pair_hand_difference_lte_three {
+    effect resolve_potdimeng(self);
+  }
+}

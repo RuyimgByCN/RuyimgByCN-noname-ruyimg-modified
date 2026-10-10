@@ -1,0 +1,6 @@
+// fenyong：音效名:fenyong, 锁定技, player:damage, player:damage_before, 加技能, 含子技能, 异步。
+skill fenyong(2378099338) locked {
+  trigger damage_before always {
+    effect prevent_current_damage();
+  }
+}

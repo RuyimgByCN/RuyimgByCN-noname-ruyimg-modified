@@ -1,0 +1,8 @@
+// 倾袭2(旧版诸葛恪)：subskill of reqingxi。锁定技。记录倾袭使用过的卡牌颜色，
+// 在该颜色卡牌结算完毕后清除记录，并在记录期间禁止使用/打出该颜色的卡牌。
+// 注：storage中的颜色追踪、cardEnabled2禁用、onremove清理均为纯内部机制，DSL无对应modifier条件读写。
+skill reqingxi2(4147934741) locked {
+  // ponytail: storage数组追踪颜色+动态禁用特定颜色卡牌无DSL原语。
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

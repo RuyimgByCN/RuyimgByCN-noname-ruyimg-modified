@@ -1,0 +1,4 @@
+// Skill rende2(119) - standard variant
+skill rende2(119) {
+  modifier attack_range add 1;
+}

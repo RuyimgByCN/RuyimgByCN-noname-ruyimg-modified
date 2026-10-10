@@ -1,0 +1,12 @@
+// 清励（族荀爽）
+skill clanqingli(2992461968) locked {
+  trigger phase_end owner_alive {
+    loop 5 {
+      if hand_count(self) < max_hp(self) {
+        if hand_count(self) < 5 {
+          effect draw_cards(self, 1);
+        }
+      }
+    }
+  }
+}

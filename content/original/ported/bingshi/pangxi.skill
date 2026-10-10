@@ -1,0 +1,20 @@
+// 势庞羲：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI514 原语。
+skill mbxuye(4127729199) {
+  trigger damage owner_alive_damage_target_min_hand_mbxuye_once_per_turn optional {
+    effect resolve_mbxuye(self, event_player);
+  }
+}
+
+skill mbkuangxiang(3758195005) {
+  active play_phase uses_per_turn 1 targets 1 1 other hand_lte_owner {
+    effect resolve_mbkuangxiang(self, event_source, 0);
+  }
+
+  trigger cards_moved owner_mbkuangxiang_received_cards_exhausted optional {
+    effect resolve_mbkuangxiang(self, event_player, 1);
+  }
+
+  trigger phase_play owner_phase_play_mbkuangxiang_active {
+    effect resolve_mbkuangxiang(self, self, 2);
+  }
+}

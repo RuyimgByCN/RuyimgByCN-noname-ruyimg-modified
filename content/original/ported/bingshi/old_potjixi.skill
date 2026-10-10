@@ -1,0 +1,6 @@
+// 旧·急袭（势邓艾）：可将「蓄力」牌当任意基本牌使用/打出（无距离限制）。
+// 旧 JS 的「蓄力 expansion + 动态转化」无对应原语；以手牌当【杀】使用近似
+// （蓄力来源未建模，已注明）。
+skill old_potjixi(2804459563) {
+  view_as sha play_phase any from hand_equip;
+}

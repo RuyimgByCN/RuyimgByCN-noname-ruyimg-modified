@@ -1,0 +1,8 @@
+// 令策（张辽系）：锁定技。任意角色使用【奇正相生】或智囊牌后，你摸一张牌。
+// 旧 JS 的「智囊牌名集合」判定无对应原语；以任意角色用牌后你摸一张
+// 近似（牌名限定未建模，已注明）。
+skill lingce(2932414142) locked {
+  trigger card_used owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

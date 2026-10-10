@@ -1,0 +1,7 @@
+// huoxin：主动(phaseUse), 需拼点, 异步, 条件计数。
+skill huoxin(3318767882) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

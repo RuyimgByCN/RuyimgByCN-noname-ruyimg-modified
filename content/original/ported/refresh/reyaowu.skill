@@ -1,0 +1,9 @@
+// 耀武：旧 JS 对所有有牌来源的伤害按颜色分支，不限于【杀】。
+skill reyaowu(2805206003) locked {
+  trigger damage_before owner_is_target_red_card_source_alive {
+    effect draw_cards(event_source, 1);
+  }
+  trigger damage_before owner_is_target_nonred_card {
+    effect draw_cards(self, 1);
+  }
+}

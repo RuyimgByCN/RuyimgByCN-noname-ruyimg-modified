@@ -1,0 +1,13 @@
+skill xinfuli(3062292376) {
+  trigger dying owner_is_target optional {
+    let groups = alive_group_count();
+    effect recover_hp(self, groups - hp(self));
+    if hand_count(self) < groups {
+      effect draw_cards(self, groups - hand_count(self));
+    }
+    if 2 < groups {
+      effect turn_over(self);
+    }
+    effect remove_skill(self_skill);
+  }
+}

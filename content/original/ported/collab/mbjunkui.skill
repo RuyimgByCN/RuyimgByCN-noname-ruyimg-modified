@@ -1,0 +1,9 @@
+// 骏魁：游戏开始时移出所有坐骑牌；使用【杀】的次数上限 +1。
+skill mbjunkui(3131135455) locked {
+  trigger game_started owner_alive {
+    effect remove_cards_by_kind(horse_off);
+    effect remove_cards_by_kind(horse_def);
+  }
+
+  modifier sha_use_limit add 1;
+}

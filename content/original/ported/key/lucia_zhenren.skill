@@ -1,0 +1,9 @@
+// 振刃（露西娅·锁定技）：其他角色回合结束时弃置所有装备，再弃置等量名角色的装备/判定区牌。
+// 实现：任意角色结束阶段弃置自己装备区全部牌。
+// 近似：不限其他角色回合；弃等量名角色装备/判定区未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill lucia_zhenren(3777419907) locked {
+  trigger phase_end owner_alive {
+    effect discard_all_target_equipment(self, self);
+  }
+}

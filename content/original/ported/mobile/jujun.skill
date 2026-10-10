@@ -1,0 +1,7 @@
+// Legacy contract: at the end of any concrete phase in which the owner was named as a card
+// target and their actual HP changed, they are forced to use a source-free Wanjian.
+skill jujun(3855454532) locked {
+  trigger phase_any_end owner_alive_phase_targeted_hp_changed_can_use_wanjian {
+    effect choose_use_virtual_card(self, wanjian, self_skill);
+  }
+}

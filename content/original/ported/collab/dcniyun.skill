@@ -1,0 +1,6 @@
+skill dcniyun(3024539645) locked {
+  modifier sha_use_limit add owner_lost_hp;
+  modifier attack_range add owner_lost_hp;
+}
+
+// Legacy locked identity with audio/AI metadata only; no independent rule behavior.

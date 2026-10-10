@@ -1,0 +1,7 @@
+// xy_jianzu：主动(phaseUse), 需选择目标, 需拼点, 造成伤害, 异步。
+skill xy_jianzu(2633831495) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

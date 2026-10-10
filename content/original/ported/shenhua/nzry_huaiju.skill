@@ -1,0 +1,21 @@
+// 怀橘（陆绩）：游戏开始时获得 3 枚「橘」；拥有「橘」时，受到伤害改为防止该伤害并移去
+// 一枚「橘」，摸牌阶段摸牌数 +1。
+// 旧 JS 仅作语义证据；标记计数、伤害防止与摸牌加成由权威状态机校验。
+skill nzry_huaiju(2906906473) locked {
+  trigger game_started owner_is_target {
+    effect add_mark(self, 2906906473, 3);
+  }
+
+  trigger damage_before owner_is_target {
+    if 0 < mark_count(self, 2906906473) {
+      effect prevent_current_damage();
+      effect remove_mark(self, 2906906473, 1);
+    }
+  }
+
+  trigger phase_draw owner_is_target {
+    if 0 < mark_count(self, 2906906473) {
+      effect increase_current_draw_count(self, 1);
+    }
+  }
+}

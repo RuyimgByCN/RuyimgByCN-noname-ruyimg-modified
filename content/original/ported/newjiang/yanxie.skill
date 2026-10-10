@@ -1,0 +1,8 @@
+// 研械（王粲）：出牌阶段限一次，选择一张「材」牌并视为使用之；使用后摸
+// 与「材」类别数等量的牌。
+// 旧 JS 的「材」expansion 状态（依赖育料）无对应原语，未建模（已注明）。
+skill yanxie(3923220865) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

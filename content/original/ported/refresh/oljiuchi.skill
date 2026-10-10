@@ -1,0 +1,11 @@
+// oljiuchi：刷新包技能。
+// triggers: source:damageEnd
+// active: 出牌阶段主动技能
+// view_as: 视为使用牌
+// forced/locked: 锁定技
+skill oljiuchi(2936515051) {
+    // 近似：旧JS事件 damageEnd → DSL事件 damage
+    trigger damage owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

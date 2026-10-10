@@ -1,0 +1,10 @@
+// 原仓库 character/diy/skill.js：怀霜。
+
+skill nshuaishuang(3540859495) locked {
+  trigger phase_end owner_is_target {
+    if 0 < public_card_kind_count(tao) {
+      effect gain_card_by_kind(self, tao);
+      effect lose_hp(self, 1);
+    }
+  }
+}

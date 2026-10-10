@@ -1,0 +1,10 @@
+// 窃王（sxrm 严畯）：其他角色受到伤害后，若其与你的距离不大于 1，你摸一张牌；
+// 且本阶段你的手牌视为【无懈可击】。
+// 旧 JS 仅作语义证据；距离判定与摸牌由 resolve_sxrmqiewang 权威状态机校验
+// （ABI 596）；手牌视为【无懈可击】需要按牌名位图追踪的 view_as 管线，未移植
+// （文档化近似）。
+skill sxrmqiewang(3539390001) {
+  trigger damage owner_alive {
+    effect resolve_sxrmqiewang(self, event_player);
+  }
+}

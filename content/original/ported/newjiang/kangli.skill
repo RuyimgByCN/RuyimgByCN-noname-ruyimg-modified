@@ -1,0 +1,9 @@
+skill kangli(2295716313) {
+  trigger damage_before owner_is_source {
+    effect discard_remembered_hand_cards(self);
+  }
+
+  trigger damage owner_is_source_or_target {
+    effect draw_remembered_hand_cards(self, 2);
+  }
+}

@@ -1,0 +1,6 @@
+// 摧克：出牌阶段开始时，可按“军略”奇偶执行目标控制；八枚以上可清空并伤害所有其他角色。
+skill nzry_cuike(2516554182) {
+  trigger phase_play owner_is_target optional {
+    effect resolve_mark_parity_control(self, 1681567279, 7, 1);
+  }
+}

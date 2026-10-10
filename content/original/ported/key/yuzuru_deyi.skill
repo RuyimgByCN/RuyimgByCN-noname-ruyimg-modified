@@ -1,0 +1,17 @@
+// 得以（音无·觉醒技）：其他角色死亡后，将困愤/曲继/往生替换为无心，减1体力上限并回复1体力。
+// 实现：其他角色死亡后一次：减 1 上限、回 1 体、卸困愤/曲继/往生、授无心。
+// 近似：以 mark_count 门控，非 awakenSkill；不检验觉醒条件外的其他前置。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuzuru_deyi(3890409763) locked {
+  trigger death owner_alive_not_target {
+    if mark_count(self, 3890409763) == 0 {
+      effect change_max_hp(self, -1);
+      effect recover_hp(self, 1);
+      effect remove_skill_by_def(self, 2231368330);
+      effect remove_skill_by_def(self, 2805568225);
+      effect remove_skill_by_def(self, 3744539174);
+      effect add_skill(self, 3940257990);
+      effect add_mark(self, 3890409763, 1);
+    }
+  }
+}

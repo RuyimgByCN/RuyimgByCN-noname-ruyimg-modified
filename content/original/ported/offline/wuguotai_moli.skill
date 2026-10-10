@@ -1,0 +1,5 @@
+// wuguotai_moli（触发技）：觉醒技, player:game_started, player:hp_lost, player:removeMark, 移出游戏, 加技能, 含子技能, 异步。
+skill wuguotai_moli(2940752305) {
+  trigger game_started owner_alive optional {
+  }
+}

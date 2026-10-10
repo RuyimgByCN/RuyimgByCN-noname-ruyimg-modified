@@ -1,0 +1,5 @@
+// oljiane：触发+修改技（shaDamage,useCardToEnd）
+skill oljiane(2264579822) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

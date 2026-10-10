@@ -1,0 +1,9 @@
+// 宗祧：当你因弃置而失去手牌进入弃牌堆时，你可以弃置一名角色装备区或判定区的一张牌。
+// 近似：用 choose_other_discard_target_card 弃置目标的装备/判定区牌。
+// 旧 JS 的「触发条件：因弃置而失去手牌进入弃牌堆」（loseAfter + type==discard + 牌进弃牌堆）DSL 无精确匹配的 filter。
+// 「包括判定区」用 equip_judge 近似：equip_judge scope 覆盖装备和判定区（比旧 JS「仅装备/判定区」更宽，但收益相近）。
+skill stdzongxuan(2972955393) {
+  trigger cards_moved always optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

@@ -1,0 +1,12 @@
+// 颂词（陈琳）：出牌阶段，对一名未以此法指定过的角色：其手牌数大于体力则弃两张 he，
+// 否则摸两张。若已对所有角色发动过，弃牌阶段结束时你摸一张。
+// 上游 (sp/skill.js:43769)：phaseUse filterTarget 未 markAuto 过的角色，
+// hand>hp 则 chooseToDiscard(2,he) 否则 draw(2)；group phaseDiscardEnd 摸 1。
+// 实现：`active play_phase targets 1 1` + `draw_selected_targets(2)`。
+// 近似：始终令目标摸 2，不检验 hand>hp 弃牌分支；每名角色一次与弃牌阶段摸牌未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill songci(2662892097) {
+  active play_phase targets 1 1 {
+    effect draw_selected_targets(2);
+  }
+}

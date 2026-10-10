@@ -1,0 +1,7 @@
+// 筹略：出牌阶段，你可以将一张手牌交给一名其他角色，然后该角色可以展示并交给你一张装备牌。
+// 旧 JS 为双向交互 active：给牌→对方选择是否回给装备牌。DSL 缺少「对方选择回给指定类型牌」的交互原语，无法精确建模。
+skill stdchoulve(4254995338) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

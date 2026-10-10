@@ -1,0 +1,12 @@
+// 岁终（年兽·OL）：锁定技。当你首次受到伤害后且体力值≤1，你回复1点体力，
+// 然后弃置每名敌方角色一张手牌。
+//
+// 近似：受伤+低血量→回复体力+弃置一名其他角色手牌/装备。
+// 旧 JS 遍历所有敌方角色逐一弃牌——DSL 无循环能力，仅对单目标弃牌。
+// 旧 JS 的「首次伤害」无可用的 once_per_game 过滤器；changeSkin 换肤逻辑——均未建模。
+skill olsuizhong(2438200140) locked {
+  trigger damage owner_is_target_hp_le_one {
+    effect recover_hp(self, 1);
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

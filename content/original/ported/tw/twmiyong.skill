@@ -1,0 +1,8 @@
+// 秘勇（TW司马师）：限定技，展示至多两张手牌中的【杀】并标记。
+// 当这些牌首次因使用/打出/弃置进入弃牌堆后，从弃牌堆中获得之。
+// 缺gaintag标记弃牌追踪与回收原语，空定义。
+skill twmiyong(2991786499) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twmiyong 含真实规则体（enable、filterCard、limited 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,28 @@
+[package]
+name = "engine-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Deterministic game core: state, command pipeline, effects, triggers, query, RNG, replay"
+
+[dependencies]
+engine-api = { workspace = true }
+rule-api = { workspace = true }
+rule-vm = { workspace = true }
+content-schema = { path = "../content-schema" }
+content-compiler = { path = "../content-compiler" }
+content-runtime = { path = "../content-runtime" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+blake3 = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+serde_json = { workspace = true }
+tempfile = "3"
+
+[features]
+default = []
+# Enable when building wasm32 dual-target tests
+wasm = []

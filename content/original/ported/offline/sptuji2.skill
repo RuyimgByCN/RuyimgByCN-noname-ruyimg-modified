@@ -1,0 +1,3 @@
+skill sptuji2(4257277562) {
+  modifier distance_from add -owner_skill_mark;
+}

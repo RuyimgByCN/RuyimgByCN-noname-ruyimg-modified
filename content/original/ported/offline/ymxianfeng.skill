@@ -1,0 +1,8 @@
+// 衔锋（春秋关银屏）：受到 1 点伤害后，可弃置伤害来源一张牌；
+// 若此牌花色为本回合首次进入弃牌堆则获得之。
+// 近似：受伤后弃来源一张 he；「首次花色进弃牌堆则获得」未建模。
+skill ymxianfeng(2855998782) {
+  trigger damage owner_is_target optional {
+    effect choose_discard_target_card(self, event_source, hand_equip);
+  }
+}

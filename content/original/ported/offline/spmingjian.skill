@@ -1,0 +1,7 @@
+// spmingjian：global:phaseBegin, 多分支选择, 移出游戏, 加技能, 多步骤, 弃牌。
+// 复杂度较高，保留占位。
+skill spmingjian(3394121921) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

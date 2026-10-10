@@ -1,0 +1,11 @@
+// 毒逝（弘农王）：锁定技，你死亡时，选择一名其他角色获得「毒逝」；
+// 拥有「毒逝」的角色不能成为其他角色【桃】的目标。
+// 诅咒传递以 choose_other_add_skill(self, dushi) 表达；「不能成为桃的目标」
+// 复用 dushi2 的 card_target_cancel(tao) 管线。
+skill dushi(3887700670) locked {
+  modifier card_target_cancel(tao) override 1;
+
+  trigger death owner_is_target {
+    effect choose_other_add_skill(self, 3887700670);
+  }
+}

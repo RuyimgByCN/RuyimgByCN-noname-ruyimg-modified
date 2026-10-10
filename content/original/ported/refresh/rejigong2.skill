@@ -1,0 +1,9 @@
+// rejigong2：刷新包技能。
+// triggers: player:phaseUseEnd
+// forced/locked: 锁定技
+skill rejigong2(3455297019) {
+    // 近似：旧JS事件 phaseUseEnd → DSL事件 phase_play_end
+    trigger phase_play_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

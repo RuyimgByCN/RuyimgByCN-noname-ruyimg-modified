@@ -1,0 +1,6 @@
+// 清剿（线下幻）
+skill yjqingjiao(4207753903) locked lord_only {
+  trigger phase_end owner_is_target_damaged_other_qun {
+    effect draw_cards(self, 1);
+  }
+}

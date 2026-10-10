@@ -1,0 +1,26 @@
+// 归离（谋董卓）：锁定技，你的第一个回合开始时，选择一名其他角色“绑定”；
+// 该角色（绑定者）的回合结束时若其本回合未造成伤害，你插入一个额外回合。
+// 上游 xianding/skill.js guili（storage guili_insert 绑定 + 子技延迟插相）。
+// 实现（第八十七批·queue_extra_turn 复用第三消费者）：
+// ①绑定：首个自身 phase_begin（storage key1 门控）→ choose_other_add_mark
+//   打上合成标记 GUILI_BIND=281977830（blake2b("guili_insert",4B)，查重通过）；
+// ②回收：`turn_ended owner_alive_event_target_mark_positive_281977830_no_damage`
+//   optional → storage key2 门控 → queue_extra_turn(self, 0, self_skill)。
+// 近似：②「额外回合」每场仅一次以 storage key2 锁定（上游按绑定唯一性天然
+// 限一次，等价成立；此注记为历史口径，保留 storage 锁实现）。
+// 核销：①「标记在场即绑定」与上游 storage 绑定一对一等价，非残差；
+// ③ queue_extra_turn 整回合插相与上游 insertPhase 一致，非残差。
+skill guili(4082668025) {
+  trigger phase_begin owner_is_target optional {
+    if storage_get(self_skill, 1) == 0 {
+      effect storage_set(self_skill, 1, 1);
+      effect choose_other_add_mark(self, 281977830, 1);
+    }
+  }
+  trigger turn_ended owner_alive_event_target_mark_positive_281977830_no_damage optional {
+    if storage_get(self_skill, 2) == 0 {
+      effect storage_set(self_skill, 2, 1);
+      effect queue_extra_turn(self, 0, self_skill);
+    }
+  }
+}

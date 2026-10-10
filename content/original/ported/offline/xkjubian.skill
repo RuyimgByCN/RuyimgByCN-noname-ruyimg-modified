@@ -1,0 +1,7 @@
+// OFFLINE「惧鞭」：旧源码只检查手牌数大于体力值，不额外限制伤害来源。
+skill xkjubian(3008850817) locked {
+  trigger damage_before owner_is_target_hand_above_hp {
+    effect adjust_hand_to(self, hp(self));
+    effect prevent_current_damage();
+  }
+}

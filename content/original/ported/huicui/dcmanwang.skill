@@ -1,0 +1,6 @@
+// dcmanwang：摸?牌；回复1体力；获技能；失技能。
+skill dcmanwang(3637565324) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

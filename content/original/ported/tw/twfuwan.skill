@@ -1,0 +1,6 @@
+// 谋溃：每个杀目标可摸牌、弃其牌或背水执行两项；未令其濒死则结算后反弃。
+skill twmoukui(3462273565) {
+  trigger card_targeted owner_source_sha {
+    effect resolve_twmoukui(self, event_player, event_card);
+  }
+}

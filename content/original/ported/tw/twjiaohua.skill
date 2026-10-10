@@ -1,0 +1,5 @@
+skill twjiaohua(3924813285) {
+trigger cards_drawn owner_alive_draw_player_owner_or_min_hp_twjiaohua_available {
+    effect resolve_twjiaohua(self, event_player);
+  }
+}

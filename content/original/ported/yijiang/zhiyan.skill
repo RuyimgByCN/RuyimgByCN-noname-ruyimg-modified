@@ -1,0 +1,9 @@
+// 直言（虞翻/诸葛瑾）：结束阶段开始时，令一名角色摸一张牌并展示之。若为
+// 装备牌，则其使用之并回复 1 点体力。
+// 旧 JS 的「展示并条件使用装备」无对应原语；以选择一名角色摸一张牌近似
+// （展示/装备使用/回复未建模，已注明）。
+skill zhiyan(2451555584) {
+  trigger phase_end owner_alive optional {
+    effect choose_target_draw(self, 1, other);
+  }
+}

@@ -1,0 +1,5 @@
+// vtbxianli：player:hp_lost, global:cards_moved, global:cards_moved, 移出游戏, 多步骤。
+skill vtbxianli(3289883639) {
+  trigger hp_lost owner_alive optional {
+  }
+}

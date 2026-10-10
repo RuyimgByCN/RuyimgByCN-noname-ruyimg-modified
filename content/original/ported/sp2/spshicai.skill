@@ -1,0 +1,16 @@
+// 识财（spshicai）：出牌阶段，你可以弃置一张牌，然后获得牌堆顶的一张牌。
+// 上游 (sp2/skill.js spshicai)：enable phaseUse（无 usable，每阶段不限次）；
+// position "he"；filterCard 任意（storage spshicai2 记录上张所得、不可再弃之）；
+// content 弃置 + gain(牌堆顶) + storage 记录。
+// 实现（2026-09-10 第二百二十八批·给予族复测散批）：主面 active play_phase
+// targets 0 0 → discard_one_hand_or_equip(self)（弃手牌/装备一张）+
+// draw_cards(self, 1)（牌堆顶入手等价）。
+// 近似（登记债）：①子面「可令一名角色使用获得的牌，摸一张牌」（spshicai
+// useCard 链）未建模；②storage 上张所得不可再弃的限制未建模；③每阶段不限次
+// 按上游无 usable 口径。
+skill spshicai(2681606731) {
+  active play_phase targets 0 0 {
+    effect discard_one_hand_or_equip(self);
+    effect draw_cards(self, 1);
+  }
+}

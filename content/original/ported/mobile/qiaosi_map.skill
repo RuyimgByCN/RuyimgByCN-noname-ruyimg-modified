@@ -1,0 +1,6 @@
+// qiaosi_map（大键角色图）：<br><li>星野 梦美：锦囊牌*2<br><li>能美 库特莉亚芙卡：装备牌/【杀】/【酒】*1<br><li>友利 奈绪：【杀】/【酒】*1<br><li>神尾 观铃：【闪】/【桃】*1<br><li>伊吹 风子：锦囊牌/【闪】/【桃】*1<br><li>仲村 由理：装备牌*2<br><li>Illustration:うら;Twitter:@ura530
+skill qiaosi_map(2791524337) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 qiaosi_map = 标记型技能（charlotte，skill.js:29319），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

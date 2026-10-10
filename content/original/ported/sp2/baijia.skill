@@ -1,0 +1,10 @@
+// 百家（卑弥呼·觉醒技）：准备阶段，若本局通过「蛊聚」获得牌数≥7，加体力上限、回复1体力、
+// 给全场其他角色打「纵傀」标记，技能组由蛊聚替换为蚕食。
+// 旧 JS 的 awakenSkill / changeSkills 无对应原语；mark 类型不匹配（zongkui_mark 非 DSL mark）。
+// 近似：仅保留 recover_hp + add_mark 收益，觉醒与技能替换未建模。
+skill baijia(2185339435) locked {
+  trigger phase_prepare owner_alive_once_per_round {
+    effect recover_hp(self, 1);
+    // 旧 JS 还有 gainMaxHp + mark 所有其他角色 + changeSkills，无原语
+  }
+}

@@ -1,0 +1,5 @@
+// wn_zhenlve：global:card_used, 需弃牌, 异步, 弃牌。
+skill wn_zhenlve(3176334600) {
+  trigger card_used owner_alive {
+  }
+}

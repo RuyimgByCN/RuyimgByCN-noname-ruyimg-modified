@@ -1,0 +1,7 @@
+// 理贤（旧OL·SB版）：结束阶段获得本回合弃牌堆中目标为你的锦囊牌；
+// 这些牌可当杀/闪使用。旧 JS 的「弃牌堆筛选+标签化+双viewAs」仅部分可近似。
+// 以下用 view_as 近似杀/闪转化，未建模「从弃牌堆回收特定锦囊牌」环节。
+skill old_olsblixian(3476952682) {
+  view_as sha play_phase any from hand;
+  view_as sha response any from hand;
+}

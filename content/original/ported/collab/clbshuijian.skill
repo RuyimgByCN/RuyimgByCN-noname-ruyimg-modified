@@ -1,0 +1,5 @@
+// 水箭：摸牌阶段额外摸 floor(装备数 / 2) + 1 张牌。
+skill clbshuijian(2631259916) {
+  modifier optional_draw_count add 1;
+  modifier optional_draw_count add owner_equip_count_half_floor;
+}

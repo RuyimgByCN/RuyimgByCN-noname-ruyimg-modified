@@ -1,0 +1,3 @@
+skill eu_xiru(3520897772) locked {
+  modifier draw_count add field_mount_card_count_ceil_half;
+}

@@ -1,0 +1,10 @@
+// 孙韶：旧 JavaScript 仅作为语义规格，运行时使用确定性 DSL/宿主复合。
+skill mbganjue(3789971232) {
+  view_as sha play_phase any from equip uses_per_turn 1 ignore_distance no_use_count target_lacks_source_suit_unrespondable;
+}
+
+skill mbzhuji(2468204018) {
+  trigger phase_play_end owner_is_target_hand_nonempty optional {
+    effect resolve_mbzhuji(self, 0);
+  }
+}

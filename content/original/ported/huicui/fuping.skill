@@ -1,0 +1,6 @@
+// fuping：获临时技。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill fuping(3094196246) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

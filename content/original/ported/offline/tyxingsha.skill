@@ -1,0 +1,5 @@
+// tyxingsha（主动技(phaseUse)/触发技）：player:phase_end, 主动(phaseUse), 移出游戏, 加技能, 含子技能, 异步。
+skill tyxingsha(2704483846) {
+  trigger phase_end owner_alive optional {
+  }
+}

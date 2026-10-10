@@ -1,0 +1,7 @@
+// mingluan：摸?牌；获临时技；弃牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill mingluan(3435031930) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

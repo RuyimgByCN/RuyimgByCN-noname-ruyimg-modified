@@ -1,0 +1,7 @@
+// 定安（族吴匡/族吴班/族吴乔）：锁定技。每轮第二次出现同名卡牌时，与未成为目标的一名角色各摸一张牌；然后手牌最多的其他角色选受1点伤害或弃置同名手牌。
+// 旧 JS 的「全局同名卡计数」「手牌最多角色选择分支」无对应原语。
+// 空定义：需 expansion 支持全局卡名计数和复杂选择。
+skill clandingan(3310762461) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

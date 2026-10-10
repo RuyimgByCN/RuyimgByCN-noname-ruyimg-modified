@@ -1,0 +1,8 @@
+// 渐缉（族王昌/族王琛）：限定技。其他角色回合结束时，若其上下家均未使用过牌且未成为牌目标，可与该角色各摸一张牌，并视为使用一张【杀】。
+// 旧 JS 的「限定技」「上下家位置计算」「全局牌使用/目标追踪」无对应原语。
+// 空定义：需 expansion 支持 limited、座位邻居判定、全局历史查询。
+skill clanjianji(2893930110) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

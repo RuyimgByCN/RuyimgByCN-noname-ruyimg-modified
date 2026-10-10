@@ -1,0 +1,4 @@
+// 界看破：响应锦囊时，可将一张黑色手牌或装备牌当【无懈可击】使用。
+skill rekanpo(2767584414) {
+  view_as wuxie response black from hand_equip;
+}

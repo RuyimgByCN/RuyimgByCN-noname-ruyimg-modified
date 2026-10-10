@@ -1,0 +1,7 @@
+// 百变（无名）：锁定技。受到伤害后或回合开始时，随机获得一个未拥有的技能（从预定义列表中）直到回合结束。
+// 旧JS的技能列表随机选择（dcshentui/dcxurui/...等14个）、技能拥有检测无对应原语。
+// 以空定义保留编译占位，待random_skill_from_list原语后补齐。
+skill dcbaibian(2450280470) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

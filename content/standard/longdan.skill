@@ -1,0 +1,5 @@
+// 龙胆 — 闪当杀 / 杀当闪
+skill longdan(17) {
+  view_as sha play_phase card_shan;
+  view_as shan any card_sha;
+}

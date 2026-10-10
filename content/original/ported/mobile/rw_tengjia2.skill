@@ -1,0 +1,4 @@
+// 桐油百韧甲之二：防具有效时受到的火焰伤害加一。
+skill rw_tengjia2(2825664767) {
+  modifier armor_damage_taken_amount(fire) add 1;
+}

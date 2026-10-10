@@ -1,0 +1,7 @@
+// 防毒（DC 曹节）：受到其他角色造成的伤害后，可令伤害来源流失 1 点体力。
+// 旧 JS 的“令伤害来源选择：交给你一张牌 / 流失 1 点体力”二选一以固定流失体力近似。
+skill dcfangdu(3648264331) {
+  trigger damage owner_is_target_other_source_alive optional {
+    effect lose_hp(event_source, 1);
+  }
+}

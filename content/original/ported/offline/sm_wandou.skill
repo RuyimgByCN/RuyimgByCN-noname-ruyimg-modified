@@ -1,0 +1,6 @@
+// sm_wandou：global:withdrawPrettyDerby, 失去体力, 异步。
+skill sm_wandou(3037982872) {
+  trigger phase_any_end owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

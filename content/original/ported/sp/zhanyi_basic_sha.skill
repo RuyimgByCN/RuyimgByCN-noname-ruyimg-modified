@@ -1,0 +1,5 @@
+// 战杀：手牌中的基本牌可当【杀】使用或打出。
+skill zhanyi_basic_sha(3535942143) {
+  view_as sha play_phase card_basic;
+  view_as sha response card_basic;
+}

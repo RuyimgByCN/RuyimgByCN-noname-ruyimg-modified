@@ -1,0 +1,4 @@
+99b58f19178e275fd363bf8b01141a5af59a1f9705ecc71ed3b28439f7ac73f4  crates/engine-native/tests/g1_cardpile.rs
+306bb4c9b1fe9e72ab1c343f8c5fab7d4faba195f8385b995e529131d4af918e  docs/migration/upstream-extension-reconstruction.md
+8b7470245b6f22c286b26c6b402c22f17a3ebe5a222f4803c0f3fd3b43b04738  docs/architecture/native-progress.md
+53c8d9486f8ec0ad194546b4a10a93481b6ab8ab0df9f2a119e8eb40d154a8df  docs/native-coverage-manifest.md

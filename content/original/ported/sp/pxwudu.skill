@@ -1,0 +1,6 @@
+// 武都（pxwudu，州郡技能）：你使用牌无次数限制。
+// 上游 (sp/skill.js:2040)：mod.cardUsable → Infinity；trigger useCard1 撤销 addCount
+// 计数。实现：modifier card_use_unlimited override 1（使用次数上限豁免，语义等价）。
+skill pxwudu(4254976850) {
+  modifier card_use_unlimited override 1;
+}

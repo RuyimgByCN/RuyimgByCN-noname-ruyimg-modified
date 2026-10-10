@@ -1,0 +1,6 @@
+// mbcaowei（操微）：锁定技，当你受到伤害后，你重铸至少一个类别的所有牌并摸一张牌。
+skill mbcaowei(2243840156) locked {
+  trigger damage owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

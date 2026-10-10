@@ -1,0 +1,5 @@
+// 本势：攻击范围 +1；杀必须覆盖攻击范围内的所有其他角色。
+skill dcbenshi(3177558288) locked {
+  modifier attack_range add 1;
+  modifier card_targets_all(sha) override 1;
+}

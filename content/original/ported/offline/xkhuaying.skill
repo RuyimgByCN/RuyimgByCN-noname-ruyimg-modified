@@ -1,0 +1,5 @@
+// xkhuaying：global:death, 需选择目标, 异步。
+skill xkhuaying(3621049258) {
+  trigger death owner_alive {
+  }
+}

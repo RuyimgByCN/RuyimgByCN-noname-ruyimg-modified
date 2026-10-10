@@ -1,0 +1,19 @@
+// 横骛（谋孙坚）：锁定技。使用/打出牌后，若手牌无此花色且场上有人装备区有
+// 此花色，摸 X 张牌（X = 场上该花色装备数）。
+// 上游 (xianding/skill.js hengwu L8144)：trigger player [useCard, respond]
+// frequent；filter 事件牌为四花色之一 + 手牌无此花色 + 场上有同花色装备；
+// content countPlayer(e 中同花色) → draw(num)。
+// 实现（2026-09-12 第二百五十六批·花色计数族状态机，ADR 0641 §8.45，
+// twmouzhi 双触发共调模式复用）：card_used / card_responded 双触发共调
+// resolve_hengwu(self, self_skill, event_card)（ABI 706 / tag 729，单发
+// 无续体）：机内校验花色四色 + 手牌无此花色 + 统计场上同花色装备数 →
+// draw(count)。frequent 锁定为强制自动（与上游意图一致）。
+skill hengwu(3527268887) locked {
+  trigger card_used owner_is_source {
+    effect resolve_hengwu(self, self_skill, event_card);
+  }
+
+  trigger card_responded owner_is_source {
+    effect resolve_hengwu(self, self_skill, event_card);
+  }
+}

@@ -1,0 +1,6 @@
+// 荐降：成为其他角色用牌的目标时，可令一名手牌数最少的角色摸一张牌。
+skill nzry_jianxiang(3232965394) {
+  trigger card_targeted owner_alive_targeted_by_other optional {
+    effect choose_target_draw(self, 1, min_hand);
+  }
+}

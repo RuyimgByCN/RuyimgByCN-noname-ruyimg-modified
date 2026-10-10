@@ -1,0 +1,10 @@
+// 瞑瞑·威迫（马谡系）：出牌阶段，选择一名无「威迫」效果的角色，其获得
+// 「威迫」效果：弃一张【杀】并获得一张牌。
+// 旧 JS 的「跨角色临时效果授予」无对应原语；以弃一张手牌并摸一张近似
+// （效果授予未建模，已注明）。
+skill mjweipo(3525798243) {
+  active play_phase select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

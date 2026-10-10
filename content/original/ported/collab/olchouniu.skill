@@ -1,0 +1,7 @@
+// 丑牛（丑牛）
+// 原语义：任意角色进入结束阶段时，若拥有者体力值为全场最低，则回复 1 点体力。
+skill olchouniu(3858737350) locked {
+  trigger phase_end owner_min_hp {
+    effect recover_hp(self, 1);
+  }
+}

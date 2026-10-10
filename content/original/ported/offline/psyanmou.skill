@@ -1,0 +1,5 @@
+// psyanmou：锁定技, player:cards_moved, global:cards_moved, global:cardsDiscardAfter, 含子技能, 异步。
+skill psyanmou(4203661163) locked {
+  trigger cards_moved always {
+  }
+}

@@ -1,0 +1,10 @@
+// 侯封（朱儁）：每轮限一次，其他角色出牌阶段开始时，若其缺少至少一种整肃且
+// 你与其距离不超过其攻击范围，你可选择一种其未拥有的整肃令其进行；其弃牌阶段
+// 结束时若整肃成功，其与你各摸两张牌或回复一点体力。
+// 旧 JavaScript 仅作语义证据；整肃类型选择、授予与成功奖励由 ABI 433
+// resolve_houfeng / ABI 432 resolve_zhengsu 权威结算。
+skill houfeng(4065778656) {
+  trigger phase_play owner_alive_other_play_phase_zhengsu_missing_in_range optional {
+    effect resolve_houfeng(self, event_source, 0, 0);
+  }
+}

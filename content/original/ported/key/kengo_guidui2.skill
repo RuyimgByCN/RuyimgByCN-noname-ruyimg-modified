@@ -1,0 +1,8 @@
+// 归队·标记（健吾）：记录恢复的装备栏，onremove 时清理。
+// 旧 JS 纯标记技能，无独立可建模效果，未建模。
+skill kengo_guidui2(2261731731) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kengo_guidui2（skill.js:11047）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,5 @@
+// peqinyin：音效名:qinyin, player:phase_discard_end, 多分支选择, 回复体力, 失去体力, 异步。
+skill peqinyin(3842033396) {
+  trigger phase_discard_end owner_alive {
+  }
+}

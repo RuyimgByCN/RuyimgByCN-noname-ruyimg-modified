@@ -1,0 +1,46 @@
+// 帝力 / 驭衡：命运线和跨包技能池均由规则 RNG 与稳定定义 ID 驱动。
+skill dili(3732080996) locked {
+  trigger game_started owner_alive {
+    effect resolve_dili_yuheng(self, 0, event_card);
+  }
+}
+
+skill yuheng(3006389674) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_dili_yuheng(self, 1, event_card);
+  }
+  trigger phase_play_end owner_is_target {
+    effect resolve_dili_yuheng(self, 2, event_card);
+  }
+}
+
+skill dili_shengzhi(3511235243) locked {
+  trigger card_used owner_is_source {
+    effect resolve_dili_yuheng(self, 3, event_card);
+  }
+}
+
+skill dili_chigang(3520220242) locked {
+  trigger phase_judge owner_is_target {
+    effect resolve_dili_yuheng(self, 4, event_card);
+  }
+}
+
+skill dili_qionglan(4057699019) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}
+
+skill dili_quandao(2682708493) locked {
+  modifier card_name(hand_rank_letter) override tiaojiyanmei;
+}
+
+skill dili_jiaohui(3616039425) locked {
+  modifier card_name(sole_hand_card) override yuanjiao;
+}
+
+skill dili_yuanlv(2521447965) locked {
+  trigger card_used owner_is_source {
+    effect resolve_dili_yuheng(self, 5, event_card);
+  }
+}

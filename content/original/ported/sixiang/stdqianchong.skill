@@ -1,0 +1,4 @@
+skill stdqianchong(2607738803) locked {
+  modifier card_use_unlimited override owner_equip_count_odd;
+  modifier card_distance_unlimited override owner_equip_count_even;
+}

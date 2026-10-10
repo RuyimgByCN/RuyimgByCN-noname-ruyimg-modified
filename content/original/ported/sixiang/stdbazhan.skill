@@ -1,0 +1,7 @@
+// 霸战：出牌阶段，你可以将一张手牌交给一名男性角色，然后该角色可以展示并交给你一张不同类型的装备牌。
+// 旧 JS 为双向交互 active：给牌→对方选回不同类型装备牌。DSL 缺少「对方选择是否回给+类型匹配」原语，无法精确建模。
+skill stdbazhan(4265909403) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

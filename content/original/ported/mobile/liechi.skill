@@ -1,0 +1,6 @@
+// 旧 JS 语义：伤害令拥有者进入濒死时，存活的伤害来源弃置一张手牌或装备牌。
+skill liechi(2902834870) locked {
+  trigger dying owner_is_target_source_alive {
+    effect discard_one_hand_or_equip(event_source);
+  }
+}

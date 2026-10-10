@@ -1,0 +1,5 @@
+// huamao_wushen：锁定技, player:card_used, 异步。
+skill huamao_wushen(2316344823) {
+  trigger card_used owner_alive {
+  }
+}

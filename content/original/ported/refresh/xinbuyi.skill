@@ -1,0 +1,8 @@
+// xinbuyi：刷新包技能。
+// triggers: global:dying
+skill xinbuyi(2381844483) {
+    // 近似：旧JS事件 dying → DSL事件 dying
+    trigger dying owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

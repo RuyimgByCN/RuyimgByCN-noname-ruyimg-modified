@@ -1,0 +1,9 @@
+// jsrgbashi（霸世）：主公技，每回合限四次，当你需要打出【杀】或【闪】时，你可以令其他吴势力角色选择是否打出一张【杀】或【闪】。若有角色响应，则视为你打出了一张【杀】或【闪】。
+// 类型：主公技
+// 未建模：翻译调用, 主公技判断, 全局状态, chooseToRespond替出牌, storage状态, chooseToRespond ...等8项（DSL无对应原语）
+skill jsrgbashi(2427603139) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgbashi（skill.js:6921）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

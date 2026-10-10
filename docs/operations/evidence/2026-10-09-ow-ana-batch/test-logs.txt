@@ -1,0 +1,28 @@
+# U05 ow 纵切批十四测试日志（2026-10-09，安娜支援，规则 v130→v131）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 452 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v130 基线 451 +1 新增支援回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 40 passed; 0 failed（39 既有 + 1 新增 ana_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 128）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v130→v131 入 canonical_hash
+——14 场景全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- zhiyuan（trigger source damageBefore；filter num>0；content
+  trigger.cancel()+trigger.player.recover(trigger.num)；check=询问式）
+
+## 测试迭代记录
+- 确认门取消=空 selection（Pass 非 options 成员→InvalidChoice；v126
+  教训三度命中）
+- 探测补丁使确认被应答两次（手动提交+原 answer_open 并存）——以
+  DBG id/spec 打印定位后删重复行

@@ -1,0 +1,6 @@
+// jxjushou：phase_end时摸牌。
+skill jxjushou(3909089763) {
+  trigger phase_end owner_alive optional {
+    effect draw_cards(self, 1);
+  }
+}

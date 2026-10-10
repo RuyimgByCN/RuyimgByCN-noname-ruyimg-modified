@@ -1,0 +1,5 @@
+// eu_mingshu：锁定技, player:eu_dengtianAfter, 失去体力, 异步。
+skill eu_mingshu(3355479108) {
+  trigger phase_any_end owner_alive {
+  }
+}

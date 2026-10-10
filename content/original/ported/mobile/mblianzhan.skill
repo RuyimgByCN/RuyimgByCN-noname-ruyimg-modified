@@ -1,0 +1,6 @@
+// mblianzhan（连斩）：你使用指定唯一目标的有点数的【杀】结算结束后，你可以对其使用一张点数更大的【杀】（无距离次数限制）并摸一张牌。
+skill mblianzhan(2571594597) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

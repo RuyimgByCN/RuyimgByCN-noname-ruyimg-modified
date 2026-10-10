@@ -1,0 +1,5 @@
+// vtbleyu：global:phaseBegin, 需弃牌, 多步骤。
+skill vtbleyu(2524076357) {
+  trigger phase_any_end owner_alive {
+  }
+}

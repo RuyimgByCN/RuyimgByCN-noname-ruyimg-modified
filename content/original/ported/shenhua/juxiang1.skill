@@ -1,0 +1,4 @@
+// 【巨象】的目标保护效果：【南蛮入侵】不能选择拥有者。
+skill juxiang1(3192375369) locked {
+  modifier card_target_cancel(nanman) override 1;
+}

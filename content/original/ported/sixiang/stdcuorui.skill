@@ -1,0 +1,18 @@
+// 挫锐：旧 JS 语义重写；开局或杀死角色后，可将手牌补至存活人数（至多 7）。
+skill stdcuorui(2683321015) {
+  trigger game_started owner_alive_hand_below_alive_count_capped_seven optional {
+    if alive_count() < 7 {
+      effect draw_cards(self, alive_count() - hand_count(self));
+    } else {
+      effect draw_cards(self, 7 - hand_count(self));
+    }
+  }
+
+  trigger death owner_is_source_hand_below_alive_count_capped_seven optional {
+    if alive_count() < 7 {
+      effect draw_cards(self, alive_count() - hand_count(self));
+    } else {
+      effect draw_cards(self, 7 - hand_count(self));
+    }
+  }
+}

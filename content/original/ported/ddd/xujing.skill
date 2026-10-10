@@ -1,0 +1,24 @@
+// 3D精选 许靖「虚誉/实荐」：旧 JavaScript 仅作语义证据，不进入运行时。
+skill dddxuyu(3210825357) {
+  trigger card_resolved owner_source_card_resolved_ddd_xuyu_pending {
+    effect resolve_ddd_xujing(self,event_source,event_card,1);
+  }
+  trigger card_resolved owner_source optional {
+    effect resolve_ddd_xujing(self,event_source,event_card,0);
+  }
+  trigger turn_ended ddd_xuyu_pending {
+    effect resolve_ddd_xujing(self,0,0,2);
+  }
+}
+
+skill dddshijian(2262569305) {
+  trigger card_resolved owner_alive_other_source_second_play_card_resolved_hand_equip_nonempty optional {
+    effect resolve_ddd_xujing(self,event_source,event_card,10);
+  }
+  trigger card_used ddd_shijian_watched_source_card_used_targeted {
+    effect resolve_ddd_xujing(self,event_source,event_card,11);
+  }
+  trigger turn_ended ddd_shijian_pending {
+    effect resolve_ddd_xujing(self,0,0,12);
+  }
+}

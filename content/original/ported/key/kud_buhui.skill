@@ -1,0 +1,14 @@
+// 不悔（库特·限定技）：进入濒死时，弃置所有装备牌并摸等量牌，获得「冲阵」，回复至2点体力。
+// 实现：濒死时可选、每局一次回复至 2 点体力（mark_count 门控）。
+// 近似：不弃装备摸等量；不获得「冲阵」。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kud_buhui(4166321790) {
+  trigger dying owner_is_target optional {
+    if mark_count(self, 4166321790) == 0 {
+      if hp(self) < 2 {
+        effect recover_hp(self, 2 - hp(self));
+      }
+      effect add_mark(self, 4166321790, 1);
+    }
+  }
+}

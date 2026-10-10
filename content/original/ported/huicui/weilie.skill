@@ -1,0 +1,7 @@
+// weilie：令目标摸2牌。
+// 旧JS含subSkill，DSL无法精确建模。
+skill weilie(2538404656) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

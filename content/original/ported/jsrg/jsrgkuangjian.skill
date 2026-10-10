@@ -1,0 +1,8 @@
+// jsrgkuangjian（匡谏）：你可以将一张装备牌当作任意基本牌使用（无次数限制但不可指定自己为目标），然后目标角色使用此装备牌。
+// 未建模：chooseButton, 翻译调用, hiddenCard, 全局状态, addTempSkill, charlotte延迟 ...等8项（DSL无对应原语）
+skill jsrgkuangjian(3531146758) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgkuangjian（skill.js:13581）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

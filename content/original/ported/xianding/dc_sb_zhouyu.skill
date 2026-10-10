@@ -1,0 +1,25 @@
+// 新杀谋周瑜【融火/英谋】（ABI 602）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dcsbronghuo(2240860827) locked {
+  trigger damage owner_alive_global_fire_damage_dcsbronghuo {
+    effect resolve_dc_sb_zhouyu(self, event_source, event_card, 0);
+  }
+
+  trigger card_used owner_source_fire_sha_or_huogong_dcsbronghuo {
+    effect resolve_dc_sb_zhouyu(self, event_source, event_card, 1);
+  }
+}
+
+skill dcsbyingmou(4166950825) conversion {
+  trigger game_started owner_alive optional {
+    effect resolve_dc_sb_zhouyu(self, self, event_card, 10);
+  }
+
+  trigger card_resolved owner_source_card_resolved_has_other_target_dcsbyingmou_once_per_turn optional {
+    effect resolve_dc_sb_zhouyu(self, event_source, event_card, 11);
+  }
+
+  trigger card_resolved dcsbyingmou_tracked_card_resolved {
+    effect resolve_dc_sb_zhouyu(self, event_source, event_card, 20);
+  }
+}

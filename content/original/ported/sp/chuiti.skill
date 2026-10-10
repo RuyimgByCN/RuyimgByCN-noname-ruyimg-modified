@@ -1,0 +1,7 @@
+// chuiti：锁定技，手牌上限等于已损失体力值。
+// 实现（2026-09-15 第二百九十批·modifier-only 补面）：
+// modifier hand_limit override owner_lost_hp（纯 DSL 零 bytecode 零新原语）。
+// 保真度：完整（owner_lost_hp 为既有 modifier 值源）。
+skill chuiti(2591098814) locked {
+  modifier hand_limit add owner_lost_hp;
+}

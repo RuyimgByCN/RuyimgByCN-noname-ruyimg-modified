@@ -1,0 +1,5 @@
+skill psyuhuo(2658654582) locked {
+  modifier damage_taken_cancel(fire) override 1;
+  modifier card_ignored_hand_limit(sha_fire) override 1;
+  modifier card_ignored_hand_limit(huogong) override 1;
+}

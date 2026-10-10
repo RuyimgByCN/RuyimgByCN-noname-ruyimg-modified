@@ -1,0 +1,35 @@
+// jsrgzuozhan（坐瞻）：游戏开始时，你选择至多两名其他角色，你的攻击范围+X
+// （X 为所选角色中最高的体力值且至多为 5）。一名「坐瞻」角色死亡后，你令一名
+// 存活的「坐瞻」角色从弃牌堆获得至多 X 张牌名各不相同的基本牌。
+// 上游 (jsrg/skill.js jsrgzuozhan L13073)：global phaseBefore(phaseNumber==0)/
+// enterGame；cost chooseTarget [1,2] notMe；content addMark(range)=min(所选最高
+// 体力,5) + markAuto(坐瞻目标集)；mod attackFrom = distance - range 标记。
+// group jsrgzuozhan_gain：global dieAfter → 选存活「坐瞻」角色 → 从弃牌堆获得
+// 至多 X 张牌名各不相同的基本牌。
+// 实现（2026-09-12 第二百四十二批·专属 host 状态机第七件，qianlong/jsrgdaoren
+// 工艺复用）：trigger game_started owner_alive optional →
+// resolve_jsrgzuozhan(self, self_skill)（ABI 698 / tag 721 / Cont 304：选 1-2
+// 名其他角色 → 射程标记 min(最高体力,5) 加于自身（id=技能 def，owner_skill_mark
+// 读取）+「坐瞻」标记记于所选角色）。attack_range add owner_skill_mark 修饰面
+// （jsrglangan 同款，方向为正）。
+// 组技补牌面（2026-09-12 第二百四十三批，同日闭合 §8.37 登记债②）：
+// trigger death owner_alive optional → resolve_jsrgzuozhan_gain(self,
+// self_skill, event_player)（ABI 699 / tag 722 / Cont 305：机内验证死亡者带
+// 「坐瞻」标记 + 存活坐瞻角色存在 + 弃牌堆有基本牌 → 选一名存活坐瞻角色 →
+// 从弃牌堆顶取得至多 X 张牌名互不相同的基本牌）。牌名口径：杀/火杀/雷杀同名。
+// 近似（登记债）：①enterGame/phaseBefore 双时点以 game_started 单点近似；②
+// 主面选择含确认环节以可取消 SelectTargets 表达（取消=不发动 ✓）；③组技面
+// 补牌为机内扫描直取（上游 get.discardPile 逐张检索同口径；无差异展示面）；
+// ④组技面 optional 确认先于机内校验打开——未标记角色死亡也会空开一次确认
+// （quanjia 批 237 同款债）。
+skill jsrgzuozhan(4241034616) {
+  trigger game_started owner_alive optional {
+    effect resolve_jsrgzuozhan(self, self_skill);
+  }
+
+  trigger death owner_alive optional {
+    effect resolve_jsrgzuozhan_gain(self, self_skill, event_player);
+  }
+
+  modifier attack_range add owner_skill_mark;
+}

@@ -1,0 +1,5 @@
+// jun_xiongtu：音效名:sbjianxiong, player:changeHpAfter, 异步。
+skill jun_xiongtu(3952916843) {
+  trigger phase_any_end owner_alive {
+  }
+}

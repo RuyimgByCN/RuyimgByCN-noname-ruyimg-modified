@@ -1,0 +1,4 @@
+// 旧 JS 语义：逻辑【杀】伤害结算时，攻击范围 >3 则早期 +1；攻击范围 <3 则最终大于 1 的伤害改为 1。
+skill lkzhongzhuang(3477978221) locked {
+  modifier sha_damage_source_range_threshold override 3;
+}

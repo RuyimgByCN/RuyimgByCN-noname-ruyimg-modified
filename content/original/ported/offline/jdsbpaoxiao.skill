@@ -1,0 +1,6 @@
+// jdsbpaoxiao：音效名:sbpaoxiao, 失去体力, 加技能, 含子技能, 异步。
+skill jdsbpaoxiao(3508798369) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

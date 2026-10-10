@@ -1,0 +1,20 @@
+// 倚伏（tw 神张角 twyiju）：锁定技。若你的"风迹"牌数大于 0：当你受到伤害时，
+// 伤害 +1，然后弃置全部"风迹"。
+// 上游 (tw/skill.js twyiju)：trigger player damageBegin3；forced；
+// filter getExpansions("twfengji").length > 0；content trigger.num++ +
+// loseToDiscardpile(全部「风迹」)。另有 attackRangeBase/cardUsable 两个 mod
+//（攻击范围=体力值、【杀】次数上限+体力-1）。
+// 实现（2026-09-09 第一百九十六批·S1-B 消费池，零新原语）：
+// damage_before owner_is_target + skill_pile_count 门控 → modify_current_damage
+// (self, 1) + discard_skill_pile(self, self_skill, twfengji def 3231783634)。
+// 近似（登记债）：①attackRangeBase=体力值与 cardUsable 两个 mod 未建模
+//（堆计数 value source 缺口）；②「风迹」堆供给依赖 twfengji 置入面落地
+//（dormant 契约）；③每次受伤消耗全部「风迹」（上游同语义，无偏差）。
+skill twyiju(3751430791) {
+  trigger damage_before owner_is_target {
+    if skill_pile_count(self, 3231783634) > 0 {
+      effect modify_current_damage(self, 1);
+      effect discard_skill_pile(self, self_skill, 3231783634);
+    }
+  }
+}

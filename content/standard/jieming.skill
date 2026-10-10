@@ -1,0 +1,4 @@
+// 戒名 (jieming) — 司马昭: distance from owner -1 (political maneuvering).
+skill jieming(40) {
+  modifier distance_from add -1;
+}

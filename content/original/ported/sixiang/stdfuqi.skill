@@ -1,0 +1,3 @@
+skill stdfuqi(2567338825) locked {
+  modifier sha_use_unrespondable_within_distance override 1;
+}

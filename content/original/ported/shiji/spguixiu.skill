@@ -1,0 +1,9 @@
+// 闺秀（SP 孙尚香系）：锁定技。你受到伤害后若处于翻面状态，翻回正面并
+// 摸一张牌；你翻面后摸一张牌。
+// 旧 JS 的「翻面状态判定」无对应原语；以受伤后摸一张近似（翻面未建模，
+// 已注明）。
+skill spguixiu(2147887284) locked {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

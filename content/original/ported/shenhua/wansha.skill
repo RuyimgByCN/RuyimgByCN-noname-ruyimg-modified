@@ -1,0 +1,4 @@
+// 完杀：拥有者的回合内，其他非濒死角色不能使用【桃】或用【桃】救人。
+skill wansha(2730287699) locked {
+  modifier tao_use_save_cancel_for_non_dying_others_during_owner_turn override 1;
+}

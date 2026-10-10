@@ -1,0 +1,6 @@
+// 旧 JS 语义：结束阶段展示牌堆顶六张牌，选择一个类别全部分配；每名角色至多三张，所得数不少于拥有者者失去一点体力。
+skill twxingluan(3047451649) {
+trigger phase_end owner_is_target {
+    effect reveal_choose_category_distribute_self_threshold_hp_loss(self, 6, 3);
+  }
+}

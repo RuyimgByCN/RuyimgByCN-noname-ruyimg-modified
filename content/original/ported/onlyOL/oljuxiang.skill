@@ -1,0 +1,7 @@
+// 举襄：获得手牌时可弃置这些牌，令当前回合角色增加等量出杀次数。
+// 旧 JS 的「获得手牌时弃置+给他人增加杀次数标记」无对应原语，以下给空定义。
+skill oljuxiang(2863596156) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 oljuxiang 含真实规则体（trigger、usable 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

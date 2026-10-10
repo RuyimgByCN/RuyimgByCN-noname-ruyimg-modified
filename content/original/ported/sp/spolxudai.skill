@@ -1,0 +1,19 @@
+// 虚待（SP 庞德）：限定技，当你响应牌或受到伤害后，你可以令一名其他角色获得〖煮酒〗。
+// 上游 (sp/skill.js spolxudai)：trigger useCard/respond/damageEnd（filter 限定
+// damage 或 respondTo）+ awakenSkill + chooseTarget(无煮酒者) + target.addSkills。
+// 实现（2026-09-03 第一百五十批·零新原语真实语义重写，批 148 误标复核晋升）：
+// card_responded（owner_is_source：响应者）/ damage（owner_is_target）双臂 +
+// choose_other_add_skill(self, 3397135295)（ABI 675 选其他角色授指定技）+
+// remove_skill(self_skill)（自移除表达限定技一次性，tuteng3 惯例）。
+// 近似：①上游 useCard 且 respondTo 的角落窗口未单列（card_responded 已覆盖响应面）；
+// ②目标名单不排除已拥有〖煮酒〗者（原语无名单过滤）；③目标选择可取消（上游强制）。
+skill spolxudai(3686006799) {
+  trigger card_responded owner_is_source optional {
+    effect choose_other_add_skill(self, 3397135295);
+    effect remove_skill(self_skill);
+  }
+  trigger damage owner_is_target optional {
+    effect choose_other_add_skill(self, 3397135295);
+    effect remove_skill(self_skill);
+  }
+}

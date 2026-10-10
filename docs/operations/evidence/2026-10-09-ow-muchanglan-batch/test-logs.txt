@@ -1,0 +1,31 @@
+# U05 xianjian 第十三切片测试日志（2026-10-09，慕长兰掠影，规则 v153→v154）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 475 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v153 基线 474 +1 新增掠影回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 63 passed; 0 failed（62 既有 + 1 新增 muchanglan_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 161 + Sha 样例含掠影两字段）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v153→154 入 canonical_hash
+——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- lueying（shaBegin usable:1；randomGet 获得目标牌；目标 chooseTarget；
+  player.discardPlayerCard(victim, forced, he)）
+
+## 测试迭代记录
+- CardsMoved 日志不存在→CardsGiven（E0599）
+- engine 哈希 lueying_victim u32→u8 cast（E0308）
+- standard/engine 测试 new-call 补 2 参（E0061）
+- host.rs 枚举尾漂移第二次（Lingyu 尾）——分批小锚补落
+- 手牌断言：杀已离手（0+1=1）
+- cards.json 补落遗忘一次（unknown skill lueying）——切片补丁清单须含
+  cards.json

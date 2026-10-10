@@ -1,0 +1,7 @@
+$ swd 第四批定向：赤龙牙（火伤 +1 锁定/非火照常/射程 2）
+test swd_chilongya_amplifies_fire_damage ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（403/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v87→v88，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Chilongya 编码 107（archive/a0/ALL 同步）+ EquipSlot::Weapon + named_weapon_range Some(2)；commit_damage 火伤增幅——来源存活且装备赤龙牙时 amount+1（Fire only；铁索传导为独立 Damage 事件照常 +1=上游 damageBegin 每事件 num++ 语义）
+$ 上游核验：card/swd/card.js chilongya（equip1/distance attackFrom -1=射程 2/skills chilongya）；skill.js chilongya（trigger source damageBegin/forced/filter hasNature fire && notLink/content trigger.num++）

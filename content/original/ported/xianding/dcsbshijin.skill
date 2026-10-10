@@ -1,0 +1,9 @@
+// 识锦（界邓艾）：锁定技，当你受到伤害时，防止此伤害并摸一张牌。
+// 旧 JS 的“限定技”属性与“你的下个回合开始时弃置所有【杀】和锦囊牌并失去等量体力、
+// 若未因此失去体力则此技能视为未发动过”未建模。
+skill dcsbshijin(3506294264) locked {
+  trigger damage_before owner_is_target {
+    effect draw_cards(self, 1);
+    effect prevent_current_damage();
+  }
+}

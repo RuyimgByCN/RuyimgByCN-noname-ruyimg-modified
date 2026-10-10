@@ -1,0 +1,5 @@
+// xibing：摸?牌；获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill xibing(4274413842) {
+  modifier hand_limit add 1;
+}

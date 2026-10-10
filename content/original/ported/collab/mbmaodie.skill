@@ -1,0 +1,5 @@
+// 毛迭（魔白马）：使用牌后，若造成伤害则限制下张伤害牌字数；否则获目标起始手牌中一张。
+// 旧 JS 含条件分支、字数标记状态机、_start_cards 追踪，均无 DSL 对应原语。
+skill mbmaodie(2842931392) {
+  modifier hand_limit add 1;
+}

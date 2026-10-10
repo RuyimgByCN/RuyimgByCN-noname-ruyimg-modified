@@ -1,0 +1,7 @@
+// mbshushen（淑慎）：每回合每项各限一次。当你回复体力时，你可以令一名其他角色摸两张牌；当你获得至少两张牌后，你可以令一名其他角色回复1点体力。
+skill mbshushen(3375207651) {
+  trigger cards_moved owner_alive {
+    effect draw_cards(self, 2);
+    effect recover_hp(self, 1);
+  }
+}

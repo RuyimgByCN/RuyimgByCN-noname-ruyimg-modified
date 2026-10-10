@@ -1,0 +1,26 @@
+# U05 ow 纵切批十六测试日志（2026-10-09，狂鼠拾火，规则 v132→v133）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 454 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v132 基线 453 +1 新增拾火回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 42 passed; 0 failed（41 既有 + 1 新增 kuangshu_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 130）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v132→v133 入 canonical_hash
+——14 场景全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- shihuo（trigger global damageEnd forced；filter hasNature("fire")；
+  content player.draw()——上游最简技之一）
+
+## 测试迭代记录
+- 杀限次第三次命中（火杀后普通杀被 ShaLimit 拒）——先装诸葛连弩
+- 手牌断言改增量口径（fire_sha 放置尝试残留非火杀牌使绝对计数脆弱）

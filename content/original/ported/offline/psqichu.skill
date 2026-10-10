@@ -1,0 +1,5 @@
+// psqichu：主动(multi), 加技能, 含子技能, 多步骤。
+skill psqichu(4131640560) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

@@ -1,0 +1,8 @@
+$ swd 第七批定向：归有界（黑判失体力+随机弃牌/往返）
+test swd_guiyoujie_delayed_black_loss ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（406/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v90→v91，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Guiyoujie 编码 110（他人延时锦囊/archive tag 110/a0 111 变体）；PlaceDelayed 派发（无懈窗口包装）；判定黑色→LoseHp 1+he 随机弃一张（RNG gen_range，装备走 revoke）；红色无事；PlayCard 门控=恰 1 其他存活目标+其判定区无同名延时
+$ 上游核验：card/swd/card.js guiyoujie（type delay/filterTarget player!==target/judge 黑色 -3/effect loseHp+randomDiscard）；list ♠3/♣9 两张
+$ 测试侧：debug_set_deck_top_by 置黑桃判定牌；发现并修复 PlayCard 穷尽臂误吞 Guiyoujie（首跑 IllegalTargets）

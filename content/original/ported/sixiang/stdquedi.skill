@@ -1,0 +1,4 @@
+// 却敌：可将手牌区或装备区内有效牌名为【杀】的实体牌当【决斗】使用。
+skill stdquedi(3311025145) {
+  view_as juedou play_phase card_sha from hand_equip;
+}

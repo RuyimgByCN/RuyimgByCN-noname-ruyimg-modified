@@ -1,0 +1,9 @@
+// decadechunlao（程普·醇醪）：未横置时可视为使用【酒】，然后横置。
+// 旧JS含 view_as 酒 + link() 横置代价，且依赖子技能 decadechunlao2/decadechunlaox 处理横置/伤害标记。
+// DSL view_as 不支持横置自身作为消耗，未建模。
+skill decadechunlao(2343624089) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 decadechunlao（skill.js:9551）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：视为【杀】”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

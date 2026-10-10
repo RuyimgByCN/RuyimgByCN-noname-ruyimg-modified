@@ -1,0 +1,7 @@
+// chunqiubi_skill：锁定技, 主动(phaseUse), 需弃牌, 摸牌, 回复体力, 失去体力, 异步。
+skill chunqiubi_skill(3893060593) locked {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

@@ -1,0 +1,10 @@
+// 思变（张温）：摸牌阶段开始时，你可改为展示牌堆顶的四张牌，获得其中点数为最大
+// 或最小的牌，将其余的牌交给一名手牌数最少的角色（无人选择时置入弃牌堆），然后
+// 跳过本回合的摸牌阶段。
+// 旧 JS 仅作语义证据；展示→取极值→分配由 resolve_sibian 权威状态机校验（ABI 470）。
+// 注：牌堆不足四张时取现有张数；跳过摸牌以 draw_phase_fixed_count(0) 表达。
+skill sibian(3021138179) {
+  trigger phase_draw owner_is_target {
+    effect resolve_sibian(self);
+  }
+}

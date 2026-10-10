@@ -1,0 +1,8 @@
+// 翊正：准备阶段开始时，你可以与一名体力不小于你的角色拼点。赢的角色对没赢的角色造成1点伤害。
+// 旧 JS 的「选择体力>=自己的目标拼点」「拼点胜者对败者造成伤害」无可用的简单原语；
+// choose_hand_compare 需要传入 win_skill_def / lose_skill_def 两个 def_id 指向自定义结算技能，无合适的空技能可用。
+skill stdyizheng(3142468286) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

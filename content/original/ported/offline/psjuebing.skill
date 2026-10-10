@@ -1,0 +1,5 @@
+// psjuebing（锁定技/主动技(chooseToUse)/转化技(视作sha)/触发技）：锁定技, source:damageSource, player:card_used, player:card_targeted, 主动(chooseToUse), 视作sha, 加技能, 含子技能, 异步。
+skill psjuebing(3699770383) locked {
+  trigger card_used always {
+  }
+}

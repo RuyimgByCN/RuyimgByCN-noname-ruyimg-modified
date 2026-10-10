@@ -1,0 +1,6 @@
+// mbjiexun（诫训）：上游 translate.js 无独立 info 条目，描述见其父技/相邻条目。
+skill mbjiexun(3572307369) locked {
+  trigger phase_discard owner_alive {
+    effect discard_selected(self);
+  }
+}

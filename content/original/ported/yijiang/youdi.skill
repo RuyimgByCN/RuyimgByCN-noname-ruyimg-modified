@@ -1,0 +1,5 @@
+skill youdi(3686673279) {
+  trigger phase_end owner_is_target_phase_end_hand_equip_nonempty_other_alive optional {
+    effect resolve_youdi(self);
+  }
+}

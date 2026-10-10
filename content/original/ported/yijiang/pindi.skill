@@ -1,0 +1,7 @@
+// 品第：同一回合不能重复牌的逻辑类别或目标；次数使用本回合已发动次数。
+skill pindi(4057378399) {
+  active play_phase targets 1 1 other unused_by_skill_this_turn select_he 1 1 unused_category_by_skill_this_turn {
+    effect discard_selected_record_unique_category_target(self, event_source);
+    effect choose_target_draw_or_discard_by_skill_use_count_link_if_wounded(self, event_source);
+  }
+}

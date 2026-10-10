@@ -1,0 +1,8 @@
+// 龙矜（幻赵云）：觉醒技，进入濒死时回复至2体力，
+// 获得「龙胆」「冲阵」作为额外技能，5回合后失去。
+// 缺觉醒标记倒计时与额外技能移除原语，空定义。
+skill twlongjin(2673764574) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 twlongjin 含真实规则体（trigger、juexingji 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

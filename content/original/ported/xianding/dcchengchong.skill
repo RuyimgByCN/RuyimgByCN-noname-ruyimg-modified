@@ -1,0 +1,24 @@
+// 承宠（邓晚棠）：锁定技：当你获得牌后，若手牌中红色牌数大于黑色牌数，你摸一张牌。
+// 上游 (xianding/skill.js dcchengchong)：trigger player gainEnd + global
+// loseAsyncEnd；forced；filter = getg(player) 非空 + 手牌红计数>黑计数 +
+// getParent(2) 非自身（防递归）；content draw(1)。
+// 实现（2026-09-10 第二百二十六批·既有面清账）：双臂 trigger cards_moved /
+// cards_drawn + owner_gained_cards_potduzuo_once_per_turn（批 226 新过滤器
+// 变体：Potduzuo 增益判定 + turn_limit 每回合一次，近似上游递归守卫）+
+// body 级 if hand_color_count(self, red) > hand_color_count(self, black)
+// （ABI 490 既有查询）→ draw_cards(self, 1)。
+// 近似（登记债）：①上游每获牌事件均可发（递归守卫内多次），此处每回合限
+// 一次（turn_limit + 双臂共享 skill 级计数，保守收窄）；②loseAsyncEnd 全局
+// 失去同步获得面以 cards_moved 增益判定近似。
+skill dcchengchong(2309973611) locked {
+  trigger cards_moved owner_gained_cards_potduzuo_once_per_turn {
+    if hand_color_count(self, red) > hand_color_count(self, black) {
+      effect draw_cards(self, 1);
+    }
+  }
+  trigger cards_drawn owner_gained_cards_potduzuo_once_per_turn {
+    if hand_color_count(self, red) > hand_color_count(self, black) {
+      effect draw_cards(self, 1);
+    }
+  }
+}

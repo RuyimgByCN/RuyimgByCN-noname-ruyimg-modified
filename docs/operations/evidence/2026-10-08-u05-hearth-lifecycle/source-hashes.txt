@@ -1,0 +1,4 @@
+c7cd92e0d980d21538dd9e2ba5da0d804f6d51a884a3f65b366697b85ab20123  crates/engine-native/tests/g1_hearth.rs
+ed6338e25e4dc32628f2e46696d4625a5102619fa3ecfed5e834b81c42aebcc5  docs/migration/upstream-extension-reconstruction.md
+b1c762abd3f2a3e6a2414a4d0082cfb4692d45ebb62850766fc3180ce16416f2  docs/architecture/native-progress.md
+f8ad3763189d901097c39b9b85b934e74fea98923fc9fb570312acda5360d284  docs/native-coverage-manifest.md

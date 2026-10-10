@@ -1,0 +1,7 @@
+// 称师（限定技）：当其他角色死亡时，若其装备区牌数大于你，你与其交换座次并交换装备区。
+// 旧 JS 涉及换座位 (swapSeat)、交换装备区 (swapEquip)、觉醒标记 (awakenSkill)，均无 DSL 原语。无法建模。
+skill stdchengshi(2462306061) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

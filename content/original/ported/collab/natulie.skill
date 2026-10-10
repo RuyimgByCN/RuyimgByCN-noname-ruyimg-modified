@@ -1,0 +1,8 @@
+// 烈（那兔赵云）：使用基本牌后可将手牌调整至 X（X=本技能发动次数+1，至多5）；
+// 若因此弃置了牌，可对一名角色造成 1 点伤害。
+// 近似：固定调整至 2 张手牌；递增 X 与「弃牌后造成伤害」未建模。
+skill natulie(3021873136) {
+  trigger card_used owner_source_basic optional {
+    effect adjust_hand_to(self, 2);
+  }
+}

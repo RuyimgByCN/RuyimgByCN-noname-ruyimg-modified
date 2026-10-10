@@ -1,0 +1,5 @@
+// jyqibian：锁定技, global:game_started, global:roundEnd, 移出游戏, 异步。
+skill jyqibian(2188379334) locked {
+  trigger game_started always {
+  }
+}

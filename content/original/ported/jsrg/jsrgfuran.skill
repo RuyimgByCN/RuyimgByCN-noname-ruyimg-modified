@@ -1,0 +1,7 @@
+// jsrgfuran（复燃）：当你受到伤害后，若来源不在你攻击范围内，你本回合结束时回复1点体力。
+// 近似：受伤害后直接回复1点体力（丢失了“来源不在攻击范围内”的判定和延迟到回合结束的时机）。
+skill jsrgfuran(3455294457) {
+  trigger damage owner_is_target {
+    effect recover_hp(self, 1);
+  }
+}

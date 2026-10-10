@@ -1,0 +1,5 @@
+// xy_lilu：音效名:cslilu, 锁定技, player:phaseDrawBegin1, 需弃牌, 回复体力, 异步。
+skill xy_lilu(2174513970) {
+  trigger phase_draw owner_alive {
+  }
+}

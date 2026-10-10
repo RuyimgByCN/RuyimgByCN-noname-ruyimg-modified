@@ -1,0 +1,28 @@
+// 贲育（程昱）：当你受到伤害后，你可选择：①将手牌摸至与伤害来源手牌数相同（至多摸至
+// 五张）；②弃置大于伤害来源手牌数的牌，然后对其造成 1 点伤害。
+// 上游 (sp/skill.js benyu)：trigger player damageEnd，direct；bool1 = 手牌 <
+// min(来源手牌,5)；bool2 = 可弃(he) > 来源手牌数；双真 chooseControl(含 cancel2)，
+// 单真直走；分支② chooseToDiscard(num=来源手牌+1) 后 source.damage()。
+// 实现（2026-09-03 第一百五十批·零新原语真实语义重写，批 148 误标复核晋升）：
+// damage 触发（DamageDealt 同 damageEnd 口径）+ owner_is_target_other_source_alive
+// 过滤器 + let 捕获（计划期求值）+ choose(1,2) 分支（kunfen 惯例）+ draw_cards
+// 表达式张数（cajujun 惯例）+ discard_hand_equip_expr（ABI 646）+ deal_damage。
+// 近似：①上游可选 cancel/单条件直走，DSL 为 optional 确认 + 强制二选一（条件不满足
+// 的分支无效果——选择面简化、效果面条件等价）；②分支②为确定性弃前 n 张（he 顺序，
+// pxyongzhou 同款）非玩家任选，且可弃不足 n 张时全弃仍造成伤害（上游不足则不发动）。
+skill benyu(3440506159) {
+  trigger damage owner_is_target_other_source_alive optional {
+    let draw_to = min(5, hand_count(event_source));
+    let need = hand_count(event_source) + 1;
+    let option = choose(1, 2);
+    if option == 1 {
+      if hand_count(self) < draw_to {
+        effect draw_cards(self, draw_to - hand_count(self));
+      }
+    }
+    if option == 2 {
+      effect discard_hand_equip_expr(self, need);
+      effect deal_damage(self, event_source, 1);
+    }
+  }
+}

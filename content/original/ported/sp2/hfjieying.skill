@@ -1,0 +1,21 @@
+// 界营（韩馥）：结束阶段，可令一名其他角色获得「界营·督战」至其下个结束阶段；
+// 其出牌阶段使用单目标【杀】时，可额外指定一个目标。
+// 旧 JS 仅作语义证据；授技与加目标由权威状态机校验（ABI 465）。
+// 注：旧 JS 的界营临时技能同时作用于锦囊牌与封牌副作用（storage 从未置位，实为
+//      冗余）；DSL 以 choose_add_current_sha_target 表达【杀】加目标（引擎加目标
+//      管线为【杀】专用，锦囊部分文档化近似舍弃）。
+skill hfjieying(2801808452) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_add_skill(self, 4111610111);
+  }
+}
+
+// 界营·督战：使用【杀】时可额外指定一个目标；目标下个结束阶段移除。
+skill hfjieying2(4111610111) {
+  trigger card_used owner_source_sha {
+    effect choose_add_current_sha_target(self, event_card);
+  }
+  trigger phase_end owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

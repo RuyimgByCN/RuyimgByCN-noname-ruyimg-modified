@@ -1,0 +1,7 @@
+// 不屈（旧周泰）：濒死时翻牌入「创」，点数不重复则免濒死。
+// 旧 JS 的「创」expansion 点数去重无对应原语；以濒死时回复 1 点近似（点数去重未建模，已注明）。
+skill buqu(3569170747) locked {
+  trigger dying owner_is_target {
+    effect recover_hp(self, 1);
+  }
+}

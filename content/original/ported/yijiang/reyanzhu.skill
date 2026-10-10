@@ -1,0 +1,12 @@
+// 宴诛(旧版)(旧版孙休)：出牌阶段限一次。选择一名其他角色，
+// 令其选择一项：1.将装备区的所有牌交给你，并令你修改"兴学"与"宴诛"；
+// 2.弃置一张牌，且下次受到的伤害+1直到下回合开始。
+// 旧JS含target chooseControl 二选一、装备移交、storage修改、伤害标记等逻辑。
+// 注：chooseControl二选一(addSkill/storage rewrite)、装备移交、标记增加伤害均缺原语。
+skill reyanzhu(2408072330) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    // 近似：目标给你一张装备，或受到1点伤害（无法建模二选一和技能修改）
+    effect choose_other_give_one_hand_equip(self);
+    // 注：旧JS的二选一(交全部装备+改技能 / 弃牌+受伤+1标记)无法精确建模
+  }
+}

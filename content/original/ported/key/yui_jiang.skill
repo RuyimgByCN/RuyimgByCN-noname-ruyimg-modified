@@ -1,0 +1,6 @@
+// 江：使用或成为【决斗】/红色【杀】的目标后，可以摸一张牌。
+skill yui_jiang(2788570580) {
+  trigger card_used owner_source_or_targeted_by_juedou_or_red_sha optional {
+    effect draw_cards(self, 1);
+  }
+}

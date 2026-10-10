@@ -1,0 +1,9 @@
+// residi3：刷新包技能。
+// triggers: global:phaseUseEnd
+// forced/locked: 锁定技
+skill residi3(2967520276) {
+    // 近似：旧JS事件 phaseUseEnd → DSL事件 phase_play_end
+    trigger phase_play_end owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

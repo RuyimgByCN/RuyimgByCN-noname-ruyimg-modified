@@ -1,0 +1,8 @@
+// 武神（神关羽）
+// 旧 JS 语义：红桃牌均视为普通【杀】，且无距离、次数限制并不可被响应。
+skill wushen(2400906129) locked {
+  modifier card_name(heart) override sha;
+  modifier card_distance_unlimited(heart) override 1;
+  modifier card_use_unlimited(heart) override 1;
+  modifier sha_unrespondable(heart) override 1;
+}

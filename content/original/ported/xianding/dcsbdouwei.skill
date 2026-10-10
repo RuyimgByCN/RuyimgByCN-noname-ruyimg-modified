@@ -1,0 +1,7 @@
+// 斗威（界董承）：每轮限一次，一名角色进入濒死状态时，可回复 1 点体力。
+// 旧 JS 的“因你【斗围】进入濒死”来源条件与“恢复一个装备栏”省略。
+skill dcsbdouwei(2217274823) {
+  trigger dying owner_alive_other_dying_once_per_round optional {
+    effect recover_hp(self, 1);
+  }
+}

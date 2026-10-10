@@ -1,0 +1,5 @@
+// tysheju：player:card_used, 需选择目标, 加技能, 含子技能, 异步。
+skill tysheju(3315844655) {
+  trigger card_used owner_alive {
+  }
+}

@@ -1,0 +1,13 @@
+// 界陷阵拼点成功的目标绑定效果。
+skill rexianzhen2(3751763590) {
+  modifier card_distance_unlimited_for_skill_bound_target add 1;
+  modifier sha_use_unlimited_for_skill_bound_target add 1;
+  modifier ignore_armor_for_skill_bound_target add 1;
+
+  trigger hand_compare_finished owner_is_target_event_card_sha {
+    effect add_skill_until_turn_end(self, 3222374511);
+  }
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

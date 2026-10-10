@@ -1,0 +1,13 @@
+// olmingzhe（明哲）：锁定技。非你的出牌阶段内，当你失去牌后，你摸一张牌。
+// 上游 filter: !isPhaseUsing() && 失去的牌中有红色；content: draw()（+ showCards 表现层）。
+// 使用 Phase 3 in_play_phase 查询（近似 isPhaseUsing = in_play_phase，对当前回合事件等价）+
+// event_card_count（card-list-iteration 族，事件移动牌数 > 0）。
+// 近似：上游限定「失去的牌中有红色」（getl.cards2 红色筛选）需逐张颜色计数原语，本定义放宽为
+// 「失去任意牌即摸一张」（触发更频繁，但摸牌副作用良性）；showCards 表现层不建模。
+skill olmingzhe(3559848237) locked {
+  trigger cards_moved owner_is_target {
+    if event_card_count > 0 && in_play_phase() == 0 {
+      effect draw_cards(self, 1);
+    }
+  }
+}

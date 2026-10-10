@@ -1,0 +1,6 @@
+// 天弓·雷伤摸牌
+skill tiangong2(3632366807) locked {
+  trigger damage owner_source_thunder {
+    effect draw_cards(self, 1);
+  }
+}

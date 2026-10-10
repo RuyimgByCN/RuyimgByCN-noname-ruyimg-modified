@@ -1,0 +1,7 @@
+// jsrgqingping（清平）：结束阶段，若攻击范围内所有角色手牌数均不大于你，摸等同于攻击范围内角色数的牌。
+// 近似：摸 alive_count() 张牌（丢失了“所有在范围内角色手牌≤你”的前置条件判断）。
+skill jsrgqingping(3536241953) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, alive_count());
+  }
+}

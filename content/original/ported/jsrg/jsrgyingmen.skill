@@ -1,0 +1,8 @@
+// jsrgyingmen（盈门）：锁定技。①游戏开始时，你将武将牌堆中随机四张武将牌置于你的武将牌上，称为“访客”。②回合开始时，若你的“访客”数小于4，你随机从武将牌堆中将“访客”补至四张。
+// 未建模：翻译调用, 全局状态, charlotte延迟, storage状态, 标记技（DSL无对应原语）
+skill jsrgyingmen(2599948678) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgyingmen（skill.js:9671）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

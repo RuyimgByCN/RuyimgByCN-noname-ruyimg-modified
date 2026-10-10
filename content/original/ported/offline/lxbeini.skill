@@ -1,0 +1,8 @@
+// 悖逆（贾充）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：出牌阶段限一次：令一名其他角色选择：对你选择的另一名角色使用伤害牌 / 交给你一张非伤害牌
+// 旧 JS 的「代他人选择使用牌」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxbeini(4083841450) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

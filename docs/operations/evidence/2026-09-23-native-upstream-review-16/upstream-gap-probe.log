@@ -1,0 +1,6 @@
+hidden-card leakage: same visible view; helper options [Player(1)] vs [Player(2)]
+multi-helper refusal: first Pass ended skill despite second Shu holding Sha
+rende cumulative 1+1: second use rejected Rejected(SkillAlreadyUsed); hp=3
+hujia query leak: same attacker view; helper Shan => public choice Some(Other { id: 1, observer: 2, prompt: "hujia_respond" }), helper Sha => no choice
+wrong-phase skill: Rende activated in Judge phase as Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "rende_cards", options: [Card(57), Card(39), Card(72), Card(71), Card(23)], min: 0, max: 5, allow_cancel: true } } }
+native standard test deck: 80 cards

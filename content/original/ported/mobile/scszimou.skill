@@ -1,0 +1,16 @@
+// scszimou（自谋）：出牌阶段第 2/4/6 张牌时分别获得【酒】/【杀】/【决斗】。
+// 实现说明（2026-08-06，C 段 omp）：原空 stub 注释称
+// "owner_source_play_card_count_eq_N" 无 DSL 原语——该过滤器现已注册
+// （typecheck.rs:1720 strip_prefix + registry:2641），按上游 useCard +
+// forced + phaseUse 内第 2/4/6 张计数语义实现（locked）。
+skill scszimou(2246121175) locked {
+  trigger card_used owner_source_play_card_count_eq_2 {
+    effect gain_card_by_kind(self, jiu);
+  }
+  trigger card_used owner_source_play_card_count_eq_4 {
+    effect gain_card_by_kind(self, sha);
+  }
+  trigger card_used owner_source_play_card_count_eq_6 {
+    effect gain_card_by_kind(self, juedou);
+  }
+}

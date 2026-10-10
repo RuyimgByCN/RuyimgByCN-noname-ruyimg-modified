@@ -1,0 +1,13 @@
+// 势张绣【附袭/豪义】（ABI 601）。旧 JavaScript 仅作语义证据，不进入运行时。
+
+skill dcsbfuxi(3319521189) {
+  trigger phase_play owner_alive_other_play_phase_tied_max_hand_dcsbfuxi_available optional {
+    effect resolve_dc_sb_zhangxiu(self, event_player, 0);
+  }
+}
+
+skill dcsbhaoyi(2398354936) {
+  trigger phase_end owner_phase_end_dcsbhaoyi_available optional {
+    effect resolve_dc_sb_zhangxiu(self, self, 10);
+  }
+}

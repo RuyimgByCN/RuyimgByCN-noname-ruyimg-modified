@@ -1,0 +1,6 @@
+// 君孙策：江。频发技在 DSL 中保留为可选触发。
+skill jun_jiang(4092230721) {
+  trigger card_used owner_source_red optional {
+    effect draw_cards(self, 1);
+  }
+}

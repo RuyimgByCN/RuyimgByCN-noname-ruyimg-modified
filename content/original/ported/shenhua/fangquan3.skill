@@ -1,0 +1,7 @@
+// 放权·3（刘禅系清理）：回合结束后清理标记。
+// 旧 JS 的清理语义，无独立规则行为。
+skill fangquan3(3167682144) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

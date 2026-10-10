@@ -1,0 +1,9 @@
+// 晋势（小鸟·晋附技）：摸牌阶段结束后，展示此阶段获得的牌，若花色各不相同则摸一张牌。
+// 实现：自己的摸牌阶段结束时可选摸 1。
+// 近似：不展示本阶段获牌，不去重检验花色。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill kotori_skill_jin(3135780791) {
+  trigger phase_draw_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 豹变（新杀夏侯霸）：每次受到伤害结算完毕后，依次检查挑衅、界咆哮、界神速，
+// 永久获得第一个尚未拥有的技能；三项均已有时不再触发。旧 JavaScript 仅作语义证据。
+skill rebaobian(4258572312) locked {
+  trigger damage owner_is_target {
+    effect add_first_missing_skill(self, 695232805, 2829854661, 2561255694);
+  }
+}

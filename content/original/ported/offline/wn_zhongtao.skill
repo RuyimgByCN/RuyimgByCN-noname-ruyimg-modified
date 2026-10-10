@@ -1,0 +1,5 @@
+// wn_zhongtao：global:card_used, 异步。
+skill wn_zhongtao(2936514068) {
+  trigger card_used owner_alive {
+  }
+}

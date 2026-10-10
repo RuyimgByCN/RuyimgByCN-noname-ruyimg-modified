@@ -1,0 +1,7 @@
+// huamao_tianxiang：player:damage_before, 多分支选择, 摸牌, 造成伤害, 失去体力, 异步, 弃牌。
+skill huamao_tianxiang(2778585786) {
+  trigger damage_before owner_alive {
+    effect draw_cards(self, 1);
+    effect deal_damage(self, event_source, 1);
+  }
+}

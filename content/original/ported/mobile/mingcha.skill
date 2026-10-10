@@ -1,0 +1,6 @@
+// mingcha（明察）：摸牌阶段开始时，你亮出牌堆顶的三张牌。若这三张牌中有点数小于9的牌，则你可以放弃摸牌并获得这些牌，然后你可以获得一名其他角色的随机一张牌。
+skill mingcha(2580500565) locked {
+  trigger phase_draw owner_alive {
+    effect gain_discard_card_by_kind(self, sha);
+  }
+}

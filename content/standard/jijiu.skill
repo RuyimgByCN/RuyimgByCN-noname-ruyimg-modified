@@ -1,0 +1,4 @@
+// 急救 (jijiu) — 华佗: outside his turn, use a red hand/equipment card as 桃.
+skill jijiu(2961041949) {
+  view_as tao response owner_outside_turn_red from hand_equip;
+}

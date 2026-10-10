@@ -1,0 +1,8 @@
+// 帝功（OL帝功）：使用牌时计数器+1；伤害牌基础伤害+1；非伤害牌使用后当前回合角色判定红色则摸1。
+// 旧 JS 含计数器（皮肤切换）、伤害牌/非伤害牌分支、延时判定，DSL 无分支逻辑及计数皮肤原语。
+// 近似为使用伤害牌时伤害+1。
+skill oldigong(3854731308) {
+  trigger card_used owner_source_sha {
+    effect increase_current_card_base_damage(self, event_card, 1);
+  }
+}

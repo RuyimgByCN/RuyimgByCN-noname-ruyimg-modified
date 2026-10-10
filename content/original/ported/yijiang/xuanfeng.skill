@@ -1,0 +1,8 @@
+// 旋风（凌统）：当弃牌阶段弃置牌后，或其他时机装备/判定/获得/失去牌后，可依次弃置两名其他角色各一张牌。
+// 旧JS含loseAfter/phaseDiscardEnd/equipAfter/addJudgeAfter/gainAfter/loseAsyncAfter/addToExpansionAfter多种触发，
+// 且需两步选择目标各弃一张。DSL缺对应多阶段目标选择原语，以全局phase_discard_end近似。
+skill xuanfeng(3760789976) {
+    trigger phase_discard_end owner_alive {
+        effect choose_other_discard_target_card(self, hand_equip);
+    }
+}

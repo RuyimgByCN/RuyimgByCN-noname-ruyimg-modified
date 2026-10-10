@@ -1,0 +1,5 @@
+// guowu：获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill guowu(3777137268) {
+  modifier hand_limit add 1;
+}

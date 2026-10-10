@@ -1,0 +1,7 @@
+// hsjunwei（主动技(chooseToUse)/转化技(视作wuxie)/触发技）：player:useCardToEnd, 主动(chooseToUse), 视作wuxie, 需选择目标, 含子技能, 异步。
+skill hsjunwei(3079154258) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

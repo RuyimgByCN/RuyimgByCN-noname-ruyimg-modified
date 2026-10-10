@@ -1,0 +1,10 @@
+// 拾慧（米娅）：锁定技，摸牌阶段改为摸 1+上回合弃置牌数张牌；回合结束时弃一张牌并回复 1 点体力。
+// 实现：结束阶段先回复 1 点体力，再弃 1 张。
+// 近似：摸牌阶段改写与上回合弃置计数未建模；先回体再弃牌（弃牌选牌不恢复后续 VM）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill mia_shihui(3357314746) locked {
+  trigger phase_end owner_is_target {
+    effect recover_hp(self, 1);
+    effect discard_hand_equip_count(self, 1);
+  }
+}

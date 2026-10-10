@@ -1,0 +1,8 @@
+// 持节（辛毗）：你成为其他角色使用的单目标牌的目标时，可判定：若结果为点数大于
+// 6 的牌，取消此牌对你的指定。
+// 旧 JavaScript 仅作语义证据；判定与取消由 ABI 422 resolve_spchijie 权威结算。
+skill spchijie(3232936655) {
+  trigger card_targeted owner_targeted_by_other_card_once_per_turn optional {
+    effect resolve_spchijie(self, event_source, event_card);
+  }
+}

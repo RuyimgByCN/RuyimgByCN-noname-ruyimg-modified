@@ -1,0 +1,6 @@
+// 制愚 (zhiyu) — 于禁: after taking damage, draw 1 card (disciplined defense).
+skill zhiyu(42) {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

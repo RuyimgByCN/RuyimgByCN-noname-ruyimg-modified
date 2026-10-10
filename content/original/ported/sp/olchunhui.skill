@@ -1,0 +1,8 @@
+// olchunhui
+// 触发事件：useCard2, damageEnd, phaseZhunbeiBegin
+// 令其他角色交给你一张牌的「目标给牌」方向原语未建模（现有 give 原语为所有者→目标方向），
+// 暂保持占位。
+skill olchunhui(2629914077) locked {
+  // INTENTIONAL_EMPTY_NOOP / TODO scaffold filled for catalog honesty
+  modifier hand_limit add 0;
+}

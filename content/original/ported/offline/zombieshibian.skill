@@ -1,0 +1,5 @@
+// zombieshibian：锁定技, player:changeCharacterAfter, 加技能, 异步。
+skill zombieshibian(3392250889) {
+  trigger phase_any_end owner_alive {
+  }
+}

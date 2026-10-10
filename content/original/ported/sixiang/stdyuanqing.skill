@@ -1,0 +1,7 @@
+// 缘情：结束阶段，你可令所有本回合失去过牌进入弃牌堆的角色依次选择并获得其中一张。
+// 旧 JS 的「按角色追踪本回合失去进弃牌堆的牌」「每名角色自选一张回收」无可用的跟踪/分角色自选原语。
+skill stdyuanqing(3640475272) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

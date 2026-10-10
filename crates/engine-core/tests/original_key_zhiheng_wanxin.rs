@@ -1,0 +1,186 @@
+//! Golden coverage for KEY 恭子「制衡」and 直井「挽心」.
+
+use engine_api::{
+    CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+    ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, SkillId, Suit, TurnPhaseTag,
+};
+use engine_core::command::apply_command;
+use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+use engine_core::transaction::Transaction;
+use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+use rule_api::EffectRequest;
+
+const KYOKO_ZHIHENG: u32 = 2_851_376_754;
+const NAO_WANXIN: u32 = 2_978_438_530;
+const ZHIHENG_SRC: &str =
+    include_str!("../../../content/original/ported/key/kyoko_zhiheng.skill");
+const WANXIN_SRC: &str = include_str!("../../../content/original/ported/key/nao_wanxin.skill");
+const PACKAGE: &[u8] = include_bytes!("../../../content/original/ported/key/key.npack.json");
+
+fn bootstrap(source: &str, name: &str, skill_def: u32) -> (Transaction, PlayerId, PlayerId) {
+    let compiled = content_compiler::compile_source_named(name, source).unwrap();
+    let mut tx = Transaction::begin(GameState::empty());
+    bootstrap_match(&mut tx, 2, u64::from(skill_def), "identity-standard").unwrap();
+    std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(&compiled).unwrap();
+    tx.state_mut().turn.phase = Phase::Play;
+    let owner = tx.state().turn.current;
+    let other = tx
+        .state()
+        .players
+        .alive_by_seat()
+        .into_iter()
+        .find(|player| *player != owner)
+        .unwrap();
+    let mut effects: Vec<_> = tx
+        .state()
+        .skills
+        .sorted_live()
+        .into_iter()
+        .map(|skill| EffectRequest::RemoveSkill { skill: skill.id })
+        .collect();
+    for player in tx.state().players.alive_by_seat() {
+        effects.push(EffectRequest::DiscardFromHand {
+            player,
+            count: u32::MAX,
+        });
+    }
+    effects.push(EffectRequest::AddSkill {
+        player: owner,
+        skill_def: SkillDefId::new(skill_def),
+    });
+    run_effects(&mut tx, effects).unwrap();
+    (tx, owner, other)
+}
+
+fn inject_hand(tx: &mut Transaction, owner: PlayerId, def: u32) -> CardId {
+    let hand = tx.state().zones.find(ZoneKind::Hand, owner).unwrap();
+    let card = tx.state_mut().cards.alloc(Card {
+        id: CardId::NONE,
+        def: CardDefId::new(def),
+        kind: CardKind::Shan,
+        suit: Suit::Club,
+        rank: 6,
+        weapon_range: 0,
+        zone: hand,
+        owner,
+        face_up: true,
+    });
+    tx.state_mut().zones.get_mut(hand).unwrap().cards.push(card);
+    card
+}
+
+fn skill_id(tx: &Transaction, owner: PlayerId, def: u32) -> SkillId {
+    tx.state()
+        .players
+        .get(owner)
+        .unwrap()
+        .skills
+        .iter()
+        .copied()
+        .find(|skill| tx.state().skills.get(*skill).unwrap().def.raw() == def)
+        .unwrap()
+}
+
+fn resolve(state: GameState, actor: PlayerId, selections: Vec<u32>, key: u64) -> GameState {
+    let (state, pipe) = apply_command(
+        state.clone(),
+        Command {
+            actor,
+            expected_revision: ExpectedRevision(state.revision),
+            idempotency_key: IdempotencyKey(key),
+            kind: CommandKind::ResolveChoice {
+                choice_id: ChoiceId::new(state.resolution.pending_choice_id),
+                selections,
+                cancelled: false,
+            },
+        },
+    );
+    assert!(
+        matches!(pipe.result, CommandResult::Accepted { .. }),
+        "{:?}",
+        pipe.result
+    );
+    state
+}
+
+#[test]
+fn kyoko_zhiheng_source_and_npack_publish_active_recast() {
+    let compiled = content_compiler::compile_source_named("kyoko_zhiheng", ZHIHENG_SRC).unwrap();
+    assert!(compiled
+        .active_index
+        .iter()
+        .any(|item| item.skill_def_id == KYOKO_ZHIHENG));
+    let pack = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
+    assert!(pack
+        .active_index
+        .iter()
+        .any(|item| item.skill_def_id == KYOKO_ZHIHENG));
+}
+
+#[test]
+fn kyoko_zhiheng_discards_selected_and_redraws_same_count() {
+    let (mut tx, owner, _) = bootstrap(ZHIHENG_SRC, "kyoko-zhiheng-test", KYOKO_ZHIHENG);
+    let card = inject_hand(&mut tx, owner, 180_101);
+    let before = tx.state().hand_count(owner);
+    let skill = skill_id(&tx, owner, KYOKO_ZHIHENG);
+    let state = tx.commit().state;
+    let (state, pipe) = apply_command(
+        state.clone(),
+        Command {
+            actor: owner,
+            expected_revision: ExpectedRevision(state.revision),
+            idempotency_key: IdempotencyKey(1),
+            kind: CommandKind::ActivateSkill {
+                skill,
+                targets: vec![],
+                card_targets: vec![card],
+            },
+        },
+    );
+    assert!(
+        matches!(pipe.result, CommandResult::Accepted { .. }),
+        "{:?}",
+        pipe.result
+    );
+    assert_eq!(state.hand_count(owner), before);
+}
+
+#[test]
+fn nao_wanxin_source_and_npack_publish_end_phase_draw() {
+    let compiled = content_compiler::compile_source_named("nao_wanxin", WANXIN_SRC).unwrap();
+    let trigger = compiled
+        .trigger_index
+        .iter()
+        .find(|trigger| trigger.skill_def_id == NAO_WANXIN)
+        .unwrap();
+    assert_eq!(trigger.event, "phase_end");
+    assert!(trigger.optional);
+    let pack = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
+    assert!(pack
+        .trigger_index
+        .iter()
+        .any(|trigger| trigger.skill_def_id == NAO_WANXIN && trigger.event == "phase_end"));
+}
+
+#[test]
+fn nao_wanxin_end_phase_lets_chosen_player_draw_two() {
+    let (tx, owner, other) = bootstrap(WANXIN_SRC, "nao-wanxin-test", NAO_WANXIN);
+    let other_hand = tx.state().hand_count(other);
+    let mut tx = tx;
+    assert_eq!(
+        dispatch_for_events(
+            &mut tx,
+            &[DomainEvent::TurnStateChanged {
+                current: owner,
+                phase: TurnPhaseTag::End,
+            }],
+            &mut TriggerFireRecord::new(),
+        ),
+        Err(EffectError::ChoiceRequested)
+    );
+    let state = resolve(tx.commit().state, owner, vec![1], 2);
+    assert!(state.has_pending_choice());
+    let state = resolve(state, owner, vec![other.raw()], 3);
+    assert_eq!(state.hand_count(other), other_hand + 2);
+}

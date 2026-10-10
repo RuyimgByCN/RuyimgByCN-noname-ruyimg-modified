@@ -1,0 +1,6 @@
+// 随势（死亡结算子技能）
+skill gzsuishi2(3663559953) locked {
+  trigger death owner_alive_event_player_same_group {
+    effect lose_hp(self, 1);
+  }
+}

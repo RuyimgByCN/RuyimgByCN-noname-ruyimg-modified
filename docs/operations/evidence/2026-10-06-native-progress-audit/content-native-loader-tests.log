@@ -1,0 +1,154 @@
+warning: unused import: `std::sync::atomic::AtomicU64`
+  --> crates/engine-native/src/ai.rs:10:5
+   |
+10 | use std::sync::atomic::AtomicU64;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardId` and `EventId`
+  --> crates/engine-native/src/archive.rs:21:18
+   |
+21 | use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+   |                  ^^^^^^  ^^^^^^^
+
+warning: unused import: `crate::machine::LogEvent`
+  --> crates/engine-native/src/archive.rs:22:5
+   |
+22 | use crate::machine::LogEvent;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostBehavior`
+    --> crates/engine-native/src/content/standard.rs:2952:48
+     |
+2952 |     use crate::content::host::{host_skill_def, HostBehavior};
+     |                                                ^^^^^^^^^^^^
+
+warning: unused imports: `Catalog` and `SkillDef`
+  --> crates/engine-native/src/content/extension.rs:10:31
+   |
+10 | use crate::catalog::{CardDef, Catalog, SkillDef};
+   |                               ^^^^^^^  ^^^^^^^^
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/src/view.rs:10:25
+   |
+10 | use crate::{GameAction, CommandOutcome};
+   |                         ^^^^^^^^^^^^^^
+
+warning: unused variable: `max`
+   --> crates/engine-native/src/ai.rs:136:17
+    |
+136 |             let max = max.max(min);
+    |                 ^^^ help: if this is intentional, prefix it with an underscore: `_max`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-native/src/content/standard.rs:2992:9
+     |
+2992 |     let mut deal_suit = |i: usize, r: u8| -> (Suit, u8) { (SUITS[i % 4], r) };
+     |         ----^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `cards`
+    --> crates/engine-native/src/content/host.rs:1064:45
+     |
+1064 |                 EventData::CardsDiscarded { cards, .. } => (None, None),
+     |                                             ^^^^^ help: try ignoring the field: `cards: _`
+
+warning: unused variable: `oc`
+    --> crates/engine-native/src/content/host.rs:1718:33
+     |
+1718 |                     if let Some(oc) = own_card {
+     |                                 ^^ help: if this is intentional, prefix it with an underscore: `_oc`
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/engine.rs:215:47
+    |
+215 |     fn new_with_mode(seed: u64, seats: usize, mut mode: GameMode) -> Self {
+    |                                               ----^^^^
+    |                                               |
+    |                                               help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/presentation.rs:275:9
+    |
+275 |     let mut line = |txt: &str, s: &mut String| {
+    |         ----^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: function `enc_faction` is never used
+   --> crates/engine-native/src/archive.rs:370:4
+    |
+370 | fn enc_faction(w: &mut W, f: &crate::catalog::Faction) {
+    |    ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variant `Retarget` is never constructed
+    --> crates/engine-native/src/content/standard.rs:2291:5
+     |
+2285 | enum JiJiStage {
+     |      --------- variant in this enum
+...
+2291 |     Retarget,
+     |     ^^^^^^^^
+     |
+     = note: `JiJiStage` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/src/engine.rs:1746:13
+     |
+1746 |             drop(p);
+     |             ^^^^^-^
+     |                  |
+     |                  argument has type `&mut PlayerState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+1746 -             drop(p);
+1746 +             let _ = p;
+     |
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   --> crates/engine-native/src/machine.rs:263:13
+    |
+263 |             drop(p);
+    |             ^^^^^-^
+    |                  |
+    |                  argument has type `&mut PlayerState`
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+263 -             drop(p);
+263 +             let _ = p;
+    |
+
+warning: `engine-native` (lib) generated 16 warnings (run `cargo fix --lib -p engine-native` to apply 12 suggestions)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running unittests src/lib.rs (target/debug/deps/content_native_loader-c2318800e7babff6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/loader_acceptance.rs (target/debug/deps/loader_acceptance-4ffea1a321025031)
+
+running 1 test
+test loader_acceptance_bounded_names_and_clear_errors ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests content_native_loader
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

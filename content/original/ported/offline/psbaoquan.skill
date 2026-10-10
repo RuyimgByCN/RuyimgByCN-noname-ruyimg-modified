@@ -1,0 +1,6 @@
+// psbaoquan：player:damage_before, 需弃牌, 多步骤。
+skill psbaoquan(4277602563) {
+  trigger damage_before owner_alive {
+    effect deal_damage(self, event_source, 1);
+  }
+}

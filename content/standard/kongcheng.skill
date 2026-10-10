@@ -1,0 +1,5 @@
+// 空城：没有手牌时，不能成为杀或决斗的目标。
+skill kongcheng(3681607931) locked {
+  modifier card_target_cancel(sha) override owner_hand_empty;
+  modifier card_target_cancel(juedou) override owner_hand_empty;
+}

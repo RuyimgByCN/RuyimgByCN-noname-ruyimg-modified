@@ -1,0 +1,4 @@
+// Skill lieren2(146) - standard variant
+skill lieren2(146) {
+  modifier attack_range add 1;
+}

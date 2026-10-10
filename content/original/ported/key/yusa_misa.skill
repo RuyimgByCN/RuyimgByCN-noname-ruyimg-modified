@@ -1,0 +1,7 @@
+// 美沙（游佐）：使用演仪后若双面可用则翻面。
+// 旧 JS 的 useSkillAfter+双面翻面 需双面系统原语，未建模。
+skill yusa_misa(2586501002) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yusa_misa = 标记型技能（charlotte，skill.js:11291），无规则面。
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

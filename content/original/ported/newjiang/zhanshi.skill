@@ -1,0 +1,9 @@
+// 战士（王朗）：任意角色拼点开始前，你可弃置至多参与者数张牌；拼点结束后
+// 若你弃置的牌所在拼点有参与者获胜，你摸 3 × 获胜者数张牌。
+// 旧 JS 的「拼点前弃牌绑定与拼点后按获胜者计数摸牌」无对应原语，
+// 未建模（已注明）。
+skill zhanshi(2868036095) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

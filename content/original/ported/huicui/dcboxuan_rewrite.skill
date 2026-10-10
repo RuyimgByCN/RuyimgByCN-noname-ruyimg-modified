@@ -1,0 +1,6 @@
+// “博玄”修改后的空替换技能；旧定义无规则行为。
+skill dcboxuan_rewrite(2493405572) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}

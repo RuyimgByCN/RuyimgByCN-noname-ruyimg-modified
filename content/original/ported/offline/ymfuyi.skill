@@ -1,0 +1,11 @@
+// 拂衣（春秋友诸葛亮）：当你成为【杀】的目标时，你可以令一名角色也成为此【杀】的
+// 目标并令所有目标角色各摸一张牌；当此【杀】被一名目标角色抵消后，此【杀】对其他
+// 目标角色无效。
+// 上游 (offline_chunqiu.js:607-660)：useCardToTarget 目标追加 + asyncDraw +
+// shaMiss 事件链使后续目标无效。
+// 「杀目标追加」「被抵消后对后续目标无效」均无对应原语。
+// 诚实 noop（保真度债，ADR 0597；此前 draw_cards(self,1) 占位与技能语义无关，已移除）。
+skill ymfuyi(2626406499) locked {
+  // INTENTIONAL_EMPTY_NOOP: sha-target-append + miss-chain unavailable
+  modifier hand_limit add 0;
+}

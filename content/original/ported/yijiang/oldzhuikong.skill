@@ -1,0 +1,7 @@
+// 坠恐（旧版·兀突骨）：继承 zhuikong 技能。
+// 旧 JS 仅 inherit，主逻辑同 zhuikong。
+skill oldzhuikong(2527312731) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

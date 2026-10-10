@@ -1,0 +1,6 @@
+// 渐营：使用与自己上一张牌花色或点数相同的牌时，可摸一张牌。
+skill dcjianying(2862591465) {
+  trigger card_used owner_source_matches_last_used_suit_or_rank optional {
+    effect draw_cards(self, 1);
+  }
+}

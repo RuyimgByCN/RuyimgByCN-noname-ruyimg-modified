@@ -1,0 +1,286 @@
+[
+  {
+    "id": 2266272721,
+    "name_key": "jin_jiachong",
+    "max_hp": 3,
+    "skills": [
+      3731458110,
+      4269285584
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_jin_jiachong.jpg"
+  },
+  {
+    "id": 4141410200,
+    "name_key": "chengjichengcui",
+    "max_hp": 6,
+    "skills": [
+      4141410101,
+      4141410102
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_chengjichengcui.jpg"
+  },
+  {
+    "id": 4141410201,
+    "name_key": "wangxiang",
+    "max_hp": 3,
+    "skills": [
+      4141410103
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_wangxiang.jpg"
+  },
+  {
+    "id": 4141410202,
+    "name_key": "xuangongzhu",
+    "max_hp": 3,
+    "skills": [
+      4141410153,
+      4141410154,
+      3463543744
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_xuangongzhu.jpg"
+  },
+  {
+    "id": 4141410203,
+    "name_key": "xinchang",
+    "max_hp": 3,
+    "skills": [
+      4141410157,
+      4141410158
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_xinchang.jpg"
+  },
+  {
+    "id": 4141410204,
+    "name_key": "yangzhi",
+    "max_hp": 3,
+    "skills": [
+      4141410003,
+      4141410111
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_yangzhi.jpg"
+  },
+  {
+    "id": 4141410205,
+    "name_key": "yangyan",
+    "max_hp": 3,
+    "skills": [
+      4141410160,
+      4141410113
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_yangyan.jpg"
+  },
+  {
+    "id": 4141410206,
+    "name_key": "ol_huaxin",
+    "max_hp": 3,
+    "skills": [
+      4141410116,
+      4141410117
+    ],
+    "sex": "male",
+    "group": "wei",
+    "portrait_asset": "character_ol_huaxin.jpg"
+  },
+  {
+    "id": 4141410207,
+    "name_key": "zhongyan",
+    "max_hp": 3,
+    "skills": [
+      4141410118,
+      4141410119
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_zhongyan.jpg"
+  },
+  {
+    "id": 4141410208,
+    "name_key": "weiguan",
+    "max_hp": 3,
+    "skills": [
+      4141410124,
+      4141410125
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_weiguan.jpg"
+  },
+  {
+    "id": 4141410209,
+    "name_key": "cheliji",
+    "max_hp": 4,
+    "skills": [
+      4141410126,
+      3061185460
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_cheliji.jpg"
+  },
+  {
+    "id": 4141410210,
+    "name_key": "simazhou",
+    "max_hp": 4,
+    "skills": [
+      4141410159,
+      4141410114
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_simazhou.jpg"
+  },
+  {
+    "id": 4141410211,
+    "name_key": "ol_lisu",
+    "max_hp": 3,
+    "skills": [
+      4141410128,
+      4141410129
+    ],
+    "sex": "male",
+    "group": "qun",
+    "portrait_asset": "character_ol_lisu.jpg"
+  },
+  {
+    "id": 4141410212,
+    "name_key": "jin_yanghuiyu",
+    "max_hp": 3,
+    "skills": [
+      4141410130,
+      4141410131,
+      4141410001
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_jin_yanghuiyu.jpg"
+  },
+  {
+    "id": 4141410213,
+    "name_key": "shibao",
+    "max_hp": 4,
+    "skills": [
+      4141410132
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_shibao.jpg"
+  },
+  {
+    "id": 4141410214,
+    "name_key": "jin_zhangchunhua",
+    "max_hp": 3,
+    "skills": [
+      4141410150,
+      4141410151,
+      4141410152
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_jin_zhangchunhua.jpg"
+  },
+  {
+    "id": 4141410215,
+    "name_key": "jin_simayi",
+    "max_hp": 3,
+    "skills": [
+      4141410120,
+      4141410121,
+      4141410122,
+      4141410123
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_jin_simayi.jpg"
+  },
+  {
+    "id": 4141410216,
+    "name_key": "jin_wangyuanji",
+    "max_hp": 3,
+    "skills": [
+      4141410144,
+      4141410145
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_jin_wangyuanji.jpg"
+  },
+  {
+    "id": 4141410217,
+    "name_key": "jin_simazhao",
+    "max_hp": 3,
+    "skills": [
+      4141410140,
+      4141410141,
+      4141410142,
+      4141410143
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_jin_simazhao.jpg"
+  },
+  {
+    "id": 4141410218,
+    "name_key": "jin_xiahouhui",
+    "max_hp": 3,
+    "skills": [
+      4141410137,
+      4141410138,
+      4141410139
+    ],
+    "sex": "female",
+    "group": "jin",
+    "portrait_asset": "character_jin_xiahouhui.jpg"
+  },
+  {
+    "id": 4141410219,
+    "name_key": "jin_simashi",
+    "max_hp": 4,
+    "initial_hp": 3,
+    "skills": [
+      4141410133,
+      4141410134,
+      4141410135,
+      4141410136
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_jin_simashi.jpg"
+  },
+  {
+    "id": 4141410220,
+    "name_key": "zhanghuyuechen",
+    "max_hp": 4,
+    "skills": [
+      4141410146
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_zhanghuyuechen.jpg"
+  },
+  {
+    "id": 4141410221,
+    "name_key": "duyu",
+    "max_hp": 4,
+    "skills": [
+      4141410147,
+      4141410148
+    ],
+    "sex": "male",
+    "group": "jin",
+    "portrait_asset": "character_duyu.jpg"
+  }
+]

@@ -1,0 +1,7 @@
+// 多锐·清理（夺锐系）：回合/死亡后清理临时状态。
+// 旧 JS 的 sourceSkill 清理语义，无独立规则行为。
+skill duorui_clear(4211096970) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

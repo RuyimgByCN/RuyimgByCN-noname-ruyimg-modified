@@ -1,0 +1,4 @@
+// mbzhaofu_tao（照抚）：每回合限一次，你可弃置所有手牌视为使用一张【桃】。发动后或你的回合结束时失去该技能。
+skill mbzhaofu_tao(2317076800) {
+  view_as tao play_phase any;
+}

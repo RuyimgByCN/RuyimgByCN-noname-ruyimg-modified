@@ -1,0 +1,18 @@
+// 排异（onlyOL 界钟会 olpaiyi）：出牌阶段，将一张「权」交给一名角色；「权」≥2 时
+// 其摸等量牌。上游 usable 随 olpaiyi_twice 变化。
+// 上游 (onlyOL/skill.js olpaiyi)：enable phaseUse；chooseButton 选堆内单卡 +
+// chooseTarget 任意角色；content 依剩余权数分支。
+// 实现（2026-09-10 第二百零二批·pile 内选卡弃置原语消费，新原语
+// choose_one_from_skill_pile_discard——tag 709 / ABI 686）：
+// active play_phase targets 1 1 other → 选堆内单卡弃置 →
+// choose_other_draw_or_recover(self, 剩余权数, 0, 1)。
+// 近似（登记债）：①「交给」收窄为「弃置」；②摸牌数 min(7, 剩余堆数)（批 231 清偿上限 7 债）、
+// 分支未建模；③olpaiyi_twice 双开未建模；④「权」堆供给依赖置入面落地（dormant）。
+skill olpaiyi(3281980776) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    if skill_pile_count(self, 3615325273) > 0 {
+      effect choose_one_from_skill_pile_discard(self, self_skill, 3615325273);
+      effect choose_other_draw_or_recover(self, min(7, skill_pile_count(self, 3615325273)), 0, 1);
+    }
+  }
+}

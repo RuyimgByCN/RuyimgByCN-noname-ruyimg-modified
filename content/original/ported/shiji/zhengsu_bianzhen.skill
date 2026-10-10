@@ -1,0 +1,9 @@
+// 整肃·变阵（核心库通用系统）：出牌阶段你使用的牌花色全部相同且不少于两张，
+// 你的弃牌阶段结束时整肃成功。
+// 旧 JavaScript 仅作语义证据；花色与计数判定由 ABI 432 resolve_zhengsu 权威
+// 结算（成功后受益者各自摸二或回复一，随后移除本临时技能）。
+skill zhengsu_bianzhen(3044720297) {
+  trigger phase_discard_end owner_is_target {
+    effect resolve_zhengsu(self, 1, 1, 0);
+  }
+}

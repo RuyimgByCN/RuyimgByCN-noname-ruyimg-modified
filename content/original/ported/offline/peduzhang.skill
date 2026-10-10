@@ -1,0 +1,7 @@
+// 独仗（PE神钟会）：成为黑色牌唯一目标后摸一张并获凛，手牌上限+凛数。
+// 近似：成为牌的目标后摸一张（黑色/唯一/凛与上限未建模）。
+skill peduzhang(3638886989) {
+  trigger card_targeted owner_is_target_once {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,5 @@
+// shinin_shengcai：主动(phaseUse), 视作sha。
+skill shinin_shengcai(3223286328) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

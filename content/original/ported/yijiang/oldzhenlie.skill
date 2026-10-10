@@ -1,0 +1,6 @@
+// 镇烈（旧版·程普）：你的判定牌生效前，可用牌堆顶一张牌替换之。
+// 旧 JS 替换判定牌后弃原判定牌；以 judgment_rewrite 判定改判 modifier
+// 近似（牌堆顶来源与弃原判牌未建模，已注明）。
+skill oldzhenlie(4031238395) {
+  modifier judgment_rewrite add 1;
+}

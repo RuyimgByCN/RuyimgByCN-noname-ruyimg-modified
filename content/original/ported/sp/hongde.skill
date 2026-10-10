@@ -1,0 +1,8 @@
+skill hongde(3138095197) {
+  trigger cards_drawn owner_gained_or_lost_at_least_two optional {
+    effect choose_target_draw(self, 1, other);
+  }
+  trigger cards_moved owner_gained_or_lost_at_least_two optional {
+    effect choose_target_draw(self, 1, other);
+  }
+}

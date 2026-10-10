@@ -1,0 +1,4 @@
+40c57d35d98c7e41a92e72e8beb3439408b336970050b77fe5f4ea7ea3515f35  crates/engine-native/tests/g1_wuxing.rs
+f970dea3c7f8d3839921f99e8878272613163753f76e8c50d1a0c77c5159b3b9  docs/migration/upstream-extension-reconstruction.md
+6cf2110ba17a57f0995f698b8efb26e66ea486625e6495b2840ddc74be1c47a7  docs/architecture/native-progress.md
+bf8ab9c8c7c36189a7dbd07518e7a45deef8ed6683402e0504d14aa2eb72db78  docs/native-coverage-manifest.md

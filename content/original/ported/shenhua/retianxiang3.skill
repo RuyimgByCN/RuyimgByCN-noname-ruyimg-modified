@@ -1,0 +1,7 @@
+// 天香·3（界小乔系）：天香失体后清理辅助。
+// 旧 JS 的清理语义，无独立规则行为。
+skill retianxiang3(2260769978) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

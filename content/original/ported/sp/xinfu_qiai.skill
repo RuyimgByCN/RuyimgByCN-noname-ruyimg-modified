@@ -1,0 +1,16 @@
+// 求援（xinfu_qiai·限定技）：当你进入濒死状态时，其他所有角色依座次各交给
+// 你一张牌（手+装备区，强制；无牌者跳过）。
+// 上游 (sp/skill.js 46093)：trigger player dying + limited（awakenSkill 消
+// 耗）；content 逐角色 forced chooseCard("he", 1) → give。
+// 实现（2026-09-15 第二百九十一批·濒死交牌循环状态机，ADR 0641 §8.75，
+// chulao 逐目标循环模板复用）：resolve_xinfu_qiai(self)（ABI 735 / tag 756 /
+// Cont 328）entry 扫描首个 giver（座位序自 owner 之后环绕，跳过 owner/死亡/
+// 无 he 牌者）开强制 SelectCards 1..1；续体移交 owner 手牌区并循环。
+// 限定技门控复用既有过滤器 owner_dying_zhupeilan_once_per_game
+// （Dying + owner 濒死 + lifetime_fire_count==0），零新过滤器。
+// 保真度：完整（座位序按存活者序环绕近似上游 sortBySeat 快照）。
+skill xinfu_qiai(2677335078) {
+  trigger dying owner_dying_zhupeilan_once_per_game {
+    effect resolve_xinfu_qiai(self);
+  }
+}

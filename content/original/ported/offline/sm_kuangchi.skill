@@ -1,0 +1,5 @@
+// sm_kuangchi：source:death, 多分支选择, 异步。
+skill sm_kuangchi(2502614493) {
+  trigger death owner_is_target_once {
+  }
+}

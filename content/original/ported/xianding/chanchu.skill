@@ -1,0 +1,8 @@
+// 谗黜（孙和）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：锁定技：你的回合开始时令所有角色各弃置 1 张牌并选择支持/反对你，若反对方弃牌点数和大于支持方…
+// 旧 JS 的「全场交互选择 + 点数和比较」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill chanchu(3500955150) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

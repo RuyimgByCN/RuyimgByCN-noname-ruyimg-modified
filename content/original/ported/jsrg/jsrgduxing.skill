@@ -1,0 +1,5 @@
+// jsrgduxing（独行）：出牌阶段限一次。你可以视为使用一张可以指定任意名目标角色的【决斗】，且你与所有目标角色的红色手牌均视为【杀】直到此牌结算结束。
+// 未建模：storage状态, charlotte延迟, 强命directHit, addTempSkill（DSL无对应原语）
+skill jsrgduxing(2382169906) {
+  view_as juedou play_phase any;
+}

@@ -1,0 +1,6 @@
+// wn_zhanyi：音效名:zhanyi, 锁定技, player:card_used, 主动(phaseUse), 失去体力, 加技能, 含子技能, 异步。
+skill wn_zhanyi(3574531216) locked {
+  trigger card_used always {
+    effect lose_hp(self, 1);
+  }
+}

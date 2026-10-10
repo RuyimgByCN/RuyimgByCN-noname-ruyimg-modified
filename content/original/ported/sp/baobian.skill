@@ -1,0 +1,19 @@
+// 豹变（baobian）：锁定技。你的体力值≤3时视为拥有〖挑衅〗；≤2时视为拥有〖咆哮〗；
+// ≤1时视为拥有〖神速〗。上游 phaseBefore/changeHp 双触发以准备阶段重同步近似
+// （技能授予的即时性以回合边界为准）。
+skill baobian(3727333388) locked {
+  trigger phase_prepare owner_is_target {
+    effect remove_skill_by_def(self, 3936161008);
+    effect remove_skill_by_def(self, 2829854661);
+    effect remove_skill_by_def(self, 2561255694);
+    if hp(self) < 4 {
+      effect add_skill(self, 3936161008);
+    }
+    if hp(self) < 3 {
+      effect add_skill(self, 2829854661);
+    }
+    if hp(self) < 2 {
+      effect add_skill(self, 2561255694);
+    }
+  }
+}

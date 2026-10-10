@@ -1,0 +1,6 @@
+// draglongyin：音效名:relongyin, global:card_used, 摸牌, 异步。
+skill draglongyin(3534579885) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

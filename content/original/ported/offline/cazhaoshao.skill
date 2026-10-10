@@ -1,0 +1,6 @@
+// cazhaoshao（锁定技/触发技）：锁定技, player:damage, source:damageSource, player:hp_lost, 需选择目标, 多分支选择, 摸牌, 移出游戏, 加技能, 含子技能, 异步。
+skill cazhaoshao(2302676084) locked {
+  trigger damage always {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,11 @@
+// 替身（翠·限定技）：准备阶段若已受伤，回复体力至上限并摸等量牌，可替换为 key_mio。
+// 实现：已受伤的准备阶段可选按已损体力摸牌并回复等量，再卸除此技。
+// 近似：不变身；靠卸技实现一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill midori_tishen(2348148371) {
+  trigger phase_prepare owner_is_target_wounded optional {
+    effect draw_cards(self, max_hp(self) - hp(self));
+    effect recover_hp(self, max_hp(self) - hp(self));
+    effect remove_skill(self_skill);
+  }
+}

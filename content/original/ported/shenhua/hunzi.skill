@@ -1,0 +1,12 @@
+// 魂姿（hunzi）— 孙坚觉醒技：准备阶段开始时，若体力值不大于 1，减 1 点体力上限，
+// 获得「英姿」（REFRESH reyingzi）与「英魂」（gzyinghun）。
+// 旧 JS（shenhua/hunzi）filter 为 hp<=1 且未觉醒；content 为 awakenSkill + loseMaxHp + addSkills。
+// 这里以 remove_skill(self_skill) 表达一次性觉醒，跨包技能以稳定 ID 引用；旧 JavaScript 不进入运行时。
+skill hunzi(4151424761) locked {
+  trigger phase_prepare owner_is_target_hp_le_one {
+    effect remove_skill(self_skill);
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 2412932912);
+    effect add_skill(self, 2790748306);
+  }
+}

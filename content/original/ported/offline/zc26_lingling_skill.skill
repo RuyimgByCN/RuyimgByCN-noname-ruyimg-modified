@@ -1,0 +1,5 @@
+// zc26_lingling_skill：锁定技, player:phase_prepare, global:roundEnd, 需选择目标, 多分支选择, 造成伤害, 异步。
+skill zc26_lingling_skill(2773598397) locked {
+  trigger phase_prepare always {
+  }
+}

@@ -1,0 +1,218 @@
+[
+ {
+  "card_def_id": 3471626821,
+  "name": "mutoumianju",
+  "kind": "armor"
+ },
+ {
+  "card_def_id": 1759987914,
+  "name": "yuheng",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 1545631315,
+  "name": "gjyuheng_plus",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3974832852,
+  "name": "gjyuheng_pro",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 2669071371,
+  "name": "gw_dieyi_equip1",
+  "kind": "weapon",
+  "weapon_range": 1
+ },
+ {
+  "card_def_id": 720398860,
+  "name": "gw_dieyi_equip2",
+  "kind": "armor"
+ },
+ {
+  "card_def_id": 1105069844,
+  "name": "gw_dieyi_equip3",
+  "kind": "horse_def"
+ },
+ {
+  "card_def_id": 3979368086,
+  "name": "gw_dieyi_equip4",
+  "kind": "horse_off"
+ },
+ {
+  "card_def_id": 2640290591,
+  "name": "gw_dieyi_equip5",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 2929563198,
+  "name": "yuruyi",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 514003133,
+  "name": "donghuangzhong",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 1227472069,
+  "name": "xuanyuanjian",
+  "kind": "weapon",
+  "weapon_range": 1,
+  "distance_from": -2
+ },
+ {
+  "card_def_id": 1599641285,
+  "name": "pangufu",
+  "kind": "weapon",
+  "weapon_range": 1,
+  "distance_from": -3
+ },
+ {
+  "card_def_id": 1457007323,
+  "name": "lianyaohu",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 2484416751,
+  "name": "haotianta",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3261586176,
+  "name": "fuxiqin",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 416901905,
+  "name": "shennongding",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 1770468628,
+  "name": "kongdongyin",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3646218022,
+  "name": "kunlunjingc",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 36769062,
+  "name": "nvwashi",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 1396985657,
+  "name": "qinglianxindeng",
+  "kind": "armor"
+ },
+ {
+  "card_def_id": 4103271267,
+  "name": "xingjunyan",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 339926913,
+  "name": "qinglonglingzhu",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 721407873,
+  "name": "baihupifeng",
+  "kind": "armor"
+ },
+ {
+  "card_def_id": 2459277709,
+  "name": "fengxueren",
+  "kind": "weapon",
+  "weapon_range": 1,
+  "distance_from": -1
+ },
+ {
+  "card_def_id": 1793610639,
+  "name": "chilongya",
+  "kind": "weapon",
+  "weapon_range": 1,
+  "distance_from": -1
+ },
+ {
+  "card_def_id": 1477528987,
+  "name": "daihuofenglun",
+  "kind": "horse_off"
+ },
+ {
+  "card_def_id": 1931501985,
+  "name": "xiayuncailing",
+  "kind": "horse_def"
+ },
+ {
+  "card_def_id": 3613627824,
+  "name": "shentoumianju",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 450668491,
+  "name": "langeguaiyi",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3235466190,
+  "name": "yufulu",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 2549757904,
+  "name": "xixueguizhihuan",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3031530454,
+  "name": "guangshatianyi",
+  "kind": "armor"
+ },
+ {
+  "card_def_id": 1495485405,
+  "name": "guilingzhitao",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3721565669,
+  "name": "qipoguyu",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3023630825,
+  "name": "sadengjinhuan",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 1100441074,
+  "name": "sifeizhenmian",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 618094067,
+  "name": "shuchui",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 1658871287,
+  "name": "guiyanfadao",
+  "kind": "weapon",
+  "weapon_range": 1,
+  "distance_from": -1
+ },
+ {
+  "card_def_id": 1087207423,
+  "name": "qiankundai",
+  "kind": "treasure"
+ },
+ {
+  "card_def_id": 3366570123,
+  "name": "suolianjia",
+  "kind": "armor"
+ }
+]

@@ -1,0 +1,5 @@
+// eu_ducai：锁定技, player:phaseBeginStart, 加技能, 含子技能, 异步。
+skill eu_ducai(3842431397) {
+  trigger phase_begin owner_alive {
+  }
+}

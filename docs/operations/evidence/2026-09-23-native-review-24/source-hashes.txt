@@ -1,0 +1,5 @@
+0a374dbfd2a6a2617f0f43e53966a42d14ce8e3af2d5af9ab535d65c142775ed  crates/engine-native/src/catalog.rs
+2056887e76b22454ce70a472c328f98badacad8de1986fc4aac862f2c90f3d04  crates/engine-native/src/engine.rs
+6df1c82cd2c9e4ae8f45b08ade42bc3b31fa2dd858dc22173fabe56cb312160e  crates/engine-native/src/content/host.rs
+2acca3e1418f532951f195142d84b7c18aa823b2afafdde1c627d7e0036a95c2  crates/engine-native/src/snap.rs
+7a151451a5776891a6f8e8f1b8defd87acb74be1d07dfba4dce0d6a72ce9e562  crates/engine-native/src/archive.rs

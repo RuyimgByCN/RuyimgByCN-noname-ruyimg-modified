@@ -1,0 +1,8 @@
+// 孛明（文钦）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：出牌阶段限一次：获得上一张进入弃牌堆的装备牌，可置入一名其他角色装备区；若如此做可再获得一张
+// 旧 JS 的「弃牌堆末位查询 + 装备转移（装备转移债）」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxbeiming(2735693520) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

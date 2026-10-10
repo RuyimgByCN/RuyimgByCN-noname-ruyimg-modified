@@ -1,0 +1,5 @@
+skill rejieyin(3295441821) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect resolve_rejieyin(self);
+  }
+}

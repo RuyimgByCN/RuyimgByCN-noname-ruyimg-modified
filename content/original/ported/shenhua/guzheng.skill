@@ -1,0 +1,10 @@
+// 固政（张昭张纮）：其他角色的弃牌阶段结束时，你可以令其获得其中一张牌（其本阶段
+// 弃置且仍处弃牌堆的牌），然后你可以获得其余以此法弃置的牌。
+// 旧 JS 仅作语义证据；弃牌阶段失牌切片、归还与取回由 resolve_guzheng 权威状态机校验
+// （ABI 513）。「其余」含本阶段任意角色弃入弃牌堆且仍处弃牌堆的牌（旧 JS 语义）；
+// 两次选择均可在屏障处重校验，归还牌离开弃牌堆时整次结算跳过。
+skill guzheng(4159731006) {
+  trigger phase_discard_end owner_alive_other_discarded_in_discard_phase optional {
+    effect resolve_guzheng(self, event_player);
+  }
+}

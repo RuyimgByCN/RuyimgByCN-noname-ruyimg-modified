@@ -1,0 +1,28 @@
+// requanji（权计·手杀）：①出牌阶段结束时，若你的手牌数大于体力值；②或当你受到
+// 1 点伤害后——你可以摸一张牌，然后将一张手牌置于武将牌上，称为“权”；
+// 你的手牌上限+X（X为“权”的数量）。
+// 上游 (mobile/skill.js requanji)：trigger player [damageEnd, phaseUseEnd]；
+// frequent；filter damage = num>0、phaseUse = 手牌>体力；getIndex=num（逐点拆分）；
+// content = draw(1) + chooseCard(手牌) → addToExpansion gaintag quanji；
+// mod maxHandcard + getExpansions("quanji")；aiOrder（AI 侧，不建模）。
+// 实现（2026-09-10 第二百一十五批·store 死腿修复 + quanji 家族晋升）：
+// 双臂 optional → 出牌阶段结束臂以 body 级 if hand_count(self) > hp(self) 门控
+// （owner_hand_gt_hp 仅 view_as 域可用，非触发过滤器），damage 臂直排；
+// 两臂均为 draw_cards(self,1) + store_selected_in_skill_pile(self)
+// （本批修复：该语句原 cards 恒空死腿——现自开 SelectCards 1/1 必选续体
+// Cont 297，选当前手牌置入本技「权」堆）+ hand_limit add owner_skill_pile_count。
+// 近似（登记债）：①getIndex 逐点拆分未建模（多点伤害一次结算，olquanji 同款）；
+// ②frequent 自动口径锁定为 optional 确认（家族同款）；③onremove 清堆未建模。
+skill requanji(2658104259) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    effect store_selected_in_skill_pile(self);
+  }
+  trigger phase_play_end owner_is_target optional {
+    if hand_count(self) > hp(self) {
+      effect draw_cards(self, 1);
+      effect store_selected_in_skill_pile(self);
+    }
+  }
+  modifier hand_limit add owner_skill_pile_count;
+}

@@ -1,0 +1,11 @@
+// olsbduoshou（OL谋夺势？SP系）：mod 面锁定技——本回合未使用过红色牌时，
+// 你的红色牌无距离限制（init 检查 useCard 红色历史挂 temp 失效 + targetInRange
+// mod 距离放开）。
+// 头注更正（2026-09-10 第二百三十四批·头注漂移抽查扩样）：原头注未描述契约
+// （省略型漂移），据上游实读补记。诚实 noop 维持：红牌条件距离 mod 无 DSL
+// 对应（card_distance_unlimited 系为目标标记型）。
+skill olsbduoshou(3584119486) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 olsbduoshou 含真实规则体（trigger、mod 等键），本行原「audio-only 无规则面」注记系 2026-09-03 批 159 复核证伪——诚实 noop 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：手牌上限 +1”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

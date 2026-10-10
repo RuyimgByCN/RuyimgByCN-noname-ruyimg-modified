@@ -1,0 +1,8 @@
+// 赏誉（许靖）：锁定技，游戏开始时获得一张【杀】。
+// 旧 JS 的“可将此牌交给一名角色、当一名角色使用此牌造成伤害后你与其各摸一张、
+// 此牌进入弃牌堆后将其交给一名本回合未以此法得到过此牌的角色”未建模。
+skill dcshangyu(3428760598) locked {
+  trigger game_started owner_alive {
+    effect gain_card_by_kind(self, sha);
+  }
+}

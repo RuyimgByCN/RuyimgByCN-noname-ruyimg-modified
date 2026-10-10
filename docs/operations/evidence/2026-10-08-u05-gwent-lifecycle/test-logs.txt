@@ -1,0 +1,7 @@
+$ gwent 子包定向：真实宿主全生命周期（六步同欢乐包模板）
+test gwent_real_host_full_lifecycle ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（389/0/1）+ 依赖包（62/0，DEPS_EXIT=0）；无引擎代码改动、无 golden 变化
+$ 身份：upstream-noname/shahai-gwent@1.0.0（U05 杀海拾遗七卡牌子包之一）；生命周期=安装+激活→安装包→原生建局（昆恩/山崩/破晓等 21 卡）→对局中 revoke_slot 卸载→锁定副本续玩→重装 Revoked 守卫→重新 import 被拒
+$ 计数口径：gwent 为 U05 子包验收第二例，非来源计数（U05 整包=全子包+角色/配置面）；来源计数仍为欢乐包 1/37

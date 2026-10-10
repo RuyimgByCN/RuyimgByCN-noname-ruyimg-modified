@@ -1,0 +1,5 @@
+// dragzuoyu：global:loseHpAfter, global:hp_recovered, 二选一, 异步。
+skill dragzuoyu(2337941695) {
+  trigger hp_lost owner_alive {
+  }
+}

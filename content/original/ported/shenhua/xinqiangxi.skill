@@ -1,0 +1,8 @@
+// 强袭（界典韦）：弃牌或失体造成伤害。
+// 旧 JS 的「二选一」无对应原语；以弃一张手牌并造成 1 点伤害近似（已注明）。
+skill xinqiangxi(3896628977) {
+  active play_phase select_he 1 1 {
+    effect discard_selected(self);
+    effect choose_other_damage(self, 1);
+  }
+}

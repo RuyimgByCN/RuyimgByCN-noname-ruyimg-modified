@@ -1,0 +1,71 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/杀海拾遗/card/gujian/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": { "name": "shahai-gujian-upstream-noname", "version": 1, "description": "G1 杀海拾遗·古剑切片", "card_prefix": "gj_" },
+  "cards": [
+    { "name": "shujinsan", "kind": "shujinsan", "suit": "diamond", "rank": 6 },
+    { "name": "shujinsan", "kind": "shujinsan", "suit": "spade", "rank": 2 },
+    { "name": "mianlijinzhen", "kind": "mianlijinzhen", "suit": "spade", "rank": 1 },
+    { "name": "feibiao", "kind": "feibiao", "suit": "club", "rank": 8 },
+    { "name": "feibiao", "kind": "feibiao", "suit": "diamond", "rank": 9 },
+    { "name": "jinlianzhu", "kind": "jinlianzhu", "suit": "heart", "rank": 9 },
+    { "name": "jinlianzhu", "kind": "jinlianzhu", "suit": "spade", "rank": 7 },
+    { "name": "tanhuadong", "kind": "tanhuadong", "suit": "spade", "rank": 2 },
+    { "name": "yougeng", "kind": "yougeng", "suit": "heart", "rank": 12 },
+    { "name": "qingtuan", "kind": "qingtuan", "suit": "spade", "rank": 3 },
+    { "name": "yuanbaorou", "kind": "yuanbaorou", "suit": "spade", "rank": 8 },
+    { "name": "gudonggeng", "kind": "gudonggeng", "suit": "heart", "rank": 8 },
+    { "name": "mapodoufu", "kind": "mapodoufu", "suit": "heart", "rank": 4 },
+    { "name": "chunbing", "kind": "chunbing", "suit": "club", "rank": 3 },
+    { "name": "liyutang", "kind": "liyutang", "suit": "heart", "rank": 1 },
+    { "name": "molicha", "kind": "molicha", "suit": "club", "rank": 1 },
+    { "name": "xiajiao", "kind": "xiajiao", "suit": "diamond", "rank": 6 },
+    { "name": "mizhilianou", "kind": "mizhilianou", "suit": "diamond", "rank": 4 },
+    { "name": "luyugeng", "kind": "luyugeng", "suit": "club", "rank": 11 },
+    { "name": "bingpotong", "kind": "bingpotong", "suit": "spade", "rank": 3 },
+    { "name": "bingpotong", "kind": "bingpotong", "suit": "club", "rank": 12 },
+    { "name": "qiankunbiao", "kind": "qiankunbiao", "suit": "spade", "rank": 9 },
+    { "name": "qiankunbiao", "kind": "qiankunbiao", "suit": "club", "rank": 13 },
+    { "name": "shenhuofeiya", "kind": "shenhuofeiya", "suit": "diamond", "rank": 9 },
+    { "name": "longxugou", "kind": "longxugou", "suit": "spade", "rank": 7 },
+    { "name": "ziyangdan", "kind": "ziyangdan", "suit": "diamond", "rank": 6 },
+    { "name": "ziyangdan", "kind": "ziyangdan", "suit": "heart", "rank": 1 },
+    { "name": "yunvyuanshen", "kind": "yunvyuanshen", "suit": "heart", "rank": 13 },
+    { "name": "shihuifen", "kind": "shihuifen", "suit": "club", "rank": 5 },
+    { "name": "shihuifen", "kind": "shihuifen", "suit": "club", "rank": 1 },
+    { "name": "shihuifen", "kind": "shihuifen", "suit": "spade", "rank": 13 },
+    { "name": "liufengsan", "kind": "liufengsan", "suit": "club", "rank": 6 },
+    { "name": "liufengsan", "kind": "liufengsan", "suit": "club", "rank": 3 },
+    { "name": "shatang", "kind": "shatang", "suit": "heart", "rank": 13 },
+    { "name": "heilonglinpian", "kind": "heilonglinpian", "suit": "spade", "rank": 2 },
+    { "name": "liutouge", "kind": "liutouge", "suit": "heart", "rank": 6 },
+    { "name": "liutouge", "kind": "liutouge", "suit": "club", "rank": 6 },
+    { "name": "mutoumianju", "kind": "mutoumianju", "suit": "club", "rank": 4 },
+    { "name": "dinvxuanshuang", "kind": "dinvxuanshuang", "suit": "heart", "rank": 9 },
+    { "name": "gjyuheng", "kind": "gjyuheng", "suit": "spade", "rank": 7 }
+  ],
+  "deferred": [
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ]
+}

@@ -1,0 +1,38 @@
+// 胁书（族王淩/族王广）：造成/受到伤害后，若未横置，可弃伤害牌名字数张牌横置自己；
+// 若已受伤，摸已损失体力值张牌。
+// 上游 (clan/skill.js)：damageEnd/damageSource 双入口 + isLinked 过滤 +
+// chooseToDiscard(he, n, chooseonly) + link + isDamaged → draw(getDamagedHp)。
+// 实现：damage owner_is_target / owner_is_source 双 optional 触发 →
+// if mark_count(self, 2) == 0（未横置，MARK_CHAIN=2）且 n > 0 →
+// discard_hand_equip_expr(self, n) + add_mark(self, 2, 1) 横置 →
+// if hp < max_hp { draw_cards(self, lost) }。
+// 近似：(1) 弃牌为确定性前 n 张（上游手选）；(2) 自伤时双入口可能各触发一次；
+// (3) 横置判定在 body 而非 filter——已横置后仍会弹出可选确认（效果被体守卫拦下），
+//     上游 isLinked 在过滤层不弹窗（optional+body-guard 的既定 DSL 语义，同 mingshi）。
+// 零新原语批次（2026-08-15，cardNameLength 家族）。
+skill clanxieshu(2196874944) {
+  trigger damage owner_is_target optional {
+    let n = card_name_length(self, event_card);
+    if mark_count(self, 2) == 0 {
+      if n > 0 {
+        effect discard_hand_equip_expr(self, n);
+        effect add_mark(self, 2, 1);
+        if hp(self) < max_hp(self) {
+          effect draw_cards(self, max_hp(self) - hp(self));
+        }
+      }
+    }
+  }
+  trigger damage owner_is_source optional {
+    let n = card_name_length(self, event_card);
+    if mark_count(self, 2) == 0 {
+      if n > 0 {
+        effect discard_hand_equip_expr(self, n);
+        effect add_mark(self, 2, 1);
+        if hp(self) < max_hp(self) {
+          effect draw_cards(self, max_hp(self) - hp(self));
+        }
+      }
+    }
+  }
+}

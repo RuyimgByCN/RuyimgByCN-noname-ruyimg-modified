@@ -1,0 +1,4 @@
+// Zhang Fei advance
+skill paoxiao2(96) {
+  modifier distance_from add -1;
+}

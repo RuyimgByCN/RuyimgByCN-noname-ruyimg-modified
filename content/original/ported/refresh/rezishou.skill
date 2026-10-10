@@ -1,0 +1,21 @@
+// 界自守：摸牌阶段可增加存活势力数张牌；若接受，本回合防止拥有者对其他角色造成的伤害。
+skill rezishou(4220178807) {
+  trigger phase_draw owner_is_target optional {
+    effect increase_current_draw_count(self, alive_group_count());
+    effect add_skill(self, 2249965594);
+  }
+}
+
+// 自守临时效果。旧 JS 仅作语义证据；运行时按来源和绑定伤害 ID 走统一防止管线。
+skill rezishou2(2249965594) locked {
+  trigger damage_before owner_source {
+    if event_player == self {
+    } else {
+      effect prevent_current_damage();
+    }
+  }
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

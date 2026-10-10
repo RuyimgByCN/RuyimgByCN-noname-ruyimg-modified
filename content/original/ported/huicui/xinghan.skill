@@ -1,0 +1,7 @@
+// xinghan：锁定技；摸?牌；获临时技。
+// 旧JS含subSkill、init初始化，DSL无法精确建模。
+skill xinghan(3592283874) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

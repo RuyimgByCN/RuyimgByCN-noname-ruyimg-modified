@@ -1,0 +1,6 @@
+// hm_juedian：source:damageSource, 多分支选择, 失去体力, 异步。
+skill hm_juedian(3565326287) {
+  trigger damage owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

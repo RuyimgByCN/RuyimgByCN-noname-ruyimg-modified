@@ -1,0 +1,4 @@
+// 【下签】在 damageBegin3 对应的普通伤害修正阶段令伤害 +1。
+skill tiansuan2_3(3501902691) locked {
+  modifier damage_taken_amount add 1;
+}

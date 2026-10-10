@@ -1,0 +1,7 @@
+// 谦节（陆抗）：锁定技，你不能被横置，也不能成为延时锦囊牌的目标。
+// 旧 JS（drlt_qianjie_1 linkBegin 取消、drlt_qianjie_2 mod.targetEnabled delay=false）
+// 仅作语义证据；横置取消与目标取消由权威状态机校验。旧 JS 的 AI 提示子技能不移植。
+skill drlt_qianjie(4180347617) locked {
+  modifier armor_link_gain_cancel override 1;
+  modifier card_target_cancel(delayed_trick) override 1;
+}

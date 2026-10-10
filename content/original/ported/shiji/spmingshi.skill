@@ -1,0 +1,6 @@
+// 名士：每受到一点来自其他存活角色的伤害，伤害来源须弃置一张手牌或装备牌。
+skill spmingshi(4153946825) locked {
+  trigger damage owner_is_target_other_source_alive_per_damage_point {
+    effect discard_one_hand_or_equip(event_source);
+  }
+}

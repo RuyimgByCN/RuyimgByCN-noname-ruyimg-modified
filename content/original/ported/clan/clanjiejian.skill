@@ -1,0 +1,20 @@
+// 诫鉴（族王昶/族王浑）：使用非装备牌指定第一个目标后，若此牌为第 N 张使用的牌且
+// 牌名字数为 N，可令一名目标角色摸 N 张牌。
+// 上游 (clan/skill.js)：useCardToPlayered + isFirstTarget + 非装备 +
+// cardNameLength == 本回合使用序数（getHistory("useCard") indexOf + 1）；
+// chooseTarget 限于事件目标 → draw(N)。
+// 实现：card_used owner_is_source optional → 序数匹配
+// `card_name_length(self, event_card) == cards_used_this_round(self) + 1`
+// （过滤时点晚于 remember_card_action，快照不含当前牌，故 +1）→
+// choose_other_draw_or_recover 令一名其他角色摸 N。
+// 近似：(1) isFirstTarget 以用牌后时机近似；(2) 非装备未过滤；(3) 目标应为事件
+// 目标，以任意其他角色近似；(4) 计数为轮口径（上游回合口径，轮内后续回合会偏大）。
+// 零新原语批次（2026-08-15，cardNameLength 家族）。
+skill clanjiejian(3544602984) {
+  trigger card_used owner_is_source optional {
+    let n = card_name_length(self, event_card);
+    if n == cards_used_this_round(self) + 1 {
+      effect choose_other_draw_or_recover(self, n, 0, 1);
+    }
+  }
+}

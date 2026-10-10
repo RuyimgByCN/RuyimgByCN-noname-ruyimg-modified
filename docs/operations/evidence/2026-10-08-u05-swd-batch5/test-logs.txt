@@ -1,0 +1,7 @@
+$ swd 第五批定向：天仙酒（酒增益杀 2 伤/共享计数 CardLimit）
+test swd_tianxianjiu_ameisha_and_self_rescue ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（404/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v88→v89，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Tianxianjiu 编码 108（archive/a0/ALL 同步）；intrinsic/PlayCard/is_tao_like 三处与 Jiu 同臂——濒死自救+下张杀 +1+每回合一次；登记差异=与酒共享每回合计数（上游 tianxianjiu 独立 usable:1）
+$ 上游核验：card/swd/card.js tianxianjiu（type basic/toself/savable dying===player/usable 1/content 濒死 recover 否则 addTempSkill jiu 效果）；list ♥9/♦2 两张

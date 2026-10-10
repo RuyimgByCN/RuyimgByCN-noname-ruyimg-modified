@@ -1,0 +1,4 @@
+// Skill shensu5(112) - standard variant
+skill shensu5(112) {
+  modifier distance_from add -1;
+}

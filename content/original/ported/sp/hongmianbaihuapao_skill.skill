@@ -1,0 +1,12 @@
+// 红棉百花袍（hongmianbaihuapao_skill，装备技）：锁定技。当你受到铁索连环传导的属性伤害时，
+// 防止此伤害。
+// 上游 (sp/skill.js)：equipSkill，damageBegin4，filter = event.hasNature("linked")（且不受
+// unequip/unequip2 免疫）；content = trigger.cancel()。
+// 实现：damage_before + owner_is_target_chain_damage_linked（CHAIN_PROPAGATED 标记）→
+// prevent_current_damage()。与上游差异：无法表达 unequip/unequip2 免疫（上游极少角色持有，
+// 本包无）；仅限传导伤害，普通伤害不触发。
+skill hongmianbaihuapao_skill(2276671070) locked {
+  trigger damage_before owner_is_target_chain_damage_linked {
+    effect prevent_current_damage();
+  }
+}

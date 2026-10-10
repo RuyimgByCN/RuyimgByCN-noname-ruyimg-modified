@@ -1,0 +1,5 @@
+skill gzsuishi(4271491554) locked {
+  trigger dying owner_alive_not_target_source_same_group {
+    effect draw_cards(self, 1);
+  }
+}

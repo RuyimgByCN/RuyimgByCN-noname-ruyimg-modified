@@ -1,0 +1,6 @@
+// mbzuoding（佐定）：当其他角色于其出牌阶段内使用♠️牌指定目标后，若你或者目标角色于此阶段内没有受到过伤害，你可以令其中一名目标角色摸一张牌。
+skill mbzuoding(3430178077) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

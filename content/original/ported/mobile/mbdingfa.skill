@@ -1,0 +1,7 @@
+// mbdingfa（定法）：弃牌阶段结束时，若本回合你失去的牌数不小于4，你可以选择一项：1、回复1点体力；2、弃置一名角色至多两张牌。
+skill mbdingfa(3918874878) {
+  trigger phase_discard_end owner_is_target_wounded {
+    effect recover_hp(self, 1);
+    effect discard_selected(self);
+  }
+}

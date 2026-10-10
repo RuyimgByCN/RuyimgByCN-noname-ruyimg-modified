@@ -1,0 +1,23 @@
+// 劫囚（tw）：出牌阶段限一次，你选择一名其他角色：废除其全部装备栏（装备
+// 入弃牌堆），其摸等同装备区牌数的牌，并标记「劫囚」；其回合结束时若仍有
+// 禁用栏，你可执行一个额外回合（每场一次）。上游 tw/skill.js twjieqiu。
+// 实现（第一百零二批·§7 装备栏编排首迁，resolve_twjieqiu ABI 673/tag 696/
+// Cont 282）：active 出牌阶段限一次 → sub0 选目标禁全五槽（引擎
+// disable_equip_slots：现有装备入弃牌堆+事件）+ 摸 k 张（k=禁用前装备区牌数）
+// + BUFF 标记（合成 blake2b("twjieqiu_buff")=385592780）；sub2 `turn_ended
+// owner_alive_event_target_twjieqiu_buff_positive_<mark>` optional → 判余禁用
+// 栏 → queue_extra_turn(check=0)；storage key2 锁每场一次。
+// 近似：①恢复节奏=目标每弃一张即时恢复一槽（引擎 CardsMoved-Discard 钩子，
+// 状态收敛等价于 phaseDiscardEnd 一次性按弃牌量恢复；槽类别确定性顺序，非
+// 上游 chooseButton 选类别）；②used(roundStart) 每轮门以每场一次收窄。
+skill twjieqiu(4201797709) {
+  active play_phase uses_per_turn 1 {
+    effect resolve_twjieqiu(self, self, 0, self_skill);
+  }
+  trigger turn_ended owner_alive_event_target_mark_positive_385592780 optional {
+    if storage_get(self_skill, 2) == 0 {
+      effect storage_set(self_skill, 2, 1);
+      effect queue_extra_turn(self, 0, self_skill);
+    }
+  }
+}

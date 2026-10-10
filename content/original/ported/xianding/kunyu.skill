@@ -1,0 +1,7 @@
+// 困欲（谋袁谭）：锁定技，当你进入濒死被救回时，回复 1 点体力。
+// 旧 JS 的“移出游戏一张火焰伤害牌”与“你的体力上限锁定为 1”（无 max_hp modifier）省略。
+skill kunyu(3623529353) locked {
+  trigger dying_after owner_is_target {
+    effect recover_hp(self, 1);
+  }
+}

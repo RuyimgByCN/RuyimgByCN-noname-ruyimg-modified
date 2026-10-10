@@ -1,0 +1,28 @@
+# U05 xianjian 第十二切片测试日志（2026-10-09，龙葵蝶舞+灵愈，规则 v152→v153）
+
+$ cargo test --offline -p engine-native --no-fail-fast
+engine-native: 474 passed / 0 failed / 1 ignored（26 测试二进制逐项实测；
+v152 基线 473 +1 新增龙葵回归）
+
+$ cargo test --offline -p engine-native --test g1_wudian
+test result: ok. 62 passed; 0 failed（61 既有 + 1 新增 longkui_*）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 2 passed（HostBehavior ALL 160）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v152→153 + diewu_draw_used
+零值字段入 canonical_hash——14 场景全 mismatch）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0
+（合计 63/0）
+
+## 上游源码核验（关键行）
+- diewu（discard:false prepare give；首次 diewu2→draw 1）
+- lingyu（phaseEnd direct chooseTarget 令其他已受伤者回复 1）
+
+## 测试迭代记录
+- 蝶舞 Act 臂缺目标应答（同温慧/链钩病）——重构为 TargetChoice 收牌→
+  Act 收目标结算
+- 灵愈 owner phaseEnd 任意阶段触发——0 号 Discard→End 即挂起（测试初
+  版等 End→收束时 ChoicePending）

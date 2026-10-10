@@ -1,0 +1,4 @@
+// Skill lijian3(133) - standard variant
+skill lijian3(133) {
+  modifier distance_from add -1;
+}

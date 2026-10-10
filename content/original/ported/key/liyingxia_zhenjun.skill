@@ -1,0 +1,9 @@
+// 阵军（李映夏·Key势力技）：回合结束时，令至多本回合使用杀/伤害锦囊数+1名角色各摸一张牌，其下回合首次伤害+1。
+// 实现：结束阶段可选令一名角色摸 1。
+// 近似：不按使用计数扩目标数；下回合伤害+1 未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill liyingxia_zhenjun(3556873289) {
+  trigger phase_end owner_is_target optional {
+    effect choose_target_draw(self, 1, any);
+  }
+}

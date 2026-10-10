@@ -1,0 +1,13 @@
+// 誓仇·OL（ol_shichou，SP马超）：你使用【杀】指定目标后，可为其添加至多
+// （已损失体力 + 1）个合法目标。
+// 上游 (sp/skill.js:32995)：trigger player:useCard2；filter = 杀；content =
+// chooseTarget([1, 已损失体力+1]) 添加合法目标。
+// 实现：card_used + owner_source_sha → 可选确认 →
+// choose_add_or_remove_current_card_target(self, event_card)（为当前杀添加一个目标）。
+// 与上游差异：单次只加一个目标（上游至多已损失体力+1 个）；「目标必须合法且未在
+// 现有目标中」由效果内校验。
+skill ol_shichou(2434401673) {
+  trigger card_used owner_source_sha optional {
+    effect choose_add_or_remove_current_card_target(self, event_card);
+  }
+}

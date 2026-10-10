@@ -1,0 +1,8 @@
+// 巧手（库特）：出牌阶段/回合结束时，选择一种装备牌名，将一张手牌视为该装备牌并装备之，然后摸一张牌。
+// 旧 JS 的「chooseButton 选装备名+viewAs 装备+虚拟装备管理」需装备名选择+虚拟装备创建原语，未建模。
+skill kud_qiaoshou(3126836455) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kud_qiaoshou（skill.js:992）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

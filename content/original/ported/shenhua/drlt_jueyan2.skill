@@ -1,0 +1,5 @@
+// 决堰·坐骑栏（神陆逊）
+// 原语义：临时效果存在时，使用所有牌均无距离限制。
+skill drlt_jueyan2(3629461497) {
+  modifier card_distance_unlimited override 1;
+}

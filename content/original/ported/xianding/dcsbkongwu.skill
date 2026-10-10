@@ -1,0 +1,5 @@
+// 孔武（界呼厨儿）：锁定技，你的摸牌阶段少摸一张牌。
+// 旧 JS 的“装备牌失效至其下回合结束”部分未建模。
+skill dcsbkongwu(3614891392) locked {
+  modifier draw_count add -1;
+}

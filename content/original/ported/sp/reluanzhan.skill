@@ -1,0 +1,12 @@
+// reluanzhan（乱战）：锁定技。你受到伤害后，或造成伤害后，获得一枚「乱战」标记。
+// 上游 content(): player.addMark("reluanzhan", 1, false); 触发 player:damageEnd + source:damageSource。
+// 标记由 reluanzhan_add/reluanzhan_remove 子技能消费（useCard2 增伤/增目标），本定义只负责
+// 累计标记（上游主技能唯一行为）。近似：标记消费的子技能为复杂 useCard2 过滤，另册登记。
+skill reluanzhan(4251489811) locked {
+  trigger damage owner_is_source {
+    effect add_mark(self, 4251489811, 1);
+  }
+  trigger damage owner_is_target {
+    effect add_mark(self, 4251489811, 1);
+  }
+}

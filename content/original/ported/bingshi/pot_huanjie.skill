@@ -1,0 +1,12 @@
+// 势桓阶：旧 JavaScript 仅作语义合同；规则由 ABI 529 权威结算。
+skill potgongmou(3894451488) {
+  trigger phase_prepare owner_is_target optional {
+    effect resolve_pothuanjie(self, event_source, 0, 3567101194, 2834927312);
+  }
+}
+
+skill potzhengshuo(2346184405) {
+  active play_phase once_per_game {
+    effect resolve_pothuanjie(self, self, 2, 3567101194, 2834927312);
+  }
+}

@@ -1,0 +1,8 @@
+skill new_reyaowu(2159889222) locked {
+  trigger damage_before owner_is_target_red_sha_source_alive {
+    effect choose_draw_or_recover(event_source, 1, 1, 0);
+  }
+  trigger damage_before owner_is_target_nonred_sha {
+    effect draw_cards(self, 1);
+  }
+}

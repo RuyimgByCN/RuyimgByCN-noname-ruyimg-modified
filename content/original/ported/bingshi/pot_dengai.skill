@@ -1,0 +1,32 @@
+skill pottuntian(2435155097) {
+  trigger cards_moved owner_lost_non_damage_card_pottuntian_charge_not_full {
+    effect resolve_pottuntian(self, 0, 2551307508);
+  }
+
+  trigger phase_begin owner_alive {
+    effect resolve_pottuntian(self, 1, 2551307508);
+  }
+
+  active play_phase uses_per_turn 1 targets 1 8 max_by_owner_mark 2435155097 {
+    effect resolve_pottuntian(self, 2, 2551307508);
+  }
+}
+
+skill potzaoxian(2551307508) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}
+
+skill potjixi(4126984108) {
+  trigger phase_begin owner_alive {
+    effect resolve_potjixi(self, self, 0);
+  }
+
+  trigger card_targeted owner_is_source {
+    effect resolve_potjixi(self, event_player, 1);
+  }
+
+  trigger turn_ended owner_alive optional {
+    effect resolve_potjixi(self, self, 2);
+  }
+}

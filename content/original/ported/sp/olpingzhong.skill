@@ -1,0 +1,11 @@
+// 评忠（OL 杨阜）：锁定技，受到伤害后摸 X+1 张（X 为没有手牌的角色数）；
+// 使用基本/锦囊时若本回合用牌数未超 X+1，可额外指定至多 X+1 名目标。
+// 上游 (sp/skill.js:6063)：damageEnd 摸 emptyHand+1；useCard2 加目标。
+// 实现：受伤后摸 1 张。
+// 近似：空手数+1 改为固定摸 1；额外指定目标未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill olpingzhong(2762208431) locked {
+  trigger damage owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

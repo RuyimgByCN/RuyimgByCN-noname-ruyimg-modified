@@ -1,0 +1,7 @@
+// dcmanhou：摸?牌；失去体力；获技能；失技能；弃牌。
+// 旧JS含subSkill、多步选择，DSL无法精确建模。
+skill dcmanhou(2387654390) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,6 @@
+// friendqinying（钦英）：出牌阶段限一次，你可以重铸任意张牌，视为使用一张【决斗】。此【决斗】结算流程中限X次（X为你以此法重铸的牌数），你或目标角色可以弃置自己区域里的一张牌，视为打出一张【杀】。
+skill friendqinying(2610015124) {
+  active play_phase uses_per_turn 1 targets 1 1 {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}

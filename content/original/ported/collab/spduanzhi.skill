@@ -1,0 +1,9 @@
+// 短制（董白）：当你成为其他角色使用牌的目标后，可弃置其1~2张牌，然后失去1点体力。
+// 旧JS中由技能拥有者选择弃置来源的1~2张牌；DSL的discard_hand_equip_count为来源自选弃置，
+// 且无法精确限制1~2范围。以来源弃1牌+自损1体力近似保留核心收益。
+skill spduanzhi(2683938977) {
+  trigger card_targeted owner_is_target optional {
+    effect discard_hand_equip_count(event_source, 1);
+    effect lose_hp(self, 1);
+  }
+}

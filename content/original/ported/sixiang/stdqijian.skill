@@ -1,0 +1,7 @@
+// 七笺：准备阶段，选两名手牌数之和为7的角色，各选择令对方摸1或弃对方1牌。
+// 旧 JS 的「双人配对选择（手牌数和=7）+ 相互抉择（摸/弃）」无对应原语，未建模。
+skill stdqijian(2189215782) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

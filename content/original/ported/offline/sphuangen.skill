@@ -1,0 +1,6 @@
+// sphuangen：global:card_targeted, 需选择目标, 摸牌, 含子技能, 多步骤, 条件计数。
+skill sphuangen(3590143854) {
+  trigger card_targeted owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

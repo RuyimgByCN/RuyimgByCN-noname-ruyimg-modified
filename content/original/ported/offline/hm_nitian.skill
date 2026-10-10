@@ -1,0 +1,5 @@
+// hm_nitian（限定技/主动技(phaseUse)/触发技）：觉醒技, 限定技, player:card_used, player:phase_end, 主动(phaseUse), 加技能, 含子技能, 异步。
+skill hm_nitian(4149295075) {
+  trigger card_used owner_alive optional {
+  }
+}

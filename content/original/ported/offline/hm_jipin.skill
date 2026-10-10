@@ -1,0 +1,6 @@
+// hm_jipin：source:damageSource, 异步。
+skill hm_jipin(2180352765) {
+  trigger damage owner_is_target_once {
+    effect deal_damage(self, event_source, 1);
+  }
+}

@@ -1,0 +1,7 @@
+// 定品：弃置本回合尚未使用或弃置过类别的牌；黑色判定后目标本回合不可重复。
+skill dingpin(3356547985) {
+  active play_phase targets 1 1 unused_by_skill_this_turn select_he 1 1 unused_category_by_owner_history_this_turn {
+    effect discard_selected(self);
+    effect resolve_dingpin(self, event_source);
+  }
+}

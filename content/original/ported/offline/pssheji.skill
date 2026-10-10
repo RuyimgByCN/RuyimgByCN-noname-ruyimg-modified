@@ -1,0 +1,7 @@
+// pssheji：音效名:pssheji, 锁定技, source:damageSource, 主动(phaseUse), 视作sha, 加技能, 含子技能。
+skill pssheji(3996127168) locked {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

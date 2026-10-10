@@ -1,0 +1,6 @@
+// 旧 JS 仅作语义证据：限定技，交出装备区全部牌；接收者令拥有者回复等量体力，或对攻击范围内至多等量角色各造成一点伤害。
+skill xianzhou(4217889451) {
+  active play_phase equip_nonempty once_per_game targets 1 1 other {
+    effect give_all_equipment_choose_recover_or_damage(self, event_source);
+  }
+}

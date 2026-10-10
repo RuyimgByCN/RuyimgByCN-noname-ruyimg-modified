@@ -1,0 +1,9 @@
+// 新无言（徐庶）：锁定技，你受到的锦囊牌伤害和造成的锦囊牌伤害均无效。
+// 旧 JS 的 damageBegin2/damageBegin4 双触发+取消锦囊伤害；DSL 以 damage_cancel filter 近似。
+skill xinwuyan(3236608981) locked {
+  trigger damage_before owner_alive {
+    // 近似：取消锦囊伤害。注意旧 JS 是取消 trick 类型伤害事件。
+    effect prevent_current_damage();
+    // 未精确：仅应取消锦囊牌造成的伤害，此处取消了所有伤害
+  }
+}

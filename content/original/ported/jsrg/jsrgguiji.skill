@@ -1,0 +1,8 @@
+// jsrgguiji（闺忌）：每回合限一次。出牌阶段，你可以与一名手牌数小于你的男性角色交换手牌。然后其下个出牌阶段结束时，你可以与其交换手牌。
+// 未建模：charlotte延迟, chooseBool, addTempSkill（DSL无对应原语）
+skill jsrgguiji(3016418231) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jsrgguiji（skill.js:5765）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：出牌阶段限一次摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

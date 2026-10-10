@@ -1,0 +1,7 @@
+// ylygniepan（锁定技/限定技/主动技(chooseToUse)/触发技）：觉醒技, 限定技, 锁定技, global:washCard, 主动(chooseToUse), 需选择目标, 摸牌, 造成伤害, 加技能, 含子技能, 异步。
+skill ylygniepan(2466887902) locked {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

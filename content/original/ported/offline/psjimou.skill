@@ -1,0 +1,5 @@
+// psjimou（锁定技/限定技/触发技）：觉醒技, 限定技, 锁定技, player:phase_prepare, global:phase_any_end, global:dieEnd, 需选择目标, 加技能, 含子技能, 异步。
+skill psjimou(3350949410) locked {
+  trigger phase_prepare always {
+  }
+}

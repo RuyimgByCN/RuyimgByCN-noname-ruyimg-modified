@@ -1,0 +1,10 @@
+// 归心（★神曹操）：每轮开始或受到伤害后，可获得所有其他角色各一张牌。
+// 近似：受伤摸 2；每轮首次准备阶段摸 2（全场各拿一张未建模）。
+skill psguixin(4148910544) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 2);
+  }
+  trigger phase_prepare owner_alive_once_per_round optional {
+    effect draw_cards(self, 2);
+  }
+}

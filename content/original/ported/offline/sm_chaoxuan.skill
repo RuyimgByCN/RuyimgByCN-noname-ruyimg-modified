@@ -1,0 +1,5 @@
+// sm_chaoxuan：锁定技, global:perttyDerbyEnd, 异步。
+skill sm_chaoxuan(4244071410) {
+  trigger phase_any_end owner_alive {
+  }
+}

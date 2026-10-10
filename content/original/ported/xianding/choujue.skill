@@ -1,0 +1,9 @@
+// 仇决（谋徐荣）：觉醒技，任意阶段结束后，若手牌数与体力值之差的绝对值≥3，减1点体力上限，获得"背水"。
+// 近似：用 phase_any_end + owner_alive_not_target_once 限制单次触发。
+// 缺失：|hp-handCount|≥3 条件无精确DSL filter；awakenSkill 标记无原语。
+skill choujue(2479638237) locked {
+  trigger phase_any_end owner_alive_not_target_once {
+    effect change_max_hp(self, -1);
+    effect add_skill(self, 2226665932);
+  }
+}

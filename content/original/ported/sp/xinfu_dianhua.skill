@@ -1,0 +1,20 @@
+// 点化（xinfu_dianhua，sp 袁术妻法箓族）：准备阶段与结束阶段，若你有「法箓」
+// 标记，观看牌堆顶 X 张牌并任意调整顺序置于牌堆顶或底（X=法箓标记花色种数，
+// 0-4）。
+// 上游 (sp/skill.js xinfu_dianhua)：trigger phaseZhunbeiBegin/phaseJieshuBegin；
+// filter = 任一 xinfu_falu_<花色> 标记存在；frequent；content = chooseToGuanxing
+// (标记花色种数)。
+// 实现（2026-09-08 第一百八十三批·花色化计数原语，ABI 683 领号）：
+// trigger phase_prepare/phase_end owner_is_target → guanxing_top_by_falu_marks
+// (self, [四法箓标记 def])（本批新原语：数非零标记种数 N → 观星 N 张，批 176
+// guanxing_top 多轮二选复用）。
+// 近似（登记债）：逐张二选顶/底近似拖拽自由排列（批 176 同款）；无标记时 N=0
+// 原语静默返回（上游 filter 同效）。
+skill xinfu_dianhua(3399270449) {
+  trigger phase_prepare owner_is_target {
+    effect guanxing_top_by_falu_marks(self, 3540560359, 3540560360, 3540560361, 3540560362);
+  }
+  trigger phase_end owner_is_target {
+    effect guanxing_top_by_falu_marks(self, 3540560359, 3540560360, 3540560361, 3540560362);
+  }
+}

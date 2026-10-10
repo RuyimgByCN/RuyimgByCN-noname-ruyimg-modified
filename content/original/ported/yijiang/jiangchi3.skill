@@ -1,0 +1,6 @@
+// 将驰的“摸牌”临时效果
+// 原语义：临时效果存在时，不能主动使用或响应打出【杀】。
+skill jiangchi3(3940214578) {
+  modifier sha_use_cancel override 1;
+  modifier sha_response_cancel override 1;
+}

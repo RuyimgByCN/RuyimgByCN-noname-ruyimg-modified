@@ -1,0 +1,8 @@
+// 新丹心（曹髦）：受到伤害后，摸一张牌并增加〖矫诏〗等级标记（上限3）。
+// 标记用于强化〖矫诏〗技能效果；DSL 以 add_mark 记录等级。
+skill xindanxin(2207592063) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+    effect add_mark(self, 2207592063, 1);
+  }
+}

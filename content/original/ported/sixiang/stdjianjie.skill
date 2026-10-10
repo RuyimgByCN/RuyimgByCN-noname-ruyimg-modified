@@ -1,0 +1,7 @@
+// 荐杰（？）：准备阶段，选至多三名有牌的角色，展示其各自一张牌：红色→视为使用火攻，黑色→视为使用铁索连环。
+// 旧 JS 的「逐人选牌→按颜色视为使用不同虚拟牌」流程无对应 DSL 原语。完全无法表达。
+skill stdjianjie(3960326732) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

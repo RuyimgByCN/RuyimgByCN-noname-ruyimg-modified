@@ -1,0 +1,5 @@
+// hm_yure：限定技, player:hp_lost, global:cards_moved, 需选择目标, 异步。
+skill hm_yure(3656426657) {
+  trigger hp_lost owner_alive optional {
+  }
+}

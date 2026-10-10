@@ -1,0 +1,12 @@
+// 伏枥：限定技；濒死时可回复至 2 点体力并将手牌补至 2 张。
+skill tyfuli(3185405820) {
+  trigger dying owner_is_target_once optional {
+    if hp(self) < 2 {
+      effect recover_hp(self, 2 - hp(self));
+    }
+    if hand_count(self) < 2 {
+      effect draw_cards(self, 2 - hand_count(self));
+    }
+    effect remove_skill(self_skill);
+  }
+}

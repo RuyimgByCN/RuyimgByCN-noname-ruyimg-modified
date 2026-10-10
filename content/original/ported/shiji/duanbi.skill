@@ -1,0 +1,10 @@
+// 断笔（刘巴，限定技）：出牌阶段，若所有角色手牌总数大于其人数两倍，你可选择
+// 任意名角色：每个目标须弃置其半数的牌（向下取整，至多三张）；全部弃置完毕后，
+// 你可选择一名角色随机获得至多三张被弃置且仍在弃牌堆中的牌。
+// 旧 JavaScript 仅作语义证据；条件校验、逐目标强制弃牌与随机获牌由 ABI 445
+// resolve_duanbi 权威结算。
+skill duanbi(4273058855) {
+  active play_phase once_per_game targets 1 255 other {
+    effect resolve_duanbi(self, 0);
+  }
+}

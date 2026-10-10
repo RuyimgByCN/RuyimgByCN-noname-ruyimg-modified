@@ -1,0 +1,16 @@
+// 攸业（mbyouye·手杀）：锁定技。其他角色结束阶段若其本回合未伤你且「蓄」<5，
+// 将牌堆顶牌置于武将牌上称「蓄」；当你造成/受到伤害后将所有「蓄」分配给任意角色。
+// 上游描述引自 translate.js；此前占位头（旧批量批次未写描述）已重记。
+// 实现（2026-09-10 第二百二十批·历史查询过滤器）：trigger phase_end
+// owner_alive_other_phase_end_not_damaged_owner_this_turn（伤害对计数）forced +
+// body 级 if skill_pile_count(self, 2953191332) < 5 →
+// place_top_deck_to_expansion(self, self_skill, 2953191332, 1)（ABI 685）。
+// 近似（登记债）：①分配面（受伤后分配所有「蓄」）未建模；②上游精确门控以
+// 头注描述为准（translate 引）未逐行核对；③onremove 清堆未建模。
+skill mbyouye(2953191332) {
+  trigger phase_end owner_alive_other_phase_end_not_damaged_owner_this_turn {
+    if skill_pile_count(self, 2953191332) < 5 {
+      effect place_top_deck_to_expansion(self, self_skill, 2953191332, 1);
+    }
+  }
+}

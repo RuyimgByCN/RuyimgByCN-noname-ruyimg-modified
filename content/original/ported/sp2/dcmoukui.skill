@@ -1,0 +1,24 @@
+// 谋溃（孙桓）：锁定技。你使用【杀】指定目标后，你可以选择一项或两项：
+// ①摸一张牌；②弃置目标的一张手牌。若两项都选且此【杀】未命中，目标弃置
+// 你的一张手牌。
+// 上游 (sp2/skill.js dcmoukui L5938)：trigger player useCardToPlayered
+// (isFirstTarget)；cost chooseButton [1,2]（draw/discard 可同选）；
+// discard 分支 owner 从有牌目标手中选一张弃置；storage dcmoukui_conseq
+// 记录追罚。
+// 实现（2026-09-13 第二百六十一批·杀目标族状态机，ADR 0641 §8.50，qiantun
+// 分段模板复用）：trigger card_targeted owner_source_sha_first_target
+// optional → resolve_dcmoukui(self, self_skill, 0, event_player)
+// （ABI 711 / tag 734 / Cont 312 两段）：stage 0 Custom [1,2] 可双选 →
+// 选 1 摸 1；选 2 → SelectCards 从目标手牌弃一张。
+// 近似（登记债）：①未命中追罚面（both+未命中→目标弃 owner 一张）留
+// slice 2（需 ShaDodged 触发 + 追罚存储）；②多目标杀逐目标触发（上游
+// isFirstTarget 仅首目标）。
+skill dcmoukui(2559477796) {
+  trigger card_targeted owner_source_sha_first_target optional {
+    effect resolve_dcmoukui(self, self_skill, 0, event_player);
+  }
+
+  trigger sha_dodged owner_source_sha_dodged {
+    effect resolve_dcmoukui(self, self_skill, 5, event_player);
+  }
+}

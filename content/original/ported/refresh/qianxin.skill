@@ -1,0 +1,9 @@
+// qianxin：刷新包技能。
+// triggers: source:damageSource
+// forced/locked: 锁定技
+skill qianxin(2891824626) {
+    // 近似：旧JS事件 damageSource → DSL事件 damage
+    trigger damage owner_alive {
+        effect draw_cards(self, 1);
+    }
+}

@@ -1,0 +1,18 @@
+== cargo test --offline -p engine-native --test g1_wudian sumei（定向回归）==
+running 2 tests
+test sumei_huahu_sacrifice_multi_target ... ok
+test sumei_sheying_black_judge_reclaim ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 92 filtered out; finished in 0.05s
+
+
+== cargo test --offline -p engine-native --test replay_scenarios（golden）==
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+== cargo test --offline -p engine-native（全量）==
+engine-native 合计: 507 passed / 0 failed / 1 ignored
+
+== 依赖包 ==
+deps 合计: 63 passed / 0 failed

@@ -1,0 +1,4 @@
+skill olqianju(2755577993) locked {
+  modifier distance_from add -owner_lost_hp;
+  modifier sha_use_limit add owner_all_others_in_attack_range;
+}

@@ -1,0 +1,7 @@
+// 巧思（王粲）：你使用牌后（每回合一次），可弃置一张「材」牌并摸一张牌。
+// 旧 JS 的「材」expansion 状态（依赖育料）无对应原语，未建模（已注明）。
+skill yjqiaosi(2748381110) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

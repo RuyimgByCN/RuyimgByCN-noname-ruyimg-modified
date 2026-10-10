@@ -1,0 +1,7 @@
+// 励军（曹熊）：准备阶段，选至多等同于体力值名有手牌的其他角色，依次明置其一张手牌，该角色选择使用之或弃置之。
+// 旧 JS 的「逐人选牌明置→选择使用或弃置」多目标逐人交互流程无对应 DSL 原语。完全无法表达。
+skill stdlijun(4263681168) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 残肆（DC 神吕布）：锁定技，准备阶段回复 1 点体力，并选择一名其他角色回复 1 点体力。
+// 旧 JS 的“依次对其使用【杀】【决斗】【火攻】”与“其受到伤害后每点伤害摸两张牌”
+// 未建模。
+skill dccansi(3144382148) locked {
+  trigger phase_begin owner_is_target {
+    effect recover_hp(self, 1);
+    effect choose_other_recover(self, 1);
+  }
+}

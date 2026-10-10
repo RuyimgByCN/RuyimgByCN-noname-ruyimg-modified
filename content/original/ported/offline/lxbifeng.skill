@@ -1,0 +1,8 @@
+// 避锋（司马伷）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：当你成为【杀】或普通锦囊牌目标时，你可翻面并取消之；若你因此翻至正面，你失去 1 点体力
+// 旧 JS 的「翻面代价取消目标（untrigger）」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxbifeng(3934274111) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

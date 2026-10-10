@@ -1,0 +1,9 @@
+// 幻界（key 包全局·锁定技）：摸牌/判定改为从牌堆底取牌。
+// 实现：自己的摸牌阶段将本阶段摸牌改为从牌堆底。
+// 近似：不翻转已是底摸的方向；判定阶段从牌堆底判定未建模；非摸牌阶段的摸牌不改向。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill key_huanjie(2802218609) locked {
+  trigger phase_draw owner_is_target {
+    effect set_draw_phase_bottom(self);
+  }
+}

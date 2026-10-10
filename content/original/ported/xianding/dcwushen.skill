@@ -1,0 +1,15 @@
+// 武神（新杀神关羽）：红桃牌视为无属性【杀】，无距离和次数限制；其造成伤害后摸一张牌。
+skill dcwushen(3292885385) locked {
+  modifier card_name(heart) override sha;
+  modifier card_nature(heart) override normal;
+  modifier card_distance_unlimited(heart) override 1;
+  modifier card_use_unlimited(heart) override 1;
+
+  trigger card_used owner_source_heart_sha {
+    effect record_current_sha_all_targets(self, event_card);
+  }
+
+  trigger damage owner_source_sha_damage_recorded_by_skill {
+    effect draw_cards(self, 1);
+  }
+}

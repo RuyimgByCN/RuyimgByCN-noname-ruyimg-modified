@@ -1,0 +1,6 @@
+// pshengwu：音效名:hengwu, player:card_used, player:respond, 需弃牌, 摸牌, 多步骤, 条件计数。
+skill pshengwu(2618297482) {
+  trigger card_used owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

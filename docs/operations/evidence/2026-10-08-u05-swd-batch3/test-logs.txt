@@ -1,0 +1,8 @@
+$ swd 第三批定向：草药（距离 1 内受伤回复/满血拒绝）
+test swd_caoyao_heals_wounded_in_range ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.02s
+
+$ 全量 engine-native 单线程（402/0/1）+ 依赖包（63/0，DEPS_EXIT=0）；规则 v86→v87，14 golden 重录后 replay 2/2
+$ 语义：CardKind::Caoyao 编码 106（archive/a0/ALL 同步）；PlayCard 门控=恰 1 目标+存活+hp<maxHp+computed_distance≤1（上游 range:{global:1}+filterTarget hp<maxHp）；内联回复（Recover 事件走 Tao 同路，无宿主行为）
+$ 上游核验：card/swd/card.js caoyao（type basic/range global 1/filterTarget hp<maxHp/content recover）；list ♣3/♣4/♣5 三张
+$ 测试侧学习：debug_clear_hand 须在注入前调用（清手会抹掉注入的牌）

@@ -1,0 +1,11 @@
+// 示北_旧(王允)：锁定技。当你受到伤害后，你判定：
+// 若已有shibei2：结果为黑色→失去1点体力；否则结果为红色→回复1点体力。
+// 然后你获得shibei2。
+// 注：shibei2状态反转判定逻辑：无shibei2时红=回血，有shibei2时黑=扣血。
+// 近似：统一用judge处理，无法根据shibei2标记切换判定方向。
+skill shibei_old(2448607758) locked {
+  trigger damage owner_is_target {
+    // 近似：判定，红色回复体力，黑色失去体力（旧JS中shibei2标记会反转此逻辑）
+    // 注：addTempSkill("shibei2")的自动状态切换无对应原语
+  }
+}

@@ -1,0 +1,8 @@
+// 典财（吕范）：其他角色的出牌阶段结束时，若你于此阶段失去过手牌，可将手牌摸至体力上限。
+// 旧 JS 的失去牌数阈值 X（X=体力值且至多为 5）省略（过滤器仅检查失去过牌）；
+// 摸至上限以 choose_target_draw_to_max_hp_cap(self, 5) 表达（cap=5 近似体力上限）。
+skill diancai(3029901387) {
+  trigger phase_end owner_alive_lost_hand_this_turn optional {
+    effect choose_target_draw_to_max_hp_cap(self, 5);
+  }
+}

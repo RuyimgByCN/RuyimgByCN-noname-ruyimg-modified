@@ -1,0 +1,3 @@
+skill rumi_shuwu3(3086026740) {
+  modifier hand_limit add owner_skill_mark;
+}

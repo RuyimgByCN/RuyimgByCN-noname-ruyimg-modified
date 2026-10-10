@@ -1,0 +1,8 @@
+// 英魂（孙坚系）：准备阶段，若已受伤，可令一名其他角色执行
+// 「摸 X 弃 1」或「摸 1 弃 X」（X=已损失体力；X=1 时固定摸 1 弃 1）。
+// 与 gzyinghun 共用 choose_other_yinghun 原语（旧 JS 仅作语义证据）。
+skill yinghun(3072887319) {
+  trigger phase_prepare owner_is_target_wounded optional {
+    effect choose_other_yinghun(self);
+  }
+}

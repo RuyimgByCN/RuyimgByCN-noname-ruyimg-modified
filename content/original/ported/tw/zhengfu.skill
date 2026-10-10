@@ -1,0 +1,6 @@
+// 征服：使用【杀】指定目标后声明类别；其交给你一张同类别牌，否则此【杀】不可被其响应。
+skill zhengfu(4010507840) {
+trigger card_targeted owner_source_sha {
+    effect choose_category_then_target_give_matching_or_sha_unrespondable(self, event_card, event_player);
+  }
+}

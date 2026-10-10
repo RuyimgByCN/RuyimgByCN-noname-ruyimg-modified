@@ -1,0 +1,6 @@
+// hongyi（弘仪）：出牌阶段限一次，你可以选择一名其他角色。你的下回合开始前，该角色造成伤害时进行判定，若结果为：黑色，此伤害-1。红色，受到伤害的角色摸一张牌。
+skill hongyi(2798374461) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect draw_cards(event_source, 1);
+  }
+}

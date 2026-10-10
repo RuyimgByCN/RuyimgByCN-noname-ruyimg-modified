@@ -1,0 +1,8 @@
+// 虎驭·标记（弘人）：获得牌时添加标记，用于虎驭续的收益追溯。
+// 旧 JS 纯标记技能，无独立可建模效果，未建模。
+skill hiroto_huyu_gain(4042298713) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hiroto_huyu_gain（skill.js:5709）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

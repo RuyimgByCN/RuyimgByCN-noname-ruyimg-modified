@@ -1,0 +1,5 @@
+// spmingjian_charlotte：锁定技, player:judgeBefore, player:phase_any_end。
+skill spmingjian_charlotte(3377586551) {
+  trigger phase_any_end owner_alive {
+  }
+}

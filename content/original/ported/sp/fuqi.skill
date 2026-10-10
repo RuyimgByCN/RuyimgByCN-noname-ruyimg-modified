@@ -1,0 +1,3 @@
+skill fuqi(3157963287) locked {
+  modifier card_use_unrespondable_within_responder_to_owner_distance override 1;
+}

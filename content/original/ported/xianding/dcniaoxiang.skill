@@ -1,0 +1,5 @@
+// 鸟翔（DC 蒋钦）：锁定技，你使用【杀】指定目标后，若你在其攻击范围内，其需要额外使用
+// 一张【闪】来抵消此【杀】。以“来源与目标距离 ≤ 1”近似“在攻击范围内”。
+skill dcniaoxiang(2962016375) locked {
+  modifier sha_response_count_if_source_owner_target_distance_le_one add 1;
+}

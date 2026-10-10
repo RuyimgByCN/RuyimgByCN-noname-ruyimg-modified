@@ -1,0 +1,44 @@
+[
+  {
+    "card_def_id": 3238845718,
+    "name": "changandajian_equip1",
+    "kind": "weapon",
+    "weapon_range": 6,
+    "on_leave_equip_skill_def": 4232406220
+  },
+  {
+    "card_def_id": 4130114000,
+    "name": "changandajian_equip2",
+    "kind": "armor",
+    "on_leave_equip_skill_def": 4232406220
+  },
+  {
+    "card_def_id": 2828308711,
+    "name": "changandajian_equip3",
+    "kind": "horse_def",
+    "distance_to": 1,
+    "on_leave_equip_skill_def": 4232406220
+  },
+  {
+    "card_def_id": 3888754104,
+    "name": "changandajian_equip4",
+    "kind": "horse_off",
+    "distance_from": -1,
+    "on_leave_equip_skill_def": 4232406220
+  },
+  {
+    "card_def_id": 4174045670,
+    "name": "changandajian_equip5",
+    "kind": "treasure",
+    "equip_skills": [3727522753],
+    "on_leave_equip_skill_def": 4232406220
+  },
+  {
+    "card_def_id": 3540539807,
+    "name": "changandajian_equip6",
+    "kind": "treasure",
+    "distance_from": -2,
+    "distance_to": 2,
+    "on_leave_equip_skill_def": 4232406220
+  }
+]

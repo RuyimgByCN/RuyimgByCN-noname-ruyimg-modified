@@ -1,0 +1,12 @@
+// 整肃·垒金（核心库通用系统）：出牌阶段你使用的牌点数严格递增且不少于三张，
+// 你的弃牌阶段结束时整肃成功。
+// 旧 JavaScript 仅作语义证据；点数序列跟踪与成功判定由 ABI 432 resolve_zhengsu
+// 权威结算（成功后受益者各自摸二或回复一，随后移除本临时技能）。
+skill zhengsu_leijin(2584022884) {
+  trigger card_used owner_is_source {
+    effect resolve_zhengsu(self, 0, 0, event_card);
+  }
+  trigger phase_discard_end owner_is_target {
+    effect resolve_zhengsu(self, 0, 1, 0);
+  }
+}

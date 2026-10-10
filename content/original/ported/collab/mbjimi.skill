@@ -1,0 +1,8 @@
+// 机米（魔机米）：游戏开始时替换非桃酒手牌为等量同名牌；桃酒进入弃牌堆时检索伤害牌。
+// 旧 JS 含三阶段逻辑：替换手牌（chooseToCompareLose）、按座位补同名牌、弃牌堆检索伤害牌。
+// DSL 无手牌置换、按名检索补牌、弃牌堆条件检索等原语，全流程无法建模。
+skill mbjimi(3405342354) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

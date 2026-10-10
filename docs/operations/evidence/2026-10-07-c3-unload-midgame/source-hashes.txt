@@ -1,0 +1,3 @@
+29a5f9b7f62c774668e8604520051ec1866655d869ea1a2a951592ecfe022e1b  crates/engine-native/tests/e02_c3_lifecycle.rs
+6a55bc48adee27f56fb8f26c2d96e2ab69b0a55f9994722fd81e04c5897d0012  docs/architecture/native-progress.md
+92a2695ca38054f12f093687aaf88d4427eb44185e0b269cec5cdaf8f1314136  docs/native-coverage-manifest.md

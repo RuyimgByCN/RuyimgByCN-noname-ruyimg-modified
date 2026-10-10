@@ -1,0 +1,24 @@
+// 妙变（佐佐美）：体力≤3 时获得「公清」、≤2 时获得「赴难」、≤1 时获得「棒球」；
+// 体力变化时按当前体力补授对应技能。
+// 实现：hp_lost / hp_recovered / game_started 三触发 + hp() 阈值 if 分支 add_skill
+// （公清 4263354141 / 赴难 2807672918 / 棒球 3822498729，def 取自 catalog）。
+// 近似：上游 changeHp 单事件以 hp_lost+hp_recovered 两触发近似；只增不减（与上游一致）；
+// 「赴难」当前仍为诚实 noop，授予后暂无效果面，待其迁移后自动生效。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill sasami_miaobian(3097071788) {
+  trigger hp_lost owner_is_target {
+    if hp(self) < 4 { effect add_skill(self, 4263354141); }
+    if hp(self) < 3 { effect add_skill(self, 2807672918); }
+    if hp(self) < 2 { effect add_skill(self, 3822498729); }
+  }
+  trigger hp_recovered owner_is_target {
+    if hp(self) < 4 { effect add_skill(self, 4263354141); }
+    if hp(self) < 3 { effect add_skill(self, 2807672918); }
+    if hp(self) < 2 { effect add_skill(self, 3822498729); }
+  }
+  trigger game_started owner_alive {
+    if hp(self) < 4 { effect add_skill(self, 4263354141); }
+    if hp(self) < 3 { effect add_skill(self, 2807672918); }
+    if hp(self) < 2 { effect add_skill(self, 3822498729); }
+  }
+}

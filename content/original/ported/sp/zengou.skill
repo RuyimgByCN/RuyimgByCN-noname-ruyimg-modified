@@ -1,0 +1,15 @@
+// zengou（赠殴？SP系）：一名攻击范围内角色的【闪】被使用结算时（global useCard），
+// 你可以弃置一张非基本牌（或取消并失去 1 点体力，体力>0 时可选），令此【闪】
+// 被排除（all_excluded，结算无效）。
+// 上游 (sp/skill.js zengou)：trigger global useCard；filter = event.card.name
+// =="shan" + inRange(用牌者) + (hp>0 或有可弃非基本牌)；content chooseToDiscard
+// 非基本（可取消转失去体力）+ trigger.all_excluded = true。
+// 头注更正（2026-09-10 第二百三十三批·头注漂移抽查）：原首行「音频/辅助技能」
+// 系陈旧误引——上游有完整规则体（批 148 已证伪 audio-only，本行据上游实读重写）。
+// 诚实 noop 维持：响应排除机制（all_excluded）无 DSL 原语。
+skill zengou(2756537945) {
+  // INTENTIONAL_EMPTY_NOOP: 响应排除（all_excluded）机制无 DSL 原语，诚实 noop
+  // 待真实重写（保真度债，ADR 0597）。
+  // 原“批量最小近似：用牌后可选摸一张”与上游不符（上游无此行为），已纠正。
+  modifier hand_limit add 0;
+}

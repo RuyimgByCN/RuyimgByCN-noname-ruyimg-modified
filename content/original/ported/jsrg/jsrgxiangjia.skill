@@ -1,0 +1,5 @@
+// jsrgxiangjia（相假）：出牌阶段限一次。若你的装备区内有武器牌，则你可以视为使用一张【借刀杀人】。然后此牌的目标角色可以视为对你使用一张【借刀杀人】。
+// 未建模：全局状态, charlotte延迟, 翻译调用, addTempSkill（DSL无对应原语）
+skill jsrgxiangjia(3616683783) {
+  view_as jiedao play_phase any uses_per_turn 1;
+}

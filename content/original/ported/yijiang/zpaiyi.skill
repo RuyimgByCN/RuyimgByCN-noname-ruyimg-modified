@@ -1,0 +1,7 @@
+// 排异（钟会）：结束阶段开始时，若你有"权"（zyexin expansion牌），可展示一张"权"并交给/使用/置入判定区一名角色，然后可摸一张牌。
+// 旧JS含zyexin expansion选牌+分类处理(basic/trick→give, delay→addJudge, equip→equip)+可选draw。DSL以空定义保留。
+skill zpaiyi(4238417784) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

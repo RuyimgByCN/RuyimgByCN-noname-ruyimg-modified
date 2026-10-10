@@ -1,0 +1,7 @@
+// 斩将（孙策）：准备阶段，获得全场所有"青釭剑"（无论是否在装备区或判定区）。
+// 按牌名搜索全场装备/判定区牌并移动，DSL 无对应原语。
+skill dczhanjiang(4073040300) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

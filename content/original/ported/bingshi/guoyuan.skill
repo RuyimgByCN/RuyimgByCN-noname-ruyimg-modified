@@ -1,0 +1,31 @@
+// 势国渊：旧 JavaScript 仅作语义证据，运行时只执行下列 DSL 与 ABI503 原语。
+skill mbqingdao(2885098893) {
+  trigger card_resolved owner_alive_other_source_damage_card_resolved_targeted_damaged {
+    effect resolve_mbqingdao(self, event_source, event_card, 1);
+  }
+  trigger card_resolved owner_alive_other_source_damage_card_resolved_targeted_not_damaged {
+    effect resolve_mbqingdao(self, event_source, event_card, 0);
+  }
+}
+
+skill mbxiugeng(3797581537) {
+  trigger phase_begin owner_is_target optional {
+    effect resolve_mbxiugeng(self, 4053015127, 2492312223, 0);
+  }
+}
+
+skill mbxiugeng_effect(4053015127) locked {
+  trigger phase_draw owner_is_target {
+    effect resolve_mbxiugeng(self, 4053015127, 2492312223, 1);
+  }
+}
+
+skill mbxiugeng_handcard(2492312223) locked {
+  modifier hand_limit add owner_skill_mark;
+}
+
+skill mbchenshe(3265153315) {
+  trigger dying owner_alive_other_dying_mbchenshe_available optional {
+    effect resolve_mbchenshe(self, event_player, event_source);
+  }
+}

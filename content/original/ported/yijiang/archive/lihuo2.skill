@@ -1,0 +1,7 @@
+// 砺火2（张让 附技）：使用火【杀】时可额外指定一个目标。
+// 以 choose_add_current_sha_target 增加杀目标（火杀前提未建模，已注明）。
+skill lihuo2(2177983011) {
+  trigger card_used owner_is_source optional {
+    effect choose_add_current_sha_target(self, event_card);
+  }
+}

@@ -1,0 +1,12 @@
+// 巨鹿（pxjulu，州郡技能）：每回合限一次。当你失去点数为黑桃 2-9 的牌后，你摸一张牌。
+// 上游 (sp/skill.js:1362)：trigger player:loseAfter + global 系列；filter = 失去的黑桃
+// 2-9 牌；usable: 1；forced；content = draw()。
+// 实现：cards_moved + owner_lost_spade_two_to_nine（新增过滤器，5 处注册：CardsMoved
+// 从手牌移出且含黑桃 2-9）→ draw_cards(self, 1)。
+// 与上游差异：「每回合限一次」以强制触发近似（摸 1 后失去同一批牌不再重复）；上游
+// lose/equip/gain 等全部移动原因均覆盖（此处仅 Discard 近似）。
+skill pxjulu(2943799463) {
+  trigger cards_moved owner_lost_spade_two_to_nine {
+    effect draw_cards(self, 1);
+  }
+}

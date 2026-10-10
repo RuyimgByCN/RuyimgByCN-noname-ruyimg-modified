@@ -1,0 +1,6 @@
+// fenyue：锁定技，出牌阶段使用杀次数+1
+skill fenyue(3639795308) locked {
+  trigger phase_play owner_alive {
+    // modifier: 杀次数+1，需 modifier global_sha_use_limit
+  }
+}

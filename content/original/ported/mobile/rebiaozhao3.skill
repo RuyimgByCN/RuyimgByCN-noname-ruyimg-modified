@@ -1,0 +1,19 @@
+// 表召·终段（mobile rebiaozhao3）：准备阶段开始时，若有「表」：令一名其他角色
+// 摸三张牌或回复 1 点体力，然后将「表」全部置入弃牌堆。
+// 上游 (mobile/skill.js rebiaozhao3)：trigger player phaseZhunbeiBegin；forced；
+// filter getExpansions("rebiaozhao").length > 0；content = loseToDiscardpile(全部「表」)
+// + chooseTarget(true) → draw(3) + recover()。
+// 实现（2026-09-09 第一百九十三批·S1-B 首件消费者 + vm-resume 缺陷修复，原语
+// discard_skill_pile(player, self_skill, pile_def)——tag 707 / ABI 684）：
+// 触发过滤器 owner_skill_pile_nonempty_<def>（批 190 注册，5 点零 ABI）→
+// choose_other_draw_or_recover(self, 3, 1, 1) → discard_skill_pile(self, self_skill,
+// rebiaozhao def 4210066284)。
+// 近似（登记债）：①上游 forced → optional 确认先行（benyu 惯例）；②上游目标
+// 含自己且 draw(3)+recover() 并发；原语为其他角色二选一；③动画未建模。
+// 效果顺序：选择型 effect 置前，弃堆在其恢复后执行（vm-resume 语义，生产管线实证）。
+skill rebiaozhao3(3401911930) {
+  trigger phase_prepare owner_skill_pile_nonempty_4210066284 optional {
+    effect choose_other_draw_or_recover(self, 3, 1, 1);
+    effect discard_skill_pile(self, self_skill, 4210066284);
+  }
+}

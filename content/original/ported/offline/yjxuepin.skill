@@ -1,0 +1,7 @@
+// 血拼：失去体力后弃置攻击范围内目标至多两张牌；恰弃两张且类别相同则回复。
+skill yjxuepin(2926558107) {
+  active play_phase uses_per_turn 1 targets 1 1 other in_attack_range has_discardable_hand_equip {
+    effect lose_hp(self, 1);
+    effect choose_discard_target_cards_recover_same_category(self, event_source, 2, 1);
+  }
+}

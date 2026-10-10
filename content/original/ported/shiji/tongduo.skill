@@ -1,0 +1,8 @@
+// 通夺（刘巴）：你成为其他角色单目标牌的目标时，每回合限一次，你可令一名角色
+// 重铸一张牌（其选择一张手牌或装备牌或判定区牌重铸）。
+// 旧 JavaScript 仅作语义证据；选人与强制重铸由 ABI 442 resolve_tongduo 权威结算。
+skill tongduo(3696525701) {
+  trigger card_targeted owner_is_target_single_target_other_source_once_per_turn optional {
+    effect resolve_tongduo(self, 0, 0, 0);
+  }
+}

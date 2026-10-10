@@ -1,0 +1,8 @@
+// 狂戾（成济）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：锁定技：你使用伤害牌指定其他角色后，你与目标各弃一张牌，类别相同此牌伤害+1、不同你摸两张牌
+// 旧 JS 的「条件加伤」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxkuangli(2409592806) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

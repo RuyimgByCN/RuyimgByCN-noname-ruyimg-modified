@@ -1,0 +1,4 @@
+// Zhurong huntress
+skill zhuisuo(88) {
+  modifier attack_range add 1;
+}

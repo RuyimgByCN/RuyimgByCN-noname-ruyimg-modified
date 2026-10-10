@@ -1,0 +1,5 @@
+skill xinfu_guanwei(3285976176) {
+  trigger phase_play_end owner_alive_event_player_play_phase_same_suit_at_least_two_once_per_turn optional {
+    effect resolve_guanwei(self, event_player);
+  }
+}

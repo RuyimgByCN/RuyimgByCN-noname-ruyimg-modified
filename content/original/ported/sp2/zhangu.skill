@@ -1,0 +1,9 @@
+// 斩骨（梁兴·锁定技）：准备阶段，若体力上限>1且手牌/装备区均为空，从牌堆获得至多3张不同类型牌并减1体力上限。
+// 近似：hand_empty 触发保留摸牌+扣血收益，无法保证"不同类型"与"手牌或装备均为空"的精确判定。
+skill zhangu(2753603131) locked {
+  trigger phase_prepare owner_hand_empty {
+    effect draw_cards(self, 3);
+    effect lose_hp(self, 1);
+    // 旧 JS 含 cardPile 按类型选取、loseMaxHp(减体力上限)而非 loseHp、需 hand_OR_equip 均为空的条件
+  }
+}

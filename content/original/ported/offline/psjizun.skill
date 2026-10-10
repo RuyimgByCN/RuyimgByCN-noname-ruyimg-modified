@@ -1,0 +1,5 @@
+// psjizun：觉醒技, 锁定技, player:dyingAfter, 加技能, 异步。
+skill psjizun(3630774350) {
+  trigger phase_any_end owner_alive {
+  }
+}

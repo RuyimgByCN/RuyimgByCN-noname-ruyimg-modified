@@ -1,0 +1,7 @@
+// 昭然·2（昭然系）：标记技能。记录目标。
+// 旧 JS 的 storage 记录无对应原语，未建模（已注明）。
+skill zhaoran2(3025594289) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

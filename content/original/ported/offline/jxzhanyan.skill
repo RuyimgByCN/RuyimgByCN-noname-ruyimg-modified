@@ -1,0 +1,7 @@
+// jxzhanyan：音效名:dcsbronghuo, 主动(phaseUse), 造成伤害, 异步。
+skill jxzhanyan(3669482576) {
+  // 主动技：需自定义取牌/目标逻辑
+  active play_phase {
+    effect draw_cards(self, 1); // 近似占位
+  }
+}

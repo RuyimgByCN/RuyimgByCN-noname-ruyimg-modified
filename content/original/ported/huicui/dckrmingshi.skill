@@ -1,0 +1,6 @@
+// dckrmingshi：锁定技。
+skill dckrmingshi(2567871384) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

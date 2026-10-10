@@ -1,0 +1,9 @@
+// 合击（吴懿）：其他角色使用【决斗】或红色【杀】指定唯一目标后（目标不是自己），
+// 你可对原目标视为使用一张【杀】或【决斗】。
+// 旧 JavaScript 仅作语义证据；目标选择与虚拟用牌由 ABI 427 resolve_heji
+// 权威结算。
+skill heji(3561932297) {
+  trigger card_used owner_alive_other_single_target_juedou_or_red_sha optional {
+    effect resolve_heji(self, event_player, event_card);
+  }
+}

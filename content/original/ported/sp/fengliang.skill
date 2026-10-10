@@ -1,0 +1,6 @@
+// fengliang：锁定技，使用杀无次数限制
+skill fengliang(4251753752) locked {
+  trigger card_used owner_source_sha {
+    // modifier: 杀无次数限制，需 modifier sha_use_limit 原语
+  }
+}

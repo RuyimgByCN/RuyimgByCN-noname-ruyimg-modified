@@ -1,0 +1,8 @@
+// 缓颊（族韩韶/族韩融/族韩馥）：出牌阶段结束时，可与一名角色拼点；赢者可使用一张拼点牌；若此牌未造成伤害，你获得另一张拼点牌，否则你失去一个技能。
+// 旧 JS 的「拼点」「赢者使用拼点牌」「条件性失去技能」无对应原语。
+// 空定义：需 expansion 支持 hand_compare 和拼点牌使用。
+skill clanhuanjia(2173291427) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,27 @@
+# U05 mtg 第二批测试日志（2026-10-08，海岛，规则 v100→v101）
+
+$ cargo test --offline -p engine-native
+engine-native: 417 passed / 0 failed / 1 ignored（v100 基线 416 +1 新增海岛回归）
+
+$ cargo test --offline -p engine-native --test g1_shahai_mtg
+test result: ok. 3 passed; 0 failed（2 既有 + mtg_haidao_land_effect）
+
+$ cargo test --offline -p engine-native --test a0_tag_registry
+test result: ok. 7 passed（CardKind ALL 123、HostBehavior ALL 85、伴随技能 32 守卫过）
+
+$ cargo test --offline -p engine-native --test replay_scenarios
+test result: ok. 2 passed（14 golden 重录后；v100→v101 入 canonical_hash 全 mismatch，纯版本位移）
+
+$ 依赖包：content-runtime 33/0、engine-ai 29/0、content-native-loader 1/0（合计 63/0）
+
+## 上游源码核验（关键行）
+- list.js:6 `["diamond", 5, "mtg_haidao"]`
+- translate.js:15-18 海岛文案（选项一/选项二/地图效果）
+- card.js:240-280 content 三步 + _temp_mtg_haidao 抑制标记；skill.js mtg_haidao_skill changeHujiaBefore 转换
+
+## 测试迭代记录
+- hp/max_hp 类型差（i32/u32）两处
+- 弃牌候选须在询问前布阵（往返派生选项一致性）
+- 换地覆盖跨回合重构：同回合第二张地被 land_used 拒（上游同口径）——轮回 0 号下回合（round 递增判据防原地打转）
+- 海岛再注入全区域 purge；盾牌格挡按 name.starts_with 查找（hearth 同款）
+- 全局转换验证 = mtg+hearth 双包同局（bridge_pack().pack 字段）

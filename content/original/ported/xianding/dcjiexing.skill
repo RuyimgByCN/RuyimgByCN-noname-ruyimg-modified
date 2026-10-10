@@ -1,0 +1,13 @@
+// 节行（袁姬）：受到伤害后、失去体力后或回复体力后，可摸一张牌。
+// 旧 JS 的“此牌不计入手牌上限”未建模。
+skill dcjiexing(4014891370) {
+  trigger damage owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+  trigger hp_recovered owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+  trigger hp_lost owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

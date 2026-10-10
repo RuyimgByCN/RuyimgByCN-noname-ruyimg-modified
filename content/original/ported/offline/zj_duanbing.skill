@@ -1,0 +1,10 @@
+// 智将短兵：旧 JavaScript 仅作语义依据，运行时使用 DSL 与通用查询规则。
+skill zj_duanbing(2843523405) {
+    trigger card_used owner_source_sha {
+        effect choose_add_current_sha_target_within_distance(self, event_card, 1);
+    }
+    trigger damage owner_source_target_distance_le_one_first_damage_to_target_this_turn {
+        effect draw_cards(self, 1);
+    }
+    modifier sha_response_count_if_source_owner_target_distance_le_one add 1;
+}

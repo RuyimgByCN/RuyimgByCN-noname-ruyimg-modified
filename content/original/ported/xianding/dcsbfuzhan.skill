@@ -1,0 +1,7 @@
+// 复盏（谋姜维）：限定技，有角色脱离濒死状态时，你回复至体力上限。
+// 旧 JS 的“然后修改绝谋”分支与限定技整局一次未建模。
+skill dcsbfuzhan(2554996648) locked {
+  trigger dying_after owner_alive_not_target {
+    effect recover_hp(self, max_hp(self) - hp(self));
+  }
+}

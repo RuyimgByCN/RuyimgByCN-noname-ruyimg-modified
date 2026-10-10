@@ -1,0 +1,9 @@
+// 剑威：准备阶段双向发起拼点；武器攻击范围增加自己的拼点点数，并按胜负获得区域牌或武器。
+skill twjianwei(3685532230) {
+  trigger phase_prepare owner_is_target {
+    effect resolve_twjianwei(self, event_player, 0);
+  }
+  trigger phase_prepare owner_alive_other_phase_prepare_can_compare_owner {
+    effect resolve_twjianwei(self, event_player, 1);
+  }
+}

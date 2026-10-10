@@ -1,0 +1,7 @@
+// 分乘（王允）：限定技。出牌阶段选择所有其他角色，每名角色须弃置装备区数量的牌或受到1点火焰伤害。
+// 旧 JS 的全体目标选择+每人独立决策（弃N张/火伤）无对应原语，暂留空定义。
+skill fencheng(2676632699) {
+  active play_phase uses_per_turn 1 {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 摸金：回合开始时选择一项摸金任务，完成条件后从奖池随机获得一张牌（可能附带特效）。
+// 出牌阶段开始时若装备区有空位，装备一张【洛阳铲】。
+// 旧 JS 的「摸金任务系统（14项条件）」「奖池管理」「自定义卡牌生成（tag）」无对应原语，未建模。
+skill olmojin(3893463273) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

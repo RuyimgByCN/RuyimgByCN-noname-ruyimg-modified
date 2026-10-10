@@ -1,0 +1,7 @@
+// 碑石（族韩韶/族韩融/族韩馥）：锁定技。受伤后，若「三恇」目标失去最后手牌，你回复1点体力。
+// 旧 JS 的「跨技能状态追踪（clansankuang 目标）」「非满血条件判断」无对应原语。
+// 空定义：需 expansion 支持跨技能状态查询。
+skill clanbeishi(3375592258) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

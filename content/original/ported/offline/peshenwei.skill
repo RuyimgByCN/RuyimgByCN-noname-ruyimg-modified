@@ -1,0 +1,5 @@
+// peshenwei：锁定技, player:phase_play, 需弃牌, 需选择目标, 失去体力, 异步。
+skill peshenwei(2380145194) {
+  trigger phase_play owner_alive {
+  }
+}

@@ -1,0 +1,7 @@
+// 承缘：限定技，自己或女性角色进入濒死时，可令其回复至体力上限。
+skill dragchengyuan(2540695647) {
+  trigger dying owner_alive_event_player_owner_or_female optional {
+    effect recover_hp(event_player, max_hp(event_player) - hp(event_player));
+    effect remove_skill(self_skill);
+  }
+}

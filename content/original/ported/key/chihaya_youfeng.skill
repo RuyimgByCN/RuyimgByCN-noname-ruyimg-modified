@@ -1,0 +1,5 @@
+// 游凤：阴阳两支各每轮一次；所有牌仍走核心普通牌合法性与结算管线。
+skill chihaya_youfeng(2842065522) {
+  view_as ordinary_trick any any from none branch 0 once_per_round next_branch 1 cost gain_max_hp_1;
+  view_as basic any any from none branch 1 once_per_round next_branch 0 cost disable_equip_slot;
+}

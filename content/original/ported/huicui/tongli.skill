@@ -1,0 +1,7 @@
+// tongli：获临时技。
+// 旧JS含subSkill，DSL无法精确建模。
+skill tongli(2620434620) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}

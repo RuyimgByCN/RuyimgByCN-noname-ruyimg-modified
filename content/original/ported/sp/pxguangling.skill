@@ -1,0 +1,7 @@
+// 广陵（pxguangling，州郡技能）：你可以将两张牌当一张【五谷丰登】使用。
+// 上游 (sp/skill.js:2475)：enable chooseToUse；viewAs = wugu；selectCard = 2；
+// position = hes。实现：view_as wugu play_phase any from hand_equip up_to 2（手牌/
+// 装备区任意两张当【五谷丰登】使用）。
+skill pxguangling(3967602994) {
+  view_as wugu play_phase any from hand_equip up_to 2;
+}

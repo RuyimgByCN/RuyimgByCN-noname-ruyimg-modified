@@ -1,0 +1,5 @@
+// 目标列表由权威 Luanqun 助手状态读取；无独立 DSL 触发或修正器。
+skill luanqun_directHit(3537894821) locked {
+  // INTENTIONAL_EMPTY_NOOP: unexpressible/charlotte/audio helper; hand_limit +0 keeps non-empty body.
+  modifier hand_limit add 0;
+}

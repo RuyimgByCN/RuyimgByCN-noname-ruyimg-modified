@@ -1,0 +1,5 @@
+// dcshouxing：旧JS复杂效果。
+skill dcshouxing(3728936491) {
+  view_as sha play_phase any from hand uses_per_turn 1;
+  view_as sha response any from hand;
+}

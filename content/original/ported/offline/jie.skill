@@ -1,0 +1,3 @@
+skill jie(3115545698) locked {
+  modifier sha_damage(red) add 1;
+}

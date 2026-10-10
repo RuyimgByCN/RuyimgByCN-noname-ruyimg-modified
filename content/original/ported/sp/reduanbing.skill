@@ -1,0 +1,10 @@
+// 断兵（reduanbing）：出牌阶段，当你使用【杀】指定目标后，可令距离为1的一名其他角色也成为
+// 此【杀】的目标。
+// 上游 (sp/skill.js)：useCard2，direct（可选），filter = sha 且存在距离≤1、可被此杀指定的
+// 非现有目标；content = 选一名距离≤1 的目标加入 trigger.targets。
+// 上游为可选技（非锁定），故不声明 locked。
+skill reduanbing(3958105675) {
+  trigger card_used owner_source_sha optional {
+    effect choose_add_current_sha_target_within_distance(self, event_card, 1);
+  }
+}

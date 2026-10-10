@@ -1,0 +1,6 @@
+// pepianchong（锁定技/触发技）：锁定技, player:phaseDrawBegin1, player:hp_lost, 摸牌, 移出游戏, 加技能, 含子技能, 异步。
+skill pepianchong(2550264017) locked {
+  trigger hp_lost always {
+    effect draw_cards(self, 1);
+  }
+}

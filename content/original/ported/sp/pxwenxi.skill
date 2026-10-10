@@ -1,0 +1,11 @@
+// 闻喜（pxwenxi，州郡技能）：当你每回合首次使用一个花色的牌后，你摸一张牌。
+// 上游 (sp/skill.js:2246)：trigger player:useCardAfter；filter = 当前牌为该花色
+// 本回合首次使用；forced；content = draw()。
+// 实现：card_used + owner_source_first_card_suit_this_turn（新增过滤器，5 处注册：
+// 本回合该花色尚未被使用过；remember_card_action 在 plan_triggers 后执行，故当前牌
+// 不计入）→ draw_cards(self, 1)。
+skill pxwenxi(3323337569) {
+  trigger card_used owner_source_first_card_suit_this_turn {
+    effect draw_cards(self, 1);
+  }
+}

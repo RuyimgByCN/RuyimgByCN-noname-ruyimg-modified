@@ -1,0 +1,5 @@
+// eu_dengtian（锁定技/触发技）：锁定技, global:game_started, source:damage_before, player:phaseDrawBegin2, 多分支选择, 含子技能, 异步。
+skill eu_dengtian(3270585664) locked {
+  trigger game_started always {
+  }
+}

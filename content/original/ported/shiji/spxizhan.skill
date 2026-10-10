@@ -1,0 +1,9 @@
+// 嬉战（SP 花鬘）：其他角色的回合开始时，须弃置一张牌或失去 1 点体力；
+// 弃牌则令〖芳踪〗本回合失效，并按花色视为用牌：
+// ♠ 其用【酒】；♥ 你用【无中生有】；♣ 你对其用【铁索连环】；♦ 你对其用火【杀】（无距离）。
+// 旧 JavaScript 仅作语义证据；弃牌/失体力与花色用牌由 ABI 403 resolve_spxizhan 权威结算。
+skill spxizhan(3032288469) {
+  trigger phase_begin owner_alive_not_target {
+    effect resolve_spxizhan(self, event_player, 2304282956);
+  }
+}

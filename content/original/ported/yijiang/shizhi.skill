@@ -1,0 +1,6 @@
+// 矢志（旧版·曹休）：锁定技。当你的体力值为 1 时，你的【闪】均视为【杀】。
+// 旧 JS 用 mod.cardname 将闪改名杀；DSL 无「体力为 1 时」的 cardname
+// modifier 原语，以【闪】当【杀】使用近似（体力条件未建模，已注明）。
+skill shizhi(2579714203) locked {
+  view_as sha play_phase card_shan from hand;
+}

@@ -1,0 +1,13 @@
+// 淑慎·国战（gzshushen，甘夫人）：每回复 1 点体力，可选择一名与势力相同的其他角色，
+// 令其摸一张牌（回复点数大于 1 时重复）。
+// 上游 (sp/skill.js:42866)：trigger player:recoverAfter；filter = 存在势力相同的其他角色；
+// content = 依回复点数循环 chooseTarget(同势力其他角色) → 目标摸 1。
+// 实现：hp_recovered + owner_is_target → 可选确认 → choose_other_draw_or_recover(self, 1,
+// 0, event_amount)（每回复 1 点选择一名其他角色摸 1）。
+// 与上游差异：「势力相同」过滤未建模（无对应过滤器），任意其他角色可选；event_amount
+// 为回复点数（hp_recovered 事件可用）。
+skill gzshushen(2220815073) {
+  trigger hp_recovered owner_is_target optional {
+    effect choose_other_draw_or_recover(self, 1, 0, event_amount);
+  }
+}

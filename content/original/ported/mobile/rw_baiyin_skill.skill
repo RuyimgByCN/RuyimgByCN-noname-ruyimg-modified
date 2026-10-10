@@ -1,0 +1,18 @@
+// rw_baiyin_skill（照月狮子盔）：锁定技，当你受到大于1的伤害时，你将伤害值
+// 改为1；当你失去装备区里的【照月狮子盔】时，你回复1点体力并摸两张牌。
+// 上游 (mobile/skill.js rw_baiyin_skill L30981，inherit baiyin_skill)。
+// 实现（2026-09-14 第二百八十二批·触发期减伤缺口铸造，ADR 0641 §8.68 更新）：
+// trigger damage_before owner_is_target_damage_amount_gt_one →
+// let delta = 1 - event_amount; modify_current_damage(self, delta)。
+// 批 282 铸造 pending_bound_damage_deltas 桥：触发执行期的增减暂存至
+// Resolution，deferral 时统一套用到 prepared CommitDamage（修复批 280 在册
+// 「触发期部分减伤不可用」时序缺口）。
+// 近似（登记债）：①arm2「失去装备区的照月狮子盔时回复1摸2」未建模——
+// 【照月狮子盔】实体牌不存在于引擎牌池（mobile 无 cards.json 条目），
+// 触发面为死代码，待卡牌入库后补建。
+skill rw_baiyin_skill(3014252790) locked {
+  trigger damage_before owner_is_target_damage_amount_gt_one {
+    let delta = 1 - event_amount;
+    effect modify_current_damage(self, delta);
+  }
+}

@@ -1,0 +1,9 @@
+// 罪辞·续（刘巴系）：废除一个装备栏并回复 2 点体力。
+// 旧 JS 的「选择废除有牌的装备栏」无对应原语；以废除全部装备栏并回复
+// 1 点近似（已注明）。
+skill rezuicix(3677553049) {
+  trigger dying owner_is_target {
+    effect disable_all_equip_slots(self);
+    effect recover_hp(self, 1);
+  }
+}

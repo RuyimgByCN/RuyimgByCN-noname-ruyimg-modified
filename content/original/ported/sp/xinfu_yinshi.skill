@@ -1,0 +1,12 @@
+// 隐士（司马徽）：锁定技，若你没有「火计」「连环」标记且防具栏为空，
+// 你防止属性伤害和锦囊造成的伤害。
+// 上游 (sp/skill.js:45066)：damageBegin4，filter 为有属性或锦囊伤害，
+// 且无 jianjie 火计/连环标记、防具栏空，content=trigger.cancel()。
+// 实现：`damage_before` + `prevent_current_damage`（与三头同一防止通道）。
+// 近似：不检验空防具栏、荐杰标记、属性/锦囊类型，防止受到的一切伤害。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xinfu_yinshi(3413758271) locked {
+  trigger damage_before owner_is_target {
+    effect prevent_current_damage();
+  }
+}

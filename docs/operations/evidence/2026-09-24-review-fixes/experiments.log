@@ -1,0 +1,133 @@
+# 2026-09-24 审查实验与先报红记录（原始输出，已去除编译警告行）
+# <iso> = 审查时 crates/engine-native（本轮修复前）的独立拷贝，CARGO_TARGET_DIR=target/review-0924/iso-target。
+#   与当前源码的差异：本轮修复（engine.rs 等）尚未进入 + 两处实验用回退（见 iso-rollback.diff）：
+#   src/content/standard.rs 规则版本 60→59、拆牌循环缺陷还原；tests/replay_scenarios.rs 14 个期望哈希换成第 48 轮 v59 golden。
+#   tests/native_kernel.rs 为当前版本（含新增 nullify 测试）；tests/probe_review.rs 为审查探针（源码见 review-probes.rs.txt）。
+
+## 实验一：出牌阶段主动使用无懈（旧代码）
+$ cd <iso> && cargo test --offline --test probe_review -- --nocapture --test-threads=1
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s
+     Running tests/probe_review.rs (target/review-0924/iso-target/debug/deps/probe_review-782d259609061263)
+running 3 tests
+test probe_play_nullify_no_target ... 
+thread 'probe_play_nullify_no_target' (28662099) panicked at src/engine.rs:2296:40:
+internal error: entered unreachable code: handled above
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test probe_play_nullify_with_target ... 
+thread 'probe_play_nullify_with_target' (28662100) panicked at src/engine.rs:2296:40:
+internal error: entered unreachable code: handled above
+FAILED
+test probe_play_shan_control ... shan (control) => Rejected(WrongPhase)
+ok
+failures:
+failures:
+    probe_play_nullify_no_target
+    probe_play_nullify_with_target
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+error: test failed, to rerun pass `--test probe_review`
+
+## 实验一补：新增回归测试 nullify_rejected_when_played_actively 在旧代码上先失败
+$ cd <iso> && cargo test --offline --test native_kernel nullify_rejected_when_played_actively
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running tests/native_kernel.rs (../../iso-target/debug/deps/native_kernel-5a13a17853de07b2)
+running 1 test
+test nullify_rejected_when_played_actively ... FAILED
+failures:
+---- nullify_rejected_when_played_actively stdout ----
+thread 'nullify_rejected_when_played_actively' (28674775) panicked at src/engine.rs:2296:40:
+internal error: entered unreachable code: handled above
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+failures:
+    nullify_rejected_when_played_actively
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 178 filtered out; finished in 0.01s
+error: test failed, to rerun pass `--test native_kernel`
+
+## 实验二：A0 目录构成检查在缺陷源码（88 张）上先失败
+$ cd <iso> && cargo test --offline --test standard_catalog_inventory -- --test-threads=1
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.26s
+     Running tests/standard_catalog_inventory.rs (target/review-0924/iso-target/debug/deps/standard_catalog_inventory-1e4d39c82cc13588)
+running 2 tests
+test defective_kinds_hold_declared_counts ... FAILED
+test standard_catalog_matches_declared_inventory ... FAILED
+failures:
+---- defective_kinds_hold_declared_counts stdout ----
+thread 'defective_kinds_hold_declared_counts' (28662549) panicked at tests/standard_catalog_inventory.rs:173:5:
+assertion `left == right` failed
+  left: 8
+ right: 4
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+---- standard_catalog_matches_declared_inventory stdout ----
+thread 'standard_catalog_matches_declared_inventory' (28662550) panicked at tests/standard_catalog_inventory.rs:144:5:
+assertion `left == right` failed: 标准目录牌数 88 != 声明 80
+  left: 88
+ right: 80
+failures:
+    defective_kinds_hold_declared_counts
+    standard_catalog_matches_declared_inventory
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+error: test failed, to rerun pass `--test standard_catalog_inventory`
+
+## 实验三：golden 归因——规则版本 59 + 缺陷牌堆，复现第 48 轮 v59 golden（14 场景）
+# 同一测试二进制的 scenarios_are_registered_in_coverage_manifest 在副本中因找不到 docs/ 覆盖清单路径失败（环境原因，与 golden 无关），故按名运行 golden 比对。
+$ cd <iso> && cargo test --offline --test replay_scenarios replay_scenarios_match_golden -- --exact
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running tests/replay_scenarios.rs (target/review-0924/iso-target/debug/deps/replay_scenarios-4708aabf46ad77ca)
+running 1 test
+test replay_scenarios_match_golden ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.01s
+
+## 装载器名称所有权断言先报红（工作区；临时把 bridge_generals 的 names::intern_list 换回 Box::leak）
+$ cargo test --offline -p content-native-loader --test loader_acceptance
+1746 -             drop(p);
+1746 +             let _ = p;
+263 -             drop(p);
+263 +             let _ = p;
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.40s
+     Running tests/loader_acceptance.rs (<sandbox-cargo-target>/debug/deps/loader_acceptance-248ccfce72434ee8)
+running 1 test
+test loader_acceptance_bounded_names_and_clear_errors ... FAILED
+failures:
+---- loader_acceptance_bounded_names_and_clear_errors stdout ----
+thread 'loader_acceptance_bounded_names_and_clear_errors' (28631045) panicked at crates/content-native-loader/tests/loader_acceptance.rs:270:9:
+武将技能名单须复用符号表存储
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+failures:
+    loader_acceptance_bounded_names_and_clear_errors
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+error: test failed, to rerun pass `-p content-native-loader --test loader_acceptance`
+
+# 同一临时改动下临时跳过指针同一性断言、只保留 interned_count 计数断言：测试通过——计数看不到绕过符号表的分配。
+$ REVIEW_SKIP_PTR=1 cargo test --offline -p content-native-loader --test loader_acceptance
+test loader_acceptance_bounded_names_and_clear_errors ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+# 两处临时改动均已还原（rg 无残留）；还原后 loader_acceptance 1/1 通过，见 loader-tests.log。
+
+## 新发现：伪造存档中的未知牌种编号使 decode_archive panic（工作区当前源码，临时探针已删除）
+$ cargo test --offline -p engine-native --test zz_review_probe_archive_kind -- --nocapture
+1746 -             drop(p);
+1746 +             let _ = p;
+263 -             drop(p);
+263 +             let _ = p;
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s
+     Running tests/zz_review_probe_archive_kind.rs (<sandbox-cargo-target>/debug/deps/zz_review_probe_archive_kind-922d507bfd468a28)
+running 1 test
+kind byte offsets: [612]
+thread 'probe_unknown_card_kind_in_archive' (28659333) panicked at crates/engine-native/src/archive.rs:2421:14:
+archive: unknown card kind 255
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+catch_unwind: Err(Any { .. })
+test probe_unknown_card_kind_in_archive ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+## 更正依据：旧版 XiaoJi 挂起字节（tag 29 + pid）在现解码表下的结果（工作区当前源码，临时探针已删除）
+# 本次与上一次运行时 shell 残留 CARGO_TARGET_DIR=target/review-0924/iso-target，编译对象仍为工作区当前源码。
+$ cargo test --offline -p engine-native --test zz_review_probe_xiaoji_old_bytes -- --nocapture
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.33s
+     Running tests/zz_review_probe_xiaoji_old_bytes.rs (target/review-0924/iso-target/debug/deps/zz_review_probe_xiaoji_old_bytes-b812328de1258cd6)
+running 1 test
+XiaoJi 单挂起（末尾）: Err(UnexpectedEof)
+XiaoJi + XiaoJi: Err(UnexpectedEof)
+XiaoJi + Dismantle: Err(BadTag("slot", 3))
+test probe_old_xiaoji_bytes ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

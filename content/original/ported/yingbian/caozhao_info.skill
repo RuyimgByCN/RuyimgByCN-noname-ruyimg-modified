@@ -1,0 +1,5 @@
+// 操昭·信息（跨角色牌名改写辅助）。
+// 旧 JS 的 storage 牌名改写无对应原语，未建模（已注明）。
+skill caozhao_info(2552592782) {
+  modifier hand_limit add 1;
+}

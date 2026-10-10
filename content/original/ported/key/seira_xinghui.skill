@@ -1,0 +1,8 @@
+// 星辉（星罗）：准备阶段扔骰子，亮出等量牌，选择放到武将牌上（星屑）或弃牌堆。
+// 旧 JS 的 扔骰子+chooseToMove+星屑扩展区 需骰子与扩展区原语，未建模。
+skill seira_xinghui(2932217435) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 seira_xinghui（skill.js:2410）含真实规则体，
+  // DSL 原语暂不足以精确建模（见文件头注释）；原“批量最小近似：结束阶段可选摸一张”为
+  // 保真度债占位、非上游语义，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,7 @@
+// dczixi：摸2牌。
+// 旧JS含subSkill、全局技能、init初始化、多步选择，DSL无法精确建模。
+skill dczixi(2897380933) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

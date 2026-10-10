@@ -1,0 +1,12 @@
+// 乱筹/共患：重置两名共患持有者；其可每回合一次代替另一名共患角色承受伤害。
+skill twluanchou(2306392424) {
+  active play_phase uses_per_turn 1 targets 2 2 {
+    effect resolve_twluanchou(self, 3503235693, 0);
+  }
+}
+
+skill twgonghuan(3503235693) {
+trigger damage_before owner_alive_other_twgonghuan_damage_before_hp_lte_owner_unused {
+    effect resolve_twluanchou(self, 3503235693, 1);
+  }
+}

@@ -1,0 +1,8 @@
+// 凶肆（成济）：上游 (v1.11.6 增量 7ed3facb..ad3bc6ca)。
+// 上游语义：限定技，出牌阶段：若已累计造成 3 点伤害，可弃置所有手牌令所有其他角色依次失去 1 点体力
+// 旧 JS 的「限定技 + 历史伤害总和门槛 + 全场依次」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-09-02 上游 v1.11.6 增量同步批次迁移（7ed3facb..ad3bc6ca）。
+skill lxxiongsi(4051219576) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

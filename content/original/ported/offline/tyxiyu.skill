@@ -1,0 +1,6 @@
+// 戏语：每张转化牌或虚拟牌只在指定第一个目标后提供一次摸牌。
+skill tyxiyu(3638198419) {
+  trigger card_targeted owner_alive_first_target_virtual_or_converted_card optional {
+    effect draw_cards(self, 1);
+  }
+}

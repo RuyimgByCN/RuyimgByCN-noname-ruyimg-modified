@@ -1,0 +1,20 @@
+// 攸业（荀谌）：锁定技。当一名其他角色的回合结束时，若其本回合未对你造成过伤害且你的"攸业"牌数<5，
+// 你将牌堆顶一张牌作为"攸业"置于武将牌上。当你造成/受到伤害后，你将所有"攸业"牌分配给其他角色
+// （当前回合角色至少分得一张）。
+// 上游 (tw/skill.js twyouye)：trigger global phaseJieshuBegin；forced；filter =
+// event.player != owner + hasHistory("sourceDamage", evt.player==owner) 取反 + 堆<5；
+// content addToExpansion(get.cards(1)) gaintag；group twyouye_give 分配面。
+// 实现（2026-09-10 第二百二十批·历史查询过滤器）：trigger phase_end
+// owner_alive_other_phase_end_not_damaged_owner_this_turn（新过滤器：伤害对计数
+// damage_pair_count(事件角色, owner)==0，跟踪面 ABI≥353 已全开）forced +
+// body 级 if skill_pile_count(self, 3495965719) < 5 →
+// place_top_deck_to_expansion(self, self_skill, 3495965719, 1)（ABI 685）。
+// 近似（登记债）：①分配面（受伤后将所有攸业牌分配给其他角色、当前回合角色至少
+// 一张）未建模；②onremove 清堆未建模。
+skill twyouye(3495965719) {
+  trigger phase_end owner_alive_other_phase_end_not_damaged_owner_this_turn {
+    if skill_pile_count(self, 3495965719) < 5 {
+      effect place_top_deck_to_expansion(self, self_skill, 3495965719, 1);
+    }
+  }
+}

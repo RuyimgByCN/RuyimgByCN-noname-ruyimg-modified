@@ -1,0 +1,20 @@
+// 养名：出牌阶段限一次。你可以与一名角色拼点，若其：没赢，你可以与其重复此
+// 流程；赢，其摸X张牌，然后你回复1点体力（X为其此阶段没赢的次数）。
+// 上游 (jsrg/skill.js jsrgyangming L6155)：enable phaseUse usable 1；目标
+// canCompare（双方有手牌）；循环 chooseToCompare → winner==target 时
+// target.draw(storage 已输次数)+player.recover(1) 结束；否则 storage++ +
+// chooseBool 是否重复（canCompare 不满足自动结束）。
+// 实现（2026-09-12 第二百五十三批·拼点族状态机第二件，ADR 0641 §8.43，
+// qiantun 拼点子第三次复用）：active play_phase uses_per_turn 1 →
+// resolve_yangming(self, self_skill)（ABI 704 / tag 727 / Cont 309 循环续体）：
+// stage 2 owner 选拼点牌 → stage 3 目选拼点牌 → 比点：目标赢 = 摸 losses 张 +
+// recover 1 结束；否则 losses++ → stage 4 知情（1=重复 2=结束，可比较不满足
+// 自动结束）。拼点牌入弃牌堆。
+// 近似（登记债）：①拼点双方依次明选（chooseToCompare 暗选同时亮出）；②
+// storage 已输次数以载荷 losses 表达（每激活重置 ✓ 同上游 per-activation
+// storage）；③chooseBool 以 Custom [1,2] 表达。
+skill jsrgyangming(2355602394) {
+  active play_phase uses_per_turn 1 targets 0 0 {
+    effect resolve_yangming(self, self_skill);
+  }
+}

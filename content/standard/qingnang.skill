@@ -1,0 +1,7 @@
+// 青囊：出牌阶段限一次，弃置一张手牌，令一名受伤角色回复 1。
+skill qingnang(13) {
+  active play_phase uses_per_turn 1 targets 1 1 wounded select_hand 1 1 {
+    effect discard_selected(self);
+    effect recover_hp(event_source, 1);
+  }
+}

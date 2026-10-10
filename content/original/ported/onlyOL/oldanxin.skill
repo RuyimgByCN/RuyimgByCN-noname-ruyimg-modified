@@ -1,0 +1,23 @@
+// 丹心：升级前先按当前等级摸牌；第二次升级时清除矫诏的本轮使用限制。
+skill oldanxin(2442439931) {
+  trigger damage owner_is_target optional {
+    let level = mark_count(self, 2442439931);
+    if 0 < level {
+      effect draw_cards(self, level);
+    }
+    if level < 2 {
+      effect add_mark(self, 2442439931, 1);
+      if level == 1 {
+        effect remove_skill_by_def(self, 2592049175);
+      }
+    }
+  }
+}
+
+// Legacy `oljiaozhao.used` subskill: stable authority identity used by oldanxin cleanup.
+skill oljiaozhao_used(2592049175) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 oljiaozhao_used 无独立 def——仅作 addTempSkill/
+  // hasSkill 旗标（onlyOL/skill.js:6868 addTempSkill、6835 hasSkill），无规则体；
+  // 原“批量最小近似：结束阶段可选摸一张”与上游不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

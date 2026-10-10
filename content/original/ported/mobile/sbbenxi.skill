@@ -1,0 +1,7 @@
+// sbbenxi（奔袭）：出牌阶段开始时，你可以弃置至少一张牌，然后你于此阶段获得如下效果：①你至其他角色距离-X；②当你使用的下一张基本牌或普通锦囊牌A选择目标后，你可以额外指定至多X名距离为1的角色为目标；③牌A结算结束后，若此牌造成过伤害，你摸五张牌（X为你以此法弃置的牌数）。
+skill sbbenxi(3238968877) {
+  trigger phase_play owner_alive {
+    effect draw_cards(self, 5);
+    effect discard_selected(self);
+  }
+}

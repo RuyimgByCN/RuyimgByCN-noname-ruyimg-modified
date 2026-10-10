@@ -1,0 +1,6 @@
+// 独进：摸牌阶段额外摸 ceil(装备数 / 2) + 1 张牌。
+skill dujin(3000807303) {
+  modifier optional_draw_count add 1;
+  modifier optional_draw_count add owner_equip_count_half_floor;
+  modifier optional_draw_count add owner_equip_count_odd;
+}

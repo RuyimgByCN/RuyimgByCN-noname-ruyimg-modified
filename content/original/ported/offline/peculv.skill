@@ -1,0 +1,7 @@
+// 策律（上官婉儿）：上游 (v1.11.5+ 7ed3facb 增量)。
+// 旧 JS 的「全局标记技（init/onremove 子技挂载 + 全员 mark2 状态）」无对应 DSL 原语，诚实 noop（保真度债，ADR 0597）。
+// 2026-08-15 上游增量同步批次迁移。
+skill peculv(3124474506) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

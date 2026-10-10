@@ -1,0 +1,6 @@
+// dragqianxun：player:phase_judge, 主动(phaseUse), 需弃牌, 摸牌, 异步, 弃牌。
+skill dragqianxun(2772670417) {
+  trigger phase_judge owner_alive {
+    effect draw_cards(self, 1);
+  }
+}

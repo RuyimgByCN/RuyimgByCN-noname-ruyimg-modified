@@ -1,0 +1,32 @@
+// 诤荐：锁定技。结束阶段，你令一名角色获得一枚「诤」（其使用或打出牌时其
+// 「诤」数 +1）；你的回合开始时，所有有「诤」的角色各摸 min(5, 体力上限,
+// 「诤」数) 张牌并移去全部「诤」。
+// 上游 (mobile/skill.js zhengjian L27081)：trigger player phaseJieshuBegin
+// direct chooseTarget（任意角色，可取消）；group zhengjian_draw：phaseBegin
+// forced → 各有标角色 draw(min(5,maxHp,标数)) + removeSkill；
+// zhengjian_mark 子技：useCard1/respond → 标记计数。
+// 实现（2026-09-13 第二百六十七批·标记族状态机，ADR 0641 §8.55，qiantun
+// 分段模板复用）：resolve_zhengjian(self, self_skill, stage, event_player)
+// （ABI 716 / tag 739 / Cont 316）四段：0=授标（SelectTargets 任意角色可
+// 取消，add_mark blake2b("zhengjian_mark")=2446053157）；1=card_used 全局
+// 计数；2=card_responded 全局计数；3=owner 回合开始摸牌清标。
+// 保真度：完整。①「诤」上限 min(5, 上限, 标数) 与上游一致 ✓；②授标目标
+// 可含自己（上游同口径 ✓）；③direct+chooseTarget 以 optional 确认表达为
+// 引擎级惯例（benyu 模式，非债）。批 285 措辞勘误确认。
+skill zhengjian(4084687925) {
+  trigger phase_end owner_is_target optional {
+    effect resolve_zhengjian(self, self_skill, 0, event_player);
+  }
+
+  trigger card_used owner_alive {
+    effect resolve_zhengjian(self, self_skill, 1, event_player);
+  }
+
+  trigger card_responded owner_alive {
+    effect resolve_zhengjian(self, self_skill, 2, event_player);
+  }
+
+  trigger phase_begin owner_is_target {
+    effect resolve_zhengjian(self, self_skill, 3, event_player);
+  }
+}

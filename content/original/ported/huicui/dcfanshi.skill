@@ -1,0 +1,7 @@
+// dcfanshi：觉醒技；锁定技；回复2体力。
+skill dcfanshi(3193807927) {
+  trigger phase_end owner_is_target {
+    // 近似：回复2点体力
+    effect recover_hp(self, 2);
+  }
+}

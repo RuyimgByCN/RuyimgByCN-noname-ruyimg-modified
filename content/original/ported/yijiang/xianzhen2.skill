@@ -1,0 +1,10 @@
+// 陷阵拼点成功的目标绑定临时效果：对该目标无距离限制、【杀】不限次数且无视防具。
+skill xianzhen2(3706320139) {
+  modifier card_distance_unlimited_for_skill_bound_target add 1;
+  modifier sha_use_unlimited_for_skill_bound_target add 1;
+  modifier ignore_armor_for_skill_bound_target add 1;
+
+  trigger turn_ended owner_is_target {
+    effect remove_skill(self_skill);
+  }
+}

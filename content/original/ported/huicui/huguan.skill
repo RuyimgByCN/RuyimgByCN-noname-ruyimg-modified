@@ -1,0 +1,5 @@
+// huguan：旧JS复杂效果。
+// 旧JS含subSkill、全局技能、init初始化，DSL无法精确建模。
+skill huguan(4150896381) {
+  modifier hand_limit add 1;
+}

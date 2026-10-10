@@ -1,0 +1,12 @@
+// 中流（族王允/族王淩/族王昶/族王浑/族王昌/族王琛）：锁定技，宗族技。
+// 使用牌时，若无宗族角色因此失去手牌，重置技能使用次数（refreshSkill）。
+// 上游 (clan/skill.js): trigger useCard forced; filter=「无太原王氏同族因本次用牌失去手牌」;
+// content=player.refreshSkill()。
+// 实现：hasClan 经角色 clans 属性（content registry 查找）+ card_loss_count 做本回合近似
+// （引擎仅有 per-turn 牌失去计数，无 per-useEvent 关联；多数对局成立，差异已记录于
+// docs/migration/upstream-1.11.5-delta.md）。refresh_skill 为本批新增 Host 原语。
+skill clanzhongliu(3016047578) locked {
+  trigger card_used owner_is_event_player_no_太原王氏_lost_hand_this_turn {
+    effect refresh_skill(self_skill);
+  }
+}

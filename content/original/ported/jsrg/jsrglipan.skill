@@ -1,0 +1,5 @@
+// jsrglipan（离叛）：回合结束时，你可以变更势力，然后摸X张牌并执行一个额外的出牌阶段。此阶段结束时，所有与你势力相同的角色依次可以将一张牌当【决斗】对你使用（X为与你势力相同的其他角色数）。
+// 未建模：翻译调用, chooseToUse转化, 全局状态, addTempSkill, changeGroup, charlotte延迟 ...等7项（DSL无对应原语）
+skill jsrglipan(2601375252) {
+  view_as juedou play_phase any;
+}

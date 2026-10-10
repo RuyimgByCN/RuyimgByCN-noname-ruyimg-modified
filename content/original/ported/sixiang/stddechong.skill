@@ -1,0 +1,25 @@
+// 得宠（标毛皇后）：其他角色的准备阶段开始时，你可将任意张可弃置的手牌或装备牌
+// 交给该角色；其下个回合的弃牌阶段开始时，若其手牌数不小于体力值，你可对其造成
+// 1 点伤害。
+// 旧 JS 仅作语义证据；赠牌与后续阶段结算由权威状态机校验（ABI 459）。
+// 注 1：旧 JS 的 when() 一次性结算以 bound 技能表达（目标弃牌阶段开始时触发，
+//       随后移除自身）。
+// 注 2：旧 JS 仅在目标手牌≥体力时才询问是否伤害；DSL 以 optional 确认 + 体内
+//       手牌条件守卫近似（条件不满足时确认后空转，文档化近似）。
+skill stddechong(2987704809) {
+  trigger phase_prepare owner_alive_not_target_hand_equip_nonempty {
+    effect choose_give_hand_equip_to_event_player(self);
+    effect add_bound_skill(self, 4229331568, event_source);
+  }
+}
+
+// 得宠·后续：目标弃牌阶段开始时，手牌不小于体力则受到拥有者 1 点伤害，随后移除。
+skill stddechong2(4229331568) {
+  trigger phase_discard owner_alive_skill_bound_target_is_event_player optional {
+    if hand_count(event_source) < hp(event_source) {
+    } else {
+      effect deal_damage(self, event_source, 1);
+    }
+    effect remove_skill(self_skill);
+  }
+}

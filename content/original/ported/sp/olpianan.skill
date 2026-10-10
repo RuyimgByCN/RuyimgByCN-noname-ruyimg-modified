@@ -1,0 +1,22 @@
+// 骗南（olpianan，SP孙策）：游戏开始时与弃牌阶段结束后，弃置所有非【闪】手牌，然后
+// 摸牌补至体力值（优先从牌堆/弃牌堆获取【闪】）。
+// 上游 (sp/skill.js:40397)：trigger player:enterGame + phaseDiscardEnd + global phaseBefore
+// （phaseNumber==0 时）；forced；content = discard(非闪手牌) → num = hp - 手牌数，
+// 若为正则补摸（优先【闪】）。
+// 实现：game_started + owner_alive / phase_discard_end + owner_is_target →
+// discard_hand(self, MAX) 弃置全部手牌 → draw_cards(self, hp(self))（弃后手牌为空，
+// 补摸体力值即补至体力值；上游在 hp > 弃后手牌数时恒补摸）。
+// 与上游差异：①「保留【闪】」与「优先补【闪】」的牌名筛选未建模（弃置全部手牌）；
+// ②上游在首轮每个阶段开始时也结算（phaseNumber==0 的 phaseBefore），本实现只保留
+// 开局与弃牌阶段结束两个主要时机。
+skill olpianan(3870010283) locked {
+  trigger game_started owner_alive {
+    effect discard_hand(self, 2147483647);
+    effect draw_cards(self, hp(self));
+  }
+
+  trigger phase_discard_end owner_is_target {
+    effect discard_hand(self, 2147483647);
+    effect draw_cards(self, hp(self));
+  }
+}

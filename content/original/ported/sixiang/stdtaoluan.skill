@@ -1,0 +1,7 @@
+// 讨乱：其他角色进入结束阶段时，可交给其一张牌，再公开并弃置其所有【闪】。
+skill stdtaoluan(3364139751) {
+  trigger phase_end owner_alive_not_target_hand_equip_nonempty optional {
+    effect draw_then_give_one(self, event_player, 0, any_hand_equip);
+    effect reveal_hand_discard_kind(event_player, shan);
+  }
+}

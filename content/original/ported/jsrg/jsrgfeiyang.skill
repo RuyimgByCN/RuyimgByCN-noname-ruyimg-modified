@@ -1,0 +1,12 @@
+// jsrgfeiyang（飞扬）：判定阶段开始时，若你的判定区里有牌，你可以弃置两张手牌并弃置你判定区里的一张牌。
+// 实现：`trigger phase_judge owner_is_target_judge_nonempty optional` →
+// discard_hand_equip_count(self, 2) + discard_all_own_judge(self, self_skill)
+// （olfeiyang 同款弃装防判双原语）。
+// 近似：上游弃判定区「一张」，DSL 弃全部（判定区仅一张时精确）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill jsrgfeiyang(2568675461) {
+  trigger phase_judge owner_is_target_judge_nonempty optional {
+    effect discard_hand_equip_count(self, 2);
+    effect discard_all_own_judge(self, self_skill);
+  }
+}

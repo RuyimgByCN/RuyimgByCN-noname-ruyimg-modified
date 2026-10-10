@@ -1,0 +1,20 @@
+// 存嗣（SP孙尚香）：出牌阶段限一次，你可翻面，从牌堆获得一张【杀】交给一名其他角色，
+// 其获得“嗣”标记与【存嗣·嗣】。
+// 旧 JavaScript 仅作语义证据；翻面、牌堆取杀与授予由 ABI 406 resolve_spcunsi 权威结算，
+// 标记与子技能由现有原语响应。
+skill spcunsi(3327019040) {
+  active play_phase uses_per_turn 1 targets 1 1 other {
+    effect resolve_spcunsi(self, event_source);
+    effect add_mark(event_source, 3487661247, 1);
+    effect add_skill(event_source, 3487661247);
+  }
+}
+
+// 存嗣·嗣：使用【杀】时伤害 + 嗣标记数，随后移除本技能。
+skill spcunsi2(3487661247) {
+  modifier damage_amount(sha) add owner_skill_mark;
+
+  trigger card_used owner_source_sha {
+    effect remove_skill(self_skill);
+  }
+}

@@ -1,0 +1,4 @@
+// Zuo Ci mysticism
+skill shemeng(97) {
+  trigger phase_begin always { effect draw_cards(self, 1); }
+}

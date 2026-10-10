@@ -1,0 +1,13 @@
+// 峻攻（高览）：出牌阶段限一次，你可弃置 X 张手牌/装备牌或失去 X 点体力
+// （X 为本阶段此前发动次数 + 1），然后对一名其他角色使用一张【杀】；
+// 若此【杀】造成伤害，本阶段内不能再发动【峻攻】。
+// 旧 JavaScript 仅作语义证据；选择与命中禁用由 ABI 400 权威原语与过滤器响应。
+skill spjungong(3803073466) {
+  active play_phase uses_per_turn owner_hp targets 1 1 other {
+    effect spjungong_discard_or_lose_then_sha(self, event_source, self_skill);
+  }
+
+  trigger damage owner_source_sha_damage_recorded_by_skill {
+    effect ban_active_until_turn_end(self, self_skill);
+  }
+}

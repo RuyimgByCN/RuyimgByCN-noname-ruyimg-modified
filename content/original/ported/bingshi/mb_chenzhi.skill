@@ -1,0 +1,19 @@
+// 势陈祗：旧 JavaScript 仅作语义证据，运行时只执行 DSL 与 ABI504 原语。
+skill mbquanchong(3613650732) locked {
+  trigger phase_end owner_is_target_discardable_hand_equip_once_per_round {
+    effect resolve_mbquanchong(self, 3254288451);
+  }
+}
+
+skill mbquanchong_effect(3254288451) locked {
+  trigger phase_begin owner_is_target {
+    effect lose_hp(self, 1);
+    effect remove_skill(self_skill);
+  }
+}
+
+skill mbrenxing(3029832657) {
+  trigger cards_moved owner_alive_first_non_discard_phase_discard_mbrenxing_available optional {
+    effect resolve_mbrenxing(self);
+  }
+}

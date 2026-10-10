@@ -1,0 +1,7 @@
+// 精策：按旧规则统计本回合所有角色因使用或打出而进入弃牌堆的实体牌数量，
+// 不能用逻辑用牌次数替代（转化牌与响应牌都必须按实体牌计数）。
+skill mobilejingce(3410757233) {
+  trigger phase_end owner_is_target_use_response_discarded_at_least_hp optional {
+    effect draw_cards(self, 2);
+  }
+}

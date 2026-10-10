@@ -1,0 +1,6 @@
+// 佐定2：旧 JS 为空对象，仅作标记技能。
+skill zuoding2(3230057064) {
+  trigger phase_end owner_is_target optional {
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,9 @@
+// 闭翼（嗔曹操系）：转换技。弃置一张牌并翻面，然后获得〖小乔〗直至下回合。
+// 旧 JS 的「转换技状态 + 技能继承」无对应原语；以弃一张手牌并摸一张近似
+// （翻面与授技未建模，已注明）。
+skill sxrmbiyi(3855473017) {
+  active play_phase uses_per_turn 1 select_he 1 1 {
+    effect discard_selected(self);
+    effect draw_cards(self, 1);
+  }
+}

@@ -1,0 +1,11 @@
+// 求援(旧版)(孙鲁班)：当你成为【杀】的目标时，你可以选择一名不为此杀目标的其他角色，
+// 令其选择一项：1.交给你一张【闪】；2.成为此杀的额外目标。
+// 旧JS含chooseTarget+chooseToGive双人交互。目标可选交闪或成为额外目标。
+// 近似：用choose_other_give_one_hand_equip近似交闪，额外目标逻辑无对应原语。
+skill qiuyuan(2778645644) {
+  trigger card_targeted owner_targeted_by_other_sha {
+    // 近似：令另一名角色交给你一张牌（无法限定必须为闪或额外目标二选一）
+    effect choose_other_give_one_hand_equip(self);
+    // 注：旧JS的二选一(交闪or成额外目标)和addTargets逻辑无法精确建模
+  }
+}

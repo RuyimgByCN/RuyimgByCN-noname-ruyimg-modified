@@ -1,0 +1,9 @@
+// 点才（吕范）：其他角色出牌阶段结束时，若其本回合失去的牌数不小于其体力值且
+// 其手牌数小于体力上限，其摸至体力上限。
+// 旧 JavaScript 仅作语义证据；失牌计数与摸牌由 ABI 434 resolve_mbdiancai
+// 权威结算（本回合失牌以回合级计数近似旧 JS 的出牌阶段内失牌）。
+skill mbdiancai(2244183634) {
+  trigger phase_play_end owner_alive_not_target optional {
+    effect resolve_mbdiancai(self, event_source);
+  }
+}

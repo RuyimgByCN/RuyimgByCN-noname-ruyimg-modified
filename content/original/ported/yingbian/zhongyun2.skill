@@ -1,0 +1,7 @@
+// 众允·2（众允系）：任意角色失去/获得牌后触发辅助。
+// 旧 JS 的「多触发源」无对应原语；以任意角色获牌后摸一张近似（已注明）。
+skill zhongyun2(2258737126) {
+  trigger cards_drawn owner_alive_once_per_round {
+    effect draw_cards(self, 1);
+  }
+}

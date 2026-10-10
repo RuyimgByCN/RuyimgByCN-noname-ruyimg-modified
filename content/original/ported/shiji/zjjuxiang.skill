@@ -1,0 +1,16 @@
+// 拒降（周姬）
+// 原语义：限定技，其他存活角色脱离濒死状态后，可对其造成 1 点伤害并摸其体力上限张牌。
+skill zjjuxiang(2215213817) {
+  trigger dying_after owner_alive_not_target optional {
+    effect remove_skill(self_skill);
+    effect deal_damage(self, event_player, 1);
+    effect draw_cards(self, max_hp(event_player));
+  }
+}
+
+// Legacy audio-only metadata; no rule behavior.
+skill houfeng1(2524141211) {
+  // INTENTIONAL_EMPTY_NOOP: complex/upstream-unexpressible or charlotte/audio helper.
+  // No authority rule surface; hand_limit +0 is a non-empty body for catalog honesty.
+  modifier hand_limit add 0;
+}

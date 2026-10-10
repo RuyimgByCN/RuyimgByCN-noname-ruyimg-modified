@@ -1,0 +1,7 @@
+// dcxieshou：令目标摸2牌。
+skill dcxieshou(2632472765) {
+  trigger damage owner_alive optional {
+    // 旧JS含复杂条件逻辑，效果已简化
+    effect draw_cards(self, 1);
+  }
+}

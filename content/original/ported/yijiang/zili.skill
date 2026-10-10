@@ -1,0 +1,15 @@
+// 自立（钟会）：觉醒技。准备阶段,若你的「权」不小于 3 张,你减 1 点体力上限,
+// 然后选择摸两张牌或回复 1 点体力。
+// 旧 JS 仅作语义证据;「获得排异」未建模（需使用技能牌堆牌原语）;
+// 觉醒仅一次以觉醒标记近似,权数判定用 ABI 565 skill_pile_count。
+skill zili(2612253819) {
+  trigger phase_prepare owner_is_target {
+    if mark_count(self, 2612253819) == 0 {
+      if 2 < skill_pile_count(self, 3650058084) {
+        effect change_max_hp(self, -1);
+        effect choose_draw_or_recover(self, 2, 1, 0);
+        effect add_mark(self, 2612253819, 1);
+      }
+    }
+  }
+}

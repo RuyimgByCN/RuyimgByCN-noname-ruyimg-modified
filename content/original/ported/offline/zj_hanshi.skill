@@ -1,0 +1,5 @@
+// zj_hanshi：音效名:dcqingshi, player:card_used, source:damage_before, player:card_used, 加技能, 含子技能, 异步。
+skill zj_hanshi(3656291258) {
+  trigger card_used owner_alive optional {
+  }
+}

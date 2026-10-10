@@ -1,0 +1,9 @@
+// 染瀚（offline 春秋罗贯中 ymranhan）：出牌阶段限一次，将场上任一装备/判定区的牌置于
+// 「湖海笔」下（涉及装备 attaching 与 chooseButton 多区选择）。
+// 上游 (offline/skill ymranhan)：enable phaseUse usable 1 + chooseButton（e/j 分区对话）
+// + huhaibi 场牌查询。
+// INTENTIONAL_EMPTY_NOOP: chooseButton 多区选择与场牌收纳（attach to equip card）
+// 缺口；2026-09-09 上游增量新将批迁移，诚实 noop（保真度债，ADR 0597）。
+skill ymranhan(3235103242) {
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,9 @@
+// 勤国（xinfu_qinguo）：你使用装备牌后，可视为使用一张【杀】。
+// 上游 (sp/skill.js:46133)：useCardEnd，filter = 装备牌；direct content = chooseUseTarget(virtual sha)。
+// 实现：card_used + owner_alive_equip_used（CardUsed 且装备）→ choose_use_virtual_sha(normal_distance)。
+// 与上游差异：子技 recover（装备数=体力时失去装备可回复 1 点体力）未建模，已注明。
+skill xinfu_qinguo(2493371671) {
+  trigger card_used owner_alive_equip_used optional {
+    effect choose_use_virtual_sha(self, normal_distance);
+  }
+}

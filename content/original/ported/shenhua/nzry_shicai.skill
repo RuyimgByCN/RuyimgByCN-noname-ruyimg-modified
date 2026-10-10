@@ -1,0 +1,7 @@
+// 恃才（许攸）：使用后置弃牌堆牌于牌堆顶并摸一。
+// 旧 JS 的「牌堆顶置放」无对应原语；以使用牌后摸一张近似（已注明）。
+skill nzry_shicai(2810349335) {
+  trigger card_used owner_is_source optional {
+    effect draw_cards(self, 1);
+  }
+}
