@@ -3,8 +3,9 @@
 //!
 //! 包的全部差异写在包数据里：`pack` 元数据（名称、内容版本、描述、牌名
 //! 前缀、开局钩子）、每张牌的 `kind`/`suit`/`rank` 与可选 `range`/
-//! `equip_skills`、`skills` 与武将技能的 `mapping`。牌种键、宿主行为键与
-//! 牌种伴随技能由 engine-native 的全局表解析（`CardKind::from_key`、
+//! `equip_skills`、`skills` 与武将技能的 `mapping`、cardpile 的
+//! `assets/pile.json` 比例表。牌种键、宿主行为键与牌种伴随技能由
+//! engine-native 的全局表解析（`CardKind::from_key`、
 //! `HostBehavior::from_key`、`card_kind_host_skills`），装载器不含逐包代码。
 //! 坏包一律返回 [`BridgeError`]，不静默取默认值。名称与名单经
 //! `engine_native::content::names` 符号表分配，重复装载/启停不泄漏增长。
@@ -14,7 +15,7 @@
 //! content-runtime 也不能反向依赖 engine-native，故落在独立宿主层 crate，
 //! 供测试、客户端与服务端共用。
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::ops::RangeInclusive;
 
 use engine_native::catalog::{CardDef, CardKind, EquipSlot, Faction, Suit};
@@ -23,6 +24,7 @@ use engine_native::content::host::{
     card_kind_equip_skills, card_kind_host_skills, HostBehavior, HostSkillDecl,
 };
 use engine_native::content::names;
+use engine_native::content::pile::{PileEntry, PileSpec};
 use engine_native::content::standard::Gender;
 use serde_json::Value;
 
@@ -58,10 +60,10 @@ pub enum BridgeError {
 impl std::fmt::Display for BridgeError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            BridgeError::BadJson(e) => write!(f, "cards.json 解析失败: {e}"),
-            BridgeError::MissingField(fld) => write!(f, "cards.json 缺少字段 {fld}"),
+            BridgeError::BadJson(e) => write!(f, "包数据解析失败: {e}"),
+            BridgeError::MissingField(fld) => write!(f, "包数据缺少字段 {fld}"),
             BridgeError::InvalidField { field, reason } => {
-                write!(f, "cards.json 字段 {field} 非法: {reason}")
+                write!(f, "包数据字段 {field} 非法: {reason}")
             }
             BridgeError::UnknownCardKind(k) => write!(f, "未知牌种键 {k}"),
             BridgeError::UnknownSuit(s) => write!(f, "未知花色 {s}"),
@@ -445,4 +447,40 @@ fn bridge_generals_inner(
         mapped_skill_keys,
         unmapped_skills: unmapped,
     })
+}
+
+/// 牌堆比例表装载（T6①）：已安装 cardpile 包的 `assets/pile.json` →
+/// `PileSpec`。字段缺失/类型非法给出明确原因；未知牌名/花色、空条目与
+/// 零张数由 [`engine_native::content::pile::extension_pack_from_pile`]
+/// 在构建期校验。`counts` 键经 `BTreeMap` 排序——生成卡牌序（目录编号、
+/// 发牌序的一部分）与解析器实现无关，仅由数据决定。
+pub fn bridge_pile(json: &str) -> Result<PileSpec, BridgeError> {
+    let parsed = parse_json(json)?;
+    let source = req_str(&parsed, "source", "pile.json source")?.to_string();
+    let total = req_int(&parsed, "total", "pile.json total", 1..=u64::from(u32::MAX))? as u32;
+    let mut entries = Vec::new();
+    for e in req_array(&parsed, "entries", "pile.json entries")? {
+        let card = req_str(e, "card", "pile.json entries[].card")?.to_string();
+        let counts_json = match e.get("counts") {
+            None | Some(Value::Null) => {
+                return Err(BridgeError::MissingField("pile.json entries[].counts"))
+            }
+            Some(Value::Object(m)) => m,
+            Some(other) => {
+                return Err(invalid(
+                    "pile.json entries[].counts",
+                    format!("须为对象，实为 {other}"),
+                ))
+            }
+        };
+        let counts: BTreeMap<String, u32> = counts_json
+            .iter()
+            .map(|(suit, n)| {
+                let n = int_in(n, "pile.json entries[].counts", 1..=u64::from(u32::MAX))? as u32;
+                Ok((suit.clone(), n))
+            })
+            .collect::<Result<BTreeMap<_, _>, BridgeError>>()?;
+        entries.push(PileEntry { card, counts: counts.into_iter().collect() });
+    }
+    Ok(PileSpec { source, total, entries })
 }

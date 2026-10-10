@@ -286,3 +286,49 @@ fn loader_acceptance_bounded_names_and_clear_errors() {
         "50 轮重新装载/建局/启停后符号表仍在增长（名称泄漏未收敛）"
     );
 }
+
+// ---------------------------------------------------------------------------
+// bridge_pile（T6①）：cardpile `assets/pile.json` → PileSpec。严格错误
+// 检查与 bridge_pack 同风格；counts 键经 BTreeMap 排序（生成卡牌序仅由
+// 数据决定）。
+// ---------------------------------------------------------------------------
+
+#[test]
+fn bridge_pile_parses_installed_cardpile_asset() {
+    // 真实已安装包资产：noname 来源 160 张比例表可装载
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let json = std::fs::read_to_string(root.join("cardpile-upstream-noname/assets/pile.json"))
+        .expect("pile.json 可读");
+    let spec = content_native_loader::bridge_pile(&json).expect("装载");
+    assert_eq!(spec.source, "noname");
+    assert_eq!(spec.total, 160);
+    assert_eq!(spec.entries.len(), 12);
+    // counts 键排序：spade/heart/club/diamond 声明序 → 字典序
+    let sha = spec.entries.iter().find(|e| e.card == "sha").expect("sha 条目");
+    let suits: Vec<&str> = sha.counts.iter().map(|(s, _)| s.as_str()).collect();
+    assert_eq!(suits, vec!["club", "diamond", "heart", "spade"], "counts 键按字典序");
+    let total_sha: u32 = sha.counts.iter().map(|(_, n)| n).sum();
+    assert_eq!(total_sha, 30, "sha 30 张（6+14+3+7）");
+}
+
+#[test]
+fn bridge_pile_rejects_bad_data() {
+    use content_native_loader::bridge_pile;
+    assert!(matches!(bridge_pile("{ not json"), Err(BridgeError::BadJson(_))));
+    assert_eq!(bridge_pile("{}"), Err(BridgeError::MissingField("pile.json source")));
+    let missing_total = r#"{"source":"noname","entries":[]}"#;
+    assert_eq!(
+        bridge_pile(missing_total),
+        Err(BridgeError::MissingField("pile.json total"))
+    );
+    let zero_count = r#"{"source":"noname","total":160,"entries":[{"card":"sha","counts":{"spade":0}}]}"#;
+    assert_eq!(
+        bridge_pile(zero_count),
+        Err(BridgeError::InvalidField { field: "pile.json entries[].counts", reason: "须为 1–4294967295 的整数，实为 0".into() })
+    );
+    let bad_counts = r#"{"source":"noname","total":160,"entries":[{"card":"sha"}]}"#;
+    assert_eq!(
+        bridge_pile(bad_counts),
+        Err(BridgeError::MissingField("pile.json entries[].counts"))
+    );
+}

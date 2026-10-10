@@ -124,35 +124,6 @@ fn options() -> InstallOptions {
     }
 }
 
-#[derive(serde::Deserialize)]
-struct PileEntryJson {
-    card: String,
-    counts: BTreeMap<String, u32>,
-}
-
-#[derive(serde::Deserialize)]
-struct PileJson {
-    source: String,
-    total: u32,
-    entries: Vec<PileEntryJson>,
-}
-
-fn parse_spec(json: &str) -> PileSpec {
-    let parsed: PileJson = serde_json::from_str(json).expect("pile.json 可解析");
-    PileSpec {
-        source: parsed.source,
-        total: parsed.total,
-        entries: parsed
-            .entries
-            .into_iter()
-            .map(|e| PileEntry {
-                card: e.card,
-                counts: e.counts.into_iter().collect(),
-            })
-            .collect(),
-    }
-}
-
 /// 转换产物防漂移：仓库内的 npack 与生成器输出逐字节一致。
 #[test]
 fn converted_packages_match_generator() {
@@ -219,7 +190,9 @@ fn g1_cardpile_vertical_install_enable_newgame_saverestore() {
             .join(meta.extension_root.as_ref().expect("drop-in 来源目录"));
         let pile_bytes = std::fs::read_to_string(source_root.join("assets/pile.json"))
             .expect("已安装资产可读");
-        let spec = parse_spec(&pile_bytes);
+        // 装载器入口（T6①）：pile.json 解析在 content-native-loader，
+        // 测试不再内嵌 parse_spec
+        let spec = content_native_loader::bridge_pile(&pile_bytes).expect("pile.json 可装载");
         assert_eq!(spec.total, 160, "上游比例表 total=160");
         let prefix = if meta.namespace == "upstream-noname" { "cnp" } else { "cpl" };
         let def = ExtensionDef {
@@ -406,7 +379,7 @@ fn cardpile_real_host_full_lifecycle() {
     let source_root = PathBuf::new()
         .join(meta_cnp.extension_root.as_ref().expect("drop-in 来源目录"));
     let pile_bytes = std::fs::read_to_string(source_root.join("assets/pile.json")).expect("pile.json");
-    let spec = parse_spec(&pile_bytes);
+    let spec = content_native_loader::bridge_pile(&pile_bytes).expect("pile.json 可装载");
     assert_eq!(spec.total, 160);
     let def = ExtensionDef {
         name: "cardpile-upstream-noname",
@@ -474,7 +447,7 @@ fn cardpile_liuli_real_host_full_lifecycle() {
     let source_root = PathBuf::new()
         .join(meta_cpl.extension_root.as_ref().expect("drop-in 来源目录"));
     let pile_bytes = std::fs::read_to_string(source_root.join("assets/pile.json")).expect("pile.json");
-    let spec = parse_spec(&pile_bytes);
+    let spec = content_native_loader::bridge_pile(&pile_bytes).expect("pile.json 可装载");
     assert_eq!(spec.total, 160);
     let def = ExtensionDef {
         name: "cardpile-upstream-liuli",
