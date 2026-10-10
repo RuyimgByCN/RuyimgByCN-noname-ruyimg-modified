@@ -1,0 +1,41 @@
+# 2026-10-10 文档清理核验
+
+## 1. delta 页重复章节（删除前逐字节比较）
+8476–8496 与 8516–8536 两段 21 行逐行相同（python 列表比较 True），删除后一段；其后紧接“上游 v1.11.7 增量同步”节，边界已断言
+
+## 2. 保真度台账重新生成
+$ python3 scripts/gen-fidelity-ledger.py --date 2026-10-10
+wrote docs/content-fidelity-ledger.md and docs/content-fidelity-ledger-detail.md: 5595 files, complete=5022 approx=573 todo=0 noop=2019
+（diff 只有生成日期与两处 §47.4 措辞）
+
+## 3. 覆盖清单联动守护
+$ cargo test --offline -p engine-native --test replay_scenarios
+test scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios_match_golden ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+## 4. 本地链接与锚点（本批改动的 md 及导航文档）
+../AGENTS.md: 链接 11，锚点 0，失效 0
+README.md: 链接 14，锚点 0，失效 0
+noname-performance-architecture.md: 链接 5，锚点 0，失效 0
+docs/architecture/native-progress.md: 链接 55，锚点 6，失效 0
+docs/architecture/overview.md: 链接 17，锚点 0，失效 0
+docs/architecture/legacy-reference.md: 链接 29，锚点 2，失效 0
+docs/architecture/native-rules-baseline.md: 链接 133，锚点 6，失效 0
+docs/adr/INDEX.md: 链接 84，锚点 0，失效 0
+docs/native-coverage-manifest.md: 链接 28，锚点 4，失效 0
+docs/content-fidelity-ledger.md: 链接 1，锚点 0，失效 0
+docs/content-fidelity-ledger-detail.md: 链接 0，锚点 0，失效 0
+docs/content-sdk/phase4-dsl-vm.md: 链接 3，锚点 2，失效 0
+docs/migration/mode-content-compatibility.md: 链接 4，锚点 0，失效 0
+docs/migration/noop-mechanism-survey.md: 链接 4，锚点 0，失效 0
+docs/migration/phase9-legacy.md: 链接 3，锚点 1，失效 0
+docs/migration/ruyimg-extensions-inventory.md: 链接 3，锚点 0，失效 0
+docs/migration/upstream-1.11.5-delta.md: 链接 5，锚点 2，失效 0
+docs/migration/upstream-extension-reconstruction.md: 链接 173，锚点 4，失效 0
+docs/migration/upstream-noname-inventory.md: 链接 7，锚点 1，失效 0
+docs/operations/evidence/2026-10-10-todo-handoff/README.md: 链接 12，锚点 3，失效 0
+docs/operations/evidence/2026-10-10-doc-cleanup/README.md: 链接 7，锚点 0，失效 0
+合计：链接 598，锚点 31，失效 0
+exit=0
