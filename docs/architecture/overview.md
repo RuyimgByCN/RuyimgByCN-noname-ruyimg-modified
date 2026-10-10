@@ -4,7 +4,7 @@
 
 ## 阅读顺序
 
-1. [重写进度](native-progress.md)：当前通过、失败、扩展整包状态与下一步。
+1. [重写进度](native-progress.md)：当前通过、失败、扩展整包状态与下一步；按批次的历史流水与 2026-10-10 事故恢复记录在[批次流水存档](native-progress-history.md)。
 2. [覆盖清单](../native-coverage-manifest.md)和[玩法规则基准](native-rules-baseline.md)：原生机制、规则版本、上游语义差异。
 3. [扩展宿主契约](native-extensions.md)和[两仓 37 来源台账](../migration/upstream-extension-reconstruction.md)：独立扩展能力与逐来源验收。
 4. [测试与性能证据](../operations/phase17-test-perf-infrastructure.md)和[原生基准](../operations/phase19-native-baseline.md)：分清旧线、原生线和历史负载。

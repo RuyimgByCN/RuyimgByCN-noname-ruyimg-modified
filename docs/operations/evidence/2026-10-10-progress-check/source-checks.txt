@@ -1,0 +1,31 @@
+# 源码核对（git 72583b2b）
+$ rg -n "pub const (STANDARD_RULESET_VERSION|ARCHIVE_FORMAT_VERSION)" crates/engine-native/src
+crates/engine-native/src/archive.rs:40:pub const ARCHIVE_FORMAT_VERSION: u16 = 41;
+crates/engine-native/src/content/standard.rs:127:pub const STANDARD_RULESET_VERSION: u64 = 192;
+$ cmp crates/engine-native/src/content/host.rs ~/host-recovery-20261010/final_allgreen_525pass.rs
+（逐字节一致）
+$ rg -n "TODO\(事故恢复\)" crates/engine-native/src
+crates/engine-native/src/content/host.rs:4922  MoshouImmunity
+crates/engine-native/src/content/host.rs:5688  GujianFoodYuanbaorou
+crates/engine-native/src/content/host.rs:8872  WudianCiqiu
+crates/engine-native/src/content/host.rs:9211  WudianChezhen
+crates/engine-native/src/content/host.rs:9269  WudianTuji
+crates/engine-native/src/content/host.rs:9495  WudianGuangshuSpade
+crates/engine-native/src/content/host.rs:9619  WudianDuwen
+crates/engine-native/src/content/host.rs:10197  WudianFeiren
+crates/engine-native/src/content/host.rs:10727  WudianXiandan
+crates/engine-native/src/content/host.rs:10732  WudianJijia
+crates/engine-native/src/content/host.rs:10797  WudianLongxiang
+crates/engine-native/src/content/host.rs:10852  XianjianTannang
+crates/engine-native/src/content/host.rs:10968  XianjianXuanyan
+crates/engine-native/src/content/host.rs:11097  WudianLueying
+$ ls crates/engine-native/src/content/*.rs.* （恢复期备份，不参与编译）
+520051 host.rs.pre_assembly
+559445 host.rs.recovered-v192
+$ rg -n "std::env::var\(" crates/engine-native/src -g "*.rs" （调试探针）
+crates/engine-native/src/machine.rs:518:        if std::env::var("XLY_DBG").is_ok() {
+crates/engine-native/src/resolution.rs:100:    if std::env::var("PT_DBG2").is_ok() && matches!(kind, EventKind::Death) {
+crates/engine-native/src/resolution.rs:287:    if std::env::var("PT_DBG2").is_ok() {
+crates/engine-native/src/resolution.rs:324:    if std::env::var("PT_DBG").is_ok() {
+$ ls packages/extensions | wc -l
+15

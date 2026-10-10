@@ -1,0 +1,98 @@
+   Compiling find-msvc-tools v0.1.9
+   Compiling shlex v2.0.1
+    Checking arrayref v0.3.9
+    Checking arrayvec v0.7.8
+    Checking constant_time_eq v0.4.2
+    Checking cfg-if v1.0.4
+   Compiling cc v1.2.66
+   Compiling blake3 v1.8.5
+    Checking engine-native v0.1.0 (crates/engine-native)
+error: unused import: `HostBehavior as B`
+     --> crates/engine-native/src/content/host.rs:14353:9
+      |
+14353 |     use HostBehavior as B;
+      |         ^^^^^^^^^^^^^^^^^
+      |
+      = note: `-D unused-imports` implied by `-D warnings`
+      = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: unused variable: `oc`
+    --> crates/engine-native/src/content/host.rs:5119:33
+     |
+5119 |                     if let Some(oc) = own_card {
+     |                                 ^^ help: if this is intentional, prefix it with an underscore: `_oc`
+     |
+     = note: `-D unused-variables` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(unused_variables)]`
+
+error: unused variable: `eff`
+    --> crates/engine-native/src/content/host.rs:9761:25
+     |
+9761 |                     let eff = 1 + ctx.core.turn.yuedong_eff as usize;
+     |                         ^^^ help: if this is intentional, prefix it with an underscore: `_eff`
+
+error: unused variable: `picked`
+     --> crates/engine-native/src/content/host.rs:11307:29
+      |
+11307 |                 if let Some(picked) = cands.first().copied() {
+      |                             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_picked`
+
+error: unused variable: `d`
+     --> crates/engine-native/src/content/host.rs:12909:33
+      |
+12909 |                     if let Some(d) = self.target.and_then(|t| Some(t)) {
+      |                                 ^ help: if this is intentional, prefix it with an underscore: `_d`
+
+error: unused variable: `def`
+     --> crates/engine-native/src/content/host.rs:14313:9
+      |
+14313 |     let def = ctx.catalog.skill_by_name(MTG_YIXIALAN_RECAST_KEY);
+      |         ^^^ help: if this is intentional, prefix it with an underscore: `_def`
+
+error: unused variable: `chongzheng`
+   --> crates/engine-native/src/engine.rs:230:13
+    |
+230 |         let chongzheng = match &self.state.core.mode {
+    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_chongzheng`
+
+error: unused variable: `boss`
+   --> crates/engine-native/src/kernel.rs:837:18
+    |
+837 |     if let Some((boss, threshold)) = ctx.core.boss_mode() {
+    |                  ^^^^ help: if this is intentional, prefix it with an underscore: `_boss`
+
+error: variable does not need to be mutable
+    --> crates/engine-native/src/kernel.rs:5604:64
+     |
+5604 |             crate::state::GameMode::Kof { mut pools, mut wins, mut games } => {
+     |                                                                ----^^^^^
+     |                                                                |
+     |                                                                help: remove this `mut`
+     |
+     = note: `-D unused-mut` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(unused_mut)]`
+
+error: unused variable: `count`
+   --> crates/engine-native/src/presentation.rs:185:52
+    |
+185 |             LogEvent::BossChongzhengTick { player, count } => {
+    |                                                    ^^^^^ help: try ignoring the field: `count: _`
+
+error: unused variable: `liuli_card`
+    --> crates/engine-native/src/snap.rs:1503:13
+     |
+1503 |             liuli_card,
+     |             ^^^^^^^^^^ help: try ignoring the field: `liuli_card: _`
+
+error: useless assignment of field of type `Option<u32>` to itself
+     --> crates/engine-native/src/content/host.rs:14168:21
+      |
+14168 |                     self.card = self.card; // 保持本体
+      |                     ^^^^^^^^^^^^^^^^^^^^^
+      |
+      = note: `-D dead-code` implied by `-D warnings`
+      = help: to override `-D warnings` add `#[expect(dead_code)]` or `#[allow(dead_code)]`
+
+error: could not compile `engine-native` (lib) due to 12 previous errors
+env RUSTFLAGS="-D warnings" CARGO_TARGET_DIR=/private/tmp/nn-gate1b cargo   -  3.14s user 0.47s system 104% cpu 3.442 total
+exit=101

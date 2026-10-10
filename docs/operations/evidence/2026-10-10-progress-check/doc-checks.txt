@@ -1,0 +1,20 @@
+# 本地链接与锚点检查（2026-10-10，python 解析 markdown 链接；锚点按 GitHub 规则生成）
+../AGENTS.md: 链接 11，锚点 0，失效 0
+README.md: 链接 14，锚点 0，失效 0
+docs/architecture/native-progress.md: 链接 47，锚点 5，失效 0
+docs/architecture/native-progress-history.md: 链接 63，锚点 4，失效 0
+docs/architecture/native-rules-baseline.md: 链接 130，锚点 6，失效 0
+docs/architecture/overview.md: 链接 16，锚点 0，失效 0
+docs/architecture/architecture-evolution-plan.md: 链接 47，锚点 10，失效 0
+docs/architecture/native-extensions.md: 链接 4，锚点 0，失效 0
+docs/migration/upstream-extension-reconstruction.md: 链接 169，锚点 2，失效 0
+docs/native-coverage-manifest.md: 链接 28，锚点 4，失效 0
+docs/operations/phase17-test-perf-infrastructure.md: 链接 11，锚点 1，失效 0
+docs/adr/INDEX.md: 链接 84，锚点 0，失效 0
+docs/operations/evidence/2026-10-10-progress-check/README.md: 链接 17，锚点 0，失效 0
+合计：链接 641，锚点 32，失效 0
+
+$ cargo test --offline -p engine-native --test replay_scenarios（清单守护：场景名与机制键登记）
+test scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios_match_golden ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

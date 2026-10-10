@@ -1,0 +1,19 @@
+# 转换包数据事实（git 72583b2b，2026-10-10）
+# 口径：assets/cards.json 的 cards/deferred 数组长度；generals[].skills 中对象型声明及 mapping=null 计数
+$ ls packages/extensions | wc -l
+15
+cardpile-upstream-liuli: 无 assets/cards.json（assets, manifest.json, package.npack.json）
+cardpile-upstream-noname: 无 assets/cards.json（assets, manifest.json, package.npack.json）
+d3-upstream-noname: 无 assets/cards.json（assets, manifest.json, package.npack.json）
+huanle-upstream-noname: cards=7 deferred=0
+shaai-ow-upstream-noname: cards=0 deferred=0 generals=24 skill_decls=61 mapping_null=27
+shaai-xianjian-upstream-noname: cards=0 deferred=0 generals=36 skill_decls=102 mapping_null=26
+shahai-gujian-upstream-noname: cards=40 deferred=0
+shahai-gwent-upstream-noname: cards=21 deferred=0
+shahai-hearth-upstream-noname: cards=17 deferred=0
+shahai-mtg-upstream-noname: cards=10 deferred=0
+shahai-swd-upstream-noname: cards=30 deferred=0
+shahai-yunchou-upstream-noname: cards=23 deferred=0
+shahai-zhenfa-upstream-noname: cards=3 deferred=5
+wudian-upstream-noname: cards=14 deferred=1 generals=6 skill_decls=12 mapping_null=2
+wuxing-upstream-liuli: cards=1 deferred=0

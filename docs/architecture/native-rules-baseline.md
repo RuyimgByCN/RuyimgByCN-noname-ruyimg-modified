@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-06 复核。源码仍为 `STANDARD_RULESET_VERSION = 60`、`ARCHIVE_FORMAT_VERSION = 2`；本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。v60 回放、标准目录和 XiaoJi tag 已于 9 月 24 日修复；存档未知牌种与载荷读尽仍未修，本次[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)再次复现。snap.rs 曾于第 43 轮发生截断事故并重建（记录见第 43 轮证据）。
+状态：活文档，2026-10-10 复核。源码为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v192 为最新（2026-10-10 补登）。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -528,6 +528,30 @@ players 向量，直授 4 张手牌=上游 directgain(4)，登记入 fellows）�
 版本 82→83 入 canonical_hash——14 golden 重录（标准场景无 KOF 局，
 纯版本位移）。回归：`kof_engine_mode_session_advance`（两局推进：
 队首淘汰/队首轮转/比分局数、存档往返、败者池清空出线形态）。
+
+v85–v95 条目于 2026-10-10 由进度主稿批次流水原样移入（此前本页缺这 11 个版本的条目；原文见[进度历史](native-progress-history.md#p2--n08n11-规则对齐批次流水2026-10-07--10-08)）。
+
+**规则 v85（2026-10-08，U05 swd 首切片）**：护符 hufu（♠1/♣1，基本牌）——`CardKind::Hufu` 编码 104（archive/a0 同步）、is_tao_like 双镜像限自身（responder==dying=上游 savable 同口径，重整 tick 无涉）、转换包 `shahai-swd-upstream-noname`（2 张）真实宿主生命周期验收；他人濒死负例固化（持符者被问但选项不含护符）；14 golden 重录（目录变化）。证据见[swd 首切片](../operations/evidence/2026-10-08-u05-swd-slice/README.md)。
+
+**规则 v86（2026-10-08，U05 swd 第二批）**：流星火雨——`CardKind::Liuxinghuoyu` 编码 105（archive/a0 同步）+ 宿主行为 `SwdLiuxinghuoyuCard`（tag 79，SelectCard 两段：目标自选弃两张 he（min=max=2 可取消）/取消或不足两张受 1 点火伤（上游 step1 directfalse||!bool → damage("fire") 同口径）；无懈窗口包装；转换包增至 5 张；弃牌落 discard 修复（首跑发现 to_discard 缺失致 card_missing_from_all_zones）。14 golden 重录（纯版本位移）；回归 `swd_liuxinghuoyu_discard2_or_fire`（弃二无伤/不足两张火伤/往返）。证据见[swd 第二批](../operations/evidence/2026-10-08-u05-swd-batch2/README.md)。
+
+**规则 v87（2026-10-08，U05 swd 第三批）**：草药 ♣3/♣4/♣5——`CardKind::Caoyao` 编码 106（archive/a0/ALL 同步）+ PlayCard 门控（恰 1 目标、存活且 hp<maxHp、computed_distance≤1=上游 range.global 1）+ 内联回复结算（Recover 事件走 Tao 同路）；转换包增至 8 张。14 golden 重录（纯版本位移）；回归 `swd_caoyao_heals_wounded_in_range`（距离内受伤回复/满血拒绝）。证据见[swd 第三批](../operations/evidence/2026-10-08-u05-swd-batch3/README.md)。
+
+**规则 v88（2026-10-08，U05 swd 第四批）**：赤龙牙 ♦3——`CardKind::Chilongya` 编码 107（equip1 射程 2、archive/a0/ALL 同步）+ commit_damage 火伤增幅（来源装备赤龙牙时火属性伤害 +1；非火照常、铁索传导的二次结算照常 +1=上游 damageBegin num++ 每事件语义）；转换包增至 9 张。14 golden 重录（纯版本位移）；回归 `swd_chilongya_amplifies_fire_damage`（火伤 1→2/非火照常/射程 2）。证据见[swd 第四批](../operations/evidence/2026-10-08-u05-swd-batch4/README.md)。
+
+**规则 v89（2026-10-08，U05 swd 第五批）**：天仙酒 ♥9/♦2——`CardKind::Tianxianjiu` 编码 108（archive/a0/ALL 同步）；酒的 swd 变体：intrinsic/PlayCard/is_tao_like 三处与 Jiu 同臂（濒死自救+下张杀 +1），登记差异=与酒共享每回合计数（上游独立 usable:1）；转换包增至 11 张。14 golden 重录（纯版本位移）；回归 `swd_tianxianjiu_ameisha_and_self_rescue`（酒增益杀 2 伤/共享计数 CardLimit）。证据见[swd 第五批](../operations/evidence/2026-10-08-u05-swd-batch5/README.md)。
+
+**规则 v90（2026-10-08，U05 swd 第六批）**：吸血鬼指环 ♠5——`CardKind::Xixueguizhihuan` 编码 109（equip5 宝物、archive/a0/ALL 同步）+ commit_damage 杀伤害后吸血（来源存活且已受伤且伤害牌为【杀】→ 回复等量体力，上游 xixue damageEnd 同口径；非杀/满血不触发）；转换包增至 12 张。14 golden 重录（纯版本位移）；回归 `swd_xixue_lifesteal_on_sha_damage`（吸血回复/满血不触发/杀计数重置脚手架）。证据见[swd 第六批](../operations/evidence/2026-10-08-u05-swd-batch6/README.md)。
+
+**规则 v91（2026-10-08，U05 swd 第七批）**：归有界 ♠3/♣9——`CardKind::Guiyoujie` 编码 110（他人延时锦囊、archive/a0/ALL 同步）+ PlaceDelayed 派发（无懈窗口包装）+ 判定结算臂（黑色失去 1 点体力+he 随机弃一张——RNG 均匀抽取同批四口径；红色无事；PlayCard 门控=恰 1 其他存活目标+其判定区无同名延时）。14 golden 重录（纯版本位移）；回归 `swd_guiyoujie_delayed_black_loss`（黑判失体力+随机弃牌/往返）。证据见[swd 第七批](../operations/evidence/2026-10-08-u05-swd-batch7/README.md)。
+
+**规则 v92（2026-10-08，U05 swd 第八批）**：潜偷面具 ♠6——`CardKind::Shentoumianju` 编码 111（equip5 宝物、archive/a0/ALL 同步）+ 装备主动技 `SwdShentouEquipSkill`（Act 问代价弃一张手牌→判定：梅花失败无事、非梅花获得手牌更多目标一张随机手牌；上游 shentou chooseCard cost + judge 梅花 + randomGet 同口径；快照派生 SelectCard 询问重 derivation）；装备注入同步授予技能实例（快照校验 EquipSkillMismatch 首跑捕获）。14 golden 重录（纯版本位移）；回归 `swd_shentou_active_steal_with_club_judge`（守恒断言/代价弃置）。证据见[swd 第八批](../operations/evidence/2026-10-08-u05-swd-batch8/README.md)。
+
+**规则 v93（2026-10-08，U05 swd 第九批）**：星君眼+青龙令珠 双 equip5 宝物——`CardKind::Xingjunyan` 编码 112（杀伤 +1 锁定，damageBegin card==sha 同赤龙牙口径）+`CardKind::Qinglonglingzhu` 编码 113（属性伤害后获得目标一张 he 牌——damageEnd hasNature+alive，RNG 代抽登记差异）；两钩子均在 commit_damage（星君眼 hp 扣减前、青龙令珠 DamageDealt 日志后）；装备注入全区域清除（首跑 card_in_multiple_zones 捕获）。14 golden 重录（纯版本位移）；回归 `swd_xingjunyan_amp_and_qinglonglingzhu_steal`（星君眼 6→4/青龙令珠目标-1 使用者+1）。证据见[swd 第九批](../operations/evidence/2026-10-08-u05-swd-batch9/README.md)。
+
+**规则 v94（2026-10-08，U05 swd 第十批）**：贴房绅视——`CardKind::Zhufangshenshi` 编码 114（他人锦囊、archive/a0/ALL 同步）+ `TurnState.zhufangshenshi_target: Option<PlayerId>`（存档 opt_u8/哈希 match/快照豁免）；sha 距离校验豁免（zfs_free 跳过 computed_distance 比较=上游 targetInRange mod 同口径）；使用后摸一张牌（上游 g_zhufangshenshi draw）；登记差异=无懈不可触发（上游 wuxie AI 权重 0 实战不戒，原生简化为直接结算）。14 golden 重录（纯版本位移）；回归 `swd_zhufangshenshi_distance_waiver`（绅视+标记目标出杀/存档往返）。证据见[swd 第十批](../operations/evidence/2026-10-08-u05-swd-batch10/README.md)。
+
+**规则 v95（2026-10-08，U05 swd 第十一批）**：风雪刃 ♣1——`CardKind::Fengxueren` 编码 115（equip1 射程 2、archive/a0/ALL 同步）+ ShaResolve `asking_fengxueren`（shaHit 后 Confirm 询问：确认→防止伤害+目标翻面（TurnOvered 事件）+摸 1；放弃→照常伤害；目标已翻面不再询问=上游 filter !isTurnedOver 同口径）；快照/存档/哈希/derive 全接线。14 golden 重录（纯版本位移）；回归 `swd_fengxueren_flip_or_damage`（翻面+摸牌/放弃伤害/翻面目标不再询问）。证据见[swd 第十一批](../operations/evidence/2026-10-08-u05-swd-batch11/README.md)。
 
 **规则 v96（2026-10-08，U05 swd 第十二批：御夫录）**：swd 转换批 +
 潜偷限一次补执行：
@@ -1833,6 +1857,24 @@ kind 级 def 注册=card_kind_host_skills(Jiguan) 首例。**登记差异/说
 环推进至归 0 结算三断言）。证据见
 [README-v191](../operations/evidence/2026-10-10-xianjian-ctianfu-batch/README-v191.md)。
 
+**规则 v192（2026-10-10，U05 swd 第十九批：机关桶，2026-10-10 补登）**：
+机关桶（上游 `jiguantong`「机关火筒」，♦4/♣7，`SwdJiguantongCard` tag
+220，与其余机关牌共用无懈窗包装）——PlayCard 校验目标须恰为当前回合角色
+起座位序的全部其他存活角色（上游 selectTarget -1、target!==player）；逐目
+标：有手牌者选弃一张手牌（可取消=受 1 点火伤，上游 chooseToDiscard 同口
+径），无手牌者直接受 1 点火伤，本体入弃堆。**登记差异**：①结算序=座位
+序（上游 `reverseOrder` 逆序）②**未实现** contentAfter「若没有人选择受
+到伤害，使用者摸一张牌」（上游 translate 与 card.js `preResult` 同此语义；
+原生机器无摸牌分支，测试未覆盖）。机关牌池：上游 6 种 13 张，已切 4 种 7
+张（余机关术×2/机关妖术×2）。swd 转换包 30 张（含机关牌 6 张）。版本
+191→**192**，存档格式不变（v41）。本批开发中 host.rs 被截断，事后从会话
+记录重建；回归 `swd_jiguantong_aoe_discard_or_fire`（弃牌免伤/空手火伤/本
+体入弃堆）2026-10-10 通过。14 golden 补齐 v191/v192 两批重录，原因核验
+（版本回退探针、轨迹语义探针、行为面全量）见
+[v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)；
+本批无独立批次证据，实现语义以源码与
+[2026-10-10 进度核对](../operations/evidence/2026-10-10-progress-check/README.md)为准。
+
 
 ## 当前声明与验证边界
 
@@ -1874,7 +1916,7 @@ v3.3 恢复原有扩展机制。单个 STANDARD_RULESET_VERSION 不足以标识�
 | 激将 | 上游有主公资格、出杀使用/响应入口，并按座位逐一询问蜀将 | **已重构（v29）**：按座位序逐人询问蜀势力（拒绝继续、全拒绝回滚 once_per_turn、借杀同一结算、身份局主公资格）。与上游剩余差异：借牌直结算非完整 chooseToRespond 通道；非国战模式以主将势力定资格 |
 | 护驾 | 上游向符合资格的魏将逐个询问，不以暗手牌预筛 | **已重构（v29）**：按座位序逐人询问魏势力（不以暗手牌预筛、身份局主公资格、代出闪计入无双需求、挂起态可恢复）。与上游剩余差异：代出闪为弃置+计数而非完整 respond 通道 |
 | 仁德累计 | 上游出牌阶段可多次给牌，累计跨过 2 张时回复一次 | **已修（v29）**：多次发动 + `TurnState.rende_given` 阶段累计（入快照/哈希/字节），跨 2 回复一次。回归：`rende_cumulative_crosses_two_across_activations` |
-| 模式入口 | 上游 `apps/core/mode` 有 12 个顶层模式入口；入口数不等于 12 套独立规则 | 原生 `GameMode` 只有 Prototype、Identity、Kingdoms 三类，KOF 仍在示例会话；boss、versus、doudizhu 等尚无同等模式接入与逐模式验收 |
+| 模式入口 | 上游 `apps/core/mode` 有 12 个顶层模式入口；入口数不等于 12 套独立规则 | 原生 `GameMode` 有 7 类（2026-10-10 源码核对）：Prototype、Identity、Kingdoms 及模式入口批次接入的 Versus（v80）、Doudizhu（v81）、Boss（v82/v84）、Kof（v83）。各模式仅基线与所测路径，变体与未建模项见上方“当前声明与验证边界”表的模式行；其余上游入口尚无接入与逐模式验收 |
 
 后续处理顺序和完成条件统一见[进度主稿](native-progress.md#后续待做按阻塞关系)，避免在本页保留另一套易过期待办。规则任务按本表固定来源与语义，逐技能/将/牌/模式比较命令、事件、随机流和中间恢复轨迹；逐来源扩展与组合验收见[两仓台账](../migration/upstream-extension-reconstruction.md)。
 

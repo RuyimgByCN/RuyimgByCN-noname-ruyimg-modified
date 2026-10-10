@@ -1,0 +1,6 @@
+date: 2026-10-10 20:19 CST
+source: git 72583b2b（本地基线提交）
+rustc 1.95.0 (59807616e 2026-04-14)
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+git version 2.56.0
+macOS 27.0.1 arm64

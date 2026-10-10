@@ -10,7 +10,7 @@
 - 旧线工作区与跨目标：cargo test --workspace；cargo run -p conformance；bash scripts/cross-target-hash.sh
 - benchmark-runner 当前仍测 engine-core，例如 trigger-dispatch、identity-match。
 
-[phase19 原生基准](phase19-native-baseline.md)与本页旧线数据负载不同，不能相除得出提速倍数。第 48 轮 v59 全绿和当前 v60 回放失败也不可混作一次验证；14 个 golden 是一个场景测试内部的 14 个期望，不额外计 14 项。正式平台、跨目标和旧上游浏览器记录须单独标注来源。
+[phase19 原生基准](phase19-native-baseline.md)与本页旧线数据负载不同，不能相除得出提速倍数。第 48 轮 v59 全绿与 9-24 时的 v60 回放失败不能当作同一次验证（当前原生结果见主稿）；14 个 golden 是一个场景测试内部的 14 个期望，不额外计 14 项。正式平台、跨目标和旧上游浏览器记录须单独标注来源。
 
 ## 2026-09-24 优化假设复核
 
