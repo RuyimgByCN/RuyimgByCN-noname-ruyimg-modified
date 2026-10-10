@@ -1500,7 +1500,6 @@ pub fn active_ask(
             asked,
             tieji_red,
             liuli_stage,
-            liuli_card,
             hujia_holder,
             ..
         } => {

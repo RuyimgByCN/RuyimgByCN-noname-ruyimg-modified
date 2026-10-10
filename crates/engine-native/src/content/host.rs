@@ -5118,10 +5118,8 @@ impl crate::catalog::SkillMachine for HostMachine {
                     ctx.core.player_mut(t).hand.retain(|x| *x != target_card);
                     ctx.core.player_mut(self.owner).hand.push(target_card);
                     // 同色 → 摸 1
-                    if let Some(oc) = own_card {
-                        if own_color == Some(t_color) {
-                            ctx.draw_cards(self.owner, 1);
-                        }
+                    if own_card.is_some() && own_color == Some(t_color) {
+                        ctx.draw_cards(self.owner, 1);
                     }
                     if let Some(c) = self.card {
                         ctx.to_discard(c);
@@ -9770,7 +9768,6 @@ impl crate::catalog::SkillMachine for HostMachine {
                 // [1,num] 可整体放弃——空选项直接跳过）。
                 HostStage::Act => {
                     let num = 1 + ctx.core.turn.yuedong_num as usize;
-                    let eff = 1 + ctx.core.turn.yuedong_eff as usize;
                     let recover = ctx.core.turn.yuedong_recover;
                     let options: Vec<ChoiceOption> = ctx
                         .core
@@ -11336,7 +11333,7 @@ HostBehavior::XianjianLingyu => match self.stage {
                             && ctx.core.discard.contains(c)
                     })
                     .collect();
-                if let Some(picked) = cands.first().copied() {
+                if !cands.is_empty() {
                     let i = ctx.core.rng.gen_range(cands.len() as u32) as usize;
                     let picked = cands[i];
                     let Some(pos) =
@@ -12938,9 +12935,7 @@ HostBehavior::XianjianLingyu => match self.stage {
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                 );
                 if is_black {
-                    if let Some(d) = self.target.and_then(|t| Some(t)) {
-                        // target 未用——伤害牌从 cards[0] 取
-                    }
+                    // target 未用——伤害牌从 cards[0] 取
                     if let Some(c) = self.cards.first().copied() {
                         if let Some(pos) =
                             ctx.core.discard.iter().position(|x| *x == c)
@@ -14197,7 +14192,6 @@ HostBehavior::XianjianLingyu => match self.stage {
                         .copied()
                         .map(ChoiceOption::Card)
                         .collect();
-                    self.card = self.card; // 保持本体
                     self.targets.insert(0, t); // 未决目标回队首（SelectCard 段消费）
                     self.stage = HostStage::SelectCard;
                     Flow::WaitChoice {
@@ -14342,7 +14336,6 @@ fn food_tick(ctx: &mut Ctx<'_>, owner: PlayerId, def_key: &str) {
 /// 技（当前仅依夏兰附重铸技；上游 addGlobalSkill+temp 簿记的实例化对
 /// 应物——once_used 随拥有者回合开始重置为既有路径）。
 pub(crate) fn sync_land_skill(ctx: &mut Ctx<'_>, owner: PlayerId, new_kind: CardKind) {
-    let def = ctx.catalog.skill_by_name(MTG_YIXIALAN_RECAST_KEY);
     // 地附技映射（当前三例）：依夏兰→重铸、林中尖塔→塔击、幽林→发现
     let key_of = |k: CardKind| match k {
         CardKind::Yixialan => Some(MTG_YIXIALAN_RECAST_KEY),
@@ -14382,7 +14375,6 @@ pub(crate) fn sync_land_skill(ctx: &mut Ctx<'_>, owner: PlayerId, new_kind: Card
 /// 牌种固有的装备技能（引擎按固定键查找）；包数据声明的装备技追加其后。
 
 pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSkillDecl] {
-    use HostBehavior as B;
     match kind {
         CardKind::Jinlianzhu => &[HostSkillDecl { name: GJ_JINLIANZHU_KEY, behavior: HostBehavior::JinlianzhuCancel }],
         CardKind::Tanhuadong => &[HostSkillDecl { name: GJ_FOOD_TANHUADONG_KEY, behavior: HostBehavior::GujianFoodTanhuadong }],

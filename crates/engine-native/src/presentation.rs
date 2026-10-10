@@ -182,7 +182,7 @@ pub fn project(
                 player: *player,
                 amount: *amount,
             }],
-            LogEvent::BossChongzhengTick { player, count } => {
+            LogEvent::BossChongzhengTick { player, count: _ } => {
                 vec![PresentationEvent::Recovered { player: *player, amount: 0 }]
             }
             LogEvent::BossRevived { player } => vec![PresentationEvent::Recovered { player: *player, amount: 0 }],

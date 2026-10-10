@@ -834,7 +834,7 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 轮到其回合时执行重整 tick（上游 bossPhaseLoop）：计数 +1、hp<上限
     // 则 +1（否则手牌 <4 摸 1），计数达阈值复活；连续死亡座位逐个 tick
     // 后落在下一存活座位。
-    if let Some((boss, threshold)) = ctx.core.boss_mode() {
+    if let Some((_, threshold)) = ctx.core.boss_mode() {
         let seats = ctx.core.players.len() as u8;
         let mut next = (player + 1) % seats;
         loop {
@@ -5601,7 +5601,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                     }
                 }
             }
-            crate::state::GameMode::Kof { mut pools, mut wins, mut games } => {
+            crate::state::GameMode::Kof { mut pools, mut wins, games } => {
                 // KOF 引擎层（P2/N08 模式入口批四，规则 v83）：2 人局，
                 // 唯一存活者胜并推进会话——败者队首淘汰、胜者队首轮转
                 //（移至队尾）、比分/局数 +1。无存活者（理论不可达）不推进。

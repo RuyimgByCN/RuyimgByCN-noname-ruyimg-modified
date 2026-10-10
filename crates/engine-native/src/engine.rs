@@ -227,10 +227,9 @@ impl Engine {
     /// 直授 4 张手牌（上游 directgain(4) 同），登记入 fellows。
     /// 仅 Boss 模式；返回新座位。
     pub fn debug_add_fellow(&mut self, hp: u32) -> Option<PlayerId> {
-        let chongzheng = match &self.state.core.mode {
-            GameMode::Boss { chongzheng, .. } => *chongzheng,
-            _ => return None,
-        };
+        if !matches!(&self.state.core.mode, GameMode::Boss { .. }) {
+            return None;
+        }
         let pid = self.state.core.players.len() as u8;
         let mut p = crate::state::PlayerState::new(hp);
         let take = self.state.core.deck.len().min(4);
