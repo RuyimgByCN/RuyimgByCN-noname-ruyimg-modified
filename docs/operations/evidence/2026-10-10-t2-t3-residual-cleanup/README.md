@@ -63,3 +63,28 @@
 
 执行环境：本机，git `aff048b7` + 本批改动；规则 v192、NGSA v41 不变。
 
+---
+
+# 同日 T7：ow、xianjian 真实宿主全生命周期测试（15/15）
+
+任务来源：[进度主稿 T7](../../../architecture/native-progress.md)；开工 HEAD `53c45171`。
+
+## 改动内容
+
+`crates/engine-native/tests/g1_wudian.rs` 末尾新增两个测试，与 `wudian_real_host_full_lifecycle` 同款六步（①独立安装+激活 ②安装包→原生建局+目录元数据断言 ③对局中卸载 ④在局锁定副本续玩 ⑤撤销后重装被拒 ⑥重新 import 被拒）：
+
+- `ow_real_host_full_lifecycle`：`shaai-ow`（24 名武将、0 张卡）；目录断言士兵76=突击/目镜（力场暂缓不入目录，与既有切片测试一致）。
+- `xianjian_real_host_full_lifecycle`：`shaai-xianjian`（**36** 名武将、0 张卡——首查包数据只列前 12 名致断言写 12，实测桥接 36 后按包数据改正）；目录断言赵灵儿=回盟/天蛇/天蛇2（该将技能全映射）。
+
+## 核验
+
+| 命令 | 结果 |
+|---|---|
+| `cargo test --offline -p engine-native --test g1_wudian real_host_full_lifecycle` | 3 通过（wudian/ow/xianjian） |
+| `*_real_host_full_lifecycle` 计数（15 个转换包） | `rg -o 'fn (\w+)_real_host_full_lifecycle'` 15 个：cardpile、cardpile_liuli、d3、hearth、huanle、gujian、gwent、mtg、swd、yunchou、zf、ow、wudian、xianjian、wuxing |
+| `cargo test --offline -p engine-native --no-fail-fast` | **526 通过 / 0 失败 / 1 ignore**（524+2，exit 0），golden 不变——[完整日志](engine-native-tests-t7.log) |
+
+台账同步：[两仓台账](../../../migration/upstream-extension-reconstruction.md) 复核段与 E02 行的“13 个/尚无”改为 15/15 并链本目录。执行环境：本机，git `53c45171` + 本批改动；规则 v192、NGSA v41 不变。
+
+边界：生命周期通过只是整包完成条件的一项，37 来源整包验收仍为 0/37；ow/xianjian 的技能级回归仍在 `g1_wudian.rs` 既有用例与暂缓登记中。
+
