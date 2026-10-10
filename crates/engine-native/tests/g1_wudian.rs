@@ -7971,10 +7971,10 @@ fn swd_jiguantong_aoe_discard_or_fire() {
     let h1 = e.debug_place(1, "tao");
     let _ = e.debug_place(0, "sha");
 
-    // AOE 使用：targets=全部其他存活（1、2）
+    // AOE 使用：targets=全部其他存活（1、2）→ 逆序结算（v193）：先 2 后 1
     let out = submit(&mut e, 0, GameAction::PlayCard { card: jgt, targets: vec![1, 2] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
-    // 询问流：1 号弃牌询问（选 tao 弃）→2 号无手牌直接火伤
+    // 询问流：2 号空手直接火伤（无询问）→ 1 号弃牌询问（选 tao 弃）
     while let Some(c) = e.open_choice() {
         let picks: Vec<ChoiceOption> = c
             .spec
@@ -7988,12 +7988,81 @@ fn swd_jiguantong_aoe_discard_or_fire() {
         let sel = if picks.len() == 1 { picks } else { vec![ChoiceOption::Pass] };
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
     }
-    // 断言：1 号弃 tao 不掉血；2 号空手受 1 火伤（4→3）；本体入弃堆
+    // 断言：1 号弃 tao 不掉血；2 号空手受 1 火伤（4→3）；本体入弃堆；
+    // 有人受伤 → contentAfter 不摸（使用者手牌保持 shan+sha 两张）
     assert_eq!(e.debug_hp(1), 4, "1 号弃牌免伤");
     assert!(!e.debug_hand(1).contains(&h1), "1 号 tao 已弃");
     assert_eq!(e.debug_hp(2), 3, "2 号空手受 1 火伤（4→3）");
+    assert_eq!(e.debug_hand(0).len(), 2, "有人受伤：contentAfter 不摸牌");
     assert!(e.state_core().discard.contains(&jgt), "机关桶本体入弃堆");
     assert!(e.state_core().discard.contains(&h1), "tao 入弃堆");
+}
+
+/// 机关桶 v193 补齐两支：逆序结算（上游 reverseOrder——targets 座位序
+/// 反转，先问 2 号）+ contentAfter（全员弃牌无人受伤 → 使用者摸 1）。
+#[test]
+fn swd_jiguantong_reverse_order_and_content_after_draw() {
+    let root = repo_extensions_root();
+    let discovered = discover_extensions(&root).expect("discover");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let disc = discovered
+        .into_iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现");
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+
+    let mut e = Engine::new_with_extensions(10069, 3, &[&pack]).expect("建局");
+    advance_loop(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+        e.debug_set_hp(p, 4);
+    }
+    let jgt = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.name.contains("jiguantong"))
+        .expect("机关桶在目录") as u32;
+    let mut snap = e.save();
+    snap.core.deck.retain(|c| *c != jgt);
+    snap.core.discard.retain(|c| *c != jgt);
+    for pl in snap.core.players.iter_mut() { pl.hand.retain(|c| *c != jgt); }
+    snap.core.players[0].hand.push(jgt);
+    let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    let shan = e.debug_place(0, "shan");
+    let _ = e.debug_place(0, "sha");
+    // 1、2 号各持一张（全员走弃牌路径）
+    let h1 = e.debug_place(1, "tao");
+    let h2 = e.debug_place(2, "tao");
+
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: jgt, targets: vec![1, 2] });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    // 逆序：首个弃牌询问 observer=2（座位序反转）；随后 observer=1
+    let c = e.open_choice().expect("首个弃牌询问");
+    assert_eq!(c.observer, 2, "逆序结算：先问 2 号（上游 reverseOrder）");
+    let (cid, obs) = (c.id, c.observer);
+    drop(c);
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(h2)] });
+    let c = e.open_choice().expect("次个弃牌询问");
+    assert_eq!(c.observer, 1, "逆序结算：后问 1 号");
+    let (cid, obs) = (c.id, c.observer);
+    drop(c);
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(h1)] });
+    while let Some(c) = e.open_choice() {
+        let (cid, obs) = (c.id, c.observer);
+        drop(c);
+        submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
+    }
+    // 断言：无人受伤（全员弃牌免伤）；contentAfter → 使用者摸 1
+    //（shan+sha 两张 + 摸 1 = 3）；两张弃牌与本体入弃堆
+    assert_eq!(e.debug_hp(1), 4, "1 号弃牌免伤");
+    assert_eq!(e.debug_hp(2), 4, "2 号弃牌免伤");
+    assert_eq!(e.debug_hand(0).len(), 3, "无人受伤：contentAfter 使用者摸 1");
+    assert!(e.state_core().discard.contains(&jgt), "机关桶本体入弃堆");
+    assert!(e.state_core().discard.contains(&h1) && e.state_core().discard.contains(&h2), "两张弃牌入弃堆");
 }
 
 // ---------------------------------------------------------------------------

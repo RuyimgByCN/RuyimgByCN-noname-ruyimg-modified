@@ -14152,22 +14152,33 @@ HostBehavior::XianjianLingyu => match self.stage {
                 Flow::Done
             },
             HostBehavior::SwdJiguantongCard => match self.stage {
-                // 机关桶（U05 swd 机关牌第四切片，规则 v192）：AOE 逐
-                // 目标「弃一张手牌或受 1 火伤」（上游 ♦4/♣7；登记差异：
-                // 结算序=座位序[上游 reverseOrder 逆序]）。无手牌目标
-                // 直接火伤。
+                // 机关桶（U05 swd 机关牌第四切片，规则 v192；v193 补齐
+                // contentAfter 与逆序）：AOE 逐目标「弃一张手牌或受 1 火
+                // 伤」（上游 ♦4/♣7，reverseOrder 逆序由 kernel 工厂臂在
+                // 目标表反转）。无手牌目标直接火伤。
                 HostStage::Act => {
-                    // 本体已弃置 = AOE 已完成；targets 空 = 结算完 → 弃本体
+                    // 本体已弃置 = AOE 已完成；targets 空 = 结算完 →
+                    // contentAfter（无人受伤 → 使用者摸 1）→ 弃本体
                     if self.card.is_none() {
                         return Flow::Done;
                     }
                     let Some(t) = self.targets.first().copied() else {
-                        // 本体弃置（卡牌机器惯例）
-                        if let Some(c) = self.card {
-                            ctx.to_discard(c);
-                            ctx.core.table.retain(|x| *x != c);
-                            self.card = None;
+                        let Some(body) = self.card else {
+                            return Flow::Done;
+                        };
+                        // 上游 contentAfter !preResult：本次结算中无以本
+                        // 牌归因的实际伤害（无懈抵消/取消弃牌不算；弃牌
+                        // 免伤不算）→ 使用者摸 1（按日志实伤判定）
+                        let damaged = ctx.out.iter().any(|l| {
+                            matches!(l, LogEvent::DamageDealt { card: Some(c), .. } if *c == body)
+                        });
+                        if !damaged {
+                            ctx.draw_cards(self.owner, 1);
                         }
+                        // 本体弃置（卡牌机器惯例）
+                        ctx.to_discard(body);
+                        ctx.core.table.retain(|x| *x != body);
+                        self.card = None;
                         return Flow::Done;
                     };
                     self.targets.remove(0);

@@ -1,6 +1,6 @@
 # 原生重写进度与下一步
 
-本页是当前状态主稿，按 **2026-10-10** [进度核对](../operations/evidence/2026-10-10-progress-check/README.md)更新（源码为本地 git 基线 `72583b2b`，规则 v192、NGSA 存档格式 v41）；同日按可领取的粒度重排了待做表（[待办整理核对](../operations/evidence/2026-10-10-todo-handoff/README.md)，只读源码，未重跑全量），并清理了过期文档（[清理核对](../operations/evidence/2026-10-10-doc-cleanup/README.md)）。目标见[性能架构 v3.3](../../noname-performance-architecture.md)；逐来源扩展状态见[两仓台账](../migration/upstream-extension-reconstruction.md)；逐版本规则语义见[规则基准](native-rules-baseline.md)；按批追加的历史流水与 10-10 事故恢复逐轮记录移至[批次流水存档](native-progress-history.md)，实现与决策过程见[证据目录](../operations/evidence/)和[ADR 索引](../adr/INDEX.md)。
+本页是当前状态主稿，按 **2026-10-10** [进度核对](../operations/evidence/2026-10-10-progress-check/README.md)更新（源码为本地 git 基线 `72583b2b`，规则 v193、NGSA 存档格式 v41）；同日按可领取的粒度重排了待做表（[待办整理核对](../operations/evidence/2026-10-10-todo-handoff/README.md)，只读源码，未重跑全量），并清理了过期文档（[清理核对](../operations/evidence/2026-10-10-doc-cleanup/README.md)）。目标见[性能架构 v3.3](../../noname-performance-architecture.md)；逐来源扩展状态见[两仓台账](../migration/upstream-extension-reconstruction.md)；逐版本规则语义见[规则基准](native-rules-baseline.md)；按批追加的历史流水与 10-10 事故恢复逐轮记录移至[批次流水存档](native-progress-history.md)，实现与决策过程见[证据目录](../operations/evidence/)和[ADR 索引](../adr/INDEX.md)。
 
 ## 当前核验快照
 
@@ -8,8 +8,8 @@
 
 | 口径 | 实际结果（2026-10-10，git `72583b2b`） | 边界 |
 |---|---|---|
-| 当前版本 | 规则 **v192**（`STANDARD_RULESET_VERSION`）、NGSA 存档格式 **v41**（`ARCHIVE_FORMAT_VERSION`）；逐版本语义见[规则基准](native-rules-baseline.md)，v192 于本日补登 | 版本号只说明编码与语义已递增，不等于上游等价 |
-| 原生全量 | `cargo test --offline -p engine-native --no-fail-fast`：**526 通过、0 失败、1 ignore**（2026-10-10 T7 后复跑，24 个测试目标，含 14 个 golden 场景、15 个包真实宿主生命周期测试、存档加固负例）——[日志](../operations/evidence/2026-10-10-t2-t3-residual-cleanup/engine-native-tests-t7.log) | 全绿限于现有测试；host.rs 14 个宿主行为分支已于 10-10 按上游逐项核对并改写为有据的 no-op（T1 完成），效果仍靠内核钩子承担 |
+| 当前版本 | 规则 **v193**（`STANDARD_RULESET_VERSION`）、NGSA 存档格式 **v41**（`ARCHIVE_FORMAT_VERSION`）；逐版本语义见[规则基准](native-rules-baseline.md)，v193 为 T10 机关桶收尾所升 | 版本号只说明编码与语义已递增，不等于上游等价 |
+| 原生全量 | `cargo test --offline -p engine-native --no-fail-fast`：**527 通过、0 失败、1 ignore**（2026-10-10 T10 后复跑，24 个测试目标，含 14 个 golden 场景（v193 重录）、15 个包真实宿主生命周期测试、存档加固负例）——[日志](../operations/evidence/2026-10-10-t10-jiguantong-v193/engine-native-tests.log) | 全绿限于现有测试；host.rs 14 个宿主行为分支已于 10-10 按上游逐项核对并改写为有据的 no-op（T1 完成），效果仍靠内核钩子承担 |
 | 装载与包管理 | `content-runtime`+`engine-ai`+`content-native-loader` 合计 **63/0/0**（16 个目标）——[日志](../operations/evidence/2026-10-10-progress-check/deps-tests.log) | 正式客户端/服务端尚未接入原生装载与规则执行 |
 | CI 门禁 1b | `RUSTFLAGS="-D warnings" cargo check -p engine-native --lib`：**通过（exit 0）**（2026-10-10，独立 target 目录）——[日志](../operations/evidence/2026-10-10-t2-t3-residual-cleanup/gate1b-check.log) | lib 12 条警告已于同日清理（T3 完成）；测试与示例目标的约 576 条警告不在本门禁范围（D3 未决） |
 | 上游来源 | 清点脚本重跑与 9-23 基线**不一致**：noname HEAD 快进到 `df2682e6`（8 个扩展目录未改）；Liuli 10 个来源实例内容变化（10-08 stash/reset 后本地修改 50→7 个文件；同日复算其中 9 个只是换行差异，见[复算](../operations/evidence/2026-10-10-doc-cleanup/liuli-crlf-check.txt)）；仍为 37 项，基线未重录——[清点复核](../operations/evidence/2026-10-10-progress-check/inventory-check.txt) | 变化来源的功能清单与切片影响待复核（T4） |
@@ -70,7 +70,7 @@
 | T7 | P1 / E02、C3 | 已完成（2026-10-10，ZCode） | `g1_wudian.rs` 新增 `ow_real_host_full_lifecycle`、`xianjian_real_host_full_lifecycle`，与 wudian 同款五步：独立安装+激活 → 安装包→原生建局（ow 24 将、xianjian 36 将，均 0 卡；目录断言士兵76=突击/目镜、赵灵儿=回盟/天蛇/天蛇2）→ 对局中卸载 → 在局锁定副本续玩 → 撤销后重装/重新 import 被拒 | 两个包测试通过，`*_real_host_full_lifecycle` 达 **15/15**；全量 **526/0/1**；台账 E02 与复核段同步——[证据](../operations/evidence/2026-10-10-t2-t3-residual-cleanup/README.md) |
 | T8 | P1 / E03、G1 | 可做原型，定案待 D2 | 开放规则。包里的技能现在只能映射到编译期的 `HostBehavior` 枚举（`host:*` 键），新规则必须改引擎再重编译，达不到[扩展契约](native-extensions.md)里“新包无需重编译客户端”的要求。按[演进提案 C1](architecture-evolution-plan.md#c1-扩展执行后端选择)，用同一个真实扩展比较各候选后端，再写 ADR | 不重编译就能安装含新技能或新牌的包；选择挂起/恢复、随机、内容锁与存档、超限和故障回滚都有实测 |
 | T9 | P1 / E01、G0 | 部分完成 | 37/37 来源的功能面基线已完成（10-07/08，含龙血玄黄 LX.1–LX.3）。剩余：每个来源的旧行为动态样本、菜单与规则分支的语义清单、目标接口和验证入口登记；龙血玄黄战斗内的触发轨迹（迁移前置项）；改进工具，让它能统计壳扩展的 `const card = {}` 段。逐来源状态见[台账](../migration/upstream-extension-reconstruction.md) | 台账里每个来源都有行为样本证据、目标接口和验证入口 |
-| T10 | P2 / N08 | 待领取 | v192 机关桶有两处已登记差异。① 上游 `jiguantong` 的 contentAfter 在没有人受到伤害时让使用者摸一张，原生没有实现。无手牌直接受伤和放弃弃牌都算受伤，被无懈抵消的目标不算。② 上游用 `reverseOrder` 逆序结算，原生按座位顺序。宿主机器在 host.rs 的 `SwdJiguantongCard` 分支（约 14127 行），回归测试是 `swd_jiguantong_aoe_discard_or_fire` | 补上摸牌分支和逆序，规则升到 v193，golden 按规则核对。回归覆盖“全员弃牌，使用者摸一”和“有人受伤，不摸”。撤销规则基准中这两条差异 |
+| T10 | P2 / N08 | 已完成（2026-10-10，ZCode） | 机关桶补齐两支：kernel 机关牌工厂臂把目标表反转为结算序（上游 `reverseOrder`）；host Act 完成点按日志实伤判定（无以本牌归因的 `DamageDealt`）补 contentAfter 使用者摸 1，随后本体入弃堆。回归补「有人受伤不摸」断言，新增逆序+全员弃牌摸一测试。规则升 **v193**；存档格式不变（v41）；14 golden 重录（版本回退探针证明位移唯一来源是版本字段，场景命令与断言不变）；规则基准补 v193 条目撤销 v192 两条登记差异 | 机关桶回归 2 支通过；`replay_scenarios` 2/2（重录后含联动守护）；全量 **527/0/1**——[证据](../operations/evidence/2026-10-10-t10-jiguantong-v193/README.md) |
 | T11 | P2 / N08、N11 | 长期 | 其余规则对齐：<br>• 规则基准已登记的逐技能差异。<br>• 模式变体：versus 替补和 4v4、斗地主特殊开局、Boss 专属技能包，以及在宿主层的 KOF 多局连续会话。<br>• 同一命令下的事件、随机流和恢复轨迹对照。<br>• 10-10 新发现一处未登记差异：掠影在 v154 记为“登记差异：无”，但上游要求另有其他有牌角色才能发动，而且是可选发动；原生 `kernel.rs:3087` 只要目标有牌就自动获得一张 | 逐项修复或登记；语义有变化就递增规则版本 |
 | T12 | P2 / E04–E06、G2–G5 | 整包 0/37 | 逐来源推进见台账。下一批切片已经明确：<br>• swd 机关术×2、机关妖术×2。<br>• mtg 其余的地。<br>• zhenfa 的 5 张 deferred。<br>• 玩点论杀 2 条未映射技能（duoqi/youzhan，暂缓）。<br>之后是模式、AI、配置、界面、资源、战役档案和联机 | 每个来源完成功能、组合、保存恢复、安装升级和目标平台验收后，才上调整包数 |
 | T13 | P2 / N10、N12 | 待领取 | 两部分：<br>• AI：工作池、运行中取消、合法座位视图、策略质量。<br>• 产品：正式客户端/服务端接入原生（含 T6③）；跨进程与目标平台运行；帧率和延迟实测 | 各项都有实测证据；旧线的测试和性能数据单列 |

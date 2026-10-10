@@ -1875,6 +1875,22 @@ kind 级 def 注册=card_kind_host_skills(Jiguan) 首例。**登记差异/说
 本批无独立批次证据，实现语义以源码与
 [2026-10-10 进度核对](../operations/evidence/2026-10-10-progress-check/README.md)为准。
 
+**规则 v193（2026-10-10，T10 机关桶收尾）**：撤销 v192 条目登记的两条机关桶
+差异，对齐上游 `jiguantong`：① 结算序改为**逆序**（上游 `reverseOrder`）——
+kernel 机关牌工厂臂在装载机器时把 PlayCard 目标表（当前回合角色起座位序）
+反转为结算序；② **补上 contentAfter**「若没有人选择受到伤害，使用者摸一张
+牌」——机器 Act 完成点按日志实伤判定：本次结算中无以本牌归因的
+`DamageDealt`（弃牌免伤、取消弃牌改受伤算受伤；被无懈抵消的目标无结算不
+算）则使用者摸 1，随后本体入弃堆（上游 content 在 contentAfter 前逐目标
+置 `preResult`，原生以实际结算日志同口径；上游 `damage()` 调用即置位与原生
+实伤判定的差别仅当伤害被完全阻止时可达，当前内容无此交互，按实伤判定登
+记）。回归：`swd_jiguantong_aoe_discard_or_fire` 补「有人受伤不摸」断言，
+新增 `swd_jiguantong_reverse_order_and_content_after_draw`（首个弃牌询问
+observer=2 证逆序 + 全员弃牌后使用者摸 1）。版本 192→**193**，存档格式不
+变（v41，机器字段未增）。14 golden 全部重录：版本回退探针（193→192 复跑
+golden 全绿）证明位移唯一来源是版本字段入 canonical_hash，jiguantong 分支
+仅经 swd 牌种、标准场景不可达，逐场景命令与断言不变——证据见
+[T10 证据](../operations/evidence/2026-10-10-t10-jiguantong-v193/README.md)。
 
 ## 当前声明与验证边界
 

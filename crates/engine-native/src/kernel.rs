@@ -1524,7 +1524,11 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 let targets_for_machine = if behavior
                     == crate::content::host::HostBehavior::SwdJiguantongCard
                 {
-                    u.targets.clone()
+                    // 逆序结算（规则 v193，上游 reverseOrder）：目标表
+                    // 反转为结算序——从使用者上家逆座位序逐个结算
+                    let mut ts = u.targets.clone();
+                    ts.reverse();
+                    ts
                 } else {
                     Vec::new()
                 };
