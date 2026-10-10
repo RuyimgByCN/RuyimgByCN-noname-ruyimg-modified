@@ -17,3 +17,6 @@ node_modules/
 /fuzz/artifacts
 /fuzz/corpus/*/crash-*
 /fuzz/corpus/*/slow-unit-*
+
+# 前端构建产物（可再生，T5 门禁产物）
+apps/web-client/dist/
