@@ -2219,11 +2219,11 @@ pub struct ShaResolveMachine {
     hanbing_pending: u8,
     /// 方天画戟（批③-b 第九把）：当前目标之后的剩余目标队列。
     extra_targets: Vec<PlayerId>,
-    /// 闪弹（U05 ow 死神，规则 v140）：弃牌询问挂起中。
+    /// 霰弹（U05 ow 死神，规则 v140）：弃牌询问挂起中。
     asking_xiandan: bool,
-    /// 闪弹：本杀已问过标志（每杀至多一次）。
+    /// 霰弹：本杀已问过标志（每杀至多一次）。
     xiandan_done: bool,
-    /// 闪弹：黑牌分支——本杀伤害 +1（上游 xiandan2 damageBegin num++
+    /// 霰弹：黑牌分支——本杀伤害 +1（上游 xiandan2 damageBegin num++
     /// 同口径，一次性随本杀）。
     xiandan_bonus: bool,
     /// 掠影（U05 xianjian 慕长兰，规则 v154）：目标选人询问挂起中。
@@ -2543,7 +2543,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 寒冰剑（逐技对照批一，规则 v75）：目标自选弃牌恢复——上游
         // discardPlayerCard("he", forced) 逐张强制弃，目标从手牌+装备
         // 自选；次数用尽或目标无牌可弃后跳过伤害。
-        // 闪弹（U05 ow 死神，规则 v140）：弃牌应答——红=直击（哨卫同
+        // 霰弹（U05 ow 死神，规则 v140）：弃牌应答——红=直击（哨卫同
         // 款直中路径）；黑=本杀伤害 +1；取消=照常进入防具/闪询问。
         if self.asking_xiandan {
             self.asking_xiandan = false;
@@ -2572,7 +2572,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 self.xiandan_bonus = true;
             }
             // 黑弃/取消：复位 asked 落回 !asked 分支重开出闪询问（青龙
-            // 再杀 reboot 同款——否则闪弹应答会被门控应答区误读）。
+            // 再杀 reboot 同款——否则霰弹应答会被门控应答区误读）。
             self.asked = false;
         }
         // 掠影（U05 xianjian 慕长兰，规则 v154）：目标选人应答——来源随
@@ -3039,7 +3039,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             if self.baolei_sentinel(ctx) && ctx.core.player(self.target).alive {
                 return self.emit_sha_damage(ctx);
             }
-            // 闪弹（U05 ow 死神，规则 v140）：shaBegin direct——来源可弃
+            // 霰弹（U05 ow 死神，规则 v140）：shaBegin direct——来源可弃
             // 1 张 he：红=直击（跳过闪询问）；黑=本杀伤害 +1；取消=照常
             //（he 空不询问；每杀至多一次——上游 shaBegin 每杀事件同口径）。
             // 龙翔（U05 xianjian 温慧，规则 v146）：shaBegin forced——

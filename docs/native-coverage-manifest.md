@@ -91,7 +91,7 @@
 | `session_auth` | 已验证（部分） | `authed_submit_rejects_impersonation_and_unknown_token`、`auth_token_reissue_revokes_old` | 原同种子跨实例及恢复前旧令牌均被拒，正确重签可用；不代表权威网络已接入 |
 | `byte_archive` | 已验证（部分） | `snapshot_archive_roundtrip_rest_and_window`、`archive_detects_tampering_and_version`、n12_crossproc；[第 17 轮字节存档 v2 回归](operations/evidence/2026-09-23-native-review-17/README.md) | 无懈窗口 ChoiceKind、`jiji_target` 映射、`tian_du_gain` 注册等原反例已修；Dismantle/XiaoJi 共用 tag 29 已于 2026-09-24 修复（XiaoJi=43，见 `tag_registry`）；伪造存档中的未知牌种编号已改为 `UnknownCardKind(u32)`、载荷读尽检查 `TrailingBytes`、势力编码走显式表（2026-10-07 加固，负例随测试运行）；同宿主特定保存点跨进程通过不等于所有保存点验收 |
 | `kingdoms_mode` | 已验证（原型所测路径） | `guozhan_general_slots_roundtrip`、`guozhan_m3_victory_regression_matrix`、`guozhan_compensatory_reveal_during_targeting` | 槽位/势力/胜负与明置实际授表内技能/体力已有回归；暗置不授实例，六技能已接表，完整装配/模式组合仍待验 |
-| `kof_session` | 近似 | `kof_m1_two_player_pure_command_endgame`、n11_kof | 已实现将池淘汰/胜者轮换与非空池文本往返；空池解析已修；会话矛盾仍接受、拒绝循环超时及真正恢复续跑待修 |
+| `kof_session` | 已验证（会话行与单局恢复路径） | `kof_session_consistency_and_midrestore`、`kof_engine_mode_session_advance`、`kof_m1_two_player_pure_command_endgame`、n11_kof | 会话行（双方将池/比分/局数）文本往返一致（结构非法/将池越界拒绝）；每局后存档恢复续跑与不恢复路径终局一致；单局中途引擎快照恢复哈希轨迹一致（30/60 命令检查点）；终局败者死亡清理（2026-10-07 固化）。语义矛盾行（字段间不一致，如比分与池淘汰不符）仍接受；KOF 多局连续会话循环与示例策略超时判负仍在宿主/示例层（非内核，见规则基准模式行） |
 | `presentation_projection` | 已验证（文本示例） | `presentation_visibility_and_render_determinism`、`render_frame_guozhan_generals_isolation`、n10_render_host | 文本帧/增量日志消费；不是原生 GPU 牌桌或输入呈现性能 |
 
 N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，证据见上表及 [当前进度](architecture/native-progress.md)。

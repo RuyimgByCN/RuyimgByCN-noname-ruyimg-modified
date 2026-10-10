@@ -2652,7 +2652,7 @@ fn apply_command(
                     }
                     // 谦逊（陆逊）：不能成为乐不思蜀目标（锁定门控；
                     // 上游无顺手牵羊，见覆盖清单）。
-                    // G1 莫守宿主原语：延时锦囊目标免疫（乐/兵均免疫）
+                    // G1 墨守宿主原语：延时锦囊目标免疫（乐/兵均免疫）
                     for t in &targets {
                         if catalog.blocks_delayed_trick(core, *t) {
                             return Err(RejectReason::IllegalTargets);

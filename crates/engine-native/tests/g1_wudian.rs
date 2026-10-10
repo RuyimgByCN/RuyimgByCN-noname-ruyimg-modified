@@ -400,7 +400,7 @@ fn sanjian_weapon_skill_two_stage_choice_with_restore() {
     assert_eq!(restored.debug_hp(1), 3, "原伤害不变");
 }
 
-/// G1 莫守目标免疫：乐不思蜀不能指定莫守持有者为目标；其他目标不受影响。
+/// G1 墨守目标免疫：乐不思蜀不能指定墨守持有者为目标；其他目标不受影响。
 #[test]
 fn moshou_blocks_delayed_trick_target() {
     let root = repo_extensions_root();
@@ -421,18 +421,18 @@ fn moshou_blocks_delayed_trick_target() {
     for p in 0..3 {
         e.debug_clear_hand(p);
     }
-    // 2 号授予莫守（费诗技能）
+    // 2 号授予墨守（费诗技能）
     e.debug_grant(2, "moshou");
     let le = e.debug_place(0, "le");
     // 目标 1 号（无免疫）→ 正常置入判定区
     let out = submit(&mut e, 0, GameAction::PlayCard { card: le, targets: vec![1] });
     assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
-    // 兵粮寸断 → 目标 2 号（莫守免疫乐/兵）→ 拒绝
+    // 兵粮寸断 → 目标 2 号（墨守免疫乐/兵）→ 拒绝
     let bing = e.debug_place(0, "bing");
     let out2 = submit(&mut e, 0, GameAction::PlayCard { card: bing, targets: vec![2] });
     assert!(
         matches!(out2, CommandOutcome::Rejected(engine_native::RejectReason::IllegalTargets)),
-        "莫守应使延时锦囊目标免疫: {out2:?}"
+        "墨守应使延时锦囊目标免疫: {out2:?}"
     );
     assert_zone_conservation_wudian(&e);
 }
@@ -548,7 +548,7 @@ fn youdishenru_cancels_sha_with_reprisal() {
     );
 }
 
-/// 莫守装配接线（2026-10-08）：费诗 generals 声明 mapping null →
+/// 墨守装配接线（2026-10-08）：费诗 generals 声明 mapping null →
 /// host:moshou_immunity——桥接后目录元数据 skills 应含 moshou
 /// （装配/明置授予路径据此自动挂接；宿主行为本体已由
 /// `moshou_blocks_delayed_trick_target` 以授予驱动验证）。
@@ -566,11 +566,11 @@ fn feishi_moshou_declaration_wired_to_host_behavior() {
             }
         }
     }
-    assert_eq!(found.map(|v| v.to_vec()), Some(vec!["nsshuaiyan", "moshou"]), "费诗目录技能=率言+莫守（率言批二 v112 接线）");
+    assert_eq!(found.map(|v| v.to_vec()), Some(vec!["nsshuaiyan", "moshou"]), "费诗目录技能=率言+墨守（率言批二 v112 接线）");
 }
 
 /// 整包验收 U07（2026-10-08，来源级第五包）：wudian 真实宿主全生命周期
-/// ——独立安装+激活 → 安装包→原生建局（14 卡+费诗莫守接线后目录）→
+/// ——独立安装+激活 → 安装包→原生建局（14 卡+费诗墨守接线后目录）→
 /// 对局中卸载 → 在局锁定副本续玩 → 撤销后重装/重新 import 被拒。
 #[test]
 fn wudian_real_host_full_lifecycle() {
@@ -589,7 +589,7 @@ fn wudian_real_host_full_lifecycle() {
     let slot = format!("{}/{}", meta.namespace, meta.package_id);
     assert!(store.read_active().unwrap().packages.contains_key(&slot), "激活集");
 
-    // ② 安装包 → 原生建局（14 卡 + 费诗莫守接线后目录元数据）
+    // ② 安装包 → 原生建局（14 卡 + 费诗墨守接线后目录元数据）
     let json = std::fs::read_to_string(
         PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
     )
@@ -609,7 +609,7 @@ fn wudian_real_host_full_lifecycle() {
             }
         }
     }
-    assert_eq!(feishi_skills.map(|v| v.to_vec()), Some(vec!["nsshuaiyan", "moshou"]), "费诗率言+莫守接线生效");
+    assert_eq!(feishi_skills.map(|v| v.to_vec()), Some(vec!["nsshuaiyan", "moshou"]), "费诗率言+墨守接线生效");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -3419,13 +3419,13 @@ fn heiying_yinshen_untargetable_until_own_judge() {
 }
 
 // ---------------------------------------------------------------------------
-// U05 ow 纵切批二十三（规则 v140）：死神（ow_sishen）闪弹（xiandan，
+// U05 ow 纵切批二十三（规则 v140）：死神（ow_sishen）霰弹（xiandan，
 // ShaResolve 内联钩）——出杀结算开始时可弃 1 张 he：红=直击（跳过闪
 // 询问）；黑=本杀伤害 +1；取消=照常。yihun（虚拟 useCard）/shouge
 //（createCard 治疗波）登记暂缓。
 // ---------------------------------------------------------------------------
 
-/// 闪弹：红弃→直击（1 号有闪不掉牌直接扣血）；黑弃→+1；取消→照常
+/// 霰弹：红弃→直击（1 号有闪不掉牌直接扣血）；黑弃→+1；取消→照常
 /// 可闪（无闪照常伤害）。
 #[test]
 fn sishen_xiandan_red_direct_black_bonus() {

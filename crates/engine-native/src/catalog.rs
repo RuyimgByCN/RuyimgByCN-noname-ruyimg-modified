@@ -1066,7 +1066,7 @@ impl Catalog {
     }
 
     /// G1 目标过滤原语：`p` 是否持有「延时锦囊目标免疫」类技能
-    ///（莫守：乐/兵不能指定其为目标）。
+    ///（墨守：乐/兵不能指定其为目标）。
     pub fn blocks_delayed_trick(
         &self,
         core: &crate::state::GameStateCore,

@@ -52,7 +52,7 @@ pub enum HostBehavior {
     ///（两段选择：弃牌 → 选目标）。
     /// [SanjianWeaponDamage]（tag 8）。
     SanjianWeaponDamage,
-    /// 莫守（玩点论杀·费诗）：延时锦囊（乐/兵）不能指定你为目标
+    /// 墨守（玩点论杀·费诗）：延时锦囊（乐/兵）不能指定你为目标
     ///（目标过滤原语，命令边界生效）。
     /// [MoshouImmunity]（tag 9）。
     MoshouImmunity,
@@ -2751,7 +2751,7 @@ fn ctianfu_clear(ctx: &mut crate::machine::Ctx<'_>, owner: u8) {
 }
 
 impl HostSkillBehavior {
-    /// 莫守：延时锦囊（乐/兵）不能指定持有者为目标。
+    /// 墨守：延时锦囊（乐/兵）不能指定持有者为目标。
     fn blocks_delayed_trick(&self) -> bool {
         self.behavior == HostBehavior::MoshouImmunity
     }

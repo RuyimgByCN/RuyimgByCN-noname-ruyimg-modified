@@ -241,7 +241,7 @@ pub enum MachineSnapshot {
         cixiong_done: bool,
         /// 寒冰剑目标自选弃牌剩余次数（逐技对照批一，规则 v75）。
         hanbing_pending: u8,
-        /// 闪弹（U05 ow 死神，规则 v140）：弃牌询问挂起/已问/黑牌加成。
+        /// 霰弹（U05 ow 死神，规则 v140）：弃牌询问挂起/已问/黑牌加成。
         asking_xiandan: bool,
         xiandan_done: bool,
         xiandan_bonus: bool,
