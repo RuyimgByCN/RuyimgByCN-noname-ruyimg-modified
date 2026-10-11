@@ -1,75 +1,84 @@
 {
-  "source": "qita/sanguosha/noname/extension/杀海拾遗/card/mtg",
-  "upstream_path": "extension/杀海拾遗/card/mtg/",
-  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
-  "pack": {
-    "name": "shahai-mtg-upstream-noname",
-    "version": 1,
-    "description": "G1 转换：上游 mtg 首切片（龙颅山峰）",
-    "card_prefix": "mtg_"
+ "source": "qita/sanguosha/noname/extension/杀海拾遗/card/mtg",
+ "upstream_path": "extension/杀海拾遗/card/mtg/",
+ "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+ "pack": {
+  "name": "shahai-mtg-upstream-noname",
+  "version": 1,
+  "description": "G1 转换：上游 mtg 首切片（龙颅山峰）",
+  "card_prefix": "mtg_"
+ },
+ "cards": [
+  {
+   "name": "mtg_longlushanfeng",
+   "kind": "longlushanfeng",
+   "suit": "club",
+   "rank": 10
   },
-  "cards": [
-    {
-      "name": "mtg_longlushanfeng",
-      "kind": "longlushanfeng",
-      "suit": "club",
-      "rank": 10
-    },
-    {
-      "name": "mtg_haidao",
-      "kind": "haidao",
-      "suit": "diamond",
-      "rank": 5
-    },
-    {
-      "name": "mtg_shuimomuxue",
-      "kind": "shuimomuxue",
-      "suit": "spade",
-      "rank": 11
-    },
-    {
-      "name": "mtg_feixu",
-      "kind": "feixu",
-      "suit": "club",
-      "rank": 8
-    },
-    {
-      "name": "mtg_yixialan",
-      "kind": "yixialan",
-      "suit": "club",
-      "rank": 12
-    },
-    {
-      "name": "mtg_shamolvzhou",
-      "kind": "shamolvzhou",
-      "suit": "heart",
-      "rank": 6
-    },
-    {
-      "name": "mtg_linzhongjianta",
-      "kind": "linzhongjianta",
-      "suit": "heart",
-      "rank": 6
-    },
-    {
-      "name": "mtg_bingheyaosai",
-      "kind": "bingheyaosai",
-      "suit": "diamond",
-      "rank": 5
-    },
-    {
-      "name": "mtg_youlin",
-      "kind": "youlin",
-      "suit": "club",
-      "rank": 10
-    },
-    {
-      "name": "mtg_lindixiliu",
-      "kind": "lindixiliu",
-      "suit": "spade",
-      "rank": 11
-    }
-  ],
-  "host_skills": [],
-  "deferred": []
+  {
+   "name": "mtg_haidao",
+   "kind": "haidao",
+   "suit": "diamond",
+   "rank": 5
+  },
+  {
+   "name": "mtg_shuimomuxue",
+   "kind": "shuimomuxue",
+   "suit": "spade",
+   "rank": 11
+  },
+  {
+   "name": "mtg_feixu",
+   "kind": "feixu",
+   "suit": "club",
+   "rank": 8
+  },
+  {
+   "name": "mtg_yixialan",
+   "kind": "yixialan",
+   "suit": "club",
+   "rank": 12
+  },
+  {
+   "name": "mtg_shamolvzhou",
+   "kind": "shamolvzhou",
+   "suit": "heart",
+   "rank": 6
+  },
+  {
+   "name": "mtg_linzhongjianta",
+   "kind": "linzhongjianta",
+   "suit": "heart",
+   "rank": 6
+  },
+  {
+   "name": "mtg_bingheyaosai",
+   "kind": "bingheyaosai",
+   "suit": "diamond",
+   "rank": 5
+  },
+  {
+   "name": "mtg_youlin",
+   "kind": "youlin",
+   "suit": "club",
+   "rank": 10
+  },
+  {
+   "name": "mtg_lindixiliu",
+   "kind": "lindixiliu",
+   "suit": "spade",
+   "rank": 11
+  }
+ ],
+ "host_skills": [],
+ "deferred": [
+  {
+   "name": "mtg_duzhao",
+   "reason": "依赖 xianxia 包【毒】卡（跨包牌种依赖同 tuoqiao 先例）——2026-10-11 暂缓，随毒卡源转换解锁"
+  },
+  {
+   "name": "mtg_cangbaohaiwan",
+   "reason": "依赖派生包选择 UI（derivation 包列表交互选牌）——原生无该机制，2026-10-11 暂缓"
+  }
+ ]
 }

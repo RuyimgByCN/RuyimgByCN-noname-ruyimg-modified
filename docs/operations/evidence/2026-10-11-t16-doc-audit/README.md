@@ -104,3 +104,14 @@
 - 重建断言按现计数收紧（CardKind ≥133、HostBehavior ==226），v60 后新增键首次被这些双射断言验证。
 - `cargo test --offline -p engine-native --lib`：**10/0**；全量 **540/0/1**（535+5，exit 0）——[日志](engine-native-tests-t17.log)；Gate 1b（lib.rs 变更）独立目录 exit 0。
 - 覆盖清单 `tag_registry` 行恢复「已验证」并标注重建位置。
+
+
+---
+
+# 同日 T12 附：mtg 其余地 / zhenfa deferred 5 查证结论
+
+- **mtg 藏宝海湾**（♣12）：内容=派生包选择 UI（derivation 包列表交互选牌+卡牌包/武将包分组）——原生无该 UI 机制，deferred 登记。
+- **mtg 毒沼**（♣8）：内容=changeLand+指定目标获得【毒】——毒卡属 xianxia 包（跨包牌种依赖，同 tuoqiao 先例），deferred 登记。
+- **zhenfa deferred 5**（长蛇阵/天覆阵/七星阵/鸟翔阵/破阵诀）：包数据内已登记结构性原因（国战队列/围攻/座位重排 inline/isFriendOf/swapSeat 子系统未建模）——非逐卡切片可达，登记 **T19（P2 结构缺口）**。
+- mtg 包 cards.json deferred 2 条已补登记+双哈希重算；zhenfa 包 deferred 原文已在（零改动）。
+- `cargo test --offline -p engine-native --test g1_shahai_mtg`：11/0；`replay_scenarios` 守护 2/2。
