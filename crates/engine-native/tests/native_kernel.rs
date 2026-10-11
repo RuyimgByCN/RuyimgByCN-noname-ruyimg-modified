@@ -2353,6 +2353,133 @@ fn boss_mingxingzhu_qingzhu_jiazu_jiding() {
     assert_zone_conservation(&r);
     assert_zone_conservation(&e);
 }
+/// 年兽系形态片（规则 v249/存档 v59）：形态轮换+忍性——①忍性直装面：
+/// 非当前回合任意伤害→持有者摸 1、当前回合不触发②轮换首换：判定锚 assembly
+/// 重挂（忍性入场/hp 保留/手牌保留）。轮换后多回合推进暴露 Suspended 风暴
+/// （中局 assembly 的 Yield 循环）→ 登记引擎待查，多回合轮换回归待查后
+/// 补。忍性年兽条目（[年瑞,猛态,忍性,形态轮换]）；守翼/精觉/睿智/暴怒形
+/// 态未落随下批。
+#[test]
+fn boss_nianshou_nbianshen_rotation_renxing() {
+    // ① 忍性直装面：1=忍性年兽（条目直装）
+    let mut e = Engine::new_boss_stage(69001, 4, 1, 3, 6, 4, 0);
+    let rx_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 26) as u16; // BOSS_GENERALS[26] 忍性年兽
+    e.debug_set_general_def(1, rx_def);
+    e.debug_set_hp(1, 12);
+    assert_eq!(
+        e.catalog().general_meta(rx_def).map(|g| g.0),
+        Some("忍性年兽"),
+        "忍性年兽入目录"
+    );
+    let rx = e.catalog().skill_by_name("忍性").expect("忍性入目录");
+    assert!(e.state_core().skills.contains_key(&(1, rx)));
+
+    // 非当前回合（0 号回合）伤害 → 1 号摸 1
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(1);
+    e.debug_deal_damage(Some(2), 3, 1, DamageNature::Normal);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hand(1).len(), 1, "忍性：非当前回合伤害摸 1");
+    // 当前回合（0 号）回复 → 1 号再摸 1（recoverEnd 半面）
+    e.debug_recover(3, 1);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hand(1).len(), 2, "忍性：非当前回合回复摸 1");
+    // 当前回合=持有者? 0 号回合内持有者=1 非 current ✓ 已验证；1 号自己
+    // 回合内伤害不触发——推到 1 号出牌阶段
+    next_phase(&mut e); // 0 Play→Discard
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End
+    drain_choices(&mut e);
+    next_phase(&mut e); // End→1 Judge
+    drain_choices(&mut e);
+    next_phase(&mut e); // 1 Judge→Draw
+    drain_choices(&mut e);
+    next_phase(&mut e); // 1 Draw→Play
+    drain_choices(&mut e);
+    let hand1 = e.debug_hand(1).len();
+    e.debug_deal_damage(Some(0), 3, 1, DamageNature::Normal);
+    drain_choices(&mut e);
+    assert_eq!(
+        e.debug_hand(1).len(),
+        hand1,
+        "当前回合=持有者：忍性不触发"
+    );
+    assert_zone_conservation(&e);
+
+    // ② 轮换首换（独立局）：1=年兽合体 → 次回合判定锚换至忍性年兽
+    let mut e2 = Engine::new_boss_stage(69002, 4, 1, 3, 6, 4, 0);
+    let heti_def = (e2.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 25) as u16; // BOSS_GENERALS[25] 年兽合体
+    let rx2_def = (e2.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 26) as u16;
+    e2.debug_set_general_def(1, heti_def);
+    e2.debug_set_hp(1, 12);
+    let nb = e2.catalog().skill_by_name("形态轮换").expect("形态轮换入目录");
+    assert!(e2.state_core().skills.contains_key(&(1, nb)));
+    advance_to_play(&mut e2, 1);
+    assert!(
+        e2.state_core().player(1).nbianshen_toggle,
+        "首回合：旗标置位不换将"
+    );
+    assert_eq!(
+        e2.state_core().player(1).general_slots[0],
+        Some(heti_def),
+        "首回合不换将"
+    );
+    // 结束本回合，推进到次回合判定锚（轮换发生）
+    next_phase(&mut e2); // Play→Discard
+    drain_choices(&mut e2);
+    next_phase(&mut e2); // Discard→End
+    drain_choices(&mut e2);
+    for _ in 0..24 {
+        if e2.turn().current == 1 && e2.turn().phase == Phase::Judge {
+            break;
+        }
+        if let Some(c) = e2.open_choice().cloned() {
+            if c.spec.prompt == "dying_save" {
+                answer(&mut e2, ChoiceOption::Pass);
+                drain_choices(&mut e2);
+            } else {
+                answer_cards(&mut e2, &c);
+            }
+            continue;
+        }
+        match next_phase(&mut e2) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Suspended => {}
+            CommandOutcome::Pending { choice } => {
+                let is_dying = choice.spec.prompt == "dying_save";
+                if is_dying {
+                    answer(&mut e2, ChoiceOption::Pass);
+                    drain_choices(&mut e2);
+                } else {
+                    answer_cards(&mut e2, &choice);
+                }
+            }
+            CommandOutcome::Rejected(r) => panic!("np rejected {r:?}"),
+        }
+    }
+    assert_eq!(
+        e2.state_core().player(1).general_slots[0],
+        Some(rx2_def),
+        "次回合轮换至忍性年兽"
+    );
+    assert!(e2.state_core().skills.contains_key(&(1, rx)), "忍性入场");
+    assert_eq!(e2.debug_hp(1), 12, "轮换：hp 保留");
+    let snap = e2.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert_eq!(
+        r.state_core().player(1).general_slots[0],
+        Some(rx2_def),
+        "形态往返"
+    );
+    assert_zone_conservation(&r);
+    assert_zone_conservation(&e);
+}
 
 /// 年兽系首片（规则 v248/存档 v58）：年瑞+猛态（年兽合体条目）——①年
 /// 瑞：摸牌阶段 +2；②猛态常态回合（摸/用均发生）：无补摸不跳弃；③猛

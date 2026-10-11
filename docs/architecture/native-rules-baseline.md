@@ -2697,6 +2697,27 @@ use_pending → None，庆祝族同位延伸）+结束补摸 3（旗标消费）
 产生双重插入+漏第三处，E0062/E0063 编译拦截）；End 臂漏旗标消费（回归
 抓出）；golden old 表 sha/judge 错位再犯（assert 第四次拦截）。
 
+**规则 v249（2026-10-11，T11 年兽系形态片：形态轮换+忍性＋忍性年兽条目；存档 v59）**：
+`PlayerState.nbianshen_toggle: bool` 新字段（**存档 58→59**；canonical_hash
+入参——字段新增批）。**形态轮换**（查询型 Noop）单臂（Judge begin 最前
+=上游 priority 25）：首回合置位不换将；启动后每回合轮换至另一「形态轮
+换」携带将（技能实例清空+general_slots 重挂+apply_general_assembly——
+versus 替补换将先例同构；hp/手牌/装备/判定区保留=上游 init 保留口径）。
+**随机序列→确定性互斥轮转登记**。**忍性**双臂（damageEnd 段+recoverEnd
+头）：持有者非当前回合角色时任意伤害/回复摸 1。`BOSS_GENERALS` 尾追加
+**忍性年兽**（def 索引 26/hp12/`[年瑞, 猛态, 忍性, 形态轮换]`）；年兽合
+体条目补「形态轮换」。**登记差异**：随机序列→确定性轮转；年兽余量形态
+（ruizhi/jingjue/baonu/shouyi）随各自依赖批。**⚠️ 引擎待查**：轮换后多
+回合推进触发 Suspended 风暴（中局 assembly 的 Yield 循环——resume 无进
+展；单回合内全部面正常），多回合轮换回归待查后补。FROZEN 名单尾加「形
+态轮换」「忍性」（106/107 名）。存档 58→**59**。版本 248→**249**（字段
+批探针：248+新代码全 14 位移佐证字段源）。回归
+`boss_nianshou_nbianshen_rotation_renxing` 两局五段（忍性三面/首回合置
+位/次回合轮换/往返）——证据见
+[T11 形态轮换证据](../operations/evidence/2026-10-11-t11-boss-nbianshen-v249/README.md)。
+**坑位**：general_slots 比较 Option 化；回归循环 open_choice 前置+Suspended
+分支（中局 assembly 触发时间片）；skill_name 返回 &str。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

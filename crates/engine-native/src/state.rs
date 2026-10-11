@@ -165,6 +165,9 @@ pub struct PlayerState {
     /// 星夏（Boss 祝融，规则 v242）：上次发动星夏的轮次（0=未发动过；
     /// 间隔 ≥2 轮可再发动；跨回合持久）。
     pub xingxia_used_round: u32,
+    /// 形态轮换（Boss 年兽系，规则 v249）：轮换交替旗标（false=处于初
+    /// 始形态，true=已轮换至次形态；确定性互斥轮转登记）。
+    pub nbianshen_toggle: bool,
     /// 天符（U05 xianjian 长卿，规则 v188）：挂附来源（雷伤来源）。
     pub ctianfu_source: Option<u8>,
     /// 天符：挂附闪实体（离场区中该牌；死亡清理/结算弃置用）。
@@ -251,6 +254,7 @@ impl PlayerState {
             lingqu_count: 0,
             xingqiu_toggled: false,
             buchun_used_round: 0,
+            nbianshen_toggle: false,
             xingxia_used_round: 0,
             ctianfu_source: None,
             ctianfu_card: None,

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 248;
+pub const STANDARD_RULESET_VERSION: u64 = 249;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,13 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 形态轮换（Boss 年兽系，规则 v249）：锁定技——回合开始交替轮换至另
+/// 一「形态轮换」携带将（assembly 重挂+hp/手牌/装备/判定区保留；首次置
+/// 位不换将）。随机序列→确定性互斥轮转登记。
+pub const BOSS_NBIANSHEN: &str = "形态轮换";
+/// 忍性（年兽忍性形态，规则 v249）：锁定技——持有者非当前回合角色时，
+/// 任意角色受到伤害或回复后其摸 1 张牌。
+pub const BOSS_RENXING: &str = "忍性";
 /// 年瑞（Boss 年兽，规则 v248）：锁定技——摸牌阶段额外摸 2 张牌。
 pub const BOSS_NIANRUI: &str = "年瑞";
 /// 猛态（Boss 年兽，规则 v248）：锁定技——准备阶段置位双旗标：本回合
@@ -4795,9 +4802,11 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 玄冥（v247 自润；神裔共用 v233；boss_xuanlin3 玄麟3=已处置关卡面；
     // 上游 female、names 嬴|禺强、shen→群目录近似——入库激活造异玄冥半门）
     ("玄冥", Faction::Qun, &[BOSS_SHENYI, BOSS_ZIRUN], 5, Gender::Female),
-    // 年兽合体（v248 年瑞+猛态；形态轮换 boss_nbianshen 未落随下批；
+    // 年兽合体（v248 年瑞+猛态；v249 形态轮换随条目[轮换载体]；
     // shen→群目录近似）
-    ("年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI], 12, Gender::Male),
+    ("年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_NBIANSHEN], 12, Gender::Male),
+    // 忍性年兽（v249 忍性+形态轮换；年瑞/猛态共用 v248；shen→群目录近似）
+    ("忍性年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_RENXING, BOSS_NBIANSHEN], 12, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6345,6 +6354,22 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_MENGTAI,
             // 查询型多面：准备置位/摸牌清位/出牌清位/结束补摸 3/弃牌闸门
             // （TurnState.mengtai_* 双旗标承载）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_NBIANSHEN,
+            // 查询型单面：Judge begin 轮换臂（assembly 重挂+hp 保留；
+            // versus 替补换将先例同构；确定性互斥轮转登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_RENXING,
+            // 查询型双臂：damageEnd（commit_damage 段）+recoverEnd
+            // （commit_recover_skills 头）——非当前回合摸 1
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

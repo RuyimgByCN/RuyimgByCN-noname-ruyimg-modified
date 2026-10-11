@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 58;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 59;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2763,6 +2763,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u32(p.buchun_used_round);
         // 星夏上次发动轮次（v242）
         w.u32(p.xingxia_used_round);
+        // 形态轮换交替旗标（v249）
+        w.boolean(p.nbianshen_toggle);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3051,6 +3053,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let xingqiu_toggled = r.boolean()?;
         let buchun_used_round = r.u32()?;
         let xingxia_used_round = r.u32()?;
+        let nbianshen_toggle = r.boolean()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3109,6 +3112,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             xingqiu_toggled,
             buchun_used_round,
             xingxia_used_round,
+            nbianshen_toggle,
             off_court,
             shuiyun_count,
             wangyou3_round,

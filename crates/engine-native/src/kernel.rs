@@ -465,6 +465,25 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 忍性（年兽形态，规则 v249）：global damageEnd——持有者非当前回
+    // 合角色时，任意角色受到伤害后其摸 1（上游 boss_renxing damageEnd
+    // global `_status.currentPhase != player` 同口径）
+    if let Some(rxdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_RENXING)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == rxdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| ctx.core.player(*o).alive && ctx.core.turn.current != *o)
+            .collect();
+        for holder in holders {
+            ctx.draw_cards(holder, 1);
+        }
+    }
     // 延妒门控（Boss 穷奇，规则 v213）：体力首次≤一半激活（隐贼同款
     // enable 直写；穷奇持延妒——与隐贼块并列， holder 独立判定）
     if let Some(dudef) = ctx
@@ -1327,6 +1346,72 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                     }
                                 }
                             }
+                        }
+                    }
+                    // 形态轮换（Boss 年兽系，规则 v249）：回合开始——
+                    // 交替旗标首次置位不换将（初始形态即条目形态），此后
+                    // 每回合轮换至另一「形态轮换」携带将（assembly 重挂+
+                    // hp 保留——versus 替补换将先例同构；随机序列→确定性
+                    // 互斥轮转登记）
+                    if let Some(nbdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_NBIANSHEN)
+                    {
+                        if ctx.core.has_skill(player, nbdef) {
+                            let armed = ctx.core.player(player).nbianshen_toggle;
+                            if armed {
+                                // 启动后每回合轮换（上游 storage 存在后每
+                                // 次 phaseBefore 均换同口径）
+                                // 轮换：找另一携带「形态轮换」的 BOSS 段将
+                                let base = (ctx.catalog.general_count()
+                                    - crate::content::standard::BOSS_GENERALS
+                                        .len())
+                                    as u16;
+                                let cur = ctx.core.player(player).general_slots[0];
+                                let other = (base
+                                    ..ctx.catalog.general_count() as u16)
+                                    .find(|&d| {
+                                        Some(d) != cur
+                                            && ctx
+                                                .catalog
+                                                .general_meta(d)
+                                                .map(|m| {
+                                                    m.2.contains(&crate::content::standard::BOSS_NBIANSHEN)
+                                                })
+                                                .unwrap_or(false)
+                                    });
+                                if let (Some(other), Some(cur)) = (other, cur) {
+                                    let _ = cur;
+                                    // 技能实例清空+重挂（区域保留）
+                                    let removed: Vec<crate::ids::SkillDefId> =
+                                        ctx
+                                            .core
+                                            .skills
+                                            .keys()
+                                            .filter(|(o, _)| *o == player)
+                                            .map(|(_, d)| *d)
+                                            .collect();
+                                    for d in removed {
+                                        ctx.core.skills.remove(&(player, d));
+                                    }
+                                    ctx.core.player_mut(player).general_slots[0] =
+                                        Some(other);
+                                    crate::engine::apply_general_assembly(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        player,
+                                        0,
+                                    );
+                                    // hp/手牌/装备/判定区保留（上游 init 保
+                                    // 留 hp/maxHp/hujia 同口径）
+                                    ctx.log(LogEvent::SkillToggled {
+                                        player,
+                                        skill: "形态轮换",
+                                        enabled: true,
+                                    });
+                                }
+                            }
+                            ctx.core.player_mut(player).nbianshen_toggle = true;
                         }
                     }
                     // 自润（Boss 玄冥，规则 v247）：准备阶段——全体角色
@@ -3658,6 +3743,25 @@ pub(crate) fn tanyu_is_max_hand(
 /// 者摸 2；否则持有者与回复者各摸 1（上游 boss_jicai recoverAfter 同
 /// 口径；仅实际回复量>0 的 Recover 事件进入）。
 fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
+    // 忍性（年兽形态，规则 v249）：global recoverEnd——持有者非当前回
+    // 合角色时，任意角色回复后其摸 1（上游 boss_renxing recoverEnd 同口
+    // 径；damageEnd 半面见 commit_damage 忍性臂）
+    if let Some(rxdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_RENXING)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == rxdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| ctx.core.player(*o).alive && ctx.core.turn.current != *o)
+            .collect();
+        for holder in holders {
+            ctx.draw_cards(holder, 1);
+        }
+    }
     let Some(jdef) = ctx
         .catalog
         .skill_by_name(crate::content::standard::BOSS_JICAI)
