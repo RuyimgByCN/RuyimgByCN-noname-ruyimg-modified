@@ -1047,7 +1047,9 @@ impl Catalog {
 
     /// 武将总数 = 基础表 + 扩展表（G1 角色包管线）。
     pub fn general_count(&self) -> usize {
-        crate::content::standard::STANDARD_GENERALS.len() + self.extension_generals.len()
+        crate::content::standard::STANDARD_GENERALS.len()
+            + crate::content::standard::BOSS_GENERALS.len()
+            + self.extension_generals.len()
     }
 
     /// 武将下标的元数据（基础表优先，扩展表接续；越界 None）。
@@ -1061,10 +1063,21 @@ impl Catalog {
             let (name, faction, skills, hp, gender) = base[g as usize];
             return Some((name, faction, skills.to_vec(), hp, gender));
         }
-        let ext = self
-            .extension_generals
-            .get(g as usize - base.len())?;
-        Some((ext.name, ext.faction, ext.skills.to_vec(), ext.max_hp, ext.gender))
+        // 扩展武将段：约定接在基础表之后（扩展将 def=base+i，g1_d3 等
+        // 消费面 ABI）
+        let ext = self.extension_generals.get(g as usize - base.len());
+        if let Some(ext) = ext {
+            return Some((ext.name, ext.faction, ext.skills.to_vec(), ext.max_hp, ext.gender));
+        }
+        // Boss 内置武将段（v208）：动态尾段（在全部启用扩展之后——扩展
+        // 将 def 约定不受扰动；boss 将 def=base+ext_n+i 随启用集浮动）
+        let boss = crate::content::standard::BOSS_GENERALS;
+        let boss_start = base.len() + self.extension_generals.len();
+        if (g as usize) >= boss_start && (g as usize) < boss_start + boss.len() {
+            let (name, faction, skills, hp, gender) = boss[g as usize - boss_start];
+            return Some((name, faction, skills.to_vec(), hp, gender));
+        }
+        None
     }
 
     pub fn skill_name(&self, id: SkillDefId) -> &'static str {

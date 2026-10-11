@@ -826,6 +826,23 @@ fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool)
     if cancelled {
         return;
     }
+    // 凶兽（Boss 模式共有技，规则 v208）：你不能被翻面（上游
+    // boss_xiongshou_turn turnOverBefore priority 20 trigger.cancel 同
+    // 口径——入口直读跳过，死亡取消型基建同款）
+    if let Some(def) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_XIONGSHOU)
+    {
+        if ctx
+            .core
+            .skills
+            .get(&(player, def))
+            .map(|i| i.enabled)
+            .unwrap_or(false)
+        {
+            return;
+        }
+    }
     let face_down = !ctx.core.player(player).face_down;
     ctx.core.player_mut(player).face_down = face_down;
     // 急冻冰封解除（U05 ow 美，规则 v127）：翻回正面即冰封结束——上游
@@ -2314,6 +2331,29 @@ fn luoyi_bonus(ctx: &Ctx<'_>, source: Option<PlayerId>) -> u32 {
     }
 }
 
+/// 凶兽（Boss 模式共有技，规则 v208）：来源持凶兽且目标体力小于来源
+/// 时，来源使用【杀】造成的伤害 +1（上游 boss_xiongshou_damage
+/// `damageBegin1` filter hp< 同口径）。
+fn xiongshou_bonus(ctx: &Ctx<'_>, source: PlayerId, target: PlayerId) -> u32 {
+    let Some(def) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_XIONGSHOU)
+    else {
+        return 0;
+    };
+    let enabled = ctx
+        .core
+        .skills
+        .get(&(source, def))
+        .map(|i| i.enabled)
+        .unwrap_or(false);
+    if enabled && ctx.core.player(target).hp < ctx.core.player(source).hp {
+        1
+    } else {
+        0
+    }
+}
+
 /// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
 fn is_tao_like(
     ctx: &Ctx<'_>,
@@ -2558,13 +2598,14 @@ impl ShaResolveMachine {
         Flow::Done
     }
 
-    /// 结算杀伤害（裸衣/酒加成）并推进目标/弃置杀本体。
+    /// 结算杀伤害（裸衣/酒/凶兽加成）并推进目标/弃置杀本体。
     fn emit_sha_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if ctx.core.player(self.target).alive {
             ctx.emit(EventData::Damage(damage_data_with(
                 Some(self.source),
                 self.target,
                 1 + luoyi_bonus(ctx, Some(self.source))
+                    + xiongshou_bonus(ctx, self.source, self.target)
                     + self.jiu_damage_bonus()
                     + u32::from(self.xiandan_bonus),
                 self.nature,

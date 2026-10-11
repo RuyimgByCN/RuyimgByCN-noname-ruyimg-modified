@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 207;
+pub const STANDARD_RULESET_VERSION: u64 = 208;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -3867,6 +3867,9 @@ pub const REN_DE: &str = "仁德";
 pub const JI_JIANG: &str = "激将";
 /// 马超「马术」：锁定技，计算与其他角色的距离时始终 -1。
 pub const MA_SHU: &str = "马术";
+/// 凶兽（Boss 模式共有技，规则 v208）：锁定技三面——你使用【杀】对体力
+/// 值小于你的角色伤害 +1；你与其他角色距离 -1；你不能被翻面。
+pub const BOSS_XIONGSHOU: &str = "凶兽";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -3921,6 +3924,12 @@ pub const STANDARD_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("公孙瓒", Faction::Qun, &[YI_CONG], 4, Gender::Male),
     ("伊籍", Faction::Shu, &[JI_JIE, JI_YUAN], 3, Gender::Male),
     ("袁术", Faction::Qun, &[WANG_ZUN, TONG_JI], 4, Gender::Male),
+];
+
+/// Boss 模式内置武将（上游 mode/boss.js characterPack.mode_boss 首批：
+/// 规则 v208 烛阴；追加于 STANDARD 索引空间尾——既有将索引不受扰动）。
+pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
+    ("烛阴", Faction::Qun, &[BOSS_XIONGSHOU], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -4998,6 +5007,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(ZhangbaBehavior),
+        },
+        SkillDef {
+            name: BOSS_XIONGSHOU,
+            // 权限型能力三面：杀伤条件臂（kernel emit_sha_damage）、
+            // computed_distance 距离 -1（state）、翻面取消（commit 入口
+            // 直读跳过——死亡取消型同款），均经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

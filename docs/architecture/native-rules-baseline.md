@@ -2124,6 +2124,24 @@ Boss 关卡开局面（消费面先行——boss 专属技能包首切片前置�
 越界回退/标准回归）——证据见
 [T11 Boss 关卡证据](../operations/evidence/2026-10-11-t11-boss-stage-v207/README.md)。
 
+**规则 v208（2026-10-11，T11 boss 内容落包首批：烛阴+凶兽）**：
+`BOSS_GENERALS` 内置 Boss 武将表（上游 mode/boss.js characterPack
+.mode_boss 首批）——烛阴（男/群/4 血/单技，`isHiddenBoss` 随从且
+`isBossAllowed`）；目录索引三段化 base→ext→**boss**（扩展将 def=base+i
+的既定 ABI 不受扰动，boss 将 def=base+ext_n+i 动态尾段随启用集浮动，
+`general_meta`/`general_count`/快照界同步）。共有技**凶兽**（技能表尾
+追加，权限型 Noop+三面查询，马术同款）：①来源使用【杀】对体力值小于
+自己的角色伤害 +1（`emit_sha_damage` 加成链）；②你与其他角色距离 -1
+（`computed_distance` minus 链）；③你不能被翻面（`commit_turn_over_
+before` 入口直读跳过，死亡取消型基建同款）。`debug_set_general_def`
+通用装配面；FROZEN 技能名序尾加「凶兽」（62 名）。**登记差异**：翻面
+取消在 commit 入口直读（上游 priority 20 触发器窗口）；boss 将 def 随
+启用扩展集浮动；烛阴 isHiddenBoss/extraModeData 随关卡内容推进。版本
+207→**208**（存档不变 v48）。版本回退探针（208→207 复跑 golden 全绿）
+证明 14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_zhuyin_xiongshou_semantics`（三面+对照+装配+往返）——证据见
+[T11 烛阴证据](../operations/evidence/2026-10-11-t11-boss-zhuyin-v208/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |
@@ -2135,7 +2153,7 @@ Boss 关卡开局面（消费面先行——boss 专属技能包首切片前置�
 | 濒死 | 整轮无人用桃才死亡；有桃且仍濒死继续新轮 | -2 血三桃救活与逐询问恢复已通过 |
 | 身份 | 4–8 人配置、阵营胜负、奖惩先于终局 | 配比/范围拒绝、三阵营终局、奖励回归已有；完整身份可见视图和所有终局逐提交恢复仍缺 |
 | 技能与武将 | 已注册补充技能；34 个非样例名称（含原生新增曹仁与 2026-10-07 五批补齐的八将，见下文对齐表）+ 3 样例；武将表有体力 | 六技能已接表；性别有槽时筛选、无槽默认通过；v204 后本块登记差异全部消除 |
-| 模式 | 国战明置实际授予表内技能/体力；KOF 引擎层（v83）：会话将池/比分/局数入 GameMode，单局终局自动推进（败者队首淘汰/胜者队首轮转）；对决 versus 2v2 基线（v80）；斗地主（v81）；Boss 基线+重整复活回环（v82） | KOF 空池解析已修；会话行往返/恢复续跑终局一致、单局中途快照恢复哈希轨迹一致、死亡清理已固化（`kof_session_consistency_and_midrestore`，2026-10-07）；versus 奖惩/终局/存档往返已固化（`versus_mode_team_victory_and_rewards`，2026-10-08）；doudizhu 终局/存档往返已固化（`doudizhu_mode_victory_and_roundtrip`，2026-10-08）；versus 4v4 变体已固化（teams 参数化天然支持，`versus_4v4_eight_seats_team_victory`，2026-10-11——无语义变化不递增版本）；versus 替补已建模（v206/存档 v48：死亡座位从本队池弹队首换将复活+摸 4+死亡不结算，池空照常死亡；奖惩不结算/队首序选择为登记差异）；斗地主特殊开局摸牌变体的 binglin 面已建模（v205），online 面（地骑虚拟装备+选将后 infoHp 时点）维持登记；Boss addFellow 中途入队已建模（v84 批三-b：`debug_add_fellow` 队尾扩张+直授 4 张+fellows 登记，`boss_mode_add_fellow_seat_expansion` 固化）；Boss 关卡骨架已建模（v207：gameDraw 分列发牌数+loopFirst 回合起点座位，`new_boss_stage`——boss 专属技能包首片消费面就绪）；boss 专属技能包与 loopType==2 变体未建模（内容面登记）；KOF 多局连续会话循环（终局自动开局下一局）仍在示例/宿主层——引擎只承载会话状态与单局推进；首局大量拒绝后超时判负为示例策略面问题（非内核） |
+| 模式 | 国战明置实际授予表内技能/体力；KOF 引擎层（v83）：会话将池/比分/局数入 GameMode，单局终局自动推进（败者队首淘汰/胜者队首轮转）；对决 versus 2v2 基线（v80）；斗地主（v81）；Boss 基线+重整复活回环（v82） | KOF 空池解析已修；会话行往返/恢复续跑终局一致、单局中途快照恢复哈希轨迹一致、死亡清理已固化（`kof_session_consistency_and_midrestore`，2026-10-07）；versus 奖惩/终局/存档往返已固化（`versus_mode_team_victory_and_rewards`，2026-10-08）；doudizhu 终局/存档往返已固化（`doudizhu_mode_victory_and_roundtrip`，2026-10-08）；versus 4v4 变体已固化（teams 参数化天然支持，`versus_4v4_eight_seats_team_victory`，2026-10-11——无语义变化不递增版本）；versus 替补已建模（v206/存档 v48：死亡座位从本队池弹队首换将复活+摸 4+死亡不结算，池空照常死亡；奖惩不结算/队首序选择为登记差异）；斗地主特殊开局摸牌变体的 binglin 面已建模（v205），online 面（地骑虚拟装备+选将后 infoHp 时点）维持登记；Boss addFellow 中途入队已建模（v84 批三-b：`debug_add_fellow` 队尾扩张+直授 4 张+fellows 登记，`boss_mode_add_fellow_seat_expansion` 固化）；Boss 关卡骨架已建模（v207：gameDraw 分列发牌数+loopFirst 回合起点座位，`new_boss_stage`）；boss 内容包首批已落（v208：烛阴+共有技凶兽三面入目录，扩展将 def ABI 不变）；boss 专属技能包其余（约 39 将/77 技）与 loopType==2 变体未建模（内容面逐批登记）；KOF 多局连续会话循环（终局自动开局下一局）仍在示例/宿主层——引擎只承载会话状态与单局推进；首局大量拒绝后超时判负为示例策略面问题（非内核） |
 | 可见性 | 原观星 ChoiceAnswered 脱敏已修；护驾/激将逐人询问不以暗手牌预筛——互换暗响应牌后攻击者视图与公开询问序列不变（v29）；规划信息集为未知池重分配，不复制真实牌堆 ID（v29） | 第 48 轮既有探针为 22 FIXED / 0 OPEN；这不代表所有询问类技能的信息隔离或策略质量已验收，继续按覆盖清单扩面 |
 | 预算/时间片 | 段预算/resume/abort 与同步规划节点/时限/预置取消已有回归；真实提交与规划模拟统一用会话高水位（u64::MAX 干净拒绝）；规划信息集为未知池确定性重分配——物理牌集合守恒、空牌堆退化确定（v29 修订） | 单选候选合法回退原反例已于 v31 修复；独立工作池未实现，命令配额阻塞及更广的策略质量仍待验收；令牌原代次反例已修 |
 

@@ -1299,6 +1299,16 @@ impl Engine {
     }
 
     /// 测试/工具：配置主将槽（势力/性别资格类测试用——明置状态不变）。
+    /// 按目录 def 索引装配将（测试面；Boss 模式 boss 将经 BOSS_GENERALS
+    /// 段索引——general_meta 统一解析，标准表之后为 boss 段）。
+    pub fn debug_set_general_def(&mut self, player: PlayerId, def: u16) {
+        self.state.core.players
+            .get_mut(player as usize)
+            .expect("player")
+            .general_slots[0] = Some(def);
+        apply_general_assembly(&mut self.state.core, &self.catalog, player, 0);
+    }
+
     pub fn debug_set_general(&mut self, player: PlayerId, name: &str) {
         let idx = content::standard::STANDARD_GENERALS
             .iter()
