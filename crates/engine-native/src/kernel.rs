@@ -1606,6 +1606,12 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                         crate::content::host::SWD_JIGUANYAOSHU_KEY,
                         u.targets.first().copied(),
                     )
+                } else if name.contains("jiguanshu") {
+                    (
+                        crate::content::host::HostBehavior::SwdJiguanshuCard,
+                        crate::content::host::SWD_JIGUANSHU_KEY,
+                        Some(u.player),
+                    )
                 } else {
                     (
                         crate::content::host::HostBehavior::SwdZhiluxiaohuCard,

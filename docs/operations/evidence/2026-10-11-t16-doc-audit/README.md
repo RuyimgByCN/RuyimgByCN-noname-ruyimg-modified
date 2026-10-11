@@ -115,3 +115,12 @@
 - **zhenfa deferred 5**（长蛇阵/天覆阵/七星阵/鸟翔阵/破阵诀）：包数据内已登记结构性原因（国战队列/围攻/座位重排 inline/isFriendOf/swapSeat 子系统未建模）——非逐卡切片可达，登记 **T19（P2 结构缺口）**。
 - mtg 包 cards.json deferred 2 条已补登记+双哈希重算；zhenfa 包 deferred 原文已在（零改动）。
 - `cargo test --offline -p engine-native --test g1_shahai_mtg`：11/0；`replay_scenarios` 守护 2/2。
+
+---
+
+# 同日 T18：卡牌实例受控合成原语（CardMod，ADR 0780）
+
+- **原语**：`PlayerState.card_mods: BTreeMap<u32,u32>`（装备实体→附着灵剑实体）；机关术（tag 235，规则 v199）自目标施放——每张有效装备随机附着一张灵剑（目录枚举 Hslingjian）。存档 v45（len+双 u32 序列）。**ADR 0780** 已起草并采纳：备选方案（运行时目录克隆/完整实体合成/不建模）弃用理由在案。
+- **登记差异**：名称合成/数值升级仅入改造表（目录不可变、无消费点）；jiqi/yuchan 池暂缓；演示呈现暂缓；改造不随卡转移。
+- **机关术×2**：deferred → cards（♣2/♦2）转正，双哈希重算；机关牌池 8 种 17 张全数转正。
+- 验证：`g1_shahai_swd` **27/27**（新增 jiguanshu 附着+往返+无装备拒 1 支）；全量 **545/0/1**（exit 0）——[日志](engine-native-tests.log)；Gate 1b exit 0；双版本探针（199/45→198/44）全绿后重录 14 golden。

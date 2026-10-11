@@ -266,8 +266,20 @@
    "kind": "hslingjian",
    "suit": "club",
    "rank": 10
+  },
+  {
+   "name": "swd_jiguanshu1",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 2
+  },
+  {
+   "name": "swd_jiguanshu2",
+   "kind": "jiguan",
+   "suit": "diamond",
+   "rank": 2
   }
  ],
  "host_skills": [],
- "deferred": [{"name": "jiguanshu"}, {"name": "jiguanshu2"}]
+ "deferred": []
 }

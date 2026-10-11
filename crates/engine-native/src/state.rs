@@ -167,6 +167,9 @@ pub struct PlayerState {
     /// 隐秘离场潜行（U05 swd 灵剑，规则 v198）：不能成为牌的目标；当前
     /// 回合结束解除（上游 tempHide 本回合近似）。
     pub yinmi_active: bool,
+    /// 卡牌实例改造表（U05 swd 机关术批，规则 v199，ADR 0780）：装备实体
+    /// → 附着灵剑实体（受控合成——目录不可变，改造以伴随表建模）。
+    pub card_mods: std::collections::BTreeMap<u32, u32>,
     /// Boss 模式重整计数（P2/N08 模式入口批三-a，规则 v82）：死亡后
     /// 每次轮到其回合计数 +1，达阈值复活（仅 Boss 模式使用）。
     pub boss_chongzheng: u8,
@@ -229,6 +232,7 @@ impl PlayerState {
             chaofeng_active: false,
             xingtigaizao_count: 0,
             yinmi_active: false,
+            card_mods: Default::default(),
             general_slots: [None, None],
             revealed_generals: [false, false],
             wunature: None,

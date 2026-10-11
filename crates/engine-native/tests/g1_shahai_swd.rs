@@ -120,7 +120,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 43, "swd 全 43 张（+…机关妖术×2/灵剑池 7 张）入目录");
+    assert_eq!(e.catalog().cards.len(), base_cards + 45, "swd 全 45 张（+…机关妖术×2/灵剑池 7 张/机关术×2）入目录");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -218,7 +218,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 43, "swd 全 43 张（含机关妖术×2/灵剑池 7 张，规则 v198）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 45, "swd 全 45 张（含灵剑池 7 张/机关术×2，规则 v199）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -233,7 +233,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 43, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 45, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -2204,4 +2204,101 @@ fn swd_jiguanyaoshu_gain_compensates_lost_equip() {
         }),
         "应补获 1 张灵剑（弃装备 Kind 牌触发补偿）"
     );
+}
+
+/// 机关术（规则 v199/ADR 0780）：自目标——每张有效装备受控合成（CardMod
+/// 附着随机灵剑）；CardMod 随存档往返；无装备不可用。
+#[test]
+fn swd_jiguanshu_attaches_card_mods_and_roundtrips() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6117, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let js1 = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.name.contains("jiguanshu"))
+        .expect("机关术在目录") as u32;
+    inject_hand(&mut e, &pack, &[js1]);
+    // 0 号装配 1 张武器
+    let weapon = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == CardKind::Weapon)
+        .expect("武器在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != weapon);
+        snap.core.discard.retain(|x| *x != weapon);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|x| *x != weapon);
+            pl.equips.retain(|x| *x != weapon);
+        }
+        snap.core.players[0].equips.push(weapon);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入装备");
+    }
+
+    let out = play(&mut e, js1, vec![0]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert!(e.open_choice().is_none(), "机关术无询问");
+    let snap = e.save();
+    let mods = &snap.core.players[0].card_mods;
+    assert_eq!(mods.len(), 1, "1 张装备 → 1 条改造");
+    let attached = mods.get(&weapon).expect("装备应附着灵剑");
+    assert_eq!(
+        e.catalog().cards[*attached as usize].kind,
+        CardKind::Hslingjian,
+        "附着实体应为灵剑"
+    );
+    assert!(snap.core.discard.contains(&js1), "本体入弃堆");
+
+    // CardMod 随存档字节往返
+    let bytes = engine_native::archive::encode_archive(&snap);
+    let restored =
+        Engine::restore_with_extensions(&engine_native::archive::decode_archive(&bytes).expect("解码"), &[&pack])
+            .expect("恢复");
+    assert_eq!(
+        restored.state_core().players[0].card_mods,
+        *mods,
+        "CardMod 随存档往返一致"
+    );
+
+    // 装备清空后不可再用（enable 校验）
+    // 无装备不可用：清空装备后再试（同实体已弃，注入另一张机关术）
+    let js_all: Vec<u32> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.name.contains("jiguanshu"))
+        .map(|(i, _)| i as u32)
+        .collect();
+    if let Some(js2) = js_all.iter().find(|x| **x != js1) {
+        inject_hand(&mut e, &pack, &[*js2]);
+        // 先把装备移入弃牌堆（保留全域唯一性；直写快照）
+        let mut snap = e.save();
+        let w = snap.core.players[0].equips.pop().expect("有装备");
+        snap.core.discard.push(w);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("清装备");
+        let out = play(&mut e, *js2, vec![0]);
+        assert!(
+            matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)),
+            "无装备不可用: {out:?}"
+        );
+    }
 }

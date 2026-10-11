@@ -3317,6 +3317,16 @@ fn apply_command(
                         if occupied.len() >= 5 {
                             return Err(RejectReason::IllegalTargets);
                         }
+                    } else if catalog.cards[card as usize].name.contains("jiguanshu") {
+                        // 机关术（swd 机关术批，规则 v199/ADR 0780）：自目
+                        // 标（上游 filterTarget target===player 同口径）；
+                        // 至少一张有效装备
+                        if targets.len() != 1 || targets[0] != core.turn.current {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        if core.player(core.turn.current).equips.is_empty() {
+                            return Err(RejectReason::IllegalTargets);
+                        }
                     } else if catalog.cards[card as usize].name.contains("jiguanyuan") {
                         // 机关怨（swd 第二十一批，规则 v196）：恰 1 名其他
                         // 角色（上游 filterTarget target!==player+

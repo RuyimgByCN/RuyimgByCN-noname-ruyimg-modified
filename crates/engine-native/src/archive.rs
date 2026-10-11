@@ -46,7 +46,10 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v44（2026-10-11，T12 机关术批 v198）：`PlayerState` 尾部追加
 /// `jileng_active`/`chaofeng_active`/`xingtigaizao_count`/`yinmi_active`
 /// 灵剑状态四字段。v43 字节被版本门禁拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 44;
+/// v45（2026-10-11，T18 机关术×2 v199）：`PlayerState` 尾部追加
+/// `card_mods`（len+(u32,u32) 序列；卡牌实例改造表，ADR 0780）。v44 字节
+/// 被版本门禁拒绝（无生产迁移数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 45;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2583,6 +2586,12 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.chaofeng_active);
         w.u8(p.xingtigaizao_count);
         w.boolean(p.yinmi_active);
+        // 卡牌实例改造表（v45，机关术批/ADR 0780）：len+（装备,附着灵剑）
+        w.len(p.card_mods.len());
+        for (card, attached) in &p.card_mods {
+            w.u32(*card);
+            w.u32(*attached);
+        }
         // 炮台等级（v6，U05 ow 托比昂）：跨回合持久
         w.u8(p.paotai_lv);
         w.u8(p.baolei_mode);
@@ -2859,6 +2868,13 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let chaofeng_active = r.boolean()?;
         let xingtigaizao_count = r.u8()?;
         let yinmi_active = r.boolean()?;
+        let cm_count = r.len()?;
+        let mut card_mods = std::collections::BTreeMap::new();
+        for _ in 0..cm_count {
+            let card = r.u32()?;
+            let attached = r.u32()?;
+            card_mods.insert(card, attached);
+        }
         let paotai_lv = r.u8()?;
         let baolei_mode = r.u8()?;
         let baoxue_used = r.boolean()?;
@@ -2914,6 +2930,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             ctianfu_card,
             gouhunluo_rounds,
             gouhunluo_source,
+            card_mods,
             jiguanyuan_cards,
             jileng_active,
             chaofeng_active,

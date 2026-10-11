@@ -607,6 +607,10 @@ pub enum HostBehavior {
     /// 机关妖术补偿（tag 234，规则 v198 补齐）：非自己回合失去装备区牌
     /// 时随机补获等量灵剑（弃装备事件近似）。
     SwdJiguanyaoGain,
+    /// 机关术（tag 235，规则 v199/ADR 0780）：每张有效装备受控合成——附
+    /// 着一张随机灵剑（CardMod 表；登记差异：名称合成/数值升级仅入改
+    /// 造表，目录不可变；jiqi/yuchan 池暂缓；演示呈现暂缓）。
+    SwdJiguanshuCard,
 }
 
 
@@ -847,6 +851,7 @@ impl HostBehavior {
             HostBehavior::SwdShengxiuhaojiaoCard => 232,
             HostBehavior::SwdYinmilichangCard => 233,
             HostBehavior::SwdJiguanyaoGain => 234,
+            HostBehavior::SwdJiguanshuCard => 235,
         }
     }
 
@@ -1086,6 +1091,7 @@ impl HostBehavior {
             232 => HostBehavior::SwdShengxiuhaojiaoCard,
             233 => HostBehavior::SwdYinmilichangCard,
             234 => HostBehavior::SwdJiguanyaoGain,
+            235 => HostBehavior::SwdJiguanshuCard,
             _ => return None,
         })
     }
@@ -1093,7 +1099,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 234] = [
+    pub const ALL: [HostBehavior; 235] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1328,6 +1334,7 @@ impl HostBehavior {
         HostBehavior::SwdShengxiuhaojiaoCard,
         HostBehavior::SwdYinmilichangCard,
         HostBehavior::SwdJiguanyaoGain,
+        HostBehavior::SwdJiguanshuCard,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1567,6 +1574,7 @@ impl HostBehavior {
             HostBehavior::SwdShengxiuhaojiaoCard => "host:swd_shengxiuhaojiao_card",
             HostBehavior::SwdYinmilichangCard => "host:swd_yinmilichang_card",
             HostBehavior::SwdJiguanyaoGain => "host:swd_jiguanyao_gain",
+            HostBehavior::SwdJiguanshuCard => "host:swd_jiguanshu_card",
         }
     }
 }
@@ -1798,6 +1806,7 @@ impl HostBehavior {
             // 机关妖术防重标记：纯状态，无触发
             HostBehavior::SwdJiguanyaoshuCard => None,
             HostBehavior::SwdJiguanyaoState => None,
+            HostBehavior::SwdJiguanshuCard => None,
             // 机关妖术补偿：弃牌事件（含装备牌时触发，登记近似差异）
             HostBehavior::SwdJiguanyaoGain => Some(TriggerMeta {
                 event: EventKind::CardsDiscarded,
@@ -2615,6 +2624,7 @@ pub const SWD_JINJILENGDONG_KEY: &str = "swd_jinjilengdong";
 pub const SWD_SHENGXIUHAOJIAO_KEY: &str = "swd_shengxiuhaojiao";
 pub const SWD_YINMILICHANG_KEY: &str = "swd_yinmilichang";
 pub const SWD_JIGUANYAO_GAIN_KEY: &str = "swd_jiguanyao_gain";
+pub const SWD_JIGUANSHU_KEY: &str = "swd_jiguanshu";
 pub const SWD_LANGEGUAIYI_SKILL_KEY: &str = "swd_langeguaiyi_skill";
 pub const SWD_LIUXING_DISCARD: &str = "swd_liuxing_discard";
 pub const SWD_LIUXING_KEY: &str = "gj:swd_liuxinghuoyu";
@@ -3656,6 +3666,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdJiguanyuanCard => false,
             HostBehavior::SwdJiguanyaoshuCard => false,
             HostBehavior::SwdJiguanyaoState => false,
+            HostBehavior::SwdJiguanshuCard => false,
             // 机关妖术补偿：非自己回合、弃牌含装备 Kind 牌（以弃装备牌近
             // 似"失去装备区牌"，登记差异：替换/获得离去路径不触发）
             HostBehavior::SwdJiguanyaoGain => matches!(event,
@@ -14857,6 +14868,40 @@ HostBehavior::XianjianLingyu => match self.stage {
                     if !got.is_empty() {
                         ctx.log(LogEvent::CardsDrawn { player: self.owner, cards: got });
                     }
+                }
+                Flow::Done
+            }
+            // 机关术（U05 swd 机关术批，规则 v199/ADR 0780）：自目标——
+            // 每张有效装备受控合成：随机附着一张灵剑实体（PlayerState.
+            // card_mods 表）。登记差异：①名称合成/数值升级仅入改造表（目
+            // 录不可变）；②jiqi/yuchan 池暂缓，全部附着灵剑；③演示呈现暂
+            // 缓。本体入弃堆。
+            HostBehavior::SwdJiguanshuCard => {
+                let valid: Vec<CardId> =
+                    ctx.core.player(self.owner).equips.iter().copied().collect();
+                let lingjian: Vec<CardId> = ctx
+                    .catalog
+                    .cards
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, c)| c.kind == CardKind::Hslingjian)
+                    .map(|(i, _)| i as CardId)
+                    .collect();
+                for equip in valid {
+                    if lingjian.is_empty() || ctx.core.player(self.owner).card_mods.contains_key(&equip) {
+                        continue;
+                    }
+                    let k = ctx.core.rng.gen_range(lingjian.len() as u32) as usize;
+                    let attached = lingjian[k];
+                    ctx.core
+                        .player_mut(self.owner)
+                        .card_mods
+                        .insert(equip, attached);
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
                 }
                 Flow::Done
             }

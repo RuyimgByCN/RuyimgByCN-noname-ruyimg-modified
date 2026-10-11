@@ -138,3 +138,4 @@
 - [0766 N12 旧线驱动器收尾批——两次进局与旧线自身缺陷定界](0766-native-n12-driver-closeout-oldline-defects.md)
 - [0767 N12 旧线浏览器单局完局记录与统计边界](0767-native-n12-driver-complete.md) —— 浏览器完局历史记录；UI 操作/终态数量不等于 n09 同口径统计
 - [0702 M7 移动端阻塞说明与替代方案](0702-m7-mobile-blocking.md) —— 历史 ADR：原 M7 移动壳决策已被性能架构原生平台路线取代；配套 phase28 快照已清理（2026-10-11 补录索引，T16⑤ 附带）
+- [0780 卡牌实例受控合成原语（CardMod 伴随表）](0780-card-instance-mod-primitive.md) —— 机关术批：card_mods 伴随表建模合成（目录不可变），名称合成/数值升级登记差异；存档 v45
