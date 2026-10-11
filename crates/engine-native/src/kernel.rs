@@ -1565,6 +1565,33 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 });
                 Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
             }
+            CardKind::Changshezhen | CardKind::Pozhenjue => {
+                // 长蛇阵/破阵诀（U05 zhenfa，规则 v201/T19b）：座位重排类
+                //（swapSeat 原语 ADR 0781）；无懈窗口包装（dizaizhen 同款）
+                let kind = ctx.catalog.card_kind(u.card);
+                let (behavior, def_key) = if kind == CardKind::Changshezhen {
+                    (
+                        crate::content::host::HostBehavior::SwdChangshezhenCard,
+                        crate::content::host::SWD_CHANGSHEZHEN_KEY,
+                    )
+                } else {
+                    (
+                        crate::content::host::HostBehavior::SwdPozhenjueCard,
+                        crate::content::host::SWD_POZHENJUE_KEY,
+                    )
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: def_key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
             CardKind::Tianfuzhen | CardKind::Qixingzhen | CardKind::Niaoxiangzhen => {
                 // 阵法三张（U05 zhenfa，规则 v200/T19a）：AOE/自目标机器
                 // + 无懈窗口包装（dizaizhen 同款）

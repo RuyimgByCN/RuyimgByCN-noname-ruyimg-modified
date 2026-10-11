@@ -275,6 +275,7 @@ impl Engine {
             ruleset_version: catalog.ruleset_version,
             mode: GameMode::Prototype,
             players: (0..seats).map(|_| PlayerState::new(4)).collect(),
+            seat_ring: (0..seats).map(|i| i as PlayerId).collect(),
             deck: Vec::new(),
             discard: Vec::new(),
             table: Vec::new(),
@@ -2752,8 +2753,23 @@ fn apply_command(
                 | CardKind::Wugu
                 | CardKind::Yangpijuan
                 | CardKind::Dizaizhen
+                | CardKind::Changshezhen
+                | CardKind::Pozhenjue
                 | CardKind::ShanDian
                 | CardKind::HongShui => {
+                    // 长蛇阵：须处于队列或存在友方（上游 enable 同口径）；
+                    // 破阵诀：恒可用（enable true）
+                    if kind == CardKind::Changshezhen
+                        && !core.inline(catalog, core.turn.current)
+                        && !core
+                            .alive_players()
+                            .any(|p| {
+                                p != core.turn.current
+                                    && core.is_friend_of(catalog, core.turn.current, p)
+                            })
+                    {
+                        return Err(RejectReason::IllegalTargets);
+                    }
                     // 地载阵：须存在非大势力存活角色（上游 enable 同口径）
                     if kind == CardKind::Dizaizhen
                         && !core
@@ -4697,6 +4713,7 @@ mod tests {
                 ruleset_version: catalog.ruleset_version,
                 mode: GameMode::Prototype,
                 players: (0..2).map(|_| PlayerState::new(4)).collect(),
+                seat_ring: (0..2).collect(),
                 deck: Vec::new(),
                 discard: Vec::new(),
                 table: Vec::new(),
@@ -4781,6 +4798,7 @@ mod tests {
                     ruleset_version: version,
                     mode: GameMode::Prototype,
                     players: (0..2).map(|_| PlayerState::new(4)).collect(),
+                    seat_ring: (0..2).collect(),
                     deck: Vec::new(),
                     discard: Vec::new(),
                     table: Vec::new(),

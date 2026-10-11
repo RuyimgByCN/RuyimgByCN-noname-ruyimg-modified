@@ -618,6 +618,11 @@ pub enum HostBehavior {
     SwdQixingzhenCard,
     /// 鸟翔阵（tag 238，规则 v200/T19a）：逐合法目标响应闪或受 1 伤。
     SwdNiaoxiangzhenCard,
+    /// 长蛇阵（tag 239，规则 v201/T19b）：队列中→全队列摸 1；否则与最近
+    /// 友方换座成队列（swapSeat）。
+    SwdChangshezhenCard,
+    /// 破阵诀（tag 240，规则 v201/T19b）：随机座位重排（swapSeat 若干次）。
+    SwdPozhenjueCard,
 }
 
 
@@ -862,6 +867,8 @@ impl HostBehavior {
             HostBehavior::SwdTianfuzhenCard => 236,
             HostBehavior::SwdQixingzhenCard => 237,
             HostBehavior::SwdNiaoxiangzhenCard => 238,
+            HostBehavior::SwdChangshezhenCard => 239,
+            HostBehavior::SwdPozhenjueCard => 240,
         }
     }
 
@@ -1105,6 +1112,8 @@ impl HostBehavior {
             236 => HostBehavior::SwdTianfuzhenCard,
             237 => HostBehavior::SwdQixingzhenCard,
             238 => HostBehavior::SwdNiaoxiangzhenCard,
+            239 => HostBehavior::SwdChangshezhenCard,
+            240 => HostBehavior::SwdPozhenjueCard,
             _ => return None,
         })
     }
@@ -1112,7 +1121,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 238] = [
+    pub const ALL: [HostBehavior; 240] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1351,6 +1360,8 @@ impl HostBehavior {
         HostBehavior::SwdTianfuzhenCard,
         HostBehavior::SwdQixingzhenCard,
         HostBehavior::SwdNiaoxiangzhenCard,
+        HostBehavior::SwdChangshezhenCard,
+        HostBehavior::SwdPozhenjueCard,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1594,6 +1605,8 @@ impl HostBehavior {
             HostBehavior::SwdTianfuzhenCard => "host:swd_tianfuzhen_card",
             HostBehavior::SwdQixingzhenCard => "host:swd_qixingzhen_card",
             HostBehavior::SwdNiaoxiangzhenCard => "host:swd_niaoxiangzhen_card",
+            HostBehavior::SwdChangshezhenCard => "host:swd_changshezhen_card",
+            HostBehavior::SwdPozhenjueCard => "host:swd_pozhenjue_card",
         }
     }
 }
@@ -1829,6 +1842,8 @@ impl HostBehavior {
             HostBehavior::SwdTianfuzhenCard => None,
             HostBehavior::SwdQixingzhenCard => None,
             HostBehavior::SwdNiaoxiangzhenCard => None,
+            HostBehavior::SwdChangshezhenCard => None,
+            HostBehavior::SwdPozhenjueCard => None,
             // 机关妖术补偿：弃牌事件（含装备牌时触发，登记近似差异）
             HostBehavior::SwdJiguanyaoGain => Some(TriggerMeta {
                 event: EventKind::CardsDiscarded,
@@ -2650,6 +2665,8 @@ pub const SWD_JIGUANSHU_KEY: &str = "swd_jiguanshu";
 pub const SWD_TIANFUZHEN_KEY: &str = "swd_tianfuzhen";
 pub const SWD_QIXINGZHEN_KEY: &str = "swd_qixingzhen";
 pub const SWD_NIAOXIANGZHEN_KEY: &str = "swd_niaoxiangzhen";
+pub const SWD_CHANGSHEZHEN_KEY: &str = "swd_changshezhen";
+pub const SWD_POZHENJUE_KEY: &str = "swd_pozhenjue";
 pub const SWD_LANGEGUAIYI_SKILL_KEY: &str = "swd_langeguaiyi_skill";
 pub const SWD_LIUXING_DISCARD: &str = "swd_liuxing_discard";
 pub const SWD_LIUXING_KEY: &str = "gj:swd_liuxinghuoyu";
@@ -3695,6 +3712,8 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdTianfuzhenCard => false,
             HostBehavior::SwdQixingzhenCard => false,
             HostBehavior::SwdNiaoxiangzhenCard => false,
+            HostBehavior::SwdChangshezhenCard => false,
+            HostBehavior::SwdPozhenjueCard => false,
             // 机关妖术补偿：非自己回合、弃牌含装备 Kind 牌（以弃装备牌近
             // 似"失去装备区牌"，登记差异：替换/获得离去路径不触发）
             HostBehavior::SwdJiguanyaoGain => matches!(event,
@@ -15168,6 +15187,61 @@ HostBehavior::XianjianLingyu => match self.stage {
                 }
                 _ => Flow::Done,
             },
+            // 长蛇阵（zhenfa，规则 v201/T19b）：队列中→全队列（含自己）各
+            // 摸 1；否则与距离最近的友方换座成队列（swapSeat）；本体入弃堆。
+            HostBehavior::SwdChangshezhenCard => {
+                let inline_now = ctx.core.inline(ctx.catalog, self.owner);
+                let prev_of_owner = ctx.core.alive_neighbors(self.owner).1;
+                if inline_now {
+                    for q in 0..ctx.core.players.len() as u8 {
+                        if ctx.core.inline_with(ctx.catalog, self.owner, q) {
+                            ctx.draw_cards(q, 1);
+                        }
+                    }
+                } else if prev_of_owner.is_some() {
+                    // 友方按与自己的座位距离排序取最近（上游 absolute 距离
+                    // 排序同口径；seat_distance 即环上最短距离）
+                    let mut friends: Vec<(u8, u8)> = (0..ctx.core.players.len() as u8)
+                        .filter(|q| {
+                            *q != self.owner
+                                && ctx.core.player(*q).alive
+                                && ctx.core.is_friend_of(ctx.catalog, self.owner, *q)
+                        })
+                        .map(|q| (q, ctx.core.seat_distance(self.owner, q)))
+                        .collect();
+                    friends.sort_by_key(|(_, d)| *d);
+                    if let Some((nearest, _)) = friends.first().copied() {
+                        let next_of_owner = ctx.core.next_alive(self.owner);
+                        ctx.core.swap_seat(nearest, next_of_owner);
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 破阵诀（zhenfa，规则 v201/T19b）：n 次随机座位交换（n=存活
+            // 数，上游 swapSeat(random, random) ×n 同口径）；本体入弃堆。
+            HostBehavior::SwdPozhenjueCard => {
+                let n = ctx.core.alive_players().count();
+                for _ in 0..n {
+                    let seats: Vec<u8> = ctx.core.alive_players().collect();
+                    if seats.len() < 2 {
+                        break;
+                    }
+                    let i = ctx.core.rng.gen_range(seats.len() as u32) as usize;
+                    let j = ctx.core.rng.gen_range(seats.len() as u32) as usize;
+                    ctx.core.swap_seat(seats[i], seats[j]);
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
             // 机关妖术（U05 swd 第二十二批，规则 v197）：单体（range.global
             // 1）——从牌堆+弃堆装备实体中发现一张「目标空装备栏」子类型的
             // 装备，置入其手牌后 emit Equipped 走完整装配（commit_equip 同

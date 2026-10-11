@@ -170,6 +170,7 @@ pub struct PlayerState {
     /// 卡牌实例改造表（U05 swd 机关术批，规则 v199，ADR 0780）：装备实体
     /// → 附着灵剑实体（受控合成——目录不可变，改造以伴随表建模）。
     pub card_mods: std::collections::BTreeMap<u32, u32>,
+
     /// Boss 模式重整计数（P2/N08 模式入口批三-a，规则 v82）：死亡后
     /// 每次轮到其回合计数 +1，达阈值复活（仅 Boss 模式使用）。
     pub boss_chongzheng: u8,
@@ -441,6 +442,10 @@ pub struct GameStateCore {
     pub ruleset_version: u64,
     pub mode: GameMode,
     pub players: Vec<PlayerState>,
+    /// 座位环（T19b，规则 v201/ADR 0781）：ring[pos]=PlayerId，恒为恒等
+    /// 排列（建局 0..n 初始化，swapSeat 重排）；座位语义全部经由
+    /// ring_next/ring_prev/ring_pos，禁止 +1%n 直算。
+    pub seat_ring: Vec<PlayerId>,
     pub deck: Vec<CardId>,
     pub discard: Vec<CardId>,
     /// 结算中的牌（出牌阶段使用、尚未进弃牌堆）。
@@ -611,6 +616,46 @@ impl GameStateCore {
         let cw = b.wrapping_sub(a) % n;
         let ccw = a.wrapping_sub(b) % n;
         cw.min(ccw)
+    }
+
+    // ---- 座位环（T19b/ADR 0781）----
+
+    /// p 在座位环中的位置（环长度与玩家数不符时退回恒等位）。
+    pub fn ring_pos(&self, p: PlayerId) -> usize {
+        if self.seat_ring.len() == self.players.len() {
+            self.seat_ring.iter().position(|x| *x == p).unwrap_or(p as usize)
+        } else {
+            p as usize
+        }
+    }
+
+    /// 座位环中 p 的下一位（不计存活；出界退恒等）。
+    pub fn ring_next(&self, p: PlayerId) -> PlayerId {
+        let n = self.players.len() as PlayerId;
+        let pos = self.ring_pos(p);
+        self.seat_ring.get((pos + 1) % (n as usize)).copied().unwrap_or((p + 1) % n)
+    }
+
+    /// 座位环中 p 的上一位（不计存活）。
+    pub fn ring_prev(&self, p: PlayerId) -> PlayerId {
+        let n = self.players.len() as PlayerId;
+        let pos = self.ring_pos(p);
+        if pos == 0 {
+            *self.seat_ring.last().unwrap_or(&(n - 1))
+        } else {
+            self.seat_ring.get(pos - 1).copied().unwrap_or((p + n - 1) % n)
+        }
+    }
+
+    /// swapSeat 座位重排（T19b，规则 v201）：交换 a/b 的环位置（PlayerId
+    /// 身份不变，座位语义即时生效；上游 game.swapSeat 同口径）。
+    pub fn swap_seat(&mut self, a: PlayerId, b: PlayerId) {
+        if a == b || self.seat_ring.len() != self.players.len() {
+            return;
+        }
+        let pa = self.ring_pos(a);
+        let pb = self.ring_pos(b);
+        self.seat_ring.swap(pa, pb);
     }
 
     /// 计算距离（含 ±1 马修饰，下限 1；座位距离只计存活玩家）。
@@ -825,17 +870,18 @@ impl GameStateCore {
             return (None, None);
         }
         let alive = |q: PlayerId| self.player(q).alive;
-        let step = |from: PlayerId, delta: i32| -> PlayerId {
-            ((from as i32 + delta + i32::from(n)) % i32::from(n)) as PlayerId
-        };
-        let mut next = step(p, 1);
-        while next != p && !alive(next) {
-            next = step(next, 1);
+        let mut next = self.ring_next(p);
+        let mut guard = 0;
+        while next != p && !alive(next) && guard < n {
+            next = self.ring_next(next);
+            guard += 1;
         }
         let next = if next == p || !alive(next) { None } else { Some(next) };
-        let mut prev = step(p, -1);
-        while prev != p && !alive(prev) {
-            prev = step(prev, -1);
+        let mut prev = self.ring_prev(p);
+        guard = 0;
+        while prev != p && !alive(prev) && guard < n {
+            prev = self.ring_prev(prev);
+            guard += 1;
         }
         let prev = if prev == p || !alive(prev) { None } else { Some(prev) };
         (next, prev)
@@ -889,15 +935,13 @@ impl GameStateCore {
         if !self.is_friend_of(catalog, p, q) {
             return false;
         }
-        let n = self.players.len() as PlayerId;
-        // forward
+        // forward/backward 沿座位环（T19b）
         let mut cur = p;
         loop {
-            let mut nxt = (cur + 1) % n;
-            while nxt != p && !self.player(nxt).alive {
-                nxt = (nxt + 1) % n;
-            }
-            if nxt == p || nxt == cur || !self.is_friend_of(catalog, p, nxt) {
+            let nxt = self.ring_next(cur);
+            if nxt == p || nxt == cur || !self.player(nxt).alive
+                || !self.is_friend_of(catalog, p, nxt)
+            {
                 break;
             }
             if nxt == q {
@@ -905,14 +949,12 @@ impl GameStateCore {
             }
             cur = nxt;
         }
-        // backward
         let mut cur = p;
         loop {
-            let mut prv = (cur + n - 1) % n;
-            while prv != p && !self.player(prv).alive {
-                prv = (prv + n - 1) % n;
-            }
-            if prv == p || prv == cur || !self.is_friend_of(catalog, p, prv) {
+            let prv = self.ring_prev(cur);
+            if prv == p || prv == cur || !self.player(prv).alive
+                || !self.is_friend_of(catalog, p, prv)
+            {
                 break;
             }
             if prv == q {
@@ -936,16 +978,19 @@ impl GameStateCore {
             .unwrap_or(false)
     }
 
-    /// 当前玩家的下一位存活玩家（顺时针）。
+    /// 当前玩家的下一位存活玩家（座位环顺时针）。
     pub fn next_alive(&self, from: PlayerId) -> PlayerId {
         let n = self.players.len() as PlayerId;
-        let mut i = (from + 1) % n;
-        loop {
+        let mut i = self.ring_next(from);
+        let mut guard = 0;
+        while guard < n {
             if self.player(i).alive {
                 return i;
             }
-            i = (i + 1) % n;
+            i = self.ring_next(i);
+            guard += 1;
         }
+        i
     }
 
     /// 从 `start` 起按座位顺序（含 start，若存活）的存活玩家队列。
@@ -955,12 +1000,16 @@ impl GameStateCore {
     pub fn seat_order_from(&self, start: PlayerId) -> Vec<PlayerId> {
         let n = self.players.len() as PlayerId;
         let mut out = Vec::new();
-        let mut cur = start % n;
+        let mut cur = self.ring_pos(start) as PlayerId;
+        // 从 ring 位置起遍历（起点按环位置而非恒等位）
+        let pos_start = self.ring_pos(start);
+        let _ = cur;
+        cur = *self.seat_ring.get(pos_start).unwrap_or(&start);
         for _ in 0..n {
             if self.player(cur).alive {
                 out.push(cur);
             }
-            cur = (cur + 1) % n;
+            cur = self.ring_next(cur);
         }
         out
     }

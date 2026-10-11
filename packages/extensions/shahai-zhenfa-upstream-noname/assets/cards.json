@@ -44,14 +44,22 @@
    "kind": "niaoxiangzhen",
    "suit": "heart",
    "rank": 3
+  },
+  {
+   "name": "swd_changshezhen1",
+   "kind": "changshezhen",
+   "suit": "diamond",
+   "rank": 1
+  },
+  {
+   "name": "swd_changshezhen2",
+   "kind": "changshezhen",
+   "suit": "club",
+   "rank": 1
   }
  ],
  "host_skills": [],
  "deferred": [
-  {
-   "name": "changshezhen",
-   "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
-  },
   {
    "name": "pozhenjue",
    "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"

@@ -97,7 +97,7 @@ fn zf_dizaizhen_major_faction_draw() {
 
     // 子局①：0/1 魏（并列最大→大势力）、2 蜀（非大）→ 仅 2 号摸 1
     let mut e = Engine::new_with_extensions(8101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 6, "zhenfa 六张入目录（地敌阵+三阵 v200/T19a）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 8, "zhenfa 八张入目录（地敌阵+三阵+长蛇阵×2，规则 v201/T19b）");
     advance_to_play(&mut e, 0);
     e.debug_assemble_general(0, &wei);
     e.debug_assemble_general(1, &wei);
@@ -187,7 +187,7 @@ fn zf_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(8103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 6, "zhenfa 卡在目录");
+    assert_eq!(e.catalog().cards.len(), base_cards + 8, "zhenfa 卡在目录");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -202,7 +202,7 @@ fn zf_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 6, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 8, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -459,4 +459,73 @@ fn grant_cards(e: &mut Engine, pack: &ExtensionPack, seat: u8, n: usize) {
         }
     }
     *e = Engine::restore_with_extensions(&snap, &[pack]).expect("发牌");
+}
+
+/// 长蛇阵+破阵诀（规则 v201/T19b；swapSeat 原语）：
+/// 长蛇阵①未入队列：0 魏/1 蜀/2 魏/3 蜀时 2 号（魏）与最近友方（0 号）换座
+/// 成队列；②入队列：全队列各摸 1。破阵诀：随机座位重排（验证环不变量）。
+#[test]
+fn zf_changshe_pozhen_swap_seat() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-zhenfa-upstream-noname")
+        .expect("zhenfa 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(8204, 4, &[&pack]).expect("建局");
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+        e.debug_set_hp(p, 4);
+    }
+    advance_to_play(&mut e, 2);
+    let (wei, shu) = two_generals();
+    // 0 魏 / 1 蜀 / 2 魏 / 3 蜀：2 号（魏）无友邻 → 未入队列；最近友方=0 号
+    e.debug_assemble_general(0, &wei);
+    e.debug_assemble_general(1, &shu);
+    e.debug_assemble_general(2, &wei);
+    e.debug_assemble_general(3, &shu);
+    let cs = (0..e.catalog().cards.len() as u32)
+        .find(|i| e.catalog().cards[*i as usize].kind == CardKind::Changshezhen)
+        .expect("长蛇阵在目录");
+    inject_zhenfa(&mut e, &pack, cs, 2);
+
+    // ① 未入队列：施放（notarget 无目标）→ 与最近友方（0 号）换座
+    let ring_before = e.state_core().seat_ring.clone();
+    let out = play(&mut e, cs, vec![]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    let ring_after = e.state_core().seat_ring.clone();
+    assert_ne!(ring_before, ring_after, "换座应改变座位环");
+    // 换座后 2 号与 0 号相邻且同势力 → 入队列
+    assert!(e.state_core().inline(e.catalog(), 2), "换座后 2 号入队列");
+
+    // ③ 入队列：施放第二张长蛇阵实体（♣1；recastable 重铸未建模，以双实
+    // 体近似）→ 全队列各摸 1（队列=连续同势力段含自身）
+    let cs2 = (0..e.catalog().cards.len() as u32)
+        .filter(|i| e.catalog().cards[*i as usize].kind == CardKind::Changshezhen)
+        .map(|i| i as u32)
+        .find(|i| *i != cs)
+        .expect("第二张长蛇阵实体");
+    inject_zhenfa(&mut e, &pack, cs2, 2);
+    let before: Vec<usize> = (0..4)
+        .map(|p| e.debug_hand(p).len())
+        .collect();
+    let out = play(&mut e, cs2, vec![]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    for p in 0..4u8 {
+        if e.state_core().inline_with(e.catalog(), 2, p) {
+            let expected = if p == 2 {
+                before[p as usize] // 施放者：出牌 -1 + 摸 1 = 净 0
+            } else {
+                before[p as usize] + 1 // 队列成员摸 1
+            };
+            assert_eq!(e.debug_hand(p).len(), expected, "队列成员 {} 手牌数", p);
+        }
+    }
+    assert!(e.state_core().discard.iter().any(|c| e.catalog().cards[*c as usize].kind == CardKind::Changshezhen), "长蛇阵本体入弃堆");
 }

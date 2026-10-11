@@ -49,7 +49,10 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v45（2026-10-11，T18 机关术×2 v199）：`PlayerState` 尾部追加
 /// `card_mods`（len+(u32,u32) 序列；卡牌实例改造表，ADR 0780）。v44 字节
 /// 被版本门禁拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 45;
+/// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
+/// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
+/// 拒绝（无生产迁移数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 46;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2528,6 +2531,11 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
             }
         }
     }
+    // 座位环（T19b/v46）：恒等排列亦显式编码（简单且自校验）
+    w.len(s.core.seat_ring.len());
+    for pid in &s.core.seat_ring {
+        w.u8(*pid);
+    }
     w.len(s.core.players.len());
     for p in &s.core.players {
         w.boolean(p.alive);
@@ -2824,6 +2832,11 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         }
         t => return Err(ArchiveError::BadTag("mode", t)),
     };
+    let ring_len = r.len()?;
+    let mut seat_ring = Vec::with_capacity(ring_len);
+    for _ in 0..ring_len {
+        seat_ring.push(dec_pid(r)?);
+    }
     let players = r.vec(|r| {
         let alive = r.boolean()?;
         let hp = r.i32()?;
@@ -3093,6 +3106,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     Ok(StateSnapshot {
         ruleset_version,
         core: crate::state::GameStateCore {
+            seat_ring,
             revision,
             ruleset_version,
             mode,
@@ -3296,6 +3310,8 @@ fn card_kind_to_num(k: &CardKind) -> u32 {
         Tianfuzhen => 134,
         Qixingzhen => 135,
         Niaoxiangzhen => 136,
+        Changshezhen => 137,
+        Pozhenjue => 138,
     }
 }
 
@@ -3439,6 +3455,8 @@ fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         134 => Tianfuzhen,
         135 => Qixingzhen,
         136 => Niaoxiangzhen,
+        137 => Changshezhen,
+        138 => Pozhenjue,
         // P0 解码加固：未知编号返回结构化错误（保留完整 u32），不再 panic。
         _ => return Err(ArchiveError::UnknownCardKind(n)),
     })
