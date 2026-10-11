@@ -2354,6 +2354,20 @@ replay_scenarios rationale 登记审计注记；探针口径变化（223 版+本
 不触发）——证据见
 [T11 兵先证据](../operations/evidence/2026-10-11-t11-boss-bingxian-v224/README.md)。
 
+**规则 v230（2026-10-11，T11 应昭批首片：封冻；运行时版本断链修正
+227→229）**：封印存储=`PlayerState.fengyin_active: bool` 新字段（**存
+档格式 52→53**；canonical_hash 入参——**字段新增批**：全部场景哈希位
+移含版本字段，探针「位移唯一来源=版本字段」口径不适用，以 229 版+当
+前代码 14 全位移佐证 Boss 不可达）。**封冻**两面（Judge begin 段授予：
+持封冻者回合开始全部其他存活获封印[自身不封]；Phase::End begin 臂回
+合结束全清）。**PlayCard 校验**：被封印者使用手牌区牌 → IllegalTargets
+（装备区牌不受限——上游 mod 仅 position=h）。**登记**：巡游[随机获得
+hej 牌+装备自动使用]/死缚(+switch) 未落随下批。FROZEN 名单尾加「封
+冻」（83 名）。回归 `boss_yingzhao_fengdong_hand_ban`（授予/解除/可用
+恢复/v53 往返）——证据见
+[T11 封冻证据](../operations/evidence/2026-10-11-t11-boss-fengdong-v230/README.md)。
+（运行时版本断链修正：228 红莲批后运行时停留 228，本批一并修正。）
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害
