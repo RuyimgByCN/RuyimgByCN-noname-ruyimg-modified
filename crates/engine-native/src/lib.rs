@@ -35,3 +35,40 @@ pub use ids::{CardId, EventId, PlayerId, SkillDefId};
 pub use machine::{Ctx, Flow, LogEvent};
 pub use resolution::Resolution;
 pub use snap::{MachineSnapshot, ParkSnapshot, ResolutionSnapshot, SnapshotError, StateSnapshot};
+
+
+// ---------------------------------------------------------------------------
+// A0 lib 单元测试（T17，2026-10-11 重建）：10-10 事故恢复中丢失的 5 个
+// lib 测试中可由公有 API 枚举的两个。其余三个（CardKind 编号往返/键双
+// 射/伴随一致）依赖 archive 模块私有枚举函数，重建于 archive.rs 测试
+// 模组。冻结表以 2026-10-11 实序为准（v60 原表 46 名为其前缀，事故中
+// 与表一同丢失）。
+// ---------------------------------------------------------------------------
+#[cfg(test)]
+mod a0_lib_tests {
+    use crate::content::host::HostBehavior;
+    use crate::content::standard::standard_catalog;
+
+    /// HostBehavior 数据键双射 + 唯一（ALL 全量 226，ADR 0778 键表）。
+    #[test]
+    fn host_behavior_keys_bijective() {
+        let mut keys = std::collections::BTreeMap::new();
+        for b in HostBehavior::ALL {
+            let k = b.key();
+            assert!(keys.insert(k, b).is_none(), "宿主行为数据键重复: {k}");
+            assert_eq!(HostBehavior::from_key(k), Some(b), "键双射失败: {k}");
+        }
+        assert_eq!(keys.len(), 226, "HostBehavior 数量应 226（2026-10-11 实测）；新增行为须同步键表");
+    }
+
+    /// standard 技能名序只追加：目录技能名序列与冻结表逐名相等——中间
+    /// 插入/重排/删除即失败；尾部追加须更新冻结表并递增规则版本登记。
+    #[test]
+    fn standard_skill_ids_append_only() {
+        const FROZEN: &[&str] = &["散财", "移伤", "碎盾", "肃清", "授艺", "反馈", "奸雄", "遗计", "刚烈", "突袭", "裸衣", "观星", "连营", "空城", "谦逊", "仁德", "激将", "马术", "倾国", "奇才", "救援", "急救", "护驾", "流离", "结姻", "反间", "离间", "铁骑", "咆哮", "奇袭", "无双", "集智", "克己", "国色", "武圣", "龙胆", "闭月", "洛神", "苦肉", "制衡", "英姿", "枭姬", "青囊", "鬼才", "鬼道", "天妒", "据守", "骁果", "狂斧", "耀武", "淑慎", "神智", "恂恂", "忘隙", "义从", "机捷", "急援", "妄尊", "妄尊印", "同疾", "丈八蛇矛",];
+        let cat = standard_catalog();
+        let seq: Vec<&str> = cat.skills.iter().map(|d| d.name).collect();
+        assert_eq!(seq.len(), FROZEN.len(), "standard 技能数变化（冻结表 {}，实得 {}）", FROZEN.len(), seq.len());
+        assert_eq!(seq.as_slice(), FROZEN, "standard 技能名序与冻结表不符：只允许尾部追加");
+    }
+}

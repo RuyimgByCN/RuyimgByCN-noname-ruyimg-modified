@@ -94,3 +94,13 @@
 | cross-target | 无独立文档（`scripts/cross-target-hash.sh` 自述） | 不适用 |
 
 零改动。附：ADR 索引缺 0702 条目（文件在）——登记为索引完整性碎片，随 ADR 索引下次维护补（T16④ 段已注明）。
+
+---
+
+# 同日 T17：重建 5 个丢失的 lib 单元测试
+
+- `lib.rs::a0_lib_tests`（2 个）：`host_behavior_keys_bijective`（ALL 226 键双射+唯一）、`standard_skill_ids_append_only`（冻结 2026-10-11 实序 61 名；v60 原表 46 名随事故丢失，以当前全序重建冻结）。
+- `archive.rs::a0_rebuilt_tests`（3 个）：`card_kind_encoding_roundtrip_all_variants`（编号连续+u8 全量往返）、`card_kind_keys_bijective`、`card_kind_companion_skills_consistent`——经本模块私有 `card_kind_to_num/from_num` 枚举（牌种无 ALL 数组）。
+- 重建断言按现计数收紧（CardKind ≥133、HostBehavior ==226），v60 后新增键首次被这些双射断言验证。
+- `cargo test --offline -p engine-native --lib`：**10/0**；全量 **540/0/1**（535+5，exit 0）——[日志](engine-native-tests-t17.log)；Gate 1b（lib.rs 变更）独立目录 exit 0。
+- 覆盖清单 `tag_registry` 行恢复「已验证」并标注重建位置。

@@ -3475,3 +3475,63 @@ pub fn decode_archive(data: &[u8]) -> Result<StateSnapshot, ArchiveError> {
     }
     Ok(snap)
 }
+// ---------------------------------------------------------------------------
+// A0 archive 单元测试（T17，2026-10-11 重建）：10-10 事故恢复中丢失的
+// 3 个 lib 单元测试迁此——CardKind 编号往返/键双射/伴随一致依赖本模块
+// 私有的 card_kind_to_num/from_num 枚举源（牌种无 ALL 数组）。
+// ---------------------------------------------------------------------------
+#[cfg(test)]
+mod a0_rebuilt_tests {
+    use super::*;
+    use crate::catalog::CardKind;
+    use crate::content::host::{card_kind_equip_skills, card_kind_host_skills};
+
+    /// CardKind 编号连续且全量编码往返（u8 存档编码域）。
+    #[test]
+    fn card_kind_encoding_roundtrip_all_variants() {
+        let mut count = 0u32;
+        while let Ok(kind) = card_kind_from_num(count) {
+            assert_eq!(card_kind_to_num(&kind), count, "编号非连续或往返不等 @{count}");
+            count += 1;
+        }
+        assert!(count >= 133, "牌种数应 ≥133（2026-10-11 实测 133），实得 {count}");
+    }
+
+    /// CardKind 数据键双射 + 唯一（键域经编号枚举全量；ADR 0778 键表）。
+    #[test]
+    fn card_kind_keys_bijective() {
+        let mut keys = std::collections::BTreeMap::new();
+        let mut count = 0u32;
+        while let Ok(kind) = card_kind_from_num(count) {
+            let key = kind.key();
+            assert!(keys.insert(key, kind).is_none(), "牌种数据键重复: {key}");
+            assert_eq!(CardKind::from_key(key), Some(kind), "键双射失败: {key}");
+            count += 1;
+        }
+        assert!(count >= 133, "牌种数应 ≥133，实得 {count}");
+    }
+
+    /// 牌种伴随技能名全局唯一，且各牌种装备技均登记于伴随集合。
+    #[test]
+    fn card_kind_companion_skills_consistent() {
+        let mut companion: std::collections::BTreeSet<&str> = Default::default();
+        let mut count = 0u32;
+        while let Ok(kind) = card_kind_from_num(count) {
+            for d in card_kind_host_skills(kind) {
+                assert!(companion.insert(d.name), "伴随技能重名: {}", d.name);
+            }
+            count += 1;
+        }
+        count = 0;
+        while let Ok(kind) = card_kind_from_num(count) {
+            for e in card_kind_equip_skills(kind) {
+                assert!(
+                    companion.contains(e),
+                    "装备技 {e} 未登记为牌种伴随技能（kind @{count}）"
+                );
+            }
+            count += 1;
+        }
+        assert!(count >= 133);
+    }
+}
