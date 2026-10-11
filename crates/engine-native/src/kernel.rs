@@ -1146,6 +1146,32 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.discard_phase_discarded = 0;
             }
             Phase::End => {
+                // 兵先（Boss 朱厌，规则 v224）：其他角色的回合结束时，若
+                // 其本回合未使用【杀】（出牌阶段口径=turn.sha_used_play_
+                // phase，登记差异）→ 视为对其使用一张【杀】（use_virtual_
+                // card，乱常万箭同款）
+                if let Some(bdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_BINGXIAN)
+                {
+                    let holders: Vec<PlayerId> = ctx
+                        .core
+                        .skills
+                        .iter()
+                        .filter(|((_, dd), i)| *dd == bdef && i.enabled)
+                        .map(|((o, _), _)| *o)
+                        .collect();
+                    for holder in holders {
+                        if player == holder
+                            || !ctx.core.player(holder).alive
+                            || !ctx.core.player(player).alive
+                            || ctx.core.turn.sha_used_play_phase
+                        {
+                            continue;
+                        }
+                        ctx.use_virtual_card(holder, CardKind::Sha, vec![player]);
+                    }
+                }
                 // 兽九（Boss 相柳，规则 v222）：回合结束补至 9（上游
                 // phaseJieshuBegin draw(9-count) 同口径）
                 if let Some(jdef) = ctx

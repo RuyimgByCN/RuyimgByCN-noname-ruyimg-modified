@@ -2256,6 +2256,44 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// （空选=失 X；弃 X 递减）；③邪酬 hp≤半激活；激活后他人用桃/酒 →
 /// 相柳获标记。
 #[test]
+/// 朱厌批首片（规则 v224）：兵先——他人回合未出杀（出牌阶段口径）→
+/// 其结束阶段被朱厌虚拟杀（受 1 或响应）；出了杀则不被打。
+#[test]
+fn boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn() {
+    let mut e = Engine::new_boss_stage(42001, 4, 1, 3, 6, 4, 0);
+    let zhuyan_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 7) as u16; // BOSS_GENERALS[7] 朱厌
+    e.debug_set_general_def(1, zhuyan_def);
+    e.debug_set_hp(1, 25);
+    let bdef = e.catalog().skill_by_name("兵先").expect("兵先入目录");
+    assert!(e.state_core().skills.contains_key(&(1, bdef)));
+
+    // ① 2 号回合未出杀 → 其结束阶段被朱厌虚拟杀（-1）
+    advance_to_play(&mut e, 2);
+    e.debug_clear_hand(2);
+    e.debug_set_hp(2, 4);
+    next_phase(&mut e); // Play→Discard
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End（兵先虚拟杀）
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(2), 3, "兵先：未出杀回合结束被虚拟杀（4-1）");
+
+    // ② 出了杀的回合 → 不被打：0 号回合出杀打 3 号后 End
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_set_hp(0, 4);
+    let sha = e.debug_place(0, "sha");
+    play(&mut e, sha, vec![3]); // 0 杀 3（出杀）
+    drain_choices(&mut e);
+    let hp0_before = e.debug_hp(0);
+    next_phase(&mut e); // Play→Discard
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End（已出杀 → 兵先不触发）
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(0), hp0_before, "出杀回合 → 兵先不触发");
+}
+
 fn boss_xiangliu_duqu_shedu_echou() {
     let mut e = Engine::new_boss_stage(40001, 4, 1, 3, 6, 4, 0);
     let shujing_def = (e.catalog().general_count()

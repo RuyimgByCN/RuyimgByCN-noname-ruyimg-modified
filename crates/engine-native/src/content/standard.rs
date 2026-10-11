@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 222;
+pub const STANDARD_RULESET_VERSION: u64 = 224;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4141,6 +4141,10 @@ pub const BOSS_SHEDU: &str = "蛇毒";
 /// 兽九（Boss 相柳，规则 v222）：锁定技——手牌上限恒为 9；出牌阶段与
 /// 回合结束时手牌补至 9；跳过摸牌阶段（摸牌基数 0）。
 pub const BOSS_JIUSHOU: &str = "兽九";
+/// 兵先（Boss 朱厌，规则 v224）：锁定技——其他角色的回合结束时，若其
+/// 本回合内没有使用【杀】（登记：出牌阶段口径），视为对其使用一张
+/// 【杀】。
+pub const BOSS_BINGXIAN: &str = "兵先";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -4221,6 +4225,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 相柳四技全齐（v221 妖兽；v222 兽九；v223 毒妒+邪酬——蛇毒标记
     // 以 PlayerState.shedu 承载）
     ("相柳", Faction::Qun, &[BOSS_YAOSHOU, BOSS_JIUSHOU, BOSS_DUQU, BOSS_ECHOU], 25, Gender::Male),
+    // 朱厌（上游 boss_zhuyan hp25/maxHp30）：兵先单技本批；巨源 selectTarget
+    // mod/虚失(+switch) 翻面机未落随下批（maxHp 差异登记同穷奇）
+    ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN], 25, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5493,6 +5500,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(ShedUBehavior),
+        },
+        SkillDef {
+            name: BOSS_BINGXIAN,
+            // 权限型单面：他人回合未出杀 → 结束阶段虚拟杀（kernel
+            // Phase::End 臂，乱常万箭同款 use_virtual_card）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

@@ -2323,6 +2323,37 @@ golden 全绿）证明 14 golden 位移唯一来源是版本字段，全量重�
 补 9/他人不受影响）——证据见
 [T11 兽九证据](../operations/evidence/2026-10-11-t11-boss-jiushou-v222/README.md)。
 
+**规则 v223（2026-10-11，T11 相柳批末片：毒妒+蛇毒链+邪酬——四技全
+齐）**：蛇毒标记存储=**`PlayerState.shedu: u8` 新字段**（跨回合持久；
+**存档格式 49→50**；canonical_hash 同步）。**毒妒**：相柳受击 → 来源
+获 1 蛇毒（自身不获；commit_damage 尾查询臂）。**邪酬**两面：激活门控
+（hp≤max/2 enable 直写，apply 特判扩至五技）+激活态他人用【桃】/【酒】
+（含 use_as）→ 相柳获 1 蛇毒。**蛇毒结算机**（BOSS_SHEDU 触发技
+PhaseBegin forced——授毒时与中毒实例双授）：标记>0 → 挂起「弃 X 张牌
+或失去 X 体力」（SelectCards min0/maxX allow_cancel，空选=失 X）→ 标
+记-1；新 `MachineSnapshot::Shedu` 变体（archive tag 64/canonical_hash
+65/**恢复臂重挂询问**——真挂起机）。**登记差异**：毒妒「桃视为杀」
+mod 未建模；shedu 增减无独立 LogEvent。FROZEN 名单尾加「毒妒」「邪
+酬」「蛇毒」（79 名）。回归 `boss_xiangliu_duqu_shedu_echou` 四段——
+证据见[T11 毒妒证据](../operations/evidence/2026-10-11-t11-boss-duqu-v223/README.md)。
+**注**：本批运行时版本因断链停留 222（见 v224 条目审计），名义按 223
+登记。
+
+**规则 v224（2026-10-11，T11 朱厌批首片：兵先+版本断链修正）**：
+`BOSS_GENERALS` 增**朱厌**（群/hp25/`[妖兽, 兵先]`——maxHp30 登记差异
+同穷奇；巨源 selectTarget mod/虚失(+switch) 未落随下批）。**兵先**：
+Phase::End 臂——他人回合结束 ∧ 其本回合未使用【杀】（**出牌阶段口径**
+turn.sha_used_play_phase，登记差异：上游 countUsed 含响应杀）→ 视为对
+之使用一张【杀】（use_virtual_card 乱常同款）。FROZEN 名单尾加「兵
+先」（80 名）。**版本断链修正**：v220–v223 四批 bump/restore 脚本链断
+链（restore 锚失效未写盘）致运行时版本停留 222——本批修正至 **224**，
+replay_scenarios rationale 登记审计注记；探针口径变化（223 版+本批代
+码 14 全位移佐证）同步登记。存档不变 v50。版本 222（实际）→**224**。
+全量重录 14 golden。回归
+`boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn`（未出杀被虚拟杀/出杀
+不触发）——证据见
+[T11 兵先证据](../operations/evidence/2026-10-11-t11-boss-bingxian-v224/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |
