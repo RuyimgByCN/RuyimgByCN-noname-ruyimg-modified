@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 51;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 52;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2816,6 +2816,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     for p in &t.minwan_targets {
         enc_pid(w, p);
     }
+    // 炎狱计数（v229）
+    w.u8(t.yanyu_count);
     // skills（BTreeMap：按键序确定性遍历）
     w.len(s.core.skills.len());
     for ((owner, def), inst) in &s.core.skills {
@@ -3123,6 +3125,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         t => return Err(ArchiveError::BadTag("turn_luanjian_card", t)),
     };
     let minwan_targets = r.vec(dec_pid)?;
+    let yanyu_count = r.u8()?;
     let skill_count = r.len()?;
     let mut skills = std::collections::BTreeMap::new();
     for _ in 0..skill_count {
@@ -3231,6 +3234,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 mujiaren_used,
                 luanjian_card,
                 minwan_targets,
+                yanyu_count,
             },
             skills,
             declared_kinds,

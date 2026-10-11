@@ -583,6 +583,29 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 炎狱门控（Boss 毕方，规则 v229）：体力首次≤一半激活（隐贼/延妒/
+    // 积财/乱常/虚失同款 enable 直写）
+    if let Some(ydef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_YANYU)
+    {
+        let holder = d.target;
+        if ctx.core.has_skill_any_state(holder, ydef)
+            && !ctx.core.has_skill(holder, ydef)
+        {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                if let Some(inst) = ctx.core.skills.get_mut(&(holder, ydef)) {
+                    inst.enabled = true;
+                }
+                ctx.log(LogEvent::SkillToggled {
+                    player: holder,
+                    skill: ctx.catalog.skill_name(ydef),
+                    enabled: true,
+                });
+            }
+        }
+    }
     // 冥顽锁定集（Boss 梼杌，规则 v219）：回合内自己使用牌对其他角色
     // 造成伤害后，受伤者入锁定集（首次同时记自己——上游 storage
     // boss_minwan=[player]+add(target) 同口径；回合更替自然清零）
@@ -1104,6 +1127,47 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 炎狱（Boss 毕方，规则 v229）：global phaseBegin——
+                    // 其他角色的回合开始判定（确定性判定铁骑先例），红色 →
+                    // 该角色受 1 点来自毕方的火伤；每回合至多 3 次（TurnState
+                    // 计数器，回合更替清零；上游 getIndex 3 同口径）
+                    if let Some(ydef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_YANYU)
+                    {
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == ydef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .filter(|o| *o != player && ctx.core.player(*o).alive)
+                            .collect();
+                        if ctx.core.turn.yanyu_count < 3 {
+                            for holder in holders {
+                                let judged = ctx.draw_judge_card();
+                                let red = matches!(
+                                    ctx.catalog.cards[judged as usize].suit,
+                                    crate::catalog::Suit::Heart
+                                        | crate::catalog::Suit::Diamond
+                                );
+                                ctx.to_discard(judged);
+                                if red {
+                                    ctx.core.turn.yanyu_count += 1;
+                                    ctx.emit(EventData::Damage(
+                                        crate::machine::damage_data_with(
+                                            Some(holder),
+                                            player,
+                                            1,
+                                            crate::event::DamageNature::Fire,
+                                            None,
+                                        ),
+                                    ));
+                                }
+                                break; // 每次判定至多一持技者结算（单 Boss 场景）
+                            }
+                        }
+                    }
                     // 中毒（Boss 书精授技，规则 v220）：回合开始判定——
                     // 非红桃受 1 点无来源伤害；非黑桃失去此技（上游
                     // boss_zhongdu phaseZhunbeiBegin judge 同口径；确定性
@@ -1596,6 +1660,7 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 冥顽锁定集（Boss 梼杌，规则 v219）：回合更替清零（上游 phaseAfter
     // clear 同窗）
     ctx.core.turn.minwan_targets.clear();
+    ctx.core.turn.yanyu_count = 0;
         ctx.core.turn.txianqu_used = false;
         ctx.core.turn.jtjubao_used = false;
         ctx.emit(EventData::Phase {
@@ -1630,6 +1695,7 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 冥顽锁定集（Boss 梼杌，规则 v219）：回合更替清零（上游 phaseAfter
     // clear 同窗）
     ctx.core.turn.minwan_targets.clear();
+    ctx.core.turn.yanyu_count = 0;
     ctx.core.turn.txianqu_used = false;
     ctx.core.turn.jtjubao_used = false;
     ctx.emit(EventData::Phase {

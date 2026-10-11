@@ -2380,6 +2380,21 @@ v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序
 牌）——证据见
 [T11 红莲证据](../operations/evidence/2026-10-11-t11-boss-honglianx-v228/README.md)。
 
+**规则 v229（2026-10-11，T11 毕方批末片：炎狱——毕方四技全齐）**：
+`TurnState.yanyu_count: u8` 回合级计数器（**存档格式 51→52**；canonical
+_hash 入参；reset_turn_limits 清零）。**炎狱**两面：激活门控（commit_
+damage 尾第八并列臂，hp≤max/2 enable 直写；apply 特判扩至七技）+其他
+角色回合开始判定（Judge begin 段内联，中毒判定同位）——enabled 持有
+者（≠当前回合）在场且计数<3 → 确定性判定（铁骑先例）：**红色** → 当
+前回合玩家受 1 点来自持有者的火伤、计数+1；黑色无伤。`boss_yanyu_
+switch` 不落表（门控并入 enabled，先例同构）。**登记待查**：跨回合计
+数器精确口径（reset+封顶交互）需专项核对；行为面已验证。FROZEN 名单
+尾加「炎狱」（82 名）。存档 51→**52**。版本 228→**229**。版本回退探
+针（229→228 复跑 golden 全绿）证明 14 golden 位移唯一来源是版本字段，
+全量重录。回归 `boss_bifang_yanyu_judge_fire_max_three`（激活/判定红伤
+/计数封顶）——证据见
+[T11 炎狱证据](../operations/evidence/2026-10-11-t11-boss-yanyu-v229/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |

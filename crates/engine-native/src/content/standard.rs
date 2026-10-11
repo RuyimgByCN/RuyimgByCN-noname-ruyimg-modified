@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 228;
+pub const STANDARD_RULESET_VERSION: u64 = 229;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4194,6 +4194,10 @@ pub const BOSS_ZHAOHUO: &str = "招祸";
 /// 定性近似：顺序取牌堆前缀红牌至多 3），并随机对 3–0 名其他角色各造
 /// 成 1 点火属性伤害（确定性近似：座位序前至多 3 名）。
 pub const BOSS_HONGLIANX: &str = "红莲";
+/// 炎狱（Boss 毕方，规则 v229）：锁定技，体力值首次减至一半或更少时激
+/// 活；其他角色回合开始（判定阶段开始锚点）判定，红色 → 其受 1 点来
+/// 自你的火伤（每回合至多 3 次）。
+pub const BOSS_YANYU: &str = "炎狱";
 /// 虚失（Boss 朱厌，规则 v225）：锁定技，体力值首次减至一半或更少时激
 /// 活；你的出牌阶段结束时翻面；武将牌翻回正面时对所有其他角色各造成
 /// 1 点伤害（上游 [1,2] 随机——恒 1 登记差异）。
@@ -4272,8 +4276,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 梼杌四技全齐（v217 拟态；v218 乱常；v219 冥顽——目标锁定集以
     // TurnState.minwan_targets 回合级承载）
     ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI, BOSS_LUANCHANG, BOSS_MINWAN], 25, Gender::Male),
-    // 毕方：红莲已落（v228）；炎狱(+switch) 未落随下批
-    ("毕方", Faction::Qun, &[BOSS_YAOSHOU, BOSS_ZHAOHUO, BOSS_HONGLIANX], 25, Gender::Male),
+    // 毕方四技全齐（v227 招祸；v228 红莲；v229 炎狱——激活门控以
+    // SkillInstance.enabled 同隐贼先例；每回合至多 3 以 TurnState 计数器）
+    ("毕方", Faction::Qun, &[BOSS_YAOSHOU, BOSS_ZHAOHUO, BOSS_HONGLIANX, BOSS_YANYU], 25, Gender::Male),
     // 书精（上游 boss_shujing hp2 女神）：催毒+中毒全技（中毒为运行时
     // 授技面，表列仅催毒——授技入实例同 catalog skill 空间）
     ("书精", Faction::Shu, &[BOSS_CUIDUI], 2, Gender::Female),
@@ -5602,6 +5607,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 权限型两面：红色不计上限+弃牌阶段红牌不可弃（hand_limit
             // 与 Discard 臂查询）；回合开始获红牌/对至多 3 名各 1 火伤
             // （Judge begin 段内联，确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_YANYU,
+            // 权限型两面：激活门控（commit_damage 尾第八并列臂）与判定
+            // 红色火伤（kernel Judge begin 段内联，回合计数至多 3）均经
+            // skill_by_name 查询；装配即未激活
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

@@ -381,6 +381,7 @@ impl Engine {
                 yingfeng_chain: false,
                 luanjian_card: None,
                 minwan_targets: Vec::new(),
+                yanyu_count: 0,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -1594,6 +1595,11 @@ impl Engine {
     }
 
     /// 测试/工具：只读访问核心状态。
+    /// 测试钩子：可变核心状态（计数器等测试面直写）。
+    pub fn state_core_mut(&mut self) -> &mut GameStateCore {
+        &mut self.state.core
+    }
+
     pub fn state_core(&self) -> &GameStateCore {
         &self.state.core
     }
@@ -2119,7 +2125,8 @@ pub(crate) fn apply_general_assembly(
             && skill != crate::content::standard::BOSS_JICAI
             && skill != crate::content::standard::BOSS_LUANCHANG
             && skill != crate::content::standard::BOSS_ECHOU
-            && skill != crate::content::standard::BOSS_XUSHI;
+            && skill != crate::content::standard::BOSS_XUSHI
+            && skill != crate::content::standard::BOSS_YANYU;
         state.skills.insert(
             (player, def),
             crate::state::SkillInstance {
@@ -4001,6 +4008,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u8(&mut h, c.turn.land_used as u8);
     push_u8(&mut h, c.turn.land_sha_used as u8);
     push_u32(&mut h, c.turn.discard_phase_discarded);
+    push_u8(&mut h, c.turn.yanyu_count);
     push_u32(&mut h, c.turn.ciqiu_dying.len() as u32);
     for p in &c.turn.ciqiu_dying {
         push_u8(&mut h, *p);
@@ -5000,6 +5008,7 @@ mod tests {
                 yingfeng_chain: false,
                 luanjian_card: None,
                 minwan_targets: Vec::new(),
+                yanyu_count: 0,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -5086,6 +5095,7 @@ mod tests {
                 yingfeng_chain: false,
                 luanjian_card: None,
                 minwan_targets: Vec::new(),
+                yanyu_count: 0,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,

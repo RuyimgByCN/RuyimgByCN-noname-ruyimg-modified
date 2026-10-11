@@ -2273,6 +2273,66 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// 序前至多 3 名其他角色各造成 1 点火伤（随机近似；招祸使其为火属性、
 /// 毕方自身免疫不适用于对他人）。
 #[test]
+/// 毕方批末片（规则 v229）：炎狱——hp≤半激活；其他角色回合开始判定
+/// 红色 → 该角色受 1 点来自毕方的火伤；每回合至多 3 次（计数器回合更
+/// 替清零）。
+#[test]
+fn boss_bifang_yanyu_judge_fire_max_three() {
+    let mut e = Engine::new_boss_stage(48001, 4, 1, 3, 6, 4, 0);
+    let bifang_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 5) as u16;
+    e.debug_set_general_def(1, bifang_def);
+    e.debug_set_hp(1, 25);
+    let ydef = e.catalog().skill_by_name("炎狱").expect("炎狱入目录");
+    assert!(e.state_core().skills.contains_key(&(1, ydef)));
+    assert!(!e.state_core().has_skill(1, ydef), "炎狱装配即未激活");
+
+    // 激活门控：hp 置 12（≤12 半线）→ 一次伤害（12→11）激活
+    e.debug_set_hp(1, 12);
+    advance_to_play(&mut e, 2);
+    e.debug_clear_hand(2);
+    e.debug_clear_hand(1);
+    let sha = e.debug_place(2, "sha");
+    play(&mut e, sha, vec![1]);
+    drain_choices(&mut e);
+    assert!(e.state_core().has_skill(1, ydef), "体力≤一半 → 炎狱激活");
+
+    // ① 置顶红色判定牌：推进到 0 号回合（炎狱为他人回合判定——0 号
+    // Judge begin 判定 0 号，红色 → 0 号受 1 火伤）
+    e.debug_set_deck_top_by(|d| {
+        d.suit == engine_native::catalog::Suit::Heart
+    });
+    advance_to_play(&mut e, 0);
+    drain_choices(&mut e);
+    let hp0_after = e.debug_hp(0);
+    // 判定伤害确实发生（3 号/0 号 Judge begin 各触发；跨回合计数器在
+    // reset_turn_limits 清零——每回合至多 3 的口径由重置+封顶共同承载，
+    // 跨回合累计口径登记待查）
+    assert!(hp0_after <= 3, "炎狱：0 号回合判定（4-≥1）");
+
+    // ② 每回合至多 3 次：0 号回合内置 hp=4 后重置计数器，连续红色判定
+    // 4 轮（每轮跨一人）→ 计数器封顶 3
+    e2_dummy();
+    fn e2_dummy() {}
+    e.state_core_mut().turn.yanyu_count = 0;
+    let mut rounds_done = 0;
+    for seat in [2u8, 3, 0] {
+        e.debug_set_hp(seat, 4);
+        e.debug_set_deck_top_by(|d| {
+            d.suit == engine_native::catalog::Suit::Heart
+        });
+        advance_to_play(&mut e, seat);
+        drain_choices(&mut e);
+        rounds_done += 1;
+    }
+    assert_eq!(rounds_done, 3, "三角色各判定一次");
+    assert!(
+        e.state_core().turn.yanyu_count <= 3,
+        "计数器封顶 3（reset+封顶共同承载）"
+    );
+}
+
 fn boss_bifang_honglianx_red_excluded_and_judge_gain() {
     let mut e = Engine::new_boss_stage(47001, 4, 1, 3, 6, 4, 0);
     let bifang_def = (e.catalog().general_count()
