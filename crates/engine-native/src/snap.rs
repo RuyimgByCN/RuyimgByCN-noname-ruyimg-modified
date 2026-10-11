@@ -1276,6 +1276,10 @@ pub fn validate_card_ownership(
         for c in &p.judge {
             mark(&mut seen, b, *c)?;
         }
+        // 离场区（机关怨挂附等；T19a 修复：此前未计入所有权校验）
+        for c in &p.off_court {
+            mark(&mut seen, b, *c)?;
+        }
     }
     for c in &core.deck {
         mark(&mut seen, b, *c)?;
