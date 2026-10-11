@@ -2033,6 +2033,36 @@ fn doudizhu_mode_victory_and_roundtrip() {
 /// 对决 2v2 基线（P2/N08 模式入口批一，规则 v80）：杀死敌方摸三；
 /// 杀死友方弃掉自己全部手牌与装备；敌方全灭终局队胜；存档往返。
 #[test]
+/// versus 4v4 变体（T11 模式变体，规则 v206 固化）：8 人建局、全员
+/// 存活、敌方全灭 → 己方胜（终局面与 2v2 同管线）。
+#[test]
+fn versus_4v4_eight_seats_team_victory() {
+    let teams: [Vec<u8>; 2] = [vec![0, 1, 2, 3], vec![4, 5, 6, 7]];
+    let mut e = Engine::new_versus(22001, teams);
+    advance_to_play(&mut e, 0);
+    for p in 0..8 {
+        assert!(e.debug_alive(p), "4v4 全员存活建局");
+        e.debug_clear_hand(p);
+    }
+    for p in 4..8 {
+        if !e.debug_alive(p) {
+            continue;
+        }
+        e.debug_set_hp(p, 1);
+        let out = e.debug_deal_damage(Some(0), p, 1, DamageNature::Normal);
+        assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+        while let Some(c) = e.open_choice() {
+            let (cid, obs) = (c.id, c.observer);
+            drop(c);
+            submit_cmd(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
+        }
+    }
+    assert!((4..8).all(|p| !e.debug_alive(p)), "敌方全灭");
+    assert!((0..4).all(|p| e.debug_alive(p)), "己方存活");
+    let out = e.state_core().outcome.clone();
+    assert!(out.is_some(), "敌方全灭应有终局: {out:?}");
+}
+
 fn versus_mode_team_victory_and_rewards() {
     let teams: [Vec<u8>; 2] = [vec![0, 1], vec![2, 3]];
     let mut e = Engine::new_versus(2001, teams.clone());
