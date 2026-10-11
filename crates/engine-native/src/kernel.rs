@@ -844,10 +844,45 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.cards_used_play_phase = 0;
             }
             Phase::Discard => {
+                // 贪欲（Boss 饕餮，规则 v215）：锁定——跳过你的弃牌阶段
+                //（上游 boss_tanyu phaseDiscardBefore trigger.cancel 同口径）
+                if let Some(def) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_TANYU)
+                {
+                    if ctx.core.has_skill(player, def) {
+                        ctx.core.turn.discard_phase_discarded = 0;
+                        return;
+                    }
+                }
                 // 水没墓穴计数（mtg 第三批，规则 v102）：弃牌阶段开始清零
                 ctx.core.turn.discard_phase_discarded = 0;
             }
             Phase::End => {
+                // 贪欲（Boss 饕餮，规则 v215）：结束阶段若你的手牌数为
+                // 全场最多（不少于任何其他存活角色）→ 失去 1 点体力（上
+                // 游 boss_tanyu_hp phaseJieshuBegin isMaxHandcard 同口径）
+                if let Some(tydef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_TANYU)
+                {
+                    let holders: Vec<PlayerId> = ctx
+                        .core
+                        .skills
+                        .iter()
+                        .filter(|((_, dd), i)| *dd == tydef && i.enabled)
+                        .map(|((o, _), _)| *o)
+                        .collect();
+                    for holder in holders {
+                        if ctx.core.player(holder).alive && tanyu_is_max_hand(ctx.core, holder)
+                        {
+                            ctx.emit(EventData::LoseHp {
+                                player: holder,
+                                amount: 1,
+                            });
+                        }
+                    }
+                }
                 // 延妒（Boss 穷奇，规则 v213）：global phaseJieshuBegin——
                 // 其他角色结束阶段开始时，若其本回合未造成伤害且有手牌
                 // → 穷奇获得其一张手牌（确定性首张；上游 gainPlayerCard
@@ -2495,6 +2530,16 @@ fn xiongshou_bonus(ctx: &Ctx<'_>, source: PlayerId, target: PlayerId) -> u32 {
     } else {
         0
     }
+}
+
+/// 贪欲手牌「全场最多」判定：持有者手牌数不少于任何其他存活角色。
+pub(crate) fn tanyu_is_max_hand(
+    core: &crate::state::GameStateCore,
+    holder: PlayerId,
+) -> bool {
+    let my = core.player(holder).hand.len();
+    core.alive_players()
+        .all(|o| o == holder || core.player(o).hand.len() <= my)
 }
 
 /// 覆泰2（Boss 穷奇，规则 v214）：场上存有持覆泰的穷奇、用/救桃者非

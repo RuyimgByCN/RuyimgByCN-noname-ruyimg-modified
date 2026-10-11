@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 214;
+pub const STANDARD_RULESET_VERSION: u64 = 215;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -3972,6 +3972,10 @@ pub const BOSS_FUTAI: &str = "覆泰";
 /// 活；其他角色结束阶段开始时，若其本回合未造成伤害且有牌，你获得其
 /// 一张手牌。
 pub const BOSS_YANDU: &str = "延妒";
+/// 贪欲（Boss 饕餮，规则 v215）：锁定技两面——跳过你的弃牌阶段；结束
+/// 阶段若你的手牌数为全场最多（不少于任何其他存活角色），失去 1 点体
+/// 力。
+pub const BOSS_TANYU: &str = "贪欲";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -4040,6 +4044,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 延妒已落（v213，激活门控以 SkillInstance.enabled 同隐贼先例）；
     // 覆泰2 全场禁桃未落随下批
     ("穷奇", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_ZHUE, BOSS_FUTAI, BOSS_YANDU], 20, Gender::Male),
+    // 饕餮（上游 boss_taotie hp20）：贪欲单技本批；藏目/集财(+switch)
+    // 未落随下批
+    ("饕餮", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_TANYU], 20, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5185,6 +5192,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 权限型两面：激活门控（commit_damage 尾，隐贼先例同构）与
             // 他人结束阶段获得牌（kernel Phase::End 臂）均经 skill_by_name
             // 查询；装配即未激活
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_TANYU,
+            // 权限型两面：跳过弃牌阶段（kernel Phase::Discard 臂直查）
+            // 与结束阶段全场最多手牌失 1 体（Phase::End 臂）均经
+            // skill_by_name 查询
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
