@@ -538,6 +538,10 @@ pub enum MachineSnapshot {
     BossXiangde {
         owner: PlayerId,
     },
+    /// 覆泰（Boss 穷奇，规则 v212）：无挂起一步机，快照仅身份。
+    BossFutai {
+        owner: PlayerId,
+    },
     LiJian {
         owner: PlayerId,
         stage: LiJianStageSnap,
@@ -1075,6 +1079,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             // chosen_suit 为定界 tag（0..=3），非实体引用，无需界校验
         }
         MachineSnapshot::BossXiangde { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossFutai { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::LiJian {
@@ -2028,6 +2035,10 @@ pub fn active_ask(
         },
         MachineSnapshot::BossXiangde { .. } => {
             // 相德：无挂起一步机（永不等待应答），恢复无询问
+            None
+        }
+        MachineSnapshot::BossFutai { .. } => {
+            // 覆泰：无挂起一步机，恢复无询问
             None
         }
         MachineSnapshot::FanJian { owner, stage, target, .. } => match stage {

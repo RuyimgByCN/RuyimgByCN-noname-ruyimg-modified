@@ -4212,6 +4212,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 62);
             push_u8(h, *owner);
         }
+        M::BossFutai { owner } => {
+            push_u8(h, 63);
+            push_u8(h, *owner);
+        }
         M::DyingSave { dying, source, responders, asked, round_used } => {
             push_u8(h, 2);
             push_u8(h, *dying);

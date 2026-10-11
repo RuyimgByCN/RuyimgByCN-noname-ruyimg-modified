@@ -1910,6 +1910,34 @@ fn kof_engine_mode_session_advance() {
 /// 伤害后（来源存活非穷奇），穷奇与来源各摸一张；穷奇自己为来源时不
 /// 触发。覆泰/延妒(+switch) 未落（下批）。
 #[test]
+/// Boss 内容第三批续片（规则 v212）：穷奇覆泰——准备阶段（判定阶段
+/// 开始锚点）全体受伤角色按座位序各回 1；满血不动；存档往返。
+#[test]
+fn boss_qiongqi_futai_recover_wounded() {
+    let mut e = Engine::new_boss_stage(29001, 4, 1, 3, 6, 4, 0);
+    let qiongqi_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 2) as u16;
+    e.debug_set_general_def(1, qiongqi_def);
+    e.debug_set_hp(1, 20);
+    let fdef = e.catalog().skill_by_name("覆泰").expect("覆泰入目录");
+    assert!(e.state_core().skills.contains_key(&(1, fdef)), "覆泰实例");
+    // 0/2 号受伤、3 号满血
+    e.debug_set_hp(0, 2);
+    e.debug_set_hp(2, 3);
+    // 推进到穷奇（1 号）判定阶段开始：覆泰触发 → 0/2 各回 1
+    advance_to_play(&mut e, 1);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(0), 3, "受伤者 0 号回 1");
+    assert_eq!(e.debug_hp(2), 4, "受伤者 2 号回 1");
+    assert_eq!(e.debug_hp(3), 4, "满血者不动");
+    // 存档往返
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert_eq!(r.debug_hp(0), 3, "回血状态往返一致");
+    assert_zone_conservation(&r);
+}
+
 fn boss_qiongqi_zhue_dual_draw() {
     let mut e = Engine::new_boss_stage(28001, 4, 1, 3, 6, 4, 0);
     let qiongqi_def = (e.catalog().general_count()

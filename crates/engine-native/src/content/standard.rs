@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 211;
+pub const STANDARD_RULESET_VERSION: u64 = 212;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -251,6 +251,44 @@ impl SkillMachine for SanCaiMachine {
 // ---------------------------------------------------------------------------
 // 移伤：当你即将受到伤害时，你可以将其转移给另一名存活玩家。
 // ---------------------------------------------------------------------------
+
+/// 覆泰（Boss 穷奇，规则 v212）：准备阶段（判定阶段开始锚点，神智同
+/// 口径）——所有受伤角色按座位序各回复 1 点体力。
+struct FutaiBehavior;
+
+impl SkillBehavior for FutaiBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(FutaiMachine { owner })
+    }
+}
+
+/// 覆泰机器：无挂起，启动即按座位序回血。
+#[derive(Clone)]
+struct FutaiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for FutaiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossFutai { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        for p in ctx.core.seat_order_from(self.owner) {
+            let pl = ctx.core.player(p);
+            if pl.alive && pl.hp < pl.max_hp as i32 {
+                ctx.recover(p, 1, None);
+            }
+        }
+        Flow::Done
+    }
+}
 
 /// 相德（Boss 混沌，规则 v210）：DamageBefore 一步直改——来源装备区
 /// 有武器且非持有者本人时伤害 +1。
@@ -3927,6 +3965,9 @@ pub const BOSS_YINZEI: &str = "隐贼";
 /// 逐厄（Boss 穷奇，规则 v211）：锁定技——任何人受到伤害后（来源存活
 /// 且非你），你与来源各摸一张牌。
 pub const BOSS_ZHUE: &str = "逐厄";
+/// 覆泰（Boss 穷奇，规则 v212）：锁定技——准备阶段（原生锚点：判定阶
+/// 段开始，神智同口径）开始时，所有受伤角色按座位序各回复 1 点体力。
+pub const BOSS_FUTAI: &str = "覆泰";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -3992,7 +4033,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("混沌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_WUZANG, BOSS_XIANGDE, BOSS_YINZEI], 25, Gender::Male),
     // 穷奇（上游 boss_qiongqi hp20/maxHp25）：逐厄单技本批；覆泰(+全场
     // 禁桃)/延妒(+switch) 未落随下批（maxHp 差异登记：max_hp 暂=hp=20）
-    ("穷奇", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_ZHUE], 20, Gender::Male),
+    // 覆泰已落（v212）；覆泰2 全场禁桃/延妒(+switch) 未落随下批
+    ("穷奇", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_ZHUE, BOSS_FUTAI], 20, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5118,6 +5160,20 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_FUTAI,
+            // 准备阶段触发（判定阶段开始锚点，神智同口径）：全体受伤
+            // 者按座位序各回 1（机器一步，无挂起；锁定=forced 无确认）
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(FutaiBehavior),
         },
     ];
     (cards, skills)

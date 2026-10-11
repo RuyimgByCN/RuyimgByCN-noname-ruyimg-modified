@@ -118,6 +118,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
         ("Jiedao", MachineSnapshot::Jiedao { owner: 0, holder: 1, victim: 2, stage: engine_native::snap::JiedaoStageSnap::Ask }),
         ("Zhangba", MachineSnapshot::Zhangba { owner: 0, cards: vec![1], stage: engine_native::snap::ZhangbaStageSnap::Cards }),
         ("BossXiangde", MachineSnapshot::BossXiangde { owner: 0 }),
+        ("BossFutai", MachineSnapshot::BossFutai { owner: 0 }),
     ]
 }
 
@@ -185,6 +186,7 @@ fn variant_index(m: &MachineSnapshot) -> u32 {
         M::Jiedao { .. } => 57,
         M::Zhangba { .. } => 58,
         M::BossXiangde { .. } => 59,
+        M::BossFutai { .. } => 60,
     }
 }
 
