@@ -2676,6 +2676,9 @@ bazhen/niepan）——bianshen 变身族建议先勘机制承载面（技能组�
 行时授技承载，changeSkin 视觉面登记）。规则 247/存档 v57 不动——证据见
 [收尾清点证据](../operations/evidence/2026-10-11-t11-boss-shen2-closeout/README.md)。
 
+**bianshen 变身机制勘验＋试炼态处置（2026-10-11，勘验登记批，无版本递增）**：变身族三形态——①开局 init 壳（试炼态四将→青龙/朱雀/白虎/玄武代位[均已入库]+捉鬼祛邪魑魅魍魉随机；intro=nobracket UI）：纯视觉壳不落；②bianshen4 死亡 changeBoss（黑白无常/牛头马面）：隐藏链同族不落；③年兽形态轮换（nbianshen：init 换将+hp/maxHp/护甲保留+形态序列轮转）：**可承载**——versus 替补换将先例同构（assembly 重挂+属性保留），随机序列登记差异。年兽系本技逐技勘验后即可逐批落包——证据见
+[bianshen 勘验证据](../operations/evidence/2026-10-11-t11-boss-bianshen-survey/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害
