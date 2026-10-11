@@ -156,6 +156,9 @@ pub struct PlayerState {
     /// 灵渠（Boss 玄武，规则 v237）：受击计数（每次受伤 +1；手牌上限
     /// +X；跨回合持久）。
     pub lingqu_count: u8,
+    /// 星囚（Boss 蓐收，规则 v239）：出牌阶段开始交替开关（每回合开始
+    /// 取反；true 回合横置全部敌方；跨回合持久）。
+    pub xingqiu_toggled: bool,
     /// 天符（U05 xianjian 长卿，规则 v188）：挂附来源（雷伤来源）。
     pub ctianfu_source: Option<u8>,
     /// 天符：挂附闪实体（离场区中该牌；死亡清理/结算弃置用）。
@@ -240,6 +243,7 @@ impl PlayerState {
             juyuan_storage: 0,
             fengyin_active: false,
             lingqu_count: 0,
+            xingqiu_toggled: false,
             ctianfu_source: None,
             ctianfu_card: None,
             gouhunluo_rounds: 0,

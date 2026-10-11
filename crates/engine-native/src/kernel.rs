@@ -1418,6 +1418,47 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 }
             }
             Phase::Play => {
+                // 星囚（Boss 蓐收，规则 v239）：出牌阶段开始交替横置全
+                // 部敌方（上游 boss_xingqiu phaseUseBegin storage 取反+
+                // content link 同口径；只链不解——已横置保持；对 boss_
+                // mingxingzhu 授 boss_jiding 面依赖武将未入库，登记差异）
+                if let Some(xqdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_XINGQIU)
+                {
+                    let holders: Vec<PlayerId> = ctx
+                        .core
+                        .skills
+                        .iter()
+                        .filter(|((_, dd), i)| *dd == xqdef && i.enabled)
+                        .map(|((o, _), _)| *o)
+                        .collect();
+                    for holder in holders {
+                        // 上游 trigger player: phaseUseBegin——仅持有者
+                        // 本人出牌阶段触发（他人阶段开始不翻转开关）
+                        if holder != player || !ctx.core.player(holder).alive {
+                            continue;
+                        }
+                        let now = !ctx.core.player(holder).xingqiu_toggled;
+                        ctx.core.player_mut(holder).xingqiu_toggled = now;
+                        if !now {
+                            continue;
+                        }
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if t == holder
+                                || !ctx.core.player(t).alive
+                                || ctx.core.is_boss_side(t) == ctx.core.is_boss_side(holder)
+                            {
+                                continue;
+                            }
+                            if !ctx.core.player(t).linked {
+                                ctx.core.player_mut(t).linked = true;
+                                ctx.log(LogEvent::Linked { player: t, linked: true });
+                            }
+                        }
+                    }
+                }
                 // 兽九（Boss 相柳，规则 v222）：出牌阶段开始补至 9（上游
                 // phaseUseBegin draw(9-count) 同口径）
                 if let Some(def) = ctx

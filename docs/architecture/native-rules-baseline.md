@@ -2509,6 +2509,23 @@ false）。光环激活=场上存在神恩持有者（上游 global 子技全员
 +1/往返）——证据见
 [T11 神恩证据](../operations/evidence/2026-10-11-t11-boss-shenen-v238/README.md)。
 
+**规则 v239（2026-10-11，T11 星宿阶段2系续片：星囚＋蓐收条目；存档 v55）**：
+`PlayerState.xingqiu_toggled: bool` 新字段（**存档 54→55**；canonical_hash
+入参——字段新增批）。**星囚**单臂（kernel Phase::Play begin 段）：持有者
+**本人**出牌阶段开始开关取反，true 回合把未横置的敌方全部横置（direct
+直写 linked+日志，索链甲同款；只链不解；敌方判定=`is_boss_side` 异侧）。
+`BOSS_GENERALS` 尾追加**蓐收**（def 索引 15/hp5/`[神裔, 星囚]`；names
+嬴|该；boss_baimang3 白芒3=已处置关卡面，条目不含）。**登记差异**：对
+boss_mingxingzhu 授 boss_jiding 面依赖武将未入库。FROZEN 名单尾加「星
+囚」（92 名）。存档 54→**55**。版本 238→**239**（字段批探针：238+新代
+码全 14 位移佐证字段源）。回归
+`boss_jinshenrushou_xingqiu_link_toggle` 五段（全横置/只链不解/开关取反
+/v55 往返/fellow 例外）——证据见
+[T11 星囚证据](../operations/evidence/2026-10-11-t11-boss-xingqiu-v239/README.md)。
+**坑位**：phase 触发技 player 域必须过滤持有者本人（首版漏滤被回归断言
+抓出——横置面绿≠开关面绿）；drain_choices 空应答被 min>0 SelectCards
+校验拒绝（静默挂起→清手牌规避）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

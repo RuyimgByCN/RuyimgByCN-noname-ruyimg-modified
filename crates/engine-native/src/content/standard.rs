@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 238;
+pub const STANDARD_RULESET_VERSION: u64 = 239;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,11 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 星囚（Boss 蓐收，规则 v239）：锁定技——出牌阶段开始交替横置全部敌
+/// 方（每回合开始开关取反，true 回合把未横置的敌方全部横置；只链不解，
+/// 已横置保持）。对 boss_mingxingzhu 授 boss_jiding 面依赖武将未入库，
+/// 登记差异。
+pub const BOSS_XINGQIU: &str = "星囚";
 /// 神恩（Boss 太昊/炎帝 光环，规则 v238）：全局光环——boss 方用牌无视
 /// 距离；挑战者侧手牌上限 +1、摸牌阶段 +1（上游 boss_shenen2 global
 /// 三 mod 同口径：targetInRange side→true / maxHandcard !side→num+1 /
@@ -4353,6 +4358,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 太昊（v238 神恩光环；神裔共用 v233；boss_qingyi 青翼未落随下批；
     // 上游 names 风|伏羲、shen→群目录近似）
     ("太昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
+    // 蓐收（v239 星囚；神裔共用 v233；boss_baimang3 白芒3=关卡流程面登记不落；
+    // 上游 names 嬴|该、shen→群目录近似）
+    ("蓐收", Faction::Qun, &[BOSS_SHENYI, BOSS_XINGQIU], 5, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5772,6 +5780,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // hand_limit 挑战者 +1（state）、Draw 臂挑战者 +1（kernel）
             // 均经 skill_by_name 查询+is_boss_side 判定；光环激活=场上
             // 存在持有者
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_XINGQIU,
+            // 查询型单面：Play begin 臂（交替开关+横置敌方，direct 直写
+            // linked+日志，索链甲同款）；授 boss_jiding 面登记差异未入库
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

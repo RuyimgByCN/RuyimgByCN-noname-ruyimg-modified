@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 54;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 55;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2726,6 +2726,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.fengyin_active);
         // 灵渠计数（v237）
         w.u8(p.lingqu_count);
+        // 星囚交替开关（v239）
+        w.boolean(p.xingqiu_toggled);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3008,6 +3010,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let juyuan_storage = r.i32()?;
         let fengyin_active = r.boolean()?;
         let lingqu_count = r.u8()?;
+        let xingqiu_toggled = r.boolean()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3063,6 +3066,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             juyuan_storage,
             fengyin_active,
             lingqu_count,
+            xingqiu_toggled,
             off_court,
             shuiyun_count,
             wangyou3_round,
