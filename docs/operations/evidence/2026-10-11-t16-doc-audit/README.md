@@ -77,3 +77,20 @@
 ## 验证
 
 - 零代码改动；纯文档。
+
+---
+
+# 同日 T16⑤：rule-semantics 等状态性陈述核对（结论：全部不动）
+
+| 目标 | 状态性陈述扫描 | 结论 |
+|---|---|---|
+| `docs/rule-semantics/`（phase2/3/5、vocabulary） | 窄/宽两轮措辞扫描 0+1 命中 | vocabulary.md:27「已实现摸牌、移动…等核心路径」为仍为真的历史语境（"等"涵盖后续增长），不动 |
+| `docs/protocol/phase7-multiplayer.md` | 0 命中 | 不动 |
+| `docs/extensions/author-guide.md` | 0 命中 | 不动 |
+| `docs/architecture/phase6-web-client.md` | 已有 2026-09-16 历史横幅（T16 范围外先前已标注） | 不动 |
+| `apps/desktop-client/README.md` | 0 命中 | 不动 |
+| `fuzz/README.md` | 0 命中（targets 清单与 fuzz_targets/ 实存一致） | 不动 |
+| 根 `README.md` | 3 处"当前"均为指向进度主稿的正确导航 | 不动 |
+| cross-target | 无独立文档（`scripts/cross-target-hash.sh` 自述） | 不适用 |
+
+零改动。附：ADR 索引缺 0702 条目（文件在）——登记为索引完整性碎片，随 ADR 索引下次维护补（T16④ 段已注明）。
