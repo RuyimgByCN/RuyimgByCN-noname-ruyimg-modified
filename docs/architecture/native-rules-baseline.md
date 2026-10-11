@@ -2399,6 +2399,24 @@ PlayCard——模型结构承载，非逐条实现）。**登记差异**：无�
 引（朱厌×3/书精/相柳）与招祸凶兽条件伤期望一并修正——修复后复位测试
 全绿、全量 578/0/1；**历史批次计数口径不可比**（详见证据 README）。
 
+**规则 v233（2026-10-11，T11 四象系首片：神裔＋青龙条目）**：
+**神裔**（查询型 Noop）两面：①判定反转——判定阶段延时锦囊判定对持有者
+恒不生效（上游 mod judge `event.type=="phase"`：bool true→false、false→
+null；上游考证：`type=="phase"` 仅判定阶段延时锦囊判定打标
+[content.ts:4968 `judge(card).set("type","phase")`]，技能自判定不受影
+响。原生=apply_judgement 五臂[乐/兵粮/洪水/归有界/闪电]效果条件一并短
+路，消费面等价；牌去向不变：锦囊照常弃置、闪电照常传下家）；②翻面取
+消——仅**正→背**取消（turnOverBefore filter `!isTurnedOver`；凶兽同位
+臂，背→正照常翻回）。`BOSS_GENERALS` 尾追加**青龙**（群/hp4/`[神裔]`，
+def 索引 10；releiji 雷击/boss_qingmu2 青木未落随下批）。**登记差异**：
+洪荒之力禁用交互（honghuangzhili）未落。FROZEN 名单尾加「神裔」（86
+名；首版 SkillDef 误插司圃前被冻结表测试当场拦截——已移真表尾）。存档
+不变 v53。版本 232→**233**。版本回退探针（233→232 复跑 golden 全绿）
+证明 14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_qinglong_shenyi_judge_void_and_never_flipped` 五段（乐无效/闪电传
+下家/非持有者对照/翻面两面/往返）——证据见
+[T11 神裔证据](../operations/evidence/2026-10-11-t11-boss-shenyi-v233/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 232;
+pub const STANDARD_RULESET_VERSION: u64 = 233;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,13 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 神裔（Boss 青龙，四象系共有技，规则 v233）：锁定技两面——判定阶段
+/// 的延时锦囊判定恒不生效（上游 mod judge `event.type=="phase"`：bool
+/// true→false、false→null，对延时锦囊消费面等价恒失效；牌去向不变）；
+/// 武将牌不能翻至背面（上游 turnOverBefore filter !isTurnedOver——仅
+/// 正→背取消，背→正照常翻回）。洪荒之力禁用交互（honghuangzhili）未
+/// 落，登记差异。
+pub const BOSS_SHENYI: &str = "神裔";
 /// 司圃（Boss 应昭，规则 v232）：锁定技，体力值首次减至一半或更少时激
 /// 活；你的出牌阶段内已使用牌数≤2 期间，其他角色无法使用牌。cardEnabled/
 /// cardUsable 使用面在原生回合模型下由「仅回合玩家可提交使用」天然承载；
@@ -4304,6 +4311,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 朱厌四技全齐（v224 兵先；v225 虚失；v226 巨源——体力上限+5 由
     // maxHp30 表意[登记同穷奇]；记录=PlayerState.juyuan_storage）
     ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
+    // 青龙四技全齐待续（v233 神裔；releiji 雷击/boss_qingmu2 青木未落随下批）
+    ("青龙", Faction::Qun, &[BOSS_SHENYI], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5659,6 +5668,16 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 未激活）与响应/救禁（respond_shan、dying_save 选项排除）
             // 均经 skill_by_name 查询；使用面由回合模型天然承载；无懈等
             // 其余响应窗未纳入禁令（登记差异）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_SHENYI,
+            // 查询型两面：翻面取消（commit_turn_over_before 臂——凶兽
+            // 同位，仅正→背取消）与判定阶段延时锦囊无效化（apply_
+            // judgement 逐臂条件）均经 skill_by_name 查询；洪荒之力禁
+            // 用交互未落（登记差异）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

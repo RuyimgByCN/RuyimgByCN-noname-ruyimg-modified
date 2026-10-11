@@ -1675,6 +1675,24 @@ fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool)
             return;
         }
     }
+    // 神裔（Boss 青龙共有技，规则 v233）：武将牌不能翻至背面（上游
+    // boss_shenyi turnOverBefore filter !isTurnedOver——仅正→背取消，
+    // 背→正照常翻回）
+    if let Some(def) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_SHENYI)
+    {
+        if ctx
+            .core
+            .skills
+            .get(&(player, def))
+            .map(|i| i.enabled)
+            .unwrap_or(false)
+            && !ctx.core.player(player).face_down
+        {
+            return;
+        }
+    }
     let face_down = !ctx.core.player(player).face_down;
     ctx.core.player_mut(player).face_down = face_down;
     // 急冻冰封解除（U05 ow 美，规则 v127）：翻回正面即冰封结束——上游
@@ -6268,9 +6286,18 @@ impl JudgePhaseMachine {
             let def = &ctx.catalog.cards[judge_card as usize];
             (def.suit, def.rank)
         };
+        // 神裔（Boss 青龙共有技，规则 v233）：判定阶段的延时锦囊判定对
+        // 持有者恒不生效（上游 mod judge event.type=="phase"：bool
+        // true→false、false→null——各臂效果条件一并短路；牌去向不变：
+        // 锦囊照常弃置、闪电照常传下家）
+        let shenyi_voids = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_SHENYI)
+            .map(|def| ctx.core.has_skill(owner, def))
+            .unwrap_or(false);
         match trick_kind {
             CardKind::Le => {
-                if !suit.is_heart() {
+                if !shenyi_voids && !suit.is_heart() {
                     ctx.core.turn.skip_play_phase = true;
                 }
                 ctx.to_discard(trick);
@@ -6279,7 +6306,7 @@ impl JudgePhaseMachine {
                 }
             }
             CardKind::Bing => {
-                if !suit.is_club() {
+                if !shenyi_voids && !suit.is_club() {
                     ctx.core.turn.skip_draw_phase = true;
                 }
                 ctx.to_discard(trick);
@@ -6290,7 +6317,7 @@ impl JudgePhaseMachine {
             CardKind::HongShui => {
                 // 洪水：梅花 2–9 → 3 点雷伤（登记差异：上游未标注属性）
                 ctx.to_discard(trick);
-                if suit.is_club() && (2..=9).contains(&rank) {
+                if !shenyi_voids && suit.is_club() && (2..=9).contains(&rank) {
                     if !machine_holds {
                         ctx.to_discard(judge_card);
                     }
@@ -6307,8 +6334,9 @@ impl JudgePhaseMachine {
             }
             CardKind::Guiyoujie => {
                 // 归有界判定（上游 judge 黑色 -3 / effect loseHp+randomDiscard）
-                if matches!(
-                    suit,
+                if !shenyi_voids
+                    && matches!(
+                        suit,
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                 ) {
                     ctx.to_discard(trick);
@@ -6355,7 +6383,7 @@ impl JudgePhaseMachine {
                 }
             }
             CardKind::ShanDian => {
-                if suit.is_spade() && (2..=9).contains(&rank) {
+                if !shenyi_voids && suit.is_spade() && (2..=9).contains(&rank) {
                     ctx.to_discard(trick);
                     if !machine_holds {
                         ctx.to_discard(judge_card);
