@@ -590,6 +590,23 @@ pub enum HostBehavior {
     /// [SwdJiguanyaoState]（tag 226）——机关妖术防重标记（上游
     /// jiguanyaoshu_skill 防重面；其补偿触发面暂缓登记至机关术批）。
     SwdJiguanyaoState,
+    /// 旋风之刃（tag 227）：目标随机弃 1 张 he。
+    SwdXuanfengzhirenCard,
+    /// 中行虎甲（tag 228）：防具发现装配 + 目标随机弃 1 张手牌。
+    SwdZhongxinghujiaCard,
+    /// 星体改造（tag 229）：使用者摸 1 + 手牌上限 -1 累加（结束阶段重置）。
+    SwdXingtigaizaoCard,
+    /// 时间回溯（tag 230）：目标获得其装备区全部牌。
+    SwdShijianhuisuCard,
+    /// 紧急冷冻（tag 231）：目标 +2 护甲、翻面；仍翻面则冻结。
+    SwdJinjilengdongCard,
+    /// 圣休号角（tag 232）：目标获嘲讽（相邻只能以其为杀目标）。
+    SwdShengxiuhaojiaoCard,
+    /// 隐秘离场（tag 233）：目标获潜行（不能成为牌目标，本回合）。
+    SwdYinmilichangCard,
+    /// 机关妖术补偿（tag 234，规则 v198 补齐）：非自己回合失去装备区牌
+    /// 时随机补获等量灵剑（弃装备事件近似）。
+    SwdJiguanyaoGain,
 }
 
 
@@ -822,6 +839,14 @@ impl HostBehavior {
             HostBehavior::SwdJiguanyuanGain => 224,
             HostBehavior::SwdJiguanyaoshuCard => 225,
             HostBehavior::SwdJiguanyaoState => 226,
+            HostBehavior::SwdXuanfengzhirenCard => 227,
+            HostBehavior::SwdZhongxinghujiaCard => 228,
+            HostBehavior::SwdXingtigaizaoCard => 229,
+            HostBehavior::SwdShijianhuisuCard => 230,
+            HostBehavior::SwdJinjilengdongCard => 231,
+            HostBehavior::SwdShengxiuhaojiaoCard => 232,
+            HostBehavior::SwdYinmilichangCard => 233,
+            HostBehavior::SwdJiguanyaoGain => 234,
         }
     }
 
@@ -1053,6 +1078,14 @@ impl HostBehavior {
             224 => HostBehavior::SwdJiguanyuanGain,
             225 => HostBehavior::SwdJiguanyaoshuCard,
             226 => HostBehavior::SwdJiguanyaoState,
+            227 => HostBehavior::SwdXuanfengzhirenCard,
+            228 => HostBehavior::SwdZhongxinghujiaCard,
+            229 => HostBehavior::SwdXingtigaizaoCard,
+            230 => HostBehavior::SwdShijianhuisuCard,
+            231 => HostBehavior::SwdJinjilengdongCard,
+            232 => HostBehavior::SwdShengxiuhaojiaoCard,
+            233 => HostBehavior::SwdYinmilichangCard,
+            234 => HostBehavior::SwdJiguanyaoGain,
             _ => return None,
         })
     }
@@ -1060,7 +1093,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 226] = [
+    pub const ALL: [HostBehavior; 234] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1287,6 +1320,14 @@ impl HostBehavior {
         HostBehavior::SwdJiguanyuanGain,
         HostBehavior::SwdJiguanyaoshuCard,
         HostBehavior::SwdJiguanyaoState,
+        HostBehavior::SwdXuanfengzhirenCard,
+        HostBehavior::SwdZhongxinghujiaCard,
+        HostBehavior::SwdXingtigaizaoCard,
+        HostBehavior::SwdShijianhuisuCard,
+        HostBehavior::SwdJinjilengdongCard,
+        HostBehavior::SwdShengxiuhaojiaoCard,
+        HostBehavior::SwdYinmilichangCard,
+        HostBehavior::SwdJiguanyaoGain,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1518,6 +1559,14 @@ impl HostBehavior {
             HostBehavior::SwdJiguanyuanGain => "host:swd_jiguanyuan_gain",
             HostBehavior::SwdJiguanyaoshuCard => "host:swd_jiguanyaoshu_card",
             HostBehavior::SwdJiguanyaoState => "host:swd_jiguanyao_state",
+            HostBehavior::SwdXuanfengzhirenCard => "host:swd_xuanfengzhiren_card",
+            HostBehavior::SwdZhongxinghujiaCard => "host:swd_zhongxinghujia_card",
+            HostBehavior::SwdXingtigaizaoCard => "host:swd_xingtigaizao_card",
+            HostBehavior::SwdShijianhuisuCard => "host:swd_shijianhuisu_card",
+            HostBehavior::SwdJinjilengdongCard => "host:swd_jinjilengdong_card",
+            HostBehavior::SwdShengxiuhaojiaoCard => "host:swd_shengxiuhaojiao_card",
+            HostBehavior::SwdYinmilichangCard => "host:swd_yinmilichang_card",
+            HostBehavior::SwdJiguanyaoGain => "host:swd_jiguanyao_gain",
         }
     }
 }
@@ -1749,6 +1798,21 @@ impl HostBehavior {
             // 机关妖术防重标记：纯状态，无触发
             HostBehavior::SwdJiguanyaoshuCard => None,
             HostBehavior::SwdJiguanyaoState => None,
+            // 机关妖术补偿：弃牌事件（含装备牌时触发，登记近似差异）
+            HostBehavior::SwdJiguanyaoGain => Some(TriggerMeta {
+                event: EventKind::CardsDiscarded,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::SwdXuanfengzhirenCard => None,
+            HostBehavior::SwdZhongxinghujiaCard => None,
+            HostBehavior::SwdXingtigaizaoCard => None,
+            HostBehavior::SwdShijianhuisuCard => None,
+            HostBehavior::SwdJinjilengdongCard => None,
+            HostBehavior::SwdShengxiuhaojiaoCard => None,
+            HostBehavior::SwdYinmilichangCard => None,
             HostBehavior::GwentZumoCard => None,
             HostBehavior::HuanleMonkeyCard => Some(TriggerMeta {
                 event: EventKind::CardUsed,
@@ -2543,6 +2607,14 @@ pub const SWD_JIGUANYUAN_GAIN_KEY: &str = "swd_jiguanyuan_gain";
 pub const SWD_JIGUANYUAN_CHOOSE: &str = "swd_jiguanyuan_choose";
 pub const SWD_JIGUANYAOSHU_KEY: &str = "swd_jiguanyaoshu";
 pub const SWD_JIGUANYAOSHU_STATE_KEY: &str = "swd_jiguanyaoshu_state";
+pub const SWD_XUANFENG_KEY: &str = "swd_xuanfengzhiren";
+pub const SWD_ZHONGXING_KEY: &str = "swd_zhongxinghujia";
+pub const SWD_XINGTIGAIZAO_KEY: &str = "swd_xingtigaizao";
+pub const SWD_SHIJIANHUISU_KEY: &str = "swd_shijianhuisu";
+pub const SWD_JINJILENGDONG_KEY: &str = "swd_jinjilengdong";
+pub const SWD_SHENGXIUHAOJIAO_KEY: &str = "swd_shengxiuhaojiao";
+pub const SWD_YINMILICHANG_KEY: &str = "swd_yinmilichang";
+pub const SWD_JIGUANYAO_GAIN_KEY: &str = "swd_jiguanyao_gain";
 pub const SWD_LANGEGUAIYI_SKILL_KEY: &str = "swd_langeguaiyi_skill";
 pub const SWD_LIUXING_DISCARD: &str = "swd_liuxing_discard";
 pub const SWD_LIUXING_KEY: &str = "gj:swd_liuxinghuoyu";
@@ -3584,6 +3656,25 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdJiguanyuanCard => false,
             HostBehavior::SwdJiguanyaoshuCard => false,
             HostBehavior::SwdJiguanyaoState => false,
+            // 机关妖术补偿：非自己回合、弃牌含装备 Kind 牌（以弃装备牌近
+            // 似"失去装备区牌"，登记差异：替换/获得离去路径不触发）
+            HostBehavior::SwdJiguanyaoGain => matches!(event,
+                EventData::CardsDiscarded { player, cards }
+                    if *player != ctx.state.turn.current
+                        && ctx.state.player(*player).alive
+                        && cards.iter().any(|c| {
+                            matches!(
+                                ctx.catalog.card_kind(*c).equip_slot(),
+                                Some(_)
+                            )
+                        })),
+            HostBehavior::SwdXuanfengzhirenCard => false,
+            HostBehavior::SwdZhongxinghujiaCard => false,
+            HostBehavior::SwdXingtigaizaoCard => false,
+            HostBehavior::SwdShijianhuisuCard => false,
+            HostBehavior::SwdJinjilengdongCard => false,
+            HostBehavior::SwdShengxiuhaojiaoCard => false,
+            HostBehavior::SwdYinmilichangCard => false,
             HostBehavior::HuanleMianjuCard => matches!(event,
                 EventData::TurnOverBefore { player, .. }
                 if ctx.state.player(*player).equips.iter().any(|c| {
@@ -14541,6 +14632,234 @@ HostBehavior::XianjianLingyu => match self.stage {
                 }
                 Flow::Done
             }
+            // 旋风之刃（灵剑，规则 v198）：目标随机弃 1 张 he；本体入弃堆。
+            HostBehavior::SwdXuanfengzhirenCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        let mut pool: Vec<CardId> = ctx
+                            .core
+                            .player(t)
+                            .hand
+                            .iter()
+                            .copied()
+                            .chain(ctx.core.player(t).equips.iter().copied())
+                            .collect();
+                        if !pool.is_empty() {
+                            let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                            let c = pool.swap_remove(k);
+                            if ctx.core.player(t).hand.contains(&c) {
+                                ctx.discard_from_hand(t, c);
+                            } else if let Some(pos) =
+                                ctx.core.player(t).equips.iter().position(|x| *x == c)
+                            {
+                                ctx.core.player_mut(t).equips.remove(pos);
+                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                                ctx.to_discard(c);
+                                // 装备弃置也发弃置事件（上游 loseEnd 含
+                                // 装备区牌；机关妖术补偿依赖此事件）
+                                ctx.emit(EventData::CardsDiscarded {
+                                    player: t,
+                                    cards: vec![c],
+                                });
+                            }
+                            ctx.log(LogEvent::CardDiscarded { player: t, cards: vec![c] });
+                        }
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 中行虎甲（灵剑，规则 v198）：目标非 isMin——从牌堆+弃堆发现防
+            // 具 Kind 实体装配（登记差异：上游装备定义池凭空造），再随机弃
+            // 1 张手牌；本体入弃堆。
+            HostBehavior::SwdZhongxinghujiaCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        let mut pool: Vec<CardId> = ctx
+                            .core
+                            .deck
+                            .iter()
+                            .chain(ctx.core.discard.iter())
+                            .copied()
+                            .filter(|x| ctx.catalog.card_kind(*x) == CardKind::Armor)
+                            .collect();
+                        let n = pool.len();
+                        for i in (1..n).rev() {
+                            let j = ctx.core.rng.gen_range(i as u32 + 1) as usize;
+                            pool.swap(i, j);
+                        }
+                        if let Some(x) = pool.first().copied() {
+                            if let Some(pos) = ctx.core.deck.iter().position(|y| *y == x) {
+                                ctx.core.deck.remove(pos);
+                            } else if let Some(pos) =
+                                ctx.core.discard.iter().position(|y| *y == x)
+                            {
+                                ctx.core.discard.remove(pos);
+                            }
+                            ctx.core.player_mut(t).hand.push(x);
+                            ctx.emit(EventData::Equipped { player: t, card: x, replaced: None });
+                        }
+                        let hand = ctx.core.player(t).hand.clone();
+                        if !hand.is_empty() {
+                            let k = ctx.core.rng.gen_range(hand.len() as u32) as usize;
+                            let c = hand[k];
+                            ctx.discard_from_hand(t, c);
+                            ctx.log(LogEvent::CardDiscarded { player: t, cards: vec![c] });
+                        }
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 星体改造（灵剑，规则 v198）：使用者（自目标）摸 1 + 手牌上限
+            // -1 累加（其下一结束阶段重置，kernel 相位钩）；本体入弃堆。
+            HostBehavior::SwdXingtigaizaoCard => {
+                let p = ctx.core.player_mut(self.owner);
+                p.xingtigaizao_count = p.xingtigaizao_count.saturating_add(1);
+                ctx.draw_cards(self.owner, 1);
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 时间回溯（灵剑，规则 v198）：目标获得其装备区全部牌（装备技
+            // 随迁撤销）；本体入弃堆。
+            HostBehavior::SwdShijianhuisuCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        let es: Vec<CardId> = ctx.core.player(t).equips.iter().copied().collect();
+                        for c in es {
+                            if let Some(pos) =
+                                ctx.core.player(t).equips.iter().position(|x| *x == c)
+                            {
+                                ctx.core.player_mut(t).equips.remove(pos);
+                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                                ctx.core.player_mut(t).hand.push(c);
+                            }
+                        }
+                        let hand: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
+                        ctx.log(LogEvent::CardsDrawn { player: t, cards: hand });
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 紧急冷冻（灵剑，规则 v198）：目标≠使用者且未翻面——+2 护甲、
+            // 翻面；仍翻面则冻结（不能使用牌也不能成为目标，翻回解除，
+            // kernel TurnOvered 钩）；本体入弃堆。
+            HostBehavior::SwdJinjilengdongCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive && !ctx.core.player(t).face_down {
+                        // 护甲直写字段（灵雪同口径，无日志原语）
+                        ctx.core.player_mut(t).hujia += 2;
+                        ctx.core.player_mut(t).face_down = true;
+                        ctx.emit(EventData::TurnOvered {
+                            player: t,
+                            face_down: true,
+                        });
+                        if ctx.core.player(t).face_down {
+                            ctx.core.player_mut(t).jileng_active = true;
+                        }
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 圣休号角（灵剑，规则 v198）：目标获嘲讽（相邻角色只能以其为
+            // 杀目标；其下一阶段开始解除，kernel 相位钩）；本体入弃堆。
+            HostBehavior::SwdShengxiuhaojiaoCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        ctx.core.player_mut(t).chaofeng_active = true;
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 隐秘离场（灵剑，规则 v198）：目标≠使用者——潜行（不能成为牌
+            // 的目标；当前回合结束解除，kernel 回合收束钩）；本体入弃堆。
+            HostBehavior::SwdYinmilichangCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        ctx.core.player_mut(t).yinmi_active = true;
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 机关妖术补偿（规则 v198）：非自己回合弃牌含装备 Kind 牌（近
+            // 似失去装备区牌，登记差异：替换/获得离去不触发）→ 随机补获
+            // 等量灵剑（牌堆+弃堆发现；无则不补，登记差异：上游全定义池
+            // 凭空造）。状态不移除（持久防重面不变）。
+            HostBehavior::SwdJiguanyaoGain => {
+                // 触发帧即弃牌事件帧（栈顶）：读取其 CardsDiscarded 载荷
+                let lost: Vec<CardId> = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    Some(EventData::CardsDiscarded { cards, .. }) => cards.clone(),
+                    _ => Vec::new(),
+                };
+                let num = lost
+                    .iter()
+                    .filter(|c| matches!(ctx.catalog.card_kind(**c).equip_slot(), Some(_)))
+                    .count();
+                if num > 0 {
+                    let mut pool: Vec<CardId> = ctx
+                        .core
+                        .deck
+                        .iter()
+                        .chain(ctx.core.discard.iter())
+                        .copied()
+                        .filter(|x| ctx.catalog.card_kind(*x) == CardKind::Hslingjian)
+                        .collect();
+                    let n = pool.len();
+                    for i in (1..n).rev() {
+                        let j = ctx.core.rng.gen_range(i as u32 + 1) as usize;
+                        pool.swap(i, j);
+                    }
+                    let take = num.min(pool.len());
+                    let mut got = Vec::new();
+                    for x in pool.into_iter().take(take) {
+                        if let Some(pos) = ctx.core.deck.iter().position(|y| *y == x) {
+                            ctx.core.deck.remove(pos);
+                        } else if let Some(pos) =
+                            ctx.core.discard.iter().position(|y| *y == x)
+                        {
+                            ctx.core.discard.remove(pos);
+                        }
+                        ctx.core.player_mut(self.owner).hand.push(x);
+                        got.push(x);
+                    }
+                    if !got.is_empty() {
+                        ctx.log(LogEvent::CardsDrawn { player: self.owner, cards: got });
+                    }
+                }
+                Flow::Done
+            }
             // 机关妖术（U05 swd 第二十二批，规则 v197）：单体（range.global
             // 1）——从牌堆+弃堆装备实体中发现一张「目标空装备栏」子类型的
             // 装备，置入其手牌后 emit Equipped 走完整装配（commit_equip 同
@@ -14591,19 +14910,19 @@ HostBehavior::XianjianLingyu => match self.stage {
                                 replaced: None,
                             });
                         }
-                        if let Some(sdef) =
-                            ctx.catalog.skill_by_name(SWD_JIGUANYAOSHU_STATE_KEY)
-                        {
-                            ctx.core.skills.insert(
-                                (t, sdef),
-                                crate::state::SkillInstance {
-                                    owner: t,
-                                    enabled: true,
-                                    once_used: false,
-                                    expires_end_of_turn: false,
-                                    rounds: 0,
-                                },
-                            );
+                        for gkey in [SWD_JIGUANYAOSHU_STATE_KEY, SWD_JIGUANYAO_GAIN_KEY] {
+                            if let Some(sdef) = ctx.catalog.skill_by_name(gkey) {
+                                ctx.core.skills.insert(
+                                    (t, sdef),
+                                    crate::state::SkillInstance {
+                                        owner: t,
+                                        enabled: true,
+                                        once_used: false,
+                                        expires_end_of_turn: false,
+                                        rounds: 0,
+                                    },
+                                );
+                            }
                         }
                     }
                 }
@@ -14840,7 +15159,7 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
             HostSkillDecl { name: MTG_YOULIN_DISCOVER_KEY, behavior: HostBehavior::MtgYoulinDiscard },
         ],
         CardKind::Lindixiliu => &[HostSkillDecl { name: MTG_LINDIXILIU_KEY, behavior: HostBehavior::MtgLindixiliuLand }],
-        CardKind::Jiguan => &[HostSkillDecl { name: SWD_GOUHUNLUO_SUB_KEY, behavior: HostBehavior::SwdGouhunluoSub }, HostSkillDecl { name: SWD_FENGYIN_STATE_KEY, behavior: HostBehavior::SwdFengyinState }, HostSkillDecl { name: SWD_JIGUANYUAN_GAIN_KEY, behavior: HostBehavior::SwdJiguanyuanGain }, HostSkillDecl { name: SWD_JIGUANYAOSHU_STATE_KEY, behavior: HostBehavior::SwdJiguanyaoState }],
+        CardKind::Jiguan => &[HostSkillDecl { name: SWD_GOUHUNLUO_SUB_KEY, behavior: HostBehavior::SwdGouhunluoSub }, HostSkillDecl { name: SWD_FENGYIN_STATE_KEY, behavior: HostBehavior::SwdFengyinState }, HostSkillDecl { name: SWD_JIGUANYUAN_GAIN_KEY, behavior: HostBehavior::SwdJiguanyuanGain }, HostSkillDecl { name: SWD_JIGUANYAOSHU_STATE_KEY, behavior: HostBehavior::SwdJiguanyaoState }, HostSkillDecl { name: SWD_JIGUANYAO_GAIN_KEY, behavior: HostBehavior::SwdJiguanyaoGain }],
         _ => &[],
     }
 }

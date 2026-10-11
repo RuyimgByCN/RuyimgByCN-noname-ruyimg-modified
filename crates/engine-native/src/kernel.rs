@@ -604,6 +604,9 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
         && phase == Phase::Judge
         && ctx.core.player(player).face_down
     {
+        // 紧急冷冻解除（U05 swd 灵剑，规则 v198）：翻回即解（上游
+        // addTempSkill {player:'turnOverAfter'} 同口径）
+        ctx.core.player_mut(player).jileng_active = false;
         ctx.emit(EventData::TurnOverBefore { player, cancelled: false });
         ctx.emit(EventData::TurnEnded { player });
         return;
@@ -617,6 +620,17 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
     // tempHide 至 phaseBeginStart 同口径
     if begin && phase == Phase::Judge && ctx.core.player(player).yinshen_active {
         ctx.core.player_mut(player).yinshen_active = false;
+    }
+    // 嘲讽解除（U05 swd 灵剑圣休号角，规则 v198）：自己回合判定阶段开始
+    // ——上游 addTempSkill {player:'phaseBegin'} 同口径
+    if begin && phase == Phase::Judge && ctx.core.player(player).chaofeng_active {
+        ctx.core.player_mut(player).chaofeng_active = false;
+    }
+    // 星体改造重置（U05 swd 灵剑，规则 v198）：自己回合判定阶段开始——
+    // 上游 phaseEnd 移除+清零在「其下一结束阶段」生效；原生以本回合开始
+    // 重置近似（差一夜，登记差异：重置时点=下一回合开始而非上一结束）
+    if begin && phase == Phase::Judge && ctx.core.player(player).xingtigaizao_count > 0 {
+        ctx.core.player_mut(player).xingtigaizao_count = 0;
     }
     // 蛊舞递减（U05 xianjian 阿奴，规则 v154）：自己每阶段结束 -1（上游
     // anwugu2 phaseAfter 递减同口径）；归 0 后移除（出牌受限/手牌上限随
@@ -1485,6 +1499,65 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                     behavior: crate::content::host::HostBehavior::SwdLiuxinghuoyuCard,
                     owner: u.player,
                     target: Some(*u.targets.first().expect("liuxinghuoyu has one target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
+            CardKind::Hslingjian => {
+                // 灵剑（swd 机关术批，规则 v198）：七卡按名分流；无懈窗
+                // 包装共享（上游 wuxieable 同口径）。
+                let name = &ctx.catalog.cards[u.card as usize].name;
+                let (behavior, def_key, target) = if name.contains("xuanfengzhiren") {
+                    (
+                        crate::content::host::HostBehavior::SwdXuanfengzhirenCard,
+                        crate::content::host::SWD_XUANFENG_KEY,
+                        u.targets.first().copied(),
+                    )
+                } else if name.contains("zhongxinghujia") {
+                    (
+                        crate::content::host::HostBehavior::SwdZhongxinghujiaCard,
+                        crate::content::host::SWD_ZHONGXING_KEY,
+                        u.targets.first().copied(),
+                    )
+                } else if name.contains("xingtigaizao") {
+                    (
+                        crate::content::host::HostBehavior::SwdXingtigaizaoCard,
+                        crate::content::host::SWD_XINGTIGAIZAO_KEY,
+                        Some(u.player),
+                    )
+                } else if name.contains("shijianhuisu") {
+                    (
+                        crate::content::host::HostBehavior::SwdShijianhuisuCard,
+                        crate::content::host::SWD_SHIJIANHUISU_KEY,
+                        u.targets.first().copied(),
+                    )
+                } else if name.contains("jinjilengdong") {
+                    (
+                        crate::content::host::HostBehavior::SwdJinjilengdongCard,
+                        crate::content::host::SWD_JINJILENGDONG_KEY,
+                        u.targets.first().copied(),
+                    )
+                } else if name.contains("shengxiuhaojiao") {
+                    (
+                        crate::content::host::HostBehavior::SwdShengxiuhaojiaoCard,
+                        crate::content::host::SWD_SHENGXIUHAOJIAO_KEY,
+                        u.targets.first().copied(),
+                    )
+                } else {
+                    (
+                        crate::content::host::HostBehavior::SwdYinmilichangCard,
+                        crate::content::host::SWD_YINMILICHANG_KEY,
+                        u.targets.first().copied(),
+                    )
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: def_key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target,
                     card: Some(u.card),
                     cards: Vec::new(),
                     targets: Vec::new(),

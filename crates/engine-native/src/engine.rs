@@ -2245,7 +2245,10 @@ fn apply_command(
             {
                 for t in &targets {
                     if *t != core.turn.current
-                        && (core.player(*t).jidong_active || core.player(*t).yinshen_active)
+                        && (core.player(*t).jidong_active
+                            || core.player(*t).yinshen_active
+                            || core.player(*t).jileng_active
+                            || core.player(*t).yinmi_active)
                     {
                         return Err(RejectReason::IllegalTargets);
                     }
@@ -2265,6 +2268,11 @@ fn apply_command(
                     },
                 );
                 return Ok(());
+            }
+            // 紧急冷冻（U05 swd 灵剑，规则 v198）：冻结者不能使用卡牌
+            //（上游 hslingjian_jinjilengdong mod cardEnabled 同口径）
+            if core.player(core.turn.current).jileng_active {
+                return Err(RejectReason::CardLimit);
             }
             match kind {
                 CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
@@ -2414,6 +2422,29 @@ fn apply_command(
                         .unwrap_or(false);
                     if kongcheng && core.player(target).hand.is_empty() {
                         return Err(RejectReason::IllegalTargets);
+                    }
+                    // 圣休号角嘲讽（U05 swd 灵剑，规则 v198）：相邻有嘲讽
+                    // 者时只能以其为杀目标（上游 hslingjian_chaofeng mod
+                    // targetEnabled 同口径）
+                    if kind.is_sha_like() {
+                        let seats = core.players.len() as u8;
+                        let cur = core.turn.current;
+                        let holder = (0..seats).find(|p| {
+                            *p != cur
+                                && core.player(*p).alive
+                                && core.player(*p).chaofeng_active
+                                && {
+                                    let d = (u16::from(*p) + u16::from(seats)
+                                        - u16::from(cur))
+                                        % u16::from(seats);
+                                    d == 1 || d == u16::from(seats) - 1
+                                }
+                        });
+                        if let Some(h) = holder {
+                            if targets.iter().any(|t| *t != h) {
+                                return Err(RejectReason::IllegalTargets);
+                            }
+                        }
                     }
                     // 逐月（U05 xianjian 云天河，规则 v161）：本出牌阶段
                     // 使用杀须以逐月目标为目标（上游 mod playerEnabled 同
@@ -3315,6 +3346,47 @@ fn apply_command(
                         }
                     }
                 }
+                CardKind::Hslingjian => {
+                    // 灵剑（swd 机关术批，规则 v198）：逐卡目标规则（上游
+                    // 各卡 filterTarget 同口径）
+                    let cname = &catalog.cards[card as usize].name;
+                    let t_ok = if cname.contains("xingtigaizao") {
+                        targets.len() == 1 && targets[0] == core.turn.current
+                    } else if cname.contains("shijianhuisu") {
+                        targets.len() == 1
+                            && targets[0] != core.turn.current
+                            && core.player(targets[0]).alive
+                            && !core.player(targets[0]).equips.is_empty()
+                    } else if cname.contains("jinjilengdong") {
+                        targets.len() == 1
+                            && targets[0] != core.turn.current
+                            && core.player(targets[0]).alive
+                            && !core.player(targets[0]).face_down
+                    } else if cname.contains("yinmilichang") {
+                        targets.len() == 1
+                            && targets[0] != core.turn.current
+                            && core.player(targets[0]).alive
+                            && !core.player(targets[0]).yinmi_active
+                            && !core.player(targets[0]).yinshen_active
+                    } else if cname.contains("shengxiuhaojiao") {
+                        targets.len() == 1
+                            && core.player(targets[0]).alive
+                            && !core.player(targets[0]).chaofeng_active
+                    } else if cname.contains("zhongxinghujia") {
+                        targets.len() == 1
+                            && core.player(targets[0]).alive
+                            && core.player(targets[0]).hand.len() as i32
+                                > core.player(targets[0]).hp
+                    } else {
+                        targets.len() == 1
+                            && core.player(targets[0]).alive
+                            && (!core.player(targets[0]).hand.is_empty()
+                                || !core.player(targets[0]).equips.is_empty())
+                    };
+                    if !t_ok {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
                 CardKind::Qinpendayu | CardKind::Birinongwu | CardKind::Ciguhanshuang => {
                     // gwent 天气：恰 1 名其他存活目标（邻座结算侧展开；
                     // 已持有状态的目标由授予机跳过）
@@ -3349,6 +3421,7 @@ fn apply_command(
                         return Err(RejectReason::IllegalTargets);
                     }
                 }
+
                 CardKind::Longxugou => {
                     // 龙须钩：恰 1 名其他存活且有装备的目标
                     if targets.len() != 1

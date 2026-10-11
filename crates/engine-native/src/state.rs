@@ -155,6 +155,18 @@ pub struct PlayerState {
     /// 机关怨（U05 swd 机关牌第二十一批，规则 v196）：待获得牌实体
     /// （离场区中；其下一结束阶段由 SwdJiguanyuanGain 移入手牌）。
     pub jiguanyuan_cards: Vec<u32>,
+    /// 紧急冷冻（U05 swd 灵剑，规则 v198）：冻结状态——不能使用牌也不
+    /// 能成为牌的目标；翻回（TurnOvered）解除。
+    pub jileng_active: bool,
+    /// 圣休号角嘲讽（U05 swd 灵剑，规则 v198）：相邻角色只能以其为杀目
+    /// 标；其下一阶段开始解除。
+    pub chaofeng_active: bool,
+    /// 星体改造（U05 swd 灵剑，规则 v198）：手牌上限 -N 累加；其下一结
+    /// 束阶段重置。
+    pub xingtigaizao_count: u8,
+    /// 隐秘离场潜行（U05 swd 灵剑，规则 v198）：不能成为牌的目标；当前
+    /// 回合结束解除（上游 tempHide 本回合近似）。
+    pub yinmi_active: bool,
     /// Boss 模式重整计数（P2/N08 模式入口批三-a，规则 v82）：死亡后
     /// 每次轮到其回合计数 +1，达阈值复活（仅 Boss 模式使用）。
     pub boss_chongzheng: u8,
@@ -213,6 +225,10 @@ impl PlayerState {
             gouhunluo_rounds: 0,
             gouhunluo_source: None,
             jiguanyuan_cards: Vec::new(),
+            jileng_active: false,
+            chaofeng_active: false,
+            xingtigaizao_count: 0,
+            yinmi_active: false,
             general_slots: [None, None],
             revealed_generals: [false, false],
             wunature: None,
@@ -780,7 +796,9 @@ impl GameStateCore {
     }
 
     pub fn hand_limit(&self, p: PlayerId) -> usize {
-        self.player(p).hp.max(0) as usize
+        // 星体改造（U05 swd 灵剑，规则 v198）：手牌上限 -N 累加
+        (self.player(p).hp.max(0) as usize)
+            .saturating_sub(self.player(p).xingtigaizao_count as usize)
     }
 
     pub fn has_skill(&self, p: PlayerId, def: SkillDefId) -> bool {

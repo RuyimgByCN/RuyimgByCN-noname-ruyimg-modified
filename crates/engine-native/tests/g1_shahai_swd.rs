@@ -120,7 +120,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 36, "swd 全 36 张（+距离对/蓝格怪衣/指路小虎/木甲人/勾魂锣×2/机关桶×2/机关凤×2/机关怨×2/机关妖术×2）入目录");
+    assert_eq!(e.catalog().cards.len(), base_cards + 43, "swd 全 43 张（+…机关妖术×2/灵剑池 7 张）入目录");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -218,7 +218,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 36, "swd 全 36 张（含机关桶×2/机关凤×2/机关怨×2/机关妖术×2，规则 v197）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 43, "swd 全 43 张（含机关妖术×2/灵剑池 7 张，规则 v198）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -233,7 +233,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 36, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 43, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -1939,4 +1939,269 @@ fn swd_jiguanyaoshu_full_slots_rejected() {
     }
     let out = play(&mut e, jys[0], vec![1]);
     assert!(matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)), "满栏目标应拒: {out:?}");
+}
+
+// ---------------------------------------------------------------------------
+// U05 swd 机关术批（规则 v198，存档 v44）：灵剑池 7 张（hslingjian——
+// 旋风之刃/中行虎甲/星体改造/时间回溯/紧急冷冻/圣休号角/隐秘离场）+
+// 机关妖术补偿触发补齐。登记差异：①灵剑实体花色点数为原生登记值（上游
+// 凭空造牌花色随机）；②装备/灵剑发现池=牌堆+弃堆可见实体（上游全定义
+// 池凭空造）；③补偿触发以弃牌事件近似失去装备区牌（替换/获得离去不触
+// 发）；④星体改造重置时点=下一回合开始（上游上一结束阶段）。机关术×2
+// 暂缓：运行时卡牌合成/改造原语缺口（T18）。
+// ---------------------------------------------------------------------------
+
+fn lingjian_id(e: &Engine, keyword: &str) -> u32 {
+    e.catalog()
+        .cards
+        .iter()
+        .position(|c| c.name.contains(keyword))
+        .expect("灵剑在目录") as u32
+}
+
+/// 灵剑①旋风之刃：目标随机弃 1 张 he；②时间回溯：目标装备区全部入手。
+#[test]
+fn swd_lingjian_xuanfeng_and_shijianhuisu() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6113, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let xf = lingjian_id(&e, "xuanfengzhiren");
+    let sj = lingjian_id(&e, "shijianhuisu");
+    inject_hand(&mut e, &pack, &[xf, sj]);
+    // 目标 1 号：2 手牌 + 1 装备（从目录取装备实体入其 equips）
+    e.debug_set_hp(1, 4);
+    let t1 = e.debug_place(1, "tao");
+    let t2 = e.debug_place(1, "shan");
+    let equip = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == CardKind::Weapon)
+        .expect("武器在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != equip);
+        snap.core.players[1].equips.push(equip);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入装备");
+    }
+
+    // 旋风之刃→1 号：随机弃 1 张 he（he 3 张→2）
+    let out = play(&mut e, xf, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert!(e.open_choice().is_none(), "旋风之刃无询问");
+    assert_eq!(e.debug_hand(1).len() + e.state_core().player(1).equips.len(), 2, "随机弃 1 张 he");
+    assert!(e.state_core().discard.contains(&xf), "本体入弃堆");
+
+    // 时间回溯→1 号：装备区全部入手（equips 0、手牌=前置 he 总量；
+    // 旋风之刃随机弃牌可能弃掉装备——两种分支都归一致终态）
+    let he_before = e.debug_hand(1).len() + e.state_core().player(1).equips.len();
+    assert_eq!(he_before, 2);
+    let out = play(&mut e, sj, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert_eq!(e.state_core().player(1).equips.len(), 0, "装备区清空");
+    assert_eq!(e.debug_hand(1).len(), he_before, "装备牌全部入手");
+}
+
+/// 灵剑③紧急冷冻：+2 护甲+翻面+冻结（不能出牌/不能被指定）；翻回解除。
+#[test]
+fn swd_lingjian_jinjilengdong_freeze_and_unfreeze() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6114, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let jl = lingjian_id(&e, "jinjilengdong");
+    inject_hand(&mut e, &pack, &[jl]);
+    e.debug_set_hp(1, 4);
+    // 目标 1 号有牌（否则下一回合弃牌门语义无关；有牌验证冻结期不能出牌）
+    let _ = e.debug_place(1, "tao");
+
+    let out = play(&mut e, jl, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert_eq!(e.debug_hp(1), 4, "冷冻不造成伤害");
+    assert!(e.state_core().player(1).face_down, "目标翻面");
+    assert_eq!(e.state_core().player(1).hujia, 2, "+2 护甲");
+    assert!(e.state_core().player(1).jileng_active, "冻结生效");
+
+    // 推进到 1 号回合：翻回+跳过 → 冷冻解除
+    loop {
+        if e.turn().current == 1 {
+            break;
+        }
+        match e.open_choice() {
+            Some(c) => {
+                let (cid, obs) = (c.id, c.observer);
+                drop(c);
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
+            }
+            None => {
+                let actor = e.turn().current;
+                match submit(&mut e, actor, GameAction::NextPhase) {
+                    CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } => {}
+                    other => panic!("advance: {other:?}"),
+                }
+            }
+        }
+    }
+    let snap = e.save();
+    assert!(!snap.core.players[1].face_down, "回合开始翻回");
+    assert!(!snap.core.players[1].jileng_active, "翻回即解冻（turnOverAfter 同口径）");
+}
+
+/// 灵剑④圣休号角嘲讽 + ⑤隐秘离场 + ⑥星体改造：杀目标限制/潜行/手牌上
+/// 限 -1 累加。
+#[test]
+fn swd_lingjian_chaofeng_yinmi_xingtigaizao() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6115, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let sx = lingjian_id(&e, "shengxiuhaojiao");
+    let ym = lingjian_id(&e, "yinmilichang");
+    let xt = lingjian_id(&e, "xingtigaizao");
+    inject_hand(&mut e, &pack, &[sx, ym, xt]);
+    e.debug_set_hp(0, 4);
+
+    // 圣休号角→2 号：0 号（2 号相邻）只能以 2 号为杀目标
+    let out = play(&mut e, sx, vec![2]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert!(e.state_core().player(2).chaofeng_active, "嘲讽生效");
+    // 0 号获得杀，目标 1 号（非嘲讽者）→ 拒
+    let sha = e.debug_place(0, "sha");
+    let out = play(&mut e, sha, vec![1]);
+    assert!(matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)), "相邻有嘲讽者应只能杀 2 号: {out:?}");
+
+    // 隐秘离场→1 号：潜行（不能被指定）；星体改造：自目标手牌上限 -1
+    let out = play(&mut e, ym, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert!(e.state_core().player(1).yinmi_active, "潜行生效");
+    let sha2 = e.debug_place(0, "sha");
+    let out = play(&mut e, sha2, vec![1]);
+    assert!(matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)), "潜行者不能被指定: {out:?}");
+    let out = play(&mut e, xt, vec![0]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert_eq!(e.state_core().player(0).xingtigaizao_count, 1, "改造计数 1");
+    assert_eq!(
+        e.state_core().hand_limit(0),
+        (e.debug_hp(0) as usize).saturating_sub(1),
+        "手牌上限 -1"
+    );
+}
+
+/// 机关妖术补偿触发（规则 v198）：防重标记持有者非自己回合弃出装备
+/// Kind 牌 → 补获 1 张灵剑。确定性构造：目标手牌两件装备 Kind 牌（任意
+/// 弃出都命中 filter 的装备 Kind 条件），hp=1 使非 isMin 成立。
+#[test]
+fn swd_jiguanyaoshu_gain_compensates_lost_equip() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6116, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let ys = jiguan_ids(&e, "jiguanyaoshu")[0];
+    let spare_lj = lingjian_id(&e, "shengxiuhaojiao");
+    let xf = lingjian_id(&e, "xuanfengzhiren");
+    // 三件互异装备 Kind 实体（手牌 2 + 装备区 1）
+    let weapons: Vec<u32> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.kind == CardKind::Weapon)
+        .map(|(i, _)| i as u32)
+        .take(3)
+        .collect();
+    assert!(weapons.len() >= 3, "标准目录应有 ≥3 把武器");
+    inject_hand(&mut e, &pack, &[ys, xf]);
+    {
+        let mut snap = e.save();
+        for x in &weapons {
+            snap.core.deck.retain(|x2| x2 != x);
+        }
+        // 目标 1 号：手牌 2 件装备 Kind（非 isMin：2 > hp 1）；装备区 1 件
+        snap.core.players[1].hp = 1;
+        snap.core.players[1].hand.push(weapons[0]);
+        snap.core.players[1].hand.push(weapons[1]);
+        snap.core.players[1].equips.push(weapons[2]);
+        // 牌堆预置 1 张灵剑实体（补偿发现源）；先全域摘除防双区
+        snap.core.deck.retain(|x| *x != spare_lj);
+        snap.core.discard.retain(|x| *x != spare_lj);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|x| *x != spare_lj);
+            pl.equips.retain(|x| *x != spare_lj);
+        }
+        snap.core.deck.push(spare_lj);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+
+    // 机关妖术打 1 号：非 isMin（2>1）通过 → 防重标记授予
+    let out = play(&mut e, ys, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    let sdef = e
+        .catalog()
+        .skill_by_name(engine_native::content::host::SWD_JIGUANYAOSHU_STATE_KEY)
+        .expect("防重标记 def");
+    assert!(e.state_core().skills.contains_key(&(1, sdef)), "标记已授予");
+
+    // 旋风之刃打 1 号：随机弃 1 张 he——三张全为装备 Kind，补偿必触发
+    let out = play(&mut e, xf, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    let snap = e.save();
+    assert!(
+        snap.core.players[1].hand.iter().any(|c| {
+            e.catalog().cards[*c as usize].kind == CardKind::Hslingjian
+        }),
+        "应补获 1 张灵剑（弃装备 Kind 牌触发补偿）"
+    );
 }

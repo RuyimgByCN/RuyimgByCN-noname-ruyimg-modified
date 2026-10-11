@@ -440,6 +440,9 @@ pub enum CardKind {
     Dizaizhen,
     /// 机关牌（U05 swd 卡子包，规则 v189 首切片指路小虎）。
     Jiguan,
+    /// 灵剑（U05 swd 机关术批，规则 v198）：swd 自造改造牌类型
+    /// （hslingjian，7 张；机关术合成与机关妖术补偿的池）。
+    Hslingjian,
 }
 
 /// 花色（判定用）。
@@ -550,7 +553,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 133] = [
+    pub const ALL: [CardKind; 134] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -684,6 +687,7 @@ impl CardKind {
         CardKind::Lindixiliu,
         CardKind::Dizaizhen,
         CardKind::Jiguan,
+        CardKind::Hslingjian,
     ];
 
     /// 扩展包数据的牌种键（宿主 ABI：每个牌种恰好一个键，只增不改）。
@@ -823,6 +827,7 @@ impl CardKind {
             CardKind::Lindixiliu => "lindixiliu",
             CardKind::Dizaizhen => "dizaizhen",
             CardKind::Jiguan => "jiguan",
+            CardKind::Hslingjian => "hslingjian",
         }
     }
 

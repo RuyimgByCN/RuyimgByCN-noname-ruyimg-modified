@@ -43,7 +43,10 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v43（2026-10-11，T12 机关怨 v196）：`PlayerState` 尾部追加
 /// `jiguanyuan_cards`（len+u32 序列；待获得牌实体）。v42 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 43;
+/// v44（2026-10-11，T12 机关术批 v198）：`PlayerState` 尾部追加
+/// `jileng_active`/`chaofeng_active`/`xingtigaizao_count`/`yinmi_active`
+/// 灵剑状态四字段。v43 字节被版本门禁拒绝（无生产迁移数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 44;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2575,6 +2578,11 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for c in &p.jiguanyuan_cards {
             w.u32(*c);
         }
+        // 灵剑状态（v44，U05 swd 机关术批）：冷冻/嘲讽/星体改造/隐秘
+        w.boolean(p.jileng_active);
+        w.boolean(p.chaofeng_active);
+        w.u8(p.xingtigaizao_count);
+        w.boolean(p.yinmi_active);
         // 炮台等级（v6，U05 ow 托比昂）：跨回合持久
         w.u8(p.paotai_lv);
         w.u8(p.baolei_mode);
@@ -2847,6 +2855,10 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         for _ in 0..jy_count {
             jiguanyuan_cards.push(r.u32()? as crate::ids::CardId);
         }
+        let jileng_active = r.boolean()?;
+        let chaofeng_active = r.boolean()?;
+        let xingtigaizao_count = r.u8()?;
+        let yinmi_active = r.boolean()?;
         let paotai_lv = r.u8()?;
         let baolei_mode = r.u8()?;
         let baoxue_used = r.boolean()?;
@@ -2903,6 +2915,10 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             gouhunluo_rounds,
             gouhunluo_source,
             jiguanyuan_cards,
+            jileng_active,
+            chaofeng_active,
+            xingtigaizao_count,
+            yinmi_active,
             face_down,
             boss_chongzheng,
             zhucheng,
@@ -3259,6 +3275,7 @@ fn card_kind_to_num(k: &CardKind) -> u32 {
         Lindixiliu => 130,
         Dizaizhen => 131,
         Jiguan => 132,
+        Hslingjian => 133,
     }
 }
 
@@ -3398,6 +3415,7 @@ fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         130 => Lindixiliu,
         131 => Dizaizhen,
         132 => Jiguan,
+        133 => Hslingjian,
         // P0 解码加固：未知编号返回结构化错误（保留完整 u32），不再 panic。
         _ => return Err(ArchiveError::UnknownCardKind(n)),
     })
