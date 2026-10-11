@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 243;
+pub const STANDARD_RULESET_VERSION: u64 = 244;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,10 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 绝红（Boss 共工，规则 v244）：锁定技——准备阶段敌方全体逐个：有牌
+/// 者，有装备 → 装备全弃（撤技能+入弃堆）；无装备 → 随机弃一张手牌
+/// （随机→手牌首张确定性近似登记先例族）。
+pub const BOSS_JUEHONG: &str = "绝红";
 /// 星夏（Boss 祝融，规则 v242）：出牌阶段主动技——对场上焰灵造成 2 点
 /// 火焰伤害；随后可选一名敌方：其弃一张红色牌（手牌+装备）或受 1 点火
 /// 焰伤害（可放弃追击）。间隔 ≥2 轮可再发动
@@ -4749,6 +4753,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 少昊（v243 纯入库：神裔共用 v233+神恩光环共用 v238；boss_baiyi 白
     // 翼=青翼同族已处置；上游 names 嬴|挚、shen→群目录近似）
     ("少昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
+    // 共工（v244 绝红；神裔共用 v233；boss_xuanlin3 玄麟3=已处置关卡面；
+    // 上游 names 姜|共工、shen→群目录近似）
+    ("共工", Faction::Qun, &[BOSS_SHENYI, BOSS_JUEHONG], 5, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6228,6 +6235,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(XingxiaBehavior),
+        },
+        SkillDef {
+            name: BOSS_JUEHONG,
+            // 查询型单面：准备阶段臂（Judge begin 段——封冻同位；装备全
+            // 弃撤技能+入弃堆，随机弃→首张确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

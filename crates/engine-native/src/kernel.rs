@@ -1174,6 +1174,58 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 绝红（Boss 共工，规则 v244）：准备阶段——敌方全
+                    // 体逐个：有牌者，有装备 → 装备全弃（撤技能+入弃堆）；
+                    // 无装备 → 随机弃一张手牌（随机→手牌首张确定性近似
+                    // 登记先例族）
+                    if let Some(jhdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_JUEHONG)
+                    {
+                        if ctx.core.has_skill(player, jhdef) {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            for t in 0..seats {
+                                if t == player || !ctx.core.player(t).alive {
+                                    continue;
+                                }
+                                if ctx.core.is_boss_side(t)
+                                    == ctx.core.is_boss_side(player)
+                                {
+                                    continue;
+                                }
+                                let has_cards = !ctx.core.player(t).hand.is_empty()
+                                    || !ctx.core.player(t).equips.is_empty();
+                                if !has_cards {
+                                    continue;
+                                }
+                                let equips: Vec<crate::ids::CardId> = ctx
+                                    .core
+                                    .player(t)
+                                    .equips
+                                    .iter()
+                                    .copied()
+                                    .collect();
+                                if !equips.is_empty() {
+                                    for c in equips {
+                                        ctx.core
+                                            .player_mut(t)
+                                            .equips
+                                            .retain(|x| *x != c);
+                                        revoke_equip_skills(
+                                            ctx.core,
+                                            ctx.catalog,
+                                            t,
+                                            c,
+                                        );
+                                        ctx.to_discard(c);
+                                    }
+                                } else if !ctx.core.player(t).hand.is_empty() {
+                                    let c = ctx.core.player(t).hand[0];
+                                    ctx.discard_from_hand(t, c);
+                                }
+                            }
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
