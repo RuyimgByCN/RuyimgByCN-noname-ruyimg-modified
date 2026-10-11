@@ -2679,6 +2679,24 @@ bazhen/niepan）——bianshen 变身族建议先勘机制承载面（技能组�
 **bianshen 变身机制勘验＋试炼态处置（2026-10-11，勘验登记批，无版本递增）**：变身族三形态——①开局 init 壳（试炼态四将→青龙/朱雀/白虎/玄武代位[均已入库]+捉鬼祛邪魑魅魍魉随机；intro=nobracket UI）：纯视觉壳不落；②bianshen4 死亡 changeBoss（黑白无常/牛头马面）：隐藏链同族不落；③年兽形态轮换（nbianshen：init 换将+hp/maxHp/护甲保留+形态序列轮转）：**可承载**——versus 替补换将先例同构（assembly 重挂+属性保留），随机序列登记差异。年兽系本技逐技勘验后即可逐批落包——证据见
 [bianshen 勘验证据](../operations/evidence/2026-10-11-t11-boss-bianshen-survey/README.md)。
 
+**规则 v248（2026-10-11，T11 年兽系首片：年瑞+猛态＋年兽条目；存档 v58）**：
+`TurnState.mengtai_draw_pending/mengtai_use_pending: bool` 新字段（**存档
+57→58**；canonical_hash 入参——字段新增批）。**年瑞**：Draw 臂固定摸 2
+后补摸 2（藏目同位）。**猛态**五臂：准备置位（Judge begin）+摸牌/出牌清
+位（跳过路径不清位=上游 phaseBegin 未触发同口径）+弃牌闸门（生成口
+use_pending → None，庆祝族同位延伸）+结束补摸 3（旗标消费）。
+`BOSS_GENERALS` 尾追加**年兽合体**（def 索引 25/hp12/`[年瑞, 猛态]`；形
+态轮换 nbianshen 未落随下批——承载结论见 bianshen 勘验批）。**登记差
+异**：形态轮换未落；势力 shen→群目录近似。FROZEN 名单尾加「年瑞」「猛
+态」（104/105 名）。存档 57→**58**。版本 247→**248**（字段批探针：247+
+新代码全 14 位移佐证字段源）。回归
+`boss_nianshou_nianrui_mengtai` 四段（年瑞+2/跳摸跳用补摸 3+跳弃/守恒/
+往返）——证据见
+[T11 年兽证据](../operations/evidence/2026-10-11-t11-boss-nianshou-v248/README.md)。
+**坑位**：TurnState 新字段构造点三处（含 lib test 内嵌 ctor——分批补齐
+产生双重插入+漏第三处，E0062/E0063 编译拦截）；End 臂漏旗标消费（回归
+抓出）；golden old 表 sha/judge 错位再犯（assert 第四次拦截）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

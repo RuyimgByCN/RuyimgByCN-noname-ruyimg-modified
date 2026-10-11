@@ -330,6 +330,11 @@ pub struct TurnState {
     pub skip_draw_phase: bool,
     /// 本回合跳过出牌阶段（乐不思蜀判定生效）。
     pub skip_play_phase: bool,
+    /// 猛态（Boss 年兽，规则 v248）：本回合准备阶段已过而摸牌阶段未发
+    /// 生（true=结束阶段补摸 3）。
+    pub mengtai_draw_pending: bool,
+    /// 猛态：本回合准备阶段已过而出牌阶段未发生（true=跳过弃牌阶段）。
+    pub mengtai_use_pending: bool,
     /// 贴房绅视（U05 swd，规则 v94）：本回合无视距离指定的目标
     ///（对【杀】等距离校验豁免；回合结束随 TurnState 更替自然清零）。
     pub zhufangshenshi_target: Option<PlayerId>,

@@ -1351,6 +1351,18 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 猛态（Boss 年兽，规则 v248）：准备阶段置双旗标
+                    //（上游 boss_mengtai_begin storage 置 true 同口径；
+                    // 摸牌/出牌阶段开始时清位）
+                    if let Some(mtdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_MENGTAI)
+                    {
+                        if ctx.core.has_skill(player, mtdef) {
+                            ctx.core.turn.mengtai_draw_pending = true;
+                            ctx.core.turn.mengtai_use_pending = true;
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
@@ -1547,6 +1559,9 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     // 兽九（Boss 相柳，规则 v222）：跳过摸牌阶段（上游
                     // boss_jiushou phaseDraw trigger.cancel 同口径）
                 } else {
+                    // 猛态：摸牌阶段已发生（跳摸路径不清位——上游
+                    // phaseDrawBegin 未触发同口径）
+                    ctx.core.turn.mengtai_draw_pending = false;
                     ctx.draw_cards(player, 2);
                     // 神恩（Boss 太昊/炎帝 光环，规则 v238）：挑战者侧
                     // 摸牌 +1（上游 boss_shenen2 phaseDrawBegin num++ 同
@@ -1590,6 +1605,16 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             if alive > 2 {
                                 ctx.draw_cards(player, (alive - 2) as usize);
                             }
+                        }
+                    }
+                    // 年瑞（Boss 年兽，规则 v248）：摸牌阶段 +2（上游
+                    // boss_nianrui phaseDrawBegin trigger.num += 2 同口径）
+                    if let Some(def) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_NIANRUI)
+                    {
+                        if ctx.core.has_skill(player, def) {
+                            ctx.draw_cards(player, 2);
                         }
                     }
                 }
@@ -1652,6 +1677,9 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.sha_used_play_phase = false;
                 // 突击计数（U07 ow，规则 v118）：出牌阶段开始清零
                 ctx.core.turn.cards_used_play_phase = 0;
+                // 猛态：出牌阶段已发生（跳过路径不清位——上游
+                // phaseUseBegin 同口径）
+                ctx.core.turn.mengtai_use_pending = false;
             }
             Phase::Discard => {
                 // 虚失（Boss 朱厌，规则 v225）：出牌阶段结束自翻面（上游
@@ -1697,6 +1725,20 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.discard_phase_discarded = 0;
             }
             Phase::End => {
+                // 猛态（Boss 年兽，规则 v248）：本回合未摸牌 → 结束阶段
+                // 摸 3（上游 boss_mengtai_end phaseJieshuBegin draw(3)
+                // 同口径）
+                if let Some(mtdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_MENGTAI)
+                {
+                    if ctx.core.has_skill(player, mtdef)
+                        && ctx.core.turn.mengtai_draw_pending
+                    {
+                        ctx.core.turn.mengtai_draw_pending = false;
+                        ctx.draw_cards(player, 3);
+                    }
+                }
                 // 封冻解除（Boss 应昭，规则 v228）：回合结束全清封印
                 for p in ctx.core.players.iter_mut() {
                     p.fengyin_active = false;
@@ -3405,7 +3447,7 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
             // 贪欲（v215）/庆祝（v245）：跳弃牌族——弃牌机器不生成（上游
             // phaseDiscardBefore trigger.cancel 同口径；此前贪欲面被测试
             // drain 掩盖，本臂补真实闸门）
-            let skip_discard = [
+            let mut skip_discard = [
                 crate::content::standard::BOSS_TANYU,
                 crate::content::standard::BOSS_QINGZHU,
             ]
@@ -3416,6 +3458,18 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                     .map(|d| ctx.core.has_skill(player, d))
                     .unwrap_or(false)
             });
+            // 猛态（Boss 年兽，规则 v248）：本回合未进入出牌阶段 → 跳过
+            // 弃牌阶段（上游 boss_mengtai_discard trigger.cancel 同口径）
+            if !skip_discard && ctx.core.turn.mengtai_use_pending {
+                if let Some(mtdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_MENGTAI)
+                {
+                    if ctx.core.has_skill(player, mtdef) {
+                        skip_discard = true;
+                    }
+                }
+            }
             if skip_discard {
                 ctx.core.turn.discard_phase_discarded = 0;
                 None

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 247;
+pub const STANDARD_RULESET_VERSION: u64 = 248;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,13 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 年瑞（Boss 年兽，规则 v248）：锁定技——摸牌阶段额外摸 2 张牌。
+pub const BOSS_NIANRUI: &str = "年瑞";
+/// 猛态（Boss 年兽，规则 v248）：锁定技——准备阶段置位双旗标：本回合
+/// 未进入摸牌阶段 → 结束阶段摸 3；未进入出牌阶段 → 跳过弃牌阶段
+/// （TurnState.mengtai_draw_pending/use_pending 承载）。形态轮换
+/// （boss_nbianshen）未落随下批。
+pub const BOSS_MENGTAI: &str = "猛态";
 /// 自润（Boss 玄冥，规则 v247）：锁定技——准备阶段全体角色按座位序各
 /// 摸牌：有装备者摸 2、无装备者摸 1。
 pub const BOSS_ZIRUN: &str = "自润";
@@ -4788,6 +4795,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 玄冥（v247 自润；神裔共用 v233；boss_xuanlin3 玄麟3=已处置关卡面；
     // 上游 female、names 嬴|禺强、shen→群目录近似——入库激活造异玄冥半门）
     ("玄冥", Faction::Qun, &[BOSS_SHENYI, BOSS_ZIRUN], 5, Gender::Female),
+    // 年兽合体（v248 年瑞+猛态；形态轮换 boss_nbianshen 未落随下批；
+    // shen→群目录近似）
+    ("年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI], 12, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6320,6 +6330,21 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_ZIRUN,
             // 查询型单面：准备阶段臂（Judge begin 段——全体摸牌：有装备
             // 2/无装备 1）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_NIANRUI,
+            // 查询型单面：Draw 臂固定摸 2 后补摸 2（藏目同位）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_MENGTAI,
+            // 查询型多面：准备置位/摸牌清位/出牌清位/结束补摸 3/弃牌闸门
+            // （TurnState.mengtai_* 双旗标承载）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

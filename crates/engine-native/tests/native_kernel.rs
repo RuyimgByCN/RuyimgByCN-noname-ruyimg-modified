@@ -2354,6 +2354,110 @@ fn boss_mingxingzhu_qingzhu_jiazu_jiding() {
     assert_zone_conservation(&e);
 }
 
+/// 年兽系首片（规则 v248/存档 v58）：年瑞+猛态（年兽合体条目）——①年
+/// 瑞：摸牌阶段 +2；②猛态常态回合（摸/用均发生）：无补摸不跳弃；③猛
+/// 态跳摸+跳用回合：结束阶段补摸 3+跳过弃牌阶段。年兽条目（群目录近似
+/// /hp12/[年瑞,猛态]；形态轮换 nbianshen 未落随下批）。
+#[test]
+fn boss_nianshou_nianrui_mengtai() {
+    // ① 年瑞 +2：年兽出牌阶段前手牌=年瑞加成（hp12 → 上限 12，无弃牌干扰）
+    let mut e = Engine::new_boss_stage(68001, 4, 1, 3, 6, 4, 0);
+    let ns_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 25) as u16; // BOSS_GENERALS[25] 年兽
+    e.debug_set_general_def(1, ns_def);
+    e.debug_set_hp(1, 12);
+    assert_eq!(
+        e.catalog().general_meta(ns_def).map(|g| g.0),
+        Some("年兽"),
+        "年兽入目录"
+    );
+    let nr = e.catalog().skill_by_name("年瑞").expect("年瑞入目录");
+    let mt = e.catalog().skill_by_name("猛态").expect("猛态入目录");
+    assert!(e.state_core().skills.contains_key(&(1, nr)));
+    assert!(e.state_core().skills.contains_key(&(1, mt)));
+    // 0 号先手回合正常轮转（无猛态面），推到 1 号出牌阶段
+    advance_to_play(&mut e, 1);
+    // 1 号：初始 6+年瑞 2+摸牌 2=10（跳过路径未走）
+    assert_eq!(e.debug_hand(1).len(), 10, "年瑞：摸牌阶段 +2");
+    assert!(
+        !e.state_core().turn.mengtai_draw_pending,
+        "摸牌已发生"
+    );
+    assert!(
+        !e.state_core().turn.mengtai_use_pending,
+        "出牌阶段已开始"
+    );
+
+    // ② 跳摸+跳用回合：推进到 1 号判定阶段（置位臂已跑）后置跳过旗标
+    //    → 摸牌跳过（清位不发生）+出牌跳过（清位不发生）→ 结束补摸 3+
+    //    弃牌闸门跳过
+    e.debug_clear_hand(1);
+    next_phase(&mut e); // Play→Discard（use 已发生→弃牌正常）
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End
+    drain_choices(&mut e);
+    for _ in 0..24 {
+        if e.turn().current == 1 && e.turn().phase == Phase::Judge {
+            break;
+        }
+        match next_phase(&mut e) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Pending { choice } => {
+                if choice.spec.prompt == "dying_save" {
+                    answer(&mut e, ChoiceOption::Pass);
+                    drain_choices(&mut e);
+                } else {
+                    answer_cards(&mut e, &choice);
+                }
+            }
+            other => panic!("{other:?}"),
+        }
+    }
+    assert!(
+        e.state_core().turn.mengtai_draw_pending
+            && e.state_core().turn.mengtai_use_pending,
+        "准备置位已跑"
+    );
+    {
+        let mut core = e.state_core_mut();
+        core.player_mut(1).skip_next_draw = true;
+        core.turn.skip_play_phase = true;
+    }
+    next_phase(&mut e); // Judge→Draw（skip_next_draw 消费：摸牌跳过）
+    drain_choices(&mut e);
+    // 推进到本回合结束阶段（弃牌闸门跳过）
+    for _ in 0..8 {
+        if e.turn().current == 1 && e.turn().phase == Phase::End {
+            break;
+        }
+        match next_phase(&mut e) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Pending { choice } => {
+                if choice.spec.prompt == "dying_save" {
+                    answer(&mut e, ChoiceOption::Pass);
+                    drain_choices(&mut e);
+                } else {
+                    answer_cards(&mut e, &choice);
+                }
+            }
+            other => panic!("{other:?}"),
+        }
+    }
+    assert_eq!(e.debug_hand(1).len(), 3, "猛态：未摸牌 → 结束阶段摸 3");
+    assert!(
+        !e.state_core().turn.mengtai_draw_pending,
+        "补摸后旗标消费"
+    );
+    assert_zone_conservation(&e);
+
+    // ③ 存档往返
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert!(r.state_core().skills.contains_key(&(1, nr)), "年瑞实例往返");
+    assert_zone_conservation(&r);
+}
+
 /// 星宿阶段2系自润片（规则 v247）：自润（玄冥）+玄冥条目——①准备阶段
 /// 全体摸牌（有装备 2/无装备 1，含自身）②造异玄冥半门激活：玄冥在场
 /// 颛顼锦囊不可指定敌方（基本牌不受此门限）③非造异持有者不受门控。

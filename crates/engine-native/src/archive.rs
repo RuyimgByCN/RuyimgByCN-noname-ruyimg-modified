@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 57;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 58;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2810,6 +2810,9 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     w.boolean(t.turn_opened);
     w.boolean(t.skip_draw_phase);
     w.boolean(t.skip_play_phase);
+    // 猛态双旗标（v248）
+    w.boolean(t.mengtai_draw_pending);
+    w.boolean(t.mengtai_use_pending);
     w.opt_u8(t.zhufangshenshi_target.map(|p| p as u8));
     // 乐动三角（U07 ow 卢西奥，规则 v126）：目标数/摸回量/回复模式
     w.u8(t.yuedong_num);
@@ -3147,6 +3150,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let turn_opened = r.boolean()?;
     let skip_draw_phase = r.boolean()?;
     let skip_play_phase = r.boolean()?;
+    let mengtai_draw_pending = r.boolean()?;
+    let mengtai_use_pending = r.boolean()?;
     let zhufangshenshi_target = r.opt_u8()?;
     let yuedong_num = r.u8()?;
     let yuedong_eff = r.u8()?;
@@ -3264,6 +3269,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 turn_opened,
                 skip_draw_phase,
                 skip_play_phase,
+                mengtai_draw_pending,
+                mengtai_use_pending,
                 zhufangshenshi_target: zhufangshenshi_target.map(|p| p as PlayerId),
                 yuedong_num,
                 yuedong_eff,
