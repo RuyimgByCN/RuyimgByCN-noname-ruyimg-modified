@@ -24,7 +24,7 @@
 
 ## 处理结论
 
-- **保留问题判断**：新增牌种/行为常要改内核枚举和宿主代码；快照、字节编解码与哈希分散手写。生产装载器已落地，但其余测试桥接和正式宿主接线未完成；独立扩展与可靠恢复仍有缺口。
+- **保留问题判断**：新增牌种/行为常要改内核枚举和宿主代码；快照、字节编解码与哈希分散手写。生产装载器已落地，八份测试桥接已全部迁移（2026-10-07；2026-10-11 更正），正式宿主接线仍未完成（主稿 T6③）；独立扩展与可靠恢复仍有缺口。
 - **先处理已复现阻断**：[进度主稿](native-progress.md#后续待做按阻塞关系)的 P0 存档解码加固先形成通过证据：未知牌种返回错误、载荷必须读尽。v60 回放、标准牌堆循环和 XiaoJi tag 冲突已修并有检查守护，不再重复立项。
 - **再做纵向样本**：用一个真实逻辑扩展验证独立装载、选择、保存恢复与错误回滚，由样本决定改哪些内核接口（推荐样本见 §2）。
 - **技术选型待验证**：统一 DSL、自动生成全部快照代码、WASM/QuickJS、ISMCTS/强化学习、旧线拆 crate、传输协议与特定渲染库都不能直接作为既定路线。每项先给出独立需求、最小原型、替代方案及验收数据；未立项的候选不阻塞现有扩展切片工作。
@@ -32,7 +32,7 @@
 ## 0 核心判断
 
 原生线（`crates/engine-native`）的事件栈、类型化暂停恢复和字节存档方向正确，但**内容扩展方式是封闭的**：
-部分新技能或扩展牌需要修改内核枚举、结算机器、快照和存档编码；`content-native-loader` 已能把包数据转成原生目录，两份 G1 测试桥接已迁移，其余适配与正式产品接入未完成。
+部分新技能或扩展牌需要修改内核枚举、结算机器、快照和存档编码；`content-native-loader` 已能把包数据转成原生目录，八份测试桥接已全部迁移（2026-10-07；2026-10-11 更正），正式产品接入未完成（主稿 T6③）。
 现有封闭行为表尚不足以支撑独立发布的新规则；README 中“扩展独立安装、启停、更新、卸载”的必做能力仍须完整验收。
 
 开放目录/行为、生产侧装载和可恢复状态是必须解决的能力问题；A–F 各节是可比较的实现候选，不构成必须依次完成的阶段门禁。
@@ -48,14 +48,14 @@
 | S3 | 扩展行为 `HostBehavior` 为封闭枚举，共 74 个变体；契约写明"新增变体 = 宿主 ABI 递增"，即每个扩展效果由宿主逐个实现 | `src/content/host.rs` |
 | S4 | 源码注释中"登记差异"共 122 处（catalog 36 / host 49 / standard 28 / kernel 6 / engine 3），"确定性"80 处；主要类型是"上游由玩家选择，原生取确定性首张"及"无失去体力原语，简化为伤害" | `src/**` |
 | S5 | `MachineSnapshot` 为手写大枚举，须与 `archive.rs` 编解码、`engine.rs` 规范哈希**手工保持同一字段集**；主稿记录过 v1 提示词推导漂移，S13 是当前实例 | `src/snap.rs`、`src/archive.rs`、`src/engine.rs` |
-| S6 | 旧线 `engine-core` 约 46.8 万行 Rust，内容经 `.skill` DSL → IR → `rule-vm` 执行；`content/original/catalog.json` 为 26 包、2,560 将、6,152 技能的目录清单，含近似与空实现，不代表逐技能规则等价。原生标准目录为 25 个非样例将 + 3 个样例 | `crates/engine-core`、`content/`、[旧线保真台账](../content-fidelity-ledger.md)、`src/content/standard.rs` |
+| S6 | 旧线 `engine-core` 约 46.8 万行 Rust，内容经 `.skill` DSL → IR → `rule-vm` 执行；`content/original/catalog.json` 为 26 包、2,560 将、6,152 技能的目录清单，含近似与空实现，不代表逐技能规则等价。原生标准目录为 34 个非样例将 + 3 个样例（2026-10-11 更正：含原生新增曹仁与 2026-10-07 五批补齐八将，见[规则基准](native-rules-baseline.md#本地上游对齐的新增核查)） | `crates/engine-core`、`content/`、[旧线保真台账](../content-fidelity-ledger.md)、`src/content/standard.rs` |
 | S7 | 原生 AI 为同步一层 `BoundedPlanner`；早期信息集、候选和询问反例已有局部修复，剩余验收见主稿 | `src/ai.rs`、[重写进度](native-progress.md) |
 | S8 | `engine-core/tests/` 下 1,078 个根目录集成测试文件；本机 `target/` 占用随并行构建变化，不能直接归因于这些测试 | 目录统计；[构建测量计划](native-progress.md#性能优化核验后的待办2026-09-24) |
 | S9 | CI `cargo test --workspace` 已包含 `engine-native`，但原生专属验收（release runner、跨进程字节存档、上游对照）不在 CI | `.github/workflows/ci.yml` |
 | S10 | README 和架构索引只导航到主稿；ADR 目录中有 27 个编号被多个文件共用，与[ADR 索引](../adr/INDEX.md)冲突表一致 | `README.md`、`overview.md`、`docs/adr/` |
 | S11 | `content-native-loader` 已提供包数据 → `ExtensionPack`/武将目录的生产实现；古剑、玩点论杀已复用。其余六条测试桥接路径和五行初始化适配仍待收敛；正式客户端/服务端未依赖装载器。`engine-native` 运行期仍只依赖 blake3，serde 解析放在宿主层 | `crates/content-native-loader`、`crates/engine-native/tests/g1_*.rs`、各产品 Cargo.toml |
 | S12 | 名称类型仍为 `&'static str`。已接入的装载器与宿主注册通过 `names::intern/intern_list` 复用同名字符串/名单，同包重复装载已测试；首次出现的唯一项仍 `Box::leak` 到全局表且无回收。未迁移的测试桥接仍有逐次 `Box::leak`，不能声称动态内容任意装卸的总内存已受控 | `src/content/names.rs`、`src/content/host.rs`、`tests/g1_*.rs` |
-| S13 | 原 tag 29 冲突与牌堆循环已修：XiaoJi=43、目录 80 张，`a0_tag_registry` 与 `standard_catalog_inventory` 自动检查已落地。当前未修缺陷为 `num_to_card_kind` 遇未知值 panic、`decode_archive` 不校验载荷读尽；2026-10-06 独立探针复现，见主稿 P0 | `src/archive.rs`、`src/content/standard.rs`、[本次探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log) |
+| S13 | 原 tag 29 冲突与牌堆循环已修：XiaoJi=43、目录 124 张（2026-10-11 更正，v74 起声明表核定），`a0_tag_registry` 与 `standard_catalog_inventory` 自动检查已落地。原记两项当前未修缺陷（`num_to_card_kind` 遇未知值 panic、`decode_archive` 不校验载荷读尽）已于 2026-10-07 加固（未知牌种拒绝+载荷读尽校验，回归 `archive_hardening_rejects_unknown_kind_and_trailing_bytes`） | `src/archive.rs`、`src/content/standard.rs`、[本次探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log) |
 
 ## 2 候选工作的采用顺序
 
@@ -99,7 +99,7 @@
   3. `SkillDefId` 只追加：已发布技能的编号顺序不变（编号进入快照和哈希）。
   4. 其他编码表双射：`archive.rs` 中牌种编码表、`HostBehavior` 标签与键之间一一对应。
 - **验收**：在修复前的源码上，检查能报出 S13 的两个缺陷（先失败）；修复后通过；新增变体而漏登记时测试失败。
-- **落地状态（2026-09-24）**：第 2 点目录构成检查已随主稿 P0「回放与目录」采纳——`tests/standard_catalog_inventory.rs` 声明表检查随 `cargo test` 运行，来源与取舍登记在[规则基准](native-rules-baseline.md#标准目录构成声明表)；修复拆牌循环缺陷后通过（S13 的目录缺陷最初由静态核查发现；2026-09-24 审查在缺陷源码上补跑，该检查 2/2 报红：88≠80、顺手牵羊 8≠4，验收口径的「先失败」由此达成，见[审查修复证据](../operations/evidence/2026-09-24-review-fixes/README.md)）。第 1、4 点已随主稿 P0「N11 字节恢复」采纳——`tests/a0_tag_registry.rs` 对 `MachineSnapshot` 42 变体做 tag 唯一性与编码→解码往返（match 穷尽守卫，新增变体漏登记即编译失败），并在未修复源码上先报出 XiaoJi 往返 UnexpectedEof（S13 的 tag 冲突缺陷，验收口径「先失败」达成）；`HostBehavior` 74 tag 唯一性同测试守护，`CardKind` 86↔0..=85 双射经静态核查确认（编解码函数私有，未行为级测试化）。审查修复（2026-09-24）补第 4 点的数据键部分：`CardKind`、`HostBehavior` 的扩展包数据键双射、键唯一与牌种伴随技能表一致性进入同一测试文件（[ADR 0778](../adr/0778-native-c0-pack-data-keys.md)）；存档牌种编码表仍私有，且解码遇未知编号 panic（主稿 P0 待做）。第 3 点已随 P1 统一装载落地（2026-10-07）：`standard_skill_ids_append_only` 锁定 standard 目录 46 技能名序（v60 实序），中间插入/重排/删除即失败，只允许尾部追加。2026-10-07 挂靠：第 3 点随主稿 P1 统一装载实施（迁移其余桥接须保持技能编号顺序）；第 4 点剩余的存档牌种编码表往返，以及 `enc_winner` 用 `as u8` 写势力、解码走显式表的不对称，随主稿 P0 处理。
+- **落地状态（2026-09-24）**：第 2 点目录构成检查已随主稿 P0「回放与目录」采纳——`tests/standard_catalog_inventory.rs` 声明表检查随 `cargo test` 运行，来源与取舍登记在[规则基准](native-rules-baseline.md#标准目录构成声明表)；修复拆牌循环缺陷后通过（S13 的目录缺陷最初由静态核查发现；2026-09-24 审查在缺陷源码上补跑，该检查 2/2 报红：88≠80、顺手牵羊 8≠4，验收口径的「先失败」由此达成，见[审查修复证据](../operations/evidence/2026-09-24-review-fixes/README.md)）。第 1、4 点已随主稿 P0「N11 字节恢复」采纳——`tests/a0_tag_registry.rs` 对 `MachineSnapshot` 42 变体做 tag 唯一性与编码→解码往返（match 穷尽守卫，新增变体漏登记即编译失败），并在未修复源码上先报出 XiaoJi 往返 UnexpectedEof（S13 的 tag 冲突缺陷，验收口径「先失败」达成）；`HostBehavior` 74 tag 唯一性同测试守护，`CardKind` 86↔0..=85 双射经静态核查确认（编解码函数私有，未行为级测试化）。审查修复（2026-09-24）补第 4 点的数据键部分：`CardKind`、`HostBehavior` 的扩展包数据键双射、键唯一与牌种伴随技能表一致性进入同一测试文件（[ADR 0778](../adr/0778-native-c0-pack-data-keys.md)）；存档牌种编码表仍私有；解码遇未知编号已于 2026-10-07 改为拒绝（加固回归在案，2026-10-11 更正）。第 3 点已随 P1 统一装载落地（2026-10-07）：`standard_skill_ids_append_only` 锁定 standard 目录 46 技能名序（v60 实序），中间插入/重排/删除即失败，只允许尾部追加。2026-10-07 挂靠：第 3 点随主稿 P1 统一装载实施（迁移其余桥接须保持技能编号顺序）；第 4 点剩余的存档牌种编码表往返，以及 `enc_winner` 用 `as u8` 写势力、解码走显式表的不对称，已随主稿 P0 于 2026-10-07 处理（加固批；2026-10-11 更正）。
 
 ### A1 结算机器去技能化
 
@@ -134,7 +134,7 @@
 
 ### A5 快照、哈希、存档编码自动生成
 
-- **近期最小修复**：枭姬/拆牌 tag 冲突及 A0 检查已完成；当前先处理[存档未知牌种与载荷读尽](native-progress.md#后续待做按阻塞关系)，补异常输入拒绝和合法往返，不把生成器作为修复前提。
+- **近期最小修复**：枭姬/拆牌 tag 冲突及 A0 检查已完成；存档未知牌种与载荷读尽已于 2026-10-07 加固（异常输入拒绝+合法往返，不依赖生成器；2026-10-11 更正）。
 - **条件方案**：若新增机器仍反复出现字段或 tag 漂移，再比较统一状态声明与现有手工编码加检查的维护成本。候选实现包括：
   - 工作区内过程宏 crate（需 `syn`/`quote` 构建期依赖，运行期仍只依赖 `blake3`）；
   - 或 `macro_rules!` 声明宏 / `build.rs` 从结构描述生成代码（零新增依赖）。
@@ -177,7 +177,7 @@
   4. 已有全局符号表复用不等于卸载回收；先明确唯一定义数量/驻留策略及包命名空间需求，需要回收时再比较目录拥有字符串等方案。名称进入摘要或存档时须保持字节一致或递增版本。
 - **验收**：G1 原有行为与恢复断言保留；循环内重载同一包，名称/名单计数和指针稳定；新增唯一名称的边界另验，不把同包测试外推为总内存可回收。坏包、未知行为键和版本不符给出明确错误。
 - **落地状态（2026-09-24，E02/G1 切片）**：择址新 crate `content-native-loader`（[ADR 0777](../adr/0777-native-c0-native-loader.md)——content-runtime 反向依赖会成环、engine-native 不引入 serde）；第 2 点装载/校验/映射/未映射报告已实现；第 4 点名称所有权经 `content::names` 符号表 intern 落地（类型保持 `&'static str`，名称入哈希/存档字节不变故版本不递增；循环内存验收用 `interned_count` 增量为 0 实证）；第 3 点迁移 gujian、wudian 两份 bridge（g1 测试名/数量/结果不变），其余 6 份为剩余切片；第 1/4 点的"坏包、未知行为键、版本不符"错误面已有验收测试。
-- **审查更正与数据化（2026-09-24 晚）**：上条"循环内存验收"的循环只在循环外装载一次，且武将技能名单仍经 `Box::leak`（计数看不到），不足以证明重复装载有界。[ADR 0778](../adr/0778-native-c0-pack-data-keys.md) 之后：包元数据、射程、装备技写入 cards.json，牌种键、宿主行为键与牌种伴随技能由引擎全局表解析，装载器不再接收逐包参数（`PackSpec` 删除）；缺省势力/性别、越界点数/体力、重名或未登记技能均报错；武将技能名单走 `names::intern_list`；验收改为循环内每轮重新装载并断言名称/名单指针复用（先报红实证见[审查修复证据](../operations/evidence/2026-09-24-review-fixes/README.md)）。其余 6 份 bridge 迁移仍待做，炉石需先改用规范牌种键。
+- **审查更正与数据化（2026-09-24 晚）**：上条"循环内存验收"的循环只在循环外装载一次，且武将技能名单仍经 `Box::leak`（计数看不到），不足以证明重复装载有界。[ADR 0778](../adr/0778-native-c0-pack-data-keys.md) 之后：包元数据、射程、装备技写入 cards.json，牌种键、宿主行为键与牌种伴随技能由引擎全局表解析，装载器不再接收逐包参数（`PackSpec` 删除）；缺省势力/性别、越界点数/体力、重名或未登记技能均报错；武将技能名单走 `names::intern_list`；验收改为循环内每轮重新装载并断言名称/名单指针复用（先报红实证见[审查修复证据](../operations/evidence/2026-09-24-review-fixes/README.md)）。其余 6 份 bridge 已于 2026-10-07 全部迁移（炉石同批改用规范牌种键；2026-10-11 更正）。
 
 ### C1 扩展执行后端选择
 
