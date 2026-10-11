@@ -1909,6 +1909,26 @@ Confirm/空应答）→ 获得目标 he 随机一张 → 仍有其他有牌者�
 下一杀可再询问）——证据见
 [T11 证据](../operations/evidence/2026-10-11-t11-lueying-v194/README.md)。
 
+**规则 v195（2026-10-11，T12 机关凤切片）**：机关凤（上游 `jiguanfeng`，
+♣3/♠4，`SwdJiguanfengCard` tag 221，与其余机关牌共用无懈窗包装）——
+PlayCard 校验恰 1 名其他存活角色（上游 filterTarget target!==player）；
+目标选择打出一张手牌闪（无闪/取消=未响应，上游 chooseToRespond+自动失败
+同口径）；未响应→获得"封印"状态并受 1 点伤害（上游 addTempSkill
+"fengyin"+damage 同序）；响应则无事，本体入弃堆。封印=**全部技能实例禁
+用，拥有者任一阶段开始解除**（`SwdFengyinState` tag 222，PhaseBegin
+forced；登记差异：上游 fengyin=非锁定技失效[library skillBlocker]，原生
+无锁定技区分=全部失效，gwent 封印同口径已登记）。**机关牌池勘误**：此前
+登记"6 种 13 张"漏计机关凤×2 与机关怨×2——按转换源 `swd/list.js` 权威
+实为 **8 种 17 张**（机关术×2/机关妖术×2/机关怨×2/机关桶×2/机关凤×2/
+勾魂锣×2/指路小虎×2/木甲人×3）；已切 5 种 11 张，余机关术×2/机关妖术
+×2/机关怨×2。版本 194→**195**，存档格式不变（v42，无新机器字段）。
+14 golden 重录：版本回退探针（195→194 复跑 golden 全绿）证明位移唯一来
+源是版本字段，机关凤分支仅经 swd 牌种、标准场景不可达。回归：
+`swd_jiguanfeng_no_shan_seal_then_unseal_at_phase_begin`（无闪→封印+1
+伤+阶段开始解除全链）、`swd_jiguanfeng_shan_respond_no_damage`（打闪→
+无事、闪与本体入弃堆）——证据见
+[T12 证据](../operations/evidence/2026-10-11-t12-jiguanfeng-v195/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |

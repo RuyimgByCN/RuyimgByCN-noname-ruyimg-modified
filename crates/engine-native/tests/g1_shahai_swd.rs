@@ -120,7 +120,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 30, "swd 全 30 张（+距离对/蓝格怪衣/指路小虎/木甲人/勾魂锣×2/机关桶×2）入目录");
+    assert_eq!(e.catalog().cards.len(), base_cards + 32, "swd 全 32 张（+距离对/蓝格怪衣/指路小虎/木甲人/勾魂锣×2/机关桶×2/机关凤×2）入目录");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -218,7 +218,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 30, "swd 全 30 张（含机关桶×2，规则 v192）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 32, "swd 全 32 张（含机关桶×2/机关凤×2，规则 v195）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -233,7 +233,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 30, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 32, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -1453,4 +1453,161 @@ fn swd_langeguaiyi_longfan_suit_branches() {
     assert_eq!(e.debug_hp(0), 2, "黑桃无回复");
     assert_eq!(e.debug_hand(0).len(), 0, "黑桃无摸牌");
     assert_eq!(e.debug_hand(1).len(), 0, "黑桃无弃牌");
+}
+
+// ---------------------------------------------------------------------------
+// U05 swd 第二十批（规则 v195）：机关凤（jiguanfeng，♣3/♠4）——目标打出
+// 一张闪（无闪/取消=未响应）；未响应→目标获"封印"（全部技能实例禁用，
+// 其下一阶段开始解除[SwdFengyinState]；登记差异：原生无锁定技区分=全部
+// 失效，上游 fengyin 仅非锁定技）+受 1 点伤害；响应则无事。
+// ---------------------------------------------------------------------------
+
+/// 机关凤①：目标无闪→未响应：封印（已授技实例禁用+封印状态在）+1 伤；
+/// 目标下一阶段开始→解除（实例复启、封印状态移除）。
+#[test]
+fn swd_jiguanfeng_no_shan_seal_then_unseal_at_phase_begin() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6107, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_set_hp(1, 4);
+    let jf = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.name.contains("jiguanfeng"))
+        .expect("机关凤在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|c| *c != jf);
+        snap.core.discard.retain(|c| *c != jf);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|c| *c != jf);
+        }
+        snap.core.players[0].hand.push(jf);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+    // 1 号有已授技能实例（马术），封印后应被禁用
+    e.debug_grant(1, "马术");
+    let mdef = e.catalog().skill_by_name("马术").expect("马术 def");
+    let fdef = e
+        .catalog()
+        .skill_by_name(engine_native::content::host::SWD_FENGYIN_STATE_KEY)
+        .expect("封印状态 def 随 Jiguan kind 注册");
+
+    let out = play(&mut e, jf, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    // 无闪：无询问，直接未响应路径
+    assert!(e.open_choice().is_none(), "无闪不应有询问");
+    assert_eq!(e.debug_hp(1), 3, "未响应受 1 点伤害（4→3）");
+    let snap = e.save();
+    assert!(!snap.core.skills[&(1, mdef)].enabled, "已授技实例被禁用");
+    assert!(snap.core.skills.contains_key(&(1, fdef)), "封印状态已授予");
+    assert!(snap.core.discard.iter().any(|c| *c == jf), "机关凤本体入弃堆");
+
+    // 推进到 1 号回合首阶段开始 → 解封
+    loop {
+        if e.turn().current == 1 && e.turn().phase == Phase::Judge {
+            break;
+        }
+        match e.open_choice() {
+            Some(c) => {
+                let (cid, obs) = (c.id, c.observer);
+                drop(c);
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
+            }
+            None => {
+                let actor = e.turn().current;
+                if actor == 0 && e.debug_hand(0).is_empty() && e.turn().phase == Phase::Discard {
+                    // 空手弃牌阶段直接过
+                }
+                match submit(&mut e, actor, GameAction::NextPhase) {
+                    CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } => {}
+                    other => panic!("advance: {other:?}"),
+                }
+            }
+        }
+    }
+    let snap2 = e.save();
+    assert!(
+        !snap2.core.skills.contains_key(&(1, fdef)),
+        "封印状态应于拥有者阶段开始移除"
+    );
+    assert!(snap2.core.skills[&(1, mdef)].enabled, "技能实例复启");
+}
+
+/// 机关凤②：目标有闪并打出→无事（不掉血、不封印）；闪入弃牌堆。
+#[test]
+fn swd_jiguanfeng_shan_respond_no_damage() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6108, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_set_hp(1, 4);
+    let jf = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.name.contains("jiguanfeng"))
+        .expect("机关凤在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|c| *c != jf);
+        snap.core.discard.retain(|c| *c != jf);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|c| *c != jf);
+        }
+        snap.core.players[0].hand.push(jf);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+    let shan = e.debug_place(1, "shan");
+    let fdef = e
+        .catalog()
+        .skill_by_name(engine_native::content::host::SWD_FENGYIN_STATE_KEY)
+        .expect("封印状态 def");
+
+    let out = play(&mut e, jf, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    // 打闪询问（observer=1）
+    let c = e.open_choice().cloned().expect("机关凤打闪询问");
+    assert_eq!(c.observer, 1, "打闪询问 observer=目标");
+    assert_eq!(c.spec.prompt, engine_native::content::host::SWD_JIGUANFENG_SHAN);
+    let cid = c.id;
+    drop(c);
+    let out = submit(&mut e, 1, GameAction::Answer {
+        choice_id: cid,
+        selection: vec![ChoiceOption::Card(shan)],
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert_eq!(e.debug_hp(1), 4, "响应闪：不受伤害");
+    let snap = e.save();
+    assert!(!snap.core.skills.contains_key(&(1, fdef)), "响应闪：无封印状态");
+    assert!(snap.core.discard.contains(&shan), "闪入弃牌堆");
+    assert!(snap.core.discard.contains(&jf), "机关凤本体入弃堆");
 }

@@ -464,6 +464,8 @@ fn host_behavior_tags_unique() {
             H::SwdJiguantongCard => 220,
             H::SwdJiguantongCard => 220,
             H::SwdJiguantongCard => 220,
+            H::SwdJiguanfengCard => 221,
+            H::SwdFengyinState => 222,
             H::XianjianPoyun => 202,
             H::XianjianXshuangren => 203,
             H::XianjianXshuangren2 => 204,

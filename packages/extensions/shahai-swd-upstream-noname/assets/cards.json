@@ -188,6 +188,18 @@
    "kind": "jiguan",
    "suit": "club",
    "rank": 7
+  },
+  {
+   "name": "swd_jiguanfeng1",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 3
+  },
+  {
+   "name": "swd_jiguanfeng2",
+   "kind": "jiguan",
+   "suit": "spade",
+   "rank": 4
   }
  ],
  "host_skills": [],

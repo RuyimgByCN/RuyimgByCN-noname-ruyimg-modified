@@ -3249,6 +3249,15 @@ fn apply_command(
                         if core.player(targets[0]).gouhunluo_rounds > 0 {
                             return Err(RejectReason::IllegalTargets);
                         }
+                    } else if catalog.cards[card as usize].name.contains("jiguanfeng") {
+                        // 机关凤（swd 第二十批，规则 v195）：恰 1 名其他
+                        // 角色（上游 filterTarget target!==player 同口径）
+                        if targets.len() != 1
+                            || targets[0] == core.turn.current
+                            || !core.player(targets[0]).alive
+                        {
+                            return Err(RejectReason::IllegalTargets);
+                        }
                     } else {
                         if targets != [core.turn.current] {
                             return Err(RejectReason::IllegalTargets);

@@ -575,6 +575,11 @@ pub enum HostBehavior {
     SwdGouhunluoSub,
     /// [SwdJiguantongCard]（tag 220）。
     SwdJiguantongCard,
+    /// [SwdJiguanfengCard]（tag 221）。
+    SwdJiguanfengCard,
+    /// [SwdFengyinState]（tag 222）——机关凤封印状态（上游 fengyin=非锁定
+    /// 技失效；登记差异：原生无锁定技区分=全部技能失效，gwent 封印同口径）。
+    SwdFengyinState,
 }
 
 
@@ -801,6 +806,8 @@ impl HostBehavior {
             HostBehavior::SwdGouhunluoCard => 218,
             HostBehavior::SwdGouhunluoSub => 219,
             HostBehavior::SwdJiguantongCard => 220,
+            HostBehavior::SwdJiguanfengCard => 221,
+            HostBehavior::SwdFengyinState => 222,
         }
     }
 
@@ -1026,6 +1033,8 @@ impl HostBehavior {
             218 => HostBehavior::SwdGouhunluoCard,
             219 => HostBehavior::SwdGouhunluoSub,
             220 => HostBehavior::SwdJiguantongCard,
+            221 => HostBehavior::SwdJiguanfengCard,
+            222 => HostBehavior::SwdFengyinState,
             _ => return None,
         })
     }
@@ -1033,7 +1042,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 220] = [
+    pub const ALL: [HostBehavior; 222] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1254,6 +1263,8 @@ impl HostBehavior {
         HostBehavior::SwdGouhunluoCard,
         HostBehavior::SwdGouhunluoSub,
         HostBehavior::SwdJiguantongCard,
+        HostBehavior::SwdJiguanfengCard,
+        HostBehavior::SwdFengyinState,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1479,6 +1490,8 @@ impl HostBehavior {
             HostBehavior::SwdGouhunluoCard => "host:swd_gouhunluo_card",
             HostBehavior::SwdGouhunluoSub => "host:swd_gouhunluo_sub",
             HostBehavior::SwdJiguantongCard => "host:swd_jiguantong_card",
+            HostBehavior::SwdJiguanfengCard => "host:swd_jiguanfeng_card",
+            HostBehavior::SwdFengyinState => "host:swd_fengyin_state",
         }
     }
 }
@@ -1688,6 +1701,16 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 机关凤封印：拥有者下一阶段开始解除（上游 addTempSkill
+            // {player:'phaseBegin'} 同口径）
+            HostBehavior::SwdFengyinState => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::SwdJiguanfengCard => None,
             HostBehavior::GwentZumoCard => None,
             HostBehavior::HuanleMonkeyCard => Some(TriggerMeta {
                 event: EventKind::CardUsed,
@@ -2474,6 +2497,9 @@ pub const SWD_GOUHUNLUO_KEY: &str = "swd_gouhunluo";
 pub const SWD_GOUHUNLUO_SUB_KEY: &str = "swd_gouhunluo_sub";
 pub const SWD_JIGUANTONG_DISCARD: &str = "swd_jiguantong_discard";
 pub const SWD_JIGUANTONG_KEY: &str = "swd_jiguantong";
+pub const SWD_JIGUANFENG_KEY: &str = "swd_jiguanfeng";
+pub const SWD_FENGYIN_STATE_KEY: &str = "swd_fengyin_state";
+pub const SWD_JIGUANFENG_SHAN: &str = "swd_jiguanfeng_shan";
 pub const SWD_LANGEGUAIYI_SKILL_KEY: &str = "swd_langeguaiyi_skill";
 pub const SWD_LIUXING_DISCARD: &str = "swd_liuxing_discard";
 pub const SWD_LIUXING_KEY: &str = "gj:swd_liuxinghuoyu";
@@ -3503,6 +3529,11 @@ impl SkillBehavior for HostSkillBehavior {
             // 双刃·殁：自己死亡帧,
             HostBehavior::GwentFengyinState => matches!(event,
                 EventData::Phase { player, begin: false, .. } if *player == owner),
+            // 机关凤封印：拥有者任一阶段开始即解除（上游
+            // {player:'phaseBegin'} 同口径）
+            HostBehavior::SwdFengyinState => matches!(event,
+                EventData::Phase { player, begin: true, .. } if *player == owner),
+            HostBehavior::SwdJiguanfengCard => false,
             HostBehavior::HuanleMianjuCard => matches!(event,
                 EventData::TurnOverBefore { player, .. }
                 if ctx.state.player(*player).equips.iter().any(|c| {
@@ -14248,6 +14279,101 @@ HostBehavior::XianjianLingyu => match self.stage {
                 }
                 _ => Flow::Done,
             },
+            // 机关凤（U05 swd 第二十批，规则 v195）：单体——目标选择打出
+            // 一张闪（无闪/取消=未响应）；未响应→目标获得"封印"（全部技
+            // 能实例禁用，其下一阶段开始解除[SwdFengyinState]，登记差异：
+            // 原生无锁定技区分）+受 1 点伤害；响应则无事。本体入弃堆。
+            HostBehavior::SwdJiguanfengCard => match self.stage {
+                HostStage::Act => {
+                    let Some(t) = self.target else {
+                        if let Some(c) = self.card {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                            self.card = None;
+                        }
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        if let Some(c) = self.card {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                            self.card = None;
+                        }
+                        return Flow::Done;
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Shan)
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        // 无闪：上游 chooseToRespond 自动失败 → 未响应路径
+                        self.seal_and_damage(ctx);
+                        if let Some(c) = self.card {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                            self.card = None;
+                        }
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: SWD_JIGUANFENG_SHAN,
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let responded = matches!(ctx.answer().first(), Some(ChoiceOption::Card(_)));
+                    if responded {
+                        // 打出闪响应：闪入弃牌堆（上游 chooseToRespond 同）
+                        if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                            if let Some(t) = self.target {
+                                ctx.discard_from_hand(t, c);
+                                ctx.log(LogEvent::CardDiscarded {
+                                    player: t,
+                                    cards: vec![c],
+                                });
+                            }
+                        }
+                    } else {
+                        // 未响应：封印 + 1 点伤害（上游 addTempSkill fengyin
+                        // + damage 同序）
+                        self.seal_and_damage(ctx);
+                    }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                        self.card = None;
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 机关凤封印状态（规则 v195）：拥有者任一阶段开始→全部技能
+            // 实例重新启用并移除自身（上游 addTempSkill {player:
+            // 'phaseBegin'} 移除同口径）
+            HostBehavior::SwdFengyinState => {
+                for ((p, _), inst) in ctx.core.skills.iter_mut() {
+                    if *p == self.owner {
+                        inst.enabled = true;
+                    }
+                }
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_FENGYIN_STATE_KEY) {
+                    ctx.core.skills.remove(&(self.owner, def));
+                }
+                Flow::Done
+            }
         }
     }
 }
@@ -14301,6 +14427,43 @@ pub fn host_skill_def(
 }
 
 impl HostMachine {
+    /// 机关凤未响应路径（规则 v195）：目标全部技能实例禁用 + 授予封印
+    /// 状态（其下一阶段开始由 SwdFengyinState 解除）+ 受 1 点伤害（上游
+    /// addTempSkill fengyin + damage 同序；登记差异：原生无锁定技区分）。
+    fn seal_and_damage(&self, ctx: &mut Ctx<'_>) {
+        let Some(t) = self.target else { return; };
+        if let Some(fdef) = ctx.catalog.skill_by_name(SWD_FENGYIN_STATE_KEY) {
+            let keys: Vec<(PlayerId, crate::ids::SkillDefId)> = ctx
+                .core
+                .skills
+                .iter()
+                .map(|((p, d), _)| (*p, *d))
+                .filter(|(p, d)| *p == t && *d != fdef)
+                .collect();
+            for k in keys {
+                if let Some(inst) = ctx.core.skills.get_mut(&k) {
+                    inst.enabled = false;
+                }
+            }
+            ctx.core.skills.insert(
+                (t, fdef),
+                crate::state::SkillInstance {
+                    owner: t,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+        }
+        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+            Some(self.owner),
+            t,
+            1,
+            crate::event::DamageNature::Normal,
+            self.card,
+        )));
+    }
     /// 石会粉：置目标禁用状态（本回合无法对其他角色用牌；
     /// expires_end_of_turn 于其回合结束清除）。
     fn grant_shihuifen_ban(&mut self, ctx: &mut Ctx<'_>, target: PlayerId) {
@@ -14435,7 +14598,7 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
             HostSkillDecl { name: MTG_YOULIN_DISCOVER_KEY, behavior: HostBehavior::MtgYoulinDiscard },
         ],
         CardKind::Lindixiliu => &[HostSkillDecl { name: MTG_LINDIXILIU_KEY, behavior: HostBehavior::MtgLindixiliuLand }],
-        CardKind::Jiguan => &[HostSkillDecl { name: SWD_GOUHUNLUO_SUB_KEY, behavior: HostBehavior::SwdGouhunluoSub }],
+        CardKind::Jiguan => &[HostSkillDecl { name: SWD_GOUHUNLUO_SUB_KEY, behavior: HostBehavior::SwdGouhunluoSub }, HostSkillDecl { name: SWD_FENGYIN_STATE_KEY, behavior: HostBehavior::SwdFengyinState }],
         _ => &[],
     }
 }
