@@ -2255,6 +2255,40 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// Boss 内容第七批首片（规则 v221）：相柳妖兽——与其他角色计算距离
 /// -2（毒妒[蛇毒标记链]/兽九[手牌补 9]/邪酬(+switch) 未落下批）。
 #[test]
+/// Boss 内容第七批续片（规则 v222）：相柳兽九三面——手牌上限恒 9；
+/// 出牌阶段开始补至 9；跳过摸牌阶段；回合结束补至 9。
+#[test]
+fn boss_xiangliu_jiushou_limit_nine_and_refill() {
+    let mut e = Engine::new_boss_stage(39001, 4, 1, 3, 6, 4, 0);
+    let xiangliu_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 6) as u16;
+    e.debug_set_general_def(1, xiangliu_def);
+    e.debug_set_hp(1, 25);
+    let jdef = e.catalog().skill_by_name("兽九").expect("兽九入目录");
+    assert!(e.state_core().skills.contains_key(&(1, jdef)));
+
+    // ① 手牌上限恒 9（hp=25 时基数为 25，兽九覆盖为 9）
+    assert_eq!(e.state_core().hand_limit(e.catalog(), 1), 9, "兽九上限恒 9");
+    assert_eq!(e.state_core().hand_limit(e.catalog(), 0), 4, "他人不受影响");
+
+    // ② 出牌阶段开始补至 9：1 号开局手牌 6 → Play 补 3（跳过摸牌后仍 9）
+    advance_to_play(&mut e, 1);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hand(1).len(), 9, "出牌阶段开始补至 9（跳过摸牌）");
+
+    // ③ 回合结束补至 9：弃 5 张（cap 9 下无弃；清到 3 张）→ End 补至 9
+    e.debug_clear_hand(1);
+    for _ in 0..3 {
+        e.debug_place(1, "tao");
+    }
+    next_phase(&mut e); // Play→Discard（3≤9 无弃）
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End（补至 9）
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hand(1).len(), 9, "回合结束补至 9");
+}
+
 fn boss_xiangliu_yaoshou_distance_minus_two() {
     let mut e = Engine::new_boss_stage(38001, 4, 1, 3, 6, 4, 0);
     let xiangliu_def = (e.catalog().general_count()

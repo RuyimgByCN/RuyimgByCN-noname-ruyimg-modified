@@ -996,6 +996,14 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     // 归烬牌（U05 xianjian 明绣，规则 v160）：跳过本次摸
                     // 牌阶段（上游 skip("phaseDraw") 同口径）
                     ctx.core.player_mut(player).skip_next_draw = false;
+                } else if ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_JIUSHOU)
+                    .map(|def| ctx.core.has_skill(player, def))
+                    .unwrap_or(false)
+                {
+                    // 兽九（Boss 相柳，规则 v222）：跳过摸牌阶段（上游
+                    // boss_jiushou phaseDraw trigger.cancel 同口径）
                 } else {
                     ctx.draw_cards(player, 2);
                     // 无脏（Boss 混沌，规则 v209）：摸牌基数改为
@@ -1032,6 +1040,19 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 }
             }
             Phase::Play => {
+                // 兽九（Boss 相柳，规则 v222）：出牌阶段开始补至 9（上游
+                // phaseUseBegin draw(9-count) 同口径）
+                if let Some(def) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_JIUSHOU)
+                {
+                    if ctx.core.has_skill(player, def) {
+                        let n = ctx.core.player(player).hand.len();
+                        if n < 9 {
+                            ctx.draw_cards(player, 9 - n);
+                        }
+                    }
+                }
                 ctx.core.turn.sha_used_play_phase = false;
                 // 突击计数（U07 ow，规则 v118）：出牌阶段开始清零
                 ctx.core.turn.cards_used_play_phase = 0;
@@ -1052,6 +1073,19 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.discard_phase_discarded = 0;
             }
             Phase::End => {
+                // 兽九（Boss 相柳，规则 v222）：回合结束补至 9（上游
+                // phaseJieshuBegin draw(9-count) 同口径）
+                if let Some(jdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_JIUSHOU)
+                {
+                    if ctx.core.has_skill(player, jdef) {
+                        let n = ctx.core.player(player).hand.len();
+                        if n < 9 {
+                            ctx.draw_cards(player, 9 - n);
+                        }
+                    }
+                }
                 // 贪欲（Boss 饕餮，规则 v215）：结束阶段若你的手牌数为
                 // 全场最多（不少于任何其他存活角色）→ 失去 1 点体力（上
                 // 游 boss_tanyu_hp phaseJieshuBegin isMaxHandcard 同口径）

@@ -1020,6 +1020,13 @@ impl GameStateCore {
                 limit = limit.saturating_sub(self.player(p).hp.max(0) as usize);
             }
         }
+        // 兽九（Boss 相柳，规则 v222）：手牌上限恒 9（上游 boss_jiushou
+        // mod maxHandcard `num - hp + 9`：基数 hp-hp+9=9 同口径）
+        if let Some(def) = catalog.skill_by_name(crate::content::standard::BOSS_JIUSHOU) {
+            if self.has_skill(p, def) {
+                limit = 9;
+            }
+        }
         limit
     }
 

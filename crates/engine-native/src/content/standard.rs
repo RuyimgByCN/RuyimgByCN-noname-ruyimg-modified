@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 221;
+pub const STANDARD_RULESET_VERSION: u64 = 222;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4045,6 +4045,9 @@ pub const BOSS_ZHONGDU: &str = "中毒";
 /// 妖兽（Boss 神兽共有技，规则 v221）：锁定技——你与其他角色计算距离
 /// 时 -2（上游 boss_yaoshou mod globalFrom distance-2 同口径）。
 pub const BOSS_YAOSHOU: &str = "妖兽";
+/// 兽九（Boss 相柳，规则 v222）：锁定技——手牌上限恒为 9；出牌阶段与
+/// 回合结束时手牌补至 9；跳过摸牌阶段（摸牌基数 0）。
+pub const BOSS_JIUSHOU: &str = "兽九";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -4122,9 +4125,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 书精（上游 boss_shujing hp2 女神）：催毒+中毒全技（中毒为运行时
     // 授技面，表列仅催毒——授技入实例同 catalog skill 空间）
     ("书精", Faction::Shu, &[BOSS_CUIDUI], 2, Gender::Female),
-    // 相柳（上游 boss_xiangliu hp25）：妖兽单技本批；毒妒[蛇毒标记链]/
-    // 兽九[手牌补 9]/邪酬(+switch) 未落随下批
-    ("相柳", Faction::Qun, &[BOSS_YAOSHOU], 25, Gender::Male),
+    // 相柳：兽九已落（v222）；毒妒[蛇毒标记链]/邪酬(+switch) 未落随下批
+    ("相柳", Faction::Qun, &[BOSS_YAOSHOU, BOSS_JIUSHOU], 25, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5354,6 +5356,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_YAOSHOU,
             // 权限型单面：computed_distance 距离 -2（state 距离链，凶兽
             // 同款）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_JIUSHOU,
+            // 权限型三面：手牌上限恒 9（state hand_limit）、跳过摸牌与
+            // 出牌/结束补至 9（kernel 阶段臂）均经 skill_by_name 查询
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
