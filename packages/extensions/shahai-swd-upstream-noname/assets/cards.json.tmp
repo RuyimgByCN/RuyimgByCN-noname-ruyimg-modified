@@ -1,0 +1,219 @@
+{
+ "source": "noname",
+ "upstream_path": "apps/core/extension/杀海拾遗/card/swd/",
+ "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+ "pack": {
+  "name": "shahai-swd-upstream-noname",
+  "version": 1,
+  "description": "G1 转换：上游 swd 首切片（护符）",
+  "card_prefix": "swd_"
+ },
+ "cards": [
+  {
+   "name": "swd_hufu",
+   "kind": "hufu",
+   "suit": "spade",
+   "rank": 1
+  },
+  {
+   "name": "swd_hufu2",
+   "kind": "hufu",
+   "suit": "club",
+   "rank": 1
+  },
+  {
+   "name": "swd_liuxinghuoyu1",
+   "kind": "liuxinghuoyu",
+   "suit": "diamond",
+   "rank": 3
+  },
+  {
+   "name": "swd_liuxinghuoyu2",
+   "kind": "liuxinghuoyu",
+   "suit": "heart",
+   "rank": 6
+  },
+  {
+   "name": "swd_liuxinghuoyu3",
+   "kind": "liuxinghuoyu",
+   "suit": "heart",
+   "rank": 9
+  },
+  {
+   "name": "swd_caoyao1",
+   "kind": "caoyao",
+   "suit": "club",
+   "rank": 3
+  },
+  {
+   "name": "swd_caoyao2",
+   "kind": "caoyao",
+   "suit": "club",
+   "rank": 4
+  },
+  {
+   "name": "swd_caoyao3",
+   "kind": "caoyao",
+   "suit": "club",
+   "rank": 5
+  },
+  {
+   "name": "swd_chilongya",
+   "kind": "chilongya",
+   "suit": "diamond",
+   "rank": 3
+  },
+  {
+   "name": "swd_tianxianjiu1",
+   "kind": "tianxianjiu",
+   "suit": "heart",
+   "rank": 9
+  },
+  {
+   "name": "swd_tianxianjiu2",
+   "kind": "tianxianjiu",
+   "suit": "diamond",
+   "rank": 2
+  },
+  {
+   "name": "swd_xixueguizhihuan",
+   "kind": "xixueguizhihuan",
+   "suit": "spade",
+   "rank": 5
+  },
+  {
+   "name": "swd_guiyoujie1",
+   "kind": "guiyoujie",
+   "suit": "spade",
+   "rank": 3
+  },
+  {
+   "name": "swd_guiyoujie2",
+   "kind": "guiyoujie",
+   "suit": "club",
+   "rank": 9
+  },
+  {
+   "name": "swd_shentoumianju",
+   "kind": "shentoumianju",
+   "suit": "spade",
+   "rank": 6
+  },
+  {
+   "name": "swd_xingjunyan",
+   "kind": "xingjunyan",
+   "suit": "spade",
+   "rank": 8
+  },
+  {
+   "name": "swd_qinglonglingzhu",
+   "kind": "qinglonglingzhu",
+   "suit": "spade",
+   "rank": 2
+  },
+  {
+   "name": "swd_zhufangshenshi",
+   "kind": "zhufangshenshi",
+   "suit": "club",
+   "rank": 7
+  },
+  {
+   "name": "swd_fengxueren",
+   "kind": "fengxueren",
+   "suit": "club",
+   "rank": 1
+  },
+  {
+   "name": "swd_yufulu",
+   "kind": "yufulu",
+   "suit": "spade",
+   "rank": 6
+  },
+  {
+   "name": "swd_yangpijuan",
+   "kind": "yangpijuan",
+   "suit": "spade",
+   "rank": 9
+  },
+  {
+   "name": "swd_daihuofenglun",
+   "kind": "daihuofenglun",
+   "suit": "heart",
+   "rank": 1
+  },
+  {
+   "name": "swd_xiayuncailing",
+   "kind": "xiayuncailing",
+   "suit": "diamond",
+   "rank": 2
+  },
+  {
+   "name": "swd_langeguaiyi",
+   "kind": "langeguaiyi",
+   "suit": "diamond",
+   "rank": 1
+  },
+  {
+   "name": "swd_zhiluxiaohu",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 4
+  },
+  {
+   "name": "swd_mujiaren",
+   "kind": "jiguan",
+   "suit": "heart",
+   "rank": 4
+  },
+  {
+   "name": "swd_gouhunluo1",
+   "kind": "jiguan",
+   "suit": "spade",
+   "rank": 9
+  },
+  {
+   "name": "swd_gouhunluo2",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 7
+  },
+  {
+   "name": "swd_jiguantong1",
+   "kind": "jiguan",
+   "suit": "diamond",
+   "rank": 4
+  },
+  {
+   "name": "swd_jiguantong2",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 7
+  },
+  {
+   "name": "swd_jiguanfeng1",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 3
+  },
+  {
+   "name": "swd_jiguanfeng2",
+   "kind": "jiguan",
+   "suit": "spade",
+   "rank": 4
+  },
+  {
+   "name": "swd_jiguanyuan1",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 3
+  },
+  {
+   "name": "swd_jiguanyuan2",
+   "kind": "jiguan",
+   "suit": "diamond",
+   "rank": 2
+  }
+ ],
+ "host_skills": [],
+ "deferred": []
+}

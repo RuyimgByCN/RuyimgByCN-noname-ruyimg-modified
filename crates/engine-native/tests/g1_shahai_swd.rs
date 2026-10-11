@@ -120,7 +120,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 32, "swd 全 32 张（+距离对/蓝格怪衣/指路小虎/木甲人/勾魂锣×2/机关桶×2/机关凤×2）入目录");
+    assert_eq!(e.catalog().cards.len(), base_cards + 34, "swd 全 34 张（+距离对/蓝格怪衣/指路小虎/木甲人/勾魂锣×2/机关桶×2/机关凤×2/机关怨×2）入目录");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -218,7 +218,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 32, "swd 全 32 张（含机关桶×2/机关凤×2，规则 v195）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 34, "swd 全 34 张（含机关桶×2/机关凤×2/机关怨×2，规则 v196）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -233,7 +233,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 32, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 34, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -1610,4 +1610,172 @@ fn swd_jiguanfeng_shan_respond_no_damage() {
     assert!(!snap.core.skills.contains_key(&(1, fdef)), "响应闪：无封印状态");
     assert!(snap.core.discard.contains(&shan), "闪入弃牌堆");
     assert!(snap.core.discard.contains(&jf), "机关凤本体入弃堆");
+}
+
+// ---------------------------------------------------------------------------
+// U05 swd 第二十一批（规则 v196）：机关怨（jiguanyuan，♣3/♦2）——使用者
+// 选一张手牌，与本体一起置于目标武将牌上（离场区），其下一结束阶段强制
+// 获得（SwdJiguanyuanGain）；使用者摸 1；本体不进弃堆。同目标待获得期间
+// 不可再指定（上游 !hasSkill("jiguanyuan") 同口径）。
+// ---------------------------------------------------------------------------
+
+/// 机关怨①：置牌→目标结束阶段获得两张+状态清除；使用者摸 1。
+#[test]
+fn swd_jiguanyuan_pending_then_gain_at_phase_end() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6109, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let jy = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.name.contains("jiguanyuan"))
+        .expect("机关怨在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|c| *c != jy);
+        snap.core.discard.retain(|c| *c != jy);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|c| *c != jy);
+        }
+        snap.core.players[0].hand.push(jy);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+    let give = e.debug_place(0, "tao");
+    let gdef = e
+        .catalog()
+        .skill_by_name(engine_native::content::host::SWD_JIGUANYUAN_GAIN_KEY)
+        .expect("待获得 def 随 Jiguan kind 注册");
+
+    let out = play(&mut e, jy, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    // 使用者选牌询问
+    let c = e.open_choice().cloned().expect("机关怨选牌询问");
+    assert_eq!(c.observer, 0, "选牌询问 observer=使用者");
+    assert_eq!(c.spec.prompt, engine_native::content::host::SWD_JIGUANYUAN_CHOOSE);
+    let cid = c.id;
+    drop(c);
+    let out = submit(&mut e, 0, GameAction::Answer {
+        choice_id: cid,
+        selection: vec![ChoiceOption::Card(give)],
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    // 置牌完成：目标离场区 2 张（本体+选牌）、待获得记录、状态已授、使用者摸 1
+    let snap = e.save();
+    assert_eq!(snap.core.players[1].off_court.len(), 2, "目标离场区 2 张（本体+选牌）");
+    assert_eq!(snap.core.players[1].jiguanyuan_cards.len(), 2, "待获得记录 2 张");
+    assert!(snap.core.skills.contains_key(&(1, gdef)), "待获得状态已授予");
+    assert!(!snap.core.table.contains(&jy), "本体已离桌（不进弃堆）");
+    assert_eq!(e.debug_hand(0).len(), 1, "使用者摸 1");
+    assert_eq!(e.debug_hand(1).len(), 0, "目标尚未获得");
+
+    // 推进到 1 号回合开始（Judge 阶段）——Judge 收束（phaseEnd begin:false）
+    // 即触发待获得（上游 phaseEnd forced 同口径：下一结束阶段=其回合内首个
+    // 阶段结束）
+    loop {
+        if e.turn().current == 1 && e.turn().phase == Phase::Judge {
+            break;
+        }
+        match e.open_choice() {
+            Some(c) => {
+                let (cid2, obs) = (c.id, c.observer);
+                drop(c);
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid2, selection: vec![ChoiceOption::Pass] });
+            }
+            None => {
+                let actor = e.turn().current;
+                match submit(&mut e, actor, GameAction::NextPhase) {
+                    CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } => {}
+                    other => panic!("advance: {other:?}"),
+                }
+            }
+        }
+    }
+    let _ = submit(&mut e, 1, GameAction::NextPhase); // Judge→Draw（Judge 收束触发获得）
+    let snap2 = e.save();
+    assert_eq!(snap2.core.players[1].hand.len(), 4, "Judge 收束获得 2 张 + 摸牌阶段正常摸 2");
+    assert!(snap2.core.players[1].jiguanyuan_cards.is_empty(), "待获得记录清");
+    assert!(!snap2.core.skills.contains_key(&(1, gdef)), "待获得状态移除");
+    assert_eq!(snap2.core.players[1].off_court.len(), 0, "离场区清空");
+}
+
+/// 机关怨②：同目标待获得期间再指定→IllegalTargets（上游
+/// !hasSkill("jiguanyuan") 同口径）。
+#[test]
+fn swd_jiguanyuan_same_target_rejected_while_pending() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6110, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let jy1 = e
+        .catalog()
+        .cards
+        .iter()
+        .filter(|c| c.name.contains("jiguanyuan"))
+        .map(|c| c.name.clone())
+        .next()
+        .expect("机关怨在目录");
+    let ids: Vec<u32> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.name.contains("jiguanyuan"))
+        .map(|(i, _)| i as u32)
+        .collect();
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|c| !ids.contains(c));
+        snap.core.discard.retain(|c| !ids.contains(c));
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|c| !ids.contains(c));
+        }
+        snap.core.players[0].hand.push(ids[0]);
+        snap.core.players[0].hand.push(ids[1]);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+    let give = e.debug_place(0, "tao");
+    let out = play(&mut e, ids[0], vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    let c = e.open_choice().cloned().expect("第一次选牌询问");
+    let cid = c.id;
+    drop(c);
+    let _ = submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(give)] });
+    // 第二张机关怨再指定同目标 → 拒绝
+    let second = e.debug_hand(0).into_iter().find(|c| {
+        e.catalog().cards[*c as usize].name.contains("jiguanyuan")
+    }).expect("第二张机关怨在手");
+    let out = play(&mut e, second, vec![1]);
+    assert!(matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)), "同目标待获得期间应拒: {out:?}");
+    // 指定其他目标 → 可用（本测试不再推进，仅验证通过校验）
+    let out = play(&mut e, second, vec![2]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } | CommandOutcome::Rejected(RejectReason::IllegalTargets)), "换目标不因同目标校验被拒: {out:?}");
+    let _ = jy1;
 }

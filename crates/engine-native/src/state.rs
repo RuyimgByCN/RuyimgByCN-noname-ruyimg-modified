@@ -152,6 +152,9 @@ pub struct PlayerState {
     pub gouhunluo_rounds: u32,
     /// 勾魂锣：挂附来源。
     pub gouhunluo_source: Option<u8>,
+    /// 机关怨（U05 swd 机关牌第二十一批，规则 v196）：待获得牌实体
+    /// （离场区中；其下一结束阶段由 SwdJiguanyuanGain 移入手牌）。
+    pub jiguanyuan_cards: Vec<u32>,
     /// Boss 模式重整计数（P2/N08 模式入口批三-a，规则 v82）：死亡后
     /// 每次轮到其回合计数 +1，达阈值复活（仅 Boss 模式使用）。
     pub boss_chongzheng: u8,
@@ -209,6 +212,7 @@ impl PlayerState {
             ctianfu_card: None,
             gouhunluo_rounds: 0,
             gouhunluo_source: None,
+            jiguanyuan_cards: Vec::new(),
             general_slots: [None, None],
             revealed_generals: [false, false],
             wunature: None,

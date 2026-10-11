@@ -1521,6 +1521,12 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                         crate::content::host::SWD_JIGUANFENG_KEY,
                         u.targets.first().copied(),
                     )
+                } else if name.contains("jiguanyuan") {
+                    (
+                        crate::content::host::HostBehavior::SwdJiguanyuanCard,
+                        crate::content::host::SWD_JIGUANYUAN_KEY,
+                        u.targets.first().copied(),
+                    )
                 } else {
                     (
                         crate::content::host::HostBehavior::SwdZhiluxiaohuCard,

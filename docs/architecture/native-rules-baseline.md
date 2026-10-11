@@ -1929,6 +1929,23 @@ forced；登记差异：上游 fengyin=非锁定技失效[library skillBlocker]�
 无事、闪与本体入弃堆）——证据见
 [T12 证据](../operations/evidence/2026-10-11-t12-jiguanfeng-v195/README.md)。
 
+**规则 v196（2026-10-11，T12 机关怨切片）**：机关怨（上游 `jiguanyuan`，
+♣3/♦2，`SwdJiguanyuanCard` tag 223，无懈窗包装）——PlayCard 校验恰 1 名
+其他存活角色且目标无待获得状态（上游 filterTarget target!==player+
+!hasSkill("jiguanyuan")）、使用者除本体至少还有一张手牌（上游 enable 同
+口径）；使用者选一张手牌，与本体一起置于目标武将牌上（离场区
+`jiguanyuan_cards` 记录，**本体不进弃堆**），使用者摸 1；目标获得
+`SwdJiguanyuanGain`（tag 224，phaseEnd forced）——其下一结束阶段将待获
+得牌移入手牌并移除状态（上游 jiguanyuan 技同口径，伴生技在 swd 包内定
+义）。死亡清理沿用离场区既有口径。**存档格式 42→43**
+（`PlayerState` 尾部追加 `jiguanyuan_cards` len+u32 序列；v42 字节被版
+本门禁拒绝，无生产迁移数据）。版本 195→**196**。14 golden 重录：版本
+回退探针（196→195 复跑 golden 全绿）证明位移唯一来源是版本字段。回归：
+`swd_jiguanyuan_pending_then_gain_at_phase_end`（置牌→Judge 收束获得 2
+张+状态清除全链）、`swd_jiguanyuan_same_target_rejected_while_pending`
+（同目标待获得期间再指定拒、换目标放行）——证据见
+[T12 证据](../operations/evidence/2026-10-11-t12-jiguanyuan-v196/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |

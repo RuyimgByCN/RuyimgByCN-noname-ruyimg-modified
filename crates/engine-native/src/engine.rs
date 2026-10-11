@@ -3258,6 +3258,24 @@ fn apply_command(
                         {
                             return Err(RejectReason::IllegalTargets);
                         }
+                    } else if catalog.cards[card as usize].name.contains("jiguanyuan") {
+                        // 机关怨（swd 第二十一批，规则 v196）：恰 1 名其他
+                        // 角色（上游 filterTarget target!==player+
+                        // !hasSkill("jiguanyuan") 同口径）；enable 要求除本
+                        // 体至少还有一张手牌（上游 enable 同口径）
+                        if targets.len() != 1
+                            || targets[0] == core.turn.current
+                            || !core.player(targets[0]).alive
+                            || !core.player(targets[0]).jiguanyuan_cards.is_empty()
+                        {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        let hand = core.player(core.turn.current).hand.clone();
+                        if hand.is_empty()
+                            || (hand.len() == 1 && hand[0] == card)
+                        {
+                            return Err(RejectReason::CardLimit);
+                        }
                     } else {
                         if targets != [core.turn.current] {
                             return Err(RejectReason::IllegalTargets);

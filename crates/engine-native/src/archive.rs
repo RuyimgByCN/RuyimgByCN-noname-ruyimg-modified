@@ -40,7 +40,10 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v42（2026-10-11，T11 掠影 v194）：`MachineSnapshot::Sha` 尾部追加
 /// `lueying_declined: u8`（放弃标记，阻止同杀重入再问）。v41 字节被版本
 /// 门禁拒绝（存档仅存在于测试与内部工具，无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 42;
+/// v43（2026-10-11，T12 机关怨 v196）：`PlayerState` 尾部追加
+/// `jiguanyuan_cards`（len+u32 序列；待获得牌实体）。v42 字节被版本门禁
+/// 拒绝（无生产迁移数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 43;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2567,6 +2570,11 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for c in &p.zhucheng {
             w.u32(*c);
         }
+        // 机关怨（v43，U05 swd 第二十一批）：待获得牌实体
+        w.len(p.jiguanyuan_cards.len());
+        for c in &p.jiguanyuan_cards {
+            w.u32(*c);
+        }
         // 炮台等级（v6，U05 ow 托比昂）：跨回合持久
         w.u8(p.paotai_lv);
         w.u8(p.baolei_mode);
@@ -2834,6 +2842,11 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         for _ in 0..zc_count {
             zhucheng.push(r.u32()? as crate::ids::CardId);
         }
+        let jy_count = r.len()?;
+        let mut jiguanyuan_cards = Vec::new();
+        for _ in 0..jy_count {
+            jiguanyuan_cards.push(r.u32()? as crate::ids::CardId);
+        }
         let paotai_lv = r.u8()?;
         let baolei_mode = r.u8()?;
         let baoxue_used = r.boolean()?;
@@ -2889,6 +2902,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             ctianfu_card,
             gouhunluo_rounds,
             gouhunluo_source,
+            jiguanyuan_cards,
             face_down,
             boss_chongzheng,
             zhucheng,
