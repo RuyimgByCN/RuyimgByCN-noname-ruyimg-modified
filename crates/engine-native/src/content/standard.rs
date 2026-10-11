@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 242;
+pub const STANDARD_RULESET_VERSION: u64 = 243;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4743,6 +4743,12 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 祝融（v242 星夏；神裔共用 v233；boss_chiyan3 赤炎3=已处置关卡面；
     // 上游 names 姜|重黎、shen→群目录近似）
     ("祝融", Faction::Qun, &[BOSS_SHENYI, BOSS_XINGXIA], 5, Gender::Male),
+    // 炎帝（v243 纯入库：神裔共用 v233+神恩光环共用 v238；boss_chiyi 赤
+    // 翼=青翼同族已处置；上游 names 姜|轨、shen→群目录近似）
+    ("炎帝", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
+    // 少昊（v243 纯入库：神裔共用 v233+神恩光环共用 v238；boss_baiyi 白
+    // 翼=青翼同族已处置；上游 names 嬴|挚、shen→群目录近似）
+    ("少昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
