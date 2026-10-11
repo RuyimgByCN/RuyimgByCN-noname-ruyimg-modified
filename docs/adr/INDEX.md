@@ -137,3 +137,4 @@
 - [0779 名称符号表总量上限与拒装策略（不回收）](0779-native-symbol-table-limit.md) —— `SYMBOL_TABLE_LIMIT=1e6`，装载器三入口超限拒装（`SymbolTableLimit`）；回收因 `'static` 贯穿目录/存档而不取；单包内逼近上限登记为已知边界
 - [0766 N12 旧线驱动器收尾批——两次进局与旧线自身缺陷定界](0766-native-n12-driver-closeout-oldline-defects.md)
 - [0767 N12 旧线浏览器单局完局记录与统计边界](0767-native-n12-driver-complete.md) —— 浏览器完局历史记录；UI 操作/终态数量不等于 n09 同口径统计
+- [0702 M7 移动端阻塞说明与替代方案](0702-m7-mobile-blocking.md) —— 历史 ADR：原 M7 移动壳决策已被性能架构原生平台路线取代；配套 phase28 快照已清理（2026-10-11 补录索引，T16⑤ 附带）
