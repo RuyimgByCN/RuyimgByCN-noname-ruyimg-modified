@@ -2118,7 +2118,8 @@ pub(crate) fn apply_general_assembly(
             && skill != crate::content::standard::BOSS_YANDU
             && skill != crate::content::standard::BOSS_JICAI
             && skill != crate::content::standard::BOSS_LUANCHANG
-            && skill != crate::content::standard::BOSS_ECHOU;
+            && skill != crate::content::standard::BOSS_ECHOU
+            && skill != crate::content::standard::BOSS_XUSHI;
         state.skills.insert(
             (player, def),
             crate::state::SkillInstance {

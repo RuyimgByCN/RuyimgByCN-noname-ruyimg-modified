@@ -546,6 +546,29 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 虚失门控（Boss 朱厌，规则 v225）：体力首次≤一半激活（隐贼/延妒/
+    // 积财/乱常同款 enable 直写）
+    if let Some(xdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_XUSHI)
+    {
+        let holder = d.target;
+        if ctx.core.has_skill_any_state(holder, xdef)
+            && !ctx.core.has_skill(holder, xdef)
+        {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                if let Some(inst) = ctx.core.skills.get_mut(&(holder, xdef)) {
+                    inst.enabled = true;
+                }
+                ctx.log(LogEvent::SkillToggled {
+                    player: holder,
+                    skill: ctx.catalog.skill_name(xdef),
+                    enabled: true,
+                });
+            }
+        }
+    }
     // 冥顽锁定集（Boss 梼杌，规则 v219）：回合内自己使用牌对其他角色
     // 造成伤害后，受伤者入锁定集（首次同时记自己——上游 storage
     // boss_minwan=[player]+add(target) 同口径；回合更替自然清零）
@@ -1131,6 +1154,22 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.cards_used_play_phase = 0;
             }
             Phase::Discard => {
+                // 虚失（Boss 朱厌，规则 v225）：出牌阶段结束自翻面（上游
+                // phaseUseEnd turnOver 同口径；锚=弃牌阶段开始[原生无
+                // PhaseEnd 帧]；经 TurnOverBefore 走翻面提交）
+                if let Some(xdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_XUSHI)
+                {
+                    if ctx.core.has_skill(player, xdef)
+                        && ctx.core.player(player).alive
+                    {
+                        ctx.emit(EventData::TurnOverBefore {
+                            player,
+                            cancelled: false,
+                        });
+                    }
+                }
                 // 贪欲（Boss 饕餮，规则 v215）：锁定——跳过你的弃牌阶段
                 //（上游 boss_tanyu phaseDiscardBefore trigger.cancel 同口径）
                 if let Some(def) = ctx
@@ -1385,6 +1424,24 @@ fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool)
     // 自身翻至背面为内联翻转不经此处）
     if !face_down {
         ctx.core.player_mut(player).jidong_active = false;
+        // 虚失（Boss 朱厌，规则 v225）：武将牌翻回正面时对所有其他角色
+        // 各造成 1 点伤害（上游 [1,2] 随机——恒 1 登记差异；激活态查询）
+        if let Some(xdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_XUSHI)
+        {
+            if ctx.core.has_skill(player, xdef) {
+                for t in ctx.core.seat_order_from(player) {
+                    if t != player && ctx.core.player(t).alive {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+                            Some(player),
+                            t,
+                            1,
+                        )));
+                    }
+                }
+            }
+        }
     }
     ctx.emit(EventData::TurnOvered { player, face_down });
 }

@@ -2259,6 +2259,57 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// 朱厌批首片（规则 v224）：兵先——他人回合未出杀（出牌阶段口径）→
 /// 其结束阶段被朱厌虚拟杀（受 1 或响应）；出了杀则不被打。
 #[test]
+/// 朱厌批续片（规则 v225）：虚失——体力首次≤一半激活；出牌阶段结束
+/// 自翻面；翻回正面时全场其他角色各受 1（随机恒 1 近似）。
+#[test]
+fn boss_zhuyan_xushi_flip_and_aoe() {
+    let mut e = Engine::new_boss_stage(43001, 4, 1, 3, 6, 4, 0);
+    let zhuyan_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 7) as u16;
+    e.debug_set_general_def(1, zhuyan_def);
+    e.debug_set_hp(1, 25);
+    let xdef = e.catalog().skill_by_name("虚失").expect("虚失入目录");
+    assert!(e.state_core().skills.contains_key(&(1, xdef)));
+    assert!(!e.state_core().has_skill(1, xdef), "虚失装配即未激活");
+
+    // 激活门控：hp 置 12（≤12 半线）→ 一次伤害（12→11）激活
+    e.debug_set_hp(1, 12);
+    advance_to_play(&mut e, 2);
+    e.debug_clear_hand(2);
+    e.debug_clear_hand(1);
+    let sha = e.debug_place(2, "sha");
+    play(&mut e, sha, vec![1]);
+    drain_choices(&mut e);
+    assert!(e.state_core().has_skill(1, xdef), "体力≤一半 → 虚失激活");
+
+    // ① 朱厌自己回合的弃牌阶段开始 → 自翻面
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    next_phase(&mut e); // 1 Play→Discard（虚失自翻面）
+    drain_choices(&mut e);
+    assert!(
+        e.state_core().player(1).face_down,
+        "虚失：朱厌出牌阶段结束自翻面"
+    );
+
+    // ② 翻面者回合跳过+翻回正面 → 全场其他角色各受 1
+    let hp0 = e.debug_hp(0);
+    let hp2 = e.debug_hp(2);
+    let hp3 = e.debug_hp(3);
+    advance_to_play(&mut e, 1); // 下一轮朱厌 Judge begin：翻回+全场伤
+    drain_choices(&mut e);
+    assert!(
+        !e.state_core().player(1).face_down,
+        "翻面者回合跳过时翻回正面"
+    );
+    assert!(
+        e.debug_hp(0) < hp0 && e.debug_hp(2) < hp2 && e.debug_hp(3) < hp3,
+        "虚失翻正：全场其他角色各受 1（{}→{}、{}→{}、{}→{}）",
+        hp0, e.debug_hp(0), hp2, e.debug_hp(2), hp3, e.debug_hp(3)
+    );
+}
+
 fn boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn() {
     let mut e = Engine::new_boss_stage(42001, 4, 1, 3, 6, 4, 0);
     let zhuyan_def = (e.catalog().general_count()
