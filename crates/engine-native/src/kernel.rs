@@ -3190,15 +3190,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             // 消费当前被询问者应答（若有）
             if let Some(holder) = self.hujia_holder.take() {
-                if ctx.answer().first() == Some(&ChoiceOption::Confirm) {
-                    if let Some(shan) = ctx
-                        .core
-                        .player(holder)
-                        .hand
-                        .iter()
-                        .copied()
-                        .find(|c| ctx.catalog.card_kind(*c) == CardKind::Shan)
-                    {
+                // v204 对齐上游 chooseToRespond：持牌者自选一张闪打出
+                //（含倾国转化：黑手牌可代出）；取消/空选 = 拒绝，问下一位
+                if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
+                    if ctx.core.player(holder).hand.contains(&shan) {
                         ctx.discard_from_hand(holder, shan);
                         ctx.emit(EventData::CardResponded {
                             card: shan,
@@ -3217,7 +3212,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         self.asked = false;
                         return Flow::Yield;
                     }
-                    // 确认但请求期间已无闪：视为拒绝，问下一位
+                    // 请求期间牌已不在手（并发消耗防御）：视为拒绝
                 }
             }
             // 逐人询问下一位（Pass 后继续）
@@ -3228,15 +3223,38 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             {
                 let next = queue.remove(pos);
                 self.hujia_holder = Some(next);
+                // 候选=自己手牌中的真闪 + 倾国转化（黑手牌）；不含他人牌
+                let qingguo_next = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::QING_GUO)
+                    .map(|d| ctx.core.has_skill(next, d))
+                    .unwrap_or(false);
+                let options: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(next)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| {
+                        let kind = ctx.catalog.card_kind(*c);
+                        kind == CardKind::Shan
+                            || (qingguo_next
+                                && matches!(
+                                    ctx.catalog.cards[*c as usize].suit,
+                                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                                ))
+                    })
+                    .map(|c| ChoiceOption::Card(c))
+                    .collect();
                 return Flow::WaitChoice {
                     observer: next,
                     spec: ChoiceSpec {
-                        kind: ChoiceKind::Confirm,
+                        kind: ChoiceKind::SelectCards,
                         prompt: "hujia_respond",
-                        options: vec![ChoiceOption::Confirm, ChoiceOption::Pass],
-                        min: 1,
+                        options,
+                        min: 0,
                         max: 1,
-                        allow_cancel: false,
+                        allow_cancel: false, // 空选=拒绝本位继续问下一位（非取消）
                     },
                 };
             }

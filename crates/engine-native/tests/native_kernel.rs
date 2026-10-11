@@ -7642,10 +7642,13 @@ fn n08_jijiu_red_card_as_tao() {
     assert!(!e3.debug_alive(1), "无人可救，华佗死亡");
 }
 
-/// 护驾（曹操，ADR 0774 隐私修复版）：需要出闪时询问持牌者代出——
-/// 不在目标选项中暴露他人暗牌 id。持牌者确认 → 代出闪。
+/// 护驾（曹操；v204 对齐上游 chooseToRespond）：需要出闪时逐魏将询问
+/// 自选一张闪打出（含倾国转化：黑手牌可代出）；空选=拒绝。选项只含
+/// 持牌者自己的手牌（他人暗牌 id 不出现）。
 #[test]
 fn n08_hujia_borrows_shan_from_others() {
+    use engine_native::catalog::Suit;
+    // (1) 借真闪：持牌者自选自己的闪代出
     let mut e = Engine::new(2003, 3);
     advance_to_play(&mut e, 0);
     for p in 0..3 {
@@ -7658,19 +7661,81 @@ fn n08_hujia_borrows_shan_from_others() {
     let shan = e.debug_place(2, "shan");
     let sha = e.debug_place(0, "sha");
     play(&mut e, sha, vec![1]);
-    // 第一个询问 = 护驾（观察者=2 号持牌者），选项不含牌 id
+    // 第一个询问 = 护驾（观察者=2 号持牌者），选项=自己的闪
     let c = e.open_choice().expect("护驾询问应挂起");
     assert_eq!(c.spec.prompt, "hujia_respond");
     assert_eq!(c.observer, 2, "持牌者应被询问");
-    // 选项不含具体牌 id（隐私修复验证）
-    assert!(
-        !c.spec.options.iter().any(|o| matches!(o, ChoiceOption::Card(_))),
-        "护驾询问不得暴露他人暗牌 id"
-    );
-    answer(&mut e, ChoiceOption::Confirm);
+    assert_eq!(c.spec.options, vec![ChoiceOption::Card(shan)], "选项=持牌者自己的闪");
+    answer_sel(&mut e, vec![ChoiceOption::Card(shan)]);
     assert_eq!(e.debug_hp(1), 4, "代出闪应抵消伤害");
     assert!(!e.debug_hand(2).contains(&shan), "持牌者的闪应被弃置");
     assert_zone_conservation(&e);
+
+    // (2) 倾国转化借牌：持牌者持倾国+黑非闪手牌可代出；红色牌不可
+    let mut e2 = Engine::new(2012, 3);
+    advance_to_play(&mut e2, 0);
+    for p in 0..3 {
+        e2.debug_clear_hand(p);
+    }
+    e2.debug_grant(1, "护驾");
+    e2.debug_grant(2, "倾国");
+    e2.debug_set_hp(1, 4);
+    e2.debug_set_general(2, "夏侯惇");
+    // 2 号持一张黑非闪与一张红非闪（倾国只转化黑手牌）
+    let mut black_card = None;
+    let mut red_card = None;
+    for _ in 0..16 {
+        let c = e2.debug_place(2, "sha");
+        if black_card.is_none() && matches!(e2.catalog().cards[c as usize].suit, Suit::Spade | Suit::Club) {
+            black_card = Some(c);
+        } else if red_card.is_none() && matches!(e2.catalog().cards[c as usize].suit, Suit::Heart | Suit::Diamond) {
+            red_card = Some(c);
+        }
+        if black_card.is_some() && red_card.is_some() {
+            break;
+        }
+    }
+    let black_card = black_card.expect("牌堆应含黑色杀");
+    let red_card = red_card.expect("牌堆应含红色杀");
+    let sha2 = e2.debug_place(0, "sha");
+    play(&mut e2, sha2, vec![1]);
+    let c = e2.open_choice().expect("护驾询问应挂起");
+    assert!(
+        c.spec.options.contains(&ChoiceOption::Card(black_card)),
+        "倾国持牌者：黑手牌入选项"
+    );
+    assert!(
+        !c.spec.options.contains(&ChoiceOption::Card(red_card)),
+        "红色牌不入倾国选项"
+    );
+    assert!(
+        c.spec.options.iter().all(|o| matches!(o, ChoiceOption::Card(x) if e2.debug_hand(2).contains(x))),
+        "选项只含持牌者自己的手牌"
+    );
+    answer_sel(&mut e2, vec![ChoiceOption::Card(black_card)]);
+    assert_eq!(e2.debug_hp(1), 4, "倾国黑手牌代出闪应抵消伤害");
+    assert!(!e2.debug_hand(2).contains(&black_card), "代出的黑手牌应离手");
+    assert!(e2.debug_hand(2).contains(&red_card), "红色牌不受影响");
+    assert_zone_conservation(&e2);
+
+    // (3) 空选=拒绝：持牌者无可用闪（不预筛仍被询问）→ 伤害照常
+    let mut e3 = Engine::new(2013, 3);
+    advance_to_play(&mut e3, 0);
+    for p in 0..3 {
+        e3.debug_clear_hand(p);
+    }
+    e3.debug_grant(1, "护驾");
+    e3.debug_set_hp(1, 4);
+    e3.debug_set_general(2, "夏侯惇");
+    let sha3 = e3.debug_place(0, "sha");
+    play(&mut e3, sha3, vec![1]);
+    let c = e3.open_choice().expect("护驾询问应挂起（不以暗手牌预筛）");
+    assert!(c.spec.options.is_empty(), "无闪无转化 → 空选项");
+    answer_empty(&mut e3); // 空选 = 拒绝本位（问下一位，队列已空）
+    // 目标 1 号无闪 → 不开本人出闪询问，杀伤害直接结算
+    assert!(e3.open_choice().is_none(), "无闪不询问，直接结算");
+    assert_eq!(e3.debug_hp(1), 3, "无人代出 → 杀伤害照常");
+    assert_zone_conservation(&e3);
 }
 
 /// 流离（大乔；逐技对照批二 规则 v76 对齐上游 chooseCardTarget）：成为
@@ -8656,11 +8721,11 @@ fn hujia_asks_wei_helpers_in_seat_order_and_continues_after_pass() {
     // 首位 = 座位序首名魏将（2 号），即使 2 号无闪也被问（不预筛）
     let c = e.open_choice().expect("护驾询问应挂起");
     assert_eq!((c.spec.prompt, c.observer), ("hujia_respond", 2), "应先问 2 号魏将");
-    answer(&mut e, ChoiceOption::Pass);
+    answer_empty(&mut e); // 2 号无闪 → 空选=拒绝
     // 首位拒绝后继续问 3 号
     let c2 = e.open_choice().expect("拒绝后应继续问下一位魏将");
     assert_eq!((c2.spec.prompt, c2.observer), ("hujia_respond", 3));
-    answer(&mut e, ChoiceOption::Confirm);
+    answer_sel(&mut e, vec![ChoiceOption::Card(shan3)]); // 自选自己的闪代出
     assert_eq!(e.debug_hp(1), 4, "代出闪应抵消伤害");
     assert!(!e.debug_hand(3).contains(&shan3), "3 号的闪应被弃置");
     assert_zone_conservation(&e);
@@ -8740,18 +8805,18 @@ fn hujia_shan_counts_toward_wushuang_requirement() {
     e.debug_grant(0, "无双");
     e.debug_set_general(2, "夏侯惇");
     e.debug_set_hp(1, 4);
-    let _shan2 = e.debug_place(2, "shan");
+    let shan2 = e.debug_place(2, "shan");
     let shan1 = e.debug_place(1, "shan");
     let sha = e.debug_place(0, "sha");
     play(&mut e, sha, vec![1]);
-    // 护驾询问 → 2 号 Confirm（第一张闪）
+    // 护驾询问 → 2 号自选自己的闪代出（第一张）
     let c = e.open_choice().expect("护驾询问");
     assert_eq!((c.spec.prompt, c.observer), ("hujia_respond", 2));
-    answer(&mut e, ChoiceOption::Confirm);
-    // 无双第二张：新响应窗口——护驾再次逐人询问（2 号已无闪，Pass）
+    answer_sel(&mut e, vec![ChoiceOption::Card(shan2)]);
+    // 无双第二张：新响应窗口——护驾再次逐人询问（2 号已无闪，空选拒绝）
     let c2 = e.open_choice().expect("新窗口应重开护驾逐人询问");
     assert_eq!((c2.spec.prompt, c2.observer), ("hujia_respond", 2));
-    answer(&mut e, ChoiceOption::Pass);
+    answer_empty(&mut e);
     // 然后目标 1 自己被问出闪
     let t = e.open_choice().expect("无双第二张应询问目标本人");
     assert_eq!((t.spec.prompt, t.observer), ("respond_shan", 1));
@@ -8815,8 +8880,8 @@ fn hujia_pending_ask_byte_roundtrip_restores() {
     let shan3 = e.debug_place(3, "shan");
     let sha = e.debug_place(0, "sha");
     play(&mut e, sha, vec![1]);
-    // 2 号 Pass 后挂起在 3 号的询问 → 字节往返 → 恢复件继续应答
-    answer(&mut e, ChoiceOption::Pass);
+    // 2 号空选（无闪）拒绝后挂起在 3 号的询问 → 字节往返 → 恢复件继续应答
+    answer_empty(&mut e);
     let bytes = encode_archive(&e.save());
     let mut restored = Engine::restore(&decode_archive(&bytes).expect("decode")).expect("字节恢复");
     let c = restored.open_choice().expect("恢复件仍挂起");
@@ -8828,7 +8893,7 @@ fn hujia_pending_ask_byte_roundtrip_restores() {
         dedup_id: fresh_dedup(),
         action: GameAction::Answer {
             choice_id: cid,
-            selection: vec![ChoiceOption::Confirm],
+            selection: vec![ChoiceOption::Card(shan3)],
         },
     });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));

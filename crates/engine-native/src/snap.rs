@@ -1570,14 +1570,35 @@ pub fn active_ask(
                 ));
             }
             if let Some(h) = hujia_holder {
+                // v204：持牌者自选一张闪（含倾国转化黑手牌）；空选=拒绝
+                let qingguo_h = catalog
+                    .skill_by_name(QING_GUO)
+                    .map(|d| core.has_skill(*h, d))
+                    .unwrap_or(false);
+                let options: Vec<ChoiceOption> = core
+                    .player(*h)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| {
+                        let kind = catalog.card_kind(*c);
+                        kind == CardKind::Shan
+                            || (qingguo_h
+                                && matches!(
+                                    catalog.cards[*c as usize].suit,
+                                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                                ))
+                    })
+                    .map(ChoiceOption::Card)
+                    .collect();
                 return Some(ask(
                     *h,
                     "hujia_respond",
-                    ChoiceKind::Confirm,
-                    vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                    ChoiceKind::SelectCards,
+                    options,
+                    0,
                     1,
-                    1,
-                    false,
+                    false, // 空选=拒绝本位（非取消）
                 ));
             }
             if *asked {
