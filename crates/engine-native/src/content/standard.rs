@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 239;
+pub const STANDARD_RULESET_VERSION: u64 = 240;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -244,6 +244,165 @@ impl SkillMachine for SanCaiMachine {
                 }
                 Flow::Done
             }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 不臣：出牌阶段主动技两线——场上有已死亡的书精 → 失去 1 点体力并把
+// 它们全部复活（回复至 1 点、摸 2）；否则令一名己方受伤角色回复 2 点
+// 体力。发动后登记轮次（间隔 ≥2 轮可再发动）。勾芒（规则 v240）。
+// ---------------------------------------------------------------------------
+
+/// 不臣阶段码（快照显式编码；0/1=复活线，2/3=恢复线）。
+const BUCHUN_STAGE_LOSE_HP: u8 = 0;
+const BUCHUN_STAGE_REVIVE_NEXT: u8 = 1;
+const BUCHUN_STAGE_ASK_TARGET: u8 = 2;
+const BUCHUN_STAGE_WAIT_TARGET: u8 = 3;
+
+struct BuchunBehavior;
+
+impl SkillBehavior for BuchunBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        // 主动技：不经触发总线（ActivateSkill 直调 activate）
+        false
+    }
+    fn start(&self, _owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        unreachable!("不臣为主动技，不经触发总线")
+    }
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        // 间隔门控：距上次发动 <2 轮 → 不可发动（上游 storage+roundNumber
+        // 过滤同口径）
+        let used = ctx.state.players[owner as usize].buchun_used_round;
+        let round = ctx.state.turn.round;
+        if used != 0 && round.saturating_sub(used) < 2 {
+            return None;
+        }
+        // 书精将定位：BOSS_GENERALS 段内按名查目录索引（表序重排稳健）
+        let base = (ctx.catalog.general_count()
+            - crate::content::standard::BOSS_GENERALS.len()) as u16;
+        let shujing = (base..ctx.catalog.general_count() as u16)
+            .find(|&d| ctx.catalog.general_meta(d).map(|g| g.0) == Some("书精"))?;
+        let seats = ctx.state.players.len() as u8;
+        let dead_shujings: Vec<u32> = (0..seats)
+            .filter(|&t| {
+                let p = &ctx.state.players[t as usize];
+                !p.alive && p.general_slots[0] == Some(shujing)
+            })
+            .map(|t| t as u32)
+            .collect();
+        if !dead_shujings.is_empty() {
+            // 复活线：失 1 体 → 全部复活（回 1 体、各摸 2）
+            return Some(Box::new(BuchunMachine {
+                owner,
+                stage: BUCHUN_STAGE_LOSE_HP,
+                targets: dead_shujings,
+            }));
+        }
+        // 恢复线：须存在同阵营受伤角色（上游 filterTarget isFriendOf+
+        // isDamaged 同口径；is_boss_side 异侧=敌）
+        let has_damaged_friend = (0..seats).any(|t| {
+            let p = &ctx.state.players[t as usize];
+            p.alive
+                && p.hp < p.max_hp as i32
+                && ctx.state.is_boss_side(t) == ctx.state.is_boss_side(owner)
+        });
+        if has_damaged_friend {
+            return Some(Box::new(BuchunMachine {
+                owner,
+                stage: BUCHUN_STAGE_ASK_TARGET,
+                targets: Vec::new(),
+            }));
+        }
+        None
+    }
+}
+
+/// 不臣机器：复活线两步（失体→逐个复活）、恢复线两步（询问→回 2）。
+#[derive(Clone)]
+struct BuchunMachine {
+    owner: PlayerId,
+    stage: u8,
+    targets: Vec<u32>,
+}
+
+impl SkillMachine for BuchunMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossBuchun {
+            owner: self.owner,
+            stage: self.stage,
+            targets: self.targets.clone(),
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            BUCHUN_STAGE_LOSE_HP => {
+                ctx.emit(EventData::LoseHp {
+                    player: self.owner,
+                    amount: 1,
+                });
+                self.stage = BUCHUN_STAGE_REVIVE_NEXT;
+                Flow::Yield
+            }
+            BUCHUN_STAGE_REVIVE_NEXT => {
+                while let Some(t) = self.targets.pop() {
+                    let t = t as PlayerId;
+                    if ctx.core.player(t).alive {
+                        continue;
+                    }
+                    // 复活（上游 revive(1)+draw(2) 同口径；重整计数清零
+                    // 与重整复活臂同款；轮次登记）
+                    {
+                        let p = ctx.core.player_mut(t);
+                        p.alive = true;
+                        p.dying = false;
+                        p.hp = 1;
+                        p.boss_chongzheng = 0;
+                    }
+                    ctx.log(LogEvent::BossRevived { player: t });
+                    ctx.draw_cards(t, 2);
+                    ctx.core.player_mut(self.owner).buchun_used_round =
+                        ctx.core.turn.round;
+                    return Flow::Yield;
+                }
+                Flow::Done
+            }
+            BUCHUN_STAGE_ASK_TARGET => {
+                let seats = ctx.core.players.len() as u8;
+                let candidates: Vec<ChoiceOption> = (0..seats)
+                    .filter(|&t| {
+                        let p = ctx.core.player(t);
+                        p.alive
+                            && p.hp < p.max_hp as i32
+                            && ctx.core.is_boss_side(t) == ctx.core.is_boss_side(self.owner)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                self.stage = BUCHUN_STAGE_WAIT_TARGET;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "buchun_target",
+                        options: candidates,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            BUCHUN_STAGE_WAIT_TARGET => {
+                if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
+                    ctx.recover(t, 2, None);
+                    ctx.core.player_mut(self.owner).buchun_used_round =
+                        ctx.core.turn.round;
+                }
+                Flow::Done
+            }
+            _ => Flow::Done,
         }
     }
 }
@@ -4196,6 +4355,11 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 不臣（Boss 勾芒，规则 v240）：出牌阶段主动技两线——场上有已死亡的
+/// 书精 → 失去 1 点体力并把它们全部复活（回 1 体、各摸 2）；否则令一
+/// 名己方受伤角色回复 2 点体力。间隔 ≥2 轮可再发动
+/// （PlayerState.buchun_used_round 登记）。
+pub const BOSS_BUCHUN: &str = "不臣";
 /// 星囚（Boss 蓐收，规则 v239）：锁定技——出牌阶段开始交替横置全部敌
 /// 方（每回合开始开关取反，true 回合把未横置的敌方全部横置；只链不解，
 /// 已横置保持）。对 boss_mingxingzhu 授 boss_jiding 面依赖武将未入库，
@@ -4361,6 +4525,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 蓐收（v239 星囚；神裔共用 v233；boss_baimang3 白芒3=关卡流程面登记不落；
     // 上游 names 嬴|该、shen→群目录近似）
     ("蓐收", Faction::Qun, &[BOSS_SHENYI, BOSS_XINGQIU], 5, Gender::Male),
+    // 勾芒（v240 不臣；神裔共用 v233；boss_qingmu3 青木3=已处置关卡面；
+    // 上游 names 姬|重、shen→群目录近似）
+    ("勾芒", Faction::Qun, &[BOSS_SHENYI, BOSS_BUCHUN], 5, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -4408,6 +4575,13 @@ pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachi
         })),
         MachineSnapshot::BiYue { owner } => {
             Some(Box::new(BiYueMachine { owner: *owner }))
+        }
+        MachineSnapshot::BossBuchun { owner, stage, targets } => {
+            Some(Box::new(BuchunMachine {
+                owner: *owner,
+                stage: *stage,
+                targets: targets.clone(),
+            }))
         }
         MachineSnapshot::JiZhi { owner } => {
             Some(Box::new(JiZhiMachine { owner: *owner }))
@@ -5791,6 +5965,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_BUCHUN,
+            // 主动技两线（ActivateSkill 直调 activate——复活线/恢复线按
+            // 场面分派；间隔门控读 buchun_used_round）；快照变体
+            // BossBuchun（archive tag 66/机哈希 67）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(BuchunBehavior),
         },
     ];
     (cards, skills)

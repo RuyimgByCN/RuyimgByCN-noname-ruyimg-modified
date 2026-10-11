@@ -2526,6 +2526,26 @@ boss_mingxingzhu 授 boss_jiding 面依赖武将未入库。FROZEN 名单尾加�
 抓出——横置面绿≠开关面绿）；drain_choices 空应答被 min>0 SelectCards
 校验拒绝（静默挂起→清手牌规避）。
 
+**规则 v240（2026-10-11，T11 星宿阶段2系末片：不臣＋勾芒条目；存档 v56）**：
+`PlayerState.buchun_used_round: u32` 新字段（**存档 55→56**；canonical_hash
+入参——字段新增批）。**不臣**（本批首个 boss 主动技——`ActivateSkill`
+直调 `activate`，不经触发总线）两线：场上有死亡书精 → 失 1 体并全部复
+活（重整计数清零同款+hp1+`BossRevived`+摸 2）；否则 SelectPlayers 令一
+名同阵营受伤者回 2（active_ask 挂起态派生）。间隔 ≥2 轮门控
+（`round-used<2 → InvalidChoice`）。快照变体 `BossBuchun`（archive tag
+66/机哈希 67/a0 64；stage 显式编码）。`BOSS_GENERALS` 尾追加**勾芒**
+（def 索引 16/hp5/`[神裔, 不臣]`；names 姬|重；青木3 已处置）。**登记
+差异**：上游仅复同 parentNode 书精+上家优先——native 全场死亡书精座
+位序（关卡分组概念裸骨架无对应）；势力 shen→群目录近似。FROZEN 名单
+尾加「不臣」（93 名）。存档 55→**56**。版本 239→**240**（字段批探针：
+239+新代码全 14 位移佐证字段源）。回归
+`boss_mushengoumang_buchun_revive_and_recover` 五段（复活线/同轮拒/恢
+复线/v56 往返/守恒）——证据见
+[T11 不臣证据](../operations/evidence/2026-10-11-t11-boss-buchun-v240/README.md)。
+**坑位**：主动技 Behavior 的 start 为必需方法（unreachable 占位）；书精
+将无常量（BOSS_GENERALS 段按名查目录）；answer_first 不存在
+（`ctx.answer().first().copied()` 惯用）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

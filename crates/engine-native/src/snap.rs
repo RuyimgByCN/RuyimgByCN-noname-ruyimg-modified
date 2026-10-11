@@ -550,6 +550,14 @@ pub enum MachineSnapshot {
     BossZhaohuo {
         owner: PlayerId,
     },
+    /// 不臣（Boss 勾芒，规则 v240）：主动技两线机。stage：0=失体
+    /// （复活线已结算失体）、1=逐个复活中、2=目标询问挂起（恢复线）、
+    /// 3=目标已答待结算；targets=复活队列（复活线）/空（恢复线）。
+    BossBuchun {
+        owner: PlayerId,
+        stage: u8,
+        targets: Vec<u32>,
+    },
     /// 蛇毒标记结算（Boss 相柳，规则 v223）：两阶段挂起机。
     Shedu {
         owner: PlayerId,
@@ -1104,6 +1112,12 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
         }
         MachineSnapshot::Shedu { owner, .. } => {
             check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossBuchun { owner, targets, .. } => {
+            check_pid(*owner, b)?;
+            for t in targets {
+                check_pid(*t as u8, b)?;
+            }
         }
         MachineSnapshot::LiJian {
             owner, card, inner, ..
@@ -2068,6 +2082,32 @@ pub fn active_ask(
         }
         MachineSnapshot::BossZhaohuo { .. } => {
             // 招祸：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {
+            // 不臣恢复线目标询问挂起：同阵营受伤角色逐字段派生
+            let seats = core.players.len() as u8;
+            let candidates: Vec<ChoiceOption> = (0..seats)
+                .filter(|&t| {
+                    let p = core.player(t);
+                    p.alive
+                        && p.hp < p.max_hp as i32
+                        && core.is_boss_side(t) == core.is_boss_side(*owner)
+                })
+                .map(ChoiceOption::Player)
+                .collect();
+            Some(ask(
+                *owner,
+                "buchun_target",
+                ChoiceKind::SelectPlayers,
+                candidates,
+                1,
+                1,
+                false,
+            ))
+        }
+        MachineSnapshot::BossBuchun { .. } => {
+            // 复活线/恢复线非挂起阶段：无询问
             None
         }
         MachineSnapshot::Shedu { owner, .. } => {

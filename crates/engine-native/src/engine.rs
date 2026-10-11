@@ -4080,6 +4080,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.fengyin_active as u8);
         push_u8(&mut h, p.lingqu_count);
         push_u8(&mut h, p.xingqiu_toggled as u8);
+        push_u32(&mut h, p.buchun_used_round);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);
@@ -4402,6 +4403,15 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         M::BossZhaohuo { owner } => {
             push_u8(h, 66);
             push_u8(h, *owner);
+        }
+        M::BossBuchun { owner, stage, targets } => {
+            push_u8(h, 67);
+            push_u8(h, *owner);
+            push_u8(h, *stage);
+            for t in targets {
+                push_u8(h, *t as u8);
+            }
+            push_u8(h, 0);
         }
         M::Shedu { owner } => {
             push_u8(h, 65);

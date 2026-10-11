@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 55;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 56;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -933,6 +933,15 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
         MachineSnapshot::BossZhaohuo { owner } => {
             w.u8(65);
             enc_pid(w, owner);
+        }
+        MachineSnapshot::BossBuchun { owner, stage, targets } => {
+            w.u8(66);
+            enc_pid(w, owner);
+            w.u8(*stage);
+            w.u32(targets.len() as u32);
+            for t in targets {
+                w.u32(*t);
+            }
         }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);
@@ -2079,6 +2088,16 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let owner = dec_pid(r)?;
             MachineSnapshot::BossZhaohuo { owner }
         }
+        66 => {
+            let owner = dec_pid(r)?;
+            let stage = r.u8()?;
+            let n = r.u32()?;
+            let mut targets = Vec::with_capacity(n as usize);
+            for _ in 0..n {
+                targets.push(r.u32()?);
+            }
+            MachineSnapshot::BossBuchun { owner, stage, targets }
+        }
         64 => {
             let owner = dec_pid(r)?;
             MachineSnapshot::Shedu { owner }
@@ -2728,6 +2747,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u8(p.lingqu_count);
         // 星囚交替开关（v239）
         w.boolean(p.xingqiu_toggled);
+        // 不臣上次发动轮次（v240）
+        w.u32(p.buchun_used_round);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3011,6 +3032,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let fengyin_active = r.boolean()?;
         let lingqu_count = r.u8()?;
         let xingqiu_toggled = r.boolean()?;
+        let buchun_used_round = r.u32()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3067,6 +3089,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             fengyin_active,
             lingqu_count,
             xingqiu_toggled,
+            buchun_used_round,
             off_court,
             shuiyun_count,
             wangyou3_round,
