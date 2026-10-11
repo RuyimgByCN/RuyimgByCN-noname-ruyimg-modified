@@ -61,6 +61,20 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
         ctx.log(LogEvent::DamagePrevented { target: d.target });
         return;
     }
+    // 招祸（Boss 毕方，规则 v227）：锁定——你免疫所有火属性伤害（上游
+    // boss_zhaohuo damageBegin4 trigger.cancel 的火伤分支同口径；诚信免
+    // 伤同位）
+    if d.nature == crate::event::DamageNature::Fire {
+        if let Some(zdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ZHAOHUO)
+        {
+            if ctx.core.has_skill(d.target, zdef) {
+                ctx.log(LogEvent::DamagePrevented { target: d.target });
+                return;
+            }
+        }
+    }
     // 拟态（Boss 梼杌，规则 v217）：锁定——防止你于回合内受到的伤害
     //（上游 boss_nitai_in damageBegin4 trigger.cancel 同口径：当前回合
     // =持有者）

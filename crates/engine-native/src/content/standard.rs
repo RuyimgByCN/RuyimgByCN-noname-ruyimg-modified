@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 226;
+pub const STANDARD_RULESET_VERSION: u64 = 227;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -251,6 +251,41 @@ impl SkillMachine for SanCaiMachine {
 // ---------------------------------------------------------------------------
 // 移伤：当你即将受到伤害时，你可以将其转移给另一名存活玩家。
 // ---------------------------------------------------------------------------
+
+/// 招祸（Boss 毕方，规则 v227）：DamageBefore 一步直改——持有者造成的
+/// 伤害视为火属性（nature=Fire）。
+struct ZhaoHuoBehavior;
+
+impl SkillBehavior for ZhaoHuoBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Damage(d)
+            if d.source == Some(owner) && d.target != owner && !d.prevented)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ZhaoHuoMachine { owner })
+    }
+}
+
+/// 招祸机器：无挂起，启动即改当前伤害帧 nature。
+#[derive(Clone)]
+struct ZhaoHuoMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for ZhaoHuoMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossZhaohuo { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let d = ctx.current_damage_mut();
+        d.nature = crate::event::DamageNature::Fire;
+        Flow::Done
+    }
+}
 
 /// 覆泰（Boss 穷奇，规则 v212）：准备阶段（判定阶段开始锚点，神智同
 /// 口径）——所有受伤角色按座位序各回复 1 点体力。
@@ -465,6 +500,7 @@ impl SkillBehavior for YiShangBehavior {
     fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         matches!(event, EventData::Damage(d) if d.target == owner && !d.prevented)
     }
+
 
     fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
         Box::new(YiShangMachine {
@@ -4149,6 +4185,10 @@ pub const BOSS_BINGXIAN: &str = "兵先";
 /// maxHp30 表意，登记同穷奇）；出牌阶段体力低于上次回合结束时体力时，
 /// 【杀】可额外指定 1 个目标。
 pub const BOSS_JUYUAN: &str = "巨源";
+/// 招祸（Boss 毕方，规则 v227）：锁定技两面——你造成的所有伤害均视为
+/// 火属性；你免疫所有火属性伤害（登记差异：你的回合中其他角色防具无
+/// 效面挂点分散，未建模）。
+pub const BOSS_ZHAOHUO: &str = "招祸";
 /// 虚失（Boss 朱厌，规则 v225）：锁定技，体力值首次减至一半或更少时激
 /// 活；你的出牌阶段结束时翻面；武将牌翻回正面时对所有其他角色各造成
 /// 1 点伤害（上游 [1,2] 随机——恒 1 登记差异）。
@@ -4227,6 +4267,10 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 梼杌四技全齐（v217 拟态；v218 乱常；v219 冥顽——目标锁定集以
     // TurnState.minwan_targets 回合级承载）
     ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI, BOSS_LUANCHANG, BOSS_MINWAN], 25, Gender::Male),
+    // 毕方（上游 boss_bifang hp25）：招祸单技本批；红莲[红色不计上限+
+    // 回合开始随机获红牌/随机火伤]/炎狱(+switch)[他人回合判定红=火伤
+    // 每回合至多 3] 未落随下批
+    ("毕方", Faction::Qun, &[BOSS_YAOSHOU, BOSS_ZHAOHUO], 25, Gender::Male),
     // 书精（上游 boss_shujing hp2 女神）：催毒+中毒全技（中毒为运行时
     // 授技面，表列仅催毒——授技入实例同 catalog skill 空间）
     ("书精", Faction::Shu, &[BOSS_CUIDUI], 2, Gender::Female),
@@ -5534,6 +5578,21 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHAOHUO,
+            // 两面：造成伤害视为火（DamageBefore 触发机一步直改 nature
+            // ——相德同款窗口）；免疫火伤（commit_damage 入口直读——拟
+            // 态回合内免伤同位）
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ZhaoHuoBehavior),
         },
     ];
     (cards, skills)

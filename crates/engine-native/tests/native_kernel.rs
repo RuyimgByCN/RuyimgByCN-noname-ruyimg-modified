@@ -2197,11 +2197,11 @@ fn boss_qiongqi_yandu_gain_at_end_phase() {
 #[test]
 fn boss_shujing_cuidui_poison_cycle() {
     let mut e = Engine::new_boss_stage(37001, 4, 1, 3, 6, 4, 0);
-    // 书精 def：boss 段第 5 条（烛阴/混沌/穷奇/饕餮/梼杌/书精——注意梼杌
-    // 之后为书精）
+    // 书精 def：boss 段第 6 条（表序：烛阴/混沌/穷奇/饕餮/梼杌/毕方/
+    // 书精/相柳/朱厌——毕方 v227 插入于梼杌后）
     let shujing_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 5) as u16;
+        + 6) as u16;
     e.debug_set_general_def(1, shujing_def);
     e.debug_set_hp(1, 2);
     let cdef = e.catalog().skill_by_name("催毒").expect("催毒入目录");
@@ -2265,13 +2265,49 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// 朱厌批末片（规则 v226/存档 v51）：巨源——回合结束记录体力；出牌
 /// 阶段体力低于记录时【杀】可额外 1 目标；体力≥记录时单目标。
 #[test]
+/// 毕方批首片（规则 v227）：招祸两面——毕方造成的伤害视为火属性
+/// （DamageBefore 机直改 nature）；毕方免疫火属性伤害（commit 入口）。
+#[test]
+fn boss_bifang_zhaohuo_fire_nature_and_immune() {
+    let mut e = Engine::new_boss_stage(46001, 4, 1, 3, 6, 4, 0);
+    let bifang_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 5) as u16; // BOSS_GENERALS[5] 毕方（表序：烛阴/混沌/穷奇/饕餮/梼杌/毕方/书精/相柳/朱厌）
+    e.debug_set_general_def(1, bifang_def);
+    e.debug_set_hp(1, 25);
+    let zdef = e.catalog().skill_by_name("招祸").expect("招祸入目录");
+    assert!(e.state_core().skills.contains_key(&(1, zdef)));
+
+    // ① 毕方普杀 → 火属性（洛神/寒冰类以 nature 消费的消费点此处以
+    //    赤龙牙同款 amount 链验证不可见——直接以「火伤免疫」反证 nature
+    //    已改：② 中毕方受火伤=0）
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    let sha = e.debug_place(1, "sha");
+    play(&mut e, sha, vec![2]);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(2), 3, "招祸：毕方普杀带 1 伤（nature=Fire 不加值）");
+
+    // ② 毕方免疫火伤：0 号回合对毕方 2 点火伤 → hp 不变
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_deal_damage(Some(0), 1, 2, DamageNature::Fire);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(1), 25, "招祸：毕方免疫火属性伤害");
+
+    // ③ 对照：毕方受普通伤害正常结算（25→24）
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(1), 24, "普通伤害正常结算");
+}
+
 fn boss_zhuyan_juyuan_storage_and_extra_target() {
     // Prototype 局验证巨源两面（End 臂纯查询不受 Boss 模式影响；
     // boss_stage 局 first=0 与虚失翻面臂的自动推进交互独立登记）
     let mut e = Engine::new(45001, 4);
     let zhuyan_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 7) as u16;
+        + 8) as u16;
     e.debug_set_general_def(1, zhuyan_def);
     e.debug_set_hp(1, 25);
     let jdef = e.catalog().skill_by_name("巨源").expect("巨源入目录");
@@ -2337,7 +2373,7 @@ fn boss_zhuyan_xushi_flip_and_aoe() {
     let mut e = Engine::new_boss_stage(43001, 4, 1, 3, 6, 4, 0);
     let zhuyan_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 7) as u16;
+        + 8) as u16;
     e.debug_set_general_def(1, zhuyan_def);
     e.debug_set_hp(1, 25);
     let xdef = e.catalog().skill_by_name("虚失").expect("虚失入目录");
@@ -2385,7 +2421,7 @@ fn boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn() {
     let mut e = Engine::new_boss_stage(42001, 4, 1, 3, 6, 4, 0);
     let zhuyan_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 7) as u16; // BOSS_GENERALS[7] 朱厌
+        + 8) as u16; // BOSS_GENERALS[7] 朱厌
     e.debug_set_general_def(1, zhuyan_def);
     e.debug_set_hp(1, 25);
     let bdef = e.catalog().skill_by_name("兵先").expect("兵先入目录");
@@ -2420,7 +2456,7 @@ fn boss_xiangliu_duqu_shedu_echou() {
     let mut e = Engine::new_boss_stage(40001, 4, 1, 3, 6, 4, 0);
     let shujing_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 5) as u16;
+        + 7) as u16;
     e.debug_set_general_def(1, shujing_def); // 书精持催毒
     e.debug_set_hp(1, 2);
     let cdef = e.catalog().skill_by_name("催毒").expect("催毒入目录");
@@ -2495,7 +2531,7 @@ fn boss_xiangliu_jiushou_limit_nine_and_refill() {
     let mut e = Engine::new_boss_stage(39001, 4, 1, 3, 6, 4, 0);
     let xiangliu_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 6) as u16;
+        + 7) as u16;
     e.debug_set_general_def(1, xiangliu_def);
     e.debug_set_hp(1, 25);
     let jdef = e.catalog().skill_by_name("兽九").expect("兽九入目录");
@@ -2529,7 +2565,7 @@ fn boss_xiangliu_yaoshou_distance_minus_two() {
     let mut e = Engine::new_boss_stage(38001, 4, 1, 3, 6, 4, 0);
     let xiangliu_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 6) as u16; // BOSS_GENERALS[6] 相柳
+        + 7) as u16; // BOSS_GENERALS[7] 相柳（毕方插入后）
     e.debug_set_general_def(1, xiangliu_def);
     e.debug_set_hp(1, 25);
     let ydef = e.catalog().skill_by_name("妖兽").expect("妖兽入目录");

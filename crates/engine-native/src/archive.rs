@@ -930,6 +930,10 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             w.u8(63);
             enc_pid(w, owner);
         }
+        MachineSnapshot::BossZhaohuo { owner } => {
+            w.u8(65);
+            enc_pid(w, owner);
+        }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);
             enc_pid(w, owner);
@@ -2070,6 +2074,10 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
         63 => {
             let owner = dec_pid(r)?;
             MachineSnapshot::BossLuanchang { owner }
+        }
+        65 => {
+            let owner = dec_pid(r)?;
+            MachineSnapshot::BossZhaohuo { owner }
         }
         64 => {
             let owner = dec_pid(r)?;

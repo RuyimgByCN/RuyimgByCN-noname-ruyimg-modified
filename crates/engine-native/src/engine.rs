@@ -4297,6 +4297,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 64);
             push_u8(h, *owner);
         }
+        M::BossZhaohuo { owner } => {
+            push_u8(h, 66);
+            push_u8(h, *owner);
+        }
         M::Shedu { owner } => {
             push_u8(h, 65);
             push_u8(h, *owner);

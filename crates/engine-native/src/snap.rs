@@ -546,6 +546,10 @@ pub enum MachineSnapshot {
     BossLuanchang {
         owner: PlayerId,
     },
+    /// 招祸（Boss 毕方，规则 v227）：无挂起一步机，快照仅身份。
+    BossZhaohuo {
+        owner: PlayerId,
+    },
     /// 蛇毒标记结算（Boss 相柳，规则 v223）：两阶段挂起机。
     Shedu {
         owner: PlayerId,
@@ -1093,6 +1097,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossLuanchang { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossZhaohuo { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::Shedu { owner, .. } => {
@@ -2057,6 +2064,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossLuanchang { .. } => {
             // 乱常：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossZhaohuo { .. } => {
+            // 招祸：无挂起一步机，恢复无询问
             None
         }
         MachineSnapshot::Shedu { owner, .. } => {
