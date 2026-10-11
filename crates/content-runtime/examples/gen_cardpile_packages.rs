@@ -8,6 +8,11 @@
 //! 两仓 data 表语义一致（仅 JS 语法差异），各保留独立来源身份。
 //!
 //! 运行：`cargo run --offline -p content-runtime --example gen_cardpile_packages`
+//!
+//! **危险（T20，2026-10-11 登记）：本示例连带重写 huanle/d3/gujian/gwent/
+//! hearth/yunchou/wudian/wuxing 等全部转换包，且生成器内容落后于手工维
+//! 护的包数据（重跑曾覆盖丢失 huanle 手工补牌，T15① 实证）——除 cardpile
+//! 双包的字节守卫重生成需求外，禁止运行本示例。**
 
 use blake3::hash;
 use content_schema::{
