@@ -1890,37 +1890,6 @@ fn kof_engine_mode_session_advance() {
     assert_eq!(games3, 2);
 }
 
-/// Boss 批三-b（规则 v84）：助战中途入队——队尾追加座位、直授 4 牌、
-/// fellows 登记；fellow 属 boss 方（不算挑战者）；存档往返含扩张后座位表。
-#[test]
-/// boss 内容落包首批（规则 v208）：烛阴（hp4）单技凶兽三面——
-/// ①杀伤条件 +1（目标体力小于来源）；②与其他角色距离 -1；
-/// ③不能被翻面；装配/存档往返。
-#[test]
-/// Boss 内容落包第二批首片（规则 v209）：混沌（hp25）无脏两面——
-/// ①摸牌阶段基数 max(5,floor(hp/2))；②手牌上限基数 0（体力贡献清零）。
-/// 相德/隐贼(+switch) 未落（下批）。
-#[test]
-/// Boss 内容第二批续片（规则 v210）：混沌相德+隐贼——
-/// ①相德：有武器来源对混沌伤害 +1、无武器不加成；
-/// ②隐贼：装配即未激活；体力首次≤一半激活（SkillToggled）；
-/// 激活后无手牌时来源伤害后弃首张手牌；有手牌不触发。
-#[test]
-/// Boss 内容第三批首片（规则 v211）：穷奇（hp20）逐厄——任何人受到
-/// 伤害后（来源存活非穷奇），穷奇与来源各摸一张；穷奇自己为来源时不
-/// 触发。覆泰/延妒(+switch) 未落（下批）。
-#[test]
-/// Boss 内容第三批续片（规则 v212）：穷奇覆泰——准备阶段（判定阶段
-/// 开始锚点）全体受伤角色按座位序各回 1；满血不动；存档往返。
-#[test]
-/// Boss 内容第三批再续片（规则 v213）：穷奇延妒——体力首次≤一半激活
-/// （SkillToggled）；激活后其他角色结束阶段若其本回合无伤害且有手牌 →
-/// 穷奇获得其首张手牌；已造成伤害者不触发。
-#[test]
-/// 覆泰2 全场禁桃两面（规则 v214）：场上存有穷奇持覆泰且非其回合——
-/// ①他人出牌阶段用桃被拒；②濒死救援时他人真桃不可救（选项不含）；
-/// 穷奇自己回合他人用桃恢复可用。
-#[test]
 /// Boss 内容第四批首片（规则 v215）：饕餮贪欲两面——①跳过弃牌阶段
 /// （手牌保留）；②结束阶段手牌全场最多 → 失去 1 点体力；非最多不失。
 #[test]
@@ -2004,6 +1973,10 @@ fn boss_taotie_tanyu_skip_discard_and_max_hand_lose_hp() {
     assert!(is_max2, "②局构造=全场最多（对照）");
 }
 
+/// 覆泰2 全场禁桃两面（规则 v214）：场上存有穷奇持覆泰且非其回合——
+/// ①他人出牌阶段用桃被拒；②濒死救援时他人真桃不可救（选项不含）；
+/// 穷奇自己回合他人用桃恢复可用。
+#[test]
 fn boss_futai2_tao_banned_both_sides() {
     let mut e = Engine::new_boss_stage(31001, 4, 1, 3, 6, 4, 0);
     let qiongqi_def = (e.catalog().general_count()
@@ -2119,6 +2092,10 @@ fn boss_taotie_cangmu_jicai() {
     assert_eq!(e.debug_hand(1).len(), 2, "积财：自己回复 → 摸 2");
 }
 
+/// Boss 内容第三批再续片（规则 v213）：穷奇延妒——体力首次≤一半激活
+/// （SkillToggled）；激活后其他角色结束阶段若其本回合无伤害且有手牌 →
+/// 穷奇获得其首张手牌；已造成伤害者不触发。
+#[test]
 fn boss_qiongqi_yandu_gain_at_end_phase() {
     let mut e = Engine::new_boss_stage(30001, 4, 1, 3, 6, 4, 0);
     let qiongqi_def = (e.catalog().general_count()
@@ -2179,18 +2156,6 @@ fn boss_qiongqi_yandu_gain_at_end_phase() {
     let _ = before;
 }
 
-/// Boss 内容第五批首片（规则 v217）：梼杌拟态两面——①回合内受到的
-/// 伤害防止（.hp 不变）；②回合外受到的火属性伤害 +1。冥顽/乱常(+switch)
-/// 未落（下批）。
-#[test]
-/// Boss 内容第五批续片（规则 v218）：梼杌乱常——激活门控（体力首次
-/// ≤一半 SkillToggled）；激活后准备阶段（判定阶段开始锚点）虚拟南蛮
-/// （全场其他存活各响应或受 1）、结束阶段虚拟万箭（同 AOE 面）。
-#[test]
-/// 梼杌批末片（规则 v219）：冥顽三面——回合内自己用牌伤害他人后锁定
-/// 集（含自己）；此后每用一张牌摸 1、出牌目标只能是自己或锁定集内；
-/// 回合更替锁定集清零（下回合不再限制）。
-#[test]
 /// Boss 内容第六批（规则 v220）：书精催毒+中毒——书精伤害非己目标后
 /// 授毒（中毒实例）；中毒者回合开始判定：非红桃伤 1、黑桃保留、方片/
 /// 梅花伤 1 后失去此技。
@@ -2252,34 +2217,141 @@ fn boss_shujing_cuidui_poison_cycle() {
     let _ = hp_after;
 }
 
-/// ①相柳受击 → 来源获蛇毒标记；②标记者回合开始「弃 X 或失 X」
-/// （空选=失 X；弃 X 递减）；③邪酬 hp≤半激活；激活后他人用桃/酒 →
-/// 相柳获标记。
+/// 应昭批末片（规则 v232）：司圃使用面——激活后应昭出牌阶段已用牌数
+/// ≤2 期间其他玩家出牌被拒；第 3 张牌后解除；应昭自己不受限；响应四
+/// 面登记差异未建模。
 #[test]
-/// 朱厌批首片（规则 v224）：兵先——他人回合未出杀（出牌阶段口径）→
-/// 其结束阶段被朱厌虚拟杀（受 1 或响应）；出了杀则不被打。
-#[test]
-/// 朱厌批续片（规则 v225）：虚失——体力首次≤一半激活；出牌阶段结束
-/// 自翻面；翻回正面时全场其他角色各受 1（随机恒 1 近似）。
-#[test]
-/// 朱厌批末片（规则 v226/存档 v51）：巨源——回合结束记录体力；出牌
-/// 阶段体力低于记录时【杀】可额外 1 目标；体力≥记录时单目标。
-#[test]
-/// 毕方批首片（规则 v227）：招祸两面——毕方造成的伤害视为火属性
-/// （DamageBefore 机直改 nature）；毕方免疫火属性伤害（commit 入口）。
-#[test]
-/// 毕方批续片（规则 v228）：红莲——红色牌不计入手牌上限（弃牌阶段红
-/// 牌不可弃）；回合开始顺序获牌堆前缀红牌至多 3（随机近似），并对座位
-/// 序前至多 3 名其他角色各造成 1 点火伤（随机近似；招祸使其为火属性、
-/// 毕方自身免疫不适用于对他人）。
-#[test]
-/// 毕方批末片（规则 v229）：炎狱——hp≤半激活；其他角色回合开始判定
-/// 红色 → 该角色受 1 点来自毕方的火伤；每回合至多 3 次（计数器回合更
-/// 替清零）。
-#[test]
-/// 应昭批首片（规则 v228）：封冻——应昭回合开始所有其他角色获封印
-/// （本回合无法使用手牌）；回合结束解除；装备区牌不受限。
-#[test]
+fn boss_yingzhao_sipu_use_ban_first_two() {
+    let mut e = Engine::new_boss_stage(52001, 4, 1, 3, 6, 4, 0);
+    let yingzhao_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 8) as u16;
+    e.debug_set_general_def(1, yingzhao_def);
+    e.debug_set_hp(1, 25);
+    let sdef = e.catalog().skill_by_name("司圃").expect("司圃入目录");
+    assert!(e.state_core().skills.contains_key(&(1, sdef)));
+    assert!(!e.state_core().has_skill(1, sdef), "司圃装配即未激活");
+
+    // 激活门控：hp 置 12（≤12 半线）→ 一次伤害（12→11）激活
+    e.debug_set_hp(1, 12);
+    advance_to_play(&mut e, 2);
+    e.debug_clear_hand(2);
+    e.debug_clear_hand(1);
+    let sha = e.debug_place(2, "sha");
+    // 巡游可能取到装备牌自动装上（马使距离+1）——清除装备后激活
+    {
+        let mut core = e.state_core_mut();
+        let eqs: Vec<u32> = core.player_mut(1).equips.drain(..).collect();
+        core.discard.extend(eqs);
+    }
+    let out = play(&mut e, sha, vec![1]);
+    drain_choices(&mut e);
+    assert!(e.state_core().has_skill(1, sdef), "体力≤一半 → 司圃激活");
+
+    // ① 应昭回合：跨到应昭出牌阶段（已用 0 牌<3）→ 杀的目标（2 号）
+    //    持闪但司圃禁响应（仅 Pass）→ 2 号受 1 伤
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(2);
+    {
+        let mut core = e.state_core_mut();
+        let eqs: Vec<u32> = core.player_mut(1).equips.drain(..).collect();
+        core.discard.extend(eqs);
+    }
+    let sha2 = e.debug_place(1, "sha");
+    let shan_t2 = e.debug_place(2, "shan");
+    e.debug_set_hp(2, 4);
+    play(&mut e, sha2, vec![2]);
+    let c = e.open_choice().expect("出闪询问应挂起");
+    assert_eq!(c.observer, 2);
+    assert!(
+        !c.spec
+            .options
+            .iter()
+            .any(|o| matches!(o, ChoiceOption::Card(x) if *x == shan_t2)),
+        "司圃：已用<3 期间 2 号闪选项被禁（仅 Pass）"
+    );
+    answer(&mut e, ChoiceOption::Pass);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(2), 3, "无法闪 → 受 1 伤（4-1）");
+
+    // ② 已用 1 牌（<3）→ 仍禁：应昭用桃（非杀避免杀限，自气回 1）
+    let tao1 = e.debug_place(1, "tao");
+    e.debug_set_hp(1, 10);
+    play(&mut e, tao1, vec![]);
+    drain_choices(&mut e);
+    assert_eq!(e.state_core().turn.cards_used_play_phase, 2, "已用 2 牌");
+
+    // ③ 已用 2 牌（<3）→ 仍禁：再用一桃（used=3 → 司圃解除）
+    let tao2 = e.debug_place(1, "tao");
+    play(&mut e, tao2, vec![]);
+    drain_choices(&mut e);
+    assert_eq!(e.state_core().turn.cards_used_play_phase, 3, "已用 3 牌");
+
+    // ④ 解除验证（cardSavable 恢复）：濒死者自救用桃恢复可用——0 号
+    //    hp=1，应昭（回合内）杀 0 号 → 濒死询问中 0 号自救桃入选项（已
+    //    用 3 张解除）
+    e.debug_clear_hand(0);
+    e.debug_set_hp(0, 1);
+    let tao0 = e.debug_place(0, "tao");
+    // 决斗（非杀避免杀限）：0 号无杀 → 受 1 伤 → hp 1→0 濒死
+    let duel = e.debug_place(1, "duel");
+    play(&mut e, duel, vec![0]);
+    let c = e.open_choice().expect("濒死询问应挂起");
+    assert_eq!(c.observer, 0);
+    assert!(
+        c.spec
+            .options
+            .iter()
+            .any(|o| matches!(o, ChoiceOption::Card(x) if *x == tao0)),
+        "已用 3 张 → 司圃解除，自救桃恢复可用"
+    );
+    answer_sel(&mut e, vec![ChoiceOption::Card(tao0)]);
+    drain_choices(&mut e);
+    assert!(e.debug_alive(0), "自救成功");
+
+    // ⑤ 应昭自己回合内濒死（used=0<3）：自救桃入选项、他人救援桃被禁
+    //    （cardSavable 建模面）——先收掉当前回合再推进到应昭新回合
+    next_phase(&mut e); // Play→Discard
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End
+    drain_choices(&mut e);
+    advance_to_play(&mut e, 1);
+    assert_eq!(e.state_core().turn.cards_used_play_phase, 0, "新回合已用清零");
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(2);
+    e.debug_set_hp(1, 1);
+    let tao_yz = e.debug_place(1, "tao");
+    let tao_2 = e.debug_place(2, "tao");
+    e.debug_deal_damage(Some(2), 1, 2, DamageNature::Normal);
+    drain_choices(&mut e);
+    let c = e.open_choice().expect("濒死询问应挂起");
+    assert_eq!(c.observer, 1, "自救优先询问应昭");
+    assert!(
+        c.spec
+            .options
+            .iter()
+            .any(|o| matches!(o, ChoiceOption::Card(x) if *x == tao_yz)),
+        "司圃不禁自救"
+    );
+    // 应昭放弃自救 → 轮转他人：2 号持桃但禁救（仅 Pass）
+    answer(&mut e, ChoiceOption::Pass);
+    drain_choices(&mut e);
+    let c = e.open_choice().expect("他人救援询问应挂起");
+    assert_eq!(c.observer, 2);
+    assert!(
+        !c.spec
+            .options
+            .iter()
+            .any(|o| matches!(o, ChoiceOption::Card(_))),
+        "已用<3 期间他人禁救（cardSavable）"
+    );
+    answer(&mut e, ChoiceOption::Pass);
+    drain_choices(&mut e);
+    assert!(!e.debug_alive(1), "无人可救 → 应昭死亡");
+    assert_zone_conservation(&e);
+}
+
 /// 应昭批续片（规则 v231）：巡游——他人回合开始获得座位序首名有手牌
 /// 者的一张手牌；装备牌自动使用（同栏替换）。
 #[test]
@@ -2326,6 +2398,9 @@ fn boss_yingzhao_xunyou_steal_and_equip() {
     assert!(stolen_in_hands, "巡游：牌入应昭手牌（闪非装备）");
 }
 
+/// 应昭批首片（规则 v228）：封冻——应昭回合开始所有其他角色获封印
+/// （本回合无法使用手牌）；回合结束解除；装备区牌不受限。
+#[test]
 fn boss_yingzhao_fengdong_hand_ban() {
     let mut e = Engine::new_boss_stage(49001, 4, 1, 3, 6, 4, 0);
     let yingzhao_def = (e.catalog().general_count()
@@ -2368,6 +2443,10 @@ fn boss_yingzhao_fengdong_hand_ban() {
     assert_zone_conservation(&r);
 }
 
+/// 毕方批末片（规则 v229）：炎狱——hp≤半激活；其他角色回合开始判定
+/// 红色 → 该角色受 1 点来自毕方的火伤；每回合至多 3 次（计数器回合更
+/// 替清零）。
+#[test]
 fn boss_bifang_yanyu_judge_fire_max_three() {
     let mut e = Engine::new_boss_stage(48001, 4, 1, 3, 6, 4, 0);
     let bifang_def = (e.catalog().general_count()
@@ -2424,6 +2503,11 @@ fn boss_bifang_yanyu_judge_fire_max_three() {
     );
 }
 
+/// 毕方批续片（规则 v228）：红莲——红色牌不计入手牌上限（弃牌阶段红
+/// 牌不可弃）；回合开始顺序获牌堆前缀红牌至多 3（随机近似），并对座位
+/// 序前至多 3 名其他角色各造成 1 点火伤（随机近似；招祸使其为火属性、
+/// 毕方自身免疫不适用于对他人）。
+#[test]
 fn boss_bifang_honglianx_red_excluded_and_judge_gain() {
     let mut e = Engine::new_boss_stage(47001, 4, 1, 3, 6, 4, 0);
     let bifang_def = (e.catalog().general_count()
@@ -2466,6 +2550,9 @@ fn boss_bifang_honglianx_red_excluded_and_judge_gain() {
     );
 }
 
+/// 毕方批首片（规则 v227）：招祸两面——毕方造成的伤害视为火属性
+/// （DamageBefore 机直改 nature）；毕方免疫火属性伤害（commit 入口）。
+#[test]
 fn boss_bifang_zhaohuo_fire_nature_and_immune() {
     let mut e = Engine::new_boss_stage(46001, 4, 1, 3, 6, 4, 0);
     let bifang_def = (e.catalog().general_count()
@@ -2484,7 +2571,7 @@ fn boss_bifang_zhaohuo_fire_nature_and_immune() {
     let sha = e.debug_place(1, "sha");
     play(&mut e, sha, vec![2]);
     drain_choices(&mut e);
-    assert_eq!(e.debug_hp(2), 3, "招祸：毕方普杀带 1 伤（nature=Fire 不加值）");
+    assert_eq!(e.debug_hp(2), 2, "招祸：普杀 1+凶兽条件伤 1（目标体力小于来源）；火属性不加值");
 
     // ② 毕方免疫火伤：0 号回合对毕方 2 点火伤 → hp 不变
     advance_to_play(&mut e, 0);
@@ -2499,13 +2586,16 @@ fn boss_bifang_zhaohuo_fire_nature_and_immune() {
     assert_eq!(e.debug_hp(1), 24, "普通伤害正常结算");
 }
 
+/// 朱厌批末片（规则 v226/存档 v51）：巨源——回合结束记录体力；出牌
+/// 阶段体力低于记录时【杀】可额外 1 目标；体力≥记录时单目标。
+#[test]
 fn boss_zhuyan_juyuan_storage_and_extra_target() {
     // Prototype 局验证巨源两面（End 臂纯查询不受 Boss 模式影响；
     // boss_stage 局 first=0 与虚失翻面臂的自动推进交互独立登记）
     let mut e = Engine::new(45001, 4);
     let zhuyan_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 8) as u16;
+        + 9) as u16;
     e.debug_set_general_def(1, zhuyan_def);
     e.debug_set_hp(1, 25);
     let jdef = e.catalog().skill_by_name("巨源").expect("巨源入目录");
@@ -2567,11 +2657,14 @@ fn boss_zhuyan_juyuan_storage_and_extra_target() {
     assert_zone_conservation(&r);
 }
 
+/// 朱厌批续片（规则 v225）：虚失——体力首次≤一半激活；出牌阶段结束
+/// 自翻面；翻回正面时全场其他角色各受 1（随机恒 1 近似）。
+#[test]
 fn boss_zhuyan_xushi_flip_and_aoe() {
     let mut e = Engine::new_boss_stage(43001, 4, 1, 3, 6, 4, 0);
     let zhuyan_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 8) as u16;
+        + 9) as u16;
     e.debug_set_general_def(1, zhuyan_def);
     e.debug_set_hp(1, 25);
     let xdef = e.catalog().skill_by_name("虚失").expect("虚失入目录");
@@ -2615,11 +2708,14 @@ fn boss_zhuyan_xushi_flip_and_aoe() {
     );
 }
 
+/// 朱厌批首片（规则 v224）：兵先——他人回合未出杀（出牌阶段口径）→
+/// 其结束阶段被朱厌虚拟杀（受 1 或响应）；出了杀则不被打。
+#[test]
 fn boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn() {
     let mut e = Engine::new_boss_stage(42001, 4, 1, 3, 6, 4, 0);
     let zhuyan_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 8) as u16; // BOSS_GENERALS[7] 朱厌
+        + 9) as u16; // BOSS_GENERALS[9] 朱厌
     e.debug_set_general_def(1, zhuyan_def);
     e.debug_set_hp(1, 25);
     let bdef = e.catalog().skill_by_name("兵先").expect("兵先入目录");
@@ -2650,11 +2746,15 @@ fn boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn() {
     assert_eq!(e.debug_hp(0), hp0_before, "出杀回合 → 兵先不触发");
 }
 
+/// ①相柳受击 → 来源获蛇毒标记；②标记者回合开始「弃 X 或失 X」
+/// （空选=失 X；弃 X 递减）；③邪酬 hp≤半激活；激活后他人用桃/酒 →
+/// 相柳获标记。
+#[test]
 fn boss_xiangliu_duqu_shedu_echou() {
     let mut e = Engine::new_boss_stage(40001, 4, 1, 3, 6, 4, 0);
     let shujing_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 7) as u16;
+        + 6) as u16;
     e.debug_set_general_def(1, shujing_def); // 书精持催毒
     e.debug_set_hp(1, 2);
     let cdef = e.catalog().skill_by_name("催毒").expect("催毒入目录");
@@ -2698,7 +2798,7 @@ fn boss_xiangliu_duqu_shedu_echou() {
     let mut e2 = Engine::new_boss_stage(40002, 4, 1, 3, 6, 4, 0);
     let xiangliu_def = (e2.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 6) as u16;
+        + 7) as u16;
     e2.debug_set_general_def(1, xiangliu_def);
     e2.debug_set_hp(1, 20);
     assert!(e2
@@ -2776,6 +2876,10 @@ fn boss_xiangliu_yaoshou_distance_minus_two() {
     assert_eq!(d02, 2, "他人距离不受妖兽影响");
 }
 
+/// 梼杌批末片（规则 v219）：冥顽三面——回合内自己用牌伤害他人后锁定
+/// 集（含自己）；此后每用一张牌摸 1、出牌目标只能是自己或锁定集内；
+/// 回合更替锁定集清零（下回合不再限制）。
+#[test]
 fn boss_taowu_minwan_lockset_draw_and_target_mod() {
     let mut e = Engine::new_boss_stage(36001, 4, 1, 3, 6, 4, 0);
     let taowu_def = (e.catalog().general_count()
@@ -2840,6 +2944,10 @@ fn boss_taowu_minwan_lockset_draw_and_target_mod() {
     assert_zone_conservation(&r);
 }
 
+/// Boss 内容第五批续片（规则 v218）：梼杌乱常——激活门控（体力首次
+/// ≤一半 SkillToggled）；激活后准备阶段（判定阶段开始锚点）虚拟南蛮
+/// （全场其他存活各响应或受 1）、结束阶段虚拟万箭（同 AOE 面）。
+#[test]
 fn boss_taowu_luanchang_virtual_aoe() {
     let mut e = Engine::new_boss_stage(35001, 4, 1, 3, 6, 4, 0);
     let taowu_def = (e.catalog().general_count()
@@ -2883,6 +2991,10 @@ fn boss_taowu_luanchang_virtual_aoe() {
     assert!(e.state_core().has_skill(1, ldef), "乱常保持激活");
 }
 
+/// Boss 内容第五批首片（规则 v217）：梼杌拟态两面——①回合内受到的
+/// 伤害防止（.hp 不变）；②回合外受到的火属性伤害 +1。冥顽/乱常(+switch)
+/// 未落（下批）。
+#[test]
 fn boss_taowu_nitai_in_shield_out_fire() {
     let mut e = Engine::new_boss_stage(34001, 4, 1, 3, 6, 4, 0);
     let taowu_def = (e.catalog().general_count()
@@ -2920,6 +3032,9 @@ fn boss_taowu_nitai_in_shield_out_fire() {
     assert_eq!(e.debug_hp(1), 22, "回合外普通伤害不加成");
 }
 
+/// Boss 内容第三批续片（规则 v212）：穷奇覆泰——准备阶段（判定阶段
+/// 开始锚点）全体受伤角色按座位序各回 1；满血不动；存档往返。
+#[test]
 fn boss_qiongqi_futai_recover_wounded() {
     let mut e = Engine::new_boss_stage(29001, 4, 1, 3, 6, 4, 0);
     let qiongqi_def = (e.catalog().general_count()
@@ -2945,6 +3060,10 @@ fn boss_qiongqi_futai_recover_wounded() {
     assert_zone_conservation(&r);
 }
 
+/// Boss 内容第三批首片（规则 v211）：穷奇（hp20）逐厄——任何人受到
+/// 伤害后（来源存活非穷奇），穷奇与来源各摸一张；穷奇自己为来源时不
+/// 触发。覆泰/延妒(+switch) 未落（下批）。
+#[test]
 fn boss_qiongqi_zhue_dual_draw() {
     let mut e = Engine::new_boss_stage(28001, 4, 1, 3, 6, 4, 0);
     let qiongqi_def = (e.catalog().general_count()
@@ -2979,6 +3098,11 @@ fn boss_qiongqi_zhue_dual_draw() {
     assert_eq!(e.debug_hand(1).len(), 0);
 }
 
+/// Boss 内容第二批续片（规则 v210）：混沌相德+隐贼——
+/// ①相德：有武器来源对混沌伤害 +1、无武器不加成；
+/// ②隐贼：装配即未激活；体力首次≤一半激活（SkillToggled）；
+/// 激活后无手牌时来源伤害后弃首张手牌；有手牌不触发。
+#[test]
 fn boss_hundun_xiangde_yinzei() {
     let mut e = Engine::new_boss_stage(27001, 4, 1, 3, 6, 4, 0);
     let hundun_def = (e.catalog().general_count()
@@ -3048,6 +3172,10 @@ fn boss_hundun_xiangde_yinzei() {
     assert_eq!(e.state_core().hand_limit(e.catalog(), 1), 0, "无脏：手牌上限基数恒 0（体力贡献清零）");
 }
 
+/// Boss 内容落包第二批首片（规则 v209）：混沌（hp25）无脏两面——
+/// ①摸牌阶段基数 max(5,floor(hp/2))；②手牌上限基数 0（体力贡献清零）。
+/// 相德/隐贼(+switch) 未落（下批）。
+#[test]
 fn boss_hundun_wuzang_draw_and_hand_limit() {
     let mut e = Engine::new_boss_stage(26001, 4, 1, 3, 6, 4, 0);
     let hundun_def = (e.catalog().general_count()
@@ -3101,6 +3229,10 @@ fn boss_hundun_wuzang_draw_and_hand_limit() {
     assert_eq!(e.state_core().hand_limit(e.catalog(), 0), 4, "他人上限不受影响（hp4）");
 }
 
+/// boss 内容落包首批（规则 v208）：烛阴（hp4）单技凶兽三面——
+/// ①杀伤条件 +1（目标体力小于来源）；②与其他角色距离 -1；
+/// ③不能被翻面；装配/存档往返。
+#[test]
 fn boss_zhuyin_xiongshou_semantics() {
     use engine_native::catalog::CardKind;
     let mut e = Engine::new_boss_stage(25001, 4, 1, 3, 6, 4, 0);
@@ -3192,6 +3324,8 @@ fn boss_stage_opening_and_first_actor() {
 
 /// addFellow 中途入队（v84 批三-b）：入队座位=队尾、直授 4 张、
 /// 座位表扩张、fellows 登记、存档往返、fellow 不算挑战者。
+/// Boss 批三-b（规则 v84）：助战中途入队——队尾追加座位、直授 4 牌、
+/// fellows 登记；fellow 属 boss 方（不算挑战者）；存档往返含扩张后座位表。
 #[test]
 fn boss_mode_add_fellow_seat_expansion() {
     let mut e = Engine::new_boss(2205, 3, 0, 2);
@@ -3247,9 +3381,6 @@ fn boss_mode_add_fellow_seat_expansion() {
     assert!(matches!(e.outcome(), Some(o) if o.winner == Winner::Boss { boss_won: true }), "{:?}", e.outcome());
 }
 
-/// 斗地主（P2/N08 模式入口批二，规则 v81）：地主死亡 → 农民胜；
-/// 农民全灭 → 地主胜；无击杀奖惩；存档往返。
-#[test]
 /// 斗地主 binglin 变体开局（规则 v205）：地主 5 张/农民 4 张；
 /// 标准变体各 4 张；开局后存档往返手牌一致。
 #[test]
@@ -3279,6 +3410,9 @@ fn doudizhu_binglin_opening_draw() {
     }
 }
 
+/// 斗地主（P2/N08 模式入口批二，规则 v81）：地主死亡 → 农民胜；
+/// 农民全灭 → 地主胜；无击杀奖惩；存档往返。
+#[test]
 fn doudizhu_mode_victory_and_roundtrip() {
     let mut e = Engine::new_doudizhu(2101, 3, 0);
     advance_to_play(&mut e, 0);

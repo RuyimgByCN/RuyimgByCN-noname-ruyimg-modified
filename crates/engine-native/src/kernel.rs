@@ -562,6 +562,27 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     }
     // 虚失门控（Boss 朱厌，规则 v225）：体力首次≤一半激活（隐贼/延妒/
     // 积财/乱常同款 enable 直写）
+    if let Some(sdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_SIPU)
+    {
+        let holder = d.target;
+        if ctx.core.has_skill_any_state(holder, sdef)
+            && !ctx.core.has_skill(holder, sdef)
+        {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                if let Some(inst) = ctx.core.skills.get_mut(&(holder, sdef)) {
+                    inst.enabled = true;
+                }
+                ctx.log(LogEvent::SkillToggled {
+                    player: holder,
+                    skill: ctx.catalog.skill_name(sdef),
+                    enabled: true,
+                });
+            }
+        }
+    }
     if let Some(xdef) = ctx
         .catalog
         .skill_by_name(crate::content::standard::BOSS_XUSHI)
@@ -4580,8 +4601,22 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
                 return self.emit_sha_damage(ctx);
             }
+            // 司圃（Boss 应昭，规则 v232）：应昭出牌阶段已用牌数≤2 期间
+            // 其他人无法打出牌（上游 cardRespondable 同口径）——出闪选项
+            // 仅保留 Pass（目标必受伤害）
+            let sipu_ban_respond = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::BOSS_SIPU)
+                .map(|def| {
+                    ctx.core.has_skill(self.source, def)
+                        && ctx.core.turn.current == self.source
+                        && ctx.core.turn.cards_used_play_phase < 3
+                })
+                .unwrap_or(false);
             let mut options = vec![ChoiceOption::Pass];
-            options.extend(shans);
+            if !sipu_ban_respond {
+                options.extend(shans);
+            }
             return Flow::WaitChoice {
                 observer: self.target,
                 spec: ChoiceSpec {
@@ -4893,11 +4928,37 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             }
             self.asked = true;
             let mut options = vec![ChoiceOption::Pass];
+            // 司圃（Boss 应昭，规则 v223/v232）：应昭出牌阶段已用牌数≤2
+            // 期间其他人不可救（上游 cardSavable 同口径）——非应昭救援者
+            // 的桃不入选项（酒同理由 cardRespondable）
+            let sipu_ban_save = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::BOSS_SIPU)
+                .map(|def| {
+                    ctx.core.has_skill(self.dying, def)
+                        && ctx.core.turn.current == self.dying
+                        && ctx.core.turn.cards_used_play_phase < 3
+                })
+                .unwrap_or(false);
+            let sipu_holder = if ctx
+                .catalog
+                .skill_by_name(crate::content::standard::BOSS_SIPU)
+                .is_some()
+            {
+                self.dying
+            } else {
+                0
+            };
             options.extend(
                 ctx.core.player(responder)
                     .hand
                     .iter()
                     .filter(|c| is_tao_like(ctx, responder, **c, self.dying))
+                    .filter(|c| {
+                        !sipu_ban_save
+                            || (responder == sipu_holder
+                                && is_tao_like(ctx, responder, **c, self.dying))
+                    })
                     .copied()
                     .map(ChoiceOption::Card),
             );

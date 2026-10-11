@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 231;
+pub const STANDARD_RULESET_VERSION: u64 = 232;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,12 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 司圃（Boss 应昭，规则 v232）：锁定技，体力值首次减至一半或更少时激
+/// 活；你的出牌阶段内已使用牌数≤2 期间，其他角色无法使用牌。cardEnabled/
+/// cardUsable 使用面在原生回合模型下由「仅回合玩家可提交使用」天然承载；
+/// cardRespondable/cardSavable 按响应/救选项排除建模（无懈等其余响应窗
+/// 未纳入禁令，登记差异）。
+pub const BOSS_SIPU: &str = "司圃";
 /// 红莲（Boss 毕方，规则 v228）：锁定技两面——你的红色牌不计入手牌上
 /// 限（弃牌阶段红色牌不可弃）；回合开始随机获得牌堆 0–3 张红色牌（确
 /// 定性近似：顺序取牌堆前缀红牌至多 3），并随机对 3–0 名其他角色各造
@@ -4292,8 +4298,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 相柳四技全齐（v221 妖兽；v222 兽九；v223 毒妒+邪酬——蛇毒标记
     // 以 PlayerState.shedu 承载）
     ("相柳", Faction::Qun, &[BOSS_YAOSHOU, BOSS_JIUSHOU, BOSS_DUQU, BOSS_ECHOU], 25, Gender::Male),
-    // 应昭：巡游已落（v231）；死缚(+switch) 未落随下批
-    ("应昭", Faction::Qun, &[BOSS_YAOSHOU, BOSS_FENGDONG, BOSS_XUNYOU], 25, Gender::Male),
+    // 应昭四技全齐（v228 封冻；v231 巡游；v232 司圃使用面——响应四面
+    // 登记差异；激活门控同隐贼先例）
+    ("应昭", Faction::Qun, &[BOSS_YAOSHOU, BOSS_FENGDONG, BOSS_XUNYOU, BOSS_SIPU], 25, Gender::Male),
     // 朱厌四技全齐（v224 兵先；v225 虚失；v226 巨源——体力上限+5 由
     // maxHp30 表意[登记同穷奇]；记录=PlayerState.juyuan_storage）
     ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
@@ -5642,6 +5649,16 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_XUNYOU,
             // 权限型单面：他人回合开始获得座位序首名有手牌者一张手牌
             //（Judge begin 段内联，确定性近似；装备牌自动使用=直接装上）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_SIPU,
+            // 权限型两面：激活门控（commit_damage 尾第九并列臂；装配即
+            // 未激活）与响应/救禁（respond_shan、dying_save 选项排除）
+            // 均经 skill_by_name 查询；使用面由回合模型天然承载；无懈等
+            // 其余响应窗未纳入禁令（登记差异）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
