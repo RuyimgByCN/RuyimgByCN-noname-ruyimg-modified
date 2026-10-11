@@ -2485,6 +2485,57 @@ fn apply_command(
             if core.player(core.turn.current).jileng_active {
                 return Err(RejectReason::CardLimit);
             }
+            // 造异（Boss 颛顼，规则 v246）：玄冥在场 → 敌方不可为锦囊目
+            // 标；共工在场 → 敌方不可为基本牌目标（上游 mod targetEnabled
+            // 同口径；装备不受限）
+            {
+                let base = (catalog.general_count()
+                    - crate::content::standard::BOSS_GENERALS.len())
+                    as u16;
+                let named_alive = |gname: &str| -> bool {
+                    (base..catalog.general_count() as u16)
+                        .filter(|&d| {
+                            catalog
+                                .general_meta(d)
+                                .map(|m| m.0 == gname)
+                                .unwrap_or(false)
+                        })
+                        .any(|gd| {
+                            (0..core.players.len() as u8).any(|t| {
+                                core.player(t).alive
+                                    && core.player(t).general_slots[0] == Some(gd)
+                            })
+                        })
+                };
+                let xuanming_alive = named_alive("玄冥");
+                let gonggong_alive = named_alive("共工");
+                if xuanming_alive || gonggong_alive {
+                    let is_basic = matches!(
+                        kind,
+                        CardKind::Sha
+                            | CardKind::FireSha
+                            | CardKind::LeiSha
+                            | CardKind::Shan
+                            | CardKind::Tao
+                            | CardKind::Jiu
+                    );
+                    let is_equip = kind.is_equip();
+                    for t in &targets {
+                        if !core.player(*t).alive {
+                            continue;
+                        }
+                        if core.is_boss_side(*t)
+                            != core.is_boss_side(core.turn.current)
+                        {
+                            if (xuanming_alive && !is_basic && !is_equip)
+                                || (gonggong_alive && is_basic)
+                            {
+                                return Err(RejectReason::IllegalTargets);
+                            }
+                        }
+                    }
+                }
+            }
             match kind {
                 CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制

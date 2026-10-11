@@ -1295,6 +1295,40 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 造异异变（运行时授予技，规则 v246）：回合开始——
+                    // 敌方中体力最低者全体失去全部体力（上游 boss_zaoyi_
+                    // hp phaseZhunbeiBegin loseHp(min) 同口径）
+                    if let Some(zhdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_ZAOYI_HP)
+                    {
+                        if ctx.core.has_skill(player, zhdef) {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            let enemies: Vec<PlayerId> = (0..seats)
+                                .filter(|&t| {
+                                    ctx.core.player(t).alive
+                                        && ctx.core.is_boss_side(t)
+                                            != ctx.core.is_boss_side(player)
+                                })
+                                .collect();
+                            if let Some(min) = enemies
+                                .iter()
+                                .map(|&t| ctx.core.player(t).hp)
+                                .min()
+                            {
+                                if min > 0 {
+                                    for t in enemies {
+                                        if ctx.core.player(t).hp == min {
+                                            ctx.emit(EventData::LoseHp {
+                                                player: t,
+                                                amount: min as u32,
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
@@ -1977,6 +2011,13 @@ fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool)
         }
     }
     ctx.emit(EventData::TurnOvered { player, face_down });
+}
+
+/// 造异异变 def 查询（运行时授予技）。
+fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
+    ctx.catalog
+        .skill_by_name(crate::content::standard::BOSS_ZAOYI_HP)
+        .expect("造异异变入目录")
 }
 
 /// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
@@ -7173,6 +7214,75 @@ impl crate::catalog::SkillMachine for DeathMachine {
             player: self.player,
             killer: self.killer,
         });
+        // 造异（Boss 颛顼，规则 v246）：玄冥/共工死亡且场上无存活同名
+        // 将 → 造异持有者摸 4 并获「造异异变」（运行时授予；技能实例已
+        // 移除，故以死亡者武将名判定）
+        {
+            let dead_name = (|| {
+                let g = ctx.core.player(self.player).general_slots[0];
+                let g = g?;
+                let base = (ctx.catalog.general_count()
+                    - crate::content::standard::BOSS_GENERALS.len())
+                    as u16;
+                if g < base {
+                    return None;
+                }
+                ctx.catalog.general_meta(g).map(|meta| meta.0.to_string())
+            })();
+            if dead_name.as_deref() == Some("共工")
+                || dead_name.as_deref() == Some("玄冥")
+            {
+                let base = (ctx.catalog.general_count()
+                    - crate::content::standard::BOSS_GENERALS.len())
+                    as u16;
+                let named_alive = (base..ctx.catalog.general_count() as u16)
+                    .filter(|&d| {
+                        matches!(
+                            ctx.catalog.general_meta(d).map(|m| m.0),
+                            Some(n) if n == "共工" || n == "玄冥"
+                        )
+                    })
+                    .any(|gd| {
+                        (0..ctx.core.players.len() as u8).any(|t| {
+                            ctx.core.player(t).alive
+                                && ctx.core.player(t).general_slots[0] == Some(gd)
+                        })
+                    });
+                if !named_alive {
+                    let zdef = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_ZAOYI);
+                    if let Some(zdef) = zdef {
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == zdef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .filter(|o| ctx.core.player(*o).alive)
+                            .collect();
+                        for holder in holders {
+                            ctx.draw_cards(holder, 4);
+                            ctx.core.skills.insert(
+                                (holder, zhp_def(ctx)),
+                                crate::state::SkillInstance {
+                                    owner: holder,
+                                    enabled: true,
+                                    once_used: false,
+                                    expires_end_of_turn: false,
+                                    rounds: 0,
+                                },
+                            );
+                            ctx.log(LogEvent::SkillToggled {
+                                player: holder,
+                                skill: ctx.catalog.skill_name(zhp_def(ctx)),
+                                enabled: true,
+                            });
+                        }
+                    }
+                }
+            }
+        }
         // 回火（Boss 焰灵，规则 v241）：死亡结算完成后其敌方全体各受
         // 3 点无来源火伤（上游 boss_huihuo2 global dieAfter 同口径）
         if had_huihuo {

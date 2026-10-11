@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 245;
+pub const STANDARD_RULESET_VERSION: u64 = 246;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,14 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 造异（Boss 颛顼，规则 v246）：锁定技——玄冥/共工死亡且场上无存活
+/// 同名将 → 摸 4 并获「造异异变」（运行时授予技：回合开始敌方中体力最
+/// 低者全体失去全部体力）；玄冥在场 → 敌方不可为锦囊目标、共工在场 →
+/// 敌方不可为基本牌目标（targetEnabled 双门控；玄冥未入库随自润批）。
+pub const BOSS_ZAOYI: &str = "造异";
+/// 造异异变（造异运行时授予技，规则 v246）：回合开始——敌方中体力最低
+/// 者全体失去全部体力。
+pub const BOSS_ZAOYI_HP: &str = "造异异变";
 /// 庆祝（Boss 明星，规则 v245）：锁定技两面——跳过弃牌阶段；自己回合
 /// 内出牌阶段不能用【杀】，直到获得急叮（上游 mod cardEnabled 同口径）。
 pub const BOSS_QINGZHU: &str = "庆祝";
@@ -4771,6 +4779,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // boss_jiding 由蓐收 boss_xingquiaaddSkills 授予——庆祝禁杀窗口依赖
     // 此初始缺席]；上游 female、shen→群目录近似）
     ("明星", Faction::Qun, &[BOSS_QINGZHU, BOSS_JIAZU], 3, Gender::Female),
+    // 颛顼（v246 造异；神裔共用 v233+神恩光环共用 v238；造异异变=运行
+    // 时授予技不随条目；上游 names 姬|颛顼、shen→群目录近似）
+    ("颛顼", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN, BOSS_ZAOYI], 6, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6278,6 +6289,23 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_JIDING,
             // 查询型单面：damageEnd 臂（友方受伤→对敌方来源虚拟雷杀，
             // LeiSha kind 载体；蓐收加成尾面登记差异）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZAOYI,
+            // 查询型三面：死亡触发（DeathMachine 移除后捕获+授技）、
+            // targetEnabled 双门控（engine 校验）、造异异变授予（运行时
+            // skills.insert，中毒/蛇毒先例）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZAOYI_HP,
+            // 查询型单面（运行时授予）：回合开始敌方最低体力全体失去全
+            // 部体力（Judge begin 臂）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
