@@ -2086,9 +2086,12 @@ pub(crate) fn apply_general_assembly(
         let def = catalog
             .skill_by_name(skill)
             .unwrap_or_else(|| panic!("catalog skill {skill}"));
-        // 隐贼（Boss 混沌，规则 v210）：装配即未激活（上游 gameStart
-        // switch_off disableSkill 同口径；体力首次≤一半时启用）
-        let enabled = skill != crate::content::standard::BOSS_YINZEI;
+        // 隐贼/延妒（Boss 混沌/穷奇，规则 v210/v213）：装配即未激活
+        //（上游 gameStart switch_off disableSkill 同口径；体力首次≤
+        // 一半时启用）
+        let enabled =
+            skill != crate::content::standard::BOSS_YINZEI
+                && skill != crate::content::standard::BOSS_YANDU;
         state.skills.insert(
             (player, def),
             crate::state::SkillInstance {

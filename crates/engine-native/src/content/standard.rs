@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 212;
+pub const STANDARD_RULESET_VERSION: u64 = 213;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -3968,6 +3968,10 @@ pub const BOSS_ZHUE: &str = "逐厄";
 /// 覆泰（Boss 穷奇，规则 v212）：锁定技——准备阶段（原生锚点：判定阶
 /// 段开始，神智同口径）开始时，所有受伤角色按座位序各回复 1 点体力。
 pub const BOSS_FUTAI: &str = "覆泰";
+/// 延妒（Boss 穷奇，规则 v213）：锁定技，体力值首次减至一半或更少时激
+/// 活；其他角色结束阶段开始时，若其本回合未造成伤害且有牌，你获得其
+/// 一张手牌。
+pub const BOSS_YANDU: &str = "延妒";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -4033,8 +4037,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("混沌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_WUZANG, BOSS_XIANGDE, BOSS_YINZEI], 25, Gender::Male),
     // 穷奇（上游 boss_qiongqi hp20/maxHp25）：逐厄单技本批；覆泰(+全场
     // 禁桃)/延妒(+switch) 未落随下批（maxHp 差异登记：max_hp 暂=hp=20）
-    // 覆泰已落（v212）；覆泰2 全场禁桃/延妒(+switch) 未落随下批
-    ("穷奇", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_ZHUE, BOSS_FUTAI], 20, Gender::Male),
+    // 延妒已落（v213，激活门控以 SkillInstance.enabled 同隐贼先例）；
+    // 覆泰2 全场禁桃未落随下批
+    ("穷奇", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_ZHUE, BOSS_FUTAI, BOSS_YANDU], 20, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5174,6 +5179,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(FutaiBehavior),
+        },
+        SkillDef {
+            name: BOSS_YANDU,
+            // 权限型两面：激活门控（commit_damage 尾，隐贼先例同构）与
+            // 他人结束阶段获得牌（kernel Phase::End 臂）均经 skill_by_name
+            // 查询；装配即未激活
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

@@ -364,6 +364,29 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 延妒门控（Boss 穷奇，规则 v213）：体力首次≤一半激活（隐贼同款
+    // enable 直写；穷奇持延妒——与隐贼块并列， holder 独立判定）
+    if let Some(dudef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_YANDU)
+    {
+        let holder = d.target;
+        if ctx.core.has_skill_any_state(holder, dudef)
+            && !ctx.core.has_skill(holder, dudef)
+        {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                if let Some(inst) = ctx.core.skills.get_mut(&(holder, dudef)) {
+                    inst.enabled = true;
+                }
+                ctx.log(LogEvent::SkillToggled {
+                    player: holder,
+                    skill: ctx.catalog.skill_name(dudef),
+                    enabled: true,
+                });
+            }
+        }
+    }
     // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
     let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
     if entering {
@@ -824,7 +847,40 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 // 水没墓穴计数（mtg 第三批，规则 v102）：弃牌阶段开始清零
                 ctx.core.turn.discard_phase_discarded = 0;
             }
-            Phase::End => {}
+            Phase::End => {
+                // 延妒（Boss 穷奇，规则 v213）：global phaseJieshuBegin——
+                // 其他角色结束阶段开始时，若其本回合未造成伤害且有手牌
+                // → 穷奇获得其一张手牌（确定性首张；上游 gainPlayerCard
+                // 由穷奇选牌，登记差异）
+                if let Some(dudef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_YANDU)
+                {
+                    let holders: Vec<PlayerId> = ctx
+                        .core
+                        .skills
+                        .iter()
+                        .filter(|((_, dd), i)| *dd == dudef && i.enabled)
+                        .map(|((o, _), _)| *o)
+                        .collect();
+                    for holder in holders {
+                        if player == holder || !ctx.core.player(holder).alive {
+                            continue;
+                        }
+                        let pl = ctx.core.player(player);
+                        if pl.alive && pl.turn_damage == 0 && !pl.hand.is_empty() {
+                            let c = pl.hand[0];
+                            ctx.core.player_mut(player).hand.retain(|x| *x != c);
+                            ctx.core.player_mut(holder).hand.push(c);
+                            ctx.log(LogEvent::CardsGiven {
+                                from: player,
+                                to: holder,
+                                cards: vec![c],
+                            });
+                        }
+                    }
+                }
+            }
         }
         return;
     }
