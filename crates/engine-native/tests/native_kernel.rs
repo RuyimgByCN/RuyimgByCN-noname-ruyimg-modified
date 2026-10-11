@@ -2030,9 +2030,83 @@ fn doudizhu_mode_victory_and_roundtrip() {
     assert!(matches!(e.outcome(), Some(o) if o.winner == Winner::Doudizhu { lord_won: true }), "{:?}", e.outcome());
 }
 
-/// 对决 2v2 基线（P2/N08 模式入口批一，规则 v80）：杀死敌方摸三；
-/// 杀死友方弃掉自己全部手牌与装备；敌方全灭终局队胜；存档往返。
+/// 排空当前挂起询问（空选应答=拒绝可取消触发/Pass 类），直到无询问。
+fn drain_choices(e: &mut Engine) {
+    for _ in 0..16 {
+        match e.open_choice() {
+            Some(c) => {
+                let (cid, obs) = (c.id, c.observer);
+                drop(c);
+                submit_cmd(e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
+            }
+            None => break,
+        }
+    }
+}
+
+/// versus 替补（规则 v206）：敌队死亡座位从本队替补池弹队首换将复活
+/// （新将满血+摸 4+区域离场），死亡不结算（奖惩/终局不发生）；池空后
+/// 照常死亡；替补池状态随存档往返。
 #[test]
+fn versus_substitute_revive_on_death() {
+    let xiahoudun = engine_native::content::standard::STANDARD_GENERALS
+        .iter()
+        .position(|(g, ..)| *g == "夏侯惇")
+        .expect("夏侯惇在表") as u16;
+    let zhangliao = engine_native::content::standard::STANDARD_GENERALS
+        .iter()
+        .position(|(g, ..)| *g == "张辽")
+        .expect("张辽在表") as u16;
+    // 敌队（1 队）带替补池 [夏侯惇, 张辽]；己队空池
+    let teams: [Vec<u8>; 2] = [vec![0, 1], vec![2, 3]];
+    let mut e = Engine::new_versus_with_substitutes(
+        23001,
+        teams,
+        vec![Vec::new(), vec![xiahoudun, zhangliao]],
+    );
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 2 号装配初始将（张辽），池首为夏侯惇
+    e.debug_set_general(2, "张辽");
+    // 0 杀 2 至死：替补介入 → 2 号不死亡、换将夏侯惇满血复活+摸 4
+    e.debug_set_hp(2, 1);
+    let out = e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    drain_choices(&mut e);
+    assert!(e.debug_alive(2), "替补介入：2 号不死亡");
+    assert!(
+        e.state_core().outcome.is_none(),
+        "替补替代死亡 → 不触发终局"
+    );
+    assert_eq!(e.debug_hand(2).len(), 4, "替补出场摸 4");
+    let hp_after = e.debug_hp(2);
+    assert!(hp_after >= 3, "新将满血复活（夏侯惇 4 血）：{hp_after}");
+    // 奖惩不结算（死亡未发生）：0 号手牌不变（清空后仍 0）
+    assert_eq!(e.debug_hand(0).len(), 0, "替补替代死亡 → 杀敌奖惩不结算");
+    // 再杀 2 号：池首已弹（剩张辽）→ 再次替补换回张辽
+    e.debug_set_hp(2, 1);
+    let out = e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    drain_choices(&mut e);
+    assert!(e.debug_alive(2), "第二替补继续介入");
+    assert_eq!(e.debug_hand(2).len(), 4, "再次替补摸 4");
+    // 池空：第三次击杀 → 照常死亡
+    e.debug_set_hp(2, 1);
+    e.debug_clear_hand(2); // 防桃自救
+    let out = e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    drain_choices(&mut e);
+    assert!(!e.debug_alive(2), "池空照常死亡");
+    assert_eq!(e.debug_hand(0).len(), 3, "死亡结算 → 杀敌奖惩摸三");
+    // 存档往返：替补池（已耗尽）状态一致
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert_eq!(r.debug_alive(2), false, "死亡状态往返一致");
+    assert_zone_conservation(&r);
+}
+
 /// versus 4v4 变体（T11 模式变体，规则 v206 固化）：8 人建局、全员
 /// 存活、敌方全灭 → 己方胜（终局面与 2v2 同管线）。
 #[test]
@@ -2063,6 +2137,9 @@ fn versus_4v4_eight_seats_team_victory() {
     assert!(out.is_some(), "敌方全灭应有终局: {out:?}");
 }
 
+/// 对决 2v2 基线（P2/N08 模式入口批一，规则 v80）：杀死敌方摸三；
+/// 杀死友方弃掉自己全部手牌与装备；敌方全灭终局队胜；存档往返。
+#[test]
 fn versus_mode_team_victory_and_rewards() {
     let teams: [Vec<u8>; 2] = [vec![0, 1], vec![2, 3]];
     let mut e = Engine::new_versus(2001, teams.clone());

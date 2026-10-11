@@ -428,8 +428,14 @@ pub enum GameMode {
     Kingdoms,
     /// 对决 2v2 基线（P2/N08 模式入口批一，规则 v80）：两队对抗——
     /// 消灭敌方全队胜；奖惩：杀死敌方摸三张、杀死友方弃掉自己全部
-    /// 手牌与装备（上游 versus 2v2 基线，替补机制未建模）。
-    Versus { teams: Vec<Vec<PlayerId>> },
+    /// 手牌与装备（上游 versus 2v2 基线）。`substitutes`=每队替补武将
+    /// 池（与 `teams` 同队序；规则 v206 替补面：死亡座位从本队池弹队首
+    /// 换将复活，空池照常死亡）。
+    Versus {
+        teams: Vec<Vec<PlayerId>>,
+        #[allow(missing_docs)]
+        substitutes: Vec<Vec<u16>>,
+    },
     /// 斗地主（P2/N08 模式入口批二，规则 v81）：地主 1 名对农民若干——
     /// 地主死亡农民胜、农民全灭地主胜；无击杀奖惩（上游 dieAfter 仅
     /// UI+判负；特殊开局摸牌变体未建模）。
@@ -542,7 +548,15 @@ impl GameStateCore {
     /// 对决模式的队伍表（非对决为 None）。队伍互斥且并集=全部座位。
     pub fn versus_teams(&self) -> Option<&[Vec<PlayerId>]> {
         match &self.mode {
-            GameMode::Versus { teams } => Some(teams),
+            GameMode::Versus { teams, .. } => Some(teams),
+            _ => None,
+        }
+    }
+
+    /// 对决模式的替补武将池（非对决为 None；与队伍同队序，可为空池）。
+    pub fn versus_substitutes(&self) -> Option<&[Vec<u16>]> {
+        match &self.mode {
+            GameMode::Versus { substitutes, .. } => Some(substitutes),
             _ => None,
         }
     }

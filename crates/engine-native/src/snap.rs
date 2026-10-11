@@ -1143,7 +1143,7 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
         }
     }
     // 对决模式结构：两队互斥、并集覆盖全部座位
-    if let GameMode::Versus { teams } = &core.mode {
+    if let GameMode::Versus { teams, substitutes } = &core.mode {
         if teams.len() != 2 {
             return Err(oob("versus_team_count", teams.len() as u64));
         }
@@ -1158,6 +1158,15 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
         }
         if seen.iter().any(|s| !s) {
             return Err(oob("versus_team_coverage", 0));
+        }
+        // 替补池（v206）：武将 def 界校验（池数与队数一致，条目为目录将）
+        if substitutes.len() != teams.len() {
+            return Err(oob("versus_substitute_pools", substitutes.len() as u64));
+        }
+        for pool in substitutes {
+            for g in pool {
+                check_def(*g, b)?;
+            }
         }
     }
     // Boss 结构：boss/助战座位有效

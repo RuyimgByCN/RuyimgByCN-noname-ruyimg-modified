@@ -5695,6 +5695,65 @@ impl crate::catalog::SkillMachine for DeathMachine {
             ctx.core.player_mut(self.player).death_cancelled = false;
             return Flow::Done;
         }
+        // versus 替补（规则 v206）：死亡座位所在队替补池非空 → 弹队首
+        // 换将复活（上游 revive+uninit/init+摸 4+濒死链取消同口径：死亡
+        // 执行被替补替代——本座位不进入死亡结算，奖惩/终局判定不发生；
+        // 登记差异：上游 dieAfter 展示与「出场」日志不入原生日志，替补
+        // 出场为新将满血开局）。
+        {
+            let team = ctx.core.versus_team_of(self.player);
+            if let Some(ti) = team {
+                let has_sub = ctx
+                    .core
+                    .versus_substitutes()
+                    .and_then(|pools| pools.get(ti))
+                    .is_some_and(|pool| !pool.is_empty());
+                if has_sub {
+                    let g = match &mut ctx.core.mode {
+                        crate::state::GameMode::Versus { substitutes, .. } => {
+                            substitutes[ti].remove(0)
+                        }
+                        _ => unreachable!("versus_team_of 只在 Versus 模式"),
+                    };
+                    // 换将前清本座位技能与区域（上游 uninit/init 重建面：
+                    // 手牌/装备/判定区离场入弃堆，替补从零开始）
+                    let removed: Vec<crate::ids::SkillDefId> = ctx
+                        .core
+                        .skills
+                        .keys()
+                        .filter(|(o, _)| *o == self.player)
+                        .map(|(_, d)| *d)
+                        .collect();
+                    for def in removed {
+                        ctx.core.skills.remove(&(self.player, def));
+                    }
+                    let leftover = {
+                        let p = ctx.core.player_mut(self.player);
+                        let mut leftover = std::mem::take(&mut p.hand);
+                        leftover.extend(std::mem::take(&mut p.equips));
+                        leftover.extend(std::mem::take(&mut p.judge));
+                        p.alive = true;
+                        p.dying = false;
+                        p.death_cancelled = false;
+                        p.general_slots = [Some(g), None];
+                        leftover
+                    };
+                    for c in leftover {
+                        ctx.to_discard(c);
+                    }
+                    crate::engine::apply_general_assembly(
+                        ctx.core,
+                        ctx.catalog,
+                        self.player,
+                        0,
+                    );
+                    let p = ctx.core.player_mut(self.player);
+                    p.hp = p.max_hp as i32;
+                    ctx.draw_cards(self.player, 4);
+                    return Flow::Done;
+                }
+            }
+        }
         let p = ctx.core.player_mut(self.player);
         p.alive = false;
         p.dying = false;
@@ -5849,7 +5908,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                     });
                 }
             }
-            crate::state::GameMode::Versus { teams } => {
+            crate::state::GameMode::Versus { teams, .. } => {
                 // 对决（P2/N08 模式入口批一）：任一队伍全灭 → 对方队伍胜
                 for (i, t) in teams.iter().enumerate() {
                     if t.iter().all(|p| !ctx.core.player(*p).alive) {

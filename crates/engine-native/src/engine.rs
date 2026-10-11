@@ -261,11 +261,31 @@ impl Engine {
 
     /// 对决 2v2 基线（P2/N08 模式入口批一）：`teams` 两队互斥并集=全部座位。
     pub fn new_versus(seed: u64, teams: [Vec<PlayerId>; 2]) -> Self {
+        let subs = vec![Vec::new(), Vec::new()];
+        Self::new_versus_with_substitutes(seed, teams, subs)
+    }
+
+    /// 对决替补变体（T11 模式变体，规则 v206）：每队携带替补武将池
+    /// （与队伍同队序）——死亡座位从本队池弹队首换将复活（上游
+    /// revive+uninit/init+摸 4+濒死链取消同口径；奖惩不结算登记差异）。
+    pub fn new_versus_with_substitutes(
+        seed: u64,
+        teams: [Vec<PlayerId>; 2],
+        substitutes: Vec<Vec<u16>>,
+    ) -> Self {
         let seats = teams[0].len() + teams[1].len();
+        assert_eq!(
+            substitutes.len(),
+            2,
+            "替补池须与队伍同队序（每队一列）"
+        );
         Self::new_with_mode(
             seed,
             seats,
-            GameMode::Versus { teams: teams.to_vec() },
+            GameMode::Versus {
+                teams: teams.to_vec(),
+                substitutes,
+            },
             crate::state::DoudizhuVariant::Standard,
         )
     }
@@ -1964,7 +1984,7 @@ fn fresh_auth_secret() -> u64 {
 /// 装配授予（P2/N08）：按武将表配置体力上限（主将槽）并授予技能集。
 /// 国战明置（`RevealGeneral`，ADR 0769）与原型装配原语
 /// （`debug_assemble_general`）共用此逻辑，授予语义不得分叉。
-fn apply_general_assembly(
+pub(crate) fn apply_general_assembly(
     state: &mut crate::state::GameStateCore,
     catalog: &crate::catalog::Catalog,
     player: PlayerId,
@@ -3655,11 +3675,19 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     match &c.mode {
         GameMode::Prototype => push_u8(&mut h, 1),
         GameMode::Kingdoms => push_u8(&mut h, 3),
-        GameMode::Versus { teams } => {
+        GameMode::Versus { teams, substitutes } => {
             push_u8(&mut h, 4);
             push_u32(&mut h, teams.len() as u32);
             for t in teams {
                 push_players(&mut h, t);
+            }
+            // 替补武将池（v206）入确定性摘要
+            push_u32(&mut h, substitutes.len() as u32);
+            for pool in substitutes {
+                push_u32(&mut h, pool.len() as u32);
+                for g in pool {
+                    push_u32(&mut h, *g as u32);
+                }
             }
         }
         GameMode::Doudizhu { lord } => {

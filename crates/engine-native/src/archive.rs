@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 47;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 48;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2534,13 +2534,21 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
             w.u32(wins[1]);
             w.u32(*games);
         }
-        GameMode::Versus { teams } => {
+        GameMode::Versus { teams, substitutes } => {
             w.u8(3);
             w.len(teams.len());
             for t in teams {
                 w.len(t.len());
                 for p in t {
                     enc_pid(w, p);
+                }
+            }
+            // 替补武将池（v206；与队伍同队序，可为空）
+            w.len(substitutes.len());
+            for pool in substitutes {
+                w.len(pool.len());
+                for g in pool {
+                    w.u16(*g);
                 }
             }
         }
@@ -2827,7 +2835,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         2 => GameMode::Kingdoms,
         3 => {
             let teams = r.vec(|r| r.vec(dec_pid))?;
-            GameMode::Versus { teams }
+            let substitutes = r.vec(|r| r.vec(|r| r.u16()))?;
+            GameMode::Versus { teams, substitutes }
         }
         4 => GameMode::Doudizhu { lord: dec_pid(r)? },
         5 => {
