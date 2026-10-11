@@ -3154,6 +3154,14 @@ fn apply_command(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let user = core.turn.current;
+                    // 覆泰2（Boss 穷奇，规则 v214）：全场禁桃时非穷奇玩
+                    // 家非穷奇回合不能用桃（上游 cardEnabled 同口径；护
+                    // 符濒死专用不受此 mod）
+                    if kind == CardKind::Tao
+                        && crate::kernel::tao_futai2_banned(core, catalog, user)
+                    {
+                        return Err(RejectReason::IllegalTargets);
+                    }
                     let p = core.player(user);
                     // 护符（U05 swd 首切片，规则 v85）：仅濒死（自己进入
                     // 濒死流程）时可用；非濒死拒绝（上游 savable 守卫）

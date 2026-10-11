@@ -2497,6 +2497,30 @@ fn xiongshou_bonus(ctx: &Ctx<'_>, source: PlayerId, target: PlayerId) -> u32 {
     }
 }
 
+/// 覆泰2（Boss 穷奇，规则 v214）：场上存有持覆泰的穷奇、用/救桃者非
+/// 穷奇且当前回合非穷奇时，桃不可用/不可救（上游 boss_futai2
+/// cardSavable/cardEnabled 双 mod 同口径）。
+pub(crate) fn tao_futai2_banned(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    user: PlayerId,
+) -> bool {
+    let Some(fdef) = catalog.skill_by_name(crate::content::standard::BOSS_FUTAI) else {
+        return false;
+    };
+    let holders: Vec<PlayerId> = core
+        .skills
+        .iter()
+        .filter(|((_, dd), i)| *dd == fdef && i.enabled)
+        .map(|((o, _), _)| *o)
+        .filter(|o| core.player(*o).alive && *o != user)
+        .collect();
+    match holders.first() {
+        Some(&boss) => core.turn.current != boss,
+        None => false,
+    }
+}
+
 /// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
 fn is_tao_like(
     ctx: &Ctx<'_>,
@@ -2505,7 +2529,8 @@ fn is_tao_like(
     dying: PlayerId,
 ) -> bool {
     if ctx.catalog.card_kind(card) == CardKind::Tao {
-        return true;
+        // 覆泰2（规则 v214）：全场禁桃时真桃不可救
+        return !tao_futai2_banned(ctx.core, ctx.catalog, responder);
     }
     // 酒（G1 cardpile 前置）：濒死时对自身使用回复 1 点体力
     if ctx.catalog.card_kind(card) == CardKind::Jiu {
