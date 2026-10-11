@@ -2604,6 +2604,14 @@ fn apply_command(
                             .skill_by_name(crate::content::host::WUDIAN_XJ_TIANXIAN_KEY)
                             .map(|def| core.has_skill(player_id, def))
                             .unwrap_or(false);
+                    // 狂笑（Boss 白虎，规则 v235）：锁定——【杀】目标数上
+                    // 限无限（上游 mod selectTarget range[1]=-1 同口径；
+                    // 天弦同构）
+                    let kuangxiao_inf = kind.is_sha_like()
+                        && catalog
+                            .skill_by_name(crate::content::standard::BOSS_KUANGXIAO)
+                            .map(|def| core.has_skill(player_id, def))
+                            .unwrap_or(false);
                     // 巨源（Boss 朱厌，规则 v226）：出牌阶段体力低于上次
                     // 回合结束时体力 → 【杀】额外 1 目标（上游 selectTarget
                     // range[1]++ 同口径；飞刃同款）
@@ -2620,7 +2628,7 @@ fn apply_command(
                             None => false,
                         }
                     };
-                    let max_targets = if tianxian_inf {
+                    let max_targets = if tianxian_inf || kuangxiao_inf {
                         usize::MAX
                     } else {
                         (if fangtian { 3 } else { 1 })
@@ -2713,6 +2721,12 @@ fn apply_command(
                         // 杀无视距离（上游 mod targetInRange 同口径）
                         || catalog
                             .skill_by_name(crate::content::host::WUDIAN_XJ_TIANXIAN_KEY)
+                            .map(|def| core.has_skill(core.turn.current, def))
+                            .unwrap_or(false)
+                        // 狂笑（Boss 白虎，规则 v235）：锁定——【杀】无视
+                        // 距离（上游 mod targetInRange=true 同口径）
+                        || catalog
+                            .skill_by_name(crate::content::standard::BOSS_KUANGXIAO)
                             .map(|def| core.has_skill(core.turn.current, def))
                             .unwrap_or(false);
                     let feiren_range_free = sha_range_free;

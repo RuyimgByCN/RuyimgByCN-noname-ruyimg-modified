@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 234;
+pub const STANDARD_RULESET_VERSION: u64 = 235;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,11 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 狂笑（Boss 白虎，规则 v235）：锁定技两面——你的【杀】无距离限制且
+/// 目标数上限无限（上游 mod targetInRange=true + selectTarget
+/// range[0..1]=-1/-1 同口径）；不能指定友方为杀目标（playerEnabled）——
+/// boss 侧同队关系网未入原生 PlayCard 校验，登记差异。
+pub const BOSS_KUANGXIAO: &str = "狂笑";
 /// 雷击（Boss 青龙，规则 v234，上游 releiji 界雷击）：你使用/打出闪后
 /// 选一名其他角色判定——黑桃其受 2 点雷伤、梅花你回 1 其受 1 点雷伤、
 /// 其他无事（原生=杀/万箭两闪消费位内联臂；目标选择以座位序首名确定
@@ -4319,6 +4324,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
     // 青龙（v233 神裔、v234 雷击；boss_qingmu2 青木=关卡流程面登记不落）
     ("青龙", Faction::Qun, &[BOSS_SHENYI, BOSS_RELEIJI], 4, Gender::Male),
+    // 白虎（v235 狂笑；神裔共用 v233；boss_baimang2 白芒=关卡流程面登记不落；
+    // 上游势力 shen→群目录近似[ Faction 枚举无神势力，烛阴空势力→群先例]）
+    ("白虎", Faction::Qun, &[BOSS_SHENYI, BOSS_KUANGXIAO], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5693,6 +5701,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 查询型单面：杀/万箭闪消费位内联臂（releiji_on_shan）经
             // skill_by_name 查询；青木2（boss_qingmu2 死亡隐藏+换位重
             // 生）为关卡流程面，属 Boss 模式裸骨架缺口，登记不落内核
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_KUANGXIAO,
+            // 查询型两面：杀无距离（engine sha_range_free 链追加）与目
+            // 标数无限（engine kuangxiao_inf 臂，天弦同构）均经 skill_
+            // by_name 查询；友方禁指面登记差异（关系网边界）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

@@ -2434,6 +2434,22 @@ Boss 模式裸骨架缺口，登记不落内核（青龙条目不含）。`BOSS_
 照/万箭触发/往返）——证据见
 [T11 雷击证据](../operations/evidence/2026-10-11-t11-boss-releiji-v234/README.md)。
 
+**规则 v235（2026-10-11，T11 四象系末片首刀：狂笑＋白虎条目）**：
+**狂笑**（查询型 Noop）两面（engine PlayCard 校验段）：【杀】无距离限制
+（sha_range_free 链追加，飞刃/天弦同位）+目标数上限无限（`kuangxiao_
+inf` 臂，天弦 tianxian_inf 同构→usize::MAX）。`BOSS_GENERALS` 尾追加
+**白虎**（def 索引 11/`[神裔, 狂笑]`/hp4；boss_baimang2 白芒=死亡隐藏+
+换位重生关卡流程面，同青木2 登记不落内核）。**登记差异**：势力 shen→
+群目录近似（Faction 无神势力枚举）；友方禁指面（playerEnabled isFriend
+Of）未建模——boss 侧关系网未入 PlayCard 校验；range[0]=-1 空指未建模
+（出牌语义不变面）。FROZEN 名单尾加「狂笑」（88 名；SkillDef 三连坑再
+犯非表尾插入——冻结表测试拦截后移真表尾）。存档不变 v53。版本 234→
+**235**。版本回退探针（235→234 复跑 golden 全绿）证明 14 golden 位移
+唯一来源是版本字段，全量重录。回归
+`boss_baihu_kuangxiao_sha_range_and_targets` 四段（隔位杀/三目标齐中/
+非持有者对照/往返）——证据见
+[T11 狂笑证据](../operations/evidence/2026-10-11-t11-boss-kuangxiao-v235/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害
