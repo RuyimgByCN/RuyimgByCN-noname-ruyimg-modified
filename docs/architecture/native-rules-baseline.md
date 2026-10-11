@@ -2546,6 +2546,22 @@ boss_mingxingzhu 授 boss_jiding 面依赖武将未入库。FROZEN 名单尾加�
 将无常量（BOSS_GENERALS 段按名查目录）；answer_first 不存在
 （`ctx.answer().first().copied()` 惯用）。
 
+**规则 v241（2026-10-11，T11 炎灵陪将片：回火+复燃＋焰灵条目）**：
+**回火**（查询型 Noop）两面：杀上限 +1（engine 杀限臂元宝肉同款额度——
+`SkillInstance.once_used` 每回合一次，`reset_turn_limits` 随本人回合开
+始清零）+死亡反噬（DeathMachine 移除前捕获、`PlayerDied` 后敌方全体各
+受 3 点无来源火伤，`is_boss_side` 异侧判定）。**复燃**（查询型 Noop）：
+`is_tao_like` 追加臂——焰灵濒死时其敌方可用红色牌当桃救（急救块同位）。
+`BOSS_GENERALS` 尾追加**焰灵**（def 索引 17/hp4/`[回火, 复燃]`；上游陪
+将无神裔）。**译名勘误**：指令面「回祸」实为上游译名「回火」（10973）。
+**登记差异**：boss 死亡即终局截停事件队列——反噬面以 fellow 线回归验
+证（测试结构边界登记，引擎语义不受影响）。FROZEN 名单尾加「回火」「复
+燃」（94/95 名）。存档不变 v56。版本 240→**241**。版本回退探针
+（241→240 复跑 golden 全绿）证明 14 golden 位移唯一来源是版本字段，全
+量重录。回归 `boss_yanling_huihuo_furan` 三段（杀限额度/复燃救援/反噬
+fellow 线+往返）——证据见
+[T11 焰灵证据](../operations/evidence/2026-10-11-t11-boss-yanling-v241/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

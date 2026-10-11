@@ -2489,6 +2489,7 @@ fn apply_command(
                 CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制
                     let mut mark_yuanbaorou = false;
+                    let mut mark_huihuo = false;
                     let player_id = core.turn.current;
                     // 焚天（Boss 朱雀，规则 v236）：锁定——红色牌使用无
                     // 次数限制且无距离限制（上游 mod cardUsable Infinity
@@ -2579,9 +2580,24 @@ fn apply_command(
                             })
                             .unwrap_or(false);
                         if !extra {
-                            return Err(RejectReason::ShaLimit);
+                            // 回火（Boss 焰灵，规则 v241）：出牌阶段额外
+                            // 一张杀（每回合一次额度，元宝肉同款）
+                            let huihuo_extra = catalog
+                                .skill_by_name(crate::content::standard::BOSS_HUIHUO)
+                                .map(|def| {
+                                    core.skills
+                                        .get(&(core.turn.current, def))
+                                        .map(|i| i.enabled && !i.once_used)
+                                        .unwrap_or(false)
+                                })
+                                .unwrap_or(false);
+                            if !huihuo_extra {
+                                return Err(RejectReason::ShaLimit);
+                            }
+                            mark_huihuo = true;
+                        } else {
+                            mark_yuanbaorou = true;
                         }
-                        mark_yuanbaorou = true;
                     }
                     // 方天画戟（批③-b 第九把）：该杀为最后手牌且装备方天
                     // 时可指定至多 3 个目标（逐个独立合法性检查，去重）。
@@ -2798,6 +2814,15 @@ fn apply_command(
                     if mark_yuanbaorou {
                         if let Some(def) = catalog
                             .skill_by_name(crate::content::host::GJ_FOOD_YUANBAOROU_KEY)
+                        {
+                            if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
+                                inst.once_used = true;
+                            }
+                        }
+                    }
+                    if mark_huihuo {
+                        if let Some(def) = catalog
+                            .skill_by_name(crate::content::standard::BOSS_HUIHUO)
                         {
                             if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
                                 inst.once_used = true;

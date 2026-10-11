@@ -3477,6 +3477,22 @@ fn is_tao_like(
     {
         return true;
     }
+    // 复燃（Boss 焰灵，规则 v241）：焰灵濒死时其敌方可用红色牌当桃救
+    //（上游 boss_furan2 dying chooseToUse viewAs tao 同口径）
+    let furan = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_FURAN)
+        .map(|d| ctx.core.has_skill(dying, d))
+        .unwrap_or(false);
+    if furan
+        && ctx.core.is_boss_side(responder) != ctx.core.is_boss_side(dying)
+        && matches!(
+            ctx.catalog.cards[card as usize].suit,
+            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+        )
+    {
+        return true;
+    }
     // 蜜链藕（G1 古剑食物）：持有者红桃手牌可当桃（濒死响应）
     let mizhilianou = ctx
         .catalog
@@ -6968,6 +6984,13 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 }
             }
         }
+        // 回火（Boss 焰灵，规则 v241）：死亡反噬标记——技能实例随死亡
+        // 结算移除，故在移除前捕获
+        let had_huihuo = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_HUIHUO)
+            .map(|d| ctx.core.skills.contains_key(&(self.player, d)))
+            .unwrap_or(false);
         let p = ctx.core.player_mut(self.player);
         p.alive = false;
         p.dying = false;
@@ -6997,6 +7020,25 @@ impl crate::catalog::SkillMachine for DeathMachine {
             player: self.player,
             killer: self.killer,
         });
+        // 回火（Boss 焰灵，规则 v241）：死亡结算完成后其敌方全体各受
+        // 3 点无来源火伤（上游 boss_huihuo2 global dieAfter 同口径）
+        if had_huihuo {
+            let seats = ctx.core.players.len() as PlayerId;
+            for t in 0..seats {
+                if !ctx.core.player(t).alive {
+                    continue;
+                }
+                if ctx.core.is_boss_side(t) != ctx.core.is_boss_side(self.player) {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        None,
+                        t,
+                        3,
+                        crate::event::DamageNature::Fire,
+                        None,
+                    )));
+                }
+            }
+        }
         // 身份局奖惩：先于胜负判定
         if let Some(roles) = ctx.core.identity_roles() {
             let dead_role = roles[self.player as usize];

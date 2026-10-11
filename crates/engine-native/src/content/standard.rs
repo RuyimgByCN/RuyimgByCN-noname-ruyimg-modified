@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 240;
+pub const STANDARD_RULESET_VERSION: u64 = 241;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4355,6 +4355,14 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 回火（Boss 焰灵，规则 v241）：锁定技两面——【杀】使用上限 +1（每
+/// 回合一次额外额度，SkillInstance.once_used 随本人回合开始重置）；死
+/// 亡反噬——死亡结算完成后其敌方全体各受 3 点无来源火伤（上游
+/// boss_huihuo2 global dieAfter 同口径）。
+pub const BOSS_HUIHUO: &str = "回火";
+/// 复燃（Boss 焰灵，规则 v241）：焰灵濒死时其敌方可用红色牌当【桃】
+/// 救（上游 boss_furan2 dying chooseToUse viewAs tao 同口径）。
+pub const BOSS_FURAN: &str = "复燃";
 /// 不臣（Boss 勾芒，规则 v240）：出牌阶段主动技两线——场上有已死亡的
 /// 书精 → 失去 1 点体力并把它们全部复活（回 1 体、各摸 2）；否则令一
 /// 名己方受伤角色回复 2 点体力。间隔 ≥2 轮可再发动
@@ -4528,6 +4536,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 勾芒（v240 不臣；神裔共用 v233；boss_qingmu3 青木3=已处置关卡面；
     // 上游 names 姬|重、shen→群目录近似）
     ("勾芒", Faction::Qun, &[BOSS_SHENYI, BOSS_BUCHUN], 5, Gender::Male),
+    // 焰灵（v241 回火+复燃；上游技能表无神裔——陪将不在神裔名单；
+    // shen→群目录近似）
+    ("焰灵", Faction::Qun, &[BOSS_HUIHUO, BOSS_FURAN], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5974,6 +5985,23 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(BuchunBehavior),
+        },
+        SkillDef {
+            name: BOSS_HUIHUO,
+            // 查询型两面：杀上限 +1（engine 限次臂 once_used 额度，元宝
+            // 肉同款）与死亡反噬（kernel 死亡结算移除前捕获+PlayerDied
+            // 后敌方 3 点火伤）均经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_FURAN,
+            // 查询型单面：濒死救援选项扩展（is_tao_like 臂——敌方红色
+            // 牌可当桃救焰灵）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)
