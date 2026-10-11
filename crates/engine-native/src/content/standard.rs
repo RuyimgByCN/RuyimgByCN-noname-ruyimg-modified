@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 208;
+pub const STANDARD_RULESET_VERSION: u64 = 209;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -3870,6 +3870,10 @@ pub const MA_SHU: &str = "马术";
 /// 凶兽（Boss 模式共有技，规则 v208）：锁定技三面——你使用【杀】对体力
 /// 值小于你的角色伤害 +1；你与其他角色距离 -1；你不能被翻面。
 pub const BOSS_XIONGSHOU: &str = "凶兽";
+/// 无脏（Boss 混沌，规则 v209）：锁定技两面——摸牌阶段的摸牌基数为
+/// max(5, 体力值一半向上取整前的整除值)（即 2+max(5,floor(hp/2))-2）；
+/// 手牌上限基数为 0（体力贡献清零，保留其余加成）。
+pub const BOSS_WUZANG: &str = "无脏";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -3930,6 +3934,9 @@ pub const STANDARD_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
 /// 规则 v208 烛阴；追加于 STANDARD 索引空间尾——既有将索引不受扰动）。
 pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("烛阴", Faction::Qun, &[BOSS_XIONGSHOU], 4, Gender::Male),
+    // 混沌（上游 boss_hundun hp25）：相德/隐贼(+switch) 两技未落，
+    // 随下批补入 skills（登记：本批仅凶兽+无脏）
+    ("混沌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_WUZANG], 25, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5013,6 +5020,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 权限型能力三面：杀伤条件臂（kernel emit_sha_damage）、
             // computed_distance 距离 -1（state）、翻面取消（commit 入口
             // 直读跳过——死亡取消型同款），均经 skill_by_name 查询
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_WUZANG,
+            // 权限型能力两面：摸牌阶段额外量与手牌上限基数归零，均在
+            // kernel 阶段臂经 skill_by_name 查询
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

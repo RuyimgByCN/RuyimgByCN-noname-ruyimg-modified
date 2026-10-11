@@ -2121,7 +2121,7 @@ fn swd_lingjian_chaofeng_yinmi_xingtigaizao() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     assert_eq!(e.state_core().player(0).xingtigaizao_count, 1, "改造计数 1");
     assert_eq!(
-        e.state_core().hand_limit(0),
+        e.state_core().hand_limit(e.catalog(), 0),
         (e.debug_hp(0) as usize).saturating_sub(1),
         "手牌上限 -1"
     );

@@ -726,6 +726,23 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     ctx.core.player_mut(player).skip_next_draw = false;
                 } else {
                     ctx.draw_cards(player, 2);
+                    // 无脏（Boss 混沌，规则 v209）：摸牌基数改为
+                    // max(5, floor(hp/2))——在固定摸 2 后补额外量
+                    // max(5, hp/2) - 2（上游 phaseDrawBegin trigger.num+=
+                    // 同口径）
+                    if let Some(def) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_WUZANG)
+                    {
+                        if ctx.core.has_skill(player, def) {
+                            let hp = ctx.core.player(player).hp.max(0) as u32;
+                            let extra = hp / 2;
+                            let total = extra.max(5);
+                            if total > 2 {
+                                ctx.draw_cards(player, (total - 2) as usize);
+                            }
+                        }
+                    }
                 }
             }
             Phase::Play => {
@@ -2215,7 +2232,7 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
             if keji && !ctx.core.turn.sha_used_play_phase {
                 None
             } else {
-                let mut limit = ctx.core.hand_limit(player);
+                let mut limit = ctx.core.hand_limit(ctx.catalog, player);
                 // 机甲（U05 ow D.Va，规则 v141）：机甲血>0 时手牌上限 +4
                 //（上游 mod maxHandcard storage.jijia 同口径）
                 if ctx

@@ -998,10 +998,19 @@ impl GameStateCore {
         false
     }
 
-    pub fn hand_limit(&self, p: PlayerId) -> usize {
+    pub fn hand_limit(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> usize {
         // 星体改造（U05 swd 灵剑，规则 v198）：手牌上限 -N 累加
-        (self.player(p).hp.max(0) as usize)
-            .saturating_sub(self.player(p).xingtigaizao_count as usize)
+        let mut limit = (self.player(p).hp.max(0) as usize)
+            .saturating_sub(self.player(p).xingtigaizao_count as usize);
+        // 无脏（Boss 混沌，规则 v209）：手牌上限基数 0——体力贡献清零
+        // （上游 boss_wuzang mod maxHandcard `num - player.hp` 同口径：
+        // 基数 hp-hp=0；其余加成修饰保留）
+        if let Some(def) = catalog.skill_by_name(crate::content::standard::BOSS_WUZANG) {
+            if self.has_skill(p, def) {
+                limit = limit.saturating_sub(self.player(p).hp.max(0) as usize);
+            }
+        }
+        limit
     }
 
     pub fn has_skill(&self, p: PlayerId, def: SkillDefId) -> bool {
