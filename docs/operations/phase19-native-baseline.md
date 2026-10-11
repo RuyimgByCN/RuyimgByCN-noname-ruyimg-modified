@@ -1,5 +1,7 @@
 # phase19：原生 runner 实跑与性能验收边界
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 独立实跑：**2026-09-23，第 14 轮，规则版本 28，release，engine-native**。
 本轮 counting runner 退出 0，FFA/身份各 20/20 终局；未完成旧线同负载、跨平台或发布性能验收。
 

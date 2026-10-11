@@ -1,5 +1,7 @@
 # 阶段 13：包化 Modifier + 跨目标对账
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 ## 目标
 
 - 内容包 `modifier_index` 装入 `ContentRegistry`

@@ -1,5 +1,7 @@
 # 阶段 12：内容包进引擎（RunVm）与跨目标
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 ## 目标
 
 - 编译后的 `.skill` / content package 可装入 `Engine`

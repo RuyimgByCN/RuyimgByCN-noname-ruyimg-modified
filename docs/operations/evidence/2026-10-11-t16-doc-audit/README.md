@@ -61,3 +61,19 @@
 
 - `cargo test --offline -p engine-native --test replay_scenarios`：**2/2**（清单联动守护，更正后通过）。
 - 零代码改动（纯文档 + 主稿/清单登记）。
+
+---
+
+# 同日 T16④：旧线阶段文档横幅与死链
+
+## 横幅补注（19 份）
+
+`docs/operations/phase{10–23,26,27,29,30}*.md`（含双 19；24/25/28 基线前已删除）全部在标题后补统一横幅：**历史阶段记录（T16④ 补注，2026-10-11）**，链接指向[进度主稿](../../architecture/native-progress.md)、[覆盖清单](../../native-coverage-manifest.md)、[规则基准](../../architecture/native-rules-baseline.md)。逐份链接核查通过（脚本断言三链接在每份前 800 字符内）。
+
+## 附带发现：legacy-reference 两处死链
+
+`phase25-game-content.md`、`phase28-mobile-shell.md` 在任何提交中都不存在（基线前已删除），legacy-reference 表仍按存在引用。已标注"该文件已删除（10-10 文档清理）"；phase28 的 ADR 0702 指引改直链实存的 [0702-m7-mobile-blocking](../../../adr/0702-m7-mobile-blocking.md)（该 ADR 未入 INDEX——登记为待办碎片，随 T16⑤ 一并核对 ADR 索引完整性）。
+
+## 验证
+
+- 零代码改动；纯文档。

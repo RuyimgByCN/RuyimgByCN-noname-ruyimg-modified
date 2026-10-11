@@ -1,5 +1,7 @@
 # 阶段 16：自描述快照与录像文件（manifest hash 贯穿 §22.3 / §23）
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 > 对应架构计划 v2.0 §22.3（录像头必须携带 MatchManifest）、§23（快照必须
 > 携带 MatchManifestHash）。是阶段 14–15 之后 manifest 身份贯穿到持久化
 > 制品的收尾工作。

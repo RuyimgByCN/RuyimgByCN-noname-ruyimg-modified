@@ -1,5 +1,7 @@
 # 阶段 20：资源流水线（§28）
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 > 对应架构计划 v2.0 §28（资源流水线：构建期编译器 + 运行期 Resource Manager
 > + 预算模型）。资源性能是项目的一级架构问题。
 

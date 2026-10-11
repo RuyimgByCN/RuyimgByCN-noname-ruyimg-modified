@@ -1,5 +1,7 @@
 # 测试与性能证据
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 本页保留测试口径、旧参考线的实测数据，并吸收 2026-09-24 优化报告中可复核的静态结论。**当前通过数、失败和后续项只见[进度主稿](../architecture/native-progress.md)**；此处旧轮次和旧线数字不代表当前原生线。
 
 ## 验证入口

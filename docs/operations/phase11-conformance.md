@@ -1,5 +1,7 @@
 # 阶段 11：一致性黄金用例、更新通道与扩展工作室
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 阶段 10 解决「装得安全」；阶段 11 解决「装完能验」与「批量更新」。
 
 ## 组件

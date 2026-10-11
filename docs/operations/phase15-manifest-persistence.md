@@ -1,5 +1,7 @@
 # 阶段 15：MatchManifest 接入持久化层（WAL + 恢复）
 
+> **历史阶段记录**（T16④ 补注，2026-10-11）：本文为旧线阶段存档，「当前/已完成/待做」类陈述仅反映撰写时点；现行状态以[进度主稿](../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)与[规则基准](../architecture/native-rules-baseline.md)为准。
+
 > 对应架构计划 v2.0 §5.3（MatchManifestHash）、§24（服务端持久化顺序）、
 > §31.5（滚动发布 / live match 固定版本）。是阶段 14 文档中标注的
 > 「后续接线（阶段 15+）」第一条。
