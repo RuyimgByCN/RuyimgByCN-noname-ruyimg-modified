@@ -1143,6 +1143,80 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 巡游（Boss 应昭，规则 v231）：其他角色回合开始——
+                    // 获得座位序首名有手牌的其他角色的一张手牌（确定性近
+                    // 似：hej 全区域/随机以座位序+手牌首张近似登记）；装
+                    // 备牌自动使用（直接装上，v180 双刃系 grant 先例）
+                    if let Some(xdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_XUNYOU)
+                    {
+                        // global phaseBegin：任意 enabled 持有者（≠当前回
+                        // 合玩家）在场即触发（炎狱 holders 先例同构）
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == xdef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .filter(|o| {
+                                *o != player && ctx.core.player(*o).alive
+                            })
+                            .collect();
+                        if !holders.is_empty() {
+                            let holder = holders[0];
+                            let mut victim: Option<PlayerId> = None;
+                            for t in ctx.core.seat_order_from(holder) {
+                                if t != holder
+                                    && ctx.core.player(t).alive
+                                    && !ctx.core.player(t).hand.is_empty()
+                                {
+                                    victim = Some(t);
+                                    break;
+                                }
+                            }
+                            if let Some(v) = victim {
+                                let c = ctx.core.player(v).hand[0];
+                                let kind = ctx.catalog.card_kind(c);
+                                ctx.core.player_mut(v).hand.retain(|x| *x != c);
+                                if let Some(slot) = kind.equip_slot() {
+                                    // 装备牌自动使用：同栏替换（旧装备入弃
+                                    // 堆并撤销技能——931 区 play 装备先例）
+                                    if let Some(old) = ctx
+                                        .core
+                                        .player(player)
+                                        .equips
+                                        .iter()
+                                        .copied()
+                                        .find(|e| {
+                                            ctx.catalog.card_kind(*e).equip_slot()
+                                                == Some(slot)
+                                        })
+                                    {
+                                        ctx.core.player_mut(holder)
+                                            .equips
+                                            .retain(|x| *x != old);
+                                        revoke_equip_skills(
+                                            ctx.core,
+                                            ctx.catalog,
+                                            holder,
+                                            old,
+                                        );
+                                        ctx.to_discard(old);
+                                    }
+                                    ctx.core.player_mut(holder).equips.push(c);
+                                    grant_equip_skills(ctx, holder, c);
+                                } else {
+                                    ctx.core.player_mut(holder).hand.push(c);
+                                }
+                                ctx.log(LogEvent::CardsGiven {
+                                    from: v,
+                                    to: player,
+                                    cards: vec![c],
+                                });
+                            }
+                        }
+                    }
                     // 炎狱（Boss 毕方，规则 v229）：global phaseBegin——
                     // 其他角色的回合开始判定（确定性判定铁骑先例），红色 →
                     // 该角色受 1 点来自毕方的火伤；每回合至多 3 次（TurnState

@@ -2280,6 +2280,52 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// 应昭批首片（规则 v228）：封冻——应昭回合开始所有其他角色获封印
 /// （本回合无法使用手牌）；回合结束解除；装备区牌不受限。
 #[test]
+/// 应昭批续片（规则 v231）：巡游——他人回合开始获得座位序首名有手牌
+/// 者的一张手牌；装备牌自动使用（同栏替换）。
+#[test]
+fn boss_yingzhao_xunyou_steal_and_equip() {
+    let mut e = Engine::new_boss_stage(50001, 4, 1, 3, 6, 4, 0);
+    let yingzhao_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 8) as u16;
+    e.debug_set_general_def(1, yingzhao_def);
+    e.debug_set_hp(1, 25);
+    let xdef = e.catalog().skill_by_name("巡游").expect("巡游入目录");
+    assert!(e.state_core().skills.contains_key(&(1, xdef)));
+
+    // ① 2 号回合开始（巡游触发：座位序从应昭起——首个有手牌者=2 号）
+    advance_to_play(&mut e, 2);
+    e.debug_clear_hand(2);
+    let tao = e.debug_place(2, "tao");
+    let hand1_before = e.debug_hand(1).len();
+    drain_choices(&mut e);
+    assert!(
+        !e.debug_hand(1).contains(&tao) && e.debug_hand(2).contains(&tao),
+        "巡游：2 号回合开始不触发（自身除外语义）"
+    );
+    let _ = hand1_before;
+
+    // ② 0 号回合开始：座位序 [1,2,3] 首个有手牌者——1 号（应昭自身除外）
+    //    0 号 clear 后 2 号有 tao？0 号回合开始时 seat_order_from(0)=[1,2,3]，
+    //    1 号除外（=巡游持有者），2 号有牌 → 取 2 号手牌首张
+    e.debug_clear_hand(1);
+    e.debug_set_hp(2, 4);
+    let victim_card = e.debug_place(2, "shan");
+    advance_to_play(&mut e, 0);
+    drain_choices(&mut e);
+    assert!(
+        !e.debug_hand(2).contains(&victim_card),
+        "巡游：0 号回合开始取走 2 号手牌首张"
+    );
+    let stolen_in_hands = e.debug_hand(1).contains(&victim_card)
+        || e
+            .state_core()
+            .player(1)
+            .equips
+            .contains(&victim_card);
+    assert!(stolen_in_hands, "巡游：牌入应昭手牌（闪非装备）");
+}
+
 fn boss_yingzhao_fengdong_hand_ban() {
     let mut e = Engine::new_boss_stage(49001, 4, 1, 3, 6, 4, 0);
     let yingzhao_def = (e.catalog().general_count()
