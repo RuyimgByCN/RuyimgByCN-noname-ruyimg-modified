@@ -2588,12 +2588,29 @@ fn apply_command(
                             .skill_by_name(crate::content::host::WUDIAN_XJ_TIANXIAN_KEY)
                             .map(|def| core.has_skill(player_id, def))
                             .unwrap_or(false);
+                    // 巨源（Boss 朱厌，规则 v226）：出牌阶段体力低于上次
+                    // 回合结束时体力 → 【杀】额外 1 目标（上游 selectTarget
+                    // range[1]++ 同口径；飞刃同款）
+                    let juyuan_extra = {
+                        let jdef = catalog
+                            .skill_by_name(crate::content::standard::BOSS_JUYUAN);
+                        match jdef {
+                            Some(def) => {
+                                core.has_skill(player_id, def)
+                                    && core.player(player_id).juyuan_storage > 0
+                                    && core.player(player_id).hp
+                                        < core.player(player_id).juyuan_storage
+                            }
+                            None => false,
+                        }
+                    };
                     let max_targets = if tianxian_inf {
                         usize::MAX
                     } else {
                         (if fangtian { 3 } else { 1 })
                             + kangyin_extra
                             + u32::from(feiren_extra) as usize
+                            + u32::from(juyuan_extra) as usize
                     };
                     if targets.is_empty() || targets.len() > max_targets {
                         return Err(RejectReason::IllegalTargets);
@@ -3961,6 +3978,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         // 玄砚计数（U05 xianjian 慕容紫英，规则 v179）
         push_u32(&mut h, p.xuanning_mark);
         push_u8(&mut h, p.shedu);
+        push_u32(&mut h, p.juyuan_storage as u32);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

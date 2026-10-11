@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 50;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 51;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2712,6 +2712,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u32(p.xuanning_mark);
         // 蛇毒标记（v223）
         w.u8(p.shedu);
+        // 巨源记录（v226）
+        w.i32(p.juyuan_storage);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -2989,6 +2991,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let huahu_used = r.boolean()?;
         let xuanning_mark = r.u32()?;
         let shedu = r.u8()?;
+        let juyuan_storage = r.i32()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3041,6 +3044,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             huahu_used,
             xuanning_mark,
             shedu,
+            juyuan_storage,
             off_court,
             shuiyun_count,
             wangyou3_round,

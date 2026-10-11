@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 225;
+pub const STANDARD_RULESET_VERSION: u64 = 226;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4145,6 +4145,10 @@ pub const BOSS_JIUSHOU: &str = "兽九";
 /// 本回合内没有使用【杀】（登记：出牌阶段口径），视为对其使用一张
 /// 【杀】。
 pub const BOSS_BINGXIAN: &str = "兵先";
+/// 巨源（Boss 朱厌，规则 v226）：锁定技——体力上限+5（由 boss_zhuyan
+/// maxHp30 表意，登记同穷奇）；出牌阶段体力低于上次回合结束时体力时，
+/// 【杀】可额外指定 1 个目标。
+pub const BOSS_JUYUAN: &str = "巨源";
 /// 虚失（Boss 朱厌，规则 v225）：锁定技，体力值首次减至一半或更少时激
 /// 活；你的出牌阶段结束时翻面；武将牌翻回正面时对所有其他角色各造成
 /// 1 点伤害（上游 [1,2] 随机——恒 1 登记差异）。
@@ -4229,9 +4233,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 相柳四技全齐（v221 妖兽；v222 兽九；v223 毒妒+邪酬——蛇毒标记
     // 以 PlayerState.shedu 承载）
     ("相柳", Faction::Qun, &[BOSS_YAOSHOU, BOSS_JIUSHOU, BOSS_DUQU, BOSS_ECHOU], 25, Gender::Male),
-    // 朱厌：虚失已落（v225，翻面机+翻正全场伤恒 1 近似）；巨源
-    // selectTarget mod 未落随下批
-    ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI], 25, Gender::Male),
+    // 朱厌四技全齐（v224 兵先；v225 虚失；v226 巨源——体力上限+5 由
+    // maxHp30 表意[登记同穷奇]；记录=PlayerState.juyuan_storage）
+    ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5518,6 +5522,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 权限型两面：出牌阶段结束自翻面（commit_phase Play begin:
             // false 臂）与翻回正面全场伤 1（commit_turn_over_before 尾）
             // 均经 skill_by_name 查询；激活门控同隐贼先例（装配即未激活）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_JUYUAN,
+            // 权限型两面：回合结束体力记录（kernel Phase::End 臂）与杀
+            // 目标 mod（engine max_targets）均经 skill_by_name 查询；
+            // juyuan_storage=PlayerState 跨回合持久字段
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

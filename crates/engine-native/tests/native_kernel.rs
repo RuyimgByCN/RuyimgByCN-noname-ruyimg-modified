@@ -2262,6 +2262,77 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// 朱厌批续片（规则 v225）：虚失——体力首次≤一半激活；出牌阶段结束
 /// 自翻面；翻回正面时全场其他角色各受 1（随机恒 1 近似）。
 #[test]
+/// 朱厌批末片（规则 v226/存档 v51）：巨源——回合结束记录体力；出牌
+/// 阶段体力低于记录时【杀】可额外 1 目标；体力≥记录时单目标。
+#[test]
+fn boss_zhuyan_juyuan_storage_and_extra_target() {
+    // Prototype 局验证巨源两面（End 臂纯查询不受 Boss 模式影响；
+    // boss_stage 局 first=0 与虚失翻面臂的自动推进交互独立登记）
+    let mut e = Engine::new(45001, 4);
+    let zhuyan_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 7) as u16;
+    e.debug_set_general_def(1, zhuyan_def);
+    e.debug_set_hp(1, 25);
+    let jdef = e.catalog().skill_by_name("巨源").expect("巨源入目录");
+    assert!(e.state_core().skills.contains_key(&(1, jdef)));
+    assert_eq!(e.debug_hp(1), 25, "朱厌 25 血装配");
+    assert!(e.state_core().player(1).juyuan_storage == 0, "初始未记录");
+
+    // ① 回合结束记录体力 25（1 号出牌阶段 NextPhase 跳到下家 Draw，
+    //    其回合的 End begin 帧（含巨源记录臂）在快进链中提交）
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    next_phase(&mut e); // Play→Discard（虚失未激活不翻面）
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End（巨源记录臂）
+    drain_choices(&mut e);
+    assert_eq!(
+        e.state_core().player(1).juyuan_storage,
+        25,
+        "回合结束记录 25（hp={}, phase={:?})",
+        e.debug_hp(1),
+        e.turn().phase
+    );
+
+    // ② 体力掉到 20（<记录 25）→ 杀可双目标
+    e.debug_set_hp(1, 20);
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(2);
+    e.debug_set_hp(0, 4);
+    e.debug_set_hp(2, 4);
+    let sha = e.debug_place(1, "sha");
+    let out = play(&mut e, sha, vec![0, 2]);
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "体力<记录 → 杀可双目标：{out:?}"
+    );
+    drain_choices(&mut e);
+
+    // ③ 记录刷新：回合结束后 juyuan=当前体力
+    next_phase(&mut e);
+    drain_choices(&mut e);
+    next_phase(&mut e);
+    drain_choices(&mut e);
+    assert_eq!(
+        e.state_core().player(1).juyuan_storage,
+        e.debug_hp(1),
+        "回合结束刷新记录=当前体力"
+    );
+
+    // ④ 存档往返（v51）
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("v51 往返");
+    assert_eq!(
+        r.state_core().player(1).juyuan_storage,
+        e.state_core().player(1).juyuan_storage,
+        "juyuan_storage 往返一致"
+    );
+    assert_zone_conservation(&r);
+}
+
 fn boss_zhuyan_xushi_flip_and_aoe() {
     let mut e = Engine::new_boss_stage(43001, 4, 1, 3, 6, 4, 0);
     let zhuyan_def = (e.catalog().general_count()

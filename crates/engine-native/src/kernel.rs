@@ -1185,6 +1185,17 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.discard_phase_discarded = 0;
             }
             Phase::End => {
+                // 巨源（Boss 朱厌，规则 v226）：回合结束记录体力（上游
+                // phaseAfter storage=hp 同口径；跨回合持久）
+                if let Some(jdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_JUYUAN)
+                {
+                    if ctx.core.has_skill(player, jdef) {
+                        let hp = ctx.core.player(player).hp;
+                        ctx.core.player_mut(player).juyuan_storage = hp;
+                    }
+                }
                 // 兵先（Boss 朱厌，规则 v224）：其他角色的回合结束时，若
                 // 其本回合未使用【杀】（出牌阶段口径=turn.sha_used_play_
                 // phase，登记差异）→ 视为对其使用一张【杀】（use_virtual_

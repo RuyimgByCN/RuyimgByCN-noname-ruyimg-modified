@@ -147,6 +147,9 @@ pub struct PlayerState {
     /// 蛇毒标记（Boss 相柳毒妒/邪酬，规则 v223）：受击者/用桃酒者累积，
     /// 其回合开始弃 X 或失 X 后递减。
     pub shedu: u8,
+    /// 巨源（Boss 朱厌，规则 v226）：上次回合结束时的体力（跨回合持久；
+    /// 出牌阶段体力低于该值时【杀】可额外指定 1 个目标）。
+    pub juyuan_storage: i32,
     /// 天符（U05 xianjian 长卿，规则 v188）：挂附来源（雷伤来源）。
     pub ctianfu_source: Option<u8>,
     /// 天符：挂附闪实体（离场区中该牌；死亡清理/结算弃置用）。
@@ -228,6 +231,7 @@ impl PlayerState {
             huahu_used: false,
             xuanning_mark: 0,
             shedu: 0,
+            juyuan_storage: 0,
             ctianfu_source: None,
             ctianfu_card: None,
             gouhunluo_rounds: 0,
