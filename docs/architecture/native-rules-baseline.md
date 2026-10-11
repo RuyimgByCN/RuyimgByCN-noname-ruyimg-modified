@@ -2467,6 +2467,21 @@ wuxieRespondable 红牌禁他人无懈未挂钩（红色锦囊 directHit 面同�
 红杀免次免距/黑杀仍限/红酒登记/跳八卦+往返）——证据见
 [T11 焚天证据](../operations/evidence/2026-10-11-t11-boss-fentian-v236/README.md)。
 
+**规则 v237（2026-10-11，T11 四象系玄武首片：灵渠＋玄武条目；存档 v54）**：
+`PlayerState.lingqu_count: u8` 新字段（**存档 53→54**；canonical_hash 入
+参——**字段新增批**：14 golden 位移=新字段+版本两源，v230 口径；实测
+236+新代码与 237+新代码两组哈希互异佐证两源独立）。**灵渠**三臂：受击
+摸 1+计数（commit_damage damageEnd 段，逐厄同位；0 点伤害照常）+终值
+>1 伤害归零（增幅后/统计前臂——上游 damageBegin4 低优先级终值口径）+
+手牌上限 +X（hand_limit 尾臂）。`BOSS_GENERALS` 尾追加**玄武**（def 索
+引 13/`[神裔, 灵渠]`/hp4；boss_xuanlin2 玄麟=关卡流程面登记不落）——
+**四象系四条目全部入目录**（青龙/白虎/朱雀/玄武=10–13）。FROZEN 名单
+尾加「灵渠」（90 名；SkillDef 第四次非表尾插入冻结表拦截后移正）。存档
+53→**54**。版本 236→**237**。回归
+`boss_xuanwu_lingqu_damage_counter` 五段（归零/1 点照常/终值门槛/上限+
+计数/v54 往返）——证据见
+[T11 灵渠证据](../operations/evidence/2026-10-11-t11-boss-lingqu-v237/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

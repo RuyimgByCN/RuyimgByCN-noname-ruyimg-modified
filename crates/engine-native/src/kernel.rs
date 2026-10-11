@@ -259,6 +259,19 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     }
     // 回合伤害统计（U05 xianjian 明绣，规则 v160 灵火门控）：来源本回
     // 合已造成伤害 +实际量（护甲/机甲吸收后；上游 getStat("damage") 按
+    // 灵渠（Boss 玄武，规则 v237）：受到的大于 1 点伤害视为 0 点（上游
+    // boss_lingqu cancel damageBegin4 num>1 → num=0 同口径；置于增幅后
+    // 统计前——终值>1 才归零；0 点伤害仍完成事件→受击摸 1/计数照常）
+    if amount > 1 {
+        if let Some(ldef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_LINGQU)
+        {
+            if ctx.core.has_skill(d.target, ldef) {
+                amount = 0;
+            }
+        }
+    }
     // damageEnd num 同口径）
     if let Some(src) = d.source {
         if src != d.target {
@@ -407,6 +420,19 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
                     ctx.draw_cards(src, 1);
                 }
             }
+        }
+    }
+    // 灵渠（Boss 玄武，规则 v237）：每次受到伤害后摸 1 张牌且受击计数
+    // +1（上游 boss_lingqu damageEnd draw+storage++ 同口径；0 点伤害照常；
+    // 计数=PlayerState.lingqu_count 跨回合持久，手牌上限 +X）
+    if let Some(ldef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_LINGQU)
+    {
+        if ctx.core.has_skill(d.target, ldef) && ctx.core.player(d.target).alive {
+            ctx.draw_cards(d.target, 1);
+            let p = ctx.core.player_mut(d.target);
+            p.lingqu_count = p.lingqu_count.saturating_add(1);
         }
     }
     // 延妒门控（Boss 穷奇，规则 v213）：体力首次≤一半激活（隐贼同款

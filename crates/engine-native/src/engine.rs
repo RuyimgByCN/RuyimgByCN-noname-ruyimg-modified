@@ -4059,6 +4059,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.shedu);
         push_u32(&mut h, p.juyuan_storage as u32);
         push_u8(&mut h, p.fengyin_active as u8);
+        push_u8(&mut h, p.lingqu_count);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

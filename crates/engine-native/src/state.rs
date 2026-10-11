@@ -153,6 +153,9 @@ pub struct PlayerState {
     /// 封印（Boss 应昭封冻，规则 v228）：本回合无法使用手牌（应昭回合
     /// 开始授予他人，回合结束解除）。
     pub fengyin_active: bool,
+    /// 灵渠（Boss 玄武，规则 v237）：受击计数（每次受伤 +1；手牌上限
+    /// +X；跨回合持久）。
+    pub lingqu_count: u8,
     /// 天符（U05 xianjian 长卿，规则 v188）：挂附来源（雷伤来源）。
     pub ctianfu_source: Option<u8>,
     /// 天符：挂附闪实体（离场区中该牌；死亡清理/结算弃置用）。
@@ -236,6 +239,7 @@ impl PlayerState {
             shedu: 0,
             juyuan_storage: 0,
             fengyin_active: false,
+            lingqu_count: 0,
             ctianfu_source: None,
             ctianfu_card: None,
             gouhunluo_rounds: 0,
@@ -1042,6 +1046,9 @@ impl GameStateCore {
                 limit = 9;
             }
         }
+        // 灵渠（Boss 玄武，规则 v237）：手牌上限 +受击计数（上游
+        // boss_lingqu mod maxHandcard `num + storage` 同口径）
+        limit += self.player(p).lingqu_count as usize;
         limit
     }
 

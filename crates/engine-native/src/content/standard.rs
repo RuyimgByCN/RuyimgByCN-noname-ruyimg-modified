@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 236;
+pub const STANDARD_RULESET_VERSION: u64 = 237;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,12 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 灵渠（Boss 玄武，规则 v237）：锁定技两面——每次受到伤害后摸 1 张牌
+/// 且受击计数 +1（手牌上限 +X，跨回合持久）；受到的大于 1 点的伤害视为
+/// 0 点（上游 boss_lingqu cancel damageBegin4 num>1 → num=0 同口径，
+/// 0 点伤害仍完成事件→摸 1/计数照常）。boss_xuanlin2 玄麟=关卡流程面，
+/// 登记不落内核。
+pub const BOSS_LINGQU: &str = "灵渠";
 /// 焚天（Boss 朱雀，规则 v236）：锁定技多面——你造成的伤害视为火属性
 /// （与招祸同构，复用 ZhaoHuo 机器/快照变体）；红色牌使用无次数限制且
 /// 无距离限制（上游 mod cardUsable Infinity + targetInRange=true）；红
@@ -4336,6 +4342,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 朱雀（v236 焚天；神裔共用 v233；boss_chiyan2 赤炎未落随下批；
     // 势力 shen→群目录近似；上游 female）
     ("朱雀", Faction::Qun, &[BOSS_SHENYI, BOSS_FENTIAN], 4, Gender::Female),
+    // 玄武（v237 灵渠；神裔共用 v233；boss_xuanlin2 玄麟=关卡流程面登记不落；
+    // 势力 shen→群目录近似）
+    ("玄武", Faction::Qun, &[BOSS_SHENYI, BOSS_LINGQU], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5738,6 +5747,16 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(ZhaoHuoBehavior),
+        },
+        SkillDef {
+            name: BOSS_LINGQU,
+            // 查询型两面：受击摸 1+计数（commit_damage damageEnd 段）与
+            // 大于 1 点伤害归零（commit_damage 入口臂）均经 skill_by_name
+            // 查询；手牌上限 +X（hand_limit 查询+PlayerState.lingqu_count
+            // 新字段）；玄麟=关卡流程面登记不落
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)
