@@ -2252,6 +2252,26 @@ fn boss_shujing_cuidui_poison_cycle() {
     let _ = hp_after;
 }
 
+/// Boss 内容第七批首片（规则 v221）：相柳妖兽——与其他角色计算距离
+/// -2（毒妒[蛇毒标记链]/兽九[手牌补 9]/邪酬(+switch) 未落下批）。
+#[test]
+fn boss_xiangliu_yaoshou_distance_minus_two() {
+    let mut e = Engine::new_boss_stage(38001, 4, 1, 3, 6, 4, 0);
+    let xiangliu_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 6) as u16; // BOSS_GENERALS[6] 相柳
+    e.debug_set_general_def(1, xiangliu_def);
+    e.debug_set_hp(1, 25);
+    let ydef = e.catalog().skill_by_name("妖兽").expect("妖兽入目录");
+    assert!(e.state_core().skills.contains_key(&(1, ydef)));
+    // 相柳（1 号）到 3 号：座位距离 2 → -2 → 0（下限钳 1？马术口径下限 1）
+    let d13 = e.state_core().computed_distance(e.catalog(), 1, 3);
+    assert!(d13 <= 1, "妖兽距离 -2：2-2 钳下限（实测 {d13}）");
+    // 对照：他人间距离不受影响（0→2 = 2）
+    let d02 = e.state_core().computed_distance(e.catalog(), 0, 2);
+    assert_eq!(d02, 2, "他人距离不受妖兽影响");
+}
+
 fn boss_taowu_minwan_lockset_draw_and_target_mod() {
     let mut e = Engine::new_boss_stage(36001, 4, 1, 3, 6, 4, 0);
     let taowu_def = (e.catalog().general_count()

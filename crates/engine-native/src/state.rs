@@ -740,6 +740,13 @@ impl GameStateCore {
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         let minus = minus + u32::from(xiongshou);
+        // 妖兽（Boss 神兽共有技，规则 v221）：锁定技——你与其他角色
+        // 距离 -2（上游 boss_yaoshou mod globalFrom distance-2 同口径）
+        let yaoshou = catalog
+            .skill_by_name(crate::content::standard::BOSS_YAOSHOU)
+            .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
+            .unwrap_or(false);
+        let minus = minus + 2 * u32::from(yaoshou);
         // 义从（公孙瓒）：锁定技——你计算与其他角色的距离 -1；其他角色
         // 计算与你的距离 +1（你的体力值不大于 2 时）。
         let yicong_from = catalog

@@ -117,7 +117,13 @@ fn g1_d3_install_bridge_and_metadata() {
     assert_eq!(skills, vec!["dddjinggou"]);
     assert_eq!(hp, 4);
     assert_eq!(gender, Gender::Male);
-    assert!(e.catalog().general_meta(base_count as u16 + 7).is_none(), "越界 None");
+    // boss 内置段（v221 起）位于扩展段后——越界以动态总尾为准
+    assert!(
+        e.catalog()
+            .general_meta(e.catalog().general_count() as u16)
+            .is_none(),
+        "越界 None"
+    );
 }
 
 /// G1 纵向：明置扩展武将（国战）→ 势力/体力来自包元数据；
@@ -299,7 +305,8 @@ fn g1_d3_content_lock_and_bounds() {
     let e = Engine::new_with_extensions(3403, 3, &[&d3_pack]).expect("建局");
     // 越界武将槽（扩展表之后）→ 恢复拒绝
     let mut snap = e.save();
-    snap.core.players[0].general_slots[0] = Some(base_count as u16 + 7);
+    snap.core.players[0].general_slots[0] =
+        Some(e.catalog().general_count() as u16 + 7);
     assert!(matches!(
         Engine::restore_with_extensions(&snap, &[&d3_pack]),
         Err(SnapshotError::IdOutOfBounds { what: "general_slot_index", .. })
