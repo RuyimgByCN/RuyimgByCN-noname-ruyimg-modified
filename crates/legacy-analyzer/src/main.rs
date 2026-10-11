@@ -45,6 +45,14 @@ enum Cmd {
         #[arg(long)]
         md: PathBuf,
     },
+    /// Count `const card = {}` segment of a shell extension card.js.
+    CardStats {
+        /// Input card.js path.
+        input: PathBuf,
+        /// Write JSON stats here.
+        #[arg(long)]
+        json: Option<PathBuf>,
+    },
     /// Emit skeletons only from stdin-less file.
     Skeleton {
         /// Input path.
@@ -155,6 +163,30 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 json.display(),
                 md.display()
             );
+        }
+        Cmd::CardStats { input, json } => {
+            let source = std::fs::read_to_string(&input)?;
+            let stats = legacy_analyzer::count_card_segment(&source);
+            if let Some(path) = json {
+                std::fs::write(&path, serde_json::to_string_pretty(&stats)?)?;
+                println!("written {}", path.display());
+            }
+            println!(
+                "const card 段：共 {} 张（纯数据 {} / 含行为 {}）",
+                stats.total, stats.data_only, stats.with_behavior
+            );
+            for (t, n) in &stats.type_counts {
+                println!("  type={t}: {n}");
+            }
+            for e in &stats.entries {
+                println!(
+                    "  {} [{}]{}{}",
+                    e.name,
+                    e.card_type.as_deref().unwrap_or("-"),
+                    if e.fullskin { " fullskin" } else { "" },
+                    if e.has_behavior { " behavior" } else { "" },
+                );
+            }
         }
         Cmd::Skeleton { input, out } => {
             let source = std::fs::read_to_string(&input)?;

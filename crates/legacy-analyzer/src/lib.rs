@@ -5,6 +5,7 @@
 
 #![deny(missing_docs)]
 
+mod cardstats;
 mod extract;
 mod grade;
 mod matrix;
@@ -12,6 +13,7 @@ mod report;
 mod sign;
 mod skeleton;
 
+pub use cardstats::{count_card_segment, CardEntry, CardSegmentStats};
 pub use extract::{analyze_source, SkillProfile};
 pub use grade::{grade_skill, CompatGrade, GradeDetail};
 pub use matrix::{build_capability_matrix, CapabilityMatrix, SkillCapabilityRow};
