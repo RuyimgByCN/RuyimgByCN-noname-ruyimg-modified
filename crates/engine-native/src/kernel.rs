@@ -441,6 +441,29 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 乱常门控（Boss 梼杌，规则 v218）：体力首次≤一半激活（隐贼/延妒/
+    // 积财同款 enable 直写）
+    if let Some(ldef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_LUANCHANG)
+    {
+        let holder = d.target;
+        if ctx.core.has_skill_any_state(holder, ldef)
+            && !ctx.core.has_skill(holder, ldef)
+        {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                if let Some(inst) = ctx.core.skills.get_mut(&(holder, ldef)) {
+                    inst.enabled = true;
+                }
+                ctx.log(LogEvent::SkillToggled {
+                    player: holder,
+                    skill: ctx.catalog.skill_name(ldef),
+                    enabled: true,
+                });
+            }
+        }
+    }
     // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
     let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
     if entering {
@@ -949,6 +972,37 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                 amount: 1,
                             });
                         }
+                    }
+                }
+                // 乱常（Boss 梼杌，规则 v218）：结束阶段视为用【万箭齐
+                // 发】（虚拟牌，目标=全部其他存活角色；上游 boss_luanchang_
+                // end phaseJieshuBegin useCard wanjian 同口径）
+                if let Some(ldef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_LUANCHANG)
+                {
+                    let holders: Vec<PlayerId> = ctx
+                        .core
+                        .skills
+                        .iter()
+                        .filter(|((_, dd), i)| *dd == ldef && i.enabled)
+                        .map(|((o, _), _)| *o)
+                        .collect();
+                    for holder in holders {
+                        if !ctx.core.player(holder).alive {
+                            continue;
+                        }
+                        let targets: Vec<PlayerId> = ctx
+                            .core
+                            .seat_order_from(holder)
+                            .into_iter()
+                            .filter(|p| *p != holder)
+                            .collect();
+                        ctx.use_virtual_card(
+                            holder,
+                            CardKind::ArcheryAttack,
+                            targets,
+                        );
                     }
                 }
                 // 延妒（Boss 穷奇，规则 v213）：global phaseJieshuBegin——

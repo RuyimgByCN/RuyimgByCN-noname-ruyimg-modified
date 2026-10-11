@@ -542,6 +542,10 @@ pub enum MachineSnapshot {
     BossFutai {
         owner: PlayerId,
     },
+    /// 乱常（Boss 梼杌，规则 v218）：无挂起一步机，快照仅身份。
+    BossLuanchang {
+        owner: PlayerId,
+    },
     LiJian {
         owner: PlayerId,
         stage: LiJianStageSnap,
@@ -1082,6 +1086,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossFutai { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossLuanchang { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::LiJian {
@@ -2039,6 +2046,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossFutai { .. } => {
             // 覆泰：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossLuanchang { .. } => {
+            // 乱常：无挂起一步机，恢复无询问
             None
         }
         MachineSnapshot::FanJian { owner, stage, target, .. } => match stage {

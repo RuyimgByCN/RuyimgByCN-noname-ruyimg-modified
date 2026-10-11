@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 217;
+pub const STANDARD_RULESET_VERSION: u64 = 218;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -263,6 +263,48 @@ impl SkillBehavior for FutaiBehavior {
 
     fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
         Box::new(FutaiMachine { owner })
+    }
+}
+
+/// 乱常（Boss 梼杌，规则 v218）：准备阶段（判定阶段开始锚点）视为使
+/// 用【南蛮入侵】（虚拟牌，目标=全部其他存活角色）；结束阶段视为用
+/// 【万箭齐发】（kernel Phase::End 臂查询式）。触发计划层过滤 disabled，
+/// 激活门控=SkillInstance.enabled 翻转。
+struct LuanChangBehavior;
+
+impl SkillBehavior for LuanChangBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(LuanChangMachine { owner })
+    }
+}
+
+/// 乱常机器：无挂起，启动即虚拟南蛮（use_virtual_card 先例：虎煞
+/// 虚拟南蛮同款，目标=全部其他存活角色）。
+#[derive(Clone)]
+struct LuanChangMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for LuanChangMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossLuanchang { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let targets: Vec<PlayerId> = ctx
+            .core
+            .seat_order_from(self.owner)
+            .into_iter()
+            .filter(|p| *p != self.owner)
+            .collect();
+        ctx.use_virtual_card(self.owner, CardKind::SavageAttack, targets);
+        Flow::Done
     }
 }
 
@@ -3985,6 +4027,10 @@ pub const BOSS_JICAI: &str = "积财";
 /// 拟态（Boss 梼杌，规则 v217）：锁定技两面——防止你于回合内受到的伤
 /// 害；你于回合外受到的火属性伤害 +1。
 pub const BOSS_NITAI: &str = "拟态";
+/// 乱常（Boss 梼杌，规则 v218）：锁定技，体力值首次减至一半或更少时激
+/// 活；回合开始（判定阶段开始锚点）视为使用【南蛮入侵】，回合结束视为
+/// 使用【万箭齐发】（目标=全部其他存活角色）。
+pub const BOSS_LUANCHANG: &str = "乱常";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -4056,9 +4102,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 饕餮四技全齐（v215 贪欲；v216 藏目+集财——集财激活以
     // SkillInstance.enabled 同隐贼/延妒先例）
     ("饕餮", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_TANYU, BOSS_CANGMU, BOSS_JICAI], 20, Gender::Male),
-    // 梼杌（上游 boss_taowu hp25）：拟态单技本批；冥顽[目标锁定集]/
-    // 乱常(+switch)[虚拟南蛮/万箭] 未落随下批
-    ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI], 25, Gender::Male),
+    // 梼杌：乱常已落（v218，虚拟 AOE+门控）；冥顽[目标锁定集] 未落
+    // 随下批
+    ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI, BOSS_LUANCHANG], 25, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5240,6 +5286,22 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_LUANCHANG,
+            // 两面：准备阶段（判定阶段开始锚点）视为用【南蛮入侵】（触
+            // 发机一步 use_virtual_card）；结束阶段视为用【万箭齐发】
+            // （kernel Phase::End 臂查询式）；激活门控同隐贼/延妒/积财
+            // 先例（装配即未启用）
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(LuanChangBehavior),
         },
     ];
     (cards, skills)

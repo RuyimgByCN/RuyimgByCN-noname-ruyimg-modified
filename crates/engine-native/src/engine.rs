@@ -2115,7 +2115,8 @@ pub(crate) fn apply_general_assembly(
         // 一半时启用）
         let enabled = skill != crate::content::standard::BOSS_YINZEI
             && skill != crate::content::standard::BOSS_YANDU
-            && skill != crate::content::standard::BOSS_JICAI;
+            && skill != crate::content::standard::BOSS_JICAI
+            && skill != crate::content::standard::BOSS_LUANCHANG;
         state.skills.insert(
             (player, def),
             crate::state::SkillInstance {
@@ -4249,6 +4250,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         }
         M::BossFutai { owner } => {
             push_u8(h, 63);
+            push_u8(h, *owner);
+        }
+        M::BossLuanchang { owner } => {
+            push_u8(h, 64);
             push_u8(h, *owner);
         }
         M::DyingSave { dying, source, responders, asked, round_used } => {
