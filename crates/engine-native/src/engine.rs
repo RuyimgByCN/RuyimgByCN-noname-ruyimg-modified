@@ -2509,7 +2509,13 @@ fn apply_command(
                 };
                 let xuanming_alive = named_alive("玄冥");
                 let gonggong_alive = named_alive("共工");
-                if xuanming_alive || gonggong_alive {
+                // 门控绑定造异持有者（上游 mod 挂 boss_zaoyi——非持有者
+                // 不受限）
+                let zaoyi_holder = catalog
+                    .skill_by_name(crate::content::standard::BOSS_ZAOYI)
+                    .map(|def| core.has_skill(core.turn.current, def))
+                    .unwrap_or(false);
+                if (xuanming_alive || gonggong_alive) && zaoyi_holder {
                     let is_basic = matches!(
                         kind,
                         CardKind::Sha

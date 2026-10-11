@@ -1329,6 +1329,28 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 自润（Boss 玄冥，规则 v247）：准备阶段——全体角色
+                    // 按座位序各摸牌：有装备者摸 2、无装备者摸 1（上游
+                    // boss_zirun phaseZhunbeiBegin asyncDraw 同口径）
+                    if let Some(zrdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_ZIRUN)
+                    {
+                        if ctx.core.has_skill(player, zrdef) {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            for t in 0..seats {
+                                if !ctx.core.player(t).alive {
+                                    continue;
+                                }
+                                let n = if ctx.core.player(t).equips.is_empty() {
+                                    1
+                                } else {
+                                    2
+                                };
+                                ctx.draw_cards(t, n);
+                            }
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
