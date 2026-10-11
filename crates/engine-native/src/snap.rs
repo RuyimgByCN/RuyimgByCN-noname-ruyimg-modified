@@ -546,6 +546,10 @@ pub enum MachineSnapshot {
     BossLuanchang {
         owner: PlayerId,
     },
+    /// 蛇毒标记结算（Boss 相柳，规则 v223）：两阶段挂起机。
+    Shedu {
+        owner: PlayerId,
+    },
     LiJian {
         owner: PlayerId,
         stage: LiJianStageSnap,
@@ -1089,6 +1093,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossLuanchang { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::Shedu { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::LiJian {
@@ -2051,6 +2058,18 @@ pub fn active_ask(
         MachineSnapshot::BossLuanchang { .. } => {
             // 乱常：无挂起一步机，恢复无询问
             None
+        }
+        MachineSnapshot::Shedu { owner, .. } => {
+            // 蛇毒：挂起态询问重挂（弃 X 或失 X）
+            Some(ask(
+                *owner,
+                "shedu_discard_or_lose",
+                ChoiceKind::SelectCards,
+                hand_card_options(&core.player(*owner).hand),
+                0,
+                core.player(*owner).shedu as usize,
+                true,
+            ))
         }
         MachineSnapshot::FanJian { owner, stage, target, .. } => match stage {
             // stage 名 = 消费者：SuitAsk 消费 fanjian_target 应答、

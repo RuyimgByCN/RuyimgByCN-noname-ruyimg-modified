@@ -120,6 +120,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
         ("BossXiangde", MachineSnapshot::BossXiangde { owner: 0 }),
         ("BossFutai", MachineSnapshot::BossFutai { owner: 0 }),
         ("BossLuanchang", MachineSnapshot::BossLuanchang { owner: 0 }),
+        ("Shedu", MachineSnapshot::Shedu { owner: 0 }),
     ]
 }
 
@@ -189,6 +190,7 @@ fn variant_index(m: &MachineSnapshot) -> u32 {
         M::BossXiangde { .. } => 59,
         M::BossFutai { .. } => 60,
         M::BossLuanchang { .. } => 61,
+        M::Shedu { .. } => 62,
     }
 }
 

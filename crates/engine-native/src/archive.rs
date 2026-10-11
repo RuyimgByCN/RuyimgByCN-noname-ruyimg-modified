@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 49;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 50;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -928,6 +928,10 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
         }
         MachineSnapshot::BossLuanchang { owner } => {
             w.u8(63);
+            enc_pid(w, owner);
+        }
+        MachineSnapshot::Shedu { owner } => {
+            w.u8(64);
             enc_pid(w, owner);
         }
         MachineSnapshot::DyingSave {
@@ -2067,6 +2071,10 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let owner = dec_pid(r)?;
             MachineSnapshot::BossLuanchang { owner }
         }
+        64 => {
+            let owner = dec_pid(r)?;
+            MachineSnapshot::Shedu { owner }
+        }
         59 => {
             let owner = dec_pid(r)?;
             let holder = dec_pid(r)?;
@@ -2702,6 +2710,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.huahu_used);
         // 玄砚计数（v35，U05 xianjian 慕容紫英）
         w.u32(p.xuanning_mark);
+        // 蛇毒标记（v223）
+        w.u8(p.shedu);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -2978,6 +2988,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let shiying_used = r.boolean()?;
         let huahu_used = r.boolean()?;
         let xuanning_mark = r.u32()?;
+        let shedu = r.u8()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3029,6 +3040,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             shiying_used,
             huahu_used,
             xuanning_mark,
+            shedu,
             off_court,
             shuiyun_count,
             wangyou3_round,

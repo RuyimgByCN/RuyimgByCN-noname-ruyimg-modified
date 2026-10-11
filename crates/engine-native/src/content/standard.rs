@@ -308,6 +308,89 @@ impl SkillMachine for LuanChangMachine {
     }
 }
 
+/// 蛇毒标记结算（Boss 相柳毒妒授予，规则 v223）：持有标记>0 的角色回
+/// 合开始——「弃置 X 张牌，或失去 X 点体力」（挂起 SelectCards；取消/
+/// 空选=失 X）→ 标记-1；X=当前标记数。
+struct ShedUBehavior;
+
+impl SkillBehavior for ShedUBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true }
+            if *player == owner
+                && ctx.state.player(owner).shedu > 0)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ShedUMachine { owner, asked: false })
+    }
+}
+
+#[derive(Clone)]
+struct ShedUMachine {
+    owner: PlayerId,
+    asked: bool,
+}
+
+impl SkillMachine for ShedUMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::Shedu { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.asked {
+            // 消费：非空选=弃所选牌（各-1 张？逐张去手）；空选=失 X 体力
+            let x = ctx.core.player(self.owner).shedu as usize;
+            let chosen: Vec<crate::ids::CardId> = ctx
+                .answer()
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some(*c),
+                    _ => None,
+                })
+                .collect();
+            if chosen.is_empty() {
+                ctx.emit(EventData::LoseHp {
+                    player: self.owner,
+                    amount: x as u32,
+                });
+            } else {
+                for c in chosen {
+                    ctx.discard_from_hand(self.owner, c);
+                }
+            }
+            let p = ctx.core.player_mut(self.owner);
+            p.shedu = p.shedu.saturating_sub(1);
+            return Flow::Done;
+        }
+        self.asked = true;
+        let x = ctx.core.player(self.owner).shedu as usize;
+        if x == 0 {
+            return Flow::Done;
+        }
+        let options: Vec<ChoiceOption> = ctx
+            .core
+            .player(self.owner)
+            .hand
+            .iter()
+            .copied()
+            .map(ChoiceOption::Card)
+            .collect();
+        Flow::WaitChoice {
+            observer: self.owner,
+            spec: ChoiceSpec {
+                kind: ChoiceKind::SelectCards,
+                prompt: "shedu_discard_or_lose",
+                options,
+                min: 0,
+                max: x,
+                allow_cancel: true, // 空选=失去 X 点体力
+            },
+        }
+    }
+}
+
 /// 覆泰机器：无挂起，启动即按座位序回血。
 #[derive(Clone)]
 struct FutaiMachine {
@@ -4045,6 +4128,16 @@ pub const BOSS_ZHONGDU: &str = "中毒";
 /// 妖兽（Boss 神兽共有技，规则 v221）：锁定技——你与其他角色计算距离
 /// 时 -2（上游 boss_yaoshou mod globalFrom distance-2 同口径）。
 pub const BOSS_YAOSHOU: &str = "妖兽";
+/// 毒妒（Boss 相柳，规则 v223）：锁定技——你受到伤害时，伤害来源获得
+/// 1 枚「蛇毒」标记（你自身不会拥有）；【桃】视为【杀】（mod 面暂缓
+/// 登记）。蛇毒标记：其回合开始弃 X 张牌或失去 X 点体力后递减。
+pub const BOSS_DUQU: &str = "毒妒";
+/// 邪酬（Boss 相柳，规则 v223）：锁定技，体力值首次减至一半或更少时激
+/// 活；除你之外的角色使用「桃」或「酒」时，获得 1 枚「蛇毒」标记。
+pub const BOSS_ECHOU: &str = "邪酬";
+/// 蛇毒标记结算（毒妒/邪酬授予的标记，规则 v223）：锁定技——回合开始
+/// 弃 X 张牌或失去 X 点体力后标记-1（X=标记数）。
+pub const BOSS_SHEDU: &str = "蛇毒";
 /// 兽九（Boss 相柳，规则 v222）：锁定技——手牌上限恒为 9；出牌阶段与
 /// 回合结束时手牌补至 9；跳过摸牌阶段（摸牌基数 0）。
 pub const BOSS_JIUSHOU: &str = "兽九";
@@ -4125,8 +4218,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 书精（上游 boss_shujing hp2 女神）：催毒+中毒全技（中毒为运行时
     // 授技面，表列仅催毒——授技入实例同 catalog skill 空间）
     ("书精", Faction::Shu, &[BOSS_CUIDUI], 2, Gender::Female),
-    // 相柳：兽九已落（v222）；毒妒[蛇毒标记链]/邪酬(+switch) 未落随下批
-    ("相柳", Faction::Qun, &[BOSS_YAOSHOU, BOSS_JIUSHOU], 25, Gender::Male),
+    // 相柳四技全齐（v221 妖兽；v222 兽九；v223 毒妒+邪酬——蛇毒标记
+    // 以 PlayerState.shedu 承载）
+    ("相柳", Faction::Qun, &[BOSS_YAOSHOU, BOSS_JIUSHOU, BOSS_DUQU, BOSS_ECHOU], 25, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5367,6 +5461,38 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_DUQU,
+            // 权限型单面：受击者给来源加蛇毒标记（commit_damage 尾经
+            // skill_by_name 查询；PlayerState.shedu 承载）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ECHOU,
+            // 权限型两面：激活门控（commit_damage 尾延妒并列）与他人桃
+            // /酒获标记（commit_card_used）均经 skill_by_name 查询；装配
+            // 即未激活
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_SHEDU,
+            // 蛇毒标记结算（运行时触发技）：Judge begin 持有标记>0 →
+            // 「弃 X 张牌或失去 X 体力」（挂起选择；取消/空选=失 X）→
+            // 标记-1；X=当前标记数
+            trigger: Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ShedUBehavior),
         },
     ];
     (cards, skills)

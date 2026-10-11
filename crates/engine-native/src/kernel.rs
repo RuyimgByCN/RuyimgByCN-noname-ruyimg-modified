@@ -458,19 +458,66 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
                 && ctx.core.player(d.target).alive
                 && !ctx.core.has_skill_any_state(d.target, zd)
             {
-                ctx.core.skills.insert(
-                    (d.target, zd),
-                    crate::state::SkillInstance {
-                        owner: d.target,
+                // 中毒标记技+蛇毒结算触发技一并授（上游 temp boss_zhongdu
+                // +global boss_shedu 组合同批生效）
+                for skdef in [
+                    zd,
+                    ctx.catalog
+                        .skill_by_name(crate::content::standard::BOSS_SHEDU)
+                        .expect("蛇毒 def"),
+                ] {
+                    ctx.core.skills.insert(
+                        (d.target, skdef),
+                        crate::state::SkillInstance {
+                            owner: d.target,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: false,
+                            rounds: 0,
+                        },
+                    );
+                    ctx.log(LogEvent::SkillToggled {
+                        player: d.target,
+                        skill: ctx.catalog.skill_name(skdef),
                         enabled: true,
-                        once_used: false,
-                        expires_end_of_turn: false,
-                        rounds: 0,
-                    },
-                );
+                    });
+                }
+            }
+        }
+    }
+    // 毒妒（Boss 相柳，规则 v223）：你受到伤害时来源获 1 蛇毒标记（自
+    // 身不获；上游 boss_duqu damageEnd storage++ 同口径）
+    if let Some(dddef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_DUQU)
+    {
+        if ctx.core.has_skill(d.target, dddef) {
+            if let Some(src) = d.source {
+                if src != d.target && ctx.core.player(src).alive {
+                    let p = ctx.core.player_mut(src);
+                    p.shedu = p.shedu.saturating_add(1);
+                }
+            }
+        }
+    }
+    // 邪酬门控（Boss 相柳，规则 v223）：体力首次≤一半激活（隐贼/延妒/
+    // 积财/乱常同款 enable 直写）
+    if let Some(edef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_ECHOU)
+    {
+        let holder = d.target;
+        if ctx.core.has_skill_any_state(holder, edef)
+            && !ctx.core.has_skill(holder, edef)
+        {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                if let Some(inst) = ctx.core.skills.get_mut(&(holder, edef)) {
+                    inst.enabled = true;
+                }
                 ctx.log(LogEvent::SkillToggled {
-                    player: d.target,
-                    skill: ctx.catalog.skill_name(zd),
+                    player: holder,
+                    skill: ctx.catalog.skill_name(edef),
                     enabled: true,
                 });
             }
@@ -621,6 +668,32 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
     // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游
     // getHistory("useCard") 同口径——未被取消的使用全计）
     ctx.core.player_mut(u.player).total_used += 1;
+    // 邪酬（Boss 相柳，规则 v223）：激活态下其他角色使用【桃】/【酒】
+    // → 相柳获 1 蛇毒标记（上游 boss_echou global useCard 同口径）
+    let effective_kind = ctx.catalog.card_kind(u.card);
+    if matches!(
+        u.use_as.unwrap_or(effective_kind),
+        CardKind::Tao | CardKind::Jiu
+    ) {
+        if let Some(edef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ECHOU)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == edef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .collect();
+            for holder in holders {
+                if holder != u.player && ctx.core.player(holder).alive {
+                    let p = ctx.core.player_mut(holder);
+                    p.shedu = p.shedu.saturating_add(1);
+                }
+            }
+        }
+    }
     // 冥顽（Boss 梼杌，规则 v219）：回合内锁定集已激活（非空）时每用
     // 一张牌摸一张（上游 boss_minwan_draw useCard 同口径）
     if ctx.core.turn.current == u.player && !ctx.core.turn.minwan_targets.is_empty() {

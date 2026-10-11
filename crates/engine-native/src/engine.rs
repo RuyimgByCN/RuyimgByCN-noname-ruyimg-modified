@@ -2117,7 +2117,8 @@ pub(crate) fn apply_general_assembly(
         let enabled = skill != crate::content::standard::BOSS_YINZEI
             && skill != crate::content::standard::BOSS_YANDU
             && skill != crate::content::standard::BOSS_JICAI
-            && skill != crate::content::standard::BOSS_LUANCHANG;
+            && skill != crate::content::standard::BOSS_LUANCHANG
+            && skill != crate::content::standard::BOSS_ECHOU;
         state.skills.insert(
             (player, def),
             crate::state::SkillInstance {
@@ -3958,6 +3959,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.huahu_used as u8);
         // 玄砚计数（U05 xianjian 慕容紫英，规则 v179）
         push_u32(&mut h, p.xuanning_mark);
+        push_u8(&mut h, p.shedu);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);
@@ -4274,6 +4276,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         }
         M::BossLuanchang { owner } => {
             push_u8(h, 64);
+            push_u8(h, *owner);
+        }
+        M::Shedu { owner } => {
+            push_u8(h, 65);
             push_u8(h, *owner);
         }
         M::DyingSave { dying, source, responders, asked, round_used } => {

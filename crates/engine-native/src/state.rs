@@ -144,6 +144,9 @@ pub struct PlayerState {
     /// xuanning 计数标记——**获得路径上游缺失登记差异**：原生仅支持
     /// 调试/宿主注入）。
     pub xuanning_mark: u32,
+    /// 蛇毒标记（Boss 相柳毒妒/邪酬，规则 v223）：受击者/用桃酒者累积，
+    /// 其回合开始弃 X 或失 X 后递减。
+    pub shedu: u8,
     /// 天符（U05 xianjian 长卿，规则 v188）：挂附来源（雷伤来源）。
     pub ctianfu_source: Option<u8>,
     /// 天符：挂附闪实体（离场区中该牌；死亡清理/结算弃置用）。
@@ -224,6 +227,7 @@ impl PlayerState {
             shiying_used: false,
             huahu_used: false,
             xuanning_mark: 0,
+            shedu: 0,
             ctianfu_source: None,
             ctianfu_card: None,
             gouhunluo_rounds: 0,
