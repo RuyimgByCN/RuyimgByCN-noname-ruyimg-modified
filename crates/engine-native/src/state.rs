@@ -551,6 +551,15 @@ impl GameStateCore {
         }
     }
 
+    /// Boss 模式阵营：boss 座位与助战 fellow 为 boss 方，其余为挑战者
+    /// 方（非 Boss 模式一律 false——神恩光环仅 Boss 场生效）。
+    pub fn is_boss_side(&self, p: PlayerId) -> bool {
+        match &self.mode {
+            GameMode::Boss { boss, fellows, .. } => p == *boss || fellows.contains(&p),
+            _ => false,
+        }
+    }
+
     /// Boss 模式助战座位表（非 Boss 为 None）。
     pub fn boss_fellows(&self) -> Option<&[PlayerId]> {
         match &self.mode {
@@ -1049,6 +1058,18 @@ impl GameStateCore {
         // 灵渠（Boss 玄武，规则 v237）：手牌上限 +受击计数（上游
         // boss_lingqu mod maxHandcard `num + storage` 同口径）
         limit += self.player(p).lingqu_count as usize;
+        // 神恩（Boss 太昊/炎帝 光环，规则 v238）：挑战者侧手牌上限 +1
+        //（上游 boss_shenen2 mod maxHandcard `!side → num+1` 同口径；
+        // 光环激活=场上存在神恩持有者）
+        {
+            let shenen = catalog.skill_by_name(crate::content::standard::BOSS_SHENEN);
+            let active = shenen
+                .map(|d| self.skills.keys().any(|(_, dd)| *dd == d))
+                .unwrap_or(false);
+            if active && !self.is_boss_side(p) {
+                limit += 1;
+            }
+        }
         limit
     }
 

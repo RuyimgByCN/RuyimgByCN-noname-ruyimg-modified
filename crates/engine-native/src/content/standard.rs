@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 237;
+pub const STANDARD_RULESET_VERSION: u64 = 238;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,11 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 神恩（Boss 太昊/炎帝 光环，规则 v238）：全局光环——boss 方用牌无视
+/// 距离；挑战者侧手牌上限 +1、摸牌阶段 +1（上游 boss_shenen2 global
+/// 三 mod 同口径：targetInRange side→true / maxHandcard !side→num+1 /
+/// phaseDrawBegin !side→num++；光环激活=场上存在神恩持有者）。
+pub const BOSS_SHENEN: &str = "神恩";
 /// 灵渠（Boss 玄武，规则 v237）：锁定技两面——每次受到伤害后摸 1 张牌
 /// 且受击计数 +1（手牌上限 +X，跨回合持久）；受到的大于 1 点的伤害视为
 /// 0 点（上游 boss_lingqu cancel damageBegin4 num>1 → num=0 同口径，
@@ -4345,6 +4350,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 玄武（v237 灵渠；神裔共用 v233；boss_xuanlin2 玄麟=关卡流程面登记不落；
     // 势力 shen→群目录近似）
     ("玄武", Faction::Qun, &[BOSS_SHENYI, BOSS_LINGQU], 4, Gender::Male),
+    // 太昊（v238 神恩光环；神裔共用 v233；boss_qingyi 青翼未落随下批；
+    // 上游 names 风|伏羲、shen→群目录近似）
+    ("太昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5754,6 +5762,16 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 大于 1 点伤害归零（commit_damage 入口臂）均经 skill_by_name
             // 查询；手牌上限 +X（hand_limit 查询+PlayerState.lingqu_count
             // 新字段）；玄麟=关卡流程面登记不落
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_SHENEN,
+            // 全局光环查询型三面：engine sha/顺手距离链 boss 方豁免、
+            // hand_limit 挑战者 +1（state）、Draw 臂挑战者 +1（kernel）
+            // 均经 skill_by_name 查询+is_boss_side 判定；光环激活=场上
+            // 存在持有者
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

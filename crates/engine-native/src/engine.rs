@@ -2746,7 +2746,16 @@ fn apply_command(
                             .map(|def| core.has_skill(core.turn.current, def))
                             .unwrap_or(false)
                         // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
-                        || fentian_red;
+                        || fentian_red
+                        // 神恩（Boss 太昊/炎帝 光环，规则 v238）：boss 方
+                        // 用牌无视距离（光环激活=场上存在持有者）
+                        || ({
+                            let active = catalog
+                                .skill_by_name(crate::content::standard::BOSS_SHENEN)
+                                .map(|def| core.skills.keys().any(|(_, dd)| *dd == def))
+                                .unwrap_or(false);
+                            active && core.is_boss_side(core.turn.current)
+                        });
                     let feiren_range_free = sha_range_free;
                     let zfs_free = core.turn.zhufangshenshi_target == Some(target);
                     // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
@@ -2905,6 +2914,15 @@ fn apply_command(
                         .skill_by_name(crate::content::standard::QI_CAI)
                         .map(|d| core.has_skill(from, d))
                         .unwrap_or(false);
+                    // 神恩（Boss 太昊/炎帝 光环，规则 v238）：boss 方用
+                    // 牌无视距离
+                    let shenen_boss_free = {
+                        let active = catalog
+                            .skill_by_name(crate::content::standard::BOSS_SHENEN)
+                            .map(|def| core.skills.keys().any(|(_, dd)| *dd == def))
+                            .unwrap_or(false);
+                        active && core.is_boss_side(from)
+                    };
                     // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
                     let fentian_red_free = {
                         let red = matches!(
@@ -2929,6 +2947,7 @@ fn apply_command(
                     if !qicai
                         && !tannang_free
                         && !fentian_red_free
+                        && !shenen_boss_free
                         && core.computed_distance(catalog, from, target) > 1
                     {
                         return Err(RejectReason::IllegalTargets);

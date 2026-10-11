@@ -2493,6 +2493,22 @@ golden 不动（无语义变化先例同 versus 4v4 固化批）——证据见
 三面全查询型，最小下一片）/boss_xingqiu 星囚（连环+授技，较重）/boss_
 buchun 不臣（复活书精，阶段流程）。
 
+**规则 v238（2026-10-11，T11 星宿阶段2系首片：神恩＋太昊条目）**：
+**神恩**（全局光环查询型 Noop）三面：boss 方用牌无视距离（sha_range_free
+链+顺手距离链 `shenen_boss_free` 臂）+挑战者侧手牌上限 +1（hand_limit
+尾臂）+挑战者侧摸牌 +1（Draw 臂固定摸 2 后追加）。**阵营承载**：新增
+`PlayerState::is_boss_side`（Boss 模式=boss 座位+fellows；非 Boss 模式恒
+false）。光环激活=场上存在神恩持有者（上游 global 子技全员发放的域化
+近似，登记）。`BOSS_GENERALS` 尾追加**太昊**（def 索引 14/hp6/`[神裔,
+神恩]`；names 风|伏羲；boss_qingyi 青翼未落随下批）。**登记差异**：阶段
+换将体不在裸骨架（side 域登记）；势力 shen→群目录近似。FROZEN 名单尾
+加「神恩」（91 名；SkillDef 第五次非表尾插入冻结表拦截后移正）。存档不
+变 v54。版本 237→**238**。版本回退探针（238→237 复跑 golden 全绿）证
+明 14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_taihao_shenen_aura` 五段（boss 方无距离/挑战者对照/摸牌+1/上限
++1/往返）——证据见
+[T11 神恩证据](../operations/evidence/2026-10-11-t11-boss-shenen-v238/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

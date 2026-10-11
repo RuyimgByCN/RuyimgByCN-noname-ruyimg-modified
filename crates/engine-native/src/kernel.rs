@@ -1371,6 +1371,19 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     // boss_jiushou phaseDraw trigger.cancel 同口径）
                 } else {
                     ctx.draw_cards(player, 2);
+                    // 神恩（Boss 太昊/炎帝 光环，规则 v238）：挑战者侧
+                    // 摸牌 +1（上游 boss_shenen2 phaseDrawBegin num++ 同
+                    // 口径；光环激活=场上存在神恩持有者）
+                    {
+                        let active = ctx
+                            .catalog
+                            .skill_by_name(crate::content::standard::BOSS_SHENEN)
+                            .map(|def| ctx.core.skills.keys().any(|(_, dd)| *dd == def))
+                            .unwrap_or(false);
+                        if active && !ctx.core.is_boss_side(player) {
+                            ctx.draw_cards(player, 1);
+                        }
+                    }
                     // 无脏（Boss 混沌，规则 v209）：摸牌基数改为
                     // max(5, floor(hp/2))——在固定摸 2 后补额外量
                     // max(5, hp/2) - 2（上游 phaseDrawBegin trigger.num+=
