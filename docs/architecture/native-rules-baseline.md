@@ -1992,6 +1992,57 @@ forced）——非自己回合弃出装备 Kind 牌时随机补获等量灵剑�
 时间回溯、紧急冷冻全链、嘲讽/潜行/星体改造、机关妖术补偿确定性构造）
 ——证据见[T12 证据](../operations/evidence/2026-10-11-t12-jiguanshu-v198/README.md)。
 
+**规则 v199（2026-10-11，T18 机关术×2 转正：CardMod 受控合成原语；存档 v45）**：
+机关术（上游 `lingjianduanzao`，`swd_jiguanshu1` ♣2 / `swd_jiguanshu2` ♦2，
+kind jiguan）自目标主动牌：对每张有效装备受控合成——CardMod 伴随表
+（`PlayerState.card_mods: BTreeMap<u32,u32>`，装备实体→附着灵剑实体，灵
+剑随机入表），目录保持只读（不运行时改定义、不 intern 新名，
+[ADR 0780](../adr/0780-card-instance-mod-primitive.md)）。**登记差异**：
+①上游名字组合+数值升级（getValue 封顶 10）以「附着登记」近似——名称合
+成/数值升级仅入改造表，点数升级当前无原生消费点；②jiqi/yuchan 池暂缓
+（机关术全部附着灵剑）；③改造不随卡牌转移（换装/获得离去即失效，表随
+拥有者存档）。**存档格式 44→45**（PlayerState 尾部 len+(u32,u32) 序列；
+v44 字节被版本门禁拒绝）。版本 198→**199**。14 golden 双探针后重录。回
+归 `swd_jiguanshu_attaches_card_mods_and_roundtrips`（施放后 CardMod 恰
+一条且附着实体为灵剑；存档字节往返一致；无装备不可用）——机关牌池
+8 种 17 张至此全数转正，swd 包 45 张——证据见[T18 证据](../operations/evidence/2026-10-11-t18-jiguanshu-primitive-v199/README.md)。
+
+**规则 v200（2026-10-11，T19a 国战派生判定原语+阵法三张）**：
+state.rs 纯派生判定原语（effective_faction 推导+存活座位序，无独立状
+态）：`is_friend_of`（双方明置势力已知且相同）、`alive_neighbors`（存
+活左右邻，跳过死亡座位）、`inline`/`inline_with`（连续同势力友方段）、
+`sieged`/`sieges`（己方已知且存活左右邻互异非己方且互为友方）。zhenfa
+启用门=存活≥4（上游 guozhanZhenfaEnabled；九变 ≥3 未建模）。zhenfa 包
+3→6 张，CardKind 134–136 追加：**天覆阵**（AOE 全部大势力且有牌者各强
+制弃 1 张 he，目标自选；HostMachine targets 队列+SelectCard 逐目标询问）、
+**七星阵**（被围攻者施放：围攻者逐个弃 1+视为对其用杀[响应闪或 1 伤]；
+targets=围攻者弃牌队列、cards=用杀队列 kernel 工厂预填）、**鸟翔阵**
+（AOE 全部合法目标[异施放者势力、已知、与自身邻座同势力=连续段端点]各
+响应闪或 1 伤）。**登记差异**：七星阵视为用杀以响应闪或 1 伤简化（上游
+真实 useCard——虚拟用牌原语缺口同族，无加成/无额外面）；邻居含死亡座位
+语义不明保守取存活；构逆/野心家结盟/undist 不建模。版本 199→**200**。
+14 golden 双版本回退探针后重录。回归 `g1_shahai_zhenfa` 6/6——证据见
+[T19a 证据](../operations/evidence/2026-10-11-t19-zhenfa-v200/README.md)。
+
+**规则 v201（2026-10-11，T19b swapSeat 座位环原语+长蛇阵；存档 v46；破
+阵诀登记上游未上架）**：
+`GameStateCore.seat_ring: Vec<PlayerId>` 显式座位环
+（[ADR 0781](../adr/0781-mutable-seat-ring.md)；建局恒等 0..n）：
+`swap_seat(a,b)` 交换环位置（PlayerId 身份不变，区域/装配全随身份）；
+座位语义全经 `ring_pos`/`ring_next`/`ring_prev` 访问器（环长度不符退恒
+等），`+1%n` 直算禁止——下游适配 `next_alive`/`seat_order_from`/
+`alive_neighbors`/`inline(_with)`/Boss 重整巡席。**存档格式 45→46**
+（GameStateCore 尾部 seat_ring，len+pid 恒等亦显式编码自校验；v45 字节
+被版本门禁拒绝）。**长蛇阵**（♣1/♦1 各 1，CardKind 137）：队列中
+（inline）→全队列（含自己）各摸 1；否则与座位距离最近的友方 swap_seat
+成队列（上游 absolute 距离排序同口径），本体入弃堆。**破阵诀**（编码
+138 机器臂已就绪）登记**上游未上架**（list.js 4 条全注释无活跃实体，
+非原生缺口；上游上架随批转换）。**登记差异**：swapSeat 第 4 参（保留相
+对方位等 UI 语义）不建模；死亡座位在环中保留、阵法判定经存活过滤。版本
+200→**201**。14 golden 双版本回退探针（201/46→200/45 复跑全绿）后重录。
+回归 `g1_shahai_zhenfa` 6/6（换座成队列环变化断言/入队列后全队列摸
+1[施放者净 0]/环不变量每 id 恰一次）——证据见[T19b 证据](../operations/evidence/2026-10-11-t19b-swapseat-v201/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |
