@@ -28,6 +28,9 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
         EventData::TurnOverBefore { player, cancelled } => {
             commit_turn_over_before(ctx, player, cancelled)
         }
+        EventData::Recover { player, .. } => {
+            commit_recover_skills(ctx, player)
+        }
         // CardsDrawn/Recover/CardsMoved 等在构造时已由助手完成区移动作。
         _ => {
             let _ = kind;
@@ -382,6 +385,29 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
                 ctx.log(LogEvent::SkillToggled {
                     player: holder,
                     skill: ctx.catalog.skill_name(dudef),
+                    enabled: true,
+                });
+            }
+        }
+    }
+    // 积财门控（Boss 饕餮，规则 v216）：体力首次≤一半激活（隐贼/延妒
+    // 同款 enable 直写）
+    if let Some(jdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_JICAI)
+    {
+        let holder = d.target;
+        if ctx.core.has_skill_any_state(holder, jdef)
+            && !ctx.core.has_skill(holder, jdef)
+        {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                if let Some(inst) = ctx.core.skills.get_mut(&(holder, jdef)) {
+                    inst.enabled = true;
+                }
+                ctx.log(LogEvent::SkillToggled {
+                    player: holder,
+                    skill: ctx.catalog.skill_name(jdef),
                     enabled: true,
                 });
             }
@@ -833,6 +859,20 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             let total = extra.max(5);
                             if total > 2 {
                                 ctx.draw_cards(player, (total - 2) as usize);
+                            }
+                        }
+                    }
+                    // 藏目（Boss 饕餮，规则 v216）：摸牌基数改为存活角色
+                    // 数——固定摸 2 后补额外 存活数-2（上游 boss_cangmu
+                    // phaseDrawBegin trigger.num += countPlayer()-2 同口径）
+                    if let Some(def) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_CANGMU)
+                    {
+                        if ctx.core.has_skill(player, def) {
+                            let alive = ctx.core.alive_count();
+                            if alive > 2 {
+                                ctx.draw_cards(player, (alive - 2) as usize);
                             }
                         }
                     }
@@ -2540,6 +2580,36 @@ pub(crate) fn tanyu_is_max_hand(
     let my = core.player(holder).hand.len();
     core.alive_players()
         .all(|o| o == holder || core.player(o).hand.len() <= my)
+}
+
+/// 积财（Boss 饕餮，规则 v216）：回复结算后——回复者==持有者 → 持有
+/// 者摸 2；否则持有者与回复者各摸 1（上游 boss_jicai recoverAfter 同
+/// 口径；仅实际回复量>0 的 Recover 事件进入）。
+fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
+    let Some(jdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_JICAI)
+    else {
+        return;
+    };
+    let holders: Vec<PlayerId> = ctx
+        .core
+        .skills
+        .iter()
+        .filter(|((_, dd), i)| *dd == jdef && i.enabled)
+        .map(|((o, _), _)| *o)
+        .filter(|o| ctx.core.player(*o).alive)
+        .collect();
+    for holder in holders {
+        if recovered == holder {
+            ctx.draw_cards(holder, 2);
+        } else {
+            ctx.draw_cards(holder, 1);
+            if ctx.core.player(recovered).alive {
+                ctx.draw_cards(recovered, 1);
+            }
+        }
+    }
 }
 
 /// 覆泰2（Boss 穷奇，规则 v214）：场上存有持覆泰的穷奇、用/救桃者非

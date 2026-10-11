@@ -2009,6 +2009,30 @@ impl Engine {
         self.finish_segment(work, log_mark)
     }
 
+    /// 调试：回复体力（发 Recover 事件走完整结算——积财等回复触发技
+    /// 依赖此通道；机械回血经 Ctx.recover 同款语义：钳上限、实际回复量
+    /// 入事件）。
+    pub fn debug_recover(&mut self, player: PlayerId, amount: u32) -> CommandOutcome {
+        if self.state.core.outcome.is_some() {
+            return CommandOutcome::Rejected(RejectReason::MatchOver);
+        }
+        if self.state.resolution.open_choice.is_some() {
+            return CommandOutcome::Rejected(RejectReason::ChoicePending);
+        }
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        crate::resolution::push_frame(
+            &mut work.resolution,
+            EventData::Recover {
+                player,
+                amount,
+                by_card: None,
+            },
+        );
+        self.finish_segment(work, log_mark)
+    }
+
     /// 调试：读取连环状态。
     pub fn debug_linked(&self, player: PlayerId) -> bool {
         self.state.core.player(player).linked
@@ -2089,9 +2113,9 @@ pub(crate) fn apply_general_assembly(
         // 隐贼/延妒（Boss 混沌/穷奇，规则 v210/v213）：装配即未激活
         //（上游 gameStart switch_off disableSkill 同口径；体力首次≤
         // 一半时启用）
-        let enabled =
-            skill != crate::content::standard::BOSS_YINZEI
-                && skill != crate::content::standard::BOSS_YANDU;
+        let enabled = skill != crate::content::standard::BOSS_YINZEI
+            && skill != crate::content::standard::BOSS_YANDU
+            && skill != crate::content::standard::BOSS_JICAI;
         state.skills.insert(
             (player, def),
             crate::state::SkillInstance {
