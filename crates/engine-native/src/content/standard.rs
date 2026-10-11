@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 233;
+pub const STANDARD_RULESET_VERSION: u64 = 234;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,12 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 雷击（Boss 青龙，规则 v234，上游 releiji 界雷击）：你使用/打出闪后
+/// 选一名其他角色判定——黑桃其受 2 点雷伤、梅花你回 1 其受 1 点雷伤、
+/// 其他无事（原生=杀/万箭两闪消费位内联臂；目标选择以座位序首名确定
+/// 性近似登记；判定=铁骑内联口径无鬼道/天妒改判窗；闪无主动使用面，
+/// useCard 触发半面由模型承载）。
+pub const BOSS_RELEIJI: &str = "雷击";
 /// 神裔（Boss 青龙，四象系共有技，规则 v233）：锁定技两面——判定阶段
 /// 的延时锦囊判定恒不生效（上游 mod judge `event.type=="phase"`：bool
 /// true→false、false→null，对延时锦囊消费面等价恒失效；牌去向不变）；
@@ -4311,8 +4317,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 朱厌四技全齐（v224 兵先；v225 虚失；v226 巨源——体力上限+5 由
     // maxHp30 表意[登记同穷奇]；记录=PlayerState.juyuan_storage）
     ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
-    // 青龙四技全齐待续（v233 神裔；releiji 雷击/boss_qingmu2 青木未落随下批）
-    ("青龙", Faction::Qun, &[BOSS_SHENYI], 4, Gender::Male),
+    // 青龙（v233 神裔、v234 雷击；boss_qingmu2 青木=关卡流程面登记不落）
+    ("青龙", Faction::Qun, &[BOSS_SHENYI, BOSS_RELEIJI], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5678,6 +5684,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 同位，仅正→背取消）与判定阶段延时锦囊无效化（apply_
             // judgement 逐臂条件）均经 skill_by_name 查询；洪荒之力禁
             // 用交互未落（登记差异）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_RELEIJI,
+            // 查询型单面：杀/万箭闪消费位内联臂（releiji_on_shan）经
+            // skill_by_name 查询；青木2（boss_qingmu2 死亡隐藏+换位重
+            // 生）为关卡流程面，属 Boss 模式裸骨架缺口，登记不落内核
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

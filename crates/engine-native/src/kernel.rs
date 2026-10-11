@@ -1654,6 +1654,50 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
 
 /// E03 翻面提交：取消位为真则跳过翻转（漩涡面具等锁定技）；
 /// 否则翻转武将牌朝向并发出完成事件。
+/// 雷击（Boss 青龙，规则 v234）：打出/使用闪后触发——座位序下一名其
+/// 他存活角色确定性判定（铁骑内联口径，无鬼道/天妒改判窗；目标选择以
+/// 上游 chooseTarget→座位序首名确定性近似登记）：黑桃 → 其受 2 点雷伤；
+/// 梅花 → 持有者回复 1、其受 1 点雷伤；其他无事。
+fn releiji_on_shan(ctx: &mut Ctx<'_>, holder: PlayerId) {
+    let releiji = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_RELEIJI)
+        .map(|d| ctx.core.has_skill(holder, d))
+        .unwrap_or(false);
+    if !releiji {
+        return;
+    }
+    let tgt = ctx.core.next_alive(holder);
+    if tgt == holder || !ctx.core.player(tgt).alive {
+        return;
+    }
+    let judged = ctx.draw_judge_card();
+    let suit = ctx.catalog.cards[judged as usize].suit;
+    ctx.to_discard(judged);
+    match suit {
+        crate::catalog::Suit::Spade => {
+            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                None,
+                tgt,
+                2,
+                crate::event::DamageNature::Thunder,
+                None,
+            )));
+        }
+        crate::catalog::Suit::Club => {
+            ctx.recover(holder, 1, None);
+            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                None,
+                tgt,
+                1,
+                crate::event::DamageNature::Thunder,
+                None,
+            )));
+        }
+        _ => {}
+    }
+}
+
 fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool) {
     if cancelled {
         return;
@@ -4691,6 +4735,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 card: shan,
                 player: self.target,
             });
+            // 雷击（Boss 青龙，规则 v234）：响应闪后判定雷击（无双第二
+            // 闪重入本臂=每张闪各触发一次，上游同口径）
+            releiji_on_shan(ctx, self.target);
             self.dodges_used += 1;
             // 无双：还需第二张闪 → 新响应窗口（重开护驾逐人询问 +
             // 目标本人询问；不弃杀、不受伤）
@@ -6476,6 +6523,11 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                     card: c,
                     player: self.target,
                 });
+                // 雷击（Boss 青龙，规则 v234）：万箭闪响应后判定雷击
+                // （南蛮响应为杀，不触发）
+                if ctx.catalog.card_kind(c) == CardKind::Shan {
+                    releiji_on_shan(ctx, self.target);
+                }
             } else {
                 // 放弃 → 1 点伤害（完整结算）
                 ctx.emit(EventData::Damage(damage_data_with(

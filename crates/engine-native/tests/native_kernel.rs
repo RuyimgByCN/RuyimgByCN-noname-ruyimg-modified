@@ -2217,6 +2217,133 @@ fn boss_shujing_cuidui_poison_cycle() {
     let _ = hp_after;
 }
 
+/// 四象系续片（规则 v234）：雷击（青龙 releiji 界雷击）——打出闪后座
+/// 位序下一名其他存活角色判定：黑桃 2 雷伤、梅花持有者回 1+其 1 雷伤、
+/// 其他无事；万箭闪响应同触发；非持有者对照不触发。目标=座位序首名
+/// 确定性近似（登记）。青木2（boss_qingmu2）=关卡流程面登记不落内核。
+#[test]
+fn boss_qinglong_releiji_thunder_judge() {
+    // ① 梅花判定：青龙回 1、攻击者受 1 雷伤
+    let mut e = Engine::new_boss_stage(54001, 4, 1, 3, 6, 4, 0);
+    let qinglong_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 10) as u16; // BOSS_GENERALS[10] 青龙
+    e.debug_set_general_def(1, qinglong_def);
+    e.debug_set_hp(1, 4);
+    let rdef = e.catalog().skill_by_name("雷击").expect("雷击入目录");
+    let sdef = e.catalog().skill_by_name("神裔").expect("神裔入目录");
+    assert!(e.state_core().skills.contains_key(&(1, rdef)));
+    assert!(e.state_core().skills.contains_key(&(1, sdef)));
+    let run_club = |seed: u64| {
+        let mut e = Engine::new_boss_stage(seed, 4, 1, 3, 6, 4, 0);
+        e.debug_set_general_def(1, qinglong_def);
+        e.debug_set_hp(1, 3);
+        advance_to_play(&mut e, 2);
+        e.debug_clear_hand(2);
+        e.debug_clear_hand(1);
+        let sha = e.debug_place(2, "sha");
+        let shan = e.debug_place(1, "shan");
+        play(&mut e, sha, vec![1]);
+        let c = e.open_choice().expect("闪询问挂起");
+        assert_eq!(c.observer, 1);
+        e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Club);
+        answer(&mut e, ChoiceOption::Card(shan));
+        drain_choices(&mut e);
+        e
+    };
+    let mut e = run_club(54001);
+    assert_eq!(e.debug_hp(1), 4, "梅花：雷击持有者回复 1");
+    assert_eq!(e.debug_hp(2), 3, "梅花：座位序下一名（2 号=攻击者）受 1 雷伤");
+
+    // ② 黑桃判定：目标受 2 点雷伤、持有者不回
+    let mut e = {
+        let mut e = Engine::new_boss_stage(54002, 4, 1, 3, 6, 4, 0);
+        e.debug_set_general_def(1, qinglong_def);
+        e.debug_set_hp(1, 4);
+        advance_to_play(&mut e, 2);
+        e.debug_clear_hand(2);
+        e.debug_clear_hand(1);
+        let sha = e.debug_place(2, "sha");
+        let shan = e.debug_place(1, "shan");
+        play(&mut e, sha, vec![1]);
+        let c = e.open_choice().expect("闪询问挂起");
+        assert_eq!(c.observer, 1);
+        e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Spade);
+        answer(&mut e, ChoiceOption::Card(shan));
+        drain_choices(&mut e);
+        e
+    };
+    assert_eq!(e.debug_hp(1), 4, "黑桃：持有者不回复");
+    assert_eq!(e.debug_hp(2), 2, "黑桃：目标受 2 点雷伤");
+
+    // ③ 红桃判定：无事
+    let mut e = {
+        let mut e = Engine::new_boss_stage(54003, 4, 1, 3, 6, 4, 0);
+        e.debug_set_general_def(1, qinglong_def);
+        e.debug_set_hp(1, 4);
+        advance_to_play(&mut e, 2);
+        e.debug_clear_hand(2);
+        e.debug_clear_hand(1);
+        let sha = e.debug_place(2, "sha");
+        let shan = e.debug_place(1, "shan");
+        play(&mut e, sha, vec![1]);
+        let c = e.open_choice().expect("闪询问挂起");
+        assert_eq!(c.observer, 1);
+        e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Heart);
+        answer(&mut e, ChoiceOption::Card(shan));
+        drain_choices(&mut e);
+        e
+    };
+    assert_eq!(e.debug_hp(1), 4, "红桃：无事");
+    assert_eq!(e.debug_hp(2), 4, "红桃：无事");
+
+    // ④ 对照（非持有者响应闪）：不触发雷击
+    let mut e = Engine::new(54004, 4);
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    let sha = e.debug_place(0, "sha");
+    let shan = e.debug_place(1, "shan");
+    play(&mut e, sha, vec![1]);
+    let c = e.open_choice().expect("闪询问挂起");
+    e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Spade);
+    answer(&mut e, ChoiceOption::Card(shan));
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(2), 4, "非持有者：无雷击");
+    assert_eq!(e.debug_hp(1), 4, "闪抵消杀伤害");
+
+    // ⑤ 万箭闪响应同触发：青龙闪万箭 → 梅花判定 → 2 号雷伤 1+万箭伤 1
+    let mut e = Engine::new_boss_stage(54005, 4, 1, 3, 6, 4, 0);
+    e.debug_set_general_def(1, qinglong_def);
+    e.debug_set_hp(1, 3);
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(2);
+    e.debug_clear_hand(3);
+    e.debug_set_hp(2, 4);
+    e.debug_set_hp(3, 4);
+    let wj = e.debug_place(0, "archery");
+    let shan = e.debug_place(1, "shan");
+    play(&mut e, wj, vec![]);
+    let c = e.open_choice().expect("万箭闪询问挂起");
+    assert_eq!(c.observer, 1);
+    e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Club);
+    answer(&mut e, ChoiceOption::Card(shan));
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(1), 4, "万箭闪免伤+梅花回复 1");
+    assert_eq!(e.debug_hp(2), 2, "2 号：雷击雷伤 1+万箭 1（无闪受 1）");
+    assert_eq!(e.debug_hp(3), 3, "3 号：万箭 1（无闪）");
+    assert_zone_conservation(&e);
+
+    // ⑥ 存档往返
+    let mut e = run_club(54006);
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert!(r.state_core().skills.contains_key(&(1, rdef)), "雷击实例往返");
+    assert_zone_conservation(&r);
+}
+
 /// 四象系首片（规则 v233）：神裔（青龙共有技）两面——①判定阶段延时
 /// 锦囊恒不生效（乐不跳过出牌、闪电恒不命中传下家；非持有者对照照常
 /// 生效）；②武将牌不能翻至背面（背→正照常翻回）。青龙条目（群/hp4/
