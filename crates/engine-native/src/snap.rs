@@ -550,6 +550,14 @@ pub enum MachineSnapshot {
     BossZhaohuo {
         owner: PlayerId,
     },
+    /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
+    /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
+    /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
+    BossXingxia {
+        owner: PlayerId,
+        stage: u8,
+        actor: u32,
+    },
     /// 不臣（Boss 勾芒，规则 v240）：主动技两线机。stage：0=失体
     /// （复活线已结算失体）、1=逐个复活中、2=目标询问挂起（恢复线）、
     /// 3=目标已答待结算；targets=复活队列（复活线）/空（恢复线）。
@@ -1118,6 +1126,10 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             for t in targets {
                 check_pid(*t as u8, b)?;
             }
+        }
+        MachineSnapshot::BossXingxia { owner, actor, .. } => {
+            check_pid(*owner, b)?;
+            check_pid(*actor as u8, b)?;
         }
         MachineSnapshot::LiJian {
             owner, card, inner, ..
@@ -2108,6 +2120,63 @@ pub fn active_ask(
         }
         MachineSnapshot::BossBuchun { .. } => {
             // 复活线/恢复线非挂起阶段：无询问
+            None
+        }
+        MachineSnapshot::BossXingxia { owner, stage, .. } if *stage == 1 => {
+            // 星夏敌方询问挂起：异侧存活角色派生
+            let seats = core.players.len() as u8;
+            let candidates: Vec<ChoiceOption> = (0..seats)
+                .filter(|&t| {
+                    core.player(t).alive
+                        && core.is_boss_side(t) != core.is_boss_side(*owner)
+                })
+                .map(ChoiceOption::Player)
+                .collect();
+            Some(ask(
+                *owner,
+                "xingxia_enemy",
+                ChoiceKind::SelectPlayers,
+                candidates,
+                0,
+                1,
+                true,
+            ))
+        }
+        MachineSnapshot::BossXingxia { actor, stage, .. } if *stage == 3 => {
+            // 星夏弃红询问挂起：焦点敌方的手牌+装备红色牌派生
+            let t = *actor as u8;
+            let mut candidates: Vec<ChoiceOption> = core.player(t)
+                .hand
+                .iter()
+                .copied()
+                .filter(|c| {
+                    matches!(
+                        catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                })
+                .map(ChoiceOption::Card)
+                .collect();
+            for c in core.player(t).equips.iter().copied() {
+                if matches!(
+                    catalog.cards[c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                ) {
+                    candidates.push(ChoiceOption::Card(c));
+                }
+            }
+            Some(ask(
+                t,
+                "xingxia_discard",
+                ChoiceKind::SelectCards,
+                candidates,
+                0,
+                1,
+                true,
+            ))
+        }
+        MachineSnapshot::BossXingxia { .. } => {
+            // 非挂起阶段：无询问
             None
         }
         MachineSnapshot::Shedu { owner, .. } => {

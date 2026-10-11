@@ -162,6 +162,9 @@ pub struct PlayerState {
     /// 不臣（Boss 勾芒，规则 v240）：上次发动不臣的轮次（0=未发动过；
     /// 间隔 ≥2 轮可再发动；跨回合持久）。
     pub buchun_used_round: u32,
+    /// 星夏（Boss 祝融，规则 v242）：上次发动星夏的轮次（0=未发动过；
+    /// 间隔 ≥2 轮可再发动；跨回合持久）。
+    pub xingxia_used_round: u32,
     /// 天符（U05 xianjian 长卿，规则 v188）：挂附来源（雷伤来源）。
     pub ctianfu_source: Option<u8>,
     /// 天符：挂附闪实体（离场区中该牌；死亡清理/结算弃置用）。
@@ -248,6 +251,7 @@ impl PlayerState {
             lingqu_count: 0,
             xingqiu_toggled: false,
             buchun_used_round: 0,
+            xingxia_used_round: 0,
             ctianfu_source: None,
             ctianfu_card: None,
             gouhunluo_rounds: 0,

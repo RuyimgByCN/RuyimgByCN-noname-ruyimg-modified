@@ -2562,6 +2562,27 @@ boss_mingxingzhu 授 boss_jiding 面依赖武将未入库。FROZEN 名单尾加�
 fellow 线+往返）——证据见
 [T11 焰灵证据](../operations/evidence/2026-10-11-t11-boss-yanling-v241/README.md)。
 
+**规则 v242（2026-10-11，T11 星宿阶段2系星夏片：星夏＋祝融条目；存档 v57）**：
+`PlayerState.xingxia_used_round: u32` 新字段（**存档 56→57**；canonical
+_hash 入参——字段新增批）。**星夏**（主动技，ActivateSkill 直调——不臣
+先例第二例）：对场上焰灵（BOSS_GENERALS 段按名查目录+座位装配匹配）
+`Damage(2, Fire)`；追击线可放弃（SelectPlayers 异侧存活 min0/cancel）→
+选中者弃一张红色牌（he 位）或受 1 点火伤；间隔 ≥2 轮门控
+（`InvalidChoice`）。快照变体 `BossXingxia`（archive tag 67/机哈希 68/
+a0 65；active_ask 挂起态派生）。`BOSS_GENERALS` 尾追加**祝融**（def 索
+引 18/hp5/`[神裔, 星夏]`；names 姜|重黎；赤炎3 已处置）。**登记差异**：
+selectTarget -1 以「全场唯一焰灵座位」承载；势力 shen→群目录近似。
+**赤翼/白翼处置**（青翼同族，登记不落）：赤翼=轮次 [3,5,7] 编排+授
+chiyi2 标记技；白翼=三子技全硬绑轮次（round5 敌弃 2/rounds<3 敌摸-1/
+rounds<7 雷免）。FROZEN 名单尾加「星夏」（96 名）。存档 56→**57**。版
+本 241→**242**（字段批探针：241+新代码全 14 位移佐证字段源）。回归
+`boss_huoshenzhurong_xingxia_yanling_burn` 六段（损焰灵/弃红免伤/同轮
+拒/放弃追击/弃牌拒受伤/往返）——证据见
+[T11 星夏证据](../operations/evidence/2026-10-11-t11-boss-xingxia-v242/README.md)。
+**坑位**：min=0 可放弃询问绝不能 drain_choices（空应答合法→静默吞成放
+弃分支，本批三踩）；Gate 1b exit 须取 cargo 真实退出码（管道 tail 吞非
+零——死常量 `-D warnings` 拦截后修正）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

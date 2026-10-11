@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 241;
+pub const STANDARD_RULESET_VERSION: u64 = 242;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -244,6 +244,202 @@ impl SkillMachine for SanCaiMachine {
                 }
                 Flow::Done
             }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 星夏：出牌阶段主动技——对场上焰灵造成 2 点火焰伤害；随后可选一名敌
+// 方：其弃一张红色牌（手牌+装备）或受 1 点火焰伤害（可放弃追击）。
+// 间隔 ≥2 轮。祝融（规则 v242）。
+// ---------------------------------------------------------------------------
+
+/// 星夏阶段码（0=损焰灵已结算、1=敌方询问挂起、2=敌方已选、3=弃牌已答
+/// 待结算——弃红询问由阶段 2 直接挂出，不经独立码）。
+const XINGXIA_STAGE_DAMAGE: u8 = 0;
+const XINGXIA_STAGE_ASK_ENEMY: u8 = 1;
+const XINGXIA_STAGE_ENEMY_DONE: u8 = 2;
+const XINGXIA_STAGE_DISCARD_DONE: u8 = 3;
+
+struct XingxiaBehavior;
+
+impl SkillBehavior for XingxiaBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+        false
+    }
+    fn start(&self, _owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        unreachable!("星夏为主动技，不经触发总线")
+    }
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let used = ctx.state.players[owner as usize].xingxia_used_round;
+        let round = ctx.state.turn.round;
+        if used != 0 && round.saturating_sub(used) < 2 {
+            return None;
+        }
+        // 焰灵定位：BOSS_GENERALS 段内按名查目录索引（表序重排稳健）
+        let base = (ctx.catalog.general_count()
+            - crate::content::standard::BOSS_GENERALS.len())
+            as u16;
+        let yanling = (base..ctx.catalog.general_count() as u16)
+            .find(|&d| ctx.catalog.general_meta(d).map(|g| g.0) == Some("焰灵"))?;
+        let seats = ctx.state.players.len() as u8;
+        let target = (0..seats).find(|&t| {
+            ctx.state.players[t as usize].alive
+                && ctx.state.players[t as usize].general_slots[0] == Some(yanling)
+        })?;
+        Some(Box::new(XingxiaMachine {
+            owner,
+            stage: XINGXIA_STAGE_DAMAGE,
+            actor: target as u32,
+        }))
+    }
+}
+
+/// 星夏机器：损焰灵线→追击线（敌方弃红或 1 火伤）。
+#[derive(Clone)]
+struct XingxiaMachine {
+    owner: PlayerId,
+    stage: u8,
+    actor: u32,
+}
+
+impl XingxiaMachine {
+    /// 焦点敌方的红色牌（手牌+装备）选项。
+    fn red_options(ctx: &Ctx<'_>, t: PlayerId) -> Vec<ChoiceOption> {
+        let mut options: Vec<ChoiceOption> = ctx.core.player(t)
+            .hand
+            .iter()
+            .copied()
+            .filter(|c| {
+                matches!(
+                    ctx.catalog.cards[*c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                )
+            })
+            .map(ChoiceOption::Card)
+            .collect();
+        for c in ctx.core.player(t).equips.iter().copied() {
+            if matches!(
+                ctx.catalog.cards[c as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            ) {
+                options.push(ChoiceOption::Card(c));
+            }
+        }
+        options
+    }
+}
+
+impl SkillMachine for XingxiaMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossXingxia {
+            owner: self.owner,
+            stage: self.stage,
+            actor: self.actor,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        match self.stage {
+            XINGXIA_STAGE_DAMAGE => {
+                let t = self.actor as PlayerId;
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(self.owner),
+                    t,
+                    2,
+                    crate::event::DamageNature::Fire,
+                    None,
+                )));
+                ctx.core.player_mut(self.owner).xingxia_used_round =
+                    ctx.core.turn.round;
+                // 无敌方可追击 → 仅损焰灵即止
+                let seats = ctx.core.players.len() as u8;
+                let has_enemy = (0..seats).any(|t| {
+                    ctx.core.player(t).alive
+                        && ctx.core.is_boss_side(t) != ctx.core.is_boss_side(self.owner)
+                });
+                if !has_enemy {
+                    return Flow::Done;
+                }
+                self.stage = XINGXIA_STAGE_ASK_ENEMY;
+                Flow::Yield
+            }
+            XINGXIA_STAGE_ASK_ENEMY => {
+                let seats = ctx.core.players.len() as u8;
+                let candidates: Vec<ChoiceOption> = (0..seats)
+                    .filter(|&t| {
+                        ctx.core.player(t).alive
+                            && ctx.core.is_boss_side(t)
+                                != ctx.core.is_boss_side(self.owner)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                self.stage = XINGXIA_STAGE_ENEMY_DONE;
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectPlayers,
+                        prompt: "xingxia_enemy",
+                        options: candidates,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                }
+            }
+            XINGXIA_STAGE_ENEMY_DONE => match ctx.answer().first().copied() {
+                Some(ChoiceOption::Player(t)) => {
+                    self.actor = t as u32;
+                    let options = Self::red_options(ctx, t);
+                    self.stage = XINGXIA_STAGE_DISCARD_DONE;
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "xingxia_discard",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                _ => Flow::Done,
+            },
+            XINGXIA_STAGE_DISCARD_DONE => {
+                let t = self.actor as PlayerId;
+                match ctx.answer().first().copied() {
+                    Some(ChoiceOption::Card(c)) => {
+                        // he 位：手牌优先，装备区移除并撤技能
+                        if ctx.core.player(t).hand.contains(&c) {
+                            ctx.discard_from_hand(t, c);
+                        } else {
+                            ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                t,
+                                c,
+                            );
+                            ctx.to_discard(c);
+                        }
+                    }
+                    _ => {
+                        // 放弃弃红 → 1 点火焰伤害
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        )));
+                    }
+                }
+                Flow::Done
+            }
+            _ => Flow::Done,
         }
     }
 }
@@ -4355,6 +4551,11 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 星夏（Boss 祝融，规则 v242）：出牌阶段主动技——对场上焰灵造成 2 点
+/// 火焰伤害；随后可选一名敌方：其弃一张红色牌（手牌+装备）或受 1 点火
+/// 焰伤害（可放弃追击）。间隔 ≥2 轮可再发动
+/// （PlayerState.xingxia_used_round 登记）。
+pub const BOSS_XINGXIA: &str = "星夏";
 /// 回火（Boss 焰灵，规则 v241）：锁定技两面——【杀】使用上限 +1（每
 /// 回合一次额外额度，SkillInstance.once_used 随本人回合开始重置）；死
 /// 亡反噬——死亡结算完成后其敌方全体各受 3 点无来源火伤（上游
@@ -4539,6 +4740,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 焰灵（v241 回火+复燃；上游技能表无神裔——陪将不在神裔名单；
     // shen→群目录近似）
     ("焰灵", Faction::Qun, &[BOSS_HUIHUO, BOSS_FURAN], 4, Gender::Male),
+    // 祝融（v242 星夏；神裔共用 v233；boss_chiyan3 赤炎3=已处置关卡面；
+    // 上游 names 姜|重黎、shen→群目录近似）
+    ("祝融", Faction::Qun, &[BOSS_SHENYI, BOSS_XINGXIA], 5, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -4592,6 +4796,13 @@ pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachi
                 owner: *owner,
                 stage: *stage,
                 targets: targets.clone(),
+            }))
+        }
+        MachineSnapshot::BossXingxia { owner, stage, actor } => {
+            Some(Box::new(XingxiaMachine {
+                owner: *owner,
+                stage: *stage,
+                actor: *actor,
             }))
         }
         MachineSnapshot::JiZhi { owner } => {
@@ -6002,6 +6213,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_XINGXIA,
+            // 主动技（ActivateSkill 直调 activate——损焰灵线/追击线按
+            // 挂起阶段推进；间隔门控读 xingxia_used_round）；快照变体
+            // BossXingxia（archive tag 67/机哈希 68）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(XingxiaBehavior),
         },
     ];
     (cards, skills)
