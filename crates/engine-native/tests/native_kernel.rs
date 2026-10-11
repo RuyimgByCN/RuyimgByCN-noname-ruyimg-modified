@@ -7346,14 +7346,16 @@ fn n04f_snapshot_association_validation() {
     }
 }
 
-/// P1/N08（ADR 0768）：倾国——装备区黑色牌当闪响应杀；奇才——锦囊
-/// 无距离限制；救援——濒死时其他角色的桃回复 +1。
+/// P1/N08（ADR 0768；v202 差异消除批）：倾国——黑色手牌当闪响应杀
+/// （上游 position "hs"，装备区黑牌不再入选项）；奇才——锦囊无距离
+/// 限制；救援——主公资格 + 用桃者为吴势力时桃回复 +1。
 #[test]
 fn n08_qingguo_qicai_jiuyuan() {
-    use engine_native::catalog::CardKind;
-    // (1) 倾国：黑色装备当闪
+    use engine_native::catalog::{CardKind, Suit};
+    // (1) 倾国：黑色手牌当闪；装备区黑牌不入选项
     let mut e = Engine::new(991, 3);
-    // p1 先在自己回合把防具（目录默认黑桃）装进装备区
+    // p1 先在自己回合把防具（目录默认黑桃）装进装备区——反例面：
+    // v202 起装备区黑牌不再是倾国素材
     advance_to_play(&mut e, 1);
     e.debug_grant(1, "倾国");
     let armor = e.debug_place(1, "armor");
@@ -7367,21 +7369,40 @@ fn n08_qingguo_qicai_jiuyuan() {
         }
     }
     e.debug_set_hp(1, 4);
+    // p1 手牌放一张黑色杀（倾国素材：任意黑色手牌）
+    let mut black_card = None;
+    for _ in 0..12 {
+        let c = e.debug_place(1, "sha");
+        if matches!(
+            e.catalog().cards[c as usize].suit,
+            Suit::Spade | Suit::Club
+        ) {
+            black_card = Some(c);
+            break;
+        }
+    }
+    let black_card = black_card.expect("牌堆应含黑色杀");
     // 八卦阵判定去随机化（v63 牌堆位移）：置黑判定 → 不免费闪避，
-    // 出闪询问（含倾国装备选项）照常打开。
+    // 出闪询问（含倾国黑手牌选项）照常打开。
     e.debug_set_deck_top_by(|d| d.suit.is_spade() || d.suit.is_club());
     let sha = e.debug_place(0, "sha");
     let _sha_out = play(&mut e, sha, vec![1]);
     let c = e.open_choice().expect("出闪询问应挂起");
-    let has_equip_option = c.spec.options.iter().any(|o| matches!(o, ChoiceOption::Card(cc) if *cc == armor));
-    if has_equip_option {
-        answer_sel(&mut e, vec![ChoiceOption::Card(armor)]);
-        assert_eq!(e.debug_hp(1), 4, "倾国装备闪应抵消伤害");
-        assert!(e.debug_equips(1).is_empty(), "装备牌打出后离区");
-    } else {
-        answer(&mut e, ChoiceOption::Pass);
-    }
-    let _ = CardKind::Armor;
+    let has_black_hand = c
+        .spec
+        .options
+        .iter()
+        .any(|o| matches!(o, ChoiceOption::Card(cc) if *cc == black_card));
+    let has_equip_option = c
+        .spec
+        .options
+        .iter()
+        .any(|o| matches!(o, ChoiceOption::Card(cc) if *cc == armor));
+    assert!(has_black_hand, "倾国：黑色手牌应入闪选项");
+    assert!(!has_equip_option, "倾国 v202：装备区黑牌不再入闪选项");
+    answer_sel(&mut e, vec![ChoiceOption::Card(black_card)]);
+    assert_eq!(e.debug_hp(1), 4, "倾国黑手牌闪应抵消伤害");
+    assert!(e.debug_equips(1).contains(&armor), "装备区不受影响");
     assert_zone_conservation(&e);
 
     // (2) 奇才：顺手牵羊无距离限制（隔座目标）
@@ -7399,26 +7420,45 @@ fn n08_qingguo_qicai_jiuyuan() {
     );
     assert!(e2.debug_hand(0).contains(&loot), "顺手牵羊应获得目标手牌");
 
-    // (3) 救援：濒死时其他角色的桃回复 2
+    // (3) 救援（v202）：主公资格 + 用桃者为吴势力——桃回复 +1
+    //（原型局 is_lord 恒真；p2 装配吴将满足用桃者吴势力条件）
     let mut e3 = Engine::new(993, 3);
     advance_to_play(&mut e3, 0);
     e3.debug_grant(1, "救援");
     for p in 0..3 {
         e3.debug_clear_hand(p);
     }
+    e3.debug_set_general(2, "周瑜");
     e3.debug_set_hp(1, 1);
     let tao = e3.debug_place(2, "tao");
     e3.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    // 濒死询问按座位顺序：2 无桃 → 0 无桃 → 1 无桃；2 有桃 → 询问 2
+    // 濒死询问按座位顺序：2 有桃 → 询问 2
     let c = e3.open_choice().expect("濒死询问应挂起");
     assert_eq!(c.observer, 2, "持桃者应被询问");
     answer_sel(&mut e3, vec![ChoiceOption::Card(tao)]);
     assert_eq!(
         e3.debug_hp(1),
         2,
-        "救援：其他角色的桃回复 1+1 = 2（1 血濒死 → 2 血）"
+        "救援：吴势力其他角色的桃回复 1+1 = 2（1 血濒死 → 2 血）"
     );
     assert_zone_conservation(&e3);
+
+    // (3b) 救援反例：用桃者非吴势力 → 不加成（仅回复 1）
+    let mut e4 = Engine::new(994, 3);
+    advance_to_play(&mut e4, 0);
+    e4.debug_grant(1, "救援");
+    for p in 0..3 {
+        e4.debug_clear_hand(p);
+    }
+    e4.debug_set_hp(1, 1);
+    let tao4 = e4.debug_place(0, "tao");
+    e4.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    // 濒死询问按座位顺序：0 有桃 → 询问 0（无将非吴）
+    let c = e4.open_choice().expect("濒死询问应挂起");
+    assert_eq!(c.observer, 0, "持桃者应被询问");
+    answer_sel(&mut e4, vec![ChoiceOption::Card(tao4)]);
+    assert_eq!(e4.debug_hp(1), 1, "非吴用桃：救援不加成，仅回复 1");
+    assert_zone_conservation(&e4);
 }
 
 /// P1/N11（ADR 0769）：明置实际装配——明置授予技能集与主将体力配置；
@@ -7560,6 +7600,46 @@ fn n08_jijiu_red_card_as_tao() {
     };
     let _ = suit;
     let _ = snap;
+
+    // (3) 急救（v202）：限回合外——华佗自己回合内红牌不可当桃
+    use engine_native::catalog::Suit as Suit3;
+    let mut e3 = Engine::new(2009, 3);
+    advance_to_play(&mut e3, 1); // 1 号（华佗）自己的回合
+    for p in 0..3 {
+        e3.debug_clear_hand(p);
+    }
+    let mut red = None;
+    for _ in 0..12 {
+        let c = e3.debug_place(1, "shan");
+        if matches!(
+            e3.catalog().cards[c as usize].suit,
+            Suit3::Heart | Suit3::Diamond
+        ) {
+            red = Some(c);
+            break;
+        }
+    }
+    let red = red.expect("牌堆应含红色闪");
+    e3.debug_grant(1, "急救");
+    e3.debug_set_hp(1, 1);
+    e3.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal); // 自己回合内濒死
+    // 自己回合内急救红牌不可用 → 全场无可用桃候选，不开濒死询问直接死亡
+    //（对照 (1)：他人回合同布阵会轮询到华佗的红牌选项）
+    let mut asked_own = false;
+    for _ in 0..8 {
+        match e3.open_choice() {
+            Some(c) if c.spec.prompt == "dying_save" => {
+                if c.observer == 1 {
+                    asked_own = true;
+                }
+                answer(&mut e3, ChoiceOption::Pass);
+            }
+            Some(_) => {}
+            None => break,
+        }
+    }
+    assert!(!asked_own, "急救 v202：自己回合内红牌不可当桃（不开本人救援询问）");
+    assert!(!e3.debug_alive(1), "无人可救，华佗死亡");
 }
 
 /// 护驾（曹操，ADR 0774 隐私修复版）：需要出闪时询问持牌者代出——

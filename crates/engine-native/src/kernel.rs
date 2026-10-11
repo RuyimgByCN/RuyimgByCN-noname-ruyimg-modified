@@ -2337,10 +2337,12 @@ fn is_tao_like(
     if ctx.catalog.card_kind(card) == CardKind::Tianxianjiu {
         return true;
     }
+    // 急救（v202 对齐上游 viewAsFilter）：限持有者回合外——自己是当前
+    // 回合角色时不可发动
     let jijiu = ctx
         .catalog
         .skill_by_name(crate::content::standard::JI_JIU)
-        .map(|d| ctx.core.has_skill(responder, d))
+        .map(|d| ctx.core.has_skill(responder, d) && ctx.core.turn.current != responder)
         .unwrap_or(false);
     if jijiu
         && matches!(
@@ -3485,7 +3487,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .map(|d| ctx.core.has_skill(self.target, d))
                 .unwrap_or(false);
             let tieji_blocks = self.tieji_red == Some(true);
-            // 倾国（甄姬）：装备区黑色牌可当闪打出——并入响应选项
+            // 倾国（甄姬，v202 对齐上游 position "hs"）：黑色手牌可当闪打出——并入响应选项
             let qingguo = ctx
                 .catalog
                 .skill_by_name(crate::content::standard::QING_GUO)
@@ -3523,12 +3525,14 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
             }
             if qingguo && !tieji_blocks {
-                for c in ctx.core.player(self.target).equips.iter().copied() {
+                for c in ctx.core.player(self.target).hand.iter().copied() {
+                    let kind = ctx.catalog.card_kind(c);
+                    let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                     let black = matches!(
                         ctx.catalog.cards[c as usize].suit,
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                     );
-                    if black {
+                    if black && !already {
                         shans.push(ChoiceOption::Card(c));
                     }
                 }
@@ -3879,13 +3883,20 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 let answer = ctx.answer().clone();
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
                     ctx.discard_from_hand(responder, tao);
-                    // 救援（孙权主公技，锁定）：濒死时其他角色的桃回复 +1
+                    // 救援（孙权主公技，锁定；v202 对齐上游 filter）：主公
+                    // 资格 + 用桃者为吴势力 + 非濒死者本人——桃回复 +1
                     let jiuyuan = ctx
                         .catalog
                         .skill_by_name(crate::content::standard::JIU_YUAN)
-                        .map(|d| ctx.core.has_skill(self.dying, d))
+                        .map(|d| {
+                            ctx.core.has_skill(self.dying, d)
+                                && responder != self.dying
+                                && ctx.core.is_lord(self.dying)
+                                && ctx.core.effective_faction(ctx.catalog, responder)
+                                    == Some(crate::catalog::Faction::Wu)
+                        })
                         .unwrap_or(false);
-                    let amount = if jiuyuan && responder != self.dying { 2 } else { 1 };
+                    let amount = if jiuyuan { 2 } else { 1 };
                     ctx.recover(self.dying, amount, Some(tao));
                     ctx.emit(EventData::CardResponded {
                         card: tao,

@@ -1604,12 +1604,15 @@ pub fn active_ask(
                     }
                 }
                 if qingguo && !tieji_blocks {
-                    for c in core.player(*target).equips.iter().copied() {
+                    // 倾国（v202 对齐上游 position "hs"）：黑色手牌并入
+                    for c in core.player(*target).hand.iter().copied() {
+                        let kind = catalog.card_kind(c);
+                        let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                         let black = matches!(
                             catalog.cards[c as usize].suit,
                             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                         );
-                        if black {
+                        if black && !already {
                             options.push(ChoiceOption::Card(c));
                         }
                     }

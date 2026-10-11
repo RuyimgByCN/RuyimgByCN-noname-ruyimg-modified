@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 201;
+pub const STANDARD_RULESET_VERSION: u64 = 202;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -2198,8 +2198,11 @@ impl SkillMachine for JijiangMachine {
 
 /// 性别门控助手：指定座位的双将槽中任一武将为男性。
 fn seat_is_male(ctx: &Ctx<'_>, p: PlayerId) -> bool {
-    let slots = ctx.core.player(p).general_slots;
-    // 非国战局无将槽 → 门控不适用（默认 true）
+    slots_is_male(&ctx.core.player(p).general_slots)
+}
+
+/// 将槽性别判定（非国战局无将槽 → 门控不适用，默认 true）。
+fn slots_is_male(slots: &[Option<u16>; 2]) -> bool {
     if slots.iter().all(|s| s.is_none()) {
         return true;
     }
@@ -2209,8 +2212,9 @@ fn seat_is_male(ctx: &Ctx<'_>, p: PlayerId) -> bool {
     })
 }
 
-// 结姻（孙尚香）：出牌阶段限一次——弃两张手牌，与一名装备区有牌的
-// 其他角色各回复 1 点体力（登记差异：不限已婚男性，ADR 0770）。
+// 结姻（孙尚香）：出牌阶段限一次——弃两张手牌，与一名**受伤的**
+// 其他男性角色各回复 1 点体力（v202 对齐上游 filterTarget：male +
+// hp<maxHp + 非自己；上游无「已婚」「装备区有牌」条件，旧登记撤销）。
 #[derive(Clone)]
 struct JieYinBehavior;
 
@@ -2228,11 +2232,11 @@ impl SkillBehavior for JieYinBehavior {
         if !p.alive || p.hand.len() < 2 {
             return None;
         }
-        if !ctx
-            .state
-            .alive_players()
-            .any(|t| t != owner && !ctx.state.player(t).equips.is_empty())
-        {
+        if !ctx.state.alive_players().any(|t| {
+            t != owner
+                && slots_is_male(&ctx.state.player(t).general_slots)
+                && ctx.state.player(t).hp < ctx.state.player(t).max_hp as i32
+        }) {
             return None;
         }
         Some(Box::new(JieYinMachine { owner, stage: JieYinStage::CardsAsk, cards: Vec::new() }))
@@ -2305,15 +2309,14 @@ impl SkillMachine for JieYinMachine {
                 if self.cards.len() < 2 {
                     return Flow::Done;
                 }
-                // 性别门控：结姻限已婚男性（装备区有牌的男性角色，
-                // 登记简化：已婚=装备区有牌）
+                // 目标门控（v202 对齐上游 filterTarget）：其他受伤男性
                 let candidates: Vec<ChoiceOption> = ctx
                     .core
                     .alive_players()
                     .filter(|t| {
                         *t != self.owner
-                            && !ctx.core.player(*t).equips.is_empty()
                             && seat_is_male(ctx, *t)
+                            && ctx.core.player(*t).hp < ctx.core.player(*t).max_hp as i32
                     })
                     .map(ChoiceOption::Player)
                     .collect();
