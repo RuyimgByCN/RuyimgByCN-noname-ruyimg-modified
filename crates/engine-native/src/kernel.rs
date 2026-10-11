@@ -1050,6 +1050,60 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     ctx.core.turn.sheying_used = false;
                     // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
                     ctx.core.turn.zhangmu_used = false;
+                    // 红莲（Boss 毕方，规则 v228）：回合开始——顺序获牌
+                    // 堆前缀红牌至多 3 张（上游随机 0-3 确定性近似），并对
+                    // 座位序前至多 3 名其他角色各造成 1 点火伤（上游随机
+                    // 3-0 名确定性近似）
+                    if let Some(hdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_HONGLIANX)
+                    {
+                        if ctx.core.has_skill(player, hdef) {
+                            let mut gained = 0usize;
+                            while gained < 3 && !ctx.core.deck.is_empty() {
+                                let c = ctx.core.deck[ctx.core.deck.len() - 1];
+                                if matches!(
+                                    ctx.catalog.cards[c as usize].suit,
+                                    crate::catalog::Suit::Heart
+                                        | crate::catalog::Suit::Diamond
+                                ) {
+                                    ctx.core.deck.pop();
+                                    ctx.core.player_mut(player).hand.push(c);
+                                    gained += 1;
+                                } else {
+                                    break;
+                                }
+                            }
+                            if gained > 0 {
+                                ctx.log(LogEvent::CardsDrawn {
+                                    player,
+                                    cards: ctx.core.player(player)
+                                        .hand
+                                        .iter()
+                                        .rev()
+                                        .take(gained)
+                                        .copied()
+                                        .collect::<Vec<_>>(),
+                                });
+                            }
+                            let targets: Vec<PlayerId> = ctx
+                                .core
+                                .seat_order_from(player)
+                                .into_iter()
+                                .filter(|t| *t != player && ctx.core.player(*t).alive)
+                                .take(3)
+                                .collect();
+                            for t in targets {
+                                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                    Some(player),
+                                    t,
+                                    1,
+                                    crate::event::DamageNature::Fire,
+                                    None,
+                                )));
+                            }
+                        }
+                    }
                     // 中毒（Boss 书精授技，规则 v220）：回合开始判定——
                     // 非红桃受 1 点无来源伤害；非黑桃失去此技（上游
                     // boss_zhongdu phaseZhunbeiBegin judge 同口径；确定性
@@ -2903,6 +2957,13 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 // ignoredHandcard basic 同口径）
                 let shamolvzhou =
                     ctx.core.current_land == Some(crate::catalog::CardKind::Shamolvzhou);
+                // 红莲（Boss 毕方，规则 v228）：红色牌不计入手牌上限
+                //（上游 ignoredHandcard red 同口径）
+                let honglianx = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_HONGLIANX)
+                    .map(|def| ctx.core.has_skill(player, def))
+                    .unwrap_or(false);
                 let hand = if shamolvzhou {
                     ctx.core
                         .player(player)
@@ -2912,6 +2973,19 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                             crate::content::host::yangpijuan_class(
                                 ctx.catalog.card_kind(**c),
                             ) != Some(0)
+                        })
+                        .count()
+                } else if honglianx {
+                    ctx.core
+                        .player(player)
+                        .hand
+                        .iter()
+                        .filter(|c| {
+                            !matches!(
+                                ctx.catalog.cards[**c as usize].suit,
+                                crate::catalog::Suit::Heart
+                                    | crate::catalog::Suit::Diamond
+                            )
                         })
                         .count()
                 } else {
@@ -6342,11 +6416,26 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
             // 选项排除基本牌（不计入即不会被要求弃）
             let shamolvzhou =
                 ctx.core.current_land == Some(crate::catalog::CardKind::Shamolvzhou);
+            // 红莲（Boss 毕方，规则 v228）：弃牌选项排除红色牌（不计入
+            // 上限即不会被要求弃）
+            let honglianx = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::BOSS_HONGLIANX)
+                .map(|def| ctx.core.has_skill(self.player, def))
+                .unwrap_or(false);
             let options: Vec<ChoiceOption> = ctx.core.player(self.player)
                 .hand
                 .iter()
                 .copied()
                 .filter(|c| {
+                    if honglianx
+                        && matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    {
+                        return false;
+                    }
                     !shamolvzhou
                         || crate::content::host::yangpijuan_class(
                             ctx.catalog.card_kind(*c),

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 227;
+pub const STANDARD_RULESET_VERSION: u64 = 228;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4189,6 +4189,11 @@ pub const BOSS_JUYUAN: &str = "巨源";
 /// 火属性；你免疫所有火属性伤害（登记差异：你的回合中其他角色防具无
 /// 效面挂点分散，未建模）。
 pub const BOSS_ZHAOHUO: &str = "招祸";
+/// 红莲（Boss 毕方，规则 v228）：锁定技两面——你的红色牌不计入手牌上
+/// 限（弃牌阶段红色牌不可弃）；回合开始随机获得牌堆 0–3 张红色牌（确
+/// 定性近似：顺序取牌堆前缀红牌至多 3），并随机对 3–0 名其他角色各造
+/// 成 1 点火属性伤害（确定性近似：座位序前至多 3 名）。
+pub const BOSS_HONGLIANX: &str = "红莲";
 /// 虚失（Boss 朱厌，规则 v225）：锁定技，体力值首次减至一半或更少时激
 /// 活；你的出牌阶段结束时翻面；武将牌翻回正面时对所有其他角色各造成
 /// 1 点伤害（上游 [1,2] 随机——恒 1 登记差异）。
@@ -4267,10 +4272,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 梼杌四技全齐（v217 拟态；v218 乱常；v219 冥顽——目标锁定集以
     // TurnState.minwan_targets 回合级承载）
     ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI, BOSS_LUANCHANG, BOSS_MINWAN], 25, Gender::Male),
-    // 毕方（上游 boss_bifang hp25）：招祸单技本批；红莲[红色不计上限+
-    // 回合开始随机获红牌/随机火伤]/炎狱(+switch)[他人回合判定红=火伤
-    // 每回合至多 3] 未落随下批
-    ("毕方", Faction::Qun, &[BOSS_YAOSHOU, BOSS_ZHAOHUO], 25, Gender::Male),
+    // 毕方：红莲已落（v228）；炎狱(+switch) 未落随下批
+    ("毕方", Faction::Qun, &[BOSS_YAOSHOU, BOSS_ZHAOHUO, BOSS_HONGLIANX], 25, Gender::Male),
     // 书精（上游 boss_shujing hp2 女神）：催毒+中毒全技（中毒为运行时
     // 授技面，表列仅催毒——授技入实例同 catalog skill 空间）
     ("书精", Faction::Shu, &[BOSS_CUIDUI], 2, Gender::Female),
@@ -5593,6 +5596,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(ZhaoHuoBehavior),
+        },
+        SkillDef {
+            name: BOSS_HONGLIANX,
+            // 权限型两面：红色不计上限+弃牌阶段红牌不可弃（hand_limit
+            // 与 Discard 臂查询）；回合开始获红牌/对至多 3 名各 1 火伤
+            // （Judge begin 段内联，确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

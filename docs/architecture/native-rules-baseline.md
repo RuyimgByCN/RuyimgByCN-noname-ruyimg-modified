@@ -2367,6 +2367,19 @@ v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序
 佐证）。回归 `boss_bifang_zhaohuo_fire_nature_and_immune` 三断言——证
 据见[T11 招祸证据](../operations/evidence/2026-10-11-t11-boss-bifang-v227/README.md)。
 
+**规则 v228（2026-10-11，T11 毕方批续片：红莲）**：
+**红莲**两面（权限型 Noop+查询）：①红色牌不计入手牌上限——弃牌机器
+双位排除（统计口径只数非红+SelectCards 选项排红，shamolvzhou 先例同
+构）；②回合开始（Judge begin 段内联）顺序获牌堆前缀红牌至多 3（非红
+即停）+对座位序前 3 名其他角色各 1 火伤（招祸联动恒为火）。**登记差
+异**：上游随机（获 0-3/目标 3-0 名）→确定性前缀/座位序近似（随机近似
+先例族）。FROZEN 名单尾加「红莲」（81 名）。存档不变 v51。版本
+227→**228**。版本回退探针（228→227 复跑 golden 全绿）证明 14 golden
+位移唯一来源是版本字段，全量重录。回归
+`boss_bifang_honglianx_red_excluded_and_judge_gain`（三目标各-1+获红
+牌）——证据见
+[T11 红莲证据](../operations/evidence/2026-10-11-t11-boss-honglianx-v228/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |
