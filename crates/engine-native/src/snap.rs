@@ -158,6 +158,7 @@ pub enum JieYinStageSnap {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FanJianStageSnap {
     TargetAsk,
+    SuitAsk,
     PickAsk,
     Consume,
 }
@@ -530,6 +531,8 @@ pub enum MachineSnapshot {
         owner: PlayerId,
         stage: FanJianStageSnap,
         target: Option<PlayerId>,
+        /// 目标所选花色 tag（0=♥ 1=♦ 2=♣ 3=♠；v203）。
+        chosen_suit: Option<u8>,
     },
     LiJian {
         owner: PlayerId,
@@ -1065,6 +1068,7 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
         MachineSnapshot::FanJian { owner, target, .. } => {
             check_pid(*owner, b)?;
             check_opt_pid(*target, b)?;
+            // chosen_suit 为定界 tag（0..=3），非实体引用，无需界校验
         }
         MachineSnapshot::LiJian {
             owner, card, inner, ..
@@ -1985,8 +1989,10 @@ pub fn active_ask(
             }
             _ => None,
         },
-        MachineSnapshot::FanJian { owner, stage, target } => match stage {
-            FanJianStageSnap::PickAsk => Some(ask(
+        MachineSnapshot::FanJian { owner, stage, target, .. } => match stage {
+            // stage 名 = 消费者：SuitAsk 消费 fanjian_target 应答、
+            // PickAsk 消费 fanjian_suit、Consume 消费 fanjian_pick（v203）
+            FanJianStageSnap::SuitAsk => Some(ask(
                 *owner,
                 "fanjian_target",
                 ChoiceKind::SelectPlayers,
@@ -1995,6 +2001,18 @@ pub fn active_ask(
                 1,
                 true,
             )),
+            FanJianStageSnap::PickAsk => {
+                let t = (*target)?;
+                Some(ask(
+                    t,
+                    "fanjian_suit",
+                    ChoiceKind::PickTag,
+                    (0..=3).map(crate::choice::ChoiceOption::Tag).collect(),
+                    1,
+                    1,
+                    false,
+                ))
+            }
             FanJianStageSnap::Consume => {
                 let t = (*target)?;
                 Some(ask(
@@ -2007,7 +2025,7 @@ pub fn active_ask(
                     false,
                 ))
             }
-            _ => None,
+            FanJianStageSnap::TargetAsk => None,
         },
         MachineSnapshot::LiJian {
             owner, stage, inner, ..

@@ -4501,11 +4501,12 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
                 push_u32(h, *c);
             }
         }
-        M::FanJian { owner, stage, target } => {
+        M::FanJian { owner, stage, target, chosen_suit } => {
             push_u8(h, 40);
             push_u8(h, *owner);
             push_u8(h, *stage as u8);
             push_u8(h, target.map(|p| p + 1).unwrap_or(0));
+            push_u8(h, chosen_suit.map(|t| t + 1).unwrap_or(0));
         }
         M::LiJian { owner, stage, card, inner } => {
             push_u8(h, 41);

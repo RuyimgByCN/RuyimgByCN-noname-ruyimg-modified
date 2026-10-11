@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 202;
+pub const STANDARD_RULESET_VERSION: u64 = 203;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -2354,8 +2354,9 @@ impl SkillMachine for JieYinMachine {
     }
 }
 
-// 反间（周瑜）：出牌阶段限一次——一名其他角色选择你的一张手牌获得之，
-// 然后受到你造成的 1 点伤害（登记差异：以看牌选牌承载花色选择）。
+// 反间（周瑜）：出牌阶段限一次——一名其他角色先选一种花色（v203 对齐
+// 上游 chooseControl：♥/♦/♣/♠），再从周瑜手牌中任选一张获得；花色与所
+// 选不符时受到周瑜造成的 1 点伤害（上游条件 damage，花色相符无事）。
 #[derive(Clone)]
 struct FanJianBehavior;
 
@@ -2365,7 +2366,7 @@ impl SkillBehavior for FanJianBehavior {
     }
 
     fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
-        Box::new(FanJianMachine { owner, stage: FanJianStage::TargetAsk, target: None })
+        Box::new(FanJianMachine { owner, stage: FanJianStage::TargetAsk, target: None, chosen_suit: None })
     }
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
@@ -2376,7 +2377,7 @@ impl SkillBehavior for FanJianBehavior {
         if !ctx.state.alive_players().any(|t| t != owner) {
             return None;
         }
-        Some(Box::new(FanJianMachine { owner, stage: FanJianStage::TargetAsk, target: None }))
+        Some(Box::new(FanJianMachine { owner, stage: FanJianStage::TargetAsk, target: None, chosen_suit: None }))
     }
 }
 
@@ -2384,9 +2385,11 @@ impl SkillBehavior for FanJianBehavior {
 enum FanJianStage {
     /// 挂起询问 = fanjian_target（选择一名其他角色；取消 = 放弃）。
     TargetAsk,
+    /// 挂起询问 = fanjian_suit（目标选一种花色；v203 对齐上游）。
+    SuitAsk,
     /// 挂起询问 = fanjian_pick（目标选周瑜一张手牌获得）。
     PickAsk,
-    /// 消费 fanjian_pick：交牌并结算 1 点伤害。
+    /// 消费 fanjian_pick：交牌并按花色比对条件伤害。
     Consume,
 }
 
@@ -2395,6 +2398,18 @@ struct FanJianMachine {
     owner: PlayerId,
     stage: FanJianStage,
     target: Option<PlayerId>,
+    /// 目标所选花色 tag（0=♥ 1=♦ 2=♣ 3=♠，上游 controls 序）。
+    chosen_suit: Option<u8>,
+}
+
+/// 反间花色 tag：0=♥ 1=♦ 2=♣ 3=♠（上游 chooseControl 序）。
+fn fanjian_suit_tag(s: crate::catalog::Suit) -> u8 {
+    match s {
+        crate::catalog::Suit::Heart => 0,
+        crate::catalog::Suit::Diamond => 1,
+        crate::catalog::Suit::Club => 2,
+        crate::catalog::Suit::Spade => 3,
+    }
 }
 
 impl SkillMachine for FanJianMachine {
@@ -2406,10 +2421,12 @@ impl SkillMachine for FanJianMachine {
             owner: self.owner,
             stage: match self.stage {
                 FanJianStage::TargetAsk => FanJianStageSnap::TargetAsk,
+                FanJianStage::SuitAsk => FanJianStageSnap::SuitAsk,
                 FanJianStage::PickAsk => FanJianStageSnap::PickAsk,
                 FanJianStage::Consume => FanJianStageSnap::Consume,
             },
             target: self.target,
+            chosen_suit: self.chosen_suit,
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -2424,7 +2441,7 @@ impl SkillMachine for FanJianMachine {
                 if candidates.is_empty() {
                     return Flow::Done;
                 }
-                self.stage = FanJianStage::PickAsk;
+                self.stage = FanJianStage::SuitAsk;
                 Flow::WaitChoice {
                     observer: self.owner,
                     spec: ChoiceSpec {
@@ -2437,7 +2454,8 @@ impl SkillMachine for FanJianMachine {
                     },
                 }
             }
-            FanJianStage::PickAsk => {
+            FanJianStage::SuitAsk => {
+                // 消费 fanjian_target 应答
                 let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
                     return Flow::Done;
                 };
@@ -2445,6 +2463,27 @@ impl SkillMachine for FanJianMachine {
                     return Flow::Done;
                 }
                 self.target = Some(target);
+                self.stage = FanJianStage::PickAsk;
+                Flow::WaitChoice {
+                    observer: target,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::PickTag,
+                        prompt: "fanjian_suit",
+                        options: (0..=3).map(ChoiceOption::Tag).collect(),
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                }
+            }
+            FanJianStage::PickAsk => {
+                let Some(ChoiceOption::Tag(suit)) = ctx.answer().first().copied() else {
+                    return Flow::Done;
+                };
+                self.chosen_suit = Some(suit);
+                let Some(target) = self.target else {
+                    return Flow::Done;
+                };
                 let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
                     .hand
                     .iter()
@@ -2472,12 +2511,18 @@ impl SkillMachine for FanJianMachine {
                     return Flow::Done;
                 };
                 if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                    let suit_matches = self
+                        .chosen_suit
+                        .is_some_and(|t| fanjian_suit_tag(ctx.catalog.cards[c as usize].suit) == t);
                     ctx.give_hand_card(self.owner, target, c);
-                    ctx.emit(EventData::Damage(crate::machine::damage_data(
-                        Some(self.owner),
-                        target,
-                        1,
-                    )));
+                    // v203 对齐上游：花色相符无事；不符才受 1 点伤害
+                    if !suit_matches {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+                            Some(self.owner),
+                            target,
+                            1,
+                        )));
+                    }
                 }
                 Flow::Done
             }
@@ -4065,14 +4110,16 @@ pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachi
             },
             cards: cards.clone(),
         })),
-        MachineSnapshot::FanJian { owner, stage, target } => Some(Box::new(FanJianMachine {
+        MachineSnapshot::FanJian { owner, stage, target, chosen_suit } => Some(Box::new(FanJianMachine {
             owner: *owner,
             stage: match stage {
                 FanJianStageSnap::TargetAsk => FanJianStage::TargetAsk,
+                FanJianStageSnap::SuitAsk => FanJianStage::SuitAsk,
                 FanJianStageSnap::PickAsk => FanJianStage::PickAsk,
                 FanJianStageSnap::Consume => FanJianStage::Consume,
             },
             target: *target,
+            chosen_suit: *chosen_suit,
         })),
         MachineSnapshot::LiJian { owner, stage, card, inner } => Some(Box::new(LiJianMachine {
             owner: *owner,

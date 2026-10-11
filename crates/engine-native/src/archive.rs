@@ -52,7 +52,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 46;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 47;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -1481,14 +1481,22 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 w.u32(*c);
             }
         }
-        MachineSnapshot::FanJian { owner, stage, target } => {
+        MachineSnapshot::FanJian { owner, stage, target, chosen_suit } => {
             w.u8(40);
             enc_pid(w, owner);
             w.u8(match stage {
                 FanJianStageSnap::TargetAsk => 0,
-                FanJianStageSnap::PickAsk => 1,
-                FanJianStageSnap::Consume => 2,
+                FanJianStageSnap::SuitAsk => 1,
+                FanJianStageSnap::PickAsk => 2,
+                FanJianStageSnap::Consume => 3,
             });
+            match *chosen_suit {
+                None => w.u8(0),
+                Some(t) => {
+                    w.u8(1);
+                    w.u8(t);
+                }
+            }
             enc_opt_pid(w, target);
         }
         MachineSnapshot::LiJian { owner, stage, card, inner } => {
@@ -2151,12 +2159,18 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let owner = dec_pid(r)?;
             let stage = match r.u8()? {
                 0 => FanJianStageSnap::TargetAsk,
-                1 => FanJianStageSnap::PickAsk,
-                2 => FanJianStageSnap::Consume,
+                1 => FanJianStageSnap::SuitAsk,
+                2 => FanJianStageSnap::PickAsk,
+                3 => FanJianStageSnap::Consume,
                 t => return Err(ArchiveError::BadTag("fanjian_stage", t)),
             };
+            let chosen_suit = match r.u8()? {
+                0 => None,
+                1 => Some(r.u8()?),
+                t => return Err(ArchiveError::BadTag("fanjian_chosen_suit", t)),
+            };
             let target = dec_opt_pid(r)?;
-            MachineSnapshot::FanJian { owner, stage, target }
+            MachineSnapshot::FanJian { owner, stage, target, chosen_suit }
         }
         41 => {
             let owner = dec_pid(r)?;

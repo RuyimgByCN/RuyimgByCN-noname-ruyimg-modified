@@ -7749,28 +7749,108 @@ fn n08_jieyin_heals_both() {
     assert_zone_conservation(&e);
 }
 
-/// 反间（周瑜）：目标选周瑜一张手牌获得，然后受到 1 点伤害。
+/// 反间（周瑜；v203 对齐上游 chooseControl+条件伤害）：目标先选一种
+/// 花色，再从周瑜手牌任选一张获得；花色**不符**才受 1 点伤害。
 #[test]
 fn n08_fanjian_give_and_damage() {
+    use engine_native::catalog::Suit;
+    // (1) 花色不符：目标选黑桃（3），获得红桃牌 → 受 1 点伤害
     let mut e = Engine::new(2006, 3);
     advance_to_play(&mut e, 0);
     e.debug_grant(0, "反间");
     for p in 0..3 {
         e.debug_clear_hand(p);
     }
-    let give = e.debug_place(0, "shan");
+    let mut heart = None;
+    for _ in 0..12 {
+        let c = e.debug_place(0, "shan");
+        if e.catalog().cards[c as usize].suit == Suit::Heart {
+            heart = Some(c);
+            break;
+        }
+    }
+    let give = heart.expect("牌堆应含红桃闪");
     e.debug_set_hp(1, 4);
     let skill = skill_id(&e, "反间");
     let out = submit_cmd(&mut e, 0, GameAction::ActivateSkill { skill });
     assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
     let t = e.open_choice().expect("fanjian_target 应挂起");
     answer_sel(&mut e, vec![ChoiceOption::Player(1)]);
+    let sc = e.open_choice().expect("fanjian_suit 应挂起");
+    assert_eq!((sc.spec.prompt, sc.spec.kind, sc.observer), ("fanjian_suit", engine_native::ChoiceKind::PickTag, 1));
+    assert_eq!(sc.spec.options, (0..=3).map(ChoiceOption::Tag).collect::<Vec<_>>(), "四花色选项");
+    answer_sel(&mut e, vec![ChoiceOption::Tag(3)]); // 选黑桃
     let p = e.open_choice().expect("fanjian_pick 应挂起");
     assert_eq!((p.spec.prompt, p.observer), ("fanjian_pick", 1));
     answer_sel(&mut e, vec![ChoiceOption::Card(give)]);
     assert!(e.debug_hand(1).contains(&give), "目标应获得反间牌");
-    assert_eq!(e.debug_hp(1), 3, "反间后受 1 点伤害");
+    assert_eq!(e.debug_hp(1), 3, "所选花色(黑桃)与获得牌(红桃)不符 → 受 1 点伤害");
     assert_zone_conservation(&e);
+
+    // (2) 花色相符：目标选红桃（0），获得红桃牌 → 不受伤
+    let mut e2 = Engine::new(2010, 3);
+    advance_to_play(&mut e2, 0);
+    e2.debug_grant(0, "反间");
+    for p in 0..3 {
+        e2.debug_clear_hand(p);
+    }
+    let mut heart2 = None;
+    for _ in 0..12 {
+        let c = e2.debug_place(0, "shan");
+        if e2.catalog().cards[c as usize].suit == Suit::Heart {
+            heart2 = Some(c);
+            break;
+        }
+    }
+    let give2 = heart2.expect("牌堆应含红桃闪");
+    e2.debug_set_hp(1, 4);
+    let skill2 = skill_id(&e2, "反间");
+    let out = submit_cmd(&mut e2, 0, GameAction::ActivateSkill { skill: skill2 });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    let t = e2.open_choice().expect("fanjian_target 应挂起");
+    answer_sel(&mut e2, vec![ChoiceOption::Player(1)]);
+    let sc = e2.open_choice().expect("fanjian_suit 应挂起");
+    answer_sel(&mut e2, vec![ChoiceOption::Tag(0)]); // 选红桃
+    let p = e2.open_choice().expect("fanjian_pick 应挂起");
+    answer_sel(&mut e2, vec![ChoiceOption::Card(give2)]);
+    assert!(e2.debug_hand(1).contains(&give2), "目标应获得反间牌");
+    assert_eq!(e2.debug_hp(1), 4, "所选花色(红桃)与获得牌相符 → 不受伤");
+    assert_zone_conservation(&e2);
+
+    // (3) 挂起态恢复（存档 v47）：fanjian_pick 挂起中存档往返，恢复后
+    // 重挂询问，应答继续结算
+    let mut e3 = Engine::new(2011, 3);
+    advance_to_play(&mut e3, 0);
+    e3.debug_grant(0, "反间");
+    for p in 0..3 {
+        e3.debug_clear_hand(p);
+    }
+    let mut heart3 = None;
+    for _ in 0..12 {
+        let c = e3.debug_place(0, "shan");
+        if e3.catalog().cards[c as usize].suit == Suit::Heart {
+            heart3 = Some(c);
+            break;
+        }
+    }
+    let give3 = heart3.expect("牌堆应含红桃闪");
+    e3.debug_set_hp(1, 4);
+    let skill3 = skill_id(&e3, "反间");
+    let out = submit_cmd(&mut e3, 0, GameAction::ActivateSkill { skill: skill3 });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    let t = e3.open_choice().expect("fanjian_target 应挂起");
+    answer_sel(&mut e3, vec![ChoiceOption::Player(1)]);
+    let sc = e3.open_choice().expect("fanjian_suit 应挂起");
+    answer_sel(&mut e3, vec![ChoiceOption::Tag(3)]); // 选黑桃（不符）
+    let _pick = e3.open_choice().expect("fanjian_pick 应挂起");
+    let snap = e3.save();
+    let mut e3 = Engine::restore(&snap).expect("挂起态恢复");
+    let p = e3.open_choice().expect("恢复后 fanjian_pick 应重挂");
+    assert_eq!((p.spec.prompt, p.observer), ("fanjian_pick", 1));
+    answer_sel(&mut e3, vec![ChoiceOption::Card(give3)]);
+    assert!(e3.debug_hand(1).contains(&give3), "恢复后目标获得反间牌");
+    assert_eq!(e3.debug_hp(1), 3, "恢复后花色不符条件伤害照常结算");
+    assert_zone_conservation(&e3);
 }
 
 /// 离间（貂蝉）：弃一张手牌令两名其他角色决斗（载体牌直结算）。

@@ -98,7 +98,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
         ("Jijiang", MachineSnapshot::Jijiang { owner: 0, stage: JijiangStageSnap::HelperAsk, queue: Some(vec![1]), helper: Some(1), sha: Some(1), inner: Some(Box::new(MachineSnapshot::Noop)) }),
         ("Snatch", MachineSnapshot::Snatch { card: 1, source: 0, target: 1, asked: true }),
         ("JieYin", MachineSnapshot::JieYin { owner: 0, stage: JieYinStageSnap::CardsAsk, cards: vec![1] }),
-        ("FanJian", MachineSnapshot::FanJian { owner: 0, stage: FanJianStageSnap::TargetAsk, target: Some(1) }),
+        ("FanJian", MachineSnapshot::FanJian { owner: 0, stage: FanJianStageSnap::TargetAsk, target: Some(1), chosen_suit: None }),
         ("LiJian", MachineSnapshot::LiJian { owner: 0, stage: LiJianStageSnap::DiscardAsk, card: Some(1), inner: Some(Box::new(MachineSnapshot::Noop)) }),
         ("Host", MachineSnapshot::Host { def_key: String::from("t:demo"), behavior: 1, stage: 0, owner: 0, target: Some(1), card: Some(1), cards: Vec::new(), targets: Vec::new() }),
         ("XiaoGuo", MachineSnapshot::XiaoGuo { owner: 0, target: 1, stage: engine_native::snap::XiaoGuoStageSnap::Read }),
