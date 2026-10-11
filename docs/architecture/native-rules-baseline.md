@@ -2482,6 +2482,17 @@ wuxieRespondable 红牌禁他人无懈未挂钩（红色锦囊 directHit 面同�
 计数/v54 往返）——证据见
 [T11 灵渠证据](../operations/evidence/2026-10-11-t11-boss-lingqu-v237/README.md)。
 
+**隐藏链八技整族处置（2026-10-11，无版本递增）**：boss_qingmu2/baimang2/
+chiyan2/xuanlin2（阶段 1→2）与 boss_qingmu3/baimang3/chiyan3/xuanlin3
+（阶段 2→3）八技均为同构关卡流程面（dieBegin hide + dieAfter changeSeat/
+changeBoss/补给/复活链）——属 Boss 模式裸骨架缺口既定边界，不落内核；
+四象隐藏条目本就只列已转换技，无目录/行为影响。规则 237/存档 v54 不变，
+golden 不动（无语义变化先例同 versus 4v4 固化批）——证据见
+[隐藏链处置证据](../operations/evidence/2026-10-11-t11-boss-hidechain-disposition/README.md)。
+下批候选勘察：boss_shenen 神恩（boss 侧无距离+挑战者侧上限/摸牌 +1，
+三面全查询型，最小下一片）/boss_xingqiu 星囚（连环+授技，较重）/boss_
+buchun 不臣（复活书精，阶段流程）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害
