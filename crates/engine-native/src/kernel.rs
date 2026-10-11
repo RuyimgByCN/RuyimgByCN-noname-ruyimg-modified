@@ -1565,6 +1565,77 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 });
                 Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
             }
+            CardKind::Tianfuzhen | CardKind::Qixingzhen | CardKind::Niaoxiangzhen => {
+                // 阵法三张（U05 zhenfa，规则 v200/T19a）：AOE/自目标机器
+                // + 无懈窗口包装（dizaizhen 同款）
+                let kind = ctx.catalog.card_kind(u.card);
+                let behavior = match kind {
+                    CardKind::Tianfuzhen => crate::content::host::HostBehavior::SwdTianfuzhenCard,
+                    CardKind::Qixingzhen => crate::content::host::HostBehavior::SwdQixingzhenCard,
+                    _ => crate::content::host::HostBehavior::SwdNiaoxiangzhenCard,
+                };
+                let def_key = match kind {
+                    CardKind::Tianfuzhen => crate::content::host::SWD_TIANFUZHEN_KEY,
+                    CardKind::Qixingzhen => crate::content::host::SWD_QIXINGZHEN_KEY,
+                    _ => crate::content::host::SWD_NIAOXIANGZHEN_KEY,
+                };
+                let mut phase2_queue: Vec<u32> = Vec::new();
+                let targets_for_machine = match kind {
+                    CardKind::Tianfuzhen => {
+                        // AOE：全部大势力且有牌者（engine 校验同口径）
+                        ctx.core
+                            .alive_players()
+                            .filter(|p| {
+                                ctx.core.is_major_faction(ctx.catalog, *p)
+                                    && (!ctx.core.player(*p).hand.is_empty()
+                                        || !ctx.core.player(*p).equips.is_empty())
+                            })
+                            .collect()
+                    }
+                    CardKind::Qixingzhen => {
+                        // 阶段一队列=全部围攻者（sieges(q, player)）；阶段二
+                        // 队列同名单（存 cards，视为用杀）
+                        let besiegers: Vec<u8> = ctx
+                            .core
+                            .alive_players()
+                            .filter(|q| ctx.core.sieges(ctx.catalog, *q, u.player))
+                            .collect();
+                        phase2_queue = besiegers.iter().map(|q| u32::from(*q)).collect();
+                        besiegers
+                    }
+                    _ => {
+                        // 鸟翔阵 AOE：全部合法目标
+                        ctx.core
+                            .alive_players()
+                            .filter(|t| {
+                                *t != u.player
+                                    && !ctx.core.is_friend_of(ctx.catalog, u.player, *t)
+                                    && {
+                                        let (n, pv) = ctx.core.alive_neighbors(*t);
+                                        n.is_some_and(|q| {
+                                            ctx.core.effective_faction(ctx.catalog, *t)
+                                                == ctx.core.effective_faction(ctx.catalog, q)
+                                        }) || pv.is_some_and(|q| {
+                                            ctx.core.effective_faction(ctx.catalog, *t)
+                                                == ctx.core.effective_faction(ctx.catalog, q)
+                                        })
+                                    }
+                            })
+                            .collect()
+                    }
+                };
+                let effect = Box::new(crate::content::host::HostMachine {
+                    def_key: def_key.to_string(),
+                    behavior,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: phase2_queue,
+                    targets: targets_for_machine,
+                    stage: crate::content::host::HostStage::Act,
+                });
+                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            }
             CardKind::Jiguan => {
                 // 机关牌（swd 第十六/十七批，规则 v189/v190）：同 kind
                 // 异行为按目录名分流（指路小虎=随机敌虚拟杀；木甲人=

@@ -3293,6 +3293,9 @@ fn card_kind_to_num(k: &CardKind) -> u32 {
         Dizaizhen => 131,
         Jiguan => 132,
         Hslingjian => 133,
+        Tianfuzhen => 134,
+        Qixingzhen => 135,
+        Niaoxiangzhen => 136,
     }
 }
 
@@ -3433,6 +3436,9 @@ fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         131 => Dizaizhen,
         132 => Jiguan,
         133 => Hslingjian,
+        134 => Tianfuzhen,
+        135 => Qixingzhen,
+        136 => Niaoxiangzhen,
         // P0 解码加固：未知编号返回结构化错误（保留完整 u32），不再 panic。
         _ => return Err(ArchiveError::UnknownCardKind(n)),
     })

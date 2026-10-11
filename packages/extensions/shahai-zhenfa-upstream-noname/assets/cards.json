@@ -1,54 +1,60 @@
 {
-  "source": "qita/sanguosha/noname/extension/杀海拾遗/card/zhenfa",
-  "upstream_path": "extension/杀海拾遗/card/zhenfa/",
-  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
-  "pack": {
-    "name": "shahai-zhenfa-upstream-noname",
-    "version": 1,
-    "description": "G1 转换：上游 zhenfa 首切片（地载阵）",
-    "card_prefix": "zf_"
+ "source": "qita/sanguosha/noname/extension/杀海拾遗/card/zhenfa",
+ "upstream_path": "extension/杀海拾遗/card/zhenfa/",
+ "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+ "pack": {
+  "name": "shahai-zhenfa-upstream-noname",
+  "version": 1,
+  "description": "G1 转换：上游 zhenfa 首切片（地载阵）",
+  "card_prefix": "zf_"
+ },
+ "cards": [
+  {
+   "name": "zf_dizaizhen",
+   "kind": "dizaizhen",
+   "suit": "diamond",
+   "rank": 3
   },
-  "cards": [
-    {
-      "name": "zf_dizaizhen",
-      "kind": "dizaizhen",
-      "suit": "diamond",
-      "rank": 3
-    },
-    {
-      "name": "zf_dizaizhen",
-      "kind": "dizaizhen",
-      "suit": "spade",
-      "rank": 3
-    },
-    {
-      "name": "zf_dizaizhen",
-      "kind": "dizaizhen",
-      "suit": "heart",
-      "rank": 3
-    }
-  ],
-  "host_skills": [],
-  "deferred": [
-    {
-      "name": "changshezhen",
-      "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
-    },
-    {
-      "name": "tianfuzhen",
-      "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
-    },
-    {
-      "name": "qixingzhen",
-      "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
-    },
-    {
-      "name": "niaoxiangzhen",
-      "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
-    },
-    {
-      "name": "pozhenjue",
-      "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
-    }
-  ]
+  {
+   "name": "zf_dizaizhen",
+   "kind": "dizaizhen",
+   "suit": "spade",
+   "rank": 3
+  },
+  {
+   "name": "zf_dizaizhen",
+   "kind": "dizaizhen",
+   "suit": "heart",
+   "rank": 3
+  },
+  {
+   "name": "swd_tianfuzhen1",
+   "kind": "tianfuzhen",
+   "suit": "spade",
+   "rank": 1
+  },
+  {
+   "name": "swd_qixingzhen1",
+   "kind": "qixingzhen",
+   "suit": "club",
+   "rank": 9
+  },
+  {
+   "name": "swd_niaoxiangzhen1",
+   "kind": "niaoxiangzhen",
+   "suit": "heart",
+   "rank": 3
+  }
+ ],
+ "host_skills": [],
+ "deferred": [
+  {
+   "name": "changshezhen",
+   "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
+  },
+  {
+   "name": "pozhenjue",
+   "reason": "依赖国战队列/围攻/座位重排体系（inline/isFriendOf/swapSeat），原生国战原型未建模——结构性保留项同族"
+  }
+ ]
 }

@@ -443,6 +443,12 @@ pub enum CardKind {
     /// 灵剑（U05 swd 机关术批，规则 v198）：swd 自造改造牌类型
     /// （hslingjian，7 张；机关术合成与机关妖术补偿的池）。
     Hslingjian,
+    /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
+    Tianfuzhen,
+    /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
+    Qixingzhen,
+    /// 鸟翔阵（U05 zhenfa，规则 v200/T19a）：逐合法目标响应闪或受 1 伤。
+    Niaoxiangzhen,
 }
 
 /// 花色（判定用）。
@@ -553,7 +559,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 134] = [
+    pub const ALL: [CardKind; 137] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -688,6 +694,9 @@ impl CardKind {
         CardKind::Dizaizhen,
         CardKind::Jiguan,
         CardKind::Hslingjian,
+        CardKind::Tianfuzhen,
+        CardKind::Qixingzhen,
+        CardKind::Niaoxiangzhen,
     ];
 
     /// 扩展包数据的牌种键（宿主 ABI：每个牌种恰好一个键，只增不改）。
@@ -828,6 +837,9 @@ impl CardKind {
             CardKind::Dizaizhen => "dizaizhen",
             CardKind::Jiguan => "jiguan",
             CardKind::Hslingjian => "hslingjian",
+            CardKind::Tianfuzhen => "tianfuzhen",
+            CardKind::Qixingzhen => "qixingzhen",
+            CardKind::Niaoxiangzhen => "niaoxiangzhen",
         }
     }
 

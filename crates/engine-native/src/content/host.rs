@@ -611,6 +611,13 @@ pub enum HostBehavior {
     /// 着一张随机灵剑（CardMod 表；登记差异：名称合成/数值升级仅入改
     /// 造表，目录不可变；jiqi/yuchan 池暂缓；演示呈现暂缓）。
     SwdJiguanshuCard,
+    /// 天覆阵（tag 236，规则 v200/T19a）：大国 AOE 逐目标强制弃 1。
+    SwdTianfuzhenCard,
+    /// 七星阵（tag 237，规则 v200/T19a）：围攻者逐个弃 1+视为对其用杀
+    ///（响应闪或 1 伤；登记差异：虚拟杀简化，无加成/不可响应额外面）。
+    SwdQixingzhenCard,
+    /// 鸟翔阵（tag 238，规则 v200/T19a）：逐合法目标响应闪或受 1 伤。
+    SwdNiaoxiangzhenCard,
 }
 
 
@@ -852,6 +859,9 @@ impl HostBehavior {
             HostBehavior::SwdYinmilichangCard => 233,
             HostBehavior::SwdJiguanyaoGain => 234,
             HostBehavior::SwdJiguanshuCard => 235,
+            HostBehavior::SwdTianfuzhenCard => 236,
+            HostBehavior::SwdQixingzhenCard => 237,
+            HostBehavior::SwdNiaoxiangzhenCard => 238,
         }
     }
 
@@ -1092,6 +1102,9 @@ impl HostBehavior {
             233 => HostBehavior::SwdYinmilichangCard,
             234 => HostBehavior::SwdJiguanyaoGain,
             235 => HostBehavior::SwdJiguanshuCard,
+            236 => HostBehavior::SwdTianfuzhenCard,
+            237 => HostBehavior::SwdQixingzhenCard,
+            238 => HostBehavior::SwdNiaoxiangzhenCard,
             _ => return None,
         })
     }
@@ -1099,7 +1112,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 235] = [
+    pub const ALL: [HostBehavior; 238] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1335,6 +1348,9 @@ impl HostBehavior {
         HostBehavior::SwdYinmilichangCard,
         HostBehavior::SwdJiguanyaoGain,
         HostBehavior::SwdJiguanshuCard,
+        HostBehavior::SwdTianfuzhenCard,
+        HostBehavior::SwdQixingzhenCard,
+        HostBehavior::SwdNiaoxiangzhenCard,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1575,6 +1591,9 @@ impl HostBehavior {
             HostBehavior::SwdYinmilichangCard => "host:swd_yinmilichang_card",
             HostBehavior::SwdJiguanyaoGain => "host:swd_jiguanyao_gain",
             HostBehavior::SwdJiguanshuCard => "host:swd_jiguanshu_card",
+            HostBehavior::SwdTianfuzhenCard => "host:swd_tianfuzhen_card",
+            HostBehavior::SwdQixingzhenCard => "host:swd_qixingzhen_card",
+            HostBehavior::SwdNiaoxiangzhenCard => "host:swd_niaoxiangzhen_card",
         }
     }
 }
@@ -1807,6 +1826,9 @@ impl HostBehavior {
             HostBehavior::SwdJiguanyaoshuCard => None,
             HostBehavior::SwdJiguanyaoState => None,
             HostBehavior::SwdJiguanshuCard => None,
+            HostBehavior::SwdTianfuzhenCard => None,
+            HostBehavior::SwdQixingzhenCard => None,
+            HostBehavior::SwdNiaoxiangzhenCard => None,
             // 机关妖术补偿：弃牌事件（含装备牌时触发，登记近似差异）
             HostBehavior::SwdJiguanyaoGain => Some(TriggerMeta {
                 event: EventKind::CardsDiscarded,
@@ -2625,6 +2647,9 @@ pub const SWD_SHENGXIUHAOJIAO_KEY: &str = "swd_shengxiuhaojiao";
 pub const SWD_YINMILICHANG_KEY: &str = "swd_yinmilichang";
 pub const SWD_JIGUANYAO_GAIN_KEY: &str = "swd_jiguanyao_gain";
 pub const SWD_JIGUANSHU_KEY: &str = "swd_jiguanshu";
+pub const SWD_TIANFUZHEN_KEY: &str = "swd_tianfuzhen";
+pub const SWD_QIXINGZHEN_KEY: &str = "swd_qixingzhen";
+pub const SWD_NIAOXIANGZHEN_KEY: &str = "swd_niaoxiangzhen";
 pub const SWD_LANGEGUAIYI_SKILL_KEY: &str = "swd_langeguaiyi_skill";
 pub const SWD_LIUXING_DISCARD: &str = "swd_liuxing_discard";
 pub const SWD_LIUXING_KEY: &str = "gj:swd_liuxinghuoyu";
@@ -3667,6 +3692,9 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdJiguanyaoshuCard => false,
             HostBehavior::SwdJiguanyaoState => false,
             HostBehavior::SwdJiguanshuCard => false,
+            HostBehavior::SwdTianfuzhenCard => false,
+            HostBehavior::SwdQixingzhenCard => false,
+            HostBehavior::SwdNiaoxiangzhenCard => false,
             // 机关妖术补偿：非自己回合、弃牌含装备 Kind 牌（以弃装备牌近
             // 似"失去装备区牌"，登记差异：替换/获得离去路径不触发）
             HostBehavior::SwdJiguanyaoGain => matches!(event,
@@ -14905,6 +14933,241 @@ HostBehavior::XianjianLingyu => match self.stage {
                 }
                 Flow::Done
             }
+            // 天覆阵（zhenfa，规则 v200/T19a）：AOE 逐大国目标强制弃 1 张
+            // he（targets 队列；目标自选牌 min 1 不可取消；self.target=当
+            // 前询问目标）。全部结算完后本体入弃堆。
+            HostBehavior::SwdTianfuzhenCard => match self.stage {
+                HostStage::Act => {
+                    if self.targets.is_empty() {
+                        if let Some(c) = self.card {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                            self.card = None;
+                        }
+                        return Flow::Done;
+                    }
+                    let t = self.targets.remove(0);
+                    self.target = Some(t);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .copied()
+                        .chain(ctx.core.player(t).equips.iter().copied())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Yield;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "swd_tianfuzhen_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                        let t = self.target.unwrap_or(self.owner);
+                        if ctx.core.player(t).hand.contains(&c) {
+                            ctx.discard_from_hand(t, c);
+                        } else if let Some(pos) =
+                            ctx.core.player(t).equips.iter().position(|x| *x == c)
+                        {
+                            ctx.core.player_mut(t).equips.remove(pos);
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                            ctx.to_discard(c);
+                        }
+                        ctx.log(LogEvent::CardDiscarded { player: t, cards: vec![c] });
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
+            // 七星阵（zhenfa，规则 v200/T19a）：阶段一 Act——逐围攻者弃 1
+            //（SelectCard 询问，self.target=围攻者）；队列空后阶段二——
+            // 视为对围攻者用杀（响应闪或 1 伤；登记差异：虚拟杀简化，无
+            // 加成/不可无懈额外面），阶段二队列存 self.cards。本体入弃堆。
+            HostBehavior::SwdQixingzhenCard => match self.stage {
+                HostStage::Act => {
+                    eprintln!("DBG qx Act stage={:?} targets={:?} cards={:?}", self.stage, self.targets, self.cards);
+                    if !self.targets.is_empty() {
+                        let t = self.targets.remove(0);
+                        self.target = Some(t);
+                        let options: Vec<ChoiceOption> = ctx
+                            .core
+                            .player(t)
+                            .hand
+                            .iter()
+                            .copied()
+                            .chain(ctx.core.player(t).equips.iter().copied())
+                            .map(ChoiceOption::Card)
+                        .collect();
+                        if options.is_empty() {
+                            return Flow::Yield;
+                        }
+                        self.stage = HostStage::SelectCard;
+                        return Flow::WaitChoice {
+                            observer: t,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: "swd_qixingzhen_discard",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
+                    if self.cards.is_empty() {
+                        if let Some(c) = self.card {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                            self.card = None;
+                        }
+                        return Flow::Done;
+                    }
+                    let t = self.cards.remove(0) as u8;
+                    self.target = Some(t);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.card_kind(*c) == CardKind::Shan)
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        // 无闪：直接结算 1 点伤害（机关凤同款收口）
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            None,
+                        )));
+                        self.stage = HostStage::Act;
+                        return Flow::Yield;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "swd_qixingzhen_shan",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    eprintln!("DBG qx SelectCard resume target={:?} answer={:?}", self.target, ctx.answer().first());
+                    if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                        let t = self.target.unwrap_or(self.owner);
+                        if ctx.core.player(t).hand.contains(&c) {
+                            ctx.discard_from_hand(t, c);
+                        } else if let Some(pos) =
+                            ctx.core.player(t).equips.iter().position(|x| *x == c)
+                        {
+                            ctx.core.player_mut(t).equips.remove(pos);
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                            ctx.to_discard(c);
+                        }
+                        ctx.log(LogEvent::CardDiscarded { player: t, cards: vec![c] });
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::Yield
+                }
+                HostStage::TargetChoice => {
+                    eprintln!("DBG qx TargetChoice resume target={:?} answer={:?}", self.target, ctx.answer().first());
+                    let t = self.target.unwrap_or(self.owner);
+                    if matches!(ctx.answer().first(), Some(ChoiceOption::Card(_))) {
+                        if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                            ctx.discard_from_hand(t, c);
+                            ctx.log(LogEvent::CardDiscarded { player: t, cards: vec![c] });
+                        }
+                    } else {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            None,
+                        )));
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
+            // 鸟翔阵（zhenfa，规则 v200/T19a）：逐合法目标响应闪或受 1 伤
+            //（targets 队列；TargetChoice 询问，取消=伤害）。本体入弃堆。
+            HostBehavior::SwdNiaoxiangzhenCard => match self.stage {
+                HostStage::Act => {
+                    if self.targets.is_empty() {
+                        if let Some(c) = self.card {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                            self.card = None;
+                        }
+                        return Flow::Done;
+                    }
+                    let t = self.targets.remove(0);
+                    self.target = Some(t);
+                    self.stage = HostStage::TargetChoice;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.card_kind(*c) == CardKind::Shan)
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "swd_niaoxiangzhen_shan",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let t = self.target.unwrap_or(self.owner);
+                    if matches!(ctx.answer().first(), Some(ChoiceOption::Card(_))) {
+                        if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                            ctx.discard_from_hand(t, c);
+                            ctx.log(LogEvent::CardDiscarded { player: t, cards: vec![c] });
+                        }
+                    } else {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            None,
+                        )));
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
             // 机关妖术（U05 swd 第二十二批，规则 v197）：单体（range.global
             // 1）——从牌堆+弃堆装备实体中发现一张「目标空装备栏」子类型的
             // 装备，置入其手牌后 emit Equipped 走完整装配（commit_equip 同

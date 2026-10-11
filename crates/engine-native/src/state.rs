@@ -799,6 +799,130 @@ impl GameStateCore {
             .unwrap_or(crate::content::standard::Gender::Male)
     }
 
+    // ---- 国战阵法派生判定（T19a，规则 v200；上游 guozhan patch
+    // player.js 简化口径：构逆/野心家结盟/undist 不建模，登记差异）----
+
+    /// 国战友方判定（上游 isFriendOf 简化）：双方明置势力已知且相同；
+    /// 同一角色恒真。
+    pub fn is_friend_of(&self, catalog: &crate::catalog::Catalog, a: PlayerId, b: PlayerId) -> bool {
+        if a == b {
+            return true;
+        }
+        match (
+            self.effective_faction(catalog, a),
+            self.effective_faction(catalog, b),
+        ) {
+            (Some(x), Some(y)) => x == y,
+            _ => false,
+        }
+    }
+
+    /// 存活左右邻居（座位环跳过死亡座位——登记差异：上游 getNext 含死
+    /// 亡座位时语义不明，保守取存活）。
+    pub fn alive_neighbors(&self, p: PlayerId) -> (Option<PlayerId>, Option<PlayerId>) {
+        let n = self.players.len() as PlayerId;
+        if n <= 1 {
+            return (None, None);
+        }
+        let alive = |q: PlayerId| self.player(q).alive;
+        let step = |from: PlayerId, delta: i32| -> PlayerId {
+            ((from as i32 + delta + i32::from(n)) % i32::from(n)) as PlayerId
+        };
+        let mut next = step(p, 1);
+        while next != p && !alive(next) {
+            next = step(next, 1);
+        }
+        let next = if next == p || !alive(next) { None } else { Some(next) };
+        let mut prev = step(p, -1);
+        while prev != p && !alive(prev) {
+            prev = step(prev, -1);
+        }
+        let prev = if prev == p || !alive(prev) { None } else { Some(prev) };
+        (next, prev)
+    }
+
+    /// 被围攻（上游 sieged 简化）：己方明置势力已知，存活左右邻均已知
+    /// 且互异、非己方、且互为友方（同势力夹击）。
+    pub fn sieged(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> bool {
+        if self.effective_faction(catalog, p).is_none() {
+            return false;
+        }
+        let (Some(next), Some(prev)) = self.alive_neighbors(p) else {
+            return false;
+        };
+        if next == prev {
+            return false;
+        }
+        if self.effective_faction(catalog, next).is_none() {
+            return false;
+        }
+        if self.is_friend_of(catalog, next, p) {
+            return false;
+        }
+        self.is_friend_of(catalog, next, prev)
+    }
+
+    /// q 围攻 p（q 为 p 的存活邻且 p 处于被围攻）。
+    pub fn sieges(&self, catalog: &crate::catalog::Catalog, q: PlayerId, p: PlayerId) -> bool {
+        let (next, prev) = self.alive_neighbors(p);
+        (next == Some(q) || prev == Some(q)) && self.sieged(catalog, p)
+    }
+
+    /// 队列判定（上游 inline）：自己回合外有 ≥1 连续同势力友邻。
+    pub fn inline(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> bool {
+        if self.effective_faction(catalog, p).is_none() {
+            return false;
+        }
+        let (next, prev) = self.alive_neighbors(p);
+        next.is_some_and(|q| self.is_friend_of(catalog, p, q))
+            || prev.is_some_and(|q| self.is_friend_of(catalog, p, q))
+    }
+
+    /// q 是否处于 p 的连续同势力友方段内（或 q==p 且 p 处于队列）。
+    pub fn inline_with(&self, catalog: &crate::catalog::Catalog, p: PlayerId, q: PlayerId) -> bool {
+        if !self.inline(catalog, p) {
+            return false;
+        }
+        if q == p {
+            return true;
+        }
+        if !self.is_friend_of(catalog, p, q) {
+            return false;
+        }
+        let n = self.players.len() as PlayerId;
+        // forward
+        let mut cur = p;
+        loop {
+            let mut nxt = (cur + 1) % n;
+            while nxt != p && !self.player(nxt).alive {
+                nxt = (nxt + 1) % n;
+            }
+            if nxt == p || nxt == cur || !self.is_friend_of(catalog, p, nxt) {
+                break;
+            }
+            if nxt == q {
+                return true;
+            }
+            cur = nxt;
+        }
+        // backward
+        let mut cur = p;
+        loop {
+            let mut prv = (cur + n - 1) % n;
+            while prv != p && !self.player(prv).alive {
+                prv = (prv + n - 1) % n;
+            }
+            if prv == p || prv == cur || !self.is_friend_of(catalog, p, prv) {
+                break;
+            }
+            if prv == q {
+                return true;
+            }
+            cur = prv;
+        }
+        false
+    }
+
     pub fn hand_limit(&self, p: PlayerId) -> usize {
         // 星体改造（U05 swd 灵剑，规则 v198）：手牌上限 -N 累加
         (self.player(p).hp.max(0) as usize)

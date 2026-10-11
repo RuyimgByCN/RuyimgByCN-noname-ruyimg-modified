@@ -2783,8 +2783,73 @@ fn apply_command(
                     );
                     return Ok(());
                 }
+                CardKind::Tianfuzhen | CardKind::Qixingzhen | CardKind::Niaoxiangzhen => {
+                    // 阵法三张（U05 zhenfa，规则 v200/T19a；上游
+                    // guozhanZhenfaEnabled=存活≥4 同口径；派生查询见
+                    // state.rs）。天覆阵=AOE 全部大势力且有牌者；七星阵
+                    // =自目标（须围攻/被围攻）；鸟翔阵=AOE 全部合法目
+                    // 标（异势力、已知、与邻座同势力）。
+                    if core.players.len() < 4 {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                    match kind {
+                        CardKind::Tianfuzhen => {
+                            if !core.alive_players().any(|p| core.is_major_faction(catalog, p)) {
+                                return Err(RejectReason::IllegalTargets);
+                            }
+                            let expected: Vec<u8> = core
+                                .alive_players()
+                                .filter(|p| {
+                                    core.is_major_faction(catalog, *p)
+                                        && (!core.player(*p).hand.is_empty()
+                                            || !core.player(*p).equips.is_empty())
+                                })
+                                .collect();
+                            if targets != expected {
+                                return Err(RejectReason::IllegalTargets);
+                            }
+                        }
+                        CardKind::Qixingzhen => {
+                            let cur = core.turn.current;
+                            let under_siege = core.alive_players().any(|q| {
+                                core.sieges(catalog, q, cur)
+                            });
+                            let besieging = core.alive_neighbors(cur).0.is_some_and(|n| {
+                                core.sieged(catalog, n)
+                            }) || core.alive_neighbors(cur).1.is_some_and(|pv| {
+                                core.sieged(catalog, pv)
+                            });
+                            if !(under_siege || besieging) || targets != [cur] {
+                                return Err(RejectReason::IllegalTargets);
+                            }
+                        }
+                        _ => {
+                            // 鸟翔阵：targets=全部合法目标（异势力、已知、
+                            // 与自身邻座同势力）
+                            let expected: Vec<u8> = core
+                                .alive_players()
+                                .filter(|t| {
+                                    *t != core.turn.current
+                                        && !core.is_friend_of(catalog, core.turn.current, *t)
+                                        && {
+                                            let (n, pv) = core.alive_neighbors(*t);
+                                            n.is_some_and(|q| {
+                                                core.effective_faction(catalog, *t)
+                                                    == core.effective_faction(catalog, q)
+                                            }) || pv.is_some_and(|q| {
+                                                core.effective_faction(catalog, *t)
+                                                    == core.effective_faction(catalog, q)
+                                            })
+                                        }
+                                })
+                                .collect();
+                            if targets != expected {
+                                return Err(RejectReason::IllegalTargets);
+                            }
+                        }
+                    }
+                }
                 CardKind::Jiedao => {
-                    // 借刀杀人：恰两名目标——[武器持有者, 另一角色]；
                     // 持有者装备区须有武器，另一角色在其攻击范围内。
                     if targets.len() != 2 {
                         return Err(RejectReason::IllegalTargets);
