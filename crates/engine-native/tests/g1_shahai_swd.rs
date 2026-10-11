@@ -120,7 +120,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 34, "swd 全 34 张（+距离对/蓝格怪衣/指路小虎/木甲人/勾魂锣×2/机关桶×2/机关凤×2/机关怨×2）入目录");
+    assert_eq!(e.catalog().cards.len(), base_cards + 36, "swd 全 36 张（+距离对/蓝格怪衣/指路小虎/木甲人/勾魂锣×2/机关桶×2/机关凤×2/机关怨×2/机关妖术×2）入目录");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -218,7 +218,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 34, "swd 全 34 张（含机关桶×2/机关凤×2/机关怨×2，规则 v196）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 36, "swd 全 36 张（含机关桶×2/机关凤×2/机关怨×2/机关妖术×2，规则 v197）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -233,7 +233,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 34, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 36, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -1778,4 +1778,165 @@ fn swd_jiguanyuan_same_target_rejected_while_pending() {
     let out = play(&mut e, second, vec![2]);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } | CommandOutcome::Rejected(RejectReason::IllegalTargets)), "换目标不因同目标校验被拒: {out:?}");
     let _ = jy1;
+}
+
+// ---------------------------------------------------------------------------
+// U05 swd 第二十二批（规则 v197）：机关妖术（jiguanyaoshu，♣3/♠3）——
+// 从牌堆+弃堆装备实体中发现一张「目标空装备栏」子类型的装备（登记差异：
+// 上游=全部已定义装备牌凭空造牌），走完整装配；授予防重标记（同目标待
+// 获得期间不可再指定；其补偿触发面——失去装备补灵剑——暂缓登记至机关
+// 术批）。目标 isMin（手牌数≤体力）不可指定（上游 !isMin 同口径）。
+// ---------------------------------------------------------------------------
+
+fn jiguan_ids(e: &Engine, keyword: &str) -> Vec<u32> {
+    e.catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.name.contains(keyword))
+        .map(|(i, _)| i as u32)
+        .collect()
+}
+
+fn inject_hand(e: &mut Engine, pack: &ExtensionPack, cards: &[u32]) {
+    let mut snap = e.save();
+    for c in cards {
+        snap.core.deck.retain(|x| x != c);
+        snap.core.discard.retain(|x| x != c);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|x| x != c);
+        }
+    }
+    for c in cards {
+        snap.core.players[0].hand.push(*c);
+    }
+    *e = Engine::restore_with_extensions(&snap, &[pack]).expect("注入");
+}
+
+/// 机关妖术①：目标有空栏→从牌堆/弃堆发现装备装配+防重标记；同目标再指
+/// 定被拒；无空栏/满栏目标不可指定。
+#[test]
+fn swd_jiguanyaoshu_discovers_equip_and_marks_target() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6111, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let jys = jiguan_ids(&e, "jiguanyaoshu");
+    assert_eq!(jys.len(), 2, "机关妖术 ♣3/♠3 两张");
+    inject_hand(&mut e, &pack, &jys);
+    // 目标非 isMin：手牌数 > 体力（hp 1 + 手牌 2）
+    e.debug_set_hp(1, 1);
+    let t1a = e.debug_place(1, "tao");
+    let t1b = e.debug_place(1, "tao");
+    let _ = (t1a, t1b);
+    let sdef = e
+        .catalog()
+        .skill_by_name(engine_native::content::host::SWD_JIGUANYAOSHU_STATE_KEY)
+        .expect("防重标记 def 随 Jiguan kind 注册");
+
+    // 第一张：目标 1 号全空栏（默认无装备）→ 发现+装配
+    let out = play(&mut e, jys[0], vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    assert!(e.open_choice().is_none(), "机关妖术无询问（内容自动）");
+    let snap = e.save();
+    assert_eq!(snap.core.players[1].equips.len(), 1, "目标获得 1 张装备");
+    assert!(snap.core.skills.contains_key(&(1, sdef)), "防重标记已授予");
+    assert!(snap.core.discard.contains(&jys[0]), "本体入弃堆");
+
+    // 同目标再指定 → 拒（防重）
+    let out = play(&mut e, jys[1], vec![1]);
+    assert!(matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)), "防重期间同目标应拒: {out:?}");
+
+    // 换 2 号：制造 isMin（手牌 1 ≤ 体力 4）→ 拒
+    let give = e.debug_place(2, "tao");
+    e.debug_clear_hand(2);
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != give);
+        snap.core.discard.retain(|x| *x != give);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|x| *x != give);
+            pl.equips.retain(|x| *x != give);
+            pl.off_court.retain(|x| *x != give);
+        }
+        snap.core.players[2].hand.push(give);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入 isMin");
+    }
+    let out = play(&mut e, jys[1], vec![2]);
+    assert!(matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)), "isMin 目标应拒: {out:?}");
+}
+
+/// 机关妖术②：满装备栏目标（5 栏全占）→ 拒绝（上游 filterTarget 空
+/// subtype 槽不存在同口径）。
+#[test]
+fn swd_jiguanyaoshu_full_slots_rejected() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(6112, 3, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let jys = jiguan_ids(&e, "jiguanyaoshu");
+    inject_hand(&mut e, &pack, &jys);
+    // 1 号装配 5 栏（直接构造 equips：标准目录各栏代表）
+    let slots: Vec<&str> = vec!["sha", "bishoupai", "hufu", "hufu", "hufu"];
+    let _ = slots;
+    // 用 debug_grant 不可装装备——直接从目录取各栏实际牌种注入 equips
+    {
+        let mut snap = e.save();
+        let find_kind = |pred: &dyn Fn(engine_native::catalog::CardKind) -> bool| {
+            e.catalog()
+                .cards
+                .iter()
+                .position(|c| pred(c.kind))
+                .map(|i| i as u32)
+        };
+        let weapon = find_kind(&|k| {
+            matches!(k, engine_native::catalog::CardKind::Weapon)
+        }).expect("武器在目录");
+        let armor = find_kind(&|k| {
+            matches!(k, engine_native::catalog::CardKind::Armor)
+        }).expect("防具在目录");
+        let hp = find_kind(&|k| {
+            matches!(k, engine_native::catalog::CardKind::HorsePlus)
+        }).expect("+1 马在目录");
+        let hm = find_kind(&|k| {
+            matches!(k, engine_native::catalog::CardKind::HorseMinus)
+        }).expect("-1 马在目录");
+        let treasure = find_kind(&|k| {
+            k.equip_slot() == Some(engine_native::catalog::EquipSlot::Treasure)
+        }).expect("宝物在目录");
+        for c in [weapon, armor, hp, hm, treasure] {
+            snap.core.deck.retain(|x| *x != c);
+            snap.core.discard.retain(|x| *x != c);
+            snap.core.players[1].equips.push(c);
+        }
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入 5 栏");
+    }
+    let out = play(&mut e, jys[0], vec![1]);
+    assert!(matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)), "满栏目标应拒: {out:?}");
 }

@@ -212,6 +212,18 @@
    "kind": "jiguan",
    "suit": "diamond",
    "rank": 2
+  },
+  {
+   "name": "swd_jiguanyaoshu1",
+   "kind": "jiguan",
+   "suit": "club",
+   "rank": 3
+  },
+  {
+   "name": "swd_jiguanyaoshu2",
+   "kind": "jiguan",
+   "suit": "spade",
+   "rank": 3
   }
  ],
  "host_skills": [],

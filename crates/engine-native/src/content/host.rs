@@ -585,6 +585,11 @@ pub enum HostBehavior {
     /// [SwdJiguanyuanGain]（tag 224）——机关怨待获得状态（拥有者结束阶
     /// 段强制获得置牌）。
     SwdJiguanyuanGain,
+    /// [SwdJiguanyaoshuCard]（tag 225）。
+    SwdJiguanyaoshuCard,
+    /// [SwdJiguanyaoState]（tag 226）——机关妖术防重标记（上游
+    /// jiguanyaoshu_skill 防重面；其补偿触发面暂缓登记至机关术批）。
+    SwdJiguanyaoState,
 }
 
 
@@ -815,6 +820,8 @@ impl HostBehavior {
             HostBehavior::SwdFengyinState => 222,
             HostBehavior::SwdJiguanyuanCard => 223,
             HostBehavior::SwdJiguanyuanGain => 224,
+            HostBehavior::SwdJiguanyaoshuCard => 225,
+            HostBehavior::SwdJiguanyaoState => 226,
         }
     }
 
@@ -1044,6 +1051,8 @@ impl HostBehavior {
             222 => HostBehavior::SwdFengyinState,
             223 => HostBehavior::SwdJiguanyuanCard,
             224 => HostBehavior::SwdJiguanyuanGain,
+            225 => HostBehavior::SwdJiguanyaoshuCard,
+            226 => HostBehavior::SwdJiguanyaoState,
             _ => return None,
         })
     }
@@ -1051,7 +1060,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 224] = [
+    pub const ALL: [HostBehavior; 226] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1276,6 +1285,8 @@ impl HostBehavior {
         HostBehavior::SwdFengyinState,
         HostBehavior::SwdJiguanyuanCard,
         HostBehavior::SwdJiguanyuanGain,
+        HostBehavior::SwdJiguanyaoshuCard,
+        HostBehavior::SwdJiguanyaoState,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1505,6 +1516,8 @@ impl HostBehavior {
             HostBehavior::SwdFengyinState => "host:swd_fengyin_state",
             HostBehavior::SwdJiguanyuanCard => "host:swd_jiguanyuan_card",
             HostBehavior::SwdJiguanyuanGain => "host:swd_jiguanyuan_gain",
+            HostBehavior::SwdJiguanyaoshuCard => "host:swd_jiguanyaoshu_card",
+            HostBehavior::SwdJiguanyaoState => "host:swd_jiguanyao_state",
         }
     }
 }
@@ -1733,6 +1746,9 @@ impl HostBehavior {
             }),
             HostBehavior::SwdJiguanfengCard => None,
             HostBehavior::SwdJiguanyuanCard => None,
+            // 机关妖术防重标记：纯状态，无触发
+            HostBehavior::SwdJiguanyaoshuCard => None,
+            HostBehavior::SwdJiguanyaoState => None,
             HostBehavior::GwentZumoCard => None,
             HostBehavior::HuanleMonkeyCard => Some(TriggerMeta {
                 event: EventKind::CardUsed,
@@ -2525,6 +2541,8 @@ pub const SWD_JIGUANFENG_SHAN: &str = "swd_jiguanfeng_shan";
 pub const SWD_JIGUANYUAN_KEY: &str = "swd_jiguanyuan";
 pub const SWD_JIGUANYUAN_GAIN_KEY: &str = "swd_jiguanyuan_gain";
 pub const SWD_JIGUANYUAN_CHOOSE: &str = "swd_jiguanyuan_choose";
+pub const SWD_JIGUANYAOSHU_KEY: &str = "swd_jiguanyaoshu";
+pub const SWD_JIGUANYAOSHU_STATE_KEY: &str = "swd_jiguanyaoshu_state";
 pub const SWD_LANGEGUAIYI_SKILL_KEY: &str = "swd_langeguaiyi_skill";
 pub const SWD_LIUXING_DISCARD: &str = "swd_liuxing_discard";
 pub const SWD_LIUXING_KEY: &str = "gj:swd_liuxinghuoyu";
@@ -3564,6 +3582,8 @@ impl SkillBehavior for HostSkillBehavior {
                         && !ctx.state.player(owner).jiguanyuan_cards.is_empty()),
             HostBehavior::SwdJiguanfengCard => false,
             HostBehavior::SwdJiguanyuanCard => false,
+            HostBehavior::SwdJiguanyaoshuCard => false,
+            HostBehavior::SwdJiguanyaoState => false,
             HostBehavior::HuanleMianjuCard => matches!(event,
                 EventData::TurnOverBefore { player, .. }
                 if ctx.state.player(*player).equips.iter().any(|c| {
@@ -14521,6 +14541,81 @@ HostBehavior::XianjianLingyu => match self.stage {
                 }
                 Flow::Done
             }
+            // 机关妖术（U05 swd 第二十二批，规则 v197）：单体（range.global
+            // 1）——从牌堆+弃堆装备实体中发现一张「目标空装备栏」子类型的
+            // 装备，置入其手牌后 emit Equipped 走完整装配（commit_equip 同
+            // 栏替换/装备技授予），并授予防重标记（登记差异：①发现池=牌
+            // 堆+弃堆可见实体，上游=全部已定义装备牌凭空造牌，无候选则不
+            // 装备；②上游 jiguanyaoshu_skill 的补偿触发面——失去装备区牌
+            // 时补获 hslingjian 灵剑——依赖灵剑类型池，暂缓登记至机关术
+            // 批，本切片仅保留防重面）。本体入弃堆。
+            HostBehavior::SwdJiguanyaoshuCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        let occupied: Vec<Option<crate::catalog::EquipSlot>> = ctx
+                            .core
+                            .player(t)
+                            .equips
+                            .iter()
+                            .map(|c| ctx.catalog.card_kind(*c).equip_slot())
+                            .collect();
+                        let mut pool: Vec<CardId> = ctx
+                            .core
+                            .deck
+                            .iter()
+                            .chain(ctx.core.discard.iter())
+                            .copied()
+                            .filter(|x| {
+                                let slot = ctx.catalog.card_kind(*x).equip_slot();
+                                matches!(slot, Some(_))
+                                    && !occupied.contains(&slot)
+                            })
+                            .collect();
+                        let n = pool.len();
+                        for i in (1..n).rev() {
+                            let j = ctx.core.rng.gen_range(i as u32 + 1) as usize;
+                            pool.swap(i, j);
+                        }
+                        if let Some(x) = pool.first().copied() {
+                            if let Some(pos) = ctx.core.deck.iter().position(|y| *y == x) {
+                                ctx.core.deck.remove(pos);
+                            } else if let Some(pos) =
+                                ctx.core.discard.iter().position(|y| *y == x)
+                            {
+                                ctx.core.discard.remove(pos);
+                            }
+                            ctx.core.player_mut(t).hand.push(x);
+                            ctx.emit(EventData::Equipped {
+                                player: t,
+                                card: x,
+                                replaced: None,
+                            });
+                        }
+                        if let Some(sdef) =
+                            ctx.catalog.skill_by_name(SWD_JIGUANYAOSHU_STATE_KEY)
+                        {
+                            ctx.core.skills.insert(
+                                (t, sdef),
+                                crate::state::SkillInstance {
+                                    owner: t,
+                                    enabled: true,
+                                    once_used: false,
+                                    expires_end_of_turn: false,
+                                    rounds: 0,
+                                },
+                            );
+                        }
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                    self.card = None;
+                }
+                Flow::Done
+            }
+            // 机关妖术防重标记：纯状态无触发面（补偿触发暂缓）
+            HostBehavior::SwdJiguanyaoState => Flow::Done,
         }
     }
 }
@@ -14745,7 +14840,7 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
             HostSkillDecl { name: MTG_YOULIN_DISCOVER_KEY, behavior: HostBehavior::MtgYoulinDiscard },
         ],
         CardKind::Lindixiliu => &[HostSkillDecl { name: MTG_LINDIXILIU_KEY, behavior: HostBehavior::MtgLindixiliuLand }],
-        CardKind::Jiguan => &[HostSkillDecl { name: SWD_GOUHUNLUO_SUB_KEY, behavior: HostBehavior::SwdGouhunluoSub }, HostSkillDecl { name: SWD_FENGYIN_STATE_KEY, behavior: HostBehavior::SwdFengyinState }, HostSkillDecl { name: SWD_JIGUANYUAN_GAIN_KEY, behavior: HostBehavior::SwdJiguanyuanGain }],
+        CardKind::Jiguan => &[HostSkillDecl { name: SWD_GOUHUNLUO_SUB_KEY, behavior: HostBehavior::SwdGouhunluoSub }, HostSkillDecl { name: SWD_FENGYIN_STATE_KEY, behavior: HostBehavior::SwdFengyinState }, HostSkillDecl { name: SWD_JIGUANYUAN_GAIN_KEY, behavior: HostBehavior::SwdJiguanyuanGain }, HostSkillDecl { name: SWD_JIGUANYAOSHU_STATE_KEY, behavior: HostBehavior::SwdJiguanyaoState }],
         _ => &[],
     }
 }

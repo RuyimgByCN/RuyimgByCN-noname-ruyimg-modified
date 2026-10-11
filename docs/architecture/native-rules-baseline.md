@@ -1946,6 +1946,28 @@ forced；登记差异：上游 fengyin=非锁定技失效[library skillBlocker]�
 （同目标待获得期间再指定拒、换目标放行）——证据见
 [T12 证据](../operations/evidence/2026-10-11-t12-jiguanyuan-v196/README.md)。
 
+**规则 v197（2026-10-11，T12 机关妖术切片）**：机关妖术（上游
+`jiguanyaoshu`，♣3/♠3，`SwdJiguanyaoshuCard` tag 225，无懈窗包装，
+range.global 1 无距离约束）——PlayCard 校验恰 1 名存活角色（含使用者自
+身，上游 filterTarget 未排除 self）：目标有空装备栏（上游空 subtype 槽
+同口径）、无防重标记（上游 !hasSkill("jiguanyaoshu_skill")）、非 isMin
+（手牌数>体力，上游 !isMin）。结算：从**牌堆+弃堆**装备实体中发现一张
+「目标空栏」子类型的装备（EquipSlot 对齐上游 subtype equip1–5），置入
+目标手牌后 emit Equipped 走完整装配（commit_equip 同 Kind 替换/装备技授
+予），并授予防重标记 `SwdJiguanyaoState`（tag 226，运行时授入、无时限，
+上游 addSkill 同为持久）。**登记差异**：①发现池=牌堆+弃堆可见实体，上
+游=get.inpile('equip') 全部已定义装备牌凭空造牌；无候选则不装备（上游
+必有候选）。②上游 `jiguanyaoshu_skill` 为复合技：防重面+**补偿触发面**
+（非自己回合内失去装备区牌时，随机补获等量 hslingjian 灵剑）——补偿面
+依赖 hslingjian 灵剑类型池（7 张 swd 自造卡，list.js 无、仅机关术/该技
+生成），**暂缓登记至机关术批**，本切片仅落地防重面。机关牌池已切 7 种
+15 张，**余机关术×2**（机关术与灵剑池同批）。版本 196→**197**，存档格
+式不变（v43）。14 golden 重录：版本回退探针（197→196 复跑 golden 全
+绿）证明位移唯一来源是版本字段。回归：
+`swd_jiguanyaoshu_discovers_equip_and_marks_target`（发现装配+防重拒+
+isMin 拒）、`swd_jiguanyaoshu_full_slots_rejected`（5 栏全占拒）——证据
+见[T12 证据](../operations/evidence/2026-10-11-t12-jiguanyaoshu-v197/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |

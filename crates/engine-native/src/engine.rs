@@ -3258,6 +3258,34 @@ fn apply_command(
                         {
                             return Err(RejectReason::IllegalTargets);
                         }
+                    } else if catalog.cards[card as usize].name.contains("jiguanyaoshu") {
+                        // 机关妖术（swd 第二十二批，规则 v197）：恰 1 名其
+                        // 他存活角色（range.global 1 无距离约束）；目标有空
+                        // 装备栏（上游 filterTarget 空 subtype 槽同口径）、
+                        // 无防重标记（上游 !hasSkill 同口径）、非 isMin
+                        //（手牌数>体力，上游 !isMin 同口径）
+                        if targets.len() != 1 || !core.player(targets[0]).alive {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        let t = targets[0];
+                        let marker = catalog
+                            .skill_by_name(crate::content::host::SWD_JIGUANYAOSHU_STATE_KEY);
+                        if marker.is_some_and(|d| core.skills.contains_key(&(t, d))) {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        let hand = core.player(t).hand.len() as i32;
+                        if hand <= core.player(t).hp {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        let occupied: Vec<Option<crate::catalog::EquipSlot>> = core
+                            .player(t)
+                            .equips
+                            .iter()
+                            .map(|c| catalog.card_kind(*c).equip_slot())
+                            .collect();
+                        if occupied.len() >= 5 {
+                            return Err(RejectReason::IllegalTargets);
+                        }
                     } else if catalog.cards[card as usize].name.contains("jiguanyuan") {
                         // 机关怨（swd 第二十一批，规则 v196）：恰 1 名其他
                         // 角色（上游 filterTarget target!==player+
