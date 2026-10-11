@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 210;
+pub const STANDARD_RULESET_VERSION: u64 = 211;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -3924,6 +3924,9 @@ pub const BOSS_XIANGDE: &str = "相德";
 /// 隐贼（Boss 混沌，规则 v210）：锁定技，体力值首次减至一半或更少时激
 /// 活；你无手牌时，其他角色对你造成伤害后弃置其一张手牌。
 pub const BOSS_YINZEI: &str = "隐贼";
+/// 逐厄（Boss 穷奇，规则 v211）：锁定技——任何人受到伤害后（来源存活
+/// 且非你），你与来源各摸一张牌。
+pub const BOSS_ZHUE: &str = "逐厄";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -3987,6 +3990,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 混沌（上游 boss_hundun hp25）：隐贼以「体力≤一半条件内生效」近似
     // 上游 switch 激活门控（首次激活永久语义登记差异）
     ("混沌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_WUZANG, BOSS_XIANGDE, BOSS_YINZEI], 25, Gender::Male),
+    // 穷奇（上游 boss_qiongqi hp20/maxHp25）：逐厄单技本批；覆泰(+全场
+    // 禁桃)/延妒(+switch) 未落随下批（maxHp 差异登记：max_hp 暂=hp=20）
+    ("穷奇", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_ZHUE], 20, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5101,6 +5107,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 权限型两面：激活门控与伤害后弃牌在 commit_damage/
             // commit_lose_hp 尾经 skill_by_name 查询（激活=SkillInstance
             // .enabled 直写，初始装配即未激活）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHUE,
+            // 权限型单面：global damageEnd 双摸在 commit_damage 尾经
+            // skill_by_name 查询
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

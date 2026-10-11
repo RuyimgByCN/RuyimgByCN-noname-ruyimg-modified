@@ -337,6 +337,33 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 逐厄（Boss 穷奇，规则 v211）：global damageEnd——任何人受到伤害
+    // 后（来源存活且非穷奇），穷奇与来源各摸一张（上游 boss_zhue
+    // asyncDraw([player, source]) 同口径）
+    if let Some(zdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_ZHUE)
+    {
+        // 任一存活穷奇持有者（单 boss 场景恰一）
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == zdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .collect();
+        for holder in holders {
+            if !ctx.core.player(holder).alive {
+                continue;
+            }
+            if let Some(src) = d.source {
+                if src != holder && ctx.core.player(src).alive {
+                    ctx.draw_cards(holder, 1);
+                    ctx.draw_cards(src, 1);
+                }
+            }
+        }
+    }
     // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
     let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
     if entering {

@@ -1906,6 +1906,44 @@ fn kof_engine_mode_session_advance() {
 /// ②隐贼：装配即未激活；体力首次≤一半激活（SkillToggled）；
 /// 激活后无手牌时来源伤害后弃首张手牌；有手牌不触发。
 #[test]
+/// Boss 内容第三批首片（规则 v211）：穷奇（hp20）逐厄——任何人受到
+/// 伤害后（来源存活非穷奇），穷奇与来源各摸一张；穷奇自己为来源时不
+/// 触发。覆泰/延妒(+switch) 未落（下批）。
+#[test]
+fn boss_qiongqi_zhue_dual_draw() {
+    let mut e = Engine::new_boss_stage(28001, 4, 1, 3, 6, 4, 0);
+    let qiongqi_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 2) as u16; // BOSS_GENERALS[2] 穷奇
+    e.debug_set_general_def(1, qiongqi_def);
+    e.debug_set_hp(1, 20);
+    let zdef = e.catalog().skill_by_name("逐厄").expect("逐厄入目录");
+    assert!(e.state_core().skills.contains_key(&(1, zdef)), "逐厄实例");
+
+    // 3 号（无逐厄）杀 2 号：穷奇与来源（3 号）各摸 1
+    advance_to_play(&mut e, 3);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(2);
+    e.debug_clear_hand(3);
+    let sha = e.debug_place(3, "sha");
+    play(&mut e, sha, vec![2]);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hand(1).len(), 1, "穷奇摸 1");
+    assert_eq!(e.debug_hand(3).len(), 1, "来源摸 1");
+    // 对照：穷奇自己为来源不触发——1 号杀 2 号
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(2);
+    e.debug_clear_hand(3);
+    let sha2 = e.debug_place(1, "sha");
+    play(&mut e, sha2, vec![2]);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hand(1).len(), 0, "穷奇为来源 → 不触发");
+    assert_eq!(e.debug_hand(1).len(), 0);
+}
+
 fn boss_hundun_xiangde_yinzei() {
     let mut e = Engine::new_boss_stage(27001, 4, 1, 3, 6, 4, 0);
     let hundun_def = (e.catalog().general_count()
