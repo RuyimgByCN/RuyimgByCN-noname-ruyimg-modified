@@ -363,6 +363,9 @@ pub struct TurnState {
     /// 乱剑（U05 xianjian 长卿，规则 v187）：虚拟杀载体牌锚定——
     /// DamageBefore 增伤判定（Judge begin 清）。
     pub luanjian_card: Option<u32>,
+    /// 冥顽（Boss 梼杌，规则 v219）：本回合内用牌伤害过的目标锁定集
+    /// （空=未激活；回合更替自然清零=上游 phaseAfter clear 同窗）。
+    pub minwan_targets: Vec<PlayerId>,
     /// 御风已发动次数（U05 xianjian 李逍遥，规则 v151）：每回合限两次
     ///（上游 xjyufeng usable:2 同口径；换回合随 TurnState 复位）。
     pub xjyufeng_used: u8,

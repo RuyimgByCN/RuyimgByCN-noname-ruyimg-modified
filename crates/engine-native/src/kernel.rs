@@ -464,6 +464,29 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 冥顽锁定集（Boss 梼杌，规则 v219）：回合内自己使用牌对其他角色
+    // 造成伤害后，受伤者入锁定集（首次同时记自己——上游 storage
+    // boss_minwan=[player]+add(target) 同口径；回合更替自然清零）
+    if let Some(mdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_MINWAN)
+    {
+        if let Some(src) = d.source {
+            if src != d.target
+                && ctx.core.turn.current == src
+                && ctx.core.has_skill(src, mdef)
+                && ctx.core.player(src).alive
+            {
+                let turn = &mut ctx.core.turn;
+                if turn.minwan_targets.is_empty() {
+                    turn.minwan_targets.push(src);
+                }
+                if !turn.minwan_targets.contains(&d.target) {
+                    turn.minwan_targets.push(d.target);
+                }
+            }
+        }
+    }
     // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
     let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
     if entering {
@@ -563,6 +586,18 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
     // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游
     // getHistory("useCard") 同口径——未被取消的使用全计）
     ctx.core.player_mut(u.player).total_used += 1;
+    // 冥顽（Boss 梼杌，规则 v219）：回合内锁定集已激活（非空）时每用
+    // 一张牌摸一张（上游 boss_minwan_draw useCard 同口径）
+    if ctx.core.turn.current == u.player && !ctx.core.turn.minwan_targets.is_empty() {
+        if let Some(mdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_MINWAN)
+        {
+            if ctx.core.has_skill(u.player, mdef) {
+                ctx.draw_cards(u.player, 1);
+            }
+        }
+    }
     ctx.log(LogEvent::CardPlayed {
         card: u.card,
         player: u.player,
@@ -1222,6 +1257,9 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
         ctx.core.turn.xjyufeng_used = 0;
         ctx.core.turn.diewu_draw_used = false;
         ctx.core.turn.lueying_used = false;
+    // 冥顽锁定集（Boss 梼杌，规则 v219）：回合更替清零（上游 phaseAfter
+    // clear 同窗）
+    ctx.core.turn.minwan_targets.clear();
         ctx.core.turn.txianqu_used = false;
         ctx.core.turn.jtjubao_used = false;
         ctx.emit(EventData::Phase {
@@ -1253,6 +1291,9 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.turn.xjyufeng_used = 0;
     ctx.core.turn.diewu_draw_used = false;
     ctx.core.turn.lueying_used = false;
+    // 冥顽锁定集（Boss 梼杌，规则 v219）：回合更替清零（上游 phaseAfter
+    // clear 同窗）
+    ctx.core.turn.minwan_targets.clear();
     ctx.core.turn.txianqu_used = false;
     ctx.core.turn.jtjubao_used = false;
     ctx.emit(EventData::Phase {

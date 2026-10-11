@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 218;
+pub const STANDARD_RULESET_VERSION: u64 = 219;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4027,6 +4027,10 @@ pub const BOSS_JICAI: &str = "积财";
 /// 拟态（Boss 梼杌，规则 v217）：锁定技两面——防止你于回合内受到的伤
 /// 害；你于回合外受到的火属性伤害 +1。
 pub const BOSS_NITAI: &str = "拟态";
+/// 冥顽（Boss 梼杌，规则 v219）：锁定技——你于回合内使用牌对其他角色
+/// 造成伤害后，你于此回合内使用牌只能指定你与这些角色为目标，且你每
+/// 使用一张牌，摸一张牌。
+pub const BOSS_MINWAN: &str = "冥顽";
 /// 乱常（Boss 梼杌，规则 v218）：锁定技，体力值首次减至一半或更少时激
 /// 活；回合开始（判定阶段开始锚点）视为使用【南蛮入侵】，回合结束视为
 /// 使用【万箭齐发】（目标=全部其他存活角色）。
@@ -4102,9 +4106,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 饕餮四技全齐（v215 贪欲；v216 藏目+集财——集财激活以
     // SkillInstance.enabled 同隐贼/延妒先例）
     ("饕餮", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_TANYU, BOSS_CANGMU, BOSS_JICAI], 20, Gender::Male),
-    // 梼杌：乱常已落（v218，虚拟 AOE+门控）；冥顽[目标锁定集] 未落
-    // 随下批
-    ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI, BOSS_LUANCHANG], 25, Gender::Male),
+    // 梼杌四技全齐（v217 拟态；v218 乱常；v219 冥顽——目标锁定集以
+    // TurnState.minwan_targets 回合级承载）
+    ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI, BOSS_LUANCHANG, BOSS_MINWAN], 25, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5302,6 +5306,16 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(LuanChangBehavior),
+        },
+        SkillDef {
+            name: BOSS_MINWAN,
+            // 权限型三面：伤害后锁定集（commit_damage 尾）、每用牌摸 1
+            //（commit_card_used 尾）、PlayCard 目标校验（engine 校验段）
+            // 均经 skill_by_name 查询；锁定集=TurnState.minwan_targets
+            //（回合级，更替自然清零）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

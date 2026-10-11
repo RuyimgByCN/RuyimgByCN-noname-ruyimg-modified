@@ -2187,6 +2187,74 @@ fn boss_qiongqi_yandu_gain_at_end_phase() {
 /// ≤一半 SkillToggled）；激活后准备阶段（判定阶段开始锚点）虚拟南蛮
 /// （全场其他存活各响应或受 1）、结束阶段虚拟万箭（同 AOE 面）。
 #[test]
+/// 梼杌批末片（规则 v219）：冥顽三面——回合内自己用牌伤害他人后锁定
+/// 集（含自己）；此后每用一张牌摸 1、出牌目标只能是自己或锁定集内；
+/// 回合更替锁定集清零（下回合不再限制）。
+#[test]
+fn boss_taowu_minwan_lockset_draw_and_target_mod() {
+    let mut e = Engine::new_boss_stage(36001, 4, 1, 3, 6, 4, 0);
+    let taowu_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 4) as u16;
+    e.debug_set_general_def(1, taowu_def);
+    e.debug_set_hp(1, 25);
+    let mdef = e.catalog().skill_by_name("冥顽").expect("冥顽入目录");
+    assert!(e.state_core().skills.contains_key(&(1, mdef)));
+
+    // 回合内：2 号杀 0 号造成伤害后（2 号非持技者——先走 1 号）：
+    // 改为 1 号自己回合：装武器? 直接用 1 号杀 2 号
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(2); // 清目标手牌防闪避
+    e.debug_set_hp(2, 4);
+    let sha = e.debug_place(1, "sha");
+    play(&mut e, sha, vec![2]);
+    drain_choices(&mut e);
+    // 锁定集=[1(自己),2]（TurnState）
+    assert_eq!(
+        e.state_core().turn.minwan_targets,
+        vec![1, 2],
+        "冥顽：锁定集=[自己, 受伤者]"
+    );
+    // 每用一张牌摸 1：place 桃自用（合法目标=自己）
+    let tao = e.debug_place(1, "tao");
+    e.debug_set_hp(1, 24); // 桃可用（<max）
+    let out = play(&mut e, tao, vec![]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
+    assert_eq!(e.debug_hand(1).len(), 1, "冥顽：用牌后摸 1");
+
+    // 目标 mod：非锁定集目标（3 号）被拒
+    e.debug_set_hp(3, 4);
+    let sha2 = e.debug_place(1, "sha");
+    let out = play(&mut e, sha2, vec![3]);
+    assert!(
+        matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)),
+        "冥顽：非锁定集目标应被拒：{out:?}"
+    );
+    // 锁定集目标（2 号）仍可（决斗单目标、无杀限）
+    let duel = e.debug_place(1, "duel");
+    let out = play(&mut e, duel, vec![2]);
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "锁定集目标可用：{out:?}"
+    );
+    drain_choices(&mut e);
+
+    // 回合更替清零：推进到 0 号回合 → 集合空、不再限制
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core().turn.minwan_targets.is_empty(),
+        "回合更替 → 锁定集清零"
+    );
+    let sha4 = e.debug_place(0, "sha");
+    let _ = sha4;
+    // 存档往返：v49 编码
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("v49 往返");
+    assert_eq!(r.state_core().turn.current, 0, "回合状态往返一致");
+    assert_zone_conservation(&r);
+}
+
 fn boss_taowu_luanchang_virtual_aoe() {
     let mut e = Engine::new_boss_stage(35001, 4, 1, 3, 6, 4, 0);
     let taowu_def = (e.catalog().general_count()

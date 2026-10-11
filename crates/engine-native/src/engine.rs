@@ -380,6 +380,7 @@ impl Engine {
                 zhangmu_used: false,
                 yingfeng_chain: false,
                 luanjian_card: None,
+                minwan_targets: Vec::new(),
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -2282,6 +2283,25 @@ fn apply_command(
             // 目标 ID 越界必须显式拒绝（不得进入 player() 索引）。
             if targets.iter().any(|t| *t as usize >= core.players.len()) {
                 return Err(RejectReason::IllegalTargets);
+            }
+            // 冥顽（Boss 梼杌，规则 v219）：回合内锁定集已激活时，出牌
+            // 目标只能是自己或已伤害过的角色（上游 boss_minwan mod
+            // playerEnabled 同口径）
+            {
+                let user = core.turn.current;
+                if !core.turn.minwan_targets.is_empty() {
+                    if let Some(mdef) =
+                        catalog.skill_by_name(crate::content::standard::BOSS_MINWAN)
+                    {
+                        if core.has_skill(user, mdef)
+                            && targets
+                                .iter()
+                                .any(|t| *t != user && !core.turn.minwan_targets.contains(t))
+                        {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                    }
+                }
             }
             let mut kind = catalog.card_kind(card);
             let mut mark_mutoumianju = false;
@@ -4950,6 +4970,7 @@ mod tests {
                 zhangmu_used: false,
                 yingfeng_chain: false,
                 luanjian_card: None,
+                minwan_targets: Vec::new(),
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -5035,6 +5056,7 @@ mod tests {
                 zhangmu_used: false,
                 yingfeng_chain: false,
                 luanjian_card: None,
+                minwan_targets: Vec::new(),
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
