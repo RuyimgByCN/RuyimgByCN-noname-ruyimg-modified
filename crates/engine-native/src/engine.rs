@@ -2490,6 +2490,21 @@ fn apply_command(
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制
                     let mut mark_yuanbaorou = false;
                     let player_id = core.turn.current;
+                    // 焚天（Boss 朱雀，规则 v236）：锁定——红色牌使用无
+                    // 次数限制且无距离限制（上游 mod cardUsable Infinity
+                    // + targetInRange=true 同口径）
+                    let fentian_red = {
+                        let red = matches!(
+                            catalog.cards[card as usize].suit,
+                            crate::catalog::Suit::Heart
+                                | crate::catalog::Suit::Diamond
+                        );
+                        red
+                            && catalog
+                                .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+                                .map(|def| core.has_skill(player_id, def))
+                                .unwrap_or(false)
+                    };
                     let paoxiao = catalog
                         .skill_by_name(crate::content::standard::PAO_XIAO)
                         .map(|d| core.has_skill(core.turn.current, d))
@@ -2548,6 +2563,7 @@ fn apply_command(
                     if !paoxiao
                         && !has_zhuge
                         && !baolei_sentinel
+                        && !fentian_red
                         && core.turn.sha_used_play_phase
                         && !land_sha_bonus
                     {
@@ -2728,7 +2744,9 @@ fn apply_command(
                         || catalog
                             .skill_by_name(crate::content::standard::BOSS_KUANGXIAO)
                             .map(|def| core.has_skill(core.turn.current, def))
-                            .unwrap_or(false);
+                            .unwrap_or(false)
+                        // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
+                        || fentian_red;
                     let feiren_range_free = sha_range_free;
                     let zfs_free = core.turn.zhufangshenshi_target == Some(target);
                     // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
@@ -2887,6 +2905,19 @@ fn apply_command(
                         .skill_by_name(crate::content::standard::QI_CAI)
                         .map(|d| core.has_skill(from, d))
                         .unwrap_or(false);
+                    // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
+                    let fentian_red_free = {
+                        let red = matches!(
+                            catalog.cards[card as usize].suit,
+                            crate::catalog::Suit::Heart
+                                | crate::catalog::Suit::Diamond
+                        );
+                        red
+                            && catalog
+                                .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+                                .map(|def| core.has_skill(from, def))
+                                .unwrap_or(false)
+                    };
                     // 探囊（U05 xianjian 韩菱纱，规则 v148）：视为的顺手
                     // 牵羊无距离限制（上游 mod targetInRange 同口径；仅
                     // 声明转化命中——实体牌非顺牵即视为路径）
@@ -2895,7 +2926,11 @@ fn apply_command(
                             .skill_by_name(crate::content::host::XJ_TANNANG_KEY)
                             .map(|def| core.has_skill(from, def))
                             .unwrap_or(false);
-                    if !qicai && !tannang_free && core.computed_distance(catalog, from, target) > 1 {
+                    if !qicai
+                        && !tannang_free
+                        && !fentian_red_free
+                        && core.computed_distance(catalog, from, target) > 1
+                    {
                         return Err(RejectReason::IllegalTargets);
                     }
                     let t = core.player(target);
@@ -3303,7 +3338,21 @@ fn apply_command(
                     if !targets.is_empty() {
                         return Err(RejectReason::IllegalTargets);
                     }
-                    if core.turn.jiu_used {
+                    // 焚天（Boss 朱雀，规则 v236）：红色酒不受每回合一次
+                    // 限制（上游 mod cardUsable Infinity 同口径）
+                    let fentian_red_jiu = {
+                        let red = matches!(
+                            catalog.cards[card as usize].suit,
+                            crate::catalog::Suit::Heart
+                                | crate::catalog::Suit::Diamond
+                        );
+                        red
+                            && catalog
+                                .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+                                .map(|def| core.has_skill(core.turn.current, def))
+                                .unwrap_or(false)
+                    };
+                    if core.turn.jiu_used && !fentian_red_jiu {
                         return Err(RejectReason::CardLimit);
                     }
                 }

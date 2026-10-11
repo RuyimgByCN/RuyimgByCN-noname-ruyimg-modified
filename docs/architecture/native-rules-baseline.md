@@ -2450,6 +2450,23 @@ Of）未建模——boss 侧关系网未入 PlayCard 校验；range[0]=-1 空指
 非持有者对照/往返）——证据见
 [T11 狂笑证据](../operations/evidence/2026-10-11-t11-boss-kuangxiao-v235/README.md)。
 
+**规则 v236（2026-10-11，T11 四象系朱雀首片：焚天＋朱雀条目）**：
+**焚天**四件：①伤害视为火（ZhaoHuoBehavior 同构复用——数据less nature
+改写机器/快照变体共用 BossZhaohuo，恢复按技能表重挂，登记同构复用）；
+②红牌免次数（杀限+酒限豁免臂）；③红牌免距离（sha_range_free 链+顺手
+牵羊臂）；④红杀无视防具（kernel 八卦阵判定步短路——原生防具=八卦阵，
+directHit 承载）。`BOSS_GENERALS` 尾追加**朱雀**（def 索引 12/female/
+`[神裔, 焚天]`/hp4；boss_chiyan2 赤炎未落随下批）。**登记差异**：
+wuxieRespondable 红牌禁他人无懈未挂钩（红色锦囊 directHit 面同门空缺）；
+红酒免次数面目录无实体红酒（仅声明转化可达，以登记代测）；势力 shen→
+群目录近似。**坑位**：行为触发总线只扫 `trigger: Some(meta)` 技能——
+复用带行为的 SkillDef 必须连 TriggerMeta 一起抄（首版静默失效）。FROZEN
+名单尾加「焚天」（89 名）。存档不变 v53。版本 235→**236**。版本回退
+探针（236→235 复跑 golden 全绿）证明 14 golden 位移唯一来源是版本字段，
+全量重录。回归 `boss_zhuque_fentian_red_cards` 五段（火改写免疫反证/
+红杀免次免距/黑杀仍限/红酒登记/跳八卦+往返）——证据见
+[T11 焚天证据](../operations/evidence/2026-10-11-t11-boss-fentian-v236/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

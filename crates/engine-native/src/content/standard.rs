@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 235;
+pub const STANDARD_RULESET_VERSION: u64 = 236;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4196,6 +4196,12 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 焚天（Boss 朱雀，规则 v236）：锁定技多面——你造成的伤害视为火属性
+/// （与招祸同构，复用 ZhaoHuo 机器/快照变体）；红色牌使用无次数限制且
+/// 无距离限制（上游 mod cardUsable Infinity + targetInRange=true）；红
+/// 色杀无视防具（boss_fentian2 directHit 全场——原生防具=八卦阵，跳防
+/// 具判定承载）。wuxieRespondable 红色牌禁他人无懈面未挂钩，登记差异。
+pub const BOSS_FENTIAN: &str = "焚天";
 /// 狂笑（Boss 白虎，规则 v235）：锁定技两面——你的【杀】无距离限制且
 /// 目标数上限无限（上游 mod targetInRange=true + selectTarget
 /// range[0..1]=-1/-1 同口径）；不能指定友方为杀目标（playerEnabled）——
@@ -4327,6 +4333,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 白虎（v235 狂笑；神裔共用 v233；boss_baimang2 白芒=关卡流程面登记不落；
     // 上游势力 shen→群目录近似[ Faction 枚举无神势力，烛阴空势力→群先例]）
     ("白虎", Faction::Qun, &[BOSS_SHENYI, BOSS_KUANGXIAO], 4, Gender::Male),
+    // 朱雀（v236 焚天；神裔共用 v233；boss_chiyan2 赤炎未落随下批；
+    // 势力 shen→群目录近似；上游 female）
+    ("朱雀", Faction::Qun, &[BOSS_SHENYI, BOSS_FENTIAN], 4, Gender::Female),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5713,6 +5722,22 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_FENTIAN,
+            // 火改写面=ZhaoHuoBehavior 同构复用（数据less nature 改写，
+            // 快照变体共用 BossZhaohuo——机器不携带技能身份，恢复路径按
+            // 技能表重挂）；其余为查询面（engine 红牌免次数/免距离、
+            // kernel 红杀跳八卦）；wuxie 禁面登记差异未挂钩
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ZhaoHuoBehavior),
         },
     ];
     (cards, skills)

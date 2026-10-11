@@ -4083,9 +4083,24 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang);
         // 八卦阵：受击者装备防具时，出闪询问前先做防具判定（每杀至多一次）
         // ——红桃视为已出闪（伤害免除），否则照常进入出闪询问。
+        // 焚天（Boss 朱雀，规则 v236）：红色杀 directHit 无视防具
+        //（上游 boss_fentian2 directHit 全场同口径——原生防具=八卦阵）
+        let fentian_direct_hit = {
+            let red = matches!(
+                ctx.catalog.cards[self.card as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            );
+            red
+                && ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+                    .map(|def| ctx.core.has_skill(self.source, def))
+                    .unwrap_or(false)
+        };
         if !self.armor_judged {
             self.armor_judged = true;
             let has_armor = !qinggang_pierce
+                && !fentian_direct_hit
                 && ctx.core.player(self.target).alive
                 && ctx
                     .core
