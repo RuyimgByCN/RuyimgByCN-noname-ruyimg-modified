@@ -36,3 +36,28 @@
 
 - 子项③（覆盖清单其余行）、④（18 份旧线阶段文档横幅）、⑤（rule-semantics/protocol 等状态性陈述）、⑥（legacy-reference 补整理节）仍列待做。
 - 本子项零代码改动；演进提案历史表行未改写。
+
+---
+
+# 同日 T16③：覆盖清单其余行逐行审计（除 kof_session 归 T14）
+
+## 方法
+
+- 69 个机制行全部过一遍：被引测试名机械化存在性核查（`rg "fn <name>"` 于测试与源码树）、状态/边界注记与近期批次（v193–v197）交叉核对、`replay:` 场景引用由 `scenarios_are_registered_in_coverage_manifest` 守护（2/2 通过）。
+
+## 发现（1 项重大 + 3 处计数过时，均已更正/登记）
+
+1. **重大——5 个 lib 单元测试在 10-10 事故恢复中丢失**：`card_kind_keys_bijective`、`host_behavior_keys_bijective`、`card_kind_companion_skills_consistent`、`card_kind_encoding_roundtrip_all_variants`、`standard_skill_ids_append_only`。10-07 维护批日志显示它们随 `unittests src/lib.rs` 运行（5 passed）；现 `src/lib.rs` 仅 37 行无测试模块（基线 72583b2b 即如此）——恢复重建时 `host_behavior_tags_unique` 重建进了 a0_tag_registry，其余 5 个未重建。后果：数据键双射/伴随一致/编码往返/技能序只追加自 v60 后的新键（CardKind 86→133、HostBehavior 74→226）从未被这些断言验证。已登记 **T17（P1）** 重建。
+2. **tag_registry 行三处计数过时**：HostBehavior 74→**226** tag、CardKind 86→**133**、MachineSnapshot 42→**59 变体**（57 结构+2 单元）——均已更正。
+3. **tag_registry 行状态**："已验证"→"已验证（部分：5 个 lib 单元测试待重建，见主稿 T17）"，测试清单逐个标注在套件/丢失。
+
+## 其余 68 行结论
+
+- 被引测试名全部实存（105/105）且在 535/0/1 全量中通过；"部分/所测路径"限定词与行内边界描述一致。
+- `catalog_inventory` 行（124 张）与 v74 后事实一致；`byte_archive` 行已含 10-07 加固记录；`kof_session` 行为 T14 更正后状态。
+- 新机关牌（机关桶/凤/怨/妖术）经既有机制键（aoe_queue/card_use/nullify_window/aoe_full_resolution）覆盖，未新增独立机制键——无缺行。
+
+## 验证
+
+- `cargo test --offline -p engine-native --test replay_scenarios`：**2/2**（清单联动守护，更正后通过）。
+- 零代码改动（纯文档 + 主稿/清单登记）。
