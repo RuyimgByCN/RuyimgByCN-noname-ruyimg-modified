@@ -2086,11 +2086,14 @@ pub(crate) fn apply_general_assembly(
         let def = catalog
             .skill_by_name(skill)
             .unwrap_or_else(|| panic!("catalog skill {skill}"));
+        // 隐贼（Boss 混沌，规则 v210）：装配即未激活（上游 gameStart
+        // switch_off disableSkill 同口径；体力首次≤一半时启用）
+        let enabled = skill != crate::content::standard::BOSS_YINZEI;
         state.skills.insert(
             (player, def),
             crate::state::SkillInstance {
                 owner: player,
-                enabled: true,
+                enabled,
                 once_used: false,
                 expires_end_of_turn: false,
                 rounds: 0,
@@ -4204,6 +4207,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
                 push_u32(h, *c);
             }
             push_u8(h, *stage as u8);
+        }
+        M::BossXiangde { owner } => {
+            push_u8(h, 62);
+            push_u8(h, *owner);
         }
         M::DyingSave { dying, source, responders, asked, round_used } => {
             push_u8(h, 2);

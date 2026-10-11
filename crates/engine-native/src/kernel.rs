@@ -294,6 +294,49 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 隐贼（Boss 混沌，规则 v210）双臂：①激活门控——体力首次减至一半
+    // 或更少时启用（SkillInstance.enabled 直写+SkillToggled；上游
+    // boss_yinzei_switch changeHp enableSkill 同口径）；②伤害后弃牌——
+    // 已激活且持有者无手牌 → 来源弃置一张手牌（确定性取首张；上游
+    // damageEnd randomDiscard 随机改首张登记差异）
+    if let Some(ydef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_YINZEI)
+    {
+        let holder = d.target;
+        let has_yinzei = ctx.core.has_skill_any_state(holder, ydef);
+        if has_yinzei {
+            let p = ctx.core.player(holder);
+            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+                let was_enabled = ctx.core.has_skill(holder, ydef);
+                if !was_enabled {
+                    if let Some(inst) = ctx.core.skills.get_mut(&(holder, ydef)) {
+                        inst.enabled = true;
+                    }
+                    ctx.log(LogEvent::SkillToggled {
+                        player: holder,
+                        skill: ctx.catalog.skill_name(ydef),
+                        enabled: true,
+                    });
+                }
+            }
+            // 伤害后弃牌（激活态）
+            if ctx.core.has_skill(holder, ydef)
+                && ctx.core.player(holder).hand.is_empty()
+                && ctx.core.player(holder).hp > 0
+            {
+                if let Some(src) = d.source {
+                    if src != holder
+                        && ctx.core.player(src).alive
+                        && !ctx.core.player(src).hand.is_empty()
+                    {
+                        let c = ctx.core.player(src).hand[0];
+                        ctx.discard_from_hand(src, c);
+                    }
+                }
+            }
+        }
+    }
     // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
     let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
     if entering {

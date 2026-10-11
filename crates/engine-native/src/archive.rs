@@ -918,6 +918,10 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 ZhangbaStageSnap::TargetRead => 2,
             });
         }
+        MachineSnapshot::BossXiangde { owner } => {
+            w.u8(61);
+            enc_pid(w, owner);
+        }
         MachineSnapshot::DyingSave {
             dying,
             source,
@@ -2042,6 +2046,10 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 t => return Err(ArchiveError::BadTag("zhangba_stage", t)),
             };
             MachineSnapshot::Zhangba { owner, cards, stage }
+        }
+        61 => {
+            let owner = dec_pid(r)?;
+            MachineSnapshot::BossXiangde { owner }
         }
         59 => {
             let owner = dec_pid(r)?;

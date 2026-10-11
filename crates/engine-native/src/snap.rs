@@ -534,6 +534,10 @@ pub enum MachineSnapshot {
         /// 目标所选花色 tag（0=♥ 1=♦ 2=♣ 3=♠；v203）。
         chosen_suit: Option<u8>,
     },
+    /// 相德（Boss 混沌，规则 v210）：无挂起一步机，快照仅身份。
+    BossXiangde {
+        owner: PlayerId,
+    },
     LiJian {
         owner: PlayerId,
         stage: LiJianStageSnap,
@@ -1069,6 +1073,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
             check_opt_pid(*target, b)?;
             // chosen_suit 为定界 tag（0..=3），非实体引用，无需界校验
+        }
+        MachineSnapshot::BossXiangde { owner, .. } => {
+            check_pid(*owner, b)?;
         }
         MachineSnapshot::LiJian {
             owner, card, inner, ..
@@ -2019,6 +2026,10 @@ pub fn active_ask(
             }
             _ => None,
         },
+        MachineSnapshot::BossXiangde { .. } => {
+            // 相德：无挂起一步机（永不等待应答），恢复无询问
+            None
+        }
         MachineSnapshot::FanJian { owner, stage, target, .. } => match stage {
             // stage 名 = 消费者：SuitAsk 消费 fanjian_target 应答、
             // PickAsk 消费 fanjian_suit、Consume 消费 fanjian_pick（v203）

@@ -1013,6 +1013,12 @@ impl GameStateCore {
         limit
     }
 
+    /// 持有判定（**含未启用**实例）——隐贼激活门控用（装配即禁用，
+    /// 体力条件达标时翻启用）。
+    pub fn has_skill_any_state(&self, p: PlayerId, def: SkillDefId) -> bool {
+        self.skills.contains_key(&(p, def))
+    }
+
     pub fn has_skill(&self, p: PlayerId, def: SkillDefId) -> bool {
         self.skills
             .get(&(p, def))
