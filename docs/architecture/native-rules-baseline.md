@@ -2718,6 +2718,16 @@ versus 替补换将先例同构；hp/手牌/装备/判定区保留=上游 init �
 **坑位**：general_slots 比较 Option 化；回归循环 open_choice 前置+Suspended
 分支（中局 assembly 触发时间片）；skill_name 返回 &str。
 
+**「Suspended 风暴」勘误（2026-10-11，v249 批待查项撤销，无版本递增）**：
+逐 resume 探针证实形态轮换后多回合推进全部正常（Accepted/Pending 交替有
+进展、零 Suspended）——Yielded 唯一产生点=`steps >= slice`（time_slice
+未设时不可达）；v249 首版「风暴」为回归草稿脚手架缺陷（循环缺分支/
+open_choice 未前置/应答与推进迭代混计 12 次上限）+轮换双向交替的断言锚
+定错误。多回合回归已补（round-3 互斥回切断言通过）。**引擎无缺口，N07
+分片续行收敛性无问题**；方法论：引擎异常结论须逐 resume 探针为证——证
+据见
+[风暴勘误证据](../operations/evidence/2026-10-11-t11-boss-storm-rebuttal/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

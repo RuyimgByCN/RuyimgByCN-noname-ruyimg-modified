@@ -2478,7 +2478,55 @@ fn boss_nianshou_nbianshen_rotation_renxing() {
         "形态往返"
     );
     assert_zone_conservation(&r);
-    assert_zone_conservation(&e);
+
+    // ⑤ 多回合回归（勘误：早前「Suspended 风暴」为测试脚手架假象——本
+    //    探针证实轮换后每 resume 均有进展、无 Suspended）：驱动过 round-3
+    //    判定锚 → 互斥轮转回年兽合体
+    for _ in 0..60 {
+        if e2.outcome().is_some() {
+            break;
+        }
+        if let Some(c) = e2.open_choice().cloned() {
+            if c.spec.prompt == "dying_save" {
+                answer(&mut e2, ChoiceOption::Pass);
+                drain_choices(&mut e2);
+            } else {
+                answer_cards(&mut e2, &c);
+            }
+            drain_choices(&mut e2);
+            continue;
+        }
+        if e2.turn().current == 1
+            && e2.turn().phase == Phase::Judge
+            && e2.turn().round >= 3
+        {
+            break;
+        }
+        match next_phase(&mut e2) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Suspended => {}
+            CommandOutcome::Pending { choice } => {
+                let is_dying = choice.spec.prompt == "dying_save";
+                if is_dying {
+                    answer(&mut e2, ChoiceOption::Pass);
+                    drain_choices(&mut e2);
+                } else {
+                    answer_cards(&mut e2, &choice);
+                }
+            }
+            CommandOutcome::Rejected(r) => panic!("np rejected {r:?}"),
+        }
+    }
+    assert_eq!(
+        e2.state_core().player(1).general_slots[0],
+        Some(heti_def),
+        "round-3 判定锚：互斥轮换回年兽合体"
+    );
+    assert_eq!(e2.debug_hp(1), 12, "多回合轮换 hp 恒保留");
+    let snap2 = e2.save();
+    let r2 = Engine::restore(&snap2).expect("往返");
+    assert_zone_conservation(&r2);
+    assert_zone_conservation(&e2);
 }
 
 /// 年兽系首片（规则 v248/存档 v58）：年瑞+猛态（年兽合体条目）——①年
