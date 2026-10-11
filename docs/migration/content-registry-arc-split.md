@@ -54,6 +54,9 @@
    「现有日志尚不能直接替代完整回滚」；4 个 Checkpoint 变体为死枚举项。
 2. 顺带发现：`hand_limit_bonus` **不在 canonical hash 编码内**
    （hash.rs 无该字段编码）——已登记为旧线哈希覆盖待核对项。
+   **2026-10-11 加注**：已按条件编码惯例补编码（空表不写字节，既有哈希
+   不变），回归 `hand_limit_bonus_enters_canonical_hash`；见
+   [T15② 证据](../operations/evidence/2026-10-11-t15-2-hand-limit-bonus-hash/README.md)。
 3. 因此 journal-only 回滚定位为**影子校验与逐步扩面机制**，生产回滚路径
    仍为基线克隆；两者由等价性测试持续对照。
 

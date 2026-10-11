@@ -121,6 +121,17 @@ pub fn canonical_state_hash(state: &GameState) -> [u8; 32] {
             put_u32(&mut h, card.raw());
         }
     }
+    // 手牌上限修正（T15②，2026-10-11 补编码）：条件编码——空表不写字节，
+    // 既有哈希不变；仅当技能（如 muyin 的 +1）写入后进入哈希，修复两个
+    // 仅此字段不同的状态哈希相同的一致性缺口。
+    if !state.hand_limit_bonus.is_empty() {
+        h.update(b"state-hand-limit-bonus/v1");
+        put_u32(&mut h, state.hand_limit_bonus.len() as u32);
+        for (player, bonus) in &state.hand_limit_bonus {
+            put_u32(&mut h, *player);
+            put_i32(&mut h, *bonus);
+        }
+    }
     if !state.turn.damage_pair_counts.is_empty() {
         h.update(b"turn-damage-pair-counts/v1");
         put_u32(&mut h, state.turn.damage_pair_counts.len() as u32);
@@ -10648,6 +10659,41 @@ mod tests {
         let a = canonical_state_hash(&GameState::empty());
         let b = canonical_state_hash(&GameState::empty());
         assert_eq!(a, b);
+    }
+
+    /// T15②（2026-10-11）：hand_limit_bonus 进入 canonical hash。
+    /// 空表不写字节（empty 哈希不变，既有 golden 兼容）；仅此字段不同
+    /// 的两个状态哈希必须不同（一致性缺口回归）。
+    #[test]
+    fn hand_limit_bonus_enters_canonical_hash() {
+        let base = canonical_state_hash(&GameState::empty());
+        let mut with_bonus = GameState::empty();
+        with_bonus.hand_limit_bonus.insert(0, 1);
+        let hashed = canonical_state_hash(&with_bonus);
+        assert_ne!(base, hashed, "非空 hand_limit_bonus 必须改变哈希");
+
+        // 编码含玩家与修正值：不同玩家/不同值 → 不同哈希。
+        let mut other_player = GameState::empty();
+        other_player.hand_limit_bonus.insert(1, 1);
+        assert_ne!(
+            hashed,
+            canonical_state_hash(&other_player),
+            "不同玩家的同值修正应产生不同哈希"
+        );
+        let mut other_value = GameState::empty();
+        other_value.hand_limit_bonus.insert(0, 2);
+        assert_ne!(
+            hashed,
+            canonical_state_hash(&other_value),
+            "同玩家不同修正值应产生不同哈希"
+        );
+
+        // 空表条件编码：与补编码前的 empty 哈希路径一致（empty_state_hash_stable 同伴）。
+        assert_eq!(
+            base,
+            canonical_state_hash(&GameState::empty()),
+            "空表不应写字节"
+        );
     }
 }
 
