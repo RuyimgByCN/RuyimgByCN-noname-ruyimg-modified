@@ -150,6 +150,9 @@ pub struct PlayerState {
     /// 巨源（Boss 朱厌，规则 v226）：上次回合结束时的体力（跨回合持久；
     /// 出牌阶段体力低于该值时【杀】可额外指定 1 个目标）。
     pub juyuan_storage: i32,
+    /// 封印（Boss 应昭封冻，规则 v228）：本回合无法使用手牌（应昭回合
+    /// 开始授予他人，回合结束解除）。
+    pub fengyin_active: bool,
     /// 天符（U05 xianjian 长卿，规则 v188）：挂附来源（雷伤来源）。
     pub ctianfu_source: Option<u8>,
     /// 天符：挂附闪实体（离场区中该牌；死亡清理/结算弃置用）。
@@ -232,6 +235,7 @@ impl PlayerState {
             xuanning_mark: 0,
             shedu: 0,
             juyuan_storage: 0,
+            fengyin_active: false,
             ctianfu_source: None,
             ctianfu_card: None,
             gouhunluo_rounds: 0,

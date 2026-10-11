@@ -4189,6 +4189,9 @@ pub const BOSS_JUYUAN: &str = "巨源";
 /// 火属性；你免疫所有火属性伤害（登记差异：你的回合中其他角色防具无
 /// 效面挂点分散，未建模）。
 pub const BOSS_ZHAOHUO: &str = "招祸";
+/// 封冻（Boss 应昭，规则 v228）：锁定技——你的回合开始时，所有其他角
+/// 色获得「封印」（本回合无法使用手牌，回合结束解除）。
+pub const BOSS_FENGDONG: &str = "封冻";
 /// 红莲（Boss 毕方，规则 v228）：锁定技两面——你的红色牌不计入手牌上
 /// 限（弃牌阶段红色牌不可弃）；回合开始随机获得牌堆 0–3 张红色牌（确
 /// 定性近似：顺序取牌堆前缀红牌至多 3），并随机对 3–0 名其他角色各造
@@ -4285,6 +4288,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 相柳四技全齐（v221 妖兽；v222 兽九；v223 毒妒+邪酬——蛇毒标记
     // 以 PlayerState.shedu 承载）
     ("相柳", Faction::Qun, &[BOSS_YAOSHOU, BOSS_JIUSHOU, BOSS_DUQU, BOSS_ECHOU], 25, Gender::Male),
+    // 应昭（上游 boss_yingzhao hp25）：封冻单技本批；巡游[随机获得 hej
+    // 牌+装备自动使用]/死缚(+switch) 未落随下批
+    ("应昭", Faction::Qun, &[BOSS_YAOSHOU, BOSS_FENGDONG], 25, Gender::Male),
     // 朱厌四技全齐（v224 兵先；v225 虚失；v226 巨源——体力上限+5 由
     // maxHp30 表意[登记同穷奇]；记录=PlayerState.juyuan_storage）
     ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
@@ -5616,6 +5622,15 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             // 权限型两面：激活门控（commit_damage 尾第八并列臂）与判定
             // 红色火伤（kernel Judge begin 段内联，回合计数至多 3）均经
             // skill_by_name 查询；装配即未激活
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_FENGDONG,
+            // 权限型两面：回合开始他人获封印（Judge begin 段内联，神智
+            // 锚）与回合结束全清（Phase::End 臂）经 skill_by_name 查询；
+            // PlayCard 手牌校验（engine 校验段）禁用封印者手牌
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

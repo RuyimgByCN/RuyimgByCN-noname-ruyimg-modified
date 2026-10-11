@@ -1127,6 +1127,22 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
+                    // 存活角色获「封印」（本回合无法使用手牌；回合结束解
+                    // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
+                    // 同口径）
+                    if let Some(fddef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_FENGDONG)
+                    {
+                        if ctx.core.has_skill(player, fddef) {
+                            for t in ctx.core.seat_order_from(player) {
+                                if t != player && ctx.core.player(t).alive {
+                                    ctx.core.player_mut(t).fengyin_active = true;
+                                }
+                            }
+                        }
+                    }
                     // 炎狱（Boss 毕方，规则 v229）：global phaseBegin——
                     // 其他角色的回合开始判定（确定性判定铁骑先例），红色 →
                     // 该角色受 1 点来自毕方的火伤；每回合至多 3 次（TurnState
@@ -1317,6 +1333,10 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.discard_phase_discarded = 0;
             }
             Phase::End => {
+                // 封冻解除（Boss 应昭，规则 v228）：回合结束全清封印
+                for p in ctx.core.players.iter_mut() {
+                    p.fengyin_active = false;
+                }
                 // 巨源（Boss 朱厌，规则 v226）：回合结束记录体力（上游
                 // phaseAfter storage=hp 同口径；跨回合持久）
                 if let Some(jdef) = ctx

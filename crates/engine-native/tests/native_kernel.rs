@@ -2277,6 +2277,51 @@ fn boss_shujing_cuidui_poison_cycle() {
 /// 红色 → 该角色受 1 点来自毕方的火伤；每回合至多 3 次（计数器回合更
 /// 替清零）。
 #[test]
+/// 应昭批首片（规则 v228）：封冻——应昭回合开始所有其他角色获封印
+/// （本回合无法使用手牌）；回合结束解除；装备区牌不受限。
+#[test]
+fn boss_yingzhao_fengdong_hand_ban() {
+    let mut e = Engine::new_boss_stage(49001, 4, 1, 3, 6, 4, 0);
+    let yingzhao_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 8) as u16; // BOSS_GENERALS[8] 应昭（表序：…梼杌/毕方/书精/相柳/朱厌/应昭）
+    e.debug_set_general_def(1, yingzhao_def);
+    e.debug_set_hp(1, 25);
+    let fdef = e.catalog().skill_by_name("封冻").expect("封冻入目录");
+    assert!(e.state_core().skills.contains_key(&(1, fdef)));
+
+    // 应昭回合开始：其他角色全获封印
+    advance_to_play(&mut e, 1);
+    assert!(e.state_core().player(0).fengyin_active, "0 号获封印");
+    assert!(e.state_core().player(2).fengyin_active, "2 号获封印");
+    assert!(e.state_core().player(3).fengyin_active, "3 号获封印");
+    assert!(!e.state_core().player(1).fengyin_active, "应昭自身不封印");
+
+    // ① 2 号（封印中）在非自己回合无法出牌——快进到 2 号自己的回合：
+    //    封印在应昭回合结束已解除 → 2 号可正常出牌
+    advance_to_play(&mut e, 2);
+    drain_choices(&mut e);
+    assert!(!e.state_core().player(2).fengyin_active, "回合结束解除");
+    e.debug_clear_hand(2);
+    let tao = e.debug_place(2, "tao");
+    e.debug_set_hp(2, 3);
+    let out = play(&mut e, tao, vec![]);
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "封印解除后 2 号可用手牌：{out:?}"
+    );
+
+    // ② 存档往返（v53）：fengyin_active 编码
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("v53 往返");
+    assert_eq!(
+        r.state_core().player(2).fengyin_active,
+        e.state_core().player(2).fengyin_active,
+        "封印状态往返一致"
+    );
+    assert_zone_conservation(&r);
+}
+
 fn boss_bifang_yanyu_judge_fire_max_three() {
     let mut e = Engine::new_boss_stage(48001, 4, 1, 3, 6, 4, 0);
     let bifang_def = (e.catalog().general_count()

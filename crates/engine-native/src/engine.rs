@@ -2293,6 +2293,14 @@ fn apply_command(
             if targets.iter().any(|t| *t as usize >= core.players.len()) {
                 return Err(RejectReason::IllegalTargets);
             }
+            // 封印（Boss 应昭封冻，规则 v228）：被封印者本回合无法使用手
+            // 牌（上游 fengyin mod cardEnabled2 position=h 同口径；装备区
+            // 牌不受限）
+            if core.player(core.turn.current).fengyin_active
+                && core.player(core.turn.current).hand.contains(&card)
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
             // 冥顽（Boss 梼杌，规则 v219）：回合内锁定集已激活时，出牌
             // 目标只能是自己或已伤害过的角色（上游 boss_minwan mod
             // playerEnabled 同口径）
@@ -3986,6 +3994,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u32(&mut h, p.xuanning_mark);
         push_u8(&mut h, p.shedu);
         push_u32(&mut h, p.juyuan_storage as u32);
+        push_u8(&mut h, p.fengyin_active as u8);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);
