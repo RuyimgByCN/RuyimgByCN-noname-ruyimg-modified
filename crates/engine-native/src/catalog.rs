@@ -449,6 +449,10 @@ pub enum CardKind {
     Qixingzhen,
     /// 鸟翔阵（U05 zhenfa，规则 v200/T19a）：逐合法目标响应闪或受 1 伤。
     Niaoxiangzhen,
+    /// 长蛇阵（U05 zhenfa，规则 v201/T19b）：队列摸 1 或换座成队列。
+    Changshezhen,
+    /// 破阵诀（U05 zhenfa，规则 v201/T19b）：随机座位重排。
+    Pozhenjue,
 }
 
 /// 花色（判定用）。
@@ -559,7 +563,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 137] = [
+    pub const ALL: [CardKind; 139] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -697,6 +701,8 @@ impl CardKind {
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
+        CardKind::Changshezhen,
+        CardKind::Pozhenjue,
     ];
 
     /// 扩展包数据的牌种键（宿主 ABI：每个牌种恰好一个键，只增不改）。
@@ -840,6 +846,8 @@ impl CardKind {
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",
             CardKind::Niaoxiangzhen => "niaoxiangzhen",
+            CardKind::Changshezhen => "changshezhen",
+            CardKind::Pozhenjue => "pozhenjue",
         }
     }
 
