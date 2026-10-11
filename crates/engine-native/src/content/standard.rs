@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 219;
+pub const STANDARD_RULESET_VERSION: u64 = 220;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4035,6 +4035,13 @@ pub const BOSS_MINWAN: &str = "冥顽";
 /// 活；回合开始（判定阶段开始锚点）视为使用【南蛮入侵】，回合结束视为
 /// 使用【万箭齐发】（目标=全部其他存活角色）。
 pub const BOSS_LUANCHANG: &str = "乱常";
+/// 催毒（Boss 书精，规则 v220）：锁定技——你对敌方角色造成伤害后，若
+/// 其没有「中毒」，你令其获得「中毒」（登记：敌方以受伤者≠持技者近似，
+/// 木神勾芒联动不在场跳过）。
+pub const BOSS_CUIDUI: &str = "催毒";
+/// 中毒（Boss 书精授技，规则 v220）：锁定技——回合开始（判定阶段开始
+/// 锚点）判定，非红桃受 1 点无来源伤害，非黑桃则失去此技。
+pub const BOSS_ZHONGDU: &str = "中毒";
 /// 马超「铁骑」：锁定式判定——使用杀指定目标后进行判定，若判定牌为红色，
 /// 该角色不能使用闪响应此杀。
 pub const TIE_JI: &str = "铁骑";
@@ -4109,6 +4116,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 梼杌四技全齐（v217 拟态；v218 乱常；v219 冥顽——目标锁定集以
     // TurnState.minwan_targets 回合级承载）
     ("梼杌", Faction::Qun, &[BOSS_XIONGSHOU, BOSS_NITAI, BOSS_LUANCHANG, BOSS_MINWAN], 25, Gender::Male),
+    // 书精（上游 boss_shujing hp2 女神）：催毒+中毒全技（中毒为运行时
+    // 授技面，表列仅催毒——授技入实例同 catalog skill 空间）
+    ("书精", Faction::Shu, &[BOSS_CUIDUI], 2, Gender::Female),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -5313,6 +5323,23 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             //（commit_card_used 尾）、PlayCard 目标校验（engine 校验段）
             // 均经 skill_by_name 查询；锁定集=TurnState.minwan_targets
             //（回合级，更替自然清零）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_CUIDUI,
+            // 权限型单面：伤害后授毒（commit_damage 尾经 skill_by_name
+            // 查询）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHONGDU,
+            // 中毒（运行时授技）：回合开始判定（commit_phase Judge begin
+            // 段内联 draw_judge_card，铁骑式确定性判定）——非红桃伤 1、
+            // 非黑桃失去此技（实例移除）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

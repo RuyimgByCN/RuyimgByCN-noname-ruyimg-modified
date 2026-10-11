@@ -441,6 +441,41 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 催毒（Boss 书精，规则 v220）：来源持催毒且目标非己、无中毒 →
+    // 目标授中毒实例（运行时授技=skills.insert；木神勾芒不在目录跳过
+    // 联动摸牌；上游 boss_cuidui damageEnd addSkill 同口径）
+    if let Some(cdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_CUIDUI)
+    {
+        let zdef = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ZHONGDU);
+        if let (Some(src), Some(zd)) = (d.source, zdef) {
+            if src != d.target
+                && ctx.core.has_skill(src, cdef)
+                && ctx.core.player(src).alive
+                && ctx.core.player(d.target).alive
+                && !ctx.core.has_skill_any_state(d.target, zd)
+            {
+                ctx.core.skills.insert(
+                    (d.target, zd),
+                    crate::state::SkillInstance {
+                        owner: d.target,
+                        enabled: true,
+                        once_used: false,
+                        expires_end_of_turn: false,
+                        rounds: 0,
+                    },
+                );
+                ctx.log(LogEvent::SkillToggled {
+                    player: d.target,
+                    skill: ctx.catalog.skill_name(zd),
+                    enabled: true,
+                });
+            }
+        }
+    }
     // 乱常门控（Boss 梼杌，规则 v218）：体力首次≤一半激活（隐贼/延妒/
     // 积财同款 enable 直写）
     if let Some(ldef) = ctx
@@ -905,6 +940,38 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     ctx.core.turn.sheying_used = false;
                     // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
                     ctx.core.turn.zhangmu_used = false;
+                    // 中毒（Boss 书精授技，规则 v220）：回合开始判定——
+                    // 非红桃受 1 点无来源伤害；非黑桃失去此技（上游
+                    // boss_zhongdu phaseZhunbeiBegin judge 同口径；确定性
+                    // 判定=铁骑内联先例）
+                    if let Some(zd) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_ZHONGDU)
+                    {
+                        if ctx.core.has_skill(player, zd) {
+                            let judged = ctx.draw_judge_card();
+                            let suit = ctx.catalog.cards[judged as usize].suit;
+                            ctx.to_discard(judged);
+                            match suit {
+                                crate::catalog::Suit::Heart => {}
+                                crate::catalog::Suit::Spade => {
+                                    ctx.log(LogEvent::SkillTriggered {
+                                        skill: "中毒",
+                                        owner: player,
+                                    });
+                                }
+                                _ => {
+                                    // 方片/梅花：伤 1 后失去此技
+                                    ctx.emit(EventData::Damage(crate::machine::damage_data(
+                                        None,
+                                        player,
+                                        1,
+                                    )));
+                                    ctx.core.skills.remove(&(player, zd));
+                                }
+                            }
+                        }
+                    }
                     ctx.core.turn.yingfeng_chain = false;
                     ctx.core.turn.luanjian_card = None;
                     ctx.core.turn.mujiaren_used = false;
