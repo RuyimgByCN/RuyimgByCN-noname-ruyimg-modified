@@ -37,7 +37,10 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// 无生产迁移数据；取舍见规则基准）。
 /// v4（2026-10-07，E03 翻面原语）：`PlayerState` 尾部追加
 /// `face_down: u8`。v3 字节同样被版本门禁拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 41;
+/// v42（2026-10-11，T11 掠影 v194）：`MachineSnapshot::Sha` 尾部追加
+/// `lueying_declined: u8`（放弃标记，阻止同杀重入再问）。v41 字节被版本
+/// 门禁拒绝（存档仅存在于测试与内部工具，无生产迁移数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 42;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -812,6 +815,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             xiandan_bonus,
             asking_lueying,
             lueying_victim,
+            lueying_declined,
         } => {
             w.u8(0);
             w.u32(*card);
@@ -883,6 +887,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                     w.u32(*c);
                 }
             }
+            w.boolean(*lueying_declined);
         }
         MachineSnapshot::Zhangba {
             owner,
@@ -1566,6 +1571,7 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 1 => Some(r.u32()?),
                 _ => return Err(ArchiveError::UnknownCardKind(255)),
             };
+            let lueying_declined = r.boolean()?;
             MachineSnapshot::Sha {
                 card,
                 source,
@@ -1597,6 +1603,7 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 xiandan_bonus,
                 asking_lueying,
                 lueying_victim,
+                lueying_declined,
             }
         }
         1 => {

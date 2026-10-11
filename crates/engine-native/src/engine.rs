@@ -3749,7 +3749,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
 fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
     use crate::snap::MachineSnapshot as M;
     match s {
-        M::Sha { card, source, target, nature, asked, armor_judged, dodges_used, tieji_red, liuli_done, liuli_stage, liuli_card, hujia_queue, hujia_holder, jiu_bonus, asking_qilin, qilin_horse, asking_hanbing, asking_fengxueren, asking_guanshi, guanshi_cards, asking_qinglong, asking_cixiong, cixiong_done, extra_targets, hanbing_pending, asking_xiandan, xiandan_done, xiandan_bonus, asking_lueying, lueying_victim } => {
+        M::Sha { card, source, target, nature, asked, armor_judged, dodges_used, tieji_red, liuli_done, liuli_stage, liuli_card, hujia_queue, hujia_holder, jiu_bonus, asking_qilin, qilin_horse, asking_hanbing, asking_fengxueren, asking_guanshi, guanshi_cards, asking_qinglong, asking_cixiong, cixiong_done, extra_targets, hanbing_pending, asking_xiandan, xiandan_done, xiandan_bonus, asking_lueying, lueying_victim, lueying_declined } => {
             push_u8(h, 1);
             push_u32(h, *card);
             push_u8(h, *source);
@@ -3826,7 +3826,7 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
                 None => push_u8(h, 255),
                 Some(t) => push_u8(h, t as u8),
             }
-
+            push_u8(h, *lueying_declined as u8);
         }
         M::Zhangba { owner, cards, stage } => {
             push_u8(h, 61);
@@ -4552,7 +4552,7 @@ mod tests {
                         0, 0, 1, DamageNature::Normal, asked, armor_judged, 0, None,
                         false, 0, None, None, None, false, false, None, false, false,
                         false, Vec::new(), false, false, false, Vec::new(), 0, false, false, false,
-                        false, None,
+                        false, None, false,
                     )),
                 }],
                 ..Resolution::new(64)

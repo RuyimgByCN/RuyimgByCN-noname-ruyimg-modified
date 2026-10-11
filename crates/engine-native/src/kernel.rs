@@ -1051,6 +1051,7 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 xiandan_bonus: false,
                 asking_lueying: false,
                 lueying_victim: None,
+                lueying_declined: false,
                 extra_targets: extra,
                 hujia_queue: None,
                 hujia_holder: None,
@@ -2230,6 +2231,9 @@ pub struct ShaResolveMachine {
     asking_lueying: bool,
     /// 掠影：目标已选定的受害者（等来源随机弃其一张）。
     lueying_victim: Option<PlayerId>,
+    /// 掠影：本杀已询问且被放弃（v194——放弃不消耗 usable，但同一杀
+    /// 不得重复询问；阻止 step 重入钩子再问）。
+    lueying_declined: bool,
 }
 
 impl ShaResolveMachine {
@@ -2265,6 +2269,7 @@ impl ShaResolveMachine {
         xiandan_bonus: bool,
         asking_lueying: bool,
         lueying_victim: Option<PlayerId>,
+        lueying_declined: bool,
     ) -> Self {
         Self {
             card,
@@ -2297,6 +2302,7 @@ impl ShaResolveMachine {
             xiandan_bonus,
             asking_lueying,
             lueying_victim,
+            lueying_declined,
         }
     }
 
@@ -2537,6 +2543,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             xiandan_bonus: self.xiandan_bonus,
             asking_lueying: self.asking_lueying,
             lueying_victim: self.lueying_victim.map(|c| c as u32),
+            lueying_declined: self.lueying_declined,
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -2575,32 +2582,98 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 再杀 reboot 同款——否则霰弹应答会被门控应答区误读）。
             self.asked = false;
         }
-        // 掠影（U05 xianjian 慕长兰，规则 v154）：目标选人应答——来源随
-        // 机弃受害者 he 一张，随后复位 asked 重开闪询问。
+        // 掠影（规则 v154；v194 两相协议）：相以应答形状区分——确认相
+        // 只会收到 Confirm（确认）或空（放弃），选人相只会收到 Player。
+        // Confirm=消耗 usable、获得目标 he 随机一张，仍有其他有牌者则
+        // 转入目标选人相；空=放弃（不消耗 usable，重开闪询问）；Player=
+        // 受害者选定，来源随机弃其 he 一张后复位 asked。
         if self.asking_lueying {
-            self.asking_lueying = false;
-            if let Some(ChoiceOption::Player(v)) = ctx.answer().first().copied() {
-                self.lueying_victim = Some(v);
-                let pool: Vec<crate::ids::CardId> = {
-                    let p = ctx.core.player(v);
-                    p.hand
-                        .iter()
-                        .copied()
-                        .chain(p.equips.iter().copied())
-                        .collect()
-                };
-                if !pool.is_empty() {
-                    let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
-                    let dc = pool[k];
-                    ctx.take_owned_card(v, dc);
-                    ctx.to_discard(dc);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: v,
-                        cards: vec![dc],
-                    });
+            match ctx.answer().first().copied() {
+                Some(ChoiceOption::Player(v)) => {
+                    self.asking_lueying = false;
+                    self.lueying_victim = Some(v);
+                    let pool: Vec<crate::ids::CardId> = {
+                        let p = ctx.core.player(v);
+                        p.hand
+                            .iter()
+                            .copied()
+                            .chain(p.equips.iter().copied())
+                            .collect()
+                    };
+                    if !pool.is_empty() {
+                        let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                        let dc = pool[k];
+                        ctx.take_owned_card(v, dc);
+                        ctx.to_discard(dc);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: v,
+                            cards: vec![dc],
+                        });
+                    }
+                    self.asked = false;
+                }
+                Some(ChoiceOption::Confirm) => {
+                    ctx.core.turn.lueying_used = true;
+                    // 获得目标 he 随机一张
+                    let pool: Vec<crate::ids::CardId> = {
+                        let p = ctx.core.player(self.target);
+                        p.hand
+                            .iter()
+                            .copied()
+                            .chain(p.equips.iter().copied())
+                            .collect()
+                    };
+                    if !pool.is_empty() {
+                        let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                        let card = pool[k];
+                        ctx.take_owned_card(self.target, card);
+                        ctx.core.player_mut(self.source).hand.push(card);
+                        ctx.log(LogEvent::CardsGiven {
+                            from: self.target,
+                            to: self.source,
+                            cards: vec![card],
+                        });
+                    }
+                    // 仍有其他有牌者→目标选人相；否则本技结束
+                    let others: Vec<PlayerId> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.source
+                                && *p != self.target
+                                && (!ctx.core.player(*p).hand.is_empty()
+                                    || !ctx.core.player(*p).equips.is_empty())
+                        })
+                        .collect();
+                    if others.is_empty() {
+                        self.asking_lueying = false;
+                        self.asked = false;
+                    } else {
+                        let options: Vec<ChoiceOption> = others
+                            .into_iter()
+                            .map(ChoiceOption::Player)
+                            .collect();
+                        return Flow::WaitChoice {
+                            observer: self.target,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectPlayers,
+                                prompt: "lueying_choose_victim",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
+                }
+                _ => {
+                    // 放弃：不消耗 usable（同上游 usable 口径），标记本杀
+                    // 已问过（阻止 step 重入再问），重开闪询问
+                    self.asking_lueying = false;
+                    self.lueying_declined = true;
+                    self.asked = false;
                 }
             }
-            self.asked = false;
         }
         if self.hanbing_pending > 0 {
             let pick = ctx.answer().first().and_then(|o| match o {
@@ -3082,9 +3155,12 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     }
                 }
             }
-            // 掠影（U05 xianjian 慕长兰，规则 v154）：shaBegin usable:1
-            // ——获得目标 he 随机一张；若另有其他有牌者→目标选人、来源
-            // 随机弃其一张（TurnState.lueying_used 每回合限一次）。
+            // 掠影（U05 xianjian 慕长兰，规则 v154；v194 对齐上游）：
+            // shaBegin usable:1，非强制——filter 要求目标 he 有牌**且**
+            // 另有一名其他有牌角色（缺第三者则整个技能不可发动，连获得
+            // 也不触发）。确认后获得目标 he 随机一张；仍有其他有牌者→
+            // 目标选人、来源随机弃其一张（lueying_used 确认后消耗，放弃
+            // 不计数，同上游 usable 口径）。
             {
                 let has_lueying = ctx
                     .catalog
@@ -3093,62 +3169,38 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .unwrap_or(false);
                 let t_he = !ctx.core.player(self.target).hand.is_empty()
                     || !ctx.core.player(self.target).equips.is_empty();
+                let others: Vec<PlayerId> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != self.source
+                            && *p != self.target
+                            && (!ctx.core.player(*p).hand.is_empty()
+                                || !ctx.core.player(*p).equips.is_empty())
+                    })
+                    .collect();
                 if has_lueying
                     && !ctx.core.turn.lueying_used
+                    && !self.lueying_declined
                     && ctx.core.player(self.source).alive
                     && ctx.core.player(self.target).alive
                     && t_he
+                    && !others.is_empty()
                 {
-                    ctx.core.turn.lueying_used = true;
-                    // 获得目标 he 随机一张
-                    let pool: Vec<crate::ids::CardId> = {
-                        let p = ctx.core.player(self.target);
-                        p.hand
-                            .iter()
-                            .copied()
-                            .chain(p.equips.iter().copied())
-                            .collect()
+                    // 确认相：复用 asking_lueying 挂起（恢复侧按应答形状
+                    // 区分相——Confirm=确认发动，Player=受害者已选定）
+                    self.asking_lueying = true;
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::Confirm,
+                            prompt: "lueying_confirm",
+                            options: vec![ChoiceOption::Confirm],
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
                     };
-                    if !pool.is_empty() {
-                        let k = ctx.core.rng.gen_range(pool.len() as u32) as usize;
-                        let card = pool[k];
-                        ctx.take_owned_card(self.target, card);
-                        ctx.core.player_mut(self.source).hand.push(card);
-                        ctx.log(LogEvent::CardsGiven {
-                            from: self.target,
-                            to: self.source,
-                            cards: vec![card],
-                        });
-                    }
-                    // 另有其他有牌者→目标选人（后续来源随机弃其一张）
-                    let others: Vec<PlayerId> = ctx
-                        .core
-                        .alive_players()
-                        .filter(|p| {
-                            *p != self.source
-                                && *p != self.target
-                                && (!ctx.core.player(*p).hand.is_empty()
-                                    || !ctx.core.player(*p).equips.is_empty())
-                        })
-                        .collect();
-                    if !others.is_empty() {
-                        self.asking_lueying = true;
-                        let options: Vec<ChoiceOption> = others
-                            .into_iter()
-                            .map(ChoiceOption::Player)
-                            .collect();
-                        return Flow::WaitChoice {
-                            observer: self.target,
-                            spec: ChoiceSpec {
-                                kind: ChoiceKind::SelectPlayers,
-                                prompt: "lueying_choose_victim",
-                                options,
-                                min: 1,
-                                max: 1,
-                                allow_cancel: false,
-                            },
-                        };
-                    }
                 }
             }
             let has_xiandan = ctx

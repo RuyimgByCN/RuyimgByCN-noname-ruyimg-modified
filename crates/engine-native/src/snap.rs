@@ -248,6 +248,8 @@ pub enum MachineSnapshot {
         /// 掠影（U05 xianjian 慕长兰，规则 v154）：目标选人挂起/受害者。
         asking_lueying: bool,
         lueying_victim: Option<u32>,
+        /// 掠影：本杀已询问且被放弃（v194，阻止重入再问）。
+        lueying_declined: bool,
     },
     /// 丈八蛇矛（批③-b 第七把）：两张手牌当杀（牌池 + 阶段）。
     Zhangba {
@@ -3675,6 +3677,7 @@ impl MachineSnapshot {
                 xiandan_bonus,
                 asking_lueying,
                 lueying_victim,
+                lueying_declined,
             } => Ok(Box::new(crate::kernel::ShaResolveMachine::new(
                 *card,
                 *source,
@@ -3706,6 +3709,7 @@ impl MachineSnapshot {
                 *xiandan_bonus,
                 *asking_lueying,
                 lueying_victim.map(|c| c as crate::ids::PlayerId),
+                *lueying_declined,
             ))),
             MachineSnapshot::DyingSave {
                 dying,

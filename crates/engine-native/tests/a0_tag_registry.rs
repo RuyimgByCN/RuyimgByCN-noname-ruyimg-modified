@@ -46,7 +46,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
             liuli_stage: 2, liuli_card: None, hujia_queue: Some(vec![2]), hujia_holder: Some(2),
             jiu_bonus: true,
             asking_xiandan: false, xiandan_done: false, xiandan_bonus: false,
-            asking_lueying: false, lueying_victim: None,
+            asking_lueying: false, lueying_victim: None, lueying_declined: false,
             asking_qilin: false,
             qilin_horse: None,
             asking_hanbing: false,

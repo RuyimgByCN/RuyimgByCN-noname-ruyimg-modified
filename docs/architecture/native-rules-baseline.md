@@ -1892,6 +1892,23 @@ golden 全绿）证明位移唯一来源是版本字段入 canonical_hash，jigu
 仅经 swd 牌种、标准场景不可达，逐场景命令与断言不变——证据见
 [T10 证据](../operations/evidence/2026-10-10-t10-jiguantong-v193/README.md)。
 
+**规则 v194（2026-10-11，T11 掠影对齐）**：撤销 v154 条目"登记差异：无"的
+掠影（lueying，慕长兰）漏登记——上游 `skill.js:1910` filter 要求目标 he
+有牌**且另有一名其他有牌角色**（缺第三者则整个技能不可发动，连获得也不
+触发），且为**非强制**（usable:1，确认后消耗，放弃不计数、同一杀不再
+问、本回合下一杀可再询问）。原生改为两相协议：确认门（observer=使用者，
+Confirm/空应答）→ 获得目标 he 随机一张 → 仍有其他有牌者则目标选人
+（原 victim 相不变）。机器 `ShaResolve` 尾部追加 `lueying_declined`（放
+弃标记，阻止 step 重入再问）——**存档格式 41→42**（v41 字节被版本门禁
+拒绝，无生产迁移数据）。版本 193→**194**；14 golden 重录：双版本回退
+探针（194/42→193/41 复跑 golden 全绿）证明位移唯一来源是两个版本字段，
+掠影分支仅经 xianjian 扩展牌种、标准场景不可达。回归：既有
+`muchanglan_lueying_gain_and_victim_discard` 加确认门步；新增
+`muchanglan_lueying_no_third_party_never_fires`（无第三者完全不发动）与
+`muchanglan_lueying_decline_keeps_usable_for_next_sha`（放弃不消耗、
+下一杀可再询问）——证据见
+[T11 证据](../operations/evidence/2026-10-11-t11-lueying-v194/README.md)。
+
 ## 当前声明与验证边界
 
 | 语义 | 当前行为/项目声明 | 验证边界 |
