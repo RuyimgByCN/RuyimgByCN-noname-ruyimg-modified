@@ -869,6 +869,7 @@ engine-api 并更新 ABI-MAX；其余登记元数据 + 文档化近似。
 | 0559 | 3D精选包（ddd）批次十五：赵昂【奋计】语义重写、Golden 与累积 npack | B (Codex overflow) | 2026-08-03 ✓ |
 | 0561 | xianding characters.json 引用修复（batch33 遗留，2 武将）：dc_sb_dengai（界邓艾）第二技能 3927470045→dcsbshijin=3506294264；dc_sb_dongcheng（董成）第二技能 2918478934→dcsbdouwei=2217274823，重打包并同步 extensions | E (Hermes) | 2026-08-03 ✓ |
 | 0562 | xianding characters.json 引用修复（batch34 遗留，2 武将）：v_caocao（曹操变体）第一技能 2513963246→dcduoyue=3729672764；wangshuang（王双）技能 2196883215→spzhuilie=3774269941，重打包并同步 extensions | E (Hermes) | 2026-08-03 ✓ |
+| 0779 | N/C0 名称符号表总量上限与拒装策略（`SYMBOL_TABLE_LIMIT=1e6`，装载器三入口超限拒装，不回收） | A (ZCode) | 2026-10-11 | 主稿 T6②；原生线 INDEX 尾号 0778 的下一号，[ADR 0779](docs/adr/0779-native-symbol-table-limit.md) |
 | 0558 | xianding characters.json 引用修复（batch32 遗留，2 武将）：dc_xujing（徐靖）第一技能 2518690530→dcshangyu=3428760598；yuanji（袁姬）第一技能 2441770008→dcfangdu=3648264331，重打包并同步 extensions | E (Hermes) | 2026-08-03 ✓ |
 
 

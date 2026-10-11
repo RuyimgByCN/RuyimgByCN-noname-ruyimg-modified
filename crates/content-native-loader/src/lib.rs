@@ -8,7 +8,8 @@
 //! engine-native 的全局表解析（`CardKind::from_key`、
 //! `HostBehavior::from_key`、`card_kind_host_skills`），装载器不含逐包代码。
 //! 坏包一律返回 [`BridgeError`]，不静默取默认值。名称与名单经
-//! `engine_native::content::names` 符号表分配，重复装载/启停不泄漏增长。
+//! `engine_native::content::names` 符号表分配，重复装载/启停不泄漏增长；
+//! 总量上限超限拒装（`BridgeError::SymbolTableLimit`，ADR 0779）。
 //!
 //! 择址说明（ADR 0777）：装载器需要 engine-native 的目录类型与
 //! serde_json 解析；engine-native 运行期只依赖 blake3（不引入 serde），
@@ -55,6 +56,8 @@ pub enum BridgeError {
     DuplicateSkill(String),
     /// cards.json 声明的引擎 API 版本与当前运行时不符。
     HostVersionMismatch { declared: u64, current: u32 },
+    /// 名称符号表已达总量上限（ADR 0779）：拒绝装载而非无界增长。
+    SymbolTableLimit { limit: usize },
 }
 
 impl std::fmt::Display for BridgeError {
@@ -77,6 +80,9 @@ impl std::fmt::Display for BridgeError {
                 f,
                 "包声明的引擎 API 版本 {declared} 与运行时 {current} 不符"
             ),
+            BridgeError::SymbolTableLimit { limit } => {
+                write!(f, "名称符号表已达总量上限 {limit}，拒绝装载（ADR 0779）")
+            }
         }
     }
 }
@@ -103,6 +109,18 @@ pub struct BridgedGenerals {
 
 fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
     BridgeError::InvalidField { field, reason: reason.into() }
+}
+
+/// 符号表总量上限门（ADR 0779）：三个生产入口（bridge_pack/
+/// bridge_generals/bridge_pile）装载前检查，超限一律拒装。表项不回收，
+/// 唯一名称数是单调量——入口检查即足以在重复安装/损坏包流下 fail-fast；
+/// 单个包自身可一次 intern 逼近上限（受包文件大小界定，登记为已知边界）。
+fn ensure_symbol_capacity() -> Result<(), BridgeError> {
+    let limit = engine_native::content::names::SYMBOL_TABLE_LIMIT;
+    if names::interned_count() >= limit {
+        return Err(BridgeError::SymbolTableLimit { limit });
+    }
+    Ok(())
 }
 
 fn parse_json(json: &str) -> Result<Value, BridgeError> {
@@ -286,6 +304,7 @@ fn pack_meta(parsed: &Value) -> Result<PackMeta, BridgeError> {
 /// 声明 `range` 的牌按通用武器建模（牌种记为 `Weapon`），`kind` 须为
 /// 武器栏牌种。
 pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
+    ensure_symbol_capacity()?;
     let parsed = parse_json(json)?;
     ensure_host_api_compatible(&parsed)?;
     let meta = pack_meta(&parsed)?;
@@ -389,6 +408,7 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
 /// 武将装载（角色包管线）：generals 数组 → `ExtensionGeneral` + 命中宿主
 /// 行为的技能声明。势力、性别、体力上限缺失或非法均报错。
 pub fn bridge_generals(json: &str) -> Result<BridgedGenerals, BridgeError> {
+    ensure_symbol_capacity()?;
     let parsed = parse_json(json)?;
     ensure_host_api_compatible(&parsed)?;
     bridge_generals_inner(&parsed, true)
@@ -455,6 +475,7 @@ fn bridge_generals_inner(
 /// 在构建期校验。`counts` 键经 `BTreeMap` 排序——生成卡牌序（目录编号、
 /// 发牌序的一部分）与解析器实现无关，仅由数据决定。
 pub fn bridge_pile(json: &str) -> Result<PileSpec, BridgeError> {
+    ensure_symbol_capacity()?;
     let parsed = parse_json(json)?;
     let source = req_str(&parsed, "source", "pile.json source")?.to_string();
     let total = req_int(&parsed, "total", "pile.json total", 1..=u64::from(u32::MAX))? as u32;

@@ -134,5 +134,6 @@
 - [0776 E01–E06 扩展运行时基础与验收](0776-native-e01-e06-extension-runtime.md) —— 内存注册、临时卡牌列表、基础名冲突 panic 和元数据检查；真实对局/保存恢复及路线图 E04–E06 仍待接入
 - [0777 C0 生产侧装载器择址 content-native-loader](0777-native-c0-native-loader.md) —— 桥接实现从 8 份测试 bridge 收敛为宿主层 crate；名称走符号表 intern（内存界验收）；择址与依赖方向决策。`PackSpec` 输入与名单一次性分配已由 0778 取代
 - [0778 原生扩展包数据键表与自描述装载（C0 续）](0778-native-c0-pack-data-keys.md) —— 引擎提供牌种/宿主行为/开局钩子数据键与牌种伴随技能表（A0 测试锁定）；cards.json 自带包元数据、射程、装备技，装载器无逐包参数；严格校验；武将技能名单走符号表。其余 6 份 bridge 迁移待做
+- [0779 名称符号表总量上限与拒装策略（不回收）](0779-native-symbol-table-limit.md) —— `SYMBOL_TABLE_LIMIT=1e6`，装载器三入口超限拒装（`SymbolTableLimit`）；回收因 `'static` 贯穿目录/存档而不取；单包内逼近上限登记为已知边界
 - [0766 N12 旧线驱动器收尾批——两次进局与旧线自身缺陷定界](0766-native-n12-driver-closeout-oldline-defects.md)
 - [0767 N12 旧线浏览器单局完局记录与统计边界](0767-native-n12-driver-complete.md) —— 浏览器完局历史记录；UI 操作/终态数量不等于 n09 同口径统计
