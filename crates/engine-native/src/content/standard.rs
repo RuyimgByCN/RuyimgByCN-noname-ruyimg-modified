@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 244;
+pub const STANDARD_RULESET_VERSION: u64 = 245;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,17 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 庆祝（Boss 明星，规则 v245）：锁定技两面——跳过弃牌阶段；自己回合
+/// 内出牌阶段不能用【杀】，直到获得急叮（上游 mod cardEnabled 同口径）。
+pub const BOSS_QINGZHU: &str = "庆祝";
+/// 夹击（Boss 明星，规则 v245）：锁定技——准备阶段相邻（环上下家）敌方
+/// 中有坐骑（+1/-1 马槽）者 → 坐骑全弃。
+pub const BOSS_JIAZU: &str = "夹击";
+/// 急叮（Boss 明星，规则 v245）：锁定技——友方（同侧非己）受敌方来源伤
+/// 害后，对来源用虚拟雷杀（机器直发不经 PlayCard 校验；蓐收加成尾面登
+/// 记差异未建模）。**授予面**：由星囚（蓐收）addSkills 授予——不随明星
+/// 条目装配（庆祝禁杀窗口依赖初始缺席）。
+pub const BOSS_JIDING: &str = "急叮";
 /// 绝红（Boss 共工，规则 v244）：锁定技——准备阶段敌方全体逐个：有牌
 /// 者，有装备 → 装备全弃（撤技能+入弃堆）；无装备 → 随机弃一张手牌
 /// （随机→手牌首张确定性近似登记先例族）。
@@ -4756,6 +4767,10 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 共工（v244 绝红；神裔共用 v233；boss_xuanlin3 玄麟3=已处置关卡面；
     // 上游 names 姜|共工、shen→群目录近似）
     ("共工", Faction::Qun, &[BOSS_SHENYI, BOSS_JUEHONG], 5, Gender::Male),
+    // 明星（v245 庆祝+夹击随条目；急叮=星囚授予技不随条目装配[上游
+    // boss_jiding 由蓐收 boss_xingquiaaddSkills 授予——庆祝禁杀窗口依赖
+    // 此初始缺席]；上游 female、shen→群目录近似）
+    ("明星", Faction::Qun, &[BOSS_QINGZHU, BOSS_JIAZU], 3, Gender::Female),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6240,6 +6255,29 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_JUEHONG,
             // 查询型单面：准备阶段臂（Judge begin 段——封冻同位；装备全
             // 弃撤技能+入弃堆，随机弃→首张确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_QINGZHU,
+            // 查询型两面：跳弃牌（Discard 臂——贪欲同位）+杀禁用（engine
+            // 校验臂——获急叮解除）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_JIAZU,
+            // 查询型单面：准备阶段臂（相邻敌方坐骑全弃）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_JIDING,
+            // 查询型单面：damageEnd 臂（友方受伤→对敌方来源虚拟雷杀，
+            // LeiSha kind 载体；蓐收加成尾面登记差异）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

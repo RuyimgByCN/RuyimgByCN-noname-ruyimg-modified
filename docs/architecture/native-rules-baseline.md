@@ -2609,6 +2609,27 @@ names 嬴|挚）。神恩光环臂为通用查询，新携带者装配即激活�
 无牌跳过/守恒/往返）——证据见
 [T11 绝红证据](../operations/evidence/2026-10-11-t11-boss-juehong-v244/README.md)。
 
+**规则 v245（2026-10-11，T11 明星片：庆祝/夹击/急叮三技＋明星条目）**：
+**庆祝**两面：跳弃牌——**弃牌机器生成口真实闸门**（Phase{Discard,begin}
+dispatch：tanyu/qingzhu → None；**勘误**：v215 贪欲臂的 return 只跳收尾
+计数，机器生成未被拦——贪欲回归靠测试 drain 掩盖，本批补闸后贪欲双测
+仍绿）+杀禁用（engine 校验臂 qz && !jd → 拒）。**夹击**：准备阶段臂——
+环上/下家异侧存活者坐骑（HorsePlus/HorseMinus 槽）全弃。**急叮**：
+damageEnd 段臂（灵渠同位）——友方受敌方来源伤害 → 对来源虚拟雷杀
+（`LeiSha` kind 载体，nature=Thunder 免改 use_virtual_card 签名）。
+`BOSS_GENERALS` 尾追加**明星**（def 索引 22/hp3/female/`[庆祝, 夹击]`——
+**急叮不随条目装配**：星囚授予技，庆祝禁杀窗口依赖初始缺席）。**登记差
+异**：急叮蓐收加成尾面未建模；势力 shen→群目录近似。FROZEN 名单尾加
+「庆祝」「夹击」「急叮」（98/99/100 名）。存档不变 v57。版本 244→
+**245**。版本回退探针（245→244 复跑 golden 全绿）证明 14 golden 位移唯
+一来源是版本字段，全量重录。回归
+`boss_mingxingzhu_qingzhu_jiazu_jiding` 五段（杀禁用/授予面+虚拟雷杀/
+夹击/跳弃牌+解除/往返）——证据见
+[T11 明星证据](../operations/evidence/2026-10-11-t11-boss-mingxingzhu-v245/README.md)。
+**坑位**：min=0 可放弃询问不 drain（星夏老坑再犯两处）；技能 def 误当武
+将 def 装配 fellow（垃圾武将致 WrongPhase 假象）；跳弃牌真实闸门在机器
+生成口（见勘误）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

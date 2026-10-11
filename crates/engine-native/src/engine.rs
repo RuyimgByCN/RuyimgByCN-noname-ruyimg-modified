@@ -2551,6 +2551,27 @@ fn apply_command(
                     {
                         return Err(RejectReason::IllegalTargets);
                     }
+                    // 庆祝（Boss 明星，规则 v245）：锁定——自己回合内出牌
+                    // 阶段不能用【杀】，直到获得急叮（上游 mod cardEnabled
+                    // `!hasSkill(boss_jiding)` 同口径）
+                    {
+                        let qz = catalog
+                            .skill_by_name(crate::content::standard::BOSS_QINGZHU)
+                            .map(|def| {
+                                core.skills
+                                    .get(&(core.turn.current, def))
+                                    .map(|i| i.enabled)
+                                    .unwrap_or(false)
+                            })
+                            .unwrap_or(false);
+                        let jd = catalog
+                            .skill_by_name(crate::content::standard::BOSS_JIDING)
+                            .map(|def| core.has_skill(core.turn.current, def))
+                            .unwrap_or(false);
+                        if qz && !jd {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                    }
                     // 诸葛连弩（批③-b 第四把）：装备时出杀不限次数（与
                     // 咆哮同口径的锁定豁免，按装备牌种判断）。
                     let has_zhuge = core.player(player_id).equips.iter().any(|c| {

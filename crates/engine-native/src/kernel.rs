@@ -435,6 +435,36 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             p.lingqu_count = p.lingqu_count.saturating_add(1);
         }
     }
+    // 急叮（Boss 明星，规则 v245）：global damageEnd——友方（同侧非己）
+    // 受敌方来源伤害后，对来源用虚拟雷杀（LeiSha kind 载体——机器直发不
+    // 经 PlayCard 校验；蓐收加成尾面登记差异未建模）
+    if let Some(jddef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_JIDING)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == jddef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| {
+                ctx.core.player(*o).alive
+                    && *o != d.target
+                    && ctx.core.is_boss_side(*o) == ctx.core.is_boss_side(d.target)
+            })
+            .collect();
+        if let Some(holder) = holders.first() {
+            if let Some(src) = d.source {
+                if src != *holder
+                    && ctx.core.player(src).alive
+                    && ctx.core.is_boss_side(src) != ctx.core.is_boss_side(*holder)
+                {
+                    ctx.use_virtual_card(*holder, CardKind::LeiSha, vec![src]);
+                }
+            }
+        }
+    }
     // 延妒门控（Boss 穷奇，规则 v213）：体力首次≤一半激活（隐贼同款
     // enable 直写；穷奇持延妒——与隐贼块并列， holder 独立判定）
     if let Some(dudef) = ctx
@@ -1226,6 +1256,45 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 夹击（Boss 明星，规则 v245）：准备阶段——相邻（环
+                    // 上/下家）敌方中有坐骑（+1/-1 马槽）者 → 坐骑全弃
+                    //（撤技能+入弃堆）
+                    if let Some(jzdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_JIAZU)
+                    {
+                        if ctx.core.has_skill(player, jzdef) {
+                            for t in [ctx.core.ring_prev(player), ctx.core.ring_next(player)] {
+                                if t == player || !ctx.core.player(t).alive {
+                                    continue;
+                                }
+                                if ctx.core.is_boss_side(t)
+                                    == ctx.core.is_boss_side(player)
+                                {
+                                    continue;
+                                }
+                                let mounts: Vec<crate::ids::CardId> = ctx
+                                    .core
+                                    .player(t)
+                                    .equips
+                                    .iter()
+                                    .copied()
+                                    .filter(|c| {
+                                        matches!(
+                                            ctx.catalog.card_kind(*c).equip_slot(),
+                                            Some(crate::catalog::EquipSlot::HorsePlus)
+                                                | Some(crate::catalog::EquipSlot::HorseMinus)
+                                        )
+                                    })
+                                    .collect();
+                                for c in mounts {
+                                    ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                                    revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                                    ctx.to_discard(c);
+                                }
+                            }
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
@@ -1550,6 +1619,18 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 if let Some(def) = ctx
                     .catalog
                     .skill_by_name(crate::content::standard::BOSS_TANYU)
+                {
+                    if ctx.core.has_skill(player, def) {
+                        ctx.core.turn.discard_phase_discarded = 0;
+                        return;
+                    }
+                }
+                // 庆祝（Boss 明星，规则 v245）：锁定——跳过你的弃牌阶段
+                //（上游 boss_qingzhu phaseDiscardBefore trigger.cancel 同
+                // 口径；与急叮解锁无关，恒跳）
+                if let Some(def) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_QINGZHU)
                 {
                     if ctx.core.has_skill(player, def) {
                         ctx.core.turn.discard_phase_discarded = 0;
@@ -3258,15 +3339,34 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
             }
         }
         EventData::Phase { player, phase: Phase::Discard, begin: true } => {
-            // 克己（吕蒙）：本回合未使用杀则无需弃牌（手牌上限视为无限）
-            let keji = ctx
-                .catalog
-                .skill_by_name(crate::content::standard::KE_JI)
-                .map(|d| ctx.core.has_skill(player, d))
-                .unwrap_or(false);
-            if keji && !ctx.core.turn.sha_used_play_phase {
+            // 贪欲（v215）/庆祝（v245）：跳弃牌族——弃牌机器不生成（上游
+            // phaseDiscardBefore trigger.cancel 同口径；此前贪欲面被测试
+            // drain 掩盖，本臂补真实闸门）
+            let skip_discard = [
+                crate::content::standard::BOSS_TANYU,
+                crate::content::standard::BOSS_QINGZHU,
+            ]
+            .iter()
+            .any(|name| {
+                ctx.catalog
+                    .skill_by_name(name)
+                    .map(|d| ctx.core.has_skill(player, d))
+                    .unwrap_or(false)
+            });
+            if skip_discard {
+                ctx.core.turn.discard_phase_discarded = 0;
                 None
-            } else {
+            }
+            // 克己（吕蒙）：本回合未使用杀则无需弃牌（手牌上限视为无限）
+            else {
+                let keji = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::KE_JI)
+                    .map(|d| ctx.core.has_skill(player, d))
+                    .unwrap_or(false);
+                if keji && !ctx.core.turn.sha_used_play_phase {
+                    None
+                } else {
                 let mut limit = ctx.core.hand_limit(ctx.catalog, player);
                 // 机甲（U05 ow D.Va，规则 v141）：机甲血>0 时手牌上限 +4
                 //（上游 mod maxHandcard storage.jijia 同口径）
@@ -3377,6 +3477,7 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 }
             }
         }
+}
         EventData::Death { player, killer } => Some(Box::new(DeathMachine { player, killer })),
         _ => None,
     }
