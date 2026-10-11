@@ -404,6 +404,18 @@ pub enum Role {
     Traitor,
 }
 
+/// 斗地主开局变体（T11 模式变体，规则 v205）：仅影响建局初始发牌数，
+/// 不入 `GameMode` 编码（开局手牌数已进状态与哈希，存档无需变体位）。
+/// 上游 `doudizhu_mode` 配置的 online 变体（选将后 infoHp 加成+地骑虚拟
+/// 装备）不建模，登记差异。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DoudizhuVariant {
+    /// 标准：各 4 张。
+    Standard,
+    /// binglin：地主 5 张、农民 4 张（上游 `next.num` 覆盖同口径）。
+    Binglin,
+}
+
 /// 对局模式。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GameMode {

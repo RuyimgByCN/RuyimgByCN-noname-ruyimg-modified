@@ -170,7 +170,7 @@ impl Engine {
     /// 开一局 `seats` 人原型对局（存活数 ≤ 1 终局），每人 4 点体力、摸 4 张牌；
     /// 种子决定牌库顺序。
     pub fn new(seed: u64, seats: usize) -> Self {
-        Self::new_with_mode(seed, seats, GameMode::Prototype)
+        Self::new_with_mode(seed, seats, GameMode::Prototype, crate::state::DoudizhuVariant::Standard)
     }
 
     /// 开一局 `seats` 人身份局（4–8 人）。座位 0 为主公（体力上限 +1），
@@ -209,17 +209,17 @@ impl Engine {
         }
         roles.push(crate::state::Role::Traitor);
         debug_assert_eq!(roles.len(), seats);
-        Self::new_with_mode(seed, seats, GameMode::Identity { roles })
+        Self::new_with_mode(seed, seats, GameMode::Identity { roles }, crate::state::DoudizhuVariant::Standard)
     }
 
     /// KOF 引擎层（P2/N08 模式入口批四）：2 人局，携带会话将池/比分/局数。
     pub fn new_kof(seed: u64, pools: [Vec<u16>; 2], wins: [u32; 2], games: u32) -> Self {
-        Self::new_with_mode(seed, 2, GameMode::Kof { pools, wins, games })
+        Self::new_with_mode(seed, 2, GameMode::Kof { pools, wins, games }, crate::state::DoudizhuVariant::Standard)
     }
 
     /// Boss（P2/N08 模式入口批三-a）：boss 1 名对挑战者，chongzheng=重整阈值（0=无复活）。
     pub fn new_boss(seed: u64, seats: usize, boss: PlayerId, chongzheng: u8) -> Self {
-        Self::new_with_mode(seed, seats, GameMode::Boss { boss, chongzheng, fellows: Vec::new() })
+        Self::new_with_mode(seed, seats, GameMode::Boss { boss, chongzheng, fellows: Vec::new() }, crate::state::DoudizhuVariant::Standard)
     }
 
     /// Boss 助战中途入队（批三-b，规则 v84）：座位表队尾追加新玩家
@@ -244,7 +244,19 @@ impl Engine {
 
     /// 斗地主（P2/N08 模式入口批二）：地主 1 名，其余为农民。
     pub fn new_doudizhu(seed: u64, seats: usize, lord: PlayerId) -> Self {
-        Self::new_with_mode(seed, seats, GameMode::Doudizhu { lord })
+        Self::new_with_mode(seed, seats, GameMode::Doudizhu { lord }, crate::state::DoudizhuVariant::Standard)
+    }
+
+    /// 斗地主 binglin 变体（T11 模式变体，规则 v205）：开局地主 5 张/
+    /// 农民 4 张（上游 gameDraw num 覆盖同口径；replacePile 换牌堆登记
+    /// 不建模，用标准牌堆）。变体仅影响初始发牌，不入模式编码。
+    pub fn new_doudizhu_binglin(seed: u64, seats: usize, lord: PlayerId) -> Self {
+        Self::new_with_mode(
+            seed,
+            seats,
+            GameMode::Doudizhu { lord },
+            crate::state::DoudizhuVariant::Binglin,
+        )
     }
 
     /// 对决 2v2 基线（P2/N08 模式入口批一）：`teams` 两队互斥并集=全部座位。
@@ -254,12 +266,18 @@ impl Engine {
             seed,
             seats,
             GameMode::Versus { teams: teams.to_vec() },
+            crate::state::DoudizhuVariant::Standard,
         )
     }
 
-    fn new_with_mode(seed: u64, seats: usize, mode: GameMode) -> Self {
+    fn new_with_mode(
+        seed: u64,
+        seats: usize,
+        mode: GameMode,
+        opening: crate::state::DoudizhuVariant,
+    ) -> Self {
         let catalog: SharedCatalog = std::sync::Arc::new(content::standard::standard_catalog());
-        Self::new_with_catalog(seed, seats, mode, catalog)
+        Self::new_with_catalog(seed, seats, mode, catalog, opening)
     }
 
     /// 带扩展目录的建局（E03 内容锁接线）：目录由调用方按启用扩展
@@ -269,6 +287,7 @@ impl Engine {
         seats: usize,
         mut mode: GameMode,
         catalog: SharedCatalog,
+        opening: crate::state::DoudizhuVariant,
     ) -> Self {
         let mut core = GameStateCore {
             revision: 0,
@@ -337,6 +356,22 @@ impl Engine {
             p.hp = p.max_hp as i32;
         }
         core.mode = mode;
+        // 开局摸牌数表（v205 斗地主变体）：binglin 地主 5/农民 4（上游
+        // gameDraw num 覆盖）；其余模式各 4 张。先于 core move 计算。
+        let opening_cards: Vec<u32> = (0..seats as PlayerId)
+            .map(|p| match &core.mode {
+                GameMode::Doudizhu { lord }
+                    if opening == crate::state::DoudizhuVariant::Binglin =>
+                {
+                    if p == *lord {
+                        5
+                    } else {
+                        4
+                    }
+                }
+                _ => 4,
+            })
+            .collect();
         // 牌库 = 目录牌序，开局用规则随机流洗牌。
         core.deck = (0..catalog.cards.len() as CardId).collect();
         core.rng.shuffle(&mut core.deck);
@@ -344,8 +379,8 @@ impl Engine {
             core,
             resolution: Resolution::new(DEFAULT_BUDGET),
         };
-        for p in 0..seats as PlayerId {
-            for _ in 0..4 {
+        for (p, cards) in (0..seats as PlayerId).zip(opening_cards) {
+            for _ in 0..cards {
                 let card = state.core.deck.pop().expect("deck has cards");
                 state.core.player_mut(p).hand.push(card);
             }
@@ -483,7 +518,13 @@ impl Engine {
     ) -> Result<Self, crate::content::extension::ExtensionError> {
         let catalog = content::standard::standard_catalog_with_extensions(packs)?;
         let catalog: SharedCatalog = std::sync::Arc::new(catalog);
-        let mut e = Self::new_with_catalog(seed, seats, GameMode::Prototype, catalog);
+        let mut e = Self::new_with_catalog(
+            seed,
+            seats,
+            GameMode::Prototype,
+            catalog,
+            crate::state::DoudizhuVariant::Standard,
+        );
         // G1 wuxing 初始化钩子：每名角色随机五行属性 + 牌堆按 1/3 比例
         // 随机获得属性（规则随机性使用引擎 RNG，保持可重放）。
         if packs.iter().any(|p| p.enabled && p.init_hook == crate::content::extension::InitHook::WuxingNatures) {
