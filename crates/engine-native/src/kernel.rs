@@ -61,7 +61,35 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
         ctx.log(LogEvent::DamagePrevented { target: d.target });
         return;
     }
+    // 拟态（Boss 梼杌，规则 v217）：锁定——防止你于回合内受到的伤害
+    //（上游 boss_nitai_in damageBegin4 trigger.cancel 同口径：当前回合
+    // =持有者）
+    if let Some(ndef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_NITAI)
+    {
+        if ctx.core.has_skill(d.target, ndef)
+            && ctx.core.turn.current == d.target
+        {
+            ctx.log(LogEvent::DamagePrevented { target: d.target });
+            return;
+        }
+    }
     let mut amount = d.amount;
+    // 拟态（Boss 梼杌，规则 v217）：锁定——你于回合外受到的火属性伤害
+    // +1（上游 boss_nitai_out damageBegin1 num++ 同口径）
+    if d.nature == crate::event::DamageNature::Fire {
+        if let Some(ndef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_NITAI)
+        {
+            if ctx.core.has_skill(d.target, ndef)
+                && ctx.core.turn.current != d.target
+            {
+                amount += 1;
+            }
+        }
+    }
     // 赤龙牙（U05 swd 第四批，规则 v88）：锁定——来源装备赤龙牙时
     // 火属性伤害 +1（上游 damageBegin num++；非铁索传导照常）
     if d.nature == crate::event::DamageNature::Fire {

@@ -2179,6 +2179,47 @@ fn boss_qiongqi_yandu_gain_at_end_phase() {
     let _ = before;
 }
 
+/// Boss 内容第五批首片（规则 v217）：梼杌拟态两面——①回合内受到的
+/// 伤害防止（.hp 不变）；②回合外受到的火属性伤害 +1。冥顽/乱常(+switch)
+/// 未落（下批）。
+#[test]
+fn boss_taowu_nitai_in_shield_out_fire() {
+    let mut e = Engine::new_boss_stage(34001, 4, 1, 3, 6, 4, 0);
+    let taowu_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 4) as u16; // BOSS_GENERALS[4] 梼杌
+    e.debug_set_general_def(1, taowu_def);
+    e.debug_set_hp(1, 25);
+    let ndef = e.catalog().skill_by_name("拟态").expect("拟态入目录");
+    assert!(e.state_core().skills.contains_key(&(1, ndef)));
+
+    // ① 回合内免伤：梼杌自己回合被打 → hp 不变
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    let sha1 = e.debug_place(1, "sha");
+    let _ = sha1;
+    // 直接伤害（走 commit_damage 全链）
+    e.debug_deal_damage(Some(0), 1, 3, DamageNature::Normal);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(1), 25, "拟态：回合内受伤防止");
+
+    // ② 回合外火伤 +1：推进到 0 号回合（回合外）后火伤
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    let out2 = e.debug_deal_damage(Some(0), 1, 1, DamageNature::Fire);
+    drain_choices(&mut e);
+    assert!(
+        matches!(out2, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "火伤应结算：{out2:?}"
+    );
+    assert_eq!(e.debug_hp(1), 23, "拟态：回合外火伤 +1（25-2）");
+    // 对照：回合外普通伤害不加成（25-1）
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(1), 22, "回合外普通伤害不加成");
+}
+
 fn boss_qiongqi_futai_recover_wounded() {
     let mut e = Engine::new_boss_stage(29001, 4, 1, 3, 6, 4, 0);
     let qiongqi_def = (e.catalog().general_count()
