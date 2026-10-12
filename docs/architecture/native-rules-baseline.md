@@ -2901,6 +2901,22 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 证据见
 [mode_boss 收口证据](../operations/evidence/2026-10-11-t11-modeboss-closeout/README.md)。
 
+**规则 v258（2026-10-11，T11 群雄乱入董卓片：酒池＋董卓条目）**：
+**酒池**（查询型 Noop）：PlayCard kind 改写臂（engine 转化链追加，武圣/
+奇袭/探囊同族）——持有者黑桃手牌 → `kind = Jiu`（酒效果承载：下杀+1/
+濒死回血/jiu_used 每回合一次）。`BOSS_GENERALS` 尾追加**董卓**（def 索
+引 36/hp20/`[酒池, 强征, 爆敛]`——强征/爆敛 v255 已落零改动混入）。
+**登记差异**：与奇袭上游同持择技→native 链奇袭优先（无同持条目，登记）；
+势力 shen→群目录近似。FROZEN 名单尾加「酒池」（127 名）。存档不变 v59。
+版本 257→**258**。版本回退探针（258→257 复跑 golden 全绿）证明 14 golden
+位移唯一来源是版本字段，全量重录。回归
+`boss_dongzhuo_jiuchi_viewas` 四段（黑桃当酒+jiu_used/第二坛拒/强征爆敛
+混入/往返）——证据见
+[T11 董卓证据](../operations/evidence/2026-10-11-t11-boss-dongzhuo-v258/README.md)。
+**坑位**：转化链守卫 `if kind != Sha && kind != Le` 排除 plain Sha——酒池
+测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
+截）；条目追加位移牛头索引（36 修正）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

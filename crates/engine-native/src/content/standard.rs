@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 257;
+pub const STANDARD_RULESET_VERSION: u64 = 258;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4599,6 +4599,10 @@ pub const BOSS_JINGJUE: &str = "精觉";
 /// 内其他角色失去最后一手牌（弃后空手）→ 对其造成 1 点伤害（chooseBool
 /// AI→恒发动确定性近似；lose/equip/gain 全事件族→CardsDiscarded 面登记）。
 pub const BOSS_JUECE: &str = "绝策";
+/// 酒池（Boss 董卓，规则 v258，群雄乱入）：锁定技——黑桃手牌可当【酒】
+/// 使用（viewAs 转化：奇袭/武圣同族 PlayCard kind 改写臂；与奇袭[黑→拆]
+/// 上游同持时由玩家择技——native if/else 链奇袭优先，登记）。
+pub const BOSS_JIUCHI: &str = "酒池";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -4887,6 +4891,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 马面（v257 炼狱+鬼计共用 v256+反馈[标准 FAN_KUI 已承载]+绝策 v258；
     // shen→群目录近似）
     ("马面", Faction::Qun, &[BOSS_GUIJI, FAN_KUI, BOSS_LIANYU, BOSS_JUECE], 6, Gender::Male),
+    // 董卓（v258 酒池+强征/爆敛混入已落[v255]；shen→群目录近似）
+    ("董卓", Faction::Qun, &[BOSS_JIUCHI, BOSS_QIANGZHENG, BOSS_BAOLIAN], 20, Gender::Male),
     // 牛头（v255 爆敛共用+枭首；蛮甲[extra-equip 藤甲挂点分散]+niepan
     // [boss 本地死亡复活面]混入未落登记；shen→群目录近似）
     ("牛头", Faction::Qun, &[BOSS_BAOLIAN, BOSS_XIAOSHOU], 7, Gender::Male),
@@ -6589,6 +6595,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_JUECE,
             // 查询型单面：CardsDiscarded 臂——自己回合内其他角色失去最后
             // 一手牌（弃后空手）→ 1 伤害（chooseBool AI→恒发动近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_JIUCHI,
+            // 查询型单面：PlayCard kind 改写臂（黑桃手牌→酒，viewAs 转化
+            // 武圣/奇袭同族）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

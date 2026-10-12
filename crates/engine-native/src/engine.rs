@@ -2384,6 +2384,20 @@ fn apply_command(
                 {
                     kind = CardKind::Snatch;
                 }
+                // 酒池（Boss 董卓，规则 v258，群雄乱入）：黑桃手牌当【酒】
+                //（viewAs 转化，武圣/奇袭同族；与奇袭上游同持择技——native
+                // 链奇袭优先，登记）
+                else if catalog
+                    .skill_by_name(crate::content::standard::BOSS_JIUCHI)
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && matches!(
+                        catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Spade
+                    )
+                {
+                    kind = CardKind::Jiu;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至
