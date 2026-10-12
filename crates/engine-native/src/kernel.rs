@@ -1437,6 +1437,15 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 魔道（Boss 夜叉，规则 v253）：准备阶段摸 2 张牌
+                    if let Some(mddef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_MODAO)
+                    {
+                        if ctx.core.has_skill(player, mddef) {
+                            ctx.draw_cards(player, 2);
+                        }
+                    }
                     // 猛态（Boss 年兽，规则 v248）：准备阶段置双旗标
                     //（上游 boss_mengtai_begin storage 置 true 同口径；
                     // 摸牌/出牌阶段开始时清位）
@@ -1833,6 +1842,31 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 // 猛态：出牌阶段已发生（跳过路径不清位——上游
                 // phaseUseBegin 同口径）
                 ctx.core.turn.mengtai_use_pending = false;
+                // 魔剑（Boss 夜叉，规则 v253）：出牌阶段开始视为对全部
+                // 敌方使用【万箭齐发】（虚拟牌机器直发——异侧存活全目标；
+                // 上游 canUse 过滤同口径）
+                if let Some(mjdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_MOJIAN)
+                {
+                    if ctx.core.has_skill(player, mjdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        let targets: Vec<PlayerId> = (0..seats)
+                            .filter(|&t| {
+                                ctx.core.player(t).alive
+                                    && ctx.core.is_boss_side(t)
+                                        != ctx.core.is_boss_side(player)
+                            })
+                            .collect();
+                        if !targets.is_empty() {
+                            ctx.use_virtual_card(
+                                player,
+                                CardKind::ArcheryAttack,
+                                targets,
+                            );
+                        }
+                    }
+                }
             }
             Phase::Discard => {
                 // 虚失（Boss 朱厌，规则 v225）：出牌阶段结束自翻面（上游

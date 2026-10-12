@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 252;
+pub const STANDARD_RULESET_VERSION: u64 = 253;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,12 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 魔道（Boss 夜叉，规则 v253）：锁定技——准备阶段摸 2 张牌。
+pub const BOSS_MODAO: &str = "魔道";
+/// 魔剑（Boss 夜叉，规则 v253）：锁定技——出牌阶段开始视为对全部敌方
+/// 使用【万箭齐发】（虚拟牌，机器直发不经 PlayCard 校验；上游 useCard
+/// canUse 过滤同口径=异侧存活）。
+pub const BOSS_MOJIAN: &str = "魔剑";
 /// 胆术（Boss 夜叉，规则 v252）：锁定技——失去手牌后（非当前回合且已
 /// 受伤）判定红色回 1（CardsDiscarded 面；gain/addJudge/equip 等其余卡
 /// 牌移动面登记差异）。
@@ -4828,6 +4834,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("守翼年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_SHOUYI, BOSS_NBIANSHEN], 12, Gender::Male),
     // 精觉年兽（v252 精觉[继承胆术]+形态轮换；年瑞/猛态共用 v248；shen→群目录近似）
     ("精觉年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_JINGJUE, BOSS_NBIANSHEN], 12, Gender::Male),
+    // 夜叉（v253 魔道+魔剑+胆术复用 v252；bazhen=标准装备八卦阵由 Armor
+    // 判定机承载不入条目；shen→群目录近似）
+    ("夜叉", Faction::Qun, &[BOSS_MODAO, BOSS_MOJIAN, BOSS_DANSHU], 11, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6422,6 +6431,21 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
         SkillDef {
             name: BOSS_JINGJUE,
             // 查询型单面：继承胆术（同内容共用 commit 臂按名双查）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_MODAO,
+            // 查询型单面：Judge begin 臂自摸 2（藏目/年瑞同位）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_MOJIAN,
+            // 查询型单面：Play begin 臂虚拟万箭（乱常 End 臂同款
+            // use_virtual_card；异侧存活全目标）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
