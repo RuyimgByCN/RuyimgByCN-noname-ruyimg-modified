@@ -1867,6 +1867,30 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                 }
+                // 御兽（Boss 罗刹，规则 v254）：出牌阶段开始视为对全部敌
+                // 方使用【南蛮入侵】（魔剑同款虚拟南蛮）
+                if let Some(ysdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_YUSHOU)
+                {
+                    if ctx.core.has_skill(player, ysdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        let targets: Vec<PlayerId> = (0..seats)
+                            .filter(|&t| {
+                                ctx.core.player(t).alive
+                                    && ctx.core.is_boss_side(t)
+                                        != ctx.core.is_boss_side(player)
+                            })
+                            .collect();
+                        if !targets.is_empty() {
+                            ctx.use_virtual_card(
+                                player,
+                                CardKind::SavageAttack,
+                                targets,
+                            );
+                        }
+                    }
+                }
             }
             Phase::Discard => {
                 // 虚失（Boss 朱厌，规则 v225）：出牌阶段结束自翻面（上游
@@ -2298,6 +2322,49 @@ fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
             ctx.recover(player, 1, None);
         }
         break; // 胆术/精觉同内容不叠加
+    }
+    // 魔炎（Boss 罗刹，规则 v254）：非当前回合失去牌后判定红色 → 对座
+    // 位序首个其他存活角色造成 2 点火焰伤害（目标自选→确定性近似登记；
+    // loseEnd 全牌损失面→CardsDiscarded 面登记差异）
+    if let Some(mydef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_MOYANY)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == mydef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| {
+                ctx.core.player(*o).alive && ctx.core.turn.current != *o
+            })
+            .collect();
+        if let Some(holder) = holders.first() {
+            let judged = ctx.draw_judge_card();
+            let red = matches!(
+                ctx.catalog.cards[judged as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            );
+            ctx.to_discard(judged);
+            if red {
+                let seats = ctx.core.players.len() as PlayerId;
+                if let Some(t) = (0..seats).find(|&t| {
+                    t != *holder
+                        && ctx.core.player(t).alive
+                        && ctx.core.is_boss_side(t)
+                            != ctx.core.is_boss_side(*holder)
+                }) {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(*holder),
+                        t,
+                        2,
+                        crate::event::DamageNature::Fire,
+                        None,
+                    )));
+                }
+            }
+        }
     }
 }
 

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 253;
+pub const STANDARD_RULESET_VERSION: u64 = 254;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4557,6 +4557,13 @@ pub const BOSS_MODAO: &str = "魔道";
 /// 使用【万箭齐发】（虚拟牌，机器直发不经 PlayCard 校验；上游 useCard
 /// canUse 过滤同口径=异侧存活）。
 pub const BOSS_MOJIAN: &str = "魔剑";
+/// 御兽（Boss 罗刹，规则 v254）：锁定技——出牌阶段开始视为对全部敌方
+/// 使用【南蛮入侵】（虚拟牌机器直发；异侧存活全目标）。
+pub const BOSS_YUSHOU: &str = "御兽";
+/// 魔炎（Boss 罗刹，规则 v254）：锁定技——非当前回合失去牌后判定红色 →
+/// 对一名其他角色造成 2 点火焰伤害（目标自选→座位序首个其他存活确定性
+/// 近似登记；loseEnd 全牌损失面→CardsDiscarded 面登记）。
+pub const BOSS_MOYANY: &str = "魔炎";
 /// 胆术（Boss 夜叉，规则 v252）：锁定技——失去手牌后（非当前回合且已
 /// 受伤）判定红色回 1（CardsDiscarded 面；gain/addJudge/equip 等其余卡
 /// 牌移动面登记差异）。
@@ -4837,6 +4844,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 夜叉（v253 魔道+魔剑+胆术复用 v252；bazhen=标准装备八卦阵由 Armor
     // 判定机承载不入条目；shen→群目录近似）
     ("夜叉", Faction::Qun, &[BOSS_MODAO, BOSS_MOJIAN, BOSS_DANSHU], 11, Gender::Male),
+    // 罗刹（v254 魔道共用+御兽+魔炎；yizhong=一将包防御技未落登记；
+    // 上游 female、shen→群目录近似）
+    ("罗刹", Faction::Qun, &[BOSS_MODAO, BOSS_YUSHOU, BOSS_MOYANY], 12, Gender::Female),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6446,6 +6456,21 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_MOJIAN,
             // 查询型单面：Play begin 臂虚拟万箭（乱常 End 臂同款
             // use_virtual_card；异侧存活全目标）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_YUSHOU,
+            // 查询型单面：Play begin 臂虚拟南蛮（魔剑同款 use_virtual_card）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_MOYANY,
+            // 查询型单面：CardsDiscarded 臂（非当前回合判定红→2 火伤打
+            // 座位序首个其他存活——确定性近似登记）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
