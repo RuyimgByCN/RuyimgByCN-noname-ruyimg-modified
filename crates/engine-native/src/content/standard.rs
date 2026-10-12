@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 260;
+pub const STANDARD_RULESET_VERSION: u64 = 261;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -802,6 +802,84 @@ impl SkillMachine for QizuoMachine {
         let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
         let carrier = ctx.use_virtual_card(self.owner, kind, self.targets.clone());
         ctx.core.turn.qizuo_copy = Some(carrier);
+        Flow::Done
+    }
+}
+
+/// 枭雄（Boss 刘备，规则 v261，群雄乱入）：其他角色使用基本牌或锦囊牌
+/// 结算结束后，你获得该牌的副本。触发挂 CardUsed AfterTriggers 窗口
+///（上游 global useCardAfter 同口径；副本入手不 emit CardUsed=无递归）。
+struct XiaoxiongBehavior;
+
+/// 枭雄可复制的牌种：基本牌+锦囊（含延时——上游 get.type(card,"trick")
+/// 延时算 trick；装备排除）。
+fn xiaoxiong_copyable(kind: CardKind) -> bool {
+    matches!(
+        kind,
+        CardKind::Sha
+            | CardKind::Shan
+            | CardKind::Tao
+            | CardKind::Jiu
+            | CardKind::FireSha
+            | CardKind::LeiSha
+            | CardKind::ShouLiJian
+            | CardKind::SavageAttack
+            | CardKind::ArcheryAttack
+            | CardKind::Duel
+            | CardKind::Le
+            | CardKind::Bing
+            | CardKind::ShanDian
+            | CardKind::Dismantle
+            | CardKind::Snatch
+            | CardKind::Wuzhong
+            | CardKind::Taoyuan
+            | CardKind::Wugu
+            | CardKind::Jiedao
+    )
+}
+
+impl SkillBehavior for XiaoxiongBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        let crate::event::EventData::CardUsed(u) = event else {
+            return false;
+        };
+        if u.cancelled || u.player == owner {
+            return false;
+        }
+        let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+        xiaoxiong_copyable(kind)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(XiaoxiongMachine { owner })
+    }
+}
+
+/// 枭雄机器：无挂起一步机——牌堆底实体入手（上游 createCard 凭空造牌→
+/// 载体实体入手登记差异：花色点数随载体+消耗库顶实体；牌堆空静默）。
+#[derive(Clone)]
+struct XiaoxiongMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for XiaoxiongMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossXiaoxiong { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let Some(carrier) = ctx.core.deck.first().copied() else {
+            return Flow::Done;
+        };
+        ctx.core.deck.remove(0);
+        ctx.core.player_mut(self.owner).hand.push(carrier);
+        ctx.log(LogEvent::CardsGiven {
+            from: self.owner,
+            to: self.owner,
+            cards: vec![carrier],
+        });
         Flow::Done
     }
 }
@@ -4743,6 +4821,18 @@ pub const BOSS_WUXIN: &str = "无心";
 /// shangshix2（group）：结束阶段若你的体力大于 1，全体存活角色（含自己）
 /// 各失去 1 点体力。
 pub const BOSS_SHANGSHIX: &str = "伤逝";
+/// 枭雄（Boss 刘备，规则 v261，群雄乱入）：锁定技两半——①其他角色使用
+/// 基本牌或锦囊牌结算结束后，你获得该牌的副本（上游 createCard 凭空造牌
+/// →牌堆底实体入手登记差异：花色点数随载体+消耗库顶实体）；②子技
+/// xiaoxiong_damage（group）：其他角色的结束阶段，若其本回合未使用过牌
+///（上游 countUsed()==0→原生出牌阶段用牌计数==0 登记差异：响应/装备不
+/// 计），你对其造成 1 点伤害。
+pub const BOSS_XIAOXIONG: &str = "枭雄";
+/// 章武（Boss 刘备，规则 v261，群雄乱入）：锁定技——你受到伤害后（来源
+/// 存活且非自己），你弃置一张牌，来源选择：弃置一张牌，或受到 1 点伤害
+///（上游刘备 [1,∞] 自选+来源 chooseToDiscard/取消双 AI 态度面→双方恒弃
+/// 首张确定性近似登记；上游 num=刘备弃牌数可多张登记）。
+pub const BOSS_ZHANGWU: &str = "章武";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5041,6 +5131,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("郭嘉", Faction::Qun, &[TIAN_DU, BOSS_GUIMOU, BOSS_YUANCE, BOSS_QIZUO], 4, Gender::Male),
     // 张春华（v260 绝情+无心+伤逝；上游 group shen→群目录近似）
     ("张春华", Faction::Qun, &[JUE_QING, BOSS_WUXIN, BOSS_SHANGSHIX], 4, Gender::Female),
+    // 刘备（v261 枭雄+章武；上游 group shen→群目录近似）
+    ("刘备", Faction::Qun, &[BOSS_XIAOXIONG, BOSS_ZHANGWU], 8, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6803,6 +6895,28 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_SHANGSHIX,
             // 查询型双面：四 commit 臂补牌（CardsDiscarded/Damage/LoseHp/
             // Recover——手牌<4 补至 4）+ End begin 臂（hp>1 全体各失 1）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_XIAOXIONG,
+            // CardUsed AfterTriggers 触发：副本入手一步机（XiaoxiongBehavior
+            // 门=他人使用+基本/锦囊白名单；End begin 臂=子技未用牌伤害）
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(XiaoxiongBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHANGWU,
+            // 查询型单面：Damage commit 尾臂（damageEnd 族）——持有者弃 1
+            // 张+来源弃 1 张或受 1 伤害（双方恒弃首张确定性近似登记）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

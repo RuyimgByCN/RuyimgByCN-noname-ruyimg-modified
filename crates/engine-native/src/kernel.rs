@@ -456,6 +456,39 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     }
     // 伤逝（规则 v260）：体力变化（受伤扣血）后补牌
     shangshix_draw(ctx, d.target);
+    // 章武（Boss 刘备，规则 v261）：你受到伤害后（来源存活且非自己）——
+    // 你弃置一张牌，来源弃置一张牌，或来源受到 1 点伤害（上游 [1,∞] 自
+    // 选+来源 chooseToDiscard/取消双 AI 态度面→双方恒弃首张确定性近似
+    // 登记；num=刘备弃牌数可多张登记；弃牌面=手牌首张，两手皆空跳过）
+    if let Some(zwdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_ZHANGWU)
+    {
+        if ctx.core.has_skill(d.target, zwdef)
+            && ctx.core.player(d.target).alive
+        {
+            if let Some(src) = d.source {
+                if src != d.target && ctx.core.player(src).alive {
+                    let hold = ctx.core.player(d.target).hand.first().copied();
+                    if let Some(c) = hold {
+                        ctx.discard_from_hand(d.target, c);
+                    }
+                    let src_card = ctx.core.player(src).hand.first().copied();
+                    if let Some(c) = src_card {
+                        ctx.discard_from_hand(src, c);
+                    } else {
+                        // 来源无牌可弃 → 受 1 点伤害（上游取消分支同口径；
+                        // 来源亦空手牌时装备面不弃登记差异）
+                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+                            Some(d.target),
+                            src,
+                            1,
+                        )));
+                    }
+                }
+            }
+        }
+    }
     // 逐厄（Boss 穷奇，规则 v211）：global damageEnd——任何人受到伤害
     // 后（来源存活且非穷奇），穷奇与来源各摸一张（上游 boss_zhue
     // asyncDraw([player, source]) 同口径）
@@ -2206,6 +2239,34 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                 1,
                                 crate::event::DamageNature::Fire,
                                 None,
+                            )));
+                        }
+                    }
+                }
+                // 枭雄子技 xiaoxiong_damage（Boss 刘备，规则 v261）：其
+                // 他角色的结束阶段，若其本回合未使用过牌（上游 countUsed()
+                // ==0→出牌阶段用牌计数==0 登记差异：响应/装备不计）→ 对其
+                // 造成 1 点伤害
+                if let Some(xxdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_XIAOXIONG)
+                {
+                    let holders: Vec<PlayerId> = ctx
+                        .core
+                        .skills
+                        .iter()
+                        .filter(|((_, dd), i)| *dd == xxdef && i.enabled)
+                        .map(|((o, _), _)| *o)
+                        .collect();
+                    if let Some(holder) = holders.first() {
+                        if player != *holder
+                            && ctx.core.player(*holder).alive
+                            && ctx.core.turn.cards_used_play_phase == 0
+                        {
+                            ctx.emit(EventData::Damage(crate::machine::damage_data(
+                                Some(*holder),
+                                player,
+                                1,
                             )));
                         }
                     }

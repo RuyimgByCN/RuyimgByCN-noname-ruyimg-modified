@@ -554,6 +554,10 @@ pub enum MachineSnapshot {
     BossQizuo {
         owner: PlayerId,
     },
+    /// 枭雄（Boss 刘备，规则 v261）：无挂起一步机，快照仅身份。
+    BossXiaoxiong {
+        owner: PlayerId,
+    },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
     /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
@@ -1123,6 +1127,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossQizuo { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossXiaoxiong { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::Shedu { owner, .. } => {
@@ -2105,6 +2112,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossQizuo { .. } => {
             // 奇佐：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossXiaoxiong { .. } => {
+            // 枭雄：无挂起一步机，恢复无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {

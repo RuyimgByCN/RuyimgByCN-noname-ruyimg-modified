@@ -2917,6 +2917,30 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v261（2026-10-11，T11 群雄乱入刘备片：枭雄/章武＋刘备条目）**：
+**枭雄**（触发 CardUsed AfterTriggers+一步机 XiaoxiongMachine，奇佐同
+款）：他人使用基本/锦囊牌（含延时——上游 get.type(card,"trick") 延时算
+trick；装备排除）结算结束后获得该牌副本（牌堆底实体入手=上游
+createCard 凭空造牌→载体实体登记差异；副本入手不 emit CardUsed 无递
+归）。**子技 xiaoxiong_damage**：End begin 臂——回合角色未用牌（上游
+countUsed()==0→出牌阶段用牌计数==0 登记差异：响应/装备不计）→对其 1
+伤害（刘备自己回合不触发）。**章武**（查询型 Noop）：Damage commit 尾
+臂（damageEnd 族）——你受到伤害后来源存活且非自己→你弃手牌首张（若
+有）→来源弃手牌首张或受 1 反伤。`BOSS_GENERALS` 尾追加**刘备**（def
+索引 39/hp8/`[枭雄, 章武]`）。**登记差异**：枭雄载体实体（花色点数随
+载体+消耗库顶）vs 凭空造牌；子技未用牌口径=出牌阶段计数；章武 [1,∞]
+自选→恒 1 张、AI 态度面→恒弃手牌首张、来源装备面不弃；势力 shen→群
+目录近似。FROZEN 名单尾加「枭雄」「章武」（134–135 名）。存档不变
+v60。版本 260→**261**。版本回退探针（261→260 复跑 golden 全绿）证明
+14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_liubei_xiaoxiong_gain_and_damage`（入手/子技正负例/自用不触发/
+往返）+`boss_liubei_zhangwu_discard_or_damage`（双方弃 1/无手牌反伤/
+往返）——证据见
+[T11 刘备证据](../operations/evidence/2026-10-11-t11-boss-liubei-v261/README.md)。
+**坑位**：first=0 建局 advance_to_play(0) 不跨回合（子技正例须显式推至
+目标 End）；章武弃牌源用闪开杀响应询问（改桃）；章武弃与枭雄入手同事
+件相抵（断言按相抵写）。
+
 **规则 v260（2026-10-11，T11 群雄乱入张春华片：绝情/无心/伤逝＋张春华
 条目）**：**绝情**（查询型 Noop，一将包旧绝情）：commit_damage 入口直
 读臂（急冻前——上游 source damageBefore 层）——你造成的伤害改为目标失
