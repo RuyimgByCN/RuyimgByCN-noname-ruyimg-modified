@@ -260,6 +260,28 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     }
     // 回合伤害统计（U05 xianjian 明绣，规则 v160 灵火门控）：来源本回
     // 合已造成伤害 +实际量（护甲/机甲吸收后；上游 getStat("damage") 按
+    // 醉酒（Boss 白无常，规则 v255）：你使用的【杀】造成的伤害 +1（上
+    // 游 damageBegin1 sha+shaParent 同口径；火杀/雷杀同属 sha 族）
+    if d.card
+        .map(|c| {
+            matches!(
+                ctx.catalog.card_kind(c),
+                CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
+            )
+        })
+        .unwrap_or(false)
+    {
+        if let Some(zjdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ZUIJIU)
+        {
+            if let Some(src) = d.source {
+                if ctx.core.has_skill(src, zjdef) {
+                    amount += 1;
+                }
+            }
+        }
+    }
     // 灵渠（Boss 玄武，规则 v237）：受到的大于 1 点伤害视为 0 点（上游
     // boss_lingqu cancel damageBegin4 num>1 → num=0 同口径；置于增幅后
     // 统计前——终值>1 才归零；0 点伤害仍完成事件→受击摸 1/计数照常）
@@ -1936,6 +1958,64 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.discard_phase_discarded = 0;
             }
             Phase::End => {
+                // 爆敛（Boss 白无常/牛头，规则 v255）：结束阶段摸 2
+                if let Some(bldef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_BAOLIAN)
+                {
+                    if ctx.core.has_skill(player, bldef) {
+                        ctx.draw_cards(player, 2);
+                    }
+                }
+                // 强征（Boss 白无常，规则 v255）：结束阶段从每名其他有手
+                // 牌角色处随机获得一张手牌（随机→首张确定性近似登记）
+                if let Some(qzdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_QIANGZHENG)
+                {
+                    if ctx.core.has_skill(player, qzdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if t == player
+                                || !ctx.core.player(t).alive
+                                || ctx.core.player(t).hand.is_empty()
+                            {
+                                continue;
+                            }
+                            let c = ctx.core.player(t).hand[0];
+                            ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                            ctx.core.player_mut(player).hand.push(c);
+                            ctx.log(LogEvent::CardsGiven {
+                                from: t,
+                                to: player,
+                                cards: vec![c],
+                            });
+                        }
+                    }
+                }
+                // 枭首（Boss 牛头，规则 v255）：结束阶段对座位序首个
+                // hp≥self 的其他存活角色造成 3 点伤害（目标自选可放弃→
+                // 恒发动确定性近似登记）
+                if let Some(xsdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_XIAOSHOU)
+                {
+                    if ctx.core.has_skill(player, xsdef) {
+                        let hp_self = ctx.core.player(player).hp;
+                        let seats = ctx.core.players.len() as PlayerId;
+                        if let Some(t) = (0..seats).find(|&t| {
+                            t != player
+                                && ctx.core.player(t).alive
+                                && ctx.core.player(t).hp >= hp_self
+                        }) {
+                            ctx.emit(EventData::Damage(crate::machine::damage_data(
+                                Some(player),
+                                t,
+                                3,
+                            )));
+                        }
+                    }
+                }
                 // 猛态（Boss 年兽，规则 v248）：本回合未摸牌 → 结束阶段
                 // 摸 3（上游 boss_mengtai_end phaseJieshuBegin draw(3)
                 // 同口径）

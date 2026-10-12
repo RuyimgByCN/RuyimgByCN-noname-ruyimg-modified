@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 254;
+pub const STANDARD_RULESET_VERSION: u64 = 255;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4557,6 +4557,18 @@ pub const BOSS_MODAO: &str = "魔道";
 /// 使用【万箭齐发】（虚拟牌，机器直发不经 PlayCard 校验；上游 useCard
 /// canUse 过滤同口径=异侧存活）。
 pub const BOSS_MOJIAN: &str = "魔剑";
+/// 爆敛（Boss 白无常/牛头，规则 v255）：锁定技——结束阶段摸 2 张牌。
+pub const BOSS_BAOLIAN: &str = "爆敛";
+/// 强征（Boss 白无常，规则 v255）：锁定技——结束阶段从每名其他有手牌
+/// 角色处随机获得一张手牌（随机→手牌首张确定性近似登记）。
+pub const BOSS_QIANGZHENG: &str = "强征";
+/// 醉酒（Boss 白无常，规则 v255）：锁定技——你使用的【杀】造成的伤害
+/// +1（上游 damageBegin1 sha+shaParent 同口径）。
+pub const BOSS_ZUIJIU: &str = "醉酒";
+/// 枭首（Boss 牛头，规则 v255）：锁定技——结束阶段对一名体力值不小于你
+/// 的其他角色造成 3 点伤害（目标自选可放弃→恒发动座位序首个 hp≥self 其
+/// 他存活确定性近似登记）。
+pub const BOSS_XIAOSHOU: &str = "枭首";
 /// 御兽（Boss 罗刹，规则 v254）：锁定技——出牌阶段开始视为对全部敌方
 /// 使用【南蛮入侵】（虚拟牌机器直发；异侧存活全目标）。
 pub const BOSS_YUSHOU: &str = "御兽";
@@ -4847,6 +4859,12 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 罗刹（v254 魔道共用+御兽+魔炎；yizhong=一将包防御技未落登记；
     // 上游 female、shen→群目录近似）
     ("罗刹", Faction::Qun, &[BOSS_MODAO, BOSS_YUSHOU, BOSS_MOYANY], 12, Gender::Female),
+    // 白无常（v255 爆敛+强征+醉酒；juece 界绝策[refresh 包]混入未落登记；
+    // shen→群目录近似）
+    ("白无常", Faction::Qun, &[BOSS_BAOLIAN, BOSS_QIANGZHENG, BOSS_ZUIJIU], 8, Gender::Male),
+    // 牛头（v255 爆敛共用+枭首；蛮甲[extra-equip 藤甲挂点分散]+niepan
+    // [boss 本地死亡复活面]混入未落登记；shen→群目录近似）
+    ("牛头", Faction::Qun, &[BOSS_BAOLIAN, BOSS_XIAOSHOU], 7, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6471,6 +6489,36 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_MOYANY,
             // 查询型单面：CardsDiscarded 臂（非当前回合判定红→2 火伤打
             // 座位序首个其他存活——确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_BAOLIAN,
+            // 查询型单面：End 臂摸 2
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_QIANGZHENG,
+            // 查询型单面：End 臂——每名其他有手牌角色随机一张→首张确定
+            // 性近似登记，获得至手牌
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZUIJIU,
+            // 查询型单面：commit_damage 臂——source sha 伤害 +1
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_XIAOSHOU,
+            // 查询型单面：End 臂——座位序首个 hp≥self 其他存活受 3 伤害
+            // （目标自选可放弃→恒发动确定性近似登记）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

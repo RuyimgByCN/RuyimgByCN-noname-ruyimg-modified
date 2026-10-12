@@ -1,0 +1,42 @@
+# 2026-10-11 T11 阴间系收尾片：爆敛/强征/醉酒/枭首（规则 v255）＋白无常/牛头条目
+
+任务来源：[进度主稿 T11](../../../architecture/native-progress.md)（领取锁 `1c5a9a23`）。上游依据：`boss_baolian`（8982：phaseJieshuBegin draw(2)）；`boss_qiangzheng`（9369：phaseJieshuBegin——每名其他有手牌角色随机弃一张、白无常获得）；`boss_zuijiu`（8913：source damageBegin1 sha+shaParent → num++）；`boss_xiaoshou`（8989：phaseJieshuBegin direct——chooseTarget hp≥self 其他角色 → 3 伤害，可放弃）；条目 boss_baiwuchang（白无常/hp8/`[爆敛,强征,醉酒,juece]`）、boss_niutou（牛头/hp7/`[爆敛,niepan,蛮甲,枭首,bianshen3]`）。
+
+## 建模
+
+- **爆敛**（查询型 Noop，`BOSS_BAOLIAN`）：End 臂摸 2（白无常/牛头共用）。
+- **强征**（查询型 Noop，`BOSS_QIANGZHENG`）：End 臂——每名其他存活有手牌者 → 首张手牌收归持有者（随机→首张确定性近似登记；CardsGiven 日志）。
+- **醉酒**（查询型 Noop，`BOSS_ZUIJIU`）：commit_damage 增幅尾臂（灵渠归零臂前）——source sha 族（Sha/FireSha/LeiSha）伤害 +1。
+- **枭首**（查询型 Noop，`BOSS_XIAOSHOU`）：End 臂——座位序首个 hp≥self 的其他存活角色受 3 点伤害（目标自选可放弃→恒发动确定性近似登记）。
+- **条目**：白无常（def 索引 32/hp8/`[爆敛,强征,醉酒]`）、牛头（def 索引 33/hp7/`[爆敛,枭首]`）。
+
+## 登记差异
+
+- juece（界绝策，refresh 包：对本回合失去过牌的其他角色造成 1 伤害）混入未落登记（随 refresh/一将批）。
+- 蛮甲（extra-equip 藤甲自动穿戴+藤甲3 面挂点分散）未落登记。
+- niepan（boss.js 本地死亡复活面，4516）未落登记（死亡触发系）。
+- 黑无常（鬼计/太平/索命/吸行）与马面（鬼计/反馈[标准]/炼狱/绝策）随其技批。
+- 势力 shen→群目录近似（先例族）。
+
+## 坑位实录
+
+- 醉酒臂首插延妒门控前=**扣血之后**（无效）——移至灵渠归零臂前（增幅尾），语义序=醉酒加成后灵渠可归零（终值>1 归零与上游 damageBegin4 -11 最晚优先一致）。
+- 四 def 首插又非表尾（冻结表拦截）——移真表尾（锚=MOYANY 块后的 `    ];`）。
+- 回归两处口径修正：爆敛+强征同 End 依次结算（hand=5 非 2）；南蛮伤害持续（hp3=3 非 4）。
+
+## 验证
+
+| 项 | 结果 |
+|---|---|
+| 新回归 `boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou` | 五段：①醉酒杀 +1（8-2）②爆敛摸 2+强征收 0/2/3 各首张（hand=5）③满血自伤对照（醉酒只加杀伤）④枭首无 hp≥self 目标不触发⑤往返+守恒（枭首触发面由牛头条目后续批扩展，本批恒发动臂已入） |
+| 既有回归 | boss 全滤 51/51；机械审计：无多重注册/零属性清零；冻结表 10/10（def 移尾后） |
+| 版本递增探针 | 254→255 全 14 位移；回退 254 复跑 **全绿**（位移唯一来源=版本字段） |
+| 14 golden 重录 | 255 全量重录 2/2 绿（def 移尾后复跑仍绿） |
+| 全量 | **601 通过 / 0 失败 / 1 ignore**（2026-10-11 本机） |
+| Gate 1b | cargo 真实 exit 0 |
+| 版本 | 规则 254→**255**；存档不变 v59（无新字段/快照变体） |
+
+## 遗留登记（不变）
+
+- boss_stage 局 first=0 与虚失翻面臂自动推进交互；炎狱跨回合计数器精确口径。
+- 下批候选：牛头条目枭首触发面扩展回归（压敌方 hp≥self 场景——本批⑤段预备）或黑无常/马面批（鬼计/太平/索命/吸行/炼狱/绝策）或 baonu 暴怒复杂面勘验。
