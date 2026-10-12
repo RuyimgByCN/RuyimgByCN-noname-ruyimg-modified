@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 259;
+pub const STANDARD_RULESET_VERSION: u64 = 260;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4727,6 +4727,22 @@ pub const BOSS_YUANCE: &str = "远策";
 /// 触发时机 useCardAfter→CardUsed AfterTriggers 窗口近似（副本效果先于
 /// 原牌效果）；铁索不复制（上游 AI check 排除同口径）；无懈不可复制。
 pub const BOSS_QIZUO: &str = "奇佐";
+/// 绝情（Boss 张春华，规则 v260，群雄乱入；一将包张春华旧绝情）：锁定
+/// 技——你造成的伤害均改为目标失去等量体力（damageBefore cancel+loseHp
+/// (num)；num=增幅前原始值——原生 commit 入口直读取 d.amount 同口径；
+/// 取消后伤害事件不再结算=受击/加成类不触发）。
+pub const JUE_QING: &str = "绝情";
+/// 无心（Boss 张春华，规则 v260，群雄乱入）：锁定技两半——①你不能使用
+/// 延时锦囊指定其他角色为目标（mod targetEnabled；原生乐/兵路由本就只
+/// 能置他人→等价于持有者不可用乐/兵；闪电自置不受限）；②你受到的伤害
+/// 改为失去 1 点体力（damageBefore priority 10 cancel+loseHp() 无参=1）。
+pub const BOSS_WUXIN: &str = "无心";
+/// 伤逝（Boss 张春华，规则 v260，群雄乱入）：锁定技——每当你的牌失去后
+/// 或体力变化后，若手牌数小于 4，你将手牌补至 4 张（loseEnd/changeHp 双
+/// 触发→原生 CardsDiscarded/Damage/LoseHp/Recover 四 commit 臂）；子技
+/// shangshix2（group）：结束阶段若你的体力大于 1，全体存活角色（含自己）
+/// 各失去 1 点体力。
+pub const BOSS_SHANGSHIX: &str = "伤逝";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5023,6 +5039,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 郭嘉（v259 鬼谋+远策+奇佐；天妒=标准技共用；上游 group shen、
     // names 郭|嘉、shen→群目录近似）
     ("郭嘉", Faction::Qun, &[TIAN_DU, BOSS_GUIMOU, BOSS_YUANCE, BOSS_QIZUO], 4, Gender::Male),
+    // 张春华（v260 绝情+无心+伤逝；上游 group shen→群目录近似）
+    ("张春华", Faction::Qun, &[JUE_QING, BOSS_WUXIN, BOSS_SHANGSHIX], 4, Gender::Female),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6764,6 +6782,30 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(QizuoBehavior),
+        },
+        SkillDef {
+            name: JUE_QING,
+            // 查询型单面：commit_damage 入口直读臂（急冻前——上游
+            // damageBefore 层）——来源伤害改为目标失去等量体力
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_WUXIN,
+            // 查询型双面：commit_damage 入口直读臂（受伤→失 1）+
+            // PlayCard 校验臂（乐/兵拒——延时禁指定他人）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_SHANGSHIX,
+            // 查询型双面：四 commit 臂补牌（CardsDiscarded/Damage/LoseHp/
+            // Recover——手牌<4 补至 4）+ End begin 臂（hp>1 全体各失 1）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

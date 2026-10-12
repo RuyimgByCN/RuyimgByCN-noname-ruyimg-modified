@@ -2917,6 +2917,36 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v260（2026-10-11，T11 群雄乱入张春华片：绝情/无心/伤逝＋张春华
+条目）**：**绝情**（查询型 Noop，一将包旧绝情）：commit_damage 入口直
+读臂（急冻前——上游 source damageBefore 层）——你造成的伤害改为目标失
+去等量体力（emit LoseHp{target, d.amount}+return 不走伤害路径；num=未
+增幅原始值与上游 damageBefore 先于增幅同口径；受击/加成类不触发=cancel
+同口径；Damage 帧仍走 AfterTriggers 触发扫描与既有 prevent 族同登记）。
+**无心**（查询型双面）：①伤害半入口直读臂（绝情后=priority 10 序）——
+你受到的伤害改为失去 1 点体力；②延时半 PlayCard 校验臂——持有者不可
+用乐/兵（上游 mod targetEnabled delay 禁他人目标；原生乐/兵路由本就只
+置他人→等价持有者不可用；闪电自置不受限）。**伤逝**（查询型双面）：
+①补牌半 shangshix_draw 四 commit 臂（CardsDiscarded/Damage/LoseHp/
+Recover——上游 loseEnd/changeHp 双触发面展开）手牌<4 补至 4；②子技
+shangshix2 End begin 臂——hp>1 时全体存活（含自己）各失去 1。
+`BOSS_GENERALS` 尾追加**张春华**（def 索引 38/hp4/female/`[绝情, 无心,
+伤逝]`）。**登记差异**：绝情/无心入口直读 vs 上游 cancel 后 damageEnd
+不入队（prevent 族同口径）；无心+绝情自伤双命中触发序（上游 priority
+序 vs 原生固定绝情先）登记；伤逝 loseEnd→CardsDiscarded 面、弃装备等
+非 CardsDiscarded 失牌面不触发；AI 估伤标签不落；势力 shen→群目录近
+似。FROZEN 名单尾加「绝情」「无心」「伤逝」（131–133 名）。存档不变
+v60。版本 259→**260**。版本回退探针（260→259 复跑 golden 全绿）证明
+14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_zhangchunhua_jueqing_wuxin_damage_faces`（绝情转失去+对照/往返）+
+`boss_zhangchunhua_wuxin_damage_only`（无心伤害半独立局）+
+`boss_zhangchunhua_wuxin_delay_and_shangshix`（乐拒/他人照常/补至 4/
+shangshix2 全体-1+自补/往返）——证据见
+[T11 张春华证据](../operations/evidence/2026-10-11-t11-boss-zhangchunhua-v260/README.md)。
+**坑位**：advance_to_play 跨张春华 End 时 shangshix2 先行全体-1 使多段
+绝对 hp 断言偏 1（无心面拆独立局+同局改相对值）；出牌阶段限一次杀复用
+被拒（分段拆局）；4 人环 0→2 杀距离不足（目标改相邻）。
+
 **规则 v259（2026-10-11，T11 群雄乱入郭嘉片：鬼谋/远策/奇佐＋郭嘉条目，
 字段批）**：`PlayerState.boss_mad`+`TurnState.qizuo_copy` 双字段入状态
 /摘要/存档（**存档格式 59→60**；`MachineSnapshot::BossQizuo` 变体

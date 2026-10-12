@@ -48,6 +48,42 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     if d.amount == 0 {
         return;
     }
+    // 绝情（Boss 张春华，规则 v260；一将包旧绝情）：锁定——你造成的伤害
+    // 改为目标失去等量体力（上游 source damageBefore cancel+loseHp(num)
+    // 同口径；num=增幅前原始值=d.amount；取消后伤害事件不再结算=受击/
+    // 加成类不触发；置于急冻前——上游 damageBefore 同层内容序）
+    if let Some(jqdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::JUE_QING)
+    {
+        if let Some(src) = d.source {
+            if src != d.target
+                && ctx.core.player(src).alive
+                && ctx.core.has_skill(src, jqdef)
+            {
+                ctx.emit(EventData::LoseHp {
+                    player: d.target,
+                    amount: d.amount,
+                });
+                return;
+            }
+        }
+    }
+    // 无心（Boss 张春华，规则 v260）伤害半：锁定——你受到的伤害改为失去
+    // 1 点体力（上游 damageBefore priority 10 cancel+loseHp() 无参=1 同
+    // 口径；置于绝情后=同层 priority 序）
+    if let Some(wxdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_WUXIN)
+    {
+        if ctx.core.has_skill(d.target, wxdef) && ctx.core.player(d.target).alive {
+            ctx.emit(EventData::LoseHp {
+                player: d.target,
+                amount: 1,
+            });
+            return;
+        }
+    }
     // 急冻冰封（U05 ow 美，规则 v127）：锁定——冰封目标受所有伤害无
     // 效（上游 jidong2 damageBefore trigger.cancel() 同口径；铁索传导
     // 的独立事件同门控）。置于各伤害增幅钩前：伤害已整体取消，
@@ -418,6 +454,8 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 伤逝（规则 v260）：体力变化（受伤扣血）后补牌
+    shangshix_draw(ctx, d.target);
     // 逐厄（Boss 穷奇，规则 v211）：global damageEnd——任何人受到伤害
     // 后（来源存活且非穷奇），穷奇与来源各摸一张（上游 boss_zhue
     // asyncDraw([player, source]) 同口径）
@@ -855,6 +893,24 @@ pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, amount: u32) {
             player,
             source: None,
         });
+    }
+    // 伤逝（规则 v260）：体力变化（失去）后补牌
+    shangshix_draw(ctx, player);
+}
+
+/// 伤逝（Boss 张春华，规则 v260）补牌半：失去牌/体力变化后手牌<4 补至
+/// 4（上游 loseEnd/changeHp forced 同口径；四 commit 臂共用）
+fn shangshix_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
+    if let Some(ssdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_SHANGSHIX)
+    {
+        if ctx.core.player(player).alive && ctx.core.has_skill(player, ssdef) {
+            let n = ctx.core.player(player).hand.len();
+            if n < 4 {
+                ctx.draw_cards(player, 4 - n);
+            }
+        }
     }
 }
 
@@ -2154,6 +2210,25 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                 }
+                // 伤逝子技 shangshix2（Boss 张春华，规则 v260）：结束
+                // 阶段若体力大于 1，全体存活角色（含自己）各失去 1 点体
+                // 力（上游 group shangshix2 phaseJieshuBegin get.players
+                // 全体 loseHp 同口径）
+                if let Some(ssdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_SHANGSHIX)
+                {
+                    if ctx.core.has_skill(player, ssdef)
+                        && ctx.core.player(player).hp > 1
+                    {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if ctx.core.player(t).alive {
+                                ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+                            }
+                        }
+                    }
+                }
                 // 鬼谋（Boss 郭嘉，规则 v259）：结束阶段随机一名其他未
                 // 混乱存活角色进入混乱状态（boss_mad 置位，其回合收束解
                 // 除；随机→座位序首个确定性近似登记）
@@ -2641,6 +2716,8 @@ fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
             }
         }
     }
+    // 伤逝（规则 v260）：失去牌后补牌
+    shangshix_draw(ctx, player);
 }
 
 /// 造异异变 def 查询（运行时授予技）。
@@ -4267,6 +4344,8 @@ fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
             }
         }
     }
+    // 伤逝（规则 v260）：体力变化（回复）后补牌
+    shangshix_draw(ctx, recovered);
 }
 
 /// 覆泰2（Boss 穷奇，规则 v214）：场上存有持覆泰的穷奇、用/救桃者非

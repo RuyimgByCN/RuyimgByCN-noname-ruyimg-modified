@@ -3108,6 +3108,17 @@ fn apply_command(
                     if target == core.turn.current || !core.player(target).alive {
                         return Err(RejectReason::IllegalTargets);
                     }
+                    // 无心（Boss 张春华，规则 v260）：锁定——你不能使用延时
+                    // 锦囊指定其他角色为目标（上游 mod targetEnabled delay 同
+                    // 口径；原生乐/兵路由本就只能置他人→等价持有者不可用乐/
+                    // 兵；闪电自置不受限）
+                    if let Some(wxdef) = catalog
+                        .skill_by_name(crate::content::standard::BOSS_WUXIN)
+                    {
+                        if core.has_skill(core.turn.current, wxdef) {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                    }
                     // 谦逊（陆逊）：不能成为乐不思蜀目标（锁定门控；
                     // 上游无顺手牵羊，见覆盖清单）。
                     // G1 墨守宿主原语：延时锦囊目标免疫（乐/兵均免疫）
