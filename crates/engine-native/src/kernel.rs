@@ -2088,6 +2088,28 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                 }
+                // 炼狱（Boss 马面，规则 v257）：结束阶段对全部其他存活
+                // 角色各造成 1 点火焰伤害（无询问直伤）
+                if let Some(lydef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_LIANYU)
+                {
+                    if ctx.core.has_skill(player, lydef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if t == player || !ctx.core.player(t).alive {
+                                continue;
+                            }
+                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                Some(player),
+                                t,
+                                1,
+                                crate::event::DamageNature::Fire,
+                                None,
+                            )));
+                        }
+                    }
+                }
                 // 猛态（Boss 年兽，规则 v248）：本回合未摸牌 → 结束阶段
                 // 摸 3（上游 boss_mengtai_end phaseJieshuBegin draw(3)
                 // 同口径）

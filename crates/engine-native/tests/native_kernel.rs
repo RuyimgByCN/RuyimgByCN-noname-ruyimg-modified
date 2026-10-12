@@ -2715,7 +2715,7 @@ fn boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou() {
         + 32) as u16; // BOSS_GENERALS[32] 白无常
     let nt_def = (e.catalog().general_count()
         - engine_native::content::standard::BOSS_GENERALS.len()
-        + 34) as u16; // BOSS_GENERALS[34] 牛头
+        + 35) as u16; // BOSS_GENERALS[35] 牛头
     e.debug_set_general_def(1, bw_def);
     e.debug_set_hp(1, 8);
     assert_eq!(
@@ -3091,6 +3091,54 @@ fn boss_luocha_yushou_moyany() {
     assert!(r.state_core().skills.contains_key(&(1, my)), "魔炎实例往返");
     assert_zone_conservation(&r);
     assert_zone_conservation(&e);
+}
+
+/// 阴间系马面片（规则 v257）：炼狱（End 全部其他存活各 1 火伤）+鬼计共
+/// 用+反馈核对（FAN_KUI 标准已承载）。马面条目（[鬼计,反馈,炼狱]，hp6；
+/// juece 旧绝策混入未勘登记——refresh 包仅 rejuece 界绝策）。
+#[test]
+fn boss_mamian_lianyu_fire_all() {
+    let mut e = Engine::new_boss_stage(77001, 4, 1, 3, 6, 4, 0);
+    let mm_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 34) as u16; // BOSS_GENERALS[34] 马面
+    e.debug_set_general_def(1, mm_def);
+    e.debug_set_hp(1, 6);
+    assert_eq!(
+        e.catalog().general_meta(mm_def).map(|g| g.0),
+        Some("马面"),
+        "马面入目录"
+    );
+    let ly = e.catalog().skill_by_name("炼狱").expect("炼狱入目录");
+    let gj = e.catalog().skill_by_name("鬼计").expect("鬼计入目录");
+    let fk = e.catalog().skill_by_name("反馈").expect("反馈标准承载");
+    assert!(e.state_core().skills.contains_key(&(1, ly)));
+    assert!(e.state_core().skills.contains_key(&(1, gj)), "鬼计共用");
+    assert!(e.state_core().skills.contains_key(&(1, fk)), "反馈标准技入条目");
+
+    // 炼狱：End 对全部其他存活各 1 火伤（3→2）
+    for t in [0u8, 1, 2, 3] {
+        e.debug_clear_hand(t);
+    }
+    e.debug_set_hp(0, 3);
+    e.debug_set_hp(2, 3);
+    e.debug_set_hp(3, 3);
+    advance_to_play(&mut e, 1);
+    next_phase(&mut e); // 1 Play→Discard
+    drain_choices(&mut e);
+    next_phase(&mut e); // Discard→End（炼狱直伤）
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(0), 2, "炼狱：0 号受 1 火伤");
+    assert_eq!(e.debug_hp(2), 2, "炼狱：2 号受 1 火伤");
+    assert_eq!(e.debug_hp(3), 2, "炼狱：3 号受 1 火伤");
+    assert_eq!(e.debug_hp(1), 6, "本体不受");
+    assert_zone_conservation(&e);
+
+    // 存档往返
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert!(r.state_core().skills.contains_key(&(1, ly)), "炼狱实例往返");
+    assert_zone_conservation(&r);
 }
 
 /// 年兽系守翼片（规则 v251）：守翼（守翼年兽形态）——所有牌无距离限

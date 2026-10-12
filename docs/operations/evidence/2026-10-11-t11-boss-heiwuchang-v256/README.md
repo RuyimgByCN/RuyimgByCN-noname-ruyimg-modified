@@ -1,4 +1,4 @@
-# 2026-10-11 T11 阴间系黑无常片：鬼计/太平/索命/吸行（规则 v256）＋黑无常条目
+# 2026-10-11 T11 阴间系黑无常片：鬼计/太平/索命/吸行＋黑无常条目（内容随马面批规则 v256 生效）
 
 任务来源：[进度主稿 T11](../../../architecture/native-progress.md)（领取锁延续批次链；精觉 v252 后阴间系第二片）。上游依据：`boss_heiwuchang`（范|无救/male/shen/hp9/skills `[boss_guiji, boss_taiping, boss_suoming, boss_xixing, boss_bianshen4]`）；`boss_guiji`（9092：phaseJudgeBegin 弃己判定区随机一张）；`boss_taiping`（8975：phaseDrawBegin num+=2）；`boss_suoming`（8941：phaseJieshuBegin choose [1,num] 未链接目标 → 逐一 link）；`boss_xixing`（9020 附近：phaseZhunbeiBegin direct——choose 已链接其他目标 → 1 雷伤+回 1）。
 
@@ -26,7 +26,7 @@
 | 14 golden 重录 | 256 全量重录 2/2 绿（行级程序化第六次） |
 | 全量 | **602 通过 / 0 失败 / 1 ignore**（2026-10-11 本机） |
 | Gate 1b | cargo 真实 exit 0 |
-| 版本 | 规则 255→**256**；存档不变 v59（无新字段/快照变体） |
+| 版本 | 规则 255→255+内容（**版本未 bump——勘误：bump 脚本未执行**，内容随马面批规则 **v256** 生效；规则号以内容生效批为准） |
 
 ## 遗留登记（不变）
 

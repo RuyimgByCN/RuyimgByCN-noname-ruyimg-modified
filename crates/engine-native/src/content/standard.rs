@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 255;
+pub const STANDARD_RULESET_VERSION: u64 = 256;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4595,6 +4595,9 @@ pub const BOSS_DANSHU: &str = "胆术";
 /// 精觉（年兽精觉形态，规则 v252）：锁定技——继承胆术（同内容共用
 /// commit_cards_discarded 臂，按名双查）。
 pub const BOSS_JINGJUE: &str = "精觉";
+/// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
+/// 各造成 1 点火焰伤害（无询问直伤）。
+pub const BOSS_LIANYU: &str = "炼狱";
 /// 守翼（年兽守翼形态，规则 v251）：锁定技——你使用所有牌无距离限制
 ///（上游 mod targetInRange恒 true 同口径；sha/顺手两距离链追加）。
 pub const BOSS_SHOUYI: &str = "守翼";
@@ -4877,6 +4880,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 黑无常（v256 鬼计+太平+索命+吸行；bianshen4 死亡换将=已处置关卡
     // 面；names 范|无救、shen→群目录近似）
     ("黑无常", Faction::Qun, &[BOSS_GUIJI, BOSS_TAIPING, BOSS_SUOMING, BOSS_XIXING], 9, Gender::Male),
+    // 马面（v257 炼狱+鬼计共用 v256+反馈[标准 FAN_KUI 已承载]；juece 旧
+    // 绝策混入未勘登记[refresh 包仅 rejuece 界绝策]；shen→群目录近似）
+    ("马面", Faction::Qun, &[BOSS_GUIJI, FAN_KUI, BOSS_LIANYU], 6, Gender::Male),
     // 牛头（v255 爆敛共用+枭首；蛮甲[extra-equip 藤甲挂点分散]+niepan
     // [boss 本地死亡复活面]混入未落登记；shen→群目录近似）
     ("牛头", Faction::Qun, &[BOSS_BAOLIAN, BOSS_XIAOSHOU], 7, Gender::Male),
@@ -6564,6 +6570,13 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_XIXING,
             // 查询型单面：Judge begin 臂——座位序首个已链接异侧受 1 雷伤
             // +持有者回 1（目标自选→首个已链接确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_LIANYU,
+            // 查询型单面：End 臂——全部其他存活各 1 火伤（无询问直伤）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
