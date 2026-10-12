@@ -1547,6 +1547,47 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 鬼计（Boss 黑无常，规则 v256）：准备阶段——弃置自
+                    // 己判定区一张牌（随机→首张确定性近似登记）
+                    if let Some(gjdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_GUIJI)
+                    {
+                        if ctx.core.has_skill(player, gjdef) {
+                            if let Some(c) = ctx.core.player(player).judge.first().copied() {
+                                ctx.core.player_mut(player).judge.retain(|x| *x != c);
+                                ctx.to_discard(c);
+                            }
+                        }
+                    }
+                    // 吸行（Boss 黑无常，规则 v256）：准备阶段——对座位序
+                    // 首个已链接的其他存活角色造成 1 点雷伤并回复 1 点体力
+                    //（目标自选→首个已链接确定性近似登记）
+                    if let Some(xxdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_XIXING)
+                    {
+                        if ctx.core.has_skill(player, xxdef) {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            let linked: Vec<PlayerId> = (0..seats)
+                                .filter(|&t| {
+                                    t != player
+                                        && ctx.core.player(t).alive
+                                        && ctx.core.player(t).linked
+                                })
+                                .collect();
+                            if let Some(&t) = linked.first() {
+                                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                    Some(player),
+                                    t,
+                                    1,
+                                    crate::event::DamageNature::Thunder,
+                                    None,
+                                )));
+                                ctx.recover(player, 1, None);
+                            }
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
@@ -1801,6 +1842,16 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.draw_cards(player, 2);
                         }
                     }
+                    // 太平（Boss 黑无常，规则 v256）：摸牌阶段 +2（年瑞
+                    // 同位）
+                    if let Some(def) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_TAIPING)
+                    {
+                        if ctx.core.has_skill(player, def) {
+                            ctx.draw_cards(player, 2);
+                        }
+                    }
                 }
             }
             Phase::Play => {
@@ -2013,6 +2064,27 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                 t,
                                 3,
                             )));
+                        }
+                    }
+                }
+                // 索命（Boss 黑无常，规则 v256）：结束阶段——横置（链接）
+                // 全部未链接的其他存活角色（[1,num] 自选→全部确定性近似
+                // 登记；链接机直写+Linked 日志，索链甲同款）
+                if let Some(smdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_SUOMING)
+                {
+                    if ctx.core.has_skill(player, smdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if t == player
+                                || !ctx.core.player(t).alive
+                                || ctx.core.player(t).linked
+                            {
+                                continue;
+                            }
+                            ctx.core.player_mut(t).linked = true;
+                            ctx.log(LogEvent::Linked { player: t, linked: true });
                         }
                     }
                 }

@@ -4557,6 +4557,18 @@ pub const BOSS_MODAO: &str = "魔道";
 /// 使用【万箭齐发】（虚拟牌，机器直发不经 PlayCard 校验；上游 useCard
 /// canUse 过滤同口径=异侧存活）。
 pub const BOSS_MOJIAN: &str = "魔剑";
+/// 鬼计（Boss 黑无常，规则 v256）：锁定技——准备阶段（判定阶段锚）
+/// 弃置自己判定区一张牌（随机→首张确定性近似登记）。
+pub const BOSS_GUIJI: &str = "鬼计";
+/// 太平（Boss 黑无常，规则 v256）：锁定技——摸牌阶段额外摸 2 张牌。
+pub const BOSS_TAIPING: &str = "太平";
+/// 索命（Boss 黑无常，规则 v256）：锁定技——结束阶段横置（链接）全部
+/// 未链接的其他存活角色（[1,num] 自选→全部确定性近似登记）。
+pub const BOSS_SUOMING: &str = "索命";
+/// 吸行（Boss 黑无常，规则 v256）：锁定技——准备阶段对一名已链接的其
+/// 他角色造成 1 点雷伤并回复 1 点体力（目标自选→座位序首个已链接确定
+/// 性近似登记）。
+pub const BOSS_XIXING: &str = "吸行";
 /// 爆敛（Boss 白无常/牛头，规则 v255）：锁定技——结束阶段摸 2 张牌。
 pub const BOSS_BAOLIAN: &str = "爆敛";
 /// 强征（Boss 白无常，规则 v255）：锁定技——结束阶段从每名其他有手牌
@@ -4862,6 +4874,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 白无常（v255 爆敛+强征+醉酒；juece 界绝策[refresh 包]混入未落登记；
     // shen→群目录近似）
     ("白无常", Faction::Qun, &[BOSS_BAOLIAN, BOSS_QIANGZHENG, BOSS_ZUIJIU], 8, Gender::Male),
+    // 黑无常（v256 鬼计+太平+索命+吸行；bianshen4 死亡换将=已处置关卡
+    // 面；names 范|无救、shen→群目录近似）
+    ("黑无常", Faction::Qun, &[BOSS_GUIJI, BOSS_TAIPING, BOSS_SUOMING, BOSS_XIXING], 9, Gender::Male),
     // 牛头（v255 爆敛共用+枭首；蛮甲[extra-equip 藤甲挂点分散]+niepan
     // [boss 本地死亡复活面]混入未落登记；shen→群目录近似）
     ("牛头", Faction::Qun, &[BOSS_BAOLIAN, BOSS_XIAOSHOU], 7, Gender::Male),
@@ -6519,6 +6534,36 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_XIAOSHOU,
             // 查询型单面：End 臂——座位序首个 hp≥self 其他存活受 3 伤害
             // （目标自选可放弃→恒发动确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_GUIJI,
+            // 查询型单面：Judge begin 臂弃自己判定区首张（随机→首张近似）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_TAIPING,
+            // 查询型单面：Draw 臂 +2（年瑞同位）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_SUOMING,
+            // 查询型单面：End 臂——全部未链接异侧存活横置（链接机直写+
+            // Linked 日志，[1,num] 自选→全部确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_XIXING,
+            // 查询型单面：Judge begin 臂——座位序首个已链接异侧受 1 雷伤
+            // +持有者回 1（目标自选→首个已链接确定性近似登记）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
