@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 249;
+pub const STANDARD_RULESET_VERSION: u64 = 250;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,10 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 睿智（年兽睿智形态，规则 v250）：锁定技——准备阶段其余角色（手牌
+/// >1 或装备 >1）须保留一张手牌和一张装备区内的牌，弃置其余（保留哪张
+/// 由目标自选——原生保留首张确定性近似登记）。
+pub const BOSS_RUIZHI: &str = "睿智";
 /// 形态轮换（Boss 年兽系，规则 v249）：锁定技——回合开始交替轮换至另
 /// 一「形态轮换」携带将（assembly 重挂+hp/手牌/装备/判定区保留；首次置
 /// 位不换将）。随机序列→确定性互斥轮转登记。
@@ -4807,6 +4811,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_NBIANSHEN], 12, Gender::Male),
     // 忍性年兽（v249 忍性+形态轮换；年瑞/猛态共用 v248；shen→群目录近似）
     ("忍性年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_RENXING, BOSS_NBIANSHEN], 12, Gender::Male),
+    // 睿智年兽（v250 睿智+形态轮换；年瑞/猛态共用 v248；shen→群目录近似）
+    ("睿智年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_RUIZHI, BOSS_NBIANSHEN], 12, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6370,6 +6376,14 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_RENXING,
             // 查询型双臂：damageEnd（commit_damage 段）+recoverEnd
             // （commit_recover_skills 头）——非当前回合摸 1
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_RUIZHI,
+            // 查询型单面：准备阶段臂（global 修剪：其余角色保留 1 手+1
+            // 装，弃其余——保留首张确定性近似登记）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

@@ -2633,6 +2633,121 @@ fn boss_nianshou_nianrui_mengtai() {
     assert_zone_conservation(&r);
 }
 
+/// 年兽系睿智片（规则 v250）：睿智（睿智年兽形态）——准备阶段其余角色
+/// （手牌>1 或装备>1）保留一张手牌和一张装备区内的牌，弃置其余（保留
+/// 首张确定性近似登记）。睿智年兽条目（[年瑞,猛态,睿智,形态轮换]）。
+#[test]
+fn boss_nianshou_ruizhi_prune() {
+    let mut e = Engine::new_boss_stage(70001, 4, 1, 3, 6, 4, 0);
+    let rz_form_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 27) as u16; // BOSS_GENERALS[27] 睿智年兽
+    e.debug_set_general_def(1, rz_form_def);
+    e.debug_set_hp(1, 12);
+    assert_eq!(
+        e.catalog().general_meta(rz_form_def).map(|g| g.0),
+        Some("睿智年兽"),
+        "睿智年兽入目录"
+    );
+    let rz = e.catalog().skill_by_name("睿智").expect("睿智入目录");
+    assert!(e.state_core().skills.contains_key(&(1, rz)));
+
+    // 布阵（0 号回合前）：0 号 3 手+2 装（修剪后 1/1）；2 号 1 手 1 装
+    // （本就不超——不触发）；3 号 3 手 0 装（弃至 1 手）
+    e.debug_clear_hand(0);
+    let eq0 = [e.debug_place(0, "armor"), e.debug_place(0, "horse_plus")];
+    for c in eq0.iter() {
+        let mut core = e.state_core_mut();
+        let pos = core.players[0]
+            .hand
+            .iter()
+            .position(|x| x == c)
+            .expect("in hand");
+        let card = core.players[0].hand.remove(pos);
+        core.players[0].equips.push(card);
+    }
+    e.debug_clear_hand(0);
+    let h0 = [
+        e.debug_place(0, "tao"),
+        e.debug_place(0, "duel"),
+        e.debug_place(0, "wugu"),
+    ];
+    e.debug_clear_hand(2);
+    let h2 = e.debug_place(2, "tao");
+    let eq2 = e.debug_place(2, "armor");
+    {
+        let mut core = e.state_core_mut();
+        let pos = core.players[2]
+            .hand
+            .iter()
+            .position(|x| x == &eq2)
+            .expect("in hand");
+        let c = core.players[2].hand.remove(pos);
+        core.players[2].equips.push(c);
+    }
+    e.debug_clear_hand(3);
+    let h3 = [
+        e.debug_place(3, "tao"),
+        e.debug_place(3, "shan"),
+        e.debug_place(3, "sha"),
+    ];
+    e.debug_clear_hand(1); // 睿智年兽自身清手（修剪只打其余角色）
+
+    // 推进到 1 号判定锚后（修剪已发生）
+    for _ in 0..12 {
+        if e.turn().current == 1 && e.turn().phase == Phase::Draw {
+            break;
+        }
+        if let Some(c) = e.open_choice().cloned() {
+            if c.spec.prompt == "dying_save" {
+                answer(&mut e, ChoiceOption::Pass);
+                drain_choices(&mut e);
+            } else {
+                answer_cards(&mut e, &c);
+            }
+            continue;
+        }
+        match next_phase(&mut e) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Suspended => {}
+            CommandOutcome::Pending { choice } => {
+                let is_dying = choice.spec.prompt == "dying_save";
+                if is_dying {
+                    answer(&mut e, ChoiceOption::Pass);
+                    drain_choices(&mut e);
+                } else {
+                    answer_cards(&mut e, &choice);
+                }
+            }
+            CommandOutcome::Rejected(r) => panic!("np rejected {r:?}"),
+        }
+    }
+    assert_eq!(e.debug_hand(0).len(), 1, "睿智：0 号手牌弃至 1");
+    assert!(
+        h0.contains(&e.debug_hand(0)[0]),
+        "保留的是原有手牌（确定性近似：实现定哪张）"
+    );
+    assert_eq!(e.state_core().player(0).equips.len(), 1, "0 号装备弃至 1");
+    assert_eq!(
+        e.state_core().player(0).equips[0],
+        eq0[0],
+        "保留首张装备"
+    );
+    assert_eq!(e.debug_hand(2).len(), 1, "2 号手牌保留（本就不超）");
+    assert_eq!(e.state_core().player(2).equips.len(), 1, "2 号装备保留");
+    assert_eq!(e.debug_hand(3).len(), 1, "睿智：3 号手牌弃至 1");
+    assert!(
+        h3.contains(&e.debug_hand(3)[0]),
+        "3 号保留原有手牌（确定性近似）"
+    );
+    assert_zone_conservation(&e);
+
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert!(r.state_core().skills.contains_key(&(1, rz)), "睿智实例往返");
+    assert_zone_conservation(&r);
+}
+
 /// 星宿阶段2系自润片（规则 v247）：自润（玄冥）+玄冥条目——①准备阶段
 /// 全体摸牌（有装备 2/无装备 1，含自身）②造异玄冥半门激活：玄冥在场
 /// 颛顼锦囊不可指定敌方（基本牌不受此门限）③非造异持有者不受门控。

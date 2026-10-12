@@ -1448,6 +1448,73 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.core.turn.mengtai_use_pending = true;
                         }
                     }
+                    // 睿智（年兽睿智形态，规则 v250）：准备阶段——其余
+                    // 角色（手牌>1 或装备>1）保留一张手牌和一张装备区内
+                    // 的牌，弃置其余（保留哪张由目标自选——原生保留首张
+                    // 确定性近似登记）
+                    if let Some(rzdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_RUIZHI)
+                    {
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == rzdef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .filter(|o| ctx.core.player(*o).alive)
+                            .collect();
+                        if !holders.is_empty() {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            for t in 0..seats {
+                                if !ctx.core.player(t).alive {
+                                    continue;
+                                }
+                                let p = ctx.core.player(t);
+                                if p.hand.len() <= 1 && p.equips.len() <= 1 {
+                                    continue;
+                                }
+                                // 保留首张手牌+首张装备，其余弃置
+                                let keep_hand =
+                                    ctx.core.player(t).hand.first().copied();
+                                let keep_equip =
+                                    ctx.core.player(t).equips.first().copied();
+                                let extra_hand: Vec<crate::ids::CardId> = ctx
+                                    .core
+                                    .player(t)
+                                    .hand
+                                    .iter()
+                                    .skip(1)
+                                    .copied()
+                                    .collect();
+                                for c in extra_hand {
+                                    ctx.discard_from_hand(t, c);
+                                }
+                                let extra_equip: Vec<crate::ids::CardId> = ctx
+                                    .core
+                                    .player(t)
+                                    .equips
+                                    .iter()
+                                    .skip(1)
+                                    .copied()
+                                    .collect();
+                                for c in extra_equip {
+                                    ctx.core
+                                        .player_mut(t)
+                                        .equips
+                                        .retain(|x| *x != c);
+                                    revoke_equip_skills(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        t,
+                                        c,
+                                    );
+                                    ctx.to_discard(c);
+                                }
+                                let _ = (keep_hand, keep_equip);
+                            }
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
