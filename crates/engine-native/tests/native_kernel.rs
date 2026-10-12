@@ -2633,6 +2633,67 @@ fn boss_nianshou_nianrui_mengtai() {
     assert_zone_conservation(&r);
 }
 
+/// 年兽系精觉片（规则 v252）：精觉（继承胆术）——失去手牌后（非当前回
+/// 合且已受伤）判定红回 1；满血/非持有者不触发。精觉年兽条目（[年瑞,猛
+/// 态,精觉,形态轮换]）；胆术 def 供夜叉批复用。
+#[test]
+fn boss_nianshou_jingjue_danshu_recover() {
+    let mut e = Engine::new_boss_stage(72001, 4, 1, 3, 6, 4, 0);
+    let jj_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 29) as u16; // BOSS_GENERALS[29] 精觉年兽
+    e.debug_set_general_def(1, jj_def);
+    e.debug_set_hp(1, 12);
+    assert_eq!(
+        e.catalog().general_meta(jj_def).map(|g| g.0),
+        Some("精觉年兽"),
+        "精觉年兽入目录"
+    );
+    let jj = e.catalog().skill_by_name("精觉").expect("精觉入目录");
+    assert!(e.state_core().skills.contains_key(&(1, jj)));
+
+    // ① 精觉面：0 号回合拆 1 号手牌 → 非当前回合+已受伤（11/12）→
+    //    判定红 → 回 1
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    e.debug_set_hp(1, 11);
+    let _shan1 = e.debug_place(1, "shan");
+    e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Heart);
+    let gs = e.debug_place(0, "dismantle");
+    play(&mut e, gs, vec![1]);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(1), 12, "精觉：判定红回 1（11→12）");
+
+    // ② 满血对照：拆第二张 → 判定红不回（已满）
+    let _shan1b = e.debug_place(1, "shan");
+    e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Heart);
+    let gs2 = e.debug_place(0, "dismantle");
+    play(&mut e, gs2, vec![1]);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(1), 12, "满血：不回（恒上限）");
+    assert_eq!(e.debug_hand(1).len(), 0, "牌仍被拆走");
+
+    // ③ 非持有者对照：拆 2 号 → 无胆术/精觉不回
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(2);
+    e.debug_set_hp(2, 3);
+    let _shan2 = e.debug_place(2, "shan");
+    e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Heart);
+    let gs3 = e.debug_place(0, "dismantle");
+    play(&mut e, gs3, vec![2]);
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(2), 3, "非持有者：无回血（拆桥本不打伤害）");
+    assert!(e.debug_hand(2).is_empty(), "牌被拆走");
+
+    // ④ 存档往返
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert!(r.state_core().skills.contains_key(&(1, jj)), "精觉实例往返");
+    assert_zone_conservation(&r);
+    assert_zone_conservation(&e);
+}
+
 /// 年兽系守翼片（规则 v251）：守翼（守翼年兽形态）——所有牌无距离限
 /// 制：①杀隔位可指定②顺手牵羊隔位可指定③非持有者对照被拒。守翼年兽
 /// 条目（[年瑞,猛态,守翼,形态轮换]；上游形态表含 boss_nbaonu 未落随批）。

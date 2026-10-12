@@ -2756,6 +2756,22 @@ open_choice 未前置/应答与推进迭代混计 12 次上限）+轮换双向�
 往返）——证据见
 [T11 守翼证据](../operations/evidence/2026-10-11-t11-boss-shouyi-v251/README.md)。
 
+**规则 v252（2026-10-11，T11 年兽系精觉片：精觉（继承胆术）＋精觉年兽条目）**：
+**胆术+精觉**（双 SkillDef 查询型 Noop 共用 commit 臂按名双查——ZhaoHuo
+同构复用先例）：CardsDiscarded 面（dispatch 新增臂）——玩家失去手牌后非
+当前回合且已受伤 → 判定红回 1（铁骑内联口径）。`BOSS_GENERALS` 尾追加
+**精觉年兽**（def 索引 29/hp12/`[年瑞, 猛态, 精觉, 形态轮换]`）；胆术
+def 供夜叉批复用。**登记差异**：上游 loseAsync/gain/addJudge/equip/
+addToExpansion 全卡牌移动事件族 → 原生仅 CardsDiscarded 面；铁骑内联判
+定无改判窗。FROZEN 名单尾加「胆术」「精觉」（110/111 名）。存档不变
+v59。版本 251→**252**。版本回退探针（252→251 复跑 golden 全绿）证明
+14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_nianshou_jingjue_danshu_recover` 四段（判定红回 1/满血对照/非持有
+者对照/往返）——证据见
+[T11 精觉证据](../operations/evidence/2026-10-11-t11-boss-jingjue-v252/README.md)。
+**坑位**：拆桥不造成伤害（对照断言误写伤害期望）；git checkout 误回滚整
+测试文件（重加）；debug_place 卡名="dismantle"（name≠kind key）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

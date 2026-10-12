@@ -28,6 +28,7 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
         EventData::TurnOverBefore { player, cancelled } => {
             commit_turn_over_before(ctx, player, cancelled)
         }
+        EventData::CardsDiscarded { player, .. } => commit_cards_discarded(ctx, player),
         EventData::Recover { player, .. } => {
             commit_recover_skills(ctx, player)
         }
@@ -2227,6 +2228,43 @@ fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool)
         }
     }
     ctx.emit(EventData::TurnOvered { player, face_down });
+}
+
+/// 胆术/精觉（Boss 夜叉/精觉年兽，规则 v252）：玩家失去手牌后（上游
+/// loseAfter+loseAsync 族的 CardsDiscarded 面；gain/addJudge/equip 等
+/// 其余卡牌移动面登记差异）——非当前回合且已受伤 → 判定红色回 1（铁骑
+/// 内联确定性口径，无鬼才/天妒改判窗）。
+fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
+    let names = [
+        crate::content::standard::BOSS_DANSHU,
+        crate::content::standard::BOSS_JINGJUE,
+    ];
+    for name in names {
+        let Some(def) = ctx.catalog.skill_by_name(name) else {
+            continue;
+        };
+        if !ctx.core.has_skill(player, def) {
+            continue;
+        }
+        // 非当前回合 + 已受伤
+        if ctx.core.turn.current == player || !ctx.core.player(player).alive {
+            continue;
+        }
+        let p = ctx.core.player(player);
+        if p.hp >= p.max_hp as i32 {
+            continue;
+        }
+        let judged = ctx.draw_judge_card();
+        let red = matches!(
+            ctx.catalog.cards[judged as usize].suit,
+            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+        );
+        ctx.to_discard(judged);
+        if red {
+            ctx.recover(player, 1, None);
+        }
+        break; // 胆术/精觉同内容不叠加
+    }
 }
 
 /// 造异异变 def 查询（运行时授予技）。

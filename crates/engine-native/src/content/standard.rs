@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 251;
+pub const STANDARD_RULESET_VERSION: u64 = 252;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4551,6 +4551,13 @@ pub const BOSS_FENGDONG: &str = "封冻";
 /// 座位序首名有手牌的其他角色的一张手牌（登记：hej 全区域/随机以座位
 /// 序+手牌首张确定性近似）；若为装备牌则你自动使用之。
 pub const BOSS_XUNYOU: &str = "巡游";
+/// 胆术（Boss 夜叉，规则 v252）：锁定技——失去手牌后（非当前回合且已
+/// 受伤）判定红色回 1（CardsDiscarded 面；gain/addJudge/equip 等其余卡
+/// 牌移动面登记差异）。
+pub const BOSS_DANSHU: &str = "胆术";
+/// 精觉（年兽精觉形态，规则 v252）：锁定技——继承胆术（同内容共用
+/// commit_cards_discarded 臂，按名双查）。
+pub const BOSS_JINGJUE: &str = "精觉";
 /// 守翼（年兽守翼形态，规则 v251）：锁定技——你使用所有牌无距离限制
 ///（上游 mod targetInRange恒 true 同口径；sha/顺手两距离链追加）。
 pub const BOSS_SHOUYI: &str = "守翼";
@@ -4819,6 +4826,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 守翼年兽（v251 守翼+形态轮换；年瑞/猛态共用 v248；上游形态表含
     // boss_nbaonu[暴怒,未落随批]——条目只列已转换技；shen→群目录近似）
     ("守翼年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_SHOUYI, BOSS_NBIANSHEN], 12, Gender::Male),
+    // 精觉年兽（v252 精觉[继承胆术]+形态轮换；年瑞/猛态共用 v248；shen→群目录近似）
+    ("精觉年兽", Faction::Qun, &[BOSS_NIANRUI, BOSS_MENGTAI, BOSS_JINGJUE, BOSS_NBIANSHEN], 12, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6398,6 +6407,21 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_SHOUYI,
             // 查询型单面：sha_range_free 链+顺手距离链追加（全牌无距离，
             // 狂笑/神恩同位）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_DANSHU,
+            // 查询型单面：CardsDiscarded 臂（失去手牌后非当前回合且已受
+            // 伤判定红回 1）——夜叉批条目复用同名 def
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_JINGJUE,
+            // 查询型单面：继承胆术（同内容共用 commit 臂按名双查）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
