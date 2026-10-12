@@ -52,7 +52,11 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v46（2026-10-11，T19b 阵法 v201）：`GameStateCore` 尾部追加
 /// `seat_ring`（len+pid 序列；座位环可变，swapSeat）。v45 字节被版本门禁
 /// 拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 59;
+/// v60（2026-10-11，T11 郭嘉批 v259）：`PlayerState` 尾部追加
+/// `boss_mad`（混乱标记）；`TurnState` 尾部追加 `qizuo_copy`（副本载体
+/// 槽）；`MachineSnapshot` 追加 `BossQizuo` 变体。v59 字节被版本门禁拒绝
+///（无生产迁移数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 60;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -948,6 +952,10 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             enc_pid(w, owner);
             w.u8(*stage);
             w.u32(*actor);
+        }
+        MachineSnapshot::BossQizuo { owner } => {
+            w.u8(68);
+            enc_pid(w, owner);
         }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);
@@ -2110,6 +2118,10 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let actor = r.u32()?;
             MachineSnapshot::BossXingxia { owner, stage, actor }
         }
+        68 => {
+            let owner = dec_pid(r)?;
+            MachineSnapshot::BossQizuo { owner }
+        }
         64 => {
             let owner = dec_pid(r)?;
             MachineSnapshot::Shedu { owner }
@@ -2765,6 +2777,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u32(p.xingxia_used_round);
         // 形态轮换交替旗标（v249）
         w.boolean(p.nbianshen_toggle);
+        // 混乱标记（v60，Boss 郭嘉鬼谋）
+        w.boolean(p.boss_mad);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -2864,6 +2878,14 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     }
     // 炎狱计数（v229）
     w.u8(t.yanyu_count);
+    // 奇佐副本载体槽（v60，Boss 郭嘉）
+    match t.qizuo_copy {
+        None => w.u8(0),
+        Some(v) => {
+            w.u8(1);
+            w.u32(v);
+        }
+    }
     // skills（BTreeMap：按键序确定性遍历）
     w.len(s.core.skills.len());
     for ((owner, def), inst) in &s.core.skills {
@@ -3054,6 +3076,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let buchun_used_round = r.u32()?;
         let xingxia_used_round = r.u32()?;
         let nbianshen_toggle = r.boolean()?;
+        let boss_mad = r.boolean()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3113,6 +3136,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             buchun_used_round,
             xingxia_used_round,
             nbianshen_toggle,
+            boss_mad,
             off_court,
             shuiyun_count,
             wangyou3_round,
@@ -3186,6 +3210,11 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     };
     let minwan_targets = r.vec(dec_pid)?;
     let yanyu_count = r.u8()?;
+    let qizuo_copy = match r.u8()? {
+        0 => None,
+        1 => Some(r.u32()?),
+        t => return Err(ArchiveError::BadTag("turn_qizuo_copy", t)),
+    };
     let skill_count = r.len()?;
     let mut skills = std::collections::BTreeMap::new();
     for _ in 0..skill_count {
@@ -3297,6 +3326,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 luanjian_card,
                 minwan_targets,
                 yanyu_count,
+                qizuo_copy,
             },
             skills,
             declared_kinds,

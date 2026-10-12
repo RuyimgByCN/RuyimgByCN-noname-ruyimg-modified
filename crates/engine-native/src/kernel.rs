@@ -445,6 +445,43 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 远策（Boss 郭嘉，规则 v259）：global damageEnd——其他角色对另一
+    // 其他角色造成伤害后（双方存活），判定：黑→受伤角色失 1 体力 / 红→
+    // 来源失 1 体力（chooseControl 选项一恒定确定性近似登记——上游 AI
+    // 态度选面+rejudge stop 检查+判定修正回调不落；hp>0 门=濒死未决者
+    // 跳过登记差异）
+    if let Some(ycdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_YUANCE)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == ycdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .collect();
+        if let Some(holder) = holders.first() {
+            if let Some(src) = d.source {
+                if ctx.core.player(*holder).alive
+                    && src != d.target
+                    && ctx.core.player(src).alive
+                    && ctx.core.player(d.target).alive
+                    && ctx.core.player(src).hp > 0
+                    && ctx.core.player(d.target).hp > 0
+                {
+                    let judged = ctx.draw_judge_card();
+                    let black = matches!(
+                        ctx.catalog.cards[judged as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    );
+                    ctx.to_discard(judged);
+                    let loser = if black { d.target } else { src };
+                    ctx.emit(EventData::LoseHp { player: loser, amount: 1 });
+                }
+            }
+        }
+    }
     // 灵渠（Boss 玄武，规则 v237）：每次受到伤害后摸 1 张牌且受击计数
     // +1（上游 boss_lingqu damageEnd draw+storage++ 同口径；0 点伤害照常；
     // 计数=PlayerState.lingqu_count 跨回合持久，手牌上限 +X）
@@ -839,6 +876,11 @@ fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId) {
 /// 出牌提交：牌离开手牌区。杀置桌面等待结算；桃立即回复。
 /// 猴子偷桃（E03）取消的使用的牌已在确认机器中移走，跳过结算。
 fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
+    // 奇佐副本载体槽（Boss 郭嘉，规则 v259）：任一非载体卡牌提交即清
+    //（副本用牌自身的提交保留槽位，供其 AfterTriggers 过滤拒递归）
+    if ctx.core.turn.qizuo_copy != Some(u.card) {
+        ctx.core.turn.qizuo_copy = None;
+    }
     if u.cancelled {
         // 取消痕迹已在猴子机器的 CardsGiven/CardsDiscarded 中观测。
         return;
@@ -1100,6 +1142,8 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
         // addTempSkill {player:'turnOverAfter'} 同口径）
         ctx.core.player_mut(player).jileng_active = false;
         ctx.emit(EventData::TurnOverBefore { player, cancelled: false });
+        // 混乱解除（规则 v259）：整回合跳过路径同口径（回合收束=解除）
+        ctx.core.player_mut(player).boss_mad = false;
         ctx.emit(EventData::TurnEnded { player });
         return;
     }
@@ -2110,6 +2154,28 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                 }
+                // 鬼谋（Boss 郭嘉，规则 v259）：结束阶段随机一名其他未
+                // 混乱存活角色进入混乱状态（boss_mad 置位，其回合收束解
+                // 除；随机→座位序首个确定性近似登记）
+                if let Some(gmdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_GUIMOU)
+                {
+                    if ctx.core.has_skill(player, gmdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        if let Some(t) = (0..seats).find(|&t| {
+                            t != player
+                                && ctx.core.player(t).alive
+                                && !ctx.core.player(t).boss_mad
+                        }) {
+                            ctx.core.player_mut(t).boss_mad = true;
+                            ctx.log(LogEvent::SkillTriggered {
+                                skill: "鬼谋",
+                                owner: player,
+                            });
+                        }
+                    }
+                }
                 // 猛态（Boss 年兽，规则 v248）：本回合未摸牌 → 结束阶段
                 // 摸 3（上游 boss_mengtai_end phaseJieshuBegin draw(3)
                 // 同口径）
@@ -2343,6 +2409,11 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
             });
         }
         None => {
+            // 混乱解除（Boss 郭嘉鬼谋，规则 v259）：混乱者回合收束解除
+            //（上游 addTempSkill "mad" {player:"phaseAfter"} 同口径）；
+            // 奇佐副本载体槽跨回合兜底清
+            ctx.core.player_mut(player).boss_mad = false;
+            ctx.core.turn.qizuo_copy = None;
             ctx.emit(EventData::TurnEnded { player });
         }
     }

@@ -384,6 +384,7 @@ impl Engine {
                 luanjian_card: None,
                 minwan_targets: Vec::new(),
                 yanyu_count: 0,
+                qizuo_copy: None,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -4213,6 +4214,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u32(&mut h, p.buchun_used_round);
         push_u32(&mut h, p.xingxia_used_round);
         push_u8(&mut h, p.nbianshen_toggle as u8);
+        // 混乱标记（Boss 郭嘉鬼谋，规则 v259）
+        push_u8(&mut h, p.boss_mad as u8);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);
@@ -4236,6 +4239,15 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u8(&mut h, c.turn.land_sha_used as u8);
     push_u32(&mut h, c.turn.discard_phase_discarded);
     push_u8(&mut h, c.turn.yanyu_count);
+    // 奇佐副本载体槽（Boss 郭嘉，规则 v259）
+    match c.turn.qizuo_copy {
+        None => push_u8(&mut h, 0),
+        Some(v) => {
+            push_u8(&mut h, 1);
+            push_u32(&mut h, v);
+        }
+    }
+
     push_u32(&mut h, c.turn.ciqiu_dying.len() as u32);
     for p in &c.turn.ciqiu_dying {
         push_u8(&mut h, *p);
@@ -4536,6 +4548,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         }
         M::BossZhaohuo { owner } => {
             push_u8(h, 66);
+            push_u8(h, *owner);
+        }
+        M::BossQizuo { owner } => {
+            push_u8(h, 68);
             push_u8(h, *owner);
         }
         M::BossBuchun { owner, stage, targets } => {
@@ -5255,6 +5271,7 @@ mod tests {
                 luanjian_card: None,
                 minwan_targets: Vec::new(),
                 yanyu_count: 0,
+                qizuo_copy: None,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -5344,6 +5361,7 @@ mod tests {
                 luanjian_card: None,
                 minwan_targets: Vec::new(),
                 yanyu_count: 0,
+                qizuo_copy: None,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,

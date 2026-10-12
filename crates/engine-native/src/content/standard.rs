@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 258;
+pub const STANDARD_RULESET_VERSION: u64 = 259;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -694,6 +694,114 @@ impl SkillMachine for LuanChangMachine {
             .filter(|p| *p != self.owner)
             .collect();
         ctx.use_virtual_card(self.owner, CardKind::SavageAttack, targets);
+        Flow::Done
+    }
+}
+
+/// 奇佐（Boss 郭嘉，规则 v259，群雄乱入）：你使用锦囊牌结算结束后，你
+/// 使用一张同名牌。触发挂 CardUsed AfterTriggers 窗口（上游 useCardAfter
+/// →前置近似：副本效果先于原牌效果，登记）；无懈不可复制；铁索不复制
+///（上游 AI check 排除同口径）；副本载体槽守卫递归（上游 event.parent
+/// name 守卫同口径）。
+struct QizuoBehavior;
+
+/// 奇佐可复制的锦囊种（标准锦囊集；G1 扩展锦囊不入 boss 场）：
+/// 延时锦囊含判定区同名去重门（上游 canUse 同口径）。
+fn qizuo_copyable(kind: CardKind) -> bool {
+    matches!(
+        kind,
+        CardKind::SavageAttack
+            | CardKind::ArcheryAttack
+            | CardKind::Duel
+            | CardKind::Le
+            | CardKind::Bing
+            | CardKind::ShanDian
+            | CardKind::Dismantle
+            | CardKind::Snatch
+            | CardKind::Wuzhong
+            | CardKind::Taoyuan
+            | CardKind::Wugu
+            | CardKind::Jiedao
+    )
+}
+
+impl SkillBehavior for QizuoBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        let crate::event::EventData::CardUsed(u) = event else {
+            return false;
+        };
+        if u.cancelled || u.player != owner {
+            return false;
+        }
+        // 副本载体自身的使用不再触发（上游 event.parent name 守卫同口径）
+        if ctx.state.turn.qizuo_copy == Some(u.card) {
+            return false;
+        }
+        let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+        if !qizuo_copyable(kind) {
+            return false;
+        }
+        // 延时锦囊：目标判定区无同名（上游 canUse 同口径）
+        if matches!(kind, CardKind::Le | CardKind::Bing | CardKind::ShanDian) {
+            for t in &u.targets {
+                if ctx
+                    .state
+                    .player(*t)
+                    .judge
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == kind)
+                {
+                    return false;
+                }
+            }
+        }
+        // 原目标全体存活（上游 isIn 同口径）
+        u.targets.iter().all(|t| ctx.state.player(*t).alive)
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let crate::event::EventData::CardUsed(u) = event else {
+            unreachable!("qizuo trigger event");
+        };
+        Box::new(QizuoMachine {
+            owner,
+            targets: u.targets.clone(),
+        })
+    }
+}
+
+/// 奇佐机器：无挂起一步机——以牌堆底实体为载体按原牌种复用（use_
+/// virtual_card 完整管线），载体实体入副本槽供其 AfterTriggers 过滤。
+#[derive(Clone)]
+struct QizuoMachine {
+    owner: PlayerId,
+    targets: Vec<PlayerId>,
+}
+
+impl SkillMachine for QizuoMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossQizuo { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 牌堆空无载体（上游凭空造牌不依赖实体，登记）；过滤后目标离场
+        //（同窗口其他触发先行结算所致）→ 不发动
+        if ctx.core.deck.is_empty()
+            || !self
+                .targets
+                .iter()
+                .all(|t| ctx.core.player(*t).alive)
+        {
+            return Flow::Done;
+        }
+        let u = ctx
+            .current_card_use()
+            .expect("qizuo machine: card use frame");
+        let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+        let carrier = ctx.use_virtual_card(self.owner, kind, self.targets.clone());
+        ctx.core.turn.qizuo_copy = Some(carrier);
         Flow::Done
     }
 }
@@ -4603,6 +4711,22 @@ pub const BOSS_JUECE: &str = "绝策";
 /// 使用（viewAs 转化：奇袭/武圣同族 PlayCard kind 改写臂；与奇袭[黑→拆]
 /// 上游同持时由玩家择技——native if/else 链奇袭优先，登记）。
 pub const BOSS_JIUCHI: &str = "酒池";
+/// 鬼谋（Boss 郭嘉，规则 v259，群雄乱入）：锁定技——结束阶段随机一名
+/// 其他未混乱角色进入混乱状态，其回合结束时解除（随机→座位序首个确定性
+/// 近似登记；上游 mad 为纯标记技+AI 态度面，原生规则面消费=鬼谋去重过滤）。
+pub const BOSS_GUIMOU: &str = "鬼谋";
+/// 远策（Boss 郭嘉，规则 v259，群雄乱入）：锁定技——每当其他角色对另一
+/// 其他角色造成伤害后，你选择一项：①判定，黑则受伤角色失 1 体力否则来
+/// 源失 1 体力；②判定，红则受伤角色回 1 体力否则来源回 1 体力（chooseControl
+/// AI 态度面+rejudge stop 检查→恒选选项一确定性近似登记；判定修正回调
+/// 为 AI 选牌面不落，判定=翻牌取色）。
+pub const BOSS_YUANCE: &str = "远策";
+/// 奇佐（Boss 郭嘉，规则 v259，群雄乱入）：锁定技——你使用锦囊牌结算
+/// 结束后，你使用一张同名牌（不可用则不发动）——副本以牌堆底实体为载体
+/// 走 use_virtual_card 完整管线（v169 原语；上游凭空造牌→载体弃置登记）；
+/// 触发时机 useCardAfter→CardUsed AfterTriggers 窗口近似（副本效果先于
+/// 原牌效果）；铁索不复制（上游 AI check 排除同口径）；无懈不可复制。
+pub const BOSS_QIZUO: &str = "奇佐";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -4896,6 +5020,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 牛头（v255 爆敛共用+枭首；蛮甲[extra-equip 藤甲挂点分散]+niepan
     // [boss 本地死亡复活面]混入未落登记；shen→群目录近似）
     ("牛头", Faction::Qun, &[BOSS_BAOLIAN, BOSS_XIAOSHOU], 7, Gender::Male),
+    // 郭嘉（v259 鬼谋+远策+奇佐；天妒=标准技共用；上游 group shen、
+    // names 郭|嘉、shen→群目录近似）
+    ("郭嘉", Faction::Qun, &[TIAN_DU, BOSS_GUIMOU, BOSS_YUANCE, BOSS_QIZUO], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6606,6 +6733,37 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_GUIMOU,
+            // 查询型单面：End begin 臂——座位序首个其他未混乱存活角色
+            // boss_mad 置位（其回合收束解除；随机→首个确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_YUANCE,
+            // 查询型单面：Damage commit 尾臂——来源≠受伤者且双方存活 →
+            // 判定（选项一恒定：黑→受伤者失 1 / 红→来源失 1；chooseControl
+            // AI 态度面→恒选项一确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_QIZUO,
+            // CardUsed AfterTriggers 触发：锦囊复用一步机（QizuoBehavior
+            // 门=无懈/铁索排除+延时同名去重+原目标存活；载体槽守卫递归）
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(QizuoBehavior),
         },
     ];
     (cards, skills)

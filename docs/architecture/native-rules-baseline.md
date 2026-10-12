@@ -2917,6 +2917,42 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v259（2026-10-11，T11 群雄乱入郭嘉片：鬼谋/远策/奇佐＋郭嘉条目，
+字段批）**：`PlayerState.boss_mad`+`TurnState.qizuo_copy` 双字段入状态
+/摘要/存档（**存档格式 59→60**；`MachineSnapshot::BossQizuo` 变体
+archive 68/摘要 66；a0 登记样例）。**鬼谋**（查询型 Noop）：End begin
+臂——座位序首个其他未混乱存活 `boss_mad` 置位（随机→首个确定性近似登
+记），本人回合收束解除（翻面跳过路径同解；上游 `goMad`=addTempSkill
+"mad" {player:"phaseAfter"}，mad 上游为纯标记技+AI 态度面——原生规则面
+消费仅鬼谋去重过滤，AI 面登记不落）。**远策**（查询型 Noop）：Damage
+commit 尾臂（damageEnd 族，扣血后）——来源≠受伤者且双方存活 hp>0 →
+判定：黑→受伤者失 1 / 红→来源失 1（emit LoseHp）。**奇佐**（触发
+CardUsed AfterTriggers+一步机 QizuoMachine，乱常机同款）：可复制标准
+锦囊 12 种（无懈排除/铁索不复制=上游 AI check 同口径/延时锦囊判定区同
+名去重=canUse 同口径/原目标全体存活）→牌堆底实体为载体按原牌种
+use_virtual_card（v169 原语）+载体入 qizuo_copy 槽守卫递归（上游
+event.parent name 守卫同口径；任一非载体提交即清+回合收束兜底清）。
+`BOSS_GENERALS` 尾追加**郭嘉**（def 索引 37/hp4/`[天妒, 鬼谋, 远策,
+奇佐]`——天妒=标准技共用随条目授入）。**登记差异**：奇佐触发时机
+useCardAfter→CardUsed AfterTriggers 窗口（副本效果先于原牌效果）；副
+本载体牌花色点数随载体（上游 createCard 保留）；载体实体入弃堆（v169
+既有）；远策 chooseControl 态度选面+rejudge stop+judge 修正回调不落
+（恒选项一确定性近似）；濒死未决 hp≤0 跳过；势力 shen→群目录近似。
+FROZEN 名单尾加「鬼谋」「远策」「奇佐」（128–130 名）。存档 v59→
+**v60**。版本 258→**259**。字段批探针：版本回退 258 复跑 14 场景哈希
+三值互异（旧 258 无字段/258+字段/259+字段）——位移=版本字段+新增字段
+双源、无行为面扰动，全量重录。回归
+`boss_guojia_guimou_mad_lifecycle`（四技实例/mad 置位/收束解除/过滤负
+例/往返）+`boss_guojia_yuance_judge_branches`（黑/红双分支/无郭嘉对
+照）+`boss_guojia_qizuo_trick_reuse`（无中生有 2+2/链挡/载体槽保持/
+杀不复制清槽/往返）——证据见
+[T11 郭嘉证据](../operations/evidence/2026-10-11-t11-boss-guojia-v259/README.md)。
+**坑位**：min≥1 询问空应答被拒两处复踩（discard_to_limit min=2/无懈窗
+Confirm——空应答=ChoicePending 假死象，新增 next_phase_settled/
+pass_nullify_windows 助手）；原生无 begin:false 帧直读误导（阶段结束走
+NextPhase 推 begin:false 帧，回合收束=Play 起 3 次 NP）；远策过滤勿排
+除持有者（上游允许郭嘉自身为来源/受伤者）。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害

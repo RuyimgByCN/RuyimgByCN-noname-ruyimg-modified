@@ -198,6 +198,11 @@ pub struct PlayerState {
     /// Boss 模式重整计数（P2/N08 模式入口批三-a，规则 v82）：死亡后
     /// 每次轮到其回合计数 +1，达阈值复活（仅 Boss 模式使用）。
     pub boss_chongzheng: u8,
+
+    /// 混乱（Boss 郭嘉鬼谋，规则 v259）：疯狂状态标记（上游 addTempSkill
+    /// "mad" 至该玩家 phaseAfter 同口径——其回合收束解除；上游 mad 仅
+    /// 挂标记+AI 态度面，原生规则面消费=鬼谋去重过滤）。
+    pub boss_mad: bool,
 }
 
 impl PlayerState {
@@ -270,6 +275,7 @@ impl PlayerState {
             revealed_generals: [false, false],
             wunature: None,
             boss_chongzheng: 0,
+            boss_mad: false,
         }
     }
 }
@@ -409,6 +415,10 @@ pub struct TurnState {
     /// 御风已发动次数（U05 xianjian 李逍遥，规则 v151）：每回合限两次
     ///（上游 xjyufeng usable:2 同口径；换回合随 TurnState 复位）。
     pub xjyufeng_used: u8,
+    /// 奇佐（Boss 郭嘉，规则 v259）：副本用牌载体槽（上游 event.parent
+    /// name 递归守卫同口径——filter 拒绝载体自身的 CardUsed；任一其他
+    /// 卡牌提交即清，回合收束兜底清）。
+    pub qizuo_copy: Option<u32>,
 }
 
 /// 对局结果。
