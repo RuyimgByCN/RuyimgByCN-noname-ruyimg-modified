@@ -2821,8 +2821,9 @@ damageBegin4 -11 最晚优先一致）。**枭首**（查询型 Noop）：End �
 「强征」「醉酒」「枭首」（117–120 名）。存档不变 v59。版本 254→**255**。
 版本回退探针（255→254 复跑 golden 全绿）证明 14 golden 位移唯一来源是
 版本字段，全量重录。回归
-`boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou` 五段（醉酒杀+1/爆敛+
-强征/满血对照/枭首无目标不触发/往返+守恒）——证据见
+`boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou` 五段+枭首触发面扩展
+段（2026-10-11 追加：压 2 号 hp≥self 后 End 首个目标受 3 断言——恒发动
+近似技须兼测负例与正例）——证据见
 [T11 阴间收尾证据](../operations/evidence/2026-10-11-t11-boss-yinjian-v255/README.md)。
 **坑位**：醉酒臂插扣血后无效（移增幅尾——语义序与上游最晚优先一致）；
 四 def 非表尾插入冻结表拦截（第 5 次）后移真表尾（锚=MOYANY 块+数组闭

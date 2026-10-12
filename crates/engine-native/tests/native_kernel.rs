@@ -2780,9 +2780,45 @@ fn boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou() {
     // 推回 1 号 End：此时 2 号 hp7 ≥ 1 号 hp7 → 枭首 3 伤
     let _ = h2_before;
     assert_eq!(e2.debug_hp(2), 7, "前置：2 号 hp7");
+
+    // ⑤ 枭首触发面扩展：压 2 号 hp 至 7 后（上方已置），驱动至 1 号
+    //    End → 座位序首个 hp≥self 其他存活=2 号 → 3 点伤害（7→4）
+    for _ in 0..24 {
+        if e2.turn().current == 1 && e2.turn().phase == Phase::End {
+            break;
+        }
+        if e2.outcome().is_some() {
+            break;
+        }
+        if let Some(c) = e2.open_choice().cloned() {
+            if c.spec.prompt == "dying_save" {
+                answer(&mut e2, ChoiceOption::Pass);
+                drain_choices(&mut e2);
+            } else {
+                answer_cards(&mut e2, &c);
+            }
+            drain_choices(&mut e2);
+            continue;
+        }
+        match next_phase(&mut e2) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Suspended => {}
+            CommandOutcome::Pending { choice } => {
+                let is_dying = choice.spec.prompt == "dying_save";
+                if is_dying {
+                    answer(&mut e2, ChoiceOption::Pass);
+                    drain_choices(&mut e2);
+                } else {
+                    answer_cards(&mut e2, &choice);
+                }
+            }
+            CommandOutcome::Rejected(r) => panic!("np rejected {r:?}"),
+        }
+    }
+    assert_eq!(e2.debug_hp(2), 4, "枭首：2 号受 3 伤害（7→4）");
+    assert_eq!(e.debug_hp(0), 6, "前局不变（回归保护）");
     let snap = e2.save();
     let r = Engine::restore(&snap).expect("往返");
-    assert!(r.state_core().skills.contains_key(&(1, nt_def)) == false || true);
     assert_zone_conservation(&r);
     assert_zone_conservation(&e2);
 }
