@@ -2890,6 +2890,17 @@ CardsDiscarded 面（胆术同口径）；getIndex 逐目标→每次弃牌事�
 关卡流程面不落。规则 257/存档 v59 不动——证据见
 [bianshen3/遗留勘验证据](../operations/evidence/2026-10-11-t11-bianshen3-yanjiu-survey/README.md)。
 
+**mode_boss 主线收口评估（2026-10-11，勘验登记批，无版本递增）**：程序化
+全量枚举 mode/boss.js 全部 71 条目——已入库 31 条目（主线 Boss 对抗链四
+凶→神兽→四象→星宿→年兽/阴间六将 v207–v257）+运行时授予技五件；已处置=
+隐藏链八技+bianshen 族+编排三翼+不臣+试炼态。**剩余四族独立子内容集**
+（约 34 将/90+ 技，不属主线缺口）：十殿阎罗系（13 将/40 技全族未勘）、
+魑魅魍魉系（4 将/9 技，guimei/minbao 机制承载待勘）、吕布变身系（暴怒
+changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落技可较快入
+库）+年兽散量（气象/damagecount/jiding 本体）。规则 257/存档 v59 不动——
+证据见
+[mode_boss 收口证据](../operations/evidence/2026-10-11-t11-modeboss-closeout/README.md)。
+
 **规则 v227（2026-10-11，T11 毕方批首片：招祸；断链批合并录 v225/v226/
 v227）**：`BOSS_GENERALS` 增**毕方**（群/hp25/`[妖兽, 招祸]`，表序插梼
 杌后——书精/相柳/朱厌 def 索引后移一位测试同步）。**招祸**两面：伤害
