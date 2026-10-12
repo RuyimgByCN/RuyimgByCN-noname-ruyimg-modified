@@ -1177,8 +1177,9 @@ impl Engine {
                     let mut found = false;
                     for p in self.state.core.players.iter_mut() {
                         if let Some(pos) = p.hand.iter().position(|c| *c == id) {
-                            let c = p.hand.remove(pos);
-                            self.state.core.player_mut(player).hand.push(c);
+                            // 仅移出（尾部统一 push——此处重复 push 会产生
+                            // 同 id 双份实体，区域守恒炸）
+                            p.hand.remove(pos);
                             found = true;
                             break;
                         }
@@ -4567,6 +4568,14 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         }
         M::BossXiaoxiong { owner } => {
             push_u8(h, 69);
+            push_u8(h, *owner);
+        }
+        M::BossLingbo { owner } => {
+            push_u8(h, 70);
+            push_u8(h, *owner);
+        }
+        M::BossTashui { owner } => {
+            push_u8(h, 71);
             push_u8(h, *owner);
         }
         M::BossBuchun { owner, stage, targets } => {

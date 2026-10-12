@@ -2917,6 +2917,34 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v262（2026-10-11，T11 群雄乱入甄姬片：踏水/凌波/娇孝/芳华＋甄姬
+条目）**：**凌波**（触发 CardResponded+extra CardUsed+一步机
+LingboMachine）：打出/使用【闪】后摸 2（frequent；viewAs 闪按声明牌
+种）。**踏水**（同族触发+TashuiMachine）：使用/打出黑色牌后，座位序首
+个其他存活翻面（TurnOverBefore 通道=虚失同款；chooseTarget AI 面→首
+个确定性近似登记）。**娇孝**（查询型 Noop）：CardUsed commit 内联臂—
+—成为红色牌目标后摸 1（实体花色；闪电自置=targets 空隐式自目标等价分
+支）。**芳华**（查询型 Noop）：End begin 臂——存在翻面角色时全部翻面
+者各失 1。`BOSS_GENERALS` 尾追加**甄姬**（def 索引 40/hp4/female/
+`[踏水, 凌波, 娇孝, 芳华]`）。**登记差异**：娇孝对桃园/五谷/无中隐式
+全员（targets 空）不触发（上游 useCardToTargeted 逐目标）；踏水目标
+AI 态度面→首个；势力 shen→群目录近似。**顺带修复**：
+`debug_move_named_card_to_hand` 手牌回收分支双 push（同 id 双份实体，
+区域守恒炸——删函数体内 push，尾部统一保留）。FROZEN 名单尾加「凌波」
+「娇孝」「芳华」「踏水」（136–139 名）。存档不变 v60。版本 261→
+**262**。版本回退探针（262→261 复跑 golden 全绿）证明 14 golden 位移
+唯一来源是版本字段，全量重录。回归
+`boss_zhenji_lingbo_jiaoxia_draws`（闪打出摸 2/自置红闪电娇孝摸 1/黑
+杀负例）+`boss_zhenji_tashui_flip_and_fanghua`（黑杀翻面/芳华翻面者失
+1/往返）——证据见
+[T11 甄姬证据](../operations/evidence/2026-10-11-t11-boss-zhenji-v262/README.md)。
+**坑位**：debug_set_deck_top_by 实际 push 牌堆尾（判定摸牌「后推先抽」
+口径）与 debug_place 头部扫描不衔接；debug_place 手牌回收分支只查不删
+（重影——测试用 state_core_mut 精确搬移绕开）；place 只按 kind 匹配
+（shandian/shandian_safe 同 kind——按名取须 move_named）；play 者须为
+回合玩家；娇孝臂先按 targets 过滤则自置分支死路（先取全部持有者再分
+支）。
+
 **规则 v261（2026-10-11，T11 群雄乱入刘备片：枭雄/章武＋刘备条目）**：
 **枭雄**（触发 CardUsed AfterTriggers+一步机 XiaoxiongMachine，奇佐同
 款）：他人使用基本/锦囊牌（含延时——上游 get.type(card,"trick") 延时算

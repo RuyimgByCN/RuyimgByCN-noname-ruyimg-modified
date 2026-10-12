@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 261;
+pub const STANDARD_RULESET_VERSION: u64 = 262;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -880,6 +880,112 @@ impl SkillMachine for XiaoxiongMachine {
             to: self.owner,
             cards: vec![carrier],
         });
+        Flow::Done
+    }
+}
+
+/// 凌波（Boss 甄姬，规则 v262，群雄乱入）：你使用或打出【闪】后摸两张。
+/// 触发挂 CardResponded+CardUsed（extra）；filter=声明/实体牌种为闪。
+struct LingboBehavior;
+
+impl SkillBehavior for LingboBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        match event {
+            crate::event::EventData::CardResponded { card, player } => {
+                *player == owner && ctx.catalog.card_kind(*card) == CardKind::Shan
+            }
+            crate::event::EventData::CardUsed(u) => {
+                u.player == owner
+                    && !u.cancelled
+                    && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card))
+                        == CardKind::Shan
+            }
+            _ => false,
+        }
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(LingboMachine { owner })
+    }
+}
+
+/// 凌波机器：无挂起一步机——摸 2。
+#[derive(Clone)]
+struct LingboMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for LingboMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossLingbo { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.draw_cards(self.owner, 2);
+        Flow::Done
+    }
+}
+
+/// 踏水（Boss 甄姬，规则 v262，群雄乱入）：你使用或打出黑色牌后，将一名
+/// 其他角色翻面。触发挂 CardResponded+CardUsed（extra）；filter=实体花
+/// 色黑（上游 get.color(event.card) 实体同口径）。
+struct TashuiBehavior;
+
+impl SkillBehavior for TashuiBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        let card = match event {
+            crate::event::EventData::CardResponded { card, player } => {
+                if *player != owner {
+                    return false;
+                }
+                *card
+            }
+            crate::event::EventData::CardUsed(u) => {
+                if u.player != owner || u.cancelled {
+                    return false;
+                }
+                u.card
+            }
+            _ => return false,
+        };
+        matches!(
+            ctx.catalog.cards[card as usize].suit,
+            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+        )
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(TashuiMachine { owner })
+    }
+}
+
+/// 踏水机器：无挂起一步机——座位序首个其他存活角色翻面（chooseTarget
+/// AI 态度面→首个确定性近似登记；经 TurnOverBefore 走翻面提交，虚失同
+/// 款通道；无其他存活静默）。
+#[derive(Clone)]
+struct TashuiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for TashuiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossTashui { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let seats = ctx.core.players.len() as PlayerId;
+        if let Some(t) = (0..seats)
+            .find(|&t| t != self.owner && ctx.core.player(t).alive)
+        {
+            ctx.emit(EventData::TurnOverBefore {
+                player: t,
+                cancelled: false,
+            });
+        }
         Flow::Done
     }
 }
@@ -4833,6 +4939,21 @@ pub const BOSS_XIAOXIONG: &str = "枭雄";
 ///（上游刘备 [1,∞] 自选+来源 chooseToDiscard/取消双 AI 态度面→双方恒弃
 /// 首张确定性近似登记；上游 num=刘备弃牌数可多张登记）。
 pub const BOSS_ZHANGWU: &str = "章武";
+/// 凌波（Boss 甄姬，规则 v262，群雄乱入）：锁定技——你使用或打出【闪】
+/// 后摸两张牌（frequent 无询问；上游 [respond, useCard] 双触发→原生
+/// CardResponded 触发+CardUsed extra 触发；viewAs 闪按声明牌种）。
+pub const BOSS_LINGBO: &str = "凌波";
+/// 娇孝（Boss 甄姬，规则 v262，群雄乱入）：锁定技——你成为红色牌的目标
+/// 后摸一张牌（frequent；上游 target useCardToTargeted→原生 CardUsed
+/// commit 臂 targets 含持有者；红色=实体花色 Heart/Diamond）。
+pub const BOSS_JIAOXIA: &str = "娇孝";
+/// 芳华（Boss 甄姬，规则 v262，群雄乱入）：锁定技——结束阶段若存在翻面
+/// 角色，全部翻面角色各失去 1 点体力。
+pub const BOSS_FANGHUA: &str = "芳华";
+/// 踏水（Boss 甄姬，规则 v262，群雄乱入）：锁定技——你使用或打出黑色牌
+/// 后，将一名其他角色翻面（chooseTarget AI 态度面→座位序首个其他存活
+/// 确定性近似登记；经 TurnOverBefore 走翻面提交=虚失同款通道）。
+pub const BOSS_TASHUI: &str = "踏水";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5133,6 +5254,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("张春华", Faction::Qun, &[JUE_QING, BOSS_WUXIN, BOSS_SHANGSHIX], 4, Gender::Female),
     // 刘备（v261 枭雄+章武；上游 group shen→群目录近似）
     ("刘备", Faction::Qun, &[BOSS_XIAOXIONG, BOSS_ZHANGWU], 8, Gender::Male),
+    // 甄姬（v262 踏水/凌波/娇孝/芳华；上游 group shen→群目录近似）
+    ("甄姬", Faction::Qun, &[BOSS_TASHUI, BOSS_LINGBO, BOSS_JIAOXIA, BOSS_FANGHUA], 4, Gender::Female),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -6920,6 +7043,46 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_LINGBO,
+            // CardResponded+CardUsed 触发：打出/使用闪后摸 2 一步机
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardResponded,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::CardUsed],
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(LingboBehavior),
+        },
+        SkillDef {
+            name: BOSS_JIAOXIA,
+            // 查询型单面：CardUsed commit 臂——成为红色牌目标后摸 1
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_FANGHUA,
+            // 查询型单面：End begin 臂——存在翻面角色则全部各失 1
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_TASHUI,
+            // CardResponded+CardUsed 触发：打出/使用黑牌后翻面一步机
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardResponded,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::CardUsed],
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(TashuiBehavior),
         },
     ];
     (cards, skills)

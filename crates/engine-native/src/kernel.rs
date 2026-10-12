@@ -1016,6 +1016,36 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
             }
         }
     }
+    // 娇孝（Boss 甄姬，规则 v262）：成为红色牌的目标后摸 1（上游 target
+    // useCardToTargeted frequent 同口径；红色=实体花色 Heart/Diamond；
+    // 含延时自置目标）
+    if let Some(jxdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_JIAOXIA)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == jxdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| ctx.core.player(*o).alive)
+            .collect();
+        if let Some(holder) = holders.first() {
+            let red = matches!(
+                ctx.catalog.cards[u.card as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            );
+            // 显式目标面：targets 含持有者；闪电自置：targets 空（隐式
+            // 自目标，上游 useCardToTargeted target=使用者同口径）
+            let is_self_shandian = u.targets.is_empty()
+                && u.player == *holder
+                && effective_kind == CardKind::ShanDian;
+            if red && (u.targets.contains(holder) || is_self_shandian) {
+                ctx.draw_cards(*holder, 1);
+            }
+        }
+    }
     ctx.log(LogEvent::CardPlayed {
         card: u.card,
         player: u.player,
@@ -2240,6 +2270,26 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                 crate::event::DamageNature::Fire,
                                 None,
                             )));
+                        }
+                    }
+                }
+                // 芳华（Boss 甄姬，规则 v262）：结束阶段若存在翻面角色，
+                // 全部翻面角色各失去 1 点体力（上游 get.players 过滤
+                // isTurnedOver 逐个 loseHp 同口径）
+                if let Some(fhdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_FANGHUA)
+                {
+                    if ctx.core.has_skill(player, fhdef)
+                        && ctx.core.players.iter().any(|p| p.alive && p.face_down)
+                    {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if ctx.core.player(t).alive
+                                && ctx.core.player(t).face_down
+                            {
+                                ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+                            }
                         }
                     }
                 }
