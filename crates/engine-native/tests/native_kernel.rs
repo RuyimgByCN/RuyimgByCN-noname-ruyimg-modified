@@ -2633,6 +2633,64 @@ fn boss_nianshou_nianrui_mengtai() {
     assert_zone_conservation(&r);
 }
 
+/// 年兽系守翼片（规则 v251）：守翼（守翼年兽形态）——所有牌无距离限
+/// 制：①杀隔位可指定②顺手牵羊隔位可指定③非持有者对照被拒。守翼年兽
+/// 条目（[年瑞,猛态,守翼,形态轮换]；上游形态表含 boss_nbaonu 未落随批）。
+#[test]
+fn boss_nianshou_shouyi_range_free() {
+    let mut e = Engine::new_boss_stage(71001, 4, 1, 3, 6, 4, 0);
+    let sy_def = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()
+        + 28) as u16; // BOSS_GENERALS[28] 守翼年兽
+    e.debug_set_general_def(1, sy_def);
+    e.debug_set_hp(1, 12);
+    assert_eq!(
+        e.catalog().general_meta(sy_def).map(|g| g.0),
+        Some("守翼年兽"),
+        "守翼年兽入目录"
+    );
+    let sy = e.catalog().skill_by_name("守翼").expect("守翼入目录");
+    assert!(e.state_core().skills.contains_key(&(1, sy)));
+
+    // ① 杀隔位可指定（1→3 距离 2）
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    e.debug_clear_hand(3);
+    e.debug_set_hp(3, 4);
+    let sha = e.debug_place(1, "sha");
+    let out = play(&mut e, sha, vec![3]);
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. }),
+        "守翼：杀无距离 {out:?}"
+    );
+    drain_choices(&mut e);
+    assert_eq!(e.debug_hp(3), 3, "隔位杀命中");
+
+    // ② 顺手牵羊隔位可指定（Accepted 即距离面合法）
+    e.debug_clear_hand(1);
+    let req = e.debug_place(1, "snatch");
+    play(&mut e, req, vec![3]);
+    drain_choices(&mut e);
+
+    // ③ 非持有者对照：2 号隔位杀 0 号 → 距离拒
+    advance_to_play(&mut e, 2);
+    e.debug_clear_hand(2);
+    e.debug_clear_hand(0);
+    let sha2 = e.debug_place(2, "sha");
+    let out = play(&mut e, sha2, vec![0]);
+    assert!(
+        !matches!(out, CommandOutcome::Accepted { .. }),
+        "非持有者：隔位杀应被距离拒"
+    );
+
+    // ④ 存档往返
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("往返");
+    assert!(r.state_core().skills.contains_key(&(1, sy)), "守翼实例往返");
+    assert_zone_conservation(&r);
+    assert_zone_conservation(&e);
+}
+
 /// 年兽系睿智片（规则 v250）：睿智（睿智年兽形态）——准备阶段其余角色
 /// （手牌>1 或装备>1）保留一张手牌和一张装备区内的牌，弃置其余（保留
 /// 首张确定性近似登记）。睿智年兽条目（[年瑞,猛态,睿智,形态轮换]）。

@@ -2851,7 +2851,12 @@ fn apply_command(
                                 .map(|def| core.skills.keys().any(|(_, dd)| *dd == def))
                                 .unwrap_or(false);
                             active && core.is_boss_side(core.turn.current)
-                        });
+                        })
+                        // 守翼（年兽守翼形态，规则 v251）：所有牌无视距离
+                        || catalog
+                            .skill_by_name(crate::content::standard::BOSS_SHOUYI)
+                            .map(|def| core.has_skill(core.turn.current, def))
+                            .unwrap_or(false);
                     let feiren_range_free = sha_range_free;
                     let zfs_free = core.turn.zhufangshenshi_target == Some(target);
                     // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
@@ -3028,6 +3033,11 @@ fn apply_command(
                             .unwrap_or(false);
                         active && core.is_boss_side(from)
                     };
+                    // 守翼（年兽守翼形态，规则 v251）：所有牌无视距离
+                    let shouyi_free = catalog
+                        .skill_by_name(crate::content::standard::BOSS_SHOUYI)
+                        .map(|def| core.has_skill(from, def))
+                        .unwrap_or(false);
                     // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
                     let fentian_red_free = {
                         let red = matches!(
@@ -3053,6 +3063,7 @@ fn apply_command(
                         && !tannang_free
                         && !fentian_red_free
                         && !shenen_boss_free
+                        && !shouyi_free
                         && core.computed_distance(catalog, from, target) > 1
                     {
                         return Err(RejectReason::IllegalTargets);
