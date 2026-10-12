@@ -2540,6 +2540,36 @@ fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
             }
         }
     }
+    // 绝策（Boss 马面，规则 v258，一将包李儒旧绝策）：自己回合内其他角
+    // 色失去最后一手牌（弃后空手）→ 对其造成 1 点伤害（chooseBool AI→
+    // 恒发动确定性近似登记；lose/equip/gain 全事件族→CardsDiscarded 面
+    // 登记差异）
+    if let Some(jcdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_JUECE)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == jcdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| {
+                ctx.core.player(*o).alive
+                    && ctx.core.turn.current == *o
+                    && *o != player
+            })
+            .collect();
+        for holder in holders {
+            if ctx.core.player(player).hand.is_empty() {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(
+                    Some(holder),
+                    player,
+                    1,
+                )));
+            }
+        }
+    }
 }
 
 /// 造异异变 def 查询（运行时授予技）。
