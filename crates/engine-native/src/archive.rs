@@ -56,7 +56,10 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// `boss_mad`（混乱标记）；`TurnState` 尾部追加 `qizuo_copy`（副本载体
 /// 槽）；`MachineSnapshot` 追加 `BossQizuo` 变体。v59 字节被版本门禁拒绝
 ///（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 60;
+/// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
+/// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
+/// 数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 61;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -967,6 +970,10 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
         }
         MachineSnapshot::BossTashui { owner } => {
             w.u8(71);
+            enc_pid(w, owner);
+        }
+        MachineSnapshot::BossZjLeiji { owner } => {
+            w.u8(72);
             enc_pid(w, owner);
         }
         MachineSnapshot::Shedu { owner } => {
@@ -2146,6 +2153,10 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let owner = dec_pid(r)?;
             MachineSnapshot::BossTashui { owner }
         }
+        72 => {
+            let owner = dec_pid(r)?;
+            MachineSnapshot::BossZjLeiji { owner }
+        }
         64 => {
             let owner = dec_pid(r)?;
             MachineSnapshot::Shedu { owner }
@@ -2910,6 +2921,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
             w.u32(v);
         }
     }
+    // 极点链挡旗标（v61，Boss 张角）
+    w.boolean(t.jidian_chain);
     // skills（BTreeMap：按键序确定性遍历）
     w.len(s.core.skills.len());
     for ((owner, def), inst) in &s.core.skills {
@@ -3239,6 +3252,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         1 => Some(r.u32()?),
         t => return Err(ArchiveError::BadTag("turn_qizuo_copy", t)),
     };
+    let jidian_chain = r.boolean()?;
     let skill_count = r.len()?;
     let mut skills = std::collections::BTreeMap::new();
     for _ in 0..skill_count {
@@ -3351,6 +3365,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 minwan_targets,
                 yanyu_count,
                 qizuo_copy,
+                jidian_chain,
             },
             skills,
             declared_kinds,

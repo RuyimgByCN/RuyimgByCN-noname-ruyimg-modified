@@ -419,6 +419,9 @@ pub struct TurnState {
     /// name 递归守卫同口径——filter 拒绝载体自身的 CardUsed；任一其他
     /// 卡牌提交即清，回合收束兜底清）。
     pub qizuo_copy: Option<u32>,
+    /// 极点（Boss 张角，规则 v263）：链挡旗标——极点造成的雷伤不再触发
+    /// 极点（登记差异：上游 damageAfter 真递归，原生确定性判定可能循环）。
+    pub jidian_chain: bool,
 }
 
 /// 对局结果。

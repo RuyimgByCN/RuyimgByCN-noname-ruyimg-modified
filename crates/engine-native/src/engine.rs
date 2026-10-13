@@ -385,6 +385,7 @@ impl Engine {
                 minwan_targets: Vec::new(),
                 yanyu_count: 0,
                 qizuo_copy: None,
+                jidian_chain: false,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -4259,6 +4260,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
             push_u32(&mut h, v);
         }
     }
+    // 极点链挡旗标（Boss 张角，规则 v263）
+    push_u8(&mut h, c.turn.jidian_chain as u8);
 
     push_u32(&mut h, c.turn.ciqiu_dying.len() as u32);
     for p in &c.turn.ciqiu_dying {
@@ -4576,6 +4579,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         }
         M::BossTashui { owner } => {
             push_u8(h, 71);
+            push_u8(h, *owner);
+        }
+        M::BossZjLeiji { owner } => {
+            push_u8(h, 72);
             push_u8(h, *owner);
         }
         M::BossBuchun { owner, stage, targets } => {
@@ -5296,6 +5303,7 @@ mod tests {
                 minwan_targets: Vec::new(),
                 yanyu_count: 0,
                 qizuo_copy: None,
+                jidian_chain: false,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,
@@ -5386,6 +5394,7 @@ mod tests {
                 minwan_targets: Vec::new(),
                 yanyu_count: 0,
                 qizuo_copy: None,
+                jidian_chain: false,
                 land_used: false,
                 land_sha_used: false,
                 discard_phase_discarded: 0,

@@ -506,6 +506,57 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 极点（Boss 张角，规则 v263）：你造成伤害后——距离受伤者 1 以内的
+    // 一名其他角色判定：黑则其受到 1 点雷伤（上游 source damageAfter
+    // chooseTarget get.distance(trigger.player,target)<=1 + judge 黑 →
+    // damage("thunder") 同口径；chooseTarget AI→座位序首个确定性近似；
+    // 链挡旗标=极点雷伤不自我递归，登记差异：上游 damageAfter 真递归；
+    // 判定为内联确定性口径，无改判窗）
+    if let Some(jddef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_JIDIAN)
+    {
+        if let Some(src) = d.source {
+            if ctx.core.player(src).alive && ctx.core.has_skill(src, jddef) {
+                // 链挡：极点造成的雷伤不再触发极点
+                if !ctx.core.turn.jidian_chain {
+                    let seats = ctx.core.players.len() as PlayerId;
+                    if let Some(t) = (0..seats).find(|&t| {
+                        t != d.target
+                            && ctx.core.player(t).alive
+                            && ctx
+                                .core
+                                .computed_distance(ctx.catalog, d.target, t)
+                                <= 1
+                    }) {
+                        // 置链挡后 emit：嵌套 Damage 帧的极点臂见旗标清除
+                        // 并跳过（挡恰一层=极点雷伤不链式，登记差异）
+                        ctx.core.turn.jidian_chain = true;
+                        let judged = ctx.draw_judge_card();
+                        let black = matches!(
+                            ctx.catalog.cards[judged as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        );
+                        ctx.to_discard(judged);
+                        if black {
+                            ctx.emit(EventData::Damage(
+                                crate::machine::damage_data_with(
+                                    Some(src),
+                                    t,
+                                    1,
+                                    crate::event::DamageNature::Thunder,
+                                    None,
+                                ),
+                            ));
+                        }
+                    }
+                } else {
+                    // 嵌套极点雷伤到达：清链挡（仅挡一层）
+                    ctx.core.turn.jidian_chain = false;
+                }
+            }
+        }
+    }
     // 逐厄（Boss 穷奇，规则 v211）：global damageEnd——任何人受到伤害
     // 后（来源存活且非穷奇），穷奇与来源各摸一张（上游 boss_zhue
     // asyncDraw([player, source]) 同口径）
@@ -7375,13 +7426,21 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                             .map(|d| ctx.core.has_skill(r, d))
                             .unwrap_or(false);
                         let has_any_hand = has_gui_cai && !p.hand.is_empty();
+                        // 天道：任意手牌或装备牌可改判（hes 全量，规则 v263）
+                        let tian_dao =
+                            ctx.catalog.skill_by_name(crate::content::standard::BOSS_TIANDAO);
+                        let has_tian_dao = tian_dao
+                            .map(|d| ctx.core.has_skill(r, d))
+                            .unwrap_or(false);
+                        let has_any_hes =
+                            has_tian_dao && (!p.hand.is_empty() || !p.equips.is_empty());
                         let has_black = p
                             .hand
                             .iter()
                             .chain(p.equips.iter())
                             .copied()
                             .any(is_black_card);
-                        if !has_black && !has_any_hand {
+                        if !has_black && !has_any_hand && !has_any_hes {
                             cur.rewriters.remove(0);
                             continue;
                         }
@@ -7407,14 +7466,20 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     let gui_cai_holders_any = gui_cai
                         .map(|d| ctx.core.has_skill(rewriter, d))
                         .unwrap_or(false);
+                    // 天道持有者：全部手牌与装备牌可打（hes 全量，规则 v263）
+                    let tian_dao =
+                        ctx.catalog.skill_by_name(crate::content::standard::BOSS_TIANDAO);
+                    let tian_dao_holders_any = tian_dao
+                        .map(|d| ctx.core.has_skill(rewriter, d))
+                        .unwrap_or(false);
                     for c in ctx.core.player(rewriter).hand.iter().copied() {
-                        if gui_cai_holders_any || is_black(c) {
+                        if tian_dao_holders_any || gui_cai_holders_any || is_black(c) {
                             options.push(ChoiceOption::Card(c));
                         }
                     }
-                    // 装备区黑色牌仅鬼道路径可用（鬼才限手牌，对齐官方）
+                    // 装备区：黑色牌（鬼道路径）或天道持有者任意装备
                     for c in ctx.core.player(rewriter).equips.iter().copied() {
-                        if is_black(c) {
+                        if tian_dao_holders_any || is_black(c) {
                             options.push(ChoiceOption::Card(c));
                         }
                     }
@@ -7513,6 +7578,10 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
             // 改判者：自判定阶段拥有者起按座位序（含本人），逐人一次——
             // 鬼道（黑色牌改判）或鬼才（任意手牌改判）持有者均入队（对齐旧线
             // judgment_rewriters(tx, owner)；同座位双技能只入队一次）。
+            // 天道（Boss 张角，规则 v263）：hes 任意牌可改判——改判资格
+            // 与鬼道/鬼才并列（座位序同队）
+            let tian_dao =
+                ctx.catalog.skill_by_name(crate::content::standard::BOSS_TIANDAO);
             let rewriters: Vec<PlayerId> = ctx
                 .core
                 .seat_order_from(self.owner)
@@ -7521,7 +7590,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     let has = |d: Option<crate::ids::SkillDefId>| {
                         d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
                     };
-                    has(gui_dao) || has(gui_cai)
+                    has(gui_dao) || has(gui_cai) || has(tian_dao)
                 })
                 .collect();
             self.current = Some(JudgementProgress {

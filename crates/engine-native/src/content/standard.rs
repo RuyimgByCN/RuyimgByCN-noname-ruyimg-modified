@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 263;
+pub const STANDARD_RULESET_VERSION: u64 = 264;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -985,6 +985,71 @@ impl SkillMachine for TashuiMachine {
                 player: t,
                 cancelled: false,
             });
+        }
+        Flow::Done
+    }
+}
+
+/// 雷击·张角（Boss 张角，规则 v263，群雄乱入）：你使用或打出【闪】后，
+/// 一名其他角色判定：黑则其受到 1 点雷伤且你摸一张牌。触发挂 CardResponded
+/// +CardUsed（extra）；chooseTarget AI 态度面→座位序首个确定性近似。
+struct ZjLeijiBehavior;
+
+impl SkillBehavior for ZjLeijiBehavior {
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        match event {
+            crate::event::EventData::CardResponded { card, player } => {
+                *player == owner && ctx.catalog.card_kind(*card) == CardKind::Shan
+            }
+            crate::event::EventData::CardUsed(u) => {
+                u.player == owner
+                    && !u.cancelled
+                    && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card))
+                        == CardKind::Shan
+            }
+            _ => false,
+        }
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ZjLeijiMachine { owner })
+    }
+}
+
+/// 雷击·张角机器：无挂起一步机——座位序首个其他存活角色判定（内联确定
+/// 性口径=铁骑先例，无改判窗）：黑则 1 雷伤+持有者摸 1；红色无伤。
+#[derive(Clone)]
+struct ZjLeijiMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for ZjLeijiMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossZjLeiji { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let seats = ctx.core.players.len() as PlayerId;
+        if let Some(t) = (0..seats).find(|&t| t != self.owner && ctx.core.player(t).alive)
+        {
+            let judged = ctx.draw_judge_card();
+            let black = matches!(
+                ctx.catalog.cards[judged as usize].suit,
+                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+            );
+            ctx.to_discard(judged);
+            if black {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(self.owner),
+                    t,
+                    1,
+                    crate::event::DamageNature::Thunder,
+                    None,
+                )));
+                ctx.draw_cards(self.owner, 1);
+            }
         }
         Flow::Done
     }
@@ -4966,6 +5031,19 @@ pub const BOSS_ZYHONGLIAN: &str = "红莲·周瑜";
 /// 失去一次牌后进行判定：红色则一名其他角色失去 1 点体力（chooseTarget
 /// AI 态度面→座位序首个其他存活确定性近似登记）。
 pub const BOSS_XIANYIN: &str = "仙音";
+/// 天道（Boss 张角，规则 v263，群雄乱入）：锁定技——判定牌确定前，你可
+/// 打出一张手牌或装备牌替换判定牌，并获得原判定牌（改判机 rewriters 扩
+/// 展：hes 任意牌，鬼道/鬼才同族）。
+pub const BOSS_TIANDAO: &str = "天道";
+/// 雷击·张角（Boss 张角，规则 v263，群雄乱入；上游 boss_leiji 与青龙
+/// boss_releiji 显示名同为「雷击」，按迅影批改名映射先例以「雷击·张角」
+/// 入目录登记）：锁定技——你使用或打出【闪】后，一名其他角色判定：黑则
+/// 其受到 1 点雷伤且你摸一张牌（chooseTarget AI→座位序首个确定性近似）。
+pub const BOSS_ZJLEIJI: &str = "雷击·张角";
+/// 极点（Boss 张角，规则 v263，群雄乱入）：锁定技——你造成伤害后，距离
+/// 受伤者 1 以内的一名其他角色判定：黑则其受到 1 点雷伤（chooseTarget
+/// AI→座位序首个确定性近似；不自我递归=链挡旗标登记差异）。
+pub const BOSS_JIDIAN: &str = "极点";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5270,6 +5348,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("甄姬", Faction::Qun, &[BOSS_TASHUI, BOSS_LINGBO, BOSS_JIAOXIA, BOSS_FANGHUA], 4, Gender::Female),
     // 周瑜（v263 火神+红莲·周瑜+仙音；上游 group shen→群目录近似）
     ("周瑜", Faction::Qun, &[BOSS_HUOSHEN, BOSS_ZYHONGLIAN, BOSS_XIANYIN], 6, Gender::Male),
+    // 张角（v263 雷击·张角+天道+极点；上游 group shen→群目录近似）
+    ("张角", Faction::Qun, &[BOSS_ZJLEIJI, BOSS_TIANDAO, BOSS_JIDIAN], 8, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7117,6 +7197,36 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_XIANYIN,
             // 查询型单面：CardsDiscarded 臂（非当前回合）——判定红→座位
             // 序首个其他存活失 1（chooseTarget AI→首个确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_TIANDAO,
+            // 查询型单面：改判机 rewriters 扩展（hes 任意牌改判+获得原判
+            // 定牌）——JudgePhase 机器内联，无独立触发
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZJLEIJI,
+            // CardResponded+CardUsed 触发：打出/使用【闪】后一步机（首个
+            // 其他存活判定黑→1 雷伤+摸 1）
+            trigger: Some(TriggerMeta {
+                event: EventKind::CardResponded,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::CardUsed],
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ZjLeijiBehavior),
+        },
+        SkillDef {
+            name: BOSS_JIDIAN,
+            // 查询型单面：Damage commit 尾臂——距受伤者 ≤1 的首个其他存
+            // 活判定黑→1 雷伤（链挡旗标不自我递归=登记差异）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
