@@ -1,0 +1,3946 @@
+   Compiling engine-core v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core)
+warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+  --> crates/engine-core/src/effect/mod.rs:10:5
+   |
+10 |     choose_gain_other_skill, lose_gained_skill, resolve_choose_gain_other_skill,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+11 |     resolve_lose_gained_skill, resolve_potheyun, resolve_potheyun_pick,
+   |                                ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `primitives::enable_equip_slot`
+  --> crates/engine-core/src/effect/mod.rs:18:16
+   |
+18 | pub(crate) use primitives::enable_equip_slot;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_xinfu_qiai`
+  --> crates/engine-core/src/effect/mod.rs:21:16
+   |
+21 | pub(crate) use primitives::resolve_xinfu_qiai;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_twxiongjun`
+  --> crates/engine-core/src/effect/mod.rs:59:16
+   |
+59 | pub(crate) use primitives::resolve_twxiongjun;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_yixiang`
+  --> crates/engine-core/src/effect/mod.rs:60:16
+   |
+60 | pub(crate) use primitives::resolve_yixiang;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_qiangyong`
+  --> crates/engine-core/src/effect/mod.rs:61:16
+   |
+61 | pub(crate) use primitives::resolve_qiangyong;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_duoduan`
+  --> crates/engine-core/src/effect/mod.rs:63:16
+   |
+63 | pub(crate) use primitives::resolve_duoduan;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_reliangyin`
+  --> crates/engine-core/src/effect/mod.rs:67:16
+   |
+67 | pub(crate) use primitives::resolve_reliangyin;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `commit_hand_compare`
+  --> crates/engine-core/src/effect/mod.rs:72:26
+   |
+72 |     commit_guanxing_top, commit_hand_compare, commit_hand_compare_between,
+   |                          ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+   --> crates/engine-core/src/effect/mod.rs:142:31
+    |
+142 |     resolve_potzhouyu_choice, resolve_rechuhai_choice, skill_pile_def, twchengpu_field_cards,
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^
+...
+203 |     RESOLVE_ZHENGRONG_CUSTOM_CHOICE, RESOLVE_ZHENGSU_CHOICE, RESOLVE_ZHENLIANG_DAMAGE,
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `actor`
+    --> crates/engine-core/src/command/resolve_choice/group_pre_2.rs:3318:9
+     |
+3318 |     let actor = PlayerId::new(payload[1]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:2845:9
+     |
+2845 |     let skill = engine_api::SkillId::new(payload[2]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:3031:9
+     |
+3031 |     let skill = engine_api::SkillId::new(*skill);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:3180:17
+     |
+3180 |             let skill = engine_api::SkillId::new(*skill);
+     |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:203:13
+    |
+203 |         let target = PlayerId::new(payload[3]);
+    |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:679:9
+    |
+679 |     let mut target = PlayerId::new(*payload.get(3).unwrap_or(&0));
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1579:9
+     |
+1579 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1636:9
+     |
+1636 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1820:5
+     |
+1820 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1824:5
+     |
+1824 |     skill: engine_api::SkillId,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1881:9
+     |
+1881 |     let skill = engine_api::SkillId::new(*payload.get(5).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2051:9
+     |
+2051 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2131:9
+     |
+2131 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2178:9
+     |
+2178 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2370:9
+     |
+2370 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2424:9
+     |
+2424 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2634:9
+     |
+2634 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2822:9
+     |
+2822 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2859:9
+     |
+2859 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2936:9
+     |
+2936 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2970:9
+     |
+2970 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `pile_zone`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1450:9
+     |
+1450 |     let pile_zone = tx
+     |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_zone`
+
+warning: unused variable: `phase`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1826:9
+     |
+1826 |     let phase = *payload.get(2).unwrap_or(&0);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1828:9
+     |
+1828 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:2126:21
+     |
+2126 |                 let mut next_payload = vec![
+     |                     ----^^^^^^^^^^^^
+     |                     |
+     |                     help: remove this `mut`
+
+warning: unused variable: `count`
+  --> crates/engine-core/src/command/resolve_choice/group_post_6.rs:87:9
+   |
+87 |     let count = payload.get(6).copied().unwrap_or(0) as usize;
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: unused variable: `draw`
+   --> crates/engine-core/src/command/resolve_choice/group_post_6.rs:277:17
+    |
+277 |             let draw = tx
+    |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:628:9
+    |
+628 |     let skill = engine_api::SkillId::new(payload[2]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2516:9
+     |
+2516 |     let target = payload[5];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2558:9
+     |
+2558 |     let target = payload[6];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `kind`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2614:9
+     |
+2614 |     let kind = payload[4];
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+
+warning: unused variable: `mode`
+    --> crates/engine-core/src/command/resolve_choice/group_post_9.rs:1526:9
+     |
+1526 |     let mode = payload[3] as u8;
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_mode`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_9.rs:2205:9
+     |
+2205 |     let skill = engine_api::SkillId::new(payload[4]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/content/registry.rs:2532:9
+     |
+2507 |         ModifierValueSource::OwnerSkillPileCount => {
+     |         ---------------------------------------- matches all the relevant values
+...
+2532 |         ModifierValueSource::OwnerSkillPileCount => "owner_skill_pile_count",
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1088:5
+     |
+1088 |     mut targets: Vec<PlayerId>,
+     |     ----^^^^^^^
+     |     |
+     |     help: remove this `mut`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1504:5
+     |
+1504 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1664:5
+     |
+1664 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2202:5
+     |
+2202 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2321:5
+     |
+2321 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `targets`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2478:5
+     |
+2478 |     targets: &[PlayerId],
+     |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_targets`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:550:52
+    |
+550 | pub(crate) fn turn_discard_count(tx: &Transaction, player: PlayerId) -> u32 {
+    |                                                    ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `value`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:998:23
+    |
+998 |                 .map(|value| vec![card])
+    |                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:1336:9
+     |
+1336 |     let mut events = run_effects(
+     |         ----^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `kongsheng_def`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:1504:5
+     |
+1504 |     kongsheng_def: engine_api::SkillDefId,
+     |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_kongsheng_def`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_huicui.rs:2095:9
+     |
+2095 |     let mut effects = vec![EffectRequest::RevealCards {
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `view`
+    --> crates/engine-core/src/effect/primitives/pack_huicui.rs:2020:5
+     |
+2020 |     view: Vec<CardId>,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_view`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:497:5
+    |
+497 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:3366:9
+     |
+3366 |     let mut options: Vec<_> = tx
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4190:5
+     |
+4190 |     skill: engine_api::SkillId,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4844:9
+     |
+4844 |     let skill = engine_api::SkillId::new(skill_raw);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5063:9
+     |
+5063 |     let skill = engine_api::SkillId::new(skill_raw);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `count`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5237:5
+     |
+5237 |     count: u32,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:6640:9
+     |
+6640 |     let mut payload = vec![
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7124:17
+     |
+7124 |             let mut events = crate::effect::draw_cards(tx, player, 1)?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7285:5
+     |
+7285 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `dodger`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7801:5
+     |
+7801 |     dodger: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_dodger`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7875:17
+     |
+7875 |             let mut drawn = crate::effect::draw_cards(tx, player, draw_n)?;
+     |                 ----^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9080:5
+     |
+9080 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9497:9
+     |
+9497 |     let mut events = crate::effect::draw_cards(tx, source, 2)?;
+     |         ----^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9840:5
+     |
+9840 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_refresh.rs:3557:9
+     |
+3557 |     let skill = engine_api::SkillId::new(*payload.get(2).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_tw_1.rs:3478:24
+     |
+3478 |     let [player, _sub, skill] = payload else {
+     |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_xianding_2.rs:2755:5
+     |
+2755 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_ddd_2.rs:2403:5
+     |
+2403 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `source`
+   --> crates/engine-core/src/effect/primitives/pack_shiji.rs:162:5
+    |
+162 |     source: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_source`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1205:17
+     |
+1205 |             let mut events = add_skill(tx, target, engine_api::SkillDefId::new(def))?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `action`
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1569:5
+     |
+1569 |     action: u8,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_action`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:2634:5
+     |
+2634 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:559:9
+    |
+559 |     let skill = engine_api::SkillId::new(*skill);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:1371:18
+     |
+1371 |     let [player, skill] = payload else {
+     |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/mod.rs:2561:9
+     |
+2377 | /         EffectRequest::ResolveQiaobian {
+2378 | |             player,
+2379 | |             phase,
+2380 | |             stage,
+2381 | |             skill,
+2382 | |         } => resolve_qiaobian(tx, player, phase, stage, skill),
+     | |_________- matches all the relevant values
+...
+2561 |           EffectRequest::ResolveQiaobian { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/mod.rs:2563:9
+     |
+2563 |         EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+     |
+note: multiple earlier patterns match some of the same values
+    --> crates/engine-core/src/effect/primitives/mod.rs:2563:9
+     |
+2417 |           EffectRequest::BanUseAgainst { user, target } => ban_use_against(tx, user, target),
+     |           --------------------------------------------- matches some of the same values
+2418 | /         EffectRequest::ResolveJuzhan {
+2419 | |             player,
+2420 | |             source,
+2421 | |             card,
+...    |
+2424 | |             skill,
+2425 | |         } => resolve_juzhan(tx, player, source, card, &targets, stage, skill),
+     | |_________- matches some of the same values
+...
+2563 |           EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ collectively making this unreachable
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/mod.rs:115:49
+    |
+115 |         EffectRequest::SetDrawPhaseFromBottom { player } => {
+    |                                                 ^^^^^^ help: try ignoring the field: `player: _`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/mod.rs:4019:13
+     |
+4019 |             skill,
+     |             ^^^^^ help: try ignoring the field: `skill: _`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1052:15
+     |
+ 933 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               -------------------------------------------- matches all the relevant values
+...
+1052 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1053:15
+     |
+ 936 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               -------------------------------------------------- matches all the relevant values
+...
+1053 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1054:15
+     |
+ 937 |             | EffectRequest::GainTargetHandCard { skill, .. }
+     |               ----------------------------------------------- matches all the relevant values
+...
+1054 |             | EffectRequest::GainTargetHandCard { skill, .. } => skill.raw(),
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1086:15
+     |
+1085 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               -------------------------------------------------------- matches all the relevant values
+1086 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2937:9
+     |
+2774 | /         EffectRequest::ResolveRechuhai {
+2775 | |             player,
+2776 | |             target,
+2777 | |             card,
+...    |
+2780 | |             skill,
+2781 | |         } => {
+     | |_________- matches all the relevant values
+...
+2937 |           EffectRequest::ResolveRechuhai { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2942:9
+     |
+2791 | /         EffectRequest::ResolveXiongshu {
+2792 | |             player,
+2793 | |             target,
+2794 | |             card,
+...    |
+2797 | |             skill,
+2798 | |         } => {
+     | |_________- matches all the relevant values
+...
+2942 |           EffectRequest::ResolveXiongshu { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2946:9
+     |
+2836 | /         EffectRequest::ResolveSpshanxi {
+2837 | |             player,
+2838 | |             target,
+2839 | |             stage,
+2840 | |             skill,
+2841 | |         } => {
+     | |_________- matches all the relevant values
+...
+2946 |           EffectRequest::ResolveSpshanxi { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2950:9
+     |
+2849 | /         EffectRequest::ResolveSpshanxiSuoming {
+2850 | |             player,
+2851 | |             actor,
+2852 | |             stage,
+2853 | |             skill,
+2854 | |         } => {
+     | |_________- matches all the relevant values
+...
+2950 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+     --> crates/engine-core/src/hash.rs:10437:9
+      |
+  766 | /         EffectRequest::ModifyCurrentDamage {
+  767 | |             player,
+  768 | |             delta,
+  769 | |             skill,
+  770 | |         } => {
+      | |_________- matches all the relevant values
+...
+10437 | /         EffectRequest::ModifyCurrentDamage {
+10438 | |             player,
+10439 | |             delta,
+10440 | |             skill,
+10441 | |         } => {
+      | |_________^ no value can reach this
+
+warning: unused variable: `flipped`
+    --> crates/engine-core/src/hash.rs:1531:13
+     |
+1531 |             flipped,
+     |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/mode/guozhan.rs:509:13
+    |
+509 |         let mut make = |st: &mut GameState, group: &str| {
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/mode/guozhan.rs:542:13
+    |
+542 |         let mut make = |st: &mut GameState, group: &str| {
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: function `validate_sha_target` is never used
+    --> crates/engine-core/src/command/play.rs:4156:15
+     |
+4156 | pub(super) fn validate_sha_target(
+     |               ^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `wuxie_tokens` is never used
+    --> crates/engine-core/src/command/play.rs:7126:15
+     |
+7126 | pub(crate) fn wuxie_tokens(state: &crate::state::GameState, player: PlayerId) -> Vec<u32> {
+     |               ^^^^^^^^^^^^
+
+warning: function `mingren_color_mask` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:357:15
+    |
+357 | pub(crate) fn mingren_color_mask(tx: &Transaction, player: PlayerId, skill: engine_api::SkillId) -> u8 {
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `kongsheng_pile_cards_by_def` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:779:15
+    |
+779 | pub(crate) fn kongsheng_pile_cards_by_def(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `suit_from_tag` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4570:4
+     |
+4570 | fn suit_from_tag(tag: u32) -> engine_api::Suit {
+     |    ^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5133:7
+     |
+5133 | const RESOLVE_TWMOUZHI_MAGIC: u32 = 0x4D4F_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7007:7
+     |
+7007 | const RESOLVE_BIAOZHAO2_MAGIC: u32 = 0x425A_0002;
+     |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7092:7
+     |
+7092 | const RESOLVE_DCNIJI_MAGIC: u32 = 0x4E4A_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7846:7
+     |
+7846 | const RESOLVE_QINMIAN_MAGIC: u32 = 0x514D_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shiji.rs:919:18
+    |
+919 | pub(crate) const RESOLVE_ZHENGSU_CHOICE: u32 = 0xDCDA_4320;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `resolve_rechuhai_choice` is never used
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1268:15
+     |
+1268 | pub(crate) fn resolve_rechuhai_choice(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:1003:13
+     |
+1003 | /             crate::command::play::make_saved_sha_target_unrespondable(
+1004 | |                 tx,
+1005 | |                 source,
+1006 | |                 card,
+1007 | |                 player,
+1008 | |             );
+     | |_____________^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+1003 |             let _ = crate::command::play::make_saved_sha_target_unrespondable(
+     |             +++++++
+
+warning: `engine-core` (lib test) generated 108 warnings (55 duplicates) (run `cargo fix --lib -p engine-core --tests` to apply 41 suggestions)
+warning: `engine-core` (lib) generated 106 warnings (51 duplicates) (run `cargo fix --lib -p engine-core` to apply 43 suggestions)
+warning: constant `REFRESH` is never used
+  --> crates/engine-core/tests/original_merged_wangxi.rs:32:7
+   |
+32 | const REFRESH: &[u8] =
+   |       ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceKind`
+   --> crates/engine-core/tests/original_merged_huicui.rs:632:34
+    |
+632 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+    |                                  ^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:1801:34
+     |
+1801 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:2017:34
+     |
+2017 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:2321:34
+     |
+2321 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:2756:34
+     |
+2756 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused imports: `CardId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, `IdempotencyKey`, `PlayerId`, and `SkillDefId`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3154:5
+     |
+3154 |     CardId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, PlayerId,
+     |     ^^^^^^  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^
+3155 |     SkillDefId,
+     |     ^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3157:5
+     |
+3157 | use engine_core::command::apply_command;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `EffectError`, `bootstrap_match`, and `run_effects`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3158:27
+     |
+3158 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                           ^^^^^^^^^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^
+
+warning: unused imports: `Card`, `GameState`, and `ZoneKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3159:26
+     |
+3159 | use engine_core::state::{Card, GameState, ZoneKind};
+     |                          ^^^^  ^^^^^^^^^  ^^^^^^^^
+
+warning: unused import: `engine_core::transaction::Transaction`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3160:5
+     |
+3160 | use engine_core::transaction::Transaction;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `rule_api::EffectRequest`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3161:5
+     |
+3161 | use rule_api::EffectRequest;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3558:15
+     |
+3558 |     ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+     |               ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3780:34
+     |
+3780 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3952:23
+     |
+3952 |     CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                       ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:4113:34
+     |
+4113 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_huicui.rs:767:9
+    |
+767 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:1958:9
+     |
+1958 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:1991:9
+     |
+1991 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:2473:9
+     |
+2473 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:2536:9
+     |
+2536 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:2924:9
+     |
+2924 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3295:9
+     |
+3295 |     let mut state = ending.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3651:9
+     |
+3651 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3741:9
+     |
+3741 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3917:9
+     |
+3917 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:4067:9
+     |
+4067 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:4093:9
+     |
+4093 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: constant `SOURCES_DIR` is never used
+    --> crates/engine-core/tests/original_merged_huicui.rs:3165:7
+     |
+3165 | const SOURCES_DIR: &str = concat!(
+     |       ^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `sources` is never used
+    --> crates/engine-core/tests/original_merged_huicui.rs:3170:4
+     |
+3170 | fn sources() -> String {
+     |    ^^^^^^^
+
+warning: unused imports: `GameState` and `Phase`
+   --> crates/engine-core/tests/original_merged_sp.rs:375:42
+    |
+375 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+    |                                          ^^^^^^^^^  ^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_sp.rs:1345:40
+     |
+1345 | use engine_core::effect::{run_effects, EffectError};
+     |                                        ^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_sp.rs:1548:40
+     |
+1548 | use engine_core::effect::{run_effects, EffectError};
+     |                                        ^^^^^^^^^^^
+
+warning: unused import: `DomainEvent`
+    --> crates/engine-core/tests/original_merged_sp.rs:1721:52
+     |
+1721 |     ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+     |                                                    ^^^^^^^^^^^
+
+warning: unused imports: `Card` and `ZoneKind`
+    --> crates/engine-core/tests/original_merged_sp.rs:1726:26
+     |
+1726 | use engine_core::state::{Card, CardKind, ContinuationKind, GameState, ZoneKind};
+     |                          ^^^^                                         ^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_sp.rs:1728:28
+     |
+1728 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_sp.rs:3675:23
+     |
+3675 |     CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                       ^^^^^^^^^^
+
+warning: unused import: `Phase`
+    --> crates/engine-core/tests/original_merged_sp.rs:5495:71
+     |
+5495 | use engine_core::state::{Card, CardKind, ContinuationKind, GameState, Phase, ZoneKind};
+     |                                                                       ^^^^^
+
+warning: unused imports: `DomainEvent` and `TurnPhaseTag`
+    --> crates/engine-core/tests/original_merged_sp.rs:6466:60
+     |
+6466 |     CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+     |                                                            ^^^^^^^^^^^
+6467 |     IdempotencyKey, PlayerId, SkillDefId, TurnPhaseTag,
+     |                                           ^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_sp.rs:6470:40
+     |
+6470 | use engine_core::effect::{run_effects, EffectError};
+     |                                        ^^^^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_sp.rs:6474:28
+     |
+6474 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `TurnPhaseTag`
+    --> crates/engine-core/tests/original_merged_sp.rs:6801:43
+     |
+6801 |     IdempotencyKey, PlayerId, SkillDefId, TurnPhaseTag,
+     |                                           ^^^^^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_sp.rs:7383:28
+     |
+7383 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Card` and `ZoneKind`
+    --> crates/engine-core/tests/original_merged_sp.rs:7662:26
+     |
+7662 | use engine_core::state::{Card, CardKind, GameState, ZoneKind};
+     |                          ^^^^                       ^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_sp.rs:7664:28
+     |
+7664 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `MarkDefId`
+    --> crates/engine-core/tests/original_merged_sp.rs:8516:21
+     |
+8516 |     IdempotencyKey, MarkDefId, PlayerId, SkillDefId, Suit, TurnPhaseTag, ZoneId,
+     |                     ^^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+    --> crates/engine-core/tests/original_merged_sp.rs:8766:72
+     |
+8766 |     IdempotencyKey, PlayerId, SkillDefId, SkillId, Suit, TurnPhaseTag, RULE_VM_ABI_VERSION,
+     |                                                                        ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::state::GameState`
+     --> crates/engine-core/tests/original_merged_sp.rs:15060:9
+      |
+15060 |     use engine_core::state::GameState;
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+     --> crates/engine-core/tests/original_merged_sp.rs:17034:5
+      |
+17034 | use engine_core::command::apply_command;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CardDefId`, `CardId`, and `Suit`
+     --> crates/engine-core/tests/original_merged_sp.rs:20297:5
+      |
+20297 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision,
+      |     ^^^^^^^^^  ^^^^^^
+20298 |     IdempotencyKey, PlayerId, SkillDefId, Suit,
+      |                                           ^^^^
+
+warning: unused imports: `CardKind` and `Card`
+     --> crates/engine-core/tests/original_merged_sp.rs:20301:26
+      |
+20301 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+      |                          ^^^^  ^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+     --> crates/engine-core/tests/original_merged_sp.rs:20753:28
+      |
+20753 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+      |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ChoiceId`
+     --> crates/engine-core/tests/original_merged_sp.rs:26023:24
+      |
+26023 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+      |                        ^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+     --> crates/engine-core/tests/original_merged_sp.rs:26026:5
+      |
+26026 | use engine_core::command::apply_command;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Phase`
+     --> crates/engine-core/tests/original_merged_sp.rs:26027:53
+      |
+26027 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+      |                                                     ^^^^^
+
+warning: `engine-core` (test "original_merged_wangxi") generated 1 warning
+warning: unused import: `engine_core::trigger::TriggerFireRecord`
+  --> crates/engine-core/tests/original_merged_dcbingji.rs:16:5
+   |
+16 | use engine_core::trigger::TriggerFireRecord;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `state`
+   --> crates/engine-core/tests/original_merged_dcbingji.rs:150:10
+    |
+150 |     let (state, opened) = activate(state, owner, 1);
+    |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `MOUKUI` is never used
+  --> crates/engine-core/tests/original_merged_dcmoukui.rs:19:7
+   |
+19 | const MOUKUI: u32 = 2_559_477_796;
+   |       ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `MOUKUI_SRC` is never used
+  --> crates/engine-core/tests/original_merged_dcmoukui.rs:20:7
+   |
+20 | const MOUKUI_SRC: &str =
+   |       ^^^^^^^^^^
+
+warning: function `setup` is never used
+  --> crates/engine-core/tests/original_merged_dcmoukui.rs:23:4
+   |
+23 | fn setup(seed: u64) -> (GameState, PlayerId, PlayerId) {
+   |    ^^^^^
+
+warning: function `sha_card` is never used
+  --> crates/engine-core/tests/original_merged_dcmoukui.rs:46:4
+   |
+46 | fn sha_card(state: &GameState) -> CardId {
+   |    ^^^^^^^^
+
+warning: function `hand_of` is never used
+  --> crates/engine-core/tests/original_merged_dcmoukui.rs:64:4
+   |
+64 | fn hand_of(state: &GameState, player: PlayerId) -> Vec<CardId> {
+   |    ^^^^^^^
+
+warning: function `resolve` is never used
+  --> crates/engine-core/tests/original_merged_dcmoukui.rs:69:4
+   |
+69 | fn resolve(
+   |    ^^^^^^^
+
+warning: function `fire_sha` is never used
+  --> crates/engine-core/tests/original_merged_dcmoukui.rs:99:4
+   |
+99 | fn fire_sha(state: GameState, owner: PlayerId, target: PlayerId, sha: CardId) -> (GameState, bool) {
+   |    ^^^^^^^^
+
+warning: unused variable: `player`
+  --> crates/engine-core/tests/original_merged_sp.rs:70:39
+   |
+70 | fn strip_skills(tx: &mut Transaction, player: PlayerId) {
+   |                                       ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sp.rs:464:9
+    |
+464 |     let mut engine = started(2_026_081_101);
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sp.rs:492:9
+    |
+492 |     let mut engine = started(2_026_081_102);
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sp.rs:516:9
+    |
+516 |     let mut engine = started(2_026_081_103);
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `state`
+   --> crates/engine-core/tests/original_merged_sp.rs:521:9
+    |
+521 |     let state = tx.commit().state;
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `hand`
+    --> crates/engine-core/tests/original_merged_sp.rs:3115:9
+     |
+3115 |     let hand = tx.state().zones.find(ZoneKind::Hand, owner).unwrap();
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_hand`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp.rs:5791:10
+     |
+5791 |     let (mut state, opened) = {
+     |          ----^^^^^
+     |          |
+     |          help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp.rs:5846:10
+     |
+5846 |     let (mut tx, opened) = {
+     |          ----^^
+     |          |
+     |          help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_sp.rs:10183:9
+      |
+10183 |     let mut tx = Transaction::begin(state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: unused variable: `player`
+     --> crates/engine-core/tests/original_merged_sp.rs:14988:39
+      |
+14988 | fn strip_skills(tx: &mut Transaction, player: PlayerId) {
+      |                                       ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `state`
+     --> crates/engine-core/tests/original_merged_sp.rs:16112:10
+      |
+16112 |     let (state, result) = apply_command(
+      |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused import: `EffectError`
+  --> crates/engine-core/tests/original_merged_hengwu.rs:11:57
+   |
+11 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+   |                                                         ^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `draw`
+     --> crates/engine-core/tests/original_merged_sp.rs:20374:9
+      |
+20374 |     let draw = tx.state().zones.find(ZoneKind::DrawPile, PlayerId::NONE).unwrap();
+      |         ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+
+warning: unused imports: `QueryRequest` and `QueryResponse`
+  --> crates/engine-core/tests/original_merged_sxrm.rs:15:31
+   |
+15 | use rule_api::{EffectRequest, QueryRequest, QueryResponse};
+   |                               ^^^^^^^^^^^^  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceKind`
+   --> crates/engine-core/tests/original_merged_sxrm.rs:432:34
+    |
+432 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+    |                                  ^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sxrm.rs:147:9
+    |
+147 |     let mut setup = setup(SOURCE_QIEWANG, &[QIEWANG]);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sxrm.rs:371:9
+    |
+371 |     let mut setup = setup(SOURCE_QIEWANG, &[QIEWANG]);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sxrm.rs:581:9
+    |
+581 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sxrm.rs:626:9
+    |
+626 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sxrm.rs:674:9
+    |
+674 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: function `dispatch` is never used
+  --> crates/engine-core/tests/original_merged_sxrm.rs:88:4
+   |
+88 | fn dispatch(state: GameState, event: DomainEvent) -> GameState {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `inject_hand` is never used
+    --> crates/engine-core/tests/original_merged_sp.rs:5581:4
+     |
+5581 | fn inject_hand(state: &mut GameState, player: PlayerId, kind: CardKind, tag: u32) -> CardId {
+     |    ^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `inject_hand` is never used
+    --> crates/engine-core/tests/original_merged_sp.rs:8581:4
+     |
+8581 | fn inject_hand(
+     |    ^^^^^^^^^^^
+
+warning: function `inject_hand` is never used
+     --> crates/engine-core/tests/original_merged_sp.rs:19630:4
+      |
+19630 | fn inject_hand(
+      |    ^^^^^^^^^^^
+
+warning: constant `FALU_CLUB` is never used
+     --> crates/engine-core/tests/original_merged_sp.rs:26036:7
+      |
+26036 | const FALU_CLUB: u32 = 3_540_560_361;
+      |       ^^^^^^^^^
+
+warning: constant `FALU_DIAMOND` is never used
+     --> crates/engine-core/tests/original_merged_sp.rs:26037:7
+      |
+26037 | const FALU_DIAMOND: u32 = 3_540_560_362;
+      |       ^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+    --> crates/engine-core/tests/original_merged_sp.rs:5687:13
+     |
+5687 |     assert!(state.hand_count(other) >= 0);
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_comparisons)]` on by default
+
+warning: unused import: `CardId`
+ --> crates/engine-core/tests/original_merged_duwang.rs:8:18
+  |
+8 | use engine_api::{CardId, DomainEvent, PlayerId, SkillDefId};
+  |                  ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_dcmoukui") generated 7 warnings
+warning: `engine-core` (test "original_merged_huicui") generated 29 warnings (run `cargo fix --test "original_merged_huicui" -p engine-core` to apply 27 suggestions)
+warning: unused import: `CardId`
+   --> crates/engine-core/tests/original_merged_offline.rs:847:5
+    |
+847 |     CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+    |     ^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `EffectError`
+   --> crates/engine-core/tests/original_merged_offline.rs:851:57
+    |
+851 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+    |                                                         ^^^^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+    --> crates/engine-core/tests/original_merged_offline.rs:3801:57
+     |
+3801 |     ExpectedRevision, IdempotencyKey, SkillDefId, Suit, RULE_VM_ABI_VERSION,
+     |                                                         ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `CardId`
+    --> crates/engine-core/tests/original_merged_offline.rs:5933:18
+     |
+5933 | use engine_api::{CardId, DomainEvent, PlayerId, SkillDefId};
+     |                  ^^^^^^
+
+warning: unused imports: `CardKind` and `Card`
+    --> crates/engine-core/tests/original_merged_offline.rs:5935:26
+     |
+5935 | use engine_core::state::{Card, CardKind, GameState, Phase};
+     |                          ^^^^  ^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+    --> crates/engine-core/tests/original_merged_offline.rs:6116:47
+     |
+6116 | use engine_api::{DomainEvent, PlayerId, Suit, RULE_VM_ABI_VERSION};
+     |                                               ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+     --> crates/engine-core/tests/original_merged_offline.rs:13323:5
+      |
+13323 |     RULE_VM_ABI_VERSION,
+      |     ^^^^^^^^^^^^^^^^^^^
+
+warning: `engine-core` (test "original_merged_dcbingji") generated 2 warnings (run `cargo fix --test "original_merged_dcbingji" -p engine-core` to apply 2 suggestions)
+warning: unused variable: `owner_hand_before`
+    --> crates/engine-core/tests/original_merged_offline.rs:3167:13
+     |
+3167 |         let owner_hand_before = hand_count(&state, owner);
+     |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_owner_hand_before`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `first_hand_before`
+    --> crates/engine-core/tests/original_merged_offline.rs:3168:13
+     |
+3168 |         let first_hand_before = hand_count(&state, first);
+     |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_first_hand_before`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:5498:10
+     |
+5498 |     let (mut state, output) = apply_command(
+     |          ----^^^^^
+     |          |
+     |          help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:6042:9
+     |
+6042 |     let mut state = {
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:6066:9
+     |
+6066 |     let mut state = {
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:6094:9
+     |
+6094 |     let mut state = {
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:7647:9
+     |
+7647 |     let mut saw_lose = false;
+     |         ----^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `saw_lose`
+    --> crates/engine-core/tests/original_merged_offline.rs:7647:9
+     |
+7647 |     let mut saw_lose = false;
+     |         ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_saw_lose`
+
+warning: unused variable: `sid`
+     --> crates/engine-core/tests/original_merged_offline.rs:15087:9
+      |
+15087 |     let sid = tx
+      |         ^^^ help: if this is intentional, prefix it with an underscore: `_sid`
+
+warning: constant `PLAY_MASK` is never used
+     --> crates/engine-core/tests/original_merged_offline.rs:14760:7
+      |
+14760 | const PLAY_MASK: u32 = 1 << 3;
+      |       ^^^^^^^^^
+      |
+      = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `TWJIEQIU` is never used
+     --> crates/engine-core/tests/original_merged_offline.rs:14930:7
+      |
+14930 | const TWJIEQIU: u32 = 4_201_797_709;
+      |       ^^^^^^^^
+
+warning: function `discard_move` is never used
+     --> crates/engine-core/tests/original_merged_offline.rs:15047:4
+      |
+15047 | fn discard_move(cards: Vec<engine_api::CardId>, to: engine_api::ZoneId) -> engine_api::DomainEvent {
+      |    ^^^^^^^^^^^^
+
+warning: `engine-core` (test "original_merged_hengwu") generated 1 warning (run `cargo fix --test "original_merged_hengwu" -p engine-core` to apply 1 suggestion)
+warning: `engine-core` (test "original_merged_duwang") generated 1 warning (run `cargo fix --test "original_merged_duwang" -p engine-core` to apply 1 suggestion)
+warning: `engine-core` (test "original_merged_sxrm") generated 8 warnings (run `cargo fix --test "original_merged_sxrm" -p engine-core` to apply 7 suggestions)
+warning: function `inject_hand_card` is never used
+  --> crates/engine-core/tests/original_merged_quanji.rs:57:4
+   |
+57 | fn inject_hand_card(state: GameState, owner: PlayerId, def: u32) -> (GameState, CardId) {
+   |    ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable `onlyOL` should have a snake case name
+  --> crates/engine-core/tests/original_merged_ported.rs:67:9
+   |
+67 |     let onlyOL = include_bytes!("../../../content/original/ported/onlyOL/onlyOL.npack.json");
+   |         ^^^^^^ help: convert the identifier to snake case: `only_ol`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: unused import: `TurnPhaseTag`
+  --> crates/engine-core/tests/original_merged_enyuan.rs:10:67
+   |
+10 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag,
+   |                                                                   ^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_sixiang.rs:3374:23
+     |
+3374 |     CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                       ^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Phase`
+    --> crates/engine-core/tests/original_merged_sixiang.rs:3379:37
+     |
+3379 | use engine_core::state::{GameState, Phase, ZoneKind};
+     |                                     ^^^^^
+
+warning: `engine-core` (test "original_merged_ported") generated 1 warning
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sixiang.rs:1684:9
+     |
+1684 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `EffectError`
+  --> crates/engine-core/tests/original_merged_sp2.rs:14:40
+   |
+14 | use engine_core::effect::{run_effects, EffectError};
+   |                                        ^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ContinuationKind`
+  --> crates/engine-core/tests/original_merged_sp2.rs:15:26
+   |
+15 | use engine_core::state::{ContinuationKind, GameState};
+   |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `MarkDefId`
+   --> crates/engine-core/tests/original_merged_sp2.rs:305:74
+    |
+305 |     Command, CommandKind, DomainEvent, ExpectedRevision, IdempotencyKey, MarkDefId, PlayerId,
+    |                                                                          ^^^^^^^^^
+
+warning: unused imports: `ChoiceKind` and `ZoneId`
+   --> crates/engine-core/tests/original_merged_sp2.rs:443:34
+    |
+443 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+    |                                  ^^^^^^^^^^
+444 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag, ZoneId,
+    |                                                                                 ^^^^^^
+
+warning: unused imports: `CardDefId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, `IdempotencyKey`, and `Suit`
+   --> crates/engine-core/tests/original_merged_sp2.rs:762:5
+    |
+762 |     CardDefId, CardId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+    |     ^^^^^^^^^          ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^
+763 |     IdempotencyKey, PlayerId, SkillDefId, Suit,
+    |     ^^^^^^^^^^^^^^                        ^^^^
+
+warning: unused imports: `Card` and `ZoneKind`
+   --> crates/engine-core/tests/original_merged_sp2.rs:766:26
+    |
+766 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+    |                          ^^^^                              ^^^^^^^^
+
+warning: unused import: `engine_core::Engine`
+   --> crates/engine-core/tests/original_merged_sp2.rs:768:5
+    |
+768 | use engine_core::Engine;
+    |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CardDefId` and `Suit`
+   --> crates/engine-core/tests/original_merged_sp2.rs:959:5
+    |
+959 |     CardDefId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+    |     ^^^^^^^^^
+960 |     IdempotencyKey, PlayerId, SkillDefId, Suit,
+    |                                           ^^^^
+
+warning: unused import: `Card`
+   --> crates/engine-core/tests/original_merged_sp2.rs:963:26
+    |
+963 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+    |                          ^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_sp2.rs:1737:34
+     |
+1737 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, ExpectedRevision,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `PipelineResult`
+    --> crates/engine-core/tests/original_merged_sp2.rs:1999:43
+     |
+1999 | use engine_core::command::{apply_command, PipelineResult};
+     |                                           ^^^^^^^^^^^^^^
+
+warning: unused imports: `ChoiceKind` and `ZoneId`
+    --> crates/engine-core/tests/original_merged_sp2.rs:4948:34
+     |
+4948 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+4949 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag, ZoneId,
+     |                                                                                 ^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_sp2.rs:5160:23
+     |
+5160 |     CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, ExpectedRevision,
+     |                       ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_sp2.rs:6072:34
+     |
+6072 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, ExpectedRevision,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_sp2.rs:6295:34
+     |
+6295 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, ExpectedRevision,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_sp2.rs:7159:34
+     |
+7159 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, ExpectedRevision,
+     |                                  ^^^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events as dfx`
+    --> crates/engine-core/tests/original_merged_sp2.rs:8135:28
+     |
+8135 | use engine_core::trigger::{dispatch_for_events as dfx, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: `engine-core` (test "original_merged_quanji") generated 1 warning
+warning: unused import: `engine_core::state::ZoneKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:3539:9
+     |
+3539 |     use engine_core::state::ZoneKind;
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:3833:34
+     |
+3833 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, ExpectedRevision,
+     |                                  ^^^^^^^^^^
+
+warning: unused imports: `CommandKind`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4586:24
+     |
+4586 |     CardDefId, CardId, Command, CommandKind, DomainEvent, ExpectedRevision, IdempotencyKey,
+     |                        ^^^^^^^  ^^^^^^^^^^^               ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4589:5
+     |
+4589 | use engine_core::command::apply_command;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:6364:34
+     |
+6364 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7012:34
+     |
+7012 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7706:34
+     |
+7706 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8114:34
+     |
+8114 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:11544:34
+      |
+11544 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:12904:34
+      |
+12904 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13976:34
+      |
+13976 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14404:34
+      |
+14404 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `EffectError`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14863:57
+      |
+14863 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+      |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15119:34
+      |
+15119 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15499:34
+      |
+15499 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `turn_flag`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16367:26
+      |
+16367 | use engine_core::state::{turn_flag, Card, CardKind, GameState, Identity, Phase, ZoneKind};
+      |                          ^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16822:34
+      |
+16822 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17217:34
+      |
+17217 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sp2.rs:659:9
+    |
+659 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sp2.rs:726:9
+    |
+726 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:1887:9
+     |
+1887 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:1898:9
+     |
+1898 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:1933:9
+     |
+1933 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:1941:9
+     |
+1941 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:1970:9
+     |
+1970 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:1978:9
+     |
+1978 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `state`
+    --> crates/engine-core/tests/original_merged_sp2.rs:2131:10
+     |
+2131 |     let (state, result) = apply_command(
+     |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:6214:9
+     |
+6214 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:6253:9
+     |
+6253 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:6277:9
+     |
+6277 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:6440:9
+     |
+6440 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:6467:9
+     |
+6467 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `other`
+    --> crates/engine-core/tests/original_merged_sp2.rs:7078:24
+     |
+7078 |     let (state, owner, other) = started(2_026_090_801);
+     |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_other`
+
+warning: unused variable: `other`
+    --> crates/engine-core/tests/original_merged_sp2.rs:7114:24
+     |
+7114 |     let (state, owner, other) = started(2_026_090_802);
+     |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_other`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:7307:9
+     |
+7307 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:7348:9
+     |
+7348 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:7379:9
+     |
+7379 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:7408:9
+     |
+7408 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_sp2.rs:7420:9
+     |
+7420 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:1484:9
+     |
+1484 |     let mut tx = match fired {
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4002:9
+     |
+4002 |     let mut state = tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4113:9
+     |
+4113 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4173:9
+     |
+4173 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `top1`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4686:9
+     |
+4686 |     let top1 = alloc_card(&mut setup.tx, draw, CardKind::Sha, 1, Suit::Spade, 5);
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_top1`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4908:9
+     |
+4908 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5320:9
+     |
+5320 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5381:9
+     |
+5381 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5416:9
+     |
+5416 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5458:9
+     |
+5458 |     let mut tx = match fired {
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7200:9
+     |
+7200 |     let mut resolution = &mut state.resolution;
+     |         ----^^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7910:9
+     |
+7910 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7951:9
+     |
+7951 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8000:9
+     |
+8000 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8409:9
+     |
+8409 |     let mut state = tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8703:9
+     |
+8703 |     let mut state = tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `give_cards`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9449:9
+     |
+9449 |     let give_cards: Vec<CardId> = (0..3)
+     |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_give_cards`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9605:9
+     |
+9605 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9644:9
+     |
+9644 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9657:9
+     |
+9657 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9699:9
+     |
+9699 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9722:9
+     |
+9722 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9782:9
+     |
+9782 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:11039:9
+      |
+11039 |     let mut tx = Transaction::begin(tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:11117:9
+      |
+11117 |     let mut tx = Transaction::begin(tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: unused variable: `h1`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13138:9
+      |
+13138 |     let h1 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h1`
+
+warning: unused variable: `h2`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13147:9
+      |
+13147 |     let h2 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h2`
+
+warning: unused variable: `h2`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13202:9
+      |
+13202 |     let h2 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h2`
+
+warning: unused imports: `ChoiceKind`, `CommandResult`, and `TurnPhaseTag`
+  --> crates/engine-core/tests/original_merged_dingce.rs:10:24
+   |
+10 |     CardDefId, CardId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+   |                        ^^^^^^^^^^                        ^^^^^^^^^^^^^
+11 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag,
+   |                                                                   ^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `diamond`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14116:9
+      |
+14116 |     let diamond = alloc_card(
+      |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_diamond`
+
+warning: unused variable: `sha`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14656:9
+      |
+14656 |     let sha = alloc_card(
+      |         ^^^ help: if this is intentional, prefix it with an underscore: `_sha`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15645:9
+      |
+15645 |     let mut state = tx.commit().state;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15825:9
+      |
+15825 |     let mut tx = Transaction::begin(state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15827:9
+      |
+15827 |     let mut state = tx.commit().state;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16551:9
+      |
+16551 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16576:9
+      |
+16576 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16754:10
+      |
+16754 |     let (mut state, owner, other, skill) = started();
+      |          ----^^^^^
+      |          |
+      |          help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16769:9
+      |
+16769 |     let mut state = resolve_choice(state, owner, vec![other.raw()], 2);
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16793:10
+      |
+16793 |     let (mut state, owner, other, skill, ordinary) = started_with_ordinary();
+      |          ----^^^^^
+      |          |
+      |          help: remove this `mut`
+
+warning: unused variable: `state`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16801:10
+      |
+16801 |     let (state, activated) = activate(state, owner, skill, vec![weapon], 2);
+      |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `owner`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17358:31
+      |
+17358 | fn prep_end(state: GameState, owner: PlayerId) -> (GameState, Vec<CardId>) {
+      |                               ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+
+warning: unused variable: `h1`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17428:9
+      |
+17428 |     let h1 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h1`
+
+warning: unused variable: `h2`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17437:9
+      |
+17437 |     let h2 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h2`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17634:9
+      |
+17634 |     let mut resolution = &mut state.resolution;
+      |         ----^^^^^^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: function `end_event` is never used
+    --> crates/engine-core/tests/original_merged_shenhua.rs:3524:4
+     |
+3524 | fn end_event(current: PlayerId) -> engine_api::DomainEvent {
+     |    ^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `far` is never read
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5154:5
+     |
+5150 | struct Setup {
+     |        ----- field in this struct
+...
+5154 |     far: PlayerId,
+     |     ^^^
+
+warning: function `option_tokens` is never used
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7846:4
+     |
+7846 | fn option_tokens(result: &engine_core::command::PipelineResult) -> Vec<u32> {
+     |    ^^^^^^^^^^^^^
+
+warning: function `alloc_card` is never used
+     --> crates/engine-core/tests/original_merged_shenhua.rs:10965:4
+      |
+10965 | fn alloc_card(
+      |    ^^^^^^^^^^
+
+warning: field `challenger` is never read
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14875:5
+      |
+14872 | struct Setup {
+      |        ----- field in this struct
+...
+14875 |     challenger: PlayerId,
+      |     ^^^^^^^^^^
+
+warning: function `option_tokens` is never used
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15611:4
+      |
+15611 | fn option_tokens(result: &engine_core::command::PipelineResult) -> Vec<u32> {
+      |    ^^^^^^^^^^^^^
+
+warning: function `fire_used` is never used
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17777:4
+      |
+17777 | fn fire_used(tx: Transaction, user: PlayerId, card: CardId, targets: Vec<PlayerId>) -> Transaction {
+      |    ^^^^^^^^^
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7204:5
+     |
+7204 |     drop(resolution);
+     |     ^^^^^----------^
+     |          |
+     |          argument has type `&mut ResolutionState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+7204 -     drop(resolution);
+7204 +     let _ = resolution;
+     |
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7339:5
+     |
+7339 | /     std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(
+7340 | |         &content_compiler::compile_source_named("jijiang", "skill jijiang(2377283906) {}").unwrap(),
+7341 | |     );
+     | |_____^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+7339 |     let _ = std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(
+     |     +++++++
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17638:5
+      |
+17638 |     drop(resolution);
+      |     ^^^^^----------^
+      |          |
+      |          argument has type `&mut ResolutionState`
+      |
+help: use `let _ = ...` to ignore the expression or result
+      |
+17638 -     drop(resolution);
+17638 +     let _ = resolution;
+      |
+
+warning: `engine-core` (test "original_merged_enyuan") generated 1 warning (run `cargo fix --test "original_merged_enyuan" -p engine-core` to apply 1 suggestion)
+warning: unused imports: `CardDefId`, `CardId`, and `Suit`
+   --> crates/engine-core/tests/original_merged_key.rs:606:5
+    |
+606 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+    |     ^^^^^^^^^  ^^^^^^
+607 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag,
+    |                                                             ^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardKind`, `Card`, and `ZoneKind`
+   --> crates/engine-core/tests/original_merged_key.rs:611:26
+    |
+611 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+    |                          ^^^^  ^^^^^^^^                    ^^^^^^^^
+
+warning: unused import: `engine_core::state::ContinuationKind`
+    --> crates/engine-core/tests/original_merged_key.rs:8557:9
+     |
+8557 |     use engine_core::state::ContinuationKind;
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `holder`
+    --> crates/engine-core/tests/original_merged_key.rs:8525:38
+     |
+8525 | fn lunhui_storage(state: &GameState, holder: PlayerId) -> Option<u32> {
+     |                                      ^^^^^^ help: if this is intentional, prefix it with an underscore: `_holder`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `equip_count` is never used
+    --> crates/engine-core/tests/original_merged_key.rs:4138:4
+     |
+4138 | fn equip_count(state: &GameState, player: PlayerId) -> u32 {
+     |    ^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_offline") generated 19 warnings (run `cargo fix --test "original_merged_offline" -p engine-core` to apply 16 suggestions)
+warning: `engine-core` (test "original_merged_dingce") generated 1 warning (run `cargo fix --test "original_merged_dingce" -p engine-core` to apply 1 suggestion)
+warning: unused imports: `ChoiceKind` and `ZoneId`
+   --> crates/engine-core/tests/original_merged_collab.rs:490:34
+    |
+490 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+    |                                  ^^^^^^^^^^
+491 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag, ZoneId,
+    |                                                                                 ^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+    --> crates/engine-core/tests/original_merged_collab.rs:1201:13
+     |
+1201 |     CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+     |             ^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+    --> crates/engine-core/tests/original_merged_collab.rs:1204:5
+     |
+1204 | use engine_core::command::apply_command;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ChoiceKind` and `ZoneId`
+    --> crates/engine-core/tests/original_merged_collab.rs:4462:34
+     |
+4462 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+4463 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag, ZoneId,
+     |                                                                                 ^^^^^^
+
+warning: unused variable: `target`
+   --> crates/engine-core/tests/original_merged_collab.rs:603:49
+    |
+603 | fn setup(tx: &mut Transaction, owner: PlayerId, target: PlayerId) {
+    |                                                 ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_collab.rs:643:9
+    |
+643 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_collab.rs:676:9
+    |
+676 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_collab.rs:702:9
+    |
+702 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `sid2`
+    --> crates/engine-core/tests/original_merged_collab.rs:1363:9
+     |
+1363 |     let sid2 = committed2
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_sid2`
+
+warning: unused variable: `sha`
+    --> crates/engine-core/tests/original_merged_collab.rs:4638:9
+     |
+4638 |     let sha = seed_sha(&mut tx, owner);
+     |         ^^^ help: if this is intentional, prefix it with an underscore: `_sha`
+
+warning: `engine-core` (test "original_merged_sixiang") generated 3 warnings (run `cargo fix --test "original_merged_sixiang" -p engine-core` to apply 3 suggestions)
+warning: function `drive_use_card` is never used
+    --> crates/engine-core/tests/original_merged_collab.rs:1305:4
+     |
+1305 | fn drive_use_card(tx: &mut Transaction, holder: PlayerId, card: CardId) -> Result<(), EffectError> {
+     |    ^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_sp") generated 43 warnings (run `cargo fix --test "original_merged_sp" -p engine-core` to apply 37 suggestions)
+warning: unused import: `CommandResult`
+ --> crates/engine-core/tests/original_merged_qiangyong.rs:9:73
+  |
+9 |     CardDefId, CardId, ChoiceKind, ChoiceRequest, Command, CommandKind, CommandResult,
+  |                                                                         ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `hand_of` is never used
+   --> crates/engine-core/tests/original_merged_qiangyong.rs:104:4
+    |
+104 | fn hand_of(state: &GameState, player: PlayerId) -> Vec<CardId> {
+    |    ^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_sp2") generated 38 warnings (run `cargo fix --test "original_merged_sp2" -p engine-core` to apply 38 suggestions)
+warning: unused import: `ChoiceKind`
+   --> crates/engine-core/tests/original_merged_diy.rs:458:34
+    |
+458 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+    |                                  ^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `target`
+   --> crates/engine-core/tests/original_merged_diy.rs:522:49
+    |
+522 | fn setup(tx: &mut Transaction, owner: PlayerId, target: PlayerId) {
+    |                                                 ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_diy.rs:606:9
+    |
+606 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_diy.rs:643:9
+    |
+643 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `holder`
+    --> crates/engine-core/tests/original_merged_diy.rs:1182:43
+     |
+1182 | fn lunhui_like_storage(state: &GameState, holder: PlayerId) -> Option<u32> {
+     |                                           ^^^^^^ help: if this is intentional, prefix it with an underscore: `_holder`
+
+warning: unused variable: `cur`
+    --> crates/engine-core/tests/original_merged_diy.rs:1552:9
+     |
+1552 |     let cur = tx.state().turn.current;
+     |         ^^^ help: if this is intentional, prefix it with an underscore: `_cur`
+
+warning: unused import: `CardId`
+  --> crates/engine-core/tests/original_merged_dcsbjianwei.rs:10:18
+   |
+10 | use engine_api::{CardId, DomainEvent, PlayerId, SkillDefId};
+   |                  ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `other`
+  --> crates/engine-core/tests/original_merged_dcsbjianwei.rs:74:24
+   |
+74 |     let (state, owner, other) = setup(20_260_928_01);
+   |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_other`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_key") generated 5 warnings (run `cargo fix --test "original_merged_key" -p engine-core` to apply 4 suggestions)
+warning: `engine-core` (test "original_merged_qiangyong") generated 2 warnings (run `cargo fix --test "original_merged_qiangyong" -p engine-core` to apply 1 suggestion)
+warning: `engine-core` (test "original_merged_collab") generated 11 warnings (run `cargo fix --test "original_merged_collab" -p engine-core` to apply 10 suggestions)
+warning: `engine-core` (test "original_merged_shenhua") generated 71 warnings (run `cargo fix --test "original_merged_shenhua" -p engine-core` to apply 61 suggestions)
+warning: `engine-core` (test "original_merged_dcsbjianwei") generated 2 warnings (run `cargo fix --test "original_merged_dcsbjianwei" -p engine-core` to apply 2 suggestions)
+warning: `engine-core` (test "original_merged_diy") generated 6 warnings (run `cargo fix --test "original_merged_diy" -p engine-core` to apply 6 suggestions)
+warning: unused import: `ChoiceId`
+  --> crates/engine-core/tests/original_merged_history.rs:12:24
+   |
+12 |     CardDefId, CardId, ChoiceId, DomainEvent, PlayerId, SkillDefId, Suit,
+   |                        ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `inject_hand_card` is never used
+  --> crates/engine-core/tests/original_merged_history.rs:20:4
+   |
+20 | fn inject_hand_card(state: GameState, owner: PlayerId, def: u32) -> (GameState, CardId) {
+   |    ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardDefId`, `CardId`, and `Suit`
+    --> crates/engine-core/tests/original_merged_clan.rs:1429:5
+     |
+1429 |     CardDefId, CardId, Command, CommandKind, DomainEvent, ExpectedRevision, IdempotencyKey,
+     |     ^^^^^^^^^  ^^^^^^
+1430 |     PlayerId, SkillDefId, Suit,
+     |                           ^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardKind`, `Card`, and `ZoneKind`
+    --> crates/engine-core/tests/original_merged_clan.rs:1433:26
+     |
+1433 | use engine_core::state::{Card, CardKind, ZoneKind};
+     |                          ^^^^  ^^^^^^^^  ^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_clan.rs:122:9
+    |
+122 |     let mut state = tx.commit().state;
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_clan.rs:150:9
+    |
+150 |     let mut state = with_skill(state, owner, CLANSHIZE);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_clan.rs:181:9
+    |
+181 |     let mut state = tx.commit().state;
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_clan.rs:224:9
+    |
+224 |     let mut state = tx.commit().state;
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_clan.rs:285:9
+    |
+285 |     let mut state = with_skill(state, owner, CLANMUYIN);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `other`
+   --> crates/engine-core/tests/original_merged_clan.rs:938:25
+    |
+938 |     let (engine, owner, other) = start();
+    |                         ^^^^^ help: if this is intentional, prefix it with an underscore: `_other`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+    --> crates/engine-core/tests/original_merged_clan.rs:1364:9
+     |
+1364 |     let skill = strip_and_add_clanqieyi(&mut tx, owner);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/tests/original_merged_clan.rs:1744:9
+     |
+1744 |     let skill = strip_and_add_clanshenjun(&mut tx, owner);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: function `inject_hand` is never used
+   --> crates/engine-core/tests/original_merged_clan.rs:842:4
+    |
+842 | fn inject_hand(
+    |    ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable `CLANSHIZE` should have a snake case name
+   --> crates/engine-core/tests/original_merged_clan.rs:148:9
+    |
+148 |     let CLANSHIZE: u32 = 3_304_769_267;
+    |         ^^^^^^^^^ help: convert the identifier to snake case: `clanshize`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: variable `CLANMUYIN` should have a snake case name
+   --> crates/engine-core/tests/original_merged_clan.rs:283:9
+    |
+283 |     let CLANMUYIN: u32 = 2_666_909_205;
+    |         ^^^^^^^^^ help: convert the identifier to snake case: `clanmuyin`
+
+warning: variable `CLANFENSHI` should have a snake case name
+   --> crates/engine-core/tests/original_merged_clan.rs:369:9
+    |
+369 |     let CLANFENSHI: u32 = 2_827_730_630;
+    |         ^^^^^^^^^^ help: convert the identifier to snake case: `clanfenshi`
+
+warning: `engine-core` (test "original_merged_history") generated 2 warnings (run `cargo fix --test "original_merged_history" -p engine-core` to apply 1 suggestion)
+warning: unused imports: `CardDefId` and `Suit`
+ --> crates/engine-core/tests/original_merged_twxiongjun.rs:8:5
+  |
+8 |     CardDefId, CardId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+  |     ^^^^^^^^^
+9 |     PlayerId, SkillDefId, Suit,
+  |                           ^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `PipelineResult`
+  --> crates/engine-core/tests/original_merged_twxiongjun.rs:11:43
+   |
+11 | use engine_core::command::{apply_command, PipelineResult};
+   |                                           ^^^^^^^^^^^^^^
+
+warning: unused imports: `Card`, `Phase`, and `ZoneKind`
+  --> crates/engine-core/tests/original_merged_twxiongjun.rs:13:26
+   |
+13 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+   |                          ^^^^                       ^^^^^  ^^^^^^^^
+
+warning: function `resolve` is never used
+   --> crates/engine-core/tests/original_merged_armor.rs:270:4
+    |
+270 | fn resolve(state: GameState, actor: PlayerId, selections: Vec<u32>, key: u64) -> GameState {
+    |    ^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_clan") generated 14 warnings (run `cargo fix --test "original_merged_clan" -p engine-core` to apply 10 suggestions)
+warning: unused imports: `CardDefId` and `Suit`
+  --> crates/engine-core/tests/original_merged_qianlong.rs:9:5
+   |
+ 9 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+   |     ^^^^^^^^^
+10 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit,
+   |                                                             ^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardKind` and `Card`
+  --> crates/engine-core/tests/original_merged_qianlong.rs:14:26
+   |
+14 | use engine_core::state::{Card, CardKind, GameState, ZoneKind};
+   |                          ^^^^  ^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_sb.rs:176:10
+    |
+176 |     let (mut tx, owner, _other) = setup(source, &[SBBIYUE]);
+    |          ----^^
+    |          |
+    |          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `ChoiceKind` and `CommandResult`
+    --> crates/engine-core/tests/original_merged_refresh.rs:3323:15
+     |
+3323 |     ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+     |               ^^^^^^^^^^                        ^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+    --> crates/engine-core/tests/original_merged_refresh.rs:6259:67
+     |
+6259 | use engine_api::{DomainEvent, PlayerId, SkillDefId, TurnPhaseTag, RULE_VM_ABI_VERSION};
+     |                                                                   ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+    --> crates/engine-core/tests/original_merged_refresh.rs:7957:43
+     |
+7957 | use engine_api::{DomainEvent, SkillDefId, RULE_VM_ABI_VERSION};
+     |                                           ^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_refresh.rs:3461:9
+     |
+3461 |     let mut state = {
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `owner`
+     --> crates/engine-core/tests/original_merged_refresh.rs:10990:21
+      |
+10990 |     let (mut state, owner, other) = setup(20_260_909_06);
+      |                     ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+      |
+      = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `GONGSUNZAN` is never used
+    --> crates/engine-core/tests/original_merged_refresh.rs:3511:7
+     |
+3511 | const GONGSUNZAN: u32 = 3_561_346_810;
+     |       ^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_twxiongjun") generated 3 warnings (run `cargo fix --test "original_merged_twxiongjun" -p engine-core` to apply 3 suggestions)
+warning: `engine-core` (test "original_merged_armor") generated 1 warning
+warning: unused import: `CardId`
+ --> crates/engine-core/tests/original_merged_spshicai.rs:9:5
+  |
+9 |     CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+  |     ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `engine_core::trigger::TriggerFireRecord`
+  --> crates/engine-core/tests/original_merged_spshicai.rs:16:5
+   |
+16 | use engine_core::trigger::TriggerFireRecord;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `CardId`
+  --> crates/engine-core/tests/original_merged_zhafu.rs:10:5
+   |
+10 |     CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+   |     ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `engine_core::trigger::TriggerFireRecord`
+  --> crates/engine-core/tests/original_merged_zhafu.rs:17:5
+   |
+17 | use engine_core::trigger::TriggerFireRecord;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `engine-core` (test "original_merged_qianlong") generated 2 warnings (run `cargo fix --test "original_merged_qianlong" -p engine-core` to apply 2 suggestions)
+warning: function `hand_of` is never used
+  --> crates/engine-core/tests/original_merged_yangming.rs:95:4
+   |
+95 | fn hand_of(state: &GameState, player: PlayerId) -> Vec<CardId> {
+   |    ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `rank_of` is never used
+   --> crates/engine-core/tests/original_merged_yangming.rs:100:4
+    |
+100 | fn rank_of(state: &GameState, card: CardId) -> u8 {
+    |    ^^^^^^^
+
+warning: `engine-core` (test "original_merged_sb") generated 1 warning (run `cargo fix --test "original_merged_sb" -p engine-core` to apply 1 suggestion)
+warning: unused import: `DomainEvent`
+    --> crates/engine-core/tests/original_merged_xianding.rs:1821:52
+     |
+1821 |     ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision, IdempotencyKey,
+     |                                                    ^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:1826:26
+     |
+1826 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_xianding.rs:1828:28
+     |
+1828 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `SkillId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:2193:61
+     |
+2193 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, SkillId, Suit,
+     |                                                             ^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:2196:57
+     |
+2196 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused imports: `CardDefId` and `CardId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5107:5
+     |
+5107 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |     ^^^^^^^^^  ^^^^^^
+
+warning: unused imports: `CardDefId` and `CardId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5258:5
+     |
+5258 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |     ^^^^^^^^^  ^^^^^^
+
+warning: unused imports: `CardDefId` and `CardId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5424:5
+     |
+5424 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |     ^^^^^^^^^  ^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6499:42
+     |
+6499 | use engine_core::state::{Card, CardKind, ContinuationKind, GameState, Phase, ZoneKind};
+     |                                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `DomainEvent`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6744:52
+     |
+6744 |     ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+     |                                                    ^^^^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6751:28
+     |
+6751 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6905:26
+     |
+6905 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7238:57
+     |
+7238 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7239:42
+     |
+7239 | use engine_core::state::{Card, CardKind, ContinuationKind, GameState, Phase, ZoneKind};
+     |                                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7465:26
+     |
+7465 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7603:57
+     |
+7603 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7604:26
+     |
+7604 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7965:26
+     |
+7965 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CommandKind`, `CommandResult`, `Command`, and `DomainEvent`
+    --> crates/engine-core/tests/original_merged_xianding.rs:8251:18
+     |
+8251 | use engine_api::{Command, CommandKind, CommandResult, DomainEvent, PlayerId, SkillDefId};
+     |                  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:8252:57
+     |
+8252 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:8908:26
+     |
+8908 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `CommandResult`
+     --> crates/engine-core/tests/original_merged_xianding.rs:12471:46
+      |
+12471 |     CardDefId, CardId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+      |                                              ^^^^^^^^^^^^^
+
+warning: unused imports: `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+     --> crates/engine-core/tests/original_merged_xianding.rs:13998:24
+      |
+13998 |     CardDefId, CardId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+      |                        ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+     --> crates/engine-core/tests/original_merged_xianding.rs:14001:5
+      |
+14001 | use engine_core::command::apply_command;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+     --> crates/engine-core/tests/original_merged_xianding.rs:15197:57
+      |
+15197 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+      |                                                         ^^^^^^^^^^^
+
+warning: `engine-core` (test "original_merged_spshicai") generated 2 warnings (run `cargo fix --test "original_merged_spshicai" -p engine-core` to apply 2 suggestions)
+warning: unreachable expression
+     --> crates/engine-core/tests/original_merged_xianding.rs:12643:21
+      |
+12643 |         Err(err) => return panic!("unexpected: {err:?}"),
+      |                     ^^^^^^^-----------------------------
+      |                     |      |
+      |                     |      any code following this expression is unreachable
+      |                     unreachable expression
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:2391:9
+     |
+2391 |     let mut tx = Transaction::begin(tx2);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:2436:9
+     |
+2436 |     let mut state = GameState::empty();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:3498:9
+     |
+3498 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:5445:9
+     |
+5445 |     let mut state = GameState::empty();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `armor`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5522:9
+     |
+5522 |     let armor = package
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_armor`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:7075:9
+     |
+7075 |     let mut state = GameState::empty();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `state`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7204:9
+     |
+7204 |     let state = resolve(state, owner, vec![first.raw()], false, 2);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:1876:4
+     |
+1876 | fn resolve(
+     |    ^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:4269:4
+     |
+4269 | fn resolve(
+     |    ^^^^^^^
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:7327:4
+     |
+7327 | fn resolve(
+     |    ^^^^^^^
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:7655:4
+     |
+7655 | fn resolve(
+     |    ^^^^^^^
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:8803:4
+     |
+8803 | fn resolve(
+     |    ^^^^^^^
+
+warning: `engine-core` (test "original_merged_zhafu") generated 2 warnings (run `cargo fix --test "original_merged_zhafu" -p engine-core` to apply 2 suggestions)
+warning: `engine-core` (test "original_merged_yangming") generated 2 warnings
+warning: unused import: `DomainEvent`
+   --> crates/engine-core/tests/original_merged_jsrg.rs:437:71
+    |
+437 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+    |                                                                       ^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `EffectError`
+   --> crates/engine-core/tests/original_merged_jsrg.rs:441:57
+    |
+441 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+    |                                                         ^^^^^^^^^^^
+
+warning: unused import: `Card`
+    --> crates/engine-core/tests/original_merged_jsrg.rs:2135:30
+     |
+2135 |     use engine_core::state::{Card, ZoneKind};
+     |                              ^^^^
+
+warning: unused variable: `seed`
+  --> crates/engine-core/tests/property_invariants.rs:77:31
+   |
+77 |     fn rollback_restores_hash(seed in any_seed()) {
+   |                               ^^^^ help: if this is intentional, prefix it with an underscore: `_seed`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `owner`
+   --> crates/engine-core/tests/original_merged_jsrg.rs:293:33
+    |
+293 | fn build_city(state: GameState, owner: PlayerId) -> GameState {
+    |                                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_jsrg.rs:2411:9
+     |
+2411 |     let mut tx = Transaction::begin(mid);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardDefId`, `CardId`, and `Suit`
+  --> crates/engine-core/tests/original_merged_a0.rs:10:5
+   |
+10 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+   |     ^^^^^^^^^  ^^^^^^
+11 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag,
+   |                                                             ^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardKind`, `Card`, and `ZoneKind`
+  --> crates/engine-core/tests/original_merged_a0.rs:15:26
+   |
+15 | use engine_core::state::{Card, CardKind, GameState, ZoneKind};
+   |                          ^^^^  ^^^^^^^^             ^^^^^^^^
+
+warning: function `inject_hand_card` is never used
+   --> crates/engine-core/tests/original_merged_a0.rs:250:4
+    |
+250 | fn inject_hand_card(state: GameState, owner: PlayerId, def: u32) -> (GameState, CardId) {
+    |    ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_refresh") generated 6 warnings (run `cargo fix --test "original_merged_refresh" -p engine-core` to apply 5 suggestions)
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_shahai.rs:939:9
+    |
+939 |     let mut tx = tx;
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "property_invariants") generated 1 warning (run `cargo fix --test "property_invariants" -p engine-core` to apply 1 suggestion)
+warning: `engine-core` (test "original_merged_a0") generated 3 warnings (run `cargo fix --test "original_merged_a0" -p engine-core` to apply 2 suggestions)
+warning: `engine-core` (test "original_merged_shahai") generated 1 warning (run `cargo fix --test "original_merged_shahai" -p engine-core` to apply 1 suggestion)
+warning: `engine-core` (test "original_merged_xianding") generated 38 warnings (run `cargo fix --test "original_merged_xianding" -p engine-core` to apply 32 suggestions)
+warning: `engine-core` (test "original_merged_jsrg") generated 5 warnings (run `cargo fix --test "original_merged_jsrg" -p engine-core` to apply 5 suggestions)
+warning: unused variable: `pile_def`
+   --> crates/engine-core/tests/original_merged_s1b.rs:381:62
+    |
+381 | fn setup(seed: u64, source: &str, tag: &str, skill_def: u32, pile_def: u32) -> (GameState, PlayerId, PlayerId) {
+    |                                                              ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_def`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `MOBILE` is never used
+  --> crates/engine-core/tests/original_merged_s1b.rs:24:7
+   |
+24 | const MOBILE: &[u8] =
+   |       ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `resolve` is never used
+   --> crates/engine-core/tests/original_merged_s1b.rs:135:4
+    |
+135 | fn resolve(state: GameState, owner: PlayerId, pick: u32, key: u64) -> GameState {
+    |    ^^^^^^^
+
+warning: constant `TUIFENG2_SRC` is never used
+   --> crates/engine-core/tests/original_merged_s1b.rs:528:7
+    |
+528 | const TUIFENG2_SRC: &str = include_str!("../../../content/original/ported/sp/tuifeng2.skill");
+    |       ^^^^^^^^^^^^
+
+warning: constant `NSDIEMOU_SRC` is never used
+   --> crates/engine-core/tests/original_merged_s1b.rs:562:7
+    |
+562 | const NSDIEMOU_SRC: &str = include_str!("../../../content/original/ported/diy/nsdiemou.skill");
+    |       ^^^^^^^^^^^^
+
+warning: function `has_skill_state` is never used
+   --> crates/engine-core/tests/original_merged_s1b.rs:588:4
+    |
+588 | fn has_skill_state(state: &GameState, owner: PlayerId, skill_def: u32) -> bool {
+    |    ^^^^^^^^^^^^^^^
+
+warning: unused imports: `CardDefId` and `Suit`
+   --> crates/engine-core/tests/original_merged_yingbian.rs:341:5
+    |
+341 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision,
+    |     ^^^^^^^^^
+342 |     IdempotencyKey, PlayerId, SkillDefId, Suit,
+    |                                           ^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CardKind` and `Card`
+   --> crates/engine-core/tests/original_merged_yingbian.rs:346:26
+    |
+346 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+    |                          ^^^^  ^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_yingbian.rs:149:10
+    |
+149 |     let (mut tx, owner, _other) = setup(source, &[CAIYUAN]);
+    |          ----^^
+    |          |
+    |          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `CardId`
+ --> crates/engine-core/tests/original_merged_zhengjian.rs:9:5
+  |
+9 |     CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+  |     ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ZoneKind`
+  --> crates/engine-core/tests/original_merged_zhengjian.rs:14:37
+   |
+14 | use engine_core::state::{GameState, ZoneKind};
+   |                                     ^^^^^^^^
+
+warning: constant `SOURCE` is never used
+   --> crates/engine-core/tests/original_merged_bingshi.rs:726:7
+    |
+726 | const SOURCE: &str = concat!(
+    |       ^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (test "original_merged_zhengjian") generated 2 warnings (run `cargo fix --test "original_merged_zhengjian" -p engine-core` to apply 2 suggestions)
+warning: `engine-core` (test "original_merged_yingbian") generated 3 warnings (run `cargo fix --test "original_merged_yingbian" -p engine-core` to apply 3 suggestions)
+warning: `engine-core` (test "original_merged_s1b") generated 6 warnings (run `cargo fix --test "original_merged_s1b" -p engine-core` to apply 1 suggestion)
+warning: value assigned to `key` is never read
+   --> crates/engine-core/tests/guozhan_trick_kefuzhongyuan.rs:211:5
+    |
+211 |     key += 1;
+    |     ^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `EffectError`
+   --> crates/engine-core/tests/original_merged_shiji.rs:443:40
+    |
+443 | use engine_core::effect::{run_effects, EffectError};
+    |                                        ^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `DomainEvent` and `TurnPhaseTag`
+    --> crates/engine-core/tests/original_merged_shiji.rs:1570:71
+     |
+1570 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |                                                                       ^^^^^^^^^^^
+1571 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag,
+     |                                                                   ^^^^^^^^^^^^
+
+warning: unused import: `Phase`
+    --> crates/engine-core/tests/original_merged_shiji.rs:1575:53
+     |
+1575 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+     |                                                     ^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_shiji.rs:1577:28
+     |
+1577 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `GameState`
+    --> crates/engine-core/tests/original_merged_shiji.rs:1809:42
+     |
+1809 | use engine_core::state::{Card, CardKind, GameState, Phase, ZoneKind};
+     |                                          ^^^^^^^^^
+
+warning: unused import: `engine_core::state::CardKind`
+ --> crates/engine-core/tests/original_merged_dcniji.rs:9:5
+  |
+9 | use engine_core::state::CardKind;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `third`
+    --> crates/engine-core/tests/original_merged_shiji.rs:1684:9
+     |
+1684 |     let third = others[1];
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_third`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:3138:9
+     |
+3138 |     let mut effects: Vec<_> = tx
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:3218:9
+     |
+3218 |     let mut effects: Vec<_> = tx
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:4196:9
+     |
+4196 |     let mut state = resolve_choice(tx.commit().state, owner, 10, vec![1], false);
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:5517:9
+     |
+5517 |     let mut state = confirm_optional(&mut tx, owner, 90);
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:5535:9
+     |
+5535 |     let mut state = state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:5587:9
+     |
+5587 |     let mut state = confirm_optional(&mut tx, owner, 92);
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:6141:9
+     |
+6141 |     let mut tx = Transaction::begin(state.clone());
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `tx`
+    --> crates/engine-core/tests/original_merged_shiji.rs:6141:9
+     |
+6141 |     let mut tx = Transaction::begin(state.clone());
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_tx`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:6175:9
+     |
+6175 |     let mut tx = Transaction::begin(state.clone());
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:6271:9
+     |
+6271 |     let mut tx = Transaction::begin(state.clone());
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:6304:9
+     |
+6304 |     let mut tx = Transaction::begin(state.clone());
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:6500:9
+     |
+6500 |     let mut tx = Transaction::begin(state.clone());
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:6547:9
+     |
+6547 |     let mut tx = Transaction::begin(state.clone());
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shiji.rs:6611:9
+     |
+6611 |     let mut tx = Transaction::begin(state.clone());
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+    --> crates/engine-core/tests/original_merged_tw.rs:6357:24
+     |
+6357 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |                        ^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^
+6358 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit,
+     |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `PipelineResult` and `apply_command`
+    --> crates/engine-core/tests/original_merged_tw.rs:6360:28
+     |
+6360 | use engine_core::command::{apply_command, PipelineResult};
+     |                            ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_tw.rs:6361:57
+     |
+6361 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+    --> crates/engine-core/tests/original_merged_tw.rs:6916:5
+     |
+6916 |     ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, PlayerId,
+     |     ^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+    --> crates/engine-core/tests/original_merged_tw.rs:6919:5
+     |
+6919 | use engine_core::command::apply_command;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_tw.rs:6920:57
+     |
+6920 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: function `resolve_choice` is never used
+   --> crates/engine-core/tests/original_merged_shiji.rs:487:4
+    |
+487 | fn resolve_choice(
+    |    ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `inject_hand` is never used
+    --> crates/engine-core/tests/original_merged_shiji.rs:1648:4
+     |
+1648 | fn inject_hand(tx: &mut Transaction, player: PlayerId, kind: CardKind, suit: Suit) -> CardId {
+     |    ^^^^^^^^^^^
+
+warning: function `inject_hand` is never used
+    --> crates/engine-core/tests/original_merged_shiji.rs:4831:4
+     |
+4831 | fn inject_hand(tx: &mut Transaction, player: PlayerId, kind: CardKind, suit: Suit) -> CardId {
+     |    ^^^^^^^^^^^
+
+warning: function `confirm` is never used
+    --> crates/engine-core/tests/original_merged_shiji.rs:5650:4
+     |
+5650 | fn confirm(tx: &mut Transaction, owner: PlayerId, key: u64, target: PlayerId) -> GameState {
+     |    ^^^^^^^
+
+warning: function `resolve_choice` is never used
+    --> crates/engine-core/tests/original_merged_shiji.rs:6693:4
+     |
+6693 | fn resolve_choice(
+     |    ^^^^^^^^^^^^^^
+
+warning: unused import: `Zone`
+  --> crates/engine-core/tests/original_merged_existing.rs:17:53
+   |
+17 | use engine_core::state::{Card, CardKind, GameState, Zone};
+   |                                                     ^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_existing.rs:125:17
+    |
+125 |     let (state, mut card) = inject_hand_card(state, owner, Suit::Heart, 9_943);
+    |                 ----^^^^
+    |                 |
+    |                 help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `owner`
+  --> crates/engine-core/tests/original_merged_tw.rs:68:39
+   |
+68 | fn with_clean_owner(state: GameState, owner: PlayerId) -> GameState {
+   |                                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_tw.rs:127:9
+    |
+127 |     let mut state = with_clean_owner(state, owner);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_tw.rs:161:9
+    |
+161 |     let mut state = with_clean_owner(state, owner);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `owner`
+    --> crates/engine-core/tests/original_merged_tw.rs:6466:18
+     |
+6466 |     let (mut tx, owner, target) = setup();
+     |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/tests/original_merged_tw.rs:2594:5
+     |
+2594 | /     std::thread::Builder::new().stack_size(16 << 20).spawn(|| {
+2595 | |         let committed = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
+2596 | |         let mut compiled = content_compiler::compile_source_named("tw", &tw_sources()).unwrap();
+2597 | |         compiled.character_index = committed.character_index.clone();
+...    |
+2666 | |         assert_eq!(tx.state().players.get(other).unwrap().max_hp, 9);
+2667 | |     });
+     | |______^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+2594 |     let _ = std::thread::Builder::new().stack_size(16 << 20).spawn(|| {
+     |     +++++++
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/tests/original_merged_tw.rs:5190:5
+     |
+5190 | /     std::thread::Builder::new().stack_size(16 << 20).spawn(|| {
+5191 | |         let committed = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
+5192 | |         assert!(committed.manifest.rule_vm_abi_version >= 490);
+5193 | |         assert_eq!(
+...    |
+5305 | |         assert_eq!(replacement.content_flags, 0);
+5306 | |     });
+     | |______^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+     |
+5190 |     let _ = std::thread::Builder::new().stack_size(16 << 20).spawn(|| {
+     |     +++++++
+
+warning: `engine-core` (test "original_merged_bingshi") generated 1 warning
+warning: `engine-core` (test "guozhan_trick_kefuzhongyuan") generated 1 warning
+warning: `engine-core` (test "original_merged_dcniji") generated 1 warning (run `cargo fix --test "original_merged_dcniji" -p engine-core` to apply 1 suggestion)
+warning: duplicated attribute
+   --> crates/engine-core/tests/original_merged_compare.rs:393:1
+    |
+393 | #[test]
+    | ^^^^^^^
+    |
+    = note: `#[warn(duplicate_macro_attributes)]` on by default
+
+warning: `engine-core` (test "original_merged_existing") generated 2 warnings (run `cargo fix --test "original_merged_existing" -p engine-core` to apply 2 suggestions)
+warning: unused variable: `card`
+   --> crates/engine-core/tests/original_merged_compare.rs:399:13
+    |
+399 |         let card = {
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `REXIANZHEN_LOSE` is never used
+  --> crates/engine-core/tests/original_merged_compare.rs:44:7
+   |
+44 | const REXIANZHEN_LOSE: u32 = 4_037_147_006;
+   |       ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `add_bound_skill` is never used
+   --> crates/engine-core/tests/original_merged_compare.rs:123:4
+    |
+123 | fn add_bound_skill(
+    |    ^^^^^^^^^^^^^^^
+
+warning: unused imports: `CardId` and `DomainEvent`
+  --> crates/engine-core/tests/original_merged_chumei.rs:10:5
+   |
+10 |     CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+   |     ^^^^^^                                                 ^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `engine_core::state::ZoneKind`
+  --> crates/engine-core/tests/original_merged_chumei.rs:16:5
+   |
+16 | use engine_core::state::ZoneKind;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_chumei.rs:130:10
+    |
+130 |     let (mut state, owner, target) = setup(20_260_913_41);
+    |          ----^^^^^
+    |          |
+    |          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_chumei.rs:153:10
+    |
+153 |     let (mut state, owner, target) = setup(20_260_913_42);
+    |          ----^^^^^
+    |          |
+    |          help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_chumei.rs:166:10
+    |
+166 |     let (mut state, owner, target) = setup(20_260_913_43);
+    |          ----^^^^^
+    |          |
+    |          help: remove this `mut`
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/tests/original_merged_modifier.rs:2047:5
+     |
+2047 | /     std::thread::Builder::new().stack_size(16 << 20).spawn(|| {
+2048 | |         for (name, source, package) in [
+2049 | |             ("sp", SP_SOURCE, SP),
+2050 | |             ("sp2", SP2_SOURCE, SP2),
+...    |
+2061 | |     });
+     | |______^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+2047 |     let _ = std::thread::Builder::new().stack_size(16 << 20).spawn(|| {
+     |     +++++++
+
+warning: `engine-core` (test "original_merged_shiji") generated 25 warnings (run `cargo fix --test "original_merged_shiji" -p engine-core` to apply 20 suggestions)
+warning: `engine-core` (test "original_merged_compare") generated 4 warnings (run `cargo fix --test "original_merged_compare" -p engine-core` to apply 1 suggestion)
+warning: `engine-core` (test "original_merged_chumei") generated 5 warnings (run `cargo fix --test "original_merged_chumei" -p engine-core` to apply 5 suggestions)
+warning: `engine-core` (test "original_merged_tw") generated 12 warnings (run `cargo fix --test "original_merged_tw" -p engine-core` to apply 10 suggestions)
+warning: `engine-core` (test "original_merged_modifier") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 15.84s
+  Executable unittests src/lib.rs (/tmp/o2-engine-core/debug/deps/engine_core-c2b764bbc81d2770)
+  Executable tests/content_lock_extensions.rs (/tmp/o2-engine-core/debug/deps/content_lock_extensions-1a3a01f8929cd831)
+  Executable tests/differential_replay.rs (/tmp/o2-engine-core/debug/deps/differential_replay-090943ac7e3f2548)
+  Executable tests/draw_fixed_runtime.rs (/tmp/o2-engine-core/debug/deps/draw_fixed_runtime-4a9e638fd4ccd9be)
+  Executable tests/fuzz_stable.rs (/tmp/o2-engine-core/debug/deps/fuzz_stable-305cffff4bf0fc13)
+  Executable tests/golden_regression.rs (/tmp/o2-engine-core/debug/deps/golden_regression-6dd3dc1a6d8e3898)
+  Executable tests/golden_start.rs (/tmp/o2-engine-core/debug/deps/golden_start-51602429db504946)
+  Executable tests/guozhan_trick_chiling.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_chiling-8c63298b794fb0c1)
+  Executable tests/guozhan_trick_guguoanbang.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_guguoanbang-924c59b9922820d4)
+  Executable tests/guozhan_trick_haolingtianxia.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_haolingtianxia-a8a041cd848f5bec)
+  Executable tests/guozhan_trick_huoshaolianying.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_huoshaolianying-6a5daac03c7e00b5)
+  Executable tests/guozhan_trick_kefuzhongyuan.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_kefuzhongyuan-d40a2e47d917145e)
+  Executable tests/guozhan_trick_lianjunshengyan.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_lianjunshengyan-9b8958aa66577c39)
+  Executable tests/guozhan_trick_lulitongxin.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_lulitongxin-0702f6650d7bed36)
+  Executable tests/guozhan_trick_shuiyanqijunx.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_shuiyanqijunx-7ad99d820d1c4451)
+  Executable tests/guozhan_trick_wenheluanwu.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_wenheluanwu-ccc58e9d78b3368a)
+  Executable tests/guozhan_trick_yiyi.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_yiyi-e5ef34006e80e60f)
+  Executable tests/guozhan_trick_yuanjiao.rs (/tmp/o2-engine-core/debug/deps/guozhan_trick_yuanjiao-43606efe26bdad5a)
+  Executable tests/gwent_gwyewu.rs (/tmp/o2-engine-core/debug/deps/gwent_gwyewu-4319d53cb77cc845)
+  Executable tests/m5_community_example.rs (/tmp/o2-engine-core/debug/deps/m5_community_example-de0edce42d91391e)
+  Executable tests/m6_ai_baseline.rs (/tmp/o2-engine-core/debug/deps/m6_ai_baseline-6862676d8e10b4fb)
+  Executable tests/m8_governance.rs (/tmp/o2-engine-core/debug/deps/m8_governance-9f72b063c01189dc)
+  Executable tests/mode_single.rs (/tmp/o2-engine-core/debug/deps/mode_single-50d9f95315808ea8)
+  Executable tests/original_merged_a0.rs (/tmp/o2-engine-core/debug/deps/original_merged_a0-ead8b52ea2204595)
+  Executable tests/original_merged_a1.rs (/tmp/o2-engine-core/debug/deps/original_merged_a1-0cee14eefded1730)
+  Executable tests/original_merged_armor.rs (/tmp/o2-engine-core/debug/deps/original_merged_armor-0a35f451bf725118)
+  Executable tests/original_merged_biaozhao2.rs (/tmp/o2-engine-core/debug/deps/original_merged_biaozhao2-78ed2c49859b2cfb)
+  Executable tests/original_merged_biaozhao3.rs (/tmp/o2-engine-core/debug/deps/original_merged_biaozhao3-f912e4760aa36582)
+  Executable tests/original_merged_bingshi.rs (/tmp/o2-engine-core/debug/deps/original_merged_bingshi-cd3b1e35f12870a0)
+  Executable tests/original_merged_canyun.rs (/tmp/o2-engine-core/debug/deps/original_merged_canyun-3441c3cd5e7d70bb)
+  Executable tests/original_merged_card.rs (/tmp/o2-engine-core/debug/deps/original_merged_card-bb157e54ff4b7b43)
+  Executable tests/original_merged_character.rs (/tmp/o2-engine-core/debug/deps/original_merged_character-6fa2b8e64e8d4751)
+  Executable tests/original_merged_choose.rs (/tmp/o2-engine-core/debug/deps/original_merged_choose-6fd45726c6e6a7e6)
+  Executable tests/original_merged_chuanyun.rs (/tmp/o2-engine-core/debug/deps/original_merged_chuanyun-044142c681dcfcbd)
+  Executable tests/original_merged_chulao.rs (/tmp/o2-engine-core/debug/deps/original_merged_chulao-a7ae6837f225e06f)
+  Executable tests/original_merged_chumei.rs (/tmp/o2-engine-core/debug/deps/original_merged_chumei-3d43ac3ddb60dc6f)
+  Executable tests/original_merged_clan.rs (/tmp/o2-engine-core/debug/deps/original_merged_clan-3c0006c00f436774)
+  Executable tests/original_merged_collab.rs (/tmp/o2-engine-core/debug/deps/original_merged_collab-81b89a5d305896b9)
+  Executable tests/original_merged_compare.rs (/tmp/o2-engine-core/debug/deps/original_merged_compare-625b5ac8daf3ec59)
+  Executable tests/original_merged_congshi.rs (/tmp/o2-engine-core/debug/deps/original_merged_congshi-6df003ae8fe6d15a)
+  Executable tests/original_merged_consecutive.rs (/tmp/o2-engine-core/debug/deps/original_merged_consecutive-a938eb897e70f420)
+  Executable tests/original_merged_damage.rs (/tmp/o2-engine-core/debug/deps/original_merged_damage-10ef093ffbd72364)
+  Executable tests/original_merged_dcanxu.rs (/tmp/o2-engine-core/debug/deps/original_merged_dcanxu-30db403aee27b9a6)
+  Executable tests/original_merged_dcbingji.rs (/tmp/o2-engine-core/debug/deps/original_merged_dcbingji-c1b8910ecd47cb7e)
+  Executable tests/original_merged_dcmoukui.rs (/tmp/o2-engine-core/debug/deps/original_merged_dcmoukui-4baaf37d2b66766b)
+  Executable tests/original_merged_dcniji.rs (/tmp/o2-engine-core/debug/deps/original_merged_dcniji-1bf28a1081d1bbde)
+  Executable tests/original_merged_dcqiaolve.rs (/tmp/o2-engine-core/debug/deps/original_merged_dcqiaolve-500119d0a952363b)
+  Executable tests/original_merged_dcsbjianwei.rs (/tmp/o2-engine-core/debug/deps/original_merged_dcsbjianwei-06cabfb6da5e7ec3)
+  Executable tests/original_merged_dingce.rs (/tmp/o2-engine-core/debug/deps/original_merged_dingce-be02710742cd0873)
+  Executable tests/original_merged_diy.rs (/tmp/o2-engine-core/debug/deps/original_merged_diy-1cca9f988c7a7258)
+  Executable tests/original_merged_duansuo.rs (/tmp/o2-engine-core/debug/deps/original_merged_duansuo-91aaa1d9941cd005)
+  Executable tests/original_merged_duoduan.rs (/tmp/o2-engine-core/debug/deps/original_merged_duoduan-332a5cf4435a4279)
+  Executable tests/original_merged_duwang.rs (/tmp/o2-engine-core/debug/deps/original_merged_duwang-1aab3d6c77e79c6a)
+  Executable tests/original_merged_enyuan.rs (/tmp/o2-engine-core/debug/deps/original_merged_enyuan-6ba28b50e7dbc415)
+  Executable tests/original_merged_existing.rs (/tmp/o2-engine-core/debug/deps/original_merged_existing-9e6b0e4e68f646bd)
+  Executable tests/original_merged_extension.rs (/tmp/o2-engine-core/debug/deps/original_merged_extension-e1c095c4ea6c0fbb)
+  Executable tests/original_merged_extra.rs (/tmp/o2-engine-core/debug/deps/original_merged_extra-90c236692939734b)
+  Executable tests/original_merged_faen.rs (/tmp/o2-engine-core/debug/deps/original_merged_faen-28740045771d062c)
+  Executable tests/original_merged_forced.rs (/tmp/o2-engine-core/debug/deps/original_merged_forced-2298fe4ef9bcbcb4)
+  Executable tests/original_merged_friendbiwei.rs (/tmp/o2-engine-core/debug/deps/original_merged_friendbiwei-08c6fc45f0c50d62)
+  Executable tests/original_merged_gaintag.rs (/tmp/o2-engine-core/debug/deps/original_merged_gaintag-aad9acb7a031cc2f)
+  Executable tests/original_merged_gaoyuan.rs (/tmp/o2-engine-core/debug/deps/original_merged_gaoyuan-eaa6833a5cc9564f)
+  Executable tests/original_merged_hengwu.rs (/tmp/o2-engine-core/debug/deps/original_merged_hengwu-342f2954824be475)
+  Executable tests/original_merged_history.rs (/tmp/o2-engine-core/debug/deps/original_merged_history-9f536d6b8076322f)
+  Executable tests/original_merged_huicui.rs (/tmp/o2-engine-core/debug/deps/original_merged_huicui-2efb1db5e63e4673)
+  Executable tests/original_merged_inherited.rs (/tmp/o2-engine-core/debug/deps/original_merged_inherited-36ddb83a6eb6fea0)
+  Executable tests/original_merged_jsrg.rs (/tmp/o2-engine-core/debug/deps/original_merged_jsrg-992ffc4febac7055)
+  Executable tests/original_merged_jsrgdaoren.rs (/tmp/o2-engine-core/debug/deps/original_merged_jsrgdaoren-d2f7e98e4127724a)
+  Executable tests/original_merged_jsrgzuozhan.rs (/tmp/o2-engine-core/debug/deps/original_merged_jsrgzuozhan-1c9f08c92b9ee8c0)
+  Executable tests/original_merged_key.rs (/tmp/o2-engine-core/debug/deps/original_merged_key-a7d41f5c06d87f57)
+  Executable tests/original_merged_kuanshi.rs (/tmp/o2-engine-core/debug/deps/original_merged_kuanshi-3e990833fa6929c3)
+  Executable tests/original_merged_mbbeiming.rs (/tmp/o2-engine-core/debug/deps/original_merged_mbbeiming-7d6d9a51145cd673)
+  Executable tests/original_merged_mbzhennan.rs (/tmp/o2-engine-core/debug/deps/original_merged_mbzhennan-237e05ab02cbd91a)
+  Executable tests/original_merged_meiyong.rs (/tmp/o2-engine-core/debug/deps/original_merged_meiyong-720d7b5e4a1b166b)
+  Executable tests/original_merged_metadata.rs (/tmp/o2-engine-core/debug/deps/original_merged_metadata-af6a6e8f46738735)
+  Executable tests/original_merged_mobile.rs (/tmp/o2-engine-core/debug/deps/original_merged_mobile-df2444bdf033737e)
+  Executable tests/original_merged_modifier.rs (/tmp/o2-engine-core/debug/deps/original_merged_modifier-0cbb4b712d2e5838)
+  Executable tests/original_merged_multi.rs (/tmp/o2-engine-core/debug/deps/original_merged_multi-d456dcdec5293ac6)
+  Executable tests/original_merged_newjiang.rs (/tmp/o2-engine-core/debug/deps/original_merged_newjiang-055462ebdd423083)
+  Executable tests/original_merged_offline.rs (/tmp/o2-engine-core/debug/deps/original_merged_offline-460a53c64eadfcca)
+  Executable tests/original_merged_old.rs (/tmp/o2-engine-core/debug/deps/original_merged_old-fd892df968bad6ab)
+  Executable tests/original_merged_onlyol.rs (/tmp/o2-engine-core/debug/deps/original_merged_onlyol-5a74876f8b651e7c)
+  Executable tests/original_merged_ported.rs (/tmp/o2-engine-core/debug/deps/original_merged_ported-8927e2023ae7aac3)
+  Executable tests/original_merged_pxqixian.rs (/tmp/o2-engine-core/debug/deps/original_merged_pxqixian-3983293e27d7f15b)
+  Executable tests/original_merged_qiangyong.rs (/tmp/o2-engine-core/debug/deps/original_merged_qiangyong-cda9c51f524a0e8d)
+  Executable tests/original_merged_qianlong.rs (/tmp/o2-engine-core/debug/deps/original_merged_qianlong-bb80b2011e0078b9)
+  Executable tests/original_merged_qiantun.rs (/tmp/o2-engine-core/debug/deps/original_merged_qiantun-e531fa5cc4148301)
+  Executable tests/original_merged_qiaoshui.rs (/tmp/o2-engine-core/debug/deps/original_merged_qiaoshui-b82dc4ecbdc1d49a)
+  Executable tests/original_merged_qicai.rs (/tmp/o2-engine-core/debug/deps/original_merged_qicai-5755c13c4790ff21)
+  Executable tests/original_merged_qinmian.rs (/tmp/o2-engine-core/debug/deps/original_merged_qinmian-2e1cf0d5e32bb753)
+  Executable tests/original_merged_quanji.rs (/tmp/o2-engine-core/debug/deps/original_merged_quanji-04c5fe9f872decb9)
+  Executable tests/original_merged_quanjia.rs (/tmp/o2-engine-core/debug/deps/original_merged_quanjia-3eb27c280f8e689d)
+  Executable tests/original_merged_rearrange.rs (/tmp/o2-engine-core/debug/deps/original_merged_rearrange-47a7de6da49ddf84)
+  Executable tests/original_merged_refresh.rs (/tmp/o2-engine-core/debug/deps/original_merged_refresh-a87f79b11a00a717)
+  Executable tests/original_merged_rejueqing.rs (/tmp/o2-engine-core/debug/deps/original_merged_rejueqing-025ba1aa3b96cecf)
+  Executable tests/original_merged_reliangyin.rs (/tmp/o2-engine-core/debug/deps/original_merged_reliangyin-41f98eee04d00506)
+  Executable tests/original_merged_round.rs (/tmp/o2-engine-core/debug/deps/original_merged_round-e23e037c75df285c)
+  Executable tests/original_merged_rw.rs (/tmp/o2-engine-core/debug/deps/original_merged_rw-770f5e3a49445e8f)
+  Executable tests/original_merged_s1a.rs (/tmp/o2-engine-core/debug/deps/original_merged_s1a-fa1b64ca12dd598e)
+  Executable tests/original_merged_s1b.rs (/tmp/o2-engine-core/debug/deps/original_merged_s1b-692d8472b99c73e6)
+  Executable tests/original_merged_sb.rs (/tmp/o2-engine-core/debug/deps/original_merged_sb-ef2de4bb0ead020c)
+  Executable tests/original_merged_sha.rs (/tmp/o2-engine-core/debug/deps/original_merged_sha-45e11c87c73f93fa)
+  Executable tests/original_merged_shahai.rs (/tmp/o2-engine-core/debug/deps/original_merged_shahai-e7c093e99f58572b)
+  Executable tests/original_merged_shenhua.rs (/tmp/o2-engine-core/debug/deps/original_merged_shenhua-4ce9ff26117ab075)
+  Executable tests/original_merged_shiji.rs (/tmp/o2-engine-core/debug/deps/original_merged_shiji-04291aa13244b49a)
+  Executable tests/original_merged_shuaiyan.rs (/tmp/o2-engine-core/debug/deps/original_merged_shuaiyan-78e7c0f9657f6621)
+  Executable tests/original_merged_shuliang.rs (/tmp/o2-engine-core/debug/deps/original_merged_shuliang-cf68384066da9088)
+  Executable tests/original_merged_simple.rs (/tmp/o2-engine-core/debug/deps/original_merged_simple-099e8d06054e64e9)
+  Executable tests/original_merged_sixiang.rs (/tmp/o2-engine-core/debug/deps/original_merged_sixiang-066a1b66c6649129)
+  Executable tests/original_merged_sp.rs (/tmp/o2-engine-core/debug/deps/original_merged_sp-d9efed850f7617d9)
+  Executable tests/original_merged_sp2.rs (/tmp/o2-engine-core/debug/deps/original_merged_sp2-2443be98a9e44d02)
+  Executable tests/original_merged_spshicai.rs (/tmp/o2-engine-core/debug/deps/original_merged_spshicai-1b89290b77ca090a)
+  Executable tests/original_merged_stale.rs (/tmp/o2-engine-core/debug/deps/original_merged_stale-5d1caeded0f1eb5f)
+  Executable tests/original_merged_standard.rs (/tmp/o2-engine-core/debug/deps/original_merged_standard-cdf5cd6e1456239a)
+  Executable tests/original_merged_storage.rs (/tmp/o2-engine-core/debug/deps/original_merged_storage-8d685bb5bd789806)
+  Executable tests/original_merged_sxrm.rs (/tmp/o2-engine-core/debug/deps/original_merged_sxrm-a28ec49cd3f5454a)
+  Executable tests/original_merged_tw.rs (/tmp/o2-engine-core/debug/deps/original_merged_tw-557bea55d83508fb)
+  Executable tests/original_merged_twdaigui.rs (/tmp/o2-engine-core/debug/deps/original_merged_twdaigui-221e421e2d690d9b)
+  Executable tests/original_merged_twmitu.rs (/tmp/o2-engine-core/debug/deps/original_merged_twmitu-1fccc173c36b5af8)
+  Executable tests/original_merged_twmouzhi.rs (/tmp/o2-engine-core/debug/deps/original_merged_twmouzhi-944366859e1a461b)
+  Executable tests/original_merged_twxiongjun.rs (/tmp/o2-engine-core/debug/deps/original_merged_twxiongjun-5ea7c63d0e58e28f)
+  Executable tests/original_merged_variable.rs (/tmp/o2-engine-core/debug/deps/original_merged_variable-d433d4850b42af9f)
+  Executable tests/original_merged_view.rs (/tmp/o2-engine-core/debug/deps/original_merged_view-679afa927eeb0b92)
+  Executable tests/original_merged_wangxi.rs (/tmp/o2-engine-core/debug/deps/original_merged_wangxi-12acc209c1b31c81)
+  Executable tests/original_merged_xianding.rs (/tmp/o2-engine-core/debug/deps/original_merged_xianding-5bd67682f2320155)
+  Executable tests/original_merged_yangming.rs (/tmp/o2-engine-core/debug/deps/original_merged_yangming-5bf23915e3626491)
+  Executable tests/original_merged_yijiang.rs (/tmp/o2-engine-core/debug/deps/original_merged_yijiang-fdc2f6c6189c3c7c)
+  Executable tests/original_merged_yingbian.rs (/tmp/o2-engine-core/debug/deps/original_merged_yingbian-ad41ce7869b623b0)
+  Executable tests/original_merged_yuheng.rs (/tmp/o2-engine-core/debug/deps/original_merged_yuheng-9084e83026a60264)
+  Executable tests/original_merged_zhafu.rs (/tmp/o2-engine-core/debug/deps/original_merged_zhafu-6d815783af2590bc)
+  Executable tests/original_merged_zhengjian.rs (/tmp/o2-engine-core/debug/deps/original_merged_zhengjian-08d133b073a9d220)
+  Executable tests/original_merged_zhongyan.rs (/tmp/o2-engine-core/debug/deps/original_merged_zhongyan-409bc408c5b49a1f)
+  Executable tests/original_small_pack_asserts.rs (/tmp/o2-engine-core/debug/deps/original_small_pack_asserts-d4482c1dce655ca8)
+  Executable tests/phase12_content_vm.rs (/tmp/o2-engine-core/debug/deps/phase12_content_vm-8da2417bc6de09e3)
+  Executable tests/phase13_modifiers.rs (/tmp/o2-engine-core/debug/deps/phase13_modifiers-7ad1c95d3fa634e2)
+  Executable tests/phase14_manifest.rs (/tmp/o2-engine-core/debug/deps/phase14_manifest-a3ba29d71259f50f)
+  Executable tests/phase16_manifest_persistence.rs (/tmp/o2-engine-core/debug/deps/phase16_manifest_persistence-3168668c0c14d188)
+  Executable tests/phase19_replay_capsule.rs (/tmp/o2-engine-core/debug/deps/phase19_replay_capsule-3f8b1ad109beeb48)
+  Executable tests/phase2_rules.rs (/tmp/o2-engine-core/debug/deps/phase2_rules-2691a53bc7bdfe53)
+  Executable tests/phase3_trigger_query.rs (/tmp/o2-engine-core/debug/deps/phase3_trigger_query-8eb9b910d8083369)
+  Executable tests/phase4_vm_bridge.rs (/tmp/o2-engine-core/debug/deps/phase4_vm_bridge-5f8ab6c08c4a8b0e)
+  Executable tests/phase5_identity.rs (/tmp/o2-engine-core/debug/deps/phase5_identity-dedc51a9b494089d)
+  Executable tests/phase_m0_choose.rs (/tmp/o2-engine-core/debug/deps/phase_m0_choose-cdd2c8c14ee4eaff)
+  Executable tests/phase_m0_intent.rs (/tmp/o2-engine-core/debug/deps/phase_m0_intent-d52b8616981e3779)
+  Executable tests/phase_m0_move_cards.rs (/tmp/o2-engine-core/debug/deps/phase_m0_move_cards-765d43fd8194f9c4)
+  Executable tests/phase_m0_trigger_choice.rs (/tmp/o2-engine-core/debug/deps/phase_m0_trigger_choice-ac956fc70e8c4481)
+  Executable tests/phase_m0_unified_skills.rs (/tmp/o2-engine-core/debug/deps/phase_m0_unified_skills-a34e6076bb4771db)
+  Executable tests/phase_m1_aoe_juedou.rs (/tmp/o2-engine-core/debug/deps/phase_m1_aoe_juedou-297e64bb42aeb774)
+  Executable tests/phase_m1_bagua.rs (/tmp/o2-engine-core/debug/deps/phase_m1_bagua-3fedc88932c15e42)
+  Executable tests/phase_m1_delayed_wuxie.rs (/tmp/o2-engine-core/debug/deps/phase_m1_delayed_wuxie-6381a8b689a90f5d)
+  Executable tests/phase_m1_elemental_sha.rs (/tmp/o2-engine-core/debug/deps/phase_m1_elemental_sha-22a751639306e441)
+  Executable tests/phase_m1_guanxing.rs (/tmp/o2-engine-core/debug/deps/phase_m1_guanxing-6abaa2ab9881a9aa)
+  Executable tests/phase_m1_guicai_tiesuo.rs (/tmp/o2-engine-core/debug/deps/phase_m1_guicai_tiesuo-1683d3563f30c6bf)
+  Executable tests/phase_m1_huogong_guohe.rs (/tmp/o2-engine-core/debug/deps/phase_m1_huogong_guohe-7e9391d13eef314d)
+  Executable tests/phase_m1_judge_delayed.rs (/tmp/o2-engine-core/debug/deps/phase_m1_judge_delayed-cd829ad892ea6a0a)
+  Executable tests/phase_m1_keji.rs (/tmp/o2-engine-core/debug/deps/phase_m1_keji-2dda0f908392d7a0)
+  Executable tests/phase_m1_kongcheng.rs (/tmp/o2-engine-core/debug/deps/phase_m1_kongcheng-e62dac0c4cf9a708)
+  Executable tests/phase_m1_luoyi.rs (/tmp/o2-engine-core/debug/deps/phase_m1_luoyi-84d21ab952009c16)
+  Executable tests/phase_m1_new_skills.rs (/tmp/o2-engine-core/debug/deps/phase_m1_new_skills-0459f31c6b3d597b)
+  Executable tests/phase_m1_qianxun.rs (/tmp/o2-engine-core/debug/deps/phase_m1_qianxun-f8657d39d7d6a18c)
+  Executable tests/phase_m1_qingguo_yiji.rs (/tmp/o2-engine-core/debug/deps/phase_m1_qingguo_yiji-3f3fbd992add7318)
+  Executable tests/phase_m1_response_zhiheng.rs (/tmp/o2-engine-core/debug/deps/phase_m1_response_zhiheng-e811e4b48fbef3de)
+  Executable tests/phase_m1_standard_content.rs (/tmp/o2-engine-core/debug/deps/phase_m1_standard_content-6fec9d7f0ac57e21)
+  Executable tests/phase_m1_tengjia.rs (/tmp/o2-engine-core/debug/deps/phase_m1_tengjia-bac1e65dac4ad397)
+  Executable tests/phase_m1_view_as.rs (/tmp/o2-engine-core/debug/deps/phase_m1_view_as-a39bd7cf5a73a964)
+  Executable tests/phase_m1_wuxie.rs (/tmp/o2-engine-core/debug/deps/phase_m1_wuxie-e42bed804840fd7e)
+  Executable tests/property_invariants.rs (/tmp/o2-engine-core/debug/deps/property_invariants-d19a486591c0ebd6)
+  Executable tests/real_extensions_lock.rs (/tmp/o2-engine-core/debug/deps/real_extensions_lock-7f0d457a7f0ffa73)
+  Executable tests/security_observer_leak.rs (/tmp/o2-engine-core/debug/deps/security_observer_leak-d8f8ff3324bf7b8a)
+  Executable tests/trick_card_effects.rs (/tmp/o2-engine-core/debug/deps/trick_card_effects-d2159ad0118f1cca)
