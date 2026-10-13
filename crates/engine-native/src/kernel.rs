@@ -112,6 +112,23 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 火神（Boss 周瑜，规则 v263）：锁定——火属性伤害对你无效，你回复
+    // 1 点体力（上游 damageBegin1 cancel+recover() 无参=1 同口径；置于
+    // 招祸同位=damageBegin 层，取消后增幅不结算）
+    if d.nature == crate::event::DamageNature::Fire {
+        if let Some(hsdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_HUOSHEN)
+        {
+            if ctx.core.player(d.target).alive
+                && ctx.core.has_skill(d.target, hsdef)
+            {
+                ctx.log(LogEvent::DamagePrevented { target: d.target });
+                ctx.recover(d.target, 1, None);
+                return;
+            }
+        }
+    }
     // 拟态（Boss 梼杌，规则 v217）：锁定——防止你于回合内受到的伤害
     //（上游 boss_nitai_in damageBegin4 trigger.cancel 同口径：当前回合
     // =持有者）
@@ -2273,6 +2290,31 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                 }
+                // 红莲（Boss 周瑜，规则 v263）：结束阶段摸两张牌，并对
+                // 全部其他存活角色各造成 1 点火焰伤害（上游 phaseJieshuBegin
+                // draw(2)+逐个 damage("fire") 同口径）
+                if let Some(hldef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_ZYHONGLIAN)
+                {
+                    if ctx.core.has_skill(player, hldef) {
+                        ctx.draw_cards(player, 2);
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if t != player && ctx.core.player(t).alive {
+                                ctx.emit(EventData::Damage(
+                                    crate::machine::damage_data_with(
+                                        Some(player),
+                                        t,
+                                        1,
+                                        crate::event::DamageNature::Fire,
+                                        None,
+                                    ),
+                                ));
+                            }
+                        }
+                    }
+                }
                 // 芳华（Boss 甄姬，规则 v262）：结束阶段若存在翻面角色，
                 // 全部翻面角色各失去 1 点体力（上游 get.players 过滤
                 // isTurnedOver 逐个 loseHp 同口径）
@@ -2824,6 +2866,41 @@ fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
                     player,
                     1,
                 )));
+            }
+        }
+    }
+    // 仙音（Boss 周瑜，规则 v263）：非当前回合失去牌后判定红 → 座位序
+    // 首个其他存活角色失去 1 点体力（上游 loseEnd frequent judge 红 →
+    // chooseTarget loseHp 同口径；chooseTarget AI 态度面→首个确定性近似
+    // 登记）
+    if let Some(xydef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_XIANYIN)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == xydef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| {
+                ctx.core.player(*o).alive && ctx.core.turn.current != *o
+            })
+            .collect();
+        if let Some(holder) = holders.first() {
+            let judged = ctx.draw_judge_card();
+            let red = matches!(
+                ctx.catalog.cards[judged as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            );
+            ctx.to_discard(judged);
+            if red {
+                let seats = ctx.core.players.len() as PlayerId;
+                if let Some(t) = (0..seats)
+                    .find(|&t| t != *holder && ctx.core.player(t).alive)
+                {
+                    ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+                }
             }
         }
     }

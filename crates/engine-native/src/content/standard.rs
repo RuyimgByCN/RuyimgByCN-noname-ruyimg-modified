@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 262;
+pub const STANDARD_RULESET_VERSION: u64 = 263;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -4954,6 +4954,18 @@ pub const BOSS_FANGHUA: &str = "芳华";
 /// 后，将一名其他角色翻面（chooseTarget AI 态度面→座位序首个其他存活
 /// 确定性近似登记；经 TurnOverBefore 走翻面提交=虚失同款通道）。
 pub const BOSS_TASHUI: &str = "踏水";
+/// 火神（Boss 周瑜，规则 v263，群雄乱入）：锁定技——火属性伤害对你无效，
+/// 你回复 1 点体力（上游 damageBegin1 cancel+recover() 无参=1 同口径）。
+pub const BOSS_HUOSHEN: &str = "火神";
+/// 红莲·周瑜（Boss 周瑜，规则 v263，群雄乱入；上游 boss_honglian 与毕方
+/// boss_honglianx 显示名同为「红莲」，按迅影批改名映射先例以「红莲·周瑜」
+/// 入目录登记）：锁定技——结束阶段你摸两张牌，并对所有敌人各造成 1 点
+/// 火焰伤害。
+pub const BOSS_ZYHONGLIAN: &str = "红莲·周瑜";
+/// 仙音（Boss 周瑜，规则 v263，群雄乱入）：锁定技——非你的回合内，你每
+/// 失去一次牌后进行判定：红色则一名其他角色失去 1 点体力（chooseTarget
+/// AI 态度面→座位序首个其他存活确定性近似登记）。
+pub const BOSS_XIANYIN: &str = "仙音";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5256,6 +5268,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("刘备", Faction::Qun, &[BOSS_XIAOXIONG, BOSS_ZHANGWU], 8, Gender::Male),
     // 甄姬（v262 踏水/凌波/娇孝/芳华；上游 group shen→群目录近似）
     ("甄姬", Faction::Qun, &[BOSS_TASHUI, BOSS_LINGBO, BOSS_JIAOXIA, BOSS_FANGHUA], 4, Gender::Female),
+    // 周瑜（v263 火神+红莲·周瑜+仙音；上游 group shen→群目录近似）
+    ("周瑜", Faction::Qun, &[BOSS_HUOSHEN, BOSS_ZYHONGLIAN, BOSS_XIANYIN], 6, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7083,6 +7097,29 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(TashuiBehavior),
+        },
+        SkillDef {
+            name: BOSS_HUOSHEN,
+            // 查询型单面：commit_damage 火伤分支直读臂（招祸同位扩展——
+            // 免疫火伤+回复 1）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZYHONGLIAN,
+            // 查询型单面：End begin 臂——摸 2+全部其他存活各 1 火伤
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_XIANYIN,
+            // 查询型单面：CardsDiscarded 臂（非当前回合）——判定红→座位
+            // 序首个其他存活失 1（chooseTarget AI→首个确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

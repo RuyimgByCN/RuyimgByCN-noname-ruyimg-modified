@@ -2917,6 +2917,32 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v263（2026-10-11，T11 群雄乱入周瑜片：火神/红莲·周瑜/仙音＋周瑜
+条目）**：**火神**（查询型 Noop）：commit_damage 火伤分支直读臂（招祸同
+位=damageBegin 层）——火属性伤害对你无效：DamagePrevented+回复 1 点体力
+（上游 cancel+recover() 无参=1 同口径；取消后增幅不结算；Damage 帧仍走
+AfterTriggers=prevent 族同口径登记）。**红莲·周瑜**（查询型 Noop）：End
+begin 臂——摸 2+全部其他存活各 1 点火焰伤害。**仙音**（查询型 Noop）：
+CardsDiscarded 臂（非当前回合）——失去牌后判定红→座位序首个其他存活失
+1（chooseTarget AI→首个确定性近似登记）。`BOSS_GENERALS` 尾追加**周瑜**
+（def 索引 41/hp6/`[火神, 红莲·周瑜, 仙音]`）。**同名改名映射（迅影批
+先例）**：上游 boss_honglian（周瑜）与 boss_honglianx（毕方）显示名同为
+「红莲」——毕方红莲已以「红莲」落目录（FROZEN 冻结不可改名），周瑜红莲
+以「红莲·周瑜」（BOSS_ZYHOLLIAN）入目录；映射登记：原生「红莲·周瑜」↔
+上游 boss_honglian、原生「红莲」↔上游 boss_honglianx。**登记差异**：仙
+音 loseEnd 全牌损失面→CardsDiscarded 面（胆术同口径）；chooseTarget AI
+面→首个其他存活；势力 shen→群目录近似。FROZEN 名单尾加「火神」「红莲·
+周瑜」「仙音」（140–142 名，顺序=def 表序）。存档不变 v60。版本 262→
+**263**。版本回退探针（263→262 复跑 golden 全绿）证明 14 golden 位移唯
+一来源是版本字段，全量重录。回归
+`boss_zhouyu_huoshen_fire_immune_recover`（火伤免疫+回 1/普通伤害对照/
+往返）+`boss_zhouyu_honglian_end_and_xianyin`（红莲 End 摸 2+全场火伤/
+仙音判定黑负例+判定红正例/往返）——证据见
+[T11 周瑜证据](../operations/evidence/2026-10-11-t11-boss-zhouyu-v263/README.md)。
+**坑位**：FROZEN 追加顺序必须=def 表顺序（首版写成火神/仙音/红莲·周瑜
+被 standard_skill_ids_append_only 名序断言拦）；仙音判定负例须预置黑桃
+（自然判定序不可控恰红假失败）。
+
 **规则 v262（2026-10-11，T11 群雄乱入甄姬片：踏水/凌波/娇孝/芳华＋甄姬
 条目）**：**凌波**（触发 CardResponded+extra CardUsed+一步机
 LingboMachine）：打出/使用【闪】后摸 2（frequent；viewAs 闪按声明牌
