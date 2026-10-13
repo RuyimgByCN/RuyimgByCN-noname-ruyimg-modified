@@ -1,0 +1,30 @@
+warning: unused import: `PileSpec`
+   --> crates/engine-native/tests/t12_g5_relays.rs:330:66
+    |
+330 |     use engine_native::content::pile::{extension_pack_from_pile, PileSpec};
+    |                                                                  ^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "t12_g5_relays") generated 1 warning (run `cargo fix --test "t12_g5_relays" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/t12_g5_relays.rs (target/debug/deps/t12_g5_relays-fd122a9a78a4d2bf)
+
+running 14 tests
+test t12_g5_relay_d3_generals_worker ... ok
+test t12_g5_relay_wudian ... ok
+test t12_g5_relay_d3_generals ... ok
+test t12_g5_relay_shahai_swd ... ok
+test t12_g5_relay_shahai_gujian ... ok
+test t12_g5_relay_shahai_mtg ... ok
+test t12_g5_relay_shahai_hearth ... ok
+test t12_g5_relay_shahai_zhenfa ... ok
+test t12_g5_relay_cardpile_liuli ... ok
+test t12_g5_relay_shaai_ow ... ok
+test t12_g5_relay_shaai_xianjian ... ok
+test t12_g5_relay_shahai_yunchou ... ok
+test t12_g5_relay_wuxing ... ok
+test t12_g5_relay_shahai_gwent ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+

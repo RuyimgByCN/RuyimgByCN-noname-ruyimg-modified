@@ -322,3 +322,87 @@ fn t12_g5_relay_d3_generals_worker() {
     )
     .expect("回写");
 }
+
+// ---- 第四批：cardpile liuli 仓跨进程接力（双 namespace 切片收尾）----
+
+/// cardpile liuli 仓专用：pile.json 桥（def 名 cardpile-upstream-liuli）。
+fn cardpile_liuli_pack_from_repo(dir: &Path) -> ExtensionPack {
+    use engine_native::content::pile::extension_pack_from_pile;
+    let store = PackageStore::open(dir.join("store")).unwrap();
+    let report = import_extensions(&store, &repo_extensions_root(), &options())
+        .expect("import（幂等）");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "cardpile" && m.namespace == "upstream-liuli")
+        .expect("liuli 仓 cardpile 安装")
+        .clone();
+    let pile_bytes = std::fs::read_to_string(
+        Path::new(meta.extension_root.as_ref().unwrap()).join("assets/pile.json"),
+    )
+    .expect("读 pile.json");
+    let spec = content_native_loader::bridge_pile(&pile_bytes).expect("pile 可装载");
+    assert_eq!(spec.total, 160);
+    let def = engine_native::content::extension::ExtensionDef {
+        name: "cardpile-upstream-liuli",
+        version: 1,
+        description: "T12 G5 接力：cardpile 牌堆比例（liuli）".into(),
+    };
+    extension_pack_from_pile(def, "cpl", &spec).expect("桥接")
+}
+
+/// 双 namespace 切片：liuli 仓 cardpile 同内容锁跨进程接力（G5）。
+#[test]
+fn t12_g5_relay_cardpile_liuli() {
+    use engine_native::archive::{decode_archive, encode_archive};
+
+    if let Ok(archive_path) = std::env::var("T12_G5_ARCHIVE") {
+        let reply_path = std::env::var("T12_G5_REPLY").expect("reply path");
+        let store_dir = std::env::var("T12_G5_STORE").expect("store dir");
+        DEDUP.fetch_add(500_000_000, Ordering::Relaxed);
+        let pack = cardpile_liuli_pack_from_repo(Path::new(&store_dir));
+        let snap = decode_archive(&std::fs::read(&archive_path).expect("读档")).expect("解码");
+        let mut wrong = cardpile_liuli_pack_from_repo(Path::new(&store_dir));
+        wrong.def.version += 1;
+        assert!(Engine::restore_with_extensions(&snap, &[&wrong]).is_err(), "错版拒绝");
+        assert!(Engine::restore(&snap).is_err(), "缺包拒绝");
+        let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("子进程恢复");
+        for _ in 0..8 {
+            advance_once(&mut e);
+        }
+        std::fs::write(&reply_path, encode_archive(&e.save())).expect("子进程回写");
+        return;
+    }
+
+    let dir = tempfile::tempdir().expect("临时目录");
+    let store_dir = dir.path().join("store");
+    let pack = cardpile_liuli_pack_from_repo(dir.path());
+    let mut e = Engine::new_with_extensions(7001_001, 3, &[&pack]).expect("建局");
+    let base = e.revision();
+    for _ in 0..6 {
+        advance_once(&mut e);
+    }
+    assert!(e.revision() >= base, "父进程推进");
+    let archive_path = dir.path().join("relay.ngsa");
+    let reply_path = dir.path().join("relay.result.ngsa");
+    std::fs::write(&archive_path, encode_archive(&e.save())).expect("父进程落盘");
+    let exe = std::env::current_exe().expect("测试二进制");
+    let status = std::process::Command::new(exe)
+        .args(["--exact", "t12_g5_relay_cardpile_liuli", "--nocapture"])
+        .env("T12_G5_ARCHIVE", archive_path.display().to_string())
+        .env("T12_G5_REPLY", reply_path.display().to_string())
+        .env("T12_G5_STORE", store_dir.display().to_string())
+        .output()
+        .expect("自启子进程");
+    assert!(
+        status.status.success(),
+        "子进程接力失败: {}",
+        String::from_utf8_lossy(&status.stderr)
+    );
+    let r = Engine::restore_with_extensions(
+        &decode_archive(&std::fs::read(&reply_path).expect("读回写")).expect("解码"),
+        &[&pack],
+    )
+    .expect("父进程恢复回写");
+    assert!(r.revision() > base, "跨进程接力 revision 前进");
+}
