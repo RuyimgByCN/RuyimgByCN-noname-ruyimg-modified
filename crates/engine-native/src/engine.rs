@@ -2625,6 +2625,32 @@ fn apply_command(
                     }
                 }
             }
+            // 帷幕（楚江王，规则 v275）：黑色锦囊对持有者无效——显式
+            // 目标锦囊（顺手/拆桥/决斗/乐）目标不可指定（上游 mod
+            // targetEnabled 同族→目标不可指定近似登记；AOE 面在 AOE 机
+            // 窗口前跳过；无指向锦囊无指向面天然不适用=登记）
+            if matches!(
+                kind,
+                CardKind::Snatch | CardKind::Dismantle | CardKind::Duel | CardKind::Le
+            ) {
+                let black = matches!(
+                    catalog.cards[card as usize].suit,
+                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                );
+                if black {
+                    let weimu = catalog
+                        .skill_by_name(crate::content::standard::BOSS_WEIMU)
+                        .map(|def| {
+                            targets.iter().any(|t| {
+                                core.player(*t).alive && core.has_skill(*t, def)
+                            })
+                        })
+                        .unwrap_or(false);
+                    if weimu {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
+            }
             match kind {
                 CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制
@@ -4685,6 +4711,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 79);
             push_u8(h, *owner);
             push_u8(h, *emitted);
+        }
+        M::BossBingfeng { owner } => {
+            push_u8(h, 80);
+            push_u8(h, *owner);
         }
         M::BossBuchun { owner, stage, targets } => {
             push_u8(h, 67);

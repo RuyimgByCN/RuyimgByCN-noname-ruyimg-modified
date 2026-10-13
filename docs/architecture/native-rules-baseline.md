@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v274 / 存档 v63**，2026-10-14 地藏王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v274 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v275 / 存档 v63**，2026-10-14 楚江王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v275 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2916,6 +2916,25 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 **坑位**：转化链守卫 `if kind != Sha && kind != Le` 排除 plain Sha——酒池
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
+
+**规则 v275（2026-10-14，T11 十殿阎罗楚江王片：帷幕/反馈复用/冰封＋楚
+江王条目）**：**帷幕**（查询型单面，双消费点，新落）：黑色锦囊对持有者
+无效——显式目标锦囊（顺手/拆桥/决斗/乐）PlayCard 拒绝位
+（IllegalTargets，造异/热闷同族；上游 targetEnabled→目标不可指定近似登
+记）＋黑色 AOE 窗口前跳过（按牌实体花色，万箭红天然不触发）；无指向锦
+囊面天然不适用=登记。**反馈**：标准 `FAN_KUI` def 复用（原生语义=任意
+伤害+手牌/装备与界反馈一致）。**冰封**（Death 触发遗言机，忘魂同位直写
+一步机）：死亡时 killer 存活且未翻面则翻面（face_down 写+TurnOvered）；
+`MachineSnapshot::BossBingfeng` 新变体（archive tag 80/机哈希 80）。
+`BOSS_GENERALS` 尾追加**楚江王**（def 索引 53/**hp4**/`[帷幕, 反馈, 冰封]`）。
+FROZEN 名单尾加「帷幕」「冰封」（175–176 名）。存档不变 v63。版本
+274→**275**。版本回退探针（275→274 复跑 golden 全绿）证明位移唯一来源
+是版本字段，全量重录。回归 `boss_chujiangwang_weimu_black_trick_block` /
+`boss_chujiangwang_fankui_reuse_gain` /
+`boss_chujiangwang_bingfeng_death_flip_source`——证据见
+[2026-10-14 楚江王片](../operations/evidence/2026-10-14-t11-boss-chujiangwang-v275/README.md)。
+**勘正**：v269 起批次证据把楚江王误计入已完成（目录实无该条目），本批
+实际落包——十殿阎罗真实进度自本批起按 11/13 计（余秦广王/Shikieiki）。
 
 **规则 v274（2026-10-14，T11 十殿阎罗地藏王片：不佛/无量/谛听＋地藏王
 条目）**：**不佛**（查询型双面）：伤害入口——受到大于 1 点的伤害改为其

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 274;
+pub const STANDARD_RULESET_VERSION: u64 = 275;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1472,6 +1472,61 @@ impl SkillMachine for HuoxingMachine {
                 None,
             )));
             return Flow::Yield;
+        }
+        Flow::Done
+    }
+}
+
+/// 冰封（十殿阎罗楚江王，规则 v275）：你死亡时，伤害来源存活且未翻面
+/// 则将其翻面。Death 前置窗口触发（忘魂同位直写一步机；无来源/已翻面
+/// 不重复翻）。
+struct BingfengBehavior;
+
+impl SkillBehavior for BingfengBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let killer = match event {
+            EventData::Death { killer, .. } => *killer,
+            _ => None,
+        };
+        Box::new(BingfengMachine { owner, killer })
+    }
+}
+
+/// 冰封机器：直写一步机（翻面写+TurnOvered；风雪刃确认臂同款写法）。
+#[derive(Clone)]
+struct BingfengMachine {
+    owner: PlayerId,
+    killer: Option<PlayerId>,
+}
+
+impl SkillMachine for BingfengMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossBingfeng { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 来源=死亡事件的 killer（behavior.start 时捕获）
+        if let Some(src) = self.killer {
+            if src != self.owner
+                && ctx.core.player(src).alive
+                && !ctx.core.player(src).face_down
+            {
+                let flipped = {
+                    let p = ctx.core.player_mut(src);
+                    p.face_down = true;
+                    p.face_down
+                };
+                ctx.emit(EventData::TurnOvered {
+                    player: src,
+                    face_down: flipped,
+                });
+            }
         }
         Flow::Done
     }
@@ -5584,6 +5639,13 @@ pub const BOSS_WULIANG: &str = "无量";
 /// -1；其他角色计算与你的距离 +1（上游 mod globalFrom/-1+globalTo/+1
 /// 同口径；义从同位）。
 pub const BOSS_DITING: &str = "谛听";
+/// 帷幕（十殿阎罗楚江王，规则 v275，共用新落）：锁定技——黑色锦囊牌对
+/// 你无效（显式目标黑锦囊 PlayCard 拒绝位+黑色 AOE 机窗口前跳过；无指
+/// 向锦囊无指向面天然不适用=登记；红杀/属性杀不属锦囊不覆盖）。
+pub const BOSS_WEIMU: &str = "帷幕";
+/// 冰封（十殿阎罗楚江王，规则 v275）：锁定遗言（Death 触发）——伤害来
+/// 源存活且未翻面时，将其翻面（上游 turnOver 同口径；已翻面不重复翻）。
+pub const BOSS_BINGFENG: &str = "冰封";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5913,6 +5975,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 地藏王（v274 不佛+无量+谛听；大愿=判定改写机 AI 态度面登记不落；
     // 上游 group qun→群目录直取）
     ("地藏王", Faction::Qun, &[BOSS_BUFO, BOSS_WULIANG, BOSS_DITING], 8, Gender::Male),
+    // 楚江王（v275 帷幕+反馈[标准 FAN_KUI 复用——原生反馈语义=任意伤害
+    // +手牌/装备，与界反馈一致]+冰封；上游 group qun→群目录直取）
+    ("楚江王", Faction::Qun, &[BOSS_WEIMU, FAN_KUI, BOSS_BINGFENG], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -8043,6 +8108,26 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_WEIMU,
+            // 查询型单面：黑锦囊 PlayCard 拒绝位+黑色 AOE 窗口前跳过
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_BINGFENG,
+            // Death 触发（遗言面）：翻面来源一步机
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(BingfengBehavior),
         },
     ];
     (cards, skills)

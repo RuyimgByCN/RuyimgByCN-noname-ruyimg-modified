@@ -8303,6 +8303,23 @@ fn dushiwang_remen_blocks(ctx: &Ctx<'_>, target: PlayerId) -> bool {
         .unwrap_or(false)
 }
 
+/// 帷幕（楚江王，规则 v275）：黑色锦囊牌对持有者无效（上游 mod
+/// targetEnabled 同族；AOE 面在窗口前跳过——万箭为红/无指向锦囊天然不
+/// 触发）。
+fn weimu_blocks_aoe(ctx: &Ctx<'_>, card: crate::ids::CardId, target: PlayerId) -> bool {
+    let black = matches!(
+        ctx.catalog.cards[card as usize].suit,
+        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+    );
+    if !black {
+        return false;
+    }
+    ctx.catalog
+        .skill_by_name(crate::content::standard::BOSS_WEIMU)
+        .map(|def| ctx.core.has_skill(target, def))
+        .unwrap_or(false)
+}
+
 /// AOE 单目标段（南蛮入侵/万箭齐发）：询问响应牌（杀/闪），Pass 或无牌
 /// 则受 1 点伤害（完整伤害帧）。无牌者不询问直接受伤（跳过语义挂账见清单）。
 #[derive(Clone)]
@@ -8495,7 +8512,8 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
             while self.inner.is_none()
                 && self.idx < self.targets.len()
                 && (!ctx.core.player(self.targets[self.idx]).alive
-                    || dushiwang_remen_blocks(ctx, self.targets[self.idx]))
+                    || dushiwang_remen_blocks(ctx, self.targets[self.idx])
+                    || weimu_blocks_aoe(ctx, self.card, self.targets[self.idx]))
             {
                 self.idx += 1;
             }
