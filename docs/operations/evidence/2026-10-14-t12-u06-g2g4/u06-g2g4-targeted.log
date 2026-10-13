@@ -1,0 +1,17 @@
+warning: unused import: `engine_native::content::extension::ExtensionDef`
+    --> crates/engine-native/tests/g1_huanle.rs:2035:9
+     |
+2035 |     use engine_native::content::extension::ExtensionDef;
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "g1_huanle") generated 1 warning (run `cargo fix --test "g1_huanle" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/g1_huanle.rs (target/debug/deps/g1_huanle-cb5b6564a17f7fc3)
+
+running 1 test
+test u06_g2g4_channels_acceptance ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.03s
+

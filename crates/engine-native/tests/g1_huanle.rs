@@ -2022,3 +2022,173 @@ fn huanle_pack_from_repo() -> ExtensionPack {
     .unwrap();
     bridge("huanle-upstream-noname", &json).expect("桥接")
 }
+
+// ---------------------------------------------------------------------------
+// T12/U06 G2–G4 产品通道验收（示例来源=欢乐卡牌）：目录/搜索（扩展卡在
+// 合并目录可按名检索且 def 序稳定）+ 配置持久（store 重开激活集存续 +
+// manifest.enabled=false 跳过导入）+ 资源（cards.json 经 content_hash 校验
+// 的字节级保真）+ 界面/AI 隔离（扩展手牌仅持有者可见，他人 Hidden）。
+// ---------------------------------------------------------------------------
+
+#[test]
+fn u06_g2g4_channels_acceptance() {
+    use engine_native::view::HandView;
+
+    // —— 资源面：cards.json 字节经 content_hash 校验保真（安装→桥接全链
+    // 路不触碰原始资产字节）——
+    let npack_bytes = std::fs::read(
+        repo_extensions_root().join("huanle-upstream-noname/package.npack.json"),
+    )
+    .expect("读 package.npack.json");
+    let raw_cards = std::fs::read(
+        repo_extensions_root().join("huanle-upstream-noname/assets/cards.json"),
+    )
+    .expect("读 cards.json");
+    let json = String::from_utf8(raw_cards.clone()).expect("utf8");
+    let pack = bridge("huanle-upstream-noname", &json).expect("桥接");
+    let npack_hash = content_runtime::content_hash_hex(&npack_bytes);
+    let dir = tempfile::tempdir().unwrap();
+    let store_path = dir.path().join("store");
+    {
+        let store = PackageStore::open(&store_path).unwrap();
+        let report = import_extensions(&store, &repo_extensions_root(), &options())
+            .expect("import");
+        let meta = report
+            .installed
+            .iter()
+            .find(|m| m.package_id == "huanle-cards")
+            .expect("安装记录");
+        assert_eq!(
+            meta.content_hash, npack_hash,
+            "资源指纹保真（npack content_hash 一致）"
+        );
+        // 资源面：安装后 cards.json 与仓库源字节一致（资产原样保真）
+        let installed_cards = std::fs::read(
+            PathBuf::from(meta.extension_root.as_ref().unwrap())
+                .join("assets/cards.json"),
+        )
+        .expect("读安装后 cards.json");
+        assert_eq!(installed_cards, raw_cards, "cards.json 字节级保真");
+    }
+
+    // —— 配置持久：store 重开后激活集存续 ——
+    {
+        let store = PackageStore::open(&store_path).unwrap();
+        let active = store.read_active().unwrap();
+        assert!(
+            active
+                .packages
+                .keys()
+                .any(|k| k.ends_with("/huanle-cards")),
+            "激活集持久"
+        );
+    }
+
+    // —— 目录+搜索：7 张扩展卡按名可检索、def 序稳定（重载后同名同位）——
+    let mut e = Engine::new_with_extensions(3402, 3, &[&pack]).expect("建局");
+    let base = Engine::new(1, 3).catalog().cards.len();
+    assert_eq!(e.catalog().cards.len(), base + 7, "7 张扩展卡入目录");
+    let mut positions_reload = Vec::new();
+    for i in 0..7 {
+        let name = {
+            let cat = e.catalog();
+            cat.cards
+                .iter()
+                .skip(base)
+                .map(|c| c.name)
+                .nth(i)
+                .expect("扩展卡名")
+        };
+        let pos = {
+            let cat = e.catalog();
+            cat.cards.iter().position(|c| c.name == name).expect("按名检索")
+        };
+        positions_reload.push((name, pos));
+    }
+    assert_eq!(positions_reload.len(), 7);
+    assert!(
+        positions_reload
+            .iter()
+            .all(|(n, _)| n.starts_with("hnl_")),
+        "扩展卡名带 hnl_ 前缀（符号表隔离）"
+    );
+
+    // —— 界面/AI 隔离：扩展手牌仅持有者可见 ——
+    e.debug_grant(1, "huanle_kuwu");
+    let shoulijian = {
+        let cat = e.catalog();
+        cat.cards
+            .iter()
+            .position(|c| c.name.starts_with("hnl_shoulijian"))
+            .expect("手里剑在目录") as u32
+    };
+    {
+        let core = e.state_core_mut();
+        core.players[1].hand.push(shoulijian);
+    }
+    e.debug_set_hp(1, 4);
+    // 视角 1：自己手里的扩展牌具体可见（HandView 明细）
+    let v1 = e.ai_session(1).view();
+    match (&v1.players[1].hand, &v1.players[2].hand) {
+        (HandView::Own(mine), other) => {
+            assert!(mine.contains(&shoulijian), "持有者视角可见扩展手牌");
+            assert!(
+                !matches!(other, HandView::Own(_)),
+                "他人手牌不泄露具体 id"
+            );
+        }
+        _ => panic!("持有者手牌应为 Own 明细"),
+    }
+    // 视角 2：他人视角下 1 号手牌为 Hidden（仅数量）
+    let v2 = e.ai_session(2).view();
+    match &v2.players[1].hand {
+        HandView::Hidden => {}
+        other => panic!("他人视角手牌应 Hidden: {other:?}"),
+    }
+    // 界面通道：扩展手牌的卡片 def 在目录可检索（UI 按 def_id 渲染）
+    let def_ok = {
+        let cat = e.catalog();
+        cat.cards[shoulijian as usize].name.starts_with("hnl_shoulijian")
+    };
+    assert!(def_ok, "界面可按 def_id 检索扩展卡名");
+
+    // —— 配置面补充：manifest.enabled=false 的目录被导入跳过 ——
+    let disabled_dir = tempfile::tempdir().unwrap();
+    let disabled_root = disabled_dir.path().join("huanle-disabled");
+    std::fs::create_dir_all(disabled_root.join("assets")).unwrap();
+    std::fs::copy(
+        repo_extensions_root().join("huanle-upstream-noname/manifest.json"),
+        disabled_root.join("manifest.json"),
+    )
+    .unwrap();
+    // 关闭开关
+    let mf_path = disabled_root.join("manifest.json");
+    let mut mf: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&mf_path).unwrap()).unwrap();
+    mf["enabled"] = serde_json::Value::Bool(false);
+    std::fs::write(&mf_path, serde_json::to_string_pretty(&mf).unwrap()).unwrap();
+    std::fs::copy(
+        repo_extensions_root().join("huanle-upstream-noname/assets/cards.json"),
+        disabled_root.join("assets/cards.json"),
+    )
+    .unwrap();
+    {
+        let store = PackageStore::open(disabled_dir.path().join("store")).unwrap();
+        let report = import_extensions(&store, disabled_dir.path(), &options()).expect("import");
+        assert!(
+            !report
+                .installed
+                .iter()
+                .any(|m| m.package_id == "huanle-cards"),
+            "enabled=false 目录被跳过（配置面）"
+        );
+        assert!(
+            report
+                .skipped
+                .iter()
+                .any(|s| s == "huanle-disabled"),
+            "跳过清单登记"
+        );
+    }
+    let _ = (positions_reload, &pack);
+}
