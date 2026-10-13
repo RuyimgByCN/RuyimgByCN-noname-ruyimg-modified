@@ -115,6 +115,53 @@ fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
 /// bridge_generals/bridge_pile）装载前检查，超限一律拒装。表项不回收，
 /// 唯一名称数是单调量——入口检查即足以在重复安装/损坏包流下 fail-fast；
 /// 单个包自身可一次 intern 逼近上限（受包文件大小界定，登记为已知边界）。
+/// T8 增量 3：npack 内 rule-vm 触发模块 → engine-native `VmSkillDecl`
+///（数据驱动装载：DSL→编译 npack→装载器→引擎，不重编译）。事件名严
+/// 格映射（phase_end/phase_begin/damage/card_used/death）；未知事件名
+/// 拒装；filter 表达式映射属后续增量（engine 侧恒 owner 域，登记）。
+pub fn bridge_vm_skill_decls(
+    pkg: &content_schema::ContentPackage,
+) -> Result<Vec<engine_native::content::extension::VmSkillDecl>, BridgeError> {
+    use engine_native::event::EventKind;
+    ensure_symbol_capacity()?;
+    let mut out = Vec::new();
+    for t in &pkg.trigger_index {
+        let module = pkg
+            .modules
+            .iter()
+            .find(|m| m.name == t.module)
+            .ok_or_else(|| BridgeError::InvalidField {
+                field: "trigger_index.module",
+                reason: format!("模块 {} 不在 npack modules 内", t.module),
+            })?;
+        let event = match t.event.as_str() {
+            "phase_end" => EventKind::PhaseEnd,
+            "phase_begin" => EventKind::PhaseBegin,
+            "damage" => EventKind::Damage,
+            "card_used" => EventKind::CardUsed,
+            "death" => EventKind::Death,
+            other => {
+                return Err(BridgeError::InvalidField {
+                    field: "trigger_index.event",
+                    reason: format!("VM 技能事件名 {other} 未映射（增量 3 严格面）"),
+                })
+            }
+        };
+        out.push(engine_native::content::extension::VmSkillDecl {
+            name: names::intern(t.module.clone()).to_string(),
+            module: module.clone(),
+            trigger: engine_native::catalog::TriggerMeta {
+                event,
+                timing: engine_native::event::Timing::Normal,
+                priority: 0,
+                optional: t.optional,
+                extra_events: Vec::new(),
+            },
+        });
+    }
+    Ok(out)
+}
+
 fn ensure_symbol_capacity() -> Result<(), BridgeError> {
     let limit = engine_native::content::names::SYMBOL_TABLE_LIMIT;
     if names::interned_count() >= limit {

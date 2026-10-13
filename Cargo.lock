@@ -589,6 +589,7 @@ name = "content-native-loader"
 version = "0.1.0"
 dependencies = [
  "content-runtime",
+ "content-schema",
  "engine-native",
  "serde",
  "serde_json",

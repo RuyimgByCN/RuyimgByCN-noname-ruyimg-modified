@@ -1,0 +1,30 @@
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.57s
+     Running unittests src/lib.rs (target/debug/deps/content_native_loader-ecec920d2e1c7674)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/loader_acceptance.rs (target/debug/deps/loader_acceptance-994cdf1929c1b40f)
+
+running 3 tests
+test bridge_pile_parses_installed_cardpile_asset ... ok
+test bridge_pile_rejects_bad_data ... ok
+test loader_acceptance_bounded_names_and_clear_errors ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/symbol_table_limit.rs (target/debug/deps/symbol_table_limit-d68b38d22e1f1ff7)
+
+running 1 test
+test bridge_rejected_at_symbol_table_limit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.84s
+
+   Doc-tests content_native_loader
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

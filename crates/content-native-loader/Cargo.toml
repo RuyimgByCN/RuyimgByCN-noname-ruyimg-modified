@@ -7,6 +7,7 @@ authors.workspace = true
 description = "C0 生产侧装载器：已安装扩展包 cards.json → engine-native ExtensionPack（ADR 0777）"
 
 [dependencies]
+content-schema = { path = "../content-schema" }
 engine-native = { path = "../engine-native" }
 content-runtime = { path = "../content-runtime" }
 serde = { workspace = true }

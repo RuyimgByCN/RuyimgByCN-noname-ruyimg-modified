@@ -367,6 +367,31 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
     );
 }
 
+/// 增量 3 端到端：DSL→编译 npack→**装载器 bridge_vm_skill_decls**→
+/// ExtensionPack→建局→触发→落账（C0 装载器在环，全数据驱动）。
+#[test]
+fn t8_vm_skill_loader_bridge_end_to_end() {
+    let pkg = compile_source_named("t8-rvm-bridge-loader", JIUWEI_DSL).expect("DSL 编译");
+    let decls = content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
+    assert_eq!(decls.len(), 1, "触发索引 1 项→1 声明");
+    // 声明名=模块名（编译器按 技能_事件 命名模块；符号表 intern）。
+    assert_eq!(decls[0].name, "hnl_jiuwei_t8_phase_end", "声明名=模块名");
+    let pack = pack_with(decls);
+    let mut e = Engine::new_with_extensions(910007, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_jiuwei_t8_phase_end");
+    e.debug_set_hp(1, 2);
+    for _ in 0..40 {
+        if e.turn().current == 1 && hp(&e, 1) == 3 {
+            break;
+        }
+        if e.outcome().is_some() {
+            panic!("对局提前结束");
+        }
+        np_settled(&mut e);
+    }
+    assert_eq!(hp(&e, 1), 3, "装载器在环：阶段结束受伤回 1");
+}
+
 /// 存档往返：VM 技能提交后对局可存档恢复（内容锁哈希入快照面）。
 #[test]
 fn t8_vm_skill_save_restore_roundtrip() {
