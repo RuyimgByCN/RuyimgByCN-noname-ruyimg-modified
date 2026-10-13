@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 275;
+pub const STANDARD_RULESET_VERSION: u64 = 276;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1526,6 +1526,56 @@ impl SkillMachine for BingfengMachine {
                     player: src,
                     face_down: flipped,
                 });
+            }
+        }
+        Flow::Done
+    }
+}
+
+/// 望乡（十殿阎罗秦广王，规则 v276）：你死亡时，全部有装备的其他角色
+/// 装备全弃（撤技能+入弃堆；绝红拆装管线同款直写一步机）。
+struct WangxiangBehavior;
+
+impl SkillBehavior for WangxiangBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(WangxiangMachine { owner })
+    }
+}
+
+/// 望乡机器：直写一步机（逐目标装备全弃；绝红同款 revoke+入弃堆）。
+#[derive(Clone)]
+struct WangxiangMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for WangxiangMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossWangxiang { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let seats = ctx.core.players.len() as PlayerId;
+        for t in 0..seats {
+            if t == self.owner || !ctx.core.player(t).alive {
+                continue;
+            }
+            let equips: Vec<crate::ids::CardId> =
+                ctx.core.player(t).equips.iter().copied().collect();
+            for c in equips {
+                ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                crate::kernel::revoke_equip_skills(
+                    &mut ctx.core,
+                    ctx.catalog,
+                    t,
+                    c,
+                );
+                ctx.to_discard(c);
             }
         }
         Flow::Done
@@ -5646,6 +5696,17 @@ pub const BOSS_WEIMU: &str = "帷幕";
 /// 冰封（十殿阎罗楚江王，规则 v275）：锁定遗言（Death 触发）——伤害来
 /// 源存活且未翻面时，将其翻面（上游 turnOver 同口径；已翻面不重复翻）。
 pub const BOSS_BINGFENG: &str = "冰封";
+/// 判官（十殿阎罗秦广王，规则 v276）：锁定技——延时锦囊对你无效
+///（上游 mod targetEnabled delay→目标不可指定近似登记；乐/闪电；兵粮
+/// 寸断不在原生目录）。
+pub const BOSS_PANGUAN: &str = "判官";
+/// 拘魂（十殿阎罗秦广王，规则 v276）：锁定技——结束阶段随机一名其他
+/// 角色翻面或横置（上游 ["turnOver","link"] randomGet→恒定翻面+座位序
+/// 首个确定性近似登记）。
+pub const BOSS_JUHUN: &str = "拘魂";
+/// 望乡（十殿阎罗秦广王，规则 v276）：锁定遗言（Death 触发）——全部
+/// 有装备的其他角色装备全弃（撤技能+入弃堆；绝红同款拆装管线）。
+pub const BOSS_WANGXIANG: &str = "望乡";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5978,6 +6039,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 楚江王（v275 帷幕+反馈[标准 FAN_KUI 复用——原生反馈语义=任意伤害
     // +手牌/装备，与界反馈一致]+冰封；上游 group qun→群目录直取）
     ("楚江王", Faction::Qun, &[BOSS_WEIMU, FAN_KUI, BOSS_BINGFENG], 4, Gender::Male),
+    // 秦广王（v276 判官+拘魂+望乡；还人=关卡流程面登记不落；上游 group
+    // qun→群目录直取）
+    ("秦广王", Faction::Qun, &[BOSS_PANGUAN, BOSS_JUHUN, BOSS_WANGXIANG], 3, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -8128,6 +8192,33 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(BingfengBehavior),
+        },
+        SkillDef {
+            name: BOSS_PANGUAN,
+            // 查询型单面：延时锦囊 PlayCard 拒绝位
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_JUHUN,
+            // 查询型单面：End begin 臂——座位序首个其他翻面（恒定翻面）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_WANGXIANG,
+            // Death 触发（遗言面）：全场装备全弃一步机
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(WangxiangBehavior),
         },
     ];
     (cards, skills)

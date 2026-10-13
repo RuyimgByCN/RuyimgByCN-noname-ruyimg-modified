@@ -1,0 +1,10 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-8285df63cb92cc1c)
+
+running 3 tests
+test boss_qinguangwang_panguan_delay_reject ... ok
+test boss_qinguangwang_wangxiang_death_strip_equips ... ok
+test boss_qinguangwang_juhun_end_flip_first ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 305 filtered out; finished in 0.00s
+

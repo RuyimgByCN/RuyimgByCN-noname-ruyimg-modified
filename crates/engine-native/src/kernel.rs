@@ -2717,6 +2717,32 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                 }
+                // 拘魂（Boss 秦广王，规则 v276）：结束阶段——座位序首
+                // 个其他翻面（上游 ["turnOver","link"] randomGet→恒定翻
+                // 面+首个确定性近似登记；风雪刃翻面写同款）
+                if let Some(jhdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_JUHUN)
+                {
+                    if ctx.core.has_skill(player, jhdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        if let Some(t) =
+                            (0..seats).find(|&t| t != player && ctx.core.player(t).alive)
+                        {
+                            if !ctx.core.player(t).face_down {
+                                let flipped = {
+                                    let p = ctx.core.player_mut(t);
+                                    p.face_down = true;
+                                    p.face_down
+                                };
+                                ctx.emit(EventData::TurnOvered {
+                                    player: t,
+                                    face_down: flipped,
+                                });
+                            }
+                        }
+                    }
+                }
                 // 无量（Boss 地藏王，规则 v274）：结束阶段摸 2 张牌
                 //（上游 boss_wuliang phaseJieshuBegin draw 2 同口径）
                 if let Some(wldef) = ctx

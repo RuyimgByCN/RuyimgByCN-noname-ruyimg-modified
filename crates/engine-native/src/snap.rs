@@ -611,6 +611,10 @@ pub enum MachineSnapshot {
     BossBingfeng {
         owner: PlayerId,
     },
+    /// 望乡（秦广王，规则 v276）：直写一步遗言机（全场装备全弃）。
+    BossWangxiang {
+        owner: PlayerId,
+    },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
     /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
@@ -1218,6 +1222,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossBingfeng { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossWangxiang { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::Shedu { owner, .. } => {
@@ -2248,6 +2255,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossBingfeng { .. } => {
             // 冰封：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossWangxiang { .. } => {
+            // 望乡：直写一步机，恢复无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {

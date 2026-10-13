@@ -2651,6 +2651,22 @@ fn apply_command(
                     }
                 }
             }
+            // 判官（秦广王，规则 v276）：延时锦囊对持有者无效（上游 mod
+            // targetEnabled delay→目标不可指定近似登记；乐/闪电——兵粮
+            // 寸断不在原生目录）
+            if matches!(kind, CardKind::Le | CardKind::ShanDian) {
+                let pg = catalog
+                    .skill_by_name(crate::content::standard::BOSS_PANGUAN)
+                    .map(|def| {
+                        targets.iter().any(|t| {
+                            core.player(*t).alive && core.has_skill(*t, def)
+                        })
+                    })
+                    .unwrap_or(false);
+                if pg {
+                    return Err(RejectReason::IllegalTargets);
+                }
+            }
             match kind {
                 CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制
@@ -4714,6 +4730,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         }
         M::BossBingfeng { owner } => {
             push_u8(h, 80);
+            push_u8(h, *owner);
+        }
+        M::BossWangxiang { owner } => {
+            push_u8(h, 81);
             push_u8(h, *owner);
         }
         M::BossBuchun { owner, stage, targets } => {
