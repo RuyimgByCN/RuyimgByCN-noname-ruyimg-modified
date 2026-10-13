@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/t12_g2g4_channels.rs (target/debug/deps/t12_g2g4_channels-dd0e7ec8acfa8aa4)
+
+running 14 tests
+test g2g4_cardpile_noname ... ok
+test g2g4_shahai_gwent ... ok
+test g2g4_shahai_gujian ... ok
+test g2g4_wudian ... ok
+test g2g4_shahai_mtg ... ok
+test g2g4_shahai_hearth ... ok
+test g2g4_shahai_yunchou ... ok
+test g2g4_wuxing ... ok
+test g2g4_shahai_swd ... ok
+test g2g4_d3_select ... ok
+test g2g4_cardpile_liuli ... ok
+test g2g4_shaai_xianjian ... ok
+test g2g4_shahai_zhenfa ... ok
+test g2g4_shaai_ow ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
