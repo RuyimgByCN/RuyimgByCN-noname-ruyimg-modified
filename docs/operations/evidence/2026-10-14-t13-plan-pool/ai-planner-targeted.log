@@ -1,0 +1,19 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/ai_planner.rs (target/debug/deps/ai_planner-c83c58d22a6ea5d6)
+
+running 12 tests
+test redact_shuffles_unknown_pool_when_deck_present ... ok
+test policy_and_plan_reject_cleanly_at_dedup_exhaustion ... ok
+test t13_plan_cancel_mid_run_cross_thread ... ok
+test plan_enumerates_confirm_and_cancel_fallbacks ... ok
+test redact_deterministic_with_empty_deck_fallback ... ok
+test redact_preserves_card_ownership_and_multiset ... ok
+test plan_enumerates_single_choice_fallbacks ... ok
+test plan_apply_roundtrip_at_high_water ... ok
+test plan_pipeline_works_with_hidden_opponent_cards ... ok
+test t13_plan_pool_more_seats_than_workers_keeps_order ... ok
+test plan_sim_uses_session_high_water ... ok
+test t13_plan_pool_parallel_matches_sequential ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -41,6 +41,71 @@ fn play_ready_with_sha(seed: u64, seats: u8) -> Engine {
     e
 }
 
+// ---------------------------------------------------------------------------
+// T13 AI 工作池（N10/N12）：并行多座规划 + 运行中取消跨线程。
+// ---------------------------------------------------------------------------
+
+/// 工作池并行结果与逐座顺序规划逐一相等（确定性纯函数回归）。
+#[test]
+fn t13_plan_pool_parallel_matches_sequential() {
+    let e = play_ready_with_sha(2602, 4);
+    let planner = engine_native::ai::BoundedPlanner::new(64);
+    let pool = engine_native::ai::PlanPool::new(4);
+    let seats = [0u8, 1, 2, 3];
+    let par = pool.plan_seats(&e, &seats, &planner);
+    let seq: Vec<_> = seats.iter().map(|&s| e.plan_action(s, &planner)).collect();
+    assert_eq!(par.len(), seats.len());
+    for (p, s) in par.iter().zip(seq.iter()) {
+        assert_eq!(p.seat, s.seat, "输入座位序返回");
+        assert_eq!(p.revision, s.revision, "同一快照基线");
+        assert_eq!(p.nodes_used, s.nodes_used, "确定性：节点数逐一相等");
+        assert_eq!(p.budget_exhausted, s.budget_exhausted);
+        assert!(!p.cancelled);
+        // 动作一致（同候选同评分→同选择）
+        let same = match (&p.action, &s.action) {
+            (a, b) => format!("{a:?}") == format!("{b:?}"),
+        };
+        assert!(same, "并行与顺序动作一致（{:?} vs {:?}）", p.action, s.action);
+    }
+}
+
+/// worker 数少于座位数：分桶消费仍按输入序返回、结果不串位。
+#[test]
+fn t13_plan_pool_more_seats_than_workers_keeps_order() {
+    let e = play_ready_with_sha(2603, 5);
+    let planner = engine_native::ai::BoundedPlanner::new(32);
+    let pool = engine_native::ai::PlanPool::new(2);
+    let seats = [0u8, 1, 2, 3, 4];
+    let par = pool.plan_seats(&e, &seats, &planner);
+    for (i, p) in par.iter().enumerate() {
+        assert_eq!(p.seat, seats[i], "输入序返回（分桶 round-robin 逆操作）");
+    }
+}
+
+/// 运行中取消（跨线程）：预挂取消旗→规划线程首边界即返回 cancelled，
+/// apply_plan 拒绝（Cancelled）。
+#[test]
+fn t13_plan_cancel_mid_run_cross_thread() {
+    let e = play_ready_with_sha(2604, 4);
+    let planner = std::sync::Arc::new(engine_native::ai::BoundedPlanner::new(1_000_000));
+    let flag = planner.cancel_flag();
+    // 预挂取消（确定性）：旗在规划线程首候选边界检查前已置位
+    flag.store(true, Ordering::SeqCst);
+    // 规划隔离已克隆化：工作线程持克隆引擎（同一快照基线，语义等价）
+    let worker_engine = e.clone();
+    let handle = std::thread::spawn(move || {
+        let planner = planner.as_ref();
+        worker_engine.plan_action(0, planner)
+    });
+    let plan = handle.join().expect("规划线程");
+    assert!(plan.cancelled, "运行中取消生效");
+    let mut e2 = e.clone();
+    assert!(matches!(
+        e2.apply_plan(&plan),
+        Err(engine_native::ai::ApplyPlanError::Cancelled)
+    ));
+}
+
 /// 规划模拟序号与会话高水位统一：真实高水位 2,000,000 时，合法杀
 /// 候选必须被实际模拟并成为规划结果（旧反例中退化为 NextPhase）。
 #[test]

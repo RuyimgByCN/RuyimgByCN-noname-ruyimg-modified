@@ -51,6 +51,68 @@ impl BoundedPlanner {
     }
 }
 
+/// T13 工作池：并行多座规划——固定 worker 线程分桶消费座位队列，各
+/// 线程独立克隆引擎（规划隔离已克隆化），结果按输入座位序返回。规划
+/// 为确定性纯函数（无共享 RNG/可变状态），并行结果与逐座顺序规划逐一
+/// 相等（回归固化）。
+#[derive(Debug, Clone, Copy)]
+pub struct PlanPool {
+    /// 并发 worker 数（≥1；超过座位数时按座位数截断）。
+    pub workers: usize,
+}
+
+impl PlanPool {
+    pub fn new(workers: usize) -> Self {
+        Self {
+            workers: workers.max(1),
+        }
+    }
+
+    /// 并行规划多个座位（同一引擎快照基线；输入序返回）。
+    pub fn plan_seats(
+        &self,
+        engine: &Engine,
+        seats: &[u8],
+        planner: &BoundedPlanner,
+    ) -> Vec<Plan> {
+        if seats.is_empty() {
+            return Vec::new();
+        }
+        let workers = self.workers.min(seats.len()).max(1);
+        // 座位按 round-robin 分桶；每线程顺序消费自己的桶
+        let mut buckets: Vec<Vec<u8>> = vec![Vec::new(); workers];
+        for (i, &seat) in seats.iter().enumerate() {
+            buckets[i % workers].push(seat);
+        }
+        std::thread::scope(|scope| {
+            let handles: Vec<_> = buckets
+                .into_iter()
+                .map(|bucket| {
+                    scope.spawn(move || {
+                        bucket
+                            .into_iter()
+                            .map(|seat| engine.plan_action(seat, planner))
+                            .collect::<Vec<Plan>>()
+                    })
+                })
+                .collect();
+            let parts: Vec<Vec<Plan>> = handles
+                .into_iter()
+                .map(|h| h.join().expect("规划工作线程"))
+                .collect();
+            // round-robin 逆操作：按输入序拼接
+            let mut out = Vec::with_capacity(seats.len());
+            let mut cursors = vec![0usize; workers];
+            for (i, _) in seats.iter().enumerate() {
+                let b = i % workers;
+                out.push(parts[b][cursors[b]].clone());
+                cursors[b] += 1;
+            }
+            out
+        })
+    }
+}
+
 /// 规划产物：携带提交时修订号，供应用侧做陈旧拒绝。
 #[derive(Debug, Clone)]
 pub struct Plan {

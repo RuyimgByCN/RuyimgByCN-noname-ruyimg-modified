@@ -1015,7 +1015,9 @@ pub struct QueryCtx<'a> {
 /// `fork` 用于工作副本回滚：暂停态随状态一起克隆。
 /// `snapshot` 导出全部局部状态的规范快照：进 canonical hash（不同机器
 /// 局部状态可区分），也是暂停点保存/恢复的唯一数据来源。
-pub trait SkillMachine: Send {
+/// 线程安全（T13 工作池）：机器为纯数据状态——Send 既有，补 Sync 使
+/// 引擎可跨线程共享（多座并行规划；实现体均为普通结构体）。
+pub trait SkillMachine: Send + Sync {
     fn step(&mut self, ctx: &mut crate::machine::Ctx<'_>) -> crate::machine::Flow;
     fn fork(&self) -> Box<dyn SkillMachine>;
     fn snapshot(&self) -> crate::snap::MachineSnapshot;
