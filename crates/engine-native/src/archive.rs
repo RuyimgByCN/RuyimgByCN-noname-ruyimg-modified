@@ -1017,6 +1017,11 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             w.u8(81);
             enc_pid(w, owner);
         }
+        MachineSnapshot::Rvm { owner, module_hash } => {
+            w.u8(82);
+            enc_pid(w, owner);
+            w.bytes(module_hash);
+        }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);
             enc_pid(w, owner);
@@ -2238,6 +2243,16 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
         81 => {
             let owner = dec_pid(r)?;
             MachineSnapshot::BossWangxiang { owner }
+        }
+        82 => {
+            let owner = dec_pid(r)?;
+            let raw = r.bytes()?;
+            if raw.len() != 32 {
+                return Err(ArchiveError::UnexpectedEof);
+            }
+            let mut module_hash = [0u8; 32];
+            module_hash.copy_from_slice(raw);
+            MachineSnapshot::Rvm { owner, module_hash }
         }
         64 => {
             let owner = dec_pid(r)?;

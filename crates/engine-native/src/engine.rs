@@ -4736,6 +4736,11 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 81);
             push_u8(h, *owner);
         }
+        M::Rvm { owner, module_hash } => {
+            push_u8(h, 82);
+            push_u8(h, *owner);
+            h.update(module_hash);
+        }
         M::BossBuchun { owner, stage, targets } => {
             push_u8(h, 67);
             push_u8(h, *owner);

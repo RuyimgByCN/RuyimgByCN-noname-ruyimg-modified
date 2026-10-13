@@ -226,6 +226,7 @@ fn g1_wudian_generals_and_siji_discard_draw() {
         generals,
         cards: Vec::new(),
         host_skills,
+        vm_skills: Vec::new(),
         init_hook: engine_native::content::extension::InitHook::None,
         enabled: true,
     };

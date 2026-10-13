@@ -1125,10 +1125,13 @@ name = "engine-native"
 version = "0.1.0"
 dependencies = [
  "blake3",
+ "content-compiler",
  "content-native-loader",
  "content-runtime",
  "content-schema",
  "resource-schema",
+ "rule-api",
+ "rule-vm",
  "serde",
  "serde_json",
  "tempfile",

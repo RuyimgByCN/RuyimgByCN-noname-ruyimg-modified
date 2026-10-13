@@ -20,6 +20,7 @@ pub mod ids;
 pub mod kernel;
 pub mod machine;
 pub mod presentation;
+pub mod rvm_bridge;
 pub mod resolution;
 pub mod rng;
 pub mod snap;

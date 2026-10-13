@@ -9859,27 +9859,6 @@ impl Assembler {
         Ok(())
     }
 
-    fn patch_jumps_if(
-        &mut self,
-        jif_idx: usize,
-        jmp_idx: usize,
-        _end_hint: u32,
-    ) -> Result<(), CompileError> {
-        // Re-assemble offsets from op indices using estimate_pc
-        let after_jif = estimate_pc(&self.ops[..jif_idx + 1]);
-        let else_start = estimate_pc(&self.ops[..jmp_idx + 1]);
-        // JumpIfFalse should skip then-body to else_start
-        // Structure: [jif][then...][jmp][else...]
-        // after executing jif operands, pc = after_jif; want target else_start
-        let off = (else_start as i32) - (after_jif as i32);
-        self.ops[jif_idx] = Op::JumpIfFalse(off as i16);
-
-        let after_jmp = estimate_pc(&self.ops[..jmp_idx + 1]);
-        let end = estimate_pc(&self.ops);
-        let off2 = (end as i32) - (after_jmp as i32);
-        self.ops[jmp_idx] = Op::Jump(off2 as i16);
-        Ok(())
-    }
 
     /// Patch jump offsets directly in assembled bytes using actual byte positions.
     /// Walks the code to build an op-index → byte-offset map, then fixes all backpatches.
@@ -9936,24 +9915,6 @@ impl Assembler {
         }
     }
 
-    fn patch_loop(
-        &mut self,
-        jif_idx: usize,
-        jmp_back: usize,
-        loop_start: usize,
-        _end: u32,
-    ) -> Result<(), CompileError> {
-        let after_jif = estimate_pc(&self.ops[..jif_idx + 1]);
-        let end_pc = estimate_pc(&self.ops);
-        let off_end = (end_pc as i32) - (after_jif as i32);
-        self.ops[jif_idx] = Op::JumpIfFalse(off_end as i16);
-
-        let after_jmp = estimate_pc(&self.ops[..jmp_back + 1]);
-        let start_pc = estimate_pc(&self.ops[..loop_start]);
-        let off_back = (start_pc as i32) - (after_jmp as i32);
-        self.ops[jmp_back] = Op::Jump(off_back as i16);
-        Ok(())
-    }
 
     fn emit_expr(&mut self, e: &ExprIr) -> Result<(), CompileError> {
         match e {

@@ -6365,6 +6365,25 @@ pub fn standard_catalog_with_extensions(
             }
             ext_skills.push(host_skill_def(decl.name.to_string(), decl.behavior));
         }
+        for decl in &pack.vm_skills {
+            let name = crate::content::names::intern(decl.name.clone());
+            if !base_names.insert(name) {
+                return Err(ExtensionError::DuplicateSkill { name: decl.name.clone() });
+            }
+            if !host_names.insert(decl.name.clone()) {
+                return Err(ExtensionError::DuplicateSkill { name: decl.name.clone() });
+            }
+            ext_skills.push(crate::catalog::SkillDef {
+                name,
+                trigger: Some(decl.trigger.clone()),
+                limits: Default::default(),
+                behavior: Box::new(crate::rvm_bridge::VmSkillBehavior {
+                    program: std::sync::Arc::new(crate::rvm_bridge::VmSkillProgram {
+                        module: decl.module.clone(),
+                    }),
+                }),
+            });
+        }
     }
     let cards = merge_extension_cards(cards, &ext_cards)?;
     let mut skills = skills;

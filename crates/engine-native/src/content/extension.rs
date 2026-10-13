@@ -69,6 +69,18 @@ impl InitHook {
     }
 }
 
+/// T8 增量 1：包声明的 rule-vm 技能（数据驱动；字节码经装载/编译产
+/// 物携带，`logic_hash` 为内容锁锚）。
+#[derive(Debug, Clone)]
+pub struct VmSkillDecl {
+    /// 技能名（目录内唯一；intern 进全局符号表）。
+    pub name: String,
+    /// 已验证字节码模块。
+    pub module: rule_vm::BytecodeModule,
+    /// 触发元数据（事件门由行为总线承载）。
+    pub trigger: crate::catalog::TriggerMeta,
+}
+
 /// 扩展包：元数据 + 额外内容。
 pub struct ExtensionPack {
     pub def: ExtensionDef,
@@ -76,6 +88,9 @@ pub struct ExtensionPack {
     pub cards: Vec<CardDef>,
     /// G1 规则宿主：包声明的宿主原语技能（数据 → 目录 SkillDef）。
     pub host_skills: Vec<crate::content::host::HostSkillDecl>,
+    /// T8 增量 1：包声明的 rule-vm 技能（数据 → 目录 SkillDef，触发时
+    /// 经 rvm_bridge 执行字节码）。
+    pub vm_skills: Vec<VmSkillDecl>,
     /// 开局初始化钩子（影响对局随机流，进入内容锁语义）。
     pub init_hook: InitHook,
     pub enabled: bool,
@@ -287,6 +302,7 @@ pub fn example_extension() -> ExtensionPack {
                 .with_suit_rank(crate::catalog::Suit::Heart, 5),
         ],
         host_skills: Vec::new(),
+        vm_skills: Vec::new(),
         init_hook: InitHook::None,
         enabled: true,
     }

@@ -399,6 +399,9 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
         generals: generals_out.generals,
         cards,
         host_skills,
+        // T8 增量 1：npack 内 rule-vm 模块桥接属增量 2（登记）；装载器
+        // 当前不产出 vm 技能声明。
+        vm_skills: Vec::new(),
         init_hook: meta.init_hook,
         enabled: true,
     };

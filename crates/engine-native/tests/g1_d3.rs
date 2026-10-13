@@ -162,6 +162,7 @@ fn g1_d3_vertical_reveal_jinggou_and_restore() {
                     name: "huanle_kuwu",
                     behavior: HostBehavior::ShaDamageForceDiscard,
                 }],
+                vm_skills: Vec::new(),
                 init_hook: engine_native::content::extension::InitHook::None,
                 enabled: true,
             },

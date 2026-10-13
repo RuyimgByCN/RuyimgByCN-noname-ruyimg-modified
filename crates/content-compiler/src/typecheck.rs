@@ -992,7 +992,7 @@ fn rewrite_stmt(stmt: &mut StmtAst, name_to_def: &std::collections::BTreeMap<Str
         StmtAst::Loop { body, .. } => {
             rewrite_stmts(body, name_to_def);
         }
-        StmtAst::Let { value, .. } => {
+        StmtAst::Let { value: _, .. } => {
             // no nested stmts in let value
         }
         _ => {}

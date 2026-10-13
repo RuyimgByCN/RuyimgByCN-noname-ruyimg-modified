@@ -615,6 +615,12 @@ pub enum MachineSnapshot {
     BossWangxiang {
         owner: PlayerId,
     },
+    /// T8 增量 1：rule-vm 技能机（数据驱动扩展包技能）。start→step
+    /// 原子完成，存档点不停在中段；快照仅身份+模块哈希（内容锁核对）。
+    Rvm {
+        owner: PlayerId,
+        module_hash: [u8; 32],
+    },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
     /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
@@ -1225,6 +1231,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossWangxiang { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::Rvm { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::Shedu { owner, .. } => {
@@ -2259,6 +2268,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossWangxiang { .. } => {
             // 望乡：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::Rvm { .. } => {
+            // T8 增量 1：VM 机 dispatch 内原子完成，恢复无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {

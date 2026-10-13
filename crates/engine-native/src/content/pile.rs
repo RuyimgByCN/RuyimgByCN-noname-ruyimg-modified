@@ -96,6 +96,7 @@ pub fn extension_pack_from_pile(
         generals: Vec::new(),
         cards,
         host_skills: Vec::new(),
+        vm_skills: Vec::new(),
         init_hook: crate::content::extension::InitHook::None,
         enabled: true,
     })

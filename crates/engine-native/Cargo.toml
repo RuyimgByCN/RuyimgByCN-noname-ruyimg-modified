@@ -8,9 +8,12 @@ description = "干净原生内核原型：只读规则目录 + 紧凑对局状�
 
 [dependencies]
 blake3 = { workspace = true }
+rule-api = { workspace = true }
+rule-vm = { workspace = true }
 
 [dev-dependencies]
 serde = { workspace = true }
+content-compiler = { path = "../content-compiler" }
 content-runtime = { path = "../content-runtime" }
 content-native-loader = { path = "../content-native-loader" }
 content-schema = { path = "../content-schema" }
