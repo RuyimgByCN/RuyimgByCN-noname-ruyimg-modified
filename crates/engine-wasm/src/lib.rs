@@ -3,6 +3,9 @@
 //! All rule work runs here (Web Worker). UI only receives observer JSON.
 
 use content_runtime::{content_hash_hex, ContentLock};
+
+#[path = "fallback_closure.rs.inc"]
+mod fallback_closure;
 use content_schema::ContentPackage;
 use engine_api::{
     Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, ObserverKind, PlayerId,
@@ -53,12 +56,24 @@ impl WasmEngine {
     }
 
     /// Load the built-in standard package for browser-only/offline fallback.
+    ///
+    /// O4 内容债①修复：standard 的 roster 跨包引用 refresh 技能且
+    /// refresh/shenhua/yijiang 等逐级跨引（ADR 0542 delta 的传递闭包）
+    /// ——本回退路径装载 standard（编译期 Rust 目录）+ 内嵌全依赖闭包
+    /// 18 npack 后统一做 roster 闭包校验（此前单包装载必拒）。
     #[wasm_bindgen(js_name = loadEmbeddedStandard)]
     pub fn load_embedded_standard(&mut self) -> Result<(), JsValue> {
         let mut staged = Engine::new();
         staged
             .load_standard_package()
             .map_err(|error| js_error(error.to_string()))?;
+        for (pid, bytes) in crate::fallback_closure::FALLBACK_CLOSURE_NPACKS {
+            let package = ContentPackage::from_json_bytes(bytes)
+                .map_err(|error| js_error(format!("{pid}: {error}")))?;
+            staged
+                .load_package(&package)
+                .map_err(|error| js_error(format!("{pid}: {error}")))?;
+        }
         staged
             .content()
             .validate_character_skill_closure()

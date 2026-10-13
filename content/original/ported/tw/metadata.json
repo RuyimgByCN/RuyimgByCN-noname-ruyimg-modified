@@ -29,6 +29,11 @@
    "namespace": "official",
    "package_id": "sp2",
    "version": "0.1.0"
+  },
+  {
+   "namespace": "official",
+   "package_id": "sb",
+   "version": "0.1.0"
   }
  ],
  "license": {
