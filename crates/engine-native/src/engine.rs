@@ -4736,10 +4736,33 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 81);
             push_u8(h, *owner);
         }
-        M::Rvm { owner, module_hash } => {
+        M::Rvm {
+            owner,
+            module,
+            paused,
+        } => {
             push_u8(h, 82);
             push_u8(h, *owner);
-            h.update(module_hash);
+            push_u32(h, module.len() as u32);
+            h.update(module);
+            match paused {
+                Some(p) => {
+                    push_u8(h, 1);
+                    push_u32(h, p.frames.len() as u32);
+                    h.update(&p.frames);
+                    push_u32(h, p.pc);
+                    push_u32(h, p.fuel_remaining);
+                    push_u64(h, p.id);
+                    h.update(&p.module_hash);
+                    push_u32(h, p.options.len() as u32);
+                    for t in &p.options {
+                        push_u32(h, *t);
+                    }
+                    push_u32(h, p.pending.len() as u32);
+                    h.update(&p.pending);
+                }
+                None => push_u8(h, 0),
+            }
         }
         M::BossBuchun { owner, stage, targets } => {
             push_u8(h, 67);

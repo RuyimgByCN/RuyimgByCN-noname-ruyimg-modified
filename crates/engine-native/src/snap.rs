@@ -197,6 +197,23 @@ pub struct JudgementProgressSnap {
 
 /// 挂起机器的规范快照。字段清单与 kernel / content 机器结构一一对应；
 /// 编解码（archive.rs）与摘要（engine.rs canonical_hash）按同一字段集。
+/// T8 增量 2：VM 机挂起态快照（continuation 帧 + 选项 + 排队效果）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RvmPaused {
+    /// Serialized operand stack + locals。
+    pub frames: Vec<u8>,
+    pub pc: u32,
+    pub fuel_remaining: u32,
+    /// Continuation identity within a match.
+    pub id: u64,
+    /// Module logic hash（内容锁：续跑时与模块哈希核对）。
+    pub module_hash: [u8; 32],
+    /// 选项 tokens（emission 序）。
+    pub options: Vec<u32>,
+    /// 排队未落账效果（rvm_bridge 自定义编码；映射面仅三种）。
+    pub pending: Vec<u8>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MachineSnapshot {
     Sha {
@@ -615,11 +632,13 @@ pub enum MachineSnapshot {
     BossWangxiang {
         owner: PlayerId,
     },
-    /// T8 增量 1：rule-vm 技能机（数据驱动扩展包技能）。start→step
-    /// 原子完成，存档点不停在中段；快照仅身份+模块哈希（内容锁核对）。
+    /// T8 增量 2：rule-vm 技能机（数据驱动扩展包技能）。快照自包含：
+    /// 模块载体字节（from_bytes 还原并验证）+ 挂起态（continuation/
+    /// 选项/排队效果——排队效果保留至续跑后落账）。
     Rvm {
         owner: PlayerId,
-        module_hash: [u8; 32],
+        module: Vec<u8>,
+        paused: Option<RvmPaused>,
     },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
@@ -1233,8 +1252,25 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
         MachineSnapshot::BossWangxiang { owner, .. } => {
             check_pid(*owner, b)?;
         }
-        MachineSnapshot::Rvm { owner, .. } => {
+        MachineSnapshot::Rvm {
+            owner,
+            module,
+            paused,
+        } => {
             check_pid(*owner, b)?;
+            if rule_vm::BytecodeModule::from_bytes(module).is_err() {
+                return Err(SnapshotError::UnknownMachine);
+            }
+            if let Some(p) = paused {
+                if p.module_hash
+                    != rule_vm::BytecodeModule::from_bytes(module)
+                        .expect("checked")
+                        .logic_hash
+                {
+                    return Err(SnapshotError::UnknownMachine);
+                }
+                let _ = &p.frames;
+            }
         }
         MachineSnapshot::Shedu { owner, .. } => {
             check_pid(*owner, b)?;
@@ -2270,8 +2306,26 @@ pub fn active_ask(
             // 望乡：直写一步机，恢复无询问
             None
         }
+        MachineSnapshot::Rvm {
+            owner,
+            paused: Some(p),
+            ..
+        } => {
+            // T8 增量 2：VM 选择挂起——选项 tokens 派生（PickTag）
+            let options: Vec<ChoiceOption> =
+                p.options.iter().map(|t| ChoiceOption::Tag(*t as u8)).collect();
+            Some(ask(
+                *owner,
+                "rvm_choice",
+                ChoiceKind::PickTag,
+                options,
+                1,
+                1,
+                false,
+            ))
+        }
         MachineSnapshot::Rvm { .. } => {
-            // T8 增量 1：VM 机 dispatch 内原子完成，恢复无询问
+            // 非挂起态：无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {
@@ -4245,6 +4299,31 @@ impl MachineSnapshot {
             MachineSnapshot::BossRenao { owner, emitted } => Ok(Box::new(
                 crate::content::standard::RenaoMachine::new(*owner, *emitted),
             )),
+            MachineSnapshot::Rvm {
+                owner,
+                module,
+                paused,
+            } => {
+                let m = rule_vm::BytecodeModule::from_bytes(module)
+                    .map_err(|_| SnapshotError::UnknownMachine)?;
+                let machine = if let Some(mut p) = paused.clone() {
+                    crate::rvm_bridge::VmMachine::restore_paused(
+                        *owner,
+                        m,
+                        std::mem::take(&mut p.frames),
+                        p.pc,
+                        p.fuel_remaining,
+                        p.id,
+                        p.module_hash,
+                        std::mem::take(&mut p.options),
+                        std::mem::take(&mut p.pending),
+                    )
+                    .map_err(|_| SnapshotError::UnknownMachine)?
+                } else {
+                    crate::rvm_bridge::VmMachine::from_module(*owner, m)
+                };
+                Ok(Box::new(machine))
+            }
             MachineSnapshot::OptionalGate {
                 owner,
                 def,

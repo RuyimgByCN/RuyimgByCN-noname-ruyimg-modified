@@ -189,7 +189,8 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
             "Rvm",
             MachineSnapshot::Rvm {
                 owner: 0,
-                module_hash: [7; 32],
+                module: Vec::new(),
+                paused: None,
             },
         ),
     ]

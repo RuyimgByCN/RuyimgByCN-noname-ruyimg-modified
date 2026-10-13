@@ -17,9 +17,10 @@
 use std::sync::Arc;
 
 use rule_api::{CapabilitySet, EffectRequest, HostTrap, QueryRequest, QueryResponse};
-use rule_vm::{BytecodeModule, ExecResult, HostContext, RuleVm, VmHost, DEFAULT_FUEL};
+use rule_vm::{BytecodeModule, Continuation, ExecResult, HostContext, RuleVm, VmHost, DEFAULT_FUEL};
 
 use crate::catalog::{SkillBehavior, SkillMachine};
+use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::event::{DamageNature, EventData};
 use crate::ids::{CardId, PlayerId};
 use crate::catalog::QueryCtx;
@@ -92,24 +93,37 @@ impl SkillBehavior for VmSkillBehavior {
     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
         Box::new(VmMachine {
             owner,
-            program: Some(self.program.clone()),
+            program: self.program.clone(),
             trig: trigger_ctx_of(event),
             pending_effects: Vec::new(),
+            paused: None,
+            asked: false,
             settled: false,
         })
     }
 }
 
-/// VM 技能机器：一次 dispatch 内执行完毕（本增量无内部挂起；快照只
-/// 出现在「start→step 原子完成」间隙之外，重建为直接 Done 的占位机）。
+/// VM 挂起态（HOST_CHOICE）：continuation + 选项 tokens。
+#[derive(Debug, Clone)]
+pub struct VmPaused {
+    pub continuation: Continuation,
+    pub options: Vec<u32>,
+}
+
+/// VM 技能机器：可挂起（HOST_CHOICE）——挂起期间排队效果保留（原型
+/// 同款「Paused 层保留至续跑后落账」），存档快照携带模块字节+挂起态+
+/// 排队效果（增量 2）。
 #[derive(Debug, Clone)]
 pub struct VmMachine {
     owner: PlayerId,
-    /// None = 恢复重建的 detached 占位（settled=true，直接 Done）。
-    program: Option<Arc<VmSkillProgram>>,
+    program: Arc<VmSkillProgram>,
     trig: VmTriggerCtx,
-    /// 排队未落账效果（Halted 提交 / Paused、Err 丢弃）。
+    /// 排队未落账效果（Halted 提交 / Paused 保留 / Err 丢弃）。
     pending_effects: Vec<EffectRequest>,
+    /// 挂起态（含已捕获 continuation 与选项）。
+    paused: Option<VmPaused>,
+    /// 挂起询问已答（下一步续跑）。
+    asked: bool,
     settled: bool,
 }
 
@@ -259,6 +273,163 @@ fn commit_effect(ctx: &mut Ctx<'_>, e: EffectRequest) {
     }
 }
 
+impl VmMachine {
+    /// 存档重建（非挂起态）：从模块载体字节还原（快照点不会停在
+    /// start→step 中段——此态重建后即待触发执行）。
+    pub(crate) fn from_module(owner: PlayerId, module: BytecodeModule) -> Self {
+        Self {
+            owner,
+            program: Arc::new(VmSkillProgram { module }),
+            trig: VmTriggerCtx::default(),
+            pending_effects: Vec::new(),
+            paused: None,
+            asked: false,
+            settled: false,
+        }
+    }
+
+    /// 存档重建（挂起态）：continuation + 选项 + 排队效果还原；内容锁
+    /// 核对（continuation 绑定模块 logic_hash，换模块续跑被拒）。
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn restore_paused(
+        owner: PlayerId,
+        module: BytecodeModule,
+        frames: Vec<u8>,
+        pc: u32,
+        fuel_remaining: u32,
+        id: u64,
+        module_hash: [u8; 32],
+        options: Vec<u32>,
+        pending_bytes: Vec<u8>,
+    ) -> Result<Self, ()> {
+        if module.logic_hash != module_hash {
+            return Err(());
+        }
+        let pending = dec_effects(&pending_bytes).ok_or(())?;
+        Ok(Self {
+            owner,
+            program: Arc::new(VmSkillProgram { module }),
+            trig: VmTriggerCtx::default(),
+            pending_effects: pending,
+            paused: Some(VmPaused {
+                continuation: Continuation {
+                    id,
+                    frames,
+                    pc,
+                    fuel_remaining,
+                    module_hash,
+                },
+                options,
+            }),
+            // 挂起态快照 = 问询已发出（active_ask 派生同一询问）——下一
+            // 应答即续跑，不重问。
+            asked: true,
+            settled: false,
+        })
+    }
+}
+
+/// 排队效果自定义编码（映射面仅三种；emit_effect 已验证）。
+fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
+    fn u32le(w: &mut Vec<u8>, v: u32) {
+        w.extend_from_slice(&v.to_le_bytes());
+    }
+    w.extend_from_slice(&(effects.len() as u32).to_le_bytes());
+    for e in effects {
+        match e {
+            EffectRequest::RecoverHp { source, player, amount } => {
+                w.push(1);
+                u32le(w, source.raw());
+                u32le(w, player.raw());
+                u32le(w, *amount);
+            }
+            EffectRequest::DrawCards { player, count } => {
+                w.push(2);
+                u32le(w, player.raw());
+                u32le(w, *count);
+            }
+            EffectRequest::DealDamage { source, target, amount, is_lose_hp, nature } => {
+                w.push(3);
+                u32le(w, source.raw());
+                u32le(w, target.raw());
+                u32le(w, *amount);
+                w.push(u8::from(*is_lose_hp));
+                w.push(*nature);
+            }
+            _ => unreachable!("emit_effect 面已拒未映射变体"),
+        }
+    }
+}
+
+/// 逐段 u32 读取器（dec_effects 用）。
+struct U32Reader<'a> {
+    r: &'a [u8],
+}
+
+impl U32Reader<'_> {
+    fn next_u32(&mut self) -> Option<u32> {
+        if self.r.len() < 4 {
+            return None;
+        }
+        let (a, rest) = self.r.split_at(4);
+        self.r = rest;
+        Some(u32::from_le_bytes(a.try_into().unwrap()))
+    }
+    fn next_u8(&mut self) -> Option<u8> {
+        let v = *self.r.first()?;
+        self.r = &self.r[1..];
+        Some(v)
+    }
+}
+
+fn dec_effects(mut r: &[u8]) -> Option<Vec<EffectRequest>> {
+    let mut rd = U32Reader { r: &mut r };
+    let n = rd.next_u32()? as usize;
+    let mut out = Vec::new();
+    for _ in 0..n {
+        let tag = rd.next_u8()?;
+        match tag {
+            1 => {
+                let source = rd.next_u32()?;
+                let player = rd.next_u32()?;
+                let amount = rd.next_u32()?;
+                out.push(EffectRequest::RecoverHp {
+                    source: rule_api::PlayerId::new(source),
+                    player: rule_api::PlayerId::new(player),
+                    amount,
+                });
+            }
+            2 => {
+                let player = rd.next_u32()?;
+                let count = rd.next_u32()?;
+                out.push(EffectRequest::DrawCards {
+                    player: rule_api::PlayerId::new(player),
+                    count,
+                });
+            }
+            3 => {
+                let source = rd.next_u32()?;
+                let target = rd.next_u32()?;
+                let amount = rd.next_u32()?;
+                let is_lose_hp = rd.next_u8()? == 1;
+                let nature = rd.next_u8()?;
+                out.push(EffectRequest::DealDamage {
+                    source: rule_api::PlayerId::new(source),
+                    target: rule_api::PlayerId::new(target),
+                    amount,
+                    is_lose_hp,
+                    nature,
+                });
+            }
+            _ => return None,
+        }
+    }
+    if !rd.r.is_empty() {
+        return None;
+    }
+    Some(out)
+}
+
 impl SkillMachine for VmMachine {
     fn fork(&self) -> Box<dyn SkillMachine> {
         Box::new(self.clone())
@@ -267,11 +438,20 @@ impl SkillMachine for VmMachine {
     fn snapshot(&self) -> MachineSnapshot {
         MachineSnapshot::Rvm {
             owner: self.owner,
-            module_hash: self
-                .program
-                .as_ref()
-                .map(|p| p.logic_hash())
-                .unwrap_or([0; 32]),
+            module: self.program.module.to_bytes(),
+            paused: self.paused.as_ref().map(|p| crate::snap::RvmPaused {
+                frames: p.continuation.frames.clone(),
+                pc: p.continuation.pc,
+                fuel_remaining: p.continuation.fuel_remaining,
+                id: p.continuation.id,
+                module_hash: p.continuation.module_hash,
+                options: p.options.clone(),
+                pending: {
+                    let mut b = Vec::new();
+                    enc_effects(&mut b, &self.pending_effects);
+                    b
+                },
+            }),
         }
     }
 
@@ -279,15 +459,59 @@ impl SkillMachine for VmMachine {
         if self.settled {
             return Flow::Done;
         }
-        self.settled = true;
-        let Some(program) = self.program.clone() else {
-            return Flow::Done;
+        // 挂起态：先问（WaitChoice），已答则续跑
+        if let Some(p) = self.paused.clone() {
+            if !self.asked {
+                self.asked = true;
+                let options: Vec<ChoiceOption> =
+                    p.options.iter().map(|t| ChoiceOption::Tag(*t as u8)).collect();
+                return Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::PickTag,
+                        prompt: "rvm_choice",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
+                };
+            }
+            self.asked = false;
+            self.paused = None;
+            let token = match ctx.answer().first() {
+                Some(ChoiceOption::Tag(t)) => *t as u32,
+                _ => return self.trap_done(),
+            };
+            let program = self.program.clone();
+            let cont = p.continuation;
+            let resumed = move |vm: &mut RuleVm, host: &mut EngineVmHost<'_>| {
+                vm.resume(&program.module, host, cont, token)
+            };
+            return self.run(ctx, resumed);
+        }
+        let program = self.program.clone();
+        let module = program.module.clone();
+        let executed = move |vm: &mut RuleVm, host: &mut EngineVmHost<'_>| {
+            vm.execute(&module, host, DEFAULT_FUEL)
         };
+        self.run(ctx, executed)
+    }
+}
+
+impl VmMachine {
+    /// 执行/续跑公共尾：Halted 提交排队效果；Paused 转挂起询问（排队
+    /// 效果保留至续跑后一并落账）；Err 回滚（排队效果整批丢弃）。
+    fn run(
+        &mut self,
+        ctx: &mut Ctx<'_>,
+        f: impl FnOnce(&mut RuleVm, &mut EngineVmHost<'_>) -> Result<ExecResult, rule_vm::VmError>,
+    ) -> Flow {
         let seats = ctx.core.players.len() as u8;
-        {
+        let outcome = {
             let mut host = EngineVmHost {
                 ctx: HostContext {
-                    // 增量 1：def id 未回填（catalog def 反查属增量 2）。
+                    // def id 反查回填属增量 3（登记）。
                     skill_id: 0,
                     self_id: to_rule_pid(self.owner).raw(),
                     event_player: self
@@ -311,19 +535,59 @@ impl SkillMachine for VmMachine {
                 pending: &mut self.pending_effects,
             };
             let mut vm = RuleVm::new();
-            let out = vm.execute(&program.module, &mut host, DEFAULT_FUEL);
-            match out {
-                Ok(ExecResult::Halted { .. }) => {}
-                Ok(ExecResult::Paused { .. }) | Err(_) => {
-                    // Paused（增量 2）/Err：排队效果整批丢弃（回滚协议）。
-                    self.pending_effects.clear();
+            f(&mut vm, &mut host)
+        };
+        match outcome {
+            Ok(ExecResult::Halted { .. }) => {
+                let pending = std::mem::take(&mut self.pending_effects);
+                for e in pending {
+                    commit_effect(ctx, e);
+                }
+                self.settled = true;
+                Flow::Done
+            }
+            Ok(ExecResult::Paused {
+                continuation,
+                options,
+            }) => {
+                // 选项超 u8 域（ChoiceOption::Tag 容量）→ 回滚。
+                if options.iter().any(|t| *t > 255) {
+                    return self.trap_done();
+                }
+                self.paused = Some(VmPaused {
+                    continuation,
+                    options,
+                });
+                self.asked = false;
+                let options: Vec<ChoiceOption> = self
+                    .paused
+                    .as_ref()
+                    .expect("just set")
+                    .options
+                    .iter()
+                    .map(|t| ChoiceOption::Tag(*t as u8))
+                    .collect();
+                Flow::WaitChoice {
+                    observer: self.owner,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::PickTag,
+                        prompt: "rvm_choice",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: false,
+                    },
                 }
             }
+            Err(_) => self.trap_done(),
         }
-        let pending = std::mem::take(&mut self.pending_effects);
-        for e in pending {
-            commit_effect(ctx, e);
-        }
+    }
+
+    /// 回滚收尾：排队效果整批丢弃（半次效果不落账，原型同款）。
+    fn trap_done(&mut self) -> Flow {
+        self.pending_effects.clear();
+        self.paused = None;
+        self.settled = true;
         Flow::Done
     }
 }

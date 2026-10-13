@@ -231,6 +231,142 @@ fn t8_vm_skill_fuel_exhaustion_rolls_back() {
     let _ = h0;
 }
 
+/// 选择挂起样本：choose(1,2) 二选一（1=回血，2=摸牌）。
+const CHOICE_DSL: &str = "\
+skill hnl_jiuwei_choice_t8(990002) {
+  trigger phase_end owner_is_target {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect recover_hp(self, 1);
+    }
+    if option == 2 {
+      effect draw_cards(self, 1);
+    }
+  }
+}
+";
+
+/// 选择挂起/恢复端到端：阶段结束 VM 挂起（rvm_choice）→ 应答续跑落账；
+/// 挂起中存档→恢复→续跑（continuation 跨存档，内容锁绑定）。
+#[test]
+fn t8_vm_skill_choice_suspend_resume_midrestore() {
+    let pkg = compile_source_named("t8-rvm-bridge", CHOICE_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_jiuwei_choice_t8");
+    let name = "t8酒尾选择";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+    }]);
+    let mut e = Engine::new_with_extensions(910005, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, name);
+    e.debug_set_hp(1, 2);
+    // 推进到 1 号阶段结束：VM 挂起（rvm_choice）
+    for _ in 0..40 {
+        if let Some(c) = e.open_choice() {
+            if c.spec.prompt == "rvm_choice" {
+                break;
+            }
+            let sel: Vec<ChoiceOption> = c
+                .spec
+                .options
+                .iter()
+                .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                .copied()
+                .take(c.spec.min.max(1))
+                .collect();
+            let (cid, obs) = (c.id, c.observer);
+            let selection = if sel.is_empty() && !c.spec.options.is_empty() {
+                vec![c.spec.options[0].clone()]
+            } else {
+                sel
+            };
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection });
+            continue;
+        }
+        if e.outcome().is_some() {
+            panic!("对局提前结束");
+        }
+        np_settled(&mut e);
+    }
+    let c = e.open_choice().expect("挂起询问");
+    assert_eq!(c.spec.prompt, "rvm_choice", "VM 选择挂起");
+    assert_eq!(c.spec.options.len(), 2, "choose(1,2) 两选项");
+    // 挂起中存档 → 恢复（同一扩展集合，内容锁）→ 续跑选 1=回血
+    let snap = e.save();
+    let mut r = Engine::restore_with_extensions(&snap, &[&pack]).expect("挂起态往返");
+    let c = r.open_choice().expect("恢复后挂起询问在位");
+    assert_eq!(c.spec.prompt, "rvm_choice", "恢复后 VM 挂起态保留");
+    let cid = c.id;
+    let obs = c.observer;
+    submit(
+        &mut r,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Tag(1)],
+        },
+    );
+    assert_eq!(hp(&r, 1), 3, "续跑落账：选择 1=回血（2→3）");
+}
+
+/// 内容锁负例：扩展包版本变化后挂起态存档拒绝恢复（名称+版本指纹）。
+#[test]
+fn t8_vm_skill_content_lock_rejects_pack_drift() {
+    let pkg = compile_source_named("t8-rvm-bridge", CHOICE_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_jiuwei_choice_t8");
+    let name = "t8酒尾选择";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+    }]);
+    let mut e = Engine::new_with_extensions(910006, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, name);
+    // 推进到挂起
+    for _ in 0..40 {
+        let pending = e.open_choice().map(|c| {
+            (c.id, c.observer, c.spec.prompt, c.spec.options.clone(), c.spec.min)
+        });
+        match pending {
+            Some((cid, obs, prompt, options, min)) => {
+                if prompt == "rvm_choice" {
+                    break;
+                }
+                let sel: Vec<ChoiceOption> = options
+                    .iter()
+                    .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                    .copied()
+                    .take(min.max(1))
+                    .collect();
+                let selection = if sel.is_empty() && !options.is_empty() {
+                    vec![options[0].clone()]
+                } else {
+                    sel
+                };
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection });
+            }
+            None => np_settled(&mut e),
+        }
+    }
+    assert!(e.open_choice().is_some(), "挂起在位");
+    let snap = e.save();
+    // 版本 +1 的同包（版本指纹漂移）
+    let mut drifted = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module: module_of(
+            &compile_source_named("t8-rvm-bridge", CHOICE_DSL).expect("重编译"),
+            "hnl_jiuwei_choice_t8",
+        ),
+        trigger: phase_end_trigger(),
+    }]);
+    drifted.def.version += 1;
+    assert!(
+        Engine::restore_with_extensions(&snap, &[&drifted]).is_err(),
+        "内容锁：包版本漂移拒绝恢复"
+    );
+}
+
 /// 存档往返：VM 技能提交后对局可存档恢复（内容锁哈希入快照面）。
 #[test]
 fn t8_vm_skill_save_restore_roundtrip() {

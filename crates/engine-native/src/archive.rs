@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 63;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 64;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -1017,10 +1017,30 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             w.u8(81);
             enc_pid(w, owner);
         }
-        MachineSnapshot::Rvm { owner, module_hash } => {
+        MachineSnapshot::Rvm {
+            owner,
+            module,
+            paused,
+        } => {
             w.u8(82);
             enc_pid(w, owner);
-            w.bytes(module_hash);
+            w.bytes(module);
+            match paused {
+                Some(p) => {
+                    w.u8(1);
+                    w.bytes(&p.frames);
+                    w.u32(p.pc);
+                    w.u32(p.fuel_remaining);
+                    w.u64(p.id);
+                    w.bytes(&p.module_hash);
+                    w.u32(p.options.len() as u32);
+                    for t in &p.options {
+                        w.u32(*t);
+                    }
+                    w.bytes(&p.pending);
+                }
+                None => w.u8(0),
+            }
         }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);
@@ -2246,13 +2266,43 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
         }
         82 => {
             let owner = dec_pid(r)?;
-            let raw = r.bytes()?;
-            if raw.len() != 32 {
-                return Err(ArchiveError::UnexpectedEof);
+            let module = r.bytes()?.to_vec();
+            let paused = match r.u8()? {
+                0 => None,
+                1 => {
+                    let frames = r.bytes()?.to_vec();
+                    let pc = r.u32()?;
+                    let fuel_remaining = r.u32()?;
+                    let id = r.u64()?;
+                    let raw = r.bytes()?;
+                    if raw.len() != 32 {
+                        return Err(ArchiveError::UnexpectedEof);
+                    }
+                    let mut module_hash = [0u8; 32];
+                    module_hash.copy_from_slice(raw);
+                    let n = r.u32()? as usize;
+                    let mut options = Vec::with_capacity(n.min(1024));
+                    for _ in 0..n {
+                        options.push(r.u32()?);
+                    }
+                    let pending = r.bytes()?.to_vec();
+                    Some(crate::snap::RvmPaused {
+                        frames,
+                        pc,
+                        fuel_remaining,
+                        id,
+                        module_hash,
+                        options,
+                        pending,
+                    })
+                }
+                _ => return Err(ArchiveError::BadTag("Rvm.paused", 255)),
+            };
+            MachineSnapshot::Rvm {
+                owner,
+                module,
+                paused,
             }
-            let mut module_hash = [0u8; 32];
-            module_hash.copy_from_slice(raw);
-            MachineSnapshot::Rvm { owner, module_hash }
         }
         64 => {
             let owner = dec_pid(r)?;

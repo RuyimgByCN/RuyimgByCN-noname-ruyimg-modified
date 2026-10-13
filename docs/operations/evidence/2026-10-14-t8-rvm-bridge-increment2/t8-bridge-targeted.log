@@ -1,0 +1,13 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/t8_rvm_bridge.rs (target/debug/deps/t8_rvm_bridge-75909643bcaaefd6)
+
+running 6 tests
+test t8_vm_skill_save_restore_roundtrip ... ok
+test t8_vm_skill_draw_branch_end_to_end ... ok
+test t8_vm_skill_content_lock_rejects_pack_drift ... ok
+test t8_vm_skill_choice_suspend_resume_midrestore ... ok
+test t8_vm_skill_recover_branch_end_to_end ... ok
+test t8_vm_skill_fuel_exhaustion_rolls_back ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
