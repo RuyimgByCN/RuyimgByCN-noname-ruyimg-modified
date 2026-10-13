@@ -8,8 +8,8 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
-use engine_native::catalog::{CardDef, CardKind, Suit};
-use engine_native::content::extension::{ExtensionDef, ExtensionPack};
+use engine_native::catalog::{CardKind, Suit};
+use engine_native::content::extension::ExtensionPack;
 use engine_native::{
     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason,
 };
@@ -36,14 +36,6 @@ fn options() -> InstallOptions {
         verify_key: None,
         host: content_runtime::tooling_host_versions(),
     }
-}
-
-#[derive(serde::Deserialize)]
-struct CardJson {
-    name: String,
-    kind: String,
-    suit: String,
-    rank: u8,
 }
 
 /// 桥接统一走 C0 装载器（ADR 0777/0778）：映射来自 cards.json 的
@@ -358,7 +350,6 @@ fn fudichouxin_compare_two_stage_with_restore() {
     assert_eq!((c.spec.prompt, c.observer), ("wd_fudi_target_pick", 1));
     let cid = c.id;
     let opts = c.spec.options.clone();
-    drop(c);
     if let CommandOutcome::Rejected(r) = submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(low_card)],
@@ -836,7 +827,6 @@ fn geanguanhuo_two_target_compare_chain() {
         assert_eq!(c.spec.prompt, "nullify_window");
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(&mut e, obs, GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Pass],
@@ -1016,7 +1006,6 @@ fn caochuan_branch_zero_gives_shas_and_reprisal() {
         if c.spec.prompt == "nullify_window" {
             let cid0 = c.id;
             let obs0 = c.observer;
-            drop(c);
             submit(&mut e, obs0, GameAction::Answer {
                 choice_id: cid0,
                 selection: vec![ChoiceOption::Pass],
@@ -1026,7 +1015,6 @@ fn caochuan_branch_zero_gives_shas_and_reprisal() {
     // 目标分支选择（PickTag，观察者 1）
     let c = e.open_choice().expect("分支选择挂起");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Tag(0)],
@@ -1113,7 +1101,6 @@ fn caochuan_no_sha_branch_shows_and_discards() {
     assert_eq!(c.spec.options, vec![ChoiceOption::Tag(1)], "无杀时仅剩被弃分支");
     let cid = c.id;
     let obs = c.observer;
-    drop(c);
     submit(&mut e, obs, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Tag(1)],
@@ -1224,15 +1211,14 @@ fn shezhanqunru_compares_all_responders() {
     snap.core.players[2].hand.push(lo2);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     let h0 = e.debug_hand(0).len();
-    let h1 = e.debug_hand(1).len();
-    let h2 = e.debug_hand(2).len();
+    let _h1 = e.debug_hand(1).len();
+    let _h2 = e.debug_hand(2).len();
     let out = submit(&mut e, 0, GameAction::PlayCard { card: sz, targets: vec![] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     if let Some(c) = e.open_choice() {
         assert_eq!(c.spec.prompt, "nullify_window");
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(&mut e, obs, GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Pass],

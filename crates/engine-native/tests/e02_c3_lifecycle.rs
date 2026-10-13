@@ -103,7 +103,7 @@ fn e02_c3_upgrade_rebinds_lock_and_rollback_restores_v1() {
     let pack_v1 = bridge(&v1_json);
 
     // ① v1 建局并保存：内容锁绑定 v1 集合。
-    let mut e = Engine::new_with_extensions(5201, 3, &[&pack_v1]).expect("v1 建局");
+    let e = Engine::new_with_extensions(5201, 3, &[&pack_v1]).expect("v1 建局");
     let snapshot = e.save();
 
     // ② 升级 v2：内容锁随 name:version 变化；错版恢复明确拒绝。

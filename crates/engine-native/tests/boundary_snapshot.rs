@@ -1914,7 +1914,7 @@ fn restore_rejects_segment_checkpoint_mismatches() {
     fn mk(
         snap: &engine_native::StateSnapshot,
     ) -> (engine_native::StateSnapshot, engine_native::StateSnapshot) {
-        let mut m = snap.clone();
+        let m = snap.clone();
         let ckpt = (**m.segment_checkpoint.as_ref().unwrap()).clone();
         (m, ckpt)
     }

@@ -11,7 +11,7 @@
 
 use engine_native::{
     ai::BoundedPlanner, CardKind, ChoiceOption, ChoiceView, CommandOutcome, Engine, GameAction,
-    GameCommand, Phase, view::{HandView, PolicyInput, SeatPolicy},
+    GameCommand, Phase, view::{PolicyInput, SeatPolicy},
 };
 use std::sync::atomic::{AtomicU64, Ordering};
 

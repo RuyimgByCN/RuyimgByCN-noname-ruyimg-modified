@@ -355,13 +355,13 @@ fn scenario_aoe_response_queue() -> [u8; 32] {
     }
     let savage = e.debug_place(0, "savage");
     let sha1 = e.debug_place(1, "sha");
-    let sha3 = e.debug_place(3, "sha");
+    let _sha3 = e.debug_place(3, "sha");
     play(&mut e, savage, vec![]);
     answer(&mut e, ChoiceOption::Card(sha1)); // 1 免伤；2 跳过；询问 3
     answer(&mut e, ChoiceOption::Pass); // 3 受伤 → 南蛮完结
     // 万箭：仅 1 持闪（Pass 受伤），2/3 无闪直接跳过受伤
     e.debug_clear_hand(1);
-    let shan1 = e.debug_place(1, "shan");
+    let _shan1 = e.debug_place(1, "shan");
     let archery = e.debug_place(0, "archery");
     play(&mut e, archery, vec![]);
     answer(&mut e, ChoiceOption::Pass);

@@ -15,9 +15,8 @@ use content_runtime::{
 use content_schema::{ContentPackage, PackageManifest};
 use engine_native::content::extension::{ExtensionDef, ExtensionError};
 use engine_native::content::pile::{extension_pack_from_pile, PileEntry, PileSpec};
-use engine_native::catalog::CardKind;
 use engine_native::{
-    ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, SnapshotError,
+    CommandOutcome, Engine, GameAction, GameCommand, Phase, SnapshotError,
 };
 use resource_schema::{AssetEntry, AssetKind, AssetManifest, PreloadPriority};
 
@@ -231,7 +230,7 @@ fn g1_cardpile_vertical_install_enable_newgame_saverestore() {
 
     // 5) 扩展牌参与规则结算：从目录定位扩展【酒】/【杀】，注入手牌，
     //    酒 → 杀 = 2 点伤害
-    let (jiu_id, sha_id) = {
+    let (_jiu_id, sha_id) = {
         let catalog = e.catalog();
         let jiu = catalog
             .cards
@@ -283,7 +282,7 @@ fn g1_cardpile_vertical_install_enable_newgame_saverestore() {
         eprintln!("PROBE-CP2 after-inject sha114: deck={} hand0={} discard={} table={}",
             cnt(&snap.core.deck), cnt(&snap.core.players[0].hand), cnt(&snap.core.discard), cnt(&snap.core.table));
         let mut total = 0usize;
-        for (i, p) in snap.core.players.iter().enumerate() {
+        for (_i, p) in snap.core.players.iter().enumerate() {
             total += cnt(&p.hand) + cnt(&p.equips) + cnt(&p.judge);
         }
         eprintln!("PROBE-CP2 sha114 in all player zones={total}");

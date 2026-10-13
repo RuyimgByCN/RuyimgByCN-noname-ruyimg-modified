@@ -10,7 +10,7 @@
 
 use engine_native::{
     content::standard::{general_hp, general_skills, STANDARD_GENERALS},
-    CardKind, ChoiceOption, ChoiceView, CommandOutcome, Engine, GameAction, GameCommand, Phase,
+    CardKind, ChoiceOption, ChoiceView, Engine, GameAction, GameCommand, Phase,
     view::HandView,
 };
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -188,7 +188,6 @@ fn main() {
     let mut session = KofSession::new(host_seed);
     println!("=== KOF 会话：将池 A={:?} B={:?} ===", session.pools[0], session.pools[1]);
 
-    let mut save_line = String::new();
     let mut round = 0;
     while session.finished().is_none() && round < 6 {
         round += 1;
@@ -212,13 +211,12 @@ fn main() {
         session.games += 1;
         println!("  淘汰：{}（座位{} 剩池 {:?}）", KofSession::name(lost), loser_seat, session.pools[loser_seat]);
         // 会话存档续跑演示：第 1 局后存档、恢复、继续
-        save_line = session.save();
+        let save_line = session.save();
         if round == 1 {
             let restored = KofSession::restore(&save_line).expect("合法会话应可恢复");
             assert_eq!(restored.save(), save_line, "会话存档往返必须一致");
             println!("  会话存档续跑校验: OK（{save_line}）");
         }
-        let _ = std::mem::take(&mut save_line);
     }
     match session.finished() {
         Some(w) => println!(

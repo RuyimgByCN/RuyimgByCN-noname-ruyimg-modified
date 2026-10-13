@@ -102,7 +102,6 @@ fn pass_nullify_window(e: &mut Engine) {
         let c = e.open_choice().unwrap();
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(e, obs, GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Pass],
@@ -132,7 +131,6 @@ fn drain_choices(e: &mut Engine) {
         } else {
             vec![]
         };
-        drop(c);
         submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
     }
     panic!("64 步内询问未消化");
@@ -361,7 +359,6 @@ fn shujinsan_discard_any_draws_equal_with_restore() {
         &[&pack],
     )
     .expect("舒筋散挂起点字节恢复");
-    drop(c);
     let cid = restored.open_choice().unwrap().id;
     let out = submit(&mut restored, 1, GameAction::Answer {
         choice_id: cid,
@@ -393,7 +390,6 @@ fn shujinsan_discard_any_draws_equal_with_restore() {
     let c = e.open_choice().expect("舒筋散目标选牌挂起");
     assert_eq!(c.spec.prompt, "gj_shujinsan_discard");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![],
@@ -461,7 +457,6 @@ fn feibiao_discard_black_or_damage() {
     assert_eq!(c.spec.options, vec![ChoiceOption::Card(black)], "选项仅黑色手牌");
     assert!(c.spec.allow_cancel, "可取消（取消则受伤）");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(black)],
@@ -487,7 +482,6 @@ fn feibiao_discard_black_or_damage() {
     pass_nullify_window(&mut e);
     let c = e.open_choice().expect("飞镖目标选牌挂起");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![],
@@ -652,7 +646,6 @@ fn jinlianzhu_cancels_damage_with_holder_confirm() {
         &[&pack],
     )
     .expect("金莲烛确认挂起点字节恢复");
-    drop(c);
     let cid = restored.open_choice().unwrap().id;
     let out = submit(&mut restored, 1, GameAction::Answer {
         choice_id: cid,
@@ -682,7 +675,6 @@ fn jinlianzhu_cancels_damage_with_holder_confirm() {
     let c = e.open_choice().expect("金莲烛确认挂起");
     assert_eq!(c.spec.prompt, "gj_jinlianzhu_confirm");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Pass],
@@ -780,7 +772,7 @@ fn food_state_grant_tick_and_expire() {
     // 归零移除：注入 rounds=1 → 下一次出牌阶段结束移除
     e.debug_set_hp(0, 9);
     let mut snap = e.save();
-    for ((owner, def), inst) in snap.core.skills.iter_mut() {
+    for ((_owner, def), inst) in snap.core.skills.iter_mut() {
         if *def == def_td {
             inst.rounds = 1;
         }
@@ -1101,7 +1093,7 @@ fn hujia_primitive_and_food_batch_three() {
     };
     let json = std::fs::read_to_string(meta.root.join("assets/cards.json")).unwrap();
     let (pack, _) = bridge(&json).expect("桥接");
-    let find = |e: &Engine, prefix: &str| {
+    let _find = |e: &Engine, prefix: &str| {
         e.catalog()
             .cards
             .iter()
@@ -1201,7 +1193,6 @@ fn hujia_primitive_and_food_batch_three() {
         let c = e.open_choice().unwrap();
         let cid = c.id;
         let sel: Vec<ChoiceOption> = c.spec.options.iter().take(c.spec.min.max(1)).copied().collect();
-        drop(c);
         submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: sel });
     }
     submit(&mut e, 0, GameAction::NextPhase); // Discard 结束 → End 开始
@@ -1308,7 +1299,6 @@ fn hujia_primitive_and_food_batch_three() {
         &[&pack],
     )
     .expect("菱角挂起点字节恢复");
-    drop(c);
     let cid = restored.open_choice().unwrap().id;
     let h0 = restored.debug_hand(0).len();
     let discard_card = restored.debug_hand(0)[0];
@@ -1337,7 +1327,7 @@ fn mizhilianou_viewas_and_luyugeng_discover() {
     };
     let json = std::fs::read_to_string(meta.root.join("assets/cards.json")).unwrap();
     let (pack, _) = bridge(&json).expect("桥接");
-    let find = |e: &Engine, prefix: &str| {
+    let _find = |e: &Engine, prefix: &str| {
         e.catalog()
             .cards
             .iter()
@@ -1416,7 +1406,6 @@ fn mizhilianou_viewas_and_luyugeng_discover() {
         if c.spec.prompt == "respond_shan" {
             let cid = c.id;
             let obs = c.observer;
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
     }
@@ -1431,7 +1420,6 @@ fn mizhilianou_viewas_and_luyugeng_discover() {
             // 0 号：红桃桃是合法选项（桃本身）；此处直接出桃
             let has_tao = c.spec.options.contains(&ChoiceOption::Card(tao_red));
             let cid = c.id;
-            drop(c);
             if has_tao {
                 submit(&mut e, 0, GameAction::Answer {
                     choice_id: cid,
@@ -1447,7 +1435,6 @@ fn mizhilianou_viewas_and_luyugeng_discover() {
             }
         } else {
             let cid = c.id;
-            drop(c);
             submit(&mut e, obs, GameAction::Answer {
                 choice_id: cid,
                 selection: vec![ChoiceOption::Pass],
@@ -1502,7 +1489,6 @@ fn mizhilianou_viewas_and_luyugeng_discover() {
     // 选项只含基本牌（shan2 是基本牌；卤玉羹本体已弃）
     assert_eq!(c.spec.options, vec![ChoiceOption::Card(shan2)]);
     let cid = c.id;
-    drop(c);
     let out = submit(&mut e, 0, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(shan2)],
@@ -1594,12 +1580,10 @@ fn jiguan_batch_four_kinds() {
     let c = e.open_choice().expect("冰魄通使用者展示挂起");
     assert_eq!(c.spec.prompt, "gj_bingpo_show_own");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(tao_red)] });
     let c = e.open_choice().expect("冰魄通目标展示挂起");
     assert_eq!((c.spec.prompt, c.observer), ("gj_bingpo_show_target", 1));
     let cid = c.id;
-    drop(c);
     submit(&mut e, 1, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(heart_sha)] });
     assert_eq!(e.debug_hp(1), hp1 - 1, "同色目标失去 1 点体力（规则 v77）");
     // 目标 2：使用者展示牌已弃、手牌空 → 上游 step0 直接跳过（无事）
@@ -1641,7 +1625,6 @@ fn jiguan_batch_four_kinds() {
     assert_eq!((c.spec.prompt, c.observer), ("gj_longxu_pick", 0));
     assert_eq!(c.spec.options, vec![ChoiceOption::Card(armor)]);
     let cid = c.id;
-    drop(c);
     submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(armor)] });
     assert!(e.debug_hand(0).contains(&armor), "使用者获得所选装备");
     assert!(e.save().core.players[1].equips.is_empty(), "目标装备被夺");
@@ -1689,7 +1672,6 @@ fn jiguan_batch_four_kinds() {
         &[&pack],
     )
     .expect("神火飞鸦挂起点字节恢复");
-    drop(c);
     // 恢复后逐个响应（出闪或 Pass）
     let mut answered = 0;
     while let Some(c) = restored.open_choice() {
@@ -1701,7 +1683,6 @@ fn jiguan_batch_four_kinds() {
         } else {
             vec![ChoiceOption::Pass]
         };
-        drop(c);
         submit(&mut restored, obs, GameAction::Answer { choice_id: cid, selection: sel });
         answered += 1;
         assert!(answered < 6, "响应循环有界");
@@ -1750,8 +1731,8 @@ fn remaining_clusters_batch() {
     for p in 0..3 {
         e.debug_clear_hand(p);
     }
-    let (zyd, shan_c) = {
-        let catalog = e.catalog();
+    let (zyd, _shan_c) = {
+        let _catalog = e.catalog();
         let zyd = find(&e, "gj_ziyangdan");
         let shan_c = card_of(&e, CardKind::Shan, Suit::Diamond);
         (zyd, shan_c)
@@ -1768,7 +1749,6 @@ fn remaining_clusters_batch() {
         let c = e.open_choice().unwrap();
         let cid = c.id;
         let sel: Vec<ChoiceOption> = c.spec.options.iter().take(c.spec.min.max(1)).copied().collect();
-        drop(c);
         submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: sel });
     }
     submit(&mut e, 0, GameAction::NextPhase); // Discard→End
@@ -1782,7 +1762,7 @@ fn remaining_clusters_batch() {
         e.debug_clear_hand(p);
     }
     let (yvs, sha_black) = {
-        let catalog = e.catalog();
+        let _catalog = e.catalog();
         let yvs = find(&e, "gj_yunvyuanshen");
         let sha_black = card_of(&e, CardKind::Sha, Suit::Spade);
         (yvs, sha_black)
@@ -1843,7 +1823,7 @@ fn remaining_clusters_batch() {
         e.debug_clear_hand(p);
     }
     let (shf, shan_c2) = {
-        let catalog = e.catalog();
+        let _catalog = e.catalog();
         let shf = find(&e, "gj_shihuifen");
         let shan_c2 = card_of(&e, CardKind::Shan, Suit::Diamond);
         (shf, shan_c2)
@@ -1882,7 +1862,6 @@ fn remaining_clusters_batch() {
     assert_eq!(c.spec.prompt, "respond_shan");
     assert_eq!(c.observer, 1);
     let cid = c.id;
-    drop(c);
     submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(shan_c2)],
@@ -2011,7 +1990,7 @@ fn final_batch_shatang_heilong_liutouge_mutou() {
         e.debug_clear_hand(p);
     }
     let (ltg, disc) = {
-        let catalog = e.catalog();
+        let _catalog = e.catalog();
         let ltg = find(&e, "gj_liutouge");
         let disc = card_of(&e, CardKind::Sha, Suit::Spade);
         (ltg, disc)
@@ -2061,7 +2040,7 @@ fn final_batch_shatang_heilong_liutouge_mutou() {
         e.debug_clear_hand(p);
     }
     let (mtj, tao_c) = {
-        let catalog = e.catalog();
+        let _catalog = e.catalog();
         let mtj = find(&e, "gj_mutoumianju");
         let tao_c = card_of(&e, CardKind::Tao, Suit::Heart);
         (mtj, tao_c)
@@ -2164,7 +2143,6 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
     assert_eq!(c.observer, 0);
     assert!(c.spec.allow_cancel, "rider 可取消");
     let cid = c.id;
-    drop(c);
     let out = submit(&mut e, 0, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(disc)],
@@ -2271,7 +2249,6 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
         let has_dvx = c.spec.options.contains(&ChoiceOption::Card(dvx2));
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         if has_dvx {
             assert_eq!(obs, 0, "帝女玄霜应只在 0 号手中");
             break cid;

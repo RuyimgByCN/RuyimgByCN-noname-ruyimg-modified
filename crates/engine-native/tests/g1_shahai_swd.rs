@@ -47,7 +47,6 @@ fn pass_nullify(e: &mut Engine) {
             break;
         }
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
 }
@@ -66,7 +65,6 @@ fn advance_to_play(e: &mut Engine, seat: u8) {
                 vec![]
             };
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
             continue;
         }
@@ -98,7 +96,6 @@ fn hufu_id(e: &Engine, n: usize) -> u32 {
 fn dying_save_pass(e: &mut Engine) {
     if let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
 }
@@ -145,7 +142,6 @@ fn swd_hufu_self_dying_only() {
     let c = e.open_choice().expect("濒死救援挂起");
     assert!(c.spec.options.contains(&ChoiceOption::Card(h0)), "护符进入濒死选项");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(h0)],
@@ -177,7 +173,6 @@ fn swd_hufu_self_dying_only() {
         let Some(c) = e.open_choice() else { break };
         if c.spec.prompt != "dying_save" {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
             continue;
         }
@@ -185,7 +180,6 @@ fn swd_hufu_self_dying_only() {
             holder_asked_with_hufu = true;
         }
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert!(!holder_asked_with_hufu, "他人濒死时护符不得进入持符者选项（上游 dying===player）");
@@ -296,7 +290,6 @@ fn swd_liuxinghuoyu_discard2_or_fire() {
     let c = e.open_choice().expect("流星火雨目标选牌挂起");
     assert_eq!((c.spec.prompt, c.observer), ("swd_liuxing_discard", 1));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(d1), ChoiceOption::Card(d2)],
@@ -562,7 +555,6 @@ fn swd_xixue_lifesteal_on_sha_damage() {
     for _ in 0..6 {
         let Some(c) = e.open_choice() else { break };
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(1), 3, "目标受 1 伤");
@@ -581,7 +573,6 @@ fn swd_xixue_lifesteal_on_sha_damage() {
     for _ in 0..6 {
         let Some(c) = e.open_choice() else { break };
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(1), 2, "目标再受 1 伤");
@@ -628,7 +619,7 @@ fn swd_guiyoujie_delayed_black_loss() {
     // 置判定堆顶为黑桃（黑色 → 判定失败 → 失体力+随机弃牌）
     e.debug_set_deck_top_by(|def| def.suit.is_spade());
     let d1 = e.debug_place(1, "shan");
-    let out = play(&mut e, gyj, vec![1]);
+    let _out = play(&mut e, gyj, vec![1]);
     pass_nullify(&mut e);
     // 推进到 1 号判定阶段
     for _ in 0..96 {
@@ -647,7 +638,6 @@ fn swd_guiyoujie_delayed_black_loss() {
                 vec![]
             };
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
             continue;
         }
@@ -736,7 +726,6 @@ fn swd_shentou_active_steal_with_club_judge() {
     let c = e.open_choice().expect("潜偷代价选牌挂起");
     assert_eq!((c.spec.prompt, c.observer), ("swd_shentou_cost", 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(cost)] });
     // 代价牌已弃、判定牌已弃、目标随机一张到 0 号：0 号手牌 = 1（偷来）
     // 判定梅花与否由牌堆决定——不置顶，接受两种结果但断言守恒：
@@ -806,7 +795,6 @@ fn swd_xingjunyan_amp_and_qinglonglingzhu_steal() {
     for _ in 0..8 {
         let Some(c) = e.open_choice() else { break };
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(1), 4, "星君眼：杀伤 +1（6-2=4）");
@@ -892,7 +880,6 @@ fn swd_zhufangshenshi_distance_waiver() {
     for _ in 0..6 {
         let Some(c) = e.open_choice() else { break };
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     let hp1 = e.debug_hp(1);
@@ -955,7 +942,6 @@ fn swd_fengxueren_flip_or_damage() {
     let c = e.open_choice().expect("风雪刃确认挂起");
     assert_eq!((c.spec.prompt, c.observer), ("fengxueren_flip_confirm", 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Confirm] });
     // 目标翻面（未受伤 4→4）且摸 1（手牌 1）
     assert_eq!(e.debug_hp(1), 4, "伤害被防止");
@@ -1071,8 +1057,7 @@ fn swd_yufulu_give_weapon_and_damage() {
     let c = e.open_choice().expect("武器询问挂起");
     assert_eq!((c.spec.prompt, c.observer), (SWD_YUFULU_WEAPON, 0));
     assert_eq!(c.spec.kind, ChoiceKind::SelectCards);
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
 
     // 存档往返①：武器询问挂起态（快照派生臂恢复同一询问）
     let snap = e.save();
@@ -1080,15 +1065,13 @@ fn swd_yufulu_give_weapon_and_damage() {
     let c = e.open_choice().expect("往返①武器询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (SWD_YUFULU_WEAPON, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(wp)] });
 
     // 目标询问挂起
     let c = e.open_choice().expect("目标询问挂起");
     assert_eq!((c.spec.prompt, c.observer), (SWD_YUFULU_TARGET, 0));
     assert_eq!(c.spec.kind, ChoiceKind::SelectPlayers);
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
 
     // 存档往返②：目标询问挂起态
     let snap = e.save();
@@ -1096,7 +1079,6 @@ fn swd_yufulu_give_weapon_and_damage() {
     let c = e.open_choice().expect("往返②目标询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (SWD_YUFULU_TARGET, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     let hp1 = e.debug_hp(1);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Player(1)] });
 
@@ -1171,7 +1153,6 @@ fn swd_yangpijuan_discover_from_deck() {
         let c = e.open_choice().expect("类别询问挂起");
         if c.spec.prompt == "nullify_window" {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
             continue;
         }
@@ -1179,8 +1160,7 @@ fn swd_yangpijuan_discover_from_deck() {
     };
     assert_eq!((c.spec.prompt, c.observer), (SWD_YANGPIJUAN_CATEGORY, 0));
     assert_eq!(c.spec.kind, ChoiceKind::PickTag);
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
 
     // 存档往返①：类别询问挂起态
     let snap = e.save();
@@ -1188,7 +1168,6 @@ fn swd_yangpijuan_discover_from_deck() {
     let c = e.open_choice().expect("往返①类别询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (SWD_YANGPIJUAN_CATEGORY, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Tag(2)] });
 
     // 发现三选一挂起：选项 ⊆ 牌堆且全为装备类（Tag 2）
@@ -1219,8 +1198,7 @@ fn swd_yangpijuan_discover_from_deck() {
             _ => None,
         })
         .collect();
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
 
     // 存档往返②：发现询问挂起态（派生读快照 cards，选项一致）
     let snap = e.save();
@@ -1239,7 +1217,6 @@ fn swd_yangpijuan_discover_from_deck() {
         .collect();
     assert_eq!(restored, offered, "往返后选项一致");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     let chosen = offered[0];
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(chosen)] });
 
@@ -1526,7 +1503,6 @@ fn swd_jiguanfeng_no_shan_seal_then_unseal_at_phase_begin() {
         match e.open_choice() {
             Some(c) => {
                 let (cid, obs) = (c.id, c.observer);
-                drop(c);
                 submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
             }
             None => {
@@ -1693,7 +1669,6 @@ fn swd_jiguanyuan_pending_then_gain_at_phase_end() {
         match e.open_choice() {
             Some(c) => {
                 let (cid2, obs) = (c.id, c.observer);
-                drop(c);
                 submit(&mut e, obs, GameAction::Answer { choice_id: cid2, selection: vec![ChoiceOption::Pass] });
             }
             None => {
@@ -1739,7 +1714,7 @@ fn swd_jiguanyuan_same_target_rejected_while_pending() {
         .cards
         .iter()
         .filter(|c| c.name.contains("jiguanyuan"))
-        .map(|c| c.name.clone())
+        .map(|c| c.name)
         .next()
         .expect("机关怨在目录");
     let ids: Vec<u32> = e
@@ -1984,8 +1959,8 @@ fn swd_lingjian_xuanfeng_and_shijianhuisu() {
     inject_hand(&mut e, &pack, &[xf, sj]);
     // 目标 1 号：2 手牌 + 1 装备（从目录取装备实体入其 equips）
     e.debug_set_hp(1, 4);
-    let t1 = e.debug_place(1, "tao");
-    let t2 = e.debug_place(1, "shan");
+    let _t1 = e.debug_place(1, "tao");
+    let _t2 = e.debug_place(1, "shan");
     let equip = e
         .catalog()
         .cards
@@ -2057,7 +2032,6 @@ fn swd_lingjian_jinjilengdong_freeze_and_unfreeze() {
         match e.open_choice() {
             Some(c) => {
                 let (cid, obs) = (c.id, c.observer);
-                drop(c);
                 submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
             }
             None => {

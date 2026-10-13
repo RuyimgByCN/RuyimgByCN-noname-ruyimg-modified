@@ -1,0 +1,52 @@
+# D2 旧 JS 扩展对引擎对象与 DOM 的直接改写（2026-10-12，只读粗略计数）
+
+口径：每个来源目录下 *.js 中
+- 覆盖列 = 正则 (lib\.element\.[a-zA-Z.]+|game\.[a-zA-Z]+|get\.[a-zA-Z]+|ui\.[a-zA-Z]+)\s*=\s*function 的命中数（只数 function 赋值，箭头函数/Object.assign 等未计，为下限）
+- DOM 列 = 正则 document\.(createElement|querySelector|body) 的命中数
+计数只反映“直接改写宿主/页面”的普遍程度，不是功能清单。
+
+## noname/apps/core/extension
+
+覆盖	DOM	来源
+1	1	杀海拾遗
+0	5	coin
+0	0	cardpile
+0	0	boss
+0	0	3D精选
+0	0	玩点论杀
+0	0	欢乐卡牌
+0	0	英雄杀
+
+## noname-liuli/noname/extension
+
+覆盖	DOM	来源
+109	158	祖安武将
+81	230	十周年UI
+72	214	手杀ui
+47	50	太虚幻境
+35	68	AI优化
+13	65	千幻聆音
+13	251	皮肤切换
+11	23	选将美化
+9	2	末日乱斗
+6	79	标记补充
+6	55	史诗卡牌
+6	137	手杀MVP
+5	0	段位制裁
+2	8	斗转星移
+1	2	笨蛋插件
+1	187	如真似幻
+1	17	更新保护
+1	1	电脑适配
+1	0	武皇争霸
+0	7	龙血玄黄
+0	5	coin
+0	19	全能搜索
+0	16	拖拽读取
+0	128	雷霆万钧
+0	0	wuxing
+0	0	SJ Settings
+0	0	cardpile
+0	0	boss
+0	0	手杀全扩
+

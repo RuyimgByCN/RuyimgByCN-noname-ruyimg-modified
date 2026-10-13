@@ -245,14 +245,14 @@ mod tests {
             description: "测试扩展",
         };
         assert!(!reg.is_installed("test_ext"));
-        reg.install(def);
+        reg.install(def).expect("安装");
         assert!(reg.is_installed("test_ext"));
         assert!(reg.is_enabled("test_ext"));
-        reg.disable("test_ext");
+        reg.disable("test_ext").expect("禁用");
         assert!(!reg.is_enabled("test_ext"));
-        reg.enable("test_ext");
+        reg.enable("test_ext").expect("启用");
         assert!(reg.is_enabled("test_ext"));
-        reg.uninstall("test_ext");
+        reg.uninstall("test_ext").expect("卸载");
         assert!(!reg.is_installed("test_ext"));
     }
 }

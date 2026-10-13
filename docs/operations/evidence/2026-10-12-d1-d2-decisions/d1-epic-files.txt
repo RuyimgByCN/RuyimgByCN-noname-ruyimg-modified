@@ -1,0 +1,79 @@
+# D1 史诗卡牌三文件核查（2026-10-12，只读）
+
+## liuli HEAD 与工作区
+$ git -C archive/upstream/noname-liuli rev-parse --short HEAD
+8485dbb
+$ git -C archive/upstream/noname-liuli status --porcelain   # 当前 7 个本地修改，不含史诗卡牌三文件
+ M "noname/extension/\345\215\201\345\221\250\345\271\264UI/meihua.js"
+ M "noname/extension/\345\217\262\350\257\227\345\215\241\347\211\214/extension.js"
+ M "noname/extension/\345\246\202\347\234\237\344\274\274\345\271\273/extension.js"
+ M "noname/extension/\345\246\202\347\234\237\344\274\274\345\271\273/js/rzsh.js"
+ M "noname/extension/\346\211\213\346\235\200ui/extension.js"
+ M "noname/extension/\351\200\211\345\260\206\347\276\216\345\214\226/extension.js"
+ M "noname/extension/\351\276\231\350\241\200\347\216\204\351\273\204/extension.js"
+
+## 三文件与 HEAD 的差异（空=逐字节相同）
+$ git diff --stat -- noname/extension/史诗卡牌/asset/lib/better-scroll.js  → []  大小 275272 字节
+$ git diff --stat -- noname/extension/史诗卡牌/cardPhantom.js  → []  大小 11811 字节
+$ git diff --stat -- noname/extension/史诗卡牌/emoji.js  → []  大小 30987 字节
+
+## 文件性质
+better-scroll.js 头部：
+/*!
+ * better-scroll / better-scroll
+ * (c) 2016-2022 ustbhuangyi
+ * Released under the MIT License.
+ */
+
+extension.js 中的加载点（cardPhantom 受配置开关控制）：
+1131:            if (lib.config["extension_史诗卡牌_cardPhantom"]) {
+1132:              this.js(window.EpicFX.extensionPath + 'cardPhantom.js');
+1188:              this.js(window.EpicFX.extensionPath + "emoji.js");
+
+emoji.js 唯一的全局技能（只播放表情动画，不改状态）：
+  lib.skill._emojiRebate1 = {
+    trigger: {player: ['recoverAfter','dying','gainAfter','turnOverAfter']},
+    forced: true,
+    filter: function (event, player) {
+      if (!event.source || event.source == player) return false;
+      return true;
+    },
+532:  EpicFX.emoji.playEmoji = function (source, target, key) {
+569:          EpicFX.emoji.playEmoji(null, player, EpicFX.emoji.nowPlay);
+714:              EpicFX.emoji.playEmoji(player, save.player, EpicFX.emoji.humiliationList.randomGet());
+716:              EpicFX.emoji.playEmoji(player, save.player, EpicFX.emoji.praiseList.randomGet());
+723:              EpicFX.emoji.playEmoji(player, trigger.source, EpicFX.emoji.humiliationList.randomGet());
+
+规则相关代码（reguhuo/rangjie）所在文件：
+noname/extension/史诗卡牌/extension.js
+
+三文件内 lib.skill/trigger/reguhuo/rangjie 计数：
+cardPhantom.js: skill/trigger=0 reguhuo/rangjie=0
+emoji.js: skill/trigger=2 reguhuo/rangjie=0
+asset/lib/better-scroll.js: skill/trigger=0 reguhuo/rangjie=0
+
+## 9-23 基线粒度
+inventory.json 对每个来源只存 files/bytes/all_sha256 聚合（史诗卡牌：6 文件 476123 字节），9-23 列为本地修改的史诗卡牌文件共 4 个：
+ M noname/extension/史诗卡牌/asset/lib/better-scroll.js
+ M noname/extension/史诗卡牌/cardPhantom.js
+ M noname/extension/史诗卡牌/emoji.js
+ M noname/extension/史诗卡牌/extension.js
+因此 148 字节差异只能定位到来源整体，无法确定落在哪个文件。
+
+## 仍在修改的 extension.js：当前本地改动（相对 HEAD，忽略行尾 CR）
+$ git -C archive/upstream/noname-liuli diff --ignore-cr-at-eol -U1 -- noname/extension/史诗卡牌/extension.js
+@@ -581,3 +581,3 @@ window.nmimport = function(func) {
+                               var to = width - (this.nextElementSibling.tx - this.tx);
+-                              if (to > 0 && window.EpicFX?.card?.expand) {
++                              if (to > 0) {
+                                 window.EpicFX.card.expand(this);
+@@ -609,3 +609,3 @@ window.nmimport = function(func) {
+                               var to = width - (this.nextElementSibling.tx - this.tx);
+-                              if (to > 0 && window.EpicFX?.card?.expand) {
++                              if (to > 0) {
+                                 window.EpicFX.card.expand(this);
+@@ -646,3 +646,3 @@ window.nmimport = function(func) {
+                       }
+-                      if (this.linkedCards && this.linkedCards.length && window.EpicFX?.card?.cancel) {
++                      if (this.linkedCards && this.linkedCards.length) {
+                         window.EpicFX.card.cancel(this);

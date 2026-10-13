@@ -10,10 +10,10 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
-use engine_native::catalog::{CardDef, CardKind, Suit};
-use engine_native::content::extension::{ExtensionDef, ExtensionPack};
+use engine_native::catalog::{CardKind, Suit};
+use engine_native::content::extension::ExtensionPack;
 use engine_native::{
-    ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason,
+    ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
 };
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -38,14 +38,6 @@ fn options() -> InstallOptions {
         verify_key: None,
         host: content_runtime::tooling_host_versions(),
     }
-}
-
-#[derive(serde::Deserialize)]
-struct CardJson {
-    name: String,
-    kind: String,
-    suit: String,
-    rank: u8,
 }
 
 /// 桥接统一走 C0 装载器（ADR 0777/0778）：映射来自 cards.json 的
@@ -162,7 +154,6 @@ fn linghunzhihuo_fire_damage_and_self_discard() {
         assert_eq!(c.spec.prompt, "nullify_window");
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(&mut e, obs, GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Pass],
@@ -175,7 +166,7 @@ fn linghunzhihuo_fire_damage_and_self_discard() {
 /// 照明弹：弃目标一张手牌，目标与使用者各摸 1。
 #[test]
 fn zhaomingdan_forced_discard_and_draws() {
-    let (mut e, pack) = setup();
+    let (e, pack) = setup();
     let (zm, victim) = {
         let catalog = e.catalog();
         let z = catalog
@@ -208,7 +199,6 @@ fn zhaomingdan_forced_discard_and_draws() {
         assert_eq!(c.spec.prompt, "nullify_window");
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(&mut e, obs, GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Pass],
@@ -224,7 +214,7 @@ fn zhaomingdan_forced_discard_and_draws() {
 /// 急耗卡：自-target 摸 1（临时技暂缓）。
 #[test]
 fn jihuocard_self_draw() {
-    let (mut e, pack) = setup();
+    let (e, pack) = setup();
     let (jh,) = {
         let catalog = e.catalog();
         let j = catalog
@@ -242,7 +232,6 @@ fn jihuocard_self_draw() {
     snap.core.discard.retain(|c| *c != jh);
     snap.core.table.retain(|c| *c != jh);
     snap.core.players[0].hand.push(jh);
-    e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     let before = e.debug_hand(0).len();
     let out = submit(&mut e, 0, GameAction::PlayCard { card: jh, targets: vec![] });
@@ -351,7 +340,6 @@ fn pass_window(e: &mut Engine) {
         let c = e.open_choice().unwrap();
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(e, obs, GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Pass],
@@ -399,12 +387,12 @@ fn hearth_remaining_batch_b() {
             .position(|c| c.kind == CardKind::Sha && c.suit == Suit::Spade)
             .expect("黑杀在目录") as u32
     };
-    let mut e = inject(&e0, &pack, &[ysh], 0);
+    let e = inject(&e0, &pack, &[ysh], 0);
     let mut e = inject(&e, &pack, &[spade_c], 1);
     e.debug_set_hp(1, 9);
     e.debug_set_hp(2, 9);
     let (hp1, hp2) = (e.debug_hp(1), e.debug_hp(2));
-    let h1 = e.debug_hand(1).len();
+    let _h1 = e.debug_hand(1).len();
     let out = submit(&mut e, 0, GameAction::PlayCard { card: ysh, targets: vec![] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     pass_window(&mut e);
@@ -418,7 +406,6 @@ fn hearth_remaining_batch_b() {
         Some(ChoiceOption::Card(c)) => *c,
         _ => unreachable!(),
     };
-    drop(c);
     submit(&mut e, 1, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(discard_card)],
@@ -429,13 +416,11 @@ fn hearth_remaining_batch_b() {
         if c.spec.prompt != "hh_yuansu_discard" {
             let cid = c.id;
             let obs = c.observer;
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
             continue;
         }
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
         break;
     }
@@ -443,7 +428,7 @@ fn hearth_remaining_batch_b() {
     assert_zone_conservation_h(&e);
 
     // —— 星界沟通：上限+1 回 1 弃全部手牌 ——
-    let mut e = inject(&e0, &pack, &[ysh], 0);
+    let e = inject(&e0, &pack, &[ysh], 0);
     let xjg = find(&e, "ht_xingjiegoutong");
     let mut e = inject(&e, &pack, &[xjg], 0);
     e.debug_set_hp(0, 2);
@@ -456,7 +441,7 @@ fn hearth_remaining_batch_b() {
     assert_zone_conservation_h(&e);
 
     // —— 坦蛇至人：座位序链式弃首张 ——
-    let mut e = inject(&e0, &pack, &[ysh], 0);
+    let e = inject(&e0, &pack, &[ysh], 0);
     let tst = find(&e, "ht_tanshezhiren");
     let mut e = inject(&e, &pack, &[tst], 0);
     let out = submit(&mut e, 0, GameAction::PlayCard { card: tst, targets: vec![] });

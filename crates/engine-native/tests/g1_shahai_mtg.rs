@@ -45,7 +45,6 @@ fn advance_to_play(e: &mut Engine, seat: u8) {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -108,8 +107,7 @@ fn mtg_longshanfeng_land_flow() {
     let c = e.open_choice().expect("获得选择挂起");
     assert_eq!((c.spec.prompt, c.observer), (MTG_LONGSHANFENG_GAIN, 0));
     assert_eq!(c.spec.kind, ChoiceKind::PickTag);
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
 
     // 存档往返：挂起态（current_land 已换、询问可恢复）
     let snap = e.save();
@@ -118,7 +116,6 @@ fn mtg_longshanfeng_land_flow() {
     let c = e.open_choice().expect("往返后询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (MTG_LONGSHANFENG_GAIN, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Tag(0)] });
 
     // 获得杀：手牌 +1 且为杀；地离手（table→弃堆流程）
@@ -173,7 +170,6 @@ fn mtg_longshanfeng_land_flow() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -263,7 +259,7 @@ fn mtg_haidao_land_effect() {
         .clone();
     let hearth_json = std::fs::read_to_string(hearth_disc.root.join("assets/cards.json")).unwrap();
     let hearth_pack = content_native_loader::bridge_pack(&hearth_json).expect("hearth 桥接").pack;
-    let base_cards = Engine::new(1, 3).catalog().cards.len();
+    let _base_cards = Engine::new(1, 3).catalog().cards.len();
 
     let setup = |seed: u64| -> Engine {
         let mut e =
@@ -306,19 +302,17 @@ fn mtg_haidao_land_effect() {
         .unwrap();
     e.debug_set_hp(0, 2);
     let give = e.debug_place(0, "shan"); // 弃牌候选（询问前布阵入选项）
-    let out = play(&mut e, hd, vec![]);
+    let _out = play(&mut e, hd, vec![]);
     let c = e.open_choice().expect("受伤分支弃牌询问挂起");
     assert_eq!((c.spec.prompt, c.observer), (MTG_HAIDAO_DISCARD, 0));
     assert_eq!(c.spec.kind, ChoiceKind::SelectCards);
     assert_eq!(c.spec.min, 0, "可取消");
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack, &hearth_pack]).expect("往返");
     let c = e.open_choice().expect("往返后询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (MTG_HAIDAO_DISCARD, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(give)] });
     assert_eq!(e.debug_hp(0), 3, "弃一张回 1（2→3）");
     assert_eq!(e.save().core.players[0].hujia, 0, "弃牌路线无护甲");
@@ -332,7 +326,6 @@ fn mtg_haidao_land_effect() {
     let _ = play(&mut e, hd, vec![]);
     let c = e.open_choice().expect("弃牌询问挂起");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     assert_eq!(e.save().core.players[0].hujia, 1, "取消得 1 护甲（不转换）");
     assert_eq!(e.debug_hp(0), 2, "取消不回血");
@@ -360,7 +353,6 @@ fn mtg_haidao_land_effect() {
     let _ = play(&mut e, ls, vec![]);
     let c = e.open_choice().expect("龙颅山峰询问挂起");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Tag(0)] });
     assert!(e.state_core().current_land == Some(CardKind::Longlushanfeng));
     // 再出海岛（换地覆盖；受伤分支取消）——每回合限一张地，轮回 0 号
@@ -372,7 +364,6 @@ fn mtg_haidao_land_effect() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -395,7 +386,6 @@ fn mtg_haidao_land_effect() {
     let _ = play(&mut e, hd, vec![]);
     let c = e.open_choice().expect("海岛询问挂起");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     assert!(e.state_core().current_land == Some(CardKind::Haidao), "换地覆盖");
     assert_eq!(e.save().core.players[0].hujia, 1, "取消得甲");
@@ -419,7 +409,6 @@ fn mtg_haidao_land_effect() {
     let _ = play(&mut e, hd, vec![]);
     let c = e.open_choice().expect("弃牌询问挂起");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] }); // 取消得甲
     // 地换后同回合再出地被拒——换回合后盾牌格挡验证转换
     for _ in 0..16 {
@@ -428,7 +417,6 @@ fn mtg_haidao_land_effect() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -453,7 +441,6 @@ fn mtg_haidao_land_effect() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert!(e.state_core().current_land == Some(CardKind::Haidao), "海岛仍在场");
@@ -523,14 +510,12 @@ fn mtg_shuimomuxue_land_effect() {
     assert_eq!((c.spec.prompt, c.observer), (MTG_SHUIMOMUXUE_DISCARD, 0));
     assert_eq!(c.spec.kind, ChoiceKind::SelectCards);
     assert_eq!(c.spec.min, 0, "可取消");
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
     let c = e.open_choice().expect("往返后询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (MTG_SHUIMOMUXUE_DISCARD, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(give)] });
     assert_eq!(e.debug_hand(0).len(), 2, "弃一摸二（0-1+2=2，均为新摸）");
     assert!(e.state_core().current_land == Some(CardKind::Shuimomuxue));
@@ -542,7 +527,6 @@ fn mtg_shuimomuxue_land_effect() {
     let _ = play(&mut e, sm, vec![]);
     let c = e.open_choice().expect("询问挂起");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     assert_eq!(e.debug_hand(0).len(), 1, "取消不摸牌（保留原牌）");
     assert!(e.debug_hand(0).contains(&keep), "原牌未被弃");
@@ -571,7 +555,6 @@ fn mtg_shuimomuxue_land_effect() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -587,7 +570,6 @@ fn mtg_shuimomuxue_land_effect() {
         assert!(need >= 1, "至少弃 1");
         let sel: Vec<ChoiceOption> = c.spec.options.iter().take(need).copied().collect();
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
         true
     } else {
@@ -601,7 +583,7 @@ fn mtg_shuimomuxue_land_effect() {
     assert_eq!(e.debug_hand(0).len(), hand_before_end + 1, "弃牌阶段弃过牌→阶段结束摸 1");
 
     // ⑤ 换地覆盖：海岛→水没墓穴（获甲转换消失）
-    let dir2 = tempfile::tempdir().unwrap();
+    let _dir2 = tempfile::tempdir().unwrap();
     let hearth_disc = discovered
         .iter()
         .find(|d| d.name == "shahai-hearth-upstream-noname")
@@ -637,7 +619,6 @@ fn mtg_shuimomuxue_land_effect() {
     let _ = play(&mut e, hd, vec![]);
     let c = e.open_choice().expect("海岛询问挂起");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     assert_eq!(e.save().core.players[0].hujia, 1);
     // 轮回 0 号下回合
@@ -648,7 +629,6 @@ fn mtg_shuimomuxue_land_effect() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -659,7 +639,6 @@ fn mtg_shuimomuxue_land_effect() {
     let _ = play(&mut e, sm, vec![]);
     if let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     }
     assert!(e.state_core().current_land == Some(CardKind::Shuimomuxue), "换地覆盖");
@@ -673,7 +652,6 @@ fn mtg_shuimomuxue_land_effect() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.save().core.players[0].hujia, 2, "水没在场：获甲不转换（1+1=2）");
@@ -746,8 +724,7 @@ fn mtg_feixu_land_effect() {
     for card in &offered {
         assert!(discard_at_ask.contains(card), "亮出的牌仍在弃堆");
     }
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     // 存档往返：选项一致
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
@@ -764,7 +741,6 @@ fn mtg_feixu_land_effect() {
         .collect();
     assert_eq!(restored, offered, "往返后选项一致");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     let chosen = offered[0];
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(chosen)] });
     assert!(e.debug_hand(0).contains(&chosen), "发现牌入手");
@@ -782,7 +758,6 @@ fn mtg_feixu_land_effect() {
         };
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -888,14 +863,12 @@ fn mtg_yixialan_land_and_recast() {
     let c = e.open_choice().expect("类型询问挂起");
     assert_eq!((c.spec.prompt, c.observer), (MTG_YIXIALAN_GAIN, 0));
     assert_eq!(c.spec.kind, ChoiceKind::PickTag);
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
     let c = e.open_choice().expect("往返后询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (MTG_YIXIALAN_GAIN, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Tag(1)] });
     // 获得锦囊牌
     let h0 = e.debug_hand(0);
@@ -914,7 +887,6 @@ fn mtg_yixialan_land_and_recast() {
     assert_eq!((c.spec.prompt, c.observer), (MTG_YIXIALAN_RECAST_CARD, 0));
     assert_eq!(c.spec.kind, ChoiceKind::SelectCards);
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(basic)] });
     let h0 = e.debug_hand(0);
     assert!(!h0.contains(&basic), "基本牌已放回牌堆");
@@ -969,7 +941,6 @@ fn mtg_yixialan_land_and_recast() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -979,7 +950,6 @@ fn mtg_yixialan_land_and_recast() {
     let _ = play(&mut e, hd, vec![]);
     if let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     }
     assert!(e.state_core().current_land == Some(CardKind::Haidao), "换地覆盖");
@@ -1062,8 +1032,7 @@ fn mtg_shamolvzhou_land_effect() {
             _ => None,
         })
         .collect();
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
     let c = e.open_choice().expect("往返后询问仍在");
@@ -1079,7 +1048,6 @@ fn mtg_shamolvzhou_land_effect() {
         .collect();
     assert_eq!(restored, offered, "往返后选项一致");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     let chosen = offered[0];
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(chosen)] });
     assert!(e.debug_hand(0).contains(&chosen), "发现牌入手");
@@ -1099,7 +1067,6 @@ fn mtg_shamolvzhou_land_effect() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -1194,14 +1161,12 @@ fn mtg_linzhongjianta_land_and_strike() {
             _ => None,
         })
         .collect();
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
     let c = e.open_choice().expect("往返后询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (MTG_LINZHONGJIANTA_DISCOVER, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     let weapon = offered[0];
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(weapon)] });
     assert!(e.save().core.players[0].equips.contains(&weapon), "发现武器已装备");
@@ -1219,19 +1184,16 @@ fn mtg_linzhongjianta_land_and_strike() {
     let c = e.open_choice().expect("塔击选牌挂起");
     assert_eq!((c.spec.prompt, c.observer), (MTG_LINZHONGJIANTA_CARD, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(basic)] });
     let c = e.open_choice().expect("塔击目标挂起");
     assert_eq!((c.spec.prompt, c.observer), (MTG_LINZHONGJIANTA_TARGET, 0));
     assert_eq!(c.spec.kind, ChoiceKind::SelectPlayers);
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Player(1)] });
     // 推进杀结算（无闪 → 1 伤）
     for _ in 0..8 {
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         } else {
             break;
@@ -1258,7 +1220,6 @@ fn mtg_linzhongjianta_land_and_strike() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -1268,7 +1229,6 @@ fn mtg_linzhongjianta_land_and_strike() {
     let _ = play(&mut e, hd, vec![]);
     if let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     }
     assert!(e.state_core().current_land == Some(CardKind::Haidao));
@@ -1330,14 +1290,12 @@ fn mtg_bingheyaosai_land_effect() {
     assert_eq!((c.spec.prompt, c.observer), (MTG_BINGHEYAOSAI_DISCARD, 0));
     assert_eq!(c.spec.kind, ChoiceKind::SelectCards);
     assert_eq!((c.spec.min, c.spec.max), (2, 2), "强制两张");
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
     let c = e.open_choice().expect("往返后询问仍在");
     assert_eq!((c.spec.prompt, c.observer), (MTG_BINGHEYAOSAI_DISCARD, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     let two: Vec<ChoiceOption> = c.spec.options.iter().take(2).copied().collect();
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: two });
     assert!(e.open_choice().is_none(), "弃二后无挂起");
@@ -1353,7 +1311,6 @@ fn mtg_bingheyaosai_land_effect() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(1), 3, "杀正常结算（4→3）");
@@ -1371,7 +1328,6 @@ fn mtg_bingheyaosai_land_effect() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -1391,7 +1347,6 @@ fn mtg_bingheyaosai_land_effect() {
     let _ = play(&mut e, hd, vec![]);
     if let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     }
     assert!(e.state_core().current_land == Some(CardKind::Haidao), "换地覆盖");
@@ -1401,7 +1356,6 @@ fn mtg_bingheyaosai_land_effect() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(1), 2, "杀正常结算（3→2）");
@@ -1418,7 +1372,7 @@ fn mtg_youlin_land_and_discover() {
     use engine_native::content::host::{
         MTG_YOULIN_DISCARD, MTG_YOULIN_DISCOVER_KEY, MTG_YOULIN_PICK,
     };
-    use engine_native::ChoiceKind;
+    
 
     let root = repo_extensions_root();
     let dir = tempfile::tempdir().unwrap();
@@ -1474,7 +1428,6 @@ fn mtg_youlin_land_and_discover() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert!(e.state_core().current_land == Some(CardKind::Youlin));
@@ -1491,7 +1444,6 @@ fn mtg_youlin_land_and_discover() {
     let c = e.open_choice().expect("锦囊选择挂起");
     assert_eq!((c.spec.prompt, c.observer), (MTG_YOULIN_DISCARD, 0));
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(wz)] });
     let c = e.open_choice().expect("发现三选一挂起");
     assert_eq!((c.spec.prompt, c.observer), (MTG_YOULIN_PICK, 0));
@@ -1506,8 +1458,7 @@ fn mtg_youlin_land_and_discover() {
             _ => None,
         })
         .collect();
-    let (cid, obs) = (c.id, c.observer);
-    drop(c);
+    let (_cid, _obs) = (c.id, c.observer);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
     let c = e.open_choice().expect("往返后询问仍在");
@@ -1523,7 +1474,6 @@ fn mtg_youlin_land_and_discover() {
         .collect();
     assert_eq!(restored, offered, "往返后选项一致");
     let (cid, obs) = (c.id, c.observer);
-    drop(c);
     let chosen = offered[0];
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(chosen)] });
     assert!(e.debug_hand(0).contains(&chosen), "发现牌入手");
@@ -1544,7 +1494,6 @@ fn mtg_youlin_land_and_discover() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -1554,7 +1503,6 @@ fn mtg_youlin_land_and_discover() {
     let _ = play(&mut e, hd, vec![]);
     if let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     }
     let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_disc });
@@ -1614,15 +1562,13 @@ fn mtg_lindixiliu_land_effect() {
     assert_eq!(c0.spec.kind, ChoiceKind::SelectCards);
     assert_eq!(c0.spec.min, 0, "可取消");
     // 往返
-    let (cid0, obs0) = (c0.id, c0.observer);
+    let (_cid0, _obs0) = (c0.id, c0.observer);
     let offered_n = c0.spec.options.len();
-    drop(c0);
     let snap = e.save();
     e = Engine::restore_with_extensions(&snap, &[&mtg_pack]).expect("往返");
     let c0 = e.open_choice().expect("往返后询问仍在");
     assert_eq!(c0.spec.options.len(), offered_n, "往返后选项数一致");
     let (cid0, obs0) = (c0.id, c0.observer);
-    drop(c0);
     // 弃全部♥（≥2：入手 1 + 布的♥——debug_place 按名放 sha/tao 不保证♥；
     // 直接选询问给出的全部♥选项）
     let hearts: Vec<ChoiceOption> = c0.spec.options.clone();
@@ -1653,7 +1599,6 @@ fn mtg_lindixiliu_land_effect() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -1676,7 +1621,6 @@ fn mtg_lindixiliu_land_effect() {
     if let Some(c) = e.open_choice() {
         assert_eq!(c.spec.prompt, MTG_LINDIXILIU_DISCARD);
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
     }
     let judged_after = e.save().core.players.iter().map(|p| p.judge.len()).sum::<usize>();

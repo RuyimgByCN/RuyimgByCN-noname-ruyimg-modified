@@ -11,11 +11,9 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
-use engine_native::catalog::{CardDef, CardKind, Suit};
-use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
-use engine_native::content::host::{HostBehavior, HostSkillDecl};
+use engine_native::content::extension::ExtensionPack;
 use engine_native::{
-    ChoiceKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
+    ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
 };
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -144,7 +142,7 @@ fn g1_wuxing_vertical_natures_shengke_saverestore() {
 
     // 生克——被克（金克木）：0 号木属性，成为金属性杀的目标 → 弃一张手牌
     let sha2 = e.debug_place(1, "sha");
-    let tao = e.debug_place(0, "tao"); // debug_place 已将 tao 置入 0 号手牌
+    let _tao = e.debug_place(0, "tao"); // debug_place 已将 tao 置入 0 号手牌
     let mut snap = e.save();
     snap.core.players[0].wunature = Some(1); // 木
     snap.core.turn.sha_used_play_phase = false; // 同阶段第二张杀（测试便捷）
@@ -163,7 +161,6 @@ fn g1_wuxing_vertical_natures_shengke_saverestore() {
                     vec![]
                 };
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 let _ = submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,

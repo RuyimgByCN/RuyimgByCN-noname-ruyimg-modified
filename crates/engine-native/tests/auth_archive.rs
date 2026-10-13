@@ -167,7 +167,6 @@ fn snapshot_archive_roundtrip_rest_and_window() {
                     vec![]
                 };
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 let out = w.submit(GameCommand {
                     actor: obs2,
                     expected_revision: w.revision(),
@@ -239,7 +238,6 @@ fn snapshot_archive_roundtrip_rest_and_window() {
                     vec![]
                 };
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 let out = w.submit(GameCommand {
                     actor: obs2,
                     expected_revision: w.revision(),

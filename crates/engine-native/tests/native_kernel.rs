@@ -953,19 +953,6 @@ fn dying_rescue_and_death() {
     assert!(e.outcome().is_none());
 }
 
-trait OutcomeExt {
-    fn accepted_or_panic(&self);
-}
-
-impl OutcomeExt for CommandOutcome {
-    fn accepted_or_panic(&self) {
-        assert!(
-            matches!(self, CommandOutcome::Accepted { .. }),
-            "expected accepted, got {self:?}"
-        );
-    }
-}
-
 // ---------------------------------------------------------------------------
 // 结算中途失效（肃清 vs 碎盾）与每回合限一次
 // ---------------------------------------------------------------------------
@@ -1616,7 +1603,6 @@ fn propagated_damage_is_full_resolution() {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -1632,7 +1618,6 @@ fn propagated_damage_is_full_resolution() {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -1784,7 +1769,7 @@ fn duel_alternating_sha_until_pass() {
     let duel = e.debug_place(0, "duel");
     let sha_t1 = e.debug_place(2, "sha");
     let sha_s = e.debug_place(0, "sha");
-    let sha_t2 = e.debug_place(2, "sha");
+    let _sha_t2 = e.debug_place(2, "sha");
     assert!(
         matches!(play(&mut e, duel, vec![2]), CommandOutcome::Pending { .. }),
         "决斗无距离限制，0→2 应可发动"
@@ -2319,14 +2304,10 @@ fn boss_mode_chongzheng_revival_and_victory() {
     assert!(e.outcome().is_none(), "2 号存活，未终局");
 
     // ② 回合推进到 1 号的重整 tick（cnt=1、hp 0→1），然后 2 号接续回合
-    let mut left_play = false;
     for _ in 0..96 {
         let snap = e.save();
         if snap.core.players[1].boss_chongzheng >= 1 {
             break;
-        }
-        if e.turn().current != 0 {
-            left_play = true;
         }
         match e.open_choice() {
             Some(g) => {
@@ -2338,7 +2319,6 @@ fn boss_mode_chongzheng_revival_and_victory() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -2380,7 +2360,6 @@ fn boss_mode_chongzheng_revival_and_victory() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -2848,7 +2827,7 @@ fn boss_mingxingzhu_qingzhu_jiazu_jiding() {
     // ③ 急叮：先授急叮（模拟星囚 addSkills 授予面）——fellow（boss 方座
     //    位 4）受 0 号伤害 → 明星对 0 虚拟雷杀
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         core.skills.insert(
             (1, jd),
             engine_native::state::SkillInstance {
@@ -2877,7 +2856,7 @@ fn boss_mingxingzhu_qingzhu_jiazu_jiding() {
     // ② 夹击：2 号（明星相邻下家）持坐骑 → 被全弃
     let horse = e.debug_place(2, "horse_plus");
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let pos = core.players[2]
             .hand
             .iter()
@@ -2892,7 +2871,7 @@ fn boss_mingxingzhu_qingzhu_jiazu_jiding() {
     // 3 号也持坐骑但非相邻（对座）→ 不触发
     let horse3 = e.debug_place(3, "horse_minus");
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let pos = core.players[3]
             .hand
             .iter()
@@ -3185,7 +3164,7 @@ fn boss_nianshou_nianrui_mengtai() {
         "准备置位已跑"
     );
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         core.player_mut(1).skip_next_draw = true;
         core.turn.skip_play_phase = true;
     }
@@ -3322,9 +3301,9 @@ fn boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou() {
     e.debug_set_hp(2, 8);
     e.debug_set_hp(3, 8);
     let _sha1 = e.debug_place(1, "sha");
-    let h0 = e.debug_place(0, "tao");
-    let h2 = e.debug_place(2, "shan");
-    let h3 = e.debug_place(3, "wugu");
+    let _h0 = e.debug_place(0, "tao");
+    let _h2 = e.debug_place(2, "shan");
+    let _h3 = e.debug_place(3, "wugu");
     // 杀 0 号（醉酒 +1 → 2 伤害）
     play(&mut e, _sha1, vec![0]);
     drain_choices(&mut e);
@@ -3435,7 +3414,7 @@ fn boss_heiwuchang_guiji_taiping_suoming_xixing() {
     }
 
     // 布阵：给 1 号判定区放一张乐（鬼计目标）；清全场手牌
-    let le = e.debug_place_judge(1, "le");
+    let _le = e.debug_place_judge(1, "le");
     for t in [0u8, 1, 2, 3] {
         e.debug_clear_hand(t);
     }
@@ -3947,7 +3926,7 @@ fn boss_nianshou_ruizhi_prune() {
     e.debug_clear_hand(0);
     let eq0 = [e.debug_place(0, "armor"), e.debug_place(0, "horse_plus")];
     for c in eq0.iter() {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let pos = core.players[0]
             .hand
             .iter()
@@ -3963,10 +3942,10 @@ fn boss_nianshou_ruizhi_prune() {
         e.debug_place(0, "wugu"),
     ];
     e.debug_clear_hand(2);
-    let h2 = e.debug_place(2, "tao");
+    let _h2 = e.debug_place(2, "tao");
     let eq2 = e.debug_place(2, "armor");
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let pos = core.players[2]
             .hand
             .iter()
@@ -4068,7 +4047,7 @@ fn boss_shuishenxuanming_zirun_draw_all() {
     // ① 自润摸牌非对称：给 0 号装备；各清手后推进到 1 号判定锚
     let armor = e.debug_place(0, "armor");
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let pos = core.players[0]
             .hand
             .iter()
@@ -4241,7 +4220,7 @@ fn boss_zhuanxu_zaoyi_grant_and_exec() {
     // 轮中摸牌可能含桃——显式 Pass 放弃救援）
     for _ in 0..48 {
         match e.open_choice() {
-            Some(c) => {
+            Some(_c) => {
                 answer(&mut e, ChoiceOption::Pass);
                 drain_choices(&mut e);
             }
@@ -4306,7 +4285,7 @@ fn boss_shuishengonggong_juehong_strip_enemies() {
     // 布阵（0 号回合前）：0 号带装备、2 号仅手牌、3 号空牌
     let armor = e.debug_place(0, "armor");
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let pos = core.players[0].hand.iter().position(|c| *c == armor).expect("armor in hand");
         let c = core.players[0].hand.remove(pos);
         core.players[0].equips.push(c);
@@ -4919,7 +4898,7 @@ fn boss_taihao_shenen_aura() {
     // ③ 挑战者摸牌 +1 / boss 侧不加：0 号（挑战者）下回合摸 3，1 号摸 2
     //    （当前在 0 号出牌阶段；先数现手牌再推进一整圈比较）
     let h0 = e.debug_hand(0).len();
-    let h1 = e.debug_hand(1).len();
+    let _h1 = e.debug_hand(1).len();
     e.debug_clear_hand(0);
     e.debug_clear_hand(1);
     next_phase(&mut e); // 0 Play→Discard
@@ -5054,7 +5033,7 @@ fn boss_zhuque_fentian_red_cards() {
     e.debug_set_hp(0, 4);
     e.debug_set_hp(3, 4);
     let sha1 = e.debug_place(1, "sha");
-    let out1 = play(&mut e, sha1, vec![2]);
+    let _out1 = play(&mut e, sha1, vec![2]);
     drain_choices(&mut e);
     assert_eq!(e.debug_hp(2), 25, "焚天：伤害视为火，毕方免疫（反证 nature=Fire）");
 
@@ -5149,7 +5128,7 @@ fn boss_zhuque_fentian_red_cards() {
     next_phase(&mut e2);
     drain_choices(&mut e2);
     advance_to_play(&mut e2, 1);
-    if let Some(b) = black_sha2 {
+    if let Some(_b) = black_sha2 {
         e2.debug_clear_hand(1);
         e2.debug_clear_hand(0);
         let b = e2.debug_place(1, "sha");
@@ -5277,12 +5256,12 @@ fn boss_qinglong_releiji_thunder_judge() {
         drain_choices(&mut e);
         e
     };
-    let mut e = run_club(54001);
+    let e = run_club(54001);
     assert_eq!(e.debug_hp(1), 4, "梅花：雷击持有者回复 1");
     assert_eq!(e.debug_hp(2), 3, "梅花：座位序下一名（2 号=攻击者）受 1 雷伤");
 
     // ② 黑桃判定：目标受 2 点雷伤、持有者不回
-    let mut e = {
+    let e = {
         let mut e = Engine::new_boss_stage(54002, 4, 1, 3, 6, 4, 0);
         e.debug_set_general_def(1, qinglong_def);
         e.debug_set_hp(1, 4);
@@ -5303,7 +5282,7 @@ fn boss_qinglong_releiji_thunder_judge() {
     assert_eq!(e.debug_hp(2), 2, "黑桃：目标受 2 点雷伤");
 
     // ③ 红桃判定：无事
-    let mut e = {
+    let e = {
         let mut e = Engine::new_boss_stage(54003, 4, 1, 3, 6, 4, 0);
         e.debug_set_general_def(1, qinglong_def);
         e.debug_set_hp(1, 4);
@@ -5331,7 +5310,7 @@ fn boss_qinglong_releiji_thunder_judge() {
     let sha = e.debug_place(0, "sha");
     let shan = e.debug_place(1, "shan");
     play(&mut e, sha, vec![1]);
-    let c = e.open_choice().expect("闪询问挂起");
+    let _c = e.open_choice().expect("闪询问挂起");
     e.debug_set_deck_top_by(|def| def.suit == engine_native::catalog::Suit::Spade);
     answer(&mut e, ChoiceOption::Card(shan));
     drain_choices(&mut e);
@@ -5363,7 +5342,7 @@ fn boss_qinglong_releiji_thunder_judge() {
     assert_zone_conservation(&e);
 
     // ⑥ 存档往返
-    let mut e = run_club(54006);
+    let e = run_club(54006);
     let snap = e.save();
     let r = Engine::restore(&snap).expect("往返");
     assert!(r.state_core().skills.contains_key(&(1, rdef)), "雷击实例往返");
@@ -5518,11 +5497,11 @@ fn boss_yingzhao_sipu_use_ban_first_two() {
     let sha = e.debug_place(2, "sha");
     // 巡游可能取到装备牌自动装上（马使距离+1）——清除装备后激活
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let eqs: Vec<u32> = core.player_mut(1).equips.drain(..).collect();
         core.discard.extend(eqs);
     }
-    let out = play(&mut e, sha, vec![1]);
+    let _out = play(&mut e, sha, vec![1]);
     drain_choices(&mut e);
     assert!(e.state_core().has_skill(1, sdef), "体力≤一半 → 司圃激活");
 
@@ -5532,7 +5511,7 @@ fn boss_yingzhao_sipu_use_ban_first_two() {
     e.debug_clear_hand(1);
     e.debug_clear_hand(2);
     {
-        let mut core = e.state_core_mut();
+        let core = e.state_core_mut();
         let eqs: Vec<u32> = core.player_mut(1).equips.drain(..).collect();
         core.discard.extend(eqs);
     }
@@ -5600,7 +5579,7 @@ fn boss_yingzhao_sipu_use_ban_first_two() {
     e.debug_clear_hand(2);
     e.debug_set_hp(1, 1);
     let tao_yz = e.debug_place(1, "tao");
-    let tao_2 = e.debug_place(2, "tao");
+    let _tao_2 = e.debug_place(2, "tao");
     e.debug_deal_damage(Some(2), 1, 2, DamageNature::Normal);
     drain_choices(&mut e);
     let c = e.open_choice().expect("濒死询问应挂起");
@@ -6493,7 +6472,7 @@ fn boss_hundun_wuzang_draw_and_hand_limit() {
     // ② 手牌上限基数 0：进入弃牌阶段应弃到 0（机甲等其余加成为 0）
     //    ——hand_limit(1)=25-25=0
     e.debug_clear_hand(1);
-    for i in 0..3 {
+    for _i in 0..3 {
         let c = e.debug_place(1, "tao");
         let _ = c;
     }
@@ -6577,7 +6556,7 @@ fn boss_zhuyin_xiongshou_semantics() {
 #[test]
 fn boss_stage_opening_and_first_actor() {
     // 关卡面：boss（1 号）8 张、挑战者 4 张、回合起点=2 号（boss 下下家）
-    let mut e = Engine::new_boss_stage(24001, 4, 1, 3, 8, 4, 2);
+    let e = Engine::new_boss_stage(24001, 4, 1, 3, 8, 4, 2);
     assert_eq!(e.debug_hand(1).len(), 8, "boss 关卡发牌数 8");
     assert_eq!(e.debug_hand(0).len(), 4, "挑战者发牌数 4");
     assert_eq!(e.debug_hand(2).len(), 4, "挑战者发牌数 4");
@@ -6589,11 +6568,11 @@ fn boss_stage_opening_and_first_actor() {
     assert_eq!(r.turn().current, 2, "回合起点往返一致");
     assert_eq!(r.debug_hand(1).len(), 8, "boss 手牌往返一致");
     // 起点越界回退 0
-    let mut e2 = Engine::new_boss_stage(24002, 3, 2, 2, 6, 4, 9);
+    let e2 = Engine::new_boss_stage(24002, 3, 2, 2, 6, 4, 9);
     assert_eq!(e2.turn().current, 0, "非法起点回退 0");
     assert_eq!(e2.debug_hand(2).len(), 6, "boss 发牌数 6");
     // 标准构造回归：各 4 张、起点 0
-    let mut e3 = Engine::new_boss(24003, 4, 0, 3);
+    let e3 = Engine::new_boss(24003, 4, 0, 3);
     assert_eq!(e3.turn().current, 0, "标准起点 0");
     for p in 0..4 {
         assert_eq!(e3.debug_hand(p).len(), 4, "标准各 4 张");
@@ -6651,7 +6630,6 @@ fn boss_mode_add_fellow_seat_expansion() {
     if let Some(c) = e.open_choice() {
         assert_eq!(c.spec.prompt, "dying_save");
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit_cmd(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert!(!e.debug_alive(1));
@@ -6676,13 +6654,13 @@ fn doudizhu_binglin_opening_draw() {
     assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
     assert!(!e.debug_alive(0), "地主应死亡");
     // 开局后存档往返（换标准变体局验证）：
-    let mut s2 = Engine::new_doudizhu_binglin(2151, 3, 1);
+    let s2 = Engine::new_doudizhu_binglin(2151, 3, 1);
     let snap = s2.save();
     let r = Engine::restore(&snap).expect("binglin 局存档往返");
     assert_eq!(r.debug_hand(1).len(), 5, "恢复后地主（1 号）手牌一致");
     assert_eq!(r.debug_hand(0).len(), 4, "恢复后农民手牌一致");
     // 标准变体回归：各 4 张
-    let mut s3 = Engine::new_doudizhu(2152, 3, 0);
+    let s3 = Engine::new_doudizhu(2152, 3, 0);
     for p in 0..3 {
         assert_eq!(s3.debug_hand(p).len(), 4, "标准斗地主各 4 张");
     }
@@ -6748,7 +6726,6 @@ fn drain_choices(e: &mut Engine) {
         match e.open_choice() {
             Some(c) => {
                 let (cid, obs) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
             }
             None => break,
@@ -6781,7 +6758,6 @@ fn pass_nullify_windows(e: &mut Engine) {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (cid, obs) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(
                     e,
                     obs,
@@ -6917,7 +6893,6 @@ fn versus_4v4_eight_seats_team_victory() {
         assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
         while let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit_cmd(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![] });
         }
     }
@@ -6959,7 +6934,7 @@ fn versus_mode_team_victory_and_rewards() {
     e.debug_clear_hand(0);
     e.debug_clear_hand(1);
     e.debug_place(1, "shan");
-    let armor_like = e.debug_place(1, "sha");
+    let _armor_like = e.debug_place(1, "sha");
     e.debug_set_hp(0, 1);
     let out = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
     assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
@@ -7548,21 +7523,6 @@ fn identity_matrix_for_supported_seats() {
     }
 }
 
-/// 按提示给出合法的确定性应答：弃牌取前 min 张，其余取首选项（确认/放弃）。
-fn answer_first_legal(choice: &OpenChoice) -> Vec<ChoiceOption> {
-    if choice.spec.prompt == "discard_to_limit" {
-        return choice
-            .spec
-            .options
-            .iter()
-            .filter(|o| matches!(o, ChoiceOption::Card(_)))
-            .copied()
-            .take(choice.spec.min)
-            .collect();
-    }
-    vec![choice.spec.options[0]]
-}
-
 /// N06 装备惩罚：主公杀忠臣弃掉全部手牌**与装备**（ADR 0711 用例深化）。
 #[test]
 fn identity_lord_penalty_discards_equips() {
@@ -7597,105 +7557,6 @@ fn identity_lord_penalty_discards_equips() {
 /// N06：完整身份局重放——整轮推进 + 逐个消灭反贼与内奸 → 主公方胜。
 #[test]
 fn identity_full_match_replay_reaches_lord_side_victory() {
-    fn advance_one_phase(e: &mut Engine) {
-        // 出牌阶段攻击脚本：有杀则对下一位存活玩家出杀
-        if e.turn().phase == Phase::Play {
-            let actor = e.turn().current;
-            let sha = e
-                .debug_hand(actor)
-                .iter()
-                .copied()
-                .find(|c| e.catalog().card_kind(*c) == CardKind::Sha);
-            if let Some(sha) = sha {
-                let target = e.state_core().next_alive(actor);
-                let out = e.submit(GameCommand {
-                    actor,
-                    expected_revision: e.revision(),
-                    dedup_id: fresh_dedup(),
-                    action: GameAction::PlayCard {
-                        card: sha,
-                        targets: vec![target],
-                    },
-                });
-                match out {
-                    CommandOutcome::Rejected(_) => {} // 杀限一次等 → 推进阶段
-                    other => {
-                        // 排干段内链式选择（响应/濒死/无懈/改判/天妒）
-                        let mut o = other;
-                        loop {
-                            o = match o {
-                                CommandOutcome::Suspended => e.resume(),
-                                CommandOutcome::Pending { choice } => {
-                                    let sel = if choice.spec.prompt == "discard_to_limit" {
-                                        choice
-                                            .spec
-                                            .options
-                                            .iter()
-                                            .filter(|o| matches!(o, ChoiceOption::Card(_)))
-                                            .copied()
-                                            .take(choice.spec.min)
-                                            .collect()
-                                    } else {
-                                        vec![choice.spec.options[0]]
-                                    };
-                                    let a = choice.observer;
-                                    let cid = choice.id;
-                                    e.submit(GameCommand {
-                                        actor: a,
-                                        expected_revision: e.revision(),
-                                        dedup_id: fresh_dedup(),
-                                        action: GameAction::Answer {
-                                            choice_id: cid,
-                                            selection: sel,
-                                        },
-                                    })
-                                }
-                                CommandOutcome::Accepted { .. } => return,
-                                CommandOutcome::Rejected(r) => {
-                                    panic!("replay rejected: {r:?}")
-                                }
-                            };
-                        }
-                    }
-                }
-                return;
-            }
-        }
-        let mut out = next_phase(e);
-        loop {
-            match out {
-                CommandOutcome::Suspended => out = e.resume(),
-                CommandOutcome::Pending { choice } => {
-                    let sel = if choice.spec.prompt == "discard_to_limit" {
-                        choice
-                            .spec
-                            .options
-                            .iter()
-                            .filter(|o| matches!(o, ChoiceOption::Card(_)))
-                            .copied()
-                            .take(choice.spec.min)
-                            .collect()
-                    } else {
-                        vec![choice.spec.options[0]]
-                    };
-                    let a = choice.observer;
-                    let cid = choice.id;
-                    out = e.submit(GameCommand {
-                        actor: a,
-                        expected_revision: e.revision(),
-                        dedup_id: fresh_dedup(),
-                        action: GameAction::Answer {
-                            choice_id: cid,
-                            selection: sel,
-                        },
-                    });
-                }
-                CommandOutcome::Accepted { .. } => return,
-                CommandOutcome::Rejected(r) => panic!("replay rejected: {r:?}"),
-            }
-        }
-    }
-
     let mut e = Engine::new_identity(321, 5);
     let mut doomed = seats_with_role(&e, Role::Rebel);
     doomed.extend(seats_with_role(&e, Role::Traitor));
@@ -8552,7 +8413,7 @@ fn assert_zone_conservation_named(e: &Engine, at: &str) {
     ids.extend(core.discard.iter().copied());
     ids.extend(core.table.iter().copied());
     ids.sort_unstable();
-    let total = ids.len();
+    let _total = ids.len();
     let dups: Vec<u32> = ids.windows(2).filter(|w| w[0] == w[1]).map(|w| w[0]).collect();
     ids.dedup();
     assert!(dups.is_empty(), "{at}: 重复实体牌 {dups:?}");
@@ -8565,7 +8426,7 @@ fn reshuffle_conserves_every_card_exactly_once() {
     let mut e = Engine::new(301, 4);
     advance_to_play(&mut e, 0);
     let mut attacked = false;
-    for cmd in 0..600 {
+    for _cmd in 0..600 {
         if e.outcome().is_some() {
             break;
         }
@@ -8687,7 +8548,7 @@ fn savage_nullify_after_deck_drain_conserves() {
         },
     });
     assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
-    let out = e.submit(GameCommand {
+    let _out = e.submit(GameCommand {
         actor: 2,
         expected_revision: e.revision(),
         dedup_id: fresh_dedup(),
@@ -8708,7 +8569,7 @@ fn savage_nullify_after_deck_drain_conserves() {
     ids.extend(core.discard.iter().copied());
     ids.extend(core.table.iter().copied());
     ids.sort_unstable();
-    let total = ids.len();
+    let _total = ids.len();
     let dups: Vec<u32> = ids.windows(2).filter(|w| w[0] == w[1]).map(|w| w[0]).collect();
     ids.dedup();
     assert!(dups.is_empty(), "重复实体牌 {dups:?}");
@@ -8753,7 +8614,7 @@ fn aoe_target_freeze_at_commit() {
     play(&mut e, savage, vec![]);
     // 2 号（1血）无杀 → 1 点 → 濒死 → 死亡
     // 队列继续：3、4 各无杀受伤
-    let out = next_phase(&mut e);
+    let _out = next_phase(&mut e);
     // 南蛮结算完毕
     assert!(!e.debug_alive(2), "2 号应死亡");
     assert!(e.debug_alive(3) && e.debug_alive(4));
@@ -10182,29 +10043,29 @@ fn lvbu_wushuang_sha_needs_two_dodges() {
     let c = e.open_choice().expect("第一张闪询问");
     assert_eq!(c.spec.prompt, "respond_shan");
     assert_eq!(c.observer, 1);
-    let Shan1 = e.debug_hand(1)[0];
+    let shan1 = e.debug_hand(1)[0];
     let cid = c.id;
     let out = e.submit(GameCommand {
         actor: 1,
         expected_revision: e.revision(),
         dedup_id: fresh_dedup(),
-        action: GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(Shan1)] },
+        action: GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(shan1)] },
     });
     assert!(matches!(out, CommandOutcome::Pending { .. }), "无双下第一张闪后应继续询问: {out:?}");
     // 第二张闪
     let c = e.open_choice().expect("第二张闪询问");
     assert_eq!(c.spec.prompt, "respond_shan");
-    let Shan2 = e.debug_hand(1).iter().copied().find(|c| e.catalog().card_kind(*c) == CardKind::Shan).expect("第二张闪");
+    let shan2 = e.debug_hand(1).iter().copied().find(|c| e.catalog().card_kind(*c) == CardKind::Shan).expect("第二张闪");
     let cid = c.id;
     let out = e.submit(GameCommand {
         actor: 1,
         expected_revision: e.revision(),
         dedup_id: fresh_dedup(),
-        action: GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(Shan2)] },
+        action: GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Card(shan2)] },
     });
     assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
     assert_eq!(hp(&e, 1), 4, "两张闪应完全抵消伤害");
-    assert_eq!(discard_count(&e, Shan1) + discard_count(&e, Shan2), 2);
+    assert_eq!(discard_count(&e, shan1) + discard_count(&e, shan2), 2);
     assert_zone_conservation(&e);
 }
 
@@ -10629,7 +10490,6 @@ fn daqiao_guose_diamond_as_le() {
                     vec![]
                 };
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => match next_phase(&mut e) {
@@ -10727,12 +10587,10 @@ fn no_paoxiao_second_sha_rejected() {
 #[test]
 fn kof_m1_two_player_pure_command_endgame() {
     let mut e = Engine::new(733, 2);
-    let mut cmds = 0;
     let mut guard = 0;
     while e.outcome().is_none() {
         guard += 1;
         assert!(guard < 8000, "2 人局未收敛");
-        cmds += 1;
         let out = if let Some(c) = e.open_choice() {
             let sel: Vec<ChoiceOption> = c
                 .spec
@@ -10793,13 +10651,13 @@ fn kof_m1_two_player_pure_command_endgame() {
 /// 设置后 save→restore 往返保持一致；篡改任一字节改变哈希。
 #[test]
 fn guozhan_general_slots_roundtrip() {
-    let mut e = Engine::new(751, 4);
+    let e = Engine::new(751, 4);
     // 通过存档往返验证双将槽/明置状态保真
     let mut s0 = e.save();
     // 写入双将（直接构造：引擎尚无公开 setter，M1 数据模型以存档往返验证）
     s0.core.players[0].general_slots = [Some(0), Some(1)];
     s0.core.players[0].revealed_generals = [true, false];
-    let mut r = Engine::restore(&s0).expect("restore");
+    let r = Engine::restore(&s0).expect("restore");
     assert_eq!(r.state_hash(), {
         let mut base = Engine::restore(&s0).unwrap();
         let _ = &mut base;
@@ -10875,7 +10733,7 @@ fn guozhan_m3_faction_victory() {
     // 曹操(2)/司马懿(1) = 魏，关羽(5) = 蜀（STANDARD_GENERALS 下标），
     // 主将全部明置。
     let kingdoms_wei_wei_shu = |seed: u64| {
-        let mut e = Engine::new(seed, 3);
+        let e = Engine::new(seed, 3);
         let mut snap = e.save();
         snap.core.mode = GameMode::Kingdoms;
         for p in snap.core.players.iter_mut() {
@@ -10990,7 +10848,7 @@ fn guozhan_reveal_gating_view_isolation() {
 
     // 国战局：曹操(2)/司马懿(1)+孙权(17)/关羽(5)，全部暗置。
     let build = |seed: u64| -> Engine {
-        let mut e = Engine::new(seed, 3);
+        let e = Engine::new(seed, 3);
         let mut snap = e.save();
         snap.core.mode = GameMode::Kingdoms;
         snap.core.players[0].general_slots = [Some(2), None];
@@ -11090,7 +10948,7 @@ fn guozhan_m3_victory_regression_matrix() {
     use engine_native::state::GameMode;
 
     let build = |seed: u64, revealed: [bool; 2]| -> Engine {
-        let mut e = Engine::new(seed, 3);
+        let e = Engine::new(seed, 3);
         let mut snap = e.save();
         snap.core.mode = GameMode::Kingdoms;
         for p in snap.core.players.iter_mut() {
@@ -11335,7 +11193,6 @@ fn xuchu_luoyi_boosts_sha_damage() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -11359,21 +11216,15 @@ fn zhugeliang_guanxing_reorders_deck_top() {
         e.debug_clear_hand(p);
     }
     // 走到 0 的下一回合：判定阶段开始时观星闸门挂起
-    let mut gate_seen = false;
     let mut shown: Vec<u32> = Vec::new();
     let mut e2_saved: Option<engine_native::snap::StateSnapshot> = None;
     for _ in 0..128 {
-        let t = e.turn();
-        if t.current == 0 && t.phase == Phase::Judge && gate_seen {
-            break;
-        }
         match next_phase(&mut e) {
             CommandOutcome::Accepted { .. } => {}
             CommandOutcome::Pending { choice } => match choice.spec.prompt {
                 "trigger_confirm" => {
                     assert_eq!(choice.observer, 0, "观星闸门只问持有者");
                     answer(&mut e, ChoiceOption::Confirm);
-                    gate_seen = true;
                     // 确认后落位询问应同步挂起（同一命令段内）
                     let arr = e.open_choice().expect("guanxing_arrange 应挂起");
                     assert_eq!(arr.spec.prompt, "guanxing_arrange");
@@ -11568,7 +11419,7 @@ fn liubei_rende_gives_cards_and_heals() {
         panic!("应存在手牌选项");
     };
     answer_sel(&mut e, vec![ChoiceOption::Card(third)]);
-    let t2 = e.open_choice().expect("rende_target 应挂起");
+    let _t2 = e.open_choice().expect("rende_target 应挂起");
     answer_sel(&mut e, vec![ChoiceOption::Player(2)]);
     assert_eq!(e.debug_hp(0), 4, "累计已跨过 2 → 第二次不回血");
     assert_eq!(e.debug_hand(2).len(), 1, "第二目标收到一张");
@@ -12014,7 +11865,7 @@ fn host_assembler_prototype_contract() {
     // 注入国战局（全暗置）并恢复
     let build = |d: &[(u16, &'static str)]| -> Engine {
         use engine_native::state::GameMode;
-        let mut e = Engine::new(42, 3);
+        let e = Engine::new(42, 3);
         let mut snap = e.save();
         snap.core.mode = GameMode::Kingdoms;
         for (seat, slot) in snap.core.players.iter_mut().enumerate() {
@@ -12051,7 +11902,7 @@ fn n10a_private_choice_answer_hidden_from_others() {
     }
     let mut answered_card = None;
     for _ in 0..128 {
-        let actor = e.turn().current;
+        let _actor = e.turn().current;
         match next_phase(&mut e) {
             CommandOutcome::Accepted { .. } => {}
             CommandOutcome::Pending { choice } => match choice.spec.prompt {
@@ -12176,7 +12027,7 @@ fn n11a_auth_token_instance_and_generation_binding() {
 #[test]
 fn n11b_archive_header_and_length_validation() {
     use engine_native::archive::{decode_archive, encode_archive};
-    let mut e = Engine::new(443, 4);
+    let e = Engine::new(443, 4);
     let snap = e.save();
     let orig = encode_archive(&snap);
 
@@ -12207,7 +12058,7 @@ fn n11b_archive_header_and_length_validation() {
 #[test]
 fn n04f_snapshot_association_validation() {
     // (1) 将槽 65535 + 明置 → 拒绝（原探针缺陷）
-    let mut e = Engine::new(443, 4);
+    let e = Engine::new(443, 4);
     let base = e.save();
     let mut bad = base.clone();
     bad.core.players[0].general_slots = [Some(u16::MAX), None];
@@ -12277,7 +12128,7 @@ fn n04f_snapshot_association_validation() {
 /// 限制；救援——主公资格 + 用桃者为吴势力时桃回复 +1。
 #[test]
 fn n08_qingguo_qicai_jiuyuan() {
-    use engine_native::catalog::{CardKind, Suit};
+    use engine_native::catalog::Suit;
     // (1) 倾国：黑色手牌当闪；装备区黑牌不入选项
     let mut e = Engine::new(991, 3);
     // p1 先在自己回合把防具（目录默认黑桃）装进装备区——反例面：
@@ -12545,7 +12396,7 @@ fn n08_jijiu_red_card_as_tao() {
             break;
         }
     }
-    let red = red.expect("牌堆应含红色闪");
+    let _red = red.expect("牌堆应含红色闪");
     e3.debug_grant(1, "急救");
     e3.debug_set_hp(1, 1);
     e3.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal); // 自己回合内濒死
@@ -12733,7 +12584,7 @@ fn n08_jieyin_heals_both() {
     let d = e.open_choice().expect("jieyin_cards 应挂起");
     assert_eq!(d.spec.prompt, "jieyin_cards");
     answer_sel(&mut e, vec![ChoiceOption::Card(c1), ChoiceOption::Card(c2)]);
-    let t = e.open_choice().expect("jieyin_target 应挂起");
+    let _t = e.open_choice().expect("jieyin_target 应挂起");
     answer_sel(&mut e, vec![ChoiceOption::Player(1)]);
     assert_eq!(e.debug_hp(0), 3, "结姻回复自己 1 点");
     assert_eq!(e.debug_hp(1), 3, "结姻回复目标 1 点");
@@ -12765,7 +12616,7 @@ fn n08_fanjian_give_and_damage() {
     let skill = skill_id(&e, "反间");
     let out = submit_cmd(&mut e, 0, GameAction::ActivateSkill { skill });
     assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
-    let t = e.open_choice().expect("fanjian_target 应挂起");
+    let _t = e.open_choice().expect("fanjian_target 应挂起");
     answer_sel(&mut e, vec![ChoiceOption::Player(1)]);
     let sc = e.open_choice().expect("fanjian_suit 应挂起");
     assert_eq!((sc.spec.prompt, sc.spec.kind, sc.observer), ("fanjian_suit", engine_native::ChoiceKind::PickTag, 1));
@@ -12798,11 +12649,11 @@ fn n08_fanjian_give_and_damage() {
     let skill2 = skill_id(&e2, "反间");
     let out = submit_cmd(&mut e2, 0, GameAction::ActivateSkill { skill: skill2 });
     assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
-    let t = e2.open_choice().expect("fanjian_target 应挂起");
+    let _t = e2.open_choice().expect("fanjian_target 应挂起");
     answer_sel(&mut e2, vec![ChoiceOption::Player(1)]);
-    let sc = e2.open_choice().expect("fanjian_suit 应挂起");
+    let _sc = e2.open_choice().expect("fanjian_suit 应挂起");
     answer_sel(&mut e2, vec![ChoiceOption::Tag(0)]); // 选红桃
-    let p = e2.open_choice().expect("fanjian_pick 应挂起");
+    let _p = e2.open_choice().expect("fanjian_pick 应挂起");
     answer_sel(&mut e2, vec![ChoiceOption::Card(give2)]);
     assert!(e2.debug_hand(1).contains(&give2), "目标应获得反间牌");
     assert_eq!(e2.debug_hp(1), 4, "所选花色(红桃)与获得牌相符 → 不受伤");
@@ -12829,9 +12680,9 @@ fn n08_fanjian_give_and_damage() {
     let skill3 = skill_id(&e3, "反间");
     let out = submit_cmd(&mut e3, 0, GameAction::ActivateSkill { skill: skill3 });
     assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
-    let t = e3.open_choice().expect("fanjian_target 应挂起");
+    let _t = e3.open_choice().expect("fanjian_target 应挂起");
     answer_sel(&mut e3, vec![ChoiceOption::Player(1)]);
-    let sc = e3.open_choice().expect("fanjian_suit 应挂起");
+    let _sc = e3.open_choice().expect("fanjian_suit 应挂起");
     answer_sel(&mut e3, vec![ChoiceOption::Tag(3)]); // 选黑桃（不符）
     let _pick = e3.open_choice().expect("fanjian_pick 应挂起");
     let snap = e3.save();
@@ -12861,7 +12712,7 @@ fn n08_lijian_forces_duel() {
     let skill = skill_id(&e, "离间");
     let out = submit_cmd(&mut e, 0, GameAction::ActivateSkill { skill });
     assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
-    let d = e.open_choice().expect("lijian_discard 应挂起");
+    let _d = e.open_choice().expect("lijian_discard 应挂起");
     answer_sel(&mut e, vec![ChoiceOption::Card(discard)]);
     let t = e.open_choice().expect("lijian_targets 应挂起");
     assert_eq!(t.spec.prompt, "lijian_targets");
@@ -13228,26 +13079,6 @@ impl engine_native::view::SeatPolicy for PassivePolicy {
     }
 }
 
-/// 进攻策略：本回合有杀攻下一位存活；否则无动作（回退推进）。
-struct AttackPolicy;
-impl engine_native::view::SeatPolicy for AttackPolicy {
-    fn act(&mut self, input: &engine_native::view::PolicyInput) -> Option<GameAction> {
-        let seat = input.view.turn;
-        if input.view.turn == seat && input.view.phase == Phase::Play {
-            let sha = input.own_hand_kinds.iter().find(|(_, k)| *k == CardKind::Sha).map(|(c, _)| *c);
-            if let Some(sha) = sha {
-                let n = input.view.players.len();
-                let target = (1..n as u8).map(|d| (seat + d) % n as u8)
-                    .find(|s| input.view.players[*s as usize].alive);
-                if let Some(target) = target {
-                    return Some(GameAction::PlayCard { card: sha, targets: vec![target] });
-                }
-            }
-        }
-        None
-    }
-}
-
 /// 策略类型隔离：PassivePolicy 只能从 PolicyInput 决策——
 /// 驱动全程无 debug 干预，输入组装不改变权威状态。
 #[test]
@@ -13385,7 +13216,7 @@ fn n10_planner_baseline_completes_games() {
 #[test]
 fn n11_kof_session_parse_negatives() {
     // 空池（首字段为空 → split 保留空串，不再被 split_whitespace 吞掉）
-    let ok = "KOF1  18,17,10 0 1 1";
+    let _ok = "KOF1  18,17,10 0 1 1";
     // 用 examples/n11_kof.rs 的 KofSession::restore 逻辑
     // 通过 save/restore 往返覆盖（compile-time 只能走 example）
     // 此处直接测解析逻辑：复用 save 格式手工构造
@@ -13432,14 +13263,14 @@ fn e01_extension_registry_lifecycle() {
     let mut reg = ExtensionRegistry::new();
     let def = ExtensionDef { name: "ext_a", version: 1, description: "A" };
     assert!(!reg.is_installed("ext_a"));
-    reg.install(def);
+    reg.install(def).expect("安装");
     assert!(reg.is_installed("ext_a"));
     assert!(reg.is_enabled("ext_a"));
-    reg.disable("ext_a");
+    reg.disable("ext_a").expect("禁用");
     assert!(!reg.is_enabled("ext_a"));
-    reg.enable("ext_a");
+    reg.enable("ext_a").expect("启用");
     assert!(reg.is_enabled("ext_a"));
-    reg.uninstall("ext_a");
+    reg.uninstall("ext_a").expect("卸载");
     assert!(!reg.is_installed("ext_a"));
     assert!(!reg.is_enabled("ext_a"));
 }
@@ -14247,7 +14078,6 @@ fn standard_missing_generals_assembly_and_behaviors() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14269,7 +14099,6 @@ fn standard_missing_generals_assembly_and_behaviors() {
     assert!(pick.spec.options.contains(&ChoiceOption::Card(basic_card)));
     let hp1 = e.debug_hp(1);
     let (pid, pobs) = (pick.id, pick.observer);
-    drop(pick);
     submit_cmd(&mut e, pobs, GameAction::Answer {
         choice_id: pid,
         selection: vec![ChoiceOption::Card(basic_card)],
@@ -14311,7 +14140,6 @@ fn standard_missing_generals_assembly_and_behaviors() {
                 vec![g.spec.options[0]]
             };
             let (id2, obs2) = (g.id, g.observer);
-            drop(g);
             submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             continue;
         }
@@ -14361,7 +14189,6 @@ fn standard_missing_generals_assembly_and_behaviors() {
         "满血来源无回复选项"
     );
     let (cid, cobs) = (c.id, c.observer);
-    drop(c);
     submit_cmd(&mut e, cobs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Tag(0)] });
     assert_eq!(e.debug_hand(0).len(), hand0 - 1 + 1, "耀武：来源摸 1（弃杀+摸1）");
     assert_eq!(e.debug_hp(1), hp1 - 1, "伤害照常生效");
@@ -14381,7 +14208,6 @@ fn standard_missing_generals_assembly_and_behaviors() {
                 vec![g.spec.options[0]]
             };
             let (id2, obs2) = (g.id, g.observer);
-            drop(g);
             submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             continue;
         }
@@ -14419,7 +14245,6 @@ fn standard_missing_generals_assembly_and_behaviors() {
         }
         let sel = vec![c.spec.options[0]]; // Pass：放弃出闪
         let (id2, obs2) = (c.id, c.observer);
-        drop(c);
         submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
     };
     submit_cmd(&mut e, cobs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Tag(1)] });
@@ -14427,7 +14252,7 @@ fn standard_missing_generals_assembly_and_behaviors() {
 }
 
 /// 测试辅助：从快照读目录牌定义（耀武红杀注入用）。
-fn snap_deck_card(snap: &engine_native::StateSnapshot, card: u32) -> engine_native::catalog::CardDef {
+fn snap_deck_card(_snap: &engine_native::StateSnapshot, card: u32) -> engine_native::catalog::CardDef {
     // StateSnapshot 不携带目录；测试引擎的目录经全局标准目录读取。
     let e = Engine::new(1, 2);
     e.catalog().cards[card as usize].clone()
@@ -14458,14 +14283,12 @@ fn ganfuren_assembly_shushen_shenzhi() {
     let gate = e.open_choice().expect("淑慎确认门应挂起");
     assert_eq!((gate.spec.prompt, gate.observer), ("trigger_confirm", 0));
     let (gid, gobs) = (gate.id, gate.observer);
-    drop(gate);
     submit_cmd(&mut e, gobs, GameAction::Answer { choice_id: gid, selection: vec![ChoiceOption::Confirm] });
     let pick = e.open_choice().expect("淑慎目标选择应挂起");
     assert_eq!(pick.spec.prompt, "shushen_target");
     assert!(pick.spec.options.contains(&ChoiceOption::Player(1)));
     let hand1 = e.debug_hand(1).len();
     let (pid, pobs) = (pick.id, pick.observer);
-    drop(pick);
     submit_cmd(&mut e, pobs, GameAction::Answer { choice_id: pid, selection: vec![ChoiceOption::Player(1)] });
     assert_eq!(e.debug_hand(1).len(), hand1 + 1, "有手牌目标摸 1");
     assert_eq!(e.debug_hp(0), 3, "桃回复生效");
@@ -14477,11 +14300,9 @@ fn ganfuren_assembly_shushen_shenzhi() {
     assert!(matches!(out, CommandOutcome::Pending { .. } | CommandOutcome::Accepted { .. }), "{out:?}");
     let gate2 = e.open_choice().expect("淑慎再次触发");
     let (gid2, gobs2) = (gate2.id, gate2.observer);
-    drop(gate2);
     submit_cmd(&mut e, gobs2, GameAction::Answer { choice_id: gid2, selection: vec![ChoiceOption::Confirm] });
     let pick2 = e.open_choice().expect("淑慎目标选择 2");
     let (pid2, pobs2) = (pick2.id, pick2.observer);
-    drop(pick2);
     submit_cmd(&mut e, pobs2, GameAction::Answer { choice_id: pid2, selection: vec![ChoiceOption::Player(2)] });
     assert_eq!(e.debug_hand(2).len(), 2, "无手牌目标摸 2");
 
@@ -14505,7 +14326,6 @@ fn ganfuren_assembly_shushen_shenzhi() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14520,7 +14340,6 @@ fn ganfuren_assembly_shushen_shenzhi() {
     let gate3 = e.open_choice().expect("神智确认门应挂起");
     assert_eq!((gate3.spec.prompt, gate3.observer), ("trigger_confirm", 0));
     let (gid3, gobs3) = (gate3.id, gate3.observer);
-    drop(gate3);
     let hand0 = e.debug_hand(0).len();
     let hp0 = e.debug_hp(0);
     submit_cmd(&mut e, gobs3, GameAction::Answer { choice_id: gid3, selection: vec![ChoiceOption::Confirm] });
@@ -14547,7 +14366,6 @@ fn ganfuren_assembly_shushen_shenzhi() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14561,7 +14379,6 @@ fn ganfuren_assembly_shushen_shenzhi() {
     }
     let gate4 = e.open_choice().expect("神智确认门（放弃路径）");
     let (gid4, gobs4) = (gate4.id, gate4.observer);
-    drop(gate4);
     let hand0 = e.debug_hand(0).len();
     submit_cmd(&mut e, gobs4, GameAction::Answer { choice_id: gid4, selection: vec![] });
     assert_eq!(e.debug_hand(0).len(), hand0, "放弃不弃牌");
@@ -14605,7 +14422,6 @@ fn lidian_assembly_xunxun_wangxi() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14620,7 +14436,6 @@ fn lidian_assembly_xunxun_wangxi() {
     let gate = e.open_choice().expect("恂恂确认门应挂起");
     assert_eq!((gate.spec.prompt, gate.observer), ("trigger_confirm", 0));
     let (gid, gobs) = (gate.id, gate.observer);
-    drop(gate);
     submit_cmd(&mut e, gobs, GameAction::Answer { choice_id: gid, selection: vec![ChoiceOption::Confirm] });
     let arrange = e.open_choice().expect("恂恂观看选择应挂起");
     assert_eq!(arrange.spec.prompt, "xunxun_arrange");
@@ -14637,7 +14452,6 @@ fn lidian_assembly_xunxun_wangxi() {
         _ => None,
     }).collect();
     let (aid, aobs) = (arrange.id, arrange.observer);
-    drop(arrange);
     submit_cmd(&mut e, aobs, GameAction::Answer {
         choice_id: aid,
         selection: vec![ChoiceOption::Card(chosen[0]), ChoiceOption::Card(chosen[1])],
@@ -14672,7 +14486,6 @@ fn lidian_assembly_xunxun_wangxi() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14693,7 +14506,6 @@ fn lidian_assembly_xunxun_wangxi() {
     let gate2 = e.open_choice().expect("忘隙确认门应挂起");
     assert_eq!((gate2.spec.prompt, gate2.observer), ("trigger_confirm", 0));
     let (gid2, gobs2) = (gate2.id, gate2.observer);
-    drop(gate2);
     submit_cmd(&mut e, gobs2, GameAction::Answer { choice_id: gid2, selection: vec![ChoiceOption::Confirm] });
     assert_eq!(e.debug_hand(0).len(), hand0 - 1 + 1, "忘隙：自己摸 1（弃杀+摸1）");
     assert_eq!(e.debug_hand(1).len(), hand1 + 1, "忘隙：对方摸 1");
@@ -14716,7 +14528,6 @@ fn lidian_assembly_xunxun_wangxi() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14736,7 +14547,6 @@ fn lidian_assembly_xunxun_wangxi() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     let gate3 = e.open_choice().expect("忘隙确认门（放弃）");
     let (gid3, gobs3) = (gate3.id, gate3.observer);
-    drop(gate3);
     submit_cmd(&mut e, gobs3, GameAction::Answer { choice_id: gid3, selection: vec![] });
     assert_eq!(e.debug_hand(0).len(), hand0 - 1, "放弃：不再摸牌");
     assert!(e.debug_hand(1).is_empty(), "放弃：对方不摸");
@@ -14805,7 +14615,6 @@ fn yiji_assembly_jijie_jiyuan() {
     assert!(pick.spec.options.contains(&ChoiceOption::Player(1)));
     assert!(pick.spec.options.contains(&ChoiceOption::Player(0)), "上游无目标过滤器：可自选");
     let (pid, pobs) = (pick.id, pick.observer);
-    drop(pick);
     submit_cmd(&mut e, pobs, GameAction::Answer { choice_id: pid, selection: vec![ChoiceOption::Player(1)] });
     assert!(e.debug_hand(1).contains(&deck_bottom), "牌堆底牌交给 1 号");
     assert_eq!(e.debug_hand(1).len(), hand1 + 1);
@@ -14827,14 +14636,12 @@ fn yiji_assembly_jijie_jiyuan() {
     let gate = e.open_choice().expect("急援确认门应挂起");
     assert_eq!((gate.spec.prompt, gate.observer), ("trigger_confirm", 0));
     let (gid, gobs) = (gate.id, gate.observer);
-    drop(gate);
     submit_cmd(&mut e, gobs, GameAction::Answer { choice_id: gid, selection: vec![ChoiceOption::Confirm] });
     // 急援摸 1 + 濒死自救询问（1 号手中有桃）挂起。
     assert_eq!(e.debug_hand(1).len(), 2, "急援：濒死者摸 1（桃 + 急援牌）");
     let save = e.open_choice().expect("濒死自救询问应挂起");
     assert_eq!(save.observer, 1);
     let (sid, sobs) = (save.id, save.observer);
-    drop(save);
     submit_cmd(&mut e, sobs, GameAction::Answer {
         choice_id: sid,
         selection: vec![ChoiceOption::Card(self_peach)],
@@ -14862,7 +14669,6 @@ fn yiji_assembly_jijie_jiyuan() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14884,7 +14690,6 @@ fn yiji_assembly_jijie_jiyuan() {
     let gate2 = e.open_choice().expect("急援确认门（死亡路径）");
     assert_eq!((gate2.spec.prompt, gate2.observer), ("trigger_confirm", 0));
     let (gid2, gobs2) = (gate2.id, gate2.observer);
-    drop(gate2);
     submit_cmd(&mut e, gobs2, GameAction::Answer { choice_id: gid2, selection: vec![ChoiceOption::Confirm] });
     // 无人救：急援摸的牌随死亡入弃牌堆，1 号死亡（存活 2 人对局继续）。
     for _ in 0..16 {
@@ -14898,7 +14703,6 @@ fn yiji_assembly_jijie_jiyuan() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -14948,7 +14752,6 @@ fn yuanshu_assembly_wangzun_tongji() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -14986,7 +14789,6 @@ fn yuanshu_assembly_wangzun_tongji() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15006,7 +14808,6 @@ fn yuanshu_assembly_wangzun_tongji() {
     let ask = e.open_choice().expect("同疾弃牌询问应挂起");
     assert_eq!((ask.spec.prompt, ask.observer), ("tongji_transfer_discard", 2));
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer {
         choice_id: aid,
         selection: vec![ChoiceOption::Card(victim_card)],
@@ -15028,7 +14829,6 @@ fn yuanshu_assembly_wangzun_tongji() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -15057,7 +14857,6 @@ fn yuanshu_assembly_wangzun_tongji() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15076,7 +14875,6 @@ fn yuanshu_assembly_wangzun_tongji() {
     assert!(matches!(out, CommandOutcome::Pending { .. } | CommandOutcome::Accepted { .. }), "{out:?}");
     let ask2 = e.open_choice().expect("同疾弃牌询问（取消路径）");
     let (aid2, aobs2) = (ask2.id, ask2.observer);
-    drop(ask2);
     submit_cmd(&mut e, aobs2, GameAction::Answer { choice_id: aid2, selection: vec![] });
     assert!(e.debug_hand(2).contains(&victim_card2), "取消：不弃牌");
     // 取消：不转移——2 号无闪，伤害直接结算到 2 号。
@@ -15093,7 +14891,6 @@ fn yuanshu_assembly_wangzun_tongji() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -15123,7 +14920,6 @@ fn wuzhong_taoyuan_trick_behaviors() {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -15151,7 +14947,6 @@ fn wuzhong_taoyuan_trick_behaviors() {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -15186,7 +14981,6 @@ fn wugu_jiedao_trick_behaviors() {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -15209,7 +15003,6 @@ fn wugu_jiedao_trick_behaviors() {
             }).collect();
         }
         let (id2, obs2) = (ask.id, ask.observer);
-        drop(ask);
         submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: vec![chosen] });
     }
     for p in 0..3 {
@@ -15239,7 +15032,6 @@ fn wugu_jiedao_trick_behaviors() {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -15251,7 +15043,6 @@ fn wugu_jiedao_trick_behaviors() {
     let ask = e.open_choice().expect("借刀选择应挂起");
     assert_eq!((ask.spec.prompt, ask.observer), ("jiedao_sha_or_give", 1));
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer { choice_id: aid, selection: vec![ChoiceOption::Tag(0)] });
     assert_eq!(e.debug_hp(2), 3, "出杀路径：2 号受 1 伤（无出闪窗口，登记差异）");
     assert_eq!(e.debug_hp(1), 4, "持有者不掉血");
@@ -15276,7 +15067,6 @@ fn wugu_jiedao_trick_behaviors() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15295,7 +15085,6 @@ fn wugu_jiedao_trick_behaviors() {
         match e.open_choice() {
             Some(c) if c.spec.prompt == "nullify_window" => {
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -15306,7 +15095,6 @@ fn wugu_jiedao_trick_behaviors() {
     }
     let ask2 = e.open_choice().expect("借刀选择（交械路径）");
     let (aid2, aobs2) = (ask2.id, ask2.observer);
-    drop(ask2);
     submit_cmd(&mut e, aobs2, GameAction::Answer { choice_id: aid2, selection: vec![ChoiceOption::Tag(1)] });
     assert!(!e.save().core.players[1].equips.contains(&weapon), "1 号交出武器");
     assert!(e.save().core.players[2].equips.contains(&weapon), "2 号获得武器");
@@ -15376,7 +15164,6 @@ fn renwang_blocks_black_sha_only() {
                     vec![]
                 };
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15423,7 +15210,6 @@ fn renwang_blocks_black_sha_only() {
                     vec![c.spec.options[0]]
                 };
                 let (id2, obs2) = (c.id, c.observer);
-                drop(c);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -15467,7 +15253,6 @@ fn qinggang_pierces_armor() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -15497,7 +15282,6 @@ fn qinggang_pierces_armor() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15536,7 +15320,6 @@ fn qinggang_pierces_armor() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -15565,7 +15348,6 @@ fn qinggang_pierces_armor() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15608,7 +15390,6 @@ fn qinggang_pierces_armor() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -15647,7 +15428,6 @@ fn qilin_bow_discards_target_horse_on_sha_damage() {
     assert_eq!((ask.spec.prompt, ask.observer), ("qilin_discard_horse", 0));
     assert!(ask.spec.options.contains(&ChoiceOption::Card(horse)));
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer {
         choice_id: aid,
         selection: vec![ChoiceOption::Card(horse)],
@@ -15675,7 +15455,6 @@ fn qilin_bow_discards_target_horse_on_sha_damage() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15700,7 +15479,6 @@ fn qilin_bow_discards_target_horse_on_sha_damage() {
     let ask2 = e.open_choice().expect("麒麟弓弃马询问（放弃路径）");
     assert!(ask2.spec.options.contains(&ChoiceOption::Card(horse2)));
     let (aid2, aobs2) = (ask2.id, ask2.observer);
-    drop(ask2);
     submit_cmd(&mut e, aobs2, GameAction::Answer { choice_id: aid2, selection: vec![] });
     assert!(e.save().core.players[1].equips.contains(&horse2), "放弃：马保留");
     assert_eq!(e.debug_hp(1), 2, "放弃：伤害照常");
@@ -15735,7 +15513,6 @@ fn hanbing_prevents_damage_discards_two_cards() {
     let ask = e.open_choice().expect("寒冰防止确认应挂起");
     assert_eq!((ask.spec.prompt, ask.observer), ("hanbing_prevent_confirm", 0));
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer { choice_id: aid, selection: vec![ChoiceOption::Confirm] });
     // 目标自选第一次：弃装备马。
     let ask = e.open_choice().expect("寒冰目标自选弃牌应挂起");
@@ -15743,7 +15520,6 @@ fn hanbing_prevents_damage_discards_two_cards() {
     assert!(ask.spec.options.contains(&ChoiceOption::Card(c1)) && ask.spec.options.contains(&ChoiceOption::Card(horse)), "选项=手牌+装备");
     assert_eq!((ask.spec.min, ask.spec.allow_cancel), (1, false), "强制弃置不可取消");
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer { choice_id: aid, selection: vec![ChoiceOption::Card(horse)] });
     assert!(!e.debug_equips(1).contains(&horse), "选中的马被弃");
     // 目标自选第二次：只剩手牌桃。
@@ -15751,7 +15527,6 @@ fn hanbing_prevents_damage_discards_two_cards() {
     assert_eq!((ask.spec.prompt, ask.observer), ("hanbing_target_discard", 1));
     assert_eq!(ask.spec.options, vec![ChoiceOption::Card(c1)], "装备已空仅剩手牌");
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer { choice_id: aid, selection: vec![ChoiceOption::Card(c1)] });
     assert_eq!(e.debug_hp(1), 4, "寒冰：伤害被防止");
     assert!(!e.debug_hand(1).contains(&c1), "第二张弃手牌");
@@ -15776,7 +15551,6 @@ fn hanbing_prevents_damage_discards_two_cards() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15795,7 +15569,6 @@ fn hanbing_prevents_damage_discards_two_cards() {
     let ask2 = e.open_choice().expect("寒冰防止确认（放弃路径）");
     eprintln!("PROBE-HB2 ask2 prompt={} obs={}", ask2.spec.prompt, ask2.observer);
     let (aid2, aobs2) = (ask2.id, ask2.observer);
-    drop(ask2);
     submit_cmd(&mut e, aobs2, GameAction::Answer { choice_id: aid2, selection: vec![] });
     eprintln!("PROBE-HB2 after hp1={} hand1={:?}", e.debug_hp(1), e.debug_hand(1));
     assert_eq!(e.debug_hp(1), 3, "放弃：照常伤害（4→3）");
@@ -15858,7 +15631,6 @@ fn guanshi_forces_damage_after_dodge() {
     let shan_ask = e.open_choice().expect("出闪询问应挂起");
     assert_eq!(shan_ask.observer, 1);
     let (sid, sobs) = (shan_ask.id, shan_ask.observer);
-    drop(shan_ask);
     submit_cmd(&mut e, sobs, GameAction::Answer {
         choice_id: sid,
         selection: vec![ChoiceOption::Card(shan_t)],
@@ -15873,7 +15645,6 @@ fn guanshi_forces_damage_after_dodge() {
         "弃牌池不含贯石斧本体"
     );
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer {
         choice_id: aid,
         selection: vec![ChoiceOption::Card(d1), ChoiceOption::Card(d2)],
@@ -15900,7 +15671,6 @@ fn guanshi_forces_damage_after_dodge() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -15915,17 +15685,16 @@ fn guanshi_forces_damage_after_dodge() {
     e.debug_clear_hand(0);
     e.debug_clear_hand(1);
     // 来源持两张可弃牌（放弃路径需池 ≥2 才会开询问）。
-    let d3 = e.debug_place(0, "tao");
-    let d4 = e.debug_place(0, "shan");
+    let _d3 = e.debug_place(0, "tao");
+    let _d4 = e.debug_place(0, "shan");
     // 目标再持一张闪（放弃路径需要目标能出闪）。
     let _shan_extra = e.debug_place(1, "shan");
-    let shan_t2 = e.debug_place(1, "shan");
+    let _shan_t2 = e.debug_place(1, "shan");
     let sha2 = e.debug_place(0, "sha");
     play(&mut e, sha2, vec![1]);
-    let mut shan_ask2 = e.open_choice().expect("出闪询问（放弃路径）");
+    let shan_ask2 = e.open_choice().expect("出闪询问（放弃路径）");
     let (sid2, sobs2) = (shan_ask2.id, shan_ask2.observer);
     let first_opt = shan_ask2.spec.options.get(1).copied().or_else(|| shan_ask2.spec.options.first().copied());
-    drop(shan_ask2);
     // 用第一张可用闪应答（保证真正触发被闪路径）。
     submit_cmd(&mut e, sobs2, GameAction::Answer {
         choice_id: sid2,
@@ -15934,7 +15703,6 @@ fn guanshi_forces_damage_after_dodge() {
     let ask2 = e.open_choice().expect("贯石斧询问（放弃路径）");
     assert_eq!((ask2.spec.prompt, ask2.observer), ("guanshi_force_damage", 0));
     let (aid2, aobs2) = (ask2.id, ask2.observer);
-    drop(ask2);
     submit_cmd(&mut e, aobs2, GameAction::Answer { choice_id: aid2, selection: vec![] });
     assert_eq!(e.debug_hp(1), 3, "放弃：不强制伤害（被闪后无伤）");
 }
@@ -15963,7 +15731,6 @@ fn qinglong_replays_sha_after_dodge() {
     let shan_ask = e.open_choice().expect("出闪询问应挂起");
     assert_eq!(shan_ask.observer, 1);
     let (sid, sobs) = (shan_ask.id, shan_ask.observer);
-    drop(shan_ask);
     submit_cmd(&mut e, sobs, GameAction::Answer {
         choice_id: sid,
         selection: vec![ChoiceOption::Card(shan_t)],
@@ -15974,7 +15741,6 @@ fn qinglong_replays_sha_after_dodge() {
     assert!(replay.spec.options.contains(&ChoiceOption::Card(sha_b)));
     // 选第一张杀 → 新杀结算 → 目标再出闪 → 再追问 → 放弃 → 无伤。
     let (rid, robs) = (replay.id, replay.observer);
-    drop(replay);
     submit_cmd(&mut e, robs, GameAction::Answer {
         choice_id: rid,
         selection: vec![ChoiceOption::Card(sha_a)],
@@ -15983,7 +15749,6 @@ fn qinglong_replays_sha_after_dodge() {
     let shan_ask2 = e.open_choice().expect("第二杀的出闪询问");
     assert_eq!(shan_ask2.observer, 1);
     let (sid2, sobs2) = (shan_ask2.id, shan_ask2.observer);
-    drop(shan_ask2);
     submit_cmd(&mut e, sobs2, GameAction::Answer {
         choice_id: sid2,
         selection: vec![ChoiceOption::Card(shan_t2)],
@@ -15991,7 +15756,6 @@ fn qinglong_replays_sha_after_dodge() {
     let replay2 = e.open_choice().expect("第二次青龙再杀询问");
     assert_eq!(replay2.spec.prompt, "qinglong_replay_sha");
     let (rid2, robs2) = (replay2.id, replay2.observer);
-    drop(replay2);
     submit_cmd(&mut e, robs2, GameAction::Answer {
         choice_id: rid2,
         selection: vec![],
@@ -16025,7 +15789,6 @@ fn zhangba_two_cards_as_sha() {
     let pick = e.open_choice().expect("丈八选两张手牌询问");
     assert_eq!((pick.spec.prompt, pick.spec.min), ("zhangba_pick_two", 2));
     let (pid, pobs) = (pick.id, pick.observer);
-    drop(pick);
     submit_cmd(&mut e, pobs, GameAction::Answer {
         choice_id: pid,
         selection: vec![ChoiceOption::Card(m1), ChoiceOption::Card(m2)],
@@ -16034,7 +15797,6 @@ fn zhangba_two_cards_as_sha() {
     let pick2 = e.open_choice().expect("丈八目标询问");
     assert_eq!(pick2.spec.prompt, "zhangba_sha_target");
     let (pid2, pobs2) = (pick2.id, pick2.observer);
-    drop(pick2);
     submit_cmd(&mut e, pobs2, GameAction::Answer {
         choice_id: pid2,
         selection: vec![ChoiceOption::Player(1)],
@@ -16053,7 +15815,6 @@ fn zhangba_two_cards_as_sha() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -16091,7 +15852,6 @@ fn cixiong_opposite_gender_discard_or_draw() {
     assert_eq!(ask.spec.options, vec![ChoiceOption::Card(hand_card)], "选项=目标手牌");
     assert_eq!((ask.spec.min, ask.spec.allow_cancel), (0, true), "可取消=令使用者摸");
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer {
         choice_id: aid,
         selection: vec![ChoiceOption::Card(hand_card)],
@@ -16118,7 +15878,6 @@ fn cixiong_opposite_gender_discard_or_draw() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -16138,7 +15897,6 @@ fn cixiong_opposite_gender_discard_or_draw() {
     let ask = e.open_choice().expect("雌雄取消询问应挂起");
     assert_eq!((ask.spec.prompt, ask.observer), ("cixiong_discard_choose", 1));
     let (aid, aobs) = (ask.id, ask.observer);
-    drop(ask);
     submit_cmd(&mut e, aobs, GameAction::Answer { choice_id: aid, selection: vec![] });
     assert_eq!(e.debug_hand(0).len(), before0 + 1, "取消=使用者摸 1");
     assert!(e.debug_hand(1).contains(&cancel_card), "目标手牌保留");
@@ -16148,7 +15906,6 @@ fn cixiong_opposite_gender_discard_or_draw() {
             Some(g) => {
                 let sel: Vec<ChoiceOption> = g.spec.options.iter().take(g.spec.min.max(1)).copied().collect();
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -16175,7 +15932,6 @@ fn cixiong_opposite_gender_discard_or_draw() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -16209,7 +15965,6 @@ fn cixiong_opposite_gender_discard_or_draw() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -16392,7 +16147,7 @@ fn kof_session_consistency_and_midrestore() {
         let gb = b.pools[1][0];
         let (w, _) = Session::play_game(seed + round as u64 * 77, [ga, gb]);
         let l = 1 - w;
-        let lost = b.pools[l].remove(0);
+        let _lost = b.pools[l].remove(0);
         let kept = b.pools[w].remove(0);
         b.pools[w].push(kept);
         b.wins[w] += 1;
@@ -16445,7 +16200,7 @@ fn kof_session_consistency_and_midrestore() {
             action: GameAction::NextPhase,
         }
     };
-    let mut setup = |e: &mut Engine| {
+    let setup = |e: &mut Engine| {
         for (seat, g) in [ga, gb].iter().enumerate() {
             for skill in general_skills(*g) {
                 e.debug_grant(seat as u8, skill);
@@ -16547,7 +16302,6 @@ fn fangtian_multi_target_sha() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => break,
@@ -16577,7 +16331,6 @@ fn fangtian_multi_target_sha() {
                     vec![]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit_cmd(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {

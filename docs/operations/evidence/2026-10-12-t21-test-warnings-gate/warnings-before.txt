@@ -1,0 +1,83 @@
+# engine-native 全目标警告（改前，git 45a3e72a = 3d207394 + 领取提交，cargo check --all-targets --message-format=json 去重）
+
+总计 623 条（唯一 lint+位置）
+
+## 按 lint
+
+ 409  dropping_references
+ 106  unused_variables
+  42  unused_mut
+  29  unused_imports
+  13  dead_code
+   8  unused_must_use
+   7  unused_assignments
+   4  unreachable_patterns
+   2  non_snake_case
+   2  noop_method_call
+   1  redundant_semicolons
+
+## 按文件
+
+ 170  crates/engine-native/tests/native_kernel.rs
+ 168  crates/engine-native/tests/g1_wudian.rs
+  80  crates/engine-native/tests/g1_shahai_mtg.rs
+  43  crates/engine-native/tests/g1_huanle.rs
+  38  crates/engine-native/tests/g1_shahai_swd.rs
+  32  crates/engine-native/tests/g1_shahai_gujian.rs
+  17  crates/engine-native/tests/g1_shahai_gwent.rs
+  16  crates/engine-native/tests/g1_hearth.rs
+  11  crates/engine-native/tests/g1_shahai_yunchou.rs
+   9  crates/engine-native/tests/a0_tag_registry.rs
+   8  crates/engine-native/tests/g1_d3.rs
+   6  crates/engine-native/tests/g1_wuxing.rs
+   5  crates/engine-native/tests/g1_shahai_zhenfa.rs
+   4  crates/engine-native/src/content/extension.rs
+   4  crates/engine-native/tests/g1_cardpile.rs
+   2  crates/engine-native/examples/n11_kof.rs
+   2  crates/engine-native/examples/probe_seed.rs
+   2  crates/engine-native/tests/replay_scenarios.rs
+   2  crates/engine-native/tests/auth_archive.rs
+   1  crates/engine-native/tests/e02_c3_lifecycle.rs
+   1  crates/engine-native/tests/boundary_snapshot.rs
+   1  crates/engine-native/examples/n10_table.rs
+   1  crates/engine-native/examples/n10_render_host.rs
+
+## 非机械类逐条（drop/unused_variables/unused_mut/unused_imports 以外）
+
+crates/engine-native/examples/n11_kof.rs:191:25  [unused_assignments]
+crates/engine-native/examples/probe_seed.rs:6:4  [dead_code]
+crates/engine-native/src/content/extension.rs:248:9  [unused_must_use]
+crates/engine-native/src/content/extension.rs:251:9  [unused_must_use]
+crates/engine-native/src/content/extension.rs:253:9  [unused_must_use]
+crates/engine-native/src/content/extension.rs:255:9  [unused_must_use]
+crates/engine-native/tests/a0_tag_registry.rs:307:8  [dead_code]
+crates/engine-native/tests/a0_tag_registry.rs:501:13  [unreachable_patterns]
+crates/engine-native/tests/a0_tag_registry.rs:502:13  [unreachable_patterns]
+crates/engine-native/tests/a0_tag_registry.rs:506:13  [unreachable_patterns]
+crates/engine-native/tests/a0_tag_registry.rs:507:13  [unreachable_patterns]
+crates/engine-native/tests/g1_d3.rs:46:8  [dead_code]
+crates/engine-native/tests/g1_d3.rs:52:8  [dead_code]
+crates/engine-native/tests/g1_hearth.rs:44:8  [dead_code]
+crates/engine-native/tests/g1_hearth.rs:245:5  [unused_assignments]
+crates/engine-native/tests/g1_huanle.rs:43:8  [dead_code]
+crates/engine-native/tests/g1_huanle.rs:52:8  [dead_code]
+crates/engine-native/tests/g1_huanle.rs:58:8  [dead_code]
+crates/engine-native/tests/g1_huanle.rs:776:7  [redundant_semicolons]
+crates/engine-native/tests/g1_huanle.rs:859:153  [noop_method_call]
+crates/engine-native/tests/g1_shahai_swd.rs:1742:24  [noop_method_call]
+crates/engine-native/tests/g1_shahai_yunchou.rs:42:8  [dead_code]
+crates/engine-native/tests/g1_wudian.rs:1390:33  [unused_assignments]
+crates/engine-native/tests/g1_wudian.rs:4182:9  [unused_assignments]
+crates/engine-native/tests/native_kernel.rs:956:7  [dead_code]
+crates/engine-native/tests/native_kernel.rs:2329:13  [unused_assignments]
+crates/engine-native/tests/native_kernel.rs:7552:4  [dead_code]
+crates/engine-native/tests/native_kernel.rs:7600:8  [dead_code]
+crates/engine-native/tests/native_kernel.rs:10185:9  [non_snake_case]
+crates/engine-native/tests/native_kernel.rs:10197:9  [non_snake_case]
+crates/engine-native/tests/native_kernel.rs:10735:9  [unused_assignments]
+crates/engine-native/tests/native_kernel.rs:11376:21  [unused_assignments]
+crates/engine-native/tests/native_kernel.rs:13232:8  [dead_code]
+crates/engine-native/tests/native_kernel.rs:13435:5  [unused_must_use]
+crates/engine-native/tests/native_kernel.rs:13438:5  [unused_must_use]
+crates/engine-native/tests/native_kernel.rs:13440:5  [unused_must_use]
+crates/engine-native/tests/native_kernel.rs:13442:5  [unused_must_use]

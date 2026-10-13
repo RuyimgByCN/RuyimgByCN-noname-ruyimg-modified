@@ -1,6 +1,6 @@
 # ADR 草稿：扩展执行后端选择（T8 / 演进提案 C1）
 
-**状态：草稿（非定案）**。后端选择依赖 D2（旧 JS 扩展兼容范围）的用户决策；本文档只登记对照原型实测结果与候选评估，不预设结论。定案后应另立正式编号 ADR，本文保留为输入证据。
+**状态：已由 [ADR 0782](../0782-extension-backend-and-legacy-js-scope.md) 定案（2026-10-12，用户决定 D2）**。本文保留为对照原型的输入证据，内容维持 2026-10-11 原文；下文“未证明”各项已转为 T8 集成验收条件。
 
 日期：2026-10-11。原型：`crates/content-compiler/examples/t8_backend_prototype.rs`（可复跑）；原始输出见 [证据目录](../operations/evidence/2026-10-11-t8-backend-prototype/README.md)。
 

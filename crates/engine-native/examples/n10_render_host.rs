@@ -8,7 +8,7 @@
 
 use engine_native::{
     presentation::PresentationEvent, CardKind, ChoiceOption, ChoiceView, CommandOutcome,
-    Engine, GameAction, GameCommand, view::HandView,
+    Engine, GameAction, GameCommand,
 };
 use std::sync::atomic::{AtomicU64, Ordering};
 

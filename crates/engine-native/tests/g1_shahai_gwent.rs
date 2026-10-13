@@ -11,8 +11,8 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
-use engine_native::catalog::{CardDef, CardKind, Suit};
-use engine_native::content::extension::{ExtensionDef, ExtensionPack};
+use engine_native::catalog::{CardKind, Suit};
+use engine_native::content::extension::ExtensionPack;
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, LogEvent, Phase, RejectReason};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -114,7 +114,6 @@ fn pass_window(e: &mut Engine) {
         let c = e.open_choice().unwrap();
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(e, obs, GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Pass],
@@ -198,7 +197,6 @@ fn gwent_spells_yanzhi_aozu_wenyi() {
     while let Some(c) = e.open_choice() {
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(1), hp1 - 1, "1 点雷电伤害");
@@ -206,7 +204,7 @@ fn gwent_spells_yanzhi_aozu_wenyi() {
 
     // 瘟疫：有手牌弃首张
     let wy = find(&e0, "gw_wenyi");
-    let mut e = inject(&e0, &pack, &[wy], 0);
+    let e = inject(&e0, &pack, &[wy], 0);
     let mut e = inject(&e, &pack, &[sha], 1);
     let h1 = e.debug_hand(1).len();
     let out = submit(&mut e, 0, GameAction::PlayCard { card: wy, targets: vec![1] });
@@ -268,7 +266,7 @@ fn gwent_spells_zhihuan_baoxue() {
     let s1 = sha_of(&e0, Suit::Spade);
     let s2 = sha_of(&e0, Suit::Club);
     let s3 = sha_of(&e0, Suit::Heart);
-    let mut e = inject(&e0, &pack, &[bx], 0);
+    let e = inject(&e0, &pack, &[bx], 0);
     let mut e = inject(&e, &pack, &[s1, s2, s3], 2);
     let out = submit(&mut e, 0, GameAction::PlayCard { card: bx, targets: vec![2] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
@@ -277,7 +275,6 @@ fn gwent_spells_zhihuan_baoxue() {
     assert_eq!((c.spec.prompt, c.observer), ("gw_baoxue_discard", 2));
     assert_eq!((c.spec.min, c.spec.max), (2, 2), "强制选两张");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 2, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Card(s2), ChoiceOption::Card(s3)],
@@ -311,7 +308,7 @@ fn gwent_weather_states() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     pass_window(&mut e);
     // 3 人局全员为邻座 → 全员获天气
-    for p in 0..3 {
+    for _p in 0..3 {
         let hand: Vec<u32> = (0..3).map(|_| 0).collect();
         let _ = hand;
     }
@@ -326,7 +323,6 @@ fn gwent_weather_states() {
         let c = e.open_choice().unwrap();
         let cid = c.id;
         let sel: Vec<ChoiceOption> = c.spec.options.iter().take(c.spec.min.max(1)).copied().collect();
-        drop(c);
         submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: sel });
     }
     eprintln!("DBG before-discard-end skills={:?}", e.save().core.skills.keys().collect::<Vec<_>>());
@@ -376,7 +372,6 @@ fn gwent_weather_states() {
         let c = e.open_choice().unwrap();
         let cid = c.id;
         let sel: Vec<ChoiceOption> = c.spec.options.iter().take(c.spec.min.max(1)).copied().collect();
-        drop(c);
         submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: sel });
     }
     // 回到能出杀的时点需再入自己的出牌阶段——此处仅验证雾已清除：
@@ -459,7 +454,7 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
     // —— 昆恩法印：防普通伤害 + 计数递减 ——
     let knf = find(&e0, "gw_kunenfayin");
     let sha = card_of(&e0, CardKind::Sha, Suit::Spade);
-    let mut e = inject(&e0, &pack, &[knf], 0);
+    let e = inject(&e0, &pack, &[knf], 0);
     let mut e = inject(&e, &pack, &[sha], 1);
     e.debug_set_hp(1, 9);
     // 0 号出牌阶段使用昆恩法印（自-target）→ 获得状态
@@ -502,13 +497,11 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
         if c.spec.prompt != "respond_shan" {
             let cid = c.id;
             let obs = c.observer;
-            drop(c);
             submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
             continue;
         }
         let cid = c.id;
         let obs = c.observer;
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(0), hp0, "昆恩防止普通伤害");
@@ -538,10 +531,10 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
             .position(|c| c.kind == CardKind::Weapon)
             .expect("武器在目录") as u32
     };
-    let mut e = inject(&e0, &pack, &[sbs], 0);
-    let mut e = inject(&e, &pack, &[armor], 1);
+    let e = inject(&e0, &pack, &[sbs], 0);
+    let e = inject(&e, &pack, &[armor], 1);
     let mut e = inject(&e, &pack, &[armor2], 2);
-    let h_none = e.debug_hand(0).len();
+    let _h_none = e.debug_hand(0).len();
     let out = submit(&mut e, 0, GameAction::PlayCard { card: sbs, targets: vec![] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     pass_window(&mut e);
@@ -577,7 +570,6 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
     let c = e.open_choice().expect("破晓分支挂起");
     assert_eq!(c.spec.prompt, "gw_poxiao_branch");
     let cid = c.id;
-    drop(c);
     submit(&mut e, 0, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Tag(1)],

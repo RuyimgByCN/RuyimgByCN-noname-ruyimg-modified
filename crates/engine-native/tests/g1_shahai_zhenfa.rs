@@ -47,7 +47,6 @@ fn advance_to_play(e: &mut Engine, seat: u8) {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            drop(c);
             submit(e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
         }
         let actor = e.turn().current;
@@ -123,7 +122,6 @@ fn zf_dizaizhen_major_faction_draw() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hand(2).len(), 1, "非大势力（蜀）摸 1");
@@ -266,7 +264,6 @@ fn zf_tianfuzhen_major_aoe_discard() {
     }
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hand(0).len(), 0, "大国 0 弃 1");
@@ -362,7 +359,6 @@ fn zf_qixingzhen_siege_discard_and_virtual_sha() {
     }
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     eprintln!("DBG hand1={:?} hand3={:?}", e.debug_hand(1), e.debug_hand(3));
@@ -428,7 +424,6 @@ fn zf_niaoxiangzhen_respond_shan_or_damage() {
     // 直接收尾：1 号已响应闪
     while let Some(c) = e.open_choice() {
         let (cid, obs) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(2), 4, "2 号响应闪免伤");

@@ -11,17 +11,14 @@
 //! - 写轮眼（宝物）：回合开始窃取他人技能至回合结束（多步机器）
 //! - 面具（防具）：翻面前置取消（锁定技，TurnOverBefore 前置窗口）
 
-use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
 use engine_native::catalog::CardKind;
-use engine_native::content::extension::{ExtensionDef, ExtensionPack};
-use engine_native::content::host::{HostBehavior, HostSkillDecl};
-use engine_native::catalog::CardDef;
+use engine_native::content::extension::ExtensionPack;
 use engine_native::{
-    ChoiceKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason,
+    ChoiceKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
 };
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -37,27 +34,6 @@ fn submit(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
 
 fn repo_extensions_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions")
-}
-
-#[derive(serde::Deserialize)]
-struct CardJson {
-    name: String,
-    kind: String,
-    range: u32,
-    suit: String,
-    rank: u8,
-}
-
-#[derive(serde::Deserialize)]
-struct SkillJson {
-    name: String,
-    behavior: String,
-}
-
-#[derive(serde::Deserialize)]
-struct CardsJson {
-    cards: Vec<CardJson>,
-    host_skills: Vec<SkillJson>,
 }
 
 /// 桥接统一走 C0 装载器（ADR 0777/0778）：映射来自 cards.json 的
@@ -319,7 +295,6 @@ fn advance_to_play(e: &mut Engine, player: u8) {
                 vec![g.spec.options[0]]
             };
             let (id, obs) = (g.id, g.observer);
-            drop(g);
             match submit(e, obs, GameAction::Answer { choice_id: id, selection: sel }) {
                 CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } => {}
                 other => panic!("answer: {other:?}"),
@@ -680,7 +655,6 @@ fn huanle_xuelunyang_steals_target_skill_until_turn_end() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -738,7 +712,6 @@ fn huanle_xuelunyang_steals_target_skill_until_turn_end() {
             // 写轮眼确认门：Pass 放弃（不再窃取，保证到期断言时序干净）。
             if g.spec.prompt == "trigger_confirm" {
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Pass],
@@ -751,7 +724,6 @@ fn huanle_xuelunyang_steals_target_skill_until_turn_end() {
                 vec![g.spec.options[0]]
             };
             let (id2, obs2) = (g.id, g.observer);
-            drop(g);
             submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             continue;
         }
@@ -773,7 +745,7 @@ fn huanle_xuelunyang_steals_target_skill_until_turn_end() {
     assert!(
         !stolen_enabled,
         "回合结束后窃得的技能应失效"
-    );;
+    );
 }
 
 /// E03 写轮眼 Pass 路径：回合开始确认门选择放弃 → 不窃取，随后他人出桃
@@ -819,7 +791,6 @@ fn huanle_xuelunyang_pass_declines_theft() {
                 // OptionalGate 门 options=[Confirm]、allow_cancel=true：
                 // 放弃 = 空选择取消（Pass 不在选项集，会被拒绝）。
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![],
@@ -832,7 +803,6 @@ fn huanle_xuelunyang_pass_declines_theft() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -856,7 +826,7 @@ fn huanle_xuelunyang_pass_declines_theft() {
 
     // 推进到 1 号出牌阶段（途中 0 号下回合开始的写轮眼门继续 Pass）。
     for gi2 in 0..96 {
-        eprintln!("DBG pass2 gi={gi2} cur={} phase={:?} open={:?}", e.turn().current, e.turn().phase, e.open_choice().map(|g| (g.observer, g.spec.prompt.clone(), g.id)));
+        eprintln!("DBG pass2 gi={gi2} cur={} phase={:?} open={:?}", e.turn().current, e.turn().phase, e.open_choice().map(|g| (g.observer, g.spec.prompt, g.id)));
         if e.turn().current == 1 && e.turn().phase == Phase::Play && e.open_choice().is_none() {
             break;
         }
@@ -864,7 +834,6 @@ fn huanle_xuelunyang_pass_declines_theft() {
             Some(g) if g.spec.prompt == "trigger_confirm" => {
                 // OptionalGate 门放弃 = 空选择取消。
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![],
@@ -877,7 +846,6 @@ fn huanle_xuelunyang_pass_declines_theft() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -939,7 +907,6 @@ fn xly_state_growth_probe() {
         match e.open_choice() {
             Some(g) if g.spec.prompt == "trigger_confirm" && g.observer == 0 => {
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Confirm],
@@ -952,7 +919,6 @@ fn xly_state_growth_probe() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -995,7 +961,6 @@ fn xly_state_growth_probe() {
             Some(g) if g.spec.prompt == "trigger_confirm" => {
                 // OptionalGate 门 options=[Confirm]：放弃 = 空选择取消。
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![],
@@ -1008,7 +973,6 @@ fn xly_state_growth_probe() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -1113,7 +1077,6 @@ fn caoren_jushou_flips_and_mianju_cancels_flip() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
                 continue;
             }
@@ -1180,7 +1143,6 @@ fn caoren_jushou_flips_and_mianju_cancels_flip() {
             vec![g.spec.options[0]]
         };
         let (id, obs) = (g.id, g.observer);
-        drop(g);
         submit(&mut e, obs, GameAction::Answer { choice_id: id, selection: sel });
     }
     advance_to_play(&mut e, 0);
@@ -1198,7 +1160,6 @@ fn caoren_jushou_flips_and_mianju_cancels_flip() {
             vec![g.spec.options[0]]
         };
         let (id, obs) = (g.id, g.observer);
-        drop(g);
         submit(&mut e, obs, GameAction::Answer { choice_id: id, selection: sel });
     }
     advance_to_play(&mut e, 0);
@@ -1216,7 +1177,6 @@ fn caoren_jushou_flips_and_mianju_cancels_flip() {
         match e.open_choice() {
             Some(g) if g.spec.prompt == "trigger_confirm" => {
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer {
                     choice_id: id2,
                     selection: vec![ChoiceOption::Confirm],
@@ -1229,7 +1189,6 @@ fn caoren_jushou_flips_and_mianju_cancels_flip() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -1415,7 +1374,6 @@ fn huanle_jiuwei_recovers_or_draws_at_turn_end() {
                         vec![g.spec.options[0]]
                     };
                     let (id2, obs2) = (g.id, g.observer);
-                    drop(g);
                     submit(e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
                 }
                 None => {
@@ -1450,7 +1408,6 @@ fn huanle_jiuwei_recovers_or_draws_at_turn_end() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -1483,7 +1440,6 @@ fn huanle_jiuwei_recovers_or_draws_at_turn_end() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -1498,7 +1454,6 @@ fn huanle_jiuwei_recovers_or_draws_at_turn_end() {
     let hand_before3 = e.debug_hand(0).len();
     let gate3 = e.open_choice().expect("放弃路径确认门应挂起");
     let (gid3, gobs3) = (gate3.id, gate3.observer);
-    drop(gate3);
     submit(&mut e, gobs3, GameAction::Answer { choice_id: gid3, selection: vec![] });
     assert_eq!(e.debug_hand(0).len(), hand_before3, "放弃不摸牌");
     assert_eq!(e.debug_hp(0), 4, "放弃不回复");
@@ -1550,7 +1505,6 @@ fn huanle_combo_stolen_jushou_fires_for_thief() {
                 vec![g.spec.options[0]]
             };
             let (id2, obs2) = (g.id, g.observer);
-            drop(g);
             submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             continue;
         }
@@ -1568,7 +1522,6 @@ fn huanle_combo_stolen_jushou_fires_for_thief() {
     submit(&mut e, tobs, GameAction::Answer { choice_id: tid, selection: vec![ChoiceOption::Player(1)] });
     let pick = e.open_choice().expect("技能选择挂起");
     let (pid, pobs) = (pick.id, pick.observer);
-    drop(pick);
     submit(&mut e, pobs, GameAction::Answer { choice_id: pid, selection: vec![ChoiceOption::Tag(0)] });
 
     // 窃取完成：0 号拥有据守（expires），1 号保留原实例。
@@ -1591,7 +1544,6 @@ fn huanle_combo_stolen_jushou_fires_for_thief() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -1608,7 +1560,6 @@ fn huanle_combo_stolen_jushou_fires_for_thief() {
     assert_eq!(gate.spec.prompt, "trigger_confirm");
     assert_eq!(gate.observer, 0);
     let (gid, gobs) = (gate.id, gate.observer);
-    drop(gate);
     submit(&mut e, gobs, GameAction::Answer { choice_id: gid, selection: vec![ChoiceOption::Confirm] });
     assert!(e.debug_face_down(0), "窃得的据守翻面（对窃得者生效）");
     assert_eq!(e.debug_hand(0).len(), hand_before + 1, "窃得的据守摸 1");
@@ -1656,7 +1607,6 @@ fn huanle_combo_stolen_jushou_flip_cancelled_by_mask() {
                 vec![g.spec.options[0]]
             };
             let (id2, obs2) = (g.id, g.observer);
-            drop(g);
             submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             continue;
         }
@@ -1670,11 +1620,9 @@ fn huanle_combo_stolen_jushou_flip_cancelled_by_mask() {
     submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Confirm] });
     let target_pick = e.open_choice().expect("选目标挂起");
     let (tid, tobs) = (target_pick.id, target_pick.observer);
-    drop(target_pick);
     submit(&mut e, tobs, GameAction::Answer { choice_id: tid, selection: vec![ChoiceOption::Player(1)] });
     let pick = e.open_choice().expect("技能选择挂起");
     let (pid, pobs) = (pick.id, pick.observer);
-    drop(pick);
     submit(&mut e, pobs, GameAction::Answer { choice_id: pid, selection: vec![ChoiceOption::Tag(0)] });
     let def_jushou = e.catalog().skill_by_name("据守").unwrap();
     assert!(e.save().core.skills.contains_key(&(0, def_jushou)), "窃得据守");
@@ -1691,7 +1639,6 @@ fn huanle_combo_stolen_jushou_flip_cancelled_by_mask() {
                 vec![g.spec.options[0]]
             };
             let (id2, obs2) = (g.id, g.observer);
-            drop(g);
             submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             continue;
         }
@@ -1716,7 +1663,6 @@ fn huanle_combo_stolen_jushou_flip_cancelled_by_mask() {
                     vec![g.spec.options[0]]
                 };
                 let (id2, obs2) = (g.id, g.observer);
-                drop(g);
                 submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
             }
             None => {
@@ -1731,7 +1677,6 @@ fn huanle_combo_stolen_jushou_flip_cancelled_by_mask() {
     let hand_before = e.debug_hand(0).len();
     let gate = e.open_choice().expect("面具下窃得据守确认门应挂起");
     let (gid, gobs) = (gate.id, gate.observer);
-    drop(gate);
     submit(&mut e, gobs, GameAction::Answer { choice_id: gid, selection: vec![ChoiceOption::Confirm] });
     assert!(!e.debug_face_down(0), "面具取消窃得据守的翻面");
     assert_eq!(e.debug_hand(0).len(), hand_before + 1, "摸牌仍执行（登记差异复用）");
@@ -1782,7 +1727,6 @@ fn huanle_combo_kuwu_sha_like_and_non_sha_damage() {
     let c = e.open_choice().expect("手里剑嵌套选择");
     assert_eq!(c.observer, 1);
     let (cid, cobs) = (c.id, c.observer);
-    drop(c);
     // 弃权（Pass）= 受 1 点伤害。
     submit(&mut e, cobs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     assert_eq!(e.debug_hp(1), hp_before - 1, "弃权受 1 伤");
@@ -1807,7 +1751,6 @@ fn huanle_combo_kuwu_sha_like_and_non_sha_damage() {
             vec![c.spec.options[0]]
         };
         let (id2, obs2) = (c.id, c.observer);
-        drop(c);
         submit(&mut e, obs2, GameAction::Answer { choice_id: id2, selection: sel });
     }
     assert_eq!(e.debug_hp(1), hp_before - 2, "雷杀命中");

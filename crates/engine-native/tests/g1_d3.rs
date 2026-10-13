@@ -9,9 +9,9 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
-use engine_native::content::extension::{ExtensionDef, ExtensionGeneral, ExtensionPack};
+use engine_native::content::extension::{ExtensionDef, ExtensionPack};
 use engine_native::content::host::{HostBehavior, HostSkillDecl};
-use engine_native::catalog::{CardDef, CardKind, Faction};
+use engine_native::catalog::{CardDef, Faction};
 use engine_native::content::standard::Gender;
 use engine_native::{
     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, GameMode, Phase,
@@ -40,21 +40,6 @@ fn options() -> InstallOptions {
         verify_key: None,
         host: content_runtime::tooling_host_versions(),
     }
-}
-
-#[derive(serde::Deserialize)]
-struct SkillJson {
-    name: String,
-    mapping: Option<String>,
-}
-
-#[derive(serde::Deserialize)]
-struct GeneralJson {
-    name: String,
-    faction: String,
-    hp: u32,
-    gender: String,
-    skills: Vec<SkillJson>,
 }
 
 /// 桥接统一走 C0 装载器（ADR 0777/0778）：武将元数据与宿主技能映射
@@ -107,7 +92,7 @@ fn g1_d3_install_bridge_and_metadata() {
 
     // 目录元数据：扩展武将接在基础表之后
     let base_count = engine_native::content::standard::STANDARD_GENERALS.len();
-    let mut e = Engine::new_with_extensions(3401, 3, &[&pack]).expect("建局");
+    let e = Engine::new_with_extensions(3401, 3, &[&pack]).expect("建局");
     let (name, faction, skills, hp, gender) = e
         .catalog()
         .general_meta(base_count as u16)
@@ -187,7 +172,7 @@ fn g1_d3_vertical_reveal_jinggou_and_restore() {
     let packs_ref: Vec<&ExtensionPack> = vec![&huanle_pack, &d3_pack];
 
     let base_count = engine_native::content::standard::STANDARD_GENERALS.len();
-    let mut e =
+    let e =
         Engine::new_with_extensions(3402, 3, &packs_ref).expect("双包建局");
 
     // 国战模式 + 配置扩展武将（下标 = 基础表长度）→ 明置命令授予技能/体力
@@ -301,7 +286,7 @@ fn g1_d3_content_lock_and_bounds() {
     )
     .unwrap();
     let (d3_pack, _) = bridge("d3-upstream-noname", &d3_json);
-    let base_count = engine_native::content::standard::STANDARD_GENERALS.len();
+    let _base_count = engine_native::content::standard::STANDARD_GENERALS.len();
     let e = Engine::new_with_extensions(3403, 3, &[&d3_pack]).expect("建局");
     // 越界武将槽（扩展表之后）→ 恢复拒绝
     let mut snap = e.save();
@@ -320,7 +305,7 @@ fn g1_d3_content_lock_and_bounds() {
 }
 
 fn report_two(
-    store: &PackageStore,
+    _store: &PackageStore,
 ) -> Vec<content_runtime::InstalledMeta> {
     let root = repo_extensions_root();
     // 重新发现以取 extension_root（store 不暴露 installed 列表时用来源目录）

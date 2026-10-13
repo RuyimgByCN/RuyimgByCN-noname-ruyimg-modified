@@ -140,3 +140,4 @@
 - [0702 M7 移动端阻塞说明与替代方案](0702-m7-mobile-blocking.md) —— 历史 ADR：原 M7 移动壳决策已被性能架构原生平台路线取代；配套 phase28 快照已清理（2026-10-11 补录索引，T16⑤ 附带）
 - [0780 卡牌实例受控合成原语（CardMod 伴随表）](0780-card-instance-mod-primitive.md) —— 机关术批：card_mods 伴随表建模合成（目录不可变），名称合成/数值升级登记差异；存档 v45
 - [0781 可变座位环原语（swapSeat）](0781-mutable-seat-ring.md) —— GameStateCore.seat_ring 显式座位环，座位语义全经环访问器；存档 v46；长蛇阵换座/破阵诀随机重排落地
+- [0782 扩展执行后端与旧 JS 兼容范围（D2/T8 定案）](0782-extension-backend-and-legacy-js-scope.md) —— 旧 JS 不承诺零改动运行；内置 HostBehavior + 扩展包 rule-vm 分层；QuickJS 兼容层不立项、WASM 暂缓；草稿未证明项转 T8 集成验收
