@@ -91,8 +91,9 @@ impl NativeContent {
                 .map_err(|e| format!("读取编译包失败 {npack_path:?}: {e}"))?;
             let parsed: content_schema::ContentPackage =
                 serde_json::from_str(&raw).map_err(|e| format!("编译包解析失败: {e}"))?;
-            let vm_skills = content_native_loader::bridge_vm_skill_decls(&parsed)
+            let outcome = content_native_loader::bridge_vm_skill_decls(&parsed)
                 .map_err(|e| e.to_string())?;
+            let vm_skills = outcome.decls;
             let bridged = if cards_path.is_file() {
                 let json = std::fs::read_to_string(&cards_path)
                     .map_err(|e| format!("读取包数据失败 {cards_path:?}: {e}"))?;

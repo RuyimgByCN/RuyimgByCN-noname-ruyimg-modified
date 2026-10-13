@@ -7,6 +7,7 @@ use content_compiler::compile_source_named;
 use engine_native::catalog::TriggerMeta;
 use engine_native::event::{EventKind, Timing};
 use engine_native::content::extension::{ExtensionDef, ExtensionPack, VmSkillDecl};
+use engine_native::event::DamageNature;
 use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
 
 /// 酒尾对照样本（同原型 JIUWEI_DSL 语义）。
@@ -136,6 +137,7 @@ fn t8_vm_skill_recover_branch_end_to_end() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = Engine::new_with_extensions(910001, 4, &[&pack]).expect("建局");
     e.debug_grant(1, name);
@@ -164,6 +166,7 @@ fn t8_vm_skill_draw_branch_end_to_end() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = Engine::new_with_extensions(910002, 4, &[&pack]).expect("建局");
     e.debug_grant(1, name);
@@ -196,6 +199,7 @@ fn t8_vm_skill_fuel_exhaustion_rolls_back() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = Engine::new_with_extensions(910003, 4, &[&pack]).expect("建局");
     e.debug_grant(1, name);
@@ -257,6 +261,7 @@ fn t8_vm_skill_choice_suspend_resume_midrestore() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = Engine::new_with_extensions(910005, 4, &[&pack]).expect("建局");
     e.debug_grant(1, name);
@@ -320,6 +325,7 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = Engine::new_with_extensions(910006, 4, &[&pack]).expect("建局");
     e.debug_grant(1, name);
@@ -359,6 +365,7 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
             "hnl_jiuwei_choice_t8",
         ),
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     drifted.def.version += 1;
     assert!(
@@ -372,7 +379,13 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
 #[test]
 fn t8_vm_skill_loader_bridge_end_to_end() {
     let pkg = compile_source_named("t8-rvm-bridge-loader", JIUWEI_DSL).expect("DSL 编译");
-    let decls = content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
+    let outcome =
+        content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
+    assert!(
+        outcome.deferred_filters.is_empty(),
+        "基样本无具名组合 filter"
+    );
+    let decls = outcome.decls;
     assert_eq!(decls.len(), 1, "触发索引 1 项→1 声明");
     // 声明名=模块名（编译器按 技能_事件 命名模块；符号表 intern）。
     assert_eq!(decls[0].name, "hnl_jiuwei_t8_phase_end", "声明名=模块名");
@@ -431,6 +444,7 @@ fn t8_rejection_unmapped_effect_rolls_back() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = engine_setup(&pack, name, 930001);
     let h0 = hand_len(&e, 1);
@@ -454,6 +468,7 @@ fn t8_rejection_corrupted_bytecode_rolls_back() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = engine_setup(&pack, name, 930002);
     let h0 = hand_len(&e, 1);
@@ -472,6 +487,7 @@ fn t8_rejection_caps_escalation_denied() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = engine_setup(&pack, name, 930003);
     let h0 = hand_len(&e, 1);
@@ -490,6 +506,7 @@ fn t8_rejection_tampered_snapshot_module_rejected() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let e = engine_setup(&pack, name, 930004);
     let snap = e.save();
@@ -511,6 +528,111 @@ fn engine_setup(pack: &ExtensionPack, name: &str, seed: u64) -> Engine {
     e
 }
 
+/// owner_is_source 样本：持有者造成伤害后摸 1。
+const SOURCE_DSL: &str = "\
+skill hnl_src_t8(990005) {
+  trigger damage owner_is_source {
+    effect draw_cards(self, 1);
+  }
+}
+";
+
+/// always 样本：任意角色阶段结束摸 1（不受 owner 域限定）。
+const ALWAYS_DSL: &str = "\
+skill hnl_always_t8(990006) {
+  trigger phase_end always {
+    effect draw_cards(self, 1);
+  }
+}
+";
+
+/// 具名组合 filter 样本（装载器跳过面）。
+const NAMED_FILTER_DSL: &str = "\
+skill hnl_named_t8(990007) {
+  trigger damage owner_is_target_wounded {
+    effect draw_cards(self, 1);
+  }
+}
+";
+
+/// 增量 6 过滤面：owner_is_source——持有者造成伤害触发、承受伤害不触
+/// 发。
+#[test]
+fn t8_vm_skill_filter_owner_is_source() {
+    let pkg = compile_source_named("t8-rvm-bridge", SOURCE_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_src_t8");
+    let name = "t8源";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: TriggerMeta {
+            event: EventKind::Damage,
+            timing: Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+    }]);
+    let mut e = Engine::new_with_extensions(930005, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, name);
+    let h0 = hand_len(&e, 1);
+    // 持有者造成伤害 → 触发摸 1
+    let out = e.debug_deal_damage(Some(1), 2, 1, DamageNature::Normal);
+    let _ = out;
+    assert_eq!(hand_len(&e, 1), h0 + 1, "owner_is_source：造成伤害后摸 1");
+    // 持有者承受伤害 → 不触发
+    let out = e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    let _ = out;
+    assert_eq!(hand_len(&e, 1), h0 + 1, "owner_is_source：承受伤害不触发");
+}
+
+/// 增量 6 过滤面：always——任意角色阶段结束都触发（他人阶段尾即摸 1）。
+#[test]
+fn t8_vm_skill_filter_always() {
+    let pkg = compile_source_named("t8-rvm-bridge", ALWAYS_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_always_t8");
+    let name = "t8常";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Always,
+    }]);
+    let mut e = Engine::new_with_extensions(930006, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, name);
+    let h0 = hand_len(&e, 1);
+    // 推进到 0 号阶段结束之后：always 域即触发
+    for _ in 0..20 {
+        if hand_len(&e, 1) > h0 {
+            break;
+        }
+        if e.outcome().is_some() {
+            panic!("对局提前结束");
+        }
+        np_settled(&mut e);
+    }
+    assert!(hand_len(&e, 1) > h0, "always：他人阶段结束即触发");
+}
+
+/// 增量 6 装载器严格面：具名组合 filter 跳过（deferred_filters 登记，
+/// 不阻断装载）。
+#[test]
+fn t8_vm_skill_loader_skips_named_filters() {
+    let pkg = compile_source_named("t8-rvm-bridge", NAMED_FILTER_DSL).expect("DSL 编译");
+    let outcome =
+        content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
+    assert!(
+        outcome.decls.is_empty(),
+        "具名组合 filter 不产出声明"
+    );
+    assert_eq!(
+        outcome.deferred_filters,
+        vec!["owner_is_target_wounded".to_string()],
+        "跳过面登记"
+    );
+}
+
 /// 存档往返：VM 技能提交后对局可存档恢复（内容锁哈希入快照面）。
 #[test]
 fn t8_vm_skill_save_restore_roundtrip() {
@@ -521,6 +643,7 @@ fn t8_vm_skill_save_restore_roundtrip() {
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
     let mut e = Engine::new_with_extensions(910004, 4, &[&pack]).expect("建局");
     e.debug_grant(1, name);

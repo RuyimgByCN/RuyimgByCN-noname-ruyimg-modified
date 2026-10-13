@@ -76,18 +76,37 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
     }
 }
 
-/// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta 与行为总线
-/// 承载；DSL filter 字段的映射属增量 2，登记）。
+/// DSL filter 映射（增量 6）：三基语义严格落；具名组合 filter 由装载
+/// 器跳过登记（deferred）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum VmFilterPolicy {
+    /// DSL `owner_is_target`：事件主玩家=持有者。
+    #[default]
+    OwnerIsTarget,
+    /// DSL `owner_is_source`：事件来源=持有者。
+    OwnerIsSource,
+    /// DSL `always`：无条件。
+    Always,
+}
+
+/// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
+/// 与 filter 策略共同承载）。
 #[derive(Debug, Clone)]
 pub struct VmSkillBehavior {
     pub program: Arc<VmSkillProgram>,
+    pub filter: VmFilterPolicy,
 }
 
 impl SkillBehavior for VmSkillBehavior {
     fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
-        // 增量 1 过滤面：恒定 owner 域（event_player==owner，DSL
-        // owner_is_target 族）；其余 filter 表达式映射属增量 2。
-        trigger_ctx_of(event).event_player == Some(owner)
+        // 增量 6 过滤面：三基语义（owner_is_target/owner_is_source/
+        // always）；其余具名组合 filter 装载器跳过（deferred 登记）。
+        let trig = trigger_ctx_of(event);
+        match self.filter {
+            VmFilterPolicy::OwnerIsTarget => trig.event_player == Some(owner),
+            VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
+            VmFilterPolicy::Always => true,
+        }
     }
 
     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {

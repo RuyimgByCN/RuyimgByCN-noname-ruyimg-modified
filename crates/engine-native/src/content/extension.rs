@@ -79,6 +79,8 @@ pub struct VmSkillDecl {
     pub module: rule_vm::BytecodeModule,
     /// 触发元数据（事件门由行为总线承载）。
     pub trigger: crate::catalog::TriggerMeta,
+    /// DSL filter 映射（三基语义；具名组合 filter 装载器跳过）。
+    pub filter: crate::rvm_bridge::VmFilterPolicy,
 }
 
 /// 扩展包：元数据 + 额外内容。

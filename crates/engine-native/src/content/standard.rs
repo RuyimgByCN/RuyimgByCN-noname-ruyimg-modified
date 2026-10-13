@@ -6381,6 +6381,7 @@ pub fn standard_catalog_with_extensions(
                     program: std::sync::Arc::new(crate::rvm_bridge::VmSkillProgram {
                         module: decl.module.clone(),
                     }),
+                    filter: decl.filter,
                 }),
             });
         }
