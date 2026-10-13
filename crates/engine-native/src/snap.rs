@@ -601,6 +601,12 @@ pub enum MachineSnapshot {
         owner: PlayerId,
         emitted: u8,
     },
+    /// 火刑（都市王，规则 v273）：直写逐座遗言机，emitted=下一座位
+    /// 索引。
+    BossHuoxing {
+        owner: PlayerId,
+        emitted: u8,
+    },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
     /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
@@ -1202,6 +1208,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossPingdeng { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossHuoxing { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::Shedu { owner, .. } => {
@@ -2224,6 +2233,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossPingdeng { .. } => {
             // 平等：直写两波机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossHuoxing { .. } => {
+            // 火刑：直写逐座机，恢复无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 272;
+pub const STANDARD_RULESET_VERSION: u64 = 273;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1412,6 +1412,62 @@ impl SkillMachine for PingdengMachine {
                 None,
                 t,
                 amount,
+                crate::event::DamageNature::Fire,
+                None,
+            )));
+            return Flow::Yield;
+        }
+        Flow::Done
+    }
+}
+
+/// 火刑（十殿阎罗都市王，规则 v273）：你死亡时，全部其他存活角色按座
+/// 位序各受 1 点火焰伤害（热恼同位直写逐座机；emitted=下一待扫描座位
+/// 索引，中途死亡由存活过滤跳过）。
+struct HuoxingBehavior;
+
+impl SkillBehavior for HuoxingBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(HuoxingMachine {
+            owner,
+            emitted: 0,
+        })
+    }
+}
+
+/// 火刑机器：直写逐座机（emit+Yield 逐目标，emitted=下一座位索引）。
+#[derive(Clone)]
+struct HuoxingMachine {
+    owner: PlayerId,
+    emitted: u8,
+}
+
+impl SkillMachine for HuoxingMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossHuoxing {
+            owner: self.owner,
+            emitted: self.emitted,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let seats = ctx.core.players.len() as PlayerId;
+        while self.emitted < seats {
+            let t = self.emitted;
+            self.emitted += 1;
+            if t == self.owner || !ctx.core.player(t).alive {
+                continue;
+            }
+            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                None,
+                t,
+                1,
                 crate::event::DamageNature::Fire,
                 None,
             )));
@@ -5501,6 +5557,20 @@ pub const BOSS_ABI: &str = "阿鼻";
 /// 焰伤害（上游两波 randomGet×lib.linked randomGet→座位序首个+恒定火
 /// 确定性近似登记）。
 pub const BOSS_PINGDENG: &str = "平等";
+/// 热闷（十殿阎罗都市王，规则 v273）：锁定技——防具区没有牌时，【杀】
+///（无属性，plain Sha）/【南蛮入侵】/【万箭齐发】对其无效（上游
+/// useCardToBefore cancel 同口径；PlayCard 拒绝位+AOE 机窗口前跳过；
+/// 属性杀不覆盖）。
+pub const BOSS_REMEN: &str = "热闷";
+/// 炙焚（十殿阎罗都市王，规则 v273）：锁定技——准备阶段随机一名其他
+/// 角色获得其一张随机手牌（若有）并受 1 点火焰伤害（上游
+/// gainPlayerCard randomGet→座位序首个+首张确定性近似登记；伤害无来
+/// 源同上游）。
+pub const BOSS_ZHIFEN: &str = "炙焚";
+/// 火刑（十殿阎罗都市王，规则 v273）：锁定遗言（Death 触发）——全部
+/// 其他存活角色按座位序各受 1 点火焰伤害（上游 sort seat 逐发同口径；
+/// 中途死亡由存活过滤跳过）。
+pub const BOSS_HUOXING: &str = "火刑";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5825,6 +5895,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("阎罗王", Faction::Qun, &[BOSS_TIEMIAN, BOSS_ZHADAO, BOSS_ZHUXIN], 4, Gender::Male),
     // 平等王（v272 锁足+阿鼻+平等；上游 group qun→群目录直取）
     ("平等王", Faction::Qun, &[BOSS_SUOZU, BOSS_ABI, BOSS_PINGDENG], 4, Gender::Male),
+    // 都市王（v273 热闷+炙焚+火刑；上游 group qun→群目录直取）
+    ("都市王", Faction::Qun, &[BOSS_REMEN, BOSS_ZHIFEN, BOSS_HUOXING], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7906,6 +7978,34 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(PingdengBehavior),
+        },
+        SkillDef {
+            name: BOSS_REMEN,
+            // 查询型单面：PlayCard 拒绝位（plain 杀）+AOE 机窗口前跳过
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHIFEN,
+            // 查询型单面：Prepare begin 臂——获得座位序首个其他首张手
+            // 牌+其受 1 火伤（无来源）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_HUOXING,
+            // Death 触发（遗言面）：全部其他存活逐座火伤机
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(HuoxingBehavior),
         },
     ];
     (cards, skills)

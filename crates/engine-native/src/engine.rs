@@ -2605,6 +2605,26 @@ fn apply_command(
                     }
                 }
             }
+            // 热闷（Boss 都市王，规则 v273）：防具槽空时无属性【杀】
+            // 对其无效（上游 useCardToBefore cancel→目标不可指定近似登记；
+            // 南蛮/万箭面在 AOE 机窗口前跳过；属性杀不覆盖）
+            if kind == CardKind::Sha {
+                for t in &targets {
+                    let remen = catalog
+                        .skill_by_name(crate::content::standard::BOSS_REMEN)
+                        .map(|def| {
+                            core.has_skill(*t, def)
+                                && !core.player(*t).equips.iter().any(|c| {
+                                    catalog.card_kind(*c).equip_slot()
+                                        == Some(crate::catalog::EquipSlot::Armor)
+                                })
+                        })
+                        .unwrap_or(false);
+                    if remen && core.player(*t).alive {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
+            }
             match kind {
                 CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制
@@ -4658,6 +4678,11 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
         }
         M::BossPingdeng { owner, emitted } => {
             push_u8(h, 78);
+            push_u8(h, *owner);
+            push_u8(h, *emitted);
+        }
+        M::BossHuoxing { owner, emitted } => {
+            push_u8(h, 79);
             push_u8(h, *owner);
             push_u8(h, *emitted);
         }

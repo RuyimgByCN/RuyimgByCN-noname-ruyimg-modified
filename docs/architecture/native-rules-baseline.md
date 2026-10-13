@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v272 / 存档 v63**，2026-10-14 平等王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v272 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v273 / 存档 v63**，2026-10-14 都市王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v273 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2916,6 +2916,25 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 **坑位**：转化链守卫 `if kind != Sha && kind != Le` 排除 plain Sha——酒池
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
+
+**规则 v273（2026-10-14，T11 十殿阎罗都市王片：热闷/炙焚/火刑＋都市王
+条目）**：**热闷**（查询型单面，双消费点）：防具槽空时——plain 杀目标不
+可指定（PlayCard 拒绝位 IllegalTargets，造异同族；上游 useCardToBefore
+cancel→目标不可指定近似登记）＋南蛮/万箭目标队列窗口前跳过
+（`dushiwang_remen_blocks`，无懈窗/响应段一并跳过）；火/雷杀不覆盖。
+**炙焚**（查询型单面，Prepare-begin 臂持有者域）：准备阶段座位序首个其
+他的首张手牌获得并受 1 火伤（randomGet×2→确定性近似登记；无来源同上
+游）。**火刑**（Death 触发遗言机）：死亡时全部其他存活按座位序各受 1 火
+伤（emitted=座位索引防重入）；`MachineSnapshot::BossHuoxing` 新变体
+（archive tag 79/机哈希 79）。`BOSS_GENERALS` 尾追加**都市王**（def 索引
+51/**hp4**/`[热闷, 炙焚, 火刑]`）。**显示名勘误**：boss_zhifen=炙焚
+（非炽焚）/boss_huoxing=火刑（非祸刑）。FROZEN 名单尾加「热闷」「炙焚」
+「火刑」（169–171 名）。存档不变 v63。版本 272→**273**。版本回退探针
+（273→272 复跑 golden 全绿）证明位移唯一来源是版本字段，全量重录。回归
+`boss_dushiwang_remen_sha_reject_then_armor` / `boss_dushiwang_remen_aoe_skip`
+/ `boss_dushiwang_zhifen_prepare_steal_and_fire` /
+`boss_dushiwang_huoxing_death_fire_all`——证据见
+[2026-10-14 都市王片](../operations/evidence/2026-10-14-t11-boss-dushiwang-v273/README.md)。
 
 **规则 v272（2026-10-14，T11 十殿阎罗平等王片：锁足/阿鼻/平等＋平等王
 条目）**：**锁足**（查询型单面）：Prepare-begin 臂——持有者准备阶段全部

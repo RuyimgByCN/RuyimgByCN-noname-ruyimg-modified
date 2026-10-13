@@ -1,0 +1,27 @@
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-native/tests/native_kernel.rs:2186:5
+     |
+2186 |     drop(core);
+     |     ^^^^^----^
+     |          |
+     |          argument has type `&mut GameStateCore`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+2186 -     drop(core);
+2186 +     let _ = core;
+     |
+
+warning: `engine-native` (test "native_kernel") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-8285df63cb92cc1c)
+
+running 4 tests
+test boss_dushiwang_remen_aoe_skip ... ok
+test boss_dushiwang_huoxing_death_fire_all ... ok
+test boss_dushiwang_zhifen_prepare_steal_and_fire ... ok
+test boss_dushiwang_remen_sha_reject_then_armor ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 294 filtered out; finished in 0.00s
+

@@ -2031,6 +2031,53 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.core.turn.jiu_active = true;
                         }
                     }
+                    // 炙焚（Boss 都市王，规则 v273）：准备阶段——随机
+                    // 一名其他角色获得其一张随机手牌（若有）并受 1 点火
+                    // 焰伤害（上游 gainPlayerCard randomGet+damage 无来
+                    // 源→座位序首个+首张确定性近似登记）
+                    if let Some(zfdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_ZHIFEN)
+                    {
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == zfdef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .collect();
+                        if let Some(holder) = holders.first() {
+                            // 上游 trigger player: phaseZhunbeiBegin——仅
+                            // 持有者本人准备阶段触发（他人阶段开始不触发）
+                            if *holder == player && ctx.core.player(*holder).alive {
+                                let seats = ctx.core.players.len() as PlayerId;
+                                if let Some(t) = (0..seats)
+                                    .find(|&t| t != *holder && ctx.core.player(t).alive)
+                                {
+                                    // 获得其首张手牌（若有）
+                                    let taken = ctx.core.player(t).hand.first().copied();
+                                    if let Some(c) = taken {
+                                        ctx.core.player_mut(t).hand.retain(|&x| x != c);
+                                        ctx.core.player_mut(*holder).hand.push(c);
+                                        ctx.log(LogEvent::CardsGiven {
+                                            from: t,
+                                            to: *holder,
+                                            cards: vec![c],
+                                        });
+                                    }
+                                    ctx.emit(EventData::Damage(
+                                        crate::machine::damage_data_with(
+                                            None,
+                                            t,
+                                            1,
+                                            crate::event::DamageNature::Fire,
+                                            None,
+                                        ),
+                                    ));
+                                }
+                            }
+                        }
+                    }
                     // 锁足（Boss 平等王，规则 v272）：准备阶段——全部
                     // 其他存活角色横置（上游 boss_suozu content link 同
                     // 口径；不分阵营；索链甲/星囚 linked 直写同款）
@@ -8164,6 +8211,26 @@ impl JudgePhaseMachine {
     }
 }
 
+/// 热闷（Boss 都市王，规则 v273）：防具槽空时南蛮/万箭对其无效
+///（上游 useCardToBefore cancel 同口径；防具槽=equip_slot()==Armor 全族）。
+fn dushiwang_remen_blocks(ctx: &Ctx<'_>, target: PlayerId) -> bool {
+    ctx.catalog
+        .skill_by_name(crate::content::standard::BOSS_REMEN)
+        .map(|def| {
+            ctx.core.has_skill(target, def)
+                && !ctx
+                    .core
+                    .player(target)
+                    .equips
+                    .iter()
+                    .any(|c| {
+                        ctx.catalog.card_kind(*c).equip_slot()
+                            == Some(crate::catalog::EquipSlot::Armor)
+                    })
+        })
+        .unwrap_or(false)
+}
+
 /// AOE 单目标段（南蛮入侵/万箭齐发）：询问响应牌（杀/闪），Pass 或无牌
 /// 则受 1 点伤害（完整伤害帧）。无牌者不询问直接受伤（跳过语义挂账见清单）。
 #[derive(Clone)]
@@ -8350,10 +8417,13 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
 
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         loop {
-            // 跳过已死亡目标（窗口未开启时）
+            // 跳过已死亡目标（窗口未开启时）；热闷（Boss 都市王，规则
+            // v273）——防具槽空时南蛮/万箭对其无效（上游 useCardToBefore
+            // cancel 同口径），窗口开启前跳过
             while self.inner.is_none()
                 && self.idx < self.targets.len()
-                && !ctx.core.player(self.targets[self.idx]).alive
+                && (!ctx.core.player(self.targets[self.idx]).alive
+                    || dushiwang_remen_blocks(ctx, self.targets[self.idx]))
             {
                 self.idx += 1;
             }
