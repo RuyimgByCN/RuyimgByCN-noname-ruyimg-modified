@@ -25,6 +25,10 @@ pub struct ServerConfig {
     pub extension_verify_key: Option<String>,
     /// Whether local unsigned drop-in extensions are allowed.
     pub allow_unsigned_extensions: bool,
+    /// Native path (T6③): drop-in raw package data root for the loader.
+    pub native_packages_root: PathBuf,
+    /// Native path (T6③): versioned package store for installed native packs.
+    pub native_store_root: PathBuf,
 }
 
 impl Default for ServerConfig {
@@ -40,6 +44,8 @@ impl Default for ServerConfig {
             extensions_root: PathBuf::from("extensions"),
             extension_verify_key: None,
             allow_unsigned_extensions: cfg!(debug_assertions),
+            native_packages_root: PathBuf::from("packages/extensions"),
+            native_store_root: PathBuf::from("data/native-content"),
         }
     }
 }
@@ -66,6 +72,12 @@ impl ServerConfig {
         }
         if let Ok(path) = std::env::var("NONAME_EXTENSIONS_ROOT") {
             c.extensions_root = path.into();
+        }
+        if let Ok(path) = std::env::var("NONAME_NATIVE_PACKAGES_ROOT") {
+            c.native_packages_root = path.into();
+        }
+        if let Ok(path) = std::env::var("NONAME_NATIVE_STORE_ROOT") {
+            c.native_store_root = path.into();
         }
         c.extension_verify_key = std::env::var("NONAME_EXTENSION_VERIFY_KEY").ok();
         if let Ok(value) = std::env::var("NONAME_ALLOW_UNSIGNED_EXTENSIONS") {

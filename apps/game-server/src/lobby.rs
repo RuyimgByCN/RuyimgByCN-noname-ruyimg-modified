@@ -5,6 +5,7 @@ use crate::room::{spawn_room_with_engine, RoomHandle, RoomMsg};
 use crate::session::{HandlerError, Session};
 use content_runtime::{ActiveAssetInfo, ActiveCatalog, ActiveCatalogPage, ContentLock};
 use engine_core::Engine;
+use crate::native::{NativeGameRequest, NativeGameSummary, NativePackageInfo};
 use engine_protocol::{
     ClientMessage, ErrorCode, MessageHeader, ServerMessage, NETWORK_PROTOCOL_VERSION,
 };
@@ -29,6 +30,7 @@ pub struct Lobby {
     content_lock: ContentLock,
     content_catalog: ActiveCatalog,
     content_assets: BTreeMap<(String, String, String), ActiveAssetInfo>,
+    native: std::sync::Arc<crate::native::NativeContent>,
 }
 
 /// Point-in-time lobby statistics for Prometheus export (§40.2).
@@ -55,6 +57,7 @@ impl Lobby {
         content_lock: ContentLock,
         content_catalog: ActiveCatalog,
         content_assets: BTreeMap<(String, String, String), ActiveAssetInfo>,
+        native: std::sync::Arc<crate::native::NativeContent>,
     ) -> Self {
         Self {
             cfg,
@@ -70,7 +73,24 @@ impl Lobby {
             content_lock,
             content_catalog,
             content_assets,
+            native,
         }
+    }
+
+    /// T6③：列出已安装原生包。
+    pub fn native_packages(&self) -> Result<Vec<NativePackageInfo>, String> {
+        self.native.installed()
+    }
+
+    /// T6③：安装包 → 装载 → 原生建局（CPU 密集，放阻塞线程池）。
+    pub async fn native_game(
+        &self,
+        req: NativeGameRequest,
+    ) -> Result<NativeGameSummary, String> {
+        let native = self.native.clone();
+        tokio::task::spawn_blocking(move || crate::native::create_native_game(&native, &req))
+            .await
+            .map_err(|e| format!("原生建局任务失败: {e}"))?
     }
 
     /// Return one bounded page from the immutable startup content catalog.

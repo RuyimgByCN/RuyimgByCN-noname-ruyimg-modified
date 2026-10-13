@@ -13,6 +13,8 @@ path = "src/main.rs"
 engine-api = { workspace = true }
 engine-core = { workspace = true }
 content-runtime = { workspace = true }
+content-native-loader = { path = "../../crates/content-native-loader" }
+engine-native = { path = "../../crates/engine-native" }
 engine-ai = { workspace = true }
 engine-protocol = { path = "../../crates/engine-protocol" }
 serde = { workspace = true }
@@ -33,3 +35,4 @@ blake3 = { workspace = true }
 tokio-tungstenite = "0.26"
 url = "2"
 content-schema = { path = "../../crates/content-schema" }
+tempfile = { workspace = true }

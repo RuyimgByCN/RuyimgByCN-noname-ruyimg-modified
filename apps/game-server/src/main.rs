@@ -2,6 +2,7 @@
 
 mod config;
 mod lobby;
+mod native;
 mod outbox;
 mod persist;
 mod room;
@@ -14,9 +15,9 @@ use axum::{
         Path as AxumPath, Query, State,
     },
     http::{header, HeaderMap, Response, StatusCode},
-    response::IntoResponse,
-    routing::get,
-    Router,
+    response::{IntoResponse, Response as AxumResponse},
+    routing::{get, post},
+    Json, Router,
 };
 use config::ServerConfig;
 use content_runtime::{import_extensions, InstallOptions, PackageStore};
@@ -75,12 +76,28 @@ async fn main() {
         content_lock = %report.content_lock.lock_hash,
         "content ready"
     );
+    // T6③ 产品路径：原生内容服务（安装包根 + 独立包存储）。安装（导入）
+    // 在启动时执行；装载与原生建局经 /native 端点按需进行。
+    let native_content = native::NativeContent::open(
+        cfg.native_packages_root.clone(),
+        cfg.native_store_root.clone(),
+    )
+    .expect("open native content");
+    let native_packages = native_content.import().unwrap_or_else(|e| {
+        warn!(error = %e, "native package import failed; /native paths degraded");
+        Vec::new()
+    });
+    info!(
+        packages = native_packages.len(),
+        "native content ready"
+    );
     let lobby = Arc::new(Lobby::new(
         cfg.clone(),
         engine_template,
         content_lock,
         content_catalog,
         content_assets,
+        Arc::new(native_content),
     ));
     let original_content = ServeDir::new(&cfg.original_content_root);
 
@@ -93,6 +110,8 @@ async fn main() {
             "/package-assets/{namespace}/{package_id}/{*asset_id}",
             get(package_asset_handler),
         )
+        .route("/native/packages", get(native_packages_handler))
+        .route("/native/games", post(native_games_handler))
         .route("/ws", get(ws_handler))
         .nest_service("/original-content", original_content)
         .layer(CorsLayer::permissive())
@@ -120,6 +139,30 @@ async fn content_catalog_handler(
     Query(query): Query<ContentCatalogQuery>,
 ) -> axum::Json<content_runtime::ActiveCatalogPage> {
     axum::Json(lobby.content_catalog_page(query.offset, query.limit))
+}
+
+/// T6③：列出已安装原生包。
+async fn native_packages_handler(
+    State(lobby): State<Arc<Lobby>>,
+) -> Result<Json<Vec<native::NativePackageInfo>>, (StatusCode, String)> {
+    match lobby.native_packages() {
+        Ok(list) => Ok(Json(list)),
+        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, e)),
+    }
+}
+
+/// T6③：安装包 → 装载 → 原生建局 → 有界 AI 驱动。
+async fn native_games_handler(
+    State(lobby): State<Arc<Lobby>>,
+    Json(req): Json<native::NativeGameRequest>,
+) -> Result<AxumResponse, (StatusCode, String)> {
+    if !(2..=8).contains(&req.seats) {
+        return Err((StatusCode::BAD_REQUEST, "seats must be 2..=8".into()));
+    }
+    match lobby.native_game(req).await {
+        Ok(summary) => Ok((StatusCode::OK, Json(summary)).into_response()),
+        Err(e) => Err((StatusCode::BAD_REQUEST, e)),
+    }
 }
 
 async fn package_asset_handler(
