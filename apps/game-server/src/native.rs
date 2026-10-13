@@ -68,8 +68,13 @@ impl NativeContent {
         Ok(metas.iter().map(Self::meta_info).collect())
     }
 
-    /// 装载：按包 id 找安装记录 → 读安装后 `assets/cards.json` → 装载器桥接。
+    /// 装载：按包 id 找安装记录 → 读安装后包数据 → 装载器桥接。
+    /// T8 增量 4：存在编译包 `package.npack.json` 时优先读——rule-vm
+    /// 模块经 `bridge_vm_skill_decls` 入 `vm_skills`（不重编译装包含新
+    /// 技能的包）；此时 `assets/cards.json` 可选（vm-only 包）。无编译
+    /// 包时维持 T6③ 口径（cards.json 必需，暂缓牌清单透传）。
     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+        use engine_native::content::extension::{ExtensionDef, ExtensionPack};
         let metas = self.store.list_installed().map_err(|e| e.to_string())?;
         let meta = metas
             .iter()
@@ -80,14 +85,63 @@ impl NativeContent {
             .as_ref()
             .ok_or_else(|| format!("包缺少安装根: {package_id}"))?;
         let cards_path = PathBuf::from(root).join("assets/cards.json");
-        let json = std::fs::read_to_string(&cards_path)
-            .map_err(|e| format!("读取包数据失败 {cards_path:?}: {e}"))?;
-        let bridged: BridgedPack =
-            content_native_loader::bridge_pack(&json).map_err(|e| e.to_string())?;
+        let npack_path = PathBuf::from(root).join("package.npack.json");
+        let (pack, deferred) = if npack_path.is_file() {
+            let raw = std::fs::read_to_string(&npack_path)
+                .map_err(|e| format!("读取编译包失败 {npack_path:?}: {e}"))?;
+            let parsed: content_schema::ContentPackage =
+                serde_json::from_str(&raw).map_err(|e| format!("编译包解析失败: {e}"))?;
+            let vm_skills = content_native_loader::bridge_vm_skill_decls(&parsed)
+                .map_err(|e| e.to_string())?;
+            let bridged = if cards_path.is_file() {
+                let json = std::fs::read_to_string(&cards_path)
+                    .map_err(|e| format!("读取包数据失败 {cards_path:?}: {e}"))?;
+                let b: BridgedPack =
+                    content_native_loader::bridge_pack(&json).map_err(|e| e.to_string())?;
+                (b.pack, b.deferred)
+            } else {
+                // vm-only 包：无卡牌桥接面，元数据取自 npack manifest。
+                (
+                    ExtensionPack {
+                        def: ExtensionDef {
+                            name: engine_native::content::names::intern(
+                                parsed.manifest.package_id.clone(),
+                            ),
+                            // npack version 为类 semver 字符串——取首个数
+                            // 字段（无法解析取 0；生命周期指纹另含内容锁）。
+                            version: parsed
+                                .manifest
+                                .version
+                                .split('.')
+                                .next()
+                                .and_then(|v| v.parse::<u32>().ok())
+                                .unwrap_or(0),
+                            description: engine_native::content::names::intern(
+                                parsed.manifest.namespace.clone(),
+                            ),
+                        },
+                        generals: Vec::new(),
+                        cards: Vec::new(),
+                        host_skills: Vec::new(),
+                        vm_skills,
+                        init_hook: engine_native::content::extension::InitHook::None,
+                        enabled: true,
+                    },
+                    Vec::new(),
+                )
+            };
+            bridged
+        } else {
+            let json = std::fs::read_to_string(&cards_path)
+                .map_err(|e| format!("读取包数据失败 {cards_path:?}: {e}"))?;
+            let bridged: BridgedPack =
+                content_native_loader::bridge_pack(&json).map_err(|e| e.to_string())?;
+            (bridged.pack, bridged.deferred)
+        };
         Ok(LoadedPack {
             package_id: package_id.to_string(),
-            pack: bridged.pack,
-            deferred: bridged.deferred,
+            pack,
+            deferred,
         })
     }
 }

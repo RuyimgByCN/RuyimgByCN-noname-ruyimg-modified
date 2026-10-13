@@ -14,6 +14,7 @@ engine-api = { workspace = true }
 engine-core = { workspace = true }
 content-runtime = { workspace = true }
 content-native-loader = { path = "../../crates/content-native-loader" }
+content-schema = { path = "../../crates/content-schema" }
 engine-native = { path = "../../crates/engine-native" }
 engine-ai = { workspace = true }
 engine-protocol = { path = "../../crates/engine-protocol" }
@@ -34,5 +35,5 @@ blake3 = { workspace = true }
 [dev-dependencies]
 tokio-tungstenite = "0.26"
 url = "2"
-content-schema = { path = "../../crates/content-schema" }
+content-compiler = { path = "../../crates/content-compiler" }
 tempfile = { workspace = true }
