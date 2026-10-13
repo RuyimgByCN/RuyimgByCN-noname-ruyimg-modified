@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 268;
+pub const STANDARD_RULESET_VERSION: u64 = 269;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -5244,6 +5244,18 @@ pub const BOSS_KUJIU: &str = "苦酒";
 /// 热恼（十殿阎罗泰山王，规则 v268，群雄乱入）：锁定技——你死亡时，随
 /// 机一名其他角色受 3 点火焰伤害（die forceDie 遗言面，雷诛同位）。
 pub const BOSS_RENAO: &str = "热恼";
+/// 轮回（十殿阎罗转轮王，规则 v269，群雄乱入）：锁定技——准备阶段，若
+/// 你的体力不大于 2，你与体力最高且大于 2 的一名其他角色交换体力值
+///（randomGet→座位序首个确定性近似登记；交换直写 min(maxHp) 封顶）。
+pub const BOSS_LUNHUI: &str = "轮回";
+/// 往生（十殿阎罗转轮王，规则 v269，群雄乱入）：锁定技——出牌阶段开始
+/// 时，视为随机使用一张【南蛮入侵】/【万箭齐发】（randomGet→恒定取南
+/// 蛮近似登记；use_virtual_card 载体管线，目标=全部其他存活）。
+pub const BOSS_WANGSHENG: &str = "往生";
+/// 反噬（十殿阎罗转轮王，规则 v269，群雄乱入）：锁定技——每回合第一次
+/// 受伤后，若再次受到伤害，对随机一名其他角色造成 1 点伤害（上游
+/// addTempSkill boss_zlfanshi_terra 交替同口径；随机→首个确定性近似）。
+pub const BOSS_ZLFANSHI: &str = "反噬";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5560,6 +5572,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("卞城王", Faction::Qun, &[BOSS_LEIZHOU, BOSS_LEIFU, BOSS_LEIZHU], 4, Gender::Male),
     // 泰山王（v268 服毒+苦酒+热恼；上游 group qun→群目录直取）
     ("泰山王", Faction::Qun, &[BOSS_FUDU, BOSS_KUJIU, BOSS_RENAO], 4, Gender::Male),
+    // 转轮王（v269 魔道[共用]+轮回+往生+反噬；上游 group qun→群目录直取）
+    ("转轮王", Faction::Qun, &[BOSS_MODAO, BOSS_LUNHUI, BOSS_WANGSHENG, BOSS_ZLFANSHI], 6, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7538,6 +7552,27 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(RenaoBehavior),
+        },
+        SkillDef {
+            name: BOSS_LUNHUI,
+            // 查询型单面：Judge begin 臂——hp≤2 与首个 hp>2 其他交换体力
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_WANGSHENG,
+            // 查询型单面：Play begin 臂——恒定虚拟南蛮（全部其他存活）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZLFANSHI,
+            // 查询型单面：Damage commit 尾臂——terra 旗交替+反噬 1 伤
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

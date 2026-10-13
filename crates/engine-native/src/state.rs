@@ -159,6 +159,9 @@ pub struct PlayerState {
     /// 星囚（Boss 蓐收，规则 v239）：出牌阶段开始交替开关（每回合开始
     /// 取反；true 回合横置全部敌方；跨回合持久）。
     pub xingqiu_toggled: bool,
+    /// 反噬 terra 旗（十殿阎罗转轮王，规则 v269）：本回合已受伤一次；
+    /// 回合结束全清（封印解除同位）。
+    pub zlfanshi_terra: bool,
     /// 不臣（Boss 勾芒，规则 v240）：上次发动不臣的轮次（0=未发动过；
     /// 间隔 ≥2 轮可再发动；跨回合持久）。
     pub buchun_used_round: u32,
@@ -258,6 +261,7 @@ impl PlayerState {
             fengyin_active: false,
             lingqu_count: 0,
             xingqiu_toggled: false,
+            zlfanshi_terra: false,
             buchun_used_round: 0,
             nbianshen_toggle: false,
             xingxia_used_round: 0,

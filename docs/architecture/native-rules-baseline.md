@@ -2917,6 +2917,27 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v269（2026-10-13，T11 十殿阎罗转轮王片：魔道共用/轮回/往生/反噬
+＋转轮王条目，字段批）**：**魔道**（共用技复用 `BOSS_MODAO`，夜叉/罗刹
+先例，零新增）。**轮回**（查询型 Noop）：Judge-begin 臂——准备阶段体力
+≤2 时与体力最高且>2 的一名其他角色交换体力值（hp 直写双向 min(maxHp)
+封顶同上游；**并列最高取座位序首个**——`max_by_key` 平局取末位故显式
+先求最大值再取首个；无事件面直写=登记差异）。**往生**（查询型 Noop）：
+Play-begin 臂——视为随机使用【南蛮】/【万箭】，`use_virtual_card` 载体
+管线（乱剑/千方同口径）；randomGet→**恒定取南蛮**近似登记；目标=全部
+其他存活（机器直发不经校验）。**反噬**（查询型 Noop）：Damage commit
+尾臂（极点同位）——每回合首次受伤置 `PlayerState.zlfanshi_terra` 旗，
+同回合再受伤→随机其他受 1 伤；旗回合结束全清（封印解除同位）。新状态
+字段入 canonical hash+存档玩家段，`ARCHIVE_FORMAT_VERSION` 61→**62**。
+`BOSS_GENERALS` 尾追加**转轮王**（def 索引 47/**hp6**/`[魔道, 轮回, 往生,
+反噬]`）。**登记差异**：随机→首个近似族；轮回直写无事件面；往生恒定
+南蛮。FROZEN 名单尾加「轮回」「往生」「反噬」（157–159 名）。版本
+268→**269**。字段批探针（v268 提交全绿；268+字段/269+字段两态全差且
+actual 互异）后全量重录。回归 `boss_zhuanlunwang_lunhui_swap_at_judge` /
+`boss_zhuanlunwang_wangsheng_virtual_savage` /
+`boss_zhuanlunwang_fanshi_damage_toggle`——证据见
+[2026-10-13 转轮王片](../operations/evidence/2026-10-13-t11-boss-zhuanlunwang-v269/README.md)。
+
 **规则 v268（2026-10-13，T11 十殿阎罗泰山王片：服毒/苦酒/热恼＋泰山王
 条目）**：**服毒**（查询型 Noop）：`commit_card_used` 内联臂（邪酬同
 位）——其他角色使用【桃】时随机另一名其他角色失 1 体力（kind 判定含

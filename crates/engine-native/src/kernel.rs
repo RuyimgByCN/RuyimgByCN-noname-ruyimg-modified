@@ -558,6 +558,32 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 反噬（十殿阎罗转轮王，规则 v269）：每回合第一次受伤后置 terra 旗，
+    // 同回合再次受伤 → 随机一名其他角色受 1 点伤害（上游 boss_zlfanshi
+    // damageEnd addTempSkill boss_zlfanshi_terra 交替同口径；随机→座位序
+    // 首个确定性近似登记；旗清零=回合结束全清，封印解除同位）
+    if let Some(fsdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_ZLFANSHI)
+    {
+        if ctx.core.has_skill(d.target, fsdef) && ctx.core.player(d.target).alive {
+            if ctx.core.player(d.target).zlfanshi_terra {
+                ctx.core.player_mut(d.target).zlfanshi_terra = false;
+                let seats = ctx.core.players.len() as PlayerId;
+                if let Some(t) =
+                    (0..seats).find(|&t| t != d.target && ctx.core.player(t).alive)
+                {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data(
+                        Some(d.target),
+                        t,
+                        1,
+                    )));
+                }
+            } else {
+                ctx.core.player_mut(d.target).zlfanshi_terra = true;
+            }
+        }
+    }
     // 逐厄（Boss 穷奇，规则 v211）：global damageEnd——任何人受到伤害
     // 后（来源存活且非穷奇），穷奇与来源各摸一张（上游 boss_zhue
     // asyncDraw([player, source]) 同口径）
@@ -1761,6 +1787,47 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.draw_cards(player, 2);
                         }
                     }
+                    // 轮回（十殿阎罗转轮王，规则 v269）：准备阶段，若体力
+                    // ≤2——与体力最高且大于 2 的一名其他角色交换体力值
+                    //（上游 boss_lunhui hp 直写 min(maxHp) 双封顶同口径；
+                    // randomGet→座位序首个确定性近似登记；无事件面直写）
+                    if let Some(lhdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_LUNHUI)
+                    {
+                        if ctx.core.has_skill(player, lhdef)
+                            && ctx.core.player(player).hp <= 2
+                        {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            let cands: Vec<i32> = (0..seats)
+                                .filter(|&t| {
+                                    t != player
+                                        && ctx.core.player(t).alive
+                                        && ctx.core.player(t).hp > 2
+                                })
+                                .map(|t| ctx.core.player(t).hp)
+                                .collect();
+                            let best = cands
+                                .iter()
+                                .copied()
+                                .max()
+                                .and_then(|maxhp| {
+                                    (0..seats).find(|&t| {
+                                        t != player
+                                            && ctx.core.player(t).alive
+                                            && ctx.core.player(t).hp == maxhp
+                                    })
+                                });
+                            if let Some(t) = best {
+                                let hp1 = ctx.core.player(player).hp;
+                                let hp2 = ctx.core.player(t).hp;
+                                let my_max = ctx.core.player(player).max_hp as i32;
+                                let t_max = ctx.core.player(t).max_hp as i32;
+                                ctx.core.player_mut(player).hp = hp2.min(my_max);
+                                ctx.core.player_mut(t).hp = hp1.min(t_max);
+                            }
+                        }
+                    }
                     // 猛态（Boss 年兽，规则 v248）：准备阶段置双旗标
                     //（上游 boss_mengtai_begin storage 置 true 同口径；
                     // 摸牌/出牌阶段开始时清位）
@@ -2209,6 +2276,29 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 }
             }
             Phase::Play => {
+                // 往生（十殿阎罗转轮王，规则 v269）：出牌阶段开始——视为
+                // 随机使用一张【南蛮入侵】/【万箭齐发】（上游 boss_wangsheng
+                // useCard noai；randomGet→恒定取南蛮确定性近似登记；
+                // use_virtual_card 载体管线，目标=全部其他存活，机器直发
+                // 不经距离/目标数校验=乱剑同口径）
+                if let Some(wsdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_WANGSHENG)
+                {
+                    if ctx.core.has_skill(player, wsdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        let targets: Vec<PlayerId> = (0..seats)
+                            .filter(|&t| t != player && ctx.core.player(t).alive)
+                            .collect();
+                        if !targets.is_empty() {
+                            ctx.use_virtual_card(
+                                player,
+                                crate::catalog::CardKind::SavageAttack,
+                                targets,
+                            );
+                        }
+                    }
+                }
                 // 星囚（Boss 蓐收，规则 v239）：出牌阶段开始交替横置全
                 // 部敌方（上游 boss_xingqiu phaseUseBegin storage 取反+
                 // content link 同口径；只链不解——已横置保持；对 boss_
@@ -2667,6 +2757,11 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 // 封冻解除（Boss 应昭，规则 v228）：回合结束全清封印
                 for p in ctx.core.players.iter_mut() {
                     p.fengyin_active = false;
+                }
+                // 反噬 terra 清零（十殿阎罗转轮王，规则 v269）：回合结束
+                // 全清（上游 addTempSkill 当前回合结束同口径）
+                for p in ctx.core.players.iter_mut() {
+                    p.zlfanshi_terra = false;
                 }
                 // 巨源（Boss 朱厌，规则 v226）：回合结束记录体力（上游
                 // phaseAfter storage=hp 同口径；跨回合持久）

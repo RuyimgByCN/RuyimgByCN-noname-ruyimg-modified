@@ -4261,6 +4261,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.fengyin_active as u8);
         push_u8(&mut h, p.lingqu_count);
         push_u8(&mut h, p.xingqiu_toggled as u8);
+        // 反噬 terra 旗（Boss 转轮王，规则 v269）
+        push_u8(&mut h, p.zlfanshi_terra as u8);
         push_u32(&mut h, p.buchun_used_round);
         push_u32(&mut h, p.xingxia_used_round);
         push_u8(&mut h, p.nbianshen_toggle as u8);
