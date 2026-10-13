@@ -1,0 +1,29 @@
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/t8_rvm_bridge.rs:494:9
+    |
+494 |     let mut e = engine_setup(&pack, name, 930004);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "t8_rvm_bridge") generated 1 warning (run `cargo fix --test "t8_rvm_bridge" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/t8_rvm_bridge.rs (target/debug/deps/t8_rvm_bridge-78d3c10f7558825f)
+
+running 11 tests
+test t8_rejection_tampered_snapshot_module_rejected ... ok
+test t8_vm_skill_save_restore_roundtrip ... ok
+test t8_rejection_corrupted_bytecode_rolls_back ... ok
+test t8_rejection_caps_escalation_denied ... ok
+test t8_vm_skill_draw_branch_end_to_end ... ok
+test t8_vm_skill_recover_branch_end_to_end ... ok
+test t8_rejection_unmapped_effect_rolls_back ... ok
+test t8_vm_skill_loader_bridge_end_to_end ... ok
+test t8_vm_skill_content_lock_rejects_pack_drift ... ok
+test t8_vm_skill_choice_suspend_resume_midrestore ... ok
+test t8_vm_skill_fuel_exhaustion_rolls_back ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

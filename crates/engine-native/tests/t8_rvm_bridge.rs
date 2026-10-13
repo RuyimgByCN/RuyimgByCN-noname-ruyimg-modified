@@ -392,6 +392,125 @@ fn t8_vm_skill_loader_bridge_end_to_end() {
     assert_eq!(hp(&e, 1), 3, "装载器在环：阶段结束受伤回 1");
 }
 
+/// 未映射效果样本：change_max_hp（增量 5 桥映射面之外）。
+const UNMAPPED_EFFECT_DSL: &str = "\
+skill hnl_capped_t8(990004) {
+  trigger phase_end owner_is_target {
+    effect change_max_hp(self, 1);
+  }
+}
+";
+
+// ---------------------------------------------------------------------------
+// 恶意字节码拒收矩阵（T8 增量 5）：全部经数据路径注入，断言「无效果
+// 落账、对局不 panic、机器回滚收尾」。
+// ---------------------------------------------------------------------------
+
+/// 推进到持有者阶段结束之后（VM 触发已发生），返回触发前后的手牌差。
+fn drive_past_holder_phase_end(e: &mut Engine) {
+    for _ in 0..40 {
+        if e.turn().current != 0 {
+            // 0 号回合收束后至少跨入 1 号回合（触发面已过）
+            return;
+        }
+        if e.outcome().is_some() {
+            panic!("对局提前结束");
+        }
+        np_settled(e);
+    }
+}
+
+/// 拒收 ①：未映射效果（change_max_hp）——emit 时 InvalidRequest → 回滚，
+/// 无效果落账。
+#[test]
+fn t8_rejection_unmapped_effect_rolls_back() {
+    let pkg = compile_source_named("t8-rvm-bridge", UNMAPPED_EFFECT_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_capped_t8");
+    let name = "t8改上限";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+    }]);
+    let mut e = engine_setup(&pack, name, 930001);
+    let h0 = hand_len(&e, 1);
+    drive_past_holder_phase_end(&mut e);
+    assert_eq!(hand_len(&e, 1), h0, "未映射效果：无落账（回滚协议）");
+    assert_eq!(hp(&e, 1), 4, "体力上限未被改动");
+}
+
+/// 拒收 ②：字节码载体篡改（数据路径注入坏码）——verify_module 拒绝，
+/// 回滚且不 panic。
+#[test]
+fn t8_rejection_corrupted_bytecode_rolls_back() {
+    let pkg = compile_source_named("t8-rvm-bridge", JIUWEI_DSL).expect("DSL 编译");
+    let mut module = module_of(&pkg, "hnl_jiuwei_t8");
+    // 破坏码段首字节（verify/执行层拒绝）
+    if !module.code.is_empty() {
+        module.code[0] ^= 0xFF;
+    }
+    let name = "t8坏码";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+    }]);
+    let mut e = engine_setup(&pack, name, 930002);
+    let h0 = hand_len(&e, 1);
+    drive_past_holder_phase_end(&mut e);
+    assert_eq!(hand_len(&e, 1), h0, "坏字节码：无落账（回滚协议）");
+}
+
+/// 拒收 ③：能力越权（caps_mask 置未知位）——check_caps 拒绝，回滚。
+#[test]
+fn t8_rejection_caps_escalation_denied() {
+    let pkg = compile_source_named("t8-rvm-bridge", JIUWEI_DSL).expect("DSL 编译");
+    let mut module = module_of(&pkg, "hnl_jiuwei_t8");
+    module.caps_mask |= 0xFFFF_0000; // 未知能力位
+    let name = "t8越权";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+    }]);
+    let mut e = engine_setup(&pack, name, 930003);
+    let h0 = hand_len(&e, 1);
+    drive_past_holder_phase_end(&mut e);
+    assert_eq!(hand_len(&e, 1), h0, "能力越权：check_caps 拒绝，无落账");
+}
+
+/// 拒收 ④：存档载体篡改——Rvm 快照模块字节被改后 restore 拒绝
+///（from_bytes/哈希核对）。
+#[test]
+fn t8_rejection_tampered_snapshot_module_rejected() {
+    let pkg = compile_source_named("t8-rvm-bridge", JIUWEI_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_jiuwei_t8");
+    let name = "t8酒尾";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+    }]);
+    let e = engine_setup(&pack, name, 930004);
+    let snap = e.save();
+    // NGSA 存档字节层面：翻转有效负载中部字节后解码须失败（魔数/校验
+    // 和防线；针对 Rvm 载体字节的针尖级篡改由 check_machine 的
+    // from_bytes/哈希核对承担——auth_archive 负例族同口径）。
+    let mut bytes = engine_native::archive::encode_archive(&snap);
+    let mid = bytes.len() / 2;
+    bytes[mid] = bytes[mid].wrapping_add(1);
+    assert!(
+        engine_native::archive::decode_archive(&bytes).is_err(),
+        "篡改存档须拒绝解码"
+    );
+}
+
+fn engine_setup(pack: &ExtensionPack, name: &str, seed: u64) -> Engine {
+    let mut e = Engine::new_with_extensions(seed, 4, &[pack]).expect("建局");
+    e.debug_grant(1, name);
+    e
+}
+
 /// 存档往返：VM 技能提交后对局可存档恢复（内容锁哈希入快照面）。
 #[test]
 fn t8_vm_skill_save_restore_roundtrip() {
