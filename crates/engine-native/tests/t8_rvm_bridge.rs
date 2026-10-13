@@ -633,6 +633,146 @@ fn t8_vm_skill_loader_skips_named_filters() {
     );
 }
 
+// ---------------------------------------------------------------------------
+// 跨进程恢复（T8 增量 7）：同宿主双进程存档接力——父进程挂起→NGSA 字
+// 节落盘→子进程（本测试二进制自启，T8_WORKER 环境变量识别）恢复→续跑
+// 落账→存档回写→父进程校验。C1 验收「跨进程恢复」面。
+// ---------------------------------------------------------------------------
+
+/// 跨进程恢复接力：父进程挂起→子进程续跑落账→回写→父进程校验。
+#[test]
+fn t8_vm_skill_cross_process_resume() {
+    const DSL: &str = "\
+skill hnl_xproc_t8(990008) {
+  trigger phase_end owner_is_target {
+    let option = choose(1, 2);
+    if option == 1 {
+      effect recover_hp(self, 1);
+    }
+    if option == 2 {
+      effect draw_cards(self, 1);
+    }
+  }
+}
+";
+    // 子进程模式：读存档→恢复→应答 Tag(1)→存档回写→退出
+    if let Ok(Paths { archive, reply }) = worker_paths() {
+        let bytes = std::fs::read(&archive).expect("子进程读存档");
+        let snap = engine_native::archive::decode_archive(&bytes).expect("子进程解码");
+        let pkg = compile_source_named("t8-rvm-bridge", DSL).expect("子进程 DSL 编译");
+        let module = module_of(&pkg, "hnl_xproc_t8");
+        let name = "t8跨进程";
+        let pack = pack_with(vec![VmSkillDecl {
+            name: name.to_string(),
+            module,
+            trigger: phase_end_trigger(),
+            filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+        }]);
+        let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("子进程恢复");
+        let c = e.open_choice().expect("子进程挂起询问在位");
+        assert_eq!(c.spec.prompt, "rvm_choice");
+        let (cid, obs) = (c.id, c.observer);
+        submit(
+            &mut e,
+            obs,
+            GameAction::Answer {
+                choice_id: cid,
+                selection: vec![ChoiceOption::Tag(1)],
+            },
+        );
+        assert_eq!(hp(&e, 1), 3, "子进程续跑落账（2→3）");
+        let out = engine_native::archive::encode_archive(&e.save());
+        std::fs::write(&reply, out).expect("子进程回写");
+        return;
+    }
+
+    // 父进程：建局→推进到挂起→落盘→自启子进程→校验
+    let pkg = compile_source_named("t8-rvm-bridge", DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_xproc_t8");
+    let name = "t8跨进程";
+    let pack = pack_with(vec![VmSkillDecl {
+        name: name.to_string(),
+        module,
+        trigger: phase_end_trigger(),
+        filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    }]);
+    let mut e = Engine::new_with_extensions(930007, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, name);
+    e.debug_set_hp(1, 2);
+    for _ in 0..40 {
+        let pending = e.open_choice().map(|c| {
+            (c.id, c.observer, c.spec.prompt, c.spec.options.clone(), c.spec.min)
+        });
+        match pending {
+            Some((cid, obs, prompt, options, min)) => {
+                if prompt == "rvm_choice" {
+                    break;
+                }
+                let sel: Vec<ChoiceOption> = options
+                    .iter()
+                    .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                    .copied()
+                    .take(min.max(1))
+                    .collect();
+                let selection = if sel.is_empty() && !options.is_empty() {
+                    vec![options[0].clone()]
+                } else {
+                    sel
+                };
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection });
+            }
+            None => {
+                if e.outcome().is_some() {
+                    panic!("对局提前结束");
+                }
+                np_settled(&mut e);
+            }
+        }
+    }
+    assert!(e.open_choice().is_some(), "父进程挂起在位");
+
+    let dir = tempfile::tempdir().expect("临时目录");
+    let archive_path = dir.path().join("relay.ngsa");
+    let reply_path = dir.path().join("relay.result.ngsa");
+    std::fs::write(&archive_path, engine_native::archive::encode_archive(&e.save()))
+        .expect("父进程落盘");
+
+    // 自启子进程（同测试二进制，T8_WORKER 环境变量识别）
+    let exe = std::env::current_exe().expect("测试二进制");
+    let status = std::process::Command::new(exe)
+        .args(["--exact", "t8_vm_skill_cross_process_resume", "--nocapture"])
+        .env("T8_WORKER_ARCHIVE", archive_path.display().to_string())
+        .env("T8_WORKER_REPLY", reply_path.display().to_string())
+        .output()
+        .expect("自启子进程");
+    assert!(
+        status.status.success(),
+        "子进程续跑失败: {}",
+        String::from_utf8_lossy(&status.stderr)
+    );
+
+    // 父进程校验回写存档：挂起已消费、hp 3
+    let reply_bytes = std::fs::read(&reply_path).expect("读回写存档");
+    let snap2 = engine_native::archive::decode_archive(&reply_bytes).expect("解码回写");
+    let r = Engine::restore_with_extensions(&snap2, &[&pack]).expect("父进程恢复回写");
+    assert_eq!(hp(&r, 1), 3, "跨进程接力：续跑效果在回写存档中");
+}
+
+/// 子进程接力路径参数（T8_WORKER_ARCHIVE/T8_WORKER_REPLY）。
+struct Paths {
+    archive: std::path::PathBuf,
+    reply: std::path::PathBuf,
+}
+
+fn worker_paths() -> Result<Paths, std::env::VarError> {
+    let archive = std::env::var("T8_WORKER_ARCHIVE")?;
+    let reply = std::env::var("T8_WORKER_REPLY")?;
+    Ok(Paths {
+        archive: archive.into(),
+        reply: reply.into(),
+    })
+}
+
 /// 存档往返：VM 技能提交后对局可存档恢复（内容锁哈希入快照面）。
 #[test]
 fn t8_vm_skill_save_restore_roundtrip() {

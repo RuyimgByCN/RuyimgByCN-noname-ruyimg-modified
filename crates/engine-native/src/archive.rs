@@ -2552,6 +2552,8 @@ const KNOWN_PROMPTS: &[&str] = &[
     "gj_shujinsan_discard", "gj_feibiao_discard", "gj_jinlianzhu_confirm",
     "gj_xiajiao_discard", "gj_luyugeng_cost", "gj_dinvxuanshuang_rider",
     "hh_dunpai_discard", "hh_yuansu_discard", "gw_poxiao_branch",
+    // T8 增量 2/7：rule-vm 技能选择挂起（rvm_bridge）
+    "rvm_choice",
 ];
 
 fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
