@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 276;
+pub const STANDARD_RULESET_VERSION: u64 = 277;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -5707,6 +5707,14 @@ pub const BOSS_JUHUN: &str = "拘魂";
 /// 望乡（十殿阎罗秦广王，规则 v276）：锁定遗言（Death 触发）——全部
 /// 有装备的其他角色装备全弃（撤技能+入弃堆；绝红同款拆装管线）。
 pub const BOSS_WANGXIANG: &str = "望乡";
+/// 天狱（群雄乱入 Boss 庞统[涅槃凤雏]，规则 v277）：锁定技——结束阶段
+/// 自己已横置则先解除，再将全部未横置的其他存活横置（上游
+/// ["turnOver"...boss_tianyu link 同口径；炼狱/锁足同款臂）。
+pub const BOSS_TIANYU: &str = "天狱";
+/// 栖梧（群雄乱入 Boss 庞统，规则 v277）：锁定技——使用梅花牌后若已受
+/// 伤则回复 1 点体力（上游 useCard club+hp<maxHp recover 同口径；事件面
+/// 与娇孝臂同族）。
+pub const BOSS_QIWU: &str = "栖梧";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -6042,6 +6050,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 秦广王（v276 判官+拘魂+望乡；还人=关卡流程面登记不落；上游 group
     // qun→群目录直取）
     ("秦广王", Faction::Qun, &[BOSS_PANGUAN, BOSS_JUHUN, BOSS_WANGXIANG], 3, Gender::Male),
+    // 庞统·涅槃凤雏（v277 天狱+栖梧；涅槃/浴火=外部包技依赖登记不落；
+    // 上游 group shen→群近似登记）
+    ("庞统", Faction::Qun, &[BOSS_TIANYU, BOSS_QIWU], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -8219,6 +8230,20 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(WangxiangBehavior),
+        },
+        SkillDef {
+            name: BOSS_TIANYU,
+            // 查询型单面：End begin 臂——自横置先解除+全场未横置横置
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_QIWU,
+            // 查询型单面：CardUsed commit 臂——梅花牌使用后受伤回复 1
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

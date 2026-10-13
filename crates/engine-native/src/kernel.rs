@@ -1207,6 +1207,26 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
             }
         }
     }
+    // 栖梧（群雄乱入 Boss 庞统，规则 v277）：使用梅花牌后若已受伤回复
+    // 1 点体力（上游 useCard club+hp<maxHp recover 同口径；事件面与娇孝
+    // 臂同族——机器直发 useCard 同覆盖）
+    if let Some(qwdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_QIWU)
+    {
+        let club = matches!(
+            ctx.catalog.cards[u.card as usize].suit,
+            crate::catalog::Suit::Club
+        );
+        if club
+            && ctx.core.has_skill(u.player, qwdef)
+            && ctx.core.player(u.player).alive
+            && ctx.core.player(u.player).hp > 0
+            && ctx.core.player(u.player).hp < ctx.core.player(u.player).max_hp as i32
+        {
+            ctx.recover(u.player, 1, None);
+        }
+    }
     // 娇孝（Boss 甄姬，规则 v262）：成为红色牌的目标后摸 1（上游 target
     // useCardToTargeted frequent 同口径；红色=实体花色 Heart/Diamond；
     // 含延时自置目标）
@@ -2704,6 +2724,31 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     .skill_by_name(crate::content::standard::BOSS_SUOMING)
                 {
                     if ctx.core.has_skill(player, smdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        for t in 0..seats {
+                            if t == player
+                                || !ctx.core.player(t).alive
+                                || ctx.core.player(t).linked
+                            {
+                                continue;
+                            }
+                            ctx.core.player_mut(t).linked = true;
+                            ctx.log(LogEvent::Linked { player: t, linked: true });
+                        }
+                    }
+                }
+                // 天狱（群雄乱入 Boss 庞统，规则 v277）：结束阶段——自
+                // 己已横置先解除，再将全部未横置的其他存活横置（上游
+                // boss_tianyu link 同口径；索链甲/锁足 linked 直写同款）
+                if let Some(tydef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_TIANYU)
+                {
+                    if ctx.core.has_skill(player, tydef) {
+                        if ctx.core.player(player).linked {
+                            ctx.core.player_mut(player).linked = false;
+                            ctx.log(LogEvent::Linked { player, linked: false });
+                        }
                         let seats = ctx.core.players.len() as PlayerId;
                         for t in 0..seats {
                             if t == player

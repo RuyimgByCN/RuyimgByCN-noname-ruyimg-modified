@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-8285df63cb92cc1c)
+
+running 2 tests
+test boss_pangtong_qiwu_club_recover ... ok
+test boss_pangtong_tianyu_end_link_all ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 308 filtered out; finished in 0.00s
+
