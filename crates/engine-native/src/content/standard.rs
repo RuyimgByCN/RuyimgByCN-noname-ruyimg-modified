@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 270;
+pub const STANDARD_RULESET_VERSION: u64 = 271;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1277,6 +1277,71 @@ impl SkillMachine for WanghunMachine {
                     enabled: false,
                 });
                 disabled += 1;
+            }
+        }
+        Flow::Done
+    }
+}
+
+/// 诛心（十殿阎罗阎罗王，规则 v271）：你死亡时，令场上血量最少的一名
+/// 其他角色受到 2 点伤害。Death 前置窗口触发（热恼同位直写一步机；
+/// 登记差异：上游 chooseTarget 最低体力池自选→座位序首个最低体力）。
+struct ZhuxinBehavior;
+
+impl SkillBehavior for ZhuxinBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(ZhuxinMachine {
+            owner,
+            emitted: 0,
+        })
+    }
+}
+
+/// 诛心机器：直写一步机（emit+Yield 一次，emitted 防重入；热恼同构）。
+#[derive(Clone)]
+struct ZhuxinMachine {
+    owner: PlayerId,
+    emitted: u8,
+}
+
+impl SkillMachine for ZhuxinMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossZhuxin {
+            owner: self.owner,
+            emitted: self.emitted,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.emitted == 0 {
+            self.emitted = 1;
+            let seats = ctx.core.players.len() as PlayerId;
+            // 座位序首个最低体力（严格更小才替换=并列取首）
+            let mut best: Option<PlayerId> = None;
+            for t in 0..seats {
+                if t == self.owner || !ctx.core.player(t).alive {
+                    continue;
+                }
+                let hp = ctx.core.player(t).hp;
+                if best.map(|b| hp < ctx.core.player(b).hp).unwrap_or(true) {
+                    best = Some(t);
+                }
+            }
+            if let Some(t) = best {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(self.owner),
+                    t,
+                    2,
+                    crate::event::DamageNature::Normal,
+                    None,
+                )));
+                return Flow::Yield;
             }
         }
         Flow::Done
@@ -5339,6 +5404,18 @@ pub const BOSS_WANGSHI: &str = "往事";
 /// 技→座位序前两个其他存活各首个启用技确定性近似登记；回魂牌堆注入与
 /// 回收面、shidianyanluo 模式旗未落随 boss 模式扩展批）。
 pub const BOSS_WANGHUN: &str = "忘魂";
+/// 铁面（十殿阎罗阎罗王，规则 v271）：锁定技——防具区没有牌时，视为
+/// 装备【仁王盾】（sha 机仁王块扩展：持有者防具槽空 → 黑杀无效；青釭/
+/// 铡刀穿透天然覆盖）。
+pub const BOSS_TIEMIAN: &str = "铁面";
+/// 铡刀（十殿阎罗阎罗王，规则 v271）：锁定技——你使用【杀】指定目标后，
+/// 令目标角色防具无效（上游 inherit qinggang_skill；sha 机青釭穿透链
+/// 扩展：来源持有者即穿透）。
+pub const BOSS_ZHADAO: &str = "铡刀";
+/// 诛心（十殿阎罗阎罗王，规则 v271）：锁定遗言（Death 触发）——你死亡
+/// 时，令场上血量最少的一名其他角色受到 2 点伤害（上游 chooseTarget
+/// 最低体力池自选→座位序首个最低体力确定性近似登记）。
+pub const BOSS_ZHUXIN: &str = "诛心";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5659,6 +5736,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("转轮王", Faction::Qun, &[BOSS_MODAO, BOSS_LUNHUI, BOSS_WANGSHENG, BOSS_ZLFANSHI], 6, Gender::Male),
     // 孟婆（v270 拾忧+忘魂+往事；上游 group qun→群目录直取；female）
     ("孟婆", Faction::Qun, &[BOSS_SHIYOU, BOSS_WANGHUN, BOSS_WANGSHI], 3, Gender::Female),
+    // 阎罗王（v271 铁面+铡刀+诛心；上游 group qun→群目录直取）
+    ("阎罗王", Faction::Qun, &[BOSS_TIEMIAN, BOSS_ZHADAO, BOSS_ZHUXIN], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7686,6 +7765,33 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_TIEMIAN,
+            // 查询型单面：sha 机仁王块扩展（防具槽空视为仁王盾）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHADAO,
+            // 查询型单面：sha 机青釭穿透链扩展（来源持有者即穿透）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHUXIN,
+            // Death 触发（遗言面）：最低体力其他存活受 2 伤一步机
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(ZhuxinBehavior),
         },
     ];
     (cards, skills)

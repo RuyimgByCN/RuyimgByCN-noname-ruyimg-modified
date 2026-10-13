@@ -589,6 +589,12 @@ pub enum MachineSnapshot {
     BossWanghun {
         owner: PlayerId,
     },
+    /// 诛心（阎罗王，规则 v271）：直写一步遗言机，emitted 防重入
+    ///（热恼同构）。
+    BossZhuxin {
+        owner: PlayerId,
+        emitted: u8,
+    },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
     /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
@@ -1184,6 +1190,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             let _ = emitted;
         }
         MachineSnapshot::BossWanghun { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossZhuxin { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::Shedu { owner, .. } => {
@@ -2198,6 +2207,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossWanghun { .. } => {
             // 忘魂：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossZhuxin { .. } => {
+            // 诛心：直写一步机，恢复无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {

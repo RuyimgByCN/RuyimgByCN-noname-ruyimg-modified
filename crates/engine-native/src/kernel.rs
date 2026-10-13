@@ -5661,13 +5661,19 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             return Flow::Done;
         }
         // 青釭剑（P2/N08 批③-b）：锁定——无视目标防具（来源装备青釭时
-        // 八卦阵判定与仁王盾免疫均不生效）。
+        // 八卦阵判定与仁王盾免疫均不生效）。铡刀（Boss 阎罗王，规则
+        // v271）：上游 inherit qinggang_skill——来源持有者即穿透。
         let qinggang_pierce = ctx
             .core
             .player(self.source)
             .equips
             .iter()
-            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang);
+            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang)
+            || ctx
+                .catalog
+                .skill_by_name(crate::content::standard::BOSS_ZHADAO)
+                .map(|def| ctx.core.has_skill(self.source, def))
+                .unwrap_or(false);
         // 八卦阵：受击者装备防具时，出闪询问前先做防具判定（每杀至多一次）
         // ——红桃视为已出闪（伤害免除），否则照常进入出闪询问。
         // 焚天（Boss 朱雀，规则 v236）：红色杀 directHit 无视防具
@@ -5951,18 +5957,31 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             // 仁王盾（P2/N08 批③-a）：锁定——黑色【杀】对装备者无效
             //（先于八卦阵判定；红杀/无盾照常进入判定与出闪询问）。
+            // 铁面（Boss 阎罗王，规则 v271）：防具区没有牌时视为装备
+            // 仁王盾（防具槽空=不被青釭/铡刀外的牌区分；青釭穿透已在
+            // !qinggang_pierce 门内天然覆盖铁面）。
             let renwang_blocks = !qinggang_pierce && {
                 let black = matches!(
                     ctx.catalog.cards[self.card as usize].suit,
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                 );
                 black
-                    && ctx
-                        .core
-                        .player(self.target)
-                        .equips
-                        .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang)
+                    && {
+                        let equips = &ctx.core.player(self.target).equips;
+                        let has_renwang = equips
+                            .iter()
+                            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang);
+                        let tiemian_active = ctx
+                            .catalog
+                            .skill_by_name(crate::content::standard::BOSS_TIEMIAN)
+                            .map(|def| ctx.core.has_skill(self.target, def))
+                            .unwrap_or(false)
+                            && !equips.iter().any(|c| {
+                                ctx.catalog.card_kind(*c).equip_slot()
+                                    == Some(crate::catalog::EquipSlot::Armor)
+                            });
+                        has_renwang || tiemian_active
+                    }
             };
             if renwang_blocks {
                 let card = self.card;
