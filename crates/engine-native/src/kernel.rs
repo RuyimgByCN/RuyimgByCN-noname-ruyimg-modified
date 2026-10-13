@@ -29,6 +29,7 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
             commit_turn_over_before(ctx, player, cancelled)
         }
         EventData::CardsDiscarded { player, .. } => commit_cards_discarded(ctx, player),
+        EventData::CardsMoved { to, .. } => commit_cards_moved(ctx, to),
         EventData::Recover { player, .. } => {
             commit_recover_skills(ctx, player)
         }
@@ -999,8 +1000,34 @@ pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, amount: u32) {
     shangshix_draw(ctx, player);
 }
 
-/// 伤逝（Boss 张春华，规则 v260）补牌半：失去牌/体力变化后手牌<4 补至
-/// 4（上游 loseEnd/changeHp forced 同口径；四 commit 臂共用）
+/// 枳枉（十殿阎罗五官王，规则 v265）：其他角色获得牌结算后（CardsMoved
+/// 面——摸牌阶段摸牌走 CardsDrawn 天然隔离=上游排除 draw 同口径），其
+/// 随机弃置一张手牌（随机→首张确定性近似登记；planetarian 彩蛋分支不
+/// 落登记）
+fn commit_cards_moved(ctx: &mut Ctx<'_>, to: PlayerId) {
+    if let Some(zwdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_ZHIWANG)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == zwdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .collect();
+        if let Some(holder) = holders.first() {
+            if to != *holder && ctx.core.player(to).alive {
+                let pick = ctx.core.player(to).hand.first().copied();
+                if let Some(c) = pick {
+                    ctx.discard_from_hand(to, c);
+                }
+            }
+        }
+    }
+}
+
+/// 伤逝（Boss 张春华，规则 v260）补牌半：
 fn shangshix_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
     if let Some(ssdef) = ctx
         .catalog
@@ -1791,6 +1818,21 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 公正（十殿阎罗五官王，规则 v265）：准备阶段（判定
+                    // 阶段开始锚点）若判定区有牌则弃置首张（上游
+                    // phaseZhunbeiBegin 判定区 randomGet 弃置→首张确定性
+                    // 近似登记；鬼计同款臂）
+                    if let Some(gzdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_GONGZHENG)
+                    {
+                        if ctx.core.has_skill(player, gzdef) {
+                            if let Some(c) = ctx.core.player(player).judge.first().copied() {
+                                ctx.core.player_mut(player).judge.retain(|x| *x != c);
+                                ctx.to_discard(c);
+                            }
+                        }
+                    }
                     // 吸行（Boss 黑无常，规则 v256）：准备阶段——对座位序
                     // 首个已链接的其他存活角色造成 1 点雷伤并回复 1 点体力
                     //（目标自选→首个已链接确定性近似登记）
@@ -2338,6 +2380,22 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                 crate::event::DamageNature::Fire,
                                 None,
                             )));
+                        }
+                    }
+                }
+                // 血池（十殿阎罗五官王，规则 v265）：结束阶段座位序首个
+                // 其他存活角色失去 2 点体力（上游 randomGet→首个确定性近
+                // 似登记）
+                if let Some(xcdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_XUECHI)
+                {
+                    if ctx.core.has_skill(player, xcdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        if let Some(t) =
+                            (0..seats).find(|&t| t != player && ctx.core.player(t).alive)
+                        {
+                            ctx.emit(EventData::LoseHp { player: t, amount: 2 });
                         }
                     }
                 }

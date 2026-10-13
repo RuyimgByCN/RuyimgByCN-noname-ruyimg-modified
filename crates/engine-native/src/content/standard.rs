@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 264;
+pub const STANDARD_RULESET_VERSION: u64 = 265;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -5044,6 +5044,17 @@ pub const BOSS_ZJLEIJI: &str = "雷击·张角";
 /// 受伤者 1 以内的一名其他角色判定：黑则其受到 1 点雷伤（chooseTarget
 /// AI→座位序首个确定性近似；不自我递归=链挡旗标登记差异）。
 pub const BOSS_JIDIAN: &str = "极点";
+/// 枳枉（十殿阎罗五官王，规则 v265，群雄乱入）：锁定技——其他角色获得
+/// 牌结算后（非摸牌阶段摸牌），其随机弃置一张手牌（随机→首张确定性近
+/// 似登记；隐藏彩蛋分支 planetarian 孙策化不落登记）。
+pub const BOSS_ZHIWANG: &str = "枳枉";
+/// 公正（十殿阎罗五官王，规则 v265，群雄乱入）：锁定技——准备阶段（原生
+/// 判定阶段开始锚点）若你的判定区有牌，你随机弃置其中一张（随机→首张
+/// 确定性近似登记；鬼计同款臂）。
+pub const BOSS_GONGZHENG: &str = "公正";
+/// 血池（十殿阎罗五官王，规则 v265，群雄乱入）：锁定技——结束阶段随机
+/// 一名其他角色失去 2 点体力（随机→座位序首个确定性近似登记）。
+pub const BOSS_XUECHI: &str = "血池";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5350,6 +5361,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("周瑜", Faction::Qun, &[BOSS_HUOSHEN, BOSS_ZYHONGLIAN, BOSS_XIANYIN], 6, Gender::Male),
     // 张角（v263 雷击·张角+天道+极点；上游 group shen→群目录近似）
     ("张角", Faction::Qun, &[BOSS_ZJLEIJI, BOSS_TIANDAO, BOSS_JIDIAN], 8, Gender::Male),
+    // 五官王（v265 枳枉+公正+血池；十殿阎罗第二殿；上游 group qun→群
+    // 目录直取）
+    ("五官王", Faction::Qun, &[BOSS_ZHIWANG, BOSS_GONGZHENG, BOSS_XUECHI], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7227,6 +7241,29 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_JIDIAN,
             // 查询型单面：Damage commit 尾臂——距受伤者 ≤1 的首个其他存
             // 活判定黑→1 雷伤（链挡旗标不自我递归=登记差异）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ZHIWANG,
+            // 查询型单面：CardsMoved commit 臂——其他角色获得牌（非摸牌
+            // 阶段摸牌，CardsDrawn 天然隔离）→其弃首张手牌
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_GONGZHENG,
+            // 查询型单面：Judge begin 臂——判定区有牌则弃首张（鬼计同款）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_XUECHI,
+            // 查询型单面：End begin 臂——座位序首个其他存活失 2（随机→
+            // 首个确定性近似登记）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

@@ -1195,6 +1195,43 @@ impl Engine {
         id
     }
 
+    /// 调试：来源玩家将一张手牌交给目标（真实 CardsMoved 事件面——
+    /// 枳枉等 gain 类技能测试布阵用）。
+    pub fn debug_give_hand_card(
+        &mut self,
+        from: PlayerId,
+        to: PlayerId,
+        card: CardId,
+    ) -> CommandOutcome {
+        if self.state.core.outcome.is_some() {
+            return CommandOutcome::Rejected(RejectReason::MatchOver);
+        }
+        if self.state.resolution.open_choice.is_some() {
+            return CommandOutcome::Rejected(RejectReason::ChoicePending);
+        }
+        if !self.state.core.player(from).hand.contains(&card) {
+            return CommandOutcome::Rejected(RejectReason::CardNotInHand);
+        }
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        work
+            .core
+            .player_mut(from)
+            .hand
+            .retain(|x| *x != card);
+        work.core.player_mut(to).hand.push(card);
+        crate::resolution::push_frame(
+            &mut work.resolution,
+            EventData::CardsMoved {
+                cards: vec![card],
+                from,
+                to,
+            },
+        );
+        self.finish_segment(work, log_mark)
+    }
+
     /// 上帝视角：牌库全部移入弃牌堆（负载/测试布阵用，
     /// 下一次摸牌/翻判定牌即触发真实 DeckReshuffled 洗回）。
     pub fn debug_drain_deck_to_discard(&mut self) {

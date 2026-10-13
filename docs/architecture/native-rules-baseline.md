@@ -2917,6 +2917,26 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v265（2026-10-11，T11 十殿阎罗五官王片：枳枉/公正/血池＋五官王条
+目，十殿阎罗首片）**：**枳枉**（查询型 Noop）：CardsMoved commit 显式臂
+（原默认臂加处理）——其他角色获得牌结算后其随机弃一张手牌（随机→首张
+确定性近似；摸牌走 CardsDrawn 天然隔离=上游排除 draw 同口径；wugu 机器
+直接 hand.push 不发事件表面差异登记；planetarian 彩蛋不落）。**公正**（查
+询型 Noop）：Judge begin 臂——判定区有牌弃首张（鬼计同款；随机→首张）。
+**血池**（查询型 Noop）：End begin 臂——座位序首个其他存活失 2（随机→
+首个）。`BOSS_GENERALS` 尾追加**五官王**（def 索引 43/hp4/`[枳枉, 公正,
+血池]`；上游 group **qun→群目录直取**=群雄乱入首个非 shen 条目）。**调试
+API 新增**：`debug_give_hand_card`（真实 CardsMoved 事件面测试布阵——gain
+类技能测试必需）。**登记差异**：枳枉随机→首张、planetarian 不落；公正/
+血池随机→首张/首个。FROZEN 名单尾加「枳枉」「公正」「血池」（146–148
+名）。存档不变 v61。版本 264→**265**。版本回退探针（265→264 复跑 golden
+全绿）证明 14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_wuguanwang_zhiwang_gongzheng_xuechi`（枳枉 CardsMoved 正例/公正判定
+区首张弃/血池失 2/往返）——证据见
+[T11 五官王证据](../operations/evidence/2026-10-11-t11-boss-wuguanwang-v265/README.md)。
+**坑位**：公正循环按回合跨度估轮数（10 轮不足穿三回合，18 轮）；闪电置判
+定区开无懈窗（pass_nullify_windows 放行）；holders.first() 拷贝 u8 不加解引。
+
 **规则 v264（2026-10-11，T11 群雄乱入张角片：天道/雷击·张角/极点＋张角
 条目，字段批）**：`TurnState.jidian_chain`（极点链挡旗标）入状态/摘要/
 存档（**存档格式 60→61**）。**天道**（查询型 Noop）：**改判机 rewriters
