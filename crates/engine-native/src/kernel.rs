@@ -337,6 +337,19 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
         }
     }
     // 灵渠（Boss 玄武，规则 v237）：受到的大于 1 点伤害视为 0 点（上游
+    // 不佛（Boss 地藏王，规则 v274）：受到大于 1 点的伤害时改为其中 1
+    // 点（上游 boss_bufo damageBegin4 num>1→num-1 同口径；置于灵渠归零
+    // 检查前——灵渠读调整后终值；两技同持为不同武将不共存，序未登记）
+    if amount > 1 {
+        if let Some(bfdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_BUFO)
+        {
+            if ctx.core.has_skill(d.target, bfdef) {
+                amount -= 1;
+            }
+        }
+    }
     // boss_lingqu cancel damageBegin4 num>1 → num=0 同口径；置于增幅后
     // 统计前——终值>1 才归零；0 点伤害仍完成事件→受击摸 1/计数照常）
     if amount > 1 {
@@ -2031,6 +2044,55 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.core.turn.jiu_active = true;
                         }
                     }
+                    // 不佛（Boss 地藏王，规则 v274）：准备阶段——距离
+                    // 1 以内的其他存活角色受 1 点火焰伤害（有来源同上游
+                    // target.damage(1, player, "fire")；炼狱同款臂内循环）
+                    if let Some(bfdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_BUFO)
+                    {
+                        if ctx.core.has_skill(player, bfdef) {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            for t in 0..seats {
+                                if t == player || !ctx.core.player(t).alive {
+                                    continue;
+                                }
+                                if ctx
+                                    .core
+                                    .computed_distance(ctx.catalog, player, t)
+                                    <= 1
+                                {
+                                    ctx.emit(EventData::Damage(
+                                        crate::machine::damage_data_with(
+                                            Some(player),
+                                            t,
+                                            1,
+                                            crate::event::DamageNature::Fire,
+                                            None,
+                                        ),
+                                    ));
+                                }
+                            }
+                        }
+                    }
+                    // 无量（Boss 地藏王，规则 v274）：准备阶段体力小于 3
+                    // 时回复至 3 点（上游 boss_wuliang recover(3-hp) 同口
+                    // 径；ctx.recover 落 hp——v234 坑位）
+                    if let Some(wldef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_WULIANG)
+                    {
+                        if ctx.core.has_skill(player, wldef)
+                            && ctx.core.player(player).alive
+                            && ctx.core.player(player).hp < 3
+                            && ctx.core.player(player).hp
+                                < ctx.core.player(player).max_hp as i32
+                        {
+                            let amount =
+                                (3 - ctx.core.player(player).hp).min(ctx.core.player(player).max_hp as i32 - ctx.core.player(player).hp) as u32;
+                            ctx.recover(player, amount, None);
+                        }
+                    }
                     // 炙焚（Boss 都市王，规则 v273）：准备阶段——随机
                     // 一名其他角色获得其一张随机手牌（若有）并受 1 点火
                     // 焰伤害（上游 gainPlayerCard randomGet+damage 无来
@@ -2653,6 +2715,16 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.core.player_mut(t).linked = true;
                             ctx.log(LogEvent::Linked { player: t, linked: true });
                         }
+                    }
+                }
+                // 无量（Boss 地藏王，规则 v274）：结束阶段摸 2 张牌
+                //（上游 boss_wuliang phaseJieshuBegin draw 2 同口径）
+                if let Some(wldef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_WULIANG)
+                {
+                    if ctx.core.has_skill(player, wldef) {
+                        ctx.draw_cards(player, 2);
                     }
                 }
                 // 炼狱（Boss 马面，规则 v257）：结束阶段对全部其他存活

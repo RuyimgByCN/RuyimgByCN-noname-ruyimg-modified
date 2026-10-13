@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 273;
+pub const STANDARD_RULESET_VERSION: u64 = 274;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -5571,6 +5571,19 @@ pub const BOSS_ZHIFEN: &str = "炙焚";
 /// 其他存活角色按座位序各受 1 点火焰伤害（上游 sort seat 逐发同口径；
 /// 中途死亡由存活过滤跳过）。
 pub const BOSS_HUOXING: &str = "火刑";
+/// 不佛（十殿阎罗地藏王，规则 v274）：锁定技两面——受到大于 1 点的伤
+/// 害时，改为其中 1 点（上游 damageBegin4 num>1→num-1 同口径，灵渠入
+/// 口同区）；准备阶段距离 1 以内的其他存活角色受 1 点火焰伤害（有来源
+/// 同上游）。
+pub const BOSS_BUFO: &str = "不佛";
+/// 无量（十殿阎罗地藏王，规则 v274）：锁定技——结束阶段摸 2 张牌；准
+/// 备阶段体力小于 3 时回复至 3 点（上游 phaseJieshu draw 2 + recover
+/// 同口径）。建局摸 3 面（gameDrawAfter/enterGame）未落随装配批登记。
+pub const BOSS_WULIANG: &str = "无量";
+/// 谛听（十殿阎罗地藏王，规则 v274）：锁定技——你计算与其他角色的距离
+/// -1；其他角色计算与你的距离 +1（上游 mod globalFrom/-1+globalTo/+1
+/// 同口径；义从同位）。
+pub const BOSS_DITING: &str = "谛听";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5897,6 +5910,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("平等王", Faction::Qun, &[BOSS_SUOZU, BOSS_ABI, BOSS_PINGDENG], 4, Gender::Male),
     // 都市王（v273 热闷+炙焚+火刑；上游 group qun→群目录直取）
     ("都市王", Faction::Qun, &[BOSS_REMEN, BOSS_ZHIFEN, BOSS_HUOXING], 4, Gender::Male),
+    // 地藏王（v274 不佛+无量+谛听；大愿=判定改写机 AI 态度面登记不落；
+    // 上游 group qun→群目录直取）
+    ("地藏王", Faction::Qun, &[BOSS_BUFO, BOSS_WULIANG, BOSS_DITING], 8, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -8006,6 +8022,27 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(HuoxingBehavior),
+        },
+        SkillDef {
+            name: BOSS_BUFO,
+            // 查询型单面×2：伤害入口减 1（终值>1）+准备阶段距离 1 火伤
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_WULIANG,
+            // 查询型单面×2：结束阶段摸 2+准备阶段体力<3 回复至 3
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_DITING,
+            // 查询型单面：computed_distance 双向链（from -1 / to +1）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
         },
     ];
     (cards, skills)

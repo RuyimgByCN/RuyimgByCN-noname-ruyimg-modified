@@ -1,0 +1,11 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-8285df63cb92cc1c)
+
+running 4 tests
+test boss_dizangwang_bufo_damage_cap ... ok
+test boss_dizangwang_bufo_prepare_range1_fire ... ok
+test boss_dizangwang_wuliang_prepare_recover_end_draw ... ok
+test boss_dizangwang_diting_distance_both_ways ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 298 filtered out; finished in 0.00s
+

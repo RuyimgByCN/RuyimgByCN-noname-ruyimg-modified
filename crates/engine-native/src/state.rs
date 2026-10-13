@@ -833,6 +833,19 @@ impl GameStateCore {
             .unwrap_or(false);
         let mut minus = minus + u32::from(yicong_from);
         let mut plus = plus + u32::from(yicong_to);
+        // 谛听（Boss 地藏王，规则 v274）：锁定技——你计算与其他角色的
+        // 距离 -1；其他角色计算与你的距离 +1（上游 boss_diting mod
+        // globalFrom/-1+globalTo/+1 同口径；义从同位）
+        let diting_from = catalog
+            .skill_by_name(crate::content::standard::BOSS_DITING)
+            .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
+            .unwrap_or(false);
+        let diting_to = catalog
+            .skill_by_name(crate::content::standard::BOSS_DITING)
+            .map(|d| self.skills.get(&(b, d)).map(|i| i.enabled).unwrap_or(false))
+            .unwrap_or(false);
+        minus += u32::from(diting_from);
+        plus += u32::from(diting_to);
         // 抗yin2（U07 玩点论杀留赞，规则 v114）：回合内临时——持有者算
         // 到其他角色距离 -X（上游 kangyin2 mod globalFrom 同口径）
         if let Some((o, x)) = self.turn.kangyin2 {

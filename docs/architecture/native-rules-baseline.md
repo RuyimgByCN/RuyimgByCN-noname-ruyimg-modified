@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v273 / 存档 v63**，2026-10-14 都市王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v273 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v274 / 存档 v63**，2026-10-14 地藏王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v274 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2916,6 +2916,24 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 **坑位**：转化链守卫 `if kind != Sha && kind != Le` 排除 plain Sha——酒池
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
+
+**规则 v274（2026-10-14，T11 十殿阎罗地藏王片：不佛/无量/谛听＋地藏王
+条目）**：**不佛**（查询型双面）：伤害入口——受到大于 1 点的伤害改为其
+中 1 点（灵渠归零检查前，灵渠读调整后终值）＋准备阶段距离 1 以内其他
+存活各受 1 火伤（有来源同上游）。**无量**（查询型双面）：结束阶段摸 2
+＋准备阶段体力<3 回复至 3（ctx.recover 双封顶）；建局摸 3 面
+（gameDrawAfter/enterGame）登记未落随装配批。**谛听**（查询型单面）：
+computed_distance 双向链——持有者算到他人 -1、他人算到持有者 +1（义从
+同位）。**大愿：登记不落**（判定改写机 AI 态度面，条目只列已转换技——
+宋帝王先例）。`BOSS_GENERALS` 尾追加**地藏王**（def 索引 52/**hp8**/
+`[不佛, 无量, 谛听]`）。**显示名勘误**：boss_bufo=不佛（非不覆）。
+FROZEN 名单尾加「不佛」「无量」「谛听」（172–174 名）。存档不变 v63。
+版本 273→**274**。版本回退探针（274→273 复跑 golden 全绿）证明位移唯一
+来源是版本字段，全量重录。回归 `boss_dizangwang_bufo_damage_cap` /
+`boss_dizangwang_bufo_prepare_range1_fire` /
+`boss_dizangwang_wuliang_prepare_recover_end_draw` /
+`boss_dizangwang_diting_distance_both_ways`——证据见
+[2026-10-14 地藏王片](../operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md)。
 
 **规则 v273（2026-10-14，T11 十殿阎罗都市王片：热闷/炙焚/火刑＋都市王
 条目）**：**热闷**（查询型单面，双消费点）：防具槽空时——plain 杀目标不
