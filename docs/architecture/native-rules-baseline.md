@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v271 / 存档 v63**，2026-10-14 阎罗王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v271 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v272 / 存档 v63**，2026-10-14 平等王批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v272 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2916,6 +2916,24 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 **坑位**：转化链守卫 `if kind != Sha && kind != Le` 排除 plain Sha——酒池
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
+
+**规则 v272（2026-10-14，T11 十殿阎罗平等王片：锁足/阿鼻/平等＋平等王
+条目）**：**锁足**（查询型单面）：Prepare-begin 臂——持有者准备阶段全部
+其他存活横置（上游 content link 同口径不分阵营；linked 直写索链甲/星囚
+同款+Linked 日志）。**阿鼻**（查询型单面）：Damage commit 尾臂（远策同
+位）——受有来源伤害后来源受 1 火伤（上游 randomGet fire/thunder→恒定火
+近似登记；新伤害无来源→天然无递归）。**平等**（Death 触发遗言机，诛心
+同构两波）：死亡时最高体力其他存活（座位序首个）先受 2 火伤、重算池后
+再受 1 火伤（上游两波 randomGet×lib.linked randomGet→确定性近似登记）；
+`MachineSnapshot::BossPingdeng` 新变体（archive tag 78/机哈希 78）。
+`BOSS_GENERALS` 尾追加**平等王**（def 索引 50/**hp4**/`[锁足, 阿鼻, 平等]`）。
+FROZEN 名单尾加「锁足」「阿鼻」「平等」（166–168 名）。存档不变 v63。
+版本 271→**272**。版本回退探针（272→271 复跑 golden 全绿）证明位移唯一
+来源是版本字段，全量重录。回归
+`boss_pingdengwang_suozu_link_all_others` /
+`boss_pingdengwang_abi_source_fire_no_source_skip` /
+`boss_pingdengwang_pingdeng_death_two_wave_fire`——证据见
+[2026-10-14 平等王片](../operations/evidence/2026-10-14-t11-boss-pingdengwang-v272/README.md)。
 
 **规则 v271（2026-10-14，T11 十殿阎罗阎罗王片：铁面/铡刀/诛心＋阎罗王
 条目）**：**铁面**（查询型单面）：sha 机仁王块扩展——持有者防具槽空时

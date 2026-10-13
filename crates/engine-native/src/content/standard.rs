@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 271;
+pub const STANDARD_RULESET_VERSION: u64 = 272;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1343,6 +1343,79 @@ impl SkillMachine for ZhuxinMachine {
                 )));
                 return Flow::Yield;
             }
+        }
+        Flow::Done
+    }
+}
+
+/// 平等（十殿阎罗平等王，规则 v272）：你死亡时——最高体力其他存活
+///（座位序首个）先受 2 点火焰伤害、重算后再受 1 点火焰伤害。Death 前置
+/// 窗口触发（诛心同位直写两波机；登记差异：上游两波 randomGet×
+/// lib.linked randomGet→座位序首个+恒定火）。
+struct PingdengBehavior;
+
+impl SkillBehavior for PingdengBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(PingdengMachine {
+            owner,
+            emitted: 0,
+        })
+    }
+}
+
+/// 平等机器：直写两波机（emit+Yield 两次，emitted 防重入；诛心同构）。
+#[derive(Clone)]
+struct PingdengMachine {
+    owner: PlayerId,
+    emitted: u8,
+}
+
+impl SkillMachine for PingdengMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossPingdeng {
+            owner: self.owner,
+            emitted: self.emitted,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.emitted >= 2 {
+            return Flow::Done;
+        }
+        let seats = ctx.core.players.len() as PlayerId;
+        // 最高体力池=体力等于其他存活最大者；取座位序首个
+        let mut max_hp: Option<i32> = None;
+        for t in 0..seats {
+            if t == self.owner || !ctx.core.player(t).alive {
+                continue;
+            }
+            let hp = ctx.core.player(t).hp;
+            if max_hp.map(|m| hp > m).unwrap_or(true) {
+                max_hp = Some(hp);
+            }
+        }
+        let target = (0..seats).find(|&t| {
+            t != self.owner
+                && ctx.core.player(t).alive
+                && Some(ctx.core.player(t).hp) == max_hp
+        });
+        self.emitted += 1;
+        if let Some(t) = target {
+            let amount = if self.emitted == 1 { 2 } else { 1 };
+            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                None,
+                t,
+                amount,
+                crate::event::DamageNature::Fire,
+                None,
+            )));
+            return Flow::Yield;
         }
         Flow::Done
     }
@@ -5416,6 +5489,18 @@ pub const BOSS_ZHADAO: &str = "铡刀";
 /// 时，令场上血量最少的一名其他角色受到 2 点伤害（上游 chooseTarget
 /// 最低体力池自选→座位序首个最低体力确定性近似登记）。
 pub const BOSS_ZHUXIN: &str = "诛心";
+/// 锁足（十殿阎罗平等王，规则 v272）：锁定技——准备阶段，全部其他存活
+/// 角色横置（上游 boss_suozu content link 同口径；不分阵营）。
+pub const BOSS_SUOZU: &str = "锁足";
+/// 阿鼻（十殿阎罗平等王，规则 v272）：锁定技——你受到有来源的伤害后，
+/// 来源受 1 点火焰伤害（上游 randomGet fire/thunder→恒定火确定性近似
+/// 登记；无来源伤害不触发）。
+pub const BOSS_ABI: &str = "阿鼻";
+/// 平等（十殿阎罗平等王，规则 v272）：锁定遗言（Death 触发）——两波：
+/// 最高体力其他存活（座位序首个）先受 2 点火焰伤害、重算后再受 1 点火
+/// 焰伤害（上游两波 randomGet×lib.linked randomGet→座位序首个+恒定火
+/// 确定性近似登记）。
+pub const BOSS_PINGDENG: &str = "平等";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5738,6 +5823,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("孟婆", Faction::Qun, &[BOSS_SHIYOU, BOSS_WANGHUN, BOSS_WANGSHI], 3, Gender::Female),
     // 阎罗王（v271 铁面+铡刀+诛心；上游 group qun→群目录直取）
     ("阎罗王", Faction::Qun, &[BOSS_TIEMIAN, BOSS_ZHADAO, BOSS_ZHUXIN], 4, Gender::Male),
+    // 平等王（v272 锁足+阿鼻+平等；上游 group qun→群目录直取）
+    ("平等王", Faction::Qun, &[BOSS_SUOZU, BOSS_ABI, BOSS_PINGDENG], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7792,6 +7879,33 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(ZhuxinBehavior),
+        },
+        SkillDef {
+            name: BOSS_SUOZU,
+            // 查询型单面：Prepare begin 臂——全部其他存活横置
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_ABI,
+            // 查询型单面：Damage commit 尾臂——来源受 1 火伤（恒定火）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_PINGDENG,
+            // Death 触发（遗言面）：最高体力两波火伤（2+1）两步机
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(PingdengBehavior),
         },
     ];
     (cards, skills)

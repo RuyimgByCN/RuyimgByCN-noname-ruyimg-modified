@@ -595,6 +595,12 @@ pub enum MachineSnapshot {
         owner: PlayerId,
         emitted: u8,
     },
+    /// 平等（平等王，规则 v272）：直写两波遗言机，emitted 波次进度
+    ///（诛心同构）。
+    BossPingdeng {
+        owner: PlayerId,
+        emitted: u8,
+    },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
     /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
@@ -1193,6 +1199,9 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossZhuxin { owner, .. } => {
+            check_pid(*owner, b)?;
+        }
+        MachineSnapshot::BossPingdeng { owner, .. } => {
             check_pid(*owner, b)?;
         }
         MachineSnapshot::Shedu { owner, .. } => {
@@ -2211,6 +2220,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossZhuxin { .. } => {
             // 诛心：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossPingdeng { .. } => {
+            // 平等：直写两波机，恢复无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {

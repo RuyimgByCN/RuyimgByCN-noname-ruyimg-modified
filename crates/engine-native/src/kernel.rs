@@ -611,6 +611,28 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 阿鼻（Boss 平等王，规则 v272）：受到有来源的伤害后——来源受 1
+    // 点火焰伤害（上游 randomGet fire/thunder→恒定火确定性近似登记；
+    // 无来源伤害不触发；新伤害无来源→天然无递归）
+    if let Some(abdef) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_ABI)
+    {
+        if let Some(src) = d.source {
+            if ctx.core.has_skill(d.target, abdef)
+                && ctx.core.player(d.target).alive
+                && ctx.core.player(src).alive
+            {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    None,
+                    src,
+                    1,
+                    crate::event::DamageNature::Fire,
+                    None,
+                )));
+            }
+        }
+    }
     // 远策（Boss 郭嘉，规则 v259）：global damageEnd——其他角色对另一
     // 其他角色造成伤害后（双方存活），判定：黑→受伤角色失 1 体力 / 红→
     // 来源失 1 体力（chooseControl 选项一恒定确定性近似登记——上游 AI
@@ -2007,6 +2029,37 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         {
                             ctx.emit(EventData::LoseHp { player, amount: 1 });
                             ctx.core.turn.jiu_active = true;
+                        }
+                    }
+                    // 锁足（Boss 平等王，规则 v272）：准备阶段——全部
+                    // 其他存活角色横置（上游 boss_suozu content link 同
+                    // 口径；不分阵营；索链甲/星囚 linked 直写同款）
+                    if let Some(szdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_SUOZU)
+                    {
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == szdef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .collect();
+                        if holders
+                            .iter()
+                            .any(|h| *h == player && ctx.core.player(*h).alive)
+                        {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            for t in 0..seats {
+                                if t == player
+                                    || !ctx.core.player(t).alive
+                                    || ctx.core.player(t).linked
+                                {
+                                    continue;
+                                }
+                                ctx.core.player_mut(t).linked = true;
+                                ctx.log(LogEvent::Linked { player: t, linked: true });
+                            }
                         }
                     }
                     // 往事（十殿阎罗孟婆，规则 v270）：其他角色的回合开始
