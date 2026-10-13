@@ -1848,3 +1848,177 @@ fn huanle_real_host_full_lifecycle() {
     // 已安装+已撤销：install 阶段应报 Revoked（不再静默通过）
     assert!(report2.is_err(), "撤销后重新 import 应被拒");
 }
+
+// ---------------------------------------------------------------------------
+// T12/U06 G5 切片：同内容锁跨进程存档接力 + 错版/缺包拒绝。
+// 父进程把「手里剑嵌套选择挂起态」经 NGSA 落盘，自启子进程（本测试
+// 二进制 + HUANLE_G5_WORKER 环境变量识别）以同一扩展内容锁恢复、续跑
+// 落账、回写；父进程校验回写。错版（包版本 +1）与缺扩展（纯标准）在
+// 子进程内断言拒绝后仍完成正例接力。
+// ---------------------------------------------------------------------------
+
+#[test]
+fn huanle_g5_cross_process_relay() {
+    use engine_native::archive::{decode_archive, encode_archive};
+
+    // 子进程分支：读档→错版/缺包拒绝断言→恢复→续跑→回写
+    if let Ok(archive_path) = std::env::var("HUANLE_G5_ARCHIVE") {
+        let reply_path = std::env::var("HUANLE_G5_REPLY").expect("reply path");
+        let bytes = std::fs::read(&archive_path).expect("子进程读存档");
+        let snap = decode_archive(&bytes).expect("子进程解码");
+
+        let pack = huanle_pack_from_repo();
+        // 错版拒绝：包版本 +1 → 内容锁不匹配
+        let mut wrong_version = huanle_pack_from_repo();
+        wrong_version.def.version += 1;
+        assert!(
+            Engine::restore_with_extensions(&snap, &[&wrong_version]).is_err(),
+            "错版拒绝"
+        );
+        // 缺包拒绝：纯标准目录无法恢复扩展局
+        assert!(
+            Engine::restore(&snap).is_err(),
+            "缺扩展包拒绝"
+        );
+        // 正例：同一扩展内容锁恢复 + 续跑落账
+        let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("子进程恢复");
+        let c = e.open_choice().expect("子进程挂起询问在位");
+        assert_eq!(c.spec.prompt, "host_target_discard_equip");
+        let equip_in_options = c
+            .spec
+            .options
+            .iter()
+            .find_map(|o| match o {
+                ChoiceOption::Card(id) => Some(*id),
+                _ => None,
+            })
+            .expect("选项含目标装备");
+        let (cid, obs) = (c.id, c.observer);
+        // 子进程 dedup 高水位独立于父进程——用高段键避免与存档内已用键
+        // 冲突（N10：重复键按重复命令干净拒绝）。
+        let out = e.submit(GameCommand {
+            actor: obs,
+            expected_revision: e.revision(),
+            dedup_id: 0xDEAD_BEEF_0000_0001,
+            action: GameAction::Answer {
+                choice_id: cid,
+                selection: vec![ChoiceOption::Card(equip_in_options)],
+            },
+        });
+        assert!(
+            matches!(
+                out,
+                CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+            ),
+            "子进程应答被拒: {out:?}"
+        );
+        assert_eq!(
+            e.debug_hp(1),
+            e.debug_hp(2),
+            "子进程续跑：弃装备免伤（体力不变；3 人局对照座位同值）"
+        );
+        assert!(
+            !e.state_core().players[1].equips.contains(&equip_in_options),
+            "子进程续跑：装备已弃"
+        );
+        std::fs::write(&reply_path, encode_archive(&e.save())).expect("子进程回写");
+        return;
+    }
+
+    // 父进程：装配 → 手里剑挂起 → 落盘 → 自启子进程 → 校验回写
+    let pack = huanle_pack_from_repo();
+    let mut e = Engine::new_with_extensions(3301, 3, &[&pack]).expect("建局");
+    e.debug_grant(0, "huanle_kuwu");
+    for _ in 0..64 {
+        if e.turn().current == 0 && e.turn().phase == Phase::Play {
+            break;
+        }
+        let actor = e.turn().current;
+        submit(&mut e, actor, GameAction::NextPhase);
+    }
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    let (shoulijian_id,) = {
+        let catalog = e.catalog();
+        let sj = catalog
+            .cards
+            .iter()
+            .position(|c| c.name.starts_with("hnl_shoulijian"))
+            .expect("扩展手里剑在目录") as u32;
+        (sj,)
+    };
+    let mut snap = e.save();
+    let purge = |snap: &mut engine_native::StateSnapshot, id: u32| {
+        snap.core.deck.retain(|c| *c != id);
+        snap.core.discard.retain(|c| *c != id);
+        snap.core.table.retain(|c| *c != id);
+        for p in snap.core.players.iter_mut() {
+            p.hand.retain(|c| *c != id);
+            p.equips.retain(|c| *c != id);
+            p.judge.retain(|c| *c != id);
+        }
+    };
+    purge(&mut snap, shoulijian_id);
+    snap.core.players[0].hand.push(shoulijian_id);
+    let equip_id = {
+        let cat = e.catalog();
+        cat.card_by_name("horse_plus").expect("目录有马牌")
+    };
+    purge(&mut snap, equip_id);
+    snap.core.players[1].equips.push(equip_id);
+    e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: shoulijian_id, targets: vec![1] });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "手里剑挂起");
+    let c = e.open_choice().expect("嵌套选择挂起");
+    assert_eq!(c.spec.prompt, "host_target_discard_equip");
+
+    // 落盘 + 自启子进程
+    let dir = tempfile::tempdir().expect("临时目录");
+    let archive_path = dir.path().join("relay.ngsa");
+    let reply_path = dir.path().join("relay.result.ngsa");
+    std::fs::write(&archive_path, encode_archive(&e.save())).expect("父进程落盘");
+    let exe = std::env::current_exe().expect("测试二进制");
+    let status = std::process::Command::new(exe)
+        .args(["--exact", "huanle_g5_cross_process_relay", "--nocapture"])
+        .env("HUANLE_G5_ARCHIVE", archive_path.display().to_string())
+        .env("HUANLE_G5_REPLY", reply_path.display().to_string())
+        .output()
+        .expect("自启子进程");
+    assert!(
+        status.status.success(),
+        "子进程接力失败: {}",
+        String::from_utf8_lossy(&status.stderr)
+    );
+
+    // 父进程校验回写存档
+    let reply_bytes = std::fs::read(&reply_path).expect("读回写存档");
+    let r = Engine::restore_with_extensions(
+        &decode_archive(&reply_bytes).expect("解码回写"),
+        &[&pack],
+    )
+    .expect("父进程恢复回写");
+    assert_eq!(
+        r.debug_hp(1),
+        r.debug_hp(2),
+        "跨进程接力：免伤（体力不变）在回写存档中"
+    );
+    assert!(
+        !r.state_core().players[1].equips.contains(&equip_id),
+        "跨进程接力：装备已弃"
+    );
+}
+
+/// 从 repo drop-in 根桥接欢乐包（子进程/父进程同源同锁）。
+fn huanle_pack_from_repo() -> ExtensionPack {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report_installed_meta(&store);
+    let json = std::fs::read_to_string(
+        PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    bridge("huanle-upstream-noname", &json).expect("桥接")
+}
