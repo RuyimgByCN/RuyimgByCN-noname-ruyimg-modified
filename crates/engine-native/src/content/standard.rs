@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 265;
+pub const STANDARD_RULESET_VERSION: u64 = 266;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1049,6 +1049,46 @@ impl SkillMachine for ZjLeijiMachine {
                     None,
                 )));
                 ctx.draw_cards(self.owner, 1);
+            }
+        }
+        Flow::Done
+    }
+}
+
+/// 黑绳（十殿阎罗宋帝王，规则 v266，群雄乱入）：你死亡时，全部其他角色
+/// 横置。Death 前置窗口触发（changan 氏遗言同款；forceDie 死后面=时序
+/// 不敏感；死亡被取消仍已横置=登记差异）。
+struct HeishengBehavior;
+
+impl SkillBehavior for HeishengBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(HeishengMachine { owner })
+    }
+}
+
+/// 黑绳机器：无挂起一步机——全部其他存活横置（索命直写同款）。
+#[derive(Clone)]
+struct HeishengMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for HeishengMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossHeisheng { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let seats = ctx.core.players.len() as PlayerId;
+        for t in 0..seats {
+            if t != self.owner && ctx.core.player(t).alive && !ctx.core.player(t).linked {
+                ctx.core.player_mut(t).linked = true;
+                ctx.log(LogEvent::Linked { player: t, linked: true });
             }
         }
         Flow::Done
@@ -5055,6 +5095,14 @@ pub const BOSS_GONGZHENG: &str = "公正";
 /// 血池（十殿阎罗五官王，规则 v265，群雄乱入）：锁定技——结束阶段随机
 /// 一名其他角色失去 2 点体力（随机→座位序首个确定性近似登记）。
 pub const BOSS_XUECHI: &str = "血池";
+/// 黑绳（十殿阎罗宋帝王，规则 v266，群雄乱入）：锁定技——你死亡时，全
+/// 部其他角色横置（上游 die forceDie 逐个 link() 同口径；死亡前置窗口触
+/// 发=changan 氏遗言同款；若死亡被取消仍已横置=登记差异）。
+pub const BOSS_HEISHENG: &str = "黑绳";
+/// 胜负（十殿阎罗宋帝王，规则 v266，群雄乱入）：锁定技——结束阶段，一
+/// 名装备区有坐骑牌的其他角色弃置其中一张（随机目标/随机牌→首个有牌者
+/// /首张确定性近似登记；宝物 equip6 面随宝物栏机制登记）。
+pub const BOSS_SHENGFU: &str = "胜负";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5364,6 +5412,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 五官王（v265 枳枉+公正+血池；十殿阎罗第二殿；上游 group qun→群
     // 目录直取）
     ("五官王", Faction::Qun, &[BOSS_ZHIWANG, BOSS_GONGZHENG, BOSS_XUECHI], 4, Gender::Male),
+    // 宋帝王（v266 黑绳+胜负；恩怨=外部包组技未落登记随外部包批；上游
+    // group qun→群目录直取）
+    ("宋帝王", Faction::Qun, &[BOSS_HEISHENG, BOSS_SHENGFU], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7264,6 +7315,26 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             name: BOSS_XUECHI,
             // 查询型单面：End begin 臂——座位序首个其他存活失 2（随机→
             // 首个确定性近似登记）
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_HEISHENG,
+            // Death 触发（死亡前置窗口=遗言面）：全体其他横置一步机
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(HeishengBehavior),
+        },
+        SkillDef {
+            name: BOSS_SHENGFU,
+            // 查询型单面：End begin 臂——首个有坐骑的其他存活弃其一
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

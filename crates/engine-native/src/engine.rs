@@ -4622,6 +4622,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 72);
             push_u8(h, *owner);
         }
+        M::BossHeisheng { owner } => {
+            push_u8(h, 73);
+            push_u8(h, *owner);
+        }
         M::BossBuchun { owner, stage, targets } => {
             push_u8(h, 67);
             push_u8(h, *owner);

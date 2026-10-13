@@ -2917,6 +2917,27 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v266（2026-10-11，T11 十殿阎罗宋帝王片：黑绳/胜负＋宋帝王条目，
+遗言面首例）**：**黑绳**（Death 触发 SkillDef=`BOSS_HEISHENG`，**Death
+前置窗口遗言面 catalog 首例**——changan 氏 host 内联同款；Death 帧
+AfterTriggers plan_triggers 早退不重排=遗言恰触发一次）：你死亡时全部
+其他存活横置（索命直写同款）。**胜负**（查询型 Noop）：End begin 臂——
+首个装备区有坐骑牌的其他存活弃置其中一张（随机目标/牌→首个/首张确定性
+近似；equip6 宝物面随宝物栏登记）。`BOSS_GENERALS` 尾追加**宋帝王**
+（def 索引 44/hp4/`[黑绳, 胜负]`——**条目只列已转换技**守翼年兽先例；
+恩怨=外部包组技 renyuan 继承 xinenyuan1/2 未落随外部包批）。**登记差
+异**：黑绳死亡前置窗口先于取消判定（死亡被取消仍已横置）；黑绳机死亡
+者存活期触发（forceDie 死后面=时序不敏感）；胜负随机→首个/首张。FROZEN
+名单尾加「黑绳」「胜负」（149–150 名）。存档不变 v61。版本 265→**266**。
+版本回退探针（266→265 复跑 golden 全绿）证明 14 golden 位移唯一来源是
+版本字段，全量重录。回归
+`boss_songdiwang_heisheng_death_link_shengfu`（真死横置全其他/胜负弃坐
+骑/往返）——证据见
+[T11 宋帝王证据](../operations/evidence/2026-10-11-t11-boss-songdiwang-v266/README.md)。
+**坑位**：Boss 模式全座位重整复活拦真死（黑绳遗言测试须 chongzheng=0）；
+dying_save 询问 min=1 空应答被拒（显式 Pass）；debug_place 置入手牌非装
+备区（装备须本人 play）。
+
 **规则 v265（2026-10-11，T11 十殿阎罗五官王片：枳枉/公正/血池＋五官王条
 目，十殿阎罗首片）**：**枳枉**（查询型 Noop）：CardsMoved commit 显式臂
 （原默认臂加处理）——其他角色获得牌结算后其随机弃一张手牌（随机→首张

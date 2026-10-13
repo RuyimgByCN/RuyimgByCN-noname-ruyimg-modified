@@ -2399,6 +2399,42 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                 }
+                // 胜负（十殿阎罗宋帝王，规则 v266）：结束阶段，一名装备
+                // 区有坐骑牌的其他角色弃置其中一张（随机目标/随机牌→首
+                // 个有牌者/首张确定性近似登记；上游 logSkill 误标黑绳为
+                // 上游原样，native 不复刻；equip6 宝物面随宝物栏机制登记）
+                if let Some(sfdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_SHENGFU)
+                {
+                    if ctx.core.has_skill(player, sfdef) {
+                        use crate::catalog::CardKind::{HorseMinus, HorsePlus};
+                        let seats = ctx.core.players.len() as PlayerId;
+                        if let Some(t) = (0..seats).find(|&t| {
+                            t != player
+                                && ctx.core.player(t).alive
+                                && ctx.core.player(t).equips.iter().any(|c| {
+                                    matches!(
+                                        ctx.catalog.cards[*c as usize].kind,
+                                        HorsePlus | HorseMinus
+                                    )
+                                })
+                        }) {
+                            let pick = ctx.core.player(t).equips.iter().copied().find(
+                                |c| {
+                                    matches!(
+                                        ctx.catalog.cards[*c as usize].kind,
+                                        HorsePlus | HorseMinus
+                                    )
+                                },
+                            );
+                            if let Some(c) = pick {
+                                ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                                ctx.to_discard(c);
+                            }
+                        }
+                    }
+                }
                 // 红莲（Boss 周瑜，规则 v263）：结束阶段摸两张牌，并对
                 // 全部其他存活角色各造成 1 点火焰伤害（上游 phaseJieshuBegin
                 // draw(2)+逐个 damage("fire") 同口径）
