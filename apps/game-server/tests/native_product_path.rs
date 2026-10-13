@@ -39,6 +39,7 @@ fn t63_import_load_build_and_drive_with_extension() {
         seed: 7301,
         seats: 3,
         max_steps: 600,
+        planner_nodes: 64,
     };
     let summary = create_native_game(&content, &req).expect("建局+驱动");
     assert_eq!(
@@ -176,6 +177,7 @@ fn t63_standard_only_build_and_drive() {
         seed: 7302,
         seats: 3,
         max_steps: 300,
+        planner_nodes: 64,
     };
     let summary = create_native_game(&content, &req).expect("建局+驱动");
     assert_eq!(

@@ -165,6 +165,14 @@ pub struct NativeGameRequest {
     /// AI 驱动步数上限（0 = 只建局不驱动）。
     #[serde(default = "default_max_steps")]
     pub max_steps: u64,
+    /// 规划节点预算（T13 策略质量评估口：0 = 无规划基线，动作退化为
+    /// NextPhase 兜底；默认 64=现状）。
+    #[serde(default = "default_planner_nodes")]
+    pub planner_nodes: usize,
+}
+
+fn default_planner_nodes() -> usize {
+    64
 }
 
 fn default_max_steps() -> u64 {
@@ -223,7 +231,7 @@ pub fn create_native_game(
     let mut since_progress = 0u64;
     let mut stalled = false;
     if req.max_steps > 0 {
-        let planner = BoundedPlanner::new(64).with_deadline_ms(50);
+        let planner = BoundedPlanner::new(req.planner_nodes).with_deadline_ms(50);
         while e.outcome().is_none() && steps < req.max_steps {
             let seat = match e.open_choice() {
                 Some(open) => open.observer,
