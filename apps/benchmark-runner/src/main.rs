@@ -99,6 +99,8 @@ fn main() {
         "snapshot" => bench_snapshot_restore(500),
         "query-cache" => bench_query_cache(100_000),
         "ai-nodes" => bench_ai_nodes(5_000),
+        "frame-latency" => bench_frame_latency(20, 4),
+        "frame-latency-heavy" => bench_frame_latency(8, 8),
         "projection" => bench_observer_projection(50_000),
         "tier-report" => {
             let tier_label = args.next().unwrap_or_else(|| "desktop-native".into());
@@ -121,7 +123,7 @@ fn main() {
         }
         other => {
             eprintln!("unknown scenario: {other}");
-            eprintln!("scenarios: all | start-hash | identity-match | trigger-dispatch | distance-query | query-cache | snapshot | projection | ai-nodes | tier-report [tier] | tiers");
+            eprintln!("scenarios: all | start-hash | identity-match | trigger-dispatch | distance-query | query-cache | snapshot | projection | ai-nodes | frame-latency | frame-latency-heavy | tier-report [tier] | tiers");
             std::process::exit(1);
         }
     }
@@ -612,4 +614,102 @@ fn emit(report: BenchReport) {
 fn cpu_info() -> String {
     // Best-effort; not security-sensitive.
     std::env::consts::ARCH.to_string()
+}
+
+/// T13 帧率/延迟实测：完整对局驱动的**逐步延迟分布**——每步（命令提交+
+/// 触发扇出+选择挂起解析）的提交延迟即客户端帧内的权威步延迟上界。
+/// 对照 §38.1 档位 `command_p95` 预算出账（desktop-native / server-baseline）。
+/// 分配剖面（allocs/bytes per step）随 O3 计数分配器输出。
+fn bench_frame_latency(games: u64, players: u8) {
+    let mut step_ns: Vec<u64> = Vec::new();
+    let mut games_finished = 0u64;
+    let mut total_steps = 0u64;
+    let (a0, b0) = alloc_snapshot();
+    let t0 = Instant::now();
+    for g in 0..games {
+        let mut eng = Engine::new();
+        eng.submit(start_cmd(42 + g, players));
+        let mut revision = eng.state().revision;
+        let mut idempotency: u64 = 0;
+        let mut steps_this_game = 0u64;
+        while !eng.state().outcome.is_finished() && steps_this_game < 4000 {
+            let (kind, actor) = match eng.last_choice() {
+                Some(choice) => {
+                    let a = choice.observer;
+                    (auto_answer(choice), a)
+                }
+                None => {
+                    let a = eng.state().turn.current;
+                    if a == PlayerId::NONE {
+                        break;
+                    }
+                    (CommandKind::EndPhase, a)
+                }
+            };
+            idempotency += 1;
+            let s = Instant::now();
+            let result = eng.submit(Command {
+                actor,
+                expected_revision: ExpectedRevision(revision),
+                idempotency_key: IdempotencyKey(idempotency),
+                kind,
+            });
+            let dt = s.elapsed().as_nanos() as u64;
+            match result {
+                CommandResult::Accepted { new_revision, .. } => {
+                    revision = new_revision;
+                    step_ns.push(dt);
+                    steps_this_game += 1;
+                }
+                CommandResult::Rejected { .. } => {}
+            }
+        }
+        total_steps += steps_this_game;
+        if eng.state().outcome.is_finished() {
+            games_finished += 1;
+        }
+    }
+    let (a1, b1) = alloc_snapshot();
+    let wall_ms = t0.elapsed().as_millis();
+    step_ns.sort_unstable();
+    let n = step_ns.len();
+    let pct = |q: f64| -> u64 {
+        if n == 0 {
+            0
+        } else {
+            step_ns[(((n as f64) * q) as usize).min(n - 1)]
+        }
+    };
+    let p50 = pct(0.50);
+    let p95 = pct(0.95);
+    let p99 = pct(0.99);
+    let max = step_ns.last().copied().unwrap_or(0);
+    let allocs_step = if total_steps > 0 {
+        (a1 - a0) / total_steps
+    } else {
+        0
+    };
+    let bytes_step = if total_steps > 0 {
+        (b1 - b0) / total_steps
+    } else {
+        0
+    };
+    // 档位预算出账（us）
+    let checks = [
+        ("desktop-native", 3_000u64),
+        ("server-baseline", 20_000u64),
+    ];
+    for (tier, budget_us) in checks {
+        let ok = p95 <= budget_us * 1_000;
+        println!(
+            "frame-latency tier={tier} budget_command_p95_us={budget_us} p95={}us pass={}",
+            p95 / 1_000,
+            if ok { "yes" } else { "no" }
+        );
+    }
+    println!(
+        "scenario=frame-latency games={games} players={players} steps_total={total_steps} \
+games_finished={games_finished} p50_ns={p50} p95_ns={p95} p99_ns={p99} max_ns={max} \
+allocs_per_step={allocs_step} bytes_per_step={bytes_step} wall_ms={wall_ms}"
+    );
 }
