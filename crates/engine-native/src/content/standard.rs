@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 266;
+pub const STANDARD_RULESET_VERSION: u64 = 267;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1090,6 +1090,67 @@ impl SkillMachine for HeishengMachine {
                 ctx.core.player_mut(t).linked = true;
                 ctx.log(LogEvent::Linked { player: t, linked: true });
             }
+        }
+        Flow::Done
+    }
+}
+
+/// 雷诛（十殿阎罗卞城王，规则 v267）：你死亡时，按座位序对全部其他角色
+/// 各造成 1 点雷伤。Death 前置窗口触发（黑绳同位；forceDie 死后面=时序
+/// 不敏感；死亡被取消仍已触发=登记差异）。
+struct LeizhuBehavior;
+
+impl SkillBehavior for LeizhuBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(LeizhuMachine { owner, emitted: 0 })
+    }
+}
+
+/// 雷诛机器：逐目标雷伤（伤害走 Damage 帧，铁索逐发同款 Yield——
+/// 伤害可致死并级联遗言，逐发让管线消化窗口）。
+/// 可挂起（目标濒死询问期间停机），故入快照重建表。
+#[derive(Clone)]
+pub(crate) struct LeizhuMachine {
+    owner: PlayerId,
+    emitted: u8,
+}
+
+impl LeizhuMachine {
+    pub(crate) fn new(owner: PlayerId, emitted: u8) -> Self {
+        Self { owner, emitted }
+    }
+}
+
+impl SkillMachine for LeizhuMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossLeizhu {
+            owner: self.owner,
+            emitted: self.emitted,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let seats = ctx.core.players.len() as PlayerId;
+        while self.emitted < seats {
+            let t = self.emitted;
+            self.emitted += 1;
+            if t == self.owner || !ctx.core.player(t).alive {
+                continue;
+            }
+            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                Some(self.owner),
+                t,
+                1,
+                crate::event::DamageNature::Thunder,
+                None,
+            )));
+            return Flow::Yield;
         }
         Flow::Done
     }
@@ -5103,6 +5164,16 @@ pub const BOSS_HEISHENG: &str = "黑绳";
 /// 名装备区有坐骑牌的其他角色弃置其中一张（随机目标/随机牌→首个有牌者
 /// /首张确定性近似登记；宝物 equip6 面随宝物栏机制登记）。
 pub const BOSS_SHENGFU: &str = "胜负";
+/// 雷舟（十殿阎罗卞城王，规则 v267，群雄乱入）：锁定技——准备阶段，随
+/// 机一名其他角色受 1 点雷伤（randomGet→座位序首个确定性近似登记）。
+pub const BOSS_LEIZHOU: &str = "雷舟";
+/// 雷斧（十殿阎罗卞城王，规则 v267，群雄乱入）：锁定技——结束阶段，随
+/// 机一名其他角色横置态切换（上游 link() 非恒链同口径；randomGet→首个
+/// 确定性近似登记）。
+pub const BOSS_LEIFU: &str = "雷斧";
+/// 雷诛（十殿阎罗卞城王，规则 v267，群雄乱入）：锁定技——你死亡时，按
+/// 座位序对全部其他角色各造成 1 点雷伤（die forceDie 遗言面，黑绳同位）。
+pub const BOSS_LEIZHU: &str = "雷诛";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5415,6 +5486,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 宋帝王（v266 黑绳+胜负；恩怨=外部包组技未落登记随外部包批；上游
     // group qun→群目录直取）
     ("宋帝王", Faction::Qun, &[BOSS_HEISHENG, BOSS_SHENGFU], 4, Gender::Male),
+    // 卞城王（v267 雷舟+雷斧+雷诛；上游 group qun→群目录直取）
+    ("卞城王", Faction::Qun, &[BOSS_LEIZHOU, BOSS_LEIFU, BOSS_LEIZHU], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7338,6 +7411,33 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_LEIZHOU,
+            // 查询型单面：Judge begin 臂——首个其他存活 1 雷伤
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_LEIFU,
+            // 查询型单面：End begin 臂——首个其他存活横置态切换
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_LEIZHU,
+            // Death 触发（遗言面，黑绳同位）：座位序逐发雷伤
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(LeizhuBehavior),
         },
     ];
     (cards, skills)

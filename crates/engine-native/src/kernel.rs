@@ -1861,6 +1861,28 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             }
                         }
                     }
+                    // 雷舟（十殿阎罗卞城王，规则 v267）：准备阶段——随机
+                    // 一名其他存活角色受 1 点雷伤（randomGet→首个确定性
+                    // 近似登记；吸行同位）
+                    if let Some(lzdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_LEIZHOU)
+                    {
+                        if ctx.core.has_skill(player, lzdef) {
+                            let seats = ctx.core.players.len() as PlayerId;
+                            if let Some(t) =
+                                (0..seats).find(|&t| t != player && ctx.core.player(t).alive)
+                            {
+                                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                    Some(player),
+                                    t,
+                                    1,
+                                    crate::event::DamageNature::Thunder,
+                                    None,
+                                )));
+                            }
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
@@ -2432,6 +2454,26 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                 ctx.core.player_mut(t).equips.retain(|x| *x != c);
                                 ctx.to_discard(c);
                             }
+                        }
+                    }
+                }
+                // 雷斧（十殿阎罗卞城王，规则 v267）：结束阶段——随机一
+                // 名其他存活角色横置态切换（上游 link() 非恒链同口径；
+                // randomGet→首个确定性近似登记）
+                if let Some(lfdef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_LEIFU)
+                {
+                    if ctx.core.has_skill(player, lfdef) {
+                        let seats = ctx.core.players.len() as PlayerId;
+                        if let Some(t) =
+                            (0..seats).find(|&t| t != player && ctx.core.player(t).alive)
+                        {
+                            let cur = ctx.core.player(t).linked;
+                            ctx.emit(EventData::Linked {
+                                player: t,
+                                linked: !cur,
+                            });
                         }
                     }
                 }

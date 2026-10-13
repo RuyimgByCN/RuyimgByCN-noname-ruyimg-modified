@@ -2917,6 +2917,28 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v267（2026-10-13，T11 十殿阎罗卞城王片：雷舟/雷斧/雷诛＋卞城王
+条目，首个可挂起 boss 机）**：**雷舟**（查询型 Noop）：准备阶段（Judge
+begin 臂位）随机一名其他存活受 1 雷伤（吸行同位；randomGet→座位序首个
+确定性近似登记；勘验勘误——会话存量误记 Judge begin，源码实为
+phaseZhunbeiBegin）。**雷斧**（查询型 Noop）：End begin 臂——随机一名
+其他存活横置态切换（上游 `link()` 非恒链同口径，emit
+`EventData::Linked` 走 commit_linked 翻转写回；随机→首个近似登记）。
+**雷诛**（Death 触发 SkillDef=`BOSS_LEIZHU`，黑绳同位遗言面）：你死亡
+时按座位序对全部其他角色各发 1 雷伤——逐目标 emit Damage+Yield（铁索
+逐发同款），**内容侧首个可挂起机**：`BossLeizhu { owner, emitted }`
+快照携带进度，**入 snap.rs 重建表首例**（此前 boss 一步机单步 Done 不
+入表）。`BOSS_GENERALS` 尾追加**卞城王**（def 索引 45/hp4/
+`[雷舟, 雷斧, 雷诛]`）。**登记差异**：雷诛死亡前置窗口先于取消判定
+（死亡被取消仍已触发）；雷舟/雷斧随机→首个近似。FROZEN 名单尾加「雷
+舟」「雷斧」「雷诛」（151–153 名）。存档编码追加 BossLeizhu=74（存档
+版本不变 v61）。版本 266→**267**。版本回退探针（266 复跑全绿/267 全
+差）证明 14 golden 位移唯一来源是版本字段，全量重录。回归
+`boss_bianchengwang_leizhou_leifu_phase_arms` /
+`boss_bianchengwang_leizhu_death_thunder_sequential`（真死逐发雷伤+
+濒死挂起存档往返续跑不重发）——证据见
+[2026-10-13 卞城王片](../operations/evidence/2026-10-13-t11-boss-bianchengwang-v267/README.md)。
+
 **规则 v266（2026-10-11，T11 十殿阎罗宋帝王片：黑绳/胜负＋宋帝王条目，
 遗言面首例）**：**黑绳**（Death 触发 SkillDef=`BOSS_HEISHENG`，**Death
 前置窗口遗言面 catalog 首例**——changan 氏 host 内联同款；Death 帧
