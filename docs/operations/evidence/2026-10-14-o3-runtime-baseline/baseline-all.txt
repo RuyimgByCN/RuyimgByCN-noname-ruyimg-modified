@@ -1,0 +1,9 @@
+scenario=start-hash players=4 seed=42 samples=50 p50_ns=139042 p99_ns=148625 total_us=7288
+scenario=start-hash players=8 seed=99 samples=50 p50_ns=143750 p99_ns=154375 total_us=7506
+scenario=identity-match players=4 seed=42 max_steps=2000 samples=10 p50_ms=3
+scenario=trigger-dispatch iterations=50000 accepted=50000 accepted_end_phase=42857 accepted_choice=7143 rejected=0 events=101784 p50_ns=42917 p95_ns=45875 p99_ns=49250 per_op_ns=43284 total_ms=2164 finished=false outcome=InProgress rounds=893 rejected_by={} allocs_delta=6778019 bytes_delta=1245285278 allocs_per_op=135 bytes_per_op=24905
+scenario=distance-query iterations=50000 per_query_ns=240 total_ms=12 allocs_delta=450000 bytes_delta=12500000 allocs_per_op=9 bytes_per_op=250
+scenario=query-cache iterations=100000 cold_ns=75 warm_ns=66 hits=100000 misses=0 hit_rate_pct=100
+scenario=snapshot-restore iterations=100 per_op_ns=47024 total_ms=4
+scenario=observer-projection iterations=10000 per_op_ns=20029 total_ms=200 fanout_targets=14 allocs_delta=1330000 bytes_delta=149520000 allocs_per_op=133 bytes_per_op=14952
+scenario=ai-nodes iterations=2000 nodes_total=256000 ns_per_node=119999 total_ms=30719

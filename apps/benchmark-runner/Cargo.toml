@@ -12,6 +12,7 @@ path = "src/main.rs"
 [dependencies]
 engine-api = { workspace = true }
 engine-core = { workspace = true }
+engine-ai = { workspace = true }
 rule-api = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

@@ -19,8 +19,43 @@ use engine_api::{Command, CommandKind, CommandResult, ExpectedRevision, Idempote
 use engine_core::{project_observer, query, run_identity_match, Engine, MatchConfig, QueryContext};
 use rule_api::QueryRequest;
 use serde::Serialize;
+use std::alloc::{GlobalAlloc, Layout, System};
 use std::env;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
+
+/// O3：计数分配器——统计分配次数与字节数（仅 benchmark 进程内）。
+struct CountingAlloc;
+
+static ALLOC_OPS: AtomicU64 = AtomicU64::new(0);
+static ALLOC_BYTES: AtomicU64 = AtomicU64::new(0);
+
+unsafe impl GlobalAlloc for CountingAlloc {
+    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+        ALLOC_OPS.fetch_add(1, Ordering::Relaxed);
+        ALLOC_BYTES.fetch_add(layout.size() as u64, Ordering::Relaxed);
+        System.alloc(layout)
+    }
+    unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
+        System.dealloc(ptr, layout)
+    }
+    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
+        ALLOC_OPS.fetch_add(1, Ordering::Relaxed);
+        ALLOC_BYTES.fetch_add(new_size as u64, Ordering::Relaxed);
+        System.realloc(ptr, layout, new_size)
+    }
+}
+
+#[global_allocator]
+static GLOBAL: CountingAlloc = CountingAlloc;
+
+/// 分配快照（op, bytes）。
+fn alloc_snapshot() -> (u64, u64) {
+    (
+        ALLOC_OPS.load(Ordering::Relaxed),
+        ALLOC_BYTES.load(Ordering::Relaxed),
+    )
+}
 
 #[derive(Debug, Serialize)]
 struct BenchReport {
@@ -52,14 +87,18 @@ fn main() {
             bench_identity_match(4, 42, 2000);
             bench_trigger_dispatch(50_000);
             bench_distance_query(50_000);
+            bench_query_cache(100_000);
             bench_snapshot_restore(100);
             bench_observer_projection(10_000);
+            bench_ai_nodes(2_000);
         }
         "start-hash" => bench_start_hash(4, 42, 200),
         "identity-match" => bench_identity_match(4, 42, 5000),
         "trigger-dispatch" => bench_trigger_dispatch(100_000),
         "distance-query" => bench_distance_query(100_000),
         "snapshot" => bench_snapshot_restore(500),
+        "query-cache" => bench_query_cache(100_000),
+        "ai-nodes" => bench_ai_nodes(5_000),
         "projection" => bench_observer_projection(50_000),
         "tier-report" => {
             let tier_label = args.next().unwrap_or_else(|| "desktop-native".into());
@@ -82,7 +121,7 @@ fn main() {
         }
         other => {
             eprintln!("unknown scenario: {other}");
-            eprintln!("scenarios: all | start-hash | identity-match | trigger-dispatch | distance-query | snapshot | projection | tier-report [tier] | tiers");
+            eprintln!("scenarios: all | start-hash | identity-match | trigger-dispatch | distance-query | query-cache | snapshot | projection | ai-nodes | tier-report [tier] | tiers");
             std::process::exit(1);
         }
     }
@@ -286,6 +325,7 @@ fn bench_trigger_dispatch(iterations: u64) {
     let mut events_total: u64 = 0;
     let mut rejected_by: BTreeMap<String, u64> = BTreeMap::new();
     let mut accepted_ns: Vec<u64> = Vec::new();
+    let (a0, b0) = alloc_snapshot();
     let t0 = Instant::now();
     for _ in 0..iterations {
         if eng.state().outcome.is_finished() {
@@ -345,6 +385,9 @@ fn bench_trigger_dispatch(iterations: u64) {
     let p95 = percentile(&accepted_ns, 0.95);
     let p99 = percentile(&accepted_ns, 0.99);
     let per_op_ns = elapsed.as_nanos() / (accepted + rejected).max(1) as u128;
+    let (a1, b1) = alloc_snapshot();
+    let a_ops = (a1 - a0) / (accepted + rejected).max(1);
+    let a_bytes = (b1 - b0) / (accepted + rejected).max(1);
     // 终局条件：驱动结束时对局是否终局、结果与回合数（§3 验收口径）。
     let outcome = eng.state().outcome.clone();
     let finished = outcome.is_finished();
@@ -353,9 +396,13 @@ fn bench_trigger_dispatch(iterations: u64) {
          accepted_end_phase={accepted_end_phase} accepted_choice={accepted_choice} \
          rejected={rejected} events={events_total} p50_ns={p50} p95_ns={p95} p99_ns={p99} \
          per_op_ns={per_op_ns} total_ms={} finished={finished} outcome={outcome:?} \
-         rounds={} rejected_by={rejected_by:?}",
+         rounds={} rejected_by={rejected_by:?} allocs_delta={} bytes_delta={} allocs_per_op={} bytes_per_op={}",
         elapsed.as_millis(),
-        eng.state().turn.round
+        eng.state().turn.round,
+        a1 - a0,
+        b1 - b0,
+        a_ops,
+        a_bytes
     );
 }
 
@@ -408,6 +455,7 @@ fn bench_distance_query(iterations: u64) {
             &mut ctx,
         );
     }
+    let (a0, b0) = alloc_snapshot();
     let t0 = Instant::now();
     for _ in 0..iterations {
         let _ = query(
@@ -416,11 +464,77 @@ fn bench_distance_query(iterations: u64) {
             &mut ctx,
         );
     }
+    let (a1, b1) = alloc_snapshot();
+    let a_ops = (a1 - a0) / iterations;
+    let a_bytes = (b1 - b0) / iterations;
     let elapsed = t0.elapsed();
     let per_q_ns = elapsed.as_nanos() / iterations as u128;
     println!(
-        "scenario=distance-query iterations={iterations} per_query_ns={per_q_ns} total_ms={}",
-        elapsed.as_millis()
+        "scenario=distance-query iterations={iterations} per_query_ns={per_q_ns} total_ms={} allocs_delta={} bytes_delta={} allocs_per_op={} bytes_per_op={}",
+        elapsed.as_millis(),
+        a1 - a0,
+        b1 - b0,
+        a_ops,
+        a_bytes
+    );
+}
+
+/// O3：query 缓存命中率（同键重复查询——无提交边界时键不失效）。
+fn bench_query_cache(iterations: u64) {
+    let mut eng = Engine::new();
+    eng.submit(start_cmd(42, 8));
+    let p1 = PlayerId::new(1);
+    let p2 = PlayerId::new(2);
+    let req = QueryRequest::Distance { from: p1, to: p2 };
+    let mut ctx = QueryContext::with_cache(true);
+    // 冷段：首查写缓存
+    let t0 = Instant::now();
+    for _ in 0..100 {
+        let _ = query(eng.state(), &req, &mut ctx);
+    }
+    let cold_ns = t0.elapsed().as_nanos() / 100;
+    let hits_before = ctx.cache_hits();
+    // 热段：同键查询应全部命中
+    let t0 = Instant::now();
+    for _ in 0..iterations {
+        let _ = query(eng.state(), &req, &mut ctx);
+    }
+    let warm_ns = t0.elapsed().as_nanos() / iterations as u128;
+    let hits = ctx.cache_hits() - hits_before;
+    let misses = iterations.saturating_sub(hits);
+    let rate_pct = hits * 100 / iterations.max(1);
+    println!(
+        "scenario=query-cache iterations={iterations} cold_ns={cold_ns} warm_ns={warm_ns} hits={hits} misses={misses} hit_rate_pct={rate_pct}"
+    );
+}
+
+/// O3：AI 节点成本（旧线 engine-ai 束搜索——nodes_used 与 ns/node）。
+fn bench_ai_nodes(iterations: u64) {
+    use engine_ai::{BeamSearch, SearchBudget, SearchPolicy, StateFork};
+    let mut eng = Engine::new();
+    eng.submit(start_cmd(42, 5));
+    let actor = eng.state().turn.current;
+    let mut search = BeamSearch::default();
+    let budget = SearchBudget {
+        max_nodes: 10_000,
+        max_depth: 8,
+    };
+    let mut total_nodes = 0u64;
+    let t0 = Instant::now();
+    for _ in 0..iterations {
+        let mut fork = StateFork::from_authority(&eng, 99);
+        let r = search.select(&mut fork, actor, budget);
+        total_nodes += r.nodes_used;
+    }
+    let ns = t0.elapsed().as_nanos();
+    let ns_per_node = if total_nodes > 0 {
+        ns / total_nodes as u128
+    } else {
+        0
+    };
+    println!(
+        "scenario=ai-nodes iterations={iterations} nodes_total={total_nodes} ns_per_node={ns_per_node} total_ms={}",
+        ns / 1_000_000
     );
 }
 
@@ -465,15 +579,26 @@ fn bench_observer_projection(iterations: u64) {
     let mut eng = Engine::new();
     eng.submit(start_cmd(42, 8));
     let p1 = PlayerId::new(1);
+    // 扇出：单次投影产出的座位+已知牌条目数（O3 project_observer 扇出面）。
+    let sample = project_observer(eng.state(), ObserverKind::Player(p1));
+    let fanout = sample.seats.len() + sample.known_cards.len();
+    let (a0, b0) = alloc_snapshot();
     let t0 = Instant::now();
     for _ in 0..iterations {
         let _ = project_observer(eng.state(), ObserverKind::Player(p1));
     }
+    let (a1, b1) = alloc_snapshot();
+    let a_ops = (a1 - a0) / iterations;
+    let a_bytes = (b1 - b0) / iterations;
     let elapsed = t0.elapsed();
     let per_op_ns = elapsed.as_nanos() / iterations as u128;
     println!(
-        "scenario=observer-projection iterations={iterations} per_op_ns={per_op_ns} total_ms={}",
-        elapsed.as_millis()
+        "scenario=observer-projection iterations={iterations} per_op_ns={per_op_ns} total_ms={} fanout_targets={fanout} allocs_delta={} bytes_delta={} allocs_per_op={} bytes_per_op={}",
+        elapsed.as_millis(),
+        a1 - a0,
+        b1 - b0,
+        a_ops,
+        a_bytes
     );
 }
 
