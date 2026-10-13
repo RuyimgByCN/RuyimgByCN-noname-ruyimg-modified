@@ -1,0 +1,4 @@
+smoke=ok require_ms=7 load_bundle_ms=104 start_game_ms=10 revision=1 hash=856ab68161dc8d77
+autostep=ok steps=80 elapsed_ms=39 finished=false
+observer=ok bytes=4821
+回归=通过（内容束装载[standard+refresh 全内容锁]/开局/自动推进/投影 全链路）
