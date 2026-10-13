@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 62;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 63;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -989,6 +989,10 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             w.u8(75);
             enc_pid(w, owner);
             w.u8(*emitted);
+        }
+        MachineSnapshot::BossWanghun { owner } => {
+            w.u8(76);
+            enc_pid(w, owner);
         }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);
@@ -2185,6 +2189,10 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let emitted = r.u8()?;
             MachineSnapshot::BossRenao { owner, emitted }
         }
+        76 => {
+            let owner = dec_pid(r)?;
+            MachineSnapshot::BossWanghun { owner }
+        }
         64 => {
             let owner = dec_pid(r)?;
             MachineSnapshot::Shedu { owner }
@@ -2836,6 +2844,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.xingqiu_toggled);
         // 反噬 terra 旗（v269）
         w.boolean(p.zlfanshi_terra);
+        // 往事封禁（v270）
+        w.boolean(p.wangshi_ban);
         // 不臣上次发动轮次（v240）
         w.u32(p.buchun_used_round);
         // 星夏上次发动轮次（v242）
@@ -3141,6 +3151,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let lingqu_count = r.u8()?;
         let xingqiu_toggled = r.boolean()?;
         let zlfanshi_terra = r.boolean()?;
+        let wangshi_ban = r.boolean()?;
         let buchun_used_round = r.u32()?;
         let xingxia_used_round = r.u32()?;
         let nbianshen_toggle = r.boolean()?;
@@ -3202,6 +3213,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             lingqu_count,
             xingqiu_toggled,
             zlfanshi_terra,
+            wangshi_ban,
             buchun_used_round,
             xingxia_used_round,
             nbianshen_toggle,

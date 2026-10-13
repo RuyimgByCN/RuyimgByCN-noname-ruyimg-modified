@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 269;
+pub const STANDARD_RULESET_VERSION: u64 = 270;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1209,6 +1209,74 @@ impl SkillMachine for RenaoMachine {
                     None,
                 )));
                 return Flow::Yield;
+            }
+        }
+        Flow::Done
+    }
+}
+
+/// 忘魂（十殿阎罗孟婆，规则 v270）：你死亡时，清全场往事封禁，随机两
+/// 名敌方角色各随机失去一个技能。Death 前置窗口触发（黑绳同位直写一
+/// 步机；登记差异：随机敌将/随机技→座位序前两个其他存活各首个启用技
+/// ——skills 为 BTreeMap 按 (座位,def 序) 确定性；敌方面→全体其他；回
+/// 魂牌堆注入与回收面未落）。
+struct WanghunBehavior;
+
+impl SkillBehavior for WanghunBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(WanghunMachine { owner })
+    }
+}
+
+/// 忘魂机器：直写一步机（禁用=SkillInstance.enabled 直写+SkillToggled，
+/// 隐贼同款；无子事件不挂起）。
+#[derive(Clone)]
+struct WanghunMachine {
+    owner: PlayerId,
+}
+
+impl SkillMachine for WanghunMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossWanghun { owner: self.owner }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // ① 清全场往事封禁（上游敌方 removeSkill boss_wangshi2 同口径）
+        for p in ctx.core.players.iter_mut() {
+            p.wangshi_ban = false;
+        }
+        // ② 座位序前两个其他存活各禁用首个启用技
+        let seats = ctx.core.players.len() as PlayerId;
+        let mut disabled = 0u8;
+        for t in 0..seats {
+            if disabled >= 2 {
+                break;
+            }
+            if t == self.owner || !ctx.core.player(t).alive {
+                continue;
+            }
+            let first_enabled = ctx
+                .core
+                .skills
+                .iter()
+                .find(|((o, _), i)| *o == t && i.enabled)
+                .map(|((_, dd), _)| *dd);
+            if let Some(dd) = first_enabled {
+                if let Some(inst) = ctx.core.skills.get_mut(&(t, dd)) {
+                    inst.enabled = false;
+                }
+                ctx.log(LogEvent::SkillToggled {
+                    player: t,
+                    skill: ctx.catalog.skill_name(dd),
+                    enabled: false,
+                });
+                disabled += 1;
             }
         }
         Flow::Done
@@ -5256,6 +5324,21 @@ pub const BOSS_WANGSHENG: &str = "往生";
 /// 受伤后，若再次受到伤害，对随机一名其他角色造成 1 点伤害（上游
 /// addTempSkill boss_zlfanshi_terra 交替同口径；随机→首个确定性近似）。
 pub const BOSS_ZLFANSHI: &str = "反噬";
+/// 拾忧（十殿阎罗孟婆，规则 v270，群雄乱入）：锁定化近似（上游可选技
+/// 恒发动确定性近似登记）——其他角色弃牌阶段弃置牌后，获得其中花色各
+/// 不相同的牌（随机/自选→按弃牌序贪心取首个未见花色确定性近似；显示
+/// 名勘误——勘验存量误记「拾又」）。
+pub const BOSS_SHIYOU: &str = "拾忧";
+/// 往事（十殿阎罗孟婆，规则 v270，群雄乱入）：锁定技——其他角色的回合
+/// 开始时，其本回合不能使用或打出一种类型的牌（上游 randomGet 基本锦
+/// 囊装备→恒定基本牌确定性近似登记；敌方面→全部其他近似；打出面响应
+/// 窗未落=登记差异；显示名勘误——勘验存量误记「忘世」）。
+pub const BOSS_WANGSHI: &str = "往事";
+/// 忘魂（十殿阎罗孟婆，规则 v270，群雄乱入）：锁定遗言（Death 触发）——
+/// 清全场往事封禁，随机两名敌方角色各随机失去一个技能（随机敌将/随机
+/// 技→座位序前两个其他存活各首个启用技确定性近似登记；回魂牌堆注入与
+/// 回收面、shidianyanluo 模式旗未落随 boss 模式扩展批）。
+pub const BOSS_WANGHUN: &str = "忘魂";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5574,6 +5657,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("泰山王", Faction::Qun, &[BOSS_FUDU, BOSS_KUJIU, BOSS_RENAO], 4, Gender::Male),
     // 转轮王（v269 魔道[共用]+轮回+往生+反噬；上游 group qun→群目录直取）
     ("转轮王", Faction::Qun, &[BOSS_MODAO, BOSS_LUNHUI, BOSS_WANGSHENG, BOSS_ZLFANSHI], 6, Gender::Male),
+    // 孟婆（v270 拾忧+忘魂+往事；上游 group qun→群目录直取；female）
+    ("孟婆", Faction::Qun, &[BOSS_SHIYOU, BOSS_WANGHUN, BOSS_WANGSHI], 3, Gender::Female),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7570,6 +7655,34 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
         SkillDef {
             name: BOSS_ZLFANSHI,
             // 查询型单面：Damage commit 尾臂——terra 旗交替+反噬 1 伤
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_SHIYOU,
+            // 查询型单面：弃牌机 Done 前臂——弃牌阶段弃牌花色互异获得
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_WANGHUN,
+            // Death 触发（遗言面）：清往事旗+前两个其他各禁用首个技
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(WanghunBehavior),
+        },
+        SkillDef {
+            name: BOSS_WANGSHI,
+            // 查询型单面：Judge begin global 臂（恒定禁基本牌）+
+            // PlayCard 拒绝位+回合结束全清
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),

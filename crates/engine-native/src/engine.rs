@@ -2329,6 +2329,13 @@ fn apply_command(
             {
                 return Err(RejectReason::CardLimit);
             }
+            // 往事封禁（十殿阎罗孟婆，规则 v270）：本回合不能使用或打出
+            // 基本牌（上游 mod cardEnabled2 类型禁用→恒定基本牌近似登记；
+            // kind 基础集=杀族/闪/桃/酒族/手里剑）；打出面（响应窗）未
+            // 落=登记差异（仅使用位 PlayCard 校验）
+            if core.player(actor).wangshi_ban && catalog.card_kind(card).is_basic_kind() {
+                return Err(RejectReason::CardLimit);
+            }
             if !core.player(core.turn.current).hand.contains(&card) {
                 return Err(RejectReason::CardNotInHand);
             }
@@ -4263,6 +4270,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.xingqiu_toggled as u8);
         // 反噬 terra 旗（Boss 转轮王，规则 v269）
         push_u8(&mut h, p.zlfanshi_terra as u8);
+        // 往事封禁（Boss 孟婆，规则 v270）
+        push_u8(&mut h, p.wangshi_ban as u8);
         push_u32(&mut h, p.buchun_used_round);
         push_u32(&mut h, p.xingxia_used_round);
         push_u8(&mut h, p.nbianshen_toggle as u8);
@@ -4637,6 +4646,10 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 75);
             push_u8(h, *owner);
             push_u8(h, *emitted);
+        }
+        M::BossWanghun { owner } => {
+            push_u8(h, 76);
+            push_u8(h, *owner);
         }
         M::BossBuchun { owner, stage, targets } => {
             push_u8(h, 67);

@@ -1,0 +1,10 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-8285df63cb92cc1c)
+
+running 3 tests
+test boss_mengpo_shiyou_distinct_suit_gain ... ok
+test boss_mengpo_wanghun_death_clear_and_disable ... ok
+test boss_mengpo_wangshi_basic_ban_turn_clear ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 285 filtered out; finished in 0.00s
+

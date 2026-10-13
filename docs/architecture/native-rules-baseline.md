@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核。源码为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v192 为最新（2026-10-10 补登）。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v270 / 存档 v63**，2026-10-14 孟婆批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v270 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2916,6 +2916,29 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 **坑位**：转化链守卫 `if kind != Sha && kind != Le` 排除 plain Sha——酒池
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
+
+**规则 v270（2026-10-14，T11 十殿阎罗孟婆片：拾忧/往事/忘魂＋孟婆条目，
+字段批）**：**拾忧**（查询型单面）：弃牌机 commit 前臂——其他角色弃牌阶
+段弃置牌后持有者获得花色互异者（上游 chooseCardButton 可选→锁定化恒发
+动+按弃牌序贪心首个未见花色近似登记；CardsGiven 日志）。**往事**（查询
+型单面）：Prepare-begin 臂（苦酒同位）置 `PlayerState.wangshi_ban`＋
+PlayCard 拒绝位（CardLimit）＋回合结束全清（反噬全清同位）；上游
+randomGet basic/trick/equip→恒定基本牌近似（`is_basic_kind`=杀族/闪/桃/
+酒族/手里剑）；上游 getEnemies 敌方面→全部其他近似；**打出面响应窗未落
+=登记差异**（仅使用位校验，封冻同口径族）。**忘魂**（Death 触发遗言机，
+黑绳前置窗口同位）：死亡时清全场往事封禁＋座位序前两个其他存活各禁用
+首个启用技（隐贼同款 enabled 直写+SkillToggled；上游 randomGet 两敌将×
+可失技→确定性近似登记）；`MachineSnapshot::BossWanghun` 新变体
+（archive tag 76/机哈希 76）。`_status.shidianyanluo_mengpodie` 模式旗与
+回魂牌堆注入/回收（boss_mengpohuihun）未落随 boss 模式扩展批。新字段入
+canonical hash+存档玩家段，`ARCHIVE_FORMAT_VERSION` 62→**63**。
+`BOSS_GENERALS` 尾追加**孟婆**（def 索引 48/**hp3**/female/`[拾忧, 忘魂,
+往事]`）。FROZEN 名单尾加「拾忧」「忘魂」「往事」（160–162 名）。版本
+269→**270**。字段批探针（269 提交全绿；269+字段/270+字段两态全差且
+actual 互异）后全量重录。回归 `boss_mengpo_wangshi_basic_ban_turn_clear`
+/ `boss_mengpo_shiyou_distinct_suit_gain` /
+`boss_mengpo_wanghun_death_clear_and_disable`——证据见
+[2026-10-14 孟婆片](../operations/evidence/2026-10-14-t11-boss-mengpo-v270/README.md)。
 
 **规则 v269（2026-10-13，T11 十殿阎罗转轮王片：魔道共用/轮回/往生/反噬
 ＋转轮王条目，字段批）**：**魔道**（共用技复用 `BOSS_MODAO`，夜叉/罗刹

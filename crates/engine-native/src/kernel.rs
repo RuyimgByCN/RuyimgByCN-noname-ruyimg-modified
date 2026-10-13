@@ -2009,6 +2009,29 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.core.turn.jiu_active = true;
                         }
                     }
+                    // 往事（十殿阎罗孟婆，规则 v270）：其他角色的回合开始
+                    // 时——其本回合不能使用或打出一种类型的牌（上游
+                    // boss_wangshi randomGet basic/trick/equip→恒定基本牌
+                    // 确定性近似登记；敌方面→全部其他近似；PlayCard 拒绝
+                    // 位+回合结束全清）
+                    if let Some(wsdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_WANGSHI)
+                    {
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == wsdef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .collect();
+                        if holders
+                            .iter()
+                            .any(|h| *h != player && ctx.core.player(*h).alive)
+                        {
+                            ctx.core.player_mut(player).wangshi_ban = true;
+                        }
+                    }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
                     // 存活角色获「封印」（本回合无法使用手牌；回合结束解
                     // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
@@ -2762,6 +2785,11 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 // 全清（上游 addTempSkill 当前回合结束同口径）
                 for p in ctx.core.players.iter_mut() {
                     p.zlfanshi_terra = false;
+                }
+                // 往事封禁清零（十殿阎罗孟婆，规则 v270）：回合结束全清
+                //（上游 addTempSkill boss_wangshi2 当前回合结束同口径）
+                for p in ctx.core.players.iter_mut() {
+                    p.wangshi_ban = false;
                 }
                 // 巨源（Boss 朱厌，规则 v226）：回合结束记录体力（上游
                 // phaseAfter storage=hp 同口径；跨回合持久）
@@ -8359,6 +8387,47 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
         if !discarded.is_empty() {
             // 水没墓穴计数（mtg 第三批，规则 v102）：弃牌阶段内弃牌
             ctx.core.turn.discard_phase_discarded += discarded.len() as u32;
+            // 拾忧（十殿阎罗孟婆，规则 v270）：其他角色弃牌阶段弃置的牌
+            // ——持有者获得其中花色各不相同的牌（上游 chooseCardButton
+            // 可选花色互异→锁定化恒发动+按弃牌序贪心取首个未见花色确定
+            // 性近似登记；牌自弃牌堆拨入持有者手牌）
+            if ctx.core.turn.phase == crate::event::Phase::Discard {
+                if let Some(sydef) = ctx
+                    .catalog
+                    .skill_by_name(crate::content::standard::BOSS_SHIYOU)
+                {
+                    let seats = ctx.core.players.len() as PlayerId;
+                    let holders: Vec<PlayerId> = (0..seats)
+                        .filter(|&h| {
+                            h != self.player
+                                && ctx.core.player(h).alive
+                                && ctx.core.has_skill(h, sydef)
+                        })
+                        .collect();
+                    if let Some(holder) = holders.first() {
+                        let mut seen: Vec<crate::catalog::Suit> = Vec::new();
+                        let mut gain: Vec<crate::ids::CardId> = Vec::new();
+                        for c in &discarded {
+                            let suit = ctx.catalog.cards[*c as usize].suit;
+                            if !seen.contains(&suit) {
+                                seen.push(suit);
+                                gain.push(*c);
+                            }
+                        }
+                        if !gain.is_empty() {
+                            for c in &gain {
+                                ctx.core.discard.retain(|x| x != c);
+                            }
+                            ctx.core.player_mut(*holder).hand.extend(gain.iter().copied());
+                            ctx.log(LogEvent::CardsGiven {
+                                from: self.player,
+                                to: *holder,
+                                cards: gain,
+                            });
+                        }
+                    }
+                }
+            }
             // 弃牌事件：连营类「失去手牌」触发依赖此事件（ADR 0763）
             ctx.emit(EventData::CardsDiscarded {
                 player: self.player,

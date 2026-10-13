@@ -495,6 +495,22 @@ impl CardKind {
         matches!(self, CardKind::Sha | CardKind::FireSha | CardKind::LeiSha)
     }
 
+    /// 基础牌判定（往事封禁面，规则 v270）：杀族/闪/桃/酒族/手里剑。
+    /// 扩展牌种未逐一归类（恒定基本牌近似下的保守集，登记差异）。
+    pub fn is_basic_kind(self) -> bool {
+        matches!(
+            self,
+            CardKind::Sha
+                | CardKind::FireSha
+                | CardKind::LeiSha
+                | CardKind::Shan
+                | CardKind::Tao
+                | CardKind::Jiu
+                | CardKind::Tianxianjiu
+                | CardKind::ShouLiJian
+        )
+    }
+
     /// 装备牌 → 装备栏；非装备牌返回 None。
     pub fn equip_slot(self) -> Option<EquipSlot> {
         Some(match self {
