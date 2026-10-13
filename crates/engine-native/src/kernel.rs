@@ -1099,6 +1099,41 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
             }
         }
     }
+    // 服毒（十殿阎罗泰山王，规则 v268）：其他角色使用【桃】时，随机另
+    // 一名其他角色失去 1 点体力（上游 global useCard boss_fudu；随机→
+    // 座位序首个确定性近似登记；候选=全体减持有者减使用者）
+    {
+        let kind = u.use_as.unwrap_or(effective_kind);
+        if kind == CardKind::Tao {
+            if let Some(fddef) = ctx
+                .catalog
+                .skill_by_name(crate::content::standard::BOSS_FUDU)
+            {
+                let seats = ctx.core.players.len() as PlayerId;
+                if seats > 2 {
+                    let holders: Vec<PlayerId> = ctx
+                        .core
+                        .skills
+                        .iter()
+                        .filter(|((_, dd), i)| *dd == fddef && i.enabled)
+                        .map(|((o, _), _)| *o)
+                        .collect();
+                    if let Some(t) = (0..seats).find(|&t| {
+                        t != u.player
+                            && !holders.contains(&t)
+                            && ctx.core.player(t).alive
+                    }) {
+                        if holders
+                            .iter()
+                            .any(|h| *h != u.player && ctx.core.player(*h).alive)
+                        {
+                            ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+                        }
+                    }
+                }
+            }
+        }
+    }
     // 冥顽（Boss 梼杌，规则 v219）：回合内锁定集已激活（非空）时每用
     // 一张牌摸一张（上游 boss_minwan_draw useCard 同口径）
     if ctx.core.turn.current == u.player && !ctx.core.turn.minwan_targets.is_empty() {
@@ -1881,6 +1916,30 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                     None,
                                 )));
                             }
+                        }
+                    }
+                    // 苦酒（十殿阎罗泰山王，规则 v268）：其他角色的准备阶
+                    // 段——其失去 1 点体力，然后视为使用一张【酒】（上游
+                    // global phaseZhunbeiBegin boss_kujiu；useCard jiu 同口
+                    // 径置位 jiu_active 不占 jiu_used；无 useCard 事件面=登
+                    // 记差异）
+                    if let Some(kjdef) = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::BOSS_KUJIU)
+                    {
+                        let holders: Vec<PlayerId> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter(|((_, dd), i)| *dd == kjdef && i.enabled)
+                            .map(|((o, _), _)| *o)
+                            .collect();
+                        if holders
+                            .iter()
+                            .any(|h| *h != player && ctx.core.player(*h).alive)
+                        {
+                            ctx.emit(EventData::LoseHp { player, amount: 1 });
+                            ctx.core.turn.jiu_active = true;
                         }
                     }
                     // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他

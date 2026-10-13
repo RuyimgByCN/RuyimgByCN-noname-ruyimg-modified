@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 267;
+pub const STANDARD_RULESET_VERSION: u64 = 268;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1151,6 +1151,65 @@ impl SkillMachine for LeizhuMachine {
                 None,
             )));
             return Flow::Yield;
+        }
+        Flow::Done
+    }
+}
+
+/// 热恼（十殿阎罗泰山王，规则 v268）：你死亡时，随机一名其他角色受 3
+/// 点火焰伤害。Death 前置窗口触发（雷诛同位；死亡被取消仍已触发=登记
+/// 差异；randomGet→座位序首个确定性近似登记）。
+struct RenaoBehavior;
+
+impl SkillBehavior for RenaoBehavior {
+    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        matches!(event, EventData::Death { player, .. } if *player == owner)
+    }
+
+    fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+        Box::new(RenaoMachine { owner, emitted: 0 })
+    }
+}
+
+/// 热恼机器：单发 3 火伤（Yield 让濒死窗口消化；可挂起入重建表）。
+#[derive(Clone)]
+pub(crate) struct RenaoMachine {
+    owner: PlayerId,
+    emitted: u8,
+}
+
+impl RenaoMachine {
+    pub(crate) fn new(owner: PlayerId, emitted: u8) -> Self {
+        Self { owner, emitted }
+    }
+}
+
+impl SkillMachine for RenaoMachine {
+    fn fork(&self) -> Box<dyn SkillMachine> {
+        Box::new(self.clone())
+    }
+    fn snapshot(&self) -> MachineSnapshot {
+        MachineSnapshot::BossRenao {
+            owner: self.owner,
+            emitted: self.emitted,
+        }
+    }
+    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.emitted == 0 {
+            self.emitted = 1;
+            let seats = ctx.core.players.len() as PlayerId;
+            if let Some(t) =
+                (0..seats).find(|&t| t != self.owner && ctx.core.player(t).alive)
+            {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(self.owner),
+                    t,
+                    3,
+                    crate::event::DamageNature::Fire,
+                    None,
+                )));
+                return Flow::Yield;
+            }
         }
         Flow::Done
     }
@@ -5174,6 +5233,17 @@ pub const BOSS_LEIFU: &str = "雷斧";
 /// 雷诛（十殿阎罗卞城王，规则 v267，群雄乱入）：锁定技——你死亡时，按
 /// 座位序对全部其他角色各造成 1 点雷伤（die forceDie 遗言面，黑绳同位）。
 pub const BOSS_LEIZHU: &str = "雷诛";
+/// 服毒（十殿阎罗泰山王，规则 v268，群雄乱入）：锁定技——其他角色使用
+/// 【桃】时，随机另一名其他角色失去 1 点体力（randomGet→座位序首个确
+/// 定性近似登记；勘误——勘验存量误记「复读」）。
+pub const BOSS_FUDU: &str = "服毒";
+/// 苦酒（十殿阎罗泰山王，规则 v268，群雄乱入）：锁定技——其他角色准备
+/// 阶段，其失去 1 点体力，然后视为使用一张【酒】（jiu_active 置位，不
+/// 占 jiu_used；无 useCard 事件面=登记差异）。
+pub const BOSS_KUJIU: &str = "苦酒";
+/// 热恼（十殿阎罗泰山王，规则 v268，群雄乱入）：锁定技——你死亡时，随
+/// 机一名其他角色受 3 点火焰伤害（die forceDie 遗言面，雷诛同位）。
+pub const BOSS_RENAO: &str = "热恼";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -5488,6 +5558,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("宋帝王", Faction::Qun, &[BOSS_HEISHENG, BOSS_SHENGFU], 4, Gender::Male),
     // 卞城王（v267 雷舟+雷斧+雷诛；上游 group qun→群目录直取）
     ("卞城王", Faction::Qun, &[BOSS_LEIZHOU, BOSS_LEIFU, BOSS_LEIZHU], 4, Gender::Male),
+    // 泰山王（v268 服毒+苦酒+热恼；上游 group qun→群目录直取）
+    ("泰山王", Faction::Qun, &[BOSS_FUDU, BOSS_KUJIU, BOSS_RENAO], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -7438,6 +7510,34 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(LeizhuBehavior),
+        },
+        SkillDef {
+            name: BOSS_FUDU,
+            // 查询型单面：CardUsed commit 臂——他人用桃随机其他失 1
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_KUJIU,
+            // 查询型单面：Judge begin 臂（global 扫持有者）——其他角色
+            // 准备阶段失 1+视为用酒
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(NoopBehavior),
+        },
+        SkillDef {
+            name: BOSS_RENAO,
+            // Death 触发（遗言面，雷诛同位）：首发其他 3 火伤
+            trigger: Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            limits: SkillLimits::default(),
+            behavior: Box::new(RenaoBehavior),
         },
     ];
     (cards, skills)

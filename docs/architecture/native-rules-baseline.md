@@ -2917,6 +2917,26 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v268（2026-10-13，T11 十殿阎罗泰山王片：服毒/苦酒/热恼＋泰山王
+条目）**：**服毒**（查询型 Noop）：`commit_card_used` 内联臂（邪酬同
+位）——其他角色使用【桃】时随机另一名其他角色失 1 体力（kind 判定含
+use_as；候选=全体减使用者减持有者；players>2 门保留；randomGet→座位序
+首个确定性近似登记）。**苦酒**（查询型 Noop）：Judge begin 臂位 global
+扫持有者——其他角色的准备阶段其失 1 体力并视为使用【酒】（jiu_active
+置位不占 jiu_used=上游 useCard jiu 同口径；无 useCard 事件面=登记差异）。
+**热恼**（Death 触发 SkillDef=`BOSS_RENAO`，雷诛同位遗言面）：你死亡时
+随机一名其他角色受 3 火伤——`BossRenao { owner, emitted }` 单发机
+（emit+Yield 可挂起，入重建表）。**显示名勘误**：boss_fudu=服毒/
+boss_kujiu=苦酒（会话勘验存量误记复读/苦久，boss.js:11282–11287）。
+`BOSS_GENERALS` 尾追加**泰山王**（def 索引 46/hp4/`[服毒, 苦酒, 热恼]`）。
+**登记差异**：随机→首个近似族；苦酒无 useCard 事件面；热恼死亡被取消
+仍已触发。FROZEN 名单尾加「服毒」「苦酒」「热恼」（154–156 名）。存档
+编码追加 BossRenao=75（存档版本不变 v61）。版本 267→**268**。版本回退
+探针（267 全绿/268 全差）证明位移唯一来源是版本字段，全量重录。回归
+`boss_taishanwang_fudu_kujiu_arms` / `boss_taishanwang_renao_death_fire`
+——证据见
+[2026-10-13 泰山王片](../operations/evidence/2026-10-13-t11-boss-taishanwang-v268/README.md)。
+
 **规则 v267（2026-10-13，T11 十殿阎罗卞城王片：雷舟/雷斧/雷诛＋卞城王
 条目，首个可挂起 boss 机）**：**雷舟**（查询型 Noop）：准备阶段（Judge
 begin 臂位）随机一名其他存活受 1 雷伤（吸行同位；randomGet→座位序首个

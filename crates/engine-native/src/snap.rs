@@ -580,6 +580,11 @@ pub enum MachineSnapshot {
         owner: PlayerId,
         emitted: u8,
     },
+    /// 热恼（泰山王，规则 v268）：单发 3 火伤遗言机，emitted∈{0,1}。
+    BossRenao {
+        owner: PlayerId,
+        emitted: u8,
+    },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
     /// 问由阶段 2 直接挂出）；actor=当前焦点（焰灵/敌方）。
@@ -1167,6 +1172,10 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pid(*owner, b)?;
         }
         MachineSnapshot::BossLeizhu { owner, emitted, .. } => {
+            check_pid(*owner, b)?;
+            let _ = emitted;
+        }
+        MachineSnapshot::BossRenao { owner, emitted, .. } => {
             check_pid(*owner, b)?;
             let _ = emitted;
         }
@@ -2174,6 +2183,10 @@ pub fn active_ask(
         }
         MachineSnapshot::BossLeizhu { .. } => {
             // 雷诛：逐发机器不产生询问（救援询问属濒死机），恢复无询问
+            None
+        }
+        MachineSnapshot::BossRenao { .. } => {
+            // 热恼：同雷诛，恢复无询问
             None
         }
         MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {
@@ -4143,6 +4156,9 @@ impl MachineSnapshot {
             }
             MachineSnapshot::BossLeizhu { owner, emitted } => Ok(Box::new(
                 crate::content::standard::LeizhuMachine::new(*owner, *emitted),
+            )),
+            MachineSnapshot::BossRenao { owner, emitted } => Ok(Box::new(
+                crate::content::standard::RenaoMachine::new(*owner, *emitted),
             )),
             MachineSnapshot::OptionalGate {
                 owner,
