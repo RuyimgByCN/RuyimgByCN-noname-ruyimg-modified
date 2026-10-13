@@ -168,6 +168,26 @@ fn g5_relay(package_id: &str, pack_name: &'static str, test_name: &str) {
 
 // 九包 G5 接力（G1 生命周期已验收的转换包；huanle 已单独完成）。
 
+/// d3 专用：character.json 桥（pack + generals 双产物）。
+fn d3_pack_from_repo(dir: &Path) -> ExtensionPack {
+    let store = PackageStore::open(dir.join("store")).unwrap();
+    let report = import_extensions(&store, &repo_extensions_root(), &options())
+        .expect("import（幂等）");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "d3-select")
+        .expect("d3-select 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        Path::new(meta.extension_root.as_ref().unwrap()).join("assets/character.json"),
+    )
+    .expect("读 character.json");
+    let out = content_native_loader::bridge_pack(&json).expect("桥接");
+    let _generals = content_native_loader::bridge_generals(&json).expect("generals");
+    out.pack
+}
+
 #[test]
 fn t12_g5_relay_shaai_ow() {
     g5_relay("shaai-ow", "shaai-ow-upstream-noname", "t12_g5_relay_shaai_ow");
@@ -206,4 +226,99 @@ fn t12_g5_relay_shahai_swd() {
 #[test]
 fn t12_g5_relay_shahai_mtg() {
     g5_relay("shahai-mtg", "shahai-mtg-upstream-noname", "t12_g5_relay_shahai_mtg");
+}
+
+// ---- 第三批：gujian/wudian/zhenfa（cards.json 桥）+ cardpile（pile 桥）----
+// + d3（character.json 桥，pack+generals）。
+
+#[test]
+fn t12_g5_relay_shahai_gujian() {
+    g5_relay(
+        "shahai-gujian",
+        "shahai-gujian-upstream-noname",
+        "t12_g5_relay_shahai_gujian",
+    );
+}
+
+#[test]
+fn t12_g5_relay_wudian() {
+    g5_relay("wudian", "wudian-upstream-noname", "t12_g5_relay_wudian");
+}
+
+#[test]
+fn t12_g5_relay_shahai_zhenfa() {
+    g5_relay(
+        "shahai-zhenfa",
+        "shahai-zhenfa-upstream-noname",
+        "t12_g5_relay_shahai_zhenfa",
+    );
+}
+
+#[test]
+fn t12_g5_relay_d3_generals() {
+    let dir = tempfile::tempdir().expect("临时目录");
+    let store_dir = dir.path().join("store");
+    let pack = d3_pack_from_repo(dir.path());
+    let mut e =
+        Engine::new_with_extensions(7000_999, 3, &[&pack]).expect("建局");
+    let base = e.revision();
+    for _ in 0..6 {
+        advance_once(&mut e);
+    }
+    assert!(e.revision() >= base, "父进程推进");
+    let archive_path = dir.path().join("relay.ngsa");
+    let reply_path = dir.path().join("relay.result.ngsa");
+    let exe = std::env::current_exe().expect("测试二进制");
+    if std::env::var("T12_G5_ARCHIVE").is_ok() {
+        return; // 本测试无子进程分支（父进程模式直测）
+    }
+    std::fs::write(&archive_path, engine_native::archive::encode_archive(&e.save()))
+        .expect("落盘");
+    let status = std::process::Command::new(&exe)
+        .args(["--exact", "t12_g5_relay_d3_generals_worker", "--nocapture"])
+        .env("T12_G5_ARCHIVE", archive_path.display().to_string())
+        .env("T12_G5_REPLY", reply_path.display().to_string())
+        .env("T12_G5_STORE", store_dir.display().to_string())
+        .output()
+        .expect("自启子进程");
+    assert!(status.status.success(), "子进程失败");
+    let r = Engine::restore_with_extensions(
+        &engine_native::archive::decode_archive(
+            &std::fs::read(&reply_path).expect("读回写"),
+        )
+        .expect("解码"),
+        &[&pack],
+    )
+    .expect("恢复回写");
+    assert!(r.revision() > base, "跨进程接力 revision 前进");
+}
+
+/// d3 跨进程 worker（bridge_generals 面）。
+#[test]
+fn t12_g5_relay_d3_generals_worker() {
+    if std::env::var("T12_G5_ARCHIVE").is_err() {
+        return; // 仅 worker 模式运行
+    }
+    let archive_path = std::env::var("T12_G5_ARCHIVE").unwrap();
+    let reply_path = std::env::var("T12_G5_REPLY").unwrap();
+    let store_dir = std::env::var("T12_G5_STORE").unwrap();
+    DEDUP.fetch_add(500_000_000, Ordering::Relaxed);
+    let pack = d3_pack_from_repo(Path::new(&store_dir).parent().expect("父目录"));
+    let snap = engine_native::archive::decode_archive(
+        &std::fs::read(&archive_path).expect("读档"),
+    )
+    .expect("解码");
+    let mut wrong = d3_pack_from_repo(Path::new(&store_dir).parent().expect("父目录"));
+    wrong.def.version += 1;
+    assert!(Engine::restore_with_extensions(&snap, &[&wrong]).is_err(), "错版拒绝");
+    assert!(Engine::restore(&snap).is_err(), "缺包拒绝");
+    let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("恢复");
+    for _ in 0..8 {
+        advance_once(&mut e);
+    }
+    std::fs::write(
+        &reply_path,
+        engine_native::archive::encode_archive(&e.save()),
+    )
+    .expect("回写");
 }
