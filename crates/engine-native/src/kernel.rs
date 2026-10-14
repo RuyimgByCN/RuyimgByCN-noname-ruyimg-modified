@@ -9030,6 +9030,9 @@ impl crate::catalog::SkillMachine for DeathMachine {
         // trigger.cancel 同口径）。
         if ctx.core.player(self.player).death_cancelled {
             ctx.core.player_mut(self.player).death_cancelled = false;
+            // 取消死亡=脱离濒死（空洞印批⑥：hp 由前置窗口技重置；不清
+            // dying 旗会令后续致死伤害不再进濒死流程）
+            ctx.core.player_mut(self.player).dying = false;
             return Flow::Done;
         }
         // versus 替补（规则 v206）：死亡座位所在队替补池非空 → 弹队首

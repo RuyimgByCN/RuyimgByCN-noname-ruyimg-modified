@@ -378,6 +378,15 @@
       "equip_skills": [
         "donghuangzhong"
       ]
+    },
+    {
+      "name": "swd_kongdongyin",
+      "kind": "kongdongyin",
+      "suit": "heart",
+      "rank": 13,
+      "equip_skills": [
+        "kongdongyin"
+      ]
     }
   ],
   "host_skills": [],

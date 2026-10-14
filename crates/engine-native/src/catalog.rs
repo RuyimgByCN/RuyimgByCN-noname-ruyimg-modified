@@ -469,6 +469,9 @@ pub enum CardKind {
     /// 东皇钟（swd 卡牌面补切批⑤）：equip5 宝物——自己阶段结束弃 1 张
     /// 红牌，置一张延时锦囊实体入目标判定区（实体发现替代 createCard）。
     Donghuangzhong,
+    /// 空洞印（swd 卡牌面补切批⑥）：equip5 宝物——死亡取消型：hp=1、
+    /// 摸 1、弃全部宝物（death_cancelled 基建消费）。
+    Kongdongyin,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
@@ -587,6 +590,7 @@ impl CardKind {
             CardKind::Nvwashi => EquipSlot::Treasure,
             CardKind::Kunlunjingc => EquipSlot::Treasure,
             CardKind::Donghuangzhong => EquipSlot::Treasure,
+            CardKind::Kongdongyin => EquipSlot::Treasure,
             // 上游 subtype equip2（防具栏）；2026-10-07 载荷对照修正（曾误
             // 登记宝物栏）。
             CardKind::Mianju => EquipSlot::Armor,
@@ -641,7 +645,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 148] = [
+    pub const ALL: [CardKind; 149] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -785,6 +789,7 @@ impl CardKind {
         CardKind::Nvwashi,
         CardKind::Kunlunjingc,
         CardKind::Donghuangzhong,
+        CardKind::Kongdongyin,
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
@@ -938,6 +943,7 @@ impl CardKind {
             CardKind::Nvwashi => "nvwashi",
             CardKind::Kunlunjingc => "kunlunjingc",
             CardKind::Donghuangzhong => "donghuangzhong",
+            CardKind::Kongdongyin => "kongdongyin",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",

@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 59, "swd 全 59 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 60, "swd 全 60 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 59, "swd 全 59 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 60, "swd 全 60 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 59, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 60, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4212,6 +4212,7 @@ fn swd_cards_alignment_guard_b29() {
         ("nvwashi", "heart", 13),
         ("kunlunjingc", "spade", 13),
         ("donghuangzhong", "diamond", 13),
+        ("kongdongyin", "heart", 13),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4225,7 +4226,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 59, "批⑤ equip5 两宝物后 59 张");
+    assert_eq!(pack.cards.len(), 60, "批⑥ 空洞印后 60 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -4917,4 +4918,91 @@ fn swd_cards_equip5_b35_kunlunjingc_donghuangzhong() {
         ),
         "东皇钟：置入的是延时锦囊实体"
     );
+}
+
+/// T12 swd 卡牌面补切批⑥：空洞印（equip5 宝物）——死亡前置窗口锁定取
+/// 消：death_cancelled 置位（DeathMachine 开头拦截跳过死亡执行）+hp=1+
+/// 摸 1+弃全部宝物（上游 dieBefore trigger.cancel 同口径）。
+#[test]
+fn swd_cards_equip5_b36_kongdongyin_death_cancel() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62016, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let kyd = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Kongdongyin)
+        .expect("空洞印在目录") as u32;
+    let qkd = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Qiankundai)
+        .expect("乾坤袋在目录") as u32;
+    // 装备空洞印+乾坤袋（两只宝物都应被弃）+技能实例
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != kyd && *x != qkd);
+        snap.core.discard.retain(|x| *x != kyd && *x != qkd);
+        snap.core.players[0].equips.push(kyd);
+        snap.core.players[0].equips.push(qkd);
+        for sk in ["kongdongyin"] {
+            let def = e.catalog().skill_by_name(sk).expect("装备技 def");
+            snap.core.skills.insert(
+                (0, def),
+                engine_native::state::SkillInstance {
+                    owner: 0,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+        }
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+
+    // 正例：p0 压到 1 再吃 4 伤 → 濒死无救 → 死亡被空洞印取消
+    e.debug_set_hp(0, 1);
+    e.debug_deal_damage(Some(1), 0, 4, engine_native::event::DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert!(e.state_core().player(0).alive, "空洞印：死亡被取消存活");
+    assert_eq!(e.debug_hp(0), 1, "空洞印：hp 重置 1");
+    assert_eq!(hand_len_w(&e, 0), 1, "空洞印：摸 1");
+    assert!(
+        !e.state_core().player(0).equips.iter().any(|c| {
+            e.catalog().cards[*c as usize].kind.equip_slot()
+                == Some(engine_native::catalog::EquipSlot::Treasure)
+        }),
+        "空洞印：宝物全弃（含自身）"
+    );
+    assert!(
+        e.state_core().discard.contains(&kyd) && e.state_core().discard.contains(&qkd),
+        "空洞印：两只宝物入弃堆"
+    );
+
+    // 反例：死亡取消后再次致死——无空洞印 → 正常死亡
+    e.debug_deal_damage(Some(1), 0, 9, engine_native::event::DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert!(!e.state_core().player(0).alive, "空洞印反例：一次性，再次致死正常死亡");
 }

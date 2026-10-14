@@ -820,6 +820,9 @@ pub enum HostBehavior {
     /// 东皇钟（tag 295，批⑤ equipSkill）：自己阶段结束弃 1 张红牌，从
     /// 牌堆发现延时锦囊实体置入目标判定区（实体发现替代 createCard）。
     SwdDonghuangzhongCard,
+    /// 空洞印（tag 296，批⑥ equipSkill）：锁定——死亡前置窗口取消死亡：
+    /// hp=1、摸 1、弃全部宝物（death_cancelled 基建消费）。
+    SwdKongdongyinGuard,
 }
 
 
@@ -899,6 +902,7 @@ impl HostBehavior {
             HostBehavior::SwdNvwashiGuard => 293,
             HostBehavior::SwdKunlunjingcCard => 294,
             HostBehavior::SwdDonghuangzhongCard => 295,
+            HostBehavior::SwdKongdongyinGuard => 296,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1439,6 +1443,7 @@ impl HostBehavior {
             293 => HostBehavior::SwdNvwashiGuard,
             294 => HostBehavior::SwdKunlunjingcCard,
             295 => HostBehavior::SwdDonghuangzhongCard,
+            296 => HostBehavior::SwdKongdongyinGuard,
             _ => return None,
         })
     }
@@ -1456,7 +1461,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 295] = [
+    pub const ALL: [HostBehavior; 296] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1752,6 +1757,7 @@ impl HostBehavior {
         HostBehavior::SwdNvwashiGuard,
         HostBehavior::SwdKunlunjingcCard,
         HostBehavior::SwdDonghuangzhongCard,
+        HostBehavior::SwdKongdongyinGuard,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1811,6 +1817,7 @@ impl HostBehavior {
             HostBehavior::SwdNvwashiGuard => "host:nvwashi",
             HostBehavior::SwdKunlunjingcCard => "host:kunlunjingc",
             HostBehavior::SwdDonghuangzhongCard => "host:donghuangzhong",
+            HostBehavior::SwdKongdongyinGuard => "host:kongdongyin",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2299,6 +2306,14 @@ impl HostBehavior {
             HostBehavior::SwdDonghuangzhongCard => Some(TriggerMeta {
                 event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 空洞印：死亡前置窗口（forced；上游 dieBefore cancel 同口径）
+            HostBehavior::SwdKongdongyinGuard => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::First,
                 priority: 0,
                 optional: false,
                 extra_events: Vec::new(),
@@ -4333,6 +4348,9 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdShennongdingCard => false,
             // 昆仑镜：无触发面
             HostBehavior::SwdKunlunjingcCard => false,
+            // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
+            HostBehavior::SwdKongdongyinGuard => matches!(event,
+                EventData::Death { player, .. } if *player == owner),
             // 东皇钟：自己任一阶段结束且手牌有红牌（蝶舞口径）
             HostBehavior::SwdDonghuangzhongCard => matches!(event,
                 EventData::Phase { player, begin, .. }
@@ -6616,6 +6634,43 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 空洞印：死亡取消——hp=1、摸 1、弃全部宝物（death_cancelled
+            // 基建消费，DeathMachine 开头拦截跳过死亡执行）
+            HostBehavior::SwdKongdongyinGuard => {
+                ctx.core.player_mut(self.owner).death_cancelled = true;
+                ctx.core.player_mut(self.owner).hp = 1;
+                ctx.draw_cards(self.owner, 1);
+                let baowu: Vec<CardId> = ctx.core.player(self.owner)
+                    .equips
+                    .iter()
+                    .filter(|c| {
+                        ctx.catalog.card_kind(**c).equip_slot()
+                            == Some(crate::catalog::EquipSlot::Treasure)
+                    })
+                    .copied()
+                    .collect();
+                for c in baowu {
+                    if let Some(pos) = ctx
+                        .core
+                        .player(self.owner)
+                        .equips
+                        .iter()
+                        .position(|x| *x == c)
+                    {
+                        let old = ctx.core.player_mut(self.owner).equips.remove(pos);
+                        // 弃宝物同步撤销装备技实例（上游 onLose 同口径——
+                        // 空洞印自身守卫技亦随之移除=一次性）
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            old,
+                        );
+                        ctx.to_discard(old);
+                    }
+                }
+                Flow::Done
+            }
             // 女娲石：确认门后濒死者回复 1、自己失去 1（hp>1 门在 filter）
             HostBehavior::SwdNvwashiGuard => {
                 let Some(t) = self.target else {
@@ -19053,6 +19108,7 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
         CardKind::Lianyaohu => &[HostSkillDecl { name: "lianyaohu_shouna", behavior: HostBehavior::SwdLianyaohuShouna }, HostSkillDecl { name: "lianyaohu_lianhua", behavior: HostBehavior::SwdLianyaohuLianhua }],
         CardKind::Shennongding => &[HostSkillDecl { name: "shennongding", behavior: HostBehavior::SwdShennongdingCard }],
         CardKind::Nvwashi => &[HostSkillDecl { name: "nvwashi", behavior: HostBehavior::SwdNvwashiGuard }],
+        CardKind::Kongdongyin => &[HostSkillDecl { name: "kongdongyin", behavior: HostBehavior::SwdKongdongyinGuard }],
         CardKind::Kunlunjingc => &[HostSkillDecl { name: "kunlunjingc", behavior: HostBehavior::SwdKunlunjingcCard }],
         CardKind::Donghuangzhong => &[HostSkillDecl { name: "donghuangzhong", behavior: HostBehavior::SwdDonghuangzhongCard }],
         _ => &[],
