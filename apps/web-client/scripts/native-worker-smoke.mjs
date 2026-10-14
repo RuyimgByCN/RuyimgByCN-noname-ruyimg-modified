@@ -55,5 +55,18 @@ check("resolveChoice_negative", threw);
 const KNOWN = new Set(["endPhase", "playCard", "resolveChoice", "autoStep", "observer"]);
 check("unmapped_reported", !KNOWN.has("loadReplay") && !KNOWN.has("activateSkill"));
 
+// observer schema 适配首层（nativeObserverToSnapshot）
+const { nativeObserverToSnapshot } = await import("../src/worker/nativeBackend.ts");
+const view0 = JSON.parse(h.engine.view_json(0));
+const snap = nativeObserverToSnapshot(view0);
+check(
+  "observer_adapter_core",
+  snap.seats.length === 4
+    && snap.seats.filter(s => s.alive).length >= 2
+    && snap.round >= 0 && typeof snap.revision === "number"
+    && ["Judge","Draw","Play","Discard","End","Idle"].includes(snap.phase),
+  `round=${snap.round} seats=${snap.seats.length}`,
+);
+
 console.log(JSON.stringify({ total: results.length, failed: results.filter(r => !r.ok).length }));
 process.exit(results.some(r => !r.ok) ? 1 : 0);

@@ -4,7 +4,10 @@
  * （env 标志选 worker 文件）；observer schema 与旧线不同（登记差异，
  * UI 层适配归后续批）。
  */
-import type { WorkerRequest, WorkerResponse } from "../types/engine";
+import type {
+  WorkerRequest, WorkerResponse, ObserverSnapshot, EngineEnvelope,
+  ReplayFrame, StatusPayload,
+} from "../types/engine";
 import { nativeCreate, nativeDispatch, type NativeHandle } from "./nativeBackend";
 
 let handle: NativeHandle | null = null;
@@ -24,14 +27,26 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
     if (!handle) throw new Error("native engine not initialized");
     if (msg.type === "start") {
       handle = nativeCreate(msg.players, msg.seed);
-      reply({ id: msg.id, ok: true, data: { started: true, players: msg.players, seed: msg.seed } });
+      reply({
+        id: msg.id,
+        ok: true,
+        data: { revision: 0, finished: false, hash: "", choice: "native start" },
+      });
       return;
     }
     const data = nativeDispatch(
       handle,
       msg as Parameters<typeof nativeDispatch>[1],
     );
-    reply({ id: msg.id, ok: true, data });
+    const payload: string | ObserverSnapshot | EngineEnvelope | ReplayFrame | StatusPayload =
+      data.kind === "status"
+        ? { revision: data.revision, finished: data.finished, hash: "", choice: "native" }
+        : data.kind === "view"
+          ? (data.view as ObserverSnapshot)
+          : data.kind === "auto"
+            ? (data.payload as EngineEnvelope)
+            : (data.text as unknown as StatusPayload);
+    reply({ id: msg.id, ok: true, data: payload });
   } catch (error) {
     reply({ id: msg.id, ok: false, error: String(error) });
   }

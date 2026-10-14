@@ -1,0 +1,8 @@
+PASS create
+PASS observer_view
+PASS endPhase_status
+PASS autoStep_progress | steps=40
+PASS playCard_shape | rev=41
+PASS resolveChoice_negative
+PASS unmapped_reported
+PASS observer_adapter_core | round=2 seats=4

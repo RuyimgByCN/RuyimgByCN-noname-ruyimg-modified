@@ -51,7 +51,7 @@ export function nativeDispatch(
     }
     case "playCard": {
       return asStatus(
-        handle.engine.play_card(req.actor, req.card, req.targets.map((t) => t)),
+        handle.engine.play_card(req.actor, req.card, new Uint32Array(req.targets)),
       );
     }
     case "resolveChoice": {
@@ -73,7 +73,9 @@ export function nativeDispatch(
         if (i < 0) throw new Error(`native: 选项值 ${v} 不在候选`);
         return i;
       });
-      return asStatus(handle.engine.answer(req.actor, choice.id, idxs));
+      return asStatus(
+        handle.engine.answer(req.actor, BigInt(choice.id), new Uint32Array(idxs)),
+      );
     }
     case "autoStep": {
       return { kind: "auto", payload: JSON.parse(handle.engine.auto_step()) };
@@ -83,6 +85,34 @@ export function nativeDispatch(
       return { kind: "view", view };
     }
   }
+}
+
+/** observer schema 适配首层（client.ts native 路径同源逻辑）：view → ObserverSnapshot 核心。 */
+export function nativeObserverToSnapshot(view: {
+  seat: number; round: number; turn: number; phase: string;
+  rulesetVersion?: number;
+  ruleset_version?: number;
+  outcome: unknown;
+  players: Array<{ seat: number; alive: boolean; hp: number; maxHp: number; handCount: number }>,
+}) {
+  const phaseMap: Record<string, string> = {
+    judge: "Judge", draw: "Draw", play: "Play", discard: "Discard", end: "End",
+  };
+  return {
+    revision: view.rulesetVersion ?? view.ruleset_version,
+    state_hash: "",
+    observer: view.seat,
+    round: view.round,
+    current_player: view.turn,
+    phase: phaseMap[view.phase] ?? "Idle",
+    seats: view.players.map((p) => ({
+      player: p.seat, character_def: 0, seat: p.seat, hp: p.hp,
+      max_hp: p.maxHp, alive: p.alive, turned_over: false,
+      hand_count: p.handCount, identity: null, skills: [],
+    })),
+    known_cards: [],
+    outcome: view.outcome ?? null,
+  };
 }
 
 /** 未映射请求统一报错面（批 15 首片子集边界）。 */
