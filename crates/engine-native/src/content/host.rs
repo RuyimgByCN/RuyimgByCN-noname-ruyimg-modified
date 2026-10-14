@@ -637,6 +637,15 @@ pub enum HostBehavior {
     /// 雅量（tag 244，运筹武将面批 2）：你造成或受到伤害后（可选），伤害
     /// 双方各摸 1 张（双方存活且异人；登记差异：摸牌序按座位序逐个）。
     YunchouYaliang,
+    /// 纵火（tag 245，运筹武将面批 3）：你造成非火属性伤害时（可选）弃
+    /// 1 张手牌将该伤害改为火属性（DamageBefore 帧直写 nature=乱剑增伤
+    /// amount 直写同机制；登记差异：上游玩家自选弃牌，原生取首张手牌）。
+    YunchouZonghuo,
+    /// 烧营（tag 246，运筹武将面批 3）：你造成火属性伤害后（可选），弃
+    /// 牌堆顶牌亮出——红色则你与受伤者距离 1 以内的一名其他角色受 1 点
+    /// 火属性伤害（登记差异：上游玩家选目标，原生取座位序首合法目标；
+    /// 链式火伤再触发与上游一致不挡）。
+    YunchouShaoying,
 }
 
 
@@ -647,6 +656,8 @@ impl HostBehavior {
             HostBehavior::YunchouDiykuanggu => 242,
             HostBehavior::YunchouXiongzi => 243,
             HostBehavior::YunchouYaliang => 244,
+            HostBehavior::YunchouZonghuo => 245,
+            HostBehavior::YunchouShaoying => 246,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1136,6 +1147,8 @@ impl HostBehavior {
             242 => HostBehavior::YunchouDiykuanggu,
             243 => HostBehavior::YunchouXiongzi,
             244 => HostBehavior::YunchouYaliang,
+            245 => HostBehavior::YunchouZonghuo,
+            246 => HostBehavior::YunchouShaoying,
             _ => return None,
         })
     }
@@ -1143,7 +1156,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 244] = [
+    pub const ALL: [HostBehavior; 246] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1388,6 +1401,8 @@ impl HostBehavior {
         HostBehavior::YunchouDiykuanggu,
         HostBehavior::YunchouXiongzi,
         HostBehavior::YunchouYaliang,
+        HostBehavior::YunchouZonghuo,
+        HostBehavior::YunchouShaoying,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1397,6 +1412,8 @@ impl HostBehavior {
             HostBehavior::YunchouDiykuanggu => "host:diykuanggu",
             HostBehavior::YunchouXiongzi => "host:xiongzi",
             HostBehavior::YunchouYaliang => "host:yaliang",
+            HostBehavior::YunchouZonghuo => "host:zonghuo",
+            HostBehavior::YunchouShaoying => "host:shaoying",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1682,6 +1699,21 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::YunchouYaliang => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 纵火：伤害前置窗（nature 写回须在 commit 前生效）
+            HostBehavior::YunchouZonghuo => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::YunchouShaoying => Some(TriggerMeta {
                 event: EventKind::Damage,
                 timing: Timing::Normal,
                 priority: 0,
@@ -3218,6 +3250,16 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
+            // 纵火：伤害目标（帧直写在 step）
+            HostBehavior::YunchouZonghuo => match event {
+                EventData::Damage(d) => (Some(d.target), None),
+                _ => (None, None),
+            },
+            // 烧营：受伤者（蔓延目标在 step 内按距离自算）
+            HostBehavior::YunchouShaoying => match event {
+                EventData::Damage(d) => (Some(d.target), None),
+                _ => (None, None),
+            },
         _ => (None, None),
         };
         let stage = match self.behavior {
@@ -3317,6 +3359,19 @@ impl HostSkillBehavior {
 impl SkillBehavior for HostSkillBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         match self.behavior {
+            // 纵火：自己造成的非火伤害（前置窗）
+            HostBehavior::YunchouZonghuo => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner)
+                    && !d.prevented
+                    && d.amount > 0
+                    && d.nature != crate::event::DamageNature::Fire),
+            // 烧营：自己造成的火伤害
+            HostBehavior::YunchouShaoying => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner)
+                    && !d.prevented
+                    && d.nature == crate::event::DamageNature::Fire),
             // 雄姿：自己摸牌阶段开始（固定摸 2 后补摸）
             HostBehavior::YunchouXiongzi => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Draw, begin: true }
@@ -4941,6 +4996,63 @@ impl crate::catalog::SkillMachine for HostMachine {
                     if ctx.core.player(s).alive {
                         ctx.draw_cards(s, 1);
                     }
+                }
+                Flow::Done
+            },
+            // 纵火：弃首张手牌（登记差异）→ 直写帧 nature=Fire
+            HostBehavior::YunchouZonghuo => {
+                let hand = ctx.core.player(self.owner).hand.clone();
+                if let Some(c) = hand.first().copied() {
+                    ctx.discard_from_hand(self.owner, c);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![c],
+                    });
+                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                    if let EventData::Damage(dm) = &mut frame.data {
+                        dm.nature = crate::event::DamageNature::Fire;
+                    }
+                }
+                Flow::Done
+            },
+            // 烧营：座位序首合法目标（受伤者距离 ≤1 且非受伤者）→ 弃堆顶
+            // 牌亮出，红色则其受 1 点火伤（登记差异：上游玩家选目标）
+            HostBehavior::YunchouShaoying => {
+                let hurt = match self.target {
+                    Some(t) => t,
+                    None => return Flow::Done,
+                };
+                let target = (0..ctx.core.players.len())
+                    .map(|i| i as u8)
+                    .find(|&i| {
+                        i != hurt
+                            && i != self.owner
+                            && ctx.core.player(i).alive
+                            && ctx.core.seat_distance(hurt, i) <= 1
+                    });
+                let Some(t) = target else { return Flow::Done };
+                let Some(card) = ctx.core.deck.pop() else {
+                    return Flow::Done;
+                };
+                let red = matches!(
+                    ctx.catalog.cards[card as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                );
+                ctx.to_discard(card);
+                ctx.log(LogEvent::CardDiscarded {
+                    player: self.owner,
+                    cards: vec![card],
+                });
+                if red {
+                    ctx.emit(crate::event::EventData::Damage(
+                        crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        ),
+                    ));
                 }
                 Flow::Done
             },

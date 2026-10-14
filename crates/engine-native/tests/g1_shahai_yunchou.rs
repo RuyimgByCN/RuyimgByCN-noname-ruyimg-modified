@@ -1455,7 +1455,11 @@ fn g1_yunchou_generals_batch2_xiongzi_yaliang() {
     )
     .expect("character.json");
     let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
-    assert_eq!(bridged.generals.len(), 3, "批 2 累计三名武将");
+    assert!(
+        bridged.generals.len() >= 3,
+        "批 2 起累计武将（现 {} 名）",
+        bridged.generals.len()
+    );
     assert_eq!(bridged.unmapped_skills, 2, "暂缓仍为奸雄·变体与护驾");
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
@@ -1514,4 +1518,91 @@ fn g1_yunchou_generals_batch2_xiongzi_yaliang() {
     let h1 = hand_len(&e, 1);
     let h2 = hand_len(&e, 2);
     assert!(h1 >= 1 || h2 >= 1, "雅量：双方摸牌（受击者 p1 手牌 {h1}）");
+}
+
+/// T12 运筹武将面批 3：diy_luxun 整将（纵火=非火伤害可选弃牌改火
+/// [DamageBefore 帧直写 nature，铁索传导验证]；烧营=火伤后弃堆顶牌亮出
+/// 红色则受伤者距离 1 内座位序首目标受 1 火伤）。
+#[test]
+fn g1_yunchou_generals_batch3_zonghuo_shaoying() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert_eq!(bridged.generals.len(), 4, "批 3 累计四名武将");
+    assert_eq!(bridged.unmapped_skills, 2, "暂缓仍 2");
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b3",
+            version: 1,
+            description: "运筹武将面批 3",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    {
+        let e = Engine::new_with_extensions(66003, 4, &[&pack]).expect("建局");
+        let m = e.catalog().general_meta(base + 3).expect("陆逊在目录");
+        assert_eq!(m.0, "ycn陆逊");
+        assert_eq!(m.2, vec!["ycnzonghuo", "ycnshaoying"]);
+    }
+
+    // 纵火：非火伤 → 确认+弃首张 → 帧直写火性（铁索传导证明）
+    {
+        let mut e = Engine::new_with_extensions(66004, 4, &[&pack]).expect("建局");
+        e.debug_grant(0, "ycnzonghuo");
+        e.debug_set_hp(1, 8);
+        e.debug_set_hp(2, 8);
+        {
+            let core = e.state_core_mut();
+            core.players[1].linked = true;
+            core.players[2].linked = true;
+        }
+        e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+        settle_optional_confirm(&mut e);
+        assert_eq!(e.debug_hp(1), 7, "纵火：伤害照常");
+        assert_eq!(e.debug_hp(2), 7, "纵火：火性经铁索传导 p2");
+        // 负例：无手牌可弃 → 不改火性（无传导）
+        {
+            let core = e.state_core_mut();
+            core.players[3].linked = true;
+            core.players[1].linked = true;
+        }
+        e.debug_clear_hand(0);
+        e.debug_set_hp(1, 6);
+        e.debug_set_hp(3, 8);
+        e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+        settle_optional_confirm(&mut e);
+        assert_eq!(e.debug_hp(1), 5, "纵火负例：伤害照常");
+        assert_eq!(e.debug_hp(3), 8, "纵火负例：无牌可弃不改火性");
+    }
+
+    // 烧营：火伤后 → 确认 → 弃堆顶牌亮出，红色则蔓延目标受 1 火伤
+    {
+        let mut e = Engine::new_with_extensions(66005, 4, &[&pack]).expect("建局");
+        e.debug_grant(0, "ycnshaoying");
+        e.debug_set_hp(1, 8);
+        e.debug_set_hp(2, 8);
+        // 牌堆排空后压受控顶：链式烧营（蔓延火伤再触发）在堆空时自然终止
+        e.debug_drain_deck_to_discard();
+        e.debug_set_deck_top("tao");
+        e.debug_deal_damage(Some(0), 1, 1, DamageNature::Fire);
+        settle_optional_confirm(&mut e);
+        assert_eq!(e.debug_hp(2), 7, "烧营：堆顶红 → 距离 1 内目标受 1 火伤");
+        // 负例：堆顶黑（按谓词压黑桃——闪有红花色变体，kind 挑选不可控）
+        e.debug_drain_deck_to_discard();
+        e.debug_set_deck_top_by(|c| c.suit == Suit::Spade);
+        e.debug_deal_damage(Some(0), 1, 1, DamageNature::Fire);
+        settle_optional_confirm(&mut e);
+        assert_eq!(e.debug_hp(2), 7, "烧营负例：堆顶黑不蔓延");
+        assert_eq!(e.debug_hp(1), 6, "原火伤照常");
+    }
 }

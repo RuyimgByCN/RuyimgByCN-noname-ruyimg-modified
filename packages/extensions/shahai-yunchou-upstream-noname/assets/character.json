@@ -3,9 +3,9 @@
   "upstream_path": "apps/core/extension/杀海拾遗/character/yunchou/",
   "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
   "pack": {
-    "name": "shahai-yunchou-generals-b2",
+    "name": "shahai-yunchou-generals-b3",
     "version": 1,
-    "description": "G1 运筹武将面批2（+周瑜·SP：雄姿/雅量）",
+    "description": "G1 运筹武将面批3（+陆逊：纵火/烧营）",
     "card_prefix": "ycn_"
   },
   "generals": [
@@ -63,6 +63,25 @@
           "name": "ycnyaliang",
           "title": "雅量",
           "mapping": "host:yaliang"
+        }
+      ]
+    },
+    {
+      "id": "ycn_diy_luxun",
+      "name": "ycn陆逊",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "ycnzonghuo",
+          "title": "纵火",
+          "mapping": "host:zonghuo"
+        },
+        {
+          "name": "ycnshaoying",
+          "title": "烧营",
+          "mapping": "host:shaoying"
         }
       ]
     }
