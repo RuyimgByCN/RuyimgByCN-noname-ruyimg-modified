@@ -302,6 +302,10 @@
       "gender": "female",
       "skills": [
         {
+          "name": "jiefen",
+          "mapping": "host:jiefen"
+        },
+        {
           "name": "datong",
           "mapping": "host:datong"
         }

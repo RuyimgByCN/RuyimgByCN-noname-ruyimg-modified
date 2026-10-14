@@ -732,6 +732,11 @@ pub enum HostBehavior {
     /// 破星（tag 270，swd 武将面批 19）：你对体力高于你的角色造成伤害
     /// 时伤害 +1（强制）。
     SwdPoxing,
+    /// 分舵（tag 271，swd 武将面批 20，习嫣 jiefen）：出牌主动技（每回
+    /// 合限一次）——手牌多于自己的角色交 1 张手牌给自己；然后自己交
+    /// 1 张手牌给手牌数更少的其他角色（登记差异：上游 chooseCardTarget
+    /// 玩家同时选牌与目标，原生两段询问+确定性目标）。
+    SwdJiefen,
 }
 
 
@@ -786,6 +791,7 @@ impl HostBehavior {
             HostBehavior::SwdHuajing => 268,
             HostBehavior::SwdHudun => 269,
             HostBehavior::SwdPoxing => 270,
+            HostBehavior::SwdJiefen => 271,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1301,6 +1307,7 @@ impl HostBehavior {
             268 => HostBehavior::SwdHuajing,
             269 => HostBehavior::SwdHudun,
             270 => HostBehavior::SwdPoxing,
+            271 => HostBehavior::SwdJiefen,
             _ => return None,
         })
     }
@@ -1318,7 +1325,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 270] = [
+    pub const ALL: [HostBehavior; 271] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1589,6 +1596,7 @@ impl HostBehavior {
         HostBehavior::SwdHuajing,
         HostBehavior::SwdHudun,
         HostBehavior::SwdPoxing,
+        HostBehavior::SwdJiefen,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1624,6 +1632,7 @@ impl HostBehavior {
             HostBehavior::SwdHuajing => "host:huajing",
             HostBehavior::SwdHudun => "host:hudun",
             HostBehavior::SwdPoxing => "host:poxing",
+            HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -2008,6 +2017,8 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 分舵：出牌主动技（ActivateSkill 通道，每回合限一次走 limits）
+            HostBehavior::SwdJiefen => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -3315,6 +3326,12 @@ pub enum HostStage {
     ComparePlayerPick,
     /// 丈八蛇矛：等待选择两张手牌。
     CardsAsk,
+    /// 分舵（习嫣 jiefen）：等待选交牌目标。
+    JiefenTarget,
+    /// 分舵：等待目标选交出的手牌。
+    JiefenTargetDiscard,
+    /// 分舵：等待自己选交出的手牌。
+    JiefenOwnerDiscard,
 }
 
 impl HostStage {
@@ -3327,7 +3344,9 @@ impl HostStage {
             HostStage::CompareTargetPick => 4,
             HostStage::ComparePlayerPick => 5,
             HostStage::CardsAsk => 6,
-
+            HostStage::JiefenTarget => 7,
+            HostStage::JiefenTargetDiscard => 8,
+            HostStage::JiefenOwnerDiscard => 9,
         }
     }
     pub fn from_tag(t: u8) -> Option<Self> {
@@ -3339,6 +3358,9 @@ impl HostStage {
             4 => HostStage::CompareTargetPick,
             5 => HostStage::ComparePlayerPick,
             6 => HostStage::CardsAsk,
+            7 => HostStage::JiefenTarget,
+            8 => HostStage::JiefenTargetDiscard,
+            9 => HostStage::JiefenOwnerDiscard,
             _ => return None,
         })
     }
@@ -4707,6 +4729,26 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 分舵：存在手牌多于自己的存活角色才可发动
+            HostBehavior::SwdJiefen => {
+                let my = ctx.state.player(owner).hand.len();
+                let has = ctx.state.alive_players().any(|p| {
+                    p != owner && ctx.state.player(p).hand.len() > my
+                });
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::JiefenTarget,
+                }))
+            }
             // 五行盘：出牌阶段限一次（阶段门控在命令边界），需手牌非空
             HostBehavior::ChangeCardNature => {
                 if ctx.state.player(owner).hand.is_empty() {
@@ -5650,6 +5692,122 @@ impl crate::catalog::SkillMachine for HostMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
+            // 分舵（习嫣 jiefen）：三段——选交牌目标（手>自己）→ 目标选
+            // 手牌交出 → 自己选 1 张手牌交给手牌最少的其他存活角色（登
+            // 记差异：上游 chooseCardTarget 同时选牌与目标，原生确定性
+            // 目标两段询问）。
+            HostBehavior::SwdJiefen => match self.stage {
+                HostStage::JiefenTarget => {
+                    let my = ctx.core.player(self.owner).hand.len();
+                    let options: Vec<ChoiceOption> = (0
+                        ..ctx.core.players.len() as u8)
+                        .filter(|&i| {
+                            i != self.owner
+                                && ctx.core.player(i).alive
+                                && ctx.core.player(i).hand.len() > my
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::JiefenTargetDiscard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "swd_jiefen_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::JiefenTargetDiscard => {
+                    let Some(t) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(t);
+                    self.stage = HostStage::JiefenOwnerDiscard;
+                    let options: Vec<ChoiceOption> = ctx.core.player(t)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "swd_jiefen_give",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::JiefenOwnerDiscard => {
+                    eprintln!("DBG jiefen owner_discard entered");
+                    let Some(t) = self.target else { return Flow::Done };
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        eprintln!("DBG jiefen owner_discard no card");
+                        return Flow::Done;
+                    };
+                    eprintln!("DBG jiefen owner gives card={c}");
+                    ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                    ctx.core.player_mut(self.owner).hand.push(c);
+                    ctx.emit(EventData::CardsMoved {
+                        cards: vec![c],
+                        from: t,
+                        to: self.owner,
+                    });
+                    ctx.log(LogEvent::CardsGiven {
+                        from: t,
+                        to: self.owner,
+                        cards: vec![c],
+                    });
+                    // 自己交 1 张手牌给手牌最少的其他存活角色（确定性）
+                    let dest = (0..ctx.core.players.len() as u8)
+                        .filter(|&i| {
+                            i != self.owner && ctx.core.player(i).alive
+                        })
+                        .min_by_key(|&i| ctx.core.player(i).hand.len());
+                    if let Some(d) = dest {
+                        if let Some(c2) =
+                            ctx.core.player(self.owner).hand.first().copied()
+                        {
+                            ctx.core
+                                .player_mut(self.owner)
+                                .hand
+                                .retain(|x| *x != c2);
+                            ctx.core.player_mut(d).hand.push(c2);
+                            ctx.emit(EventData::CardsMoved {
+                                cards: vec![c2],
+                                from: self.owner,
+                                to: d,
+                            });
+                            ctx.log(LogEvent::CardsGiven {
+                                from: self.owner,
+                                to: d,
+                                cards: vec![c2],
+                            });
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 复仇：目录锚（取消逻辑在 ShaResolveMachine 内联）
             HostBehavior::WudianFuchou => Flow::Done,
             // 坚壁：锁定查询面（AOE 目标段查询），无独立效果步
