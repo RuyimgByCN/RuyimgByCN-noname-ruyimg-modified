@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 68;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 69;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2914,6 +2914,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         // 暴雪/急冻（v8，U05 ow 美）：limited 已发动 + 冰封标记
         w.boolean(p.baoxue_used);
         w.boolean(p.guihan_used);
+        // 雪煌 limited（swd 芝茵，批 26）
+        w.boolean(p.xuehuang_used);
         w.boolean(p.jidong_active);
         // 强固（v10，U05 ow 奥丽莎）：生效标记
         w.boolean(p.qianggu_active);
@@ -3250,6 +3252,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let baolei_mode = r.u8()?;
         let baoxue_used = r.boolean()?;
         let guihan_used = r.boolean()?;
+        let xuehuang_used = r.boolean()?;
         let jidong_active = r.boolean()?;
         let qianggu_active = r.boolean()?;
         let pingzhang_self_used = r.boolean()?;
@@ -3331,6 +3334,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             baolei_mode,
             baoxue_used,
             guihan_used,
+            xuehuang_used,
             jidong_active,
             qianggu_active,
             pingzhang_self_used,

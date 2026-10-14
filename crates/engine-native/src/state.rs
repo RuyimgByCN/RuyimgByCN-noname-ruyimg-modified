@@ -49,6 +49,8 @@ pub struct PlayerState {
     /// 归汉已发动（玩点论杀批 17，规则 v280）：limited 技每局限一次
     ///（上游 awakenSkill 同口径，暴雪先例同构）。
     pub guihan_used: bool,
+    /// 雪煌 limited 每局一次（swd 芝茵，武将面批 26）。
+    pub xuehuang_used: bool,
     /// 急冻冰封（U05 ow 美，规则 v127）：hp=1 回合结束触发后的临时
     /// 冰封——受所有伤害无效 + 不能被其他角色的牌指定为目标；自己
     /// 回合结束（翻回后的跳过回合收束）解除（上游 addTempSkill
@@ -236,6 +238,7 @@ impl PlayerState {
             baolei_mode: 0,
             baoxue_used: false,
             guihan_used: false,
+            xuehuang_used: false,
             jidong_active: false,
             qianggu_active: false,
             pingzhang_self_used: false,

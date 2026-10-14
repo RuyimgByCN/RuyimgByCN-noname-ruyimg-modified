@@ -786,6 +786,10 @@ pub enum HostBehavior {
     /// 朱羽（tag 285，批 25，芝茵 zhuyu）：横置角色即将受到非传导伤害
     /// （可选）弃 1 张红色牌，伤害 +1 且改为火属性。
     SwdZhuyu,
+    /// 雪煌（tag 286，批 26，芝茵 xuehuang）：limited 每局一次主动技——
+    /// 手牌全红时发动：弃全部手牌，逐张视为对（至多）两名其他存活角色
+    /// 使用火杀（use_virtual_card；登记差异上游随机 2 名敌人）。
+    SwdXuehuang,
 }
 
 
@@ -855,6 +859,7 @@ impl HostBehavior {
             HostBehavior::SwdXingdian => 283,
             HostBehavior::SwdXielv => 284,
             HostBehavior::SwdZhuyu => 285,
+            HostBehavior::SwdXuehuang => 286,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1385,6 +1390,7 @@ impl HostBehavior {
             283 => HostBehavior::SwdXingdian,
             284 => HostBehavior::SwdXielv,
             285 => HostBehavior::SwdZhuyu,
+            286 => HostBehavior::SwdXuehuang,
             _ => return None,
         })
     }
@@ -1402,7 +1408,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 285] = [
+    pub const ALL: [HostBehavior; 286] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1688,6 +1694,7 @@ impl HostBehavior {
         HostBehavior::SwdXingdian,
         HostBehavior::SwdXielv,
         HostBehavior::SwdZhuyu,
+        HostBehavior::SwdXuehuang,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1737,6 +1744,7 @@ impl HostBehavior {
             HostBehavior::SwdXingdian => "host:xingdian",
             HostBehavior::SwdXielv => "host:xielv",
             HostBehavior::SwdZhuyu => "host:zhuyu",
+            HostBehavior::SwdXuehuang => "host:xuehuang",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2208,6 +2216,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 雪煌：出牌主动技（ActivateSkill 通道，limited bool 门）
+            HostBehavior::SwdXuehuang => None,
             // 朱羽：横置者受伤前置窗口（可选；上游 global damageBegin）
             HostBehavior::SwdZhuyu => Some(TriggerMeta {
                 event: EventKind::DamageBefore,
@@ -4198,6 +4208,8 @@ impl SkillBehavior for HostSkillBehavior {
                                 })
                             }
                     }),
+            // 雪煌：无触发面
+            HostBehavior::SwdXuehuang => false,
             // 朱羽：横置角色受到非传导伤害且持有者有红牌（手/装备区）
             HostBehavior::SwdZhuyu => matches!(event,
                 EventData::Damage(d)
@@ -5270,6 +5282,30 @@ impl SkillBehavior for HostSkillBehavior {
                     cards: Vec::new(),
                     targets: Vec::new(),
                     stage: HostStage::SelectCard,
+                }))
+            }
+            // 雪煌：limited 未发动、手牌全红且非空
+            HostBehavior::SwdXuehuang => {
+                let p = ctx.state.player(owner);
+                let all_red = !p.hand.is_empty()
+                    && p.hand.iter().all(|c| {
+                        matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    });
+                if p.xuehuang_used || !all_red {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
                 }))
             }
             // 悲歌：确认门由 optional 承担（activate 恒供机）
@@ -7111,6 +7147,44 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 雪煌：limited 置位 → 弃全部手牌 → 逐张视为对（至多）两名
+            // 其他存活角色使用火杀（座位序确定性；登记差异上游随机 2 名
+            // 敌人；目标中途死亡即终止该张）
+            HostBehavior::SwdXuehuang => {
+                ctx.core.player_mut(self.owner).xuehuang_used = true;
+                let cards: Vec<CardId> = ctx.core.player(self.owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .collect();
+                let num = cards.len();
+                for c in cards {
+                    ctx.discard_from_hand(self.owner, c);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![c],
+                    });
+                }
+                for _ in 0..num {
+                    let targets: Vec<PlayerId> = (0..ctx.core.players.len())
+                        .filter(|&i| {
+                            i as PlayerId != self.owner
+                                && ctx.core.player(i as PlayerId).alive
+                        })
+                        .map(|i| i as PlayerId)
+                        .take(2)
+                        .collect();
+                    if targets.is_empty() {
+                        break;
+                    }
+                    ctx.use_virtual_card(
+                        self.owner,
+                        crate::catalog::CardKind::FireSha,
+                        targets,
+                    );
+                }
+                Flow::Done
+            }
             // 大同：全场极差 ≤1 → 摸 2
             HostBehavior::SwdDatong => {
                 ctx.draw_cards(self.owner, 2);

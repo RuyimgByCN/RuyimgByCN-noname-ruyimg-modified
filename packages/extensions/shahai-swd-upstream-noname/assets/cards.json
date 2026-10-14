@@ -495,7 +495,7 @@
       "skills": [
         {
           "name": "xuehuang",
-          "mapping": null
+          "mapping": "host:xuehuang"
         },
         {
           "name": "ningshuang",
