@@ -354,6 +354,8 @@ impl Engine {
                 phase: Phase::Judge,
                 round: 1,
                 sha_used_play_phase: false,
+                mufeng_used_basic: false,
+                wangchen_discard_basic: false,
                     rende_given: 0,
                     jiu_used: false,
                 mujiaren_used: false,
@@ -3196,6 +3198,11 @@ fn apply_command(
                             .unwrap_or(false)
                         // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
                         || fentian_red
+                        // 疾影（赛特，swd 批㉑）：锁定 sha 无视距离
+                        || catalog
+                            .skill_by_name("jiying")
+                            .map(|def| core.has_skill(core.turn.current, def))
+                            .unwrap_or(false)
                         // 破月（拓跋玉儿，swd 武将面批 28）：黑色杀无视
                         // 距离（上游 mod targetInRange black 同口径）
                         || (catalog
@@ -4680,6 +4687,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u8(&mut h, c.turn.phase as u8);
     push_u32(&mut h, c.turn.round);
     push_u8(&mut h, c.turn.sha_used_play_phase as u8);
+    push_u8(&mut h, c.turn.mufeng_used_basic as u8);
+    push_u8(&mut h, c.turn.wangchen_discard_basic as u8);
     push_u8(&mut h, c.turn.rende_given);
     push_u8(&mut h, c.turn.jiu_used as u8);
     // 木甲人限次（规则 v190）
@@ -5792,6 +5801,8 @@ mod tests {
                     phase: Phase::Play,
                     round: 1,
                     sha_used_play_phase: false,
+                    mufeng_used_basic: false,
+                    wangchen_discard_basic: false,
                     mengtai_draw_pending: false,
                     mengtai_use_pending: false,
                     rende_given: 0,
@@ -5885,6 +5896,8 @@ mod tests {
                         phase: Phase::Play,
                         round: 1,
                         sha_used_play_phase: false,
+                        mufeng_used_basic: false,
+                        wangchen_discard_basic: false,
                         mengtai_draw_pending: false,
                         mengtai_use_pending: false,
                     rende_given: 0,

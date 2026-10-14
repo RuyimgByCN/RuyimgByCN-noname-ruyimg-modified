@@ -849,6 +849,15 @@ pub enum HostBehavior {
     /// 神草结（tag 309，批⑬ trick 手持交互）：锦囊伤害前——受伤者是自
     /// 己则伤-1、来源是自己则伤+1（弃一张神草结；确认门）。
     SwdShencaojieGuard,
+    /// 疾影（tag 311，批㉑ 赛特）：锁定 sha 无视距离（marker，sha_range_
+    /// free 链 skill 查询）。
+    SwdJiyingHeld,
+    /// 沐风（tag 312，批㉑ 桓远之）：结束阶段本回合用过基本牌则摸 1
+    ///（discoverCard 确定性=牌堆末摸 1）。
+    SwdMufengHeld,
+    /// 望尘（tag 313，批㉑ 古月圣）：弃牌阶段结束弃置过基本牌则令一名角
+    /// 色翻面（End 帧入场确认门）。
+    SwdWangchenHeld,
     /// 玉蝉换形（tag 310，批⑮ equipSkill）：自己用牌结算后，手牌中玉蝉
     /// 实体轮换为八卦序下一 kind 的实体（确定性发现；登记差异上游随机）。
     SwdYuchanSwap,
@@ -946,6 +955,9 @@ impl HostBehavior {
             HostBehavior::SwdHuanglinzhicongHeld => 308,
             HostBehavior::SwdShencaojieGuard => 309,
             HostBehavior::SwdYuchanSwap => 310,
+            HostBehavior::SwdJiyingHeld => 312,
+            HostBehavior::SwdMufengHeld => 313,
+            HostBehavior::SwdWangchenHeld => 314,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1498,6 +1510,9 @@ impl HostBehavior {
             307 => HostBehavior::SwdXuanwuzhihuangHeld,
             308 => HostBehavior::SwdHuanglinzhicongHeld,
             309 => HostBehavior::SwdShencaojieGuard,
+            312 => HostBehavior::SwdJiyingHeld,
+            313 => HostBehavior::SwdMufengHeld,
+            314 => HostBehavior::SwdWangchenHeld,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1518,7 +1533,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 308] = [
+    pub const ALL: [HostBehavior; 311] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1824,6 +1839,9 @@ impl HostBehavior {
         HostBehavior::SwdXuanwuzhihuangHeld,
         HostBehavior::SwdHuanglinzhicongHeld,
         HostBehavior::SwdShencaojieGuard,
+        HostBehavior::SwdJiyingHeld,
+        HostBehavior::SwdMufengHeld,
+        HostBehavior::SwdWangchenHeld,
         HostBehavior::SwdYuchanSwap,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
@@ -1896,6 +1914,9 @@ impl HostBehavior {
             HostBehavior::SwdXuanwuzhihuangHeld => "xuanwuzhihuang",
             HostBehavior::SwdHuanglinzhicongHeld => "huanglinzhicong",
             HostBehavior::SwdShencaojieGuard => "shencaojie",
+            HostBehavior::SwdJiyingHeld => "host:jiying",
+            HostBehavior::SwdMufengHeld => "host:mufeng",
+            HostBehavior::SwdWangchenHeld => "host:wangchen",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2431,6 +2452,24 @@ impl HostBehavior {
                 timing: Timing::Last,
                 priority: 0,
                 optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 疾影：锁定 mod 无触发面（sha_range_free 链查询）
+            HostBehavior::SwdJiyingHeld => None,
+            // 沐风：结束阶段确认门（frequent 上游→确认近似）
+            HostBehavior::SwdMufengHeld => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 望尘：弃牌阶段结束确认门（Discard→End 入场近似）
+            HostBehavior::SwdWangchenHeld => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             // 神草结：锦囊伤害前置窗口（确认门；上游 chooseToUse）
@@ -4553,6 +4592,20 @@ impl SkillBehavior for HostSkillBehavior {
                     && ctx.state.player(owner).hand.iter().any(|c| {
                         ctx.catalog.card_kind(*c).yuchan_auto_view_as().is_some()
                     })),
+            // 疾影：无触发面
+            HostBehavior::SwdJiyingHeld => false,
+            // 沐风：结束阶段且本回合用过基本牌
+            HostBehavior::SwdMufengHeld => matches!(event,
+                EventData::Phase { player, begin, .. }
+                if *player == owner && !*begin
+                    && ctx.state.turn.mufeng_used_basic),
+            // 望尘：弃牌阶段结束（End 入场）且弃置过基本牌
+            HostBehavior::SwdWangchenHeld => matches!(event,
+                EventData::Phase { player, phase, begin }
+                if *player == owner
+                    && *phase == crate::event::Phase::End
+                    && *begin
+                    && ctx.state.turn.wangchen_discard_basic),
             // 神草结：锦囊伤害且自己是受伤者或来源、手持神草结
             HostBehavior::SwdShencaojieGuard => matches!(event,
                 EventData::Damage(d)
@@ -6632,6 +6685,60 @@ impl crate::catalog::SkillMachine for HostMachine {
         match self.behavior {
             // 平恤：无效果步（computed_distance 字段消费）
             HostBehavior::SwdPingxu => Flow::Done,
+            // 疾影：无效果步（sha_range_free 链查询）
+            HostBehavior::SwdJiyingHeld => Flow::Done,
+            // 沐风：确认门后摸 1（discoverCard 确定性=牌堆末摸 1）
+            HostBehavior::SwdMufengHeld => {
+                ctx.draw_cards(self.owner, 1);
+                Flow::Done
+            }
+            // 望尘：确认门后 TargetChoice 选任意角色翻面
+            HostBehavior::SwdWangchenHeld => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = (0..ctx.core.players.len())
+                        .filter(|&i| ctx.core.player(i as PlayerId).alive)
+                        .map(|i| ChoiceOption::Player(i as u8))
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "wangchen_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    self.target = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    });
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).alive {
+                        let flipped = {
+                            let pl = ctx.core.player_mut(t);
+                            pl.face_down = !pl.face_down;
+                            pl.face_down
+                        };
+                        ctx.emit(EventData::TurnOvered {
+                            player: t,
+                            face_down: flipped,
+                        });
+                    }
+                    ctx.core.turn.wangchen_discard_basic = false;
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 还侠：无效果步（PlayCard 转化臂+kernel 跟踪钩承载）
             HostBehavior::SwdHuanxia => Flow::Done,
             // 破月：无效果步

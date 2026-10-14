@@ -1143,6 +1143,10 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
     // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游
     // getHistory("useCard") 同口径——未被取消的使用全计）
     ctx.core.player_mut(u.player).total_used += 1;
+    // 沐风（swd 桓远之，批㉑）：本回合已使用基本牌（TurnState 旗，换回合清）
+    if ctx.catalog.card_kind(u.card).is_basic_kind() {
+        ctx.core.turn.mufeng_used_basic = true;
+    }
     // 邪酬（Boss 相柳，规则 v223）：激活态下其他角色使用【桃】/【酒】
     // → 相柳获 1 蛇毒标记（上游 boss_echou global useCard 同口径）
     let effective_kind = ctx.catalog.card_kind(u.card);
@@ -3494,6 +3498,21 @@ fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cancelled: bool)
 /// 其余卡牌移动面登记差异）——非当前回合且已受伤 → 判定红色回 1（铁骑
 /// 内联确定性口径，无鬼才/天妒改判窗）。
 fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
+    // 望尘（swd 古月圣，批㉑）：自己弃牌阶段弃置过基本牌（TurnState 旗，
+    // 换回合清；判定区/装备区弃置路径亦计入——上游 discardEnd cards 同为
+    // 实际弃置集合）
+    if let Some(f) = ctx.res.frame(ctx.current_frame_id()) {
+        if let EventData::CardsDiscarded { cards, .. } = &f.data {
+            if ctx.core.turn.current == player
+                && ctx.core.turn.phase == crate::event::Phase::Discard
+                && cards.iter().any(|c| {
+                    ctx.catalog.card_kind(*c).is_basic_kind()
+                })
+            {
+                ctx.core.turn.wangchen_discard_basic = true;
+            }
+        }
+    }
     let names = [
         crate::content::standard::BOSS_DANSHU,
         crate::content::standard::BOSS_JINGJUE,
@@ -9013,6 +9032,10 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
         let mut discarded: Vec<crate::ids::CardId> = Vec::new();
         for opt in answer {
             if let ChoiceOption::Card(c) = opt {
+                // 望尘（swd 古月圣，批㉑）：弃牌阶段弃置基本牌置旗
+                if ctx.catalog.card_kind(c).is_basic_kind() {
+                    ctx.core.turn.wangchen_discard_basic = true;
+                }
                 ctx.discard_from_hand(self.player, c);
                 discarded.push(c);
             }

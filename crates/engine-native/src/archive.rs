@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 73;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 74;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3036,6 +3036,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     enc_phase(w, &t.phase);
     w.u32(t.round);
     w.boolean(t.sha_used_play_phase);
+    w.boolean(t.mufeng_used_basic);
+    w.boolean(t.wangchen_discard_basic);
     w.boolean(t.land_used);
     w.boolean(t.land_sha_used);
     w.u32(t.discard_phase_discarded);
@@ -3423,6 +3425,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let phase = dec_phase(r)?;
     let round = r.u32()?;
     let sha_used_play_phase = r.boolean()?;
+    let mufeng_used_basic = r.boolean()?;
+    let wangchen_discard_basic = r.boolean()?;
     let land_used = r.boolean()?;
     let land_sha_used = r.boolean()?;
     let discard_phase_discarded = r.u32()?;
@@ -3562,6 +3566,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 phase,
                 round,
                 sha_used_play_phase,
+                mufeng_used_basic,
+                wangchen_discard_basic,
                 land_used,
                 land_sha_used,
                 discard_phase_discarded,

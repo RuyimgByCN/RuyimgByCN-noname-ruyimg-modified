@@ -332,6 +332,10 @@ pub struct TurnState {
     pub round: u32,
     /// 出牌阶段是否已使用过杀。
     pub sha_used_play_phase: bool,
+    /// 沐风（swd 桓远之，批㉑）：本回合已使用基本牌。
+    pub mufeng_used_basic: bool,
+    /// 望尘（swd 古月圣，批㉑）：弃牌阶段弃置过基本牌。
+    pub wangchen_discard_basic: bool,
     /// mtg 龙颅山峰（规则 v100）：本回合已使用地（上游 land_used 临时技
     /// 同口径——仅当前回合玩家可出牌，故回合级布尔等价）。
     pub land_used: bool,
