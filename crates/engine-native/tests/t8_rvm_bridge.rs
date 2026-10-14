@@ -1200,3 +1200,198 @@ fn t8_bte_kind_classification() {
     }
     assert!(!K::Jiguan.is_basic_trick_or_equip(), "机关牌不计入");
 }
+
+// ---------------------------------------------------------------------------
+// 增量 15：参数化/计数族 filter——hp_below_{N}（hp<N）、play_card_count_eq_{N}
+// /eq_hp（第 N 张主动用牌，commit 后序数口径）、card_used_at_least_hp（主动
+// 用牌 ≥ 体力，出牌阶段计数化归）。触发效果=摸 1，以日志 CardsDrawn(p1,1)
+// 计数锚定（规避无懈/摸牌阶段账目干扰）。
+// ---------------------------------------------------------------------------
+
+/// 触发探针构造：filter 由声明侧注入。
+fn param_probe_pack(
+    module: &rule_vm::BytecodeModule,
+    filter: engine_native::rvm_bridge::VmFilterPolicy,
+    event: EventKind,
+) -> ExtensionPack {
+    pack_with(vec![VmSkillDecl {
+        name: "t8参".to_string(),
+        module: module.clone(),
+        trigger: TriggerMeta {
+            event,
+            timing: Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter,
+    }])
+}
+
+/// 日志中 p1 的 n=1 摸牌次数（触发效果计数）。
+fn trigger_draws(e: &Engine) -> usize {
+    e.log()
+        .iter()
+        .filter(|ev| {
+            matches!(
+                ev,
+                engine_native::machine::LogEvent::CardsDrawn { player: 1, cards } if cards.len() == 1
+            )
+        })
+        .count()
+}
+
+#[test]
+fn t8_filter_param_hp_below_dual_gate_and_threshold() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named(
+        "t8-rvm-bridge",
+        "skill hnl_php_t8(990011) {\n  trigger damage always {\n    effect draw_cards(self, 1);\n  }\n}\n",
+    )
+    .expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_php_t8");
+    let pack = param_probe_pack(&module, P::OwnerHpBelow(2), EventKind::Damage);
+    let mut e = Engine::new_with_extensions(953000, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8参");
+    // 阈值边（口径=事件时点体力，damage 帧在 commit 扣血后评估 filter）：
+    // 扣血后 hp=2 不满足 2<2 → 不触发
+    e.debug_set_hp(1, 3);
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 0, "hp=N 阈值边不触发");
+    // 扣血后 hp=1 < 2 → 触发
+    e.debug_set_hp(1, 2);
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 1, "hp<N 触发");
+    // owner 门：他人受伤不触发（谓词对持有者成立）
+    e.debug_deal_damage(Some(2), 0, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 1, "他人受伤不过闸");
+}
+
+/// 出两张牌（无中生有+闪电：均自目标、计数面走 commit_card_used），
+/// 第 2 张 commit 后序数=2。
+/// 只应答开放选择、不推进阶段（出牌后挂起窗排空）。
+fn settle_choices(e: &mut Engine) {
+    for _ in 0..8 {
+        let Some(c) = e.open_choice() else { return };
+        let sel: Vec<ChoiceOption> = c
+            .spec
+            .options
+            .iter()
+            .filter(|o| matches!(o, ChoiceOption::Card(_)))
+            .copied()
+            .take(c.spec.min.max(1))
+            .collect();
+        let (cid, obs) = (c.id, c.observer);
+        if sel.is_empty() && !c.spec.options.is_empty() {
+            submit(e, obs, GameAction::Answer { choice_id: cid, selection: vec![c.spec.options[0].clone()] });
+        } else if !sel.is_empty() {
+            submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+        }
+    }
+}
+
+fn play_two_cards(e: &mut Engine) {
+    advance_to(e, 1, Phase::Play);
+    for name in ["wuzhong", "shandian"] {
+        let id = e.debug_place(1, name);
+        submit(e, 1, GameAction::PlayCard { card: id, targets: vec![] });
+        settle_choices(e);
+    }
+}
+
+#[test]
+fn t8_filter_param_play_count_and_at_least_hp() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let dsl = "\
+skill hnl_pcnt_t8(990012) {
+  trigger card_used always {
+    effect draw_cards(self, 1);
+  }
+}
+";
+    let pkg = compile_source_named("t8-rvm-bridge", dsl).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_pcnt_t8");
+
+    // eq_hp：hp=2 → 第 2 张主动用牌时触发（commit 后序数口径）
+    let pack = param_probe_pack(&module, P::OwnerPlayCountEqHp, EventKind::CardUsed);
+    let mut e = Engine::new_with_extensions(954000, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8参");
+    e.debug_set_hp(1, 2);
+    play_two_cards(&mut e);
+    assert_eq!(trigger_draws(&e), 1, "eq_hp：第 hp 张牌使用时触发");
+
+    // eq_2：同口径参数化
+    let pack = param_probe_pack(&module, P::OwnerPlayCountEq(2), EventKind::CardUsed);
+    let mut e = Engine::new_with_extensions(954001, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8参");
+    play_two_cards(&mut e);
+    assert_eq!(trigger_draws(&e), 1, "eq_2：第 2 张牌使用时触发");
+
+    // at_least_hp：hp=2 → 第 2 张触发；hp=3 → 第 2 张不触发
+    let pack = param_probe_pack(&module, P::OwnerCardUsedAtLeastHp, EventKind::CardUsed);
+    let mut e = Engine::new_with_extensions(954002, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8参");
+    e.debug_set_hp(1, 3);
+    play_two_cards(&mut e);
+    assert_eq!(trigger_draws(&e), 0, "at_least_hp：2<3 不触发");
+    // 推进到持有者下一回合（计数随 Play 开始清零），hp 改 2：第 1 张
+    // count=1<2 不触发、第 2 张 count=2≥2 触发。
+    np_settled(&mut e);
+    e.debug_set_hp(1, 2);
+    play_two_cards(&mut e);
+    assert_eq!(trigger_draws(&e), 1, "at_least_hp：达阈值牌触发");
+}
+
+/// 装载器参数化解析锁面：4 名（2 精确+2 参数化）经 DSL 编译→桥接产出
+/// 声明、deferred 空、变体逐一对。
+#[test]
+fn t8_loader_maps_parameterized_filters() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let dsl = "\
+skill hnl_pz_a(990013) {
+  trigger damage owner_is_target_hp_below_2 {
+    effect draw_cards(self, 1);
+  }
+}
+skill hnl_pz_b(990014) {
+  trigger card_used owner_source_play_card_count_eq_2 {
+    effect draw_cards(self, 1);
+  }
+}
+skill hnl_pz_c(990015) {
+  trigger card_used owner_source_play_card_count_eq_hp {
+    effect draw_cards(self, 1);
+  }
+}
+skill hnl_pz_d(990016) {
+  trigger card_used owner_is_target_card_used_at_least_hp {
+    effect draw_cards(self, 1);
+  }
+}
+";
+    let pkg = compile_source_named("t8-rvm-bridge", dsl).expect("DSL 编译");
+    let outcome = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
+    assert!(
+        outcome.deferred_filters.is_empty(),
+        "参数化族不得落 deferred: {:?}",
+        outcome.deferred_filters
+    );
+    let want = [
+        ("hnl_pz_a", P::OwnerHpBelow(2)),
+        ("hnl_pz_b", P::OwnerPlayCountEq(2)),
+        ("hnl_pz_c", P::OwnerPlayCountEqHp),
+        ("hnl_pz_d", P::OwnerCardUsedAtLeastHp),
+    ];
+    assert_eq!(outcome.decls.len(), 4);
+    for (tag, policy) in want {
+        let decl = outcome
+            .decls
+            .iter()
+            .find(|d| d.name.contains(tag))
+            .unwrap_or_else(|| panic!("{tag} 声明缺失"));
+        assert_eq!(decl.filter, policy, "{tag} 策略映射");
+    }
+}

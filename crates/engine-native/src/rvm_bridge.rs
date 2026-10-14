@@ -139,6 +139,20 @@ pub enum VmFilterPolicy {
     /// 出牌阶段结束，且持有者在该出牌阶段已使用 ≥1 张基本/锦囊/装备牌
     ///（仅当前回合玩家可用牌，故事件主玩家=持有者；增量 14，ABI 293）。
     OwnerAlivePlayPhaseBteUsed,
+    /// DSL `owner_is_target_hp_below_{N}`：事件主玩家=持有者，且当前体力
+    /// < N（增量 15，参数化）。
+    OwnerHpBelow(u32),
+    /// DSL `owner_source_play_card_count_eq_{N}`：事件主玩家=持有者（使
+    /// 用者），且本次为其本出牌阶段第 N 张主动用牌（响应不计、出牌阶段
+    /// 开始清零；增量 15，参数化）。
+    OwnerPlayCountEq(u32),
+    /// DSL `owner_source_play_card_count_eq_hp`：同上，N=当前体力（增量
+    /// 15）。
+    OwnerPlayCountEqHp,
+    /// DSL `owner_is_target_card_used_at_least_hp`：事件主玩家=持有者，
+    /// 且本回合（口径化归：出牌阶段计数，Play 开始清零=换回合归零）已
+    /// 主动用牌 ≥ 当前体力（增量 15；响应不计）。
+    OwnerCardUsedAtLeastHp,
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -231,6 +245,27 @@ impl SkillBehavior for VmSkillBehavior {
                 is_event_player
                     && trig.phase == Some(crate::event::Phase::Play)
                     && ctx.state.turn.bte_used_play_phase > 0
+            }
+            VmFilterPolicy::OwnerHpBelow(n) => {
+                is_event_player && {
+                    let p = holder_state(owner);
+                    p.hp > 0 && p.hp < n as i32
+                }
+            }
+            // 用牌序数：commit_card_used 尾计数=本次用牌的序数（响应走
+            // CardResponded 不经此点=「Responses do not count」同口径）。
+            VmFilterPolicy::OwnerPlayCountEq(n) => {
+                is_event_player && ctx.state.turn.cards_used_play_phase == n
+            }
+            VmFilterPolicy::OwnerPlayCountEqHp => {
+                let p = holder_state(owner);
+                is_event_player
+                    && ctx.state.turn.cards_used_play_phase == p.hp as u32
+            }
+            VmFilterPolicy::OwnerCardUsedAtLeastHp => {
+                let p = holder_state(owner);
+                is_event_player
+                    && ctx.state.turn.cards_used_play_phase >= p.hp as u32
             }
         }
     }

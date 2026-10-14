@@ -178,11 +178,29 @@ pub fn bridge_vm_skill_decls(
             "owner_alive_play_phase_card_category_count_positive" => {
                 P::OwnerAlivePlayPhaseBteUsed
             }
+            "owner_source_play_card_count_eq_hp" => P::OwnerPlayCountEqHp,
+            "owner_is_target_card_used_at_least_hp" => P::OwnerCardUsedAtLeastHp,
             other => {
-                // 具名组合 filter：engine 无承载（增量 6 严格面）——跳过
-                // 登记，不阻断同包其余 VM 技能装载。
-                deferred_filters.push(other.to_string());
-                continue;
+                // 参数化族（增量 15）：词表保证后缀为正整数，解析失败按
+                // 未承载跳过登记（防御性，与未知具名同路）。
+                if let Some(n) = other
+                    .strip_prefix("owner_is_target_hp_below_")
+                    .and_then(|v| v.parse::<u32>().ok())
+                    .filter(|v| *v > 0)
+                {
+                    P::OwnerHpBelow(n)
+                } else if let Some(n) = other
+                    .strip_prefix("owner_source_play_card_count_eq_")
+                    .and_then(|v| v.parse::<u32>().ok())
+                    .filter(|v| *v > 0)
+                {
+                    P::OwnerPlayCountEq(n)
+                } else {
+                    // 具名组合 filter：engine 无承载（增量 6 严格面）——
+                    // 跳过登记，不阻断同包其余 VM 技能装载。
+                    deferred_filters.push(other.to_string());
+                    continue;
+                }
             }
         };
         out.push(engine_native::content::extension::VmSkillDecl {
