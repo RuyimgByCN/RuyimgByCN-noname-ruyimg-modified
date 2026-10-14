@@ -427,6 +427,15 @@
         "nigong_accumulate",
         "nigong_strike"
       ]
+    },
+    {
+      "name": "swd_sifeizhenmian",
+      "kind": "sifeizhenmian",
+      "suit": "spade",
+      "rank": 4,
+      "equip_skills": [
+        "yiluan"
+      ]
     }
   ],
   "host_skills": [],

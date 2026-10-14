@@ -486,6 +486,10 @@ pub enum CardKind {
     /// 龟灵之桃（swd 卡牌面补切批⑧）：equip5 宝物——逆攻标记积攒（受伤
     /// +1 上限 4）与弃标记打伤/摸牌消费。
     Guilingzhitao,
+    /// 四非珍面（swd 卡牌面补切批⑨）：equip5 宝物——出牌限一次令其他有
+    /// 手牌角色判定，非红桃则其用首张手牌指向座位序首个其他存活者（登记
+    /// 差异上游随机牌/随机目标）。
+    Sifeizhenmian,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
@@ -614,6 +618,7 @@ impl CardKind {
             CardKind::Donghuangzhong => EquipSlot::Treasure,
             CardKind::Kongdongyin => EquipSlot::Treasure,
             CardKind::Guilingzhitao => EquipSlot::Treasure,
+            CardKind::Sifeizhenmian => EquipSlot::Treasure,
             // 上游 subtype equip2（防具栏）；2026-10-07 载荷对照修正（曾误
             // 登记宝物栏）。
             CardKind::Mianju => EquipSlot::Armor,
@@ -668,7 +673,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 154] = [
+    pub const ALL: [CardKind; 155] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -818,6 +823,7 @@ impl CardKind {
         CardKind::Guisheqi,
         CardKind::Xianluhui,
         CardKind::Guilingzhitao,
+        CardKind::Sifeizhenmian,
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
@@ -977,6 +983,7 @@ impl CardKind {
             CardKind::Guisheqi => "guisheqi",
             CardKind::Xianluhui => "xianluhui",
             CardKind::Guilingzhitao => "guilingzhitao",
+            CardKind::Sifeizhenmian => "sifeizhenmian",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",

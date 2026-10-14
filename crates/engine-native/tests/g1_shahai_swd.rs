@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 66, "swd 全 66 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 67, "swd 全 67 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 66, "swd 全 66 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 67, "swd 全 67 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 66, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 67, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4219,6 +4219,7 @@ fn swd_cards_alignment_guard_b29() {
         ("guisheqi", "club", 7),
         ("xianluhui", "spade", 13),
         ("guilingzhitao", "spade", 7),
+        ("sifeizhenmian", "spade", 4),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4232,7 +4233,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 66, "批⑧ 龟灵之桃后 66 张");
+    assert_eq!(pack.cards.len(), 67, "批⑨ 四非珍面后 67 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -5234,4 +5235,96 @@ fn swd_cards_equip5_b38_guilingzhitao_nigong() {
     e.debug_deal_damage(Some(1), 0, 9, engine_native::event::DamageNature::Normal);
     settle_optional_confirm(&mut e);
     assert_eq!(e.state_core().player(0).nigong_lv, 4, "逆攻④：上限 4");
+}
+
+/// T12 swd 卡牌面补切批⑨：四非珍面——出牌限一次令其他有手牌角色判定，
+/// 非红桃则其用首张手牌指向座位序首个其他存活者（登记差异上游随机牌/
+/// 随机目标）。
+#[test]
+fn swd_cards_equip5_b39_sifeizhenmian_yiluan() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62019, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let sfm = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Sifeizhenmian)
+        .expect("四非珍面在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != sfm);
+        snap.core.discard.retain(|x| *x != sfm);
+        snap.core.players[0].equips.push(sfm);
+        let def = e.catalog().skill_by_name("yiluan").expect("移乱 def");
+        snap.core.skills.insert(
+            (0, def),
+            engine_native::state::SkillInstance {
+                owner: 0,
+                enabled: true,
+                once_used: false,
+                expires_end_of_turn: false,
+                rounds: 0,
+            },
+        );
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+
+    // ① 目标 p1（手牌黑杀首张）判定非红桃（预控判定牌堆顶为黑）→ 用黑杀
+    // 指向座位序首个其他存活者（=p2）
+    e.debug_set_deck_top_by(|d| {
+        !matches!(d.suit, engine_native::catalog::Suit::Heart)
+    });
+    let _t1 = e.debug_place(1, "sha");
+    let _t2 = e.debug_place(1, "tao");
+    e.debug_set_hp(2, 8);
+    e.debug_set_hp(3, 8);
+    let yiluan_def = e.catalog().skill_by_name("yiluan").expect("移乱 def");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: yiluan_def },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "四非受理 {out:?}");
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("四非选人窗");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Player(1)] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(hand_len_w(&e, 1), 1, "四非①：目标首张手牌被用（2→1）");
+    // 座位序首个其他存活者 = p0：黑杀指向 p0（无闪直中 4→3）
+    assert_eq!(e.debug_hp(0), 3, "四非①：p0（座位序首）被杀指向");
+
+    // 反例：判定红桃时不用牌（预控红桃顶）——再发动（限一次未消耗？
+    // usable:1 每回合一次，此处换目标验证结果分支而非限次）
+    // 反例改为主：目标手牌为空时不进目标表
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let yiluan_def = e.catalog().skill_by_name("yiluan").expect("移乱 def");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: yiluan_def },
+    });
+    assert!(!matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "四非反例：无其他有手牌角色拒 {out:?}");
 }

@@ -829,6 +829,10 @@ pub enum HostBehavior {
     /// 逆攻发动（tag 298，批⑧龟灵之桃 equipSkill）：出牌弃全部标记——
     /// 奇数摸 1+对一名其他角色造成 floor(标记/2) 伤；标记=1 时仅摸 1。
     SwdNigongStrike,
+    /// 四非珍面（tag 303，批⑨ equipSkill）：出牌限一次令其他有手牌角色
+    /// 判定，非红桃则其用首张手牌指向座位序首个其他存活者（登记差异
+    /// 上游随机牌/随机目标）。
+    SwdSifeizhenmianCard,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -915,6 +919,7 @@ impl HostBehavior {
             HostBehavior::SwdKongdongyinGuard => 296,
             HostBehavior::SwdNigongAccumulate => 299,
             HostBehavior::SwdNigongStrike => 300,
+            HostBehavior::SwdSifeizhenmianCard => 303,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1460,6 +1465,7 @@ impl HostBehavior {
             296 => HostBehavior::SwdKongdongyinGuard,
             299 => HostBehavior::SwdNigongAccumulate,
             300 => HostBehavior::SwdNigongStrike,
+            303 => HostBehavior::SwdSifeizhenmianCard,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
             _ => return None,
@@ -1479,7 +1485,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 300] = [
+    pub const ALL: [HostBehavior; 301] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1778,6 +1784,7 @@ impl HostBehavior {
         HostBehavior::SwdKongdongyinGuard,
         HostBehavior::SwdNigongAccumulate,
         HostBehavior::SwdNigongStrike,
+        HostBehavior::SwdSifeizhenmianCard,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -1842,6 +1849,7 @@ impl HostBehavior {
             HostBehavior::SwdKongdongyinGuard => "host:kongdongyin",
             HostBehavior::SwdNigongAccumulate => "nigong_accumulate",
             HostBehavior::SwdNigongStrike => "nigong_strike",
+            HostBehavior::SwdSifeizhenmianCard => "yiluan",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -2349,6 +2357,8 @@ impl HostBehavior {
             }),
             // 逆攻发动：出牌主动技（标记门在 activate）
             HostBehavior::SwdNigongStrike => None,
+            // 四非珍面：出牌主动技（usable:1 走 limits）
+            HostBehavior::SwdSifeizhenmianCard => None,
             // 空洞印：死亡前置窗口（forced；上游 dieBefore cancel 同口径）
             HostBehavior::SwdKongdongyinGuard => Some(TriggerMeta {
                 event: EventKind::Death,
@@ -4396,6 +4406,8 @@ impl SkillBehavior for HostSkillBehavior {
                 if d.target == owner && !d.prevented && d.amount > 0),
             // 逆攻发动：无触发面
             HostBehavior::SwdNigongStrike => false,
+            // 四非珍面：无触发面
+            HostBehavior::SwdSifeizhenmianCard => false,
             // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
             HostBehavior::SwdKongdongyinGuard => matches!(event,
                 EventData::Death { player, .. } if *player == owner),
@@ -5569,6 +5581,25 @@ impl SkillBehavior for HostSkillBehavior {
                     cards: Vec::new(),
                     targets: Vec::new(),
                     stage: HostStage::Act,
+                }))
+            }
+            // 四非珍面：存在其他有手牌角色
+            HostBehavior::SwdSifeizhenmianCard => {
+                let others = ctx.state.alive_players().any(|p| {
+                    p != owner && !ctx.state.player(p).hand.is_empty()
+                });
+                if !others {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::TargetChoice,
                 }))
             }
             // 逆攻发动：标记 ≥1；lv≥2 打伤需选目标，lv==1 仅摸 1（直发）
@@ -6786,6 +6817,80 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             }
+            // 四非珍面：TargetChoice 选其他有手牌角色 → Act 判定（非红桃
+            // 则目标用首张手牌指向座位序首个其他存活者——登记差异上游
+            // 随机牌/随机目标）
+            HostBehavior::SwdSifeizhenmianCard => match self.stage {
+                HostStage::TargetChoice => {
+                    let options: Vec<ChoiceOption> = (0..ctx.core.players.len())
+                        .filter(|&i| {
+                            i as PlayerId != self.owner
+                                && ctx.core.player(i as PlayerId).alive
+                                && !ctx.core.player(i as PlayerId).hand.is_empty()
+                        })
+                        .map(|i| ChoiceOption::Player(i as u8))
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "yiluan_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::Act => {
+                    // 已执行守卫：子帧 CardUsed 结算期间机器可能被再次
+                    // 步进（阶段未推进），cards 非空即完成
+                    if !self.cards.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.target = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    });
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    let judged = ctx.draw_judge_card();
+                    if matches!(
+                        ctx.catalog.cards[judged as usize].suit,
+                        crate::catalog::Suit::Heart
+                    ) {
+                        return Flow::Done;
+                    }
+                    let Some(c) = ctx.core.player(t).hand.first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.cards = vec![c];
+                    let kind = ctx.catalog.cards[c as usize].kind;
+                    let targets: Vec<PlayerId> = (0..ctx.core.players.len())
+                        .filter(|&i| {
+                            let p = i as PlayerId;
+                            p != t && ctx.core.player(p).alive
+                        })
+                        .map(|i| i as PlayerId)
+                        .take(1)
+                        .collect();
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    // 真实牌自动使用（v177 同口径）：机器侧不预取，卡留在
+                    // 目标手牌由 CardUsed 提交段自取
+                    ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                        c, t, targets, Some(kind),
+                    )));
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 逆攻发动：TargetChoice 选目标 → Act 弃全部标记——奇数摸 1+
             // floor(标记/2) 伤；标记=1 时仅摸 1（activate 分流两 activate 面）
             HostBehavior::SwdNigongStrike => match self.stage {
@@ -19091,7 +19196,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdLianyaohuShouna
         | HostBehavior::SwdLianyaohuLianhua
         | HostBehavior::SwdShennongdingCard
-        | HostBehavior::SwdKunlunjingcCard => {
+        | HostBehavior::SwdKunlunjingcCard
+        | HostBehavior::SwdSifeizhenmianCard => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
@@ -19285,6 +19391,7 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
         CardKind::Nvwashi => &[HostSkillDecl { name: "nvwashi", behavior: HostBehavior::SwdNvwashiGuard }],
         CardKind::Kongdongyin => &[HostSkillDecl { name: "kongdongyin", behavior: HostBehavior::SwdKongdongyinGuard }],
         CardKind::Guilingzhitao => &[HostSkillDecl { name: "nigong_accumulate", behavior: HostBehavior::SwdNigongAccumulate }, HostSkillDecl { name: "nigong_strike", behavior: HostBehavior::SwdNigongStrike }],
+        CardKind::Sifeizhenmian => &[HostSkillDecl { name: "yiluan", behavior: HostBehavior::SwdSifeizhenmianCard }],
         CardKind::Kunlunjingc => &[HostSkillDecl { name: "kunlunjingc", behavior: HostBehavior::SwdKunlunjingcCard }],
         CardKind::Donghuangzhong => &[HostSkillDecl { name: "donghuangzhong", behavior: HostBehavior::SwdDonghuangzhongCard }],
         _ => &[],
