@@ -849,18 +849,25 @@ pub enum HostBehavior {
     /// 神草结（tag 309，批⑬ trick 手持交互）：锦囊伤害前——受伤者是自
     /// 己则伤-1、来源是自己则伤+1（弃一张神草结；确认门）。
     SwdShencaojieGuard,
-    /// 疾影（tag 311，批㉑ 赛特）：锁定 sha 无视距离（marker，sha_range_
+    /// 疾影（tag 312，批㉑ 赛特）：锁定 sha 无视距离（marker，sha_range_
     /// free 链 skill 查询）。
     SwdJiyingHeld,
-    /// 沐风（tag 312，批㉑ 桓远之）：结束阶段本回合用过基本牌则摸 1
+    /// 沐风（tag 313，批㉑ 桓远之）：结束阶段本回合用过基本牌则摸 1
     ///（discoverCard 确定性=牌堆末摸 1）。
     SwdMufengHeld,
-    /// 望尘（tag 313，批㉑ 古月圣）：弃牌阶段结束弃置过基本牌则令一名角
+    /// 望尘（tag 314，批㉑ 古月圣）：弃牌阶段结束弃置过基本牌则令一名角
     /// 色翻面（End 帧入场确认门）。
     SwdWangchenHeld,
     /// 玉蝉换形（tag 310，批⑮ equipSkill）：自己用牌结算后，手牌中玉蝉
     /// 实体轮换为八卦序下一 kind 的实体（确定性发现；登记差异上游随机）。
     SwdYuchanSwap,
+    /// 神秘果窗口（tag 315，卡牌面窗口机批）：出牌阶段用出基本/普通锦
+    /// 囊结算后（手持神秘果、每阶段限一次）确认令该牌再结算一次（原体
+    /// 自弃堆复用登记差异上游凭空复制；view-as 转化用牌收窄不可再结算）。
+    SwdShenmiguoWindow,
+    /// 鼠槌主动技（tag 316，equip5）：出牌阶段限一次——指定攻击范围内
+    /// 角色依次自动用出手中至多 3 张杀（凤略 Yield 循环同型）。
+    SwdShuchuiUse,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -958,6 +965,8 @@ impl HostBehavior {
             HostBehavior::SwdJiyingHeld => 312,
             HostBehavior::SwdMufengHeld => 313,
             HostBehavior::SwdWangchenHeld => 314,
+            HostBehavior::SwdShenmiguoWindow => 315,
+            HostBehavior::SwdShuchuiUse => 316,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1513,6 +1522,8 @@ impl HostBehavior {
             312 => HostBehavior::SwdJiyingHeld,
             313 => HostBehavior::SwdMufengHeld,
             314 => HostBehavior::SwdWangchenHeld,
+            315 => HostBehavior::SwdShenmiguoWindow,
+            316 => HostBehavior::SwdShuchuiUse,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1533,7 +1544,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 311] = [
+    pub const ALL: [HostBehavior; 313] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1843,6 +1854,8 @@ impl HostBehavior {
         HostBehavior::SwdMufengHeld,
         HostBehavior::SwdWangchenHeld,
         HostBehavior::SwdYuchanSwap,
+        HostBehavior::SwdShenmiguoWindow,
+        HostBehavior::SwdShuchuiUse,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -1917,6 +1930,8 @@ impl HostBehavior {
             HostBehavior::SwdJiyingHeld => "host:jiying",
             HostBehavior::SwdMufengHeld => "host:mufeng",
             HostBehavior::SwdWangchenHeld => "host:wangchen",
+            HostBehavior::SwdShenmiguoWindow => "host:shenmiguo_window",
+            HostBehavior::SwdShuchuiUse => "host:shuchui",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2534,6 +2549,17 @@ impl HostBehavior {
             }),
             // 分舵：出牌主动技（ActivateSkill 通道，每回合限一次走 limits）
             HostBehavior::SwdJiefen => None,
+            // 神秘果窗口：出牌阶段用牌结算后（确认门=optional——上游
+            // chooseToUse 即确认）
+            HostBehavior::SwdShenmiguoWindow => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 鼠槌：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
+            HostBehavior::SwdShuchuiUse => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -3847,6 +3873,12 @@ pub enum HostStage {
     JiefenTargetDiscard,
     /// 分舵：等待自己选交出的手牌。
     JiefenOwnerDiscard,
+    /// 神秘果窗口（卡牌面窗口机批）：载体用牌结算后——原体上桌面重发射。
+    ShenmiguoRestage,
+    /// 鼠槌（equip5）：等待目标选择（攻击范围内）。
+    ShuchuiTarget,
+    /// 鼠槌（equip5）：目标已选定——逐张用杀循环（凤略 Yield 同型）。
+    ShuchuiTargetLoop,
 }
 
 impl HostStage {
@@ -3862,6 +3894,9 @@ impl HostStage {
             HostStage::JiefenTarget => 7,
             HostStage::JiefenTargetDiscard => 8,
             HostStage::JiefenOwnerDiscard => 9,
+            HostStage::ShenmiguoRestage => 10,
+            HostStage::ShuchuiTargetLoop => 11,
+            HostStage::ShuchuiTarget => 12,
         }
     }
     pub fn from_tag(t: u8) -> Option<Self> {
@@ -3876,6 +3911,9 @@ impl HostStage {
             7 => HostStage::JiefenTarget,
             8 => HostStage::JiefenTargetDiscard,
             9 => HostStage::JiefenOwnerDiscard,
+            10 => HostStage::ShenmiguoRestage,
+            11 => HostStage::ShuchuiTargetLoop,
+            12 => HostStage::ShuchuiTarget,
             _ => return None,
         })
     }
@@ -4628,6 +4666,35 @@ impl SkillBehavior for HostSkillBehavior {
             // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
             HostBehavior::SwdKongdongyinGuard => matches!(event,
                 EventData::Death { player, .. } if *player == owner),
+            // 神秘果窗口：自己出牌阶段用出基本/普通锦囊结算后、手持神秘
+            // 果、每阶段限一次、目标全存活。登记差异：view-as 转化用牌、
+            // 五谷（Remained 面未实现）、机关异类与延时锦囊不进再结算
+            // 白名单（上游 complexTarget/exclusion 同口径收窄）。
+            HostBehavior::SwdShenmiguoWindow => matches!(event,
+                EventData::CardUsed(u)
+                if u.player == owner
+                    && u.use_as.map(|k| k == ctx.catalog.card_kind(u.card)).unwrap_or(true)
+                    && ctx.state.turn.phase == crate::event::Phase::Play
+                    && ctx.state.turn.current == owner
+                    && !ctx.state.turn.shenmiguo_used
+                    && {
+                        let k = ctx.catalog.card_kind(u.card);
+                        if matches!(
+                            k,
+                            CardKind::Shenmiguo
+                                | CardKind::Wugu
+                                | CardKind::Jiguan
+                                | CardKind::Le
+                                | CardKind::Bing
+                                | CardKind::ShanDian
+                        ) {
+                            false
+                        } else {
+                            k.is_basic_kind() || k.equip_slot().is_none()
+                        }
+                    }
+                    && hand_has_kind(ctx, owner, CardKind::Shenmiguo)
+                    && u.targets.iter().all(|t| ctx.state.player(*t).alive)),
             // 东皇钟：自己任一阶段结束且手牌有红牌（蝶舞口径）
             HostBehavior::SwdDonghuangzhongCard => matches!(event,
                 EventData::Phase { player, begin, .. }
@@ -5533,6 +5600,29 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 鼠槌（equip5 窗口机批）：手中有杀且本回合未用过杀（上游
+            // filter cardUsable 同口径——限击数提升时收窄登记差异）
+            HostBehavior::SwdShuchuiUse => {
+                let has_sha = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c).is_sha_like());
+                if !has_sha || ctx.state.turn.sha_used_play_phase {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 分舵：存在手牌多于自己的存活角色才可发动
             HostBehavior::SwdJiefen => {
                 let my = ctx.state.player(owner).hand.len();
@@ -6663,6 +6753,55 @@ impl HostMachine {
             allow_cancel: false,
         }
     }
+
+    /// 鼠槌逐杀循环头（ShuchuiTargetLoop 臂与链头共用）：目标存活且
+    /// 剩余次数未尽且手中有杀则用出（重扫首张=上游 getCards("h")[0]），
+    /// Yield 等待本杀结算后重入；否则收束——链上任一杀造成伤害
+    ///（commit_damage 钩置位）则摸 1，清武装旗。
+    fn shuchui_loop(&mut self, ctx: &mut Ctx<'_>, target: PlayerId) -> Flow {
+        if !ctx.core.player(target).alive
+            || self.cards.is_empty()
+            || !ctx
+                .core
+                .player(self.owner)
+                .hand
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c).is_sha_like())
+        {
+            ctx.core.turn.shuchui_armed = false;
+            if ctx.core.turn.shuchui_hit {
+                ctx.core.turn.shuchui_hit = false;
+                if ctx.core.player(self.owner).alive {
+                    ctx.draw_cards(self.owner, 1);
+                }
+            }
+            self.cards.clear();
+            self.target = None;
+            return Flow::Done;
+        }
+        self.cards.pop();
+        let sha = ctx
+            .core
+            .player(self.owner)
+            .hand
+            .iter()
+            .copied()
+            .find(|c| ctx.catalog.card_kind(*c).is_sha_like())
+            .expect("loop head checked sha presence");
+        ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+            card: sha,
+            player: self.owner,
+            targets: vec![target],
+            nature: match ctx.catalog.card_kind(sha) {
+                CardKind::FireSha => crate::event::DamageNature::Fire,
+                CardKind::LeiSha => crate::event::DamageNature::Thunder,
+                _ => crate::event::DamageNature::Normal,
+            },
+            use_as: None,
+            cancelled: false,
+        }));
+        Flow::Yield
+    }
 }
 
 impl crate::catalog::SkillMachine for HostMachine {
@@ -7371,6 +7510,141 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             }
+            // 神秘果窗口（卡牌面窗口机批）：确认后——发射载体神秘果用牌
+            //（提交段自取+Shenmiguo 臂弃置=上游 useCard 同簿记），随后
+            // 原体自弃堆上桌面重发射（登记差异：上游凭空复制同花色点数
+            // 新实体，原生原体复用——弃堆在再结算窗口内少一张观测差）。
+            // 确认即置位每阶段一次旗（上游 shenmiguo2 临时技：再结算牌
+            // 的用牌后窗口被同一旗挡住=循环守卫）。
+            HostBehavior::SwdShenmiguoWindow => match self.stage {
+                HostStage::Act => {
+                    let (x_card, x_targets) = {
+                        let u = ctx.current_card_use().expect("card use frame");
+                        (u.card, u.targets.clone())
+                    };
+                    let Some(fruit) = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .find(|c| ctx.catalog.card_kind(*c) == CardKind::Shenmiguo)
+                    else {
+                        return Flow::Done;
+                    };
+                    self.card = Some(fruit);
+                    self.cards = vec![x_card];
+                    self.targets = x_targets;
+                    ctx.core.turn.shenmiguo_used = true;
+                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                        card: fruit,
+                        player: self.owner,
+                        targets: Vec::new(),
+                        nature: crate::event::DamageNature::Normal,
+                        use_as: None,
+                        cancelled: false,
+                    }));
+                    self.stage = HostStage::ShenmiguoRestage;
+                    Flow::Yield
+                }
+                HostStage::ShenmiguoRestage => {
+                    let Some(x_card) = self.cards.first().copied() else {
+                        return Flow::Done;
+                    };
+                    // 原体自弃堆上桌面（处理区）；不在弃堆（特殊流转）则放弃
+                    if ctx.core.discard.contains(&x_card) {
+                        ctx.core.discard.retain(|c| *c != x_card);
+                        ctx.core.table.push(x_card);
+                    } else if !ctx.core.table.contains(&x_card) {
+                        return Flow::Done;
+                    }
+                    let kind = ctx.catalog.card_kind(x_card);
+                    let nature = match kind {
+                        CardKind::FireSha => crate::event::DamageNature::Fire,
+                        CardKind::LeiSha => crate::event::DamageNature::Thunder,
+                        _ => crate::event::DamageNature::Normal,
+                    };
+                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                        card: x_card,
+                        player: self.owner,
+                        targets: self.targets.clone(),
+                        nature,
+                        use_as: None,
+                        cancelled: false,
+                    }));
+                    self.cards.clear();
+                    self.targets.clear();
+                    self.card = None;
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 鼠槌（equip5 窗口机批）：凤略 Yield 循环同型——选攻击范围
+            // 内目标（sha_range_free 链同 engine 出杀口径）→ 至多 3 张
+            // 逐张自动用出（每次重扫手中首张杀=上游 getCards("h")[0]
+            // 确定性口径）；终局若链上任一杀造成伤害（commit_damage 钩
+            // 置位 shuchui_hit）则摸 1。cards 复用为剩余次数计数。
+            HostBehavior::SwdShuchuiUse => match self.stage {
+                // 首步：目标询问（挂起前 stage 前移到消费阶段——active_ask
+                // 铁律：快照 stage=挂起期间等待的下一阶段）
+                HostStage::Act => {
+                    let sha_range_free = ctx
+                        .catalog
+                        .skill_by_name("jiying")
+                        .map(|d| ctx.core.has_skill(self.owner, d))
+                        .unwrap_or(false);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && (sha_range_free
+                                    || ctx.core.computed_distance(
+                                        ctx.catalog,
+                                        self.owner,
+                                        *p,
+                                    ) <= ctx.core.attack_range(ctx.catalog, self.owner))
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::ShuchuiTarget;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "shuchui_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::ShuchuiTarget => {
+                    if let Some(ChoiceOption::Player(t)) = ctx.answer().first().cloned() {
+                        if t != self.owner && ctx.core.player(t).alive {
+                            self.target = Some(t);
+                        }
+                    }
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    // 链头武装：伤害钩置位窗开（commit_damage 消费）
+                    ctx.core.turn.shuchui_armed = true;
+                    ctx.core.turn.shuchui_hit = false;
+                    self.cards = vec![0, 0, 0];
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    self.shuchui_loop(ctx, t)
+                }
+                HostStage::ShuchuiTargetLoop => self.shuchui_loop(
+                    ctx,
+                    self.target.expect("loop stage implies target"),
+                ),
+                _ => Flow::Done,
+            },
             // 玉蝉换形: 手牌中每张玉蝉实体轮换为八卦序下一 kind 的实体
             //（牌堆/弃堆确定性发现首张；登记差异上游随机+init 原地变形）
             HostBehavior::SwdYuchanSwap => {
@@ -16739,11 +17013,8 @@ HostBehavior::XianjianLingyu => match self.stage {
                         .hand
                         .iter()
                         .copied()
-                        .filter(|c| {
-                            ctx.catalog.cards[*c as usize].kind
-                                != CardKind::Tao // 摸 3 的牌含刚入手牌末——全部参与去重即可
-                                || true
-                        })
+                        // 摸 3 的牌含刚入手牌末——全部参与去重（原恒真
+                        // 过滤器由 clippy logic_bug 拦截删除，语义不变）
                         .filter(|c| {
                             let k =
                                 yangpijuan_class(ctx.catalog.card_kind(*c));
@@ -19725,7 +19996,8 @@ pub fn host_skill_def(
         HostBehavior::SwdShentouEquipSkill
         | HostBehavior::SwdYufuluEquipSkill
         | HostBehavior::SwdLangeguaiyiEquipSkill
-        | HostBehavior::MtgYixialanRecast => {
+        | HostBehavior::MtgYixialanRecast
+        | HostBehavior::SwdShuchuiUse => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
@@ -19945,6 +20217,10 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
         CardKind::Xuanwuzhihuang => &[HostSkillDecl { name: "xuanwuzhihuang", behavior: HostBehavior::SwdXuanwuzhihuangHeld }],
         CardKind::Huanglinzhicong => &[HostSkillDecl { name: "huanglinzhicong", behavior: HostBehavior::SwdHuanglinzhicongHeld }],
         CardKind::Shencaojie => &[HostSkillDecl { name: "shencaojie", behavior: HostBehavior::SwdShencaojieGuard }],
+        CardKind::Shenmiguo => &[HostSkillDecl { name: "shenmiguo_window", behavior: HostBehavior::SwdShenmiguoWindow }],
+        CardKind::Shuchui => &[
+            HostSkillDecl { name: "shuchui", behavior: HostBehavior::SwdShuchuiUse },
+        ],
         CardKind::Yuchanqian
         | CardKind::Yuchankun
         | CardKind::Yuchanzhen

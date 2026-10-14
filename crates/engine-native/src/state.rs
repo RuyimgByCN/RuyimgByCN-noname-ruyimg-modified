@@ -336,6 +336,14 @@ pub struct TurnState {
     pub mufeng_used_basic: bool,
     /// 望尘（swd 古月圣，批㉑）：弃牌阶段弃置过基本牌。
     pub wangchen_discard_basic: bool,
+    /// 神秘果（swd 卡牌面窗口机批）：本阶段已再结算过（上游 shenmiguo2
+    /// 临时技等价——限一次与循环守卫共用；换回合清）。
+    pub shenmiguo_used: bool,
+    /// 鼠槌（swd 卡牌面窗口机批）：多杀循环链武装中（commit_damage 钩
+    /// 消费；机器收束清，换回合清）。
+    pub shuchui_armed: bool,
+    /// 鼠槌：链上任一杀已造成真实伤害（终局摸 1 判据）。
+    pub shuchui_hit: bool,
     /// mtg 龙颅山峰（规则 v100）：本回合已使用地（上游 land_used 临时技
     /// 同口径——仅当前回合玩家可出牌，故回合级布尔等价）。
     pub land_used: bool,

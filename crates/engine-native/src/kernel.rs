@@ -58,6 +58,17 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             }
         }
     }
+    // 鼠槌（swd 卡牌面窗口机批）：多杀循环链武装中，任一杀造成真实伤害
+    // → 置位（上游 shuchui2 charlotte source damageEnd filter card=sha
+    // 同口径；武装=当前回合玩家=链主）
+    if ctx.core.turn.shuchui_armed
+        && d.source == Some(ctx.core.turn.current)
+        && d.card
+            .map(|c| ctx.catalog.card_kind(c).is_sha_like())
+            .unwrap_or(false)
+    {
+        ctx.core.turn.shuchui_hit = true;
+    }
     // 绝情（Boss 张春华，规则 v260；一将包旧绝情）：锁定——你造成的伤害
     // 改为目标失去等量体力（上游 source damageBefore cancel+loseHp(num)
     // 同口径；num=增幅前原始值=d.amount；取消后伤害事件不再结算=受击/
@@ -1139,7 +1150,17 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
         // 取消痕迹已在猴子机器的 CardsGiven/CardsDiscarded 中观测。
         return;
     }
-    ctx.take_hand_card(u.player, u.card);
+    if ctx.core.player(u.player).hand.contains(&u.card) {
+        ctx.take_hand_card(u.player, u.card);
+    } else if ctx.core.table.contains(&u.card) {
+        // 神秘果再结算（swd 卡牌面窗口机批）：原体自弃堆直上桌面（处理
+        // 区暂存）后重发射——提交段自桌面取，不经手牌（AfterTriggers 窗
+        // 口内手牌数无扰动）；随后按牌种臂照常置桌面/弃置。
+        ctx.core.table.retain(|c| *c != u.card);
+    } else {
+        // 保持原 panic 语义（调用方先验证）。
+        ctx.take_hand_card(u.player, u.card);
+    }
     // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游
     // getHistory("useCard") 同口径——未被取消的使用全计）
     ctx.core.player_mut(u.player).total_used += 1;
@@ -1405,6 +1426,12 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
             ctx.to_discard(u.card);
             ctx.core.turn.jiu_used = true;
             ctx.core.turn.jiu_active = true;
+        }
+        CardKind::Shenmiguo => {
+            // 神秘果（swd 卡牌面窗口机批）：载体牌直接弃置（不置桌面）
+            //——再结算由 CardUsed after 窗口行为发射（mufeng 等基本牌
+            // 计数已在前置段按真实牌种覆盖）。
+            ctx.to_discard(u.card);
         }
         // Le/Bing/ShanDian：先置桌面，经无懈窗口（使用时开窗，对齐旧线）
         // 由 PlaceDelayedMachine 放入判定区或弃置。
@@ -3671,6 +3698,10 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.turn.skip_play_phase = false;
     // 还侠跟踪清残留（正常流程已被阶段末回收消费）
     ctx.core.turn.huanxia_track.clear();
+    // 神秘果/鼠槌窗口旗清残留（正常流程已被窗口机消费；防御换回合残留）
+    ctx.core.turn.shenmiguo_used = false;
+    ctx.core.turn.shuchui_armed = false;
+    ctx.core.turn.shuchui_hit = false;
     // Boss 模式（P2/N08 模式入口批三-a，规则 v82）：死亡座位不跳过——
     // 轮到其回合时执行重整 tick（上游 bossPhaseLoop）：计数 +1、hp<上限
     // 则 +1（否则手牌 <4 摸 1），计数达阈值复活；连续死亡座位逐个 tick
@@ -3904,6 +3935,8 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 lueying_declined: false,
                 asking_fuchou: false,
                 fuchou_card: None,
+                asking_sadeng: false,
+                asking_sadeng_shan: false,
                 extra_targets: extra,
                 hujia_queue: None,
                 hujia_holder: None,
@@ -5502,6 +5535,10 @@ pub struct ShaResolveMachine {
     asking_fuchou: bool,
     /// 复仇：目标所选取消牌（取消结算：杀回来源手、牌归来源、标记）。
     fuchou_card: Option<crate::ids::CardId>,
+    /// 萨登荆环（swd 卡牌面窗口机批）：被闪后判定确认询问挂起中。
+    asking_sadeng: bool,
+    /// 萨登荆环：目标额外出闪询问挂起中。
+    asking_sadeng_shan: bool,
 }
 
 impl ShaResolveMachine {
@@ -5540,6 +5577,8 @@ impl ShaResolveMachine {
         lueying_declined: bool,
         asking_fuchou: bool,
         fuchou_card: Option<crate::ids::CardId>,
+        asking_sadeng: bool,
+        asking_sadeng_shan: bool,
     ) -> Self {
         Self {
             card,
@@ -5575,6 +5614,8 @@ impl ShaResolveMachine {
             lueying_declined,
             asking_fuchou,
             fuchou_card,
+            asking_sadeng,
+            asking_sadeng_shan,
 
         }
     }
@@ -5635,6 +5676,41 @@ impl ShaResolveMachine {
     }
 
     /// 结算杀伤害（裸衣/酒/凶兽加成）并推进目标/弃置杀本体。
+    /// 萨登荆环命中改写后的伤害续入（与正常命中路径同口径：寒冰/麒麟
+    /// 窗先开，无窗则直接结算伤害）。
+    fn sadeng_continue_to_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.hanbing_can_fire(ctx) {
+            self.asking_hanbing = true;
+            return Flow::WaitChoice {
+                observer: self.source,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::Confirm,
+                    prompt: "hanbing_prevent_confirm",
+                    options: vec![ChoiceOption::Confirm],
+                    min: 0,
+                    max: 1,
+                    allow_cancel: true,
+                },
+            };
+        }
+        let horses = self.qilin_horses(ctx);
+        if !horses.is_empty() {
+            self.asking_qilin = true;
+            return Flow::WaitChoice {
+                observer: self.source,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::SelectCards,
+                    prompt: "qilin_discard_horse",
+                    options: horses,
+                    min: 0,
+                    max: 1,
+                    allow_cancel: true,
+                },
+            };
+        }
+        self.emit_sha_damage(ctx)
+    }
+
     fn emit_sha_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if ctx.core.player(self.target).alive {
             ctx.emit(EventData::Damage(damage_data_with(
@@ -5820,6 +5896,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             lueying_declined: self.lueying_declined,
             asking_fuchou: self.asking_fuchou,
             fuchou_card: self.fuchou_card.map(|c| c as u32),
+            asking_sadeng: self.asking_sadeng,
+            asking_sadeng_shan: self.asking_sadeng_shan,
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -6125,6 +6203,89 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
             }
             // 放弃：当前目标按被闪结算（无伤）→ 推进队列/结束。
+            return self.advance_target(ctx);
+        }
+        // 萨登荆环（swd 卡牌面窗口机批）：被闪后判定确认恢复——确定性判
+        // 定（内联口径同铁骑，登记差异：无鬼道改判窗）；红色→目标额外
+        // 出闪询问，未打出则本杀改为命中（上游 shaMiss→judge→shaHit 改
+        // 写同口径）；确认放弃或判定黑→被闪结算维持。
+        if self.asking_sadeng {
+            self.asking_sadeng = false;
+            let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
+            if confirmed && ctx.core.player(self.target).alive {
+                let judged = ctx.draw_judge_card();
+                let red = matches!(
+                    ctx.catalog.cards[judged as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                );
+                ctx.to_discard(judged);
+                if red {
+                    let longdan = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::LONG_DAN)
+                        .map(|d| ctx.core.has_skill(self.target, d))
+                        .unwrap_or(false);
+                    let qingguo = ctx
+                        .catalog
+                        .skill_by_name(crate::content::standard::QING_GUO)
+                        .map(|d| ctx.core.has_skill(self.target, d))
+                        .unwrap_or(false);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.target)
+                        .hand
+                        .iter()
+                        .filter(|c| {
+                            let kind = ctx.catalog.card_kind(**c);
+                            let black = matches!(
+                                ctx.catalog.cards[**c as usize].suit,
+                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                            );
+                            kind == CardKind::Shan
+                                || (longdan && kind.is_sha_like())
+                                || (qingguo && black)
+                        })
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if !options.is_empty() {
+                        self.asking_sadeng_shan = true;
+                        return Flow::WaitChoice {
+                            observer: self.target,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: "sadengjinhuan_extra_shan",
+                                options,
+                                min: 0,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
+                    // 无闪可打：改为命中（照常走寒冰/麒麟窗）
+                    return self.sadeng_continue_to_damage(ctx);
+                }
+            }
+            // 未确认/判定黑/目标已死：被闪结算维持 → 推进
+            return self.advance_target(ctx);
+        }
+        // 萨登荆环：额外出闪恢复——打出则本杀仍被闪避；未打出则改为
+        // 命中（照常走寒冰/麒麟窗）。
+        if self.asking_sadeng_shan {
+            self.asking_sadeng_shan = false;
+            if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
+                if ctx.core.player(self.target).hand.contains(&shan) {
+                    ctx.discard_from_hand(self.target, shan);
+                    ctx.emit(EventData::CardResponded {
+                        card: shan,
+                        player: self.target,
+                    });
+                    return self.advance_target(ctx);
+                }
+            }
+            if ctx.core.player(self.target).alive {
+                return self.sadeng_continue_to_damage(ctx);
+            }
             return self.advance_target(ctx);
         }
         // 雌雄双股剑（批③-b 第八把；逐技对照批一 v75 消除首张差异）：
@@ -6965,6 +7126,32 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         },
                     };
                 }
+            }
+            // 萨登荆环（swd 卡牌面窗口机批）：被闪后可选判定窗（青龙
+            // →贯石斧→荆环确定性次序，登记差异：上游同点触发技按
+            // 目标序）。三窗并发时青龙先改杀重启、贯石斧先强伤。
+            let has_sadeng = ctx
+                .core
+                .player(self.source)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Sadengjinhuan);
+            if has_sadeng
+                && ctx.core.player(self.source).alive
+                && !self.asking_sadeng
+            {
+                self.asking_sadeng = true;
+                return Flow::WaitChoice {
+                    observer: self.source,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::Confirm,
+                        prompt: "sadengjinhuan_judge_confirm",
+                        options: vec![ChoiceOption::Confirm],
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
             }
         } else if ctx.core.player(self.target).alive {
             if self.hanbing_can_fire(ctx) {
@@ -8196,6 +8383,11 @@ pub struct JudgementProgress {
     finalized: bool,
     /// 判定牌是否仍由机器持有（未弃置、未进入手牌）。
     judge_held: bool,
+    /// 昊天塔（swd 卡牌面窗口机批）：插窗持有者（Some = 等待其从两张
+    /// 候选强制选一为判定结果；改判/天妒窗随插窗跳过）。
+    haotian_holder: Option<PlayerId>,
+    /// 昊天塔：未被选中的候选牌（选中另一张后弃置）。
+    haotian_other: Option<crate::ids::CardId>,
 }
 
 impl Clone for JudgePhaseMachine {
@@ -8230,6 +8422,8 @@ impl JudgementProgress {
             in_rewrite: s.in_rewrite,
             finalized: s.finalized,
             judge_held: s.judge_held,
+            haotian_holder: s.haotian_holder,
+            haotian_other: s.haotian_other.map(|c| c as crate::ids::CardId),
         }
     }
 }
@@ -8254,6 +8448,8 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     in_rewrite: c.in_rewrite,
                     finalized: c.finalized,
                     judge_held: c.judge_held,
+                    haotian_holder: c.haotian_holder,
+                    haotian_other: c.haotian_other.map(|x| x as u32),
                 })
             }),
         }
@@ -8284,6 +8480,36 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
 
             // 当前判定的进行态
             if let Some(cur) = &mut self.current {
+                // 昊天塔（swd 卡牌面窗口机批）：插窗应答消费——强制选一
+                // 张候选为判定结果，未选中的弃置。锁定技无取消（上游
+                // chooseCardButton(true) 同口径）；登记差异：多持有者仅
+                // 座序首位开窗（上游逐人触发 chaos 未定义时序）。
+                if cur.haotian_holder.is_some() && cur.haotian_other.is_some() {
+                    let holder = cur.haotian_holder.take().expect("checked");
+                    let other = cur.haotian_other.take().expect("checked");
+                    let picked = match ctx.answer().first().copied() {
+                        Some(ChoiceOption::Card(c)) => Some(c),
+                        _ => None,
+                    };
+                    match picked {
+                        // 选中另一候选：判定牌换牌，原判定牌弃置
+                        Some(c) if c != cur.judge_card => {
+                            let old = cur.judge_card;
+                            cur.judge_card = c;
+                            ctx.to_discard(old);
+                            ctx.log(LogEvent::JudgementRewritten {
+                                player: holder,
+                                card: c,
+                                replaced: old,
+                            });
+                        }
+                        // 选中原判定牌：候选弃置
+                        Some(_) => ctx.to_discard(other),
+                        // 防御（强制选一不应出现）：候选弃置
+                        None => ctx.to_discard(other),
+                    }
+                    continue;
+                }
                 if cur.in_rewrite {
                     // 应答消费：当前改判者出黑色手牌替换或放弃
                     if cur.asked {
@@ -8475,6 +8701,64 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 player: self.owner,
                 card: judge_card,
             });
+            // 昊天塔（swd 卡牌面窗口机批，equip5）：任意角色判定前，持有
+            // 者观看牌堆顶两张、强制选一张直接作为判定结果（锁定技无取
+            // 消；上游 trigger.cancel 手动定结果=改判/天妒窗一并绕过，
+            // 原生跳过改判/天妒队列登记差异同口径；次候选弃置）。
+            let haotian_holder = ctx
+                .core
+                .seat_order_from(self.owner)
+                .into_iter()
+                .find(|p| {
+                    ctx.core.player(*p).alive
+                        && ctx
+                            .core
+                            .player(*p)
+                            .equips
+                            .iter()
+                            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Haotianta)
+                });
+            if let Some(h) = haotian_holder {
+                // 次候选=牌堆顶第二张（draw_judge_card 已取顶张；堆空则
+                // 洗弃堆，堆弃双空则不开窗）
+                if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                    if ctx.core.deck.is_empty() {
+                        let mut cards = std::mem::take(&mut ctx.core.discard);
+                        ctx.core.rng.shuffle(&mut cards);
+                        ctx.core.deck = cards;
+                        ctx.log(LogEvent::DeckReshuffled);
+                    }
+                    let other = ctx
+                        .core
+                        .deck
+                        .pop()
+                        .expect("judge candidate: deck or discard non-empty");
+                    self.current = Some(JudgementProgress {
+                        trick,
+                        judge_card,
+                        rewriters: Vec::new(),
+                        asked: false,
+                        tian_du: Vec::new(),
+                        gained: false,
+                        in_rewrite: false,
+                        finalized: false,
+                        judge_held: true,
+                        haotian_holder: Some(h),
+                        haotian_other: Some(other),
+                    });
+                    return Flow::WaitChoice {
+                        observer: h,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "haotianta_pick",
+                            options: vec![ChoiceOption::Card(judge_card), ChoiceOption::Card(other)],
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    };
+                }
+            }
             let gui_dao = ctx.catalog.skill_by_name(crate::content::standard::GUI_DAO);
             let gui_cai = ctx.catalog.skill_by_name(crate::content::standard::GUI_CAI);
             let tian_du = ctx.catalog.skill_by_name(crate::content::standard::TIAN_DU);
@@ -8515,6 +8799,8 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 in_rewrite: true,
                 finalized: false,
                 judge_held: true,
+                haotian_holder: None,
+                haotian_other: None,
             });
         }
     }

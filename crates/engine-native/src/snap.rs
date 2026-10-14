@@ -189,6 +189,10 @@ pub struct JudgementProgressSnap {
     pub finalized: bool,
     /// 判定牌是否仍由机器持有。
     pub judge_held: bool,
+    /// 昊天塔（swd 卡牌面窗口机批）：插窗持有者（Some=等待强选）。
+    pub haotian_holder: Option<PlayerId>,
+    /// 昊天塔：未选中的候选牌（选中另一张后弃置）。
+    pub haotian_other: Option<u32>,
 }
 
 // ---------------------------------------------------------------------------
@@ -270,6 +274,9 @@ pub enum MachineSnapshot {
         lueying_declined: bool,
         asking_fuchou: bool,
         fuchou_card: Option<u32>,
+        /// 萨登荆环（swd 卡牌面窗口机批）：被闪后判定确认/额外出闪询问。
+        asking_sadeng: bool,
+        asking_sadeng_shan: bool,
     },
     /// 丈八蛇矛（批③-b 第七把）：两张手牌当杀（牌池 + 阶段）。
     Zhangba {
@@ -4153,6 +4160,8 @@ impl MachineSnapshot {
                 lueying_declined,
                 asking_fuchou,
                 fuchou_card,
+                asking_sadeng,
+                asking_sadeng_shan,
             } => Ok(Box::new(crate::kernel::ShaResolveMachine::new(
                 *card,
                 *source,
@@ -4187,6 +4196,8 @@ impl MachineSnapshot {
                 *lueying_declined,
                 *asking_fuchou,
                 fuchou_card.map(|c| c as u32),
+                *asking_sadeng,
+                *asking_sadeng_shan,
             ))),
             MachineSnapshot::DyingSave {
                 dying,

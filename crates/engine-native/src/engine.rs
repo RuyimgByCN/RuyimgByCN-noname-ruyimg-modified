@@ -356,6 +356,9 @@ impl Engine {
                 sha_used_play_phase: false,
                 mufeng_used_basic: false,
                 wangchen_discard_basic: false,
+                shenmiguo_used: false,
+                shuchui_armed: false,
+                shuchui_hit: false,
                     rende_given: 0,
                     jiu_used: false,
                 mujiaren_used: false,
@@ -670,6 +673,7 @@ impl Engine {
                                 | crate::content::host::HostBehavior::SwdHuanglinzhicongHeld
                                 | crate::content::host::HostBehavior::SwdShencaojieGuard
                                 | crate::content::host::HostBehavior::SwdYuchanSwap
+                                | crate::content::host::HostBehavior::SwdShenmiguoWindow
                         )
                     )
                 })
@@ -4689,6 +4693,9 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u8(&mut h, c.turn.sha_used_play_phase as u8);
     push_u8(&mut h, c.turn.mufeng_used_basic as u8);
     push_u8(&mut h, c.turn.wangchen_discard_basic as u8);
+    push_u8(&mut h, c.turn.shenmiguo_used as u8);
+    push_u8(&mut h, c.turn.shuchui_armed as u8);
+    push_u8(&mut h, c.turn.shuchui_hit as u8);
     push_u8(&mut h, c.turn.rende_given);
     push_u8(&mut h, c.turn.jiu_used as u8);
     // 木甲人限次（规则 v190）
@@ -4913,7 +4920,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
 fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
     use crate::snap::MachineSnapshot as M;
     match s {
-        M::Sha { card, source, target, nature, asked, armor_judged, dodges_used, tieji_red, liuli_done, liuli_stage, liuli_card, hujia_queue, hujia_holder, jiu_bonus, asking_qilin, qilin_horse, asking_hanbing, asking_fengxueren, asking_guanshi, guanshi_cards, asking_qinglong, asking_cixiong, cixiong_done, extra_targets, hanbing_pending, asking_xiandan, xiandan_done, xiandan_bonus, asking_lueying, lueying_victim, lueying_declined, asking_fuchou, fuchou_card } => {
+        M::Sha { card, source, target, nature, asked, armor_judged, dodges_used, tieji_red, liuli_done, liuli_stage, liuli_card, hujia_queue, hujia_holder, jiu_bonus, asking_qilin, qilin_horse, asking_hanbing, asking_fengxueren, asking_guanshi, guanshi_cards, asking_qinglong, asking_cixiong, cixiong_done, extra_targets, hanbing_pending, asking_xiandan, xiandan_done, xiandan_bonus, asking_lueying, lueying_victim, lueying_declined, asking_fuchou, fuchou_card, asking_sadeng, asking_sadeng_shan } => {
             push_u8(h, 1);
             push_u32(h, *card);
             push_u8(h, *source);
@@ -4997,6 +5004,8 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
                 Some(c) => push_u32(h, *c),
                 None => {}
             }
+            push_u8(h, *asking_sadeng as u8);
+            push_u8(h, *asking_sadeng_shan as u8);
         }
         M::Zhangba { owner, cards, stage } => {
             push_u8(h, 61);
@@ -5803,6 +5812,9 @@ mod tests {
                     sha_used_play_phase: false,
                     mufeng_used_basic: false,
                     wangchen_discard_basic: false,
+                    shenmiguo_used: false,
+                    shuchui_armed: false,
+                    shuchui_hit: false,
                     mengtai_draw_pending: false,
                     mengtai_use_pending: false,
                     rende_given: 0,
@@ -5860,7 +5872,7 @@ mod tests {
                         0, 0, 1, DamageNature::Normal, asked, armor_judged, 0, None,
                         false, 0, None, None, None, false, false, None, false, false,
                         false, Vec::new(), false, false, false, Vec::new(), 0, false, false, false,
-                        false, None, false, false, None,
+                        false, None, false, false, None, false, false,
                     )),
                 }],
                 ..Resolution::new(64)
@@ -5898,6 +5910,9 @@ mod tests {
                         sha_used_play_phase: false,
                         mufeng_used_basic: false,
                         wangchen_discard_basic: false,
+                        shenmiguo_used: false,
+                        shuchui_armed: false,
+                        shuchui_hit: false,
                         mengtai_draw_pending: false,
                         mengtai_use_pending: false,
                     rende_given: 0,

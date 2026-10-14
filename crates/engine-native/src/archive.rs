@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 74;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 75;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -776,6 +776,15 @@ fn enc_judgement_progress(w: &mut W, c: &JudgementProgressSnap) {
     w.boolean(c.in_rewrite);
     w.boolean(c.finalized);
     w.boolean(c.judge_held);
+    // v75（swd 卡牌面窗口机批）：昊天塔插窗两字段（尾部追加）
+    enc_opt_pid(w, &c.haotian_holder);
+    match c.haotian_other {
+        None => w.u8(0),
+        Some(x) => {
+            w.u8(1);
+            w.u32(x);
+        }
+    }
 }
 
 fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, ArchiveError> {
@@ -788,6 +797,13 @@ fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, Archiv
     let in_rewrite = r.boolean()?;
     let finalized = r.boolean()?;
     let judge_held = r.boolean()?;
+    // v75（swd 卡牌面窗口机批）：昊天塔插窗两字段（尾部追加）
+    let haotian_holder = dec_opt_pid(r)?;
+    let haotian_other = match r.u8()? {
+        0 => None,
+        1 => Some(r.u32()?),
+        _ => return Err(ArchiveError::UnknownCardKind(255)),
+    };
     Ok(JudgementProgressSnap {
         trick,
         judge_card,
@@ -798,6 +814,8 @@ fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, Archiv
         in_rewrite,
         finalized,
         judge_held,
+        haotian_holder,
+        haotian_other,
     })
 }
 
@@ -832,6 +850,8 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             asking_xiandan,
             xiandan_done,
             xiandan_bonus,
+            asking_sadeng,
+            asking_sadeng_shan,
             asking_lueying,
             lueying_victim,
             lueying_declined,
@@ -917,6 +937,9 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                     w.u32(*c);
                 }
             }
+            // v75（swd 卡牌面窗口机批）：萨登荆环两询问挂起旗（尾部追加）
+            w.boolean(*asking_sadeng);
+            w.boolean(*asking_sadeng_shan);
         }
         MachineSnapshot::Zhangba {
             owner,
@@ -1739,6 +1762,9 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let lueying_declined = r.boolean()?;
             let asking_fuchou = r.boolean()?;
             let fuchou_card = dec_opt_u32(r)?;
+            // v75（swd 卡牌面窗口机批）：萨登荆环两询问挂起旗（尾部追加）
+            let asking_sadeng = r.boolean()?;
+            let asking_sadeng_shan = r.boolean()?;
             MachineSnapshot::Sha {
                 card,
                 source,
@@ -1773,6 +1799,8 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 lueying_declined,
                 asking_fuchou,
                 fuchou_card,
+                asking_sadeng,
+                asking_sadeng_shan,
             }
         }
         1 => {
@@ -3038,6 +3066,10 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     w.boolean(t.sha_used_play_phase);
     w.boolean(t.mufeng_used_basic);
     w.boolean(t.wangchen_discard_basic);
+    // v75（swd 卡牌面窗口机批）：神秘果/鼠槌三旗（尾部追加）
+    w.boolean(t.shenmiguo_used);
+    w.boolean(t.shuchui_armed);
+    w.boolean(t.shuchui_hit);
     w.boolean(t.land_used);
     w.boolean(t.land_sha_used);
     w.u32(t.discard_phase_discarded);
@@ -3427,6 +3459,10 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let sha_used_play_phase = r.boolean()?;
     let mufeng_used_basic = r.boolean()?;
     let wangchen_discard_basic = r.boolean()?;
+    // v75（swd 卡牌面窗口机批）：神秘果/鼠槌三旗（尾部追加）
+    let shenmiguo_used = r.boolean()?;
+    let shuchui_armed = r.boolean()?;
+    let shuchui_hit = r.boolean()?;
     let land_used = r.boolean()?;
     let land_sha_used = r.boolean()?;
     let discard_phase_discarded = r.u32()?;
@@ -3568,6 +3604,9 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 sha_used_play_phase,
                 mufeng_used_basic,
                 wangchen_discard_basic,
+                shenmiguo_used,
+                shuchui_armed,
+                shuchui_hit,
                 land_used,
                 land_sha_used,
                 discard_phase_discarded,

@@ -329,6 +329,18 @@
       "rank": 1
     },
     {
+      "name": "swd_shenmiguo",
+      "kind": "shenmiguo",
+      "suit": "spade",
+      "rank": 2
+    },
+    {
+      "name": "swd_shenmiguo2",
+      "kind": "shenmiguo",
+      "suit": "heart",
+      "rank": 1
+    },
+    {
       "name": "swd_lianyaohu",
       "kind": "lianyaohu",
       "suit": "club",
@@ -473,28 +485,27 @@
       "kind": "shuchui",
       "suit": "club",
       "rank": 6,
-      "deferred_reason": "多杀循环机：依次至多 3 张杀对同目标+伤后标记+终局摸牌——需嵌套杀结算循环机，独立机批"
+      "equip_skills": [
+        "shuchui"
+      ]
     },
     {
       "name": "swd_sadengjinhuan",
       "kind": "sadengjinhuan",
       "suit": "club",
-      "rank": 13,
-      "deferred_reason": "杀被闪后判定改写+额外闪响应——需 ShaResolve 闪避点钩+响应改写，独立机批"
+      "rank": 13
     },
     {
       "name": "swd_haotianta",
       "kind": "haotianta",
       "suit": "diamond",
-      "rank": 13,
-      "deferred_reason": "任意角色判定前观看牌堆顶 2 选 1 为判定结果——需 JudgePhase 抽牌点插窗+快照字段，独立机批"
+      "rank": 13
     },
     {
       "name": "swd_yuruyi",
       "kind": "yuruyi",
       "suit": "heart",
-      "rank": 9,
-      "deferred_reason": "摸牌阶段以牌堆顶比较替换好牌（概率语义）——需 Draw 钩+价值比较面，独立机批"
+      "rank": 9
     },
     {
       "name": "swd_yuchanqian",
@@ -529,7 +540,7 @@
       "kind": "yuchankan",
       "suit": "spade",
       "rank": 5,
-      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 神秘果随神秘果窗口机批）"
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬"
     },
     {
       "name": "swd_yuchanli",
