@@ -323,7 +323,7 @@
         },
         {
           "name": "huanling",
-          "mapping": null
+          "mapping": "host:huanling"
         }
       ]
     },
@@ -335,7 +335,7 @@
       "skills": [
         {
           "name": "jiuchi",
-          "mapping": null
+          "mapping": "builtin:酒池"
         },
         {
           "name": "jufu",
@@ -355,7 +355,7 @@
         },
         {
           "name": "pingxu",
-          "mapping": null
+          "mapping": "host:pingxu"
         }
       ]
     },
@@ -383,7 +383,7 @@
       "skills": [
         {
           "name": "yicong",
-          "mapping": null
+          "mapping": "builtin:义从"
         },
         {
           "name": "poxing",

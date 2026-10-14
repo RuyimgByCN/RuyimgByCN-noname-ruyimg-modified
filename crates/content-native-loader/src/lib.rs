@@ -329,7 +329,7 @@ enum MappedSkill {
 
 /// 内置技能引用白名单：仅收**有原生实现**的标准技（护驾=kernel 主公技
 /// 臂、谦逊=乐不思蜀目标校验查询面）。悲歌本体未实现，不入册。
-const BUILTIN_SKILL_REFS: [&str; 2] = ["护驾", "谦逊"];
+const BUILTIN_SKILL_REFS: [&str; 4] = ["护驾", "谦逊", "义从", "酒池"];
 
 fn mapping_of(v: &Value, field: &'static str) -> Result<MappedSkill, BridgeError> {
     match opt_str(v, "mapping", field)? {

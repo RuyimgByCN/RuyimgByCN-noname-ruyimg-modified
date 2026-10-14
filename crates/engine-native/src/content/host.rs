@@ -759,6 +759,14 @@ pub enum HostBehavior {
     /// 工神（tag 277，批 22，黄雷 gongshen）：其他角色使用基本/锦囊牌
     /// 且有目标（可选）弃 1 张装备牌令其失效（cancelled 写回，筑城同款）。
     SwdGongshen,
+    /// 平恤（tag 278，批 23，秦叔宝 pingxu）：无触发面——全局距离字段技
+    /// （computed_distance 消费：场上有持技者时，攻击方无武器距离 -1、
+    /// 防守方无防具距离 +1；上游 mod globalFrom/globalTo 同口径）。
+    SwdPingxu,
+    /// 还灵（tag 279，批 23，轩辕剑侍 huanling）：自己阶段结束（可选）
+    /// 选一名其他角色，自己与其同时翻面（上游 phaseEnd chooseTarget
+    /// turnOver×2 同口径；原生 Phase begin:false 帧等价接入）。
+    SwdHuanling,
 }
 
 
@@ -820,6 +828,8 @@ impl HostBehavior {
             HostBehavior::SwdYulin => 275,
             HostBehavior::SwdNingshuang => 276,
             HostBehavior::SwdGongshen => 277,
+            HostBehavior::SwdPingxu => 278,
+            HostBehavior::SwdHuanling => 279,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1342,6 +1352,8 @@ impl HostBehavior {
             275 => HostBehavior::SwdYulin,
             276 => HostBehavior::SwdNingshuang,
             277 => HostBehavior::SwdGongshen,
+            278 => HostBehavior::SwdPingxu,
+            279 => HostBehavior::SwdHuanling,
             _ => return None,
         })
     }
@@ -1359,7 +1371,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 277] = [
+    pub const ALL: [HostBehavior; 279] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1637,6 +1649,8 @@ impl HostBehavior {
         HostBehavior::SwdYulin,
         HostBehavior::SwdNingshuang,
         HostBehavior::SwdGongshen,
+        HostBehavior::SwdPingxu,
+        HostBehavior::SwdHuanling,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1678,6 +1692,8 @@ impl HostBehavior {
             HostBehavior::SwdYulin => "host:yulin",
             HostBehavior::SwdNingshuang => "host:ningshuang",
             HostBehavior::SwdGongshen => "host:gongshen",
+            HostBehavior::SwdPingxu => "host:pingxu",
+            HostBehavior::SwdHuanling => "host:huanling",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2106,6 +2122,16 @@ impl HostBehavior {
             // 工神：其他角色用基本/锦囊牌（可选；上游 global useCard）
             HostBehavior::SwdGongshen => Some(TriggerMeta {
                 event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 平恤：无触发面（computed_distance 字段消费）
+            HostBehavior::SwdPingxu => None,
+            // 还灵：自己阶段结束（可选确认门；上游 player phaseEnd）
+            HostBehavior::SwdHuanling => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -4048,6 +4074,12 @@ impl SkillBehavior for HostSkillBehavior {
                         || ctx.state.player(owner).hand.iter().any(|c| {
                             ctx.catalog.card_kind(*c).equip_slot().is_some()
                         }))),
+            // 平恤：无触发面
+            HostBehavior::SwdPingxu => false,
+            // 还灵：自己任一阶段结束（上游 player phaseEnd 逐阶段均触发）
+            HostBehavior::SwdHuanling => matches!(event,
+                EventData::Phase { player, begin, .. }
+                if *player == owner && !*begin),
             // 凝霜：成为黑色牌的目标（使用者≠持有者、未「横置且翻面」、
             // 持有者手/装备区有黑牌）
             HostBehavior::SwdNingshuang => matches!(event,
@@ -5867,6 +5899,8 @@ impl crate::catalog::SkillMachine for HostMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
+            // 平恤：无效果步（computed_distance 字段消费）
+            HostBehavior::SwdPingxu => Flow::Done,
             // 分舵（习嫣 jiefen）：三段——选交牌目标（手>自己）→ 目标选
             // 手牌交出 → 自己选 1 张手牌交给手牌最少的其他存活角色（登
             // 记差异：上游 chooseCardTarget 同时选牌与目标，原生确定性
@@ -6509,6 +6543,61 @@ impl crate::catalog::SkillMachine for HostMachine {
                         // trigger.cancel 同口径；提交段按 cancelled 跳过）
                         ctx.core.table.retain(|x| *x != used);
                         ctx.core.player_mut(user).hand.push(used);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 还灵：Act 问选其他角色 → TargetChoice 自己与目标同时翻面
+            //（取消=不发动；上游 turnOver×2）
+            HostBehavior::SwdHuanling => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = (0..ctx.core.players.len())
+                        .filter(|&i| {
+                            i as PlayerId != self.owner
+                                && ctx.core.player(i as PlayerId).alive
+                        })
+                        .map(|i| ChoiceOption::Player(i as u8))
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "huanling_target",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let picked: Option<PlayerId> = ctx.answer().iter().find_map(
+                        |o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        },
+                    );
+                    let Some(t) = picked else {
+                        // 取消：双方都不翻
+                        return Flow::Done;
+                    };
+                    for p in [self.owner, t] {
+                        if ctx.core.player(p).alive {
+                            let flipped = {
+                                let pl = ctx.core.player_mut(p);
+                                pl.face_down = !pl.face_down;
+                                pl.face_down
+                            };
+                            ctx.emit(EventData::TurnOvered {
+                                player: p,
+                                face_down: flipped,
+                            });
+                        }
                     }
                     Flow::Done
                 }

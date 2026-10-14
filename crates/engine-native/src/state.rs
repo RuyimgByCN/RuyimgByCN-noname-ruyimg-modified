@@ -858,6 +858,33 @@ impl GameStateCore {
             .unwrap_or(false);
         minus += u32::from(diting_from);
         plus += u32::from(diting_to);
+        // 平恤（swd 秦叔宝，swd 武将面批 23）：全局距离字段技——场上有
+        // 任一存活持技者时，攻击方无武器则距离 -1、防守方无防具则距离
+        // +1（上游 pingxu mod globalFrom/globalTo 全局字段同口径）
+        let pingxu = catalog
+            .skill_by_name("pingxu")
+            .map(|d| {
+                self.skills
+                    .iter()
+                    .any(|((o, dd), i)| *dd == d && i.enabled && self.player(*o).alive)
+            })
+            .unwrap_or(false);
+        if pingxu {
+            let a_no_weapon = !self
+                .player(a)
+                .equips
+                .iter()
+                .any(|c| catalog.cards[*c as usize].kind.equip_slot()
+                    == Some(crate::catalog::EquipSlot::Weapon));
+            let b_no_armor = !self
+                .player(b)
+                .equips
+                .iter()
+                .any(|c| catalog.cards[*c as usize].kind.equip_slot()
+                    == Some(crate::catalog::EquipSlot::Armor));
+            minus += u32::from(a_no_weapon);
+            plus += u32::from(b_no_armor);
+        }
         // 抗yin2（U07 玩点论杀留赞，规则 v114）：回合内临时——持有者算
         // 到其他角色距离 -X（上游 kangyin2 mod globalFrom 同口径）
         if let Some((o, x)) = self.turn.kangyin2 {
