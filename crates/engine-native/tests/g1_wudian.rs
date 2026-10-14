@@ -216,7 +216,7 @@ fn g1_wudian_generals_and_siji_discard_draw() {
     let host_skills = out.host_skills;
     let unmapped_total = out.unmapped_skills;
     assert_eq!(generals.len(), 9, "玩点论杀九名武将全量入册（批 10 补西真夕红/造之仁君/杨仪）");
-    assert_eq!(unmapped_total, 8, "8 个技能登记暂缓（批 10 增复仇双技/良策/坚壁/仇渡/理断；存量夺启+佑赞）");
+    assert_eq!(unmapped_total, 7, "7 个技能登记暂缓（理断转正；余复仇双技/良策/坚壁/仇渡+存量夺启/佑赞）");
     let pack = ExtensionPack {
         def: ExtensionDef {
             name: "wudian-upstream-noname",
@@ -6363,7 +6363,6 @@ fn liumengli_changnian_death_bequest() {
     // 先走完濒死求桃链（仅 Pass 求桃询问）→ 死亡帧 → 长念遗言询问
     loop {
         let Some(c) = e.open_choice() else { break };
-        eprintln!("DBG ask prompt={} obs={}", c.spec.prompt, c.observer);
         if c.spec.prompt != "dying_save" {
             break; // 长念询问到达
         }
@@ -7734,7 +7733,6 @@ fn swd_zhiluxiaohu_random_enemy_virtual_sha() {
         let (cid, obs) = (c.id, c.observer);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
-    eprintln!("DBG zx hp1={} hp2={}", e.debug_hp(1), e.debug_hp(2));
     // 随机敌唯一候选链：seed 10065 下恰一名敌 -1（另一敌不动）
     let (h1, h2) = (e.debug_hp(1), e.debug_hp(2));
     assert!((h1 == 3 && h2 == 4) || (h1 == 4 && h2 == 3), "恰一名敌被虚拟杀 -1: ({h1},{h2})");
@@ -7894,7 +7892,6 @@ fn swd_gouhunluo_countdown_lose_hp_discard() {
         let _ = submit(&mut e, actor, GameAction::NextPhase);
     }
     while let Some(c) = e.open_choice() {
-        eprintln!("DBG ghl post-drain prompt={:?}", c.spec.prompt);
         let (cid, obs) = (c.id, c.observer);
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
@@ -8342,4 +8339,88 @@ fn advance_to_play(e: &mut Engine, player: u8) {
         }
     }
     panic!("200 步未到 p{player} 出牌阶段");
+}
+
+/// T12 玩点论杀批 12：理断（杨仪部分转正）——他人回合外获得装备到手
+/// （可选确认）：同栏已有装备则交首张手牌给持有者；否则直接装备该牌
+/// （登记差异：上游获得者自选，原生按同栏状态确定性分支；直装不走
+/// Equipped 帧防双 grant）。坚壁登记「目标排除面」缺口维持暂缓。
+#[test]
+fn wudian_generals_batch12_liduan_gain_equip() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "wudian")
+        .expect("wudian 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(61001, 4, &[&pack]).expect("建局");
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let yangyi = base + 8;
+    let m = e.catalog().general_meta(yangyi).expect("杨仪在目录");
+    assert_eq!(m.0, "杨仪");
+    assert_eq!(m.2, vec!["liduan"], "仇渡暂缓（依赖 deferred 卡）");
+
+    // 直装分支：p1 持理断；p0 回合中，p2 获得装备到手（同栏无装备）
+    e.debug_grant(1, "liduan");
+    advance_to_play(&mut e, 0);
+    let z = e.debug_place(2, "zhuge");
+    {
+        // 从 p2 手移到 p0 再 give（产生 CardsMoved from=0 to=2——wait，理断
+        // filter 要 from!=to 且 to 非当前回合玩家：当前回合=p0，to=p2 ✓
+        let core = e.state_core_mut();
+        core.players[2].hand.retain(|x| *x != z);
+        core.players[0].hand.push(z);
+    }
+    e.debug_give_hand_card(0, 2, z);
+    settle_optional_confirm(&mut e);
+    assert!(
+        e.state_core().players[2].equips.contains(&z),
+        "理断：直装分支——装备被装上"
+    );
+
+    // 交牌分支：p2 再获得一件同栏（武器）装备 → 交首张手牌给 p1
+    let z2 = e.debug_place(2, "hanbing");
+    {
+        let core = e.state_core_mut();
+        core.players[2].hand.retain(|x| *x != z2);
+        core.players[0].hand.push(z2);
+    }
+    // 给 p2 一张手牌作交牌面
+    let pay = e.debug_place(2, "tao");
+    let h1 = e.state_core().players[1].hand.len();
+    let out = e.debug_give_hand_card(0, 2, z2);
+    let _ = out;
+    settle_optional_confirm(&mut e);
+    assert!(
+        !e.state_core().players[2].equips.contains(&z2),
+        "理断：同栏已有装备不直装"
+    );
+    assert_eq!(
+        e.state_core().players[1].hand.len(),
+        h1 + 1,
+        "理断：交牌分支——p1 收 1 张手牌"
+    );
+    let _ = pay;
+}
+
+/// 可选确认门排空（首选项应答）。
+fn settle_optional_confirm(e: &mut Engine) {
+    for _ in 0..8 {
+        let Some(c) = e.open_choice() else { return };
+        let (cid, obs) = (c.id, c.observer);
+        if c.spec.options.is_empty() {
+            return;
+        }
+        let sel = vec![c.spec.options[0].clone()];
+        submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    }
 }

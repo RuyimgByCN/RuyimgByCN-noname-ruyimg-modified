@@ -99,6 +99,12 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             event_source: *killer,
             ..VmTriggerCtx::default()
         },
+        // 移牌：获得者为主玩家、首张为事件卡（理断触发面，玩点论杀批 12）
+        EventData::CardsMoved { cards, to, .. } => VmTriggerCtx {
+            event_player: Some(*to),
+            event_card: cards.first().copied(),
+            ..VmTriggerCtx::default()
+        },
         _ => VmTriggerCtx::default(),
     }
 }

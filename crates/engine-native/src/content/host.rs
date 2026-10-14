@@ -681,6 +681,10 @@ pub enum HostBehavior {
     /// 锦囊禁用（PlayCard 门查询，往事封禁先例；登记差异：上游四面
     /// cardEnabled/Usable/Respondable/Savable，原生仅使用面）。
     WudianJinyan,
+    /// 理断（tag 257，玩点论杀批 12）：他人回合外获得一张装备牌到手后
+    /// （可选确认）：同栏已有装备则其交 1 张手牌（首张，登记差异：上游
+    /// 玩家自选），否则直接装备该牌（不走 Equipped 帧防双 grant）。
+    WudianLiduan,
 }
 
 
@@ -718,8 +722,10 @@ impl HostBehavior {
             HostBehavior::YunchouYiesheng => 253,
             HostBehavior::YunchouDiychanyuan => 254,
             HostBehavior::WudianDiyjuntun => 255,
-            // Jinyan 用历史空洞 96（u8 值域已满——256 越界；from_tag 同步）
+            // Jinyan 用历史空洞 96（u8 值域已满——256 越界；from_tag 同步；
+            // 批 11 起 tag/from_tag 已扩 u16，新变体顺序编号）
             HostBehavior::WudianJinyan => 96,
+            HostBehavior::WudianLiduan => 257,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1221,6 +1227,7 @@ impl HostBehavior {
             254 => HostBehavior::YunchouDiychanyuan,
             255 => HostBehavior::WudianDiyjuntun,
             96 => HostBehavior::WudianJinyan,
+            257 => HostBehavior::WudianLiduan,
             _ => return None,
         })
     }
@@ -1228,7 +1235,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 256] = [
+    pub const ALL: [HostBehavior; 257] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1485,6 +1492,7 @@ impl HostBehavior {
         HostBehavior::YunchouDiychanyuan,
         HostBehavior::WudianDiyjuntun,
         HostBehavior::WudianJinyan,
+        HostBehavior::WudianLiduan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1506,6 +1514,7 @@ impl HostBehavior {
             HostBehavior::YunchouDiychanyuan => "host:diychanyuan",
             HostBehavior::WudianDiyjuntun => "host:wudian_diyjuntun",
             HostBehavior::WudianJinyan => "host:wudian_jinyan",
+            HostBehavior::WudianLiduan => "host:wudian_liduan",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1817,6 +1826,14 @@ impl HostBehavior {
             HostBehavior::YunchouYiesheng => None,
             HostBehavior::WudianDiyjuntun => None,
             HostBehavior::WudianJinyan => None,
+            // 理断：获得结算后（CardsMoved after）
+            HostBehavior::WudianLiduan => Some(TriggerMeta {
+                event: EventKind::CardsMoved,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
             // 蝉缘·变体：死亡结算后（来源减上限）
             HostBehavior::YunchouDiychanyuan => Some(TriggerMeta {
                 event: EventKind::Death,
@@ -3409,6 +3426,13 @@ impl HostSkillBehavior {
                 EventData::Death { killer: Some(k), .. } => (Some(*k), None),
                 _ => (None, None),
             },
+            // 理断：获得者+所获装备（第 9 触点：card 必须提取）
+            HostBehavior::WudianLiduan => match event {
+                EventData::CardsMoved { cards, to, .. } => {
+                    (Some(*to), cards.first().copied())
+                }
+                _ => (None, None),
+            },
             // 厉焰·链杀：用水攻的持有者（目标取 targets 首）
             HostBehavior::YunchouLuweiyan2 => (Some(owner), None),
             // 红莲：伤害来源（弃其红牌）
@@ -3531,7 +3555,15 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::YunchouJieyan => false,
             HostBehavior::YunchouYiesheng => false,
             HostBehavior::WudianDiyjuntun => false,
-            HostBehavior::WudianJinyan => false,
+            HostBehavior::WudianLiduan => matches!(event,
+                EventData::CardsMoved { cards, from, to }
+                if *to != owner
+                    && from != to
+                    && cards.len() == 1
+                    && ctx.state.player(*to).alive
+                    && ctx.state.turn.current != *to
+                    && ctx.state.player(*to).hand.contains(&cards[0])
+                    && ctx.catalog.card_kind(cards[0]).equip_slot().is_some()),
             // 蝉缘·变体：有来源的死亡
             HostBehavior::YunchouDiychanyuan => matches!(event,
                 EventData::Death { killer: Some(_), .. }),
@@ -5274,6 +5306,61 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::YunchouDiychanyuan => {
                 if let Some(src) = self.target {
                     ctx.lose_max_hp(src, 1);
+                }
+                Flow::Done
+            },
+            // 理断：同栏已有装备 → 其交首张手牌（登记差异：上游自选）；
+            // 否则直接装备该牌（不走 Equipped 帧防双 grant）
+            HostBehavior::WudianLiduan => {
+                let to = match self.target {
+                    Some(t) => t,
+                    None => return Flow::Done,
+                };
+                let Some(card) = self.card else { return Flow::Done };
+                let Some(slot) = ctx.catalog.card_kind(card).equip_slot() else {
+                    return Flow::Done;
+                };
+                let same_slot = ctx.core.player(to).equips.iter().any(|e| {
+                    ctx.catalog.card_kind(*e).equip_slot() == Some(slot)
+                });
+                if same_slot {
+                    // 交首张手牌给持有者
+                    if let Some(c) = ctx.core.player(to).hand.first().copied() {
+                        ctx.core.player_mut(to).hand.retain(|x| *x != c);
+                        ctx.core.player_mut(self.owner).hand.push(c);
+                        ctx.emit(EventData::CardsMoved {
+                            cards: vec![c],
+                            from: to,
+                            to: self.owner,
+                        });
+                        ctx.log(LogEvent::CardsGiven {
+                            from: to,
+                            to: self.owner,
+                            cards: vec![c],
+                        });
+                    }
+                } else {
+                    ctx.core.player_mut(to).hand.retain(|x| *x != card);
+                    let old_equip = ctx.core.player(to).equips.iter().copied().find(
+                        |e| ctx.catalog.card_kind(*e).equip_slot() == Some(slot),
+                    );
+                    if let Some(old) = old_equip {
+                        ctx.core.player_mut(to).equips.retain(|x| *x != old);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            to,
+                            old,
+                        );
+                        ctx.to_discard(old);
+                    }
+                    ctx.core.player_mut(to).equips.push(card);
+                    crate::kernel::grant_equip_skills(ctx, to, card);
+                    ctx.log(LogEvent::Equipped {
+                        player: to,
+                        card,
+                        replaced: old_equip,
+                    });
                 }
                 Flow::Done
             },
