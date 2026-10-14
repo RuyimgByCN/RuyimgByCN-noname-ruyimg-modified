@@ -710,6 +710,13 @@ pub enum HostBehavior {
     /// 登记差异：上游玩家自选）；收回奖励：弃牌花色=判定花色收回判定
     /// 牌、点数=判定点数收回所弃牌。
     YunchouBeige,
+    /// 铁壁（tag 264，swd 武将面批 18）：成为杀目标且与持有者距离 ≤1
+    /// 时弃 1 张黑牌给目标 +1 护甲（CardUsed 帧等价承载，登记差异：上游
+    /// target shaBefore 玩家自选弃牌，原生首张黑牌确定性）。
+    SwdTiebi,
+    /// 大同（tag 265，swd 武将面批 18）：任意角色任意阶段结束全场手牌
+    /// 极差 ≤1 则自己摸 2（frequent 自动无门）。
+    SwdDatong,
 }
 
 
@@ -757,6 +764,8 @@ impl HostBehavior {
             HostBehavior::WudianLiangceRemain => 261,
             HostBehavior::WudianGuihan => 262,
             HostBehavior::YunchouBeige => 263,
+            HostBehavior::SwdTiebi => 264,
+            HostBehavior::SwdDatong => 265,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1265,6 +1274,8 @@ impl HostBehavior {
             261 => HostBehavior::WudianLiangceRemain,
             262 => HostBehavior::WudianGuihan,
             263 => HostBehavior::YunchouBeige,
+            264 => HostBehavior::SwdTiebi,
+            265 => HostBehavior::SwdDatong,
             _ => return None,
         })
     }
@@ -1282,7 +1293,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 263] = [
+    pub const ALL: [HostBehavior; 265] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1546,6 +1557,8 @@ impl HostBehavior {
         HostBehavior::WudianLiangceRemain,
         HostBehavior::WudianGuihan,
         HostBehavior::YunchouBeige,
+        HostBehavior::SwdTiebi,
+        HostBehavior::SwdDatong,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1574,6 +1587,8 @@ impl HostBehavior {
             HostBehavior::WudianLiangceRemain => "host:liangce_remain",
             HostBehavior::WudianGuihan => "host:guihan",
             HostBehavior::YunchouBeige => "host:beige",
+            HostBehavior::SwdTiebi => "host:tiebi",
+            HostBehavior::SwdDatong => "host:datong",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1901,6 +1916,23 @@ impl HostBehavior {
             HostBehavior::WudianLiangceRemain => None,
             // 归汉：目录锚（limited 确认逻辑在 DyingSaveMachine 内联）
             HostBehavior::WudianGuihan => None,
+            // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
+            // target shaBefore，原生以 CardUsed+targets 等价承载）
+            HostBehavior::SwdTiebi => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 大同：任意玩家阶段结束（global；frequent 自动无门）
+            HostBehavior::SwdDatong => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -3512,6 +3544,13 @@ impl HostSkillBehavior {
             HostBehavior::WudianFuchou => (None, None),
             // 归汉：目录锚（无提取）
             HostBehavior::WudianGuihan => (None, None),
+            // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
+            HostBehavior::SwdTiebi => match event {
+                EventData::CardUsed(u) => (u.targets.first().copied(), None),
+                _ => (None, None),
+            },
+            // 大同：自己（摸 2）
+            HostBehavior::SwdDatong => (Some(owner), None),
             // 悲歌：targets=[来源, 受伤者]
             HostBehavior::YunchouBeige => match event {
                 EventData::Damage(d) => (
@@ -3668,6 +3707,46 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianFuchou => false,
             HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianGuihan => false,
+            // 铁壁：杀指定了与持有者距离 ≤1 的目标，持有者有黑牌
+            HostBehavior::SwdTiebi => {
+                let hit = matches!(event,
+                    EventData::CardUsed(u)
+                    if ctx.catalog.card_kind(u.card).is_sha_like()
+                        && u.targets.iter().any(|&t| {
+                            t != owner
+                                && ctx.state.player(t).alive
+                                && ctx.state.player(t).hujia == 0
+                                && ctx.state.seat_distance(t, owner) <= 1
+                        })
+                        && ctx.state.player(owner).hand.iter().any(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                            )
+                        }));
+                if std::env::var("TB_DBG").is_ok() {
+                    if let EventData::CardUsed(u) = event {
+                        eprintln!(
+                            "DBG tb owner={owner} kind={:?} targets={:?} hit={hit}",
+                            ctx.catalog.card_kind(u.card),
+                            u.targets
+                        );
+                    }
+                }
+                hit
+            },
+            // 大同：任意角色任意阶段结束（global phaseEnd）全场极差 ≤1
+            HostBehavior::SwdDatong => matches!(event,
+                EventData::Phase { begin: false, .. }
+                if {
+                    let counts: Vec<usize> = ctx.state.players.iter()
+                        .filter(|p| p.alive)
+                        .map(|p| p.hand.len())
+                        .collect();
+                    let max = counts.iter().copied().max().unwrap_or(0);
+                    let min = counts.iter().copied().min().unwrap_or(0);
+                    max - min <= 1
+                }),
             // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
             HostBehavior::YunchouBeige => matches!(event,
                 EventData::Damage(d)
@@ -4620,6 +4699,26 @@ impl SkillBehavior for HostSkillBehavior {
                 }))
             }
             // 悲歌：确认门由 optional 承担（activate 恒供机）
+            HostBehavior::SwdTiebi => Some(Box::new(HostMachine {
+                def_key: self.name.clone(),
+                behavior: self.behavior,
+                owner,
+                target: None,
+                card: None,
+                cards: Vec::new(),
+                targets: Vec::new(),
+                stage: HostStage::Act,
+            })),
+            HostBehavior::SwdDatong => Some(Box::new(HostMachine {
+                def_key: self.name.clone(),
+                behavior: self.behavior,
+                owner,
+                target: None,
+                card: None,
+                cards: Vec::new(),
+                targets: Vec::new(),
+                stage: HostStage::Act,
+            })),
             HostBehavior::YunchouBeige => {
                 Some(Box::new(HostMachine {
                     def_key: self.name.clone(),
@@ -5671,6 +5770,32 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 铁壁：弃首张黑牌 → 目标 +1 护甲（登记差异：上游玩家选弃牌）
+            HostBehavior::SwdTiebi => {
+                let Some(t) = self.target else { return Flow::Done };
+                let black = ctx.core.player(self.owner).hand.iter().copied().find(
+                    |c| {
+                        matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        )
+                    },
+                );
+                if let Some(c) = black {
+                    ctx.discard_from_hand(self.owner, c);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![c],
+                    });
+                    ctx.change_hujia(t, 1);
+                }
+                Flow::Done
+            }
+            // 大同：全场极差 ≤1 → 摸 2
+            HostBehavior::SwdDatong => {
+                ctx.draw_cards(self.owner, 2);
+                Flow::Done
+            }
             // 良策·余获：锁定查询面（五谷机器内联查询），无独立效果步
             HostBehavior::WudianLiangceRemain => Flow::Done,
             // 归汉：目录锚（无独立效果步）
@@ -16254,7 +16379,6 @@ HostBehavior::XianjianLingyu => match self.stage {
             // 加成/不可无懈额外面），阶段二队列存 self.cards。本体入弃堆。
             HostBehavior::SwdQixingzhenCard => match self.stage {
                 HostStage::Act => {
-                    eprintln!("DBG qx Act stage={:?} targets={:?} cards={:?}", self.stage, self.targets, self.cards);
                     if !self.targets.is_empty() {
                         let t = self.targets.remove(0);
                         self.target = Some(t);
@@ -16328,7 +16452,6 @@ HostBehavior::XianjianLingyu => match self.stage {
                     }
                 }
                 HostStage::SelectCard => {
-                    eprintln!("DBG qx SelectCard resume target={:?} answer={:?}", self.target, ctx.answer().first());
                     if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
                         let t = self.target.unwrap_or(self.owner);
                         if ctx.core.player(t).hand.contains(&c) {
@@ -16346,7 +16469,6 @@ HostBehavior::XianjianLingyu => match self.stage {
                     Flow::Yield
                 }
                 HostStage::TargetChoice => {
-                    eprintln!("DBG qx TargetChoice resume target={:?} answer={:?}", self.target, ctx.answer().first());
                     let t = self.target.unwrap_or(self.owner);
                     if matches!(ctx.answer().first(), Some(ChoiceOption::Card(_))) {
                         if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {

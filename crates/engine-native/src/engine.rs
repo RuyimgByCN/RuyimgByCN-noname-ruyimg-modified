@@ -4254,8 +4254,6 @@ fn apply_command(
             }
             let player = core.turn.current;
             // view-as 声明（蜜链藕红桃当桃等）：转化后按声明牌种结算
-            if std::env::var("LC_DBG").is_ok() {
-            }
             let use_as = if kind != catalog.card_kind(card) {
                 Some(kind)
             } else {
