@@ -167,6 +167,8 @@ pub fn bridge_vm_skill_decls(
             "owner_is_target_hand_empty" => P::OwnerHandEmpty,
             "owner_is_target_no_turn_damage" => P::OwnerNoTurnDamage,
             "owner_is_target_turn_damage" => P::OwnerTurnDamage,
+            "owner_is_target_turn_damage_at_least_three" => P::OwnerTurnDamageAtLeastThree,
+            "owner_is_target_hand_at_least_hp_other_alive" => P::OwnerHandAtLeastHpOtherAlive,
             other => {
                 // 具名组合 filter：engine 无承载（增量 6 严格面）——跳过
                 // 登记，不阻断同包其余 VM 技能装载。

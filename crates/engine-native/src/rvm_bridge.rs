@@ -109,6 +109,11 @@ pub enum VmFilterPolicy {
     OwnerHandAtLeastHp,
     /// DSL `owner_is_target_other_hand_nonempty`：任一其他存活角色手牌非空。
     OwnerOtherHandNonempty,
+    /// DSL `owner_is_target_turn_damage_at_least_three`：本回合受伤 ≥3。
+    OwnerTurnDamageAtLeastThree,
+    /// DSL `owner_is_target_hand_at_least_hp_other_alive`：手牌数 ≥ 体力
+    /// 且存在其他存活角色。
+    OwnerHandAtLeastHpOtherAlive,
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -155,6 +160,13 @@ impl SkillBehavior for VmSkillBehavior {
                     i as u8 != owner
                         && ctx.state.players[i].alive
                         && !ctx.state.players[i].hand.is_empty()
+                }),
+            VmFilterPolicy::OwnerTurnDamageAtLeastThree => {
+                holder_state(owner).turn_damage >= 3
+            }
+            VmFilterPolicy::OwnerHandAtLeastHpOtherAlive => (0..ctx.state.players.len())
+                .any(|i| {
+                    i as u8 != owner && ctx.state.players[i].alive
                 }),
         }
     }
