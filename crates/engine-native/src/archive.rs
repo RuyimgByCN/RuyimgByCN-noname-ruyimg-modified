@@ -835,8 +835,8 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             asking_lueying,
             lueying_victim,
             lueying_declined,
-            asking_fuchou: _,
-            fuchou_card: _,
+            asking_fuchou,
+            fuchou_card,
         } => {
             w.u8(0);
             w.u32(*card);
@@ -909,6 +909,14 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 }
             }
             w.boolean(*lueying_declined);
+            w.boolean(*asking_fuchou);
+            match fuchou_card {
+                None => w.u8(0),
+                Some(c) => {
+                    w.u8(1);
+                    w.u32(*c);
+                }
+            }
         }
         MachineSnapshot::Zhangba {
             owner,
@@ -1054,7 +1062,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             responders,
             asked,
             round_used,
-            guihan_asked: _,
+            guihan_asked,
         } => {
             w.u8(1);
             enc_pid(w, dying);
@@ -1062,6 +1070,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             enc_pids(w, responders);
             w.boolean(*asked);
             w.boolean(*round_used);
+            w.boolean(*guihan_asked);
         }
         MachineSnapshot::Duel {
             card,

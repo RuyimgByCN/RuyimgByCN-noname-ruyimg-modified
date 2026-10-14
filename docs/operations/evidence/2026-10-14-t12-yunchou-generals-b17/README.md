@@ -39,3 +39,14 @@
   （骰子+多步）。
 - 濒死确认注入模式泛化：后续濒死主动技（归汉类）循 DyingSaveMachine
   确认位直接承载。
+
+## 补遗（工作区核验发现 enc/dec 不对称并修复）
+
+批 17 初版的 DyingSave 快照改动存在 **archive enc/dec 不对称**（enc 臂
+`guihan_asked: _` 忽略写入、dec 读三字段）——各批定向与全量在无 DyingSave
+挂起存档往返路径下未暴露；全工作区核验由 a0_tag_registry 往返守护与
+native_kernel dying_save 恢复测试抓出（UnexpectedEof/BadTag choice_kind）。
+已修（enc 写入对齐 dec）。同时同步 lib 冻结键数（258→262，批 12–17 的
+Liduan/Jianbi/Fuchou/Fuchou2/LiangceRemain/Guihan 六行为）。全工作区
+**5325/0/0**（exit 0）。**流程强化**：涉及快照结构的批次清单增加「archive
+enc/dec 对称 + 全工作区核验」双项。
