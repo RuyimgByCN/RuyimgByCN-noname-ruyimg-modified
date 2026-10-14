@@ -466,6 +466,66 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd兰茵",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "xingdian",
+          "mapping": null
+        },
+        {
+          "name": "yulin",
+          "mapping": "host:yulin"
+        },
+        {
+          "name": "luomei",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd芝茵",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "xuehuang",
+          "mapping": null
+        },
+        {
+          "name": "ningshuang",
+          "mapping": "host:ningshuang"
+        },
+        {
+          "name": "zhuyu",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd黄雷",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "jilve",
+          "mapping": null
+        },
+        {
+          "name": "gongshen",
+          "mapping": "host:gongshen"
+        },
+        {
+          "name": "gaizao",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

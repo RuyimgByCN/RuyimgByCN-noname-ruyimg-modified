@@ -744,10 +744,21 @@ pub enum HostBehavior {
     /// 确认）目标摸 1、自己回 1（未满血门；登记差异：上游 check 为 AI
     /// 决策面）。
     SwdMojian,
-    /// 道法（tag 274，swd 武将面批 21，胡忠仙）：其他角色受到伤害后（可
+    /// 道法（tag 274，swd 武将面批 21，壶中仙）：其他角色受到伤害后（可
     /// 选确认）来源弃 1 张牌（登记差异：上游 chooseToDiscard 玩家自选，
     /// 原生首张确定性）。
     SwdDaofa,
+    /// 玉鳞（tag 275，批 22，兰茵 yulin）：受伤前置窗口（可选）弃 1 张
+    /// 装备牌（手/装备区）免此伤害。
+    SwdYulin,
+    /// 凝霜（tag 276，批 22，芝茵 ningshuang）：成为黑色牌目标（可选）
+    /// 弃 1 张黑色牌，对使用者阶梯：已翻面→失 1 体力；已横置→翻面；
+    /// 否则→横置（仅横置支自己摸 1，上游代码原样；登记差异：上游
+    /// useCardToBegin 帧等价接入 CardUsed）。
+    SwdNingshuang,
+    /// 工神（tag 277，批 22，黄雷 gongshen）：其他角色使用基本/锦囊牌
+    /// 且有目标（可选）弃 1 张装备牌令其失效（cancelled 写回，筑城同款）。
+    SwdGongshen,
 }
 
 
@@ -806,6 +817,9 @@ impl HostBehavior {
             HostBehavior::SwdLiuhong => 272,
             HostBehavior::SwdMojian => 273,
             HostBehavior::SwdDaofa => 274,
+            HostBehavior::SwdYulin => 275,
+            HostBehavior::SwdNingshuang => 276,
+            HostBehavior::SwdGongshen => 277,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1325,6 +1339,9 @@ impl HostBehavior {
             272 => HostBehavior::SwdLiuhong,
             273 => HostBehavior::SwdMojian,
             274 => HostBehavior::SwdDaofa,
+            275 => HostBehavior::SwdYulin,
+            276 => HostBehavior::SwdNingshuang,
+            277 => HostBehavior::SwdGongshen,
             _ => return None,
         })
     }
@@ -1342,7 +1359,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 274] = [
+    pub const ALL: [HostBehavior; 277] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1617,6 +1634,9 @@ impl HostBehavior {
         HostBehavior::SwdLiuhong,
         HostBehavior::SwdMojian,
         HostBehavior::SwdDaofa,
+        HostBehavior::SwdYulin,
+        HostBehavior::SwdNingshuang,
+        HostBehavior::SwdGongshen,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1655,6 +1675,9 @@ impl HostBehavior {
             HostBehavior::SwdLiuhong => "host:swdliuhong",
             HostBehavior::SwdMojian => "host:mojian",
             HostBehavior::SwdDaofa => "host:daofa",
+            HostBehavior::SwdYulin => "host:yulin",
+            HostBehavior::SwdNingshuang => "host:ningshuang",
+            HostBehavior::SwdGongshen => "host:gongshen",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2059,6 +2082,30 @@ impl HostBehavior {
             // 道法：其他角色受伤结算后（global；确认门=optional）
             HostBehavior::SwdDaofa => Some(TriggerMeta {
                 event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 玉鳞：受伤前置窗口（可选；弃装备牌免伤）
+            HostBehavior::SwdYulin => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 凝霜：成为黑牌目标（可选；上游 useCardToBegin）
+            HostBehavior::SwdNingshuang => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 工神：其他角色用基本/锦囊牌（可选；上游 global useCard）
+            HostBehavior::SwdGongshen => Some(TriggerMeta {
+                event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -3729,6 +3776,18 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (d.source, None),
                 _ => (None, None),
             },
+            // 玉鳞：无目标（弃自己装备牌 + 免伤）
+            HostBehavior::SwdYulin => (None, None),
+            // 凝霜：黑牌使用者（阶梯对象）
+            HostBehavior::SwdNingshuang => match event {
+                EventData::CardUsed(u) => (Some(u.player), None),
+                _ => (None, None),
+            },
+            // 工神：用牌者（取消其使用）
+            HostBehavior::SwdGongshen => match event {
+                EventData::CardUsed(u) => (Some(u.player), None),
+                _ => (None, None),
+            },
             // 悲歌：targets=[来源, 受伤者]
             HostBehavior::YunchouBeige => match event {
                 EventData::Damage(d) => (
@@ -3981,6 +4040,45 @@ impl SkillBehavior for HostSkillBehavior {
                     && d.source.is_some()
                     && d.source != Some(owner)
                     && !ctx.state.player(d.source.unwrap()).hand.is_empty()),
+            // 玉鳞：持有者即将受伤且手/装备区有装备牌
+            HostBehavior::SwdYulin => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner && !d.prevented && d.amount > 0
+                    && (!ctx.state.player(owner).equips.is_empty()
+                        || ctx.state.player(owner).hand.iter().any(|c| {
+                            ctx.catalog.card_kind(*c).equip_slot().is_some()
+                        }))),
+            // 凝霜：成为黑色牌的目标（使用者≠持有者、未「横置且翻面」、
+            // 持有者手/装备区有黑牌）
+            HostBehavior::SwdNingshuang => matches!(event,
+                EventData::CardUsed(u)
+                if u.player != owner
+                    && u.targets.contains(&owner)
+                    && !u.cancelled
+                    && matches!(ctx.catalog.cards[u.card as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club)
+                    && !(ctx.state.player(u.player).linked
+                        && ctx.state.player(u.player).face_down)
+                    && ctx.state.player(owner).hand.iter()
+                        .chain(ctx.state.player(owner).equips.iter())
+                        .any(|c| matches!(ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club))),
+            // 工神：其他角色使用基本/锦囊牌且有目标（持有者手/装备区有
+            // 装备牌；地/机关等异类种不计）
+            HostBehavior::SwdGongshen => matches!(event,
+                EventData::CardUsed(u)
+                if u.player != owner
+                    && !u.cancelled
+                    && !u.targets.is_empty()
+                    && {
+                        let k = ctx.catalog.card_kind(u.card);
+                        k.is_basic_kind()
+                            || (k.is_basic_trick_or_equip() && k.equip_slot().is_none())
+                    }
+                    && (!ctx.state.player(owner).equips.is_empty()
+                        || ctx.state.player(owner).hand.iter().any(|c| {
+                            ctx.catalog.card_kind(*c).equip_slot().is_some()
+                        }))),
             // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
             HostBehavior::YunchouBeige => matches!(event,
                 EventData::Damage(d)
@@ -6194,6 +6292,228 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             }
+            // 玉鳞：Act 问选装备牌（手/装备区）→ SelectCard 弃置+免伤；
+            // 取消=不免伤（照常伤害）
+            HostBehavior::SwdYulin => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                        .hand
+                        .iter()
+                        .filter(|c| {
+                            ctx.catalog.card_kind(**c).equip_slot().is_some()
+                        })
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "yulin_discard",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Option<CardId> = ctx.answer().iter().find_map(
+                        |o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        },
+                    );
+                    let Some(discarded) = picked else {
+                        // 取消：伤害照常
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&discarded) {
+                        ctx.discard_from_hand(self.owner, discarded);
+                    } else {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != discarded);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            discarded,
+                        );
+                        ctx.to_discard(discarded);
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![discarded],
+                    });
+                    ctx.current_damage_mut().prevented = true;
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 凝霜：Act 问选黑牌 → SelectCard 弃置+使用者阶梯
+            // （已翻面→失 1 体力；已横置→翻面；否则→横置且自己摸 1）
+            HostBehavior::SwdNingshuang => match self.stage {
+                HostStage::Act => {
+                    let is_black = |c: CardId| {
+                        matches!(
+                            ctx.catalog.cards[c as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        )
+                    };
+                    let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .filter(|c| is_black(*c))
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "ningshuang_discard",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Option<CardId> = ctx.answer().iter().find_map(
+                        |o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        },
+                    );
+                    let Some(discarded) = picked else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&discarded) {
+                        ctx.discard_from_hand(self.owner, discarded);
+                    } else {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != discarded);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            discarded,
+                        );
+                        ctx.to_discard(discarded);
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![discarded],
+                    });
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    if ctx.core.player(t).face_down {
+                        // 已翻面：失 1 体力（不摸牌）
+                        ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+                    } else if ctx.core.player(t).linked {
+                        // 已横置：翻面（不摸牌）
+                        let flipped = {
+                            let p = ctx.core.player_mut(t);
+                            p.face_down = !p.face_down;
+                            p.face_down
+                        };
+                        ctx.emit(EventData::TurnOvered {
+                            player: t,
+                            face_down: flipped,
+                        });
+                    } else {
+                        // 横置（仅此支自己摸 1，上游代码原样）
+                        ctx.emit(EventData::Linked { player: t, linked: true });
+                        ctx.draw_cards(self.owner, 1);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 工神：Act 问选装备牌 → SelectCard 弃置+取消该使用（筑城
+            // cancelled 写回同款；取消=使用照常）
+            HostBehavior::SwdGongshen => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                        .hand
+                        .iter()
+                        .filter(|c| {
+                            ctx.catalog.card_kind(**c).equip_slot().is_some()
+                        })
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "gongshen_discard",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Option<CardId> = ctx.answer().iter().find_map(
+                        |o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        },
+                    );
+                    let Some(discarded) = picked else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&discarded) {
+                        ctx.discard_from_hand(self.owner, discarded);
+                    } else {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != discarded);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            discarded,
+                        );
+                        ctx.to_discard(discarded);
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![discarded],
+                    });
+                    {
+                        let (used, user) = {
+                            let u = ctx.current_card_use_mut();
+                            (u.card, u.player)
+                        };
+                        ctx.current_card_use_mut().cancelled = true;
+                        // 取消的使用：牌从桌面归还使用者手牌（上游
+                        // trigger.cancel 同口径；提交段按 cancelled 跳过）
+                        ctx.core.table.retain(|x| *x != used);
+                        ctx.core.player_mut(user).hand.push(used);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 大同：全场极差 ≤1 → 摸 2
             HostBehavior::SwdDatong => {
                 ctx.draw_cards(self.owner, 2);
