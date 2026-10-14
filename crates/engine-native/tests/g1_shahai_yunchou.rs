@@ -1362,7 +1362,7 @@ fn g1_yunchou_generals_batch1_bridge_and_behaviors() {
         .general_meta(base)
         .expect("扩展武将在目录");
     assert_eq!(name, "ycn曹操");
-    assert_eq!(skills, vec!["ycnxicai"], "护驾/奸雄·变体暂缓不入目录");
+    assert_eq!(skills, vec!["ycnxicai", "护驾"], "护驾内置引用入目录（奸雄暂缓）");
     let _ = faction;
     let hp2 = e.catalog().general_meta(base + 1).expect("魏延在目录");
     assert_eq!(hp2.0, "ycn魏延");
@@ -1733,7 +1733,7 @@ fn g1_yunchou_generals_batch5_full_roster_metadata() {
         bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>()
     );
     assert!(
-        bridged.unmapped_skills >= 8,
+        bridged.unmapped_skills >= 6,
         "暂缓累计（现 {} 条）",
         bridged.unmapped_skills
     );
@@ -1811,8 +1811,8 @@ fn g1_yunchou_generals_batch6_luweiyan_conversion_and_chain() {
     assert_eq!(m.0, "ycn陆抗");
     assert_eq!(
         m.2,
-        vec!["ycnluweiyan", "ycnluweiyan2"],
-        "厉焰双子技同授（上游 group 同口径）；谦逊暂缓"
+        vec!["ycnluweiyan", "ycnluweiyan2", "谦逊"],
+        "厉焰双子技同授（上游 group 同口径）；谦逊=内置引用"
     );
 
     // 厉焰转化+链杀：陆抗（座位 0）出牌阶段，桃（基本——负例）与装备牌
@@ -1961,5 +1961,111 @@ fn g1_yunchou_generals_batch7_active_skills_jieyan_yiesheng() {
     assert!(
         !e.debug_hand(1).contains(&b1) && !e.debug_hand(1).contains(&b2),
         "野升：原两张黑牌已弃"
+    );
+}
+
+/// T12 运筹武将面批 8：内置技能引用面（mapping `builtin:*` 白名单）——
+/// 护驾/谦逊转正（悲歌本体未实现不入册）。谦逊行为定向：持谦逊者不能
+/// 成为顺手牵羊目标；反例：builtin:悲歌 拒装。
+#[test]
+fn g1_yunchou_generals_batch8_builtin_skill_refs() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    // 内置引用不进 host_skills、不进 unmapped——目录技能列表含内置名
+    let caocao = &bridged.generals[0];
+    assert_eq!(caocao.name, "ycn曹操");
+    assert_eq!(
+        caocao.skills.to_vec(),
+        vec![
+            "ycnxicai",
+            "护驾",
+        ],
+        "曹操：戏才+护驾（奸雄暂缓）"
+    );
+    let lukang = bridged
+        .generals
+        .iter()
+        .find(|g| g.name == "ycn陆抗")
+        .expect("陆抗");
+    assert!(
+        lukang.skills.to_vec().contains(&"谦逊"),
+        "陆抗：谦逊入列表"
+    );
+    let unmapped_names: Vec<String> = json
+        .to_string()
+        .matches("\"mapping\": null")
+        .map(|_| String::new())
+        .collect();
+    let _ = unmapped_names;
+    assert_eq!(bridged.unmapped_skills, 6, "暂缓 6：奸雄/悲歌/蝉缘/归汉/巧思/精械");
+    let _ = json;
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b8",
+            version: 1,
+            description: "运筹武将面批 8",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66013, 4, &[&pack]).expect("建局");
+    // 护驾 def 为标准目录 def（内置引用语义）
+    assert!(
+        e.catalog().skill_by_name("护驾").is_some(),
+        "护驾 def 在标准目录"
+    );
+    let lukang_meta = e
+        .catalog()
+        .general_meta(base + 8)
+        .expect("陆抗");
+    assert_eq!(
+        lukang_meta.2.to_vec(),
+        vec!["ycnluweiyan", "ycnluweiyan2", "谦逊"],
+        "陆抗三技（谦逊=内置引用）"
+    );
+
+    // 谦逊行为定向：持谦逊者不能成为乐不思蜀目标（原生校验面=乐，
+    // 上游无顺手牵羊挂账见覆盖清单）
+    let lukang_seat = 0u8;
+    e.debug_grant(lukang_seat, "谦逊");
+    e.debug_set_hp(lukang_seat, 8);
+    advance_to(&mut e, 1, Phase::Play);
+    let le = e.debug_place(1, "le");
+    let out = submit(&mut e, 1, GameAction::PlayCard { card: le, targets: vec![lukang_seat] });
+    assert!(
+        matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)),
+        "谦逊：乐不思蜀指定被拒: {out:?}"
+    );
+}
+
+/// builtin 白名单拒装反例：`builtin:悲歌`（本体未实现）必须拒绝。
+#[test]
+fn g1_yunchou_generals_batch8_builtin_whitelist_rejects() {
+    let json = r#"{
+        "generals": [{
+            "name": "ycn测试",
+            "faction": "wei",
+            "hp": 3,
+            "gender": "male",
+            "skills": [{"name": "beige", "title": "悲歌", "mapping": "builtin:悲歌"}]
+        }]
+    }"#;
+    let err = match content_native_loader::bridge_generals(json) {
+        Err(e) => e,
+        Ok(_) => panic!("builtin:悲歌 应拒装"),
+    };
+    assert!(
+        err.to_string().contains("builtin:悲歌"),
+        "白名单外 builtin 拒装: {err}"
     );
 }

@@ -318,12 +318,34 @@ fn opt_array<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a [Va
 }
 
 /// `mapping` 字段：字符串 = 宿主行为键；null/缺省 = 暂缓（未映射）。
-fn mapping_of(v: &Value, field: &'static str) -> Result<Option<HostBehavior>, BridgeError> {
+/// 技能映射三态（T12 运筹武将面批 8）：暂缓（mapping null）/内置引用
+/// （`builtin:名`，白名单——**只收有原生实现的标准技**；引用不存在的
+/// def 会在建局后行为面静默失效，故白名单而非开放查名）/宿主行为。
+enum MappedSkill {
+    Deferred,
+    Builtin(&'static str),
+    Host(HostBehavior),
+}
+
+/// 内置技能引用白名单：仅收**有原生实现**的标准技（护驾=kernel 主公技
+/// 臂、谦逊=乐不思蜀目标校验查询面）。悲歌本体未实现，不入册。
+const BUILTIN_SKILL_REFS: [&str; 2] = ["护驾", "谦逊"];
+
+fn mapping_of(v: &Value, field: &'static str) -> Result<MappedSkill, BridgeError> {
     match opt_str(v, "mapping", field)? {
-        None => Ok(None),
-        Some(key) => HostBehavior::from_key(key)
-            .map(Some)
-            .ok_or_else(|| BridgeError::UnknownBehaviorKey(key.to_string())),
+        None => Ok(MappedSkill::Deferred),
+        Some(key) => {
+            if let Some(builtin) = key.strip_prefix("builtin:") {
+                return BUILTIN_SKILL_REFS
+                    .iter()
+                    .find(|b| **b == builtin)
+                    .map(|b| MappedSkill::Builtin(b))
+                    .ok_or_else(|| BridgeError::UnknownBehaviorKey(key.to_string()));
+            }
+            HostBehavior::from_key(key)
+                .map(MappedSkill::Host)
+                .ok_or_else(|| BridgeError::UnknownBehaviorKey(key.to_string()))
+        }
     }
 }
 
@@ -474,7 +496,8 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
 
     for sk in opt_array(&parsed, "skills", "skills")? {
         let key = req_str(sk, "name", "skills[].name")?;
-        if let Some(behavior) = mapping_of(sk, "skills[].mapping")? {
+        // cards.json 面暂无内置引用需求：Deferred/Builtin 均跳过
+        if let MappedSkill::Host(behavior) = mapping_of(sk, "skills[].mapping")? {
             host_skills.push(HostSkillDecl {
                 name: names::intern(key.to_string()),
                 behavior,
@@ -558,7 +581,7 @@ fn bridge_generals_inner(
         for sk in req_array(g, "skills", "generals[].skills")? {
             let key = req_str(sk, "name", "generals[].skills[].name")?;
             match mapping_of(sk, "generals[].skills[].mapping")? {
-                Some(behavior) => {
+                MappedSkill::Host(behavior) => {
                     let interned = names::intern(key.to_string());
                     match host_skills.iter().find(|d| d.name == interned) {
                         Some(d) if d.behavior != behavior => {
@@ -570,7 +593,12 @@ fn bridge_generals_inner(
                     skills.push(interned);
                     mapped_skill_keys.push(interned);
                 }
-                None => unmapped += 1,
+                // 内置引用：技能 def 已在标准目录（白名单保证实现存在）
+                // ——只 intern 进武将技能列表，不产出 host 行为。
+                MappedSkill::Builtin(builtin) => {
+                    skills.push(names::intern(builtin.to_string()));
+                }
+                MappedSkill::Deferred => unmapped += 1,
             }
         }
         let faction = faction_of(req_str(g, "faction", "generals[].faction")?)?;
