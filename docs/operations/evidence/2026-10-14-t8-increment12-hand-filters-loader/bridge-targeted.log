@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/t8_rvm_bridge.rs (target/debug/deps/t8_rvm_bridge-78d3c10f7558825f)
+
+running 16 tests
+test t8_vm_skill_loader_skips_named_filters ... ok
+test t8_vm_skill_id_reverse_lookup_wired ... ok
+test t8_vm_skill_filter_always ... ok
+test t8_rejection_tampered_snapshot_module_rejected ... ok
+test t8_rejection_caps_escalation_denied ... ok
+test t8_vm_skill_draw_branch_end_to_end ... ok
+test t8_vm_skill_filter_owner_is_source ... ok
+test t8_vm_skill_choice_suspend_resume_midrestore ... ok
+test t8_rejection_corrupted_bytecode_rolls_back ... ok
+test t8_rejection_unmapped_effect_rolls_back ... ok
+test t8_vm_skill_fuel_exhaustion_rolls_back ... ok
+test t8_vm_skill_loader_bridge_end_to_end ... ok
+test t8_vm_skill_save_restore_roundtrip ... ok
+test t8_vm_skill_content_lock_rejects_pack_drift ... ok
+test t8_vm_skill_recover_branch_end_to_end ... ok
+test t8_vm_skill_cross_process_resume ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
