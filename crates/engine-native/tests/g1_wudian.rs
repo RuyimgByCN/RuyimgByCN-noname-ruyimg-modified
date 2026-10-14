@@ -8675,4 +8675,7 @@ fn wudian_generals_batch15_liangce_conversion_and_remain() {
     settle_optional_confirm(&mut e);
     // 五谷：全员各摸 1 张（择牌）——p2 手牌 +1
     assert!(hand_len_w(&e, 2) >= h2, "五谷：目标择牌入手");
+
+    // 结构性登记：4 人局五谷亮牌数=存活数=择牌数，永无剩余——良策·余获
+    // 在可达面与「无效果」等价（批 16 勘察，近似归持有者已覆盖）。
 }
