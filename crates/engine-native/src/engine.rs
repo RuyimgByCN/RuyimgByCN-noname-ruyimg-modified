@@ -2639,6 +2639,42 @@ fn apply_command(
                 {
                     kind = CardKind::Liuxinghuoyu;
                 }
+                // 夜影（小黄龙，swd 武将面批㉗）：黑色牌当乾坤镖使用
+                else if catalog
+                    .skill_by_name("yeying")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && matches!(
+                        catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                {
+                    kind = CardKind::Qiankunbiao;
+                }
+                // 归影（虎魄，swd 武将面批㉗）：黑色牌当偷梁换柱使用
+                else if catalog
+                    .skill_by_name("guiying")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && matches!(
+                        catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                {
+                    kind = CardKind::Toulianghuanzhu;
+                }
+                // 凤泽（司徒强，swd 武将面批㉗）：黑色牌当桃园结义使用
+                else if catalog
+                    .skill_by_name("fengze")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && matches!(
+                        catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                {
+                    kind = CardKind::Taoyuan;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至

@@ -919,6 +919,21 @@ pub enum HostBehavior {
     /// 火扑（tag 332，武将面批㉖ 夜鸦熙）：锁定 marker——红桃牌当流星
     /// 火雨使用（engine PlayCard viewAs 链查询）。
     SwdHuopu,
+    /// 夜影（tag 333，武将面批㉗ 小黄龙）：锁定 marker——黑色牌当乾坤镖
+    /// 使用（engine PlayCard viewAs 链查询）。
+    SwdYeying,
+    /// 归影（tag 334，武将面批㉗ 虎魄）：锁定 marker——黑色牌当偷梁换柱
+    /// 使用（engine PlayCard viewAs 链查询）。
+    SwdGuiying,
+    /// 凤泽（tag 335，武将面批㉗ 司徒强）：锁定 marker——黑色牌当桃园结
+    /// 义使用（engine PlayCard viewAs 链查询）。
+    SwdFengze,
+    /// 玲月（tag 336，武将面批㉗ 司徒强）：锁定——杀指定目标后目标弃置
+    /// 一张牌（确定性首张登记差异上游自选；锦鳞 limited defer）。
+    SwdLingyue,
+    /// 暗莲映（tag 337，武将面批㉗ 暗卡）：手牌被弃置空后摸 2（frequent
+    /// 锁定式；登记差异上游 loseEnd 全丢失面≈弃置面；颂词 defer）。
+    SwdAnlianying,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1034,6 +1049,11 @@ impl HostBehavior {
             HostBehavior::SwdWanjun => 330,
             HostBehavior::SwdSenluo => 331,
             HostBehavior::SwdHuopu => 332,
+            HostBehavior::SwdYeying => 333,
+            HostBehavior::SwdGuiying => 334,
+            HostBehavior::SwdFengze => 335,
+            HostBehavior::SwdLingyue => 336,
+            HostBehavior::SwdAnlianying => 337,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1607,6 +1627,11 @@ impl HostBehavior {
             330 => HostBehavior::SwdWanjun,
             331 => HostBehavior::SwdSenluo,
             332 => HostBehavior::SwdHuopu,
+            333 => HostBehavior::SwdYeying,
+            334 => HostBehavior::SwdGuiying,
+            335 => HostBehavior::SwdFengze,
+            336 => HostBehavior::SwdLingyue,
+            337 => HostBehavior::SwdAnlianying,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1627,7 +1652,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 329] = [
+    pub const ALL: [HostBehavior; 334] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1955,6 +1980,11 @@ impl HostBehavior {
         HostBehavior::SwdWanjun,
         HostBehavior::SwdSenluo,
         HostBehavior::SwdHuopu,
+        HostBehavior::SwdYeying,
+        HostBehavior::SwdGuiying,
+        HostBehavior::SwdFengze,
+        HostBehavior::SwdLingyue,
+        HostBehavior::SwdAnlianying,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2047,6 +2077,11 @@ impl HostBehavior {
             HostBehavior::SwdWanjun => "host:wanjun",
             HostBehavior::SwdSenluo => "host:senluo",
             HostBehavior::SwdHuopu => "host:huopu",
+            HostBehavior::SwdYeying => "host:yeying",
+            HostBehavior::SwdGuiying => "host:guiying",
+            HostBehavior::SwdFengze => "host:fengze",
+            HostBehavior::SwdLingyue => "host:lingyue",
+            HostBehavior::SwdAnlianying => "host:anlianying",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2763,6 +2798,22 @@ impl HostBehavior {
             HostBehavior::SwdSenluo => None,
             // 火扑：锁定 marker（engine PlayCard viewAs 链查询），无触发面
             HostBehavior::SwdHuopu => None,
+            // 夜影：锁定 marker（engine PlayCard viewAs 链查询），无触发面
+            HostBehavior::SwdYeying => None,
+            // 归影：锁定 marker（engine PlayCard viewAs 链查询），无触发面
+            HostBehavior::SwdGuiying => None,
+            // 凤泽：锁定 marker（engine PlayCard viewAs 链查询），无触发面
+            HostBehavior::SwdFengze => None,
+            // 玲月：锁定（sha 机器内联臂查询），无触发面
+            HostBehavior::SwdLingyue => None,
+            // 暗莲映：其他/自己弃牌结算后（frequent 锁定式=非 optional）
+            HostBehavior::SwdAnlianying => Some(TriggerMeta {
+                event: EventKind::CardsDiscarded,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -4960,6 +5011,13 @@ impl SkillBehavior for HostSkillBehavior {
                         let k = ctx.catalog.card_kind(*c);
                         !k.is_basic_kind() && k.equip_slot().is_none()
                     })),
+            // 暗莲映：弃牌结算后自己手牌为空（含自己弃牌——上游 loseEnd
+            // 手牌丢失面≈弃置面登记差异）→ frequent 摸 2
+            HostBehavior::SwdAnlianying => matches!(event,
+                EventData::CardsDiscarded { player, cards }
+                if *player == owner
+                    && !cards.is_empty()
+                    && ctx.state.player(owner).hand.is_empty()),
             // 苏生：任意角色死亡前置、自己有手牌（每回合一次走 limits 在
             // OptionalGate 消费；目标体力重置在机器步写回）
             HostBehavior::SwdSusheng => matches!(event,
@@ -8812,6 +8870,21 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::SwdWanjun => Flow::Done,
             // 火扑：锁定 marker（engine PlayCard viewAs 链查询），无效果步
             HostBehavior::SwdHuopu => Flow::Done,
+            // 夜影：锁定 marker（engine PlayCard viewAs 链查询），无效果步
+            HostBehavior::SwdYeying => Flow::Done,
+            // 归影：锁定 marker（engine PlayCard viewAs 链查询），无效果步
+            HostBehavior::SwdGuiying => Flow::Done,
+            // 凤泽：锁定 marker（engine PlayCard viewAs 链查询），无效果步
+            HostBehavior::SwdFengze => Flow::Done,
+            // 玲月：锁定（sha 机器内联臂查询），无独立效果步
+            HostBehavior::SwdLingyue => Flow::Done,
+            // 暗莲映：frequent 锁定式——直摸 2
+            HostBehavior::SwdAnlianying => {
+                if ctx.core.player(self.owner).alive {
+                    ctx.draw_cards(self.owner, 2);
+                }
+                Flow::Done
+            }
             // 对诗：Act 弃一张手牌 → SelectCard 指定目标 → TargetChoice
             // 目标同花色弃牌窗 → CardsAsk 消费（空选=拒绝→随机获得其一
             // 张）。usable:1 收敛上游 duishi2/duishi3 临时技面（登记差异）。

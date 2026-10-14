@@ -6848,6 +6848,47 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 // 无手牌：唯一可选 = 令使用者摸 1。
                 ctx.draw_cards(self.source, 1);
             }
+            // 玲月（司徒强，swd 武将面批㉗）：锁定——杀指定目标后目标弃
+            // 置一张牌（he 确定性首张，登记差异上游目标自选 chooseToDiscard
+            // forced；每杀每目标一次=!asked 门内）
+            {
+                let has_lingyue = ctx
+                    .catalog
+                    .skill_by_name("lingyue")
+                    .map(|d| ctx.core.has_skill(self.source, d))
+                    .unwrap_or(false);
+                if has_lingyue && ctx.core.player(self.target).alive {
+                    let hand_first =
+                        ctx.core.player(self.target).hand.first().copied();
+                    let eq_first =
+                        ctx.core.player(self.target).equips.first().copied();
+                    if let Some(c) = hand_first.or(eq_first) {
+                        let in_hand =
+                            ctx.core.player(self.target).hand.contains(&c);
+                        if in_hand {
+                            ctx.discard_from_hand(self.target, c);
+                        } else {
+                            ctx.core
+                                .player_mut(self.target)
+                                .equips
+                                .retain(|x| *x != c);
+                            if ctx.catalog.card_kind(c).is_equip() {
+                                crate::kernel::revoke_equip_skills(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    self.target,
+                                    c,
+                                );
+                            }
+                            ctx.to_discard(c);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: self.target,
+                                cards: vec![c],
+                            });
+                        }
+                    }
+                }
+            }
             // 龙胆：杀可当闪打出——响应选项并入目标手牌中的杀
             let longdan = ctx
                 .catalog

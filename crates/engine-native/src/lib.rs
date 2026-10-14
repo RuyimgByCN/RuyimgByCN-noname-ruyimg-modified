@@ -59,7 +59,7 @@ mod a0_lib_tests {
             assert!(keys.insert(k, b).is_none(), "宿主行为数据键重复: {k}");
             assert_eq!(HostBehavior::from_key(k), Some(b), "键双射失败: {k}");
         }
-        assert_eq!(keys.len(), 329, "HostBehavior 数量应 329（2026-10-15 武将面批㉖ 后实测）；新增行为须同步键表");
+        assert_eq!(keys.len(), 334, "HostBehavior 数量应 334（2026-10-15 武将面批㉗ 后实测）；新增行为须同步键表");
     }
 
     /// standard 技能名序只追加：目录技能名序列与冻结表逐名相等——中间
