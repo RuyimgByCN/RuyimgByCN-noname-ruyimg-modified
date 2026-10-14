@@ -910,6 +910,15 @@ pub enum HostBehavior {
     /// 挥琪（tag 329，武将面批㉕ 夏柔）：受伤后可令一名其他角色摸 X 张
     ///（X=自己已损失体力值）。
     SwdHuiqi,
+    /// 万钧（tag 330，武将面批㉖ 浊山铸）：锁定 marker——装备牌当南蛮
+    /// 入侵使用（engine PlayCard viewAs 链查询）。
+    SwdWanjun,
+    /// 森罗（tag 331，武将面批㉖ 莫耶）：出牌阶段限一次且手牌数为全场
+    /// 最少——其他有手牌角色各弃 2 摸 1（弃牌确定性首两张登记差异）。
+    SwdSenluo,
+    /// 火扑（tag 332，武将面批㉖ 夜鸦熙）：锁定 marker——红桃牌当流星
+    /// 火雨使用（engine PlayCard viewAs 链查询）。
+    SwdHuopu,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1022,6 +1031,9 @@ impl HostBehavior {
             HostBehavior::SwdSusheng => 327,
             HostBehavior::SwdXianghui => 328,
             HostBehavior::SwdHuiqi => 329,
+            HostBehavior::SwdWanjun => 330,
+            HostBehavior::SwdSenluo => 331,
+            HostBehavior::SwdHuopu => 332,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1592,6 +1604,9 @@ impl HostBehavior {
             327 => HostBehavior::SwdSusheng,
             328 => HostBehavior::SwdXianghui,
             329 => HostBehavior::SwdHuiqi,
+            330 => HostBehavior::SwdWanjun,
+            331 => HostBehavior::SwdSenluo,
+            332 => HostBehavior::SwdHuopu,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1612,7 +1627,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 326] = [
+    pub const ALL: [HostBehavior; 329] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1937,6 +1952,9 @@ impl HostBehavior {
         HostBehavior::SwdSusheng,
         HostBehavior::SwdXianghui,
         HostBehavior::SwdHuiqi,
+        HostBehavior::SwdWanjun,
+        HostBehavior::SwdSenluo,
+        HostBehavior::SwdHuopu,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2026,6 +2044,9 @@ impl HostBehavior {
             HostBehavior::SwdSusheng => "host:susheng",
             HostBehavior::SwdXianghui => "host:xianghui",
             HostBehavior::SwdHuiqi => "host:huiqi",
+            HostBehavior::SwdWanjun => "host:wanjun",
+            HostBehavior::SwdSenluo => "host:senluo",
+            HostBehavior::SwdHuopu => "host:huopu",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2736,6 +2757,12 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 万钧：锁定 marker（engine PlayCard viewAs 链查询），无触发面
+            HostBehavior::SwdWanjun => None,
+            // 森罗：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
+            HostBehavior::SwdSenluo => None,
+            // 火扑：锁定 marker（engine PlayCard viewAs 链查询），无触发面
+            HostBehavior::SwdHuopu => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -5852,6 +5879,27 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 森罗（武将面批㉖ 莫耶）：自己手牌数为全场严格最少
+            HostBehavior::SwdSenluo => {
+                let my = ctx.state.player(owner).hand.len();
+                let is_min = ctx
+                    .state
+                    .alive_players()
+                    .all(|p| p == owner || ctx.state.player(p).hand.len() >= my);
+                if !is_min {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 湛卢（武将面批㉕ 屠维）：有黑桃牌且场上有已受伤角色
             HostBehavior::SwdZhanlu => {
                 let has_spade = ctx.state.player(owner).hand.iter().any(|c| {
@@ -8466,6 +8514,27 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 森罗：activate 门已验手牌最少——对其他有手牌角色各：弃 2
+            //（确定性首两张，登记差异上游自选）+摸 1
+            HostBehavior::SwdSenluo => {
+                let targets: Vec<PlayerId> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != self.owner && !ctx.core.player(*p).hand.is_empty())
+                    .collect();
+                for t in targets {
+                    let hand: Vec<CardId> =
+                        ctx.core.player(t).hand.iter().copied().collect();
+                    let n = hand.len().min(2);
+                    for c in hand.into_iter().take(n) {
+                        ctx.discard_from_hand(t, c);
+                    }
+                    if ctx.core.player(t).alive {
+                        ctx.draw_cards(t, 1);
+                    }
+                }
+                Flow::Done
+            }
             // 连打：SelectCard 弃一张牌（he 可取消=放弃）→ 虚拟杀对原目
             // 标再结算（凤略直发口径；每回合旗置位=循环守卫）
             HostBehavior::SwdLianda => match self.stage {
@@ -8739,6 +8808,10 @@ impl crate::catalog::SkillMachine for HostMachine {
             // 连舞：锁定 marker（engine max_targets 链+kernel 红杀 directHit
             // 臂查询），无独立效果步
             HostBehavior::SwdLianwu => Flow::Done,
+            // 万钧：锁定 marker（engine PlayCard viewAs 链查询），无效果步
+            HostBehavior::SwdWanjun => Flow::Done,
+            // 火扑：锁定 marker（engine PlayCard viewAs 链查询），无效果步
+            HostBehavior::SwdHuopu => Flow::Done,
             // 对诗：Act 弃一张手牌 → SelectCard 指定目标 → TargetChoice
             // 目标同花色弃牌窗 → CardsAsk 消费（空选=拒绝→随机获得其一
             // 张）。usable:1 收敛上游 duishi2/duishi3 临时技面（登记差异）。
@@ -21223,7 +21296,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdDuishi
         | HostBehavior::SwdZhanlu
         | HostBehavior::SwdXianghui
-        | HostBehavior::SwdSusheng => {
+        | HostBehavior::SwdSusheng
+        | HostBehavior::SwdSenluo => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

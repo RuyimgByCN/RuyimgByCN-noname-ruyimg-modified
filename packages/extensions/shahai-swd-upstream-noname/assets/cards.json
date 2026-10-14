@@ -1049,6 +1049,62 @@
           "mapping": "host:huiqi"
         }
       ]
+    },
+    {
+      "name": "swd_zhuoshanzhu",
+      "faction": "wu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "suiyan",
+          "mapping": "host:suiyan"
+        },
+        {
+          "name": "wanjun",
+          "mapping": "host:wanjun"
+        }
+      ]
+    },
+    {
+      "name": "swd_moye",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "rexue",
+          "mapping": null
+        },
+        {
+          "name": "liuli",
+          "mapping": null
+        },
+        {
+          "name": "senluo",
+          "mapping": "host:senluo"
+        }
+      ]
+    },
+    {
+      "name": "swd_yeyaxi",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "rexue",
+          "mapping": null
+        },
+        {
+          "name": "huopu",
+          "mapping": "host:huopu"
+        },
+        {
+          "name": "shenyan",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

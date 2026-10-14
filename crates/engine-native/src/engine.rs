@@ -2615,6 +2615,30 @@ fn apply_command(
                 {
                     kind = vk;
                 }
+                // 万钧（浊山铸，swd 武将面批㉖）：装备牌当南蛮入侵使用
+                //（上游 viewAs nanman 同口径——出牌与响应双面，响应面
+                // 天然收敛登记）
+                else if catalog
+                    .skill_by_name("wanjun")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && catalog.card_kind(card).is_equip()
+                {
+                    kind = CardKind::SavageAttack;
+                }
+                // 火扑（夜鸦熙，swd 武将面批㉖）：红桃牌当流星火雨使用
+                //（上游 viewAs liuxinghuoyu 同口径）
+                else if catalog
+                    .skill_by_name("huopu")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && matches!(
+                        catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Heart
+                    )
+                {
+                    kind = CardKind::Liuxinghuoyu;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至
@@ -3741,10 +3765,18 @@ fn apply_command(
                     if matches!(kind, CardKind::Jingleishan | CardKind::Chiyuxi) {
                         aoe_targets.reverse();
                     }
+                    // viewAs 转化（万钧装备牌当南蛮等）须随帧声明——工厂按
+                    // 声明种路由 AOE 机，实体种会把机路由丢空
+                    let declared =
+                        if kind != catalog.card_kind(card) {
+                            Some(kind)
+                        } else {
+                            None
+                        };
                     crate::resolution::push_frame(
                         &mut state.resolution,
-                        EventData::CardUsed(crate::machine::card_use(
-                            card, player, aoe_targets,
+                        EventData::CardUsed(crate::machine::card_use_as(
+                            card, player, aoe_targets, declared,
                         )),
                     );
                     return Ok(());
