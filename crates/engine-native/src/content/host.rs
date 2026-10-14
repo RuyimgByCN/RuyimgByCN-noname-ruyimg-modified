@@ -717,6 +717,21 @@ pub enum HostBehavior {
     /// 大同（tag 265，swd 武将面批 18）：任意角色任意阶段结束全场手牌
     /// 极差 ≤1 则自己摸 2（frequent 自动无门）。
     SwdDatong,
+    /// 承剑（tag 266，swd 武将面批 19）：其他角色受到杀伤害后（可选确
+    /// 认）来源摸 1。
+    SwdChengjian,
+    /// 缚斧（tag 267，swd 武将面批 19）：你对目标使用杀伤害 +1（强制，
+    /// 需装备武器）。
+    SwdJufu,
+    /// 花镜（tag 268，swd 武将面批 19）：你造成的锦囊牌伤害后回 1 摸 1
+    ///（frequent 自动）。
+    SwdHuajing,
+    /// 护盾（tag 269，swd 武将面批 19）：你造成伤害后自己无护甲则 +1
+    /// 护甲（强制）。
+    SwdHudun,
+    /// 破星（tag 270，swd 武将面批 19）：你对体力高于你的角色造成伤害
+    /// 时伤害 +1（强制）。
+    SwdPoxing,
 }
 
 
@@ -766,6 +781,11 @@ impl HostBehavior {
             HostBehavior::YunchouBeige => 263,
             HostBehavior::SwdTiebi => 264,
             HostBehavior::SwdDatong => 265,
+            HostBehavior::SwdChengjian => 266,
+            HostBehavior::SwdJufu => 267,
+            HostBehavior::SwdHuajing => 268,
+            HostBehavior::SwdHudun => 269,
+            HostBehavior::SwdPoxing => 270,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1276,6 +1296,11 @@ impl HostBehavior {
             263 => HostBehavior::YunchouBeige,
             264 => HostBehavior::SwdTiebi,
             265 => HostBehavior::SwdDatong,
+            266 => HostBehavior::SwdChengjian,
+            267 => HostBehavior::SwdJufu,
+            268 => HostBehavior::SwdHuajing,
+            269 => HostBehavior::SwdHudun,
+            270 => HostBehavior::SwdPoxing,
             _ => return None,
         })
     }
@@ -1293,7 +1318,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 265] = [
+    pub const ALL: [HostBehavior; 270] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1559,6 +1584,11 @@ impl HostBehavior {
         HostBehavior::YunchouBeige,
         HostBehavior::SwdTiebi,
         HostBehavior::SwdDatong,
+        HostBehavior::SwdChengjian,
+        HostBehavior::SwdJufu,
+        HostBehavior::SwdHuajing,
+        HostBehavior::SwdHudun,
+        HostBehavior::SwdPoxing,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1589,6 +1619,11 @@ impl HostBehavior {
             HostBehavior::YunchouBeige => "host:beige",
             HostBehavior::SwdTiebi => "host:tiebi",
             HostBehavior::SwdDatong => "host:datong",
+            HostBehavior::SwdChengjian => "host:chengjian",
+            HostBehavior::SwdJufu => "host:jufu",
+            HostBehavior::SwdHuajing => "host:huajing",
+            HostBehavior::SwdHudun => "host:hudun",
+            HostBehavior::SwdPoxing => "host:poxing",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1928,6 +1963,46 @@ impl HostBehavior {
             // 大同：任意玩家阶段结束（global；frequent 自动无门）
             HostBehavior::SwdDatong => Some(TriggerMeta {
                 event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 承剑：其他角色受伤结算后（global；确认门=optional）
+            HostBehavior::SwdChengjian => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 缚斧：伤害前置窗（num 直写）
+            HostBehavior::SwdJufu => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 花镜：自己造成伤害结算后（frequent 自动无门）
+            HostBehavior::SwdHuajing => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 护盾：自己造成伤害结算后（forced 无门）
+            HostBehavior::SwdHudun => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 破星：伤害前置窗（num 直写）
+            HostBehavior::SwdPoxing => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
@@ -3551,6 +3626,28 @@ impl HostSkillBehavior {
             },
             // 大同：自己（摸 2）
             HostBehavior::SwdDatong => (Some(owner), None),
+            // 承剑：伤害来源（摸 1 面在效果）
+            HostBehavior::SwdChengjian => match event {
+                EventData::Damage(d) => (d.source, None),
+                _ => (None, None),
+            },
+            // 缚斧：伤害目标（效果直写帧）
+            HostBehavior::SwdJufu => match event {
+                EventData::Damage(d) => (Some(d.target), None),
+                _ => (None, None),
+            },
+            // 花镜：伤害目标
+            HostBehavior::SwdHuajing => match event {
+                EventData::Damage(d) => (Some(d.target), None),
+                _ => (None, None),
+            },
+            // 护盾：自己（+1 护甲）
+            HostBehavior::SwdHudun => (Some(owner), None),
+            // 破星：伤害目标（效果直写帧）
+            HostBehavior::SwdPoxing => match event {
+                EventData::Damage(d) => (Some(d.target), None),
+                _ => (None, None),
+            },
             // 悲歌：targets=[来源, 受伤者]
             HostBehavior::YunchouBeige => match event {
                 EventData::Damage(d) => (
@@ -3747,6 +3844,44 @@ impl SkillBehavior for HostSkillBehavior {
                     let min = counts.iter().copied().min().unwrap_or(0);
                     max - min <= 1
                 }),
+            // 承剑：其他角色受到杀伤害（来源≠持有者）
+            HostBehavior::SwdChengjian => matches!(event,
+                EventData::Damage(d)
+                if !d.prevented && d.amount > 0
+                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+                    && d.source.is_some()
+                    && d.source != Some(owner)
+                    && ctx.state.player(d.source.unwrap()).alive),
+            // 缚斧：持有者对目标用杀伤害前置（有武器）
+            HostBehavior::SwdJufu => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner) && !d.prevented && d.amount > 0
+                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+                    && ctx.state.player(owner).equips.iter().any(|c| {
+                        ctx.catalog.card_kind(*c).equip_slot()
+                            == Some(crate::catalog::EquipSlot::Weapon)
+                    })),
+            // 花镜：持有者造成的锦囊牌伤害
+            HostBehavior::SwdHuajing => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner) && !d.prevented && d.amount > 0
+                    && d.card.map(|c| {
+                        let k = ctx.catalog.card_kind(c);
+                        !k.is_basic_kind()
+                            && k.equip_slot().is_none()
+                            && k.is_basic_trick_or_equip()
+                    }).unwrap_or(false)),
+            // 护盾：持有者造成伤害后自己无护甲
+            HostBehavior::SwdHudun => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner) && !d.prevented && d.amount > 0
+                    && ctx.state.player(owner).hujia == 0),
+            // 破星：持有者对体力高于自己的目标造成伤害
+            HostBehavior::SwdPoxing => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner) && !d.prevented && d.amount > 0
+                    && d.target != owner
+                    && ctx.state.player(d.target).hp > ctx.state.player(owner).hp),
             // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
             HostBehavior::YunchouBeige => matches!(event,
                 EventData::Damage(d)
@@ -5794,6 +5929,52 @@ impl crate::catalog::SkillMachine for HostMachine {
             // 大同：全场极差 ≤1 → 摸 2
             HostBehavior::SwdDatong => {
                 ctx.draw_cards(self.owner, 2);
+                Flow::Done
+            }
+            // 承剑：来源摸 1
+            HostBehavior::SwdChengjian => {
+                if let Some(src) = self.target {
+                    if ctx.core.player(src).alive {
+                        ctx.draw_cards(src, 1);
+                    }
+                }
+                Flow::Done
+            }
+            // 缚斧：DamageBefore 帧直写 num+1（乱剑先例）
+            HostBehavior::SwdJufu => {
+                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                if let EventData::Damage(dm) = &mut frame.data {
+                    dm.amount += 1;
+                }
+                Flow::Done
+            }
+            // 花镜：回 1 + 摸 1（受伤者判定面：上游回 1 无判定——纯回摸）
+            HostBehavior::SwdHuajing => {
+                let p = ctx.core.player(self.owner);
+                if p.hp < p.max_hp as i32 {
+                    ctx.recover(self.owner, 1, None);
+                }
+                ctx.draw_cards(self.owner, 1);
+                Flow::Done
+            }
+            // 护盾：自己无护甲 → +1
+            HostBehavior::SwdHudun => {
+                if ctx.core.player(self.owner).hujia == 0 {
+                    ctx.change_hujia(self.owner, 1);
+                }
+                Flow::Done
+            }
+            // 破星：目标体力 > 持有者 → 伤害 +1（帧直写）
+            HostBehavior::SwdPoxing => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).hp > ctx.core.player(self.owner).hp {
+                        let frame =
+                            ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                        if let EventData::Damage(dm) = &mut frame.data {
+                            dm.amount += 1;
+                        }
+                    }
+                }
                 Flow::Done
             }
             // 良策·余获：锁定查询面（五谷机器内联查询），无独立效果步

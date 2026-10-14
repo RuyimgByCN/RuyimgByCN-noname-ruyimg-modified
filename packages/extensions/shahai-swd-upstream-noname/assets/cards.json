@@ -306,6 +306,86 @@
           "mapping": "host:datong"
         }
       ]
+    },
+    {
+      "name": "swd轩辕剑侍",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "chengjian",
+          "mapping": "host:chengjian"
+        },
+        {
+          "name": "huanling",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd程咬金",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "jiuchi",
+          "mapping": null
+        },
+        {
+          "name": "jufu",
+          "mapping": "host:jufu"
+        }
+      ]
+    },
+    {
+      "name": "swd秦叔宝",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "huajing",
+          "mapping": "host:huajing"
+        },
+        {
+          "name": "pingxu",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd子达书",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "shoulie",
+          "mapping": null
+        },
+        {
+          "name": "hudun",
+          "mapping": "host:hudun"
+        }
+      ]
+    },
+    {
+      "name": "swd张高",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "yicong",
+          "mapping": null
+        },
+        {
+          "name": "poxing",
+          "mapping": "host:poxing"
+        }
+      ]
     }
   ]
 }
