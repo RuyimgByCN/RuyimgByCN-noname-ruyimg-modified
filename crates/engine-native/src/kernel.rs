@@ -2465,6 +2465,36 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     // 猛态：摸牌阶段已发生（跳摸路径不清位——上游
                     // phaseDrawBegin 未触发同口径）
                     ctx.core.turn.mengtai_draw_pending = false;
+                    // 玉如意（swd 卡牌面补切批⑭）：装备者摸牌阶段从牌堆末
+                    // 20 张窗口（pop 摸牌位）中取最大点数牌移至摸牌位（登记
+                    // 差异上游按牌价值加权随机+任意 drawBegin 收敛为阶段钩）
+                    if ctx
+                        .core
+                        .player(player)
+                        .equips
+                        .iter()
+                        .any(|c| {
+                            ctx.catalog.card_kind(*c)
+                                == crate::catalog::CardKind::Yuruyi
+                        })
+                        && ctx.core.deck.len() > 1
+                    {
+                        let len = ctx.core.deck.len();
+                        let window = len.min(20);
+                        let mut best = len - 1;
+                        for i in (len - window)..len {
+                            if ctx.catalog.cards[ctx.core.deck[i] as usize].rank
+                                > ctx.catalog.cards[ctx.core.deck[best] as usize]
+                                    .rank
+                            {
+                                best = i;
+                            }
+                        }
+                        if best != len - 1 {
+                            let card = ctx.core.deck.remove(best);
+                            ctx.core.deck.push(card);
+                        }
+                    }
                     ctx.draw_cards(player, 2);
                     // 雪霁冰雹（swd 卡牌面补切批②）：标记角色摸牌阶段摸
                     // 牌数 +1（上游 xuejibingbao phaseDrawBegin num++ 同

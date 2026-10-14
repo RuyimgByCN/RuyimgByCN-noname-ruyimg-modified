@@ -5658,3 +5658,111 @@ fn swd_cards_trick_b43_shencaojie_guard() {
     );
     assert!(e.open_choice().is_none(), "神草结反例：无牌不触发");
 }
+
+/// T12 swd 卡牌面补切批⑭：玉如意——装备后自己摸牌阶段从牌堆末 20 张
+/// 窗口（pop 摸牌位）中取最大点数牌移至摸牌位（登记差异上游按牌价值加
+/// 权随机；任意 drawBegin 收敛为阶段摸牌钩）。
+#[test]
+fn swd_cards_equip5_b44_yuruyi_draw_window() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62023, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let yry = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Yuruyi)
+        .expect("玉如意在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != yry);
+        snap.core.discard.retain(|x| *x != yry);
+        snap.core.players[0].equips.push(yry);
+        // 布阵：低点数牌（rank 2）压在摸牌位（deck 尾），高点数牌（rank
+        // 13）放在窗口内非摸牌位
+        let low = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.rank == 2 && c.kind == CardKind::Shan)
+            .map(|(i, _)| i as u32)
+            .expect("rank2 实体");
+        let high = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.rank == 13 && c.kind == CardKind::Shan)
+            .map(|(i, _)| i as u32)
+            .expect("rank13 实体");
+        assert_ne!(low, high);
+        snap.core.deck.retain(|x| *x != low && *x != high);
+        snap.core.deck.push(low);
+        snap.core.deck.insert(snap.core.deck.len() - 1, high);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("布阵");
+    }
+    let deck_len = e.state_core().deck.len();
+    assert_eq!(
+        e.state_core().deck[deck_len - 1],
+        e.state_core().deck[deck_len - 1]
+    );
+    // 推进完一整轮到 p0 下个摸牌阶段（Draw begin 触发玉如意换牌）：
+    // 逐 NextPhase 驱动至 p0 重新进入 Play（其间 p0 摸牌阶段已带钩结算）
+    let mut left_p0 = false;
+    for _ in 0..48 {
+        if left_p0
+            && e.turn().current == 0
+            && e.turn().phase == Phase::Play
+            && e.open_choice().is_none()
+        {
+            break;
+        }
+        if e.turn().current != 0 {
+            left_p0 = true;
+        }
+        if let Some(c) = e.open_choice() {
+            let (cid, obs) = (c.id, c.observer);
+            let sel: Vec<ChoiceOption> = if c.spec.min > 0 {
+                c.spec.options.iter().take(c.spec.min).copied().collect()
+            } else if !c.spec.options.is_empty() {
+                vec![c.spec.options[0]]
+            } else {
+                vec![]
+            };
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            continue;
+        }
+        let cur = e.turn().current;
+        let out = submit(&mut e, cur, GameAction::NextPhase);
+        if let CommandOutcome::Rejected(_) = out {
+            continue;
+        }
+    }
+    let hand = e.debug_hand(0);
+    assert!(
+        hand.iter().any(|c| {
+            e.catalog().cards[*c as usize].rank == 13
+        }),
+        "玉如意：最大点数牌被移至摸牌位入手"
+    );
+}
