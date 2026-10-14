@@ -551,6 +551,24 @@
       "suit": "heart",
       "rank": 8,
       "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 雪霁冰雹本批已转正）"
+    },
+    {
+      "name": "swd_shencaojie",
+      "kind": "shencaojie",
+      "suit": "club",
+      "rank": 4
+    },
+    {
+      "name": "swd_shencaojie2",
+      "kind": "shencaojie",
+      "suit": "diamond",
+      "rank": 4
+    },
+    {
+      "name": "swd_shencaojie3",
+      "kind": "shencaojie",
+      "suit": "spade",
+      "rank": 4
     }
   ],
   "host_skills": [],

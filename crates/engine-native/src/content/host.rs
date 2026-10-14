@@ -846,6 +846,9 @@ pub enum HostBehavior {
     SwdXuanwuzhihuangHeld,
     /// 黄麟之琮（tag 308，批⑩ 器族手持技）：准备阶段无护甲则 +1 护甲。
     SwdHuanglinzhicongHeld,
+    /// 神草结（tag 309，批⑬ trick 手持交互）：锦囊伤害前——受伤者是自
+    /// 己则伤-1、来源是自己则伤+1（弃一张神草结；确认门）。
+    SwdShencaojieGuard,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -938,6 +941,7 @@ impl HostBehavior {
             HostBehavior::SwdBaishouzhihuHeld => 306,
             HostBehavior::SwdXuanwuzhihuangHeld => 307,
             HostBehavior::SwdHuanglinzhicongHeld => 308,
+            HostBehavior::SwdShencaojieGuard => 309,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1489,6 +1493,7 @@ impl HostBehavior {
             306 => HostBehavior::SwdBaishouzhihuHeld,
             307 => HostBehavior::SwdXuanwuzhihuangHeld,
             308 => HostBehavior::SwdHuanglinzhicongHeld,
+            309 => HostBehavior::SwdShencaojieGuard,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
             _ => return None,
@@ -1508,7 +1513,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 306] = [
+    pub const ALL: [HostBehavior; 307] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1813,6 +1818,7 @@ impl HostBehavior {
         HostBehavior::SwdBaishouzhihuHeld,
         HostBehavior::SwdXuanwuzhihuangHeld,
         HostBehavior::SwdHuanglinzhicongHeld,
+        HostBehavior::SwdShencaojieGuard,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -1883,6 +1889,7 @@ impl HostBehavior {
             HostBehavior::SwdBaishouzhihuHeld => "baishouzhihu",
             HostBehavior::SwdXuanwuzhihuangHeld => "xuanwuzhihuang",
             HostBehavior::SwdHuanglinzhicongHeld => "huanglinzhicong",
+            HostBehavior::SwdShencaojieGuard => "shencaojie",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -2409,6 +2416,14 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 神草结：锦囊伤害前置窗口（确认门；上游 chooseToUse）
+            HostBehavior::SwdShencaojieGuard => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             // 玄武之璜：自己造成伤害结算后 forced
@@ -4515,6 +4530,17 @@ impl SkillBehavior for HostSkillBehavior {
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
                     && hand_has_kind(ctx, owner, CardKind::Xuanwuzhihuang)),
+            // 神草结：锦囊伤害且自己是受伤者或来源、手持神草结
+            HostBehavior::SwdShencaojieGuard => matches!(event,
+                EventData::Damage(d)
+                if !d.prevented && d.amount > 0
+                    && d.card.map(|c| {
+                        let k = ctx.catalog.card_kind(c);
+                        !k.is_basic_kind() && k.equip_slot().is_none()
+                    })
+                    .unwrap_or(false)
+                    && (d.target == owner || d.source == Some(owner))
+                    && hand_has_kind(ctx, owner, CardKind::Shencaojie)),
             // 黄麟之琮：自己准备阶段无护甲且手持
             HostBehavior::SwdHuanglinzhicongHeld => matches!(event,
                 EventData::Phase { player, phase, begin }
@@ -7172,6 +7198,47 @@ impl crate::catalog::SkillMachine for HostMachine {
             // 黄麟之琮：+1 护甲（hujia==0 门在 filter）
             HostBehavior::SwdHuanglinzhicongHeld => {
                 ctx.change_hujia(self.owner, 1);
+                Flow::Done
+            }
+            // 神草结：确认门后弃一张神草结——受伤者是自己则伤-1、是自己
+            // 造成则伤+1
+            HostBehavior::SwdShencaojieGuard => {
+                if let Some(EventData::Damage(dm)) =
+                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+                {
+                    let toward_self = dm.target == self.owner;
+                    if let Some(pos) = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .position(|c| {
+                            ctx.catalog.card_kind(*c) == CardKind::Shencaojie
+                        })
+                    {
+                        let c = ctx
+                            .core
+                            .player_mut(self.owner)
+                            .hand
+                            .remove(pos);
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: self.owner,
+                            cards: vec![c],
+                        });
+                        let frame = ctx
+                            .res
+                            .frame_mut(ctx.current_frame_id())
+                            .expect("frame");
+                        if let EventData::Damage(d2) = &mut frame.data {
+                            if toward_self {
+                                d2.amount = d2.amount.saturating_sub(1);
+                            } else {
+                                d2.amount += 1;
+                            }
+                        }
+                    }
+                }
                 Flow::Done
             }
             // 逆攻发动：TargetChoice 选目标 → Act 弃全部标记——奇数摸 1+
@@ -19683,6 +19750,7 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
         CardKind::Baishouzhihu => &[HostSkillDecl { name: "baishouzhihu", behavior: HostBehavior::SwdBaishouzhihuHeld }],
         CardKind::Xuanwuzhihuang => &[HostSkillDecl { name: "xuanwuzhihuang", behavior: HostBehavior::SwdXuanwuzhihuangHeld }],
         CardKind::Huanglinzhicong => &[HostSkillDecl { name: "huanglinzhicong", behavior: HostBehavior::SwdHuanglinzhicongHeld }],
+        CardKind::Shencaojie => &[HostSkillDecl { name: "shencaojie", behavior: HostBehavior::SwdShencaojieGuard }],
         CardKind::Kunlunjingc => &[HostSkillDecl { name: "kunlunjingc", behavior: HostBehavior::SwdKunlunjingcCard }],
         CardKind::Donghuangzhong => &[HostSkillDecl { name: "donghuangzhong", behavior: HostBehavior::SwdDonghuangzhongCard }],
         _ => &[],

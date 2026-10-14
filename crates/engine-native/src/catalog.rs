@@ -519,6 +519,9 @@ pub enum CardKind {
     Yuchangen,
     /// 玉蝉·兑（swd 卡牌面补切批⑫）：器族手持 autoViewAs 雪霁冰雹。
     Yuchandui,
+    /// 神草结（swd 卡牌面补切批⑬）：trick 手持交互——锦囊伤害前，持有
+    /// 者为受伤者则伤-1、为来源则伤+1（各限持牌数）。
+    Shencaojie,
     /// 青龙之圭（swd 卡牌面补切批⑩）：器族手持——准备阶段摸 2 弃 1。
     Qinglongzhigui,
     /// 朱雀之璋（swd 卡牌面补切批⑩）：器族手持——受他人伤害后来源火 1 伤。
@@ -731,7 +734,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 172] = [
+    pub const ALL: [CardKind; 173] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -894,6 +897,7 @@ impl CardKind {
         CardKind::Yuchanli,
         CardKind::Yuchangen,
         CardKind::Yuchandui,
+        CardKind::Shencaojie,
         CardKind::Qinglongzhigui,
         CardKind::Zhuquezhizhang,
         CardKind::Baishouzhihu,
@@ -1071,6 +1075,7 @@ impl CardKind {
             CardKind::Yuchanli => "yuchanli",
             CardKind::Yuchangen => "yuchangen",
             CardKind::Yuchandui => "yuchandui",
+            CardKind::Shencaojie => "shencaojie",
             CardKind::Qinglongzhigui => "qinglongzhigui",
             CardKind::Zhuquezhizhang => "zhuquezhizhang",
             CardKind::Baishouzhihu => "baishouzhihu",

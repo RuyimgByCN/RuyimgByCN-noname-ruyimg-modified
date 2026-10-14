@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 84, "swd 全 84 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 87, "swd 全 87 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 84, "swd 全 84 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 87, "swd 全 87 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 84, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 87, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4247,6 +4247,9 @@ fn swd_cards_alignment_guard_b29() {
         ("yuchanli", "club", 6),
         ("yuchangen", "diamond", 7),
         ("yuchandui", "heart", 8),
+        ("shencaojie", "club", 4),
+        ("shencaojie", "diamond", 4),
+        ("shencaojie", "spade", 4),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4260,7 +4263,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 84, "批⑫ 玉蝉八卦后 84 张");
+    assert_eq!(pack.cards.len(), 87, "批⑬ 神草结后 87 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -4756,6 +4759,12 @@ fn swd_cards_equip5_b34_qiankundai_shennongding_nvwashi() {
     equip_with_skills(&mut e, 0, nws, &["nvwashi"]);
     e.debug_set_hp(0, 4);
     e.debug_set_hp(2, 1);
+    // 清全场手牌+清 p2 护甲：初始手牌随包扩卡漂移，濒死救援窗会抢在女
+    // 娲石前；器族手持黄麟之琮者准备阶段获护甲会抵消伤害
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_set_hujia(2, 0);
     e.debug_deal_damage(Some(1), 2, 1, engine_native::event::DamageNature::Normal);
     let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("女娲石确认窗");
     assert_eq!(obs, 0, "女娲石窗归持有者");
@@ -5475,7 +5484,7 @@ fn swd_cards_trick_b42_yuchan_autoviewas() {
     )
     .unwrap();
     let pack = bridge(&json);
-    assert_eq!(pack.cards.len(), 84, "批⑫ 玉蝉八卦后 84 张");
+    assert_eq!(pack.cards.len(), 87, "批⑬ 神草结后 87 张");
     let mut e = Engine::new_with_extensions(62021, 4, &[&pack]).expect("建局");
     advance_to_play(&mut e, 0);
     for p in 0..4 {
@@ -5529,4 +5538,123 @@ fn swd_cards_trick_b42_yuchan_autoviewas() {
         !matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
         "玉蝉乾反例：杀无目标拒 {out:?}"
     );
+}
+
+/// T12 swd 卡牌面补切批⑬：神草结——锦囊伤害前置窗口：受伤者是自己则
+/// 伤-1、来源是自己则伤+1（弃一张神草结；确认门）。InitHook 扩展授全
+/// 员实例，效果由手持 filter 门控。
+#[test]
+fn swd_cards_trick_b43_shencaojie_guard() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62022, 4, &[&pack]).expect("建局");
+    // init hook 核验：全员持有神草结守卫实例
+    let scj_def = e.catalog().skill_by_name("shencaojie").expect("神草结 def");
+    assert!(
+        e.state_core().skills.contains_key(&(0, scj_def)),
+        "神草结守卫开局已授予"
+    );
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let scj = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Shencaojie)
+        .expect("神草结在目录") as u32;
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != scj);
+        core.discard.retain(|x| *x != scj);
+        core.players[0].hand.push(scj);
+    }
+    // 伤害卡：决斗（锦囊实体）入牌堆顶供 with_card 使用
+    let duel = e.debug_place(2, "duel");
+
+    // ① 受伤方向：p1 用锦囊实体伤 p0 → p0 确认 → 伤-1
+    e.debug_set_hp(0, 4);
+    e.debug_deal_damage_with_card(
+        Some(1),
+        0,
+        2,
+        engine_native::event::DamageNature::Normal,
+        duel,
+    );
+    // 确认窗归 p0
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("神草结确认窗");
+    assert_eq!(obs, 0, "神草结窗归持有者");
+    let conf: Vec<ChoiceOption> = {
+        let ch = e.open_choice().expect("still open");
+        ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Confirm)).cloned().collect()
+    };
+    assert_eq!(conf.len(), 1);
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: conf });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(0), 3, "神草结：受伤方向伤-1（4-2+1=3）");
+    assert_eq!(hand_len_w(&e, 0), 0, "神草结：一张已弃");
+
+    // ② 增伤方向：p0 用锦囊实体伤 p1 → p0 确认 → 伤+1
+    // 再入一张神草结
+    let scj2 = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(i, c)| {
+            c.kind == engine_native::catalog::CardKind::Shencaojie
+                && *i as u32 != scj
+        })
+        .map(|(i, _)| i as u32)
+        .expect("第二张神草结");
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != scj2);
+        core.discard.retain(|x| *x != scj2);
+        core.players[0].hand.push(scj2);
+    }
+    e.debug_set_hp(2, 8);
+    e.debug_deal_damage_with_card(
+        Some(0),
+        2,
+        2,
+        engine_native::event::DamageNature::Normal,
+        duel,
+    );
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("神草结增伤窗");
+    assert_eq!(obs, 0);
+    let conf: Vec<ChoiceOption> = {
+        let ch = e.open_choice().expect("still open");
+        ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Confirm)).cloned().collect()
+    };
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: conf });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(2), 5, "神草结：增伤方向伤+1（8-2-1=5）");
+
+    // 反例：无神草结在手 → 不触发（p0 手空）
+    e.debug_set_hp(0, 4);
+    e.debug_deal_damage_with_card(
+        Some(1),
+        0,
+        2,
+        engine_native::event::DamageNature::Normal,
+        duel,
+    );
+    assert!(e.open_choice().is_none(), "神草结反例：无牌不触发");
 }

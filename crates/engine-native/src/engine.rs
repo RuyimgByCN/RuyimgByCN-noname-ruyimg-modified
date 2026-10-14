@@ -666,6 +666,7 @@ impl Engine {
                                 | crate::content::host::HostBehavior::SwdBaishouzhihuHeld
                                 | crate::content::host::HostBehavior::SwdXuanwuzhihuangHeld
                                 | crate::content::host::HostBehavior::SwdHuanglinzhicongHeld
+                                | crate::content::host::HostBehavior::SwdShencaojieGuard
                         )
                     )
                 })
@@ -2865,6 +2866,7 @@ fn apply_command(
                 | CardKind::Yuchanli
                 | CardKind::Yuchangen
                 | CardKind::Yuchandui
+                | CardKind::Shencaojie
                 // 器族五件：手持牌（非装备路径；效果经手持触发技）
                 | CardKind::Qinglongzhigui
                 | CardKind::Zhuquezhizhang
