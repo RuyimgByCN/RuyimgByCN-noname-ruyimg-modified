@@ -131,7 +131,7 @@ pub fn bridge_vm_skill_decls(
     pkg: &content_schema::ContentPackage,
 ) -> Result<VmBridgeOutcome, BridgeError> {
     use engine_native::event::{EventKind, Timing};
-    use engine_native::rvm_bridge::VmFilterPolicy;
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
     ensure_symbol_capacity()?;
     let mut out = Vec::new();
     let mut deferred_filters = Vec::new();
@@ -158,9 +158,15 @@ pub fn bridge_vm_skill_decls(
             }
         };
         let filter = match t.filter.as_str() {
-            "owner_is_target" => VmFilterPolicy::OwnerIsTarget,
-            "owner_is_source" => VmFilterPolicy::OwnerIsSource,
-            "always" => VmFilterPolicy::Always,
+            "owner_is_target" => P::OwnerIsTarget,
+            "owner_source" => P::OwnerIsSource,
+            "always" => P::Always,
+            "owner_is_target_wounded" => P::OwnerWounded,
+            "owner_is_target_linked" => P::OwnerLinked,
+            "owner_is_target_hand_nonempty" => P::OwnerHandNonempty,
+            "owner_is_target_hand_empty" => P::OwnerHandEmpty,
+            "owner_is_target_no_turn_damage" => P::OwnerNoTurnDamage,
+            "owner_is_target_turn_damage" => P::OwnerTurnDamage,
             other => {
                 // 具名组合 filter：engine 无承载（增量 6 严格面）——跳过
                 // 登记，不阻断同包其余 VM 技能装载。

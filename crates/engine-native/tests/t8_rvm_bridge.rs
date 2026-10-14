@@ -549,7 +549,7 @@ skill hnl_always_t8(990006) {
 /// 具名组合 filter 样本（装载器跳过面）。
 const NAMED_FILTER_DSL: &str = "\
 skill hnl_named_t8(990007) {
-  trigger damage owner_is_target_wounded {
+  trigger damage owner_is_target_wounded_sha {
     effect draw_cards(self, 1);
   }
 }
@@ -628,8 +628,8 @@ fn t8_vm_skill_loader_skips_named_filters() {
     );
     assert_eq!(
         outcome.deferred_filters,
-        vec!["owner_is_target_wounded".to_string()],
-        "跳过面登记"
+        vec!["owner_is_target_wounded_sha".to_string()],
+        "跳过面登记（增量 9 后 wounded 已承载，组合 sha 仍未承载）"
     );
 }
 

@@ -78,17 +78,29 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
     }
 }
 
-/// DSL filter 映射（增量 6）：三基语义严格落；具名组合 filter 由装载
-/// 器跳过登记（deferred）。
+/// DSL filter 映射（增量 6 三基 + 增量 9 基元扩展）：具名组合 filter 由
+/// 装载器跳过登记（deferred）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum VmFilterPolicy {
     /// DSL `owner_is_target`：事件主玩家=持有者。
     #[default]
     OwnerIsTarget,
-    /// DSL `owner_is_source`：事件来源=持有者。
+    /// DSL `owner_source`：事件来源=持有者。
     OwnerIsSource,
     /// DSL `always`：无条件。
     Always,
+    /// DSL `owner_is_target_wounded`：持有者已受伤（hp<maxHp）。
+    OwnerWounded,
+    /// DSL `owner_is_target_linked`：持有者横置。
+    OwnerLinked,
+    /// DSL `owner_is_target_hand_nonempty`：持有者手牌非空。
+    OwnerHandNonempty,
+    /// DSL `owner_is_target_hand_empty`：持有者手牌为空。
+    OwnerHandEmpty,
+    /// DSL `owner_is_target_no_turn_damage`：本回合未受到伤害。
+    OwnerNoTurnDamage,
+    /// DSL `owner_is_target_turn_damage`：本回合已受到伤害。
+    OwnerTurnDamage,
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -100,14 +112,24 @@ pub struct VmSkillBehavior {
 }
 
 impl SkillBehavior for VmSkillBehavior {
-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
-        // 增量 6 过滤面：三基语义（owner_is_target/owner_is_source/
-        // always）；其余具名组合 filter 装载器跳过（deferred 登记）。
+    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+        // 增量 9 过滤面：三基语义 + 七个基元状态谓词（引擎侧已有承载）；
+        // 其余具名组合 filter 装载器跳过（deferred 登记）。
         let trig = trigger_ctx_of(event);
+        let holder_state = |s: u8| ctx.state.player(s);
         match self.filter {
             VmFilterPolicy::OwnerIsTarget => trig.event_player == Some(owner),
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
             VmFilterPolicy::Always => true,
+            VmFilterPolicy::OwnerWounded => {
+                let p = holder_state(owner);
+                p.hp > 0 && p.hp < p.max_hp as i32
+            }
+            VmFilterPolicy::OwnerLinked => holder_state(owner).linked,
+            VmFilterPolicy::OwnerHandNonempty => !holder_state(owner).hand.is_empty(),
+            VmFilterPolicy::OwnerHandEmpty => holder_state(owner).hand.is_empty(),
+            VmFilterPolicy::OwnerNoTurnDamage => holder_state(owner).turn_damage == 0,
+            VmFilterPolicy::OwnerTurnDamage => holder_state(owner).turn_damage > 0,
         }
     }
 
