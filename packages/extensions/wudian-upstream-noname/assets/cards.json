@@ -272,6 +272,62 @@
           "reason": "shaBefore 时点（原生映射 AfterTriggers 偏晚）+令目标虚拟 useCard 诱敌深入组合——2026-10-08 正式暂缓"
         }
       ]
+    },
+    {
+      "name": "西真夕红",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "jinyan",
+          "mapping": "host:wudian_jinyan"
+        },
+        {
+          "name": "fuchou",
+          "mapping": null
+        },
+        {
+          "name": "fuchou2",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "造之仁君",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "liangce",
+          "mapping": null
+        },
+        {
+          "name": "jianbi",
+          "mapping": null
+        },
+        {
+          "name": "diyjuntun",
+          "mapping": "host:wudian_diyjuntun"
+        }
+      ]
+    },
+    {
+      "name": "杨仪",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "choudu",
+          "mapping": null
+        },
+        {
+          "name": "liduan",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

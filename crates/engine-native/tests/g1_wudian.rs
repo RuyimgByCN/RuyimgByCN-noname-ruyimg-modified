@@ -12,7 +12,7 @@ use content_runtime::{discover_extensions, import_extensions, InstallOptions, Pa
 use engine_native::catalog::CardKind;
 use engine_native::content::extension::{ExtensionDef, ExtensionPack};
 use engine_native::{
-    ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
+    ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason,
 };
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -215,8 +215,8 @@ fn g1_wudian_generals_and_siji_discard_draw() {
     let generals = out.generals;
     let host_skills = out.host_skills;
     let unmapped_total = out.unmapped_skills;
-    assert_eq!(generals.len(), 6, "六名武将元数据");
-    assert_eq!(unmapped_total, 2, "2 个技能登记暂缓（11 项声明中 siji/moshou/ciqiu/nsshuaiyan/zhucheng/zhucheng2/kangyin/chezhen/juedao 已映射，2026-10-08 绝道批六；夺启暂缓；zhucheng2 为上游 group 子技能显式化）");
+    assert_eq!(generals.len(), 9, "玩点论杀九名武将全量入册（批 10 补西真夕红/造之仁君/杨仪）");
+    assert_eq!(unmapped_total, 8, "8 个技能登记暂缓（批 10 增复仇双技/良策/坚壁/仇渡/理断；存量夺启+佑赞）");
     let pack = ExtensionPack {
         def: ExtensionDef {
             name: "wudian-upstream-noname",
@@ -8197,4 +8197,149 @@ fn xianjian_real_host_full_lifecycle() {
     // ⑥ 重新 import 被拒
     let report2 = import_extensions(&store, &root, &options());
     assert!(report2.is_err(), "撤销后重新 import 应被拒");
+}
+
+/// T12 玩点论杀续批（2026-10-14）：三将补入（西真夕红/造之仁君/杨仪）。
+/// 屯田·DIY（ActivateSkill 主动技重铸：弃 1 装备 → 牌堆随机装备入手）
+/// 与禁言（PlayCard 门查询：体力 ≤2 黑锦囊禁用，往事封禁先例同位）。
+/// 登记差异：禁言上游四面查询仅承载使用面；屯田上游 canRecast 换置面
+/// 不做。仇渡暂缓（依赖 deferred 卡调兵遣将）；复仇系（跨回合存储）、
+/// 良策（五谷 Remained 子事件）、坚壁（目标转移）、理断（令他人用牌）
+/// 逐批后续。
+#[test]
+fn wudian_generals_batch10_diyjuntun_recast_and_jinyan() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "wudian")
+        .expect("wudian 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    assert_eq!(pack.generals.len(), 9, "玩点论杀九名武将全量入册");
+
+    let mut e = Engine::new_with_extensions(61000, 4, &[&pack]).expect("建局");
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    // 新三将在扩展段尾（6 旧将之后）
+    let zao = base + 7;
+    let m = e.catalog().general_meta(zao).expect("造之仁君在目录");
+    assert_eq!(m.0, "造之仁君");
+    assert_eq!(
+        m.2,
+        vec!["diyjuntun"],
+        "屯田转正（良策/坚壁 null 暂缓不进目录列表）"
+    );
+    let jieyan_def = e.catalog().skill_by_name("diyjuntun").expect("屯田 def");
+    let _ = jieyan_def;
+
+    // 屯田·DIY：p0 挂装备 + 手牌装备 → ActivateSkill 重铸
+    e.debug_grant(0, "diyjuntun");
+    advance_to_play(&mut e, 0);
+    let z0 = e.debug_place(0, "zhuge");
+    {
+        let core = e.state_core_mut();
+        core.players[0].hand.retain(|x| *x != z0);
+        core.players[0].equips.push(z0);
+    }
+    let h0 = hand_len_w(&e, 0);
+    let equip_pool_before = {
+        let core = e.state_core();
+        core.deck
+            .iter()
+            .chain(core.discard.iter())
+            .filter(|c| {
+                e.catalog().card_kind(**c).equip_slot().is_some()
+            })
+            .count()
+    };
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: jieyan_def },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "屯田受理: {out:?}"
+    );
+    // SelectCards 应答（选 zhuge2）
+    let c = e.open_choice().expect("屯田选择挂起");
+    let (cid, obs) = (c.id, c.observer);
+    let sel: Vec<ChoiceOption> = c
+        .spec
+        .options
+        .iter()
+        .filter(|o| matches!(o, ChoiceOption::Card(x) if *x == z0))
+        .cloned()
+        .collect();
+    assert_eq!(sel.len(), 1, "重铸选择面含挂载装备");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    assert!(
+        !e.state_core().players[0].equips.contains(&z0),
+        "屯田：原装备被弃"
+    );
+    let gained = hand_len_w(&e, 0) - h0;
+    if equip_pool_before > 0 {
+        assert_eq!(gained, 1, "屯田：牌堆获得 1 张装备（池 {equip_pool_before}）");
+    }
+
+    // 禁言：p1（持禁言）体力 2 → 黑锦囊使用被拒；体力 3 → 放行
+    e.debug_grant(1, "jinyan");
+    advance_to_play(&mut e, 1);
+    e.debug_set_hp(1, 2);
+    let le = e.debug_place(1, "le");
+    let out = submit(&mut e, 1, GameAction::PlayCard { card: le, targets: vec![0] });
+    assert!(
+        matches!(out, CommandOutcome::Rejected(RejectReason::CardLimit)),
+        "禁言：体力 ≤2 黑锦囊被拒: {out:?}"
+    );
+    e.debug_set_hp(1, 3);
+    let out = submit(&mut e, 1, GameAction::PlayCard { card: le, targets: vec![0] });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "禁言：体力 3 放行: {out:?}"
+    );
+}
+
+fn hand_len_w(e: &Engine, p: u8) -> usize {
+    e.state_core().player(p).hand.len()
+}
+
+/// 推进到指定玩家出牌阶段（空/首选应答排空）。
+fn advance_to_play(e: &mut Engine, player: u8) {
+    for _ in 0..200 {
+        if e.turn().current == player && e.turn().phase == Phase::Play {
+            return;
+        }
+        assert!(e.outcome().is_none(), "对局提前结束");
+        let actor = e.turn().current;
+        submit(e, actor, GameAction::NextPhase);
+        if let Some(c) = e.open_choice() {
+            let sel: Vec<ChoiceOption> = c
+                .spec
+                .options
+                .iter()
+                .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                .copied()
+                .take(c.spec.min.max(1))
+                .collect();
+            let (cid, obs) = (c.id, c.observer);
+            if !sel.is_empty() {
+                submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            } else if !c.spec.options.is_empty() {
+                submit(e, obs, GameAction::Answer {
+                    choice_id: cid,
+                    selection: vec![c.spec.options[0].clone()],
+                });
+            }
+        }
+    }
+    panic!("200 步未到 p{player} 出牌阶段");
 }

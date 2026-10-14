@@ -673,6 +673,14 @@ pub enum HostBehavior {
     /// 蝉缘·变体（tag 254，运筹武将面批 9）：死亡时来源体力上限 -1
     ///（强制；max_hp 减面承载——来源不存在则不触发）。
     YunchouDiychanyuan,
+    /// 屯田·DIY（tag 255，玩点论杀续批）：出牌主动技——重铸一张装备牌：
+    /// 弃之并从牌堆随机获得一张装备牌（实体发现模式，v187 先例；登记
+    /// 差异：上游 canRecast 的换置面不做）。
+    WudianDiyjuntun,
+    /// 禁言（tag 256，玩点论杀续批）：目录锚+查询面——体力 ≤2 时黑色
+    /// 锦囊禁用（PlayCard 门查询，往事封禁先例；登记差异：上游四面
+    /// cardEnabled/Usable/Respondable/Savable，原生仅使用面）。
+    WudianJinyan,
 }
 
 
@@ -706,6 +714,9 @@ impl HostBehavior {
             HostBehavior::YunchouJieyan => 252,
             HostBehavior::YunchouYiesheng => 253,
             HostBehavior::YunchouDiychanyuan => 254,
+            HostBehavior::WudianDiyjuntun => 255,
+            // Jinyan 用历史空洞 96（u8 值域已满——256 越界；from_tag 同步）
+            HostBehavior::WudianJinyan => 96,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1205,14 +1216,17 @@ impl HostBehavior {
             252 => HostBehavior::YunchouJieyan,
             253 => HostBehavior::YunchouYiesheng,
             254 => HostBehavior::YunchouDiychanyuan,
-            _ => return None,
+            255 => HostBehavior::WudianDiyjuntun,
+            96 => HostBehavior::WudianJinyan,
+            // u8 值域已满（256 变体全占用；96 为历史空洞回收）——下一个
+            // 新变体须先将 tag/from_tag 扩为 u16（登记边界）。
         })
     }
 
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 254] = [
+    pub const ALL: [HostBehavior; 256] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1467,6 +1481,8 @@ impl HostBehavior {
         HostBehavior::YunchouJieyan,
         HostBehavior::YunchouYiesheng,
         HostBehavior::YunchouDiychanyuan,
+        HostBehavior::WudianDiyjuntun,
+        HostBehavior::WudianJinyan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1486,6 +1502,8 @@ impl HostBehavior {
             HostBehavior::YunchouJieyan => "host:jieyan",
             HostBehavior::YunchouYiesheng => "host:yiesheng",
             HostBehavior::YunchouDiychanyuan => "host:diychanyuan",
+            HostBehavior::WudianDiyjuntun => "host:wudian_diyjuntun",
+            HostBehavior::WudianJinyan => "host:wudian_jinyan",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1795,6 +1813,8 @@ impl HostBehavior {
             HostBehavior::YunchouLuweiyan => None,
             HostBehavior::YunchouJieyan => None,
             HostBehavior::YunchouYiesheng => None,
+            HostBehavior::WudianDiyjuntun => None,
+            HostBehavior::WudianJinyan => None,
             // 蝉缘·变体：死亡结算后（来源减上限）
             HostBehavior::YunchouDiychanyuan => Some(TriggerMeta {
                 event: EventKind::Death,
@@ -2923,6 +2943,8 @@ pub const WUDIAN_JUEDAO_KEY: &str = "juedao";
 pub const WUDIAN_KANGYIN_DISCARD: &str = "wudian_kangyin_discard";
 pub const WUDIAN_KANGYIN_DRAW: &str = "wudian_kangyin_draw";
 pub const WUDIAN_KANGYIN_KEY: &str = "kangyin";
+/// 禁言（玩点论杀续批）：PlayCard 门查询锚。
+pub const WUDIAN_JINYAN_KEY: &str = "jinyan";
 pub const WUDIAN_KANGYIN_TARGET: &str = "wudian_kangyin_target";
 pub const WUDIAN_KUOYIN_CARDS: &str = "wudian_kuoyin_cards";
 pub const WUDIAN_LIANGOU_CARDS: &str = "wudian_liangou_cards";
@@ -3405,6 +3427,7 @@ impl HostSkillBehavior {
             HostBehavior::GeanguanhuoCompare => HostStage::CompareTargetPick,
             HostBehavior::GujianShujinsanCard => HostStage::SelectCard,
             HostBehavior::YunchouYiesheng => HostStage::SelectCard,
+            HostBehavior::WudianDiyjuntun => HostStage::SelectCard,
             HostBehavior::GujianFeibiaoCard => HostStage::SelectCard,
             HostBehavior::JiguanBingpoCard => HostStage::ComparePlayerPick,
             HostBehavior::JiguanLongxuCard => HostStage::SelectCard,
@@ -3505,6 +3528,8 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::YunchouLuweiyan2 => u_matches_lw2(event, owner, ctx),
             HostBehavior::YunchouJieyan => false,
             HostBehavior::YunchouYiesheng => false,
+            HostBehavior::WudianDiyjuntun => false,
+            HostBehavior::WudianJinyan => false,
             // 蝉缘·变体：有来源的死亡
             HostBehavior::YunchouDiychanyuan => matches!(event,
                 EventData::Death { killer: Some(_), .. }),
@@ -4439,6 +4464,26 @@ impl SkillBehavior for HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            // 屯田·DIY：有装备牌（手/场）才可发动
+            HostBehavior::WudianDiyjuntun => {
+                let has = !ctx.state.player(owner).equips.is_empty()
+                    || ctx.state.player(owner).hand.iter().any(|c| {
+                        ctx.catalog.card_kind(*c).equip_slot().is_some()
+                    });
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
             // 隙焰：有红手牌才可发动
             HostBehavior::YunchouJieyan => {
                 let has = ctx.state.player(owner).hand.iter().any(|c| {
@@ -5229,6 +5274,101 @@ impl crate::catalog::SkillMachine for HostMachine {
                     ctx.lose_max_hp(src, 1);
                 }
                 Flow::Done
+            },
+            // 禁言：查询锚（PlayCard 门），无独立效果步
+            HostBehavior::WudianJinyan => Flow::Done,
+            // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
+            // 装备牌（实体发现模式；deck+discard 无装备则仅弃置）
+            HostBehavior::WudianDiyjuntun => match self.stage {
+                HostStage::SelectCard => {
+                    let p = ctx.core.player(self.owner);
+                    let mut options: Vec<ChoiceOption> = p
+                        .equips
+                        .iter()
+                        .chain(p.hand.iter())
+                        .copied()
+                        .filter(|c| {
+                            ctx.catalog.card_kind(*c).equip_slot().is_some()
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    options.dedup();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "wudian_diyjuntun_recast",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::Act => {
+                    let picked: Option<CardId> = ctx.answer().iter().find_map(
+                        |o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        },
+                    );
+                    let Some(c) = picked else { return Flow::Done };
+                    // 弃置（装备栏走 revoke）
+                    if ctx.core.player(self.owner).equips.contains(&c) {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            c,
+                        );
+                        ctx.to_discard(c);
+                    } else {
+                        ctx.discard_from_hand(self.owner, c);
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![c],
+                    });
+                    // 实体发现：牌堆随机一张装备牌入手（弃堆兜底）
+                    let mut pool: Vec<CardId> = ctx
+                        .core
+                        .deck
+                        .iter()
+                        .chain(ctx.core.discard.iter())
+                        .copied()
+                        .filter(|x| {
+                            ctx.catalog.card_kind(*x).equip_slot().is_some()
+                        })
+                        .collect();
+                    if !pool.is_empty() {
+                        let idx = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                        let got = pool.swap_remove(idx);
+                        if let Some(pos) =
+                            ctx.core.deck.iter().position(|x| *x == got)
+                        {
+                            ctx.core.deck.remove(pos);
+                        } else if let Some(pos) = ctx
+                            .core
+                            .discard
+                            .iter()
+                            .position(|x| *x == got)
+                        {
+                            ctx.core.discard.remove(pos);
+                        }
+                        ctx.core.player_mut(self.owner).hand.push(got);
+                        ctx.log(LogEvent::CardsDrawn {
+                            player: self.owner,
+                            cards: vec![got],
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
             },
             // 隙焰：弃首张红手牌（登记差异）→ 全体其他存活座位序各 1 火
             HostBehavior::YunchouJieyan => {

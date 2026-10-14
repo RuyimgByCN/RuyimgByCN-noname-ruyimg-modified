@@ -2372,6 +2372,26 @@ fn apply_command(
             if core.player(actor).wangshi_ban && catalog.card_kind(card).is_basic_kind() {
                 return Err(RejectReason::CardLimit);
             }
+            // 禁言（玩点论杀西真夕红，玩点论杀续批）：体力 ≤2 时黑色锦囊
+            // 禁用（查询面，往事封禁先例同位；登记差异：上游四面
+            // cardEnabled/Usable/Respondable/Savable，原生仅使用面）
+            if core.player(actor).hp <= 2 {
+                let jinyan = catalog
+                    .skill_by_name(crate::content::host::WUDIAN_JINYAN_KEY)
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false);
+                let kind = catalog.card_kind(card);
+                let black_trick = !kind.is_basic_kind()
+                    && kind.equip_slot().is_none()
+                    && kind.is_basic_trick_or_equip()
+                    && matches!(
+                        catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    );
+                if jinyan && black_trick {
+                    return Err(RejectReason::CardLimit);
+                }
+            }
             if !core.player(core.turn.current).hand.contains(&card) {
                 return Err(RejectReason::CardNotInHand);
             }
