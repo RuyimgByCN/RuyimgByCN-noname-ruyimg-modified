@@ -50,6 +50,8 @@ struct VmTriggerCtx {
     event_source: Option<PlayerId>,
     event_card: Option<CardId>,
     event_amount: u32,
+    /// 阶段事件携带（阶段种，begin 由 EventKind 区分；增量 14）。
+    phase: Option<crate::event::Phase>,
 }
 
 fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
@@ -59,9 +61,13 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             event_source: d.source,
             event_card: d.card,
             event_amount: d.amount,
+            ..VmTriggerCtx::default()
         },
-        EventData::Phase { player, .. } => VmTriggerCtx {
+        EventData::Phase {
+            player, phase, ..
+        } => VmTriggerCtx {
             event_player: Some(*player),
+            phase: Some(*phase),
             ..VmTriggerCtx::default()
         },
         EventData::CardUsed(u) => VmTriggerCtx {
@@ -125,6 +131,14 @@ pub enum VmFilterPolicy {
     /// DSL `owner_is_target_hand_at_least_hp_other_alive`：事件主玩家=持
     /// 有者，手牌数 ≥ 体力，且存在其他存活角色。
     OwnerHandAtLeastHpOtherAlive,
+    /// DSL `owner_is_target_play_phase_card_category_count_positive`：事
+    /// 件主玩家=持有者，事件为出牌阶段结束，且本出牌阶段已使用 ≥1 张基
+    /// 本/锦囊/装备牌（增量 14，ABI 42）。
+    OwnerPlayPhaseBteUsed,
+    /// DSL `owner_alive_play_phase_card_category_count_positive`：事件为
+    /// 出牌阶段结束，且持有者在该出牌阶段已使用 ≥1 张基本/锦囊/装备牌
+    ///（仅当前回合玩家可用牌，故事件主玩家=持有者；增量 14，ABI 293）。
+    OwnerAlivePlayPhaseBteUsed,
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -208,6 +222,15 @@ impl SkillBehavior for VmSkillBehavior {
                 } && (0..ctx.state.players.len()).any(|i| {
                     i as u8 != owner && ctx.state.players[i].alive
                 })
+            }
+            // 出牌阶段结束 && 本阶段三类牌已用 ≥1（计数随 Play 开始清
+            // 零，事件时点值即本阶段值；ABI 293 的持有者归因由「仅当前
+            // 回合玩家可用牌」化归为事件主玩家合取）。
+            VmFilterPolicy::OwnerPlayPhaseBteUsed
+            | VmFilterPolicy::OwnerAlivePlayPhaseBteUsed => {
+                is_event_player
+                    && trig.phase == Some(crate::event::Phase::Play)
+                    && ctx.state.turn.bte_used_play_phase > 0
             }
         }
     }

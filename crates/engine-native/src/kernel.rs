@@ -1364,6 +1364,11 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
     // 突击计数（U07 ow，规则 v118）：出牌阶段使用任意牌 +1（取消不计；
     // 等值牌种分支已各自置 table，此处只累计）
     ctx.core.turn.cards_used_play_phase += 1;
+    // 基本/锦囊/装备三类计数（T8 增量 14）：按结算牌种判类（view-as 转
+    // 化后），地/机关牌异类不计
+    if effective.is_basic_trick_or_equip() {
+        ctx.core.turn.bte_used_play_phase += 1;
+    }
 }
 
 /// 装备提交：牌入手牌区到对应装备栏，同栏旧牌替换入弃牌堆；
@@ -2561,6 +2566,8 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 ctx.core.turn.sha_used_play_phase = false;
                 // 突击计数（U07 ow，规则 v118）：出牌阶段开始清零
                 ctx.core.turn.cards_used_play_phase = 0;
+                // 三类计数同步清零（T8 增量 14）
+                ctx.core.turn.bte_used_play_phase = 0;
                 // 猛态：出牌阶段已发生（跳过路径不清位——上游
                 // phaseUseBegin 同口径）
                 ctx.core.turn.mengtai_use_pending = false;

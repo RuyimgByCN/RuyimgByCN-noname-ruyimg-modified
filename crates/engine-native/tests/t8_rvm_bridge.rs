@@ -8,6 +8,7 @@ use engine_native::catalog::TriggerMeta;
 use engine_native::event::{EventKind, Timing};
 use engine_native::content::extension::{ExtensionDef, ExtensionPack, VmSkillDecl};
 use engine_native::event::DamageNature;
+use engine_native::event::Phase;
 use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
 
 /// 酒尾对照样本（同原型 JIUWEI_DSL 语义）。
@@ -983,7 +984,7 @@ fn t8_loader_maps_all_carried_named_filters() {
     let mut dsl = String::new();
     // 词表差集说明：`owner_is_target_hand_empty` 不在编译器 FILTERS 词表
     // （装载器映射为前进兼容死臂，策略行为由家族直注测试覆盖）。
-    let named: [(&str, &str, P); 10] = [
+    let named: [(&str, &str, P); 12] = [
         ("wounded", "owner_is_target_wounded", P::OwnerWounded),
         ("linked", "owner_is_target_linked", P::OwnerLinked),
         (
@@ -1022,6 +1023,16 @@ fn t8_loader_maps_all_carried_named_filters() {
             "owner_is_target_other_hand_nonempty",
             P::OwnerOtherHandNonempty,
         ),
+        (
+            "play_bte",
+            "owner_is_target_play_phase_card_category_count_positive",
+            P::OwnerPlayPhaseBteUsed,
+        ),
+        (
+            "alive_play_bte",
+            "owner_alive_play_phase_card_category_count_positive",
+            P::OwnerAlivePlayPhaseBteUsed,
+        ),
     ];
     for (idx, (tag, filter, _)) in named.iter().enumerate() {
         dsl.push_str(&format!(
@@ -1036,7 +1047,7 @@ fn t8_loader_maps_all_carried_named_filters() {
         "已承载具名 filter 不得落 deferred: {:?}",
         outcome.deferred_filters
     );
-    assert_eq!(outcome.decls.len(), 10, "词表内 10 名全产出声明");
+    assert_eq!(outcome.decls.len(), 12, "词表内 12 名全产出声明");
     for (tag, _, want) in named.iter() {
         let decl = outcome
             .decls
@@ -1045,4 +1056,147 @@ fn t8_loader_maps_all_carried_named_filters() {
             .unwrap_or_else(|| panic!("hnl_ld_{tag} 声明缺失"));
         assert_eq!(decl.filter, *want, "hnl_ld_{tag} 策略映射");
     }
+}
+
+// ---------------------------------------------------------------------------
+// 增量 14：出牌阶段基本/锦囊/装备三类计数（TurnState.bte_used_play_phase，
+// 存档 v65/规则 v278）承载 `*_play_phase_card_category_count_positive` 双
+// 策略。零询问布置（装备/延时种）；阶段种负例=弃牌阶段结束时计数仍非零
+// 但事件非 Play 结束。
+// ---------------------------------------------------------------------------
+
+/// 出牌阶段结束探针：效果=摸 1（filter 由声明侧注入）。
+const BTE_DSL: &str = "\
+skill hnl_bte_t8(990010) {
+  trigger phase_end always {
+    effect draw_cards(self, 1);
+  }
+}
+";
+
+/// 推进到指定玩家的指定阶段（途中询问以空/首选应答排空）。
+fn advance_to(e: &mut Engine, player: u8, phase: Phase) {
+    for _ in 0..200 {
+        if e.turn().current == player && e.turn().phase == phase {
+            return;
+        }
+        assert!(e.outcome().is_none(), "对局提前结束");
+        np_settled(e);
+    }
+    panic!("200 步未到 p{player} 目标阶段");
+}
+
+#[test]
+fn t8_bte_play_phase_filter_dual_gate_and_phase_kind() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named("t8-rvm-bridge", BTE_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_bte_t8");
+    let trig = TriggerMeta {
+        event: EventKind::PhaseEnd,
+        timing: Timing::Normal,
+        priority: 0,
+        optional: false,
+        extra_events: Vec::new(),
+    };
+    let name = "t8阵";
+
+    for (idx, filter) in [P::OwnerPlayPhaseBteUsed, P::OwnerAlivePlayPhaseBteUsed]
+        .into_iter()
+        .enumerate()
+    {
+        let pack = pack_with(vec![VmSkillDecl {
+            name: name.to_string(),
+            module: module.clone(),
+            trigger: trig.clone(),
+            filter,
+        }]);
+        let mut e = Engine::new_with_extensions(951000 + idx as u64, 4, &[&pack])
+            .expect("建局");
+        e.debug_grant(1, name);
+
+        // ① gate 负例：玩家 0 出牌阶段出杀（bte=1；装备牌走 Equipped 帧
+        //    不经 commit_card_used，与 cards_used_play_phase 同集）→ 出牌
+        //    阶段结束时事件主玩家=0≠持有者 1，不触发。目标选 3（非持有
+        //    者，距离 1）。
+        advance_to(&mut e, 0, Phase::Play);
+        let sha0 = e.debug_place(0, "sha");
+        submit(&mut e, 0, GameAction::PlayCard { card: sha0, targets: vec![3] });
+        assert_eq!(
+            e.state_core().turn.bte_used_play_phase, 1,
+            "基本牌计入三类计数"
+        );
+        let h1 = hand_len(&e, 1);
+        advance_to(&mut e, 0, Phase::Discard);
+        assert_eq!(hand_len(&e, 1), h1, "他人 Play 结束不过闸（双策略）");
+
+        // ② 正例：玩家 1 出牌阶段出杀 → Play 结束触发摸 1。
+        advance_to(&mut e, 1, Phase::Play);
+        let sha1 = e.debug_place(1, "sha");
+        submit(&mut e, 1, GameAction::PlayCard { card: sha1, targets: vec![0] });
+        // 结算链时序（np_settled 同链）：Play 结束触发入队 → 阶段推进弃
+        // 牌 1 张 → 队首触发机结算摸 1。手牌 4(初始)+2(摸)-1(杀)-1(弃)
+        // +1(触发)=5。
+        advance_to(&mut e, 1, Phase::Discard);
+        assert_eq!(hand_len(&e, 1), 5, "{filter:?}: Play 结束触发摸 1");
+        // 阶段种负例：计数仍为 1，但弃牌阶段结束事件非 Play 结束 → 不再
+        // 触发（若误触发此处为 6）。
+        advance_to(&mut e, 1, Phase::End);
+        assert_eq!(hand_len(&e, 1), 5, "{filter:?}: 弃牌阶段结束不再触发");
+    }
+}
+
+#[test]
+fn t8_bte_zero_count_negative() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named("t8-rvm-bridge", BTE_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_bte_t8");
+    let pack = pack_with(vec![VmSkillDecl {
+        name: "t8阵".to_string(),
+        module,
+        trigger: TriggerMeta {
+            event: EventKind::PhaseEnd,
+            timing: Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: P::OwnerPlayPhaseBteUsed,
+    }]);
+    let mut e = Engine::new_with_extensions(952000, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8阵");
+    // 玩家 1 出牌阶段不出牌直接结束：计数 0 → 不触发（摸 2 张原样保留，
+    // 弃牌回上限后=4；若误触发=5）。
+    advance_to(&mut e, 1, Phase::Play);
+    assert_eq!(e.state_core().turn.bte_used_play_phase, 0);
+    advance_to(&mut e, 1, Phase::Discard);
+    assert_eq!(hand_len(&e, 1), 4, "计数 0 不触发");
+}
+
+/// 三类分类判定单测：异类（地十种+机关牌）排除、基本/装备/锦囊计入。
+#[test]
+fn t8_bte_kind_classification() {
+    use engine_native::catalog::CardKind as K;
+    assert!(K::Sha.is_basic_trick_or_equip());
+    assert!(K::Jiu.is_basic_trick_or_equip());
+    assert!(K::Weapon.is_basic_trick_or_equip());
+    assert!(K::Armor.is_basic_trick_or_equip());
+    assert!(K::ArcheryAttack.is_basic_trick_or_equip(), "锦囊计入");
+    assert!(K::Le.is_basic_trick_or_equip(), "延时锦囊计入");
+    for land in [
+        K::Longlushanfeng,
+        K::Haidao,
+        K::Shuimomuxue,
+        K::Feixu,
+        K::Yixialan,
+        K::Shamolvzhou,
+        K::Linzhongjianta,
+        K::Bingheyaosai,
+        K::Youlin,
+        K::Lindixiliu,
+    ] {
+        assert!(!land.is_basic_trick_or_equip(), "{land:?} 地不计入");
+    }
+    assert!(!K::Jiguan.is_basic_trick_or_equip(), "机关牌不计入");
 }

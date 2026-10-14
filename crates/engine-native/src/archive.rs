@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 64;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 65;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3007,6 +3007,7 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         }
     }
     w.u32(t.cards_used_play_phase);
+    w.u32(t.bte_used_play_phase);
     w.u32(t.phase_number);
     w.u8(t.rende_given);
     w.boolean(t.jiu_used);
@@ -3365,6 +3366,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         _ => return Err(ArchiveError::UnknownCardKind(255)),
     };
     let cards_used_play_phase = r.u32()?;
+    let bte_used_play_phase = r.u32()?;
     let phase_number = r.u32()?;
     let rende_given = r.u8()?;
     let jiu_used = r.boolean()?;
@@ -3490,6 +3492,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 ciqiu_dying,
                 kangyin2,
                 cards_used_play_phase,
+                bte_used_play_phase,
                 phase_number,
                 rende_given,
                 jiu_used,

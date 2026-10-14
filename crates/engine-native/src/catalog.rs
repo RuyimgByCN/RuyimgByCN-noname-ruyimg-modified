@@ -511,6 +511,33 @@ impl CardKind {
         )
     }
 
+    /// 出牌阶段主动使用的「基本/锦囊/装备」三类判定（T8 增量 14，
+    /// DSL filter `*_play_phase_card_category_count_positive` 承载；
+    /// 上游 "logical basic, trick, or equipment" 同口径）。地（mtg 十种）
+    /// 与机关牌（swd）为宿主专用异类不计入；其余经出牌提交的种均属三
+    /// 类（G1 扩展种按目录定义为锦囊/装备/基本牌；view-as 转化按结算
+    /// 牌种判）。扩展种未逐一归类按三类近似（保守集登记差异，同
+    /// is_basic_kind 先例）。
+    pub fn is_basic_trick_or_equip(self) -> bool {
+        if self.is_basic_kind() || self.equip_slot().is_some() {
+            return true;
+        }
+        !matches!(
+            self,
+            CardKind::Longlushanfeng
+                | CardKind::Haidao
+                | CardKind::Shuimomuxue
+                | CardKind::Feixu
+                | CardKind::Yixialan
+                | CardKind::Shamolvzhou
+                | CardKind::Linzhongjianta
+                | CardKind::Bingheyaosai
+                | CardKind::Youlin
+                | CardKind::Lindixiliu
+                | CardKind::Jiguan
+        )
+    }
+
     /// 装备牌 → 装备栏；非装备牌返回 None。
     pub fn equip_slot(self) -> Option<EquipSlot> {
         Some(match self {

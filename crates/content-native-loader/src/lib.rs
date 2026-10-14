@@ -172,6 +172,12 @@ pub fn bridge_vm_skill_decls(
             "owner_is_target_hand_below_max_hp" => P::OwnerHandBelowMaxHp,
             "owner_is_target_hand_above_hp" => P::OwnerHandAboveHp,
             "owner_is_target_other_hand_nonempty" => P::OwnerOtherHandNonempty,
+            "owner_is_target_play_phase_card_category_count_positive" => {
+                P::OwnerPlayPhaseBteUsed
+            }
+            "owner_alive_play_phase_card_category_count_positive" => {
+                P::OwnerAlivePlayPhaseBteUsed
+            }
             other => {
                 // 具名组合 filter：engine 无承载（增量 6 严格面）——跳过
                 // 登记，不阻断同包其余 VM 技能装载。

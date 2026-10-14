@@ -329,6 +329,10 @@ pub struct TurnState {
     /// 突击（U07 ow 士兵76，规则 v118）：本出牌阶段已使用牌数（上游
     /// countUsed 同口径；Play 阶段开始清零、换回合自然清零）。
     pub cards_used_play_phase: u32,
+    /// 出牌阶段已使用的基本/锦囊/装备牌数（T8 增量 14，DSL filter
+    /// `*_play_phase_card_category_count_positive` 承载；上游三类计数
+    /// 同口径——按结算牌种判类，地/机关牌异类不计；Play 阶段开始清零）。
+    pub bte_used_play_phase: u32,
     /// 全局阶段计数（U07 ow 自愈，规则 v120；上游 game.phaseNumber 同
     /// 口径——每阶段开始 +1，自愈 %4 门控用；入存档/哈希）。
     pub phase_number: u32,

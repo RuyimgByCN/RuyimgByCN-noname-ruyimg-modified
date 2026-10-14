@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v277 / 存档 v63**，2026-10-14 庞统批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v277 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v278 / 存档 v65**，2026-10-14 T8 增量 14 批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v278 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2916,6 +2916,26 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 **坑位**：转化链守卫 `if kind != Sha && kind != Le` 排除 plain Sha——酒池
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
+
+**规则 v278（2026-10-14，T8 增量 14：出牌阶段三类计数字段批）**：
+`TurnState.bte_used_play_phase`（出牌阶段已用基本/锦囊/装备牌数，
+`commit_card_used` 尾按**结算牌种**[view-as 转化后]计数，Play 阶段开始
+清零）入哈希，承载 DSL filter
+`owner_is_target_play_phase_card_category_count_positive`（ABI 42）与
+`owner_alive_play_phase_card_category_count_positive`（ABI 293）双策略
+（合取=事件主玩家为持有者 ∧ 事件为 Play 结束[ABI 293 的持有者归因由
+「仅当前回合玩家可用牌」化归] ∧ 计数>0；`VmTriggerCtx` 增 phase 捕获）。
+`CardKind::is_basic_trick_or_equip` 三类判定：地十种+机关牌为异类不计；
+扩展种未归类按三类保守近似（登记差异，同 is_basic_kind 先例）。**登记
+差异**：装备牌走 Equipped 帧不经出牌提交，不计数（与
+`cards_used_play_phase` 同集；上游 countUsed 装备口径未逐项对照）。
+装载器映射 2 名。存档 v64→**v65**（增量 2 起 v63→v64）。版本
+277→**278**。字段批探针：版本回退 277 复跑 14
+场景哈希三值互异（277 无字段/277+字段/278+字段），证明位移=版本字段+
+新增字段双源、无行为面扰动；全量重录。回归
+`t8_bte_play_phase_filter_dual_gate_and_phase_kind` /
+`t8_bte_zero_count_negative` / `t8_bte_kind_classification`——证据见
+[2026-10-14 T8 增量 14](../operations/evidence/2026-10-14-t8-increment14-bte-filters/README.md)。
 
 **规则 v277（2026-10-14，T11 群雄乱入 Boss 专项：庞统片[天狱/栖梧]＋庞
 统条目）**：**天狱**（查询型单面，End-begin 臂）：结束阶段自己已横置先

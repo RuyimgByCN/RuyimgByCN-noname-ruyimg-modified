@@ -392,6 +392,7 @@ impl Engine {
                 ciqiu_dying: Vec::new(),
                 kangyin2: None,
                 cards_used_play_phase: 0,
+                bte_used_play_phase: 0,
                 phase_number: 0,
             },
             skills: Default::default(),
@@ -4386,6 +4387,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
     }
     push_u32(&mut h, c.turn.cards_used_play_phase);
+    push_u32(&mut h, c.turn.bte_used_play_phase);
     push_u32(&mut h, c.turn.phase_number);
     // 贴房绅视：本回合无视距离目标（规则 v94）
     match c.turn.zhufangshenshi_target {
@@ -5489,6 +5491,7 @@ mod tests {
                 ciqiu_dying: Vec::new(),
                 kangyin2: None,
                 cards_used_play_phase: 0,
+                bte_used_play_phase: 0,
                 phase_number: 0,
                 },
                 skills: Default::default(),
@@ -5580,6 +5583,7 @@ mod tests {
                 ciqiu_dying: Vec::new(),
                 kangyin2: None,
                 cards_used_play_phase: 0,
+                bte_used_play_phase: 0,
                 phase_number: 0,
                     },
                     skills: Default::default(),
