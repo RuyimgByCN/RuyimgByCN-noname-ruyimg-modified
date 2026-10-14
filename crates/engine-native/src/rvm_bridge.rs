@@ -32,6 +32,8 @@ use crate::snap::MachineSnapshot;
 pub struct VmSkillProgram {
     /// 已验证字节码模块（装载/编译产物；`logic_hash` 为内容锁锚）。
     pub module: BytecodeModule,
+    /// 目录 def 名（T8 增量 8：HostContext.skill_id 反查键）。
+    pub skill_name: String,
 }
 
 impl VmSkillProgram {
@@ -298,7 +300,10 @@ impl VmMachine {
     pub(crate) fn from_module(owner: PlayerId, module: BytecodeModule) -> Self {
         Self {
             owner,
-            program: Arc::new(VmSkillProgram { module }),
+            program: Arc::new(VmSkillProgram {
+                skill_name: module.name.clone(),
+                module,
+            }),
             trig: VmTriggerCtx::default(),
             pending_effects: Vec::new(),
             paused: None,
@@ -327,7 +332,10 @@ impl VmMachine {
         let pending = dec_effects(&pending_bytes).ok_or(())?;
         Ok(Self {
             owner,
-            program: Arc::new(VmSkillProgram { module }),
+            program: Arc::new(VmSkillProgram {
+                skill_name: module.name.clone(),
+                module,
+            }),
             trig: VmTriggerCtx::default(),
             pending_effects: pending,
             paused: Some(VmPaused {
@@ -530,8 +538,12 @@ impl VmMachine {
         let outcome = {
             let mut host = EngineVmHost {
                 ctx: HostContext {
-                    // def id 反查回填属增量 3（登记）。
-                    skill_id: 0,
+                    // T8 增量 8：skill_id 经目录反查回填（查不到保持 0=NONE）。
+                    skill_id: ctx
+                        .catalog
+                        .skill_by_name(&self.program.skill_name)
+                        .map(|d| d as u32)
+                        .unwrap_or(0),
                     self_id: to_rule_pid(self.owner).raw(),
                     event_player: self
                         .trig

@@ -6380,6 +6380,7 @@ pub fn standard_catalog_with_extensions(
                 behavior: Box::new(crate::rvm_bridge::VmSkillBehavior {
                     program: std::sync::Arc::new(crate::rvm_bridge::VmSkillProgram {
                         module: decl.module.clone(),
+                        skill_name: decl.name.clone(),
                     }),
                     filter: decl.filter,
                 }),

@@ -796,3 +796,49 @@ fn t8_vm_skill_save_restore_roundtrip() {
         "VM 技能 def 经内容锁恢复"
     );
 }
+
+/// T8 增量 8 定向：HostContext.skill_id 经目录反查回填（非 0）。
+/// 观测面：DSL 侧无 skill_id 查询——以目录 def 查询同键核对装配一致性
+/// （装配 def 名=声明名，program.skill_name 同源）。
+#[test]
+fn t8_vm_skill_id_reverse_lookup_wired() {
+    let pkg = compile_source_named("t8-rvm-bridge", JIUWEI_DSL).expect("DSL 编译");
+    let outcome = content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
+    let decls = outcome.decls;
+    let pack = {
+        // 复用通道测试的装配路径：npack 声明经 standard_catalog_with_extensions
+        use engine_native::content::extension::{ExtensionDef, ExtensionPack, VmSkillDecl};
+        use engine_native::catalog::TriggerMeta;
+        use engine_native::event::{EventKind, Timing};
+        ExtensionPack {
+            def: ExtensionDef {
+                name: "t8-skillid",
+                version: 1,
+                description: "skill_id 反查",
+            },
+            generals: Vec::new(),
+            cards: Vec::new(),
+            host_skills: Vec::new(),
+            vm_skills: vec![VmSkillDecl {
+                name: decls[0].name.clone(),
+                module: decls[0].module.clone(),
+                trigger: TriggerMeta {
+                    event: EventKind::PhaseEnd,
+                    timing: Timing::Normal,
+                    priority: 0,
+                    optional: false,
+                    extra_events: Vec::new(),
+                },
+                filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+            }],
+            init_hook: engine_native::content::extension::InitHook::None,
+            enabled: true,
+        }
+    };
+    let e = Engine::new_with_extensions(930001, 3, &[&pack]).expect("建局");
+    let def = e
+        .catalog()
+        .skill_by_name(&decls[0].name)
+        .unwrap_or_else(|| panic!("VM def 应在目录"));
+    assert_ne!(def, 0, "def id 非 NONE（反查键有效）");
+}
