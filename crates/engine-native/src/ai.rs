@@ -162,7 +162,13 @@ impl Engine {
     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
         let submitted_revision = self.revision();
-        let started = Instant::now();
+        // wasm 目标无 wall-clock 时间源（Instant::now panic）：deadline
+        // 静默失效=纯节点预算面（engine-native-wasm 壳契约，登记证据）；
+        // 原生目标语义不变。
+        #[cfg(target_arch = "wasm32")]
+        let started: Option<Instant> = None;
+        #[cfg(not(target_arch = "wasm32"))]
+        let started: Option<Instant> = Some(Instant::now());
         // 计算与规则推进隔离：全部模拟发生在克隆上
         let mut sim = self.clone();
         // N10 规划信息集（ADR 0774/v29）：未知牌（对手暗手牌+牌库）
@@ -251,8 +257,8 @@ impl Engine {
                     cancelled: true,
                 };
             }
-            if let Some(ms) = planner.deadline_ms {
-                if started.elapsed() > Duration::from_millis(ms) {
+            if let (Some(t), Some(ms)) = (started, planner.deadline_ms) {
+                if t.elapsed() > Duration::from_millis(ms) {
                     timed_out = true;
                     break;
                 }

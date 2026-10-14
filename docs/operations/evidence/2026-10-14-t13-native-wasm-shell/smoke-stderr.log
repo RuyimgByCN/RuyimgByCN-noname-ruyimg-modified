@@ -1,0 +1,11 @@
+PASS build | ruleset=v278 players=4
+PASS view_own_hand | own=4
+PASS view_hidden_hand | {"hidden":true}
+PASS view_deck_count_only | deck=108
+PASS view_per_seat
+PASS auto_game_progress | steps=180 finished=true answers=30
+PASS auto_suspended_none_or_resumable | suspended=0
+PASS restore_view_equal | mid-save restore per-view equal
+PASS restore_matches_same_seed | same-seed 60 steps equal restored view
+PASS dual_instance_determinism | hash_equal=true
+PASS choice_visibility_own_and_other | own=true other=true

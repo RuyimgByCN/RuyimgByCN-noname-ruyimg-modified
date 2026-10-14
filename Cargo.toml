@@ -6,6 +6,8 @@ members = [
     "crates/rule-api",
     "crates/engine-core",
     "crates/engine-native",
+    "crates/engine-native-wasm",
+    "crates/engine-native-wasm",
     "crates/rule-vm",
     "crates/content-schema",
     "crates/content-compiler",

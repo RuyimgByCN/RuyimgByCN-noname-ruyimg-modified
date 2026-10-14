@@ -1140,6 +1140,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "engine-native-wasm"
+version = "0.1.0"
+dependencies = [
+ "engine-native",
+ "serde_json",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "engine-protocol"
 version = "0.1.0"
 dependencies = [
