@@ -3771,6 +3771,8 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 asking_lueying: false,
                 lueying_victim: None,
                 lueying_declined: false,
+                asking_fuchou: false,
+                fuchou_card: None,
                 extra_targets: extra,
                 hujia_queue: None,
                 hujia_holder: None,
@@ -5313,6 +5315,10 @@ pub struct ShaResolveMachine {
     /// 掠影：本杀已询问且被放弃（v194——放弃不消耗 usable，但同一杀
     /// 不得重复询问；阻止 step 重入钩子再问）。
     lueying_declined: bool,
+    /// 复仇（玩点论杀批 14，规则 v279）：目标弃牌取消询问挂起中。
+    asking_fuchou: bool,
+    /// 复仇：目标所选取消牌（取消结算：杀回来源手、牌归来源、标记）。
+    fuchou_card: Option<crate::ids::CardId>,
 }
 
 impl ShaResolveMachine {
@@ -5349,6 +5355,8 @@ impl ShaResolveMachine {
         asking_lueying: bool,
         lueying_victim: Option<PlayerId>,
         lueying_declined: bool,
+        asking_fuchou: bool,
+        fuchou_card: Option<crate::ids::CardId>,
     ) -> Self {
         Self {
             card,
@@ -5382,6 +5390,9 @@ impl ShaResolveMachine {
             asking_lueying,
             lueying_victim,
             lueying_declined,
+            asking_fuchou,
+            fuchou_card,
+
         }
     }
 
@@ -5624,9 +5635,64 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             asking_lueying: self.asking_lueying,
             lueying_victim: self.lueying_victim.map(|c| c as u32),
             lueying_declined: self.lueying_declined,
+            asking_fuchou: self.asking_fuchou,
+            fuchou_card: self.fuchou_card.map(|c| c as u32),
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 复仇（玩点论杀批 14，规则 v279）：成为杀目标时弃 1 张手牌取消
+        // 该杀（上游 target shaBefore direct chooseCard 同面；所选牌归来
+        // 源+标记来源供 fuchou2 回合末结算；杀回来源手=上游 cancel 回手
+        // 同口径）。取消（空应答）则照常响应流程。
+        if !self.asking_fuchou && self.fuchou_card.is_none() {
+            let t = self.target;
+            let has = ctx
+                .catalog
+                .skill_by_name(crate::content::host::WUDIAN_FUCHOU_KEY)
+                .map(|d| ctx.core.has_skill(t, d))
+                .unwrap_or(false);
+            if has && !ctx.core.player(t).hand.is_empty() {
+                self.asking_fuchou = true;
+                let options: Vec<ChoiceOption> = ctx.core.player(t)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                return Flow::WaitChoice {
+                    observer: t,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "wudian_fuchou_cancel",
+                        options,
+                        min: 1,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
+            }
+        } else if self.asking_fuchou {
+            self.asking_fuchou = false;
+            let t = self.target;
+            let picked = ctx.answer().iter().find_map(|o| match o {
+                ChoiceOption::Card(c) => Some(*c),
+                _ => None,
+            });
+            if let Some(c) = picked {
+                self.fuchou_card = Some(c);
+                ctx.core.table.retain(|x| *x != self.card);
+                ctx.core.player_mut(self.source).hand.push(self.card);
+                ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                ctx.core.player_mut(self.source).hand.push(c);
+                ctx.core.player_mut(t).fuchou_marked.push(self.source);
+                ctx.log(LogEvent::CardsGiven {
+                    from: t,
+                    to: self.source,
+                    cards: vec![c],
+                });
+                return Flow::Done; // 杀整体取消
+            }
+        }
         // 寒冰剑（逐技对照批一，规则 v75）：目标自选弃牌恢复——上游
         // discardPlayerCard("he", forced) 逐张强制弃，目标从手牌+装备
         // 自选；次数用尽或目标无牌可弃后跳过伤害。

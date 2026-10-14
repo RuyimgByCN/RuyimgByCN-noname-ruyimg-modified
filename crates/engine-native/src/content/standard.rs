@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 278;
+pub const STANDARD_RULESET_VERSION: u64 = 279;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -3664,6 +3664,8 @@ impl SkillMachine for JijiangMachine {
                     false,
                     None,
                     false,
+                    false,
+                    None,
                 );
                 self.inner = Some(Box::new(machine));
                 let flow = self.inner.as_mut().expect("just set").step(ctx);

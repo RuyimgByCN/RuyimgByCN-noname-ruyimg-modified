@@ -166,6 +166,9 @@ pub struct PlayerState {
     ///（上游 randomGet 类型→恒定基本牌近似；打出面未落=登记差异）；
     /// 回合结束全清。
     pub wangshi_ban: bool,
+    /// 复仇标记（玩点论杀批 14，规则 v279）：以【杀】指向前弃牌取消并
+    /// 标记的来源（跨回合持久；fuchou2 于自己回合结束逐个结算）。
+    pub fuchou_marked: Vec<PlayerId>,
     /// 不臣（Boss 勾芒，规则 v240）：上次发动不臣的轮次（0=未发动过；
     /// 间隔 ≥2 轮可再发动；跨回合持久）。
     pub buchun_used_round: u32,
@@ -267,6 +270,7 @@ impl PlayerState {
             xingqiu_toggled: false,
             zlfanshi_terra: false,
             wangshi_ban: false,
+            fuchou_marked: Vec::new(),
             buchun_used_round: 0,
             nbianshen_toggle: false,
             xingxia_used_round: 0,

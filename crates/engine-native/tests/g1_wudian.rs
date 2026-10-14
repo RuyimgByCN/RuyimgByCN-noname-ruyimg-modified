@@ -216,7 +216,7 @@ fn g1_wudian_generals_and_siji_discard_draw() {
     let host_skills = out.host_skills;
     let unmapped_total = out.unmapped_skills;
     assert_eq!(generals.len(), 9, "玩点论杀九名武将全量入册（批 10 补西真夕红/造之仁君/杨仪）");
-    assert_eq!(unmapped_total, 7, "7 个技能登记暂缓（理断转正；余复仇双技/良策/坚壁/仇渡+存量夺启/佑赞）");
+    assert_eq!(unmapped_total, 5, "5 个技能登记暂缓（批 14 复仇双技转正；余良策/仇渡+存量夺启/佑赞/坚壁全域面）");
     let pack = ExtensionPack {
         def: ExtensionDef {
             name: "wudian-upstream-noname",
@@ -8449,7 +8449,7 @@ fn wudian_generals_batch13_jianbi_aoe_exclude() {
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     let m = e.catalog().general_meta(base + 6).expect("西真夕红在目录");
     assert_eq!(m.0, "西真夕红");
-    assert_eq!(m.2, vec!["jinyan", "jianbi"], "坚壁入目录（fuchou/fuchou2 暂缓不进列表）");
+    assert_eq!(m.2, vec!["jinyan", "fuchou", "fuchou2", "jianbi"], "西真夕红整将（批 14 复仇双技转正）");
 
     // 南蛮：p0 对全体——p1（持坚壁）被跳过（不询问不掉血），p2/p3 受伤
     e.debug_grant(1, "jianbi");
@@ -8489,4 +8489,121 @@ fn wudian_generals_batch13_jianbi_aoe_exclude() {
     submit(&mut e2, 0, GameAction::PlayCard { card: nanman2, targets: vec![] });
     settle_optional_confirm(&mut e2);
     assert_eq!(e2.debug_hp(1), 7, "负例：无坚壁 p1 正常受伤");
+}
+
+/// T12 玩点论杀批 14：复仇双技（西真夕红整将转正）——成为杀目标时弃
+/// 1 张手牌取消该杀（ShaResolveMachine 内联选择阶段；杀回来源手+所选
+/// 牌归来源+标记）；自己回合结束时对标记来源逐个摸 1+虚拟杀强制指定。
+#[test]
+fn wudian_generals_batch14_fuchou_cancel_and_settle() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "wudian")
+        .expect("wudian 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(61004, 4, &[&pack]).expect("建局");
+    assert!(e.catalog().skill_by_name("fuchou").is_some(), "复仇 def");
+    assert!(e.catalog().skill_by_name("fuchou2").is_some(), "清算 def");
+
+    // 复仇取消：p1 持复仇，p0 杀 p1 → 弃牌取消 → p0 收回杀+获得所选牌
+    e.debug_grant(1, "fuchou");
+    e.debug_set_hp(1, 8);
+    advance_to_play(&mut e, 0);
+    let sha = e.debug_place(0, "sha");
+    let pay = e.debug_place(1, "tao");
+    let hp0 = e.debug_hp(0);
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: sha, targets: vec![1] });
+    let _ = out;
+    // 复仇选择挂起：选 tao 取消杀
+    let c = e.open_choice().expect("复仇选择挂起");
+    assert_eq!(c.observer, 1, "复仇询问目标本人");
+    let (cid, obs) = (c.id, c.observer);
+    let sel: Vec<ChoiceOption> = c
+        .spec
+        .options
+        .iter()
+        .filter(|o| matches!(o, ChoiceOption::Card(x) if *x == pay))
+        .cloned()
+        .collect();
+    assert_eq!(sel.len(), 1, "选择面含所布牌");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    assert_eq!(e.debug_hp(1), 8, "复仇：杀被取消不受伤");
+    assert!(e.debug_hand(0).contains(&sha), "复仇：杀回来源手");
+    assert!(e.debug_hand(0).contains(&pay), "复仇：所选牌归来源");
+    assert!(
+        e.state_core().players[1].fuchou_marked.contains(&0),
+        "复仇：来源已标记"
+    );
+
+    // 清算：p1 回合结束 → 对标记来源摸 1+虚拟杀（p1 掉血或 p0 有闪弃闪）
+    e.debug_grant(1, "fuchou2");
+    e.debug_set_hp(1, 8);
+    // 推进到 p1 回合结束（End 阶段结束帧触发）
+    for _ in 0..200 {
+        if e.outcome().is_some() {
+            break;
+        }
+        // 到 p1 的 End 阶段后停止推进（End 结束帧在下一 NextPhase）
+        if e.turn().current == 1 && e.turn().phase == Phase::End {
+            break;
+        }
+        let actor = e.turn().current;
+        submit(&mut e, actor, GameAction::NextPhase);
+        let pending = e.open_choice().map(|ch| (ch.id, ch.observer, ch.spec.min.max(1)));
+        if let Some((cid2, obs2, min)) = pending {
+            let card_sel: Vec<ChoiceOption> = {
+                let ch = e.open_choice().expect("still open");
+                ch.spec
+                    .options
+                    .iter()
+                    .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                    .copied()
+                    .take(min)
+                    .collect()
+            };
+            if !card_sel.is_empty() {
+                submit(&mut e, obs2, GameAction::Answer { choice_id: cid2, selection: card_sel });
+            } else {
+                let first = {
+                    let ch = e.open_choice().expect("still open");
+                    vec![ch.spec.options[0].clone()]
+                };
+                submit(&mut e, obs2, GameAction::Answer { choice_id: cid2, selection: first });
+            }
+        }
+    }
+    let h1 = hand_len_w(&e, 1);
+    // 触发 End 结束帧（NextPhase 推进）
+    let cur = e.turn().current;
+    if cur == 1 && e.turn().phase == Phase::End {
+        submit(&mut e, 1, GameAction::NextPhase);
+            let pending = e.open_choice().map(|ch| (ch.id, ch.observer));
+        if let Some((cid2, obs2)) = pending {
+            let first = {
+                let ch = e.open_choice().expect("still open");
+                vec![ch.spec.options[0].clone()]
+            };
+            submit(&mut e, obs2, GameAction::Answer { choice_id: cid2, selection: first });
+        }
+    }
+    assert_eq!(
+        hand_len_w(&e, 1),
+        h1 + 1,
+        "清算：对标记来源摸 1"
+    );
+    assert!(
+        e.state_core().players[1].fuchou_marked.is_empty(),
+        "清算：标记已消耗"
+    );
+    let _ = hp0;
 }

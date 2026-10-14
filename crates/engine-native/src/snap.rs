@@ -268,6 +268,8 @@ pub enum MachineSnapshot {
         lueying_victim: Option<u32>,
         /// 掠影：本杀已询问且被放弃（v194，阻止重入再问）。
         lueying_declined: bool,
+        asking_fuchou: bool,
+        fuchou_card: Option<u32>,
     },
     /// 丈八蛇矛（批③-b 第七把）：两张手牌当杀（牌池 + 阶段）。
     Zhangba {
@@ -4146,6 +4148,8 @@ impl MachineSnapshot {
                 asking_lueying,
                 lueying_victim,
                 lueying_declined,
+                asking_fuchou,
+                fuchou_card,
             } => Ok(Box::new(crate::kernel::ShaResolveMachine::new(
                 *card,
                 *source,
@@ -4178,6 +4182,8 @@ impl MachineSnapshot {
                 *asking_lueying,
                 lueying_victim.map(|c| c as crate::ids::PlayerId),
                 *lueying_declined,
+                *asking_fuchou,
+                fuchou_card.map(|c| c as u32),
             ))),
             MachineSnapshot::DyingSave {
                 dying,

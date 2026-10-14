@@ -689,6 +689,14 @@ pub enum HostBehavior {
     /// 持有者无效（目标排除原语首例，帷幕 weimu_blocks_aoe 同构；登记
     /// 差异：上游可选确认且覆盖全部多目标锦囊，原生锁定仅 AOE 面）。
     WudianJianbi,
+    /// 复仇（tag 259，玩点论杀批 14）：目录锚——取消逻辑在
+    /// ShaResolveMachine 内联（杀目标响应窗前选择阶段）。
+    WudianFuchou,
+    /// 复仇·清算（tag 260，玩点论杀批 14）：自己回合结束时对复仇标记的
+    /// 来源逐个结算——摸 1 张并以虚拟杀强制指定（登记差异：上游
+    /// chooseToUse 玩家选杀实体且可逐个取消，原生虚拟杀直发；死亡标记
+    /// 一并移除）。
+    WudianFuchou2,
 }
 
 
@@ -731,6 +739,8 @@ impl HostBehavior {
             HostBehavior::WudianJinyan => 96,
             HostBehavior::WudianLiduan => 257,
             HostBehavior::WudianJianbi => 258,
+            HostBehavior::WudianFuchou => 259,
+            HostBehavior::WudianFuchou2 => 260,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1234,6 +1244,8 @@ impl HostBehavior {
             96 => HostBehavior::WudianJinyan,
             257 => HostBehavior::WudianLiduan,
             258 => HostBehavior::WudianJianbi,
+            259 => HostBehavior::WudianFuchou,
+            260 => HostBehavior::WudianFuchou2,
             _ => return None,
         })
     }
@@ -1246,7 +1258,7 @@ impl HostBehavior {
     pub const fn aoe_exclude(self) -> bool {
         matches!(self, Self::WudianJianbi)
     }
-    pub const ALL: [HostBehavior; 258] = [
+    pub const ALL: [HostBehavior; 260] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1505,6 +1517,8 @@ impl HostBehavior {
         HostBehavior::WudianJinyan,
         HostBehavior::WudianLiduan,
         HostBehavior::WudianJianbi,
+        HostBehavior::WudianFuchou,
+        HostBehavior::WudianFuchou2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1528,6 +1542,8 @@ impl HostBehavior {
             HostBehavior::WudianJinyan => "host:wudian_jinyan",
             HostBehavior::WudianLiduan => "host:wudian_liduan",
             HostBehavior::WudianJianbi => "host:wudian_jianbi",
+            HostBehavior::WudianFuchou => "host:fuchou",
+            HostBehavior::WudianFuchou2 => "host:fuchou2",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1849,6 +1865,16 @@ impl HostBehavior {
             }),
             // 坚壁：锁定查询面（AOE 目标段查询，无触发帧）
             HostBehavior::WudianJianbi => None,
+            // 复仇：目录锚（取消逻辑在 ShaResolveMachine 内联）
+            HostBehavior::WudianFuchou => None,
+            // 复仇·清算：自己回合结束（标记逐个结算）
+            HostBehavior::WudianFuchou2 => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 蝉缘·变体：死亡结算后（来源减上限）
             HostBehavior::YunchouDiychanyuan => Some(TriggerMeta {
                 event: EventKind::Death,
@@ -2979,6 +3005,8 @@ pub const WUDIAN_KANGYIN_DRAW: &str = "wudian_kangyin_draw";
 pub const WUDIAN_KANGYIN_KEY: &str = "kangyin";
 /// 禁言（玩点论杀续批）：PlayCard 门查询锚。
 pub const WUDIAN_JINYAN_KEY: &str = "jinyan";
+/// 复仇（玩点论杀批 14）：ShaResolveMachine 内联取消查询锚。
+pub const WUDIAN_FUCHOU_KEY: &str = "fuchou";
 pub const WUDIAN_KANGYIN_TARGET: &str = "wudian_kangyin_target";
 pub const WUDIAN_KUOYIN_CARDS: &str = "wudian_kuoyin_cards";
 pub const WUDIAN_LIANGOU_CARDS: &str = "wudian_liangou_cards";
@@ -3436,6 +3464,8 @@ impl HostSkillBehavior {
             },
             // 狡黠：自身（摸 1）
             HostBehavior::YunchouJiaoxia => (Some(owner), None),
+            // 复仇：目录锚（无提取）
+            HostBehavior::WudianFuchou => (None, None),
             // 蝉缘·变体：死亡来源（减其上限）
             HostBehavior::YunchouDiychanyuan => match event {
                 EventData::Death { killer: Some(k), .. } => (Some(*k), None),
@@ -3571,6 +3601,12 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::YunchouYiesheng => false,
             HostBehavior::WudianDiyjuntun => false,
             HostBehavior::WudianJianbi => false,
+            // 复仇·清算：自己 End 阶段结束（登记差异：上游 global
+            // phaseAfter，原生自己回合结束）
+            HostBehavior::WudianFuchou2 => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
+                if *player == owner),
+            HostBehavior::WudianFuchou => false,
             HostBehavior::WudianLiduan => matches!(event,
                 EventData::CardsMoved { cards, from, to }
                 if *to != owner
@@ -5298,6 +5334,8 @@ impl crate::catalog::SkillMachine for HostMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
+            // 复仇：目录锚（取消逻辑在 ShaResolveMachine 内联）
+            HostBehavior::WudianFuchou => Flow::Done,
             // 坚壁：锁定查询面（AOE 目标段查询），无独立效果步
             HostBehavior::WudianJianbi => Flow::Done,
             // 厉焰：目录锚（转化逻辑在 PlayCard 门，无独立效果步）
@@ -5379,6 +5417,22 @@ impl crate::catalog::SkillMachine for HostMachine {
                         card,
                         replaced: old_equip,
                     });
+                }
+                Flow::Done
+            },
+            // 复仇·清算：标记来源逐个摸 1+虚拟杀强制指定（死亡移除）
+            HostBehavior::WudianFuchou2 => {
+                let mut marked = std::mem::take(
+                    &mut ctx.core.player_mut(self.owner).fuchou_marked,
+                );
+                marked.retain(|src| ctx.core.player(*src).alive);
+                for src in marked {
+                    ctx.draw_cards(self.owner, 1);
+                    ctx.use_virtual_card(
+                        self.owner,
+                        crate::catalog::CardKind::Sha,
+                        vec![src],
+                    );
                 }
                 Flow::Done
             },

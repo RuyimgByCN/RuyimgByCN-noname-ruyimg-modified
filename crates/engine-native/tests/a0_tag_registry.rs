@@ -46,6 +46,8 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
             jiu_bonus: true,
             asking_xiandan: false, xiandan_done: false, xiandan_bonus: false,
             asking_lueying: false, lueying_victim: None, lueying_declined: false,
+            asking_fuchou: false,
+            fuchou_card: None,
             asking_qilin: false,
             qilin_horse: None,
             asking_hanbing: false,

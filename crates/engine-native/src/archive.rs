@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 66;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 67;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -835,6 +835,8 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             asking_lueying,
             lueying_victim,
             lueying_declined,
+            asking_fuchou: _,
+            fuchou_card: _,
         } => {
             w.u8(0);
             w.u32(*card);
@@ -1720,6 +1722,8 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 _ => return Err(ArchiveError::UnknownCardKind(255)),
             };
             let lueying_declined = r.boolean()?;
+            let asking_fuchou = r.boolean()?;
+            let fuchou_card = dec_opt_u32(r)?;
             MachineSnapshot::Sha {
                 card,
                 source,
@@ -1752,6 +1756,8 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 asking_lueying,
                 lueying_victim,
                 lueying_declined,
+                asking_fuchou,
+                fuchou_card,
             }
         }
         1 => {
@@ -2536,6 +2542,7 @@ fn enc_open_choice(w: &mut W, o: &OpenChoice) {
 /// 直接拒绝。所有引擎生成的 prompt 均为编译期常量。
 const KNOWN_PROMPTS: &[&str] = &[
     "discard_to_limit", "respond_shan", "dying_save", "gui_dao_rewrite",
+    "wudian_fuchou_cancel", "wudian_diyjuntun_recast",
     "guanxing_arrange", "tuxi_target", "rende_cards", "rende_target",
     "jieyin_cards", "jieyin_target", "fanjian_target", "fanjian_pick",
     "lijian_discard", "lijian_targets", "jijiang_helper", "jijiang_respond",
@@ -2959,6 +2966,11 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.zlfanshi_terra);
         // 往事封禁（v270）
         w.boolean(p.wangshi_ban);
+        // 复仇标记（玩点论杀批 14）
+        w.len(p.fuchou_marked.len());
+        for src in &p.fuchou_marked {
+            w.u8(*src);
+        }
         // 不臣上次发动轮次（v240）
         w.u32(p.buchun_used_round);
         // 星夏上次发动轮次（v242）
@@ -3266,6 +3278,11 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let xingqiu_toggled = r.boolean()?;
         let zlfanshi_terra = r.boolean()?;
         let wangshi_ban = r.boolean()?;
+        let fuchou_len = r.len()?;
+        let mut fuchou_marked = Vec::with_capacity(fuchou_len);
+        for _ in 0..fuchou_len {
+            fuchou_marked.push(r.u8()?);
+        }
         let buchun_used_round = r.u32()?;
         let xingxia_used_round = r.u32()?;
         let nbianshen_toggle = r.boolean()?;
@@ -3328,6 +3345,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             xingqiu_toggled,
             zlfanshi_terra,
             wangshi_ban,
+            fuchou_marked,
             buchun_used_round,
             xingxia_used_round,
             nbianshen_toggle,

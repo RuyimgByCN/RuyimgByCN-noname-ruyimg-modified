@@ -285,11 +285,11 @@
         },
         {
           "name": "fuchou",
-          "mapping": null
+          "mapping": "host:fuchou"
         },
         {
           "name": "fuchou2",
-          "mapping": null
+          "mapping": "host:fuchou2"
         },
         {
           "name": "jianbi",
