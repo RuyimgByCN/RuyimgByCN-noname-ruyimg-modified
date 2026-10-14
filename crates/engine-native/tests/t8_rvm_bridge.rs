@@ -984,7 +984,7 @@ fn t8_loader_maps_all_carried_named_filters() {
     let mut dsl = String::new();
     // 词表差集说明：`owner_is_target_hand_empty` 不在编译器 FILTERS 词表
     // （装载器映射为前进兼容死臂，策略行为由家族直注测试覆盖）。
-    let named: [(&str, &str, P); 14] = [
+    let named: [(&str, &str, P); 19] = [
         ("wounded", "owner_is_target_wounded", P::OwnerWounded),
         ("linked", "owner_is_target_linked", P::OwnerLinked),
         (
@@ -1043,6 +1043,31 @@ fn t8_loader_maps_all_carried_named_filters() {
             "owner_is_target_source_movable_field_card",
             P::OwnerSourceMovableFieldCard,
         ),
+        (
+            "tied_max_hand",
+            "owner_is_target_tied_max_hand",
+            P::OwnerTiedMaxHand,
+        ),
+        (
+            "tied_max_hp",
+            "owner_is_target_tied_max_hp",
+            P::OwnerTiedMaxHp,
+        ),
+        (
+            "tied_max_equip",
+            "owner_is_target_tied_max_equip_nonempty",
+            P::OwnerTiedMaxEquipNonempty,
+        ),
+        (
+            "not_unique_max_hp",
+            "owner_is_target_not_unique_max_current_hp",
+            P::OwnerNotUniqueMaxHp,
+        ),
+        (
+            "targeted_by_sha",
+            "owner_targeted_by_other_sha",
+            P::OwnerTargetedByOtherSha,
+        ),
     ];
     for (idx, (tag, filter, _)) in named.iter().enumerate() {
         // dbf_hand_empty 走 damage_before 触发面（ABI 358 语义事件种）
@@ -1059,7 +1084,7 @@ fn t8_loader_maps_all_carried_named_filters() {
         "已承载具名 filter 不得落 deferred: {:?}",
         outcome.deferred_filters
     );
-    assert_eq!(outcome.decls.len(), 14, "词表内 14 名全产出声明");
+    assert_eq!(outcome.decls.len(), 19, "词表内 19 名全产出声明");
     for (tag, _, want) in named.iter() {
         let decl = outcome
             .decls
@@ -1240,14 +1265,18 @@ fn param_probe_pack(
     }])
 }
 
-/// 日志中 p1 的 n=1 摸牌次数（触发效果计数）。
+/// 日志中某座位 n=1 摸牌次数（触发效果计数）。
 fn trigger_draws(e: &Engine) -> usize {
+    trigger_draws_of(e, 1)
+}
+
+fn trigger_draws_of(e: &Engine, player: u8) -> usize {
     e.log()
         .iter()
         .filter(|ev| {
             matches!(
                 ev,
-                engine_native::machine::LogEvent::CardsDrawn { player: 1, cards } if cards.len() == 1
+                engine_native::machine::LogEvent::CardsDrawn { player: p, cards } if *p == player && cards.len() == 1
             )
         })
         .count()
@@ -1520,4 +1549,120 @@ fn t8_filter_damage_source_movable_field_card() {
     // owner 门：受伤者非持有者
     e.debug_deal_damage(Some(2), 0, 1, DamageNature::Normal);
     assert_eq!(trigger_draws(&e), 2, "他人受伤不过闸");
+}
+
+// ---------------------------------------------------------------------------
+// 增量 17：并列最大查询族（ABI 55 三兄弟 + not_unique_max_hp）与
+// targeted_by_other_sha（原生以 CardUsed+targets 表达，登记差异）。
+// ---------------------------------------------------------------------------
+
+#[test]
+fn t8_filter_tied_max_family() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named("t8-rvm-bridge", BTE_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_bte_t8");
+    let trig = TriggerMeta {
+        event: EventKind::PhaseEnd,
+        timing: Timing::Normal,
+        priority: 0,
+        optional: false,
+        extra_events: Vec::new(),
+    };
+    let name = "t8并";
+
+    // 断言用日志摸牌计数（trigger_draws）而非手牌增量——np_settled 的
+    // 一步会推进阶段并触发 Draw 摸牌，污染手牌账。
+    let case = |filter: P, setup: fn(&mut Engine)| -> bool {
+        let pack = pack_with(vec![VmSkillDecl {
+            name: name.to_string(),
+            module: module.clone(),
+            trigger: trig.clone(),
+            filter,
+        }]);
+        let mut e = Engine::new_with_extensions(957000, 4, &[&pack]).expect("建局");
+        e.debug_grant(0, name);
+        setup(&mut e);
+        np_settled(&mut e);
+        trigger_draws_of(&e, 0) == 1
+    };
+
+    // tied_max_hand：初始 4 人各 4 张并列 → 触发；p1 手牌压到 8（p0 即便
+    // 经 Draw 摸 2 至 6 仍非并列）→ 恒不触发
+    assert!(case(P::OwnerTiedMaxHand, |_| {}), "手牌并列最大触发");
+    assert!(!case(P::OwnerTiedMaxHand, |e: &mut Engine| {
+        for card_name in ["tao", "sha", "wuzhong", "shandian"] {
+            let extra = e.debug_place(1, card_name);
+            e.state_core_mut().players[1].hand.push(extra);
+        }
+    }), "他人手牌更多不触发");
+
+    // tied_max_hp：初始全 4 并列 → 触发；p1 体力更高 → 不触发
+    assert!(case(P::OwnerTiedMaxHp, |_| {}), "体力并列最大触发");
+    assert!(!case(P::OwnerTiedMaxHp, |e: &mut Engine| {
+        e.debug_set_hp(1, 6);
+    }), "他人体力更高不触发");
+
+    // tied_max_equip_nonempty：空装备不触发；p0 挂武器并列最大（唯一）触发
+    assert!(!case(P::OwnerTiedMaxEquipNonempty, |_| {}), "无装备不触发");
+    assert!(case(P::OwnerTiedMaxEquipNonempty, |e: &mut Engine| {
+        let z = e.debug_place(0, "zhuge");
+        e.state_core_mut().players[0].equips.push(z);
+    }), "有装备且并列最大触发");
+
+    // not_unique_max_hp：全 4 并列 → 触发；p0 严格最高 → 不触发
+    assert!(case(P::OwnerNotUniqueMaxHp, |_| {}), "体力非严格最高触发");
+    assert!(!case(P::OwnerNotUniqueMaxHp, |e: &mut Engine| {
+        e.debug_set_hp(1, 3);
+        e.debug_set_hp(2, 3);
+        e.debug_set_hp(3, 3);
+    }), "严格最高不触发");
+}
+
+#[test]
+fn t8_filter_targeted_by_other_sha() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named(
+        "t8-rvm-bridge",
+        "skill hnl_tgt_t8(990019) {\n  trigger card_used always {\n    effect draw_cards(self, 1);\n  }\n}\n",
+    )
+    .expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_tgt_t8");
+    let pack = pack_with(vec![VmSkillDecl {
+        name: "t8指".to_string(),
+        module,
+        trigger: TriggerMeta {
+            event: EventKind::CardUsed,
+            timing: Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: P::OwnerTargetedByOtherSha,
+    }]);
+    let mut e = Engine::new_with_extensions(958000, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8指");
+    e.debug_set_hp(1, 8);
+
+    // p2 杀 p1（持有者为目标）→ 触发
+    advance_to(&mut e, 2, Phase::Play);
+    let sha = e.debug_place(2, "sha");
+    submit(&mut e, 2, GameAction::PlayCard { card: sha, targets: vec![1] });
+    settle_choices(&mut e);
+    assert_eq!(trigger_draws(&e), 1, "被他人杀指定触发");
+
+    // p2 杀 p0（非持有者）→ 不触发
+    advance_to(&mut e, 2, Phase::Play);
+    let sha = e.debug_place(2, "sha");
+    submit(&mut e, 2, GameAction::PlayCard { card: sha, targets: vec![0] });
+    settle_choices(&mut e);
+    assert_eq!(trigger_draws(&e), 1, "目标非持有者不触发");
+
+    // p1 自己出杀指 p0（使用者=持有者）→ 不触发
+    advance_to(&mut e, 1, Phase::Play);
+    let sha = e.debug_place(1, "sha");
+    submit(&mut e, 1, GameAction::PlayCard { card: sha, targets: vec![0] });
+    settle_choices(&mut e);
+    assert_eq!(trigger_draws(&e), 1, "使用者本人不计");
 }

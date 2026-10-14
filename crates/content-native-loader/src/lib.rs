@@ -150,6 +150,9 @@ pub fn bridge_vm_skill_decls(
             "damage" => EventKind::Damage,
             "damage_before" => EventKind::DamageBefore,
             "card_used" => EventKind::CardUsed,
+            // card_targeted：原生无独立 targeted 帧型，以 CardUsed+targets
+            // 表达（增量 17，登记差异）。
+            "card_targeted" => EventKind::CardUsed,
             "death" => EventKind::Death,
             other => {
                 return Err(BridgeError::InvalidField {
@@ -185,6 +188,11 @@ pub fn bridge_vm_skill_decls(
                 P::OwnerHandEmptyElementalOrTrickDamageBefore
             }
             "owner_is_target_source_movable_field_card" => P::OwnerSourceMovableFieldCard,
+            "owner_is_target_tied_max_hand" => P::OwnerTiedMaxHand,
+            "owner_is_target_tied_max_hp" => P::OwnerTiedMaxHp,
+            "owner_is_target_tied_max_equip_nonempty" => P::OwnerTiedMaxEquipNonempty,
+            "owner_is_target_not_unique_max_current_hp" => P::OwnerNotUniqueMaxHp,
+            "owner_targeted_by_other_sha" => P::OwnerTargetedByOtherSha,
             other => {
                 // 参数化族（增量 15）：词表保证后缀为正整数，解析失败按
                 // 未承载跳过登记（防御性，与未知具名同路）。

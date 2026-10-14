@@ -44,7 +44,8 @@ impl VmSkillProgram {
 }
 
 /// VM 技能触发时捕获的宿主上下文（从触发事件提取）。
-#[derive(Debug, Clone, Copy, Default)]
+/// targets 为堆面（增量 17），弃 Copy 保 Clone。
+#[derive(Debug, Clone, Default)]
 struct VmTriggerCtx {
     event_player: Option<PlayerId>,
     event_source: Option<PlayerId>,
@@ -54,6 +55,9 @@ struct VmTriggerCtx {
     phase: Option<crate::event::Phase>,
     /// 伤害载荷携带（增量 16；非伤害帧为 None——串帧防护面）。
     nature: Option<crate::event::DamageNature>,
+    /// 用牌目标集（增量 17；CardUsed 载荷——card_targeted 语义以
+    /// CardUsed+targets 表达，原生无独立 targeted 帧）。
+    targets: Vec<u8>,
 }
 
 /// 普通锦囊判定（增量 16）：锦囊三类（非基本/非装备/非异类）且非延时
@@ -87,6 +91,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         EventData::CardUsed(u) => VmTriggerCtx {
             event_player: Some(u.player),
             event_card: Some(u.card),
+            targets: u.targets.clone(),
             ..VmTriggerCtx::default()
         },
         EventData::Death { player, killer } => VmTriggerCtx {
@@ -176,6 +181,23 @@ pub enum VmFilterPolicy {
     /// 少一张可移至来源（装备按栏空、判定区按同名唯一；增量 16，ABI
     /// 202）。移动可行性查询为近似：不校验移动技自身规则面。
     OwnerSourceMovableFieldCard,
+    /// DSL `owner_is_target_tied_max_hand`：事件主玩家=持有者，且手牌数
+    /// 与存活玩家最大值并列（增量 17，ABI 55）。
+    OwnerTiedMaxHand,
+    /// DSL `owner_is_target_tied_max_hp`：事件主玩家=持有者，且当前体力
+    /// 与存活玩家最大值并列（增量 17，ABI 55）。
+    OwnerTiedMaxHp,
+    /// DSL `owner_is_target_tied_max_equip_nonempty`：事件主玩家=持有者，
+    /// 有装备且装备数与存活玩家最大值并列（增量 17，ABI 55）。
+    OwnerTiedMaxEquipNonempty,
+    /// DSL `owner_is_target_not_unique_max_current_hp`：事件主玩家=持有
+    /// 者，且体力并非严格高于所有其他存活角色（存在并列或更高者；增量
+    /// 17）。
+    OwnerNotUniqueMaxHp,
+    /// DSL `owner_targeted_by_other_sha`：持有者被**另一玩家**的杀指定
+    /// （增量 17；原生无独立 targeted 帧型，以 CardUsed+targets 表达，
+    /// 登记差异）。
+    OwnerTargetedByOtherSha,
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -305,6 +327,57 @@ impl SkillBehavior for VmSkillBehavior {
                 is_event_player
                     && elemental | ordinary_trick
                     && holder_state(owner).hand.is_empty()
+            }
+            // 并列最大查询族（ABI 55）：存活玩家集合上的最大值并列。
+            VmFilterPolicy::OwnerTiedMaxHand => {
+                is_event_player && {
+                    let me = holder_state(owner).hand.len();
+                    me > 0
+                        && (0..ctx.state.players.len()).all(|i| {
+                            let p = &ctx.state.players[i];
+                            !p.alive || p.hand.len() <= me
+                        })
+                }
+            }
+            VmFilterPolicy::OwnerTiedMaxHp => {
+                is_event_player && {
+                    let me = holder_state(owner).hp;
+                    me > 0
+                        && (0..ctx.state.players.len()).all(|i| {
+                            let p = &ctx.state.players[i];
+                            !p.alive || p.hp <= me
+                        })
+                }
+            }
+            VmFilterPolicy::OwnerTiedMaxEquipNonempty => {
+                is_event_player && {
+                    let me = holder_state(owner).equips.len();
+                    me > 0
+                        && (0..ctx.state.players.len()).all(|i| {
+                            let p = &ctx.state.players[i];
+                            !p.alive || p.equips.len() <= me
+                        })
+                }
+            }
+            VmFilterPolicy::OwnerNotUniqueMaxHp => {
+                is_event_player && {
+                    let me = holder_state(owner).hp;
+                    (0..ctx.state.players.len()).any(|i| {
+                        let p = &ctx.state.players[i];
+                        p.alive && i as u8 != owner && p.hp >= me
+                    })
+                }
+            }
+            // 被另一玩家的杀指定（原生以 CardUsed+targets 表达）：
+            // 持有者=目标集成员（**非**事件主玩家——lsp "the living owner
+            // is targeted"）∧ 使用者非持有者 ∧ 事件卡为杀族。
+            VmFilterPolicy::OwnerTargetedByOtherSha => {
+                trig.event_player.is_some_and(|u| u != owner)
+                    && trig
+                        .event_card
+                        .map(|c| ctx.catalog.card_kind(c).is_sha_like())
+                        .unwrap_or(false)
+                    && trig.targets.contains(&owner)
             }
             // 伤害事件：来源存活 ∧ 任意其他存活角色场上有可移至来源的
             // 装备（来源同栏空）或判定区延时（来源判定区无同名种）。
