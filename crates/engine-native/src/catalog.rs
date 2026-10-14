@@ -443,6 +443,15 @@ pub enum CardKind {
     /// 灵剑（U05 swd 机关术批，规则 v198）：swd 自造改造牌类型
     /// （hslingjian，7 张；机关术合成与机关妖术补偿的池）。
     Hslingjian,
+    /// 雪霁冰雹（swd 卡牌面补切批②）：basic——目标摸牌阶段摸牌数 +1，
+    /// 持续其 2 个摸牌阶段（PlayerState.xuejibingbao 计数）。
+    Xuejibingbao,
+    /// 神秘果（swd 卡牌面补切批②）：basic——你使用基本牌/普通锦囊结算
+    /// 后可弃此牌令该牌再结算一次（每阶段限一次；窗口=host 触发技）。
+    Shenmiguo,
+    /// 封印之丹（swd 卡牌面补切批②）：basic——对自身使用，随机使用两
+    /// 张普通锦囊牌（登记差异：原生确定性窄池{五谷/决斗}+座位序目标）。
+    Fengyinzhidan,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
@@ -508,6 +517,9 @@ impl CardKind {
                 | CardKind::Jiu
                 | CardKind::Tianxianjiu
                 | CardKind::ShouLiJian
+                | CardKind::Xuejibingbao
+                | CardKind::Shenmiguo
+                | CardKind::Fengyinzhidan
         )
     }
 
@@ -606,7 +618,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 139] = [
+    pub const ALL: [CardKind; 142] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -741,6 +753,9 @@ impl CardKind {
         CardKind::Dizaizhen,
         CardKind::Jiguan,
         CardKind::Hslingjian,
+        CardKind::Xuejibingbao,
+        CardKind::Shenmiguo,
+        CardKind::Fengyinzhidan,
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
@@ -885,6 +900,9 @@ impl CardKind {
             CardKind::Lindixiliu => "lindixiliu",
             CardKind::Dizaizhen => "dizaizhen",
             CardKind::Jiguan => "jiguan",
+            CardKind::Xuejibingbao => "xuejibingbao",
+            CardKind::Shenmiguo => "shenmiguo",
+            CardKind::Fengyinzhidan => "fengyinzhidan",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",

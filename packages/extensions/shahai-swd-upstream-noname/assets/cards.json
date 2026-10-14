@@ -308,6 +308,24 @@
       "kind": "yangpijuan",
       "suit": "club",
       "rank": 7
+    },
+    {
+      "name": "swd_xuejibingbao",
+      "kind": "xuejibingbao",
+      "suit": "club",
+      "rank": 1
+    },
+    {
+      "name": "swd_xuejibingbao2",
+      "kind": "xuejibingbao",
+      "suit": "spade",
+      "rank": 1
+    },
+    {
+      "name": "swd_fengyinzhidan",
+      "kind": "fengyinzhidan",
+      "suit": "spade",
+      "rank": 1
     }
   ],
   "host_skills": [],

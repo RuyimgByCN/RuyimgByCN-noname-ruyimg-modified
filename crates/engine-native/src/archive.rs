@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 69;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 70;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2916,6 +2916,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.guihan_used);
         // 雪煌 limited（swd 芝茵，批 26）
         w.boolean(p.xuehuang_used);
+        // 雪霁冰雹标记（swd 卡牌面补切批②）
+        w.u8(p.xuejibingbao);
         w.boolean(p.jidong_active);
         // 强固（v10，U05 ow 奥丽莎）：生效标记
         w.boolean(p.qianggu_active);
@@ -3259,6 +3261,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let baoxue_used = r.boolean()?;
         let guihan_used = r.boolean()?;
         let xuehuang_used = r.boolean()?;
+        let xuejibingbao = r.u8()?;
         let jidong_active = r.boolean()?;
         let qianggu_active = r.boolean()?;
         let pingzhang_self_used = r.boolean()?;
@@ -3341,6 +3344,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             baoxue_used,
             guihan_used,
             xuehuang_used,
+            xuejibingbao,
             jidong_active,
             qianggu_active,
             pingzhang_self_used,
@@ -3729,6 +3733,9 @@ fn card_kind_to_num(k: &CardKind) -> u32 {
         Dizaizhen => 131,
         Jiguan => 132,
         Hslingjian => 133,
+        Xuejibingbao => 140,
+        Shenmiguo => 141,
+        Fengyinzhidan => 142,
         Tianfuzhen => 134,
         Qixingzhen => 135,
         Niaoxiangzhen => 136,
@@ -3874,6 +3881,9 @@ fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         131 => Dizaizhen,
         132 => Jiguan,
         133 => Hslingjian,
+        140 => Xuejibingbao,
+        141 => Shenmiguo,
+        142 => Fengyinzhidan,
         134 => Tianfuzhen,
         135 => Qixingzhen,
         136 => Niaoxiangzhen,

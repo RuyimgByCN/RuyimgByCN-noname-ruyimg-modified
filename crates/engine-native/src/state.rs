@@ -51,6 +51,8 @@ pub struct PlayerState {
     pub guihan_used: bool,
     /// 雪煌 limited 每局一次（swd 芝茵，武将面批 26）。
     pub xuehuang_used: bool,
+    /// 雪霁冰雹标记（swd 卡牌面补切批②）：剩余摸牌阶段摸牌数 +1 次数。
+    pub xuejibingbao: u8,
     /// 急冻冰封（U05 ow 美，规则 v127）：hp=1 回合结束触发后的临时
     /// 冰封——受所有伤害无效 + 不能被其他角色的牌指定为目标；自己
     /// 回合结束（翻回后的跳过回合收束）解除（上游 addTempSkill
@@ -239,6 +241,7 @@ impl PlayerState {
             baoxue_used: false,
             guihan_used: false,
             xuehuang_used: false,
+            xuejibingbao: 0,
             jidong_active: false,
             qianggu_active: false,
             pingzhang_self_used: false,

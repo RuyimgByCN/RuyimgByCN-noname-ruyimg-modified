@@ -2783,6 +2783,27 @@ fn apply_command(
                 }
             }
             match kind {
+                CardKind::Xuejibingbao => {
+                    // 雪霁冰雹（swd 卡牌面补切批②）：恰 1 名存活目标且未
+                    // 处于标记中（上游 filterTarget 无同标记者同口径）
+                    if targets.len() != 1
+                        || !core.player(targets[0]).alive
+                        || core.player(targets[0]).xuejibingbao > 0
+                    {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
+                CardKind::Shenmiguo => {
+                    // 神秘果不可直接使用（经用牌后窗口消耗——窗口机登记
+                    // 结构性暂缓，见补切批②证据）
+                    return Err(RejectReason::IllegalTargets);
+                }
+                CardKind::Fengyinzhidan => {
+                    // 封印之丹：对自身使用（无目标或目标=自己）
+                    if targets.len() > 1 || targets.first().map(|t| *t != core.turn.current).unwrap_or(false) {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
                 CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制
                     let mut mark_yuanbaorou = false;

@@ -1299,6 +1299,34 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
             let t = *u.targets.first().expect("caoyao has one target");
             ctx.recover(t, 1, Some(u.card));
         }
+        CardKind::Xuejibingbao => {
+            // 雪霁冰雹（swd 卡牌面补切批②）：目标标记 2 个摸牌阶段摸牌
+            // 数 +1（Draw 钩消费；重标记在 PlayCard 门控拒绝）
+            ctx.to_discard(u.card);
+            let t = *u.targets.first().expect("xuejibingbao has one target");
+            ctx.core.player_mut(t).xuejibingbao = 2;
+        }
+        CardKind::Fengyinzhidan => {
+            // 封印之丹（swd 卡牌面补切批②）：随机使用两张普通锦囊牌——
+            // 登记差异：原生确定性窄池{五谷→全体其他存活者, 决斗→座位序
+            // 首个其他存活者}×2（炮台 v108 随机锦囊最小闭环同口径）
+            ctx.to_discard(u.card);
+            let others: Vec<PlayerId> = (0..ctx.core.players.len())
+                .map(|i| i as PlayerId)
+                .filter(|p| *p != u.player && ctx.core.player(*p).alive)
+                .collect();
+            if others.is_empty() {
+                return;
+            }
+            ctx.use_virtual_card(u.player, CardKind::Wugu, others.clone());
+            let others2: Vec<PlayerId> = (0..ctx.core.players.len())
+                .map(|i| i as PlayerId)
+                .filter(|p| *p != u.player && ctx.core.player(*p).alive)
+                .collect();
+            if let Some(t) = others2.first() {
+                ctx.use_virtual_card(u.player, CardKind::Duel, vec![*t]);
+            }
+        }
         CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
             // 出牌阶段限用一次（普通/火/雷杀共享）；龙颅山峰地图效果
             //（mtg 首切片，规则 v100）下第二张杀走额外标记——若本次为
@@ -2438,6 +2466,13 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     // phaseDrawBegin 未触发同口径）
                     ctx.core.turn.mengtai_draw_pending = false;
                     ctx.draw_cards(player, 2);
+                    // 雪霁冰雹（swd 卡牌面补切批②）：标记角色摸牌阶段摸
+                    // 牌数 +1（上游 xuejibingbao phaseDrawBegin num++ 同
+                    // 口径；计数 2→1→0 两轮后移除）
+                    if ctx.core.player(player).xuejibingbao > 0 {
+                        ctx.draw_cards(player, 1);
+                        ctx.core.player_mut(player).xuejibingbao -= 1;
+                    }
                     // 神恩（Boss 太昊/炎帝 光环，规则 v238）：挑战者侧
                     // 摸牌 +1（上游 boss_shenen2 phaseDrawBegin num++ 同
                     // 口径；光环激活=场上存在神恩持有者）

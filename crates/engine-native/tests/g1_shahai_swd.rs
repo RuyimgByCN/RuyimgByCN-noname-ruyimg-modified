@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 50, "swd 全 50 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 53, "swd 全 53 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 50, "swd 全 50 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 53, "swd 全 53 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 50, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 53, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4178,6 +4178,9 @@ fn swd_cards_alignment_guard_b29() {
         ("zhufangshenshi", "spade", 8),
         ("yangpijuan", "spade", 9),
         ("yangpijuan", "club", 7),
+        ("xuejibingbao", "club", 1),
+        ("xuejibingbao", "spade", 1),
+        ("fengyinzhidan", "spade", 1),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4190,6 +4193,148 @@ fn swd_cards_alignment_guard_b29() {
         });
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
-    // 总张数冻结（批① 后 50；批②+ 随补切批递增并同步此处）
-    assert_eq!(pack.cards.len(), 50, "批① 对齐后 50 张");
+    // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
+    assert_eq!(pack.cards.len(), 53, "批② basic 族后 53 张（神秘果 2 张挂窗口机批）");
+}
+
+/// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
+/// 轮，重标记拒）；封印之丹（自用随机 2 普通锦囊——确定性窄池五谷+决斗
+/// 登记差异）；神秘果 kind 注册、卡牌挂窗口机批结构性暂缓。
+#[test]
+fn swd_cards_basic_b32_xuejibingbao_fengyinzhidan() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62012, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let xjb = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Xuejibingbao)
+        .expect("雪霁在目录") as u32;
+    {
+        // 全域摘除后置入 p0 手牌
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != xjb);
+        core.discard.retain(|x| *x != xjb);
+        core.players[0].hand.push(xjb);
+    }
+
+    // ① 雪霁→p1：下两个摸牌阶段各 +1
+    let d1_before = {
+        // 记录 p1 手牌，推进 p1 回合摸牌阶段后测量
+        let h = e.debug_hand(1).len();
+        h
+    };
+    submit(&mut e, 0, GameAction::PlayCard { card: xjb, targets: vec![1] });
+    settle_optional_confirm(&mut e);
+    assert!(e.state_core().player(1).xuejibingbao == 2, "雪霁：标记置 2");
+    // 推进 p1 整回合（摸牌阶段 +1）
+    advance_to_play(&mut e, 1);
+    let d1_after = e.debug_hand(1).len();
+    // 摸 2+1=3（其余阶段摸牌为 0；手牌被上家清空过但 p1 自己摸牌前可能
+    // 已有牌——以增量为断言）
+    let grew = d1_after as i32 - d1_before as i32;
+    assert!(grew >= 3, "雪霁：摸牌阶段 +1（增量 {}≥3）", grew);
+    assert!(e.state_core().player(1).xuejibingbao == 1, "雪霁：计数 2→1");
+
+    // 反例 ①b：已标记目标不可再标记
+    advance_to_play(&mut e, 0);
+    // 雪霁实体置入手牌（全域摘除防双区）
+    let xjb_now = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.kind == engine_native::catalog::CardKind::Xuejibingbao)
+        .map(|(i, _)| i as u32)
+        .expect("雪霁实体存在");
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != xjb_now);
+        core.discard.retain(|x| *x != xjb_now);
+        core.players[0].hand.push(xjb_now);
+    }
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: xjb_now, targets: vec![1] });
+    assert!(
+        !matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "雪霁反例：已标记目标拒 {out:?}"
+    );
+
+    // ② 封印之丹自用：确定性窄池五谷（全体其他）+决斗（座位序首个）
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let fyz = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Fengyinzhidan)
+        .expect("封印之丹在目录") as u32;
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != fyz);
+        core.players[0].hand.push(fyz);
+    }
+    e.debug_set_hp(1, 8);
+    e.debug_set_hp(2, 8);
+    e.debug_set_hp(3, 8);
+    submit(&mut e, 0, GameAction::PlayCard { card: fyz, targets: vec![] });
+    settle_optional_confirm(&mut e);
+    // 五谷：p1/p2/p3 各摸 1（随机弃面不设）；决斗：p0 vs p1（座位序首），
+    // 双方手空 → p1 先不出杀受 1 伤
+    assert_eq!(hand_len_w(&e, 1), 1, "封印之丹：五谷 p1 得 1");
+    assert_eq!(hand_len_w(&e, 2), 1, "封印之丹：五谷 p2 得 1");
+    assert_eq!(hand_len_w(&e, 3), 1, "封印之丹：五谷 p3 得 1");
+    assert_eq!(e.debug_hp(1), 7, "封印之丹：决斗 p1 受 1（座位序首个其他）");
+
+    // 反例 ②b：对他人使用被拒
+    advance_to_play(&mut e, 0);
+    let fyz2 = {
+        let id = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.kind == engine_native::catalog::CardKind::Fengyinzhidan)
+            .map(|(i, _)| i as u32);
+        let Some(id) = id else { panic!("封印实体") };
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != id);
+        core.discard.retain(|x| *x != id);
+        core.players[0].hand.push(id);
+        id
+    };
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: fyz2, targets: vec![1] });
+    assert!(
+        !matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "封印反例：对他人使用拒 {out:?}"
+    );
+
+    // 反例 ③：神秘果不可直接使用
+    let smg = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Shenmiguo);
+    assert!(smg.is_none(), "神秘果 2 张挂窗口机批暂未入包");
 }
