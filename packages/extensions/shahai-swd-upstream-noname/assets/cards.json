@@ -423,11 +423,11 @@
         },
         {
           "name": "duanyue",
-          "mapping": null
+          "mapping": "host:duanyue"
         },
         {
           "name": "tuzhen",
-          "mapping": null
+          "mapping": "host:tuzhen"
         }
       ]
     },
@@ -475,7 +475,7 @@
       "skills": [
         {
           "name": "xingdian",
-          "mapping": null
+          "mapping": "host:xingdian"
         },
         {
           "name": "yulin",
@@ -483,7 +483,7 @@
         },
         {
           "name": "luomei",
-          "mapping": null
+          "mapping": "host:luomei"
         }
       ]
     },
