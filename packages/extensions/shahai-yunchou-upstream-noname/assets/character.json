@@ -3,9 +3,9 @@
   "upstream_path": "apps/core/extension/杀海拾遗/character/yunchou/",
   "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
   "pack": {
-    "name": "shahai-yunchou-generals-b8",
+    "name": "shahai-yunchou-generals-b9",
     "version": 1,
-    "description": "G1 运筹武将面批8（内置引用面：护驾/谦逊转正；悲歌本体未实现仍暂缓）",
+    "description": "G1 运筹武将面批9（于吉整将：蝉缘 max_hp 减面转正）",
     "card_prefix": "ycn_"
   },
   "generals": [
@@ -98,9 +98,9 @@
           "mapping": "host:diyguhuo"
         },
         {
-          "name": "diychanyuan",
+          "name": "ycndiychanyuan",
           "title": "蝉缘",
-          "mapping": null
+          "mapping": "host:diychanyuan"
         }
       ]
     },

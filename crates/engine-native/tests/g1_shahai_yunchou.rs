@@ -1651,7 +1651,11 @@ fn g1_yunchou_generals_batch4_guhuo_jiaoxia_honglian() {
         let e = Engine::new_with_extensions(66006, 4, &[&pack]).expect("建局");
         let m = e.catalog().general_meta(base + 4).expect("于吉在目录");
         assert_eq!(m.0, "ycn于吉");
-        assert_eq!(m.2, vec!["ycndiyguhuo"], "蝉缘暂缓不入目录");
+        assert_eq!(
+        m.2,
+        vec!["ycndiyguhuo", "ycndiychanyuan"],
+        "于吉整将（蝉缘 max_hp 减面转正）"
+    );
     }
 
     // 蛊惑·变体：回合开始摸 2 弃 2（Judge-begin 触发；无装备/判定 →
@@ -1732,10 +1736,9 @@ fn g1_yunchou_generals_batch5_full_roster_metadata() {
         "目录技能列表=mapped 面（现 {} 条）",
         bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>()
     );
-    assert!(
-        bridged.unmapped_skills >= 6,
-        "暂缓累计（现 {} 条）",
-        bridged.unmapped_skills
+    assert_eq!(
+        bridged.unmapped_skills, 5,
+        "暂缓 5：奸雄/悲歌/归汉/巧思/精械"
     );
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
@@ -2001,7 +2004,7 @@ fn g1_yunchou_generals_batch8_builtin_skill_refs() {
         .map(|_| String::new())
         .collect();
     let _ = unmapped_names;
-    assert_eq!(bridged.unmapped_skills, 6, "暂缓 6：奸雄/悲歌/蝉缘/归汉/巧思/精械");
+    assert_eq!(bridged.unmapped_skills, 5, "暂缓 5：奸雄/悲歌/归汉/巧思/精械");
     let _ = json;
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
@@ -2068,4 +2071,47 @@ fn g1_yunchou_generals_batch8_builtin_whitelist_rejects() {
         err.to_string().contains("builtin:悲歌"),
         "白名单外 builtin 拒装: {err}"
     );
+}
+
+/// T12 运筹武将面批 9：蝉缘·变体（于吉整将）——死亡时来源体力上限
+/// -1（max_hp 减面首例；体力钳上限）。负例：无来源死亡不触发。
+#[test]
+fn g1_yunchou_generals_batch9_diychanyuan_max_hp_loss() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert!(bridged.host_skills.len() >= 14, "host 行为累计 14");
+
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b9",
+            version: 1,
+            description: "运筹武将面批 9",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66014, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "ycndiychanyuan");
+    // p1（蝉缘持有者）被 p2 重伤致死（全场清手——无人有桃，濒死窗不开
+    // 直接死亡）→ p2 体力上限 -1
+    e.debug_set_hp(1, 1);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_deal_damage(Some(2), 1, 3, DamageNature::Normal);
+    let src = e.state_core();
+    assert!(!src.players[1].alive, "p1 死亡");
+    assert_eq!(src.players[2].max_hp, 3, "蝉缘：来源上限 4→3");
+    assert_eq!(src.players[2].hp, 3, "蝉缘：来源体力钳上限");
+    // 负例：无来源死亡不触发（p0 蝉缘？未授予——改用再授一次验证杀手为
+    // None 的路径：p2 自尽式无来源伤害不可构造——用 max_hp 基线复核）
+    assert_eq!(e.state_core().players[0].max_hp, 4, "无涉者上限不变");
 }

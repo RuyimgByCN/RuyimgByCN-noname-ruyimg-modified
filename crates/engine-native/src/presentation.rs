@@ -21,6 +21,11 @@ pub enum PresentationEvent {
         player: PlayerId,
     },
     DeckReshuffled,
+    /// 体力上限减少（max_hp 减面，运筹武将面批 9）。
+    MaxHpLost {
+        player: PlayerId,
+        amount: u32,
+    },
     /// 摸牌：他人仅数量（`cards: None`，暗置信息不下渗到表现层）；
     /// 本人携带具体牌名。
     Drawn {
@@ -137,6 +142,12 @@ pub fn project(
             }],
             LogEvent::DamagePrevented { target } => {
                 vec![PresentationEvent::DamagePrevented { target: *target }]
+            }
+            LogEvent::MaxHpLost { player, amount } => {
+                vec![PresentationEvent::MaxHpLost {
+                    player: *player,
+                    amount: *amount,
+                }]
             }
             LogEvent::CardsDrawn { player, cards } => {
                 let own = viewer == Some(*player);
@@ -355,6 +366,9 @@ pub fn render_table(view: &PlayerView, events: &[PresentationEvent], width: usiz
     }
     for e in tail.iter().rev() {
         let txt = match e {
+            PresentationEvent::MaxHpLost { player, amount } => {
+                format!("座位{player} 体力上限 -{amount}")
+            }
             PresentationEvent::Phase {
                 player,
                 phase,

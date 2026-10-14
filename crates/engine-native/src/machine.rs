@@ -39,6 +39,11 @@ pub enum LogEvent {
         card: CardId,
         player: PlayerId,
     },
+    /// 体力上限减少（蝉缘类——max_hp 减面，运筹武将面批 9 起承载）。
+    MaxHpLost {
+        player: PlayerId,
+        amount: u32,
+    },
     CardDiscarded {
         player: PlayerId,
         cards: Vec<CardId>,
@@ -420,6 +425,22 @@ impl<'a> Ctx<'a> {
         let next = (cur + delta).max(0) as u8;
         self.core.player_mut(player).hujia = next;
         next
+    }
+
+    /// 体力上限减少（max_hp 减面，运筹武将面批 9）：上限 -n 并钳体力
+    ///（hp>max 时收齐）；不入 Recover 事件流（无 MaxHpChanged 事件种
+    /// ——新事件种九处接线成本，无消费者，登记边界）。
+    pub fn lose_max_hp(&mut self, player: PlayerId, amount: u32) {
+        let p = self.core.player_mut(player);
+        let cut = (p.max_hp.min(amount)) as i32;
+        p.max_hp -= cut as u32;
+        if p.hp > p.max_hp as i32 {
+            p.hp = p.max_hp as i32;
+        }
+        self.out.push(LogEvent::MaxHpLost {
+            player,
+            amount: cut as u32,
+        });
     }
 
     pub fn recover(&mut self, player: PlayerId, amount: u32, by_card: Option<CardId>) -> u32 {

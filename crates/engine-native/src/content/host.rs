@@ -670,6 +670,9 @@ pub enum HostBehavior {
     /// 野升（tag 253，运筹武将面批 7）：出牌主动技——弃任意张黑手牌并
     /// 摸等量的牌（自选多张，舒筋散机器同构）。
     YunchouYiesheng,
+    /// 蝉缘·变体（tag 254，运筹武将面批 9）：死亡时来源体力上限 -1
+    ///（强制；max_hp 减面承载——来源不存在则不触发）。
+    YunchouDiychanyuan,
 }
 
 
@@ -702,6 +705,7 @@ impl HostBehavior {
             HostBehavior::YunchouLuweiyan2 => 251,
             HostBehavior::YunchouJieyan => 252,
             HostBehavior::YunchouYiesheng => 253,
+            HostBehavior::YunchouDiychanyuan => 254,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1200,6 +1204,7 @@ impl HostBehavior {
             251 => HostBehavior::YunchouLuweiyan2,
             252 => HostBehavior::YunchouJieyan,
             253 => HostBehavior::YunchouYiesheng,
+            254 => HostBehavior::YunchouDiychanyuan,
             _ => return None,
         })
     }
@@ -1207,7 +1212,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 253] = [
+    pub const ALL: [HostBehavior; 254] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1461,6 +1466,7 @@ impl HostBehavior {
         HostBehavior::YunchouLuweiyan2,
         HostBehavior::YunchouJieyan,
         HostBehavior::YunchouYiesheng,
+        HostBehavior::YunchouDiychanyuan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1479,6 +1485,7 @@ impl HostBehavior {
             HostBehavior::YunchouLuweiyan2 => "host:luweiyan2",
             HostBehavior::YunchouJieyan => "host:jieyan",
             HostBehavior::YunchouYiesheng => "host:yiesheng",
+            HostBehavior::YunchouDiychanyuan => "host:diychanyuan",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1788,6 +1795,14 @@ impl HostBehavior {
             HostBehavior::YunchouLuweiyan => None,
             HostBehavior::YunchouJieyan => None,
             HostBehavior::YunchouYiesheng => None,
+            // 蝉缘·变体：死亡结算后（来源减上限）
+            HostBehavior::YunchouDiychanyuan => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             HostBehavior::YunchouLuweiyan2 => Some(TriggerMeta {
                 event: EventKind::CardUsed,
                 timing: Timing::Normal,
@@ -3365,6 +3380,11 @@ impl HostSkillBehavior {
             },
             // 狡黠：自身（摸 1）
             HostBehavior::YunchouJiaoxia => (Some(owner), None),
+            // 蝉缘·变体：死亡来源（减其上限）
+            HostBehavior::YunchouDiychanyuan => match event {
+                EventData::Death { killer: Some(k), .. } => (Some(*k), None),
+                _ => (None, None),
+            },
             // 厉焰·链杀：用水攻的持有者（目标取 targets 首）
             HostBehavior::YunchouLuweiyan2 => (Some(owner), None),
             // 红莲：伤害来源（弃其红牌）
@@ -3485,6 +3505,9 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::YunchouLuweiyan2 => u_matches_lw2(event, owner, ctx),
             HostBehavior::YunchouJieyan => false,
             HostBehavior::YunchouYiesheng => false,
+            // 蝉缘·变体：有来源的死亡
+            HostBehavior::YunchouDiychanyuan => matches!(event,
+                EventData::Death { killer: Some(_), .. }),
             // 蛊惑·变体：自己回合开始且区域有牌
             HostBehavior::YunchouDiyguhuo => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
@@ -5197,6 +5220,13 @@ impl crate::catalog::SkillMachine for HostMachine {
                     if ctx.core.player(s).alive {
                         ctx.draw_cards(s, 1);
                     }
+                }
+                Flow::Done
+            },
+            // 蝉缘·变体：来源体力上限 -1（体力钳上限）
+            HostBehavior::YunchouDiychanyuan => {
+                if let Some(src) = self.target {
+                    ctx.lose_max_hp(src, 1);
                 }
                 Flow::Done
             },
