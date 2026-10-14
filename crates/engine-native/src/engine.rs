@@ -649,6 +649,43 @@ impl Engine {
                 }
             }
         }
+        // G1 swd 器族手持技初始化钩子（卡牌面补切批⑩）：四象五件手持触发
+        // 技授予全部存活角色（效果由手持 filter 门控——未持牌不触发）。
+        if packs.iter().any(|p| p.enabled && p.init_hook == crate::content::extension::InitHook::SwdJiqiHeld) {
+            let jiqi_defs: Vec<crate::ids::SkillDefId> = e
+                .catalog
+                .skills
+                .iter()
+                .enumerate()
+                .filter(|(_, def)| {
+                    matches!(
+                        def.behavior.as_host_behavior(),
+                        Some(
+                            crate::content::host::HostBehavior::SwdQinglongzhiguiHeld
+                                | crate::content::host::HostBehavior::SwdZhuquezhizhangHeld
+                                | crate::content::host::HostBehavior::SwdBaishouzhihuHeld
+                                | crate::content::host::HostBehavior::SwdXuanwuzhihuangHeld
+                                | crate::content::host::HostBehavior::SwdHuanglinzhicongHeld
+                        )
+                    )
+                })
+                .map(|(i, _)| i as crate::ids::SkillDefId)
+                .collect();
+            for def in jiqi_defs {
+                for p in 0..seats as crate::ids::PlayerId {
+                    e.state.core.skills.insert(
+                        (p, def),
+                        crate::state::SkillInstance {
+                            owner: p,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: false,
+                            rounds: 0,
+                        },
+                    );
+                }
+            }
+        }
         // G1 古剑·金莲烛：伤害前置事件取消监听技授予全体角色——
         // 持有金莲烛时才经过滤器生效（上游 global damageBefore 触发
         // + chooseToUse 语义的确定性化）。
@@ -2806,7 +2843,13 @@ fn apply_command(
                 | CardKind::Donghuangzhong
                 | CardKind::Kongdongyin
                 | CardKind::Guilingzhitao
-                | CardKind::Sifeizhenmian => {
+                | CardKind::Sifeizhenmian
+                // 器族五件：手持牌（非装备路径；效果经手持触发技）
+                | CardKind::Qinglongzhigui
+                | CardKind::Zhuquezhizhang
+                | CardKind::Baishouzhihu
+                | CardKind::Xuanwuzhihuang
+                | CardKind::Huanglinzhicong => {
                     // 炼妖壶/乾坤袋/女娲石/神农鼎：装备牌走 equip 校验
                     //（同栏替换由 commit_equip 处理；神农鼎/女娲石效果经
                     // 装备技实例）

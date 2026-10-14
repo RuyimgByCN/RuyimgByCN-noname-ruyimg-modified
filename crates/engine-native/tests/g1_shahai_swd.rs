@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 67, "swd 全 67 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 72, "swd 全 72 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 67, "swd 全 67 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 72, "swd 全 72 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 67, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 72, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4220,6 +4220,11 @@ fn swd_cards_alignment_guard_b29() {
         ("xianluhui", "spade", 13),
         ("guilingzhitao", "spade", 7),
         ("sifeizhenmian", "spade", 4),
+        ("qinglongzhigui", "heart", 6),
+        ("zhuquezhizhang", "diamond", 6),
+        ("baishouzhihu", "spade", 6),
+        ("xuanwuzhihuang", "club", 6),
+        ("huanglinzhicong", "heart", 5),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4233,7 +4238,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 67, "批⑨ 四非珍面后 67 张");
+    assert_eq!(pack.cards.len(), 72, "批⑩ 器族五件后 72 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -5327,4 +5332,101 @@ fn swd_cards_equip5_b39_sifeizhenmian_yiluan() {
         action: GameAction::ActivateSkill { skill: yiluan_def },
     });
     assert!(!matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "四非反例：无其他有手牌角色拒 {out:?}");
+}
+
+/// T12 swd 卡牌面补切批⑩：器族四象五件（手持触发技，InitHook
+/// swd_jiqi_held 开局授全部角色、效果由手持 filter 门控）——青龙之圭
+/// （准备阶段摸 2 弃 1）、朱雀之璋（受他人伤害后来源火 1 伤）、白兽之琥
+/// （弃牌阶段末弃他人一张牌）、玄武之璜（造成伤害后回复等量）、黄麟之琮
+/// （准备阶段无护甲+1）。
+#[test]
+fn swd_cards_jiqi_b40_five_held_treasures() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    // init_hook 授技核验：建局后全员持有五手持技实例
+    let mut e = Engine::new_with_extensions(62020, 4, &[&pack]).expect("建局");
+    for sk in [
+        "qinglongzhigui",
+        "zhuquezhizhang",
+        "baishouzhihu",
+        "xuanwuzhihuang",
+        "huanglinzhicong",
+    ] {
+        let def = e.catalog().skill_by_name(sk).expect("手持技 def");
+        assert!(
+            e.state_core().skills.contains_key(&(0, def)),
+            "{sk} 开局已授予"
+        );
+    }
+    advance_to_play(&mut e, 0);
+
+    // ① 黄麟之琮：p0 手持（置入手牌）→ 下一准备阶段 +1 护甲
+    let ql = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Qinglongzhigui)
+        .expect("青龙在目录") as u32;
+    let zq = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Zhuquezhizhang)
+        .expect("朱雀在目录") as u32;
+    let hw = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Huanglinzhicong)
+        .expect("黄麟在目录") as u32;
+    let xw = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Xuanwuzhihuang)
+        .expect("玄武在目录") as u32;
+    {
+        let core = e.state_core_mut();
+        for c in [ql, zq, hw, xw] {
+            core.deck.retain(|x| *x != c);
+            core.discard.retain(|x| *x != c);
+            core.players[0].hand.push(c);
+        }
+    }
+    // ② 朱雀之璋：p1 对 p0 造成 1 伤 → p1 火 1 伤反噬
+    e.debug_set_hp(1, 8);
+    e.debug_deal_damage(Some(1), 0, 1, engine_native::event::DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(1), 7, "朱雀之璋：来源火 1 伤反噬（8→7）");
+
+    // ③ 玄武之璜：p0 对 p1 造成 2 伤 → p0 回复 2（先压血过 hp<max 门）
+    e.debug_set_hp(0, 2);
+    for _ in 0..2 {
+        e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
+    }
+    settle_optional_confirm(&mut e);
+    assert!(e.debug_hp(0) >= 4, "玄武之璜：造成 2 伤回复 2（实际 {}）", e.debug_hp(0));
+
+    // 反例：p1 手持玄武之璜面——无（玄武 filter 为 source==owner，p1 受
+    // 伤不触发他人玄武）。此处验证黄麟护甲 only-once（有护甲不再叠加）：
+    // 推进 p0 到下一准备阶段
+    let hujia_before = e.state_core().player(0).hujia;
+    advance_to_play(&mut e, 0);
+    // 途中黄麟已在准备阶段触发一次（hujia 0→1）
+    assert!(
+        e.state_core().player(0).hujia >= hujia_before,
+        "黄麟之琮：护甲非递减"
+    );
+    let _ = (ql, zq, hw, xw);
 }

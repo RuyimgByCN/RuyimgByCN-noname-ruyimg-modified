@@ -6,7 +6,8 @@
     "name": "shahai-swd-upstream-noname",
     "version": 1,
     "description": "G1 转换：上游 swd 首切片（护符）",
-    "card_prefix": "swd_"
+    "card_prefix": "swd_",
+    "init_hook": "swd_jiqi_held"
   },
   "cards": [
     {
@@ -436,6 +437,36 @@
       "equip_skills": [
         "yiluan"
       ]
+    },
+    {
+      "name": "swd_qinglongzhigui",
+      "kind": "qinglongzhigui",
+      "suit": "heart",
+      "rank": 6
+    },
+    {
+      "name": "swd_zhuquezhizhang",
+      "kind": "zhuquezhizhang",
+      "suit": "diamond",
+      "rank": 6
+    },
+    {
+      "name": "swd_baishouzhihu",
+      "kind": "baishouzhihu",
+      "suit": "spade",
+      "rank": 6
+    },
+    {
+      "name": "swd_xuanwuzhihuang",
+      "kind": "xuanwuzhihuang",
+      "suit": "club",
+      "rank": 6
+    },
+    {
+      "name": "swd_huanglinzhicong",
+      "kind": "huanglinzhicong",
+      "suit": "heart",
+      "rank": 5
     }
   ],
   "host_skills": [],

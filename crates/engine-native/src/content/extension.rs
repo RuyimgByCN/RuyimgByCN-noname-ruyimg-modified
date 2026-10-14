@@ -51,19 +51,24 @@ pub enum InitHook {
     None,
     /// wuxing：开局为每名角色随机五行属性，牌堆按比例随机获得属性。
     WuxingNatures,
+    /// swd 器族（卡牌面补切批⑩）：开局为每名角色授予四象五件手持触发技
+    /// 实例（效果由手持 filter 门控）。
+    SwdJiqiHeld,
 }
 
 impl InitHook {
     /// 扩展包数据 `init_hook` 键（宿主 ABI，只增不改）。
+    pub const SWD_JIQI_HELD_KEY: &str = "swd_jiqi_held";
     pub const fn key(self) -> &'static str {
         match self {
             InitHook::None => "none",
             InitHook::WuxingNatures => "wuxing_natures",
+            InitHook::SwdJiqiHeld => Self::SWD_JIQI_HELD_KEY,
         }
     }
 
     pub fn from_key(key: &str) -> Option<Self> {
-        [InitHook::None, InitHook::WuxingNatures]
+        [InitHook::None, InitHook::WuxingNatures, InitHook::SwdJiqiHeld]
             .into_iter()
             .find(|h| h.key() == key)
     }

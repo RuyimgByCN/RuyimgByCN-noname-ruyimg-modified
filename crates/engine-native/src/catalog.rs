@@ -490,6 +490,16 @@ pub enum CardKind {
     /// 手牌角色判定，非红桃则其用首张手牌指向座位序首个其他存活者（登记
     /// 差异上游随机牌/随机目标）。
     Sifeizhenmian,
+    /// 青龙之圭（swd 卡牌面补切批⑩）：器族手持——准备阶段摸 2 弃 1。
+    Qinglongzhigui,
+    /// 朱雀之璋（swd 卡牌面补切批⑩）：器族手持——受他人伤害后来源火 1 伤。
+    Zhuquezhizhang,
+    /// 白兽之琥（swd 卡牌面补切批⑩）：器族手持——弃牌阶段末弃他人一张牌。
+    Baishouzhihu,
+    /// 玄武之璜（swd 卡牌面补切批⑩）：器族手持——造成伤害后回复等量体力。
+    Xuanwuzhihuang,
+    /// 黄麟之琮（swd 卡牌面补切批⑩）：器族手持——准备阶段无护甲则+1。
+    Huanglinzhicong,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
@@ -673,7 +683,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 155] = [
+    pub const ALL: [CardKind; 160] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -824,6 +834,11 @@ impl CardKind {
         CardKind::Xianluhui,
         CardKind::Guilingzhitao,
         CardKind::Sifeizhenmian,
+        CardKind::Qinglongzhigui,
+        CardKind::Zhuquezhizhang,
+        CardKind::Baishouzhihu,
+        CardKind::Xuanwuzhihuang,
+        CardKind::Huanglinzhicong,
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
@@ -984,6 +999,11 @@ impl CardKind {
             CardKind::Xianluhui => "xianluhui",
             CardKind::Guilingzhitao => "guilingzhitao",
             CardKind::Sifeizhenmian => "sifeizhenmian",
+            CardKind::Qinglongzhigui => "qinglongzhigui",
+            CardKind::Zhuquezhizhang => "zhuquezhizhang",
+            CardKind::Baishouzhihu => "baishouzhihu",
+            CardKind::Xuanwuzhihuang => "xuanwuzhihuang",
+            CardKind::Huanglinzhicong => "huanglinzhicong",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",
