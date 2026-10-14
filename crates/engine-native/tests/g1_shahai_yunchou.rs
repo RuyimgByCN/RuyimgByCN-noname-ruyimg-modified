@@ -9,6 +9,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
 use engine_native::catalog::{CardKind, Suit};
+use engine_native::event::DamageNature;
 use engine_native::content::extension::ExtensionPack;
 use engine_native::{
     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason,
@@ -1306,4 +1307,136 @@ fn yunchou_real_host_full_lifecycle() {
     // ⑥ 重新 import 被拒
     let report2 = import_extensions(&store, &root, &options());
     assert!(report2.is_err(), "撤销后重新 import 应被拒");
+}
+
+// ---------------------------------------------------------------------------
+// T12 运筹武将面批 1（2026-10-14）：上游 character/yunchou 10 名武将的首
+// 2 名——diy_caocao（戏才=host:xicai；奸雄·变体与护驾 mapping null 暂缓
+// 登记）与 diy_weiyan（狂骨·变体=host:diykuanggu）。桥接/目录元数据/两
+// 行为定向/可选确认门。
+// ---------------------------------------------------------------------------
+
+#[test]
+fn g1_yunchou_generals_batch1_bridge_and_behaviors() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert_eq!(bridged.generals.len(), 2, "批 1 两名武将");
+    assert_eq!(
+        bridged.host_skills.len(),
+        2,
+        "xicai + diykuanggu 两行为"
+    );
+    assert_eq!(bridged.unmapped_skills, 2, "奸雄·变体与护驾暂缓登记");
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let generals = bridged.generals.clone();
+    let host_skills = bridged.host_skills.clone();
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b1",
+            version: 1,
+            description: "运筹武将面批 1",
+        },
+        generals,
+        cards: Vec::new(),
+        host_skills,
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66001, 4, &[&pack]).expect("建局");
+    let (name, faction, skills, hp, _gender) = e
+        .catalog()
+        .general_meta(base)
+        .expect("扩展武将在目录");
+    assert_eq!(name, "ycn曹操");
+    assert_eq!(skills, vec!["ycnxicai"], "护驾/奸雄·变体暂缓不入目录");
+    let _ = faction;
+    let hp2 = e.catalog().general_meta(base + 1).expect("魏延在目录");
+    assert_eq!(hp2.0, "ycn魏延");
+    let _ = hp;
+    assert_eq!(hp2.3, 4);
+
+    // 戏才（可选确认门）：真实出杀通道——p0 杀 p1 → 伤害窗确认 → 获得
+    // 伤害牌（杀实体须在处理区，debug 注入载荷不移动实体不可用）
+    e.debug_grant(1, "ycnxicai");
+    e.debug_set_hp(1, 8);
+    advance_to(&mut e, 0, Phase::Play);
+    e.debug_clear_hand(1); // 无闪可出——杀必中，聚焦戏才确认门
+    let sha = e.debug_place(0, "sha");
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: sha, targets: vec![1] });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "出杀受理: {out:?}"
+    );
+    settle_optional_confirm(&mut e);
+    assert!(
+        e.debug_hand(1).contains(&sha),
+        "戏才：确认后获得伤害牌（处理区回收）"
+    );
+
+    // 狂骨·变体（强制）：距离 2 目标受伤 → 摸 1
+    e.debug_grant(0, "ycndiykuanggu");
+    let h0 = hand_len(&e, 0);
+    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 0), h0 + 1, "距离 >1 摸 1");
+
+    // 狂骨·变体：距离 1 且已受伤 → 回复 1
+    e.debug_set_hp(0, 2);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(e.debug_hp(0), 3, "距离 1 且已受伤回复 1");
+}
+
+fn hand_len(e: &Engine, p: u8) -> usize {
+    e.state_core().player(p).hand.len()
+}
+
+/// 推进到指定玩家的指定阶段（空/首选应答排空）。
+fn advance_to(e: &mut Engine, player: u8, phase: Phase) {
+    for _ in 0..200 {
+        if e.turn().current == player && e.turn().phase == phase {
+            return;
+        }
+        assert!(e.outcome().is_none(), "对局提前结束");
+        let actor = e.turn().current;
+        submit(e, actor, GameAction::NextPhase);
+        if let Some(c) = e.open_choice() {
+            let sel: Vec<ChoiceOption> = c
+                .spec
+                .options
+                .iter()
+                .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                .copied()
+                .take(c.spec.min.max(1))
+                .collect();
+            let (cid, obs) = (c.id, c.observer);
+            if !sel.is_empty() {
+                submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            } else if !c.spec.options.is_empty() {
+                submit(e, obs, GameAction::Answer {
+                    choice_id: cid,
+                    selection: vec![c.spec.options[0].clone()],
+                });
+            }
+        }
+    }
+    panic!("200 步未到 p{player} 目标阶段");
+}
+
+/// 可选触发确认门排空（Confirm/Pass 取首选项；无门则空转）。
+fn settle_optional_confirm(e: &mut Engine) {
+    for _ in 0..8 {
+        let Some(c) = e.open_choice() else { return };
+        let (cid, obs) = (c.id, c.observer);
+        let sel = if c.spec.options.is_empty() {
+            return;
+        } else {
+            vec![c.spec.options[0].clone()]
+        };
+        submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    }
 }
