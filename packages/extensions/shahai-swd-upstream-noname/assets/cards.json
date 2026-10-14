@@ -459,7 +459,7 @@
         },
         {
           "name": "xielv",
-          "mapping": null
+          "mapping": "host:xielv"
         },
         {
           "name": "hujing",
@@ -503,7 +503,7 @@
         },
         {
           "name": "zhuyu",
-          "mapping": null
+          "mapping": "host:zhuyu"
         }
       ]
     },
