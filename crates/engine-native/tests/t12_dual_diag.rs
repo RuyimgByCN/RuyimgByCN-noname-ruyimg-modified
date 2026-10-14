@@ -25,7 +25,7 @@ fn cardpile_pack_from_repo(
     def_name: &'static str,
     prefix: &'static str,
 ) -> ExtensionPack {
-    use engine_native::content::pile::{extension_pack_from_pile, PileSpec};
+    use engine_native::content::pile::extension_pack_from_pile;
     let store = PackageStore::open(dir.join("store")).unwrap();
     let report = import_extensions(&store, &repo_extensions_root(), &options())
         .expect("import");

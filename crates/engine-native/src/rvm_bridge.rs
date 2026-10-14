@@ -78,8 +78,9 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
     }
 }
 
-/// DSL filter 映射（增量 6 三基 + 增量 9 基元扩展）：具名组合 filter 由
-/// 装载器跳过登记（deferred）。
+/// DSL filter 映射（增量 6 三基 + 增量 9 基元扩展；增量 13 语义收敛——
+/// `owner_is_target_*` 家族全部含「事件主玩家=持有者」合取段）：具名
+/// 组合 filter 由装载器跳过登记（deferred）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum VmFilterPolicy {
     /// DSL `owner_is_target`：事件主玩家=持有者。
@@ -89,30 +90,40 @@ pub enum VmFilterPolicy {
     OwnerIsSource,
     /// DSL `always`：无条件。
     Always,
-    /// DSL `owner_is_target_wounded`：持有者已受伤（hp<maxHp）。
+    /// DSL `owner_is_target_wounded`：事件主玩家=持有者，且持有者已受伤
+    /// （0<hp<maxHp）。
     OwnerWounded,
-    /// DSL `owner_is_target_linked`：持有者横置。
+    /// DSL `owner_is_target_linked`：事件主玩家=持有者，且持有者横置。
     OwnerLinked,
-    /// DSL `owner_is_target_hand_nonempty`：持有者手牌非空。
+    /// DSL `owner_is_target_hand_nonempty`：事件主玩家=持有者，且持有者
+    /// 手牌非空。
     OwnerHandNonempty,
-    /// DSL `owner_is_target_hand_empty`：持有者手牌为空。
+    /// DSL `owner_is_target_hand_empty`：事件主玩家=持有者，且持有者手牌
+    /// 为空。
     OwnerHandEmpty,
-    /// DSL `owner_is_target_no_turn_damage`：本回合未受到伤害。
+    /// DSL `owner_is_target_no_turn_damage`：事件主玩家=持有者，且持有者
+    /// 本回合未造成伤害。
     OwnerNoTurnDamage,
-    /// DSL `owner_is_target_turn_damage`：本回合已受到伤害。
+    /// DSL `owner_is_target_turn_damage`：事件主玩家=持有者，且持有者本
+    /// 回合已造成伤害。
     OwnerTurnDamage,
-    /// DSL `owner_is_target_hand_below_max_hp`：手牌数 < 体力上限。
+    /// DSL `owner_is_target_hand_below_max_hp`：事件主玩家=持有者，且手
+    /// 牌数 < 体力上限。
     OwnerHandBelowMaxHp,
-    /// DSL `owner_is_target_hand_above_hp`：手牌数 > 体力。
+    /// DSL `owner_is_target_hand_above_hp`：事件主玩家=持有者，且手牌数
+    /// > 体力。
     OwnerHandAboveHp,
-    /// DSL `owner_is_target_hand_at_least_hp`：手牌数 >= 体力。
+    /// DSL `owner_is_target_hand_at_least_hp`：事件主玩家=持有者，且手牌
+    /// 数 >= 体力。
     OwnerHandAtLeastHp,
-    /// DSL `owner_is_target_other_hand_nonempty`：任一其他存活角色手牌非空。
+    /// DSL `owner_is_target_other_hand_nonempty`：事件主玩家=持有者，且
+    /// 任一其他存活角色手牌非空。
     OwnerOtherHandNonempty,
-    /// DSL `owner_is_target_turn_damage_at_least_three`：本回合受伤 ≥3。
+    /// DSL `owner_is_target_turn_damage_at_least_three`：事件主玩家=持有
+    /// 者，且本回合造成伤害 ≥3。
     OwnerTurnDamageAtLeastThree,
-    /// DSL `owner_is_target_hand_at_least_hp_other_alive`：手牌数 ≥ 体力
-    /// 且存在其他存活角色。
+    /// DSL `owner_is_target_hand_at_least_hp_other_alive`：事件主玩家=持
+    /// 有者，手牌数 ≥ 体力，且存在其他存活角色。
     OwnerHandAtLeastHpOtherAlive,
 }
 
@@ -126,48 +137,78 @@ pub struct VmSkillBehavior {
 
 impl SkillBehavior for VmSkillBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
-        // 增量 9 过滤面：三基语义 + 七个基元状态谓词（引擎侧已有承载）；
-        // 其余具名组合 filter 装载器跳过（deferred 登记）。
+        // 增量 13 语义收敛：`owner_is_target_*` 家族的权威语义（编译器
+        // lsp 权威描述 "the skill owner is the event player and …"）是
+        // 「事件主玩家=持有者」与状态谓词的合取——filter 是触发调度里
+        // 唯一的持有者域闸（plan_triggers 只按 EventKind 找候选），漏掉
+        // 合取段会让他人事件过闸（炙焚 holder 门同类缺陷）。turn_damage
+        // 为本回合「造成」伤害计数（kernel 记在来源侧），与 lsp 一致。
         let trig = trigger_ctx_of(event);
+        let is_event_player = trig.event_player == Some(owner);
         let holder_state = |s: u8| ctx.state.player(s);
         match self.filter {
-            VmFilterPolicy::OwnerIsTarget => trig.event_player == Some(owner),
+            VmFilterPolicy::OwnerIsTarget => is_event_player,
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
             VmFilterPolicy::Always => true,
             VmFilterPolicy::OwnerWounded => {
-                let p = holder_state(owner);
-                p.hp > 0 && p.hp < p.max_hp as i32
+                is_event_player
+                    && {
+                        let p = holder_state(owner);
+                        p.hp > 0 && p.hp < p.max_hp as i32
+                    }
             }
-            VmFilterPolicy::OwnerLinked => holder_state(owner).linked,
-            VmFilterPolicy::OwnerHandNonempty => !holder_state(owner).hand.is_empty(),
-            VmFilterPolicy::OwnerHandEmpty => holder_state(owner).hand.is_empty(),
-            VmFilterPolicy::OwnerNoTurnDamage => holder_state(owner).turn_damage == 0,
-            VmFilterPolicy::OwnerTurnDamage => holder_state(owner).turn_damage > 0,
+            VmFilterPolicy::OwnerLinked => {
+                is_event_player && holder_state(owner).linked
+            }
+            VmFilterPolicy::OwnerHandNonempty => {
+                is_event_player && !holder_state(owner).hand.is_empty()
+            }
+            VmFilterPolicy::OwnerHandEmpty => {
+                is_event_player && holder_state(owner).hand.is_empty()
+            }
+            VmFilterPolicy::OwnerNoTurnDamage => {
+                is_event_player && holder_state(owner).turn_damage == 0
+            }
+            VmFilterPolicy::OwnerTurnDamage => {
+                is_event_player && holder_state(owner).turn_damage > 0
+            }
             VmFilterPolicy::OwnerHandBelowMaxHp => {
-                let p = holder_state(owner);
-                p.hand.len() < p.max_hp as usize
+                is_event_player && {
+                    let p = holder_state(owner);
+                    p.hand.len() < p.max_hp as usize
+                }
             }
             VmFilterPolicy::OwnerHandAboveHp => {
-                let p = holder_state(owner);
-                p.hand.len() > p.hp as usize
+                is_event_player && {
+                    let p = holder_state(owner);
+                    p.hand.len() > p.hp as usize
+                }
             }
             VmFilterPolicy::OwnerHandAtLeastHp => {
-                let p = holder_state(owner);
-                p.hand.len() >= p.hp as usize
+                is_event_player && {
+                    let p = holder_state(owner);
+                    p.hand.len() >= p.hp as usize
+                }
             }
-            VmFilterPolicy::OwnerOtherHandNonempty => (0..ctx.state.players.len())
-                .any(|i| {
-                    i as u8 != owner
-                        && ctx.state.players[i].alive
-                        && !ctx.state.players[i].hand.is_empty()
-                }),
+            VmFilterPolicy::OwnerOtherHandNonempty => {
+                is_event_player
+                    && (0..ctx.state.players.len()).any(|i| {
+                        i as u8 != owner
+                            && ctx.state.players[i].alive
+                            && !ctx.state.players[i].hand.is_empty()
+                    })
+            }
             VmFilterPolicy::OwnerTurnDamageAtLeastThree => {
-                holder_state(owner).turn_damage >= 3
+                is_event_player && holder_state(owner).turn_damage >= 3
             }
-            VmFilterPolicy::OwnerHandAtLeastHpOtherAlive => (0..ctx.state.players.len())
-                .any(|i| {
+            VmFilterPolicy::OwnerHandAtLeastHpOtherAlive => {
+                is_event_player && {
+                    let p = holder_state(owner);
+                    p.hand.len() >= p.hp as usize
+                } && (0..ctx.state.players.len()).any(|i| {
                     i as u8 != owner && ctx.state.players[i].alive
-                }),
+                })
+            }
         }
     }
 

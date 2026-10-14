@@ -842,3 +842,207 @@ fn t8_vm_skill_id_reverse_lookup_wired() {
         .unwrap_or_else(|| panic!("VM def 应在目录"));
     assert_ne!(def, 0, "def id 非 NONE（反查键有效）");
 }
+
+// ---------------------------------------------------------------------------
+// 增量 13 过滤面收敛：`owner_is_target_*` 家族权威语义（编译器 lsp 权威
+// 描述 "the skill owner is the event player and …"）=「事件主玩家=持有者」
+// ∧ 状态谓词。12 策略逐策略双闸：非持有者事件不过闸（负例）、持有者事
+// 件过闸（正例）；turn_damage 系另测「造成」口径（kernel 记来源侧），
+// AtLeastHpOtherAlive 另测「手牌≥体力」半边（增量 11 实现曾丢）。
+// ---------------------------------------------------------------------------
+
+/// 家族探针样本：效果=摸 1；filter 由声明侧逐策略注入（DSL 侧 always
+/// 仅占位）。
+const GATE_DSL: &str = "\
+skill hnl_gate_t8(990009) {
+  trigger damage always {
+    effect draw_cards(self, 1);
+  }
+}
+";
+
+#[test]
+fn t8_filter_family_owner_gate_and_predicates() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named("t8-rvm-bridge", GATE_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_gate_t8");
+    let trig = TriggerMeta {
+        event: EventKind::Damage,
+        timing: Timing::Normal,
+        priority: 0,
+        optional: false,
+        extra_events: Vec::new(),
+    };
+    let name = "t8闸";
+
+    // 每策略一局：setup 布置谓词态 → 负例（非持有者事件不过闸）→ 正例
+    // （本人为事件主玩家时过闸）。
+    let cases: Vec<(P, fn(&mut Engine))> = vec![
+        (P::OwnerWounded, |e: &mut Engine| e.debug_set_hp(1, 2)),
+        (
+            P::OwnerLinked,
+            |e: &mut Engine| e.state_core_mut().players[1].linked = true,
+        ),
+        (P::OwnerHandNonempty, |_| {}),
+        (P::OwnerHandEmpty, |e: &mut Engine| e.debug_clear_hand(1)),
+        (P::OwnerNoTurnDamage, |_| {}),
+        (P::OwnerTurnDamage, |_| {}),
+        (P::OwnerTurnDamageAtLeastThree, |_| {}),
+        (P::OwnerHandBelowMaxHp, |e: &mut Engine| e.debug_clear_hand(1)),
+        (P::OwnerHandAboveHp, |e: &mut Engine| e.debug_set_hp(1, 2)),
+        (P::OwnerHandAtLeastHp, |e: &mut Engine| e.debug_set_hp(1, 2)),
+        (P::OwnerOtherHandNonempty, |_| {}),
+        (
+            P::OwnerHandAtLeastHpOtherAlive,
+            |e: &mut Engine| e.debug_set_hp(1, 2),
+        ),
+    ];
+
+    for (idx, (filter, setup)) in cases.iter().enumerate() {
+        let pack = pack_with(vec![VmSkillDecl {
+            name: name.to_string(),
+            module: module.clone(),
+            trigger: trig.clone(),
+            filter: *filter,
+        }]);
+        let mut e =
+            Engine::new_with_extensions(941000 + idx as u64, 4, &[&pack]).expect("建局");
+        e.debug_grant(1, name);
+        setup(&mut e);
+        let h0 = hand_len(&e, 1);
+
+        match filter {
+            // 造成伤害系：负例=持有者对他人造成伤害（事件主=受伤者≠持有
+            // 者，同时把 turn_damage 布置过阈值）；正例=他人对持有者造成
+            // 伤害。
+            P::OwnerTurnDamage => {
+                e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+                assert_eq!(
+                    hand_len(&e, 1),
+                    h0,
+                    "turn_damage：持有者对他人造成伤害不过闸"
+                );
+                e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+                assert_eq!(hand_len(&e, 1), h0 + 1, "turn_damage：本人受伤过闸");
+            }
+            P::OwnerTurnDamageAtLeastThree => {
+                e.debug_deal_damage(Some(1), 0, 3, DamageNature::Normal);
+                assert_eq!(
+                    hand_len(&e, 1),
+                    h0,
+                    "turn_damage_3：持有者对他人造成伤害不过闸"
+                );
+                e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+                assert_eq!(
+                    hand_len(&e, 1),
+                    h0 + 1,
+                    "turn_damage_3：本人受伤过闸（已造成 3）"
+                );
+            }
+            // 手牌≥体力半边专项：先令谓词假（体力 6 > 手牌 4）——本人受
+            // 伤也不触发（增量 11 丢半边反例）；再回体力 2 走双闸。
+            P::OwnerHandAtLeastHpOtherAlive => {
+                e.debug_set_hp(1, 6);
+                e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+                assert_eq!(
+                    hand_len(&e, 1),
+                    h0,
+                    "at_least_hp_other_alive：手牌<体力谓词假不触发"
+                );
+                e.debug_set_hp(1, 2);
+                e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+                assert_eq!(
+                    hand_len(&e, 1),
+                    h0 + 1,
+                    "at_least_hp_other_alive：本人受伤过闸"
+                );
+                e.debug_deal_damage(Some(2), 0, 1, DamageNature::Normal);
+                assert_eq!(
+                    hand_len(&e, 1),
+                    h0 + 1,
+                    "at_least_hp_other_alive：他人受伤不过闸"
+                );
+            }
+            _ => {
+                e.debug_deal_damage(Some(2), 0, 1, DamageNature::Normal);
+                assert_eq!(hand_len(&e, 1), h0, "{filter:?}：他人受伤不过闸");
+                e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+                assert_eq!(hand_len(&e, 1), h0 + 1, "{filter:?}：本人受伤过闸");
+            }
+        }
+    }
+}
+
+/// 增量 13 装载器映射正向锁面：词表中已承载的 11 个具名组合 filter 逐
+/// 名映射到对应策略，deferred_filters 为空（映射遗漏会落 deferred）。
+#[test]
+fn t8_loader_maps_all_carried_named_filters() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let mut dsl = String::new();
+    // 词表差集说明：`owner_is_target_hand_empty` 不在编译器 FILTERS 词表
+    // （装载器映射为前进兼容死臂，策略行为由家族直注测试覆盖）。
+    let named: [(&str, &str, P); 10] = [
+        ("wounded", "owner_is_target_wounded", P::OwnerWounded),
+        ("linked", "owner_is_target_linked", P::OwnerLinked),
+        (
+            "hand_nonempty",
+            "owner_is_target_hand_nonempty",
+            P::OwnerHandNonempty,
+        ),
+        (
+            "no_turn_damage",
+            "owner_is_target_no_turn_damage",
+            P::OwnerNoTurnDamage,
+        ),
+        ("turn_damage", "owner_is_target_turn_damage", P::OwnerTurnDamage),
+        (
+            "turn_damage_at_least_three",
+            "owner_is_target_turn_damage_at_least_three",
+            P::OwnerTurnDamageAtLeastThree,
+        ),
+        (
+            "hand_at_least_hp_other_alive",
+            "owner_is_target_hand_at_least_hp_other_alive",
+            P::OwnerHandAtLeastHpOtherAlive,
+        ),
+        (
+            "hand_below_max_hp",
+            "owner_is_target_hand_below_max_hp",
+            P::OwnerHandBelowMaxHp,
+        ),
+        (
+            "hand_above_hp",
+            "owner_is_target_hand_above_hp",
+            P::OwnerHandAboveHp,
+        ),
+        (
+            "other_hand_nonempty",
+            "owner_is_target_other_hand_nonempty",
+            P::OwnerOtherHandNonempty,
+        ),
+    ];
+    for (idx, (tag, filter, _)) in named.iter().enumerate() {
+        dsl.push_str(&format!(
+            "skill hnl_ld_{tag}(99{:02}) {{\n  trigger damage {filter} {{\n    effect draw_cards(self, 1);\n  }}\n}}\n",
+            10 + idx
+        ));
+    }
+    let pkg = compile_source_named("t8-rvm-bridge", &dsl).expect("DSL 编译");
+    let outcome = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
+    assert!(
+        outcome.deferred_filters.is_empty(),
+        "已承载具名 filter 不得落 deferred: {:?}",
+        outcome.deferred_filters
+    );
+    assert_eq!(outcome.decls.len(), 10, "词表内 10 名全产出声明");
+    for (tag, _, want) in named.iter() {
+        let decl = outcome
+            .decls
+            .iter()
+            .find(|d| d.name.contains(&format!("hnl_ld_{tag}")))
+            .unwrap_or_else(|| panic!("hnl_ld_{tag} 声明缺失"));
+        assert_eq!(decl.filter, *want, "hnl_ld_{tag} 策略映射");
+    }
+}
