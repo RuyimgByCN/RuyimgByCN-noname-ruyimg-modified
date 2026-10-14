@@ -3634,18 +3634,66 @@ fn apply_command(
                     );
                     return Ok(());
                 }
-                CardKind::SavageAttack | CardKind::ArcheryAttack => {
+                CardKind::SavageAttack
+                | CardKind::ArcheryAttack
+                | CardKind::Jingleishan
+                | CardKind::Chiyuxi => {
                     // AOE：目标 = 出牌时刻的全部其他存活玩家（自下家起按座位
-                    // 顺序冻结），命令显式 targets 必须为空。
+                    // 顺序冻结），命令显式 targets 必须为空。惊雷山/炽羽袭
+                    // reverseOrder：结算序反转为从自己上家起逆座位序。
                     if !targets.is_empty() {
                         return Err(RejectReason::IllegalTargets);
                     }
                     let player = core.turn.current;
-                    let aoe_targets: Vec<PlayerId> = core
+                    let mut aoe_targets: Vec<PlayerId> = core
                         .seat_order_from(core.next_alive(player))
                         .into_iter()
                         .filter(|p| *p != player)
                         .collect();
+                    if matches!(kind, CardKind::Jingleishan | CardKind::Chiyuxi) {
+                        aoe_targets.reverse();
+                    }
+                    crate::resolution::push_frame(
+                        &mut state.resolution,
+                        EventData::CardUsed(crate::machine::card_use(
+                            card, player, aoe_targets,
+                        )),
+                    );
+                    return Ok(());
+                }
+                CardKind::Guisheqi => {
+                    // 鬼蛇旗：恰 1 名任意存活目标（可含自己）
+                    if targets.len() != 1 || !core.player(targets[0]).alive {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                    crate::resolution::push_frame(
+                        &mut state.resolution,
+                        EventData::CardUsed(crate::machine::card_use(
+                            card,
+                            core.turn.current,
+                            targets,
+                        )),
+                    );
+                    return Ok(());
+                }
+                CardKind::Xianluhui => {
+                    // 仙露回：AOE 全体受伤角色（含自己，reverseOrder 逆序近似
+                    // 为逆座位序），命令显式 targets 必须为空。
+                    if !targets.is_empty() {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                    let player = core.turn.current;
+                    let mut aoe_targets: Vec<PlayerId> = core
+                        .seat_order_from(core.next_alive(player))
+                        .into_iter()
+                        .filter(|p| {
+                            *p != player && core.player(*p).alive && core.player(*p).hp < core.player(*p).max_hp as i32
+                        })
+                        .collect();
+                    if core.player(player).hp < core.player(player).max_hp as i32 {
+                        aoe_targets.push(player);
+                    }
+                    aoe_targets.reverse();
                     crate::resolution::push_frame(
                         &mut state.resolution,
                         EventData::CardUsed(crate::machine::card_use(
@@ -5062,7 +5110,7 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             }
         }
         M::Noop => push_u8(h, 18),
-        M::Aoe { card, source, need, targets, idx, inner } => {
+        M::Aoe { card, source, need, targets, idx, inner, nature } => {
             push_u8(h, 6);
             push_u32(h, *card);
             push_u8(h, *source);
@@ -5076,14 +5124,16 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
                     push_machine(h, m);
                 }
             }
+            push_u8(h, *nature as u8);
         }
-        M::AoeTarget { source, target, need, asked, card } => {
+        M::AoeTarget { source, target, need, asked, card, nature } => {
             push_u8(h, 15);
             push_u8(h, *source);
             push_u8(h, *target);
             push_u8(h, *need as u8);
             push_u8(h, *asked as u8);
             push_u32(h, *card);
+            push_u8(h, *nature as u8);
         }
         M::Chain { card, source, targets, emitted } => {
             push_u8(h, 16);

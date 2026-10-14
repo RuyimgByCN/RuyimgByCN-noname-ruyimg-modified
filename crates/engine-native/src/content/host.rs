@@ -823,6 +823,10 @@ pub enum HostBehavior {
     /// 空洞印（tag 296，批⑥ equipSkill）：锁定——死亡前置窗口取消死亡：
     /// hp=1、摸 1、弃全部宝物（death_cancelled 基建消费）。
     SwdKongdongyinGuard,
+    /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
+    GuisheqiCard,
+    /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
+    XianluhuiCard,
 }
 
 
@@ -903,6 +907,8 @@ impl HostBehavior {
             HostBehavior::SwdKunlunjingcCard => 294,
             HostBehavior::SwdDonghuangzhongCard => 295,
             HostBehavior::SwdKongdongyinGuard => 296,
+            HostBehavior::GuisheqiCard => 297,
+            HostBehavior::XianluhuiCard => 298,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1444,6 +1450,8 @@ impl HostBehavior {
             294 => HostBehavior::SwdKunlunjingcCard,
             295 => HostBehavior::SwdDonghuangzhongCard,
             296 => HostBehavior::SwdKongdongyinGuard,
+            297 => HostBehavior::GuisheqiCard,
+            298 => HostBehavior::XianluhuiCard,
             _ => return None,
         })
     }
@@ -1461,7 +1469,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 296] = [
+    pub const ALL: [HostBehavior; 298] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1758,6 +1766,8 @@ impl HostBehavior {
         HostBehavior::SwdKunlunjingcCard,
         HostBehavior::SwdDonghuangzhongCard,
         HostBehavior::SwdKongdongyinGuard,
+        HostBehavior::GuisheqiCard,
+        HostBehavior::XianluhuiCard,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1818,6 +1828,8 @@ impl HostBehavior {
             HostBehavior::SwdKunlunjingcCard => "host:kunlunjingc",
             HostBehavior::SwdDonghuangzhongCard => "host:donghuangzhong",
             HostBehavior::SwdKongdongyinGuard => "host:kongdongyin",
+            HostBehavior::GuisheqiCard => "guisheqi_card",
+            HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2310,6 +2322,9 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 鬼蛇旗/仙露回：trick 卡牌机（元数据不进触发计划）
+            HostBehavior::GuisheqiCard => None,
+            HostBehavior::XianluhuiCard => None,
             // 空洞印：死亡前置窗口（forced；上游 dieBefore cancel 同口径）
             HostBehavior::SwdKongdongyinGuard => Some(TriggerMeta {
                 event: EventKind::Death,
@@ -4348,6 +4363,9 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdShennongdingCard => false,
             // 昆仑镜：无触发面
             HostBehavior::SwdKunlunjingcCard => false,
+            // 鬼蛇旗/仙露回：无触发面（CardUsed 内建直派）
+            HostBehavior::GuisheqiCard => false,
+            HostBehavior::XianluhuiCard => false,
             // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
             HostBehavior::SwdKongdongyinGuard => matches!(event,
                 EventData::Death { player, .. } if *player == owner),
@@ -6634,6 +6652,32 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 鬼蛇旗：目标 +1 护甲（change_hujia=受伤抵 1 伤语义）
+            HostBehavior::GuisheqiCard => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        ctx.change_hujia(t, 1);
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                }
+                Flow::Done
+            }
+            // 仙露回：全体受伤目标各 +1 护甲（targets 已过滤受伤）
+            HostBehavior::XianluhuiCard => {
+                for t in self.targets.clone() {
+                    if ctx.core.player(t).alive {
+                        ctx.change_hujia(t, 1);
+                    }
+                }
+                if let Some(c) = self.card {
+                    ctx.to_discard(c);
+                    ctx.core.table.retain(|x| *x != c);
+                }
+                Flow::Done
+            }
             // 空洞印：死亡取消——hp=1、摸 1、弃全部宝物（death_cancelled
             // 基建消费，DeathMachine 开头拦截跳过死亡执行）
             HostBehavior::SwdKongdongyinGuard => {

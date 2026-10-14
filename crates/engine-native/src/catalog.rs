@@ -472,6 +472,17 @@ pub enum CardKind {
     /// 空洞印（swd 卡牌面补切批⑥）：equip5 宝物——死亡取消型：hp=1、
     /// 摸 1、弃全部宝物（death_cancelled 基建消费）。
     Kongdongyin,
+    /// 惊雷山（swd 卡牌面补切批⑦）：trick AOE（雷版南蛮——全体其他需
+    /// 出杀，不出则雷 1 伤；逆座位序）。
+    Jingleishan,
+    /// 炽羽袭（swd 卡牌面补切批⑦）：trick AOE（火版万箭——全体其他需
+    /// 出闪，不出则火 1 伤；逆座位序）。
+    Chiyuxi,
+    /// 鬼蛇旗（swd 卡牌面补切批⑦）：trick 单目标 +1 护甲。
+    Guisheqi,
+    /// 仙露回（swd 卡牌面补切批⑦）：trick AOE——全体受伤角色（含自己）
+    /// +1 护甲（逆座位序）。
+    Xianluhui,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
@@ -508,12 +519,20 @@ impl Suit {
 }
 
 impl CardKind {
-    /// AOE 牌对应的响应需求牌。
+    /// AOE 牌对应的响应需求牌（惊雷山=杀，炽羽袭=闪）。
     pub fn aoe_need(self) -> Option<CardKind> {
         match self {
-            CardKind::SavageAttack => Some(CardKind::Sha),
-            CardKind::ArcheryAttack => Some(CardKind::Shan),
+            CardKind::SavageAttack | CardKind::Jingleishan => Some(CardKind::Sha),
+            CardKind::ArcheryAttack | CardKind::Chiyuxi => Some(CardKind::Shan),
             _ => None,
+        }
+    }
+    /// AOE 伤害属性（惊雷山=雷、炽羽袭=火，南蛮/万箭普通）。
+    pub fn aoe_nature(self) -> crate::event::DamageNature {
+        match self {
+            CardKind::Jingleishan => crate::event::DamageNature::Thunder,
+            CardKind::Chiyuxi => crate::event::DamageNature::Fire,
+            _ => crate::event::DamageNature::Normal,
         }
     }
 }
@@ -645,7 +664,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 149] = [
+    pub const ALL: [CardKind; 153] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -790,6 +809,10 @@ impl CardKind {
         CardKind::Kunlunjingc,
         CardKind::Donghuangzhong,
         CardKind::Kongdongyin,
+        CardKind::Jingleishan,
+        CardKind::Chiyuxi,
+        CardKind::Guisheqi,
+        CardKind::Xianluhui,
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
@@ -944,6 +967,10 @@ impl CardKind {
             CardKind::Kunlunjingc => "kunlunjingc",
             CardKind::Donghuangzhong => "donghuangzhong",
             CardKind::Kongdongyin => "kongdongyin",
+            CardKind::Jingleishan => "jingleishan",
+            CardKind::Chiyuxi => "chiyuxi",
+            CardKind::Guisheqi => "guisheqi",
+            CardKind::Xianluhui => "xianluhui",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",

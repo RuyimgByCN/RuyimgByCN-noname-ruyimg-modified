@@ -321,6 +321,7 @@ pub enum MachineSnapshot {
         targets: Vec<PlayerId>,
         idx: usize,
         inner: Option<Box<MachineSnapshot>>,
+        nature: crate::event::DamageNature,
     },
     AoeTarget {
         source: PlayerId,
@@ -328,6 +329,7 @@ pub enum MachineSnapshot {
         need: CardKind,
         asked: bool,
         card: CardId,
+        nature: crate::event::DamageNature,
     },
     Chain {
         card: CardId,
@@ -4263,6 +4265,7 @@ impl MachineSnapshot {
                 targets,
                 idx,
                 inner,
+                nature,
             } => {
                 let inner = match inner {
                     Some(e) => match e.restore() {
@@ -4278,6 +4281,7 @@ impl MachineSnapshot {
                     targets.clone(),
                     *idx,
                     inner,
+                    *nature,
                 )))
             }
             MachineSnapshot::AoeTarget {
@@ -4286,12 +4290,14 @@ impl MachineSnapshot {
                 need,
                 asked,
                 card,
+                nature,
             } => Ok(Box::new(crate::kernel::AoeTargetMachine::new(
                 *source,
                 *target,
                 *need,
                 *asked,
                 *card,
+                *nature,
             ))),
             MachineSnapshot::Chain {
                 card,

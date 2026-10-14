@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 60, "swd 全 60 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 65, "swd 全 65 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 60, "swd 全 60 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 65, "swd 全 65 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 60, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 65, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4213,6 +4213,11 @@ fn swd_cards_alignment_guard_b29() {
         ("kunlunjingc", "spade", 13),
         ("donghuangzhong", "diamond", 13),
         ("kongdongyin", "heart", 13),
+        ("jingleishan", "club", 7),
+        ("chiyuxi", "diamond", 7),
+        ("guisheqi", "spade", 9),
+        ("guisheqi", "club", 7),
+        ("xianluhui", "spade", 13),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4226,7 +4231,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 60, "批⑥ 空洞印后 60 张");
+    assert_eq!(pack.cards.len(), 65, "批⑦ 锦囊族后 65 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -5005,4 +5010,114 @@ fn swd_cards_equip5_b36_kongdongyin_death_cancel() {
     e.debug_deal_damage(Some(1), 0, 9, engine_native::event::DamageNature::Normal);
     settle_optional_confirm(&mut e);
     assert!(!e.state_core().player(0).alive, "空洞印反例：一次性，再次致死正常死亡");
+}
+
+/// T12 swd 卡牌面补切批⑦：锦囊族 4 kind 7 张——惊雷山（雷版南蛮，逆座
+/// 序）；炽羽袭（火版万箭，逆座序）；鬼蛇旗（单目标 +1 护甲）；仙露回
+/// （全体受伤者 +1 护甲）。MachineSnapshot::Aoe/AoeTarget nature 字段批
+/// （存档 v71→v72，规则 v284→v285，golden 重录+284 探针零扰动）。
+#[test]
+fn swd_cards_trick_b37_jingleishan_chiyuxi_guisheqi_xianluhui() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62017, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let kind_id = |e: &Engine, k: engine_native::catalog::CardKind| {
+        e.catalog()
+            .cards
+            .iter()
+            .position(|c| c.kind == k)
+            .expect("卡在目录") as u32
+    };
+    use engine_native::catalog::CardKind;
+    use engine_native::event::DamageNature;
+
+    // ① 鬼蛇旗：p2 +1 护甲
+    let gsq = kind_id(&e, CardKind::Guisheqi);
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != gsq);
+        core.players[0].hand.push(gsq);
+    }
+    e.debug_set_hp(2, 8);
+    submit(&mut e, 0, GameAction::PlayCard { card: gsq, targets: vec![2] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(2).hujia, 1, "鬼蛇旗：p2 +1 护甲");
+
+    // ② 惊雷山：全体其他需出杀，不出雷 1 伤（p1/p2/p3 手牌全空 → 各 -1）
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let jls = kind_id(&e, CardKind::Jingleishan);
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != jls);
+        core.players[0].hand.push(jls);
+    }
+    e.debug_set_hp(1, 4);
+    e.debug_set_hp(2, 4);
+    e.debug_set_hp(3, 4);
+    submit(&mut e, 0, GameAction::PlayCard { card: jls, targets: vec![] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(1), 3, "惊雷山：p1 雷 1 伤");
+    // p2 有 ① 的 1 护甲：雷 1 伤被护甲抵消（hp 不动、护甲清零）
+    assert_eq!(e.debug_hp(2), 4, "惊雷山：p2 雷 1 伤被护甲抵消");
+    assert_eq!(e.state_core().player(2).hujia, 0, "惊雷山：p2 护甲消耗");
+    assert_eq!(e.debug_hp(3), 3, "惊雷山：p3 雷 1 伤");
+
+    // ③ 炽羽袭：需出闪，火 1 伤（同上结构）
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let cyx = kind_id(&e, CardKind::Chiyuxi);
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != cyx);
+        core.players[0].hand.push(cyx);
+    }
+    e.debug_set_hp(1, 4);
+    e.debug_set_hp(2, 4);
+    e.debug_set_hp(3, 4);
+    submit(&mut e, 0, GameAction::PlayCard { card: cyx, targets: vec![] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(1), 3, "炽羽袭：p1 火 1 伤");
+    // p2 无护甲（②已消耗）→ 3→2
+    assert_eq!(e.debug_hp(2), 3, "炽羽袭：p2 hp 4→3（②雷伤已被护甲抵消未扣血）");
+    assert_eq!(e.debug_hp(3), 3, "炽羽袭：p3 火 1 伤");
+
+    // ④ 仙露回：受伤者（p1/p2/p3 各 7/8）各 +1 护甲
+    let xlh = kind_id(&e, CardKind::Xianluhui);
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != xlh);
+        core.players[0].hand.push(xlh);
+    }
+    submit(&mut e, 0, GameAction::PlayCard { card: xlh, targets: vec![] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(1).hujia, 1, "仙露回：受伤 p1 +1 护甲");
+    assert_eq!(e.state_core().player(2).hujia, 1, "仙露回：受伤 p2 +1 护甲");
+    assert_eq!(e.state_core().player(3).hujia, 1, "仙露回：受伤 p3 +1 护甲");
+
+    // 反例：满血 p0 不进仙露回目标表
+    assert_eq!(e.state_core().player(0).hujia, 0, "仙露回：p0 满血不受益");
+    let _ = DamageNature::Thunder;
+    let _ = DamageNature::Fire;
 }

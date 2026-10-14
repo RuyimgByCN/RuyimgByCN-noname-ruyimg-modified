@@ -4790,6 +4790,33 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                     stage: crate::content::host::HostStage::TargetChoice,
                 }))
             }
+            CardKind::Guisheqi => {
+                // 鬼蛇旗（swd 补切批⑦）：目标 +1 护甲（原生 change_hujia=
+                // 受伤抵 1 伤语义，上游 changeHujia 同口径）
+                Some(Box::new(crate::content::host::HostMachine {
+                    def_key: "guisheqi_card".to_string(),
+                    behavior: crate::content::host::HostBehavior::GuisheqiCard,
+                    owner: u.player,
+                    target: Some(*u.targets.first().expect("guisheqi target")),
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: crate::content::host::HostStage::Act,
+                }))
+            }
+            CardKind::Xianluhui => {
+                // 仙露回（swd 补切批⑦）：全体受伤目标各 +1 护甲
+                Some(Box::new(crate::content::host::HostMachine {
+                    def_key: "xianluhui_card".to_string(),
+                    behavior: crate::content::host::HostBehavior::XianluhuiCard,
+                    owner: u.player,
+                    target: None,
+                    card: Some(u.card),
+                    cards: Vec::new(),
+                    targets: u.targets.clone(),
+                    stage: crate::content::host::HostStage::Act,
+                }))
+            }
             kind if kind.aoe_need().is_some() => {
                 // AOE 的无懈窗口为**逐目标**（由 AoeResolveMachine 对每个目标
                 // 自行开窗），外层不再包整牌级窗口——旧包裹会吞掉应答并把
@@ -4801,6 +4828,7 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                     targets: u.targets,
                     idx: 0,
                     inner: None,
+                    nature: kind.aoe_nature(),
                 }))
             }
             CardKind::Chain => {
@@ -8648,11 +8676,13 @@ fn weimu_blocks_aoe(ctx: &Ctx<'_>, card: crate::ids::CardId, target: PlayerId) -
 pub struct AoeTargetMachine {
     source: PlayerId,
     target: PlayerId,
-    /// 响应需求（南蛮=杀，万箭=闪）。
+    /// 响应需求（南蛮/惊雷山=杀，万箭/炽羽袭=闪）。
     need: CardKind,
     asked: bool,
     /// 造成伤害的锦囊牌（DamageData.card 透传）。
     card: crate::ids::CardId,
+    /// 伤害属性（惊雷山=雷、炽羽袭=火）。
+    nature: crate::event::DamageNature,
 }
 
 impl AoeTargetMachine {
@@ -8662,8 +8692,9 @@ impl AoeTargetMachine {
         need: CardKind,
         asked: bool,
         card: crate::ids::CardId,
+        nature: crate::event::DamageNature,
     ) -> Self {
-        Self { source, target, need, asked, card }
+        Self { source, target, need, asked, card, nature }
     }
 }
 
@@ -8679,6 +8710,7 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             need: self.need,
             asked: self.asked,
             card: self.card,
+            nature: self.nature,
         }
     }
 
@@ -8704,7 +8736,7 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                     Some(self.source),
                     self.target,
                     1,
-                    crate::event::DamageNature::Normal,
+                    self.nature,
                     Some(self.card),
                 )));
             }
@@ -8722,7 +8754,7 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                 Some(self.source),
                 self.target,
                 1,
-                crate::event::DamageNature::Normal,
+                self.nature,
                 Some(self.card),
             )));
             return Flow::Done;
@@ -8751,12 +8783,14 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
 pub struct AoeResolveMachine {
     card: crate::ids::CardId,
     source: PlayerId,
-    /// 响应需求（南蛮=杀，万箭=闪）。
+    /// 响应需求（南蛮/惊雷山=杀，万箭/炽羽袭=闪）。
     need: CardKind,
     targets: Vec<PlayerId>,
     idx: usize,
     /// 当前目标的无懈窗口（内含响应段机器）。
     inner: Option<Box<dyn SkillMachine>>,
+    /// 伤害属性（惊雷山=雷、炽羽袭=火，其余普通）。
+    nature: crate::event::DamageNature,
 }
 
 impl Clone for AoeResolveMachine {
@@ -8768,6 +8802,7 @@ impl Clone for AoeResolveMachine {
             targets: self.targets.clone(),
             idx: self.idx,
             inner: self.inner.as_ref().map(|m| m.fork()),
+            nature: self.nature,
         }
     }
 }
@@ -8780,8 +8815,17 @@ impl AoeResolveMachine {
         targets: Vec<PlayerId>,
         idx: usize,
         inner: Option<Box<dyn SkillMachine>>,
+        nature: crate::event::DamageNature,
     ) -> Self {
-        Self { card, source, need, targets, idx, inner }
+        Self {
+            card,
+            source,
+            need,
+            targets,
+            idx,
+            inner,
+            nature,
+        }
     }
 
     fn spawn_window(&self, ctx: &Ctx<'_>) -> Box<dyn SkillMachine> {
@@ -8797,7 +8841,7 @@ impl AoeResolveMachine {
             true,
             false,
             Some(Box::new(AoeTargetMachine::new(
-                self.source, target, self.need, false, self.card,
+                self.source, target, self.need, false, self.card, self.nature,
             ))),
         ))
     }
@@ -8812,6 +8856,7 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
             targets: self.targets.clone(),
             idx: self.idx,
             inner: self.inner.as_ref().map(|m| m.fork()),
+            nature: self.nature,
         })
     }
 
@@ -8823,6 +8868,7 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
             targets: self.targets.clone(),
             idx: self.idx,
             inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
+            nature: self.nature,
         }
     }
 

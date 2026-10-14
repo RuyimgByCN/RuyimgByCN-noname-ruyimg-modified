@@ -7721,7 +7721,14 @@ fn swd_zhiluxiaohu_random_enemy_virtual_sha() {
         .position(|c| c.kind == CardKind::Jiguan)
         .expect("指路小虎在目录") as u32;
     let mut snap = e.save();
+    // 全域摘除（批①对齐后 zhiluxiaohu/mujiaren 同为 Jiguan，首实体可能
+    // 已在发牌手牌中——仅 deck.retain 会造成双区）
     snap.core.deck.retain(|c| *c != zhhu);
+    snap.core.discard.retain(|c| *c != zhhu);
+    for pl in snap.core.players.iter_mut() {
+        pl.hand.retain(|c| *c != zhhu);
+        pl.equips.retain(|c| *c != zhhu);
+    }
     snap.core.players[0].hand.push(zhhu);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     assert_eq!(e.catalog().card_kind(zhhu), CardKind::Jiguan, "机关牌种");

@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 71;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 72;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -1143,6 +1143,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             targets,
             idx,
             inner,
+            nature,
         } => {
             w.u8(7);
             w.u32(*card);
@@ -1161,6 +1162,8 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 }
                 None => w.u8(0),
             }
+            // AOE 伤害属性（批⑦）
+            w.u8(*nature as u8);
         }
         MachineSnapshot::AoeTarget {
             source,
@@ -1168,6 +1171,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             need,
             asked,
             card,
+            nature,
         } => {
             w.u8(8);
             enc_pid(w, source);
@@ -1175,6 +1179,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             w.u32(card_kind_to_num(need));
             w.boolean(*asked);
             w.u32(*card);
+            w.u8(*nature as u8);
         }
         MachineSnapshot::Chain {
             card,
@@ -1858,6 +1863,7 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 1 => Some(Box::new(dec_machine(r)?)),
                 t => return Err(ArchiveError::BadTag("opt_machine", t)),
             };
+            let nature = nature_from_num(r.u8()?)?;
             MachineSnapshot::Aoe {
                 card,
                 source,
@@ -1865,6 +1871,7 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 targets,
                 idx,
                 inner,
+                nature,
             }
         }
         8 => {
@@ -1873,12 +1880,14 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let need = card_kind_from_num(r.u32()?)?;
             let asked = r.boolean()?;
             let card = r.u32()?;
+            let nature = nature_from_num(r.u8()?)?;
             MachineSnapshot::AoeTarget {
                 source,
                 target,
                 need,
                 asked,
                 card,
+                nature,
             }
         }
         9 => {
@@ -3754,12 +3763,25 @@ fn card_kind_to_num(k: &CardKind) -> u32 {
         Kunlunjingc => 147,
         Donghuangzhong => 148,
         Kongdongyin => 149,
+        Jingleishan => 150,
+        Chiyuxi => 151,
+        Guisheqi => 152,
+        Xianluhui => 153,
         Tianfuzhen => 134,
         Qixingzhen => 135,
         Niaoxiangzhen => 136,
         Changshezhen => 137,
         Pozhenjue => 138,
     }
+}
+
+fn nature_from_num(n: u8) -> Result<crate::event::DamageNature, ArchiveError> {
+    Ok(match n {
+        0 => crate::event::DamageNature::Normal,
+        1 => crate::event::DamageNature::Fire,
+        2 => crate::event::DamageNature::Thunder,
+        t => return Err(ArchiveError::BadTag("nature", t)),
+    })
 }
 
 fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
@@ -3909,6 +3931,10 @@ fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         147 => Kunlunjingc,
         148 => Donghuangzhong,
         149 => Kongdongyin,
+        150 => Jingleishan,
+        151 => Chiyuxi,
+        152 => Guisheqi,
+        153 => Xianluhui,
         134 => Tianfuzhen,
         135 => Qixingzhen,
         136 => Niaoxiangzhen,

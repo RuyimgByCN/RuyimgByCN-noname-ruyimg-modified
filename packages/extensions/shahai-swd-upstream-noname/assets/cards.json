@@ -387,6 +387,36 @@
       "equip_skills": [
         "kongdongyin"
       ]
+    },
+    {
+      "name": "swd_jingleishan",
+      "kind": "jingleishan",
+      "suit": "club",
+      "rank": 7
+    },
+    {
+      "name": "swd_chiyuxi",
+      "kind": "chiyuxi",
+      "suit": "diamond",
+      "rank": 7
+    },
+    {
+      "name": "swd_guisheqi",
+      "kind": "guisheqi",
+      "suit": "spade",
+      "rank": 9
+    },
+    {
+      "name": "swd_guisheqi2",
+      "kind": "guisheqi",
+      "suit": "club",
+      "rank": 7
+    },
+    {
+      "name": "swd_xianluhui",
+      "kind": "xianluhui",
+      "suit": "spade",
+      "rank": 13
     }
   ],
   "host_skills": [],
