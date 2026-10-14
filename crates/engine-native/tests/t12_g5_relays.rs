@@ -444,11 +444,11 @@ fn cardpile_both_packs_from_repo(dir: &Path) -> (ExtensionPack, ExtensionPack) {
 
 /// 双仓同载跨进程接力：noname+liuli 两包并入同一目录 → 挂起 → 子进程
 /// 双锁恢复 → 推进 → 回写 → 父进程校验（双 namespace 深化切片）。
-/// **已知缺陷（2026-10-14 登记）**：双 cardpile 包同载时本测挂起（>90s
-/// 无完成，疑目录合并/发牌路径病态）——单仓接力（第三/四批）与双仓
-/// G2–G4 通道均绿，挂起点待专项诊断后解除 ignore。
+/// 双仓同载跨进程接力：noname+liuli 两包并入同一目录 → 挂起 → 子进程
+/// 双锁恢复 → 推进 → 回写 → 父进程校验（双 namespace 深化切片）。
+/// 2026-10-14 诊断：首版挂起真因=子进程 spawn 了主测试自身（自递归
+/// 进程链，非引擎缺陷）——spawn 目标修正为 worker 测试后解除。
 #[test]
-#[ignore = "双 cardpile 同载挂起待诊断（2026-10-14 登记，见 g5-batch5 证据）"]
 fn t12_g5_relay_cardpile_dual_namespace() {
     use engine_native::archive::{decode_archive, encode_archive};
 
@@ -478,7 +478,7 @@ fn t12_g5_relay_cardpile_dual_namespace() {
     std::fs::write(&archive_path, encode_archive(&e.save())).expect("父进程落盘");
     let exe = std::env::current_exe().expect("测试二进制");
     let status = std::process::Command::new(exe)
-        .args(["--exact", "t12_g5_relay_cardpile_dual_namespace", "--nocapture"])
+        .args(["--exact", "t12_g5_relay_cardpile_dual_namespace_worker", "--nocapture"])
         .env("T12_G5_ARCHIVE", archive_path.display().to_string())
         .env("T12_G5_REPLY", reply_path.display().to_string())
         .env("T12_G5_STORE", store_dir.display().to_string())
@@ -505,7 +505,6 @@ fn t12_g5_relay_cardpile_dual_namespace() {
 
 /// 双仓同载接力的子进程分支（由主测试自启，env 识别）。
 #[test]
-#[ignore = "随主测 ignore（挂起待诊断）"]
 fn t12_g5_relay_cardpile_dual_namespace_worker() {
     if std::env::var("T12_G5_ARCHIVE").is_err() {
         return; // 仅 worker 模式运行
