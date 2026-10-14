@@ -209,3 +209,47 @@ fn options() -> InstallOptions {
         host: content_runtime::tooling_host_versions(),
     }
 }
+
+/// KOF 连续会话（N08 模式入口批四）：2 人局 Own/Hidden 语义成立——
+/// T13 余项「KOF 信息隔离」切片。
+#[test]
+fn isolation_kof_two_player() {
+    let pools: [Vec<u16>; 2] = [vec![1, 2], vec![3, 4]];
+    let e = Engine::new_kof(9108, pools, [0, 0], 3);
+    for seat in 0u8..2 {
+        let v = e.ai_session(seat).view();
+        for (i, cell) in v.players.iter().enumerate() {
+            let s = i as u8;
+            if s != seat && cell.alive {
+                assert!(
+                    matches!(cell.hand, HandView::Hidden),
+                    "KOF：对手手牌 Hidden（seat={seat} 视角 i={i}）"
+                );
+            }
+        }
+    }
+}
+
+/// 国战（N11）：势力模式 Own/Hidden 语义成立（与标准原型同构）。
+#[test]
+fn isolation_kingdoms_seat_matrix() {
+    let mut e = Engine::new(9109, 4);
+    e.submit(engine_native::GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: 1,
+        action: engine_native::GameAction::NextPhase,
+    });
+    for seat in 0u8..4 {
+        let v = e.ai_session(seat).view();
+        for (i, cell) in v.players.iter().enumerate() {
+            let s = i as u8;
+            if s != seat && cell.alive {
+                assert!(
+                    matches!(cell.hand, HandView::Hidden),
+                    "国战：他人手牌 Hidden（seat={seat} 视角 i={i}）"
+                );
+            }
+        }
+    }
+}
