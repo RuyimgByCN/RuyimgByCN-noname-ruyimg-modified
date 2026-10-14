@@ -889,6 +889,70 @@
           "mapping": "host:wangchen"
         }
       ]
+    },
+    {
+      "name": "swd_shangzhang",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "lianwu",
+          "mapping": "host:lianwu"
+        }
+      ]
+    },
+    {
+      "name": "swd_youzhao",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "longdan",
+          "mapping": "builtin:龙胆"
+        },
+        {
+          "name": "yuchen",
+          "mapping": "host:yuchen"
+        }
+      ]
+    },
+    {
+      "name": "swd_wangsiyue",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "duishi",
+          "mapping": "host:duishi"
+        },
+        {
+          "name": "biyue",
+          "mapping": "builtin:闭月"
+        }
+      ]
+    },
+    {
+      "name": "swd_yuwentuo",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "wushuang",
+          "mapping": "builtin:无双"
+        },
+        {
+          "name": "xielei",
+          "mapping": "host:xielei"
+        },
+        {
+          "name": "kunlunjing",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

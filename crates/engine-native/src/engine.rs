@@ -3099,6 +3099,12 @@ fn apply_command(
                             None => false,
                         }
                     };
+                    // 连舞（尚章，swd 武将面批㉒）：锁定——杀可额外指定一
+                    // 个目标（上游 mod selectTarget range[1]++ 同口径）
+                    let lianwu_extra = catalog
+                        .skill_by_name("lianwu")
+                        .map(|def| core.has_skill(core.turn.current, def))
+                        .unwrap_or(false);
                     let max_targets = if tianxian_inf || kuangxiao_inf {
                         usize::MAX
                     } else {
@@ -3106,6 +3112,7 @@ fn apply_command(
                             + kangyin_extra
                             + u32::from(feiren_extra) as usize
                             + u32::from(juyuan_extra) as usize
+                            + u32::from(lianwu_extra) as usize
                     };
                     if targets.is_empty() || targets.len() > max_targets {
                         return Err(RejectReason::IllegalTargets);

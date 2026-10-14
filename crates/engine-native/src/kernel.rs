@@ -6358,11 +6358,18 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
             );
             red
-                && ctx
+                && (ctx
                     .catalog
                     .skill_by_name("poyue")
                     .map(|def| ctx.core.has_skill(self.source, def))
                     .unwrap_or(false)
+                    // 连舞（尚章，swd 武将面批㉒）：锁定——红杀不可被闪避
+                    //（上游 shaBegin forced directHit 同口径）
+                    || ctx
+                        .catalog
+                        .skill_by_name("lianwu")
+                        .map(|def| ctx.core.has_skill(self.source, def))
+                        .unwrap_or(false))
         };
         if !self.armor_judged {
             self.armor_judged = true;
