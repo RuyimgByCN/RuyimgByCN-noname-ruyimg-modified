@@ -9,7 +9,7 @@
 - 父进程 `Engine::new_with_extensions(seed, 3, &[&pack_noname, &pack_liuli])`（226 张并入目录）→ 推进 6 步 → 落盘 → 自启子进程双锁恢复 → **>90s 无完成（挂起确认，单测直跑同样复现）**。
 - 挂起点：父进程建局/推进或子进程双锁恢复（`--nocapture` 下无 panic 输出，纯挂起）。
 - **对照**：单仓接力（第三批 noname、第四批 liuli）与双仓 G2–G4 通道均绿——挂起仅出现在**双仓同载**路径。
-- **处置**：`t12_g5_relay_cardpile_dual_namespace`(+worker) 标 `#[ignore]` 并登记缺陷；单仓接力与双仓 G2–G4 不受影响。
+- **处置与后续（2026-10-14 当日闭环）**：ignore 登记后专项诊断完成——根因=子进程 spawn 目标误写为主测试自身（自递归进程链，非引擎缺陷）；修复后解除 ignore，见 [诊断修复证据](../2026-10-14-t12-g5-batch5-fix/README.md)。
 
 ## 实测记录
 

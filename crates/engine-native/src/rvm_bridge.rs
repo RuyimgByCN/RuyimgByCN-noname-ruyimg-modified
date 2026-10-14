@@ -101,6 +101,14 @@ pub enum VmFilterPolicy {
     OwnerNoTurnDamage,
     /// DSL `owner_is_target_turn_damage`：本回合已受到伤害。
     OwnerTurnDamage,
+    /// DSL `owner_is_target_hand_below_max_hp`：手牌数 < 体力上限。
+    OwnerHandBelowMaxHp,
+    /// DSL `owner_is_target_hand_above_hp`：手牌数 > 体力。
+    OwnerHandAboveHp,
+    /// DSL `owner_is_target_hand_at_least_hp`：手牌数 >= 体力。
+    OwnerHandAtLeastHp,
+    /// DSL `owner_is_target_other_hand_nonempty`：任一其他存活角色手牌非空。
+    OwnerOtherHandNonempty,
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -130,6 +138,24 @@ impl SkillBehavior for VmSkillBehavior {
             VmFilterPolicy::OwnerHandEmpty => holder_state(owner).hand.is_empty(),
             VmFilterPolicy::OwnerNoTurnDamage => holder_state(owner).turn_damage == 0,
             VmFilterPolicy::OwnerTurnDamage => holder_state(owner).turn_damage > 0,
+            VmFilterPolicy::OwnerHandBelowMaxHp => {
+                let p = holder_state(owner);
+                p.hand.len() < p.max_hp as usize
+            }
+            VmFilterPolicy::OwnerHandAboveHp => {
+                let p = holder_state(owner);
+                p.hand.len() > p.hp as usize
+            }
+            VmFilterPolicy::OwnerHandAtLeastHp => {
+                let p = holder_state(owner);
+                p.hand.len() >= p.hp as usize
+            }
+            VmFilterPolicy::OwnerOtherHandNonempty => (0..ctx.state.players.len())
+                .any(|i| {
+                    i as u8 != owner
+                        && ctx.state.players[i].alive
+                        && !ctx.state.players[i].hand.is_empty()
+                }),
         }
     }
 
