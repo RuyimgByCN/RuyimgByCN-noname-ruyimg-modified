@@ -808,6 +808,12 @@ pub enum HostBehavior {
     /// 壶境（tag 291，批③，壶中仙 hujing）：锁定——准备阶段弃牌堆有炼
     /// 妖壶则装备之；装备时手牌上限 +2（kernel 手牌上限钩+弃堆回收钩）。
     SwdHujing,
+    /// 神农鼎（tag 292，批④ equipSkill）：出牌限一次弃 2 张手牌回复 1
+    /// （受伤时；ActivateSkill 装备技实例通道）。
+    SwdShennongdingCard,
+    /// 女娲石（tag 293，批④ equipSkill）：其他角色濒死（其 hp≤0）且自
+    /// 己 hp>1：目标回复 1、自己失去 1（Dying 触发确认门）。
+    SwdNvwashiGuard,
 }
 
 
@@ -883,6 +889,8 @@ impl HostBehavior {
             HostBehavior::SwdLianyaohuShouna => 289,
             HostBehavior::SwdLianyaohuLianhua => 290,
             HostBehavior::SwdHujing => 291,
+            HostBehavior::SwdShennongdingCard => 292,
+            HostBehavior::SwdNvwashiGuard => 293,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1419,6 +1427,8 @@ impl HostBehavior {
             289 => HostBehavior::SwdLianyaohuShouna,
             290 => HostBehavior::SwdLianyaohuLianhua,
             291 => HostBehavior::SwdHujing,
+            292 => HostBehavior::SwdShennongdingCard,
+            293 => HostBehavior::SwdNvwashiGuard,
             _ => return None,
         })
     }
@@ -1436,7 +1446,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 291] = [
+    pub const ALL: [HostBehavior; 293] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1728,6 +1738,8 @@ impl HostBehavior {
         HostBehavior::SwdLianyaohuShouna,
         HostBehavior::SwdLianyaohuLianhua,
         HostBehavior::SwdHujing,
+        HostBehavior::SwdShennongdingCard,
+        HostBehavior::SwdNvwashiGuard,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1783,6 +1795,8 @@ impl HostBehavior {
             HostBehavior::SwdLianyaohuShouna => "host:lianyaohu_shouna",
             HostBehavior::SwdLianyaohuLianhua => "host:lianyaohu_lianhua",
             HostBehavior::SwdHujing => "host:hujing",
+            HostBehavior::SwdShennongdingCard => "host:shennongding",
+            HostBehavior::SwdNvwashiGuard => "host:nvwashi",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2264,6 +2278,16 @@ impl HostBehavior {
             HostBehavior::SwdLianyaohuShouna => None,
             // 炼化：出牌主动技（usable:1 走 limits）
             HostBehavior::SwdLianyaohuLianhua => None,
+            // 神农鼎：出牌主动技（usable:1 走 limits）
+            HostBehavior::SwdShennongdingCard => None,
+            // 女娲石：他人濒死（确认门；上游 global dying priority 6）
+            HostBehavior::SwdNvwashiGuard => Some(TriggerMeta {
+                event: EventKind::Dying,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
             // 壶境：准备阶段（Judge 帧入场 forced；上游 phaseBegin 锁定）
             HostBehavior::SwdHujing => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -3962,6 +3986,11 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
+            // 女娲石：濒死者（回复其 1）
+            HostBehavior::SwdNvwashiGuard => match event {
+                EventData::Dying { player, .. } => (Some(*player), None),
+                _ => (None, None),
+            },
             // 悲歌：targets=[来源, 受伤者]
             HostBehavior::YunchouBeige => match event {
                 EventData::Damage(d) => (
@@ -4268,6 +4297,16 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdHuanxia => false,
             // 破月：无触发面
             HostBehavior::SwdPoyue => false,
+            // 女娲石：濒死者 hp≤0 且自己 hp>1（上游 global dying 同口径；
+    // 含自身濒死时 owner hp>1 恒否自然排除）
+            HostBehavior::SwdNvwashiGuard => matches!(event,
+                EventData::Dying { player, .. }
+                if ctx.state.player(*player).hp <= 0
+                    && ctx.state.player(owner).hp > 1),
+            // 收纳/炼化/神农鼎：无触发面
+            HostBehavior::SwdLianyaohuShouna => false,
+            HostBehavior::SwdLianyaohuLianhua => false,
+            HostBehavior::SwdShennongdingCard => false,
             // 壶境：自己准备阶段入场且弃牌堆有炼妖壶
             HostBehavior::SwdHujing => matches!(event,
                 EventData::Phase { player, phase, begin }
@@ -4277,9 +4316,6 @@ impl SkillBehavior for HostSkillBehavior {
                     && ctx.state.discard.iter().any(|c| {
                         ctx.catalog.card_kind(*c) == CardKind::Lianyaohu
                     })),
-            // 收纳/炼化：无触发面
-            HostBehavior::SwdLianyaohuShouna => false,
-            HostBehavior::SwdLianyaohuLianhua => false,
             // 朱羽：横置角色受到非传导伤害且持有者有红牌（手/装备区）
             HostBehavior::SwdZhuyu => matches!(event,
                 EventData::Damage(d)
@@ -5415,6 +5451,23 @@ impl SkillBehavior for HostSkillBehavior {
                     stage: HostStage::SelectCard,
                 }))
             }
+            // 神农鼎：受伤且手牌 ≥2
+            HostBehavior::SwdShennongdingCard => {
+                let p = ctx.state.player(owner);
+                if p.hp >= p.max_hp as i32 || p.hand.len() < 2 {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
             // 悲歌：确认门由 optional 承担（activate 恒供机）
             HostBehavior::SwdTiebi => Some(Box::new(HostMachine {
                 def_key: self.name.clone(),
@@ -6450,6 +6503,78 @@ impl crate::catalog::SkillMachine for HostMachine {
                         from: self.owner,
                         to: self.owner,
                         cards: vec![hu],
+                    });
+                }
+                Flow::Done
+            }
+            // 神农鼎：SelectCard 弃 2 手牌 → Act 回复 1（受伤时；门控在
+            // activate 臂 hp<maxHp+手牌≥2）
+            HostBehavior::SwdShennongdingCard => match self.stage {
+                HostStage::SelectCard => {
+                    let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.len() < 2 {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "shennongding_cost",
+                            options,
+                            min: 2,
+                            max: 2,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::Act => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.len() < 2 {
+                        return Flow::Done;
+                    }
+                    for c in picked {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.discard_from_hand(self.owner, c);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: self.owner,
+                                cards: vec![c],
+                            });
+                        }
+                    }
+                    let p = ctx.core.player(self.owner);
+                    if p.alive && p.hp < p.max_hp as i32 {
+                        ctx.recover(self.owner, 1, None);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 女娲石：确认门后濒死者回复 1、自己失去 1（hp>1 门在 filter）
+            HostBehavior::SwdNvwashiGuard => {
+                let Some(t) = self.target else {
+                    return Flow::Done;
+                };
+                if ctx.core.player(t).alive || ctx.core.player(t).hp <= 0 {
+                    ctx.recover(t, 1, None);
+                }
+                let p = ctx.core.player(self.owner);
+                if p.alive && p.hp > 1 {
+                    ctx.emit(EventData::LoseHp {
+                        player: self.owner,
+                        amount: 1,
                     });
                 }
                 Flow::Done
@@ -18483,7 +18608,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdDuanyue
         | HostBehavior::SwdXingdian
         | HostBehavior::SwdLianyaohuShouna
-        | HostBehavior::SwdLianyaohuLianhua => {
+        | HostBehavior::SwdLianyaohuLianhua
+        | HostBehavior::SwdShennongdingCard => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
@@ -18673,6 +18799,8 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
         CardKind::Lindixiliu => &[HostSkillDecl { name: MTG_LINDIXILIU_KEY, behavior: HostBehavior::MtgLindixiliuLand }],
         CardKind::Jiguan => &[HostSkillDecl { name: SWD_GOUHUNLUO_SUB_KEY, behavior: HostBehavior::SwdGouhunluoSub }, HostSkillDecl { name: SWD_FENGYIN_STATE_KEY, behavior: HostBehavior::SwdFengyinState }, HostSkillDecl { name: SWD_JIGUANYUAN_GAIN_KEY, behavior: HostBehavior::SwdJiguanyuanGain }, HostSkillDecl { name: SWD_JIGUANYAOSHU_STATE_KEY, behavior: HostBehavior::SwdJiguanyaoState }, HostSkillDecl { name: SWD_JIGUANYAO_GAIN_KEY, behavior: HostBehavior::SwdJiguanyaoGain }],
         CardKind::Lianyaohu => &[HostSkillDecl { name: "lianyaohu_shouna", behavior: HostBehavior::SwdLianyaohuShouna }, HostSkillDecl { name: "lianyaohu_lianhua", behavior: HostBehavior::SwdLianyaohuLianhua }],
+        CardKind::Shennongding => &[HostSkillDecl { name: "shennongding", behavior: HostBehavior::SwdShennongdingCard }],
+        CardKind::Nvwashi => &[HostSkillDecl { name: "nvwashi", behavior: HostBehavior::SwdNvwashiGuard }],
         _ => &[],
     }
 }

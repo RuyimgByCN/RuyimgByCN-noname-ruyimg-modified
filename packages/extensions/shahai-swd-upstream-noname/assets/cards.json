@@ -331,7 +331,35 @@
       "name": "swd_lianyaohu",
       "kind": "lianyaohu",
       "suit": "club",
-      "rank": 13
+      "rank": 13,
+      "equip_skills": [
+        "lianyaohu_shouna",
+        "lianyaohu_lianhua"
+      ]
+    },
+    {
+      "name": "swd_qiankundai",
+      "kind": "qiankundai",
+      "suit": "club",
+      "rank": 1
+    },
+    {
+      "name": "swd_shennongding",
+      "kind": "shennongding",
+      "suit": "club",
+      "rank": 13,
+      "equip_skills": [
+        "shennongding"
+      ]
+    },
+    {
+      "name": "swd_nvwashi",
+      "kind": "nvwashi",
+      "suit": "heart",
+      "rank": 13,
+      "equip_skills": [
+        "nvwashi"
+      ]
     }
   ],
   "host_skills": [],

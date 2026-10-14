@@ -5059,6 +5059,19 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 {
                     limit += 2;
                 }
+                // 乾坤袋（swd 卡牌面补切批④）：装备时手牌上限 +1（上游
+                // qiankundai mod maxHandcard 同口径）
+                if ctx
+                    .core
+                    .player(player)
+                    .equips
+                    .iter()
+                    .any(|c| {
+                        ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Qiankundai
+                    })
+                {
+                    limit += 1;
+                }
                 // 倾盆大雨（gwent 天气）：手牌上限 -1
                 if let Some(def) = ctx.catalog.skill_by_name(crate::content::host::GW_QINPEN_STATE_KEY)
                 {

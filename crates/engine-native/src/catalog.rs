@@ -455,6 +455,14 @@ pub enum CardKind {
     /// 炼妖壶（swd 卡牌面补切批③）：equip5 宝物——收纳/炼化两 equipSkill
     /// +壶境再装备/手牌上限+2 依赖。
     Lianyaohu,
+    /// 乾坤袋（swd 卡牌面补切批④）：equip5 宝物——手牌上限 +1（纯 mod）。
+    Qiankundai,
+    /// 神农鼎（swd 卡牌面补切批④）：equip5 宝物——出牌限一次弃 2 张手
+    /// 牌回复 1 点体力（受伤时）。
+    Shennongding,
+    /// 女娲石（swd 卡牌面补切批④）：equip5 宝物——其他角色濒死且其体力
+    /// ≤0、自己体力 >1 时：目标回复 1、自己失去 1（global 触发）。
+    Nvwashi,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
@@ -568,6 +576,9 @@ impl CardKind {
             CardKind::Monkey => EquipSlot::Treasure,
             CardKind::Xuelunyang => EquipSlot::Treasure,
             CardKind::Lianyaohu => EquipSlot::Treasure,
+            CardKind::Qiankundai => EquipSlot::Treasure,
+            CardKind::Shennongding => EquipSlot::Treasure,
+            CardKind::Nvwashi => EquipSlot::Treasure,
             // 上游 subtype equip2（防具栏）；2026-10-07 载荷对照修正（曾误
             // 登记宝物栏）。
             CardKind::Mianju => EquipSlot::Armor,
@@ -622,7 +633,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 143] = [
+    pub const ALL: [CardKind; 146] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -761,6 +772,9 @@ impl CardKind {
         CardKind::Shenmiguo,
         CardKind::Fengyinzhidan,
         CardKind::Lianyaohu,
+        CardKind::Qiankundai,
+        CardKind::Shennongding,
+        CardKind::Nvwashi,
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
@@ -909,6 +923,9 @@ impl CardKind {
             CardKind::Shenmiguo => "shenmiguo",
             CardKind::Fengyinzhidan => "fengyinzhidan",
             CardKind::Lianyaohu => "lianyaohu",
+            CardKind::Qiankundai => "qiankundai",
+            CardKind::Shennongding => "shennongding",
+            CardKind::Nvwashi => "nvwashi",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",

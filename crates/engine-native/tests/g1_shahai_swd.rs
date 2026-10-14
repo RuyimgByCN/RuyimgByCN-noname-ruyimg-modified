@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 54, "swd 全 54 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 57, "swd 全 57 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 54, "swd 全 54 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 57, "swd 全 57 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 54, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 57, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4207,6 +4207,9 @@ fn swd_cards_alignment_guard_b29() {
         ("xuejibingbao", "spade", 1),
         ("fengyinzhidan", "spade", 1),
         ("lianyaohu", "club", 13),
+        ("qiankundai", "club", 1),
+        ("shennongding", "club", 13),
+        ("nvwashi", "heart", 13),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4220,7 +4223,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 54, "批③ 炼妖壶后 54 张（神秘果 2 张挂窗口机批）");
+    assert_eq!(pack.cards.len(), 57, "批④ equip5 三宝物后 57 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -4575,4 +4578,163 @@ fn swd_cards_equip5_b33_lianyaohu_hujing() {
             continue;
         }
     }
+}
+
+/// T12 swd 卡牌面补切批④：equip5 三宝物——乾坤袋（手牌上限+1 纯 mod）；
+/// 神农鼎（出牌限一次弃 2 手牌回 1，受伤时）；女娲石（他人濒死确认门：
+/// 目标回 1、自己失去 1）。另修批③缺口：炼妖壶卡条目补 equip_skills。
+#[test]
+fn swd_cards_equip5_b34_qiankundai_shennongding_nvwashi() {
+    use engine_native::catalog::CardKind;
+    use engine_native::state::SkillInstance;
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62014, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+
+    let kind_id = |e: &Engine, k: CardKind| {
+        e.catalog()
+            .cards
+            .iter()
+            .position(|c| c.kind == k)
+            .expect("卡在目录") as u32
+    };
+    let equip_with_skills = |e: &mut Engine, p: u8, card: u32, skills: &[&str]| {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != card);
+        snap.core.discard.retain(|x| *x != card);
+        snap.core.players[p as usize].equips.push(card);
+        for sk in skills {
+            let def = e.catalog().skill_by_name(sk).expect("装备技 def");
+            snap.core.skills.insert(
+                (p, def),
+                SkillInstance {
+                    owner: p,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+        }
+        *e = Engine::restore_with_extensions(&snap, &[&pack]).expect("装备注入");
+    };
+
+    // ① 乾坤袋：装备后弃牌窗 min = 手-(hp+1)
+    let qkd = kind_id(&e, CardKind::Qiankundai);
+    equip_with_skills(&mut e, 0, qkd, &[]);
+    e.debug_set_hp(0, 4);
+    for _ in 0..6 {
+        e.debug_place(0, "tao");
+    }
+    // 6 手牌 hp4 → 无袋 min=2；有袋 min=1
+    loop {
+        if let Some(c) = e.open_choice() {
+            if c.spec.prompt == "discard_to_limit" {
+                let min = c.spec.min as usize;
+                let hand = hand_len_w(&e, 0);
+                assert_eq!(
+                    min,
+                    hand.saturating_sub(5),
+                    "乾坤袋：上限 hp+1=5（min {min} = 手 {hand} - 5）"
+                );
+                break;
+            }
+            let (cid, obs) = (c.id, c.observer);
+            let sel: Vec<ChoiceOption> = if c.spec.min > 0 {
+                c.spec.options.iter().take(c.spec.min).copied().collect()
+            } else if !c.spec.options.is_empty() {
+                vec![c.spec.options[0]]
+            } else {
+                vec![]
+            };
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            continue;
+        }
+        if e.turn().current == 0 && e.turn().phase == Phase::Discard {
+            panic!("6 手牌应触发弃牌窗");
+        }
+        let cur = e.turn().current;
+        let out = submit(&mut e, cur, GameAction::NextPhase);
+        if let CommandOutcome::Rejected(_) = out {
+            continue;
+        }
+    }
+
+    // ② 神农鼎：受伤时弃 2 手牌回 1
+    advance_to_play(&mut e, 0);
+    let snd = kind_id(&e, CardKind::Shennongding);
+    equip_with_skills(&mut e, 0, snd, &["shennongding"]);
+    e.debug_set_hp(0, 3);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let c1 = e.debug_place(0, "tao");
+    let c2 = e.debug_place(0, "tao");
+    let snd_def = e.catalog().skill_by_name("shennongding").expect("神农鼎 def");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: snd_def },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "神农鼎受理 {out:?}");
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("神农鼎弃牌窗");
+    let sel: Vec<ChoiceOption> = {
+        let ch = e.open_choice().expect("still open");
+        ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(x) if *x == c1 || *x == c2)).cloned().take(2).collect()
+    };
+    assert_eq!(sel.len(), 2);
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(0), 4, "神农鼎：回 1（3→4）");
+    assert_eq!(hand_len_w(&e, 0), 0, "神农鼎：2 张已弃");
+
+    // 反例 ②b：满血拒（activate 门）
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: snd_def },
+    });
+    assert!(!matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "神农鼎反例：满血拒 {out:?}");
+
+    // ③ 女娲石：p2 濒死（hp 0）→ p0 确认 → p2 回 1、p0 失 1
+    let nws = kind_id(&e, CardKind::Nvwashi);
+    equip_with_skills(&mut e, 0, nws, &["nvwashi"]);
+    e.debug_set_hp(0, 4);
+    e.debug_set_hp(2, 1);
+    e.debug_deal_damage(Some(1), 2, 1, engine_native::event::DamageNature::Normal);
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("女娲石确认窗");
+    assert_eq!(obs, 0, "女娲石窗归持有者");
+    let conf: Vec<ChoiceOption> = {
+        let ch = e.open_choice().expect("still open");
+        ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Confirm)).cloned().collect()
+    };
+    assert_eq!(conf.len(), 1);
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: conf });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(2), 1, "女娲石：p2 回 1 脱离濒死（0→1）");
+    assert_eq!(e.debug_hp(0), 3, "女娲石：p0 失去 1（4→3）");
+
+    // 反例 ③b：p0 hp=1 时不再触发（filter hp>1）
+    e.debug_set_hp(0, 1);
+    e.debug_set_hp(2, 1);
+    e.debug_deal_damage(Some(1), 2, 1, engine_native::event::DamageNature::Normal);
+    assert!(e.open_choice().is_none(), "女娲石反例：自己 hp=1 不触发");
 }
