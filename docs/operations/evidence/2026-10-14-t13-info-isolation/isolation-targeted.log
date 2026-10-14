@@ -1,0 +1,14 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/t13_info_isolation.rs (target/debug/deps/t13_info_isolation-34bae4536c8fac64)
+
+running 7 tests
+test isolation_doudizhu_two_sides ... ok
+test isolation_prototype_seat_matrix ... ok
+test isolation_boss_stage_hidden ... ok
+test isolation_planner_redaction_leaves_authority_intact ... ok
+test isolation_versus_teammates_hidden ... ok
+test isolation_identity_roles_hidden ... ok
+test isolation_extension_cards_hidden_like_standard ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
