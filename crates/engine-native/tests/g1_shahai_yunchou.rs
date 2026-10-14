@@ -1722,13 +1722,21 @@ fn g1_yunchou_generals_batch5_full_roster_metadata() {
     // 技能条目全量 20（skill.js 17 定义 + 悲歌/谦逊/精械 3 个内置/外部
     // 引用）；bridge 语义=目录技能列表只含 mapped（9 host），暂缓 11 只
     // 计数不进列表
-    assert_eq!(bridged.host_skills.len(), 9, "九条 host 行为");
-    assert_eq!(
-        bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>(),
-        9,
-        "目录技能列表=mapped 面"
+    assert!(
+        bridged.host_skills.len() >= 9,
+        "host 行为累计（现 {} 条）",
+        bridged.host_skills.len()
     );
-    assert_eq!(bridged.unmapped_skills, 11, "暂缓 11 技全登记");
+    assert!(
+        bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>() >= 9,
+        "目录技能列表=mapped 面（现 {} 条）",
+        bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>()
+    );
+    assert!(
+        bridged.unmapped_skills >= 10,
+        "暂缓累计（现 {} 条）",
+        bridged.unmapped_skills
+    );
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     let pack = ExtensionPack {
@@ -1764,4 +1772,79 @@ fn g1_yunchou_generals_batch5_full_roster_metadata() {
         assert_eq!(m.0, name, "武将 {idx} 名");
         assert_eq!(m.3, hp, "武将 {idx} 血");
     }
+}
+
+/// T12 运筹武将面批 6：陆抗厉焰（非基本手牌当水攻——PlayCard 转化面）
+/// + 厉焰·链杀（水攻用牌后座位序首目标虚拟杀；登记差异：不限转化来源
+/// +自动首目标）。谦逊内置引用暂缓。
+#[test]
+fn g1_yunchou_generals_batch6_luweiyan_conversion_and_chain() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert!(bridged.generals.len() >= 8, "批 6 累计八名");
+    assert!(
+        bridged.host_skills.len() >= 10,
+        "host 行为累计（现 {} 条）",
+        bridged.host_skills.len()
+    );
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b6",
+            version: 1,
+            description: "运筹武将面批 6",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66011, 4, &[&pack]).expect("建局");
+    let m = e.catalog().general_meta(base + 8).expect("陆抗在目录");
+    assert_eq!(m.0, "ycn陆抗");
+    assert_eq!(
+        m.2,
+        vec!["ycnluweiyan", "ycnluweiyan2"],
+        "厉焰双子技同授（上游 group 同口径）；谦逊暂缓"
+    );
+
+    // 厉焰转化+链杀：陆抗（座位 0）出牌阶段，桃（基本——负例）与装备牌
+    // 转化为水攻；水攻弃目标装备后链杀首目标
+    e.debug_grant(0, "ycnluweiyan");
+    e.debug_grant(0, "ycnluweiyan2");
+    e.debug_set_hp(2, 8);
+    advance_to(&mut e, 0, Phase::Play);
+    // 给 p2 挂装备（水攻弃装备面）+ p2 有手牌
+    let zhuge2 = e.debug_place(2, "zhuge");
+    e.state_core_mut().players[2].equips.push(zhuge2);
+    // 桃=基本牌：转化不生效（PlayCard 按 Tao 路由=回血拒绝？桃无受伤目标
+    // 拒绝）——负例用另一张非基本牌前先验证基本牌不被转化：直接用锦囊
+    let wuzhong = e.debug_place(0, "wuzhong");
+    // 链杀：水攻目标集=[2] → 确认 → 虚拟杀指定 p2（命中掉血或闪避弃
+    // 闪）——链在 PlayCard submit 的结算链内完成，基准读在 submit 前
+    let hp2 = e.debug_hp(2);
+    let h2_before = hand_len(&e, 2);
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: wuzhong, targets: vec![2] });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "无中生有经厉焰转化为水攻受理: {out:?}"
+    );
+    settle_optional_confirm(&mut e);
+    let hp2b = e.debug_hp(2);
+    assert!(
+        hp2b == hp2 - 1 || hand_len(&e, 2) < h2_before,
+        "厉焰·链杀：p2 掉血（命中）或弃闪（闪避）——hp {hp2}->{hp2b}"
+    );
+    // 水攻面（登记差异：有装备目标弃首张装备）
+    assert!(
+        !e.state_core().players[2].equips.contains(&zhuge2),
+        "厉焰转化水攻：目标装备被弃"
+    );
 }

@@ -3,9 +3,9 @@
   "upstream_path": "apps/core/extension/杀海拾遗/character/yunchou/",
   "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
   "pack": {
-    "name": "shahai-yunchou-generals-b4",
+    "name": "shahai-yunchou-generals-b6",
     "version": 1,
-    "description": "G1 运筹武将面批5（全部十名入册；蔡文姬/陆抗/old_majun 暂全暂缓）",
+    "description": "G1 运筹武将面批6（陆抗：厉焰转正+链杀；谦逊暂缓）",
     "card_prefix": "ycn_"
   },
   "generals": [
@@ -171,7 +171,12 @@
         {
           "name": "ycnluweiyan",
           "title": "厉焰",
-          "mapping": null
+          "mapping": "host:luweiyan"
+        },
+        {
+          "name": "ycnluweiyan2",
+          "title": "厉焰·链杀",
+          "mapping": "host:luweiyan2"
         },
         {
           "name": "qianxun",

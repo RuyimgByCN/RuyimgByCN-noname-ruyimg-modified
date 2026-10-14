@@ -656,8 +656,28 @@ pub enum HostBehavior {
     /// 红莲（tag 249，运筹武将面批 4）：受到来源为其他角色的伤害后（可
     /// 选），来源弃其手牌与装备区的全部红色牌。
     YunchouHonglian,
+    /// 厉焰（tag 250，运筹武将面批 6）：目录锚（非触发面）——转化逻辑在
+    /// PlayCard 门（非基本手牌当水攻，国色先例同位）。
+    YunchouLuweiyan,
+    /// 厉焰·链杀（tag 251，运筹武将面批 6）：持有者以水攻用牌后（可选
+    /// 确认），对座位序首目标视为用杀（登记差异：上游限「厉焰转化的水
+    /// 攻」且玩家选目标，原生按持有者全部水攻+自动首目标）。
+    YunchouLuweiyan2,
 }
 
+
+fn u_matches_lw2(
+    event: &EventData,
+    owner: u8,
+    ctx: &QueryCtx<'_>,
+) -> bool {
+    matches!(event,
+        EventData::CardUsed(u)
+        if u.player == owner
+            && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card))
+                == crate::catalog::CardKind::Shuigong
+            && !u.targets.is_empty())
+}
 
 impl HostBehavior {
     pub const fn tag(self) -> u8 {
@@ -671,6 +691,8 @@ impl HostBehavior {
             HostBehavior::YunchouDiyguhuo => 247,
             HostBehavior::YunchouJiaoxia => 248,
             HostBehavior::YunchouHonglian => 249,
+            HostBehavior::YunchouLuweiyan => 250,
+            HostBehavior::YunchouLuweiyan2 => 251,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1165,6 +1187,8 @@ impl HostBehavior {
             247 => HostBehavior::YunchouDiyguhuo,
             248 => HostBehavior::YunchouJiaoxia,
             249 => HostBehavior::YunchouHonglian,
+            250 => HostBehavior::YunchouLuweiyan,
+            251 => HostBehavior::YunchouLuweiyan2,
             _ => return None,
         })
     }
@@ -1172,7 +1196,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 249] = [
+    pub const ALL: [HostBehavior; 251] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1422,6 +1446,8 @@ impl HostBehavior {
         HostBehavior::YunchouDiyguhuo,
         HostBehavior::YunchouJiaoxia,
         HostBehavior::YunchouHonglian,
+        HostBehavior::YunchouLuweiyan,
+        HostBehavior::YunchouLuweiyan2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1436,6 +1462,8 @@ impl HostBehavior {
             HostBehavior::YunchouDiyguhuo => "host:diyguhuo",
             HostBehavior::YunchouJiaoxia => "host:jiaoxia",
             HostBehavior::YunchouHonglian => "host:honglian",
+            HostBehavior::YunchouLuweiyan => "host:luweiyan",
+            HostBehavior::YunchouLuweiyan2 => "host:luweiyan2",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1737,6 +1765,14 @@ impl HostBehavior {
             }),
             HostBehavior::YunchouShaoying => Some(TriggerMeta {
                 event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::YunchouLuweiyan => None,
+            HostBehavior::YunchouLuweiyan2 => Some(TriggerMeta {
+                event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -3312,6 +3348,8 @@ impl HostSkillBehavior {
             },
             // 狡黠：自身（摸 1）
             HostBehavior::YunchouJiaoxia => (Some(owner), None),
+            // 厉焰·链杀：用水攻的持有者（目标取 targets 首）
+            HostBehavior::YunchouLuweiyan2 => (Some(owner), None),
             // 红莲：伤害来源（弃其红牌）
             HostBehavior::YunchouHonglian => match event {
                 EventData::Damage(d) => (d.source, None),
@@ -3398,6 +3436,11 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => vec![d.source.unwrap_or(d.target), d.target],
                 _ => Vec::new(),
             },
+            // 厉焰·链杀：水攻目标集
+            HostBehavior::YunchouLuweiyan2 => match event {
+                EventData::CardUsed(u) => u.targets.clone(),
+                _ => Vec::new(),
+            },
             _ => Vec::new(),
         };
         HostMachine {
@@ -3416,6 +3459,12 @@ impl HostSkillBehavior {
 impl SkillBehavior for HostSkillBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         match self.behavior {
+            // 厉焰·链杀：持有者以水攻用牌（使用者=持有者；kind 按**结算
+            // 种**（use_as 转化声明优先，目录种兜底）——厉焰转化的牌目录
+            // 种非水攻）
+                        // 厉焰·链杀：持有者以水攻用牌（结算种 use_as 优先；语义集
+            // 中在 helper）
+            HostBehavior::YunchouLuweiyan2 => u_matches_lw2(event, owner, ctx),
             // 蛊惑·变体：自己回合开始且区域有牌
             HostBehavior::YunchouDiyguhuo => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
@@ -5067,6 +5116,8 @@ impl crate::catalog::SkillMachine for HostMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
+            // 厉焰：目录锚（转化逻辑在 PlayCard 门，无独立效果步）
+            HostBehavior::YunchouLuweiyan => Flow::Done,
             // 雄姿：补摸 1+⌊装备数/2⌋
             HostBehavior::YunchouXiongzi => {
                 let n = 1 + ctx.core.player(self.owner).equips.len() / 2;
@@ -5082,6 +5133,23 @@ impl crate::catalog::SkillMachine for HostMachine {
                     if ctx.core.player(s).alive {
                         ctx.draw_cards(s, 1);
                     }
+                }
+                Flow::Done
+            },
+            // 厉焰·链杀：对座位序首目标视为用杀（虚拟杀直发；登记差异：
+            // 上游玩家选目标+可取消，原生自动首目标）
+            HostBehavior::YunchouLuweiyan2 => {
+                let mut seats = self.targets.clone();
+                seats.sort_unstable();
+                seats.dedup();
+                if let Some(t) = seats.into_iter().find(|&t| {
+                    t != self.owner && ctx.core.player(t).alive
+                }) {
+                    ctx.use_virtual_card(
+                        self.owner,
+                        crate::catalog::CardKind::Sha,
+                        vec![t],
+                    );
                 }
                 Flow::Done
             },

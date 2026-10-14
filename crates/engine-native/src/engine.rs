@@ -2467,6 +2467,17 @@ fn apply_command(
                 {
                     kind = CardKind::Snatch;
                 }
+                // 厉焰（陆抗·DIY，运筹武将面批 6）：非基本手牌当【水攻】
+                //（viewAs 转化，奇袭/探囊同族；优先级并列尾部落位——上游
+                // 独立技无竞争链）
+                else if catalog
+                    .skill_by_name("ycnluweiyan")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && !catalog.card_kind(card).is_basic_kind()
+                {
+                    kind = CardKind::Shuigong;
+                }
                 // 酒池（Boss 董卓，规则 v258，群雄乱入）：黑桃手牌当【酒】
                 //（viewAs 转化，武圣/奇袭同族；与奇袭上游同持择技——native
                 // 链奇袭优先，登记）
