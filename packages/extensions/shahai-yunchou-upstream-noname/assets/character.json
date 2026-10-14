@@ -3,9 +3,9 @@
   "upstream_path": "apps/core/extension/杀海拾遗/character/yunchou/",
   "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
   "pack": {
-    "name": "shahai-yunchou-generals-b3",
+    "name": "shahai-yunchou-generals-b4",
     "version": 1,
-    "description": "G1 运筹武将面批3（+陆逊：纵火/烧营）",
+    "description": "G1 运筹武将面批4（+于吉部分/+周瑜·DIY 部分/+甄姬·DIY 部分）",
     "card_prefix": "ycn_"
   },
   "generals": [
@@ -82,6 +82,63 @@
           "name": "ycnshaoying",
           "title": "烧营",
           "mapping": "host:shaoying"
+        }
+      ]
+    },
+    {
+      "id": "ycn_diy_yuji",
+      "name": "ycn于吉",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "ycndiyguhuo",
+          "title": "蛊惑",
+          "mapping": "host:diyguhuo"
+        },
+        {
+          "name": "diychanyuan",
+          "title": "蝉缘",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "id": "ycn_diy_zhouyu",
+      "name": "ycn周瑜",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "jieyan",
+          "title": "隙焰",
+          "mapping": null
+        },
+        {
+          "name": "ycnhonglian",
+          "title": "红莲",
+          "mapping": "host:honglian"
+        }
+      ]
+    },
+    {
+      "id": "ycn_diy_zhenji",
+      "name": "ycn甄姬",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "ycnjiaoxia",
+          "title": "狡黠",
+          "mapping": "host:jiaoxia"
+        },
+        {
+          "name": "yiesheng",
+          "title": "野升",
+          "mapping": null
         }
       ]
     }

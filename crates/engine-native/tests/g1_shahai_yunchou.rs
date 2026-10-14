@@ -1334,7 +1334,11 @@ fn g1_yunchou_generals_batch1_bridge_and_behaviors() {
         "批 1 起累计行为（现 {} 条）",
         bridged.host_skills.len()
     );
-    assert_eq!(bridged.unmapped_skills, 2, "奸雄·变体与护驾暂缓登记");
+    assert!(
+        bridged.unmapped_skills >= 2,
+        "暂缓累计（现 {} 条）",
+        bridged.unmapped_skills
+    );
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     let generals = bridged.generals.clone();
@@ -1460,7 +1464,7 @@ fn g1_yunchou_generals_batch2_xiongzi_yaliang() {
         "批 2 起累计武将（现 {} 名）",
         bridged.generals.len()
     );
-    assert_eq!(bridged.unmapped_skills, 2, "暂缓仍为奸雄·变体与护驾");
+    assert!(bridged.unmapped_skills >= 2, "暂缓累计（现 {} 条）", bridged.unmapped_skills);
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     let pack = ExtensionPack {
@@ -1531,8 +1535,12 @@ fn g1_yunchou_generals_batch3_zonghuo_shaoying() {
     )
     .expect("character.json");
     let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
-    assert_eq!(bridged.generals.len(), 4, "批 3 累计四名武将");
-    assert_eq!(bridged.unmapped_skills, 2, "暂缓仍 2");
+    assert!(
+        bridged.generals.len() >= 4,
+        "批 3 起累计武将（现 {} 名）",
+        bridged.generals.len()
+    );
+    assert!(bridged.unmapped_skills >= 2);
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     let pack = ExtensionPack {
@@ -1604,5 +1612,97 @@ fn g1_yunchou_generals_batch3_zonghuo_shaoying() {
         settle_optional_confirm(&mut e);
         assert_eq!(e.debug_hp(2), 7, "烧营负例：堆顶黑不蔓延");
         assert_eq!(e.debug_hp(1), 6, "原火伤照常");
+    }
+}
+
+/// T12 运筹武将面批 4：蛊惑·变体（于吉部分——摸 2 弃 2 确定性序）、
+/// 狡黠（红色牌目标摸 1）、红莲（来源弃全部红牌）。蝉缘（loseMaxHp）
+/// 无承载暂缓。
+#[test]
+fn g1_yunchou_generals_batch4_guhuo_jiaoxia_honglian() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert!(
+        bridged.generals.len() >= 5,
+        "批 4 起累计武将（现 {} 名）",
+        bridged.generals.len()
+    );
+    assert!(bridged.unmapped_skills >= 3, "暂缓累计");
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b4",
+            version: 1,
+            description: "运筹武将面批 4",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    {
+        let e = Engine::new_with_extensions(66006, 4, &[&pack]).expect("建局");
+        let m = e.catalog().general_meta(base + 4).expect("于吉在目录");
+        assert_eq!(m.0, "ycn于吉");
+        assert_eq!(m.2, vec!["ycndiyguhuo"], "蝉缘暂缓不入目录");
+    }
+
+    // 蛊惑·变体：回合开始摸 2 弃 2（Judge-begin 触发；无装备/判定 →
+    // 手牌首张序）——推进到 Draw 断言：4(初始)-2(弃)+2(蛊惑摸)+2(固定)=6
+    {
+        let mut e = Engine::new_with_extensions(66007, 4, &[&pack]).expect("建局");
+        e.debug_grant(0, "ycndiyguhuo");
+        advance_to(&mut e, 0, Phase::Draw);
+        assert_eq!(hand_len(&e, 0), 6, "蛊惑：摸 2 弃 2 后固定摸 2");
+    }
+
+    // 狡黠：成为红色牌目标 → 摸 1（杀为黑色负例）
+    {
+        let mut e = Engine::new_with_extensions(66008, 4, &[&pack]).expect("建局");
+        e.debug_grant(1, "ycnjiaoxia");
+        e.debug_set_hp(1, 8);
+        advance_to(&mut e, 2, Phase::Play);
+        let h1 = hand_len(&e, 1);
+        // 找一张黑杀打 p1
+        let sha = e.debug_place(2, "sha");
+        let black = {
+            let cat = e.catalog();
+            matches!(
+                cat.cards[sha as usize].suit,
+                Suit::Spade | Suit::Club
+            )
+        };
+        submit(&mut e, 2, GameAction::PlayCard { card: sha, targets: vec![1] });
+        settle_optional_confirm(&mut e);
+        if black {
+            assert_eq!(hand_len(&e, 1), h1, "狡黠：黑牌目标不触发");
+        } else {
+            assert_eq!(hand_len(&e, 1), h1 + 1, "狡黠：红牌目标摸 1");
+        }
+    }
+
+    // 红莲：p1 受 p2 伤害 → 确认 → p2 弃全部红牌（手 1 红+装备 1 红）
+    {
+        let mut e = Engine::new_with_extensions(66009, 4, &[&pack]).expect("建局");
+        e.debug_grant(1, "ycnhonglian");
+        e.debug_set_hp(1, 8);
+        // p2 手牌：留一张红桃、清其余（装备红牌弃置面同 host 先例，此段
+        // 验证手牌红弃置）
+        let red = e.debug_place(2, "tao");
+        let reds_before = 1;
+        e.debug_clear_hand(2);
+        e.state_core_mut().players[2].hand.push(red);
+        let h2 = hand_len(&e, 2);
+        assert_eq!(h2, reds_before);
+        e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+        settle_optional_confirm(&mut e);
+        assert_eq!(hand_len(&e, 2), 0, "红莲：来源红牌被全弃");
     }
 }

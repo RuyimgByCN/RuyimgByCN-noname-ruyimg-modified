@@ -646,6 +646,16 @@ pub enum HostBehavior {
     /// 火属性伤害（登记差异：上游玩家选目标，原生取座位序首合法目标；
     /// 链式火伤再触发与上游一致不挡）。
     YunchouShaoying,
+    /// 蛊惑·变体（tag 247，运筹武将面批 4）：回合开始摸 2 然后弃自己区
+    /// 域 2 张牌（强制；登记差异：上游 AI 择弃优先判定区，原生确定性
+    /// 判定区→装备→手牌首张序）。
+    YunchouDiyguhuo,
+    /// 狡黠（tag 248，运筹武将面批 4）：成为红色牌的目标时摸 1（frequent
+    /// 自动触发，无确认门）。
+    YunchouJiaoxia,
+    /// 红莲（tag 249，运筹武将面批 4）：受到来源为其他角色的伤害后（可
+    /// 选），来源弃其手牌与装备区的全部红色牌。
+    YunchouHonglian,
 }
 
 
@@ -658,6 +668,9 @@ impl HostBehavior {
             HostBehavior::YunchouYaliang => 244,
             HostBehavior::YunchouZonghuo => 245,
             HostBehavior::YunchouShaoying => 246,
+            HostBehavior::YunchouDiyguhuo => 247,
+            HostBehavior::YunchouJiaoxia => 248,
+            HostBehavior::YunchouHonglian => 249,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1149,6 +1162,9 @@ impl HostBehavior {
             244 => HostBehavior::YunchouYaliang,
             245 => HostBehavior::YunchouZonghuo,
             246 => HostBehavior::YunchouShaoying,
+            247 => HostBehavior::YunchouDiyguhuo,
+            248 => HostBehavior::YunchouJiaoxia,
+            249 => HostBehavior::YunchouHonglian,
             _ => return None,
         })
     }
@@ -1156,7 +1172,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 246] = [
+    pub const ALL: [HostBehavior; 249] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1403,6 +1419,9 @@ impl HostBehavior {
         HostBehavior::YunchouYaliang,
         HostBehavior::YunchouZonghuo,
         HostBehavior::YunchouShaoying,
+        HostBehavior::YunchouDiyguhuo,
+        HostBehavior::YunchouJiaoxia,
+        HostBehavior::YunchouHonglian,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1414,6 +1433,9 @@ impl HostBehavior {
             HostBehavior::YunchouYaliang => "host:yaliang",
             HostBehavior::YunchouZonghuo => "host:zonghuo",
             HostBehavior::YunchouShaoying => "host:shaoying",
+            HostBehavior::YunchouDiyguhuo => "host:diyguhuo",
+            HostBehavior::YunchouJiaoxia => "host:jiaoxia",
+            HostBehavior::YunchouHonglian => "host:honglian",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1714,6 +1736,29 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::YunchouShaoying => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 蛊惑·变体：回合（判定阶段）开始
+            HostBehavior::YunchouDiyguhuo => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 狡黠：成为牌目标（CardUsed+targets，frequent 自动）
+            HostBehavior::YunchouJiaoxia => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::YunchouHonglian => Some(TriggerMeta {
                 event: EventKind::Damage,
                 timing: Timing::Normal,
                 priority: 0,
@@ -3260,6 +3305,18 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
+            // 蛊惑·变体：自身
+            HostBehavior::YunchouDiyguhuo => match event {
+                EventData::Phase { player, .. } => (Some(*player), None),
+                _ => (None, None),
+            },
+            // 狡黠：自身（摸 1）
+            HostBehavior::YunchouJiaoxia => (Some(owner), None),
+            // 红莲：伤害来源（弃其红牌）
+            HostBehavior::YunchouHonglian => match event {
+                EventData::Damage(d) => (d.source, None),
+                _ => (None, None),
+            },
         _ => (None, None),
         };
         let stage = match self.behavior {
@@ -3359,6 +3416,35 @@ impl HostSkillBehavior {
 impl SkillBehavior for HostSkillBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         match self.behavior {
+            // 蛊惑·变体：自己回合开始且区域有牌
+            HostBehavior::YunchouDiyguhuo => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                if *player == owner
+                    && (!ctx.state.player(owner).hand.is_empty()
+                        || !ctx.state.player(owner).equips.is_empty()
+                        || !ctx.state.player(owner).judge.is_empty())),
+            // 狡黠：成为红色牌的目标（使用者不限）
+            HostBehavior::YunchouJiaoxia => matches!(event,
+                EventData::CardUsed(u)
+                if u.targets.contains(&owner)
+                    && matches!(
+                        ctx.catalog.cards[u.card as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )),
+            // 红莲：受到来源为其他角色的伤害且来源有红牌
+            HostBehavior::YunchouHonglian => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner && !d.prevented && d.amount > 0
+                    && d.source.is_some() && d.source != Some(owner)
+                    && {
+                        let src = ctx.state.player(d.source.unwrap());
+                        src.hand.iter().chain(src.equips.iter()).any(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                            )
+                        })
+                    }),
             // 纵火：自己造成的非火伤害（前置窗）
             HostBehavior::YunchouZonghuo => matches!(event,
                 EventData::Damage(d)
@@ -4996,6 +5082,86 @@ impl crate::catalog::SkillMachine for HostMachine {
                     if ctx.core.player(s).alive {
                         ctx.draw_cards(s, 1);
                     }
+                }
+                Flow::Done
+            },
+            // 蛊惑·变体：摸 2 然后弃自己区域 2 张（判定区→装备→手牌首张序）
+            HostBehavior::YunchouDiyguhuo => {
+                ctx.draw_cards(self.owner, 2);
+                for _ in 0..2 {
+                    let next = if let Some(c) =
+                        ctx.core.player(self.owner).judge.first().copied()
+                    {
+                        ctx.core.player_mut(self.owner).judge.retain(|x| *x != c);
+                        Some(c)
+                    } else if let Some(c) =
+                        ctx.core.player(self.owner).equips.first().copied()
+                    {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            c,
+                        );
+                        Some(c)
+                    } else {
+                        ctx.core.player(self.owner).hand.first().copied()
+                    };
+                    if let Some(c) = next {
+                        ctx.core.player_mut(self.owner).hand.retain(|x| *x != c);
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: self.owner,
+                            cards: vec![c],
+                        });
+                    }
+                }
+                Flow::Done
+            },
+            // 狡黠：摸 1
+            HostBehavior::YunchouJiaoxia => {
+                ctx.draw_cards(self.owner, 1);
+                Flow::Done
+            },
+            // 红莲：来源弃其手牌与装备区全部红牌（装备走 revoke 同款）
+            HostBehavior::YunchouHonglian => {
+                let src = match self.target {
+                    Some(t) => t,
+                    None => return Flow::Done,
+                };
+                let reds: Vec<_> = {
+                    let p = ctx.core.player(src);
+                    p.hand
+                        .iter()
+                        .chain(p.equips.iter())
+                        .copied()
+                        .filter(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Heart
+                                    | crate::catalog::Suit::Diamond
+                            )
+                        })
+                        .collect()
+                };
+                for c in reds {
+                    if ctx.core.player(src).hand.contains(&c) {
+                        ctx.discard_from_hand(src, c);
+                    } else {
+                        ctx.core.player_mut(src).equips.retain(|x| *x != c);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            src,
+                            c,
+                        );
+                        ctx.to_discard(c);
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: src,
+                        cards: vec![c],
+                    });
                 }
                 Flow::Done
             },
