@@ -390,6 +390,82 @@
           "mapping": "host:poxing"
         }
       ]
+    },
+    {
+      "name": "swd拓跋玉儿",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "swdliuhong",
+          "mapping": "host:swdliuhong"
+        },
+        {
+          "name": "poyue",
+          "mapping": null
+        },
+        {
+          "name": "niepan",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd水镜",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "mojian",
+          "mapping": "host:mojian"
+        },
+        {
+          "name": "duanyue",
+          "mapping": null
+        },
+        {
+          "name": "tuzhen",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd屈娴",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "mojian",
+          "mapping": "host:mojian"
+        },
+        {
+          "name": "huanxia",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd壶中仙",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "daofa",
+          "mapping": "host:daofa"
+        },
+        {
+          "name": "xielv",
+          "mapping": null
+        },
+        {
+          "name": "hujing",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

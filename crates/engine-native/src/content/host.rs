@@ -737,6 +737,17 @@ pub enum HostBehavior {
     /// 1 张手牌给手牌数更少的其他角色（登记差异：上游 chooseCardTarget
     /// 玩家同时选牌与目标，原生两段询问+确定性目标）。
     SwdJiefen,
+    /// 流虹（tag 272，swd 武将面批 21，拓跋月儿）：使用杀后摸 1
+    ///（frequent 自动）。
+    SwdLiuhong,
+    /// 墨剑（tag 273，swd 武将面批 21，水镜/曲贤）：成为杀目标时（可选
+    /// 确认）目标摸 1、自己回 1（未满血门；登记差异：上游 check 为 AI
+    /// 决策面）。
+    SwdMojian,
+    /// 道法（tag 274，swd 武将面批 21，胡忠仙）：其他角色受到伤害后（可
+    /// 选确认）来源弃 1 张牌（登记差异：上游 chooseToDiscard 玩家自选，
+    /// 原生首张确定性）。
+    SwdDaofa,
 }
 
 
@@ -792,6 +803,9 @@ impl HostBehavior {
             HostBehavior::SwdHudun => 269,
             HostBehavior::SwdPoxing => 270,
             HostBehavior::SwdJiefen => 271,
+            HostBehavior::SwdLiuhong => 272,
+            HostBehavior::SwdMojian => 273,
+            HostBehavior::SwdDaofa => 274,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1308,6 +1322,9 @@ impl HostBehavior {
             269 => HostBehavior::SwdHudun,
             270 => HostBehavior::SwdPoxing,
             271 => HostBehavior::SwdJiefen,
+            272 => HostBehavior::SwdLiuhong,
+            273 => HostBehavior::SwdMojian,
+            274 => HostBehavior::SwdDaofa,
             _ => return None,
         })
     }
@@ -1325,7 +1342,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 271] = [
+    pub const ALL: [HostBehavior; 274] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1597,6 +1614,9 @@ impl HostBehavior {
         HostBehavior::SwdHudun,
         HostBehavior::SwdPoxing,
         HostBehavior::SwdJiefen,
+        HostBehavior::SwdLiuhong,
+        HostBehavior::SwdMojian,
+        HostBehavior::SwdDaofa,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1632,6 +1652,9 @@ impl HostBehavior {
             HostBehavior::SwdHuajing => "host:huajing",
             HostBehavior::SwdHudun => "host:hudun",
             HostBehavior::SwdPoxing => "host:poxing",
+            HostBehavior::SwdLiuhong => "host:swdliuhong",
+            HostBehavior::SwdMojian => "host:mojian",
+            HostBehavior::SwdDaofa => "host:daofa",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2015,6 +2038,30 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 流虹：使用杀（frequent 自动无门）
+            HostBehavior::SwdLiuhong => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 墨剑：自己使用杀（可选确认门；上游 shaBegin）
+            HostBehavior::SwdMojian => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 道法：其他角色受伤结算后（global；确认门=optional）
+            HostBehavior::SwdDaofa => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             // 分舵：出牌主动技（ActivateSkill 通道，每回合限一次走 limits）
@@ -3670,6 +3717,18 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
+            // 流虹：自己（摸 1）
+            HostBehavior::SwdLiuhong => (Some(owner), None),
+            // 墨剑：杀的首个目标（摸 1；回 1 面在效果）
+            HostBehavior::SwdMojian => match event {
+                EventData::CardUsed(u) => (u.targets.first().copied(), None),
+                _ => (None, None),
+            },
+            // 道法：伤害来源（弃其手牌）
+            HostBehavior::SwdDaofa => match event {
+                EventData::Damage(d) => (d.source, None),
+                _ => (None, None),
+            },
             // 悲歌：targets=[来源, 受伤者]
             HostBehavior::YunchouBeige => match event {
                 EventData::Damage(d) => (
@@ -3904,6 +3963,24 @@ impl SkillBehavior for HostSkillBehavior {
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && d.target != owner
                     && ctx.state.player(d.target).hp > ctx.state.player(owner).hp),
+            // 流虹：持有者使用杀
+            HostBehavior::SwdLiuhong => matches!(event,
+                EventData::CardUsed(u)
+                if u.player == owner
+                    && ctx.catalog.card_kind(u.card).is_sha_like()),
+            // 墨剑：持有者使用杀且指定了目标（上游 shaBegin=自己用杀）
+            HostBehavior::SwdMojian => matches!(event,
+                EventData::CardUsed(u)
+                if u.player == owner
+                    && ctx.catalog.card_kind(u.card).is_sha_like()
+                    && !u.targets.is_empty()),
+            // 道法：其他角色受伤且来源有牌
+            HostBehavior::SwdDaofa => matches!(event,
+                EventData::Damage(d)
+                if !d.prevented && d.amount > 0
+                    && d.source.is_some()
+                    && d.source != Some(owner)
+                    && !ctx.state.player(d.source.unwrap()).hand.is_empty()),
             // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
             HostBehavior::YunchouBeige => matches!(event,
                 EventData::Damage(d)
@@ -6081,6 +6158,39 @@ impl crate::catalog::SkillMachine for HostMachine {
                         cards: vec![c],
                     });
                     ctx.change_hujia(t, 1);
+                }
+                Flow::Done
+            }
+            // 流虹：使用杀后摸 1
+            HostBehavior::SwdLiuhong => {
+                ctx.draw_cards(self.owner, 1);
+                Flow::Done
+            }
+            // 墨剑：目标摸 1 + 自己回 1（未满血门）
+            HostBehavior::SwdMojian => {
+                if let Some(t) = self.target {
+                    if ctx.core.player(t).alive {
+                        ctx.draw_cards(t, 1);
+                    }
+                }
+                let p = ctx.core.player(self.owner);
+                if p.hp < p.max_hp as i32 {
+                    ctx.recover(self.owner, 1, None);
+                }
+                Flow::Done
+            }
+            // 道法：来源弃首张手牌（登记差异：上游玩家自选）
+            HostBehavior::SwdDaofa => {
+                if let Some(src) = self.target {
+                    if let Some(c) =
+                        ctx.core.player(src).hand.first().copied()
+                    {
+                        ctx.discard_from_hand(src, c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: src,
+                            cards: vec![c],
+                        });
+                    }
                 }
                 Flow::Done
             }
