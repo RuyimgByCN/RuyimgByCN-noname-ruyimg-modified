@@ -359,6 +359,7 @@ impl Engine {
                 shenmiguo_used: false,
                 shuchui_armed: false,
                 shuchui_hit: false,
+                lianda_used: false,
                     rende_given: 0,
                     jiu_used: false,
                 mujiaren_used: false,
@@ -4703,6 +4704,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u8(&mut h, c.turn.shenmiguo_used as u8);
     push_u8(&mut h, c.turn.shuchui_armed as u8);
     push_u8(&mut h, c.turn.shuchui_hit as u8);
+    push_u8(&mut h, c.turn.lianda_used as u8);
     push_u8(&mut h, c.turn.rende_given);
     push_u8(&mut h, c.turn.jiu_used as u8);
     // 木甲人限次（规则 v190）
@@ -5822,6 +5824,7 @@ mod tests {
                     shenmiguo_used: false,
                     shuchui_armed: false,
                     shuchui_hit: false,
+                    lianda_used: false,
                     mengtai_draw_pending: false,
                     mengtai_use_pending: false,
                     rende_given: 0,
@@ -5920,6 +5923,7 @@ mod tests {
                         shenmiguo_used: false,
                         shuchui_armed: false,
                         shuchui_hit: false,
+                        lianda_used: false,
                         mengtai_draw_pending: false,
                         mengtai_use_pending: false,
                     rende_given: 0,

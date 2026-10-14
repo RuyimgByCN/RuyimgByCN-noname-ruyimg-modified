@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 75;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 76;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3070,6 +3070,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     w.boolean(t.shenmiguo_used);
     w.boolean(t.shuchui_armed);
     w.boolean(t.shuchui_hit);
+    // v76（swd 武将面批㉔）：连打每回合旗（尾部追加）
+    w.boolean(t.lianda_used);
     w.boolean(t.land_used);
     w.boolean(t.land_sha_used);
     w.u32(t.discard_phase_discarded);
@@ -3463,6 +3465,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let shenmiguo_used = r.boolean()?;
     let shuchui_armed = r.boolean()?;
     let shuchui_hit = r.boolean()?;
+    let lianda_used = r.boolean()?;
     let land_used = r.boolean()?;
     let land_sha_used = r.boolean()?;
     let discard_phase_discarded = r.u32()?;
@@ -3607,6 +3610,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 shenmiguo_used,
                 shuchui_armed,
                 shuchui_hit,
+                lianda_used,
                 land_used,
                 land_sha_used,
                 discard_phase_discarded,

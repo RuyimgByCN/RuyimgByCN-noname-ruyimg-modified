@@ -3702,6 +3702,7 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.turn.shenmiguo_used = false;
     ctx.core.turn.shuchui_armed = false;
     ctx.core.turn.shuchui_hit = false;
+    ctx.core.turn.lianda_used = false;
     // Boss 模式（P2/N08 模式入口批三-a，规则 v82）：死亡座位不跳过——
     // 轮到其回合时执行重整 tick（上游 bossPhaseLoop）：计数 +1、hp<上限
     // 则 +1（否则手牌 <4 摸 1），计数达阈值复活；连续死亡座位逐个 tick

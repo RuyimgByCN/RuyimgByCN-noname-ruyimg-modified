@@ -953,6 +953,70 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_fuyan",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "lianda",
+          "mapping": "host:lianda"
+        }
+      ]
+    },
+    {
+      "name": "swd_rongshuang",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "suiyan",
+          "mapping": "host:suiyan"
+        },
+        {
+          "name": "duanxing",
+          "mapping": "host:duanxing"
+        }
+      ]
+    },
+    {
+      "name": "swd_muyun",
+      "faction": "wei",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "zhuhai",
+          "mapping": null
+        },
+        {
+          "name": "polang",
+          "mapping": "host:polang"
+        },
+        {
+          "name": "jikong",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_chenjingchou",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "youyin",
+          "mapping": "host:youyin"
+        },
+        {
+          "name": "yihua",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

@@ -344,6 +344,9 @@ pub struct TurnState {
     pub shuchui_armed: bool,
     /// 鼠槌：链上任一杀已造成真实伤害（终局摸 1 判据）。
     pub shuchui_hit: bool,
+    /// 连打（swd 武将面批㉔ 敷衍）：本回合已链过（上游 lianda2 临时技等
+    /// 价——循环守卫；换回合清）。
+    pub lianda_used: bool,
     /// mtg 龙颅山峰（规则 v100）：本回合已使用地（上游 land_used 临时技
     /// 同口径——仅当前回合玩家可出牌，故回合级布尔等价）。
     pub land_used: bool,
