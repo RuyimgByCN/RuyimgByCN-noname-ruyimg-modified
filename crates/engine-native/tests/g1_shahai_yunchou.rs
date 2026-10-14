@@ -1706,3 +1706,62 @@ fn g1_yunchou_generals_batch4_guhuo_jiaoxia_honglian() {
         assert_eq!(hand_len(&e, 2), 0, "红莲：来源红牌被全弃");
     }
 }
+
+/// T12 运筹武将面批 5：全部十名武将入册（蔡文姬/陆抗/马钧三将暂全暂缓
+/// ——机制缺口：濒死/出牌主动技面、内置技能引用、骰子面）。目录元数据
+/// 面验收（映射表全量 17 技，转正 7 暂缓 10...勘正：转正 7+暂缓 10=17）。
+#[test]
+fn g1_yunchou_generals_batch5_full_roster_metadata() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert_eq!(bridged.generals.len(), 10, "十名武将全量入册");
+    // 技能条目全量 20（skill.js 17 定义 + 悲歌/谦逊/精械 3 个内置/外部
+    // 引用）；bridge 语义=目录技能列表只含 mapped（9 host），暂缓 11 只
+    // 计数不进列表
+    assert_eq!(bridged.host_skills.len(), 9, "九条 host 行为");
+    assert_eq!(
+        bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>(),
+        9,
+        "目录技能列表=mapped 面"
+    );
+    assert_eq!(bridged.unmapped_skills, 11, "暂缓 11 技全登记");
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b5",
+            version: 1,
+            description: "运筹武将面批 5（全量入册）",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let e = Engine::new_with_extensions(66010, 4, &[&pack]).expect("建局");
+    for (idx, (name, hp)) in [
+        (0, ("ycn曹操", 4u32)),
+        (1, ("ycn魏延", 4)),
+        (2, ("ycn周瑜", 3)),
+        (3, ("ycn陆逊", 3)),
+        (4, ("ycn于吉", 3)),
+        (5, ("ycn周瑜", 3)),
+        (6, ("ycn甄姬", 3)),
+        (7, ("ycn蔡文姬", 3)),
+        (8, ("ycn陆抗", 4)),
+        (9, ("ycn马钧", 3)),
+    ] {
+        let m = e
+            .catalog()
+            .general_meta(base + idx)
+            .unwrap_or_else(|| panic!("武将 {idx} 在目录"));
+        assert_eq!(m.0, name, "武将 {idx} 名");
+        assert_eq!(m.3, hp, "武将 {idx} 血");
+    }
+}

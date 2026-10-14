@@ -5,7 +5,7 @@
   "pack": {
     "name": "shahai-yunchou-generals-b4",
     "version": 1,
-    "description": "G1 运筹武将面批4（+于吉部分/+周瑜·DIY 部分/+甄姬·DIY 部分）",
+    "description": "G1 运筹武将面批5（全部十名入册；蔡文姬/陆抗/old_majun 暂全暂缓）",
     "card_prefix": "ycn_"
   },
   "generals": [
@@ -138,6 +138,63 @@
         {
           "name": "yiesheng",
           "title": "野升",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "id": "ycn_diy_caiwenji",
+      "name": "ycn蔡文姬",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "beige",
+          "title": "悲歌",
+          "mapping": null
+        },
+        {
+          "name": "ycnguihan",
+          "title": "归汉",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "id": "ycn_diy_lukang",
+      "name": "ycn陆抗",
+      "faction": "wu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "ycnluweiyan",
+          "title": "厉焰",
+          "mapping": null
+        },
+        {
+          "name": "qianxun",
+          "title": "谦逊",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "id": "ycn_old_majun",
+      "name": "ycn马钧",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "xinfu_jingxie",
+          "title": "精械",
+          "mapping": null
+        },
+        {
+          "name": "ycnxinfu_qiaosi",
+          "title": "巧思",
           "mapping": null
         }
       ]
