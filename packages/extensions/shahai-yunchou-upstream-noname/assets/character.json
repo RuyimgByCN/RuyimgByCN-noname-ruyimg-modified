@@ -3,9 +3,9 @@
   "upstream_path": "apps/core/extension/杀海拾遗/character/yunchou/",
   "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
   "pack": {
-    "name": "shahai-yunchou-generals-b1",
+    "name": "shahai-yunchou-generals-b2",
     "version": 1,
-    "description": "G1 运筹武将面批1（戏才/狂骨·变体；奸雄·变体与护驾暂缓登记）",
+    "description": "G1 运筹武将面批2（+周瑜·SP：雄姿/雅量）",
     "card_prefix": "ycn_"
   },
   "generals": [
@@ -16,9 +16,21 @@
       "hp": 4,
       "gender": "male",
       "skills": [
-        {"name": "ycnxicai", "title": "戏才", "mapping": "host:xicai"},
-        {"name": "ycndiyjianxiong", "title": "奸雄", "mapping": null},
-        {"name": "hujia", "title": "护驾", "mapping": null}
+        {
+          "name": "ycnxicai",
+          "title": "戏才",
+          "mapping": "host:xicai"
+        },
+        {
+          "name": "ycndiyjianxiong",
+          "title": "奸雄",
+          "mapping": null
+        },
+        {
+          "name": "hujia",
+          "title": "护驾",
+          "mapping": null
+        }
       ]
     },
     {
@@ -28,7 +40,30 @@
       "hp": 4,
       "gender": "male",
       "skills": [
-        {"name": "ycndiykuanggu", "title": "狂骨", "mapping": "host:diykuanggu"}
+        {
+          "name": "ycndiykuanggu",
+          "title": "狂骨",
+          "mapping": "host:diykuanggu"
+        }
+      ]
+    },
+    {
+      "id": "ycn_diy_sp_zhouyu",
+      "name": "ycn周瑜",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "ycnxiongzi",
+          "title": "雄姿",
+          "mapping": "host:xiongzi"
+        },
+        {
+          "name": "ycnyaliang",
+          "title": "雅量",
+          "mapping": "host:yaliang"
+        }
       ]
     }
   ]

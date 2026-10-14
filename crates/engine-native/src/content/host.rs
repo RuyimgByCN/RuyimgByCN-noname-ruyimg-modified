@@ -631,6 +631,12 @@ pub enum HostBehavior {
     /// 其到你攻击距离大于 1 摸 1 张，否则你已受伤回复 1 点（强制；登记
     /// 差异：攻击距离按座位基础距离，坐骑修正不参与）。
     YunchouDiykuanggu,
+    /// 雄姿（tag 243，运筹武将面批 2）：摸牌阶段开始额外摸 1+⌊装备数/2⌋
+    /// 张（强制；固定摸 2 后补摸——阶段技后执行口径）。
+    YunchouXiongzi,
+    /// 雅量（tag 244，运筹武将面批 2）：你造成或受到伤害后（可选），伤害
+    /// 双方各摸 1 张（双方存活且异人；登记差异：摸牌序按座位序逐个）。
+    YunchouYaliang,
 }
 
 
@@ -639,6 +645,8 @@ impl HostBehavior {
         match self {
             HostBehavior::YunchouXicai => 241,
             HostBehavior::YunchouDiykuanggu => 242,
+            HostBehavior::YunchouXiongzi => 243,
+            HostBehavior::YunchouYaliang => 244,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1126,6 +1134,8 @@ impl HostBehavior {
             240 => HostBehavior::SwdPozhenjueCard,
             241 => HostBehavior::YunchouXicai,
             242 => HostBehavior::YunchouDiykuanggu,
+            243 => HostBehavior::YunchouXiongzi,
+            244 => HostBehavior::YunchouYaliang,
             _ => return None,
         })
     }
@@ -1133,7 +1143,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 242] = [
+    pub const ALL: [HostBehavior; 244] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1376,6 +1386,8 @@ impl HostBehavior {
         HostBehavior::SwdPozhenjueCard,
         HostBehavior::YunchouXicai,
         HostBehavior::YunchouDiykuanggu,
+        HostBehavior::YunchouXiongzi,
+        HostBehavior::YunchouYaliang,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1383,6 +1395,8 @@ impl HostBehavior {
         match self {
             HostBehavior::YunchouXicai => "host:xicai",
             HostBehavior::YunchouDiykuanggu => "host:diykuanggu",
+            HostBehavior::YunchouXiongzi => "host:xiongzi",
+            HostBehavior::YunchouYaliang => "host:yaliang",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1658,6 +1672,20 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::YunchouXiongzi => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::YunchouYaliang => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             HostBehavior::TargetDiscardEquipOrDamage => None,
@@ -3170,6 +3198,16 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
                 _ => (None, None),
             },
+            // 雄姿：自身（补摸量在效果内按装备数计算）
+            HostBehavior::YunchouXiongzi => match event {
+                EventData::Phase { player, .. } => (Some(*player), None),
+                _ => (None, None),
+            },
+            // 雅量：伤害目标（双方经 targets=[source,target] 提取摸牌）
+            HostBehavior::YunchouYaliang => match event {
+                EventData::Damage(d) => (Some(d.target), None),
+                _ => (None, None),
+            },
             // 戏才：伤害目标+伤害牌（获得面）
             HostBehavior::YunchouXicai => match event {
                 EventData::Damage(d) => (Some(d.target), d.card),
@@ -3256,6 +3294,11 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => d.source.map(|s| vec![s]).unwrap_or_default(),
                 _ => Vec::new(),
             },
+            // 雅量：伤害双方（座位序在效果内排序）
+            HostBehavior::YunchouYaliang => match event {
+                EventData::Damage(d) => vec![d.source.unwrap_or(d.target), d.target],
+                _ => Vec::new(),
+            },
             _ => Vec::new(),
         };
         HostMachine {
@@ -3274,6 +3317,19 @@ impl HostSkillBehavior {
 impl SkillBehavior for HostSkillBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         match self.behavior {
+            // 雄姿：自己摸牌阶段开始（固定摸 2 后补摸）
+            HostBehavior::YunchouXiongzi => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Draw, begin: true }
+                if *player == owner),
+            // 雅量：自己造成或受到伤害，双方存活且异人
+            HostBehavior::YunchouYaliang => matches!(event,
+                EventData::Damage(d)
+                if !d.prevented && d.amount > 0
+                    && (d.source == Some(owner) || d.target == owner)
+                    && d.source.is_some()
+                    && d.source != Some(d.target)
+                    && ctx.state.player(d.source.unwrap()).alive
+                    && ctx.state.player(d.target).alive),
             // 戏才：自己受到有牌伤害（可选确认门走 trigger_meta optional）
             HostBehavior::YunchouXicai => matches!(event,
                 EventData::Damage(d)
@@ -4870,6 +4926,24 @@ impl crate::catalog::SkillMachine for HostMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
+            // 雄姿：补摸 1+⌊装备数/2⌋
+            HostBehavior::YunchouXiongzi => {
+                let n = 1 + ctx.core.player(self.owner).equips.len() / 2;
+                ctx.draw_cards(self.owner, n);
+                Flow::Done
+            },
+            // 雅量：伤害双方各摸 1（座位序逐个）
+            HostBehavior::YunchouYaliang => {
+                let mut seats = self.targets.clone();
+                seats.sort_unstable();
+                seats.dedup();
+                for s in seats {
+                    if ctx.core.player(s).alive {
+                        ctx.draw_cards(s, 1);
+                    }
+                }
+                Flow::Done
+            },
             // 戏才：获得伤害牌（table 优先、弃堆兜底；登记近似：不校验
             // 上游 position 'o' 处理区位）
             HostBehavior::YunchouXicai => {

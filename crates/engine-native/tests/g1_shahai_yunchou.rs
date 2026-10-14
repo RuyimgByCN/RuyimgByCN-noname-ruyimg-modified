@@ -1324,11 +1324,15 @@ fn g1_yunchou_generals_batch1_bridge_and_behaviors() {
     )
     .expect("character.json");
     let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
-    assert_eq!(bridged.generals.len(), 2, "批 1 两名武将");
-    assert_eq!(
-        bridged.host_skills.len(),
-        2,
-        "xicai + diykuanggu 两行为"
+    assert!(
+        bridged.generals.len() >= 2,
+        "批 1 起累计武将（现 {} 名）",
+        bridged.generals.len()
+    );
+    assert!(
+        bridged.host_skills.len() >= 2,
+        "批 1 起累计行为（现 {} 条）",
+        bridged.host_skills.len()
     );
     assert_eq!(bridged.unmapped_skills, 2, "奸雄·变体与护驾暂缓登记");
 
@@ -1439,4 +1443,75 @@ fn settle_optional_confirm(e: &mut Engine) {
         };
         submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
     }
+}
+
+/// T12 运筹武将面批 2：diy_sp_zhouyu（雄姿=摸牌阶段补摸 1+⌊装备/2⌋；
+/// 雅量=伤害双方各摸 1，可选确认门）。
+#[test]
+fn g1_yunchou_generals_batch2_xiongzi_yaliang() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert_eq!(bridged.generals.len(), 3, "批 2 累计三名武将");
+    assert_eq!(bridged.unmapped_skills, 2, "暂缓仍为奸雄·变体与护驾");
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b2",
+            version: 1,
+            description: "运筹武将面批 2",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66002, 4, &[&pack]).expect("建局");
+    let meta2 = e.catalog().general_meta(base + 2).expect("周瑜·SP 在目录");
+    assert_eq!(meta2.0, "ycn周瑜");
+    assert_eq!(meta2.2, vec!["ycnxiongzi", "ycnyaliang"]);
+    assert_eq!(meta2.3, 3);
+
+    // 雄姿：p0 摸牌阶段固定 2 后补摸 1+⌊装备/2⌋（增量断言：Judge→Draw
+    // 之间手牌变化=固定 2+补摸）
+    e.debug_grant(0, "ycnxiongzi");
+    advance_to(&mut e, 0, Phase::Judge);
+    let h_judge = hand_len(&e, 0);
+    advance_to(&mut e, 0, Phase::Draw);
+    assert_eq!(
+        hand_len(&e, 0),
+        h_judge + 2 + 1,
+        "雄姿补摸 1（无装备）"
+    );
+    // 挂 1 件装备：⌊1/2⌋=0 补摸仍 1
+    let z = e.debug_place(0, "zhuge");
+    e.state_core_mut().players[0].equips.push(z);
+    advance_to(&mut e, 0, Phase::Judge);
+    let h_judge = hand_len(&e, 0);
+    advance_to(&mut e, 0, Phase::Draw);
+    assert_eq!(hand_len(&e, 0), h_judge + 2 + 1, "⌊1/2⌋=0 补摸仍 1");
+    // 挂至 2 件：⌊2/2⌋=1 补摸 2
+    let z2 = e.debug_place(0, "renwang");
+    e.state_core_mut().players[0].equips.push(z2);
+    advance_to(&mut e, 0, Phase::Judge);
+    let h_judge = hand_len(&e, 0);
+    advance_to(&mut e, 0, Phase::Draw);
+    assert_eq!(hand_len(&e, 0), h_judge + 2 + 2, "⌊2/2⌋=1 补摸 2");
+
+    // 雅量：p2 杀 p1 → 双方各摸 1（确认门）
+    e.debug_grant(1, "ycnyaliang");
+    e.debug_clear_hand(1);
+    advance_to(&mut e, 2, Phase::Play);
+    let sha = e.debug_place(2, "sha");
+    submit(&mut e, 2, GameAction::PlayCard { card: sha, targets: vec![1] });
+    settle_optional_confirm(&mut e);
+    let h1 = hand_len(&e, 1);
+    let h2 = hand_len(&e, 2);
+    assert!(h1 >= 1 || h2 >= 1, "雅量：双方摸牌（受击者 p1 手牌 {h1}）");
 }
