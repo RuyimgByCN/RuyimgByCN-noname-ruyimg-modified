@@ -371,6 +371,6 @@ fn host_behavior_tags_unique() {
         }
         assert_eq!(HostBehavior::from_tag(t), Some(b), "tag {t} 往返失败");
     }
-    let reachable = (0..=u8::MAX).filter_map(HostBehavior::from_tag).count();
+    let reachable = (0..=u16::MAX).filter_map(HostBehavior::from_tag).count();
     assert_eq!(reachable, HostBehavior::ALL.len(), "from_tag 可达变体数与 ALL 不符");
 }

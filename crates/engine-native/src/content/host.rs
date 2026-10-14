@@ -698,7 +698,10 @@ fn u_matches_lw2(
 }
 
 impl HostBehavior {
-    pub const fn tag(self) -> u8 {
+    /// u16（批 11 扩容）：u8 值域已满（256 变体全占用）；编号只增不改
+    /// ——ABI 兼容对包数据无影响（包内为 `host:*` 字符串键，tag 仅内部
+    /// 编号与存档快照）。
+    pub const fn tag(self) -> u16 {
         match self {
             HostBehavior::YunchouXicai => 241,
             HostBehavior::YunchouDiykuanggu => 242,
@@ -960,7 +963,7 @@ impl HostBehavior {
         }
     }
 
-    pub fn from_tag(t: u8) -> Option<Self> {
+    pub fn from_tag(t: u16) -> Option<Self> {
         Some(match t {
             0 => HostBehavior::ShaDamageForceDiscard,
             1 => HostBehavior::PhaseEndRecoverOrDraw,
@@ -1218,8 +1221,7 @@ impl HostBehavior {
             254 => HostBehavior::YunchouDiychanyuan,
             255 => HostBehavior::WudianDiyjuntun,
             96 => HostBehavior::WudianJinyan,
-            // u8 值域已满（256 变体全占用；96 为历史空洞回收）——下一个
-            // 新变体须先将 tag/from_tag 扩为 u16（登记边界）。
+            _ => return None,
         })
     }
 

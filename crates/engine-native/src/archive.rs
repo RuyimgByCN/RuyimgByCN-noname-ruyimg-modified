@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 65;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 66;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -1648,7 +1648,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             w.u8(42);
             // 定义键：有界字符串（解码侧限长 64）
             w.str(def_key);
-            w.u8(*behavior);
+            w.u16(*behavior);
             w.u8(*stage);
             enc_pid(w, owner);
             enc_opt_pid(w, target);
@@ -2461,7 +2461,7 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let def_key = std::str::from_utf8(key_bytes)
                 .map_err(|_| ArchiveError::BadTag("host_def_key_utf8", 0))?
                 .to_string();
-            let behavior = r.u8()?;
+            let behavior = r.u16()?;
             let stage = r.u8()?;
             let owner = dec_pid(r)?;
             let target = dec_opt_pid(r)?;

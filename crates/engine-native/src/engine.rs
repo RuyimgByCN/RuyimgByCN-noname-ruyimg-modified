@@ -5264,7 +5264,7 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
                 hv = hv.wrapping_mul(0x1000_0000_01b3);
             }
             push_u64(h, hv);
-            push_u8(h, *behavior);
+            push_u16(h, *behavior);
             push_u8(h, *stage);
             push_u8(h, *owner);
             push_u8(h, target.map(|p| p + 1).unwrap_or(0));

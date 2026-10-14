@@ -668,7 +668,7 @@ pub enum MachineSnapshot {
     },
     Host {
         def_key: String,
-        behavior: u8,
+        behavior: u16,
         stage: u8,
         owner: PlayerId,
         target: Option<PlayerId>,
@@ -2588,7 +2588,16 @@ pub fn active_ask(
         MachineSnapshot::Host {
             behavior, stage, owner, target, targets, cards, ..
         } => {
-            active_ask_host(*behavior, *stage, *owner, *target, targets, cards, core, catalog)
+            active_ask_host(
+                u16::from(*behavior),
+                *stage,
+                *owner,
+                *target,
+                targets,
+                cards,
+                core,
+                catalog,
+            )
         }
         // ---- 无询问机器 ----
         _ => None,
@@ -2599,7 +2608,7 @@ pub fn active_ask(
 /// 创建该 `WaitChoice` 时的 `ChoiceSpec`（挂起时 stage 已前移到下一阶段）。
 #[allow(clippy::too_many_arguments)]
 fn active_ask_host(
-    behavior: u8,
+    behavior: u16,
     stage: u8,
     owner: PlayerId,
     target: Option<PlayerId>,
@@ -2622,7 +2631,7 @@ fn active_ask_host(
         WUDIAN_YUEDONG_TARGETS, WUXING_SELECT_CARD, WUXING_SELECT_NATURE,
         YC_GEAN_T1_PICK, YC_GEAN_T2_PICK,
     };
-    let behavior = HostBehavior::from_tag(behavior)?;
+    let behavior = HostBehavior::from_tag(behavior)?; // behavior: u16
     let stage = HostStage::from_tag(stage)?;
     match behavior {
         // 五行盘：改属性手牌 → 新属性
