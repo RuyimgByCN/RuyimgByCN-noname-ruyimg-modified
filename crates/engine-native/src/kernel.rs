@@ -7319,8 +7319,21 @@ impl WuguMachine {
         }
     }
     fn finish_wugu(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 良策·余获（玩点论杀批 15）：场上存在五谷剩余归获技能持有者
+        // 时，剩余牌归其所有（登记差异：上游玩家选目标，原生归持有者
+        // 本人）；无持有者照旧入弃堆。
+        let beneficiary = ctx.catalog.wugu_remain_beneficiary(ctx.core);
         for c in self.cards.drain(..) {
-            ctx.to_discard(c);
+            match beneficiary {
+                Some(t) if ctx.core.player(t).alive => {
+                    ctx.core.player_mut(t).hand.push(c);
+                    ctx.out.push(crate::LogEvent::CardsDrawn {
+                        player: t,
+                        cards: vec![c],
+                    });
+                }
+                _ => ctx.to_discard(c),
+            }
         }
         if let Some(c) = ctx.core.table.iter().position(|c| {
             ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Wugu

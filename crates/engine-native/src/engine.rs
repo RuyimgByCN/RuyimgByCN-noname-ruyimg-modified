@@ -2427,6 +2427,16 @@ fn apply_command(
                 }
             }
             let mut kind = catalog.card_kind(card);
+            // 良策（造之仁君，玩点论杀批 15）：基本手牌当【五谷丰登】
+            //（viewAs 转化，独立于杀转化链——sha 牌可转化；登记差异：
+            // 上游 usable:1，原生不限次——厉焰同款登记）
+            let liangce_hit = catalog
+                .skill_by_name("liangce")
+                .map(|d| core.has_skill(core.turn.current, d))
+                .unwrap_or(false);
+            if liangce_hit && kind.is_basic_kind() {
+                kind = CardKind::Wugu;
+            }
             let mut mark_mutoumianju = false;
             // view-as 转化（N08 官方迁移）：
             // 国色（方块手牌当乐不思蜀，优先于武圣）/ 武圣（红色手牌当杀）/
@@ -2486,6 +2496,17 @@ fn apply_command(
                     )
                 {
                     kind = CardKind::Snatch;
+                }
+                // 良策（造之仁君，玩点论杀批 15）：基本手牌当【五谷丰登】
+                //（viewAs 转化，厉焰同族；登记差异：上游 usable:1，原生
+                // 不限次——厉焰同款登记）
+                else if catalog
+                    .skill_by_name("liangce")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && catalog.card_kind(card).is_basic_kind()
+                {
+                    kind = CardKind::Wugu;
                 }
                 // 厉焰（陆抗·DIY，运筹武将面批 6）：非基本手牌当【水攻】
                 //（viewAs 转化，奇袭/探囊同族；优先级并列尾部落位——上游
@@ -3113,6 +3134,20 @@ fn apply_command(
                             }
                         }
                     }
+                    // 良策转化（玩点论杀批 15）：基本牌当五谷时按五谷
+                    // 机器路由（use_as 声明）。
+                    if kind == CardKind::Wugu {
+                        crate::resolution::push_frame(
+                            &mut state.resolution,
+                            EventData::CardUsed(crate::machine::card_use_as(
+                                card,
+                                player,
+                                targets,
+                                Some(CardKind::Wugu),
+                            )),
+                        );
+                        return Ok(());
+                    }
                     crate::resolution::push_frame(
                         &mut state.resolution,
                         EventData::CardUsed(crate::machine::card_use_with_nature(
@@ -3403,10 +3438,14 @@ fn apply_command(
                     {
                         return Err(RejectReason::IllegalTargets);
                     }
+                    // 良策转化（玩点论杀批 15）：基本牌当五谷——use_as 声明
+                    // 必须随帧（否则机器工厂回退目录种）。
+                    let use_as =
+                        (kind != catalog.card_kind(card)).then_some(kind);
                     crate::resolution::push_frame(
                         &mut state.resolution,
-                        EventData::CardUsed(crate::machine::card_use(
-                            card, player, targets,
+                        EventData::CardUsed(crate::machine::card_use_as(
+                            card, player, targets, use_as,
                         )),
                     );
                     return Ok(());
@@ -4199,6 +4238,8 @@ fn apply_command(
             }
             let player = core.turn.current;
             // view-as 声明（蜜链藕红桃当桃等）：转化后按声明牌种结算
+            if std::env::var("LC_DBG").is_ok() {
+            }
             let use_as = if kind != catalog.card_kind(card) {
                 Some(kind)
             } else {

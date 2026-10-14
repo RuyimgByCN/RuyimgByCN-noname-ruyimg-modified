@@ -1064,6 +1064,26 @@ pub struct Catalog {
 }
 
 impl Catalog {
+    /// 五谷剩余归获查询（玩点论杀批 15——良策）：场上存活角色持有带
+    /// 五谷剩余归获语义的宿主技能（良策·余获）则返回其座位——五谷结算
+    /// 后剩余牌归其所有。内核通用查询——不点名扩展技能。
+    pub fn wugu_remain_beneficiary(
+        &self,
+        core: &crate::state::GameStateCore,
+    ) -> Option<crate::ids::PlayerId> {
+        core.skills
+            .iter()
+            .find(|((p, def), inst)| {
+                inst.enabled
+                    && self.skills[*def as usize]
+                        .behavior
+                        .as_host_behavior()
+                        .is_some_and(|h| h.wugu_remain_gain())
+                    && core.player(*p).alive
+            })
+            .map(|((p, _), _)| *p)
+    }
+
     /// AOE 目标排除查询（目标排除原语首例，玩点论杀批 13）：目标持有的
     /// 任一宿主技能声明 AOE 排除语义（坚壁）则 AOE（南蛮/万箭）对其无效。
     /// 内核通用查询——不点名扩展技能。

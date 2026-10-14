@@ -697,6 +697,10 @@ pub enum HostBehavior {
     /// chooseToUse 玩家选杀实体且可逐个取消，原生虚拟杀直发；死亡标记
     /// 一并移除）。
     WudianFuchou2,
+    /// 良策·余获（tag 261，玩点论杀批 15）：锁定查询面——五谷丰登结算
+    /// 后剩余牌归持有者（wuguRemained 子事件承载，登记差异：上游玩家
+    /// 选目标，原生归持有者本人；viewAs 转化面在 PlayCard 门）。
+    WudianLiangceRemain,
 }
 
 
@@ -741,6 +745,7 @@ impl HostBehavior {
             HostBehavior::WudianJianbi => 258,
             HostBehavior::WudianFuchou => 259,
             HostBehavior::WudianFuchou2 => 260,
+            HostBehavior::WudianLiangceRemain => 261,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1246,6 +1251,7 @@ impl HostBehavior {
             258 => HostBehavior::WudianJianbi,
             259 => HostBehavior::WudianFuchou,
             260 => HostBehavior::WudianFuchou2,
+            261 => HostBehavior::WudianLiangceRemain,
             _ => return None,
         })
     }
@@ -1258,7 +1264,12 @@ impl HostBehavior {
     pub const fn aoe_exclude(self) -> bool {
         matches!(self, Self::WudianJianbi)
     }
-    pub const ALL: [HostBehavior; 260] = [
+    /// 五谷剩余归获语义标记（玩点论杀批 15——良策；catalog 通用查询
+    /// `wugu_remain_beneficiary` 消费）。
+    pub const fn wugu_remain_gain(self) -> bool {
+        matches!(self, Self::WudianLiangceRemain)
+    }
+    pub const ALL: [HostBehavior; 261] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1519,6 +1530,7 @@ impl HostBehavior {
         HostBehavior::WudianJianbi,
         HostBehavior::WudianFuchou,
         HostBehavior::WudianFuchou2,
+        HostBehavior::WudianLiangceRemain,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1544,6 +1556,7 @@ impl HostBehavior {
             HostBehavior::WudianJianbi => "host:wudian_jianbi",
             HostBehavior::WudianFuchou => "host:fuchou",
             HostBehavior::WudianFuchou2 => "host:fuchou2",
+            HostBehavior::WudianLiangceRemain => "host:liangce_remain",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1867,6 +1880,8 @@ impl HostBehavior {
             HostBehavior::WudianJianbi => None,
             // 复仇：目录锚（取消逻辑在 ShaResolveMachine 内联）
             HostBehavior::WudianFuchou => None,
+            // 良策·余获：锁定查询面（五谷机器内联查询，无触发帧）
+            HostBehavior::WudianLiangceRemain => None,
             // 复仇·清算：自己回合结束（标记逐个结算）
             HostBehavior::WudianFuchou2 => Some(TriggerMeta {
                 event: EventKind::PhaseEnd,
@@ -3607,6 +3622,7 @@ impl SkillBehavior for HostSkillBehavior {
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
                 if *player == owner),
             HostBehavior::WudianFuchou => false,
+            HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianLiduan => matches!(event,
                 EventData::CardsMoved { cards, from, to }
                 if *to != owner
@@ -5436,6 +5452,8 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             },
+            // 良策·余获：锁定查询面（五谷机器内联查询），无独立效果步
+            HostBehavior::WudianLiangceRemain => Flow::Done,
             // 禁言：查询锚（PlayCard 门），无独立效果步
             HostBehavior::WudianJinyan => Flow::Done,
             // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张

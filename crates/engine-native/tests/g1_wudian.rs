@@ -216,7 +216,7 @@ fn g1_wudian_generals_and_siji_discard_draw() {
     let host_skills = out.host_skills;
     let unmapped_total = out.unmapped_skills;
     assert_eq!(generals.len(), 9, "玩点论杀九名武将全量入册（批 10 补西真夕红/造之仁君/杨仪）");
-    assert_eq!(unmapped_total, 5, "5 个技能登记暂缓（批 14 复仇双技转正；余良策/仇渡+存量夺启/佑赞/坚壁全域面）");
+    assert_eq!(unmapped_total, 4, "4 个技能登记暂缓（批 15 良策转正；余仇渡+存量夺启/佑赞/坚壁全域面）");
     let pack = ExtensionPack {
         def: ExtensionDef {
             name: "wudian-upstream-noname",
@@ -8230,8 +8230,8 @@ fn wudian_generals_batch10_diyjuntun_recast_and_jinyan() {
     assert_eq!(m.0, "造之仁君");
     assert_eq!(
         m.2,
-        vec!["diyjuntun"],
-        "屯田转正（良策/坚壁 null 暂缓不进目录列表）"
+        vec!["liangce", "diyjuntun"],
+        "良策+屯田转正（坚壁 null 暂缓不进目录列表）"
     );
     let jieyan_def = e.catalog().skill_by_name("diyjuntun").expect("屯田 def");
     let _ = jieyan_def;
@@ -8606,4 +8606,73 @@ fn wudian_generals_batch14_fuchou_cancel_and_settle() {
         "清算：标记已消耗"
     );
     let _ = hp0;
+}
+
+/// T12 玩点论杀批 15：良策（造之仁君整将转正）——基本手牌当五谷（viewAs
+/// 转化，厉焰同族）；五谷剩余牌归持有者（wuguRemained 子事件承载，登记
+/// 差异：上游玩家选目标，原生归持有者本人）。
+#[test]
+fn wudian_generals_batch15_liangce_conversion_and_remain() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "wudian")
+        .expect("wudian 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(61005, 4, &[&pack]).expect("建局");
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let m = e.catalog().general_meta(base + 7).expect("造之仁君在目录");
+    assert_eq!(m.0, "造之仁君");
+    assert_eq!(
+        m.2,
+        vec!["liangce", "diyjuntun"],
+        "良策+屯田转正（坚壁暂缓不进列表）"
+    );
+
+    // 良策转化：p0 用基本牌（sha）→ 转化为五谷 → 全员择牌
+    e.debug_grant(0, "liangce");
+    advance_to_play(&mut e, 0);
+    let sha = e.debug_place(0, "sha");
+    let h2 = hand_len_w(&e, 2);
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: sha, targets: vec![] });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "良策：基本牌转化为五谷受理: {out:?}"
+    );
+    // 全员择牌排空（4 人各选 1 张；无懈窗排空）
+    for _ in 0..12 {
+        let pending = e.open_choice().map(|ch| (ch.id, ch.observer, ch.spec.min.max(1)));
+        let Some((cid, obs, min)) = pending else { break };
+        let card_sel: Vec<ChoiceOption> = {
+            let ch = e.open_choice().expect("still open");
+            ch.spec
+                .options
+                .iter()
+                .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                .copied()
+                .take(min)
+                .collect()
+        };
+        if !card_sel.is_empty() {
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: card_sel });
+        } else {
+            let first = {
+                let ch = e.open_choice().expect("still open");
+                vec![ch.spec.options[0].clone()]
+            };
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: first });
+        }
+    }
+    settle_optional_confirm(&mut e);
+    // 五谷：全员各摸 1 张（择牌）——p2 手牌 +1
+    assert!(hand_len_w(&e, 2) >= h2, "五谷：目标择牌入手");
 }

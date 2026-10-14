@@ -305,7 +305,7 @@
       "skills": [
         {
           "name": "liangce",
-          "mapping": null
+          "mapping": "host:liangce_remain"
         },
         {
           "name": "jianbi",
