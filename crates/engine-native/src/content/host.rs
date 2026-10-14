@@ -849,6 +849,9 @@ pub enum HostBehavior {
     /// 神草结（tag 309，批⑬ trick 手持交互）：锦囊伤害前——受伤者是自
     /// 己则伤-1、来源是自己则伤+1（弃一张神草结；确认门）。
     SwdShencaojieGuard,
+    /// 玉蝉换形（tag 310，批⑮ equipSkill）：自己用牌结算后，手牌中玉蝉
+    /// 实体轮换为八卦序下一 kind 的实体（确定性发现；登记差异上游随机）。
+    SwdYuchanSwap,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -942,6 +945,7 @@ impl HostBehavior {
             HostBehavior::SwdXuanwuzhihuangHeld => 307,
             HostBehavior::SwdHuanglinzhicongHeld => 308,
             HostBehavior::SwdShencaojieGuard => 309,
+            HostBehavior::SwdYuchanSwap => 310,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1494,6 +1498,7 @@ impl HostBehavior {
             307 => HostBehavior::SwdXuanwuzhihuangHeld,
             308 => HostBehavior::SwdHuanglinzhicongHeld,
             309 => HostBehavior::SwdShencaojieGuard,
+            310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
             _ => return None,
@@ -1513,7 +1518,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 307] = [
+    pub const ALL: [HostBehavior; 308] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1819,6 +1824,7 @@ impl HostBehavior {
         HostBehavior::SwdXuanwuzhihuangHeld,
         HostBehavior::SwdHuanglinzhicongHeld,
         HostBehavior::SwdShencaojieGuard,
+        HostBehavior::SwdYuchanSwap,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -1890,6 +1896,7 @@ impl HostBehavior {
             HostBehavior::SwdXuanwuzhihuangHeld => "xuanwuzhihuang",
             HostBehavior::SwdHuanglinzhicongHeld => "huanglinzhicong",
             HostBehavior::SwdShencaojieGuard => "shencaojie",
+            HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -2414,6 +2421,14 @@ impl HostBehavior {
             HostBehavior::SwdBaishouzhihuHeld => Some(TriggerMeta {
                 event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 玉蝉换形：自己用牌结算后 silent forced
+            HostBehavior::SwdYuchanSwap => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Last,
                 priority: 0,
                 optional: false,
                 extra_events: Vec::new(),
@@ -4530,6 +4545,14 @@ impl SkillBehavior for HostSkillBehavior {
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
                     && hand_has_kind(ctx, owner, CardKind::Xuanwuzhihuang)),
+            // 玉蝉换形：自己用牌（非玉蝉本体）结算后且手牌有玉蝉
+            HostBehavior::SwdYuchanSwap => matches!(event,
+                EventData::CardUsed(u)
+                if u.player == owner
+                    && !u.cancelled
+                    && ctx.state.player(owner).hand.iter().any(|c| {
+                        ctx.catalog.card_kind(*c).yuchan_auto_view_as().is_some()
+                    })),
             // 神草结：锦囊伤害且自己是受伤者或来源、手持神草结
             HostBehavior::SwdShencaojieGuard => matches!(event,
                 EventData::Damage(d)
@@ -7238,6 +7261,70 @@ impl crate::catalog::SkillMachine for HostMachine {
                             }
                         }
                     }
+                }
+                Flow::Done
+            }
+            // 玉蝉换形: 手牌中每张玉蝉实体轮换为八卦序下一 kind 的实体
+            //（牌堆/弃堆确定性发现首张；登记差异上游随机+init 原地变形）
+            HostBehavior::SwdYuchanSwap => {
+                const ORDER: [CardKind; 8] = [
+                    CardKind::Yuchanqian,
+                    CardKind::Yuchankun,
+                    CardKind::Yuchanzhen,
+                    CardKind::Yuchanxun,
+                    CardKind::Yuchankan,
+                    CardKind::Yuchanli,
+                    CardKind::Yuchangen,
+                    CardKind::Yuchandui,
+                ];
+                let mut swaps: Vec<(usize, CardId, CardId)> = Vec::new();
+                for (i, c) in ctx
+                    .core
+                    .player(self.owner)
+                    .hand
+                    .iter()
+                    .enumerate()
+                    .rev()
+                {
+                    let Some(pos) = ctx
+                        .catalog
+                        .card_kind(*c)
+                        .yuchan_auto_view_as()
+                        .and_then(|_| {
+                            ORDER.iter().position(|k| k == &ctx.catalog.card_kind(*c))
+                        })
+                    else {
+                        continue;
+                    };
+                    let want = ORDER[(pos + 1) % 8];
+                    if let Some(newc) = ctx
+                        .core
+                        .deck
+                        .iter()
+                        .chain(ctx.core.discard.iter())
+                        .copied()
+                        .find(|x| ctx.catalog.card_kind(*x) == want)
+                    {
+                        swaps.push((i, *c, newc));
+                    }
+                }
+                for (i, oldc, newc) in swaps {
+                    // 旧实体入弃堆（守恒），新实体从来源区移除后入手
+                    ctx.to_discard(oldc);
+                    if let Some(dpos) = ctx.core.deck.iter().position(|x| *x == newc) {
+                        ctx.core.deck.remove(dpos);
+                    } else if let Some(dpos) =
+                        ctx.core.discard.iter().position(|x| *x == newc)
+                    {
+                        ctx.core.discard.remove(dpos);
+                    }
+                    let hand = &mut ctx.core.player_mut(self.owner).hand;
+                    hand[i] = newc;
+                    ctx.log(LogEvent::CardsGiven {
+                        from: self.owner,
+                        to: self.owner,
+                        cards: vec![newc],
+                    });
                 }
                 Flow::Done
             }
@@ -19751,6 +19838,14 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
         CardKind::Xuanwuzhihuang => &[HostSkillDecl { name: "xuanwuzhihuang", behavior: HostBehavior::SwdXuanwuzhihuangHeld }],
         CardKind::Huanglinzhicong => &[HostSkillDecl { name: "huanglinzhicong", behavior: HostBehavior::SwdHuanglinzhicongHeld }],
         CardKind::Shencaojie => &[HostSkillDecl { name: "shencaojie", behavior: HostBehavior::SwdShencaojieGuard }],
+        CardKind::Yuchanqian
+        | CardKind::Yuchankun
+        | CardKind::Yuchanzhen
+        | CardKind::Yuchanxun
+        | CardKind::Yuchankan
+        | CardKind::Yuchanli
+        | CardKind::Yuchangen
+        | CardKind::Yuchandui => &[HostSkillDecl { name: "yuchan_swap", behavior: HostBehavior::SwdYuchanSwap }],
         CardKind::Kunlunjingc => &[HostSkillDecl { name: "kunlunjingc", behavior: HostBehavior::SwdKunlunjingcCard }],
         CardKind::Donghuangzhong => &[HostSkillDecl { name: "donghuangzhong", behavior: HostBehavior::SwdDonghuangzhongCard }],
         _ => &[],

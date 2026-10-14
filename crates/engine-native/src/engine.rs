@@ -667,6 +667,7 @@ impl Engine {
                                 | crate::content::host::HostBehavior::SwdXuanwuzhihuangHeld
                                 | crate::content::host::HostBehavior::SwdHuanglinzhicongHeld
                                 | crate::content::host::HostBehavior::SwdShencaojieGuard
+                                | crate::content::host::HostBehavior::SwdYuchanSwap
                         )
                     )
                 })

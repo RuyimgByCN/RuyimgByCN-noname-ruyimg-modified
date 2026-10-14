@@ -2665,6 +2665,7 @@ fn swd_generals_b21_liuhong_mojian_daofa() {
         e.debug_clear_hand(p);
     }
     let tao = e.debug_place(0, "tao");
+    e.debug_set_hp(0, 3);
     submit(&mut e, 0, GameAction::PlayCard { card: tao, targets: vec![] });
     settle_optional_confirm(&mut e);
     assert_eq!(hand_len_w(&e, 0), 0, "流虹反例：用桃不摸");
@@ -5765,4 +5766,104 @@ fn swd_cards_equip5_b44_yuruyi_draw_window() {
         }),
         "玉如意：最大点数牌被移至摸牌位入手"
     );
+}
+
+/// T12 swd 卡牌面补切批⑮：玉蝉换形——自己用牌结算后，手牌中玉蝉实体
+/// 轮换为八卦序下一 kind 的实体（牌堆/弃堆确定性发现；登记差异上游随
+/// 机+init 原地变形）。
+#[test]
+fn swd_cards_yuchan_b45_swap_rotation() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62024, 4, &[&pack]).expect("建局");
+    // 授予换形技实例（器族手持技经 InitHook 已授全员，直接核验）
+    let swap_def = e.catalog().skill_by_name("yuchan_swap").expect("换形 def");
+    assert!(
+        e.state_core().skills.contains_key(&(0, swap_def)),
+        "换形技开局已授予"
+    );
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let kind_id = |e: &Engine, k: engine_native::catalog::CardKind| {
+        e.catalog()
+            .cards
+            .iter()
+            .position(|c| c.kind == k)
+            .expect("玉蝉在目录") as u32
+    };
+    use engine_native::catalog::CardKind;
+
+    // 布阵：p0 手持玉蝉·乾；玉蝉·坤实体固定入牌堆（替换发现源）
+    let yq = kind_id(&e, CardKind::Yuchanqian);
+    let yk = kind_id(&e, CardKind::Yuchankun);
+    {
+        let core = e.state_core_mut();
+        for c in [yq, yk] {
+            core.deck.retain(|x| *x != c);
+            core.discard.retain(|x| *x != c);
+        }
+        core.players[0].hand.push(yq);
+        core.deck.push(yk);
+    }
+    // p0 用任意非玉蝉牌（tao）触发换形
+    e.debug_set_hp(0, 3);
+    let tao = e.debug_place(0, "tao");
+    submit(&mut e, 0, GameAction::PlayCard { card: tao, targets: vec![] });
+    settle_optional_confirm(&mut e);
+    let hand = e.debug_hand(0);
+    assert!(
+        hand.contains(&yk),
+        "玉蝉换形：乾轮换为坤（坤实体入手）"
+    );
+    assert!(!hand.contains(&yq), "玉蝉换形：乾实体已让位");
+
+    // 反例：用玉蝉本体（乾 as 杀）不触发换形（filter 排除玉蝉本体）
+    // 布阵第二张乾不可得（每 kind 一张）——改验：打出的坤触发轮换至震
+    let yz = kind_id(&e, CardKind::Yuchanzhen);
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != yz);
+        core.discard.retain(|x| *x != yz);
+        core.deck.push(yz);
+    }
+    // p0 手中的坤视为草药（单目标受伤）——先伤 p0 使草药可用
+    e.debug_set_hp(0, 3);
+    // 再置一张甘（艮）入手：用坤后剩余手牌玉蝉轮换 甘→兑
+    let yg = kind_id(&e, CardKind::Yuchangen);
+    {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != yg);
+        core.discard.retain(|x| *x != yg);
+        core.players[0].hand.push(yg);
+    }
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: yk, targets: vec![0] });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "坤 as 草药受理 {out:?}"
+    );
+    settle_optional_confirm(&mut e);
+    let hand = e.debug_hand(0);
+    let yd = kind_id(&e, CardKind::Yuchandui);
+    assert!(
+        hand.contains(&yd),
+        "玉蝉换形②：剩余甘轮换为兑"
+    );
+    assert_eq!(e.debug_hp(0), 4, "坤 as 草药：p0 回满");
 }
