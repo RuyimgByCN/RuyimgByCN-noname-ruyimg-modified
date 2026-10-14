@@ -8424,3 +8424,69 @@ fn settle_optional_confirm(e: &mut Engine) {
         submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
     }
 }
+
+/// T12 玩点论杀批 13：坚壁（西真夕红部分转正）——AOE 目标排除原语首例
+/// （catalog.aoe_excludes_target 通用查询，帷幕 weimu_blocks_aoe 同构）。
+/// 南蛮对持有者无效（不询问不掉血），无持有者正常受伤。
+#[test]
+fn wudian_generals_batch13_jianbi_aoe_exclude() {
+    let root = repo_extensions_root();
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "wudian")
+        .expect("wudian 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(61002, 4, &[&pack]).expect("建局");
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let m = e.catalog().general_meta(base + 6).expect("西真夕红在目录");
+    assert_eq!(m.0, "西真夕红");
+    assert_eq!(m.2, vec!["jinyan", "jianbi"], "坚壁入目录（fuchou/fuchou2 暂缓不进列表）");
+
+    // 南蛮：p0 对全体——p1（持坚壁）被跳过（不询问不掉血），p2/p3 受伤
+    e.debug_grant(1, "jianbi");
+    assert!(
+        e.catalog().aoe_excludes_target(e.state_core(), 1),
+        "排除查询：grant 后应命中"
+    );
+    e.debug_set_hp(1, 8);
+    e.debug_set_hp(2, 8);
+    e.debug_set_hp(3, 8);
+    advance_to_play(&mut e, 0);
+    for p in 1..4 {
+        e.debug_clear_hand(p);
+    }
+    let nanman = e.debug_place(0, "savage");
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: nanman, targets: vec![] });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "南蛮受理: {out:?}"
+    );
+    // 排空响应窗（无手牌 → 无窗；保险再排）
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(1), 8, "坚壁：AOE 排除——p1 不掉血");
+    assert_eq!(e.debug_hp(2), 7, "南蛮：p2 受 1 伤");
+    assert_eq!(e.debug_hp(3), 7, "南蛮：p3 受 1 伤");
+
+    // 负例：无坚壁持有者时 AOE 正常（新实例 p2 持坚壁对照位）
+    let mut e2 = Engine::new_with_extensions(61003, 4, &[&pack]).expect("建局");
+    e2.debug_set_hp(1, 8);
+    e2.debug_set_hp(2, 8);
+    e2.debug_set_hp(3, 8);
+    advance_to_play(&mut e2, 0);
+    for p in 1..4 {
+        e2.debug_clear_hand(p);
+    }
+    let nanman2 = e2.debug_place(0, "savage");
+    submit(&mut e2, 0, GameAction::PlayCard { card: nanman2, targets: vec![] });
+    settle_optional_confirm(&mut e2);
+    assert_eq!(e2.debug_hp(1), 7, "负例：无坚壁 p1 正常受伤");
+}

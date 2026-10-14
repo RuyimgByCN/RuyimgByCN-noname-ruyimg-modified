@@ -290,6 +290,10 @@
         {
           "name": "fuchou2",
           "mapping": null
+        },
+        {
+          "name": "jianbi",
+          "mapping": "host:wudian_jianbi"
         }
       ]
     },

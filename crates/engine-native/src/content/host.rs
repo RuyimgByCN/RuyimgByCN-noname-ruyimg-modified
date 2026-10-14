@@ -685,6 +685,10 @@ pub enum HostBehavior {
     /// （可选确认）：同栏已有装备则其交 1 张手牌（首张，登记差异：上游
     /// 玩家自选），否则直接装备该牌（不走 Equipped 帧防双 grant）。
     WudianLiduan,
+    /// 坚壁（tag 258，玩点论杀批 13）：锁定查询面——AOE（南蛮/万箭）对
+    /// 持有者无效（目标排除原语首例，帷幕 weimu_blocks_aoe 同构；登记
+    /// 差异：上游可选确认且覆盖全部多目标锦囊，原生锁定仅 AOE 面）。
+    WudianJianbi,
 }
 
 
@@ -726,6 +730,7 @@ impl HostBehavior {
             // 批 11 起 tag/from_tag 已扩 u16，新变体顺序编号）
             HostBehavior::WudianJinyan => 96,
             HostBehavior::WudianLiduan => 257,
+            HostBehavior::WudianJianbi => 258,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1228,6 +1233,7 @@ impl HostBehavior {
             255 => HostBehavior::WudianDiyjuntun,
             96 => HostBehavior::WudianJinyan,
             257 => HostBehavior::WudianLiduan,
+            258 => HostBehavior::WudianJianbi,
             _ => return None,
         })
     }
@@ -1235,7 +1241,12 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 257] = [
+    /// AOE 目标排除语义标记（目标排除原语首例——坚壁；catalog 通用查询
+    /// `aoe_excludes_target` 消费，内核不点名扩展技能）。
+    pub const fn aoe_exclude(self) -> bool {
+        matches!(self, Self::WudianJianbi)
+    }
+    pub const ALL: [HostBehavior; 258] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1493,6 +1504,7 @@ impl HostBehavior {
         HostBehavior::WudianDiyjuntun,
         HostBehavior::WudianJinyan,
         HostBehavior::WudianLiduan,
+        HostBehavior::WudianJianbi,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1515,6 +1527,7 @@ impl HostBehavior {
             HostBehavior::WudianDiyjuntun => "host:wudian_diyjuntun",
             HostBehavior::WudianJinyan => "host:wudian_jinyan",
             HostBehavior::WudianLiduan => "host:wudian_liduan",
+            HostBehavior::WudianJianbi => "host:wudian_jianbi",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1834,6 +1847,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 坚壁：锁定查询面（AOE 目标段查询，无触发帧）
+            HostBehavior::WudianJianbi => None,
             // 蝉缘·变体：死亡结算后（来源减上限）
             HostBehavior::YunchouDiychanyuan => Some(TriggerMeta {
                 event: EventKind::Death,
@@ -3555,6 +3570,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::YunchouJieyan => false,
             HostBehavior::YunchouYiesheng => false,
             HostBehavior::WudianDiyjuntun => false,
+            HostBehavior::WudianJianbi => false,
             HostBehavior::WudianLiduan => matches!(event,
                 EventData::CardsMoved { cards, from, to }
                 if *to != owner
@@ -5282,6 +5298,8 @@ impl crate::catalog::SkillMachine for HostMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
+            // 坚壁：锁定查询面（AOE 目标段查询），无独立效果步
+            HostBehavior::WudianJianbi => Flow::Done,
             // 厉焰：目录锚（转化逻辑在 PlayCard 门，无独立效果步）
             HostBehavior::YunchouLuweiyan => Flow::Done,
             // 雄姿：补摸 1+⌊装备数/2⌋

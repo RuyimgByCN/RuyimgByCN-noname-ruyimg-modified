@@ -8591,7 +8591,10 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
                 && self.idx < self.targets.len()
                 && (!ctx.core.player(self.targets[self.idx]).alive
                     || dushiwang_remen_blocks(ctx, self.targets[self.idx])
-                    || weimu_blocks_aoe(ctx, self.card, self.targets[self.idx]))
+                    || weimu_blocks_aoe(ctx, self.card, self.targets[self.idx])
+                    || ctx
+                        .catalog
+                        .aoe_excludes_target(ctx.core, self.targets[self.idx]))
             {
                 self.idx += 1;
             }

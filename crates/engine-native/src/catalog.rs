@@ -1064,6 +1064,26 @@ pub struct Catalog {
 }
 
 impl Catalog {
+    /// AOE 目标排除查询（目标排除原语首例，玩点论杀批 13）：目标持有的
+    /// 任一宿主技能声明 AOE 排除语义（坚壁）则 AOE（南蛮/万箭）对其无效。
+    /// 内核通用查询——不点名扩展技能。
+    pub fn aoe_excludes_target(
+        &self,
+        core: &crate::state::GameStateCore,
+        target: crate::ids::PlayerId,
+    ) -> bool {
+        core.skills
+            .range((target, u16::MIN)..)
+            .take_while(|((p, _), _)| *p == target)
+            .any(|((_, def), inst)| {
+                inst.enabled
+                    && self.skills[*def as usize]
+                        .behavior
+                        .as_host_behavior()
+                        .is_some_and(|h| h.aoe_exclude())
+            })
+    }
+
     /// 由技能表构建分发索引；重复注册同一事件按定义号排序保证确定。
     pub fn build(cards: Vec<CardDef>, mut skills: Vec<SkillDef>) -> Catalog {
         let mut dispatch: BTreeMap<EventKind, Vec<SkillDefId>> = BTreeMap::new();
