@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 53, "swd 全 53 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 54, "swd 全 54 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 53, "swd 全 53 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 54, "swd 全 54 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 53, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 54, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -2995,13 +2995,38 @@ fn swd_generals_b22_yulin_ningshuang_gongshen() {
     }
     let _blk_for_p0 = place_sha_color(&mut e, 0, true);
     reset_sha(&mut e);
-    let bsha = place_sha_color(&mut e, 1, true);
+    // 普通杀（非火/雷）：雷杀会使新横置的 p1 吃铁索传导并解除横置
+    let bsha = {
+        let id = e.debug_set_deck_top_by(|d| {
+            d.kind == engine_native::catalog::CardKind::Sha
+                && matches!(d.suit, Suit::Spade | Suit::Club)
+        });
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != id);
+        core.players[1].hand.push(id);
+        id
+    };
     assert!(is_black(&e, bsha), "p1 布到黑杀");
     e.debug_set_hp(0, 4);
     submit(&mut e, 1, GameAction::PlayCard { card: bsha, targets: vec![0] });
     confirm(&mut e, 0);
     pick_first_card(&mut e);
     settle_optional_confirm(&mut e);
+    // 时间片暂停冲刷：Act 直接变更立见而 emit 排队帧需续行（批③ 包加卡
+    // 改发牌序暴露——原测试耦合旧 RNG 流恰在窗内结算完毕）
+    for _ in 0..8 {
+        let r = e.resume();
+        eprintln!("b22 dbg resume={:?}", r);
+        if matches!(r, CommandOutcome::Rejected(RejectReason::NotSuspended)) {
+            break;
+        }
+        settle_optional_confirm(&mut e);
+    }
+    {
+        let log = e.log();
+        let tail: Vec<String> = log.iter().rev().take(6).map(|l| format!("{l:?}")).collect();
+        eprintln!("b22 dbg logtail={:?}", tail);
+    }
     assert!(e.state_core().player(1).linked, "凝霜：使用者横置");
     assert!(!e.state_core().player(1).face_down, "凝霜：使用者未翻面");
     assert_eq!(hand_len_w(&e, 0), 1, "凝霜：横置支自己摸 1");
@@ -4181,6 +4206,7 @@ fn swd_cards_alignment_guard_b29() {
         ("xuejibingbao", "club", 1),
         ("xuejibingbao", "spade", 1),
         ("fengyinzhidan", "spade", 1),
+        ("lianyaohu", "club", 13),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4194,7 +4220,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 53, "批② basic 族后 53 张（神秘果 2 张挂窗口机批）");
+    assert_eq!(pack.cards.len(), 54, "批③ 炼妖壶后 54 张（神秘果 2 张挂窗口机批）");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -4337,4 +4363,216 @@ fn swd_cards_basic_b32_xuejibingbao_fengyinzhidan() {
         .iter()
         .position(|c| c.kind == engine_native::catalog::CardKind::Shenmiguo);
     assert!(smg.is_none(), "神秘果 2 张挂窗口机批暂未入包");
+}
+
+/// T12 swd 卡牌面补切批③：炼妖壶——收纳（弃 1 手牌拿目标首张手牌入壶
+/// 仓，登记差异上游随机）；炼化（壶仓 ≥2 弃 2 张从牌堆顶得首张类别均
+/// 不同牌）；壶境（准备阶段弃堆回收炼妖壶+装备时手牌上限 +2）。壶中仙
+/// 3/3 整将收口。
+#[test]
+fn swd_cards_equip5_b33_lianyaohu_hujing() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62013, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let hu = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Lianyaohu)
+        .expect("炼妖壶在目录") as u32;
+    // 装备炼妖壶+同步授予装备技实例（快照校验装备在场须有实例）
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != hu);
+        snap.core.discard.retain(|x| *x != hu);
+        snap.core.players[0].equips.push(hu);
+        for sk in ["lianyaohu_shouna", "lianyaohu_lianhua"] {
+            let def = e.catalog().skill_by_name(sk).expect("装备技 def");
+            snap.core.skills.insert(
+                (0, def),
+                engine_native::state::SkillInstance {
+                    owner: 0,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+        }
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入壶");
+    }
+
+    // ① 收纳：弃 tao → 目标 p1 首张手牌入壶仓
+    let _cost = e.debug_place(0, "tao");
+    let taken = e.debug_place(1, "shan");
+    let _p1b = e.debug_place(1, "tao");
+    let sn_def = e
+        .catalog()
+        .skill_by_name("lianyaohu_shouna")
+        .expect("收纳 def");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: sn_def },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "收纳受理 {out:?}");
+    let pick = |e: &mut Engine, pred: &dyn Fn(&ChoiceOption) -> bool, msg: &'static str| {
+        let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect(msg);
+        let sel: Vec<ChoiceOption> = {
+            let ch = e.open_choice().expect("still open");
+            ch.spec.options.iter().filter(|o| pred(o)).cloned().take(1).collect()
+        };
+        assert_eq!(sel.len(), 1, "{}", msg);
+        submit(e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    };
+    pick(&mut e, &|o| matches!(o, ChoiceOption::Card(_)), "收纳弃牌窗");
+    pick(&mut e, &|o| matches!(o, ChoiceOption::Player(1)), "收纳选人窗");
+    settle_optional_confirm(&mut e);
+    assert!(
+        e.state_core().player(0).lianyaohu_store.contains(&taken),
+        "收纳：目标首张手牌入壶仓"
+    );
+    assert_eq!(hand_len_w(&e, 0), 0, "收纳：成本已弃");
+    assert_eq!(hand_len_w(&e, 1), 1, "收纳：p1 剩 1");
+
+    // 反例 ①b：收纳本回合限一次
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: sn_def },
+    });
+    assert!(!matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "收纳反例：限一次 {out:?}");
+
+    // ② 炼化：壶仓补 1 张后为 2 → 弃 2 张得牌堆顶首张类别均不同牌
+    let extra = e.debug_place(0, "shan");
+    {
+        let core = e.state_core_mut();
+        core.players[0].hand.retain(|x| *x != extra);
+        core.players[0].lianyaohu_store.push(extra);
+    }
+    assert_eq!(e.state_core().player(0).lianyaohu_store.len(), 2);
+    // 牌堆顶压一张桃（与壶仓两类不同类别时跳过逻辑由实现扫描兜底）
+    let lh_def = e
+        .catalog()
+        .skill_by_name("lianyaohu_lianhua")
+        .expect("炼化 def");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: lh_def },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "炼化受理 {out:?}");
+    // 炼化选牌窗 min=2：一次提交两张
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("炼化选牌窗");
+    let sel: Vec<ChoiceOption> = {
+        let ch = e.open_choice().expect("still open");
+        ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).cloned().take(2).collect()
+    };
+    assert_eq!(sel.len(), 2, "炼化选牌面 2 张");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(0).lianyaohu_store.len(), 0, "炼化：壶仓清空");
+    assert_eq!(hand_len_w(&e, 0), 1, "炼化：牌堆顶首张类别均不同牌入手");
+
+    // ③ 壶境：撤装备技实例后弃壶入弃堆+授壶境 → p0 准备阶段自动回收装备
+    {
+        let mut snap = e.save();
+        snap.core.players[0].equips.retain(|x| *x != hu);
+        snap.core.discard.push(hu);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("卸壶");
+    }
+    e.debug_grant(0, "hujing");
+    // 推进到 p0 下一回合 Judge 入场（壶境 forced 自动装备）
+    let mut guard = 0;
+    loop {
+        guard += 1;
+        assert!(guard < 200, "advance 溢出");
+        if let Some(c) = e.open_choice() {
+            let (cid, obs) = (c.id, c.observer);
+            let sel: Vec<ChoiceOption> = if c.spec.min > 0 {
+                c.spec.options.iter().take(c.spec.min).copied().collect()
+            } else if !c.spec.options.is_empty() {
+                vec![c.spec.options[0]]
+            } else {
+                vec![]
+            };
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            continue;
+        }
+        if e.turn().current == 0 && e.turn().phase == Phase::Judge {
+            break;
+        }
+        let cur = e.turn().current;
+        let out = submit(&mut e, cur, GameAction::NextPhase);
+        if let CommandOutcome::Rejected(_) = out {
+            continue;
+        }
+    }
+    assert!(
+        e.state_core().player(0).equips.contains(&hu),
+        "壶境：弃牌堆炼妖壶自动回收装备"
+    );
+    // 手牌上限 +2：hp1 → 上限 3；置 4 张手牌推进弃牌阶段，弃窗 min=1
+    //（4-(1+2)）证明 +2 生效
+    let mut snap = e.save();
+    snap.core.players[0].hp = 1;
+    e = Engine::restore_with_extensions(&snap, &[&pack]).expect("压血");
+    let extra_cards: Vec<u32> = (0..4)
+        .map(|_| e.debug_place(0, "tao"))
+        .collect();
+    let _ = extra_cards;
+    // 推进至弃牌阶段
+    loop {
+        if let Some(c) = e.open_choice() {
+            if c.spec.prompt == "discard_to_limit" {
+                let min = c.spec.min as usize;
+                let hand = hand_len_w(&e, 0);
+                let expect = hand.saturating_sub(e.debug_hp(0).max(0) as usize + 2);
+                assert_eq!(min, expect, "壶境：上限=hp+2（min {} = 手 {} - 上限 {}）", min, hand, e.debug_hp(0).max(0) as usize + 2);
+                break;
+            }
+            let (cid, obs) = (c.id, c.observer);
+            let sel: Vec<ChoiceOption> = if c.spec.min > 0 {
+                c.spec.options.iter().take(c.spec.min).copied().collect()
+            } else if !c.spec.options.is_empty() {
+                vec![c.spec.options[0]]
+            } else {
+                vec![]
+            };
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            continue;
+        }
+        if e.turn().current == 0 && e.turn().phase == Phase::Discard {
+            // 无窗=未超限——手牌应恰 3 张
+            assert_eq!(hand_len_w(&e, 0), 3, "壶境：上限 3 恰好不弃");
+            break;
+        }
+        let cur = e.turn().current;
+        let out = submit(&mut e, cur, GameAction::NextPhase);
+        if let CommandOutcome::Rejected(_) = out {
+            continue;
+        }
+    }
 }

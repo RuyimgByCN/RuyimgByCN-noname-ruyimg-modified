@@ -5048,6 +5048,17 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                         limit += 1;
                     }
                 }
+                // 壶境（壶中仙，swd 卡牌面补切批③）：装备炼妖壶时手牌上限
+                // +2（上游 hujing mod maxHandcard getEquip("lianyaohu") 同口径）
+                if ctx
+                    .core
+                    .player(player)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Lianyaohu)
+                {
+                    limit += 2;
+                }
                 // 倾盆大雨（gwent 天气）：手牌上限 -1
                 if let Some(def) = ctx.catalog.skill_by_name(crate::content::host::GW_QINPEN_STATE_KEY)
                 {

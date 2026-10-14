@@ -2798,6 +2798,10 @@ fn apply_command(
                     // 结构性暂缓，见补切批②证据）
                     return Err(RejectReason::IllegalTargets);
                 }
+                CardKind::Lianyaohu => {
+                    // 炼妖壶：装备牌走 equip 校验（唯一壶——目标区已有同
+                    // kind 由 commit_equip 同栏替换处理）
+                }
                 CardKind::Fengyinzhidan => {
                     // 封印之丹：对自身使用（无目标或目标=自己）
                     if targets.len() > 1 || targets.first().map(|t| *t != core.turn.current).unwrap_or(false) {

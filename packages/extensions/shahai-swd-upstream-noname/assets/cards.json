@@ -326,6 +326,12 @@
       "kind": "fengyinzhidan",
       "suit": "spade",
       "rank": 1
+    },
+    {
+      "name": "swd_lianyaohu",
+      "kind": "lianyaohu",
+      "suit": "club",
+      "rank": 13
     }
   ],
   "host_skills": [],
@@ -512,7 +518,7 @@
         },
         {
           "name": "hujing",
-          "mapping": null
+          "mapping": "host:hujing"
         }
       ]
     },

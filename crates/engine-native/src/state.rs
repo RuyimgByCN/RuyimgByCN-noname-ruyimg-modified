@@ -53,6 +53,9 @@ pub struct PlayerState {
     pub xuehuang_used: bool,
     /// 雪霁冰雹标记（swd 卡牌面补切批②）：剩余摸牌阶段摸牌数 +1 次数。
     pub xuejibingbao: u8,
+    /// 炼妖壶收纳仓（swd 卡牌面补切批③）：壶中暂存牌（特殊区等价——不
+    /// 在任何玩家区域，跨回合持久；登记差异上游挂壶实体 storage）。
+    pub lianyaohu_store: Vec<CardId>,
     /// 急冻冰封（U05 ow 美，规则 v127）：hp=1 回合结束触发后的临时
     /// 冰封——受所有伤害无效 + 不能被其他角色的牌指定为目标；自己
     /// 回合结束（翻回后的跳过回合收束）解除（上游 addTempSkill
@@ -242,6 +245,7 @@ impl PlayerState {
             guihan_used: false,
             xuehuang_used: false,
             xuejibingbao: 0,
+            lianyaohu_store: Vec::new(),
             jidong_active: false,
             qianggu_active: false,
             pingzhang_self_used: false,
