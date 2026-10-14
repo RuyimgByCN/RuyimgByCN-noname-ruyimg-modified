@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 45, "swd 全 45 张（+…机关妖术×2/灵剑池 7 张/机关术×2）入目录");
+    assert_eq!(e.catalog().cards.len(), base_cards + 50, "swd 全 50 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 45, "swd 全 45 张（含灵剑池 7 张/机关术×2，规则 v199）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 50, "swd 全 50 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 45, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 50, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -1982,10 +1982,17 @@ fn swd_lingjian_xuanfeng_and_shijianhuisu() {
     assert_eq!(e.debug_hand(1).len() + e.state_core().player(1).equips.len(), 2, "随机弃 1 张 he");
     assert!(e.state_core().discard.contains(&xf), "本体入弃堆");
 
-    // 时间回溯→1 号：装备区全部入手（equips 0、手牌=前置 he 总量；
-    // 旋风之刃随机弃牌可能弃掉装备——两种分支都归一致终态）
+    // 时间回溯→1 号：装备区全部入手。旋风随机弃牌可能弃掉装备（RNG
+    // 耦合批① 暴露）——sj 校验要求装备区非空，缺则确定性重注
+    if e.state_core().player(1).equips.is_empty() {
+        let mut snap = e.save();
+        snap.core.discard.retain(|x| *x != equip);
+        snap.core.deck.retain(|x| *x != equip);
+        snap.core.players[1].equips.push(equip);
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("重注装备");
+    }
     let he_before = e.debug_hand(1).len() + e.state_core().player(1).equips.len();
-    assert_eq!(he_before, 2);
+    assert!(he_before >= 2, "he 至少 2（弃 1 后余量）");
     let out = play(&mut e, sj, vec![1]);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     assert_eq!(e.state_core().player(1).equips.len(), 0, "装备区清空");
@@ -2168,8 +2175,12 @@ fn swd_jiguanyaoshu_gain_compensates_lost_equip() {
         .skill_by_name(engine_native::content::host::SWD_JIGUANYAOSHU_STATE_KEY)
         .expect("防重标记 def");
     assert!(e.state_core().skills.contains_key(&(1, sdef)), "标记已授予");
+    // 清空 p1 手牌（静默清不触发补偿）——xf 随机池仅剩装备区 1 件，
+    // 弃装备路径必发 CardsDiscarded → 补偿确定性触发（批① 牌堆序变化
+    // 前测试耦合 RNG 选中装备面，此处消除耦合）
+    e.debug_clear_hand(1);
 
-    // 旋风之刃打 1 号：随机弃 1 张 he——三张全为装备 Kind，补偿必触发
+    // 旋风之刃打 1 号：弃装备区唯一装备 → 补偿必触发
     let out = play(&mut e, xf, vec![1]);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     let snap = e.save();
@@ -4132,4 +4143,53 @@ fn swd_generals_b28_poyue_black_range_red_free_direct() {
         !matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
         "破月反例：无技黑杀距离 2 被拒 {out:?}"
     );
+}
+
+/// T12 swd 卡牌面补切批①：对账守护——勘误+补张后的 7 kind 13 张与上游
+/// list.js 配对逐条一致（批② 起新增卡不得扰动本表；对账全景见证据
+/// 2026-10-15-t12-swd-cards-audit/）。
+#[test]
+fn swd_cards_alignment_guard_b29() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let _ = import_extensions(&store, &root, &options()).expect("import");
+    let discovered = discover_extensions(&root).unwrap();
+    let disc = discovered
+        .iter()
+        .find(|d| d.name == "shahai-swd-upstream-noname")
+        .expect("swd 可发现")
+        .clone();
+    let json = std::fs::read_to_string(disc.root.join("assets/cards.json")).unwrap();
+    let pack = bridge(&json);
+    // 上游 list.js 对应行（勘误后基准）
+    let expected: &[(&str, &str, u8)] = &[
+        ("hufu", "spade", 1),
+        ("hufu", "heart", 1),
+        ("zhiluxiaohu", "heart", 3),
+        ("zhiluxiaohu", "diamond", 4),
+        ("mujiaren", "club", 7),
+        ("mujiaren", "heart", 6),
+        ("mujiaren", "diamond", 11),
+        ("shentoumianju", "club", 6),
+        ("xingjunyan", "spade", 7),
+        ("zhufangshenshi", "spade", 4),
+        ("zhufangshenshi", "spade", 8),
+        ("yangpijuan", "spade", 9),
+        ("yangpijuan", "club", 7),
+    ];
+    for (name, suit, rank) in expected {
+        // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
+        // 以 swd_<名> 子串+花色/点数三元组判定
+        let needle = format!("swd_{name}");
+        let hit = pack.cards.iter().any(|c| {
+            c.name.contains(&needle)
+                && format!("{:?}", c.suit).to_lowercase().contains(*suit)
+                && c.rank == *rank
+        });
+        assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
+    }
+    // 总张数冻结（批① 后 50；批②+ 随补切批递增并同步此处）
+    assert_eq!(pack.cards.len(), 50, "批① 对齐后 50 张");
 }

@@ -18,7 +18,7 @@
     {
       "name": "swd_hufu2",
       "kind": "hufu",
-      "suit": "club",
+      "suit": "heart",
       "rank": 1
     },
     {
@@ -96,14 +96,14 @@
     {
       "name": "swd_shentoumianju",
       "kind": "shentoumianju",
-      "suit": "spade",
+      "suit": "club",
       "rank": 6
     },
     {
       "name": "swd_xingjunyan",
       "kind": "xingjunyan",
       "suit": "spade",
-      "rank": 8
+      "rank": 7
     },
     {
       "name": "swd_qinglonglingzhu",
@@ -114,8 +114,8 @@
     {
       "name": "swd_zhufangshenshi",
       "kind": "zhufangshenshi",
-      "suit": "club",
-      "rank": 7
+      "suit": "spade",
+      "rank": 4
     },
     {
       "name": "swd_fengxueren",
@@ -156,14 +156,14 @@
     {
       "name": "swd_zhiluxiaohu",
       "kind": "jiguan",
-      "suit": "club",
-      "rank": 4
+      "suit": "heart",
+      "rank": 3
     },
     {
       "name": "swd_mujiaren",
       "kind": "jiguan",
-      "suit": "heart",
-      "rank": 4
+      "suit": "club",
+      "rank": 7
     },
     {
       "name": "swd_gouhunluo1",
@@ -278,6 +278,36 @@
       "kind": "jiguan",
       "suit": "diamond",
       "rank": 2
+    },
+    {
+      "name": "swd_zhufangshenshi2",
+      "kind": "zhufangshenshi",
+      "suit": "spade",
+      "rank": 8
+    },
+    {
+      "name": "swd_zhiluxiaohu2",
+      "kind": "jiguan",
+      "suit": "diamond",
+      "rank": 4
+    },
+    {
+      "name": "swd_mujiaren2",
+      "kind": "jiguan",
+      "suit": "heart",
+      "rank": 6
+    },
+    {
+      "name": "swd_mujiaren3",
+      "kind": "jiguan",
+      "suit": "diamond",
+      "rank": 11
+    },
+    {
+      "name": "swd_yangpijuan2",
+      "kind": "yangpijuan",
+      "suit": "club",
+      "rank": 7
     }
   ],
   "host_skills": [],
