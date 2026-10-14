@@ -704,6 +704,12 @@ pub enum HostBehavior {
     /// 归汉（tag 262，玩点论杀批 17）：目录锚——limited 濒死自救逻辑在
     /// DyingSaveMachine 内联（确认+回摸，性别目标面内联）。
     WudianGuihan,
+    /// 悲歌（tag 263，运筹批 18，refresh 变体）：受到杀伤害后（可选确
+    /// 认）——受伤者判定，持有者弃 1 张牌（可取消）按判定花色执行：
+    /// 红桃受伤者回 1/方块受伤者摸 2/黑桃来源翻面/草花来源弃 2（强制，
+    /// 登记差异：上游玩家自选）；收回奖励：弃牌花色=判定花色收回判定
+    /// 牌、点数=判定点数收回所弃牌。
+    YunchouBeige,
 }
 
 
@@ -750,6 +756,7 @@ impl HostBehavior {
             HostBehavior::WudianFuchou2 => 260,
             HostBehavior::WudianLiangceRemain => 261,
             HostBehavior::WudianGuihan => 262,
+            HostBehavior::YunchouBeige => 263,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1257,6 +1264,7 @@ impl HostBehavior {
             260 => HostBehavior::WudianFuchou2,
             261 => HostBehavior::WudianLiangceRemain,
             262 => HostBehavior::WudianGuihan,
+            263 => HostBehavior::YunchouBeige,
             _ => return None,
         })
     }
@@ -1274,7 +1282,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 262] = [
+    pub const ALL: [HostBehavior; 263] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1537,6 +1545,7 @@ impl HostBehavior {
         HostBehavior::WudianFuchou2,
         HostBehavior::WudianLiangceRemain,
         HostBehavior::WudianGuihan,
+        HostBehavior::YunchouBeige,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1564,6 +1573,7 @@ impl HostBehavior {
             HostBehavior::WudianFuchou2 => "host:fuchou2",
             HostBehavior::WudianLiangceRemain => "host:liangce_remain",
             HostBehavior::WudianGuihan => "host:guihan",
+            HostBehavior::YunchouBeige => "host:beige",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1891,6 +1901,14 @@ impl HostBehavior {
             HostBehavior::WudianLiangceRemain => None,
             // 归汉：目录锚（limited 确认逻辑在 DyingSaveMachine 内联）
             HostBehavior::WudianGuihan => None,
+            // 悲歌：任意角色受伤结算后（global；确认门=optional）
+            HostBehavior::YunchouBeige => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
             // 复仇·清算：自己回合结束（标记逐个结算）
             HostBehavior::WudianFuchou2 => Some(TriggerMeta {
                 event: EventKind::PhaseEnd,
@@ -3494,6 +3512,14 @@ impl HostSkillBehavior {
             HostBehavior::WudianFuchou => (None, None),
             // 归汉：目录锚（无提取）
             HostBehavior::WudianGuihan => (None, None),
+            // 悲歌：targets=[来源, 受伤者]
+            HostBehavior::YunchouBeige => match event {
+                EventData::Damage(d) => (
+                    Some(d.target),
+                    None,
+                ),
+                _ => (None, None),
+            },
             // 蝉缘·变体：死亡来源（减其上限）
             HostBehavior::YunchouDiychanyuan => match event {
                 EventData::Death { killer: Some(k), .. } => (Some(*k), None),
@@ -3601,6 +3627,11 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u) => u.targets.clone(),
                 _ => Vec::new(),
             },
+            // 悲歌：targets=[来源, 受伤者]
+            HostBehavior::YunchouBeige => match event {
+                EventData::Damage(d) => vec![d.source.unwrap_or(d.target), d.target],
+                _ => Vec::new(),
+            },
             _ => Vec::new(),
         };
         HostMachine {
@@ -3637,6 +3668,14 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianFuchou => false,
             HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianGuihan => false,
+            // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
+            HostBehavior::YunchouBeige => matches!(event,
+                EventData::Damage(d)
+                if !d.prevented && d.amount > 0
+                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+                    && ctx.state.player(d.target).alive
+                    && (!ctx.state.player(owner).hand.is_empty()
+                        || !ctx.state.player(owner).equips.is_empty())),
             HostBehavior::WudianLiduan => matches!(event,
                 EventData::CardsMoved { cards, from, to }
                 if *to != owner
@@ -4580,6 +4619,19 @@ impl SkillBehavior for HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            // 悲歌：确认门由 optional 承担（activate 恒供机）
+            HostBehavior::YunchouBeige => {
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 屯田·DIY：有装备牌（手/场）才可发动
             HostBehavior::WudianDiyjuntun => {
                 let has = !ctx.state.player(owner).equips.is_empty()
@@ -5465,6 +5517,159 @@ impl crate::catalog::SkillMachine for HostMachine {
                     );
                 }
                 Flow::Done
+            },
+            // 悲歌（refresh 变体）：判定→弃 1 张（可取消）→按判定花色
+            // 分支+收回奖励。登记差异：草花来源弃 2 取首两张确定性；
+            // addExpose（AI 面）不做。
+            HostBehavior::YunchouBeige => match self.stage {
+                HostStage::Act => {
+                    // 受伤者=targets[1]，来源=targets[0]
+                    let judged = ctx.draw_judge_card();
+                    ctx.to_discard(judged);
+                    self.cards = vec![judged];
+                    self.stage = HostStage::SelectCard;
+                    let options: Vec<ChoiceOption> = ctx.core.player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "beige_discard",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let [src, target] = [self.targets[0], self.targets[1]];
+                    let judged = self.cards[0];
+                    let judged_suit = ctx.catalog.cards[judged as usize].suit;
+                    let judged_num = ctx.catalog.cards[judged as usize].rank;
+                    let picked: Option<CardId> = ctx.answer().iter().find_map(
+                        |o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        },
+                    );
+                    let Some(discarded) = picked else {
+                        // 取消：判定牌已在弃堆，无效果
+                        return Flow::Done;
+                    };
+                    let disc_suit = ctx.catalog.cards[discarded as usize].suit;
+                    let disc_num = ctx.catalog.cards[discarded as usize].rank;
+                    // 弃置所选（手/装备）
+                    if ctx.core.player(self.owner).hand.contains(&discarded) {
+                        ctx.discard_from_hand(self.owner, discarded);
+                    } else {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != discarded);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            discarded,
+                        );
+                        ctx.to_discard(discarded);
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![discarded],
+                    });
+                    // 按判定花色分支
+                    match judged_suit {
+                        crate::catalog::Suit::Heart => {
+                            let p = ctx.core.player(target);
+                            if p.alive && p.hp < p.max_hp as i32 {
+                                ctx.recover(target, 1, None);
+                            }
+                        }
+                        crate::catalog::Suit::Diamond => {
+                            if ctx.core.player(target).alive {
+                                ctx.draw_cards(target, 2);
+                            }
+                        }
+                        crate::catalog::Suit::Spade => {
+                            if ctx.core.player(src).alive {
+                                let flipped = {
+                                    let p = ctx.core.player_mut(src);
+                                    p.face_down = !p.face_down;
+                                    p.face_down
+                                };
+                                ctx.emit(EventData::TurnOvered {
+                                    player: src,
+                                    face_down: flipped,
+                                });
+                            }
+                        }
+                        crate::catalog::Suit::Club => {
+                            // 来源弃 he 前 2 张（确定性首两张，登记差异）
+                            if ctx.core.player(src).alive {
+                                let drop: Vec<CardId> = ctx.core.player(src)
+                                    .hand
+                                    .iter()
+                                    .chain(ctx.core.player(src).equips.iter())
+                                    .copied()
+                                    .take(2)
+                                    .collect();
+                                for c in &drop {
+                                    if ctx.core.player(src).hand.contains(c) {
+                                        ctx.discard_from_hand(src, *c);
+                                    } else {
+                                        ctx.core.player_mut(src).equips.retain(|x| x != c);
+                                        crate::kernel::revoke_equip_skills(
+                                            ctx.core,
+                                            ctx.catalog,
+                                            src,
+                                            *c,
+                                        );
+                                        ctx.to_discard(*c);
+                                    }
+                                    ctx.log(LogEvent::CardDiscarded {
+                                        player: src,
+                                        cards: vec![*c],
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    // 收回奖励：花色相同→判定牌归持有者；点数相同→所弃牌归持有者
+                    let mut gains: Vec<CardId> = Vec::new();
+                    if disc_suit == judged_suit {
+                        if let Some(pos) =
+                            ctx.core.discard.iter().position(|x| *x == judged)
+                        {
+                            ctx.core.discard.remove(pos);
+                            gains.push(judged);
+                        }
+                    }
+                    if disc_num == judged_num && discarded != judged {
+                        if let Some(pos) =
+                            ctx.core.discard.iter().position(|x| *x == discarded)
+                        {
+                            ctx.core.discard.remove(pos);
+                            gains.push(discarded);
+                        }
+                    }
+                    if !gains.is_empty() {
+                        ctx.core.player_mut(self.owner).hand.extend(gains.iter().copied());
+                        ctx.log(LogEvent::CardsGiven {
+                            from: self.owner,
+                            to: self.owner,
+                            cards: gains,
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
             },
             // 良策·余获：锁定查询面（五谷机器内联查询），无独立效果步
             HostBehavior::WudianLiangceRemain => Flow::Done,

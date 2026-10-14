@@ -1736,10 +1736,7 @@ fn g1_yunchou_generals_batch5_full_roster_metadata() {
         "目录技能列表=mapped 面（现 {} 条）",
         bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>()
     );
-    assert_eq!(
-        bridged.unmapped_skills, 4,
-        "暂缓 4：奸雄/悲歌/巧思/精械（归汉批 17 转正）"
-    );
+    assert_eq!(bridged.unmapped_skills, 3, "暂缓 3：奸雄/巧思/精械（悲歌批 18 转正）");
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     let pack = ExtensionPack {
@@ -2004,7 +2001,7 @@ fn g1_yunchou_generals_batch8_builtin_skill_refs() {
         .map(|_| String::new())
         .collect();
     let _ = unmapped_names;
-    assert_eq!(bridged.unmapped_skills, 4, "暂缓 4：奸雄/悲歌/巧思/精械");
+    assert_eq!(bridged.unmapped_skills, 3, "暂缓 3：奸雄/巧思/精械（悲歌批 18 转正）");
     let _ = json;
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
@@ -2185,4 +2182,79 @@ fn g1_yunchou_generals_batch17_guihan_dying_limited() {
         !e.state_core().player(1).alive,
         "归汉 limited：第二次濒死不再触发"
     );
+}
+
+/// T12 运筹批 18：悲歌（refresh 变体，蔡文姬整将转正）——受到杀伤害后
+/// （可选确认）受伤者判定，弃 1 张牌按判定花色：红桃受伤者回 1/方块摸
+/// 2/黑桃来源翻面/草花来源弃 2；收回奖励：弃牌花色=判定花色收回判定牌。
+#[test]
+fn g1_yunchou_generals_batch18_beige_judge_branches() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    let cai = bridged.generals.iter().find(|g| g.name == "ycn蔡文姬").expect("蔡文姬");
+    assert_eq!(
+        cai.skills.to_vec(),
+        vec!["beige", "ycnguihan"],
+        "蔡文姬 mapped 面：悲歌+归汉"
+    );
+
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b18",
+            version: 1,
+            description: "运筹武将面批 18",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66015, 4, &[&pack]).expect("建局");
+    assert!(e.catalog().skill_by_name("beige").is_some(), "悲歌 def 在目录");
+    e.debug_grant(1, "beige");
+
+    // 红桃分支：deck 顶压**红桃花色**（debug_set_deck_top 按 kind 找牌
+    // 会有花色变体，须按谓词压确定花色）
+    e.debug_set_deck_top_by(|c| c.suit == Suit::Heart);
+    e.debug_set_hp(2, 2);
+    let h0 = hand_len(&e, 0);
+    // 杀实体：布到 p0 手并移出（damage_with_card 只要求 card id）
+    let sha_card = e.debug_place(0, "sha");
+    {
+        let core = e.state_core_mut();
+        core.players[0].hand.retain(|x| *x != sha_card);
+    }
+    e.debug_deal_damage_with_card(
+        Some(0), 2, 1, DamageNature::Normal, sha_card,
+    );
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(2), 2, "悲歌：判定红桃 → 受伤者回 1（2-1+1）");
+    assert!(hand_len(&e, 0) <= h0, "悲歌：持有者弃 1 张");
+
+    // 方块分支补充：压方块顶 → 受伤者摸 2（替代回血断言的对照面）
+    e.debug_set_deck_top_by(|c| c.suit == Suit::Diamond);
+    let h2b = hand_len(&e, 2);
+    e.debug_deal_damage_with_card(
+        Some(0), 2, 1, DamageNature::Normal, sha_card,
+    );
+    settle_optional_confirm(&mut e);
+    assert_eq!(
+        hand_len(&e, 2),
+        h2b + 2,
+        "悲歌：判定方块 → 受伤者摸 2"
+    );
+
+    // limited 无（悲歌每伤害均可）——负例：无牌持有者不触发
+    e.debug_clear_hand(1);
+    e.state_core_mut().players[1].equips.clear();
+    let hp3 = e.debug_hp(3);
+    e.debug_deal_damage(Some(0), 3, 1, DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(3), hp3 - 1, "悲歌负例：无牌不触发");
 }

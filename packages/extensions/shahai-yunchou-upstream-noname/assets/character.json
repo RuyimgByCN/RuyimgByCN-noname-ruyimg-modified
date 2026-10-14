@@ -152,7 +152,7 @@
         {
           "name": "beige",
           "title": "悲歌",
-          "mapping": null
+          "mapping": "host:beige"
         },
         {
           "name": "ycnguihan",
