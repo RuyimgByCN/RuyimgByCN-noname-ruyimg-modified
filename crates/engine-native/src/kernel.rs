@@ -1303,13 +1303,23 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
             // 出牌阶段限用一次（普通/火/雷杀共享）；龙颅山峰地图效果
             //（mtg 首切片，规则 v100）下第二张杀走额外标记——若本次为
             // 加成额外杀则置 land_sha_used，否则置常规已用
+            // 破月（拓跋玉儿，swd 武将面批 28）：红杀不计入限一次（上
+            // 游 stat 回退同口径）
+            let poyue_red_free = matches!(
+                ctx.catalog.cards[u.card as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            ) && ctx
+                .catalog
+                .skill_by_name("poyue")
+                .map(|def| ctx.core.has_skill(u.player, def))
+                .unwrap_or(false);
             if ctx.core.turn.sha_used_play_phase {
                 if ctx.core.current_land
                     == Some(crate::catalog::CardKind::Longlushanfeng)
                 {
                     ctx.core.turn.land_sha_used = true;
                 }
-            } else {
+            } else if !poyue_red_free {
                 ctx.core.turn.sha_used_play_phase = true;
             }
             // 冰河要塞地图效果（mtg 第八批，规则 v107）：锁定全局——使
@@ -6043,10 +6053,25 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .map(|def| ctx.core.has_skill(self.source, def))
                     .unwrap_or(false)
         };
+        // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀不可被闪避
+        //（forced directHit；跳过防具判定与出闪询问）
+        let poyue_direct_hit = {
+            let red = matches!(
+                ctx.catalog.cards[self.card as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            );
+            red
+                && ctx
+                    .catalog
+                    .skill_by_name("poyue")
+                    .map(|def| ctx.core.has_skill(self.source, def))
+                    .unwrap_or(false)
+        };
         if !self.armor_judged {
             self.armor_judged = true;
             let has_armor = !qinggang_pierce
                 && !fentian_direct_hit
+                && !poyue_direct_hit
                 && ctx.core.player(self.target).alive
                 && ctx
                     .core
@@ -6637,6 +6662,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
                 return self.emit_sha_damage(ctx);
             }
+            // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀 directHit
+            // ——整段跳过闪询问直接结算伤害
+            if poyue_direct_hit {
+                return self.emit_sha_damage(ctx);
+            }
             // 司圃（Boss 应昭，规则 v232）：应昭出牌阶段已用牌数≤2 期间
             // 其他人无法打出牌（上游 cardRespondable 同口径）——出闪选项
             // 仅保留 Pass（目标必受伤害）
@@ -6650,7 +6680,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 })
                 .unwrap_or(false);
             let mut options = vec![ChoiceOption::Pass];
-            if !sipu_ban_respond {
+            if !sipu_ban_respond && !poyue_direct_hit {
                 options.extend(shans);
             }
             return Flow::WaitChoice {

@@ -2879,10 +2879,23 @@ fn apply_command(
                     let land_sha_bonus = core.current_land
                         == Some(CardKind::Longlushanfeng)
                         && !core.turn.land_sha_used;
+                    // 破月（拓跋玉儿，swd 武将面批 28）：红杀不计入出
+                    // 牌阶段限一次（上游 cardUsable Infinity+stat 回退同
+                    // 口径；原生双位豁免=此处不查+kernel 不置位）
+                    let poyue_red_free = catalog
+                        .skill_by_name("poyue")
+                        .map(|def| core.has_skill(core.turn.current, def))
+                        .unwrap_or(false)
+                        && matches!(
+                            catalog.cards[card as usize].suit,
+                            crate::catalog::Suit::Heart
+                                | crate::catalog::Suit::Diamond
+                        );
                     if !paoxiao
                         && !has_zhuge
                         && !baolei_sentinel
                         && !fentian_red
+                        && !poyue_red_free
                         && core.turn.sha_used_play_phase
                         && !land_sha_bonus
                     {
@@ -3081,6 +3094,17 @@ fn apply_command(
                             .unwrap_or(false)
                         // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
                         || fentian_red
+                        // 破月（拓跋玉儿，swd 武将面批 28）：黑色杀无视
+                        // 距离（上游 mod targetInRange black 同口径）
+                        || (catalog
+                            .skill_by_name("poyue")
+                            .map(|def| core.has_skill(core.turn.current, def))
+                            .unwrap_or(false)
+                            && matches!(
+                                catalog.cards[card as usize].suit,
+                                crate::catalog::Suit::Spade
+                                    | crate::catalog::Suit::Club
+                            ))
                         // 神恩（Boss 太昊/炎帝 光环，规则 v238）：boss 方
                         // 用牌无视距离（光环激活=场上存在持有者）
                         || ({
