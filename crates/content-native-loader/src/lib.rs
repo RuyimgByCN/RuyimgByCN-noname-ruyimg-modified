@@ -148,6 +148,7 @@ pub fn bridge_vm_skill_decls(
             "phase_end" => EventKind::PhaseEnd,
             "phase_begin" => EventKind::PhaseBegin,
             "damage" => EventKind::Damage,
+            "damage_before" => EventKind::DamageBefore,
             "card_used" => EventKind::CardUsed,
             "death" => EventKind::Death,
             other => {
@@ -180,6 +181,10 @@ pub fn bridge_vm_skill_decls(
             }
             "owner_source_play_card_count_eq_hp" => P::OwnerPlayCountEqHp,
             "owner_is_target_card_used_at_least_hp" => P::OwnerCardUsedAtLeastHp,
+            "owner_target_hand_empty_elemental_or_trick_damage_before" => {
+                P::OwnerHandEmptyElementalOrTrickDamageBefore
+            }
+            "owner_is_target_source_movable_field_card" => P::OwnerSourceMovableFieldCard,
             other => {
                 // 参数化族（增量 15）：词表保证后缀为正整数，解析失败按
                 // 未承载跳过登记（防御性，与未知具名同路）。

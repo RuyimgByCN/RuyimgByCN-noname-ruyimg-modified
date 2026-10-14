@@ -52,6 +52,19 @@ struct VmTriggerCtx {
     event_amount: u32,
     /// 阶段事件携带（阶段种，begin 由 EventKind 区分；增量 14）。
     phase: Option<crate::event::Phase>,
+    /// 伤害载荷携带（增量 16；非伤害帧为 None——串帧防护面）。
+    nature: Option<crate::event::DamageNature>,
+}
+
+/// 普通锦囊判定（增量 16）：锦囊三类（非基本/非装备/非异类）且非延时
+///（乐/兵/闪电/洪水——G1 运筹洪水同为延时）。异类（地/机关）不计。
+fn kind_is_ordinary_trick(kind: crate::catalog::CardKind) -> bool {
+    use crate::catalog::CardKind as K;
+    if kind.is_basic_kind() || kind.equip_slot().is_some() {
+        return false;
+    }
+    !matches!(kind, K::Le | K::Bing | K::ShanDian | K::HongShui)
+        && kind.is_basic_trick_or_equip()
 }
 
 fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
@@ -61,6 +74,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             event_source: d.source,
             event_card: d.card,
             event_amount: d.amount,
+            nature: Some(d.nature),
             ..VmTriggerCtx::default()
         },
         EventData::Phase {
@@ -153,6 +167,15 @@ pub enum VmFilterPolicy {
     /// 且本回合（口径化归：出牌阶段计数，Play 开始清零=换回合归零）已
     /// 主动用牌 ≥ 当前体力（增量 15；响应不计）。
     OwnerCardUsedAtLeastHp,
+    /// DSL `owner_target_hand_empty_elemental_or_trick_damage_before`：伤
+    /// 害前置窗，事件主玩家=持有者、其手牌为空，且即将承受的伤害为元素
+    /// 性（火/雷）或事件卡为普通锦囊（非延时；增量 16，ABI 358）。
+    OwnerHandEmptyElementalOrTrickDamageBefore,
+    /// DSL `owner_is_target_source_movable_field_card`：伤害事件主玩家=
+    /// 持有者、来源存活，且任意其他存活角色的场牌（装备/判定区延时）至
+    /// 少一张可移至来源（装备按栏空、判定区按同名唯一；增量 16，ABI
+    /// 202）。移动可行性查询为近似：不校验移动技自身规则面。
+    OwnerSourceMovableFieldCard,
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -266,6 +289,53 @@ impl SkillBehavior for VmSkillBehavior {
                 let p = holder_state(owner);
                 is_event_player
                     && ctx.state.turn.cards_used_play_phase >= p.hp as u32
+            }
+            // 伤害前置窗：手牌空 ∧（元素性 ∨ 事件卡=普通锦囊）。非伤害
+            // 载荷帧（before 窗对全帧型开放）nature/card 双 None → 恒否。
+            VmFilterPolicy::OwnerHandEmptyElementalOrTrickDamageBefore => {
+                let elemental = matches!(
+                    trig.nature,
+                    Some(crate::event::DamageNature::Fire)
+                        | Some(crate::event::DamageNature::Thunder)
+                );
+                let ordinary_trick = trig
+                    .event_card
+                    .map(|c| kind_is_ordinary_trick(ctx.catalog.card_kind(c)))
+                    .unwrap_or(false);
+                is_event_player
+                    && elemental | ordinary_trick
+                    && holder_state(owner).hand.is_empty()
+            }
+            // 伤害事件：来源存活 ∧ 任意其他存活角色场上有可移至来源的
+            // 装备（来源同栏空）或判定区延时（来源判定区无同名种）。
+            VmFilterPolicy::OwnerSourceMovableFieldCard => {
+                let Some(src) = trig.event_source else { return false };
+                if !ctx.state.players[src as usize].alive || !is_event_player {
+                    return false;
+                }
+                let src_slot: Vec<_> = ctx.state.players[src as usize]
+                    .equips
+                    .iter()
+                    .map(|c| ctx.catalog.card_kind(*c).equip_slot())
+                    .collect();
+                let src_judge: Vec<_> = ctx.state.players[src as usize]
+                    .judge
+                    .iter()
+                    .map(|c| ctx.catalog.card_kind(*c))
+                    .collect();
+                (0..ctx.state.players.len()).any(|i| {
+                    let p = &ctx.state.players[i];
+                    i as u8 != src
+                        && p.alive
+                        && p.equips.iter().any(|c| {
+                            let slot = ctx.catalog.card_kind(*c).equip_slot();
+                            slot.is_some() && !src_slot.contains(&slot)
+                        })
+                        || p.judge.iter().any(|c| {
+                            let kind = ctx.catalog.card_kind(*c);
+                            !src_judge.contains(&kind)
+                        })
+                })
             }
         }
     }

@@ -984,7 +984,7 @@ fn t8_loader_maps_all_carried_named_filters() {
     let mut dsl = String::new();
     // 词表差集说明：`owner_is_target_hand_empty` 不在编译器 FILTERS 词表
     // （装载器映射为前进兼容死臂，策略行为由家族直注测试覆盖）。
-    let named: [(&str, &str, P); 12] = [
+    let named: [(&str, &str, P); 14] = [
         ("wounded", "owner_is_target_wounded", P::OwnerWounded),
         ("linked", "owner_is_target_linked", P::OwnerLinked),
         (
@@ -1033,10 +1033,22 @@ fn t8_loader_maps_all_carried_named_filters() {
             "owner_alive_play_phase_card_category_count_positive",
             P::OwnerAlivePlayPhaseBteUsed,
         ),
+        (
+            "dbf_hand_empty",
+            "owner_target_hand_empty_elemental_or_trick_damage_before",
+            P::OwnerHandEmptyElementalOrTrickDamageBefore,
+        ),
+        (
+            "movable_field",
+            "owner_is_target_source_movable_field_card",
+            P::OwnerSourceMovableFieldCard,
+        ),
     ];
     for (idx, (tag, filter, _)) in named.iter().enumerate() {
+        // dbf_hand_empty 走 damage_before 触发面（ABI 358 语义事件种）
+        let event = if *tag == "dbf_hand_empty" { "damage_before" } else { "damage" };
         dsl.push_str(&format!(
-            "skill hnl_ld_{tag}(99{:02}) {{\n  trigger damage {filter} {{\n    effect draw_cards(self, 1);\n  }}\n}}\n",
+            "skill hnl_ld_{tag}(99{:02}) {{\n  trigger {event} {filter} {{\n    effect draw_cards(self, 1);\n  }}\n}}\n",
             10 + idx
         ));
     }
@@ -1047,7 +1059,7 @@ fn t8_loader_maps_all_carried_named_filters() {
         "已承载具名 filter 不得落 deferred: {:?}",
         outcome.deferred_filters
     );
-    assert_eq!(outcome.decls.len(), 12, "词表内 12 名全产出声明");
+    assert_eq!(outcome.decls.len(), 14, "词表内 14 名全产出声明");
     for (tag, _, want) in named.iter() {
         let decl = outcome
             .decls
@@ -1394,4 +1406,118 @@ skill hnl_pz_d(990016) {
             .unwrap_or_else(|| panic!("{tag} 声明缺失"));
         assert_eq!(decl.filter, policy, "{tag} 策略映射");
     }
+}
+
+// ---------------------------------------------------------------------------
+// 增量 16：伤害面前置 filter——hand_empty_elemental_or_trick_damage_before
+// （ABI 358：手空 ∧ 元素性 ∨ 事件卡普通锦囊）与 source_movable_field_card
+// （ABI 202：来源存活 ∧ 他人场牌可移至来源）。装载器事件面补 damage_before。
+// ---------------------------------------------------------------------------
+
+const DBF_DSL: &str = "\
+skill hnl_dbf_t8(990017) {
+  trigger damage_before always {
+    effect draw_cards(self, 1);
+  }
+}
+";
+
+#[test]
+fn t8_filter_damage_before_hand_empty_elemental_or_trick() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named("t8-rvm-bridge", DBF_DSL).expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_dbf_t8");
+    let pack = pack_with(vec![VmSkillDecl {
+        name: "t8伤".to_string(),
+        module,
+        trigger: TriggerMeta {
+            event: EventKind::DamageBefore,
+            timing: Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: P::OwnerHandEmptyElementalOrTrickDamageBefore,
+    }]);
+    let mut e = Engine::new_with_extensions(955000, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8伤");
+    e.debug_set_hp(1, 8);
+    e.debug_clear_hand(1);
+
+    // 正例（元素性）：火伤 → 触发
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Fire);
+    assert_eq!(trigger_draws(&e), 1, "元素性伤害前置触发");
+    // 谓词负例：手牌非空
+    let tao = e.debug_place(1, "tao");
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Fire);
+    assert_eq!(trigger_draws(&e), 1, "手牌非空不触发");
+    let _ = tao;
+    e.debug_clear_hand(1);
+    // 谓词负例：普通伤害无卡（非元素非锦囊）
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 1, "无卡普通伤害不触发");
+    // 正例（普通锦囊卡）：事件卡=无中生有（锦囊）→ 触发
+    let wuzhong = e.debug_place(0, "wuzhong");
+    e.debug_deal_damage_with_card(Some(2), 1, 1, DamageNature::Normal, wuzhong);
+    assert_eq!(trigger_draws(&e), 2, "事件卡普通锦囊触发");
+    // 谓词负例：延时锦囊卡（乐）非普通锦囊
+    let le = e.debug_place(0, "le");
+    e.debug_deal_damage_with_card(Some(2), 1, 1, DamageNature::Normal, le);
+    assert_eq!(trigger_draws(&e), 2, "延时锦囊卡不触发");
+    // owner 门：他人受伤（手空、火伤）
+    e.debug_deal_damage(Some(2), 0, 1, DamageNature::Fire);
+    assert_eq!(trigger_draws(&e), 2, "他人受伤不过闸");
+}
+
+#[test]
+fn t8_filter_damage_source_movable_field_card() {
+    use engine_native::rvm_bridge::VmFilterPolicy as P;
+
+    let pkg = compile_source_named(
+        "t8-rvm-bridge",
+        "skill hnl_mvf_t8(990018) {\n  trigger damage always {\n    effect draw_cards(self, 1);\n  }\n}\n",
+    )
+    .expect("DSL 编译");
+    let module = module_of(&pkg, "hnl_mvf_t8");
+    let pack = pack_with(vec![VmSkillDecl {
+        name: "t8移".to_string(),
+        module,
+        trigger: TriggerMeta {
+            event: EventKind::Damage,
+            timing: Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: P::OwnerSourceMovableFieldCard,
+    }]);
+    let mut e = Engine::new_with_extensions(956000, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "t8移");
+    e.debug_set_hp(1, 8);
+
+    // 负例：全场无场牌
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 0, "无场牌不触发");
+    // 正例：p3 场上有武器、来源 p2 武器栏空 → 可移
+    let zhuge = e.debug_place(3, "zhuge");
+    e.state_core_mut().players[3].equips.push(zhuge);
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 1, "他人装备可移至来源触发");
+    // 负例：来源同栏被占（p2 也挂武器）
+    let zhuge2 = e.debug_place(2, "zhuge");
+    e.state_core_mut().players[2].equips.push(zhuge2);
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 1, "来源栏被占不可移");
+    // 正例：判定区延时可移（来源判定区无同名种）
+    let shandian = e.debug_place(3, "shandian");
+    e.state_core_mut().players[3].judge.push(shandian);
+    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 2, "判定区延时可移触发");
+    // 负例：来源即持牌者（p3 自己受伤）——"another"不含来源
+    e.debug_deal_damage(Some(3), 1, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 2, "来源自己的场牌不计");
+    // owner 门：受伤者非持有者
+    e.debug_deal_damage(Some(2), 0, 1, DamageNature::Normal);
+    assert_eq!(trigger_draws(&e), 2, "他人受伤不过闸");
 }

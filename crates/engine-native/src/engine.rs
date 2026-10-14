@@ -2059,6 +2059,41 @@ impl Engine {
         self.finish_segment(work, log_mark)
     }
 
+    /// 调试：带卡伤害（T8 增量 16 filter 定向回归——"ordinary-trick
+    /// damage"事件卡面；同 debug_deal_damage 管线，card 注入帧载荷）。
+    pub fn debug_deal_damage_with_card(
+        &mut self,
+        source: Option<PlayerId>,
+        target: PlayerId,
+        amount: u32,
+        nature: crate::event::DamageNature,
+        card: crate::ids::CardId,
+    ) -> CommandOutcome {
+        if self.state.core.outcome.is_some() {
+            return CommandOutcome::Rejected(RejectReason::MatchOver);
+        }
+        if self.state.resolution.open_choice.is_some() {
+            return CommandOutcome::Rejected(RejectReason::ChoicePending);
+        }
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        crate::resolution::push_frame(
+            &mut work.resolution,
+            EventData::Damage(crate::event::DamageData {
+                source,
+                target,
+                amount,
+                nature,
+                prevented: false,
+                redirect_chain: Vec::new(),
+                card: Some(card),
+                from_chain: false,
+            }),
+        );
+        self.finish_segment(work, log_mark)
+    }
+
     /// 调试：回复体力（发 Recover 事件走完整结算——积财等回复触发技
     /// 依赖此通道；机械回血经 Ctx.recover 同款语义：钳上限、实际回复量
     /// 入事件）。
