@@ -1017,6 +1017,38 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_tuwei",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "zhanlu",
+          "mapping": "host:zhanlu"
+        },
+        {
+          "name": "susheng",
+          "mapping": "host:susheng"
+        }
+      ]
+    },
+    {
+      "name": "swd_xiarou",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "xianghui",
+          "mapping": "host:xianghui"
+        },
+        {
+          "name": "huiqi",
+          "mapping": "host:huiqi"
+        }
+      ]
     }
   ]
 }
