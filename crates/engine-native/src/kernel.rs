@@ -3662,6 +3662,7 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
             responders: ctx.core.seat_order_from(ctx.core.turn.current),
             asked: false,
             round_used: false,
+                guihan_asked: false,
         })),
         EventData::CardUsed(u) => {
             // 筑城守卫（U07 批三，规则 v113）等 AfterTriggers 机器写回的
@@ -6809,6 +6810,8 @@ pub struct DyingSaveMachine {
     asked: bool,
     /// 本轮是否已有人用桃（整轮无人用桃 → 濒死结算死亡，不再循环询问）。
     round_used: bool,
+    /// 归汉（玩点论杀批 17，规则 v280）：limited 确认询问挂起中。
+    guihan_asked: bool,
 }
 
 impl DyingSaveMachine {
@@ -6819,7 +6822,7 @@ impl DyingSaveMachine {
         asked: bool,
         round_used: bool,
     ) -> Self {
-        Self { dying, source, responders, asked, round_used }
+        Self { dying, source, responders, asked, round_used, guihan_asked: false }
     }
 }
 
@@ -6834,6 +6837,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             responders: self.responders.clone(),
             asked: self.asked,
             round_used: self.round_used,
+            guihan_asked: self.guihan_asked,
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -6847,6 +6851,50 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 killer: self.source,
             });
             return Flow::Done;
+        }
+        // 归汉（玩点论杀批 17，规则 v280）：limited 濒死自救——求救循环
+        // 前一次性确认（登记差异：上游 chooseToUse 玩家主动+自选男性
+        // 目标，原生锁定确认+座位序首男性其他存活；limited 每局一次同
+        // 口径）。确认后自回 1（救回由循环顶 hp>0 判定自然发出）摸 2，
+        // 男性目标回 1 摸 2。
+        if !self.guihan_asked {
+            let gui = ctx
+                .catalog
+                .skill_by_name(crate::content::host::WUDIAN_GUIHAN_KEY)
+                .map(|d| ctx.core.has_skill(self.dying, d))
+                .unwrap_or(false);
+            let unused = !ctx.core.player(self.dying).guihan_used;
+            if gui && unused {
+                self.guihan_asked = true;
+                return Flow::WaitChoice {
+                    observer: self.dying,
+                    spec: crate::choice::ChoiceSpec::confirm("wudian_guihan_ask"),
+                };
+            }
+        } else {
+            self.guihan_asked = false;
+            eprintln!("DBG guihan step2 entered");
+            if let Some(crate::choice::ChoiceOption::Confirm) =
+                ctx.answer().first().copied()
+            {
+                eprintln!("DBG guihan confirmed");
+                let t = self.dying;
+                ctx.core.player_mut(t).guihan_used = true;
+                ctx.recover(t, 1, None);
+                ctx.draw_cards(t, 2);
+                // 座位序首男性其他存活
+                let male = (0..ctx.core.players.len() as u8).find(|&i| {
+                    i != t
+                        && ctx.core.player(i).alive
+                        && ctx.core.effective_gender(i)
+                            == crate::content::standard::Gender::Male
+                });
+                if let Some(m) = male {
+                    ctx.recover(m, 1, None);
+                    ctx.draw_cards(m, 2);
+                }
+                // 回血后 hp>0 → 循环顶自然发出 DyingSaved
+            }
         }
         loop {
             let p = ctx.core.player(self.dying);

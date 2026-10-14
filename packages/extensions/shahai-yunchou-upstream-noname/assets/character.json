@@ -157,7 +157,7 @@
         {
           "name": "ycnguihan",
           "title": "归汉",
-          "mapping": null
+          "mapping": "host:guihan"
         }
       ]
     },

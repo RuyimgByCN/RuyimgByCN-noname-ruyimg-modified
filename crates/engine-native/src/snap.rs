@@ -283,6 +283,7 @@ pub enum MachineSnapshot {
         responders: Vec<PlayerId>,
         asked: bool,
         round_used: bool,
+        guihan_asked: bool,
     },
     Duel {
         card: CardId,
@@ -4191,6 +4192,7 @@ impl MachineSnapshot {
                 responders,
                 asked,
                 round_used,
+                guihan_asked: _,
             } => Ok(Box::new(crate::kernel::DyingSaveMachine::new(
                 *dying,
                 *source,

@@ -1737,8 +1737,8 @@ fn g1_yunchou_generals_batch5_full_roster_metadata() {
         bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>()
     );
     assert_eq!(
-        bridged.unmapped_skills, 5,
-        "暂缓 5：奸雄/悲歌/归汉/巧思/精械"
+        bridged.unmapped_skills, 4,
+        "暂缓 4：奸雄/悲歌/巧思/精械（归汉批 17 转正）"
     );
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
@@ -2004,7 +2004,7 @@ fn g1_yunchou_generals_batch8_builtin_skill_refs() {
         .map(|_| String::new())
         .collect();
     let _ = unmapped_names;
-    assert_eq!(bridged.unmapped_skills, 5, "暂缓 5：奸雄/悲歌/归汉/巧思/精械");
+    assert_eq!(bridged.unmapped_skills, 4, "暂缓 4：奸雄/悲歌/巧思/精械");
     let _ = json;
 
     let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
@@ -2114,4 +2114,75 @@ fn g1_yunchou_generals_batch9_diychanyuan_max_hp_loss() {
     // 负例：无来源死亡不触发（p0 蝉缘？未授予——改用再授一次验证杀手为
     // None 的路径：p2 自尽式无来源伤害不可构造——用 max_hp 基线复核）
     assert_eq!(e.state_core().players[0].max_hp, 4, "无涉者上限不变");
+}
+
+/// T12 玩点论杀批 17：归汉（蔡文姬部分转正）——limited 濒死自救
+/// （DyingSaveMachine 求救循环前一次性确认；自回 1 摸 2+座位序首男性
+/// 其他存活回 1 摸 2；limited 每局一次）。登记差异：上游 chooseToUse
+/// 玩家主动+自选男性目标，原生锁定确认+确定性目标。
+#[test]
+fn g1_yunchou_generals_batch17_guihan_dying_limited() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    let cai = bridged
+        .generals
+        .iter()
+        .find(|g| g.name == "ycn蔡文姬")
+        .expect("蔡文姬");
+    assert!(
+        cai.skills.to_vec().contains(&"ycnguihan"),
+        "归汉入目录（builtin 悲歌仍暂缓）"
+    );
+
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b17",
+            version: 1,
+            description: "运筹武将面批 17",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66014, 4, &[&pack]).expect("建局");
+    // p1 持归汉（座位 2 为男性目标）
+    e.debug_grant(1, "ycnguihan");
+    e.debug_set_hp(1, 2);
+    e.debug_set_hp(2, 3);
+    // 全场清手防桃自救/求救
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let h1 = hand_len(&e, 1);
+    let h2 = hand_len(&e, 2);
+    let hp1 = e.debug_hp(1);
+    let hp2 = e.debug_hp(2);
+    assert_eq!((h1, h2), (0, 0), "布阵：全场清手基准");
+    e.debug_deal_damage(Some(0), 1, 2, DamageNature::Normal);
+    // 归汉确认门（p1）
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(1), hp1 - 2 + 1, "归汉：自回 1（濒死救回）");
+    // 场上已清手——摸 2 前 h1 为清手后基准（0），确认+回血+摸 2 → 2
+    assert_eq!(hand_len(&e, 1), h1 + 2, "归汉：摸 2");
+    // 座位序首男性=座位 0（满血 hp=max，回 1 饱和 +0）；摸 2 不饱和
+    assert_eq!(e.debug_hp(0), 4, "归汉：男性目标回 1（满血饱和 +0）");
+    assert_eq!(hand_len(&e, 0), h2 + 2, "归汉：男性目标摸 2");
+    let _ = h2;
+    let _ = hp2;
+
+    // limited：第二次濒死不触发（无桃直接死亡）
+    e.debug_set_hp(1, 1);
+    e.debug_deal_damage(Some(0), 1, 2, DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert!(
+        !e.state_core().player(1).alive,
+        "归汉 limited：第二次濒死不再触发"
+    );
 }

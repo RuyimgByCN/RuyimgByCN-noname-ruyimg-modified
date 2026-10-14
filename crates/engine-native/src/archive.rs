@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 67;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 68;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -1054,6 +1054,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             responders,
             asked,
             round_used,
+            guihan_asked: _,
         } => {
             w.u8(1);
             enc_pid(w, dying);
@@ -1766,12 +1767,14 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             let responders = dec_pids(r)?;
             let asked = r.boolean()?;
             let round_used = r.boolean()?;
+            let guihan_asked = r.boolean()?;
             MachineSnapshot::DyingSave {
                 dying,
                 source,
                 responders,
                 asked,
                 round_used,
+                guihan_asked,
             }
         }
         2 => {
@@ -2901,6 +2904,7 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u8(p.baolei_mode);
         // 暴雪/急冻（v8，U05 ow 美）：limited 已发动 + 冰封标记
         w.boolean(p.baoxue_used);
+        w.boolean(p.guihan_used);
         w.boolean(p.jidong_active);
         // 强固（v10，U05 ow 奥丽莎）：生效标记
         w.boolean(p.qianggu_active);
@@ -3236,6 +3240,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let paotai_lv = r.u8()?;
         let baolei_mode = r.u8()?;
         let baoxue_used = r.boolean()?;
+        let guihan_used = r.boolean()?;
         let jidong_active = r.boolean()?;
         let qianggu_active = r.boolean()?;
         let pingzhang_self_used = r.boolean()?;
@@ -3316,6 +3321,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             paotai_lv,
             baolei_mode,
             baoxue_used,
+            guihan_used,
             jidong_active,
             qianggu_active,
             pingzhang_self_used,

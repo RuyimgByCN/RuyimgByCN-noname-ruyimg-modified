@@ -4382,6 +4382,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.baolei_mode);
         // 暴雪/急冻（U05 ow 美，规则 v127）
         push_u8(&mut h, p.baoxue_used as u8);
+        push_u8(&mut h, p.guihan_used as u8);
         push_u8(&mut h, p.jidong_active as u8);
         // 强固（U05 ow 奥丽莎，规则 v136）
         push_u8(&mut h, p.qianggu_active as u8);
@@ -4903,7 +4904,7 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u8(h, 65);
             push_u8(h, *owner);
         }
-        M::DyingSave { dying, source, responders, asked, round_used } => {
+        M::DyingSave { dying, source, responders, asked, round_used, guihan_asked: _ } => {
             push_u8(h, 2);
             push_u8(h, *dying);
             push_u8(h, source.map(|p| p + 1).unwrap_or(0));
