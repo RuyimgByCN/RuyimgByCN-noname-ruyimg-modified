@@ -823,6 +823,12 @@ pub enum HostBehavior {
     /// 空洞印（tag 296，批⑥ equipSkill）：锁定——死亡前置窗口取消死亡：
     /// hp=1、摸 1、弃全部宝物（death_cancelled 基建消费）。
     SwdKongdongyinGuard,
+    /// 逆攻积攒（tag 297，批⑧龟灵之桃 equipSkill）：受伤后标记
+    /// +amount（上限 4，forced）。
+    SwdNigongAccumulate,
+    /// 逆攻发动（tag 298，批⑧龟灵之桃 equipSkill）：出牌弃全部标记——
+    /// 奇数摸 1+对一名其他角色造成 floor(标记/2) 伤；标记=1 时仅摸 1。
+    SwdNigongStrike,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -907,8 +913,10 @@ impl HostBehavior {
             HostBehavior::SwdKunlunjingcCard => 294,
             HostBehavior::SwdDonghuangzhongCard => 295,
             HostBehavior::SwdKongdongyinGuard => 296,
-            HostBehavior::GuisheqiCard => 297,
-            HostBehavior::XianluhuiCard => 298,
+            HostBehavior::SwdNigongAccumulate => 299,
+            HostBehavior::SwdNigongStrike => 300,
+            HostBehavior::GuisheqiCard => 301,
+            HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1450,8 +1458,10 @@ impl HostBehavior {
             294 => HostBehavior::SwdKunlunjingcCard,
             295 => HostBehavior::SwdDonghuangzhongCard,
             296 => HostBehavior::SwdKongdongyinGuard,
-            297 => HostBehavior::GuisheqiCard,
-            298 => HostBehavior::XianluhuiCard,
+            299 => HostBehavior::SwdNigongAccumulate,
+            300 => HostBehavior::SwdNigongStrike,
+            301 => HostBehavior::GuisheqiCard,
+            302 => HostBehavior::XianluhuiCard,
             _ => return None,
         })
     }
@@ -1469,7 +1479,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 298] = [
+    pub const ALL: [HostBehavior; 300] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1766,6 +1776,8 @@ impl HostBehavior {
         HostBehavior::SwdKunlunjingcCard,
         HostBehavior::SwdDonghuangzhongCard,
         HostBehavior::SwdKongdongyinGuard,
+        HostBehavior::SwdNigongAccumulate,
+        HostBehavior::SwdNigongStrike,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -1828,6 +1840,8 @@ impl HostBehavior {
             HostBehavior::SwdKunlunjingcCard => "host:kunlunjingc",
             HostBehavior::SwdDonghuangzhongCard => "host:donghuangzhong",
             HostBehavior::SwdKongdongyinGuard => "host:kongdongyin",
+            HostBehavior::SwdNigongAccumulate => "nigong_accumulate",
+            HostBehavior::SwdNigongStrike => "nigong_strike",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -2325,6 +2339,16 @@ impl HostBehavior {
             // 鬼蛇旗/仙露回：trick 卡牌机（元数据不进触发计划）
             HostBehavior::GuisheqiCard => None,
             HostBehavior::XianluhuiCard => None,
+            // 逆攻积攒：受伤结算后 forced
+            HostBehavior::SwdNigongAccumulate => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 逆攻发动：出牌主动技（标记门在 activate）
+            HostBehavior::SwdNigongStrike => None,
             // 空洞印：死亡前置窗口（forced；上游 dieBefore cancel 同口径）
             HostBehavior::SwdKongdongyinGuard => Some(TriggerMeta {
                 event: EventKind::Death,
@@ -4366,6 +4390,12 @@ impl SkillBehavior for HostSkillBehavior {
             // 鬼蛇旗/仙露回：无触发面（CardUsed 内建直派）
             HostBehavior::GuisheqiCard => false,
             HostBehavior::XianluhuiCard => false,
+            // 逆攻积攒：自己受到真实伤害
+            HostBehavior::SwdNigongAccumulate => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner && !d.prevented && d.amount > 0),
+            // 逆攻发动：无触发面
+            HostBehavior::SwdNigongStrike => false,
             // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
             HostBehavior::SwdKongdongyinGuard => matches!(event,
                 EventData::Death { player, .. } if *player == owner),
@@ -5541,6 +5571,36 @@ impl SkillBehavior for HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            // 逆攻发动：标记 ≥1；lv≥2 打伤需选目标，lv==1 仅摸 1（直发）
+            HostBehavior::SwdNigongStrike => {
+                let lv = ctx.state.player(owner).nigong_lv;
+                if lv == 0 {
+                    return None;
+                }
+                if lv == 1 {
+                    Some(Box::new(HostMachine {
+                        def_key: self.name.clone(),
+                        behavior: self.behavior,
+                        owner,
+                        target: None,
+                        card: None,
+                        cards: Vec::new(),
+                        targets: Vec::new(),
+                        stage: HostStage::Act,
+                    }))
+                } else {
+                    Some(Box::new(HostMachine {
+                        def_key: self.name.clone(),
+                        behavior: self.behavior,
+                        owner,
+                        target: None,
+                        card: None,
+                        cards: Vec::new(),
+                        targets: Vec::new(),
+                        stage: HostStage::TargetChoice,
+                    }))
+                }
+            }
             // 神农鼎：受伤且手牌 ≥2
             HostBehavior::SwdShennongdingCard => {
                 let p = ctx.state.player(owner);
@@ -6715,6 +6775,77 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             }
+            // 逆攻积攒：标记 +amount（上限 4）
+            HostBehavior::SwdNigongAccumulate => {
+                if let Some(EventData::Damage(d)) =
+                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+                {
+                    let lv = ctx.core.player(self.owner).nigong_lv;
+                    ctx.core.player_mut(self.owner).nigong_lv =
+                        (lv + d.amount as u8).min(4);
+                }
+                Flow::Done
+            }
+            // 逆攻发动：TargetChoice 选目标 → Act 弃全部标记——奇数摸 1+
+            // floor(标记/2) 伤；标记=1 时仅摸 1（activate 分流两 activate 面）
+            HostBehavior::SwdNigongStrike => match self.stage {
+                HostStage::TargetChoice => {
+                    let options: Vec<ChoiceOption> = (0..ctx.core.players.len())
+                        .filter(|&i| {
+                            i as PlayerId != self.owner
+                                && ctx.core.player(i as PlayerId).alive
+                        })
+                        .map(|i| ChoiceOption::Player(i as u8))
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "nigong_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::Act => {
+                    self.target = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    });
+                    let lv = ctx.core.player(self.owner).nigong_lv;
+                    ctx.core.player_mut(self.owner).nigong_lv = 0;
+                    if lv % 2 == 1 {
+                        ctx.draw_cards(self.owner, 1);
+                    }
+                    if self.target.is_none() {
+                        // lv==1 面：无目标仅摸 1 清零
+                        return Flow::Done;
+                    }
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    let dmg = lv / 2;
+                    if dmg > 0 && ctx.core.player(t).alive {
+                        ctx.emit(EventData::Damage(
+                            crate::machine::damage_data_with(
+                                Some(self.owner),
+                                t,
+                                dmg as u32,
+                                crate::event::DamageNature::Normal,
+                                None,
+                            ),
+                        ));
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 女娲石：确认门后濒死者回复 1、自己失去 1（hp>1 门在 filter）
             HostBehavior::SwdNvwashiGuard => {
                 let Some(t) = self.target else {
@@ -19153,6 +19284,7 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
         CardKind::Shennongding => &[HostSkillDecl { name: "shennongding", behavior: HostBehavior::SwdShennongdingCard }],
         CardKind::Nvwashi => &[HostSkillDecl { name: "nvwashi", behavior: HostBehavior::SwdNvwashiGuard }],
         CardKind::Kongdongyin => &[HostSkillDecl { name: "kongdongyin", behavior: HostBehavior::SwdKongdongyinGuard }],
+        CardKind::Guilingzhitao => &[HostSkillDecl { name: "nigong_accumulate", behavior: HostBehavior::SwdNigongAccumulate }, HostSkillDecl { name: "nigong_strike", behavior: HostBehavior::SwdNigongStrike }],
         CardKind::Kunlunjingc => &[HostSkillDecl { name: "kunlunjingc", behavior: HostBehavior::SwdKunlunjingcCard }],
         CardKind::Donghuangzhong => &[HostSkillDecl { name: "donghuangzhong", behavior: HostBehavior::SwdDonghuangzhongCard }],
         _ => &[],

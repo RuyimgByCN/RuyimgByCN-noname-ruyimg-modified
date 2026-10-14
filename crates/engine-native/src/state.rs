@@ -56,6 +56,8 @@ pub struct PlayerState {
     /// 炼妖壶收纳仓（swd 卡牌面补切批③）：壶中暂存牌（特殊区等价——不
     /// 在任何玩家区域，跨回合持久；登记差异上游挂壶实体 storage）。
     pub lianyaohu_store: Vec<CardId>,
+    /// 逆攻标记（swd 卡牌面补切批⑧龟灵之桃）：受伤积攒，上限 4。
+    pub nigong_lv: u8,
     /// 急冻冰封（U05 ow 美，规则 v127）：hp=1 回合结束触发后的临时
     /// 冰封——受所有伤害无效 + 不能被其他角色的牌指定为目标；自己
     /// 回合结束（翻回后的跳过回合收束）解除（上游 addTempSkill
@@ -246,6 +248,7 @@ impl PlayerState {
             xuehuang_used: false,
             xuejibingbao: 0,
             lianyaohu_store: Vec::new(),
+            nigong_lv: 0,
             jidong_active: false,
             qianggu_active: false,
             pingzhang_self_used: false,

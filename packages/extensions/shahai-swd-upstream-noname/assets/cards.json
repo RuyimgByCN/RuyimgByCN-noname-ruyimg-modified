@@ -417,6 +417,16 @@
       "kind": "xianluhui",
       "suit": "spade",
       "rank": 13
+    },
+    {
+      "name": "swd_guilingzhitao",
+      "kind": "guilingzhitao",
+      "suit": "spade",
+      "rank": 7,
+      "equip_skills": [
+        "nigong_accumulate",
+        "nigong_strike"
+      ]
     }
   ],
   "host_skills": [],

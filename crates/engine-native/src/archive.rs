@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 72;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 73;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2932,6 +2932,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for c in &p.lianyaohu_store {
             w.u32(*c);
         }
+        // 逆攻标记（swd 龟灵之桃，批⑧）
+        w.u8(p.nigong_lv);
         w.boolean(p.jidong_active);
         // 强固（v10，U05 ow 奥丽莎）：生效标记
         w.boolean(p.qianggu_active);
@@ -3281,6 +3283,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         for _ in 0..store_len {
             lianyaohu_store.push(r.u32()?);
         }
+        let nigong_lv = r.u8()?;
         let jidong_active = r.boolean()?;
         let qianggu_active = r.boolean()?;
         let pingzhang_self_used = r.boolean()?;
@@ -3365,6 +3368,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             xuehuang_used,
             xuejibingbao,
             lianyaohu_store,
+            nigong_lv,
             jidong_active,
             qianggu_active,
             pingzhang_self_used,
@@ -3767,6 +3771,7 @@ fn card_kind_to_num(k: &CardKind) -> u32 {
         Chiyuxi => 151,
         Guisheqi => 152,
         Xianluhui => 153,
+        Guilingzhitao => 154,
         Tianfuzhen => 134,
         Qixingzhen => 135,
         Niaoxiangzhen => 136,
@@ -3935,6 +3940,7 @@ fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         151 => Chiyuxi,
         152 => Guisheqi,
         153 => Xianluhui,
+        154 => Guilingzhitao,
         134 => Tianfuzhen,
         135 => Qixingzhen,
         136 => Niaoxiangzhen,

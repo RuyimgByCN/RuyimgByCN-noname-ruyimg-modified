@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 65, "swd 全 65 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 66, "swd 全 66 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 65, "swd 全 65 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 66, "swd 全 66 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 65, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 66, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4218,6 +4218,7 @@ fn swd_cards_alignment_guard_b29() {
         ("guisheqi", "spade", 9),
         ("guisheqi", "club", 7),
         ("xianluhui", "spade", 13),
+        ("guilingzhitao", "spade", 7),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4231,7 +4232,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 65, "批⑦ 锦囊族后 65 张");
+    assert_eq!(pack.cards.len(), 66, "批⑧ 龟灵之桃后 66 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -5120,4 +5121,117 @@ fn swd_cards_trick_b37_jingleishan_chiyuxi_guisheqi_xianluhui() {
     assert_eq!(e.state_core().player(0).hujia, 0, "仙露回：p0 满血不受益");
     let _ = DamageNature::Thunder;
     let _ = DamageNature::Fire;
+}
+
+/// T12 swd 卡牌面补切批⑧：龟灵之桃——逆攻标记受伤积攒（上限 4）、
+/// 出牌弃全部标记：奇数摸 1+对一名其他角色 floor(标记/2) 伤；标记=1 仅
+/// 摸 1。PlayerState.nigong_lv 字段批（存档 v72→v73/规则 v285→v286）。
+#[test]
+fn swd_cards_equip5_b38_guilingzhitao_nigong() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62018, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let glt = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Guilingzhitao)
+        .expect("龟灵之桃在目录") as u32;
+    {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != glt);
+        snap.core.discard.retain(|x| *x != glt);
+        snap.core.players[0].equips.push(glt);
+        for sk in ["nigong_accumulate", "nigong_strike"] {
+            let def = e.catalog().skill_by_name(sk).expect("逆攻 def");
+            snap.core.skills.insert(
+                (0, def),
+                engine_native::state::SkillInstance {
+                    owner: 0,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+        }
+        e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入");
+    }
+
+    // ① 受伤积攒：debug 伤 2 → 标记 2（forced 无窗）
+    e.debug_set_hp(0, 8);
+    e.debug_deal_damage(Some(1), 0, 2, engine_native::event::DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(0).nigong_lv, 2, "逆攻：受伤 +2 标记");
+
+    // ② 发动（lv=2）：弃全部标记，偶数不摸，对 p1 造成 1 伤（floor 2/2）
+    e.debug_set_hp(1, 8);
+    e.debug_set_hp(2, 8);
+    let strike = e.catalog().skill_by_name("nigong_strike").expect("发动 def");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: strike },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "逆攻发动受理 {out:?}");
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("逆攻选人窗");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Player(1)] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(0).nigong_lv, 0, "逆攻②：标记清零");
+    assert_eq!(e.debug_hp(1), 7, "逆攻②：floor(2/2)=1 伤");
+    assert_eq!(hand_len_w(&e, 0), 0, "逆攻②：偶数不摸");
+
+    // 反例 ②b：标记 0 时发动拒
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: strike },
+    });
+    assert!(!matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "逆攻反例：无标记拒 {out:?}");
+
+    // ③ 奇数面：受伤 3 → 标记 3 → 发动：摸 1 + floor(3/2)=1 伤
+    e.debug_deal_damage(Some(1), 0, 3, engine_native::event::DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(0).nigong_lv, 3, "逆攻③：受伤 +3 标记");
+    let h0 = hand_len_w(&e, 0);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: strike },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("逆攻③选人窗");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Player(2)] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(0).nigong_lv, 0, "逆攻③：标记清零");
+    assert_eq!(hand_len_w(&e, 0), h0 + 1, "逆攻③：奇数摸 1");
+    assert_eq!(e.debug_hp(2), 7, "逆攻③：floor(3/2)=1 伤");
+
+    // ④ 上限：先抬血防死，受伤 9 → 标记钳 4
+    e.debug_set_hp(0, 12);
+    e.debug_deal_damage(Some(1), 0, 9, engine_native::event::DamageNature::Normal);
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.state_core().player(0).nigong_lv, 4, "逆攻④：上限 4");
 }
