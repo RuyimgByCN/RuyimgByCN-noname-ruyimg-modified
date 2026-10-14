@@ -2597,6 +2597,15 @@ fn apply_command(
                 {
                     kind = CardKind::Sha;
                 }
+                // 玉蝉八卦（swd 补切批⑫）：手持 autoViewAs 对应基本牌
+                //（你的行动时=PlayCard 自身回合门已限；登记差异随机换形态
+                // 与煅造装备面挂后续批）
+                else if let Some(vk) = catalog.cards[card as usize]
+                    .kind
+                    .yuchan_auto_view_as()
+                {
+                    kind = vk;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至
@@ -2848,6 +2857,14 @@ fn apply_command(
                 | CardKind::Sadengjinhuan
                 | CardKind::Haotianta
                 | CardKind::Yuruyi
+                | CardKind::Yuchanqian
+                | CardKind::Yuchankun
+                | CardKind::Yuchanzhen
+                | CardKind::Yuchanxun
+                | CardKind::Yuchankan
+                | CardKind::Yuchanli
+                | CardKind::Yuchangen
+                | CardKind::Yuchandui
                 // 器族五件：手持牌（非装备路径；效果经手持触发技）
                 | CardKind::Qinglongzhigui
                 | CardKind::Zhuquezhizhang

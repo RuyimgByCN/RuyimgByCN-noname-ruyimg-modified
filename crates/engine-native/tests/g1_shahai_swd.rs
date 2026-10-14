@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 76, "swd 全 76 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 84, "swd 全 84 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 76, "swd 全 76 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 84, "swd 全 84 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 76, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 84, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -1970,7 +1970,12 @@ fn swd_lingjian_xuanfeng_and_shijianhuisu() {
         .expect("武器在目录") as u32;
     {
         let mut snap = e.save();
+        // 全域摘除（批⑫ 加卡发牌序耦合：首武器实体可能已在手牌）
         snap.core.deck.retain(|x| *x != equip);
+        snap.core.discard.retain(|x| *x != equip);
+        for pl in snap.core.players.iter_mut() {
+            pl.hand.retain(|x| *x != equip);
+        }
         snap.core.players[1].equips.push(equip);
         e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入装备");
     }
@@ -4234,6 +4239,14 @@ fn swd_cards_alignment_guard_b29() {
         ("sadengjinhuan", "club", 13),
         ("haotianta", "diamond", 13),
         ("yuruyi", "heart", 9),
+        ("yuchanqian", "spade", 1),
+        ("yuchankun", "club", 2),
+        ("yuchanzhen", "diamond", 3),
+        ("yuchanxun", "heart", 4),
+        ("yuchankan", "spade", 5),
+        ("yuchanli", "club", 6),
+        ("yuchangen", "diamond", 7),
+        ("yuchandui", "heart", 8),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4247,7 +4260,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 76, "批⑪ equip5 收口后 76 张（余 4 张挂独立机批暂以数据入包）");
+    assert_eq!(pack.cards.len(), 84, "批⑫ 玉蝉八卦后 84 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -5438,4 +5451,82 @@ fn swd_cards_jiqi_b40_five_held_treasures() {
         "黄麟之琮：护甲非递减"
     );
     let _ = (ql, zq, hw, xw);
+}
+
+/// T12 swd 卡牌面补切批⑫：玉蝉八卦 8 kind autoViewAs 面——手持时视作
+/// 对应基本牌使用（乾=杀/坤=草药/震=酒/巽=桃/坎=神秘果[同拒]/离=天仙
+/// 酒/艮=封印之丹/兑=雪霁冰雹）；换形态 mutation+煅造装备面挂批⑬。
+#[test]
+fn swd_cards_trick_b42_yuchan_autoviewas() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    assert_eq!(pack.cards.len(), 84, "批⑫ 玉蝉八卦后 84 张");
+    let mut e = Engine::new_with_extensions(62021, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let kind_id = |e: &Engine, k: engine_native::catalog::CardKind| {
+        e.catalog()
+            .cards
+            .iter()
+            .position(|c| c.kind == k)
+            .expect("玉蝉在目录") as u32
+    };
+    let hold = |e: &mut Engine, p: u8, card: u32| {
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != card);
+        core.discard.retain(|x| *x != card);
+        core.players[p as usize].hand.push(card);
+    };
+    use engine_native::catalog::CardKind;
+
+    // ① 玉蝉·乾 autoViewAs 杀：打 p1 造成 1 伤
+    let yq = kind_id(&e, CardKind::Yuchanqian);
+    hold(&mut e, 0, yq);
+    e.debug_set_hp(1, 4);
+    submit(&mut e, 0, GameAction::PlayCard { card: yq, targets: vec![1] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(1), 3, "玉蝉乾：视为杀命中 p1（4→3）");
+
+    // ② 玉蝉·巽 autoViewAs 桃：p0 受伤回 1
+    e.debug_set_hp(0, 2);
+    let yx = kind_id(&e, CardKind::Yuchanxun);
+    hold(&mut e, 0, yx);
+    submit(&mut e, 0, GameAction::PlayCard { card: yx, targets: vec![] });
+    settle_optional_confirm(&mut e);
+    assert_eq!(e.debug_hp(0), 3, "玉蝉巽：视为桃回 1（2→3）");
+
+    // ③ 反例：玉蝉·坎 autoViewAs 神秘果——神秘果无直用面同拒
+    let yk = kind_id(&e, CardKind::Yuchankan);
+    hold(&mut e, 0, yk);
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: yk, targets: vec![] });
+    assert!(
+        !matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "玉蝉坎反例：神秘果面同拒 {out:?}"
+    );
+
+    // ④ 反例：玉蝉族不可当原实体使用（乾不能当普通实体牌非杀路径用）
+    // ——乾的直用仅杀路径；此处验证目标空时的杀被拒
+    hold(&mut e, 0, yq);
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: yq, targets: vec![] });
+    assert!(
+        !matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "玉蝉乾反例：杀无目标拒 {out:?}"
+    );
 }

@@ -495,6 +495,62 @@
       "suit": "heart",
       "rank": 9,
       "deferred_reason": "摸牌阶段以牌堆顶比较替换好牌（概率语义）——需 Draw 钩+价值比较面，独立机批"
+    },
+    {
+      "name": "swd_yuchanqian",
+      "kind": "yuchanqian",
+      "suit": "spade",
+      "rank": 1,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 杀本批已转正）"
+    },
+    {
+      "name": "swd_yuchankun",
+      "kind": "yuchankun",
+      "suit": "club",
+      "rank": 2,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 草药本批已转正）"
+    },
+    {
+      "name": "swd_yuchanzhen",
+      "kind": "yuchanzhen",
+      "suit": "diamond",
+      "rank": 3,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 酒本批已转正）"
+    },
+    {
+      "name": "swd_yuchanxun",
+      "kind": "yuchanxun",
+      "suit": "heart",
+      "rank": 4,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 桃本批已转正）"
+    },
+    {
+      "name": "swd_yuchankan",
+      "kind": "yuchankan",
+      "suit": "spade",
+      "rank": 5,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 神秘果随神秘果窗口机批）"
+    },
+    {
+      "name": "swd_yuchanli",
+      "kind": "yuchanli",
+      "suit": "club",
+      "rank": 6,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 天仙酒本批已转正）"
+    },
+    {
+      "name": "swd_yuchangen",
+      "kind": "yuchangen",
+      "suit": "diamond",
+      "rank": 7,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 封印之丹本批已转正）"
+    },
+    {
+      "name": "swd_yuchandui",
+      "kind": "yuchandui",
+      "suit": "heart",
+      "rank": 8,
+      "deferred_reason": "换形态随机 mutation+煅造装备面挂批⑬（autoViewAs 雪霁冰雹本批已转正）"
     }
   ],
   "host_skills": [],

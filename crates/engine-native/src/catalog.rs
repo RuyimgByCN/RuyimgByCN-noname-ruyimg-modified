@@ -502,6 +502,23 @@ pub enum CardKind {
     /// 玉如意（swd 卡牌面补切批⑪）：equip5 宝物——摸牌改写暂缓，kind 先
     /// 注册。
     Yuruyi,
+    /// 玉蝉·乾（swd 卡牌面补切批⑫）：器族手持 autoViewAs 杀。
+    Yuchanqian,
+    /// 玉蝉·坤（swd 卡牌面补切批⑫）：器族手持 autoViewAs 草药。
+    Yuchankun,
+    /// 玉蝉·震（swd 卡牌面补切批⑫）：器族手持 autoViewAs 酒。
+    Yuchanzhen,
+    /// 玉蝉·巽（swd 卡牌面补切批⑫）：器族手持 autoViewAs 桃。
+    Yuchanxun,
+    /// 玉蝉·坎（swd 卡牌面补切批⑫）：器族手持 autoViewAs 神秘果（原生
+    /// 神秘果无直用面，同拒）。
+    Yuchankan,
+    /// 玉蝉·离（swd 卡牌面补切批⑫）：器族手持 autoViewAs 天仙酒。
+    Yuchanli,
+    /// 玉蝉·艮（swd 卡牌面补切批⑫）：器族手持 autoViewAs 封印之丹。
+    Yuchangen,
+    /// 玉蝉·兑（swd 卡牌面补切批⑫）：器族手持 autoViewAs 雪霁冰雹。
+    Yuchandui,
     /// 青龙之圭（swd 卡牌面补切批⑩）：器族手持——准备阶段摸 2 弃 1。
     Qinglongzhigui,
     /// 朱雀之璋（swd 卡牌面补切批⑩）：器族手持——受他人伤害后来源火 1 伤。
@@ -556,6 +573,21 @@ impl CardKind {
             _ => None,
         }
     }
+    /// 玉蝉八卦 autoViewAs（swd 补切批⑫）：手持时视作对应基本牌使用。
+    pub fn yuchan_auto_view_as(self) -> Option<CardKind> {
+        Some(match self {
+            CardKind::Yuchanqian => CardKind::Sha,
+            CardKind::Yuchankun => CardKind::Caoyao,
+            CardKind::Yuchanzhen => CardKind::Jiu,
+            CardKind::Yuchanxun => CardKind::Tao,
+            CardKind::Yuchankan => CardKind::Shenmiguo,
+            CardKind::Yuchanli => CardKind::Tianxianjiu,
+            CardKind::Yuchangen => CardKind::Fengyinzhidan,
+            CardKind::Yuchandui => CardKind::Xuejibingbao,
+            _ => return None,
+        })
+    }
+
     /// AOE 伤害属性（惊雷山=雷、炽羽袭=火，南蛮/万箭普通）。
     pub fn aoe_nature(self) -> crate::event::DamageNature {
         match self {
@@ -699,7 +731,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 164] = [
+    pub const ALL: [CardKind; 172] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -854,6 +886,14 @@ impl CardKind {
         CardKind::Sadengjinhuan,
         CardKind::Haotianta,
         CardKind::Yuruyi,
+        CardKind::Yuchanqian,
+        CardKind::Yuchankun,
+        CardKind::Yuchanzhen,
+        CardKind::Yuchanxun,
+        CardKind::Yuchankan,
+        CardKind::Yuchanli,
+        CardKind::Yuchangen,
+        CardKind::Yuchandui,
         CardKind::Qinglongzhigui,
         CardKind::Zhuquezhizhang,
         CardKind::Baishouzhihu,
@@ -1023,6 +1063,14 @@ impl CardKind {
             CardKind::Sadengjinhuan => "sadengjinhuan",
             CardKind::Haotianta => "haotianta",
             CardKind::Yuruyi => "yuruyi",
+            CardKind::Yuchanqian => "yuchanqian",
+            CardKind::Yuchankun => "yuchankun",
+            CardKind::Yuchanzhen => "yuchanzhen",
+            CardKind::Yuchanxun => "yuchanxun",
+            CardKind::Yuchankan => "yuchankan",
+            CardKind::Yuchanli => "yuchanli",
+            CardKind::Yuchangen => "yuchangen",
+            CardKind::Yuchandui => "yuchandui",
             CardKind::Qinglongzhigui => "qinglongzhigui",
             CardKind::Zhuquezhizhang => "zhuquezhizhang",
             CardKind::Baishouzhihu => "baishouzhihu",
