@@ -663,6 +663,13 @@ pub enum HostBehavior {
     /// 确认），对座位序首目标视为用杀（登记差异：上游限「厉焰转化的水
     /// 攻」且玩家选目标，原生按持有者全部水攻+自动首目标）。
     YunchouLuweiyan2,
+    /// 隙焰（tag 252，运筹武将面批 7）：出牌主动技——弃 1 张红手牌，全
+    /// 体其他存活角色各受 1 点火属性伤害（座位序逐个；登记差异：上游玩
+    /// 家选弃哪张红牌，原生取首张红手牌；上游 multiline 呈现面不做）。
+    YunchouJieyan,
+    /// 野升（tag 253，运筹武将面批 7）：出牌主动技——弃任意张黑手牌并
+    /// 摸等量的牌（自选多张，舒筋散机器同构）。
+    YunchouYiesheng,
 }
 
 
@@ -693,6 +700,8 @@ impl HostBehavior {
             HostBehavior::YunchouHonglian => 249,
             HostBehavior::YunchouLuweiyan => 250,
             HostBehavior::YunchouLuweiyan2 => 251,
+            HostBehavior::YunchouJieyan => 252,
+            HostBehavior::YunchouYiesheng => 253,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1189,6 +1198,8 @@ impl HostBehavior {
             249 => HostBehavior::YunchouHonglian,
             250 => HostBehavior::YunchouLuweiyan,
             251 => HostBehavior::YunchouLuweiyan2,
+            252 => HostBehavior::YunchouJieyan,
+            253 => HostBehavior::YunchouYiesheng,
             _ => return None,
         })
     }
@@ -1196,7 +1207,7 @@ impl HostBehavior {
     pub fn from_key(key: &str) -> Option<Self> {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
-    pub const ALL: [HostBehavior; 251] = [
+    pub const ALL: [HostBehavior; 253] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1448,6 +1459,8 @@ impl HostBehavior {
         HostBehavior::YunchouHonglian,
         HostBehavior::YunchouLuweiyan,
         HostBehavior::YunchouLuweiyan2,
+        HostBehavior::YunchouJieyan,
+        HostBehavior::YunchouYiesheng,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1464,6 +1477,8 @@ impl HostBehavior {
             HostBehavior::YunchouHonglian => "host:honglian",
             HostBehavior::YunchouLuweiyan => "host:luweiyan",
             HostBehavior::YunchouLuweiyan2 => "host:luweiyan2",
+            HostBehavior::YunchouJieyan => "host:jieyan",
+            HostBehavior::YunchouYiesheng => "host:yiesheng",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
             HostBehavior::TargetDiscardEquipOrDamage => "host:target_discard_equip_or_damage",
@@ -1771,6 +1786,8 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::YunchouLuweiyan => None,
+            HostBehavior::YunchouJieyan => None,
+            HostBehavior::YunchouYiesheng => None,
             HostBehavior::YunchouLuweiyan2 => Some(TriggerMeta {
                 event: EventKind::CardUsed,
                 timing: Timing::Normal,
@@ -3367,6 +3384,7 @@ impl HostSkillBehavior {
             HostBehavior::TouliangSwap => HostStage::SelectCard,
             HostBehavior::GeanguanhuoCompare => HostStage::CompareTargetPick,
             HostBehavior::GujianShujinsanCard => HostStage::SelectCard,
+            HostBehavior::YunchouYiesheng => HostStage::SelectCard,
             HostBehavior::GujianFeibiaoCard => HostStage::SelectCard,
             HostBehavior::JiguanBingpoCard => HostStage::ComparePlayerPick,
             HostBehavior::JiguanLongxuCard => HostStage::SelectCard,
@@ -3465,6 +3483,8 @@ impl SkillBehavior for HostSkillBehavior {
                         // 厉焰·链杀：持有者以水攻用牌（结算种 use_as 优先；语义集
             // 中在 helper）
             HostBehavior::YunchouLuweiyan2 => u_matches_lw2(event, owner, ctx),
+            HostBehavior::YunchouJieyan => false,
+            HostBehavior::YunchouYiesheng => false,
             // 蛊惑·变体：自己回合开始且区域有牌
             HostBehavior::YunchouDiyguhuo => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
@@ -4396,6 +4416,50 @@ impl SkillBehavior for HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            // 隙焰：有红手牌才可发动
+            HostBehavior::YunchouJieyan => {
+                let has = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                });
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 野升：有黑手牌才可发动（自选多张）
+            HostBehavior::YunchouYiesheng => {
+                let has = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                });
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
             HostBehavior::ZhangbaSha => {
                 // 丈八蛇矛：两张手牌当杀的主动技（机器见 HostMachine）。
                 Some(Box::new(HostMachine {
@@ -5135,6 +5199,96 @@ impl crate::catalog::SkillMachine for HostMachine {
                     }
                 }
                 Flow::Done
+            },
+            // 隙焰：弃首张红手牌（登记差异）→ 全体其他存活座位序各 1 火
+            HostBehavior::YunchouJieyan => {
+                let red = ctx.core.player(self.owner).hand.iter().copied().find(
+                    |c| {
+                        matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Heart
+                                | crate::catalog::Suit::Diamond
+                        )
+                    },
+                );
+                let Some(c) = red else { return Flow::Done };
+                ctx.discard_from_hand(self.owner, c);
+                ctx.log(LogEvent::CardDiscarded {
+                    player: self.owner,
+                    cards: vec![c],
+                });
+                let seats: Vec<u8> = (0..ctx.core.players.len() as u8)
+                    .filter(|&i| i != self.owner && ctx.core.player(i).alive)
+                    .collect();
+                for t in seats {
+                    ctx.emit(crate::event::EventData::Damage(
+                        crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        ),
+                    ));
+                }
+                Flow::Done
+            },
+            // 野升：自选任意张黑手牌 → 弃所选摸等量（舒筋散机器同构）
+            HostBehavior::YunchouYiesheng => match self.stage {
+                HostStage::SelectCard => {
+                    let options: Vec<ChoiceOption> =
+                        ctx.core.player(self.owner).hand.iter().copied()
+                            .filter(|c| {
+                                matches!(
+                                    ctx.catalog.cards[*c as usize].suit,
+                                    crate::catalog::Suit::Spade
+                                        | crate::catalog::Suit::Club
+                                )
+                            })
+                            .map(ChoiceOption::Card)
+                            .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    let n = options.len();
+                    self.stage = HostStage::Act;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "yiesheng_discard",
+                            options,
+                            min: 1,
+                            max: n,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::Act => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if !picked.is_empty() {
+                        for c in &picked {
+                            ctx.core
+                                .player_mut(self.owner)
+                                .hand
+                                .retain(|x| x != c);
+                        }
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: self.owner,
+                            cards: picked.clone(),
+                        });
+                        ctx.draw_cards(self.owner, picked.len());
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
             },
             // 厉焰·链杀：对座位序首目标视为用杀（虚拟杀直发；登记差异：
             // 上游玩家选目标+可取消，原生自动首目标）

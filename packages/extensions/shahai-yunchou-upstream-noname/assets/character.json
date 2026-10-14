@@ -3,9 +3,9 @@
   "upstream_path": "apps/core/extension/杀海拾遗/character/yunchou/",
   "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
   "pack": {
-    "name": "shahai-yunchou-generals-b6",
+    "name": "shahai-yunchou-generals-b7",
     "version": 1,
-    "description": "G1 运筹武将面批6（陆抗：厉焰转正+链杀；谦逊暂缓）",
+    "description": "G1 运筹武将面批7（周瑜·DIY/甄姬·DIY 整将：隙焰/野升主动技转正）",
     "card_prefix": "ycn_"
   },
   "generals": [
@@ -112,9 +112,9 @@
       "gender": "male",
       "skills": [
         {
-          "name": "jieyan",
+          "name": "ycnjieyan",
           "title": "隙焰",
-          "mapping": null
+          "mapping": "host:jieyan"
         },
         {
           "name": "ycnhonglian",
@@ -136,9 +136,9 @@
           "mapping": "host:jiaoxia"
         },
         {
-          "name": "yiesheng",
+          "name": "ycnyiesheng",
           "title": "野升",
-          "mapping": null
+          "mapping": "host:yiesheng"
         }
       ]
     },

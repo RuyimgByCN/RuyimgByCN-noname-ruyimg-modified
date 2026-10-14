@@ -1733,7 +1733,7 @@ fn g1_yunchou_generals_batch5_full_roster_metadata() {
         bridged.generals.iter().map(|g| g.skills.len()).sum::<usize>()
     );
     assert!(
-        bridged.unmapped_skills >= 10,
+        bridged.unmapped_skills >= 8,
         "暂缓累计（现 {} 条）",
         bridged.unmapped_skills
     );
@@ -1846,5 +1846,120 @@ fn g1_yunchou_generals_batch6_luweiyan_conversion_and_chain() {
     assert!(
         !e.state_core().players[2].equips.contains(&zhuge2),
         "厉焰转化水攻：目标装备被弃"
+    );
+}
+
+/// T12 运筹武将面批 7：出牌主动技面——隙焰（弃 1 红手牌全体 1 火伤，
+/// ActivateSkill 命令通道）与野升（自选任意黑手牌摸等量，SelectCards
+/// 多选机）。周瑜·DIY/甄姬·DIY 双整将转正。
+#[test]
+fn g1_yunchou_generals_batch7_active_skills_jieyan_yiesheng() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root()
+            .join("shahai-yunchou-upstream-noname/assets/character.json"),
+    )
+    .expect("character.json");
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接");
+    assert!(bridged.host_skills.len() >= 13, "host 行为累计 13");
+
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    let pack = ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "shahai-yunchou-generals-b7",
+            version: 1,
+            description: "运筹武将面批 7",
+        },
+        generals: bridged.generals.clone(),
+        cards: Vec::new(),
+        host_skills: bridged.host_skills.clone(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(66012, 4, &[&pack]).expect("建局");
+    // 周瑜·DIY（base+5）/甄姬·DIY（base+6）目录面
+    assert_eq!(
+        e.catalog().general_meta(base + 5).unwrap().2,
+        vec!["ycnjieyan", "ycnhonglian"],
+        "周瑜·DIY 整将"
+    );
+    assert_eq!(
+        e.catalog().general_meta(base + 6).unwrap().2,
+        vec!["ycnjiaoxia", "ycnyiesheng"],
+        "甄姬·DIY 整将"
+    );
+    let jieyan_def = e.catalog().skill_by_name("ycnjieyan").expect("隙焰 def");
+    let yiesheng_def = e.catalog().skill_by_name("ycnyiesheng").expect("野升 def");
+
+    // 隙焰：p0 弃 1 红手牌 → 全体其他存活各 1 火伤
+    e.debug_grant(0, "ycnjieyan");
+    e.debug_set_hp(1, 8);
+    e.debug_set_hp(2, 8);
+    e.debug_set_hp(3, 8);
+    advance_to(&mut e, 0, Phase::Play);
+    let tao = e.debug_place(0, "tao"); // 红
+    let h0 = hand_len(&e, 0);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: jieyan_def },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "隙焰受理: {out:?}"
+    );
+    settle_optional_confirm(&mut e);
+    let _ = tao;
+    assert_eq!(e.debug_hp(1), 7, "隙焰：p1 受 1 火伤");
+    assert_eq!(e.debug_hp(2), 7, "隙焰：p2 受 1 火伤");
+    assert_eq!(e.debug_hp(3), 7, "隙焰：p3 受 1 火伤");
+    assert!(hand_len(&e, 0) < h0, "隙焰：弃 1 张红手牌");
+
+    // 野升：p1 弃 2 张黑手牌 → 摸 2（SelectCards 多选）
+    e.debug_grant(1, "ycnyiesheng");
+    advance_to(&mut e, 1, Phase::Play);
+    e.debug_clear_hand(1);
+    // 谓词压顶两张黑牌入手（压顶后弹出入手，避免同一实体两处）
+    let b1 = e.debug_set_deck_top_by(|c| c.suit == Suit::Spade);
+    {
+        let core = e.state_core_mut();
+        let c = core.deck.pop().expect("just pushed");
+        core.players[1].hand.push(c);
+    }
+    let b2 = e.debug_set_deck_top_by(|c| c.suit == Suit::Club);
+    {
+        let core = e.state_core_mut();
+        let c = core.deck.pop().expect("just pushed");
+        core.players[1].hand.push(c);
+    }
+    let h1 = hand_len(&e, 1);
+    assert_eq!(h1, 2, "两张黑牌已布置");
+    let out = e.submit(GameCommand {
+        actor: 1,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: yiesheng_def },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "野升受理: {out:?}"
+    );
+    // SelectCards 多选应答（两张全选）
+    let c = e.open_choice().expect("野升选择挂起");
+    let (cid, obs) = (c.id, c.observer);
+    let sel: Vec<ChoiceOption> = c
+        .spec
+        .options
+        .iter()
+        .filter(|o| matches!(o, ChoiceOption::Card(x) if *x == b1 || *x == b2))
+        .cloned()
+        .collect();
+    assert_eq!(sel.len(), 2, "两张黑牌在选择面");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    assert_eq!(hand_len(&e, 1), 2, "野升：弃 2 摸 2 净持平");
+    assert!(
+        !e.debug_hand(1).contains(&b1) && !e.debug_hand(1).contains(&b2),
+        "野升：原两张黑牌已弃"
     );
 }
