@@ -360,6 +360,24 @@
       "equip_skills": [
         "nvwashi"
       ]
+    },
+    {
+      "name": "swd_kunlunjingc",
+      "kind": "kunlunjingc",
+      "suit": "spade",
+      "rank": 13,
+      "equip_skills": [
+        "kunlunjingc"
+      ]
+    },
+    {
+      "name": "swd_donghuangzhong",
+      "kind": "donghuangzhong",
+      "suit": "diamond",
+      "rank": 13,
+      "equip_skills": [
+        "donghuangzhong"
+      ]
     }
   ],
   "host_skills": [],

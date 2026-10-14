@@ -463,6 +463,12 @@ pub enum CardKind {
     /// 女娲石（swd 卡牌面补切批④）：equip5 宝物——其他角色濒死且其体力
     /// ≤0、自己体力 >1 时：目标回复 1、自己失去 1（global 触发）。
     Nvwashi,
+    /// 昆仑镜（swd 卡牌面补切批⑤）：equip5 宝物——出牌限一次亮牌堆顶
+    /// 3 张选 1 获得、以 1 张手牌替换（登记差异：上游替换牌入特殊区）。
+    Kunlunjingc,
+    /// 东皇钟（swd 卡牌面补切批⑤）：equip5 宝物——自己阶段结束弃 1 张
+    /// 红牌，置一张延时锦囊实体入目标判定区（实体发现替代 createCard）。
+    Donghuangzhong,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。
@@ -579,6 +585,8 @@ impl CardKind {
             CardKind::Qiankundai => EquipSlot::Treasure,
             CardKind::Shennongding => EquipSlot::Treasure,
             CardKind::Nvwashi => EquipSlot::Treasure,
+            CardKind::Kunlunjingc => EquipSlot::Treasure,
+            CardKind::Donghuangzhong => EquipSlot::Treasure,
             // 上游 subtype equip2（防具栏）；2026-10-07 载荷对照修正（曾误
             // 登记宝物栏）。
             CardKind::Mianju => EquipSlot::Armor,
@@ -633,7 +641,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 146] = [
+    pub const ALL: [CardKind; 148] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -775,6 +783,8 @@ impl CardKind {
         CardKind::Qiankundai,
         CardKind::Shennongding,
         CardKind::Nvwashi,
+        CardKind::Kunlunjingc,
+        CardKind::Donghuangzhong,
         CardKind::Tianfuzhen,
         CardKind::Qixingzhen,
         CardKind::Niaoxiangzhen,
@@ -926,6 +936,8 @@ impl CardKind {
             CardKind::Qiankundai => "qiankundai",
             CardKind::Shennongding => "shennongding",
             CardKind::Nvwashi => "nvwashi",
+            CardKind::Kunlunjingc => "kunlunjingc",
+            CardKind::Donghuangzhong => "donghuangzhong",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",

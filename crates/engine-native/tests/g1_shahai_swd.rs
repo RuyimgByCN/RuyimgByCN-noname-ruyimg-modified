@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 57, "swd 全 57 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 59, "swd 全 59 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 57, "swd 全 57 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 59, "swd 全 59 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 57, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 59, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4210,6 +4210,8 @@ fn swd_cards_alignment_guard_b29() {
         ("qiankundai", "club", 1),
         ("shennongding", "club", 13),
         ("nvwashi", "heart", 13),
+        ("kunlunjingc", "spade", 13),
+        ("donghuangzhong", "diamond", 13),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4223,7 +4225,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 57, "批④ equip5 三宝物后 57 张");
+    assert_eq!(pack.cards.len(), 59, "批⑤ equip5 两宝物后 59 张");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -4737,4 +4739,182 @@ fn swd_cards_equip5_b34_qiankundai_shennongding_nvwashi() {
     e.debug_set_hp(2, 1);
     e.debug_deal_damage(Some(1), 2, 1, engine_native::event::DamageNature::Normal);
     assert!(e.open_choice().is_none(), "女娲石反例：自己 hp=1 不触发");
+}
+
+/// T12 swd 卡牌面补切批⑤：昆仑镜（出牌限一次亮牌堆顶 3 选 1 获得、以
+/// 1 手牌替换）；东皇钟（阶段末弃 1 红牌置延时锦囊实体入目标判定区——
+/// 实体发现替代 createCard，登记差异随机→首张）。
+#[test]
+fn swd_cards_equip5_b35_kunlunjingc_donghuangzhong() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap())
+            .join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62015, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let equip_with_skills = |e: &mut Engine, p: u8, card: u32, skills: &[&str]| {
+        let mut snap = e.save();
+        snap.core.deck.retain(|x| *x != card);
+        snap.core.discard.retain(|x| *x != card);
+        snap.core.players[p as usize].equips.push(card);
+        for sk in skills {
+            let def = e.catalog().skill_by_name(sk).expect("装备技 def");
+            snap.core.skills.insert(
+                (p, def),
+                engine_native::state::SkillInstance {
+                    owner: p,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+        }
+        *e = Engine::restore_with_extensions(&snap, &[&pack]).expect("装备注入");
+    };
+
+    // ① 昆仑镜：亮牌堆顶 3 选 1 → 弃 1 手牌 → 获得选中牌
+    let kj = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Kunlunjingc)
+        .expect("昆仑镜在目录") as u32;
+    equip_with_skills(&mut e, 0, kj, &["kunlunjingc"]);
+    let replace = e.debug_place(0, "tao");
+    let deck_top3: Vec<u32> = e.state_core().deck.iter().take(3).copied().collect();
+    let kj_def = e.catalog().skill_by_name("kunlunjingc").expect("昆仑镜 def");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: kj_def },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "昆仑镜受理 {out:?}");
+    let want = deck_top3[0];
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("昆仑镜选亮牌窗");
+    let sel: Vec<ChoiceOption> = {
+        let ch = e.open_choice().expect("still open");
+        ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(x) if *x == want)).cloned().collect()
+    };
+    assert_eq!(sel.len(), 1, "亮牌面含牌堆首张");
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    let (cid, obs) = e.open_choice().map(|c| (c.id, c.observer)).expect("昆仑镜替换窗");
+    let sel: Vec<ChoiceOption> = {
+        let ch = e.open_choice().expect("still open");
+        ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(x) if *x == replace)).cloned().collect()
+    };
+    assert_eq!(sel.len(), 1);
+    submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    settle_optional_confirm(&mut e);
+    assert!(e.debug_hand(0).contains(&want), "昆仑镜：获得选中牌");
+    assert!(!e.debug_hand(0).contains(&replace), "昆仑镜：替换手牌已弃");
+    // 反例 ①b：限一次
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action: GameAction::ActivateSkill { skill: kj_def },
+    });
+    assert!(!matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "昆仑镜反例：限一次 {out:?}");
+
+    // ② 东皇钟：p1 阶段末弃 1 红牌 → 置延时锦囊实体入 p2 判定区
+    let dhz = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == engine_native::catalog::CardKind::Donghuangzhong)
+        .expect("东皇钟在目录") as u32;
+    equip_with_skills(&mut e, 1, dhz, &["donghuangzhong"]);
+    advance_to_play(&mut e, 1);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let red = {
+        let id = e.debug_set_deck_top_by(|d| {
+            matches!(d.suit, engine_native::catalog::Suit::Heart | engine_native::catalog::Suit::Diamond)
+        });
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != id);
+        core.players[1].hand.push(id);
+        id
+    };
+    // 主动推进 p1 的阶段（Judge→Draw→Play→Discard→End 各段末触发窗）
+    let mut guard = 0;
+    loop {
+        guard += 1;
+        assert!(guard < 300, "推进溢出");
+        if let Some(c) = e.open_choice() {
+            let prompt = c.spec.prompt;
+            if prompt == "donghuangzhong_cost" {
+                let (cid, obs) = (c.id, c.observer);
+                let sel: Vec<ChoiceOption> = {
+                    let ch = e.open_choice().expect("still open");
+                    ch.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(x) if *x == red)).cloned().collect()
+                };
+                assert_eq!(sel.len(), 1);
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+                continue;
+            }
+            if prompt == "donghuangzhong_target" {
+                let (cid, obs) = (c.id, c.observer);
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Player(2)] });
+                continue;
+            }
+            let (cid, obs) = (c.id, c.observer);
+            let sel: Vec<ChoiceOption> = if c.spec.min > 0 {
+                c.spec.options.iter().take(c.spec.min).copied().collect()
+            } else if !c.spec.options.is_empty() {
+                vec![c.spec.options[0]]
+            } else {
+                vec![]
+            };
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            continue;
+        }
+        if !e.state_core().player(2).judge.is_empty() {
+            break;
+        }
+        if e.turn().current != 1 || e.turn().phase == Phase::Play {
+            // p1 End 后未置入即失配
+        }
+        let cur = e.turn().current;
+        let out = submit(&mut e, cur, GameAction::NextPhase);
+        if let CommandOutcome::Rejected(_) = out {
+            continue;
+        }
+        if guard > 250 && e.turn().current == 1 && e.turn().phase == Phase::End {
+            break;
+        }
+    }
+    assert!(
+        !e.state_core().player(2).judge.is_empty(),
+        "东皇钟：延时锦囊实体置入 p2 判定区"
+    );
+    let judge_kind = e.catalog().cards[e.state_core().player(2).judge[0] as usize].kind;
+    assert!(
+        matches!(
+            judge_kind,
+            engine_native::catalog::CardKind::Le
+                | engine_native::catalog::CardKind::Bing
+                | engine_native::catalog::CardKind::ShanDian
+        ),
+        "东皇钟：置入的是延时锦囊实体"
+    );
 }

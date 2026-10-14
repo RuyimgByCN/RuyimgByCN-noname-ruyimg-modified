@@ -2801,7 +2801,9 @@ fn apply_command(
                 CardKind::Lianyaohu
                 | CardKind::Qiankundai
                 | CardKind::Nvwashi
-                | CardKind::Shennongding => {
+                | CardKind::Shennongding
+                | CardKind::Kunlunjingc
+                | CardKind::Donghuangzhong => {
                     // 炼妖壶/乾坤袋/女娲石/神农鼎：装备牌走 equip 校验
                     //（同栏替换由 commit_equip 处理；神农鼎/女娲石效果经
                     // 装备技实例）
