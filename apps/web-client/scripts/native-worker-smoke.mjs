@@ -57,6 +57,12 @@ check("unmapped_reported", !KNOWN.has("loadReplay") && !KNOWN.has("activateSkill
 
 // observer schema 适配首层（nativeObserverToSnapshot）
 const { nativeObserverToSnapshot } = await import("../src/worker/nativeBackend.ts");
+// 深字段断言前置：raw view 的 turnedOver/skills 已投影
+const rawv = JSON.parse(h.engine.view_json(0));
+console.error("DEEP", JSON.stringify({
+  turned: rawv.players.map(p => p.turnedOver),
+  skills: rawv.players.map(p => (p.skills || []).length),
+}));
 const view0 = JSON.parse(h.engine.view_json(0));
 const snap = nativeObserverToSnapshot(view0);
 check(

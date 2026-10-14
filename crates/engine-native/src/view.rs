@@ -46,6 +46,10 @@ pub struct PlayerCellView {
     pub generals: [Option<GeneralView>; 2],
     /// 明置状态：公开信息（明置行为本身可见）。
     pub revealed_generals: [bool; 2],
+    /// 翻面状态：公开信息（T13 客户端深字段，批 19 起投影）。
+    pub turned_over: bool,
+    /// 已授技能名（公开信息；T13 起投影，排序稳定）。
+    pub skills: Vec<&'static str>,
 }
 
 /// 单个座位的完整可见视图。

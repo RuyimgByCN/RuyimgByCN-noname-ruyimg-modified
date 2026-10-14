@@ -1501,6 +1501,22 @@ impl Engine {
                     hand_count: p.hand.len(),
                     equips: p.equips.clone(),
                     judge: p.judge.clone(),
+                    turned_over: p.face_down,
+                    skills: {
+                        let mut names: Vec<&'static str> = core
+                            .skills
+                            .range((i, u16::MIN)..)
+                            .take_while(|((owner, _), _)| *owner == i)
+                            .filter_map(|((_, def), inst)| {
+                                if !inst.enabled {
+                                    return None;
+                                }
+                                Some(self.catalog.skills[*def as usize].name)
+                            })
+                            .collect();
+                        names.sort_unstable();
+                        names
+                    },
                     generals,
                     revealed_generals: p.revealed_generals,
                 }

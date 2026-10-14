@@ -82,6 +82,8 @@ fn view_to_json(v: &PlayerView) -> serde_json::Value {
             "handCount": p.hand_count,
             "equips": p.equips,
             "judge": p.judge,
+            "turnedOver": p.turned_over,
+            "skills": p.skills,
             "revealedGenerals": p.revealed_generals,
         })).collect::<Vec<_>>(),
         "deckCount": v.deck_count,

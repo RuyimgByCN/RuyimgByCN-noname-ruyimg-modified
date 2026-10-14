@@ -192,10 +192,14 @@ export class EngineClient {
           hp: p.hp,
           max_hp: p.maxHp,
           alive: p.alive,
-          turned_over: false,
+          turned_over: p.turnedOver,
           hand_count: p.handCount,
           identity: null,
-          skills: [],
+          skills: p.skills.map((name: string) => ({
+            id: 0, def: 0, enabled: true, use_count: 0,
+            active: false, view_as: false, locked: false,
+            name,
+          } as import("../types/engine").SkillView & { name: string })),
         })),
         known_cards: [],
         outcome: view.outcome ?? null,
@@ -228,7 +232,8 @@ interface NativeView {
   players: Array<{
     seat: number; alive: boolean; hp: number; maxHp: number;
     hand: { own?: number[]; hidden?: boolean }; handCount: number;
-    equips: number[]; judge: number[]; revealedGenerals: boolean[];
+    equips: number[]; judge: number[];
+    turnedOver: boolean; skills: string[]; revealedGenerals: boolean[];
   }>;
   deckCount: number;
   discard: number[];

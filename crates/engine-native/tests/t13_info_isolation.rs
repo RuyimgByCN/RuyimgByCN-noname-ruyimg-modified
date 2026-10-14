@@ -11,6 +11,29 @@ use engine_native::view::HandView;
 use engine_native::Engine;
 use std::path::Path;
 
+/// T13 深字段（批 19 起投影）：turned_over 公开翻转状态 + skills 已授
+/// 技能名（仅 enabled 实例，排序稳定）。
+#[test]
+fn deep_fields_turned_over_and_skills() {
+    let mut e = Engine::new(1, 3);
+    e.debug_grant(1, "护驾");
+    let v = e.view_for(1);
+    let cell = &v.players[1];
+    assert!(!cell.turned_over, "默认未翻面");
+    assert!(
+        cell.skills.iter().any(|s| *s == "护驾"),
+        "skills 含已授技能: {:?}",
+        cell.skills
+    );
+    // 他人视角：skills 同为公开面（技能授予公开）
+    let v0 = e.view_for(0);
+    let cell0_of_1 = &v0.players[1];
+    assert!(
+        cell0_of_1.skills.iter().any(|s| *s == "护驾"),
+        "他人视角 skills 公开"
+    );
+}
+
 /// 标准原型：Own/Hidden 逐座位矩阵 + 牌库仅数量。
 #[test]
 fn isolation_prototype_seat_matrix() {
