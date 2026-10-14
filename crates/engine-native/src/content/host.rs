@@ -790,6 +790,10 @@ pub enum HostBehavior {
     /// 手牌全红时发动：弃全部手牌，逐张视为对（至多）两名其他存活角色
     /// 使用火杀（use_virtual_card；登记差异上游随机 2 名敌人）。
     SwdXuehuang,
+    /// 还侠（tag 287，批 27，屈娴 huanxia）：目录标记技——viewAs 红牌当
+    /// 杀（engine PlayCard 转化臂）+TurnState 跟踪未造成伤害的转化杀，
+    /// 持有者阶段末从弃牌堆收回（kernel 钩；登记差异上游经特殊区暂存）。
+    SwdHuanxia,
 }
 
 
@@ -860,6 +864,7 @@ impl HostBehavior {
             HostBehavior::SwdXielv => 284,
             HostBehavior::SwdZhuyu => 285,
             HostBehavior::SwdXuehuang => 286,
+            HostBehavior::SwdHuanxia => 287,
             HostBehavior::ShaDamageForceDiscard => 0,
             HostBehavior::PhaseEndRecoverOrDraw => 1,
             HostBehavior::TargetDiscardEquipOrDamage => 2,
@@ -1391,6 +1396,7 @@ impl HostBehavior {
             284 => HostBehavior::SwdXielv,
             285 => HostBehavior::SwdZhuyu,
             286 => HostBehavior::SwdXuehuang,
+            287 => HostBehavior::SwdHuanxia,
             _ => return None,
         })
     }
@@ -1408,7 +1414,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 286] = [
+    pub const ALL: [HostBehavior; 287] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1695,6 +1701,7 @@ impl HostBehavior {
         HostBehavior::SwdXielv,
         HostBehavior::SwdZhuyu,
         HostBehavior::SwdXuehuang,
+        HostBehavior::SwdHuanxia,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -1745,6 +1752,7 @@ impl HostBehavior {
             HostBehavior::SwdXielv => "host:xielv",
             HostBehavior::SwdZhuyu => "host:zhuyu",
             HostBehavior::SwdXuehuang => "host:xuehuang",
+            HostBehavior::SwdHuanxia => "host:huanxia",
             HostBehavior::SwdJiefen => "host:jiefen",
             HostBehavior::ShaDamageForceDiscard => "host:sha_damage_force_discard",
             HostBehavior::PhaseEndRecoverOrDraw => "host:phase_end_recover_or_draw",
@@ -2218,6 +2226,8 @@ impl HostBehavior {
             }),
             // 雪煌：出牌主动技（ActivateSkill 通道，limited bool 门）
             HostBehavior::SwdXuehuang => None,
+            // 还侠：无触发面（PlayCard 转化臂+kernel 跟踪钩承载）
+            HostBehavior::SwdHuanxia => None,
             // 朱羽：横置者受伤前置窗口（可选；上游 global damageBegin）
             HostBehavior::SwdZhuyu => Some(TriggerMeta {
                 event: EventKind::DamageBefore,
@@ -4210,6 +4220,8 @@ impl SkillBehavior for HostSkillBehavior {
                     }),
             // 雪煌：无触发面
             HostBehavior::SwdXuehuang => false,
+            // 还侠：无触发面
+            HostBehavior::SwdHuanxia => false,
             // 朱羽：横置角色受到非传导伤害且持有者有红牌（手/装备区）
             HostBehavior::SwdZhuyu => matches!(event,
                 EventData::Damage(d)
@@ -6127,6 +6139,8 @@ impl crate::catalog::SkillMachine for HostMachine {
         match self.behavior {
             // 平恤：无效果步（computed_distance 字段消费）
             HostBehavior::SwdPingxu => Flow::Done,
+            // 还侠：无效果步（PlayCard 转化臂+kernel 跟踪钩承载）
+            HostBehavior::SwdHuanxia => Flow::Done,
             // 分舵（习嫣 jiefen）：三段——选交牌目标（手>自己）→ 目标选
             // 手牌交出 → 自己选 1 张手牌交给手牌最少的其他存活角色（登
             // 记差异：上游 chooseCardTarget 同时选牌与目标，原生确定性

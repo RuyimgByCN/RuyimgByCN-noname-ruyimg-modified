@@ -49,6 +49,15 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     if d.amount == 0 {
         return;
     }
+    // 还侠跟踪（swd 屈娴，批 27）：还侠转化杀造成真实伤害 → 置位（上
+    // 游 expire 子技 source damageAfter 同口径；牌 id 匹配最后提交者）
+    if let Some(dcard) = d.card {
+        if let Some((card, caused)) = ctx.core.turn.huanxia_track.last_mut() {
+            if *card == dcard {
+                *caused = true;
+            }
+        }
+    }
     // 绝情（Boss 张春华，规则 v260；一将包旧绝情）：锁定——你造成的伤害
     // 改为目标失去等量体力（上游 source damageBefore cancel+loseHp(num)
     // 同口径；num=增幅前原始值=d.amount；取消后伤害事件不再结算=受击/
@@ -3205,6 +3214,31 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
             });
         }
     }
+    // 还侠回收（swd 屈娴，批 27）：持有者每阶段结束收回未造成伤害的还
+    // 侠转化杀（上游 gain 子技 player phaseEnd；登记差异上游经特殊区暂
+    // 存，原生从弃牌堆取回——牌若已离开弃牌堆则不收回）
+    if !ctx.core.turn.huanxia_track.is_empty()
+        && phase == Phase::End
+        && !begin
+    {
+        let pending = std::mem::take(&mut ctx.core.turn.huanxia_track);
+        for (card, caused) in pending {
+            if caused {
+                continue;
+            }
+            if let Some(pos) =
+                ctx.core.discard.iter().position(|x| *x == card)
+            {
+                let c = ctx.core.discard.remove(pos);
+                ctx.core.player_mut(player).hand.push(c);
+                ctx.log(LogEvent::CardsGiven {
+                    from: player,
+                    to: player,
+                    cards: vec![c],
+                });
+            }
+        }
+    }
     // 水没墓穴地图效果（mtg 第三批，规则 v102）：锁定——本弃牌阶段弃
     // 置过牌则阶段结束摸一（上游 phaseDiscardEnd forced 同口径）
     if phase == Phase::Discard {
@@ -3541,6 +3575,8 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 清残留跳阶段旗标（正常流程已被消费）
     ctx.core.turn.skip_draw_phase = false;
     ctx.core.turn.skip_play_phase = false;
+    // 还侠跟踪清残留（正常流程已被阶段末回收消费）
+    ctx.core.turn.huanxia_track.clear();
     // Boss 模式（P2/N08 模式入口批三-a，规则 v82）：死亡座位不跳过——
     // 轮到其回合时执行重整 tick（上游 bossPhaseLoop）：计数 +1、hp<上限
     // 则 +1（否则手牌 <4 摸 1），计数达阈值复活；连续死亡座位逐个 tick

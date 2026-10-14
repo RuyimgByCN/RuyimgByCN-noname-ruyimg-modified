@@ -337,6 +337,9 @@ pub struct TurnState {
     /// addTempSkill("kangyin2") 等价；换回合清空）——到其他角色距离
     /// -X、杀额外目标上限 +X（X=发动时 maxHp-体力）。
     pub kangyin2: Option<(PlayerId, u32)>,
+    /// 还侠跟踪（swd 屈娴，批 27）：本回合已提交的还侠转化杀（牌, 是否
+    /// 已造成伤害）——阶段末收回未造成伤害者（换回合清空）。
+    pub huanxia_track: Vec<(CardId, bool)>,
     /// 突击（U07 ow 士兵76，规则 v118）：本出牌阶段已使用牌数（上游
     /// countUsed 同口径；Play 阶段开始清零、换回合自然清零）。
     pub cards_used_play_phase: u32,

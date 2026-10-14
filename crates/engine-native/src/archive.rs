@@ -3033,6 +3033,12 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
             w.u32(x);
         }
     }
+    // 还侠跟踪（swd 屈娴，批 27）
+    w.len(t.huanxia_track.len());
+    for (c, caused) in &t.huanxia_track {
+        w.u32(*c);
+        w.boolean(*caused);
+    }
     w.u32(t.cards_used_play_phase);
     w.u32(t.bte_used_play_phase);
     w.u32(t.phase_number);
@@ -3402,6 +3408,11 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         1 => Some((r.u8()? as PlayerId, r.u32()?)),
         _ => return Err(ArchiveError::UnknownCardKind(255)),
     };
+    let huanxia_len = r.len()?;
+    let mut huanxia_track = Vec::with_capacity(huanxia_len);
+    for _ in 0..huanxia_len {
+        huanxia_track.push((r.u32()?, r.boolean()?));
+    }
     let cards_used_play_phase = r.u32()?;
     let bte_used_play_phase = r.u32()?;
     let phase_number = r.u32()?;
@@ -3528,6 +3539,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 discard_phase_discarded,
                 ciqiu_dying,
                 kangyin2,
+                huanxia_track,
                 cards_used_play_phase,
                 bte_used_play_phase,
                 phase_number,

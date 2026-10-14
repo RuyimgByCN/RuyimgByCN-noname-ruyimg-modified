@@ -391,6 +391,7 @@ impl Engine {
                 discard_phase_discarded: 0,
                 ciqiu_dying: Vec::new(),
                 kangyin2: None,
+                huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
                 bte_used_play_phase: 0,
                 phase_number: 0,
@@ -2549,6 +2550,16 @@ fn apply_command(
                 {
                     kind = CardKind::Jiu;
                 }
+                // 还侠（屈娴，swd 武将面批 27）：红色牌当【杀】（viewAs
+                // 转化，武圣同族；上游 he 区红牌仅使用面不含响应=登记）
+                else if catalog
+                    .skill_by_name("huanxia")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && red
+                {
+                    kind = CardKind::Sha;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至
@@ -4259,6 +4270,20 @@ fn apply_command(
             } else {
                 None
             };
+            // 还侠跟踪（swd 屈娴，批 27）：还侠转化的杀入跟踪列（是否造
+            // 成伤害由 commit_damage 置位；阶段末回收未造成伤害者）
+            if use_as == Some(CardKind::Sha)
+                && catalog
+                    .skill_by_name("huanxia")
+                    .map(|d| state.core.has_skill(state.core.turn.current, d))
+                    .unwrap_or(false)
+            {
+                state
+                    .core
+                    .turn
+                    .huanxia_track
+                    .push((card, false));
+            }
             crate::resolution::push_frame(
                 &mut state.resolution,
                 EventData::CardUsed(crate::machine::card_use_as(
@@ -4512,6 +4537,11 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
             push_u8(&mut h, o);
             push_u32(&mut h, x);
         }
+    }
+    push_u32(&mut h, c.turn.huanxia_track.len() as u32);
+    for (card, caused) in &c.turn.huanxia_track {
+        push_u32(&mut h, *card);
+        push_u8(&mut h, *caused as u8);
     }
     push_u32(&mut h, c.turn.cards_used_play_phase);
     push_u32(&mut h, c.turn.bte_used_play_phase);
@@ -5623,6 +5653,7 @@ mod tests {
                 discard_phase_discarded: 0,
                 ciqiu_dying: Vec::new(),
                 kangyin2: None,
+                huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
                 bte_used_play_phase: 0,
                 phase_number: 0,
@@ -5715,6 +5746,7 @@ mod tests {
                 discard_phase_discarded: 0,
                 ciqiu_dying: Vec::new(),
                 kangyin2: None,
+                huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
                 bte_used_play_phase: 0,
                 phase_number: 0,
