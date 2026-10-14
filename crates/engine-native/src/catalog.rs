@@ -490,6 +490,18 @@ pub enum CardKind {
     /// 手牌角色判定，非红桃则其用首张手牌指向座位序首个其他存活者（登记
     /// 差异上游随机牌/随机目标）。
     Sifeizhenmian,
+    /// 书锤（swd 卡牌面补切批⑪）：equip5 宝物——多杀循环机暂缓，kind 先
+    /// 注册卡牌数据入包。
+    Shuchui,
+    /// 散灯金环（swd 卡牌面补切批⑪）：equip5 宝物——杀被闪后判定改写暂
+    /// 缓，kind 先注册。
+    Sadengjinhuan,
+    /// 昊天塔（swd 卡牌面补切批⑪）：equip5 宝物——判定改写暂缓，kind 先
+    /// 注册。
+    Haotianta,
+    /// 玉如意（swd 卡牌面补切批⑪）：equip5 宝物——摸牌改写暂缓，kind 先
+    /// 注册。
+    Yuruyi,
     /// 青龙之圭（swd 卡牌面补切批⑩）：器族手持——准备阶段摸 2 弃 1。
     Qinglongzhigui,
     /// 朱雀之璋（swd 卡牌面补切批⑩）：器族手持——受他人伤害后来源火 1 伤。
@@ -629,6 +641,10 @@ impl CardKind {
             CardKind::Kongdongyin => EquipSlot::Treasure,
             CardKind::Guilingzhitao => EquipSlot::Treasure,
             CardKind::Sifeizhenmian => EquipSlot::Treasure,
+            CardKind::Shuchui => EquipSlot::Treasure,
+            CardKind::Sadengjinhuan => EquipSlot::Treasure,
+            CardKind::Haotianta => EquipSlot::Treasure,
+            CardKind::Yuruyi => EquipSlot::Treasure,
             // 上游 subtype equip2（防具栏）；2026-10-07 载荷对照修正（曾误
             // 登记宝物栏）。
             CardKind::Mianju => EquipSlot::Armor,
@@ -683,7 +699,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 160] = [
+    pub const ALL: [CardKind; 164] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -834,6 +850,10 @@ impl CardKind {
         CardKind::Xianluhui,
         CardKind::Guilingzhitao,
         CardKind::Sifeizhenmian,
+        CardKind::Shuchui,
+        CardKind::Sadengjinhuan,
+        CardKind::Haotianta,
+        CardKind::Yuruyi,
         CardKind::Qinglongzhigui,
         CardKind::Zhuquezhizhang,
         CardKind::Baishouzhihu,
@@ -999,6 +1019,10 @@ impl CardKind {
             CardKind::Xianluhui => "xianluhui",
             CardKind::Guilingzhitao => "guilingzhitao",
             CardKind::Sifeizhenmian => "sifeizhenmian",
+            CardKind::Shuchui => "shuchui",
+            CardKind::Sadengjinhuan => "sadengjinhuan",
+            CardKind::Haotianta => "haotianta",
+            CardKind::Yuruyi => "yuruyi",
             CardKind::Qinglongzhigui => "qinglongzhigui",
             CardKind::Zhuquezhizhang => "zhuquezhizhang",
             CardKind::Baishouzhihu => "baishouzhihu",

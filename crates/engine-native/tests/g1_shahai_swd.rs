@@ -117,7 +117,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 72, "swd 全 72 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 76, "swd 全 76 张（对账勘误+6：逐鹿小虎/木甲人/逐方绅视补张，护符花色勘误，批①）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -212,7 +212,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 72, "swd 全 72 张（对账勘误+6，批①）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 76, "swd 全 76 张（对账勘误+6，批①）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -227,7 +227,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 72, "锁定副本仍可用");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 76, "锁定副本仍可用");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -2493,10 +2493,15 @@ fn swd_generals_b19_five_damage_line_skills() {
     e.debug_set_hp(0, 8);
     e.debug_set_hp(1, 3);
     advance_to_play(&mut e, 1, );
+    // 器族手持技（批⑩ init hook）在 p0 准备阶段给初始手牌含器族牌的角
+    // 色加了护甲——清护甲+清手牌保持伤害断言纯凑（批⑪ 发牌敏感同 b37）
+    e.debug_set_hujia(0, 0);
+    e.debug_clear_hand(0);
     let sha1 = e.debug_place(1, "sha");
     let hp0 = e.debug_hp(0);
     submit(&mut e, 1, GameAction::PlayCard { card: sha1, targets: vec![0] });
     settle_optional_confirm(&mut e);
+
     assert_eq!(e.debug_hp(0), hp0 - 2, "破星：目标体力高 → 伤 +1");
 
     // 花镜：p2 持花镜，p2 杀 p0 → p2 回 1（已受伤时）摸 1
@@ -4225,6 +4230,10 @@ fn swd_cards_alignment_guard_b29() {
         ("baishouzhihu", "spade", 6),
         ("xuanwuzhihuang", "club", 6),
         ("huanglinzhicong", "heart", 5),
+        ("shuchui", "club", 6),
+        ("sadengjinhuan", "club", 13),
+        ("haotianta", "diamond", 13),
+        ("yuruyi", "heart", 9),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -4238,7 +4247,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 72, "批⑩ 器族五件后 72 张");
+    assert_eq!(pack.cards.len(), 76, "批⑪ equip5 收口后 76 张（余 4 张挂独立机批暂以数据入包）");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2

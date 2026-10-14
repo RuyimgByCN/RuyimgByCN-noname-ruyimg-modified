@@ -2844,6 +2844,10 @@ fn apply_command(
                 | CardKind::Kongdongyin
                 | CardKind::Guilingzhitao
                 | CardKind::Sifeizhenmian
+                | CardKind::Shuchui
+                | CardKind::Sadengjinhuan
+                | CardKind::Haotianta
+                | CardKind::Yuruyi
                 // 器族五件：手持牌（非装备路径；效果经手持触发技）
                 | CardKind::Qinglongzhigui
                 | CardKind::Zhuquezhizhang

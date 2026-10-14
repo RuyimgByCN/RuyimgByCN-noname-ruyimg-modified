@@ -8546,12 +8546,15 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             // 破星：目标体力 > 持有者 → 伤害 +1（帧直写）
             HostBehavior::SwdPoxing => {
+                eprintln!("b41 dbg poxing step target={:?} stage={:?}", self.target, self.stage);
                 if let Some(t) = self.target {
+                    eprintln!("b41 dbg hp t={} owner={}", ctx.core.player(t).hp, ctx.core.player(self.owner).hp);
                     if ctx.core.player(t).hp > ctx.core.player(self.owner).hp {
                         let frame =
                             ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
                         if let EventData::Damage(dm) = &mut frame.data {
                             dm.amount += 1;
+                            eprintln!("b41 dbg amount now {}", dm.amount);
                         }
                     }
                 }
