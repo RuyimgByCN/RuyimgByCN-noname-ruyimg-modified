@@ -1,7 +1,7 @@
 # T12 swd 武将面批 85：舒莞儿（活弹）
 
 - 日期：2026-10-15
-- 范围：一将 partial 转正——**76/79 名**（上批 75 将+1）；新增 HostBehavior tag 380
+- 范围：一将 partial 转正——**74/79 名**（上批 73 将+1）；新增 HostBehavior tag 380
 - 上游回读：`archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/{character.js,skill.js,translate.js}`（huodan 逐段核验）
 
 ## 一将语义与接线
@@ -19,5 +19,5 @@
 
 ## 结论
 
-- **76/79 名**（sxianjing 待字段批：存储陷阱牌+同花色响应对面）。
+- **74/79 名**（计数勘误：b84 未加将——此前 75/76 系误计；sxianjing 待字段批）。
 - 四项用户决策维持待用户裁决清单登记。

@@ -1,7 +1,7 @@
 # T12 swd 武将面批 84：淳于恒/凤天凌（补技）
 
 - 日期：2026-10-15
-- 范围：两 partial 补技——**75/79 名**（上批 73 将+2）；新增 HostBehavior tag 378–379
+- 范围：两 partial 补技——**名数不变 73/79**（补技不加将）；新增 HostBehavior tag 378–379
 - 上游回读：`archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/{character.js,skill.js,translate.js}`
 
 ## 两将语义与接线
@@ -26,5 +26,5 @@
 
 ## 结论
 
-- **75/79 名**（局内剩余 4 将：车芸/端蒙/疆梧/尉迟嫣红/舒莞儿/姜子牙待批）。
+- **73/79 名**（部分转正将的缺技补全；入包将数不变）。
 - 四项用户决策维持待用户裁决清单登记。

@@ -1869,6 +1869,22 @@
           "mapping": "host:huodan"
         }
       ]
+    },
+    {
+      "name": "swd_jiangwu",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "yijue",
+          "mapping": "host:yijue"
+        },
+        {
+          "name": "dangping",
+          "mapping": "host:dangping"
+        }
+      ]
     }
   ],
   "skills": [
