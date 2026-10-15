@@ -6848,6 +6848,59 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 // 无手牌：唯一可选 = 令使用者摸 1。
                 ctx.draw_cards(self.source, 1);
             }
+            // 渔人（喀玛，swd 武将面批㉙）：锁定——杀指定目标后判定（内联
+            // 确定性口径同铁骑，登记差异无改判窗）：黑→弃目标 he 随机一张
+            //（上游 discardPlayerCard forced random 同口径）；红→摸 1（登记
+            // 差异：上游收回此杀实体——实体回流与在结机器持有冲突改摸 1）。
+            // 每杀一次=!asked 门内。
+            {
+                let has_yueren = ctx
+                    .catalog
+                    .skill_by_name("yueren")
+                    .map(|d| ctx.core.has_skill(self.source, d))
+                    .unwrap_or(false);
+                if has_yueren && ctx.core.player(self.target).alive {
+                    let judged = ctx.draw_judge_card();
+                    let black = matches!(
+                        ctx.catalog.cards[judged as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    );
+                    ctx.to_discard(judged);
+                    if black {
+                        let mut pool: Vec<crate::ids::CardId> =
+                            ctx.core.player(self.target).hand.iter().copied().collect();
+                        pool.extend(ctx.core.player(self.target).equips.iter().copied());
+                        if !pool.is_empty() {
+                            let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                            let c = pool[j];
+                            let in_hand = ctx.core.player(self.target).hand.contains(&c);
+                            if in_hand {
+                                ctx.take_hand_card(self.target, c);
+                            } else {
+                                ctx.core
+                                    .player_mut(self.target)
+                                    .equips
+                                    .retain(|x| *x != c);
+                                if ctx.catalog.card_kind(c).is_equip() {
+                                    crate::kernel::revoke_equip_skills(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        self.target,
+                                        c,
+                                    );
+                                }
+                            }
+                            ctx.to_discard(c);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: self.target,
+                                cards: vec![c],
+                            });
+                        }
+                    } else if ctx.core.player(self.source).alive {
+                        ctx.draw_cards(self.source, 1);
+                    }
+                }
+            }
             // 玲月（司徒强，swd 武将面批㉗）：锁定——杀指定目标后目标弃
             // 置一张牌（he 确定性首张，登记差异上游目标自选 chooseToDiscard
             // forced；每杀每目标一次=!asked 门内）

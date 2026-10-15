@@ -946,6 +946,13 @@ pub enum HostBehavior {
     /// 回复者非自己且其手牌≥自己则各摸 1，否则回复者摸 1（唤魂/待行
     /// defer）。
     SwdYinyue,
+    /// 灵心（tag 341，武将面批㉙ 玉澧）：阶段结束 frequent——观看牌堆顶
+    /// 三张，红桃收入手牌其余弃置（天香非原生 defer）。
+    SwdLingxin,
+    /// 渔人（tag 342，武将面喀玛批㉙）：锁定——杀指定目标后判定：黑→弃
+    /// 目标 he 随机一张；红→摸 1（登记差异：上游收回此杀实体，原生实体
+    /// 回流与在结机器持有冲突改摸 1；每杀一次=!asked 门）。
+    SwdYueren,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1069,6 +1076,8 @@ impl HostBehavior {
             HostBehavior::SwdLjifeng => 338,
             HostBehavior::SwdDuanyi => 339,
             HostBehavior::SwdYinyue => 340,
+            HostBehavior::SwdLingxin => 341,
+            HostBehavior::SwdYueren => 342,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1650,6 +1659,8 @@ impl HostBehavior {
             338 => HostBehavior::SwdLjifeng,
             339 => HostBehavior::SwdDuanyi,
             340 => HostBehavior::SwdYinyue,
+            341 => HostBehavior::SwdLingxin,
+            342 => HostBehavior::SwdYueren,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1670,7 +1681,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 337] = [
+    pub const ALL: [HostBehavior; 339] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2006,6 +2017,8 @@ impl HostBehavior {
         HostBehavior::SwdLjifeng,
         HostBehavior::SwdDuanyi,
         HostBehavior::SwdYinyue,
+        HostBehavior::SwdLingxin,
+        HostBehavior::SwdYueren,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2106,6 +2119,8 @@ impl HostBehavior {
             HostBehavior::SwdLjifeng => "host:ljifeng",
             HostBehavior::SwdDuanyi => "host:duanyi",
             HostBehavior::SwdYinyue => "host:yinyue",
+            HostBehavior::SwdLingxin => "host:lingxin",
+            HostBehavior::SwdYueren => "host:yueren",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2851,6 +2866,16 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 灵心：自己阶段结束（frequent 锁定式=非 optional）
+            HostBehavior::SwdLingxin => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 渔人：锁定（sha 机器内联臂查询），无触发面
+            HostBehavior::SwdYueren => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -5059,6 +5084,11 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdYinyue => matches!(event,
                 EventData::Recover { player, .. }
                     if ctx.state.player(*player).alive),
+            // 灵心：自己阶段结束帧（End/收束入场——PhaseEnd 语义由 filter
+            // 验 begin=false 且 phase==owner 当前阶段末）
+            HostBehavior::SwdLingxin => matches!(event,
+                EventData::Phase { player, begin, .. }
+                if *player == owner && !*begin),
             // 苏生：任意角色死亡前置、自己有手牌（每回合一次走 limits 在
             // OptionalGate 消费；目标体力重置在机器步写回）
             HostBehavior::SwdSusheng => matches!(event,
@@ -9075,6 +9105,47 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 灵心：frequent——牌堆顶三张（pop×3）：红桃入手，其余弃置
+            HostBehavior::SwdLingxin => {
+                if !ctx.core.player(self.owner).alive {
+                    return Flow::Done;
+                }
+                for _ in 0..3 {
+                    if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+                        break;
+                    }
+                    if ctx.core.deck.is_empty() {
+                        let mut cards = std::mem::take(&mut ctx.core.discard);
+                        ctx.core.rng.shuffle(&mut cards);
+                        ctx.core.deck = cards;
+                        ctx.log(LogEvent::DeckReshuffled);
+                    }
+                    let c = ctx
+                        .core
+                        .deck
+                        .pop()
+                        .expect("lingxin: deck or discard non-empty");
+                    if matches!(
+                        ctx.catalog.cards[c as usize].suit,
+                        crate::catalog::Suit::Heart
+                    ) {
+                        ctx.core.player_mut(self.owner).hand.push(c);
+                        ctx.log(LogEvent::CardsDrawn {
+                            player: self.owner,
+                            cards: vec![c],
+                        });
+                    } else {
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: self.owner,
+                            cards: vec![c],
+                        });
+                    }
+                }
+                Flow::Done
+            }
+            // 渔人：锁定（sha 机器内联臂查询），无独立效果步
+            HostBehavior::SwdYueren => Flow::Done,
             // 乐跃：TargetChoice-free 分流——回复者非自己且其手牌≥自己则
             // 各摸 1，否则回复者摸 1
             HostBehavior::SwdYinyue => {

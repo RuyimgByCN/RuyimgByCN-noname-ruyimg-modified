@@ -1225,6 +1225,38 @@
           "mapping": "host:yinyue"
         }
       ]
+    },
+    {
+      "name": "swd_yuli",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "lingxin",
+          "mapping": "host:lingxin"
+        },
+        {
+          "name": "tianxiang",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_kama",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "yueren",
+          "mapping": "host:yueren"
+        },
+        {
+          "name": "shangshi",
+          "mapping": "builtin:伤逝"
+        }
+      ]
     }
   ]
 }
