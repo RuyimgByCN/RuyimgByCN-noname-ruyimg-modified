@@ -1593,6 +1593,58 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_shaowei",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "jianji",
+          "mapping": null
+        },
+        {
+          "name": "huangyu",
+          "mapping": "host:huangyu"
+        }
+      ]
+    },
+    {
+      "name": "swd_jialanduo",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "xianyin",
+          "mapping": "host:xianyin"
+        },
+        {
+          "name": "mailun",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_qi",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "yaotong",
+          "mapping": null
+        },
+        {
+          "name": "heihuo",
+          "mapping": null
+        },
+        {
+          "name": "pojian",
+          "mapping": "host:pojian"
+        }
+      ]
     }
   ]
 }
