@@ -3166,6 +3166,20 @@ fn apply_command(
                         .skill_by_name("lianwu")
                         .map(|def| core.has_skill(core.turn.current, def))
                         .unwrap_or(false);
+                    // 疾风（卢承轩，swd 武将面批㉘）：锁定——杀目标上限 +X
+                    //（X=已损失体力，上游 range[1] += maxHp-hp 同口径）
+                    let ljifeng_extra = catalog
+                        .skill_by_name("ljifeng")
+                        .map(|def| core.has_skill(core.turn.current, def))
+                        .unwrap_or(false)
+                        && core.player(core.turn.current).max_hp
+                            > core.player(core.turn.current).hp as u32;
+                    let ljifeng_n = if ljifeng_extra {
+                        core.player(core.turn.current).max_hp
+                            - core.player(core.turn.current).hp as u32
+                    } else {
+                        0
+                    };
                     let max_targets = if tianxian_inf || kuangxiao_inf {
                         usize::MAX
                     } else {
@@ -3174,6 +3188,7 @@ fn apply_command(
                             + u32::from(feiren_extra) as usize
                             + u32::from(juyuan_extra) as usize
                             + u32::from(lianwu_extra) as usize
+                            + ljifeng_n as usize
                     };
                     if targets.is_empty() || targets.len() > max_targets {
                         return Err(RejectReason::IllegalTargets);

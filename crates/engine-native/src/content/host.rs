@@ -934,6 +934,18 @@ pub enum HostBehavior {
     /// 暗莲映（tag 337，武将面批㉗ 暗卡）：手牌被弃置空后摸 2（frequent
     /// 锁定式；登记差异上游 loseEnd 全丢失面≈弃置面；颂词 defer）。
     SwdAnlianying,
+    /// 疾风（tag 338，武将面批㉘ 卢承轩）：锁定 marker——杀目标上限 +X、
+    /// 与他人距离 -X（X=已损失体力；engine max_targets 链+state
+    /// computed_distance 链查询）。
+    SwdLjifeng,
+    /// 断义（tag 339，武将面批㉘ 慕容诗）：出牌阶段限一次弃两张杀——对
+    /// 一名角色造成 1 点伤害并其随机弃 X 张 he（X=其已损失体力；孤兴
+    /// defer）。
+    SwdDuanyi,
+    /// 乐跃（tag 340，武将面批㉘ 小雪）：任意角色回复体力后（确认门）——
+    /// 回复者非自己且其手牌≥自己则各摸 1，否则回复者摸 1（唤魂/待行
+    /// defer）。
+    SwdYinyue,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1054,6 +1066,9 @@ impl HostBehavior {
             HostBehavior::SwdFengze => 335,
             HostBehavior::SwdLingyue => 336,
             HostBehavior::SwdAnlianying => 337,
+            HostBehavior::SwdLjifeng => 338,
+            HostBehavior::SwdDuanyi => 339,
+            HostBehavior::SwdYinyue => 340,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1632,6 +1647,9 @@ impl HostBehavior {
             335 => HostBehavior::SwdFengze,
             336 => HostBehavior::SwdLingyue,
             337 => HostBehavior::SwdAnlianying,
+            338 => HostBehavior::SwdLjifeng,
+            339 => HostBehavior::SwdDuanyi,
+            340 => HostBehavior::SwdYinyue,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1652,7 +1670,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 334] = [
+    pub const ALL: [HostBehavior; 337] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -1985,6 +2003,9 @@ impl HostBehavior {
         HostBehavior::SwdFengze,
         HostBehavior::SwdLingyue,
         HostBehavior::SwdAnlianying,
+        HostBehavior::SwdLjifeng,
+        HostBehavior::SwdDuanyi,
+        HostBehavior::SwdYinyue,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2082,6 +2103,9 @@ impl HostBehavior {
             HostBehavior::SwdFengze => "host:fengze",
             HostBehavior::SwdLingyue => "host:lingyue",
             HostBehavior::SwdAnlianying => "host:anlianying",
+            HostBehavior::SwdLjifeng => "host:ljifeng",
+            HostBehavior::SwdDuanyi => "host:duanyi",
+            HostBehavior::SwdYinyue => "host:yinyue",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2812,6 +2836,19 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 疾风：锁定 marker（engine max_targets 链+state computed_distance
+            // 链查询），无触发面
+            HostBehavior::SwdLjifeng => None,
+            // 断义：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
+            HostBehavior::SwdDuanyi => None,
+            // 乐跃：任意角色回复结算后（确认门=optional）
+            HostBehavior::SwdYinyue => Some(TriggerMeta {
+                event: EventKind::Recover,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
@@ -5018,6 +5055,10 @@ impl SkillBehavior for HostSkillBehavior {
                 if *player == owner
                     && !cards.is_empty()
                     && ctx.state.player(owner).hand.is_empty()),
+            // 乐跃：任意角色回复结算后（候选面在机器步分流）
+            HostBehavior::SwdYinyue => matches!(event,
+                EventData::Recover { player, .. }
+                    if ctx.state.player(*player).alive),
             // 苏生：任意角色死亡前置、自己有手牌（每回合一次走 limits 在
             // OptionalGate 消费；目标体力重置在机器步写回）
             HostBehavior::SwdSusheng => matches!(event,
@@ -5937,6 +5978,30 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 断义（武将面批㉘ 慕容诗）：手牌中杀多于 1（上游 countCards
+            // "sha" > 1 同口径）
+            HostBehavior::SwdDuanyi => {
+                let sha_n = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .filter(|c| ctx.catalog.card_kind(**c).is_sha_like())
+                    .count();
+                if sha_n <= 1 {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 森罗（武将面批㉖ 莫耶）：自己手牌数为全场严格最少
             HostBehavior::SwdSenluo => {
                 let my = ctx.state.player(owner).hand.len();
@@ -8882,6 +8947,158 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::SwdAnlianying => {
                 if ctx.core.player(self.owner).alive {
                     ctx.draw_cards(self.owner, 2);
+                }
+                Flow::Done
+            }
+            // 疾风：锁定 marker（engine max_targets 链+state computed_distance
+            // 链查询），无独立效果步
+            HostBehavior::SwdLjifeng => Flow::Done,
+            // 断义：Act 弃两张杀（代价，selectCard 2 非默认弃置面——
+            // 机器显式弃）→ SelectCard 消费 → TargetChoice 选目标 →
+            // 1 伤 + 目标随机弃 X 张 he（X=其已损失体力）
+            HostBehavior::SwdDuanyi => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.card_kind(*c).is_sha_like())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.len() < 2 {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "duanyi_discard",
+                            options,
+                            min: 2,
+                            max: 2,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picks: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picks.len() < 2 {
+                        return Flow::Done;
+                    }
+                    for c in picks {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.discard_from_hand(self.owner, c);
+                        }
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "duanyi_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(self.owner),
+                        t,
+                        1,
+                        crate::event::DamageNature::Normal,
+                        None,
+                    )));
+                    let x = (ctx.core.player(t).max_hp as i32
+                        - ctx.core.player(t).hp)
+                    .max(0) as usize;
+                    let mut pool: Vec<CardId> =
+                        ctx.core.player(t).hand.iter().copied().collect();
+                    pool.extend(ctx.core.player(t).equips.iter().copied());
+                    for _ in 0..x {
+                        if pool.is_empty() {
+                            break;
+                        }
+                        let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                        let c = pool.swap_remove(j);
+                        let in_hand = ctx.core.player(t).hand.contains(&c);
+                        if in_hand {
+                            ctx.take_hand_card(t, c);
+                        } else {
+                            ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                            if ctx.catalog.card_kind(c).is_equip() {
+                                crate::kernel::revoke_equip_skills(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    t,
+                                    c,
+                                );
+                            }
+                        }
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: t,
+                            cards: vec![c],
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 乐跃：TargetChoice-free 分流——回复者非自己且其手牌≥自己则
+            // 各摸 1，否则回复者摸 1
+            HostBehavior::SwdYinyue => {
+                let Some(r) = ctx
+                    .res
+                    .frame(ctx.current_frame_id())
+                    .map(|f| &f.data)
+                    .and_then(|data| match data {
+                        crate::event::EventData::Recover { player, .. } => Some(*player),
+                        _ => None,
+                    })
+                else {
+                    return Flow::Done;
+                };
+                if r != self.owner
+                    && ctx.core.player(r).hand.len()
+                        >= ctx.core.player(self.owner).hand.len()
+                {
+                    ctx.draw_cards(r, 1);
+                    if ctx.core.player(self.owner).alive {
+                        ctx.draw_cards(self.owner, 1);
+                    }
+                } else if ctx.core.player(r).alive {
+                    ctx.draw_cards(r, 1);
                 }
                 Flow::Done
             }
@@ -21370,7 +21587,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdZhanlu
         | HostBehavior::SwdXianghui
         | HostBehavior::SwdSusheng
-        | HostBehavior::SwdSenluo => {
+        | HostBehavior::SwdSenluo
+        | HostBehavior::SwdDuanyi => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

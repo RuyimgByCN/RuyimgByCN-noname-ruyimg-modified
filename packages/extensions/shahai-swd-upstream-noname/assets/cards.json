@@ -1173,6 +1173,58 @@
           "mapping": "host:anlianying"
         }
       ]
+    },
+    {
+      "name": "swd_luchengxuan",
+      "faction": "wu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "ljifeng",
+          "mapping": "host:ljifeng"
+        },
+        {
+          "name": "lxianglong",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_murongshi",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "duanyi",
+          "mapping": "host:duanyi"
+        },
+        {
+          "name": "guxing",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_yuxiaoxue",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "huanhun",
+          "mapping": null
+        },
+        {
+          "name": "daixing",
+          "mapping": null
+        },
+        {
+          "name": "yinyue",
+          "mapping": "host:yinyue"
+        }
+      ]
     }
   ]
 }

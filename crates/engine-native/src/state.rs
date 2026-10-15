@@ -854,13 +854,24 @@ impl GameStateCore {
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         let minus = minus + u32::from(xiongshou);
+        // 疾风（卢承轩，swd 武将面批㉘）：锁定技——计算与他人的距离 -X
+        //（X=自己已损失体力，上游 attackFrom distance += hp-maxHp 同口径）
+        let ljifeng = catalog
+            .skill_by_name("ljifeng")
+            .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
+            .unwrap_or(false);
+        let ljifeng_minus = if ljifeng {
+            (self.player(a).max_hp as i32 - self.player(a).hp).max(0) as u32
+        } else {
+            0
+        };
         // 妖兽（Boss 神兽共有技，规则 v221）：锁定技——你与其他角色
         // 距离 -2（上游 boss_yaoshou mod globalFrom distance-2 同口径）
         let yaoshou = catalog
             .skill_by_name(crate::content::standard::BOSS_YAOSHOU)
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
-        let minus = minus + 2 * u32::from(yaoshou);
+        let minus = minus + 2 * u32::from(yaoshou) + ljifeng_minus;
         // 义从（公孙瓒）：锁定技——你计算与其他角色的距离 -1；其他角色
         // 计算与你的距离 +1（你的体力值不大于 2 时）。
         let yicong_from = catalog
