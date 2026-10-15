@@ -1901,6 +1901,22 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_jiangziya",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "mingfu",
+          "mapping": "host:mingfu"
+        },
+        {
+          "name": "tianlun",
+          "mapping": null
+        }
+      ]
     }
   ],
   "skills": [
