@@ -1853,6 +1853,22 @@
           "mapping": "host:lmazui"
         }
       ]
+    },
+    {
+      "name": "swd_shuwaner",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "sxianjing",
+          "mapping": null
+        },
+        {
+          "name": "huodan",
+          "mapping": "host:huodan"
+        }
+      ]
     }
   ],
   "skills": [

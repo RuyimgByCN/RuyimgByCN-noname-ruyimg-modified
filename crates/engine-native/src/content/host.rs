@@ -1086,6 +1086,10 @@ pub enum HostBehavior {
     /// 圣手·淳于恒面（tag 379，武将面批 84 淳于恒）：锁定 marker——
     /// 黑色手牌当草药使用（engine PlayCard viewAs 链查询）。
     SwdShengshou,
+    /// 活弹·舒莞儿面（tag 380，武将面批 85 舒莞儿）：出牌阶段限一次——
+    /// 弃一张红色手牌并失去 1 点体力：一名目标受 2 点火伤或两名目标各
+    /// 受 1 点火伤（上游 huodan selectTarget [1,2] 同口径）。
+    SwdHuodan,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1248,6 +1252,7 @@ impl HostBehavior {
             HostBehavior::SwdLmazui2 => 377,
             HostBehavior::SwdJiang => 378,
             HostBehavior::SwdShengshou => 379,
+            HostBehavior::SwdHuodan => 380,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1868,6 +1873,7 @@ impl HostBehavior {
             377 => HostBehavior::SwdLmazui2,
             378 => HostBehavior::SwdJiang,
             379 => HostBehavior::SwdShengshou,
+            380 => HostBehavior::SwdHuodan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1888,7 +1894,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 376] = [
+    pub const ALL: [HostBehavior; 377] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2263,6 +2269,7 @@ impl HostBehavior {
         HostBehavior::SwdLmazui2,
         HostBehavior::SwdJiang,
         HostBehavior::SwdShengshou,
+        HostBehavior::SwdHuodan,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2402,6 +2409,7 @@ impl HostBehavior {
             HostBehavior::SwdLmazui2 => "host:lmazui2",
             HostBehavior::SwdJiang => "host:jiang",
             HostBehavior::SwdShengshou => "host:shengshou",
+            HostBehavior::SwdHuodan => "host:huodan",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3348,6 +3356,8 @@ impl HostBehavior {
             }),
             // 圣手·淳于恒面：锁定 marker（engine PlayCard viewAs 链查询）
             HostBehavior::SwdShengshou => None,
+            // 活弹·舒莞儿面：出牌主动技（usable:1 走 limits）
+            HostBehavior::SwdHuodan => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -5692,6 +5702,9 @@ impl SkillBehavior for HostSkillBehavior {
             // 圣手·淳于恒面：锁定 marker（engine viewAs 链查询），无触发
             HostBehavior::SwdShengshou => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 活弹·舒莞儿面：出牌主动技（activate 通道），无触发 filter
+            HostBehavior::SwdHuodan => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
             // 激昂·凤天凌面：①自己使用红杀/决斗（指定唯一目标）②成为
             // 红杀/决斗的目标（他人使用）——上游双面并集；登记差异：
             // 目标面按 CardUsed+targets 表达（useCardToTargeted 等价），
@@ -6720,6 +6733,29 @@ impl SkillBehavior for HostSkillBehavior {
                     .alive_players()
                     .any(|p| p != owner && ctx.state.player(p).off_court.is_empty());
                 if !black || !others {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 活弹·舒莞儿面（武将面批 85）：有红色手牌且存活其他角色≥1
+            HostBehavior::SwdHuodan => {
+                let red = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                });
+                let others = ctx.state.alive_players().any(|p| p != owner);
+                if !red || !others {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -11691,6 +11727,124 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             // 圣手·淳于恒面：锁定 marker（engine viewAs 链查询），无效果步
             HostBehavior::SwdShengshou => Flow::Done,
+            // 活弹·舒莞儿面：SelectCard 红色手牌 → TargetChoice 1-2 名任一
+            // 存活（1 名=2 火伤/2 名=各 1 火伤）→ 自失 1 体力（contentBefore
+            // 同口径：先弃牌再失体力）
+            HostBehavior::SwdHuodan => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Heart
+                                    | crate::catalog::Suit::Diamond
+                            )
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "huodan_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&c)
+                        || !matches!(
+                            ctx.catalog.cards[c as usize].suit,
+                            crate::catalog::Suit::Heart
+                                | crate::catalog::Suit::Diamond
+                        )
+                    {
+                        return Flow::Done;
+                    }
+                    ctx.discard_from_hand(self.owner, c);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "huodan_target",
+                            options,
+                            min: 1,
+                            max: 2,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() || targets.len() > 2 {
+                        return Flow::Done;
+                    }
+                    // 先失去 1 体力（上游 contentBefore loseHp 同口径）
+                    ctx.emit(EventData::LoseHp {
+                        player: self.owner,
+                        amount: 1,
+                    });
+                    if targets.len() == 1 {
+                        ctx.emit(EventData::Damage(
+                            crate::machine::damage_data_with(
+                                Some(self.owner),
+                                targets[0],
+                                2,
+                                crate::event::DamageNature::Fire,
+                                None,
+                            ),
+                        ));
+                    } else {
+                        for t in targets {
+                            ctx.emit(EventData::Damage(
+                                crate::machine::damage_data_with(
+                                    Some(self.owner),
+                                    t,
+                                    1,
+                                    crate::event::DamageNature::Fire,
+                                    None,
+                                ),
+                            ));
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 激昂·凤天凌面：摸 1（frequent 非 optional，无效果步以外的
             // 状态变化）
             HostBehavior::SwdJiang => {
@@ -24842,7 +24996,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdLuanji
         | HostBehavior::SwdZhanxing
         | HostBehavior::SwdZhenjiu
-        | HostBehavior::SwdLmazui => {
+        | HostBehavior::SwdLmazui
+        | HostBehavior::SwdHuodan => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
