@@ -1885,6 +1885,22 @@
           "mapping": "host:dangping"
         }
       ]
+    },
+    {
+      "name": "swd_yuchiyanhong",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "huanxing",
+          "mapping": "host:huanxing"
+        },
+        {
+          "name": "meihuo",
+          "mapping": null
+        }
+      ]
     }
   ],
   "skills": [
@@ -1895,6 +1911,10 @@
     {
       "name": "swd_lmazui2",
       "mapping": "host:lmazui2"
+    },
+    {
+      "name": "swd_huanxing_state",
+      "mapping": "host:huanxing2"
     }
   ]
 }

@@ -1100,6 +1100,15 @@ pub enum HostBehavior {
     /// dangping 弃牌+目标窗同口径；addTempSkill dangping2 换回合等价
     /// once_per_turn）。
     SwdDangping,
+    /// 幻形（tag 383，武将面批 87 尉迟嫣红）：准备阶段——弃一张 he 并
+    /// 指定一名男性其他角色：获得其（非 unique 且自己未持有）武将技
+    /// 实例，自己受伤后移除（上游 huanxing/huanxing2 同口径；登记差异：
+    /// 上游复制标记面收敛为实例授予）。
+    SwdHuanxing,
+    /// 幻形·移除面（tag 384）：自己受伤结算后——移除幻形授予的技能实例
+    ///（上游 huanxing2 damageAfter 同口径；惑乱 meihuo=装备离场事件缺口
+    /// 登记 defer）。
+    SwdHuanxing2,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1265,6 +1274,8 @@ impl HostBehavior {
             HostBehavior::SwdHuodan => 380,
             HostBehavior::SwdYijue => 381,
             HostBehavior::SwdDangping => 382,
+            HostBehavior::SwdHuanxing => 383,
+            HostBehavior::SwdHuanxing2 => 384,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1888,6 +1899,8 @@ impl HostBehavior {
             380 => HostBehavior::SwdHuodan,
             381 => HostBehavior::SwdYijue,
             382 => HostBehavior::SwdDangping,
+            383 => HostBehavior::SwdHuanxing,
+            384 => HostBehavior::SwdHuanxing2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1908,7 +1921,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 379] = [
+    pub const ALL: [HostBehavior; 381] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2286,6 +2299,8 @@ impl HostBehavior {
         HostBehavior::SwdHuodan,
         HostBehavior::SwdYijue,
         HostBehavior::SwdDangping,
+        HostBehavior::SwdHuanxing,
+        HostBehavior::SwdHuanxing2,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2428,6 +2443,8 @@ impl HostBehavior {
             HostBehavior::SwdHuodan => "host:huodan",
             HostBehavior::SwdYijue => "host:yijue",
             HostBehavior::SwdDangping => "host:dangping",
+            HostBehavior::SwdHuanxing => "host:huanxing",
+            HostBehavior::SwdHuanxing2 => "host:huanxing2",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3387,6 +3404,23 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 幻形：自己准备阶段开始（direct 非 optional）
+            HostBehavior::SwdHuanxing => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 幻形·移除面：自己受伤结算后（forced）
+            HostBehavior::SwdHuanxing2 => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -4462,6 +4496,8 @@ pub const SWD_FENGYIN_STATE_KEY: &str = "swd_fengyin_state";
 pub const SWD_ZHENJIU2_KEY: &str = "swd_zhenjiu2";
 /// 麻醉·临月触发面内部键（挂附者伤害前置返还+降 1）。
 pub const SWD_LMAZUI2_KEY: &str = "swd_lmazui2";
+/// 幻形在位旗标内部键（授予技能的存续标记——受伤后清）。
+pub const SWD_HUANXING_STATE_KEY: &str = "swd_huanxing_state";
 pub const SWD_JIGUANFENG_SHAN: &str = "swd_jiguanfeng_shan";
 pub const SWD_JIGUANYUAN_KEY: &str = "swd_jiguanyuan";
 pub const SWD_JIGUANYUAN_GAIN_KEY: &str = "swd_jiguanyuan_gain";
@@ -5744,6 +5780,21 @@ impl SkillBehavior for HostSkillBehavior {
                     && !d.prevented
                     && d.amount > 0
                     && ctx.state.player(d.target).alive),
+            // 幻形：自己准备阶段开始（有可弃牌与男性其他存活）
+            HostBehavior::SwdHuanxing => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                if *player == owner),
+            // 幻形·移除面：自己受伤结算后（在位旗标=状态技能实例）
+            HostBehavior::SwdHuanxing2 => {
+                let in_place = ctx
+                    .catalog
+                    .skill_by_name(SWD_HUANXING_STATE_KEY)
+                    .map(|d| ctx.state.skills.contains_key(&(owner, d)))
+                    .unwrap_or(false);
+                matches!(event,
+                    EventData::Damage(d)
+                    if d.target == owner && !d.prevented && in_place)
+            }
             // 激昂·凤天凌面：①自己使用红杀/决斗（指定唯一目标）②成为
             // 红杀/决斗的目标（他人使用）——上游双面并集；登记差异：
             // 目标面按 CardUsed+targets 表达（useCardToTargeted 等价），
@@ -11924,6 +11975,185 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 幻形（武将面批 87）：SelectCard 弃一张 he → TargetChoice
+            // 男性其他存活角色 → 复制其（非 unique/未持有）技能实例并
+            // 置 huanxing_granted（受伤后移除）
+            HostBehavior::SwdHuanxing => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .chain(ctx.core.player(self.owner).equips.iter().copied())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "huanxing_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&c) {
+                        ctx.discard_from_hand(self.owner, c);
+                    } else if ctx.core.player(self.owner).equips.contains(&c) {
+                        ctx.core
+                            .player_mut(self.owner)
+                            .equips
+                            .retain(|x| *x != c);
+                        if ctx.catalog.card_kind(c).is_equip() {
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                c,
+                            );
+                        }
+                        ctx.to_discard(c);
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.effective_gender(*p)
+                                    == crate::content::standard::Gender::Male
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "huanxing_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    // 复制目标将的技能名（登记差异：unique/已持有过滤按
+                    // 目录名；复制面收敛为实例授予）
+                    let names: Vec<&'static str> = {
+                        let meta = ctx
+                            .catalog
+                            .general_meta(ctx.core.player(t).general_slots[0].unwrap_or(u16::MAX));
+                        meta.map(|(_, _, skills, _, _)| skills).unwrap_or_default()
+                    };
+                    let mut granted = Vec::new();
+                    for n in names {
+                        if let Some(def) = ctx.catalog.skill_by_name(n) {
+                            if !ctx.core.skills.contains_key(&(self.owner, def)) {
+                                granted.push(def);
+                            }
+                        }
+                    }
+                    if granted.is_empty() {
+                        return Flow::Done;
+                    }
+                    for def in granted {
+                        ctx.core.skills.insert(
+                            (self.owner, def),
+                            crate::state::SkillInstance {
+                                owner: self.owner,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 0,
+                            },
+                        );
+                    }
+                    // 在位旗标=内部状态技能实例（免存档字段批——
+                    // 已启用技能随内容锁/快照自然往返）
+                    if let Some(sdef) = ctx.catalog.skill_by_name(SWD_HUANXING_STATE_KEY) {
+                        ctx.core.skills.insert(
+                            (self.owner, sdef),
+                            crate::state::SkillInstance {
+                                owner: self.owner,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 0,
+                            },
+                        );
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 幻形·移除面：移除幻形授予的技能实例（在位旗标=内部状态技能
+            // 实例；按其他玩家将技能全表尝试移除——登记差异：不追踪具体
+            // 授予集）
+            HostBehavior::SwdHuanxing2 => {
+                // 移除幻形授予的技能实例：按 all 玩家（除自己）将技能名
+                // 全表扫描，跳过自己本将技能（登记差异：不追踪具体授予
+                // 集，同名他将技能亦会被移除的边界已收窄为本将排除）
+                let own: Vec<&'static str> = {
+                    let meta = ctx.catalog.general_meta(
+                        ctx.core.player(self.owner).general_slots[0].unwrap_or(u16::MAX),
+                    );
+                    meta.map(|(_, _, skills, _, _)| skills).unwrap_or_default()
+                };
+                let mut candidates: Vec<&'static str> = Vec::new();
+                for i in 0..ctx.core.players.len() {
+                    let pid = i as PlayerId;
+                    if pid == self.owner {
+                        continue;
+                    }
+                    let meta = ctx
+                        .catalog
+                        .general_meta(ctx.core.player(pid).general_slots[0].unwrap_or(u16::MAX));
+                    if let Some((_, _, skills, _, _)) = meta {
+                        for s in skills {
+                            if !own.contains(&s) && !candidates.contains(&s) {
+                                candidates.push(s);
+                            }
+                        }
+                    }
+                }
+                for n in candidates {
+                    if let Some(def) = ctx.catalog.skill_by_name(n) {
+                        ctx.core.skills.remove(&(self.owner, def));
+                    }
+                }
+                if let Some(sdef) = ctx.catalog.skill_by_name(SWD_HUANXING_STATE_KEY) {
+                    ctx.core.skills.remove(&(self.owner, sdef));
+                }
+                Flow::Done
+            }
             // 荡平（武将面批 86）：SelectCard 弃一张 he → TargetChoice 受害
             // 者距离 ≤1 的另一名角色 → 1 伤
             HostBehavior::SwdDangping => match self.stage {
