@@ -1645,6 +1645,46 @@
           "mapping": "host:pojian"
         }
       ]
+    },
+    {
+      "name": "swd_huiyan",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "hwendao",
+          "mapping": "host:hwendao"
+        },
+        {
+          "name": "lingfeng",
+          "mapping": "host:lingfeng"
+        },
+        {
+          "name": "hxunzhi",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_qiner",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "huanyin",
+          "mapping": null
+        },
+        {
+          "name": "tianhuo",
+          "mapping": "host:tianhuo"
+        },
+        {
+          "name": "xuanzhou",
+          "mapping": null
+        }
+      ]
     }
   ]
 }
