@@ -1317,6 +1317,54 @@
           "mapping": "host:xuying"
         }
       ]
+    },
+    {
+      "name": "swd_ziqiao",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "guaili",
+          "mapping": "host:guaili"
+        },
+        {
+          "name": "fuyan",
+          "mapping": "host:fuyan"
+        }
+      ]
+    },
+    {
+      "name": "swd_lilian",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "swd_wuxie",
+          "mapping": "host:wuxie"
+        },
+        {
+          "name": "lqingcheng",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_jiting",
+      "faction": "wei",
+      "hp": 4,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "guanhu",
+          "mapping": "host:guanhu"
+        },
+        {
+          "name": "lingshi",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

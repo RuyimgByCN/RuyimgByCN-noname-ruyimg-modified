@@ -960,6 +960,19 @@ pub enum HostBehavior {
     /// 手牌非空则失去 1 点体力（DamageBefore 帧写回；绝情 builtin 白名
     /// 单引用；笙笙 NOT FOUND defer）。
     SwdXuying,
+    /// 乖戾（tag 345，武将面批㉙ 子巧）：锁定双事件——杀伤害 +1（非铁索
+    /// 传导）+ 造成杀伤害后弃两张手牌（敷衍=受伤后令无护甲角色 +1 护甲
+    /// 同将第二技独立 tag 348）。
+    SwdGuaili,
+    /// 无邪（tag 346，武将面批㉙ 莉莲）：锁定 marker——延时锦囊只能以自
+    /// 己为目标（engine PlayCard 延时校验臂查询；青城判定循环 defer）。
+    SwdWuxie,
+    /// 观虎（tag 347，武将面批㉙ 吉挺）：杀造成伤害后可弃目标一张手牌和
+    /// 一张装备牌（确定性首张登记差异上游自选；灵视多面 defer）。
+    SwdGuanhu,
+    /// 敷衍·护甲面（tag 348，武将面批㉙ 子巧）：受伤后可令一名无护甲角色
+    /// 获得 1 点护甲（确认门）。
+    SwdFuyan,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1087,6 +1100,10 @@ impl HostBehavior {
             HostBehavior::SwdYueren => 342,
             HostBehavior::SwdHuanjian => 343,
             HostBehavior::SwdXuying => 344,
+            HostBehavior::SwdGuaili => 345,
+            HostBehavior::SwdWuxie => 346,
+            HostBehavior::SwdGuanhu => 347,
+            HostBehavior::SwdFuyan => 348,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1672,6 +1689,10 @@ impl HostBehavior {
             342 => HostBehavior::SwdYueren,
             343 => HostBehavior::SwdHuanjian,
             344 => HostBehavior::SwdXuying,
+            345 => HostBehavior::SwdGuaili,
+            346 => HostBehavior::SwdWuxie,
+            347 => HostBehavior::SwdGuanhu,
+            348 => HostBehavior::SwdFuyan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1692,7 +1713,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 341] = [
+    pub const ALL: [HostBehavior; 345] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2032,6 +2053,10 @@ impl HostBehavior {
         HostBehavior::SwdYueren,
         HostBehavior::SwdHuanjian,
         HostBehavior::SwdXuying,
+        HostBehavior::SwdGuaili,
+        HostBehavior::SwdWuxie,
+        HostBehavior::SwdGuanhu,
+        HostBehavior::SwdFuyan,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2136,6 +2161,10 @@ impl HostBehavior {
             HostBehavior::SwdYueren => "host:yueren",
             HostBehavior::SwdHuanjian => "host:huanjian",
             HostBehavior::SwdXuying => "host:xuying",
+            HostBehavior::SwdGuaili => "host:guaili",
+            HostBehavior::SwdWuxie => "host:wuxie",
+            HostBehavior::SwdGuanhu => "host:guanhu",
+            HostBehavior::SwdFuyan => "host:fuyan",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2899,6 +2928,32 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 乖戾：双事件（DamageBefore +1 与 Damage 后弃牌同机分流）
+            HostBehavior::SwdGuaili => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::Damage],
+            }),
+            // 无邪：锁定 marker（engine 延时校验臂查询），无触发面
+            HostBehavior::SwdWuxie => None,
+            // 观虎：杀伤害结算后（确认门=optional）
+            HostBehavior::SwdGuanhu => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 敷衍·护甲面：受伤结算后（确认门=optional）
+            HostBehavior::SwdFuyan => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
@@ -5119,6 +5174,26 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdXuying => matches!(event,
                 EventData::Damage(d)
                 if d.target == owner && !d.prevented),
+            // 乖戾：自己杀伤害（非铁索传导）——Before 面 +1 / After 面弃两张
+            HostBehavior::SwdGuaili => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner)
+                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+                    && !d.from_chain
+                    && !d.prevented),
+            // 敷衍·护甲面：自己受伤结算后（无护甲目标候选在机器步求取）
+            HostBehavior::SwdFuyan => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner && !d.prevented && d.amount > 0),
+            // 观虎：自己杀伤害结算后、对方有牌（手/装备任一）
+            HostBehavior::SwdGuanhu => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner)
+                    && !d.prevented
+                    && d.amount > 0
+                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+                    && (!ctx.state.player(d.target).hand.is_empty()
+                        || !ctx.state.player(d.target).equips.is_empty())),
             // 苏生：任意角色死亡前置、自己有手牌（每回合一次走 limits 在
             // OptionalGate 消费；目标体力重置在机器步写回）
             HostBehavior::SwdSusheng => matches!(event,
@@ -9135,6 +9210,120 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 敷衍·护甲面：TargetChoice 选无护甲角色 → +1 护甲
+            HostBehavior::SwdFuyan => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| ctx.core.player(*p).hujia == 0)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "fuyan_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).alive {
+                        ctx.change_hujia(t, 1);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 观虎：确认后——弃目标一张手牌+一张装备（确定性首张，登记
+            // 差异上游自选 discardPlayerCard 可选面）
+            HostBehavior::SwdGuanhu => match self.stage {
+                HostStage::Act => {
+                    let Some(d) = ctx
+                        .res
+                        .frame(ctx.current_frame_id())
+                        .map(|f| &f.data)
+                        .and_then(|data| match data {
+                            crate::event::EventData::Damage(d) => Some(d.target),
+                            _ => None,
+                        })
+                    else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(d);
+                    // 自选窗：目标手牌+装备合集任选（min 0 可取消=放弃）
+                    let mut pool: Vec<CardId> =
+                        ctx.core.player(d).hand.iter().copied().collect();
+                    pool.extend(ctx.core.player(d).equips.iter().copied());
+                    if pool.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "guanhu_discard",
+                            options: pool.iter().copied().map(ChoiceOption::Card).collect(),
+                            min: 0,
+                            max: 2,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picks: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    for c in picks {
+                        let in_hand = ctx.core.player(t).hand.contains(&c);
+                        if in_hand {
+                            ctx.take_hand_card(t, c);
+                        } else if ctx.core.player(t).equips.contains(&c) {
+                            ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                            if ctx.catalog.card_kind(c).is_equip() {
+                                crate::kernel::revoke_equip_skills(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    t,
+                                    c,
+                                );
+                            }
+                        } else {
+                            continue;
+                        }
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: t,
+                            cards: vec![c],
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 灵心：frequent——牌堆顶三张（pop×3）：红桃入手，其余弃置
             HostBehavior::SwdLingxin => {
                 if !ctx.core.player(self.owner).alive {
@@ -9176,8 +9365,46 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             // 渔人：锁定（sha 机器内联臂查询），无独立效果步
             HostBehavior::SwdYueren => Flow::Done,
+            // 无邪：锁定 marker（engine 延时校验臂查询），无独立效果步
+            HostBehavior::SwdWuxie => Flow::Done,
             // 幻剑：锁定 marker（engine PlayCard viewAs 链查询），无效果步
             HostBehavior::SwdHuanjian => Flow::Done,
+            // 乖戾：Before 帧 +1（缚斧同款直写）；After 帧弃两张手牌
+            //（手牌不足弃全部）
+            HostBehavior::SwdGuaili => {
+                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
+                match frame {
+                    Some(crate::event::EventData::Damage(d))
+                        if !d.prevented && d.source == Some(self.owner) =>
+                    {
+                        // Before/After 同载荷同 kind——按帧 stage 区分：
+                        // BeforeTriggers 面直写 +1；AfterTriggers 面弃两张
+                        let stage = ctx.res.frame(ctx.current_frame_id()).expect("frame").stage;
+                        if stage == crate::event::Stage::AfterTriggers {
+                            let hand: Vec<CardId> = ctx
+                                .core
+                                .player(self.owner)
+                                .hand
+                                .iter()
+                                .copied()
+                                .collect();
+                            let n = hand.len().min(2);
+                            for c in hand.into_iter().take(n) {
+                                ctx.discard_from_hand(self.owner, c);
+                            }
+                            Flow::Done
+                        } else {
+                            let frame =
+                                ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                            if let crate::event::EventData::Damage(d) = &mut frame.data {
+                                d.amount += 1;
+                            }
+                            Flow::Done
+                        }
+                    }
+                    _ => Flow::Done,
+                }
+            }
             // 虚影：锁定——伤害前置取消 + 手牌非空则失去 1 点体力（Boss
             // 绝情同窗：帧 cancelled 写回+LoseHp 发射）
             HostBehavior::SwdXuying => {

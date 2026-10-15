@@ -2896,6 +2896,16 @@ fn apply_command(
                 if pg {
                     return Err(RejectReason::IllegalTargets);
                 }
+                // 无邪（莉莲，swd 武将面批㉙）：锁定——延时锦囊只能以自己
+                // 为目标（上游 mod targetEnabled delay target!=self false
+                // 同口径）
+                let wuxie = catalog
+                    .skill_by_name("swd_wuxie")
+                    .map(|def| core.has_skill(core.turn.current, def))
+                    .unwrap_or(false);
+                if wuxie && targets.iter().any(|t| *t != core.turn.current) {
+                    return Err(RejectReason::IllegalTargets);
+                }
             }
             match kind {
                 CardKind::Xuejibingbao => {
