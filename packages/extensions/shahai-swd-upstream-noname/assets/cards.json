@@ -1537,6 +1537,62 @@
           "mapping": "host:guiyan"
         }
       ]
+    },
+    {
+      "name": "swd_fengyu",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "fzhenwei",
+          "mapping": null
+        },
+        {
+          "name": "shangxi",
+          "mapping": "host:shangxi"
+        }
+      ]
+    },
+    {
+      "name": "swd_xuanyuanjianxian",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "pozhou",
+          "mapping": null
+        },
+        {
+          "name": "huajian",
+          "mapping": "host:huajian"
+        },
+        {
+          "name": "xuanyuan",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_muyue",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "xingzhui",
+          "mapping": "host:xingzhui"
+        },
+        {
+          "name": "lingxian",
+          "mapping": null
+        },
+        {
+          "name": "shouyin",
+          "mapping": null
+        }
+      ]
     }
   ]
 }
