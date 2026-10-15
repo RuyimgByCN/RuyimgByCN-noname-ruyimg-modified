@@ -1741,6 +1741,26 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_sikongyu",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "sliufeng",
+          "mapping": "host:sliufeng"
+        },
+        {
+          "name": "linyun",
+          "mapping": null
+        },
+        {
+          "name": "hutian",
+          "mapping": null
+        }
+      ]
     }
   ]
 }

@@ -3354,11 +3354,21 @@ fn apply_command(
                     // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
                     // 无距离限制（上游 mod targetInRange 同口径）
                     let zhuyue_free = core.turn.zhuyue_targets.contains(&target);
+                    // 疾风·司空宇面（swd 武将面批㊟）：锁定——体力值不大于
+                    // 自己的角色视为在攻击范围（上游 mod targetInRange 同口径）
+                    let sliufeng_free = catalog
+                        .skill_by_name("sliufeng")
+                        .map(|def| {
+                            core.has_skill(core.turn.current, def)
+                                && core.player(target).hp <= core.player(core.turn.current).hp
+                        })
+                        .unwrap_or(false);
                     let dist = core.computed_distance(catalog, from, target);
                     if !zfs_free
                         && !baolei_range_free
                         && !feiren_range_free
                         && !zhuyue_free
+                        && !sliufeng_free
                         && dist > core.attack_range(catalog, from)
                     {
                         return Err(RejectReason::IllegalTargets);
