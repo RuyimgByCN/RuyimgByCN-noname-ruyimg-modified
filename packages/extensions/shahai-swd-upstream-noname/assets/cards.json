@@ -1309,8 +1309,8 @@
           "mapping": "builtin:绝情"
         },
         {
-          "name": "shengsheng",
-          "mapping": null
+          "name": "shengshou",
+          "mapping": "host:shengshou"
         },
         {
           "name": "xuying",
@@ -1535,6 +1535,10 @@
         {
           "name": "guiyan",
           "mapping": "host:guiyan"
+        },
+        {
+          "name": "jiang",
+          "mapping": "host:jiang"
         }
       ]
     },

@@ -1078,6 +1078,14 @@ pub enum HostBehavior {
     /// 麻醉·临月触发面（tag 377）：伤害前置——off_court 黑牌返还（登记
     /// 差异：上游伤害结算后归还，原生伤前归还）并令本次伤害 -1。
     SwdLmazui2,
+    /// 激昂·凤天凌面（tag 378，武将面批 84 凤天凌）：frequent——成为
+    /// 【决斗】或红色【杀】的目标、或使用红色【杀】/【决斗】指定唯一
+    /// 目标时摸 1（上游 jiang useCardToPlayered/useCardToTargeted 双面
+    /// 同口径；登记差异：原生按 CardUsed+targets 单事件面表达）。
+    SwdJiang,
+    /// 圣手·淳于恒面（tag 379，武将面批 84 淳于恒）：锁定 marker——
+    /// 黑色手牌当草药使用（engine PlayCard viewAs 链查询）。
+    SwdShengshou,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1238,6 +1246,8 @@ impl HostBehavior {
             HostBehavior::SwdZhenjiu2 => 375,
             HostBehavior::SwdLmazui => 376,
             HostBehavior::SwdLmazui2 => 377,
+            HostBehavior::SwdJiang => 378,
+            HostBehavior::SwdShengshou => 379,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1856,6 +1866,8 @@ impl HostBehavior {
             375 => HostBehavior::SwdZhenjiu2,
             376 => HostBehavior::SwdLmazui,
             377 => HostBehavior::SwdLmazui2,
+            378 => HostBehavior::SwdJiang,
+            379 => HostBehavior::SwdShengshou,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1876,7 +1888,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 374] = [
+    pub const ALL: [HostBehavior; 376] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2249,6 +2261,8 @@ impl HostBehavior {
         HostBehavior::SwdZhenjiu2,
         HostBehavior::SwdLmazui,
         HostBehavior::SwdLmazui2,
+        HostBehavior::SwdJiang,
+        HostBehavior::SwdShengshou,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2386,6 +2400,8 @@ impl HostBehavior {
             HostBehavior::SwdZhenjiu2 => "host:zhenjiu2",
             HostBehavior::SwdLmazui => "host:lmazui",
             HostBehavior::SwdLmazui2 => "host:lmazui2",
+            HostBehavior::SwdJiang => "host:jiang",
+            HostBehavior::SwdShengshou => "host:shengshou",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3321,6 +3337,17 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 激昂·凤天凌面：判定为「成为目标」面——原生经 CardUsed+targets
+            // 表达（frequent=非 optional）
+            HostBehavior::SwdJiang => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 圣手·淳于恒面：锁定 marker（engine PlayCard viewAs 链查询）
+            HostBehavior::SwdShengshou => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -5662,6 +5689,38 @@ impl SkillBehavior for HostSkillBehavior {
                 EventData::Damage(d)
                 if d.source == Some(owner) && !d.prevented
                     && !ctx.state.player(owner).off_court.is_empty()),
+            // 圣手·淳于恒面：锁定 marker（engine viewAs 链查询），无触发
+            HostBehavior::SwdShengshou => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 激昂·凤天凌面：①自己使用红杀/决斗（指定唯一目标）②成为
+            // 红杀/决斗的目标（他人使用）——上游双面并集；登记差异：
+            // 目标面按 CardUsed+targets 表达（useCardToTargeted 等价），
+            // 来源面按 targets.len()==1 收窄
+            HostBehavior::SwdJiang => {
+                let red_sha_or_duel = |c: CardId| {
+                    let k = ctx.catalog.card_kind(c);
+                    (k == CardKind::Duel)
+                        || (k.is_sha_like()
+                            && matches!(
+                                ctx.catalog.cards[c as usize].suit,
+                                crate::catalog::Suit::Heart
+                                    | crate::catalog::Suit::Diamond
+                            ))
+                };
+                match event {
+                    EventData::CardUsed(u) => {
+                        // 自己使用面：红杀/决斗且唯一目标
+                        (u.player == owner
+                            && u.targets.len() == 1
+                            && red_sha_or_duel(u.card))
+                        // 成为目标面：他人使用红杀/决斗且自己在其目标中
+                        || (u.player != owner
+                            && u.targets.contains(&owner)
+                            && red_sha_or_duel(u.card))
+                    }
+                    _ => false,
+                }
+            }
             // 横刀·慧彦面：回合外用牌/响应结算（当前回合角色 he 有牌）
             HostBehavior::SwdHwendao => {
                 let cur = ctx.state.turn.current;
@@ -11628,6 +11687,14 @@ impl crate::catalog::SkillMachine for HostMachine {
                 if let Some(def) = ctx.catalog.skill_by_name(SWD_ZHENJIU2_KEY) {
                     ctx.core.skills.remove(&(self.owner, def));
                 }
+                Flow::Done
+            }
+            // 圣手·淳于恒面：锁定 marker（engine viewAs 链查询），无效果步
+            HostBehavior::SwdShengshou => Flow::Done,
+            // 激昂·凤天凌面：摸 1（frequent 非 optional，无效果步以外的
+            // 状态变化）
+            HostBehavior::SwdJiang => {
+                ctx.draw_cards(self.owner, 1);
                 Flow::Done
             }
             // 麻醉触发面：伤害前置——off_court 黑牌返还（登记差异：上游

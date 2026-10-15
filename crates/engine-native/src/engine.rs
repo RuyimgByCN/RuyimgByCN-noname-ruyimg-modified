@@ -2706,6 +2706,19 @@ fn apply_command(
                 {
                     kind = CardKind::Sha;
                 }
+                // 圣手（淳于恒，swd 武将面批 84）：黑色手牌当草药使用
+                //（上游 viewAs caoyao 同口径）
+                else if catalog
+                    .skill_by_name("shengshou")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && matches!(
+                        catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                {
+                    kind = CardKind::Caoyao;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至
