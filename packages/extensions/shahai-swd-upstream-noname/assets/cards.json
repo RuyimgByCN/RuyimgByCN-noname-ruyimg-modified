@@ -1257,6 +1257,66 @@
           "mapping": "builtin:伤逝"
         }
       ]
+    },
+    {
+      "name": "swd_nicole",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "huanjian",
+          "mapping": "host:huanjian"
+        },
+        {
+          "name": "lingwu",
+          "mapping": null
+        },
+        {
+          "name": "minjing",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_weida",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "yueren",
+          "mapping": "host:yueren"
+        },
+        {
+          "name": "zhenlie",
+          "mapping": null
+        },
+        {
+          "name": "duijue",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_chunyuheng",
+      "faction": "wei",
+      "hp": 2,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "jueqing",
+          "mapping": "builtin:绝情"
+        },
+        {
+          "name": "shengsheng",
+          "mapping": null
+        },
+        {
+          "name": "xuying",
+          "mapping": "host:xuying"
+        }
+      ]
     }
   ]
 }

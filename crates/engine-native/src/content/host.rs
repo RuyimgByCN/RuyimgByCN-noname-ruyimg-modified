@@ -953,6 +953,13 @@ pub enum HostBehavior {
     /// 目标 he 随机一张；红→摸 1（登记差异：上游收回此杀实体，原生实体
     /// 回流与在结机器持有冲突改摸 1；每杀一次=!asked 门）。
     SwdYueren,
+    /// 幻剑（tag 343，武将面批㉚ 妮可）：锁定 marker——黑色牌当冰魄针使
+    /// 用（engine PlayCard viewAs 链查询；灵武额外阶段=引擎缺口 defer）。
+    SwdHuanjian,
+    /// 虚影（tag 344，武将面批㉚ 淳于衡）：锁定——伤害前置窗口取消伤害，
+    /// 手牌非空则失去 1 点体力（DamageBefore 帧写回；绝情 builtin 白名
+    /// 单引用；笙笙 NOT FOUND defer）。
+    SwdXuying,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1078,6 +1085,8 @@ impl HostBehavior {
             HostBehavior::SwdYinyue => 340,
             HostBehavior::SwdLingxin => 341,
             HostBehavior::SwdYueren => 342,
+            HostBehavior::SwdHuanjian => 343,
+            HostBehavior::SwdXuying => 344,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1661,6 +1670,8 @@ impl HostBehavior {
             340 => HostBehavior::SwdYinyue,
             341 => HostBehavior::SwdLingxin,
             342 => HostBehavior::SwdYueren,
+            343 => HostBehavior::SwdHuanjian,
+            344 => HostBehavior::SwdXuying,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1681,7 +1692,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 339] = [
+    pub const ALL: [HostBehavior; 341] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2019,6 +2030,8 @@ impl HostBehavior {
         HostBehavior::SwdYinyue,
         HostBehavior::SwdLingxin,
         HostBehavior::SwdYueren,
+        HostBehavior::SwdHuanjian,
+        HostBehavior::SwdXuying,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2121,6 +2134,8 @@ impl HostBehavior {
             HostBehavior::SwdYinyue => "host:yinyue",
             HostBehavior::SwdLingxin => "host:lingxin",
             HostBehavior::SwdYueren => "host:yueren",
+            HostBehavior::SwdHuanjian => "host:huanjian",
+            HostBehavior::SwdXuying => "host:xuying",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2876,6 +2891,16 @@ impl HostBehavior {
             }),
             // 渔人：锁定（sha 机器内联臂查询），无触发面
             HostBehavior::SwdYueren => None,
+            // 幻剑：锁定 marker（engine PlayCard viewAs 链查询），无触发面
+            HostBehavior::SwdHuanjian => None,
+            // 虚影：伤害前置窗口（锁定取消+失去体力——Boss 绝情同窗）
+            HostBehavior::SwdXuying => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -5089,6 +5114,11 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdLingxin => matches!(event,
                 EventData::Phase { player, begin, .. }
                 if *player == owner && !*begin),
+            // 虚影：自己受到伤害前置（DamageBefore 帧共用 Damage 载荷——
+            // 取消+失去体力在机器步写回）
+            HostBehavior::SwdXuying => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner && !d.prevented),
             // 苏生：任意角色死亡前置、自己有手牌（每回合一次走 limits 在
             // OptionalGate 消费；目标体力重置在机器步写回）
             HostBehavior::SwdSusheng => matches!(event,
@@ -9146,6 +9176,23 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             // 渔人：锁定（sha 机器内联臂查询），无独立效果步
             HostBehavior::SwdYueren => Flow::Done,
+            // 幻剑：锁定 marker（engine PlayCard viewAs 链查询），无效果步
+            HostBehavior::SwdHuanjian => Flow::Done,
+            // 虚影：锁定——伤害前置取消 + 手牌非空则失去 1 点体力（Boss
+            // 绝情同窗：帧 cancelled 写回+LoseHp 发射）
+            HostBehavior::SwdXuying => {
+                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                if let crate::event::EventData::Damage(d) = &mut frame.data {
+                    d.prevented = true;
+                }
+                if !ctx.core.player(self.owner).hand.is_empty() {
+                    ctx.emit(EventData::LoseHp {
+                        player: self.owner,
+                        amount: 1,
+                    });
+                }
+                Flow::Done
+            }
             // 乐跃：TargetChoice-free 分流——回复者非自己且其手牌≥自己则
             // 各摸 1，否则回复者摸 1
             HostBehavior::SwdYinyue => {
