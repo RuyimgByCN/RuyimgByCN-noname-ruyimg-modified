@@ -2675,6 +2675,16 @@ fn apply_command(
                 {
                     kind = CardKind::Taoyuan;
                 }
+                // 破晓（张烈，swd 武将面批㊞）：装备牌当杀使用（上游
+                // viewAs sha 同口径）
+                else if catalog
+                    .skill_by_name("poxiao")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && catalog.card_kind(card).is_equip()
+                {
+                    kind = CardKind::Sha;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至
@@ -3190,6 +3200,19 @@ fn apply_command(
                     } else {
                         0
                     };
+                    // 破晓（张烈，swd 武将面批㊞）：无武器时杀目标上限 +1
+                    //（上游 selectTarget range[1]++ 同口径）
+                    let poxiao_extra = catalog
+                        .skill_by_name("poxiao")
+                        .map(|def| core.has_skill(core.turn.current, def))
+                        .unwrap_or(false)
+                        && !core
+                            .player(core.turn.current)
+                            .equips
+                            .iter()
+                            .any(|c| {
+                                catalog.card_kind(*c) == crate::catalog::CardKind::Weapon
+                            });
                     let max_targets = if tianxian_inf || kuangxiao_inf {
                         usize::MAX
                     } else {
@@ -3199,6 +3222,7 @@ fn apply_command(
                             + u32::from(juyuan_extra) as usize
                             + u32::from(lianwu_extra) as usize
                             + ljifeng_n as usize
+                            + u32::from(poxiao_extra) as usize
                     };
                     if targets.is_empty() || targets.len() > max_targets {
                         return Err(RejectReason::IllegalTargets);

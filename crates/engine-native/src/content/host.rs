@@ -1025,6 +1025,10 @@ pub enum HostBehavior {
     /// ——目标随机弃一张手牌，同色自己摸 1 否则目标摸 1（gongxin/jqimou
     /// defer）。
     SwdYunchou,
+    /// 破晓·张烈面（tag 366，武将面批㊞ 张烈）：锁定 marker 三查询——装备
+    /// 牌当杀 viewAs 链+无武器距离 -1（computed_distance 链）+无武器杀目
+    /// 标上限 +1（max_targets 链）（huajin 授技面 defer）。
+    SwdPoxiao,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1173,6 +1177,7 @@ impl HostBehavior {
             HostBehavior::SwdLingfeng => 363,
             HostBehavior::SwdTianhuo => 364,
             HostBehavior::SwdYunchou => 365,
+            HostBehavior::SwdPoxiao => 366,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1779,6 +1784,7 @@ impl HostBehavior {
             363 => HostBehavior::SwdLingfeng,
             364 => HostBehavior::SwdTianhuo,
             365 => HostBehavior::SwdYunchou,
+            366 => HostBehavior::SwdPoxiao,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1799,7 +1805,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 362] = [
+    pub const ALL: [HostBehavior; 363] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2160,6 +2166,7 @@ impl HostBehavior {
         HostBehavior::SwdLingfeng,
         HostBehavior::SwdTianhuo,
         HostBehavior::SwdYunchou,
+        HostBehavior::SwdPoxiao,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2285,6 +2292,7 @@ impl HostBehavior {
             HostBehavior::SwdLingfeng => "host:lingfeng",
             HostBehavior::SwdTianhuo => "host:tianhuo",
             HostBehavior::SwdYunchou => "host:yunchou",
+            HostBehavior::SwdPoxiao => "host:poxiao",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3161,6 +3169,8 @@ impl HostBehavior {
             HostBehavior::SwdTianhuo => None,
             // 运筹·姬亮面：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
             HostBehavior::SwdYunchou => None,
+            // 破晓·张烈面：锁定 marker（viewAs 链+距离链+目标上限链三查询）
+            HostBehavior::SwdPoxiao => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -5419,6 +5429,9 @@ impl SkillBehavior for HostSkillBehavior {
                     }),
             // 运筹·姬亮面：出牌主动技（ActivateSkill 通道），无触发面
             HostBehavior::SwdYunchou => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 破晓·张烈面：锁定 marker（三查询点），无触发面
+            HostBehavior::SwdPoxiao => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
             // 横刀·慧彦面：回合外用牌/响应结算（当前回合角色 he 有牌）
             HostBehavior::SwdHwendao => {
@@ -10836,6 +10849,8 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             }
+            // 破晓·张烈面：锁定 marker（viewAs 链+距离链+目标上限链三查询）
+            HostBehavior::SwdPoxiao => Flow::Done,
             // 运筹·姬亮面：SelectCard 弃一张手牌 → TargetChoice 有手牌
             // 目标 → 目标随机弃一张手牌：同色自己摸 1 否则目标摸 1
             HostBehavior::SwdYunchou => match self.stage {

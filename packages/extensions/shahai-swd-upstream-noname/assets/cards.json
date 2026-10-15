@@ -1705,6 +1705,42 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_zhanglie",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "huajin",
+          "mapping": null
+        },
+        {
+          "name": "poxiao",
+          "mapping": "host:poxiao"
+        }
+      ]
+    },
+    {
+      "name": "swd_xuanyuanjianxian",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "pozhou",
+          "mapping": null
+        },
+        {
+          "name": "huajian",
+          "mapping": "host:huajian"
+        },
+        {
+          "name": "xuanyuan",
+          "mapping": null
+        }
+      ]
     }
   ]
 }
