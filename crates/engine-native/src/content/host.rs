@@ -1021,6 +1021,10 @@ pub enum HostBehavior {
     /// 天火·秦壬面（tag 364，武将面批㊲ 秦壬）：出牌阶段限一次——判定区
     /// 有牌的其他角色各弃判定牌并受等量火伤（huanyin/xuanzhou defer）。
     SwdTianhuo,
+    /// 运筹·姬亮面（tag 365，武将面批㊳ 姬亮）：出牌阶段限一次弃一张手牌
+    /// ——目标随机弃一张手牌，同色自己摸 1 否则目标摸 1（gongxin/jqimou
+    /// defer）。
+    SwdYunchou,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1168,6 +1172,7 @@ impl HostBehavior {
             HostBehavior::SwdHwendao => 362,
             HostBehavior::SwdLingfeng => 363,
             HostBehavior::SwdTianhuo => 364,
+            HostBehavior::SwdYunchou => 365,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1773,6 +1778,7 @@ impl HostBehavior {
             362 => HostBehavior::SwdHwendao,
             363 => HostBehavior::SwdLingfeng,
             364 => HostBehavior::SwdTianhuo,
+            365 => HostBehavior::SwdYunchou,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1793,7 +1799,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 361] = [
+    pub const ALL: [HostBehavior; 362] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2153,6 +2159,7 @@ impl HostBehavior {
         HostBehavior::SwdHwendao,
         HostBehavior::SwdLingfeng,
         HostBehavior::SwdTianhuo,
+        HostBehavior::SwdYunchou,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2277,6 +2284,7 @@ impl HostBehavior {
             HostBehavior::SwdHwendao => "host:hwendao",
             HostBehavior::SwdLingfeng => "host:lingfeng",
             HostBehavior::SwdTianhuo => "host:tianhuo",
+            HostBehavior::SwdYunchou => "host:yunchou",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3151,6 +3159,8 @@ impl HostBehavior {
             }),
             // 天火·秦壬面：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
             HostBehavior::SwdTianhuo => None,
+            // 运筹·姬亮面：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
+            HostBehavior::SwdYunchou => None,
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -5407,6 +5417,9 @@ impl SkillBehavior for HostSkillBehavior {
                         ctx.state.deck.iter().any(|c| ctx.catalog.card_kind(*c).is_equip())
                             || ctx.state.discard.iter().any(|c| ctx.catalog.card_kind(*c).is_equip())
                     }),
+            // 运筹·姬亮面：出牌主动技（ActivateSkill 通道），无触发面
+            HostBehavior::SwdYunchou => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
             // 横刀·慧彦面：回合外用牌/响应结算（当前回合角色 he 有牌）
             HostBehavior::SwdHwendao => {
                 let cur = ctx.state.turn.current;
@@ -6367,6 +6380,22 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 运筹·姬亮面（武将面批㊳）：自己有手牌
+            HostBehavior::SwdYunchou => {
+                if ctx.state.player(owner).hand.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 天火·秦壬面（武将面批㊲）：任一其他角色判定区有牌
             HostBehavior::SwdTianhuo => {
                 let has = ctx.state.alive_players().any(|p| {
@@ -10807,6 +10836,108 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             }
+            // 运筹·姬亮面：SelectCard 弃一张手牌 → TargetChoice 有手牌
+            // 目标 → 目标随机弃一张手牌：同色自己摸 1 否则目标摸 1
+            HostBehavior::SwdYunchou => match self.stage {
+                HostStage::Act => {
+                    if ctx.core.player(self.owner).hand.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "yunchou_discard",
+                            options: ctx
+                                .core
+                                .player(self.owner)
+                                .hand
+                                .iter()
+                                .copied()
+                                .map(ChoiceOption::Card)
+                                .collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(picked) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&picked) {
+                        return Flow::Done;
+                    }
+                    ctx.discard_from_hand(self.owner, picked);
+                    let anchor_color = ctx.catalog.cards[picked as usize].suit;
+                    let is_red_anchor = matches!(
+                        anchor_color,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    );
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner && !ctx.core.player(*p).hand.is_empty()
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    self.card = Some(u32::from(is_red_anchor));
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "yunchou_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive || ctx.core.player(t).hand.is_empty() {
+                        return Flow::Done;
+                    }
+                    let pool: Vec<CardId> =
+                        ctx.core.player(t).hand.iter().copied().collect();
+                    let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                    let c = pool[j];
+                    let same = {
+                        let t_suit = ctx.catalog.cards[c as usize].suit;
+                        let is_red_t = matches!(
+                            t_suit,
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        );
+                        let is_red_a = self.card == Some(1);
+                        is_red_t == is_red_a
+                    };
+                    ctx.discard_from_hand(t, c);
+                    if same {
+                        ctx.draw_cards(self.owner, 1);
+                    } else {
+                        ctx.draw_cards(t, 1);
+                    }
+                    self.card = None;
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 凌波·恒爱面：frequent——闪响应/使用后摸 2
             HostBehavior::SwdHlingbo => {
                 if ctx.core.player(self.owner).alive {
@@ -23519,7 +23650,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdGuiyan
         | HostBehavior::SwdXingzhui
         | HostBehavior::SwdHuangyu
-        | HostBehavior::SwdTianhuo => {
+        | HostBehavior::SwdTianhuo
+        | HostBehavior::SwdYunchou => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

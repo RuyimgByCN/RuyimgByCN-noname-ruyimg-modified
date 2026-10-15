@@ -1685,6 +1685,26 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_jiliang",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "yunchou",
+          "mapping": "host:yunchou"
+        },
+        {
+          "name": "gongxin",
+          "mapping": null
+        },
+        {
+          "name": "jqimou",
+          "mapping": null
+        }
+      ]
     }
   ]
 }
