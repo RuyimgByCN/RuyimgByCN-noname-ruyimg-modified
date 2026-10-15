@@ -1493,6 +1493,50 @@
           "mapping": "builtin:突袭"
         }
       ]
+    },
+    {
+      "name": "swd_haidapang",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "bingjian",
+          "mapping": "host:bingjian"
+        },
+        {
+          "name": "rumeng",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_maixing",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "toudan",
+          "mapping": null
+        },
+        {
+          "name": "shending",
+          "mapping": "host:shending"
+        }
+      ]
+    },
+    {
+      "name": "swd_fengtianling",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "guiyan",
+          "mapping": "host:guiyan"
+        }
+      ]
     }
   ]
 }
