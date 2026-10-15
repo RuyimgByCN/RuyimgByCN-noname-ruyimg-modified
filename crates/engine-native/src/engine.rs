@@ -1859,6 +1859,11 @@ impl Engine {
         self.state.core.player(player).hp
     }
 
+    /// 手牌上限查询（测试面：hand_limit 含扩展技修饰）。
+    pub fn hand_limit_for_debug(&self, player: PlayerId) -> usize {
+        self.state.core.hand_limit(&self.catalog, player)
+    }
+
     pub fn debug_alive(&self, player: PlayerId) -> bool {
         self.state.core.player(player).alive
     }

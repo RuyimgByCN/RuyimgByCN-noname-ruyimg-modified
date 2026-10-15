@@ -1190,9 +1190,20 @@ impl GameStateCore {
     }
 
     pub fn hand_limit(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> usize {
+        // 英姿·刷新面（swd 武将面批 81 reyingzi）：手牌上限基数为体力上限
+        //（上游 reyingzi mod maxHandcardBase `return player.maxHp` 同口径
+        //——覆盖基数；星体改造等 maxHandcard 修饰仍叠加）
+        let base = if catalog
+            .skill_by_name("reyingzi")
+            .map(|d| self.has_skill(p, d))
+            .unwrap_or(false)
+        {
+            self.player(p).max_hp as usize
+        } else {
+            self.player(p).hp.max(0) as usize
+        };
         // 星体改造（U05 swd 灵剑，规则 v198）：手牌上限 -N 累加
-        let mut limit = (self.player(p).hp.max(0) as usize)
-            .saturating_sub(self.player(p).xingtigaizao_count as usize);
+        let mut limit = base.saturating_sub(self.player(p).xingtigaizao_count as usize);
         // 无脏（Boss 混沌，规则 v209）：手牌上限基数 0——体力贡献清零
         // （上游 boss_wuzang mod maxHandcard `num - player.hp` 同口径：
         // 基数 hp-hp=0；其余加成修饰保留）

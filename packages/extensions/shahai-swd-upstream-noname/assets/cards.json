@@ -1761,6 +1761,38 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_jipeng",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "reyingzi",
+          "mapping": "host:reyingzi"
+        },
+        {
+          "name": "guozao",
+          "mapping": "host:guozao"
+        }
+      ]
+    },
+    {
+      "name": "swd_duopeng",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "luanji",
+          "mapping": "host:luanji"
+        },
+        {
+          "name": "reyingzi",
+          "mapping": "host:reyingzi"
+        }
+      ]
     }
   ]
 }

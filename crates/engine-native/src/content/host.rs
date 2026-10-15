@@ -1033,6 +1033,19 @@ pub enum HostBehavior {
     /// 不大于自己的角色视为在攻击范围（engine 杀距离校验臂查询；
     /// linyun 两牌当杀/hutian 护天 defer）。
     SwdSliufeng,
+    /// 乱击·多鹏面（tag 368，武将面批 81 多鹏）：出牌将两张同花色手牌
+    /// 视为使用【万箭齐发】（ActivateSkill 双段选牌机 + use_virtual_card
+    /// 完整 AOE 管线；上游 viewAs 双卡复杂选牌面同口径）。
+    SwdLuanji,
+    /// 聒噪·疾鹏面（tag 369，武将面批 81 疾鹏）：锁定——距离 1 以内的
+    /// 角色受到伤害结算后（伤害来源非自己），观看牌堆顶三张并令距离 2
+    /// 以内一名有手牌角色以手牌与其交换（登记差异：上游不足三张时先摸
+    /// 三张再弃置的补牌面收敛为洗弃堆）。
+    SwdGuozao,
+    /// 英姿·刷新（tag 370，武将面批 81 疾鹏/多鹏 reyingzi）：锁定——
+    /// 摸牌阶段额外摸一张牌，且手牌上限为体力上限（上游 refresh
+    /// reyingzi 双面；标准目录「英姿」只有摸牌面，故独立行为承载）。
+    SwdReyingzi,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1183,6 +1196,9 @@ impl HostBehavior {
             HostBehavior::SwdYunchou => 365,
             HostBehavior::SwdPoxiao => 366,
             HostBehavior::SwdSliufeng => 367,
+            HostBehavior::SwdLuanji => 368,
+            HostBehavior::SwdGuozao => 369,
+            HostBehavior::SwdReyingzi => 370,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1791,6 +1807,9 @@ impl HostBehavior {
             365 => HostBehavior::SwdYunchou,
             366 => HostBehavior::SwdPoxiao,
             367 => HostBehavior::SwdSliufeng,
+            368 => HostBehavior::SwdLuanji,
+            369 => HostBehavior::SwdGuozao,
+            370 => HostBehavior::SwdReyingzi,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1811,7 +1830,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 364] = [
+    pub const ALL: [HostBehavior; 367] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2174,6 +2193,9 @@ impl HostBehavior {
         HostBehavior::SwdYunchou,
         HostBehavior::SwdPoxiao,
         HostBehavior::SwdSliufeng,
+        HostBehavior::SwdLuanji,
+        HostBehavior::SwdGuozao,
+        HostBehavior::SwdReyingzi,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2301,6 +2323,9 @@ impl HostBehavior {
             HostBehavior::SwdYunchou => "host:yunchou",
             HostBehavior::SwdPoxiao => "host:poxiao",
             HostBehavior::SwdSliufeng => "host:sliufeng",
+            HostBehavior::SwdLuanji => "host:luanji",
+            HostBehavior::SwdGuozao => "host:guozao",
+            HostBehavior::SwdReyingzi => "host:reyingzi",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3181,6 +3206,26 @@ impl HostBehavior {
             HostBehavior::SwdPoxiao => None,
             // 疾风·司空宇面：锁定 marker（engine 杀距离校验臂查询），无触发面
             HostBehavior::SwdSliufeng => None,
+            // 乱击·多鹏面：出牌主动技（viewAs 双卡链+usable:1 走 limits）
+            HostBehavior::SwdLuanji => None,
+            // 聒噪·疾鹏面：自己以外的任意角色受到伤害结算后（global；
+            // 距离与手牌候选在机器步求取；锁定=非 optional）
+            HostBehavior::SwdGuozao => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 英姿·刷新面：自己摸牌阶段开始时额外摸 1（上游 phaseDrawBegin2
+            // num++ 同口径；手牌上限=体力上限在 state.hand_limit 查询）
+            HostBehavior::SwdReyingzi => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -4415,6 +4460,32 @@ pub const YC_GEAN_KEY: &str = "yc:geanguanhuo";
 pub const YC_GEAN_T1_PICK: &str = "yc_gean_t1_pick";
 pub const YC_GEAN_T2_PICK: &str = "yc_gean_t2_pick";
 
+/// 乱击·多鹏面（武将面批 81）：手牌选项列表（SelectCards min=max=2 读
+/// 两张，花色一致性在消费段校验——上游 complexCard 逐张校验同口径）。
+fn same_suit_pair_options(
+    core: &crate::state::GameStateCore,
+    owner: PlayerId,
+) -> Vec<ChoiceOption> {
+    core.player(owner)
+        .hand
+        .iter()
+        .copied()
+        .map(ChoiceOption::Card)
+        .collect()
+}
+
+/// 乱击两卡花色一致性校验（上游 filterCard: get.suit(card) ==
+/// get.suit(ui.selected.cards[0]) 同口径）。
+fn upstream_same_suit(ctx: &Ctx<'_>, cards: &[CardId]) -> bool {
+    let Some(first) = cards.first() else {
+        return false;
+    };
+    let suit = ctx.catalog.cards[*first as usize].suit;
+    cards
+        .iter()
+        .all(|c| ctx.catalog.cards[*c as usize].suit == suit)
+}
+
 /// 羊皮卷发现类别池（swd 第十三批 v97）：上游 `get.inpile(type)` 按通用
 /// type 枚举；原生按目录牌种枚举——gwent/炉石/古剑机关/食物/欢乐等
 /// 专用牌种不入池（登记边界）。Tag：0=基本 1=锦囊 2=装备。
@@ -5446,6 +5517,28 @@ impl SkillBehavior for HostSkillBehavior {
             // 疾风·司空宇面：锁定 marker（engine 杀距离校验臂查询），无触发面
             HostBehavior::SwdSliufeng => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 乱击·多鹏面：出牌主动技（activate 通道），无触发 filter
+            HostBehavior::SwdLuanji => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 聒噪·疾鹏面：距离 1 以内角色受损（来源非自己；距离与手牌
+            // 候选在机器步求取；受损者含自己——上游 filter 只排除来源）
+            HostBehavior::SwdGuozao => {
+                let pl = ctx.state.player(owner);
+                matches!(event,
+                    EventData::Damage(d)
+                    if d.amount > 0
+                        && !d.prevented
+                        && d.source != Some(owner)
+                        && ctx
+                            .state
+                            .computed_distance(ctx.catalog, owner, d.target)
+                            <= 1
+                        && pl.alive)
+            }
+            // 英姿·刷新面：自己摸牌阶段开始（额外摸 1；手牌上限查询在同位）
+            HostBehavior::SwdReyingzi => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Draw, begin: true }
+                if *player == owner),
             // 横刀·慧彦面：回合外用牌/响应结算（当前回合角色 he 有牌）
             HostBehavior::SwdHwendao => {
                 let cur = ctx.state.turn.current;
@@ -6406,6 +6499,30 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 乱击·多鹏面（武将面批 81）：手牌存在同花色两卡
+            HostBehavior::SwdLuanji => {
+                let hand: Vec<CardId> =
+                    ctx.state.player(owner).hand.iter().copied().collect();
+                let has_pair = hand.iter().enumerate().any(|(i, a)| {
+                    let sa = ctx.catalog.cards[*a as usize].suit;
+                    hand.iter().skip(i + 1).any(|b| {
+                        ctx.catalog.cards[*b as usize].suit == sa
+                    })
+                });
+                if !has_pair {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 运筹·姬亮面（武将面批㊳）：自己有手牌
             HostBehavior::SwdYunchou => {
                 if ctx.state.player(owner).hand.is_empty() {
@@ -10866,6 +10983,153 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::SwdPoxiao => Flow::Done,
             // 疾风·司空宇面：锁定 marker（engine 杀距离校验臂查询），无效果步
             HostBehavior::SwdSliufeng => Flow::Done,
+            // 乱击·多鹏面：SelectCards 弃两张同花色手牌 → 虚拟万箭齐发
+            //（AOE 全体其他存活，座位序）
+            HostBehavior::SwdLuanji => match self.stage {
+                HostStage::Act => {
+                    let pairs = same_suit_pair_options(ctx.core, self.owner);
+                    if pairs.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "luanji_discard",
+                            options: pairs,
+                            min: 2,
+                            max: 2,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picks: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picks.len() != 2
+                        || !upstream_same_suit(ctx, &picks)
+                        || picks.iter().any(|c| {
+                            !ctx.core.player(self.owner).hand.contains(c)
+                        })
+                    {
+                        return Flow::Done;
+                    }
+                    for c in picks {
+                        ctx.discard_from_hand(self.owner, c);
+                    }
+                    let targets: Vec<PlayerId> = ctx
+                        .core
+                        .seat_order_from(ctx.core.next_alive(self.owner))
+                        .into_iter()
+                        .filter(|p| *p != self.owner)
+                        .collect();
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    ctx.use_virtual_card(self.owner, CardKind::ArcheryAttack, targets);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 聒噪·疾鹏面：TargetChoice 距离 2 内有手牌角色（含自己）→
+            // 其手牌全部弃置，牌堆顶三张入手（上游 lose._triggered=null +
+            // gain "draw" 同口径；登记差异：上游观看面为二段交互，原生
+            // 单窗收敛）
+            HostBehavior::SwdGuozao => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            !ctx.core.player(*p).hand.is_empty()
+                                && ctx.core.computed_distance(
+                                    ctx.catalog,
+                                    self.owner,
+                                    *p,
+                                ) <= 2
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "guozao_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    // 牌堆顶三张（不足先洗弃堆；仍不足则按实有张数）
+                    let mut top: Vec<CardId> = Vec::new();
+                    for _ in 0..3 {
+                        if ctx.core.deck.is_empty() {
+                            if ctx.core.discard.is_empty() {
+                                break;
+                            }
+                            let mut cards = std::mem::take(&mut ctx.core.discard);
+                            ctx.core.rng.shuffle(&mut cards);
+                            ctx.core.deck = cards;
+                            ctx.log(LogEvent::DeckReshuffled);
+                        }
+                        top.push(ctx.core.deck.pop().expect("guozao top"));
+                    }
+                    if top.is_empty() {
+                        return Flow::Done;
+                    }
+                    // 目标手牌全部弃置（上游 lose(...)._triggered=null 同
+                    // 口径不发射弃置事件），三张入手（gain "draw"）
+                    let taken: Vec<CardId> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .copied()
+                        .collect();
+                    for c in &taken {
+                        ctx.take_hand_card(t, *c);
+                        ctx.to_discard(*c);
+                    }
+                    for c in &top {
+                        ctx.core.player_mut(t).hand.push(*c);
+                    }
+                    ctx.log(LogEvent::CardsDrawn {
+                        player: t,
+                        cards: top.clone(),
+                    });
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 英姿·刷新面：自己摸牌阶段额外摸 1（手牌上限查询在
+            // state.hand_limit；此处只补摸牌面）
+            HostBehavior::SwdReyingzi => {
+                ctx.draw_cards(self.owner, 1);
+                Flow::Done
+            },
             // 运筹·姬亮面：SelectCard 弃一张手牌 → TargetChoice 有手牌
             // 目标 → 目标随机弃一张手牌：同色自己摸 1 否则目标摸 1
             HostBehavior::SwdYunchou => match self.stage {
@@ -23681,7 +23945,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdXingzhui
         | HostBehavior::SwdHuangyu
         | HostBehavior::SwdTianhuo
-        | HostBehavior::SwdYunchou => {
+        | HostBehavior::SwdYunchou
+        | HostBehavior::SwdLuanji => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
