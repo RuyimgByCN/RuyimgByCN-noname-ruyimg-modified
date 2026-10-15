@@ -1937,6 +1937,22 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_duanmeng",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "xuanying",
+          "mapping": "host:xuanying"
+        },
+        {
+          "name": "lieren",
+          "mapping": "host:lieren"
+        }
+      ]
     }
   ],
   "skills": [

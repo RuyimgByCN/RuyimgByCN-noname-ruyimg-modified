@@ -1120,6 +1120,15 @@ pub enum HostBehavior {
     /// equip 同口径；登记差异：实体发现替代 createCard；巧械 cyqiaoxie
     /// 挂后续批）。
     SwdCyxianjiang,
+    /// 玄影·端蒙面（tag 387，武将面批 90 端蒙）：锁定 marker——未横置
+    /// 时可横置自身视为使用无视距离【杀】；已横置时可横置自身视为出
+    /// 【闪】/受伤后反击来源/回合外失去牌时反击目标（上游 xuanying
+    /// 四子技同口径；登记差异：响应面收敛为标记面+出闪窗扩展臂）。
+    SwdXuanying,
+    /// 烈刃（tag 388，武将面批 90 端蒙）：杀造成伤害后（每触发与目标
+    /// 拼点，赢则获得其一张 he；上游 lieren chooseToCompare+gainPlayerCard
+    /// 同口径）。
+    SwdLieren,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1289,6 +1298,8 @@ impl HostBehavior {
             HostBehavior::SwdHuanxing2 => 384,
             HostBehavior::SwdMingfu => 385,
             HostBehavior::SwdCyxianjiang => 386,
+            HostBehavior::SwdXuanying => 387,
+            HostBehavior::SwdLieren => 388,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1916,6 +1927,8 @@ impl HostBehavior {
             384 => HostBehavior::SwdHuanxing2,
             385 => HostBehavior::SwdMingfu,
             386 => HostBehavior::SwdCyxianjiang,
+            387 => HostBehavior::SwdXuanying,
+            388 => HostBehavior::SwdLieren,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1936,7 +1949,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 383] = [
+    pub const ALL: [HostBehavior; 385] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2318,6 +2331,8 @@ impl HostBehavior {
         HostBehavior::SwdHuanxing2,
         HostBehavior::SwdMingfu,
         HostBehavior::SwdCyxianjiang,
+        HostBehavior::SwdXuanying,
+        HostBehavior::SwdLieren,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2464,6 +2479,8 @@ impl HostBehavior {
             HostBehavior::SwdHuanxing2 => "host:huanxing2",
             HostBehavior::SwdMingfu => "host:mingfu",
             HostBehavior::SwdCyxianjiang => "host:cyxianjiang",
+            HostBehavior::SwdXuanying => "host:xuanying",
+            HostBehavior::SwdLieren => "host:lieren",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3445,6 +3462,23 @@ impl HostBehavior {
             // direct optional 确认门）
             HostBehavior::SwdCyxianjiang => Some(TriggerMeta {
                 event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 玄影·端蒙面：自己受伤结算后（damageEnd 反击面——已横置且
+            // 来源存活可反击；sha 面经 ActivateSkill）
+            HostBehavior::SwdXuanying => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 烈刃：自己杀造成伤害结算后（每触发与目标拼点，optional）
+            HostBehavior::SwdLieren => Some(TriggerMeta {
+                event: EventKind::Damage,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -5817,6 +5851,26 @@ impl SkillBehavior for HostSkillBehavior {
             // 命符·姜子牙面：出牌主动技（activate 通道），无触发 filter
             HostBehavior::SwdMingfu => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 玄影·端蒙面：自己受伤（真实）、已横置、来源存活
+            HostBehavior::SwdXuanying => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner
+                    && !d.prevented
+                    && d.amount > 0
+                    && ctx.state.player(owner).linked
+                    && d.source.map(|s| ctx.state.player(s).alive).unwrap_or(false)),
+            // 烈刃：自己以杀造成真实伤害且受害者存活有牌
+            HostBehavior::SwdLieren => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner)
+                    && !d.prevented
+                    && d.amount > 0
+                    && d.card
+                        .map(|c| ctx.catalog.card_kind(c).is_sha_like())
+                        .unwrap_or(false)
+                    && ctx.state.player(d.target).alive
+                    && (!ctx.state.player(d.target).hand.is_empty()
+                        || !ctx.state.player(d.target).equips.is_empty())),
             // 仙匠·车芸面：自己使用牌且唯一目标为他人、目标装备区有
             // 自己未持有（按目录牌种）的牌
             HostBehavior::SwdCyxianjiang => {
@@ -6879,6 +6933,24 @@ impl SkillBehavior for HostSkillBehavior {
                     .alive_players()
                     .any(|p| p != owner && ctx.state.player(p).off_court.is_empty());
                 if !black || !others {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 玄影·端蒙面（武将面批 90）：未横置且有存活其他角色（sha 面）
+            HostBehavior::SwdXuanying => {
+                let unlinked = !ctx.state.player(owner).linked;
+                let others = ctx.state.alive_players().any(|p| p != owner);
+                if !unlinked || !others {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -12047,6 +12119,220 @@ impl crate::catalog::SkillMachine for HostMachine {
                         let pl = ctx.core.player(t);
                         if pl.hp < pl.max_hp as i32 {
                             ctx.recover(t, 1, None);
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 玄影·端蒙面（受伤反击面）：解除横置 + 对来源虚拟杀
+            //（ActivateSkill 面走下方 stage 分支——两入口按触发帧区分：
+            // 帧存在且为 Damage=反击面；无帧=主动面）
+            HostBehavior::SwdXuanying => {
+                let frame_dmg = ctx
+                    .res
+                    .frame(ctx.current_frame_id())
+                    .map(|f| &f.data)
+                    .and_then(|data| match data {
+                        crate::event::EventData::Damage(d) => Some(d.source),
+                        _ => None,
+                    });
+                if let Some(Some(src)) = frame_dmg {
+                    if !ctx.core.player(src).alive {
+                        return Flow::Done;
+                    }
+                    // 已横置（filter 保证）→ commit_linked 翻转为未横置
+                    ctx.emit(EventData::Linked {
+                        player: self.owner,
+                        linked: false,
+                    });
+                    if !ctx.core.deck.is_empty() {
+                        ctx.use_virtual_card(self.owner, CardKind::Sha, vec![src]);
+                    }
+                    return Flow::Done;
+                }
+                // 主动面（ActivateSkill）：TargetChoice 任一其他存活 →
+                // 横置自身 + 虚拟杀
+                match self.stage {
+                    HostStage::Act => {
+                        let options: Vec<ChoiceOption> = ctx
+                            .core
+                            .alive_players()
+                            .filter(|p| *p != self.owner)
+                            .map(ChoiceOption::Player)
+                            .collect();
+                        if options.is_empty() {
+                            return Flow::Done;
+                        }
+                        self.stage = HostStage::TargetChoice;
+                        Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectPlayers,
+                                prompt: "xuanying_target",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: true,
+                            },
+                        }
+                    }
+                    HostStage::TargetChoice => {
+                        let Some(t) = ctx.answer().first().and_then(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        }) else {
+                            return Flow::Done;
+                        };
+                        if ctx.core.player(t).alive {
+                            // commit_linked 翻转旗标（不含预置）
+                            ctx.emit(EventData::Linked {
+                                player: self.owner,
+                                linked: true,
+                            });
+                            if !ctx.core.deck.is_empty() {
+                                ctx.use_virtual_card(
+                                    self.owner,
+                                    CardKind::Sha,
+                                    vec![t],
+                                );
+                            }
+                        }
+                        Flow::Done
+                    }
+                    _ => Flow::Done,
+                }
+            },
+            // 烈刃：与受害者拼点——CompareTargetPick 目标选牌 →
+            // ComparePlayerPick 己方选牌 → 赢者获得对方拼点牌+随机一张 he
+            HostBehavior::SwdLieren => match self.stage {
+                HostStage::Act => {
+                    let victim = ctx
+                        .res
+                        .frame(ctx.current_frame_id())
+                        .map(|f| &f.data)
+                        .and_then(|data| match data {
+                            crate::event::EventData::Damage(d) => Some(d.target),
+                            _ => None,
+                        });
+                    let Some(t) = victim else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive
+                        || ctx.core.player(self.owner).hand.is_empty()
+                        || ctx.core.player(t).hand.is_empty()
+                    {
+                        return Flow::Done;
+                    }
+                    self.target = Some(t);
+                    self.stage = HostStage::CompareTargetPick;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "lieren_target_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::CompareTargetPick => {
+                    let Some(ChoiceOption::Card(t_card)) = ctx.answer().first().copied()
+                    else {
+                        return Flow::Done;
+                    };
+                    self.cards = vec![t_card];
+                    self.stage = HostStage::ComparePlayerPick;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "lieren_player_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::ComparePlayerPick => {
+                    let Some(ChoiceOption::Card(p_card)) = ctx.answer().first().copied()
+                    else {
+                        return Flow::Done;
+                    };
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(t_card) = self.cards.first().copied() else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&p_card) {
+                        ctx.discard_from_hand(self.owner, p_card);
+                    }
+                    if ctx.core.player(t).hand.contains(&t_card) {
+                        ctx.discard_from_hand(t, t_card);
+                    }
+                    let pr = ctx.catalog.cards[p_card as usize].rank;
+                    let tr = ctx.catalog.cards[t_card as usize].rank;
+                    if pr > tr {
+                        // 赢：获得目标一张 he（手牌优先；登记差异：上游
+                        // gainPlayerCard 自选，原生确定性首张）
+                        let grab = ctx
+                            .core
+                            .player(t)
+                            .hand
+                            .first()
+                            .copied()
+                            .map(|c| (t, c, true))
+                            .or_else(|| {
+                                ctx.core
+                                    .player(t)
+                                    .equips
+                                    .first()
+                                    .copied()
+                                    .map(|c| (t, c, false))
+                            });
+                        if let Some((from, c, in_hand)) = grab {
+                            if in_hand {
+                                ctx.core.player_mut(from).hand.retain(|x| *x != c);
+                            } else {
+                                ctx.core.player_mut(from).equips.retain(|x| *x != c);
+                                if ctx.catalog.card_kind(c).is_equip() {
+                                    crate::kernel::revoke_equip_skills(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        from,
+                                        c,
+                                    );
+                                }
+                            }
+                            ctx.core.player_mut(self.owner).hand.push(c);
+                            ctx.log(LogEvent::CardsGiven {
+                                from,
+                                to: self.owner,
+                                cards: vec![c],
+                            });
                         }
                     }
                     Flow::Done
