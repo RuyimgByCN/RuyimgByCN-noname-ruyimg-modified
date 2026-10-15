@@ -1114,6 +1114,12 @@ pub enum HostBehavior {
     /// 定区；上游 mingfu prepare throw + addJudge guiyoujie 同口径；
     /// 天命 tianlun=判定改判窗缺口登记 defer）。
     SwdMingfu,
+    /// 仙匠·车芸面（tag 386，武将面批 89 车芸）：使用牌指定唯一其他目
+    /// 标时（每回合每目标一次）——可选其装备区一张自己未持有的同类牌，
+    /// 实体发现复制并装备（上游 cyxianjiang choosePlayerCard+createCard
+    /// equip 同口径；登记差异：实体发现替代 createCard；巧械 cyqiaoxie
+    /// 挂后续批）。
+    SwdCyxianjiang,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1282,6 +1288,7 @@ impl HostBehavior {
             HostBehavior::SwdHuanxing => 383,
             HostBehavior::SwdHuanxing2 => 384,
             HostBehavior::SwdMingfu => 385,
+            HostBehavior::SwdCyxianjiang => 386,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1908,6 +1915,7 @@ impl HostBehavior {
             383 => HostBehavior::SwdHuanxing,
             384 => HostBehavior::SwdHuanxing2,
             385 => HostBehavior::SwdMingfu,
+            386 => HostBehavior::SwdCyxianjiang,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1928,7 +1936,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 382] = [
+    pub const ALL: [HostBehavior; 383] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2309,6 +2317,7 @@ impl HostBehavior {
         HostBehavior::SwdHuanxing,
         HostBehavior::SwdHuanxing2,
         HostBehavior::SwdMingfu,
+        HostBehavior::SwdCyxianjiang,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2454,6 +2463,7 @@ impl HostBehavior {
             HostBehavior::SwdHuanxing => "host:huanxing",
             HostBehavior::SwdHuanxing2 => "host:huanxing2",
             HostBehavior::SwdMingfu => "host:mingfu",
+            HostBehavior::SwdCyxianjiang => "host:cyxianjiang",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3431,6 +3441,15 @@ impl HostBehavior {
             }),
             // 命符·姜子牙面：出牌主动技（usable:1 走 limits）
             HostBehavior::SwdMingfu => None,
+            // 仙匠·车芸面：使用牌指定唯一目标后（CardUsed；frequent 面=
+            // direct optional 确认门）
+            HostBehavior::SwdCyxianjiang => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
 
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
@@ -5798,6 +5817,29 @@ impl SkillBehavior for HostSkillBehavior {
             // 命符·姜子牙面：出牌主动技（activate 通道），无触发 filter
             HostBehavior::SwdMingfu => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 仙匠·车芸面：自己使用牌且唯一目标为他人、目标装备区有
+            // 自己未持有（按目录牌种）的牌
+            HostBehavior::SwdCyxianjiang => {
+                matches!(event,
+                    EventData::CardUsed(u)
+                    if u.player == owner
+                        && u.targets.len() == 1
+                        && u.targets[0] != owner
+                        && ctx
+                            .state
+                            .player(u.targets[0])
+                            .equips
+                            .iter()
+                            .any(|c| {
+                                let k = ctx.catalog.card_kind(*c);
+                                !ctx.state
+                                    .player(owner)
+                                    .hand
+                                    .iter()
+                                    .chain(ctx.state.player(owner).equips.iter())
+                                    .any(|o| ctx.catalog.card_kind(*o) == k)
+                            }))
+            }
             // 幻形·移除面：自己受伤结算后（在位旗标=状态技能实例）
             HostBehavior::SwdHuanxing2 => {
                 let in_place = ctx
@@ -12006,6 +12048,92 @@ impl crate::catalog::SkillMachine for HostMachine {
                         if pl.hp < pl.max_hp as i32 {
                             ctx.recover(t, 1, None);
                         }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 仙匠·车芸面：SelectCard 目标装备区含未持有种（消费段校验）
+            // → 实体发现同牌种牌入手+Equipped 帧全托管装备
+            //（take_hand_card+同栏替换+grant_equip_skills——破茧同款）
+            HostBehavior::SwdCyxianjiang => match self.stage {
+                HostStage::Act => {
+                    let target = ctx
+                        .res
+                        .frame(ctx.current_frame_id())
+                        .map(|f| &f.data)
+                        .and_then(|data| match data {
+                            crate::event::EventData::CardUsed(u) => {
+                                u.targets.first().copied()
+                            }
+                            _ => None,
+                        });
+                    let Some(t) = target else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(t);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t)
+                        .equips
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            let k = ctx.catalog.card_kind(*c);
+                            !ctx.core
+                                .player(self.owner)
+                                .hand
+                                .iter()
+                                .chain(ctx.core.player(self.owner).equips.iter())
+                                .any(|o| ctx.catalog.card_kind(*o) == k)
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "cyxianjiang_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(pick) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    let kind = ctx.catalog.card_kind(pick);
+                    // 实体发现（牌堆优先弃堆；无则不做）
+                    let found = ctx
+                        .core
+                        .deck
+                        .iter()
+                        .position(|c| ctx.catalog.card_kind(*c) == kind)
+                        .map(|i| ctx.core.deck.remove(i))
+                        .or_else(|| {
+                            ctx.core
+                                .discard
+                                .iter()
+                                .position(|c| ctx.catalog.card_kind(*c) == kind)
+                                .map(|i| ctx.core.discard.remove(i))
+                        });
+                    if let Some(card) = found {
+                        ctx.core.player_mut(self.owner).hand.push(card);
+                        ctx.emit(EventData::Equipped {
+                            player: self.owner,
+                            card,
+                            replaced: None,
+                        });
                     }
                     Flow::Done
                 }
@@ -25691,7 +25819,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdHuodan
         | HostBehavior::SwdYijue
         | HostBehavior::SwdDangping
-        | HostBehavior::SwdMingfu => {
+        | HostBehavior::SwdMingfu
+        | HostBehavior::SwdCyxianjiang => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

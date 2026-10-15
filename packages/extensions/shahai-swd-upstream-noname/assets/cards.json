@@ -1917,6 +1917,26 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_cheyun",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "cyxianjiang",
+          "mapping": "host:cyxianjiang"
+        },
+        {
+          "name": "cyqiaoxie",
+          "mapping": null
+        },
+        {
+          "name": "shengong",
+          "mapping": null
+        }
+      ]
     }
   ],
   "skills": [
