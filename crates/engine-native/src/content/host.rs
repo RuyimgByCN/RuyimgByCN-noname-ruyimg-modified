@@ -1129,6 +1129,20 @@ pub enum HostBehavior {
     /// 拼点，赢则获得其一张 he；上游 lieren chooseToCompare+gainPlayerCard
     /// 同口径）。
     SwdLieren,
+    /// 极谋·姬良面（tag 389，武将面批 91 姬良）：回合外受伤结算后
+    /// frequent——摸 1（上游 jqimou damageEnd + 回合外门 + draw 同口径；
+    /// 使用牌续段=主动选择面登记差异不收）。
+    SwdJqimou,
+    /// 剑击·少微面（tag 390，武将面批 91 少微）：出牌阶段限一次——弃一
+    /// 张装备牌视为对杀合法目标使用一张虚拟杀并摸 1（上游 jianji
+    /// discard equip + useCard sha + draw 同口径；unequip 附加技面登记
+    /// 差异不收）。
+    SwdJianji,
+    /// 头弹·麦星面（tag 391，武将面批 91 麦星）：出牌阶段限一次——弃一
+    /// 张黑桃 he，目标受 1 火伤；随后自受害者起（含自己）座位序各弃一
+    /// 张 he（上游 toudan 链式弃置同口径；登记差异：机器直发确定性弃
+    /// 首张）。
+    SwdToudan,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1300,6 +1314,9 @@ impl HostBehavior {
             HostBehavior::SwdCyxianjiang => 386,
             HostBehavior::SwdXuanying => 387,
             HostBehavior::SwdLieren => 388,
+            HostBehavior::SwdJqimou => 389,
+            HostBehavior::SwdJianji => 390,
+            HostBehavior::SwdToudan => 391,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1929,6 +1946,9 @@ impl HostBehavior {
             386 => HostBehavior::SwdCyxianjiang,
             387 => HostBehavior::SwdXuanying,
             388 => HostBehavior::SwdLieren,
+            389 => HostBehavior::SwdJqimou,
+            390 => HostBehavior::SwdJianji,
+            391 => HostBehavior::SwdToudan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1949,7 +1969,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 385] = [
+    pub const ALL: [HostBehavior; 388] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2333,6 +2353,9 @@ impl HostBehavior {
         HostBehavior::SwdCyxianjiang,
         HostBehavior::SwdXuanying,
         HostBehavior::SwdLieren,
+        HostBehavior::SwdJqimou,
+        HostBehavior::SwdJianji,
+        HostBehavior::SwdToudan,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2481,6 +2504,9 @@ impl HostBehavior {
             HostBehavior::SwdCyxianjiang => "host:cyxianjiang",
             HostBehavior::SwdXuanying => "host:xuanying",
             HostBehavior::SwdLieren => "host:lieren",
+            HostBehavior::SwdJqimou => "host:jqimou",
+            HostBehavior::SwdJianji => "host:jianji",
+            HostBehavior::SwdToudan => "host:toudan",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3484,6 +3510,19 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 极谋·姬良面：自己受伤结算后（回合外门在 filter；frequent=非
+            // optional）
+            HostBehavior::SwdJqimou => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 剑击·少微面：出牌主动技（usable:1 走 limits）
+            HostBehavior::SwdJianji => None,
+            // 头弹·麦星面：出牌主动技（usable:1 走 limits）
+            HostBehavior::SwdToudan => None,
 
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
@@ -5859,6 +5898,20 @@ impl SkillBehavior for HostSkillBehavior {
                     && d.amount > 0
                     && ctx.state.player(owner).linked
                     && d.source.map(|s| ctx.state.player(s).alive).unwrap_or(false)),
+            // 极谋·姬良面：自己受伤（真实）且回合非自己
+            HostBehavior::SwdJqimou => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner
+                    && !d.prevented
+                    && d.amount > 0
+                    && ctx.state.turn.current != owner
+                    && ctx.state.player(owner).alive),
+            // 剑击·少微面：出牌主动技（activate 通道），无触发 filter
+            HostBehavior::SwdJianji => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 头弹·麦星面：出牌主动技（activate 通道），无触发 filter
+            HostBehavior::SwdToudan => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
             // 烈刃：自己以杀造成真实伤害且受害者存活有牌
             HostBehavior::SwdLieren => matches!(event,
                 EventData::Damage(d)
@@ -6933,6 +6986,63 @@ impl SkillBehavior for HostSkillBehavior {
                     .alive_players()
                     .any(|p| p != owner && ctx.state.player(p).off_court.is_empty());
                 if !black || !others {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 剑击·少微面（武将面批 91）：有装备牌且射程内有目标
+            HostBehavior::SwdJianji => {
+                let has_equip = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .chain(ctx.state.player(owner).equips.iter())
+                    .any(|c| ctx.catalog.card_kind(*c).is_equip());
+                let in_range = ctx.state.alive_players().any(|p| {
+                    p != owner
+                        && ctx.state.computed_distance(ctx.catalog, owner, p)
+                            <= ctx.state.attack_range(ctx.catalog, owner)
+                });
+                if !has_equip || !in_range {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 头弹·麦星面（武将面批 91）：有黑桃 he 且有其他存活
+            HostBehavior::SwdToudan => {
+                let spade = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .chain(ctx.state.player(owner).equips.iter())
+                    .any(|c| {
+                        matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Spade
+                        )
+                    });
+                let others = ctx.state.alive_players().any(|p| p != owner);
+                if !spade || !others {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -12119,6 +12229,260 @@ impl crate::catalog::SkillMachine for HostMachine {
                         let pl = ctx.core.player(t);
                         if pl.hp < pl.max_hp as i32 {
                             ctx.recover(t, 1, None);
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 极谋·姬良面：回合外受伤后摸 1（上游 jqimou draw 同口径；
+            // 使用牌续段=主动选择面登记差异不收）
+            HostBehavior::SwdJqimou => {
+                ctx.draw_cards(self.owner, 1);
+                Flow::Done
+            }
+            // 剑击·少微面：SelectCard 弃装备牌 → TargetChoice 杀合法目标 →
+            // 虚拟杀 + 摸 1（上游 useCard sha + draw 同口径）
+            HostBehavior::SwdJianji => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .chain(ctx.core.player(self.owner).equips.iter().copied())
+                        .filter(|c| ctx.catalog.card_kind(*c).is_equip())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "jianji_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&c) {
+                        ctx.discard_from_hand(self.owner, c);
+                    } else if ctx.core.player(self.owner).equips.contains(&c) {
+                        ctx.core
+                            .player_mut(self.owner)
+                            .equips
+                            .retain(|x| *x != c);
+                        if ctx.catalog.card_kind(c).is_equip() {
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                c,
+                            );
+                        }
+                        ctx.to_discard(c);
+                    } else {
+                        return Flow::Done;
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.computed_distance(
+                                    ctx.catalog,
+                                    self.owner,
+                                    *p,
+                                ) <= ctx.core.attack_range(ctx.catalog, self.owner)
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "jianji_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).alive && !ctx.core.deck.is_empty() {
+                        ctx.use_virtual_card(self.owner, CardKind::Sha, vec![t]);
+                        ctx.draw_cards(self.owner, 1);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 头弹·麦星面：SelectCard 黑桃 he → TargetChoice 其他存活 →
+            // 目标 1 火伤 + 自受害者起（含自己）座位序各弃一张 he
+            //（确定性首张登记差异）
+            HostBehavior::SwdToudan => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .chain(ctx.core.player(self.owner).equips.iter().copied())
+                        .filter(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Spade
+                            )
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "toudan_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&c) {
+                        ctx.discard_from_hand(self.owner, c);
+                    } else if ctx.core.player(self.owner).equips.contains(&c) {
+                        ctx.core
+                            .player_mut(self.owner)
+                            .equips
+                            .retain(|x| *x != c);
+                        if ctx.catalog.card_kind(c).is_equip() {
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                c,
+                            );
+                        }
+                        ctx.to_discard(c);
+                    } else {
+                        return Flow::Done;
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "toudan_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    ctx.emit(EventData::Damage(
+                        crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        ),
+                    ));
+                    // 自受害者起座位序（含自己）各弃一张 he（首张）
+                    let order = ctx.core.seat_order_from(t);
+                    for p in order {
+                        if p != self.owner && !ctx.core.player(p).alive {
+                            continue;
+                        }
+                        let pick = ctx
+                            .core
+                            .player(p)
+                            .hand
+                            .first()
+                            .copied()
+                            .map(|c| (c, true))
+                            .or_else(|| {
+                                ctx.core
+                                    .player(p)
+                                    .equips
+                                    .first()
+                                    .copied()
+                                    .map(|c| (c, false))
+                            });
+                        if let Some((c, in_hand)) = pick {
+                            if in_hand {
+                                ctx.discard_from_hand(p, c);
+                            } else {
+                                ctx.core
+                                    .player_mut(p)
+                                    .equips
+                                    .retain(|x| *x != c);
+                                if ctx.catalog.card_kind(c).is_equip() {
+                                    crate::kernel::revoke_equip_skills(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        p,
+                                        c,
+                                    );
+                                }
+                                ctx.to_discard(c);
+                            }
                         }
                     }
                     Flow::Done
@@ -26106,7 +26470,9 @@ pub fn host_skill_def(
         | HostBehavior::SwdYijue
         | HostBehavior::SwdDangping
         | HostBehavior::SwdMingfu
-        | HostBehavior::SwdCyxianjiang => {
+        | HostBehavior::SwdCyxianjiang
+        | HostBehavior::SwdJianji
+        | HostBehavior::SwdToudan => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
