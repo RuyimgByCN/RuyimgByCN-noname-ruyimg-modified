@@ -1056,6 +1056,28 @@ pub enum HostBehavior {
     /// 甲/梅花各敌人随机弃 1/黑桃令一名角色受 1 无来源雷伤（上游
     /// zhanxing 同口径；敌对关系按阵营 friend 判定取反）。
     SwdZhanxing,
+    /// 乐学·久悠面（tag 373，武将面批 83 久悠）：锁定——自己回合开始/
+    /// 结束随机更换临时技能：回合内面授 {制衡/集智}（上游池含缔盟/驱虎
+    /// ——原生未实现=登记差异，池取已实现子集）、回合外面授 {遗计/急救/
+    /// 鬼道/反馈}（上游 lexue1/lexue2 同口径；授前清四候选）。
+    SwdLexue,
+    /// 枕流·临月面（tag 374，武将面批 83 临月）：出牌阶段限一次——将一
+    /// 张红色手牌置于一名其他角色的武将牌上（其 off_court 挂附、来源
+    /// 牌通道），其下一个准备阶段回复 1 并获得此牌（上游 zhenjiu/
+    /// zhenjiu2 同口径；触发面=独立 tag 375）。
+    SwdZhenjiu,
+    /// 枕流·临月触发面（tag 375）：自己准备阶段开始时——off_court 红牌
+    /// 入手并回复 1（登记差异：经花色过滤取牌，目标若有其他红色
+    /// off_court 牌可能误取）。
+    SwdZhenjiu2,
+    /// 麻醉·临月面（tag 376，武将面批 83 临月）：出牌阶段限一次——将一
+    /// 张黑色手牌置于一名其他角色的武将牌上（off_court 挂附），其造成
+    /// 的下一次伤害 -1 然后获得此牌（上游 lmazui/lmazui2/lmazui3 同口
+    /// 径；减伤触发面=独立 tag 377）。
+    SwdLmazui,
+    /// 麻醉·临月触发面（tag 377）：伤害前置——off_court 黑牌返还（登记
+    /// 差异：上游伤害结算后归还，原生伤前归还）并令本次伤害 -1。
+    SwdLmazui2,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1211,6 +1233,11 @@ impl HostBehavior {
             HostBehavior::SwdReyingzi => 370,
             HostBehavior::SwdYudun => 371,
             HostBehavior::SwdZhanxing => 372,
+            HostBehavior::SwdLexue => 373,
+            HostBehavior::SwdZhenjiu => 374,
+            HostBehavior::SwdZhenjiu2 => 375,
+            HostBehavior::SwdLmazui => 376,
+            HostBehavior::SwdLmazui2 => 377,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1824,6 +1851,11 @@ impl HostBehavior {
             370 => HostBehavior::SwdReyingzi,
             371 => HostBehavior::SwdYudun,
             372 => HostBehavior::SwdZhanxing,
+            373 => HostBehavior::SwdLexue,
+            374 => HostBehavior::SwdZhenjiu,
+            375 => HostBehavior::SwdZhenjiu2,
+            376 => HostBehavior::SwdLmazui,
+            377 => HostBehavior::SwdLmazui2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1844,7 +1876,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 369] = [
+    pub const ALL: [HostBehavior; 374] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2212,6 +2244,11 @@ impl HostBehavior {
         HostBehavior::SwdReyingzi,
         HostBehavior::SwdYudun,
         HostBehavior::SwdZhanxing,
+        HostBehavior::SwdLexue,
+        HostBehavior::SwdZhenjiu,
+        HostBehavior::SwdZhenjiu2,
+        HostBehavior::SwdLmazui,
+        HostBehavior::SwdLmazui2,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2344,6 +2381,11 @@ impl HostBehavior {
             HostBehavior::SwdReyingzi => "host:reyingzi",
             HostBehavior::SwdYudun => "host:yudun",
             HostBehavior::SwdZhanxing => "host:zhanxing",
+            HostBehavior::SwdLexue => "host:lexue",
+            HostBehavior::SwdZhenjiu => "host:zhenjiu",
+            HostBehavior::SwdZhenjiu2 => "host:zhenjiu2",
+            HostBehavior::SwdLmazui => "host:lmazui",
+            HostBehavior::SwdLmazui2 => "host:lmazui2",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -3249,6 +3291,36 @@ impl HostBehavior {
             HostBehavior::SwdYudun => None,
             // 占星·肯迪面：出牌主动技（usable:1 走 limits）
             HostBehavior::SwdZhanxing => None,
+            // 乐学·久悠面：自己回合开始（授技在机器步按当前回合分流——
+            // 自己回合授{制衡/集智}、他人回合授{遗计/急救/鬼道/反馈}；
+            // 回合结束清候选在 PhaseEnd 面另入 filter 分流）
+            HostBehavior::SwdLexue => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 枕流·临月面：出牌主动技（usable:1 走 limits）
+            HostBehavior::SwdZhenjiu => None,
+            // 枕流触发面：自己准备阶段开始（off_court 红牌入手+回 1）
+            HostBehavior::SwdZhenjiu2 => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 麻醉·临月面：出牌主动技（usable:1 走 limits）
+            HostBehavior::SwdLmazui => None,
+            // 麻醉触发面：伤害前置（off_court 黑牌返还+降 1）
+            HostBehavior::SwdLmazui2 => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -4320,6 +4392,10 @@ pub const SWD_JIGUANTONG_DISCARD: &str = "swd_jiguantong_discard";
 pub const SWD_JIGUANTONG_KEY: &str = "swd_jiguantong";
 pub const SWD_JIGUANFENG_KEY: &str = "swd_jiguanfeng";
 pub const SWD_FENGYIN_STATE_KEY: &str = "swd_fengyin_state";
+/// 枕流·临月触发面内部键（挂附目标的准备阶段取回+回复）。
+pub const SWD_ZHENJIU2_KEY: &str = "swd_zhenjiu2";
+/// 麻醉·临月触发面内部键（挂附者伤害前置返还+降 1）。
+pub const SWD_LMAZUI2_KEY: &str = "swd_lmazui2";
 pub const SWD_JIGUANFENG_SHAN: &str = "swd_jiguanfeng_shan";
 pub const SWD_JIGUANYUAN_KEY: &str = "swd_jiguanyuan";
 pub const SWD_JIGUANYUAN_GAIN_KEY: &str = "swd_jiguanyuan_gain";
@@ -5569,6 +5645,23 @@ impl SkillBehavior for HostSkillBehavior {
             // 占星·肯迪面：出牌主动技（activate 通道），无触发 filter
             HostBehavior::SwdZhanxing => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 乐学：任一角色回合开始（授技在机器步按当前回合角色分流：
+            // 自己回合=回合内池，他人回合=回合外池；上游 lexue1/lexue2
+            // 分别挂 phaseBegin/phaseEnd 的双池面收敛为回合开始单窗，
+            // PhaseBegin 授至本回合结束由 expires_end_of_turn 承担）
+            HostBehavior::SwdLexue => matches!(event,
+                EventData::Phase { phase: crate::event::Phase::Judge, begin: true, .. }
+                if ctx.state.player(owner).alive),
+            // 枕流触发面：自己准备阶段开始且 off_court 有牌
+            HostBehavior::SwdZhenjiu2 => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                if *player == owner && !ctx.state.player(owner).off_court.is_empty()),
+            // 麻醉触发面：自己造成伤害前置（source 面——上游
+            // trigger: {source: "damageBegin"} 同口径）且 off_court 有牌
+            HostBehavior::SwdLmazui2 => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner) && !d.prevented
+                    && !ctx.state.player(owner).off_court.is_empty()),
             // 横刀·慧彦面：回合外用牌/响应结算（当前回合角色 he 有牌）
             HostBehavior::SwdHwendao => {
                 let cur = ctx.state.turn.current;
@@ -6529,6 +6622,58 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 枕流·临月面（武将面批 83）：有红色手牌且有其他存活角色
+            HostBehavior::SwdZhenjiu => {
+                let red = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                });
+                let others = ctx
+                    .state
+                    .alive_players()
+                    .any(|p| p != owner && ctx.state.player(p).off_court.is_empty());
+                if !red || !others {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 麻醉·临月面（武将面批 83）：有黑色手牌且有其他未挂附存活角色
+            HostBehavior::SwdLmazui => {
+                let black = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                });
+                let others = ctx
+                    .state
+                    .alive_players()
+                    .any(|p| p != owner && ctx.state.player(p).off_court.is_empty());
+                if !black || !others {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 愚钝·福面（武将面批 82）：两张锦囊手牌且在攻击范围内有目标
             HostBehavior::SwdYudun => {
                 let tricks = ctx
@@ -11209,6 +11354,313 @@ impl crate::catalog::SkillMachine for HostMachine {
                 ctx.draw_cards(self.owner, 1);
                 Flow::Done
             },
+            // 枕流·临月面：SelectCard 红色手牌 → TargetChoice 其他未挂附
+            // 存活 → off_court 挂附（上游 placeCard 武将牌上同口径；
+            // 触发面 SwdZhenjiu2 在其准备阶段取回）
+            HostBehavior::SwdZhenjiu => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Heart
+                                    | crate::catalog::Suit::Diamond
+                            )
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "zhenjiu_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&c)
+                        || !matches!(
+                            ctx.catalog.cards[c as usize].suit,
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    {
+                        return Flow::Done;
+                    }
+                    self.card = Some(c);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.player(*p).off_court.is_empty()
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "zhenjiu_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    let Some(c) = self.card else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).alive
+                        && ctx.core.player(t).off_court.is_empty()
+                        && ctx.core.player(self.owner).hand.contains(&c)
+                    {
+                        ctx.take_hand_card(self.owner, c);
+                        ctx.core.player_mut(t).off_court.push(c);
+                        // 授予触发面实例（其准备阶段取回+回复后自清）
+                        if let Some(def) = ctx.catalog.skill_by_name(SWD_ZHENJIU2_KEY) {
+                            ctx.core.skills.insert(
+                                (t, def),
+                                crate::state::SkillInstance {
+                                    owner: t,
+                                    enabled: true,
+                                    once_used: false,
+                                    expires_end_of_turn: false,
+                                    rounds: 0,
+                                },
+                            );
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 麻醉·临月面：SelectCard 黑色手牌 → TargetChoice → off_court
+            // 挂附（触发面 SwdLmazui2 在持有者伤害前置返还+降 1）
+            HostBehavior::SwdLmazui => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                            )
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "lmazui_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&c)
+                        || !matches!(
+                            ctx.catalog.cards[c as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        )
+                    {
+                        return Flow::Done;
+                    }
+                    self.card = Some(c);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.player(*p).off_court.is_empty()
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "lmazui_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    let Some(c) = self.card else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).alive
+                        && ctx.core.player(t).off_court.is_empty()
+                        && ctx.core.player(self.owner).hand.contains(&c)
+                    {
+                        ctx.take_hand_card(self.owner, c);
+                        ctx.core.player_mut(t).off_court.push(c);
+                        // 授予触发面实例（其伤害前置返还+降 1 后自清）
+                        if let Some(def) = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY) {
+                            ctx.core.skills.insert(
+                                (t, def),
+                                crate::state::SkillInstance {
+                                    owner: t,
+                                    enabled: true,
+                                    once_used: false,
+                                    expires_end_of_turn: false,
+                                    rounds: 0,
+                                },
+                            );
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 乐学·久悠面：回合开始授技——自己回合授{制衡/集智}之一，
+            // 他人回合授{遗计/急救/鬼道/反馈}之一（RNG 选择；
+            // expires_end_of_turn 到期移除。登记差异：上游池含缔盟/驱虎，
+            // 原生未实现故回合内池取已实现子集）
+            HostBehavior::SwdLexue => {
+                let in_turn = ctx.core.turn.current == self.owner;
+                let pool: &[&str] = if in_turn {
+                    &["制衡", "集智"]
+                } else {
+                    &["遗计", "急救", "鬼道", "反馈"]
+                };
+                let defs: Vec<crate::ids::SkillDefId> = pool
+                    .iter()
+                    .filter_map(|n| ctx.catalog.skill_by_name(n))
+                    .collect();
+                if defs.is_empty() {
+                    return Flow::Done;
+                }
+                let j = ctx.core.rng.gen_range(defs.len() as u32) as usize;
+                let chosen = defs[j];
+                ctx.add_skill_until_turn_end(self.owner, chosen);
+                Flow::Done
+            }
+            // 枕流触发面：off_court 红牌入手并回复 1（登记差异：按花色
+            // 过滤取牌——若 off_court 有他技红色挂附可能误取）
+            HostBehavior::SwdZhenjiu2 => {
+                let red = ctx
+                    .core
+                    .player(self.owner)
+                    .off_court
+                    .iter()
+                    .copied()
+                    .find(|c| {
+                        matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    });
+                if let Some(c) = red {
+                    ctx.core
+                        .player_mut(self.owner)
+                        .off_court
+                        .retain(|x| *x != c);
+                    ctx.core.player_mut(self.owner).hand.push(c);
+                    ctx.log(LogEvent::CardsGiven {
+                        from: self.owner,
+                        to: self.owner,
+                        cards: vec![c],
+                    });
+                    ctx.recover(self.owner, 1, None);
+                }
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_ZHENJIU2_KEY) {
+                    ctx.core.skills.remove(&(self.owner, def));
+                }
+                Flow::Done
+            }
+            // 麻醉触发面：伤害前置——off_court 黑牌返还（登记差异：上游
+            // 伤害后归还，原生伤前归还）并令本次伤害 -1
+            HostBehavior::SwdLmazui2 => {
+                let black = ctx
+                    .core
+                    .player(self.owner)
+                    .off_court
+                    .iter()
+                    .copied()
+                    .find(|c| {
+                        matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        )
+                    });
+                if let Some(c) = black {
+                    ctx.core
+                        .player_mut(self.owner)
+                        .off_court
+                        .retain(|x| *x != c);
+                    ctx.core.player_mut(self.owner).hand.push(c);
+                }
+                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                if let crate::event::EventData::Damage(d) = &mut frame.data {
+                    d.amount = d.amount.saturating_sub(1);
+                }
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY) {
+                    ctx.core.skills.remove(&(self.owner, def));
+                }
+                Flow::Done
+            }
             // 愚钝·福面：SelectCards 两张锦囊手牌（消费段校验）→
             // TargetChoice 攻击距离内其他存活 → 首张作 declared-Sha 载荷
             //（use_as 声明）进入杀结算，次张弃置（丈八蛇矛机同型，
@@ -24321,7 +24773,9 @@ pub fn host_skill_def(
         | HostBehavior::SwdTianhuo
         | HostBehavior::SwdYunchou
         | HostBehavior::SwdLuanji
-        | HostBehavior::SwdZhanxing => {
+        | HostBehavior::SwdZhanxing
+        | HostBehavior::SwdZhenjiu
+        | HostBehavior::SwdLmazui => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

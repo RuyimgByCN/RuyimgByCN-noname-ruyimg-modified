@@ -1821,6 +1821,44 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_jiuyou",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "lexue",
+          "mapping": "host:lexue"
+        }
+      ]
+    },
+    {
+      "name": "swd_linyue",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "zhenjiu",
+          "mapping": "host:zhenjiu"
+        },
+        {
+          "name": "lmazui",
+          "mapping": "host:lmazui"
+        }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "swd_zhenjiu2",
+      "mapping": "host:zhenjiu2"
+    },
+    {
+      "name": "swd_lmazui2",
+      "mapping": "host:lmazui2"
     }
   ]
 }
