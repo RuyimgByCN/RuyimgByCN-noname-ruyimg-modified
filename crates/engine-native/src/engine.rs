@@ -2440,6 +2440,22 @@ fn apply_command(
             if core.player(actor).wangshi_ban && catalog.card_kind(card).is_basic_kind() {
                 return Err(RejectReason::CardLimit);
             }
+            // 愚钝·福面（swd 武将面批 82）：锁定——无法使用锦囊牌（上游
+            // mod cardEnabled/cardRespondable/cardSavable 全禁；登记差异：
+            // 原生仅使用位 PlayCard 校验，打出/响应面同往事封禁口径）
+            if catalog
+                .skill_by_name("yudun")
+                .map(|d| core.has_skill(actor, d))
+                .unwrap_or(false)
+            {
+                let kind = catalog.card_kind(card);
+                let is_trick = !kind.is_basic_kind()
+                    && kind.equip_slot().is_none()
+                    && kind.is_basic_trick_or_equip();
+                if is_trick {
+                    return Err(RejectReason::CardLimit);
+                }
+            }
             // 禁言（玩点论杀西真夕红，玩点论杀续批）：体力 ≤2 时黑色锦囊
             // 禁用（查询面，往事封禁先例同位；登记差异：上游四面
             // cardEnabled/Usable/Respondable/Savable，原生仅使用面）

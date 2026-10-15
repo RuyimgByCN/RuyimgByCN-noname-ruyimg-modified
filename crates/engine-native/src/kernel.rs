@@ -1366,13 +1366,24 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
                 .skill_by_name("poyue")
                 .map(|def| ctx.core.has_skill(u.player, def))
                 .unwrap_or(false);
+            // 愚钝·福面（swd 武将面批 82）：双锦囊当杀不计入出杀次数
+            //（上游 yudun_count useCard 后 stat.card.sha-- 同口径）。
+            // 判据=声明杀且实体非杀族（PlayCard 常态出杀也带 use_as=
+            // 声明位，须按实体牌种区分——批 15 良策勘误同口径）
+            let yudun_free = u.use_as == Some(crate::catalog::CardKind::Sha)
+                && !ctx.catalog.card_kind(u.card).is_sha_like()
+                && ctx
+                    .catalog
+                    .skill_by_name("yudun")
+                    .map(|def| ctx.core.has_skill(u.player, def))
+                    .unwrap_or(false);
             if ctx.core.turn.sha_used_play_phase {
                 if ctx.core.current_land
                     == Some(crate::catalog::CardKind::Longlushanfeng)
                 {
                     ctx.core.turn.land_sha_used = true;
                 }
-            } else if !poyue_red_free {
+            } else if !poyue_red_free && !yudun_free {
                 ctx.core.turn.sha_used_play_phase = true;
             }
             // 冰河要塞地图效果（mtg 第八批，规则 v107）：锁定全局——使

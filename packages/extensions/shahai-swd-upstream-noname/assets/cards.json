@@ -1793,6 +1793,34 @@
           "mapping": "host:reyingzi"
         }
       ]
+    },
+    {
+      "name": "swd_fu",
+      "faction": "qun",
+      "hp": 5,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "yudun",
+          "mapping": "host:yudun"
+        }
+      ]
+    },
+    {
+      "name": "swd_kendi",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "zhanxing",
+          "mapping": "host:zhanxing"
+        },
+        {
+          "name": "kbolan",
+          "mapping": null
+        }
+      ]
     }
   ]
 }
