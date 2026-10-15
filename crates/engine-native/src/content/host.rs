@@ -973,6 +973,12 @@ pub enum HostBehavior {
     /// 敷衍·护甲面（tag 348，武将面批㉙ 子巧）：受伤后可令一名无护甲角色
     /// 获得 1 点护甲（确认门）。
     SwdFuyan,
+    /// 凌波·恒爱面（tag 349，武将面批㉜ 恒爱）：闪响应/使用后 frequent 摸
+    /// 2（双事件 CardResponded+CardUsed；funiao/ningxian defer）。
+    SwdHlingbo,
+    /// 血裔·Miles 面（tag 350，武将面批㉜ Miles）：锁定——伤害前置取消+
+    /// 失去 1 点体力（无条件版虚影；aojian/mohua2 defer）。
+    SwdMilesXueyi,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1104,6 +1110,8 @@ impl HostBehavior {
             HostBehavior::SwdWuxie => 346,
             HostBehavior::SwdGuanhu => 347,
             HostBehavior::SwdFuyan => 348,
+            HostBehavior::SwdHlingbo => 349,
+            HostBehavior::SwdMilesXueyi => 350,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1693,6 +1701,8 @@ impl HostBehavior {
             346 => HostBehavior::SwdWuxie,
             347 => HostBehavior::SwdGuanhu,
             348 => HostBehavior::SwdFuyan,
+            349 => HostBehavior::SwdHlingbo,
+            350 => HostBehavior::SwdMilesXueyi,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1713,7 +1723,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 345] = [
+    pub const ALL: [HostBehavior; 347] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2057,6 +2067,8 @@ impl HostBehavior {
         HostBehavior::SwdWuxie,
         HostBehavior::SwdGuanhu,
         HostBehavior::SwdFuyan,
+        HostBehavior::SwdHlingbo,
+        HostBehavior::SwdMilesXueyi,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2165,6 +2177,8 @@ impl HostBehavior {
             HostBehavior::SwdWuxie => "host:wuxie",
             HostBehavior::SwdGuanhu => "host:guanhu",
             HostBehavior::SwdFuyan => "host:fuyan",
+            HostBehavior::SwdHlingbo => "host:hlingbo",
+            HostBehavior::SwdMilesXueyi => "host:miles_xueyi",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2954,6 +2968,22 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 凌波·恒爱面：闪响应/使用结算后（双事件 frequent=非 optional）
+            HostBehavior::SwdHlingbo => Some(TriggerMeta {
+                event: EventKind::CardResponded,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::CardUsed],
+            }),
+            // 血裔·Miles 面：伤害前置窗口（锁定取消+失去体力）
+            HostBehavior::SwdMilesXueyi => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
@@ -5185,6 +5215,18 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdFuyan => matches!(event,
                 EventData::Damage(d)
                 if d.target == owner && !d.prevented && d.amount > 0),
+            // 凌波·恒爱面：闪的响应/使用结算（双事件；frequent 摸 2）
+            HostBehavior::SwdHlingbo => matches!(event,
+                EventData::CardResponded { card, player }
+                if *player == owner && ctx.catalog.card_kind(*card) == CardKind::Shan
+            ) || matches!(event,
+                EventData::CardUsed(u)
+                if u.player == owner
+                    && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card)) == CardKind::Shan),
+            // 血裔·Miles 面：自己受到伤害前置
+            HostBehavior::SwdMilesXueyi => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner && !d.prevented),
             // 观虎：自己杀伤害结算后、对方有牌（手/装备任一）
             HostBehavior::SwdGuanhu => matches!(event,
                 EventData::Damage(d)
@@ -9249,6 +9291,26 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 凌波·恒爱面：frequent——闪响应/使用后摸 2
+            HostBehavior::SwdHlingbo => {
+                if ctx.core.player(self.owner).alive {
+                    ctx.draw_cards(self.owner, 2);
+                }
+                Flow::Done
+            }
+            // 血裔·Miles 面：锁定——伤害前置取消+失去 1 点体力（无条件；
+            // Boss 绝情同窗）
+            HostBehavior::SwdMilesXueyi => {
+                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                if let crate::event::EventData::Damage(d) = &mut frame.data {
+                    d.prevented = true;
+                }
+                ctx.emit(EventData::LoseHp {
+                    player: self.owner,
+                    amount: 1,
+                });
+                Flow::Done
+            }
             // 观虎：确认后——弃目标一张手牌+一张装备（确定性首张，登记
             // 差异上游自选 discardPlayerCard 可选面）
             HostBehavior::SwdGuanhu => match self.stage {

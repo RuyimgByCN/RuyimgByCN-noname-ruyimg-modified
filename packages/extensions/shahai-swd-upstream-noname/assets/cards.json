@@ -1365,6 +1365,86 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_hengai",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "hlingbo",
+          "mapping": "host:hlingbo"
+        },
+        {
+          "name": "funiao",
+          "mapping": null
+        },
+        {
+          "name": "ningxian",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_miles",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "aojian",
+          "mapping": null
+        },
+        {
+          "name": "miles_xueyi",
+          "mapping": "host:miles_xueyi"
+        },
+        {
+          "name": "mohua2",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_kangnalishi",
+      "faction": "qun",
+      "hp": 1,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "busi",
+          "mapping": null
+        },
+        {
+          "name": "xuying",
+          "mapping": "host:xuying"
+        },
+        {
+          "name": "yinguo",
+          "mapping": null
+        }
+      ]
+    },
+    {
+      "name": "swd_zhaoyun",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "longdan",
+          "mapping": "builtin:龙胆"
+        },
+        {
+          "name": "pozhen",
+          "mapping": null
+        },
+        {
+          "name": "tanlin",
+          "mapping": null
+        }
+      ]
     }
   ]
 }
