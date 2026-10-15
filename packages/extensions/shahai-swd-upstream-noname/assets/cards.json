@@ -1445,6 +1445,54 @@
           "mapping": null
         }
       ]
+    },
+    {
+      "name": "swd_huyue",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "hyunshen",
+          "mapping": null
+        },
+        {
+          "name": "fengming",
+          "mapping": "host:fengming"
+        }
+      ]
+    },
+    {
+      "name": "swd_shanxiaoxiao",
+      "faction": "wu",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "shehun",
+          "mapping": null
+        },
+        {
+          "name": "xiaomoyu",
+          "mapping": "host:xiaomoyu"
+        }
+      ]
+    },
+    {
+      "name": "swd_duguningke",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "nlianji",
+          "mapping": null
+        },
+        {
+          "name": "touxi",
+          "mapping": "builtin:突袭"
+        }
+      ]
     }
   ]
 }

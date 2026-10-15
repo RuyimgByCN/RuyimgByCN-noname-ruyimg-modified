@@ -979,6 +979,12 @@ pub enum HostBehavior {
     /// 血裔·Miles 面（tag 350，武将面批㉜ Miles）：锁定——伤害前置取消+
     /// 失去 1 点体力（无条件版虚影；aojian/mohua2 defer）。
     SwdMilesXueyi,
+    /// 鸣凤（tag 351，武将面批㉝ 胡月）：出牌阶段限一次弃一张装备牌——
+    /// 一名角色回复 1 并摸 1（hyunshen 计数存储 defer）。
+    SwdFengming,
+    /// 小莫雨·山小小面（tag 352，武将面批㉝ 山小小）：锁定——造成伤害后
+    /// 回复 1（满血改摸 1），每回合一次（inst.once_used；shehun defer）。
+    SwdXiaomoyu,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1112,6 +1118,8 @@ impl HostBehavior {
             HostBehavior::SwdFuyan => 348,
             HostBehavior::SwdHlingbo => 349,
             HostBehavior::SwdMilesXueyi => 350,
+            HostBehavior::SwdFengming => 351,
+            HostBehavior::SwdXiaomoyu => 352,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1703,6 +1711,8 @@ impl HostBehavior {
             348 => HostBehavior::SwdFuyan,
             349 => HostBehavior::SwdHlingbo,
             350 => HostBehavior::SwdMilesXueyi,
+            351 => HostBehavior::SwdFengming,
+            352 => HostBehavior::SwdXiaomoyu,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -1723,7 +1733,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 347] = [
+    pub const ALL: [HostBehavior; 349] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2069,6 +2079,8 @@ impl HostBehavior {
         HostBehavior::SwdFuyan,
         HostBehavior::SwdHlingbo,
         HostBehavior::SwdMilesXueyi,
+        HostBehavior::SwdFengming,
+        HostBehavior::SwdXiaomoyu,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2179,6 +2191,8 @@ impl HostBehavior {
             HostBehavior::SwdFuyan => "host:fuyan",
             HostBehavior::SwdHlingbo => "host:hlingbo",
             HostBehavior::SwdMilesXueyi => "host:miles_xueyi",
+            HostBehavior::SwdFengming => "host:fengming",
+            HostBehavior::SwdXiaomoyu => "host:xiaomoyu",
             HostBehavior::SwdYuchanSwap => "yuchan_swap",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
@@ -2981,6 +2995,17 @@ impl HostBehavior {
             // 血裔·Miles 面：伤害前置窗口（锁定取消+失去体力）
             HostBehavior::SwdMilesXueyi => Some(TriggerMeta {
                 event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 鸣凤：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
+            HostBehavior::SwdFengming => None,
+            // 小莫雨·山小小面：造成伤害结算后（锁定强制；每回合一次走
+            // limits once_per_turn——机器臂消费 inst.once_used）
+            HostBehavior::SwdXiaomoyu => Some(TriggerMeta {
+                event: EventKind::Damage,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
@@ -5227,6 +5252,10 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdMilesXueyi => matches!(event,
                 EventData::Damage(d)
                 if d.target == owner && !d.prevented),
+            // 小莫雨·山小小面：自己造成伤害结算后（每回合一次经 inst 检查）
+            HostBehavior::SwdXiaomoyu => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner) && !d.prevented && d.amount > 0),
             // 观虎：自己杀伤害结算后、对方有牌（手/装备任一）
             HostBehavior::SwdGuanhu => matches!(event,
                 EventData::Damage(d)
@@ -6155,6 +6184,29 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn crate::catalog::SkillMachine>> {
         match self.behavior {
+            // 鸣凤（武将面批㉝ 胡月）：有装备牌可弃
+            HostBehavior::SwdFengming => {
+                let has_equip = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .chain(ctx.state.player(owner).equips.iter())
+                    .any(|c| ctx.catalog.card_kind(*c).is_equip());
+                if !has_equip {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 断义（武将面批㉘ 慕容诗）：手牌中杀多于 1（上游 countCards
             // "sha" > 1 同口径）
             HostBehavior::SwdDuanyi => {
@@ -9291,6 +9343,120 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 鸣凤：SelectCard 弃一张装备牌 → TargetChoice 任一存活角色
+            // → 回复 1 + 摸 1
+            HostBehavior::SwdFengming => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .filter(|c| ctx.catalog.card_kind(*c).is_equip())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "fengming_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(picked) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    let in_hand = ctx.core.player(self.owner).hand.contains(&picked);
+                    if in_hand {
+                        ctx.take_hand_card(self.owner, picked);
+                    } else {
+                        ctx.core
+                            .player_mut(self.owner)
+                            .equips
+                            .retain(|x| *x != picked);
+                        if ctx.catalog.card_kind(picked).is_equip() {
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                picked,
+                            );
+                        }
+                    }
+                    ctx.to_discard(picked);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![picked],
+                    });
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "fengming_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).alive {
+                        let pl = ctx.core.player(t);
+                        if pl.hp < pl.max_hp as i32 {
+                            ctx.recover(t, 1, None);
+                        }
+                        ctx.draw_cards(t, 1);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 小莫雨·山小小面：锁定——回复 1（满血改摸 1）；每回合一次
+            //（inst.once_used 消费——limits once_per_turn 走回合重置）
+            HostBehavior::SwdXiaomoyu => {
+                // 每回合一次由 resolution 层强制触发路径自动消费 once_used
+                //（plan→start 前置检查），机器臂直接执行效果
+                if !ctx.core.player(self.owner).alive {
+                    return Flow::Done;
+                }
+                let pl = ctx.core.player(self.owner);
+                if pl.hp < pl.max_hp as i32 {
+                    ctx.recover(self.owner, 1, None);
+                } else {
+                    ctx.draw_cards(self.owner, 1);
+                }
+                Flow::Done
+            }
             // 凌波·恒爱面：frequent——闪响应/使用后摸 2
             HostBehavior::SwdHlingbo => {
                 if ctx.core.player(self.owner).alive {
@@ -21995,7 +22161,9 @@ pub fn host_skill_def(
         | HostBehavior::SwdXianghui
         | HostBehavior::SwdSusheng
         | HostBehavior::SwdSenluo
-        | HostBehavior::SwdDuanyi => {
+        | HostBehavior::SwdDuanyi
+        | HostBehavior::SwdFengming
+        | HostBehavior::SwdXiaomoyu => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
