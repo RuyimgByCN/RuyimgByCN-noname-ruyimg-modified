@@ -82,7 +82,7 @@ fn committed_package_matches_source() {
     .unwrap();
     compiled.manifest.logic_hash = compiled.compute_logic_hash();
     assert_eq!(committed.manifest.logic_hash, compiled.manifest.logic_hash);
-    assert_eq!(committed.skill_index.len(), 103);
+    assert_eq!(committed.skill_index.len(), 105);
     assert!(committed
         .skill_index
         .iter()

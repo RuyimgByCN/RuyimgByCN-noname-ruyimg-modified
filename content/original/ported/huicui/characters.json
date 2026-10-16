@@ -1423,5 +1423,15 @@
     "sex": "male",
     "group": "shu",
     "portrait_asset": "character_zongyu.jpg"
+  },
+  {
+    "id": 3192598888,
+    "name_key": "dc_sunjun",
+    "max_hp": 5,
+    "skills": [
+      2802623829
+    ],
+    "sex": "male",
+    "group": "wu"
   }
 ]

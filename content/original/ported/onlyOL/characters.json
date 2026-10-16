@@ -995,5 +995,16 @@
     ],
     "sex": "male",
     "group": "shen"
+  },
+  {
+    "id": 2509129165,
+    "name_key": "ol_sb_zhouyu",
+    "max_hp": 4,
+    "skills": [
+      4204242468,
+      2728901365
+    ],
+    "sex": "male",
+    "group": "wu"
   }
 ]

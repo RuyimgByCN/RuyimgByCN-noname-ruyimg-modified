@@ -1,0 +1,7 @@
+// 枭姬（offline）：吴势力技。当你失去装备区里的一张牌后，你摸两张牌，然后可以弃置场上的一张牌。
+// 上游语义摘录如上。旧线诚实 noop：失去装备摸二+弃场上牌；吴势力技面可部分复用但本批诚实 noop 与九鼎孙尚香同迁（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill jdsbxiaoji(3085707855) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,7 @@
+// 识预（xianding）：每轮限一次，其他角色的回合开始时，你可秘密猜测每种类型的牌本回合是否被该角色使用，其回合结束时，你每猜对一种，你获得其一张牌并防止其本轮下次对你造成的伤害；每猜错一种，你与其依次对对方造成1点伤害。若你全部猜对，此技能本轮可使用次数+1。
+// 上游语义摘录如上。旧线诚实 noop：秘密猜测牌类使用+猜对获牌防伤/猜错互伤；秘密猜测博弈债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill dcshiyu(3143309739) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

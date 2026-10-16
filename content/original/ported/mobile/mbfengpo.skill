@@ -1,0 +1,7 @@
+// 凤魄（mobile）：每阶段各限一次，你使用【杀】或【决斗】指定唯一目标后，你可选择一项：1.摸X张牌；2.令此牌伤害+X（X为你与目标方片牌数之和）。
+// 上游语义摘录如上。旧线诚实 noop：杀/决斗唯一目标后摸或加伤按双方方片数；阶段限次+花色计数复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill mbfengpo(2318615547) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

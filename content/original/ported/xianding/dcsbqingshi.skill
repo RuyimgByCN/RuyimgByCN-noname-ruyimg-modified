@@ -1,0 +1,7 @@
+// 清势（xianding）：当你使用手牌结算后，若你的手牌里没有【杀】，你可以视为对此回合未受到伤害的一名其他角色使用一张【杀】，此回合结束阶段，此回合以此法受到伤害的角色可对你使用一张【杀】（不可叠加）。
+// 上游语义摘录如上。旧线诚实 noop：手牌无杀后视为对未受伤者用杀+结束阶段反击；视为杀连环复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill dcsbqingshi(2271027796) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

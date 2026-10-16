@@ -1,0 +1,52 @@
+=== rebuild bingshi ===
+wrote /tmp/rebuild_bingshi.npack.json logic_hash=e5466cde4ded7e41ac0805293b7120db506030e56ce719de165781647b316c8a
+rebuilt /tmp/rebuild_bingshi.npack.json
+bingshi abi=677 skills=105 chars=37 modules=170 logic=e5466cde4ded7e41
+=== rebuild clan ===
+wrote /tmp/rebuild_clan.npack.json logic_hash=1f86a1ba1c39b2f055ce7922af9b6286485a3f492ff6247834dcd6001f6a6682
+rebuilt /tmp/rebuild_clan.npack.json
+clan abi=649 skills=90 chars=41 modules=69 logic=1f86a1ba1c39b2f0
+=== rebuild collab ===
+wrote /tmp/rebuild_collab.npack.json logic_hash=6881766bc2a8232f63c184ac64c609c887fffc1e652cefe27397a94e00e6221e
+rebuilt /tmp/rebuild_collab.npack.json
+collab abi=694 skills=156 chars=90 modules=128 logic=6881766bc2a8232f
+=== rebuild huicui ===
+wrote /tmp/rebuild_huicui.npack.json logic_hash=2e389acd378cded9c59dd09d1bef146eb3da36a4b1194b6fdf9dedb7c3f28d6a
+rebuilt /tmp/rebuild_huicui.npack.json
+huicui abi=487 skills=255 chars=120 modules=195 logic=2e389acd378cded9
+=== rebuild mobile ===
+wrote /tmp/rebuild_mobile.npack.json logic_hash=ee2a4f45f519d1c3375824d4bda0d73c86ec244773f017db063b9004e4304925
+rebuilt /tmp/rebuild_mobile.npack.json
+mobile abi=734 skills=441 chars=205 modules=245 logic=ee2a4f45f519d1c3
+=== rebuild newjiang ===
+wrote /tmp/rebuild_newjiang.npack.json logic_hash=1f37a37f96f1a0fb48e6b8ecc8734f902c70d14ac656a97b4228fc3132d0c61b
+rebuilt /tmp/rebuild_newjiang.npack.json
+newjiang abi=732 skills=105 chars=44 modules=81 logic=1f37a37f96f1a0fb
+=== rebuild offline ===
+wrote /tmp/rebuild_offline.npack.json logic_hash=b5290516116cfde73debcdee76451f6123367039bb97b3d5c2add3bd086e2e3c
+rebuilt /tmp/rebuild_offline.npack.json
+offline abi=691 skills=851 chars=385 modules=724 logic=b5290516116cfde7
+=== rebuild old ===
+wrote /tmp/rebuild_old.npack.json logic_hash=c13a50258fe23d917673ef15393bc6888bcddbb8fc71f73d30be29da9ebe93bf
+rebuilt /tmp/rebuild_old.npack.json
+old abi=275 skills=28 chars=79 modules=21 logic=c13a50258fe23d91
+=== rebuild onlyOL ===
+wrote /tmp/rebuild_onlyOL.npack.json logic_hash=f50f552949bdb9999256fd38a72beb51fc7221af646e79179fcd311c55dd8595
+rebuilt /tmp/rebuild_onlyOL.npack.json
+onlyOL abi=688 skills=190 chars=84 modules=30 logic=f50f552949bdb999
+=== rebuild sb ===
+wrote /tmp/rebuild_sb.npack.json logic_hash=e98468ae308afffa8193a7e9809fc14be73f6b3d9c84b8e8c9a0b0744d873b62
+rebuilt /tmp/rebuild_sb.npack.json
+sb abi=599 skills=124 chars=55 modules=4 logic=e98468ae308afffa
+=== rebuild sp2 ===
+wrote /tmp/rebuild_sp2.npack.json logic_hash=d20427bb53a8ebfdf4c5a27392bdbe28780c780c8d5cd27dfa5fb6f433591b4e
+rebuilt /tmp/rebuild_sp2.npack.json
+sp2 abi=753 skills=290 chars=114 modules=87 logic=d20427bb53a8ebfd
+=== rebuild tw ===
+wrote /tmp/rebuild_tw.npack.json logic_hash=622bd94edcd86ec48665d8eeec1358675d7aed3368d9e53229f9997c525b8a9e
+rebuilt /tmp/rebuild_tw.npack.json
+tw abi=733 skills=407 chars=166 modules=169 logic=622bd94edcd86ec4
+=== rebuild xianding ===
+wrote /tmp/rebuild_xianding.npack.json logic_hash=687ae36f1c72a237097552fdd4247a7a392ae05ecbe296de4ff3eebeef38f93f
+rebuilt /tmp/rebuild_xianding.npack.json
+xianding abi=751 skills=534 chars=221 modules=188 logic=687ae36f1c72a237

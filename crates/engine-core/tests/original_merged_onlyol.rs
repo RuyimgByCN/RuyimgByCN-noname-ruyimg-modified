@@ -169,10 +169,10 @@ fn open_gain_choice(setup: Setup, key: u64) -> (Setup, GameState, PipelineResult
 fn package_publishes_complete_ol_liaohua_at_abi293() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 188);
-    assert_eq!(package.character_index.len(), 83);
+    assert_eq!(package.skill_index.len(), 190);
+    assert_eq!(package.character_index.len(), 84);
     assert_eq!(package.trigger_index.len(), 27); // 批162 olrenxin +1
-    assert_eq!(package.modifier_index.len(), 169); // 批162 olrenxin noop modifier -1
+    assert_eq!(package.modifier_index.len(), 171); // 批162 olrenxin noop modifier -1
     assert_eq!(package.modules.len(), 30); // 批162 olrenxin +1
     let character = package
         .character_index
@@ -688,8 +688,8 @@ fn has_skill(state: &GameState, owner: PlayerId, def: u32) -> bool {
 fn package_publishes_complete_ol_caozhang_at_abi293() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 188);
-    assert_eq!(package.character_index.len(), 83);
+    assert_eq!(package.skill_index.len(), 190);
+    assert_eq!(package.character_index.len(), 84);
     assert_eq!(package.trigger_index.len(), 27); // 批162 olrenxin +1
     assert_eq!(package.modules.len(), 30); // 批162 olrenxin +1
     let character = package
@@ -930,8 +930,8 @@ fn end_play(state: GameState, current: PlayerId) -> (Transaction, Result<(), Eff
 fn package_publishes_complete_ol_guohuai_at_abi293() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 188);
-    assert_eq!(package.character_index.len(), 83);
+    assert_eq!(package.skill_index.len(), 190);
+    assert_eq!(package.character_index.len(), 84);
     let character = package
         .character_index
         .iter()
@@ -1156,7 +1156,7 @@ fn accept_trigger(
 fn package_publishes_optional_hand_lte_trigger_at_abi338() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 188);
+    assert_eq!(package.skill_index.len(), 190);
     assert_eq!(package.trigger_index.len(), 27); // 批162 olrenxin +1
     let trigger = package
         .trigger_index
@@ -1352,8 +1352,8 @@ fn resolve(
 fn package_publishes_complete_ol_caifuren_at_abi293() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 188);
-    assert_eq!(package.character_index.len(), 83);
+    assert_eq!(package.skill_index.len(), 190);
+    assert_eq!(package.character_index.len(), 84);
     assert_eq!(package.trigger_index.len(), 27); // 批162 olrenxin +1
     assert_eq!(package.modules.len(), 30); // 批162 olrenxin +1
     assert!(package.manifest.dependencies.iter().any(|dependency| {
@@ -1602,8 +1602,8 @@ fn accept_olqingxi(
 fn package_publishes_complete_ol_caoxiu_at_abi293() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 188);
-    assert_eq!(package.character_index.len(), 83);
+    assert_eq!(package.skill_index.len(), 190);
+    assert_eq!(package.character_index.len(), 84);
     assert_eq!(package.trigger_index.len(), 27); // 批162 olrenxin +1
     assert_eq!(package.modules.len(), 30); // 批162 olrenxin +1
     let character = package

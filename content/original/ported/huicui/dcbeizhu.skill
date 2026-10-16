@@ -1,0 +1,7 @@
+// 备诛（huicui）：每回合结束时若满足过序号项可执行邻项并令人执行剩余项；回合开始可交换邻项
+// 上游语义摘录如上。旧线诚实 noop：回合末三项序号邻接执行+回合初交换选项；动态选项状态机债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill dcbeizhu(2802623829) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

@@ -1,0 +1,3128 @@
+warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+  --> crates/engine-core/src/effect/mod.rs:10:5
+   |
+10 |     choose_gain_other_skill, lose_gained_skill, resolve_choose_gain_other_skill,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+11 |     resolve_lose_gained_skill, resolve_potheyun, resolve_potheyun_pick,
+   |                                ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `primitives::enable_equip_slot`
+  --> crates/engine-core/src/effect/mod.rs:18:16
+   |
+18 | pub(crate) use primitives::enable_equip_slot;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_xinfu_qiai`
+  --> crates/engine-core/src/effect/mod.rs:21:16
+   |
+21 | pub(crate) use primitives::resolve_xinfu_qiai;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_twxiongjun`
+  --> crates/engine-core/src/effect/mod.rs:59:16
+   |
+59 | pub(crate) use primitives::resolve_twxiongjun;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_yixiang`
+  --> crates/engine-core/src/effect/mod.rs:60:16
+   |
+60 | pub(crate) use primitives::resolve_yixiang;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_qiangyong`
+  --> crates/engine-core/src/effect/mod.rs:61:16
+   |
+61 | pub(crate) use primitives::resolve_qiangyong;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_duoduan`
+  --> crates/engine-core/src/effect/mod.rs:63:16
+   |
+63 | pub(crate) use primitives::resolve_duoduan;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_reliangyin`
+  --> crates/engine-core/src/effect/mod.rs:67:16
+   |
+67 | pub(crate) use primitives::resolve_reliangyin;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `commit_hand_compare`
+  --> crates/engine-core/src/effect/mod.rs:72:26
+   |
+72 |     commit_guanxing_top, commit_hand_compare, commit_hand_compare_between,
+   |                          ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+   --> crates/engine-core/src/effect/mod.rs:142:31
+    |
+142 |     resolve_potzhouyu_choice, resolve_rechuhai_choice, skill_pile_def, twchengpu_field_cards,
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^
+...
+203 |     RESOLVE_ZHENGRONG_CUSTOM_CHOICE, RESOLVE_ZHENGSU_CHOICE, RESOLVE_ZHENLIANG_DAMAGE,
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `actor`
+    --> crates/engine-core/src/command/resolve_choice/group_pre_2.rs:3318:9
+     |
+3318 |     let actor = PlayerId::new(payload[1]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:2845:9
+     |
+2845 |     let skill = engine_api::SkillId::new(payload[2]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:3031:9
+     |
+3031 |     let skill = engine_api::SkillId::new(*skill);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:3180:17
+     |
+3180 |             let skill = engine_api::SkillId::new(*skill);
+     |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:203:13
+    |
+203 |         let target = PlayerId::new(payload[3]);
+    |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:679:9
+    |
+679 |     let mut target = PlayerId::new(*payload.get(3).unwrap_or(&0));
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1579:9
+     |
+1579 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1636:9
+     |
+1636 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1820:5
+     |
+1820 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1824:5
+     |
+1824 |     skill: engine_api::SkillId,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1881:9
+     |
+1881 |     let skill = engine_api::SkillId::new(*payload.get(5).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2051:9
+     |
+2051 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2131:9
+     |
+2131 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2178:9
+     |
+2178 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2370:9
+     |
+2370 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2424:9
+     |
+2424 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2634:9
+     |
+2634 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2822:9
+     |
+2822 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2859:9
+     |
+2859 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2936:9
+     |
+2936 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2970:9
+     |
+2970 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `pile_zone`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1450:9
+     |
+1450 |     let pile_zone = tx
+     |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_zone`
+
+warning: unused variable: `phase`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1826:9
+     |
+1826 |     let phase = *payload.get(2).unwrap_or(&0);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1828:9
+     |
+1828 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:2126:21
+     |
+2126 |                 let mut next_payload = vec![
+     |                     ----^^^^^^^^^^^^
+     |                     |
+     |                     help: remove this `mut`
+
+warning: unused variable: `count`
+  --> crates/engine-core/src/command/resolve_choice/group_post_6.rs:87:9
+   |
+87 |     let count = payload.get(6).copied().unwrap_or(0) as usize;
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: unused variable: `draw`
+   --> crates/engine-core/src/command/resolve_choice/group_post_6.rs:277:17
+    |
+277 |             let draw = tx
+    |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:628:9
+    |
+628 |     let skill = engine_api::SkillId::new(payload[2]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2516:9
+     |
+2516 |     let target = payload[5];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2558:9
+     |
+2558 |     let target = payload[6];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `kind`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2614:9
+     |
+2614 |     let kind = payload[4];
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+
+warning: unused variable: `mode`
+    --> crates/engine-core/src/command/resolve_choice/group_post_9.rs:1526:9
+     |
+1526 |     let mode = payload[3] as u8;
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_mode`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_9.rs:2205:9
+     |
+2205 |     let skill = engine_api::SkillId::new(payload[4]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/content/registry.rs:2532:9
+     |
+2507 |         ModifierValueSource::OwnerSkillPileCount => {
+     |         ---------------------------------------- matches all the relevant values
+...
+2532 |         ModifierValueSource::OwnerSkillPileCount => "owner_skill_pile_count",
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1088:5
+     |
+1088 |     mut targets: Vec<PlayerId>,
+     |     ----^^^^^^^
+     |     |
+     |     help: remove this `mut`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1504:5
+     |
+1504 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1664:5
+     |
+1664 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2202:5
+     |
+2202 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2321:5
+     |
+2321 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `targets`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2478:5
+     |
+2478 |     targets: &[PlayerId],
+     |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_targets`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:550:52
+    |
+550 | pub(crate) fn turn_discard_count(tx: &Transaction, player: PlayerId) -> u32 {
+    |                                                    ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `value`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:998:23
+    |
+998 |                 .map(|value| vec![card])
+    |                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:1336:9
+     |
+1336 |     let mut events = run_effects(
+     |         ----^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `kongsheng_def`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:1504:5
+     |
+1504 |     kongsheng_def: engine_api::SkillDefId,
+     |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_kongsheng_def`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_huicui.rs:2095:9
+     |
+2095 |     let mut effects = vec![EffectRequest::RevealCards {
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `view`
+    --> crates/engine-core/src/effect/primitives/pack_huicui.rs:2020:5
+     |
+2020 |     view: Vec<CardId>,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_view`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:497:5
+    |
+497 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:3366:9
+     |
+3366 |     let mut options: Vec<_> = tx
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4190:5
+     |
+4190 |     skill: engine_api::SkillId,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4844:9
+     |
+4844 |     let skill = engine_api::SkillId::new(skill_raw);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5063:9
+     |
+5063 |     let skill = engine_api::SkillId::new(skill_raw);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `count`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5237:5
+     |
+5237 |     count: u32,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:6640:9
+     |
+6640 |     let mut payload = vec![
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7124:17
+     |
+7124 |             let mut events = crate::effect::draw_cards(tx, player, 1)?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7285:5
+     |
+7285 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `dodger`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7801:5
+     |
+7801 |     dodger: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_dodger`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7875:17
+     |
+7875 |             let mut drawn = crate::effect::draw_cards(tx, player, draw_n)?;
+     |                 ----^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9080:5
+     |
+9080 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9497:9
+     |
+9497 |     let mut events = crate::effect::draw_cards(tx, source, 2)?;
+     |         ----^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9840:5
+     |
+9840 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_refresh.rs:3557:9
+     |
+3557 |     let skill = engine_api::SkillId::new(*payload.get(2).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_tw_1.rs:3478:24
+     |
+3478 |     let [player, _sub, skill] = payload else {
+     |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_xianding_2.rs:2755:5
+     |
+2755 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_ddd_2.rs:2403:5
+     |
+2403 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `source`
+   --> crates/engine-core/src/effect/primitives/pack_shiji.rs:162:5
+    |
+162 |     source: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_source`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1205:17
+     |
+1205 |             let mut events = add_skill(tx, target, engine_api::SkillDefId::new(def))?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `action`
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1569:5
+     |
+1569 |     action: u8,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_action`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:2634:5
+     |
+2634 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:559:9
+    |
+559 |     let skill = engine_api::SkillId::new(*skill);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:1371:18
+     |
+1371 |     let [player, skill] = payload else {
+     |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/mod.rs:2561:9
+     |
+2377 | /         EffectRequest::ResolveQiaobian {
+2378 | |             player,
+2379 | |             phase,
+2380 | |             stage,
+2381 | |             skill,
+2382 | |         } => resolve_qiaobian(tx, player, phase, stage, skill),
+     | |_________- matches all the relevant values
+...
+2561 |           EffectRequest::ResolveQiaobian { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/mod.rs:2563:9
+     |
+2563 |         EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+     |
+note: multiple earlier patterns match some of the same values
+    --> crates/engine-core/src/effect/primitives/mod.rs:2563:9
+     |
+2417 |           EffectRequest::BanUseAgainst { user, target } => ban_use_against(tx, user, target),
+     |           --------------------------------------------- matches some of the same values
+2418 | /         EffectRequest::ResolveJuzhan {
+2419 | |             player,
+2420 | |             source,
+2421 | |             card,
+...    |
+2424 | |             skill,
+2425 | |         } => resolve_juzhan(tx, player, source, card, &targets, stage, skill),
+     | |_________- matches some of the same values
+...
+2563 |           EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ collectively making this unreachable
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/mod.rs:115:49
+    |
+115 |         EffectRequest::SetDrawPhaseFromBottom { player } => {
+    |                                                 ^^^^^^ help: try ignoring the field: `player: _`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/mod.rs:4019:13
+     |
+4019 |             skill,
+     |             ^^^^^ help: try ignoring the field: `skill: _`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1052:15
+     |
+ 933 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               -------------------------------------------- matches all the relevant values
+...
+1052 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1053:15
+     |
+ 936 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               -------------------------------------------------- matches all the relevant values
+...
+1053 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1054:15
+     |
+ 937 |             | EffectRequest::GainTargetHandCard { skill, .. }
+     |               ----------------------------------------------- matches all the relevant values
+...
+1054 |             | EffectRequest::GainTargetHandCard { skill, .. } => skill.raw(),
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1086:15
+     |
+1085 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               -------------------------------------------------------- matches all the relevant values
+1086 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2937:9
+     |
+2774 | /         EffectRequest::ResolveRechuhai {
+2775 | |             player,
+2776 | |             target,
+2777 | |             card,
+...    |
+2780 | |             skill,
+2781 | |         } => {
+     | |_________- matches all the relevant values
+...
+2937 |           EffectRequest::ResolveRechuhai { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2942:9
+     |
+2791 | /         EffectRequest::ResolveXiongshu {
+2792 | |             player,
+2793 | |             target,
+2794 | |             card,
+...    |
+2797 | |             skill,
+2798 | |         } => {
+     | |_________- matches all the relevant values
+...
+2942 |           EffectRequest::ResolveXiongshu { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2946:9
+     |
+2836 | /         EffectRequest::ResolveSpshanxi {
+2837 | |             player,
+2838 | |             target,
+2839 | |             stage,
+2840 | |             skill,
+2841 | |         } => {
+     | |_________- matches all the relevant values
+...
+2946 |           EffectRequest::ResolveSpshanxi { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2950:9
+     |
+2849 | /         EffectRequest::ResolveSpshanxiSuoming {
+2850 | |             player,
+2851 | |             actor,
+2852 | |             stage,
+2853 | |             skill,
+2854 | |         } => {
+     | |_________- matches all the relevant values
+...
+2950 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+     --> crates/engine-core/src/hash.rs:10437:9
+      |
+  766 | /         EffectRequest::ModifyCurrentDamage {
+  767 | |             player,
+  768 | |             delta,
+  769 | |             skill,
+  770 | |         } => {
+      | |_________- matches all the relevant values
+...
+10437 | /         EffectRequest::ModifyCurrentDamage {
+10438 | |             player,
+10439 | |             delta,
+10440 | |             skill,
+10441 | |         } => {
+      | |_________^ no value can reach this
+
+warning: unused variable: `flipped`
+    --> crates/engine-core/src/hash.rs:1531:13
+     |
+1531 |             flipped,
+     |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+
+warning: function `validate_sha_target` is never used
+    --> crates/engine-core/src/command/play.rs:4156:15
+     |
+4156 | pub(super) fn validate_sha_target(
+     |               ^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `wuxie_tokens` is never used
+    --> crates/engine-core/src/command/play.rs:7126:15
+     |
+7126 | pub(crate) fn wuxie_tokens(state: &crate::state::GameState, player: PlayerId) -> Vec<u32> {
+     |               ^^^^^^^^^^^^
+
+warning: function `mingren_color_mask` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:357:15
+    |
+357 | pub(crate) fn mingren_color_mask(tx: &Transaction, player: PlayerId, skill: engine_api::SkillId) -> u8 {
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `kongsheng_pile_cards_by_def` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:779:15
+    |
+779 | pub(crate) fn kongsheng_pile_cards_by_def(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `suit_from_tag` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4570:4
+     |
+4570 | fn suit_from_tag(tag: u32) -> engine_api::Suit {
+     |    ^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5133:7
+     |
+5133 | const RESOLVE_TWMOUZHI_MAGIC: u32 = 0x4D4F_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7007:7
+     |
+7007 | const RESOLVE_BIAOZHAO2_MAGIC: u32 = 0x425A_0002;
+     |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7092:7
+     |
+7092 | const RESOLVE_DCNIJI_MAGIC: u32 = 0x4E4A_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7846:7
+     |
+7846 | const RESOLVE_QINMIAN_MAGIC: u32 = 0x514D_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shiji.rs:919:18
+    |
+919 | pub(crate) const RESOLVE_ZHENGSU_CHOICE: u32 = 0xDCDA_4320;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `resolve_rechuhai_choice` is never used
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1268:15
+     |
+1268 | pub(crate) fn resolve_rechuhai_choice(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:1003:13
+     |
+1003 | /             crate::command::play::make_saved_sha_target_unrespondable(
+1004 | |                 tx,
+1005 | |                 source,
+1006 | |                 card,
+1007 | |                 player,
+1008 | |             );
+     | |_____________^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+1003 |             let _ = crate::command::play::make_saved_sha_target_unrespondable(
+     |             +++++++
+
+warning: `engine-core` (lib) generated 106 warnings (run `cargo fix --lib -p engine-core` to apply 82 suggestions)
+   Compiling engine-core v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core)
+warning: unused import: `DomainEvent`
+    --> crates/engine-core/tests/original_merged_xianding.rs:1821:52
+     |
+1821 |     ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision, IdempotencyKey,
+     |                                                    ^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:1826:26
+     |
+1826 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_xianding.rs:1828:28
+     |
+1828 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `SkillId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:2193:61
+     |
+2193 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, SkillId, Suit,
+     |                                                             ^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:2196:57
+     |
+2196 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused imports: `CardDefId` and `CardId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5107:5
+     |
+5107 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |     ^^^^^^^^^  ^^^^^^
+
+warning: unused imports: `CardDefId` and `CardId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5258:5
+     |
+5258 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |     ^^^^^^^^^  ^^^^^^
+
+warning: unused imports: `CardDefId` and `CardId`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5424:5
+     |
+5424 |     CardDefId, CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent,
+     |     ^^^^^^^^^  ^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6499:42
+     |
+6499 | use engine_core::state::{Card, CardKind, ContinuationKind, GameState, Phase, ZoneKind};
+     |                                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `DomainEvent`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6744:52
+     |
+6744 |     ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+     |                                                    ^^^^^^^^^^^
+
+warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6751:28
+     |
+6751 | use engine_core::trigger::{dispatch_for_events, TriggerFireRecord};
+     |                            ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:6905:26
+     |
+6905 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7238:57
+     |
+7238 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7239:42
+     |
+7239 | use engine_core::state::{Card, CardKind, ContinuationKind, GameState, Phase, ZoneKind};
+     |                                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7465:26
+     |
+7465 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7603:57
+     |
+7603 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7604:26
+     |
+7604 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7965:26
+     |
+7965 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CommandKind`, `CommandResult`, `Command`, and `DomainEvent`
+    --> crates/engine-core/tests/original_merged_xianding.rs:8251:18
+     |
+8251 | use engine_api::{Command, CommandKind, CommandResult, DomainEvent, PlayerId, SkillDefId};
+     |                  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+    --> crates/engine-core/tests/original_merged_xianding.rs:8252:57
+     |
+8252 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ContinuationKind`
+    --> crates/engine-core/tests/original_merged_xianding.rs:8965:26
+     |
+8965 | use engine_core::state::{ContinuationKind, GameState, Phase};
+     |                          ^^^^^^^^^^^^^^^^
+
+warning: unused import: `CommandResult`
+     --> crates/engine-core/tests/original_merged_xianding.rs:12528:46
+      |
+12528 |     CardDefId, CardId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+      |                                              ^^^^^^^^^^^^^
+
+warning: unused imports: `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+     --> crates/engine-core/tests/original_merged_xianding.rs:14055:24
+      |
+14055 |     CardDefId, CardId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+      |                        ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+     --> crates/engine-core/tests/original_merged_xianding.rs:14058:5
+      |
+14058 | use engine_core::command::apply_command;
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `EffectError`
+     --> crates/engine-core/tests/original_merged_xianding.rs:15254:57
+      |
+15254 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+      |                                                         ^^^^^^^^^^^
+
+warning: unreachable expression
+     --> crates/engine-core/tests/original_merged_xianding.rs:12700:21
+      |
+12700 |         Err(err) => return panic!("unexpected: {err:?}"),
+      |                     ^^^^^^^-----------------------------
+      |                     |      |
+      |                     |      any code following this expression is unreachable
+      |                     unreachable expression
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:2391:9
+     |
+2391 |     let mut tx = Transaction::begin(tx2);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:2436:9
+     |
+2436 |     let mut state = GameState::empty();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:3498:9
+     |
+3498 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:5445:9
+     |
+5445 |     let mut state = GameState::empty();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `armor`
+    --> crates/engine-core/tests/original_merged_xianding.rs:5522:9
+     |
+5522 |     let armor = package
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_armor`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_xianding.rs:7075:9
+     |
+7075 |     let mut state = GameState::empty();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `state`
+    --> crates/engine-core/tests/original_merged_xianding.rs:7204:9
+     |
+7204 |     let state = resolve(state, owner, vec![first.raw()], false, 2);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:1876:4
+     |
+1876 | fn resolve(
+     |    ^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:4269:4
+     |
+4269 | fn resolve(
+     |    ^^^^^^^
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:7327:4
+     |
+7327 | fn resolve(
+     |    ^^^^^^^
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:7655:4
+     |
+7655 | fn resolve(
+     |    ^^^^^^^
+
+warning: function `resolve` is never used
+    --> crates/engine-core/tests/original_merged_xianding.rs:8860:4
+     |
+8860 | fn resolve(
+     |    ^^^^^^^
+
+warning: `engine-core` (test "original_merged_xianding") generated 38 warnings (run `cargo fix --test "original_merged_xianding" -p engine-core` to apply 32 suggestions)
+warning: unused import: `ChoiceKind`
+   --> crates/engine-core/tests/original_merged_huicui.rs:632:34
+    |
+632 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+    |                                  ^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:1801:34
+     |
+1801 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:2017:34
+     |
+2017 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:2321:34
+     |
+2321 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:2756:34
+     |
+2756 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused imports: `CardId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, `IdempotencyKey`, `PlayerId`, and `SkillDefId`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3154:5
+     |
+3154 |     CardId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, PlayerId,
+     |     ^^^^^^  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^
+3155 |     SkillDefId,
+     |     ^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3157:5
+     |
+3157 | use engine_core::command::apply_command;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `EffectError`, `bootstrap_match`, and `run_effects`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3158:27
+     |
+3158 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+     |                           ^^^^^^^^^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^
+
+warning: unused imports: `Card`, `GameState`, and `ZoneKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3159:26
+     |
+3159 | use engine_core::state::{Card, GameState, ZoneKind};
+     |                          ^^^^  ^^^^^^^^^  ^^^^^^^^
+
+warning: unused import: `engine_core::transaction::Transaction`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3160:5
+     |
+3160 | use engine_core::transaction::Transaction;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `rule_api::EffectRequest`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3161:5
+     |
+3161 | use rule_api::EffectRequest;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3558:15
+     |
+3558 |     ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+     |               ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3780:34
+     |
+3780 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:3952:23
+     |
+3952 |     CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                       ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_huicui.rs:4113:34
+     |
+4113 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_huicui.rs:767:9
+    |
+767 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:1958:9
+     |
+1958 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:1991:9
+     |
+1991 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:2473:9
+     |
+2473 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:2536:9
+     |
+2536 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:2924:9
+     |
+2924 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3295:9
+     |
+3295 |     let mut state = ending.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3651:9
+     |
+3651 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3741:9
+     |
+3741 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused imports: `ChoiceKind` and `ZoneId`
+   --> crates/engine-core/tests/original_merged_collab.rs:490:34
+    |
+490 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+    |                                  ^^^^^^^^^^
+491 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag, ZoneId,
+    |                                                                                 ^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:3917:9
+     |
+3917 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:4067:9
+     |
+4067 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_huicui.rs:4093:9
+     |
+4093 |     let mut tx = Transaction::begin(tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+    --> crates/engine-core/tests/original_merged_collab.rs:1201:13
+     |
+1201 |     CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+     |             ^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+    --> crates/engine-core/tests/original_merged_collab.rs:1204:5
+     |
+1204 | use engine_core::command::apply_command;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ChoiceKind` and `ZoneId`
+    --> crates/engine-core/tests/original_merged_collab.rs:4462:34
+     |
+4462 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+4463 |     ExpectedRevision, IdempotencyKey, PlayerId, SkillDefId, Suit, TurnPhaseTag, ZoneId,
+     |                                                                                 ^^^^^^
+
+warning: constant `SOURCES_DIR` is never used
+    --> crates/engine-core/tests/original_merged_huicui.rs:3165:7
+     |
+3165 | const SOURCES_DIR: &str = concat!(
+     |       ^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `sources` is never used
+    --> crates/engine-core/tests/original_merged_huicui.rs:3170:4
+     |
+3170 | fn sources() -> String {
+     |    ^^^^^^^
+
+warning: unused variable: `target`
+   --> crates/engine-core/tests/original_merged_collab.rs:603:49
+    |
+603 | fn setup(tx: &mut Transaction, owner: PlayerId, target: PlayerId) {
+    |                                                 ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_collab.rs:643:9
+    |
+643 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_collab.rs:676:9
+    |
+676 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/tests/original_merged_collab.rs:702:9
+    |
+702 |     let mut tx = Transaction::begin(tx.commit().state);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `sid2`
+    --> crates/engine-core/tests/original_merged_collab.rs:1363:9
+     |
+1363 |     let sid2 = committed2
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_sid2`
+
+warning: unused variable: `sha`
+    --> crates/engine-core/tests/original_merged_collab.rs:4638:9
+     |
+4638 |     let sha = seed_sha(&mut tx, owner);
+     |         ^^^ help: if this is intentional, prefix it with an underscore: `_sha`
+
+warning: function `drive_use_card` is never used
+    --> crates/engine-core/tests/original_merged_collab.rs:1305:4
+     |
+1305 | fn drive_use_card(tx: &mut Transaction, holder: PlayerId, card: CardId) -> Result<(), EffectError> {
+     |    ^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `SOURCE` is never used
+   --> crates/engine-core/tests/original_merged_bingshi.rs:726:7
+    |
+726 | const SOURCE: &str = concat!(
+    |       ^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `engine_core::state::ZoneKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:3539:9
+     |
+3539 |     use engine_core::state::ZoneKind;
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:3833:34
+     |
+3833 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, ExpectedRevision,
+     |                                  ^^^^^^^^^^
+
+warning: unused imports: `CommandKind`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4586:24
+     |
+4586 |     CardDefId, CardId, Command, CommandKind, DomainEvent, ExpectedRevision, IdempotencyKey,
+     |                        ^^^^^^^  ^^^^^^^^^^^               ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `engine_core::command::apply_command`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4589:5
+     |
+4589 | use engine_core::command::apply_command;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:6364:34
+     |
+6364 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7012:34
+     |
+7012 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7706:34
+     |
+7706 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8114:34
+     |
+8114 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+     |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:11544:34
+      |
+11544 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:12904:34
+      |
+12904 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13976:34
+      |
+13976 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14404:34
+      |
+14404 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `EffectError`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14863:57
+      |
+14863 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+      |                                                         ^^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15119:34
+      |
+15119 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15499:34
+      |
+15499 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `turn_flag`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16367:26
+      |
+16367 | use engine_core::state::{turn_flag, Card, CardKind, GameState, Identity, Phase, ZoneKind};
+      |                          ^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16822:34
+      |
+16822 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `ChoiceKind`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17217:34
+      |
+17217 |     CardDefId, CardId, ChoiceId, ChoiceKind, Command, CommandKind, CommandResult, DomainEvent,
+      |                                  ^^^^^^^^^^
+
+warning: unused import: `CardId`
+   --> crates/engine-core/tests/original_merged_offline.rs:847:5
+    |
+847 |     CardId, ChoiceId, Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey,
+    |     ^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `EffectError`
+   --> crates/engine-core/tests/original_merged_offline.rs:851:57
+    |
+851 | use engine_core::effect::{bootstrap_match, run_effects, EffectError};
+    |                                                         ^^^^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+    --> crates/engine-core/tests/original_merged_offline.rs:3815:57
+     |
+3815 |     ExpectedRevision, IdempotencyKey, SkillDefId, Suit, RULE_VM_ABI_VERSION,
+     |                                                         ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `CardId`
+    --> crates/engine-core/tests/original_merged_offline.rs:5947:18
+     |
+5947 | use engine_api::{CardId, DomainEvent, PlayerId, SkillDefId};
+     |                  ^^^^^^
+
+warning: unused imports: `CardKind` and `Card`
+    --> crates/engine-core/tests/original_merged_offline.rs:5949:26
+     |
+5949 | use engine_core::state::{Card, CardKind, GameState, Phase};
+     |                          ^^^^  ^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+    --> crates/engine-core/tests/original_merged_offline.rs:6130:47
+     |
+6130 | use engine_api::{DomainEvent, PlayerId, Suit, RULE_VM_ABI_VERSION};
+     |                                               ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `RULE_VM_ABI_VERSION`
+     --> crates/engine-core/tests/original_merged_offline.rs:13402:5
+      |
+13402 |     RULE_VM_ABI_VERSION,
+      |     ^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:1484:9
+     |
+1484 |     let mut tx = match fired {
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4002:9
+     |
+4002 |     let mut state = tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4113:9
+     |
+4113 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4173:9
+     |
+4173 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `top1`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4686:9
+     |
+4686 |     let top1 = alloc_card(&mut setup.tx, draw, CardKind::Sha, 1, Suit::Spade, 5);
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_top1`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:4908:9
+     |
+4908 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5320:9
+     |
+5320 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5381:9
+     |
+5381 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5416:9
+     |
+5416 |     let mut setup = setup();
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5458:9
+     |
+5458 |     let mut tx = match fired {
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7200:9
+     |
+7200 |     let mut resolution = &mut state.resolution;
+     |         ----^^^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7910:9
+     |
+7910 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7951:9
+     |
+7951 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8000:9
+     |
+8000 |     let mut state = dispatch_tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8409:9
+     |
+8409 |     let mut state = tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:8703:9
+     |
+8703 |     let mut state = tx.commit().state;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `give_cards`
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9449:9
+     |
+9449 |     let give_cards: Vec<CardId> = (0..3)
+     |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_give_cards`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9605:9
+     |
+9605 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9644:9
+     |
+9644 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9657:9
+     |
+9657 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9699:9
+     |
+9699 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9722:9
+     |
+9722 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_shenhua.rs:9782:9
+     |
+9782 |     let mut tx = Transaction::begin(state);
+     |         ----^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:11039:9
+      |
+11039 |     let mut tx = Transaction::begin(tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:11117:9
+      |
+11117 |     let mut tx = Transaction::begin(tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: unused variable: `h1`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13138:9
+      |
+13138 |     let h1 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h1`
+
+warning: unused variable: `h2`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13147:9
+      |
+13147 |     let h2 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h2`
+
+warning: unused variable: `h2`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:13202:9
+      |
+13202 |     let h2 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h2`
+
+warning: unused variable: `diamond`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14116:9
+      |
+14116 |     let diamond = alloc_card(
+      |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_diamond`
+
+warning: unused variable: `sha`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14656:9
+      |
+14656 |     let sha = alloc_card(
+      |         ^^^ help: if this is intentional, prefix it with an underscore: `_sha`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15645:9
+      |
+15645 |     let mut state = tx.commit().state;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15825:9
+      |
+15825 |     let mut tx = Transaction::begin(state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15827:9
+      |
+15827 |     let mut state = tx.commit().state;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16551:9
+      |
+16551 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16576:9
+      |
+16576 |     let mut tx = Transaction::begin(setup.tx.commit().state);
+      |         ----^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16754:10
+      |
+16754 |     let (mut state, owner, other, skill) = started();
+      |          ----^^^^^
+      |          |
+      |          help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16769:9
+      |
+16769 |     let mut state = resolve_choice(state, owner, vec![other.raw()], 2);
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16793:10
+      |
+16793 |     let (mut state, owner, other, skill, ordinary) = started_with_ordinary();
+      |          ----^^^^^
+      |          |
+      |          help: remove this `mut`
+
+warning: unused variable: `state`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:16801:10
+      |
+16801 |     let (state, activated) = activate(state, owner, skill, vec![weapon], 2);
+      |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `owner`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17358:31
+      |
+17358 | fn prep_end(state: GameState, owner: PlayerId) -> (GameState, Vec<CardId>) {
+      |                               ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+
+warning: unused variable: `h1`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17428:9
+      |
+17428 |     let h1 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h1`
+
+warning: unused variable: `h2`
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17437:9
+      |
+17437 |     let h2 = alloc_card(
+      |         ^^ help: if this is intentional, prefix it with an underscore: `_h2`
+
+warning: variable does not need to be mutable
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17634:9
+      |
+17634 |     let mut resolution = &mut state.resolution;
+      |         ----^^^^^^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: function `end_event` is never used
+    --> crates/engine-core/tests/original_merged_shenhua.rs:3524:4
+     |
+3524 | fn end_event(current: PlayerId) -> engine_api::DomainEvent {
+     |    ^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `far` is never read
+    --> crates/engine-core/tests/original_merged_shenhua.rs:5154:5
+     |
+5150 | struct Setup {
+     |        ----- field in this struct
+...
+5154 |     far: PlayerId,
+     |     ^^^
+
+warning: function `option_tokens` is never used
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7846:4
+     |
+7846 | fn option_tokens(result: &engine_core::command::PipelineResult) -> Vec<u32> {
+     |    ^^^^^^^^^^^^^
+
+warning: function `alloc_card` is never used
+     --> crates/engine-core/tests/original_merged_shenhua.rs:10965:4
+      |
+10965 | fn alloc_card(
+      |    ^^^^^^^^^^
+
+warning: field `challenger` is never read
+     --> crates/engine-core/tests/original_merged_shenhua.rs:14875:5
+      |
+14872 | struct Setup {
+      |        ----- field in this struct
+...
+14875 |     challenger: PlayerId,
+      |     ^^^^^^^^^^
+
+warning: function `option_tokens` is never used
+     --> crates/engine-core/tests/original_merged_shenhua.rs:15611:4
+      |
+15611 | fn option_tokens(result: &engine_core::command::PipelineResult) -> Vec<u32> {
+      |    ^^^^^^^^^^^^^
+
+warning: function `fire_used` is never used
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17777:4
+      |
+17777 | fn fire_used(tx: Transaction, user: PlayerId, card: CardId, targets: Vec<PlayerId>) -> Transaction {
+      |    ^^^^^^^^^
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7204:5
+     |
+7204 |     drop(resolution);
+     |     ^^^^^----------^
+     |          |
+     |          argument has type `&mut ResolutionState`
+     |
+     = note: `#[warn(dropping_references)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+     |
+7204 -     drop(resolution);
+7204 +     let _ = resolution;
+     |
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/tests/original_merged_shenhua.rs:7339:5
+     |
+7339 | /     std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(
+7340 | |         &content_compiler::compile_source_named("jijiang", "skill jijiang(2377283906) {}").unwrap(),
+7341 | |     );
+     | |_____^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+7339 |     let _ = std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(
+     |     +++++++
+
+warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+     --> crates/engine-core/tests/original_merged_shenhua.rs:17638:5
+      |
+17638 |     drop(resolution);
+      |     ^^^^^----------^
+      |          |
+      |          argument has type `&mut ResolutionState`
+      |
+help: use `let _ = ...` to ignore the expression or result
+      |
+17638 -     drop(resolution);
+17638 +     let _ = resolution;
+      |
+
+warning: `engine-core` (test "original_merged_collab") generated 11 warnings (run `cargo fix --test "original_merged_collab" -p engine-core` to apply 10 suggestions)
+warning: `engine-core` (test "original_merged_huicui") generated 29 warnings (run `cargo fix --test "original_merged_huicui" -p engine-core` to apply 27 suggestions)
+warning: `engine-core` (test "original_merged_bingshi") generated 1 warning
+warning: unused variable: `owner_hand_before`
+    --> crates/engine-core/tests/original_merged_offline.rs:3186:13
+     |
+3186 |         let owner_hand_before = hand_count(&state, owner);
+     |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_owner_hand_before`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `first_hand_before`
+    --> crates/engine-core/tests/original_merged_offline.rs:3187:13
+     |
+3187 |         let first_hand_before = hand_count(&state, first);
+     |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_first_hand_before`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:5512:10
+     |
+5512 |     let (mut state, output) = apply_command(
+     |          ----^^^^^
+     |          |
+     |          help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:6056:9
+     |
+6056 |     let mut state = {
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:6080:9
+     |
+6080 |     let mut state = {
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:6108:9
+     |
+6108 |     let mut state = {
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/tests/original_merged_offline.rs:7680:9
+     |
+7680 |     let mut saw_lose = false;
+     |         ----^^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `saw_lose`
+    --> crates/engine-core/tests/original_merged_offline.rs:7680:9
+     |
+7680 |     let mut saw_lose = false;
+     |         ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_saw_lose`
+
+warning: unused variable: `sid`
+     --> crates/engine-core/tests/original_merged_offline.rs:15166:9
+      |
+15166 |     let sid = tx
+      |         ^^^ help: if this is intentional, prefix it with an underscore: `_sid`
+
+warning: constant `PLAY_MASK` is never used
+     --> crates/engine-core/tests/original_merged_offline.rs:14839:7
+      |
+14839 | const PLAY_MASK: u32 = 1 << 3;
+      |       ^^^^^^^^^
+      |
+      = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `TWJIEQIU` is never used
+     --> crates/engine-core/tests/original_merged_offline.rs:15009:7
+      |
+15009 | const TWJIEQIU: u32 = 4_201_797_709;
+      |       ^^^^^^^^
+
+warning: function `discard_move` is never used
+     --> crates/engine-core/tests/original_merged_offline.rs:15126:4
+      |
+15126 | fn discard_move(cards: Vec<engine_api::CardId>, to: engine_api::ZoneId) -> engine_api::DomainEvent {
+      |    ^^^^^^^^^^^^
+
+warning: `engine-core` (test "original_merged_shenhua") generated 71 warnings (run `cargo fix --test "original_merged_shenhua" -p engine-core` to apply 61 suggestions)
+warning: `engine-core` (test "original_merged_offline") generated 19 warnings (run `cargo fix --test "original_merged_offline" -p engine-core` to apply 16 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.29s
+     Running tests/original_merged_bingshi.rs (.scratch/target-oldline/debug/deps/original_merged_bingshi-cd3b1e35f12870a0)
+
+running 116 tests
+test original_bingshi_pangxi::package_publishes_pangxi_and_hand_lte_target_contract_at_abi514 ... ok
+test original_bingshi_guoyuan::xiugeng_equal_hand_count_applies_both_results ... ok
+test original_bingshi_guoyuan::quanchong_discards_all_and_queues_penalized_extra_turn ... ok
+test original_bingshi_mbtanfeng::both_branches_discard_hand_and_equip_deal_fire_damage_and_skip_phases ... ok
+test original_bingshi_luyusheng::runwei_resets_after_qualified_loss_and_cleans_own_gain ... ok
+test original_bingshi_pangxi::kuangxiang_swaps_whole_hands_and_each_received_set_fires_once ... ok
+test original_bingshi_guoyuan::package_contains_guoyuan_at_abi509 ... ok
+test original_bingshi_mbtanfeng::package_contains_complete_xiahoushang ... ok
+test original_bingshi_luyusheng::shuanghuai_prevents_the_bound_damage ... ok
+test original_bingshi_guoyuan::renxing_draw_branch_counts_against_the_round_limit ... ok
+test original_bingshi_pot_caoshuang::dianyi_uses_deterministic_random_gain_count_and_hp_threshold ... ok
+test original_bingshi_pangxi::xuye_draws_then_places_target_hej_card_on_draw_pile_top ... ok
+test original_bingshi_pot_caoshuang::nizun_collects_tagged_discard_once_per_turn_and_increases_damage ... ok
+test original_bingshi_guoyuan::chenshe_same_suit_recovers_to_max_and_removes_itself ... ok
+test original_bingshi_guoyuan::qingdao_waits_for_the_damage_card_to_finish ... ok
+test original_bingshi_pot_caoshuang::jianzhuan_assigns_all_timings_then_awakens_once ... ok
+test original_bingshi_pot_caoshuang::shequan_freezes_private_choices_and_rewrites_hand_numbers ... ok
+test original_bingshi_pot_caozhen::package_publishes_complete_pot_caozhen_at_abi517 ... ok
+test original_bingshi_pot_caoshuang::package_publishes_complete_pot_caoshuang_at_abi568 ... ok
+test original_bingshi_pot_chenjiao::ceduan_reveals_range_players_uses_all_majority_cards_and_draws_on_damage ... ok
+test original_bingshi_pot_chendao::package_publishes_complete_pot_chendao_at_abi519 ... ok
+test original_bingshi_huangzu::chizhang_locks_matching_response_color_and_duanyang_stores_ownerless_sha ... ok
+test original_bingshi_pot_chenjiao::package_publishes_chenjiao_at_abi544 ... ok
+test original_bingshi_pot_chendao::wanglie_arms_only_the_chosen_card_then_enables_self_target_lock ... ok
+test original_bingshi_pot_chengpu::duzuo_moves_the_topmost_fire_sha_to_the_chosen_role ... ok
+test original_bingshi_pot_chengpu::package_publishes_complete_pot_chengpu_at_abi517 ... ok
+test original_bingshi_pot_dengai::tuntian_grows_charges_spends_and_applies_zaoxian ... ok
+test original_bingshi_pot_dengai::jixi_records_targets_discards_then_starts_multi_target_shunshou ... ok
+test original_bingshi_pot_caozhen::sifeng_distributes_in_selection_order_consumes_first_and_forces_mismatched_discard ... ok
+test original_bingshi_pot_chengpu::bihan_discards_to_hp_then_reduces_the_bound_sha_damage ... ok
+test original_bingshi_pot_chenjiao::qingyan_keeps_shown_cards_locks_then_increases_round_cost ... ok
+test original_bingshi_pot_dengai::package_publishes_dengai_at_abi543 ... ok
+test original_bingshi_pot_chenqun::package_publishes_complete_pot_chenqun_at_abi518 ... ok
+test original_bingshi_pot_dongzhao::miaolve_creates_distinct_suits_and_resolves_damage_reward ... ok
+test original_bingshi_pot_dongzhao::yingjia_requires_a_repeated_trick_then_queues_one_draw_turn ... ok
+test original_bingshi_pot_dongzhao::mantianguohai_gains_then_gives_each_successful_target_in_seat_order ... ok
+test original_bingshi_pot_chendao::hongyi_caps_at_five_and_runs_the_opposite_end_phase_branch ... ok
+test original_bingshi_pot_dongzhao::package_publishes_dongzhao_and_mantianguohai_at_abi539 ... ok
+test original_bingshi_pot_chenqun::faen_remembers_previous_user_and_applies_the_opposite_to_the_next_user ... ok
+test original_bingshi_pot_huanjie::package_publishes_huanjie_and_cross_package_derivations_at_abi529 ... ok
+test original_bingshi_pot_caozhen::sifeng_phase_end_can_gain_all_or_discard_all_then_damage ... ok
+test original_bingshi_pot_lougui::package_publishes_complete_pot_lougui_at_abi520 ... ok
+test original_bingshi_pot_lvyi::huilv_rejects_a_pending_choice_after_the_skill_is_removed ... ok
+test original_bingshi_pot_lusu::pothaoshi_borrows_visible_hand_refills_twice_and_clears ... ok
+test original_bingshi_pot_lusu::potdimeng_revalidates_pair_swaps_hands_and_settles_both_choices ... ok
+test original_bingshi_pot_lougui::guansha_replaces_every_hand_card_with_basics_and_adds_equal_hand_limit ... ok
+test original_bingshi_pot_lusu::pothaoshi_borrowed_shan_uses_the_response_pipeline ... ok
+test original_bingshi_pot_chenqun::dingpin_queues_a_real_draw_phase_for_a_maximum_loss_target ... ok
+test original_bingshi_pot_lvyi::huilv_card_outside_discard_causes_unreal_damage_then_can_be_given_away ... ok
+test original_bingshi_pot_lvyi::huilv_tracks_the_exact_used_card_and_damages_the_phase_actor ... ok
+test original_bingshi_pot_lougui::jiyu_gains_other_categories_and_only_resets_twice ... ok
+test original_bingshi_pot_lvyi::songyan_allows_matching_round_discard_color_as_wuxie ... ok
+test original_bingshi_pot_taishici::hanzhan_draws_each_side_to_max_hp_cap_three_then_duels ... ok
+test original_bingshi_pot_sunchen::potlulian_links_targets_draws_and_forces_fire_damage_after_hand_card_resolves ... ok
+test original_bingshi_pot_taishici::zhanlie_spends_six_marks_for_damage_response_cost_and_post_sha_draw ... ok
+test original_bingshi_pot_weiyan::mission_failure_replaces_zhuangshi_with_kunfen ... ok
+test original_bingshi_pot_taishici::zhenfeng_persists_independent_x_sources_for_both_skills ... ok
+test original_bingshi_pot_taishici::package_publishes_complete_pot_taishici_at_abi548 ... ok
+test original_bingshi_pot_lvyi::shishi_freezes_each_card_then_stops_recording_after_first_response ... ok
+test original_bingshi_pot_weiyan::zhuangshi_discards_and_loses_hp_into_first_n_helpers ... ok
+test original_bingshi_pot_weiyan::package_publishes_complete_pot_weiyan_at_abi558 ... ok
+test original_bingshi_pot_lvyi::package_publishes_complete_pot_lvyi_at_abi564 ... ok
+test original_bingshi_pot_xiahouba::libing_cycles_range_draw_and_next_sha_damage_then_resets ... ok
+test original_bingshi_pot_sunchen::potnigu_collects_optional_gifts_and_buffs_exactly_each_refused_damage ... ok
+test original_bingshi_pot_xiahouba::poxi_direct_hits_targets_with_no_more_hand_cards ... ok
+test original_bingshi_pot_xinxianying::qingshi_resolves_ally_draw_and_enemy_discards ... ok
+test original_bingshi_pot_yuji::fuji_one_time_shan_reward_draws_then_expires ... ok
+test original_bingshi_pot_xiahouba::poxi_allows_a_target_with_more_hand_cards_to_respond ... ok
+test original_bingshi_pot_yuji::daozhuan_discards_cost_and_enforces_turn_and_round_names ... ok
+test original_bingshi_pot_xiahouba::package_publishes_complete_pot_xiahouba_at_abi522 ... ok
+test original_bingshi_pot_xinxianying::package_publishes_complete_pot_xinxianying_at_abi558 ... ok
+test original_bingshi_pot_yuji::fuji_pairs_cards_rewards_minimum_and_tagged_sha_gains_and_deals_extra_damage ... ok
+test original_bingshi_pot_xinxianying::jiejie_discards_other_suits_and_grants_turn_suit_limit ... ok
+test original_bingshi_pot_zhangren::fuan_records_suit_uses_virtual_sha_and_can_silence ... ok
+test original_bingshi_pot_yuji::package_publishes_complete_pot_yuji_at_abi570 ... ok
+test original_bingshi_pot_zhangren::yinxian_boosts_farthest_sha_and_grows_range_outside_turn ... ok
+test original_bingshi_pot_zanghong::package_publishes_complete_pot_zanghong_at_abi517 ... ok
+test original_bingshi_pot_zhangren::package_publishes_complete_pot_zhangren_at_abi525 ... ok
+test original_bingshi_pot_zhouyu::fentao_discard_branch_relinks_after_the_fire_damage ... ok
+test original_bingshi_pot_zhouyu::xiongzi_keeps_one_branch_for_all_three_skills_and_draws_two ... ok
+test original_bingshi_pot_zanghong::jugu_discards_one_then_two_across_successive_turn_fires ... ok
+test original_bingshi_pot_zhouyu::chiyun_gives_cards_then_draws_two_and_links_target_once_per_phase ... ok
+test original_bingshi_pot_zhouyu::package_publishes_complete_pot_zhouyu_at_abi561 ... ok
+test original_bingshi_potyinhui_gain::potheyun_loses_shared_skill_and_target_draws_two ... ok
+test original_bingshi_pot_zhouyu::yanhui_phase_damage_is_limited_to_a_role_whose_card_was_discarded ... ok
+test original_bingshi_potyinhui_gain::potyinhui_lose_arm_offers_and_removes_a_gained_skill ... ok
+test original_bingshi_pot_huanjie::zhengshuo_discards_every_hand_then_reshuffles_and_deals_four ... ok
+test original_bingshi_potyinhui_gain::potyinhui_once_per_round_lock_engages ... ok
+test original_bingshi_pot_zhouyu::pending_choice_rejects_after_the_originating_skill_is_removed ... ok
+test original_bingshi_potyinhui_gain::potyinhui_offers_then_gains_target_skill_via_staged_choice ... ok
+test original_bingshi_sp_zhonghui::sizi_spends_charge_and_settles_sha_users ... ok
+test original_bingshi_pot_zanghong::liezhi_uses_source_free_jiu_loses_max_hp_and_shares_one_turn_limit ... ok
+test original_bingshi_sp_zhonghui::xiezhi_overflow_grows_both_limits_and_yunan_upgrades_kechang ... ok
+test original_bingshi_sunshao::ganjue_target_without_matching_suit_cannot_respond ... ok
+test original_bingshi_sunshao::ganjue_ignores_distance_and_sha_count_but_same_suit_hand_can_respond ... ok
+test original_bingshi_pot_huanjie::qice_consumes_every_original_hand_card_as_one_ordinary_trick ... ok
+test original_bingshi_sunshao::zhuji_discards_exact_suit_uses_shared_equip_and_hujia_absorbs_damage ... ok
+test original_bingshi_sp_zhonghui::package_publishes_complete_sp_zhonghui_at_abi553 ... ok
+test original_bingshi_sunshao::package_publishes_sunshao_at_abi521 ... ok
+test original_bingshi_sunjun::xiongtu_damage_arms_only_after_itself_then_external_damage_enables_second_use ... ok
+test original_bingshi_pot_huanjie::gongmou_swaps_whole_hands_and_grants_qice_and_kanpo_until_turn_end ... ok
+test original_bingshi_sunjun::xiongtu_cancelled_cost_discards_the_revealed_hand_card_and_arms ... ok
+test original_bingshi_tianfeng::package_publishes_complete_tianfeng_at_abi509 ... ok
+test original_bingshi_yanghong::package_publishes_complete_yanghong_at_abi509 ... ok
+test original_bingshi_sunjun::xianshuai_only_unlimits_the_first_hand_card_of_each_suit ... ok
+test original_bingshi_tianfeng::ganggeng_active_command_forwards_selected_hand_cards ... ok
+test original_bingshi_yanghong::jianji_both_participants_can_share_the_same_physical_card ... ok
+test original_bingshi_tianfeng::ganggeng_gives_selected_cards_and_draws_when_recipient_has_max_hand ... ok
+test original_bingshi_tianfeng::sijian_both_is_cumulative_and_grants_one_shot_discard ... ok
+test original_bingshi_tianfeng::ganggeng_discards_from_recipient_when_another_player_has_more_hand ... ok
+test original_bingshi_zhangyan::package_publishes_zhangyan_and_damage_trick_view_as_at_abi510 ... ok
+test original_bingshi_yanghong::jianji_shared_sha_compares_once_then_damages_its_chooser ... ok
+test original_bingshi_yanghong::yuanmo_draws_for_attack_range_population_lost_by_moving_weapon ... ok
+test original_bingshi_zhangyan::xiaoge_follows_the_original_single_target_sha_with_duel ... ok
+test original_bingshi_zhangyan::feijing_discards_on_chosen_path_and_adds_matching_color_target ... ok
+test original_bingshi_zhangyan::xiaoge_prevents_bound_damage_recovers_and_reclaims_discard ... ok
+
+test result: ok. 116 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/original_merged_collab.rs (.scratch/target-oldline/debug/deps/original_merged_collab-81b89a5d305896b9)
+
+running 59 tests
+test original_collab_fuzhao::committed_package_contains_the_optional_rewrite ... ok
+test original_collab_dcfanzhuan::package_contains_complete_initially_damaged_character ... ok
+test original_collab_fuzhao::judgment_uses_the_judged_players_effective_suit ... ok
+test original_collab_haoxue::haoxue_loses_hp_when_discarding_outside_own_play_phase ... ok
+test original_collab_dczhiheng::discards_and_draws_equal_with_bonus_when_all_hand_discarded ... ok
+test original_collab_dczhiheng::no_bonus_when_hand_kept ... ok
+test original_collab_dczhiheng::equip_cards_are_discardable ... ok
+test original_collab_fuzhao::heart_judgment_recovers_the_dying_player_with_the_owner_as_source ... ok
+test original_collab_haoxue::haoxue_no_recover_when_full_hp ... ok
+test original_collab_haoxue::haoxue_no_loss_when_discarding_during_own_play_phase ... ok
+test original_collab_dcfanzhuan::adjusts_both_directions_draws_delta_and_fires_once_per_round ... ok
+test original_collab_haoxue::haoxue_recovers_once_when_gaining_during_own_play_phase ... ok
+test original_collab_dcfanzhuan::declining_does_not_consume_the_round_limit ... ok
+test original_collab_fuzhao::non_heart_judgment_does_not_recover_and_declining_does_not_judge ... ok
+test original_collab_dcjianxiong::package_and_runtime_match_the_legacy_growth_and_card_gain_contract ... ok
+test original_collab_olchenlong::nonlethal_choice_loses_and_deals_the_same_amount_without_max_hp_cost ... ok
+test original_collab_olchenlong::exact_self_loss_dying_reduces_max_hp_and_defers_target_damage_until_saved ... ok
+test original_collab_dclonggong::decline_keeps_the_use_and_source_free_damage_never_prompts ... ok
+test original_collab_dclonggong::accepted_use_prevents_damage_grants_equipment_and_consumes_turn_limit ... ok
+test original_collab_olchenlong::package_publishes_numeric_active_and_complete_character ... ok
+test original_collab_olmaotu::leaving_dying_grants_dynamic_hp_based_target_protection ... ok
+test original_collab_mount_skills::mbjiguan_removes_every_mount_and_adds_two_hand_limit ... ok
+test original_collab_mount_skills::mbjunkui_removes_every_mount_and_adds_one_sha_use ... ok
+test original_collab_olhaizhu::package_retains_abi112_skill_and_character_closure ... ok
+test original_collab_olhaizhu::gains_only_other_players_black_cards_from_the_exact_discard_batch ... ok
+test original_collab_olchouniu::dcxurui_draws_attack_range_capped_five_only_without_turn_damage ... ok
+test original_collab_olmaotu::protection_survives_other_turns_and_expires_at_the_owners_next_turn_start ... ok
+test original_collab_olchouniu::bachiqionggouyu_recovers_after_play_and_draws_two_extra_only_at_full_hp ... ok
+test original_collab_olmaotu::package_publishes_abi107_helper_modifier_and_complete_character ... ok
+test original_collab_olhaizhu::own_discards_and_non_discard_movements_are_not_reclaimed ... ok
+test original_collab_olchouniu::clbshuijian_draw_bonus_uses_half_the_equip_count_rounded_down_plus_one ... ok
+test original_collab_olshenhou::committed_package_contains_the_complete_rewritten_character ... ok
+test original_collab_olweiyang::duplicate_categories_healthy_targets_and_mismatched_counts_are_atomic_rejections ... ok
+test original_collab_olhaizhu::preparation_hp_loss_counts_ties_but_not_a_smaller_hand ... ok
+test original_collab_olshenhou::black_judgment_keeps_the_sha_effective ... ok
+test original_collab_olweiyang::package_publishes_abi109_matched_selection_and_complete_character ... ok
+test original_collab_olweiyang::two_wounded_targets_require_two_distinct_categories_then_both_recover ... ok
+test original_collab_olshenhou::red_judgment_excludes_only_the_current_sha_target ... ok
+test original_collab_olwuma::draw_and_play_skip_flags_record_events_but_restore_the_exact_phases ... ok
+test original_collab_natuxing_gate::natuxing_unrespondable_gated_by_gaintag_absent ... ok
+test original_collab_olwuma::another_players_trick_draws_once_even_when_it_has_multiple_targets ... ok
+test original_collab_olwuma::explicit_skip_current_phase_is_audited_without_advancing ... ok
+test original_collab_olsishe::spchizhong_uses_max_hp_for_hand_limit_and_gains_max_hp_after_another_death ... ok
+test original_collab_olsishe::optional_reflection_uses_damage_amount_and_requires_a_living_source ... ok
+test original_collab_olwuma::package_retains_olwuma_skill_and_character_closure ... ok
+test original_collab_olsishe::qiusuo_gains_from_draw_pile_before_discard_pile ... ok
+test original_collab_olyinhu::package_publishes_abi110_play_phase_category_contract_and_character ... ok
+test original_collab_olwuma::face_up_cannot_turn_face_down_but_existing_face_down_state_can_clear ... ok
+test original_collab_spfengyin::no_choice_when_target_hp_below_owner ... ok
+test original_collab_spfengyin::gives_sha_and_skips_play_and_discard_phases ... ok
+test original_collab_olzishu::package_publishes_larger_hand_contract_and_character ... ok
+test original_collab_olyinhu::exact_dying_bans_for_the_turn_even_across_an_extra_play_phase ... ok
+test original_collab_olxugou::red_sha_is_blocked_incoming_and_boosted_outgoing ... ok
+test original_collab_spfengyin::cancel_keeps_phases ... ok
+test original_collab_olzishu::mandatory_first_take_repeats_and_stops_on_a_maximum_hand_tie ... ok
+test original_collab_olzishu::repeated_choice_may_be_cancelled_and_initial_non_larger_target_is_rejected ... ok
+test original_collab_olyinhu::categories_are_unique_per_play_phase_but_targets_may_repeat ... ok
+test original_collab_olwuma::judgment_and_discard_skip_modifiers_still_execute_the_owner_phases ... ok
+test original_collab_olchouniu::complete_character_starts_damaged_and_recovers_only_at_minimum_hp ... ok
+
+test result: ok. 59 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/original_merged_huicui.rs (.scratch/target-oldline/debug/deps/original_merged_huicui-2efb1db5e63e4673)
+
+running 44 tests
+test original_huicui_chenjian::two_marks_reveal_five_and_never_grow_past_cap ... ok
+test original_huicui_1_11_5_dcqiansu_chijian::qiansu_skips_when_owner_hand_not_less ... ok
+test original_huicui_chenjian::a_dead_owner_still_cleans_up_tracked_processing_cards ... ok
+test original_huicui_1_11_5_dcqiansu_chijian::qiansu_draws_three_then_gives_one_when_other_has_more_hand ... ok
+test original_huicui_chenjian::discard_first_uses_effective_discard_suit_raw_reveal_suit_and_may_skip_use ... ok
+test original_huicui_chenjian::used_wuzhong_resolves_wuxie_then_second_option_marks_and_recasts_all_hand ... ok
+test original_huicui_dcchiying::discard_loop_gains_basic_cards ... ok
+test original_huicui_dcgangu::qingman_draws_to_the_ending_players_empty_equip_slots ... ok
+test original_huicui_dcgangu::reshishou2_loses_hp_at_prepare_only_without_recangchu_mark ... ok
+test original_huicui_dcgangu::dccunwei_draws_for_single_target_and_discards_only_for_payable_multi_target_tricks ... ok
+test original_huicui_dckuizhen::owner_not_damaged_target_loses_hp ... ok
+test original_huicui_dcgangu::recangchu_rewrites_all_three_legacy_js_behaviors ... ok
+test original_huicui_1_11_5_dcqiansu_chijian::chijian_adds_sha_use_limit_and_ignore_armor ... ok
+test original_huicui_dcmanzhi::branches_are_once_per_turn ... ok
+test original_huicui_dcmoyu::undamaged_use_sets_add_mark ... ok
+test original_huicui_dcmanzhi::give_branch_target_hands_cards_and_uses_sha ... ok
+test original_huicui_dcmoyu::damaged_use_bans_skill_and_marks_target ... ok
+test original_huicui_dcxiangshu::exact_match_gains_card_and_deals_damage ... ok
+test original_huicui_dcmanzhi::gain_branch_gains_gives_back_and_draws ... ok
+test original_huicui_1_11_5_dcqiansu_chijian::package_publishes_1_11_5_feiyi_and_xiahouen_closures ... ok
+test original_huicui_lianzhou::links_self_then_links_same_hp_unlinked_others ... ok
+test original_huicui_dcgangu::xixiu_uses_raw_event_suit_effective_equip_suit_and_protects_only_the_sole_equip ... ok
+test original_huicui_dckuizhen::owner_damaged_gains_target_shas ... ok
+test original_huicui_dcgangu::shenwei_adds_two_draws_and_two_hand_limit ... ok
+test original_huicui_dcgangu::reshishou_consumes_grain_for_logical_jiu_and_fire_damage ... ok
+test original_huicui_dcgangu::yuxiang_uses_each_targets_final_distance_for_sha_response_lock ... ok
+test original_huicui_dcshoucheng::committed_package_declares_dcshoucheng_and_closes_jiangfei ... ok
+test original_huicui_xinkuangfu::self_equip_damage_draws_two ... ok
+test original_huicui_rekuanshi::only_once_per_turn ... ok
+test original_huicui_rekuanshi::second_damage_of_turn_recovers_watched_player ... ok
+test original_huicui_xizhen::duel_branch_keeps_hp_without_shas ... ok
+test original_huicui_dczhongji::dczhongji_publishes_contract ... ok
+test original_huicui_xuxie::draw_branch_draws_for_adjacent ... ok
+test original_huicui_xizhen::sha_branch_deals_damage ... ok
+test original_huicui_dcyingtu::neighbor_gain_triggers_take_give_chain ... ok
+test original_huicui_refuyuan::committed_package_declares_refuyuan_and_abi29 ... ok
+test original_huicui_xuxie::discard_branch_and_max_hp_loss_and_restore ... ok
+test original_huicui_dcshoucheng::dcshoucheng_draws_two_only_once_per_turn_and_resets_next_turn ... ok
+test original_huicui_refuyuan::first_sha_target_is_offered_and_draws_for_event_player ... ok
+test original_huicui_dcshoucheng::current_turn_player_losing_their_last_hand_does_not_trigger ... ok
+test original_huicui_refuyuan::earlier_red_card_from_any_source_blocks_later_sha_for_same_target ... ok
+test original_huicui_refuyuan::same_physical_red_card_is_excluded_and_turn_boundary_clears_history ... ok
+test original_huicui_dcgangu::committed_package_distinguishes_hp_loss_and_fires_once ... ok
+test original_huicui_refuyuan::later_red_card_in_same_batch_does_not_cancel_earlier_sha_offer ... ok
+
+test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/original_merged_mobile.rs (.scratch/target-oldline/debug/deps/original_merged_mobile-df2444bdf033737e)
+
+running 135 tests
+test original_mobile_chengzhao_dongcheng::trigger_requires_two_gained_cards_and_both_comparison_hands ... ok
+test original_mobile_daoji_hucheer::weapon_is_gained_equipped_then_damages_original_owner ... ok
+test original_mobile_beizhu_dingyuan::all_snapshotted_sha_are_forced_and_direct_damage_draws_per_point ... ok
+test original_mobile_beizhu_dingyuan::queued_sha_skips_stale_cards_and_survives_main_skill_removal ... ok
+test original_mobile_beizhu_dingyuan::elemental_chain_damage_does_not_draw_for_the_propagated_target ... ok
+test original_mobile_beizhu_dingyuan::target_contract_rejects_self_and_empty_hand_atomically ... ok
+test original_mobile_daoji_hucheer::basic_cost_and_gain_protected_equipment_are_rejected ... ok
+test original_mobile_daoji_hucheer::nonweapon_causes_no_damage_and_disabled_weapon_slot_still_takes_damage ... ok
+test original_mobile_beizhu_dingyuan::no_sha_branch_privately_reveals_discards_and_can_cancel_or_grant_draw_pile_sha ... ok
+test original_mobile_chengzhao_dongcheng::tie_or_loss_does_not_use_sha_and_cleans_helpers ... ok
+test original_mobile_chengzhao_dongcheng::strict_win_uses_distance_unlimited_armor_ignoring_sha_and_cleans_helpers ... ok
+test original_mobile_beizhu_dingyuan::package_publishes_abi324_skill_and_complete_character ... ok
+test original_mobile_daoji_hucheer::package_publishes_hucheer_and_daoji ... ok
+test original_mobile_chengzhao_dongcheng::package_publishes_dongcheng_and_all_chengzhao_rules ... ok
+test original_mobile_laishou::lethal_damage_grows_max_hp_and_is_prevented_then_prepare_kills_at_nine ... ok
+test original_mobile_jiaohua_liwei::category_cycle_persists_gains_from_draw_only_and_resets_after_all_three ... ok
+test original_mobile_luanqun_laimin::selections_stay_private_then_mismatch_restricts_first_sha_and_direct_hits_owner ... ok
+test original_mobile_jujun_bixian::max_hp_change_without_actual_hp_change_still_forces_bixian ... ok
+test original_mobile_jiaohua_liwei::package_publishes_liwei_and_jiaohua ... ok
+test original_mobile_laishou::package_publishes_laimin_after_luanqun_closes_character ... ok
+test original_mobile_jujun_bixian::targeted_with_hp_change_forces_jujun_wanjian ... ok
+test original_mobile_jujun_bixian::package_declares_current_abi_skills_and_closed_characters ... ok
+test original_mobile_ly_piliche::accepting_discards_all_equipment_and_never_discards_target_hand ... ok
+test original_mobile_jiebing_yangfu::damage_excludes_source_and_equips_random_gain ... ok
+test original_mobile_jujun_bixian::targeted_without_hp_change_forces_bixian_duel_target_choice ... ok
+test original_mobile_luanqun_laimin::package_publishes_laimin_and_both_hidden_helpers ... ok
+test original_mobile_ly_piliche::package_contains_equipment_skill ... ok
+test original_mobile_jujun_bixian::hp_change_without_becoming_a_card_target_fires_neither_skill ... ok
+test original_mobile_ly_piliche::self_damage_and_empty_other_target_do_not_offer_the_skill ... ok
+test original_mobile_mbjinzu::non_extreme_reveal_buffs_only_the_next_sha_against_that_target ... ok
+test original_mobile_mbjinzu::unique_extreme_discards_all_reveals_and_refreshes_the_active_skill ... ok
+test original_mobile_mbanda::no_different_color_pair_recovers_immediately_after_activation ... ok
+test original_mobile_ly_piliche::hand_only_target_can_confirm_but_effect_is_a_noop ... ok
+test original_mobile_mbanda::package_publishes_abi330_mbanda_trigger ... ok
+test original_mobile_mbanxian::package_publishes_abi333_and_first_hand_discard_trigger ... ok
+test original_mobile_mbhanyong::package_publishes_abi114_skill_and_mobile_wutugu_closure ... ok
+test original_mobile_mbanda::source_gives_different_colors_across_hand_and_equip_without_recovery ... ok
+test original_mobile_mbshanjia_mb_caochun::basic_and_trick_discards_suppress_their_rewards_independently ... ok
+test original_mobile_mbanda::source_decline_recovers_and_same_color_pair_is_rejected ... ok
+test original_mobile_mbshanjia_mb_caochun::equipment_loss_reduces_cost_and_noncategory_discards_grant_both_rewards ... ok
+test original_mobile_mbshanjia_mb_caochun::three_equipment_losses_require_no_discard_and_grant_both_rewards ... ok
+test original_mobile_mbanxian::a_first_hand_discard_without_sha_blocks_later_sha ... ok
+test original_mobile_mbkuili::package_exposes_locked_damage_source_weapon_restore_contract ... ok
+test original_mobile_mbjinzu::package_publishes_abi333_and_closes_caoxing ... ok
+test original_mobile_mbkuili::damage_restores_exactly_one_disabled_weapon_slot_with_owner_attribution ... ok
+test original_mobile_mbanxian::first_discarded_hand_sha_is_gained_then_used_ignoring_limits ... ok
+test original_mobile_mbshanjia_mb_caochun::package_publishes_mb_caochun_and_both_mbshanjia_rules ... ok
+test original_mobile_mbzhuguo_wuke::excess_hand_discards_to_cap_then_recovers ... ok
+test original_mobile_mbzhuguo_wuke::draw_to_cap_then_use_physical_sha_on_owner_selected_target ... ok
+test original_mobile_mbzhuguo_wuke::equal_hand_count_recovers_without_follow_up ... ok
+test original_mobile_mbyilie3::positive_mark_draws_then_loses_equal_hp_and_clears_the_mark ... ok
+test original_mobile_mbzhuguo_wuke::package_publishes_current_abi_and_complete_wuke ... ok
+test original_mobile_mobilejingce::nullified_delayed_trick_and_the_wuxie_both_count ... ok
+test original_mobile_mobiledanshou_xin_zhuran::zero_targetings_draws_and_two_targetings_discard_then_damage ... ok
+test original_mobile_mbyilie3::zero_mark_does_not_fire ... ok
+test original_mobile_refuhai::private_choices_reveal_together_and_draw_initial_equal_run ... ok
+test original_mobile_mobilejingce::package_declares_rewritten_skill_helper_and_character ... ok
+test original_mobile_mobilejingce::used_and_responded_physical_cards_share_the_turn_threshold ... ok
+test original_mobile_mbkuili::enabled_weapon_slot_or_unattributed_damage_does_not_fire ... ok
+test original_mobile_rejieming::declining_and_stale_target_leave_hands_unchanged ... ok
+test original_mobile_rejieming::owner_does_not_draw_when_target_reaches_max_hp_hand_size ... ok
+test original_mobile_mbhanyong::three_branches_draw_increase_damage_and_backwater_exactly ... ok
+test original_mobile_redangxian::turn_begin_gains_sha_from_discard_only_then_opens_extra_play_phase ... ok
+test original_mobile_redangxian::package_publishes_exact_skill_and_complete_character ... ok
+test original_mobile_rejiuchi_dongzhuo::ordinary_sha_damage_keeps_benghuai_enabled ... ok
+test original_mobile_refuhai::package_publishes_character_closure ... ok
+test original_mobile_rejieming::two_damage_points_choose_independent_targets_and_check_after_each_draw ... ok
+test original_mobile_rejiuchi_dongzhuo::jiu_boosted_sha_damage_disables_benghuai_until_next_turn ... ok
+test original_mobile_refuli::tied_current_hp_does_not_turn_over_but_still_consumes_refuli ... ok
+test original_mobile_refuli::declining_refuli_preserves_hp_orientation_and_limited_skill ... ok
+test original_mobile_rejieming::package_contains_abi120_rewritten_skill ... ok
+test original_mobile_refuli::accepted_refuli_recovers_then_turns_over_only_when_strictly_highest ... ok
+test original_mobile_rejiuchi_dongzhuo::package_publishes_abi191_and_complete_re_dongzhuo ... ok
+test original_mobile_rw_tengjia3::package_exposes_locked_armor_link_modifiers ... ok
+test original_mobile_mobilejingce::successful_delayed_trick_placement_does_not_count_as_discarded ... ok
+test original_mobile_scsyaozhuo::strict_win_skips_the_targets_next_draw_phase_once ... ok
+test original_mobile_scsyaozhuo::tie_discards_every_remaining_card_when_fewer_than_two_exist ... ok
+test original_mobile_mbhanyong::decline_full_health_and_non_damage_multi_target_preserve_legacy_gates ... ok
+test original_mobile_refuli::committed_package_exposes_optional_limited_dying_contract ... ok
+test original_mobile_scsniqu::package_contains_the_active_contract_without_a_fake_selectable_character ... ok
+test original_mobile_xiahui_poxiang::poxiang_gives_draws_and_loses_hp_in_order ... ok
+test original_mobile_scsniqu::deals_fire_damage_and_rejects_a_second_use_without_mutation ... ok
+test original_mobile_scsxiaolu::discard_branch_discards_exactly_two_after_the_draw ... ok
+test original_mobile_scszimou::package_declares_skill_without_publishing_the_hidden_component ... ok
+test original_mobile_scsxiaolu::give_branch_draws_then_gives_exactly_two_current_hand_cards ... ok
+test original_mobile_scsyaozhuo::package_publishes_four_rule_modules_without_exposing_hidden_xiayun ... ok
+test original_mobile_scsxiaolu::insufficient_hand_fallback_discards_every_current_discardable_hand_card ... ok
+test original_mobile_scsxiaolu::package_contains_active_without_publishing_hidden_hankui ... ok
+test original_mobile_scsniqu::missing_or_dead_target_is_rejected_without_mutation ... ok
+test original_mobile_xinanjian::damage_branch_keeps_response_and_adds_one_if_sha_hits ... ok
+test original_mobile_xinanjian::intent_rejects_a_stale_or_mismatched_sha_tuple ... ok
+test original_mobile_xinanjian::multi_target_damage_bonus_changes_only_selected_target ... ok
+test original_mobile_shhlianhua::committed_package_publishes_shhlianhua_trigger ... ok
+test original_mobile_xinanjian::unrespondable_branch_skips_target_shan ... ok
+test original_mobile_xinanjian::target_includes_owner_in_attack_range_so_skill_does_not_fire ... ok
+test original_mobile_scszimou::second_fourth_and_sixth_uses_fire_and_each_play_phase_resets ... ok
+test original_mobile_xiahui_poxiang::xiahui_publishes_black_ignored_hand_limit ... ok
+test original_mobile_xiaoxi_hansui::package_exposes_both_black_hand_equip_view_as_rules ... ok
+test original_mobile_xinpingkou::damages_selected_targets_then_gains_draw_pile_equipment_without_discard_fallback ... ok
+test original_mobile_xinqieting_xin_caifuren::hand_branch_reveals_only_two_and_rejects_an_uninspected_card_atomically ... ok
+test original_mobile_xinqieting_xin_caifuren::damage_history_blocks_while_draw_and_cancel_remain_available ... ok
+test original_mobile_xiaoxi_hansui::duel_accepts_black_equipment_as_response_sha ... ok
+test original_mobile_xinqieting_xin_caifuren::compatible_equipment_can_move_to_the_owner ... ok
+test original_mobile_xinqingxi_xin_caoxiu::accepted_trigger_is_limited_to_once_in_the_current_turn ... ok
+test original_mobile_xinqingxi_xin_caoxiu::distance_two_target_discards_exactly_two_for_non_sha_damage ... ok
+test original_mobile_xinqingxi_xin_caoxiu::increased_elemental_damage_updates_chain_base_without_retriggering ... ok
+test original_mobile_xinduodao::accepting_gains_every_current_weapon_and_leaves_other_equipment ... ok
+test original_mobile_xinduodao::package_contains_skill_and_now_publishes_complete_character ... ok
+test original_mobile_xiaoxi_hansui::black_equipment_acts_as_proactive_sha_but_red_card_does_not ... ok
+test original_mobile_xinqingxi_xin_caoxiu::insufficient_hand_or_cancel_increases_the_bound_damage ... ok
+test original_mobile_xinpingkou::package_contains_abi124_skill_and_complete_character ... ok
+test original_mobile_xinduodao::no_weapon_opens_no_choice_and_declining_keeps_weapon_equipped ... ok
+test original_mobile_xinqingxi_xin_caoxiu::package_publishes_abi322_skill_and_complete_character ... ok
+test original_mobile_xinjintao::first_sha_is_unrespondable_and_second_sha_gains_damage ... ok
+test original_mobile_xinqieting_xin_caifuren::package_publishes_abi323_skill_and_complete_character ... ok
+test original_mobile_yingjian::mobile_package_contains_complete_sunru ... ok
+test original_mobile_shhlianhua::being_targeted_by_sha_draws_one_card ... ok
+test original_mobile_zhaohuo::dujin_draw_bonus_uses_half_the_equip_count_rounded_up_plus_one ... ok
+test original_mobile_yingjian::yingjian_uses_the_normal_sha_response_damage_and_history_pipeline ... ok
+test original_mobile_zhaohuo::committed_package_only_reacts_to_another_players_dying ... ok
+test original_mobile_zhaohuo::jiu_can_self_save_while_tiansuan2_4_blocks_tao_jiu_and_adds_damage ... ok
+test original_mobile_zhaohuo::huaizi_uses_max_hp_as_the_hand_limit_base ... ok
+test original_mobile_shhlianhua::being_targeted_by_a_trick_does_not_draw ... ok
+test original_mobile_zhengjing2_gain::zhengjing2_gains_pile_and_removes_itself ... ok
+test original_mobile_zhaohuo::rejiangchi3_cancels_the_proactive_sha_limit ... ok
+test original_mobile_zhaohuo::mbranshang_counts_only_fire_damage_then_resolves_the_end_phase_penalty ... ok
+test original_mobile_zhaohuo::rejiangchi_publishes_the_play_phase_choice_and_complete_character ... ok
+test original_mobile_xinanjian::package_contains_abi120_skill_and_complete_character ... ok
+test original_mobile_yingjian::virtual_sha_distance_policy_controls_target_options_and_cancel_cleans_up ... ok
+test original_mobile_rw_tengjia3::active_armor_blocks_only_unlinked_to_linked_transition ... ok
+test original_mobile_zhaohuo::tiansuan2_0_prevents_damage_but_not_lose_hp ... ok
+test original_mobile_zhaohuo::tiansuan2_3_adds_one_to_damage_but_not_lose_hp ... ok
+test original_mobile_zhaohuo::tiansuan2_1_caps_final_fire_damage_then_offers_one_card ... ok
+test original_mobile_zhaohuo::tiansuan2_2_turns_damage_to_fire_then_caps_after_tengjia ... ok
+test original_mobile_zhaohuo::tiansuan2_damage_is_optional_and_draws_the_resolved_damage_amount ... ok
+
+test result: ok. 135 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+     Running tests/original_merged_offline.rs (.scratch/target-oldline/debug/deps/original_merged_offline-460a53c64eadfcca)
+
+running 205 tests
+test original_offline_chixin::package_exposes_diamond_hand_equip_sha_and_shan_rules ... ok
+test original_offline_eu_xiaoguo::package_publishes_exact_unlimited_basic_hand_contract_and_character ... ok
+test original_offline_dragtaiguan_pangde::package_publishes_abi193_and_complete_drag_pangde ... ok
+test original_offline_dragchengyuan::female_target_can_be_restored_to_max_and_declining_does_not_consume_the_skill ... ok
+test original_offline_chixin::chixin1_uses_diamond_equipment_as_sha_but_rejects_other_suits ... ok
+test original_offline_eu_xiaoguo::non_basic_cost_is_atomic_and_non_dying_damage_can_repeat ... ok
+test original_offline_dragtaiguan_pangde::active_limit_is_lost_hp_with_a_minimum_of_one ... ok
+test original_offline_eu_xiaoguo::exact_dying_damage_bans_until_the_next_turn_starts ... ok
+test original_offline_gzjinfa::cancel_takes_a_card_and_spade_equipment_gift_uses_sha ... ok
+test original_offline_eu_zhangliao::empty_or_dead_entries_are_skipped ... ok
+test original_offline_eu_zhangliao::package_publishes_complete_eu_zhangliao_and_exact_abi63_module ... ok
+test original_offline_jdlianhuan::converted_tiesuo_opens_direct_cancelable_discard_then_resolves ... ok
+test original_offline_eu_zhangliao::draw_finishes_before_ordered_target_owner_and_next_choices ... ok
+test original_offline_jdlianhuan::linked_and_empty_targets_do_not_offer_discard ... ok
+test original_offline_jdlianhuan::only_club_hand_cards_convert_and_zero_target_recasts ... ok
+test original_offline_jdlianhuan::multi_target_choices_follow_declared_order_and_empty_legal_scope_is_noop ... ok
+test original_offline_jdlianhuan::real_tiesuo_discards_before_a_later_wuxie_nullifies_it ... ok
+test original_offline_chixin::yyyazhen_accepts_any_equipment_but_never_a_hand_card ... ok
+test original_offline_dragchengyuan::male_owner_is_an_eligible_target_but_a_dead_owner_cannot_trigger ... ok
+test original_offline_hm_qianjun::package_publishes_hm_qianjun_contract ... ok
+test original_offline_dragchengyuan::tyfuli_recovers_and_draws_to_two_only_when_accepted ... ok
+test original_offline_eu_zhangliao::two_player_previous_and_next_duplicate_is_preserved ... ok
+test original_offline_jdsbzhiheng::discards_selected_and_redraws_same_count ... ok
+test original_offline_chixin::diamond_equipment_is_offered_for_sha_and_shan_responses ... ok
+test original_offline_jdlianhuan::package_publishes_character_skill_dependency_and_abi305 ... ok
+test original_offline_eu_zhangliao::forged_card_selection_is_rejected_atomically ... ok
+test original_offline_jdsbjiuyuan::package_publishes_jdsbjiuyuan_contract ... ok
+test original_offline_hm_qianjun::hm_qianjun_gives_all_equipment_recovers_and_gains_olluanji ... ok
+test original_offline_jdsbzhiheng::source_and_npack_publish_active_zhiheng ... ok
+test original_offline_jdsbtongye::committed_package_publishes_jdsbtongye_trigger ... ok
+test original_offline_jy_huanggai::liezhou_chain_draws_once_for_each_player_linked_before_propagation ... ok
+test original_offline_jy_huanggai::liezhou_converts_outgoing_damage_and_draws_final_amount_from_pre_damage_link ... ok
+test original_offline_jy_huanggai::liezhou_ignores_unlinked_zero_source_free_and_hp_loss_damage ... ok
+test original_offline_jun_renwang::package_publishes_jun_renwang_contract ... ok
+test original_offline_jy_huanggai::zhaxiang_reduces_max_hp_once_installs_both_response_locks_and_expires ... ok
+test original_offline_jy_huanggai::zhaxiang_rejects_outside_play_and_max_hp_zero_kills_the_owner ... ok
+test original_offline_jun_zhaoshou::package_publishes_jun_zhaoshou_contract ... ok
+test original_offline_jun_renwang::jun_renwang_gives_two_cards_then_self_recovers ... ok
+test original_offline_jdsbjiuyuan::jdsbjiuyuan_requires_gainable_equipment ... ok
+test original_offline_jun_renwang::jun_renwang_rejects_single_card_selection ... ok
+test original_offline_jytongbei_jy_caocao::package_and_runtime_cover_gift_and_damage_branches ... ok
+test original_offline_dragxueji::dragxueji_publishes_contract ... ok
+test original_offline_jy_huanggai::package_publishes_abi306_skills_helper_and_complete_character ... ok
+test original_offline_nscesuan::package_exposes_locked_damage_before_contract ... ok
+test original_offline_nsfeixiong_ns_lijue::offline_package_publishes_complete_ns_lijue_without_an_abi_bump ... ok
+test original_offline_nsfeixiong_ns_lijue::strict_winner_damages_loser_and_tie_only_cleans_up_the_helper ... ok
+test original_offline_dragxueji::dragxueji_deals_one_damage_to_chosen_target ... ok
+test original_offline_jysuozhou::club_self_target_offers_once_and_draws_each_linked_player ... ok
+test original_offline_jyyuhuo::linked_other_players_gain_elemental_and_lose_normal_damage ... ok
+test original_offline_jylianhuan::jylianhuan_loses_hp_then_links_up_to_two_targets_once_per_play_phase ... ok
+test original_offline_nsjianglie::package_publishes_abi155_with_exact_jianglie_contract_and_character ... ok
+test original_offline_nslulve::package_publishes_abi157_contract_and_character ... ok
+test original_offline_jyyuhuo::aura_runs_only_in_the_final_incoming_damage_stage ... ok
+test original_offline_jdsbjiuyuan::jdsbjiuyuan_gains_all_target_equipment_and_self_recovers ... ok
+test original_offline_nsyangwu::heart_cost_is_paid_before_rounded_up_hand_difference_is_gained ... ok
+test original_offline_jyyuhuo::living_owners_stack_and_dead_owners_stop_contributing ... ok
+test original_offline_jdsbtongye::game_start_grants_yingzi_and_guzheng ... ok
+test original_offline_nslulve::exact_equipment_count_is_an_atomic_cost_before_damage ... ok
+test original_offline_pshoufa::earlier_seat_draws_to_target_max_hp_only_once_per_turn ... ok
+test original_offline_pshoufa::zj_fenxun_has_no_card_cost_and_binds_one_target_for_the_turn ... ok
+test original_offline_psdaohe::package_publishes_psdaohe_contract ... ok
+test original_offline_nsyangwu::package_publishes_exact_character_closure ... ok
+test original_offline_psmoyan::any_player_hp_loss_draws_owner_a_card ... ok
+test original_offline_psmoyan::converted_chain_leaves_no_pending_choice ... ok
+test original_offline_psmoyan::owner_dealt_damage_converts_to_target_hp_loss_and_draws ... ok
+test original_offline_psmoyan::owner_received_damage_converts_to_own_hp_loss_and_draws ... ok
+test original_offline_pshuoluan::package_publishes_exact_bidirectional_modifier_contract ... ok
+test original_offline_nslulve::selection_barrier_uses_the_targets_live_equipment_count ... ok
+test original_offline_pkwuku::only_equipment_uses_add_wuku_and_the_mark_caps_at_three ... ok
+test original_offline_nsjianglie::unoffered_color_is_rejected_without_mutating_the_choice_state ... ok
+test original_offline_sclcongjian::congjian_increases_incoming_damage_during_own_turn ... ok
+test original_offline_sclcongjian::congjian_increases_outgoing_damage_outside_own_turn ... ok
+test original_offline_nsjianglie::mixed_hand_is_public_and_target_chooses_the_discarded_color ... ok
+test original_offline_sclcongjian::congjian_leaves_incoming_damage_unchanged_outside_own_turn ... ok
+test original_offline_psmoyan::package_publishes_psmoyan_contract ... ok
+test original_offline_scls_qinzheng::lifetime_use_and_response_count_draws_for_each_matching_divisor_across_turns ... ok
+test original_offline_sclcongjian::congjian_leaves_outgoing_damage_unchanged_during_own_turn ... ok
+test original_offline_scls_zhanshen::each_prepare_adds_one_missing_permanent_bonus_and_last_is_automatic ... ok
+test original_offline_pszhonghun::package_closes_ps_guanyu_and_top_card_only_enters_hand_on_matching_color ... ok
+test original_offline_residual_placeholders::package_publishes_former_placeholder_skills_with_modifiers ... ok
+test original_offline_psdaohe::psdaohe_giver_stashes_one_card_and_self_recovers ... ok
+test original_offline_scls_qinzheng::package_publishes_exact_skill_and_complete_character ... ok
+test original_offline_residual_placeholders::ylygxiangxing_yingzi_matches_reyingzi_draw_and_hand_base ... ok
+test original_offline_nsjianglie::single_color_discards_without_a_color_choice_and_empty_hand_skips_the_trigger ... ok
+test original_offline_residual_placeholders::psqingsuan_and_tanhu3_load_from_shipped_npack ... ok
+test original_offline_scls_zhanshen::package_publishes_skill_helpers_and_complete_character ... ok
+test original_offline_nscesuan::prevents_damage_and_draws_only_when_current_hp_falls_with_max_hp ... ok
+test original_offline_spfuluan::package_publishes_abi304_contract_modifier_and_character ... ok
+test original_offline_tanhu3::package_publishes_tanhu3_contract ... ok
+test original_offline_spfuluan::dead_or_dying_players_cannot_activate_true_active_skills ... ok
+test original_offline_spfuluan::active_sha_and_ignore_count_virtual_sha_are_blocked_until_turn_end ... ok
+test original_offline_spfuluan::effective_same_suit_hand_equip_cost_turns_target_and_installs_temporary_ban ... ok
+test original_offline_tanhu::package_publishes_tanhu_grant_contract ... ok
+test original_offline_nslulve::unequipped_or_unpayable_targets_are_rejected_atomically ... ok
+test original_offline_tydangxian::no_discard_sha_skips_choice_and_still_opens_extra_play_phase ... ok
+test original_offline_tanhu3::tanhu3_grants_distance_free_approach_to_tanhu2_holder_only ... ok
+test original_offline_tydangxian::turn_begin_forces_sha_choice_then_opens_extra_play_phase ... ok
+test original_offline_tanhu::tanhu_lose_branch_grants_nothing ... ok
+test original_offline_tybenxiang::package_exposes_forced_source_death_contract_without_new_abi ... ok
+test original_offline_tydangxian::package_publishes_exact_skill_and_complete_character ... ok
+test original_offline_jun_zhaoshou::jun_zhaoshou_full_chain_gives_then_compares_then_virtual_sha ... ok
+test original_offline_tyxianshou::package_exposes_forced_source_death_recovery_contract ... ok
+test original_offline_tanhu3::tanhu3_requires_the_declared_skill_on_the_target ... ok
+test original_offline_tyyizhuang::declining_preserves_hp_and_judgment_cards ... ok
+test original_offline_tyyizhuang::accepting_damages_owner_then_discards_only_current_judgment_cards ... ok
+test original_offline_tyyizhuang::empty_judgment_zone_suppresses_the_optional_trigger ... ok
+test original_offline_tyyizhuang::judgment_discard_waits_until_the_self_damage_dying_save_finishes ... ok
+test original_offline_tyxiyu::offline_package_contains_complete_ty_liue ... ok
+test original_offline_spfuluan::mixed_suits_and_out_of_range_targets_are_rejected_atomically ... ok
+test original_offline_tyxianshou::killer_must_choose_another_living_player_to_recover_two ... ok
+test original_offline_tyzhuan::package_publishes_abi158_contract_and_character ... ok
+test original_offline_tybenxiang::killer_must_choose_another_living_player_to_draw_three ... ok
+test original_offline_vtbshuli::committed_package_contains_optional_twice_per_turn_sha_filter ... ok
+test original_offline_tyzhuan::equipment_use_offers_optional_draw_but_non_equipment_does_not ... ok
+test original_offline_wn_qifeng::losing_the_same_card_twice_makes_the_phase_end_virtual_sha_deal_two_damage ... ok
+test original_offline_tyxianshou::full_hp_target_remains_selectable_and_other_killer_does_not_trigger ... FAILED
+test original_offline_wxdlfangzhu::no_other_player_suppresses_trigger_and_dead_choice_is_rejected ... ok
+test original_offline_tyxiyu::tyxiyu_ignores_physical_cards_and_draws_once_for_each_converted_or_virtual_use ... ok
+test original_offline_tyzhuan::sha_cost_is_atomic_then_owner_chooses_and_gains_target_equipment ... ok
+test original_offline_wxdlfangzhu::target_draws_current_owner_lost_hp_before_turning_over ... ok
+test original_offline_wxdlqianqian::first_card_this_turn_cannot_be_heart_until_another_card_is_used ... ok
+test original_offline_wxdlfangzhu::compiled_source_and_npack_publish_the_fangzhu_contract ... ok
+test original_offline_tyyizhuang::package_publishes_complete_character_without_legacy_js ... ok
+test original_offline_vtbshuli::own_or_non_sha_damage_does_not_offer_shuli ... ok
+test original_offline_pshuoluan::other_groups_and_unrelated_damage_are_not_increased ... ok
+test original_offline_wxdlyishi::selected_others_draw_owner_lost_hp_then_one_gains_fangzhu ... ok
+test original_offline_wxdlqianqian::compiled_source_and_npack_publish_the_qianqian_contract ... ok
+test original_offline_wxdlyishi::compiled_source_and_npack_publish_the_yishi_contract ... ok
+test original_offline_wn_dutan::wn_dutan_uses_one_virtual_duel_on_every_selected_target_once ... ok
+test original_offline_xktanlu_cuilian::gift_branch_rejects_forgery_then_moves_exactly_x_as_one_give_batch ... ok
+test original_offline_sclwansha::kills_only_another_player_during_the_owners_turn_and_preserves_the_killer ... ok
+test original_offline_xktanlu_cuilian::jubian_prevents_damage_before_tanlu_reloads_the_discard_choice ... ok
+test original_offline_vtbshuli::other_players_sha_damage_can_draw_for_both_sides_only_twice_per_turn ... ok
+test original_offline_xktanlu_cuilian::optional_cancel_bad_initial_context_and_runner_choices_are_authoritative ... ok
+test original_offline_xkjubian::committed_package_exposes_pre_damage_hand_above_hp_contract ... ok
+test original_offline_yjluoshen::owner_may_stop_and_a_stale_phase_cannot_start_another_judgment ... ok
+test original_offline_yjluoshen::first_effective_color_is_gained_and_repeats_until_a_different_color ... ok
+test original_offline_xktanlu_cuilian::target_death_skips_discard_and_source_death_does_not_cancel_the_started_chain ... ok
+test original_offline_xktanlu_cuilian::protected_cards_force_a_smaller_gift_and_nested_giver_death_finishes ... ok
+test original_offline_wxdlqianqian::npack_loads_into_a_started_match ... ok
+test original_offline_xktanlu_cuilian::zero_or_gap_above_original_hand_forces_damage_then_discard ... ok
+test original_offline_wxdlyishi::npack_loads_wxdlyishi ... ok
+test original_offline_xkjubian::excess_hand_choice_resumes_then_prevents_damage ... ok
+test original_offline_yjxuepin::package_publishes_exact_abi155_contract_and_character ... ok
+test original_offline_ylyg_hunzi::awakening_at_one_hp_grants_yingzi_and_yinghun_once ... ok
+test original_offline_ylyg_hunzi::hp_above_one_does_not_awaken ... ok
+test original_offline_yjzhenlve::committed_skill_matches_the_inherited_zhenlue_contract ... ok
+test original_offline_ylyg_jiang::own_juedou_draws_two_and_other_juedou_draws_one_each ... ok
+test original_offline_xktanlu_cuilian::package_module_character_and_ids_are_stable ... ok
+test original_offline_ylyg_jiang::package_publishes_ylyg_jiang_contract ... ok
+test original_offline_ylyg_hunzi::package_publishes_ylyg_hunzi_contract ... ok
+test original_offline_yjluoshen::package_closes_yj_zhenji_without_legacy_javascript ... ok
+test original_offline_yjxuepin::two_same_category_cards_recover_after_the_forced_discard ... ok
+test original_offline_ylygqiangxi::package_publishes_exact_abi156_contract_and_character ... ok
+test original_offline_xkjubian::hand_not_above_hp_takes_damage_and_source_is_not_restricted ... ok
+test original_offline_yy_baimaxiaoqi_skill::package_exposes_all_four_equipment_count_modifiers ... ok
+test original_offline_ylygqiangxi::malformed_duplicate_target_activation_is_atomic ... ok
+test original_offline_yy_baimaxiaoqi_skill::equipment_count_applies_each_legacy_threshold_without_early_bonus ... ok
+test original_offline_yjxuepin::range_empty_target_and_duplicate_selection_are_rejected_atomically ... ok
+test original_offline_ylygqiangxi::second_non_win_loses_hp_chooses_equal_path_and_bans_the_skill ... ok
+test original_offline_spfuluan::selection_can_cancel_without_cards_or_use_count_and_self_target_is_legal ... ok
+test original_offline_yyfuqi::package_exposes_locked_response_modifier_and_per_target_trigger ... ok
+test original_offline_yyfuqi::near_targets_are_locked_and_each_far_target_draws_once ... ok
+test original_offline_yyxuezhan::committed_package_contains_the_rewritten_skill_and_character ... ok
+test original_offline_yyfuqi::another_players_card_does_not_draw_for_the_owner ... ok
+test original_offline_yysudi::draws_when_an_in_range_player_responds_to_the_owners_sha ... ok
+test original_offline_ylygqiangxi::strict_win_can_draw_or_discard_one_target_card ... ok
+test original_offline_yyxuezhan::delayed_tricks_keep_their_physical_name ... ok
+test original_offline_yysudi::ignores_the_wrong_response_origin_and_an_out_of_range_responder ... ok
+test original_offline_yjzhenlve::ordinary_tricks_skip_wuxie_and_delayed_tricks_cannot_target_the_owner ... ok
+test original_offline_zj_cuijian::package_publishes_abi150_exact_contract_and_character ... ok
+test original_offline_yyxuezhan::ordinary_trick_becomes_unwuxieable_duel_but_still_asks_for_sha ... ok
+test original_offline_zj_cuijian::gains_every_shan_and_armor_after_revealing_the_complete_hand ... ok
+test original_offline_zj_cuijian::no_matching_card_draws_two_and_an_empty_target_is_rejected_atomically ... ok
+test original_offline_zj_duanbing::package_closes_zj_dingfeng_and_publishes_both_generic_rules ... ok
+test original_offline_pshuoluan::qun_owner_and_shu_other_increase_damage_in_both_directions ... ok
+test original_offline_yjxuepin::one_card_or_mixed_categories_do_not_recover ... ok
+test original_offline_zj_duanbing::nearby_sha_needs_two_shan_and_only_first_damage_per_target_draws ... ok
+test original_offline_zj_guluo::committed_package_recovers_or_dies_when_max_hp_reaches_zero ... ok
+test original_offline_zj_guluo::hanci_draws_for_each_living_player_when_one_skill_is_added ... ok
+test original_offline_zj_guluo::jie_only_adds_damage_to_red_sha ... ok
+test original_offline_zj_guluo::hm_zhong_diamond_draws_two_after_damage_only ... ok
+test original_offline_zj_guluo::jun_jiang_offers_draw_only_after_the_owner_uses_a_red_card ... ok
+test original_offline_zj_guluo::psdiwan_draws_the_declared_sha_target_count_for_its_user ... ok
+test original_offline_zj_guluo::eu_jiquan_only_fires_for_a_living_western_turn_owner ... ok
+test original_offline_zj_guluo::xiru_counts_all_living_mount_cards_and_rounds_up ... ok
+test original_offline_zj_guluo::gzsuishi2_loses_hp_only_when_the_dead_player_has_the_same_group ... ok
+test original_offline_zj_guluo::jylijun_only_offers_to_draw_for_a_living_wei_damage_target ... ok
+test original_offline_zj_guluo::spshude_offers_to_draw_to_max_hp_only_when_hand_is_below_it ... ok
+test original_offline_zj_guluo::yinshi_skips_judgment_and_leaves_delayed_cards_in_place ... ok
+test original_offline_zjfuli::zjfuli_publishes_contract ... ok
+test original_offline_zyshangyi::package_publishes_jiangqing_and_the_exact_active_contract_at_abi153 ... ok
+test original_offline_zymoucheng::package_exposes_the_full_legacy_contract ... ok
+test original_offline_zjfuli::zjfuli_latches_and_enqueues_play_only_extra_turn ... ok
+test original_offline_zylianji::zylianji_publishes_contract ... ok
+test original_offline_zj_guluo::zhangu_requires_max_hp_above_one_and_an_empty_zone ... ok
+test original_offline_zj_guluo::gzsuishi_uses_the_damage_source_group_when_another_player_enters_dying ... ok
+test original_offline_zylianji::zylianji_grants_draw_skips_remaining_and_cropped_turn ... ok
+test original_offline_zymoucheng::black_equipment_can_be_used_as_jiedao_and_the_skill_cannot_repeat ... ok
+test original_offline_zj_guluo::qingjiao_draws_after_damaging_another_qun_character ... ok
+test original_offline_zyshangyi::empty_target_hand_is_a_noop_while_self_target_and_second_use_are_rejected ... ok
+test original_offline_zyshangyi::reveals_the_owner_hand_to_the_target_and_cancellation_keeps_target_cards ... ok
+test original_offline_zyshangyi::selected_hand_card_is_discarded_but_equipment_is_never_offered ... ok
+test original_offline_tanhu3::wuxie_blocked_by_target_skill_declarations ... ok
+test original_offline_tanhu::tanhu_full_chain_grants_marker_on_win_only_to_target ... ok
+
+failures:
+
+---- original_offline_tyxianshou::full_hp_target_remains_selectable_and_other_killer_does_not_trigger stdout ----
+
+thread 'original_offline_tyxianshou::full_hp_target_remains_selectable_and_other_killer_does_not_trigger' (9571735) panicked at crates/engine-core/tests/original_merged_offline.rs:8403:5:
+assertion failed: matches!(engine.submit(Command
+    {
+        actor: PlayerId::NONE, expected_revision: ExpectedRevision(0),
+        idempotency_key: IdempotencyKey(seed), kind: CommandKind::StartGame
+        {
+            player_count: 3, rng_seed: seed, ruleset:
+            "identity-standard".into(),
+        },
+    }), CommandResult::Accepted { .. })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_offline_tyxianshou::full_hp_target_remains_selectable_and_other_killer_does_not_trigger
+
+test result: FAILED. 204 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.93s
+
+error: test failed, to rerun pass `-p engine-core --test original_merged_offline`
+     Running tests/original_merged_onlyol.rs (.scratch/target-oldline/debug/deps/original_merged_onlyol-5a74876f8b651e7c)
+
+running 35 tests
+test original_onlyol_oldangxian::package_publishes_complete_ol_liaohua_at_abi293 ... ok
+test original_onlyol_oljiangchi::package_publishes_complete_ol_caozhang_at_abi293 ... ok
+test original_onlyol_olfuli::committed_package_exposes_optional_limited_dying_contract_at_abi8 ... ok
+test original_onlyol_oljingce::package_publishes_complete_ol_guohuai_at_abi293 ... ok
+test original_onlyol_oljiangchi::recast_branch_recasts_one_card_and_grants_sha_range_and_limit ... ok
+test original_onlyol_oldangxian::gained_draw_pile_sha_alone_ignores_distance_and_no_damage_causes_self_damage ... ok
+test original_onlyol_oldangxian::damage_dealt_after_accepting_suppresses_the_self_damage ... ok
+test original_onlyol_oldangxian::gain_is_optional_and_cancelling_does_not_arm_the_penalty ... ok
+test original_onlyol_oldangxian::opening_phase_origin_prevents_oldangxian_from_firing_in_another_skills_segment ... ok
+test original_onlyol_oljuece::package_publishes_optional_hand_lte_trigger_at_abi338 ... ok
+test original_onlyol_oljuece::only_other_players_with_no_more_hand_cards_are_selectable_and_damaged ... ok
+test original_onlyol_oljuece::target_hand_growth_is_revalidated_before_damage ... ok
+test original_onlyol_oljingce::rejingce_remains_limited_to_the_owners_own_play_phase_end ... ok
+test original_onlyol_oljingce::owner_without_card_history_is_not_prompted ... ok
+test original_onlyol_oljingce::owner_use_during_another_players_play_phase_draws_distinct_categories ... ok
+test original_onlyol_oljiangchi::choice_can_cancel_or_draw_and_the_draw_helper_expires_at_turn_end ... ok
+test original_onlyol_olqieting::package_publishes_complete_ol_caifuren_at_abi293 ... ok
+test original_onlyol_olfuli::enough_actual_damage_does_not_turn_over ... ok
+test original_onlyol_olqingxi::package_publishes_complete_ol_caoxiu_at_abi293 ... ok
+test original_onlyol_olqingxi::direct_filter_does_not_retrigger_for_chain_propagation ... ok
+test original_onlyol_olqieting::both_turn_history_branches_remain_cancellable ... ok
+test original_onlyol_olfuli::low_lifetime_damage_recovers_refills_turns_over_and_consumes ... ok
+test original_onlyol_olrenxin::package_publishes_olrenxin_contract ... ok
+test original_onlyol_olrenxin::olrenxin_rescues_dying_other_to_one_hp_at_turnover_cost ... ok
+test original_onlyol_olrenxin::olrenxin_skipped_without_any_equip_card ... ok
+test original_onlyol_qixian::old_oldanxin_draws_each_time_and_caps_its_upgrade_mark_at_two ... ok
+test original_onlyol_qixian::package_publishes_complete_ol_guanping_and_yijiang_dependency ... ok
+test original_onlyol_olfuli::declining_preserves_state_and_limited_skill ... ok
+test original_onlyol_qixian::oldanxin_draws_by_pre_upgrade_level_and_clears_jiaozhao_used_at_level_two ... ok
+test original_onlyol_qixian::oljieyong_uses_exactly_one_red_hand_card_as_sha ... ok
+test original_onlyol_qixian::olqianju_uses_lost_hp_and_all_targets_in_range ... ok
+test original_onlyol_olqingxi::weapon_forces_discard_damage_and_weapon_loss_even_when_cards_are_short ... ok
+test original_onlyol_olqingxi::no_weapon_target_chooses_discard_or_increased_damage ... ok
+test original_onlyol_olqieting::no_other_target_allows_move_then_draw_while_damage_history_keeps_single_choice ... ok
+test original_onlyol_qixian::hand_limit_base_is_seven ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/original_merged_shenhua.rs (.scratch/target-oldline/debug/deps/original_merged_shenhua-4ce9ff26117ab075)
+
+running 229 tests
+test original_shenhua_caiwenji::compiled_contract_is_abi219_while_committed_package_is_abi221 ... ok
+test original_shenhua_baonue::only_another_living_qun_damage_source_gets_the_choice ... ok
+test original_shenhua_bazhen::package_publishes_complete_sp_zhugeliang_and_virtual_bagua_modifier ... ok
+test original_shenhua_chendao::package_publishes_chendao_in_current_shenhua_contract ... ok
+test original_shenhua_chendao::first_two_cards_targeting_others_ignore_distance ... ok
+test original_shenhua_dengai::package_exposes_tuntian_zaoxian_contract ... ok
+test original_shenhua_baonue::accepted_spade_judges_for_source_and_recovers_lord ... ok
+test original_shenhua_baonue::package_exposes_damage_source_choice_contract ... ok
+test original_shenhua_chendao::accepted_use_marks_only_current_card_unrespondable_and_cleans_both_helpers ... ok
+test original_shenhua_dengai::jixi_uses_tian_as_shunshou ... ok
+test original_shenhua_caiwenji::judgment_rewrite_card_becomes_the_final_beige_result ... ok
+test original_shenhua_dengai::tuntian_stores_non_heart_judge_card_in_pile_and_reduces_distance ... ok
+test original_shenhua_baonue::non_spade_does_not_recover_and_declining_does_not_judge ... ok
+test original_shenhua_dengai::tuntian_heart_judge_card_goes_nowhere ... ok
+test original_shenhua_bazhen::virtual_bagua_requires_an_enabled_empty_armor_slot ... ok
+test original_shenhua_drlt_congjian::package_exposes_multi_target_trick_contract ... ok
+test original_shenhua_dengai::zaoxian_awakens_with_three_tian ... ok
+test original_shenhua_bazhen::virtual_bagua_red_judgment_answers_sha_without_a_fake_cause_card ... ok
+test original_shenhua_dengai::zaoxian_does_not_fire_below_three_tian ... ok
+test original_shenhua_drlt_congjian::gives_card_to_other_target_and_draws_one ... ok
+test original_shenhua_dongzhuo::roulin_applies_in_both_directions_only_opposite_female_or_double_sex ... ok
+test original_shenhua_dongzhuo::multi_target_sha_recomputes_roulin_for_each_current_target ... ok
+test original_shenhua_caiwenji::final_suit_applies_each_legacy_branch_after_paying_one_card ... ok
+test original_shenhua_drlt_congjian::declining_leaves_everything_in_place ... ok
+test original_shenhua_drlt_huairou::equipment_recast_rejects_other_cards_then_draws_one_replacement ... ok
+test original_shenhua_dianwei::weapon_and_hp_costs_damage_distinct_targets_with_two_use_limit ... ok
+test original_shenhua_drlt_yongsi::package_exposes_yongsi_weidi_contract ... ok
+test original_shenhua_dianwei::package_publishes_dianwei_and_qiangxix_contract ... ok
+test original_shenhua_drlt_yongsi::yongsi_play_end_without_damage_draws_to_hp ... ok
+test original_shenhua_dongzhuo::benghuai_forces_hp_or_max_hp_loss_only_when_owner_is_not_tied_minimum ... ok
+test original_shenhua_drlt_yongsi::weidi_gives_cards_to_equal_qun_players ... ok
+test original_shenhua_drlt_yongsi::yongsi_replaces_draw_with_living_group_count ... ok
+test original_shenhua_drlt_yongsi::yongsi_play_end_with_damage_grants_discard_state ... ok
+test original_shenhua_dongzhuo::package_publishes_complete_dongzhuo_and_exact_skill_contracts ... ok
+test original_shenhua_drlt_huairou::committed_package_exposes_the_typed_equipment_recast ... ok
+test original_shenhua_fangzhu::no_other_player_suppresses_trigger_and_dead_choice_is_rejected ... ok
+test original_shenhua_fangzhu::target_draws_current_owner_lost_hp_before_turning_over ... ok
+test original_shenhua_drlt_wanglie::packages_publish_abi115_skill_and_cross_package_character ... ok
+test original_shenhua_guanqiujian::package_exposes_guanqiujian_contract ... ok
+test original_shenhua_guzheng::package_exposes_discard_phase_return_contract ... ok
+test original_shenhua_drlt_wanglie::accepting_sha_or_trick_makes_it_unrespondable_then_cleans_up ... ok
+test original_shenhua_drlt_wanglie::only_the_first_card_in_the_owners_play_phase_ignores_distance ... ok
+test original_shenhua_guanqiujian::zhengrong_stores_one_target_card_as_rong ... ok
+test original_shenhua_guanqiujian::hongju_awakens_with_three_rong ... ok
+test original_shenhua_drlt_wanglie::non_sha_basic_and_wrong_phase_do_not_offer_wanglie ... ok
+test original_shenhua_guanqiujian::qingjian_exchanges_rong_and_discards_target_equipment ... ok
+test original_shenhua_duanchang::package_exposes_exact_forced_death_contract ... ok
+test original_shenhua_guzheng::returns_one_discard_and_gives_up_the_rest ... ok
+test original_shenhua_fangzhu::package_exposes_exact_damage_contract ... ok
+test original_shenhua_guanqiujian::zhengrong_filter_skips_non_damage_cards ... ok
+test original_shenhua_gzbuqu::gzbuqu_distance_query_unaffected ... ok
+test original_shenhua_guzheng::returns_one_discard_and_owner_takes_the_rest ... ok
+test original_shenhua_guzheng::skipping_the_choice_keeps_everything_in_place ... ok
+test original_shenhua_gzbuqu::gzbuqu_duplicate_rank_does_not_mark_nodying ... ok
+test original_shenhua_jiangwei::package_exposes_tiaoxin_zhiji_contract ... ok
+test original_shenhua_gzbuqu::gzbuqu_moves_top_cards_to_chuang_and_marks_nodying_when_ranks_unique ... ok
+test original_shenhua_fangquan2::fangquan2_publishes_contract ... ok
+test original_shenhua_gzbuqu::gzbuqu_skips_when_hp_still_positive ... ok
+test original_shenhua_jianchu::equipment_branch_discards_the_card_and_makes_only_this_target_unrespondable ... ok
+test original_shenhua_jianchu::non_equipment_branch_gives_the_physical_sha_then_preserves_normal_response ... ok
+test original_shenhua_gzbuqu::gzbuqu_recover_removes_chuang_card ... ok
+test original_shenhua_jiangwei::zhiji_awakens_with_empty_hand ... ok
+test original_shenhua_jiangwei::tiaoxin_refusal_discards_one_card_of_the_target ... ok
+test original_shenhua_jiangwei::tiaoxin_skips_out_of_range_or_cardless_targets ... ok
+test original_shenhua_jiangwei::zhiji_does_not_fire_with_hand_cards ... ok
+test original_shenhua_jiaxu::dying_save_queue_starts_at_current_player_and_uses_multiple_rescuers ... ok
+test original_shenhua_jieming::source_free_damage_triggers_and_dead_target_is_rejected_at_resume ... ok
+test original_shenhua_jiaxu::wansha_save_queue_skips_blocked_helpers_and_still_allows_the_dying_player ... ok
+test original_shenhua_jiaxu::wansha_blocks_other_non_dying_tao_but_keeps_owner_and_dying_exceptions ... ok
+test original_shenhua_jiangwei::tiaoxin_forced_sha_hits_the_owner ... ok
+test original_shenhua_jieming::two_damage_points_offer_independent_targets_and_cap_draw_at_five ... ok
+test original_shenhua_kuailiangkuaiyue::package_exposes_kl_contract ... ok
+test original_shenhua_jianchu::package_publishes_jianchu_re_pangde_and_standard_dependency ... ok
+test original_shenhua_gzbuqu::package_exposes_gzbuqu_contract ... ok
+test original_shenhua_duanchang::death_removes_every_current_skill_only_from_a_living_killer ... ok
+test original_shenhua_jieming::package_exposes_exact_per_damage_point_contract ... ok
+test original_shenhua_kuailiangkuaiyue::shenshi_yang_gives_and_damages ... ok
+test original_shenhua_kuailiangkuaiyue::jianxiang_min_hand_draws ... ok
+test original_shenhua_jiaxu::package_publishes_complete_jiaxu_and_exact_wansha_contract ... ok
+test original_shenhua_fangquan2::fangquan2_discards_and_inserts_chosen_target_extra_turn ... ok
+test original_shenhua_jushou::package_closes_old_caoren_and_jushou ... ok
+test original_shenhua_liushan::package_exposes_liushan_contract ... ok
+test original_shenhua_kuailiangkuaiyue::shenshi_yin_tracks_gift_until_source_turn_end ... ok
+test original_shenhua_liegong::multi_target_sha_locks_only_the_accepted_current_target ... ok
+test original_shenhua_liegong::eligible_target_can_be_locked_or_left_to_play_shan ... ok
+test original_shenhua_liegong::intent_rejects_a_stale_or_mismatched_sha_tuple ... ok
+test original_shenhua_liushan::fangquan_skips_play_and_grants_extra_turn ... ok
+test original_shenhua_liushan::ruoyu_awakens_at_min_hp ... ok
+test original_shenhua_liushan::xiangle_refusal_excludes_owner_from_sha ... ok
+test original_shenhua_luanwu::luanwu_accepts_play_phase_view_as_sha_sources ... ok
+test original_shenhua_luanwu::cancelling_a_legal_luanwu_sha_loses_hp_and_preserves_the_source_card ... ok
+test original_shenhua_luanwu::luanwu_queue_resumes_after_a_dying_player_is_killed ... ok
+test original_shenhua_liushan::xiangle_discard_keeps_sha ... ok
+test original_shenhua_jushou::jushou_draws_three_turns_owner_over_and_skips_their_next_turn ... ok
+test original_shenhua_lusu::package_exposes_lusu_contract ... ok
+test original_shenhua_luzhi::package_exposes_luzhi_contract ... ok
+test original_shenhua_jushou::moon_jushou_draws_one_then_turns_owner_over ... ok
+test original_shenhua_menghuo::package_exposes_menghuo_contract ... ok
+test original_shenhua_liegong::filter_uses_both_hp_and_current_attack_range_boundaries ... ok
+test original_shenhua_luanwu::luanwu_runs_clockwise_uses_only_nearest_targets_and_does_not_count_sha ... ok
+test original_shenhua_jushou::all_face_down_players_are_flipped_once_before_play_resumes ... ok
+test original_shenhua_menghuo::huoshou_redirects_nanman_damage_source_to_the_owner ... ok
+test original_shenhua_liegong::packages_publish_exact_skill_character_and_dependency ... ok
+test original_shenhua_luzhi::mingren_places_and_replaces ... ok
+test original_shenhua_lusu::haoshi_draws_extra_two_and_gives_half_to_min_hand ... ok
+test original_shenhua_menghuo::qiushou_draws_for_shu_qun_after_nanman_death ... ok
+test original_shenhua_menghuo::qiushou_does_not_fire_without_death_or_many_damage ... ok
+test original_shenhua_menghuo::zaiqi_replaces_draw_and_recovers_per_heart ... ok
+test original_shenhua_luzhi::zhenliang_yin_discards_same_color_and_damages ... ok
+test original_shenhua_lusu::dimeng_exchanges_hands_with_diff_discard ... ok
+test original_shenhua_luanwu::package_publishes_exact_luanwu_contract ... ok
+test original_shenhua_mengjin::filter_skips_hit_and_dodge_without_a_remaining_target_card ... ok
+test original_shenhua_mengjin::multi_target_sha_resumes_after_the_dodged_targets_discard ... ok
+test original_shenhua_mengjin::full_dodge_can_be_declined_or_discard_exactly_one_hand_or_equip_card ... ok
+test original_shenhua_luzhi::zhenliang_yang_outside_turn_draws ... ok
+test original_shenhua_mengjin::target_card_choice_revalidates_the_selected_card_at_resume ... ok
+test original_shenhua_nzry_feijun::package_exposes_feijun_binglve_contract ... ok
+test original_shenhua_mengjin::wanjian_shan_is_not_a_sha_dodge ... ok
+test original_shenhua_nzry_feijun::equip_branch_discards_one_equipment ... ok
+test original_shenhua_mengjin::two_shan_requirement_emits_only_after_the_second_response ... ok
+test original_shenhua_nzry_feijun::hand_branch_gives_card_then_binglve_draws_two_at_phase_end ... ok
+test original_shenhua_nzry_feijun::repeated_target_does_not_rearm_binglve ... ok
+test original_shenhua_mengjin::packages_publish_exact_skill_character_and_dependencies ... ok
+test original_shenhua_nzry_jianxiang::self_use_does_not_trigger_and_stale_minimum_target_is_rejected ... ok
+test original_shenhua_nzry_jianxiang::accepting_chooses_any_player_tied_for_minimum_hand_and_draws_one ... ok
+test original_shenhua_nzry_jianxiang::package_exposes_exact_optional_targeted_contract ... ok
+test original_shenhua_new_fenji::nonempty_turn_player_does_not_offer_fenji ... ok
+test original_shenhua_oldniepan::package_publishes_complete_pangtong_and_oldniepan_contract ... ok
+test original_shenhua_quhu::loss_and_tie_both_damage_owner_from_compare_target ... ok
+test original_shenhua_quhu::strict_win_lets_owner_choose_in_bound_sources_range_and_uses_that_source ... ok
+test original_shenhua_quhu::activation_rejects_equal_or_lower_hp_targets ... ok
+test original_shenhua_shuangxiong::package_exposes_draw_judgment_contract ... ok
+test original_shenhua_new_fenji::empty_handed_turn_player_draws_two_before_owner_loses_hp ... ok
+test original_shenhua_new_fenji::owner_can_trigger_fenji_at_the_end_of_their_own_turn ... ok
+test original_shenhua_oldniepan::declining_preserves_cards_state_hp_and_limited_skill ... ok
+test original_shenhua_retianxiang::branch_zero_damages_from_source_then_draws_lost_hp_capped_five ... ok
+test original_shenhua_shuangxiong::draw_phase_judges_gains_card_and_arms_opposite_color_view_as ... ok
+test original_shenhua_retianxiang::branch_one_loses_hp_and_gains_discarded_card ... ok
+test original_shenhua_oldniepan::accepting_discards_hej_restores_state_draws_three_recovers_to_three_and_consumes ... ok
+test original_shenhua_songwei::only_another_wei_players_black_judgment_prompts_that_player ... ok
+test original_shenhua_sunliang::package_exposes_sunliang_contract ... ok
+test original_shenhua_songwei::black_bagua_judgment_prompts_songwei_then_reopens_sha_response ... ok
+test original_shenhua_songwei::rewritten_physical_card_drives_songwei_then_delayed_trick_resumes ... ok
+test original_shenhua_sunliang::kuizhu_draw_branch ... ok
+test original_shenhua_sunliang::kuizhu_damage_branch ... ok
+test original_shenhua_qimou::choosing_three_loses_three_hp_grants_three_bonuses_once_and_expires ... ok
+test original_shenhua_sunliang::lijun_gains_wu_sha ... ok
+test original_shenhua_shuangxiong::second_draw_phase_does_not_rejudge_when_draw_is_fixed ... ok
+test original_shenhua_sunliang::zhizheng_discards_out_of_range_card ... ok
+test original_shenhua_qimou::package_publishes_complete_re_weiyan_and_qimou_contract ... ok
+test original_shenhua_songwei::package_exposes_lord_event_player_choice_contract ... ok
+test original_shenhua_tianyi::package_publishes_complete_taishici_and_exact_tianyi_modules ... ok
+test original_shenhua_wangji::jinqu_draws_two_and_discards_to_qizhi_count ... ok
+test original_shenhua_wangji::package_exposes_wangji_contract ... ok
+test original_shenhua_tianyi::comparison_rejects_a_target_without_hand_cards ... ok
+test original_shenhua_view_as::package_exposes_jiuchi_huoji_and_kanpo_view_as_rules ... ok
+test original_shenhua_view_as::jiuchi_spade_card_can_self_save_from_dying ... ok
+test original_shenhua_view_as::jiuchi_uses_only_a_spade_hand_card_as_jiu ... ok
+test original_shenhua_wangji::jinqu_keeps_qizhi_count_cards ... ok
+test original_shenhua_view_as::gzduanliang_accepts_only_black_basic_or_equipment_from_hand_or_equip ... ok
+test original_shenhua_quhu::packages_publish_abi159_quhu_and_both_complete_xunyu_variants ... ok
+test original_shenhua_tianyi::strict_win_discards_both_cards_grants_all_sha_bonuses_once_and_expires ... ok
+test original_shenhua_view_as::lianhuan_club_hand_card_can_recast_or_use_tiesuo ... ok
+test original_shenhua_wangji::qizhi_discards_non_target_and_draws ... ok
+test original_shenhua_view_as::huoji_red_card_runs_the_full_huogong_resolution ... ok
+test original_shenhua_xingshang::package_exposes_exact_optional_death_contract ... ok
+test original_shenhua_view_as::kanpo_black_hand_card_only_works_in_a_wuxie_response_window ... ok
+test original_shenhua_xinliegong::sha_rank_unlocks_only_targets_within_that_final_distance ... ok
+test original_shenhua_xinkuanggu::package_contains_cancellable_per_damage_point_trigger ... ok
+test original_shenhua_xuyou::chenglve_flips_draws_discards_and_unlimits_discarded_suits ... ok
+test original_shenhua_xuyou::package_exposes_xuyou_contract ... ok
+test original_shenhua_xueyi::xueyi_is_lord_only_and_counts_other_alive_qun_players_twice ... ok
+test original_shenhua_yanyan::package_exposes_juzhan_contract ... ok
+test original_shenhua_xuyou::cunmu_draws_from_bottom_of_draw_pile ... ok
+test original_shenhua_yanyan::juzhan_ban_cancels_banned_user_cards ... ok
+test original_shenhua_xingshang::empty_hand_and_equipment_do_not_offer_the_skill ... ok
+test original_shenhua_yanyan::juzhan_yang_gains_card_and_bans_owner ... ok
+test original_shenhua_yanyan::juzhan_yin_both_draw_and_ban_source ... ok
+test original_shenhua_xingshang::accepting_gains_dead_players_hand_and_equipment_but_not_judgment ... ok
+test original_shenhua_yuji::chanyuan_disables_other_skills_at_one_hp ... ok
+test original_shenhua_xinliegong::package_publishes_re_huangzhong_and_exact_contract ... ok
+test original_shenhua_yuanshao::exactly_two_same_suit_hand_cards_become_wanjian ... ok
+test original_shenhua_yuji::package_exposes_yuji_contract ... ok
+test original_shenhua_xuyou::shicai_places_used_card_on_top_and_draws_once_per_category ... ok
+test original_shenhua_zhanghe::package_exposes_qiaobian_contract ... ok
+test original_shenhua_yuji::guhuo_declared_sha_hits_when_unchallenged ... ok
+test original_shenhua_xinliegong::accepted_trigger_applies_each_current_target_branch_independently ... ok
+test original_shenhua_yuji::guhuo_use_rejected_at_one_hp ... ok
+test original_shenhua_yuji::guhuo_truthful_declaration_resolves_with_challenge ... ok
+test original_shenhua_zhangjiao::huangtian_gives_shan_when_qun_player_in_play_phase ... ok
+test original_shenhua_zhangjiao::guidao_rewrites_judgment_with_black_card ... ok
+test original_shenhua_yuanshao::package_publishes_yuanshao_with_exact_two_card_rule ... ok
+test original_shenhua_zhanghe::qiaobian_discard_skips_discard_phase ... ok
+test original_shenhua_zhangjiao::package_exposes_zhangjiao_contract ... ok
+test original_shenhua_zhanghe::qiaobian_draw_takes_one_card_from_each_of_two_targets ... ok
+test original_shenhua_tianyi::tie_and_loss_both_forbid_sha_until_turn_end ... ok
+test original_shenhua_zhanghe::qiaobian_play_moves_field_equip_to_another_player ... ok
+test original_shenhua_xinkuanggu::near_multi_point_damage_offers_one_cancellable_choice_per_point ... ok
+test original_shenhua_zhiba::package_exposes_lord_compare_contract ... ok
+test original_shenhua_zhanghe::qiaobian_judge_discards_and_skips_judge_phase ... ok
+test original_shenhua_zhanghe::qiaobian_cancel_keeps_phase ... ok
+test original_shenhua_zhangjiao::huangtian_skips_non_shan_lightning_hands ... ok
+test original_shenhua_zhangjiao::releiji_club_recovers_and_deals_one ... ok
+test original_shenhua_zhangxiu::xiongluan_disables_slots_judge_marks_target_and_bans_hand_cards ... ok
+test original_shenhua_zhangjiao::releiji_spade_deals_two_thunder_damage ... ok
+test original_shenhua_zhijian::package_exposes_give_equipment_contract ... ok
+test original_shenhua_zhiba::awakened_lord_can_refuse_then_actor_compare_wins ... ok
+test original_shenhua_zhangxiu::xiongluan_target_has_zero_distance_and_unlimited_use_count ... ok
+test original_shenhua_zhoufei::package_exposes_zhoufei_contract ... ok
+test original_shenhua_zhugezhan::package_exposes_zhugezhan_contract ... ok
+test original_shenhua_zhijian::gives_hand_weapon_to_other_player_and_draws_one ... ok
+test original_shenhua_zhijian::rejects_non_equipment_and_owner_as_target ... ok
+test original_shenhua_zhiba::unawakened_lord_wins_compare_and_takes_both_cards ... ok
+test original_shenhua_zhoufei::liangyin_discard_branch ... ok
+test original_shenhua_zhangxiu::twjuxiang_fires_on_other_qun_play_phase_and_moves_equip ... ok
+test original_shenhua_zhugezhan::fuyin_excludes_first_sha_from_richer_source ... ok
+test original_shenhua_zhurong::package_exposes_juxiang_lieren_contract ... ok
+test original_shenhua_zhoufei::kongsheng_end_returns_and_equips ... ok
+test original_shenhua_zhangxiu::package_exposes_zhangxiu_contract ... ok
+test original_shenhua_zhurong::juxiang_gains_resolved_nanman_from_discard ... ok
+test original_shenhua_zhugezhan::zuilun_two_conditions_puts_two_on_top ... ok
+test original_shenhua_xinkuanggu::full_hp_can_cancel_the_draw_and_far_damage_does_not_trigger ... ok
+test original_shenhua_zhugezhan::zuilun_zero_conditions_gains_all_three ... ok
+test original_shenhua_zhurong::lieren_loss_takes_nothing ... ok
+test original_shenhua_zuoci::zuoci_skills_are_metadata_only ... ok
+test original_shenhua_zhugezhan::zuilun_three_conditions_lose_hp_together ... ok
+test original_shenhua_zhurong::lieren_win_takes_one_card_from_damaged_target ... ok
+test original_shenhua_zhoufei::liangyin_draw_and_recover ... ok
+test original_shenhua_zuoci::package_exposes_zuoci_contract ... ok
+
+test result: ok. 229 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/original_merged_xianding.rs (.scratch/target-oldline/debug/deps/original_merged_xianding-5bd67682f2320155)
+
+running 245 tests
+test original_xianding_batch10::package_exposes_batch10_skills_with_expected_contracts ... ok
+test original_xianding_batch12::package_exposes_batch12_skill_with_expected_contracts ... ok
+test original_xianding_batch11::package_exposes_batch11_skills_with_expected_contracts ... ok
+test original_xianding_bailingyun::package_closes_bailingyun_contract ... ok
+test original_xianding_batch13::package_exposes_batch13_skill_with_expected_contracts ... ok
+test original_xianding_batch14::dcwushen_automatically_rewrites_heart_card_to_normal_sha ... ok
+test original_xianding_batch12::zhukou_does_not_trigger_when_owner_caused_damage_this_turn ... ok
+test original_xianding_batch14::dcdichou_marks_source_when_owner_targeted_and_draws_against_marked_target ... ok
+test original_xianding_batch11::dcduzhang_gains_mark_and_draws_when_targeted_by_nonred_card ... ok
+test original_xianding_batch11::dcfengshi_offers_discard_target_equip_when_owner_outside_target_range ... ok
+test original_xianding_batch10::dcshouze_consumes_mark_loses_hp_and_gains_sha_at_phase_end ... ok
+test original_xianding_batch13::dcjinjie_respects_once_per_round_limit ... ok
+test original_xianding_batch13::dcjinjie_zero_branch_can_recover_owner_without_draw_or_discard ... ok
+test original_xianding_batch13::dcjinjie_may_cancel_equal_discard_without_recovery ... ok
+test original_xianding_batch13::dcjinjie_draws_declared_count_then_discards_same_count_to_recover ... ok
+test original_xianding_batch10::dcminshan_offers_other_player_two_card_draw_after_damage ... ok
+test original_xianding_bailingyun::xiace_two_branches_are_independently_once_per_turn ... ok
+test original_xianding_batch12::zhukou_offers_two_other_damage_at_phase_end_when_no_damage_this_turn ... ok
+test original_xianding_batch14::package_exposes_batch14_skills_with_expected_contracts ... ok
+test original_xianding_batch15::package_exposes_batch15_skills_with_expected_contracts ... ok
+test original_xianding_batch16::package_exposes_batch16_skills_with_expected_contracts ... ok
+test original_xianding_batch17::package_exposes_batch17_skill_with_expected_contracts ... ok
+test original_xianding_batch15::dcdujun_draws_two_after_first_damage_of_turn ... ok
+test original_xianding_batch15::dclianzhi_recovers_and_draws_when_owner_enters_dying ... ok
+test original_xianding_batch17::dcwuhun_marks_damage_source_when_owner_damaged ... ok
+test original_xianding_batch16::dcsbjutu_does_not_trigger_after_owner_caused_damage ... ok
+test original_xianding_batch16::dcfuxue_draws_hp_at_phase_end ... ok
+test original_xianding_bailingyun::linghui_uses_one_gains_one_and_returns_the_rest_in_order ... ok
+test original_xianding_batch17::dcwuhun_marks_once_per_damage_point ... ok
+test original_xianding_batch15::dcdujun_only_triggers_on_first_damage_of_turn ... ok
+test original_xianding_batch16::dcsbjutu_draws_two_at_phase_end_without_turn_damage ... ok
+test original_xianding_batch18::diancai_does_not_trigger_on_own_phase_end ... ok
+test original_xianding_batch18::diancai_draws_to_max_hp_after_other_phase_end_with_hand_loss ... ok
+test original_xianding_batch18::package_exposes_batch18_skills_with_expected_contracts ... ok
+test original_xianding_batch18::fensi_damages_other_player_at_phase_begin ... ok
+test original_xianding_batch19::package_exposes_batch19_skills_with_expected_contracts ... ok
+test original_xianding_batch1_dcganfuren::package_closes_dc_ganfuren_with_exact_skills ... ok
+test original_xianding_batch19::dcfengyan_takes_one_card_from_lower_hp_target ... ok
+test original_xianding_batch1_dcganfuren::dcjidi_source_with_more_hp_loses_one_and_more_hand_discards_two ... ok
+test original_xianding_batch1_dcganfuren::dcshushen_offers_other_player_draw_or_recover_choice_per_recover_point ... ok
+test original_xianding_batch1_dcganfuren::dcshenzhi_discards_one_hand_then_recovers_when_hand_above_hp ... ok
+test original_xianding_batch19::liren_draws_when_sha_dodged ... ok
+test original_xianding_batch1_dcganfuren::dczhijue_shortens_distance_from_owner_by_two_and_draws_to_max_hp_on_damage ... ok
+test original_xianding_batch1_dcganfuren::dczhaohan_increases_current_draw_count_by_two ... ok
+test original_xianding_batch1_dcganfuren::dcguixiu_draws_two_at_phase_begin_once ... ok
+test original_xianding_batch1_dcganfuren::dczhaohan_gives_exactly_two_hand_cards_to_a_hand_empty_player ... ok
+test original_xianding_batch1_dcganfuren::dczhaohan_forces_two_discards_when_no_player_is_hand_empty ... ok
+test original_xianding_batch20::package_exposes_batch20_skills_with_expected_contracts ... ok
+test original_xianding_batch20::dcjiudun_draws_and_uses_jiu_when_targeted_by_black_card ... ok
+test original_xianding_batch20::dcquanshou_offers_draw_to_max_hp_on_other_phase_begin ... ok
+test original_xianding_batch21::package_exposes_batch21_skills_with_expected_contracts ... ok
+test original_xianding_batch23::package_exposes_batch23_skills_with_expected_contracts ... ok
+test original_xianding_batch22::package_exposes_batch22_skill_with_expected_contracts ... ok
+test original_xianding_batch21::dcliexiang_draws_five_then_damages_target ... ok
+test original_xianding_batch25::package_exposes_batch25_skill_with_expected_contracts ... ok
+test original_xianding_batch21::dcshouhu_uses_virtual_sha_on_other ... ok
+test original_xianding_batch22::dcxiace_discards_and_recovers_after_damage ... ok
+test original_xianding_batch26::package_exposes_batch26_skills_with_expected_contracts ... ok
+test original_xianding_batch23::dcqingleng_discards_one_card_from_any_player_when_targeted_by_black_card ... ok
+test original_xianding_batch25::dcsbyizhi_skill_can_be_attached ... ok
+test original_xianding_batch23::dcjieying_links_other_and_draws_linked_players_at_phase_end ... ok
+test original_xianding_batch26::batch26_skills_can_be_attached ... ok
+test original_xianding_batch27::package_exposes_batch27_skills_with_expected_contracts ... ok
+test original_xianding_batch27::batch27_skills_can_be_attached ... ok
+test original_xianding_batch28::package_exposes_batch28_skill_with_expected_contracts ... ok
+test original_xianding_batch29::package_exposes_batch29_skills_with_expected_contracts ... ok
+test original_xianding_batch2::package_exposes_batch2_skills_with_expected_contracts ... ok
+test original_xianding_batch28::dcenyu_draws_when_targeted_by_other_card ... ok
+test original_xianding_batch29::dccansi_recovers_self_and_other_at_phase_begin ... ok
+test original_xianding_batch2::dczhongjie_recovers_and_draws_for_dying_player ... ok
+test original_xianding_batch2::dcjiexing_draws_after_damage_recovery_and_hp_loss ... ok
+test original_xianding_batch30::package_exposes_batch30_skill_with_expected_contracts ... ok
+test original_xianding_batch31::package_exposes_batch31_skills_with_expected_contracts ... ok
+test original_xianding_batch2::dcjinggong_equip_can_be_viewed_as_sha_in_play_phase ... ok
+test original_xianding_batch30::jiaoying3_draw_draws_target_to_five_cards_at_phase_end ... ok
+test original_xianding_batch31::zhuihuan2_else_branch_discards_source_card_when_hp_not_higher ... ok
+test original_xianding_batch31::shawu_damages_sha_source ... ok
+test original_xianding_batch32::package_exposes_batch32_skills_with_expected_contracts ... ok
+test original_xianding_batch29::dcdyqingshi_damages_a_player_after_single_target_sha ... ok
+test original_xianding_batch33::package_exposes_batch33_skills_with_expected_contracts ... ok
+test original_xianding_batch32::dcfangdu_makes_source_lose_hp_after_damage ... ok
+test original_xianding_batch32::dcshangyu_gains_sha_on_game_start ... ok
+test original_xianding_batch34::package_exposes_batch34_skills_with_expected_contracts ... ok
+test original_xianding_batch33::dcsbdouwei_recovers_when_other_enters_dying ... ok
+test original_xianding_batch33::dcsbshijin_prevents_damage_and_draws ... ok
+test original_xianding_batch34::dcduoyue_opens_hand_compare_at_phase_play ... ok
+test original_xianding_batch34::spzhuilie_grants_distance_and_armor_ignore ... ok
+test original_xianding_batch35::package_exposes_batch35_skill_with_expected_contracts ... ok
+test original_xianding_batch36::package_exposes_batch36_skill_with_expected_contracts ... ok
+test original_xianding_batch37::package_exposes_batch37_skills_with_expected_contracts ... ok
+test original_xianding_batch35::dcdanyi_draws_when_card_repeats_previous_targets ... ok
+test original_xianding_batch37::dccuxi_discards_two_and_damages_at_other_phase_begin ... ok
+test original_xianding_batch38::package_exposes_batch38_skill_with_expected_contracts ... ok
+test original_xianding_batch36::dchuayi_draws_when_other_phase_ends ... ok
+test original_xianding_batch37::dcdulu_damages_targets_on_activation ... ok
+test original_xianding_batch39::package_exposes_batch39_skills_with_expected_contracts ... ok
+test original_xianding_batch39::kunyu_recovers_after_being_saved_from_dying ... ok
+test original_xianding_batch38::dcsbkongwu_skill_can_be_attached ... ok
+test original_xianding_batch3::package_exposes_batch3_skills_with_expected_contracts ... ok
+test original_xianding_batch39::oldjinjie_draws_and_recovers_for_dying_other ... ok
+test original_xianding_batch3::dccunsi_grants_yongjue_to_other_and_draws_two ... ok
+test original_xianding_batch3::dccunsi_on_self_grants_yongjue_without_draw ... ok
+test original_xianding_batch40::package_exposes_batch40_skill_with_expected_contracts ... ok
+test original_xianding_batch42::package_exposes_batch42_skill_with_expected_contracts ... ok
+test original_xianding_batch41::package_exposes_batch41_skill_with_expected_contracts ... ok
+test original_xianding_batch40::shiyuan_draws_three_when_source_hp_higher ... ok
+test original_xianding_batch43::package_exposes_batch43_skills_with_expected_contracts ... ok
+test original_xianding_batch42::dcduorui_reduces_damage_by_one_when_optional_confirmed ... ok
+test original_xianding_batch41::pytianjiang_gains_equipment_on_game_start ... ok
+test original_xianding_batch44::package_exposes_batch44_skills_with_expected_contracts ... ok
+test original_xianding_batch43::dcsbqijue_draws_two_and_recovers_two_for_dying_other ... ok
+test original_xianding_batch44::dczhangcai_draws_one_when_owner_uses_card ... ok
+test original_xianding_batch44::oldjue_chooses_virtual_sha_target_at_prepare_phase ... ok
+test original_xianding_batch43::dushi2_skill_can_be_attached ... ok
+test original_xianding_batch45::package_exposes_batch45_skills_with_expected_contracts ... ok
+test original_xianding_batch3::dcyongjue_offers_refund_or_gain_choice_on_first_play_phase_sha ... ok
+test original_xianding_batch45::dcsbsushen_grants_fumou ... ok
+test original_xianding_batch45::dcruxian_grants_zhangcai_all_and_removes_on_turn_end ... ok
+test original_xianding_batch45::dcxiaowu_discards_he_and_gains_sha ... ok
+test original_xianding_batch46::package_exposes_dushi_with_tao_cancel_and_death_trigger ... ok
+test original_xianding_batch47::package_exposes_batch47_skills_with_expected_contracts ... ok
+test original_xianding_batch46::dushi_grants_curse_to_chosen_other_on_owner_death ... ok
+test original_xianding_batch48::package_exposes_batch48_skills_with_expected_contracts ... ok
+test original_xianding_batch47::old_dcrenshuang_recovers_to_one_and_gains_max_hp_on_dying ... ok
+test original_xianding_batch49::package_exposes_dcpijing_phase_end_trigger ... ok
+test original_xianding_batch47::dcsbwankang_recovers_one_and_draws_two_on_dying ... ok
+test original_xianding_batch48::dcjujian_draws_one_for_target_and_bans_use_against_owner ... ok
+test original_xianding_batch4::package_exposes_batch4_skills_with_expected_contracts ... ok
+test original_xianding_batch48::dcsbxunshi_discards_and_draws_on_thunder_sha_damage ... ok
+test original_xianding_batch49::dcpijing_grants_zimu_to_chosen_other_at_phase_end ... ok
+test original_xianding_batch4::dcweiti_choose_damage_branch_damages_other ... ok
+test original_xianding_batch50::package_exposes_shichou_juedou_view_as ... ok
+test original_xianding_batch4::dcweiti_choose_recover_branch_recovers_other ... ok
+test original_xianding_batch51::package_exposes_peiniang_jiu_view_as_and_unlimited ... ok
+test original_xianding_batch50::shichou_can_be_attached ... ok
+test original_xianding_batch5::package_exposes_batch5_skills_with_expected_contracts ... ok
+test original_xianding_batch51::peiniang_can_be_attached ... ok
+test original_xianding_batch6::package_exposes_batch6_skills_with_expected_contracts ... ok
+test original_xianding_batch5::dcyuzhi_plans_base_damage_increase_when_sha_targets_owner ... ok
+test original_xianding_batch5::dczhangji_draws_extra_for_multi_target_card ... ok
+test original_xianding_batch5::dczhangji_no_draw_for_single_target_card ... ok
+test original_xianding_batch7::package_exposes_batch7_skills_with_expected_contracts ... ok
+test original_xianding_batch6::dclingfang_gains_mark_at_prepare_phase ... ok
+test original_xianding_bianyue::bizu_repeated_exact_group_draws_then_bans_and_recovers ... ok
+test original_xianding_bianyue::wuxie_swaps_whole_hands_then_places_new_damage_cards_at_draw_bottom ... ok
+test original_xianding_chentai::active_recasts_ceil_half_then_opens_an_exact_tracked_duel ... ok
+test original_xianding_chentai::damage_branch_can_recover_a_wounded_character_in_the_target_range ... ok
+test original_xianding_caoyi::miyi_reverses_the_selected_effect_at_end_phase ... ok
+test original_xianding_batch6::dclingfang_gains_mark_when_targeted_by_nonred_card ... ok
+test original_xianding_batch8::package_exposes_batch8_skills_with_expected_contracts ... ok
+test original_xianding_batch7::dcyuxi_draws_when_owner_suffers_damage ... ok
+test original_xianding_batch7::dcsbfuzhan_recovers_owner_to_max_after_other_leaves_dying ... ok
+test original_xianding_dc_mifuren::missing_guixiu_does_not_recover ... ok
+test original_xianding_batch9::package_exposes_batch9_skills_with_expected_contracts ... ok
+test original_xianding_batch7::dcyuxi_draws_when_owner_causes_damage ... ok
+test original_xianding_dc_mifuren::other_target_draw_chain_finishes_before_guixiu_recovery ... ok
+test original_xianding_batch8::dcxinyou_recovers_and_draws_to_max_hp ... ok
+test original_xianding_dc_mifuren::targeting_self_grants_yongjue_without_draw_and_recovers_if_wounded ... ok
+test original_xianding_dc_sb_lusu::mengmou_yin_counts_physical_sha_responses_then_loses_remaining_hp ... ok
+test original_xianding_batch9::xinlvli_draws_difference_when_hp_exceeds_hand ... ok
+test original_xianding_dc_sb_lusu::mengmou_yang_uses_normal_sha_and_recovers_for_exact_damage ... ok
+test original_xianding_dc_sb_lusu::mingshi_draws_two_then_reveals_three_and_gives_the_chosen_card ... ok
+test original_xianding_dc_sb_zhangxiu::fuxi_gives_one_card_then_draws_two ... ok
+test original_xianding_dc_sb_zhangxiu::fuxi_discards_then_uses_a_distance_free_virtual_sha ... ok
+test original_xianding_cuimao::package_closes_cuimao_contract ... ok
+test original_xianding_dc_shen_guanyu::dcwuhun_marks_both_damage_directions_per_point_and_publishes_death_effect ... ok
+test original_xianding_dc_shen_guanyu::dcwushen_draws_only_for_targets_bound_to_the_exact_sha ... ok
+test original_xianding_dc_sb_zhouyu::ronghuo_permission_is_non_stacking_and_yingmou_can_toggle_at_game_start ... ok
+test original_xianding_batch9::dcsbfangong_recovers_and_draws_up_to_five ... ok
+test original_xianding_dc_sb_zhangxiu::haoyi_gains_only_non_damaging_damage_cards_then_can_distribute_them ... ok
+test original_xianding_dc_lingcao::package_closes_dc_lingcao_contract ... ok
+test original_xianding_dc_sb_zhouyu::yingmou_yin_without_damage_cards_discards_to_owner_then_deals_fire_damage ... ok
+test original_xianding_cuimao::fengying_discards_hand_and_refills_only_its_extra_turn ... ok
+test original_xianding_cuimao::zhengbi_basic_gift_receives_non_basic_payment ... ok
+test original_xianding_batch9::xinlvli_recovers_difference_when_hand_exceeds_hp ... ok
+test original_xianding_dc_lingcao::dcdufeng_can_pay_both_costs_then_draw_and_gain_exact_turn_bonus ... ok
+test original_xianding_dc_lingcao::dcdufeng_requires_at_least_one_cost ... ok
+test original_xianding_cuimao::zhengbi_gains_one_hand_and_one_equip_after_target_gained ... ok
+test original_xianding_dcsbjinglian::does_not_fire_with_zero_losses ... ok
+test original_xianding_dc_mifuren::package_publishes_exact_dc_mifuren_closure ... ok
+test original_xianding_dcsbjinglian::draws_three_only_after_at_least_two_card_losses_this_turn ... ok
+test original_xianding_dc_tianfeng::package_closes_dc_tianfeng_contract ... ok
+test original_xianding_dc_yangbiao::package_closes_dc_yangbiao_with_exact_contract ... ok
+test original_xianding_dchaoxian_machine::package_publishes_dchaoxian_contract ... ok
+test original_xianding_dc_shen_guanyu::package_publishes_exact_character_and_skill_contracts ... ok
+test original_xianding_dc_yangbiao::dcjue_tracks_only_discard_reason_cards_that_remain_in_discard ... ok
+test original_xianding_dc_yangbiao::dcjue_confirms_fixed_target_and_starts_authoritative_random_loop_once_per_round ... ok
+test original_xianding_dcsbkangyong::committed_package_exposes_both_locked_turn_endpoints ... ok
+test original_xianding_dchaoxian_machine::dchaoxian_shuffles_threes_to_deck_bottom_and_collects_from_others ... ok
+test original_xianding_dcsbjinglian::package_publishes_refined_jinglian_filter_and_zhonghui_closure ... ok
+test original_xianding_dc_tianfeng::dcsuishi_draws_when_the_dying_damage_source_shares_the_owner_group ... ok
+test original_xianding_dc_yangbiao::dcjue_own_end_phase_uses_single_other_target_choice ... ok
+test original_xianding_dcsbkangyong::healthy_turn_start_does_not_record_a_debt ... ok
+test original_xianding_dcsbchensheng::chensheng_only_offers_draw_after_another_turn_when_neither_is_unique_max_hand ... ok
+test original_xianding_dcyuxin::shangjue_recovers_then_gains_max_hp_grants_kunli_and_records_upgrade ... ok
+test original_xianding_dcsbkangyong::turn_start_recovers_to_max_and_turn_end_loses_the_recorded_amount ... ok
+test original_xianding_dcsbkangyong::end_loss_stops_at_one_and_only_the_owners_end_phase_consumes_the_record ... ok
+test original_xianding_dcyuxin::declined_and_non_improving_other_target_do_not_consume_yuxin ... ok
+test original_xianding_dcyuxin::nonnegative_owner_hp_matches_legacy_get_hp_clamping ... ok
+test original_xianding_fugan::package_closes_fugan_contract ... ok
+test original_xianding_dczhee_machine::package_publishes_dczhee_contract ... ok
+test original_xianding_dczhee_machine::searches_draw_and_discard_piles_for_lightning ... ok
+test original_xianding_dczhee_machine::end_phase_pipeline_hangs_lightning_from_discard_pile ... ok
+test original_xianding_malingli::xiaoyin_gains_red_cards_and_places_black_card_on_the_chosen_target ... ok
+test original_xianding_fugan::qiaojian_lower_sum_gains_both_cards_and_exempts_them_from_hand_limit ... ok
+test original_xianding_huzun::package_closes_huzun_contract ... ok
+test original_xianding_guili::guili_publishes_contract ... ok
+test original_xianding_fugan::xicha_matching_equipment_use_is_cancelled_consumed_and_gained ... ok
+test original_xianding_dcyuxin::yuxin_recovers_self_to_one_and_other_to_owner_hp ... ok
+test original_xianding_huzun::dczhantao_compares_judgment_with_all_physical_materials ... ok
+test original_xianding_dc_tianfeng::dcsuishi_death_forces_one_to_all_hand_cards_and_revalidates_the_choice ... ok
+test original_xianding_huzun::dcanjing_second_activation_draws_two_and_recovers_one_lowest_hp_target ... ok
+test original_xianding_fugan::qiaojian_next_turn_policies_merge_and_ban_only_damage_cards ... ok
+test original_xianding_dcyuxin::kunli_recovers_before_gaining_max_hp_and_removes_kuichi ... ok
+test original_xianding_mansi::package_publishes_mansi_contract ... ok
+test original_xianding_mansi::mansi_draws_when_nanman_damages_anyone ... ok
+test original_xianding_tuiyan::other_player_phase_does_not_trigger ... ok
+test original_xianding_tuiyan::play_phase_start_opens_three_card_view_loop ... ok
+test original_xianding_mansi::mansi_not_triggered_by_plain_damage ... ok
+test original_xianding_zhangjian::skill_a_rewrites_physical_card_damage_to_rank_and_prevents_rankless_card_damage ... ok
+test original_xianding_ruanji::package_closes_ruanji_with_exact_contract ... ok
+test original_xianding_zhangjian::skill_b_discards_all_and_grants_skill_a_until_owners_next_turn ... ok
+test original_xianding_ruanji::jiudun_rewrites_jiu_recovery_to_next_sha_boost ... ok
+test original_xianding_sanshou_machine::package_publishes_sanshou_contract ... ok
+test original_xianding_ruanji::jiudun_black_target_branches_draw_drink_or_discard_exclude ... ok
+test original_xianding_zhugeruoxue::nuanhui_snapshots_equipment_count_and_discards_equipment_after_repeated_name ... ok
+test original_xianding_sanshou_machine::sanshou_cancels_damage_when_new_type_revealed ... ok
+test original_xianding_ruanji::zhaowen_tracks_current_hand_converts_black_once_per_name_and_rewards_red_use ... ok
+test original_xianding_zhugeruoxue::qiongying_moves_field_card_then_discards_matching_suit_hand_card ... ok
+test original_xianding_zhupeilan::tongdao_replaces_non_internal_skills_with_fresh_starting_skills_and_recovers_owner ... ok
+test original_xianding_sanshou_machine::sanshou_passes_when_all_types_known ... ok
+test original_xianding_zhushi::non_wei_recovery_does_not_trigger ... ok
+test original_xianding_zhupeilan::cilv_draws_by_remaining_options_then_binds_prevent_and_gain_to_exact_card ... ok
+test original_xianding_v_guanyinping::package_closes_v_guanyinping_contract ... ok
+test original_xianding_zhushi::recovery_outside_own_phase_does_not_trigger ... ok
+test original_xianding_zhushi::wei_recovery_in_own_phase_lets_owner_draw_once_per_turn ... ok
+test original_xianding_tuiyan::package_publishes_tuiyan_contract ... ok
+test original_xianding_v_guanyinping::dcshaowei_gains_at_most_three_red_draw_cards_once_per_turn ... ok
+test original_xianding_guili::guili_skips_when_bound_target_dealt_damage ... ok
+test original_xianding_zhugemengxue::package_closes_zhugemengxue_contract ... ok
+test original_xianding_v_guanyinping::dcdichou_resolves_begin_bonus_and_end_fire_damage ... ok
+test original_xianding_guili::guili_binds_once_then_recovers_extra_turn_on_clean_target_end ... ok
+test original_xianding_zhugemengxue::dchanying_uses_draw_pile_equipment_without_a_fake_hand_gain ... ok
+test original_xianding_zhugemengxue::dcjichun_uses_each_branch_once_and_counts_localized_name ... ok
+test original_xianding_zhushi::package_publishes_zhushi_contract ... ok
+
+test result: ok. 245 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.61s
+
+error: 1 target failed:
+    `-p engine-core --test original_merged_offline`

@@ -2430,5 +2430,16 @@
     "sex": "male",
     "group": "wei",
     "portrait_asset": "character_zhuling.jpg"
+  },
+  {
+    "id": 2446084825,
+    "name_key": "mb_mayunlu",
+    "max_hp": 4,
+    "skills": [
+      2,
+      2318615547
+    ],
+    "sex": "female",
+    "group": "shu"
   }
 ]

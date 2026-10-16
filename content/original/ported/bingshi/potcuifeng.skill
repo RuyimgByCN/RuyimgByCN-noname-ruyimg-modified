@@ -1,0 +1,7 @@
+// 摧锋（bingshi）：每轮限两次，每回合结束时，你可视为对当前回合角色使用一张【决斗】且此【决斗】造成伤害+X（X为本回合所有角色打出【杀】的次数）。
+// 上游语义摘录如上。旧线诚实 noop：每轮限次+回合末视为决斗+打出杀计数加伤；轮次限次与历史计数复合无原语（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill potcuifeng(2605615634) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

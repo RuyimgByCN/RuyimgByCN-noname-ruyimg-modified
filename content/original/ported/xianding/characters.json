@@ -1842,9 +1842,9 @@
   {
     "id": 3337707145,
     "name_key": "shen_zhangjiao",
-    "max_hp": 3,
+    "max_hp": 4,
     "skills": [
-      3482142715,
+      2880926835,
       3103628203,
       3583301051,
       4106647506
@@ -2649,5 +2649,27 @@
     ],
     "sex": "male",
     "group": "wu"
+  },
+  {
+    "id": 3924209032,
+    "name_key": "dc_sb_weiguan",
+    "max_hp": 4,
+    "skills": [
+      2271027796,
+      3421915330
+    ],
+    "sex": "male",
+    "group": "wei"
+  },
+  {
+    "id": 2552384325,
+    "name_key": "dc_wangyuanji",
+    "max_hp": 3,
+    "skills": [
+      3143309739,
+      3715829428
+    ],
+    "sex": "female",
+    "group": "wei"
   }
 ]

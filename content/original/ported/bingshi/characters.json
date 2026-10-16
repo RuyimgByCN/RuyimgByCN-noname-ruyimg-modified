@@ -431,5 +431,16 @@
     "sex": "male",
     "group": "wu",
     "portrait_asset": "character_pot_heqi.jpg"
+  },
+  {
+    "id": 3487446641,
+    "name_key": "pot_zhaoyun",
+    "max_hp": 4,
+    "skills": [
+      2960911741,
+      2605615634
+    ],
+    "sex": "male",
+    "group": "shu"
   }
 ]

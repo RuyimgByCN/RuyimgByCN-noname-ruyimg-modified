@@ -1,0 +1,7 @@
+// 鏖斗（offline）：当你获得牌时，你可以将一张牌当做【决斗】使用。
+// 上游语义摘录如上。旧线诚实 noop：获牌后将牌当决斗；获牌触发 viewAs 决斗复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill smaodou(4285957407) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

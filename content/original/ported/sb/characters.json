@@ -653,5 +653,16 @@
     "sex": "male",
     "group": "wu",
     "portrait_asset": "character_sb_luxun.jpg"
+  },
+  {
+    "id": 2722540467,
+    "name_key": "sb_guoyouzhi",
+    "max_hp": 3,
+    "skills": [
+      2655739857,
+      3054784632
+    ],
+    "sex": "male",
+    "group": "shu"
   }
 ]

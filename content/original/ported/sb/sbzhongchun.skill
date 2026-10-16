@@ -1,0 +1,7 @@
+// 忠纯（sb）：一名角色的结束阶段，你可选择一张弃牌堆中其本回合弃置的牌，令其获得且其可使用之。
+// 上游语义摘录如上。旧线诚实 noop：结束阶段令其获本回合弃牌并可使用；弃牌堆本回合溯源债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill sbzhongchun(3054784632) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

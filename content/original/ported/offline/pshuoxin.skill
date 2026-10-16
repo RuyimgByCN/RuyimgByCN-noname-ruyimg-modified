@@ -1,0 +1,7 @@
+// 惑心（offline）：限定技，其他角色的回合开始前，你可令此回合改为由你操控。
+// 上游语义摘录如上。旧线诚实 noop：限定技令他人回合改由你操控；操控权移交无原语（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill pshuoxin(4144152227) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

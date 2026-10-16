@@ -509,5 +509,16 @@
     "sex": "male",
     "group": "qun",
     "portrait_asset": "character_fj_peixiu.jpg"
+  },
+  {
+    "id": 2392926390,
+    "name_key": "yudu",
+    "max_hp": 5,
+    "skills": [
+      3740135724,
+      3094063522
+    ],
+    "sex": "male",
+    "group": "qun"
   }
 ]

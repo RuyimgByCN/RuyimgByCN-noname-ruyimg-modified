@@ -1066,7 +1066,7 @@
     "skills": [
       3705444845,
       3985665409,
-      4242421106
+      3085707855
     ],
     "sex": "female",
     "group": "shu",
@@ -4674,5 +4674,39 @@
     "sex": "male",
     "group": "qun",
     "portrait_asset": "character_ym_luoguanzhong.jpg"
+  },
+  {
+    "id": 3983839515,
+    "name_key": "ps_shen_diaochan",
+    "max_hp": 3,
+    "skills": [
+      3378605440,
+      4144152227
+    ],
+    "sex": "female",
+    "group": "shen"
+  },
+  {
+    "id": 2843133629,
+    "name_key": "ps_shen_jiaxu",
+    "max_hp": 3,
+    "skills": [
+      2190653932,
+      3409473679,
+      3158766308
+    ],
+    "sex": "male",
+    "group": "shen"
+  },
+  {
+    "id": 2283162859,
+    "name_key": "sm_shenmo_sunce",
+    "max_hp": 6,
+    "skills": [
+      2208019773,
+      2794290885
+    ],
+    "sex": "male",
+    "group": "shen"
   }
 ]

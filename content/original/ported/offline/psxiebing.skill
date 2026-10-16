@@ -1,0 +1,7 @@
+// 卸兵（offline）：每轮开始时或当你受到伤害后，你可选择一项，直到本轮结束：1.废除一名其他角色的所有装备栏；2.废除所有其他角色的同一种装备栏。每回合限一次，当你受到伤害时，若伤害来源的装备区内没有装备牌，你防止此伤害。
+// 上游语义摘录如上。旧线诚实 noop：废除装备栏族+无装备来源防伤；装备栏废除子系统债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill psxiebing(2190653932) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

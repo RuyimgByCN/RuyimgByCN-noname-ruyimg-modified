@@ -1,0 +1,7 @@
+// 亢掌（collab）：当你对其他角色造成伤害后，你可将一张♠️手牌当做【杀】对其使用或将一张♥️手牌当做【桃】对自己使用。
+// 上游语义摘录如上。旧线诚实 noop：伤害后黑桃当杀/红桃当桃转化用牌；花色条件 viewAs 复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill kangzhang(4216697545) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

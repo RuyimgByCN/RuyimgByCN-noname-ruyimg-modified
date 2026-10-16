@@ -1,0 +1,7 @@
+// 蔽锋（offline）：锁定技，当你每回合第至少X次发动除此技能外的技能时，你选择一项：1.失去1点体力；2.减1点体力上限（X为你的体力上限）。
+// 上游语义摘录如上。旧线诚实 noop：每回合第 X 次发动技能后失体或减上限；技能发动计数门槛债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill smbifeng(2562409654) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

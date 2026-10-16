@@ -21,7 +21,7 @@
 > 与 [`upstream-1.11.5-delta.md`](./upstream-1.11.5-delta.md)。
 > 另：catalog 的 `missing_character_portraits`（普查时 44，现 45）经逐项核对
 > **上游本就无对应头像图**（多为 pot_* 等活动/PVE 武将），无可迁移内容，维持登记。
-> **2026-10-10 注**：10-08 同步上游 v1.11.7 后，catalog 有 19 将 39 技为 `source_synced`（未移植），上游另新增 `card/jiubian.js`；本页“全部处理完毕”只适用于 08-21 时。见 [delta 10-08 节](upstream-1.11.5-delta.md)与[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) T15。
+> **2026-10-16 注**：T15③/D6 已将 v1.11.7 残差 19 将 39 技诚实 noop 移植，catalog 现 **2576/2576 + 6190/6190 全 ported**（见 [T15③ 证据](../operations/evidence/2026-10-16-t15-3-v117-transplant/README.md)）。上游另新增 `card/jiubian.js`（mode/card 层，不在本 inventory 武将移植范围）。
 
 ## 已迁移（npack + extensions 投放）
 

@@ -1,0 +1,7 @@
+// 枭扬（offline）：锁定技，出牌阶段你只能使用一张【杀】；你失去一张牌后可以摸一张牌。
+// 上游语义摘录如上。旧线诚实 noop：出牌阶段只能用一张杀+失去牌摸牌；用杀次数锁+失去牌摸复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill smxiaoyang(2208019773) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

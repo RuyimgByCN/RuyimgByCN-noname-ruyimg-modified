@@ -169,7 +169,7 @@ fn packages_publish_both_complete_jianyong_variants() {
     assert_eq!(yijiang.manifest.rule_vm_abi_version, 637);
     assert_eq!(onlyol.manifest.rule_vm_abi_version, 688);
     assert_eq!(yijiang.skill_index.len(), 281);
-    assert_eq!(onlyol.skill_index.len(), 188);
+    assert_eq!(onlyol.skill_index.len(), 190);
     assert_eq!(
         yijiang
             .character_index

@@ -1,0 +1,7 @@
+// 率俭（xianding）：你的回合开始和结束时，你可以执行一项：1.令手牌数最多的一名角色将手牌弃置至不为全场最多，然后你令一名角色摸弃牌数张牌；2.令装备区牌数最多的一名角色将装备区牌弃置至不为全场最多，然后你令一名角色回复弃牌数点体力。
+// 上游语义摘录如上。旧线诚实 noop：回合始末弃最多手牌/装备至非最多后令摸/回；全场最多查询分配复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill dcshuaijian(3715829428) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

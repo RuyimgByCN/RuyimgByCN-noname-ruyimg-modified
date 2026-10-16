@@ -1,0 +1,7 @@
+// 筑寨（old）：觉醒技：因攻郡获过四花色则修改攻郡
+// 上游语义摘录如上。旧线诚实 noop：觉醒技按攻郡获四花色修改攻郡；技能修改/觉醒债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill zhuzhai(3258269278) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

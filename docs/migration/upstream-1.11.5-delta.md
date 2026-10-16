@@ -8540,3 +8540,23 @@ noop 池周期复评；或四类引擎缺口铸造专项。
 - **下一步**：19 将 39 技移植批（沿用 v1.11.6 批 146 流程：sync 残差清单→
   .skill/characters.json→rebuild-pack→四副本部署→种子敏感三件套）。2026-10-10 起
   该项登记在[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系) T15。
+
+## 本轮：T15③ / D6——v1.11.7 残差 19 将 39 技旧线移植（2026-10-16）
+
+用户 D6 裁决启动移植。沿用批 146 流程，零新原语、零 ABI 抬升（host 753 不变）：
+
+- **39 技诚实 noop**：各包 `.skill` 落位（`modifier hand_limit add 0` + 上游语义/
+  阻塞机制注记，ADR 0597）。衍生技（神魔孙策 sm* 等）一并落库。
+- **19 将 roster**：新增/更新 `characters.json`；纠偏族荀灌首技、九鼎孙尚香枭姬
+  本地 def、神张角 `dcyizhao` + max_hp 4。
+- **13 包 rebuild + 四副本部署**：ported / extensions×2 / npack-store（offline、
+  onlyOL 另有 `content/original/packages/`）。
+- **catalog 闭包**：`source_synced` 19 将 39 技 → **0**；**2576/2576 + 6190/6190
+  全 ported**（`sync-original-content.mjs` + `--verify-only` 绿）。
+- **测试对账**：冻结 skill/character/modifier 计数随 roster 增长更新；collab
+  `olchouniu`/`olsishe` canonical hash 重录；offline/xianding 开局选择排空与
+  jun_zhaoshou/tanhu 种子窗扩展。
+
+回归（`CARGO_TARGET_DIR=.scratch/target-oldline`）：engine-core **3778/0/1**；
+engine-api **4/0**；conformance ALL PASS；cross-target-hash PASS；sync-verify
+PASS。证据：[2026-10-16-t15-3-v117-transplant](../operations/evidence/2026-10-16-t15-3-v117-transplant/README.md)。

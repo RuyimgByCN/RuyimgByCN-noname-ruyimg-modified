@@ -1,0 +1,7 @@
+// 撼天（tw）：出牌阶段限一次，你可视为使用一张【火攻】，此牌目标须优先展示其本回合获得的牌。你造成的火焰伤害+X（X为受到伤害角色本回合获得的牌的次数）。
+// 上游语义摘录如上。旧线诚实 noop：视为火攻优先展本回合获牌+火焰伤按获牌次数；火攻展示约束复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill twhantian(3749024108) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

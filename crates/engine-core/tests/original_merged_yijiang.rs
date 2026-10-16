@@ -172,7 +172,7 @@ fn packages_publish_abi97_active_contract_and_old_zhuzhi_closure() {
     assert_eq!(yijiang.manifest.rule_vm_abi_version, 637);
     assert_eq!(yijiang.skill_index.len(), 281);
     assert_eq!(yijiang.character_index.len(), 72);
-    assert_eq!(old.character_index.len(), 78);
+    assert_eq!(old.character_index.len(), 79);
 
     let active = yijiang
         .active_index

@@ -123,8 +123,8 @@ fn setup_qiansu() -> (Transaction, PlayerId, PlayerId, CardId) {
 fn package_publishes_1_11_5_feiyi_and_xiahouen_closures() {
     let package = package();
     assert_eq!(package.manifest.rule_vm_abi_version, 487);
-    assert_eq!(package.skill_index.len(), 254);
-    assert_eq!(package.character_index.len(), 119);
+    assert_eq!(package.skill_index.len(), 255);
+    assert_eq!(package.character_index.len(), 120);
     assert!(package
         .skill_index
         .iter()

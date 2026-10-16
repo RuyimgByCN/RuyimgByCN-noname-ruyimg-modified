@@ -1,0 +1,7 @@
+// 狂沸（offline）：出牌阶段限50次，你可以摸一张牌。
+// 上游语义摘录如上。旧线诚实 noop：出牌阶段限 50 次摸牌；超高 usable 可建模但本批与衍生同迁诚实 noop（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill smkuangfei(2507939346) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

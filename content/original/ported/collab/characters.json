@@ -1029,5 +1029,27 @@
     ],
     "sex": "male",
     "group": "wei"
+  },
+  {
+    "id": 2721440334,
+    "name_key": "feifeigongzhu",
+    "max_hp": 4,
+    "skills": [
+      3708724429,
+      2536181107
+    ],
+    "sex": "female",
+    "group": "qun"
+  },
+  {
+    "id": 2959728437,
+    "name_key": "ggbond",
+    "max_hp": 4,
+    "skills": [
+      3142204175,
+      4216697545
+    ],
+    "sex": "male",
+    "group": "qun"
   }
 ]

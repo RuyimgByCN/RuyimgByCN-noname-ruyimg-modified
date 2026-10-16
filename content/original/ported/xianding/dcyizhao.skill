@@ -1,0 +1,7 @@
+// 异兆（xianding）：锁定技。当你使用或打出牌或你的牌因弃置进入弃牌堆时，你获得等同于此牌点数枚“黄”标记。然后若“黄”的十位数发生变化，你获得牌堆中一张点数为你“黄”的十位数的牌。
+// 上游语义摘录如上。旧线诚实 noop：用/打出/弃置获黄标记+十位数变化获牌堆点数牌；标记十位变化查询债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill dcyizhao(2880926835) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

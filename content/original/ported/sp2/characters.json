@@ -1349,5 +1349,16 @@
     ],
     "sex": "male",
     "group": "wu"
+  },
+  {
+    "id": 2408253080,
+    "name_key": "star_dongyun",
+    "max_hp": 4,
+    "skills": [
+      4156479931,
+      2544166903
+    ],
+    "sex": "male",
+    "group": "shu"
   }
 ]

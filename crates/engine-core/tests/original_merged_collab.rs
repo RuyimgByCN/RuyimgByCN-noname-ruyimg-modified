@@ -250,8 +250,8 @@ fn package_and_runtime_match_the_legacy_growth_and_card_gain_contract() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     let compiled = content_compiler::compile_source_named("dcjianxiong", SOURCE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 694);
-    assert_eq!(package.skill_index.len(), 152);
-    assert_eq!(package.character_index.len(), 88);
+    assert_eq!(package.skill_index.len(), 156);
+    assert_eq!(package.character_index.len(), 90);
     assert!(package
         .character_index
         .iter()
@@ -1769,7 +1769,7 @@ fn complete_character_starts_damaged_and_recovers_only_at_minimum_hp() {
     // 冻结哈希随批 237 quanjia 内容变更更新（新增触发模块改变同包装载态）。
     assert_eq!(
         hex(canonical_state_hash(tx.state())),
-        "7b8a73b37e6a9e98b9acf03a05a81f7923906a8766ec5637deba97c4e05ada84"
+        "647cdf8372e43d26f75d06f97c9a1909a081ba1e25e4a49d6847e85d09c7b117"
     );
 
     tx.state_mut().players.get_mut(current).unwrap().hp = 1;
@@ -2109,8 +2109,8 @@ fn dispatch(tx: &mut Transaction, events: &[DomainEvent]) {
 fn package_retains_abi112_skill_and_character_closure() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 694);
-    assert_eq!(package.skill_index.len(), 152);
-    assert_eq!(package.character_index.len(), 88);
+    assert_eq!(package.skill_index.len(), 156);
+    assert_eq!(package.character_index.len(), 90);
     let triggers: Vec<_> = package
         .trigger_index
         .iter()
@@ -2866,7 +2866,7 @@ fn optional_reflection_uses_damage_amount_and_requires_a_living_source() {
     assert_eq!(state.players.get(source).unwrap().hp, source_hp - 2);
     assert_eq!(
         hex(canonical_state_hash(&state)),
-        "aed4c2de7b614a0b2546a62e23b2aa2d59692fe39ff10e3e484398d17c11656c"
+        "33278f37ce2336eddd4fe3f15b45d6e0627e5fc00cc963319e1834b6506b2cd6"
     );
 
     let mut dead_source = Transaction::begin(state);
@@ -3458,8 +3458,8 @@ fn dispatch_card_used(tx: &mut Transaction, user: PlayerId, card: CardId, target
 fn package_retains_olwuma_skill_and_character_closure() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 694);
-    assert_eq!(package.skill_index.len(), 152);
-    assert_eq!(package.character_index.len(), 88);
+    assert_eq!(package.skill_index.len(), 156);
+    assert_eq!(package.character_index.len(), 90);
     let trigger = package
         .trigger_index
         .iter()
@@ -3950,8 +3950,8 @@ fn enter_extra_play_phase(state: GameState, owner: PlayerId) -> GameState {
 fn package_publishes_abi110_play_phase_category_contract_and_character() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 694);
-    assert_eq!(package.skill_index.len(), 152);
-    assert_eq!(package.character_index.len(), 88);
+    assert_eq!(package.skill_index.len(), 156);
+    assert_eq!(package.character_index.len(), 90);
     assert!(package
         .skill_index
         .iter()
@@ -4301,8 +4301,8 @@ fn resolve(
 fn package_publishes_larger_hand_contract_and_character() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 694);
-    assert_eq!(package.skill_index.len(), 152);
-    assert_eq!(package.character_index.len(), 88);
+    assert_eq!(package.skill_index.len(), 156);
+    assert_eq!(package.character_index.len(), 90);
     let active = package
         .active_index
         .iter()

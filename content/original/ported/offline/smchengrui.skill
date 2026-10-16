@@ -1,0 +1,7 @@
+// 骋锐（offline）：一名角色的回合结束时，你可以执行以下项至多X次：1.视为使用一张【决斗】；2.摸一张牌（X为上个出牌阶段体力值变化过的角色数）。
+// 上游语义摘录如上。旧线诚实 noop：回合末按上出牌阶段体力变化角色数循环决斗/摸牌；历史计数循环复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill smchengrui(2838676769) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

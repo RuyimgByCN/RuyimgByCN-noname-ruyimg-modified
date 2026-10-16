@@ -1,0 +1,7 @@
+// 坚垒（newjiang）：你可将装备区内的黑色/红色牌当【杀】/【闪】使用或打出，你的装备栏每有一种花色，你的攻击范围+1，若包含四种花色，其他角色与你计算距离+1。
+// 上游语义摘录如上。旧线诚实 noop：装备区黑/红当杀/闪+花色种数改攻距/座距；装备花色统计 modifier 债（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill jianlei(3740135724) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

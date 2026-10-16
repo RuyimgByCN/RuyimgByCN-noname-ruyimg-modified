@@ -1,0 +1,7 @@
+// 遁迹（clan）：锁定技，当你每回合首次使用黑色牌后，你令一名角色用一张手牌交换此牌。
+// 上游语义摘录如上。旧线诚实 noop：使用黑色牌后令角色用手牌交换此牌；用牌后换牌原语缺口（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill clandunji(2857752098) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

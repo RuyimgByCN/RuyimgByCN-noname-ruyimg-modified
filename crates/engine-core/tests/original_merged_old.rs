@@ -461,7 +461,7 @@ fn packages_publish_complete_old_gaoshun_and_exact_xianzhen_modules() {
     }
 
     let old = content_schema::ContentPackage::from_json_bytes(OLD).unwrap();
-    assert_eq!(old.character_index.len(), 78);
+    assert_eq!(old.character_index.len(), 79);
     let character = old
         .character_index
         .iter()

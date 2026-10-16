@@ -920,5 +920,16 @@
     "sex": "male",
     "group": "qun",
     "portrait_asset": "character_zhangjiao.jpg"
+  },
+  {
+    "id": 3223774204,
+    "name_key": "two_yudu",
+    "max_hp": 4,
+    "skills": [
+      3703238126,
+      3258269278
+    ],
+    "sex": "male",
+    "group": "qun"
   }
 ]

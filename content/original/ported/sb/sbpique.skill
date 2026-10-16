@@ -1,0 +1,7 @@
+// 裨阙（sb）：出牌阶段限一次，你可观看一名其他角色的手牌。然后你可交给其任意张其未拥有的牌名的手牌，并可将手牌数调整至你此次交出的牌名数。
+// 上游语义摘录如上。旧线诚实 noop：观手牌后交未拥有牌名手牌并调手牌数；牌名差集交牌复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill sbpique(2655739857) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

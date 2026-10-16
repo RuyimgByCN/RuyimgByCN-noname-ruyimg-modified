@@ -1,0 +1,7 @@
+// 魅魂（offline）：结束阶段或当你成为【杀】的目标后，你可以令一名其他角色交给你一张你声明的花色的牌，若其没有则你观看其手牌然后弃置其中一张。
+// 上游语义摘录如上。旧线诚实 noop：结束阶段/成为杀目标后声明花色索牌或观牌弃置；声明花色索牌复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill psmeihun(3378605440) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

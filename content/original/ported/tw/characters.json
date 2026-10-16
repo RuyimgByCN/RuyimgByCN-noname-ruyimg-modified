@@ -1968,5 +1968,16 @@
     ],
     "sex": "male",
     "group": "wu"
+  },
+  {
+    "id": 3188482273,
+    "name_key": "huan_zhouyu",
+    "max_hp": 4,
+    "skills": [
+      3134151550,
+      3749024108
+    ],
+    "sex": "male",
+    "group": "wu"
   }
 ]

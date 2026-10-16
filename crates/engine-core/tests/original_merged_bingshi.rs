@@ -812,7 +812,7 @@ fn package_contains_complete_xiahoushang() {
         .any(|skill| skill.skill_def_id == MBTANFENG));
     // 33 名上游武将 + ABI 521 孙韶（敢决/筑墼，上游 bingshi/skill.js 定义、角色条目
     // 随 ABI 521 落地）＝ 34。
-    assert_eq!(committed.character_index.len(), 36);
+    assert_eq!(committed.character_index.len(), 37);
     let xiahoushang = committed
         .character_index
         .iter()
@@ -1188,8 +1188,8 @@ fn package_publishes_complete_pot_caoshuang_at_abi568() {
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
     // 定稿 npack（2026-08-04 16:23 重打包）＝ 33 名上游武将 + ABI 521 孙韶 = 34；
     // 技能 99 项；上游 bingshi/card.js 无卡牌定义，card_index 为 0。
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(package.card_index.len(), 1);
     assert_eq!(
         package
@@ -2362,8 +2362,8 @@ fn resolve(state: GameState, selection: Vec<u32>, key: u64) -> (GameState, Pipel
 fn package_publishes_chenjiao_at_abi544() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(
         package
             .character_index
@@ -2987,8 +2987,8 @@ fn charge(state: &GameState, owner: PlayerId) -> i32 {
 fn package_publishes_dengai_at_abi543() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(package.card_index.len(), 1);
     assert_eq!(
         package
@@ -3308,8 +3308,8 @@ fn resolve(
 fn package_publishes_dongzhao_and_mantianguohai_at_abi539() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(package.card_index.len(), 1);
     assert_eq!(package.card_index[0].card_def_id, MANTIANGUOHAI);
     assert_eq!(package.card_index[0].kind, "mantianguohai");
@@ -4506,8 +4506,8 @@ fn resolve(
 fn package_publishes_complete_pot_lvyi_at_abi564() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(package.card_index.len(), 1);
     assert_eq!(
         package
@@ -5214,8 +5214,8 @@ fn resolve(
 fn package_publishes_complete_pot_taishici_at_abi548() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(
         package
             .character_index
@@ -5485,8 +5485,8 @@ fn inject_hand(tx: &mut Transaction, player: PlayerId) -> CardId {
 fn package_publishes_complete_pot_weiyan_at_abi558() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(
         package
             .character_index
@@ -5950,8 +5950,8 @@ fn resolve(
 fn package_publishes_complete_pot_xinxianying_at_abi558() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(
         package
             .character_index
@@ -6214,8 +6214,8 @@ fn choose(state: GameState, selections: Vec<u32>, key: u64) -> (GameState, Pipel
 fn package_publishes_complete_pot_yuji_at_abi570() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(package.card_index.len(), 1);
     assert_eq!(
         package
@@ -7098,8 +7098,8 @@ fn resolve(
 fn package_publishes_complete_pot_zhouyu_at_abi561() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(
         package
             .character_index
@@ -7681,8 +7681,8 @@ fn effect(
 fn package_publishes_complete_sp_zhonghui_at_abi553() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 677);
-    assert_eq!(package.character_index.len(), 36);
-    assert_eq!(package.skill_index.len(), 103);
+    assert_eq!(package.character_index.len(), 37);
+    assert_eq!(package.skill_index.len(), 105);
     assert_eq!(
         package
             .character_index

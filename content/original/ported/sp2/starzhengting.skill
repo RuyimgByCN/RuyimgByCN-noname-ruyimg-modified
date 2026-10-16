@@ -1,0 +1,7 @@
+// 正听（sp2）：出牌阶段限一次，你可以选择一名其他角色。你与其互相观看手牌，然后你选择一项：1.你与其分别将手牌弃置至每种花色剩一张；2.你与其分别将手牌中没有花色的牌各随机获得一张。
+// 上游语义摘录如上。旧线诚实 noop：互观手牌后按花色弃至一或互获无花色牌；互观手牌操作复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill starzhengting(4156479931) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

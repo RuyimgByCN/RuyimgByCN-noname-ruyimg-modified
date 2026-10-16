@@ -1452,8 +1452,8 @@ fn bit(player: PlayerId) -> i32 {
 fn package_declares_current_abi_skills_and_closed_characters() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert!(package.manifest.rule_vm_abi_version >= 252);
-    assert_eq!(package.skill_index.len(), 440);
-    assert_eq!(package.character_index.len(), 204);
+    assert_eq!(package.skill_index.len(), 441);
+    assert_eq!(package.character_index.len(), 205);
     for (skill, event_filter) in [
         (
             JUJUN,
@@ -2167,7 +2167,7 @@ fn confirm(
 fn package_contains_equipment_skill() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert!(package.manifest.rule_vm_abi_version >= 252);
-    assert_eq!(package.skill_index.len(), 440);
+    assert_eq!(package.skill_index.len(), 441);
     assert!(package
         .skill_index
         .iter()
@@ -2442,7 +2442,7 @@ fn mbanda_instance(state: &GameState, owner: PlayerId) -> engine_api::SkillId {
 fn package_publishes_abi330_mbanda_trigger() {
     let package = package();
     assert_eq!(package.manifest.rule_vm_abi_version, 734);
-    assert_eq!(package.skill_index.len(), 440);
+    assert_eq!(package.skill_index.len(), 441);
     assert!(package
         .skill_index
         .iter()
@@ -2651,7 +2651,7 @@ fn resolve(
 fn package_publishes_abi333_and_first_hand_discard_trigger() {
     let package = package();
     assert_eq!(package.manifest.rule_vm_abi_version, 734);
-    assert_eq!(package.skill_index.len(), 440);
+    assert_eq!(package.skill_index.len(), 441);
     let trigger = package
         .trigger_index
         .iter()
@@ -3201,7 +3201,7 @@ fn has_skill(state: &GameState, player: PlayerId, def: u32) -> bool {
 fn package_publishes_abi333_and_closes_caoxing() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 734);
-    assert_eq!(package.skill_index.len(), 440);
+    assert_eq!(package.skill_index.len(), 441);
     assert_eq!(
         package
             .character_index
@@ -3334,10 +3334,10 @@ fn setup(seed: u64) -> (Transaction, PlayerId, PlayerId) {
 fn package_exposes_locked_damage_source_weapon_restore_contract() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert!(package.manifest.rule_vm_abi_version >= 252);
-    assert_eq!(package.skill_index.len(), 440);
-    assert_eq!(package.character_index.len(), 204);
+    assert_eq!(package.skill_index.len(), 441);
+    assert_eq!(package.character_index.len(), 205);
     assert_eq!(package.trigger_index.len(), 198);
-    assert_eq!(package.modifier_index.len(), 225);
+    assert_eq!(package.modifier_index.len(), 226);
     assert_eq!(package.active_index.len(), 47);
     assert_eq!(package.view_as_index.len(), 8);
     assert_eq!(package.modules.len(), 245);
@@ -4067,8 +4067,8 @@ fn resolve(
 fn package_publishes_current_abi_and_complete_wuke() {
     let package = package();
     assert_eq!(package.manifest.rule_vm_abi_version, 734);
-    assert_eq!(package.skill_index.len(), 440);
-    assert_eq!(package.character_index.len(), 204);
+    assert_eq!(package.skill_index.len(), 441);
+    assert_eq!(package.character_index.len(), 205);
     let character = package
         .character_index
         .iter()
@@ -5218,8 +5218,8 @@ fn damage(state: GameState, source: PlayerId, owner: PlayerId, amount: u32) -> G
 fn package_contains_abi120_rewritten_skill() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert!(package.manifest.rule_vm_abi_version >= 252);
-    assert_eq!(package.skill_index.len(), 440);
-    assert_eq!(package.character_index.len(), 204);
+    assert_eq!(package.skill_index.len(), 441);
+    assert_eq!(package.character_index.len(), 205);
     let skill = package
         .skill_index
         .iter()
@@ -7231,8 +7231,8 @@ fn equip_range_two(tx: &mut Transaction, owner: PlayerId, def: u32) {
 fn package_contains_abi120_skill_and_complete_character() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert!(package.manifest.rule_vm_abi_version >= 252);
-    assert_eq!(package.skill_index.len(), 440);
-    assert_eq!(package.character_index.len(), 204);
+    assert_eq!(package.skill_index.len(), 441);
+    assert_eq!(package.character_index.len(), 205);
     assert!(package
         .skill_index
         .iter()
@@ -7830,8 +7830,8 @@ fn open_phase_end(state: GameState, owner: PlayerId) -> (GameState, PipelineResu
 fn package_contains_abi124_skill_and_complete_character() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     assert!(package.manifest.rule_vm_abi_version >= 252);
-    assert_eq!(package.skill_index.len(), 440);
-    assert_eq!(package.character_index.len(), 204);
+    assert_eq!(package.skill_index.len(), 441);
+    assert_eq!(package.character_index.len(), 205);
     let character = package
         .character_index
         .iter()

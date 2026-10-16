@@ -25,9 +25,9 @@
   "counts": {
     "packs": 26,
     "characters": 2576,
-    "migrated_characters": 2557,
+    "migrated_characters": 2576,
     "skills": 6190,
-    "migrated_skills": 6151,
+    "migrated_skills": 6190,
     "profiled_skills": 6104,
     "portraits": 2703,
     "missing_character_portraits": 45,
@@ -880,7 +880,7 @@
     {
       "id": "bingshi:pot_zhaoyun",
       "def_id": 3487446641,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "bingshi",
       "name": "pot_zhaoyun",
       "display_name": "势赵云",
@@ -1707,7 +1707,7 @@
     {
       "id": "clan:clan_xunguan",
       "def_id": 3114770560,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "clan",
       "name": "clan_xunguan",
       "display_name": "族荀灌",
@@ -2430,7 +2430,7 @@
     {
       "id": "collab:feifeigongzhu",
       "def_id": 2721440334,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "collab",
       "name": "feifeigongzhu",
       "display_name": "菲菲公主",
@@ -2455,7 +2455,7 @@
     {
       "id": "collab:ggbond",
       "def_id": 2959728437,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "collab",
       "name": "ggbond",
       "display_name": "猪猪侠",
@@ -7059,7 +7059,7 @@
     {
       "id": "huicui:dc_sunjun",
       "def_id": 3192598888,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "huicui",
       "name": "dc_sunjun",
       "display_name": "新杀孙峻",
@@ -14783,7 +14783,7 @@
     {
       "id": "mobile:mb_mayunlu",
       "def_id": 2446084825,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "mobile",
       "name": "mb_mayunlu",
       "display_name": "手杀马云禄",
@@ -19623,7 +19623,7 @@
     {
       "id": "newjiang:yudu",
       "def_id": 2392926390,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "newjiang",
       "name": "yudu",
       "display_name": "于毒",
@@ -21881,7 +21881,7 @@
     {
       "id": "offline:jd_sb_sunshangxiang",
       "def_id": 2167569708,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "offline",
       "name": "jd_sb_sunshangxiang",
       "display_name": "九鼎孙尚香",
@@ -24450,7 +24450,7 @@
     {
       "id": "offline:ps_shen_diaochan",
       "def_id": 3983839515,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "offline",
       "name": "ps_shen_diaochan",
       "display_name": "★神貂蝉",
@@ -24502,7 +24502,7 @@
     {
       "id": "offline:ps_shen_jiaxu",
       "def_id": 2843133629,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "offline",
       "name": "ps_shen_jiaxu",
       "display_name": "★神贾诩",
@@ -25596,7 +25596,7 @@
     {
       "id": "offline:sm_shenmo_sunce",
       "def_id": 2283162859,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "offline",
       "name": "sm_shenmo_sunce",
       "display_name": "PE神魔孙策",
@@ -31219,7 +31219,7 @@
     {
       "id": "old:two_yudu",
       "def_id": 3223774204,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "old",
       "name": "two_yudu",
       "display_name": "攻郡于毒",
@@ -33179,7 +33179,7 @@
     {
       "id": "onlyOL:ol_sb_zhouyu",
       "def_id": 2509129165,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "onlyOL",
       "name": "ol_sb_zhouyu",
       "display_name": "OL谋周瑜",
@@ -37230,7 +37230,7 @@
     {
       "id": "sb:sb_guoyouzhi",
       "def_id": 2722540467,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "sb",
       "name": "sb_guoyouzhi",
       "display_name": "谋郭攸之",
@@ -50274,7 +50274,7 @@
     {
       "id": "sp2:star_dongyun",
       "def_id": 2408253080,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "sp2",
       "name": "star_dongyun",
       "display_name": "星董允",
@@ -53377,7 +53377,7 @@
     {
       "id": "tw:huan_zhouyu",
       "def_id": 3188482273,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "tw",
       "name": "huan_zhouyu",
       "display_name": "幻周瑜",
@@ -58653,7 +58653,7 @@
     {
       "id": "xianding:dc_sb_weiguan",
       "def_id": 3924209032,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "xianding",
       "name": "dc_sb_weiguan",
       "display_name": "新杀谋卫瓘",
@@ -59331,7 +59331,7 @@
     {
       "id": "xianding:dc_wangyuanji",
       "def_id": 2552384325,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "xianding",
       "name": "dc_wangyuanji",
       "display_name": "新杀王元姬",
@@ -61057,7 +61057,7 @@
     {
       "id": "xianding:shen_zhangjiao",
       "def_id": 3337707145,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "pack": "xianding",
       "name": "shen_zhangjiao",
       "display_name": "神张角",
@@ -66440,7 +66440,7 @@
       "description": "每轮限两次，每回合结束时，你可视为对当前回合角色使用一张【决斗】且此【决斗】造成伤害+X（X为本回合所有角色打出【杀】的次数）。",
       "source": "legacy-source/character/character/bingshi/skill.js",
       "line": 173,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -67941,7 +67941,7 @@
       "description": "若你从手牌使用或打出过的基本牌牌名数不小于：1.每轮限一次，你可视为使用一张任意【杀】或【闪】；2.你使用基本牌无次数限制；3.你使用基本牌无距离限制；4.当你获得或失去手牌后，将你的手牌数调整为4。",
       "source": "legacy-source/character/character/bingshi/skill.js",
       "line": 7,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -69147,7 +69147,7 @@
       "description": "锁定技，当你每回合首次使用黑色牌后，你令一名角色用一张手牌交换此牌。",
       "source": "legacy-source/character/character/clan/skill.js",
       "line": 415,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -72314,7 +72314,7 @@
       "description": "你使用牌时，若此牌花色是本回合第一次被使用，你可以摸一张牌。每个回合结束时，若本回合已有四种花色的牌被使用过，你摸两张牌。",
       "source": "legacy-source/character/character/collab/skill.js",
       "line": 108,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -74392,7 +74392,7 @@
       "description": "当你对其他角色造成伤害后，你可将一张♠️手牌当做【杀】对其使用或将一张♥️手牌当做【桃】对自己使用。",
       "source": "legacy-source/character/character/collab/skill.js",
       "line": 67,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -77624,7 +77624,7 @@
       "description": "你使用牌指定自己为目标后，获得一个“糖果”标记。你使用牌指定其他角色为目标后，若“糖果”数大于其手牌数，其不能响应此牌。出牌阶段限一次，你可移去任意数量的“糖果”并摸等量张牌。",
       "source": "legacy-source/character/character/collab/skill.js",
       "line": 6,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -77669,7 +77669,7 @@
       "description": "出牌阶段限一次，你使用伤害牌指定目标时，可弃置任意张花色不同的牌，然后根据你弃置的牌数依次执行以下选项：1张，随机获得目标角色手牌中一张你没有的花色的牌；2张，可多选一个目标；3张，此牌伤害+1；4张，你本回合获得的牌不计手牌上限。",
       "source": "legacy-source/character/character/collab/skill.js",
       "line": 171,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -86083,7 +86083,7 @@
       "description": null,
       "source": "legacy-source/character/character/huicui/skill.js",
       "line": 117,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -116283,7 +116283,7 @@
       "description": "每阶段各限一次，你使用【杀】或【决斗】指定唯一目标后，你可选择一项：1.摸X张牌；2.令此牌伤害+X（X为你与目标方片牌数之和）。",
       "source": "legacy-source/character/character/mobile/skill.js",
       "line": 6,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -129858,7 +129858,7 @@
       "description": "你可将装备区内的黑色/红色牌当【杀】/【闪】使用或打出，你的装备栏每有一种花色，你的攻击范围+1，若包含四种花色，其他角色与你计算距离+1。",
       "source": "legacy-source/character/character/newjiang/skill.js",
       "line": 6,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [],
@@ -129934,7 +129934,7 @@
       "description": "出牌阶段每种花色限一次，你可以将一张手牌置入你的空置装备栏，视为对攻击范围内的一名使用一张【杀】；回合结束时，若你在以此法指定的目标攻击范围内，其可以弃置一张牌视为对你使用一张【杀】。",
       "source": "legacy-source/character/character/newjiang/skill.js",
       "line": 80,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -139869,7 +139869,7 @@
       "description": "吴势力技。当你失去装备区里的一张牌后，你摸两张牌，然后可以弃置场上的一张牌。",
       "source": "legacy-source/character/character/offline/skill/offline_jiudin.js",
       "line": 1577,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [],
@@ -146739,7 +146739,7 @@
       "description": "限定技，其他角色的回合开始前，你可令此回合改为由你操控。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyS.js",
       "line": 57,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -147536,7 +147536,7 @@
       "description": "结束阶段或当你成为【杀】的目标后，你可以令一名其他角色交给你一张你声明的花色的牌，若其没有则你观看其手牌然后弃置其中一张。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyS.js",
       "line": 7,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "D",
         "triggers": [
@@ -148684,7 +148684,7 @@
       "description": "每轮开始时或当你受到伤害后，你可选择一项，直到本轮结束：1.废除一名其他角色的所有装备栏；2.废除所有其他角色的同一种装备栏。每回合限一次，当你受到伤害时，若伤害来源的装备区内没有装备牌，你防止此伤害。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyS.js",
       "line": 2282,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "D",
         "triggers": [
@@ -148968,7 +148968,7 @@
       "description": "当你在场时，角色死亡后不亮出身份牌不执行身份奖惩。每个回合结束时，你可亮出你或一名死亡角色未亮出的身份牌并选择一名角色，然后若此身份牌为：忠臣：其弃置所有牌；反贼：其摸三张牌。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyS.js",
       "line": 2464,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -149162,7 +149162,7 @@
       "description": "限定技，出牌阶段，你可选择一名其他角色，然后你和所有体力值小于其的其他角色依次选择一项：1.失去1点体力；2.对其造成1点伤害。此阶段结束时，若于此阶段内死亡的角色数大于1，此技能视为未发动过。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyS.js",
       "line": 2401,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -151396,7 +151396,7 @@
       "description": "当你获得牌时，你可以将一张牌当做【决斗】使用。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyE_shenmo.js",
       "line": 238,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -151433,7 +151433,7 @@
       "description": "锁定技，当你每回合第至少X次发动除此技能外的技能时，你选择一项：1.失去1点体力；2.减1点体力上限（X为你的体力上限）。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyE_shenmo.js",
       "line": 284,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -151463,7 +151463,7 @@
       "description": "一名角色的回合结束时，你可以执行以下项至多X次：1.视为使用一张【决斗】；2.摸一张牌（X为上个出牌阶段体力值变化过的角色数）。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyE_shenmo.js",
       "line": 110,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -151538,7 +151538,7 @@
       "description": "当你失去牌时，你可以令一名角色回复1点体力。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyE_shenmo.js",
       "line": 82,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -151574,7 +151574,7 @@
       "description": "出牌阶段限50次，你可以摸一张牌。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyE_shenmo.js",
       "line": 212,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [],
@@ -151608,7 +151608,7 @@
       "description": null,
       "source": "legacy-source/character/character/offline/skill/offline_piracyE_shenmo.js",
       "line": 56,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -151883,7 +151883,7 @@
       "description": "锁定技，出牌阶段你只能使用一张【杀】；你失去一张牌后可以摸一张牌。",
       "source": "legacy-source/character/character/offline/skill/offline_piracyE_shenmo.js",
       "line": 7,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -164337,7 +164337,7 @@
       "description": "每回合限一次，你对其他角色使用牌时，你可令一名目标角色弃置任意张牌，然后你从牌堆中随机获得其未弃置的花色牌各一张。",
       "source": "legacy-source/character/character/old/skill.js",
       "line": 6,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -165242,7 +165242,7 @@
       "description": null,
       "source": "legacy-source/character/character/old/skill.js",
       "line": 75,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -168995,7 +168995,7 @@
       "description": "锁定技，你的回合内：被展示过的手牌本回合称为“阙”；有“阙”的其他角色只能使用“阙”；“阙”被使用后，你摸两张牌。",
       "source": "legacy-source/character/character/onlyOL/skill.js",
       "line": 640,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -171046,7 +171046,7 @@
       "description": "出牌阶段限体力上限次，你可弃置一个花色的唯一手牌并选择一名角色，你观看其的手牌并展示其中一张。若弃置牌与展示牌花色相同，你对其造成1点火焰伤害。其可将此牌当【酒】对你使用。",
       "source": "legacy-source/character/character/onlyOL/skill.js",
       "line": 736,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "D",
         "triggers": [],
@@ -186748,7 +186748,7 @@
       "description": "出牌阶段限一次，你可观看一名其他角色的手牌。然后你可交给其任意张其未拥有的牌名的手牌，并可将手牌数调整至你此次交出的牌名数。",
       "source": "legacy-source/character/character/sb/skill.js",
       "line": 6,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [],
@@ -188792,7 +188792,7 @@
       "description": "一名角色的结束阶段，你可选择一张弃牌堆中其本回合弃置的牌，令其获得且其可使用之。",
       "source": "legacy-source/character/character/sb/skill.js",
       "line": 74,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -241408,7 +241408,7 @@
       "description": "每轮限一次，一名角色的回合结束时，你可以交给其任意张牌（可不交），然后若其手牌数等于体力值，其执行一个出牌阶段，此阶段内：其使用第一张牌不可被响应且使用伤害牌时你摸一张牌。",
       "source": "legacy-source/character/character/sp2/skill.js",
       "line": 247,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -242922,7 +242922,7 @@
       "description": "出牌阶段限一次，你可以选择一名其他角色。你与其互相观看手牌，然后你选择一项：1.你与其分别将手牌弃置至每种花色剩一张；2.你与其分别将手牌中没有花色的牌各随机获得一张。",
       "source": "legacy-source/character/character/sp2/skill.js",
       "line": 128,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [],
@@ -253153,7 +253153,7 @@
       "description": "你每阶段首次{获得或失去牌（因你使用装备失去之除外）}后，可选择一项：1.展示牌堆顶的一张牌并令一名角色获得之；2.重铸一名角色三张牌。每回合结束时，本回合因此技能获得牌唯一最多的存活角色失去1点体力。",
       "source": "legacy-source/character/character/tw/skill.js",
       "line": 8744,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "D",
         "triggers": [
@@ -255022,7 +255022,7 @@
       "description": "出牌阶段限一次，你可视为使用一张【火攻】，此牌目标须优先展示其本回合获得的牌。你造成的火焰伤害+X（X为受到伤害角色本回合获得的牌的次数）。",
       "source": "legacy-source/character/character/tw/skill.js",
       "line": 8908,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "D",
         "triggers": [
@@ -274427,7 +274427,7 @@
       "description": "当你使用手牌结算后，若你的手牌里没有【杀】，你可以视为对此回合未受到伤害的一名其他角色使用一张【杀】，此回合结束阶段，此回合以此法受到伤害的角色可对你使用一张【杀】（不可叠加）。",
       "source": "legacy-source/character/character/xianding/skill.js",
       "line": 645,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -275842,7 +275842,7 @@
       "description": "当你受到伤害后，你可以摸三张牌，然后弃置其中的【杀】；当你造成伤害时，你可以弃置一张【杀】令此伤害+1。",
       "source": "legacy-source/character/character/xianding/skill.js",
       "line": 741,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [
@@ -276682,7 +276682,7 @@
       "description": "每轮限一次，其他角色的回合开始时，你可秘密猜测每种类型的牌本回合是否被该角色使用，其回合结束时，你每猜对一种，你获得其一张牌并防止其本轮下次对你造成的伤害；每猜错一种，你与其依次对对方造成1点伤害。若你全部猜对，此技能本轮可使用次数+1。",
       "source": "legacy-source/character/character/xianding/skill.js",
       "line": 9,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "D",
         "triggers": [
@@ -276930,7 +276930,7 @@
       "description": "你的回合开始和结束时，你可以执行一项：1.令手牌数最多的一名角色将手牌弃置至不为全场最多，然后你令一名角色摸弃牌数张牌；2.令装备区牌数最多的一名角色将装备区牌弃置至不为全场最多，然后你令一名角色回复弃牌数点体力。",
       "source": "legacy-source/character/character/xianding/skill.js",
       "line": 90,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "C",
         "triggers": [
@@ -279156,7 +279156,7 @@
       "description": "锁定技。当你使用或打出牌或你的牌因弃置进入弃牌堆时，你获得等同于此牌点数枚“黄”标记。然后若“黄”的十位数发生变化，你获得牌堆中一张点数为你“黄”的十位数的牌。",
       "source": "legacy-source/character/character/xianding/skill.js",
       "line": 7486,
-      "migration_status": "source_synced",
+      "migration_status": "ported",
       "profile": {
         "grade": "B",
         "triggers": [

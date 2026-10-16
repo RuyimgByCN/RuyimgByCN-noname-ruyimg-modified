@@ -1,0 +1,7 @@
+// 醉锋（onlyOL）：出牌阶段限体力上限次，你可弃置一个花色的唯一手牌并选择一名角色，你观看其的手牌并展示其中一张。若弃置牌与展示牌花色相同，你对其造成1点火焰伤害。其可将此牌当【酒】对你使用。
+// 上游语义摘录如上。旧线诚实 noop：弃唯一花色手牌观牌展示同花火焰伤+当酒；观牌展示花色比较复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill olsbzuifeng(2728901365) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

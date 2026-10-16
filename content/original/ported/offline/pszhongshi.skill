@@ -1,0 +1,7 @@
+// 众矢（offline）：限定技，出牌阶段，你可选择一名其他角色，然后你和所有体力值小于其的其他角色依次选择一项：1.失去1点体力；2.对其造成1点伤害。此阶段结束时，若于此阶段内死亡的角色数大于1，此技能视为未发动过。
+// 上游语义摘录如上。旧线诚实 noop：限定多角色失体或伤害+阶段末死亡数重置限定；多目标连锁复合（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill pszhongshi(3409473679) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

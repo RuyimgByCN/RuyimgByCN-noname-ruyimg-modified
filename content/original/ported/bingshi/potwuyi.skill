@@ -1,0 +1,7 @@
+// 武翊（bingshi）：若你从手牌使用或打出过的基本牌牌名数不小于：1.每轮限一次，你可视为使用一张任意【杀】或【闪】；2.你使用基本牌无次数限制；3.你使用基本牌无距离限制；4.当你获得或失去手牌后，将你的手牌数调整为4。
+// 上游语义摘录如上。旧线诚实 noop：基本牌名累计门槛阶梯（视为用杀闪/无限次/无距离/调手牌至4）复合状态机无原语（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill potwuyi(2960911741) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

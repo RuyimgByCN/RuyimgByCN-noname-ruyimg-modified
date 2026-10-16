@@ -1,0 +1,7 @@
+// 扶倾（offline）：当你失去牌时，你可以令一名角色回复1点体力。
+// 上游语义摘录如上。旧线诚实 noop：失去牌后令角色回复；可直译但本批与神魔孙策衍生同迁诚实 noop（保真度债，ADR 0597）。
+// 2026-10-16 T15③ / D6：上游 v1.11.7 source_synced 19 将 39 技移植批（沿用批 146 流程）。
+skill smfuqing(3379301135) locked {
+  // INTENTIONAL_EMPTY_NOOP: composite mechanics unavailable
+  modifier hand_limit add 0;
+}

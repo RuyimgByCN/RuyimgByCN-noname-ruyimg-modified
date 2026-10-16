@@ -68,7 +68,7 @@ fn package_exposes_sb_contract() {
         "../../../content/original/ported/sb/sb.npack.json"
     ))
     .unwrap();
-    assert_eq!(committed.character_index.len(), 54);
+    assert_eq!(committed.character_index.len(), 55);
     for def in [SBZHIHENG, SBBIYUE, SBYANGWEI] {
         assert!(
             committed

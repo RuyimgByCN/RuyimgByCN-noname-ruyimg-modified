@@ -8569,7 +8569,11 @@ mod original_xianding_batch7 {
 //! Golden for XIANDING（限定包）批次七：
 //! 虞袭（dcyuxi）、复盏（dcsbfuzhan）。
 
-use engine_api::{CardId, DomainEvent, PlayerId, SkillDefId};
+use engine_api::{
+    CardId, ChoiceId, Command, CommandKind, CommandResult, DomainEvent, ExpectedRevision,
+    IdempotencyKey, PlayerId, SkillDefId,
+};
+use engine_core::command::apply_command;
 use engine_core::effect::{bootstrap_match, run_effects, EffectError};
 use engine_core::state::{ContinuationKind, GameState, Phase};
 use engine_core::transaction::Transaction;
@@ -8589,7 +8593,36 @@ fn setup(seed: u64) -> (Transaction, PlayerId, PlayerId, PlayerId) {
     let mut state = GameState::empty();
     std::sync::Arc::make_mut(&mut state.content).load_package(&package()).unwrap();
     let mut tx = Transaction::begin(state);
-    bootstrap_match(&mut tx, 3, seed, "identity-standard").unwrap();
+    if bootstrap_match(&mut tx, 3, seed, "identity-standard").is_err() {
+        // T15③ roster +2 平移：开局撞 optional 触发——cancelled 排空（qimen 范例）。
+        let mut st = tx.commit().state;
+        let mut drain_key = 1u64;
+        while st.has_pending_choice() {
+            let choice = ChoiceId::new(st.resolution.pending_choice_id);
+            let revision = st.revision;
+            let (next, output) = apply_command(
+                st,
+                Command {
+                    actor: PlayerId::NONE,
+                    expected_revision: ExpectedRevision(revision),
+                    idempotency_key: IdempotencyKey(seed ^ drain_key),
+                    kind: CommandKind::ResolveChoice {
+                        choice_id: choice,
+                        selections: vec![],
+                        cancelled: true,
+                    },
+                },
+            );
+            assert!(
+                matches!(output.result, CommandResult::Accepted { .. }),
+                "drain rejected: {:?}",
+                output.result
+            );
+            st = next;
+            drain_key += 1;
+        }
+        tx = Transaction::begin(st);
+    }
     let players = tx.state().players.alive_by_seat();
     let (owner, first, second) = (players[0], players[1], players[2]);
     let mut effects: Vec<_> = tx
@@ -8603,7 +8636,31 @@ fn setup(seed: u64) -> (Transaction, PlayerId, PlayerId, PlayerId) {
         player: *player,
         count: u32::MAX,
     }));
-    run_effects(&mut tx, effects).unwrap();
+    let _ = run_effects(&mut tx, effects);
+    // 卸技/弃牌可能再开 optional 窗——再排空一次。
+    let mut st = tx.commit().state;
+    let mut drain_key = 0xB7u64;
+    while st.has_pending_choice() {
+        let choice = ChoiceId::new(st.resolution.pending_choice_id);
+        let revision = st.revision;
+        let (next, output) = apply_command(
+            st,
+            Command {
+                actor: PlayerId::NONE,
+                expected_revision: ExpectedRevision(revision),
+                idempotency_key: IdempotencyKey(seed ^ drain_key),
+                kind: CommandKind::ResolveChoice {
+                    choice_id: choice,
+                    selections: vec![],
+                    cancelled: true,
+                },
+            },
+        );
+        assert!(matches!(output.result, CommandResult::Accepted { .. }));
+        st = next;
+        drain_key += 1;
+    }
+    let mut tx = Transaction::begin(st);
     tx.state_mut().revision = 1;
     tx.state_mut().turn.current = owner;
     tx.state_mut().turn.phase = Phase::Play;

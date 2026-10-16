@@ -10635,8 +10635,8 @@ fn packages_publish_abi159_quhu_and_both_complete_xunyu_variants() {
 
     let mobile = content_schema::ContentPackage::from_json_bytes(MOBILE).unwrap();
     assert_eq!(mobile.manifest.rule_vm_abi_version, 734);
-    assert_eq!(mobile.skill_index.len(), 440);
-    assert_eq!(mobile.character_index.len(), 204);
+    assert_eq!(mobile.skill_index.len(), 441);
+    assert_eq!(mobile.character_index.len(), 205);
     assert_eq!(
         mobile
             .character_index
