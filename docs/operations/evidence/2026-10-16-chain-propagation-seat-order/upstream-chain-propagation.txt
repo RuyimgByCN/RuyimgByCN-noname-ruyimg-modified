@@ -1,0 +1,143 @@
+# 上游语义摘录：铁索传导/解链/座位序起点（2026-10-16 只读核对）
+# 采用玩法版本=本地 archive/upstream/noname（v1.11.7，HEAD df2682e6）
+
+## 1 _lianhuan（library/skill.js:2017-2056）：传导 = 独立完整伤害事件、保留原始来源、目标按【当前回合玩家】座位序、逐个 isLinked 复查
+	_lianhuan: {
+		trigger: { player: "damageAfter" },
+		filter: function (event, player) {
+			return event.lianhuanable == true;
+		},
+		forced: true,
+		popup: false,
+		logv: false,
+		forceDie: true,
+		silent: true,
+		forceOut: true,
+		//priority:-5,
+		content: [
+			async (event, trigger, player) => {
+				event.logvid = trigger.getLogv();
+			},
+			async (event, trigger, player) => {
+				event.targets = game.filterPlayer(function (current) {
+					return current != event.player && current.isLinked();
+				});
+				lib.tempSortSeat = _status.currentPhase || player;
+				event.targets.sort(lib.sort.seat);
+				delete lib.tempSortSeat;
+				event._args = [trigger.num, trigger.nature, trigger.cards, trigger.card];
+				if (trigger.source) {
+					event._args.push(trigger.source);
+				} else {
+					event._args.push("nosource");
+				}
+			},
+			async (event, trigger, player) => {
+				if (event.targets.length) {
+					var target = event.targets.shift();
+					if (target.isLinked()) {
+						target.damage.apply(target, event._args.slice(0));
+					}
+					event.redo();
+				}
+			},
+		],
+
+## 2 _lianhuan4（library/skill.js:2058-2076）：承受属性伤害后解链；notLink() 守卫防级联（事后防，非预先解链）
+	_lianhuan4: {
+		trigger: { player: "changeHp" },
+		priority: -10,
+		forced: true,
+		popup: false,
+		forceDie: true,
+		silent: true,
+		filter: function (event, player) {
+			var evt = event.getParent();
+			return evt && evt.name == "damage" && evt.hasNature("linked") && player.isLinked();
+		},
+		async content(event, trigger, player) {
+			player.link();
+			if (trigger.getParent().notLink()) {
+				trigger.getParent().lianhuanable = true;
+			}
+		},
+	},
+	//休整
+
+## 3 notLink()（library/element/gameEvent.ts:1055-1060）：父事件名为 _lianhuan/_lianhuan2 时返回 false → 传导伤害不再传导
+	isMine() {
+		return this.player?.isMine();
+	}
+	isOnline() {
+		return this.player?.isOnline();
+	}
+	notLink() {
+		return this.getParent().name != "_lianhuan" && this.getParent().name != "_lianhuan2";
+	}
+	isPhaseUsing(player) {
+		const evt = this.getParent("phaseUse");
+
+## 4 lib.linked（library/index.js:13890）：属性伤害传导集合
+			}
+			*/
+		},
+	};
+	linked = ["fire", "thunder", "kami", "ice"];
+	natureBg = new Map([["stab", "image/card/cisha.png"]]);
+	natureSeparator = "|";
+
+## 5 多目标非 multitarget 锦囊目标定序（content.ts:10136-10152）：sortBySeat(_status.currentPhase || player)
+		async (event, trigger, player) => {
+			const { cards, card, targets, num } = event;
+			event.sortTarget = (animate, sort) => {
+				const { card, targets, num, fixedSeat } = event;
+				const info = get.info(card, false);
+				if (num !== 0 || targets.length <= 1) {
+					return;
+				}
+				if (!info.multitarget && !fixedSeat && !sort) {
+					targets.sortBySeat(_status.currentPhase || player);
+				}
+				if (!animate) {
+					return;
+				}
+				for (const target of targets) {
+					target.addTempClass("target");
+				}
+			};
+			event.sortTarget();
+			event._triggerTo = async (name: string, key: string, first: string, last?: boolean) => {
+
+## 6 AOE 目标数组：useCard step12 只做动画（sort=true 跳过座位重排，content.ts:10298-10306）
+		// step 12
+		async (event, trigger, player) => {
+			const { cards, card, targets, num } = event;
+			if (event.all_excluded) {
+				return;
+			}
+			const info = get.info(event.card, false);
+			if (num == 0 && targets.length > 1) {
+				event.sortTarget(true, true);
+			}
+
+## 7 无懈名单排序（card/standard.js:4486-4488）
+						event.id = get.id();
+					}
+					map.id = event.id;
+					list.sortBySeat(_status.currentPhase);
+				},
+				async (event, trigger, player, result) => {
+					if (event.list.length === 0) {
+						event.finish();
+					} else if (_status.connectMode && (event.list[0].isOnline() || event.list[0] === game.me)) {
+						event.goto(4);
+					} else {
+						event.current = event.list.shift();
+						event.send(event.current, event._info_map);
+					}
+				},
+				async (event, trigger, player, result) => {
+
+## 8 原生线对应实现
+- 传导：crates/engine-native/src/kernel.rs:1025-1058（commit_damage 尾：seat_order_from(target) 过滤 linked → 【先解除全部连环】→ 逐目标 emit Damage{from_chain:true, 保留 d.source}）
+- 无懈窗口：kernel.rs wrap_nullify_window（queue = seat_order_from(source)）；NullifyWindowMachine 应答后 queue = seat_order_from(next_alive(responder))
