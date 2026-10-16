@@ -1,0 +1,163 @@
+# 上游语义摘录：AOE/决斗响应跳过与无懈窗口询问轮次（2026-10-16 只读核对）
+# 采用玩法版本=本地 archive/upstream/noname（v1.11.7，HEAD df2682e6）
+
+## 1 响应跳过：autochoose = autoRespondSha/Shan
+		 *
+		 * @this {{ player: Player }}
+		 * @returns { boolean }
+		 */
+		autoRespondSha() {
+			return !this.player.hasSha("respond");
+		},
+		/**
+		 * 判断当前响应事件是否应自动跳过出闪。
+		 *
+		 * @this {{ player: Player }}
+		 * @returns { boolean }
+		 */
+		autoRespondShan() {
+			return !this.player.hasShan("respond");
+
+## 2 chooseToRespond 的跳过路径（content.ts:5489 附近）
+				_status.noclearcountdown = true;
+			}
+			if (!_status.connectMode && lib.config.skip_shan && event.autochoose && event.autochoose()) {
+				event.result = { bool: false };
+			} else {
+				if (game.modeSwapPlayer && !_status.auto && player.isUnderControl()) {
+					game.modeSwapPlayer(player);
+				}
+				if (event.isMine()) {
+
+## 3 南蛮 nanman（card/standard.js:1306-1330）：逐目标 chooseToRespond + autochoose + reverseOrder 声明
+		nanman: {
+			audio: true,
+			fullskin: true,
+			type: "trick",
+			enable: true,
+			selectTarget: -1,
+			defaultYingbianEffect: "remove",
+			filterTarget(card, player, target) {
+				return target !== player;
+			},
+			reverseOrder: true,
+			async content(event, trigger, player) {
+				const target = event.target;
+				if (typeof event.shaRequired !== "number" || !event.shaRequired || event.shaRequired < 0) {
+					event.shaRequired = 1;
+				}
+				if (typeof event.baseDamage !== "number") {
+						return 0;
+					}
+					let evt = _status.event.getParent("useCard"),
+						pri = 1,
+
+## 4 万箭 wanjian（card/standard.js:1685-1700）同构
+		wanjian: {
+			audio: true,
+			fullskin: true,
+			type: "trick",
+			enable: true,
+			selectTarget: -1,
+			reverseOrder: true,
+			defaultYingbianEffect: "remove",
+			filterTarget(card, player, target) {
+				return target !== player;
+			},
+			async content(event, trigger, player) {
+
+## 5 决斗 juedou：目标先（event.turn = target）+ autochoose + 伤害来源 event.source（:2120-2232）
+			filterTarget(card, player, target) {
+				return target !== player;
+			},
+			async content(event, trigger, player) {
+				const target = event.target;
+				if (event.turn === undefined) {
+					event.turn = target;
+				}
+							await event.turn.damage(event.source);
+							damaged = true;
+							break;
+						}
+					}
+					if (damaged) {
+						break;
+
+## 6 目标冻结/死亡跳过（useCard 结算与效果调用两处 isDead 检查）
+		// step 12
+		async (event, trigger, player) => {
+			const { cards, card, targets, num } = event;
+			if (event.all_excluded) {
+				return;
+			}
+			const info = get.info(event.card, false);
+			if (num == 0 && targets.length > 1) {
+				event.sortTarget(true, true);
+			}
+
+			const info = get.info(event.skill);
+
+			if ((targets[num] && targets[num].isDead() && !info?.deadTarget) || (targets[num] && targets[num].isOut() && !info?.includeOut) || (targets[num] && targets[num].removed)) {
+				if (!info.multitarget && num < targets.length - 1) {
+					event.num++;
+					event.redo();
+				}
+				return;
+			}
+
+			const next = game.createEvent(event.skill);
+			next.setContent(info.content);
+			next.targets = targets;
+
+## 7 无懈窗口询问名单与排序（_wuxie：filterPlayer hasWuxie → sortBySeat(_status.currentPhase)）
+				},
+				async (event, trigger, player, result) => {
+					//判断谁有无懈
+					const map = event._info_map;
+					const list = game.filterPlayer(current => {
+						if (event.triggername === "phaseJudge") {
+							if (game.checkMod(map.card, map.target, current, "unchanged", "wuxieJudgeEnabled", current) === false) {
+								return false;
+							}
+							if (game.checkMod(map.card, map.target, current, "unchanged", "wuxieJudgeRespondable", map.target) === false) {
+								return false;
+							}
+						} else {
+							if (trigger.getParent().directHit.includes(current)) {
+								return false;
+							}
+							if (game.checkMod(map.card, map.player, map.target, current, "unchanged", "wuxieEnabled", current) === false) {
+								return false;
+							}
+							if (game.checkMod(map.card, map.player, map.target, current, "unchanged", "wuxieRespondable", map.player) === false) {
+								return false;
+							}
+						}
+						return current.hasWuxie(map);
+					});
+					event.list = list;
+					if (!event.id) {
+						event.id = get.id();
+					}
+					map.id = event.id;
+					list.sortBySeat(_status.currentPhase);
+				},
+				async (event, trigger, player, result) => {
+					if (event.list.length === 0) {
+						event.finish();
+					} else if (_status.connectMode && (event.list[0].isOnline() || event.list[0] === game.me)) {
+						event.goto(4);
+					} else {
+						event.current = event.list.shift();
+						event.send(event.current, event._info_map);
+					}
+				},
+
+## 8 reverseOrder 仅 versus 生效（content.ts:10267） vs 结算方向选择内容（content.ts:3645-3667）
+				}
+				await next;
+			} else if (info.reverseOrder && get.is.versus() && targets.length > 1) {
+				const next = game.createEvent(`${event.card.name}ContentBefore`);
+				next.setContent("reverseOrder");
+				next.targets = targets;
+				next.card = event.card;

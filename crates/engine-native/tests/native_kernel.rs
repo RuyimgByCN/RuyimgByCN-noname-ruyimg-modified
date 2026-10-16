@@ -3835,6 +3835,7 @@ fn savage_attack_response_skip_and_pass() {
     // 1 有杀（询问→出杀免伤）；2 无杀（跳过→受伤）；3 有杀（询问→Pass→受伤）
     let sha1 = e.debug_place(1, "sha");
     let sha3 = e.debug_place(3, "sha");
+    let asks_before = count_log(&e, |l| matches!(l, LE::ChoiceOpened { .. }));
     assert!(matches!(
         play(&mut e, savage, vec![]),
         CommandOutcome::Pending { .. }
@@ -3858,6 +3859,16 @@ fn savage_attack_response_skip_and_pass() {
     assert_eq!(hp(&e, 3), 3);
     assert!(!e.debug_hand(1).contains(&sha1));
     assert!(e.debug_hand(3).contains(&sha3));
+    // 询问次数口径（2026-10-16 按上游核对冻结）：上游 `autochoose = lib.filter.
+    // autoRespondSha`（`!player.hasSha('respond')`，library/index.js:12002）在无
+    // 响应牌时直接 `result = {bool:false}`（content.ts:5489），即**不发起询问**；
+    // 原生同为「无牌跳过」。因此本场景恰好 2 次 aoe_response 询问（目标 1、3），
+    // 无杀的目标 2 不产生选择。
+    assert_eq!(
+        count_log(&e, |l| matches!(l, LE::ChoiceOpened { .. })) - asks_before,
+        2,
+        "无杀目标不发起询问（对齐上游 autochoose）"
+    );
 }
 
 /// 万箭：全部目标持闪但全部 Pass → 全员 -1。
@@ -3949,6 +3960,23 @@ fn duel_alternating_sha_until_pass() {
     // 已出的响应杀均入弃牌堆
     assert!(!e.debug_hand(2).contains(&sha_t1));
     assert!(!e.debug_hand(0).contains(&sha_s));
+    // 伤害来源 = **对方**（上游 `await event.turn.damage(event.source)`，
+    // card/standard.js:2227；轮转中 [source, turn] 交换 → 失败方受伤、来源为
+    // 对手，与「最后出杀者」在交替制下等价）。断言来源字段而非仅看体力，
+    // 以冻结「来源归属不受最后出杀者影响」。
+    assert_eq!(
+        count_log(&e, |l| matches!(
+            l,
+            LE::DamageDealt { source: Some(0), target: 2, amount: 1, .. }
+        )),
+        1,
+        "决斗伤害来源应为对手 0"
+    );
+    assert_eq!(
+        count_log(&e, |l| matches!(l, LE::DamageDealt { source: Some(2), .. })),
+        0,
+        "目标不应成为伤害来源"
+    );
 }
 
 /// 轮到方无杀：不询问直接受伤（0 有杀也不被询问）。
@@ -3961,12 +3989,19 @@ fn duel_no_sha_immediate_loss() {
     }
     let duel = e.debug_place(0, "duel");
     let sha = e.debug_place(0, "sha");
+    let asks_before = count_log(&e, |l| matches!(l, LE::ChoiceOpened { .. }));
     let out = play(&mut e, duel, vec![1]);
     // 1 无杀 → 直接受伤，决斗完结（不产生任何询问）
     assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
     assert_eq!(hp(&e, 1), 3);
     assert_eq!(hp(&e, 0), 4);
     assert!(e.debug_hand(0).contains(&sha), "来源的杀不应被消耗");
+    // 上游 `juedou` 同一 autochoose 口径（card/standard.js:2178 起）→ 零询问
+    assert_eq!(
+        count_log(&e, |l| matches!(l, LE::ChoiceOpened { .. })) - asks_before,
+        0,
+        "轮到方无杀时不发起询问（对齐上游 autochoose）"
+    );
 }
 
 /// 决斗不消耗出牌阶段限一次杀。

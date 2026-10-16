@@ -110,15 +110,15 @@ N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，�
 | 传导伤害来源 | 当前保留原始来源，`chain_propagation_preserves_source` 已有行为断言 | 继续核对选定规则及复合技能边界 |
 | 解链时点 | 原生线在发出传导帧**之前**先解除全部连环（天然不级联）；上游按 flag 事后防级联， 传导期间新连环者的卷入口径两线不同 | 触发窗口化时一并对照 |
 | 传导结算完整性 | 原生线传导伤害走完整伤害帧（可触发转移/濒死/触发器）；旧线为 follow-up 队列项， 触发面待逐条对照 | 扩面差分用例核对 |
-| AOE 目标冻结时机 | 原生线在**出牌提交时**冻结目标列表（结算中途死亡者由存活过滤跳过， 中途新增链/玩家不影响队列）；上游冻结时点（使用时 vs 逐个结算时）待核对 | 差分用例核对 |
-| AOE 无牌跳过可见性 | 原生线无响应牌者**不发起询问**直接结算伤害；上游是否照常询问「无牌玩家」 （表现为强制放弃）待核对——影响日志/录像的询问次数口径 | 差分用例核对 |
-| AOE 询问顺序 | 原生线自出牌者下家起按座位顺序；上游顺序一致但边界（如出牌者已死场景）未对照 | 差分用例核对 |
-| 决斗轮转起手 | 原生线**目标先**出杀；上游同为目标先，但来源侧濒死/出牌者中途死亡的终止口径未对照 | 差分用例核对 |
-| 决斗无杀跳过 | 轮到方无杀**不询问**直接受伤（同 AOE 跳过语义）；上游询问口径待核对 | 差分用例核对 |
-| 决斗伤害来源 | 伤害来源固定为**对方**（最后出杀者不影响来源归属）；上游一致性与 「来源已死亡时来源字段」的口径待核对 | 差分用例核对 |
-| 无懈询问顺序与重开 | 原生线窗口队列自**来源本人**起按座位顺序（含来源，对齐旧线 `alive_from_seat(actor)`，ADR 0708 对齐），持无懈者才被询问，出无懈后自其下家重建队列；上游询问轮次的其余细节待逐条对照 | 差分用例核对 |
+| AOE 目标冻结时机 | **已核对一致（2026-10-16）**：上游 `useCard` 在 `num==0 && targets.length>1` 时 `sortTarget(true,true)` 定序一次、结算每目标前查 `targets[num].isDead()` 跳过（`content.ts:10298/10300/10730`）→ 与原生「提交时冻结 + 逐个存活过滤」同口径 | 一致；中途死亡继续结算见 `aoe_continues_after_midqueue_death`——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
+| AOE 无牌跳过可见性 | **已核对一致（2026-10-16）**：上游 `autochoose = lib.filter.autoRespondSha/Shan`（无牌即 `result={bool:false}`，`library/index.js:12002/12009`、`content.ts:5489`）同样**不发起询问**（`skip_shan` 配置关/真人皮下表现为空询问后强制放弃） | 语义一致；**事件轨迹差异**登记（上游存在立即取消的响应事件，原生不建）；询问次数由 `savage_attack_response_skip_and_pass` 断言冻结（无杀目标不产生询问）——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
+| AOE 询问顺序 | **已核对一致（2026-10-16）**：上游非 versus 按 `targets` 定序数组逐个结算＝自使用者下家起座位序；`reverseOrder`（顺时针/逆时针结算方向）**仅 versus 生效**（`content.ts:10267`） | 标准一致（`archery_attack_all_pass_takes_damage` 断言观察者 1→2→3）；versus 结算方向选择未建模 → 归模式变体登记——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
+| 决斗轮转起手 | **已核对一致（2026-10-16）**：上游 `event.turn = target`（`card/standard.js:2131`）目标先，原生 `DuelMachine.on_target` 初态同 | 起手一致；「一方中途死亡」上游不校验存活仍轮转、原生按轮到方死亡走无杀受伤分支且同样不校验来源存活 → 当前已建模技能集内**不可达**，登记未覆盖边界——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
+| 决斗无杀跳过 | **已核对一致（2026-10-16）**：上游同 `autochoose` 短路后 `await event.turn.damage(event.source)`（`card/standard.js:2227`），轮到方无杀不询问直接受伤 | 一致；询问次数 0 由 `duel_no_sha_immediate_loss` 断言冻结——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
+| 决斗伤害来源 | **已核对一致（2026-10-16）**：上游 `event.turn.damage(event.source)` + 轮转 `[source,turn]` 互换（`card/standard.js:2227/2232`）→ 失败方受伤、来源=对方；「来源已死亡」上游与原生均不校验存活（不可达） | 一致；`duel_alternating_sha_until_pass` 新增来源字段断言（`source:Some(0),target:2` 恰 1 次、无 `source:Some(2)`）——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
+| 无懈询问顺序与重开 | **已核对出差异（2026-10-16）**：上游 `_wuxie` 名单 `filterPlayer(hasWuxie)` 后 **`sortBySeat(_status.currentPhase)`**——自**当前回合玩家**起座位序（含本人，`card/standard.js:4473-4487`）；「无懈对无懈」是**嵌套窗口**（无懈本体重走 `useCardToBegin` 新建 `_wuxie`，`map.state` 按嵌套层翻转）。原生自**牌来源**起（ADR 0708 按旧线 `alive_from_seat(actor)`），且单窗口内取反 + 自出无懈者下家**重建环** | **差异登记（候选对齐）**：起点与「重开」结构均不同；起点差异在多数已建模路径不可观察（来源=当前回合玩家），「令他人用牌」类技能可分离二者 → 改判上游口径需 ADR＋版本次＋golden 重录，另立项——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
 | 延时锦囊无懈时点 | 已按旧线改为使用时开窗，来源起含本人；被抵消则弃置、不入判定区；判定阶段不再开窗 | 版本 3 内部规则声明已登记，剩余边界与行为依据归 N06 |
-| 逐目标窗口重开细节 | AOE 逐目标窗口每次抵消后自出无懈者下家重建队列；上游对逐目标窗口的询问范围/轮次细节待对照 | 差分用例核对 |
+| 逐目标窗口重开细节 | **已核对出差异（2026-10-16）**：上游逐目标窗口 = 每个目标各一个由 `useCardToBegin` 触发的 `_wuxie`（名单与该目标绑定、按当前回合玩家排序）；「抵消后重开」由**无懈自身的嵌套窗口**承担。原生为同窗口单次遍历 + 抵消后重建环（`queue = seat_order_from(next_alive(responder))`，含已放弃者绕回复问） | **差异登记（候选对齐）**：对齐＝为无懈本体开独立窗口并保存嵌套层状态（快照/存档面变化），属专项批次——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
 | 奖惩与终局判定顺序 | 已有主公击杀末反贼时奖励不被终局短路的回归 | 其余来源/死亡组合与规则版本依据继续验收 |
 | 改判与天妒切片 | 原范围/旧牌/装备资格与恢复/Finalized 反例已修复，主动与放弃恢复已固化 | 关闭原 N08-c/d；新增判定技能与复合路径继续按逐规则证据验收 |
 | 判定顺序 | 非闪电按放置序在前、闪电在后、队首消费；双放置序工程测试与独立反例复验通过，版本 4 golden 已重录 | N06-a 原反例关闭；多非闪电相对顺序及组合恢复继续补验 |
