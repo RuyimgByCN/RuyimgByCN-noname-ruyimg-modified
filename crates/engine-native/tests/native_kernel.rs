@@ -18850,3 +18850,145 @@ fn d4_boss_b0_ban_query_stub_always_false() {
     assert!(!p.save().core.is_boss_general_banned(0));
     assert!(!p.save().core.boss_mengpo_spawned());
 }
+
+// ---------------------------------------------------------------------------
+// D4/B1 青木隐藏链（tag 411–414）
+// ---------------------------------------------------------------------------
+
+fn boss_general_named(e: &Engine, name: &str) -> u16 {
+    let base = (e.catalog().general_count()
+        - engine_native::content::standard::BOSS_GENERALS.len()) as u16;
+    (base..e.catalog().general_count() as u16)
+        .find(|&d| e.catalog().general_meta(d).map(|g| g.0) == Some(name))
+        .unwrap_or_else(|| panic!("boss general {name}"))
+}
+
+/// 青木链 1→2：青龙死亡 → 勾芒 + 两书精 fellow + 挑战者重整 + stage.
+#[test]
+fn d4_boss_b1_qingmu2_chain_to_goumang() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29201, 4, 0, 0, 4, 4, 0);
+    let qinglong = boss_general_named(&e, "青龙");
+    let goumang = boss_general_named(&e, "勾芒");
+    let shujing = boss_general_named(&e, "书精");
+    e.debug_set_general_def(0, qinglong);
+    e.debug_set_hp(0, 4);
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.catalog().skill_by_name("青木").is_some()
+            && e.state_core().skills.contains_key(&(0, e.catalog().skill_by_name("青木").unwrap())),
+        "青龙应装配青木"
+    );
+
+    // 击杀 Boss：清手防自救 → 过量伤害
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    e.debug_deal_damage(Some(1), 0, 8, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0), "转阶后 Boss 座位应存活");
+    assert_eq!(
+        e.state_core().players[0].general_slots[0],
+        Some(goumang),
+        "应换为勾芒"
+    );
+    let fellows = e.state_core().boss_fellows().expect("fellows");
+    assert_eq!(fellows.len(), 2, "应追加两书精 fellow");
+    for &f in fellows {
+        assert_eq!(
+            e.state_core().players[f as usize].general_slots[0],
+            Some(shujing),
+            "fellow 应为书精"
+        );
+        assert!(e.state_core().is_boss_side(f));
+    }
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 2);
+    assert_eq!(e.state_core().turn.current, 0, "回合锚定 Boss");
+    // 挑战者应回满
+    for t in 1..4u8 {
+        assert!(e.debug_alive(t));
+        assert_eq!(e.debug_hp(t), e.state_core().players[t as usize].max_hp as i32);
+    }
+    assert_zone_conservation(&e);
+
+    // 存档往返
+    let snap = e.save();
+    let e2 = Engine::restore(&snap).expect("restore");
+    assert_eq!(
+        e2.state_core().players[0].general_slots[0],
+        Some(goumang)
+    );
+    assert_eq!(e2.state_core().boss_stage().unwrap().level, 2);
+}
+
+/// 青木3 链 2→3：勾芒死亡 → 太昊 + 侧座勾芒/书精。
+#[test]
+fn d4_boss_b1_qingmu3_chain_to_taihao_sides() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29202, 4, 0, 0, 4, 4, 0);
+    let goumang = boss_general_named(&e, "勾芒");
+    let taihao = boss_general_named(&e, "太昊");
+    let shujing = boss_general_named(&e, "书精");
+    e.debug_set_general_def(0, goumang);
+    e.debug_set_hp(0, 5);
+    // 侧座预置无关将，转阶后应被覆盖
+    e.debug_set_general_def(1, boss_general_named(&e, "书精"));
+    e.debug_set_general_def(3, boss_general_named(&e, "书精"));
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core()
+            .skills
+            .contains_key(&(0, e.catalog().skill_by_name("青木3").unwrap())),
+        "勾芒应装配青木3"
+    );
+
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    e.debug_deal_damage(Some(1), 0, 10, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0));
+    assert_eq!(e.state_core().players[0].general_slots[0], Some(taihao));
+    let prev = e.state_core().ring_prev(0);
+    let next = e.state_core().ring_next(0);
+    assert_eq!(
+        e.state_core().players[prev as usize].general_slots[0],
+        Some(goumang),
+        "prevSeat → 勾芒"
+    );
+    assert_eq!(
+        e.state_core().players[next as usize].general_slots[0],
+        Some(shujing),
+        "nextSeat → 书精"
+    );
+    assert!(e.state_core().is_boss_side(prev));
+    assert!(e.state_core().is_boss_side(next));
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 3);
+    assert_zone_conservation(&e);
+}
+
+/// HostBehavior tag 411–414 往返。
+#[test]
+fn d4_boss_b1_qingmu_host_tags() {
+    use engine_native::content::host::HostBehavior;
+    assert_eq!(HostBehavior::BossQingmu2.tag(), 411);
+    assert_eq!(HostBehavior::BossQingmu2x.tag(), 412);
+    assert_eq!(HostBehavior::BossQingmu3.tag(), 413);
+    assert_eq!(HostBehavior::BossQingmu3x.tag(), 414);
+    assert_eq!(
+        HostBehavior::from_tag(411),
+        Some(HostBehavior::BossQingmu2)
+    );
+    assert_eq!(
+        HostBehavior::from_tag(414),
+        Some(HostBehavior::BossQingmu3x)
+    );
+}

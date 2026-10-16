@@ -2956,6 +2956,18 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 不挂 tag。证据见
 [2026-10-16 D4 B0](../operations/evidence/2026-10-16-d4-boss-b0/README.md)。
 
+**规则 v292（2026-10-16，D4 Boss B1 青木隐藏链打样 / ADR 0783）**：
+HostBehavior tag **411–414**——青木 / 青木·转阶 / 青木3 / 青木3·转阶
+（Death BeforeTriggers：First hide + Normal priority -10 转阶；
+`death_cancelled` 拦 DeathMachine；`SixiangChainParams` 参数化复用
+`reinit`/`add_fellow`/挑战者重整）。青龙/勾芒条目补挂。存档不变 **v79**。
+版本 291→**292**。版本回退探针（292→291 复跑 golden 全绿）证明位移唯
+一来源是规则版本字段。登记差异：无 dieAfter 窗、无八座 changeSeat、
+changeBoss 座位保留清区摸 4、hide 为日志/stage 近似。证据见
+[2026-10-16 D4 B1](../operations/evidence/2026-10-16-d4-boss-b1-qingmu/README.md)。
+（原 2026-10-11「隐藏链八技整族处置不落」对青木四技由本批撤销；白芒/
+赤炎/玄麟六技仍待 B1 余项或后续批。）
+
 **规则 v278（2026-10-14，T8 增量 14：出牌阶段三类计数字段批）**：
 `TurnState.bte_used_play_phase`（出牌阶段已用基本/锦囊/装备牌数，
 `commit_card_used` 尾按**结算牌种**[view-as 转化后]计数，Play 阶段开始

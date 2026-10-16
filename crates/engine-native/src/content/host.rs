@@ -1201,6 +1201,15 @@ pub enum HostBehavior {
     /// 明镜（tag 410，deferred 消解批 妮可）：无防具时视为光纱天衣——
     /// 即将受到伤害时 1/3 概率伤害 -1（RNG 同上游 filter）。
     SwdMinjing,
+    /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
+    BossQingmu2,
+    /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
+    /// （上游 dieAfter priority -10；原生 Death 仅 BeforeTriggers，见 ADR 0783）。
+    BossQingmu2x,
+    /// 青木3（tag 413，D4/B1）：Boss 死亡前置三人隐藏（本体+环邻）。
+    BossQingmu3,
+    /// 青木3·转阶（tag 414，D4/B1）：转阶→太昊，并侧座重挂勾芒/书精。
+    BossQingmu3x,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1394,6 +1403,10 @@ impl HostBehavior {
             HostBehavior::SwdHuajin => 408,
             HostBehavior::SwdHuajin2 => 409,
             HostBehavior::SwdMinjing => 410,
+            HostBehavior::BossQingmu2 => 411,
+            HostBehavior::BossQingmu2x => 412,
+            HostBehavior::BossQingmu3 => 413,
+            HostBehavior::BossQingmu3x => 414,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2045,6 +2058,10 @@ impl HostBehavior {
             408 => HostBehavior::SwdHuajin,
             409 => HostBehavior::SwdHuajin2,
             410 => HostBehavior::SwdMinjing,
+            411 => HostBehavior::BossQingmu2,
+            412 => HostBehavior::BossQingmu2x,
+            413 => HostBehavior::BossQingmu3,
+            414 => HostBehavior::BossQingmu3x,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2065,7 +2082,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 407] = [
+    pub const ALL: [HostBehavior; 411] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2471,6 +2488,10 @@ impl HostBehavior {
         HostBehavior::SwdHuajin,
         HostBehavior::SwdHuajin2,
         HostBehavior::SwdMinjing,
+        HostBehavior::BossQingmu2,
+        HostBehavior::BossQingmu2x,
+        HostBehavior::BossQingmu3,
+        HostBehavior::BossQingmu3x,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2642,6 +2663,10 @@ impl HostBehavior {
             HostBehavior::SwdHuajin => "host:huajin",
             HostBehavior::SwdHuajin2 => "host:huajin2",
             HostBehavior::SwdMinjing => "host:minjing",
+            HostBehavior::BossQingmu2 => "host:qingmu2",
+            HostBehavior::BossQingmu2x => "host:qingmu2x",
+            HostBehavior::BossQingmu3 => "host:qingmu3",
+            HostBehavior::BossQingmu3x => "host:qingmu3x",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3708,6 +3733,36 @@ impl HostBehavior {
                 event: EventKind::DamageBefore,
                 timing: Timing::Normal,
                 priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 青木：死亡前置 First（上游 dieBegin hide）
+            HostBehavior::BossQingmu2 => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::First,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 青木·转阶：死亡前置 Normal priority -10（上游 dieAfter）
+            HostBehavior::BossQingmu2x => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: -10,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::BossQingmu3 => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::First,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::BossQingmu3x => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: -10,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -7273,6 +7328,16 @@ impl SkillBehavior for HostSkillBehavior {
                     && d.amount > 0
                     && d.card.is_some()
                     && ctx.state.turn.luanjian_card == d.card.map(|c| c as u32)),
+            // 青木/青木3：本人死亡且本人是 Boss
+            HostBehavior::BossQingmu2 | HostBehavior::BossQingmu3 => matches!(event,
+                EventData::Death { player, .. }
+                if *player == owner
+                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
+            // 青木·转阶 / 青木3·转阶：同上（技能仍在 DeathMachine 前）
+            HostBehavior::BossQingmu2x | HostBehavior::BossQingmu3x => matches!(event,
+                EventData::Death { player, .. }
+                if *player == owner
+                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
             _ => false,
         }
     }
@@ -27990,10 +28055,257 @@ HostBehavior::XianjianLingyu => match self.stage {
                 }
                 Flow::Done
             }
+            // 青木：标记四象链 + 表现隐藏（座位交互门控近似=日志；无存档字段）
+            HostBehavior::BossQingmu2 => {
+                sixiang_mark_hide(ctx, self.owner, false);
+                Flow::Done
+            }
+            // 青木·转阶：取消死亡执行 + 换勾芒 + 全场回满 + 两书精 + 挑战者重整
+            HostBehavior::BossQingmu2x => {
+                sixiang_run_chain(
+                    ctx,
+                    self.owner,
+                    &SixiangChainParams {
+                        next_boss: "勾芒",
+                        add_fellows: &["书精", "书精"],
+                        side_reinits: &[],
+                        heal_all: true,
+                        chain_level: 2,
+                    },
+                );
+                Flow::Done
+            }
+            // 青木3：三人隐藏（本体+环邻）
+            HostBehavior::BossQingmu3 => {
+                sixiang_mark_hide(ctx, self.owner, true);
+                Flow::Done
+            }
+            // 青木3·转阶：太昊 + 侧座勾芒/书精 + 挑战者重整
+            HostBehavior::BossQingmu3x => {
+                sixiang_run_chain(
+                    ctx,
+                    self.owner,
+                    &SixiangChainParams {
+                        next_boss: "太昊",
+                        add_fellows: &[],
+                        side_reinits: &[(-1, "勾芒"), (1, "书精")],
+                        heal_all: false,
+                        chain_level: 3,
+                    },
+                );
+                Flow::Done
+            }
             // 机关妖术防重标记：纯状态无触发面（补偿触发暂缓）
             HostBehavior::SwdJiguanyaoState => Flow::Done,
         }
     }
+}
+
+
+// ---------------------------------------------------------------------------
+// D4/B1 四象隐藏链（青木打样；白芒/赤炎/玄麟复用 SixiangChainParams）
+// ---------------------------------------------------------------------------
+
+/// 隐藏链转阶参数表（结构同构，避免八份拷贝）。
+struct SixiangChainParams {
+    next_boss: &'static str,
+    add_fellows: &'static [&'static str],
+    /// 环相对位移 → 将名：-1=prevSeat，+1=nextSeat。
+    side_reinits: &'static [(i8, &'static str)],
+    heal_all: bool,
+    chain_level: u8,
+}
+
+fn boss_general_def(catalog: &crate::catalog::Catalog, name: &str) -> Option<u16> {
+    let n = crate::content::standard::BOSS_GENERALS.len();
+    let base = (catalog.general_count() - n) as u16;
+    (base..catalog.general_count() as u16)
+        .find(|&d| catalog.general_meta(d).map(|g| g.0) == Some(name))
+}
+
+fn sixiang_mark_hide(ctx: &mut Ctx<'_>, boss: PlayerId, three: bool) {
+    if let crate::state::GameMode::Boss { stage, .. } = &mut ctx.core.mode {
+        stage.kind = crate::state::BossStageKind::SixiangChain;
+    }
+    ctx.log(crate::machine::LogEvent::SkillTriggered {
+        skill: if three { "青木3" } else { "青木" },
+        owner: boss,
+    });
+    if three {
+        let next = ctx.core.ring_next(boss);
+        let prev = ctx.core.ring_prev(boss);
+        for p in [next, prev] {
+            if p != boss {
+                ctx.log(crate::machine::LogEvent::SkillTriggered {
+                    skill: "青木3",
+                    owner: p,
+                });
+            }
+        }
+    }
+}
+
+fn sixiang_reinit_seat(ctx: &mut Ctx<'_>, seat: PlayerId, general: u16, preserve_hp: bool) {
+    if seat as usize >= ctx.core.players.len() {
+        return;
+    }
+    let old_hp = ctx.core.player(seat).hp;
+    let removed: Vec<crate::ids::SkillDefId> = ctx
+        .core
+        .skills
+        .keys()
+        .filter(|(o, _)| *o == seat)
+        .map(|(_, d)| *d)
+        .collect();
+    for d in removed {
+        ctx.core.skills.remove(&(seat, d));
+    }
+    ctx.core.player_mut(seat).general_slots[0] = Some(general);
+    ctx.core.player_mut(seat).general_slots[1] = None;
+    ctx.core.player_mut(seat).revealed_generals = [true, false];
+    crate::engine::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
+    let p = ctx.core.player_mut(seat);
+    if preserve_hp {
+        p.hp = old_hp.min(p.max_hp as i32);
+    } else {
+        p.hp = p.max_hp as i32;
+    }
+    p.alive = true;
+    p.dying = false;
+    // 保留调用方已置的 death_cancelled（隐藏链转阶需拦 DeathMachine）
+}
+
+fn sixiang_add_fellow(ctx: &mut Ctx<'_>, name: &str) -> Option<PlayerId> {
+    let g = boss_general_def(ctx.catalog, name)?;
+    let hp = ctx.catalog.general_meta(g).map(|m| m.3).unwrap_or(2);
+    let pid = ctx.core.players.len() as u8;
+    ctx.core
+        .players
+        .push(crate::state::PlayerState::new(hp));
+    ctx.core.seat_ring.push(pid);
+    if let crate::state::GameMode::Boss { fellows, .. } = &mut ctx.core.mode {
+        fellows.push(pid);
+    }
+    ctx.core.player_mut(pid).general_slots[0] = Some(g);
+    ctx.core.player_mut(pid).revealed_generals = [true, false];
+    crate::engine::apply_general_assembly(ctx.core, ctx.catalog, pid, 0);
+    let p = ctx.core.player_mut(pid);
+    p.hp = p.max_hp as i32;
+    p.alive = true;
+    ctx.draw_cards(pid, 4);
+    Some(pid)
+}
+
+fn sixiang_mark_fellow(ctx: &mut Ctx<'_>, seat: PlayerId) {
+    if let crate::state::GameMode::Boss { fellows, .. } = &mut ctx.core.mode {
+        if !fellows.contains(&seat) {
+            fellows.push(seat);
+        }
+    }
+}
+
+fn sixiang_discard_zone(ctx: &mut Ctx<'_>, seat: PlayerId) {
+    let hand: Vec<_> = ctx.core.player(seat).hand.clone();
+    for c in hand {
+        ctx.take_hand_card(seat, c);
+        ctx.to_discard(c);
+    }
+    let equips: Vec<_> = ctx.core.player(seat).equips.clone();
+    for c in equips {
+        ctx.core.player_mut(seat).equips.retain(|x| *x != c);
+        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, seat, c);
+        ctx.to_discard(c);
+    }
+    let judge: Vec<_> = ctx.core.player(seat).judge.clone();
+    for c in judge {
+        ctx.core.player_mut(seat).judge.retain(|x| *x != c);
+        ctx.to_discard(c);
+    }
+}
+
+fn sixiang_reset_challengers(ctx: &mut Ctx<'_>) {
+    let seats = ctx.core.players.len() as u8;
+    let mut dnum = 0u32;
+    // 复活已死挑战者
+    for t in 0..seats {
+        if ctx.core.is_boss_side(t) {
+            continue;
+        }
+        if !ctx.core.player(t).alive && ctx.core.player(t).max_hp > 0 {
+            let p = ctx.core.player_mut(t);
+            p.alive = true;
+            p.dying = false;
+            p.hp = p.max_hp as i32;
+            p.boss_chongzheng = 0;
+            ctx.log(crate::machine::LogEvent::BossRevived { player: t });
+            dnum += 1;
+        }
+    }
+    let draw_n = 4u32.saturating_sub(dnum) as usize;
+    for t in 0..seats {
+        if ctx.core.is_boss_side(t) || !ctx.core.player(t).alive {
+            continue;
+        }
+        sixiang_discard_zone(ctx, t);
+        let p = ctx.core.player_mut(t);
+        p.hp = p.max_hp as i32;
+        p.hujia = 0;
+        p.face_down = false;
+        p.linked = false;
+        if draw_n > 0 {
+            ctx.draw_cards(t, draw_n);
+        }
+    }
+}
+
+fn sixiang_run_chain(ctx: &mut Ctx<'_>, boss: PlayerId, params: &SixiangChainParams) {
+    // 取消 DeathMachine 致死，由转阶重挂保活（空洞印同款基建）
+    ctx.core.player_mut(boss).death_cancelled = true;
+    let Some(next) = boss_general_def(ctx.catalog, params.next_boss) else {
+        return;
+    };
+    // 登记差异：上游八座 changeSeat 观战位移不建模（seat_ring 保持）
+    sixiang_reinit_seat(ctx, boss, next, false);
+    // 上游 changeBoss 删旧建新+directgain(4)；原生座位保留，清区后摸 4
+    sixiang_discard_zone(ctx, boss);
+    ctx.draw_cards(boss, 4);
+    if let crate::state::GameMode::Boss { stage, .. } = &mut ctx.core.mode {
+        stage.kind = crate::state::BossStageKind::SixiangChain;
+        stage.level = params.chain_level;
+    }
+    if params.heal_all {
+        let seats = ctx.core.players.len() as u8;
+        for t in 0..seats {
+            if ctx.core.player(t).alive {
+                let p = ctx.core.player_mut(t);
+                p.hp = p.max_hp as i32;
+            }
+        }
+    }
+    for name in params.add_fellows {
+        let _ = sixiang_add_fellow(ctx, name);
+    }
+    for &(rel, name) in params.side_reinits {
+        let seat = if rel < 0 {
+            ctx.core.ring_prev(boss)
+        } else {
+            ctx.core.ring_next(boss)
+        };
+        if seat == boss {
+            continue;
+        }
+        if let Some(g) = boss_general_def(ctx.catalog, name) {
+            sixiang_reinit_seat(ctx, seat, g, false);
+            sixiang_discard_zone(ctx, seat);
+            ctx.draw_cards(seat, 4);
+            sixiang_mark_fellow(ctx, seat);
+        }
+    }
+    sixiang_reset_challengers(ctx);
+    // 回合环重置到 Boss（上游 phaseLoop 重锚定）
+    ctx.core.turn.current = boss;
+    ctx.core.turn.phase = crate::event::Phase::Judge;
+    ctx.core.turn.round = 1;
 }
 
 /// 目录侧注册：行为 → 触发元数据 + 宿主行为实现（打包为 SkillDef）。

@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 291;
+pub const STANDARD_RULESET_VERSION: u64 = 292;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -5821,6 +5821,14 @@ pub const BOSS_KUANGXIAO: &str = "狂笑";
 /// 性近似登记；判定=铁骑内联口径无鬼道/天妒改判窗；闪无主动使用面，
 /// useCard 触发半面由模型承载）。
 pub const BOSS_RELEIJI: &str = "雷击";
+/// 青木（Boss 青龙，规则 v292，D4/B1）：死亡前置隐藏 + 配套转阶技。
+pub const BOSS_QINGMU2: &str = "青木";
+/// 青木·转阶（Boss 青龙，规则 v292，D4/B1）：死亡前置晚窗→勾芒+书精。
+pub const BOSS_QINGMU2X: &str = "青木·转阶";
+/// 青木3（Boss 勾芒，规则 v292，D4/B1）：死亡前置三人隐藏。
+pub const BOSS_QINGMU3: &str = "青木3";
+/// 青木3·转阶（Boss 勾芒，规则 v292，D4/B1）：→太昊+侧座勾芒/书精。
+pub const BOSS_QINGMU3X: &str = "青木3·转阶";
 /// 神裔（Boss 青龙，四象系共有技，规则 v233）：锁定技两面——判定阶段
 /// 的延时锦囊判定恒不生效（上游 mod judge `event.type=="phase"`：bool
 /// true→false、false→null，对延时锦囊消费面等价恒失效；牌去向不变）；
@@ -5936,8 +5944,8 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 朱厌四技全齐（v224 兵先；v225 虚失；v226 巨源——体力上限+5 由
     // maxHp30 表意[登记同穷奇]；记录=PlayerState.juyuan_storage）
     ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
-    // 青龙（v233 神裔、v234 雷击；boss_qingmu2 青木=关卡流程面登记不落）
-    ("青龙", Faction::Qun, &[BOSS_SHENYI, BOSS_RELEIJI], 4, Gender::Male),
+    // 青龙（v233 神裔、v234 雷击；v292 青木/青木·转阶隐藏链）
+    ("青龙", Faction::Qun, &[BOSS_SHENYI, BOSS_RELEIJI, BOSS_QINGMU2, BOSS_QINGMU2X], 4, Gender::Male),
     // 白虎（v235 狂笑；神裔共用 v233；boss_baimang2 白芒=关卡流程面登记不落；
     // 上游势力 shen→群目录近似[ Faction 枚举无神势力，烛阴空势力→群先例]）
     ("白虎", Faction::Qun, &[BOSS_SHENYI, BOSS_KUANGXIAO], 4, Gender::Male),
@@ -5953,9 +5961,9 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 蓐收（v239 星囚；神裔共用 v233；boss_baimang3 白芒3=关卡流程面登记不落；
     // 上游 names 嬴|该、shen→群目录近似）
     ("蓐收", Faction::Qun, &[BOSS_SHENYI, BOSS_XINGQIU], 5, Gender::Male),
-    // 勾芒（v240 不臣；神裔共用 v233；boss_qingmu3 青木3=已处置关卡面；
+    // 勾芒（v240 不臣；神裔共用 v233；v292 青木3/青木3·转阶隐藏链；
     // 上游 names 姬|重、shen→群目录近似）
-    ("勾芒", Faction::Qun, &[BOSS_SHENYI, BOSS_BUCHUN], 5, Gender::Male),
+    ("勾芒", Faction::Qun, &[BOSS_SHENYI, BOSS_BUCHUN, BOSS_QINGMU3, BOSS_QINGMU3X], 5, Gender::Male),
     // 焰灵（v241 回火+复燃；上游技能表无神裔——陪将不在神裔名单；
     // shen→群目录近似）
     ("焰灵", Faction::Qun, &[BOSS_HUIHUO, BOSS_FURAN], 4, Gender::Male),
@@ -7465,8 +7473,7 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
         SkillDef {
             name: BOSS_RELEIJI,
             // 查询型单面：杀/万箭闪消费位内联臂（releiji_on_shan）经
-            // skill_by_name 查询；青木2（boss_qingmu2 死亡隐藏+换位重
-            // 生）为关卡流程面，属 Boss 模式裸骨架缺口，登记不落内核
+            // skill_by_name 查询；青木链见 BOSS_QINGMU2/2X（v292）
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
@@ -8271,6 +8278,23 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
         },
+        // D4/B1 四象隐藏链青木打样（HostBehavior tag 411–414）
+        crate::content::host::host_skill_def(
+            BOSS_QINGMU2.to_string(),
+            crate::content::host::HostBehavior::BossQingmu2,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_QINGMU2X.to_string(),
+            crate::content::host::HostBehavior::BossQingmu2x,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_QINGMU3.to_string(),
+            crate::content::host::HostBehavior::BossQingmu3,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_QINGMU3X.to_string(),
+            crate::content::host::HostBehavior::BossQingmu3x,
+        ),
     ];
     (cards, skills)
 }
