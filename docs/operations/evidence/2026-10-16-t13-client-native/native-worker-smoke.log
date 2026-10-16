@@ -1,0 +1,10 @@
+PASS init_web
+PASS create
+PASS observer_view
+PASS endPhase
+PASS autoStep_progress | steps=40
+PASS save_hex | bytes=1540
+PASS restore_hex | rev=41
+PASS playCard_shape | rev=41
+PASS extension_catalog_15 | n=15
+{"total":9,"failed":0}

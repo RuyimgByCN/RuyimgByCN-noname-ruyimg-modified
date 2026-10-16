@@ -8,6 +8,11 @@ import {
 } from "../engine/appearanceStore";
 import { setDesktopMatchFrozen } from "../engine/desktopHost";
 import {
+  contentLockSummary,
+  putNativeSave,
+  setMatchFrozen,
+} from "../engine/extensionStore";
+import {
   NetworkEngineClient,
   type RoomRoster,
 } from "../engine/networkClient";
@@ -67,14 +72,18 @@ async function handleEnvelope(env: EngineEnvelope) {
   await presentationDelay(store, 120);
   clearEffects(store);
   const prefix = isOnline.value ? `房间 #${roomId.value} · ` : "";
+  const hashHint = (env.hash_hex || "").slice(0, 12);
   statusLine.value = env.finished
     ? `${prefix}终局 · rev ${env.revision}`
-    : `${prefix}rev ${env.revision} · ${env.hash_hex.slice(0, 12)}…`;
+    : `${prefix}rev ${env.revision}${hashHint ? ` · ${hashHint}…` : ""}${
+        localClient.isNative() ? " · native" : ""
+      }`;
 }
 
 async function connectAndStart() {
   await withBusy(async () => {
     await setDesktopMatchFrozen(true);
+    setMatchFrozen(true);
     if (isOnline.value) {
       const intent = readOnlineIntent();
       configureOnlineAppearanceCatalog(intent.wsUrl);
@@ -84,10 +93,66 @@ async function connectAndStart() {
     configureLocalAppearanceCatalog();
     await localClient.connect();
     store.connected = true;
-    statusLine.value = "Worker 就绪，开局中…";
+    statusLine.value = localClient.isNative()
+      ? "原生 Worker 就绪，开局中…"
+      : "Worker 就绪，开局中…";
+    // 原生座位从 0 起；旧线观察者常为 1。保持 query 兼容，原生路径夹到 [0, players)。
+    if (localClient.isNative()) {
+      selfId.value = Math.max(0, Math.min(selfId.value, players.value - 1));
+    }
     const env = await localClient.start(players.value, seed.value, selfId.value);
     await handleEnvelope(env);
-    pushLog(store, `开局 ${players.value} 人 seed=${seed.value}`);
+    const lock = contentLockSummary();
+    pushLog(
+      store,
+      `开局 ${players.value} 人 seed=${seed.value}${
+        lock.packages.length ? ` · 内容锁 ${lock.packages.length} 包` : ""
+      }`,
+    );
+  });
+}
+
+async function saveMatch() {
+  await withBusy(async () => {
+    if (isOnline.value) throw new Error("联机模式请使用服务端存档");
+    if (!localClient.isNative()) throw new Error("存档仅原生后端支持");
+    const hex = await localClient.saveHex();
+    const lock = contentLockSummary();
+    const id = `save-${Date.now()}`;
+    putNativeSave({
+      id,
+      label: `rev${store.revision} · ${players.value}p seed=${seed.value}`,
+      hex,
+      seed: seed.value,
+      players: players.value,
+      contentLock: lock.packages.map((p) => p.key),
+      lockSeed: lock.hashSeed,
+      savedAt: new Date().toISOString(),
+      revision: store.revision,
+    });
+    pushLog(store, `已存档 ${id}（${hex.length / 2} 字节）`);
+    statusLine.value = `已存档 · ${id}`;
+  });
+}
+
+async function loadLatestSave() {
+  await withBusy(async () => {
+    if (isOnline.value) throw new Error("联机模式不支持本地读档");
+    if (!localClient.isNative()) throw new Error("读档仅原生后端支持");
+    const { listNativeSaves } = await import("../engine/extensionStore");
+    const slots = listNativeSaves();
+    const slot = slots[0];
+    if (!slot) throw new Error("无本地存档");
+    // 内容锁错版拒绝（G5 客户端闸）：锁摘要不一致则拒
+    const lock = contentLockSummary();
+    if (slot.lockSeed && lock.hashSeed !== slot.lockSeed) {
+      throw new Error(
+        `内容锁不匹配：存档 ${slot.lockSeed || "∅"} ≠ 当前 ${lock.hashSeed || "∅"}`,
+      );
+    }
+    const env = await localClient.restoreHex(slot.hex);
+    await handleEnvelope(env);
+    pushLog(store, `读档 ${slot.id} · rev ${slot.revision}`);
   });
 }
 
@@ -291,17 +356,25 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-onMounted(() => {
-  window.addEventListener('keydown', onKeydown);
-  void connectAndStart();
-});
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', onKeydown);
+function releaseMatchLocks() {
   stopAuto();
   localClient.dispose();
   networkClient.dispose();
   void setDesktopMatchFrozen(false);
+  setMatchFrozen(false);
+}
+
+onMounted(() => {
+  window.addEventListener("keydown", onKeydown);
+  // 整页跳转不会走 onUnmounted，需 pagehide 解冻内容锁
+  window.addEventListener("pagehide", releaseMatchLocks);
+  void connectAndStart();
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", onKeydown);
+  window.removeEventListener("pagehide", releaseMatchLocks);
+  releaseMatchLocks();
 });
 
 watch(
@@ -416,6 +489,22 @@ const turnInfo = computed(() => {
         </button>
         <button v-if="!isOnline" type="button" :disabled="store.busy" @click="toggleAuto">
           {{ autoRunning ? "停止自动" : "连续自动" }}
+        </button>
+        <button
+          v-if="!isOnline"
+          type="button"
+          :disabled="store.busy || !store.connected"
+          @click="saveMatch"
+        >
+          存档
+        </button>
+        <button
+          v-if="!isOnline"
+          type="button"
+          :disabled="store.busy || !store.connected"
+          @click="loadLatestSave"
+        >
+          读档
         </button>
       </div>
       <div class="row muted controls">
