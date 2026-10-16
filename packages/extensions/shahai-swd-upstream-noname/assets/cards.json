@@ -1438,7 +1438,7 @@
         },
         {
           "name": "pozhen",
-          "mapping": null
+          "mapping": "host:pozhen"
         },
         {
           "name": "tanlin",
@@ -1963,6 +1963,10 @@
     {
       "name": "swd_huanxing_state",
       "mapping": "host:huanxing2"
+    },
+    {
+      "name": "swd_guiyan2",
+      "mapping": "host:guiyan2"
     }
   ]
 }
