@@ -1559,26 +1559,6 @@
       ]
     },
     {
-      "name": "swd_xuanyuanjianxian",
-      "faction": "qun",
-      "hp": 4,
-      "gender": "male",
-      "skills": [
-        {
-          "name": "pozhou",
-          "mapping": null
-        },
-        {
-          "name": "huajian",
-          "mapping": "host:huajian"
-        },
-        {
-          "name": "xuanyuan",
-          "mapping": null
-        }
-      ]
-    },
-    {
       "name": "swd_muyue",
       "faction": "wei",
       "hp": 3,
@@ -1951,6 +1931,22 @@
         {
           "name": "lieren",
           "mapping": "host:lieren"
+        }
+      ]
+    },
+    {
+      "name": "swd_chenfu",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "xuanzhou",
+          "mapping": null
+        },
+        {
+          "name": "bingfeng",
+          "mapping": null
         }
       ]
     }
