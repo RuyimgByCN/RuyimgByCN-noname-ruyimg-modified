@@ -1,7 +1,7 @@
 # 原生重写统一规则覆盖清单
 
 - 状态：活文档，登记**机制级**证据与未对齐边界。当前进度和待办只在 [进度主稿](architecture/native-progress.md) 维护；扩展逐包状态见 [重构台账](migration/upstream-extension-reconstruction.md)。本表历史条目不自动代表最新整包验收。
-- **版本与验证口径（2026-10-10 复核）**：工作区源码 `STANDARD_RULESET_VERSION = 192`，仍在开发；扩展切片的逐技回归（如 swd/ow/xianjian 各批）登记在[两仓台账](migration/upstream-extension-reconstruction.md)与各批证据，本表只登记机制键与 golden 场景；当前测试结论与最近一次全绿只在[进度主稿](architecture/native-progress.md#当前核验快照)维护，本表不复制。[第 48 轮 v59](operations/evidence/2026-09-23-native-review-48/README.md)（原生 335 项、全工作区 4,901 项）与 v28/238 项的[第 16 轮](operations/evidence/2026-09-23-native-upstream-review-16/README.md)均为历史快照。规则版本变更见 [玩法基准](architecture/native-rules-baseline.md)。
+- **版本与验证口径（2026-10-16 复核）**：工作区源码 `STANDARD_RULESET_VERSION = 290`、`ARCHIVE_FORMAT_VERSION = 77`，仍在开发；扩展切片的逐技回归（如 swd/ow/xianjian 各批）登记在[两仓台账](migration/upstream-extension-reconstruction.md)与各批证据，本表只登记机制键与 golden 场景；当前测试结论与最近一次全绿只在[进度主稿](architecture/native-progress.md#当前核验快照)维护，本表不复制。[第 48 轮 v59](operations/evidence/2026-09-23-native-review-48/README.md)（原生 335 项、全工作区 4,901 项）与 v28/238 项的[第 16 轮](operations/evidence/2026-09-23-native-upstream-review-16/README.md)均为历史快照。规则版本变更见 [玩法基准](architecture/native-rules-baseline.md)。
   测试通过、实现符合声明与官方版本等价分别举证；原稿“引擎全部完成”不再作为验收结论。
 - 用途：区分每条规则机制的**已验证 / 近似 / 缺失 / 行为差异**四类状态，
   并给出可执行证据的位置；新内容迁移以此为登记入口。
@@ -62,7 +62,7 @@
 | `attack_range` | 已验证 | replay:equip_distance_matrix、`equip_horses_weapon_range_and_replacement` | 武器射程覆盖基础 1，替换即时生效 |
 | `equip_replace` | 已验证（含卸装效果终止行为证明，ADR 0724） | `equip_horses_weapon_range_and_replacement`、`weapon_replacement_terminates_old_range` | 旧牌入弃牌堆恰一份、帧载荷写回 replaced；行为级证明旧武器射程即时终止（替换后射程回落、远距目标再次不可达） |
 | `distance_alive_skip` | 已验证（含独立参照差分，ADR 0723） | `equip_distance_skips_dead_players`、`distance_range_reference_differential` | 座位距离只计存活玩家；差分含死座压缩阶段与传导（next_alive/seat_order_from）参照 |
-| `chain_state` | 已验证 | replay:chain_fire_propagation、`chain_card_toggles_link`、`chain_can_be_nullified` | 连环横置/重置（铁索对 1-2 名目标翻转）；铁索经 CardUsed+无懈窗口结算、牌离手入弃牌堆（本批修复不离手缺陷，ADR 0705） |
+| `chain_state` | 已验证 | replay:chain_fire_propagation、`chain_card_toggles_link`、`chain_nullify_is_per_target_first_only`、`chain_nullify_is_per_target_second_only`、`chain_double_nullify_leaves_nobody_linked`、`pause_roundtrip_chain_target_window` | 连环横置/重置（铁索对 1-2 名目标翻转）；铁索经 CardUsed+**逐目标**无懈窗口结算（v290 对齐上游 `useCardToBegin` 逐目标窗口）、牌离手入弃牌堆（离手缺陷修复见 ADR 0705；逐目标窗口见规则基准 v290） |
 | `damage_nature` | 已验证 | replay:chain_fire_propagation、`fire_sha_propagates_through_chain`、`thunder_damage_propagates_and_unlinks_all` | 普通/火/雷三属性；火杀入线；`debug_deal_damage` 为技能侧属性伤害内核入口 |
 | `chain_propagation` | 已验证 | replay:chain_fire_propagation、`propagated_damage_is_full_resolution` | 属性伤害传导 + 全员解链；传导为完整结算（可被转移）；普伤不传导不解链 |
 | `aoe_queue` | 已验证 | replay:aoe_response_queue、`savage_attack_response_skip_and_pass`、`archery_attack_all_pass_takes_damage` | 南蛮/万箭多目标响应队列：按冻结目标顺序询问，显式事件栈实现 |
@@ -73,7 +73,7 @@
 | `nullify_window` | 已验证 | replay:nullify_chain_on_savage、`nullify_cancels_savage`、`duel_can_be_nullified` | 锦囊生效前的无懈询问窗口（南蛮/万箭/决斗/铁索/延时锦囊）；`no_nullify_window_for_basic_card` 断言基础牌不开窗 |
 | `nullify_chain` | 已验证 | replay:nullify_chain_on_savage、`nullify_on_nullify_reverses` | 对无懈的无懈反转抵消状态，自出无懈者下家重新询问 |
 | `nullify_active_play` | 已验证（所测路径） | `nullify_rejected_when_played_actively` | 无懈可击只能在无懈窗口响应：出牌阶段主动使用（无目标/有目标）以 WrongPhase 拒绝，状态不变，恢复件同样拒绝（2026-09-24 修复：原先落入 `unreachable!` panic） |
-| `nullify_scope` | 已验证（部分） | `chain_can_be_nullified`、`delayed_trick_play_time_nullify_window`、`savage_per_target_nullify` | AOE 按目标、决斗单目标、铁索整牌窗口；延时锦囊改为使用时开窗，判定阶段不再开窗（ADR 0708） |
+| `nullify_scope` | 已验证（部分） | `chain_nullify_is_per_target_first_only`、`chain_nullify_is_per_target_second_only`、`chain_double_nullify_leaves_nobody_linked`、`delayed_trick_play_time_nullify_window`、`savage_per_target_nullify` | AOE 按目标、决斗单目标、**铁索按目标**（v290 对齐上游逐目标 `useCardToBegin` 窗口；原「整牌级窗口」行为差异本批关闭）；延时锦囊改为使用时开窗，判定阶段不再开窗（ADR 0708） |
 | `judge_zone` | 已验证 | replay:judge_phase_delayed_tricks、`le_judgement_skips_play_phase`、`bing_judgement_skips_draw_phase`、`judge_zone_same_name_limit`、`judge_order_delayed_first_then_lightning_hit_kills`（双放置序） | 主动放置查重；判定排序分组已落地（非闪电放置序在前、闪电在后、队首消费，ADR 0713），双放置序锁定测试通过 |
 | `delayed_trick` | 已验证（部分） | replay:judge_phase_delayed_tricks、`shandian_hits_and_transfers`、`delayed_trick_play_time_nullify_window` | 乐/兵/闪电；使用时无懈，判定阶段直接翻牌；闪电黑桃 2–9 命中 3 雷伤（无来源），未中传下一存活玩家，若其已有闪电则弃置 |
 | `phase_skip` | 已验证 | replay:judge_phase_delayed_tricks、`bing_judgement_skips_draw_phase` | 乐跳过出牌阶段（Draw 后直达 Discard）、兵跳过摸牌（不摸） |
@@ -98,9 +98,10 @@ N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，�
 
 ### 行为差异（迁移/对齐前不得当作与旧线等价）
 
+> 2026-10-16 勘正：原「铁索无懈仍为整牌级」行已关闭（规则 v290 对齐上游逐目标 `useCardToBegin` 窗口，见[规则基准 v290 条目](architecture/native-rules-baseline.md)与[证据](operations/evidence/2026-10-16-n06-chain-per-target-nullify/README.md)）；本表仅剩以下未对齐项。
+
 | 条目 | 差异 | 处置 |
 |---|---|---|
-| 铁索无懈仍为整牌级 | 一个窗口包裹全部铁索目标，抵消时两个目标都不横置；测试冻结该实现，尚未确认目标粒度规则 | 按选定规则来源核对，再写独立行为断言（N06） |
 | 临时技能存续期 | 原生线：存续至**拥有者**回合结束；旧线 `add_skill_until_turn_end` 语义待逐条核对 | 需语义核对后要么对齐要么登记 ADR |
 | 触发全序细节 | 原生线 `Timing→Priority(降)→强制先→座位距→定义号`；旧线含 seat_rel 与 fire-limit 细节，未逐项对照 | 扩面时用差分用例对照 |
 | 濒死应答队列静态 | 应答者名单在濒死帧启动时构建，不响应其后的技能变动 | 与旧线行为一致性待核对 |

@@ -70,7 +70,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
         ("PlaceDelayed", MachineSnapshot::PlaceDelayed { card: 1, target: 1, placed: true }),
         ("Aoe", MachineSnapshot::Aoe { card: 1, source: 0, need: engine_native::CardKind::SavageAttack, targets: vec![1], idx: 0, inner: Some(Box::new(MachineSnapshot::Noop)), nature: engine_native::event::DamageNature::Normal }),
         ("AoeTarget", MachineSnapshot::AoeTarget { source: 0, target: 1, need: engine_native::CardKind::ArcheryAttack, asked: true, card: 1, nature: engine_native::event::DamageNature::Normal }),
-        ("Chain", MachineSnapshot::Chain { card: 1, source: 0, targets: vec![1, 2], emitted: 1 }),
+        ("Chain", MachineSnapshot::Chain { card: 1, source: 0, targets: vec![1, 2], idx: 1, inner: Some(Box::new(MachineSnapshot::Noop)), dispatcher: true }),
         ("DiscardToLimit", MachineSnapshot::DiscardToLimit { player: 0, need: 1, asked: true }),
         ("Death", MachineSnapshot::Death { player: 1, killer: Some(0) }),
         ("OptionalGate", MachineSnapshot::OptionalGate { owner: 0, def: SkillDefId::MAX, event: damage, asked: true, inner: Some(Box::new(MachineSnapshot::Noop)) }),

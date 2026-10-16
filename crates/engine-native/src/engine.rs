@@ -5392,12 +5392,20 @@ fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
             push_u32(h, *card);
             push_u8(h, *nature as u8);
         }
-        M::Chain { card, source, targets, emitted } => {
+        M::Chain { card, source, targets, idx, inner, dispatcher } => {
             push_u8(h, 16);
             push_u32(h, *card);
             push_u8(h, *source);
             push_players(h, targets);
-            push_usize(h, *emitted);
+            push_usize(h, *idx);
+            match inner {
+                None => push_u8(h, 0),
+                Some(m) => {
+                    push_u8(h, 1);
+                    push_machine(h, m);
+                }
+            }
+            push_u8(h, *dispatcher as u8);
         }
         M::PlaceDelayed { card, target, placed } => {
             push_u8(h, 17);

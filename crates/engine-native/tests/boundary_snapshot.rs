@@ -1085,6 +1085,25 @@ fn pause_roundtrip_judge_window() {
     assert_pause_roundtrip(build_judge_window, answer_by_prompt);
 }
 
+/// 铁索逐目标无懈窗口（规则 v290）：Chain 机器新增 `idx/inner/dispatcher`
+/// 编码（存档 v77），窗口挂起点必须可往返；窗口被抵消只影响该目标。
+fn build_chain_window() -> Engine {
+    let mut e = Engine::new(177, 4);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let chain = e.debug_place(0, "chain");
+    let _nul = e.debug_place(1, "nullify");
+    play(&mut e, chain, vec![1, 2]);
+    e
+}
+
+#[test]
+fn pause_roundtrip_chain_target_window() {
+    assert_pause_roundtrip(build_chain_window, answer_plays_nullify);
+}
+
 #[test]
 fn pause_roundtrip_discard_to_limit() {
     assert_pause_roundtrip(build_discard_to_limit, answer_by_prompt);

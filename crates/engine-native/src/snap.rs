@@ -342,7 +342,10 @@ pub enum MachineSnapshot {
         card: CardId,
         source: PlayerId,
         targets: Vec<PlayerId>,
-        emitted: usize,
+        idx: usize,
+        inner: Option<Box<MachineSnapshot>>,
+        /// true=整牌调度层（逐目标无懈窗口 + 收尾弃置）；false=单目标叶子。
+        dispatcher: bool,
     },
     DiscardToLimit {
         player: PlayerId,
@@ -1031,11 +1034,15 @@ fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotE
             card,
             source,
             targets,
+            inner,
             ..
         } => {
             check_card(*card, b)?;
             check_pid(*source, b)?;
             check_pids(targets, b)?;
+            if let Some(e) = inner {
+                check_machine(e, b)?;
+            }
         }
         MachineSnapshot::DiscardToLimit { player, .. } => check_pid(*player, b)?,
         MachineSnapshot::Death { player, killer } => {
@@ -2057,7 +2064,12 @@ pub fn active_ask(
                 false,
             ))
         }
-        MachineSnapshot::Chain { .. } => None,
+        // 铁索逐目标无懈窗口（规则 v290）：当前目标窗口内的询问由窗口机器回答；
+        // 派发层自身不产生询问。
+        MachineSnapshot::Chain { inner, .. } => {
+            let e = inner.as_deref()?;
+            active_ask(e, core, catalog)
+        }
         MachineSnapshot::DiscardToLimit { player, need, asked } => {
             if !*asked {
                 return None;
@@ -4314,13 +4326,26 @@ impl MachineSnapshot {
                 card,
                 source,
                 targets,
-                emitted,
-            } => Ok(Box::new(crate::kernel::ChainMachine::new(
-                *card,
-                *source,
-                targets.clone(),
-                *emitted,
-            ))),
+                idx,
+                inner,
+                dispatcher,
+            } => {
+                let inner = match inner {
+                    Some(e) => match e.restore() {
+                        Ok(m) => Some(m),
+                        Err(_) => return Err(SnapshotError::UnknownMachine),
+                    },
+                    None => None,
+                };
+                Ok(Box::new(crate::kernel::ChainMachine::new(
+                    *card,
+                    *source,
+                    targets.clone(),
+                    *idx,
+                    inner,
+                    *dispatcher,
+                )))
+            }
             MachineSnapshot::DiscardToLimit { player, need, asked } => Ok(Box::new(
                 crate::kernel::DiscardToLimitMachine::new(*player, *need, *asked),
             )),

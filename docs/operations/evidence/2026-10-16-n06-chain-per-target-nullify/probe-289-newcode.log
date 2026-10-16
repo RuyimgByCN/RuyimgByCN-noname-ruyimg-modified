@@ -1,0 +1,15 @@
+# 版本回退探针（位移源证明）
+# 构型：新代码（逐目标无懈 + Chain 新编码 idx/inner/dispatcher）
+#       + 规则版本回退 290→289 + golden 表回退为 v289 记录值
+# 命令：cargo test --offline -p engine-native --test replay_scenarios
+# 预期：14 场全绿——证明新编码不进入这 14 个哈希，位移唯一来源=规则版本字段
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-1215dbf5c401b5c8)
+
+running 2 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios_match_golden ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

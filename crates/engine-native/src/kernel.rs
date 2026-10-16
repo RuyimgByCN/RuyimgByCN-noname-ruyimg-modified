@@ -4926,13 +4926,14 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 }))
             }
             CardKind::Chain => {
-                let effect = ChainMachine {
-                    card: u.card,
-                    source: u.player,
-                    targets: u.targets,
-                    emitted: 0,
-                };
-                Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, Box::new(effect))))
+                // 铁索的逐目标无懈窗口由 ChainMachine 自身对每个目标开启
+                // （对齐上游 useCardToBegin 逐目标窗口），外层不再包整牌级
+                // 窗口——旧包裹在任一无懈生效时令**全部**目标不横置。
+                Some(Box::new(ChainMachine::dispatcher(
+                    u.card,
+                    u.player,
+                    u.targets,
+                )))
             }
             CardKind::Duel => {
                 let effect = DuelMachine {
@@ -8154,17 +8155,36 @@ impl crate::catalog::SkillMachine for SnatchMachine {
     }
 }
 
-/// 铁索连环结算：无懈窗口未抵消后，逐存活目标翻转横置
-/// （每目标一个 Linked 子帧，走 commit 翻转并写回载荷）。
-/// 牌在出牌提交时已入手牌→桌面，本机器结算后一次性弃置——
-/// 旧实现只推 Linked 帧而牌从未离手，本批修复（ADR 0705）。
-#[derive(Clone)]
+/// 铁索连环结算：**逐目标**独立无懈窗口（对齐上游 `useCardToBegin` 逐目标
+/// 窗口——`_wuxie` 触发于每目标的使用开始、无懈以 `neutralize()` 只作用于
+/// 该目标；铁索 `complexTarget` 非 multitarget，故两个目标各有独立窗口）。
+/// 抵消只作用于该目标，其余目标照常横置；全部目标结算后牌离桌入弃牌堆
+/// （唯一弃置点）。无懈窗口原为整牌级、抵消即全场不横置，本批对齐上游并
+/// 关闭覆盖清单行为差异「铁索无懈仍为整牌级」（N06）。
 pub struct ChainMachine {
     card: crate::ids::CardId,
     source: PlayerId,
     targets: Vec<PlayerId>,
-    /// 已发出 Linked 帧的目标数。
-    emitted: usize,
+    /// 已开窗（并结算）的目标数。
+    idx: usize,
+    /// 当前目标的无懈窗口（内含单目标叶子机器）。
+    inner: Option<Box<dyn SkillMachine>>,
+    /// true=整牌调度层（逐目标开窗 + 收尾弃置）；false=窗口内层单目标
+    /// 叶子（未抵消时发 Linked 帧翻转横置，不持弃置权）。
+    dispatcher: bool,
+}
+
+impl Clone for ChainMachine {
+    fn clone(&self) -> Self {
+        Self {
+            card: self.card,
+            source: self.source,
+            targets: self.targets.clone(),
+            idx: self.idx,
+            inner: self.inner.as_ref().map(|m| m.fork()),
+            dispatcher: self.dispatcher,
+        }
+    }
 }
 
 impl ChainMachine {
@@ -8172,15 +8192,65 @@ impl ChainMachine {
         card: crate::ids::CardId,
         source: PlayerId,
         targets: Vec<PlayerId>,
-        emitted: usize,
+        idx: usize,
+        inner: Option<Box<dyn SkillMachine>>,
+        dispatcher: bool,
     ) -> Self {
-        Self { card, source, targets, emitted }
+        Self {
+            card,
+            source,
+            targets,
+            idx,
+            inner,
+            dispatcher,
+        }
+    }
+
+    /// 整牌调度层入口（命令层使用）。
+    pub(crate) fn dispatcher(
+        card: crate::ids::CardId,
+        source: PlayerId,
+        targets: Vec<PlayerId>,
+    ) -> Self {
+        Self::new(card, source, targets, 0, None, true)
+    }
+
+    /// 单目标叶子（窗口内层效果）。
+    fn leaf(card: crate::ids::CardId, source: PlayerId, target: PlayerId) -> Self {
+        Self::new(card, source, vec![target], 0, None, false)
+    }
+
+    /// 当前目标的独立无懈窗口；窗口不持弃置权（外层收尾统一弃置，N01 同款），
+    /// 询问队列自来源起（含本人），对齐旧线 alive_from_seat(actor)。
+    fn spawn_window(&self, ctx: &Ctx<'_>) -> Box<dyn SkillMachine> {
+        let target = self.targets[self.idx];
+        Box::new(NullifyWindowMachine::new(
+            self.card,
+            self.source,
+            false,
+            ctx.core.seat_order_from(self.source),
+            false,
+            true,
+            false,
+            Some(Box::new(ChainMachine::leaf(
+                self.card,
+                self.source,
+                target,
+            ))),
+        ))
     }
 }
 
 impl crate::catalog::SkillMachine for ChainMachine {
     fn fork(&self) -> Box<dyn SkillMachine> {
-        Box::new(self.clone())
+        Box::new(Self {
+            card: self.card,
+            source: self.source,
+            targets: self.targets.clone(),
+            idx: self.idx,
+            inner: self.inner.as_ref().map(|m| m.fork()),
+            dispatcher: self.dispatcher,
+        })
     }
 
     fn snapshot(&self) -> crate::snap::MachineSnapshot {
@@ -8188,28 +8258,54 @@ impl crate::catalog::SkillMachine for ChainMachine {
             card: self.card,
             source: self.source,
             targets: self.targets.clone(),
-            emitted: self.emitted,
+            idx: self.idx,
+            inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
+            dispatcher: self.dispatcher,
         }
     }
 
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        while self.emitted < self.targets.len() {
-            let t = self.targets[self.emitted];
-            self.emitted += 1;
-            if !ctx.core.player(t).alive {
-                continue; // 窗口期间死亡的目标跳过
+        if !self.dispatcher {
+            // 叶子：窗口未抵消（本机器只在未抵消路径被委托）→ 单目标横置。
+            if self.idx == 0 {
+                self.idx = 1;
+                let t = self.targets[0];
+                if ctx.core.player(t).alive {
+                    ctx.emit(EventData::Linked {
+                        player: t,
+                        linked: false,
+                    });
+                    return Flow::Yield;
+                }
             }
-            ctx.emit(EventData::Linked {
-                player: t,
-                linked: false,
-            });
-            return Flow::Yield;
+            return Flow::Done;
         }
-        // 收尾：铁索离桌入弃牌堆（唯一弃置点）
-        let card = self.card;
-        ctx.to_discard(card);
-        ctx.core.table.retain(|c| *c != card);
-        Flow::Done
+        loop {
+            // 跳过开窗前已死亡的目标（窗口期间死亡者由叶子跳过）
+            while self.inner.is_none()
+                && self.idx < self.targets.len()
+                && !ctx.core.player(self.targets[self.idx]).alive
+            {
+                self.idx += 1;
+            }
+            if self.idx >= self.targets.len() {
+                // 收尾：铁索离桌入弃牌堆（唯一弃置点）
+                let card = self.card;
+                ctx.to_discard(card);
+                ctx.core.table.retain(|c| *c != card);
+                return Flow::Done;
+            }
+            if self.inner.is_none() {
+                self.inner = Some(self.spawn_window(ctx));
+            }
+            let flow = self.inner.as_mut().expect("checked").step(ctx);
+            if matches!(flow, Flow::Done) {
+                self.inner = None;
+                self.idx += 1;
+                continue;
+            }
+            return flow;
+        }
     }
 }
 

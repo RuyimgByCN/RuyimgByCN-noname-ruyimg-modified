@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v278 / 存档 v65**，2026-10-14 T8 增量 14 批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v278 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v290 / 存档 v77**，2026-10-16 N06 铁索逐目标无懈批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v290 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2917,6 +2917,34 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 测试须用非杀黑桃牌（闪电=黑桃1）；SkillDef 本体漏加第 6 次（assembly 拦
 截）；条目追加位移牛头索引（36 修正）。
 
+**规则 v290（2026-10-16，覆盖清单 N06：铁索连环无懈窗口逐目标对齐）**：
+覆盖清单行为差异表原列「铁索无懈仍为整牌级」——原生把铁索连环的 1–2 个
+目标包在一个**整牌级**无懈窗口里，任一无懈生效即**全部**目标不横置。
+**规则来源核对（上游）**：`card/extra.js::tiesuo` 为 `type: trick`、
+`complexTarget: true`、`selectTarget: [1,2]`（**非** `multitarget`），
+`content: await event.target.link()` 逐目标执行；`card/standard.js::_wuxie`
+`trigger: { player: ['useCardToBegin','phaseJudge'] }`——`useCardToBegin`
+**逐目标**触发（`map.tempnowuxie = trigger.targets.length > 1 && !multitarget`
+即铁索这类多目标非 multitarget 牌的逐目标询问）；无懈本体
+`content` 对目标事件调 `triggerEvent.neutralize()`，仅国战「对势力使用」
+分支才额外扩展 `excluded`。→ 上游口径：抵消以**单目标**为单位。
+**本批实现**：`ChainMachine` 改为**派发层**（`idx/inner/dispatcher`），对
+每个存活目标开一个独立无懈窗口（窗口持有 `NullifyWindowMachine` + 单目
+标叶子），抵消只跳过该目标，其余目标照常横置；全部目标结算后铁索仍只入
+弃牌堆一次（唯一弃置点不变）。存档 76→**77**（`MachineSnapshot::Chain`
+载荷 `emitted` → `idx/inner/dispatcher`）。版本 289→**290**。版本回退探
+针（289 + 新编码 + **回退 golden 表**复跑 14 场全绿）证明位移唯一来源是
+版本字段：14 个 golden 场景在任何记录点都没有挂起的 Chain 机器（铁索场
+景无人持无懈时窗口不挂起），新编码不进入这些哈希；行为面由定向测试覆盖。
+回归 `chain_nullify_is_per_target_first_only` /
+`chain_nullify_is_per_target_second_only` /
+`chain_double_nullify_leaves_nobody_linked`（含同窗口无懈对无懈反转）/
+`pause_roundtrip_chain_target_window`（窗口挂起点往返）——证据见
+[2026-10-16 N06 证据](../operations/evidence/2026-10-16-n06-chain-per-target-nullify/README.md)。
+**登记边界**：同一窗口内第二张无懈反转抵消状态（上游 `map.state` 经父
+`_wuxie` 链翻转，语义一致，非差异）；铁索 `recastable`（重铸）面仍为既
+有未建模登记，本批不动。
+
 **规则 v278（2026-10-14，T8 增量 14：出牌阶段三类计数字段批）**：
 `TurnState.bte_used_play_phase`（出牌阶段已用基本/锦囊/装备牌数，
 `commit_card_used` 尾按**结算牌种**[view-as 转化后]计数，Play 阶段开始
@@ -3413,7 +3441,7 @@ switch` 不落表（门控并入 enabled，先例同构）。**登记待查**：
 
 | 语义 | 当前行为/项目声明 | 验证边界 |
 |---|---|---|
-| 无懈 | 结算型锦囊生效前，延时锦囊使用时开窗；来源起问；AOE 逐目标 | 已有主动无懈×真实洗牌×恢复组合；全部轮次/死亡动态边界仍按覆盖清单 |
+| 无懈 | 结算型锦囊生效前，延时锦囊使用时开窗；来源起问；AOE 与铁索均**逐目标**（v290 对齐上游 `useCardToBegin`） | 已有主动无懈×真实洗牌×恢复组合与铁索逐目标窗口（含挂起点往返）；全部轮次/死亡动态边界仍按覆盖清单 |
 | 判定排序/闪电 | 非闪电按放置序在前、闪电在后；黑桃 2–9 命中 3 雷伤，未中传下家、同名弃置 | 双放置序及转移用例已有；死亡剩余机器持牌路径不由终态测试完全覆盖 |
 | 鬼道/天妒 | 黑手牌或黑装备改判，改判者获得旧牌；天妒限本人最终牌 | 仅装备/混合/恢复、确认/放弃和原事件反例通过，N08-c/d 关闭 |
 | 判定事件 | Judged、逐次 Rewritten、Finalized 恰一次且先于 Gained | 原反例已回归；新增洛神/八卦/铁骑等判定路径需独立语义与事件覆盖 |
