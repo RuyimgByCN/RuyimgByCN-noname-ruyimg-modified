@@ -19,28 +19,20 @@
       "覆盖清单与规则基准开放行",
       "D4–D8 解锁后的执行项"
     ],
-    "method": "只读调研必读文档；不改代码、不改正文；本目录为权威待做快照证据",
+    "method": "只读调研必读文档；ambiguous 13 条已于 2026-10-16 消解（见 ambiguous-resolutions.md）；本目录为权威待做快照证据；不改 crates/**",
     "status_enum": [
       "open",
       "blocked",
-      "in_progress"
+      "in_progress",
+      "resolved"
     ],
-    "item_count": 85,
-    "ambiguous_ids": [
-      "T8-FILTER-COMPOSITE",
-      "T11-BOSS-PANGTONG-EXTERNAL",
-      "T11-BOSS-DIZANG-DAYUAN",
-      "T11-BOSS-SHIKIEIKI-EXCLUDED",
-      "T11-BOSS-MENGPO-WANGSHI-PLAY",
-      "T11-EVENT-RNG-RESTORE-PARITY",
-      "T12-SWD-DEFERRED-SKILLS",
-      "T12-SRC-U06",
-      "COV-TRIGGER-GETINDEX-BUCKETS",
-      "COV-PARTIAL-MECHANISMS",
-      "RULE-JUDGE-ORDER-NOTE",
-      "RULE-CONTENT-DIFF-CONVENTIONS",
-      "RULE-BUDGET-DOC-LAG"
-    ]
+    "item_count": 89,
+    "ambiguous_ids": [],
+    "ambiguous_resolved_date": "2026-10-16",
+    "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "resolved_count": 6,
+    "open_count": 83,
+    "notes_on_head": "登记表起草 HEAD 5c5bf131；消解批以当时文件+交叉证据为准，不因并行 worker 后续提交自动重写条目正文"
   },
   "items": [
     {
@@ -65,8 +57,20 @@
         "E03",
         "G1"
       ],
-      "notes": "按需立项；约数来自增量 17 扫描（642=18 已承载+624 待办），非精确工单计数",
-      "ambiguous": true
+      "notes": "工单以 2026-10-16-t8-filter-batches/batches.json 为准（619 待办/60 批）；增量 17 的 18+624 为映射落地前快照",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "keep_open",
+        "conclusion": "模糊性消除：分批清单已固化；保留为本 ID 总账，不以约数合同计数",
+        "evidence": [
+          "docs/operations/evidence/2026-10-16-t8-filter-batches/README.md",
+          "docs/operations/evidence/2026-10-16-t8-filter-batches/batches.json",
+          "docs/operations/evidence/2026-10-14-t8-increment17-tied-max-filters/README.md"
+        ],
+        "disposition": "保持 open；执行按 B01–B60",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
     },
     {
       "id": "T8-EFFECT-QUERY-VARIANTS",
@@ -183,7 +187,8 @@
       "tags": [
         "T11",
         "D4"
-      ]
+      ],
+      "notes": "含孟婆 mengpodie 旗 / boss_mengpohuihun 回魂面（自 T11-BOSS-MENGPO-WANGSHI-PLAY 并入）"
     },
     {
       "id": "T11-BOSS-HIDECHAIN-8",
@@ -302,8 +307,21 @@
         "T11",
         "D5"
       ],
-      "notes": "与诸葛亮同属外部包依赖族；完成边界依赖外部包可用性",
-      "ambiguous": true
+      "notes": "非 D4；等 D5/外部包。天狱/栖梧已落（v277）",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "wait_d5",
+        "conclusion": "边界已清：涅槃/浴火属外部包技+loopType，挂 D5/外部包推进，不阻塞关卡子系统",
+        "evidence": [
+          "docs/adr/0783-boss-stage-flow-subsystem.md",
+          "docs/operations/evidence/2026-10-16-d4-boss-adr/README.md",
+          "docs/operations/evidence/2026-10-14-t11-boss-pangtong-v277/README.md",
+          "docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md"
+        ],
+        "disposition": "保持 open；depends_on D5-LX-MIGRATION",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
     },
     {
       "id": "T11-BOSS-DIZANG-DAYUAN",
@@ -324,35 +342,27 @@
       "tags": [
         "T11"
       ],
-      "notes": "是否纳入 D4 关卡子系统未在裁决文中点名；暂挂 T11 内容余项",
-      "ambiguous": true
+      "notes": "ADR 0783 §5：明确不纳入 D4；判定改写 AI 态度面内容余项",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "keep_open",
+        "conclusion": "单列内容余项（非 D4 关卡子系统）",
+        "evidence": [
+          "docs/adr/0783-boss-stage-flow-subsystem.md",
+          "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md"
+        ],
+        "disposition": "保持 open；不依赖 T11-BOSS-STAGE-SUBSYSTEM",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
     },
     {
-      "id": "T11-BOSS-SHIKIEIKI-EXCLUDED",
+      "id": "T11-BOSS-DIZANG-WULIANG-GAMEDRAW",
       "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 Shikieiki 排除登记"
+        "doc": "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
+        "ref": "无量建局摸 3 面登记未落；自 T11-BOSS-MENGPO-WANGSHI-PLAY 拆出"
       },
-      "description": "四季映姬 boss_yingzhong：外部武将库结构性依赖，目录排除。若要落包需外部武将池基建。",
-      "done_when_evidence": [
-        "结构性依赖解除或正式永久排除 ADR/台账"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11"
-      ],
-      "notes": "当前为排除登记而非待实现；关闭条件模糊（排除确认 vs 未来基建）",
-      "ambiguous": true
-    },
-    {
-      "id": "T11-BOSS-MENGPO-WANGSHI-PLAY",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 孟婆 v270"
-      },
-      "description": "孟婆「往事」打出面未落登记；建局摸 3 面等地藏王无量登记未落等零散 Boss 登记差异收口。",
+      "description": "地藏王「无量」建局摸 3 面（gameDrawAfter/enterGame）——v274 登记未落，随装配/建局批。",
       "done_when_evidence": [
         "规则版本递增（若语义变）",
         "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
@@ -365,7 +375,93 @@
       "tags": [
         "T11"
       ],
-      "ambiguous": true
+      "notes": "非 D4 关卡流程；与大愿（T11-BOSS-DIZANG-DAYUAN）分立",
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "split_new",
+        "conclusion": "自原 ambiguous 抓包项拆出的明确 open 项",
+        "evidence": [
+          "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
+          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+        ],
+        "disposition": "新增 open",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "split_from": "T11-BOSS-MENGPO-WANGSHI-PLAY"
+      }
+    },
+    {
+      "id": "T11-BOSS-SHIKIEIKI-EXCLUDED",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 Shikieiki 排除登记"
+      },
+      "description": "四季映姬 boss_yingzhong：外部武将库结构性依赖，目录排除。若要落包需外部武将池基建。",
+      "done_when_evidence": [
+        "结构性依赖解除或正式永久排除 ADR/台账"
+      ],
+      "status": "resolved",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11"
+      ],
+      "notes": "永久目录排除（ADR 0783）；未来外部将池另开新 ID",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "permanent_diff",
+        "conclusion": "维持四季映姬/映种目录排除；关闭条件=排除确认（已确认）",
+        "evidence": [
+          "docs/adr/0783-boss-stage-flow-subsystem.md",
+          "docs/operations/evidence/2026-10-16-d4-boss-adr/README.md",
+          "docs/operations/evidence/2026-10-14-t11-boss-qinguangwang-v276/README.md"
+        ],
+        "disposition": "status=resolved；还人映姬候选池未就绪则登记不可达",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
+    },
+    {
+      "id": "T11-BOSS-MENGPO-WANGSHI-PLAY",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 孟婆 v270"
+      },
+      "description": "（已拆分关闭）原抓包：孟婆往事打出面 / 地藏王无量建局摸 3 / 十殿 mengpodie·回魂等零散 Boss 登记差异。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "resolved",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11"
+      ],
+      "ambiguous": false,
+      "notes": "往事打出面=v270 永久登记差异；mengpodie/huihun→并入 T11-BOSS-HUANREN；无量建局摸3→T11-BOSS-DIZANG-WULIANG-GAMEDRAW",
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "split_new",
+        "conclusion": "拆清三面：往事打出永久差异；mengpodie/huihun 并入还人；无量建局摸3 新 ID",
+        "evidence": [
+          "docs/operations/evidence/2026-10-14-t11-boss-mengpo-v270/README.md",
+          "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
+          "docs/adr/0783-boss-stage-flow-subsystem.md"
+        ],
+        "disposition": "status=resolved",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "split_into": [
+          "T11-BOSS-DIZANG-WULIANG-GAMEDRAW"
+        ],
+        "merged_into": [
+          "T11-BOSS-HUANREN"
+        ],
+        "permanent_aspects": [
+          "孟婆往事打出/响应窗仅使用位（v270 登记）"
+        ]
+      }
     },
     {
       "id": "T11-EVENT-RNG-RESTORE-PARITY",
@@ -375,11 +471,10 @@
       },
       "description": "T11 横切：同一命令下事件、随机流和恢复轨迹对照（逐项修复或登记；语义变则升规则版本）。",
       "done_when_evidence": [
+        "parity_chain_compound / parity_aoe_skip_trail / parity_judge_rewrite_rng 等定向夹具+证据目录",
         "规则版本递增（若语义变）",
         "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录",
-        "命令/事件/随机/恢复四轨对照证据"
+        "命令/事件/随机/恢复四轨对照证据（投影后语义）"
       ],
       "status": "open",
       "depends_on": [],
@@ -388,8 +483,19 @@
         "T11",
         "N08"
       ],
-      "notes": "长期横切验收，非单一可关闭切片",
-      "ambiguous": true
+      "notes": "可切片关闭；完成判定见 t11-open-rows 专节夹具 1–3（及 4–5 条件）",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "keep_open",
+        "conclusion": "长期横切但可切片；t11-open-rows 已给出最小夹具集与完成判定",
+        "evidence": [
+          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
+          "docs/adr/0727-native-n06-replay-restore-per-command-parity.md"
+        ],
+        "disposition": "保持 open；不再标 ambiguous",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
     },
     {
       "id": "D5-LX-MIGRATION",
@@ -595,7 +701,7 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
       },
-      "description": "杀海拾遗·swd 武将面 deferred 技能消解至可验收（卡牌面 92 行已闭环；仍有多余 13 张处置与 deferred 技能）。",
+      "description": "杀海拾遗·swd 武将面 deferred 技能消解至可验收（卡牌面 92 行已闭环；多余 13 张另项）。核验时点：b99 为 133/184 映射、deferred 49（起草快照曾写批 98≈51）。",
       "done_when_evidence": [
         "定向回归测试通过",
         "cargo test --offline -p engine-native --no-fail-fast 全绿",
@@ -611,8 +717,19 @@
         "U05",
         "swd"
       ],
-      "notes": "并行 worker 可能继续消解；本登记以调研时台账叙述为准",
-      "ambiguous": true
+      "notes": "计数以最新 swd deferred 证据 README 为准；并行消解属进度漂移非归类模糊",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "keep_open",
+        "conclusion": "进度跟踪项；以当前证据计数为准，快照漂移不构成 ambiguous",
+        "evidence": [
+          "docs/operations/evidence/2026-10-16-t12-swd-deferred-b99/README.md",
+          "docs/migration/upstream-extension-reconstruction.md"
+        ],
+        "disposition": "保持 open",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
     },
     {
       "id": "T12-SWD-EXTRA-CARDS-DISPOSITION",
@@ -844,8 +961,21 @@
         "U06",
         "G3"
       ],
-      "notes": "U06 已达 G0–G5 通道验收，但主稿整包计数仍 0/37——是否单独上调需进度 worker 裁定",
-      "ambiguous": true
+      "notes": "G0–G5 通道验收≠整包上调；本决议裁定不上调 0/37",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "keep_open",
+        "conclusion": "通道全绿不单独上调整包总账；U06 仍归 T12-WHOLEPACK-0-37 直至 E06 整包口径齐",
+        "evidence": [
+          "docs/architecture/native-progress.md",
+          "docs/migration/upstream-extension-reconstruction.md",
+          "docs/operations/evidence/2026-10-14-t12-u06-g2g4/README.md",
+          "docs/operations/evidence/2026-10-14-t12-huanle-g5/README.md"
+        ],
+        "disposition": "保持 open；不上调 0/37",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
     },
     {
       "id": "T12-SRC-U07",
@@ -1692,8 +1822,20 @@
         "COV",
         "RULE"
       ],
-      "notes": "条件立项；无内容需求时可保持开放登记",
-      "ambiguous": true
+      "notes": "条件立项；与触发全序定案分层。关闭=立项 ADR 或明确不立项笔记",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "keep_open",
+        "conclusion": "有内容需求再建模 getIndex/firstDo/lastDo；无需求可记「维持不立项」关闭",
+        "evidence": [
+          "docs/native-coverage-manifest.md",
+          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
+          "docs/operations/evidence/2026-10-16-trigger-order-upstream/README.md"
+        ],
+        "disposition": "保持 open（条件立项）",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+      }
     },
     {
       "id": "COV-PARTIAL-MECHANISMS",
@@ -1701,9 +1843,116 @@
         "doc": "docs/native-coverage-manifest.md",
         "ref": "范围 A 多行「已验证（部分）」：nullify_scope/snapshot_restore/identity_mode/visible_views/session_auth/byte_archive/nullify_judge_window 等"
       },
-      "description": "覆盖清单部分验证行仍需扩面：新机器/选择逐点恢复、身份中间恢复续跑、扩展/客户端视图隔离、权威网络接入、兵/闪电抵消组合等。",
+      "description": "（已拆分关闭）原伞项：覆盖清单多行「已验证（部分）」扩面。",
       "done_when_evidence": [
         "逐机制扩面测试+清单状态升级"
+      ],
+      "status": "resolved",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "COV"
+      ],
+      "ambiguous": false,
+      "notes": "snapshot→T11-EVENT-RNG-RESTORE-PARITY；identity mid→RULE-IDENTITY-VIEW-RESTORE；其余见新 ID",
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "split_new",
+        "conclusion": "伞项关闭；机制面并入已有 ID 或单列新 ID",
+        "evidence": [
+          "docs/native-coverage-manifest.md",
+          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md"
+        ],
+        "disposition": "status=resolved",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "split_into": [
+          "COV-VISIBLE-VIEWS-EXT",
+          "COV-SESSION-AUTH-PRODUCT",
+          "COV-NULLIFY-JUDGE-EXPAND"
+        ],
+        "merged_into": [
+          "T11-EVENT-RNG-RESTORE-PARITY",
+          "RULE-IDENTITY-VIEW-RESTORE"
+        ]
+      }
+    },
+    {
+      "id": "COV-VISIBLE-VIEWS-EXT",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "visible_views 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
+      },
+      "description": "可见视图扩面：扩展/客户端视图隔离——不外推为所有扩展与客户端均已隔离。",
+      "done_when_evidence": [
+        "扩面测试+覆盖清单状态升级",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T13-PRODUCT-CLIENT"
+      ],
+      "role": "client-engineer",
+      "tags": [
+        "COV",
+        "T13"
+      ],
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "split_new",
+        "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
+        "evidence": [
+          "docs/native-coverage-manifest.md",
+          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+        ],
+        "disposition": "新增 open",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "split_from": "COV-PARTIAL-MECHANISMS"
+      }
+    },
+    {
+      "id": "COV-SESSION-AUTH-PRODUCT",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "session_auth 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
+      },
+      "description": "会话鉴权产品面：权威网络接入——现有令牌拒绝/重签切片不代表权威网络已接入。",
+      "done_when_evidence": [
+        "权威网络/产品接入证据",
+        "覆盖清单状态升级"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T13-PRODUCT-CLIENT"
+      ],
+      "role": "server-engineer",
+      "tags": [
+        "COV",
+        "T13"
+      ],
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "split_new",
+        "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
+        "evidence": [
+          "docs/native-coverage-manifest.md",
+          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+        ],
+        "disposition": "新增 open",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "split_from": "COV-PARTIAL-MECHANISMS"
+      }
+    },
+    {
+      "id": "COV-NULLIFY-JUDGE-EXPAND",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "nullify_judge_window 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
+      },
+      "description": "延时锦囊无懈窗口扩面：兵/闪电抵消及多牌组合（乐被抵消路径已有）。",
+      "done_when_evidence": [
+        "兵/闪电抵消与多牌组合定向测",
+        "覆盖清单状态升级",
+        "证据目录"
       ],
       "status": "open",
       "depends_on": [],
@@ -1711,7 +1960,18 @@
       "tags": [
         "COV"
       ],
-      "ambiguous": true
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "split_new",
+        "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
+        "evidence": [
+          "docs/native-coverage-manifest.md",
+          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+        ],
+        "disposition": "新增 open",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "split_from": "COV-PARTIAL-MECHANISMS"
+      }
     },
     {
       "id": "COV-STANDARD-FULL-CONTENT",
@@ -1765,14 +2025,33 @@
       "done_when_evidence": [
         "声明表措辞与语义选择定案对齐（进度/文档 worker）"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "docs-auditor",
       "tags": [
         "RULE"
       ],
-      "notes": "实质语义已定案；开放点是声明表残留措辞",
-      "ambiguous": true
+      "notes": "语义已定案保留原生；开放点仅为声明表措辞滞后",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "doc_lag_fix",
+        "conclusion": "实质已定案保留原生 FIFO+闪电最后；声明表 L3447「是否改判上游待决策」为文档滞后",
+        "evidence": [
+          "docs/native-coverage-manifest.md",
+          "docs/architecture/native-rules-baseline.md",
+          "docs/operations/evidence/2026-10-16-judge-order-upstream/README.md",
+          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md"
+        ],
+        "disposition": "status=resolved；建议 docs 将验证边界改为「已定案保留原生…」",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "suggested_fix": {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "approx_line": 3447,
+          "replace_phrase": "是否改判上游待决策",
+          "with": "已定案保留原生（非闪电 FIFO + 闪电最后）；与上游 LIFO 差异见语义选择表/覆盖清单"
+        }
+      }
     },
     {
       "id": "RULE-IDENTITY-VIEW-RESTORE",
@@ -1845,15 +2124,29 @@
       "done_when_evidence": [
         "逐技能上游等价证据或正式差异关闭"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "rules-auditor",
       "tags": [
         "RULE",
         "T11"
       ],
-      "notes": "开放验收面而非未定案缺陷",
-      "ambiguous": true
+      "notes": "ADR 0776 保留惯例；逐技能举证并入 COV-STANDARD-FULL-CONTENT",
+      "ambiguous": false,
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "permanent_diff",
+        "conclusion": "护驾/激将登记惯例为正式保留差异，非未定案缺陷；本项关闭",
+        "evidence": [
+          "docs/architecture/native-rules-baseline.md",
+          "docs/adr/0776-native-n08-jijiang-hujia-per-seat-ask.md"
+        ],
+        "disposition": "status=resolved；举证并入 COV-STANDARD-FULL-CONTENT",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "merged_into": [
+          "COV-STANDARD-FULL-CONTENT"
+        ]
+      }
     },
     {
       "id": "RULE-BUDGET-DOC-LAG",
@@ -1865,14 +2158,33 @@
       "done_when_evidence": [
         "声明表更新为与 T13 证据一致"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "docs-auditor",
       "tags": [
         "RULE",
         "T13"
       ],
-      "ambiguous": true
+      "ambiguous": false,
+      "notes": "PlanPool 已完成；声明表滞后待 docs 一行勘正",
+      "resolution": {
+        "date": "2026-10-16",
+        "kind": "doc_lag_fix",
+        "conclusion": "T13 PlanPool（2026-10-14）已实现；基准「独立工作池未实现」为文档滞后",
+        "evidence": [
+          "docs/architecture/native-progress.md",
+          "docs/operations/evidence/2026-10-14-t13-plan-pool/README.md",
+          "docs/architecture/native-rules-baseline.md"
+        ],
+        "disposition": "status=resolved；建议 docs 更新 L3456 验证边界",
+        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+        "suggested_fix": {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "approx_line": 3456,
+          "replace_phrase": "独立工作池未实现",
+          "with": "独立工作池（PlanPool）已实现（2026-10-14）；命令配额阻塞及更广策略质量仍待验收"
+        }
+      }
     }
   ]
 }
