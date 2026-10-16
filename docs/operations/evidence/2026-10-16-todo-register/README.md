@@ -122,12 +122,12 @@
 | `COV-NULLIFY-JUDGE-EXPAND` | docs/native-coverage-manifest.md · nullify_judge_window | 兵/闪电抵消及多牌组合扩面（自 COV-PARTIAL 拆出）。 | 定向测+清单升级+证据目录 | open | — | kernel-engineer |
 | `COV-STANDARD-FULL-CONTENT` | docs/native-coverage-manifest.md · 范围 B「所有历史包/正式完整内容」未完成；标准武将/模式行 | 标准整将/牌/模式完整验收与历史包正式内容未完成；不按名称或测试数计算迁移率。 | 玩法版本+逐技能语义清单；整包证据 | open | T11-EVENT-RNG-RESTORE-PARITY | rules-auditor |
 | `COV-EXT-37` | docs/native-coverage-manifest.md · 扩展机制表「指定两仓全部扩展」 | 覆盖清单扩展行：原生整包验收 0/37，与 T12 总账同口径。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | T12-WHOLEPACK-0-37 | extension-lead |
-| `RULE-JUDGE-ORDER-NOTE` | docs/architecture/native-rules-baseline.md · 判定排序（约 L3447） | 语义已定案保留原生；声明表「是否改判上游待决策」为**文档滞后**——建议就地一行勘正后本项已关。 | 声明表措辞对齐建议已登记 | resolved | — | docs-auditor |
+| `RULE-JUDGE-ORDER-NOTE` | docs/architecture/native-rules-baseline.md · 判定排序（约 L3447） | 语义已定案保留原生；声明表「是否改判上游待决策」文档滞后**已就地勘正**（兼改 coverage `judge_zone`）。 | 正文对齐+证据 [rule-doc-lag-fix](../2026-10-16-rule-doc-lag-fix/README.md) | resolved | — | docs-auditor |
 | `RULE-IDENTITY-VIEW-RESTORE` | docs/architecture/native-rules-baseline.md · 当前声明「身份」验证边界（约 L3452） | 完整身份可见视图和所有终局逐提交恢复仍缺。 | 定向回归测试通过；cargo test --offline -p engine-native --no-fail-fast 全绿；Gate 1b exit 0… | open | — | kernel-engineer |
 | `RULE-MODE-REMAINDERS` | docs/architecture/native-rules-baseline.md · 当前声明「模式」行（约 L3454） | 模式变体余项：斗地主 online 面登记、KOF 多局连续会话循环仍在宿主层、Boss loopType==2 等未建模变体、其余上游 mode 入口未接入。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
 | `RULE-DISTANCE-UNMODELED` | docs/architecture/native-rules-baseline.md · 当前声明「距离/座距」；采用玩法版本证据 | undist/isMin 等未建模；其余距离类技能仍逐技能验收。 | 逐技能证据或建模 | open | — | kernel-engineer |
 | `RULE-CONTENT-DIFF-CONVENTIONS` | docs/architecture/native-rules-baseline.md · 内容差异（约 L3489） | 护驾/激将保留惯例（ADR 0776）=**永久差异**；逐技能举证并入 `COV-STANDARD-FULL-CONTENT`。 | 永久惯例确认 | resolved | — | rules-auditor |
-| `RULE-BUDGET-DOC-LAG` | docs/architecture/native-rules-baseline.md · 预算/时间片（约 L3456） | PlanPool 已完成；声明「独立工作池未实现」为**文档滞后**——建议就地一行勘正；本登记项关闭。 | 勘正建议已登记 | resolved | — | docs-auditor |
+| `RULE-BUDGET-DOC-LAG` | docs/architecture/native-rules-baseline.md · 预算/时间片（约 L3456） | PlanPool 已完成；声明「独立工作池未实现」文档滞后**已就地勘正**。 | 正文对齐+证据 [rule-doc-lag-fix](../2026-10-16-rule-doc-lag-fix/README.md) | resolved | — | docs-auditor |
 
 ## 原模糊项消解（2026-10-16）
 
@@ -145,13 +145,13 @@
 | `T12-SRC-U06` | keep_open（**不上调** 0/37） | open |
 | `COV-TRIGGER-GETINDEX-BUCKETS` | 条件立项 | open |
 | `COV-PARTIAL-MECHANISMS` | 拆分/并入 | resolved |
-| `RULE-JUDGE-ORDER-NOTE` | 文档滞后建议修正 | resolved |
+| `RULE-JUDGE-ORDER-NOTE` | 文档滞后已勘正 | resolved |
 | `RULE-CONTENT-DIFF-CONVENTIONS` | 永久惯例 | resolved |
-| `RULE-BUDGET-DOC-LAG` | 文档滞后建议修正 | resolved |
+| `RULE-BUDGET-DOC-LAG` | 文档滞后已勘正 | resolved |
 
 **新增 open（4）**：`T11-BOSS-DIZANG-WULIANG-GAMEDRAW`、`COV-VISIBLE-VIEWS-EXT`、`COV-SESSION-AUTH-PRODUCT`、`COV-NULLIFY-JUDGE-EXPAND`。
 
-**文档就地修正建议**（未改正文）：基准约 L3447 判定排序「是否改判上游待决策」→已定案保留原生；约 L3456「独立工作池未实现」→PlanPool 已实现。
+**文档就地修正**（2026-10-16 已改正文）：基准判定排序「是否改判上游待决策」→已定案保留原生；预算「独立工作池未实现」→PlanPool 已实现；coverage `judge_zone` 同口径——证据 [rule-doc-lag-fix](../2026-10-16-rule-doc-lag-fix/README.md)。
 
 ## 按主题索引
 

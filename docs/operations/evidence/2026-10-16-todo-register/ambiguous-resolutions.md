@@ -114,8 +114,8 @@
 |---|---|
 | **结论** | `doc_lag_fix` + `permanent_diff`（语义已定案）— **本登记项关闭** |
 | **依据** | 覆盖清单行为差异「判定顺序」：**已定案保留原生** FIFO+闪电最后；基准「语义选择」表同行；[judge-order 证据](../2026-10-16-judge-order-upstream/README.md)；t11-open-rows 已列入口径定案关闭集 |
-| **文档滞后点** | `native-rules-baseline.md`「当前声明」判定排序行验证边界仍写「是否改判上游待决策」（约 L3447） |
-| **就地修正建议**（交 docs-auditor，本批未改正文） | 将该格验证边界改为：「**已定案保留原生**（非闪电 FIFO + 闪电最后）；与上游 LIFO 差异见语义选择表 / 覆盖清单；死亡剩余机器持牌路径不由终态测试完全覆盖」 |
+| **文档滞后点** | `native-rules-baseline.md`「当前声明」判定排序行验证边界曾写「是否改判上游待决策」（约 L3447） |
+| **就地修正**（2026-10-16 docs-auditor 已改正文） | 验证边界改为：「**已定案保留原生**（非闪电 FIFO + 闪电最后）；与上游 LIFO 差异见语义选择表 / 覆盖清单；死亡剩余机器持牌路径不由终态测试完全覆盖」——证据 [rule-doc-lag-fix](../2026-10-16-rule-doc-lag-fix/README.md) |
 
 ## 12. `RULE-CONTENT-DIFF-CONVENTIONS`
 
@@ -129,9 +129,9 @@
 
 | 项 | 内容 |
 |---|---|
-| **结论** | `doc_lag_fix` — **本登记项关闭**（正文待 docs 一行勘正） |
-| **依据** | 进度主稿 T13：`PlanPool` 工作池 **2026-10-14 已完成**（[plan-pool 证据](../2026-10-14-t13-plan-pool/README.md)）；基准「预算/时间片」行仍写「独立工作池未实现」（约 L3456） |
-| **就地修正建议** | 验证边界改为：「独立工作池（`PlanPool`）**已实现**（2026-10-14）；命令配额阻塞及更广策略质量仍待验收（见 `T13-AI-STRONGER-POLICY`）；令牌原代次反例已修」 |
+| **结论** | `doc_lag_fix` — **本登记项关闭**（正文已勘正） |
+| **依据** | 进度主稿 T13：`PlanPool` 工作池 **2026-10-14 已完成**（[plan-pool 证据](../2026-10-14-t13-plan-pool/README.md)）；基准「预算/时间片」行曾写「独立工作池未实现」（约 L3456） |
+| **就地修正**（2026-10-16 docs-auditor 已改正文） | 验证边界改为：「独立工作池（`PlanPool`）**已实现**（2026-10-14）；命令配额阻塞及更广策略质量仍待验收（见 `T13-AI-STRONGER-POLICY`）；令牌原代次反例已修」——证据 [rule-doc-lag-fix](../2026-10-16-rule-doc-lag-fix/README.md) |
 
 ---
 
@@ -157,4 +157,4 @@
 
 **无法消解项**：无。13 条 ambiguous 标记全部清除。
 
-**未改正文**：`native-rules-baseline.md` / `native-progress.md` / 台账——仅给出 L3447 / L3456 一行勘正建议，交并行 docs worker。
+**正文勘正**：`native-rules-baseline.md` L3447 / L3456 与 coverage `judge_zone` 同口径已于 2026-10-16 改正——见 [rule-doc-lag-fix](../2026-10-16-rule-doc-lag-fix/README.md)。**未改**：`native-progress.md`（并行他线）。

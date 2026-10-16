@@ -2021,9 +2021,9 @@
         "doc": "docs/architecture/native-rules-baseline.md",
         "ref": "当前声明与验证边界「判定排序/闪电」（约 L3447）"
       },
-      "description": "判定排序：语义选择已定案保留原生 FIFO+闪电最后，但「当前声明」表仍写「是否改判上游待决策」——需文档对齐或确认无残余决策。",
+      "description": "判定排序：语义选择已定案保留原生 FIFO+闪电最后；声明表曾写「是否改判上游待决策」——文档滞后已就地勘正。",
       "done_when_evidence": [
-        "声明表措辞与语义选择定案对齐（进度/文档 worker）"
+        "声明表措辞与语义选择定案对齐（docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md）"
       ],
       "status": "resolved",
       "depends_on": [],
@@ -2031,25 +2031,24 @@
       "tags": [
         "RULE"
       ],
-      "notes": "语义已定案保留原生；开放点仅为声明表措辞滞后",
+      "notes": "2026-10-16 正文已勘正：基准验证边界与 coverage `judge_zone` 同口径改为「已定案保留原生」",
       "ambiguous": false,
       "resolution": {
         "date": "2026-10-16",
         "kind": "doc_lag_fix",
-        "conclusion": "实质已定案保留原生 FIFO+闪电最后；声明表 L3447「是否改判上游待决策」为文档滞后",
+        "conclusion": "实质已定案保留原生 FIFO+闪电最后；声明表滞后句已改正并留证据",
         "evidence": [
           "docs/native-coverage-manifest.md",
           "docs/architecture/native-rules-baseline.md",
           "docs/operations/evidence/2026-10-16-judge-order-upstream/README.md",
-          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md"
+          "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
         ],
-        "disposition": "status=resolved；建议 docs 将验证边界改为「已定案保留原生…」",
+        "disposition": "status=resolved；正文已勘正（closed）",
         "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "suggested_fix": {
+        "applied_fix": {
           "file": "docs/architecture/native-rules-baseline.md",
-          "approx_line": 3447,
-          "replace_phrase": "是否改判上游待决策",
-          "with": "已定案保留原生（非闪电 FIFO + 闪电最后）；与上游 LIFO 差异见语义选择表/覆盖清单"
+          "also": "docs/native-coverage-manifest.md judge_zone",
+          "evidence": "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
         }
       }
     },
@@ -2154,9 +2153,9 @@
         "doc": "docs/architecture/native-rules-baseline.md",
         "ref": "当前声明「预算/时间片」（约 L3456）"
       },
-      "description": "声明仍写「独立工作池未实现」，但 T13 PlanPool 已完成——文档滞后，需进度/基准 worker 勘正后关闭本项。",
+      "description": "声明曾写「独立工作池未实现」，但 T13 PlanPool 已完成——文档滞后已就地勘正。",
       "done_when_evidence": [
-        "声明表更新为与 T13 证据一致"
+        "声明表更新为与 T13 证据一致（docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md）"
       ],
       "status": "resolved",
       "depends_on": [],
@@ -2166,23 +2165,21 @@
         "T13"
       ],
       "ambiguous": false,
-      "notes": "PlanPool 已完成；声明表滞后待 docs 一行勘正",
+      "notes": "2026-10-16 正文已勘正：基准验证边界改为 PlanPool 已实现；策略质量仍挂 T13-AI-STRONGER-POLICY",
       "resolution": {
         "date": "2026-10-16",
         "kind": "doc_lag_fix",
-        "conclusion": "T13 PlanPool（2026-10-14）已实现；基准「独立工作池未实现」为文档滞后",
+        "conclusion": "T13 PlanPool（2026-10-14）已实现；基准滞后句已改正并留证据",
         "evidence": [
-          "docs/architecture/native-progress.md",
           "docs/operations/evidence/2026-10-14-t13-plan-pool/README.md",
-          "docs/architecture/native-rules-baseline.md"
+          "docs/architecture/native-rules-baseline.md",
+          "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
         ],
-        "disposition": "status=resolved；建议 docs 更新 L3456 验证边界",
+        "disposition": "status=resolved；正文已勘正（closed）",
         "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "suggested_fix": {
+        "applied_fix": {
           "file": "docs/architecture/native-rules-baseline.md",
-          "approx_line": 3456,
-          "replace_phrase": "独立工作池未实现",
-          "with": "独立工作池（PlanPool）已实现（2026-10-14）；命令配额阻塞及更广策略质量仍待验收"
+          "evidence": "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
         }
       }
     }
