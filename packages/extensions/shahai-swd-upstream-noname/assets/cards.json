@@ -1214,7 +1214,7 @@
       "skills": [
         {
           "name": "huanhun",
-          "mapping": null
+          "mapping": "host:huanhun"
         },
         {
           "name": "daixing",
@@ -1346,7 +1346,7 @@
         },
         {
           "name": "lqingcheng",
-          "mapping": null
+          "mapping": "host:lqingcheng"
         }
       ]
     },
