@@ -3442,6 +3442,7 @@ switch` 不落表（门控并入 enabled，先例同构）。**登记待查**：
 | 语义 | 当前行为/项目声明 | 验证边界 |
 |---|---|---|
 | 无懈 | 结算型锦囊生效前，延时锦囊使用时开窗；来源起问；AOE 与铁索均**逐目标**（v290 对齐上游 `useCardToBegin`） | 已有主动无懈×真实洗牌×恢复组合与铁索逐目标窗口（含挂起点往返）；全部轮次/死亡动态边界仍按覆盖清单 |
+| 距离/座距 | 座距只计存活、环形取最小且下限 1；±马按装备 `distance.globalTo/globalFrom`；采用玩法版本=本地 upstream noname v1.11.7（`get.distance`，2026-10-16 核对） | 独立参照模型全对全比对（ADR 0723）+ 装备/死座用例；其余距离类技能仍逐技能验收，`undist`/`isMin` 未建模 |
 | 判定排序/闪电 | 非闪电按放置序在前、闪电在后；黑桃 2–9 命中 3 雷伤，未中传下家、同名弃置 | 双放置序及转移用例已有；死亡剩余机器持牌路径不由终态测试完全覆盖 |
 | 鬼道/天妒 | 黑手牌或黑装备改判，改判者获得旧牌；天妒限本人最终牌 | 仅装备/混合/恢复、确认/放弃和原事件反例通过，N08-c/d 关闭 |
 | 判定事件 | Judged、逐次 Rewritten、Finalized 恰一次且先于 Gained | 原反例已回归；新增洛神/八卦/铁骑等判定路径需独立语义与事件覆盖 |
@@ -3467,6 +3468,8 @@ v3.3 恢复原有扩展机制。单个 STANDARD_RULESET_VERSION 不足以标识�
 完整差异和复现见 [进度主稿](native-progress.md)。
 
 ### 本地上游对齐的新增核查
+
+**采用玩法版本（2026-10-16 明确）**：本地 `archive/upstream/noname`（上游 v1.11.7，核对 HEAD `df2682e6`）的 standard 规则与标准包；Liuli 侧差异与扩展自带规则另见[两仓台账](../migration/upstream-extension-reconstruction.md)，旧线 `engine-core` 只作迁移对照、不是规则来源。距离/座距语义据此核对（[证据](../operations/evidence/2026-10-16-rule-source-distance-basis/README.md)）。
 
 下表以当前本地 `archive/upstream/noname` 为规则和标准包参照；Liuli 的相应扩展与旧规则另见[两仓台账](../migration/upstream-extension-reconstruction.md)。[第 16 轮证据](../operations/evidence/2026-09-23-native-upstream-review-16/README.md)保留源码位置、清点口径和实际 API 探针。这里的数量只表示目录覆盖，不表示行为等价。
 

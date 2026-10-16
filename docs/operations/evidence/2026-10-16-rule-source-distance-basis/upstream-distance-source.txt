@@ -1,0 +1,148 @@
+# 规则来源摘录：距离/座距/下限 1（采用玩法版本=本地 archive/upstream/noname, HEAD df2682e6, v1.11.7）
+
+## get.distance（apps/core/noname/get/index.js:3665-3781）
+	distance(from, to, method) {
+		if (from == to) {
+			return 0;
+		}
+		if (!game.players.includes(from) && !game.dead.includes(from)) {
+			return Infinity;
+		}
+		if (!game.players.includes(to) && !game.dead.includes(to)) {
+			return Infinity;
+		}
+		let n = 1;
+		if (game.chess) {
+			let fxy = from.getXY(),
+				txy = to.getXY();
+			n = Math.abs(fxy[0] - txy[0]) + Math.abs(fxy[1] - txy[1]);
+			if (method == "raw" || method == "pure" || method == "absolute") {
+				return n;
+			}
+		} else if (to.isMin(true) || from.isMin(true)) {
+			if (method == "raw" || method == "pure" || method == "absolute") {
+				return n;
+			}
+		} else {
+			let player = from,
+				length = game.players.length;
+			const totalPopulation = game.players.length + game.dead.length + 1;
+			for (let iwhile = 0; iwhile < totalPopulation; iwhile++) {
+				if (player.nextSeat != to) {
+					player = player.nextSeat;
+					if (player.isAlive() && !player.isOut() && !player.hasSkill("undist") && !player.isMin(true)) {
+						n++;
+					}
+				} else {
+					break;
+				}
+			}
+... [3701-3725: length = 存活人数；n=Math.min(n,length-n) 环取最小；from/to.isDead() 时 length+1]
+			for (let i = 0; i < game.players.length; i++) {
+				if (game.players[i].isOut() || game.players[i].hasSkill("undist") || game.players[i].isMin(true)) {
+					length--;
+				}
+			}
+			if (method == "absolute") {
+				return n;
+			}
+			if (from.isDead()) {
+				length++;
+			}
+			if (to.isDead()) {
+				length++;
+			}
+			const left = from.hasSkillTag("left_hand"),
+				right = from.hasSkillTag("right_hand");
+			if (left === right) {
+				n = Math.min(n, length - n);
+			} else if (left == true) {
+				n = length - n;
+			}
+			if (method == "raw" || method == "pure") {
+				return n;
+			}
+		}
+... [3726-3760: checkMod globalFrom/globalTo + 装备 distance.globalFrom/globalTo 叠加]
+		n = game.checkMod(from, to, n, "globalFrom", from);
+		n = game.checkMod(from, to, n, "globalTo", to);
+		const equips1 = from.getVCards("e", function (card) {
+				return !card.cards?.some(card => {
+					return ui.selected.cards?.includes(card);
+				});
+			}),
+			equips2 = to.getVCards("e", function (card) {
+				return !card.cards?.some(card => {
+					return ui.selected.cards?.includes(card);
+				});
+			});
+		for (let i = 0; i < equips1.length; i++) {
+			let info = get.info(equips1[i]).distance;
+			if (!info) {
+				continue;
+			}
+			if (info.globalFrom) {
+				n += info.globalFrom;
+			}
+		}
+		for (let i = 0; i < equips2.length; i++) {
+			let info = get.info(equips2[i]).distance;
+			if (!info) {
+				continue;
+... [3772-3781: return Math.max(1, n) 下限]
+			// 	if(!info) continue;
+			// 	if(info.attackTo){
+			// 		m+=info.attackTo;
+			// 	}
+			// }
+			// return n;
+		} else if (method == "unchecked") {
+			return n;
+		}
+		return Math.max(1, n);
+	}
+	/**
+	 * @overload
+	 * @param { string | Symbol } item
+
+## 装备 distance 声明（apps/core/card/standard.js）
+820-			type: "equip",
+821-			subtype: "equip3",
+822-			bingzhu: ["曹操"],
+823:			distance: { globalTo: 1 },
+--
+843-			type: "equip",
+844-			subtype: "equip3",
+845-			bingzhu: ["刘备"],
+846:			distance: { globalTo: 1 },
+--
+850-			type: "equip",
+851-			subtype: "equip3",
+852-			bingzhu: ["曹操"],
+853:			distance: { globalTo: 1 },
+--
+857-			type: "equip",
+858-			subtype: "equip4",
+859-			bingzhu: ["吕布", "关羽"],
+860:			distance: { globalFrom: -1 },
+--
+864-			type: "equip",
+865-			subtype: "equip4",
+866-			bingzhu: ["曹操"],
+867:			distance: { globalFrom: -1 },
+--
+871-			type: "equip",
+872-			subtype: "equip4",
+873-			bingzhu: ["曹操"],
+874:			distance: { globalFrom: -1 },
+--
+919-			type: "equip",
+920-			subtype: "equip1",
+921-			bingzhu: ["刘备"],
+922:			distance: { attackFrom: -1 },
+--
+932-			type: "equip",
+933-			subtype: "equip1",
+934-			bingzhu: ["赵云", "曹操"],
+935:			distance: { attackFrom: -1 },
+--
