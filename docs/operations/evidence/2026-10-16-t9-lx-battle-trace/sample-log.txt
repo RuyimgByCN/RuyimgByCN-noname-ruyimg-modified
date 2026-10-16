@@ -1,0 +1,11 @@
+# 龙血玄黄 / Boss 诸葛亮 / ylyg* 轨迹采样
+date: 2026-10-16
+liuli_root: /Users/ruyimg/Documents/Claude/sanguosha/scratch/legacy-harness/liuli
+seed: 20261016
+static_map: /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-16-t9-lx-battle-trace/static-trigger-map.json (10 hits)
+lib_ready: true
+runtime_skills: 0 -> runtime-skill-summaries.json
+has_mbqianlong: false
+has__CMeffects: false
+extensions: ["龙血玄黄","AI优化","标记补充","皮肤切换","千幻聆音","全能搜索","十周年UI","手杀MVP","手杀全扩","如真似幻","手杀ui","太虚幻境","武皇争霸","更新保护","雷霆万钧","史诗卡牌","选将美化","笨蛋插件","斗转星移","末日乱斗","祖安武将","祖安设置","游戏说明","段位制裁","电脑适配"]
+after_pump: players=5 event=showCards:1 paused=true content_hits=0

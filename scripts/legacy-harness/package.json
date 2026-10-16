@@ -1,0 +1,18 @@
+{
+  "name": "noname-legacy-harness",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "G0/E01 只读旧线采样工具：静态清单、注册期动态采样与无头对局轨迹（上游源码只读，运行副本放 archive 之外）",
+  "scripts": {
+    "probe": "node probe-liuli-boot.mjs",
+    "sample:lx": "node sample-lx-battle.mjs",
+    "g0": "python3 generate-g0-docs.py",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "acorn": "^8.14.0",
+    "acorn-walk": "^8.3.4",
+    "jsdom": "^26.1.0"
+  }
+}

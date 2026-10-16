@@ -1,0 +1,59 @@
+# G0 · L06 wuxing
+
+> 核验日期：2026-10-16 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/wuxing`  
+> 本页为 E01/G0 深度清单（功能 / 菜单与规则分支语义 / 目标接口 / 验证入口 / 旧行为样本引用）。非整包验收证明。
+
+## 1. 功能清单
+
+### 入口与形态
+- `extension/wuxing/extension.js`（约 229 行；game.import=True；skills=2; cards=1; characters=None）
+
+### 清点摘要
+- 主入口行数：229
+- game.import：True
+- 子插件数：0
+- 资源：无统计
+- 混淆/动态特征：无
+- 台账原生重构状态（摘录）：**部分重构；纵向样本已验收（第 20 轮）**：真实包 `packages/extensions/wuxing-upstream-liuli`；五行属性入状态（引擎 RNG 可重放，登记差异：上游 Math.random 不逐局等价）、生克宿主行为（被生摸牌/被克弃牌——弃牌为确定性首张，登记差异）、五行盘 Treasure 占栏 + 改属性主动技（PickTag 两段选择字节恢复）。暂缓：联机/视频/帮助表现层；装备技能挂载生命周期（五行盘技能以授予验证）。**真实宿主全生命周期验收完成（2026-10-08，[wuxing 生命周期](../operations/evidence/2026-10-08-u05-wuxing-lifecycle/README.md)——第六例即本包）**：安装+激活→安装包→原生建局→对局中卸载→锁定副本续玩→重装/import 守卫
+
+### 能力面（G0 登记）
+- 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
+- 载荷类型：按下方目标接口拆分；旧 JS 不承诺零改动运行（ADR 0782）
+
+## 2. 菜单 / 规则分支语义
+
+### 菜单 / 配置分支
+- 入口配置项计数（清点近似）：未检出独立 config 段（或壳扩展）
+- settings/config 引用次数（清点近似）：0
+- 子插件/子目录：无
+### 规则 / 依赖分支
+- 外部扩展引用：无（清点未检出）
+- 台账已核查摘要：五行属性、五行盘卡牌/技能、开局随机插牌
+- 台账待处理（含规则分支）：同 U05 内嵌 wuxing 语义比对；装备技能挂载生命周期后补全
+- 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
+
+## 3. 目标接口
+
+对照 [原生扩展机制](../../architecture/native-extensions.md)：
+
+- `content`：内容包（武将/技能/卡牌目录合并 + rule-vm/宿主行为）
+- `lifecycle`：包生命周期（安装/启停/升级/卸载）
+
+## 4. 验证入口
+
+- G0 本文档：`docs/migration/g0/L06-wuxing.md`
+- 台账行：`docs/migration/upstream-extension-reconstruction.md` 对应 ID
+- 功能面基线：`docs/operations/evidence/2026-10-07-e01-feature-inventory/feature-inventory.json`
+- 原生包生命周期/内容锁：`crates/content-runtime` + 对应 packages/extensions（若已有转换包）
+- 无头启动探针：`node scripts/legacy-harness/probe-liuli-boot.mjs <scratch/liuli根>`
+
+## 5. 旧行为动态样本引用
+
+- ../operations/evidence/2026-10-07-e01-feature-inventory/README.md（功能面清点基线）
+- ../operations/evidence/2026-10-08-u05-wuxing-lifecycle/README.md
+- scripts/legacy-harness/（无头旧线采样入口；运行副本 scratch/legacy-harness）
+
+## 6. 阻塞与后续
+
+- G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
+- 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。

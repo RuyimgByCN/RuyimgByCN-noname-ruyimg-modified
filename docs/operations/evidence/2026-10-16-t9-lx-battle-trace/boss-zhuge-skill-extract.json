@@ -1,0 +1,34 @@
+{
+  "xiangxing": {
+    "line": 7893,
+    "chars": 1794,
+    "trigger": "trigger: { player: [\"damageEnd\", \"loseHpEnd\"] }",
+    "forced": true,
+    "hasContent": true,
+    "head": "\n\t\t\txiangxing: {\n\t\t\t\tunique: true,\n\t\t\t\tinit(player) {\n\t\t\t\t\tplayer.storage.xiangxing = 7;\n\t\t\t\t\tplayer.storage.xiangxing_count = 0;\n\t\t\t\t\tplayer.addSkill(\"xiangxing7\");\n\t\t\t\t},\n\t\t\t\tmark: true,\n\t\t\t\tintro: {\n\t\t\t\t\tcontent: \"当前有#枚星\",\n\t\t\t\t},\n\t\t\t\ttrigger: { player: [\"damageEnd\", \"loseHpEnd\"] },\n\t\t\t\tforced: true,\n\t\t\t\tpopup: false,\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tvar num = trigger.num;\n\t\t\t\t\tif (num) {\n\t\t\t\t\t\tplayer.storage.xiangxing_count += num;\n\t\t\t\t\t}\n\t\t\t\t\tif (player.storage.xiangxing_count >= 7) {\n\t\t\t"
+  },
+  "yueyin": {
+    "line": 7774,
+    "chars": 3222,
+    "trigger": null,
+    "forced": false,
+    "hasContent": false,
+    "head": "\n\t\t\tyueyin: {\n\t\t\t\tunique: true,\n\t\t\t\tmark: true,\n\t\t\t\tintro: {\n\t\t\t\t\tcontent(storage, player) {\n\t\t\t\t\t\tvar str = \"扣减\" + (7 - player.storage.xiangxing_count) + \"点体力后失去下一枚星；\";\n\t\t\t\t\t\tstr += \"防止禳星伤害条件：\" + lib.translate[\"xiangxing\" + player.storage.xiangxing + \"_info\"];\n\t\t\t\t\t\treturn str;\n\t\t\t\t\t},\n\t\t\t\t\tmarkcount(storage, player) {\n\t\t\t\t\t\treturn Math.max(0, 7 - player.storage.xiangxing_count);\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t\tskipDamage: {\n\t\t\t\t\tx7(player) {\n\t\t\t\t\t\treturn player.countCards(\"h\") == 0;\n\t\t\t\t\t},\n\t\t\t\t\tx6(player,"
+  },
+  "fengqi": {
+    "line": 7959,
+    "chars": 2000,
+    "trigger": "trigger: { player: [\"phaseZhunbeiBegin\", \"phaseJieshuBegin\"] }",
+    "forced": false,
+    "hasContent": false,
+    "head": "\n\t\t\tfengqi: {\n\t\t\t\ttrigger: { player: [\"phaseZhunbeiBegin\", \"phaseJieshuBegin\"] },\n\t\t\t\tdirect: true,\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tvar list = { basic: [], equip: [], trick: [], delay: [] };\n\t\t\t\t\tfor (var i = 0; i < lib.inpile.length; i++) {\n\t\t\t\t\t\tvar name = lib.inpile[i];\n\t\t\t\t\t\tvar info = lib.card[name];\n\t\t\t\t\t\tif (info.autoViewAs || name == \"yuansuhuimie\") {\n\t\t\t\t\t\t\tcontinue;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (lib.filter.cardEnabled({ name: name }, player)) {\n\t\t\t\t\t\t\tif (!list[info.type]) {\n\t\t\t\t\t\t\t\tlist[info."
+  },
+  "gaiming": {
+    "line": 8032,
+    "chars": 2857,
+    "trigger": "trigger: { player: \"judgeBefore\" }",
+    "forced": false,
+    "hasContent": false,
+    "head": "\n\t\t\tgaiming: {\n\t\t\t\ttrigger: { player: \"judgeBefore\" },\n\t\t\t\tdirect: true,\n\t\t\t\tpriority: 1,\n\t\t\t\tunique: true,\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tevent.cards = get.cards(7);\n\t\t\t\t\tplayer.chooseCardButton(true, event.cards, \"改命：选择一张牌作为你的\" + trigger.judgestr + \"判定结果\").ai = function (button) {\n\t\t\t\t\t\tif (get.attitude(player, trigger.player) > 0) {\n\t\t\t\t\t\t\treturn 1 + trigger.judge(button.link);\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (get.attitude(player, trigger.player) < 0) {\n\t\t\t\t\t\t\treturn 1 - trigger.judge(button.link);\n\t\t\t"
+  }
+}
