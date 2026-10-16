@@ -1,14 +1,16 @@
 /**
- * 原生引擎 Worker 入口（T13 客户端切换首片）：与 engine.worker.ts 协议
- * 兼容的子集面，引擎后端为 engine-native-wasm 窄壳。客户端按环境分流
- * （env 标志选 worker 文件）；observer schema 与旧线不同（登记差异，
- * UI 层适配归后续批）。
+ * 原生引擎 Worker 入口（T13 产品面）：协议对齐旧线 WorkerRequest 子集，
+ * 引擎后端为 engine-native-wasm 窄壳；默认产品路径。
  */
-import type {
-  WorkerRequest, WorkerResponse, ObserverSnapshot, EngineEnvelope,
-  ReplayFrame, StatusPayload,
-} from "../types/engine";
-import { nativeCreate, nativeDispatch, type NativeHandle } from "./nativeBackend";
+import type { WorkerRequest, WorkerResponse } from "../types/engine";
+import {
+  ensureNativeReady,
+  nativeCreate,
+  nativeDispatch,
+  nativeEnvelope,
+  nativeUnsupported,
+  type NativeHandle,
+} from "./nativeBackend";
 
 let handle: NativeHandle | null = null;
 
@@ -18,35 +20,50 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
     (self as DedicatedWorkerGlobalScope).postMessage(resp);
   };
   try {
+    await ensureNativeReady();
     if (msg.type === "init") {
-      // 标准目录内建（扩展包装载面归后续批）
-      handle = nativeCreate(4, 4242);
+      // 标准目录内建；扩展包装载待窄壳 new_with_extensions
+      handle = nativeCreate(4, 4242, 0);
       reply({ id: msg.id, ok: true, data: "native ready" });
       return;
     }
     if (!handle) throw new Error("native engine not initialized");
-    if (msg.type === "start") {
-      handle = nativeCreate(msg.players, msg.seed);
-      reply({
-        id: msg.id,
-        ok: true,
-        data: { revision: 0, finished: false, hash: "", choice: "native start" },
-      });
-      return;
+
+    switch (msg.type) {
+      case "start": {
+        handle = nativeCreate(msg.players, msg.seed, msg.observer);
+        reply({ id: msg.id, ok: true, data: nativeEnvelope(handle) });
+        return;
+      }
+      case "endPhase":
+      case "playCard":
+      case "resolveChoice":
+      case "autoStep":
+      case "observer":
+      case "status": {
+        const data = nativeDispatch(handle, msg as Parameters<typeof nativeDispatch>[1]);
+        reply({ id: msg.id, ok: true, data: data as never });
+        return;
+      }
+      case "save": {
+        const data = nativeDispatch(handle, { type: "save" });
+        reply({ id: msg.id, ok: true, data: data as never });
+        return;
+      }
+      case "restore": {
+        const data = nativeDispatch(handle, { type: "restore", hex: msg.hex });
+        reply({ id: msg.id, ok: true, data: data as never });
+        return;
+      }
+      case "activateSkill":
+      case "useSkillCard":
+      case "loadReplay":
+      case "seekReplay":
+        nativeUnsupported(msg.type);
+        return;
+      default:
+        nativeUnsupported((msg as { type: string }).type);
     }
-    const data = nativeDispatch(
-      handle,
-      msg as Parameters<typeof nativeDispatch>[1],
-    );
-    const payload: string | ObserverSnapshot | EngineEnvelope | ReplayFrame | StatusPayload =
-      data.kind === "status"
-        ? { revision: data.revision, finished: data.finished, hash: "", choice: "native" }
-        : data.kind === "view"
-          ? (data.view as ObserverSnapshot)
-          : data.kind === "auto"
-            ? (data.payload as EngineEnvelope)
-            : (data.text as unknown as StatusPayload);
-    reply({ id: msg.id, ok: true, data: payload });
   } catch (error) {
     reply({ id: msg.id, ok: false, error: String(error) });
   }

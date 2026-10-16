@@ -243,6 +243,8 @@ export type WorkerRequest =
     }
   | { id: number; type: "autoStep" }
   | { id: number; type: "observer" }
+  | { id: number; type: "save" }
+  | { id: number; type: "restore"; hex: string }
   | { id: number; type: "loadReplay"; json: string }
   | {
       id: number;

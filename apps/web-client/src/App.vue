@@ -11,6 +11,7 @@ import { RouterLink, RouterView } from "vue-router";
       <nav class="nav" aria-label="主导航">
         <RouterLink to="/">大厅</RouterLink>
         <RouterLink to="/battle">对局</RouterLink>
+        <RouterLink to="/extensions">扩展</RouterLink>
         <RouterLink to="/settings">设置</RouterLink>
         <RouterLink to="/replay">录像</RouterLink>
         <RouterLink to="/collection">武将库</RouterLink>

@@ -74,8 +74,8 @@ const roomLabel = computed(() => (roomId.value > 0 ? `#${roomId.value}` : "—")
     <section class="panel hero">
       <h1>确定性身份局</h1>
       <p class="muted">
-        规则核心运行在 Web Worker 中的 WASM。界面只消费观察者投影（Observer
-        View），不持有完整权威状态。
+        默认原生引擎后端（engine-native-wasm 窄壳，Worker 内运行）。界面只消费观察者投影，不持有完整权威状态。可用
+        <code>VITE_ENGINE_BACKEND=legacy</code> 回退旧线。
       </p>
       <p v-if="desktopPlatform" class="shell-badge">
         Tauri 2 · {{ desktopPlatform.os }} · {{ desktopPlatform.arch }}
@@ -139,8 +139,9 @@ const roomLabel = computed(() => (roomId.value > 0 ? `#${roomId.value}` : "—")
       <h2>架构要点</h2>
       <ul class="muted list">
         <li>主线程：Vue Shell + DOM 战斗层 + 动画时间线</li>
-        <li>本地：Worker + WASM Engine；联机：WebSocket + 权威服务器</li>
-        <li>支持自动步进、倍速、跳过动画、减少动态效果</li>
+        <li>本地：Worker + 原生窄壳（默认）/ 旧线 WASM；联机：WebSocket + 权威服务器</li>
+        <li>扩展包管理：安装 / 启停 / 升级 / 卸载（导航「扩展」）</li>
+        <li>支持自动步进、存读档、倍速、跳过动画、减少动态效果</li>
       </ul>
     </section>
   </div>
