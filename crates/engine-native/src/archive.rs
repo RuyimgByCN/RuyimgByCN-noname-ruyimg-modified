@@ -59,7 +59,7 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 77;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 78;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -852,6 +852,7 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             xiandan_bonus,
             asking_sadeng,
             asking_sadeng_shan,
+            shoulie_direct,
             asking_lueying,
             lueying_victim,
             lueying_declined,
@@ -940,6 +941,8 @@ fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             // v75（swd 卡牌面窗口机批）：萨登荆环两询问挂起旗（尾部追加）
             w.boolean(*asking_sadeng);
             w.boolean(*asking_sadeng_shan);
+            // v78（swd deferred 消解批 95）：狩猎不可闪避旗（尾部追加）
+            w.boolean(*shoulie_direct);
         }
         MachineSnapshot::Zhangba {
             owner,
@@ -1775,6 +1778,8 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
             // v75（swd 卡牌面窗口机批）：萨登荆环两询问挂起旗（尾部追加）
             let asking_sadeng = r.boolean()?;
             let asking_sadeng_shan = r.boolean()?;
+            // v78（swd deferred 消解批 95）：狩猎不可闪避旗（尾部追加）
+            let shoulie_direct = r.boolean()?;
             MachineSnapshot::Sha {
                 card,
                 source,
@@ -1811,6 +1816,7 @@ fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
                 fuchou_card,
                 asking_sadeng,
                 asking_sadeng_shan,
+                shoulie_direct,
             }
         }
         1 => {

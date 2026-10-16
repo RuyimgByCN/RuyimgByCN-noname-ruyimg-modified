@@ -1168,6 +1168,12 @@ pub enum HostBehavior {
     /// 鬼眼·复活面（tag 399，deferred 消解批 冯天凌）：濒死时强制回 1
     /// 并移除鬼眼双技（鬼眼使用时授予本实例）。
     SwdGuiyan2,
+    /// 不死（tag 400，deferred 消解批 康那里士）：濒死时判定——黑桃则
+    /// 照常死亡；否则体力回至 1 并翻面（unique 一次后移除实例）。
+    SwdBusi,
+    /// 狩猎（tag 401，deferred 消解批 子达书）：可选——杀指定后弃一张
+    /// 手牌令此杀不可闪避（Sha 机器 shoulie_direct 旗标承载）。
+    SwdShoulie,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1350,6 +1356,8 @@ impl HostBehavior {
             HostBehavior::SwdYaotong => 397,
             HostBehavior::SwdPozhen => 398,
             HostBehavior::SwdGuiyan2 => 399,
+            HostBehavior::SwdBusi => 400,
+            HostBehavior::SwdShoulie => 401,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -1990,6 +1998,8 @@ impl HostBehavior {
             397 => HostBehavior::SwdYaotong,
             398 => HostBehavior::SwdPozhen,
             399 => HostBehavior::SwdGuiyan2,
+            400 => HostBehavior::SwdBusi,
+            401 => HostBehavior::SwdShoulie,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2010,7 +2020,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 396] = [
+    pub const ALL: [HostBehavior; 398] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2405,6 +2415,8 @@ impl HostBehavior {
         HostBehavior::SwdYaotong,
         HostBehavior::SwdPozhen,
         HostBehavior::SwdGuiyan2,
+        HostBehavior::SwdBusi,
+        HostBehavior::SwdShoulie,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2565,6 +2577,8 @@ impl HostBehavior {
             HostBehavior::SwdYaotong => "host:yaotong",
             HostBehavior::SwdPozhen => "host:pozhen",
             HostBehavior::SwdGuiyan2 => "host:guiyan2",
+            HostBehavior::SwdBusi => "host:busi",
+            HostBehavior::SwdShoulie => "host:shoulie",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3612,6 +3626,16 @@ impl HostBehavior {
             }),
             // 妖童：锁定 marker（engine viewAs 链查询），无触发面
             HostBehavior::SwdYaotong => None,
+            // 狩猎：可选（Sha 机器内联臂承载——filter/machine 无触发面）
+            HostBehavior::SwdShoulie => None,
+            // 不死：自己濒死（锁定强制；priority 7 先于鬼眼复活面/救援）
+            HostBehavior::SwdBusi => Some(TriggerMeta {
+                event: EventKind::Dying,
+                timing: Timing::Normal,
+                priority: 7,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 破阵：自己受伤结算后（确认门=optional）
             HostBehavior::SwdPozhen => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -6059,6 +6083,13 @@ impl SkillBehavior for HostSkillBehavior {
                     }).unwrap_or(false)),
             // 鬼眼·复活面：自己濒死且存活
             HostBehavior::SwdGuiyan2 => matches!(event,
+                EventData::Dying { player, .. }
+                if *player == owner && ctx.state.player(owner).alive),
+            // 狩猎：Sha 机器内联（无触发 filter）
+            HostBehavior::SwdShoulie => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 不死：自己濒死且存活
+            HostBehavior::SwdBusi => matches!(event,
                 EventData::Dying { player, .. }
                 if *player == owner && ctx.state.player(owner).alive),
             // 烈刃：自己以杀造成真实伤害且受害者存活有牌
@@ -12436,6 +12467,32 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 狩猎：Sha 机器内联臂承载，无独立效果步
+            HostBehavior::SwdShoulie => Flow::Done,
+            // 不死：濒死强制判定（内联口径同铁骑）——黑桃照常（落救援/
+            // 死亡）；非黑桃体力回至 1+翻面（TurnOverBefore 帧经 commit
+            // 含凶兽守卫/急冻解除）；unique 一次后移除实例
+            HostBehavior::SwdBusi => {
+                let judged = ctx.draw_judge_card();
+                let spade = matches!(
+                    ctx.catalog.cards[judged as usize].suit,
+                    crate::catalog::Suit::Spade
+                );
+                ctx.to_discard(judged);
+                if !spade {
+                    let hp = ctx.core.player(self.owner).hp;
+                    let need = (1 - hp).max(1) as u32;
+                    ctx.recover(self.owner, need, None);
+                    ctx.emit(EventData::TurnOverBefore {
+                        player: self.owner,
+                        cancelled: false,
+                    });
+                }
+                if let Some(d) = ctx.catalog.skill_by_name("busi") {
+                    ctx.core.skills.remove(&(self.owner, d));
+                }
+                Flow::Done
+            }
             // 破阵：Act 读差值分流——多：弃差值张→来源 1 伤；少：确认
             // →弃来源差值张（确定性首 N 张）
             HostBehavior::SwdPozhen => match self.stage {

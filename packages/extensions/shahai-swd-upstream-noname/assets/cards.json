@@ -669,7 +669,7 @@
       "skills": [
         {
           "name": "shoulie",
-          "mapping": null
+          "mapping": "host:shoulie"
         },
         {
           "name": "hudun",
@@ -1414,7 +1414,7 @@
       "skills": [
         {
           "name": "busi",
-          "mapping": null
+          "mapping": "host:busi"
         },
         {
           "name": "xuying",

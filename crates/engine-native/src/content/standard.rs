@@ -3668,6 +3668,7 @@ impl SkillMachine for JijiangMachine {
                     None,
                     false,
                     false,
+                    false,
                 );
                 self.inner = Some(Box::new(machine));
                 let flow = self.inner.as_mut().expect("just set").step(ctx);

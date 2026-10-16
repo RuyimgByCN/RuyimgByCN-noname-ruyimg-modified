@@ -277,6 +277,8 @@ pub enum MachineSnapshot {
         /// 萨登荆环（swd 卡牌面窗口机批）：被闪后判定确认/额外出闪询问。
         asking_sadeng: bool,
         asking_sadeng_shan: bool,
+        /// 狩猎（swd deferred 消解批 95）：本杀不可闪避（弃牌确认后置位）。
+        shoulie_direct: bool,
     },
     /// 丈八蛇矛（批③-b 第七把）：两张手牌当杀（牌池 + 阶段）。
     Zhangba {
@@ -4174,6 +4176,7 @@ impl MachineSnapshot {
                 fuchou_card,
                 asking_sadeng,
                 asking_sadeng_shan,
+                shoulie_direct,
             } => Ok(Box::new(crate::kernel::ShaResolveMachine::new(
                 *card,
                 *source,
@@ -4210,6 +4213,7 @@ impl MachineSnapshot {
                 fuchou_card.map(|c| c as u32),
                 *asking_sadeng,
                 *asking_sadeng_shan,
+                *shoulie_direct,
             ))),
             MachineSnapshot::DyingSave {
                 dying,

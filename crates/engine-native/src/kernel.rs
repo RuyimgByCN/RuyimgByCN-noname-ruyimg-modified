@@ -3949,6 +3949,7 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
                 fuchou_card: None,
                 asking_sadeng: false,
                 asking_sadeng_shan: false,
+                shoulie_direct: false,
                 extra_targets: extra,
                 hujia_queue: None,
                 hujia_holder: None,
@@ -5552,6 +5553,9 @@ pub struct ShaResolveMachine {
     asking_sadeng: bool,
     /// 萨登荆环：目标额外出闪询问挂起中。
     asking_sadeng_shan: bool,
+    /// 狩猎（swd deferred 消解批 子达书）：弃一张手牌令此杀不可闪避
+    ///（确认后置位；整杀有效=机器实例生命周期）。
+    shoulie_direct: bool,
 }
 
 impl ShaResolveMachine {
@@ -5592,6 +5596,7 @@ impl ShaResolveMachine {
         fuchou_card: Option<crate::ids::CardId>,
         asking_sadeng: bool,
         asking_sadeng_shan: bool,
+        shoulie_direct: bool,
     ) -> Self {
         Self {
             card,
@@ -5629,6 +5634,7 @@ impl ShaResolveMachine {
             fuchou_card,
             asking_sadeng,
             asking_sadeng_shan,
+            shoulie_direct,
 
         }
     }
@@ -5911,6 +5917,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             fuchou_card: self.fuchou_card.map(|c| c as u32),
             asking_sadeng: self.asking_sadeng,
             asking_sadeng_shan: self.asking_sadeng_shan,
+            shoulie_direct: self.shoulie_direct,
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -6365,6 +6372,23 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         };
         // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀不可被闪避
         //（forced directHit；跳过防具判定与出闪询问）
+        // 狩猎应答消费（哨兵在位=刚恢复；asked 门外的首个到达点）：
+        // 弃一张→置不可闪避旗；消费后重置 asked 重入门（防应答被闪窗
+        // 误读——青龙再杀同款 Yield 重入）
+        if self.hujia_holder == Some(self.source) && !self.shoulie_direct {
+            self.hujia_holder = None;
+            if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                if ctx.core.player(self.source).hand.contains(&c) {
+                    ctx.discard_from_hand(self.source, c);
+                    self.shoulie_direct = true;
+                }
+            }
+            self.asked = false;
+            return Flow::Yield;
+        }
+        // 狩猎（swd deferred 消解批 95）：弃牌确认后本杀不可闪避（整杀
+        // 有效=机器旗标）
+        let shoulie_hit = self.shoulie_direct;
         let poyue_direct_hit = {
             let red = matches!(
                 ctx.catalog.cards[self.card as usize].suit,
@@ -6389,6 +6413,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             let has_armor = !qinggang_pierce
                 && !fentian_direct_hit
                 && !poyue_direct_hit
+                && !shoulie_hit
                 && ctx.core.player(self.target).alive
                 && ctx
                     .core
@@ -6860,6 +6885,39 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 // 无手牌：唯一可选 = 令使用者摸 1。
                 ctx.draw_cards(self.source, 1);
             }
+            // 狩猎（swd deferred 消解批 子达书）：可选——弃一张手牌令此
+            // 杀不可闪避（整杀有效；每杀一次=!asked 门+机器旗标）
+            if !self.shoulie_direct
+                && ctx
+                    .catalog
+                    .skill_by_name("shoulie")
+                    .map(|d| ctx.core.has_skill(self.source, d))
+                    .unwrap_or(false)
+                && ctx.core.player(self.source).alive
+                && !ctx.core.player(self.source).hand.is_empty()
+            {
+                self.shoulie_direct = false; // 待应答后置位
+                self.hujia_holder = Some(self.source); // 哨兵=shoulie 待应答
+                let opts: Vec<ChoiceOption> = ctx
+                    .core
+                    .player(self.source)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                return Flow::WaitChoice {
+                    observer: self.source,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "shoulie_discard",
+                        options: opts,
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                };
+            }
             // 渔人（喀玛，swd 武将面批㉙）：锁定——杀指定目标后判定（内联
             // 确定性口径同铁骑，登记差异无改判窗）：黑→弃目标 he 随机一张
             //（上游 discardPlayerCard forced random 同口径）；红→摸 1（登记
@@ -7075,7 +7133,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀 directHit
             // ——整段跳过闪询问直接结算伤害
-            if poyue_direct_hit {
+            if poyue_direct_hit || shoulie_hit {
                 return self.emit_sha_damage(ctx);
             }
             // 司圃（Boss 应昭，规则 v232）：应昭出牌阶段已用牌数≤2 期间
@@ -7091,7 +7149,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 })
                 .unwrap_or(false);
             let mut options = vec![ChoiceOption::Pass];
-            if !sipu_ban_respond && !poyue_direct_hit {
+            if !sipu_ban_respond && !poyue_direct_hit && !shoulie_hit {
                 options.extend(shans);
             }
             return Flow::WaitChoice {

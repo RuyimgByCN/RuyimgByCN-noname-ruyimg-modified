@@ -50,6 +50,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
             fuchou_card: None,
             asking_sadeng: true,
             asking_sadeng_shan: false,
+            shoulie_direct: false,
             asking_qilin: false,
             qilin_horse: None,
             asking_hanbing: false,
