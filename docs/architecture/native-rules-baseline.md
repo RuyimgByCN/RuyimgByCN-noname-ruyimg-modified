@@ -1,6 +1,6 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v290 / 存档 v77**，2026-10-16 N06 铁索逐目标无懈批核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v290 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；现源码为 **v291 / 存档 v79**，2026-10-16 D4 Boss 关卡流程 B0 核对）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，v291 为最新。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -2944,6 +2944,17 @@ changeHp+recastable 复杂面）、群雄乱入系（16 将，大量混入已落
 **登记边界**：同一窗口内第二张无懈反转抵消状态（上游 `map.state` 经父
 `_wuxie` 链翻转，语义一致，非差异）；铁索 `recastable`（重铸）面仍为既
 有未建模登记，本批不动。
+
+**规则 v291（2026-10-16，D4 Boss 关卡流程子系统 B0 / ADR 0783）**：
+`GameMode::Boss` 增可序列化 `BossStageState`（kind/level/孟婆乱入与已死
+旗/禁将表/翼武装位旗/pending；默认 `kind=None`，对现有局零可达语义）+
+内部原语 `change_boss` / `reinit_boss_seat` / `add_boss_fellow` + 禁将/
+乱入旗只读查询空实现。存档 78→**79**（旧档版本门禁拒绝、无迁移）。版
+本 290→**291**。版本回退探针（291→290 复跑 golden 全绿）证明位移唯一
+来源是规则版本字段：14 个标准场景均为 Prototype，不进入 Boss 哈希分支。
+内容技（隐藏链/还人/翼等）自 HostBehavior tag **411** 起留给 B1+；本批
+不挂 tag。证据见
+[2026-10-16 D4 B0](../operations/evidence/2026-10-16-d4-boss-b0/README.md)。
 
 **规则 v278（2026-10-14，T8 增量 14：出牌阶段三类计数字段批）**：
 `TurnState.bte_used_play_phase`（出牌阶段已用基本/锦囊/装备牌数，

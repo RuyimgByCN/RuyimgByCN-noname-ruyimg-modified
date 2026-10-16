@@ -524,6 +524,61 @@ pub enum DoudizhuVariant {
     Binglin,
 }
 
+/// Boss 关卡流程种类（ADR 0783 §3.1；B0 默认 `None`）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[repr(u8)]
+pub enum BossStageKind {
+    /// 未启用关卡流程面（现有 Boss 局默认）。
+    #[default]
+    None = 0,
+    /// 十殿阎罗还人链（B3）。
+    ShidianYanluo = 1,
+    /// 四象隐藏链（B1）。
+    SixiangChain = 2,
+    /// 青/赤/白翼轮次门控（B4）。
+    WingGate = 3,
+}
+
+/// Boss 关卡流程挂起询问（B0 仅占位编码；写入留给后续批）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum BossStagePending {
+    /// 选将询问：候选为目录武将 def 下标。
+    SelectGeneral { candidates: Vec<u16> },
+}
+
+/// Boss 关卡流程态（ADR 0783；入快照/哈希/存档 v79）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BossStageState {
+    pub kind: BossStageKind,
+    /// 十殿：0..3 对应关卡说明四关；其他 kind 自解释。
+    pub level: u8,
+    /// `_status.shidianyanluo_mengpo`：孟婆已乱入。
+    pub mengpo_spawned: bool,
+    /// `_status.shidianyanluo_mengpodie`：孟婆已死。
+    pub mengpo_died: bool,
+    /// 还人禁将表（目录武将 def 下标；B0 恒空，写入留给 B3）。
+    pub banned_generals: Vec<u16>,
+    /// 青/赤/白翼本局已武装的 round 门（位旗；B0 恒 0）。
+    pub wing_armed: u8,
+    /// 选将/延迟换将挂起（B0 恒 None）。
+    pub pending: Option<BossStagePending>,
+}
+
+impl BossStageState {
+    /// 默认空态：`kind=None`、等级 0、旗 false、禁将空、翼未武装、无挂起。
+    pub fn default_none() -> Self {
+        Self {
+            kind: BossStageKind::None,
+            level: 0,
+            mengpo_spawned: false,
+            mengpo_died: false,
+            banned_generals: Vec::new(),
+            wing_armed: 0,
+            pending: None,
+        }
+    }
+}
+
 /// 对局模式。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GameMode {
@@ -548,11 +603,18 @@ pub enum GameMode {
     /// 地主死亡农民胜、农民全灭地主胜；无击杀奖惩（上游 dieAfter 仅
     /// UI+判负；特殊开局摸牌变体未建模）。
     Doudizhu { lord: PlayerId },
-    /// Boss（P2/N08 模式入口批三-a，规则 v82；批三-b v84 增 fellow）：
+    /// Boss（P2/N08 模式入口批三-a，规则 v82；批三-b v84 增 fellow；
+    /// D4/ADR 0783 批 B0 增 `stage` 关卡流程态）：
     /// 单体对抗 + 重整复活回环——死亡玩家轮到回合时计数 +1 并回血/摸牌，
     /// 达阈值复活；boss 死亡挑战者胜、挑战者（含助战 fellow 为 boss 方）
     /// 全灭 boss 胜。fellows=中途入队的助战座位（队尾追加，规则 v84）。
-    Boss { boss: PlayerId, chongzheng: u8, fellows: Vec<PlayerId> },
+    /// `stage`=关卡流程面（默认 `kind=None`，B0 无对局可达语义）。
+    Boss {
+        boss: PlayerId,
+        chongzheng: u8,
+        fellows: Vec<PlayerId>,
+        stage: BossStageState,
+    },
     /// KOF 引擎层（P2/N08 模式入口批四，规则 v83）：单败会话状态入
     /// 引擎——双方将池（GENERAL 下标）、比分、局数；单局终局时推进
     /// 会话（败者队首淘汰、胜者队首轮转、比分/局数 +1）。
@@ -651,6 +713,39 @@ impl GameStateCore {
         match &self.mode {
             GameMode::Boss { fellows, .. } => Some(fellows),
             _ => None,
+        }
+    }
+
+    /// Boss 关卡流程态（非 Boss 为 None）。
+    pub fn boss_stage(&self) -> Option<&BossStageState> {
+        match &self.mode {
+            GameMode::Boss { stage, .. } => Some(stage),
+            _ => None,
+        }
+    }
+
+    /// 禁将查询（B0 空实现：默认禁将表空 → 恒未禁；非 Boss 恒 false）。
+    /// 写入与选将拦截留给 B3 `T11-BOSS-HUANREN`。
+    pub fn is_boss_general_banned(&self, general: u16) -> bool {
+        match &self.mode {
+            GameMode::Boss { stage, .. } => stage.banned_generals.contains(&general),
+            _ => false,
+        }
+    }
+
+    /// 孟婆乱入旗只读（B0 默认 false；写入留给 B3）。
+    pub fn boss_mengpo_spawned(&self) -> bool {
+        match &self.mode {
+            GameMode::Boss { stage, .. } => stage.mengpo_spawned,
+            _ => false,
+        }
+    }
+
+    /// 孟婆已死旗只读（B0 默认 false；写入留给 B3）。
+    pub fn boss_mengpo_died(&self) -> bool {
+        match &self.mode {
+            GameMode::Boss { stage, .. } => stage.mengpo_died,
+            _ => false,
         }
     }
 

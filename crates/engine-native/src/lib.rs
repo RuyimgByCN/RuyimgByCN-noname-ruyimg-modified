@@ -30,7 +30,9 @@ pub use catalog::{CardKind, Catalog, EquipSlot, SharedCatalog, SkillBehavior, Sk
 pub use choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};
 pub use engine::{AuthToken, CommandOutcome, Engine, GameAction, GameCommand, RejectReason};
 pub use event::{DamageData, EventData, EventKind, Phase, Stage, Timing};
-pub use state::{GameMode, Outcome, Role, Winner};
+pub use state::{
+    BossStageKind, BossStagePending, BossStageState, GameMode, Outcome, Role, Winner,
+};
 pub use view::{ChoiceView, EventView, HandView, PlayerCellView, PlayerView};
 pub use ids::{CardId, EventId, PlayerId, SkillDefId};
 pub use machine::{Ctx, Flow, LogEvent};

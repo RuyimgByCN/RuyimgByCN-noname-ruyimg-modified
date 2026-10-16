@@ -27,7 +27,9 @@ use crate::snap::{
     ZhiHengStageSnap, JudgementProgressSnap, MachineSnapshot, ParkSnapshot,
     ResolutionSnapshot, SanCaiStageSnap, StateSnapshot, YiShangStageSnap,
 };
-use crate::state::{GameMode, Role, SkillInstance, Winner};
+use crate::state::{
+    BossStageKind, BossStagePending, BossStageState, GameMode, Role, SkillInstance, Winner,
+};
 
 /// 存档格式版本：编码布局变化时递增。
 /// v2：OpenChoice 显式编码 ChoiceKind（v1 由提示词静态推导，曾与机器实际
@@ -59,7 +61,10 @@ use crate::state::{GameMode, Role, SkillInstance, Winner};
 /// v61（2026-10-11，T11 周瑜批 v263）：`TurnState` 尾部追加
 /// `jidian_chain`（极点链挡旗标）。v60 字节被版本门禁拒绝（无生产迁移
 /// 数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 78;
+/// v79（2026-10-16，D4 Boss 关卡流程 B0）：`GameMode::Boss` 尾部追加
+/// `BossStageState`（kind/level/孟婆旗/禁将表/翼武装/pending）。v78 字节
+/// 被版本门禁拒绝（无生产迁移数据；存档仅测试与内部工具）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 79;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2840,6 +2845,62 @@ fn dec_resolution(r: &mut R<'_>) -> Result<ResolutionSnapshot, ArchiveError> {
     })
 }
 
+// ---- Boss 关卡流程态（存档 v79 / ADR 0783 B0）----
+
+fn enc_boss_stage(w: &mut W, stage: &BossStageState) {
+    w.u8(stage.kind as u8);
+    w.u8(stage.level);
+    w.boolean(stage.mengpo_spawned);
+    w.boolean(stage.mengpo_died);
+    w.len(stage.banned_generals.len());
+    for g in &stage.banned_generals {
+        w.u16(*g);
+    }
+    w.u8(stage.wing_armed);
+    match &stage.pending {
+        None => w.u8(0),
+        Some(BossStagePending::SelectGeneral { candidates }) => {
+            w.u8(1);
+            w.len(candidates.len());
+            for g in candidates {
+                w.u16(*g);
+            }
+        }
+    }
+}
+
+fn dec_boss_stage(r: &mut R<'_>) -> Result<BossStageState, ArchiveError> {
+    let kind = match r.u8()? {
+        0 => BossStageKind::None,
+        1 => BossStageKind::ShidianYanluo,
+        2 => BossStageKind::SixiangChain,
+        3 => BossStageKind::WingGate,
+        t => return Err(ArchiveError::BadTag("boss_stage_kind", t)),
+    };
+    let level = r.u8()?;
+    let mengpo_spawned = r.boolean()?;
+    let mengpo_died = r.boolean()?;
+    let banned_generals = r.vec(|r| r.u16())?;
+    let wing_armed = r.u8()?;
+    let pending = match r.u8()? {
+        0 => None,
+        1 => {
+            let candidates = r.vec(|r| r.u16())?;
+            Some(BossStagePending::SelectGeneral { candidates })
+        }
+        t => return Err(ArchiveError::BadTag("boss_stage_pending", t)),
+    };
+    Ok(BossStageState {
+        kind,
+        level,
+        mengpo_spawned,
+        mengpo_died,
+        banned_generals,
+        wing_armed,
+        pending,
+    })
+}
+
 // ---- 顶层快照 ----
 
 fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
@@ -2860,7 +2921,12 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
             w.u8(4);
             enc_pid(w, lord);
         }
-        GameMode::Boss { boss, chongzheng, fellows } => {
+        GameMode::Boss {
+            boss,
+            chongzheng,
+            fellows,
+            stage,
+        } => {
             w.u8(5);
             enc_pid(w, boss);
             w.u8(*chongzheng);
@@ -2868,6 +2934,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
             for f in fellows {
                 enc_pid(w, f);
             }
+            // v79：BossStageState
+            enc_boss_stage(w, stage);
         }
         GameMode::Kof { pools, wins, games } => {
             w.u8(6);
@@ -3264,7 +3332,13 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             let boss = dec_pid(r)?;
             let chongzheng = r.u8()?;
             let fellows = r.vec(dec_pid)?;
-            GameMode::Boss { boss, chongzheng, fellows }
+            let stage = dec_boss_stage(r)?;
+            GameMode::Boss {
+                boss,
+                chongzheng,
+                fellows,
+                stage,
+            }
         }
         6 => {
             let p0 = r.vec(|r| r.u16())?;

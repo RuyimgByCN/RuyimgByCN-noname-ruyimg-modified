@@ -219,14 +219,24 @@ impl Engine {
 
     /// Boss（P2/N08 模式入口批三-a）：boss 1 名对挑战者，chongzheng=重整阈值（0=无复活）。
     pub fn new_boss(seed: u64, seats: usize, boss: PlayerId, chongzheng: u8) -> Self {
-        Self::new_with_mode(seed, seats, GameMode::Boss { boss, chongzheng, fellows: Vec::new() }, OpeningPlan::Standard)
+        Self::new_with_mode(
+            seed,
+            seats,
+            GameMode::Boss {
+                boss,
+                chongzheng,
+                fellows: Vec::new(),
+                stage: crate::state::BossStageState::default_none(),
+            },
+            OpeningPlan::Standard,
+        )
     }
 
-    /// Boss 助战中途入队（批三-b，规则 v84）：座位表队尾追加新玩家
-    /// （登记差异：上游 addFellow 可按位置插入，原生固定队尾），
-    /// 直授 4 张手牌（上游 directgain(4) 同），登记入 fellows。
-    /// 仅 Boss 模式；返回新座位。
-    pub fn debug_add_fellow(&mut self, hp: u32) -> Option<PlayerId> {
+    /// Boss 助战中途入队（批三-b，规则 v84；D4/B0 正式 API）：
+    /// 座位表队尾追加新玩家（登记差异：上游 addFellow 可按位置插入，
+    /// 原生固定队尾），直授 4 张手牌（上游 directgain(4) 同），登记入
+    /// fellows，并同步 `seat_ring` 队尾（ADR 0781）。仅 Boss 模式；返回新座位。
+    pub fn add_boss_fellow(&mut self, hp: u32) -> Option<PlayerId> {
         if !matches!(&self.state.core.mode, GameMode::Boss { .. }) {
             return None;
         }
@@ -235,11 +245,77 @@ impl Engine {
         let take = self.state.core.deck.len().min(4);
         p.hand.extend(self.state.core.deck.drain(..take));
         self.state.core.players.push(p);
-        if let GameMode::Boss { boss, fellows, .. } = &mut self.state.core.mode {
+        // 保持座位环与玩家表长度一致（ADR 0781）；历史 debug 入口曾漏写，
+        // ring_* 退回恒等位——正式 API 显式追加。
+        self.state.core.seat_ring.push(pid);
+        if let GameMode::Boss { fellows, .. } = &mut self.state.core.mode {
             fellows.push(pid);
-            let _ = boss;
         }
         Some(pid)
+    }
+
+    /// 测试入口：等价于 [`Self::add_boss_fellow`]。
+    pub fn debug_add_fellow(&mut self, hp: u32) -> Option<PlayerId> {
+        self.add_boss_fellow(hp)
+    }
+
+    /// 换 Boss 将（D4/B0 内部原语）：在当前 `GameMode::Boss.boss` 座位上
+    /// 清空技能、重挂目录将并更新装配；不改 boss 指针、不改座位环。
+    /// `preserve_hp=true` 时保留当前体力（上限随新将裁剪，年兽 nbianshen
+    /// 同构）；`false` 时回满。区域（手/装/判定）保留。默认对局路径不调用。
+    pub fn change_boss(&mut self, general: u16, preserve_hp: bool) -> bool {
+        let Some((boss, _)) = self.state.core.boss_mode() else {
+            return false;
+        };
+        self.reinit_boss_seat(boss, general, preserve_hp)
+    }
+
+    /// 在指定座位重挂将（D4/B0 内部原语；不改 boss 指针）。
+    /// 隐藏链侧座换将 / 年兽形态轮换可复用。非 Boss 模式拒绝。
+    pub fn reinit_boss_seat(
+        &mut self,
+        seat: PlayerId,
+        general: u16,
+        preserve_hp: bool,
+    ) -> bool {
+        if !matches!(&self.state.core.mode, GameMode::Boss { .. }) {
+            return false;
+        }
+        if seat as usize >= self.state.core.players.len() {
+            return false;
+        }
+        if self.catalog.general_meta(general).is_none() {
+            return false;
+        }
+        let old_hp = self.state.core.player(seat).hp;
+        let removed: Vec<crate::ids::SkillDefId> = self
+            .state
+            .core
+            .skills
+            .keys()
+            .filter(|(o, _)| *o == seat)
+            .map(|(_, d)| *d)
+            .collect();
+        for d in removed {
+            self.state.core.skills.remove(&(seat, d));
+        }
+        self.state.core.player_mut(seat).general_slots[0] = Some(general);
+        self.state.core.player_mut(seat).general_slots[1] = None;
+        self.state.core.player_mut(seat).revealed_generals = [true, false];
+        apply_general_assembly(&mut self.state.core, &self.catalog, seat, 0);
+        let p = self.state.core.player_mut(seat);
+        if preserve_hp {
+            if p.hp > p.max_hp as i32 {
+                p.hp = p.max_hp as i32;
+            } else {
+                p.hp = old_hp.min(p.max_hp as i32);
+            }
+        } else {
+            p.hp = p.max_hp as i32;
+        }
+        p.alive = true;
+        p.dying = false;
+        true
     }
 
     /// 斗地主（P2/N08 模式入口批二）：地主 1 名，其余为农民。
@@ -280,6 +356,7 @@ impl Engine {
                 boss,
                 chongzheng,
                 fellows: Vec::new(),
+                stage: crate::state::BossStageState::default_none(),
             },
             OpeningPlan::BossStage {
                 boss_cards,
@@ -4712,11 +4789,36 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
             push_u8(&mut h, 5);
             push_u8(&mut h, *lord);
         }
-        GameMode::Boss { boss, chongzheng, fellows } => {
+        GameMode::Boss {
+            boss,
+            chongzheng,
+            fellows,
+            stage,
+        } => {
             push_u8(&mut h, 6);
             push_u8(&mut h, *boss);
             push_u8(&mut h, *chongzheng);
             push_players(&mut h, fellows);
+            // D4/B0：关卡流程态入确定性摘要（规则 v291）
+            push_u8(&mut h, stage.kind as u8);
+            push_u8(&mut h, stage.level);
+            push_u8(&mut h, stage.mengpo_spawned as u8);
+            push_u8(&mut h, stage.mengpo_died as u8);
+            push_u32(&mut h, stage.banned_generals.len() as u32);
+            for g in &stage.banned_generals {
+                push_u16(&mut h, *g);
+            }
+            push_u8(&mut h, stage.wing_armed);
+            match &stage.pending {
+                None => push_u8(&mut h, 0),
+                Some(crate::state::BossStagePending::SelectGeneral { candidates }) => {
+                    push_u8(&mut h, 1);
+                    push_u32(&mut h, candidates.len() as u32);
+                    for g in candidates {
+                        push_u16(&mut h, *g);
+                    }
+                }
+            }
         }
         GameMode::Kof { pools, wins, games } => {
             push_u8(&mut h, 7);

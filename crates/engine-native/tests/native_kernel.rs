@@ -18705,3 +18705,148 @@ fn fangtian_multi_target_sha() {
 }
 
 // probe: bianchengwang death flow
+
+// ---------------------------------------------------------------------------
+// D4 Boss 关卡流程子系统 B0（ADR 0783 / T11-BOSS-STAGE-SUBSYSTEM）
+// ---------------------------------------------------------------------------
+
+/// B0-STAGE-STATE + B0-ARCHIVE-ROUNDTRIP：默认 kind=None；encode→decode 全等。
+#[test]
+fn d4_boss_b0_stage_state_default_none_roundtrip() {
+    use engine_native::archive::{decode_archive, encode_archive};
+    use engine_native::{BossStageKind, BossStageState};
+
+    let e = Engine::new_boss(29101, 3, 0, 0);
+    let stage = e
+        .save()
+        .core
+        .boss_stage()
+        .expect("Boss 模式应有 stage")
+        .clone();
+    assert_eq!(stage.kind, BossStageKind::None);
+    assert_eq!(stage.level, 0);
+    assert!(!stage.mengpo_spawned);
+    assert!(!stage.mengpo_died);
+    assert!(stage.banned_generals.is_empty());
+    assert_eq!(stage.wing_armed, 0);
+    assert!(stage.pending.is_none());
+    assert_eq!(stage, BossStageState::default_none());
+
+    let bytes = encode_archive(&e.save());
+    let back = decode_archive(&bytes).expect("v79 解码");
+    assert_eq!(back.core.mode, e.save().core.mode);
+    assert_eq!(
+        back.core.boss_stage(),
+        Some(&BossStageState::default_none())
+    );
+}
+
+/// B0-ARCHIVE-ROUNDTRIP：旧档格式被门禁拒绝（无迁移）。
+#[test]
+fn d4_boss_b0_archive_format_v79_rejects_v78_without_migration() {
+    use engine_native::archive::{
+        decode_archive, encode_archive, ArchiveError, ARCHIVE_FORMAT_VERSION, ARCHIVE_MAGIC,
+    };
+
+    assert_eq!(ARCHIVE_FORMAT_VERSION, 79);
+    let e = Engine::new_boss(29102, 3, 0, 0);
+    let mut bytes = encode_archive(&e.save());
+    // 伪造头格式版本 78（载荷仍为 v79 布局）——门禁应拒收。
+    bytes[4..6].copy_from_slice(&78u16.to_le_bytes());
+    assert_eq!(&bytes[0..4], ARCHIVE_MAGIC);
+    match decode_archive(&bytes) {
+        Err(ArchiveError::UnsupportedFormatVersion(78)) => {}
+        other => panic!("期望拒收 v78，得到 {other:?}"),
+    }
+}
+
+/// B0-HASH-PROBE：仅改 stage 字段 → 摘要变化。
+#[test]
+fn d4_boss_b0_hash_includes_stage_fields() {
+    let e = Engine::new_boss(29103, 3, 0, 0);
+    let h0 = e.state_hash();
+    // 经快照注入改 level（不经默认对局路径）
+    let mut snap = e.save();
+    match &mut snap.core.mode {
+        GameMode::Boss { stage, .. } => stage.level = 2,
+        _ => panic!("Boss"),
+    }
+    let e2 = Engine::restore(&snap).expect("恢复");
+    assert_ne!(h0, e2.state_hash(), "level 变化应位移摘要");
+    match &mut snap.core.mode {
+        GameMode::Boss { stage, .. } => {
+            stage.level = 0;
+            stage.mengpo_spawned = true;
+        }
+        _ => panic!("Boss"),
+    }
+    let e3 = Engine::restore(&snap).expect("恢复");
+    assert_ne!(h0, e3.state_hash(), "mengpo_spawned 变化应位移摘要");
+}
+
+/// B0-CHANGE-BOSS-API：换将更新装配；座位环长度不变。
+#[test]
+fn d4_boss_b0_change_boss_api_reinit_updates_pointer() {
+    use engine_native::content::standard::BOSS_GENERALS;
+
+    let mut e = Engine::new_boss(29104, 3, 0, 0);
+    advance_to_play(&mut e, 0);
+    let base = (e.catalog().general_count() - BOSS_GENERALS.len()) as u16;
+    let zhuyin = base; // BOSS_GENERALS[0]
+    let hundun = base + 1; // BOSS_GENERALS[1]
+    e.debug_set_general_def(0, zhuyin);
+    let ring_before = e.save().core.seat_ring.clone();
+    let hp_before = e.debug_hp(0);
+    assert!(e.change_boss(hundun, true), "change_boss 应成功");
+    let (boss, _) = e.save().core.boss_mode().expect("Boss");
+    assert_eq!(boss, 0, "boss 指针不变");
+    assert_eq!(
+        e.save().core.players[0].general_slots[0],
+        Some(hundun),
+        "主将槽更新"
+    );
+    // 混沌携带无脏等；烛阴仅凶兽——换将后应有无脏实例
+    let wuzang = e.catalog().skill_by_name("无脏").expect("无脏");
+    assert!(
+        e.save().core.skills.contains_key(&(0, wuzang)),
+        "新将技能已装配"
+    );
+    let xiongshou = e.catalog().skill_by_name("凶兽").expect("凶兽");
+    // 凶兽为共有技：混沌条目亦携带，故仍在；断言主将槽已换即可
+    let _ = xiongshou;
+    assert_ne!(zhuyin, hundun);
+    assert_eq!(e.save().core.seat_ring, ring_before, "座位环不破坏");
+    assert_eq!(e.debug_hp(0), hp_before.min(e.save().core.players[0].max_hp as i32));
+}
+
+/// B0-ADD-FELLOW-API：正式 API 入队尾并同步 seat_ring；boss 侧判定含 fellow。
+#[test]
+fn d4_boss_b0_add_fellow_api_appends_and_marks_boss_side() {
+    let mut e = Engine::new_boss(29105, 3, 0, 0);
+    advance_to_play(&mut e, 0);
+    let fellow = e.add_boss_fellow(4).expect("入队");
+    assert_eq!(fellow, 3);
+    assert_eq!(e.save().core.boss_fellows().unwrap(), &[3]);
+    assert_eq!(e.save().core.seat_ring.len(), 4);
+    assert_eq!(*e.save().core.seat_ring.last().unwrap(), 3);
+    assert!(e.save().core.is_boss_side(3));
+    assert!(!e.save().core.is_boss_side(1));
+}
+
+/// B0-BAN-QUERY-STUB：恒未禁、旗 getter 默认 false。
+#[test]
+fn d4_boss_b0_ban_query_stub_always_false() {
+    let e = Engine::new_boss(29106, 3, 0, 0);
+    for id in 0..64u16 {
+        assert!(
+            !e.save().core.is_boss_general_banned(id),
+            "B0 禁将空表 id={id}"
+        );
+    }
+    assert!(!e.save().core.boss_mengpo_spawned());
+    assert!(!e.save().core.boss_mengpo_died());
+    // 非 Boss 模式同样恒 false
+    let p = Engine::new(29107, 2);
+    assert!(!p.save().core.is_boss_general_banned(0));
+    assert!(!p.save().core.boss_mengpo_spawned());
+}
