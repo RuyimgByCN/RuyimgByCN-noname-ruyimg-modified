@@ -1,0 +1,1878 @@
+{
+  "meta": {
+    "title": "noname-next 全量未完成待做登记表",
+    "verified_date": "2026-10-16",
+    "head": "5c5bf131c621288c8051b8549ec5644a30b38eca",
+    "head_short": "5c5bf131",
+    "ruleset_version_noted": 290,
+    "archive_format_version_noted": 77,
+    "engine_native_tests_noted": "807 通过 / 0 失败 / 1 ignore（维护守护批快照；并行开发中可能漂移）",
+    "scope": [
+      "T8 余项",
+      "T9",
+      "T11",
+      "T12（37 来源整包）",
+      "T13",
+      "T15③",
+      "O4/O5",
+      "台账 E01–E06/G0–G5 未完成",
+      "覆盖清单与规则基准开放行",
+      "D4–D8 解锁后的执行项"
+    ],
+    "method": "只读调研必读文档；不改代码、不改正文；本目录为权威待做快照证据",
+    "status_enum": [
+      "open",
+      "blocked",
+      "in_progress"
+    ],
+    "item_count": 85,
+    "ambiguous_ids": [
+      "T8-FILTER-COMPOSITE",
+      "T11-BOSS-PANGTONG-EXTERNAL",
+      "T11-BOSS-DIZANG-DAYUAN",
+      "T11-BOSS-SHIKIEIKI-EXCLUDED",
+      "T11-BOSS-MENGPO-WANGSHI-PLAY",
+      "T11-EVENT-RNG-RESTORE-PARITY",
+      "T12-SWD-DEFERRED-SKILLS",
+      "T12-SRC-U06",
+      "COV-TRIGGER-GETINDEX-BUCKETS",
+      "COV-PARTIAL-MECHANISMS",
+      "RULE-JUDGE-ORDER-NOTE",
+      "RULE-CONTENT-DIFF-CONVENTIONS",
+      "RULE-BUDGET-DOC-LAG"
+    ]
+  },
+  "items": [
+    {
+      "id": "T8-FILTER-COMPOSITE",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T8 行（约 L81）；增量 17 证据分类账"
+      },
+      "description": "T8 余项：具名组合 filter 深化（全词表扫描约 624 待办中的复合查询等；新策略须双闸回归）。含 active_used_at_least_N、mark/skill_pile/lost-history/once 旗标、移动批次、pot 族、牌堆、转化杀、记忆等需内核新原语的族。",
+      "done_when_evidence": [
+        "定向回归测试通过",
+        "cargo test --offline -p engine-native --no-fail-fast 全绿",
+        "Gate 1b exit 0",
+        "证据目录 README+日志",
+        "装载器 deferred_filters 收敛证据"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T8",
+        "E03",
+        "G1"
+      ],
+      "notes": "按需立项；约数来自增量 17 扫描（642=18 已承载+624 待办），非精确工单计数",
+      "ambiguous": true
+    },
+    {
+      "id": "T8-EFFECT-QUERY-VARIANTS",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T8 行（约 L81）完成条件段"
+      },
+      "description": "T8 余项：剩余 rule-vm 效果/查询变体（部分需内核新原语）；开放规则验收面「不重编译即可装含新技能/新牌的包」在通用效果面的持续扩面。",
+      "done_when_evidence": [
+        "定向回归测试通过",
+        "cargo test --offline -p engine-native --no-fail-fast 全绿",
+        "Gate 1b exit 0",
+        "证据目录 README+日志",
+        "真实扩展样本端到端"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T8-FILTER-COMPOSITE"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "T8",
+        "E03",
+        "G1"
+      ]
+    },
+    {
+      "id": "T9-SOURCE-BEHAVIOR-SAMPLES",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T9 行（约 L82）"
+      },
+      "description": "T9：37 来源各自补齐旧行为动态样本、菜单与规则分支语义清单、目标接口与验证入口登记（功能面基线已有，非整包）。",
+      "done_when_evidence": [
+        "台账每来源行为样本证据",
+        "目标接口与验证入口登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-auditor",
+      "tags": [
+        "T9",
+        "E01",
+        "G0"
+      ]
+    },
+    {
+      "id": "T9-LX-BATTLE-TRACE",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T9；docs/operations/evidence/2026-10-11-t9-lx-trace-survey/README.md"
+      },
+      "description": "T9 龙血玄黄：搭旧线无头运行环境，采集战斗内触发轨迹（LX.2 仅注册期；archive 只读无 node_modules）。D5 已立项解锁。",
+      "done_when_evidence": [
+        "无头环境搭建证据",
+        "战斗触发轨迹样本",
+        "勘察阻塞项关闭说明"
+      ],
+      "status": "open",
+      "depends_on": [
+        "D5-LX-MIGRATION"
+      ],
+      "role": "legacy-harness-engineer",
+      "tags": [
+        "T9",
+        "E01",
+        "D5",
+        "L29"
+      ]
+    },
+    {
+      "id": "T11-BOSS-STAGE-SUBSYSTEM",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T11；D4 裁决 docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md"
+      },
+      "description": "D4 解锁：建原生 Boss 关卡流程子系统（另写 ADR），并把原「关卡流程面登记不落」技能逐个落包——含十殿阎罗「还人」族（换将链/孟婆乱入/禁将表）、四象隐藏链八技、青/赤/白翼轮次编排、bianshen 死亡换 Boss。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录",
+        "子系统 ADR",
+        "逐技定向回归"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "architect+kernel-engineer",
+      "tags": [
+        "T11",
+        "D4",
+        "N08",
+        "N11"
+      ]
+    },
+    {
+      "id": "T11-BOSS-HUANREN",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 秦广王片（v276）；规则基准还人登记不落段"
+      },
+      "description": "十殿阎罗「还人」：关卡换将链、孟婆乱入、禁将表——原登记不落，D4 后待实现。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T11-BOSS-STAGE-SUBSYSTEM"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11",
+        "D4"
+      ]
+    },
+    {
+      "id": "T11-BOSS-HIDECHAIN-8",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 四象隐藏链处置证据 2026-10-11"
+      },
+      "description": "四象隐藏链八技（青木2/3、白芒2/3、赤炎2/3、玄麟2/3）dieBegin hide+dieAfter 换将重生——D4 后随关卡子系统落包。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T11-BOSS-STAGE-SUBSYSTEM"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11",
+        "D4"
+      ]
+    },
+    {
+      "id": "T11-BOSS-WING-ROTATION",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 青翼/赤翼/白翼登记不落"
+      },
+      "description": "青/赤/白翼轮次编排技（阶段 3/5/7 等）——D4 后待实现。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T11-BOSS-STAGE-SUBSYSTEM"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11",
+        "D4"
+      ]
+    },
+    {
+      "id": "T11-BOSS-BIANSHEN-CHANGEBOSS",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 bianshen 勘验片；D4"
+      },
+      "description": "bianshen 死亡 changeBoss / bianshen4 同族关卡流程面——D4 后待实现。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T11-BOSS-STAGE-SUBSYSTEM"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11",
+        "D4"
+      ]
+    },
+    {
+      "id": "T11-BOSS-ZHUGE-LIANG",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 庞统/诸葛亮片 v277；D5"
+      },
+      "description": "Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技 ylyg* 龙血玄黄包依赖——D5 立项后由登记不落转待实现。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录",
+        "hp Infinity 承载设计"
+      ],
+      "status": "open",
+      "depends_on": [
+        "D5-LX-MIGRATION",
+        "T9-LX-BATTLE-TRACE"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11",
+        "D5",
+        "T9"
+      ]
+    },
+    {
+      "id": "T11-BOSS-PANGTONG-EXTERNAL",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 庞统片 v277"
+      },
+      "description": "庞统涅槃/浴火等外部包技依赖（shenhua oldniepan / offline ylygniepan+三外部技+loopType）——随外部包/龙血面推进。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "D5-LX-MIGRATION"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11",
+        "D5"
+      ],
+      "notes": "与诸葛亮同属外部包依赖族；完成边界依赖外部包可用性",
+      "ambiguous": true
+    },
+    {
+      "id": "T11-BOSS-DIZANG-DAYUAN",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 地藏王 v274"
+      },
+      "description": "地藏王「大愿」：判定改写机 AI 态度面——条目只列已转换技，仍开放。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11"
+      ],
+      "notes": "是否纳入 D4 关卡子系统未在裁决文中点名；暂挂 T11 内容余项",
+      "ambiguous": true
+    },
+    {
+      "id": "T11-BOSS-SHIKIEIKI-EXCLUDED",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 Shikieiki 排除登记"
+      },
+      "description": "四季映姬 boss_yingzhong：外部武将库结构性依赖，目录排除。若要落包需外部武将池基建。",
+      "done_when_evidence": [
+        "结构性依赖解除或正式永久排除 ADR/台账"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11"
+      ],
+      "notes": "当前为排除登记而非待实现；关闭条件模糊（排除确认 vs 未来基建）",
+      "ambiguous": true
+    },
+    {
+      "id": "T11-BOSS-MENGPO-WANGSHI-PLAY",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 孟婆 v270"
+      },
+      "description": "孟婆「往事」打出面未落登记；建局摸 3 面等地藏王无量登记未落等零散 Boss 登记差异收口。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T11"
+      ],
+      "ambiguous": true
+    },
+    {
+      "id": "T11-EVENT-RNG-RESTORE-PARITY",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T11 完成条件末段"
+      },
+      "description": "T11 横切：同一命令下事件、随机流和恢复轨迹对照（逐项修复或登记；语义变则升规则版本）。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录",
+        "命令/事件/随机/恢复四轨对照证据"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "rules-auditor",
+      "tags": [
+        "T11",
+        "N08"
+      ],
+      "notes": "长期横切验收，非单一可关闭切片",
+      "ambiguous": true
+    },
+    {
+      "id": "D5-LX-MIGRATION",
+      "source": {
+        "doc": "docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md",
+        "ref": "D5 行"
+      },
+      "description": "D5：龙血玄黄规则面迁移立项执行——先无头轨迹采集，再迁移规则面（含 ylyg*）。",
+      "done_when_evidence": [
+        "迁移计划/包数据",
+        "规则面回归",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T9-LX-BATTLE-TRACE"
+      ],
+      "role": "extension-engineer",
+      "tags": [
+        "D5",
+        "T9",
+        "T11",
+        "L29"
+      ]
+    },
+    {
+      "id": "T15-3-LEGACY-PORT",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T15 行③（约 L88）；D6；delta 页 10-08 节"
+      },
+      "description": "D6 解锁：旧线 engine-core 移植批——19 将 39 技从 source_synced 补齐实现。",
+      "done_when_evidence": [
+        "engine-core 定向/全量测试",
+        "catalog 状态从 source_synced 迁出",
+        "证据目录",
+        "upstream-1.11.5-delta 分布对照关闭"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "legacy-engineer",
+      "tags": [
+        "T15",
+        "D6"
+      ]
+    },
+    {
+      "id": "O4-WASM-OPT-COMPARE",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "性能待办 / O4（约 L130）；D7"
+      },
+      "description": "D7：接受离线内嵌 14.5MB；补装 wasm-opt 做一次对比测量后关闭 O4。",
+      "done_when_evidence": [
+        "同设备同工具链同负载前后数据",
+        "证据目录测量日志",
+        "wasm-opt 有/无体积与功能回归对照"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "performance-engineer",
+      "tags": [
+        "O4",
+        "D7"
+      ]
+    },
+    {
+      "id": "O5-PROFILING-CLOSEOUT",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "性能待办 / O5（约 L131）；D8"
+      },
+      "description": "D8：保持条件立项；做一轮剖析（JSON 快照/回放、动态派发、大文件拆分、Blake3 合并、目录重命名）。无触发条件则记录结论并关闭；有触发则最小改动并版本化。",
+      "done_when_evidence": [
+        "同设备同工具链同负载前后数据",
+        "证据目录测量日志",
+        "剖析结论页（关闭或立项）"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "performance-engineer",
+      "tags": [
+        "O5",
+        "D8"
+      ]
+    },
+    {
+      "id": "PERF-ARCH-ACCEPTANCE-GATES",
+      "source": {
+        "doc": "noname-next/noname-performance-architecture.md",
+        "ref": "§11 性能验证与验收标准"
+      },
+      "description": "架构验收口径未作为已测成绩：桌面/移动帧预算、输入响应、规则执行、AI、冷启动、长局内存、持续负载、联机、扩展有/无对照——须同设备同负载独立证据；原生 GPU 牌桌与正式客户端性能另轨。",
+      "done_when_evidence": [
+        "同设备同工具链同负载前后数据",
+        "证据目录测量日志",
+        "设备/OS/功耗条件固定记录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T13-PRODUCT-CLIENT"
+      ],
+      "role": "performance-engineer",
+      "tags": [
+        "PERF",
+        "ARCH"
+      ],
+      "notes": "目标文档口径，与 O1–O5 局部优化项不同层"
+    },
+    {
+      "id": "T13-AI-STRONGER-POLICY",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T13（约 L86）策略质量段"
+      },
+      "description": "更强 AI 候选（深搜/MCTS/身份目标匹配）即插即评——质量下界已确立，候选未交付。",
+      "done_when_evidence": [
+        "policy_eval 对照报告",
+        "同 seed 质量与成本"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "ai-engineer",
+      "tags": [
+        "T13",
+        "N10"
+      ]
+    },
+    {
+      "id": "T13-PRODUCT-CLIENT",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T13 产品面；O4 完成条件「浏览器 UI 归 T13」"
+      },
+      "description": "正式客户端产品面：web-client UI 层适配完整化、扩展包装载面、真实浏览器回归（worker 窄壳/切片已有，余产品面）。",
+      "done_when_evidence": [
+        "客户端/浏览器实测证据",
+        "与旧线数据分列"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "client-engineer",
+      "tags": [
+        "T13",
+        "N12"
+      ]
+    },
+    {
+      "id": "T13-NATIVE-GENERALS-PRODUCT",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T6③ 证据：装载面暂限卡牌包"
+      },
+      "description": "game-server /native 产品路径武将包 bridge_generals 接入选批（现暂限卡牌包）。",
+      "done_when_evidence": [
+        "game-server 定向测",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "server-engineer",
+      "tags": [
+        "T13",
+        "T6",
+        "E02"
+      ]
+    },
+    {
+      "id": "T12-WHOLEPACK-0-37",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "后续待做 / T12（约 L85）；台账「37 项均未完成原生整包验收」"
+      },
+      "description": "T12 总账：两仓 37 来源原生整包验收仍为 0/37。每来源须功能+组合+保存恢复+安装升级+目标平台通过后才上调整包数。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [
+        "E01-G0-DEPTH",
+        "E02-OPEN-RULE",
+        "E03-OPEN-RULE",
+        "E04-G2G4",
+        "E05-G5",
+        "E06-PER-SOURCE"
+      ],
+      "role": "extension-lead",
+      "tags": [
+        "T12",
+        "E04",
+        "E05",
+        "E06",
+        "G2",
+        "G3",
+        "G4",
+        "G5"
+      ]
+    },
+    {
+      "id": "T12-SWD-DEFERRED-SKILLS",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
+      },
+      "description": "杀海拾遗·swd 武将面 deferred 技能消解至可验收（卡牌面 92 行已闭环；仍有多余 13 张处置与 deferred 技能）。",
+      "done_when_evidence": [
+        "定向回归测试通过",
+        "cargo test --offline -p engine-native --no-fail-fast 全绿",
+        "Gate 1b exit 0",
+        "证据目录 README+日志",
+        "deferred 计数收敛证据"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T12",
+        "U05",
+        "swd"
+      ],
+      "notes": "并行 worker 可能继续消解；本登记以调研时台账叙述为准",
+      "ambiguous": true
+    },
+    {
+      "id": "T12-SWD-EXTRA-CARDS-DISPOSITION",
+      "source": {
+        "doc": "docs/operations/evidence/2026-10-15-t12-swd-cards-audit/README.md",
+        "ref": "包内多余 13 处置待决"
+      },
+      "description": "swd 卡牌对账：包内多余 13 张处置待决（勘误/删除/保留登记）。",
+      "done_when_evidence": [
+        "处置结论+包数据守护测试"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "U05",
+        "swd"
+      ]
+    },
+    {
+      "id": "T12-YUNCHOU-DEFERRED",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T12 运筹武将面批（约 18/20，2 暂缓）"
+      },
+      "description": "运筹帷幄余暂缓：奸雄·变体（身份改写面）、巧思等——随身份局深化/骰子等原语。",
+      "done_when_evidence": [
+        "定向回归测试通过",
+        "cargo test --offline -p engine-native --no-fail-fast 全绿",
+        "Gate 1b exit 0",
+        "证据目录 README+日志"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T12",
+        "U05",
+        "yunchou"
+      ]
+    },
+    {
+      "id": "T12-WUDIAN-DEFERRED",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T12 玩点论杀批（约 19/22，3 暂缓）"
+      },
+      "description": "玩点论杀余暂缓：仇渡/调兵遣将（亮牌替换锦囊面级工程）、夺启/佑赞等机制缺口。",
+      "done_when_evidence": [
+        "定向回归测试通过",
+        "cargo test --offline -p engine-native --no-fail-fast 全绿",
+        "Gate 1b exit 0",
+        "证据目录 README+日志",
+        "deferred-survey 立项关闭"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T12",
+        "U07"
+      ]
+    },
+    {
+      "id": "T12-MTG-DEFERRED-LANDS",
+      "source": {
+        "doc": "docs/architecture/native-progress.md",
+        "ref": "T12 mtg 藏宝海湾/毒沼 deferred"
+      },
+      "description": "mtg 地 2 张结构性依赖（派生包 UI / 跨包毒卡）——非逐卡切片可达。",
+      "done_when_evidence": [
+        "结构性依赖解除或永久 deferred ADR"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "architect",
+      "tags": [
+        "T12",
+        "U05",
+        "mtg"
+      ]
+    },
+    {
+      "id": "T12-D3-REMAINING-GENERALS",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3.1 U01"
+      },
+      "description": "3D精选：末焱与其余约 32 将技能逐将重写+资源映射（纵向样本/生命周期已过）。",
+      "done_when_evidence": [
+        "定向回归测试通过",
+        "cargo test --offline -p engine-native --no-fail-fast 全绿",
+        "Gate 1b exit 0",
+        "证据目录 README+日志",
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "T12",
+        "U01"
+      ]
+    },
+    {
+      "id": "T12-SRC-U01",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U01 3D精选"
+      },
+      "description": "来源 U01（3D精选）原生整包验收未完成。台账状态：部分重构；G1 样本+生命周期；整包未完成。建议批次：G1→G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U01",
+        "G1"
+      ]
+    },
+    {
+      "id": "T12-SRC-U02",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U02 boss"
+      },
+      "description": "来源 U02（boss）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U02",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-U03",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U03 cardpile"
+      },
+      "description": "来源 U03（cardpile）原生整包验收未完成。台账状态：G1 生命周期完成；倍率/随机点数差距；整包计数仍 0/37。建议批次：G1→G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U03",
+        "G1"
+      ]
+    },
+    {
+      "id": "T12-SRC-U04",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U04 coin"
+      },
+      "description": "来源 U04（coin）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U04",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-U05",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U05 杀海拾遗"
+      },
+      "description": "来源 U05（杀海拾遗）原生整包验收未完成。台账状态：多子包部分重构；swd/运筹等内容面推进中；非整包。建议批次：G1→G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U05",
+        "G1"
+      ]
+    },
+    {
+      "id": "T12-SRC-U06",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U06 欢乐卡牌"
+      },
+      "description": "来源 U06（欢乐卡牌）原生整包验收未完成。台账状态：G0–G5 通道样本首个通过来源；台账整包总账仍 0/37。建议批次：G3–G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U06",
+        "G3"
+      ],
+      "notes": "U06 已达 G0–G5 通道验收，但主稿整包计数仍 0/37——是否单独上调需进度 worker 裁定",
+      "ambiguous": true
+    },
+    {
+      "id": "T12-SRC-U07",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U07 玩点论杀"
+      },
+      "description": "来源 U07（玩点论杀）原生整包验收未完成。台账状态：部分重构；武将/卡 deferred 余项；非整包。建议批次：G1→G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U07",
+        "G1"
+      ]
+    },
+    {
+      "id": "T12-SRC-U08",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / U08 英雄杀"
+      },
+      "description": "来源 U08（英雄杀）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "U08",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L01",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L01 AI优化"
+      },
+      "description": "来源 L01（AI优化）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L01",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L02",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L02 SJ Settings"
+      },
+      "description": "来源 L02（SJ Settings）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;移动端G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L02",
+        "G2;移动端G5"
+      ]
+    },
+    {
+      "id": "T12-SRC-L03",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L03 boss"
+      },
+      "description": "来源 L03（boss）原生整包验收未完成。台账状态：待重构；未验收（对照 U02）。建议批次：G2–G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L03",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L04",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L04 cardpile"
+      },
+      "description": "来源 L04（cardpile）原生整包验收未完成。台账状态：G1 生命周期完成；整包计数仍开放。建议批次：G1→G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L04",
+        "G1"
+      ]
+    },
+    {
+      "id": "T12-SRC-L05",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L05 coin"
+      },
+      "description": "来源 L05（coin）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L05",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L06",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L06 wuxing"
+      },
+      "description": "来源 L06（wuxing）原生整包验收未完成。台账状态：部分重构；生命周期样本；表现层暂缓。建议批次：G1→G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L06",
+        "G1"
+      ]
+    },
+    {
+      "id": "T12-SRC-L07",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L07 全能搜索"
+      },
+      "description": "来源 L07（全能搜索）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L07",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L08",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L08 十周年UI"
+      },
+      "description": "来源 L08（十周年UI）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L08",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L09",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L09 千幻聆音"
+      },
+      "description": "来源 L09（千幻聆音）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L09",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L10",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L10 史诗卡牌"
+      },
+      "description": "来源 L10（史诗卡牌）原生整包验收未完成。台账状态：待重构；未验收（D1 工作区口径）。建议批次：G3–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L10",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L11",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L11 太虚幻境"
+      },
+      "description": "来源 L11（太虚幻境）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3→G4–G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L11",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L12",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L12 如真似幻"
+      },
+      "description": "来源 L12（如真似幻）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L12",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L13",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L13 手杀MVP"
+      },
+      "description": "来源 L13（手杀MVP）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L13",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L14",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L14 手杀ui"
+      },
+      "description": "来源 L14（手杀ui）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L14",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L15",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L15 手杀全扩"
+      },
+      "description": "来源 L15（手杀全扩）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L15",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L16",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L16 拖拽读取"
+      },
+      "description": "来源 L16（拖拽读取）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;跨平台G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L16",
+        "G2;跨平台G5"
+      ]
+    },
+    {
+      "id": "T12-SRC-L17",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L17 斗转星移"
+      },
+      "description": "来源 L17（斗转星移）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L17",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L18",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L18 更新保护"
+      },
+      "description": "来源 L18（更新保护）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;平台G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L18",
+        "G2;平台G5"
+      ]
+    },
+    {
+      "id": "T12-SRC-L19",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L19 末日乱斗"
+      },
+      "description": "来源 L19（末日乱斗）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L19",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L20",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L20 标记补充"
+      },
+      "description": "来源 L20（标记补充）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L20",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L21",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L21 武皇争霸"
+      },
+      "description": "来源 L21（武皇争霸）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L21",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L22",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L22 段位制裁"
+      },
+      "description": "来源 L22（段位制裁）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L22",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L23",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L23 电脑适配"
+      },
+      "description": "来源 L23（电脑适配）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;平台G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L23",
+        "G2;平台G5"
+      ]
+    },
+    {
+      "id": "T12-SRC-L24",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L24 皮肤切换"
+      },
+      "description": "来源 L24（皮肤切换）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L24",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L25",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L25 祖安武将"
+      },
+      "description": "来源 L25（祖安武将）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G0细拆→G3–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L25",
+        "G0细拆"
+      ]
+    },
+    {
+      "id": "T12-SRC-L26",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L26 笨蛋插件"
+      },
+      "description": "来源 L26（笨蛋插件）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L26",
+        "G2"
+      ]
+    },
+    {
+      "id": "T12-SRC-L27",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L27 选将美化"
+      },
+      "description": "来源 L27（选将美化）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L27",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L28",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L28 雷霆万钧"
+      },
+      "description": "来源 L28（雷霆万钧）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L28",
+        "G3"
+      ]
+    },
+    {
+      "id": "T12-SRC-L29",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "§3 全量逐项台账 / L29 龙血玄黄"
+      },
+      "description": "来源 L29（龙血玄黄）原生整包验收未完成。台账状态：G0 清单完成；规则面迁移 D5 解锁；非整包。建议批次：G0→G1/G4。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [
+        "D5-LX-MIGRATION"
+      ],
+      "role": "extension-engineer",
+      "tags": [
+        "T12",
+        "整包",
+        "L29",
+        "G0"
+      ],
+      "notes": "依赖 D5 规则面迁移"
+    },
+    {
+      "id": "E01-G0-DEPTH",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "当前状态与 E01–E06 / E01·G0"
+      },
+      "description": "E01/G0 部分完成：其余来源逐配置/子插件/规则分支/依赖/缺资源与旧行为样本；每项目标接口与验证入口。",
+      "done_when_evidence": [
+        "对应 G 门槛断言+测试",
+        "证据目录",
+        "台账 G0 深度清单"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "extension-auditor",
+      "tags": [
+        "E01",
+        "G0",
+        "T9"
+      ]
+    },
+    {
+      "id": "E02-OPEN-RULE",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "E02 / G1"
+      },
+      "description": "E02/G1：独立发布新规则仍须证明无需重编译客户端（T8 余项）；产品装载武将面等缺口。",
+      "done_when_evidence": [
+        "对应 G 门槛断言+测试",
+        "证据目录",
+        "不重编译装新规则证据"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T8-FILTER-COMPOSITE",
+        "T8-EFFECT-QUERY-VARIANTS",
+        "T13-NATIVE-GENERALS-PRODUCT"
+      ],
+      "role": "extension-engineer",
+      "tags": [
+        "E02",
+        "G1",
+        "T8"
+      ]
+    },
+    {
+      "id": "E03-OPEN-RULE",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "E03 / G1"
+      },
+      "description": "E03/G1：扩展自定义规则/机器状态、随机和选择可通用编码、恢复、校验及失败回滚；登记差异逐项对照上游。",
+      "done_when_evidence": [
+        "对应 G 门槛断言+测试",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T8-EFFECT-QUERY-VARIANTS"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "E03",
+        "G1",
+        "T8"
+      ]
+    },
+    {
+      "id": "E04-G2G4",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "E04 / G2–G4"
+      },
+      "description": "E04/G2–G4 待验收：模式、AI、配置、资源和界面契约——各有真实扩展示例；15 包通道五断言已有，其余来源未齐。",
+      "done_when_evidence": [
+        "对应 G 门槛断言+测试",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T12-WHOLEPACK-0-37"
+      ],
+      "role": "extension-engineer",
+      "tags": [
+        "E04",
+        "G2",
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "id": "E05-G5",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "E05 / G5"
+      },
+      "description": "E05/G5 待验收：联机内容锁、存档/录像和旧版会话——15 个 G1 转换包 G5 切片已达成，其余来源与真联机产品面未齐。",
+      "done_when_evidence": [
+        "对应 G 门槛断言+测试",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "server-engineer",
+      "tags": [
+        "E05",
+        "G5"
+      ]
+    },
+    {
+      "id": "E06-PER-SOURCE",
+      "source": {
+        "doc": "docs/migration/upstream-extension-reconstruction.md",
+        "ref": "E06 / G3–G5"
+      },
+      "description": "E06：每来源功能清单和正反例齐全；安装/升级/配置/组合/性能逐包通过后才上调整包状态。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [
+        "E01-G0-DEPTH",
+        "E04-G2G4",
+        "E05-G5"
+      ],
+      "role": "extension-lead",
+      "tags": [
+        "E06",
+        "G3",
+        "G4",
+        "G5",
+        "T12"
+      ]
+    },
+    {
+      "id": "COV-EQUIP-TIMING-WINDOW",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "行为差异表「装备即时生效」（约 L109）"
+      },
+      "description": "装备即时生效 vs 上游装备时机触发窗口——行为差异保留，触发窗口化另立项。",
+      "done_when_evidence": [
+        "立项 ADR 或正式永久差异登记",
+        "回归"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "COV",
+        "行为差异"
+      ]
+    },
+    {
+      "id": "COV-REWARD-OVER-VERIFY",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "行为差异表「奖惩与终局判定顺序」待核项（约 L122）"
+      },
+      "description": "上游 game.over 后事件链是否仍执行 dieAfter2 未逐项确认——待核后关闭或改登记。",
+      "done_when_evidence": [
+        "上游对照证据",
+        "覆盖清单处置更新"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "rules-auditor",
+      "tags": [
+        "COV",
+        "RULE"
+      ]
+    },
+    {
+      "id": "COV-TRIGGER-GETINDEX-BUCKETS",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "行为差异表「触发全序细节」；规则基准当前声明"
+      },
+      "description": "getIndex / firstDo / lastDo 有内容需求时立项（当前保留原生确定性全序）。",
+      "done_when_evidence": [
+        "内容需求驱动的立项或明确不立项"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "architect",
+      "tags": [
+        "COV",
+        "RULE"
+      ],
+      "notes": "条件立项；无内容需求时可保持开放登记",
+      "ambiguous": true
+    },
+    {
+      "id": "COV-PARTIAL-MECHANISMS",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "范围 A 多行「已验证（部分）」：nullify_scope/snapshot_restore/identity_mode/visible_views/session_auth/byte_archive/nullify_judge_window 等"
+      },
+      "description": "覆盖清单部分验证行仍需扩面：新机器/选择逐点恢复、身份中间恢复续跑、扩展/客户端视图隔离、权威网络接入、兵/闪电抵消组合等。",
+      "done_when_evidence": [
+        "逐机制扩面测试+清单状态升级"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "COV"
+      ],
+      "ambiguous": true
+    },
+    {
+      "id": "COV-STANDARD-FULL-CONTENT",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "范围 B「所有历史包/正式完整内容」未完成；标准武将/模式行"
+      },
+      "description": "标准整将/牌/模式完整验收与历史包正式内容未完成；不按名称或测试数计算迁移率。",
+      "done_when_evidence": [
+        "玩法版本+逐技能语义清单",
+        "整包证据"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T11-EVENT-RNG-RESTORE-PARITY"
+      ],
+      "role": "rules-auditor",
+      "tags": [
+        "COV",
+        "T11"
+      ]
+    },
+    {
+      "id": "COV-EXT-37",
+      "source": {
+        "doc": "docs/native-coverage-manifest.md",
+        "ref": "扩展机制表「指定两仓全部扩展」"
+      },
+      "description": "覆盖清单扩展行：原生整包验收 0/37，与 T12 总账同口径。",
+      "done_when_evidence": [
+        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+        "整包状态上调登记"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T12-WHOLEPACK-0-37"
+      ],
+      "role": "extension-lead",
+      "tags": [
+        "COV",
+        "T12"
+      ]
+    },
+    {
+      "id": "RULE-JUDGE-ORDER-NOTE",
+      "source": {
+        "doc": "docs/architecture/native-rules-baseline.md",
+        "ref": "当前声明与验证边界「判定排序/闪电」（约 L3447）"
+      },
+      "description": "判定排序：语义选择已定案保留原生 FIFO+闪电最后，但「当前声明」表仍写「是否改判上游待决策」——需文档对齐或确认无残余决策。",
+      "done_when_evidence": [
+        "声明表措辞与语义选择定案对齐（进度/文档 worker）"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "docs-auditor",
+      "tags": [
+        "RULE"
+      ],
+      "notes": "实质语义已定案；开放点是声明表残留措辞",
+      "ambiguous": true
+    },
+    {
+      "id": "RULE-IDENTITY-VIEW-RESTORE",
+      "source": {
+        "doc": "docs/architecture/native-rules-baseline.md",
+        "ref": "当前声明「身份」验证边界（约 L3452）"
+      },
+      "description": "完整身份可见视图和所有终局逐提交恢复仍缺。",
+      "done_when_evidence": [
+        "定向回归测试通过",
+        "cargo test --offline -p engine-native --no-fail-fast 全绿",
+        "Gate 1b exit 0",
+        "证据目录 README+日志"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "RULE",
+        "T13"
+      ]
+    },
+    {
+      "id": "RULE-MODE-REMAINDERS",
+      "source": {
+        "doc": "docs/architecture/native-rules-baseline.md",
+        "ref": "当前声明「模式」行（约 L3454）"
+      },
+      "description": "模式变体余项：斗地主 online 面登记、KOF 多局连续会话循环仍在宿主层、Boss loopType==2 等未建模变体、其余上游 mode 入口未接入。",
+      "done_when_evidence": [
+        "规则版本递增（若语义变）",
+        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+        "规则基准条目",
+        "证据目录"
+      ],
+      "status": "open",
+      "depends_on": [
+        "T11-BOSS-STAGE-SUBSYSTEM"
+      ],
+      "role": "kernel-engineer",
+      "tags": [
+        "RULE",
+        "T11"
+      ]
+    },
+    {
+      "id": "RULE-DISTANCE-UNMODELED",
+      "source": {
+        "doc": "docs/architecture/native-rules-baseline.md",
+        "ref": "当前声明「距离/座距」；采用玩法版本证据"
+      },
+      "description": "undist/isMin 等未建模；其余距离类技能仍逐技能验收。",
+      "done_when_evidence": [
+        "逐技能证据或建模"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "kernel-engineer",
+      "tags": [
+        "RULE"
+      ]
+    },
+    {
+      "id": "RULE-CONTENT-DIFF-CONVENTIONS",
+      "source": {
+        "doc": "docs/architecture/native-rules-baseline.md",
+        "ref": "内容差异与后续验收（约 L3489）"
+      },
+      "description": "保留惯例：护驾转化牌实体响应、激将借牌直结算（ADR 0776）——非缺陷但非整将上游等价；逐技能/复合场景继续举证。",
+      "done_when_evidence": [
+        "逐技能上游等价证据或正式差异关闭"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "rules-auditor",
+      "tags": [
+        "RULE",
+        "T11"
+      ],
+      "notes": "开放验收面而非未定案缺陷",
+      "ambiguous": true
+    },
+    {
+      "id": "RULE-BUDGET-DOC-LAG",
+      "source": {
+        "doc": "docs/architecture/native-rules-baseline.md",
+        "ref": "当前声明「预算/时间片」（约 L3456）"
+      },
+      "description": "声明仍写「独立工作池未实现」，但 T13 PlanPool 已完成——文档滞后，需进度/基准 worker 勘正后关闭本项。",
+      "done_when_evidence": [
+        "声明表更新为与 T13 证据一致"
+      ],
+      "status": "open",
+      "depends_on": [],
+      "role": "docs-auditor",
+      "tags": [
+        "RULE",
+        "T13"
+      ],
+      "ambiguous": true
+    }
+  ]
+}
