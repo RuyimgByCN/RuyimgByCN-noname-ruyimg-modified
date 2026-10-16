@@ -1378,11 +1378,11 @@
         },
         {
           "name": "funiao",
-          "mapping": null
+          "mapping": "host:funiao"
         },
         {
           "name": "ningxian",
-          "mapping": null
+          "mapping": "host:ningxian"
         }
       ]
     },
@@ -1618,7 +1618,7 @@
       "skills": [
         {
           "name": "yaotong",
-          "mapping": null
+          "mapping": "host:yaotong"
         },
         {
           "name": "heihuo",

@@ -2719,6 +2719,17 @@ fn apply_command(
                 {
                     kind = CardKind::Caoyao;
                 }
+                // 妖童（齐，swd deferred 消解批 93）：手牌数为奇数时任意
+                // 手牌当杀使用（上游 viewAs sha 同口径；闪响应面/无懈
+                // 偶数面登记 defer）
+                else if catalog
+                    .skill_by_name("yaotong")
+                    .map(|d| core.has_skill(actor, d))
+                    .unwrap_or(false)
+                    && core.player(actor).hand.len() % 2 == 1
+                {
+                    kind = CardKind::Sha;
+                }
                 else {
                     // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
                     // 手牌当【杀】（once_used 随回合重置；标记延迟至
