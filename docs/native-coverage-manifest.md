@@ -103,7 +103,7 @@ N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，�
 | 条目 | 差异 | 处置 |
 |---|---|---|
 | 临时技能存续期 | **三点语义已勘验（2026-10-16，只读源码）**：原生=至**拥有者**回合结束（5 处授技：妄尊印/移伤/乐学/幻形/石会粉禁用）；旧线=至**授技时当前回合玩家**的回合结束；上游=逐站点 `addTempSkill` 规格（默认 `{global:['phaseAfter','phaseBeforeStart']}`，`phaseAfter` 无触发点、`phaseBeforeStart` 每阶段开始触发→默认≈至当前阶段结束；乐学=addSkill+拥有者阶段边界重掷；幻形=addAdditionalSkill+受伤移除） | 普通行为差异保留：原生取「拥有者回合结束」为上界近似（不会提前失效、可能延长可用窗口）；逐站点粒度差异已在各批次台账登记；要改「阶段边界结束」需新 expire 原语＋逐站点核对，另立项。勘验依据见[证据](operations/evidence/2026-10-16-temp-skill-expiry-audit/temp-skill-expiry-audit.txt)（妄尊 mark 与 skill 配合的实际窗口未复算，不得据此对齐） |
-| 触发全序细节 | 原生线 `Timing→Priority(降)→强制先→座位距→定义号`；旧线含 seat_rel 与 fire-limit 细节，未逐项对照 | 扩面时用差分用例对照 |
+| 触发全序细节 | **已对照并决策（2026-10-16）**：上游为**玩家主序**（`playerMap.sortBySeat(start)`，`start`=当前回合玩家优先，含死者）× 桶内 `priority` 降，另设 `firstDo`/`lastDo` 两桶（执行序 firstDo → 逐玩家 → lastDo），同玩家同优先级并列先取 `silent`/无描述技、否则**交互选择**（`chooseControl`）；原生键 = `(Timing::{First,Normal,Last}, -priority, optional, seat_distance(turn.current, owner), def_id)`（`resolution.rs:290-315`）——**座位距起点与上游一致**，差异在：①主序（优先级主序 vs 玩家主序）②同优先级并列（确定性 `def_id` vs 交互选择）；`getIndex` 多次触发未建模 | **决策：保留原生确定性全序**（重放/恢复逐命令一致为项目契约，上游交互并列不可无交互复现）；跨玩家优先级主序差异属已知语义差异，涉及具体技能组合时按各批次逐条验收；`getIndex`/`firstDo`/`lastDo` 有内容需求时立项——[证据](operations/evidence/2026-10-16-trigger-order-upstream/README.md) |
 | 濒死应答队列静态 | 应答者名单在濒死帧启动时构建，不响应其后的技能变动 | 与旧线行为一致性待核对 |
 | 死亡清技能 | 原生线死亡即删实例；旧线靠 alive 过滤（观察面等价、哈希面不同） | 迁移哈希门禁前需决策 |
 | 装备即时生效 | 原生线装备提交后立刻参与距离/射程判定（同回合可打）；上游「装备时机」 触发窗口（如 +1 马对结算中之杀的回溯影响）未实现 | 行为差异保留，触发窗口化另立项 |

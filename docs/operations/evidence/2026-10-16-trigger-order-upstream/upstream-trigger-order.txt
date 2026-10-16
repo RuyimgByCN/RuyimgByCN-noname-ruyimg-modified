@@ -1,0 +1,152 @@
+# 上游触发全序摘录（2026-10-16 只读核对）
+# 采用玩法版本=本地 archive/upstream/noname（v1.11.7, HEAD df2682e6）
+
+## 1 扫描起点 start（当前回合玩家优先）
+		}
+		let start = [_status.currentPhase, event.source, event.player, game.me, game.players[0]].find(i => get.itemtype(i) == "player");
+		if (!start) {
+			return;
+		}
+		if (!game.players.includes(start) && !game.dead.includes(start)) {
+			start = game.findNext(start);
+		}
+		const firstDo: triggerPlayerTodo = {
+			player: "firstDo",
+
+## 2 playerMap = 以 start 为起点含死者的座位序
+			doneList: [],
+		};
+		const lastDo: triggerPlayerTodo = {
+			player: "lastDo",
+			todoList: [],
+			doneList: [],
+		};
+		const doingList: triggerPlayerTodo[] = [];
+		const roles = ["player", "source", "target", "global"],
+			map = lib.relatedTrigger,
+			names = Object.keys(map);
+		const playerMap = game.players.concat(game.dead).sortBySeat(start);
+		let player = start;
+		let allbool = false;
+
+## 3 桶分配（firstDo / 逐玩家 / lastDo）与 getIndex 多次触发
+					}
+					this.listAdded[skill] = true;
+
+					const info = lib.skill[skill];
+					const list = info.firstDo ? firstDo.todoList : info.lastDo ? lastDo.todoList : this.todoList;
+					const priority = get.priority(skill);
+					if (typeof info.getIndex === "function") {
+						const indexedResult = info.getIndex<any>(event, player, name);
+						if (typeof indexedResult === "number") {
+							for (let i = 0; i < indexedResult; i++) {
+								list.push({
+									skill,
+									player: this.player,
+									priority,
+									indexedData: true,
+								});
+							}
+						} else if (indexedResult != null && typeof indexedResult !== "string" && typeof indexedResult[Symbol.iterator] === "function") {
+							for (const indexedData of indexedResult) {
+								list.push({
+									skill,
+									player: this.player,
+									priority,
+									indexedData,
+								});
+							};
+						}
+
+## 4 排序：firstDo/lastDo 桶 = priority 降 + 座位序；普通桶（player 为对象）= 仅 priority 降
+					} else {
+						list.push({
+							skill: skill,
+							player: this.player,
+							priority: get.priority(skill),
+						});
+					}
+					if (typeof this.player == "string") {
+						list.sort((a, b) => b.priority - a.priority || playerMap.indexOf(a.player) - playerMap.indexOf(b.player));
+					} else {
+						list.sort((a, b) => b.priority - a.priority);
+					}
+					allbool = true;
+				},
+			};
+
+
+## 5 执行顺序：firstDo → 逐玩家桶（座位序）→ lastDo
+				doing.addList(lib.hook.globalskill[role + "_" + name]);
+				doing.addList(lib.hook[player.playerid + "_" + role + "_" + name]);
+			});
+			delete doing.listAdded;
+			delete doing.addList;
+			doingList.push(doing);
+			player = player.nextSeat;
+		} while (player && player !== start);
+		doingList.unshift(firstDo);
+		doingList.push(lastDo);
+		// console.log(name,event.player,doingList.map(i=>({player:i.player,todoList:i.todoList.slice(),doneList:i.doneList.slice()})))
+
+		if (allbool) {
+
+## 6 arrangeTrigger：桶内取最高优先级、silent/无描述优先、同玩家并列交 chooseControl
+	async arrangeTrigger(event, trigger, player) {
+		const doingList = event.doingList.slice(0);
+
+		while (doingList.length > 0) {
+			event.doing = doingList.shift();
+			while (true) {
+				if (trigger.filterStop && trigger.filterStop()) {
+					return;
+				}
+				const usableSkills = event.doing.todoList.filter(info => lib.filter.filterTrigger(trigger, info.player, event.triggername, info.skill, info.indexedData));
+				if (usableSkills.length == 0) {
+					break;
+				} else {
+					event.doing.todoList = event.doing.todoList.filter(i => i.priority <= usableSkills[0].priority);
+					//firstDo时机和lastDo时机不进行技能优先级选择
+					if (get.itemtype(event.doing.player) !== "player") {
+						event.current = usableSkills[0];
+					} else {
+						event.choice = usableSkills.filter(n => n.priority == usableSkills[0].priority);
+						//现在只要找到一个同优先度技能为silent，或没有技能描述的技能 便优先执行该技能
+						const silentSkill = event.choice.find(item => {
+							const skillInfo = lib.skill[item.skill];
+							return skillInfo && (skillInfo.silent || !lib.translate[item.skill]);
+						});
+						if (silentSkill) {
+							event.current = silentSkill;
+						} else {
+							const currentChoice = event.choice[0];
+							const skillsToChoose = event.choice.map(i => i.skill).unique();
+							if (event.choice.length === 1 || skillsToChoose.length === 1) {
+								event.current = currentChoice;
+							} else {
+								const currentPlayer = currentChoice.player;
+								const next = currentPlayer.chooseControl(skillsToChoose.map(skill => get.skillTranslation(skill, currentPlayer, true)));
+								next.set("prompt", "选择下一个触发的技能");
+								next.set("forceDie", true);
+								next.set("arrangeSkill", true);
+								next.set("includeOut", true);
+								const result = await next.forResult();
+								//千里走单骑全责，把敌人打死可能会打断chooseControl
+								if (result) {
+									event.current = usableSkills.find(info => info.skill == skillsToChoose[result.index]);
+								} else {
+									event.current = usableSkills[0];
+								}
+							}
+						}
+					}
+					event.doing.doneList.push(event.current);
+					event.doing.todoList.remove(event.current);
+					const result = await game.createTrigger(event.triggername, event.current.skill, event.current.player, trigger, event.current.indexedData).forResult();
+					if (get.itemtype(event.doing.player) === "player" && result === "cancelled") {
+						for (let i = 0; i < event.doing.todoList.length; i++) {
+							if (event.current.skill === event.doing.todoList[i].skill) {
+
+## 7 原生线对应实现
+- crates/engine-native/src/resolution.rs:290-315（触发键 = (Timing::First/Normal/Last, -priority, optional, seat_distance(turn_current, owner), def_id)，sort_by_key）
+- 原生座位距起点 = turn.current（与上游 start 的当前回合玩家一致）
