@@ -1,0 +1,406 @@
+{
+  "title": "T11 行为差异表其余开放行清单",
+  "date": "2026-10-16",
+  "head_at_draft": "8c7a9614",
+  "scope": "覆盖清单行为差异表在 2026-10-16 核对/定案后仍开放的残余行与子项；含事件/随机流/恢复轨迹对照横切",
+  "exclusions": {
+    "no_crates_edits": true,
+    "no_native_progress_or_ledger_edits": true,
+    "closed_or_decided_keep_native": [
+      "AOE 目标冻结时机",
+      "AOE 无牌跳过可见性（语义）",
+      "决斗轮转起手",
+      "决斗无杀跳过",
+      "决斗伤害来源",
+      "传导伤害来源",
+      "传导结算完整性",
+      "N06 铁索无懈逐目标",
+      "距离下限 1",
+      "座距只计存活",
+      "无懈询问顺序与重开（定案保留原生）",
+      "逐目标窗口重开细节（定案保留原生）",
+      "解链时点（定案保留原生）",
+      "判定顺序（定案保留原生）",
+      "濒死应答队列静态（定案保留原生）",
+      "临时技能存续期（定案保留原生）",
+      "延时锦囊无懈时点（定案保留原生）",
+      "触发全序细节（决策保留确定性全序）",
+      "死亡清技能（决策保留死亡即删实例）",
+      "奖惩与终局判定顺序（主序保留原生；待核项另列）"
+    ]
+  },
+  "counts": {
+    "open_rows": 11,
+    "d4_cross_wait_not_duplicated": 5,
+    "d5_cross_wait_not_duplicated": 2,
+    "linked_existing_2026_10_16_evidence_dirs": 10
+  },
+  "existing_evidence_links": [
+    "docs/operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/",
+    "docs/operations/evidence/2026-10-16-chain-propagation-seat-order/",
+    "docs/operations/evidence/2026-10-16-death-reward-order-and-skill-clearing/",
+    "docs/operations/evidence/2026-10-16-delayed-trick-nullify-timing/",
+    "docs/operations/evidence/2026-10-16-dying-save-roster-upstream/",
+    "docs/operations/evidence/2026-10-16-judge-order-upstream/",
+    "docs/operations/evidence/2026-10-16-trigger-order-upstream/",
+    "docs/operations/evidence/2026-10-16-temp-skill-expiry-audit/",
+    "docs/operations/evidence/2026-10-16-rule-source-distance-basis/",
+    "docs/operations/evidence/2026-10-16-n06-chain-per-target-nullify/"
+  ],
+  "suggested_engine_first_batch": [
+    "T11-DIFF-REWARD-OVER-VERIFY",
+    "T11-DIFF-CHAIN-COMPOUND",
+    "T11-DIFF-JUDGE-REWRITE-EXPAND",
+    "T11-EVENT-RNG-RESTORE-PARITY",
+    "T11-DIFF-EQUIP-TIMING"
+  ],
+  "rows": [
+    {
+      "id": "T11-DIFF-REWARD-OVER-VERIFY",
+      "priority": "P0",
+      "theme": "奖惩与终局：上游 game.over 后是否仍执行 dieAfter2",
+      "anchors": {
+        "coverage_manifest": "行为差异表「奖惩与终局判定顺序」待核项",
+        "todo_register": "COV-REWARD-OVER-VERIFY",
+        "rules_baseline": null
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-death-reward-order-and-skill-clearing/"
+      ],
+      "gaps": {
+        "implementation": "无预期引擎改动（审计关闭或改登记）",
+        "tests": "可选：原生 last_rebel_reward_precedes_victory 保持",
+        "parity_trails": "上游差分/探针：over 后事件链是否仍发奖惩"
+      },
+      "suggested_batch": "B-audit-1",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "rules-auditor"
+    },
+    {
+      "id": "T11-DIFF-JUDGE-REWRITE-EXPAND",
+      "priority": "P0",
+      "theme": "改判与天妒：新增判定技 / 复合路径扩面",
+      "anchors": {
+        "coverage_manifest": "行为差异表「改判与天妒切片」",
+        "todo_register": null,
+        "rules_baseline": "内容差异与后续验收 / 逐规则证据"
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-trigger-order-upstream/",
+        "docs/operations/evidence/2026-10-16-judge-order-upstream/"
+      ],
+      "gaps": {
+        "implementation": "仅当发现真实语义缺口时改引擎",
+        "tests": "新判定技组合、Finalized 反例、装备资格；pause_roundtrip 扩面",
+        "parity_trails": "命令后事件序；挂起恢复增量；RNG 改判消费序"
+      },
+      "suggested_batch": "B-judge-1",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "kernel-engineer",
+      "related_tests": [
+        "judgement_event_order_rewrite_then_tiandu",
+        "pause_roundtrip_rewrite_then_tiandu_combo",
+        "pause_roundtrip_guidao_active_rewrite",
+        "pause_roundtrip_tiandu_confirm"
+      ]
+    },
+    {
+      "id": "T11-DIFF-CHAIN-COMPOUND",
+      "priority": "P0",
+      "theme": "传导复合边界（解链已定案后的可达组合）",
+      "anchors": {
+        "coverage_manifest": "进度「传导复合边界」；传导/解链相关行",
+        "todo_register": null,
+        "rules_baseline": "语义选择：解链时点（已定案，不重开对齐）"
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-chain-propagation-seat-order/"
+      ],
+      "gaps": {
+        "implementation": "不对齐解链时点；仅补复合边界冻结",
+        "tests": "传导中读 linked；传导中濒死/转移；解链日志数量",
+        "parity_trails": "parity_chain_compound：逐命令 hash+事件增量"
+      },
+      "suggested_batch": "B-chain-1",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "kernel-engineer",
+      "related_tests": [
+        "chain_propagation_preserves_source",
+        "propagated_damage_is_full_resolution",
+        "pause_roundtrip_chain_target_window"
+      ]
+    },
+    {
+      "id": "T11-DIFF-EQUIP-TIMING",
+      "priority": "P1",
+      "theme": "装备即时生效 vs 上游装备时机窗",
+      "anchors": {
+        "coverage_manifest": "行为差异表「装备即时生效」",
+        "todo_register": "COV-EQUIP-TIMING-WINDOW",
+        "rules_baseline": null
+      },
+      "existing_evidence": [],
+      "gaps": {
+        "implementation": "ADR 触发窗口化或正式永久差异关闭",
+        "tests": "最小复现：+1 马对结算中杀的回溯",
+        "parity_trails": "parity_equip_timing（立项后）"
+      },
+      "suggested_batch": "B-equip-1",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "kernel-engineer",
+      "related_tests": [
+        "equip_horses_weapon_range_and_replacement"
+      ]
+    },
+    {
+      "id": "T11-DIFF-AOE-EVENT-TRAIL",
+      "priority": "P1",
+      "theme": "AOE 无牌跳过：语义一致、事件轨迹不同",
+      "anchors": {
+        "coverage_manifest": "行为差异表「AOE 无牌跳过可见性」事件轨迹登记",
+        "todo_register": null,
+        "rules_baseline": null
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/"
+      ],
+      "gaps": {
+        "implementation": "不改行为",
+        "tests": "询问次数断言已有；补轨迹形状说明/夹具",
+        "parity_trails": "parity_aoe_skip_trail：允许缺省「立即取消响应事件」"
+      },
+      "suggested_batch": "B-trail-1",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "rules-auditor",
+      "related_tests": [
+        "savage_attack_response_skip_and_pass",
+        "pause_roundtrip_aoe_mid_queue"
+      ]
+    },
+    {
+      "id": "T11-DIFF-SELECTTARGET-MINUS1",
+      "priority": "P1",
+      "theme": "selectTarget:-1 自动目标数组构造起点未逐项确认",
+      "anchors": {
+        "coverage_manifest": "AOE 询问顺序勘正残留；座位序起点族",
+        "todo_register": null,
+        "rules_baseline": "语义选择：多目标非 multitarget 定序（已定案）"
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-chain-propagation-seat-order/"
+      ],
+      "gaps": {
+        "implementation": "审计后登记或补测；不自动改判上游",
+        "tests": "南蛮/万箭自动目标数组起点对照",
+        "parity_trails": "可选：同命令目标序事件字段"
+      },
+      "suggested_batch": "B-audit-2",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "rules-auditor"
+    },
+    {
+      "id": "T11-DIFF-TIESUO-RECAST",
+      "priority": "P1",
+      "theme": "铁索 recastable（重铸）面未建模",
+      "anchors": {
+        "coverage_manifest": "N06 边界；铁索相关行",
+        "todo_register": null,
+        "rules_baseline": null
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-n06-chain-per-target-nullify/"
+      ],
+      "gaps": {
+        "implementation": "重铸入口实现或正式 deferred/ADR",
+        "tests": "重铸弃置与摸牌路径",
+        "parity_trails": "实现后纳入 pause_roundtrip / 逐命令脚本"
+      },
+      "suggested_batch": "B-tiesuo-recast",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "kernel-engineer"
+    },
+    {
+      "id": "T11-DIFF-DUEL-MIDDEATH",
+      "priority": "P2",
+      "theme": "决斗中途一方死亡（来源字段）不可达边界",
+      "anchors": {
+        "coverage_manifest": "决斗相关行未覆盖边界",
+        "todo_register": null,
+        "rules_baseline": null
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/"
+      ],
+      "gaps": {
+        "implementation": "维持登记；有致死响应路径内容时再开",
+        "tests": "条件夹具",
+        "parity_trails": "条件"
+      },
+      "suggested_batch": "conditional",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "rules-auditor",
+      "related_tests": [
+        "duel_no_sha_immediate_loss",
+        "duel_alternating_sha_until_pass"
+      ]
+    },
+    {
+      "id": "T11-DIFF-TRIGGER-GETINDEX",
+      "priority": "P2",
+      "theme": "getIndex / firstDo / lastDo 桶",
+      "anchors": {
+        "coverage_manifest": "行为差异表「触发全序细节」",
+        "todo_register": "COV-TRIGGER-GETINDEX-BUCKETS",
+        "rules_baseline": "当前声明与验证边界 / 触发全序"
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-trigger-order-upstream/"
+      ],
+      "gaps": {
+        "implementation": "内容需求驱动立项",
+        "tests": "立项后",
+        "parity_trails": "立项后（确定性全序契约不可破）"
+      },
+      "suggested_batch": "content-driven",
+      "d4_cross": "none",
+      "status": "open",
+      "role": "architect",
+      "ambiguous": true
+    },
+    {
+      "id": "T11-DIFF-VERSUS-REVERSEORDER",
+      "priority": "P2",
+      "theme": "versus 结算方向选择（reverseOrder）",
+      "anchors": {
+        "coverage_manifest": "AOE/决斗证据 §C；非标准差异",
+        "todo_register": "RULE-MODE-REMAINDERS",
+        "rules_baseline": "当前声明「模式」行"
+      },
+      "existing_evidence": [
+        "docs/operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/"
+      ],
+      "gaps": {
+        "implementation": "versus 模式变体深化",
+        "tests": "顺/逆时针结算方向选择",
+        "parity_trails": "模式批内中间恢复"
+      },
+      "suggested_batch": "mode-versus",
+      "d4_cross": "none_not_boss_stage",
+      "notes": "非 D4 Boss 关卡；勿与 Boss 子系统混开",
+      "status": "open",
+      "role": "kernel-engineer"
+    },
+    {
+      "id": "T11-EVENT-RNG-RESTORE-PARITY",
+      "priority": "P1",
+      "theme": "同一命令下事件、随机流和恢复轨迹对照（横切）",
+      "anchors": {
+        "coverage_manifest": "范围 C / 标准完整内容依赖",
+        "todo_register": "T11-EVENT-RNG-RESTORE-PARITY",
+        "rules_baseline": "后续验收：比较命令、事件、随机流和中间恢复轨迹",
+        "progress": "T11 完成条件末段"
+      },
+      "existing_evidence": [
+        "docs/adr/0727-native-n06-replay-restore-per-command-parity.md",
+        "docs/operations/evidence/2026-10-16-todo-register/"
+      ],
+      "gaps": {
+        "implementation": "按切片补夹具；语义变则升规则版本",
+        "tests": "parity_chain_compound / parity_judge_rewrite_rng / parity_aoe_skip_trail / parity_mode_midrestore",
+        "parity_trails": "见 README 专节；跨线用投影后语义"
+      },
+      "suggested_batch": "B-parity-1",
+      "d4_cross": "none",
+      "notes": "BossStage 深路径中间恢复等 D4",
+      "status": "open",
+      "role": "rules-auditor",
+      "ambiguous": true,
+      "related_tests": [
+        "replay_and_restore_per_command_parity",
+        "restore_at_every_choice_point_continues_identically",
+        "p2_identity_endgame_per_submission_parity"
+      ],
+      "missing_fixtures": [
+        {
+          "code": "parity_chain_compound",
+          "need": "连环伤害→传导→濒死可选→解链日志；逐命令 hash+事件增量"
+        },
+        {
+          "code": "parity_judge_rewrite_rng",
+          "need": "改判→天妒扩面 + 中途恢复 + RNG 消费位数"
+        },
+        {
+          "code": "parity_aoe_skip_trail",
+          "need": "允许缺省立即取消响应事件；锁询问次数与终态"
+        },
+        {
+          "code": "parity_equip_timing",
+          "need": "装备时机立项后：结算中 ±马 前后距离/可出杀"
+        },
+        {
+          "code": "parity_mode_midrestore",
+          "need": "Identity/Versus/BossStage 命令中点恢复；BossStage 等 D4"
+        },
+        {
+          "code": "parity_rng_call_count",
+          "need": "同 seed 下 gen_range 调用次数与首分歧命令索引"
+        }
+      ],
+      "minimal_repro_commands": [
+        "CARGO_TARGET_DIR=/tmp/nn-t11-parity-check cargo test --offline -p engine-native --test native_kernel replay_and_restore_per_command_parity -- --list",
+        "CARGO_TARGET_DIR=/tmp/nn-t11-parity-check cargo test --offline -p engine-native --test boundary_snapshot restore_at_every_choice_point_continues_identically -- --list",
+        "CARGO_TARGET_DIR=/tmp/nn-t11-parity-check cargo test --offline -p engine-native --test native_kernel replay_and_restore_per_command_parity -- --exact --nocapture",
+        "CARGO_TARGET_DIR=/tmp/nn-t11-parity-check cargo test --offline -p engine-native --test native_kernel 'judgement_event_order_rewrite_then_tiandu|chain_propagation_preserves_source|propagated_damage_is_full_resolution|savage_attack_response_skip_and_pass|duel_no_sha_immediate_loss|last_rebel_reward_precedes_victory' -- --nocapture",
+        "CARGO_TARGET_DIR=/tmp/nn-t11-parity-check cargo test --offline -p engine-native --test boundary_snapshot 'pause_roundtrip_rewrite_then_tiandu_combo|pause_roundtrip_chain_target_window|pause_roundtrip_aoe_mid_queue' -- --nocapture",
+        "CARGO_TARGET_DIR=/tmp/nn-t11-parity-check cargo test --offline -p engine-native --test replay_scenarios -- --nocapture"
+      ]
+    }
+  ],
+  "d4_wait_do_not_duplicate": [
+    {
+      "id": "T11-BOSS-STAGE-SUBSYSTEM",
+      "theme": "Boss 关卡流程子系统 + ADR",
+      "action": "等 D4"
+    },
+    {
+      "id": "T11-BOSS-HUANREN",
+      "theme": "十殿阎罗还人",
+      "action": "等 D4"
+    },
+    {
+      "id": "T11-BOSS-HIDECHAIN-8",
+      "theme": "四象隐藏链八技",
+      "action": "等 D4"
+    },
+    {
+      "id": "T11-BOSS-WING-ROTATION",
+      "theme": "青/赤/白翼轮次编排",
+      "action": "等 D4"
+    },
+    {
+      "id": "T11-BOSS-BIANSHEN-CHANGEBOSS",
+      "theme": "bianshen 死亡换 Boss",
+      "action": "等 D4"
+    }
+  ],
+  "d5_wait_do_not_duplicate": [
+    {
+      "id": "T11-BOSS-ZHUGE-LIANG",
+      "theme": "Boss 诸葛亮 ylyg*",
+      "action": "等 D5"
+    },
+    {
+      "id": "T11-BOSS-PANGTONG-EXTERNAL",
+      "theme": "庞统外部包技依赖",
+      "action": "等 D5"
+    }
+  ]
+}
