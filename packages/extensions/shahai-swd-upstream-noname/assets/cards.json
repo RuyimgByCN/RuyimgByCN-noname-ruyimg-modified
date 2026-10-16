@@ -1394,7 +1394,7 @@
       "skills": [
         {
           "name": "aojian",
-          "mapping": null
+          "mapping": "host:aojian"
         },
         {
           "name": "miles_xueyi",
@@ -1802,7 +1802,7 @@
         },
         {
           "name": "kbolan",
-          "mapping": null
+          "mapping": "host:kbolan"
         }
       ]
     },

@@ -2538,6 +2538,24 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         }
                     }
                     ctx.draw_cards(player, 2);
+                    // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
+                    // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差
+                    // 异上游玩家自选；置顶牌留待下位摸牌者）
+                    if ctx
+                        .catalog
+                        .skill_by_name("kbolan")
+                        .map(|def| ctx.core.has_skill(player, def))
+                        .unwrap_or(false)
+                        && !ctx.core.player(player).hand.is_empty()
+                    {
+                        ctx.draw_cards(player, 1);
+                        if let Some(c) =
+                            ctx.core.player(player).hand.first().copied()
+                        {
+                            ctx.take_hand_card(player, c);
+                            ctx.core.deck.push(c);
+                        }
+                    }
                     // 雪霁冰雹（swd 卡牌面补切批②）：标记角色摸牌阶段摸
                     // 牌数 +1（上游 xuejibingbao phaseDrawBegin num++ 同
                     // 口径；计数 2→1→0 两轮后移除）

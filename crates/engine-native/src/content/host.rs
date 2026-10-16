@@ -1187,6 +1187,12 @@ pub enum HostBehavior {
     /// 因果（tag 405，deferred 消解批 康那里士）：他人即将受到有来源伤
     /// 害时——可弃一张牌将伤害来源和目标对调（unique 一次）。
     SwdYinguo,
+    /// 拷贝栏（tag 406，deferred 消解批 肯迪）：锁定——摸牌阶段额外摸
+    /// 1，随后将一张手牌置于牌堆顶（确定性首张登记差异）。
+    SwdKbolan,
+    /// 奥剑（tag 407，deferred 消解批 Miles）：出牌阶段弃 X 张手牌——
+    /// 攻击距离内至多 X 名角色各 1 伤（X=已损失体力；usable:1）。
+    SwdAojian,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1375,6 +1381,8 @@ impl HostBehavior {
             HostBehavior::SwdLqingcheng => 403,
             HostBehavior::SwdXuanzhou => 404,
             HostBehavior::SwdYinguo => 405,
+            HostBehavior::SwdKbolan => 406,
+            HostBehavior::SwdAojian => 407,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2021,6 +2029,8 @@ impl HostBehavior {
             403 => HostBehavior::SwdLqingcheng,
             404 => HostBehavior::SwdXuanzhou,
             405 => HostBehavior::SwdYinguo,
+            406 => HostBehavior::SwdKbolan,
+            407 => HostBehavior::SwdAojian,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2041,7 +2051,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 402] = [
+    pub const ALL: [HostBehavior; 404] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2442,6 +2452,8 @@ impl HostBehavior {
         HostBehavior::SwdLqingcheng,
         HostBehavior::SwdXuanzhou,
         HostBehavior::SwdYinguo,
+        HostBehavior::SwdKbolan,
+        HostBehavior::SwdAojian,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2608,6 +2620,8 @@ impl HostBehavior {
             HostBehavior::SwdLqingcheng => "host:lqingcheng",
             HostBehavior::SwdXuanzhou => "host:xuanzhou",
             HostBehavior::SwdYinguo => "host:yinguo",
+            HostBehavior::SwdKbolan => "host:kbolan",
+            HostBehavior::SwdAojian => "host:aojian",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3655,6 +3669,10 @@ impl HostBehavior {
             }),
             // 妖童：锁定 marker（engine viewAs 链查询），无触发面
             HostBehavior::SwdYaotong => None,
+            // 拷贝栏：锁定（Draw 内联钩），无触发面
+            HostBehavior::SwdKbolan => None,
+            // 奥剑：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
+            HostBehavior::SwdAojian => None,
             // 玄咒：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
             HostBehavior::SwdXuanzhou => None,
             // 因果：他人伤害前置（确认门=optional；priority 6 同上游）
@@ -6165,6 +6183,11 @@ impl SkillBehavior for HostSkillBehavior {
                     && d.source.map(|src| src != owner).unwrap_or(false)
                     && (!ctx.state.player(owner).hand.is_empty()
                         || !ctx.state.player(owner).equips.is_empty())),
+            // 拷贝栏/奥剑：内联/主动通道，无触发 filter
+            HostBehavior::SwdKbolan => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
+            HostBehavior::SwdAojian => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
             // 烈刃：自己以杀造成真实伤害且受害者存活有牌
             HostBehavior::SwdLieren => matches!(event,
                 EventData::Damage(d)
@@ -7267,6 +7290,25 @@ impl SkillBehavior for HostSkillBehavior {
                             <= ctx.state.attack_range(ctx.catalog, owner)
                 });
                 if !has_equip || !in_range {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 奥剑（deferred 消解批）：已损失体力≥1 且有手牌
+            HostBehavior::SwdAojian => {
+                let x = (ctx.state.player(owner).max_hp as i32
+                    - ctx.state.player(owner).hp)
+                    .max(0);
+                if x == 0 || ctx.state.player(owner).hand.is_empty() {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -12556,6 +12598,120 @@ impl crate::catalog::SkillMachine for HostMachine {
                             ctx.recover(t, 1, None);
                         }
                     }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 拷贝栏：锁定（Draw 内联钩），无独立效果步
+            HostBehavior::SwdKbolan => Flow::Done,
+            // 奥剑：SelectCard 弃 1..X 张手牌 → TargetChoice 攻击距离内
+            // 至多 X 名 → 各 1 伤
+            HostBehavior::SwdAojian => match self.stage {
+                HostStage::Act => {
+                    let x = (ctx.core.player(self.owner).max_hp as i32
+                        - ctx.core.player(self.owner).hp)
+                        .max(0) as usize;
+                    if x == 0 || ctx.core.player(self.owner).hand.is_empty() {
+                        return Flow::Done;
+                    }
+                    let n = x.min(ctx.core.player(self.owner).hand.len());
+                    self.card = Some(n as u32);
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "aojian_discard",
+                            options: ctx
+                                .core
+                                .player(self.owner)
+                                .hand
+                                .iter()
+                                .copied()
+                                .map(ChoiceOption::Card)
+                                .collect(),
+                            min: 1,
+                            max: n,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picks: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picks.is_empty() {
+                        return Flow::Done;
+                    }
+                    for c in &picks {
+                        if ctx.core.player(self.owner).hand.contains(c) {
+                            ctx.discard_from_hand(self.owner, *c);
+                        }
+                    }
+                    let n = picks.len();
+                    self.cards = picks;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.computed_distance(
+                                    ctx.catalog,
+                                    self.owner,
+                                    *p,
+                                ) <= 1
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "aojian_targets",
+                            options,
+                            min: 1,
+                            max: n,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    let n = self.cards.len();
+                    if targets.is_empty() || targets.len() > n {
+                        return Flow::Done;
+                    }
+                    for t in targets {
+                        if ctx.core.player(t).alive {
+                            ctx.emit(EventData::Damage(
+                                crate::machine::damage_data_with(
+                                    Some(self.owner),
+                                    t,
+                                    1,
+                                    crate::event::DamageNature::Normal,
+                                    None,
+                                ),
+                            ));
+                        }
+                    }
+                    self.cards.clear();
+                    self.card = None;
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -27718,6 +27874,7 @@ pub fn host_skill_def(
         | HostBehavior::SwdMingfu
         | HostBehavior::SwdCyxianjiang
         | HostBehavior::SwdJianji
+        | HostBehavior::SwdAojian
         | HostBehavior::SwdXuanzhou
         | HostBehavior::SwdFuniao
         | HostBehavior::SwdHeihuo
