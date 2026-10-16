@@ -1,0 +1,126 @@
+# 濒死救援名单/轮次三方对照摘录（2026-10-16 只读核对）
+# 采用玩法版本=本地 archive/upstream/noname（v1.11.7, HEAD df2682e6）
+
+## 1 上游 dying：start 起点（当前回合玩家优先）→ 建 _save
+		async (event, trigger, player) => {
+			delete event.filterStop;
+			if (player.hp > 0 || event.nodying) {
+				_status.dying.remove(player);
+				game.broadcast(list => {
+					_status.dying = list;
+				}, _status.dying);
+				event.finish();
+			} else if (!event.skipTao) {
+				let start = false;
+				const starts = [_status.currentPhase, event.source, event.player, game.me, game.players[0]];
+				for (const current of starts) {
+					if (get.itemtype(current) == "player" && game.players.concat(game.dead).includes(current)) {
+						start = game.players
+							.slice()
+							.sortBySeat(current)
+							.find(i => !i.isOut());
+						if (start) {
+							break;
+						}
+					}
+				}
+				if (start) {
+					const next = game.createEvent("_save");
+					next.player = start;
+					next._trigger = event;
+					next.triggername = "_save";
+					next.forceDie = true;
+					next.setContent("_save");
+					await next;
+				}
+			}
+		},
+
+## 2 上游 _save：acted 单趟（每人至多问一次；救回者原位复问；遇已问者 break outer）
+	async _save(event, trigger) {
+		event.dying = trigger.player;
+
+		const dying = trigger.player;
+		const acted = new Set();
+		const prompt = `${get.translation(trigger.player)}濒死，是否帮助？`;
+
+		outer: while (!trigger.player.isDead()) {
+			const player = event.player;
+			acted.add(player);
+
+			// @ts-expect-error 部分模式存在Player#side
+			const taoEnemyConfig = lib.config.tao_enemy && dying.side !== player.side && lib.config.mode != "identity" && lib.config.mode != "guozhan" && !dying.hasSkillTag("revertsave");
+				break;
+			}
+			if (result.bool) {
+				if (dying.hp > 0 || trigger.nodying || dying.nodying || !dying.isAlive() || dying.isOut() || dying.removed) {
+					trigger.untrigger();
+					break;
+				}
+			} else {
+				let next = player.next;
+				const cacheNext = new Set();
+
+				while (true) {
+					if (acted.has(next) || cacheNext.has(next)) {
+						break outer;
+					}
+
+					if (!next.isOut()) {
+						event.player = next;
+						break;
+					}
+
+					cacheNext.add(next);
+					next = next.next;
+				}
+			}
+		}
+	},
+	async chooseNumbers(event, trigger, player) {
+		if (event.chooseTime && _status.connectMode && !game.online) {
+			event.time = lib.configOL.choose_timeout;
+			game.broadcastAll(time => {
+
+## 3 旧线：request_dying_save（名单一次构建，起点 [turn.current, source, player] 首个命中）+ 逐应答者动态复查
+pub(crate) fn request_dying_save(
+    tx: &mut Transaction,
+    player: PlayerId,
+    source: PlayerId,
+) -> Result<Vec<DomainEvent>, EffectError> {
+    let order = tx.state().players.alive_by_seat();
+    let start = [tx.state().turn.current, source, player]
+        .into_iter()
+        .find_map(|candidate| order.iter().position(|&player| player == candidate))
+        .unwrap_or(0);
+    let responders = (0..order.len())
+        .map(|offset| order[(start + offset) % order.len()])
+        .collect();
+    request_dying_save_from_queue(tx, player, source, responders)
+}
+
+pub(crate) fn request_dying_save_from_queue(
+    tx: &mut Transaction,
+    player: PlayerId,
+    source: PlayerId,
+    mut responders: Vec<PlayerId>,
+
+## 4 旧线：DyingSave 应答续行（save 者前插回队首 → 立即复问）
+                        .ok_or_else(|| EffectError::Illegal("missing save card".into()))?;
+                    let discard = tx
+                        .state()
+                        .zones
+                        .find(ZoneKind::DiscardPile, PlayerId::NONE)
+                        .ok_or_else(|| EffectError::Illegal("no discard".into()))?;
+                    let mut responders = vec![responder];
+                    responders.extend(remaining);
+                    let mut effects = vec![EffectRequest::MoveCardsWithReason {
+                        cards: vec![save_card],
+                        to: discard,
+                        from: Some(from),
+                        reason: CardMoveReason::Respond,
+
+## 5 原生：首轮名单 = seat_order_from(turn.current)；轮次重建 = seat_order_from(dying)
+- crates/engine-native/src/kernel.rs:3832-3839（Dying 事件 → DyingSaveMachine responders=seat_order_from(turn.current)）
+- crates/engine-native/src/kernel.rs:7410-7430（队列耗尽 + round_used + 场上仍有桃 → responders = seat_order_from(self.dying)，round_used=false）
+- crates/engine-native/src/kernel.rs:7412-7424（逐应答者动态复查 alive/持桃）
