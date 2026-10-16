@@ -1,0 +1,30 @@
+# 临时技能存续期勘验：三点语义对照（2026-10-16，只读源码，未改行为）
+
+## 原生线（noname-next）
+- 授技：crates/engine-native/src/machine.rs:499-521 add_skill_until_turn_end(owner, def) → SkillInstance{ owner, expires_end_of_turn: true }
+- 到期：machine.rs:522-552 expire_temporary_skills(owner) 过滤 `*o == owner && expires_end_of_turn`；由 kernel.rs:3706 ctx.expire_temporary_skills(player)（回合结束提交时，player=结束回合的玩家）调用
+- 站点（结构扫描：src 内 expires_end_of_turn 赋值 true 处 + add_skill_until_turn_end 调用）——共 5 处授技：
+crates/engine-native/src/content/standard.rs:2759:                        expires_end_of_turn: true,   -> 妄尊印（授予 self.target）
+crates/engine-native/src/content/standard.rs:5182:        ctx.add_skill_until_turn_end(self.owner, yishang);   -> 移伤（原生机制样例，无上游对照）
+crates/engine-native/src/content/host.rs:12052:                ctx.add_skill_until_turn_end(self.owner, chosen);   -> 乐学（swd 久悠，池取子集登记）
+crates/engine-native/src/content/host.rs:18560:                        ctx.add_skill_until_turn_end(self.owner, def);   -> 幻形（swd 尉迟嫣红，复制将技实例）
+crates/engine-native/src/content/host.rs:26543:                    expires_end_of_turn: true,   -> 石会粉禁用（gujian 石会粉，授予 target）
+crates/engine-native/src/machine.rs:499:    pub fn add_skill_until_turn_end(&mut self, owner: PlayerId, def: SkillDefId) {
+crates/engine-native/src/machine.rs:511:                    expires_end_of_turn: true,
+
+## 旧线（engine-core）
+- 授技：crates/engine-core/src/effect/primitives/pack_tw_1.rs:388-434 add_skill_until_turn_end → instance.temporary_until_turn_end_of = turn_owner（授技时的当前回合玩家）
+- 到期：crates/engine-core/src/command/turn.rs:110-118 expire_temporary_skills(tx, turn_owner) 过滤 `skill.temporary_until_turn_end_of == turn_owner`
+
+## 上游（archive/upstream/noname）
+- 机制：apps/core/noname/library/element/player.js:11952-11970 addTempSkill(skill, expire)——无 expire 时默认 { global: ['phaseAfter','phaseBeforeStart'] }；字符串/数组 expire → { global: expire }
+- 到期判定：apps/core/noname/library/element/gameEvent.ts:585-619（触发扫描时按 expire 规格匹配 name 后 removeSkill）
+- phaseBeforeStart 每阶段开始触发：apps/core/noname/library/element/content.ts:4742 `await event.trigger("phaseBeforeStart")`；`phaseAfter` 在代码树无触发点（grep 0 命中）→ 默认规格实际≈「下一个阶段开始」（即当前阶段结束时）
+- relatedTrigger 展开：apps/core/noname/library/index.js:469-476 仅 phaseAny → lib.phaseName(index.js:14956)
+- 站点 1 妄尊：apps/core/character/standard/skill.js:141-176 rewangzun(global phaseZhunbeiBegin) → target.addTempSkill("rewangzun2")（无 expire）+ target.addMark("rewangzun2",1,false)
+- 站点 2 乐学（杀海拾遗 swd）：apps/core/extension/杀海拾遗/character/swd/skill.js:5950-6010 lexue1(player phaseBegin)/lexue2(player phaseEnd) 用 addSkill + removeSkill(storage.lexue) 在拥有者阶段边界重掷（非 addTempSkill）
+- 站点 3 幻形（杀海拾遗 swd）：apps/core/extension/杀海拾遗/character/swd/skill.js:3039-3118 huanxing(player phaseBegin) addAdditionalSkill("huanxing", list)；huanxing2(:3119-3129) player damageAfter → removeAdditionalSkill("huanxing")
+
+## 未核对（不得据此对齐）
+- 妄尊 addMark("rewangzun2",1) 与 skill 的配合：手牌上限窗口是否由 mark 承担、实际可观察窗口长度未复算。
+- 上游其余 addTempSkill 调用点的 expire 规格未全量清点（本勘验只覆盖原生已有授技站点的对应技能）。
