@@ -141,3 +141,4 @@
 - [0780 卡牌实例受控合成原语（CardMod 伴随表）](0780-card-instance-mod-primitive.md) —— 机关术批：card_mods 伴随表建模合成（目录不可变），名称合成/数值升级登记差异；存档 v45
 - [0781 可变座位环原语（swapSeat）](0781-mutable-seat-ring.md) —— GameStateCore.seat_ring 显式座位环，座位语义全经环访问器；存档 v46；长蛇阵换座/破阵诀随机重排落地
 - [0782 扩展执行后端与旧 JS 兼容范围（D2/T8 定案）](0782-extension-backend-and-legacy-js-scope.md) —— 旧 JS 不承诺零改动运行；内置 HostBehavior + 扩展包 rule-vm 分层；QuickJS 兼容层不立项、WASM 暂缓；草稿未证明项转 T8 集成验收
+- [0783 Boss 关卡流程子系统（D4）](0783-boss-stage-flow-subsystem.md) —— 十殿还人/隐藏链八技/翼轮次/bianshen 换 Boss 进原生流程面；与 D5 龙血·ylyg*、映种、庞统外部技划界；实现分 B0–B4
