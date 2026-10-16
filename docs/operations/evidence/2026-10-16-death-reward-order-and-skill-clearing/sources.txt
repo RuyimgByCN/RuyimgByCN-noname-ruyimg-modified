@@ -1,0 +1,83 @@
+# 死亡结算顺序与死亡清技能：上游/原生/旧线对照摘录（2026-10-16 只读核对）
+
+## 1 上游 die 内容：dieAfter（含 checkResult）先于 dieAfter2（奖惩）
+			if (player.hp != 0) {
+				await player.changeHp(0 - player.hp, false).set("forceDie", true);
+			}
+		},
+		async (event, trigger, player) => {
+			const { source } = event;
+			//是否执行展示身份牌和胜负判断的操作
+			if (player.dieAfter && !event.reserveOut && !event.noDieAfter) {
+				await player.dieAfter(source);
+			}
+		},
+		async (event, trigger, player) => {
+			game.callHook("checkDie", [event, player]);
+			await event.trigger("die");
+		},
+		async (event, trigger, player) => {
+			}
+		},
+		async (event, trigger, player) => {
+			const { source } = event;
+			//是否执行击杀奖惩的操作
+			if (player.dieAfter2 && !event.reserveOut && !event.noDieAfter2) {
+				await player.dieAfter2(source);
+			}
+		},
+		async (event, trigger, player) => {
+			const { reason, source } = event;
+
+## 2 上游 identity.js：dieAfter 内 game.checkResult()；dieAfter2 为奖惩（反贼→来源摸3；忠臣被主公杀→主公弃全部）
+						(zhu, identity) => {
+							zhu.removeSkill(identity);
+						},
+						game.zhu,
+						this.special_identity
+					);
+				}
+				game.checkResult();
+				if (_status.mode === "purple") {
+					const red = [];
+					const blue = [];
+					game.countPlayer(current => {
+						const identity = current.identity.slice(1);
+			 * @param { Player } [source] - 击杀来源角色。
+			 * @returns { void }
+			 */
+			dieAfter(source) {
+				if (!this.identityShown) {
+					game.broadcastAll(
+						(player, identity, identity2) => {
+							player.setIdentity(player.identity);
+							player.identityShown = true;
+							player.node.identity.classList.remove("guessing");
+							if (identity) {
+								player.node.identity.firstChild.innerHTML = get.translation(`${identity}_bg`);
+								game.log(player, "的身份是", `#g${get.translation(identity)}`);
+
+## 3 上游 checkResult：调用 game.over(...)（普通身份局分支）
+1:				if (get.population("fan") == 0) {
+4:							game.over(false);
+7:							game.over(true);
+10:							game.over(true);
+13:							game.over();
+16:				} else if (get.population("zhong") == 0) {
+19:							game.over(true);
+22:							game.over(false);
+25:							game.over(true);
+28:							game.over();
+34:			if (game.zhu.isAlive() && get.population("fan") + get.population("nei") > 0) {
+41:			if (me.identity == "zhu" || me.identity == "zhong" || me.identity == "mingzhong") {
+
+## 4 原生：奖惩先于终局判定（ADR 0705）+ 死亡即删技能实例
+noname-next/crates/engine-native/tests/native_kernel.rs:4524:fn identity_rebel_death_rewards_killer() {
+noname-next/crates/engine-native/tests/native_kernel.rs:11224:fn last_rebel_reward_precedes_victory() {
+
+## 5 旧线：alive 过滤（技能实例保留，观察面等价、哈希面不同）
+noname-next/crates/engine-core/src/trigger/dispatch.rs:27:    state.players.alive_by_seat().into_iter().any(|player| {
+noname-next/crates/engine-core/src/trigger/dispatch.rs:50:        .alive_by_seat()
+noname-next/crates/engine-core/src/trigger/dispatch.rs:1593:            p.alive
+noname-next/crates/engine-core/src/trigger/dispatch.rs:2001:    let alive = tx.state().players.alive_by_seat();
+noname-next/crates/engine-core/src/trigger/dispatch.rs:2010:            let seat_rel = seat_rel_to_current(&alive, current, active.owner);
