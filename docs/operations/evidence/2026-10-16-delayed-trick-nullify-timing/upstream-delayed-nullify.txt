@@ -1,0 +1,57 @@
+# 延时锦囊无懈时点：上游摘录（2026-10-16 只读核对）
+# 采用玩法版本=本地 archive/upstream/noname（v1.11.7, HEAD df2682e6）
+
+## 1 _wuxie.trigger 同时含 useCardToBegin 与 phaseJudge（card/standard.js:4225）
+		_wuxie: {
+			trigger: { player: ["useCardToBegin", "phaseJudge"] },
+			priority: 5,
+			popup: false,
+			forced: true,
+			silent: true,
+			filter(event, player) {
+
+## 2 phaseJudge 事件触发点：锦囊已离判定区（player.lose 之后）→ 开窗口
+				event.redo();
+			} else {
+				if (event.card) {
+					await player.lose(event.card, "visible", ui.ordering);
+				}
+				player.$phaseJudge(event.card);
+				event.cancelled = false;
+				await event.trigger("phaseJudge");
+				player.popup(cardName, "thunder");
+				if (!cardInfo.effect) {
+					await game.delay();
+					event.redo();
+				} else if (!cardInfo.judge) {
+					await game.delay();
+					event.nojudge = true;
+				} else {
+					event.nojudge = false;
+
+## 3 被 cancelled 时不再翻判定牌（content.ts:4962-4966）
+				} else {
+					event.nojudge = false;
+				}
+			}
+		},
+		async (event, trigger, player) => {
+			if (!event.cancelled && !event.nojudge) {
+				event.result = await player.judge(event.card).set("type", "phase").forResult();
+
+## 4 无懈本体内容：phaseJudge 分支 untrigger+cancelled
+					triggerEvent.untrigger("currentOnly");
+					triggerEvent.cancelled = true;
+				} else {
+					triggerEvent.neutralize();
+					if (event.getParent().guowuxie === true) {
+						triggerEvent.getParent().excluded.addArray(game.filterPlayer(current => current.isFriendOf(triggerEvent.target)));
+					}
+				}
+				if (player.isOnline()) {
+					player.send(player => {
+
+## 5 原生：仅使用时开窗（ADR 0708），判定阶段不开窗
+noname-next/docs/native-coverage-manifest.md:76:| `nullify_scope` | 已验证（部分） | `chain_nullify_is_per_target_first_only`、`chain_nullify_is_per_target_second_only`、`chain_double_nullify_leaves_nobody_linked`、`delayed_trick_play_time_nullify_window`、`savage_per_target_nullify` | AOE 按目标、决斗单目标、**铁索按目标**（v290 对齐上游逐目标 `useCardToBegin` 窗口；原「整牌级窗口」行为差异本批关闭）；延时锦囊改为使用时开窗，判定阶段不再开窗（ADR 0708） |
+noname-next/docs/native-coverage-manifest.md:120:| 延时锦囊无懈时点 | 已按旧线改为使用时开窗，来源起含本人；被抵消则弃置、不入判定区；判定阶段不再开窗 | 版本 3 内部规则声明已登记，剩余边界与行为依据归 N06 |
+noname-next/crates/engine-native/src/kernel.rs:1447:        // Le/Bing/ShanDian：先置桌面，经无懈窗口（使用时开窗，对齐旧线）

@@ -3455,6 +3455,30 @@ switch` 不落表（门控并入 enabled，先例同构）。**登记待查**：
 | 可见性 | 原观星 ChoiceAnswered 脱敏已修；护驾/激将逐人询问不以暗手牌预筛——互换暗响应牌后攻击者视图与公开询问序列不变（v29）；规划信息集为未知池重分配，不复制真实牌堆 ID（v29） | 第 48 轮既有探针为 22 FIXED / 0 OPEN；这不代表所有询问类技能的信息隔离或策略质量已验收，继续按覆盖清单扩面 |
 | 预算/时间片 | 段预算/resume/abort 与同步规划节点/时限/预置取消已有回归；真实提交与规划模拟统一用会话高水位（u64::MAX 干净拒绝）；规划信息集为未知池确定性重分配——物理牌集合守恒、空牌堆退化确定（v29 修订） | 单选候选合法回退原反例已于 v31 修复；独立工作池未实现，命令配额阻塞及更广的策略质量仍待验收；令牌原代次反例已修 |
 
+## 语义选择：窗口/顺序口径（2026-10-16 定案）
+
+原生线多处沿用**旧线**口径（迁移期已固化，并已有成批回归与 14 golden 基线），而采用玩法版本
+（本地 `archive/upstream/noname` v1.11.7）在同类位置使用另一套约定。2026-10-16 逐项对照后
+**定案：保留原生口径，上游对应行为登记为已知差异（不追）；改判需另立 ADR**（语义变化：递增
+`STANDARD_RULESET_VERSION`、重录 14 golden、改造相关测试）。
+
+| 口径 | 项目采用（原生，源自旧线） | 上游 v1.11.7 | 对照证据 |
+|---|---|---|---|
+| 无懈应答名单起点 | 自**牌来源**起（`seat_order_from(source)`，ADR 0708） | `list.sortBySeat(_status.currentPhase)`（`card/standard.js:4487`） | [AOE/决斗/无懈](../operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
+| 无懈对无懈 | 单窗口取反 + 自出无懈者下家重建环 | 嵌套 `_wuxie` 窗口（无懈本体重走 `useCardToBegin`） | 同上 |
+| 铁索传导目标顺序 | `seat_order_from(受害者)` | `sort(lib.sort.seat)`（起点 `_status.currentPhase`，`library/skill.js:2037-2039`） | [铁索传导/座位序](../operations/evidence/2026-10-16-chain-propagation-seat-order/README.md) |
+| 解链时点 | 发传导帧**前**一次解除全部连环 | **逐受害者**结算时解链 + `notLink()` 事后防级联 | 同上 |
+| 多目标非 multitarget 锦囊目标定序 | 命令提交序（使用者下家起） | `targets.sortBySeat(_status.currentPhase)`（`content.ts:10143`） | 同上 |
+| 判定阶段顺序 | 非闪电放置序 FIFO + 闪电恒最后（ADR 0713） | 判定区数组 **LIFO**、无闪电分组（`content.ts:4931`+`player.js:15791`） | [判定顺序](../operations/evidence/2026-10-16-judge-order-upstream/README.md) |
+| 濒死轮次结构 | 按轮重建名单（重建起点=濒死者） | `acted` **单趟**、救回者原位复问 | [濒死名单](../operations/evidence/2026-10-16-dying-save-roster-upstream/README.md) |
+| 延时锦囊无懈时点 | 仅**使用时**开窗 | 使用时 **+ 判定时（`phaseJudge`）** 均开窗 | [延时锦囊无懈时点](../operations/evidence/2026-10-16-delayed-trick-nullify-timing/README.md) |
+| 临时技能存续期 | 至**拥有者**回合结束（上界近似） | 逐站点 `addTempSkill` expire 规格（默认≈当前阶段结束） | [临时技能存续期](../operations/evidence/2026-10-16-temp-skill-expiry-audit/README.md) |
+
+**定案依据**：①翻转属语义变化且会打破既有成批回归/golden 证据链；②数处是原生/旧线为**确定性重放与
+恢复契约**选定的结构（判定顺序确定性、窗口状态可编码），上游对应处依赖运行时交互或 UI 约定；
+③上游对应行为未被证明与官方规则一致（判定区 LIFO 与"按放置顺序"口径相反；无懈名单起点属上游实现
+约定）——故不构成改判充分依据。逐条可复核内容见各证据目录。
+
 ## 扩展与规则版本
 
 v3.3 恢复原有扩展机制。单个 STANDARD_RULESET_VERSION 不足以标识任意第三方规则组合：
