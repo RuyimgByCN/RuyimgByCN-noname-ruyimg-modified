@@ -74,8 +74,8 @@
 | `nullify_chain` | 已验证 | replay:nullify_chain_on_savage、`nullify_on_nullify_reverses` | 对无懈的无懈反转抵消状态，自出无懈者下家重新询问 |
 | `nullify_active_play` | 已验证（所测路径） | `nullify_rejected_when_played_actively` | 无懈可击只能在无懈窗口响应：出牌阶段主动使用（无目标/有目标）以 WrongPhase 拒绝，状态不变，恢复件同样拒绝（2026-09-24 修复：原先落入 `unreachable!` panic） |
 | `nullify_scope` | 已验证（部分） | `chain_nullify_is_per_target_first_only`、`chain_nullify_is_per_target_second_only`、`chain_double_nullify_leaves_nobody_linked`、`delayed_trick_play_time_nullify_window`、`savage_per_target_nullify` | AOE 按目标、决斗单目标、**铁索按目标**（v290 对齐上游逐目标 `useCardToBegin` 窗口；原「整牌级窗口」行为差异本批关闭）；延时锦囊改为使用时开窗，判定阶段不再开窗（ADR 0708） |
-| `judge_zone` | 已验证 | replay:judge_phase_delayed_tricks、`le_judgement_skips_play_phase`、`bing_judgement_skips_draw_phase`、`judge_zone_same_name_limit`、`judge_order_delayed_first_then_lightning_hit_kills`（双放置序） | 主动放置查重；判定排序分组已落地（非闪电放置序在前、闪电在后、队首消费，ADR 0713），双放置序锁定测试通过 |
-| `delayed_trick` | 已验证（部分） | replay:judge_phase_delayed_tricks、`shandian_hits_and_transfers`、`delayed_trick_play_time_nullify_window` | 乐/兵/闪电；使用时无懈，判定阶段直接翻牌；闪电黑桃 2–9 命中 3 雷伤（无来源），未中传下一存活玩家，若其已有闪电则弃置 |
+| `judge_zone` | 已验证 | replay:judge_phase_delayed_tricks、`le_judgement_skips_play_phase`、`bing_judgement_skips_draw_phase`、`judge_zone_same_name_limit`、`judge_order_delayed_first_then_lightning_hit_kills`（双放置序）、`judge_order_grouping_multi_cards_and_restore`（多张 + 快照往返） | 主动放置查重；判定排序为**非闪电放置序在前、闪电在后、队首消费**（ADR 0713，源自旧线），双放置序与多张/恢复已锁定；**顺序规则与上游不同（上游 LIFO、无闪电分组，2026-10-16 核对）**，差异登记与待决策见行为差异表「判定顺序」——[证据](operations/evidence/2026-10-16-judge-order-upstream/README.md) |
+| `delayed_trick` | 已验证（部分） | replay:judge_phase_delayed_tricks、`shandian_hits_and_transfers`、`delayed_trick_play_time_nullify_window`、`judge_order_grouping_multi_cards_and_restore` | 乐/兵/闪电；使用时无懈，判定阶段直接翻牌；闪电黑桃 2–9 命中 3 雷伤（无来源），未中传下一存活玩家，若其已有闪电则弃置；多张时按判定区分组序（见 `judge_zone`，与上游 LIFO 差异登记） |
 | `phase_skip` | 已验证 | replay:judge_phase_delayed_tricks、`bing_judgement_skips_draw_phase` | 乐跳过出牌阶段（Draw 后直达 Discard）、兵跳过摸牌（不摸） |
 | `machine_state_digest` | 已验证（所测字段） | `park_machine_state_changes_digest`（src 单元）、replay:rollback_invariants（挂起终态 golden） | 已编码机器字段参与摘要（ADR 0704）；后续流离/护驾与扩展机器字段须随规则版本逐次核对，不由早期测试外推完整性 |
 | `rule_version_binding` | 已验证 | `ruleset_version_changes_digest`（src 单元）、`restore_rejects_rule_version_mismatch`、`restore_rejects_tampered_core_ruleset_version` | 核心版本入摘要、顶层与核心副本版本不符均被拒绝（并行评审复现的「核心副本被篡改」洞已修复并有回归测试） |
@@ -121,7 +121,7 @@ N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，�
 | 逐目标窗口重开细节 | **已核对出差异（2026-10-16）**：上游逐目标窗口 = 每个目标各一个由 `useCardToBegin` 触发的 `_wuxie`（名单与该目标绑定、按当前回合玩家排序）；「抵消后重开」由**无懈自身的嵌套窗口**承担。原生为同窗口单次遍历 + 抵消后重建环（`queue = seat_order_from(next_alive(responder))`，含已放弃者绕回复问） | **差异登记（候选对齐）**：对齐＝为无懈本体开独立窗口并保存嵌套层状态（快照/存档面变化），属专项批次——[证据](operations/evidence/2026-10-16-aoe-duel-nullify-ask-semantics/README.md) |
 | 奖惩与终局判定顺序 | 已有主公击杀末反贼时奖励不被终局短路的回归 | 其余来源/死亡组合与规则版本依据继续验收 |
 | 改判与天妒切片 | 原范围/旧牌/装备资格与恢复/Finalized 反例已修复，主动与放弃恢复已固化 | 关闭原 N08-c/d；新增判定技能与复合路径继续按逐规则证据验收 |
-| 判定顺序 | 非闪电按放置序在前、闪电在后、队首消费；双放置序工程测试与独立反例复验通过，版本 4 golden 已重录 | N06-a 原反例关闭；多非闪电相对顺序及组合恢复继续补验 |
+| 判定顺序 | **已核对出差异（2026-10-16）**：上游 `phaseJudge` 以判定区数组（DOM 顺序，`$addVirtualJudge` 新牌 insertBefore firstChild）为队列并 **`shift()` 队首消费 ⇒ LIFO（最后放置的先判）、无闪电分组**（`content.ts:4931-4960`、`player.js:5391-5412/15791`）；原生为**非闪电按放置序 FIFO、闪电恒最后**（`kernel.rs:5083-5100`，源自旧线 `collect_delayed_queue`/ADR 0713） | **差异已固化 + 待决策**：新增 `judge_order_grouping_multi_cards_and_restore`（两放置序 + 快照往返）冻结原生现状；改判上游 LIFO 属语义变化（版本次＋14 golden 重录＋既有排序测试改造＋ADR 部分取代 0713），若判定「放置序」为项目采用语义则应移入「不追的已知差异」并写明依据——[证据](operations/evidence/2026-10-16-judge-order-upstream/README.md) |
 
 第 16 轮列出的主动技阶段门控、激将/护驾暗手预筛与逐人询问、仁德分次累计等差异已在[第 17 轮证据](operations/evidence/2026-09-23-native-review-17/README.md)逐项修复并加入回归；不再列为当前行为差异。逐技能、复合场景与上游等价性仍须单独举证。
 

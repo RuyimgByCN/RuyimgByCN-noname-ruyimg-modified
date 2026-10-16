@@ -1,6 +1,7 @@
 # ADR 0713：判定稳定分组与版本 4（N06-a 原反例关闭）
 
 - 状态：已落地；2026-09-17 独立复核通过，原排序反例关闭。
+- **2026-10-16 补注（勘正依据）**：本 ADR 的分组依据是当时参照的**旧线** `collect_delayed_queue`，不是规则来源。项目采用玩法版本已于 2026-10-16 明确为本地 `archive/upstream/noname`（v1.11.7），而上游 `phaseJudge` 为判定区数组 **LIFO（最后放置的先判）、无闪电分组**（`content.ts:4931-4960` + `player.js:15791`）。因此本 ADR 的排序规则与采用版本**不一致**，是否改判上游（属语义变化：版本次＋14 golden 重录＋既有排序测试改造）另立 ADR 决策；本批只做核对与现状固化——见[证据](../operations/evidence/2026-10-16-judge-order-upstream/README.md)与覆盖清单行为差异表「判定顺序」。
 - 关联：[原生 kernel](../../crates/engine-native/src/kernel.rs)、[版本定义](../../crates/engine-native/src/content/standard.rs)、
   [前序 ADR 0711](0711-native-judge-order-alignment.md)、[首组技能切片 ADR 0712](0712-native-first-official-skills.md)。
 

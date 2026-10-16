@@ -9344,6 +9344,73 @@ fn savage_nullified_target_discards_once() {
     assert_zone_conservation(&e);
 }
 
+/// 判定顺序补验（覆盖清单行为差异「判定顺序」，2026-10-16）：
+/// **原生现状** = 非闪电延时锦囊按放置序在前（组内 FIFO）、闪电在后、队首消费，
+/// 与放置序无关；本测试用「乐 + 闪电」两种放置序 + 快照往返冻结该行为。
+///
+/// **注意（已核对差异）**：采用玩法版本（upstream noname v1.11.7）的判定阶段
+/// 为 `event.cards = player.getCards("j")`（判定区 DOM 顺序 = `insertBefore(firstChild)`
+/// 新牌在前）后 `shift()`，即 **LIFO：新放置的先判、且无闪电分组**
+/// （`content.ts:4931-4960`、`player.js:15791`）。原生顺序与上游不同，
+/// 见覆盖清单行为差异表「判定顺序」与证据
+/// docs/operations/evidence/2026-10-16-judge-order-upstream/README.md。
+#[test]
+fn judge_order_grouping_multi_cards_and_restore() {
+    for (placement, seed) in [(("le", "shandian"), 193u64), (("shandian", "le"), 195u64)] {
+        // 基准线与快照线各跑一次：组合恢复断言（同一布阵同命令下判定序列一致）
+        let mut results = Vec::new();
+        for restore in [false, true] {
+            let mut e = Engine::new(seed, 4);
+            advance_to_play(&mut e, 0);
+            for p in 0..4 {
+                e.debug_clear_hand(p);
+            }
+            let first = e.debug_place_judge(1, placement.0);
+            let second = e.debug_place_judge(1, placement.1);
+            // 抽取顺序：先压红桃（后抽），再压黑桃 2-9（先抽）
+            let heart = e.debug_set_deck_top_by(|def| def.suit.is_heart());
+            let spade =
+                e.debug_set_deck_top_by(|def| def.suit.is_spade() && (2..=9).contains(&def.rank));
+            if restore {
+                let snap = e.save();
+                e = Engine::restore(&snap).expect("restore");
+            }
+            // 推进到玩家 1 判定阶段结束（两次判定）或上限
+            for _ in 0..40 {
+                let judged = count_log(&e, |l| matches!(l, LE::Judged { player: 1, .. }));
+                if judged >= 2 || !e.debug_alive(1) {
+                    break;
+                }
+                match next_phase(&mut e) {
+                    CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } => {}
+                    other => panic!("{other:?}"),
+                }
+            }
+            let judged: Vec<u32> = e
+                .log()
+                .iter()
+                .filter_map(|l| match l {
+                    LE::Judged { player: 1, card } => Some(*card),
+                    _ => None,
+                })
+                .collect();
+            // 原生分组：非闪电（乐）先判 → 乐吃黑桃（非红桃 → 跳过出牌），
+            // 闪电吃红桃（未命中 → 传下家）；因此玩家 1 全程不受雷伤。
+            assert_eq!(judged, vec![spade, heart], "判定顺序应为 乐 → 闪电（原生分组）");
+            assert_eq!(hp(&e, 1), 4, "原生顺序下闪电未命中，玩家 1 不应受伤");
+            assert!(!e.debug_judge(1).contains(&first) && !e.debug_judge(1).contains(&second));
+            // 闪电已传下家判定区（未命中路径）
+            assert!(
+                (2..4).any(|p| e.debug_judge(p).contains(&second) || e.debug_judge(p).contains(&first)),
+                "闪电未命中应传下一存活玩家的判定区"
+            );
+            assert_zone_conservation(&e);
+            results.push((judged, hp(&e, 1)));
+        }
+        assert_eq!(results[0], results[1], "组合恢复：直跑与恢复件结果必须一致");
+    }
+}
+
 /// N06 判定排序对齐（ADR 0711）：非闪电锦囊按放置序先于闪电判定。
 /// 乐先判（红桃不生效）、闪电后判命中致死；乐经判定弃置恰一份。
 /// 旧原生排序（后放入先判）会让闪电先判——本测试锁定对齐后顺序，
