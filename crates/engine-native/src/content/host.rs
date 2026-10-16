@@ -1193,6 +1193,14 @@ pub enum HostBehavior {
     /// 奥剑（tag 407，deferred 消解批 Miles）：出牌阶段弃 X 张手牌——
     /// 攻击距离内至多 X 名角色各 1 伤（X=已损失体力；usable:1）。
     SwdAojian,
+    /// 化金（tag 408，deferred 消解批 张烈）：出牌阶段限一次弃一张 he——
+    /// 授予化金触发面，令你造成的伤害 +1 直到你的下一回合开始。
+    SwdHuajin,
+    /// 化金触发面（tag 409）：自己造成伤害前置 +1；自己准备阶段开始移除。
+    SwdHuajin2,
+    /// 明镜（tag 410，deferred 消解批 妮可）：无防具时视为光纱天衣——
+    /// 即将受到伤害时 1/3 概率伤害 -1（RNG 同上游 filter）。
+    SwdMinjing,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1383,6 +1391,9 @@ impl HostBehavior {
             HostBehavior::SwdYinguo => 405,
             HostBehavior::SwdKbolan => 406,
             HostBehavior::SwdAojian => 407,
+            HostBehavior::SwdHuajin => 408,
+            HostBehavior::SwdHuajin2 => 409,
+            HostBehavior::SwdMinjing => 410,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2031,6 +2042,9 @@ impl HostBehavior {
             405 => HostBehavior::SwdYinguo,
             406 => HostBehavior::SwdKbolan,
             407 => HostBehavior::SwdAojian,
+            408 => HostBehavior::SwdHuajin,
+            409 => HostBehavior::SwdHuajin2,
+            410 => HostBehavior::SwdMinjing,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2051,7 +2065,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 404] = [
+    pub const ALL: [HostBehavior; 407] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2454,6 +2468,9 @@ impl HostBehavior {
         HostBehavior::SwdYinguo,
         HostBehavior::SwdKbolan,
         HostBehavior::SwdAojian,
+        HostBehavior::SwdHuajin,
+        HostBehavior::SwdHuajin2,
+        HostBehavior::SwdMinjing,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2622,6 +2639,9 @@ impl HostBehavior {
             HostBehavior::SwdYinguo => "host:yinguo",
             HostBehavior::SwdKbolan => "host:kbolan",
             HostBehavior::SwdAojian => "host:aojian",
+            HostBehavior::SwdHuajin => "host:huajin",
+            HostBehavior::SwdHuajin2 => "host:huajin2",
+            HostBehavior::SwdMinjing => "host:minjing",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3673,6 +3693,24 @@ impl HostBehavior {
             HostBehavior::SwdKbolan => None,
             // 奥剑：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
             HostBehavior::SwdAojian => None,
+            // 化金：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
+            HostBehavior::SwdHuajin => None,
+            // 化金触发面：伤害前置 +1；准备阶段开始自清（extra PhaseBegin）
+            HostBehavior::SwdHuajin2 => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::PhaseBegin],
+            }),
+            // 明镜：自己受到伤害前置（无防具 + 1/3）
+            HostBehavior::SwdMinjing => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 玄咒：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
             HostBehavior::SwdXuanzhou => None,
             // 因果：他人伤害前置（确认门=optional；priority 6 同上游）
@@ -4800,6 +4838,7 @@ pub const SWD_FENGYIN_STATE_KEY: &str = "swd_fengyin_state";
 pub const SWD_ZHENJIU2_KEY: &str = "swd_zhenjiu2";
 /// 麻醉·临月触发面内部键（挂附者伤害前置返还+降 1）。
 pub const SWD_LMAZUI2_KEY: &str = "swd_lmazui2";
+pub const SWD_HUAJIN2_KEY: &str = "swd_huajin2";
 /// 幻形在位旗标内部键（授予技能的存续标记——受伤后清）。
 pub const SWD_HUANXING_STATE_KEY: &str = "swd_huanxing_state";
 pub const SWD_JIGUANFENG_SHAN: &str = "swd_jiguanfeng_shan";
@@ -6188,6 +6227,27 @@ impl SkillBehavior for HostSkillBehavior {
                 EventData::Phase { player, begin, .. } if *player == owner && false),
             HostBehavior::SwdAojian => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 化金：出牌主动技，无触发 filter
+            HostBehavior::SwdHuajin => matches!(event,
+                EventData::Phase { player, begin, .. } if *player == owner && false),
+            // 化金触发面：自己造成伤害前置，或自己准备阶段开始（自清）
+            HostBehavior::SwdHuajin2 => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner) && !d.prevented
+            ) || matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                if *player == owner),
+            // 明镜：自己受伤前置 + 无防具（1/3 在机器步掷；登记差异：上游
+            // 在 filter 掷点，原生 filter 只读故效果步掷——同净效）
+            HostBehavior::SwdMinjing => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner
+                    && !d.prevented
+                    && d.amount > 0
+                    && !ctx.state.player(owner).equips.iter().any(|c| {
+                        ctx.catalog.card_kind(*c).equip_slot()
+                            == Some(crate::catalog::EquipSlot::Armor)
+                    })),
             // 烈刃：自己以杀造成真实伤害且受害者存活有牌
             HostBehavior::SwdLieren => matches!(event,
                 EventData::Damage(d)
@@ -7309,6 +7369,23 @@ impl SkillBehavior for HostSkillBehavior {
                     - ctx.state.player(owner).hp)
                     .max(0);
                 if x == 0 || ctx.state.player(owner).hand.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 化金（deferred 消解批）：he 有牌
+            HostBehavior::SwdHuajin => {
+                let p = ctx.state.player(owner);
+                if p.hand.is_empty() && p.equips.is_empty() {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -12716,6 +12793,98 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 化金：SelectCard 弃一张 he → 授予 swd_huajin2
+            HostBehavior::SwdHuajin => match self.stage {
+                HostStage::Act => {
+                    let p = ctx.core.player(self.owner);
+                    let options: Vec<ChoiceOption> = p
+                        .hand
+                        .iter()
+                        .chain(p.equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "huajin_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(c) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    let p = ctx.core.player(self.owner);
+                    if !p.hand.contains(&c) && !p.equips.contains(&c) {
+                        return Flow::Done;
+                    }
+                    ctx.take_owned_card(self.owner, c);
+                    ctx.to_discard(c);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![c],
+                    });
+                    if let Some(def) = ctx.catalog.skill_by_name(SWD_HUAJIN2_KEY) {
+                        ctx.core.skills.insert(
+                            (self.owner, def),
+                            crate::state::SkillInstance {
+                                owner: self.owner,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 0,
+                            },
+                        );
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 化金触发面：伤害前置 +1；准备阶段开始移除实例
+            HostBehavior::SwdHuajin2 => {
+                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
+                match frame {
+                    Some(EventData::Damage(d))
+                        if d.source == Some(self.owner) && !d.prevented =>
+                    {
+                        ctx.current_damage_mut().amount += 1;
+                        Flow::Done
+                    }
+                    Some(EventData::Phase {
+                        player,
+                        phase: crate::event::Phase::Judge,
+                        begin: true,
+                    }) if *player == self.owner =>
+                    {
+                        if let Some(def) = ctx.catalog.skill_by_name(SWD_HUAJIN2_KEY) {
+                            ctx.core.skills.remove(&(self.owner, def));
+                        }
+                        Flow::Done
+                    }
+                    _ => Flow::Done,
+                }
+            }
+            // 明镜：1/3 伤害 -1（等同光纱天衣；无防具门在 filter）
+            HostBehavior::SwdMinjing => {
+                if ctx.core.rng.gen_range(3u32) == 0 {
+                    let d = ctx.current_damage_mut();
+                    d.amount = d.amount.saturating_sub(1);
+                }
+                Flow::Done
+            }
             // 玄咒：SelectCard 置出一张普通锦囊（discard:false=置出而非
             // 弃——原生近似弃置登记）→ TargetChoice 任一角色（含自己，
             // 判定区无同名牌）→ 确定性 kind 规则置入判定区
@@ -27875,6 +28044,7 @@ pub fn host_skill_def(
         | HostBehavior::SwdCyxianjiang
         | HostBehavior::SwdJianji
         | HostBehavior::SwdAojian
+        | HostBehavior::SwdHuajin
         | HostBehavior::SwdXuanzhou
         | HostBehavior::SwdFuniao
         | HostBehavior::SwdHeihuo

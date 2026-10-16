@@ -1274,7 +1274,7 @@
         },
         {
           "name": "minjing",
-          "mapping": null
+          "mapping": "host:minjing"
         }
       ]
     },
@@ -1698,7 +1698,7 @@
       "skills": [
         {
           "name": "huajin",
-          "mapping": null
+          "mapping": "host:huajin"
         },
         {
           "name": "poxiao",
@@ -1967,6 +1967,10 @@
     {
       "name": "swd_guiyan2",
       "mapping": "host:guiyan2"
+    },
+    {
+      "name": "swd_huajin2",
+      "mapping": "host:huajin2"
     }
   ]
 }
