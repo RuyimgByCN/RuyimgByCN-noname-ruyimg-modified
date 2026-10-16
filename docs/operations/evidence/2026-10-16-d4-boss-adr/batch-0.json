@@ -1,0 +1,224 @@
+{
+  "schema": "d4-boss-batch-0/v1",
+  "date": "2026-10-16",
+  "todo_id": "T11-BOSS-STAGE-SUBSYSTEM",
+  "adr": "docs/adr/0783-boss-stage-flow-subsystem.md",
+  "adr_batch": "B0",
+  "title": "Boss 关卡流程子系统骨架（引擎开工清单）",
+  "language": "zh-CN",
+  "implementation_forbidden_in_this_doc_batch": ["crates/**", "cards.json", "npack", "docs/architecture/native-progress.md"],
+  "read_only_baseline": {
+    "verified_at": "2026-10-16",
+    "standard_ruleset_version": 290,
+    "archive_format_version": 78,
+    "host_behavior_max_tag": 410,
+    "host_behavior_max_variant": "SwdMinjing",
+    "host_behavior_next_tag": 411,
+    "game_mode_boss_fields": ["boss", "chongzheng", "fellows"],
+    "boss_stage_state_present": false,
+    "change_boss_api_present": false,
+    "turn_state_touched_by_b0": false
+  },
+  "upstream": {
+    "authority": "archive/upstream/noname/apps/core/mode/boss.js",
+    "note": "工作区可能未检出 archive；行号以 d4-boss-adr/README 与历史 T11 证据为准",
+    "symbols": {
+      "addBossFellow": { "approx_line": 1680 },
+      "changeBoss": { "approx_line": 1688 },
+      "shidianyanluo_level": { "approx_lines": [2512, 3376, 3400] },
+      "shidianyanluo_mengpo": { "approx_lines": [3418, 3542] },
+      "shidianyanluo_mengpodie": { "approx_lines": [3488, 4134] },
+      "boss_newhuanren": { "approx_line": 3404 },
+      "boss_newhuanren2": { "approx_line": 3448 },
+      "banned_generals_literal": { "approx_line": 3436 }
+    }
+  },
+  "items": [
+    {
+      "id": "B0-STAGE-STATE",
+      "order": 1,
+      "kind": "mechanism",
+      "name": "BossStageState 数据模型与默认空态",
+      "upstream_symbols": [
+        "_status.shidianyanluo_level",
+        "_status.shidianyanluo_mengpo",
+        "_status.shidianyanluo_mengpodie"
+      ],
+      "suggested_landing": ["crates/engine-native/src/state.rs", "GameMode::Boss 扩展或并列 BossStageState"],
+      "host_behavior_tag": null,
+      "host_behavior_note": "内核模式态，不挂 HostBehavior",
+      "touches": {
+        "turn_state": false,
+        "archive_format_version": true,
+        "standard_ruleset_version": true,
+        "golden14": "probe_then_rerecord_if_needed"
+      },
+      "acceptance": "默认 kind=None；快照/哈希含全字段；非 Boss 模式不受影响"
+    },
+    {
+      "id": "B0-ARCHIVE-ROUNDTRIP",
+      "order": 2,
+      "kind": "mechanism",
+      "name": "存档编解码往返",
+      "upstream_symbols": [],
+      "suggested_landing": ["crates/engine-native/src/archive.rs"],
+      "host_behavior_tag": null,
+      "expected_archive_bump": { "from": 78, "to": 79 },
+      "touches": {
+        "turn_state": false,
+        "archive_format_version": true,
+        "standard_ruleset_version": false,
+        "golden14": "no_unless_coupled_with_hash"
+      },
+      "acceptance": "encode/decode 往返；旧档策略有单测锁定"
+    },
+    {
+      "id": "B0-HASH-PROBE",
+      "order": 3,
+      "kind": "mechanism",
+      "name": "摘要哈希纳入与版本探针",
+      "upstream_symbols": [],
+      "suggested_landing": ["crates/engine-native/src/engine.rs", "crates/engine-native/src/snap.rs", "crates/engine-native/src/content/standard.rs"],
+      "host_behavior_tag": null,
+      "expected_ruleset_bump": { "from": 290, "to": 291 },
+      "touches": {
+        "turn_state": false,
+        "archive_format_version": false,
+        "standard_ruleset_version": true,
+        "golden14": "probe_then_rerecord"
+      },
+      "acceptance": "字段变化改变摘要；290→291 回退探针按 AGENTS.md 处置 golden"
+    },
+    {
+      "id": "B0-CHANGE-BOSS-API",
+      "order": 4,
+      "kind": "mechanism",
+      "name": "change_boss / reinit_boss 内部原语",
+      "upstream_symbols": ["changeBoss"],
+      "suggested_landing": ["crates/engine-native/src/engine.rs", "crates/engine-native/src/kernel.rs", "apply_general_assembly"],
+      "host_behavior_tag": null,
+      "touches": {
+        "turn_state": false,
+        "archive_format_version": false,
+        "standard_ruleset_version": "only_if_default_path_reachable",
+        "golden14": "none_if_api_only"
+      },
+      "acceptance": "更新 Boss 指针与装配；无技能表挂名；默认对局不可达"
+    },
+    {
+      "id": "B0-ADD-FELLOW-API",
+      "order": 5,
+      "kind": "mechanism",
+      "name": "add_boss_fellow 正式 API",
+      "upstream_symbols": ["addBossFellow", "game.addFellow"],
+      "suggested_landing": ["crates/engine-native/src/engine.rs", "对齐 debug_add_fellow / fellows 队尾", "ADR 0781 seat_ring"],
+      "host_behavior_tag": null,
+      "touches": {
+        "turn_state": false,
+        "archive_format_version": false,
+        "standard_ruleset_version": "only_if_default_path_reachable",
+        "golden14": "none_if_api_only"
+      },
+      "acceptance": "fellow 入队尾；boss 侧胜负口径与 v84 一致"
+    },
+    {
+      "id": "B0-BAN-QUERY-STUB",
+      "order": 6,
+      "kind": "mechanism",
+      "name": "禁将与乱入旗只读查询空实现",
+      "upstream_symbols": ["boss_newhuanren", "boss_newhuanren2", "banned_generals_literal"],
+      "suggested_landing": ["BossStageState getters", "is_boss_general_banned"],
+      "host_behavior_tag": null,
+      "touches": {
+        "turn_state": false,
+        "archive_format_version": false,
+        "standard_ruleset_version": false,
+        "golden14": "none"
+      },
+      "acceptance": "B0 恒未禁、旗恒 false；不拦截选将；写入留给 B3"
+    }
+  ],
+  "host_behavior_tag_policy": {
+    "b0_reserves_tags": false,
+    "content_skills_start_at": 411,
+    "note": "B0 不挂 HostBehavior；B1+ 内容技自 411 顺序编号（只增不改）"
+  },
+  "deferred_to_later_batches": [
+    { "batch": "B1", "todo_id": "T11-BOSS-HIDECHAIN-8", "skills": ["boss_qingmu2", "boss_qingmu2x", "boss_qingmu3", "boss_qingmu3x", "boss_baimang2", "boss_baimang2x", "boss_baimang3", "boss_baimang3x", "boss_chiyan2", "boss_chiyan2x", "boss_chiyan3", "boss_chiyan3x", "boss_xuanlin2", "boss_xuanlin2x", "boss_xuanlin3", "boss_xuanlin3x"] },
+    { "batch": "B2", "todo_id": "T11-BOSS-BIANSHEN-CHANGEBOSS", "skills": ["boss_bianshen4"] },
+    { "batch": "B3", "todo_id": "T11-BOSS-HUANREN", "skills": ["boss_newhuanren", "boss_newhuanren2"] },
+    { "batch": "B4", "todo_id": "T11-BOSS-WING-ROTATION", "skills": ["boss_qingyi", "boss_chiyi", "boss_baiyi"] }
+  ],
+  "test_fixtures_draft": [
+    {
+      "name": "boss_stage_state_default_none_roundtrip",
+      "asserts": ["kind=None on new Boss game", "encode/decode equality"]
+    },
+    {
+      "name": "boss_stage_archive_format_v79_rejects_v78_without_migration",
+      "asserts": ["legacy archive policy locked by test"]
+    },
+    {
+      "name": "boss_stage_hash_includes_stage_fields",
+      "asserts": ["mutating stage fields changes digest"]
+    },
+    {
+      "name": "boss_change_boss_api_reinit_updates_pointer",
+      "asserts": ["boss pointer updated", "assembly refreshed", "seat ring intact"]
+    },
+    {
+      "name": "boss_add_fellow_api_appends_and_marks_boss_side",
+      "asserts": ["fellow at fellows tail", "boss-side win/loss includes fellow"]
+    },
+    {
+      "name": "boss_ban_query_stub_always_false",
+      "asserts": ["is_boss_general_banned always false", "mengpo flags false"]
+    },
+    {
+      "name": "ruleset_290_to_291_golden_probe",
+      "asserts": ["optional if ruleset bumped", "probe before rerecord"]
+    }
+  ],
+  "exclusions": [
+    {
+      "id": "D5-LX-MIGRATION",
+      "items": ["ylyg*", "龙血玄黄", "诸葛亮整将", "hp Infinity"],
+      "reason": "D5；关卡子系统不得为 ylyg* 开特例"
+    },
+    {
+      "id": "T11-BOSS-SHIKIEIKI-EXCLUDED",
+      "items": ["boss_shikieiki", "boss_yingzhong"],
+      "reason": "永久目录排除；不借 D4 建外部将池"
+    },
+    {
+      "id": "T11-BOSS-PANGTONG-EXTERNAL",
+      "items": ["oldniepan", "ylygniepan", "浴火"],
+      "reason": "wait_d5；非 D4"
+    },
+    {
+      "id": "T11-BOSS-DIZANG-DAYUAN",
+      "items": ["地藏大愿", "判定改写 AI 态度面"],
+      "reason": "非 D4 内容余项"
+    },
+    {
+      "id": "T11-BOSS-DIZANG-WULIANG-GAMEDRAW",
+      "items": ["无量建局摸3", "gameDrawAfter", "enterGame"],
+      "reason": "非 D4；勿并入 B0/B3"
+    },
+    {
+      "id": "T11-BOSS-MENGPO-WANGSHI-PLAY",
+      "items": ["往事打出面"],
+      "reason": "v270 永久登记差异；父项已拆分关闭"
+    },
+    {
+      "id": "init-shells",
+      "items": ["boss_qingmu 试炼 init 壳", "boss_bianshen 开局壳"],
+      "reason": "不落包；条目以目标将代位"
+    }
+  ],
+  "suggested_impl_evidence_dir": "docs/operations/evidence/YYYY-MM-DD-d4-boss-stage-b0-skeleton/",
+  "impl_acceptance_commands": [
+    "cargo test --offline -p engine-native --no-fail-fast",
+    "RUSTFLAGS=\"-D warnings\" cargo check -p engine-native --all-targets"
+  ]
+}

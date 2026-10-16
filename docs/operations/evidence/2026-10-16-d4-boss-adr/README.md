@@ -8,8 +8,10 @@
 |---|---|
 | ADR | [docs/adr/0783-boss-stage-flow-subsystem.md](../../../adr/0783-boss-stage-flow-subsystem.md) |
 | INDEX 登记 | [docs/adr/INDEX.md](../../../adr/INDEX.md)（0783 行） |
+| **批次 0 开工清单** | [batch-0.md](batch-0.md) · [batch-0.json](batch-0.json)（`T11-BOSS-STAGE-SUBSYSTEM` / ADR B0） |
 | 用户裁决 | [2026-10-16-d4-d8-decisions](../2026-10-16-d4-d8-decisions/README.md) D4 行 |
 | 待做映射 | [2026-10-16-todo-register](../2026-10-16-todo-register/README.md) · `T11-BOSS-STAGE-SUBSYSTEM` 及子项 |
+| 模糊项边界 | [ambiguous-resolutions](../2026-10-16-todo-register/ambiguous-resolutions.md)（地藏大愿非 D4、映姬永久排除、孟婆拆分等） |
 
 本批**未改** `native-progress.md` 正文（并行 worker）；未改 `crates/**`、cards.json、npack。
 
@@ -86,7 +88,22 @@
 
 规则基准对应段可将「登记不落」改为「待实现（ADR 0783；实现前语义仍不可达）」并链本目录——由基准/进度 worker 择机回填，避免与并行编辑冲突。
 
-## 建议首批实现技能（B1，B0 之后）
+## 批次 0（B0 骨架 · 引擎开工）
+
+引擎可直接按 [batch-0.md](batch-0.md) / [batch-0.json](batch-0.json) 开工。摘要：
+
+| ID | 机制 |
+|---|---|
+| `B0-STAGE-STATE` | `BossStageState` + 默认 `kind=None` |
+| `B0-ARCHIVE-ROUNDTRIP` | 存档往返；`ARCHIVE` 78→79 |
+| `B0-HASH-PROBE` | 哈希纳入；规则 290→291（探针后 golden） |
+| `B0-CHANGE-BOSS-API` | `change_boss` / `reinit_boss` 内部原语 |
+| `B0-ADD-FELLOW-API` | `add_boss_fellow` 正式 API |
+| `B0-BAN-QUERY-STUB` | 禁将/乱入旗只读空实现 |
+
+只读基线：`HostBehavior` 最高 tag **410**（`SwdMinjing`）→ 内容技自 **411** 起（B1+）；B0 **不挂** HostBehavior、**不触碰** `TurnState`。明确排除：D5/`ylyg*`、映姬永久排除、地藏大愿、无量建局摸 3、庞统外部技等（见 batch-0 排除表）。
+
+## 建议首批内容技（B1，B0 之后）
 
 1. `boss_qingmu2` / `boss_qingmu2x`
 2. `boss_qingmu3` / `boss_qingmu3x`
@@ -99,3 +116,4 @@
 | 引擎 / 包数据改动 | 无 |
 | 规则 / 存档 / golden | 不递增、不重录 |
 | cargo 全量 | 未跑（文档批） |
+| batch-0 清单 | 已落盘（2026-10-16 补全） |

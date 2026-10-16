@@ -123,7 +123,7 @@ BossStageState {
 
 | 批 | 内容 | 建议证据目录名 | 验收 |
 |---|---|---|---|
-| **B0** | 子系统骨架 + 默认空状态；存档/哈希/往返；无内容语义或仅内部 API 单测 | `docs/operations/evidence/YYYY-MM-DD-d4-boss-stage-b0-skeleton/` | 定向往返；规则/存档按 §4；全量 `cargo test --offline -p engine-native --no-fail-fast`；Gate 1b；规则基准改「待实现→本批已承载」 |
+| **B0** | 子系统骨架 + 默认空状态；存档/哈希/往返；无内容语义或仅内部 API 单测 | 开工清单：[batch-0.md](../operations/evidence/2026-10-16-d4-boss-adr/batch-0.md) / [batch-0.json](../operations/evidence/2026-10-16-d4-boss-adr/batch-0.json)；实现证据建议 `docs/operations/evidence/YYYY-MM-DD-d4-boss-stage-b0-skeleton/` | 定向往返；规则/存档按 §4；全量 `cargo test --offline -p engine-native --no-fail-fast`；Gate 1b；规则基准改「待实现→本批已承载」 |
 | **B1** | 隐藏链八技（结构最同构，无十殿选将 UI） | `…-d4-boss-hidechain-…` | 每链至少：死亡→换将/fellow、守恒、暂停恢复（若有询问则无）；四象条目补挂流程技名 |
 | **B2** | bianshen4 死亡换 Boss（复用 B1 骨架） | `…-d4-boss-bianshen-changeboss-…` | 候选池种子化；阴间系条目补挂 |
 | **B3** | 还人：等级链 + 选将询问 + 禁将表 + 孟婆乱入旗 | `…-d4-boss-huanren-…` | 多关推进；禁将入口拒绝；乱入一次性；与忘魂/孟婆已落技共存 |
@@ -158,4 +158,5 @@ BossStageState {
 
 - 本文件落盘且 [INDEX](INDEX.md) 已登记
 - 证据目录链到本 ADR 与上游勘点
+- B0 引擎开工清单 [batch-0.md](../operations/evidence/2026-10-16-d4-boss-adr/batch-0.md) / [batch-0.json](../operations/evidence/2026-10-16-d4-boss-adr/batch-0.json) 已落盘
 - **无** `crates/**`、cards.json、npack 改动；不跑长时间全量 cargo（实现批另证）
