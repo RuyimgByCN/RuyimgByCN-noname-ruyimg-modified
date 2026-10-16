@@ -1422,7 +1422,7 @@
         },
         {
           "name": "yinguo",
-          "mapping": null
+          "mapping": "host:yinguo"
         }
       ]
     },
@@ -1666,7 +1666,7 @@
         },
         {
           "name": "xuanzhou",
-          "mapping": null
+          "mapping": "host:xuanzhou"
         }
       ]
     },
@@ -1942,7 +1942,7 @@
       "skills": [
         {
           "name": "xuanzhou",
-          "mapping": null
+          "mapping": "host:xuanzhou"
         },
         {
           "name": "bingfeng",
