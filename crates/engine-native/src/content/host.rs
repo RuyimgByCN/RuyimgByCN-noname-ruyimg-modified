@@ -5427,15 +5427,6 @@ impl SkillBehavior for HostSkillBehavior {
                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                             )
                         }));
-                if std::env::var("TB_DBG").is_ok() {
-                    if let EventData::CardUsed(u) = event {
-                        eprintln!(
-                            "DBG tb owner={owner} kind={:?} targets={:?} hit={hit}",
-                            ctx.catalog.card_kind(u.card),
-                            u.targets
-                        );
-                    }
-                }
                 hit
             },
             // 大同：任意角色任意阶段结束（global phaseEnd）全场极差 ≤1
@@ -14495,16 +14486,13 @@ impl crate::catalog::SkillMachine for HostMachine {
                     }
                 }
                 HostStage::JiefenOwnerDiscard => {
-                    eprintln!("DBG jiefen owner_discard entered");
                     let Some(t) = self.target else { return Flow::Done };
                     let Some(c) = ctx.answer().iter().find_map(|o| match o {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
-                        eprintln!("DBG jiefen owner_discard no card");
                         return Flow::Done;
                     };
-                    eprintln!("DBG jiefen owner gives card={c}");
                     ctx.core.player_mut(t).hand.retain(|x| *x != c);
                     ctx.core.player_mut(self.owner).hand.push(c);
                     ctx.emit(EventData::CardsMoved {
@@ -15530,15 +15518,12 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             // 破星：目标体力 > 持有者 → 伤害 +1（帧直写）
             HostBehavior::SwdPoxing => {
-                eprintln!("b41 dbg poxing step target={:?} stage={:?}", self.target, self.stage);
                 if let Some(t) = self.target {
-                    eprintln!("b41 dbg hp t={} owner={}", ctx.core.player(t).hp, ctx.core.player(self.owner).hp);
                     if ctx.core.player(t).hp > ctx.core.player(self.owner).hp {
                         let frame =
                             ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
                         if let EventData::Damage(dm) = &mut frame.data {
                             dm.amount += 1;
-                            eprintln!("b41 dbg amount now {}", dm.amount);
                         }
                     }
                 }

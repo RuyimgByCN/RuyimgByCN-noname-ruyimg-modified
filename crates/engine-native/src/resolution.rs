@@ -293,12 +293,6 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
             if !def.behavior.filter(&qctx, *owner, &event) {
                 continue;
             }
-            if std::env::var("TB_DBG").is_ok() {
-                eprintln!(
-                    "DBG plan entry def={} owner={owner} kind={kind:?}",
-                    catalog.skills[def_id as usize].name
-                );
-            }
             let seat_rel = core.seat_distance(turn_current, *owner);
             entries.push(QueuedTrigger {
                 def: def_id,

@@ -7376,11 +7376,9 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             }
         } else {
             self.guihan_asked = false;
-            eprintln!("DBG guihan step2 entered");
             if let Some(crate::choice::ChoiceOption::Confirm) =
                 ctx.answer().first().copied()
             {
-                eprintln!("DBG guihan confirmed");
                 let t = self.dying;
                 ctx.core.player_mut(t).guihan_used = true;
                 ctx.recover(t, 1, None);
