@@ -1,0 +1,24 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/native_kernel.rs (.scratch/target-d4-b3/debug/deps/native_kernel-a5e2b4363d607405)
+
+running 17 tests
+test d4_boss_b0_change_boss_api_reinit_updates_pointer ... ok
+test d4_boss_b0_ban_query_stub_always_false ... ok
+test d4_boss_b1_qingmu_host_tags ... ok
+test d4_boss_b0_archive_format_v79_rejects_v78_without_migration ... ok
+test d4_boss_b1_qingmu3_chain_to_taihao_sides ... ok
+test d4_boss_b0_hash_includes_stage_fields ... ok
+test d4_boss_b0_stage_state_default_none_roundtrip ... ok
+test d4_boss_b3_baimang3_chain_to_shaohao_sides ... ok
+test d4_boss_b1_qingmu2_chain_to_goumang ... ok
+test d4_boss_b2_baimang2_chain_to_rushou ... ok
+test d4_boss_b0_add_fellow_api_appends_and_marks_boss_side ... ok
+test d4_boss_b2_sixiang_host_tags ... ok
+test d4_boss_b3_sixiang3_host_tags ... ok
+test d4_boss_b3_chiyan3_chain_to_yandi_sides ... ok
+test d4_boss_b2_chiyan2_chain_to_zhurong ... ok
+test d4_boss_b3_xuanlin3_chain_to_zhuanxu ... ok
+test d4_boss_b2_xuanlin2_chain_to_gonggong ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 313 filtered out; finished in 0.01s
+

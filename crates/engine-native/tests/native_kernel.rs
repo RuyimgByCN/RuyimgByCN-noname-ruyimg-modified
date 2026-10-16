@@ -19168,3 +19168,186 @@ fn d4_boss_b2_sixiang_host_tags() {
         Some(HostBehavior::BossXuanlin2x)
     );
 }
+
+// ---------------------------------------------------------------------------
+// D4/B3 白芒/赤炎/玄麟 3/3x（tag 421–426；侧座 reinit 复用青木3）
+// ---------------------------------------------------------------------------
+
+/// 白芒3 链 2→3：蓐收死亡 → 少昊 + 侧座蓐收/明星 + 一明星 fellow。
+#[test]
+fn d4_boss_b3_baimang3_chain_to_shaohao_sides() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29401, 4, 0, 0, 4, 4, 0);
+    let rushou = boss_general_named(&e, "蓐收");
+    let shaohao = boss_general_named(&e, "少昊");
+    let mingxing = boss_general_named(&e, "明星");
+    e.debug_set_general_def(0, rushou);
+    e.debug_set_hp(0, 5);
+    e.debug_set_general_def(1, boss_general_named(&e, "明星"));
+    e.debug_set_general_def(3, boss_general_named(&e, "明星"));
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core()
+            .skills
+            .contains_key(&(0, e.catalog().skill_by_name("白芒3").unwrap())),
+        "蓐收应装配白芒3"
+    );
+
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    e.debug_deal_damage(Some(1), 0, 10, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0));
+    assert_eq!(e.state_core().players[0].general_slots[0], Some(shaohao));
+    // 4 人环侧座固定 3=prev / 1=next；add_fellow 队尾后 ring_prev 会漂到新
+    // fellow，故按座位号断言（与建局预置一致）。
+    assert_eq!(
+        e.state_core().players[3].general_slots[0],
+        Some(rushou),
+        "prevSeat(3) → 蓐收"
+    );
+    assert_eq!(
+        e.state_core().players[1].general_slots[0],
+        Some(mingxing),
+        "nextSeat(1) → 明星"
+    );
+    assert!(e.state_core().is_boss_side(3));
+    assert!(e.state_core().is_boss_side(1));
+    let fellows = e.state_core().boss_fellows().expect("fellows");
+    assert!(
+        fellows.iter().any(|&f| {
+            f >= 4
+                && e.state_core().players[f as usize].general_slots[0] == Some(mingxing)
+        }),
+        "应追加一明星 fellow（队尾）"
+    );
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 3);
+    assert_zone_conservation(&e);
+}
+
+/// 赤炎3 链 2→3：祝融死亡 → 炎帝 + 侧座祝融/焰灵。
+#[test]
+fn d4_boss_b3_chiyan3_chain_to_yandi_sides() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29402, 4, 0, 0, 4, 4, 0);
+    let zhurong = boss_general_named(&e, "祝融");
+    let yandi = boss_general_named(&e, "炎帝");
+    let yanling = boss_general_named(&e, "焰灵");
+    e.debug_set_general_def(0, zhurong);
+    e.debug_set_hp(0, 5);
+    e.debug_set_general_def(1, boss_general_named(&e, "焰灵"));
+    e.debug_set_general_def(3, boss_general_named(&e, "焰灵"));
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core()
+            .skills
+            .contains_key(&(0, e.catalog().skill_by_name("赤炎3").unwrap())),
+        "祝融应装配赤炎3"
+    );
+
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    e.debug_deal_damage(Some(1), 0, 10, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0));
+    assert_eq!(e.state_core().players[0].general_slots[0], Some(yandi));
+    let prev = e.state_core().ring_prev(0);
+    let next = e.state_core().ring_next(0);
+    assert_eq!(
+        e.state_core().players[prev as usize].general_slots[0],
+        Some(zhurong),
+        "prevSeat → 祝融"
+    );
+    assert_eq!(
+        e.state_core().players[next as usize].general_slots[0],
+        Some(yanling),
+        "nextSeat → 焰灵"
+    );
+    assert!(e.state_core().is_boss_side(prev));
+    assert!(e.state_core().is_boss_side(next));
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 3);
+    assert_zone_conservation(&e);
+}
+
+/// 玄麟3 链 2→3：共工死亡 → 颛顼 + 共工 fellow + 次座玄冥。
+#[test]
+fn d4_boss_b3_xuanlin3_chain_to_zhuanxu() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29403, 4, 0, 0, 4, 4, 0);
+    let gonggong = boss_general_named(&e, "共工");
+    let zhuanxu = boss_general_named(&e, "颛顼");
+    let xuanming = boss_general_named(&e, "玄冥");
+    e.debug_set_general_def(0, gonggong);
+    e.debug_set_hp(0, 5);
+    e.debug_set_general_def(1, boss_general_named(&e, "玄冥"));
+    e.debug_set_general_def(3, boss_general_named(&e, "玄冥"));
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core()
+            .skills
+            .contains_key(&(0, e.catalog().skill_by_name("玄麟3").unwrap())),
+        "共工应装配玄麟3"
+    );
+
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    e.debug_deal_damage(Some(1), 0, 10, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0));
+    assert_eq!(
+        e.state_core().players[0].general_slots[0],
+        Some(zhuanxu),
+        "应换为颛顼"
+    );
+    let next = e.state_core().ring_next(0);
+    assert_eq!(
+        e.state_core().players[next as usize].general_slots[0],
+        Some(xuanming),
+        "nextSeat → 玄冥"
+    );
+    assert!(e.state_core().is_boss_side(next));
+    let fellows = e.state_core().boss_fellows().expect("fellows");
+    assert!(
+        fellows.iter().any(|&f| {
+            e.state_core().players[f as usize].general_slots[0] == Some(gonggong)
+        }),
+        "应追加一共工 fellow"
+    );
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 3);
+    assert_zone_conservation(&e);
+}
+
+/// HostBehavior tag 421–426 往返。
+#[test]
+fn d4_boss_b3_sixiang3_host_tags() {
+    use engine_native::content::host::HostBehavior;
+    assert_eq!(HostBehavior::BossBaimang3.tag(), 421);
+    assert_eq!(HostBehavior::BossBaimang3x.tag(), 422);
+    assert_eq!(HostBehavior::BossChiyan3.tag(), 423);
+    assert_eq!(HostBehavior::BossChiyan3x.tag(), 424);
+    assert_eq!(HostBehavior::BossXuanlin3.tag(), 425);
+    assert_eq!(HostBehavior::BossXuanlin3x.tag(), 426);
+    assert_eq!(
+        HostBehavior::from_tag(421),
+        Some(HostBehavior::BossBaimang3)
+    );
+    assert_eq!(
+        HostBehavior::from_tag(426),
+        Some(HostBehavior::BossXuanlin3x)
+    );
+}
