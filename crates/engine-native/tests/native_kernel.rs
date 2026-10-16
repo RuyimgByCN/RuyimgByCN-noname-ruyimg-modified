@@ -18992,3 +18992,179 @@ fn d4_boss_b1_qingmu_host_tags() {
         Some(HostBehavior::BossQingmu3x)
     );
 }
+
+// ---------------------------------------------------------------------------
+// D4/B2 白芒/赤炎/玄麟隐藏链（tag 415–420）
+// ---------------------------------------------------------------------------
+
+/// 白芒链 1→2：白虎死亡 → 蓐收 + 两明星 fellow。
+#[test]
+fn d4_boss_b2_baimang2_chain_to_rushou() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29301, 4, 0, 0, 4, 4, 0);
+    let baihu = boss_general_named(&e, "白虎");
+    let rushou = boss_general_named(&e, "蓐收");
+    let mingxing = boss_general_named(&e, "明星");
+    e.debug_set_general_def(0, baihu);
+    e.debug_set_hp(0, 4);
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core()
+            .skills
+            .contains_key(&(0, e.catalog().skill_by_name("白芒").unwrap())),
+        "白虎应装配白芒"
+    );
+
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    e.debug_deal_damage(Some(1), 0, 8, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0), "转阶后 Boss 座位应存活");
+    assert_eq!(
+        e.state_core().players[0].general_slots[0],
+        Some(rushou),
+        "应换为蓐收"
+    );
+    let fellows = e.state_core().boss_fellows().expect("fellows");
+    assert_eq!(fellows.len(), 2, "应追加两明星 fellow");
+    for &f in fellows {
+        assert_eq!(
+            e.state_core().players[f as usize].general_slots[0],
+            Some(mingxing),
+            "fellow 应为明星"
+        );
+        assert!(e.state_core().is_boss_side(f));
+    }
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 2);
+    assert_eq!(e.state_core().turn.current, 0);
+    for t in 1..4u8 {
+        assert!(e.debug_alive(t));
+        assert_eq!(e.debug_hp(t), e.state_core().players[t as usize].max_hp as i32);
+    }
+    assert_zone_conservation(&e);
+
+    let snap = e.save();
+    let e2 = Engine::restore(&snap).expect("restore");
+    assert_eq!(
+        e2.state_core().players[0].general_slots[0],
+        Some(rushou)
+    );
+    assert_eq!(e2.state_core().boss_stage().unwrap().level, 2);
+}
+
+/// 赤炎链 1→2：朱雀死亡 → 祝融 + 两焰灵 fellow。
+#[test]
+fn d4_boss_b2_chiyan2_chain_to_zhurong() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29302, 4, 0, 0, 4, 4, 0);
+    let zhuque = boss_general_named(&e, "朱雀");
+    let zhurong = boss_general_named(&e, "祝融");
+    let yanling = boss_general_named(&e, "焰灵");
+    e.debug_set_general_def(0, zhuque);
+    e.debug_set_hp(0, 4);
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core()
+            .skills
+            .contains_key(&(0, e.catalog().skill_by_name("赤炎").unwrap())),
+        "朱雀应装配赤炎"
+    );
+
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    e.debug_deal_damage(Some(1), 0, 8, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0));
+    assert_eq!(
+        e.state_core().players[0].general_slots[0],
+        Some(zhurong),
+        "应换为祝融"
+    );
+    let fellows = e.state_core().boss_fellows().expect("fellows");
+    assert_eq!(fellows.len(), 2, "应追加两焰灵 fellow");
+    for &f in fellows {
+        assert_eq!(
+            e.state_core().players[f as usize].general_slots[0],
+            Some(yanling),
+            "fellow 应为焰灵"
+        );
+    }
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 2);
+    assert_zone_conservation(&e);
+}
+
+/// 玄麟链 1→2：玄武死亡 → 共工 + 一玄冥 fellow。
+/// 注：玄武灵渠将 amount>1 归零，故以 1 体 + 1 伤击杀。
+#[test]
+fn d4_boss_b2_xuanlin2_chain_to_gonggong() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29303, 4, 0, 0, 4, 4, 0);
+    let xuanwu = boss_general_named(&e, "玄武");
+    let gonggong = boss_general_named(&e, "共工");
+    let xuanming = boss_general_named(&e, "玄冥");
+    e.debug_set_general_def(0, xuanwu);
+    e.debug_set_hp(0, 1);
+    advance_to_play(&mut e, 0);
+    assert!(
+        e.state_core()
+            .skills
+            .contains_key(&(0, e.catalog().skill_by_name("玄麟").unwrap())),
+        "玄武应装配玄麟"
+    );
+
+    for s in 0..4u8 {
+        e.debug_clear_hand(s);
+    }
+    // 灵渠：受伤>1 归零；1 伤照常，且手牌已清空防桃救
+    e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+    drain_choices(&mut e);
+
+    assert!(e.debug_alive(0));
+    assert_eq!(
+        e.state_core().players[0].general_slots[0],
+        Some(gonggong),
+        "应换为共工"
+    );
+    let fellows = e.state_core().boss_fellows().expect("fellows");
+    assert_eq!(fellows.len(), 1, "应追加一玄冥 fellow");
+    assert_eq!(
+        e.state_core().players[fellows[0] as usize].general_slots[0],
+        Some(xuanming),
+        "fellow 应为玄冥"
+    );
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::SixiangChain);
+    assert_eq!(stage.level, 2);
+    assert_zone_conservation(&e);
+}
+
+/// HostBehavior tag 415–420 往返。
+#[test]
+fn d4_boss_b2_sixiang_host_tags() {
+    use engine_native::content::host::HostBehavior;
+    assert_eq!(HostBehavior::BossBaimang2.tag(), 415);
+    assert_eq!(HostBehavior::BossBaimang2x.tag(), 416);
+    assert_eq!(HostBehavior::BossChiyan2.tag(), 417);
+    assert_eq!(HostBehavior::BossChiyan2x.tag(), 418);
+    assert_eq!(HostBehavior::BossXuanlin2.tag(), 419);
+    assert_eq!(HostBehavior::BossXuanlin2x.tag(), 420);
+    assert_eq!(
+        HostBehavior::from_tag(415),
+        Some(HostBehavior::BossBaimang2)
+    );
+    assert_eq!(
+        HostBehavior::from_tag(420),
+        Some(HostBehavior::BossXuanlin2x)
+    );
+}

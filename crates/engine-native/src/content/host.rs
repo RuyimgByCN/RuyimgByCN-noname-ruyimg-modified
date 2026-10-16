@@ -1210,6 +1210,18 @@ pub enum HostBehavior {
     BossQingmu3,
     /// 青木3·转阶（tag 414，D4/B1）：转阶→太昊，并侧座重挂勾芒/书精。
     BossQingmu3x,
+    /// 白芒（tag 415，D4/B2）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
+    BossBaimang2,
+    /// 白芒·转阶（tag 416，D4/B2）：→蓐收 + 两明星 fellow + 全场回满。
+    BossBaimang2x,
+    /// 赤炎（tag 417，D4/B2）：Boss 死亡前置隐藏。
+    BossChiyan2,
+    /// 赤炎·转阶（tag 418，D4/B2）：→祝融 + 两焰灵 fellow + 全场回满。
+    BossChiyan2x,
+    /// 玄麟（tag 419，D4/B2）：Boss 死亡前置隐藏。
+    BossXuanlin2,
+    /// 玄麟·转阶（tag 420，D4/B2）：→共工 + 一玄冥 fellow + 全场回满。
+    BossXuanlin2x,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1407,6 +1419,12 @@ impl HostBehavior {
             HostBehavior::BossQingmu2x => 412,
             HostBehavior::BossQingmu3 => 413,
             HostBehavior::BossQingmu3x => 414,
+            HostBehavior::BossBaimang2 => 415,
+            HostBehavior::BossBaimang2x => 416,
+            HostBehavior::BossChiyan2 => 417,
+            HostBehavior::BossChiyan2x => 418,
+            HostBehavior::BossXuanlin2 => 419,
+            HostBehavior::BossXuanlin2x => 420,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2062,6 +2080,12 @@ impl HostBehavior {
             412 => HostBehavior::BossQingmu2x,
             413 => HostBehavior::BossQingmu3,
             414 => HostBehavior::BossQingmu3x,
+            415 => HostBehavior::BossBaimang2,
+            416 => HostBehavior::BossBaimang2x,
+            417 => HostBehavior::BossChiyan2,
+            418 => HostBehavior::BossChiyan2x,
+            419 => HostBehavior::BossXuanlin2,
+            420 => HostBehavior::BossXuanlin2x,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2082,7 +2106,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-    pub const ALL: [HostBehavior; 411] = [
+      pub const ALL: [HostBehavior; 417] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2492,6 +2516,12 @@ impl HostBehavior {
         HostBehavior::BossQingmu2x,
         HostBehavior::BossQingmu3,
         HostBehavior::BossQingmu3x,
+        HostBehavior::BossBaimang2,
+        HostBehavior::BossBaimang2x,
+        HostBehavior::BossChiyan2,
+        HostBehavior::BossChiyan2x,
+        HostBehavior::BossXuanlin2,
+        HostBehavior::BossXuanlin2x,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
     ];
@@ -2667,6 +2697,12 @@ impl HostBehavior {
             HostBehavior::BossQingmu2x => "host:qingmu2x",
             HostBehavior::BossQingmu3 => "host:qingmu3",
             HostBehavior::BossQingmu3x => "host:qingmu3x",
+            HostBehavior::BossBaimang2 => "host:baimang2",
+            HostBehavior::BossBaimang2x => "host:baimang2x",
+            HostBehavior::BossChiyan2 => "host:chiyan2",
+            HostBehavior::BossChiyan2x => "host:chiyan2x",
+            HostBehavior::BossXuanlin2 => "host:xuanlin2",
+            HostBehavior::BossXuanlin2x => "host:xuanlin2x",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3760,6 +3796,26 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::BossQingmu3x => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: -10,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 白芒/赤炎/玄麟：同青木 dieBegin First
+            HostBehavior::BossBaimang2
+            | HostBehavior::BossChiyan2
+            | HostBehavior::BossXuanlin2 => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::First,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 白芒/赤炎/玄麟·转阶：同青木·转阶 dieAfter Normal -10
+            HostBehavior::BossBaimang2x
+            | HostBehavior::BossChiyan2x
+            | HostBehavior::BossXuanlin2x => Some(TriggerMeta {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: -10,
@@ -7328,13 +7384,21 @@ impl SkillBehavior for HostSkillBehavior {
                     && d.amount > 0
                     && d.card.is_some()
                     && ctx.state.turn.luanjian_card == d.card.map(|c| c as u32)),
-            // 青木/青木3：本人死亡且本人是 Boss
-            HostBehavior::BossQingmu2 | HostBehavior::BossQingmu3 => matches!(event,
+            // 四象隐藏链 2/3：本人死亡且本人是 Boss
+            HostBehavior::BossQingmu2
+            | HostBehavior::BossQingmu3
+            | HostBehavior::BossBaimang2
+            | HostBehavior::BossChiyan2
+            | HostBehavior::BossXuanlin2 => matches!(event,
                 EventData::Death { player, .. }
                 if *player == owner
                     && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
-            // 青木·转阶 / 青木3·转阶：同上（技能仍在 DeathMachine 前）
-            HostBehavior::BossQingmu2x | HostBehavior::BossQingmu3x => matches!(event,
+            // 四象隐藏链·转阶：同上（技能仍在 DeathMachine 前）
+            HostBehavior::BossQingmu2x
+            | HostBehavior::BossQingmu3x
+            | HostBehavior::BossBaimang2x
+            | HostBehavior::BossChiyan2x
+            | HostBehavior::BossXuanlin2x => matches!(event,
                 EventData::Death { player, .. }
                 if *player == owner
                     && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
@@ -28057,7 +28121,7 @@ HostBehavior::XianjianLingyu => match self.stage {
             }
             // 青木：标记四象链 + 表现隐藏（座位交互门控近似=日志；无存档字段）
             HostBehavior::BossQingmu2 => {
-                sixiang_mark_hide(ctx, self.owner, false);
+                sixiang_mark_hide(ctx, self.owner, "青木", false);
                 Flow::Done
             }
             // 青木·转阶：取消死亡执行 + 换勾芒 + 全场回满 + 两书精 + 挑战者重整
@@ -28077,7 +28141,7 @@ HostBehavior::XianjianLingyu => match self.stage {
             }
             // 青木3：三人隐藏（本体+环邻）
             HostBehavior::BossQingmu3 => {
-                sixiang_mark_hide(ctx, self.owner, true);
+                sixiang_mark_hide(ctx, self.owner, "青木3", true);
                 Flow::Done
             }
             // 青木3·转阶：太昊 + 侧座勾芒/书精 + 挑战者重整
@@ -28095,6 +28159,64 @@ HostBehavior::XianjianLingyu => match self.stage {
                 );
                 Flow::Done
             }
+            // 白芒 / 赤炎 / 玄麟：同青木 dieBegin hide（D4/B2）
+            HostBehavior::BossBaimang2 => {
+                sixiang_mark_hide(ctx, self.owner, "白芒", false);
+                Flow::Done
+            }
+            HostBehavior::BossChiyan2 => {
+                sixiang_mark_hide(ctx, self.owner, "赤炎", false);
+                Flow::Done
+            }
+            HostBehavior::BossXuanlin2 => {
+                sixiang_mark_hide(ctx, self.owner, "玄麟", false);
+                Flow::Done
+            }
+            // 白芒·转阶：蓐收 + 两明星 + 全场回满 + 挑战者重整
+            HostBehavior::BossBaimang2x => {
+                sixiang_run_chain(
+                    ctx,
+                    self.owner,
+                    &SixiangChainParams {
+                        next_boss: "蓐收",
+                        add_fellows: &["明星", "明星"],
+                        side_reinits: &[],
+                        heal_all: true,
+                        chain_level: 2,
+                    },
+                );
+                Flow::Done
+            }
+            // 赤炎·转阶：祝融 + 两焰灵 + 全场回满 + 挑战者重整
+            HostBehavior::BossChiyan2x => {
+                sixiang_run_chain(
+                    ctx,
+                    self.owner,
+                    &SixiangChainParams {
+                        next_boss: "祝融",
+                        add_fellows: &["焰灵", "焰灵"],
+                        side_reinits: &[],
+                        heal_all: true,
+                        chain_level: 2,
+                    },
+                );
+                Flow::Done
+            }
+            // 玄麟·转阶：共工 + 一玄冥 + 全场回满 + 挑战者重整
+            HostBehavior::BossXuanlin2x => {
+                sixiang_run_chain(
+                    ctx,
+                    self.owner,
+                    &SixiangChainParams {
+                        next_boss: "共工",
+                        add_fellows: &["玄冥"],
+                        side_reinits: &[],
+                        heal_all: true,
+                        chain_level: 2,
+                    },
+                );
+                Flow::Done
+            }
             // 机关妖术防重标记：纯状态无触发面（补偿触发暂缓）
             HostBehavior::SwdJiguanyaoState => Flow::Done,
         }
@@ -28103,7 +28225,7 @@ HostBehavior::XianjianLingyu => match self.stage {
 
 
 // ---------------------------------------------------------------------------
-// D4/B1 四象隐藏链（青木打样；白芒/赤炎/玄麟复用 SixiangChainParams）
+// D4/B1+B2 四象隐藏链（青木打样；白芒/赤炎/玄麟复用 SixiangChainParams）
 // ---------------------------------------------------------------------------
 
 /// 隐藏链转阶参数表（结构同构，避免八份拷贝）。
@@ -28123,12 +28245,12 @@ fn boss_general_def(catalog: &crate::catalog::Catalog, name: &str) -> Option<u16
         .find(|&d| catalog.general_meta(d).map(|g| g.0) == Some(name))
 }
 
-fn sixiang_mark_hide(ctx: &mut Ctx<'_>, boss: PlayerId, three: bool) {
+fn sixiang_mark_hide(ctx: &mut Ctx<'_>, boss: PlayerId, skill: &'static str, three: bool) {
     if let crate::state::GameMode::Boss { stage, .. } = &mut ctx.core.mode {
         stage.kind = crate::state::BossStageKind::SixiangChain;
     }
     ctx.log(crate::machine::LogEvent::SkillTriggered {
-        skill: if three { "青木3" } else { "青木" },
+        skill,
         owner: boss,
     });
     if three {
@@ -28137,7 +28259,7 @@ fn sixiang_mark_hide(ctx: &mut Ctx<'_>, boss: PlayerId, three: bool) {
         for p in [next, prev] {
             if p != boss {
                 ctx.log(crate::machine::LogEvent::SkillTriggered {
-                    skill: "青木3",
+                    skill,
                     owner: p,
                 });
             }

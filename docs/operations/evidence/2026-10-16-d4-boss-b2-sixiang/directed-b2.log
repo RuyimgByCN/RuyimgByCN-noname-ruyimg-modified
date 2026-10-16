@@ -1,0 +1,11 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s
+     Running tests/native_kernel.rs (.scratch/target-d4-b2/debug/deps/native_kernel-a5e2b4363d607405)
+
+running 4 tests
+test d4_boss_b2_sixiang_host_tags ... ok
+test d4_boss_b2_xuanlin2_chain_to_gonggong ... ok
+test d4_boss_b2_chiyan2_chain_to_zhurong ... ok
+test d4_boss_b2_baimang2_chain_to_rushou ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 322 filtered out; finished in 0.00s
+

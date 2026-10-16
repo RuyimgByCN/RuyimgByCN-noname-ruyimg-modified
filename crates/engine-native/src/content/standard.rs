@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 292;
+pub const STANDARD_RULESET_VERSION: u64 = 293;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -5829,6 +5829,18 @@ pub const BOSS_QINGMU2X: &str = "青木·转阶";
 pub const BOSS_QINGMU3: &str = "青木3";
 /// 青木3·转阶（Boss 勾芒，规则 v292，D4/B1）：→太昊+侧座勾芒/书精。
 pub const BOSS_QINGMU3X: &str = "青木3·转阶";
+/// 白芒（Boss 白虎，规则 v293，D4/B2）：死亡前置隐藏 + 配套转阶技。
+pub const BOSS_BAIMANG2: &str = "白芒";
+/// 白芒·转阶（Boss 白虎，规则 v293，D4/B2）：→蓐收+两明星+全场回满。
+pub const BOSS_BAIMANG2X: &str = "白芒·转阶";
+/// 赤炎（Boss 朱雀，规则 v293，D4/B2）：死亡前置隐藏 + 配套转阶技。
+pub const BOSS_CHIYAN2: &str = "赤炎";
+/// 赤炎·转阶（Boss 朱雀，规则 v293，D4/B2）：→祝融+两焰灵+全场回满。
+pub const BOSS_CHIYAN2X: &str = "赤炎·转阶";
+/// 玄麟（Boss 玄武，规则 v293，D4/B2）：死亡前置隐藏 + 配套转阶技。
+pub const BOSS_XUANLIN2: &str = "玄麟";
+/// 玄麟·转阶（Boss 玄武，规则 v293，D4/B2）：→共工+一玄冥+全场回满。
+pub const BOSS_XUANLIN2X: &str = "玄麟·转阶";
 /// 神裔（Boss 青龙，四象系共有技，规则 v233）：锁定技两面——判定阶段
 /// 的延时锦囊判定恒不生效（上游 mod judge `event.type=="phase"`：bool
 /// true→false、false→null，对延时锦囊消费面等价恒失效；牌去向不变）；
@@ -5946,15 +5958,15 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("朱厌", Faction::Qun, &[BOSS_YAOSHOU, BOSS_BINGXIAN, BOSS_XUSHI, BOSS_JUYUAN], 25, Gender::Male),
     // 青龙（v233 神裔、v234 雷击；v292 青木/青木·转阶隐藏链）
     ("青龙", Faction::Qun, &[BOSS_SHENYI, BOSS_RELEIJI, BOSS_QINGMU2, BOSS_QINGMU2X], 4, Gender::Male),
-    // 白虎（v235 狂笑；神裔共用 v233；boss_baimang2 白芒=关卡流程面登记不落；
+    // 白虎（v235 狂笑；神裔共用 v233；v293 白芒/白芒·转阶隐藏链；
     // 上游势力 shen→群目录近似[ Faction 枚举无神势力，烛阴空势力→群先例]）
-    ("白虎", Faction::Qun, &[BOSS_SHENYI, BOSS_KUANGXIAO], 4, Gender::Male),
-    // 朱雀（v236 焚天；神裔共用 v233；boss_chiyan2 赤炎未落随下批；
+    ("白虎", Faction::Qun, &[BOSS_SHENYI, BOSS_KUANGXIAO, BOSS_BAIMANG2, BOSS_BAIMANG2X], 4, Gender::Male),
+    // 朱雀（v236 焚天；神裔共用 v233；v293 赤炎/赤炎·转阶隐藏链；
     // 势力 shen→群目录近似；上游 female）
-    ("朱雀", Faction::Qun, &[BOSS_SHENYI, BOSS_FENTIAN], 4, Gender::Female),
-    // 玄武（v237 灵渠；神裔共用 v233；boss_xuanlin2 玄麟=关卡流程面登记不落；
+    ("朱雀", Faction::Qun, &[BOSS_SHENYI, BOSS_FENTIAN, BOSS_CHIYAN2, BOSS_CHIYAN2X], 4, Gender::Female),
+    // 玄武（v237 灵渠；神裔共用 v233；v293 玄麟/玄麟·转阶隐藏链；
     // 势力 shen→群目录近似）
-    ("玄武", Faction::Qun, &[BOSS_SHENYI, BOSS_LINGQU], 4, Gender::Male),
+    ("玄武", Faction::Qun, &[BOSS_SHENYI, BOSS_LINGQU, BOSS_XUANLIN2, BOSS_XUANLIN2X], 4, Gender::Male),
     // 太昊（v238 神恩光环；神裔共用 v233；boss_qingyi 青翼未落随下批；
     // 上游 names 风|伏羲、shen→群目录近似）
     ("太昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
@@ -8294,6 +8306,31 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
         crate::content::host::host_skill_def(
             BOSS_QINGMU3X.to_string(),
             crate::content::host::HostBehavior::BossQingmu3x,
+        ),
+        // D4/B2 白芒/赤炎/玄麟 2/2x（HostBehavior tag 415–420）
+        crate::content::host::host_skill_def(
+            BOSS_BAIMANG2.to_string(),
+            crate::content::host::HostBehavior::BossBaimang2,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_BAIMANG2X.to_string(),
+            crate::content::host::HostBehavior::BossBaimang2x,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_CHIYAN2.to_string(),
+            crate::content::host::HostBehavior::BossChiyan2,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_CHIYAN2X.to_string(),
+            crate::content::host::HostBehavior::BossChiyan2x,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_XUANLIN2.to_string(),
+            crate::content::host::HostBehavior::BossXuanlin2,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_XUANLIN2X.to_string(),
+            crate::content::host::HostBehavior::BossXuanlin2x,
         ),
     ];
     (cards, skills)
