@@ -1,0 +1,9 @@
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next-wt-perf/crates/engine-native)
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next-wt-perf/crates/engine-native-wasm)
+    Finished `release` profile [optimized] target(s) in 22.03s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+[INFO]: ✨   Done in 22.30s
+[INFO]: 📦   Your wasm pkg is ready to publish at crates/engine-native-wasm/.perf-tools/o4-results/engine-native-wasm/pkg-no-opt.

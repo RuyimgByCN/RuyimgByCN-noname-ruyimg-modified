@@ -1,0 +1,6 @@
+engine-wasm/no-opt require_ms_med=12 load_embedded_ms_med=105 start_game_ms_med=11 autostep80_ms_med=43
+engine-wasm/O1 require_ms_med=11 load_embedded_ms_med=106 start_game_ms_med=10 autostep80_ms_med=43
+engine-wasm/O2 require_ms_med=11 load_embedded_ms_med=159 start_game_ms_med=37 autostep80_ms_med=74
+engine-wasm/O3 require_ms_med=11 load_embedded_ms_med=158 start_game_ms_med=37 autostep80_ms_med=70
+engine-wasm/Os require_ms_med=11 load_embedded_ms_med=159 start_game_ms_med=37 autostep80_ms_med=70
+engine-wasm/Oz require_ms_med=11 load_embedded_ms_med=158 start_game_ms_med=37 autostep80_ms_med=67

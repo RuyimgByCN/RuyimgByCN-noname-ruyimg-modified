@@ -1,0 +1,30 @@
+    |
+166 |         self.snapshot_bytes.len() as u64 + self.applied_commands.iter().map(|c| 100).sum::<u64>()
+    |                                                                              ^ help: if this is intentional, prefix it with an underscore: `_c`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: struct `ForkMeta` is never constructed
+  --> crates/engine-ai/src/fork.rs:69:12
+   |
+69 | pub struct ForkMeta {
+   |            ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: function `assert_no_foreign_hand_faces` is never used
+  --> crates/engine-ai/src/info_set.rs:56:8
+   |
+56 | pub fn assert_no_foreign_hand_faces(view: &InformationSetView) -> bool {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+   Compiling engine-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next-wt-perf/crates/engine-wasm)
+    Finished `release` profile [optimized] target(s) in 2m 32s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optional field missing from Cargo.toml: 'repository'. This is not necessary, but recommended
+[INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+[INFO]: ✨   Done in 2m 33s
+[INFO]: 📦   Your wasm pkg is ready to publish at crates/engine-wasm/.perf-tools/o4-results/engine-wasm/pkg-no-opt.

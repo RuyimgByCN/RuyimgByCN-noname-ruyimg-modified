@@ -1,0 +1,6 @@
+engine-native-wasm/no-opt require_ms_med=3 autostep80_ms_med=12
+engine-native-wasm/O1 require_ms_med=3 autostep80_ms_med=11
+engine-native-wasm/O2 require_ms_med=3 autostep80_ms_med=12
+engine-native-wasm/O3 require_ms_med=3 autostep80_ms_med=13
+engine-native-wasm/Os require_ms_med=3 autostep80_ms_med=12
+engine-native-wasm/Oz require_ms_med=3 autostep80_ms_med=12

@@ -1,0 +1,5 @@
+=== interference snapshot 2026-10-16T13:51:15Z ===
+{ 53.42 27.55 21.91 }
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next           8c7a9614 [main]
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next-wt-client 8c7a9614 [client-native]
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next-wt-perf   8c7a9614 (detached HEAD)
