@@ -481,6 +481,7 @@ impl Engine {
                 huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
                 cards_used_turn: 0,
+                liaoyuan_count: 0,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
@@ -5407,6 +5408,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u32(&mut h, c.turn.cards_used_play_phase);
     // swd 灵武批 120（规则 v307）：本回合已用牌数 + 额外阶段队列 + 插入位
     push_u32(&mut h, c.turn.cards_used_turn);
+    // 燎原计数（swd 批 145，规则 v319）
+    push_u8(&mut h, c.turn.liaoyuan_count);
     push_u32(&mut h, c.turn.extra_phases.len() as u32);
     for p in &c.turn.extra_phases {
         push_u8(&mut h, *p);
@@ -6596,6 +6599,7 @@ mod tests {
                 huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
                 cards_used_turn: 0,
+                liaoyuan_count: 0,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
@@ -6702,6 +6706,7 @@ mod tests {
                 huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
                 cards_used_turn: 0,
+                liaoyuan_count: 0,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,

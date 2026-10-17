@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 燎原（tag 502，swd deferred 消解批 145，`liaoyuan`）：自己使用【杀】
+    /// 时可选——弃置任意张与该杀同花色的牌（手/装备），令目标额外需打出
+    /// 等量张【闪】；未能全部打出则该杀**直接命中**且伤害 +张数。
+    Liaoyuan,
     /// 改造（tag 501，swd deferred 消解批 143，`gaizao`）：自己使用装备牌
     /// 且该牌固有栏位已被占用时可选——改放到一个**空栏位**（牌种不变故
     /// 装备技能保留；`declared_slots` 栏位覆盖）。
@@ -1759,6 +1763,7 @@ impl HostBehavior {
             HostBehavior::Lxianglong => 499,
             HostBehavior::SwdTianshu => 500,
             HostBehavior::Gaizao => 501,
+            HostBehavior::Liaoyuan => 502,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2501,6 +2506,7 @@ impl HostBehavior {
             499 => HostBehavior::Lxianglong,
             500 => HostBehavior::SwdTianshu,
             501 => HostBehavior::Gaizao,
+            502 => HostBehavior::Liaoyuan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2521,7 +2527,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 498] = [
+        pub const ALL: [HostBehavior; 499] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3020,6 +3026,7 @@ impl HostBehavior {
         HostBehavior::Lxianglong,
         HostBehavior::SwdTianshu,
         HostBehavior::Gaizao,
+        HostBehavior::Liaoyuan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3280,6 +3287,7 @@ impl HostBehavior {
             HostBehavior::Lxianglong => "host:lxianglong",
             HostBehavior::SwdTianshu => "host:swdtianshu",
             HostBehavior::Gaizao => "host:gaizao",
+            HostBehavior::Liaoyuan => "host:liaoyuan",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3754,6 +3762,14 @@ impl HostBehavior {
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 燎原：自己使用【杀】（结算窗；可选）
+            HostBehavior::Liaoyuan => Some(TriggerMeta {
+                event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -6116,6 +6132,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 燎原（swd 批 145）：目录技能名（弃同花色牌换额外闪需求与加伤）。
+pub const SWD_LIAOYUAN_KEY: &str = "liaoyuan";
+
 /// 改造（swd 批 143）：目录技能名（装备牌改放到空栏位）。
 pub const SWD_GAIZAO_KEY: &str = "gaizao";
 
@@ -7186,6 +7205,7 @@ impl HostSkillBehavior {
             HostBehavior::Lxianglong => (None, None),
             HostBehavior::SwdTianshu => (None, None),
             HostBehavior::Gaizao => (None, None),
+            HostBehavior::Liaoyuan => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7524,6 +7544,23 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 燎原：自己是【杀】的使用者且持有与该杀同花色的牌
+            HostBehavior::Liaoyuan => match event {
+                EventData::CardUsed(u) => {
+                    if u.player != owner || u.cancelled {
+                        return false;
+                    }
+                    let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                    if !kind.is_sha_like() {
+                        return false;
+                    }
+                    let suit = ctx.catalog.cards[u.card as usize].suit;
+                    ctx.state.player(owner).hand.iter().chain(
+                        ctx.state.player(owner).equips.iter(),
+                    ).any(|c| ctx.catalog.cards[*c as usize].suit == suit)
+                }
+                _ => false,
+            },
             // 改造：自己装备牌入槽前，且该牌固有栏位已被自己占用（有空格）
             HostBehavior::Gaizao => match event {
                 EventData::Equipped { player, card, .. } => {
@@ -20917,6 +20954,82 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 燎原：循环弃同花色牌（首张必问；弃后余 >1 张才续问）→ 记额外闪数
+            HostBehavior::Liaoyuan => match self.stage {
+                HostStage::Act => {
+                    // 花色仅首次捕获（弃牌会发射帧，之后当前帧不再是 CardUsed）
+                    if self.card.is_none() {
+                        let suit = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                            Some(EventData::CardUsed(u)) => {
+                                ctx.catalog.cards[u.card as usize].suit as u8
+                            }
+                            _ => return Flow::Done,
+                        };
+                        self.card = Some(u32::from(suit));
+                    }
+                    let suit = self.card.unwrap_or(0) as u8;
+                    let cards: Vec<CardId> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .filter(|c| mbcm_suit_of(ctx, *c) == Some(suit))
+                        .collect();
+                    // 上游循环条件：首张必问；弃后余 >1 张才续问
+                    if cards.is_empty() || (!self.cards.is_empty() && cards.len() <= 1) {
+                        let count = self.cards.len() as u8;
+                        ctx.core.turn.liaoyuan_count = count;
+                        if count > 0 {
+                            ctx.log(LogEvent::SkillTriggered {
+                                skill: "燎原",
+                                owner: self.owner,
+                            });
+                        }
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "liaoyuan_discard",
+                            options: cards.into_iter().map(ChoiceOption::Card).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        // 取消：结束循环，记数
+                        let count = self.cards.len() as u8;
+                        ctx.core.turn.liaoyuan_count = count;
+                        if count > 0 {
+                            ctx.log(LogEvent::SkillTriggered {
+                                skill: "燎原",
+                                owner: self.owner,
+                            });
+                        }
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&c) {
+                        ctx.discard_from_hand(self.owner, c);
+                    } else if ctx.core.player(self.owner).equips.contains(&c) {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+                        ctx.to_discard(c);
+                    } else {
+                        return Flow::Done;
+                    }
+                    self.cards.push(u32::from(c));
+                    self.stage = HostStage::Act;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
             // 改造：选一个空栏位 → 写入 declared_slots（提交按新栏位入槽）
             HostBehavior::Gaizao => match self.stage {
                 HostStage::Act => {

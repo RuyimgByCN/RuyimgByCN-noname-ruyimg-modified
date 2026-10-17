@@ -841,7 +841,7 @@
     },
     {
      "name": "liaoyuan",
-     "mapping": null
+     "mapping": "host:liaoyuan"
     },
     {
      "name": "yishan",

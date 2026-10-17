@@ -103,7 +103,9 @@ use crate::state::{
 /// （`swdtianshu_from`/`swdtianshu_granted`）。v100 字节被拒绝。
 /// v102（2026-10-17，swd 改造批 143）：`GameStateCore` 追加装备栏改写表
 /// `declared_slots`。v101 字节被拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 102;
+/// v103（2026-10-17，swd 燎原批 145）：`TurnState` 追加燎原计数
+/// `liaoyuan_count`。v102 字节被拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 103;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3538,6 +3540,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     w.u32(t.cards_used_play_phase);
     // v92（swd 灵武批 120）：本回合已用牌数 + 额外阶段队列 + 灵武插入位
     w.u32(t.cards_used_turn);
+    // 燎原计数（v103，swd 批 145）
+    w.u8(t.liaoyuan_count);
     w.len(t.extra_phases.len());
     for p in &t.extra_phases {
         w.u8(*p);
@@ -4036,6 +4040,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     }
     let cards_used_play_phase = r.u32()?;
     let cards_used_turn = r.u32()?;
+    let liaoyuan_count = r.u8()?;
     let extra_phases = r.vec(|r| r.u8())?;
     let extra_phase_lingwu = r.boolean()?;
     let bte_used_play_phase = r.u32()?;
@@ -4188,6 +4193,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 huanxia_track,
                 cards_used_play_phase,
                 cards_used_turn,
+                liaoyuan_count,
                 extra_phases,
                 extra_phase_lingwu,
                 bte_used_play_phase,

@@ -6060,6 +6060,10 @@ impl ShaResolveMachine {
     }
 
     fn emit_sha_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 燎原加伤（swd 批 145，规则 v319）：上游 liaoyuan2 damageBegin
+        // `trigger.num += storage.liaoyuan` 同口径；计入后清零
+        let liaoyuan = u32::from(ctx.core.turn.liaoyuan_count);
+        ctx.core.turn.liaoyuan_count = 0;
         if ctx.core.player(self.target).alive {
             ctx.emit(EventData::Damage(damage_data_with(
                 Some(self.source),
@@ -6067,7 +6071,8 @@ impl ShaResolveMachine {
                 1 + luoyi_bonus(ctx, Some(self.source))
                     + xiongshou_bonus(ctx, self.source, self.target)
                     + self.jiu_damage_bonus()
-                    + u32::from(self.xiandan_bonus),
+                    + u32::from(self.xiandan_bonus)
+                    + liaoyuan,
                 self.nature,
                 Some(self.card),
             )));
@@ -6895,11 +6900,15 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 不以暗手牌预筛（询问资格公开、应答私密，不向攻击者泄漏
         // 谁持闪）；拒绝继续问下一位，任一人确认即代出一张闪
         // （计入无双需求），全部拒绝后回到目标本人询问。
-        let needed: u8 = if self.source_has_wushuang(ctx) { 2 } else { 1 };
+        // 燎原（swd 批 145，规则 v319）：额外闪需求并入总需求
+        let needed: u8 = if self.source_has_wushuang(ctx) { 2 } else { 1 }
+            + ctx.core.turn.liaoyuan_count;
         if self.dodges_used >= needed {
             let card = self.card;
             ctx.to_discard(card);
             ctx.core.table.retain(|c| *c != card);
+            // 燎原结束清零（上游 liaoyuan3 shaEnd 同口径）
+            ctx.core.turn.liaoyuan_count = 0;
             return Flow::Done;
         }
         if self.hujia_active(ctx) {
@@ -7565,7 +7574,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             self.dodges_used += 1;
             // 无双：还需第二张闪 → 新响应窗口（重开护驾逐人询问 +
             // 目标本人询问；不弃杀、不受伤）
-            let needed: u8 = if self.source_has_wushuang(ctx) { 2 } else { 1 };
+            let needed: u8 = if self.source_has_wushuang(ctx) { 2 } else { 1 }
+                + ctx.core.turn.liaoyuan_count;
             if self.dodges_used < needed {
                 self.hujia_queue = None;
                 self.hujia_holder = None;
@@ -7706,6 +7716,14 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     },
                 };
             }
+            return self.emit_sha_damage(ctx);
+        }
+        // 燎原（swd 批 145，规则 v319）：仍有未满足的额外闪需求 → 未闪避
+        // 部分视为命中（上游 `trigger.untrigger(); directHit=true` 同口径；
+        // 加伤=燎原计数，上游 liaoyuan2 damageBegin `trigger.num += storage`
+        // 同口径）
+        if self.dodges_used < ctx.core.turn.liaoyuan_count {
+            // 加伤与清零由 emit_sha_damage 统一承担
             return self.emit_sha_damage(ctx);
         }
         // 杀被闪避（swd 批 141，规则 v316 同批）：发射 ShaDodged（上游

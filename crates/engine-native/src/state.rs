@@ -494,6 +494,9 @@ pub struct TurnState {
     /// 本回合已使用牌数（swd 灵武批 120，规则 v307；上游 `countUsed()`
     /// 无参口径——本回合全部使用；换回合清零）。
     pub cards_used_turn: u32,
+    /// 燎原·本次【杀】的额外闪需求/加伤数（swd 批 145，规则 v319）：
+    /// 上游 `storage.liaoyuan`（杀结算开始置数、伤害时加伤、杀结束清零）。
+    pub liaoyuan_count: u8,
     /// 额外阶段队列（同批）：`insertPhase` 原语——阶段结束时若非空则弹出
     /// 该阶段作为下一阶段（码同 `Phase`：0 准备/1 摸牌/2 出牌/3 弃牌/4 结束）。
     pub extra_phases: Vec<u8>,
