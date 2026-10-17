@@ -1220,6 +1220,10 @@ pub enum HostBehavior {
     /// 与一名攻击距离大于 1 的角色各摸 1。登记差异：自选目标→座位序首个
     /// 确定性近似；可放弃→恒发动近似。
     SwdLingxian,
+    /// 拼点（tag 444，deferred 消解批 独孤宁珂）：出牌阶段限一次，弃一张手牌，
+    /// 令两名角色拼点：赢者获得该牌、输者受赢者 1 伤。登记差异：拼点牌由
+    /// 两目标自选→确定性与座位序近似。
+    SwdNlianji,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1505,6 +1509,7 @@ impl HostBehavior {
             HostBehavior::SwdRexue => 441,
             HostBehavior::SwdHuanyin => 442,
             HostBehavior::SwdLingxian => 443,
+            HostBehavior::SwdNlianji => 444,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2189,6 +2194,7 @@ impl HostBehavior {
             441 => HostBehavior::SwdRexue,
             442 => HostBehavior::SwdHuanyin,
             443 => HostBehavior::SwdLingxian,
+            444 => HostBehavior::SwdNlianji,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2209,7 +2215,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 440] = [
+        pub const ALL: [HostBehavior; 441] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2650,6 +2656,7 @@ impl HostBehavior {
         HostBehavior::SwdRexue,
         HostBehavior::SwdHuanyin,
         HostBehavior::SwdLingxian,
+        HostBehavior::SwdNlianji,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2852,6 +2859,7 @@ impl HostBehavior {
             HostBehavior::SwdRexue => "host:rexue",
             HostBehavior::SwdHuanyin => "host:huanyin",
             HostBehavior::SwdLingxian => "host:lingxian",
+            HostBehavior::SwdNlianji => "host:nlianji",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3183,6 +3191,7 @@ impl HostBehavior {
             // 归汉：目录锚（limited 确认逻辑在 DyingSaveMachine 内联）
             HostBehavior::WudianGuihan => None,
             HostBehavior::SwdGTiandao => None,
+            HostBehavior::SwdNlianji => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
             // target shaBefore，原生以 CardUsed+targets 等价承载）
             HostBehavior::SwdTiebi => Some(TriggerMeta {
@@ -5809,6 +5818,7 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::SwdLingxian => (None, None),
+            HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
                 EventData::CardUsed(u) => (u.targets.first().copied(), None),
@@ -6030,6 +6040,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianGuihan => false,
             HostBehavior::SwdGTiandao => false,
+            HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
                 if let EventData::Phase { player, begin: true, .. } = event {
@@ -7872,6 +7883,22 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdHuajin => {
                 let p = ctx.state.player(owner);
                 if p.hand.is_empty() && p.equips.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 拼点（deferred 消解批）：手牌有牌
+            HostBehavior::SwdNlianji => {
+                if ctx.state.player(owner).hand.is_empty() {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -17846,6 +17873,170 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 Flow::Done
             }
+            // 拼点（deferred 消解批 独孤宁珂）：弃一张手牌，令两名角色拼点：
+            // 赢者获得该牌、输者受赢者 1 伤（拼点牌两目标自选；登记差异：
+            // 目标/拼点牌座位序与确定性近似）
+            HostBehavior::SwdNlianji => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "nlianji_throw",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.cards = vec![c];
+                    self.stage = HostStage::TargetChoice;
+                    Flow::Yield
+                }
+                HostStage::TargetChoice => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner && !ctx.core.player(*p).hand.is_empty())
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::CardsAsk;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "nlianji_target0",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::CardsAsk => {
+                    let Some(ChoiceOption::Player(t0)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(t0);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && *p != t0
+                                && !ctx.core.player(*p).hand.is_empty()
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::CompareTargetPick;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "nlianji_target1",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::CompareTargetPick => {
+                    let Some(ChoiceOption::Player(t1)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.targets = vec![t1];
+                    let Some(t0) = self.target else {
+                        return Flow::Done;
+                    };
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t0)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::ComparePlayerPick;
+                    Flow::WaitChoice {
+                        observer: t0,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "nlianji_t0_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::ComparePlayerPick => {
+                    let Some(ChoiceOption::Card(t0_card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(t0) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(t1) = self.targets.first().copied() else {
+                        return Flow::Done;
+                    };
+                    // t1 拼点牌：座位序首个手牌（登记差异：自选→首个）
+                    let Some(t1_card) = ctx.core.player(t1).hand.first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(throw_card) = self.cards.first().copied() else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t0).hand.contains(&t0_card) {
+                        ctx.discard_from_hand(t0, t0_card);
+                    }
+                    if ctx.core.player(t1).hand.contains(&t1_card) {
+                        ctx.discard_from_hand(t1, t1_card);
+                    }
+                    let r0 = ctx.catalog.cards[t0_card as usize].rank;
+                    let r1 = ctx.catalog.cards[t1_card as usize].rank;
+                    if r0 == r1 {
+                        return Flow::Done;
+                    }
+                    let (winner, loser) = if r0 > r1 { (t0, t1) } else { (t1, t0) };
+                    ctx.give_hand_card(self.owner, winner, throw_card);
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(winner),
+                        loser,
+                        1,
+                        crate::event::DamageNature::Normal,
+                        None,
+                    )));
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 禁言：查询锚（PlayCard 门），无独立效果步
             HostBehavior::WudianJinyan => Flow::Done,
             // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
@@ -29594,7 +29785,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdXuanzhou
         | HostBehavior::SwdFuniao
         | HostBehavior::SwdHeihuo
-        | HostBehavior::SwdToudan => {
+        | HostBehavior::SwdToudan
+        | HostBehavior::SwdNlianji => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

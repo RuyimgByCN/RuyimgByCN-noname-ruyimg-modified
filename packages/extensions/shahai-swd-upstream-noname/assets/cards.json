@@ -1486,7 +1486,7 @@
    "skills": [
     {
      "name": "nlianji",
-     "mapping": null
+     "mapping": "host:nlianji"
     },
     {
      "name": "touxi",
