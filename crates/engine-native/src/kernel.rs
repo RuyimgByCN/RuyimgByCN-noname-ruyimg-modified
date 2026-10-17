@@ -3550,6 +3550,19 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
             }
         }
     }
+    // 魂殉志·殉（swd 批 132）：出牌阶段**收束**时持有「殉」者死亡（上游
+    // hxunzhi2 phaseUseEnd forced player.die() 同口径——直接死亡，非伤害）
+    if !begin && phase == Phase::Play {
+        if let Some(def) = ctx.catalog.skill_by_name(crate::content::host::SWD_HXUNZHI2_KEY)
+        {
+            if ctx.core.skills.remove(&(player, def)).is_some() {
+                ctx.emit(EventData::Death {
+                    player,
+                    killer: None,
+                });
+            }
+        }
+    }
     // 护天（swd 批 131，规则 v314）：寄存只跨一个阶段边界（上游 `hutian4`
     // 临时技在下一阶段边界移除 → `hutian3` 于下一次阶段收束归还）。原生
     // 阶段收束的 commit 先于该阶段的触发窗，故「寄存当次的收束」看不到

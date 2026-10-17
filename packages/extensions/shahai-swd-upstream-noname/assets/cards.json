@@ -1666,7 +1666,7 @@
     },
     {
      "name": "hxunzhi",
-     "mapping": null
+     "mapping": "host:hxunzhi"
     }
    ]
   },
@@ -2011,6 +2011,10 @@
   {
    "name": "tianxiang2",
    "mapping": "host:tianxiang2"
+  },
+  {
+   "name": "hxunzhi2",
+   "mapping": "host:hxunzhi2"
   }
  ]
 }

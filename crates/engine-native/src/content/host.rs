@@ -1309,6 +1309,12 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 魂殉志（tag 488，swd deferred 消解批 132，`hxunzhi`）：出牌阶段限定
+    /// 技——视为对全部其他角色使用【万箭齐发】，并获得武圣/咆哮；出牌阶段
+    /// 结束时死亡（组技 `hxunzhi2`，tag 489 旗标 + 内联臂）。
+    Hxunzhi,
+    /// 魂殉志·殉（tag 489，`hxunzhi2`）：出牌阶段结束死亡（旗标 + 内联臂）。
+    Hxunzhi2,
     /// 护天（tag 487，swd deferred 消解批 131，`hutian`）：结束阶段可选——
     /// 选任意张牌（手/装备）寄存于一名体力上限不低于张数的其他角色处；
     /// 其体力低于寄存数时回复至该数；寄存期间其受到的伤害/失去体力以
@@ -1693,6 +1699,8 @@ impl HostBehavior {
             HostBehavior::Tianxiang => 485,
             HostBehavior::Tianxiang2 => 486,
             HostBehavior::Hutian => 487,
+            HostBehavior::Hxunzhi => 488,
+            HostBehavior::Hxunzhi2 => 489,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2421,6 +2429,8 @@ impl HostBehavior {
             485 => HostBehavior::Tianxiang,
             486 => HostBehavior::Tianxiang2,
             487 => HostBehavior::Hutian,
+            488 => HostBehavior::Hxunzhi,
+            489 => HostBehavior::Hxunzhi2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2441,7 +2451,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 484] = [
+        pub const ALL: [HostBehavior; 486] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2926,6 +2936,8 @@ impl HostBehavior {
         HostBehavior::Tianxiang,
         HostBehavior::Tianxiang2,
         HostBehavior::Hutian,
+        HostBehavior::Hxunzhi,
+        HostBehavior::Hxunzhi2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3172,6 +3184,8 @@ impl HostBehavior {
             HostBehavior::Tianxiang => "host:tianxiang",
             HostBehavior::Tianxiang2 => "host:tianxiang2",
             HostBehavior::Hutian => "host:hutian",
+            HostBehavior::Hxunzhi => "host:hxunzhi",
+            HostBehavior::Hxunzhi2 => "host:hxunzhi2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3651,6 +3665,9 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 魂殉志 / 殉：无触发时机（主动面 + 内联臂）
+            HostBehavior::Hxunzhi => None,
+            HostBehavior::Hxunzhi2 => None,
             // 护天：自己阶段结束（可选）
             HostBehavior::Hutian => Some(TriggerMeta {
                 event: EventKind::PhaseEnd,
@@ -5939,6 +5956,11 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 魂殉志（swd 批 132）：目录技能名（万箭 + 授予武圣/咆哮 + 出牌阶段末死亡）。
+pub const SWD_HXUNZHI_KEY: &str = "hxunzhi";
+/// 魂殉志·殉（同批）：目录技能名（旗标；内联臂于出牌阶段收束）。
+pub const SWD_HXUNZHI2_KEY: &str = "hxunzhi2";
+
 /// 护天（swd 批 131）：目录技能名（阶段结束寄存牌作护体）。
 pub const SWD_HUTIAN_KEY: &str = "hutian";
 
@@ -6819,6 +6841,8 @@ impl HostSkillBehavior {
             HostBehavior::Tianxiang => (None, None),
             HostBehavior::Tianxiang2 => (None, None),
             HostBehavior::Hutian => (None, None),
+            HostBehavior::Hxunzhi => (None, None),
+            HostBehavior::Hxunzhi2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7153,6 +7177,8 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
+            HostBehavior::Hxunzhi => false,
+            HostBehavior::Hxunzhi2 => false,
             // 护天：自己阶段结束、手牌非空且当前无寄存
             HostBehavior::Hutian => matches!(event, EventData::Phase { begin: false, .. })
                 && !ctx.state.player(owner).hand.is_empty()
@@ -9268,6 +9294,32 @@ impl SkillBehavior for HostSkillBehavior {
             //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
             HostBehavior::SwdJinlin => {
                 if ctx.state.player(owner).jinlin_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 魂殉志（swd 批 132）：出牌阶段主动（限定——实例启用时）
+            HostBehavior::Hxunzhi => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let enabled = ctx
+                    .catalog
+                    .skill_by_name(SWD_HXUNZHI_KEY)
+                    .and_then(|d| ctx.state.skills.get(&(owner, d)).map(|i| i.enabled))
+                    .unwrap_or(false);
+                if !enabled {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -20338,6 +20390,80 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 魂殉志：万箭齐发 + 授予武圣/咆哮/殉 + 觉醒自身
+            HostBehavior::Hxunzhi => {
+                if !ctx.core.player(self.owner).alive {
+                    return Flow::Done;
+                }
+                // 觉醒（一次性）：禁用自身实例
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_HXUNZHI_KEY) {
+                    if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, def)) {
+                        inst.enabled = false;
+                    }
+                    ctx.log(LogEvent::SkillToggled {
+                        player: self.owner,
+                        skill: ctx.catalog.skill_name(def),
+                        enabled: false,
+                    });
+                }
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "魂殉志",
+                    owner: self.owner,
+                });
+                // 视为对全部其他存活角色使用万箭齐发（座位序）
+                let targets: Vec<PlayerId> = ctx
+                    .core
+                    .seat_order_from(self.owner)
+                    .into_iter()
+                    .filter(|p| *p != self.owner && ctx.core.player(*p).alive)
+                    .collect();
+                if !targets.is_empty() {
+                    ctx.use_virtual_card(
+                        self.owner,
+                        crate::catalog::CardKind::ArcheryAttack,
+                        targets,
+                    );
+                }
+                // 授予武圣/咆哮（标准目录技）+ 殉（旗标）
+                for name in ["武圣", "咆哮"] {
+                    let Some(def) = ctx.catalog.skill_by_name(name) else {
+                        continue;
+                    };
+                    if !ctx.core.skills.contains_key(&(self.owner, def)) {
+                        ctx.core.skills.insert(
+                            (self.owner, def),
+                            crate::state::SkillInstance {
+                                owner: self.owner,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 0,
+                            },
+                        );
+                        ctx.log(LogEvent::SkillToggled {
+                            player: self.owner,
+                            skill: ctx.catalog.skill_name(def),
+                            enabled: true,
+                        });
+                    }
+                }
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_HXUNZHI2_KEY) {
+                    if !ctx.core.skills.contains_key(&(self.owner, def)) {
+                        ctx.core.skills.insert(
+                            (self.owner, def),
+                            crate::state::SkillInstance {
+                                owner: self.owner,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 0,
+                            },
+                        );
+                    }
+                }
+                Flow::Done
+            }
+            HostBehavior::Hxunzhi2 => Flow::Done,
             // 护天：选任意张牌 → 选体力上限足够的目标 → 寄存 + 补至张数
             HostBehavior::Hutian => match self.stage {
                 HostStage::Act => {
