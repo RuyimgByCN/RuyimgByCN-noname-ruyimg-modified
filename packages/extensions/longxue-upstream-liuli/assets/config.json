@@ -1,0 +1,14 @@
+{
+ "source": "noname-liuli",
+ "upstream_path": "noname/extension/龙血玄黄/extension.js",
+ "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+ "package_name": "龙血玄黄",
+ "package_version": "1.0",
+ "author": "夕、上骞、🦘、某个不为人知的萌新",
+ "settings": {
+  "shengjian": true
+ },
+ "labels": {
+  "shengjian": "圣剑，启动！"
+ }
+}

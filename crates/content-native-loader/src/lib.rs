@@ -41,6 +41,7 @@ mod omnisearch;
 mod shousha;
 mod shousha_mvp;
 mod sj_settings;
+mod longxue;
 mod update_guard;
 pub use coin::{
     apply_coin_commands, buy_item, change_coin, mark_phase_started, open_coin_session,
@@ -48,6 +49,9 @@ pub use coin::{
     start_item, stop_item, toggle_snow_fall, toggle_snow_size, CoinConfig, CoinDisplay, CoinError,
     CoinGate, CoinMode, CoinSession, IdentityRole, SettleOutcome, SettleRequest, ShopItem,
     SnowSize,
+};
+pub use longxue::{
+    longxue_unlock_report, parse_longxue_config, LongxueConfig, LongxueError, LONGXUE_THRESHOLDS,
 };
 pub use boss_playpack::{
     apply_boss_play_line, exclude_versus_ladder, filter_allowed, init_outcome, merge_translate,
