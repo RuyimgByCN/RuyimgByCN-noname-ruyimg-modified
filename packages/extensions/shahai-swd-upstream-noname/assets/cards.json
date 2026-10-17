@@ -1254,7 +1254,7 @@
     },
     {
      "name": "tianxiang",
-     "mapping": null
+     "mapping": "host:tianxiang"
     }
    ]
   },
@@ -2007,6 +2007,10 @@
   {
    "name": "swd_jinlin2",
    "mapping": "host:jinlin2"
+  },
+  {
+   "name": "tianxiang2",
+   "mapping": "host:tianxiang2"
   }
  ]
 }

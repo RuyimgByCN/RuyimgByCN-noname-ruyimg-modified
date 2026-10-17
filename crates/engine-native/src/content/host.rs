@@ -1309,6 +1309,12 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 天香（tag 485，swd deferred 消解批 130，`tianxiang`）：受到伤害前
+    /// 可选——弃一张红桃手牌，把该伤害转移给一名其他角色；其承受后按其
+    /// 实际失去的体力摸等量牌（组技 `tianxiang2`，运行时授予，tag 486）。
+    Tianxiang,
+    /// 天香·受（tag 486，`tianxiang2`）：伤害结算后按其失去体力摸牌并移除。
+    Tianxiang2,
     /// 颂词（tag 484，swd deferred 消解批 129，`songci`）：出牌阶段主动
     /// （可重复）——选一名未发动过的角色（含自己）：其手牌多于体力则弃 2 张
     /// （手/装备），否则摸 2 张；全部角色均已记录时弃牌阶段末摸 1（组技
@@ -1678,6 +1684,8 @@ impl HostBehavior {
             HostBehavior::SwdLinyun => 482,
             HostBehavior::SwdZhuhai => 483,
             HostBehavior::Songci => 484,
+            HostBehavior::Tianxiang => 485,
+            HostBehavior::Tianxiang2 => 486,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2403,6 +2411,8 @@ impl HostBehavior {
             482 => HostBehavior::SwdLinyun,
             483 => HostBehavior::SwdZhuhai,
             484 => HostBehavior::Songci,
+            485 => HostBehavior::Tianxiang,
+            486 => HostBehavior::Tianxiang2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2423,7 +2433,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 481] = [
+        pub const ALL: [HostBehavior; 483] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2905,6 +2915,8 @@ impl HostBehavior {
         HostBehavior::SwdLinyun,
         HostBehavior::SwdZhuhai,
         HostBehavior::Songci,
+        HostBehavior::Tianxiang,
+        HostBehavior::Tianxiang2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3148,6 +3160,8 @@ impl HostBehavior {
             HostBehavior::SwdLinyun => "host:linyun",
             HostBehavior::SwdZhuhai => "host:zhuhai",
             HostBehavior::Songci => "host:songci",
+            HostBehavior::Tianxiang => "host:tianxiang",
+            HostBehavior::Tianxiang2 => "host:tianxiang2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3625,6 +3639,22 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 天香：自己受到伤害前（可选）
+            HostBehavior::Tianxiang => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 天香·受：自己受到伤害结算后（运行时授予）
+            HostBehavior::Tianxiang2 => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 颂词：出牌阶段主动（activate 分支；无触发时机）
@@ -5891,6 +5921,11 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 天香（swd 批 130）：目录技能名（受伤前弃红桃转移伤害）。
+pub const SWD_TIANXIANG_KEY: &str = "tianxiang";
+/// 天香·受（同批）：目录技能名（运行时授予；按失去体力摸牌后移除）。
+pub const SWD_TIANXIANG2_KEY: &str = "tianxiang2";
+
 /// 颂词（swd 批 129）：目录技能名（选未记录角色：弃 2 或摸 2）。
 pub const SONGCI_KEY: &str = "songci";
 
@@ -6760,6 +6795,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdLinyun => (None, None),
             HostBehavior::SwdZhuhai => (None, None),
             HostBehavior::Songci => (None, None),
+            HostBehavior::Tianxiang => (None, None),
+            HostBehavior::Tianxiang2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7094,6 +7131,18 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
+            // 天香：自己受到未防止伤害且手中有红桃牌
+            HostBehavior::Tianxiang => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner
+                    && !d.prevented
+                    && d.amount > 0
+                    && ctx.state.player(owner).hand.iter().any(|c| {
+                        ctx.catalog.cards[*c as usize].suit == crate::catalog::Suit::Heart
+                    })),
+            // 天香·受：自己是该伤害的承受者
+            HostBehavior::Tianxiang2 => matches!(event,
+                EventData::Damage(d) if d.target == owner && !d.prevented),
             HostBehavior::Songci => false,
             // 诛害：他人结束阶段开始、其本回合造成过伤害、自己有杀且在射程内
             HostBehavior::SwdZhuhai => match event {
@@ -20263,6 +20312,130 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 天香：选红桃手牌 → 选目标 → 弃牌 + 伤害转移 + 授予天香·受
+            HostBehavior::Tianxiang => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            ctx.catalog.cards[*c as usize].suit == crate::catalog::Suit::Heart
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "tianxiang_heart",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&card) {
+                        return Flow::Done;
+                    }
+                    self.card = Some(card);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "tianxiang_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive || !ctx.core.player(self.owner).hand.contains(&card)
+                    {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "天香",
+                        owner: self.owner,
+                    });
+                    // 弃红桃牌
+                    ctx.discard_from_hand(self.owner, card);
+                    // 伤害转移（帧 target 改写 + 转移链记录）
+                    {
+                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                        if let EventData::Damage(d) = &mut frame.data {
+                            d.redirect_chain.push(d.target);
+                            d.target = target;
+                        }
+                    }
+                    // 授予「天香·受」（运行时实例；承受后按其失去体力摸牌）
+                    if let Some(def) = ctx.catalog.skill_by_name(SWD_TIANXIANG2_KEY) {
+                        if !ctx.core.skills.contains_key(&(target, def)) {
+                            ctx.core.skills.insert(
+                                (target, def),
+                                crate::state::SkillInstance {
+                                    owner: target,
+                                    enabled: true,
+                                    once_used: false,
+                                    expires_end_of_turn: false,
+                                    rounds: 0,
+                                },
+                            );
+                            ctx.log(LogEvent::SkillToggled {
+                                player: target,
+                                skill: ctx.catalog.skill_name(def),
+                                enabled: true,
+                            });
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 天香·受：按本次伤害量摸牌后移除自身
+            HostBehavior::Tianxiang2 => {
+                let amount = ctx.current_damage().map(|d| d.amount).unwrap_or(0);
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_TIANXIANG2_KEY) {
+                    ctx.core.skills.remove(&(self.owner, def));
+                }
+                if amount > 0 {
+                    ctx.draw_cards(self.owner, amount as usize);
+                }
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "天香·受",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
             // 颂词：选未记录角色 → 手牌多于体力弃 2 否则摸 2 → 记录
             HostBehavior::Songci => match self.stage {
                 HostStage::Act => {
