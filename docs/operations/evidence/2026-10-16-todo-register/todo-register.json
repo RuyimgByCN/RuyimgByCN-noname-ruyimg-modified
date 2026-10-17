@@ -52,7 +52,8 @@
     "swd_batch_113": "2026-10-17 swd 批 113 灵矢（tag 460，无版本/无 golden 位移）：149/184 映射、deferred 33、计亭整将闭环；engine-native 895/0/1、Gate 1b exit 0。",
     "t13_ai_policy_v2": "2026-10-17 T13-AI-STRONGER-POLICY 关闭：策略变体 1（全手牌候选+牌值评分）同 64 节点座位 0 胜率 2%→70%；附内核应答路由修复（1 场 golden 重录，无版本变化）。",
     "l13_closure_2026_10_17": "T12-SRC-L13 resolved after eight-dimension evidence. Whole-pack 19/37; L13 not counted via any other source line.",
-    "swd_batch_114": "2026-10-17 swd 批 114 锦鳞（tag 461/462，规则 v302/存档 v87）：150/184 映射、deferred 32、司空蔷整将闭环；14 golden 重录 + 版本回退探针，engine-native 899/0/1、Gate 1b exit 0。"
+    "swd_batch_114": "2026-10-17 swd 批 114 锦鳞（tag 461/462，规则 v302/存档 v87）：150/184 映射、deferred 32、司空蔷整将闭环；14 golden 重录 + 版本回退探针，engine-native 899/0/1、Gate 1b exit 0。",
+    "d5_infinite_hp": "2026-10-17 D5 前置：无限体力哨兵（装载器 Infinity → INFINITE_HP；伤害/回复/上限减门控；不濒死；手牌上限按哨兵）。engine-native 901/0/1，14 golden 零扰动。D5/T11-BOSS-ZHUGE-LIANG 仍 open。"
   },
   "items": [
     {
@@ -350,7 +351,8 @@
         "T11",
         "D5",
         "T9"
-      ]
+      ],
+      "notes": "2026-10-17：前置原语无限体力已交付（`INFINITE_HP` 哨兵；证据 docs/operations/evidence/2026-10-17-d5-infinite-hp/）。余：四技迁移（禳星/隐月/起风/改命，含 `skipDamage` 表与三星星存储）+ boss_zhugeliang 装配与 Boss 关卡接入。"
     },
     {
       "id": "T11-BOSS-PANGTONG-EXTERNAL",
@@ -576,7 +578,8 @@
         "T9",
         "T11",
         "L29"
-      ]
+      ],
+      "notes": "2026-10-17：无限体力前置原语已落地（装载器接受 `Infinity` → `INFINITE_HP` 哨兵；伤害/失去体力/回复不改体力、不濒死、手牌上限按哨兵基数；14 golden 零扰动）——证据 docs/operations/evidence/2026-10-17-d5-infinite-hp/。余：四技 `hlss_xiangxing`/`hlss_yueyin`/`hlss_fengqi`/`hlss_gaiming`（liuli `character/extra.js`）+ Boss 装配 + `mbqianlong`/`_CMeffects`。"
     },
     {
       "id": "T15-3-LEGACY-PORT",

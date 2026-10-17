@@ -4,6 +4,8 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
+> **2026-10-17 D5 前置**：无限体力哨兵落地（装载器 `Infinity` → `INFINITE_HP`；伤害/失去体力/回复/上限减门控、不濒死、手牌上限按哨兵基数；engine-native **901/0/1**、14 golden 零扰动）——[证据](../2026-10-17-d5-infinite-hp/README.md)；`D5-LX-MIGRATION`/`T11-BOSS-ZHUGE-LIANG` 保持 open（余四技与 Boss 装配）。
+
 > **2026-10-17 swd 批 114**：锦鳞（tag 461/462，字段批 v302/存档 v87）消解——150/184 映射、deferred 32、司空蔷整将闭环；14 golden 重录 + 版本回退探针，engine-native **899/0/1**、Gate 1b exit 0（[证据](../2026-10-17-t12-swd-deferred-b114/README.md)）。
 
 > **2026-10-17 L13 手杀MVP 八项整包**：整包 18/37 → **19/37**、`T12-SRC-L13` 关闭（[证据](../2026-10-17-t12-l13-eight/README.md)）；同批修客户端扩展存储冒烟过期断言与 L23 过期依赖反例。

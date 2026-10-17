@@ -437,6 +437,11 @@ impl<'a> Ctx<'a> {
     /// ——新事件种九处接线成本，无消费者，登记边界）。
     pub fn lose_max_hp(&mut self, player: PlayerId, amount: u32) {
         let p = self.core.player_mut(player);
+        // 无限体力（上游 Infinity）：体力上限不减（Infinity - n = Infinity）。
+        if p.infinite_hp() {
+            self.out.push(LogEvent::MaxHpLost { player, amount: 0 });
+            return;
+        }
         let cut = (p.max_hp.min(amount)) as i32;
         p.max_hp -= cut as u32;
         if p.hp > p.max_hp as i32 {
@@ -454,7 +459,10 @@ impl<'a> Ctx<'a> {
             return 0;
         }
         let before = p.hp;
-        p.hp = before.saturating_add(amount as i32).min(p.max_hp as i32);
+        // 无限体力（上游 Infinity）：回复不改变体力（Infinity + n = Infinity）。
+        if !p.infinite_hp() {
+            p.hp = before.saturating_add(amount as i32).min(p.max_hp as i32);
+        }
         let gained = (p.hp - before).max(0) as u32;
         if p.hp > 0 {
             p.dying = false;

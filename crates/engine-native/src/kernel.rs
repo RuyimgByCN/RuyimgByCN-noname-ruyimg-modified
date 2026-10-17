@@ -391,7 +391,11 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
         }
     }
     let p = ctx.core.player_mut(d.target);
-    p.hp -= amount as i32;
+    // 无限体力（上游 Infinity）：伤害照常结算与记录，但不改变体力
+    //（hp 保持 == max_hp，故「已受伤」类判据恒假——与上游一致）。
+    if !p.infinite_hp() {
+        p.hp -= amount as i32;
+    }
     ctx.log(LogEvent::DamageDealt {
         source: d.source,
         target: d.target,
@@ -1067,7 +1071,9 @@ pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, amount: u32) {
         return;
     }
     let p = ctx.core.player_mut(player);
-    p.hp -= amount as i32;
+    if !p.infinite_hp() {
+        p.hp -= amount as i32;
+    }
     ctx.log(LogEvent::HpLost { player, amount });
     let entering = ctx.core.player(player).hp <= 0 && !ctx.core.player(player).dying;
     if entering {

@@ -1,0 +1,5 @@
+test t9_invalid_hp_values_are_rejected ... ok
+test infinite_hp_survives_damage_and_recovery ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

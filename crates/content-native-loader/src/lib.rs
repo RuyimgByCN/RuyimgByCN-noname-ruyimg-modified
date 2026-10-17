@@ -668,7 +668,19 @@ fn bridge_generals_inner(
         }
         let faction = faction_of(req_str(g, "faction", "generals[].faction")?)?;
         let gender = gender_of(req_str(g, "gender", "generals[].gender")?)?;
-        let max_hp = req_int(g, "hp", "generals[].hp", 1..=u64::from(u8::MAX))? as u32;
+        // D5/T11-BOSS-ZHUGE-LIANG 前置：体力 `Infinity`（上游 JS 字面量，
+        // 包数据只能写成字符串）映射为无限体力哨兵；其余非法值仍拒绝。
+        let max_hp = match g.get("hp") {
+            Some(serde_json::Value::String(text)) if text == "Infinity" => {
+                engine_native::state::INFINITE_HP
+            }
+            Some(serde_json::Value::Number(n))
+                if n.as_u64() == Some(u64::from(engine_native::state::INFINITE_HP)) =>
+            {
+                engine_native::state::INFINITE_HP
+            }
+            _ => req_int(g, "hp", "generals[].hp", 1..=u64::from(u8::MAX))? as u32,
+        };
         generals.push(ExtensionGeneral {
             name: names::intern(name.to_string()),
             faction,

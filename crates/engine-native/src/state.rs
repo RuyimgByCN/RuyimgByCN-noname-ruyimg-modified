@@ -245,7 +245,19 @@ pub struct PlayerState {
     pub jinlin_used: bool,
 }
 
+/// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
+/// `max_hp` 等于该值即视为无限体力——伤害/失去体力/回复**都不改变**体力
+/// （保持 hp == max_hp，上游 Infinity 同口径），濒死判定永不进入，手牌上限
+/// 基数取哨兵值（等效无上限）。投影直接暴露哨兵数值，宿主可映射为 ∞
+///（登记差异：不新增视图字段）。
+pub const INFINITE_HP: u32 = i32::MAX as u32;
+
 impl PlayerState {
+    /// 该玩家是否持有无限体力（哨兵判定）。
+    pub fn infinite_hp(&self) -> bool {
+        self.max_hp == INFINITE_HP
+    }
+
     pub fn new(hp: u32) -> Self {
         Self {
             alive: true,
