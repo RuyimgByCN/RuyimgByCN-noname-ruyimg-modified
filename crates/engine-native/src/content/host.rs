@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 此桥邪（tag 490，swd deferred 消解批 133，`cyqiaoxie`）：自己失去
+    /// 装备牌后，按失去张数逐次——从牌堆/弃牌堆可得的**机关牌名**中选一张
+    /// 使用（自目标/单目标/AOE 按牌名规则；取消即止）。
+    Cyqiaoxie,
     /// 魂殉志（tag 488，swd deferred 消解批 132，`hxunzhi`）：出牌阶段限定
     /// 技——视为对全部其他角色使用【万箭齐发】，并获得武圣/咆哮；出牌阶段
     /// 结束时死亡（组技 `hxunzhi2`，tag 489 旗标 + 内联臂）。
@@ -1701,6 +1705,7 @@ impl HostBehavior {
             HostBehavior::Hutian => 487,
             HostBehavior::Hxunzhi => 488,
             HostBehavior::Hxunzhi2 => 489,
+            HostBehavior::Cyqiaoxie => 490,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2431,6 +2436,7 @@ impl HostBehavior {
             487 => HostBehavior::Hutian,
             488 => HostBehavior::Hxunzhi,
             489 => HostBehavior::Hxunzhi2,
+            490 => HostBehavior::Cyqiaoxie,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2451,7 +2457,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 486] = [
+        pub const ALL: [HostBehavior; 487] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2938,6 +2944,7 @@ impl HostBehavior {
         HostBehavior::Hutian,
         HostBehavior::Hxunzhi,
         HostBehavior::Hxunzhi2,
+        HostBehavior::Cyqiaoxie,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3186,6 +3193,7 @@ impl HostBehavior {
             HostBehavior::Hutian => "host:hutian",
             HostBehavior::Hxunzhi => "host:hxunzhi",
             HostBehavior::Hxunzhi2 => "host:hxunzhi2",
+            HostBehavior::Cyqiaoxie => "host:cyqiaoxie",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3663,6 +3671,14 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 此桥邪：自己失去装备牌后（频繁技——恒发动，无确认门）
+            HostBehavior::Cyqiaoxie => Some(TriggerMeta {
+                event: EventKind::CardsLost,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 魂殉志 / 殉：无触发时机（主动面 + 内联臂）
@@ -5956,6 +5972,121 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 此桥邪（swd 批 133）：目录技能名（失去装备后使用机关牌）。
+pub const SWD_CYQIAOXIE_KEY: &str = "cyqiaoxie";
+
+/// 机关牌名目标规则（按上游 filterTarget 与引擎 PlayCard 校验同口径）。
+enum CyqiaoxieRule {
+    SelfTarget,
+    OneOther,
+    AllOthers,
+}
+
+fn cyqiaoxie_rule(name: &str) -> Option<CyqiaoxieRule> {
+    if name.contains("jiguantong") {
+        Some(CyqiaoxieRule::AllOthers)
+    } else if name.contains("gouhunluo")
+        || name.contains("jiguanfeng")
+        || name.contains("jiguanyuan")
+        || name.contains("jiguanyaoshu")
+    {
+        Some(CyqiaoxieRule::OneOther)
+    } else if name.contains("zhiluxiaohu")
+        || name.contains("mujiaren")
+        || name.contains("jiguanshu")
+    {
+        Some(CyqiaoxieRule::SelfTarget)
+    } else {
+        None
+    }
+}
+
+/// 单目标机关牌的目标合法性（近似：勾魂锣未挂附 / 机关凤存活 /
+/// 机关妖术 手牌>体力且无标记 / 机关怨 无标记）。
+fn cyqiaoxie_target_ok(ctx: &Ctx<'_>, target: PlayerId, name: &str) -> bool {
+    if !ctx.core.player(target).alive {
+        return false;
+    }
+    if name.contains("gouhunluo") || name.contains("jiguanyuan") {
+        return ctx.core.player(target).gouhunluo_rounds == 0
+            && ctx.core.player(target).jiguanyuan_cards.is_empty();
+    }
+    if name.contains("jiguanyaoshu") {
+        let hand = ctx.core.player(target).hand.len() as i32;
+        return hand > ctx.core.player(target).hp
+            && ctx.core.player(target).equips.len() < 5;
+    }
+    true
+}
+
+/// 机关牌候选：牌堆/弃牌堆中可得的机关牌（各牌名取首张代表；自目标类
+/// 检查自身前置、单目标类检查存在合法目标；至多 3 张——上游
+/// `randomGets(3)` 的确定性近似）。
+fn cyqiaoxie_candidates(ctx: &Ctx<'_>, owner: PlayerId) -> Vec<ChoiceOption> {
+    let mut seen: Vec<&str> = Vec::new();
+    let mut out: Vec<ChoiceOption> = Vec::new();
+    for c in ctx.core.deck.iter().chain(ctx.core.discard.iter()).copied() {
+        let def = &ctx.catalog.cards[c as usize];
+        if def.kind != crate::catalog::CardKind::Jiguan {
+            continue;
+        }
+        let name: &str = def.name;
+        if seen.contains(&name) {
+            continue;
+        }
+        let Some(rule) = cyqiaoxie_rule(&name) else {
+            continue;
+        };
+        let ok = match rule {
+            CyqiaoxieRule::SelfTarget => {
+                if name.contains("mujiaren") {
+                    !ctx.core.turn.mujiaren_used
+                } else if name.contains("jiguanshu") {
+                    !ctx.core.player(owner).equips.is_empty()
+                } else {
+                    true
+                }
+            }
+            CyqiaoxieRule::OneOther => ctx
+                .core
+                .alive_players()
+                .any(|p| p != owner && cyqiaoxie_target_ok(ctx, p, &name)),
+            CyqiaoxieRule::AllOthers => ctx
+                .core
+                .alive_players()
+                .any(|p| p != owner),
+        };
+        if !ok {
+            continue;
+        }
+        seen.push(name);
+        out.push(ChoiceOption::Card(c));
+        if out.len() >= 3 {
+            break;
+        }
+    }
+    out
+}
+
+/// 使用所选机关牌：实体从所在区入手 → `CardUsed` 帧结算（机关牌按名路由）。
+fn cyqiaoxie_use(ctx: &mut Ctx<'_>, owner: PlayerId, card: CardId, targets: Vec<PlayerId>) {
+    if let Some(pos) = ctx.core.deck.iter().position(|c| *c == card) {
+        ctx.core.deck.remove(pos);
+    } else if let Some(pos) = ctx.core.discard.iter().position(|c| *c == card) {
+        ctx.core.discard.remove(pos);
+    } else {
+        return;
+    }
+    ctx.core.player_mut(owner).hand.push(card);
+    ctx.log(LogEvent::SkillTriggered {
+        skill: "此桥邪",
+        owner,
+    });
+    ctx.emit(crate::event::EventData::CardUsed(crate::machine::card_use(
+        card, owner, targets,
+    )));
+}
+
 /// 魂殉志（swd 批 132）：目录技能名（万箭 + 授予武圣/咆哮 + 出牌阶段末死亡）。
 pub const SWD_HXUNZHI_KEY: &str = "hxunzhi";
 /// 魂殉志·殉（同批）：目录技能名（旗标；内联臂于出牌阶段收束）。
@@ -6843,6 +6974,7 @@ impl HostSkillBehavior {
             HostBehavior::Hutian => (None, None),
             HostBehavior::Hxunzhi => (None, None),
             HostBehavior::Hxunzhi2 => (None, None),
+            HostBehavior::Cyqiaoxie => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7179,6 +7311,18 @@ impl SkillBehavior for HostSkillBehavior {
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
             HostBehavior::Hxunzhi => false,
             HostBehavior::Hxunzhi2 => false,
+            // 此桥邪：自己失去的牌中含装备区来源
+            HostBehavior::Cyqiaoxie => match event {
+                EventData::CardsLost {
+                    player, origins, ..
+                } => {
+                    *player == owner
+                        && origins
+                            .iter()
+                            .any(|o| *o == crate::event::LostOrigin::Equip)
+                }
+                _ => false,
+            },
             // 护天：自己阶段结束、手牌非空且当前无寄存
             HostBehavior::Hutian => matches!(event, EventData::Phase { begin: false, .. })
                 && !ctx.state.player(owner).hand.is_empty()
@@ -20390,6 +20534,113 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 此桥邪：失去装备后逐次使用机关牌（自目标/单目标/AOE）
+            HostBehavior::Cyqiaoxie => match self.stage {
+                HostStage::Act => {
+                    let lost_equips = match ctx
+                        .res
+                        .frame(ctx.current_frame_id())
+                        .map(|f| &f.data)
+                    {
+                        Some(EventData::CardsLost { origins, .. }) => origins
+                            .iter()
+                            .filter(|o| **o == crate::event::LostOrigin::Equip)
+                            .count(),
+                        _ => 0,
+                    };
+                    if lost_equips == 0 {
+                        return Flow::Done;
+                    }
+                    self.cards = (0..lost_equips).map(|_| 0u32).collect();
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                HostStage::ShuchuiTargetLoop => {
+                    if self.cards.is_empty() {
+                        return Flow::Done;
+                    }
+                    let options = cyqiaoxie_candidates(ctx, self.owner);
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.cards.pop();
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "cyqiaoxie_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.card = Some(card);
+                    let name = ctx.catalog.cards[card as usize].name;
+                    match cyqiaoxie_rule(name) {
+                        Some(CyqiaoxieRule::AllOthers) => {
+                            let targets: Vec<PlayerId> = ctx
+                                .core
+                                .seat_order_from(self.owner)
+                                .into_iter()
+                                .filter(|p| *p != self.owner && ctx.core.player(*p).alive)
+                                .collect();
+                            cyqiaoxie_use(ctx, self.owner, card, targets);
+                            self.stage = HostStage::ShuchuiTargetLoop;
+                            Flow::Yield
+                        }
+                        Some(CyqiaoxieRule::OneOther) => {
+                            let options: Vec<ChoiceOption> = ctx
+                                .core
+                                .alive_players()
+                                .filter(|p| {
+                                    *p != self.owner && cyqiaoxie_target_ok(ctx, *p, name)
+                                })
+                                .map(ChoiceOption::Player)
+                                .collect();
+                            if options.is_empty() {
+                                return Flow::Done;
+                            }
+                            self.stage = HostStage::TargetChoice;
+                            Flow::WaitChoice {
+                                observer: self.owner,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::SelectPlayers,
+                                    prompt: "cyqiaoxie_target",
+                                    options,
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: false,
+                                },
+                            }
+                        }
+                        Some(CyqiaoxieRule::SelfTarget) => {
+                            cyqiaoxie_use(ctx, self.owner, card, vec![self.owner]);
+                            self.stage = HostStage::ShuchuiTargetLoop;
+                            Flow::Yield
+                        }
+                        None => Flow::Done,
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    cyqiaoxie_use(ctx, self.owner, card, vec![target]);
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
             // 魂殉志：万箭齐发 + 授予武圣/咆哮/殉 + 觉醒自身
             HostBehavior::Hxunzhi => {
                 if !ctx.core.player(self.owner).alive {
