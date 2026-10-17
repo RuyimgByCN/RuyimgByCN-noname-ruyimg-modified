@@ -4,7 +4,7 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
-> **2026-10-17 收口批**：本次再关 15 项（`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`/`HUANREN`/`HIDECHAIN-8`/`WING-ROTATION`/`BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`、`COV-EQUIP-TIMING-WINDOW`、`COV-TRIGGER-GETINDEX-BUCKETS`、`T12-SWD-EXTRA-CARDS-DISPOSITION`），resolved 21→**36**、open 68→**53**。依据为各批已落盘证据（[T8 具名 filter](../2026-10-17-t8-named-filters/README.md)、[D4 B4](../2026-10-17-d4-boss-b4-huanren-wings/README.md)、[T9 钩挂](../2026-10-17-t9-lx-content-hooks/README.md)、[T15③](../2026-10-16-t15-3-v117-transplant/README.md)、[O4](../2026-10-16-o4-wasm-opt/README.md)、[O5](../2026-10-16-o5-profiling/README.md)、[奖惩审计](../2026-10-17-cov-reward-over-audit/README.md)、[无懈扩面](../2026-10-17-cov-nullify-judge-expand/README.md)、[装载/触发桶定案](../2026-10-17-cov-permanent-diffs/README.md)、[swd 多余卡处置](../2026-10-17-t12-swd-extra-cards-disposition/README.md)）。
+> **2026-10-17 收口批**：本次再关 17 项（`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`/`HUANREN`/`HIDECHAIN-8`/`WING-ROTATION`/`BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`、`COV-EQUIP-TIMING-WINDOW`、`COV-TRIGGER-GETINDEX-BUCKETS`、`T12-SWD-EXTRA-CARDS-DISPOSITION`、`T11-BOSS-DIZANG-DAYUAN`、`T11-BOSS-DIZANG-WULIANG-GAMEDRAW`），resolved 21→**38**、open 68→**51**。依据为各批已落盘证据（[T8 具名 filter](../2026-10-17-t8-named-filters/README.md)、[D4 B4](../2026-10-17-d4-boss-b4-huanren-wings/README.md)、[T9 钩挂](../2026-10-17-t9-lx-content-hooks/README.md)、[T15③](../2026-10-16-t15-3-v117-transplant/README.md)、[O4](../2026-10-16-o4-wasm-opt/README.md)、[O5](../2026-10-16-o5-profiling/README.md)、[奖惩审计](../2026-10-17-cov-reward-over-audit/README.md)、[无懈扩面](../2026-10-17-cov-nullify-judge-expand/README.md)、[装载/触发桶定案](../2026-10-17-cov-permanent-diffs/README.md)、[swd 多余卡处置](../2026-10-17-t12-swd-extra-cards-disposition/README.md)、[地藏王余项](../2026-10-17-t11-boss-dizang-remainders/README.md)）。
 
 ## 快照上下文
 
@@ -14,8 +14,8 @@
 | engine-native（主稿快照） | 807/0/1 |
 | 条目数 | **89**（原 85 + 拆出 4） |
 | 标为模糊（ambiguous） | **0**（原 13 已消解，见 [ambiguous-resolutions.md](./ambiguous-resolutions.md)） |
-| 已 resolved | **36**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
-| 仍 open | **53**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
+| 已 resolved | **38**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
+| 仍 open | **51**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
 
 ## 覆盖范围
 
@@ -52,8 +52,8 @@
 | `T11-BOSS-BIANSHEN-CHANGEBOSS` | docs/architecture/native-progress.md · T11 bianshen 勘验片；D4 | bianshen 死亡 changeBoss / bianshen4 同族关卡流程面——D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
 | `T11-BOSS-ZHUGE-LIANG` | docs/architecture/native-progress.md · T11 庞统/诸葛亮片 v277；D5 | Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技 ylyg* 龙血玄黄包依赖——D5 立项后由登记不落转待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | D5-LX-MIGRATION, T9-LX-BATTLE-TRACE | kernel-engineer |
 | `T11-BOSS-PANGTONG-EXTERNAL` | docs/architecture/native-progress.md · T11 庞统片 v277 | 庞统涅槃/浴火等外部包技依赖（shenhua oldniepan / offline ylygniepan+三外部技+loopType）——随外部包/龙血面推进。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | D5-LX-MIGRATION | kernel-engineer |
-| `T11-BOSS-DIZANG-DAYUAN` | docs/architecture/native-progress.md · T11 地藏王 v274 | 地藏王「大愿」：判定改写机 AI 态度面——条目只列已转换技，仍开放。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | — | kernel-engineer |
-| `T11-BOSS-DIZANG-WULIANG-GAMEDRAW` | docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md · 无量建局摸 3 | 地藏王「无量」建局摸 3 面（gameDrawAfter/enterGame）——自原孟婆抓包项拆出。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | — | kernel-engineer |
+| `T11-BOSS-DIZANG-DAYUAN` | docs/architecture/native-progress.md · T11 地藏王 v274 | 地藏王「大愿」：判定改写机 AI 态度面——条目只列已转换技，仍开放。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | — | kernel-engineer |
+| `T11-BOSS-DIZANG-WULIANG-GAMEDRAW` | docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md · 无量建局摸 3 | 地藏王「无量」建局摸 3 面（gameDrawAfter/enterGame）——自原孟婆抓包项拆出。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | — | kernel-engineer |
 | `T11-BOSS-SHIKIEIKI-EXCLUDED` | docs/architecture/native-progress.md · T11 Shikieiki 排除登记；ADR 0783 | 四季映姬 boss_yingzhong：外部武将库结构性依赖——**永久目录排除**（ADR 0783 确认）。未来将池基建另开新 ID。 | 排除确认（已确认） | resolved | — | kernel-engineer |
 | `T11-BOSS-MENGPO-WANGSHI-PLAY` | docs/architecture/native-progress.md · T11 孟婆 v270 | （已拆分关闭）往事打出面=v270 永久登记差异；mengpodie/huihun→`T11-BOSS-HUANREN`；无量建局摸3→`T11-BOSS-DIZANG-WULIANG-GAMEDRAW`。 | 拆分完成 | resolved | — | kernel-engineer |
 | `T11-EVENT-RNG-RESTORE-PARITY` | docs/architecture/native-progress.md · T11 完成条件末段 | T11 横切：同一命令下事件、随机流和恢复轨迹对照（逐项修复或登记；语义变则升规则版本）。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | — | rules-auditor |

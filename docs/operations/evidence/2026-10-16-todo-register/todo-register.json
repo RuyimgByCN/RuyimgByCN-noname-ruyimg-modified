@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 36,
-  "open_count": 53,
+  "resolved_count": 38,
+  "open_count": 51,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -48,7 +48,7 @@
   "l17_closure_2026_10_17": "T12-SRC-L17 resolved after its own liuli install. Whole-pack stays open at 12/37.",
   "l15_closure_2026_10_17": "T12-SRC-L15 resolved after its own liuli install. Whole-pack stays open at 11/37.",
   "l02_closure_2026_10_17": "T12-SRC-L02 resolved after its own liuli install. Whole-pack stays open at 10/37.",
-  "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。 另：COV-EQUIP-TIMING-WINDOW 与 COV-TRIGGER-GETINDEX-BUCKETS 定案关闭。 另：T12-SWD-EXTRA-CARDS-DISPOSITION 处置关闭。"
+  "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。 另：COV-EQUIP-TIMING-WINDOW 与 COV-TRIGGER-GETINDEX-BUCKETS 定案关闭。 另：T12-SWD-EXTRA-CARDS-DISPOSITION 处置关闭。 另：T11-BOSS-DIZANG-DAYUAN/WULIANG-GAMEDRAW 登记差异关闭。"
  },
  "items": [
   {
@@ -399,7 +399,7 @@
     "规则基准条目",
     "证据目录"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "kernel-engineer",
    "tags": [
@@ -408,15 +408,12 @@
    "notes": "ADR 0783 §5：明确不纳入 D4；判定改写 AI 态度面内容余项",
    "ambiguous": false,
    "resolution": {
-    "date": "2026-10-16",
-    "kind": "keep_open",
-    "conclusion": "单列内容余项（非 D4 关卡子系统）",
+    "date": "2026-10-17",
+    "kind": "registered_difference",
+    "conclusion": "登记差异（不实现）：大愿=判定改写机的 AI 态度面（get.attitude+chooseControl），原生判定改写为确定性策略、无态度模型；条目只列已转换技。",
     "evidence": [
-     "docs/adr/0783-boss-stage-flow-subsystem.md",
-     "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md"
-    ],
-    "disposition": "保持 open；不依赖 T11-BOSS-STAGE-SUBSYSTEM",
-    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+     "docs/operations/evidence/2026-10-17-t11-boss-dizang-remainders/README.md"
+    ]
    }
   },
   {
@@ -432,7 +429,7 @@
     "规则基准条目",
     "证据目录"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "kernel-engineer",
    "tags": [
@@ -440,16 +437,12 @@
    ],
    "notes": "非 D4 关卡流程；与大愿（T11-BOSS-DIZANG-DAYUAN）分立",
    "resolution": {
-    "date": "2026-10-16",
-    "kind": "split_new",
-    "conclusion": "自原 ambiguous 抓包项拆出的明确 open 项",
+    "date": "2026-10-17",
+    "kind": "registered_difference",
+    "conclusion": "登记差异（不实现）：无量建局摸 3（上游 gameDrawAfter/enterGame）缺「建局帧」原语；准备回复至 3 与结束摸 2 已落（v274）。",
     "evidence": [
-     "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
-     "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-    ],
-    "disposition": "新增 open",
-    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "split_from": "T11-BOSS-MENGPO-WANGSHI-PLAY"
+     "docs/operations/evidence/2026-10-17-t11-boss-dizang-remainders/README.md"
+    ]
    }
   },
   {
