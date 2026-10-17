@@ -716,7 +716,7 @@ pub fn run_query(
             let p = seat(player, "EmptyEquip")?;
             let mut filled = [false; 5];
             for c in &core.player(p).equips {
-                if let Some(slot) = catalog.card_kind(*c).equip_slot() {
+                if let Some(slot) = catalog.card_slot_of(core, *c) {
                     let i = match slot {
                         crate::catalog::EquipSlot::Weapon => 0,
                         crate::catalog::EquipSlot::Armor => 1,

@@ -1396,6 +1396,19 @@ impl Catalog {
         self.cards[card as usize].kind
     }
 
+    /// 牌的**实际**装备栏（swd 批 143 改造）：`declared_slots` 覆盖优先，
+    /// 否则取牌种固有栏位。装备技能仍按牌种授予（牌种未变）。
+    pub fn card_slot_of(
+        &self,
+        core: &crate::state::GameStateCore,
+        card: CardId,
+    ) -> Option<EquipSlot> {
+        core.declared_slots
+            .get(&card)
+            .copied()
+            .or_else(|| self.card_kind(card).equip_slot())
+    }
+
     /// 某事件类别的候选触发定义（静态顺序，确定）。
     pub fn candidates(&self, kind: EventKind) -> &[SkillDefId] {
         self.dispatch.get(&kind).map(Vec::as_slice).unwrap_or(&[])

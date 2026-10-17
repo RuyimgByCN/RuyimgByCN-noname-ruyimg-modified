@@ -101,6 +101,9 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
         EventKind::Damage => Stage::BeforeTriggers,
         // E03 翻面：前置取消窗口（漩涡面具等锁定技在 Commit 前派发）
         EventKind::TurnOverBefore => Stage::BeforeTriggers,
+        // 装备前置窗口（swd 批 143 改造，规则 v318）：BeforeTriggers 派发
+        // useCardToBegin 类技（改造改写装备栏后再入槽）
+        EventKind::Equipped => Stage::BeforeTriggers,
         // 死亡前置窗口（规则 v170）：BeforeTriggers 收集 dieBegin 类遗
         // 言/拦截技（changan 氏），Intrinsic 仍为 DeathMachine。
         EventKind::Death => Stage::BeforeTriggers,
@@ -144,6 +147,7 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         (EventKind::TurnOverBefore, Stage::BeforeTriggers) => Stage::AfterTriggers,
         (EventKind::TurnOverBefore, Stage::AfterTriggers) => Stage::Commit,
         (EventKind::TurnOverBefore, Stage::Commit) => Stage::Done,
+        (EventKind::Equipped, Stage::BeforeTriggers) => Stage::Commit,
         (EventKind::CardUsed, Stage::Commit) => Stage::AfterTriggers,
         (EventKind::CardUsed, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::CardUsed, Stage::Intrinsic) => Stage::Done,

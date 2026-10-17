@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 改造（tag 501，swd deferred 消解批 143，`gaizao`）：自己使用装备牌
+    /// 且该牌固有栏位已被占用时可选——改放到一个**空栏位**（牌种不变故
+    /// 装备技能保留；`declared_slots` 栏位覆盖）。
+    Gaizao,
     /// 天书（tag 500，swd deferred 消解批 142，`swdtianshu`）：出牌阶段
     /// 限定技——弃一张锦囊手牌，选一名角色，获取其武将的**一个未持有
     /// 技能**（永久）；来源角色阵亡时移除（内联臂）。
@@ -1754,6 +1758,7 @@ impl HostBehavior {
             HostBehavior::Yihua => 498,
             HostBehavior::Lxianglong => 499,
             HostBehavior::SwdTianshu => 500,
+            HostBehavior::Gaizao => 501,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2495,6 +2500,7 @@ impl HostBehavior {
             498 => HostBehavior::Yihua,
             499 => HostBehavior::Lxianglong,
             500 => HostBehavior::SwdTianshu,
+            501 => HostBehavior::Gaizao,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2515,7 +2521,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 497] = [
+        pub const ALL: [HostBehavior; 498] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3013,6 +3019,7 @@ impl HostBehavior {
         HostBehavior::Yihua,
         HostBehavior::Lxianglong,
         HostBehavior::SwdTianshu,
+        HostBehavior::Gaizao,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3272,6 +3279,7 @@ impl HostBehavior {
             HostBehavior::Yihua => "host:yihua",
             HostBehavior::Lxianglong => "host:lxianglong",
             HostBehavior::SwdTianshu => "host:swdtianshu",
+            HostBehavior::Gaizao => "host:gaizao",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3750,6 +3758,14 @@ impl HostBehavior {
                 priority: 0,
                 optional: true,
                 extra_events: Vec::new(),
+            }),
+            // 改造：装备前置窗（DamageBefore 类；filter 检查 Equipped）
+            HostBehavior::Gaizao => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: vec![EventKind::Equipped],
             }),
             // 天书：出牌阶段主动（activate 分支；无触发时机）
             HostBehavior::SwdTianshu => None,
@@ -6100,6 +6116,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 改造（swd 批 143）：目录技能名（装备牌改放到空栏位）。
+pub const SWD_GAIZAO_KEY: &str = "gaizao";
+
 /// 天书（swd 批 142）：目录技能名（获取目标武将的一个未持有技能）。
 pub const SWD_TIANSHU_KEY: &str = "swdtianshu";
 
@@ -7166,6 +7185,7 @@ impl HostSkillBehavior {
             HostBehavior::Yihua => (None, None),
             HostBehavior::Lxianglong => (None, None),
             HostBehavior::SwdTianshu => (None, None),
+            HostBehavior::Gaizao => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7504,6 +7524,35 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 改造：自己装备牌入槽前，且该牌固有栏位已被自己占用（有空格）
+            HostBehavior::Gaizao => match event {
+                EventData::Equipped { player, card, .. } => {
+                    if *player != owner {
+                        return false;
+                    }
+                    let Some(kind_slot) = ctx.catalog.card_kind(*card).equip_slot() else {
+                        return false;
+                    };
+                    let occupied = |slot: crate::catalog::EquipSlot| {
+                        ctx.state
+                            .player(owner)
+                            .equips
+                            .iter()
+                            .any(|c| ctx.catalog.card_slot_of(ctx.state, *c) == Some(slot))
+                    };
+                    occupied(kind_slot)
+                        && [
+                            crate::catalog::EquipSlot::Weapon,
+                            crate::catalog::EquipSlot::Armor,
+                            crate::catalog::EquipSlot::HorsePlus,
+                            crate::catalog::EquipSlot::HorseMinus,
+                            crate::catalog::EquipSlot::Treasure,
+                        ]
+                        .iter()
+                        .any(|s| !occupied(*s))
+                }
+                _ => false,
+            },
             HostBehavior::SwdTianshu => false,
             // 李香龙：自己是该杀的使用者且闪避者存活
             HostBehavior::Lxianglong => matches!(event,
@@ -7785,7 +7834,7 @@ impl SkillBehavior for HostSkillBehavior {
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
                     && ctx.state.player(owner).equips.iter().any(|c| {
-                        ctx.catalog.card_kind(*c).equip_slot()
+                        ctx.catalog.card_slot_of(ctx.state, *c)
                             == Some(crate::catalog::EquipSlot::Weapon)
                     })),
             // 花镜：持有者造成的锦囊牌伤害
@@ -7833,7 +7882,7 @@ impl SkillBehavior for HostSkillBehavior {
                 if d.target == owner && !d.prevented && d.amount > 0
                     && (!ctx.state.player(owner).equips.is_empty()
                         || ctx.state.player(owner).hand.iter().any(|c| {
-                            ctx.catalog.card_kind(*c).equip_slot().is_some()
+                            ctx.catalog.card_slot_of(ctx.state, *c).is_some()
                         }))),
             // 平恤：无触发面
             HostBehavior::SwdPingxu => false,
@@ -8335,7 +8384,7 @@ impl SkillBehavior for HostSkillBehavior {
                     && !d.prevented
                     && d.amount > 0
                     && !ctx.state.player(owner).equips.iter().any(|c| {
-                        ctx.catalog.card_kind(*c).equip_slot()
+                        ctx.catalog.card_slot_of(ctx.state, *c)
                             == Some(crate::catalog::EquipSlot::Armor)
                     })),
             // 兰芷：自己使用的牌花色为梅花（未取消）
@@ -8552,7 +8601,7 @@ impl SkillBehavior for HostSkillBehavior {
                     }
                     && (!ctx.state.player(owner).equips.is_empty()
                         || ctx.state.player(owner).hand.iter().any(|c| {
-                            ctx.catalog.card_kind(*c).equip_slot().is_some()
+                            ctx.catalog.card_slot_of(ctx.state, *c).is_some()
                         }))),
             // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
             HostBehavior::YunchouBeige => matches!(event,
@@ -8570,7 +8619,7 @@ impl SkillBehavior for HostSkillBehavior {
                     && ctx.state.player(*to).alive
                     && ctx.state.turn.current != *to
                     && ctx.state.player(*to).hand.contains(&cards[0])
-                    && ctx.catalog.card_kind(cards[0]).equip_slot().is_some()),
+                    && ctx.catalog.card_slot_of(ctx.state, cards[0]).is_some()),
             // 蝉缘·变体：有来源的死亡
             HostBehavior::YunchouDiychanyuan => matches!(event,
                 EventData::Death { killer: Some(_), .. }),
@@ -8947,11 +8996,11 @@ impl SkillBehavior for HostSkillBehavior {
                 && !ctx.state.player(owner).hand.is_empty()
                 && ctx.state.alive_players().into_iter().any(|src| {
                     let eq_ok = ctx.state.player(src).equips.iter().any(|c| {
-                        let slot = ctx.catalog.card_kind(*c).equip_slot();
+                        let slot = ctx.catalog.card_slot_of(ctx.state, *c);
                         ctx.state.alive_players().into_iter().any(|dst| {
                             dst != src
                                 && ctx.state.player(dst).equips.iter().all(|o| {
-                                    ctx.catalog.card_kind(*o).equip_slot() != slot
+                                    ctx.catalog.card_slot_of(ctx.state, *o) != slot
                                 })
                         })
                     });
@@ -9064,7 +9113,7 @@ impl SkillBehavior for HostSkillBehavior {
                 EventData::CardsDiscarded { player, cards }
                 if *player == owner
                     && cards.iter().any(|c| {
-                        ctx.catalog.card_kind(*c).equip_slot()
+                        ctx.catalog.card_slot_of(ctx.state, *c)
                             == Some(crate::catalog::EquipSlot::Weapon)
                     })),
             // 双刃·殁：自己死亡帧,
@@ -9128,7 +9177,7 @@ impl SkillBehavior for HostSkillBehavior {
                         && ctx.state.player(*player).alive
                         && cards.iter().any(|c| {
                             matches!(
-                                ctx.catalog.card_kind(*c).equip_slot(),
+                                ctx.catalog.card_slot_of(ctx.state, *c),
                                 Some(_)
                             )
                         })),
@@ -10570,7 +10619,7 @@ impl SkillBehavior for HostSkillBehavior {
                 // 御夫录（swd 第十二批 v96）：需有武器牌（手牌/装备区，
                 // 上游 filter he+equip1 同口径）且存在其他存活角色
                 let is_weapon = |c: CardId| {
-                    ctx.catalog.card_kind(c).equip_slot()
+                    ctx.catalog.card_slot_of(ctx.state, c)
                         == Some(crate::catalog::EquipSlot::Weapon)
                 };
                 let has_weapon = ctx.state.player(owner)
@@ -10619,7 +10668,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdDuanyue => {
                 let has = !ctx.state.player(owner).equips.is_empty()
                     || ctx.state.player(owner).hand.iter().any(|c| {
-                        ctx.catalog.card_kind(*c).equip_slot().is_some()
+                        ctx.catalog.card_slot_of(ctx.state, *c).is_some()
                     });
                 let others = ctx.state.alive_players().any(|p| p != owner);
                 if !has || !others {
@@ -10839,7 +10888,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianDiyjuntun => {
                 let has = !ctx.state.player(owner).equips.is_empty()
                     || ctx.state.player(owner).hand.iter().any(|c| {
-                        ctx.catalog.card_kind(*c).equip_slot().is_some()
+                        ctx.catalog.card_slot_of(ctx.state, *c).is_some()
                     });
                 if !has {
                     return None;
@@ -11545,7 +11594,7 @@ impl SkillBehavior for HostSkillBehavior {
                     return None;
                 }
                 let has_weapon = ctx.state.player(owner).equips.iter().any(|c| {
-                    ctx.catalog.card_kind(*c).equip_slot()
+                    ctx.catalog.card_slot_of(ctx.state, *c)
                         == Some(crate::catalog::EquipSlot::Weapon)
                 });
                 let has_basic = ctx.state.player(owner).hand.iter().any(|c| {
@@ -12163,7 +12212,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .equips
                         .iter()
                         .position(|c| {
-                            ctx.catalog.card_kind(*c).equip_slot()
+                            ctx.catalog.card_slot_of(ctx.core, *c)
                                 == Some(crate::catalog::EquipSlot::Treasure)
                         })
                     {
@@ -12281,7 +12330,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                     .equips
                     .iter()
                     .filter(|c| {
-                        ctx.catalog.card_kind(**c).equip_slot()
+                        ctx.catalog.card_slot_of(ctx.core, **c)
                             == Some(crate::catalog::EquipSlot::Treasure)
                     })
                     .copied()
@@ -18862,11 +18911,11 @@ impl crate::catalog::SkillMachine for HostMachine {
                     None => return Flow::Done,
                 };
                 let Some(card) = self.card else { return Flow::Done };
-                let Some(slot) = ctx.catalog.card_kind(card).equip_slot() else {
+                let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
                     return Flow::Done;
                 };
                 let same_slot = ctx.core.player(to).equips.iter().any(|e| {
-                    ctx.catalog.card_kind(*e).equip_slot() == Some(slot)
+                    ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot)
                 });
                 if same_slot {
                     // 交首张手牌给持有者
@@ -18887,7 +18936,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                 } else {
                     ctx.core.player_mut(to).hand.retain(|x| *x != card);
                     let old_equip = ctx.core.player(to).equips.iter().copied().find(
-                        |e| ctx.catalog.card_kind(*e).equip_slot() == Some(slot),
+                        |e| ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot),
                     );
                     if let Some(old) = old_equip {
                         ctx.core.player_mut(to).equips.retain(|x| *x != old);
@@ -19140,7 +19189,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .hand
                         .iter()
                         .filter(|c| {
-                            ctx.catalog.card_kind(**c).equip_slot().is_some()
+                            ctx.catalog.card_slot_of(ctx.core, **c).is_some()
                         })
                         .chain(ctx.core.player(self.owner).equips.iter())
                         .copied()
@@ -19291,7 +19340,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .hand
                         .iter()
                         .filter(|c| {
-                            ctx.catalog.card_kind(**c).equip_slot().is_some()
+                            ctx.catalog.card_slot_of(ctx.core, **c).is_some()
                         })
                         .chain(ctx.core.player(self.owner).equips.iter())
                         .copied()
@@ -19417,7 +19466,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .hand
                         .iter()
                         .filter(|c| {
-                            ctx.catalog.card_kind(**c).equip_slot().is_some()
+                            ctx.catalog.card_slot_of(ctx.core, **c).is_some()
                         })
                         .chain(ctx.core.player(self.owner).equips.iter())
                         .copied()
@@ -20868,6 +20917,72 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 改造：选一个空栏位 → 写入 declared_slots（提交按新栏位入槽）
+            HostBehavior::Gaizao => match self.stage {
+                HostStage::Act => {
+                    let card = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                        Some(EventData::Equipped { card, .. }) => *card,
+                        _ => return Flow::Done,
+                    };
+                    let occupied = |slot: crate::catalog::EquipSlot| {
+                        ctx.core
+                            .player(self.owner)
+                            .equips
+                            .iter()
+                            .any(|c| ctx.catalog.card_slot_of(ctx.core, *c) == Some(slot))
+                    };
+                    let slots = [
+                        (0u8, crate::catalog::EquipSlot::Weapon),
+                        (1, crate::catalog::EquipSlot::Armor),
+                        (2, crate::catalog::EquipSlot::HorsePlus),
+                        (3, crate::catalog::EquipSlot::HorseMinus),
+                        (4, crate::catalog::EquipSlot::Treasure),
+                    ];
+                    let options: Vec<ChoiceOption> = slots
+                        .iter()
+                        .filter(|(_, s)| !occupied(*s))
+                        .map(|(i, _)| ChoiceOption::Tag(*i))
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.card = Some(card);
+                    self.stage = HostStage::SelectNature;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "gaizao_slot",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectNature => {
+                    let Some(ChoiceOption::Tag(slot)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let slot = match slot {
+                        0 => crate::catalog::EquipSlot::Weapon,
+                        1 => crate::catalog::EquipSlot::Armor,
+                        2 => crate::catalog::EquipSlot::HorsePlus,
+                        3 => crate::catalog::EquipSlot::HorseMinus,
+                        _ => crate::catalog::EquipSlot::Treasure,
+                    };
+                    ctx.core.declared_slots.insert(card, slot);
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "改造",
+                        owner: self.owner,
+                    });
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 天书：弃一张锦囊手牌 → 选角色 → 选其一个未持有技能 → 永久获取
             HostBehavior::SwdTianshu => match self.stage {
                 HostStage::Act => {
@@ -22894,7 +23009,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .chain(p.hand.iter())
                         .copied()
                         .filter(|c| {
-                            ctx.catalog.card_kind(*c).equip_slot().is_some()
+                            ctx.catalog.card_slot_of(ctx.core, *c).is_some()
                         })
                         .map(ChoiceOption::Card)
                         .collect();
@@ -22948,7 +23063,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .chain(ctx.core.discard.iter())
                         .copied()
                         .filter(|x| {
-                            ctx.catalog.card_kind(*x).equip_slot().is_some()
+                            ctx.catalog.card_slot_of(ctx.core, *x).is_some()
                         })
                         .collect();
                     if !pool.is_empty() {
@@ -26229,7 +26344,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                 // damage + gain 同序；dieThen 仍获得登记差异）。
                 HostStage::Act => {
                     let is_weapon = |c: CardId| {
-                        ctx.catalog.card_kind(c).equip_slot()
+                        ctx.catalog.card_slot_of(ctx.core, c)
                             == Some(crate::catalog::EquipSlot::Weapon)
                     };
                     let has_weapon = ctx.core.player(self.owner)
@@ -27017,7 +27132,7 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .iter()
                         .copied()
                         .filter(|c| {
-                            ctx.catalog.card_kind(*c).equip_slot()
+                            ctx.catalog.card_slot_of(ctx.core, *c)
                                 == Some(crate::catalog::EquipSlot::Weapon)
                         })
                         .collect();
@@ -31461,11 +31576,11 @@ HostBehavior::XianjianLingyu => match self.stage {
                     // 确定性移动：首张可移牌+首个合法目的地
                     'scan: for src in ctx.core.alive_players().collect::<Vec<_>>() {
                         for eq in ctx.core.player(src).equips.clone() {
-                            let slot = ctx.catalog.card_kind(eq).equip_slot();
+                            let slot = ctx.catalog.card_slot_of(ctx.core, eq);
                             let dst = ctx.core.alive_players().find(|dst| {
                                 *dst != src
                                     && ctx.core.player(*dst).equips.iter().all(|o| {
-                                        ctx.catalog.card_kind(*o).equip_slot() != slot
+                                        ctx.catalog.card_slot_of(ctx.core, *o) != slot
                                     })
                             });
                             if let Some(dst) = dst {
@@ -32037,7 +32152,7 @@ HostBehavior::XianjianLingyu => match self.stage {
                 // 堆回收置离场区+grant 该武器技能（上游 addAdditionalSkill
                 // 同口径；**登记差异**：仅弃置路径触发）。
                 for c in self.cards.clone() {
-                    let is_weapon = ctx.catalog.card_kind(c).equip_slot()
+                    let is_weapon = ctx.catalog.card_slot_of(ctx.core, c)
                         == Some(crate::catalog::EquipSlot::Weapon);
                     let Some(pos) =
                         ctx.core.discard.iter().position(|x| *x == c)
@@ -33323,7 +33438,7 @@ HostBehavior::XianjianLingyu => match self.stage {
                 };
                 let num = lost
                     .iter()
-                    .filter(|c| matches!(ctx.catalog.card_kind(**c).equip_slot(), Some(_)))
+                    .filter(|c| matches!(ctx.catalog.card_slot_of(ctx.core, **c), Some(_)))
                     .count();
                 if num > 0 {
                     let mut pool: Vec<CardId> = ctx
@@ -33695,7 +33810,7 @@ HostBehavior::XianjianLingyu => match self.stage {
                             .player(t)
                             .equips
                             .iter()
-                            .map(|c| ctx.catalog.card_kind(*c).equip_slot())
+                            .map(|c| ctx.catalog.card_slot_of(ctx.core, *c))
                             .collect();
                         let mut pool: Vec<CardId> = ctx
                             .core
@@ -33704,7 +33819,7 @@ HostBehavior::XianjianLingyu => match self.stage {
                             .chain(ctx.core.discard.iter())
                             .copied()
                             .filter(|x| {
-                                let slot = ctx.catalog.card_kind(*x).equip_slot();
+                                let slot = ctx.catalog.card_slot_of(ctx.core, *x);
                                 matches!(slot, Some(_))
                                     && !occupied.contains(&slot)
                             })

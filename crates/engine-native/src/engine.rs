@@ -488,6 +488,7 @@ impl Engine {
             },
             skills: Default::default(),
             declared_kinds: Default::default(),
+            declared_slots: Default::default(),
                 card_natures: Default::default(),
                 current_land: None,
             outcome: None,
@@ -3191,7 +3192,7 @@ fn apply_command(
                         .map(|def| {
                             core.has_skill(*t, def)
                                 && !core.player(*t).equips.iter().any(|c| {
-                                    catalog.card_kind(*c).equip_slot()
+                                    catalog.card_slot_of(core, *c)
                                         == Some(crate::catalog::EquipSlot::Armor)
                                 })
                         })
@@ -3463,7 +3464,7 @@ fn apply_command(
                                     })
                                     .unwrap_or(false)
                                     && core.player(core.turn.current).equips.iter().any(|c| {
-                                        catalog.card_kind(*c).equip_slot()
+                                        catalog.card_slot_of(core, *c)
                                             == Some(crate::catalog::EquipSlot::Treasure)
                                     });
                                 if !lingshi_extra {
@@ -4778,7 +4779,7 @@ fn apply_command(
                             .player(t)
                             .equips
                             .iter()
-                            .map(|c| catalog.card_kind(*c).equip_slot())
+                            .map(|c| catalog.card_slot_of(core, *c))
                             .collect();
                         if occupied.len() >= 5 {
                             return Err(RejectReason::IllegalTargets);
@@ -5485,6 +5486,19 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, inst.rounds);
     }
     // view-as 声明牌种表入哈希（防篡改完整性，BTreeMap 键序确定性）
+    for (card, slot) in &c.declared_slots {
+        push_u32(&mut h, *card);
+        push_u8(
+            &mut h,
+            match slot {
+                crate::catalog::EquipSlot::Weapon => 0,
+                crate::catalog::EquipSlot::Armor => 1,
+                crate::catalog::EquipSlot::HorsePlus => 2,
+                crate::catalog::EquipSlot::HorseMinus => 3,
+                crate::catalog::EquipSlot::Treasure => 4,
+            },
+        );
+    }
     for (card, kind) in &c.declared_kinds {
         push_u32(&mut h, *card);
         push_u8(&mut h, *kind as u8);
@@ -6589,6 +6603,7 @@ mod tests {
                 },
                 skills: Default::default(),
                 declared_kinds: Default::default(),
+            declared_slots: Default::default(),
                 card_natures: Default::default(),
                 current_land: None,
                 outcome: None,
@@ -6694,6 +6709,7 @@ mod tests {
                     },
                     skills: Default::default(),
                     declared_kinds: Default::default(),
+            declared_slots: Default::default(),
                 card_natures: Default::default(),
                 current_land: None,
                     outcome: None,

@@ -1626,18 +1626,19 @@ pub(crate) fn revoke_equip_skills(
 }
 
 fn commit_equip(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId, card: crate::ids::CardId) {
-    let kind = ctx.catalog.card_kind(card);
-    let Some(_slot) = kind.equip_slot() else {
+    // 实际装备栏（swd 批 143 改造：declared_slots 覆盖优先）
+    let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
         panic!("commit_equip on non-equip card");
     };
     ctx.take_hand_card(player, card);
+    // 同**栏位**替换（改造后同栏位不同牌种亦替换）
     let replaced = ctx
         .core
         .player(player)
         .equips
         .iter()
         .copied()
-        .find(|c| ctx.catalog.card_kind(*c) == kind);
+        .find(|c| ctx.catalog.card_slot_of(ctx.core, *c) == Some(slot));
     if let Some(old) = replaced {
         ctx.core.player_mut(player).equips.retain(|c| *c != old);
         revoke_equip_skills(ctx.core, ctx.catalog, player, old);
@@ -1908,7 +1909,7 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                     .copied()
                                     .filter(|c| {
                                         matches!(
-                                            ctx.catalog.card_kind(*c).equip_slot(),
+                                            ctx.catalog.card_slot_of(ctx.core, *c),
                                             Some(crate::catalog::EquipSlot::HorsePlus)
                                                 | Some(crate::catalog::EquipSlot::HorseMinus)
                                         )
@@ -2487,7 +2488,7 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                         .iter()
                                         .copied()
                                         .find(|e| {
-                                            ctx.catalog.card_kind(*e).equip_slot()
+                                            ctx.catalog.card_slot_of(ctx.core, *e)
                                                 == Some(slot)
                                         })
                                     {
@@ -2677,7 +2678,7 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         .unwrap_or(false)
                         && ctx.core.player(player).equips.iter().any(|c| {
                             matches!(
-                                ctx.catalog.card_kind(*c).equip_slot(),
+                                ctx.catalog.card_slot_of(ctx.core, *c),
                                 Some(crate::catalog::EquipSlot::HorsePlus)
                                     | Some(crate::catalog::EquipSlot::HorseMinus)
                             )
@@ -6727,7 +6728,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             .unwrap_or(false)
             && ctx.core.player(self.source).equips.iter().any(|c| {
                 matches!(
-                    ctx.catalog.card_kind(*c).equip_slot(),
+                    ctx.catalog.card_slot_of(ctx.core, *c),
                     Some(crate::catalog::EquipSlot::Weapon)
                         | Some(crate::catalog::EquipSlot::Armor)
                 )
@@ -7041,7 +7042,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                             .map(|def| ctx.core.has_skill(self.target, def))
                             .unwrap_or(false)
                             && !equips.iter().any(|c| {
-                                ctx.catalog.card_kind(*c).equip_slot()
+                                ctx.catalog.card_slot_of(ctx.core, *c)
                                     == Some(crate::catalog::EquipSlot::Armor)
                             });
                         has_renwang || tiemian_active
@@ -9834,7 +9835,7 @@ fn dushiwang_remen_blocks(ctx: &Ctx<'_>, target: PlayerId) -> bool {
                     .equips
                     .iter()
                     .any(|c| {
-                        ctx.catalog.card_kind(*c).equip_slot()
+                        ctx.catalog.card_slot_of(ctx.core, *c)
                             == Some(crate::catalog::EquipSlot::Armor)
                     })
         })

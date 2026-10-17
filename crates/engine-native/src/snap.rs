@@ -2766,7 +2766,7 @@ fn active_ask_host(
                     .iter()
                     .copied()
                     .filter(|c| {
-                        catalog.card_kind(*c).equip_slot()
+                        catalog.card_slot_of(core, *c)
                             == Some(crate::catalog::EquipSlot::Weapon)
                     })
                     .map(ChoiceOption::Card)
@@ -2777,7 +2777,7 @@ fn active_ask_host(
                         .iter()
                         .copied()
                         .filter(|c| {
-                            catalog.card_kind(*c).equip_slot()
+                            catalog.card_slot_of(core, *c)
                                 == Some(crate::catalog::EquipSlot::Weapon)
                         })
                         .map(ChoiceOption::Card),

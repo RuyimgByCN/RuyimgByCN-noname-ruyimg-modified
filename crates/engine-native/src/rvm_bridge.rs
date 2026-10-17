@@ -520,7 +520,7 @@ impl SkillBehavior for VmSkillBehavior {
                 let src_slot: Vec<_> = ctx.state.players[src as usize]
                     .equips
                     .iter()
-                    .map(|c| ctx.catalog.card_kind(*c).equip_slot())
+                    .map(|c| ctx.catalog.card_slot_of(ctx.state, *c))
                     .collect();
                 let src_judge: Vec<_> = ctx.state.players[src as usize]
                     .judge
@@ -532,7 +532,7 @@ impl SkillBehavior for VmSkillBehavior {
                     i as u8 != src
                         && p.alive
                         && p.equips.iter().any(|c| {
-                            let slot = ctx.catalog.card_kind(*c).equip_slot();
+                            let slot = ctx.catalog.card_slot_of(ctx.state, *c);
                             slot.is_some() && !src_slot.contains(&slot)
                         })
                         || p.judge.iter().any(|c| {

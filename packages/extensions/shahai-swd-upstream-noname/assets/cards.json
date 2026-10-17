@@ -826,7 +826,7 @@
     },
     {
      "name": "gaizao",
-     "mapping": null
+     "mapping": "host:gaizao"
     }
    ]
   },

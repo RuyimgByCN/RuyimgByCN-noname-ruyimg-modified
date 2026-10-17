@@ -101,7 +101,9 @@ use crate::state::{
 /// （`mailun_mode`/`mailun_out_used`/`mailun_in_used`）。v99 字节被拒绝。
 /// v101（2026-10-17，swd 天书批 142）：`PlayerState` 追加天书两字段
 /// （`swdtianshu_from`/`swdtianshu_granted`）。v100 字节被拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 101;
+/// v102（2026-10-17，swd 改造批 143）：`GameStateCore` 追加装备栏改写表
+/// `declared_slots`。v101 字节被拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 102;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3626,6 +3628,18 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     }
     // outcome
     // view-as 声明牌种表（BTreeMap 确定性遍历）
+    // 装备栏改写（v102，swd 批 143 改造）
+    w.len(s.core.declared_slots.len());
+    for (card, slot) in &s.core.declared_slots {
+        w.u32(*card);
+        w.u8(match slot {
+            crate::catalog::EquipSlot::Weapon => 0,
+            crate::catalog::EquipSlot::Armor => 1,
+            crate::catalog::EquipSlot::HorsePlus => 2,
+            crate::catalog::EquipSlot::HorseMinus => 3,
+            crate::catalog::EquipSlot::Treasure => 4,
+        });
+    }
     w.len(s.core.declared_kinds.len());
     for (card, kind) in &s.core.declared_kinds {
         w.u32(*card);
@@ -4093,6 +4107,19 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             },
         );
     }
+    let mut declared_slots = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let card = r.u32()?;
+        let slot = match r.u8()? {
+            0 => crate::catalog::EquipSlot::Weapon,
+            1 => crate::catalog::EquipSlot::Armor,
+            2 => crate::catalog::EquipSlot::HorsePlus,
+            3 => crate::catalog::EquipSlot::HorseMinus,
+            4 => crate::catalog::EquipSlot::Treasure,
+            t => return Err(ArchiveError::BadTag("equip_slot", t)),
+        };
+        declared_slots.insert(card, slot);
+    }
     let dk_count = r.len()?;
     let mut declared_kinds = std::collections::BTreeMap::new();
     for _ in 0..dk_count {
@@ -4202,6 +4229,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             },
             skills,
             declared_kinds,
+            declared_slots,
             card_natures,
             current_land,
             outcome,

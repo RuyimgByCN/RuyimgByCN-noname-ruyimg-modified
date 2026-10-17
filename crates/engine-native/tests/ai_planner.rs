@@ -434,7 +434,11 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
         steps += 1;
     }
     assert!(e.outcome().is_some(), "400 步内终局（实走 {steps} 步）");
-    assert_eq!(steps, 218, "步数冻结（策略变更须同步证据）");
+    // 2026-10-17（swd 改造批 143）218 → 189：装备替换改为按**栏位**判定
+    //（原先按牌种——具名武器与泛型武器同栏却不互相替换的缺陷修复），
+    // 轨迹步数随之变化；胜方不变（下方断言）。改动同步记录于
+    // docs/operations/evidence/2026-10-17-t12-swd-deferred-b143/。
+    assert_eq!(steps, 189, "步数冻结（策略变更须同步证据）");
     assert!(
         matches!(e.outcome().map(|o| o.winner), Some(engine_native::Winner::Player(3))),
         "胜方冻结：{:?}",

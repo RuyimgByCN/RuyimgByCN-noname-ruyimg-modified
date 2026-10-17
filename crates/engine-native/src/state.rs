@@ -785,6 +785,10 @@ pub struct GameStateCore {
     /// view-as 延时锦囊声明（国色）：牌 id → 声明牌种。
     /// 判定生效时按声明牌种执行（目录牌种不再可靠）。
     pub declared_kinds: BTreeMap<CardId, crate::catalog::CardKind>,
+    /// 装备栏改写（swd 批 143 改造，规则 v318）：牌 → 实际占用的装备栏
+    /// （上游 `gaizao` 把牌改名为 `name_gaizao_equipN`、`subtype` 改槽但
+    /// **保留原装备技能**；原生以栏位覆盖承载——牌种不变故技能保留）。
+    pub declared_slots: BTreeMap<CardId, crate::catalog::EquipSlot>,
     /// 五行属性表（G1 wuxing：牌 id → 属性 0=金 1=木 2=水 3=火 4=土；
     /// 仅启用 wuxing 时非空）。
     pub card_natures: BTreeMap<CardId, u8>,
@@ -972,7 +976,7 @@ impl GameStateCore {
                 let v: Vec<PlayerId> = others
                     .iter()
                     .copied()
-                    .filter(|t| self.player(*t).equips.iter().any(|c| catalog.card_kind(*c).equip_slot() == Some(crate::catalog::EquipSlot::Weapon)))
+                    .filter(|t| self.player(*t).equips.iter().any(|c| catalog.card_slot_of(self, *c) == Some(crate::catalog::EquipSlot::Weapon)))
                     .collect();
                 (1, 1, v)
             }
