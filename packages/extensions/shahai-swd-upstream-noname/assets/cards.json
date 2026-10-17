@@ -1286,7 +1286,7 @@
     },
     {
      "name": "lingwu",
-     "mapping": null
+     "mapping": "host:lingwu"
     },
     {
      "name": "minjing",

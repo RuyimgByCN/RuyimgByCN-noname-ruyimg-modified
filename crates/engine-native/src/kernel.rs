@@ -1490,6 +1490,9 @@ fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
     // 突击计数（U07 ow，规则 v118）：出牌阶段使用任意牌 +1（取消不计；
     // 等值牌种分支已各自置 table，此处只累计）
     ctx.core.turn.cards_used_play_phase += 1;
+    // 本回合已用牌数（swd 灵武批 120，规则 v307；上游 `countUsed()` 无参
+    // 口径=本回合全部使用，含出牌阶段外）
+    ctx.core.turn.cards_used_turn += 1;
     // 基本/锦囊/装备三类计数（T8 增量 14）：按结算牌种判类（view-as 转
     // 化后），地/机关牌异类不计
     if effective.is_basic_trick_or_equip() {
@@ -1683,6 +1686,8 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 if !ctx.core.turn.turn_opened {
                     ctx.reset_turn_limits(player);
                     ctx.core.turn.turn_opened = true;
+                    // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零
+                    ctx.core.turn.cards_used_turn = 0;
                     // 回合伤害统计清零（U05 xianjian 明绣，规则 v160 灵火
                     // 门控；上游 getStat 每回合重置同口径）——在本人回合
                     // 开始清（PhaseEnd 触发晚于收束提交，见规则基准）
@@ -3495,6 +3500,43 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
         ctx.emit(EventData::Phase {
             player,
             phase: Phase::Discard,
+            begin: true,
+        });
+        return;
+    }
+    // 灵武（swd 妮可，批 120，规则 v307）：频繁技——阶段结束时若本回合
+    // 已用牌数 ≥ 体力则插入一个额外出牌阶段（上游 `insertPhase()` 同口径；
+    // 插入阶段的收束不再触发=上游 `event.skill != 'lingwu'` 防递归）。
+    {
+        let from_lingwu = ctx.core.turn.extra_phase_lingwu;
+        ctx.core.turn.extra_phase_lingwu = false;
+        if !from_lingwu {
+            if let Some(def) = ctx.catalog.skill_by_name(crate::content::host::SWD_LINGWU_KEY) {
+                let hp = ctx.core.player(player).hp.max(0) as u32;
+                if ctx.core.has_skill(player, def)
+                    && ctx.core.player(player).alive
+                    && ctx.core.turn.cards_used_turn >= hp
+                {
+                    ctx.core.turn.extra_phases.push(2); // Phase::Play
+                    ctx.core.turn.extra_phase_lingwu = true;
+                }
+            }
+        }
+    }
+    // 额外阶段队列（insertPhase 原语）：非空则弹出为下一阶段
+    if !ctx.core.turn.extra_phases.is_empty() {
+        let code = ctx.core.turn.extra_phases.remove(0);
+        let next = match code {
+            0 => Phase::Judge,
+            1 => Phase::Draw,
+            2 => Phase::Play,
+            3 => Phase::Discard,
+            _ => Phase::End,
+        };
+        ctx.core.turn.phase = next;
+        ctx.emit(EventData::Phase {
+            player,
+            phase: next,
             begin: true,
         });
         return;

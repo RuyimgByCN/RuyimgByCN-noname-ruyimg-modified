@@ -478,6 +478,9 @@ impl Engine {
                 kangyin2: None,
                 huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
+                cards_used_turn: 0,
+                extra_phases: Vec::new(),
+                extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
                 phase_number: 0,
             },
@@ -5215,6 +5218,13 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, *caused as u8);
     }
     push_u32(&mut h, c.turn.cards_used_play_phase);
+    // swd 灵武批 120（规则 v307）：本回合已用牌数 + 额外阶段队列 + 插入位
+    push_u32(&mut h, c.turn.cards_used_turn);
+    push_u32(&mut h, c.turn.extra_phases.len() as u32);
+    for p in &c.turn.extra_phases {
+        push_u8(&mut h, *p);
+    }
+    push_u8(&mut h, c.turn.extra_phase_lingwu as u8);
     push_u32(&mut h, c.turn.bte_used_play_phase);
     push_u32(&mut h, c.turn.phase_number);
     // 贴房绅视：本回合无视距离目标（规则 v94）
@@ -6354,6 +6364,9 @@ mod tests {
                 kangyin2: None,
                 huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
+                cards_used_turn: 0,
+                extra_phases: Vec::new(),
+                extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
                 phase_number: 0,
                 },
@@ -6456,6 +6469,9 @@ mod tests {
                 kangyin2: None,
                 huanxia_track: Vec::new(),
                 cards_used_play_phase: 0,
+                cards_used_turn: 0,
+                extra_phases: Vec::new(),
+                extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
                 phase_number: 0,
                     },

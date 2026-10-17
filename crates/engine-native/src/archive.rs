@@ -79,7 +79,10 @@ use crate::state::{
 /// v91（2026-10-17，T11 Boss 庞统族批 118）：`PlayerState` 追加涅槃限定
 /// 技位 `niepan_used`，`BossStageState` 追加浴火关卡循环型 `loop_type`。
 /// v90 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 91;
+/// v92（2026-10-17，swd 灵武批 120）：`TurnState` 追加本回合已用牌数
+/// `cards_used_turn`、额外阶段队列 `extra_phases`、灵武插入位
+/// `extra_phase_lingwu`。v91 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 92;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3387,6 +3390,13 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(*caused);
     }
     w.u32(t.cards_used_play_phase);
+    // v92（swd 灵武批 120）：本回合已用牌数 + 额外阶段队列 + 灵武插入位
+    w.u32(t.cards_used_turn);
+    w.len(t.extra_phases.len());
+    for p in &t.extra_phases {
+        w.u8(*p);
+    }
+    w.boolean(t.extra_phase_lingwu);
     w.u32(t.bte_used_play_phase);
     w.u32(t.phase_number);
     w.u8(t.rende_given);
@@ -3819,6 +3829,9 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         huanxia_track.push((r.u32()?, r.boolean()?));
     }
     let cards_used_play_phase = r.u32()?;
+    let cards_used_turn = r.u32()?;
+    let extra_phases = r.vec(|r| r.u8())?;
+    let extra_phase_lingwu = r.boolean()?;
     let bte_used_play_phase = r.u32()?;
     let phase_number = r.u32()?;
     let rende_given = r.u8()?;
@@ -3955,6 +3968,9 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 kangyin2,
                 huanxia_track,
                 cards_used_play_phase,
+                cards_used_turn,
+                extra_phases,
+                extra_phase_lingwu,
                 bte_used_play_phase,
                 phase_number,
                 rende_given,

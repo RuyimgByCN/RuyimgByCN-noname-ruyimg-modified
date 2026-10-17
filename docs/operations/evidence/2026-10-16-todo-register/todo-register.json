@@ -30,8 +30,8 @@
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 54,
-    "open_count": 35,
+    "resolved_count": 55,
+    "open_count": 34,
     "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
     "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
     "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -801,7 +801,7 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
       },
-      "description": "杀海拾遗·swd deferred 消解（核验 b99：133/184，deferred 49；2026-10-17 批 100–114 后：**150/184 映射，deferred 32**；多余 13 张另项）。",
+      "description": "杀海拾遗·swd deferred 消解（核验 b99：133/184，deferred 49；2026-10-17 批 100–114 后：**151/184 映射，deferred 31**；多余 13 张另项）。",
       "done_when_evidence": [
         "定向回归测试通过",
         "cargo test --offline -p engine-native --no-fail-fast 全绿",
@@ -817,7 +817,7 @@
         "U05",
         "swd"
       ],
-      "notes": "2026-10-17 批 100–112：兰芷/改天道/热血(+流离内置引用)/幻音/灵弦/拼点/蛇魂/魂身(v296/81)/待行(v297/82)/聚悉(v298/83)/破舟(v299/84)/陷阱(v300/85)/孤行(v301/86) 消解——148/184 映射，deferred 49→34。批 113：灵矢（tag 460，无版本批；距离/直中/摸牌/杀限次四臂内联，计亭整将闭环，51/79），149/184，deferred 33。批 114：锦鳞（tag 461/462，字段批 v302/存档 v87——limited 一次性授「锦鳞·退」按阶段递减；司空蔷整将闭环 52/79），150/184，deferred 32。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100..b113/",
+      "notes": "2026-10-17 批 100–112：兰芷/改天道/热血(+流离内置引用)/幻音/灵弦/拼点/蛇魂/魂身(v296/81)/待行(v297/82)/聚悉(v298/83)/破舟(v299/84)/陷阱(v300/85)/孤行(v301/86) 消解——148/184 映射，deferred 49→34。批 113：灵矢（tag 460，无版本批；距离/直中/摸牌/杀限次四臂内联，计亭整将闭环，51/79），149/184，deferred 33。批 114：锦鳞（tag 461/462，字段批 v302/存档 v87——limited 一次性授「锦鳞·退」按阶段递减；司空蔷整将闭环 52/79），150/184，deferred 32。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100..b113/ 批 120：灵武（tag 475）+ insertPhase 额外阶段原语（字段批 v307/存档 v92）——151/184，deferred 31。",
       "ambiguous": false,
       "resolution": {
         "date": "2026-10-16",
@@ -1801,7 +1801,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "D5-LX-MIGRATION"
       ],
@@ -1812,7 +1812,7 @@
         "L29",
         "G0"
       ],
-      "notes": "依赖 D5 规则面迁移"
+      "notes": "依赖 D5 规则面迁移 2026-10-17：整包八项验收通过（L29 计入总账），本行关闭。"
     },
     {
       "id": "E01-G0-DEPTH",

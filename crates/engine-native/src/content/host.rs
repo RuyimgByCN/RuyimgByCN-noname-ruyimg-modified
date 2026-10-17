@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 灵武（tag 475，swd deferred 消解批 120，`lingwu`）：频繁技——阶段
+    /// 结束时本回合已用牌数 ≥ 体力则插入一个额外出牌阶段（效果内联于
+    /// 阶段收束；本行为仅登记与触发面）。
+    SwdLingwu,
     /// 清正（tag 474，T11 Boss 庞统族后继批 119，`mbcmqingzheng`）：出牌
     /// 阶段开始可选——弃置自己一种花色的全部手牌，再令一名其他角色弃置
     /// 其一种花色的全部手牌；其弃牌数少于自己时受 1 点伤害（无来源）。
@@ -1629,6 +1633,7 @@ impl HostBehavior {
             HostBehavior::Yuhuo => 472,
             HostBehavior::Shenwei => 473,
             HostBehavior::MbcmQingzheng => 474,
+            HostBehavior::SwdLingwu => 475,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2344,6 +2349,7 @@ impl HostBehavior {
             472 => HostBehavior::Yuhuo,
             473 => HostBehavior::Shenwei,
             474 => HostBehavior::MbcmQingzheng,
+            475 => HostBehavior::SwdLingwu,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2364,7 +2370,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 471] = [
+        pub const ALL: [HostBehavior; 472] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2836,6 +2842,7 @@ impl HostBehavior {
         HostBehavior::Yuhuo,
         HostBehavior::Shenwei,
         HostBehavior::MbcmQingzheng,
+        HostBehavior::SwdLingwu,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3069,6 +3076,7 @@ impl HostBehavior {
             HostBehavior::Yuhuo => "host:boss_yuhuo",
             HostBehavior::Shenwei => "host:shenwei",
             HostBehavior::MbcmQingzheng => "host:mbcmqingzheng",
+            HostBehavior::SwdLingwu => "host:lingwu",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3548,6 +3556,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 灵武：无触发时机（效果内联于阶段收束）
+            HostBehavior::SwdLingwu => None,
             // 浴火 / 神威：无触发时机（浴火由涅槃收束内联；神威为 kernel 臂）
             HostBehavior::Yuhuo => None,
             HostBehavior::Shenwei => None,
@@ -5750,6 +5760,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 灵武（swd 妮可，批 120）：目录技能名（额外阶段；效果内联于阶段收束）。
+pub const SWD_LINGWU_KEY: &str = "lingwu";
+
 /// 清正（批 119）：目录技能名（道心值 25 阈值解锁；手杀包外部技能已转换）。
 pub const MBCM_QINGZHENG_KEY: &str = "mbcmqingzheng";
 
@@ -6509,6 +6522,7 @@ impl HostSkillBehavior {
             HostBehavior::Yuhuo => (None, None),
             HostBehavior::Shenwei => (None, None),
             HostBehavior::MbcmQingzheng => (None, None),
+            HostBehavior::SwdLingwu => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6842,6 +6856,7 @@ impl SkillBehavior for HostSkillBehavior {
                     if *player == owner && !ctx.state.player(owner).niepan_used),
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
+            HostBehavior::SwdLingwu => false,
             // 清正：自己出牌阶段开始且手牌非空
             HostBehavior::MbcmQingzheng => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
@@ -19867,6 +19882,7 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
+            HostBehavior::SwdLingwu => Flow::Done,
             // 清正：选花色 → 选目标 → 选目标花色 → 双向弃牌 → 少弃者受伤
             HostBehavior::MbcmQingzheng => match self.stage {
                 HostStage::Act => {

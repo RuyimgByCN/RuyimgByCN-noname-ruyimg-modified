@@ -429,6 +429,15 @@ pub struct TurnState {
     /// 突击（U07 ow 士兵76，规则 v118）：本出牌阶段已使用牌数（上游
     /// countUsed 同口径；Play 阶段开始清零、换回合自然清零）。
     pub cards_used_play_phase: u32,
+    /// 本回合已使用牌数（swd 灵武批 120，规则 v307；上游 `countUsed()`
+    /// 无参口径——本回合全部使用；换回合清零）。
+    pub cards_used_turn: u32,
+    /// 额外阶段队列（同批）：`insertPhase` 原语——阶段结束时若非空则弹出
+    /// 该阶段作为下一阶段（码同 `Phase`：0 准备/1 摸牌/2 出牌/3 弃牌/4 结束）。
+    pub extra_phases: Vec<u8>,
+    /// 当前阶段是否由灵武插入（同批）：上游 `event.skill != 'lingwu'`
+    /// 防递归——插入阶段的收束不再触发灵武。
+    pub extra_phase_lingwu: bool,
     /// 出牌阶段已使用的基本/锦囊/装备牌数（T8 增量 14，DSL filter
     /// `*_play_phase_card_category_count_positive` 承载；上游三类计数
     /// 同口径——按结算牌种判类，地/机关牌异类不计；Play 阶段开始清零）。
