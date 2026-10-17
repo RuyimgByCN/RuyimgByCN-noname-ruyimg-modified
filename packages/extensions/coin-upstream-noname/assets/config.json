@@ -1,0 +1,7 @@
+{
+  "coin": 0,
+  "coin_display_playpackconfig": "icon",
+  "coin_canvas_playpackconfig": false,
+  "snowFall": false,
+  "coinSnowSize": false
+}

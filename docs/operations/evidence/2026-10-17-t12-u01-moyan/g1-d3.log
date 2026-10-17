@@ -1,0 +1,11 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/g1_d3.rs (target/debug/deps/g1_d3-50e24c8a11197f6b)
+
+running 4 tests
+test d3_real_host_full_lifecycle ... ok
+test g1_d3_content_lock_and_bounds ... ok
+test g1_d3_install_bridge_and_metadata ... ok
+test g1_d3_vertical_reveal_jinggou_and_restore ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+

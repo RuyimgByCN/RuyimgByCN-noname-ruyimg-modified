@@ -1,0 +1,201 @@
+[
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 0,
+    "player": "mb_caomao",
+    "rngDraws": 5
+  },
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 1,
+    "player": "mb_caomao",
+    "rngDraws": 5
+  },
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 0,
+    "player": "caocao",
+    "rngDraws": 6
+  },
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 1,
+    "player": "caocao",
+    "rngDraws": 6
+  },
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 0,
+    "player": "liubei",
+    "rngDraws": 7
+  },
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 1,
+    "player": "liubei",
+    "rngDraws": 7
+  },
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 0,
+    "player": "boss_zhugeliang",
+    "rngDraws": 8
+  },
+  {
+    "kind": "skill.content",
+    "skill": "_CMeffects",
+    "event": "_CMeffects",
+    "step": 1,
+    "player": "boss_zhugeliang",
+    "rngDraws": 8
+  },
+  {
+    "kind": "skill.content",
+    "skill": "mbqianlong",
+    "event": "mbqianlong",
+    "step": 0,
+    "player": "mb_caomao",
+    "rngDraws": 332
+  },
+  {
+    "kind": "skill.content",
+    "skill": "mbqianlong_refresh",
+    "event": "mbqianlong_refresh",
+    "step": 0,
+    "player": "mb_caomao",
+    "rngDraws": 332
+  },
+  {
+    "kind": "skill.content",
+    "skill": "mbqianlong_refresh",
+    "event": "mbqianlong_refresh",
+    "step": 1,
+    "player": "mb_caomao",
+    "rngDraws": 332
+  },
+  {
+    "kind": "skill.content",
+    "skill": "mbqianlong_refresh",
+    "event": "mbqianlong_refresh",
+    "step": 2,
+    "player": "mb_caomao",
+    "rngDraws": 332
+  },
+  {
+    "kind": "skill.content",
+    "skill": "mbqianlong",
+    "event": "mbqianlong",
+    "step": 1,
+    "player": "mb_caomao",
+    "rngDraws": 332
+  },
+  {
+    "kind": "skill.content",
+    "skill": "fengqi",
+    "event": "fengqi",
+    "step": 0,
+    "player": "boss_zhugeliang",
+    "rngDraws": 332
+  },
+  {
+    "kind": "skill.content",
+    "skill": "fengqi",
+    "event": "fengqi",
+    "step": 1,
+    "player": "boss_zhugeliang",
+    "rngDraws": 347
+  },
+  {
+    "kind": "mid_restore_snapshot",
+    "rngDraws": 351,
+    "event": {
+      "name": "useCard",
+      "step": 8,
+      "player": "boss_zhugeliang"
+    },
+    "players": [
+      {
+        "name": "mb_caomao",
+        "hp": 3,
+        "maxHp": 3,
+        "identity": "cai",
+        "storage": {
+          "mbqianlong": 20
+        },
+        "skills": [
+          "mbqianlong"
+        ]
+      },
+      {
+        "name": "caocao",
+        "hp": 4,
+        "maxHp": 4,
+        "identity": "cai",
+        "storage": {},
+        "skills": [
+          "jianxiong"
+        ]
+      },
+      {
+        "name": "liubei",
+        "hp": 4,
+        "maxHp": 4,
+        "identity": "cai",
+        "storage": {},
+        "skills": [
+          "rende"
+        ]
+      },
+      {
+        "name": "boss_zhugeliang",
+        "hp": "Infinity",
+        "maxHp": "Infinity",
+        "identity": "zhu",
+        "storage": {
+          "xiangxing": 7,
+          "xiangxing_count": 0
+        },
+        "skills": [
+          "xiangxing",
+          "yueyin",
+          "fengqi",
+          "gaiming"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "skill.content",
+    "skill": "fengqi",
+    "event": "fengqi",
+    "step": 2,
+    "player": "boss_zhugeliang",
+    "rngDraws": 390
+  },
+  {
+    "kind": "skill.content",
+    "skill": "mbqianlong_2",
+    "event": "mbqianlong_2",
+    "step": 0,
+    "player": "mb_caomao",
+    "rngDraws": 396
+  },
+  {
+    "kind": "resume.error",
+    "message": "skinSwitch is not defined"
+  }
+]

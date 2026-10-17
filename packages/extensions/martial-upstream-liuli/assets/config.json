@@ -1,0 +1,14 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/武皇争霸/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "upstream_version": "1.3",
+  "enable": true,
+  "show_number": "5",
+  "battle_number": "5",
+  "hide_number": "2",
+  "double_character": false,
+  "double_hp": "hejiansan",
+  "free_choose": false,
+  "change_choice": false
+}

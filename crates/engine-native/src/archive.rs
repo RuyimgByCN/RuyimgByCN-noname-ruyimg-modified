@@ -64,7 +64,8 @@ use crate::state::{
 /// v79（2026-10-16，D4 Boss 关卡流程 B0）：`GameMode::Boss` 尾部追加
 /// `BossStageState`（kind/level/孟婆旗/禁将表/翼武装/pending）。v78 字节
 /// 被版本门禁拒绝（无生产迁移数据；存档仅测试与内部工具）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 79;
+/// 80：核心末尾追加 `VmAux`（T8 标记/牌堆/丢失/once/旗标）。空表仍写长度 0。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 80;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2639,6 +2640,9 @@ const KNOWN_PROMPTS: &[&str] = &[
     "hh_dunpai_discard", "hh_yuansu_discard", "gw_poxiao_branch",
     // T8 增量 2/7：rule-vm 技能选择挂起（rvm_bridge）
     "rvm_choice",
+    "huanren_pick",
+    "d3_moyan_target",
+    "d3_moyan_gain",
 ];
 
 fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
@@ -2898,6 +2902,127 @@ fn dec_boss_stage(r: &mut R<'_>) -> Result<BossStageState, ArchiveError> {
         banned_generals,
         wing_armed,
         pending,
+    })
+}
+
+fn enc_vm_aux(w: &mut W, a: &crate::state::VmAux) {
+    w.len(a.marks.len());
+    for ((p, id), n) in &a.marks {
+        w.u8(*p);
+        w.u32(*id);
+        w.i32(*n);
+    }
+    w.len(a.piles.len());
+    for ((p, name), cards) in &a.piles {
+        w.u8(*p);
+        w.str(name);
+        w.len(cards.len());
+        for c in cards {
+            w.u32(*c);
+        }
+    }
+    w.len(a.lost.len());
+    for (p, cards) in &a.lost {
+        w.u8(*p);
+        w.len(cards.len());
+        for c in cards {
+            w.u32(*c);
+        }
+    }
+    w.len(a.once.len());
+    for (p, key, scope) in &a.once {
+        w.u8(*p);
+        w.str(key);
+        w.u8(*scope);
+    }
+    w.len(a.flags.len());
+    for ((p, key), n) in &a.flags {
+        w.u8(*p);
+        w.str(key);
+        w.u32(*n);
+    }
+    w.len(a.hits.len());
+    for ((p, key), n) in &a.hits {
+        w.u8(*p);
+        w.str(key);
+        w.u32(*n);
+    }
+    w.len(a.drawn.len());
+    for (p, n) in &a.drawn {
+        w.u8(*p);
+        w.u32(*n);
+    }
+}
+
+fn dec_string(r: &mut R<'_>) -> Result<String, ArchiveError> {
+    let b = r.bytes()?;
+    String::from_utf8(b.to_vec()).map_err(|_| ArchiveError::BadTag("vm_aux_str", 0))
+}
+
+fn dec_vm_aux(r: &mut R<'_>) -> Result<crate::state::VmAux, ArchiveError> {
+    let mut marks = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let id = r.u32()?;
+        let n = r.i32()?;
+        marks.insert((p, id), n);
+    }
+    let mut piles = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let name = dec_string(r)?;
+        let n = r.len()?;
+        let mut cards = Vec::with_capacity(n.min(256));
+        for _ in 0..n {
+            cards.push(r.u32()?);
+        }
+        piles.insert((p, name), cards);
+    }
+    let mut lost = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let n = r.len()?;
+        let mut cards = Vec::with_capacity(n.min(256));
+        for _ in 0..n {
+            cards.push(r.u32()?);
+        }
+        lost.insert(p, cards);
+    }
+    let mut once = std::collections::BTreeSet::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let key = dec_string(r)?;
+        let scope = r.u8()?;
+        once.insert((p, key, scope));
+    }
+    let mut flags = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let key = dec_string(r)?;
+        let n = r.u32()?;
+        flags.insert((p, key), n);
+    }
+    let mut hits = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let key = dec_string(r)?;
+        let n = r.u32()?;
+        hits.insert((p, key), n);
+    }
+    let mut drawn = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let n = r.u32()?;
+        drawn.insert(p, n);
+    }
+    Ok(crate::state::VmAux {
+        marks,
+        piles,
+        lost,
+        once,
+        flags,
+        hits,
+        drawn,
     })
 }
 
@@ -3295,6 +3420,7 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         }
         None => w.u8(0),
     }
+    enc_vm_aux(w, &s.core.vm_aux);
     // 会话数据
     w.u64(s.last_dedup);
     w.boolean(s.segment_open);
@@ -3677,6 +3803,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         }),
         t => return Err(ArchiveError::BadTag("opt_outcome", t)),
     };
+    let vm_aux = dec_vm_aux(r)?;
     let last_dedup = r.u64()?;
     let segment_open = r.boolean()?;
     let auth_generation = r.u64()?;
@@ -3756,6 +3883,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             card_natures,
             current_land,
             outcome,
+            vm_aux,
         },
         last_dedup,
         auth_generation,

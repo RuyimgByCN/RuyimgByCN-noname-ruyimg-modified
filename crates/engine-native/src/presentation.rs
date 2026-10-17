@@ -286,6 +286,7 @@ pub fn project(
                 player: *player,
                 success: *success,
             }],
+            LogEvent::CardsRevealed { .. } => vec![],
         });
     }
     out

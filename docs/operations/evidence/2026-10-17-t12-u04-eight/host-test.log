@@ -1,0 +1,9 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running tests/u04_coin_eight.rs (target/debug/deps/u04_coin_eight-6d9bbadf5b796eb4)
+
+running 1 test
+test u04_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+

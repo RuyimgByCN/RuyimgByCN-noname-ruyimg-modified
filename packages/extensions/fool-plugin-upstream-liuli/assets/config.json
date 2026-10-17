@@ -1,0 +1,12 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/笨蛋插件/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "upstream_version": "2.0.2",
+  "Fool_throwEmotion": true,
+  "Fool_skill": true,
+  "Fool_chooseAudio": true,
+  "Fool_peiyinFix": false,
+  "Fool_liegong": "shousha",
+  "Fool_derivationSkill": false
+}

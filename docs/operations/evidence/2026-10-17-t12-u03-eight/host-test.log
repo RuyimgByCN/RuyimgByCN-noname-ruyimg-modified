@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/u03_cardpile_eight.rs (target/debug/deps/u03_cardpile_eight-c654c29ada2bdefd)
+
+running 1 test
+test u03_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+

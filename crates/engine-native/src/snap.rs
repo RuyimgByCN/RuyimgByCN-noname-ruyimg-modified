@@ -1486,6 +1486,12 @@ fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
             }
         }
         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
+        // 末焱展示牌已离开牌库，挂起期间只在宿主机器上。
+        MachineSnapshot::Host { behavior, cards, .. }
+            if *behavior == HostBehavior::D3Moyan.tag() =>
+        {
+            out.extend(cards.iter().copied());
+        }
         MachineSnapshot::OptionalGate { inner, .. }
         | MachineSnapshot::NullifyWindow { effect: inner, .. }
         | MachineSnapshot::Aoe { inner, .. }
@@ -2644,7 +2650,7 @@ fn active_ask_host(
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     use crate::content::host::{
-        D3_JINGGOU_TARGET, GJ_BINGPO_SHOW_OWN, GJ_BINGPO_SHOW_TARGET, GJ_DINVXUANSHUANG_RIDER,
+        D3_JINGGOU_TARGET, D3_MOYAN_GAIN, D3_MOYAN_TARGET, GJ_BINGPO_SHOW_OWN, GJ_BINGPO_SHOW_TARGET, GJ_DINVXUANSHUANG_RIDER,
         GJ_FEIBIAO_DISCARD, GJ_JINLIANZHU_CONFIRM, GJ_LONGXU_PICK, GJ_LUYUGENG_COST,
         GJ_SHUJINSAN_DISCARD, GJ_XIAJIAO_DISCARD, GW_BAOXUE_DISCARD, HOST_TARGET_DISCARD_EQUIP,
         WD_CAOCHUAN_BRANCH, WD_FUDI_PLAYER_PICK, WD_FUDI_TARGET_PICK, WD_SANJIAN_DISCARD,
@@ -3763,6 +3769,40 @@ fn active_ask_host(
                 false,
             ))
         }
+        // 末焱：选获得者（含自己，可取消）→ 该角色从展示牌中至少取一张
+        HostBehavior::D3Moyan => match stage {
+            HostStage::TargetChoice => {
+                let options: Vec<ChoiceOption> = core.alive_players().map(ChoiceOption::Player).collect();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    D3_MOYAN_TARGET,
+                    ChoiceKind::SelectPlayers,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::SelectCard => {
+                let target = target?;
+                if cards.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    target,
+                    D3_MOYAN_GAIN,
+                    ChoiceKind::SelectCards,
+                    cards.iter().copied().map(ChoiceOption::Card).collect(),
+                    1,
+                    cards.len(),
+                    false,
+                ))
+            }
+            _ => None,
+        },
         // 最远射程武器（精彀）：指定一名其他角色受 1 点伤害
         HostBehavior::MaxRangeWeaponDamage => {
             if stage != HostStage::Act {

@@ -12,7 +12,7 @@
       "gender": "male",
       "skills": [
         { "name": "dddjinggou", "title": "精彀", "mapping": "host:max_range_weapon_damage" },
-        { "name": "dddmoyan", "title": "末焱", "mapping": null }
+        { "name": "dddmoyan", "title": "末焱", "mapping": "host:d3_moyan" }
       ]
     }
   ]

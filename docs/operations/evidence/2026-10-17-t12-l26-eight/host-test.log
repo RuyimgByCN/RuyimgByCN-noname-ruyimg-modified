@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s
+     Running tests/l26_fool_eight.rs (target/debug/deps/l26_fool_eight-1a3278b89a9a0394)
+
+running 1 test
+test l26_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+

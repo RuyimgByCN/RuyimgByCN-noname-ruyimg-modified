@@ -17,6 +17,7 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
         let f = ctx.res.frame(frame_id).expect("commit frame");
         (f.kind, f.data.clone())
     };
+    record_vm_history(ctx, &data);
     match data {
         EventData::Damage(d) => commit_damage(ctx, frame_id, d),
         EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
@@ -2537,7 +2538,20 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             ctx.core.deck.push(card);
                         }
                     }
-                    ctx.draw_cards(player, 2);
+                    // 白翼（Boss 少昊，规则 v295）：第 3 轮前敌方摸牌 -1
+                    //（上游 boss_baiyi_draw phaseDrawBegin num--）。
+                    let baiyi_cut = ctx.core.turn.round < 3
+                        && !ctx.core.is_boss_side(player)
+                        && ctx
+                            .catalog
+                            .skill_by_name(crate::content::standard::BOSS_BAIYI)
+                            .map(|def| {
+                                ctx.core.skills.keys().any(|(holder, dd)| {
+                                    *dd == def && ctx.core.player(*holder).alive
+                                })
+                            })
+                            .unwrap_or(false);
+                    ctx.draw_cards(player, if baiyi_cut { 1 } else { 2 });
                     // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
                     // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差
                     // 异上游玩家自选；置顶牌留待下位摸牌者）
@@ -3719,7 +3733,37 @@ fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
 }
 
 /// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
+fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
+    // 标准局面没有 VM 技能时不记。空 VmAux 不写摘要，v295 golden 保持。
+    if !ctx.catalog.vm_card_history {
+        return;
+    }
+    match data {
+        EventData::CardsDiscarded { player, cards } => {
+            ctx.core
+                .vm_aux
+                .lost
+                .entry(*player)
+                .or_default()
+                .extend(cards.iter().copied());
+        }
+        EventData::CardsMoved { cards, from, to } if from != to => {
+            ctx.core
+                .vm_aux
+                .lost
+                .entry(*from)
+                .or_default()
+                .extend(cards.iter().copied());
+        }
+        EventData::CardsDrawn { player, cards } => {
+            *ctx.core.vm_aux.drawn.entry(*player).or_default() += cards.len() as u32;
+        }
+        _ => {}
+    }
+}
+
 fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
+    ctx.core.vm_aux.clear_turn();
     ctx.log(LogEvent::TurnEnded { player });
     ctx.expire_temporary_skills(player);
     // 清残留跳阶段旗标（正常流程已被消费）
@@ -3774,6 +3818,7 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
         }
         if next <= player {
             ctx.core.turn.round += 1;
+            ctx.core.vm_aux.clear_round();
         }
         ctx.core.turn.current = next;
         ctx.core.turn.phase = Phase::Judge;
@@ -3809,6 +3854,7 @@ fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     let next = ctx.core.next_alive(player);
     if next <= player {
         ctx.core.turn.round += 1;
+        ctx.core.vm_aux.clear_round();
     }
     ctx.core.turn.current = next;
     ctx.core.turn.phase = Phase::Judge;

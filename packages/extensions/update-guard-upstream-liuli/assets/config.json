@@ -1,0 +1,10 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/更新保护/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "upstream_version": "1.5",
+  "cancelForbid": true,
+  "autoAddExts": true,
+  "update_link": "",
+  "brokenFile": []
+}

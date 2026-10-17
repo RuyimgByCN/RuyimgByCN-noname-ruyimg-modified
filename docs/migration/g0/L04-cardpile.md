@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：无
-- 台账原生重构状态（摘录）：**部分重构；纵向样本已验收（第 18 轮）**：真实包 `packages/extensions/cardpile-upstream-liuli` 独立身份（namespace `upstream-liuli`）可发现/导入；与 U03 共用同一桥接构建器与酒/雷杀规则（未复制两套算法）；双来源内容锁互斥恢复有测试
+- 台账原生重构状态（摘录）：**八项整包已验收（2026-10-17）；随机点数仍为登记差异**。真实包 `packages/extensions/cardpile-upstream-liuli`。G0 本页不是该次上调的证明，证据见 [L04 八项](../../operations/evidence/2026-10-17-t12-l04-eight/README.md)。不由 U03 的组合行计入
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：无（清点未检出）
 - 台账已核查摘要：旧 play 牌堆比例/随机生成；来源同含 `jiu`、`leisha`
-- 台账待处理（含规则分支）：倍率缩放与随机点数映射同 U03；两来源 `playpackconfig` 配置分支未逐项对照。**整包验收完成（2026-10-08，[L04 生命周期](../operations/evidence/2026-10-08-l04-cardpile-liuli-lifecycle/README.md)）**：双仓同装下仅撤 liuli slot（noname 不受影响）→liuli 仓 113 张锁定副本续玩→重装 Revoked→重新 import 被拒
+- 台账待处理（含规则分支）：2026-10-17 八项整包已从 liuli 商店副本关闭（[证据](../../operations/evidence/2026-10-17-t12-l04-eight/README.md)）。点数仍由调用方注入，不是上游 Math.random。`playpackconfig` 未逐项对照。2026-10-08 生命周期不构成这次上调（[L04 生命周期](../../operations/evidence/2026-10-08-l04-cardpile-liuli-lifecycle/README.md)）
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口

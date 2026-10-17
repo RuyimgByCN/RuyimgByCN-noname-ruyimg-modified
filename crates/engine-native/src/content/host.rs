@@ -1234,6 +1234,32 @@ pub enum HostBehavior {
     BossXuanlin3,
     /// 玄麟3·转阶（tag 426，D4/B3）：→颛顼 + 共工 fellow + 次座玄冥。
     BossXuanlin3x,
+    /// 后援3（tag 427，D4/B4）：Boss 死亡前置隐藏（bianshen3；牛头/马面）。
+    BossBianshen3,
+    /// 后援3·转阶（tag 428，D4/B4）：种子化换 Boss → 白无常/黑无常池。
+    BossBianshen3x,
+    /// 后援4（tag 429，D4/B4）：Boss 死亡前置隐藏（bianshen4；黑/白无常）。
+    BossBianshen4,
+    /// 后援4·转阶（tag 430，D4/B4）：种子化换 Boss → 夜叉/罗刹池。
+    BossBianshen4x,
+    /// 还人（tag 431，D4/B4）：十殿开局——禁将表、40% 孟婆乱入。
+    BossHuanren,
+    /// 还人·转关（tag 432，D4/B4）：Boss 死亡选将换关。
+    BossHuanrenDie,
+    /// 青翼（tag 433，D4/B4）：轮次 3/5/7 编排。
+    BossQingyi,
+    /// 赤翼（tag 434，D4/B4）：轮次 3/5/7 编排。
+    BossChiyi,
+    /// 赤仪2（tag 435，D4/B4）：受到的伤害 +1。
+    BossChiyiMark,
+    /// 白翼（tag 436，D4/B4）：第 5 轮敌方弃 2。
+    BossBaiyi,
+    /// 白翼·雷（tag 437，D4/B4）：第 7 轮前雷伤无效。
+    BossBaiyiThunder,
+    /// 末焱（tag 438，3D精选·刘冲）：一轮内首次判定阶段开始展示至多 3 张
+    /// 牌库顶牌，一名角色获得其中至少一张；该角色存活且手牌数不大于获得
+    /// 张数时，技能持有者受到的伤害 +1。标记进 `vm_aux.flags`，标准局不写。
+    D3Moyan,
     /// 鬼蛇旗（tag 297，批⑦ trick 卡牌机）：目标 +1 护甲。
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
@@ -1443,6 +1469,18 @@ impl HostBehavior {
             HostBehavior::BossChiyan3x => 424,
             HostBehavior::BossXuanlin3 => 425,
             HostBehavior::BossXuanlin3x => 426,
+            HostBehavior::BossBianshen3 => 427,
+            HostBehavior::BossBianshen3x => 428,
+            HostBehavior::BossBianshen4 => 429,
+            HostBehavior::BossBianshen4x => 430,
+            HostBehavior::BossHuanren => 431,
+            HostBehavior::BossHuanrenDie => 432,
+            HostBehavior::BossQingyi => 433,
+            HostBehavior::BossChiyi => 434,
+            HostBehavior::BossChiyiMark => 435,
+            HostBehavior::BossBaiyi => 436,
+            HostBehavior::BossBaiyiThunder => 437,
+            HostBehavior::D3Moyan => 438,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2110,6 +2148,18 @@ impl HostBehavior {
             424 => HostBehavior::BossChiyan3x,
             425 => HostBehavior::BossXuanlin3,
             426 => HostBehavior::BossXuanlin3x,
+            427 => HostBehavior::BossBianshen3,
+            428 => HostBehavior::BossBianshen3x,
+            429 => HostBehavior::BossBianshen4,
+            430 => HostBehavior::BossBianshen4x,
+            431 => HostBehavior::BossHuanren,
+            432 => HostBehavior::BossHuanrenDie,
+            433 => HostBehavior::BossQingyi,
+            434 => HostBehavior::BossChiyi,
+            435 => HostBehavior::BossChiyiMark,
+            436 => HostBehavior::BossBaiyi,
+            437 => HostBehavior::BossBaiyiThunder,
+            438 => HostBehavior::D3Moyan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2130,7 +2180,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 423] = [
+        pub const ALL: [HostBehavior; 435] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2552,8 +2602,20 @@ impl HostBehavior {
         HostBehavior::BossChiyan3x,
         HostBehavior::BossXuanlin3,
         HostBehavior::BossXuanlin3x,
+        HostBehavior::BossBianshen3,
+        HostBehavior::BossBianshen3x,
+        HostBehavior::BossBianshen4,
+        HostBehavior::BossBianshen4x,
+        HostBehavior::BossHuanren,
+        HostBehavior::BossHuanrenDie,
+        HostBehavior::BossQingyi,
+        HostBehavior::BossChiyi,
+        HostBehavior::BossChiyiMark,
+        HostBehavior::BossBaiyi,
+        HostBehavior::BossBaiyiThunder,
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
+        HostBehavior::D3Moyan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2739,6 +2801,18 @@ impl HostBehavior {
             HostBehavior::BossChiyan3x => "host:chiyan3x",
             HostBehavior::BossXuanlin3 => "host:xuanlin3",
             HostBehavior::BossXuanlin3x => "host:xuanlin3x",
+            HostBehavior::BossBianshen3 => "host:bianshen3",
+            HostBehavior::BossBianshen3x => "host:bianshen3x",
+            HostBehavior::BossBianshen4 => "host:bianshen4",
+            HostBehavior::BossBianshen4x => "host:bianshen4x",
+            HostBehavior::BossHuanren => "host:huanren",
+            HostBehavior::BossHuanrenDie => "host:huanren_die",
+            HostBehavior::BossQingyi => "host:qingyi",
+            HostBehavior::BossChiyi => "host:chiyi",
+            HostBehavior::BossChiyiMark => "host:chiyi2",
+            HostBehavior::BossBaiyi => "host:baiyi",
+            HostBehavior::BossBaiyiThunder => "host:baiyi_thunder",
+            HostBehavior::D3Moyan => "host:d3_moyan",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3838,29 +3912,80 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 白芒/赤炎/玄麟 2/3：同青木 dieBegin First
+            // 白芒/赤炎/玄麟 2/3 + 后援3/4：同青木 dieBegin First
             HostBehavior::BossBaimang2
             | HostBehavior::BossChiyan2
             | HostBehavior::BossXuanlin2
             | HostBehavior::BossBaimang3
             | HostBehavior::BossChiyan3
-            | HostBehavior::BossXuanlin3 => Some(TriggerMeta {
+            | HostBehavior::BossXuanlin3
+            | HostBehavior::BossBianshen3
+            | HostBehavior::BossBianshen4 => Some(TriggerMeta {
                 event: EventKind::Death,
                 timing: Timing::First,
                 priority: 0,
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 白芒/赤炎/玄麟 2x/3x：同青木·转阶 dieAfter Normal -10
+            // 白芒/赤炎/玄麟 2x/3x + 后援3/4·转阶：同青木·转阶 dieAfter Normal -10
             HostBehavior::BossBaimang2x
             | HostBehavior::BossChiyan2x
             | HostBehavior::BossXuanlin2x
             | HostBehavior::BossBaimang3x
             | HostBehavior::BossChiyan3x
-            | HostBehavior::BossXuanlin3x => Some(TriggerMeta {
+            | HostBehavior::BossXuanlin3x
+            | HostBehavior::BossBianshen3x
+            | HostBehavior::BossBianshen4x => Some(TriggerMeta {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: -10,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 还人：任意阶段结束即开局（原生无 gameStart 帧）
+            HostBehavior::BossHuanren => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 还人·转关：同隐藏链 dieAfter
+            HostBehavior::BossHuanrenDie => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: -10,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 青翼/赤翼：准备阶段锚 = 判定阶段开始
+            HostBehavior::BossQingyi | HostBehavior::BossChiyi => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 赤仪2：伤害前置 +1
+            HostBehavior::BossChiyiMark => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 白翼弃牌：第 5 轮判定阶段开始（roundStart 近似）
+            HostBehavior::BossBaiyi => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::BossBaiyiThunder => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -3986,6 +4111,14 @@ impl HostBehavior {
                 priority: 0,
                 optional: false,
                 extra_events: Vec::new(),
+            }),
+            // 末焱：判定阶段开始（一轮一次）+ 伤害前置增幅
+            HostBehavior::D3Moyan => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::DamageBefore],
             }),
             HostBehavior::WangmeiZhikeCard => None,
             HostBehavior::SijiDiscardDraw => Some(TriggerMeta {
@@ -4862,6 +4995,11 @@ pub const GJ_FOOD_ROUNDS_TANHUADONG: u8 = 3;
 pub const GJ_FOOD_ROUNDS_XIAJIAO: u8 = 4;
 pub const GJ_FOOD_ROUNDS_YOUGENG: u8 = 3;
 pub const D3_JINGGOU_TARGET: &str = "d3_jinggou_target";
+pub const D3_MOYAN_TARGET: &str = "d3_moyan_target";
+pub const D3_MOYAN_GAIN: &str = "d3_moyan_gain";
+const MOYAN_ROUND: &str = "d3_moyan_round";
+const MOYAN_TARGET: &str = "d3_moyan_target";
+const MOYAN_COUNT: &str = "d3_moyan_count";
 pub const GJ_BINGPOTONG_CARD_KEY: &str = "gj:bingpotong";
 pub const GJ_BINGPO_SHOW_OWN: &str = "gj_bingpo_show_own";
 pub const GJ_BINGPO_SHOW_TARGET: &str = "gj_bingpo_show_target";
@@ -5268,6 +5406,8 @@ pub enum HostStage {
     ShuchuiTarget,
     /// 鼠槌（equip5）：目标已选定——逐张用杀循环（凤略 Yield 同型）。
     ShuchuiTargetLoop,
+    /// 还人：等待选下一关武将（PickTag 下标）。
+    HuanrenPick,
 }
 
 impl HostStage {
@@ -5286,6 +5426,7 @@ impl HostStage {
             HostStage::ShenmiguoRestage => 10,
             HostStage::ShuchuiTargetLoop => 11,
             HostStage::ShuchuiTarget => 12,
+            HostStage::HuanrenPick => 13,
         }
     }
     pub fn from_tag(t: u8) -> Option<Self> {
@@ -5303,6 +5444,7 @@ impl HostStage {
             10 => HostStage::ShenmiguoRestage,
             11 => HostStage::ShuchuiTargetLoop,
             12 => HostStage::ShuchuiTarget,
+            13 => HostStage::HuanrenPick,
             _ => return None,
         })
     }
@@ -7426,7 +7568,7 @@ impl SkillBehavior for HostSkillBehavior {
                     && d.amount > 0
                     && d.card.is_some()
                     && ctx.state.turn.luanjian_card == d.card.map(|c| c as u32)),
-            // 四象隐藏链 2/3：本人死亡且本人是 Boss
+            // 四象隐藏链 2/3 + 后援3/4：本人死亡且本人是 Boss
             HostBehavior::BossQingmu2
             | HostBehavior::BossQingmu3
             | HostBehavior::BossBaimang2
@@ -7434,11 +7576,13 @@ impl SkillBehavior for HostSkillBehavior {
             | HostBehavior::BossXuanlin2
             | HostBehavior::BossBaimang3
             | HostBehavior::BossChiyan3
-            | HostBehavior::BossXuanlin3 => matches!(event,
+            | HostBehavior::BossXuanlin3
+            | HostBehavior::BossBianshen3
+            | HostBehavior::BossBianshen4 => matches!(event,
                 EventData::Death { player, .. }
                 if *player == owner
                     && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
-            // 四象隐藏链·转阶：同上（技能仍在 DeathMachine 前）
+            // 四象隐藏链·转阶 + 后援3/4·转阶：同上（技能仍在 DeathMachine 前）
             HostBehavior::BossQingmu2x
             | HostBehavior::BossQingmu3x
             | HostBehavior::BossBaimang2x
@@ -7446,10 +7590,51 @@ impl SkillBehavior for HostSkillBehavior {
             | HostBehavior::BossXuanlin2x
             | HostBehavior::BossBaimang3x
             | HostBehavior::BossChiyan3x
-            | HostBehavior::BossXuanlin3x => matches!(event,
+            | HostBehavior::BossXuanlin3x
+            | HostBehavior::BossBianshen3x
+            | HostBehavior::BossBianshen4x => matches!(event,
                 EventData::Death { player, .. }
                 if *player == owner
                     && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
+            // 还人开局：关卡尚未进入十殿，且持有者是 Boss
+            HostBehavior::BossHuanren => {
+                ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)
+                    && matches!(
+                        ctx.state.boss_stage().map(|s| s.kind),
+                        Some(crate::state::BossStageKind::None)
+                    )
+            }
+            // 还人转关：十殿链且等级未终（0..2 还有下一关）
+            HostBehavior::BossHuanrenDie => matches!(event,
+                EventData::Death { player, .. }
+                if *player == owner
+                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)
+                    && ctx.state.boss_stage().is_some_and(|s| {
+                        s.kind == crate::state::BossStageKind::ShidianYanluo && s.level < 3
+                    })),
+            HostBehavior::BossQingyi => wing_round_gate(ctx, owner, event, 0),
+            HostBehavior::BossChiyi => wing_round_gate(ctx, owner, event, 3),
+            HostBehavior::BossChiyiMark => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner && !d.prevented && d.amount > 0),
+            HostBehavior::BossBaiyi => {
+                let armed = ctx.state.boss_stage().map(|s| s.wing_armed).unwrap_or(0);
+                matches!(event,
+                    EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                    if *player == owner
+                        && ctx.state.turn.round == 5
+                        && armed & WING_BAI_5 == 0
+                        && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false))
+            }
+            HostBehavior::BossBaiyiThunder => matches!(event,
+                EventData::Damage(d)
+                if d.target == owner
+                    && d.nature == crate::event::DamageNature::Thunder
+                    && !d.prevented
+                    && d.amount > 0
+                    && ctx.state.turn.round < 7
+                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
+            HostBehavior::D3Moyan => moyan_filter(ctx, owner, event),
             _ => false,
         }
     }
@@ -9382,6 +9567,194 @@ impl HostMachine {
             cancelled: false,
         }));
         Flow::Yield
+    }
+}
+
+fn moyan_flag(ctx: &QueryCtx<'_>, owner: PlayerId, key: &str) -> Option<u32> {
+    ctx.state
+        .vm_aux
+        .flags
+        .get(&(owner, key.to_string()))
+        .copied()
+}
+
+fn moyan_set_flag(ctx: &mut Ctx<'_>, owner: PlayerId, key: &str, value: u32) {
+    ctx.core
+        .vm_aux
+        .flags
+        .insert((owner, key.to_string()), value);
+}
+
+fn moyan_clear_flag(ctx: &mut Ctx<'_>, owner: PlayerId, key: &str) {
+    ctx.core.vm_aux.flags.remove(&(owner, key.to_string()));
+}
+
+/// 末焱过滤：一轮内首次判定阶段开始（持有者存活且牌库或弃牌堆非空）；
+/// 或持有者受伤且记录的获得者存活、其手牌数不大于获得张数。
+fn moyan_filter(ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+    if !ctx.state.player(owner).alive {
+        return false;
+    }
+    match event {
+        EventData::Phase {
+            phase: crate::event::Phase::Judge,
+            begin: true,
+            ..
+        } => {
+            moyan_flag(ctx, owner, MOYAN_ROUND) != Some(ctx.state.turn.round)
+                && (!ctx.state.deck.is_empty() || !ctx.state.discard.is_empty())
+        }
+        EventData::Damage(damage) => {
+            if damage.target != owner || damage.prevented || damage.amount == 0 {
+                return false;
+            }
+            let Some(target) = moyan_flag(ctx, owner, MOYAN_TARGET) else {
+                return false;
+            };
+            let Some(limit) = moyan_flag(ctx, owner, MOYAN_COUNT) else {
+                return false;
+            };
+            let target = target as PlayerId;
+            (target as usize) < ctx.state.players.len()
+                && ctx.state.player(target).alive
+                && ctx.state.player(target).hand.len() <= limit as usize
+        }
+        _ => false,
+    }
+}
+
+fn moyan_take_shown(ctx: &mut Ctx<'_>, n: usize) -> Vec<CardId> {
+    let mut cards = Vec::new();
+    for _ in 0..n {
+        if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+            break;
+        }
+        cards.push(ctx.draw_judge_card());
+    }
+    cards
+}
+
+fn moyan_discard_shown(ctx: &mut Ctx<'_>, owner: PlayerId, cards: &[CardId]) {
+    if cards.is_empty() {
+        return;
+    }
+    for card in cards {
+        ctx.to_discard(*card);
+    }
+    ctx.log(LogEvent::CardDiscarded {
+        player: owner,
+        cards: cards.to_vec(),
+    });
+}
+
+fn moyan_give_shown(ctx: &mut Ctx<'_>, owner: PlayerId, to: PlayerId, cards: &[CardId]) {
+    for card in cards {
+        ctx.core.player_mut(to).hand.push(*card);
+    }
+    ctx.log(LogEvent::CardsGiven {
+        from: owner,
+        to,
+        cards: cards.to_vec(),
+    });
+}
+
+/// 末焱回合边界：展示至多 3 张，选一名角色（可取消），该角色至少获得一张。
+/// 取消或未选中的牌立即弃置（登记差异：上游留在处理区）。
+fn moyan_round_step(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    match machine.stage {
+        HostStage::Act => {
+            moyan_set_flag(ctx, machine.owner, MOYAN_ROUND, ctx.core.turn.round);
+            moyan_clear_flag(ctx, machine.owner, MOYAN_TARGET);
+            moyan_clear_flag(ctx, machine.owner, MOYAN_COUNT);
+            machine.cards = moyan_take_shown(ctx, 3);
+            if machine.cards.is_empty() {
+                return Flow::Done;
+            }
+            ctx.log(LogEvent::CardsRevealed {
+                cards: machine.cards.clone(),
+                to: ctx.core.alive_players().collect(),
+            });
+            let options: Vec<ChoiceOption> = ctx.core.alive_players().map(ChoiceOption::Player).collect();
+            if options.is_empty() {
+                let cards = machine.cards.clone();
+                moyan_discard_shown(ctx, machine.owner, &cards);
+                machine.cards.clear();
+                return Flow::Done;
+            }
+            machine.stage = HostStage::TargetChoice;
+            Flow::WaitChoice {
+                observer: machine.owner,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::SelectPlayers,
+                    prompt: D3_MOYAN_TARGET,
+                    options,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: true,
+                },
+            }
+        }
+        HostStage::TargetChoice => {
+            let picked = ctx.answer().iter().find_map(|opt| match opt {
+                ChoiceOption::Player(player) => Some(*player),
+                _ => None,
+            });
+            let Some(target) = picked.filter(|player| ctx.core.player(*player).alive) else {
+                let cards = machine.cards.clone();
+                moyan_discard_shown(ctx, machine.owner, &cards);
+                machine.cards.clear();
+                return Flow::Done;
+            };
+            machine.target = Some(target);
+            machine.stage = HostStage::SelectCard;
+            let max = machine.cards.len();
+            Flow::WaitChoice {
+                observer: target,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::SelectCards,
+                    prompt: D3_MOYAN_GAIN,
+                    options: machine.cards.iter().copied().map(ChoiceOption::Card).collect(),
+                    min: 1,
+                    max,
+                    allow_cancel: false,
+                },
+            }
+        }
+        HostStage::SelectCard => {
+            let wanted: Vec<CardId> = ctx
+                .answer()
+                .iter()
+                .filter_map(|opt| match opt {
+                    ChoiceOption::Card(card) => Some(*card),
+                    _ => None,
+                })
+                .collect();
+            let Some(target) = machine.target else {
+                let cards = machine.cards.clone();
+                moyan_discard_shown(ctx, machine.owner, &cards);
+                machine.cards.clear();
+                return Flow::Done;
+            };
+            let mut gain = Vec::new();
+            let mut rest = Vec::new();
+            for card in machine.cards.drain(..) {
+                if wanted.contains(&card) {
+                    gain.push(card);
+                } else {
+                    rest.push(card);
+                }
+            }
+            if gain.is_empty() {
+                moyan_discard_shown(ctx, machine.owner, &rest);
+                return Flow::Done;
+            }
+            moyan_give_shown(ctx, machine.owner, target, &gain);
+            moyan_discard_shown(ctx, machine.owner, &rest);
+            moyan_set_flag(ctx, machine.owner, MOYAN_TARGET, u32::from(target));
+            moyan_set_flag(ctx, machine.owner, MOYAN_COUNT, gain.len() as u32);
+            Flow::Done
+        }
+        _ => Flow::Done,
     }
 }
 
@@ -28323,6 +28696,77 @@ HostBehavior::XianjianLingyu => match self.stage {
                 );
                 Flow::Done
             }
+            // 后援3/4：死亡前置隐藏（日志近似；不改 stage.kind）
+            HostBehavior::BossBianshen3 => {
+                bianshen_mark_hide(ctx, self.owner, "后援3");
+                Flow::Done
+            }
+            HostBehavior::BossBianshen4 => {
+                bianshen_mark_hide(ctx, self.owner, "后援4");
+                Flow::Done
+            }
+            // 后援3·转阶：种子化 → 白无常/黑无常
+            HostBehavior::BossBianshen3x => {
+                bianshen_run_change_boss(
+                    ctx,
+                    self.owner,
+                    &["白无常", "黑无常"],
+                );
+                Flow::Done
+            }
+            // 后援4·转阶：种子化 → 夜叉/罗刹
+            HostBehavior::BossBianshen4x => {
+                bianshen_run_change_boss(
+                    ctx,
+                    self.owner,
+                    &["夜叉", "罗刹"],
+                );
+                Flow::Done
+            }
+            HostBehavior::BossHuanren => {
+                huanren_on_game_start(ctx, self.owner);
+                Flow::Done
+            }
+            HostBehavior::BossHuanrenDie => match self.stage {
+                HostStage::Act => huanren_die_ask(ctx, self),
+                HostStage::HuanrenPick => {
+                    huanren_die_commit(ctx, self);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            HostBehavior::BossQingyi => {
+                wing_qing(ctx, self.owner);
+                Flow::Done
+            }
+            HostBehavior::BossChiyi => {
+                wing_chi(ctx, self.owner);
+                Flow::Done
+            }
+            HostBehavior::BossChiyiMark => {
+                ctx.current_damage_mut().amount += 1;
+                Flow::Done
+            }
+            HostBehavior::BossBaiyi => {
+                wing_bai_discard(ctx, self.owner);
+                Flow::Done
+            }
+            HostBehavior::BossBaiyiThunder => {
+                ctx.current_damage_mut().prevented = true;
+                Flow::Done
+            }
+            HostBehavior::D3Moyan => {
+                let frame_id = ctx.current_frame_id();
+                let is_damage = ctx.res.frame(frame_id).is_some_and(|frame| {
+                    matches!(frame.data, EventData::Damage(_))
+                });
+                if is_damage {
+                    ctx.current_damage_mut().amount += 1;
+                    Flow::Done
+                } else {
+                    moyan_round_step(self, ctx)
+                }
+            }
             // 机关妖术防重标记：纯状态无触发面（补偿触发暂缓）
             HostBehavior::SwdJiguanyaoState => Flow::Done,
         }
@@ -28342,6 +28786,389 @@ struct SixiangChainParams {
     side_reinits: &'static [(i8, &'static str)],
     heal_all: bool,
     chain_level: u8,
+}
+
+const HUANREN_PICK: &str = "huanren_pick";
+/// 上游禁将九名；目录里能对上的只有这两名。孙策替换池不在目录，
+/// 命中后改挂标准刘备（登记差异）。
+const HUANREN_BANNED: &[&str] = &["陆逊", "张春华"];
+const HUANREN_REPLACEMENT: &str = "刘备";
+/// 白翼第 5 轮弃牌门。青翼用 bit 0..2，赤翼用 bit 3..5。
+const WING_BAI_5: u8 = 1 << 6;
+
+fn wing_bit(base: u8, round: u32) -> Option<u8> {
+    let shift = match round {
+        3 => 0,
+        5 => 1,
+        7 => 2,
+        _ => return None,
+    };
+    Some(1u8 << (base + shift))
+}
+
+fn wing_round_gate(
+    ctx: &QueryCtx<'_>,
+    owner: PlayerId,
+    event: &EventData,
+    bit_base: u8,
+) -> bool {
+    let EventData::Phase {
+        player,
+        phase: crate::event::Phase::Judge,
+        begin: true,
+    } = event
+    else {
+        return false;
+    };
+    if *player != owner || !matches!(ctx.state.turn.round, 3 | 5 | 7) {
+        return false;
+    }
+    if !ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false) {
+        return false;
+    }
+    let bit = wing_bit(bit_base, ctx.state.turn.round).unwrap_or(0);
+    let armed = ctx.state.boss_stage().map(|s| s.wing_armed).unwrap_or(0);
+    armed & bit == 0
+}
+
+fn with_boss_stage(ctx: &mut Ctx<'_>, f: impl FnOnce(&mut crate::state::BossStageState)) {
+    if let crate::state::GameMode::Boss { stage, .. } = &mut ctx.core.mode {
+        f(stage);
+    }
+}
+
+fn general_def_first(catalog: &crate::catalog::Catalog, name: &str) -> Option<u16> {
+    (0..catalog.general_count() as u16)
+        .find(|&d| catalog.general_meta(d).map(|g| g.0) == Some(name))
+}
+
+fn grant_named_skill(ctx: &mut Ctx<'_>, seat: PlayerId, name: &str) {
+    let Some(def) = ctx.catalog.skill_by_name(name) else {
+        return;
+    };
+    ctx.core.skills.insert(
+        (seat, def),
+        crate::state::SkillInstance {
+            owner: seat,
+            enabled: true,
+            once_used: false,
+            expires_end_of_turn: false,
+            rounds: 0,
+        },
+    );
+}
+
+fn seat_with_general(ctx: &Ctx<'_>, name: &str) -> Option<PlayerId> {
+    let g = boss_general_def(ctx.catalog, name)?;
+    (0..ctx.core.players.len() as u8)
+        .find(|&p| ctx.core.player(p).general_slots[0] == Some(g))
+}
+
+fn forced_discard_n(ctx: &mut Ctx<'_>, seat: PlayerId, mut left: usize) {
+    let hand: Vec<CardId> = ctx.core.player(seat).hand.clone();
+    for c in hand {
+        if left == 0 {
+            break;
+        }
+        ctx.take_hand_card(seat, c);
+        ctx.to_discard(c);
+        left -= 1;
+    }
+    let equips: Vec<CardId> = ctx.core.player(seat).equips.clone();
+    for c in equips {
+        if left == 0 {
+            break;
+        }
+        ctx.core.player_mut(seat).equips.retain(|x| *x != c);
+        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, seat, c);
+        ctx.to_discard(c);
+        left -= 1;
+    }
+}
+
+fn bianshen_mark_hide(ctx: &mut Ctx<'_>, boss: PlayerId, skill: &'static str) {
+    ctx.log(LogEvent::SkillTriggered { skill, owner: boss });
+}
+
+fn bianshen_run_change_boss(ctx: &mut Ctx<'_>, boss: PlayerId, pool: &[&str]) {
+    let defs: Vec<u16> = pool
+        .iter()
+        .filter_map(|n| boss_general_def(ctx.catalog, n))
+        .collect();
+    if defs.is_empty() {
+        return;
+    }
+    ctx.core.player_mut(boss).death_cancelled = true;
+    let j = ctx.core.rng.gen_range(defs.len() as u32) as usize;
+    let g = defs[j];
+    sixiang_reinit_seat(ctx, boss, g, false);
+    sixiang_discard_zone(ctx, boss);
+    ctx.draw_cards(boss, 4);
+    ctx.core.turn.current = boss;
+    ctx.core.turn.phase = crate::event::Phase::Judge;
+}
+
+fn huanren_spawn_mengpo(ctx: &mut Ctx<'_>, draw4: bool) {
+    let Some(pid) = sixiang_add_fellow(ctx, "孟婆") else {
+        return;
+    };
+    if !draw4 {
+        let hand = ctx.core.player(pid).hand.clone();
+        for c in hand.into_iter().rev() {
+            ctx.take_hand_card(pid, c);
+            ctx.core.deck.push(c);
+        }
+    }
+    with_boss_stage(ctx, |stage| stage.mengpo_spawned = true);
+}
+
+fn huanren_remove_mengpo(ctx: &mut Ctx<'_>) {
+    let mengpo = boss_general_def(ctx.catalog, "孟婆");
+    let seats = ctx.core.players.len() as u8;
+    let mut gone = Vec::new();
+    for t in 0..seats {
+        if mengpo.is_some() && ctx.core.player(t).general_slots[0] == mengpo {
+            let p = ctx.core.player_mut(t);
+            p.alive = false;
+            p.dying = false;
+            p.hp = 0;
+            gone.push(t);
+        }
+    }
+    if let crate::state::GameMode::Boss { fellows, .. } = &mut ctx.core.mode {
+        fellows.retain(|p| !gone.contains(p));
+    }
+}
+
+fn huanren_on_game_start(ctx: &mut Ctx<'_>, boss: PlayerId) {
+    let banned: Vec<u16> = HUANREN_BANNED
+        .iter()
+        .filter_map(|n| general_def_first(ctx.catalog, n))
+        .collect();
+    with_boss_stage(ctx, |stage| {
+        stage.kind = crate::state::BossStageKind::ShidianYanluo;
+        stage.level = 0;
+        stage.banned_generals = banned.clone();
+    });
+    let replacement = general_def_first(ctx.catalog, HUANREN_REPLACEMENT);
+    let seats = ctx.core.players.len() as u8;
+    for t in 0..seats {
+        if t == boss {
+            continue;
+        }
+        let g = ctx.core.player(t).general_slots[0];
+        if g.is_some_and(|id| banned.contains(&id)) {
+            if let Some(rep) = replacement {
+                sixiang_reinit_seat(ctx, t, rep, false);
+            }
+        }
+    }
+    if ctx.core.rng.gen_range(100) < 40 {
+        huanren_spawn_mengpo(ctx, false);
+    }
+}
+
+/// 十殿下一关候选。level==2 且孟婆已死且阶段数≤50 时改为地藏王。
+/// 映种（四季映姬）按 ADR 0783 候选恒不可达，不进入此表。
+fn huanren_candidates(ctx: &Ctx<'_>, level: u8) -> Vec<u16> {
+    let dizang = level == 2
+        && ctx.core.turn.phase_number <= 50
+        && ctx.core.boss_stage().is_some_and(|s| s.mengpo_died);
+    let names: &[&str] = if dizang {
+        &["地藏王"]
+    } else {
+        match level {
+            0 => &["楚江王", "宋帝王", "五官王", "阎罗王"],
+            1 => &["卞城王", "泰山王", "都市王", "平等王"],
+            2 => &["转轮王"],
+            _ => &[],
+        }
+    };
+    names
+        .iter()
+        .filter_map(|n| boss_general_def(ctx.catalog, n))
+        .collect()
+}
+
+fn huanren_apply(ctx: &mut Ctx<'_>, boss: PlayerId, general: u16) {
+    ctx.core.player_mut(boss).death_cancelled = true;
+    let is_dizang = boss_general_def(ctx.catalog, "地藏王") == Some(general);
+    sixiang_reinit_seat(ctx, boss, general, false);
+    sixiang_discard_zone(ctx, boss);
+    ctx.draw_cards(boss, 4);
+    if is_dizang {
+        ctx.draw_cards(boss, 3);
+    }
+    grant_named_skill(ctx, boss, "还人");
+    grant_named_skill(ctx, boss, "还人·转关");
+    let spawned = ctx.core.boss_mengpo_spawned();
+    with_boss_stage(ctx, |stage| {
+        stage.level = stage.level.saturating_add(1);
+        stage.pending = None;
+        stage.kind = crate::state::BossStageKind::ShidianYanluo;
+    });
+    let level = ctx.core.boss_stage().map(|s| s.level).unwrap_or(0);
+    if !spawned {
+        let roll = ctx.core.rng.gen_range(100);
+        if roll < 50 || level == 2 {
+            huanren_spawn_mengpo(ctx, level != 0);
+        }
+    } else {
+        huanren_remove_mengpo(ctx);
+    }
+    ctx.core.turn.current = boss;
+    ctx.core.turn.phase = crate::event::Phase::Judge;
+}
+
+fn huanren_die_ask(ctx: &mut Ctx<'_>, mach: &mut HostMachine) -> Flow {
+    let level = ctx.core.boss_stage().map(|s| s.level).unwrap_or(0);
+    let cands = huanren_candidates(ctx, level);
+    if cands.is_empty() {
+        return Flow::Done;
+    }
+    if cands.len() == 1 {
+        huanren_apply(ctx, mach.owner, cands[0]);
+        return Flow::Done;
+    }
+    with_boss_stage(ctx, |stage| {
+        stage.pending = Some(crate::state::BossStagePending::SelectGeneral {
+            candidates: cands.clone(),
+        });
+    });
+    mach.stage = HostStage::HuanrenPick;
+    Flow::WaitChoice {
+        observer: mach.owner,
+        spec: ChoiceSpec {
+            kind: ChoiceKind::PickTag,
+            prompt: HUANREN_PICK,
+            options: (0..cands.len())
+                .map(|i| ChoiceOption::Tag(i as u8))
+                .collect(),
+            min: 1,
+            max: 1,
+            allow_cancel: false,
+        },
+    }
+}
+
+fn huanren_die_commit(ctx: &mut Ctx<'_>, mach: &HostMachine) {
+    let cands = match ctx.core.boss_stage().and_then(|s| s.pending.clone()) {
+        Some(crate::state::BossStagePending::SelectGeneral { candidates }) => candidates,
+        None => return,
+    };
+    let idx = match ctx.answer().first() {
+        Some(ChoiceOption::Tag(n)) => *n as usize,
+        _ => 0,
+    };
+    let Some(&g) = cands.get(idx).or_else(|| cands.first()) else {
+        return;
+    };
+    huanren_apply(ctx, mach.owner, g);
+}
+
+fn wing_arm(ctx: &mut Ctx<'_>, bit: u8) {
+    with_boss_stage(ctx, |stage| {
+        if stage.kind == crate::state::BossStageKind::None {
+            stage.kind = crate::state::BossStageKind::WingGate;
+        }
+        stage.wing_armed |= bit;
+    });
+}
+
+fn wing_qing(ctx: &mut Ctx<'_>, _owner: PlayerId) {
+    let round = ctx.core.turn.round;
+    let Some(bit) = wing_bit(0, round) else {
+        return;
+    };
+    wing_arm(ctx, bit);
+    let seats = ctx.core.players.len() as u8;
+    match round {
+        3 => {
+            for t in 0..seats {
+                if ctx.core.player(t).alive && ctx.core.is_boss_side(t) {
+                    let p = ctx.core.player_mut(t);
+                    if (p.hp as u32) < p.max_hp {
+                        p.hp += 1;
+                    }
+                }
+            }
+        }
+        5 => {
+            for t in 0..seats {
+                if ctx.core.player(t).alive && !ctx.core.is_boss_side(t) && ctx.core.player(t).hp > 1
+                {
+                    ctx.core.player_mut(t).hp -= 1;
+                }
+            }
+        }
+        7 => {
+            for name in ["勾芒", "书精"] {
+                if let Some(seat) = seat_with_general(ctx, name) {
+                    let dead = !ctx.core.player(seat).alive;
+                    {
+                        let p = ctx.core.player_mut(seat);
+                        p.max_hp += 1;
+                        if dead {
+                            p.alive = true;
+                            p.dying = false;
+                            p.hp = 3;
+                        } else {
+                            p.hp = (p.hp + 3).min(p.max_hp as i32);
+                        }
+                    }
+                    ctx.draw_cards(seat, 3);
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
+fn wing_chi(ctx: &mut Ctx<'_>, _owner: PlayerId) {
+    let round = ctx.core.turn.round;
+    let Some(bit) = wing_bit(3, round) else {
+        return;
+    };
+    wing_arm(ctx, bit);
+    let seats = ctx.core.players.len() as u8;
+    match round {
+        3 => {
+            for t in 0..seats {
+                if ctx.core.player(t).alive && !ctx.core.is_boss_side(t) {
+                    grant_named_skill(ctx, t, "赤仪2");
+                }
+            }
+        }
+        5 => {
+            for t in 0..seats {
+                if ctx.core.player(t).alive && ctx.core.player(t).hp > 1 {
+                    ctx.core.player_mut(t).hp -= 1;
+                }
+            }
+        }
+        7 => {
+            if let Some(seat) = seat_with_general(ctx, "焰灵") {
+                let p = ctx.core.player_mut(seat);
+                p.hp -= 5;
+                if p.hp < 1 {
+                    p.hp = 1;
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
+fn wing_bai_discard(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    wing_arm(ctx, WING_BAI_5);
+    let seats = ctx.core.players.len() as u8;
+    for t in 0..seats {
+        if !ctx.core.player(t).alive || ctx.core.is_boss_side(t) {
+            continue;
+        }
+        let _ = owner;
+        forced_discard_n(ctx, t, 2);
+    }
 }
 
 fn boss_general_def(catalog: &crate::catalog::Catalog, name: &str) -> Option<u16> {

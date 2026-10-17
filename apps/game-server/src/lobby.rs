@@ -93,6 +93,32 @@ impl Lobby {
             .map_err(|e| format!("原生建局任务失败: {e}"))?
     }
 
+    /// 已安装扩展进入新对局，返回可恢复的存档。
+    pub async fn native_match(
+        &self,
+        packages: Vec<String>,
+        seed: u64,
+        seats: u8,
+    ) -> Result<crate::native::NativeMatchArchive, String> {
+        let native = self.native.clone();
+        tokio::task::spawn_blocking(move || {
+            crate::native::open_native_match(&native, &packages, seed, seats)
+        })
+        .await
+        .map_err(|e| format!("原生对局任务失败: {e}"))?
+    }
+
+    /// 用同一安装集恢复对局。缺包或错版由装载器/内容锁拒绝。
+    pub async fn native_restore(
+        &self,
+        req: crate::native::NativeRestoreRequest,
+    ) -> Result<crate::native::NativeRestoreSummary, String> {
+        let native = self.native.clone();
+        tokio::task::spawn_blocking(move || crate::native::restore_native_match(&native, &req))
+            .await
+            .map_err(|e| format!("原生恢复任务失败: {e}"))?
+    }
+
     /// Return one bounded page from the immutable startup content catalog.
     pub fn content_catalog_page(
         &self,

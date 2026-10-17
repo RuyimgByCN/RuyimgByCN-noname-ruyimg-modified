@@ -1,0 +1,10 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/t9_d5_surface.rs (target/debug/deps/t9_d5_surface-30dc89e5e58529e9)
+
+running 3 tests
+test t9_unknown_mapping_is_not_a_noop ... ok
+test t9_zhuge_and_ylyg_skills_stay_unmapped ... ok
+test t9_infinity_hp_is_rejected ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

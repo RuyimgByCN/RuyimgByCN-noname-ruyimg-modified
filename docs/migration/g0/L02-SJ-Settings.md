@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：extension/SJ Settings/extension.js: packed=False, eval=1, long_lines=0
-- 台账原生重构状态（摘录）：**待重构；未验收**
+- 台账原生重构状态（摘录）：**八项整包已验收（2026-10-17）；不请求网络、不 eval update.js、不打开 PDF、不启动 eruda、不调用 game.reload 或 game.loop。Cordova、进度条和通知仍为登记差异**。真实包 `packages/extensions/sj-settings-upstream-liuli`。G0 本页不是该次上调的证明，证据见 [L02 八项](../../operations/evidence/2026-10-17-t12-l02-eight/README.md)。L21 计入后总账为 15/37
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：SJ Settings
 - 台账已核查摘要：Android 外部打开扩展、配置导入、下载入口和调试台
-- 台账待处理（含规则分支）：统一包导入入口 + 移动端文件/分享桥；配置有 schema 与备份，调试控制台独立能力；外部包导入→重启可用
+- 台账待处理（含规则分支）：八项公式已从真实安装验收（[L02 八项](../../operations/evidence/2026-10-17-t12-l02-eight/README.md)）。不请求网络，不 eval update.js，不打开 PDF，不启动 eruda，不调用 game.reload 或 game.loop。Cordova、进度条和通知没有迁入。数据库导入要求 config 与 data 都是对象，比上游数组为真更严
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口

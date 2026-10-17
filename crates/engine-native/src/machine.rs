@@ -142,6 +142,11 @@ pub enum LogEvent {
         card: CardId,
         success: bool,
     },
+    /// VM 亮牌：牌不移动，只进入权威日志（表现层不重复展示牌面）。
+    CardsRevealed {
+        cards: Vec<CardId>,
+        to: Vec<PlayerId>,
+    },
 }
 
 /// 机器单步结果。

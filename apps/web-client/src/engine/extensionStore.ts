@@ -4,7 +4,8 @@
  * - 发现源：EXTENSION_CATALOG（15 包）
  * - 持久化：localStorage（浏览器）/ 同源键（桌面壳共用）
  * - 在局锁定：active 集快照写入 contentLock；卸载不破坏锁内旧局续玩标记
- * - 窄壳装载：待 NativeEngine.new_with_extensions（缺口登记，不改内核）
+ * - 窄壳装载：开局把 cards.json 数组经 WorkerRequest.packsJson 交给
+ *   NativeEngine.new_with_packs_json / restore_hex_with_packs_json
  */
 import {
   EXTENSION_CATALOG,

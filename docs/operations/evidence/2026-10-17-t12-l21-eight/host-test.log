@@ -1,0 +1,9 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running tests/l21_martial_eight.rs (target/debug/deps/l21_martial_eight-9aecca7ef6f21a05)
+
+running 1 test
+test l21_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+

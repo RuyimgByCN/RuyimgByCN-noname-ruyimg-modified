@@ -3,9 +3,10 @@
 //!
 //! 上游（noname-liuli wuxing @ 8485dbb2）：每角色随机属性、牌堆 1/3
 //! 随机属性、被克弃牌/被生摸牌、五行盘改手牌属性（equip5）。
-//! 原生映射：属性入核心状态（规则随机性走引擎 RNG）；被克弃牌为
-//! 确定性首张（登记差异：上游为目标自选「he」）；五行盘占栏 equip5
-//! → 宝物栏（Treasure），其技能以授予验证（装备技能挂载生命周期未做）。
+//! 原生映射：属性入核心状态（规则随机性走引擎 RNG，不是上游
+//! Math.random 逐局等价）；被克弃牌为确定性首张（登记差异：上游为
+//! 目标自选「he」）；五行盘占栏 equip5 → 宝物栏，`equip_skills` 随
+//! 装备授予 `wuxingpan_skill`。联机提前返回、录像和帮助 HTML 仍未迁入。
 
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -340,4 +341,249 @@ fn wuxing_real_host_full_lifecycle() {
     // ⑥ 重新 import 被拒
     let report2 = import_extensions(&store, &root, &options());
     assert!(report2.is_err(), "撤销后重新 import 应被拒");
+}
+
+/// L06 五行八项整包（2026-10-17）：从真实安装覆盖功能、配置、依赖、组合、
+/// 保存恢复、安装升级、目标平台与规则差异。联机/录像/帮助 HTML 仍是登记差异。
+/// 本测试只关闭 L06。
+#[test]
+fn l06_eight_dimension_from_fresh_install() {
+    use content_runtime::RuntimeError;
+    use content_schema::{ContentPackage, PackageDependency};
+
+    let source_root = repo_extensions_root().join("wuxing-upstream-liuli");
+    let npack_path = source_root.join("package.npack.json");
+    let cards_path = source_root.join("assets/cards.json");
+    let npack_bytes = std::fs::read(&npack_path).expect("读 npack");
+    let cards_text = std::fs::read_to_string(&cards_path).expect("读 cards.json");
+    let cfg_text = std::fs::read_to_string(source_root.join("assets/wuxing.json")).expect("配置");
+    assert!(
+        cfg_text.contains("\"denominator\": 3"),
+        "配置正例：牌堆属性比例分母为 3"
+    );
+
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &repo_extensions_root(), &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "wuxing")
+        .expect("五行已安装");
+    assert_eq!(meta.version, "1.0.0");
+    assert_eq!(meta.namespace, "upstream-liuli");
+    let installed_root = PathBuf::from(meta.extension_root.as_ref().unwrap());
+    let installed_npack = std::fs::read(installed_root.join("package.npack.json")).expect("安装副本");
+    assert_eq!(installed_npack, npack_bytes);
+    assert_eq!(
+        meta.content_hash,
+        content_runtime::content_hash_hex(&npack_bytes)
+    );
+    let installed_pkg = ContentPackage::from_json_bytes(&installed_npack).expect("解析");
+    assert!(installed_pkg.manifest.dependencies.is_empty(), "依赖正例：无外部依赖");
+
+    let active_version = |store: &PackageStore| -> String {
+        store
+            .read_active()
+            .unwrap()
+            .packages
+            .iter()
+            .find(|(slot, _)| slot.ends_with("/wuxing"))
+            .map(|(_, version)| version.clone())
+            .expect("激活集含五行")
+    };
+    assert_eq!(active_version(&store), "1.0.0");
+
+    match store.activate_version("upstream-liuli", "wuxing", "9.9.9") {
+        Err(RuntimeError::NotFound(_)) => {}
+        other => panic!("未安装版本应 NotFound: {other:?}"),
+    }
+    assert_eq!(active_version(&store), "1.0.0");
+
+    let mut escaped = installed_pkg.clone();
+    escaped.manifest.package_id = "../wuxing".into();
+    escaped.manifest.logic_hash = escaped.compute_logic_hash();
+    match store.install(&escaped.to_json_bytes().unwrap(), None, &options()) {
+        Err(RuntimeError::Package(msg)) => assert!(msg.contains("invalid package_id"), "{msg}"),
+        other => panic!("路径逃逸应拒绝: {other:?}"),
+    }
+
+    let mut missing = installed_pkg.clone();
+    missing.manifest.version = "1.0.1".into();
+    missing.manifest.dependencies.push(PackageDependency {
+        namespace: "upstream-liuli".into(),
+        package_id: "missing-base".into(),
+        version: "1.0.0".into(),
+        logic_hash: [0u8; 32],
+    });
+    missing.manifest.logic_hash = missing.compute_logic_hash();
+    match store.install_with_assets(
+        &missing.to_json_bytes().unwrap(),
+        None,
+        &options(),
+        &source_root,
+    ) {
+        Err(RuntimeError::Invalid(msg)) => assert!(msg.contains("missing dependency"), "{msg}"),
+        other => panic!("缺依赖应拒绝: {other:?}"),
+    }
+    assert_eq!(active_version(&store), "1.0.0");
+
+    let disabled_dir = tempfile::tempdir().unwrap();
+    let disabled_root = disabled_dir.path().join("wuxing-disabled");
+    std::fs::create_dir_all(disabled_root.join("assets")).unwrap();
+    std::fs::copy(source_root.join("manifest.json"), disabled_root.join("manifest.json")).unwrap();
+    std::fs::copy(&npack_path, disabled_root.join("package.npack.json")).unwrap();
+    std::fs::copy(&cards_path, disabled_root.join("assets/cards.json")).unwrap();
+    std::fs::copy(
+        source_root.join("assets/wuxing.json"),
+        disabled_root.join("assets/wuxing.json"),
+    )
+    .unwrap();
+    let mf_path = disabled_root.join("manifest.json");
+    let mut mf: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&mf_path).unwrap()).unwrap();
+    mf["enabled"] = serde_json::Value::Bool(false);
+    std::fs::write(&mf_path, serde_json::to_string_pretty(&mf).unwrap()).unwrap();
+    {
+        let disabled_store = PackageStore::open(disabled_dir.path().join("store")).unwrap();
+        let disabled =
+            import_extensions(&disabled_store, disabled_dir.path(), &options()).expect("import");
+        assert!(!disabled.installed.iter().any(|m| m.package_id == "wuxing"));
+        assert!(disabled.skipped.iter().any(|s| s == "wuxing-disabled"));
+    }
+
+    let value: serde_json::Value = serde_json::from_str(&cards_text).unwrap();
+    let shengke = value["skills"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|s| s["name"] == "wuxing_shengke")
+        .unwrap()["mapping"]
+        .as_str()
+        .unwrap();
+    assert_eq!(shengke, "host:shengke_check");
+    assert!(
+        value["cards"][0]["equip_skills"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|s| s == "wuxingpan_skill"),
+        "五行盘声明装备技能"
+    );
+
+    let installed_cards =
+        std::fs::read_to_string(installed_root.join("assets/cards.json")).unwrap();
+    assert_eq!(installed_cards, cards_text);
+    let pack = {
+        let out = content_native_loader::bridge_pack(&installed_cards).unwrap();
+        assert_eq!(out.pack.def.name, "wuxing-upstream-liuli");
+        out.pack
+    };
+    let mut e = Engine::new_with_extensions(3419, 3, &[&pack]).expect("建局");
+    let again = Engine::new_with_extensions(3419, 3, &[&pack]).expect("同种子");
+    assert_eq!(
+        e.save().core.players[0].wunature,
+        again.save().core.players[0].wunature,
+        "规则差异：属性由引擎 RNG 决定，同种子可重放；不是上游 Math.random 逐局等价"
+    );
+    let base = Engine::new(1, 3).catalog().cards.len();
+    assert_eq!(e.catalog().cards.len(), base + 1);
+    assert!(e.save().core.players.iter().all(|p| p.wunature.is_some()));
+    assert!(!e.save().core.card_natures.is_empty(), "功能正例：牌堆获得属性");
+
+    advance_to_play(&mut e, 0);
+    e.debug_set_hp(0, 4);
+    match submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: u32::MAX,
+            targets: vec![1],
+        },
+    ) {
+        CommandOutcome::Rejected(_) => {}
+        other => panic!("不存在的牌必须拒绝: {other:?}"),
+    }
+    let pan_name = e
+        .catalog()
+        .cards
+        .iter()
+        .find(|c| c.name.starts_with("wxl_wuxingpan"))
+        .expect("五行盘")
+        .name
+        .to_string();
+    let pan = e.debug_move_named_card_to_hand(0, &pan_name);
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: pan,
+            targets: vec![],
+        },
+    );
+    assert!(matches!(out, CommandOutcome::Accepted { .. }), "装备五行盘: {out:?}");
+    assert!(e.save().core.players[0].equips.contains(&pan));
+    let def = e.catalog().skill_by_name("wuxingpan_skill").expect("技能在目录");
+    assert!(
+        e.save().core.skills.contains_key(&(0, def)),
+        "功能正例：装备授予五行盘技能"
+    );
+
+    let saved = e.save();
+    let bytes = engine_native::archive::encode_archive(&saved);
+    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
+    let restored = Engine::restore_with_extensions(&decoded, &[&pack]).expect("保存恢复");
+    assert_eq!(restored.catalog().cards.len(), base + 1);
+    match Engine::restore(&saved) {
+        Err(engine_native::SnapshotError::RuleVersionMismatch { .. }) => {}
+        Err(err) => panic!("{err:?}"),
+        Ok(_) => panic!("标准目录不得恢复"),
+    }
+    let mut wrong = content_native_loader::bridge_pack(&installed_cards).unwrap().pack;
+    wrong.def.version += 1;
+    match Engine::restore_with_extensions(&saved, &[&wrong]) {
+        Err(engine_native::SnapshotError::RuleVersionMismatch { .. }) => {}
+        Err(err) => panic!("错版必须拒绝: {err:?}"),
+        Ok(_) => panic!("错版必须拒绝"),
+    }
+
+    let huanle_text = std::fs::read_to_string(
+        repo_extensions_root().join("huanle-upstream-noname/assets/cards.json"),
+    )
+    .unwrap();
+    let huanle = content_native_loader::bridge_pack(&huanle_text).unwrap().pack;
+    let combo = Engine::new_with_extensions(3420, 3, &[&pack, &huanle]).expect("组合");
+    assert!(combo.catalog().cards.len() > base + 1);
+    assert_eq!(
+        combo.catalog().cards.iter().filter(|c| c.name.starts_with("wxl_")).count(),
+        1
+    );
+    assert_eq!(
+        combo.catalog().cards.iter().filter(|c| c.name.starts_with("hnl_")).count(),
+        7
+    );
+    match Engine::restore_with_extensions(&saved, &[&pack, &huanle]) {
+        Err(engine_native::SnapshotError::RuleVersionMismatch { .. }) => {}
+        Err(err) => panic!("组合反例: {err:?}"),
+        Ok(_) => panic!("单包存档不得用双包目录恢复"),
+    }
+
+    let mut upgraded = installed_pkg.clone();
+    upgraded.manifest.version = "2.0.0".into();
+    upgraded.manifest.logic_hash = upgraded.compute_logic_hash();
+    store
+        .install_with_assets(&upgraded.to_json_bytes().unwrap(), None, &options(), &source_root)
+        .expect("升级");
+    assert_eq!(active_version(&store), "2.0.0");
+    let rolled = store.rollback().unwrap();
+    assert_eq!(
+        rolled
+            .packages
+            .iter()
+            .find(|(slot, _)| slot.ends_with("/wuxing"))
+            .map(|(_, v)| v.as_str()),
+        Some("1.0.0")
+    );
+    let still = Engine::restore_with_extensions(&saved, &[&pack]).expect("升级前存档");
+    assert!(still.save().core.skills.contains_key(&(0, def)));
 }

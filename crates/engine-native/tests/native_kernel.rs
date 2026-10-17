@@ -18748,7 +18748,7 @@ fn d4_boss_b0_archive_format_v79_rejects_v78_without_migration() {
         decode_archive, encode_archive, ArchiveError, ARCHIVE_FORMAT_VERSION, ARCHIVE_MAGIC,
     };
 
-    assert_eq!(ARCHIVE_FORMAT_VERSION, 79);
+    assert_eq!(ARCHIVE_FORMAT_VERSION, 80);
     let e = Engine::new_boss(29102, 3, 0, 0);
     let mut bytes = encode_archive(&e.save());
     // 伪造头格式版本 78（载荷仍为 v79 布局）——门禁应拒收。
@@ -19350,4 +19350,374 @@ fn d4_boss_b3_sixiang3_host_tags() {
         HostBehavior::from_tag(426),
         Some(HostBehavior::BossXuanlin3x)
     );
+}
+
+// ---------------------------------------------------------------------------
+// D4 后援 / 还人 / 青赤白翼（规则 v295；tag 427–437）
+// 从 new_boss_stage 起步，不预写 stage 结果。
+// ---------------------------------------------------------------------------
+
+fn general_named_first(e: &Engine, name: &str) -> u16 {
+    (0..e.catalog().general_count() as u16)
+        .find(|&d| e.catalog().general_meta(d).map(|g| g.0) == Some(name))
+        .unwrap_or_else(|| panic!("general {name}"))
+}
+
+fn general_slot_name(e: &Engine, seat: u8) -> Option<&str> {
+    e.state_core().players[seat as usize].general_slots[0]
+        .and_then(|id| e.catalog().general_meta(id).map(|g| g.0))
+}
+
+fn living_named(e: &Engine, name: &str) -> usize {
+    (0..e.state_core().players.len() as u8)
+        .filter(|&s| e.debug_alive(s) && general_slot_name(e, s) == Some(name))
+        .count()
+}
+
+fn has_named_skill(e: &Engine, seat: u8, name: &str) -> bool {
+    e.catalog()
+        .skill_by_name(name)
+        .is_some_and(|def| e.state_core().skills.contains_key(&(seat, def)))
+}
+
+/// 排空挂起。还人选将必须点选项，不能空应答。
+fn settle_boss_choices(e: &mut Engine) {
+    for _ in 0..32 {
+        let Some(choice) = e.open_choice().cloned() else {
+            return;
+        };
+        let sel = if choice.spec.prompt == "huanren_pick" {
+            assert!(!choice.spec.options.is_empty(), "还人候选为空");
+            vec![choice.spec.options[0]]
+        } else {
+            let cards: Vec<ChoiceOption> = choice
+                .spec
+                .options
+                .iter()
+                .copied()
+                .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                .take(choice.spec.min.max(1))
+                .collect();
+            if !cards.is_empty() {
+                cards
+            } else if choice
+                .spec
+                .options
+                .iter()
+                .any(|o| matches!(o, ChoiceOption::Pass))
+            {
+                vec![ChoiceOption::Pass]
+            } else if choice.spec.min == 0 {
+                vec![]
+            } else if !choice.spec.options.is_empty() {
+                vec![choice.spec.options[0]]
+            } else {
+                vec![]
+            }
+        };
+        let outcome = answer_sel(e, sel);
+        assert!(
+            !matches!(outcome, CommandOutcome::Rejected(_)),
+            "settle rejected prompt={} {outcome:?}",
+            choice.spec.prompt
+        );
+    }
+    panic!("choices did not settle");
+}
+
+fn finish_cmd(e: &mut Engine, outcome: CommandOutcome) {
+    match outcome {
+        CommandOutcome::Accepted { .. } => {}
+        CommandOutcome::Pending { .. } => settle_boss_choices(e),
+        other => panic!("command {other:?}"),
+    }
+    assert!(e.open_choice().is_none(), "choice still open");
+}
+
+fn kill_boss(e: &mut Engine) {
+    let n = e.state_core().players.len() as u8;
+    for s in 0..n {
+        e.debug_clear_hand(s);
+    }
+    e.debug_set_hp(0, 1);
+    let out = e.debug_deal_damage(Some(1), 0, 12, DamageNature::Normal);
+    finish_cmd(e, out);
+}
+
+/// 结束末座回合，使轮次加一并在 Boss 座位打开判定阶段。
+fn end_turn_into_round(e: &mut Engine, round: u32) {
+    let last = (e.state_core().players.len() - 1) as u8;
+    e.debug_set_turn(last, Phase::End, round - 1);
+    let out = next_phase(e);
+    finish_cmd(e, out);
+    assert_eq!(e.turn().round, round, "round wrap");
+    assert_eq!(e.turn().current, 0);
+    assert_eq!(e.turn().phase, Phase::Judge);
+}
+
+#[test]
+fn d4_boss_b4_host_tags() {
+    use engine_native::content::host::HostBehavior;
+    assert_eq!(HostBehavior::BossBianshen3.tag(), 427);
+    assert_eq!(HostBehavior::BossBianshen3x.tag(), 428);
+    assert_eq!(HostBehavior::BossBianshen4.tag(), 429);
+    assert_eq!(HostBehavior::BossBianshen4x.tag(), 430);
+    assert_eq!(HostBehavior::BossHuanren.tag(), 431);
+    assert_eq!(HostBehavior::BossHuanrenDie.tag(), 432);
+    assert_eq!(HostBehavior::BossQingyi.tag(), 433);
+    assert_eq!(HostBehavior::BossChiyi.tag(), 434);
+    assert_eq!(HostBehavior::BossChiyiMark.tag(), 435);
+    assert_eq!(HostBehavior::BossBaiyi.tag(), 436);
+    assert_eq!(HostBehavior::BossBaiyiThunder.tag(), 437);
+    assert_eq!(HostBehavior::from_tag(427), Some(HostBehavior::BossBianshen3));
+    assert_eq!(
+        HostBehavior::from_tag(437),
+        Some(HostBehavior::BossBaiyiThunder)
+    );
+}
+
+fn bianshen_outcome(seed: u64, from: &str) -> String {
+    let mut e = Engine::new_boss_stage(seed, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, from));
+    assert!(
+        has_named_skill(&e, 0, if from == "牛头" || from == "马面" { "后援3" } else { "后援4" }),
+        "{from} 应装配后援"
+    );
+    kill_boss(&mut e);
+    assert!(e.debug_alive(0), "转身后 Boss 座位应存活");
+    let name = general_slot_name(&e, 0).unwrap_or("").to_string();
+    assert_ne!(name, from);
+    assert_zone_conservation(&e);
+    name
+}
+
+#[test]
+fn d4_boss_b4_bianshen3_changes_boss_seeded() {
+    let a = bianshen_outcome(29501, "牛头");
+    let b = bianshen_outcome(29501, "牛头");
+    assert_eq!(a, b, "同一种子换将结果相同");
+    assert!(a == "白无常" || a == "黑无常", "后援3 应换白/黑无常，实得 {a}");
+    let c = bianshen_outcome(29502, "马面");
+    assert!(c == "白无常" || c == "黑无常", "马面后援3 实得 {c}");
+}
+
+#[test]
+fn d4_boss_b4_bianshen4_changes_boss_seeded() {
+    let a = bianshen_outcome(29503, "黑无常");
+    let b = bianshen_outcome(29503, "黑无常");
+    assert_eq!(a, b, "同一种子换将结果相同");
+    assert!(a == "夜叉" || a == "罗刹", "后援4 应换夜叉/罗刹，实得 {a}");
+    let c = bianshen_outcome(29504, "白无常");
+    assert!(c == "夜叉" || c == "罗刹", "白无常后援4 实得 {c}");
+}
+
+fn boot_huanren(seed: u64) -> Engine {
+    let mut e = Engine::new_boss_stage(seed, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "秦广王"));
+    e.debug_set_general_def(1, general_named_first(&e, "陆逊"));
+    assert!(has_named_skill(&e, 0, "还人"));
+    let out = next_phase(&mut e);
+    finish_cmd(&mut e, out);
+    e
+}
+
+#[test]
+fn d4_boss_b4_huanren_boot_bans_and_may_spawn_mengpo() {
+    use engine_native::BossStageKind;
+
+    let e = boot_huanren(29510);
+    let stage = e.state_core().boss_stage().expect("stage");
+    assert_eq!(stage.kind, BossStageKind::ShidianYanluo);
+    assert_eq!(stage.level, 0);
+    assert!(!stage.banned_generals.is_empty(), "禁将表应写入目录中存在的名字");
+    assert!(
+        stage.banned_generals.contains(&general_named_first(&e, "陆逊")),
+        "陆逊应在禁将表"
+    );
+    assert_eq!(
+        e.state_core().players[1].general_slots[0],
+        Some(general_named_first(&e, "刘备")),
+        "被禁非 Boss 座应换成目录中第一名刘备"
+    );
+    assert_ne!(general_slot_name(&e, 1), Some("映姬"));
+
+    let mut spawned = false;
+    let mut quiet = false;
+    for seed in 1..81u64 {
+        let e = boot_huanren(seed);
+        let flag = e.state_core().boss_mengpo_spawned();
+        let living = living_named(&e, "孟婆");
+        if flag {
+            spawned = true;
+            assert_eq!(living, 1, "seed {seed} 乱入后应有一名存活孟婆");
+            let seat = (0..e.state_core().players.len() as u8)
+                .find(|&s| general_slot_name(&e, s) == Some("孟婆"))
+                .unwrap();
+            assert!(
+                e.debug_hand(seat).is_empty(),
+                "level 0 孟婆不应保留摸到的 4 张牌"
+            );
+        } else {
+            quiet = true;
+            assert_eq!(living, 0, "seed {seed} 未乱入时不应有孟婆");
+        }
+    }
+    assert!(spawned, "1..80 应出现孟婆乱入（40% 门）");
+    assert!(quiet, "1..80 应出现不乱入");
+}
+
+#[test]
+fn d4_boss_b4_huanren_die_picks_successor_and_removes_mengpo() {
+    let mut spawned_seed = None;
+    for seed in 1..81u64 {
+        let e = boot_huanren(seed);
+        if e.state_core().boss_mengpo_spawned() {
+            spawned_seed = Some(seed);
+            break;
+        }
+    }
+    let seed = spawned_seed.expect("应有乱入种子");
+    let mut e = boot_huanren(seed);
+    assert_eq!(living_named(&e, "孟婆"), 1);
+    kill_boss(&mut e);
+    assert!(e.debug_alive(0));
+    assert_eq!(general_slot_name(&e, 0), Some("楚江王"), "候选首项");
+    assert_eq!(e.state_core().boss_stage().unwrap().level, 1);
+    assert!(has_named_skill(&e, 0, "还人"));
+    assert!(has_named_skill(&e, 0, "还人·转关"), "换将后应重授转关");
+    assert_eq!(living_named(&e, "孟婆"), 0, "已乱入后再转关应移出孟婆");
+    assert!(e.state_core().boss_mengpo_spawned(), "乱入旗保持");
+    assert_ne!(general_slot_name(&e, 0), Some("映姬"));
+
+    kill_boss(&mut e);
+    assert_eq!(living_named(&e, "孟婆"), 0, "第二次转关不再投放孟婆");
+    assert!(e.state_core().boss_mengpo_spawned());
+    assert_eq!(e.state_core().boss_stage().unwrap().level, 2);
+    assert_ne!(general_slot_name(&e, 0), Some("映姬"));
+    assert_zone_conservation(&e);
+}
+
+#[test]
+fn d4_boss_b4_huanren_dizang_and_zhuanlun_not_yingji() {
+    let mut e = Engine::new_boss_stage(29530, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "秦广王"));
+    e.debug_set_boss_progress(2, true, true);
+    assert_eq!(e.state_core().turn.phase_number, 0);
+    kill_boss(&mut e);
+    assert_eq!(general_slot_name(&e, 0), Some("地藏王"));
+    assert_eq!(e.state_core().boss_stage().unwrap().level, 3);
+    assert_eq!(e.debug_hand(0).len(), 7, "弃置区域后摸 4，地藏王再摸 3");
+    assert_ne!(general_slot_name(&e, 0), Some("映姬"));
+    assert!(e.debug_alive(0));
+
+    let mut e = Engine::new_boss_stage(29531, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "秦广王"));
+    e.debug_set_boss_progress(2, true, false);
+    kill_boss(&mut e);
+    assert_eq!(general_slot_name(&e, 0), Some("转轮王"));
+    assert_eq!(e.state_core().boss_stage().unwrap().level, 3);
+    assert_ne!(general_slot_name(&e, 0), Some("映姬"));
+    assert_ne!(general_slot_name(&e, 0), Some("地藏王"));
+}
+
+#[test]
+fn d4_boss_b4_qingyi_rounds_change_hp() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29540, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "太昊"));
+    assert!(has_named_skill(&e, 0, "青翼"));
+    let boss_hp = e.debug_hp(0);
+    let foe_hp = e.debug_hp(1);
+    assert!(boss_hp < e.state_core().players[0].max_hp as i32);
+    end_turn_into_round(&mut e, 3);
+    assert_eq!(e.debug_hp(0), boss_hp + 1, "第 3 轮友方回复 1");
+    assert_eq!(e.debug_hp(1), foe_hp, "第 3 轮不改敌方体力");
+    let stage = e.state_core().boss_stage().unwrap();
+    assert_eq!(stage.kind, BossStageKind::WingGate);
+    assert_eq!(stage.wing_armed & 1, 1, "青翼第 3 轮 bit0");
+
+    let mut e = Engine::new_boss_stage(29541, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "太昊"));
+    e.debug_set_hp(1, 3);
+    let boss_hp = e.debug_hp(0);
+    end_turn_into_round(&mut e, 5);
+    assert_eq!(e.debug_hp(1), 2, "第 5 轮敌方失去 1 体力");
+    assert_eq!(e.debug_hp(0), boss_hp, "第 5 轮不改友方体力");
+    assert_eq!(e.state_core().boss_stage().unwrap().wing_armed & 2, 2);
+
+    let mut e = Engine::new_boss_stage(29542, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "太昊"));
+    e.debug_set_general_def(2, boss_general_named(&e, "书精"));
+    e.state_core_mut().player_mut(2).alive = false;
+    e.state_core_mut().player_mut(2).hp = 0;
+    let hand = e.debug_hand(2).len();
+    let max_hp = e.state_core().players[2].max_hp;
+    end_turn_into_round(&mut e, 7);
+    assert!(e.debug_alive(2), "第 7 轮应复活书精");
+    assert_eq!(e.debug_hp(2), 3);
+    assert_eq!(e.state_core().players[2].max_hp, max_hp + 1);
+    assert_eq!(e.debug_hand(2).len(), hand + 3);
+    assert_eq!(e.state_core().boss_stage().unwrap().wing_armed & 4, 4);
+}
+
+#[test]
+fn d4_boss_b4_chiyi_mark_then_real_damage() {
+    use engine_native::BossStageKind;
+
+    let mut e = Engine::new_boss_stage(29550, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "炎帝"));
+    assert!(has_named_skill(&e, 0, "赤翼"));
+    end_turn_into_round(&mut e, 3);
+    assert!(has_named_skill(&e, 1, "赤仪2"), "第 3 轮敌方获得赤仪2");
+    assert_eq!(
+        e.state_core().boss_stage().unwrap().kind,
+        BossStageKind::WingGate
+    );
+    let hp = e.debug_hp(1);
+    let out = e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    finish_cmd(&mut e, out);
+    assert_eq!(e.debug_hp(1), hp - 2, "赤仪2 使 1 点伤害变为 2");
+}
+
+#[test]
+fn d4_boss_b4_baiyi_discard_thunder_and_draw() {
+    let mut e = Engine::new_boss_stage(29560, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "少昊"));
+    assert!(has_named_skill(&e, 0, "白翼"));
+    assert!(has_named_skill(&e, 0, "白翼·雷"));
+    let hand = e.debug_hand(1).len();
+    assert!(hand >= 2);
+    end_turn_into_round(&mut e, 5);
+    assert_eq!(e.debug_hand(1).len(), hand - 2, "第 5 轮敌方弃 2");
+    assert_eq!(e.state_core().boss_stage().unwrap().wing_armed & (1 << 6), 1 << 6);
+
+    let mut e = Engine::new_boss_stage(29561, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "少昊"));
+    e.debug_set_turn(0, Phase::Play, 6);
+    let hp = e.debug_hp(0);
+    let out = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Thunder);
+    finish_cmd(&mut e, out);
+    assert_eq!(e.debug_hp(0), hp, "第 7 轮前雷伤被防止");
+    e.debug_set_turn(0, Phase::Play, 7);
+    let out = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Thunder);
+    finish_cmd(&mut e, out);
+    assert_eq!(e.debug_hp(0), hp - 1, "第 7 轮雷伤生效");
+
+    let mut e = Engine::new_boss_stage(29562, 4, 0, 0, 4, 4, 0);
+    e.debug_set_general_def(0, boss_general_named(&e, "少昊"));
+    // 神恩光环按「场上存在该技能」计数，不看 enabled。摘掉实例后
+    // 白翼把基础 2 削成 1 才能单独看见。
+    let shenen = e.catalog().skill_by_name("神恩").expect("神恩");
+    e.state_core_mut().skills.remove(&(0, shenen));
+    e.debug_set_turn(1, Phase::Judge, 1);
+    let before = e.debug_hand(1).len();
+    let out = next_phase(&mut e);
+    finish_cmd(&mut e, out);
+    assert_eq!(e.debug_hand(1).len(), before + 1, "第 3 轮前敌方摸牌 -1");
+    e.debug_set_turn(2, Phase::Judge, 3);
+    let before = e.debug_hand(2).len();
+    let out = next_phase(&mut e);
+    finish_cmd(&mut e, out);
+    assert_eq!(e.debug_hand(2).len(), before + 2, "第 3 轮起不再削减");
 }

@@ -1,0 +1,23 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.98s
+     Running unittests src/lib.rs (target/debug/deps/engine_native-00d5f906556fbd30)
+
+running 2 tests
+test a0_lib_tests::standard_skill_ids_append_only ... ok
+test a0_lib_tests::host_behavior_keys_bijective ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/a0_tag_registry.rs (target/debug/deps/a0_tag_registry-41ad1f64e979e720)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-1215dbf5c401b5c8)
+
+running 1 test
+test replay_scenarios_match_golden ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.02s
+

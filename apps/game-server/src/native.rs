@@ -271,3 +271,117 @@ pub fn create_native_game(
         elapsed_ms: started.elapsed().as_millis(),
     })
 }
+
+fn load_refs<'a>(
+    content: &'a NativeContent,
+    packages: &[String],
+) -> Result<Vec<LoadedPack>, String> {
+    let mut loaded = Vec::new();
+    for id in packages {
+        loaded.push(content.load(id)?);
+    }
+    Ok(loaded)
+}
+
+/// 新对局存档（HTTP `/native/matches`）。
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct NativeMatchArchive {
+    pub packages: Vec<String>,
+    pub catalog_cards: usize,
+    pub archive_hex: String,
+}
+
+/// 恢复请求（HTTP `/native/matches/restore`）。
+#[derive(Debug, Clone, Deserialize)]
+pub struct NativeRestoreRequest {
+    #[serde(default)]
+    pub packages: Vec<String>,
+    pub archive_hex: String,
+}
+
+/// 恢复结果。
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct NativeRestoreSummary {
+    pub catalog_cards: usize,
+}
+
+fn hex_encode(bytes: &[u8]) -> String {
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let mut s = String::with_capacity(bytes.len() * 2);
+    for b in bytes {
+        s.push(HEX[(b >> 4) as usize] as char);
+        s.push(HEX[(b & 0xf) as usize] as char);
+    }
+    s
+}
+
+fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
+    if s.len() % 2 != 0 {
+        return Err("存档十六进制长度须为偶数".into());
+    }
+    (0..s.len())
+        .step_by(2)
+        .map(|i| u8::from_str_radix(&s[i..i + 2], 16).map_err(|e| format!("非法十六进制: {e}")))
+        .collect()
+}
+
+/// 安装包进入新对局，并交出 NGSA 字节。调用方用同一包 id 列表恢复。
+pub fn save_fresh_match(
+    content: &NativeContent,
+    packages: &[String],
+    seed: u64,
+    seats: u8,
+) -> Result<(Vec<u8>, usize), String> {
+    let loaded = load_refs(content, packages)?;
+    let refs: Vec<&ExtensionPack> = loaded.iter().map(|l| &l.pack).collect();
+    let engine = Engine::new_with_extensions(seed, seats as usize, &refs)
+        .map_err(|err| format!("原生建局失败: {err:?}"))?;
+    let cards = engine.catalog().cards.len();
+    let bytes = engine_native::archive::encode_archive(&engine.save());
+    Ok((bytes, cards))
+}
+
+/// 用已安装包恢复对局。缺包在装载阶段失败；错版或另一包集合在内容锁校验失败。
+/// 成功时返回恢复后的目录牌数。
+pub fn restore_match(
+    content: &NativeContent,
+    packages: &[String],
+    bytes: &[u8],
+) -> Result<usize, String> {
+    let loaded = load_refs(content, packages)?;
+    let refs: Vec<&ExtensionPack> = loaded.iter().map(|l| &l.pack).collect();
+    let snapshot = engine_native::archive::decode_archive(bytes)
+        .map_err(|err| format!("存档解码失败: {err:?}"))?;
+    let engine = if refs.is_empty() {
+        Engine::restore(&snapshot).map_err(|err| format!("恢复失败: {err:?}"))?
+    } else {
+        Engine::restore_with_extensions(&snapshot, &refs)
+            .map_err(|err| format!("恢复失败: {err:?}"))?
+    };
+    Ok(engine.catalog().cards.len())
+}
+
+/// HTTP 建局：安装包进入新对局并返回存档十六进制。
+pub fn open_native_match(
+    content: &NativeContent,
+    packages: &[String],
+    seed: u64,
+    seats: u8,
+) -> Result<NativeMatchArchive, String> {
+    let (bytes, catalog_cards) = save_fresh_match(content, packages, seed, seats)?;
+    Ok(NativeMatchArchive {
+        packages: packages.to_vec(),
+        catalog_cards,
+        archive_hex: hex_encode(&bytes),
+    })
+}
+
+/// HTTP 恢复：同一安装集恢复；缺包或错版返回错误。
+pub fn restore_native_match(
+    content: &NativeContent,
+    req: &NativeRestoreRequest,
+) -> Result<NativeRestoreSummary, String> {
+    let bytes = hex_decode(&req.archive_hex)?;
+    let catalog_cards = restore_match(content, &req.packages, &bytes)?;
+    Ok(NativeRestoreSummary { catalog_cards })
+}

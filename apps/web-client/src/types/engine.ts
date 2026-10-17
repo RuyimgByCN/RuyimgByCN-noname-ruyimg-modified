@@ -212,8 +212,15 @@ export interface ContentBundle {
 }
 
 export type WorkerRequest =
-  | { id: number; type: "init"; bundle?: ContentBundle }
-  | { id: number; type: "start"; players: number; seed: number; observer: number }
+  | { id: number; type: "init"; bundle?: ContentBundle; packsJson?: string }
+  | {
+      id: number;
+      type: "start";
+      players: number;
+      seed: number;
+      observer: number;
+      packsJson?: string;
+    }
   | { id: number; type: "endPhase"; actor?: number }
   | { id: number; type: "playCard"; actor: number; card: number; targets: number[] }
   | {
@@ -244,7 +251,7 @@ export type WorkerRequest =
   | { id: number; type: "autoStep" }
   | { id: number; type: "observer" }
   | { id: number; type: "save" }
-  | { id: number; type: "restore"; hex: string }
+  | { id: number; type: "restore"; hex: string; packsJson?: string }
   | { id: number; type: "loadReplay"; json: string }
   | {
       id: number;

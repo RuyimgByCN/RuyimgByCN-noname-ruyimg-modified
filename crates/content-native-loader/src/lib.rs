@@ -29,6 +29,86 @@ use engine_native::content::pile::{PileEntry, PileSpec};
 use engine_native::content::standard::Gender;
 use serde_json::Value;
 
+mod coin;
+mod desktop_adapt;
+mod douzhuan;
+mod elo;
+mod fool;
+mod martial;
+mod omnisearch;
+mod shousha;
+mod sj_settings;
+mod update_guard;
+pub use coin::{
+    apply_coin_commands, buy_item, change_coin, mark_phase_started, open_coin_session,
+    parse_coin_config, persist_config, place_bet, restore_coin, settle_for, snapshot_coin,
+    start_item, stop_item, toggle_snow_fall, toggle_snow_size, CoinConfig, CoinDisplay, CoinError,
+    CoinGate, CoinMode, CoinSession, IdentityRole, SettleOutcome, SettleRequest, ShopItem,
+    SnowSize,
+};
+pub use desktop_adapt::{
+    apply as apply_desktop_adapt, classify_pointer, export_download, invoke_emoji,
+    parse_config as parse_desktop_config, pointer_allowed, restore_snapshot, set_layout, snapshot,
+    AppliedProfile, DesktopConfig, DesktopError, DeviceProfile, Download, EmojiBridgeState,
+    HostKind, Layout, PointerClass, PointerContext,
+};
+pub use douzhuan::{
+    apply_douzhuan, apply_douzhuan_line, export_plan, format_report as format_douzhuan_report,
+    parse_douzhuan_config, parse_plan_text, rank_score, request_from_json, rewrite_skill_text,
+    CandidateIn, CharacterIn as DouzhuanCharacterIn, CharacterOut as DouzhuanCharacterOut,
+    DouzhuanConfig, DouzhuanError, DouzhuanReport, DouzhuanRequest, PackView, PickIn,
+    SkillIn as DouzhuanSkillIn, SkillOut as DouzhuanSkillOut,
+};
+pub use elo::{
+    apply_elo_commands, hand_visible, mark_inserted, mark_opening, parse_elo_config, reorder_draw,
+    resolve_difficulty, restore_pile, restrict_pool, snapshot_pile, think_delay, wash, EloCard,
+    EloConfig, EloError, EloLevel, EloQuery, EloViewer, Think,
+};
+pub use fool::{
+    apply_fool_line, choose_card_runs, choose_voice, custom_choose_file_runs, derivation_sample,
+    fangtong_allows, fangtong_select_len, fix_peiyin, is_phone, landing_offset, minsi_allows,
+    parse_fool_config, peiyin_sample, rewrite_derivation, save_liegong, sha_filter_wrapped,
+    sha_hint, sha_target_allowed, throw_emotion, ziyuan_allows, AudioSpec, DerivCharacter,
+    DerivSkill, FangCard, FoolConfig, FoolError, HintQuery, LiegongSave, SkillAudio, ThrowOut,
+    VoiceClip, VoiceOut,
+};
+pub use martial::{
+    ai_order, apply_martial_line, ask_join, assign_seats, attitude, battle_lists, check_result,
+    connect_enabled, consider_mighty, double_hp_visible, draft, enemy_battle, filter_pool,
+    format_record, free_replace, has_zhu_skill, layout_numbers, mighty_script, on_general_dead,
+    online_choose_runs, opening_draw, parse_martial_config, playback_runs, redraw_pool,
+    replacement_draw, reselect_pool, take_unique, video_name, DeathQuery, DraftInput, DraftOutput,
+    FreeOut, JoinOut, Layout as MartialLayout, MartialConfig, MartialError, MightyOut, MightyPair,
+    OverOut,
+    RecordBook, ReplaceOut, Seats,
+};
+pub use omnisearch::{
+    debug_execute, debug_inspect, parse_config, EntryKind, PublicEntry, PublicIndex, SearchConfig,
+    SearchError,
+};
+pub use shousha::{
+    apply_shousha, apply_shousha_line, format_report, parse_shousha_config, CharacterIn,
+    CharacterOut, ShoushaConfig, ShoushaError, ShoushaReport, ShoushaRequest, SkillIn, SkillOut,
+};
+pub use sj_settings::{
+    apply_external, apply_sj_commands, boot, catalog_mark, choose_download, classify_fault,
+    compare_version, decode_text, decode_uri, encode_text, eval_update_script, filter_downloads,
+    finish_download, format_window_error, import_config, load_remote_catalog, open_asset_file,
+    parse_sj_config, plan_files, request_console, Actor, BootInput, BootOutput, CatalogEntry,
+    CatalogMark, ConsoleRequest, ExternalEffect, ExternalKind, FaultAction, FilePlan, Finish,
+    FormattedError, Frame, GameEvent, HttpCode, ImportInput, ImportOutput, InstalledPack,
+    SelectInput, SjConfig, SjError, TransferFault, VersionOrder, WindowError,
+};
+pub use update_guard::{
+    apply_update_guard_line, boot_link, can_update, classify_body, compare_update, dedup_broken,
+    extension_urls, forced_enables, format_catch, join_changelog, next_error_count, on_remove_link,
+    parse_size, parse_update_guard_config, precontent_menu, press_asset_button, press_game_button,
+    retry_updates, scan_folders, select_extension_link, select_general_link, settle_broken,
+    Attempt, BodyClass, BootLink, BrokenOut, ButtonOut, CatchKind, FolderIn, GuardConfig,
+    GuardError, MenuFlags, RetryClass, ScanOut, SelectOutcome, UpdatePrompt, UpdateUrl, CODING_URL,
+    FASTGIT_URL, GITHUB_URL, URC_URL,
+};
+
 /// 装载错误：坏包、未知键与宿主 API 版本不符给出明确原因。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BridgeError {
@@ -108,7 +188,10 @@ pub struct BridgedGenerals {
 }
 
 fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
-    BridgeError::InvalidField { field, reason: reason.into() }
+    BridgeError::InvalidField {
+        field,
+        reason: reason.into(),
+    }
 }
 
 /// 符号表总量上限门（ADR 0779）：三个生产入口（bridge_pack/
@@ -118,8 +201,8 @@ fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
 /// T8 增量 3/6：npack 内 rule-vm 触发模块 → engine-native `VmSkillDecl`
 ///（数据驱动装载：DSL→编译 npack→装载器→引擎，不重编译）。事件名严
 /// 格映射（phase_end/phase_begin/damage/card_used/death）；未知事件名
-/// 拒装。filter 三基语义映射（owner_is_target/owner_is_source/always）；
-/// 具名组合 filter 跳过入 `deferred_filters`（engine 无承载，登记）。
+/// 拒装。filter 走 `map_vm_filter`：精确策略、参数化族、具名编译；
+/// 无法编译的名称跳过入 `deferred_filters`（不恒真）。
 pub struct VmBridgeOutcome {
     /// 可装载声明。
     pub decls: Vec<engine_native::content::extension::VmSkillDecl>,
@@ -131,7 +214,6 @@ pub fn bridge_vm_skill_decls(
     pkg: &content_schema::ContentPackage,
 ) -> Result<VmBridgeOutcome, BridgeError> {
     use engine_native::event::{EventKind, Timing};
-    use engine_native::rvm_bridge::VmFilterPolicy as P;
     ensure_symbol_capacity()?;
     let mut out = Vec::new();
     let mut deferred_filters = Vec::new();
@@ -153,7 +235,15 @@ pub fn bridge_vm_skill_decls(
             // card_targeted：原生无独立 targeted 帧型，以 CardUsed+targets
             // 表达（增量 17，登记差异）。
             "card_targeted" => EventKind::CardUsed,
+            "card_responded" => EventKind::CardResponded,
+            "cards_moved" => EventKind::CardsMoved,
+            "cards_drawn" => EventKind::CardsDrawn,
+            "dying" => EventKind::Dying,
+            "dying_after" => EventKind::DyingSaved,
             "death" => EventKind::Death,
+            "turn_ended" => EventKind::TurnEnded,
+            "hp_lost" => EventKind::LoseHp,
+            "hp_recovered" => EventKind::Recover,
             other => {
                 return Err(BridgeError::InvalidField {
                     field: "trigger_index.event",
@@ -161,60 +251,9 @@ pub fn bridge_vm_skill_decls(
                 })
             }
         };
-        let filter = match t.filter.as_str() {
-            "owner_is_target" => P::OwnerIsTarget,
-            "owner_source" => P::OwnerIsSource,
-            "always" => P::Always,
-            "owner_is_target_wounded" => P::OwnerWounded,
-            "owner_is_target_linked" => P::OwnerLinked,
-            "owner_is_target_hand_nonempty" => P::OwnerHandNonempty,
-            "owner_is_target_hand_empty" => P::OwnerHandEmpty,
-            "owner_is_target_no_turn_damage" => P::OwnerNoTurnDamage,
-            "owner_is_target_turn_damage" => P::OwnerTurnDamage,
-            "owner_is_target_turn_damage_at_least_three" => P::OwnerTurnDamageAtLeastThree,
-            "owner_is_target_hand_at_least_hp_other_alive" => P::OwnerHandAtLeastHpOtherAlive,
-            "owner_is_target_hand_below_max_hp" => P::OwnerHandBelowMaxHp,
-            "owner_is_target_hand_above_hp" => P::OwnerHandAboveHp,
-            "owner_is_target_other_hand_nonempty" => P::OwnerOtherHandNonempty,
-            "owner_is_target_play_phase_card_category_count_positive" => {
-                P::OwnerPlayPhaseBteUsed
-            }
-            "owner_alive_play_phase_card_category_count_positive" => {
-                P::OwnerAlivePlayPhaseBteUsed
-            }
-            "owner_source_play_card_count_eq_hp" => P::OwnerPlayCountEqHp,
-            "owner_is_target_card_used_at_least_hp" => P::OwnerCardUsedAtLeastHp,
-            "owner_target_hand_empty_elemental_or_trick_damage_before" => {
-                P::OwnerHandEmptyElementalOrTrickDamageBefore
-            }
-            "owner_is_target_source_movable_field_card" => P::OwnerSourceMovableFieldCard,
-            "owner_is_target_tied_max_hand" => P::OwnerTiedMaxHand,
-            "owner_is_target_tied_max_hp" => P::OwnerTiedMaxHp,
-            "owner_is_target_tied_max_equip_nonempty" => P::OwnerTiedMaxEquipNonempty,
-            "owner_is_target_not_unique_max_current_hp" => P::OwnerNotUniqueMaxHp,
-            "owner_targeted_by_other_sha" => P::OwnerTargetedByOtherSha,
-            other => {
-                // 参数化族（增量 15）：词表保证后缀为正整数，解析失败按
-                // 未承载跳过登记（防御性，与未知具名同路）。
-                if let Some(n) = other
-                    .strip_prefix("owner_is_target_hp_below_")
-                    .and_then(|v| v.parse::<u32>().ok())
-                    .filter(|v| *v > 0)
-                {
-                    P::OwnerHpBelow(n)
-                } else if let Some(n) = other
-                    .strip_prefix("owner_source_play_card_count_eq_")
-                    .and_then(|v| v.parse::<u32>().ok())
-                    .filter(|v| *v > 0)
-                {
-                    P::OwnerPlayCountEq(n)
-                } else {
-                    // 具名组合 filter：engine 无承载（增量 6 严格面）——
-                    // 跳过登记，不阻断同包其余 VM 技能装载。
-                    deferred_filters.push(other.to_string());
-                    continue;
-                }
-            }
+        let Some(filter) = engine_native::rvm_bridge::map_vm_filter(t.filter.as_str()) else {
+            deferred_filters.push(t.filter.clone());
+            continue;
         };
         out.push(engine_native::content::extension::VmSkillDecl {
             name: names::intern(t.module.clone()).to_string(),
@@ -255,7 +294,11 @@ fn req_str<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a str, 
     }
 }
 
-fn opt_str<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<Option<&'a str>, BridgeError> {
+fn opt_str<'a>(
+    v: &'a Value,
+    key: &str,
+    field: &'static str,
+) -> Result<Option<&'a str>, BridgeError> {
     match v.get(key) {
         None | Some(Value::Null) => Ok(None),
         Some(Value::String(s)) => Ok(Some(s.as_str())),
@@ -263,11 +306,7 @@ fn opt_str<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<Option<&'
     }
 }
 
-fn int_in(
-    x: &Value,
-    field: &'static str,
-    range: RangeInclusive<u64>,
-) -> Result<u64, BridgeError> {
+fn int_in(x: &Value, field: &'static str, range: RangeInclusive<u64>) -> Result<u64, BridgeError> {
     match x.as_u64() {
         Some(n) if range.contains(&n) => Ok(n),
         _ => Err(invalid(
@@ -329,7 +368,9 @@ enum MappedSkill {
 
 /// 内置技能引用白名单：仅收**有原生实现**的标准技（护驾=kernel 主公技
 /// 臂、谦逊=乐不思蜀目标校验查询面）。悲歌本体未实现，不入册。
-const BUILTIN_SKILL_REFS: [&str; 10] = ["护驾", "谦逊", "义从", "酒池", "龙胆", "无双", "闭月", "伤逝", "绝情", "突袭"];
+const BUILTIN_SKILL_REFS: [&str; 10] = [
+    "护驾", "谦逊", "义从", "酒池", "龙胆", "无双", "闭月", "伤逝", "绝情", "突袭",
+];
 
 fn mapping_of(v: &Value, field: &'static str) -> Result<MappedSkill, BridgeError> {
     match opt_str(v, "mapping", field)? {
@@ -420,7 +461,10 @@ fn pack_meta(parsed: &Value) -> Result<PackMeta, BridgeError> {
     let description = opt_str(pack, "description", "pack.description")?.unwrap_or("");
     let card_prefix = req_str(pack, "card_prefix", "pack.card_prefix")?;
     if card_prefix.is_empty() {
-        return Err(invalid("pack.card_prefix", "不能为空（牌名须与基础目录隔离）"));
+        return Err(invalid(
+            "pack.card_prefix",
+            "不能为空（牌名须与基础目录隔离）",
+        ));
     }
     let init_hook = match opt_str(pack, "init_hook", "pack.init_hook")? {
         None => InitHook::None,
@@ -480,9 +524,9 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
         }
         let mut equip_skills = card_kind_equip_skills(kind).to_vec();
         for s in opt_array(c, "equip_skills", "cards[].equip_skills")? {
-            let s = s
-                .as_str()
-                .ok_or_else(|| invalid("cards[].equip_skills", format!("元素须为字符串，实为 {s}")))?;
+            let s = s.as_str().ok_or_else(|| {
+                invalid("cards[].equip_skills", format!("元素须为字符串，实为 {s}"))
+            })?;
             equip_skills.push(names::intern(s.to_string()));
         }
         def.equip_skills = equip_skills;
@@ -588,7 +632,10 @@ fn bridge_generals_inner(
                             return Err(BridgeError::DuplicateSkill(key.to_string()));
                         }
                         Some(_) => {}
-                        None => host_skills.push(HostSkillDecl { name: interned, behavior }),
+                        None => host_skills.push(HostSkillDecl {
+                            name: interned,
+                            behavior,
+                        }),
                     }
                     skills.push(interned);
                     mapped_skill_keys.push(interned);
@@ -652,7 +699,46 @@ pub fn bridge_pile(json: &str) -> Result<PileSpec, BridgeError> {
                 Ok((suit.clone(), n))
             })
             .collect::<Result<BTreeMap<_, _>, BridgeError>>()?;
-        entries.push(PileEntry { card, counts: counts.into_iter().collect() });
+        entries.push(PileEntry {
+            card,
+            counts: counts.into_iter().collect(),
+        });
     }
-    Ok(PileSpec { source, total, entries })
+    Ok(PileSpec {
+        source,
+        total,
+        entries,
+    })
+}
+
+const PILE_FACTOR_CARDS: &[&str] = &[
+    "guohe", "huosha", "jiu", "leisha", "nanman", "sha", "shan", "shunshou", "tao", "tiesuo",
+    "wanjian", "wuxie",
+];
+
+/// 解析牌堆倍率。键必须是比例表里的牌名，值必须是有限非负数。
+///
+/// 缺某个牌名不是这里的错误：[`engine_native::content::pile::scale_plan`]
+/// 会把它看成上游未配置，从而不追加牌。
+pub fn parse_pile_factors(json: &str) -> Result<BTreeMap<String, f64>, String> {
+    let value: Value = serde_json::from_str(json).map_err(|err| format!("factors: {err}"))?;
+    let obj = value
+        .as_object()
+        .ok_or_else(|| "factors: not an object".to_string())?;
+    let mut factors = BTreeMap::new();
+    for (key, raw) in obj {
+        if !PILE_FACTOR_CARDS.contains(&key.as_str()) {
+            return Err(format!("unknown pile factor {key}"));
+        }
+        let number = raw
+            .as_f64()
+            .ok_or_else(|| format!("pile factor {key} is not a number"))?;
+        if !number.is_finite() || number < 0.0 {
+            return Err(format!(
+                "pile factor {key} must be a finite non-negative number"
+            ));
+        }
+        factors.insert(key.clone(), number);
+    }
+    Ok(factors)
 }

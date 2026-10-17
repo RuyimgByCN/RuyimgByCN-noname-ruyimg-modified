@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running unittests src/lib.rs (target/debug/deps/engine_native_wasm-15ede17e3b73a404)
+
+running 1 test
+test pack_roundtrip::wuxing_pack_json_enters_wasm_helper ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+

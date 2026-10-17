@@ -1222,6 +1222,12 @@ pub trait SkillBehavior: Send + Sync {
     fn blocks_delayed_trick_target(&self) -> bool {
         false
     }
+
+    /// 本技能的具名 filter / 查询需要本回合弃置与摸牌史。
+    /// 标准宿主技为 false，标准局面不写 VmAux，v295 摘要保持不变。
+    fn needs_vm_card_history(&self) -> bool {
+        false
+    }
 }
 
 /// 只读查询上下文：机器/过滤器访问对局状态与目录的唯一只读入口。
@@ -1257,6 +1263,8 @@ pub struct Catalog {
     /// 规则版本：目录语义变化时递增；随状态入摘要、随快照做恢复绑定。
     /// 由内容模块在构建后赋值（`Catalog::build` 初始化为 0）。
     pub ruleset_version: u64,
+    /// 目录里有 VM 技能需要本回合弃置/摸牌史。不入对局摘要。
+    pub vm_card_history: bool,
 }
 
 impl Catalog {
@@ -1317,12 +1325,14 @@ impl Catalog {
         }
         // 技能表按定义号排列，保证目录本身确定。
         skills.shrink_to_fit();
+        let vm_card_history = skills.iter().any(|s| s.behavior.needs_vm_card_history());
         Catalog {
             cards,
             skills,
             extension_generals: Vec::new(),
             dispatch,
             ruleset_version: 0,
+            vm_card_history,
         }
     }
 

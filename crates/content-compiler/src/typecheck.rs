@@ -57,6 +57,11 @@ const EVENTS: &[&str] = &[
     "judgment_resolved",
 ];
 /// Allowed filters.
+/// DSL filter 词表（装载器与引擎具名编译的权威名称清单）。
+pub fn filter_vocabulary() -> &'static [&'static str] {
+    FILTERS
+}
+
 const FILTERS: &[&str] = &[
     "owner_is_target",
     "owner_source",

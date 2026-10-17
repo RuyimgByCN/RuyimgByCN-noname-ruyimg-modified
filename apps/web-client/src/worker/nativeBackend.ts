@@ -4,8 +4,9 @@
  * 将 WorkerRequest 协议子集映射到 NativeEngine 窄 API，并合成 UI 可消费的
  * EngineEnvelope（view + legal_actions + revision/finished）。
  *
- * 扩展包装载面：窄壳尚无 `new_with_extensions`/`restore_with_extensions`，
- * 管理面状态由客户端 extensionStore 维护；开局装载需内核 API（见证据 README）。
+ * 扩展包装载：`NativeEngine.new_with_packs_json` /
+ * `restore_hex_with_packs_json` 接收 cards.json 对象数组。空数组等于标准目录。
+ * 管理面元数据仍由 extensionStore 保存；开局把包 JSON 经 packsJson 传入。
  */
 import type {
   EngineEnvelope,
@@ -45,6 +46,21 @@ export function nativeCreate(
 ): NativeHandle {
   return {
     engine: new NativeEngine(players, BigInt(seed)),
+    seed,
+    players,
+    observer,
+  };
+}
+
+/** 已安装扩展的 cards.json 数组建局。空数组与 nativeCreate 相同。 */
+export function nativeCreateWithPacks(
+  players: number,
+  seed: number,
+  observer: number,
+  packsJson: string,
+): NativeHandle {
+  return {
+    engine: NativeEngine.new_with_packs_json(players, BigInt(seed), packsJson),
     seed,
     players,
     observer,
@@ -265,7 +281,7 @@ export type NativeDispatchReq =
   | { type: "autoStep" }
   | { type: "observer" }
   | { type: "save" }
-  | { type: "restore"; hex: string }
+  | { type: "restore"; hex: string; packsJson?: string }
   | { type: "status" };
 
 /** 请求映射；返回信封或存档文本。 */
@@ -324,7 +340,11 @@ export function nativeDispatch(
     case "save":
       return { kind: "save", hex: handle.engine.save_hex() };
     case "restore": {
-      handle.engine.restore_hex(req.hex);
+      if (req.packsJson !== undefined) {
+        handle.engine.restore_hex_with_packs_json(req.hex, req.packsJson);
+      } else {
+        handle.engine.restore_hex(req.hex);
+      }
       return nativeEnvelope(handle);
     }
     case "status":

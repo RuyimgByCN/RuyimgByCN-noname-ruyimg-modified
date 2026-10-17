@@ -56,4 +56,5 @@
 ## 6. 阻塞与后续
 
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
+- 2026-10-17：五行盘 `equip_skills` 已随装备授予 `wuxingpan_skill`。八项证据见 [2026-10-17-t12-l06-eight](../operations/evidence/2026-10-17-t12-l06-eight/README.md)。联机提前返回、录像和帮助 HTML 仍未迁入。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。

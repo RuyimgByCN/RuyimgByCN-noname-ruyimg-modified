@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/l18_update_guard_eight.rs (target/debug/deps/l18_update_guard_eight-495e79b18b1fa9e4)
+
+running 1 test
+test l18_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+

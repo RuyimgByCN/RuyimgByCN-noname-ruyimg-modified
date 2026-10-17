@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：无
-- 台账原生重构状态（摘录）：**部分重构；纵向样本已验收（第 18 轮）**：真实包 `packages/extensions/cardpile-upstream-noname` 可发现/导入/激活，比例表桥接为 113 张唯一实体牌入目录，扩展酒/杀在局中按引擎规则结算，存档按集合绑定恢复
+- 台账原生重构状态（摘录）：**八项整包已验收（2026-10-17）；随机点数仍为登记差异**。真实包 `packages/extensions/cardpile-upstream-noname`。G0 本页不是该次上调的证明，证据见 [U03 八项](../../operations/evidence/2026-10-17-t12-u03-eight/README.md)
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：无（清点未检出）
 - 台账已核查摘要：牌堆比例、花色和随机点数；来源含 `jiu`、`leisha`
-- 台账待处理（含规则分支）：倍率缩放（160 总量补足）与上游随机点数未映射（点数为确定性流水号，随机性由建局洗牌承接）——登记为与上游牌堆逐张等价的剩余差距；非本体倍率配置分支未逐项对照。**整包验收完成（2026-10-08，[cardpile 生命周期](../operations/evidence/2026-10-08-u03-cardpile-lifecycle/README.md)）**：双仓同装→noname 仓 113 张建局→对局中 revoke_slot 仅撤 noname 仓→在局锁定副本续玩→重装 Revoked 守卫→重新 import 被拒（liuli 仓激活不受影响）
+- 台账待处理（含规则分支）：2026-10-16 登记的倍率缩放已由八项整包关闭（[证据](../../operations/evidence/2026-10-17-t12-u03-eight/README.md)）。点数仍由调用方注入，不是上游 Math.random。113 张比例牌仍是目录材料。`playpackconfig` 未逐项对照。2026-10-08 生命周期不构成上调（[cardpile 生命周期](../../operations/evidence/2026-10-08-u03-cardpile-lifecycle/README.md)）
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -56,5 +56,5 @@
 
 ## 6. 阻塞与后续
 
-- G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
+- G0 本文档完成不等于 G1–G5。2026-10-17 八项整包见[证据](../../operations/evidence/2026-10-17-t12-u03-eight/README.md)；G0 本身不是该次上调的证明。整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。

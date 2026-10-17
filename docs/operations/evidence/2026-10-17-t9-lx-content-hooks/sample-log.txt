@@ -1,0 +1,25 @@
+# 龙血玄黄 / Boss 诸葛亮 / ylyg* 轨迹采样
+date: 2026-10-17
+liuli_root: /Users/ruyimg/Documents/Claude/sanguosha/scratch/legacy-harness/liuli
+seed: 20261016
+mode: boss
+boss: boss_zhugeliang
+fighters: mb_caomao,caocao,liubei
+static_map: /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-17-t9-lx-content-hooks/static-trigger-map.json (10 hits)
+lib_ready: true
+runtime_skills: 0 -> runtime-skill-summaries.json
+has_mbqianlong: false
+has_xiangxing: false
+has_fengqi: false
+has_gaiming: false
+has_yueyin: false
+ylyg_in_lib: 0
+has_character_mb_caomao: false
+has_character_boss_zhugeliang: false
+has_character_ylyg_pangtong: false
+hooked_before_players: true
+extensions: ["龙血玄黄","AI优化","标记补充","皮肤切换","千幻聆音","全能搜索","十周年UI","手杀MVP","手杀全扩","如真似幻","手杀ui","太虚幻境","武皇争霸","更新保护","雷霆万钧","史诗卡牌","选将美化","笨蛋插件","斗转星移","末日乱斗","祖安武将","段位制裁","电脑适配"]
+storage_current: undefined
+players: [{"name":"mb_caomao","hp":2,"maxHp":3,"skills":["mbqianlong"]},{"name":"caocao","hp":3,"maxHp":4,"skills":[]},{"name":"liubei","hp":4,"maxHp":4,"skills":[]},{"name":"boss_zhugeliang","hp":"Infinity","maxHp":"Infinity","skills":["xiangxing","yueyin","fengqi","gaiming"]}]
+after_pump: players=4 event=mbqianlong_2:0 paused=false content_hits=17 commands=3 rng=396
+content_skills: _CMeffects,mbqianlong,mbqianlong_refresh,fengqi,mbqianlong_2

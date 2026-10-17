@@ -6,7 +6,7 @@
 //! - 执行位置（事件栈/挂起机器/开放选择）归 `resolution::Resolution`，
 //!   为便于调度器拆借用而与核心字段并排放在 `GameState` 内。
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::event::Phase;
 use crate::ids::{CardId, PlayerId, SkillDefId};
@@ -652,6 +652,53 @@ pub struct GameStateCore {
     /// changeLand 全局唯一 ui.land 同口径；效果全局生效）。
     pub current_land: Option<crate::catalog::CardKind>,
     pub outcome: Option<Outcome>,
+    /// T8 具名 filter 原语面（标记 / 技能牌堆 / 本回合丢失 / once / 旗标）。
+    /// 空表不写入确定性摘要，标准局面哈希与 v295 golden 一致。
+    pub vm_aux: VmAux,
+}
+
+/// VM 扩展技能的可观察状态。空表编码为零字节（哈希）或长度前缀 0（存档 v80）。
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct VmAux {
+    /// (座位, 标记定义) → 层数。
+    pub marks: BTreeMap<(u8, u32), i32>,
+    /// (座位, 技能名) → 牌堆。
+    pub piles: BTreeMap<(u8, String), Vec<CardId>>,
+    /// 本回合离开该座位的牌（弃置或被移走）。
+    pub lost: BTreeMap<u8, Vec<CardId>>,
+    /// (座位, 键, 范围)：1 回合 / 2 轮 / 3 整局。在集合中 = 已消费。
+    pub once: BTreeSet<(u8, String, u8)>,
+    /// 效果写入的具名旗标（pending / assigned）。
+    pub flags: BTreeMap<(u8, String), u32>,
+    /// 本回合各技能已触发的伤害次数（first/second damage）。
+    pub hits: BTreeMap<(u8, String), u32>,
+    /// 本回合摸入的张数。
+    pub drawn: BTreeMap<u8, u32>,
+}
+
+impl VmAux {
+    pub fn is_empty(&self) -> bool {
+        self.marks.is_empty()
+            && self.piles.is_empty()
+            && self.lost.is_empty()
+            && self.once.is_empty()
+            && self.flags.is_empty()
+            && self.hits.is_empty()
+            && self.drawn.is_empty()
+    }
+
+    /// 换回合：丢掉回合范围的 once、丢失史、命中与摸牌计数。
+    pub fn clear_turn(&mut self) {
+        self.lost.clear();
+        self.hits.clear();
+        self.drawn.clear();
+        self.once.retain(|(_, _, scope)| *scope != 1);
+    }
+
+    /// 轮次推进：丢掉轮范围的 once。
+    pub fn clear_round(&mut self) {
+        self.once.retain(|(_, _, scope)| *scope != 2);
+    }
 }
 
 impl GameStateCore {

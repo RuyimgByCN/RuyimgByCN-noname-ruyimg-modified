@@ -1,0 +1,58 @@
+{
+  "rngDraws": 351,
+  "event": {
+    "name": "useCard",
+    "step": 8,
+    "player": "boss_zhugeliang"
+  },
+  "players": [
+    {
+      "name": "mb_caomao",
+      "hp": 3,
+      "maxHp": 3,
+      "identity": "cai",
+      "storage": {
+        "mbqianlong": 20
+      },
+      "skills": [
+        "mbqianlong"
+      ]
+    },
+    {
+      "name": "caocao",
+      "hp": 4,
+      "maxHp": 4,
+      "identity": "cai",
+      "storage": {},
+      "skills": [
+        "jianxiong"
+      ]
+    },
+    {
+      "name": "liubei",
+      "hp": 4,
+      "maxHp": 4,
+      "identity": "cai",
+      "storage": {},
+      "skills": [
+        "rende"
+      ]
+    },
+    {
+      "name": "boss_zhugeliang",
+      "hp": "Infinity",
+      "maxHp": "Infinity",
+      "identity": "zhu",
+      "storage": {
+        "xiangxing": 7,
+        "xiangxing_count": 0
+      },
+      "skills": [
+        "xiangxing",
+        "yueyin",
+        "fengqi",
+        "gaiming"
+      ]
+    }
+  ]
+}

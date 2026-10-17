@@ -1,0 +1,25 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/斗转星移/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "upstream_version": "1.0",
+  "jinJiang": true,
+  "jinJiangType": "forbidai",
+  "jinJiangRuZhen": "online",
+  "jjGroupColor": true,
+  "qnssBackground": true,
+  "aiQianghua": true,
+  "qidongyeMeiHua": false,
+  "miaoshuXiuGai": false,
+  "forbidReload": true,
+  "planNames": ["方案一", "方案二", "方案三"],
+  "plans": {
+    "0": [],
+    "1": [],
+    "2": [],
+    "3": []
+  },
+  "modePlans": {},
+  "stars": {},
+  "planPacks": []
+}

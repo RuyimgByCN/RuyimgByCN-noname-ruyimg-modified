@@ -484,6 +484,7 @@ impl Engine {
                 card_natures: Default::default(),
                 current_land: None,
             outcome: None,
+            vm_aux: crate::state::VmAux::default(),
         };
         // 身份局：其余身份洗序（种子决定），主公（座位 0）体力上限 +1。
         if let GameMode::Identity { roles } = &mut mode {
@@ -1388,6 +1389,28 @@ impl Engine {
     /// 测试/工具：设置机甲血（D.Va jijia，规则 v141）。
     pub fn debug_set_jijia(&mut self, player: PlayerId, hp: u8) {
         self.state.core.player_mut(player).jijia_hp = hp;
+    }
+
+    /// 测试入口：改当前回合座位、阶段与轮次（翼轮次门不经完整绕圈）。
+    pub fn debug_set_turn(&mut self, current: PlayerId, phase: crate::event::Phase, round: u32) {
+        self.state.core.turn.current = current;
+        self.state.core.turn.phase = phase;
+        self.state.core.turn.round = round;
+    }
+
+    /// 测试入口：直接写十殿进度（地藏王分支 / 孟婆旗）。
+    pub fn debug_set_boss_progress(
+        &mut self,
+        level: u8,
+        mengpo_spawned: bool,
+        mengpo_died: bool,
+    ) {
+        if let GameMode::Boss { stage, .. } = &mut self.state.core.mode {
+            stage.kind = crate::state::BossStageKind::ShidianYanluo;
+            stage.level = level;
+            stage.mengpo_spawned = mengpo_spawned;
+            stage.mengpo_died = mengpo_died;
+        }
     }
 
     pub fn debug_set_hp(&mut self, player: PlayerId, hp: i32) {
@@ -4762,6 +4785,64 @@ fn apply_command(
 // 不互认）。重放一致性以静止点哈希核对。
 // ---------------------------------------------------------------------------
 
+fn push_vm_aux(h: &mut Hasher, a: &crate::state::VmAux) {
+    if a.is_empty() {
+        return;
+    }
+    push_u8(h, 0xA8);
+    push_u32(h, a.marks.len() as u32);
+    for ((p, id), n) in &a.marks {
+        push_u8(h, *p);
+        push_u32(h, *id);
+        push_i32(h, *n);
+    }
+    push_u32(h, a.piles.len() as u32);
+    for ((p, name), cards) in &a.piles {
+        push_u8(h, *p);
+        push_static_owned(h, name);
+        push_u32(h, cards.len() as u32);
+        for c in cards {
+            push_u32(h, *c);
+        }
+    }
+    push_u32(h, a.lost.len() as u32);
+    for (p, cards) in &a.lost {
+        push_u8(h, *p);
+        push_u32(h, cards.len() as u32);
+        for c in cards {
+            push_u32(h, *c);
+        }
+    }
+    push_u32(h, a.once.len() as u32);
+    for (p, key, scope) in &a.once {
+        push_u8(h, *p);
+        push_static_owned(h, key);
+        push_u8(h, *scope);
+    }
+    push_u32(h, a.flags.len() as u32);
+    for ((p, key), n) in &a.flags {
+        push_u8(h, *p);
+        push_static_owned(h, key);
+        push_u32(h, *n);
+    }
+    push_u32(h, a.hits.len() as u32);
+    for ((p, key), n) in &a.hits {
+        push_u8(h, *p);
+        push_static_owned(h, key);
+        push_u32(h, *n);
+    }
+    push_u32(h, a.drawn.len() as u32);
+    for (p, n) in &a.drawn {
+        push_u8(h, *p);
+        push_u32(h, *n);
+    }
+}
+
+fn push_static_owned(h: &mut Hasher, s: &str) {
+    push_u32(h, s.len() as u32);
+    h.update(s.as_bytes());
+}
+
 fn canonical_hash(state: &GameState) -> [u8; 32] {
     let mut h = Hasher::new();
     let c = &state.core;
@@ -5138,6 +5219,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
             }
         }
     }
+    // T8 原语面：空表不写字节，标准局面摘要与加字段前一致。
+    push_vm_aux(&mut h, &c.vm_aux);
     let r = &state.resolution;
     push_u32(&mut h, r.next_event_id);
     push_u64(&mut h, r.next_choice_id);
@@ -6154,6 +6237,7 @@ mod tests {
                 card_natures: Default::default(),
                 current_land: None,
                 outcome: None,
+                vm_aux: crate::state::VmAux::default(),
             };
             core.deck = (0..catalog.cards.len() as CardId).collect();
             let resolution = Resolution {
@@ -6253,6 +6337,7 @@ mod tests {
                 card_natures: Default::default(),
                 current_land: None,
                     outcome: None,
+                    vm_aux: crate::state::VmAux::default(),
                 },
                 resolution: Resolution::new(64),
             }

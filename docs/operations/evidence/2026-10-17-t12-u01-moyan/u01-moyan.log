@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/u01_d3_moyan.rs (target/debug/deps/u01_d3_moyan-31ad25be65c46314)
+
+running 1 test
+test u01_moyan_from_real_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

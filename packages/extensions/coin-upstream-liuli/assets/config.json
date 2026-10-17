@@ -1,0 +1,10 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/coin/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "coin": 0,
+  "coin_display_playpackconfig": "icon",
+  "coin_canvas_playpackconfig": false,
+  "snowFall": false,
+  "coinSnowSize": false
+}

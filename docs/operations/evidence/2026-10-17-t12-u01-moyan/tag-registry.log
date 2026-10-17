@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/a0_tag_registry.rs (target/debug/deps/a0_tag_registry-41ad1f64e979e720)
+
+running 1 test
+test host_behavior_tags_unique ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+

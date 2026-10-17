@@ -33,6 +33,11 @@ export function bootLiuli({
 	disableAllExtensions = false,
 	virtualTimers = true,
 	onConsole,
+	// 脚本执行前写入的额外 localStorage。值不是字符串时 JSON.stringify。
+	// 挑战模式的 lib.storage 来自 noname_0.9_<mode>，必须在脚本前写好。
+	localStorageExtra = {},
+	// 页面脚本开始前调用，便于在 lib 出现的同一加载间隙挂上技能钩子。
+	beforeScripts: beforeScriptsExtra,
 } = {}) {
 	const abs = path.resolve(root);
 	const html = fs.readFileSync(path.join(abs, "index.html"), "utf8");
@@ -68,6 +73,10 @@ export function bootLiuli({
 					window.localStorage.setItem(`extension_${name}_enable`, "true");
 				}
 			}
+			for (const [key, value] of Object.entries(localStorageExtra)) {
+				window.localStorage.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
+			}
+			if (typeof beforeScriptsExtra === "function") beforeScriptsExtra(window, pageLog);
 		},
 	});
 

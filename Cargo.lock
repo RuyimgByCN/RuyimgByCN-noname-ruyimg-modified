@@ -1143,6 +1143,7 @@ dependencies = [
 name = "engine-native-wasm"
 version = "0.1.0"
 dependencies = [
+ "content-native-loader",
  "engine-native",
  "serde_json",
  "wasm-bindgen",

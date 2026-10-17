@@ -21,10 +21,10 @@ use rule_vm::{BytecodeModule, Continuation, ExecResult, HostContext, RuleVm, VmH
 
 use crate::catalog::{SkillBehavior, SkillMachine};
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
-use crate::event::{DamageNature, EventData};
+use crate::event::EventData;
 use crate::ids::{CardId, PlayerId};
 use crate::catalog::QueryCtx;
-use crate::machine::{damage_data_with, Ctx, Flow};
+use crate::machine::{Ctx, Flow};
 use crate::snap::MachineSnapshot;
 
 /// 数据驱动的 VM 技能程序（扩展包声明携带；目录 def 的 behavior 持有）。
@@ -58,6 +58,18 @@ struct VmTriggerCtx {
     /// 用牌目标集（增量 17；CardUsed 载荷——card_targeted 语义以
     /// CardUsed+targets 表达，原生无独立 targeted 帧）。
     targets: Vec<u8>,
+    /// view-as 声明牌种。
+    use_as: Option<crate::catalog::CardKind>,
+    /// 铁索传导。
+    from_chain: bool,
+    /// 本批张数（弃牌/移牌）。
+    batch_len: u32,
+    /// 移牌来源座位。
+    moved_from: Option<PlayerId>,
+    /// 阶段开始/结束。
+    begin: Option<bool>,
+    /// 1 伤害 2 用牌 3 阶段 4 弃牌 5 移牌 6 濒死 7 死亡 8 打出。
+    kind: u8,
 }
 
 /// 普通锦囊判定（增量 16）：锦囊三类（非基本/非装备/非异类）且非延时
@@ -79,40 +91,89 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             event_card: d.card,
             event_amount: d.amount,
             nature: Some(d.nature),
+            from_chain: d.from_chain,
+            kind: 1,
             ..VmTriggerCtx::default()
         },
         EventData::Phase {
-            player, phase, ..
+            player,
+            phase,
+            begin,
         } => VmTriggerCtx {
             event_player: Some(*player),
             phase: Some(*phase),
+            begin: Some(*begin),
+            kind: 3,
             ..VmTriggerCtx::default()
         },
         EventData::CardUsed(u) => VmTriggerCtx {
             event_player: Some(u.player),
             event_card: Some(u.card),
             targets: u.targets.clone(),
+            use_as: u.use_as,
+            nature: Some(u.nature),
+            kind: 2,
             ..VmTriggerCtx::default()
         },
         EventData::Death { player, killer } => VmTriggerCtx {
             event_player: Some(*player),
             event_source: *killer,
+            kind: 7,
             ..VmTriggerCtx::default()
         },
-        // 移牌：获得者为主玩家、首张为事件卡（理断触发面，玩点论杀批 12）
-        EventData::CardsMoved { cards, to, .. } => VmTriggerCtx {
+        EventData::CardsMoved { cards, from, to } => VmTriggerCtx {
             event_player: Some(*to),
             event_card: cards.first().copied(),
+            moved_from: Some(*from),
+            batch_len: cards.len() as u32,
+            kind: 5,
+            ..VmTriggerCtx::default()
+        },
+        EventData::CardsDiscarded { player, cards } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_card: cards.first().copied(),
+            batch_len: cards.len() as u32,
+            kind: 4,
+            ..VmTriggerCtx::default()
+        },
+        EventData::Dying { player, source } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: *source,
+            kind: 6,
+            ..VmTriggerCtx::default()
+        },
+        EventData::CardResponded { card, player } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_card: Some(*card),
+            kind: 8,
             ..VmTriggerCtx::default()
         },
         _ => VmTriggerCtx::default(),
     }
 }
 
+fn filter_view(t: &VmTriggerCtx) -> crate::rvm_named::FilterView {
+    crate::rvm_named::FilterView {
+        event_player: t.event_player,
+        event_source: t.event_source,
+        event_card: t.event_card,
+        event_amount: t.event_amount,
+        phase: t.phase,
+        nature: t.nature,
+        targets: t.targets.clone(),
+        use_as: t.use_as,
+        from_chain: t.from_chain,
+        batch_len: t.batch_len,
+        moved_from: t.moved_from,
+        begin: t.begin,
+        kind: t.kind,
+    }
+}
+
 /// DSL filter 映射（增量 6 三基 + 增量 9 基元扩展；增量 13 语义收敛——
 /// `owner_is_target_*` 家族全部含「事件主玩家=持有者」合取段）：具名
 /// 组合 filter 由装载器跳过登记（deferred）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum VmFilterPolicy {
     /// DSL `owner_is_target`：事件主玩家=持有者。
     #[default]
@@ -204,6 +265,70 @@ pub enum VmFilterPolicy {
     /// （增量 17；原生无独立 targeted 帧型，以 CardUsed+targets 表达，
     /// 登记差异）。
     OwnerTargetedByOtherSha,
+    /// 具名组合 filter（T8 余项）。精确策略优先于本变体。
+    Named(Arc<crate::rvm_named::NamedProgram>),
+}
+
+/// 把 DSL filter 名映射到策略。未知名称返回 None（装载器跳过，不恒真）。
+pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
+    let exact = match name {
+        "owner_is_target" => Some(VmFilterPolicy::OwnerIsTarget),
+        "owner_source" => Some(VmFilterPolicy::OwnerIsSource),
+        "always" => Some(VmFilterPolicy::Always),
+        "owner_is_target_wounded" => Some(VmFilterPolicy::OwnerWounded),
+        "owner_is_target_linked" => Some(VmFilterPolicy::OwnerLinked),
+        "owner_is_target_hand_nonempty" => Some(VmFilterPolicy::OwnerHandNonempty),
+        "owner_is_target_hand_empty" => Some(VmFilterPolicy::OwnerHandEmpty),
+        "owner_is_target_no_turn_damage" => Some(VmFilterPolicy::OwnerNoTurnDamage),
+        "owner_is_target_turn_damage" => Some(VmFilterPolicy::OwnerTurnDamage),
+        "owner_is_target_turn_damage_at_least_three" => {
+            Some(VmFilterPolicy::OwnerTurnDamageAtLeastThree)
+        }
+        "owner_is_target_hand_at_least_hp_other_alive" => {
+            Some(VmFilterPolicy::OwnerHandAtLeastHpOtherAlive)
+        }
+        "owner_is_target_hand_below_max_hp" => Some(VmFilterPolicy::OwnerHandBelowMaxHp),
+        "owner_is_target_hand_above_hp" => Some(VmFilterPolicy::OwnerHandAboveHp),
+        "owner_is_target_other_hand_nonempty" => Some(VmFilterPolicy::OwnerOtherHandNonempty),
+        "owner_is_target_play_phase_card_category_count_positive" => {
+            Some(VmFilterPolicy::OwnerPlayPhaseBteUsed)
+        }
+        "owner_alive_play_phase_card_category_count_positive" => {
+            Some(VmFilterPolicy::OwnerAlivePlayPhaseBteUsed)
+        }
+        "owner_source_play_card_count_eq_hp" => Some(VmFilterPolicy::OwnerPlayCountEqHp),
+        "owner_is_target_card_used_at_least_hp" => Some(VmFilterPolicy::OwnerCardUsedAtLeastHp),
+        "owner_target_hand_empty_elemental_or_trick_damage_before" => {
+            Some(VmFilterPolicy::OwnerHandEmptyElementalOrTrickDamageBefore)
+        }
+        "owner_is_target_source_movable_field_card" => {
+            Some(VmFilterPolicy::OwnerSourceMovableFieldCard)
+        }
+        "owner_is_target_tied_max_hand" => Some(VmFilterPolicy::OwnerTiedMaxHand),
+        "owner_is_target_tied_max_hp" => Some(VmFilterPolicy::OwnerTiedMaxHp),
+        "owner_is_target_tied_max_equip_nonempty" => Some(VmFilterPolicy::OwnerTiedMaxEquipNonempty),
+        "owner_is_target_not_unique_max_current_hp" => Some(VmFilterPolicy::OwnerNotUniqueMaxHp),
+        "owner_targeted_by_other_sha" => Some(VmFilterPolicy::OwnerTargetedByOtherSha),
+        _ => None,
+    };
+    if exact.is_some() {
+        return exact;
+    }
+    if let Some(n) = name
+        .strip_prefix("owner_is_target_hp_below_")
+        .and_then(|v| v.parse::<u32>().ok())
+        .filter(|v| *v > 0)
+    {
+        return Some(VmFilterPolicy::OwnerHpBelow(n));
+    }
+    if let Some(n) = name
+        .strip_prefix("owner_source_play_card_count_eq_")
+        .and_then(|v| v.parse::<u32>().ok())
+        .filter(|v| *v > 0)
+    {
+        return Some(VmFilterPolicy::OwnerPlayCountEq(n));
+    }
+    crate::rvm_named::compile_named(name).map(|p| VmFilterPolicy::Named(Arc::new(p)))
 }
 
 /// VM 技能行为：触发即执行模块（事件门由 def 的 TriggerMeta、行为总线
@@ -225,7 +350,7 @@ impl SkillBehavior for VmSkillBehavior {
         let trig = trigger_ctx_of(event);
         let is_event_player = trig.event_player == Some(owner);
         let holder_state = |s: u8| ctx.state.player(s);
-        match self.filter {
+        match self.filter.clone() {
             VmFilterPolicy::OwnerIsTarget => is_event_player,
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
             VmFilterPolicy::Always => true,
@@ -416,10 +541,25 @@ impl SkillBehavior for VmSkillBehavior {
                         })
                 })
             }
+            VmFilterPolicy::Named(prog) => crate::rvm_named::eval_program(
+                &prog,
+                ctx,
+                owner,
+                &self.program.skill_name,
+                &filter_view(&trig),
+            ),
         }
     }
 
+    fn needs_vm_card_history(&self) -> bool {
+        true
+    }
+
     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+        let (consume, count_hits) = match &self.filter {
+            VmFilterPolicy::Named(p) => (p.consume.clone(), p.count_hits),
+            _ => (Vec::new(), false),
+        };
         Box::new(VmMachine {
             owner,
             program: self.program.clone(),
@@ -428,6 +568,8 @@ impl SkillBehavior for VmSkillBehavior {
             paused: None,
             asked: false,
             settled: false,
+            consume,
+            count_hits,
         })
     }
 }
@@ -454,26 +596,14 @@ pub struct VmMachine {
     /// 挂起询问已答（下一步续跑）。
     asked: bool,
     settled: bool,
+    /// Halted 时写入 once。挂起恢复后续跑不再次消费（登记差异：清单不入快照）。
+    consume: Vec<(String, u8)>,
+    count_hits: bool,
 }
 
 /// 内核座位 ↔ rule-api id（1 基，NONE=0）。
 fn to_rule_pid(p: PlayerId) -> rule_api::PlayerId {
     rule_api::PlayerId::new(p as u32 + 1)
-}
-
-fn from_rule_pid(p: rule_api::PlayerId) -> Option<PlayerId> {
-    if !p.is_some() {
-        return None;
-    }
-    let raw = p.raw() - 1;
-    u8::try_from(raw).ok()
-}
-
-/// 未映射查询/效果：立即拒绝（模块 trap → 回滚协议，绝不半提交）。
-fn reject_unmapped(name: &str) -> HostTrap {
-    HostTrap::InvalidRequest {
-        message: format!("rvm_bridge 增量1 未映射: {name}"),
-    }
 }
 
 /// 内核只读查询 + 排队效果的 VmHost 适配器。
@@ -497,110 +627,17 @@ impl VmHost for EngineVmHost<'_> {
     }
 
     fn emit_effect(&mut self, req: EffectRequest) -> Result<(), HostTrap> {
-        // 增量 1 映射面校验（玩家界内 + 值合法），未映射变体拒绝。
-        match &req {
-            EffectRequest::RecoverHp { player, amount, .. } => {
-                let p = from_rule_pid(*player)
-                    .ok_or_else(|| reject_unmapped("RecoverHp.NONE"))?;
-                if p >= self.seats || *amount == 0 {
-                    return Err(reject_unmapped("RecoverHp 越界/零量"));
-                }
-            }
-            EffectRequest::DrawCards { player, count } => {
-                let p = from_rule_pid(*player)
-                    .ok_or_else(|| reject_unmapped("DrawCards.NONE"))?;
-                if p >= self.seats || *count == 0 {
-                    return Err(reject_unmapped("DrawCards 越界/零量"));
-                }
-            }
-            EffectRequest::DealDamage { target, amount, nature, .. } => {
-                let t = from_rule_pid(*target)
-                    .ok_or_else(|| reject_unmapped("DealDamage.NONE"))?;
-                if t >= self.seats || *amount == 0 || *nature > 2 {
-                    return Err(reject_unmapped("DealDamage 越界/nature"));
-                }
-            }
-            other => {
-                let name = format!("{other:?}");
-                return Err(reject_unmapped(name.split([' ', '(', '{']).next().unwrap_or("?")));
-            }
-        }
+        crate::rvm_ops::accept_effect(&req, self.seats)?;
         self.pending.push(req);
         Ok(())
     }
 
     fn run_query(&mut self, req: QueryRequest) -> Result<QueryResponse, HostTrap> {
-        match req {
-            QueryRequest::Hp { player } => {
-                let p = from_rule_pid(player).ok_or_else(|| reject_unmapped("Hp.NONE"))?;
-                if p >= self.seats {
-                    return Err(reject_unmapped("Hp 越界"));
-                }
-                Ok(QueryResponse::Int(self.core.player(p).hp as i32))
-            }
-            QueryRequest::MaxHp { player } => {
-                let p = from_rule_pid(player).ok_or_else(|| reject_unmapped("MaxHp.NONE"))?;
-                if p >= self.seats {
-                    return Err(reject_unmapped("MaxHp 越界"));
-                }
-                Ok(QueryResponse::Int(self.core.player(p).max_hp as i32))
-            }
-            QueryRequest::Distance { from, to } => {
-                let a = from_rule_pid(from).ok_or_else(|| reject_unmapped("Distance.NONE"))?;
-                let b = from_rule_pid(to).ok_or_else(|| reject_unmapped("Distance.NONE"))?;
-                if a >= self.seats || b >= self.seats {
-                    return Err(reject_unmapped("Distance 越界"));
-                }
-                Ok(QueryResponse::Int(
-                    self.core.computed_distance(self.catalog, a, b) as i32,
-                ))
-            }
-            other => {
-                let name = format!("{other:?}");
-                Err(reject_unmapped(name.split([' ', '(', '{']).next().unwrap_or("?")))
-            }
-        }
+        crate::rvm_ops::run_query(self.core, self.catalog, self.seats, req)
     }
 }
 
-/// 效果提交（emit_effect 已验证映射面；此处只落账）。
-fn commit_effect(ctx: &mut Ctx<'_>, e: EffectRequest) {
-    match e {
-        EffectRequest::RecoverHp { player, amount, .. } => {
-            if let Some(p) = from_rule_pid(player) {
-                ctx.recover(p, amount, None);
-            }
-        }
-        EffectRequest::DrawCards { player, count } => {
-            if let Some(p) = from_rule_pid(player) {
-                ctx.draw_cards(p, count as usize);
-            }
-        }
-        EffectRequest::DealDamage { source, target, amount, is_lose_hp, nature } => {
-            let Some(t) = from_rule_pid(target) else {
-                return;
-            };
-            let src = if source.is_some() {
-                from_rule_pid(source)
-            } else {
-                None
-            };
-            if is_lose_hp {
-                ctx.emit(EventData::LoseHp { player: t, amount });
-            } else {
-                let nature = match nature {
-                    1 => DamageNature::Fire,
-                    2 => DamageNature::Thunder,
-                    _ => DamageNature::Normal,
-                };
-                ctx.emit(EventData::Damage(damage_data_with(
-                    src, t, amount, nature, None,
-                )));
-            }
-        }
-        _ => {}
-    }
-}
+/// 效果提交（`accept_effect` 已验证映射面；此处只落账）。
 
 impl VmMachine {
     /// 存档重建（非挂起态）：从模块载体字节还原（快照点不会停在
@@ -617,6 +654,8 @@ impl VmMachine {
             paused: None,
             asked: false,
             settled: false,
+            consume: Vec::new(),
+            count_hits: false,
         }
     }
 
@@ -660,109 +699,18 @@ impl VmMachine {
             // 应答即续跑，不重问。
             asked: true,
             settled: false,
+            consume: Vec::new(),
+            count_hits: false,
         })
     }
 }
 
-/// 排队效果自定义编码（映射面仅三种；emit_effect 已验证）。
 fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
-    fn u32le(w: &mut Vec<u8>, v: u32) {
-        w.extend_from_slice(&v.to_le_bytes());
-    }
-    w.extend_from_slice(&(effects.len() as u32).to_le_bytes());
-    for e in effects {
-        match e {
-            EffectRequest::RecoverHp { source, player, amount } => {
-                w.push(1);
-                u32le(w, source.raw());
-                u32le(w, player.raw());
-                u32le(w, *amount);
-            }
-            EffectRequest::DrawCards { player, count } => {
-                w.push(2);
-                u32le(w, player.raw());
-                u32le(w, *count);
-            }
-            EffectRequest::DealDamage { source, target, amount, is_lose_hp, nature } => {
-                w.push(3);
-                u32le(w, source.raw());
-                u32le(w, target.raw());
-                u32le(w, *amount);
-                w.push(u8::from(*is_lose_hp));
-                w.push(*nature);
-            }
-            _ => unreachable!("emit_effect 面已拒未映射变体"),
-        }
-    }
+    crate::rvm_ops::enc_effects(w, effects);
 }
 
-/// 逐段 u32 读取器（dec_effects 用）。
-struct U32Reader<'a> {
-    r: &'a [u8],
-}
-
-impl U32Reader<'_> {
-    fn next_u32(&mut self) -> Option<u32> {
-        if self.r.len() < 4 {
-            return None;
-        }
-        let (a, rest) = self.r.split_at(4);
-        self.r = rest;
-        Some(u32::from_le_bytes(a.try_into().unwrap()))
-    }
-    fn next_u8(&mut self) -> Option<u8> {
-        let v = *self.r.first()?;
-        self.r = &self.r[1..];
-        Some(v)
-    }
-}
-
-fn dec_effects(mut r: &[u8]) -> Option<Vec<EffectRequest>> {
-    let mut rd = U32Reader { r: &mut r };
-    let n = rd.next_u32()? as usize;
-    let mut out = Vec::new();
-    for _ in 0..n {
-        let tag = rd.next_u8()?;
-        match tag {
-            1 => {
-                let source = rd.next_u32()?;
-                let player = rd.next_u32()?;
-                let amount = rd.next_u32()?;
-                out.push(EffectRequest::RecoverHp {
-                    source: rule_api::PlayerId::new(source),
-                    player: rule_api::PlayerId::new(player),
-                    amount,
-                });
-            }
-            2 => {
-                let player = rd.next_u32()?;
-                let count = rd.next_u32()?;
-                out.push(EffectRequest::DrawCards {
-                    player: rule_api::PlayerId::new(player),
-                    count,
-                });
-            }
-            3 => {
-                let source = rd.next_u32()?;
-                let target = rd.next_u32()?;
-                let amount = rd.next_u32()?;
-                let is_lose_hp = rd.next_u8()? == 1;
-                let nature = rd.next_u8()?;
-                out.push(EffectRequest::DealDamage {
-                    source: rule_api::PlayerId::new(source),
-                    target: rule_api::PlayerId::new(target),
-                    amount,
-                    is_lose_hp,
-                    nature,
-                });
-            }
-            _ => return None,
-        }
-    }
-    if !rd.r.is_empty() {
-        return None;
-    }
-    Some(out)
+fn dec_effects(r: &[u8]) -> Option<Vec<EffectRequest>> {
+    crate::rvm_ops::dec_effects(r)
 }
 
 impl SkillMachine for VmMachine {
@@ -878,9 +826,25 @@ impl VmMachine {
         };
         match outcome {
             Ok(ExecResult::Halted { .. }) => {
+                for (key, scope) in &self.consume {
+                    let k = if key.is_empty() {
+                        self.program.skill_name.clone()
+                    } else {
+                        key.clone()
+                    };
+                    ctx.core.vm_aux.once.insert((self.owner, k, *scope));
+                }
+                if self.count_hits && self.trig.kind == 1 {
+                    *ctx.core
+                        .vm_aux
+                        .hits
+                        .entry((self.owner, self.program.skill_name.clone()))
+                        .or_default() += 1;
+                }
                 let pending = std::mem::take(&mut self.pending_effects);
+                let skill = self.program.skill_name.clone();
                 for e in pending {
-                    commit_effect(ctx, e);
+                    crate::rvm_ops::commit_effect(ctx, &skill, e);
                 }
                 self.settled = true;
                 Flow::Done

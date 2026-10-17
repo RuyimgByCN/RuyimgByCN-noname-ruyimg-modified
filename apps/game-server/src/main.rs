@@ -112,6 +112,8 @@ async fn main() {
         )
         .route("/native/packages", get(native_packages_handler))
         .route("/native/games", post(native_games_handler))
+        .route("/native/matches", post(native_matches_handler))
+        .route("/native/matches/restore", post(native_restore_handler))
         .route("/ws", get(ws_handler))
         .nest_service("/original-content", original_content)
         .layer(CorsLayer::permissive())
@@ -148,6 +150,39 @@ async fn native_packages_handler(
     match lobby.native_packages() {
         Ok(list) => Ok(Json(list)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, e)),
+    }
+}
+
+#[derive(Debug, Deserialize)]
+struct NativeMatchBody {
+    #[serde(default)]
+    packages: Vec<String>,
+    seed: u64,
+    seats: u8,
+}
+
+/// 已安装扩展进入新对局，返回存档十六进制。
+async fn native_matches_handler(
+    State(lobby): State<Arc<Lobby>>,
+    Json(req): Json<NativeMatchBody>,
+) -> Result<Json<native::NativeMatchArchive>, (StatusCode, String)> {
+    if !(2..=8).contains(&req.seats) {
+        return Err((StatusCode::BAD_REQUEST, "seats must be 2..=8".into()));
+    }
+    match lobby.native_match(req.packages, req.seed, req.seats).await {
+        Ok(archive) => Ok(Json(archive)),
+        Err(e) => Err((StatusCode::BAD_REQUEST, e)),
+    }
+}
+
+/// 同一安装集恢复对局。缺包或错版返回 400。
+async fn native_restore_handler(
+    State(lobby): State<Arc<Lobby>>,
+    Json(req): Json<native::NativeRestoreRequest>,
+) -> Result<Json<native::NativeRestoreSummary>, (StatusCode, String)> {
+    match lobby.native_restore(req).await {
+        Ok(summary) => Ok(Json(summary)),
+        Err(e) => Err((StatusCode::BAD_REQUEST, e)),
     }
 }
 

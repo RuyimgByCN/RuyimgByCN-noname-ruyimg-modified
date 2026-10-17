@@ -1,0 +1,100 @@
+[
+  {
+    "label": "boss.js Zhuge skills",
+    "file": "/Users/ruyimg/Documents/Claude/sanguosha/scratch/legacy-harness/noname/apps/core/mode/boss.js",
+    "names": [
+      "xiangxing",
+      "yueyin",
+      "fengqi",
+      "gaiming"
+    ],
+    "missing": false,
+    "hits": [
+      {
+        "name": "xiangxing",
+        "offset": 217346,
+        "line": 7893,
+        "triggerSnippet": "trigger: { player: [\"damageEnd\", \"loseHpEnd\"] }",
+        "head": "\n\t\t\txiangxing: {\n\t\t\t\tunique: true,\n\t\t\t\tinit(player) {\n\t\t\t\t\tplayer.storage.xiangxing = 7;\n\t\t\t\t\tplayer.storage.xiangxing_count = 0;\n\t\t\t\t\tplayer.addSkill(\"xiangxing7\");\n\t\t\t\t},\n\t\t\t\tmark: true,\n\t\t\t\tintro: {\n\t\t\t\t\tcontent: \"当前有#枚星\",\n\t\t\t\t},"
+      },
+      {
+        "name": "yueyin",
+        "offset": 214123,
+        "line": 7774,
+        "triggerSnippet": null,
+        "head": "\n\t\t\tyueyin: {\n\t\t\t\tunique: true,\n\t\t\t\tmark: true,\n\t\t\t\tintro: {\n\t\t\t\t\tcontent(storage, player) {\n\t\t\t\t\t\tvar str = \"扣减\" + (7 - player.storage.xiangxing_count) + \"点体力后失去下一枚星；\";\n\t\t\t\t\t\tstr += \"防止禳星伤害条件：\" + lib.translate[\"xiangxing\" + player.storage.xiangxing + \"_info\"];\n\t\t\t\t\t\treturn str;\n\t\t\t\t\t},\n\t\t\t\t\tmarkcount(storage, player) {\n\t\t\t\t\t\treturn Math.max(0, 7 - player.storage.xiangxing_count);"
+      },
+      {
+        "name": "fengqi",
+        "offset": 219141,
+        "line": 7959,
+        "triggerSnippet": "trigger: { player: [\"phaseZhunbeiBegin\", \"phaseJieshuBegin\"] }",
+        "head": "\n\t\t\tfengqi: {\n\t\t\t\ttrigger: { player: [\"phaseZhunbeiBegin\", \"phaseJieshuBegin\"] },\n\t\t\t\tdirect: true,\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tvar list = { basic: [], equip: [], trick: [], delay: [] };\n\t\t\t\t\tfor (var i = 0; i < lib.inpile.length; i++) {\n\t\t\t\t\t\tvar name = lib.inpile[i];\n\t\t\t\t\t\tvar info = lib.card[name];\n\t\t\t\t\t\tif (info.autoViewAs || name == \"yuansuhuimie\") {\n\t\t\t\t\t\t\tcontinue;"
+      },
+      {
+        "name": "gaiming",
+        "offset": 221142,
+        "line": 8032,
+        "triggerSnippet": "trigger: { player: \"judgeBefore\" }",
+        "head": "\n\t\t\tgaiming: {\n\t\t\t\ttrigger: { player: \"judgeBefore\" },\n\t\t\t\tdirect: true,\n\t\t\t\tpriority: 1,\n\t\t\t\tunique: true,\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tevent.cards = get.cards(7);\n\t\t\t\t\tplayer.chooseCardButton(true, event.cards, \"改命：选择一张牌作为你的\" + trigger.judgestr + \"判定结果\").ai = function (button) {\n\t\t\t\t\t\tif (get.attitude(player, trigger.player) > 0) {\n\t\t\t\t\t\t\treturn 1 + trigger.judge(button.link);"
+      }
+    ]
+  },
+  {
+    "label": "offline_yanling ylyg*",
+    "file": "/Users/ruyimg/Documents/Claude/sanguosha/scratch/legacy-harness/noname/apps/core/character/offline/skill/offline_yanling.js",
+    "names": [
+      "ylygxiangxing",
+      "ylyglianhuan",
+      "ylygniepan",
+      "ylyg_jiang",
+      "ylygguhuo",
+      "ylygtianxiang"
+    ],
+    "missing": false,
+    "hits": [
+      {
+        "name": "ylygxiangxing",
+        "offset": 14719,
+        "line": 531,
+        "triggerSnippet": "trigger: { player: \"useCardAfter\", }",
+        "head": "\n\tylygxiangxing: {\n\t\tlocked: true,\n\t\tderivation: [\"reyingzi\", \"rebiyue\"],\n\t\tglobal: [\"ylygxiangxing_yingzi\", \"ylygxiangxing_biyue\"],\n\t},\n\tylygxiangxing_yingzi: {\n\t\tinherit: \"reyingzi\",\n\t\tfilter(event, player) {\n\t\t\treturn game.hasPlayer(target => target !== player && target.hasSkill(\"ylygxiangxing\")) && !event.numFixed;\n\t\t},\n\t\tmod: {"
+      },
+      {
+        "name": "ylyglianhuan",
+        "offset": 15416,
+        "line": 556,
+        "triggerSnippet": "trigger: { player: \"useCardAfter\", }",
+        "head": "\n\tylyglianhuan: {\n\t\tenable: \"phaseUse\",\n\t\tfilterCard: true,\n\t\tviewAsFilter(player) {\n\t\t\treturn player.countCards(\"hes\") > 0;\n\t\t},\n\t\tusable(skill, player) {\n\t\t\treturn game.shuffleNumber + 1;\n\t\t},\n\t\tviewAs: {\n\t\t\tname: \"tiesuo\","
+      },
+      {
+        "name": "ylygniepan",
+        "offset": 17308,
+        "line": 630,
+        "triggerSnippet": null,
+        "head": "\n\tylygniepan: {\n\t\tenable: \"chooseToUse\",\n\t\tlimited: true,\n\t\tskillAnimation: true,\n\t\tanimationColor: \"fire\",\n\t\tfilter(event, player) {\n\t\t\tif (event.type === \"dying\") {\n\t\t\t\tif (player !== event.dying) {\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t\treturn true;"
+      },
+      {
+        "name": "ylyg_jiang",
+        "offset": 173,
+        "line": 6,
+        "triggerSnippet": "trigger: { global: \"useCardToPlayered\" }",
+        "head": "\n\tylyg_jiang: {\n\t\ttrigger: { global: \"useCardToPlayered\" },\n\t\tfrequent: true,\n\t\tlocked: false,\n\t\tfilter(event, player) {\n\t\t\tif (!(event.card?.name === \"juedou\" || (event.card?.name === \"sha\" && get.color(event.card) === \"red\"))) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (!event.isFirstTarget) {\n\t\t\t\treturn false;\n\t\t\t}"
+      },
+      {
+        "name": "ylygguhuo",
+        "offset": 27791,
+        "line": 973,
+        "triggerSnippet": null,
+        "head": "\n\tylygguhuo: {\n\t\taudio: \"reguhuo\",\n\t\tderivation: [\"ylyghuinu\"],\n\t\tgetList(event, player) {\n\t\t\treturn get.inpileVCardList(info => {\n\t\t\t\tif (![\"basic\", \"trick\"].removeArray(player.getStorage(\"ylygguhuo_used\")).includes(info[0])) {\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t\treturn event.filterCard(get.autoViewAs({ name: info[2], nature: info[3] }, \"unsure\"), player, event);\n\t\t\t});\n\t\t},"
+      },
+      {
+        "name": "ylygtianxiang",
+        "offset": 22397,
+        "line": 799,
+        "triggerSnippet": "trigger: { player: \"damageBegin4\", }",
+        "head": "\n\tylygtianxiang: {\n\t\taudio: \"retianxiang\",\n\t\ttrigger: {\n\t\t\tplayer: \"damageBegin4\",\n\t\t},\n\t\tfilter(event, player) {\n\t\t\treturn player.countDiscardableCards(player, \"he\", { suit: \"heart\" }) > 0;\n\t\t},\n\t\tasync cost(event, trigger, player) {\n\t\t\tevent.result = await player\n\t\t\t\t.chooseToDiscard(get.prompt(event.skill), `弃置一张红桃牌防止${trigger.source ? `${get.translation(trigger.source)}造成的` : \"\"}伤害`, { suit: \"heart\" }, \"he\", \"chooseonly\")"
+      }
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/g1_cardpile.rs (target/debug/deps/g1_cardpile-31327d4d3320875a)
+
+running 5 tests
+test cardpile_liuli_real_host_full_lifecycle ... ok
+test cardpile_real_host_full_lifecycle ... ok
+test converted_packages_match_generator ... ok
+test g1_cardpile_vertical_install_enable_newgame_saverestore ... ok
+test pile_bridge_rejects_invalid_spec ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+

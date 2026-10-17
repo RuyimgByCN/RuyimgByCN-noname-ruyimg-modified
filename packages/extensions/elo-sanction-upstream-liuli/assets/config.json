@@ -1,0 +1,8 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/段位制裁/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "eloPlayers": true,
+  "eloDifficulty": "paiwei",
+  "timeKiller": "none"
+}

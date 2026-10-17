@@ -66,5 +66,35 @@ const dirs = readdirSync(extRoot).filter((d) =>
 );
 check("extension_catalog_15", dirs.length === 15, `n=${dirs.length}`);
 
+const huanlePath = join(extRoot, "huanle-upstream-noname/assets/cards.json");
+const packs = JSON.stringify([JSON.parse(readFileSync(huanlePath, "utf8"))]);
+const ext = NativeEngine.new_with_packs_json(4, 17017n, packs);
+const prefixed = ext.cards_with_prefix("hnl_");
+check("pack_enters_match", prefixed === 7, `hnl_=${prefixed}`);
+const extHex = ext.save_hex();
+let missingRefused = false;
+try {
+  const bare = new NativeEngine(4, 1n);
+  bare.restore_hex(extHex);
+} catch {
+  missingRefused = true;
+}
+check("missing_pack_refused", missingRefused);
+const again = NativeEngine.new_with_packs_json(4, 1n, packs);
+again.restore_hex_with_packs_json(extHex, packs);
+check("same_pack_restore", again.cards_with_prefix("hnl_") === 7);
+const wrongObj = JSON.parse(packs);
+wrongObj[0].pack.version = 2;
+let wrongRefused = false;
+let wrongDetail = "";
+try {
+  again.restore_hex_with_packs_json(extHex, JSON.stringify(wrongObj));
+  wrongDetail = "accepted";
+} catch (e) {
+  wrongDetail = String(e);
+  wrongRefused = wrongDetail.includes("恢复失败");
+}
+check("wrong_version_refused", wrongRefused, wrongDetail);
+
 console.log(JSON.stringify({ total: results.length, failed: results.filter((r) => !r.ok).length }));
 process.exit(results.some((r) => !r.ok) ? 1 : 0);

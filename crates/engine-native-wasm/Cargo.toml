@@ -9,5 +9,6 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 engine-native = { path = "../engine-native" }
+content-native-loader = { path = "../content-native-loader" }
 wasm-bindgen = { workspace = true }
 serde_json = { workspace = true }

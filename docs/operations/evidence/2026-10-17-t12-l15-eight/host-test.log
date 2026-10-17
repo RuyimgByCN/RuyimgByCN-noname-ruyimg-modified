@@ -1,0 +1,8 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.48s
+     Running tests/l15_shousha_eight.rs (target/debug/deps/l15_shousha_eight-82203a5afa0684ab)
+
+running 1 test
+test l15_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s

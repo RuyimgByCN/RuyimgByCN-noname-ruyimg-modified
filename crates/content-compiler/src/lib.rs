@@ -19,7 +19,7 @@ pub use lsp::{
     LspDiagnostic, LspHover, LspPosition, LspRange, LspSeverity,
 };
 pub use parse::parse_source;
-pub use typecheck::typecheck;
+pub use typecheck::{filter_vocabulary, typecheck};
 
 use content_schema::{
     ContentPackage, PackageActiveEntry, PackageManifest, PackageModifierEntry,

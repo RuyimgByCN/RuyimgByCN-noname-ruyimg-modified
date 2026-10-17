@@ -1,0 +1,20 @@
+[
+  {
+    "skill": "mbqianlong",
+    "cmd": "addMark",
+    "player": "mb_caomao",
+    "rngDraws": 332
+  },
+  {
+    "skill": "fengqi",
+    "cmd": "chooseButton",
+    "player": "boss_zhugeliang",
+    "rngDraws": 347
+  },
+  {
+    "skill": "mbqianlong_2",
+    "cmd": "addMark",
+    "player": "mb_caomao",
+    "rngDraws": 396
+  }
+]

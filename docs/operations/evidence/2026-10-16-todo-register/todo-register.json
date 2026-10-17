@@ -30,9 +30,24 @@
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 6,
-    "open_count": 83,
-    "notes_on_head": "登记表起草 HEAD 5c5bf131；消解批以当时文件+交叉证据为准，不因并行 worker 后续提交自动重写条目正文"
+    "resolved_count": 21,
+    "open_count": 68,
+    "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
+    "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
+    "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
+    "notes_on_head": "登记表起草 HEAD 5c5bf131；消解批以当时文件+交叉证据为准，不因并行 worker 后续提交自动重写条目正文",
+    "l23_closure_2026_10_17": "T12-SRC-L23 resolved after eight-dimension evidence. Whole-pack at that close was 4/37.",
+    "u03_closure_2026_10_17": "T12-SRC-U03 resolved after eight-dimension evidence. Whole-pack at that close was 5/37.",
+    "u04_closure_2026_10_17": "T12-SRC-U04 resolved after eight-dimension evidence. Whole-pack at that close was 6/37. L05 is not counted.",
+    "l04_closure_2026_10_17": "T12-SRC-L04 resolved after its own liuli install. Whole-pack stays open at 7/37. U03 is not counted again.",
+    "l05_closure_2026_10_17": "T12-SRC-L05 resolved after its own liuli install. Whole-pack stays open at 8/37. U04 is not counted again.",
+    "l22_closure_2026_10_17": "T12-SRC-L22 resolved after its own liuli install. Whole-pack stays open at 9/37. L12 is not counted.",
+    "l21_closure_2026_10_17": "T12-SRC-L21 resolved after its own liuli install. Whole-pack stays open at 15/37.",
+    "l26_closure_2026_10_17": "T12-SRC-L26 resolved after its own liuli install. Whole-pack stays open at 14/37.",
+    "l18_closure_2026_10_17": "T12-SRC-L18 resolved after its own liuli install. Whole-pack stays open at 13/37.",
+    "l17_closure_2026_10_17": "T12-SRC-L17 resolved after its own liuli install. Whole-pack stays open at 12/37.",
+    "l15_closure_2026_10_17": "T12-SRC-L15 resolved after its own liuli install. Whole-pack stays open at 11/37.",
+    "l02_closure_2026_10_17": "T12-SRC-L02 resolved after its own liuli install. Whole-pack stays open at 10/37."
   },
   "items": [
     {
@@ -669,7 +684,7 @@
         "doc": "docs/architecture/native-progress.md",
         "ref": "后续待做 / T12（约 L85）；台账「37 项均未完成原生整包验收」"
       },
-      "description": "T12 总账：两仓 37 来源原生整包验收仍为 0/37。每来源须功能+组合+保存恢复+安装升级+目标平台通过后才上调整包数。",
+      "description": "T12 总账：2026-10-17 起为 15/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26 与 L21 八项）。其余 22 个来源未验收。U04 不因同一经济再计一次。每来源八项通过后才计入。",
       "done_when_evidence": [
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
@@ -819,7 +834,7 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3.1 U01"
       },
-      "description": "3D精选：末焱与其余约 32 将技能逐将重写+资源映射（纵向样本/生命周期已过）。",
+      "description": "3D精选：刘冲末焱已映射（2026-10-17），其余 30 将与 56 条技能引用未实现，资源映射未做。不计整包。L21 计入后总账为 15/37，末焱本身不计。",
       "done_when_evidence": [
         "定向回归测试通过",
         "cargo test --offline -p engine-native --no-fail-fast 全绿",
@@ -842,7 +857,7 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / U01 3D精选"
       },
-      "description": "来源 U01（3D精选）原生整包验收未完成。台账状态：部分重构；G1 样本+生命周期；整包未完成。建议批次：G1→G3。",
+      "description": "来源 U01（3D精选）原生整包验收未完成。台账状态：部分重构；G1 样本+生命周期；刘冲末焱切片已测（2026-10-17），其余 30 将与 56 条技能引用未实现。整包未完成。L21 计入后总账为 15/37，本行未验收。建议批次：G1→G3。",
       "done_when_evidence": [
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
@@ -884,12 +899,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / U03 cardpile"
       },
-      "description": "来源 U03（cardpile）原生整包验收未完成。台账状态：G1 生命周期完成；倍率/随机点数差距；整包计数仍 0/37。建议批次：G1→G3。",
+      "description": "来源 U03（cardpile）八项已于 2026-10-17 从真实安装验收。随机点数仍为登记差异。113 张比例牌不是上游默认追加。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-u03-eight/README.md",
+        "u03_eight_dimension_from_fresh_install",
+        "cardpile_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -897,7 +913,8 @@
         "整包",
         "U03",
         "G1"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from a real install. Injected ranks are not Math.random. The 113 ratio cards stay catalog material. L04 is not counted."
     },
     {
       "id": "T12-SRC-U04",
@@ -905,12 +922,14 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / U04 coin"
       },
-      "description": "来源 U04（coin）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "description": "来源 U04（coin）八项已于 2026-10-17 从真实安装验收。画布、音效、提示、CSS 和粒子仍为登记差异。其后 L05 另有八项，不由本行计入。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-u04-eight/README.md",
+        "u04_eight_dimension_from_fresh_install",
+        "coin_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
+      "resolution": "2026-10-17 eight-dimension acceptance from a real install. Canvas, audio, toast, CSS, and particles stay registered differences. Caller unit random is not Math.random. L05 is not counted.",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -947,12 +966,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / U06 欢乐卡牌"
       },
-      "description": "来源 U06（欢乐卡牌）原生整包验收未完成。台账状态：G0–G5 通道样本首个通过来源；台账整包总账仍 0/37。建议批次：G3–G5。",
+      "description": "来源 U06（欢乐卡牌）八项已于 2026-10-17 从真实安装验收。2026-10-16 决议仍有效：通道全绿不单独上调。苦无仍为登记差异。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-u06-eight/README.md",
+        "u06_eight_dimension_from_fresh_install",
+        "huanle_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -961,19 +981,20 @@
         "U06",
         "G3"
       ],
-      "notes": "G0–G5 通道验收≠整包上调；本决议裁定不上调 0/37",
+      "notes": "2026-10-16：通道验收不上调。2026-10-17：八项测试通过后关闭。关闭当时总账 1/37。其后 L06、L07 计入曾为 3/37。其后 L23 计入曾为 4/37。其后 U03 计入曾为 5/37。其后 U04 计入曾为 6/37。其后 L04 计入曾为 7/37。其后 L05 计入曾为 8/37。其后 L22 计入曾为 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。苦无仍为登记差异。U04 不因同一经济再计一次。",
       "ambiguous": false,
       "resolution": {
         "date": "2026-10-16",
-        "kind": "keep_open",
-        "conclusion": "通道全绿不单独上调整包总账；U06 仍归 T12-WHOLEPACK-0-37 直至 E06 整包口径齐",
+        "kind": "closed_2026_10_17",
+        "conclusion": "2026-10-16：通道全绿不单独上调。2026-10-17：八项从真实安装通过后 U06 resolved。关闭当时总账 1/37。其后 L06、L07 计入曾为 3/37。其后 L23 计入曾为 4/37。其后 U03 计入曾为 5/37。其后 U04 计入曾为 6/37。其后 L04 计入曾为 7/37。其后 L05 计入曾为 8/37。其后 L22 计入曾为 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。苦无仍为登记差异。U04 不因同一经济再计一次。",
         "evidence": [
           "docs/architecture/native-progress.md",
           "docs/migration/upstream-extension-reconstruction.md",
           "docs/operations/evidence/2026-10-14-t12-u06-g2g4/README.md",
-          "docs/operations/evidence/2026-10-14-t12-huanle-g5/README.md"
+          "docs/operations/evidence/2026-10-14-t12-huanle-g5/README.md",
+          "docs/operations/evidence/2026-10-17-t12-u06-eight/README.md"
         ],
-        "disposition": "保持 open；不上调 0/37",
+        "disposition": "T12-SRC-U06 resolved；T12-WHOLEPACK 仍 open（当前 15/37）",
         "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
       }
     },
@@ -1046,12 +1067,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L02 SJ Settings"
       },
-      "description": "来源 L02（SJ Settings）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;移动端G5。",
+      "description": "来源 L02（SJ Settings）八项已于 2026-10-17 从 liuli 真实安装验收。不请求网络，不 eval update.js，不打开 PDF，不启动 eruda，不调用 game.reload 或 game.loop。Cordova、进度条和通知仍为登记差异。数据库导入要求 config 与 data 都是对象。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l02-eight/README.md",
+        "l02_eight_dimension_from_fresh_install",
+        "sj_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1059,7 +1081,8 @@
         "整包",
         "L02",
         "G2;移动端G5"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Network, eval, PDF, eruda, and game.reload or game.loop stay refused. Cordova, progress UI, and notifications stay registered differences."
     },
     {
       "id": "T12-SRC-L03",
@@ -1088,12 +1111,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L04 cardpile"
       },
-      "description": "来源 L04（cardpile）原生整包验收未完成。台账状态：G1 生命周期完成；整包计数仍开放。建议批次：G1→G3。",
+      "description": "来源 L04（cardpile）八项已于 2026-10-17 从 liuli 真实安装验收。随机点数仍为登记差异。不由 U03 组合行计入。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l04-eight/README.md",
+        "l04_eight_dimension_from_fresh_install",
+        "liuli_cardpile_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1101,7 +1125,8 @@
         "整包",
         "L04",
         "G1"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Injected ranks are not Math.random. U03 is not counted again."
     },
     {
       "id": "T12-SRC-L05",
@@ -1109,12 +1134,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L05 coin"
       },
-      "description": "来源 L05（coin）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "description": "来源 L05（coin）八项已于 2026-10-17 从 liuli 真实安装验收。画布、音效、提示、CSS 和粒子仍为登记差异。不由 U04 组合行计入。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l05-eight/README.md",
+        "l05_eight_dimension_from_fresh_install",
+        "liuli_coin_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1122,7 +1148,8 @@
         "整包",
         "L05",
         "G2"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli coin package install. Canvas, audio, toast, CSS, and particles stay registered differences. U04 is not counted again."
     },
     {
       "id": "T12-SRC-L06",
@@ -1130,12 +1157,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L06 wuxing"
       },
-      "description": "来源 L06（wuxing）原生整包验收未完成。台账状态：部分重构；生命周期样本；表现层暂缓。建议批次：G1→G3。",
+      "description": "来源 L06（wuxing）八项已于 2026-10-17 从真实安装验收。装备授予五行盘技能。随机、弃牌选择、联机/录像/帮助仍为登记差异。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l06-eight/README.md",
+        "l06_eight_dimension_from_fresh_install",
+        "wuxing_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1151,12 +1179,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L07 全能搜索"
       },
-      "description": "来源 L07（全能搜索）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "description": "来源 L07（全能搜索）八项已于 2026-10-17 从真实安装验收。界面、语音和脚本执行仍为登记差异。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l07-eight/README.md",
+        "l07_eight_dimension_from_fresh_install",
+        "omnisearch_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1319,12 +1348,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L15 手杀全扩"
       },
-      "description": "来源 L15（手杀全扩）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+      "description": "来源 L15（手杀全扩）八项已于 2026-10-17 从 liuli 真实安装验收。不播放奶龙音频，不画界面，不调用 clsPrefixName。HTML 配置名、CSS 和玩家排序仍为登记差异。出厂配置没有 changeGroup。空名在改名时返回 BadName。BT 数组空洞不记为 id。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l15-eight/README.md",
+        "l15_eight_dimension_from_fresh_install",
+        "shousha_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1332,7 +1362,8 @@
         "整包",
         "L15",
         "G2"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Audio, DOM, clsPrefixName, HTML config names, CSS, and player sort stay registered differences."
     },
     {
       "id": "T12-SRC-L16",
@@ -1361,12 +1392,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L17 斗转星移"
       },
-      "description": "来源 L17（斗转星移）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+      "description": "来源 L17（斗转星移）八项已于 2026-10-17 从 liuli 真实安装验收。不打开菜单，不播放音频，不调用 game.reload，不 eval。HTML/CSS、启动页、势力颜色和玩家排序仍为登记差异。空方案导出是 ['']。禁将用 indexOf。AI 网络要正好是 online。稀有度和抽样由调用方给出。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l17-eight/README.md",
+        "l17_eight_dimension_from_fresh_install",
+        "douzhuan_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1374,7 +1406,8 @@
         "整包",
         "L17",
         "G2"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Menu, audio, game.reload, eval, HTML/CSS, splash, group color, and player sort stay registered differences."
     },
     {
       "id": "T12-SRC-L18",
@@ -1382,12 +1415,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L18 更新保护"
       },
-      "description": "来源 L18（更新保护）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;平台G5。",
+      "description": "来源 L18（更新保护）八项已于 2026-10-17 从 liuli 真实安装验收。不请求网络，不写盘，不 eval，不睡眠。下载写盘、Cordova、DOM 和两秒等待仍为登记差异。注释里的下载不执行。检查素材更新后 UpdatingForAsset 仍为真。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l18-eight/README.md",
+        "l18_eight_dimension_from_fresh_install",
+        "update_guard_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1395,7 +1429,8 @@
         "整包",
         "L18",
         "G2;平台G5"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Network, disk writes, eval, sleep, Cordova, and DOM stay registered differences. The commented download path is not executed."
     },
     {
       "id": "T12-SRC-L19",
@@ -1445,12 +1480,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L21 武皇争霸"
       },
-      "description": "来源 L21（武皇争霸）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+      "description": "来源 L21（武皇争霸）八项已于 2026-10-17 从 liuli 真实安装验收。不画界面，不采样 Math.random，不播放录像，不走联机。双将体力上限的五种算法不执行。extension/武皇/mightyFoe.js 不指向本目录，旁路不自动执行。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l21-eight/README.md",
+        "l21_eight_dimension_from_fresh_install",
+        "martial_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1458,7 +1494,8 @@
         "整包",
         "L21",
         "G3"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. UI, Math.random, playback, online choose, the commented double-HP formulas, and the sibling mightyFoe script stay registered differences."
     },
     {
       "id": "T12-SRC-L22",
@@ -1466,12 +1503,12 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L22 段位制裁"
       },
-      "description": "来源 L22（段位制裁）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+      "description": "来源 L22（段位制裁）八项已于 2026-10-17 从真实安装验收。将池不筛，烧条不睡眠、不说台词，分数由调用方给出，仍为登记差异。L12 不计入。关闭当时总账 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。",
       "done_when_evidence": [
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1487,12 +1524,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L23 电脑适配"
       },
-      "description": "来源 L23（电脑适配）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;平台G5。",
+      "description": "来源 L23（电脑适配）八项已于 2026-10-17 从真实安装验收。窗口、DOM 和抛表情仍为登记差异。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l23-eight/README.md",
+        "l23_eight_dimension_from_fresh_install",
+        "desktop_adapt_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1500,7 +1538,8 @@
         "整包",
         "L23",
         "G2;平台G5"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from a real install. Window, DOM, and emoji dispatch stay registered differences."
     },
     {
       "id": "T12-SRC-L24",
@@ -1550,12 +1589,13 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "§3 全量逐项台账 / L26 笨蛋插件"
       },
-      "description": "来源 L26（笨蛋插件）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+      "description": "来源 L26（笨蛋插件）八项已于 2026-10-17 从 liuli 真实安装验收。不画界面，不播放音频，不启动定时器，不采样 Math.random，不生成随机锚点。if(false) 里的选择卡牌优化不执行。注释里的 _choose.mp3 不执行。",
       "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
+        "docs/operations/evidence/2026-10-17-t12-l26-eight/README.md",
+        "l26_eight_dimension_from_fresh_install",
+        "fool_pack_json_enters_wasm_helper"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1563,7 +1603,8 @@
         "整包",
         "L26",
         "G2"
-      ]
+      ],
+      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Dialogs, audio, timers, Math.random, random anchors, the disabled choose-card optimizer, and the commented choose-file path stay registered differences."
     },
     {
       "id": "T12-SRC-L27",
@@ -2000,7 +2041,7 @@
         "doc": "docs/native-coverage-manifest.md",
         "ref": "扩展机制表「指定两仓全部扩展」"
       },
-      "description": "覆盖清单扩展行：原生整包验收 0/37，与 T12 总账同口径。",
+      "description": "覆盖清单扩展行：原生整包验收 15/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26 与 L21，2026-10-17），仍需处理 22/37，与 T12 总账同口径。U04 不因同一经济再计一次。",
       "done_when_evidence": [
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"

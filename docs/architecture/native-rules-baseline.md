@@ -3014,7 +3014,7 @@ HostBehavior tag **421–426**——白芒3 / 白芒3·转阶 / 赤炎3 / 赤炎
 用梅花牌后若已受伤回复 1（机器直发 useCard 同覆盖）。**登记不落**：涅
 槃/浴火=外部包技依赖（shenhua oldniepan/offline ylygniepan+kanpo/
 shenwei/zhuyu+loopType 关卡面）；**诸葛亮整体勘验登记不落**（hp Infinity
-无承载+四技 offline 龙血玄黄包，与 T9 同源阻塞）。
+无承载+四技 offline 龙血玄黄包）。2026-10-17 T9 用上游对局复核：自动选将后体力仍为 Infinity，四技已装配，`fengqi`/`mbqianlong` 的 content 有命中；原生装载器拒绝该体力并把这些技能留在未映射，差异保留，不改记为已支持（[证据](../operations/evidence/2026-10-17-t9-lx-content-hooks/README.md)）。
 `BOSS_GENERALS` 尾追加**庞统·涅槃凤雏**（def 索引 55/**hp4**/`[天狱, 栖
 梧]`；上游 group shen→群近似登记）。FROZEN 名单尾加「天狱」「栖梧」
 （180–181 名）。存档不变 v63。版本 276→**277**。版本回退探针（277→276
@@ -3526,7 +3526,7 @@ switch` 不落表（门控并入 enabled，先例同构）。**登记待查**：
 v3.3 恢复原有扩展机制。单个 STANDARD_RULESET_VERSION 不足以标识任意第三方规则组合：
 本局还须固定扩展版本、逻辑哈希、依赖、规则配置与宿主接口版本，并纳入恢复/重放兼容检查。
 扩展机器状态和等待选择的续行数据必须编码、校验并参与状态摘要；更新只影响后续开局。
-历史或当前原生测试通过均不证明扩展整包已验收；v60 golden 修复已完成，独立执行、生命周期和逐来源功能仍按[扩展台账](../migration/upstream-extension-reconstruction.md)验收，能力边界见[扩展契约](native-extensions.md)。
+历史或当前原生测试通过均不证明扩展整包已验收；v60 golden 修复已完成，独立执行、生命周期和逐来源功能仍按[扩展台账](../migration/upstream-extension-reconstruction.md)验收，能力边界见[扩展契约](native-extensions.md)。2026-10-17 U03 牌堆、U06 欢乐卡牌、L06 五行、L07 全能搜索、L23 电脑适配、U04 金币、L04 牌堆、L05 金币、L22 段位制裁、L02 SJ Settings、L15 手杀全扩、L17 斗转星移、L18 更新保护、L26 笨蛋插件 与 L21 武皇争霸 八项已从真实安装验收（[U03](../operations/evidence/2026-10-17-t12-u03-eight/README.md)、[U06](../operations/evidence/2026-10-17-t12-u06-eight/README.md)、[L06](../operations/evidence/2026-10-17-t12-l06-eight/README.md)、[L07](../operations/evidence/2026-10-17-t12-l07-eight/README.md)、[L23](../operations/evidence/2026-10-17-t12-l23-eight/README.md)、[U04](../operations/evidence/2026-10-17-t12-u04-eight/README.md)、[L04](../operations/evidence/2026-10-17-t12-l04-eight/README.md)）、[L05](../operations/evidence/2026-10-17-t12-l05-eight/README.md)、[L22](../operations/evidence/2026-10-17-t12-l22-eight/README.md)、[L02](../operations/evidence/2026-10-17-t12-l02-eight/README.md)、[L15](../operations/evidence/2026-10-17-t12-l15-eight/README.md)、[L17](../operations/evidence/2026-10-17-t12-l17-eight/README.md)、[L18](../operations/evidence/2026-10-17-t12-l18-eight/README.md)、[L26](../operations/evidence/2026-10-17-t12-l26-eight/README.md)、[L21](../operations/evidence/2026-10-17-t12-l21-eight/README.md)），计入整包 15/37。苦无、五行的引擎 RNG、确定性弃牌、联机/录像/帮助，全能搜索的界面、语音和脚本执行，电脑适配的窗口、DOM 和抛表情，牌堆随机点数，金币的画布、音效、提示、CSS 和粒子，以及段位制裁的将池不筛、烧条台词和调用方分数，以及 SJ Settings 不请求网络、不 eval update.js、不打开 PDF、不启动 eruda、不调用 game.reload 或 game.loop，以及手杀全扩不播放奶龙音频、不画界面、不调用 clsPrefixName，以及斗转星移不打开菜单、不播放音频、不调用 game.reload、不 eval，以及更新保护不请求网络、不写盘、不 eval、不睡眠，以及笨蛋插件不画界面、不播放音频、不采样 Math.random、不执行已关闭的选择卡牌优化，以及武皇争霸不画界面、不采样 Math.random、不播放录像、不执行已注释的双将体力公式，仍为登记差异，不是上游等价。113 张比例牌是目录材料，缺配置时上游不追加。金币的 `unit_random` 由调用方给出。L05 已按自身安装计入，不由 U04 行计入。L22 已按自身安装计入。L02 已按自身安装计入。其余 22 个来源仍按台账验收。U01 刘冲末焱（`host:d3_moyan`，2026-10-17，[证据](../operations/evidence/2026-10-17-t12-u01-moyan/README.md)）已从真实安装测过。登记差异：开局已在判定阶段内，不补发 roundStart；取消与未选牌立即弃置，不留处理区；展示牌挂在宿主机器（tag 438），不进桌面；获得为手牌推入加 `CardsGiven`，不是上游 gain2。其余 30 将与 56 条技能引用未实现，不计整包。L21 计入后总账为 15/37，末焱本身不计。
 
 ## 内容差异与后续验收
 

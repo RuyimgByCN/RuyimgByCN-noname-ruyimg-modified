@@ -7,7 +7,9 @@
 #[path = "../src/native.rs"]
 mod native;
 
-use native::{create_native_game, NativeContent, NativeGameRequest};
+use native::{
+    create_native_game, restore_match, save_fresh_match, NativeContent, NativeGameRequest,
+};
 use std::path::PathBuf;
 
 fn repo_packages_root() -> PathBuf {
@@ -190,6 +192,43 @@ fn t63_standard_only_build_and_drive() {
         "T6③ 标准实测: steps={} finished={} elapsed_ms={}",
         summary.steps, summary.finished, summary.elapsed_ms
     );
+}
+
+/// 已安装扩展进入新对局，保存后再用同一包恢复；缺包与另一包集合被拒绝。
+#[test]
+fn t13_installed_extension_enters_match_and_restores() {
+    let dir = tempfile::tempdir().unwrap();
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("安装");
+    let packages = vec!["huanle-cards".to_string()];
+    let (bytes, cards) = save_fresh_match(&content, &packages, 17017, 4).expect("新对局");
+    let base = engine_native::Engine::new(1, 4).catalog().cards.len();
+    assert_eq!(cards, base + 7, "欢乐卡牌 7 张进入新对局");
+
+    let restored = restore_match(&content, &packages, &bytes).expect("同包恢复");
+    assert_eq!(restored, cards, "恢复后目录牌数不变");
+
+    let missing = restore_match(&content, &[], &bytes);
+    match missing {
+        Err(msg) => assert!(msg.contains("恢复失败"), "缺包必须拒绝: {msg}"),
+        Ok(n) => panic!("缺包必须拒绝，得到 {n}"),
+    }
+
+    let other = restore_match(&content, &["wuxing".into()], &bytes);
+    match other {
+        Err(msg) => assert!(
+            msg.contains("恢复失败"),
+            "另一已安装包必须因内容锁拒绝: {msg}"
+        ),
+        Ok(n) => panic!("另一已安装包必须拒绝，得到 {n}"),
+    }
+
+    let unknown = restore_match(&content, &["not-installed".into()], &bytes);
+    match unknown {
+        Err(msg) => assert!(msg.contains("包未安装"), "{msg}"),
+        Ok(n) => panic!("未安装包必须拒绝，得到 {n}"),
+    }
 }
 
 /// 未安装包装载必须可处理报错（不 panic）。

@@ -1,0 +1,17 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.61s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-a5e2b4363d607405)
+
+running 9 tests
+test d4_boss_b4_host_tags ... ok
+test d4_boss_b4_chiyi_mark_then_real_damage ... ok
+test d4_boss_b4_huanren_dizang_and_zhuanlun_not_yingji ... ok
+test d4_boss_b4_qingyi_rounds_change_hp ... ok
+test d4_boss_b4_baiyi_discard_thunder_and_draw ... ok
+test d4_boss_b4_bianshen3_changes_boss_seeded ... ok
+test d4_boss_b4_bianshen4_changes_boss_seeded ... ok
+test d4_boss_b4_huanren_die_picks_successor_and_removes_mengpo ... ok
+test d4_boss_b4_huanren_boot_bans_and_may_spawn_mengpo ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 330 filtered out; finished in 0.02s
+

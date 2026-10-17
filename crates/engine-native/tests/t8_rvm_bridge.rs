@@ -616,21 +616,17 @@ fn t8_vm_skill_filter_always() {
     assert!(hand_len(&e, 1) > h0, "always：他人阶段结束即触发");
 }
 
-/// 增量 6 装载器严格面：具名组合 filter 跳过（deferred_filters 登记，
-/// 不阻断装载）。
+/// 装载器：无法编译的 filter 名跳过，不阻断同包其余技能。
 #[test]
 fn t8_vm_skill_loader_skips_named_filters() {
-    let pkg = compile_source_named("t8-rvm-bridge", NAMED_FILTER_DSL).expect("DSL 编译");
+    let mut pkg = compile_source_named("t8-rvm-bridge", NAMED_FILTER_DSL).expect("DSL 编译");
+    pkg.trigger_index[0].filter = "not_a_real_filter".to_string();
     let outcome =
         content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
-    assert!(
-        outcome.decls.is_empty(),
-        "具名组合 filter 不产出声明"
-    );
+    assert!(outcome.decls.is_empty(), "未知 filter 不产出声明");
     assert_eq!(
         outcome.deferred_filters,
-        vec!["owner_is_target_wounded_sha".to_string()],
-        "跳过面登记（增量 9 后 wounded 已承载，组合 sha 仍未承载）"
+        vec!["not_a_real_filter".to_string()],
     );
 }
 
@@ -905,7 +901,7 @@ fn t8_filter_family_owner_gate_and_predicates() {
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
-            filter: *filter,
+            filter: filter.clone(),
         }]);
         let mut e =
             Engine::new_with_extensions(941000 + idx as u64, 4, &[&pack]).expect("建局");
@@ -1146,7 +1142,7 @@ fn t8_bte_play_phase_filter_dual_gate_and_phase_kind() {
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
-            filter,
+            filter: filter.clone(),
         }]);
         let mut e = Engine::new_with_extensions(951000 + idx as u64, 4, &[&pack])
             .expect("建局");
@@ -1665,4 +1661,311 @@ fn t8_filter_targeted_by_other_sha() {
     submit(&mut e, 1, GameAction::PlayCard { card: sha, targets: vec![0] });
     settle_choices(&mut e);
     assert_eq!(trigger_draws(&e), 1, "使用者本人不计");
+}
+
+fn install_dsl(dsl: &str) -> ExtensionPack {
+    let pkg = compile_source_named("t8-rvm-bridge", dsl).expect("DSL 编译");
+    let outcome = content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器");
+    assert!(
+        outcome.deferred_filters.is_empty(),
+        "不应跳过: {:?}",
+        outcome.deferred_filters
+    );
+    assert!(!outcome.decls.is_empty(), "装载器应产出声明");
+    pack_with(outcome.decls)
+}
+
+fn keep_only(e: &mut Engine, seat: u8, names: &[&str]) {
+    let ids: Vec<_> = names
+        .iter()
+        .map(|n| e.catalog().skill_by_name(n).unwrap_or_else(|| panic!("无技能 {n}")))
+        .collect();
+    e.state_core_mut()
+        .skills
+        .retain(|(o, d), _| *o != seat || ids.contains(d));
+}
+
+fn sha_id(e: &mut Engine) -> u32 {
+    e.debug_place(0, "sha")
+}
+
+/// 词表里的每个 filter 都能映射；非 owner 未知名不能。
+#[test]
+fn t8_named_filter_vocabulary_maps() {
+    use engine_native::rvm_bridge::{map_vm_filter, VmFilterPolicy};
+    use engine_native::rvm_named::Atom;
+    for name in content_compiler::filter_vocabulary() {
+        let mapped = map_vm_filter(name).unwrap_or_else(|| panic!("未映射 {name}"));
+        if let VmFilterPolicy::Named(prog) = &mapped {
+            if name.starts_with("owner_is_target_") {
+                assert!(
+                    prog.groups.iter().all(|g| {
+                        g.iter().any(|c| !c.neg && c.atom == Atom::EvPlayer)
+                    }),
+                    "{name} 缺少事件主玩家合取"
+                );
+            }
+        }
+    }
+    assert!(map_vm_filter("not_a_real_filter").is_none());
+}
+
+/// 受伤且伤害来自杀：摸 1。满血、他人受伤、非杀都不摸。
+///
+/// lsp：`owner_is_target_wounded_sha` 是伤害前置窗。`damage` 在扣血之后
+/// 才过滤，满血承受 1 点伤害时已经受伤，所以这里走 `damage_before`。
+#[test]
+fn t8_named_wounded_sha_dual_gate() {
+    let dsl = "\
+skill hnl_wsha(990020) {
+  trigger damage_before owner_is_target_wounded_sha {
+    effect draw_cards(self, 1);
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961001, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_wsha_damage_before");
+    keep_only(&mut e, 1, &["hnl_wsha_damage_before"]);
+    let max = e.state_core().player(1).max_hp as i32;
+    e.debug_set_hp(1, max);
+    let h = hand_len(&e, 1);
+    let sha = sha_id(&mut e);
+    e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, sha);
+    assert_eq!(hand_len(&e, 1), h, "满血杀伤前置不摸");
+    e.debug_set_hp(1, max - 1);
+    e.debug_deal_damage_with_card(Some(0), 2, 1, DamageNature::Normal, sha);
+    assert_eq!(hand_len(&e, 1), h, "他人承受杀伤不摸");
+    e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, sha);
+    assert_eq!(hand_len(&e, 1), h + 1, "受伤且杀伤摸 1");
+    let shan = e.debug_place(0, "shan");
+    e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, shan);
+    assert_eq!(hand_len(&e, 1), h + 1, "非杀伤害不摸");
+}
+
+/// 被他人杀伤害：本回合第一次摸牌并记 once，第二次不摸。
+#[test]
+fn t8_named_sha_once_dual_gate() {
+    let dsl = "\
+skill hnl_once(990023) {
+  trigger damage owner_targeted_by_other_sha_once {
+    effect draw_cards(self, 1);
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961002, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_once_damage");
+    keep_only(&mut e, 1, &["hnl_once_damage"]);
+    let h = hand_len(&e, 1);
+    let sha = sha_id(&mut e);
+    e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, sha);
+    assert_eq!(hand_len(&e, 1), h + 1, "第一次杀伤害摸 1");
+    assert!(
+        e.state_core().vm_aux.once.contains(&(1, "hnl_once_damage".to_string(), 1)),
+        "once 已记"
+    );
+    e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, sha);
+    assert_eq!(hand_len(&e, 1), h + 1, "同回合第二次不摸");
+}
+
+/// 牌堆顶进技能牌堆；下一事件上「牌堆非空」才摸牌。
+#[test]
+fn t8_skill_pile_then_nonempty_filter() {
+    let dsl = "\
+skill hnl_pile(990021) {
+  trigger damage owner_is_target {
+    effect gain_top_card_to_skill_pile(self);
+  }
+}
+skill hnl_pile_see(990024) {
+  trigger damage owner_alive_other_phase_play_skill_pile_nonempty {
+    effect draw_cards(self, 1);
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961003, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_pile_damage");
+    e.debug_grant(1, "hnl_pile_see_damage");
+    keep_only(&mut e, 1, &["hnl_pile_damage", "hnl_pile_see_damage"]);
+    e.debug_set_turn(1, Phase::Play, 1);
+    let deck0 = e.state_core().deck.len();
+    let top = *e.state_core().deck.last().expect("牌堆");
+    let h = hand_len(&e, 1);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    let pile = e
+        .state_core()
+        .vm_aux
+        .piles
+        .get(&(1, "hnl_pile_damage".to_string()))
+        .map(|c| c.len())
+        .unwrap_or(0);
+    assert_eq!(pile, 1, "牌堆顶进入技能牌堆");
+    assert_eq!(e.state_core().deck.len(), deck0 - 1);
+    assert_eq!(
+        e.state_core().vm_aux.piles.get(&(1, "hnl_pile_damage".to_string())).unwrap()[0],
+        top
+    );
+    assert_eq!(hand_len(&e, 1), h, "同波伤害时尚无牌堆，不摸");
+    e.debug_set_turn(1, Phase::Judge, 1);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h, "非出牌阶段不摸");
+    e.debug_set_turn(1, Phase::Play, 1);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h + 1, "出牌阶段且牌堆非空后摸 1");
+}
+
+/// add_mark 写入标记。
+#[test]
+fn t8_add_mark_writes() {
+    let dsl = "\
+skill hnl_mark(990022) {
+  trigger damage owner_is_target {
+    effect add_mark(self, 7, 2);
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961004, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_mark_damage");
+    keep_only(&mut e, 1, &["hnl_mark_damage"]);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(
+        e.state_core().vm_aux.marks.get(&(1, 7)).copied(),
+        Some(2)
+    );
+}
+
+/// change_max_hp 改变体力上限。
+#[test]
+fn t8_change_max_hp_writes() {
+    let dsl = "\
+skill hnl_max(990025) {
+  trigger damage owner_is_target {
+    effect change_max_hp(self, 1);
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961005, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_max_damage");
+    keep_only(&mut e, 1, &["hnl_max_damage"]);
+    let before = e.state_core().player(1).max_hp;
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(e.state_core().player(1).max_hp, before + 1);
+}
+
+/// hand_count 查询为真才摸牌；空手不摸。
+#[test]
+fn t8_hand_count_query_gates_draw() {
+    let dsl = "\
+skill hnl_hc(990030) {
+  trigger damage owner_is_target {
+    if hand_count(self) > 0 {
+      effect draw_cards(self, 1);
+    }
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961006, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_hc_damage");
+    keep_only(&mut e, 1, &["hnl_hc_damage"]);
+    let h = hand_len(&e, 1);
+    assert!(h > 0);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h + 1, "有手牌时查询放行摸 1");
+    let gone: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
+    e.state_core_mut().discard.extend(gone);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), 0, "空手查询为假，不摸");
+}
+
+/// 本回合丢失史：同一波弃牌尚不可见；下一事件才放行。他人事件不放行。
+#[test]
+fn t8_lost_history_dual_gate() {
+    let dsl = "\
+skill hnl_lost(990040) {
+  trigger damage owner_alive_lost_hand_this_turn {
+    effect draw_cards(self, 1);
+  }
+}
+skill hnl_drop(990041) {
+  trigger damage owner_is_target {
+    effect discard_hand(self, 1);
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961007, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_lost_damage");
+    e.debug_grant(1, "hnl_drop_damage");
+    keep_only(&mut e, 1, &["hnl_lost_damage", "hnl_drop_damage"]);
+    let h = hand_len(&e, 1);
+    assert!(h > 0);
+    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h, "尚无丢失史，不摸");
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h - 1, "同波只弃牌，丢失史尚未放行");
+    assert!(
+        e.state_core().vm_aux.lost.get(&1).is_some_and(|c| !c.is_empty()),
+        "弃牌写入丢失史"
+    );
+    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h, "下一事件看见丢失史后摸回 1");
+}
+
+/// 移牌批次：真实 CardsMoved 放行；关掉技能后同一路径不再摸。
+#[test]
+fn t8_move_batch_dual_gate() {
+    let dsl = "\
+skill hnl_batch(990042) {
+  trigger cards_moved owner_alive_discard_batch {
+    effect draw_cards(self, 1);
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961008, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_batch_cards_moved");
+    keep_only(&mut e, 1, &["hnl_batch_cards_moved"]);
+    let h = hand_len(&e, 1);
+    let card = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 2, card);
+    assert_eq!(hand_len(&e, 1), h + 1, "移牌批次摸 1");
+    e.debug_set_skill_enabled(1, "hnl_batch_cards_moved", false);
+    let card2 = e.debug_place(0, "shan");
+    e.debug_give_hand_card(0, 2, card2);
+    assert_eq!(hand_len(&e, 1), h + 1, "技能关闭后不再摸");
+}
+
+/// 技能实例剩余次数：once_used 之前摸 1，置位后不摸。
+#[test]
+fn t8_skill_uses_remaining_dual_gate() {
+    let dsl = "\
+skill hnl_uses(990050) {
+  trigger damage owner_is_target {
+    let remaining = skill_uses_remaining(self_skill);
+    if remaining > 0 {
+      effect draw_cards(self, 1);
+    }
+  }
+}
+";
+    let pack = install_dsl(dsl);
+    let mut e = Engine::new_with_extensions(961009, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, "hnl_uses_damage");
+    keep_only(&mut e, 1, &["hnl_uses_damage"]);
+    let h = hand_len(&e, 1);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h + 1, "剩余次数为正时摸 1");
+    let def = e.catalog().skill_by_name("hnl_uses_damage").expect("技能");
+    e.state_core_mut()
+        .skills
+        .get_mut(&(1, def))
+        .expect("实例")
+        .once_used = true;
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(hand_len(&e, 1), h + 1, "次数用尽后不摸");
 }

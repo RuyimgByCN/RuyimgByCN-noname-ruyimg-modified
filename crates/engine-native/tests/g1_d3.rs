@@ -2,8 +2,8 @@
 //! 精彀宿主行为（触发 + 目标选择 + 伤害）→ 内容锁。
 //!
 //! 切片：刘冲（群/4血/男，技能 精彀+末焱 @ 5c02a745）。精彀映射为
-//! 宿主原语 max_range_weapon_damage；末焱（展示牌/获得/标记/伤害增幅）
-//! 需更多宿主原语——包数据中登记 mapping:null，测试断言其暂缓状态。
+//! 宿主原语 max_range_weapon_damage；末焱映射为 host:d3_moyan。
+//! 其余 3D 武将仍未入包，本文件不把来源标成整包。
 
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -43,8 +43,8 @@ fn options() -> InstallOptions {
 }
 
 /// 桥接统一走 C0 装载器（ADR 0777/0778）：武将元数据与宿主技能映射
-/// 来自 character.json 的 pack 段与数据键；末焱暂缓计数经伴随装载入口
-/// 读取，测试只校验包元数据一致。
+/// 来自 character.json 的 pack 段与数据键。刘冲两技均映射；
+/// 测试只校验包元数据一致。
 fn bridge(pack_name: &'static str, json: &str) -> (ExtensionPack, Vec<String>) {
     let out =
         content_native_loader::bridge_pack(json).expect("character.json 可装载");
@@ -66,7 +66,7 @@ fn bridge(pack_name: &'static str, json: &str) -> (ExtensionPack, Vec<String>) {
     (out.pack, unmapped)
 }
 
-/// G1 纵向：发现 → 导入 → 桥接（武将元数据 + 宿主技能；末焱暂缓登记）。
+/// G1 纵向：发现 → 导入 → 桥接（武将元数据 + 精彀/末焱宿主技能）。
 #[test]
 fn g1_d3_install_bridge_and_metadata() {
     let root = repo_extensions_root();
@@ -86,9 +86,9 @@ fn g1_d3_install_bridge_and_metadata() {
     )
     .unwrap();
     let (pack, unmapped) = bridge("d3-upstream-noname", &json);
-    assert_eq!(unmapped, vec!["dddmoyan".to_string()], "末焱登记暂缓");
+    assert_eq!(unmapped, Vec::<String>::new(), "刘冲两技均已映射");
     assert_eq!(pack.general_count(), 1);
-    assert_eq!(pack.host_skills.len(), 1);
+    assert_eq!(pack.host_skills.len(), 2);
 
     // 目录元数据：扩展武将接在基础表之后
     let base_count = engine_native::content::standard::STANDARD_GENERALS.len();
@@ -99,7 +99,7 @@ fn g1_d3_install_bridge_and_metadata() {
         .expect("扩展武将在目录");
     assert_eq!(name, "ddd刘冲");
     assert_eq!(faction, Faction::Qun);
-    assert_eq!(skills, vec!["dddjinggou"]);
+    assert_eq!(skills, vec!["dddjinggou", "dddmoyan"]);
     assert_eq!(hp, 4);
     assert_eq!(gender, Gender::Male);
     // boss 内置段（v221 起）位于扩展段后——越界以动态总尾为准
@@ -354,7 +354,7 @@ fn d3_real_host_full_lifecycle() {
     )
     .unwrap();
     let (pack, unmapped) = bridge("d3-upstream-noname", &json);
-    assert_eq!(unmapped, vec!["dddmoyan".to_string()], "末焱登记暂缓");
+    assert_eq!(unmapped, Vec::<String>::new(), "刘冲两技均已映射");
     let base_count = engine_native::content::standard::STANDARD_GENERALS.len();
     let mut e = Engine::new_with_extensions(5901, 3, &[&pack]).expect("建局");
     assert!(

@@ -12,6 +12,7 @@ rule-api = { workspace = true }
 rule-vm = { workspace = true }
 
 [dev-dependencies]
+blake3 = { workspace = true }
 serde = { workspace = true }
 content-compiler = { path = "../content-compiler" }
 content-runtime = { path = "../content-runtime" }

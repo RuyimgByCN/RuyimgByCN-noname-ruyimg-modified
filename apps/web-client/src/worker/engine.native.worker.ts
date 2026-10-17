@@ -6,6 +6,7 @@ import type { WorkerRequest, WorkerResponse } from "../types/engine";
 import {
   ensureNativeReady,
   nativeCreate,
+  nativeCreateWithPacks,
   nativeDispatch,
   nativeEnvelope,
   nativeUnsupported,
@@ -22,8 +23,9 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
   try {
     await ensureNativeReady();
     if (msg.type === "init") {
-      // 标准目录内建；扩展包装载待窄壳 new_with_extensions
-      handle = nativeCreate(4, 4242, 0);
+      handle = msg.packsJson
+        ? nativeCreateWithPacks(4, 4242, 0, msg.packsJson)
+        : nativeCreate(4, 4242, 0);
       reply({ id: msg.id, ok: true, data: "native ready" });
       return;
     }
@@ -31,7 +33,9 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
 
     switch (msg.type) {
       case "start": {
-        handle = nativeCreate(msg.players, msg.seed, msg.observer);
+        handle = msg.packsJson
+          ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
+          : nativeCreate(msg.players, msg.seed, msg.observer);
         reply({ id: msg.id, ok: true, data: nativeEnvelope(handle) });
         return;
       }
@@ -51,7 +55,11 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
         return;
       }
       case "restore": {
-        const data = nativeDispatch(handle, { type: "restore", hex: msg.hex });
+        const data = nativeDispatch(handle, {
+          type: "restore",
+          hex: msg.hex,
+          packsJson: msg.packsJson,
+        });
         reply({ id: msg.id, ok: true, data: data as never });
         return;
       }

@@ -88,13 +88,19 @@ export class EngineClient {
     return this.seq++;
   }
 
-  start(players: number, seed: number, observer = 1): Promise<EngineEnvelope> {
+  start(
+    players: number,
+    seed: number,
+    observer = 1,
+    packsJson?: string,
+  ): Promise<EngineEnvelope> {
     return this.request({
       id: this.nextId(),
       type: "start",
       players,
       seed,
       observer,
+      packsJson,
     }) as Promise<EngineEnvelope>;
   }
 
@@ -192,12 +198,13 @@ export class EngineClient {
     });
   }
 
-  /** 从 NGSA 十六进制恢复（仅原生后端）。 */
-  restoreHex(hex: string): Promise<EngineEnvelope> {
+  /** 从 NGSA 十六进制恢复。扩展局传入与开局相同的 packsJson。 */
+  restoreHex(hex: string, packsJson?: string): Promise<EngineEnvelope> {
     return this.request({
       id: this.nextId(),
       type: "restore",
       hex,
+      packsJson,
     }) as Promise<EngineEnvelope>;
   }
 

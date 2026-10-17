@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 294;
+pub const STANDARD_RULESET_VERSION: u64 = 295;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -1247,6 +1247,10 @@ impl SkillMachine for WanghunMachine {
         MachineSnapshot::BossWanghun { owner: self.owner }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 孟婆死亡置乱入已死旗（上游 boss_wanghun 写 shidianyanluo_mengpodie）
+        if let crate::state::GameMode::Boss { stage, .. } = &mut ctx.core.mode {
+            stage.mengpo_died = true;
+        }
         // ① 清全场往事封禁（上游敌方 removeSkill boss_wangshi2 同口径）
         for p in ctx.core.players.iter_mut() {
             p.wangshi_ban = false;
@@ -5853,6 +5857,28 @@ pub const BOSS_CHIYAN3X: &str = "赤炎3·转阶";
 pub const BOSS_XUANLIN3: &str = "玄麟3";
 /// 玄麟3·转阶（Boss 共工，规则 v294，D4/B3）：→颛顼+共工 fellow+次座玄冥。
 pub const BOSS_XUANLIN3X: &str = "玄麟3·转阶";
+/// 后援3（Boss 牛头/马面，规则 v295）：死亡前置隐藏。
+pub const BOSS_BIANSHEN3: &str = "后援3";
+/// 后援3·转阶（规则 v295）：种子化换白无常/黑无常。
+pub const BOSS_BIANSHEN3X: &str = "后援3·转阶";
+/// 后援4（Boss 黑无常/白无常，规则 v295）：死亡前置隐藏。
+pub const BOSS_BIANSHEN4: &str = "后援4";
+/// 后援4·转阶（规则 v295）：种子化换夜叉/罗刹。
+pub const BOSS_BIANSHEN4X: &str = "后援4·转阶";
+/// 还人（Boss 秦广王，规则 v295）：开局禁将与孟婆乱入。
+pub const BOSS_HUANREN: &str = "还人";
+/// 还人·转关（规则 v295）：死亡选将换关。换将后重新授予，链不随条目丢失。
+pub const BOSS_HUANREN_DIE: &str = "还人·转关";
+/// 青翼（Boss 太昊，规则 v295）：轮次 3/5/7。
+pub const BOSS_QINGYI: &str = "青翼";
+/// 赤翼（Boss 炎帝，规则 v295）：轮次 3/5/7。
+pub const BOSS_CHIYI: &str = "赤翼";
+/// 赤仪2（规则 v295）：赤翼第 3 轮授予，受到的伤害 +1。
+pub const BOSS_CHIYI2: &str = "赤仪2";
+/// 白翼（Boss 少昊，规则 v295）：第 5 轮敌方弃 2；雷伤见配套技。
+pub const BOSS_BAIYI: &str = "白翼";
+/// 白翼·雷（规则 v295）：第 7 轮前雷伤无效。
+pub const BOSS_BAIYI_THUNDER: &str = "白翼·雷";
 /// 神裔（Boss 青龙，四象系共有技，规则 v233）：锁定技两面——判定阶段
 /// 的延时锦囊判定恒不生效（上游 mod judge `event.type=="phase"`：bool
 /// true→false、false→null，对延时锦囊消费面等价恒失效；牌去向不变）；
@@ -5981,7 +6007,7 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("玄武", Faction::Qun, &[BOSS_SHENYI, BOSS_LINGQU, BOSS_XUANLIN2, BOSS_XUANLIN2X], 4, Gender::Male),
     // 太昊（v238 神恩光环；神裔共用 v233；boss_qingyi 青翼未落随下批；
     // 上游 names 风|伏羲、shen→群目录近似）
-    ("太昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
+    ("太昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN, BOSS_QINGYI], 6, Gender::Male),
     // 蓐收（v239 星囚；神裔共用 v233；v294 白芒3/白芒3·转阶隐藏链；
     // 上游 names 嬴|该、shen→群目录近似）
     ("蓐收", Faction::Qun, &[BOSS_SHENYI, BOSS_XINGQIU, BOSS_BAIMANG3, BOSS_BAIMANG3X], 5, Gender::Male),
@@ -5996,10 +6022,10 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("祝融", Faction::Qun, &[BOSS_SHENYI, BOSS_XINGXIA, BOSS_CHIYAN3, BOSS_CHIYAN3X], 5, Gender::Male),
     // 炎帝（v243 纯入库：神裔共用 v233+神恩光环共用 v238；boss_chiyi 赤
     // 翼=青翼同族已处置；上游 names 姜|轨、shen→群目录近似）
-    ("炎帝", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
+    ("炎帝", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN, BOSS_CHIYI], 6, Gender::Male),
     // 少昊（v243 纯入库：神裔共用 v233+神恩光环共用 v238；boss_baiyi 白
     // 翼=青翼同族已处置；上游 names 嬴|挚、shen→群目录近似）
-    ("少昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN], 6, Gender::Male),
+    ("少昊", Faction::Qun, &[BOSS_SHENYI, BOSS_SHENEN, BOSS_BAIYI, BOSS_BAIYI_THUNDER], 6, Gender::Male),
     // 共工（v244 绝红；神裔共用 v233；v294 玄麟3/玄麟3·转阶隐藏链；
     // 上游 names 姜|共工、shen→群目录近似）
     ("共工", Faction::Qun, &[BOSS_SHENYI, BOSS_JUEHONG, BOSS_XUANLIN3, BOSS_XUANLIN3X], 5, Gender::Male),
@@ -6034,18 +6060,18 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("罗刹", Faction::Qun, &[BOSS_MODAO, BOSS_YUSHOU, BOSS_MOYANY], 12, Gender::Female),
     // 白无常（v255 爆敛+强征+醉酒；juece 界绝策[refresh 包]混入未落登记；
     // shen→群目录近似）
-    ("白无常", Faction::Qun, &[BOSS_BAOLIAN, BOSS_QIANGZHENG, BOSS_ZUIJIU], 8, Gender::Male),
+    ("白无常", Faction::Qun, &[BOSS_BAOLIAN, BOSS_QIANGZHENG, BOSS_ZUIJIU, BOSS_BIANSHEN4, BOSS_BIANSHEN4X], 8, Gender::Male),
     // 黑无常（v256 鬼计+太平+索命+吸行；bianshen4 死亡换将=已处置关卡
     // 面；names 范|无救、shen→群目录近似）
-    ("黑无常", Faction::Qun, &[BOSS_GUIJI, BOSS_TAIPING, BOSS_SUOMING, BOSS_XIXING], 9, Gender::Male),
+    ("黑无常", Faction::Qun, &[BOSS_GUIJI, BOSS_TAIPING, BOSS_SUOMING, BOSS_XIXING, BOSS_BIANSHEN4, BOSS_BIANSHEN4X], 9, Gender::Male),
     // 马面（v257 炼狱+鬼计共用 v256+反馈[标准 FAN_KUI 已承载]+绝策 v258；
     // shen→群目录近似）
-    ("马面", Faction::Qun, &[BOSS_GUIJI, FAN_KUI, BOSS_LIANYU, BOSS_JUECE], 6, Gender::Male),
+    ("马面", Faction::Qun, &[BOSS_GUIJI, FAN_KUI, BOSS_LIANYU, BOSS_JUECE, BOSS_BIANSHEN3, BOSS_BIANSHEN3X], 6, Gender::Male),
     // 董卓（v258 酒池+强征/爆敛混入已落[v255]；shen→群目录近似）
     ("董卓", Faction::Qun, &[BOSS_JIUCHI, BOSS_QIANGZHENG, BOSS_BAOLIAN], 20, Gender::Male),
     // 牛头（v255 爆敛共用+枭首；蛮甲[extra-equip 藤甲挂点分散]+niepan
     // [boss 本地死亡复活面]混入未落登记；shen→群目录近似）
-    ("牛头", Faction::Qun, &[BOSS_BAOLIAN, BOSS_XIAOSHOU], 7, Gender::Male),
+    ("牛头", Faction::Qun, &[BOSS_BAOLIAN, BOSS_XIAOSHOU, BOSS_BIANSHEN3, BOSS_BIANSHEN3X], 7, Gender::Male),
     // 郭嘉（v259 鬼谋+远策+奇佐；天妒=标准技共用；上游 group shen、
     // names 郭|嘉、shen→群目录近似）
     ("郭嘉", Faction::Qun, &[TIAN_DU, BOSS_GUIMOU, BOSS_YUANCE, BOSS_QIZUO], 4, Gender::Male),
@@ -6087,7 +6113,7 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("楚江王", Faction::Qun, &[BOSS_WEIMU, FAN_KUI, BOSS_BINGFENG], 4, Gender::Male),
     // 秦广王（v276 判官+拘魂+望乡；还人=关卡流程面登记不落；上游 group
     // qun→群目录直取）
-    ("秦广王", Faction::Qun, &[BOSS_PANGUAN, BOSS_JUHUN, BOSS_WANGXIANG], 3, Gender::Male),
+    ("秦广王", Faction::Qun, &[BOSS_PANGUAN, BOSS_JUHUN, BOSS_WANGXIANG, BOSS_HUANREN, BOSS_HUANREN_DIE], 3, Gender::Male),
     // 庞统·涅槃凤雏（v277 天狱+栖梧；涅槃/浴火=外部包技依赖登记不落；
     // 上游 group shen→群近似登记）
     ("庞统", Faction::Qun, &[BOSS_TIANYU, BOSS_QIWU], 4, Gender::Male),
@@ -6420,7 +6446,7 @@ pub fn standard_catalog_with_extensions(
                         module: decl.module.clone(),
                         skill_name: decl.name.clone(),
                     }),
-                    filter: decl.filter,
+                    filter: decl.filter.clone(),
                 }),
             });
         }
@@ -8369,6 +8395,50 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
         crate::content::host::host_skill_def(
             BOSS_XUANLIN3X.to_string(),
             crate::content::host::HostBehavior::BossXuanlin3x,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_BIANSHEN3.to_string(),
+            crate::content::host::HostBehavior::BossBianshen3,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_BIANSHEN3X.to_string(),
+            crate::content::host::HostBehavior::BossBianshen3x,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_BIANSHEN4.to_string(),
+            crate::content::host::HostBehavior::BossBianshen4,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_BIANSHEN4X.to_string(),
+            crate::content::host::HostBehavior::BossBianshen4x,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_HUANREN.to_string(),
+            crate::content::host::HostBehavior::BossHuanren,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_HUANREN_DIE.to_string(),
+            crate::content::host::HostBehavior::BossHuanrenDie,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_QINGYI.to_string(),
+            crate::content::host::HostBehavior::BossQingyi,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_CHIYI.to_string(),
+            crate::content::host::HostBehavior::BossChiyi,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_CHIYI2.to_string(),
+            crate::content::host::HostBehavior::BossChiyiMark,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_BAIYI.to_string(),
+            crate::content::host::HostBehavior::BossBaiyi,
+        ),
+        crate::content::host::host_skill_def(
+            BOSS_BAIYI_THUNDER.to_string(),
+            crate::content::host::HostBehavior::BossBaiyiThunder,
         ),
     ];
     (cards, skills)
