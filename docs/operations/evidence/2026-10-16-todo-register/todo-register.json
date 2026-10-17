@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 49,
-  "open_count": 40,
+  "resolved_count": 50,
+  "open_count": 39,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -2295,12 +2295,20 @@
    "done_when_evidence": [
     "逐技能证据或建模"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "kernel-engineer",
    "tags": [
     "RULE"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "registered_difference",
+    "conclusion": "undist/isMin 登记为未建模（无当前内容依赖），附解除条件；其余距离类技能按 COV-STANDARD-FULL-CONTENT 逐条验收。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-rule-distance-unmodeled/README.md"
+    ]
+   }
   },
   {
    "id": "RULE-CONTENT-DIFF-CONVENTIONS",

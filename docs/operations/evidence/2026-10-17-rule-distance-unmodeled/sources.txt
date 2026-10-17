@@ -1,0 +1,21 @@
+# 上游 get.distance 的 undist / isMin 排除（noname v1.11.7, HEAD df2682e6）
+		} else if (to.isMin(true) || from.isMin(true)) {
+			/* empty */
+		} else {
+			let length = game.players.length;
+			let totalPopulation = game.players.length + game.dead.length + 1;
+			for (let iwhile = 0; iwhile < totalPopulation; iwhile++) {
+				if (player.nextSeat != to) {
+					player = player.nextSeat;
+					if (player.isAlive() && !player.isOut() && !player.hasSkill("undist") && !player.isMin(true)) {
+						n++;
+					}
+				} else {
+					break;
+				}
+			}
+			for (let i = 0; i < game.players.length; i++) {
+				if (game.players[i].isOut() || game.players[i].hasSkill("undist") || game.players[i].isMin(true)) {
+					length--;
+				}
+			}
