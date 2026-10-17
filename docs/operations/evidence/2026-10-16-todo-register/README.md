@@ -19,7 +19,7 @@
 | 条目数 | **89**（原 85 + 拆出 4） |
 | 标为模糊（ambiguous） | **0**（原 13 已消解，见 [ambiguous-resolutions.md](./ambiguous-resolutions.md)） |
 | 已 resolved | **51**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
-| 仍 open | **39**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
+| 仍 open | **38**（2026-10-16 快照为 83；2026-10-17 又关 `T13-AI-STRONGER-POLICY`。整包总账仍 open，当前 18/37） |
 
 ## 覆盖范围
 
