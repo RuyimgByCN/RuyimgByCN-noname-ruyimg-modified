@@ -1,0 +1,11 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.70s
+     Running tests/g1_shahai_swd.rs (target/debug/deps/g1_shahai_swd-eba24be2ade66ae5)
+
+running 3 tests
+test swd_deferred_hyunshen_counter_draw_and_distance ... ok
+test swd_deferred_nlianji_compare_reward_and_damage ... ok
+test swd_deferred_shehun_suit_match_damage ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 98 filtered out; finished in 0.16s
+

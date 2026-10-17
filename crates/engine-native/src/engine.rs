@@ -5023,6 +5023,7 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u32(&mut h, p.chengxin_ready_round);
         // 虎煞（U05 xianjian 王小虎，规则 v169）
         push_u8(&mut h, p.husha_mark);
+        push_u8(&mut h, p.hyunshen_count);
         // 适盈（U05 xianjian 月琦，规则 v171）
         push_u8(&mut h, p.death_cancelled as u8);
         push_u8(&mut h, p.shiying_used as u8);

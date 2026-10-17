@@ -145,6 +145,9 @@ pub struct PlayerState {
     /// 虎煞标记（U05 xianjian 王小虎，规则 v169；上游 storage.husha 同
     /// 口径——回合内伤人 +伤害量，上限 3）。
     pub husha_mark: u8,
+    /// 魂身计数（swd 胡月，规则 v296）：使用/打出闪累计；准备阶段摸等量
+    /// 并清零；他人算向自己距离 +计数。
+    pub hyunshen_count: u8,
     /// 死亡拦截标记（规则 v171 死亡取消型基建；上游 dieBefore
     /// trigger.cancel 族——DeathMachine 直读跳过死亡执行）。
     pub death_cancelled: bool,
@@ -276,6 +279,7 @@ impl PlayerState {
             chengxin_active: false,
             chengxin_ready_round: 0,
             husha_mark: 0,
+            hyunshen_count: 0,
             death_cancelled: false,
             shiying_used: false,
             huahu_used: false,
@@ -1058,6 +1062,18 @@ impl GameStateCore {
             .unwrap_or(false);
         minus += u32::from(diting_from);
         plus += u32::from(diting_to);
+        // 魂身（swd 胡月，规则 v296）：他人算向持有者距离 +计数
+        //（上游 globalTo distance + to.storage.hyunshen 同口径）
+        if let Some(def) = catalog.skill_by_name("hyunshen") {
+            if self
+                .skills
+                .get(&(b, def))
+                .map(|i| i.enabled)
+                .unwrap_or(false)
+            {
+                plus += self.player(b).hyunshen_count as u32;
+            }
+        }
         // 平恤（swd 秦叔宝，swd 武将面批 23）：全局距离字段技——场上有
         // 任一存活持技者时，攻击方无武器则距离 -1、防守方无防具则距离
         // +1（上游 pingxu mod globalFrom/globalTo 全局字段同口径）

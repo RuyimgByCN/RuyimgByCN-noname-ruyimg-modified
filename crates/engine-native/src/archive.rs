@@ -65,7 +65,7 @@ use crate::state::{
 /// `BossStageState`（kind/level/孟婆旗/禁将表/翼武装/pending）。v78 字节
 /// 被版本门禁拒绝（无生产迁移数据；存档仅测试与内部工具）。
 /// 80：核心末尾追加 `VmAux`（T8 标记/牌堆/丢失/once/旗标）。空表仍写长度 0。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 80;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 81;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3223,6 +3223,7 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u32(p.chengxin_ready_round);
         // 虎煞标记（v32，U05 xianjian 王小虎）
         w.u8(p.husha_mark);
+        w.u8(p.hyunshen_count);
         // 死亡拦截+适盈一次性（v33，U05 xianjian 月琦）
         w.boolean(p.death_cancelled);
         w.boolean(p.shiying_used);
@@ -3575,6 +3576,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let chengxin_active = r.boolean()?;
         let chengxin_ready_round = r.u32()?;
         let husha_mark = r.u8()?;
+        let hyunshen_count = r.u8()?;
         let death_cancelled = r.boolean()?;
         let shiying_used = r.boolean()?;
         let huahu_used = r.boolean()?;
@@ -3672,6 +3674,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             chengxin_active,
             chengxin_ready_round,
             husha_mark,
+            hyunshen_count,
         })
     })?;
     let deck = r.vec(|r| r.u32())?;

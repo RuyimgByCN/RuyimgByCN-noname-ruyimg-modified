@@ -1228,6 +1228,10 @@ pub enum HostBehavior {
     /// 花色互异的手牌并选一名有牌角色：其弃等量 he 牌，若其中有与弃牌同花色
     /// 者则其受 1 伤。登记差异：花色互异约束未强制（任意 1–4 张）。
     SwdShehun,
+    /// 魂身（tag 446，deferred 消解批 胡月）：使用/打出闪后计数 +1。
+    SwdHyunshen,
+    /// 魂身·收束（tag 447）：准备阶段若计数 >0，摸等量张并清零。
+    SwdHyunshen2,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1515,6 +1519,8 @@ impl HostBehavior {
             HostBehavior::SwdLingxian => 443,
             HostBehavior::SwdNlianji => 444,
             HostBehavior::SwdShehun => 445,
+            HostBehavior::SwdHyunshen => 446,
+            HostBehavior::SwdHyunshen2 => 447,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2201,6 +2207,8 @@ impl HostBehavior {
             443 => HostBehavior::SwdLingxian,
             444 => HostBehavior::SwdNlianji,
             445 => HostBehavior::SwdShehun,
+            446 => HostBehavior::SwdHyunshen,
+            447 => HostBehavior::SwdHyunshen2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2221,7 +2229,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 442] = [
+        pub const ALL: [HostBehavior; 444] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2664,6 +2672,8 @@ impl HostBehavior {
         HostBehavior::SwdLingxian,
         HostBehavior::SwdNlianji,
         HostBehavior::SwdShehun,
+        HostBehavior::SwdHyunshen,
+        HostBehavior::SwdHyunshen2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2868,6 +2878,8 @@ impl HostBehavior {
             HostBehavior::SwdLingxian => "host:lingxian",
             HostBehavior::SwdNlianji => "host:nlianji",
             HostBehavior::SwdShehun => "host:shehun",
+            HostBehavior::SwdHyunshen => "host:hyunshen",
+            HostBehavior::SwdHyunshen2 => "host:hyunshen2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3199,6 +3211,22 @@ impl HostBehavior {
             // 归汉：目录锚（limited 确认逻辑在 DyingSaveMachine 内联）
             HostBehavior::WudianGuihan => None,
             HostBehavior::SwdGTiandao => None,
+            // 魂身：自己使用/打出闪（上游 respond/useCard，frequent）
+            HostBehavior::SwdHyunshen => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::CardResponded],
+            }),
+            // 魂身·收束：自己准备阶段开始
+            HostBehavior::SwdHyunshen2 => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             HostBehavior::SwdShehun => None,
             HostBehavior::SwdNlianji => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
@@ -5828,6 +5856,8 @@ impl HostSkillBehavior {
             },
             HostBehavior::SwdLingxian => (None, None),
             HostBehavior::SwdShehun => (None, None),
+            HostBehavior::SwdHyunshen => (None, None),
+            HostBehavior::SwdHyunshen2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6051,6 +6081,23 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianGuihan => false,
             HostBehavior::SwdGTiandao => false,
             HostBehavior::SwdShehun => false,
+            // 魂身：自己使用/打出的牌为闪
+            HostBehavior::SwdHyunshen => {
+                let is_shan = |card: crate::ids::CardId| {
+                    ctx.catalog.card_kind(card) == crate::catalog::CardKind::Shan
+                };
+                match event {
+                    EventData::CardUsed(u) => u.player == owner && is_shan(u.card),
+                    EventData::CardResponded { card, player } => {
+                        *player == owner && is_shan(*card)
+                    }
+                    _ => false,
+                }
+            }
+            // 魂身·收束：自己准备阶段开始且计数 >0
+            HostBehavior::SwdHyunshen2 => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                if *player == owner && ctx.state.player(owner).hyunshen_count > 0),
             HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
@@ -18223,6 +18270,21 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 魂身（deferred 消解批 胡月）：使用/打出闪后计数 +1
+            HostBehavior::SwdHyunshen => {
+                ctx.core.player_mut(self.owner).hyunshen_count =
+                    ctx.core.player(self.owner).hyunshen_count.saturating_add(1);
+                Flow::Done
+            }
+            // 魂身·收束：准备阶段摸等量并清零
+            HostBehavior::SwdHyunshen2 => {
+                let n = ctx.core.player(self.owner).hyunshen_count;
+                if n > 0 {
+                    ctx.draw_cards(self.owner, n as usize);
+                    ctx.core.player_mut(self.owner).hyunshen_count = 0;
+                }
+                Flow::Done
+            }
             // 禁言：查询锚（PlayCard 门），无独立效果步
             HostBehavior::WudianJinyan => Flow::Done,
             // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
