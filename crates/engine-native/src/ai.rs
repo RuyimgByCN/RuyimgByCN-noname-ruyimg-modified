@@ -25,6 +25,9 @@ pub struct BoundedPlanner {
     /// 搜索深度：1 = 单层启发式（现状）；2 = 两层（我方候选后再模拟
     /// 对手最优应对）。T13 更强候选。
     pub lookahead_depth: u8,
+    /// 策略变体：0 = 现状（仅杀候选 + 体力差评分）；1 = 更强候选
+    /// （全手牌候选 + 牌值/存活/护甲/装备评分）。T13 更强候选。
+    pub policy_variant: u8,
 }
 
 impl BoundedPlanner {
@@ -34,6 +37,7 @@ impl BoundedPlanner {
             deadline_ms: None,
             cancel: std::sync::Arc::new(AtomicBool::new(false)),
             lookahead_depth: 1,
+            policy_variant: 0,
         }
     }
 
@@ -45,6 +49,12 @@ impl BoundedPlanner {
     /// 两层搜索（T13 更强候选）：每个候选后再模拟对手最优应对。
     pub fn with_lookahead(mut self, depth: u8) -> Self {
         self.lookahead_depth = depth.max(1);
+        self
+    }
+
+    /// 策略变体选择（T13 更强候选）：1 = 全手牌候选 + 牌值评分。
+    pub fn with_policy_variant(mut self, variant: u8) -> Self {
+        self.policy_variant = variant;
         self
     }
 
@@ -169,10 +179,17 @@ impl Engine {
 /// 两层搜索中对手应对的候选评估上限（防组合爆炸）。
 const MAX_LOOKAHEAD_CANDIDATES: usize = 8;
 
-/// 候选动作枚举（只依赖只读投影）：开放询问的合法回退（每个单选项 ∪
-/// `min≥2` 时按序取 min 的集合 ∪ `min=0` 的空应答）或出牌阶段的杀，
-/// 末尾附 `NextPhase` 兼底。单层与两层搜索共用。
-fn enumerate_candidates(sim: &Engine, seat: u8) -> Vec<GameAction> {
+/// 更强候选（策略变体 1）的出牌候选上限（防手牌×目标组合爆炸）。
+const MAX_PLAY_CANDIDATES_V2: usize = 96;
+
+/// 候选枚举（按策略变体分派）。
+///
+/// - 变体 0（现状）：询问回退 + 出牌阶段的【杀】。
+/// - 变体 1（T13 更强候选）：询问回退增补「全部选项」组合；出牌阶段
+///   枚举**全部手牌**（自目标用空目标表、非杀牌逐一尝试其他存活座位），
+///   非法候选由模拟提交拒绝。候选按「杀 → 其他牌 → NextPhase」排序，
+///   让节点预算优先覆盖最具进攻性的候选。
+fn enumerate_candidates_variant(sim: &Engine, seat: u8, variant: u8) -> Vec<GameAction> {
     let input = sim.ai_session(seat).input();
     let mut candidates: Vec<GameAction> = Vec::new();
     if let Some(ChoiceView::Own {
@@ -195,6 +212,17 @@ fn enumerate_candidates(sim: &Engine, seat: u8) -> Vec<GameAction> {
                 choice_id: id,
                 selection: sel,
             });
+            // 变体 1：小选项集时补「全选」组合（弃多张/多目标询问的
+            // 一次性应答；组合爆炸由选项数上限挡住）。
+            if variant >= 1
+                && options.len() <= 8
+                && options.len() > min
+            {
+                candidates.push(GameAction::Answer {
+                    choice_id: id,
+                    selection: options.iter().take(8).copied().collect(),
+                });
+            }
         } else if min == 0 && allow_cancel && !options.is_empty() {
             candidates.push(GameAction::Answer {
                 choice_id: id,
@@ -202,22 +230,118 @@ fn enumerate_candidates(sim: &Engine, seat: u8) -> Vec<GameAction> {
             });
         }
     } else if input.view.turn == seat && input.view.phase == crate::event::Phase::Play {
-        for (card, kind) in &input.own_hand_kinds {
-            if *kind == CardKind::Sha {
-                let n = input.view.players.len();
-                for t in 0..n as u8 {
-                    if t != seat && input.view.players[t as usize].alive {
+        let others: Vec<u8> = input
+            .view
+            .players
+            .iter()
+            .filter(|p| p.alive && p.seat != seat)
+            .map(|p| p.seat)
+            .collect();
+        if variant == 0 {
+            for (card, kind) in &input.own_hand_kinds {
+                if *kind == CardKind::Sha {
+                    for t in &others {
                         candidates.push(GameAction::PlayCard {
                             card: *card,
-                            targets: vec![t],
+                            targets: vec![*t],
                         });
                     }
+                }
+            }
+        } else {
+            // 杀优先（进攻候选先占节点预算）
+            for (card, kind) in &input.own_hand_kinds {
+                if kind.is_sha_like() {
+                    for t in &others {
+                        candidates.push(GameAction::PlayCard {
+                            card: *card,
+                            targets: vec![*t],
+                        });
+                    }
+                }
+            }
+            for (card, kind) in &input.own_hand_kinds {
+                if candidates.len() >= MAX_PLAY_CANDIDATES_V2 {
+                    break;
+                }
+                if kind.is_sha_like() {
+                    continue;
+                }
+                // 自目标/无目标形态（桃、无中生有、装备、AOE 等）
+                candidates.push(GameAction::PlayCard {
+                    card: *card,
+                    targets: vec![],
+                });
+                // 单目标形态（顺牵/拆桥/决斗/乐/兵粮等；非法由模拟拒绝）
+                for t in &others {
+                    if candidates.len() >= MAX_PLAY_CANDIDATES_V2 {
+                        break;
+                    }
+                    candidates.push(GameAction::PlayCard {
+                        card: *card,
+                        targets: vec![*t],
+                    });
                 }
             }
         }
     }
     candidates.push(GameAction::NextPhase);
     candidates
+}
+
+
+/// 启发式评分（策略变体分派）。`base` = 规划前基线投影，`after` = 模拟
+/// 提交后的投影；两者都是**观察者视角**的合法信息集。
+///
+/// - 变体 0（现状）：`(敌方体力下降) − (己方体力下降)`——与历史行为
+///   逐值一致（同 seed 计划不变）。
+/// - 变体 1（T13 更强候选）：定点整数加权——己方体力 8/手牌 3/装备 4，
+///   敌方体力 8/手牌 1/装备 2（防御性资源），击杀 +24、己方死亡 -1000；
+///   模拟出终局时以胜负巨值收口（胜 +100_000，非胜 -100_000）。
+///
+/// 手牌项天然抑制「白打一张牌」：出牌使手牌 -1（-3），无收益的牌因此
+/// 劣于 `NextPhase`；摸牌/顺牵等净增手牌的牌为正收益。
+fn policy_score(
+    base: &crate::view::PlayerView,
+    after: &crate::view::PlayerView,
+    seat: u8,
+    variant: u8,
+) -> i64 {
+    let hp_of = |v: &crate::view::PlayerView, s: u8| v.players[s as usize].hp as i64;
+    let enemy_hp = |v: &crate::view::PlayerView| -> i64 {
+        v.players
+            .iter()
+            .filter(|p| p.alive && p.seat != seat)
+            .map(|p| p.hp as i64)
+            .sum()
+    };
+    if variant == 0 {
+        return (enemy_hp(base) - enemy_hp(after)) - (hp_of(base, seat) - hp_of(after, seat));
+    }
+    if let Some(winner) = &after.outcome {
+        let win = matches!(winner, crate::state::Winner::Player(p) if *p == seat);
+        return if win { 100_000 } else { -100_000 };
+    }
+    let me_b = &base.players[seat as usize];
+    let me_a = &after.players[seat as usize];
+    if me_b.alive && !me_a.alive {
+        return -1000;
+    }
+    let mut score = 8 * (me_a.hp as i64 - me_b.hp as i64)
+        + 3 * (me_a.hand_count as i64 - me_b.hand_count as i64)
+        + 4 * (me_a.equips.len() as i64 - me_b.equips.len() as i64);
+    for (pb, pa) in base.players.iter().zip(after.players.iter()) {
+        if pb.seat == seat {
+            continue;
+        }
+        score -= 8 * (pa.hp as i64 - pb.hp as i64);
+        score -= pa.hand_count as i64 - pb.hand_count as i64;
+        score -= 2 * (pa.equips.len() as i64 - pb.equips.len() as i64);
+        if pb.alive && !pa.alive {
+            score += 24;
+        }
+    }
+    score
 }
 
 impl Engine {
@@ -239,17 +363,9 @@ impl Engine {
         // 确定性重分配——搜索不使用真实暗牌归属，且物理牌集合守恒
         crate::ai::redact_opponent_hands(&mut sim, seat);
         let baseline_view = sim.ai_session(seat).view();
-        let hp_of = |v: &crate::view::PlayerView, s: u8| v.players[s as usize].hp as i64;
-        let my_base = hp_of(&baseline_view, seat);
-        let enemy_base: i64 = baseline_view
-            .players
-            .iter()
-            .filter(|p| p.alive && p.seat != seat)
-            .map(|p| p.hp as i64)
-            .sum();
 
         // 候选生成（只依赖只读投影）
-        let candidates = enumerate_candidates(&sim, seat);
+        let candidates = enumerate_candidates_variant(&sim, seat, planner.policy_variant);
 
         let mut nodes = 0usize;
         let mut best: Option<(i64, GameAction)> = None;
@@ -294,14 +410,7 @@ impl Engine {
                 continue; // 非法候选不计分
             }
             let after = trial.ai_session(seat).view();
-            let my_after = hp_of(&after, seat);
-            let enemy_after: i64 = after
-                .players
-                .iter()
-                .filter(|p| p.alive && p.seat != seat)
-                .map(|p| p.hp as i64)
-                .sum();
-            let mut score = (enemy_base - enemy_after) - (my_base - my_after);
+            let mut score = policy_score(&baseline_view, &after, seat, planner.policy_variant);
             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
             if planner.lookahead_depth >= 2 && trial.outcome().is_none() {
@@ -310,7 +419,8 @@ impl Engine {
                     None => trial.turn().current,
                 };
                 if opp != seat {
-                    let opp_candidates = enumerate_candidates(&trial, opp);
+                    let opp_candidates =
+                        enumerate_candidates_variant(&trial, opp, planner.policy_variant);
                     let mut worst: Option<i64> = None;
                     for opp_action in opp_candidates.into_iter().take(MAX_LOOKAHEAD_CANDIDATES) {
                         if planner.cancelled() || nodes >= planner.node_budget {
@@ -335,14 +445,7 @@ impl Engine {
                             continue;
                         }
                         let v = t2.ai_session(seat).view();
-                        let my = hp_of(&v, seat);
-                        let enemy: i64 = v
-                            .players
-                            .iter()
-                            .filter(|p| p.alive && p.seat != seat)
-                            .map(|p| p.hp as i64)
-                            .sum();
-                        let s = (enemy_base - enemy) - (my_base - my);
+                        let s = policy_score(&baseline_view, &v, seat, planner.policy_variant);
                         if worst.map(|w| s < w).unwrap_or(true) {
                             worst = Some(s);
                         }

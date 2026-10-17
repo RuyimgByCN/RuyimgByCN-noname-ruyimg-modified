@@ -917,6 +917,13 @@ type ScenarioFn = fn() -> [u8; 32];
 /// 从 296 改回 295，新代码不动，14 场全 mismatch）证明位移含规则版本字段；
 /// 魂身/如梦分支仅经 swd 扩展将可达，标准 14 场景不可达。证据见
 /// docs/operations/evidence/2026-10-17-t12-swd-deferred-b107/。
+/// 2026-10-17 重录依据（单场景，应答路由修复）：无规则版本/存档变化。
+/// `resolution::run` 挂起机器改为在**开窗时刻**记录恢复深度（旧值=机器创建
+/// 时深度；机器若在挂起期间发射过子帧则失配——AOE 逐目标派发下应答被
+/// 深度恰好相等的别的机器消费，AoeTarget 恢复时空应答 panic 实证）。修复
+/// 后仅 `nullify_chain_on_savage` 一场位移：可观测状态（体力/手牌/弃牌/询问
+/// 序列）逐项相同，快照差仅 `resolution.budget`（调度步数少 4 步）。
+/// 证据见 docs/operations/evidence/2026-10-17-t13-ai-policy-v2/。
 const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
     (
         "sha_dodge_then_damage",
@@ -994,7 +1001,7 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
         "nullify_chain_on_savage",
         scenario_nullify_chain_on_savage,
         &["nullify_window", "nullify_chain", "nullify_scope"],
-        "b14030fa250d3589061bc4e3ffc6f439c943a8cabebf75335301cf30e33dde32",
+        "02ae63279b89c03b1803d9ef6542d2cc03f7099c3035a95c9558e4f6f0a331c4",
     ),
     (
         "judge_phase_delayed_tricks",

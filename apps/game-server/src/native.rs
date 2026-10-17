@@ -172,6 +172,10 @@ pub struct NativeGameRequest {
     /// 搜索深度（T13 更强候选：1 = 单层启发式默认；2 = 两层）。
     #[serde(default = "default_planner_lookahead")]
     pub planner_lookahead: u8,
+    /// 策略变体（T13 更强候选：0 = 现状仅杀候选/体力差评分；1 = 全手牌
+    /// 候选 + 牌值评分）。
+    #[serde(default)]
+    pub planner_variant: u8,
 }
 
 fn default_planner_nodes() -> usize {
@@ -248,7 +252,8 @@ pub fn create_native_game(
     if req.max_steps > 0 {
         let planner = BoundedPlanner::new(req.planner_nodes)
             .with_deadline_ms(50)
-            .with_lookahead(req.planner_lookahead);
+            .with_lookahead(req.planner_lookahead)
+            .with_policy_variant(req.planner_variant);
         while e.outcome().is_none() && steps < req.max_steps {
             let seat = match e.open_choice() {
                 Some(open) => open.observer,

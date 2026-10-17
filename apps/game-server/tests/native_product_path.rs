@@ -43,6 +43,7 @@ fn t63_import_load_build_and_drive_with_extension() {
         max_steps: 600,
         planner_nodes: 64,
         planner_lookahead: 1,
+        planner_variant: 0,
     };
     let summary = create_native_game(&content, &req).expect("建局+驱动");
     assert_eq!(
@@ -86,6 +87,7 @@ fn t13_generals_package_loads_via_native_path() {
         max_steps: 0,
         planner_nodes: 0,
         planner_lookahead: 1,
+        planner_variant: 0,
     };
     let summary = create_native_game(&content, &req).expect("武将包建局");
     assert_eq!(summary.packages, vec!["wudian".to_string()]);
@@ -222,6 +224,7 @@ fn t63_standard_only_build_and_drive() {
         max_steps: 300,
         planner_nodes: 64,
         planner_lookahead: 1,
+        planner_variant: 0,
     };
     let summary = create_native_game(&content, &req).expect("建局+驱动");
     assert_eq!(

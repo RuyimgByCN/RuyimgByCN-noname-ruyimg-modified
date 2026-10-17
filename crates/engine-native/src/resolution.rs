@@ -366,6 +366,15 @@ pub fn run(
                             prompt: spec.prompt,
                         });
                         res.open_choice = Some(OpenChoice { id, observer, spec });
+                        // 应答恢复点＝**开窗时刻**的栈深。机器可能在挂起期间
+                        // 发射过子帧（如 AOE 逐目标派发：前一目标的伤害帧
+                        // 尚未结算就为下一目标开响应窗），此时沿用创建时的
+                        // 旧深度会与其它挂起机器错配——应答被深度恰好相等
+                        // 的**别的**机器消费（AOE→昏迷应答错配：目标机器
+                        // 恢复时 answer 已空，panic 实证）。开窗后对局暂停
+                        // （open_choice 存在时不推进栈），故开窗时刻的栈深
+                        // 即恢复点。
+                        park.resume_depth = res.stack.len();
                         res.parks.push(park);
                         return StepOutcome::Pending;
                     }

@@ -373,3 +373,71 @@ fn two_ply_lookahead_deterministic_and_bounded() {
     let out = e2.apply_plan(&s1).expect("apply");
     assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
 }
+
+// ---------------------------------------------------------------------------
+// T13 更强候选（策略变体 1）：全手牌候选 + 牌值评分。
+// ---------------------------------------------------------------------------
+
+/// 变体 1 会考虑非杀牌：0 号只持「无中生有」时，现状（变体 0）只能
+/// `NextPhase`，变体 1 出牌摸 2；两次规划确定性一致、计划可应用。
+#[test]
+fn policy_v2_plays_value_card_and_is_deterministic() {
+    let mut e = play_ready_with_sha(9401, 4);
+    e.debug_clear_hand(0);
+    let wuzhong = e.debug_place(0, "wuzhong");
+    let baseline = engine_native::ai::BoundedPlanner::new(64);
+    let strong = engine_native::ai::BoundedPlanner::new(64).with_policy_variant(1);
+
+    let p0 = e.plan_action(0, &baseline);
+    assert_eq!(
+        format!("{:?}", p0.action),
+        format!("{:?}", GameAction::NextPhase),
+        "变体 0：非杀牌不进入候选"
+    );
+    let p1 = e.plan_action(0, &strong);
+    let p2 = e.plan_action(0, &strong);
+    assert_eq!(format!("{:?}", p1.action), format!("{:?}", p2.action), "变体 1 确定性");
+    match &p1.action {
+        GameAction::PlayCard { card, targets } => {
+            assert_eq!(*card, wuzhong, "变体 1 应选无中生有");
+            assert!(targets.is_empty(), "自目标牌空目标表");
+        }
+        other => panic!("变体 1 应出牌：{other:?}"),
+    }
+    let out = e.apply_plan(&p1).expect("apply");
+    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
+}
+
+/// 变体 1 全座位驱动回归（应答路由修复守护）：seed 8211 在修复前于
+/// 第 110 步规划时 panic（`answer present on resume`——AOE 逐目标派发下
+/// 挂起机器恢复深度失配，应答被别的机器消费）。终值冻结于 2026-10-17。
+#[test]
+fn policy_v2_drives_all_seats_without_answer_routing_panic() {
+    let mut e = Engine::new(8211, 4);
+    let strong = engine_native::ai::BoundedPlanner::new(64)
+        .with_deadline_ms(50)
+        .with_policy_variant(1);
+    let mut steps = 0u64;
+    while e.outcome().is_none() && steps < 400 {
+        let seat = match e.open_choice() {
+            Some(open) => open.observer,
+            None => e.turn().current,
+        };
+        let plan = e.plan_action(seat, &strong);
+        match e.apply_plan(&plan) {
+            Ok(CommandOutcome::Accepted { .. })
+            | Ok(CommandOutcome::Pending { .. })
+            | Ok(CommandOutcome::Suspended) => {}
+            Ok(CommandOutcome::Rejected(_)) => {}
+            Err(err) => panic!("apply: {err:?}"),
+        }
+        steps += 1;
+    }
+    assert!(e.outcome().is_some(), "400 步内终局（实走 {steps} 步）");
+    assert_eq!(steps, 218, "步数冻结（策略变更须同步证据）");
+    assert!(
+        matches!(e.outcome().map(|o| o.winner), Some(engine_native::Winner::Player(3))),
+        "胜方冻结：{:?}",
+        e.outcome()
+    );
+}
