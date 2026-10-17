@@ -57,6 +57,10 @@
 | 60（初次引入） | gwent 祖墨手铠/封印原语使卡牌切片达 21/21；当时定向测试 6/6、`replay_scenarios` 有 1 项失败（14 个 golden 场景哈希不符）。这是修复前快照；后续处理与依据见下一行 |
 | 60（回放修复，2026-09-24） | 14 golden 重录并全量通过。差异核因：①规则版本 59→60 字段入 canonical_hash（`engine.rs`），必变全部哈希；v60 行为增量仅经 `CardKind::Zumoshoukao`（枚举末位追加）的 gwent 分支，标准场景目录无此牌、命令/事件/状态轨迹语义不变（14 场景脚本中途断言全部通过）；②`standard_catalog_parts` 拆牌循环体误含顺手牵羊/酒/雷杀入目录语句（实际产出顺 8、酒 4、雷杀 4，共 88 张），修正为[声明表](#标准目录构成声明表)的 80 张。证据见[回放与目录核验](../operations/evidence/2026-09-24-replay-golden-v60/README.md) |
 
+> **v61–v294 的逐版本变化**按批次登记于[进度主稿](native-progress.md) T8/T11/T12 行与各批证据目录（如 [v294 D4 Boss B3](../operations/evidence/2026-10-16-d4-boss-b3-sixiang3/README.md)）；本表保留至 v60 的历史粒度。
+>
+> **近期版本（2026-10-17）**：**v295**（D4 Boss B4 后援/还人/青赤白翼，tag 427–437，存档 v79）；**v296**（swd 魂身 `hyunshen_count`，存档 v80→81）；**v297**（swd 待行 `daixing_count`，存档 v82）；**v298**（swd 聚悉 `juxi_count`，存档 v83）；**v299**（swd 破舟 `pozhou_count`，存档 v84）；**v300**（swd 陷阱 `sxianjing_traps`，存档 v85）；**v301**（swd 孤行 `guxing_armed`/`guxing_count`，存档 v86）。每批 14 golden 重录 + 版本回退探针，证据见 [b100](../operations/evidence/2026-10-17-t12-swd-deferred-b100/README.md)…[b112](../operations/evidence/2026-10-17-t12-swd-deferred-b112/README.md)。
+
 NGSA 已有字节格式版本及规则版本字段，内存 restore 会检查当前规则版本；v2 起开放选择显式编码
 ChoiceKind（机器种类为权威，不再由提示词推导），未知提示词仍被注册表拒绝，v1 字节被版本门禁拒绝。
 头部版本/长度、提示词无限增长池、流离内存标记原反例已修。决斗/AOE/流离/无懈/遗计两阶段/天妒/
@@ -3536,6 +3540,7 @@ v3.3 恢复原有扩展机制。单个 STANDARD_RULESET_VERSION 不足以标识�
 流离弃牌选择与范围（v76）；倾国黑手牌、救援主公/吴势力、结姻受伤男性、急救回合外（**v202**）；反间花色选择+条件伤害（**v203**）；护驾自选代出+倾国转化（**v204**）——本块登记差异已**全部消除**（2026-10-11）。
 保留既有登记惯例：护驾代出转化牌以实体牌响应（上游 result 为虚拟闪）；激将借牌直结算非完整 chooseToRespond 通道（ADR 0776）。
 Boss 内容面余项已登记为差异（不实现）：地藏王「大愿」=判定改写机的 AI 态度面（`get.attitude`+`chooseControl`）、「无量」建局摸 3 面（上游 `gameDrawAfter`/`enterGame`）——缺态度模型与「建局帧」原语，见[证据](operations/evidence/2026-10-17-t11-boss-dizang-remainders/README.md)。
+swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–112 消解 13 技，映射 133/184 → 148/184（deferred 49→34）**，涵盖单触发/判定/多步机/状态字段；未映射余 34 项（多步/跨包引用/缺事件型）仍为暂缓，逐来源状态见[两仓台账](migration/upstream-extension-reconstruction.md)。
 完整差异和复现见 [进度主稿](native-progress.md)。
 
 ### 本地上游对齐的新增核查

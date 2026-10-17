@@ -787,7 +787,7 @@
     "doc": "docs/migration/upstream-extension-reconstruction.md",
     "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
    },
-   "description": "杀海拾遗·swd 武将面 deferred 技能消解至可验收（卡牌面 92 行已闭环；多余 13 张另项）。核验时点：b99 为 133/184 映射、deferred 49（起草快照曾写批 98≈51）。",
+   "description": "杀海拾遗·swd deferred 消解（核验 b99：133/184，deferred 49；2026-10-17 批 100–112 后：**148/184 映射，deferred 34**；多余 13 张另项）。",
    "done_when_evidence": [
     "定向回归测试通过",
     "cargo test --offline -p engine-native --no-fail-fast 全绿",
