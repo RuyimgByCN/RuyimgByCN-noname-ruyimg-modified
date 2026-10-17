@@ -252,6 +252,9 @@ pub struct PlayerState {
     /// 隐月·已受伤类型位图（上游 `storage.hlss_yueyin_damage`）：
     /// 1=雷属性伤害、2=火属性伤害、4=锦囊牌伤害；失星时清空。
     pub hlss_damage: u8,
+    /// 起风·已用牌种码表（T11 Boss 诸葛亮族批 116，规则 v303 起同批）：
+    /// 上游 `storage.hlss_fengqi_used`（牌名字符串表）——原生存目录牌种码。
+    pub hlss_fengqi_used: Vec<u16>,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -354,6 +357,7 @@ impl PlayerState {
             hlss_stars: 0,
             hlss_count: 0,
             hlss_damage: 0,
+            hlss_fengqi_used: Vec::new(),
         }
     }
 }

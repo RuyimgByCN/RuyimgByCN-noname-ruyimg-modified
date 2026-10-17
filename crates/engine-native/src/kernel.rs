@@ -8559,6 +8559,20 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
     }
 
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // 起风·闭（T11 Boss 诸葛亮族批 116，规则 v303 同批）：锁定——
+        // 来源持技时其使用的牌不可被无懈响应（上游 hlss_fengqi2
+        // `mod.wuxieRespondable = false` 同口径）：窗口不询问、不抵消，
+        // 直接委托效果机器。
+        if self.window_open
+            && ctx
+                .catalog
+                .skill_by_name(crate::content::host::HLSS_FENGQI2_KEY)
+                .map(|def| ctx.core.has_skill(self.source, def))
+                .unwrap_or(false)
+        {
+            self.window_open = false;
+            return self.step(ctx);
+        }
         // 窗口阶段
         if self.window_open {
             // 询问队列清理：跳过死亡/无无懈持有者
@@ -8784,6 +8798,9 @@ pub struct JudgementProgress {
     haotian_holder: Option<PlayerId>,
     /// 昊天塔：未被选中的候选牌（选中另一张后弃置）。
     haotian_other: Option<crate::ids::CardId>,
+    /// 改命（T11 Boss 诸葛亮族批 116）：亮出的牌堆顶 7 张候选（Some =
+    /// 等待拥有者选 1 作为判定结果；其余弃置，改判/天妒窗跳过）。
+    gaiming_cards: Option<Vec<crate::ids::CardId>>,
 }
 
 impl Clone for JudgePhaseMachine {
@@ -8820,6 +8837,10 @@ impl JudgementProgress {
             judge_held: s.judge_held,
             haotian_holder: s.haotian_holder,
             haotian_other: s.haotian_other.map(|c| c as crate::ids::CardId),
+            gaiming_cards: s
+                .gaiming_cards
+                .as_ref()
+                .map(|v| v.iter().map(|c| *c as crate::ids::CardId).collect()),
         }
     }
 }
@@ -8846,6 +8867,10 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     judge_held: c.judge_held,
                     haotian_holder: c.haotian_holder,
                     haotian_other: c.haotian_other.map(|x| x as u32),
+                    gaiming_cards: c
+                        .gaiming_cards
+                        .as_ref()
+                        .map(|v| v.iter().map(|x| *x as u32).collect()),
                 })
             }),
         }
@@ -8876,6 +8901,34 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
 
             // 当前判定的进行态
             if let Some(cur) = &mut self.current {
+                // 改命应答消费：选中牌成为判定结果、其余弃置并跳过改判/
+                // 天妒窗；放弃则 7 张按原序回牌堆顶、照常判定（登记差异：
+                // 上游取消后 7 张滞留处理区，原生归还牌堆）。
+                if let Some(cards) = cur.gaiming_cards.take() {
+                    match ctx.answer().first().copied() {
+                        Some(ChoiceOption::Card(c)) if cards.contains(&c) => {
+                            cur.judge_card = c;
+                            for other in cards.iter().copied() {
+                                if other != c {
+                                    ctx.to_discard(other);
+                                }
+                            }
+                            cur.rewriters.clear();
+                            cur.in_rewrite = false;
+                            cur.tian_du.clear();
+                            ctx.log(LogEvent::Judged {
+                                player: self.owner,
+                                card: c,
+                            });
+                        }
+                        _ => {
+                            for c in cards.into_iter().rev() {
+                                ctx.core.deck.push(c);
+                            }
+                        }
+                    }
+                    continue;
+                }
                 // 昊天塔（swd 卡牌面窗口机批）：插窗应答消费——强制选一
                 // 张候选为判定结果，未选中的弃置。锁定技无取消（上游
                 // chooseCardButton(true) 同口径）；登记差异：多持有者仅
@@ -9102,6 +9155,57 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 return Flow::Done;
             }
             let trick = self.queue.remove(0);
+            // 改命（T11 Boss 诸葛亮族批 116，规则 v303 同批）：判定前——拥有
+            // 者持技时亮牌堆顶 7 张，由其选 1 作为判定结果（其余弃置、改判/
+            // 天妒窗跳过；上游 judgeBefore chooseCardButton + trigger.cancel
+            // + trigger.direct 同口径）。
+            let has_gaiming = ctx
+                .catalog
+                .skill_by_name(crate::content::host::HLSS_GAIMING_KEY)
+                .map(|def| ctx.core.has_skill(self.owner, def))
+                .unwrap_or(false);
+            if has_gaiming {
+                let mut cards: Vec<crate::ids::CardId> = Vec::new();
+                for _ in 0..7 {
+                    if ctx.core.deck.is_empty() {
+                        if ctx.core.discard.is_empty() {
+                            break;
+                        }
+                        let mut d = std::mem::take(&mut ctx.core.discard);
+                        ctx.core.rng.shuffle(&mut d);
+                        ctx.core.deck = d;
+                        ctx.log(LogEvent::DeckReshuffled);
+                    }
+                    cards.push(ctx.core.deck.pop().expect("deck non-empty"));
+                }
+                if !cards.is_empty() {
+                    self.current = Some(JudgementProgress {
+                        trick,
+                        judge_card: cards[0],
+                        rewriters: Vec::new(),
+                        asked: false,
+                        tian_du: Vec::new(),
+                        gained: false,
+                        in_rewrite: false,
+                        finalized: false,
+                        judge_held: true,
+                        haotian_holder: None,
+                        haotian_other: None,
+                        gaiming_cards: Some(cards.clone()),
+                    });
+                    return Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "gaiming_pick",
+                            options: cards.into_iter().map(ChoiceOption::Card).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    };
+                }
+            }
             let judge_card = ctx.draw_judge_card();
             ctx.log(LogEvent::Judged {
                 player: self.owner,
@@ -9151,6 +9255,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         judge_held: true,
                         haotian_holder: Some(h),
                         haotian_other: Some(other),
+                        gaiming_cards: None,
                     });
                     return Flow::WaitChoice {
                         observer: h,
@@ -9209,6 +9314,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 judge_held: true,
                 haotian_holder: None,
                 haotian_other: None,
+                gaiming_cards: None,
             });
         }
     }

@@ -1,0 +1,51 @@
+{
+ "source": "noname-liuli",
+ "upstream_path": "noname/character/extra.js + noname/mode/boss.js",
+ "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+ "pack": {
+  "name": "boss-zhugeliang-upstream-liuli",
+  "version": 1,
+  "description": "T11 Boss 诸葛亮（祭风卧龙）：无限体力 + hlss 四技（禳星/隐月/起风/改命）",
+  "card_prefix": "boss_zl_"
+ },
+ "cards": [],
+ "host_skills": [],
+ "deferred": [],
+ "skills": [
+  {
+   "name": "hlss_fengqi2",
+   "general": "boss_zhugeliang",
+   "mapping": "host:hlss_fengqi2"
+  }
+ ],
+ "generals": [
+  {
+   "name": "boss_zhugeliang",
+   "faction": "qun",
+   "hp": "Infinity",
+   "gender": "male",
+   "skills": [
+    {
+     "name": "hlss_xiangxing",
+     "mapping": "host:hlss_xiangxing"
+    },
+    {
+     "name": "hlss_yueyin",
+     "mapping": "host:hlss_yueyin"
+    },
+    {
+     "name": "hlss_yueyin2",
+     "mapping": "host:hlss_yueyin2"
+    },
+    {
+     "name": "hlss_fengqi",
+     "mapping": "host:hlss_fengqi"
+    },
+    {
+     "name": "hlss_gaiming",
+     "mapping": "host:hlss_gaiming"
+    }
+   ]
+  }
+ ]
+}

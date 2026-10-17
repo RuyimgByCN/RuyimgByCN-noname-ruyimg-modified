@@ -215,6 +215,7 @@ impl NativeEngine {
                     engine_native::ChoiceOption::Card(id) => serde_json::json!({ "card": id }),
                     engine_native::ChoiceOption::Player(p) => serde_json::json!({ "player": p }),
                     engine_native::ChoiceOption::Tag(t) => serde_json::json!({ "tag": t }),
+                    engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
                 }).collect::<Vec<_>>(),
             })
             .to_string(),

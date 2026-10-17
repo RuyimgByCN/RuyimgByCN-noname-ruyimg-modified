@@ -1282,6 +1282,15 @@ pub enum HostBehavior {
     /// 隐月·判（tag 465，`hlss_yueyin2`）：判定区的牌对持有者不生效
     ///（上游 mod judge 反转）+ 不能被翻面。
     HlssYueyin2,
+    /// 起风（tag 466，T11 Boss 诸葛亮族批 116，`hlss_fengqi`）：准备阶段
+    /// 限一次——从可用**非延时锦囊**牌名中选一张并使用（本技已用过的
+    /// 牌名不再出现）。
+    HlssFengqi,
+    /// 起风·闭（tag 467，`hlss_fengqi2`）：锁定——你使用的牌不可被无懈。
+    HlssFengqi2,
+    /// 改命（tag 468，`hlss_gaiming`）：锁定旗标——判定前亮牌堆顶 7 张，
+    /// 选 1 作为判定结果（其余弃置，改判/天妒窗跳过）；逻辑内联于判定机。
+    HlssGaiming,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1589,6 +1598,9 @@ impl HostBehavior {
             HostBehavior::HlssXiangxing => 463,
             HostBehavior::HlssYueyin => 464,
             HostBehavior::HlssYueyin2 => 465,
+            HostBehavior::HlssFengqi => 466,
+            HostBehavior::HlssFengqi2 => 467,
+            HostBehavior::HlssGaiming => 468,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2295,6 +2307,9 @@ impl HostBehavior {
             463 => HostBehavior::HlssXiangxing,
             464 => HostBehavior::HlssYueyin,
             465 => HostBehavior::HlssYueyin2,
+            466 => HostBehavior::HlssFengqi,
+            467 => HostBehavior::HlssFengqi2,
+            468 => HostBehavior::HlssGaiming,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2315,7 +2330,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 462] = [
+        pub const ALL: [HostBehavior; 465] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2778,6 +2793,9 @@ impl HostBehavior {
         HostBehavior::HlssXiangxing,
         HostBehavior::HlssYueyin,
         HostBehavior::HlssYueyin2,
+        HostBehavior::HlssFengqi,
+        HostBehavior::HlssFengqi2,
+        HostBehavior::HlssGaiming,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3002,6 +3020,9 @@ impl HostBehavior {
             HostBehavior::HlssXiangxing => "host:hlss_xiangxing",
             HostBehavior::HlssYueyin => "host:hlss_yueyin",
             HostBehavior::HlssYueyin2 => "host:hlss_yueyin2",
+            HostBehavior::HlssFengqi => "host:hlss_fengqi",
+            HostBehavior::HlssFengqi2 => "host:hlss_fengqi2",
+            HostBehavior::HlssGaiming => "host:hlss_gaiming",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3442,6 +3463,17 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 起风：准备阶段开始（Judge 阶段 = 上游 phaseZhunbei），可选
+            HostBehavior::HlssFengqi => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 起风·闭 / 改命：锁定旗标（无触发时机；效果内联）
+            HostBehavior::HlssFengqi2 => None,
+            HostBehavior::HlssGaiming => None,
             // 隐月·判：翻面前置取消（不能被翻面；判定不生效由 kernel 内联）
             HostBehavior::HlssYueyin2 => Some(TriggerMeta {
                 event: EventKind::TurnOverBefore,
@@ -5631,6 +5663,104 @@ pub const HLSS_DAMAGE_THUNDER: u8 = 1;
 pub const HLSS_DAMAGE_FIRE: u8 = 2;
 /// 隐月记录位：锦囊牌伤害。
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
+/// 起风（同批）：目录技能名。
+pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 起风·闭（同批）：目录技能名（锁定——你的牌不可被无懈）。
+pub const HLSS_FENGQI2_KEY: &str = "hlss_fengqi2";
+/// 改命（同批）：目录技能名（锁定旗标——判定逻辑内联于判定机）。
+pub const HLSS_GAIMING_KEY: &str = "hlss_gaiming";
+
+/// 起风候选：可用**非延时锦囊**牌种（未用过、有合法目标）。
+/// 上游从 `lib.inpile` 取 `type == 'trick'` 且 `cardEnabled` 者；原生以
+/// 目录固定表承载标准非延时锦囊（登记差异：扩展锦囊牌种不入候选、
+/// 借刀杀人不入候选）。
+fn hlss_fengqi_candidates(ctx: &Ctx<'_>, owner: PlayerId) -> Vec<crate::catalog::CardKind> {
+    use crate::catalog::CardKind::*;
+    const TABLE: [crate::catalog::CardKind; 9] = [
+        Wuzhong, Wugu, Taoyuan, SavageAttack, ArcheryAttack, Duel, Snatch, Dismantle, Chain,
+    ];
+    let used = &ctx.core.player(owner).hlss_fengqi_used;
+    TABLE
+        .into_iter()
+        .filter(|k| {
+            let code = crate::archive::kind_code(*k);
+            if used.contains(&code) {
+                return false;
+            }
+            let (min, max) = hlss_fengqi_targets(*k);
+            if max == 0 {
+                return true;
+            }
+            let count = ctx
+                .core
+                .alive_players()
+                .filter(|p| hlss_fengqi_target_ok(ctx, owner, *p, *k))
+                .count();
+            count >= min as usize
+        })
+        .collect()
+}
+
+/// 起风目标数（min, max；max=0 表示无目标直接使用）。
+fn hlss_fengqi_targets(kind: crate::catalog::CardKind) -> (u8, u8) {
+    use crate::catalog::CardKind::*;
+    match kind {
+        Wuzhong | Wugu | Taoyuan | SavageAttack | ArcheryAttack => (0, 0),
+        Duel | Snatch | Dismantle => (1, 1),
+        Chain => (1, 2),
+        _ => (0, 0),
+    }
+}
+
+/// 无目标锦囊的目标表：AOE 按出牌口径显式给出全部其他存活者（自下家
+/// 起座位序冻结）；无中/五谷/桃园由各自机器自行取目标（空表）。
+fn hlss_fengqi_all_targets(
+    ctx: &Ctx<'_>,
+    owner: PlayerId,
+    kind: crate::catalog::CardKind,
+) -> Vec<PlayerId> {
+    if kind.aoe_need().is_some() {
+        ctx.core
+            .seat_order_from(ctx.core.next_alive(owner))
+            .into_iter()
+            .filter(|p| *p != owner)
+            .collect()
+    } else {
+        Vec::new()
+    }
+}
+
+/// 起风目标合法性（近似：单目标锦囊按距离/持牌判；登记差异）。
+fn hlss_fengqi_target_ok(
+    ctx: &Ctx<'_>,
+    owner: PlayerId,
+    target: PlayerId,
+    kind: crate::catalog::CardKind,
+) -> bool {
+    use crate::catalog::CardKind::*;
+    if target == owner {
+        return matches!(kind, Chain);
+    }
+    if !ctx.core.player(target).alive {
+        return false;
+    }
+    match kind {
+        Duel => true,
+        Snatch => {
+            ctx.core.computed_distance(ctx.catalog, owner, target) <= 1
+                && (!ctx.core.player(target).hand.is_empty()
+                    || !ctx.core.player(target).equips.is_empty())
+        }
+        Dismantle => {
+            ctx.core.computed_distance(ctx.catalog, owner, target) <= 1
+                && (!ctx.core.player(target).hand.is_empty()
+                    || !ctx.core.player(target).equips.is_empty()
+                    || !ctx.core.player(target).judge.is_empty())
+        }
+        Chain => true,
+        _ => true,
+    }
+}
 pub const WUDIAN_XJ_WANGYOU_CARDS: &str = "xj_wangyou_cards";
 pub const WUDIAN_XJ_XIEPAN_CARDS: &str = "xj_xiepan_cards";
 pub const WUDIAN_XJ_XTANXI_CARDS: &str = "xj_xtanxi_cards";
@@ -6128,6 +6258,9 @@ impl HostSkillBehavior {
             HostBehavior::HlssXiangxing => (None, None),
             HostBehavior::HlssYueyin => (None, None),
             HostBehavior::HlssYueyin2 => (None, None),
+            HostBehavior::HlssFengqi => (None, None),
+            HostBehavior::HlssFengqi2 => (None, None),
+            HostBehavior::HlssGaiming => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6423,6 +6556,11 @@ impl SkillBehavior for HostSkillBehavior {
             // 隐月：自己受到未防止伤害（前置窗）
             HostBehavior::HlssYueyin => matches!(event,
                 EventData::Damage(d) if d.target == owner && !d.prevented),
+            HostBehavior::HlssFengqi => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                if *player == owner),
+            HostBehavior::HlssFengqi2 => false,
+            HostBehavior::HlssGaiming => false,
             // 隐月·判：自己未被翻面时取消翻面（上游 filter !isTurnedOver）
             HostBehavior::HlssYueyin2 => matches!(event,
                 EventData::TurnOverBefore { player, .. }
@@ -19257,6 +19395,95 @@ impl crate::catalog::SkillMachine for HostMachine {
                 ctx.core.player_mut(self.owner).hlss_damage |= bits;
                 Flow::Done
             }
+            // 起风：选一张未用过的可用锦囊牌名并使用（上游 chooseButton
+            // + chooseUseTarget；原生以目录牌种码承载牌名选择）
+            HostBehavior::HlssFengqi => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = hlss_fengqi_candidates(ctx, self.owner)
+                        .into_iter()
+                        .map(|k| ChoiceOption::Kind(crate::archive::kind_code(k)))
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "fengqi_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Kind(code)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Ok(kind) = crate::archive::kind_from_code(code) else {
+                        return Flow::Done;
+                    };
+                    let (min, max) = hlss_fengqi_targets(kind);
+                    if max == 0 {
+                        // 无目标锦囊：直接视为使用（无中/五谷/桃园/南蛮/万箭）
+                        let targets = hlss_fengqi_all_targets(ctx, self.owner, kind);
+                        ctx.use_virtual_card(self.owner, kind, targets);
+                        ctx.core.player_mut(self.owner).hlss_fengqi_used.push(code);
+                        return Flow::Done;
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| hlss_fengqi_target_ok(ctx, self.owner, *p, kind))
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if (options.len() as u8) < min {
+                        return Flow::Done;
+                    }
+                    self.cards.push(u32::from(code));
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "fengqi_targets",
+                            max: options.len().min(max as usize),
+                            options,
+                            min: min as usize,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(code) = self.cards.first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Ok(kind) = crate::archive::kind_from_code(code as u16) else {
+                        return Flow::Done;
+                    };
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    ctx.use_virtual_card(self.owner, kind, targets);
+                    ctx.core.player_mut(self.owner).hlss_fengqi_used.push(code as u16);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 起风·闭 / 改命：锁定旗标（无机器步；无懈门/判定机内联）
+            HostBehavior::HlssFengqi2 => Flow::Done,
+            HostBehavior::HlssGaiming => Flow::Done,
             // 隐月·判：取消翻面（写回前置帧取消位）
             HostBehavior::HlssYueyin2 => {
                 let (_, cancelled) = ctx.current_turn_over_before_mut();

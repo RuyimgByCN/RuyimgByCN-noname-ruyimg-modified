@@ -5117,6 +5117,11 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.hlss_stars);
         push_u8(&mut h, p.hlss_count);
         push_u8(&mut h, p.hlss_damage);
+        // 起风已用牌种表（批 116，规则 v303 同批）
+        push_u32(&mut h, p.hlss_fengqi_used.len() as u32);
+        for k in &p.hlss_fengqi_used {
+            push_u32(&mut h, u32::from(*k));
+        }
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);
@@ -6227,6 +6232,10 @@ fn push_options(h: &mut Hasher, opts: &[ChoiceOption]) {
             ChoiceOption::Tag(t) => {
                 push_u8(h, 5);
                 push_u8(h, *t);
+            }
+            ChoiceOption::Kind(k) => {
+                push_u8(h, 6);
+                push_u32(h, u32::from(*k));
             }
         }
     }

@@ -59,7 +59,7 @@
 
 > **v61–v294 的逐版本变化**按批次登记于[进度主稿](native-progress.md) T8/T11/T12 行与各批证据目录（如 [v294 D4 Boss B3](../operations/evidence/2026-10-16-d4-boss-b3-sixiang3/README.md)）；本表保留至 v60 的历史粒度。
 >
-> **近期版本（2026-10-17）**：**v295**（D4 Boss B4 后援/还人/青赤白翼，tag 427–437，存档 v79）；**v296**（swd 魂身 `hyunshen_count`，存档 v80→81）；**v297**（swd 待行 `daixing_count`，存档 v82）；**v298**（swd 聚悉 `juxi_count`，存档 v83）；**v299**（swd 破舟 `pozhou_count`，存档 v84）；**v300**（swd 陷阱 `sxianjing_traps`，存档 v85）；**v301**（swd 孤行 `guxing_armed`/`guxing_count`，存档 v86）；**v302**（swd 锦鳞 `jinlin_used`，存档 v86→87）；**v303**（T11 Boss 诸葛亮族 hlss 星系统 `hlss_stars`/`hlss_count`/`hlss_damage`，存档 v87→88）。无版本批：**批 113 灵矢**（tag 460 四条锁定臂内联，golden 零扰动）与 **批 114 之外**的装载器来源包（如 L13 手杀MVP）不改规则版本。每批 14 golden 重录 + 版本回退探针，证据见 [b100](../operations/evidence/2026-10-17-t12-swd-deferred-b100/README.md)…[b114](../operations/evidence/2026-10-17-t12-swd-deferred-b114/README.md)、[hlss 星系统](../operations/evidence/2026-10-17-t11-boss-zhugeliang-hlss/README.md)。
+> **近期版本（2026-10-17）**：**v295**（D4 Boss B4 后援/还人/青赤白翼，tag 427–437，存档 v79）；**v296**（swd 魂身 `hyunshen_count`，存档 v80→81）；**v297**（swd 待行 `daixing_count`，存档 v82）；**v298**（swd 聚悉 `juxi_count`，存档 v83）；**v299**（swd 破舟 `pozhou_count`，存档 v84）；**v300**（swd 陷阱 `sxianjing_traps`，存档 v85）；**v301**（swd 孤行 `guxing_armed`/`guxing_count`，存档 v86）；**v302**（swd 锦鳞 `jinlin_used`，存档 v86→87）；**v303**（T11 Boss 诸葛亮族 hlss 星系统 `hlss_stars`/`hlss_count`/`hlss_damage`，存档 v87→88）；**v304**（同族批 116 起风/改命：`hlss_fengqi_used` + 选择项 `ChoiceOption::Kind` + 判定机改命候选位，存档 v88→89）。无版本批：**批 113 灵矢**（tag 460 四条锁定臂内联，golden 零扰动）与 **批 114 之外**的装载器来源包（如 L13 手杀MVP）不改规则版本。每批 14 golden 重录 + 版本回退探针，证据见 [b100](../operations/evidence/2026-10-17-t12-swd-deferred-b100/README.md)…[b114](../operations/evidence/2026-10-17-t12-swd-deferred-b114/README.md)、[hlss 星系统](../operations/evidence/2026-10-17-t11-boss-zhugeliang-hlss/README.md)、[起风/改命+Boss 装配](../operations/evidence/2026-10-17-t11-boss-zhugeliang-four/README.md)。
 
 NGSA 已有字节格式版本及规则版本字段，内存 restore 会检查当前规则版本；v2 起开放选择显式编码
 ChoiceKind（机器种类为权威，不再由提示词推导），未知提示词仍被注册表拒绝，v1 字节被版本门禁拒绝。
@@ -3017,8 +3017,12 @@ HostBehavior tag **421–426**——白芒3 / 白芒3·转阶 / 赤炎3 / 赤炎
 款；臂内幂等）。**栖梧**（查询型单面，CardUsed commit 臂娇孝同族）：使
 用梅花牌后若已受伤回复 1（机器直发 useCard 同覆盖）。**登记不落**：涅
 槃/浴火=外部包技依赖（shenhua oldniepan/offline ylygniepan+kanpo/
-shenwei/zhuyu+loopType 关卡面）；**诸葛亮整体勘验登记不落**（hp Infinity
-无承载+四技 offline 龙血玄黄包）。2026-10-17 T9 用上游对局复核：自动选将后体力仍为 Infinity，四技已装配，`fengqi`/`mbqianlong` 的 content 有命中；原生装载器拒绝该体力并把这些技能留在未映射，差异保留，不改记为已支持（[证据](../operations/evidence/2026-10-17-t9-lx-content-hooks/README.md)）。
+shenwei/zhuyu+loopType 关卡面）；**诸葛亮已落（2026-10-17 批 116）**：hp Infinity 承载（`INFINITE_HP` 哨兵）+ 四技
+（禳星/隐月/隐月·判/起风 + 起风·闭/改命）+ 转换包 `upstream-liuli/boss-zhugeliang@1.0.0`
+（[证据](../operations/evidence/2026-10-17-t11-boss-zhugeliang-four/README.md)）。T9 上游对局复核记录
+（体力 Infinity、四技装配、`fengqi`/`mbqianlong` content 命中）见
+[证据](../operations/evidence/2026-10-17-t9-lx-content-hooks/README.md)；`mbqianlong`/`_CMeffects`
+（龙血玄黄本体）与 `ylyg*` 外部依赖仍归 D5/庞统条目。
 `BOSS_GENERALS` 尾追加**庞统·涅槃凤雏**（def 索引 55/**hp4**/`[天狱, 栖
 梧]`；上游 group shen→群近似登记）。FROZEN 名单尾加「天狱」「栖梧」
 （180–181 名）。存档不变 v63。版本 276→**277**。版本回退探针（277→276
@@ -3492,6 +3496,7 @@ switch` 不落表（门控并入 enabled，先例同构）。**登记待查**：
 | 距离/座距 | 座距只计存活、环形取最小且下限 1；±马按装备 `distance.globalTo/globalFrom`；采用玩法版本=本地 upstream noname v1.11.7（`get.distance`，2026-10-16 核对） | 独立参照模型全对全比对（ADR 0723）+ 装备/死座用例；其余距离类技能仍逐技能验收；`undist`/`isMin` **已登记为未建模差异（无当前内容依赖，附解除条件）**——[证据](../operations/evidence/2026-10-17-rule-distance-unmodeled/README.md) |
 | 判定排序/闪电 | 非闪电按放置序在前、闪电在后（组内 FIFO，源自旧线/ADR 0713）；黑桃 2–9 命中 3 雷伤，未中传下家、同名弃置。**采用玩法版本（upstream noname v1.11.7）为 LIFO、无闪电分组**（2026-10-16 核对） | 双放置序、多张 + 快照往返（`judge_order_grouping_multi_cards_and_restore`）及转移用例已有；**已定案保留原生**（非闪电 FIFO + 闪电最后）；与上游 LIFO 差异见语义选择表 / 覆盖清单；死亡剩余机器持牌路径不由终态测试完全覆盖 |
 | hlss 星系统（T11 Boss 诸葛亮族批 115，2026-10-17） | 禳星：装配 3 星，受伤害/失血累计 3 → 失一星并向其他角色分配 3 点雷伤（全场随机 1 + 随机敌 2，原生「敌」= `is_boss_side` 异侧、无敌人退化全场），星归零觉醒；隐月：受伤 +1 并记录伤害类型（雷/火/锦囊，供禳星免除：3=雷/2=火/1=锦囊）；光：星未耗尽时体力变化后回满（伤害/失体提交点、濒死判定前）；隐月·判：判定区延时锦囊对持有者不生效（神裔同臂）+ 不能翻面（[证据](../operations/evidence/2026-10-17-t11-boss-zhugeliang-hlss/README.md)） | 装配初始化/隐月 +1/光回满/免除/失星雷伤分配/觉醒/翻面取消/判定失效与对照共 5 测；起风与改命未迁移、Boss 未装配（`T11-BOSS-ZHUGE-LIANG` 仍 open）；态度按 Boss 阵营近似、隐月记录合并 trick/delay 两位、防止伤害窗口内已记录（登记差异） |
+| 起风/改命与 Boss 装配（T11 Boss 诸葛亮族批 116，2026-10-17） | 起风：准备阶段可选，从 9 种标准非延时锦囊牌名中选一张使用（已用牌名排除；候选以目录牌种码 `ChoiceOption::Kind` 承载）；起风·闭：来源持技时其牌不可被无懈（无懈窗开窗即关）；改命：判定前亮牌堆顶 7 张选 1 作判定结果（其余弃置、改判/天妒窗跳过），放弃则 7 张回牌堆顶照常判定。Boss 包 `upstream-liuli/boss-zhugeliang@1.0.0`（hp `Infinity` + 五技映射）可发现/导入/装配 （[证据](../operations/evidence/2026-10-17-t11-boss-zhugeliang-four/README.md)） | 8 测覆盖起风（选牌名/排除已用/放弃）与改命（改判/放弃回堆）；**登记差异**：起风候选限目录 9 种（上游全 `lib.inpile`、借刀不入）、目标合法性近似、可选窗以确认门承载、改命放弃路径牌堆归还；Boss 关卡流程接入归 D4 后续批，`ylyg*`/`mbqianlong` 归 D5/庞统条目 |
 | 无限体力（D5 前置，2026-10-17） | `max_hp == state::INFINITE_HP`（= i32::MAX 哨兵）即无限：伤害/失去体力/回复/上限减都不改变体力（hp 恒等于 max_hp）、永不濒死、手牌上限基数取哨兵（等效无上限）；装载器接受 `"Infinity"` 与哨兵数值。**无规则版本变化**（既有内容不可达该哨兵，14 golden 零扰动）；上游 Boss 诸葛亮体力即 `Infinity`（[证据](../operations/evidence/2026-10-17-d5-infinite-hp/README.md)） | 无限角色受伤/回复/手牌上限/投影/存档与 AI 规划回归；四技（`hlss_xiangxing`/`yueyin`/`fengqi`/`gaiming`）与 Boss 装配未迁移（D5/T11 登记项仍 open）；视图显示哨兵数值不显示 ∞（登记差异） |
 | 鬼道/天妒 | 黑手牌或黑装备改判，改判者获得旧牌；天妒限本人最终牌 | 仅装备/混合/恢复、确认/放弃和原事件反例通过，N08-c/d 关闭 |
 | 判定事件 | Judged、逐次 Rewritten、Finalized 恰一次且先于 Gained | 原反例已回归；新增洛神/八卦/铁骑等判定路径需独立语义与事件覆盖 |

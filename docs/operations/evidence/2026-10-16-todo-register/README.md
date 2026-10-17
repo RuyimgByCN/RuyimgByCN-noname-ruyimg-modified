@@ -4,6 +4,8 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
+> **2026-10-17 T11 Boss 诸葛亮族批 116**：起风/改命 + Boss 包装配落地（**v304/存档 v89**，含 `ChoiceOption::Kind` 协议扩展）——`T11-BOSS-ZHUGE-LIANG` **关闭**（engine-native 909/0/1；[证据](../2026-10-17-t11-boss-zhugeliang-four/README.md)）。
+
 > **2026-10-17 T11 Boss 诸葛亮族批 115**：hlss 星系统三技（禳星/隐月/隐月·判，tag 463–465，字段批 **v303/存档 v88**）落地——engine-native **906/0/1**、14 golden 重录 + 版本回退探针（[证据](../2026-10-17-t11-boss-zhugeliang-hlss/README.md)）；`T11-BOSS-ZHUGE-LIANG` 保持 open（余起风/改命与 Boss 装配）。
 
 > **2026-10-17 D5 前置**：无限体力哨兵落地（装载器 `Infinity` → `INFINITE_HP`；伤害/失去体力/回复/上限减门控、不濒死、手牌上限按哨兵基数；engine-native **901/0/1**、14 golden 零扰动）——[证据](../2026-10-17-d5-infinite-hp/README.md)；`D5-LX-MIGRATION`/`T11-BOSS-ZHUGE-LIANG` 保持 open（余四技与 Boss 装配）。
@@ -26,8 +28,8 @@
 | engine-native（主稿快照） | 807/0/1 |
 | 条目数 | **89**（原 85 + 拆出 4） |
 | 标为模糊（ambiguous） | **0**（原 13 已消解，见 [ambiguous-resolutions.md](./ambiguous-resolutions.md)） |
-| 已 resolved | **52**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
-| 仍 open | **37**（2026-10-16 快照为 83；2026-10-17 又关 `T13-AI-STRONGER-POLICY` 与 `T12-SRC-L13`。整包总账仍 open，当前 19/37） |
+| 已 resolved | **53**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
+| 仍 open | **36**（2026-10-16 快照为 83；2026-10-17 又关 `T13-AI-STRONGER-POLICY`、`T12-SRC-L13` 与 `T11-BOSS-ZHUGE-LIANG`。整包总账仍 open，当前 19/37） |
 
 ## 覆盖范围
 
@@ -62,7 +64,7 @@
 | `T11-BOSS-HIDECHAIN-8` | docs/architecture/native-progress.md · T11 四象隐藏链处置证据 2026-10-11 | 四象隐藏链八技（青木2/3、白芒2/3、赤炎2/3、玄麟2/3）dieBegin hide+dieAfter 换将重生——D4 后随关卡子系统落包。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
 | `T11-BOSS-WING-ROTATION` | docs/architecture/native-progress.md · T11 青翼/赤翼/白翼登记不落 | 青/赤/白翼轮次编排技（阶段 3/5/7 等）——D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
 | `T11-BOSS-BIANSHEN-CHANGEBOSS` | docs/architecture/native-progress.md · T11 bianshen 勘验片；D4 | bianshen 死亡 changeBoss / bianshen4 同族关卡流程面——D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
-| `T11-BOSS-ZHUGE-LIANG` | docs/architecture/native-progress.md · T11 庞统/诸葛亮片 v277；D5 | Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技 ylyg* 龙血玄黄包依赖——D5 立项后由登记不落转待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | D5-LX-MIGRATION, T9-LX-BATTLE-TRACE | kernel-engineer |
+| `T11-BOSS-ZHUGE-LIANG` | docs/architecture/native-progress.md · 后续待做 / T11；D4/D5 关联 | Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技——**2026-10-17 已交付**（无限体力哨兵 + 禳星/隐月/隐月·判/起风+起风·闭/改命 + 包 `upstream-liuli/boss-zhugeliang@1.0.0` 可装配；Boss 关卡流程接入归 D4，`ylyg*`/`mbqianlong` 归 D5/庞统）。 | 规则版本 v304 递增；14 golden 查明原因后重录 + 版本回退探针；规则基准条目；[hlss 证据](../2026-10-17-t11-boss-zhugeliang-hlss/README.md)与[四技+装配证据](../2026-10-17-t11-boss-zhugeliang-four/README.md) | resolved | — | kernel-engineer |
 | `T11-BOSS-PANGTONG-EXTERNAL` | docs/architecture/native-progress.md · T11 庞统片 v277 | 庞统涅槃/浴火等外部包技依赖（shenhua oldniepan / offline ylygniepan+三外部技+loopType）——随外部包/龙血面推进。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | D5-LX-MIGRATION | kernel-engineer |
 | `T11-BOSS-DIZANG-DAYUAN` | docs/architecture/native-progress.md · T11 地藏王 v274 | 地藏王「大愿」：判定改写机 AI 态度面——条目只列已转换技，仍开放。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | — | kernel-engineer |
 | `T11-BOSS-DIZANG-WULIANG-GAMEDRAW` | docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md · 无量建局摸 3 | 地藏王「无量」建局摸 3 面（gameDrawAfter/enterGame）——自原孟婆抓包项拆出。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | — | kernel-engineer |

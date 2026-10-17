@@ -187,7 +187,7 @@ function deriveLegalActions(
     const raw = handle.engine.open_choice_json(handle.observer);
     const choice = JSON.parse(raw) as {
       id: number;
-      options: Array<number | { card: number } | { player: number } | { tag: number } | string>;
+      options: Array<number | { card: number } | { player: number } | { tag: number } | { kind: number } | string>;
       min?: number;
       max?: number;
       allowCancel?: boolean;

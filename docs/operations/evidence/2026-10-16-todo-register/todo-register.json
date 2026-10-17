@@ -30,8 +30,8 @@
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 52,
-    "open_count": 37,
+    "resolved_count": 53,
+    "open_count": 36,
     "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
     "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
     "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -54,7 +54,8 @@
     "l13_closure_2026_10_17": "T12-SRC-L13 resolved after eight-dimension evidence. Whole-pack 19/37; L13 not counted via any other source line.",
     "swd_batch_114": "2026-10-17 swd 批 114 锦鳞（tag 461/462，规则 v302/存档 v87）：150/184 映射、deferred 32、司空蔷整将闭环；14 golden 重录 + 版本回退探针，engine-native 899/0/1、Gate 1b exit 0。",
     "d5_infinite_hp": "2026-10-17 D5 前置：无限体力哨兵（装载器 Infinity → INFINITE_HP；伤害/回复/上限减门控；不濒死；手牌上限按哨兵）。engine-native 901/0/1，14 golden 零扰动。D5/T11-BOSS-ZHUGE-LIANG 仍 open。",
-    "t11_hlss_115": "2026-10-17 批 115：hlss 星系统三技（禳星/隐月/隐月·判）落地，规则 v303/存档 v88；engine-native 906/0/1、14 golden 重录 + 版本回退探针。T11-BOSS-ZHUGE-LIANG 仍 open（余起风/改命与 Boss 装配）。"
+    "t11_hlss_115": "2026-10-17 批 115：hlss 星系统三技（禳星/隐月/隐月·判）落地，规则 v303/存档 v88；engine-native 906/0/1、14 golden 重录 + 版本回退探针。T11-BOSS-ZHUGE-LIANG 仍 open（余起风/改命与 Boss 装配）。",
+    "t11_zhugeliang_closure": "2026-10-17：T11-BOSS-ZHUGE-LIANG 关闭（无限体力 + 四技 + Boss 包装配，v304/存档 v89）。Boss 关卡流程接入归 D4；D5/庞统外部依赖仍 open。"
   },
   "items": [
     {
@@ -334,7 +335,7 @@
         "doc": "docs/architecture/native-progress.md",
         "ref": "T11 庞统/诸葛亮片 v277；D5"
       },
-      "description": "Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技 ylyg* 龙血玄黄包依赖——D5 立项后由登记不落转待实现。",
+      "description": "Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技——**2026-10-17 已交付**：无限体力哨兵（批 115 前置/批 116 收口）+ 禳星/隐月/隐月·判/起风（+起风·闭）/改命 四技 + 转换包 `upstream-liuli/boss-zhugeliang@1.0.0` 可装配。Boss 关卡流程接入归 D4 后续批；`ylyg*`/`mbqianlong` 归 D5/庞统条目。",
       "done_when_evidence": [
         "规则版本递增（若语义变）",
         "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
@@ -342,7 +343,7 @@
         "证据目录",
         "hp Infinity 承载设计"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "D5-LX-MIGRATION",
         "T9-LX-BATTLE-TRACE"
@@ -353,7 +354,7 @@
         "D5",
         "T9"
       ],
-      "notes": "2026-10-17：前置原语无限体力已交付（`INFINITE_HP` 哨兵）。2026-10-17 批 115：hlss 星系统三技落地（禳星/隐月/隐月·判，tag 463–465，字段批 v303/存档 v88；定向 5/5）。余：起风 `hlss_fengqi`（准备阶段选锦囊使用 + 无懈不可响应）、改命 `hlss_gaiming`（判定前亮 7 张选 1）+ boss_zhugeliang 装配与 Boss 关卡接入。"
+      "notes": "2026-10-17：批 115 星系统三技（v303/存档 v88）、批 116 起风/改命 + Boss 包（v304/存档 v89，8 测全绿，engine-native 909/0/1）。证据 docs/operations/evidence/2026-10-17-t11-boss-zhugeliang-hlss/ 与 2026-10-17-t11-boss-zhugeliang-four/。"
     },
     {
       "id": "T11-BOSS-PANGTONG-EXTERNAL",

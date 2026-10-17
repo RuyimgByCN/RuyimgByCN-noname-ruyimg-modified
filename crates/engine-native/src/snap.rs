@@ -193,6 +193,8 @@ pub struct JudgementProgressSnap {
     pub haotian_holder: Option<PlayerId>,
     /// 昊天塔：未选中的候选牌（选中另一张后弃置）。
     pub haotian_other: Option<u32>,
+    /// 改命（T11 Boss 诸葛亮族批 116）：亮出的 7 张候选（Some=等待选一）。
+    pub gaiming_cards: Option<Vec<u32>>,
 }
 
 // ---------------------------------------------------------------------------

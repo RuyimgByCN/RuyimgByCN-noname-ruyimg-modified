@@ -71,7 +71,10 @@ use crate::state::{
 /// v88（2026-10-17，T11 Boss 诸葛亮族批 115）：`PlayerState` 尾部追加
 /// hlss 星系统三字段（`hlss_stars`/`hlss_count`/`hlss_damage`）。v87 字节
 /// 被版本门禁拒绝（无生产迁移数据）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 88;
+/// v89（2026-10-17，T11 Boss 诸葛亮族批 116）：选择项新增牌种码
+/// `ChoiceOption::Kind(u16)`（判别 5），`PlayerState` 追加起风已用牌种表
+/// `hlss_fengqi_used`，判定机追加改命候选位。v88 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 89;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -797,6 +800,17 @@ fn enc_judgement_progress(w: &mut W, c: &JudgementProgressSnap) {
             w.u32(x);
         }
     }
+    // v89（T11 Boss 诸葛亮族批 116）：改命 7 张候选（尾部追加）
+    match &c.gaiming_cards {
+        None => w.u8(0),
+        Some(cards) => {
+            w.u8(1);
+            w.len(cards.len());
+            for c in cards {
+                w.u32(*c);
+            }
+        }
+    }
 }
 
 fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, ArchiveError> {
@@ -816,6 +830,19 @@ fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, Archiv
         1 => Some(r.u32()?),
         _ => return Err(ArchiveError::UnknownCardKind(255)),
     };
+    // v89：改命候选
+    let gaiming_cards = match r.u8()? {
+        0 => None,
+        1 => {
+            let len = r.len()?;
+            let mut cards = Vec::with_capacity(len);
+            for _ in 0..len {
+                cards.push(r.u32()?);
+            }
+            Some(cards)
+        }
+        _ => return Err(ArchiveError::UnknownCardKind(255)),
+    };
     Ok(JudgementProgressSnap {
         trick,
         judge_card,
@@ -828,6 +855,7 @@ fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, Archiv
         judge_held,
         haotian_holder,
         haotian_other,
+        gaiming_cards,
     })
 }
 
@@ -2592,6 +2620,10 @@ fn enc_choice_option(w: &mut W, o: &ChoiceOption) {
             w.u8(4);
             w.u8(*t);
         }
+        ChoiceOption::Kind(k) => {
+            w.u8(5);
+            w.u32(u32::from(*k));
+        }
     }
 }
 
@@ -2602,6 +2634,12 @@ fn dec_choice_option(r: &mut R<'_>) -> Result<ChoiceOption, ArchiveError> {
         2 => ChoiceOption::Card(r.u32()?),
         3 => ChoiceOption::Player(r.u8()?),
         4 => ChoiceOption::Tag(r.u8()?),
+        5 => {
+            let code = r.u32()?;
+            // 码位必须能反解为目录牌种（未知码=坏档）
+            card_kind_from_num(code)?;
+            ChoiceOption::Kind(code as u16)
+        }
         t => return Err(ArchiveError::BadTag("choice_option", t)),
     })
 }
@@ -3277,6 +3315,11 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u8(p.hlss_stars);
         w.u8(p.hlss_count);
         w.u8(p.hlss_damage);
+        // 起风已用牌种表（v89）
+        w.len(p.hlss_fengqi_used.len());
+        for k in &p.hlss_fengqi_used {
+            w.u32(u32::from(*k));
+        }
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3630,6 +3673,11 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let hlss_stars = r.u8()?;
         let hlss_count = r.u8()?;
         let hlss_damage = r.u8()?;
+        let fengqi_len = r.len()?;
+        let mut hlss_fengqi_used = Vec::with_capacity(fengqi_len);
+        for _ in 0..fengqi_len {
+            hlss_fengqi_used.push(r.u32()? as u16);
+        }
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3702,6 +3750,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             hlss_stars,
             hlss_count,
             hlss_damage,
+            hlss_fengqi_used,
             off_court,
             shuiyun_count,
             wangyou3_round,
@@ -3941,7 +3990,17 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     })
 }
 
-// ---- CardKind 数值映射（AOE need 字段用） ----
+// ---- CardKind 数值映射（AOE need 字段用 + 选择项牌种码） ----
+
+/// 牌种码（`ChoiceOption::Kind` 载荷，与存档 AOE need 同表）。
+pub fn kind_code(kind: CardKind) -> u16 {
+    card_kind_to_num(&kind) as u16
+}
+
+/// 牌种码反解。
+pub fn kind_from_code(code: u16) -> Result<CardKind, ArchiveError> {
+    card_kind_from_num(code as u32)
+}
 
 fn card_kind_to_num(k: &CardKind) -> u32 {
     use crate::catalog::CardKind::*;

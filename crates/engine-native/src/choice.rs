@@ -28,6 +28,9 @@ pub enum ChoiceOption {
     Player(PlayerId),
     /// 定界标签（G1 五行属性 0..=4：金/木/水/火/土）。
     Tag(u8),
+    /// 目录牌种码（`catalog::kind_code`）——「按牌名选择」类询问
+    /// （T11 Boss 诸葛亮族批 116 起风：从可用锦囊牌名中选一张并使用）。
+    Kind(u16),
 }
 
 impl ChoiceOption {
@@ -38,6 +41,7 @@ impl ChoiceOption {
             ChoiceOption::Card(c) => format!("card:{c}"),
             ChoiceOption::Player(p) => format!("player:{p}"),
             ChoiceOption::Tag(t) => format!("nature:{t}"),
+            ChoiceOption::Kind(k) => format!("kind:{k}"),
         }
     }
 }
