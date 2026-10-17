@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 41,
-  "open_count": 48,
+  "resolved_count": 43,
+  "open_count": 46,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -856,14 +856,22 @@
     "Gate 1b exit 0",
     "证据目录 README+日志"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "kernel-engineer",
    "tags": [
     "T12",
     "U05",
     "yunchou"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "registered_difference",
+    "conclusion": "登记差异（不实现）：奸雄·变体=身份改写面四触点；马钧 精谐/巧思=骰子(throwDice/幸运星)+态度选面——均新原语，附解除条件。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-t12-deferred-registration/README.md"
+    ]
+   }
   },
   {
    "id": "T12-WUDIAN-DEFERRED",
@@ -879,13 +887,21 @@
     "证据目录 README+日志",
     "deferred-survey 立项关闭"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "kernel-engineer",
    "tags": [
     "T12",
     "U07"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "registered_difference",
+    "conclusion": "登记差异（不实现）：调兵遣将=亮牌替换型锦囊三原语(+牌堆顶任意序)；仇渡依赖上项；夺启/佑赞=phaseUse 中止/shaBefore 时点+虚拟 useCard——附解除条件。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-t12-deferred-registration/README.md"
+    ]
+   }
   },
   {
    "id": "T12-MTG-DEFERRED-LANDS",
