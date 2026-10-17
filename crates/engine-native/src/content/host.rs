@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 守印（tag 479，swd deferred 消解批 124，`shouyin`）：限定技——任意
+    /// 角色濒死时（自己未翻面）可发动：翻面自己，随后按座位序将全部已受伤
+    /// 角色回复至满体力。
+    SwdShouyin,
     /// 义山（tag 478，swd deferred 消解批 123，`yishan`）：自己受伤后，
     /// 取回「最近失去的牌」中仍在他处者至多 2 张（新在前）。
     SwdYishan,
@@ -1648,6 +1652,7 @@ impl HostBehavior {
             HostBehavior::SwdShenyan => 476,
             HostBehavior::SwdRumeng => 477,
             HostBehavior::SwdYishan => 478,
+            HostBehavior::SwdShouyin => 479,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2367,6 +2372,7 @@ impl HostBehavior {
             476 => HostBehavior::SwdShenyan,
             477 => HostBehavior::SwdRumeng,
             478 => HostBehavior::SwdYishan,
+            479 => HostBehavior::SwdShouyin,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2387,7 +2393,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 475] = [
+        pub const ALL: [HostBehavior; 476] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2863,6 +2869,7 @@ impl HostBehavior {
         HostBehavior::SwdShenyan,
         HostBehavior::SwdRumeng,
         HostBehavior::SwdYishan,
+        HostBehavior::SwdShouyin,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3100,6 +3107,7 @@ impl HostBehavior {
             HostBehavior::SwdShenyan => "host:shenyan",
             HostBehavior::SwdRumeng => "host:rumeng",
             HostBehavior::SwdYishan => "host:yishan",
+            HostBehavior::SwdShouyin => "host:shouyin",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3574,6 +3582,14 @@ impl HostBehavior {
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 守印：任意角色濒死（可选）
+            HostBehavior::SwdShouyin => Some(TriggerMeta {
+                event: EventKind::Dying,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -5807,6 +5823,14 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 守印（swd 批 124）：目录技能名（濒死全员回复限定技）。
+pub const SWD_SHOUYIN_KEY: &str = "shouyin";
+
+/// 存活查询（守印收束用）。
+fn pl_alive(ctx: &Ctx<'_>, p: PlayerId) -> bool {
+    ctx.core.player(p).alive
+}
+
 /// 义山（swd 批 123）：目录技能名（受伤取回最近失去的牌）。
 pub const SWD_YISHAN_KEY: &str = "yishan";
 
@@ -6638,6 +6662,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdShenyan => (None, None),
             HostBehavior::SwdRumeng => (None, None),
             HostBehavior::SwdYishan => (None, None),
+            HostBehavior::SwdShouyin => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6971,6 +6996,10 @@ impl SkillBehavior for HostSkillBehavior {
                     if *player == owner && !ctx.state.player(owner).niepan_used),
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
+            // 守印：任意角色濒死、自己未发动且未翻面
+            HostBehavior::SwdShouyin => matches!(event, EventData::Dying { .. })
+                && !ctx.state.player(owner).shouyin_used
+                && !ctx.state.player(owner).face_down,
             // 义山：自己受伤且有「仍在他处」的已失去牌
             HostBehavior::SwdYishan => match event {
                 EventData::Damage(d) if d.target == owner && !d.prevented => ctx
@@ -20030,6 +20059,28 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
+            // 守印：置限定位 + 自翻面 + 全员回复至满（座位序）
+            HostBehavior::SwdShouyin => {
+                ctx.core.player_mut(self.owner).shouyin_used = true;
+                ctx.emit(EventData::TurnOverBefore {
+                    player: self.owner,
+                    cancelled: false,
+                });
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "守印",
+                    owner: self.owner,
+                });
+                for p in ctx.core.seat_order_from(self.owner) {
+                    let (hp, max) = {
+                        let pl = ctx.core.player(p);
+                        (pl.hp, pl.max_hp)
+                    };
+                    if pl_alive(ctx, p) && hp < max as i32 {
+                        ctx.recover(p, (max as i32 - hp) as u32, None);
+                    }
+                }
+                Flow::Done
+            }
             // 义山：取回最近失去且仍在他处的至多 2 张（新在前）
             HostBehavior::SwdYishan => {
                 let list = ctx.core.player(self.owner).yishan_lost.clone();

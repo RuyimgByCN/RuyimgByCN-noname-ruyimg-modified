@@ -88,7 +88,9 @@ use crate::state::{
 /// `skip_discard_phase`。v93 字节被版本门禁拒绝。
 /// v95（2026-10-17，swd 义山批 123）：`PlayerState` 追加最近失去牌表
 /// `yishan_lost`。v94 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 95;
+/// v96（2026-10-17，swd 守印批 124）：`PlayerState` 追加守印限定位
+/// `shouyin_used`。v95 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 96;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3355,6 +3357,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for c in &p.yishan_lost {
             w.u32(*c);
         }
+        // 守印限定位（v96）
+        w.boolean(p.shouyin_used);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3726,6 +3730,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let shenyan_pending = r.vec(|r| r.u8())?;
         let skip_discard_phase = r.boolean()?;
         let yishan_lost = r.vec(|r| r.u32())?;
+        let shouyin_used = r.boolean()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3805,6 +3810,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             shenyan_pending,
             skip_discard_phase,
             yishan_lost,
+            shouyin_used,
             off_court,
             shuiyun_count,
             wangyou3_round,

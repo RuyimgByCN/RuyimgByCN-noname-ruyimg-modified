@@ -275,6 +275,9 @@ pub struct PlayerState {
     /// （`yishan2` loseEnd unshift 记录；新在前）——受伤后取回至多 2 张
     /// 仍在他处者。
     pub yishan_lost: Vec<CardId>,
+    /// 守印·限定技已发动（swd 批 124，规则 v311）：上游
+    /// `player.storage.shouyin`（awakenSkill 后 true）。
+    pub shouyin_used: bool,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -384,6 +387,7 @@ impl PlayerState {
             shenyan_pending: Vec::new(),
             skip_discard_phase: false,
             yishan_lost: Vec::new(),
+            shouyin_used: false,
         }
     }
 }

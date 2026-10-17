@@ -5189,6 +5189,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         for c in &p.yishan_lost {
             push_u32(&mut h, *c);
         }
+        // 守印限定位（swd 批 124，规则 v311）
+        push_u8(&mut h, p.shouyin_used as u8);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

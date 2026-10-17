@@ -1594,7 +1594,7 @@
     },
     {
      "name": "shouyin",
-     "mapping": null
+     "mapping": "host:shouyin"
     }
    ]
   },
