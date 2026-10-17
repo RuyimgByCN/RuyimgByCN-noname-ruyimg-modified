@@ -4,7 +4,7 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
-> **2026-10-17 收口批**：本次再关 17 项（`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`/`HUANREN`/`HIDECHAIN-8`/`WING-ROTATION`/`BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`、`COV-EQUIP-TIMING-WINDOW`、`COV-TRIGGER-GETINDEX-BUCKETS`、`T12-SWD-EXTRA-CARDS-DISPOSITION`、`T11-BOSS-DIZANG-DAYUAN`、`T11-BOSS-DIZANG-WULIANG-GAMEDRAW`），resolved 21→**38**、open 68→**51**。依据为各批已落盘证据（[T8 具名 filter](../2026-10-17-t8-named-filters/README.md)、[D4 B4](../2026-10-17-d4-boss-b4-huanren-wings/README.md)、[T9 钩挂](../2026-10-17-t9-lx-content-hooks/README.md)、[T15③](../2026-10-16-t15-3-v117-transplant/README.md)、[O4](../2026-10-16-o4-wasm-opt/README.md)、[O5](../2026-10-16-o5-profiling/README.md)、[奖惩审计](../2026-10-17-cov-reward-over-audit/README.md)、[无懈扩面](../2026-10-17-cov-nullify-judge-expand/README.md)、[装载/触发桶定案](../2026-10-17-cov-permanent-diffs/README.md)、[swd 多余卡处置](../2026-10-17-t12-swd-extra-cards-disposition/README.md)、[地藏王余项](../2026-10-17-t11-boss-dizang-remainders/README.md)）。
+> **2026-10-17 收口批**：本次再关 18 项（`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`/`HUANREN`/`HIDECHAIN-8`/`WING-ROTATION`/`BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`、`COV-EQUIP-TIMING-WINDOW`、`COV-TRIGGER-GETINDEX-BUCKETS`、`T12-SWD-EXTRA-CARDS-DISPOSITION`、`T11-BOSS-DIZANG-DAYUAN`、`T11-BOSS-DIZANG-WULIANG-GAMEDRAW`、`T12-MTG-DEFERRED-LANDS`），resolved 21→**39**、open 68→**50**。依据为各批已落盘证据（[T8 具名 filter](../2026-10-17-t8-named-filters/README.md)、[D4 B4](../2026-10-17-d4-boss-b4-huanren-wings/README.md)、[T9 钩挂](../2026-10-17-t9-lx-content-hooks/README.md)、[T15③](../2026-10-16-t15-3-v117-transplant/README.md)、[O4](../2026-10-16-o4-wasm-opt/README.md)、[O5](../2026-10-16-o5-profiling/README.md)、[奖惩审计](../2026-10-17-cov-reward-over-audit/README.md)、[无懈扩面](../2026-10-17-cov-nullify-judge-expand/README.md)、[装载/触发桶定案](../2026-10-17-cov-permanent-diffs/README.md)、[swd 多余卡处置](../2026-10-17-t12-swd-extra-cards-disposition/README.md)、[地藏王余项](../2026-10-17-t11-boss-dizang-remainders/README.md)、[mtg 永久 deferred](../2026-10-17-t12-mtg-lands-deferred/README.md)）。
 
 ## 快照上下文
 
@@ -14,8 +14,8 @@
 | engine-native（主稿快照） | 807/0/1 |
 | 条目数 | **89**（原 85 + 拆出 4） |
 | 标为模糊（ambiguous） | **0**（原 13 已消解，见 [ambiguous-resolutions.md](./ambiguous-resolutions.md)） |
-| 已 resolved | **38**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
-| 仍 open | **51**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
+| 已 resolved | **39**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
+| 仍 open | **50**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
 
 ## 覆盖范围
 
@@ -70,7 +70,7 @@
 | `T12-SWD-EXTRA-CARDS-DISPOSITION` | docs/operations/evidence/2026-10-15-t12-swd-cards-audit/README.md · 包内多余 13 处置待决 | swd 卡牌对账：包内多余 13 张处置待决（勘误/删除/保留登记）。 | 处置结论+包数据守护测试 | resolved | — | extension-engineer |
 | `T12-YUNCHOU-DEFERRED` | docs/architecture/native-progress.md · T12 运筹武将面批（约 18/20，2 暂缓） | 运筹帷幄余暂缓：奸雄·变体（身份改写面）、巧思等——随身份局深化/骰子等原语。 | 定向回归测试通过；cargo test --offline -p engine-native --no-fail-fast 全绿；Gate 1b exit 0… | open | — | kernel-engineer |
 | `T12-WUDIAN-DEFERRED` | docs/architecture/native-progress.md · T12 玩点论杀批（约 19/22，3 暂缓） | 玩点论杀余暂缓：仇渡/调兵遣将（亮牌替换锦囊面级工程）、夺启/佑赞等机制缺口。 | 定向回归测试通过；cargo test --offline -p engine-native --no-fail-fast 全绿；Gate 1b exit 0… | open | — | kernel-engineer |
-| `T12-MTG-DEFERRED-LANDS` | docs/architecture/native-progress.md · T12 mtg 藏宝海湾/毒沼 deferred | mtg 地 2 张结构性依赖（派生包 UI / 跨包毒卡）——非逐卡切片可达。 | 结构性依赖解除或永久 deferred ADR | open | — | architect |
+| `T12-MTG-DEFERRED-LANDS` | docs/architecture/native-progress.md · T12 mtg 藏宝海湾/毒沼 deferred | mtg 地 2 张结构性依赖（派生包 UI / 跨包毒卡）——非逐卡切片可达。 | 结构性依赖解除或永久 deferred ADR | resolved | — | architect |
 | `T12-D3-REMAINING-GENERALS` | docs/migration/upstream-extension-reconstruction.md · §3.1 U01 | 3D精选：刘冲末焱已映射（2026-10-17），其余 30 将与 56 条技能引用未实现，资源映射未做。不计整包。L21 计入后总账为 15/37，末焱本身不计。 | 定向回归测试通过；cargo test --offline -p engine-native --no-fail-fast 全绿；Gate 1b exit 0… | open | — | kernel-engineer |
 | `T12-SRC-U01` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / U01 3D精选 | 来源 U01（3D精选）原生整包验收未完成。台账状态：部分重构；G1 样本+生命周期；整包未完成。建议批次：G1→G3。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | — | extension-engineer |
 | `T12-SRC-U02` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / U02 boss | 来源 U02（boss）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | — | extension-engineer |

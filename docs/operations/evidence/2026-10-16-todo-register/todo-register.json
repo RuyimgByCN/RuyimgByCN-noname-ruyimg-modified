@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 38,
-  "open_count": 51,
+  "resolved_count": 39,
+  "open_count": 50,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -48,7 +48,7 @@
   "l17_closure_2026_10_17": "T12-SRC-L17 resolved after its own liuli install. Whole-pack stays open at 12/37.",
   "l15_closure_2026_10_17": "T12-SRC-L15 resolved after its own liuli install. Whole-pack stays open at 11/37.",
   "l02_closure_2026_10_17": "T12-SRC-L02 resolved after its own liuli install. Whole-pack stays open at 10/37.",
-  "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。 另：COV-EQUIP-TIMING-WINDOW 与 COV-TRIGGER-GETINDEX-BUCKETS 定案关闭。 另：T12-SWD-EXTRA-CARDS-DISPOSITION 处置关闭。 另：T11-BOSS-DIZANG-DAYUAN/WULIANG-GAMEDRAW 登记差异关闭。"
+  "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。 另：COV-EQUIP-TIMING-WINDOW 与 COV-TRIGGER-GETINDEX-BUCKETS 定案关闭。 另：T12-SWD-EXTRA-CARDS-DISPOSITION 处置关闭。 另：T11-BOSS-DIZANG-DAYUAN/WULIANG-GAMEDRAW 登记差异关闭。 另：T12-MTG-DEFERRED-LANDS 永久 deferred 关闭。"
  },
  "items": [
   {
@@ -892,14 +892,22 @@
    "done_when_evidence": [
     "结构性依赖解除或永久 deferred ADR"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "architect",
    "tags": [
     "T12",
     "U05",
     "mtg"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "permanent_deferred",
+    "conclusion": "藏宝海湾上游 enable 恒 false（mode_derivation 空）、毒沼依赖 mode_derivation 衍生牌实体——两张永久 deferred，不编码。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-t12-mtg-lands-deferred/README.md"
+    ]
+   }
   },
   {
    "id": "T12-D3-REMAINING-GENERALS",
