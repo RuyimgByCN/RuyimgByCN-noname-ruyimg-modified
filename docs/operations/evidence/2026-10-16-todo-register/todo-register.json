@@ -30,8 +30,8 @@
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 53,
-    "open_count": 36,
+    "resolved_count": 54,
+    "open_count": 35,
     "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
     "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
     "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -56,7 +56,8 @@
     "d5_infinite_hp": "2026-10-17 D5 前置：无限体力哨兵（装载器 Infinity → INFINITE_HP；伤害/回复/上限减门控；不濒死；手牌上限按哨兵）。engine-native 901/0/1，14 golden 零扰动。D5/T11-BOSS-ZHUGE-LIANG 仍 open。",
     "t11_hlss_115": "2026-10-17 批 115：hlss 星系统三技（禳星/隐月/隐月·判）落地，规则 v303/存档 v88；engine-native 906/0/1、14 golden 重录 + 版本回退探针。T11-BOSS-ZHUGE-LIANG 仍 open（余起风/改命与 Boss 装配）。",
     "t11_zhugeliang_closure": "2026-10-17：T11-BOSS-ZHUGE-LIANG 关闭（无限体力 + 四技 + Boss 包装配，v304/存档 v89）。Boss 关卡流程接入归 D4；D5/庞统外部依赖仍 open。",
-    "d5_longxue_117": "2026-10-17 批 117：潜龙道心值 + 卫统 + 曹髦包（规则 v305/存档 v90）；engine-native 914/0/1，14 golden 重录 + 探针。D5 仍 open（余外部手杀包四技与 ylyg*）。"
+    "d5_longxue_117": "2026-10-17 批 117：潜龙道心值 + 卫统 + 曹髦包（规则 v305/存档 v90）；engine-native 914/0/1，14 golden 重录 + 探针。D5 仍 open（余外部手杀包四技与 ylyg*）。",
+    "t11_pangtong_closure": "2026-10-17：T11-BOSS-PANGTONG-EXTERNAL 关闭（涅槃/浴火/神威 + loopType，v306/存档 v91）。看破/朱羽/ylygniepan 外部依赖与 D4 轮次起点登记。"
   },
   "items": [
     {
@@ -363,14 +364,14 @@
         "doc": "docs/architecture/native-progress.md",
         "ref": "T11 庞统片 v277"
       },
-      "description": "庞统涅槃/浴火等外部包技依赖（shenhua oldniepan / offline ylygniepan+三外部技+loopType）——随外部包/龙血面推进。",
+      "description": "庞统涅槃/浴火等外部包技依赖——**2026-10-17 已交付**：涅槃（濒死/出牌阶段限定技）+ 浴火（链式授予神威 + 关卡循环型 1）+ 神威（摸牌/手牌上限）；看破 `kanpo`（offline 转发桩→sb 包）、`zhuyu`、`ylygniepan`（本仓无定义）为外部依赖登记；`_status.roundStart` 轮次起点归 D4。",
       "done_when_evidence": [
         "规则版本递增（若语义变）",
         "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
         "规则基准条目",
         "证据目录"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "D5-LX-MIGRATION"
       ],
@@ -379,7 +380,7 @@
         "T11",
         "D5"
       ],
-      "notes": "非 D4；等 D5/外部包。天狱/栖梧已落（v277）",
+      "notes": "2026-10-17 批 118（v306/存档 v91）：定向 4/4、engine-native 918/0/1、14 golden 重录 + 探针。证据 docs/operations/evidence/2026-10-17-t11-boss-pangtong-niepan/。天狱/栖梧已于 v277 落地。",
       "ambiguous": false,
       "resolution": {
         "date": "2026-10-16",

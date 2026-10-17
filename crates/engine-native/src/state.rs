@@ -259,6 +259,9 @@ pub struct PlayerState {
     /// `player.countMark('mbqianlong')`，0..=99；阈值 25/50/75/99 解锁
     /// 清正/酒诗/放逐/绝进。
     pub mbqianlong_marks: u8,
+    /// 涅槃·限定技已发动（T11 Boss 庞统族批 118，规则 v306）：上游
+    /// `player.storage.niepan`（awakenSkill 后 true）。
+    pub niepan_used: bool,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -363,6 +366,7 @@ impl PlayerState {
             hlss_damage: 0,
             hlss_fengqi_used: Vec::new(),
             mbqianlong_marks: 0,
+            niepan_used: false,
         }
     }
 }
@@ -623,6 +627,9 @@ pub struct BossStageState {
     pub wing_armed: u8,
     /// 选将/延迟换将挂起（B0 恒 None）。
     pub pending: Option<BossStagePending>,
+    /// 浴火·关卡循环型（T11 Boss 庞统族批 118，规则 v306）：上游
+    /// `game.bossinfo.loopType = 1`（浴火后置位；0=未置位）。
+    pub loop_type: u8,
 }
 
 impl BossStageState {
@@ -636,6 +643,7 @@ impl BossStageState {
             banned_generals: Vec::new(),
             wing_armed: 0,
             pending: None,
+            loop_type: 0,
         }
     }
 }
@@ -827,6 +835,14 @@ impl GameStateCore {
     /// Boss 关卡流程态（非 Boss 为 None）。
     pub fn boss_stage(&self) -> Option<&BossStageState> {
         match &self.mode {
+            GameMode::Boss { stage, .. } => Some(stage),
+            _ => None,
+        }
+    }
+
+    /// 关卡流程态可变访问（浴火置 loopType；非 Boss 返回 None）。
+    pub fn boss_stage_mut(&mut self) -> Option<&mut BossStageState> {
+        match &mut self.mode {
             GameMode::Boss { stage, .. } => Some(stage),
             _ => None,
         }
@@ -1451,6 +1467,14 @@ impl GameStateCore {
         // 灵渠（Boss 玄武，规则 v237）：手牌上限 +受击计数（上游
         // boss_lingqu mod maxHandcard `num + storage` 同口径）
         limit += self.player(p).lingqu_count as usize;
+        // 神威（Boss 庞统浴火授予，批 118 规则 v306）：手牌上限
+        // +min(3, 其他角色数)（上游 shenwei mod maxHandcard 同口径）
+        if let Some(def) = catalog.skill_by_name(crate::content::host::BOSS_SHENWEI_KEY) {
+            if self.has_skill(p, def) {
+                let others = self.alive_players().filter(|q| *q != p).count();
+                limit += others.min(3);
+            }
+        }
         // 神恩（Boss 太昊/炎帝 光环，规则 v238）：挑战者侧手牌上限 +1
         //（上游 boss_shenen2 mod maxHandcard `!side → num+1` 同口径；
         // 光环激活=场上存在神恩持有者）

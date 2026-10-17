@@ -1299,6 +1299,16 @@ pub enum HostBehavior {
     /// 卫统（tag 470，`mbweitong`，主公技）：开局登记「修改潜龙初始道心值」
     /// （实际 +60 由潜龙内容按同条件判定）。
     MbWeitong,
+    /// 涅槃（tag 471，T11 Boss 庞统族批 118，`niepan`）：限定技——濒死时
+    /// 或出牌阶段发动：弃置全部牌（手/装/判）、解除横置、翻回正面、摸 3、
+    /// 回复至 3 点体力；发动后触发浴火。
+    Niepan,
+    /// 浴火（tag 472，`boss_yuhuo`）：涅槃后授予看破/神威/朱羽（目录存在
+    /// 才授予）并置关卡循环型 1（逻辑内联于涅槃收束）。
+    Yuhuo,
+    /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
+    /// 手牌上限同量加成。
+    Shenwei,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1611,6 +1621,9 @@ impl HostBehavior {
             HostBehavior::HlssGaiming => 468,
             HostBehavior::MbQianlong => 469,
             HostBehavior::MbWeitong => 470,
+            HostBehavior::Niepan => 471,
+            HostBehavior::Yuhuo => 472,
+            HostBehavior::Shenwei => 473,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2322,6 +2335,9 @@ impl HostBehavior {
             468 => HostBehavior::HlssGaiming,
             469 => HostBehavior::MbQianlong,
             470 => HostBehavior::MbWeitong,
+            471 => HostBehavior::Niepan,
+            472 => HostBehavior::Yuhuo,
+            473 => HostBehavior::Shenwei,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2342,7 +2358,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 467] = [
+        pub const ALL: [HostBehavior; 470] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2810,6 +2826,9 @@ impl HostBehavior {
         HostBehavior::HlssGaiming,
         HostBehavior::MbQianlong,
         HostBehavior::MbWeitong,
+        HostBehavior::Niepan,
+        HostBehavior::Yuhuo,
+        HostBehavior::Shenwei,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3039,6 +3058,9 @@ impl HostBehavior {
             HostBehavior::HlssGaiming => "host:hlss_gaiming",
             HostBehavior::MbQianlong => "host:mbqianlong",
             HostBehavior::MbWeitong => "host:mbweitong",
+            HostBehavior::Niepan => "host:niepan",
+            HostBehavior::Yuhuo => "host:boss_yuhuo",
+            HostBehavior::Shenwei => "host:shenwei",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3502,6 +3524,17 @@ impl HostBehavior {
                     EventKind::Damage,
                 ],
             }),
+            // 涅槃：自己濒死（可选；出牌阶段面走 activate）
+            HostBehavior::Niepan => Some(TriggerMeta {
+                event: EventKind::Dying,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 浴火 / 神威：无触发时机（浴火由涅槃收束内联；神威为 kernel 臂）
+            HostBehavior::Yuhuo => None,
+            HostBehavior::Shenwei => None,
             // 卫统：开局首阶段（登记面）
             HostBehavior::MbWeitong => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -5701,10 +5734,89 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 神威（T11 Boss 庞统族批 118）：目录技能名（浴火授予；摸牌/手牌上限臂）。
+pub const BOSS_SHENWEI_KEY: &str = "神威";
+/// 涅槃（T11 Boss 庞统族批 118）：目录技能名。
+pub const BOSS_NIEPAN_KEY: &str = "涅槃";
+/// 浴火（同批）：目录技能名（涅槃后授予三技 + 关卡循环型）。
+pub const BOSS_YUHOU_KEY: &str = "浴火";
+
 /// 潜龙（D5 龙血玄黄批 117）：目录技能名（道心值系统）。
 pub const HLSS_MBQIANLONG_KEY: &str = "mbqianlong";
 /// 卫统（同批）：目录技能名（主公技登记面）。
 pub const HLSS_MBWEITONG_KEY: &str = "mbweitong";
+
+/// 涅槃（T11 Boss 庞统族批 118，规则 v306）：限定技收束——置已发动、
+/// 弃置全部牌（手牌/装备/判定区）、解除横置、翻回正面、摸 3、回复至
+/// 3 点体力；随后若持浴火则授予看破/神威/朱羽（目录存在才授予，缺目录
+/// 按上游 addSkill 无对应技能时不虚构空操作）并置关卡循环型 1。
+pub(crate) fn niepan_effect(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    ctx.core.player_mut(owner).niepan_used = true;
+    // 弃置全部牌（手/装/判）
+    let hand: Vec<CardId> = ctx.core.player(owner).hand.clone();
+    for c in hand {
+        ctx.discard_from_hand(owner, c);
+    }
+    let equips: Vec<CardId> = ctx.core.player(owner).equips.clone();
+    for c in equips {
+        ctx.core.player_mut(owner).equips.retain(|x| *x != c);
+        ctx.to_discard(c);
+    }
+    let judge: Vec<CardId> = ctx.core.player(owner).judge.clone();
+    for c in judge {
+        ctx.core.player_mut(owner).judge.retain(|x| *x != c);
+        ctx.to_discard(c);
+    }
+    // 解除横置 + 翻回正面
+    ctx.core.player_mut(owner).linked = false;
+    ctx.core.player_mut(owner).face_down = false;
+    // 摸 3 + 回复至 3
+    ctx.draw_cards(owner, 3);
+    let hp = ctx.core.player(owner).hp;
+    if hp < 3 {
+        ctx.recover(owner, (3 - hp) as u32, None);
+    }
+    ctx.log(LogEvent::SkillTriggered {
+        skill: "涅槃",
+        owner,
+    });
+    // 浴火：授予三技（存在才授予）+ 关卡循环型 1
+    if let Some(def) = ctx.catalog.skill_by_name(BOSS_YUHOU_KEY) {
+        if ctx.core.has_skill(owner, def) {
+            // 上游 addSkill('kanpo'/'shenwei'/'zhuyu')；原生目录中神威为
+            // 中名（看破/朱羽未转换 → 存在性守卫跳过）
+            for name in ["kanpo", BOSS_SHENWEI_KEY, "zhuyu"] {
+                let Some(sd) = ctx.catalog.skill_by_name(name) else {
+                    continue;
+                };
+                if !ctx.core.skills.contains_key(&(owner, sd)) {
+                    ctx.core.skills.insert(
+                        (owner, sd),
+                        crate::state::SkillInstance {
+                            owner,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: false,
+                            rounds: 0,
+                        },
+                    );
+                    ctx.log(LogEvent::SkillToggled {
+                        player: owner,
+                        skill: ctx.catalog.skill_name(sd),
+                        enabled: true,
+                    });
+                }
+            }
+            if let Some(stage) = ctx.core.boss_stage_mut() {
+                stage.loop_type = 1;
+            }
+            ctx.log(LogEvent::SkillTriggered {
+                skill: "浴火",
+                owner,
+            });
+        }
+    }
+}
 
 /// 潜龙阈值解锁：按道心值授予清正（25）/酒诗（50）/放逐（75）/绝进（99）
 /// ——先撤销四个（上游 removeAdditionalSkill），再按阈值授予；目录缺该
@@ -6349,6 +6461,9 @@ impl HostSkillBehavior {
             HostBehavior::HlssGaiming => (None, None),
             HostBehavior::MbQianlong => (None, None),
             HostBehavior::MbWeitong => (None, None),
+            HostBehavior::Niepan => (None, None),
+            HostBehavior::Yuhuo => (None, None),
+            HostBehavior::Shenwei => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6676,6 +6791,12 @@ impl SkillBehavior for HostSkillBehavior {
                 }
                 _ => false,
             },
+            // 涅槃：自己濒死且未发动
+            HostBehavior::Niepan => matches!(event,
+                EventData::Dying { player, .. }
+                    if *player == owner && !ctx.state.player(owner).niepan_used),
+            HostBehavior::Yuhuo => false,
+            HostBehavior::Shenwei => false,
             // 卫统：开局首阶段 + 自己持潜龙 + 另有魏势力持本技者
             HostBehavior::MbWeitong => match event {
                 EventData::Phase { begin: true, .. } => {
@@ -8675,6 +8796,28 @@ impl SkillBehavior for HostSkillBehavior {
             //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
             HostBehavior::SwdJinlin => {
                 if ctx.state.player(owner).jinlin_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 涅槃（T11 Boss 庞统族批 118）：出牌阶段主动面——限定技未发动
+            // 时可用（濒死面走触发路径；两面共用收束）。
+            HostBehavior::Niepan => {
+                if ctx.state.player(owner).niepan_used {
+                    return None;
+                }
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -19664,6 +19807,17 @@ impl crate::catalog::SkillMachine for HostMachine {
                 mbqianlong_refresh(ctx, self.owner);
                 Flow::Done
             }
+            // 涅槃：弃全部牌 + 解除横置 + 翻回正面 + 摸 3 + 回复至 3；
+            // 随后触发浴火（上游独立 niepanAfter 事件面 → 原生链式，登记差异）
+            HostBehavior::Niepan => {
+                if ctx.core.player(self.owner).niepan_used {
+                    return Flow::Done;
+                }
+                niepan_effect(ctx, self.owner);
+                Flow::Done
+            }
+            HostBehavior::Yuhuo => Flow::Done,
+            HostBehavior::Shenwei => Flow::Done,
             // 卫统：登记面（实际加成由潜龙内容按同条件判定）
             HostBehavior::MbWeitong => Flow::Done,
             // 隐月·判：取消翻面（写回前置帧取消位）

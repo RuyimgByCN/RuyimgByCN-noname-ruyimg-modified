@@ -2602,7 +2602,26 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                     | Some(crate::catalog::EquipSlot::HorseMinus)
                             )
                         });
-                    ctx.draw_cards(player, if baiyi_cut { 1 } else { 2 } + usize::from(lingshi_draw));
+                    // 神威（Boss 庞统浴火授予，批 118 规则 v306）：摸牌阶段
+                    // 多摸 min(3, 其他角色数)（上游 shenwei phaseDrawBegin
+                    // `trigger.num += Math.min(3, game.players.length-1)`）
+                    let shenwei_draw = if ctx
+                        .catalog
+                        .skill_by_name(crate::content::host::BOSS_SHENWEI_KEY)
+                        .map(|def| ctx.core.has_skill(player, def))
+                        .unwrap_or(false)
+                    {
+                        let others = ctx.core.alive_players().filter(|p| *p != player).count();
+                        others.min(3)
+                    } else {
+                        0
+                    };
+                    ctx.draw_cards(
+                        player,
+                        if baiyi_cut { 1 } else { 2 }
+                            + usize::from(lingshi_draw)
+                            + shenwei_draw,
+                    );
                     // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
                     // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差
                     // 异上游玩家自选；置顶牌留待下位摸牌者）

@@ -4953,6 +4953,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
                 push_u16(&mut h, *g);
             }
             push_u8(&mut h, stage.wing_armed);
+            // 浴火关卡循环型（批 118，规则 v306）
+            push_u8(&mut h, stage.loop_type);
             match &stage.pending {
                 None => push_u8(&mut h, 0),
                 Some(crate::state::BossStagePending::SelectGeneral { candidates }) => {
@@ -5124,6 +5126,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
         // 潜龙道心值（D5 批 117，规则 v305）
         push_u8(&mut h, p.mbqianlong_marks);
+        // 涅槃限定技（T11 Boss 庞统族批 118，规则 v306）
+        push_u8(&mut h, p.niepan_used as u8);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

@@ -76,7 +76,10 @@ use crate::state::{
 /// `hlss_fengqi_used`，判定机追加改命候选位。v88 字节被版本门禁拒绝。
 /// v90（2026-10-17，D5 龙血玄黄批 117）：`PlayerState` 尾部追加潜龙
 /// 道心值 `mbqianlong_marks`。v89 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 90;
+/// v91（2026-10-17，T11 Boss 庞统族批 118）：`PlayerState` 追加涅槃限定
+/// 技位 `niepan_used`，`BossStageState` 追加浴火关卡循环型 `loop_type`。
+/// v90 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 91;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -2907,6 +2910,8 @@ fn enc_boss_stage(w: &mut W, stage: &BossStageState) {
         w.u16(*g);
     }
     w.u8(stage.wing_armed);
+    // v91：浴火关卡循环型（尾部追加）
+    w.u8(stage.loop_type);
     match &stage.pending {
         None => w.u8(0),
         Some(BossStagePending::SelectGeneral { candidates }) => {
@@ -2932,6 +2937,7 @@ fn dec_boss_stage(r: &mut R<'_>) -> Result<BossStageState, ArchiveError> {
     let mengpo_died = r.boolean()?;
     let banned_generals = r.vec(|r| r.u16())?;
     let wing_armed = r.u8()?;
+    let loop_type = r.u8()?;
     let pending = match r.u8()? {
         0 => None,
         1 => {
@@ -2947,6 +2953,7 @@ fn dec_boss_stage(r: &mut R<'_>) -> Result<BossStageState, ArchiveError> {
         mengpo_died,
         banned_generals,
         wing_armed,
+        loop_type,
         pending,
     })
 }
@@ -3324,6 +3331,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         }
         // 潜龙道心值（v90）
         w.u8(p.mbqianlong_marks);
+        // 涅槃限定技（v91）
+        w.boolean(p.niepan_used);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3683,6 +3692,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             hlss_fengqi_used.push(r.u32()? as u16);
         }
         let mbqianlong_marks = r.u8()?;
+        let niepan_used = r.boolean()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3757,6 +3767,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             hlss_damage,
             hlss_fengqi_used,
             mbqianlong_marks,
+            niepan_used,
             off_court,
             shuiyun_count,
             wangyou3_round,

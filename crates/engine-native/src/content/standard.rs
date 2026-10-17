@@ -124,7 +124,7 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 305;
+pub const STANDARD_RULESET_VERSION: u64 = 306;
 
 // ---------------------------------------------------------------------------
 // 散财：受到伤害后，可以摸两张牌，然后将一张手牌交给另一名玩家。
@@ -5724,6 +5724,16 @@ pub const BOSS_TIANYU: &str = "天狱";
 /// 伤则回复 1 点体力（上游 useCard club+hp<maxHp recover 同口径；事件面
 /// 与娇孝臂同族）。
 pub const BOSS_QIWU: &str = "栖梧";
+/// 涅槃（Boss 庞统[涅槃凤雏]，T11 批 118，规则 v306）：限定技——濒死时或
+/// 出牌阶段发动：弃置全部牌（手/装/判）、解除横置、翻回正面、摸 3、
+/// 回复至 3 点体力（上游 shenhua `niepan` 同口径）。
+pub const BOSS_NIEPAN: &str = "涅槃";
+/// 浴火（Boss 庞统，批 118）：涅槃后授予看破/神威/朱羽并置关卡循环型 1
+/// （上游 `boss_yuhuo` `niepanAfter` 触发；原生链式执行，登记差异）。
+pub const BOSS_YUHOU: &str = "浴火";
+/// 神威（Boss 庞统浴火授予，批 118）：锁定——摸牌阶段多摸
+/// min(3, 其他角色数)，手牌上限同量加成（上游 `shenwei` 同口径）。
+pub const BOSS_SHENWEI: &str = "神威";
 /// 炼狱（Boss 马面，规则 v257）：锁定技——结束阶段对全部其他存活角色
 /// 各造成 1 点火焰伤害（无询问直伤）。
 pub const BOSS_LIANYU: &str = "炼狱";
@@ -6114,9 +6124,10 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     // 秦广王（v276 判官+拘魂+望乡；还人=关卡流程面登记不落；上游 group
     // qun→群目录直取）
     ("秦广王", Faction::Qun, &[BOSS_PANGUAN, BOSS_JUHUN, BOSS_WANGXIANG, BOSS_HUANREN, BOSS_HUANREN_DIE], 3, Gender::Male),
-    // 庞统·涅槃凤雏（v277 天狱+栖梧；涅槃/浴火=外部包技依赖登记不落；
-    // 上游 group shen→群近似登记）
-    ("庞统", Faction::Qun, &[BOSS_TIANYU, BOSS_QIWU], 4, Gender::Male),
+    // 庞统·涅槃凤雏（v277 天狱+栖梧；v306 批 118 补涅槃+浴火——浴火授予
+    // 看破/神威/朱羽，神威已落、看破/朱羽外部包依赖登记；上游 group
+    // shen→群近似登记）
+    ("庞统", Faction::Qun, &[BOSS_TIANYU, BOSS_QIWU, BOSS_NIEPAN, BOSS_YUHOU], 4, Gender::Male),
 ];
 
 /// 武将目录下标 → 性别（越界返回 None）。
@@ -8439,6 +8450,22 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
         crate::content::host::host_skill_def(
             BOSS_BAIYI_THUNDER.to_string(),
             crate::content::host::HostBehavior::BossBaiyiThunder,
+        ),
+        // T11 Boss 庞统族批 118（规则 v306）：涅槃/浴火/神威——尾部追加
+        // 涅槃（濒死面可选触发 + 出牌阶段主动面；trigger 由行为元数据给出）
+        crate::content::host::host_skill_def(
+            BOSS_NIEPAN.to_string(),
+            crate::content::host::HostBehavior::Niepan,
+        ),
+        // 浴火（涅槃后链式授予，无触发时机）
+        crate::content::host::host_skill_def(
+            BOSS_YUHOU.to_string(),
+            crate::content::host::HostBehavior::Yuhuo,
+        ),
+        // 神威（锁定查询型：摸牌 +N / 手牌上限 +N，kernel 臂）
+        crate::content::host::host_skill_def(
+            BOSS_SHENWEI.to_string(),
+            crate::content::host::HostBehavior::Shenwei,
         ),
     ];
     (cards, skills)

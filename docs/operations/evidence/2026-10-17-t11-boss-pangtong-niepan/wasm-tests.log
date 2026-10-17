@@ -1,0 +1,39 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+warning: duplicated attribute
+    --> crates/engine-native-wasm/src/lib.rs:1133:5
+     |
+1133 |     #[test]
+     |     ^^^^^^^
+     |
+     = note: `#[warn(duplicate_macro_attributes)]` on by default
+
+warning: `engine-native-wasm` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.16s
+     Running unittests src/lib.rs (target/debug/deps/engine_native_wasm-15ede17e3b73a404)
+
+running 20 tests
+test pack_roundtrip::fool_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::coin_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::liuli_coin_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::desktop_adapt_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::elo_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::boss_play_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::martial_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::drag_read_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::douzhuan_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::update_guard_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::shousha_mvp_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::shousha_mvp_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::sj_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::liuli_cardpile_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::cardpile_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::huanle_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::wuxing_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::installed_pack_enters_new_match_and_restore ... ok
+test pack_roundtrip::omnisearch_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::shousha_pack_json_enters_wasm_helper ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
