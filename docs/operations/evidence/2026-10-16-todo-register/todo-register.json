@@ -803,7 +803,7 @@
     "U05",
     "swd"
    ],
-   "notes": "2026-10-17 批 100：兰芷（tag 439）消解——134/184 映射，deferred 49→48。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100/README.md",
+   "notes": "2026-10-17 批 100/101：兰芷（tag 439）+改天道（tag 440）消解——135/184 映射，deferred 49→47。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100/、-b101/",
    "ambiguous": false,
    "resolution": {
     "date": "2026-10-16",

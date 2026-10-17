@@ -878,7 +878,7 @@
    "skills": [
     {
      "name": "gtiandao",
-     "mapping": null
+     "mapping": "host:g_tiandao"
     },
     {
      "name": "gxianyin",

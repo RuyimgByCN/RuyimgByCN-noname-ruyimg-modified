@@ -8895,8 +8895,13 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         let has_tian_dao = tian_dao
                             .map(|d| ctx.core.has_skill(r, d))
                             .unwrap_or(false);
-                        let has_any_hes =
-                            has_tian_dao && (!p.hand.is_empty() || !p.equips.is_empty());
+                        // 改天道（swd 孤月）：同天道——hes 全量可改判
+                        let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
+                        let has_g_tiandao = g_tiandao
+                            .map(|d| ctx.core.has_skill(r, d))
+                            .unwrap_or(false);
+                        let has_any_hes = (has_tian_dao || has_g_tiandao)
+                            && (!p.hand.is_empty() || !p.equips.is_empty());
                         let has_black = p
                             .hand
                             .iter()
@@ -8935,14 +8940,19 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     let tian_dao_holders_any = tian_dao
                         .map(|d| ctx.core.has_skill(rewriter, d))
                         .unwrap_or(false);
+                    // 改天道持有者（swd 孤月）：同天道——hes 全量可打
+                    let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
+                    let g_tiandao_holders_any = g_tiandao
+                        .map(|d| ctx.core.has_skill(rewriter, d))
+                        .unwrap_or(false);
                     for c in ctx.core.player(rewriter).hand.iter().copied() {
-                        if tian_dao_holders_any || gui_cai_holders_any || is_black(c) {
+                        if tian_dao_holders_any || g_tiandao_holders_any || gui_cai_holders_any || is_black(c) {
                             options.push(ChoiceOption::Card(c));
                         }
                     }
-                    // 装备区：黑色牌（鬼道路径）或天道持有者任意装备
+                    // 装备区：黑色牌（鬼道路径）或天道/改天道持有者任意装备
                     for c in ctx.core.player(rewriter).equips.iter().copied() {
-                        if tian_dao_holders_any || is_black(c) {
+                        if tian_dao_holders_any || g_tiandao_holders_any || is_black(c) {
                             options.push(ChoiceOption::Card(c));
                         }
                     }
@@ -9103,6 +9113,8 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
             // 与鬼道/鬼才并列（座位序同队）
             let tian_dao =
                 ctx.catalog.skill_by_name(crate::content::standard::BOSS_TIANDAO);
+            // 改天道（swd 孤月）：hes 任意牌改判——与天道/鬼道/鬼才并列入队
+            let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
             let rewriters: Vec<PlayerId> = ctx
                 .core
                 .seat_order_from(self.owner)
@@ -9111,7 +9123,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     let has = |d: Option<crate::ids::SkillDefId>| {
                         d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
                     };
-                    has(gui_dao) || has(gui_cai) || has(tian_dao)
+                    has(gui_dao) || has(gui_cai) || has(tian_dao) || has(g_tiandao)
                 })
                 .collect();
             self.current = Some(JudgementProgress {

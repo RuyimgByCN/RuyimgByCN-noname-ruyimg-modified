@@ -1205,6 +1205,10 @@ pub enum HostBehavior {
     /// 自己的已受伤角色（含自己）按座位序各回复 1。上游含 `check`（可放弃）
     /// ——原生恒发动近似登记。
     SwdLanzhi,
+    /// 改天道（tag 440，deferred 消解批 孤月）：全局判定——hes 任意牌改判
+    /// 并获得原判定牌（同 Boss 张角「天道」语义）。查询型能力：判定流程经
+    /// `skill_by_name` 查询持有者，无独立触发时机。
+    SwdGTiandao,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1486,6 +1490,7 @@ impl HostBehavior {
             HostBehavior::BossBaiyiThunder => 437,
             HostBehavior::D3Moyan => 438,
             HostBehavior::SwdLanzhi => 439,
+            HostBehavior::SwdGTiandao => 440,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2166,6 +2171,7 @@ impl HostBehavior {
             437 => HostBehavior::BossBaiyiThunder,
             438 => HostBehavior::D3Moyan,
             439 => HostBehavior::SwdLanzhi,
+            440 => HostBehavior::SwdGTiandao,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2186,7 +2192,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 436] = [
+        pub const ALL: [HostBehavior; 437] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2623,6 +2629,7 @@ impl HostBehavior {
         HostBehavior::XianluhuiCard,
         HostBehavior::D3Moyan,
         HostBehavior::SwdLanzhi,
+        HostBehavior::SwdGTiandao,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2821,6 +2828,7 @@ impl HostBehavior {
             HostBehavior::BossBaiyiThunder => "host:baiyi_thunder",
             HostBehavior::D3Moyan => "host:d3_moyan",
             HostBehavior::SwdLanzhi => "host:lanzhi",
+            HostBehavior::SwdGTiandao => "host:g_tiandao",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3151,6 +3159,7 @@ impl HostBehavior {
             HostBehavior::WudianLiangceRemain => None,
             // 归汉：目录锚（limited 确认逻辑在 DyingSaveMachine 内联）
             HostBehavior::WudianGuihan => None,
+            HostBehavior::SwdGTiandao => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
             // target shaBefore，原生以 CardUsed+targets 等价承载）
             HostBehavior::SwdTiebi => Some(TriggerMeta {
@@ -5741,6 +5750,7 @@ impl HostSkillBehavior {
             HostBehavior::WudianFuchou => (None, None),
             // 归汉：目录锚（无提取）
             HostBehavior::WudianGuihan => (None, None),
+            HostBehavior::SwdGTiandao => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
                 EventData::CardUsed(u) => (u.targets.first().copied(), None),
@@ -5961,6 +5971,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianFuchou => false,
             HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianGuihan => false,
+            HostBehavior::SwdGTiandao => false,
             // 铁壁：杀指定了与持有者距离 ≤1 的目标，持有者有黑牌
             HostBehavior::SwdTiebi => {
                 let hit = matches!(event,
@@ -17704,6 +17715,7 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::WudianLiangceRemain => Flow::Done,
             // 归汉：目录锚（无独立效果步）
             HostBehavior::WudianGuihan => Flow::Done,
+            HostBehavior::SwdGTiandao => Flow::Done,
             // 禁言：查询锚（PlayCard 门），无独立效果步
             HostBehavior::WudianJinyan => Flow::Done,
             // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
