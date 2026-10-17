@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 魅惑（tag 480，swd deferred 消解批 125，`meihuo`）：自己失去装备
+    /// 且装备区已空时可选——选一名其他有牌角色，获得其一张牌（装备牌则
+    /// 直接装备之）。
+    SwdMeihuo,
     /// 守印（tag 479，swd deferred 消解批 124，`shouyin`）：限定技——任意
     /// 角色濒死时（自己未翻面）可发动：翻面自己，随后按座位序将全部已受伤
     /// 角色回复至满体力。
@@ -1653,6 +1657,7 @@ impl HostBehavior {
             HostBehavior::SwdRumeng => 477,
             HostBehavior::SwdYishan => 478,
             HostBehavior::SwdShouyin => 479,
+            HostBehavior::SwdMeihuo => 480,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2373,6 +2378,7 @@ impl HostBehavior {
             477 => HostBehavior::SwdRumeng,
             478 => HostBehavior::SwdYishan,
             479 => HostBehavior::SwdShouyin,
+            480 => HostBehavior::SwdMeihuo,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2393,7 +2399,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 476] = [
+        pub const ALL: [HostBehavior; 477] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2870,6 +2876,7 @@ impl HostBehavior {
         HostBehavior::SwdRumeng,
         HostBehavior::SwdYishan,
         HostBehavior::SwdShouyin,
+        HostBehavior::SwdMeihuo,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3108,6 +3115,7 @@ impl HostBehavior {
             HostBehavior::SwdRumeng => "host:rumeng",
             HostBehavior::SwdYishan => "host:yishan",
             HostBehavior::SwdShouyin => "host:shouyin",
+            HostBehavior::SwdMeihuo => "host:meihuo",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3582,6 +3590,14 @@ impl HostBehavior {
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 魅惑：自己失去装备牌后（可选）
+            HostBehavior::SwdMeihuo => Some(TriggerMeta {
+                event: EventKind::CardsLost,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -5823,6 +5839,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 魅惑（swd 批 125）：目录技能名（失去装备后取他人一张牌）。
+pub const SWD_MEIHUO_KEY: &str = "meihuo";
+
 /// 守印（swd 批 124）：目录技能名（濒死全员回复限定技）。
 pub const SWD_SHOUYIN_KEY: &str = "shouyin";
 
@@ -6663,6 +6682,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdRumeng => (None, None),
             HostBehavior::SwdYishan => (None, None),
             HostBehavior::SwdShouyin => (None, None),
+            HostBehavior::SwdMeihuo => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6996,6 +7016,19 @@ impl SkillBehavior for HostSkillBehavior {
                     if *player == owner && !ctx.state.player(owner).niepan_used),
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
+            // 魅惑：自己失去装备牌（来源区=装备）且装备区已空
+            HostBehavior::SwdMeihuo => match event {
+                EventData::CardsLost {
+                    player, origins, ..
+                } => {
+                    *player == owner
+                        && origins
+                            .iter()
+                            .any(|o| *o == crate::event::LostOrigin::Equip)
+                        && ctx.state.player(owner).equips.is_empty()
+                }
+                _ => false,
+            },
             // 守印：任意角色濒死、自己未发动且未翻面
             HostBehavior::SwdShouyin => matches!(event, EventData::Dying { .. })
                 && !ctx.state.player(owner).shouyin_used
@@ -20059,6 +20092,93 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
+            // 魅惑：选目标 → 取其一张牌（装备牌则装备之）
+            HostBehavior::SwdMeihuo => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && (!ctx.core.player(*p).hand.is_empty()
+                                    || !ctx.core.player(*p).equips.is_empty())
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "meihuo_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(target);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(target)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(target).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "meihuo_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let is_equip = ctx.catalog.card_kind(card).is_equip();
+                    ctx.take_owned_card(target, card);
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "魅惑",
+                        owner: self.owner,
+                    });
+                    if is_equip {
+                        // 装备牌：入手 → Equipped 帧（commit_equip 全托管）
+                        ctx.core.player_mut(self.owner).hand.push(card);
+                        ctx.emit(EventData::Equipped {
+                            player: self.owner,
+                            card,
+                            replaced: None,
+                        });
+                    } else {
+                        ctx.core.player_mut(self.owner).hand.push(card);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 守印：置限定位 + 自翻面 + 全员回复至满（座位序）
             HostBehavior::SwdShouyin => {
                 ctx.core.player_mut(self.owner).shouyin_used = true;

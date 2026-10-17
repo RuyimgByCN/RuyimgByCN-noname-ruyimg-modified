@@ -31,6 +31,18 @@ pub enum EventKind {
     /// 濒死救回（U05 xianjian 焚逝挂点，规则 v157）：固有救援机在
     /// 体力>0 且脱离濒死时发射（上游 dyingAfter 时序等价）。
     DyingSaved,
+    /// 失去牌（swd 批 125，规则 v312）：手牌被弃置/交出或装备被取走时
+    /// 发射（上游 `loseEnd` 触发窗；装备替换过程不发——上游 `equiping`
+    /// 期过滤同口径）。
+    CardsLost,
+}
+
+/// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LostOrigin {
+    Hand,
+    Equip,
+    Judge,
 }
 
 /// 伤害属性：普通 / 火 / 雷。属性伤害触发铁索连环传导。
@@ -148,6 +160,13 @@ pub enum EventData {
         player: PlayerId,
         cards: Vec<CardId>,
     },
+    /// 失去牌（swd 批 125）：`origins` 与 `cards` 等长，标出每张的来源区
+    /// （上游 `card.original`——'h'/'e'/'j'）。
+    CardsLost {
+        player: PlayerId,
+        cards: Vec<CardId>,
+        origins: Vec<LostOrigin>,
+    },
     /// 失去体力（逐技对照批三 v77）：直接扣减体力——不经护甲、不触发
     /// 伤害类窗口/铁索/伤害来源技；体力 ≤0 进入濒死（上游 loseHp）。
     LoseHp {
@@ -179,6 +198,7 @@ impl EventData {
             EventData::Equipped { .. } => EventKind::Equipped,
             EventData::Linked { .. } => EventKind::Linked,
             EventData::CardsDiscarded { .. } => EventKind::CardsDiscarded,
+            EventData::CardsLost { .. } => EventKind::CardsLost,
             EventData::TurnOverBefore { .. } => EventKind::TurnOverBefore,
             EventData::TurnOvered { .. } => EventKind::TurnOvered,
             EventData::LoseHp { .. } => EventKind::LoseHp,

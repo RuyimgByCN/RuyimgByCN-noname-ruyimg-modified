@@ -1251,6 +1251,92 @@ impl Engine {
         })
     }
 
+    /// 测试/工具：从某玩家手牌/装备区取走一张（走 `take_owned_card`
+    /// 语义：区移除、装备技撤销、义山记录钩），并**发射失去牌事件**
+    /// （CardsLost，走完整结算——失去牌触发类技能照常开窗）。取走后牌
+    /// 入弃牌堆。
+    pub fn debug_take_owned_card(&mut self, player: PlayerId, card: CardId) -> CommandOutcome {
+        if self.state.core.outcome.is_some() {
+            return CommandOutcome::Rejected(RejectReason::MatchOver);
+        }
+        if self.state.resolution.open_choice.is_some() {
+            return CommandOutcome::Rejected(RejectReason::ChoicePending);
+        }
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        let in_hand = work.core.player(player).hand.iter().position(|c| *c == card);
+        let in_equips = work
+            .core
+            .player(player)
+            .equips
+            .iter()
+            .position(|c| *c == card);
+        let origin = if let Some(pos) = in_hand {
+            work.core.player_mut(player).hand.remove(pos);
+            crate::event::LostOrigin::Hand
+        } else if let Some(pos) = in_equips {
+            work.core.player_mut(player).equips.remove(pos);
+            crate::kernel::revoke_equip_skills(&mut work.core, &self.catalog, player, card);
+            crate::event::LostOrigin::Equip
+        } else {
+            panic!("card {card} not in hand or equips of {player}");
+        };
+        crate::machine::note_cards_lost(&mut work.core, &self.catalog, player, &[card]);
+        work.core.discard.push(card);
+        crate::resolution::push_frame(
+            &mut work.resolution,
+            EventData::CardsLost {
+                player,
+                cards: vec![card],
+                origins: vec![origin],
+            },
+        );
+        self.finish_segment(work, log_mark)
+    }
+
+    /// 旧签名兼容（不发射事件；仅供无触发面测试布阵）。
+    pub fn debug_take_owned_card_quiet(&mut self, player: PlayerId, card: CardId) {
+        let in_hand = self
+            .state
+            .core
+            .player(player)
+            .hand
+            .iter()
+            .position(|c| *c == card);
+        if let Some(pos) = in_hand {
+            self.state.core.player_mut(player).hand.remove(pos);
+            crate::machine::note_cards_lost(
+                &mut self.state.core,
+                &self.catalog,
+                player,
+                &[card],
+            );
+            self.state.core.discard.push(card);
+            return;
+        }
+        let in_equips = self
+            .state
+            .core
+            .player(player)
+            .equips
+            .iter()
+            .position(|c| *c == card);
+        if let Some(pos) = in_equips {
+            self.state.core.player_mut(player).equips.remove(pos);
+            crate::kernel::revoke_equip_skills(&mut self.state.core, &self.catalog, player, card);
+            crate::machine::note_cards_lost(
+                &mut self.state.core,
+                &self.catalog,
+                player,
+                &[card],
+            );
+            self.state.core.discard.push(card);
+            return;
+        }
+        panic!("card {card} not in hand or equips of {player}");
+    }
+
     /// 测试/工具：从手牌弃置一张（走正常弃置管线：移出手牌、入弃堆、
     /// 义山记录钩、日志）。
     pub fn debug_discard_card(&mut self, player: PlayerId, card: CardId) {
@@ -6257,6 +6343,26 @@ fn push_event_data(h: &mut Hasher, data: &EventData) {
             push_u8(h, 14);
             push_u8(h, *player);
             push_cards(h, cards);
+        }
+        EventData::CardsLost {
+            player,
+            cards,
+            origins,
+        } => {
+            // swd 批 125（判别 15）
+            push_u8(h, 15);
+            push_u8(h, *player);
+            push_cards(h, cards);
+            for o in origins {
+                push_u8(
+                    h,
+                    match o {
+                        crate::event::LostOrigin::Hand => 0,
+                        crate::event::LostOrigin::Equip => 1,
+                        crate::event::LostOrigin::Judge => 2,
+                    },
+                );
+            }
         }
     }
 }

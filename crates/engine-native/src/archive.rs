@@ -366,6 +366,7 @@ fn enc_event_kind(w: &mut W, v: &EventKind) {
         TurnOvered => 17,
         LoseHp => 18,
         DyingSaved => 19,
+        CardsLost => 20,
     };
     w.u8(t);
 }
@@ -393,6 +394,7 @@ fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
         17 => TurnOvered,
         18 => LoseHp,
         19 => DyingSaved,
+        20 => CardsLost,
         t => return Err(ArchiveError::BadTag("event_kind", t)),
     })
 }
@@ -639,6 +641,26 @@ fn enc_event_data(w: &mut W, v: &EventData) {
             enc_pid(w, player);
             w.u32(*amount);
         }
+        EventData::CardsLost {
+            player,
+            cards,
+            origins,
+        } => {
+            // swd 批 125（判别 18，表尾追加）
+            w.u8(18);
+            enc_pid(w, player);
+            w.len(cards.len());
+            for c in cards {
+                w.u32(*c);
+            }
+            for o in origins {
+                w.u8(match o {
+                    crate::event::LostOrigin::Hand => 0,
+                    crate::event::LostOrigin::Equip => 1,
+                    crate::event::LostOrigin::Judge => 2,
+                });
+            }
+        }
         EventData::DyingSaved { player, source } => {
             // 濒死救回（tag 17，表尾追加；焚逝挂点规则 v157）
             w.u8(17);
@@ -790,6 +812,25 @@ fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
             let player = dec_pid(r)?;
             let cards = r.vec(|r| r.u32())?;
             EventData::CardsDiscarded { player, cards }
+        }
+        18 => {
+            let player = dec_pid(r)?;
+            let cards = r.vec(|r| r.u32())?;
+            let n = cards.len();
+            let mut origins = Vec::with_capacity(n);
+            for _ in 0..n {
+                origins.push(match r.u8()? {
+                    0 => crate::event::LostOrigin::Hand,
+                    1 => crate::event::LostOrigin::Equip,
+                    2 => crate::event::LostOrigin::Judge,
+                    t => return Err(ArchiveError::BadTag("lost_origin", t)),
+                });
+            }
+            EventData::CardsLost {
+                player,
+                cards,
+                origins,
+            }
         }
         t => return Err(ArchiveError::BadTag("event_data", t)),
     })

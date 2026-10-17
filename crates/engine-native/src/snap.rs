@@ -856,6 +856,20 @@ fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pids(&d.redirect_chain, b)?;
             check_opt_card(d.card, b)?;
         }
+        EventData::CardsLost {
+            player,
+            cards,
+            origins,
+        } => {
+            check_pid(*player, b)?;
+            check_cards(cards, b)?;
+            if cards.len() != origins.len() {
+                return Err(SnapshotError::IdOutOfBounds {
+                    what: "cards_lost_origins",
+                    got: origins.len() as u64,
+                });
+            }
+        }
         EventData::LoseHp { player, .. } => {
             check_pid(*player, b)?;
         }

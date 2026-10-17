@@ -1910,7 +1910,7 @@
     },
     {
      "name": "meihuo",
-     "mapping": null
+     "mapping": "host:meihuo"
     }
    ]
   },

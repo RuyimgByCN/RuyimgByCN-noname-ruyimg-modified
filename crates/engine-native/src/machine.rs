@@ -181,8 +181,23 @@ impl<'a> Ctx<'a> {
 
     // ---- 事件栈 ----
 
-    /// 当前（栈顶）帧号。机器只在自己的恢复深度上运行，栈顶即触发帧。
+    /// 当前事件帧号：机器只在自己的恢复深度上运行，栈顶即触发帧；但机器
+    /// 在一步内可能发射**失去牌子帧**（`CardsLost`——仅用于触发失去牌类
+    /// 技能，不改变调用方正在处理的事件），此访问器跳过它，保证「我正处理
+    /// 的那个事件」语义稳定。需要裸栈顶时用 `top_frame_id`。
     pub fn current_frame_id(&self) -> crate::ids::EventId {
+        self.res
+            .stack
+            .iter()
+            .rev()
+            .find(|f| f.kind != crate::event::EventKind::CardsLost)
+            .or_else(|| self.res.stack.last())
+            .expect("machine runs with a frame on stack")
+            .id
+    }
+
+    /// 裸栈顶帧号（含失去牌子帧）。
+    pub fn top_frame_id(&self) -> crate::ids::EventId {
         self.res.stack.last().expect("machine runs with a frame on stack").id
     }
 
@@ -327,18 +342,39 @@ impl<'a> Ctx<'a> {
     /// 不存在则 panic：调用方先验证。
     pub fn take_owned_card(&mut self, player: PlayerId, card: CardId) {
         let is_equip = self.catalog.card_kind(card).is_equip();
-        let p = self.core.player_mut(player);
-        if let Some(pos) = p.hand.iter().position(|c| *c == card) {
-            p.hand.remove(pos);
+        let in_hand = self
+            .core
+            .player(player)
+            .hand
+            .iter()
+            .position(|c| *c == card);
+        if let Some(pos) = in_hand {
+            self.core.player_mut(player).hand.remove(pos);
+            self.note_cards_lost(player, &[card]);
+            self.emit(EventData::CardsLost {
+                player,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Hand],
+            });
             return;
         }
-        if let Some(pos) = p.equips.iter().position(|c| *c == card) {
-            p.equips.remove(pos);
-            #[allow(dropping_references)] // 显式提前结束可变借用（直觉性标注）
-            drop(p);
+        let in_equips = self
+            .core
+            .player(player)
+            .equips
+            .iter()
+            .position(|c| *c == card);
+        if let Some(pos) = in_equips {
+            self.core.player_mut(player).equips.remove(pos);
             if is_equip {
                 crate::kernel::revoke_equip_skills(self.core, self.catalog, player, card);
             }
+            self.note_cards_lost(player, &[card]);
+            self.emit(EventData::CardsLost {
+                player,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Equip],
+            });
             return;
         }
         panic!("card {card} not in hand or equips of {player}");
@@ -362,6 +398,11 @@ impl<'a> Ctx<'a> {
         self.take_hand_card(player, card);
         self.to_discard(card);
         self.note_cards_lost(player, &[card]);
+        self.emit(EventData::CardsLost {
+            player,
+            cards: vec![card],
+            origins: vec![crate::event::LostOrigin::Hand],
+        });
         self.out.push(LogEvent::CardDiscarded {
             player,
             cards: vec![card],
@@ -423,6 +464,11 @@ impl<'a> Ctx<'a> {
     pub fn give_hand_card(&mut self, from: PlayerId, to: PlayerId, card: CardId) {
         self.take_hand_card(from, card);
         self.note_cards_lost(from, &[card]);
+        self.emit(EventData::CardsLost {
+            player: from,
+            cards: vec![card],
+            origins: vec![crate::event::LostOrigin::Hand],
+        });
         self.core.player_mut(to).hand.push(card);
         self.emit(EventData::CardsMoved {
             cards: vec![card],
