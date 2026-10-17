@@ -1614,6 +1614,7 @@ impl Engine {
 
     fn build_view(&self, seat: Option<PlayerId>) -> crate::view::PlayerView {
         let core = &self.state.core;
+        let roles = core.identity_roles();
         let players = core
             .players
             .iter()
@@ -1621,6 +1622,12 @@ impl Engine {
             .map(|(i, p)| {
                 let i = i as PlayerId;
                 let own = seat == Some(i);
+                // 身份可见性（RULE-IDENTITY-VIEW-RESTORE）：本人、主公（公开）
+                // 与已死亡（遗言公开）可见；其余他人身份不可见。
+                let role = roles.and_then(|rs| {
+                    let r = *rs.get(i as usize)?;
+                    (own || r == crate::state::Role::Lord || !p.alive).then_some(r)
+                });
                 // 国战门控（ADR 0757）：本座位双将可见；他人只见明置槽。
                 let mut generals: [Option<crate::view::GeneralView>; 2] = [None, None];
                 for (s, g_slot) in p.general_slots.iter().enumerate() {
@@ -1666,6 +1673,7 @@ impl Engine {
                     },
                     generals,
                     revealed_generals: p.revealed_generals,
+                    role,
                 }
             })
             .collect();

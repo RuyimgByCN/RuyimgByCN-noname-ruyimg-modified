@@ -7,6 +7,7 @@
 
 use crate::event::Phase;
 use crate::ids::{CardId, PlayerId};
+use crate::state::Role;
 use crate::GameAction;
 use crate::state::{Winner};
 
@@ -50,6 +51,10 @@ pub struct PlayerCellView {
     pub turned_over: bool,
     /// 已授技能名（公开信息；T13 起投影，排序稳定）。
     pub skills: Vec<&'static str>,
+    /// 身份（仅身份局有值）：本人视角、主公（公开）与已死亡（遗言公开，
+    /// 上游 `dieAfter`）成员可见；其余存活非主公成员的他人身份为 `None`
+    /// （信息隔离）。非身份局恒 `None`。
+    pub role: Option<Role>,
 }
 
 /// 单个座位的完整可见视图。

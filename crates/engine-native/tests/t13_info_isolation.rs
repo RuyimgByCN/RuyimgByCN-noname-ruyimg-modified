@@ -276,3 +276,64 @@ fn isolation_kingdoms_seat_matrix() {
         }
     }
 }
+
+/// RULE-IDENTITY-VIEW-RESTORE：身份可见视图——本人、主公（公开）与已死亡
+/// （遗言公开）成员可见；其余存活非主公成员的他人身份不可见。死亡公开后
+/// 逐提交恢复仍一致（身份可见性由投影确定性导出，不入状态）。
+#[test]
+fn identity_role_visibility_and_death_reveal() {
+    use engine_native::event::DamageNature;
+    use engine_native::state::Role;
+
+    let mut e = Engine::new_identity(9201, 5);
+    let roles = e.roles().expect("身份局身份表").to_vec();
+    assert_eq!(roles[0], Role::Lord, "座位 0 为主公");
+
+    for seat in 0u8..5 {
+        let v = e.ai_session(seat).view();
+        assert_eq!(
+            v.players[0].role,
+            Some(Role::Lord),
+            "主公身份对所有人公开（seat={seat}）"
+        );
+        assert_eq!(
+            v.players[seat as usize].role,
+            Some(roles[seat as usize]),
+            "本人可见自己身份（seat={seat}）"
+        );
+        for (i, cell) in v.players.iter().enumerate() {
+            let s = i as u8;
+            if s != seat && s != 0 && cell.alive {
+                assert_eq!(cell.role, None, "他人身份不可见（seat={seat} i={i}）");
+            }
+        }
+    }
+
+    // 击杀 1 号（5 点伤害 > 5 体力上限）→ 死亡后身份公开（遗言）。
+    let out = e.debug_deal_damage(None, 1, 9, DamageNature::Normal);
+    assert!(
+        matches!(out, engine_native::CommandOutcome::Accepted { .. }),
+        "{out:?}"
+    );
+    assert!(!e.debug_alive(1), "1 号应已死亡");
+    for seat in 0u8..5 {
+        if seat == 1 {
+            continue;
+        }
+        let v = e.ai_session(seat).view();
+        assert_eq!(
+            v.players[1].role,
+            Some(roles[1]),
+            "死者身份公开（seat={seat}）"
+        );
+    }
+
+    // 逐提交恢复：恢复件导出的可见身份与基准一致。
+    let snap = e.save();
+    let r = Engine::restore(&snap).expect("restore");
+    for seat in 0u8..5 {
+        let a = e.ai_session(seat).view();
+        let b = r.ai_session(seat).view();
+        assert_eq!(a, b, "恢复后座位 {seat} 视图（含身份可见性）一致");
+    }
+}

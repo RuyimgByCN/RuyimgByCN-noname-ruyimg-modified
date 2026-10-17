@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 43,
-  "open_count": 46,
+  "resolved_count": 44,
+  "open_count": 45,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -2216,13 +2216,21 @@
     "Gate 1b exit 0",
     "证据目录 README+日志"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "kernel-engineer",
    "tags": [
     "RULE",
     "T13"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "PlayerCellView 增 role：身份局本人/主公/死亡公开、其余隐藏（纯投影不入状态）；身份局逐命令恢复一致（non_prototype_script_parity + 死亡公开视图恢复断言）。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-rule-identity-view-restore/README.md"
+    ]
+   }
   },
   {
    "id": "RULE-MODE-REMAINDERS",
