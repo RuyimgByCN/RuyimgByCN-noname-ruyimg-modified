@@ -390,6 +390,19 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             p.turn_damage = p.turn_damage.saturating_add(amount.min(255) as u8);
         }
     }
+    // 护天护体（swd 批 131，规则 v314）：目标寄存护天牌时伤害以「体力降至
+    // 寄存数」为上限（上游 hutian2 damageBegin priority -55 `trigger.num =
+    // hp - storage.hutian2.length` 同口径）
+    {
+        let hold = ctx.core.player(d.target).hutian_hold.len() as i32;
+        if hold > 0 {
+            let hp = ctx.core.player(d.target).hp;
+            let cap = hp - hold;
+            if cap < amount as i32 {
+                amount = cap.max(0) as u32;
+            }
+        }
+    }
     let p = ctx.core.player_mut(d.target);
     // 无限体力（上游 Infinity）：伤害照常结算与记录，但不改变体力
     //（hp 保持 == max_hp，故「已受伤」类判据恒假——与上游一致）。
@@ -1092,11 +1105,48 @@ pub(crate) fn hlss_light_refill(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.player_mut(player).hp = max;
 }
 
+/// 护天归还（swd 批 131，规则 v314）：把持有者寄存于目标处的牌归还目标，
+/// 清理双方寄存状态（上游 `hutian3` 收束同口径）。
+pub(crate) fn hutian_return_deposit(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    let Some(target) = ctx.core.player_mut(owner).hutian_deposit.take() else {
+        return;
+    };
+    let cards = std::mem::take(&mut ctx.core.player_mut(target).hutian_hold);
+    ctx.core.player_mut(target).hutian_owner = None;
+    if !cards.is_empty() {
+        for c in cards.iter().copied() {
+            ctx.core.player_mut(target).hand.push(c);
+        }
+        ctx.log(LogEvent::CardsGiven {
+            from: owner,
+            to: target,
+            cards,
+        });
+    }
+    ctx.core.player_mut(owner).hutian_just_given = false;
+}
+
 /// 失去体力提交（逐技对照批三 v77）：直接扣减体力——不经护甲抵扣、
 /// 无伤害前置窗口/铁索传导/伤害来源触发技（LoseHp 是独立事件种）；
 /// 体力 ≤0 与伤害同口径进入濒死（上游 loseHp 语义）。
-pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, amount: u32) {
+pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, mut amount: u32) {
     if amount == 0 {
+        return;
+    }
+    // 护天护体（swd 批 131，规则 v314）：失去体力同样以「体力降至寄存数」
+    // 为上限（上游 hutian2 loseHpBegin 同口径）
+    {
+        let hold = ctx.core.player(player).hutian_hold.len() as i32;
+        if hold > 0 {
+            let hp = ctx.core.player(player).hp;
+            let cap = hp - hold;
+            if cap < amount as i32 {
+                amount = cap.max(0) as u32;
+            }
+        }
+    }
+    if amount == 0 {
+        ctx.log(LogEvent::HpLost { player, amount: 0 });
         return;
     }
     let p = ctx.core.player_mut(player);
@@ -3499,6 +3549,13 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 )));
             }
         }
+    }
+    // 护天（swd 批 131，规则 v314）：寄存只跨一个阶段边界（上游 `hutian4`
+    // 临时技在下一阶段边界移除 → `hutian3` 于下一次阶段收束归还）。原生
+    // 阶段收束的 commit 先于该阶段的触发窗，故「寄存当次的收束」看不到
+    // 寄存（just_given 尚未置位），**下一次阶段收束**即归还 ✓
+    if !begin && ctx.core.player(player).hutian_deposit.is_some() {
+        hutian_return_deposit(ctx, player);
     }
     // 颂词组技 songci_draw（swd 批 129，规则 v313）：弃牌阶段**收束**时若
     // 全部角色均已记录（无未记录者）→ 摸 1（上游 phaseDiscardEnd forced）
@@ -10025,6 +10082,9 @@ impl crate::catalog::SkillMachine for DeathMachine {
         // 死亡拦截（规则 v171 死亡取消型基建）：标记置位则跳过死亡执
         // 行（存活态保持——前置窗口技已重置体力；上游 dieBefore
         // trigger.cancel 同口径）。
+        // 护天归还（swd 批 131，规则 v314）：持有者死亡前置（上游 hutian3
+        // dieBegin forced）——把其寄存于目标处的牌归还目标并清理双方状态
+        hutian_return_deposit(ctx, self.player);
         if ctx.core.player(self.player).death_cancelled {
             ctx.core.player_mut(self.player).death_cancelled = false;
             // 取消死亡=脱离濒死（空洞印批⑥：hp 由前置窗口技重置；不清

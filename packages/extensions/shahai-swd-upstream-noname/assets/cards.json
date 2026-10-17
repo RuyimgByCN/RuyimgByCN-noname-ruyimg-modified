@@ -1766,7 +1766,7 @@
     },
     {
      "name": "hutian",
-     "mapping": null
+     "mapping": "host:hutian"
     }
    ]
   },

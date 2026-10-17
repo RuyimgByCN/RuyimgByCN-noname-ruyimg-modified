@@ -281,6 +281,16 @@ pub struct PlayerState {
     /// 颂词·已发动过的目标（swd 批 129，规则 v313）：上游
     /// `storage.songci`（按座位序；全部角色均已记录时弃牌阶段末摸 1）。
     pub songci_targets: Vec<PlayerId>,
+    /// 护天·寄存目标（swd 批 131，规则 v314）：上游 `storage.hutian`
+    /// （寄存方视角；Some = 牌寄存于该角色处）。
+    pub hutian_deposit: Option<PlayerId>,
+    /// 护天·刚寄存位（同批）：上游 `hutian4` 临时技（默认 expire=
+    /// phaseAfter/phaseBefore）——寄存只跨一个阶段边界，期间不归还。
+    pub hutian_just_given: bool,
+    /// 护天·寄存于此的牌（同批）：上游 `storage.hutian2`（被寄存方视角）。
+    pub hutian_hold: Vec<CardId>,
+    /// 护天·寄存方（同批）：被寄存方记录谁寄存（归还时用）。
+    pub hutian_owner: Option<PlayerId>,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -392,6 +402,10 @@ impl PlayerState {
             yishan_lost: Vec::new(),
             shouyin_used: false,
             songci_targets: Vec::new(),
+            hutian_deposit: None,
+            hutian_just_given: false,
+            hutian_hold: Vec::new(),
+            hutian_owner: None,
         }
     }
 }

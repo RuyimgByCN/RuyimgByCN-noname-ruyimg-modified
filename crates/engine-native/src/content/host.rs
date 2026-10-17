@@ -1309,6 +1309,12 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 护天（tag 487，swd deferred 消解批 131，`hutian`）：结束阶段可选——
+    /// 选任意张牌（手/装备）寄存于一名体力上限不低于张数的其他角色处；
+    /// 其体力低于寄存数时回复至该数；寄存期间其受到的伤害/失去体力以
+    /// 「体力降至寄存数」为上限；寄存只跨一个阶段边界，随后归还（归还由
+    /// 阶段收束/死亡内联承载）。
+    Hutian,
     /// 天香（tag 485，swd deferred 消解批 130，`tianxiang`）：受到伤害前
     /// 可选——弃一张红桃手牌，把该伤害转移给一名其他角色；其承受后按其
     /// 实际失去的体力摸等量牌（组技 `tianxiang2`，运行时授予，tag 486）。
@@ -1686,6 +1692,7 @@ impl HostBehavior {
             HostBehavior::Songci => 484,
             HostBehavior::Tianxiang => 485,
             HostBehavior::Tianxiang2 => 486,
+            HostBehavior::Hutian => 487,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2413,6 +2420,7 @@ impl HostBehavior {
             484 => HostBehavior::Songci,
             485 => HostBehavior::Tianxiang,
             486 => HostBehavior::Tianxiang2,
+            487 => HostBehavior::Hutian,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2433,7 +2441,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 483] = [
+        pub const ALL: [HostBehavior; 484] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2917,6 +2925,7 @@ impl HostBehavior {
         HostBehavior::Songci,
         HostBehavior::Tianxiang,
         HostBehavior::Tianxiang2,
+        HostBehavior::Hutian,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3162,6 +3171,7 @@ impl HostBehavior {
             HostBehavior::Songci => "host:songci",
             HostBehavior::Tianxiang => "host:tianxiang",
             HostBehavior::Tianxiang2 => "host:tianxiang2",
+            HostBehavior::Hutian => "host:hutian",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3636,6 +3646,14 @@ impl HostBehavior {
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 护天：自己阶段结束（可选）
+            HostBehavior::Hutian => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -5921,6 +5939,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 护天（swd 批 131）：目录技能名（阶段结束寄存牌作护体）。
+pub const SWD_HUTIAN_KEY: &str = "hutian";
+
 /// 天香（swd 批 130）：目录技能名（受伤前弃红桃转移伤害）。
 pub const SWD_TIANXIANG_KEY: &str = "tianxiang";
 /// 天香·受（同批）：目录技能名（运行时授予；按失去体力摸牌后移除）。
@@ -6797,6 +6818,7 @@ impl HostSkillBehavior {
             HostBehavior::Songci => (None, None),
             HostBehavior::Tianxiang => (None, None),
             HostBehavior::Tianxiang2 => (None, None),
+            HostBehavior::Hutian => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7131,6 +7153,10 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
+            // 护天：自己阶段结束、手牌非空且当前无寄存
+            HostBehavior::Hutian => matches!(event, EventData::Phase { begin: false, .. })
+                && !ctx.state.player(owner).hand.is_empty()
+                && ctx.state.player(owner).hutian_deposit.is_none(),
             // 天香：自己受到未防止伤害且手中有红桃牌
             HostBehavior::Tianxiang => matches!(event,
                 EventData::Damage(d)
@@ -20312,6 +20338,122 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 护天：选任意张牌 → 选体力上限足够的目标 → 寄存 + 补至张数
+            HostBehavior::Hutian => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    let max = options.len();
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "hutian_cards",
+                            options,
+                            min: 1,
+                            max,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.cards = picked.iter().map(|c| u32::from(*c)).collect();
+                    let need = picked.len() as u16;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.player(*p).max_hp as u16 >= need
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "hutian_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive {
+                        return Flow::Done;
+                    }
+                    let cards: Vec<CardId> = self.cards.iter().map(|c| *c as CardId).collect();
+                    let count = cards.len() as i32;
+                    // 牌离场入寄存区（手牌移除 / 装备撤技后移除；不入弃堆）
+                    for c in cards.iter().copied() {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.take_hand_card(self.owner, c);
+                        } else if ctx.core.player(self.owner).equips.contains(&c) {
+                            ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                c,
+                            );
+                        } else {
+                            return Flow::Done;
+                        }
+                    }
+                    {
+                        let p = ctx.core.player_mut(self.owner);
+                        p.hutian_deposit = Some(target);
+                        p.hutian_just_given = true;
+                    }
+                    {
+                        let t = ctx.core.player_mut(target);
+                        t.hutian_owner = Some(self.owner);
+                        t.hutian_hold.extend(cards.iter().copied());
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "护天",
+                        owner: self.owner,
+                    });
+                    // 目标体力低于寄存数 → 回复至该数（上游 step2）
+                    let hp = ctx.core.player(target).hp;
+                    if hp < count {
+                        ctx.recover(target, (count - hp) as u32, None);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 天香：选红桃手牌 → 选目标 → 弃牌 + 伤害转移 + 授予天香·受
             HostBehavior::Tianxiang => match self.stage {
                 HostStage::Act => {

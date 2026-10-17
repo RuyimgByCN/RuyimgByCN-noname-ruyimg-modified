@@ -92,7 +92,10 @@ use crate::state::{
 /// `shouyin_used`。v95 字节被版本门禁拒绝。
 /// v97（2026-10-17，swd 颂词批 129）：`PlayerState` 追加颂词已发动目标表
 /// `songci_targets`。v96 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 97;
+/// v98（2026-10-17，swd 护天批 131）：`PlayerState` 追加护天四字段
+/// （`hutian_deposit`/`hutian_just_given`/`hutian_hold`/`hutian_owner`）。
+/// v97 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 98;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3407,6 +3410,26 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for t in &p.songci_targets {
             w.u8(*t);
         }
+        // 护天四字段（v98）
+        match p.hutian_deposit {
+            None => w.u8(0),
+            Some(t) => {
+                w.u8(1);
+                w.u8(t);
+            }
+        }
+        w.boolean(p.hutian_just_given);
+        w.len(p.hutian_hold.len());
+        for c in &p.hutian_hold {
+            w.u32(*c);
+        }
+        match p.hutian_owner {
+            None => w.u8(0),
+            Some(t) => {
+                w.u8(1);
+                w.u8(t);
+            }
+        }
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3780,6 +3803,18 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let yishan_lost = r.vec(|r| r.u32())?;
         let shouyin_used = r.boolean()?;
         let songci_targets = r.vec(|r| r.u8())?;
+        let hutian_deposit = match r.u8()? {
+            0 => None,
+            1 => Some(r.u8()?),
+            t => return Err(ArchiveError::BadTag("hutian_deposit", t)),
+        };
+        let hutian_just_given = r.boolean()?;
+        let hutian_hold = r.vec(|r| r.u32())?;
+        let hutian_owner = match r.u8()? {
+            0 => None,
+            1 => Some(r.u8()?),
+            t => return Err(ArchiveError::BadTag("hutian_owner", t)),
+        };
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3861,6 +3896,10 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             yishan_lost,
             shouyin_used,
             songci_targets,
+            hutian_deposit,
+            hutian_just_given,
+            hutian_hold,
+            hutian_owner,
             off_court,
             shuiyun_count,
             wangyou3_round,

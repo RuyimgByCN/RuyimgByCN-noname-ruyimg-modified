@@ -5299,6 +5299,26 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         for t in &p.songci_targets {
             push_u8(&mut h, *t);
         }
+        // 护天四字段（swd 批 131，规则 v314）
+        match p.hutian_deposit {
+            None => push_u8(&mut h, 0),
+            Some(t) => {
+                push_u8(&mut h, 1);
+                push_u8(&mut h, t);
+            }
+        }
+        push_u8(&mut h, p.hutian_just_given as u8);
+        push_u32(&mut h, p.hutian_hold.len() as u32);
+        for c in &p.hutian_hold {
+            push_u32(&mut h, *c);
+        }
+        match p.hutian_owner {
+            None => push_u8(&mut h, 0),
+            Some(t) => {
+                push_u8(&mut h, 1);
+                push_u8(&mut h, t);
+            }
+        }
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);
