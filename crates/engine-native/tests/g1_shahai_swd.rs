@@ -38,6 +38,28 @@ fn bridge(json: &str) -> ExtensionPack {
     out.pack
 }
 
+/// T12-SWD-EXTRA-CARDS-DISPOSITION 守护（2026-10-17）：包内 89 张；上游
+/// `list.js` 无行的 7 张为灵剑池（hslingjian，v198 有意建模），非「多余」；
+/// 错位旧值已随补切批勘误（hufu/zhiluxiaohu/mujiaren/shentoumianju/
+/// xingjunyan/zhufangshenshi/yangpijuan）。
+#[test]
+fn swd_extra_cards_disposition_guard() {
+    let json = std::fs::read_to_string(
+        repo_extensions_root().join("shahai-swd-upstream-noname/assets/cards.json"),
+    )
+    .expect("读 swd cards.json");
+    let pack = bridge(&json);
+    assert_eq!(pack.cards.len(), 89, "对账勘误后包内 89 张");
+    assert_eq!(
+        pack.cards
+            .iter()
+            .filter(|c| c.kind == CardKind::Hslingjian)
+            .count(),
+        7,
+        "灵剑池 7 张保留（上游 list.js 无行 ≠ 多余）"
+    );
+}
+
 use engine_native::content::extension::ExtensionPack;
 
 
