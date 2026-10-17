@@ -42,6 +42,7 @@ RUSTFLAGS="-D warnings" cargo check -p engine-native --all-targets   # 独立 CA
 | wasm | **20/0**（[wasm-tests.log](wasm-tests.log)） |
 | 14 golden | 重录 + 版本回退探针（304→303 全 14 场 mismatch，[probe-version-rollback.count](probe-version-rollback.count)）——[replay-golden-v304.log](replay-golden-v304.log) |
 | Gate 1b | `RUSTFLAGS="-D warnings" cargo check -p engine-native --all-targets` **exit 0**（[gate1b-all-targets.log](gate1b-all-targets.log)） |
+| 服务端 / 客户端冒烟 | game-server **49/0/0**（[game-server-tests.log](game-server-tests.log)）；客户端扩展存储冒烟 **8/8**（新包入目录后 `catalog_files_g1` 仍通过，[client-store-smoke.log](client-store-smoke.log)） |
 
 ## 边界（不属于本条目）
 
