@@ -84,7 +84,9 @@ use crate::state::{
 /// `extra_phase_lingwu`。v91 字节被版本门禁拒绝。
 /// v93（2026-10-17，swd 神焰批 121）：`PlayerState` 追加神焰限定位
 /// `shenyan_used` 与待蔓延目标 `shenyan_pending`。v92 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 93;
+/// v94（2026-10-17，swd 入梦批 122）：`PlayerState` 追加跳过弃牌阶段位
+/// `skip_discard_phase`。v93 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 94;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3344,6 +3346,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for t in &p.shenyan_pending {
             w.u8(*t);
         }
+        // 入梦跳过弃牌阶段（v94）
+        w.boolean(p.skip_discard_phase);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3713,6 +3717,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let niepan_used = r.boolean()?;
         let shenyan_used = r.boolean()?;
         let shenyan_pending = r.vec(|r| r.u8())?;
+        let skip_discard_phase = r.boolean()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3790,6 +3795,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             niepan_used,
             shenyan_used,
             shenyan_pending,
+            skip_discard_phase,
             off_court,
             shuiyun_count,
             wangyou3_round,

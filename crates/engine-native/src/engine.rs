@@ -5166,6 +5166,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         for t in &p.shenyan_pending {
             push_u8(&mut h, *t);
         }
+        // 入梦跳过弃牌阶段（swd 批 122，规则 v309）
+        push_u8(&mut h, p.skip_discard_phase as u8);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

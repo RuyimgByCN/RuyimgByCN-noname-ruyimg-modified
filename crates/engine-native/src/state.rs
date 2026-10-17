@@ -268,6 +268,9 @@ pub struct PlayerState {
     /// 神焰·待蔓延目标（同批）：上游 `storage.shenyan2`（原目标距离 ≤1 的
     /// 其他角色，座位序）——主伤害结算后逐个受 1 点无来源火伤。
     pub shenyan_pending: Vec<PlayerId>,
+    /// 入梦·跳过弃牌阶段（swd 批 122，规则 v309）：上游 `skip('phaseDiscard')`
+    /// ——弃牌阶段开始即跳过（本回合内一次性，用后清零）。
+    pub skip_discard_phase: bool,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -375,6 +378,7 @@ impl PlayerState {
             niepan_used: false,
             shenyan_used: false,
             shenyan_pending: Vec::new(),
+            skip_discard_phase: false,
         }
     }
 }

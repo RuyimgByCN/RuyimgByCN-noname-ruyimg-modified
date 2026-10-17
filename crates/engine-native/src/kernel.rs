@@ -2855,6 +2855,13 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                 }
             }
             Phase::Discard => {
+                // 入梦（swd 闻人绘，批 122，规则 v309）：跳过弃牌阶段位
+                //（上游 `skip('phaseDiscard')` 同口径；一次性，用后清零）
+                if ctx.core.player(player).skip_discard_phase {
+                    ctx.core.player_mut(player).skip_discard_phase = false;
+                    ctx.core.turn.discard_phase_discarded = 0;
+                    return;
+                }
                 // 虚失（Boss 朱厌，规则 v225）：出牌阶段结束自翻面（上游
                 // phaseUseEnd turnOver 同口径；锚=弃牌阶段开始[原生无
                 // PhaseEnd 帧]；经 TurnOverBefore 走翻面提交）

@@ -1526,7 +1526,7 @@
     },
     {
      "name": "rumeng",
-     "mapping": null
+     "mapping": "host:rumeng"
     }
    ]
   },

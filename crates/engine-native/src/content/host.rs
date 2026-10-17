@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 入梦（tag 477，swd deferred 消解批 122，`rumeng`）：他人出牌阶段
+    /// 开始前可选——弃一张非基本牌（手/装备），令其弃一张基本牌，否则
+    /// 跳过其出牌与弃牌阶段。
+    SwdRumeng,
     /// 神焰（tag 476，swd deferred 消解批 121，`shenyan`）：限定技——你
     /// 造成的**火属性**伤害 +1，并在结算后令原目标距离 ≤1 的其他角色
     /// （座位序，不含你与原目标）各受 1 点无来源火伤。
@@ -1639,6 +1643,7 @@ impl HostBehavior {
             HostBehavior::MbcmQingzheng => 474,
             HostBehavior::SwdLingwu => 475,
             HostBehavior::SwdShenyan => 476,
+            HostBehavior::SwdRumeng => 477,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2356,6 +2361,7 @@ impl HostBehavior {
             474 => HostBehavior::MbcmQingzheng,
             475 => HostBehavior::SwdLingwu,
             476 => HostBehavior::SwdShenyan,
+            477 => HostBehavior::SwdRumeng,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2376,7 +2382,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 473] = [
+        pub const ALL: [HostBehavior; 474] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2850,6 +2856,7 @@ impl HostBehavior {
         HostBehavior::MbcmQingzheng,
         HostBehavior::SwdLingwu,
         HostBehavior::SwdShenyan,
+        HostBehavior::SwdRumeng,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3085,6 +3092,7 @@ impl HostBehavior {
             HostBehavior::MbcmQingzheng => "host:mbcmqingzheng",
             HostBehavior::SwdLingwu => "host:lingwu",
             HostBehavior::SwdShenyan => "host:shenyan",
+            HostBehavior::SwdRumeng => "host:rumeng",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3558,6 +3566,14 @@ impl HostBehavior {
             }),
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 入梦：任意角色出牌阶段开始前（可选）
+            HostBehavior::SwdRumeng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
@@ -5776,6 +5792,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 入梦（swd 闻人绘，批 122）：目录技能名（他人出牌阶段前弃牌/跳阶段）。
+pub const SWD_RUMENG_KEY: &str = "rumeng";
+
 /// 神焰（swd 夜鸦熙，批 121）：目录技能名（火伤 +1 + 邻位蔓延；两面同机）。
 pub const SWD_SHENYAN_KEY: &str = "shenyan";
 
@@ -6543,6 +6562,7 @@ impl HostSkillBehavior {
             HostBehavior::MbcmQingzheng => (None, None),
             HostBehavior::SwdLingwu => (None, None),
             HostBehavior::SwdShenyan => (None, None),
+            HostBehavior::SwdRumeng => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6876,6 +6896,17 @@ impl SkillBehavior for HostSkillBehavior {
                     if *player == owner && !ctx.state.player(owner).niepan_used),
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
+            // 入梦：他人出牌阶段开始且自己手/装备中有非基本牌
+            HostBehavior::SwdRumeng => match event {
+                EventData::Phase { player, phase: crate::event::Phase::Play, begin: true } => {
+                    *player != owner
+                        && ctx.state.player(owner).alive
+                        && ctx.state.player(owner).hand.iter().chain(ctx.state.player(owner).equips.iter()).any(|c| {
+                            !ctx.catalog.cards[*c as usize].kind.is_basic_kind()
+                        })
+                }
+                _ => false,
+            },
             // 神焰：前置面=自己造成的未防止火伤且未发动；结算面=已发动且
             // 有待蔓延目标（同一伤害事件的两面按状态区分）
             HostBehavior::SwdShenyan => match event {
@@ -19914,6 +19945,107 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
+            // 入梦：弃非基本牌 → 目标弃基本牌或跳过出牌/弃牌阶段
+            HostBehavior::SwdRumeng => match self.stage {
+                HostStage::Act => {
+                    // 触发帧即回合角色的出牌阶段开始帧——目标在此取定
+                    let target = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                        Some(EventData::Phase { player, .. }) => *player,
+                        _ => return Flow::Done,
+                    };
+                    self.target = Some(target);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .filter(|c| !ctx.catalog.cards[*c as usize].kind.is_basic_kind())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "rumeng_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    // 弃置（手牌或装备区）
+                    if ctx.core.player(self.owner).hand.contains(&card) {
+                        ctx.discard_from_hand(self.owner, card);
+                    } else if ctx.core.player(self.owner).equips.contains(&card) {
+                        ctx.core.player_mut(self.owner).equips.retain(|c| *c != card);
+                        ctx.to_discard(card);
+                    } else {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "入梦",
+                        owner: self.owner,
+                    });
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    let basics: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(target)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.cards[*c as usize].kind.is_basic_kind())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: target,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "rumeng_basic_or_skip",
+                            options: basics,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    match ctx.answer().first().copied() {
+                        Some(ChoiceOption::Card(card)) => {
+                            ctx.discard_from_hand(target, card);
+                        }
+                        _ => {
+                            // 取消：跳过其出牌与弃牌阶段（上游 trigger.cancel
+                            // + skip('phaseDiscard')）——立即收束当前出牌阶段，
+                            // 弃牌阶段由跳位承载
+                            ctx.core.player_mut(target).skip_discard_phase = true;
+                            ctx.emit(EventData::Phase {
+                                player: target,
+                                phase: crate::event::Phase::Play,
+                                begin: false,
+                            });
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 神焰：前置面（+1 并记录蔓延目标）与结算面（逐个蔓延火伤）
             HostBehavior::SwdShenyan => {
                 let (target, amount) = match ctx.current_damage() {
