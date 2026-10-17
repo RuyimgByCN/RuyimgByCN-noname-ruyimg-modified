@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 天书（tag 500，swd deferred 消解批 142，`swdtianshu`）：出牌阶段
+    /// 限定技——弃一张锦囊手牌，选一名角色，获取其武将的**一个未持有
+    /// 技能**（永久）；来源角色阵亡时移除（内联臂）。
+    SwdTianshu,
     /// 李香龙（tag 499，swd deferred 消解批 141，`lxianglong`）：自己的
     /// 【杀】被闪避后可选——对攻击范围内一名角色使用一张虚拟【杀】。
     Lxianglong,
@@ -1749,6 +1753,7 @@ impl HostBehavior {
             HostBehavior::Zhenlie => 497,
             HostBehavior::Yihua => 498,
             HostBehavior::Lxianglong => 499,
+            HostBehavior::SwdTianshu => 500,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2489,6 +2494,7 @@ impl HostBehavior {
             497 => HostBehavior::Zhenlie,
             498 => HostBehavior::Yihua,
             499 => HostBehavior::Lxianglong,
+            500 => HostBehavior::SwdTianshu,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2509,7 +2515,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 496] = [
+        pub const ALL: [HostBehavior; 497] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3006,6 +3012,7 @@ impl HostBehavior {
         HostBehavior::Zhenlie,
         HostBehavior::Yihua,
         HostBehavior::Lxianglong,
+        HostBehavior::SwdTianshu,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3264,6 +3271,7 @@ impl HostBehavior {
             HostBehavior::Zhenlie => "host:zhenlie",
             HostBehavior::Yihua => "host:yihua",
             HostBehavior::Lxianglong => "host:lxianglong",
+            HostBehavior::SwdTianshu => "host:swdtianshu",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3743,6 +3751,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 天书：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::SwdTianshu => None,
             // 李香龙：自己的杀被闪避后（可选）
             HostBehavior::Lxianglong => Some(TriggerMeta {
                 event: EventKind::ShaDodged,
@@ -6090,6 +6100,33 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 天书（swd 批 142）：目录技能名（获取目标武将的一个未持有技能）。
+pub const SWD_TIANSHU_KEY: &str = "swdtianshu";
+
+/// 天书候选：目标武将技能中自己未持有者（登记差异：上游排除 unique
+/// 限定技，原生无 unique 元数据，故一并列出）。
+fn swdtianshu_skills(ctx: &Ctx<'_>, target: PlayerId, owner: PlayerId) -> Vec<&'static str> {
+    let mut out: Vec<&'static str> = Vec::new();
+    for slot in ctx.core.player(target).general_slots.iter().flatten() {
+        let Some((_, _, skills, _, _)) = ctx.catalog.general_meta(*slot) else {
+            continue;
+        };
+        for name in skills {
+            if out.contains(&name) {
+                continue;
+            }
+            let Some(def) = ctx.catalog.skill_by_name(name) else {
+                continue;
+            };
+            if ctx.core.skills.contains_key(&(owner, def)) {
+                continue;
+            }
+            out.push(name);
+        }
+    }
+    out
+}
+
 /// 李香龙（swd 批 141）：目录技能名（杀被闪避后对射程内目标用虚拟杀）。
 pub const SWD_LXIANGLONG_KEY: &str = "lxianglong";
 
@@ -7128,6 +7165,7 @@ impl HostSkillBehavior {
             HostBehavior::Zhenlie => (None, None),
             HostBehavior::Yihua => (None, None),
             HostBehavior::Lxianglong => (None, None),
+            HostBehavior::SwdTianshu => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7466,6 +7504,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            HostBehavior::SwdTianshu => false,
             // 李香龙：自己是该杀的使用者且闪避者存活
             HostBehavior::Lxianglong => matches!(event,
                 EventData::ShaDodged { source, target, .. }
@@ -9629,6 +9668,36 @@ impl SkillBehavior for HostSkillBehavior {
             //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
             HostBehavior::SwdJinlin => {
                 if ctx.state.player(owner).jinlin_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 天书（swd 批 142）：出牌阶段主动（限定——实例启用时）
+            HostBehavior::SwdTianshu => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let enabled = ctx
+                    .catalog
+                    .skill_by_name(SWD_TIANSHU_KEY)
+                    .and_then(|d| ctx.state.skills.get(&(owner, d)).map(|i| i.enabled))
+                    .unwrap_or(false);
+                let has_trick = ctx.state.player(owner).hand.iter().any(|c| {
+                    let kind = ctx.catalog.card_kind(*c);
+                    !kind.is_basic_kind() && !kind.is_equip()
+                });
+                if !enabled || !has_trick {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -20799,6 +20868,151 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 天书：弃一张锦囊手牌 → 选角色 → 选其一个未持有技能 → 永久获取
+            HostBehavior::SwdTianshu => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            let kind = ctx.catalog.card_kind(*c);
+                            !kind.is_basic_kind() && !kind.is_equip()
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "swdtianshu_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&card) {
+                        return Flow::Done;
+                    }
+                    self.card = Some(card);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner && !swdtianshu_skills(ctx, *p, self.owner).is_empty())
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "swdtianshu_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let names = swdtianshu_skills(ctx, target, self.owner);
+                    if names.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.target = Some(target);
+                    // Tag=候选下标（answer 时按同序重枚举映射——技能定义 id
+                    // 可能超出 u8）
+                    let options: Vec<ChoiceOption> = (0..names.len())
+                        .map(|i| ChoiceOption::Tag(i as u8))
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "swdtianshu_skill",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::ShuchuiTargetLoop => {
+                    let Some(ChoiceOption::Tag(idx)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    // 重枚举映射（同序）：下标 → 技能定义
+                    let names = swdtianshu_skills(ctx, target, self.owner);
+                    let Some(name) = names.get(idx as usize).copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(def) = ctx.catalog.skill_by_name(name) else {
+                        return Flow::Done;
+                    };
+                    let def_id = u16::from(def);
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "天书",
+                        owner: self.owner,
+                    });
+                    // 弃置锦囊手牌（上游 phaseUse 用牌消耗）
+                    if ctx.core.player(self.owner).hand.contains(&card) {
+                        ctx.discard_from_hand(self.owner, card);
+                    }
+                    // 永久获取（附加技实例）
+                    if !ctx.core.skills.contains_key(&(self.owner, def)) {
+                        ctx.core.skills.insert(
+                            (self.owner, def),
+                            crate::state::SkillInstance {
+                                owner: self.owner,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 0,
+                            },
+                        );
+                    }
+                    {
+                        let p = ctx.core.player_mut(self.owner);
+                        p.swdtianshu_from = Some(target);
+                        p.swdtianshu_granted = Some(u16::from(def_id));
+                    }
+                    ctx.log(LogEvent::SkillToggled {
+                        player: self.owner,
+                        skill: ctx.catalog.skill_name(def),
+                        enabled: true,
+                    });
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 李香龙：选攻击范围内目标 → 使用虚拟杀
             HostBehavior::Lxianglong => match self.stage {
                 HostStage::Act => {

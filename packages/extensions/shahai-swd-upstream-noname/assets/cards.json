@@ -858,7 +858,7 @@
    "skills": [
     {
      "name": "swdtianshu",
-     "mapping": null
+     "mapping": "host:swdtianshu"
     },
     {
      "name": "lanzhi",

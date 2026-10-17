@@ -99,7 +99,9 @@ use crate::state::{
 /// 次数 `jilve_used`。v98 字节被版本门禁拒绝。
 /// v100（2026-10-17，swd 脉轮批 137）：`PlayerState` 追加脉轮三字段
 /// （`mailun_mode`/`mailun_out_used`/`mailun_in_used`）。v99 字节被拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 100;
+/// v101（2026-10-17，swd 天书批 142）：`PlayerState` 追加天书两字段
+/// （`swdtianshu_from`/`swdtianshu_granted`）。v100 字节被拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 101;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3439,6 +3441,21 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         }
         // 极略已用次数（v99）
         w.u8(p.jilve_used);
+        // 天书两字段（v101）
+        match p.swdtianshu_from {
+            None => w.u8(0),
+            Some(t) => {
+                w.u8(1);
+                w.u8(t);
+            }
+        }
+        match p.swdtianshu_granted {
+            None => w.u8(0),
+            Some(d) => {
+                w.u8(1);
+                w.u16(d);
+            }
+        }
         // 脉轮三字段（v100）
         w.u8(p.mailun_mode);
         w.boolean(p.mailun_out_used);
@@ -3837,6 +3854,16 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let shouyin_used = r.boolean()?;
         let songci_targets = r.vec(|r| r.u8())?;
         let jilve_used = r.u8()?;
+        let swdtianshu_from = match r.u8()? {
+            0 => None,
+            1 => Some(r.u8()?),
+            t => return Err(ArchiveError::BadTag("swdtianshu_from", t)),
+        };
+        let swdtianshu_granted = match r.u8()? {
+            0 => None,
+            1 => Some(r.u16()?),
+            t => return Err(ArchiveError::BadTag("swdtianshu_granted", t)),
+        };
         let mailun_mode = r.u8()?;
         let mailun_out_used = r.boolean()?;
         let mailun_in_used = r.boolean()?;
@@ -3934,6 +3961,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             shouyin_used,
             songci_targets,
             jilve_used,
+            swdtianshu_from,
+            swdtianshu_granted,
             mailun_mode,
             mailun_out_used,
             mailun_in_used,

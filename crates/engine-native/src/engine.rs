@@ -5307,6 +5307,21 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
         // 极略已用次数（swd 批 136，规则 v315）
         push_u8(&mut h, p.jilve_used);
+        // 天书两字段（swd 批 142，规则 v317）
+        match p.swdtianshu_from {
+            None => push_u8(&mut h, 0),
+            Some(t) => {
+                push_u8(&mut h, 1);
+                push_u8(&mut h, t);
+            }
+        }
+        match p.swdtianshu_granted {
+            None => push_u8(&mut h, 0),
+            Some(d) => {
+                push_u8(&mut h, 1);
+                push_u16(&mut h, d);
+            }
+        }
         // 脉轮三字段（swd 批 137，规则 v316）
         push_u8(&mut h, p.mailun_mode);
         push_u8(&mut h, p.mailun_out_used as u8);

@@ -10268,6 +10268,28 @@ impl crate::catalog::SkillMachine for DeathMachine {
         // 死亡拦截（规则 v171 死亡取消型基建）：标记置位则跳过死亡执
         // 行（存活态保持——前置窗口技已重置体力；上游 dieBefore
         // trigger.cancel 同口径）。
+        // 天书移除（swd 批 142，规则 v317）：来源角色阵亡 → 移除所获技能
+        // （上游 swdtianshu_remove dieAfter 同口径）
+        {
+            let dying = self.player;
+            for p in 0..ctx.core.players.len() as PlayerId {
+                if ctx.core.player(p).swdtianshu_from != Some(dying) {
+                    continue;
+                }
+                let granted = ctx.core.player(p).swdtianshu_granted;
+                if let Some(def) = granted.map(|d| d as crate::ids::SkillDefId) {
+                    ctx.core.skills.remove(&(p, def));
+                    ctx.log(LogEvent::SkillToggled {
+                        player: p,
+                        skill: ctx.catalog.skill_name(def),
+                        enabled: false,
+                    });
+                }
+                let pl = ctx.core.player_mut(p);
+                pl.swdtianshu_from = None;
+                pl.swdtianshu_granted = None;
+            }
+        }
         // 护天归还（swd 批 131，规则 v314）：持有者死亡前置（上游 hutian3
         // dieBegin forced）——把其寄存于目标处的牌归还目标并清理双方状态
         hutian_return_deposit(ctx, self.player);

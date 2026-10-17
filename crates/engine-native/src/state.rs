@@ -278,6 +278,12 @@ pub struct PlayerState {
     /// 守印·限定技已发动（swd 批 124，规则 v311）：上游
     /// `player.storage.shouyin`（awakenSkill 后 true）。
     pub shouyin_used: bool,
+    /// 天书·技能来源角色（swd 批 142，规则 v317）：上游
+    /// `storage.swdtianshu`（来源阵亡时移除所获技能）。
+    pub swdtianshu_from: Option<PlayerId>,
+    /// 天书·所获技能定义（同批）：移除时定位实例（上游
+    /// `removeAdditionalSkill('swdtianshu')`）。
+    pub swdtianshu_granted: Option<u16>,
     /// 脉轮·当前效果（swd 批 137，规则 v316）：上游 `storage.mailun`
     /// （1..8；0=未选）。每阶段开始重选（旧效果清除）。
     pub mailun_mode: u8,
@@ -412,6 +418,8 @@ impl PlayerState {
             skip_discard_phase: false,
             yishan_lost: Vec::new(),
             shouyin_used: false,
+            swdtianshu_from: None,
+            swdtianshu_granted: None,
             mailun_mode: 0,
             mailun_out_used: false,
             mailun_in_used: false,
