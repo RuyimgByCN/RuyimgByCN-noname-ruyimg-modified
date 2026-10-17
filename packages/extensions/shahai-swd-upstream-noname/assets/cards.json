@@ -1862,11 +1862,19 @@
    "skills": [
     {
      "name": "sxianjing",
-     "mapping": null
+     "mapping": "host:sxianjing"
     },
     {
      "name": "huodan",
      "mapping": "host:huodan"
+    },
+    {
+     "name": "sxianjing_gain",
+     "mapping": "host:sxianjing_gain"
+    },
+    {
+     "name": "sxianjing_damage",
+     "mapping": "host:sxianjing_damage"
     }
    ]
   },

@@ -1248,6 +1248,13 @@ pub enum HostBehavior {
     /// 破舟·封印（tag 454）：出牌阶段消耗 1 计数，封印一名其他角色（全部
     /// 技能禁用至其下一阶段开始）。
     SwdPozhou2,
+    /// 陷阱（tag 455，deferred 消解批 舒莞儿）：出牌阶段置出一张花色未在
+    /// 陷阱表中的手牌为陷阱。
+    SwdSxianjing,
+    /// 陷阱·触发（tag 456）：他人以同花色牌指定你时，弃陷阱并随机获得其一张牌。
+    SwdSxianjingGain,
+    /// 陷阱·取回（tag 457）：你受伤时随机取回一张陷阱。
+    SwdSxianjingDamage,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1544,6 +1551,9 @@ impl HostBehavior {
             HostBehavior::SwdJuxiCount => 452,
             HostBehavior::SwdPozhou => 453,
             HostBehavior::SwdPozhou2 => 454,
+            HostBehavior::SwdSxianjing => 455,
+            HostBehavior::SwdSxianjingGain => 456,
+            HostBehavior::SwdSxianjingDamage => 457,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2239,6 +2249,9 @@ impl HostBehavior {
             452 => HostBehavior::SwdJuxiCount,
             453 => HostBehavior::SwdPozhou,
             454 => HostBehavior::SwdPozhou2,
+            455 => HostBehavior::SwdSxianjing,
+            456 => HostBehavior::SwdSxianjingGain,
+            457 => HostBehavior::SwdSxianjingDamage,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2259,7 +2272,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 451] = [
+        pub const ALL: [HostBehavior; 454] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2711,6 +2724,9 @@ impl HostBehavior {
         HostBehavior::SwdJuxiCount,
         HostBehavior::SwdPozhou,
         HostBehavior::SwdPozhou2,
+        HostBehavior::SwdSxianjing,
+        HostBehavior::SwdSxianjingGain,
+        HostBehavior::SwdSxianjingDamage,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2924,6 +2940,9 @@ impl HostBehavior {
             HostBehavior::SwdJuxiCount => "host:juxi_count",
             HostBehavior::SwdPozhou => "host:pozhou",
             HostBehavior::SwdPozhou2 => "host:pozhou2",
+            HostBehavior::SwdSxianjing => "host:sxianjing",
+            HostBehavior::SwdSxianjingGain => "host:sxianjing_gain",
+            HostBehavior::SwdSxianjingDamage => "host:sxianjing_damage",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3315,6 +3334,24 @@ impl HostBehavior {
             }),
             // 破舟·封印：主动技（无触发时机）
             HostBehavior::SwdPozhou2 => None,
+            // 陷阱：主动技（无触发时机）
+            HostBehavior::SwdSxianjing => None,
+            // 陷阱·触发：他人使用牌（目标含自己）
+            HostBehavior::SwdSxianjingGain => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 陷阱·取回：自己受伤后
+            HostBehavior::SwdSxianjingDamage => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             HostBehavior::SwdShehun => None,
             HostBehavior::SwdNlianji => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
@@ -5953,6 +5990,13 @@ impl HostSkillBehavior {
             HostBehavior::SwdJuxiCount => (None, None),
             HostBehavior::SwdPozhou => (None, None),
             HostBehavior::SwdPozhou2 => (None, None),
+            // 陷阱·触发：牌的使用者为关联目标、牌为关联卡
+            HostBehavior::SwdSxianjingGain => match event {
+                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                _ => (None, None),
+            },
+            HostBehavior::SwdSxianjing => (None, None),
+            HostBehavior::SwdSxianjingDamage => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6216,6 +6260,22 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdPozhou => matches!(event,
                 EventData::Damage(d) if d.target == owner && !d.prevented),
             HostBehavior::SwdPozhou2 => false,
+            // 陷阱：主动技
+            HostBehavior::SwdSxianjing => false,
+            // 陷阱·触发：他人以同花色牌指定你，且该花色在陷阱表中
+            HostBehavior::SwdSxianjingGain => matches!(event,
+                EventData::CardUsed(u)
+                if u.player != owner
+                    && u.targets.contains(&owner)
+                    && !u.cancelled
+                    && ctx.state.player(owner).sxianjing_traps.iter().any(|c| {
+                        ctx.catalog.cards[*c as usize].suit
+                            == ctx.catalog.cards[u.card as usize].suit
+                    })),
+            // 陷阱·取回：自己受伤后且陷阱表非空
+            HostBehavior::SwdSxianjingDamage => matches!(event,
+                EventData::Damage(d) if d.target == owner && !d.prevented
+                    && !ctx.state.player(owner).sxianjing_traps.is_empty()),
             HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
@@ -8135,6 +8195,32 @@ impl SkillBehavior for HostSkillBehavior {
                     !sealed
                 });
                 if ctx.state.player(owner).pozhou_count == 0 || !has_target {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 陷阱（deferred 消解批）：有花色未在陷阱表中的手牌
+            HostBehavior::SwdSxianjing => {
+                let traps: Vec<crate::catalog::Suit> = ctx
+                    .state
+                    .player(owner)
+                    .sxianjing_traps
+                    .iter()
+                    .map(|c| ctx.catalog.cards[*c as usize].suit)
+                    .collect();
+                let has = ctx.state.player(owner).hand.iter().any(|c| {
+                    !traps.contains(&ctx.catalog.cards[*c as usize].suit)
+                });
+                if !has {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -18612,6 +18698,116 @@ impl crate::catalog::SkillMachine for HostMachine {
                     Flow::Done
                 }
                 _ => Flow::Done,
+            },
+            // 陷阱：出牌阶段置出一张花色未在陷阱表中的手牌为陷阱
+            HostBehavior::SwdSxianjing => match self.stage {
+                HostStage::Act => {
+                    let traps: Vec<crate::catalog::Suit> = ctx
+                        .core
+                        .player(self.owner)
+                        .sxianjing_traps
+                        .iter()
+                        .map(|c| ctx.catalog.cards[*c as usize].suit)
+                        .collect();
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| !traps.contains(&ctx.catalog.cards[*c as usize].suit))
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "sxianjing_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&c) {
+                        ctx.take_hand_card(self.owner, c);
+                    }
+                    ctx.core.player_mut(self.owner).sxianjing_traps.push(c);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 陷阱·触发：同花色陷阱弃置 + 随机获得使用者一张牌（首个 he）
+            HostBehavior::SwdSxianjingGain => {
+                let Some(attacker) = self.target else {
+                    return Flow::Done;
+                };
+                let Some(card) = self.card else {
+                    return Flow::Done;
+                };
+                let suit = ctx.catalog.cards[card as usize].suit;
+                let trap = ctx
+                    .core
+                    .player(self.owner)
+                    .sxianjing_traps
+                    .iter()
+                    .copied()
+                    .find(|c| ctx.catalog.cards[*c as usize].suit == suit);
+                if let Some(trap) = trap {
+                    ctx.core
+                        .player_mut(self.owner)
+                        .sxianjing_traps
+                        .retain(|x| *x != trap);
+                    ctx.to_discard(trap);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![trap],
+                    });
+                }
+                // 随机获得使用者一张 he 牌（确定性：首个 he）
+                let stolen = ctx
+                    .core
+                    .player(attacker)
+                    .hand
+                    .first()
+                    .copied()
+                    .or_else(|| ctx.core.player(attacker).equips.first().copied());
+                if let Some(c) = stolen {
+                    ctx.take_owned_card(attacker, c);
+                    ctx.core.player_mut(self.owner).hand.push(c);
+                    ctx.log(LogEvent::CardsGiven {
+                        from: attacker,
+                        to: self.owner,
+                        cards: vec![c],
+                    });
+                }
+                Flow::Done
+            }
+            // 陷阱·取回：受伤后随机取回一张陷阱（确定性：首个）
+            HostBehavior::SwdSxianjingDamage => {
+                if let Some(trap) = ctx
+                    .core
+                    .player(self.owner)
+                    .sxianjing_traps
+                    .first()
+                    .copied()
+                {
+                    ctx.core
+                        .player_mut(self.owner)
+                        .sxianjing_traps
+                        .retain(|x| *x != trap);
+                    ctx.core.player_mut(self.owner).hand.push(trap);
+                }
+                Flow::Done
             },
             // 聚悉：扣存活数并选一名角色——已受伤则自选受伤/回复，否则受伤
             HostBehavior::SwdJuxi => match self.stage {
@@ -30444,7 +30640,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdNlianji
         | HostBehavior::SwdShehun
         | HostBehavior::SwdJuxi
-        | HostBehavior::SwdPozhou2 => {
+        | HostBehavior::SwdPozhou2
+        | HostBehavior::SwdSxianjing => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

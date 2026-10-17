@@ -157,6 +157,9 @@ pub struct PlayerState {
     /// 破舟计数（swd 刘承宣，规则 v299）：受伤累计；出牌阶段可消耗 1
     /// 封印一名其他角色（全部技能禁用至其下一阶段开始）。
     pub pozhou_count: u8,
+    /// 陷阱牌（swd 舒莞儿，规则 v300）：置出的陷阱牌实体；他人用同花色
+    /// 牌指定你时触发（消耗陷阱 + 随机获得其一张牌）；你受伤时随机取回。
+    pub sxianjing_traps: Vec<CardId>,
     /// 死亡拦截标记（规则 v171 死亡取消型基建；上游 dieBefore
     /// trigger.cancel 族——DeathMachine 直读跳过死亡执行）。
     pub death_cancelled: bool,
@@ -292,6 +295,7 @@ impl PlayerState {
             daixing_count: 0,
             juxi_count: 0,
             pozhou_count: 0,
+            sxianjing_traps: Vec::new(),
             death_cancelled: false,
             shiying_used: false,
             huahu_used: false,
