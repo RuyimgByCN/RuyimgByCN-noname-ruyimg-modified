@@ -1,0 +1,15 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/拖拽读取/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "upstream_version": "1.81",
+  "intro": "Windows电脑版专属扩展，把扩展包（zip或7z文件）拖入到游戏内即可导入",
+  "author": "诗笺",
+  "native_plays": ["coin", "boss", "wuxing", "cardpile"],
+  "complete_folders": ["card", "character", "font", "game", "layout", "mode", "theme"],
+  "complete_files": ["app.html", "index.html", "LICENSE", "README.md"],
+  "audio_subfolders": ["background", "card", "die", "effect", "skill", "voice"],
+  "image_subfolders": ["background", "card", "character", "emotion", "mode", "splash"],
+  "extension_subfolders": ["boss", "cardpile", "coin", "wuxing"],
+  "node_modules_subfolders": ["options", "ultron", "ws"]
+}

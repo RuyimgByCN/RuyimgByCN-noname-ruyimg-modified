@@ -653,6 +653,14 @@ fn update_guard_apply(config_json: &str, request_json: &str) -> String {
     }
 }
 
+/// L16 目标平台：跑拖拽读取的拖入决策。不 eval、不读写文件、不请求网络、不启 Electron。
+fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    match content_native_loader::apply_drag_read_line(config_json, request_json) {
+        Ok(text) => text,
+        Err(err) => format!("error:{err:?}"),
+    }
+}
+
 /// L26 目标平台：跑笨蛋插件的仍在执行的决策。不画界面，不播放，不睡眠。
 fn fool_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_fool_line(config_json, request_json) {
@@ -1235,6 +1243,41 @@ mod pack_roundtrip {
             "{}"
         )
         .starts_with("error:BadConfig"));
+    }
+
+    /// L16 目标平台：真实 config.json。zip 计划、7z 拒绝、原生 play 拒绝、不 eval。
+    #[test]
+    fn drag_read_pack_json_enters_wasm_helper() {
+        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../packages/extensions/drag-read-upstream-liuli/assets/config.json");
+        let config = std::fs::read_to_string(&path).expect("读拖拽读取 config.json");
+        assert!(config.contains("\"source\": \"noname-liuli\""));
+        assert!(config.contains("拖拽读取/extension.js"));
+        assert!(config.contains("8485dbb29ff16f9b258a766b1a17ef75f883aade"));
+        assert!(config.contains("\"upstream_version\": \"1.81\""));
+        assert!(!config.contains("eval("));
+        assert!(!config.contains("fetch("));
+        let ok = drag_read_apply(
+            &config,
+            r#"{"name":"我的扩展.zip","mime":"application/zip","files":["我的扩展/extension.js","我的扩展/card/a.json"],"dir":["card",".git","_x","image"]}"#,
+        );
+        assert!(ok.starts_with("kind:zip | default:我的扩展 | prefix:我的扩展/ |"), "{ok}");
+        assert!(ok.contains("dir:card,image |"), "{ok}");
+        assert!(ok.ends_with("| err:- | eval:0 | fetch:0 | write:0 | dom:0"), "{ok}");
+        let seven = drag_read_apply(&config, r#"{"name":"我的扩展.7z","mime":""}"#);
+        assert!(seven.starts_with("kind:7z |"), "{seven}");
+        assert!(seven.contains("err:还不支持读取7z格式的扩展"), "{seven}");
+        let native = drag_read_apply(
+            &config,
+            r#"{"name":"boss.zip","mime":"application/zip","extname":"boss","files":["boss/extension.js"]}"#,
+        );
+        assert!(native.contains("err:禁止安装游戏原生扩展（boss）"), "{native}");
+        let single = drag_read_apply(&config, r#"{"name":"extension.js","mime":""}"#);
+        assert!(single.starts_with("kind:extension.js |"), "{single}");
+        assert!(single.contains("err:extension.js代码有错误，无法导入！"), "{single}");
+        assert!(drag_read_apply(&config, "not json").starts_with("error:BadConfig"));
+        assert!(drag_read_apply(&config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""), "{}")
+            .starts_with("error:BadConfig"));
     }
 
     /// L26 目标平台：真实 config.json。不画界面，不播放，不睡眠。

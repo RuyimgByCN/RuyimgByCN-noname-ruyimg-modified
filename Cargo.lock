@@ -605,6 +605,7 @@ dependencies = [
  "content-schema",
  "engine-api",
  "resource-schema",
+ "rule-api",
  "rule-vm",
  "serde",
  "serde_json",

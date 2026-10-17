@@ -17,6 +17,7 @@ blake3 = { workspace = true }
 [dev-dependencies]
 tempfile = "3"
 content-schema = { path = "../content-schema" }
+rule-api = { workspace = true }
 rule-vm = { path = "../rule-vm" }
 resource-schema = { workspace = true }
 blake3 = { workspace = true }

@@ -32,6 +32,7 @@ use serde_json::Value;
 mod coin;
 mod desktop_adapt;
 mod douzhuan;
+mod drag_read;
 mod elo;
 mod fool;
 mod martial;
@@ -58,6 +59,12 @@ pub use douzhuan::{
     CandidateIn, CharacterIn as DouzhuanCharacterIn, CharacterOut as DouzhuanCharacterOut,
     DouzhuanConfig, DouzhuanError, DouzhuanReport, DouzhuanRequest, PackView, PickIn,
     SkillIn as DouzhuanSkillIn, SkillOut as DouzhuanSkillOut,
+};
+pub use drag_read::{
+    apply_drag_read_line, complete_package_tree, default_extension_name, detect_drop,
+    dir_entry_visible, list_dir, parse_drag_config, plan_archive_import, plan_single_extension_js,
+    DragConfig, DragError, DropKind, ImportPlan, ERR_BAD_EXTENSION_JS, ERR_NATIVE_PLAY,
+    ERR_NOT_EXTENSION, ERR_NO_EXTENSION_JS, SEVENZ_UNSUPPORTED,
 };
 pub use elo::{
     apply_elo_commands, hand_visible, mark_inserted, mark_opening, parse_elo_config, reorder_draw,
