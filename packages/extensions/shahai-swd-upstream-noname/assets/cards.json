@@ -1118,7 +1118,11 @@
     },
     {
      "name": "juxi",
-     "mapping": null
+     "mapping": "host:juxi"
+    },
+    {
+     "name": "juxi_count",
+     "mapping": "host:juxi_count"
     }
    ]
   },

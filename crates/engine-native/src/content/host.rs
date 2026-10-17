@@ -1238,6 +1238,11 @@ pub enum HostBehavior {
     SwdDaixing2,
     /// 待行·吸收（tag 450）：受伤后递减计数（近似护甲吸收量）。
     SwdDaixing3,
+    /// 聚悉（tag 451，deferred 消解批 小黄龙）：出牌阶段，计数达存活数时可发动：
+    /// 扣存活数并选一名角色——其已受伤则自选受伤/回复，否则受伤。
+    SwdJuxi,
+    /// 聚悉·计数（tag 452）：非当前回合角色弃牌后计数 +1。
+    SwdJuxiCount,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1530,6 +1535,8 @@ impl HostBehavior {
             HostBehavior::SwdDaixing => 448,
             HostBehavior::SwdDaixing2 => 449,
             HostBehavior::SwdDaixing3 => 450,
+            HostBehavior::SwdJuxi => 451,
+            HostBehavior::SwdJuxiCount => 452,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2221,6 +2228,8 @@ impl HostBehavior {
             448 => HostBehavior::SwdDaixing,
             449 => HostBehavior::SwdDaixing2,
             450 => HostBehavior::SwdDaixing3,
+            451 => HostBehavior::SwdJuxi,
+            452 => HostBehavior::SwdJuxiCount,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2241,7 +2250,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 447] = [
+        pub const ALL: [HostBehavior; 449] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2689,6 +2698,8 @@ impl HostBehavior {
         HostBehavior::SwdDaixing,
         HostBehavior::SwdDaixing2,
         HostBehavior::SwdDaixing3,
+        HostBehavior::SwdJuxi,
+        HostBehavior::SwdJuxiCount,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2898,6 +2909,8 @@ impl HostBehavior {
             HostBehavior::SwdDaixing => "host:daixing",
             HostBehavior::SwdDaixing2 => "host:daixing2",
             HostBehavior::SwdDaixing3 => "host:daixing3",
+            HostBehavior::SwdJuxi => "host:juxi",
+            HostBehavior::SwdJuxiCount => "host:juxi_count",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3264,6 +3277,16 @@ impl HostBehavior {
             // 待行·吸收：自己受伤后（silent）
             HostBehavior::SwdDaixing3 => Some(TriggerMeta {
                 event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 聚悉：主动技（无触发时机）
+            HostBehavior::SwdJuxi => None,
+            // 聚悉·计数：任意角色弃牌后（global）
+            HostBehavior::SwdJuxiCount => Some(TriggerMeta {
+                event: EventKind::CardsDiscarded,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
@@ -5903,6 +5926,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdDaixing => (None, None),
             HostBehavior::SwdDaixing2 => (None, None),
             HostBehavior::SwdDaixing3 => (None, None),
+            HostBehavior::SwdJuxi => (None, None),
+            HostBehavior::SwdJuxiCount => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6157,6 +6182,11 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdDaixing3 => matches!(event,
                 EventData::Damage(d) if d.target == owner && !d.prevented
                     && ctx.state.player(owner).daixing_count > 0),
+            HostBehavior::SwdJuxi => false,
+            // 聚悉·计数：弃牌者非当前回合玩家
+            HostBehavior::SwdJuxiCount => matches!(event,
+                EventData::CardsDiscarded { player, .. }
+                if *player != ctx.state.turn.current),
             HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
@@ -8032,6 +8062,23 @@ impl SkillBehavior for HostSkillBehavior {
             // 蛇魂（deferred 消解批）：手牌有牌
             HostBehavior::SwdShehun => {
                 if ctx.state.player(owner).hand.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 聚悉（deferred 消解批）：计数 >= 存活数
+            HostBehavior::SwdJuxi => {
+                let alive = ctx.state.alive_players().count() as u8;
+                if ctx.state.player(owner).juxi_count < alive || alive == 0 {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -18427,6 +18474,91 @@ impl crate::catalog::SkillMachine for HostMachine {
                 ctx.core.player_mut(self.owner).daixing_count = cur.saturating_sub(cur.min(dmg));
                 Flow::Done
             }
+            // 聚悉·计数：非当前回合角色弃牌后计数 +1
+            HostBehavior::SwdJuxiCount => {
+                ctx.core.player_mut(self.owner).juxi_count =
+                    ctx.core.player(self.owner).juxi_count.saturating_add(1);
+                Flow::Done
+            }
+            // 聚悉：扣存活数并选一名角色——已受伤则自选受伤/回复，否则受伤
+            HostBehavior::SwdJuxi => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "juxi_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(t);
+                    let alive = ctx.core.alive_players().count() as u8;
+                    let cur = ctx.core.player(self.owner).juxi_count;
+                    ctx.core.player_mut(self.owner).juxi_count = cur.saturating_sub(alive);
+                    let damaged = ctx.core.player(t).hp < ctx.core.player(t).max_hp as i32;
+                    if damaged {
+                        self.stage = HostStage::SelectNature;
+                        Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::PickTag,
+                                prompt: "juxi_choice",
+                                options: vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        }
+                    } else {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            None,
+                        )));
+                        Flow::Done
+                    }
+                }
+                HostStage::SelectNature => {
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    match ctx.answer().first().copied() {
+                        Some(ChoiceOption::Tag(1)) => {
+                            ctx.recover(t, 1, None);
+                        }
+                        _ => {
+                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                Some(self.owner),
+                                t,
+                                1,
+                                crate::event::DamageNature::Normal,
+                                None,
+                            )));
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 禁言：查询锚（PlayCard 门），无独立效果步
             HostBehavior::WudianJinyan => Flow::Done,
             // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
@@ -30177,7 +30309,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdHeihuo
         | HostBehavior::SwdToudan
         | HostBehavior::SwdNlianji
-        | HostBehavior::SwdShehun => {
+        | HostBehavior::SwdShehun
+        | HostBehavior::SwdJuxi => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

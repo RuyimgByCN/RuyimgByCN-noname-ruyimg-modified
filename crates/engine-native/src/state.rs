@@ -151,6 +151,9 @@ pub struct PlayerState {
     /// 待行计数（swd 吕晓雪，规则 v297）：结束阶段弃牌换取的护甲量；
     /// 下回合准备阶段按剩余量移除；受伤吸收时递减。
     pub daixing_count: u8,
+    /// 聚悉计数（swd 小黄龙，规则 v298）：非当前回合角色弃牌累计；
+    /// 达存活数时可发动聚悉（扣存活数）令目标受伤或回复。
+    pub juxi_count: u8,
     /// 死亡拦截标记（规则 v171 死亡取消型基建；上游 dieBefore
     /// trigger.cancel 族——DeathMachine 直读跳过死亡执行）。
     pub death_cancelled: bool,
@@ -284,6 +287,7 @@ impl PlayerState {
             husha_mark: 0,
             hyunshen_count: 0,
             daixing_count: 0,
+            juxi_count: 0,
             death_cancelled: false,
             shiying_used: false,
             huahu_used: false,
