@@ -1,0 +1,40 @@
+# content.ts die 事件内容链中的 dieAfter / dieAfter2（noname v1.11.7, HEAD df2682e6）
+12537:			if (player.dieAfter && !event.reserveOut && !event.noDieAfter) {
+12538:				await player.dieAfter(source);
+12615:			if (player.dieAfter2 && !event.reserveOut && !event.noDieAfter2) {
+12616:				await player.dieAfter2(source);
+--- 步骤片段 12610-12618 ---
+			}
+		},
+		async (event, trigger, player) => {
+			const { source } = event;
+			//是否执行击杀奖惩的操作
+			if (player.dieAfter2 && !event.reserveOut && !event.noDieAfter2) {
+				await player.dieAfter2(source);
+			}
+		},
+--- identity.js checkResult 调用点 ---
+3187:				game.checkResult();
+--- game/index.js over() 守卫 ---
+	over(result, bool) {
+		if (_status.over) {
+			return;
+		}
+		if (game.me._trueMe) {
+			game.swapPlayer(game.me._trueMe);
+		}
+		let i,
+			j,
+			k,
+			num,
+			table,
+			tr,
+			td,
+			dialog,
+			hsMap = new Map([]),
+			poptipData = new Map([]);
+		for (const target of [...game.players, ...game.dead]) {
+			hsMap.set(target, target.getCards("h"));
+		}
+		_status.over = true;
+		ui.control.show();

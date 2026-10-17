@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-a5e2b4363d607405)
+
+running 2 tests
+test delayed_trick_bing_and_shandian_nullify_window ... ok
+test delayed_trick_play_time_nullify_window ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 338 filtered out; finished in 0.00s
+

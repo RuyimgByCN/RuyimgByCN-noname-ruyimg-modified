@@ -1,2228 +1,2304 @@
 {
-  "meta": {
-    "title": "noname-next 全量未完成待做登记表",
-    "verified_date": "2026-10-16",
-    "head": "5c5bf131c621288c8051b8549ec5644a30b38eca",
-    "head_short": "5c5bf131",
-    "ruleset_version_noted": 290,
-    "archive_format_version_noted": 77,
-    "engine_native_tests_noted": "807 通过 / 0 失败 / 1 ignore（维护守护批快照；并行开发中可能漂移）",
-    "scope": [
-      "T8 余项",
-      "T9",
-      "T11",
-      "T12（37 来源整包）",
-      "T13",
-      "T15③",
-      "O4/O5",
-      "台账 E01–E06/G0–G5 未完成",
-      "覆盖清单与规则基准开放行",
-      "D4–D8 解锁后的执行项"
-    ],
-    "method": "只读调研必读文档；ambiguous 13 条已于 2026-10-16 消解（见 ambiguous-resolutions.md）；本目录为权威待做快照证据；不改 crates/**",
-    "status_enum": [
-      "open",
-      "blocked",
-      "in_progress",
-      "resolved"
-    ],
-    "item_count": 89,
-    "ambiguous_ids": [],
-    "ambiguous_resolved_date": "2026-10-16",
-    "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 21,
-    "open_count": 68,
-    "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
-    "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
-    "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
-    "notes_on_head": "登记表起草 HEAD 5c5bf131；消解批以当时文件+交叉证据为准，不因并行 worker 后续提交自动重写条目正文",
-    "l23_closure_2026_10_17": "T12-SRC-L23 resolved after eight-dimension evidence. Whole-pack at that close was 4/37.",
-    "u03_closure_2026_10_17": "T12-SRC-U03 resolved after eight-dimension evidence. Whole-pack at that close was 5/37.",
-    "u04_closure_2026_10_17": "T12-SRC-U04 resolved after eight-dimension evidence. Whole-pack at that close was 6/37. L05 is not counted.",
-    "l04_closure_2026_10_17": "T12-SRC-L04 resolved after its own liuli install. Whole-pack stays open at 7/37. U03 is not counted again.",
-    "l05_closure_2026_10_17": "T12-SRC-L05 resolved after its own liuli install. Whole-pack stays open at 8/37. U04 is not counted again.",
-    "l22_closure_2026_10_17": "T12-SRC-L22 resolved after its own liuli install. Whole-pack stays open at 9/37. L12 is not counted.",
-    "l21_closure_2026_10_17": "T12-SRC-L21 resolved after its own liuli install. Whole-pack stays open at 15/37.",
-    "l26_closure_2026_10_17": "T12-SRC-L26 resolved after its own liuli install. Whole-pack stays open at 14/37.",
-    "l18_closure_2026_10_17": "T12-SRC-L18 resolved after its own liuli install. Whole-pack stays open at 13/37.",
-    "l17_closure_2026_10_17": "T12-SRC-L17 resolved after its own liuli install. Whole-pack stays open at 12/37.",
-    "l15_closure_2026_10_17": "T12-SRC-L15 resolved after its own liuli install. Whole-pack stays open at 11/37.",
-    "l02_closure_2026_10_17": "T12-SRC-L02 resolved after its own liuli install. Whole-pack stays open at 10/37."
+ "meta": {
+  "title": "noname-next 全量未完成待做登记表",
+  "verified_date": "2026-10-17",
+  "head": "5c5bf131c621288c8051b8549ec5644a30b38eca",
+  "head_short": "5c5bf131",
+  "ruleset_version_noted": 290,
+  "archive_format_version_noted": 77,
+  "engine_native_tests_noted": "807 通过 / 0 失败 / 1 ignore（维护守护批快照；并行开发中可能漂移）",
+  "scope": [
+   "T8 余项",
+   "T9",
+   "T11",
+   "T12（37 来源整包）",
+   "T13",
+   "T15③",
+   "O4/O5",
+   "台账 E01–E06/G0–G5 未完成",
+   "覆盖清单与规则基准开放行",
+   "D4–D8 解锁后的执行项"
+  ],
+  "method": "只读调研必读文档；ambiguous 13 条已于 2026-10-16 消解（见 ambiguous-resolutions.md）；本目录为权威待做快照证据；不改 crates/**",
+  "status_enum": [
+   "open",
+   "blocked",
+   "in_progress",
+   "resolved"
+  ],
+  "item_count": 89,
+  "ambiguous_ids": [],
+  "ambiguous_resolved_date": "2026-10-16",
+  "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+  "resolved_count": 33,
+  "open_count": 56,
+  "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
+  "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
+  "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
+  "notes_on_head": "登记表起草 HEAD 5c5bf131；消解批以当时文件+交叉证据为准，不因并行 worker 后续提交自动重写条目正文",
+  "l23_closure_2026_10_17": "T12-SRC-L23 resolved after eight-dimension evidence. Whole-pack at that close was 4/37.",
+  "u03_closure_2026_10_17": "T12-SRC-U03 resolved after eight-dimension evidence. Whole-pack at that close was 5/37.",
+  "u04_closure_2026_10_17": "T12-SRC-U04 resolved after eight-dimension evidence. Whole-pack at that close was 6/37. L05 is not counted.",
+  "l04_closure_2026_10_17": "T12-SRC-L04 resolved after its own liuli install. Whole-pack stays open at 7/37. U03 is not counted again.",
+  "l05_closure_2026_10_17": "T12-SRC-L05 resolved after its own liuli install. Whole-pack stays open at 8/37. U04 is not counted again.",
+  "l22_closure_2026_10_17": "T12-SRC-L22 resolved after its own liuli install. Whole-pack stays open at 9/37. L12 is not counted.",
+  "l21_closure_2026_10_17": "T12-SRC-L21 resolved after its own liuli install. Whole-pack stays open at 15/37.",
+  "l26_closure_2026_10_17": "T12-SRC-L26 resolved after its own liuli install. Whole-pack stays open at 14/37.",
+  "l18_closure_2026_10_17": "T12-SRC-L18 resolved after its own liuli install. Whole-pack stays open at 13/37.",
+  "l17_closure_2026_10_17": "T12-SRC-L17 resolved after its own liuli install. Whole-pack stays open at 12/37.",
+  "l15_closure_2026_10_17": "T12-SRC-L15 resolved after its own liuli install. Whole-pack stays open at 11/37.",
+  "l02_closure_2026_10_17": "T12-SRC-L02 resolved after its own liuli install. Whole-pack stays open at 10/37.",
+  "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。"
+ },
+ "items": [
+  {
+   "id": "T8-FILTER-COMPOSITE",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T8 行（约 L81）；增量 17 证据分类账"
+   },
+   "description": "T8 余项：具名组合 filter 深化（全词表扫描约 624 待办中的复合查询等；新策略须双闸回归）。含 active_used_at_least_N、mark/skill_pile/lost-history/once 旗标、移动批次、pot 族、牌堆、转化杀、记忆等需内核新原语的族。",
+   "done_when_evidence": [
+    "定向回归测试通过",
+    "cargo test --offline -p engine-native --no-fail-fast 全绿",
+    "Gate 1b exit 0",
+    "证据目录 README+日志",
+    "装载器 deferred_filters 收敛证据"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T8",
+    "E03",
+    "G1"
+   ],
+   "notes": "工单以 2026-10-16-t8-filter-batches/batches.json 为准（619 待办/60 批）；增量 17 的 18+624 为映射落地前快照",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "642 个词表 filter 名称全部可映射：精确策略（增量 1–17）优先，其余编译具名程序；词表外名称返回 None 入装载器 deferred_filters、不恒真。标记/技能牌堆/丢失/once/旗标/命中/摸牌计数/技能剩余次数入 VmAux（存档 v80）。具名结算器仍由宿主承载=登记差异。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-t8-named-filters/README.md"
+    ]
+   }
   },
-  "items": [
-    {
-      "id": "T8-FILTER-COMPOSITE",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T8 行（约 L81）；增量 17 证据分类账"
-      },
-      "description": "T8 余项：具名组合 filter 深化（全词表扫描约 624 待办中的复合查询等；新策略须双闸回归）。含 active_used_at_least_N、mark/skill_pile/lost-history/once 旗标、移动批次、pot 族、牌堆、转化杀、记忆等需内核新原语的族。",
-      "done_when_evidence": [
-        "定向回归测试通过",
-        "cargo test --offline -p engine-native --no-fail-fast 全绿",
-        "Gate 1b exit 0",
-        "证据目录 README+日志",
-        "装载器 deferred_filters 收敛证据"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T8",
-        "E03",
-        "G1"
-      ],
-      "notes": "工单以 2026-10-16-t8-filter-batches/batches.json 为准（619 待办/60 批）；增量 17 的 18+624 为映射落地前快照",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "keep_open",
-        "conclusion": "模糊性消除：分批清单已固化；保留为本 ID 总账，不以约数合同计数",
-        "evidence": [
-          "docs/operations/evidence/2026-10-16-t8-filter-batches/README.md",
-          "docs/operations/evidence/2026-10-16-t8-filter-batches/batches.json",
-          "docs/operations/evidence/2026-10-14-t8-increment17-tied-max-filters/README.md"
-        ],
-        "disposition": "保持 open；执行按 B01–B60",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "T8-EFFECT-QUERY-VARIANTS",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T8 行（约 L81）完成条件段"
-      },
-      "description": "T8 余项：剩余 rule-vm 效果/查询变体（部分需内核新原语）；开放规则验收面「不重编译即可装含新技能/新牌的包」在通用效果面的持续扩面。",
-      "done_when_evidence": [
-        "定向回归测试通过",
-        "cargo test --offline -p engine-native --no-fail-fast 全绿",
-        "Gate 1b exit 0",
-        "证据目录 README+日志",
-        "真实扩展样本端到端"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T8-FILTER-COMPOSITE"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "T8",
-        "E03",
-        "G1"
-      ]
-    },
-    {
-      "id": "T9-SOURCE-BEHAVIOR-SAMPLES",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T9 行（约 L82）"
-      },
-      "description": "T9：37 来源各自补齐旧行为动态样本、菜单与规则分支语义清单、目标接口与验证入口登记（功能面基线已有，非整包）。",
-      "done_when_evidence": [
-        "台账每来源行为样本证据",
-        "目标接口与验证入口登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-auditor",
-      "tags": [
-        "T9",
-        "E01",
-        "G0"
-      ]
-    },
-    {
-      "id": "T9-LX-BATTLE-TRACE",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T9；docs/operations/evidence/2026-10-11-t9-lx-trace-survey/README.md"
-      },
-      "description": "T9 龙血玄黄：搭旧线无头运行环境，采集战斗内触发轨迹（LX.2 仅注册期；archive 只读无 node_modules）。D5 已立项解锁。",
-      "done_when_evidence": [
-        "无头环境搭建证据",
-        "战斗触发轨迹样本",
-        "勘察阻塞项关闭说明"
-      ],
-      "status": "open",
-      "depends_on": [
-        "D5-LX-MIGRATION"
-      ],
-      "role": "legacy-harness-engineer",
-      "tags": [
-        "T9",
-        "E01",
-        "D5",
-        "L29"
-      ]
-    },
-    {
-      "id": "T11-BOSS-STAGE-SUBSYSTEM",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T11；D4 裁决 docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md"
-      },
-      "description": "D4 解锁：建原生 Boss 关卡流程子系统（另写 ADR），并把原「关卡流程面登记不落」技能逐个落包——含十殿阎罗「还人」族（换将链/孟婆乱入/禁将表）、四象隐藏链八技、青/赤/白翼轮次编排、bianshen 死亡换 Boss。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录",
-        "子系统 ADR",
-        "逐技定向回归"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "architect+kernel-engineer",
-      "tags": [
-        "T11",
-        "D4",
-        "N08",
-        "N11"
-      ]
-    },
-    {
-      "id": "T11-BOSS-HUANREN",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 秦广王片（v276）；规则基准还人登记不落段"
-      },
-      "description": "十殿阎罗「还人」：关卡换将链、孟婆乱入、禁将表——原登记不落，D4 后待实现。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T11-BOSS-STAGE-SUBSYSTEM"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11",
-        "D4"
-      ],
-      "notes": "含孟婆 mengpodie 旗 / boss_mengpohuihun 回魂面（自 T11-BOSS-MENGPO-WANGSHI-PLAY 并入）"
-    },
-    {
-      "id": "T11-BOSS-HIDECHAIN-8",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 四象隐藏链处置证据 2026-10-11"
-      },
-      "description": "四象隐藏链八技（青木2/3、白芒2/3、赤炎2/3、玄麟2/3）dieBegin hide+dieAfter 换将重生——D4 后随关卡子系统落包。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T11-BOSS-STAGE-SUBSYSTEM"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11",
-        "D4"
-      ]
-    },
-    {
-      "id": "T11-BOSS-WING-ROTATION",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 青翼/赤翼/白翼登记不落"
-      },
-      "description": "青/赤/白翼轮次编排技（阶段 3/5/7 等）——D4 后待实现。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T11-BOSS-STAGE-SUBSYSTEM"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11",
-        "D4"
-      ]
-    },
-    {
-      "id": "T11-BOSS-BIANSHEN-CHANGEBOSS",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 bianshen 勘验片；D4"
-      },
-      "description": "bianshen 死亡 changeBoss / bianshen4 同族关卡流程面——D4 后待实现。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T11-BOSS-STAGE-SUBSYSTEM"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11",
-        "D4"
-      ]
-    },
-    {
-      "id": "T11-BOSS-ZHUGE-LIANG",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 庞统/诸葛亮片 v277；D5"
-      },
-      "description": "Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技 ylyg* 龙血玄黄包依赖——D5 立项后由登记不落转待实现。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录",
-        "hp Infinity 承载设计"
-      ],
-      "status": "open",
-      "depends_on": [
-        "D5-LX-MIGRATION",
-        "T9-LX-BATTLE-TRACE"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11",
-        "D5",
-        "T9"
-      ]
-    },
-    {
-      "id": "T11-BOSS-PANGTONG-EXTERNAL",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 庞统片 v277"
-      },
-      "description": "庞统涅槃/浴火等外部包技依赖（shenhua oldniepan / offline ylygniepan+三外部技+loopType）——随外部包/龙血面推进。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "D5-LX-MIGRATION"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11",
-        "D5"
-      ],
-      "notes": "非 D4；等 D5/外部包。天狱/栖梧已落（v277）",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "wait_d5",
-        "conclusion": "边界已清：涅槃/浴火属外部包技+loopType，挂 D5/外部包推进，不阻塞关卡子系统",
-        "evidence": [
-          "docs/adr/0783-boss-stage-flow-subsystem.md",
-          "docs/operations/evidence/2026-10-16-d4-boss-adr/README.md",
-          "docs/operations/evidence/2026-10-14-t11-boss-pangtong-v277/README.md",
-          "docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md"
-        ],
-        "disposition": "保持 open；depends_on D5-LX-MIGRATION",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "T11-BOSS-DIZANG-DAYUAN",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 地藏王 v274"
-      },
-      "description": "地藏王「大愿」：判定改写机 AI 态度面——条目只列已转换技，仍开放。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11"
-      ],
-      "notes": "ADR 0783 §5：明确不纳入 D4；判定改写 AI 态度面内容余项",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "keep_open",
-        "conclusion": "单列内容余项（非 D4 关卡子系统）",
-        "evidence": [
-          "docs/adr/0783-boss-stage-flow-subsystem.md",
-          "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md"
-        ],
-        "disposition": "保持 open；不依赖 T11-BOSS-STAGE-SUBSYSTEM",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "T11-BOSS-DIZANG-WULIANG-GAMEDRAW",
-      "source": {
-        "doc": "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
-        "ref": "无量建局摸 3 面登记未落；自 T11-BOSS-MENGPO-WANGSHI-PLAY 拆出"
-      },
-      "description": "地藏王「无量」建局摸 3 面（gameDrawAfter/enterGame）——v274 登记未落，随装配/建局批。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11"
-      ],
-      "notes": "非 D4 关卡流程；与大愿（T11-BOSS-DIZANG-DAYUAN）分立",
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "split_new",
-        "conclusion": "自原 ambiguous 抓包项拆出的明确 open 项",
-        "evidence": [
-          "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
-          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-        ],
-        "disposition": "新增 open",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "split_from": "T11-BOSS-MENGPO-WANGSHI-PLAY"
-      }
-    },
-    {
-      "id": "T11-BOSS-SHIKIEIKI-EXCLUDED",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 Shikieiki 排除登记"
-      },
-      "description": "四季映姬 boss_yingzhong：外部武将库结构性依赖，目录排除。若要落包需外部武将池基建。",
-      "done_when_evidence": [
-        "结构性依赖解除或正式永久排除 ADR/台账"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11"
-      ],
-      "notes": "永久目录排除（ADR 0783）；未来外部将池另开新 ID",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "permanent_diff",
-        "conclusion": "维持四季映姬/映种目录排除；关闭条件=排除确认（已确认）",
-        "evidence": [
-          "docs/adr/0783-boss-stage-flow-subsystem.md",
-          "docs/operations/evidence/2026-10-16-d4-boss-adr/README.md",
-          "docs/operations/evidence/2026-10-14-t11-boss-qinguangwang-v276/README.md"
-        ],
-        "disposition": "status=resolved；还人映姬候选池未就绪则登记不可达",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "T11-BOSS-MENGPO-WANGSHI-PLAY",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 孟婆 v270"
-      },
-      "description": "（已拆分关闭）原抓包：孟婆往事打出面 / 地藏王无量建局摸 3 / 十殿 mengpodie·回魂等零散 Boss 登记差异。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T11"
-      ],
-      "ambiguous": false,
-      "notes": "往事打出面=v270 永久登记差异；mengpodie/huihun→并入 T11-BOSS-HUANREN；无量建局摸3→T11-BOSS-DIZANG-WULIANG-GAMEDRAW",
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "split_new",
-        "conclusion": "拆清三面：往事打出永久差异；mengpodie/huihun 并入还人；无量建局摸3 新 ID",
-        "evidence": [
-          "docs/operations/evidence/2026-10-14-t11-boss-mengpo-v270/README.md",
-          "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
-          "docs/adr/0783-boss-stage-flow-subsystem.md"
-        ],
-        "disposition": "status=resolved",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "split_into": [
-          "T11-BOSS-DIZANG-WULIANG-GAMEDRAW"
-        ],
-        "merged_into": [
-          "T11-BOSS-HUANREN"
-        ],
-        "permanent_aspects": [
-          "孟婆往事打出/响应窗仅使用位（v270 登记）"
-        ]
-      }
-    },
-    {
-      "id": "T11-EVENT-RNG-RESTORE-PARITY",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T11 完成条件末段"
-      },
-      "description": "T11 横切：同一命令下事件、随机流和恢复轨迹对照（逐项修复或登记；语义变则升规则版本）。",
-      "done_when_evidence": [
-        "parity_chain_compound / parity_aoe_skip_trail / parity_judge_rewrite_rng 等定向夹具+证据目录",
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "命令/事件/随机/恢复四轨对照证据（投影后语义）"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "rules-auditor",
-      "tags": [
-        "T11",
-        "N08"
-      ],
-      "notes": "可切片关闭；完成判定见 t11-open-rows 专节夹具 1–3（及 4–5 条件）",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "keep_open",
-        "conclusion": "长期横切但可切片；t11-open-rows 已给出最小夹具集与完成判定",
-        "evidence": [
-          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
-          "docs/adr/0727-native-n06-replay-restore-per-command-parity.md"
-        ],
-        "disposition": "保持 open；不再标 ambiguous",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "D5-LX-MIGRATION",
-      "source": {
-        "doc": "docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md",
-        "ref": "D5 行"
-      },
-      "description": "D5：龙血玄黄规则面迁移立项执行——先无头轨迹采集，再迁移规则面（含 ylyg*）。",
-      "done_when_evidence": [
-        "迁移计划/包数据",
-        "规则面回归",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T9-LX-BATTLE-TRACE"
-      ],
-      "role": "extension-engineer",
-      "tags": [
-        "D5",
-        "T9",
-        "T11",
-        "L29"
-      ]
-    },
-    {
-      "id": "T15-3-LEGACY-PORT",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T15 行③（约 L88）；D6；delta 页 10-08 节"
-      },
-      "description": "D6 解锁：旧线 engine-core 移植批——19 将 39 技从 source_synced 补齐实现。",
-      "done_when_evidence": [
-        "engine-core 定向/全量测试",
-        "catalog 状态从 source_synced 迁出",
-        "证据目录",
-        "upstream-1.11.5-delta 分布对照关闭"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "legacy-engineer",
-      "tags": [
-        "T15",
-        "D6"
-      ]
-    },
-    {
-      "id": "O4-WASM-OPT-COMPARE",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "性能待办 / O4（约 L130）；D7"
-      },
-      "description": "D7：接受离线内嵌 14.5MB；补装 wasm-opt 做一次对比测量后关闭 O4。",
-      "done_when_evidence": [
-        "同设备同工具链同负载前后数据",
-        "证据目录测量日志",
-        "wasm-opt 有/无体积与功能回归对照"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "performance-engineer",
-      "tags": [
-        "O4",
-        "D7"
-      ]
-    },
-    {
-      "id": "O5-PROFILING-CLOSEOUT",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "性能待办 / O5（约 L131）；D8"
-      },
-      "description": "D8：保持条件立项；做一轮剖析（JSON 快照/回放、动态派发、大文件拆分、Blake3 合并、目录重命名）。无触发条件则记录结论并关闭；有触发则最小改动并版本化。",
-      "done_when_evidence": [
-        "同设备同工具链同负载前后数据",
-        "证据目录测量日志",
-        "剖析结论页（关闭或立项）"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "performance-engineer",
-      "tags": [
-        "O5",
-        "D8"
-      ]
-    },
-    {
-      "id": "PERF-ARCH-ACCEPTANCE-GATES",
-      "source": {
-        "doc": "noname-next/noname-performance-architecture.md",
-        "ref": "§11 性能验证与验收标准"
-      },
-      "description": "架构验收口径未作为已测成绩：桌面/移动帧预算、输入响应、规则执行、AI、冷启动、长局内存、持续负载、联机、扩展有/无对照——须同设备同负载独立证据；原生 GPU 牌桌与正式客户端性能另轨。",
-      "done_when_evidence": [
-        "同设备同工具链同负载前后数据",
-        "证据目录测量日志",
-        "设备/OS/功耗条件固定记录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T13-PRODUCT-CLIENT"
-      ],
-      "role": "performance-engineer",
-      "tags": [
-        "PERF",
-        "ARCH"
-      ],
-      "notes": "目标文档口径，与 O1–O5 局部优化项不同层"
-    },
-    {
-      "id": "T13-AI-STRONGER-POLICY",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T13（约 L86）策略质量段"
-      },
-      "description": "更强 AI 候选（深搜/MCTS/身份目标匹配）即插即评——质量下界已确立，候选未交付。",
-      "done_when_evidence": [
-        "policy_eval 对照报告",
-        "同 seed 质量与成本"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "ai-engineer",
-      "tags": [
-        "T13",
-        "N10"
-      ]
-    },
-    {
-      "id": "T13-PRODUCT-CLIENT",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T13 产品面；O4 完成条件「浏览器 UI 归 T13」"
-      },
-      "description": "正式客户端产品面：web-client UI 层适配完整化、扩展包装载面、真实浏览器回归（worker 窄壳/切片已有，余产品面）。",
-      "done_when_evidence": [
-        "客户端/浏览器实测证据",
-        "与旧线数据分列"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "client-engineer",
-      "tags": [
-        "T13",
-        "N12"
-      ]
-    },
-    {
-      "id": "T13-NATIVE-GENERALS-PRODUCT",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T6③ 证据：装载面暂限卡牌包"
-      },
-      "description": "game-server /native 产品路径武将包 bridge_generals 接入选批（现暂限卡牌包）。",
-      "done_when_evidence": [
-        "game-server 定向测",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "server-engineer",
-      "tags": [
-        "T13",
-        "T6",
-        "E02"
-      ]
-    },
-    {
-      "id": "T12-WHOLEPACK-0-37",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "后续待做 / T12（约 L85）；台账「37 项均未完成原生整包验收」"
-      },
-      "description": "T12 总账：2026-10-17 起为 15/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26 与 L21 八项）。其余 22 个来源未验收。U04 不因同一经济再计一次。每来源八项通过后才计入。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [
-        "E01-G0-DEPTH",
-        "E02-OPEN-RULE",
-        "E03-OPEN-RULE",
-        "E04-G2G4",
-        "E05-G5",
-        "E06-PER-SOURCE"
-      ],
-      "role": "extension-lead",
-      "tags": [
-        "T12",
-        "E04",
-        "E05",
-        "E06",
-        "G2",
-        "G3",
-        "G4",
-        "G5"
-      ]
-    },
-    {
-      "id": "T12-SWD-DEFERRED-SKILLS",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
-      },
-      "description": "杀海拾遗·swd 武将面 deferred 技能消解至可验收（卡牌面 92 行已闭环；多余 13 张另项）。核验时点：b99 为 133/184 映射、deferred 49（起草快照曾写批 98≈51）。",
-      "done_when_evidence": [
-        "定向回归测试通过",
-        "cargo test --offline -p engine-native --no-fail-fast 全绿",
-        "Gate 1b exit 0",
-        "证据目录 README+日志",
-        "deferred 计数收敛证据"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T12",
-        "U05",
-        "swd"
-      ],
-      "notes": "计数以最新 swd deferred 证据 README 为准；并行消解属进度漂移非归类模糊",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "keep_open",
-        "conclusion": "进度跟踪项；以当前证据计数为准，快照漂移不构成 ambiguous",
-        "evidence": [
-          "docs/operations/evidence/2026-10-16-t12-swd-deferred-b99/README.md",
-          "docs/migration/upstream-extension-reconstruction.md"
-        ],
-        "disposition": "保持 open",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "T12-SWD-EXTRA-CARDS-DISPOSITION",
-      "source": {
-        "doc": "docs/operations/evidence/2026-10-15-t12-swd-cards-audit/README.md",
-        "ref": "包内多余 13 处置待决"
-      },
-      "description": "swd 卡牌对账：包内多余 13 张处置待决（勘误/删除/保留登记）。",
-      "done_when_evidence": [
-        "处置结论+包数据守护测试"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "U05",
-        "swd"
-      ]
-    },
-    {
-      "id": "T12-YUNCHOU-DEFERRED",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T12 运筹武将面批（约 18/20，2 暂缓）"
-      },
-      "description": "运筹帷幄余暂缓：奸雄·变体（身份改写面）、巧思等——随身份局深化/骰子等原语。",
-      "done_when_evidence": [
-        "定向回归测试通过",
-        "cargo test --offline -p engine-native --no-fail-fast 全绿",
-        "Gate 1b exit 0",
-        "证据目录 README+日志"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T12",
-        "U05",
-        "yunchou"
-      ]
-    },
-    {
-      "id": "T12-WUDIAN-DEFERRED",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T12 玩点论杀批（约 19/22，3 暂缓）"
-      },
-      "description": "玩点论杀余暂缓：仇渡/调兵遣将（亮牌替换锦囊面级工程）、夺启/佑赞等机制缺口。",
-      "done_when_evidence": [
-        "定向回归测试通过",
-        "cargo test --offline -p engine-native --no-fail-fast 全绿",
-        "Gate 1b exit 0",
-        "证据目录 README+日志",
-        "deferred-survey 立项关闭"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T12",
-        "U07"
-      ]
-    },
-    {
-      "id": "T12-MTG-DEFERRED-LANDS",
-      "source": {
-        "doc": "docs/architecture/native-progress.md",
-        "ref": "T12 mtg 藏宝海湾/毒沼 deferred"
-      },
-      "description": "mtg 地 2 张结构性依赖（派生包 UI / 跨包毒卡）——非逐卡切片可达。",
-      "done_when_evidence": [
-        "结构性依赖解除或永久 deferred ADR"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "architect",
-      "tags": [
-        "T12",
-        "U05",
-        "mtg"
-      ]
-    },
-    {
-      "id": "T12-D3-REMAINING-GENERALS",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3.1 U01"
-      },
-      "description": "3D精选：刘冲末焱已映射（2026-10-17），其余 30 将与 56 条技能引用未实现，资源映射未做。不计整包。L21 计入后总账为 15/37，末焱本身不计。",
-      "done_when_evidence": [
-        "定向回归测试通过",
-        "cargo test --offline -p engine-native --no-fail-fast 全绿",
-        "Gate 1b exit 0",
-        "证据目录 README+日志",
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "T12",
-        "U01"
-      ]
-    },
-    {
-      "id": "T12-SRC-U01",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U01 3D精选"
-      },
-      "description": "来源 U01（3D精选）原生整包验收未完成。台账状态：部分重构；G1 样本+生命周期；刘冲末焱切片已测（2026-10-17），其余 30 将与 56 条技能引用未实现。整包未完成。L21 计入后总账为 15/37，本行未验收。建议批次：G1→G3。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U01",
-        "G1"
-      ]
-    },
-    {
-      "id": "T12-SRC-U02",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U02 boss"
-      },
-      "description": "来源 U02（boss）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U02",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-U03",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U03 cardpile"
-      },
-      "description": "来源 U03（cardpile）八项已于 2026-10-17 从真实安装验收。随机点数仍为登记差异。113 张比例牌不是上游默认追加。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-u03-eight/README.md",
-        "u03_eight_dimension_from_fresh_install",
-        "cardpile_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U03",
-        "G1"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from a real install. Injected ranks are not Math.random. The 113 ratio cards stay catalog material. L04 is not counted."
-    },
-    {
-      "id": "T12-SRC-U04",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U04 coin"
-      },
-      "description": "来源 U04（coin）八项已于 2026-10-17 从真实安装验收。画布、音效、提示、CSS 和粒子仍为登记差异。其后 L05 另有八项，不由本行计入。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-u04-eight/README.md",
-        "u04_eight_dimension_from_fresh_install",
-        "coin_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "resolution": "2026-10-17 eight-dimension acceptance from a real install. Canvas, audio, toast, CSS, and particles stay registered differences. Caller unit random is not Math.random. L05 is not counted.",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U04",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-U05",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U05 杀海拾遗"
-      },
-      "description": "来源 U05（杀海拾遗）原生整包验收未完成。台账状态：多子包部分重构；swd/运筹等内容面推进中；非整包。建议批次：G1→G5。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U05",
-        "G1"
-      ]
-    },
-    {
-      "id": "T12-SRC-U06",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U06 欢乐卡牌"
-      },
-      "description": "来源 U06（欢乐卡牌）八项已于 2026-10-17 从真实安装验收。2026-10-16 决议仍有效：通道全绿不单独上调。苦无仍为登记差异。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-u06-eight/README.md",
-        "u06_eight_dimension_from_fresh_install",
-        "huanle_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U06",
-        "G3"
-      ],
-      "notes": "2026-10-16：通道验收不上调。2026-10-17：八项测试通过后关闭。关闭当时总账 1/37。其后 L06、L07 计入曾为 3/37。其后 L23 计入曾为 4/37。其后 U03 计入曾为 5/37。其后 U04 计入曾为 6/37。其后 L04 计入曾为 7/37。其后 L05 计入曾为 8/37。其后 L22 计入曾为 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。苦无仍为登记差异。U04 不因同一经济再计一次。",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "closed_2026_10_17",
-        "conclusion": "2026-10-16：通道全绿不单独上调。2026-10-17：八项从真实安装通过后 U06 resolved。关闭当时总账 1/37。其后 L06、L07 计入曾为 3/37。其后 L23 计入曾为 4/37。其后 U03 计入曾为 5/37。其后 U04 计入曾为 6/37。其后 L04 计入曾为 7/37。其后 L05 计入曾为 8/37。其后 L22 计入曾为 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。苦无仍为登记差异。U04 不因同一经济再计一次。",
-        "evidence": [
-          "docs/architecture/native-progress.md",
-          "docs/migration/upstream-extension-reconstruction.md",
-          "docs/operations/evidence/2026-10-14-t12-u06-g2g4/README.md",
-          "docs/operations/evidence/2026-10-14-t12-huanle-g5/README.md",
-          "docs/operations/evidence/2026-10-17-t12-u06-eight/README.md"
-        ],
-        "disposition": "T12-SRC-U06 resolved；T12-WHOLEPACK 仍 open（当前 15/37）",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "T12-SRC-U07",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U07 玩点论杀"
-      },
-      "description": "来源 U07（玩点论杀）原生整包验收未完成。台账状态：部分重构；武将/卡 deferred 余项；非整包。建议批次：G1→G3。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U07",
-        "G1"
-      ]
-    },
-    {
-      "id": "T12-SRC-U08",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / U08 英雄杀"
-      },
-      "description": "来源 U08（英雄杀）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "U08",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L01",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L01 AI优化"
-      },
-      "description": "来源 L01（AI优化）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L01",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L02",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L02 SJ Settings"
-      },
-      "description": "来源 L02（SJ Settings）八项已于 2026-10-17 从 liuli 真实安装验收。不请求网络，不 eval update.js，不打开 PDF，不启动 eruda，不调用 game.reload 或 game.loop。Cordova、进度条和通知仍为登记差异。数据库导入要求 config 与 data 都是对象。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l02-eight/README.md",
-        "l02_eight_dimension_from_fresh_install",
-        "sj_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L02",
-        "G2;移动端G5"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Network, eval, PDF, eruda, and game.reload or game.loop stay refused. Cordova, progress UI, and notifications stay registered differences."
-    },
-    {
-      "id": "T12-SRC-L03",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L03 boss"
-      },
-      "description": "来源 L03（boss）原生整包验收未完成。台账状态：待重构；未验收（对照 U02）。建议批次：G2–G3。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L03",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L04",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L04 cardpile"
-      },
-      "description": "来源 L04（cardpile）八项已于 2026-10-17 从 liuli 真实安装验收。随机点数仍为登记差异。不由 U03 组合行计入。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l04-eight/README.md",
-        "l04_eight_dimension_from_fresh_install",
-        "liuli_cardpile_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L04",
-        "G1"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Injected ranks are not Math.random. U03 is not counted again."
-    },
-    {
-      "id": "T12-SRC-L05",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L05 coin"
-      },
-      "description": "来源 L05（coin）八项已于 2026-10-17 从 liuli 真实安装验收。画布、音效、提示、CSS 和粒子仍为登记差异。不由 U04 组合行计入。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l05-eight/README.md",
-        "l05_eight_dimension_from_fresh_install",
-        "liuli_coin_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L05",
-        "G2"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli coin package install. Canvas, audio, toast, CSS, and particles stay registered differences. U04 is not counted again."
-    },
-    {
-      "id": "T12-SRC-L06",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L06 wuxing"
-      },
-      "description": "来源 L06（wuxing）八项已于 2026-10-17 从真实安装验收。装备授予五行盘技能。随机、弃牌选择、联机/录像/帮助仍为登记差异。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l06-eight/README.md",
-        "l06_eight_dimension_from_fresh_install",
-        "wuxing_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L06",
-        "G1"
-      ]
-    },
-    {
-      "id": "T12-SRC-L07",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L07 全能搜索"
-      },
-      "description": "来源 L07（全能搜索）八项已于 2026-10-17 从真实安装验收。界面、语音和脚本执行仍为登记差异。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l07-eight/README.md",
-        "l07_eight_dimension_from_fresh_install",
-        "omnisearch_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L07",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L08",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L08 十周年UI"
-      },
-      "description": "来源 L08（十周年UI）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L08",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L09",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L09 千幻聆音"
-      },
-      "description": "来源 L09（千幻聆音）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L09",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L10",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L10 史诗卡牌"
-      },
-      "description": "来源 L10（史诗卡牌）原生整包验收未完成。台账状态：待重构；未验收（D1 工作区口径）。建议批次：G3–G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L10",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L11",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L11 太虚幻境"
-      },
-      "description": "来源 L11（太虚幻境）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3→G4–G5。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L11",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L12",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L12 如真似幻"
-      },
-      "description": "来源 L12（如真似幻）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L12",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L13",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L13 手杀MVP"
-      },
-      "description": "来源 L13（手杀MVP）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L13",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L14",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L14 手杀ui"
-      },
-      "description": "来源 L14（手杀ui）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L14",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L15",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L15 手杀全扩"
-      },
-      "description": "来源 L15（手杀全扩）八项已于 2026-10-17 从 liuli 真实安装验收。不播放奶龙音频，不画界面，不调用 clsPrefixName。HTML 配置名、CSS 和玩家排序仍为登记差异。出厂配置没有 changeGroup。空名在改名时返回 BadName。BT 数组空洞不记为 id。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l15-eight/README.md",
-        "l15_eight_dimension_from_fresh_install",
-        "shousha_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L15",
-        "G2"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Audio, DOM, clsPrefixName, HTML config names, CSS, and player sort stay registered differences."
-    },
-    {
-      "id": "T12-SRC-L16",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L16 拖拽读取"
-      },
-      "description": "来源 L16（拖拽读取）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;跨平台G5。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L16",
-        "G2;跨平台G5"
-      ]
-    },
-    {
-      "id": "T12-SRC-L17",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L17 斗转星移"
-      },
-      "description": "来源 L17（斗转星移）八项已于 2026-10-17 从 liuli 真实安装验收。不打开菜单，不播放音频，不调用 game.reload，不 eval。HTML/CSS、启动页、势力颜色和玩家排序仍为登记差异。空方案导出是 ['']。禁将用 indexOf。AI 网络要正好是 online。稀有度和抽样由调用方给出。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l17-eight/README.md",
-        "l17_eight_dimension_from_fresh_install",
-        "douzhuan_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L17",
-        "G2"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Menu, audio, game.reload, eval, HTML/CSS, splash, group color, and player sort stay registered differences."
-    },
-    {
-      "id": "T12-SRC-L18",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L18 更新保护"
-      },
-      "description": "来源 L18（更新保护）八项已于 2026-10-17 从 liuli 真实安装验收。不请求网络，不写盘，不 eval，不睡眠。下载写盘、Cordova、DOM 和两秒等待仍为登记差异。注释里的下载不执行。检查素材更新后 UpdatingForAsset 仍为真。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l18-eight/README.md",
-        "l18_eight_dimension_from_fresh_install",
-        "update_guard_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L18",
-        "G2;平台G5"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Network, disk writes, eval, sleep, Cordova, and DOM stay registered differences. The commented download path is not executed."
-    },
-    {
-      "id": "T12-SRC-L19",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L19 末日乱斗"
-      },
-      "description": "来源 L19（末日乱斗）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L19",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L20",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L20 标记补充"
-      },
-      "description": "来源 L20（标记补充）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L20",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L21",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L21 武皇争霸"
-      },
-      "description": "来源 L21（武皇争霸）八项已于 2026-10-17 从 liuli 真实安装验收。不画界面，不采样 Math.random，不播放录像，不走联机。双将体力上限的五种算法不执行。extension/武皇/mightyFoe.js 不指向本目录，旁路不自动执行。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l21-eight/README.md",
-        "l21_eight_dimension_from_fresh_install",
-        "martial_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L21",
-        "G3"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. UI, Math.random, playback, online choose, the commented double-HP formulas, and the sibling mightyFoe script stay registered differences."
-    },
-    {
-      "id": "T12-SRC-L22",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L22 段位制裁"
-      },
-      "description": "来源 L22（段位制裁）八项已于 2026-10-17 从真实安装验收。将池不筛，烧条不睡眠、不说台词，分数由调用方给出，仍为登记差异。L12 不计入。关闭当时总账 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L22",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L23",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L23 电脑适配"
-      },
-      "description": "来源 L23（电脑适配）八项已于 2026-10-17 从真实安装验收。窗口、DOM 和抛表情仍为登记差异。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l23-eight/README.md",
-        "l23_eight_dimension_from_fresh_install",
-        "desktop_adapt_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L23",
-        "G2;平台G5"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from a real install. Window, DOM, and emoji dispatch stay registered differences."
-    },
-    {
-      "id": "T12-SRC-L24",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L24 皮肤切换"
-      },
-      "description": "来源 L24（皮肤切换）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L24",
-        "G2"
-      ]
-    },
-    {
-      "id": "T12-SRC-L25",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L25 祖安武将"
-      },
-      "description": "来源 L25（祖安武将）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G0细拆→G3–G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L25",
-        "G0细拆"
-      ]
-    },
-    {
-      "id": "T12-SRC-L26",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L26 笨蛋插件"
-      },
-      "description": "来源 L26（笨蛋插件）八项已于 2026-10-17 从 liuli 真实安装验收。不画界面，不播放音频，不启动定时器，不采样 Math.random，不生成随机锚点。if(false) 里的选择卡牌优化不执行。注释里的 _choose.mp3 不执行。",
-      "done_when_evidence": [
-        "docs/operations/evidence/2026-10-17-t12-l26-eight/README.md",
-        "l26_eight_dimension_from_fresh_install",
-        "fool_pack_json_enters_wasm_helper"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L26",
-        "G2"
-      ],
-      "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Dialogs, audio, timers, Math.random, random anchors, the disabled choose-card optimizer, and the commented choose-file path stay registered differences."
-    },
-    {
-      "id": "T12-SRC-L27",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L27 选将美化"
-      },
-      "description": "来源 L27（选将美化）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L27",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L28",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L28 雷霆万钧"
-      },
-      "description": "来源 L28（雷霆万钧）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L28",
-        "G3"
-      ]
-    },
-    {
-      "id": "T12-SRC-L29",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "§3 全量逐项台账 / L29 龙血玄黄"
-      },
-      "description": "来源 L29（龙血玄黄）原生整包验收未完成。台账状态：G0 清单完成；规则面迁移 D5 解锁；非整包。建议批次：G0→G1/G4。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [
-        "D5-LX-MIGRATION"
-      ],
-      "role": "extension-engineer",
-      "tags": [
-        "T12",
-        "整包",
-        "L29",
-        "G0"
-      ],
-      "notes": "依赖 D5 规则面迁移"
-    },
-    {
-      "id": "E01-G0-DEPTH",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "当前状态与 E01–E06 / E01·G0"
-      },
-      "description": "E01/G0 部分完成：其余来源逐配置/子插件/规则分支/依赖/缺资源与旧行为样本；每项目标接口与验证入口。",
-      "done_when_evidence": [
-        "对应 G 门槛断言+测试",
-        "证据目录",
-        "台账 G0 深度清单"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "extension-auditor",
-      "tags": [
-        "E01",
-        "G0",
-        "T9"
-      ]
-    },
-    {
-      "id": "E02-OPEN-RULE",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "E02 / G1"
-      },
-      "description": "E02/G1：独立发布新规则仍须证明无需重编译客户端（T8 余项）；产品装载武将面等缺口。",
-      "done_when_evidence": [
-        "对应 G 门槛断言+测试",
-        "证据目录",
-        "不重编译装新规则证据"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T8-FILTER-COMPOSITE",
-        "T8-EFFECT-QUERY-VARIANTS",
-        "T13-NATIVE-GENERALS-PRODUCT"
-      ],
-      "role": "extension-engineer",
-      "tags": [
-        "E02",
-        "G1",
-        "T8"
-      ]
-    },
-    {
-      "id": "E03-OPEN-RULE",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "E03 / G1"
-      },
-      "description": "E03/G1：扩展自定义规则/机器状态、随机和选择可通用编码、恢复、校验及失败回滚；登记差异逐项对照上游。",
-      "done_when_evidence": [
-        "对应 G 门槛断言+测试",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T8-EFFECT-QUERY-VARIANTS"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "E03",
-        "G1",
-        "T8"
-      ]
-    },
-    {
-      "id": "E04-G2G4",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "E04 / G2–G4"
-      },
-      "description": "E04/G2–G4 待验收：模式、AI、配置、资源和界面契约——各有真实扩展示例；15 包通道五断言已有，其余来源未齐。",
-      "done_when_evidence": [
-        "对应 G 门槛断言+测试",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T12-WHOLEPACK-0-37"
-      ],
-      "role": "extension-engineer",
-      "tags": [
-        "E04",
-        "G2",
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "id": "E05-G5",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "E05 / G5"
-      },
-      "description": "E05/G5 待验收：联机内容锁、存档/录像和旧版会话——15 个 G1 转换包 G5 切片已达成，其余来源与真联机产品面未齐。",
-      "done_when_evidence": [
-        "对应 G 门槛断言+测试",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "server-engineer",
-      "tags": [
-        "E05",
-        "G5"
-      ]
-    },
-    {
-      "id": "E06-PER-SOURCE",
-      "source": {
-        "doc": "docs/migration/upstream-extension-reconstruction.md",
-        "ref": "E06 / G3–G5"
-      },
-      "description": "E06：每来源功能清单和正反例齐全；安装/升级/配置/组合/性能逐包通过后才上调整包状态。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [
-        "E01-G0-DEPTH",
-        "E04-G2G4",
-        "E05-G5"
-      ],
-      "role": "extension-lead",
-      "tags": [
-        "E06",
-        "G3",
-        "G4",
-        "G5",
-        "T12"
-      ]
-    },
-    {
-      "id": "COV-EQUIP-TIMING-WINDOW",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "行为差异表「装备即时生效」（约 L109）"
-      },
-      "description": "装备即时生效 vs 上游装备时机触发窗口——行为差异保留，触发窗口化另立项。",
-      "done_when_evidence": [
-        "立项 ADR 或正式永久差异登记",
-        "回归"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "COV",
-        "行为差异"
-      ]
-    },
-    {
-      "id": "COV-REWARD-OVER-VERIFY",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "行为差异表「奖惩与终局判定顺序」待核项（约 L122）"
-      },
-      "description": "上游 game.over 后事件链是否仍执行 dieAfter2 未逐项确认——待核后关闭或改登记。",
-      "done_when_evidence": [
-        "上游对照证据",
-        "覆盖清单处置更新"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "rules-auditor",
-      "tags": [
-        "COV",
-        "RULE"
-      ]
-    },
-    {
-      "id": "COV-TRIGGER-GETINDEX-BUCKETS",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "行为差异表「触发全序细节」；规则基准当前声明"
-      },
-      "description": "getIndex / firstDo / lastDo 有内容需求时立项（当前保留原生确定性全序）。",
-      "done_when_evidence": [
-        "内容需求驱动的立项或明确不立项"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "architect",
-      "tags": [
-        "COV",
-        "RULE"
-      ],
-      "notes": "条件立项；与触发全序定案分层。关闭=立项 ADR 或明确不立项笔记",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "keep_open",
-        "conclusion": "有内容需求再建模 getIndex/firstDo/lastDo；无需求可记「维持不立项」关闭",
-        "evidence": [
-          "docs/native-coverage-manifest.md",
-          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
-          "docs/operations/evidence/2026-10-16-trigger-order-upstream/README.md"
-        ],
-        "disposition": "保持 open（条件立项）",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-      }
-    },
-    {
-      "id": "COV-PARTIAL-MECHANISMS",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "范围 A 多行「已验证（部分）」：nullify_scope/snapshot_restore/identity_mode/visible_views/session_auth/byte_archive/nullify_judge_window 等"
-      },
-      "description": "（已拆分关闭）原伞项：覆盖清单多行「已验证（部分）」扩面。",
-      "done_when_evidence": [
-        "逐机制扩面测试+清单状态升级"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "COV"
-      ],
-      "ambiguous": false,
-      "notes": "snapshot→T11-EVENT-RNG-RESTORE-PARITY；identity mid→RULE-IDENTITY-VIEW-RESTORE；其余见新 ID",
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "split_new",
-        "conclusion": "伞项关闭；机制面并入已有 ID 或单列新 ID",
-        "evidence": [
-          "docs/native-coverage-manifest.md",
-          "docs/operations/evidence/2026-10-16-t11-open-rows/README.md"
-        ],
-        "disposition": "status=resolved",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "split_into": [
-          "COV-VISIBLE-VIEWS-EXT",
-          "COV-SESSION-AUTH-PRODUCT",
-          "COV-NULLIFY-JUDGE-EXPAND"
-        ],
-        "merged_into": [
-          "T11-EVENT-RNG-RESTORE-PARITY",
-          "RULE-IDENTITY-VIEW-RESTORE"
-        ]
-      }
-    },
-    {
-      "id": "COV-VISIBLE-VIEWS-EXT",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "visible_views 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
-      },
-      "description": "可见视图扩面：扩展/客户端视图隔离——不外推为所有扩展与客户端均已隔离。",
-      "done_when_evidence": [
-        "扩面测试+覆盖清单状态升级",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T13-PRODUCT-CLIENT"
-      ],
-      "role": "client-engineer",
-      "tags": [
-        "COV",
-        "T13"
-      ],
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "split_new",
-        "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
-        "evidence": [
-          "docs/native-coverage-manifest.md",
-          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-        ],
-        "disposition": "新增 open",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "split_from": "COV-PARTIAL-MECHANISMS"
-      }
-    },
-    {
-      "id": "COV-SESSION-AUTH-PRODUCT",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "session_auth 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
-      },
-      "description": "会话鉴权产品面：权威网络接入——现有令牌拒绝/重签切片不代表权威网络已接入。",
-      "done_when_evidence": [
-        "权威网络/产品接入证据",
-        "覆盖清单状态升级"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T13-PRODUCT-CLIENT"
-      ],
-      "role": "server-engineer",
-      "tags": [
-        "COV",
-        "T13"
-      ],
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "split_new",
-        "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
-        "evidence": [
-          "docs/native-coverage-manifest.md",
-          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-        ],
-        "disposition": "新增 open",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "split_from": "COV-PARTIAL-MECHANISMS"
-      }
-    },
-    {
-      "id": "COV-NULLIFY-JUDGE-EXPAND",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "nullify_judge_window 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
-      },
-      "description": "延时锦囊无懈窗口扩面：兵/闪电抵消及多牌组合（乐被抵消路径已有）。",
-      "done_when_evidence": [
-        "兵/闪电抵消与多牌组合定向测",
-        "覆盖清单状态升级",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "COV"
-      ],
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "split_new",
-        "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
-        "evidence": [
-          "docs/native-coverage-manifest.md",
-          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-        ],
-        "disposition": "新增 open",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "split_from": "COV-PARTIAL-MECHANISMS"
-      }
-    },
-    {
-      "id": "COV-STANDARD-FULL-CONTENT",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "范围 B「所有历史包/正式完整内容」未完成；标准武将/模式行"
-      },
-      "description": "标准整将/牌/模式完整验收与历史包正式内容未完成；不按名称或测试数计算迁移率。",
-      "done_when_evidence": [
-        "玩法版本+逐技能语义清单",
-        "整包证据"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T11-EVENT-RNG-RESTORE-PARITY"
-      ],
-      "role": "rules-auditor",
-      "tags": [
-        "COV",
-        "T11"
-      ]
-    },
-    {
-      "id": "COV-EXT-37",
-      "source": {
-        "doc": "docs/native-coverage-manifest.md",
-        "ref": "扩展机制表「指定两仓全部扩展」"
-      },
-      "description": "覆盖清单扩展行：原生整包验收 15/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26 与 L21，2026-10-17），仍需处理 22/37，与 T12 总账同口径。U04 不因同一经济再计一次。",
-      "done_when_evidence": [
-        "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
-        "整包状态上调登记"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T12-WHOLEPACK-0-37"
-      ],
-      "role": "extension-lead",
-      "tags": [
-        "COV",
-        "T12"
-      ]
-    },
-    {
-      "id": "RULE-JUDGE-ORDER-NOTE",
-      "source": {
-        "doc": "docs/architecture/native-rules-baseline.md",
-        "ref": "当前声明与验证边界「判定排序/闪电」（约 L3447）"
-      },
-      "description": "判定排序：语义选择已定案保留原生 FIFO+闪电最后；声明表曾写「是否改判上游待决策」——文档滞后已就地勘正。",
-      "done_when_evidence": [
-        "声明表措辞与语义选择定案对齐（docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md）"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "docs-auditor",
-      "tags": [
-        "RULE"
-      ],
-      "notes": "2026-10-16 正文已勘正：基准验证边界与 coverage `judge_zone` 同口径改为「已定案保留原生」",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "doc_lag_fix",
-        "conclusion": "实质已定案保留原生 FIFO+闪电最后；声明表滞后句已改正并留证据",
-        "evidence": [
-          "docs/native-coverage-manifest.md",
-          "docs/architecture/native-rules-baseline.md",
-          "docs/operations/evidence/2026-10-16-judge-order-upstream/README.md",
-          "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
-        ],
-        "disposition": "status=resolved；正文已勘正（closed）",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "applied_fix": {
-          "file": "docs/architecture/native-rules-baseline.md",
-          "also": "docs/native-coverage-manifest.md judge_zone",
-          "evidence": "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
-        }
-      }
-    },
-    {
-      "id": "RULE-IDENTITY-VIEW-RESTORE",
-      "source": {
-        "doc": "docs/architecture/native-rules-baseline.md",
-        "ref": "当前声明「身份」验证边界（约 L3452）"
-      },
-      "description": "完整身份可见视图和所有终局逐提交恢复仍缺。",
-      "done_when_evidence": [
-        "定向回归测试通过",
-        "cargo test --offline -p engine-native --no-fail-fast 全绿",
-        "Gate 1b exit 0",
-        "证据目录 README+日志"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "RULE",
-        "T13"
-      ]
-    },
-    {
-      "id": "RULE-MODE-REMAINDERS",
-      "source": {
-        "doc": "docs/architecture/native-rules-baseline.md",
-        "ref": "当前声明「模式」行（约 L3454）"
-      },
-      "description": "模式变体余项：斗地主 online 面登记、KOF 多局连续会话循环仍在宿主层、Boss loopType==2 等未建模变体、其余上游 mode 入口未接入。",
-      "done_when_evidence": [
-        "规则版本递增（若语义变）",
-        "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
-        "规则基准条目",
-        "证据目录"
-      ],
-      "status": "open",
-      "depends_on": [
-        "T11-BOSS-STAGE-SUBSYSTEM"
-      ],
-      "role": "kernel-engineer",
-      "tags": [
-        "RULE",
-        "T11"
-      ]
-    },
-    {
-      "id": "RULE-DISTANCE-UNMODELED",
-      "source": {
-        "doc": "docs/architecture/native-rules-baseline.md",
-        "ref": "当前声明「距离/座距」；采用玩法版本证据"
-      },
-      "description": "undist/isMin 等未建模；其余距离类技能仍逐技能验收。",
-      "done_when_evidence": [
-        "逐技能证据或建模"
-      ],
-      "status": "open",
-      "depends_on": [],
-      "role": "kernel-engineer",
-      "tags": [
-        "RULE"
-      ]
-    },
-    {
-      "id": "RULE-CONTENT-DIFF-CONVENTIONS",
-      "source": {
-        "doc": "docs/architecture/native-rules-baseline.md",
-        "ref": "内容差异与后续验收（约 L3489）"
-      },
-      "description": "保留惯例：护驾转化牌实体响应、激将借牌直结算（ADR 0776）——非缺陷但非整将上游等价；逐技能/复合场景继续举证。",
-      "done_when_evidence": [
-        "逐技能上游等价证据或正式差异关闭"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "rules-auditor",
-      "tags": [
-        "RULE",
-        "T11"
-      ],
-      "notes": "ADR 0776 保留惯例；逐技能举证并入 COV-STANDARD-FULL-CONTENT",
-      "ambiguous": false,
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "permanent_diff",
-        "conclusion": "护驾/激将登记惯例为正式保留差异，非未定案缺陷；本项关闭",
-        "evidence": [
-          "docs/architecture/native-rules-baseline.md",
-          "docs/adr/0776-native-n08-jijiang-hujia-per-seat-ask.md"
-        ],
-        "disposition": "status=resolved；举证并入 COV-STANDARD-FULL-CONTENT",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "merged_into": [
-          "COV-STANDARD-FULL-CONTENT"
-        ]
-      }
-    },
-    {
-      "id": "RULE-BUDGET-DOC-LAG",
-      "source": {
-        "doc": "docs/architecture/native-rules-baseline.md",
-        "ref": "当前声明「预算/时间片」（约 L3456）"
-      },
-      "description": "声明曾写「独立工作池未实现」，但 T13 PlanPool 已完成——文档滞后已就地勘正。",
-      "done_when_evidence": [
-        "声明表更新为与 T13 证据一致（docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md）"
-      ],
-      "status": "resolved",
-      "depends_on": [],
-      "role": "docs-auditor",
-      "tags": [
-        "RULE",
-        "T13"
-      ],
-      "ambiguous": false,
-      "notes": "2026-10-16 正文已勘正：基准验证边界改为 PlanPool 已实现；策略质量仍挂 T13-AI-STRONGER-POLICY",
-      "resolution": {
-        "date": "2026-10-16",
-        "kind": "doc_lag_fix",
-        "conclusion": "T13 PlanPool（2026-10-14）已实现；基准滞后句已改正并留证据",
-        "evidence": [
-          "docs/operations/evidence/2026-10-14-t13-plan-pool/README.md",
-          "docs/architecture/native-rules-baseline.md",
-          "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
-        ],
-        "disposition": "status=resolved；正文已勘正（closed）",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "applied_fix": {
-          "file": "docs/architecture/native-rules-baseline.md",
-          "evidence": "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
-        }
-      }
+  {
+   "id": "T8-EFFECT-QUERY-VARIANTS",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T8 行（约 L81）完成条件段"
+   },
+   "description": "T8 余项：剩余 rule-vm 效果/查询变体（部分需内核新原语）；开放规则验收面「不重编译即可装含新技能/新牌的包」在通用效果面的持续扩面。",
+   "done_when_evidence": [
+    "定向回归测试通过",
+    "cargo test --offline -p engine-native --no-fail-fast 全绿",
+    "Gate 1b exit 0",
+    "证据目录 README+日志",
+    "真实扩展样本端到端"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T8-FILTER-COMPOSITE"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "T8",
+    "E03",
+    "G1"
+   ]
+  },
+  {
+   "id": "T9-SOURCE-BEHAVIOR-SAMPLES",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T9 行（约 L82）"
+   },
+   "description": "T9：37 来源各自补齐旧行为动态样本、菜单与规则分支语义清单、目标接口与验证入口登记（功能面基线已有，非整包）。",
+   "done_when_evidence": [
+    "台账每来源行为样本证据",
+    "目标接口与验证入口登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-auditor",
+   "tags": [
+    "T9",
+    "E01",
+    "G0"
+   ]
+  },
+  {
+   "id": "T9-LX-BATTLE-TRACE",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T9；docs/operations/evidence/2026-10-11-t9-lx-trace-survey/README.md"
+   },
+   "description": "T9 龙血玄黄：搭旧线无头运行环境，采集战斗内触发轨迹（LX.2 仅注册期；archive 只读无 node_modules）。D5 已立项解锁。",
+   "done_when_evidence": [
+    "无头环境搭建证据",
+    "战斗触发轨迹样本",
+    "勘察阻塞项关闭说明"
+   ],
+   "status": "resolved",
+   "depends_on": [
+    "D5-LX-MIGRATION"
+   ],
+   "role": "legacy-harness-engineer",
+   "tags": [
+    "T9",
+    "E01",
+    "D5",
+    "L29"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "龙血无头 harness（scripts/legacy-harness）自动选将后对局内 skill.content 钩挂 17 次，采集命令、随机流计数与中途快照；Infinity 体力与 ylyg* 保持未映射（t9_d5_surface 3/0），登记为差异。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-t9-lx-content-hooks/README.md"
+    ]
+   }
+  },
+  {
+   "id": "T11-BOSS-STAGE-SUBSYSTEM",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T11；D4 裁决 docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md"
+   },
+   "description": "D4 解锁：建原生 Boss 关卡流程子系统（另写 ADR），并把原「关卡流程面登记不落」技能逐个落包——含十殿阎罗「还人」族（换将链/孟婆乱入/禁将表）、四象隐藏链八技、青/赤/白翼轮次编排、bianshen 死亡换 Boss。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录",
+    "子系统 ADR",
+    "逐技定向回归"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "architect+kernel-engineer",
+   "tags": [
+    "T11",
+    "D4",
+    "N08",
+    "N11"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "ADR 0783 子系统建成并按 B0–B4 全部落地：B0 骨架（v291）、B1 青木（v292）、B2/B3/B4 由进度主稿 B2/B3/B4 批覆盖（v293/v294/v295）。",
+    "evidence": [
+     "docs/adr/0783-boss-stage-flow-subsystem.md",
+     "docs/operations/evidence/2026-10-17-d4-boss-b4-huanren-wings/README.md"
+    ]
+   }
+  },
+  {
+   "id": "T11-BOSS-HUANREN",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 秦广王片（v276）；规则基准还人登记不落段"
+   },
+   "description": "十殿阎罗「还人」：关卡换将链、孟婆乱入、禁将表——原登记不落，D4 后待实现。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "resolved",
+   "depends_on": [
+    "T11-BOSS-STAGE-SUBSYSTEM"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11",
+    "D4"
+   ],
+   "notes": "含孟婆 mengpodie 旗 / boss_mengpohuihun 回魂面（自 T11-BOSS-MENGPO-WANGSHI-PLAY 并入）",
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "还人链（等级/禁将表/孟婆乱入/换将）随 ADR B3 落地（v295）：首阶段结束写十殿+禁将表+换将，孟婆乱入种子 1..80 覆盖，等级 2 分支换地藏王/转轮王，候选无映姬。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-d4-boss-b4-huanren-wings/README.md"
+    ]
+   }
+  },
+  {
+   "id": "T11-BOSS-HIDECHAIN-8",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 四象隐藏链处置证据 2026-10-11"
+   },
+   "description": "四象隐藏链八技（青木2/3、白芒2/3、赤炎2/3、玄麟2/3）dieBegin hide+dieAfter 换将重生——D4 后随关卡子系统落包。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "resolved",
+   "depends_on": [
+    "T11-BOSS-STAGE-SUBSYSTEM"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11",
+    "D4"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "四象隐藏链 2/2x/3/3x 全系落包：B1 青木（v292）、B2 白芒/赤炎/玄麟 2/2x（v293）、B3 3/3x（v294），参数表复用 SixiangChainParams。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-16-d4-boss-b1-qingmu/README.md",
+     "docs/operations/evidence/2026-10-16-d4-boss-b2-sixiang/README.md",
+     "docs/operations/evidence/2026-10-16-d4-boss-b3-sixiang3/README.md"
+    ]
+   }
+  },
+  {
+   "id": "T11-BOSS-WING-ROTATION",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 青翼/赤翼/白翼登记不落"
+   },
+   "description": "青/赤/白翼轮次编排技（阶段 3/5/7 等）——D4 后待实现。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "resolved",
+   "depends_on": [
+    "T11-BOSS-STAGE-SUBSYSTEM"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11",
+    "D4"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "青/赤/白翼轮次编排随 ADR B4 落地（v295）：青翼 3/5/7 轮、赤翼 3 轮授赤仪2 增伤、白翼 5 轮弃 2、7 轮前雷伤防止。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-d4-boss-b4-huanren-wings/README.md"
+    ]
+   }
+  },
+  {
+   "id": "T11-BOSS-BIANSHEN-CHANGEBOSS",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 bianshen 勘验片；D4"
+   },
+   "description": "bianshen 死亡 changeBoss / bianshen4 同族关卡流程面——D4 后待实现。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "resolved",
+   "depends_on": [
+    "T11-BOSS-STAGE-SUBSYSTEM"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11",
+    "D4"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "后援3/后援4 换将随 ADR B2 落地（v295）：牛头/马面死亡换白/黑无常，黑白无常死亡换夜叉/罗刹，同种子结果一致。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-d4-boss-b4-huanren-wings/README.md"
+    ]
+   }
+  },
+  {
+   "id": "T11-BOSS-ZHUGE-LIANG",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 庞统/诸葛亮片 v277；D5"
+   },
+   "description": "Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技 ylyg* 龙血玄黄包依赖——D5 立项后由登记不落转待实现。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录",
+    "hp Infinity 承载设计"
+   ],
+   "status": "open",
+   "depends_on": [
+    "D5-LX-MIGRATION",
+    "T9-LX-BATTLE-TRACE"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11",
+    "D5",
+    "T9"
+   ]
+  },
+  {
+   "id": "T11-BOSS-PANGTONG-EXTERNAL",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 庞统片 v277"
+   },
+   "description": "庞统涅槃/浴火等外部包技依赖（shenhua oldniepan / offline ylygniepan+三外部技+loopType）——随外部包/龙血面推进。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [
+    "D5-LX-MIGRATION"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11",
+    "D5"
+   ],
+   "notes": "非 D4；等 D5/外部包。天狱/栖梧已落（v277）",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "wait_d5",
+    "conclusion": "边界已清：涅槃/浴火属外部包技+loopType，挂 D5/外部包推进，不阻塞关卡子系统",
+    "evidence": [
+     "docs/adr/0783-boss-stage-flow-subsystem.md",
+     "docs/operations/evidence/2026-10-16-d4-boss-adr/README.md",
+     "docs/operations/evidence/2026-10-14-t11-boss-pangtong-v277/README.md",
+     "docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md"
+    ],
+    "disposition": "保持 open；depends_on D5-LX-MIGRATION",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+   }
+  },
+  {
+   "id": "T11-BOSS-DIZANG-DAYUAN",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 地藏王 v274"
+   },
+   "description": "地藏王「大愿」：判定改写机 AI 态度面——条目只列已转换技，仍开放。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11"
+   ],
+   "notes": "ADR 0783 §5：明确不纳入 D4；判定改写 AI 态度面内容余项",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "keep_open",
+    "conclusion": "单列内容余项（非 D4 关卡子系统）",
+    "evidence": [
+     "docs/adr/0783-boss-stage-flow-subsystem.md",
+     "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md"
+    ],
+    "disposition": "保持 open；不依赖 T11-BOSS-STAGE-SUBSYSTEM",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+   }
+  },
+  {
+   "id": "T11-BOSS-DIZANG-WULIANG-GAMEDRAW",
+   "source": {
+    "doc": "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
+    "ref": "无量建局摸 3 面登记未落；自 T11-BOSS-MENGPO-WANGSHI-PLAY 拆出"
+   },
+   "description": "地藏王「无量」建局摸 3 面（gameDrawAfter/enterGame）——v274 登记未落，随装配/建局批。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11"
+   ],
+   "notes": "非 D4 关卡流程；与大愿（T11-BOSS-DIZANG-DAYUAN）分立",
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "split_new",
+    "conclusion": "自原 ambiguous 抓包项拆出的明确 open 项",
+    "evidence": [
+     "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
+     "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+    ],
+    "disposition": "新增 open",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "split_from": "T11-BOSS-MENGPO-WANGSHI-PLAY"
+   }
+  },
+  {
+   "id": "T11-BOSS-SHIKIEIKI-EXCLUDED",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 Shikieiki 排除登记"
+   },
+   "description": "四季映姬 boss_yingzhong：外部武将库结构性依赖，目录排除。若要落包需外部武将池基建。",
+   "done_when_evidence": [
+    "结构性依赖解除或正式永久排除 ADR/台账"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11"
+   ],
+   "notes": "永久目录排除（ADR 0783）；未来外部将池另开新 ID",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "permanent_diff",
+    "conclusion": "维持四季映姬/映种目录排除；关闭条件=排除确认（已确认）",
+    "evidence": [
+     "docs/adr/0783-boss-stage-flow-subsystem.md",
+     "docs/operations/evidence/2026-10-16-d4-boss-adr/README.md",
+     "docs/operations/evidence/2026-10-14-t11-boss-qinguangwang-v276/README.md"
+    ],
+    "disposition": "status=resolved；还人映姬候选池未就绪则登记不可达",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+   }
+  },
+  {
+   "id": "T11-BOSS-MENGPO-WANGSHI-PLAY",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 孟婆 v270"
+   },
+   "description": "（已拆分关闭）原抓包：孟婆往事打出面 / 地藏王无量建局摸 3 / 十殿 mengpodie·回魂等零散 Boss 登记差异。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T11"
+   ],
+   "ambiguous": false,
+   "notes": "往事打出面=v270 永久登记差异；mengpodie/huihun→并入 T11-BOSS-HUANREN；无量建局摸3→T11-BOSS-DIZANG-WULIANG-GAMEDRAW",
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "split_new",
+    "conclusion": "拆清三面：往事打出永久差异；mengpodie/huihun 并入还人；无量建局摸3 新 ID",
+    "evidence": [
+     "docs/operations/evidence/2026-10-14-t11-boss-mengpo-v270/README.md",
+     "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
+     "docs/adr/0783-boss-stage-flow-subsystem.md"
+    ],
+    "disposition": "status=resolved",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "split_into": [
+     "T11-BOSS-DIZANG-WULIANG-GAMEDRAW"
+    ],
+    "merged_into": [
+     "T11-BOSS-HUANREN"
+    ],
+    "permanent_aspects": [
+     "孟婆往事打出/响应窗仅使用位（v270 登记）"
+    ]
+   }
+  },
+  {
+   "id": "T11-EVENT-RNG-RESTORE-PARITY",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T11 完成条件末段"
+   },
+   "description": "T11 横切：同一命令下事件、随机流和恢复轨迹对照（逐项修复或登记；语义变则升规则版本）。",
+   "done_when_evidence": [
+    "parity_chain_compound / parity_aoe_skip_trail / parity_judge_rewrite_rng 等定向夹具+证据目录",
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "命令/事件/随机/恢复四轨对照证据（投影后语义）"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "rules-auditor",
+   "tags": [
+    "T11",
+    "N08"
+   ],
+   "notes": "可切片关闭；完成判定见 t11-open-rows 专节夹具 1–3（及 4–5 条件）",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "keep_open",
+    "conclusion": "长期横切但可切片；t11-open-rows 已给出最小夹具集与完成判定",
+    "evidence": [
+     "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
+     "docs/adr/0727-native-n06-replay-restore-per-command-parity.md"
+    ],
+    "disposition": "保持 open；不再标 ambiguous",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+   }
+  },
+  {
+   "id": "D5-LX-MIGRATION",
+   "source": {
+    "doc": "docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md",
+    "ref": "D5 行"
+   },
+   "description": "D5：龙血玄黄规则面迁移立项执行——先无头轨迹采集，再迁移规则面（含 ylyg*）。",
+   "done_when_evidence": [
+    "迁移计划/包数据",
+    "规则面回归",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T9-LX-BATTLE-TRACE"
+   ],
+   "role": "extension-engineer",
+   "tags": [
+    "D5",
+    "T9",
+    "T11",
+    "L29"
+   ]
+  },
+  {
+   "id": "T15-3-LEGACY-PORT",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T15 行③（约 L88）；D6；delta 页 10-08 节"
+   },
+   "description": "D6 解锁：旧线 engine-core 移植批——19 将 39 技从 source_synced 补齐实现。",
+   "done_when_evidence": [
+    "engine-core 定向/全量测试",
+    "catalog 状态从 source_synced 迁出",
+    "证据目录",
+    "upstream-1.11.5-delta 分布对照关闭"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "legacy-engineer",
+   "tags": [
+    "T15",
+    "D6"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "D6 移植批：旧线 19 将 39 技诚实 noop 移植，catalog 全 ported。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-16-t15-3-v117-transplant/README.md"
+    ]
+   }
+  },
+  {
+   "id": "O4-WASM-OPT-COMPARE",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "性能待办 / O4（约 L130）；D7"
+   },
+   "description": "D7：接受离线内嵌 14.5MB；补装 wasm-opt 做一次对比测量后关闭 O4。",
+   "done_when_evidence": [
+    "同设备同工具链同负载前后数据",
+    "证据目录测量日志",
+    "wasm-opt 有/无体积与功能回归对照"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "performance-engineer",
+   "tags": [
+    "O4",
+    "D7"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "D7：wasm-opt（binaryen 123）与 no-opt 各级优化体积对比完成，接受离线内嵌 14.5MB 后关闭 O4。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-16-o4-wasm-opt/README.md"
+    ]
+   }
+  },
+  {
+   "id": "O5-PROFILING-CLOSEOUT",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "性能待办 / O5（约 L131）；D8"
+   },
+   "description": "D8：保持条件立项；做一轮剖析（JSON 快照/回放、动态派发、大文件拆分、Blake3 合并、目录重命名）。无触发条件则记录结论并关闭；有触发则最小改动并版本化。",
+   "done_when_evidence": [
+    "同设备同工具链同负载前后数据",
+    "证据目录测量日志",
+    "剖析结论页（关闭或立项）"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "performance-engineer",
+   "tags": [
+    "O5",
+    "D8"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "D8：benchmark-runner 一轮剖析对照 O3 基线，六类候选均无触发证据，记录结论并关闭 O5。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-16-o5-profiling/README.md"
+    ]
+   }
+  },
+  {
+   "id": "PERF-ARCH-ACCEPTANCE-GATES",
+   "source": {
+    "doc": "noname-next/noname-performance-architecture.md",
+    "ref": "§11 性能验证与验收标准"
+   },
+   "description": "架构验收口径未作为已测成绩：桌面/移动帧预算、输入响应、规则执行、AI、冷启动、长局内存、持续负载、联机、扩展有/无对照——须同设备同负载独立证据；原生 GPU 牌桌与正式客户端性能另轨。",
+   "done_when_evidence": [
+    "同设备同工具链同负载前后数据",
+    "证据目录测量日志",
+    "设备/OS/功耗条件固定记录"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T13-PRODUCT-CLIENT"
+   ],
+   "role": "performance-engineer",
+   "tags": [
+    "PERF",
+    "ARCH"
+   ],
+   "notes": "目标文档口径，与 O1–O5 局部优化项不同层"
+  },
+  {
+   "id": "T13-AI-STRONGER-POLICY",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T13（约 L86）策略质量段"
+   },
+   "description": "更强 AI 候选（深搜/MCTS/身份目标匹配）即插即评——质量下界已确立，候选未交付。",
+   "done_when_evidence": [
+    "policy_eval 对照报告",
+    "同 seed 质量与成本"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "ai-engineer",
+   "tags": [
+    "T13",
+    "N10"
+   ]
+  },
+  {
+   "id": "T13-PRODUCT-CLIENT",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T13 产品面；O4 完成条件「浏览器 UI 归 T13」"
+   },
+   "description": "正式客户端产品面：web-client UI 层适配完整化、扩展包装载面、真实浏览器回归（worker 窄壳/切片已有，余产品面）。",
+   "done_when_evidence": [
+    "客户端/浏览器实测证据",
+    "与旧线数据分列"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "client-engineer",
+   "tags": [
+    "T13",
+    "N12"
+   ]
+  },
+  {
+   "id": "T13-NATIVE-GENERALS-PRODUCT",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T6③ 证据：装载面暂限卡牌包"
+   },
+   "description": "game-server /native 产品路径武将包 bridge_generals 接入选批（现暂限卡牌包）。",
+   "done_when_evidence": [
+    "game-server 定向测",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "server-engineer",
+   "tags": [
+    "T13",
+    "T6",
+    "E02"
+   ]
+  },
+  {
+   "id": "T12-WHOLEPACK-0-37",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "后续待做 / T12（约 L85）；台账「37 项均未完成原生整包验收」"
+   },
+   "description": "T12 总账：2026-10-17 起为 15/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26 与 L21 八项）。其余 22 个来源未验收。U04 不因同一经济再计一次。每来源八项通过后才计入。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [
+    "E01-G0-DEPTH",
+    "E02-OPEN-RULE",
+    "E03-OPEN-RULE",
+    "E04-G2G4",
+    "E05-G5",
+    "E06-PER-SOURCE"
+   ],
+   "role": "extension-lead",
+   "tags": [
+    "T12",
+    "E04",
+    "E05",
+    "E06",
+    "G2",
+    "G3",
+    "G4",
+    "G5"
+   ]
+  },
+  {
+   "id": "T12-SWD-DEFERRED-SKILLS",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
+   },
+   "description": "杀海拾遗·swd 武将面 deferred 技能消解至可验收（卡牌面 92 行已闭环；多余 13 张另项）。核验时点：b99 为 133/184 映射、deferred 49（起草快照曾写批 98≈51）。",
+   "done_when_evidence": [
+    "定向回归测试通过",
+    "cargo test --offline -p engine-native --no-fail-fast 全绿",
+    "Gate 1b exit 0",
+    "证据目录 README+日志",
+    "deferred 计数收敛证据"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T12",
+    "U05",
+    "swd"
+   ],
+   "notes": "计数以最新 swd deferred 证据 README 为准；并行消解属进度漂移非归类模糊",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "keep_open",
+    "conclusion": "进度跟踪项；以当前证据计数为准，快照漂移不构成 ambiguous",
+    "evidence": [
+     "docs/operations/evidence/2026-10-16-t12-swd-deferred-b99/README.md",
+     "docs/migration/upstream-extension-reconstruction.md"
+    ],
+    "disposition": "保持 open",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+   }
+  },
+  {
+   "id": "T12-SWD-EXTRA-CARDS-DISPOSITION",
+   "source": {
+    "doc": "docs/operations/evidence/2026-10-15-t12-swd-cards-audit/README.md",
+    "ref": "包内多余 13 处置待决"
+   },
+   "description": "swd 卡牌对账：包内多余 13 张处置待决（勘误/删除/保留登记）。",
+   "done_when_evidence": [
+    "处置结论+包数据守护测试"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "U05",
+    "swd"
+   ]
+  },
+  {
+   "id": "T12-YUNCHOU-DEFERRED",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T12 运筹武将面批（约 18/20，2 暂缓）"
+   },
+   "description": "运筹帷幄余暂缓：奸雄·变体（身份改写面）、巧思等——随身份局深化/骰子等原语。",
+   "done_when_evidence": [
+    "定向回归测试通过",
+    "cargo test --offline -p engine-native --no-fail-fast 全绿",
+    "Gate 1b exit 0",
+    "证据目录 README+日志"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T12",
+    "U05",
+    "yunchou"
+   ]
+  },
+  {
+   "id": "T12-WUDIAN-DEFERRED",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T12 玩点论杀批（约 19/22，3 暂缓）"
+   },
+   "description": "玩点论杀余暂缓：仇渡/调兵遣将（亮牌替换锦囊面级工程）、夺启/佑赞等机制缺口。",
+   "done_when_evidence": [
+    "定向回归测试通过",
+    "cargo test --offline -p engine-native --no-fail-fast 全绿",
+    "Gate 1b exit 0",
+    "证据目录 README+日志",
+    "deferred-survey 立项关闭"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T12",
+    "U07"
+   ]
+  },
+  {
+   "id": "T12-MTG-DEFERRED-LANDS",
+   "source": {
+    "doc": "docs/architecture/native-progress.md",
+    "ref": "T12 mtg 藏宝海湾/毒沼 deferred"
+   },
+   "description": "mtg 地 2 张结构性依赖（派生包 UI / 跨包毒卡）——非逐卡切片可达。",
+   "done_when_evidence": [
+    "结构性依赖解除或永久 deferred ADR"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "architect",
+   "tags": [
+    "T12",
+    "U05",
+    "mtg"
+   ]
+  },
+  {
+   "id": "T12-D3-REMAINING-GENERALS",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3.1 U01"
+   },
+   "description": "3D精选：刘冲末焱已映射（2026-10-17），其余 30 将与 56 条技能引用未实现，资源映射未做。不计整包。L21 计入后总账为 15/37，末焱本身不计。",
+   "done_when_evidence": [
+    "定向回归测试通过",
+    "cargo test --offline -p engine-native --no-fail-fast 全绿",
+    "Gate 1b exit 0",
+    "证据目录 README+日志",
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "T12",
+    "U01"
+   ]
+  },
+  {
+   "id": "T12-SRC-U01",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U01 3D精选"
+   },
+   "description": "来源 U01（3D精选）原生整包验收未完成。台账状态：部分重构；G1 样本+生命周期；刘冲末焱切片已测（2026-10-17），其余 30 将与 56 条技能引用未实现。整包未完成。L21 计入后总账为 15/37，本行未验收。建议批次：G1→G3。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U01",
+    "G1"
+   ]
+  },
+  {
+   "id": "T12-SRC-U02",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U02 boss"
+   },
+   "description": "来源 U02（boss）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U02",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-U03",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U03 cardpile"
+   },
+   "description": "来源 U03（cardpile）八项已于 2026-10-17 从真实安装验收。随机点数仍为登记差异。113 张比例牌不是上游默认追加。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-u03-eight/README.md",
+    "u03_eight_dimension_from_fresh_install",
+    "cardpile_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U03",
+    "G1"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from a real install. Injected ranks are not Math.random. The 113 ratio cards stay catalog material. L04 is not counted."
+  },
+  {
+   "id": "T12-SRC-U04",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U04 coin"
+   },
+   "description": "来源 U04（coin）八项已于 2026-10-17 从真实安装验收。画布、音效、提示、CSS 和粒子仍为登记差异。其后 L05 另有八项，不由本行计入。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-u04-eight/README.md",
+    "u04_eight_dimension_from_fresh_install",
+    "coin_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "resolution": "2026-10-17 eight-dimension acceptance from a real install. Canvas, audio, toast, CSS, and particles stay registered differences. Caller unit random is not Math.random. L05 is not counted.",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U04",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-U05",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U05 杀海拾遗"
+   },
+   "description": "来源 U05（杀海拾遗）原生整包验收未完成。台账状态：多子包部分重构；swd/运筹等内容面推进中；非整包。建议批次：G1→G5。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U05",
+    "G1"
+   ]
+  },
+  {
+   "id": "T12-SRC-U06",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U06 欢乐卡牌"
+   },
+   "description": "来源 U06（欢乐卡牌）八项已于 2026-10-17 从真实安装验收。2026-10-16 决议仍有效：通道全绿不单独上调。苦无仍为登记差异。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-u06-eight/README.md",
+    "u06_eight_dimension_from_fresh_install",
+    "huanle_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U06",
+    "G3"
+   ],
+   "notes": "2026-10-16：通道验收不上调。2026-10-17：八项测试通过后关闭。关闭当时总账 1/37。其后 L06、L07 计入曾为 3/37。其后 L23 计入曾为 4/37。其后 U03 计入曾为 5/37。其后 U04 计入曾为 6/37。其后 L04 计入曾为 7/37。其后 L05 计入曾为 8/37。其后 L22 计入曾为 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。苦无仍为登记差异。U04 不因同一经济再计一次。",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "closed_2026_10_17",
+    "conclusion": "2026-10-16：通道全绿不单独上调。2026-10-17：八项从真实安装通过后 U06 resolved。关闭当时总账 1/37。其后 L06、L07 计入曾为 3/37。其后 L23 计入曾为 4/37。其后 U03 计入曾为 5/37。其后 U04 计入曾为 6/37。其后 L04 计入曾为 7/37。其后 L05 计入曾为 8/37。其后 L22 计入曾为 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。苦无仍为登记差异。U04 不因同一经济再计一次。",
+    "evidence": [
+     "docs/architecture/native-progress.md",
+     "docs/migration/upstream-extension-reconstruction.md",
+     "docs/operations/evidence/2026-10-14-t12-u06-g2g4/README.md",
+     "docs/operations/evidence/2026-10-14-t12-huanle-g5/README.md",
+     "docs/operations/evidence/2026-10-17-t12-u06-eight/README.md"
+    ],
+    "disposition": "T12-SRC-U06 resolved；T12-WHOLEPACK 仍 open（当前 15/37）",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+   }
+  },
+  {
+   "id": "T12-SRC-U07",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U07 玩点论杀"
+   },
+   "description": "来源 U07（玩点论杀）原生整包验收未完成。台账状态：部分重构；武将/卡 deferred 余项；非整包。建议批次：G1→G3。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U07",
+    "G1"
+   ]
+  },
+  {
+   "id": "T12-SRC-U08",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / U08 英雄杀"
+   },
+   "description": "来源 U08（英雄杀）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "U08",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L01",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L01 AI优化"
+   },
+   "description": "来源 L01（AI优化）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L01",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L02",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L02 SJ Settings"
+   },
+   "description": "来源 L02（SJ Settings）八项已于 2026-10-17 从 liuli 真实安装验收。不请求网络，不 eval update.js，不打开 PDF，不启动 eruda，不调用 game.reload 或 game.loop。Cordova、进度条和通知仍为登记差异。数据库导入要求 config 与 data 都是对象。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l02-eight/README.md",
+    "l02_eight_dimension_from_fresh_install",
+    "sj_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L02",
+    "G2;移动端G5"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Network, eval, PDF, eruda, and game.reload or game.loop stay refused. Cordova, progress UI, and notifications stay registered differences."
+  },
+  {
+   "id": "T12-SRC-L03",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L03 boss"
+   },
+   "description": "来源 L03（boss）原生整包验收未完成。台账状态：待重构；未验收（对照 U02）。建议批次：G2–G3。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L03",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L04",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L04 cardpile"
+   },
+   "description": "来源 L04（cardpile）八项已于 2026-10-17 从 liuli 真实安装验收。随机点数仍为登记差异。不由 U03 组合行计入。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l04-eight/README.md",
+    "l04_eight_dimension_from_fresh_install",
+    "liuli_cardpile_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L04",
+    "G1"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Injected ranks are not Math.random. U03 is not counted again."
+  },
+  {
+   "id": "T12-SRC-L05",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L05 coin"
+   },
+   "description": "来源 L05（coin）八项已于 2026-10-17 从 liuli 真实安装验收。画布、音效、提示、CSS 和粒子仍为登记差异。不由 U04 组合行计入。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l05-eight/README.md",
+    "l05_eight_dimension_from_fresh_install",
+    "liuli_coin_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L05",
+    "G2"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli coin package install. Canvas, audio, toast, CSS, and particles stay registered differences. U04 is not counted again."
+  },
+  {
+   "id": "T12-SRC-L06",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L06 wuxing"
+   },
+   "description": "来源 L06（wuxing）八项已于 2026-10-17 从真实安装验收。装备授予五行盘技能。随机、弃牌选择、联机/录像/帮助仍为登记差异。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l06-eight/README.md",
+    "l06_eight_dimension_from_fresh_install",
+    "wuxing_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L06",
+    "G1"
+   ]
+  },
+  {
+   "id": "T12-SRC-L07",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L07 全能搜索"
+   },
+   "description": "来源 L07（全能搜索）八项已于 2026-10-17 从真实安装验收。界面、语音和脚本执行仍为登记差异。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l07-eight/README.md",
+    "l07_eight_dimension_from_fresh_install",
+    "omnisearch_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L07",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L08",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L08 十周年UI"
+   },
+   "description": "来源 L08（十周年UI）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L08",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L09",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L09 千幻聆音"
+   },
+   "description": "来源 L09（千幻聆音）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L09",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L10",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L10 史诗卡牌"
+   },
+   "description": "来源 L10（史诗卡牌）原生整包验收未完成。台账状态：待重构；未验收（D1 工作区口径）。建议批次：G3–G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L10",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L11",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L11 太虚幻境"
+   },
+   "description": "来源 L11（太虚幻境）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3→G4–G5。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L11",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L12",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L12 如真似幻"
+   },
+   "description": "来源 L12（如真似幻）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L12",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L13",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L13 手杀MVP"
+   },
+   "description": "来源 L13（手杀MVP）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L13",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L14",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L14 手杀ui"
+   },
+   "description": "来源 L14（手杀ui）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L14",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L15",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L15 手杀全扩"
+   },
+   "description": "来源 L15（手杀全扩）八项已于 2026-10-17 从 liuli 真实安装验收。不播放奶龙音频，不画界面，不调用 clsPrefixName。HTML 配置名、CSS 和玩家排序仍为登记差异。出厂配置没有 changeGroup。空名在改名时返回 BadName。BT 数组空洞不记为 id。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l15-eight/README.md",
+    "l15_eight_dimension_from_fresh_install",
+    "shousha_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L15",
+    "G2"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Audio, DOM, clsPrefixName, HTML config names, CSS, and player sort stay registered differences."
+  },
+  {
+   "id": "T12-SRC-L16",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L16 拖拽读取"
+   },
+   "description": "来源 L16（拖拽读取）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;跨平台G5。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L16",
+    "G2;跨平台G5"
+   ]
+  },
+  {
+   "id": "T12-SRC-L17",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L17 斗转星移"
+   },
+   "description": "来源 L17（斗转星移）八项已于 2026-10-17 从 liuli 真实安装验收。不打开菜单，不播放音频，不调用 game.reload，不 eval。HTML/CSS、启动页、势力颜色和玩家排序仍为登记差异。空方案导出是 ['']。禁将用 indexOf。AI 网络要正好是 online。稀有度和抽样由调用方给出。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l17-eight/README.md",
+    "l17_eight_dimension_from_fresh_install",
+    "douzhuan_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L17",
+    "G2"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Menu, audio, game.reload, eval, HTML/CSS, splash, group color, and player sort stay registered differences."
+  },
+  {
+   "id": "T12-SRC-L18",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L18 更新保护"
+   },
+   "description": "来源 L18（更新保护）八项已于 2026-10-17 从 liuli 真实安装验收。不请求网络，不写盘，不 eval，不睡眠。下载写盘、Cordova、DOM 和两秒等待仍为登记差异。注释里的下载不执行。检查素材更新后 UpdatingForAsset 仍为真。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l18-eight/README.md",
+    "l18_eight_dimension_from_fresh_install",
+    "update_guard_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L18",
+    "G2;平台G5"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Network, disk writes, eval, sleep, Cordova, and DOM stay registered differences. The commented download path is not executed."
+  },
+  {
+   "id": "T12-SRC-L19",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L19 末日乱斗"
+   },
+   "description": "来源 L19（末日乱斗）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L19",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L20",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L20 标记补充"
+   },
+   "description": "来源 L20（标记补充）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L20",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L21",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L21 武皇争霸"
+   },
+   "description": "来源 L21（武皇争霸）八项已于 2026-10-17 从 liuli 真实安装验收。不画界面，不采样 Math.random，不播放录像，不走联机。双将体力上限的五种算法不执行。extension/武皇/mightyFoe.js 不指向本目录，旁路不自动执行。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l21-eight/README.md",
+    "l21_eight_dimension_from_fresh_install",
+    "martial_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L21",
+    "G3"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. UI, Math.random, playback, online choose, the commented double-HP formulas, and the sibling mightyFoe script stay registered differences."
+  },
+  {
+   "id": "T12-SRC-L22",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L22 段位制裁"
+   },
+   "description": "来源 L22（段位制裁）八项已于 2026-10-17 从真实安装验收。将池不筛，烧条不睡眠、不说台词，分数由调用方给出，仍为登记差异。L12 不计入。关闭当时总账 9/37。其后 L02 计入曾为 10/37。其后 L15 计入曾为 11/37。其后 L17 计入曾为 12/37。其后 L18 计入曾为 13/37。其后 L26 计入曾为 14/37。其后 L21 计入，当前总账 15/37。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L22",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L23",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L23 电脑适配"
+   },
+   "description": "来源 L23（电脑适配）八项已于 2026-10-17 从真实安装验收。窗口、DOM 和抛表情仍为登记差异。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l23-eight/README.md",
+    "l23_eight_dimension_from_fresh_install",
+    "desktop_adapt_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L23",
+    "G2;平台G5"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from a real install. Window, DOM, and emoji dispatch stay registered differences."
+  },
+  {
+   "id": "T12-SRC-L24",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L24 皮肤切换"
+   },
+   "description": "来源 L24（皮肤切换）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L24",
+    "G2"
+   ]
+  },
+  {
+   "id": "T12-SRC-L25",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L25 祖安武将"
+   },
+   "description": "来源 L25（祖安武将）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G0细拆→G3–G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L25",
+    "G0细拆"
+   ]
+  },
+  {
+   "id": "T12-SRC-L26",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L26 笨蛋插件"
+   },
+   "description": "来源 L26（笨蛋插件）八项已于 2026-10-17 从 liuli 真实安装验收。不画界面，不播放音频，不启动定时器，不采样 Math.random，不生成随机锚点。if(false) 里的选择卡牌优化不执行。注释里的 _choose.mp3 不执行。",
+   "done_when_evidence": [
+    "docs/operations/evidence/2026-10-17-t12-l26-eight/README.md",
+    "l26_eight_dimension_from_fresh_install",
+    "fool_pack_json_enters_wasm_helper"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L26",
+    "G2"
+   ],
+   "resolution": "2026-10-17 eight-dimension acceptance from the liuli package install. Dialogs, audio, timers, Math.random, random anchors, the disabled choose-card optimizer, and the commented choose-file path stay registered differences."
+  },
+  {
+   "id": "T12-SRC-L27",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L27 选将美化"
+   },
+   "description": "来源 L27（选将美化）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L27",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L28",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L28 雷霆万钧"
+   },
+   "description": "来源 L28（雷霆万钧）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L28",
+    "G3"
+   ]
+  },
+  {
+   "id": "T12-SRC-L29",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "§3 全量逐项台账 / L29 龙血玄黄"
+   },
+   "description": "来源 L29（龙血玄黄）原生整包验收未完成。台账状态：G0 清单完成；规则面迁移 D5 解锁；非整包。建议批次：G0→G1/G4。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [
+    "D5-LX-MIGRATION"
+   ],
+   "role": "extension-engineer",
+   "tags": [
+    "T12",
+    "整包",
+    "L29",
+    "G0"
+   ],
+   "notes": "依赖 D5 规则面迁移"
+  },
+  {
+   "id": "E01-G0-DEPTH",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "当前状态与 E01–E06 / E01·G0"
+   },
+   "description": "E01/G0 部分完成：其余来源逐配置/子插件/规则分支/依赖/缺资源与旧行为样本；每项目标接口与验证入口。",
+   "done_when_evidence": [
+    "对应 G 门槛断言+测试",
+    "证据目录",
+    "台账 G0 深度清单"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "extension-auditor",
+   "tags": [
+    "E01",
+    "G0",
+    "T9"
+   ]
+  },
+  {
+   "id": "E02-OPEN-RULE",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "E02 / G1"
+   },
+   "description": "E02/G1：独立发布新规则仍须证明无需重编译客户端（T8 余项）；产品装载武将面等缺口。",
+   "done_when_evidence": [
+    "对应 G 门槛断言+测试",
+    "证据目录",
+    "不重编译装新规则证据"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T8-FILTER-COMPOSITE",
+    "T8-EFFECT-QUERY-VARIANTS",
+    "T13-NATIVE-GENERALS-PRODUCT"
+   ],
+   "role": "extension-engineer",
+   "tags": [
+    "E02",
+    "G1",
+    "T8"
+   ]
+  },
+  {
+   "id": "E03-OPEN-RULE",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "E03 / G1"
+   },
+   "description": "E03/G1：扩展自定义规则/机器状态、随机和选择可通用编码、恢复、校验及失败回滚；登记差异逐项对照上游。",
+   "done_when_evidence": [
+    "对应 G 门槛断言+测试",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T8-EFFECT-QUERY-VARIANTS"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "E03",
+    "G1",
+    "T8"
+   ]
+  },
+  {
+   "id": "E04-G2G4",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "E04 / G2–G4"
+   },
+   "description": "E04/G2–G4 待验收：模式、AI、配置、资源和界面契约——各有真实扩展示例；15 包通道五断言已有，其余来源未齐。",
+   "done_when_evidence": [
+    "对应 G 门槛断言+测试",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T12-WHOLEPACK-0-37"
+   ],
+   "role": "extension-engineer",
+   "tags": [
+    "E04",
+    "G2",
+    "G3",
+    "G4"
+   ]
+  },
+  {
+   "id": "E05-G5",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "E05 / G5"
+   },
+   "description": "E05/G5 待验收：联机内容锁、存档/录像和旧版会话——15 个 G1 转换包 G5 切片已达成，其余来源与真联机产品面未齐。",
+   "done_when_evidence": [
+    "对应 G 门槛断言+测试",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "server-engineer",
+   "tags": [
+    "E05",
+    "G5"
+   ]
+  },
+  {
+   "id": "E06-PER-SOURCE",
+   "source": {
+    "doc": "docs/migration/upstream-extension-reconstruction.md",
+    "ref": "E06 / G3–G5"
+   },
+   "description": "E06：每来源功能清单和正反例齐全；安装/升级/配置/组合/性能逐包通过后才上调整包状态。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [
+    "E01-G0-DEPTH",
+    "E04-G2G4",
+    "E05-G5"
+   ],
+   "role": "extension-lead",
+   "tags": [
+    "E06",
+    "G3",
+    "G4",
+    "G5",
+    "T12"
+   ]
+  },
+  {
+   "id": "COV-EQUIP-TIMING-WINDOW",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "行为差异表「装备即时生效」（约 L109）"
+   },
+   "description": "装备即时生效 vs 上游装备时机触发窗口——行为差异保留，触发窗口化另立项。",
+   "done_when_evidence": [
+    "立项 ADR 或正式永久差异登记",
+    "回归"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "COV",
+    "行为差异"
+   ]
+  },
+  {
+   "id": "COV-REWARD-OVER-VERIFY",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "行为差异表「奖惩与终局判定顺序」待核项（约 L122）"
+   },
+   "description": "上游 game.over 后事件链是否仍执行 dieAfter2 未逐项确认——待核后关闭或改登记。",
+   "done_when_evidence": [
+    "上游对照证据",
+    "覆盖清单处置更新"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "rules-auditor",
+   "tags": [
+    "COV",
+    "RULE"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "上游审计确认 game.over 只置 _status.over 并快照手牌、不中断 death 内容链，dieAfter2 仍执行⇒over 后仍发奖惩；两边都发放，差异仅在顺序与终局快照口径。保留原生顺序，待核项关闭。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-cov-reward-over-audit/README.md"
+    ]
+   }
+  },
+  {
+   "id": "COV-TRIGGER-GETINDEX-BUCKETS",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "行为差异表「触发全序细节」；规则基准当前声明"
+   },
+   "description": "getIndex / firstDo / lastDo 有内容需求时立项（当前保留原生确定性全序）。",
+   "done_when_evidence": [
+    "内容需求驱动的立项或明确不立项"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "architect",
+   "tags": [
+    "COV",
+    "RULE"
+   ],
+   "notes": "条件立项；与触发全序定案分层。关闭=立项 ADR 或明确不立项笔记",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "keep_open",
+    "conclusion": "有内容需求再建模 getIndex/firstDo/lastDo；无需求可记「维持不立项」关闭",
+    "evidence": [
+     "docs/native-coverage-manifest.md",
+     "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
+     "docs/operations/evidence/2026-10-16-trigger-order-upstream/README.md"
+    ],
+    "disposition": "保持 open（条件立项）",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+   }
+  },
+  {
+   "id": "COV-PARTIAL-MECHANISMS",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "范围 A 多行「已验证（部分）」：nullify_scope/snapshot_restore/identity_mode/visible_views/session_auth/byte_archive/nullify_judge_window 等"
+   },
+   "description": "（已拆分关闭）原伞项：覆盖清单多行「已验证（部分）」扩面。",
+   "done_when_evidence": [
+    "逐机制扩面测试+清单状态升级"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "COV"
+   ],
+   "ambiguous": false,
+   "notes": "snapshot→T11-EVENT-RNG-RESTORE-PARITY；identity mid→RULE-IDENTITY-VIEW-RESTORE；其余见新 ID",
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "split_new",
+    "conclusion": "伞项关闭；机制面并入已有 ID 或单列新 ID",
+    "evidence": [
+     "docs/native-coverage-manifest.md",
+     "docs/operations/evidence/2026-10-16-t11-open-rows/README.md"
+    ],
+    "disposition": "status=resolved",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "split_into": [
+     "COV-VISIBLE-VIEWS-EXT",
+     "COV-SESSION-AUTH-PRODUCT",
+     "COV-NULLIFY-JUDGE-EXPAND"
+    ],
+    "merged_into": [
+     "T11-EVENT-RNG-RESTORE-PARITY",
+     "RULE-IDENTITY-VIEW-RESTORE"
+    ]
+   }
+  },
+  {
+   "id": "COV-VISIBLE-VIEWS-EXT",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "visible_views 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
+   },
+   "description": "可见视图扩面：扩展/客户端视图隔离——不外推为所有扩展与客户端均已隔离。",
+   "done_when_evidence": [
+    "扩面测试+覆盖清单状态升级",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T13-PRODUCT-CLIENT"
+   ],
+   "role": "client-engineer",
+   "tags": [
+    "COV",
+    "T13"
+   ],
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "split_new",
+    "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
+    "evidence": [
+     "docs/native-coverage-manifest.md",
+     "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+    ],
+    "disposition": "新增 open",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "split_from": "COV-PARTIAL-MECHANISMS"
+   }
+  },
+  {
+   "id": "COV-SESSION-AUTH-PRODUCT",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "session_auth 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
+   },
+   "description": "会话鉴权产品面：权威网络接入——现有令牌拒绝/重签切片不代表权威网络已接入。",
+   "done_when_evidence": [
+    "权威网络/产品接入证据",
+    "覆盖清单状态升级"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T13-PRODUCT-CLIENT"
+   ],
+   "role": "server-engineer",
+   "tags": [
+    "COV",
+    "T13"
+   ],
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "split_new",
+    "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
+    "evidence": [
+     "docs/native-coverage-manifest.md",
+     "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+    ],
+    "disposition": "新增 open",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "split_from": "COV-PARTIAL-MECHANISMS"
+   }
+  },
+  {
+   "id": "COV-NULLIFY-JUDGE-EXPAND",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "nullify_judge_window 已验证（部分）；自 COV-PARTIAL-MECHANISMS 拆出"
+   },
+   "description": "延时锦囊无懈窗口扩面：兵/闪电抵消及多牌组合（乐被抵消路径已有）。",
+   "done_when_evidence": [
+    "兵/闪电抵消与多牌组合定向测",
+    "覆盖清单状态升级",
+    "证据目录"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "COV"
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "新增 delayed_trick_bing_and_shandian_nullify_window：兵粮寸断/闪电使用时窗口与抵消不判、同目标多牌组合只抵消被点名者；机制键 nullify_judge_window 收敛为已验证。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-cov-nullify-judge-expand/README.md"
+    ]
+   }
+  },
+  {
+   "id": "COV-STANDARD-FULL-CONTENT",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "范围 B「所有历史包/正式完整内容」未完成；标准武将/模式行"
+   },
+   "description": "标准整将/牌/模式完整验收与历史包正式内容未完成；不按名称或测试数计算迁移率。",
+   "done_when_evidence": [
+    "玩法版本+逐技能语义清单",
+    "整包证据"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T11-EVENT-RNG-RESTORE-PARITY"
+   ],
+   "role": "rules-auditor",
+   "tags": [
+    "COV",
+    "T11"
+   ]
+  },
+  {
+   "id": "COV-EXT-37",
+   "source": {
+    "doc": "docs/native-coverage-manifest.md",
+    "ref": "扩展机制表「指定两仓全部扩展」"
+   },
+   "description": "覆盖清单扩展行：原生整包验收 15/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26 与 L21，2026-10-17），仍需处理 22/37，与 T12 总账同口径。U04 不因同一经济再计一次。",
+   "done_when_evidence": [
+    "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
+    "整包状态上调登记"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T12-WHOLEPACK-0-37"
+   ],
+   "role": "extension-lead",
+   "tags": [
+    "COV",
+    "T12"
+   ]
+  },
+  {
+   "id": "RULE-JUDGE-ORDER-NOTE",
+   "source": {
+    "doc": "docs/architecture/native-rules-baseline.md",
+    "ref": "当前声明与验证边界「判定排序/闪电」（约 L3447）"
+   },
+   "description": "判定排序：语义选择已定案保留原生 FIFO+闪电最后；声明表曾写「是否改判上游待决策」——文档滞后已就地勘正。",
+   "done_when_evidence": [
+    "声明表措辞与语义选择定案对齐（docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md）"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "docs-auditor",
+   "tags": [
+    "RULE"
+   ],
+   "notes": "2026-10-16 正文已勘正：基准验证边界与 coverage `judge_zone` 同口径改为「已定案保留原生」",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "doc_lag_fix",
+    "conclusion": "实质已定案保留原生 FIFO+闪电最后；声明表滞后句已改正并留证据",
+    "evidence": [
+     "docs/native-coverage-manifest.md",
+     "docs/architecture/native-rules-baseline.md",
+     "docs/operations/evidence/2026-10-16-judge-order-upstream/README.md",
+     "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
+    ],
+    "disposition": "status=resolved；正文已勘正（closed）",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "applied_fix": {
+     "file": "docs/architecture/native-rules-baseline.md",
+     "also": "docs/native-coverage-manifest.md judge_zone",
+     "evidence": "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
     }
-  ]
+   }
+  },
+  {
+   "id": "RULE-IDENTITY-VIEW-RESTORE",
+   "source": {
+    "doc": "docs/architecture/native-rules-baseline.md",
+    "ref": "当前声明「身份」验证边界（约 L3452）"
+   },
+   "description": "完整身份可见视图和所有终局逐提交恢复仍缺。",
+   "done_when_evidence": [
+    "定向回归测试通过",
+    "cargo test --offline -p engine-native --no-fail-fast 全绿",
+    "Gate 1b exit 0",
+    "证据目录 README+日志"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "RULE",
+    "T13"
+   ]
+  },
+  {
+   "id": "RULE-MODE-REMAINDERS",
+   "source": {
+    "doc": "docs/architecture/native-rules-baseline.md",
+    "ref": "当前声明「模式」行（约 L3454）"
+   },
+   "description": "模式变体余项：斗地主 online 面登记、KOF 多局连续会话循环仍在宿主层、Boss loopType==2 等未建模变体、其余上游 mode 入口未接入。",
+   "done_when_evidence": [
+    "规则版本递增（若语义变）",
+    "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
+    "规则基准条目",
+    "证据目录"
+   ],
+   "status": "open",
+   "depends_on": [
+    "T11-BOSS-STAGE-SUBSYSTEM"
+   ],
+   "role": "kernel-engineer",
+   "tags": [
+    "RULE",
+    "T11"
+   ]
+  },
+  {
+   "id": "RULE-DISTANCE-UNMODELED",
+   "source": {
+    "doc": "docs/architecture/native-rules-baseline.md",
+    "ref": "当前声明「距离/座距」；采用玩法版本证据"
+   },
+   "description": "undist/isMin 等未建模；其余距离类技能仍逐技能验收。",
+   "done_when_evidence": [
+    "逐技能证据或建模"
+   ],
+   "status": "open",
+   "depends_on": [],
+   "role": "kernel-engineer",
+   "tags": [
+    "RULE"
+   ]
+  },
+  {
+   "id": "RULE-CONTENT-DIFF-CONVENTIONS",
+   "source": {
+    "doc": "docs/architecture/native-rules-baseline.md",
+    "ref": "内容差异与后续验收（约 L3489）"
+   },
+   "description": "保留惯例：护驾转化牌实体响应、激将借牌直结算（ADR 0776）——非缺陷但非整将上游等价；逐技能/复合场景继续举证。",
+   "done_when_evidence": [
+    "逐技能上游等价证据或正式差异关闭"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "rules-auditor",
+   "tags": [
+    "RULE",
+    "T11"
+   ],
+   "notes": "ADR 0776 保留惯例；逐技能举证并入 COV-STANDARD-FULL-CONTENT",
+   "ambiguous": false,
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "permanent_diff",
+    "conclusion": "护驾/激将登记惯例为正式保留差异，非未定案缺陷；本项关闭",
+    "evidence": [
+     "docs/architecture/native-rules-baseline.md",
+     "docs/adr/0776-native-n08-jijiang-hujia-per-seat-ask.md"
+    ],
+    "disposition": "status=resolved；举证并入 COV-STANDARD-FULL-CONTENT",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "merged_into": [
+     "COV-STANDARD-FULL-CONTENT"
+    ]
+   }
+  },
+  {
+   "id": "RULE-BUDGET-DOC-LAG",
+   "source": {
+    "doc": "docs/architecture/native-rules-baseline.md",
+    "ref": "当前声明「预算/时间片」（约 L3456）"
+   },
+   "description": "声明曾写「独立工作池未实现」，但 T13 PlanPool 已完成——文档滞后已就地勘正。",
+   "done_when_evidence": [
+    "声明表更新为与 T13 证据一致（docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md）"
+   ],
+   "status": "resolved",
+   "depends_on": [],
+   "role": "docs-auditor",
+   "tags": [
+    "RULE",
+    "T13"
+   ],
+   "ambiguous": false,
+   "notes": "2026-10-16 正文已勘正：基准验证边界改为 PlanPool 已实现；策略质量仍挂 T13-AI-STRONGER-POLICY",
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "doc_lag_fix",
+    "conclusion": "T13 PlanPool（2026-10-14）已实现；基准滞后句已改正并留证据",
+    "evidence": [
+     "docs/operations/evidence/2026-10-14-t13-plan-pool/README.md",
+     "docs/architecture/native-rules-baseline.md",
+     "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
+    ],
+    "disposition": "status=resolved；正文已勘正（closed）",
+    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
+    "applied_fix": {
+     "file": "docs/architecture/native-rules-baseline.md",
+     "evidence": "docs/operations/evidence/2026-10-16-rule-doc-lag-fix/README.md"
+    }
+   }
+  }
+ ]
 }

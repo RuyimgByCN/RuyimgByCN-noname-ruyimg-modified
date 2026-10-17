@@ -4,6 +4,8 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
+> **2026-10-17 收口批**：本次再关 12 项（`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`/`HUANREN`/`HIDECHAIN-8`/`WING-ROTATION`/`BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`），resolved 21→**33**、open 68→**56**。依据为各批已落盘证据（[T8 具名 filter](../2026-10-17-t8-named-filters/README.md)、[D4 B4](../2026-10-17-d4-boss-b4-huanren-wings/README.md)、[T9 钩挂](../2026-10-17-t9-lx-content-hooks/README.md)、[T15③](../2026-10-16-t15-3-v117-transplant/README.md)、[O4](../2026-10-16-o4-wasm-opt/README.md)、[O5](../2026-10-16-o5-profiling/README.md)、[奖惩审计](../2026-10-17-cov-reward-over-audit/README.md)、[无懈扩面](../2026-10-17-cov-nullify-judge-expand/README.md)）。
+
 ## 快照上下文
 
 | 项 | 值 |
@@ -12,8 +14,8 @@
 | engine-native（主稿快照） | 807/0/1 |
 | 条目数 | **89**（原 85 + 拆出 4） |
 | 标为模糊（ambiguous） | **0**（原 13 已消解，见 [ambiguous-resolutions.md](./ambiguous-resolutions.md)） |
-| 已 resolved | **21**（2026-10-16 快照为 6；2026-10-17 关闭 `T12-SRC-U06`、`T12-SRC-L06`、`T12-SRC-L07`、`T12-SRC-L23`、`T12-SRC-U03`、`T12-SRC-U04`、`T12-SRC-L04`、`T12-SRC-L05`、`T12-SRC-L22`、`T12-SRC-L02`、`T12-SRC-L15`、`T12-SRC-L17`、`T12-SRC-L18`、`T12-SRC-L26` 与 `T12-SRC-L21`） |
-| 仍 open | **68**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
+| 已 resolved | **33**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
+| 仍 open | **56**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
 
 ## 覆盖范围
 
@@ -39,15 +41,15 @@
 
 | ID | 来源 | 描述 | 完成证据类型 | 状态 | 依赖 | 角色 |
 |---|---|---|---|---|---|---|
-| `T8-FILTER-COMPOSITE` | docs/architecture/native-progress.md · 后续待做 / T8 行（约 L81）；增量 17 证据分类账 | T8 余项：具名组合 filter 深化（全词表扫描约 624 待办中的复合查询等；新策略须双闸回归）。含 active_used_at_least_N、mark/skill_pile/lost-history/once 旗标、移动批次、p… | 定向回归测试通过；cargo test --offline -p engine-native --no-fail-fast 全绿；Gate 1b exit 0… | open | — | kernel-engineer |
+| `T8-FILTER-COMPOSITE` | docs/architecture/native-progress.md · 后续待做 / T8 行（约 L81）；增量 17 证据分类账 | T8 余项：具名组合 filter 深化（全词表扫描约 624 待办中的复合查询等；新策略须双闸回归）。含 active_used_at_least_N、mark/skill_pile/lost-history/once 旗标、移动批次、p… | 定向回归测试通过；cargo test --offline -p engine-native --no-fail-fast 全绿；Gate 1b exit 0… | resolved | — | kernel-engineer |
 | `T8-EFFECT-QUERY-VARIANTS` | docs/architecture/native-progress.md · 后续待做 / T8 行（约 L81）完成条件段 | T8 余项：剩余 rule-vm 效果/查询变体（部分需内核新原语）；开放规则验收面「不重编译即可装含新技能/新牌的包」在通用效果面的持续扩面。 | 定向回归测试通过；cargo test --offline -p engine-native --no-fail-fast 全绿；Gate 1b exit 0… | open | T8-FILTER-COMPOSITE | kernel-engineer |
 | `T9-SOURCE-BEHAVIOR-SAMPLES` | docs/architecture/native-progress.md · 后续待做 / T9 行（约 L82） | T9：37 来源各自补齐旧行为动态样本、菜单与规则分支语义清单、目标接口与验证入口登记（功能面基线已有，非整包）。 | 台账每来源行为样本证据；目标接口与验证入口登记 | open | — | extension-auditor |
-| `T9-LX-BATTLE-TRACE` | docs/architecture/native-progress.md · 后续待做 / T9；docs/operations/evidence/2026-10-11-t9-lx-trace-survey/README.md | T9 龙血玄黄：搭旧线无头运行环境，采集战斗内触发轨迹（LX.2 仅注册期；archive 只读无 node_modules）。D5 已立项解锁。 | 无头环境搭建证据；战斗触发轨迹样本；勘察阻塞项关闭说明 | open | D5-LX-MIGRATION | legacy-harness-engineer |
-| `T11-BOSS-STAGE-SUBSYSTEM` | docs/architecture/native-progress.md · 后续待做 / T11；D4 裁决 docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md | D4 解锁：建原生 Boss 关卡流程子系统（另写 ADR），并把原「关卡流程面登记不落」技能逐个落包——含十殿阎罗「还人」族（换将链/孟婆乱入/禁将表）、四象隐藏链八技、青/赤/白翼轮次编排、bianshen 死亡换 Boss。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | — | architect+kernel-engineer |
-| `T11-BOSS-HUANREN` | docs/architecture/native-progress.md · T11 秦广王片（v276）；规则基准还人登记不落段 | 十殿阎罗「还人」：关卡换将链、孟婆乱入、禁将表——原登记不落，D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
-| `T11-BOSS-HIDECHAIN-8` | docs/architecture/native-progress.md · T11 四象隐藏链处置证据 2026-10-11 | 四象隐藏链八技（青木2/3、白芒2/3、赤炎2/3、玄麟2/3）dieBegin hide+dieAfter 换将重生——D4 后随关卡子系统落包。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
-| `T11-BOSS-WING-ROTATION` | docs/architecture/native-progress.md · T11 青翼/赤翼/白翼登记不落 | 青/赤/白翼轮次编排技（阶段 3/5/7 等）——D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
-| `T11-BOSS-BIANSHEN-CHANGEBOSS` | docs/architecture/native-progress.md · T11 bianshen 勘验片；D4 | bianshen 死亡 changeBoss / bianshen4 同族关卡流程面——D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
+| `T9-LX-BATTLE-TRACE` | docs/architecture/native-progress.md · 后续待做 / T9；docs/operations/evidence/2026-10-11-t9-lx-trace-survey/README.md | T9 龙血玄黄：搭旧线无头运行环境，采集战斗内触发轨迹（LX.2 仅注册期；archive 只读无 node_modules）。D5 已立项解锁。 | 无头环境搭建证据；战斗触发轨迹样本；勘察阻塞项关闭说明 | resolved | D5-LX-MIGRATION | legacy-harness-engineer |
+| `T11-BOSS-STAGE-SUBSYSTEM` | docs/architecture/native-progress.md · 后续待做 / T11；D4 裁决 docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md | D4 解锁：建原生 Boss 关卡流程子系统（另写 ADR），并把原「关卡流程面登记不落」技能逐个落包——含十殿阎罗「还人」族（换将链/孟婆乱入/禁将表）、四象隐藏链八技、青/赤/白翼轮次编排、bianshen 死亡换 Boss。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | — | architect+kernel-engineer |
+| `T11-BOSS-HUANREN` | docs/architecture/native-progress.md · T11 秦广王片（v276）；规则基准还人登记不落段 | 十殿阎罗「还人」：关卡换将链、孟婆乱入、禁将表——原登记不落，D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
+| `T11-BOSS-HIDECHAIN-8` | docs/architecture/native-progress.md · T11 四象隐藏链处置证据 2026-10-11 | 四象隐藏链八技（青木2/3、白芒2/3、赤炎2/3、玄麟2/3）dieBegin hide+dieAfter 换将重生——D4 后随关卡子系统落包。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
+| `T11-BOSS-WING-ROTATION` | docs/architecture/native-progress.md · T11 青翼/赤翼/白翼登记不落 | 青/赤/白翼轮次编排技（阶段 3/5/7 等）——D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
+| `T11-BOSS-BIANSHEN-CHANGEBOSS` | docs/architecture/native-progress.md · T11 bianshen 勘验片；D4 | bianshen 死亡 changeBoss / bianshen4 同族关卡流程面——D4 后待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | resolved | T11-BOSS-STAGE-SUBSYSTEM | kernel-engineer |
 | `T11-BOSS-ZHUGE-LIANG` | docs/architecture/native-progress.md · T11 庞统/诸葛亮片 v277；D5 | Boss 诸葛亮（祭风卧龙）：hp Infinity 承载 + 四技 ylyg* 龙血玄黄包依赖——D5 立项后由登记不落转待实现。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | D5-LX-MIGRATION, T9-LX-BATTLE-TRACE | kernel-engineer |
 | `T11-BOSS-PANGTONG-EXTERNAL` | docs/architecture/native-progress.md · T11 庞统片 v277 | 庞统涅槃/浴火等外部包技依赖（shenhua oldniepan / offline ylygniepan+三外部技+loopType）——随外部包/龙血面推进。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | D5-LX-MIGRATION | kernel-engineer |
 | `T11-BOSS-DIZANG-DAYUAN` | docs/architecture/native-progress.md · T11 地藏王 v274 | 地藏王「大愿」：判定改写机 AI 态度面——条目只列已转换技，仍开放。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | — | kernel-engineer |
@@ -56,9 +58,9 @@
 | `T11-BOSS-MENGPO-WANGSHI-PLAY` | docs/architecture/native-progress.md · T11 孟婆 v270 | （已拆分关闭）往事打出面=v270 永久登记差异；mengpodie/huihun→`T11-BOSS-HUANREN`；无量建局摸3→`T11-BOSS-DIZANG-WULIANG-GAMEDRAW`。 | 拆分完成 | resolved | — | kernel-engineer |
 | `T11-EVENT-RNG-RESTORE-PARITY` | docs/architecture/native-progress.md · T11 完成条件末段 | T11 横切：同一命令下事件、随机流和恢复轨迹对照（逐项修复或登记；语义变则升规则版本）。 | 规则版本递增（若语义变）；14 golden 按 AGENTS.md 查明原因后重录或证明无位移；规则基准条目… | open | — | rules-auditor |
 | `D5-LX-MIGRATION` | docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md · D5 行 | D5：龙血玄黄规则面迁移立项执行——先无头轨迹采集，再迁移规则面（含 ylyg*）。 | 迁移计划/包数据；规则面回归；证据目录 | open | T9-LX-BATTLE-TRACE | extension-engineer |
-| `T15-3-LEGACY-PORT` | docs/architecture/native-progress.md · 后续待做 / T15 行③（约 L88）；D6；delta 页 10-08 节 | D6 解锁：旧线 engine-core 移植批——19 将 39 技从 source_synced 补齐实现。 | engine-core 定向/全量测试；catalog 状态从 source_synced 迁出；证据目录… | open | — | legacy-engineer |
-| `O4-WASM-OPT-COMPARE` | docs/architecture/native-progress.md · 性能待办 / O4（约 L130）；D7 | D7：接受离线内嵌 14.5MB；补装 wasm-opt 做一次对比测量后关闭 O4。 | 同设备同工具链同负载前后数据；证据目录测量日志；wasm-opt 有/无体积与功能回归对照 | open | — | performance-engineer |
-| `O5-PROFILING-CLOSEOUT` | docs/architecture/native-progress.md · 性能待办 / O5（约 L131）；D8 | D8：保持条件立项；做一轮剖析（JSON 快照/回放、动态派发、大文件拆分、Blake3 合并、目录重命名）。无触发条件则记录结论并关闭；有触发则最小改动并版本化。 | 同设备同工具链同负载前后数据；证据目录测量日志；剖析结论页（关闭或立项） | open | — | performance-engineer |
+| `T15-3-LEGACY-PORT` | docs/architecture/native-progress.md · 后续待做 / T15 行③（约 L88）；D6；delta 页 10-08 节 | D6 解锁：旧线 engine-core 移植批——19 将 39 技从 source_synced 补齐实现。 | engine-core 定向/全量测试；catalog 状态从 source_synced 迁出；证据目录… | resolved | — | legacy-engineer |
+| `O4-WASM-OPT-COMPARE` | docs/architecture/native-progress.md · 性能待办 / O4（约 L130）；D7 | D7：接受离线内嵌 14.5MB；补装 wasm-opt 做一次对比测量后关闭 O4。 | 同设备同工具链同负载前后数据；证据目录测量日志；wasm-opt 有/无体积与功能回归对照 | resolved | — | performance-engineer |
+| `O5-PROFILING-CLOSEOUT` | docs/architecture/native-progress.md · 性能待办 / O5（约 L131）；D8 | D8：保持条件立项；做一轮剖析（JSON 快照/回放、动态派发、大文件拆分、Blake3 合并、目录重命名）。无触发条件则记录结论并关闭；有触发则最小改动并版本化。 | 同设备同工具链同负载前后数据；证据目录测量日志；剖析结论页（关闭或立项） | resolved | — | performance-engineer |
 | `PERF-ARCH-ACCEPTANCE-GATES` | noname-next/noname-performance-architecture.md · §11 性能验证与验收标准 | 架构验收口径未作为已测成绩：桌面/移动帧预算、输入响应、规则执行、AI、冷启动、长局内存、持续负载、联机、扩展有/无对照——须同设备同负载独立证据；原生 GPU 牌桌与正式客户端性能另轨。 | 同设备同工具链同负载前后数据；证据目录测量日志；设备/OS/功耗条件固定记录 | open | T13-PRODUCT-CLIENT | performance-engineer |
 | `T13-AI-STRONGER-POLICY` | docs/architecture/native-progress.md · 后续待做 / T13（约 L86）策略质量段 | 更强 AI 候选（深搜/MCTS/身份目标匹配）即插即评——质量下界已确立，候选未交付。 | policy_eval 对照报告；同 seed 质量与成本 | open | — | ai-engineer |
 | `T13-PRODUCT-CLIENT` | docs/architecture/native-progress.md · 后续待做 / T13 产品面；O4 完成条件「浏览器 UI 归 T13」 | 正式客户端产品面：web-client UI 层适配完整化、扩展包装载面、真实浏览器回归（worker 窄壳/切片已有，余产品面）。 | 客户端/浏览器实测证据；与旧线数据分列 | open | — | client-engineer |
@@ -114,12 +116,12 @@
 | `E05-G5` | docs/migration/upstream-extension-reconstruction.md · E05 / G5 | E05/G5 待验收：联机内容锁、存档/录像和旧版会话——15 个 G1 转换包 G5 切片已达成，其余来源与真联机产品面未齐。 | 对应 G 门槛断言+测试；证据目录 | open | — | server-engineer |
 | `E06-PER-SOURCE` | docs/migration/upstream-extension-reconstruction.md · E06 / G3–G5 | E06：每来源功能清单和正反例齐全；安装/升级/配置/组合/性能逐包通过后才上调整包状态。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | E01-G0-DEPTH, E04-G2G4, E05-G5 | extension-lead |
 | `COV-EQUIP-TIMING-WINDOW` | docs/native-coverage-manifest.md · 行为差异表「装备即时生效」（约 L109） | 装备即时生效 vs 上游装备时机触发窗口——行为差异保留，触发窗口化另立项。 | 立项 ADR 或正式永久差异登记；回归 | open | — | kernel-engineer |
-| `COV-REWARD-OVER-VERIFY` | docs/native-coverage-manifest.md · 行为差异表「奖惩与终局判定顺序」待核项（约 L122） | 上游 game.over 后事件链是否仍执行 dieAfter2 未逐项确认——待核后关闭或改登记。 | 上游对照证据；覆盖清单处置更新 | open | — | rules-auditor |
+| `COV-REWARD-OVER-VERIFY` | docs/native-coverage-manifest.md · 行为差异表「奖惩与终局判定顺序」待核项（约 L122） | 上游 game.over 后事件链是否仍执行 dieAfter2 未逐项确认——待核后关闭或改登记。 | 上游对照证据；覆盖清单处置更新 | resolved | — | rules-auditor |
 | `COV-TRIGGER-GETINDEX-BUCKETS` | docs/native-coverage-manifest.md · 行为差异表「触发全序细节」；规则基准当前声明 | getIndex / firstDo / lastDo 有内容需求时立项（当前保留原生确定性全序）。 | 内容需求驱动的立项或明确不立项 | open | — | architect |
 | `COV-PARTIAL-MECHANISMS` | docs/native-coverage-manifest.md · 范围 A「已验证（部分）」伞项 | （已拆分关闭）snapshot→`T11-EVENT-RNG-RESTORE-PARITY`；identity mid→`RULE-IDENTITY-VIEW-RESTORE`；视图/网络/兵闪见新 ID。 | 拆分完成 | resolved | — | kernel-engineer |
 | `COV-VISIBLE-VIEWS-EXT` | docs/native-coverage-manifest.md · visible_views | 扩展/客户端视图隔离扩面（自 COV-PARTIAL 拆出）。 | 扩面测试+清单状态升级 | open | T13-PRODUCT-CLIENT | client-engineer |
 | `COV-SESSION-AUTH-PRODUCT` | docs/native-coverage-manifest.md · session_auth | 权威网络接入产品面（自 COV-PARTIAL 拆出）。 | 权威网络/产品接入证据；清单升级 | open | T13-PRODUCT-CLIENT | server-engineer |
-| `COV-NULLIFY-JUDGE-EXPAND` | docs/native-coverage-manifest.md · nullify_judge_window | 兵/闪电抵消及多牌组合扩面（自 COV-PARTIAL 拆出）。 | 定向测+清单升级+证据目录 | open | — | kernel-engineer |
+| `COV-NULLIFY-JUDGE-EXPAND` | docs/native-coverage-manifest.md · nullify_judge_window | 兵/闪电抵消及多牌组合扩面（自 COV-PARTIAL 拆出）。 | 定向测+清单升级+证据目录 | resolved | — | kernel-engineer |
 | `COV-STANDARD-FULL-CONTENT` | docs/native-coverage-manifest.md · 范围 B「所有历史包/正式完整内容」未完成；标准武将/模式行 | 标准整将/牌/模式完整验收与历史包正式内容未完成；不按名称或测试数计算迁移率。 | 玩法版本+逐技能语义清单；整包证据 | open | T11-EVENT-RNG-RESTORE-PARITY | rules-auditor |
 | `COV-EXT-37` | docs/native-coverage-manifest.md · 扩展机制表「指定两仓全部扩展」 | 覆盖清单扩展行：原生整包验收 15/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26 与 L21，2026-10-17），仍需处理 22/37，与 T12 总账同口径。U04 不因同一经济再计一次。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | T12-WHOLEPACK-0-37 | extension-lead |
 | `RULE-JUDGE-ORDER-NOTE` | docs/architecture/native-rules-baseline.md · 判定排序（约 L3447） | 语义已定案保留原生；声明表「是否改判上游待决策」文档滞后**已就地勘正**（兼改 coverage `judge_zone`）。 | 正文对齐+证据 [rule-doc-lag-fix](../2026-10-16-rule-doc-lag-fix/README.md) | resolved | — | docs-auditor |

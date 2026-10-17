@@ -4444,7 +4444,62 @@ fn delayed_trick_play_time_nullify_window() {
     assert!(log_has(&e, |l| matches!(l, LE::CardNullified { player: 0, .. })));
 }
 
-/// 判定区同名牌限制：同名牌不得重复置入同一名玩家的判定区。
+/// 延时锦囊无懈窗口扩面（COV-NULLIFY-JUDGE-EXPAND）：兵粮寸断与闪电在
+/// 使用时同样开窗；抵消后不入判定区、阶段效果不生效；同目标多张不同名
+/// 延时锦囊只抵消被点名的那张、其余照常置入并结算。
+#[test]
+fn delayed_trick_bing_and_shandian_nullify_window() {
+    // 兵粮寸断：使用时开窗，2 号持无懈 → 抵消后不入判定区、摸牌不被跳过
+    let mut e = Engine::new(181, 4);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let nul = e.debug_place(2, "nullify");
+    let bing = e.debug_place(0, "bing");
+    let out = play(&mut e, bing, vec![1]);
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    assert_eq!(prompt_of(&e), "nullify_window");
+    assert_eq!(e.open_choice().unwrap().observer, 2, "0 无无懈自动跳过");
+    answer(&mut e, ChoiceOption::Card(nul));
+    assert!(e.debug_judge(1).is_empty(), "兵被抵消应随抵消弃置");
+    advance_to_play(&mut e, 1);
+    assert!(!e.debug_hand(1).is_empty(), "兵被抵消后摸牌不被跳过");
+    assert!(log_has(&e, |l| matches!(l, LE::CardNullified { player: 0, .. })));
+
+    // 闪电：使用时开窗，被无懈 → 不入判定区、不判定
+    let mut e = Engine::new(183, 4);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let nul = e.debug_place(2, "nullify");
+    let sd = e.debug_place(0, "shandian");
+    let out = play(&mut e, sd, vec![]);
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    assert_eq!(prompt_of(&e), "nullify_window");
+    assert_eq!(e.open_choice().unwrap().observer, 2, "闪电自置：队列自 0 起，2 持无懈");
+    answer(&mut e, ChoiceOption::Card(nul));
+    assert!(e.debug_judge(0).is_empty(), "闪电被抵消不入判定区");
+    assert!(log_has(&e, |l| matches!(l, LE::CardNullified { player: 0, .. })));
+
+    // 多牌组合：同目标 乐 + 兵，只抵消乐，兵照常入判定区并触发
+    let mut e = Engine::new(185, 4);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let nul = e.debug_place(2, "nullify");
+    let le = e.debug_place(0, "le");
+    let bing = e.debug_place(0, "bing");
+    let out = play(&mut e, le, vec![1]);
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    answer(&mut e, ChoiceOption::Card(nul));
+    assert!(e.debug_judge(1).is_empty(), "乐被抵消不入判定区");
+    let out = play(&mut e, bing, vec![1]);
+    assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
+    assert_eq!(e.debug_judge(1).len(), 1, "兵未被抵消照常入判定区");
+}
 #[test]
 fn judge_zone_same_name_limit() {
     let mut e = Engine::new(177, 4);
