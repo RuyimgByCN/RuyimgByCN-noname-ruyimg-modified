@@ -1528,6 +1528,21 @@ impl Engine {
         apply_general_assembly(&mut self.state.core, &self.catalog, player, 0);
     }
 
+    /// 测试/工具：按目录 def 装配主将（扩展/Boss 段）——与
+    /// `debug_assemble_general` 同语义（`apply_general_assembly` + 体力按
+    /// 上限设置），供扩展/Boss 武将测试驱动。
+    pub fn debug_assemble_general_def(&mut self, player: PlayerId, def: u16) {
+        self.state.core.players
+            .get_mut(player as usize)
+            .expect("player")
+            .general_slots[0] = Some(def);
+        apply_general_assembly(&mut self.state.core, &self.catalog, player, 0);
+        let p = self.state.core.player_mut(player);
+        p.hp = p.max_hp as i32;
+        p.alive = true;
+        p.dying = false;
+    }
+
     /// 测试/工具：摘除主将（装配撤销）——撤销该武将授予的技能实例
     /// （装备离场撤销语义）并清空主将槽。体力上限不回退（装配授予的
     /// 差异登记：原型测试工具不做体力还原）。
@@ -2370,6 +2385,14 @@ pub(crate) fn apply_general_assembly(
         }
     }
     let skills: Vec<&'static str> = meta.map(|(_, _, skills, _, _)| skills).unwrap_or_default();
+    // 禳星（T11 Boss 诸葛亮族批 115，规则 v303）：装配即初始化星系统
+    //（上游 `hlss_xiangxing` init：3 枚星、计数 0、无受伤记录）。
+    if skills.contains(&crate::content::host::HLSS_XIANGXING_KEY) {
+        let p = state.players.get_mut(player as usize).expect("player");
+        p.hlss_stars = 3;
+        p.hlss_count = 0;
+        p.hlss_damage = 0;
+    }
     for skill in skills {
         let def = catalog
             .skill_by_name(skill)
@@ -5090,6 +5113,10 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.boss_mad as u8);
         // 锦鳞一次性发动（swd 司空蔷，规则 v302）
         push_u8(&mut h, p.jinlin_used as u8);
+        // hlss 星系统（T11 Boss 诸葛亮族，规则 v303）
+        push_u8(&mut h, p.hlss_stars);
+        push_u8(&mut h, p.hlss_count);
+        push_u8(&mut h, p.hlss_damage);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

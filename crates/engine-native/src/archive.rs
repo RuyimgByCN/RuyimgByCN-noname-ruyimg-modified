@@ -68,7 +68,10 @@ use crate::state::{
 /// v87（2026-10-17，swd 批 114 锦鳞）：`PlayerState` 尾部追加
 /// `jinlin_used`（limited 一次性主动技已发动）。v86 字节被版本门禁拒绝
 ///（无生产迁移数据；存档仅测试与内部工具）。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 87;
+/// v88（2026-10-17，T11 Boss 诸葛亮族批 115）：`PlayerState` 尾部追加
+/// hlss 星系统三字段（`hlss_stars`/`hlss_count`/`hlss_damage`）。v87 字节
+/// 被版本门禁拒绝（无生产迁移数据）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 88;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3270,6 +3273,10 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.boss_mad);
         // 锦鳞一次性发动（v87）
         w.boolean(p.jinlin_used);
+        // hlss 星系统（v88）：星数/计数/已受伤类型位图
+        w.u8(p.hlss_stars);
+        w.u8(p.hlss_count);
+        w.u8(p.hlss_damage);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3620,6 +3627,9 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let nbianshen_toggle = r.boolean()?;
         let boss_mad = r.boolean()?;
         let jinlin_used = r.boolean()?;
+        let hlss_stars = r.u8()?;
+        let hlss_count = r.u8()?;
+        let hlss_damage = r.u8()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3689,6 +3699,9 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             nbianshen_toggle,
             boss_mad,
             jinlin_used,
+            hlss_stars,
+            hlss_count,
+            hlss_damage,
             off_court,
             shuiyun_count,
             wangyou3_round,

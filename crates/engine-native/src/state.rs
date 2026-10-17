@@ -243,6 +243,15 @@ pub struct PlayerState {
     /// 锦鳞（swd 司空蔷，swd deferred 消解批 114，规则 v302）：limited
     /// 一次性主动技已发动（上游 `awakenSkill` + `storage.jinlin`）。
     pub jinlin_used: bool,
+    /// 禳星·星数（T11 Boss 诸葛亮族 / hlss 星系统，规则 v303）：上游
+    /// `storage.hlss_xiangxing`，3→0；归零时觉醒（不再回满体力）。
+    pub hlss_stars: u8,
+    /// 禳星·累计伤害计数（上游 `storage.hlss_xiangxing_count`）：每受
+    /// 1 点伤害/失去 1 点体力 +1，达 3 触发失星与雷伤分配。
+    pub hlss_count: u8,
+    /// 隐月·已受伤类型位图（上游 `storage.hlss_yueyin_damage`）：
+    /// 1=雷属性伤害、2=火属性伤害、4=锦囊牌伤害；失星时清空。
+    pub hlss_damage: u8,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -342,6 +351,9 @@ impl PlayerState {
             boss_chongzheng: 0,
             boss_mad: false,
             jinlin_used: false,
+            hlss_stars: 0,
+            hlss_count: 0,
+            hlss_damage: 0,
         }
     }
 }

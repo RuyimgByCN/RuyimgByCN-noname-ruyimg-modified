@@ -396,6 +396,7 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     if !p.infinite_hp() {
         p.hp -= amount as i32;
     }
+    hlss_light_refill(ctx, d.target);
     ctx.log(LogEvent::DamageDealt {
         source: d.source,
         target: d.target,
@@ -1063,6 +1064,34 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
     }
 }
 
+/// 禳星·光（T11 Boss 诸葛亮族批 115，规则 v303）：持有「禳星」且星未
+/// 归零（技能实例启用）时，任意体力变化后回满体力（上游 `hlss_xiangxing_hp`
+/// 子技 changeHp/loseMaxHp/gainMaxHp → `hp = maxHp` 同口径；在伤害/失去
+/// 体力提交点、濒死判定前调用，故星未耗尽者不会进入濒死）。
+pub(crate) fn hlss_light_refill(ctx: &mut Ctx<'_>, player: PlayerId) {
+    let Some(def) = ctx
+        .catalog
+        .skill_by_name(crate::content::host::HLSS_XIANGXING_KEY)
+    else {
+        return;
+    };
+    let p = ctx.core.player_mut(player);
+    if !p.alive || p.hp >= p.max_hp as i32 {
+        return;
+    }
+    let enabled = ctx
+        .core
+        .skills
+        .get(&(player, def))
+        .map(|i| i.enabled)
+        .unwrap_or(false);
+    if !enabled {
+        return;
+    }
+    let max = ctx.core.player(player).max_hp as i32;
+    ctx.core.player_mut(player).hp = max;
+}
+
 /// 失去体力提交（逐技对照批三 v77）：直接扣减体力——不经护甲抵扣、
 /// 无伤害前置窗口/铁索传导/伤害来源触发技（LoseHp 是独立事件种）；
 /// 体力 ≤0 与伤害同口径进入濒死（上游 loseHp 语义）。
@@ -1074,6 +1103,7 @@ pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, amount: u32) {
     if !p.infinite_hp() {
         p.hp -= amount as i32;
     }
+    hlss_light_refill(ctx, player);
     ctx.log(LogEvent::HpLost { player, amount });
     let entering = ctx.core.player(player).hp <= 0 && !ctx.core.player(player).dying;
     if entering {
@@ -9215,7 +9245,15 @@ impl JudgePhaseMachine {
             .catalog
             .skill_by_name(crate::content::standard::BOSS_SHENYI)
             .map(|def| ctx.core.has_skill(owner, def))
-            .unwrap_or(false);
+            .unwrap_or(false)
+            // 隐月·判（T11 Boss 诸葛亮族批 115，规则 v303）：上游
+            // `hlss_yueyin2` mod judge 对阶段判定「true→false、false→null」
+            // ——两臂皆不生效（牌去向不变），与神裔同口径。
+            || ctx
+                .catalog
+                .skill_by_name(crate::content::host::HLSS_YUEYIN2_KEY)
+                .map(|def| ctx.core.has_skill(owner, def))
+                .unwrap_or(false);
         match trick_kind {
             CardKind::Le => {
                 if !shenyi_voids && !suit.is_heart() {

@@ -1272,6 +1272,16 @@ pub enum HostBehavior {
     SwdJinlin,
     /// 锦鳞·退（tag 462）：持有者阶段开始递减护甲与计数。
     SwdJinlin2,
+    /// 禳星（tag 463，T11 Boss 诸葛亮族批 115，赫拉西斯 `hlss_xiangxing`）：
+    /// 受伤害/失去体力累计 3 点 → 失一枚星（3→0）并向其他角色分配 3 点
+    /// 雷伤；星归零即觉醒（不再回满体力）。隐月满足免除条件时不失星。
+    HlssXiangxing,
+    /// 隐月（tag 464，`hlss_yueyin`）：受到伤害 +1 并记录伤害类型
+    ///（雷/火/锦囊位图），供禳星免除条件使用。
+    HlssYueyin,
+    /// 隐月·判（tag 465，`hlss_yueyin2`）：判定区的牌对持有者不生效
+    ///（上游 mod judge 反转）+ 不能被翻面。
+    HlssYueyin2,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1576,6 +1586,9 @@ impl HostBehavior {
             HostBehavior::SwdLingshi => 460,
             HostBehavior::SwdJinlin => 461,
             HostBehavior::SwdJinlin2 => 462,
+            HostBehavior::HlssXiangxing => 463,
+            HostBehavior::HlssYueyin => 464,
+            HostBehavior::HlssYueyin2 => 465,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2279,6 +2292,9 @@ impl HostBehavior {
             460 => HostBehavior::SwdLingshi,
             461 => HostBehavior::SwdJinlin,
             462 => HostBehavior::SwdJinlin2,
+            463 => HostBehavior::HlssXiangxing,
+            464 => HostBehavior::HlssYueyin,
+            465 => HostBehavior::HlssYueyin2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2299,7 +2315,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 459] = [
+        pub const ALL: [HostBehavior; 462] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2759,6 +2775,9 @@ impl HostBehavior {
         HostBehavior::SwdLingshi,
         HostBehavior::SwdJinlin,
         HostBehavior::SwdJinlin2,
+        HostBehavior::HlssXiangxing,
+        HostBehavior::HlssYueyin,
+        HostBehavior::HlssYueyin2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2980,6 +2999,9 @@ impl HostBehavior {
             HostBehavior::SwdLingshi => "host:lingshi",
             HostBehavior::SwdJinlin => "host:jinlin",
             HostBehavior::SwdJinlin2 => "host:jinlin2",
+            HostBehavior::HlssXiangxing => "host:hlss_xiangxing",
+            HostBehavior::HlssYueyin => "host:hlss_yueyin",
+            HostBehavior::HlssYueyin2 => "host:hlss_yueyin2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3404,6 +3426,30 @@ impl HostBehavior {
             HostBehavior::SwdLingshi => None,
             // 锦鳞：主动技（limited 一次性；无触发时机）
             HostBehavior::SwdJinlin => None,
+            // 禳星：自己受伤害结算后 / 失去体力后（silent forced）
+            HostBehavior::HlssXiangxing => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::LoseHp],
+            }),
+            // 隐月：伤害前置窗（num+1 写回 + 记录伤害类型）
+            HostBehavior::HlssYueyin => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 隐月·判：翻面前置取消（不能被翻面；判定不生效由 kernel 内联）
+            HostBehavior::HlssYueyin2 => Some(TriggerMeta {
+                event: EventKind::TurnOverBefore,
+                timing: Timing::Normal,
+                priority: 20,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 锦鳞·退：持有者阶段开始（silent）
             HostBehavior::SwdJinlin2 => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -5572,6 +5618,19 @@ pub const WUDIAN_XJ_TIANXIAN_KEY: &str = "tianxian";
 /// 锦鳞·退（swd 司空蔷，swd deferred 消解批 114）：目录技能名（包 `skills`
 /// 段声明 `swd_jinlin2` → `host:jinlin2`，运行时由锦鳞授予实例）。
 pub const SWD_JINLIN2_KEY: &str = "swd_jinlin2";
+
+/// 禳星（T11 Boss 诸葛亮族批 115）：目录技能名。
+pub const HLSS_XIANGXING_KEY: &str = "hlss_xiangxing";
+/// 隐月（同批）：目录技能名（隐月·判为其 group 技能）。
+pub const HLSS_YUEYIN_KEY: &str = "hlss_yueyin";
+/// 隐月·判（同批）：目录技能名。
+pub const HLSS_YUEYIN2_KEY: &str = "hlss_yueyin2";
+/// 隐月记录位：雷属性伤害。
+pub const HLSS_DAMAGE_THUNDER: u8 = 1;
+/// 隐月记录位：火属性伤害。
+pub const HLSS_DAMAGE_FIRE: u8 = 2;
+/// 隐月记录位：锦囊牌伤害。
+pub const HLSS_DAMAGE_TRICK: u8 = 4;
 pub const WUDIAN_XJ_WANGYOU_CARDS: &str = "xj_wangyou_cards";
 pub const WUDIAN_XJ_XIEPAN_CARDS: &str = "xj_xiepan_cards";
 pub const WUDIAN_XJ_XTANXI_CARDS: &str = "xj_xtanxi_cards";
@@ -6066,6 +6125,9 @@ impl HostSkillBehavior {
             HostBehavior::SwdLingshi => (None, None),
             HostBehavior::SwdJinlin => (None, None),
             HostBehavior::SwdJinlin2 => (None, None),
+            HostBehavior::HlssXiangxing => (None, None),
+            HostBehavior::HlssYueyin => (None, None),
+            HostBehavior::HlssYueyin2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6352,6 +6414,19 @@ impl SkillBehavior for HostSkillBehavior {
             // 锦鳞·退：持有者阶段开始
             HostBehavior::SwdJinlin2 => matches!(event,
                 EventData::Phase { player, begin: true, .. } if *player == owner),
+            // 禳星：自己受到未防止伤害 / 自己失去体力
+            HostBehavior::HlssXiangxing => match event {
+                EventData::Damage(d) => d.target == owner && !d.prevented,
+                EventData::LoseHp { player, .. } => *player == owner,
+                _ => false,
+            },
+            // 隐月：自己受到未防止伤害（前置窗）
+            HostBehavior::HlssYueyin => matches!(event,
+                EventData::Damage(d) if d.target == owner && !d.prevented),
+            // 隐月·判：自己未被翻面时取消翻面（上游 filter !isTurnedOver）
+            HostBehavior::HlssYueyin2 => matches!(event,
+                EventData::TurnOverBefore { player, .. }
+                    if *player == owner && !ctx.state.player(owner).face_down),
             // 孤行·计数：孤行杀窗口内自己造成伤害
             HostBehavior::SwdGuxing3 => matches!(event,
                 EventData::Damage(d)
@@ -19058,6 +19133,136 @@ impl crate::catalog::SkillMachine for HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 禳星：累计计数；达 3 判定免除/失星，随后分配 3 点雷伤
+            HostBehavior::HlssXiangxing => {
+                let damage_num = ctx
+                    .current_damage()
+                    .map(|d| d.amount)
+                    .or_else(|_| ctx.current_lose_hp())
+                    .unwrap_or(0);
+                let p = ctx.core.player_mut(self.owner);
+                p.hlss_count = p.hlss_count.saturating_add(damage_num.min(255) as u8);
+                if ctx.core.player(self.owner).hlss_count < 3 {
+                    return Flow::Done;
+                }
+                // 隐月免除：当前星数对应的伤害类型已在记录位图中
+                let stars = ctx.core.player(self.owner).hlss_stars;
+                let recorded = ctx.core.player(self.owner).hlss_damage;
+                let need = match stars {
+                    3 => HLSS_DAMAGE_THUNDER,
+                    2 => HLSS_DAMAGE_FIRE,
+                    1 => HLSS_DAMAGE_TRICK,
+                    _ => 0,
+                };
+                let has_yueyin = ctx
+                    .catalog
+                    .skill_by_name(HLSS_YUEYIN_KEY)
+                    .map(|d| ctx.core.has_skill(self.owner, d))
+                    .unwrap_or(false);
+                if has_yueyin && need != 0 && recorded & need != 0 {
+                    // 免除：不失星、不放雷；仅当星已归零时回满体力
+                    if stars == 0 {
+                        let max = ctx.core.player(self.owner).max_hp as i32;
+                        ctx.core.player_mut(self.owner).hp = max;
+                    }
+                    return Flow::Done;
+                }
+                // 失星：星 -1、计数清零、记录清空
+                {
+                    let p = ctx.core.player_mut(self.owner);
+                    p.hlss_stars = p.hlss_stars.saturating_sub(1);
+                    p.hlss_count = 0;
+                    p.hlss_damage = 0;
+                }
+                // 雷伤分配（上游：全场随机 1 名 +1；随机敌人两名各 +1，
+                // 无敌人时退化为全场）
+                let others: Vec<PlayerId> = ctx
+                    .core
+                    .alive_players()
+                    .filter(|p| *p != self.owner)
+                    .collect();
+                if others.is_empty() {
+                    return Flow::Done;
+                }
+                let mut damage_map: std::collections::BTreeMap<PlayerId, u32> =
+                    std::collections::BTreeMap::new();
+                let pick = others[ctx.core.rng.gen_range(others.len() as u32) as usize];
+                *damage_map.entry(pick).or_insert(0) += 1;
+                let enemies: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|p| ctx.core.is_boss_side(*p) != ctx.core.is_boss_side(self.owner))
+                    .collect();
+                let enemy_pool = if enemies.is_empty() { others.clone() } else { enemies };
+                for _ in 0..2 {
+                    let e = enemy_pool[ctx.core.rng.gen_range(enemy_pool.len() as u32) as usize];
+                    *damage_map.entry(e).or_insert(0) += 1;
+                }
+                for (target, num) in damage_map {
+                    if !ctx.core.player(target).alive {
+                        continue;
+                    }
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(self.owner),
+                        target,
+                        num,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                }
+                // 星归零：回满体力并觉醒（不再回满）
+                if ctx.core.player(self.owner).hlss_stars == 0 {
+                    let max = ctx.core.player(self.owner).max_hp as i32;
+                    ctx.core.player_mut(self.owner).hp = max;
+                    if let Some(def) = ctx.catalog.skill_by_name(HLSS_XIANGXING_KEY) {
+                        if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, def)) {
+                            inst.enabled = false;
+                        }
+                    }
+                    ctx.log(LogEvent::SkillToggled {
+                        player: self.owner,
+                        skill: ctx.catalog.skill_name(
+                            ctx.catalog
+                                .skill_by_name(HLSS_XIANGXING_KEY)
+                                .expect("hlss 禳星在目录"),
+                        ),
+                        enabled: false,
+                    });
+                }
+                Flow::Done
+            }
+            // 隐月：伤害前置窗——num+1 写回（上游 damageBegin4 num++），
+            // 并记录伤害类型（雷/火/锦囊牌；上游 damage 面记录，原生同窗
+            // 记录，登记差异：防止伤害的窗口内已记录）
+            HostBehavior::HlssYueyin => {
+                let (nature, card) = {
+                    let d = ctx.current_damage_mut();
+                    d.amount += 1;
+                    (d.nature, d.card)
+                };
+                let mut bits = 0u8;
+                match nature {
+                    crate::event::DamageNature::Thunder => bits |= HLSS_DAMAGE_THUNDER,
+                    crate::event::DamageNature::Fire => bits |= HLSS_DAMAGE_FIRE,
+                    crate::event::DamageNature::Normal => {}
+                }
+                if let Some(card) = card {
+                    // 上游按 `get.type2(card)` 记 'trick'/'delay' 两类键；
+                    // 原生合并记「锦囊牌伤害」一位（登记差异）。
+                    let kind = ctx.catalog.card_kind(card);
+                    if !kind.is_basic_kind() && !kind.is_equip() {
+                        bits |= HLSS_DAMAGE_TRICK;
+                    }
+                }
+                ctx.core.player_mut(self.owner).hlss_damage |= bits;
+                Flow::Done
+            }
+            // 隐月·判：取消翻面（写回前置帧取消位）
+            HostBehavior::HlssYueyin2 => {
+                let (_, cancelled) = ctx.current_turn_over_before_mut();
+                *cancelled = true;
+                Flow::Done
+            }
             // 锦鳞·退：阶段开始 -1 护甲与计数；护甲归零或计数归零移除
             HostBehavior::SwdJinlin2 => {
                 if ctx.core.player(self.owner).hujia > 0 {

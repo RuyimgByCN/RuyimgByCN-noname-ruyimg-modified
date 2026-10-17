@@ -210,6 +210,24 @@ impl<'a> Ctx<'a> {
             .turn_over_before_mut()
     }
 
+    /// 当前帧的伤害载荷只读访问（hlss 隐月记录/禳星计数等；非伤害帧 Err）。
+    pub fn current_damage(&self) -> Result<&DamageData, ()> {
+        let id = self.current_frame_id();
+        match self.res.frame(id).map(|f| &f.data) {
+            Some(crate::event::EventData::Damage(d)) => Ok(d),
+            _ => Err(()),
+        }
+    }
+
+    /// 当前帧的失去体力载荷（hlss 禳星计数；非 LoseHp 帧 Err）。
+    pub fn current_lose_hp(&self) -> Result<u32, ()> {
+        let id = self.current_frame_id();
+        match self.res.frame(id).map(|f| &f.data) {
+            Some(crate::event::EventData::LoseHp { amount, .. }) => Ok(*amount),
+            _ => Err(()),
+        }
+    }
+
     pub fn current_damage_mut(&mut self) -> &mut DamageData {
         let id = self.current_frame_id();
         self.res

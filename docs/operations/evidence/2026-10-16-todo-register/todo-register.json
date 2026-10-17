@@ -53,7 +53,8 @@
     "t13_ai_policy_v2": "2026-10-17 T13-AI-STRONGER-POLICY 关闭：策略变体 1（全手牌候选+牌值评分）同 64 节点座位 0 胜率 2%→70%；附内核应答路由修复（1 场 golden 重录，无版本变化）。",
     "l13_closure_2026_10_17": "T12-SRC-L13 resolved after eight-dimension evidence. Whole-pack 19/37; L13 not counted via any other source line.",
     "swd_batch_114": "2026-10-17 swd 批 114 锦鳞（tag 461/462，规则 v302/存档 v87）：150/184 映射、deferred 32、司空蔷整将闭环；14 golden 重录 + 版本回退探针，engine-native 899/0/1、Gate 1b exit 0。",
-    "d5_infinite_hp": "2026-10-17 D5 前置：无限体力哨兵（装载器 Infinity → INFINITE_HP；伤害/回复/上限减门控；不濒死；手牌上限按哨兵）。engine-native 901/0/1，14 golden 零扰动。D5/T11-BOSS-ZHUGE-LIANG 仍 open。"
+    "d5_infinite_hp": "2026-10-17 D5 前置：无限体力哨兵（装载器 Infinity → INFINITE_HP；伤害/回复/上限减门控；不濒死；手牌上限按哨兵）。engine-native 901/0/1，14 golden 零扰动。D5/T11-BOSS-ZHUGE-LIANG 仍 open。",
+    "t11_hlss_115": "2026-10-17 批 115：hlss 星系统三技（禳星/隐月/隐月·判）落地，规则 v303/存档 v88；engine-native 906/0/1、14 golden 重录 + 版本回退探针。T11-BOSS-ZHUGE-LIANG 仍 open（余起风/改命与 Boss 装配）。"
   },
   "items": [
     {
@@ -352,7 +353,7 @@
         "D5",
         "T9"
       ],
-      "notes": "2026-10-17：前置原语无限体力已交付（`INFINITE_HP` 哨兵；证据 docs/operations/evidence/2026-10-17-d5-infinite-hp/）。余：四技迁移（禳星/隐月/起风/改命，含 `skipDamage` 表与三星星存储）+ boss_zhugeliang 装配与 Boss 关卡接入。"
+      "notes": "2026-10-17：前置原语无限体力已交付（`INFINITE_HP` 哨兵）。2026-10-17 批 115：hlss 星系统三技落地（禳星/隐月/隐月·判，tag 463–465，字段批 v303/存档 v88；定向 5/5）。余：起风 `hlss_fengqi`（准备阶段选锦囊使用 + 无懈不可响应）、改命 `hlss_gaiming`（判定前亮 7 张选 1）+ boss_zhugeliang 装配与 Boss 关卡接入。"
     },
     {
       "id": "T11-BOSS-PANGTONG-EXTERNAL",

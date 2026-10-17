@@ -930,90 +930,97 @@ type ScenarioFn = fn() -> [u8; 32];
 /// 达。版本回退探针（临时把 `STANDARD_RULESET_VERSION` 从 302 改回 301，
 /// 新代码不动，14 场全 mismatch）证明位移含规则版本字段。证据见
 /// docs/operations/evidence/2026-10-17-t12-swd-deferred-b114/。
+/// 2026-10-17 重录依据（v303，T11 Boss 诸葛亮族批 115）：规则版本
+/// 302→303 + 存档 87→88（`PlayerState` 尾部追加 hlss 星系统三字段：
+/// `hlss_stars`/`hlss_count`/`hlss_damage`）。14 场全部重录；hlss 星系统
+/// 仅经扩展/Boss 将可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 303 改回 302，新代码不动，14 场全
+/// mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t11-boss-zhugeliang-hlss/。
 const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
     (
         "sha_dodge_then_damage",
         scenario_sha_dodge_then_damage,
         &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
-        "5bf8bf2669bbc347abc8339e41b08acd2006ac1c1223de3945df2f31de1ddb3e",
+        "9751e703fa0778c98cffa8c604bccedb04b2b216903fc60ce7b196018e09e6cf",
     ),
     (
         "death_terminal_single",
         scenario_death_terminal_single,
         &["dying", "death", "victory"],
-        "5e62f87e0a8da908bf0d820304f5bd635ca8f0277ed0f1c02c5f168d81687e65",
+        "e76a7028fb4befe1586b0e80a11549f3458d61bdc4b8dfb172d95ade703843e0",
     ),
     (
         "sancai_nested_chain",
         scenario_sancai_nested_chain,
         &["optional_trigger", "nested_choice", "draw", "give_cards"],
-        "324de7b1b3ad290010c0f0a327249625f0b1aebcbc7b459ecfa318f46cbd02a9",
+        "6fc43ff516326f5349ee71ccd06e63ac4d063f7d364d4b2fae6c76b4bff15391",
     ),
     (
         "yishang_redirect",
         scenario_yishang_redirect,
         &["damage_before_window", "payload_rewrite_redirect"],
-        "913c4e591d9793b128eec5c928bc16ad2eb3cc106543eeff759a2af9977602d1",
+        "b29426df32358395cc042403c4acc37a123accbf74b007d94a0e0b5ff6c46940",
     ),
     (
         "suidun_window_matrix",
         scenario_suidun_window_matrix,
         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
-        "f7d28644f78445fd38df74628fd7ef4280a9cc8907874fd661dc019e9f77ddb1",
+        "fa72640f3c3750dca108e5cd53dc4aac288d79113620196828059859cbce2cc8",
     ),
     (
         "shouyi_dynamic_skill",
         scenario_shouyi_dynamic_skill,
         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
-        "a89a07aad4852779812e57caad8ae278d6814b2878053885d58ed6a57cfb58fb",
+        "9a2a65bec5d34bcf357cc89aa978d7f2f34462e01035b8bb67337c930c0cdb43",
     ),
     (
         "discard_to_limit",
         scenario_discard_to_limit,
         &["hand_limit", "intrinsic_machine"],
-        "fa09759ea0b709755a5cfa8c1e7a572b4ecd24f7ce708f4d3f1dab226a0fdbf5",
+        "b1aa38dd99bbd44e102510cae37877ad4db834e3fe7e72f1a1cd402949d40acb",
     ),
     (
         "rollback_invariants",
         scenario_rollback_invariants,
         &["reject_rollback", "budget_rollback"],
-        "8cfdca8d7dcc11e5405323b8b6bf032b95602266740d13bfd06bc40adf1d32ec",
+        "fabc259e1286242f5b28917027d32305b600cf134ee11106a1c41919389e75b4",
     ),
     (
         "equip_distance_matrix",
         scenario_equip_distance_matrix,
         &["equip_slots", "distance_modifier", "attack_range", "equip_replace"],
-        "50f63e58ac055aea4f5ff479ed48328cb5f35598e1bd12ba4932cf25ea5264be",
+        "09c3c824c0891c41cc8734163b5fec0d16e048b6f0af375ab74e02137ddb8934",
     ),
     (
         "chain_fire_propagation",
         scenario_chain_fire_propagation,
         &["chain_state", "damage_nature", "chain_propagation"],
-        "693099fdf80793d79f605c3751f882b3ba0aa2a13914a1346c444745695add32",
+        "16e11c1e87252055d93ed0c9cf26e665f832ab2a64b0ff39429e76ddf7de3f41",
     ),
     (
         "aoe_response_queue",
         scenario_aoe_response_queue,
         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
-        "797111a8415d10569b4c152d9febaa1c3b762be91bb1028ae316b651f5ac31a9",
+        "91b8ee6223cfb579b1e9ae5b104feeefd32c041544220d648b7449bea1f27ac1",
     ),
     (
         "duel_alternating_response",
         scenario_duel_alternating_response,
         &["duel_alternating", "duel_no_distance_limit"],
-        "354be6e263378d133027505d370e6b3011a2e2c6dbdabb99686e94926313dfeb",
+        "5b1f49cc098a171196568e9f0212546bdadf1a7c93816635cb738e7e97235da5",
     ),
     (
         "nullify_chain_on_savage",
         scenario_nullify_chain_on_savage,
         &["nullify_window", "nullify_chain", "nullify_scope"],
-        "a2f86fd19bf9677aeb700b6b2f8bf99b51a6b2248328e59045bad828878e6dc5",
+        "dbc3f9a86cc421221db9ad5c888b2f0d1f365e26fb00ed85fdaec4f8224e7093",
     ),
     (
         "judge_phase_delayed_tricks",
         scenario_judge_phase_delayed_tricks,
         &["judge_zone", "delayed_trick", "phase_skip"],
-        "60613e575056f203f7e86ac7988828f946940e55ce235694225ec1ea80802063",
+        "0c18784aa49d85c6b70304f428deb74fd50aa9bda34b004aa86e58d4a9783711",
     ),
 ];
 
