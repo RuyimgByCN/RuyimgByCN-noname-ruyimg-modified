@@ -1201,6 +1201,10 @@ pub enum HostBehavior {
     /// 明镜（tag 410，deferred 消解批 妮可）：无防具时视为光纱天衣——
     /// 即将受到伤害时 1/3 概率伤害 -1（RNG 同上游 filter）。
     SwdMinjing,
+    /// 兰芷（tag 439，deferred 消解批 环婉之）：使用梅花牌后，体力不大于
+    /// 自己的已受伤角色（含自己）按座位序各回复 1。上游含 `check`（可放弃）
+    /// ——原生恒发动近似登记。
+    SwdLanzhi,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1481,6 +1485,7 @@ impl HostBehavior {
             HostBehavior::BossBaiyi => 436,
             HostBehavior::BossBaiyiThunder => 437,
             HostBehavior::D3Moyan => 438,
+            HostBehavior::SwdLanzhi => 439,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2160,6 +2165,7 @@ impl HostBehavior {
             436 => HostBehavior::BossBaiyi,
             437 => HostBehavior::BossBaiyiThunder,
             438 => HostBehavior::D3Moyan,
+            439 => HostBehavior::SwdLanzhi,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2180,7 +2186,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 435] = [
+        pub const ALL: [HostBehavior; 436] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2616,6 +2622,7 @@ impl HostBehavior {
         HostBehavior::GuisheqiCard,
         HostBehavior::XianluhuiCard,
         HostBehavior::D3Moyan,
+        HostBehavior::SwdLanzhi,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2813,6 +2820,7 @@ impl HostBehavior {
             HostBehavior::BossBaiyi => "host:baiyi",
             HostBehavior::BossBaiyiThunder => "host:baiyi_thunder",
             HostBehavior::D3Moyan => "host:d3_moyan",
+            HostBehavior::SwdLanzhi => "host:lanzhi",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3877,6 +3885,14 @@ impl HostBehavior {
             // 明镜：自己受到伤害前置（无防具 + 1/3）
             HostBehavior::SwdMinjing => Some(TriggerMeta {
                 event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 兰芷：使用梅花牌后（上游含 check 可放弃→原生恒发动近似）
+            HostBehavior::SwdLanzhi => Some(TriggerMeta {
+                event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
@@ -6543,6 +6559,12 @@ impl SkillBehavior for HostSkillBehavior {
                         ctx.catalog.card_kind(*c).equip_slot()
                             == Some(crate::catalog::EquipSlot::Armor)
                     })),
+            // 兰芷：自己使用的牌花色为梅花（未取消）
+            HostBehavior::SwdLanzhi => matches!(event,
+                EventData::CardUsed(u)
+                if u.player == owner
+                    && !u.cancelled
+                    && ctx.catalog.cards[u.card as usize].suit == crate::catalog::Suit::Club),
             // 烈刃：自己以杀造成真实伤害且受害者存活有牌
             HostBehavior::SwdLieren => matches!(event,
                 EventData::Damage(d)
@@ -13432,6 +13454,19 @@ impl crate::catalog::SkillMachine for HostMachine {
                 if ctx.core.rng.gen_range(3u32) == 0 {
                     let d = ctx.current_damage_mut();
                     d.amount = d.amount.saturating_sub(1);
+                }
+                Flow::Done
+            }
+            // 兰芷：使用梅花牌后，体力不大于自己的已受伤角色（含自己）
+            // 按座位序各回复 1（上游 list.sort(lib.sort.seat)；恒发动近似）。
+            HostBehavior::SwdLanzhi => {
+                let n = ctx.core.players.len() as PlayerId;
+                let own_hp = ctx.core.player(self.owner).hp;
+                for t in 0..n {
+                    let p = ctx.core.player(t);
+                    if p.alive && p.hp < p.max_hp as i32 && p.hp <= own_hp {
+                        ctx.recover(t, 1, None);
+                    }
                 }
                 Flow::Done
             }

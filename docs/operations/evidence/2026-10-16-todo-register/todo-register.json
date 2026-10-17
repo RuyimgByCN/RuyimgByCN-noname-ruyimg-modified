@@ -803,7 +803,7 @@
     "U05",
     "swd"
    ],
-   "notes": "计数以最新 swd deferred 证据 README 为准；并行消解属进度漂移非归类模糊",
+   "notes": "2026-10-17 批 100：兰芷（tag 439）消解——134/184 映射，deferred 49→48。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100/README.md",
    "ambiguous": false,
    "resolution": {
     "date": "2026-10-16",
