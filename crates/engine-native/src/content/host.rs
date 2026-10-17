@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 神焰（tag 476，swd deferred 消解批 121，`shenyan`）：限定技——你
+    /// 造成的**火属性**伤害 +1，并在结算后令原目标距离 ≤1 的其他角色
+    /// （座位序，不含你与原目标）各受 1 点无来源火伤。
+    SwdShenyan,
     /// 灵武（tag 475，swd deferred 消解批 120，`lingwu`）：频繁技——阶段
     /// 结束时本回合已用牌数 ≥ 体力则插入一个额外出牌阶段（效果内联于
     /// 阶段收束；本行为仅登记与触发面）。
@@ -1634,6 +1638,7 @@ impl HostBehavior {
             HostBehavior::Shenwei => 473,
             HostBehavior::MbcmQingzheng => 474,
             HostBehavior::SwdLingwu => 475,
+            HostBehavior::SwdShenyan => 476,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2350,6 +2355,7 @@ impl HostBehavior {
             473 => HostBehavior::Shenwei,
             474 => HostBehavior::MbcmQingzheng,
             475 => HostBehavior::SwdLingwu,
+            476 => HostBehavior::SwdShenyan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2370,7 +2376,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 472] = [
+        pub const ALL: [HostBehavior; 473] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2843,6 +2849,7 @@ impl HostBehavior {
         HostBehavior::Shenwei,
         HostBehavior::MbcmQingzheng,
         HostBehavior::SwdLingwu,
+        HostBehavior::SwdShenyan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3077,6 +3084,7 @@ impl HostBehavior {
             HostBehavior::Shenwei => "host:shenwei",
             HostBehavior::MbcmQingzheng => "host:mbcmqingzheng",
             HostBehavior::SwdLingwu => "host:lingwu",
+            HostBehavior::SwdShenyan => "host:shenyan",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3555,6 +3563,14 @@ impl HostBehavior {
                 priority: 0,
                 optional: true,
                 extra_events: Vec::new(),
+            }),
+            // 神焰：伤害前置窗（+1 并记录蔓延目标）+ 伤害结算后（蔓延）
+            HostBehavior::SwdShenyan => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::Damage],
             }),
             // 灵武：无触发时机（效果内联于阶段收束）
             HostBehavior::SwdLingwu => None,
@@ -5760,6 +5776,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 神焰（swd 夜鸦熙，批 121）：目录技能名（火伤 +1 + 邻位蔓延；两面同机）。
+pub const SWD_SHENYAN_KEY: &str = "shenyan";
+
 /// 灵武（swd 妮可，批 120）：目录技能名（额外阶段；效果内联于阶段收束）。
 pub const SWD_LINGWU_KEY: &str = "lingwu";
 
@@ -6523,6 +6542,7 @@ impl HostSkillBehavior {
             HostBehavior::Shenwei => (None, None),
             HostBehavior::MbcmQingzheng => (None, None),
             HostBehavior::SwdLingwu => (None, None),
+            HostBehavior::SwdShenyan => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6856,6 +6876,18 @@ impl SkillBehavior for HostSkillBehavior {
                     if *player == owner && !ctx.state.player(owner).niepan_used),
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
+            // 神焰：前置面=自己造成的未防止火伤且未发动；结算面=已发动且
+            // 有待蔓延目标（同一伤害事件的两面按状态区分）
+            HostBehavior::SwdShenyan => match event {
+                EventData::Damage(d) if d.source == Some(owner) && !d.prevented => {
+                    if !ctx.state.player(owner).shenyan_used {
+                        d.nature == crate::event::DamageNature::Fire
+                    } else {
+                        !ctx.state.player(owner).shenyan_pending.is_empty()
+                    }
+                }
+                _ => false,
+            },
             HostBehavior::SwdLingwu => false,
             // 清正：自己出牌阶段开始且手牌非空
             HostBehavior::MbcmQingzheng => matches!(event,
@@ -19882,6 +19914,54 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
+            // 神焰：前置面（+1 并记录蔓延目标）与结算面（逐个蔓延火伤）
+            HostBehavior::SwdShenyan => {
+                let (target, amount) = match ctx.current_damage() {
+                    Ok(d) => (d.target, d.amount),
+                    Err(_) => return Flow::Done,
+                };
+                if !ctx.core.player(self.owner).shenyan_used {
+                    // 前置面：火伤 +1、置限定位、记录原目标距离 ≤1 的其他
+                    // 角色（座位序，不含来源与原目标）
+                    ctx.current_damage_mut().amount = amount + 1;
+                    let mut pending: Vec<PlayerId> = ctx
+                        .core
+                        .seat_order_from(target)
+                        .into_iter()
+                        .filter(|p| {
+                            *p != self.owner
+                                && *p != target
+                                && ctx.core.player(*p).alive
+                                && ctx.core.computed_distance(ctx.catalog, target, *p) <= 1
+                        })
+                        .collect();
+                    pending.sort_unstable();
+                    let p = ctx.core.player_mut(self.owner);
+                    p.shenyan_used = true;
+                    p.shenyan_pending = pending;
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "神焰",
+                        owner: self.owner,
+                    });
+                } else {
+                    // 结算面：逐个蔓延（上游 shenyan2 global damageAfter 循环）
+                    let pending: Vec<PlayerId> =
+                        std::mem::take(&mut ctx.core.player_mut(self.owner).shenyan_pending);
+                    for t in pending {
+                        if !ctx.core.player(t).alive {
+                            continue;
+                        }
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            None,
+                            t,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        )));
+                    }
+                }
+                Flow::Done
+            }
             HostBehavior::SwdLingwu => Flow::Done,
             // 清正：选花色 → 选目标 → 选目标花色 → 双向弃牌 → 少弃者受伤
             HostBehavior::MbcmQingzheng => match self.stage {

@@ -82,7 +82,9 @@ use crate::state::{
 /// v92（2026-10-17，swd 灵武批 120）：`TurnState` 追加本回合已用牌数
 /// `cards_used_turn`、额外阶段队列 `extra_phases`、灵武插入位
 /// `extra_phase_lingwu`。v91 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 92;
+/// v93（2026-10-17，swd 神焰批 121）：`PlayerState` 追加神焰限定位
+/// `shenyan_used` 与待蔓延目标 `shenyan_pending`。v92 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 93;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3336,6 +3338,12 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.u8(p.mbqianlong_marks);
         // 涅槃限定技（v91）
         w.boolean(p.niepan_used);
+        // 神焰限定技 + 待蔓延目标（v93）
+        w.boolean(p.shenyan_used);
+        w.len(p.shenyan_pending.len());
+        for t in &p.shenyan_pending {
+            w.u8(*t);
+        }
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3703,6 +3711,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         }
         let mbqianlong_marks = r.u8()?;
         let niepan_used = r.boolean()?;
+        let shenyan_used = r.boolean()?;
+        let shenyan_pending = r.vec(|r| r.u8())?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3778,6 +3788,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             hlss_fengqi_used,
             mbqianlong_marks,
             niepan_used,
+            shenyan_used,
+            shenyan_pending,
             off_court,
             shuiyun_count,
             wangyou3_round,

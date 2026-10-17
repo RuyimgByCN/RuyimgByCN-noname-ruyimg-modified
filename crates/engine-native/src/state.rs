@@ -262,6 +262,12 @@ pub struct PlayerState {
     /// 涅槃·限定技已发动（T11 Boss 庞统族批 118，规则 v306）：上游
     /// `player.storage.niepan`（awakenSkill 后 true）。
     pub niepan_used: bool,
+    /// 神焰·限定技已发动（swd 批 121，规则 v308）：上游
+    /// `player.storage.shenyan`（awakenSkill 后 true）。
+    pub shenyan_used: bool,
+    /// 神焰·待蔓延目标（同批）：上游 `storage.shenyan2`（原目标距离 ≤1 的
+    /// 其他角色，座位序）——主伤害结算后逐个受 1 点无来源火伤。
+    pub shenyan_pending: Vec<PlayerId>,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -367,6 +373,8 @@ impl PlayerState {
             hlss_fengqi_used: Vec::new(),
             mbqianlong_marks: 0,
             niepan_used: false,
+            shenyan_used: false,
+            shenyan_pending: Vec::new(),
         }
     }
 }

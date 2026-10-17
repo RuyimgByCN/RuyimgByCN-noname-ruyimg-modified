@@ -5160,6 +5160,12 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.mbqianlong_marks);
         // 涅槃限定技（T11 Boss 庞统族批 118，规则 v306）
         push_u8(&mut h, p.niepan_used as u8);
+        // 神焰限定技 + 待蔓延目标（swd 批 121，规则 v308）
+        push_u8(&mut h, p.shenyan_used as u8);
+        push_u32(&mut h, p.shenyan_pending.len() as u32);
+        for t in &p.shenyan_pending {
+            push_u8(&mut h, *t);
+        }
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

@@ -1102,7 +1102,7 @@
     },
     {
      "name": "shenyan",
-     "mapping": null
+     "mapping": "host:shenyan"
     }
    ]
   },
