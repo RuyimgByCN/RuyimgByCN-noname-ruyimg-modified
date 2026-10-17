@@ -1978,7 +1978,7 @@
     },
     {
      "name": "bingfeng",
-     "mapping": null
+     "mapping": "host:bingfeng"
     }
    ]
   }
@@ -2015,6 +2015,10 @@
   {
    "name": "hxunzhi2",
    "mapping": "host:hxunzhi2"
+  },
+  {
+   "name": "bingfeng2",
+   "mapping": "host:bingfeng2"
   }
  ]
 }

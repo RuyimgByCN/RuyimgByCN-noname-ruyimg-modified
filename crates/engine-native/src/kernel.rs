@@ -7440,7 +7440,13 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 })
                 .unwrap_or(false);
             let mut options = vec![ChoiceOption::Pass];
-            if !sipu_ban_respond && !poyue_direct_hit && !shoulie_hit && !lingshi_direct_hit {
+            // 冰封·封（swd 批 134）：出牌封锁者不能打出闪（选项为空=必中）
+            if !sipu_ban_respond
+                && !poyue_direct_hit
+                && !shoulie_hit
+                && !lingshi_direct_hit
+                && !ctx.catalog.blocks_all_cards(ctx.core, self.target)
+            {
                 options.extend(shans);
             }
             return Flow::WaitChoice {
@@ -7862,6 +7868,12 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     .copied()
                     .map(ChoiceOption::Card),
             );
+            // 冰封·封（swd 批 134）：封锁者不能求桃/自救
+            let options = if ctx.catalog.blocks_all_cards(ctx.core, responder) {
+                Vec::new()
+            } else {
+                options
+            };
             return Flow::WaitChoice {
                 observer: responder,
                 spec: ChoiceSpec {
@@ -7951,7 +7963,9 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 }
                 self.asked = true;
                 let mut options = vec![ChoiceOption::Pass];
-                options.extend(shas.into_iter().map(ChoiceOption::Card));
+                if !ctx.catalog.blocks_all_cards(ctx.core, responder) {
+                    options.extend(shas.into_iter().map(ChoiceOption::Card));
+                }
                 return Flow::WaitChoice {
                     observer: responder,
                     spec: ChoiceSpec {
@@ -9778,7 +9792,9 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
         }
         self.asked = true;
         let mut options = vec![ChoiceOption::Pass];
-        options.extend(holders.into_iter().map(ChoiceOption::Card));
+        if !ctx.catalog.blocks_all_cards(ctx.core, self.target) {
+            options.extend(holders.into_iter().map(ChoiceOption::Card));
+        }
         Flow::WaitChoice {
             observer: self.target,
             spec: ChoiceSpec {

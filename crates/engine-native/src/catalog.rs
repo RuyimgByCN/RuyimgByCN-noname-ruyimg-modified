@@ -1223,6 +1223,13 @@ pub trait SkillBehavior: Send + Sync {
         false
     }
 
+    /// 出牌封锁原语（swd 批 134 冰封）：持有该行为的启用实例时，玩家
+    /// 不能使用/打出/响应/求桃任何牌（上游 `bingfeng2` mod
+    /// cardEnabled/cardUsable/cardRespondable/cardSavable 全 false 同口径）。
+    fn blocks_all_cards(&self) -> bool {
+        false
+    }
+
     /// 本技能的具名 filter / 查询需要本回合弃置与摸牌史。
     /// 标准宿主技为 false，标准局面不写 VmAux，v295 摘要保持不变。
     fn needs_vm_card_history(&self) -> bool {
@@ -1396,6 +1403,17 @@ impl Catalog {
 
     /// G1 目标过滤原语：`p` 是否持有「延时锦囊目标免疫」类技能
     ///（墨守：乐/兵不能指定其为目标）。
+    /// 出牌封锁查询（swd 批 134 冰封）：玩家任一启用实例的行为声明封锁。
+    pub fn blocks_all_cards(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        core.skills.iter().any(|((o, def), inst)| {
+            *o == p && inst.enabled && self.skills[*def as usize].behavior.blocks_all_cards()
+        })
+    }
+
     pub fn blocks_delayed_trick(
         &self,
         core: &crate::state::GameStateCore,

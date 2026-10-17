@@ -119,6 +119,7 @@ impl Metrics {
                     RejectReason::NoSuchGeneral => "no_such_general",
                     RejectReason::AlreadyRevealed => "already_revealed",
                     RejectReason::CardLimit => "card_limit",
+                    RejectReason::CardBlocked => "card_blocked",
                 };
                 *self.rejects_by_reason.entry(key).or_insert(0) += 1;
             }

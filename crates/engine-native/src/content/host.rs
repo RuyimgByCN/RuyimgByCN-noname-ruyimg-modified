@@ -1309,6 +1309,12 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 冰封（tag 491，swd deferred 消解批 134，`bingfeng`）：出牌阶段限定
+    /// 技——翻面自己与至多 3 名未翻面其他角色，失去 1 点体力上限，并给
+    /// 双方授予「冰封·封」（tag 492：出牌/响应/求桃全封锁，翻回正面时移除）。
+    Bingfeng,
+    /// 冰封·封（tag 492，`bingfeng2`）：出牌封锁旗标（翻回正面自移除）。
+    Bingfeng2,
     /// 此桥邪（tag 490，swd deferred 消解批 133，`cyqiaoxie`）：自己失去
     /// 装备牌后，按失去张数逐次——从牌堆/弃牌堆可得的**机关牌名**中选一张
     /// 使用（自目标/单目标/AOE 按牌名规则；取消即止）。
@@ -1706,6 +1712,8 @@ impl HostBehavior {
             HostBehavior::Hxunzhi => 488,
             HostBehavior::Hxunzhi2 => 489,
             HostBehavior::Cyqiaoxie => 490,
+            HostBehavior::Bingfeng => 491,
+            HostBehavior::Bingfeng2 => 492,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2437,6 +2445,8 @@ impl HostBehavior {
             488 => HostBehavior::Hxunzhi,
             489 => HostBehavior::Hxunzhi2,
             490 => HostBehavior::Cyqiaoxie,
+            491 => HostBehavior::Bingfeng,
+            492 => HostBehavior::Bingfeng2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2457,7 +2467,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 487] = [
+        pub const ALL: [HostBehavior; 489] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2945,6 +2955,8 @@ impl HostBehavior {
         HostBehavior::Hxunzhi,
         HostBehavior::Hxunzhi2,
         HostBehavior::Cyqiaoxie,
+        HostBehavior::Bingfeng,
+        HostBehavior::Bingfeng2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3194,6 +3206,8 @@ impl HostBehavior {
             HostBehavior::Hxunzhi => "host:hxunzhi",
             HostBehavior::Hxunzhi2 => "host:hxunzhi2",
             HostBehavior::Cyqiaoxie => "host:cyqiaoxie",
+            HostBehavior::Bingfeng => "host:bingfeng",
+            HostBehavior::Bingfeng2 => "host:bingfeng2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3673,6 +3687,16 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 冰封·封：自己翻回正面时（自移除）
+            HostBehavior::Bingfeng2 => Some(TriggerMeta {
+                event: EventKind::TurnOvered,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 冰封：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Bingfeng => None,
             // 此桥邪：自己失去装备牌后（频繁技——恒发动，无确认门）
             HostBehavior::Cyqiaoxie => Some(TriggerMeta {
                 event: EventKind::CardsLost,
@@ -5972,6 +5996,11 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 冰封（swd 批 134）：目录技能名（翻面封锁限定技）。
+pub const SWD_BINGFENG_KEY: &str = "bingfeng";
+/// 冰封·封（同批）：目录技能名（出牌封锁旗标；翻回正面自移除）。
+pub const SWD_BINGFENG2_KEY: &str = "bingfeng2";
+
 /// 此桥邪（swd 批 133）：目录技能名（失去装备后使用机关牌）。
 pub const SWD_CYQIAOXIE_KEY: &str = "cyqiaoxie";
 
@@ -6975,6 +7004,8 @@ impl HostSkillBehavior {
             HostBehavior::Hxunzhi => (None, None),
             HostBehavior::Hxunzhi2 => (None, None),
             HostBehavior::Cyqiaoxie => (None, None),
+            HostBehavior::Bingfeng => (None, None),
+            HostBehavior::Bingfeng2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7311,6 +7342,11 @@ impl SkillBehavior for HostSkillBehavior {
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
             HostBehavior::Hxunzhi => false,
             HostBehavior::Hxunzhi2 => false,
+            // 冰封·封：自己已翻回正面（移除自身）
+            HostBehavior::Bingfeng2 => matches!(event,
+                EventData::TurnOvered { player, .. } if *player == owner)
+                && !ctx.state.player(owner).face_down,
+            HostBehavior::Bingfeng => false,
             // 此桥邪：自己失去的牌中含装备区来源
             HostBehavior::Cyqiaoxie => match event {
                 EventData::CardsLost {
@@ -9451,6 +9487,37 @@ impl SkillBehavior for HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            // 冰封（swd 批 134）：出牌阶段主动（限定——实例启用时）
+            HostBehavior::Bingfeng => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let enabled = ctx
+                    .catalog
+                    .skill_by_name(SWD_BINGFENG_KEY)
+                    .and_then(|d| ctx.state.skills.get(&(owner, d)).map(|i| i.enabled))
+                    .unwrap_or(false);
+                if !enabled
+                    || !ctx
+                        .state
+                        .alive_players()
+                        .any(|p| p != owner && !ctx.state.player(p).face_down)
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 魂殉志（swd 批 132）：出牌阶段主动（限定——实例启用时）
             HostBehavior::Hxunzhi => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
@@ -11245,6 +11312,10 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn blocks_delayed_trick_target(&self) -> bool {
         self.blocks_delayed_trick()
+    }
+
+    fn blocks_all_cards(&self) -> bool {
+        matches!(self.behavior, HostBehavior::Bingfeng2)
     }
 }
 impl HostMachine {
@@ -20534,6 +20605,126 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 冰封·封：翻回正面 → 移除自身
+            HostBehavior::Bingfeng2 => {
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_BINGFENG2_KEY) {
+                    ctx.core.skills.remove(&(self.owner, def));
+                    ctx.log(LogEvent::SkillToggled {
+                        player: self.owner,
+                        skill: ctx.catalog.skill_name(def),
+                        enabled: false,
+                    });
+                }
+                Flow::Done
+            }
+            // 冰封：翻面自己与至多 3 名目标 + 失去体力上限 + 授予封锁
+            HostBehavior::Bingfeng => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner && !ctx.core.player(*p).face_down
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    let max = options.len().min(3);
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "bingfeng_targets",
+                            options,
+                            min: 1,
+                            max,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    // 觉醒（一次性）：禁用自身实例
+                    if let Some(def) = ctx.catalog.skill_by_name(SWD_BINGFENG_KEY) {
+                        if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, def)) {
+                            inst.enabled = false;
+                        }
+                        ctx.log(LogEvent::SkillToggled {
+                            player: self.owner,
+                            skill: ctx.catalog.skill_name(def),
+                            enabled: false,
+                        });
+                    }
+                    // 移除玄咒（上游 removeSkill('xuanzhou')）
+                    if let Some(def) = ctx.catalog.skill_by_name("xuanzhou") {
+                        if ctx.core.skills.remove(&(self.owner, def)).is_some() {
+                            ctx.log(LogEvent::SkillToggled {
+                                player: self.owner,
+                                skill: ctx.catalog.skill_name(def),
+                                enabled: false,
+                            });
+                        }
+                    }
+                    // 失去 1 点体力上限
+                    ctx.lose_max_hp(self.owner, 1);
+                    // 翻面自己 + 各目标（TurnOverBefore 提交帧；取消技照常生效）
+                    ctx.emit(EventData::TurnOverBefore {
+                        player: self.owner,
+                        cancelled: false,
+                    });
+                    for t in targets.iter().copied() {
+                        if ctx.core.player(t).alive && !ctx.core.player(t).face_down {
+                            ctx.emit(EventData::TurnOverBefore {
+                                player: t,
+                                cancelled: false,
+                            });
+                        }
+                    }
+                    // 授予「冰封·封」（自己与各目标）
+                    let mut holders = vec![self.owner];
+                    holders.extend(targets.iter().copied());
+                    if let Some(def) = ctx.catalog.skill_by_name(SWD_BINGFENG2_KEY) {
+                        for h in holders {
+                            if !ctx.core.skills.contains_key(&(h, def)) {
+                                ctx.core.skills.insert(
+                                    (h, def),
+                                    crate::state::SkillInstance {
+                                        owner: h,
+                                        enabled: true,
+                                        once_used: false,
+                                        expires_end_of_turn: false,
+                                        rounds: 0,
+                                    },
+                                );
+                                ctx.log(LogEvent::SkillToggled {
+                                    player: h,
+                                    skill: ctx.catalog.skill_name(def),
+                                    enabled: true,
+                                });
+                            }
+                        }
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "冰封",
+                        owner: self.owner,
+                    });
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 此桥邪：失去装备后逐次使用机关牌（自目标/单目标/AOE）
             HostBehavior::Cyqiaoxie => match self.stage {
                 HostStage::Act => {

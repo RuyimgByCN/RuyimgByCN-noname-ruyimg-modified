@@ -85,6 +85,8 @@ pub enum RejectReason {
     SegmentSuspended,
     /// 段未处于暂停状态，无续行可做。
     NotSuspended,
+    /// 出牌封锁（swd 批 134 冰封·封）：该玩家不能使用牌。
+    CardBlocked,
     /// N10 有界计算池：该座位本轮命令配额已用尽（宿主策略，默认不限制）。
     QuotaExhausted,
     /// N11 认证：令牌不存在或已失效（会话数据不入快照）。
@@ -2708,6 +2710,10 @@ fn apply_command(
             }
             if core.turn.phase != Phase::Play {
                 return Err(RejectReason::WrongPhase);
+            }
+            // 冰封·封（swd 批 134，规则 v314 同批）：出牌封锁者不能使用牌
+            if catalog.blocks_all_cards(core, actor) {
+                return Err(RejectReason::CardBlocked);
             }
             // 蛊舞·缚（U05 xianjian 阿奴，规则 v154）：蛊舞生效中每回合
             // 最多使用 3 张牌（上游 anwugu2 mod cardEnabled countUsed>=
