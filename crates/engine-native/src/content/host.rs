@@ -1213,6 +1213,9 @@ pub enum HostBehavior {
     /// 若其在你杀范围内且你有杀，视为对其使用一张杀，然后摸 1。
     /// 登记差异：虚拟杀（不消耗实体杀）+ 恒发动近似（上游 chooseToUse 可放弃）。
     SwdRexue,
+    /// 幻音（tag 442，deferred 消解批 琴儿）：他人对你使用牌时，判定——
+    /// 黑桃取消该牌、红桃摸 1、其余无事。
+    SwdHuanyin,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1496,6 +1499,7 @@ impl HostBehavior {
             HostBehavior::SwdLanzhi => 439,
             HostBehavior::SwdGTiandao => 440,
             HostBehavior::SwdRexue => 441,
+            HostBehavior::SwdHuanyin => 442,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2178,6 +2182,7 @@ impl HostBehavior {
             439 => HostBehavior::SwdLanzhi,
             440 => HostBehavior::SwdGTiandao,
             441 => HostBehavior::SwdRexue,
+            442 => HostBehavior::SwdHuanyin,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2198,7 +2203,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 438] = [
+        pub const ALL: [HostBehavior; 439] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2637,6 +2642,7 @@ impl HostBehavior {
         HostBehavior::SwdLanzhi,
         HostBehavior::SwdGTiandao,
         HostBehavior::SwdRexue,
+        HostBehavior::SwdHuanyin,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2837,6 +2843,7 @@ impl HostBehavior {
             HostBehavior::SwdLanzhi => "host:lanzhi",
             HostBehavior::SwdGTiandao => "host:g_tiandao",
             HostBehavior::SwdRexue => "host:rexue",
+            HostBehavior::SwdHuanyin => "host:huanyin",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3920,6 +3927,14 @@ impl HostBehavior {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 幻音：他人对你使用牌（上游 useCardToBefore target，priority 5.9）
+            HostBehavior::SwdHuanyin => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 6,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -5772,6 +5787,11 @@ impl HostSkillBehavior {
                 EventData::Phase { player, .. } => (Some(*player), None),
                 _ => (None, None),
             },
+            // 幻音：牌的使用者为关联目标，牌为关联卡
+            HostBehavior::SwdHuanyin => match event {
+                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                _ => (None, None),
+            },
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
                 EventData::CardUsed(u) => (u.targets.first().copied(), None),
@@ -6007,6 +6027,10 @@ impl SkillBehavior for HostSkillBehavior {
                     false
                 }
             }
+            // 幻音：他人对你使用牌且未取消
+            HostBehavior::SwdHuanyin => matches!(event,
+                EventData::CardUsed(u)
+                if u.player != owner && u.targets.contains(&owner) && !u.cancelled),
             // 铁壁：杀指定了与持有者距离 ≤1 的目标，持有者有黑牌
             HostBehavior::SwdTiebi => {
                 let hit = matches!(event,
@@ -17757,6 +17781,22 @@ impl crate::catalog::SkillMachine for HostMachine {
                 if let Some(actor) = self.target {
                     ctx.use_virtual_card(self.owner, CardKind::Sha, vec![actor]);
                     ctx.draw_cards(self.owner, 1);
+                }
+                Flow::Done
+            }
+            // 幻音：判定——黑桃取消该牌、红桃摸 1、其余无事
+            HostBehavior::SwdHuanyin => {
+                let judged = ctx.draw_judge_card();
+                let suit = ctx.catalog.cards[judged as usize].suit;
+                ctx.to_discard(judged);
+                match suit {
+                    crate::catalog::Suit::Spade => {
+                        ctx.current_card_use_mut().cancelled = true;
+                    }
+                    crate::catalog::Suit::Heart => {
+                        ctx.draw_cards(self.owner, 1);
+                    }
+                    _ => {}
                 }
                 Flow::Done
             }

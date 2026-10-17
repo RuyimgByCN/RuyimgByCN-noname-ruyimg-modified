@@ -1658,7 +1658,7 @@
    "skills": [
     {
      "name": "huanyin",
-     "mapping": null
+     "mapping": "host:huanyin"
     },
     {
      "name": "tianhuo",
