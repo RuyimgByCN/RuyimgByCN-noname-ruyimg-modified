@@ -1206,7 +1206,11 @@
     },
     {
      "name": "guxing",
-     "mapping": null
+     "mapping": "host:guxing"
+    },
+    {
+     "name": "guxing3",
+     "mapping": "host:guxing3"
     }
    ]
   },

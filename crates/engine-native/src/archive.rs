@@ -65,7 +65,7 @@ use crate::state::{
 /// `BossStageState`（kind/level/孟婆旗/禁将表/翼武装/pending）。v78 字节
 /// 被版本门禁拒绝（无生产迁移数据；存档仅测试与内部工具）。
 /// 80：核心末尾追加 `VmAux`（T8 标记/牌堆/丢失/once/旗标）。空表仍写长度 0。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 85;
+pub const ARCHIVE_FORMAT_VERSION: u16 = 86;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3327,6 +3327,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     w.boolean(t.turn_opened);
     w.boolean(t.skip_draw_phase);
     w.boolean(t.skip_play_phase);
+    w.boolean(t.guxing_armed);
+    w.u8(t.guxing_count);
     // 猛态双旗标（v248）
     w.boolean(t.mengtai_draw_pending);
     w.boolean(t.mengtai_use_pending);
@@ -3739,6 +3741,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let turn_opened = r.boolean()?;
     let skip_draw_phase = r.boolean()?;
     let skip_play_phase = r.boolean()?;
+    let guxing_armed = r.boolean()?;
+    let guxing_count = r.u8()?;
     let mengtai_draw_pending = r.boolean()?;
     let mengtai_use_pending = r.boolean()?;
     let zhufangshenshi_target = r.opt_u8()?;
@@ -3873,6 +3877,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 turn_opened,
                 skip_draw_phase,
                 skip_play_phase,
+                guxing_armed,
+                guxing_count,
                 mengtai_draw_pending,
                 mengtai_use_pending,
                 zhufangshenshi_target: zhufangshenshi_target.map(|p| p as PlayerId),

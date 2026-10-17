@@ -444,6 +444,8 @@ impl Engine {
                 turn_opened: true,
                 skip_draw_phase: false,
                 skip_play_phase: false,
+                guxing_armed: false,
+                guxing_count: 0,
                 mengtai_draw_pending: false,
                 mengtai_use_pending: false,
                 zhufangshenshi_target: None,
@@ -5128,6 +5130,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u8(&mut h, c.turn.turn_opened as u8);
     push_u8(&mut h, c.turn.skip_draw_phase as u8);
     push_u8(&mut h, c.turn.skip_play_phase as u8);
+    push_u8(&mut h, c.turn.guxing_armed as u8);
+    push_u8(&mut h, c.turn.guxing_count);
     push_u8(&mut h, c.turn.mengtai_draw_pending as u8);
     push_u8(&mut h, c.turn.mengtai_use_pending as u8);
     // 乐动三角（U07 ow 卢西奥，规则 v126）
@@ -6216,6 +6220,8 @@ mod tests {
                     turn_opened: true,
                     skip_draw_phase: false,
                     skip_play_phase: false,
+                    guxing_armed: false,
+                    guxing_count: 0,
                     zhufangshenshi_target: None,
                 yuedong_num: 0,
                 yuedong_eff: 0,
@@ -6316,6 +6322,8 @@ mod tests {
                         turn_opened: true,
                         skip_draw_phase: false,
                         skip_play_phase: false,
+                        guxing_armed: false,
+                        guxing_count: 0,
                         zhufangshenshi_target: None,
                 yuedong_num: 0,
                 yuedong_eff: 0,

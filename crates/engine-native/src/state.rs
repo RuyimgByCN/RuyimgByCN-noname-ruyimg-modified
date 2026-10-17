@@ -412,6 +412,10 @@ pub struct TurnState {
     pub skip_draw_phase: bool,
     /// 本回合跳过出牌阶段（乐不思蜀判定生效）。
     pub skip_play_phase: bool,
+    /// 孤行（swd 慕容诗，规则 v301）：本回合孤行杀已发出（guxing3 计数门）。
+    pub guxing_armed: bool,
+    /// 孤行：本回合孤行杀造成的伤害数（结算后摸等量）。
+    pub guxing_count: u8,
     /// 猛态（Boss 年兽，规则 v248）：本回合准备阶段已过而摸牌阶段未发
     /// 生（true=结束阶段补摸 3）。
     pub mengtai_draw_pending: bool,

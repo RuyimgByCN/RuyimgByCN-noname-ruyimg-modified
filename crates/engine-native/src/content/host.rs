@@ -1255,6 +1255,12 @@ pub enum HostBehavior {
     SwdSxianjingGain,
     /// 陷阱·取回（tag 457）：你受伤时随机取回一张陷阱。
     SwdSxianjingDamage,
+    /// 孤行（tag 458，deferred 消解批 慕容诗）：出牌阶段限一次，若手牌数不
+    /// 大于 max(1,已损失体力)，将全部手牌当杀使用（1–3 目标）；结算后摸
+    /// 该杀造成的伤害数。
+    SwdGuxing,
+    /// 孤行·计数（tag 459）：孤行杀造成伤害时计数 +1。
+    SwdGuxing3,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1554,6 +1560,8 @@ impl HostBehavior {
             HostBehavior::SwdSxianjing => 455,
             HostBehavior::SwdSxianjingGain => 456,
             HostBehavior::SwdSxianjingDamage => 457,
+            HostBehavior::SwdGuxing => 458,
+            HostBehavior::SwdGuxing3 => 459,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2252,6 +2260,8 @@ impl HostBehavior {
             455 => HostBehavior::SwdSxianjing,
             456 => HostBehavior::SwdSxianjingGain,
             457 => HostBehavior::SwdSxianjingDamage,
+            458 => HostBehavior::SwdGuxing,
+            459 => HostBehavior::SwdGuxing3,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2272,7 +2282,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 454] = [
+        pub const ALL: [HostBehavior; 456] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2727,6 +2737,8 @@ impl HostBehavior {
         HostBehavior::SwdSxianjing,
         HostBehavior::SwdSxianjingGain,
         HostBehavior::SwdSxianjingDamage,
+        HostBehavior::SwdGuxing,
+        HostBehavior::SwdGuxing3,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2943,6 +2955,8 @@ impl HostBehavior {
             HostBehavior::SwdSxianjing => "host:sxianjing",
             HostBehavior::SwdSxianjingGain => "host:sxianjing_gain",
             HostBehavior::SwdSxianjingDamage => "host:sxianjing_damage",
+            HostBehavior::SwdGuxing => "host:guxing",
+            HostBehavior::SwdGuxing3 => "host:guxing3",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3346,6 +3360,16 @@ impl HostBehavior {
             }),
             // 陷阱·取回：自己受伤后
             HostBehavior::SwdSxianjingDamage => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 孤行：主动技（无触发时机）
+            HostBehavior::SwdGuxing => None,
+            // 孤行·计数：自己以杀造成伤害后
+            HostBehavior::SwdGuxing3 => Some(TriggerMeta {
                 event: EventKind::Damage,
                 timing: Timing::Normal,
                 priority: 0,
@@ -5997,6 +6021,8 @@ impl HostSkillBehavior {
             },
             HostBehavior::SwdSxianjing => (None, None),
             HostBehavior::SwdSxianjingDamage => (None, None),
+            HostBehavior::SwdGuxing => (None, None),
+            HostBehavior::SwdGuxing3 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6276,6 +6302,13 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdSxianjingDamage => matches!(event,
                 EventData::Damage(d) if d.target == owner && !d.prevented
                     && !ctx.state.player(owner).sxianjing_traps.is_empty()),
+            HostBehavior::SwdGuxing => false,
+            // 孤行·计数：孤行杀窗口内自己造成伤害
+            HostBehavior::SwdGuxing3 => matches!(event,
+                EventData::Damage(d)
+                if d.source == Some(owner)
+                    && !d.prevented
+                    && ctx.state.turn.guxing_armed),
             HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
@@ -8221,6 +8254,25 @@ impl SkillBehavior for HostSkillBehavior {
                     !traps.contains(&ctx.catalog.cards[*c as usize].suit)
                 });
                 if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 孤行（deferred 消解批）：手牌数 <= max(1, 已损失体力) 且 >0
+            HostBehavior::SwdGuxing => {
+                let p = ctx.state.player(owner);
+                let lost = (p.max_hp as i32 - p.hp).max(0) as usize;
+                let limit = lost.max(1);
+                if p.hand.is_empty() || p.hand.len() > limit {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -18807,6 +18859,74 @@ impl crate::catalog::SkillMachine for HostMachine {
                         .retain(|x| *x != trap);
                     ctx.core.player_mut(self.owner).hand.push(trap);
                 }
+                Flow::Done
+            }
+            // 孤行：将全部手牌当杀使用（1–3 目标），结算后摸伤害数
+            HostBehavior::SwdGuxing => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.computed_distance(ctx.catalog, self.owner, *p)
+                                    <= ctx.core.attack_range(ctx.catalog, self.owner)
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "guxing_targets",
+                            options,
+                            min: 1,
+                            max: 3,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    let hand: Vec<crate::ids::CardId> =
+                        ctx.core.player(self.owner).hand.clone();
+                    for c in hand {
+                        ctx.discard_from_hand(self.owner, c);
+                    }
+                    ctx.core.turn.guxing_armed = true;
+                    ctx.core.turn.guxing_count = 0;
+                    ctx.use_virtual_card(self.owner, CardKind::Sha, targets);
+                    self.stage = HostStage::SelectCard;
+                    Flow::Yield
+                }
+                HostStage::SelectCard => {
+                    let n = ctx.core.turn.guxing_count;
+                    if n > 0 {
+                        ctx.draw_cards(self.owner, n as usize);
+                    }
+                    ctx.core.turn.guxing_count = 0;
+                    ctx.core.turn.guxing_armed = false;
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            }
+            // 孤行·计数：孤行杀造成伤害 +1
+            HostBehavior::SwdGuxing3 => {
+                ctx.core.turn.guxing_count = ctx.core.turn.guxing_count.saturating_add(1);
                 Flow::Done
             },
             // 聚悉：扣存活数并选一名角色——已受伤则自选受伤/回复，否则受伤
@@ -30641,7 +30761,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdShehun
         | HostBehavior::SwdJuxi
         | HostBehavior::SwdPozhou2
-        | HostBehavior::SwdSxianjing => {
+        | HostBehavior::SwdSxianjing
+        | HostBehavior::SwdGuxing => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()
