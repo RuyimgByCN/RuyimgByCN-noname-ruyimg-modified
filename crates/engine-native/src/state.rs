@@ -148,6 +148,9 @@ pub struct PlayerState {
     /// 魂身计数（swd 胡月，规则 v296）：使用/打出闪累计；准备阶段摸等量
     /// 并清零；他人算向自己距离 +计数。
     pub hyunshen_count: u8,
+    /// 待行计数（swd 吕晓雪，规则 v297）：结束阶段弃牌换取的护甲量；
+    /// 下回合准备阶段按剩余量移除；受伤吸收时递减。
+    pub daixing_count: u8,
     /// 死亡拦截标记（规则 v171 死亡取消型基建；上游 dieBefore
     /// trigger.cancel 族——DeathMachine 直读跳过死亡执行）。
     pub death_cancelled: bool,
@@ -280,6 +283,7 @@ impl PlayerState {
             chengxin_ready_round: 0,
             husha_mark: 0,
             hyunshen_count: 0,
+            daixing_count: 0,
             death_cancelled: false,
             shiying_used: false,
             huahu_used: false,

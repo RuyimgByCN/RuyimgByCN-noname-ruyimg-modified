@@ -1218,11 +1218,19 @@
     },
     {
      "name": "daixing",
-     "mapping": null
+     "mapping": "host:daixing"
     },
     {
      "name": "yinyue",
      "mapping": "host:yinyue"
+    },
+    {
+     "name": "daixing2",
+     "mapping": "host:daixing2"
+    },
+    {
+     "name": "daixing3",
+     "mapping": "host:daixing3"
     }
    ]
   },
