@@ -1,0 +1,29 @@
+# 上游源码摘录（noname v1.11.7, HEAD df2682e6）
+## 装备事件（equip timing window）
+1017:	async equip(event, trigger, player) {
+	async equip(event, trigger, player) {
+		event.visible = true;
+		//先确定这次的cards是什么成分也防止有人在equipBegin之类的时机往里面塞垃圾
+		if (event.cards.length > 1 && event.cards.some(cardx => cardx.isViewAsCard)) {
+## arrangeTrigger firstDo/lastDo 桶
+		while (doingList.length > 0) {
+			event.doing = doingList.shift();
+			while (true) {
+				if (trigger.filterStop && trigger.filterStop()) {
+					return;
+				}
+				const usableSkills = event.doing.todoList.filter(info => lib.filter.filterTrigger(trigger, info.player, event.triggername, info.skill, info.indexedData));
+				if (usableSkills.length == 0) {
+					break;
+				} else {
+					event.doing.todoList = event.doing.todoList.filter(i => i.priority <= usableSkills[0].priority);
+					//firstDo时机和lastDo时机不进行技能优先级选择
+					if (get.itemtype(event.doing.player) !== "player") {
+						event.current = usableSkills[0];
+					} else {
+						event.choice = usableSkills.filter(n => n.priority == usableSkills[0].priority);
+						//现在只要找到一个同优先度技能为silent，或没有技能描述的技能 便优先执行该技能
+						const silentSkill = event.choice.find(item => {
+							const skillInfo = lib.skill[item.skill];
+							return skillInfo && (skillInfo.silent || !lib.translate[item.skill]);
+						});

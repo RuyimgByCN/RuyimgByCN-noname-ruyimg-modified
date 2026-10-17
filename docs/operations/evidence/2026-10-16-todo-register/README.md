@@ -4,7 +4,7 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
-> **2026-10-17 收口批**：本次再关 12 项（`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`/`HUANREN`/`HIDECHAIN-8`/`WING-ROTATION`/`BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`），resolved 21→**33**、open 68→**56**。依据为各批已落盘证据（[T8 具名 filter](../2026-10-17-t8-named-filters/README.md)、[D4 B4](../2026-10-17-d4-boss-b4-huanren-wings/README.md)、[T9 钩挂](../2026-10-17-t9-lx-content-hooks/README.md)、[T15③](../2026-10-16-t15-3-v117-transplant/README.md)、[O4](../2026-10-16-o4-wasm-opt/README.md)、[O5](../2026-10-16-o5-profiling/README.md)、[奖惩审计](../2026-10-17-cov-reward-over-audit/README.md)、[无懈扩面](../2026-10-17-cov-nullify-judge-expand/README.md)）。
+> **2026-10-17 收口批**：本次再关 14 项（`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`/`HUANREN`/`HIDECHAIN-8`/`WING-ROTATION`/`BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`、`COV-EQUIP-TIMING-WINDOW`、`COV-TRIGGER-GETINDEX-BUCKETS`），resolved 21→**35**、open 68→**54**。依据为各批已落盘证据（[T8 具名 filter](../2026-10-17-t8-named-filters/README.md)、[D4 B4](../2026-10-17-d4-boss-b4-huanren-wings/README.md)、[T9 钩挂](../2026-10-17-t9-lx-content-hooks/README.md)、[T15③](../2026-10-16-t15-3-v117-transplant/README.md)、[O4](../2026-10-16-o4-wasm-opt/README.md)、[O5](../2026-10-16-o5-profiling/README.md)、[奖惩审计](../2026-10-17-cov-reward-over-audit/README.md)、[无懈扩面](../2026-10-17-cov-nullify-judge-expand/README.md)、[装载/触发桶定案](../2026-10-17-cov-permanent-diffs/README.md)）。
 
 ## 快照上下文
 
@@ -14,8 +14,8 @@
 | engine-native（主稿快照） | 807/0/1 |
 | 条目数 | **89**（原 85 + 拆出 4） |
 | 标为模糊（ambiguous） | **0**（原 13 已消解，见 [ambiguous-resolutions.md](./ambiguous-resolutions.md)） |
-| 已 resolved | **33**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
-| 仍 open | **56**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
+| 已 resolved | **35**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
+| 仍 open | **54**（2026-10-16 快照为 83。整包总账仍 open，当前 15/37） |
 
 ## 覆盖范围
 
@@ -115,9 +115,9 @@
 | `E04-G2G4` | docs/migration/upstream-extension-reconstruction.md · E04 / G2–G4 | E04/G2–G4 待验收：模式、AI、配置、资源和界面契约——各有真实扩展示例；15 包通道五断言已有，其余来源未齐。 | 对应 G 门槛断言+测试；证据目录 | open | T12-WHOLEPACK-0-37 | extension-engineer |
 | `E05-G5` | docs/migration/upstream-extension-reconstruction.md · E05 / G5 | E05/G5 待验收：联机内容锁、存档/录像和旧版会话——15 个 G1 转换包 G5 切片已达成，其余来源与真联机产品面未齐。 | 对应 G 门槛断言+测试；证据目录 | open | — | server-engineer |
 | `E06-PER-SOURCE` | docs/migration/upstream-extension-reconstruction.md · E06 / G3–G5 | E06：每来源功能清单和正反例齐全；安装/升级/配置/组合/性能逐包通过后才上调整包状态。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | E01-G0-DEPTH, E04-G2G4, E05-G5 | extension-lead |
-| `COV-EQUIP-TIMING-WINDOW` | docs/native-coverage-manifest.md · 行为差异表「装备即时生效」（约 L109） | 装备即时生效 vs 上游装备时机触发窗口——行为差异保留，触发窗口化另立项。 | 立项 ADR 或正式永久差异登记；回归 | open | — | kernel-engineer |
+| `COV-EQUIP-TIMING-WINDOW` | docs/native-coverage-manifest.md · 行为差异表「装备即时生效」（约 L109） | 装备即时生效 vs 上游装备时机触发窗口——行为差异保留，触发窗口化另立项。 | 立项 ADR 或正式永久差异登记；回归 | resolved | — | kernel-engineer |
 | `COV-REWARD-OVER-VERIFY` | docs/native-coverage-manifest.md · 行为差异表「奖惩与终局判定顺序」待核项（约 L122） | 上游 game.over 后事件链是否仍执行 dieAfter2 未逐项确认——待核后关闭或改登记。 | 上游对照证据；覆盖清单处置更新 | resolved | — | rules-auditor |
-| `COV-TRIGGER-GETINDEX-BUCKETS` | docs/native-coverage-manifest.md · 行为差异表「触发全序细节」；规则基准当前声明 | getIndex / firstDo / lastDo 有内容需求时立项（当前保留原生确定性全序）。 | 内容需求驱动的立项或明确不立项 | open | — | architect |
+| `COV-TRIGGER-GETINDEX-BUCKETS` | docs/native-coverage-manifest.md · 行为差异表「触发全序细节」；规则基准当前声明 | getIndex / firstDo / lastDo 有内容需求时立项（当前保留原生确定性全序）。 | 内容需求驱动的立项或明确不立项 | resolved | — | architect |
 | `COV-PARTIAL-MECHANISMS` | docs/native-coverage-manifest.md · 范围 A「已验证（部分）」伞项 | （已拆分关闭）snapshot→`T11-EVENT-RNG-RESTORE-PARITY`；identity mid→`RULE-IDENTITY-VIEW-RESTORE`；视图/网络/兵闪见新 ID。 | 拆分完成 | resolved | — | kernel-engineer |
 | `COV-VISIBLE-VIEWS-EXT` | docs/native-coverage-manifest.md · visible_views | 扩展/客户端视图隔离扩面（自 COV-PARTIAL 拆出）。 | 扩面测试+清单状态升级 | open | T13-PRODUCT-CLIENT | client-engineer |
 | `COV-SESSION-AUTH-PRODUCT` | docs/native-coverage-manifest.md · session_auth | 权威网络接入产品面（自 COV-PARTIAL 拆出）。 | 权威网络/产品接入证据；清单升级 | open | T13-PRODUCT-CLIENT | server-engineer |

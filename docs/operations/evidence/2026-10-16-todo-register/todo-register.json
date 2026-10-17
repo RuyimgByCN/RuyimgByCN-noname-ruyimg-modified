@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 33,
-  "open_count": 56,
+  "resolved_count": 35,
+  "open_count": 54,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -48,7 +48,7 @@
   "l17_closure_2026_10_17": "T12-SRC-L17 resolved after its own liuli install. Whole-pack stays open at 12/37.",
   "l15_closure_2026_10_17": "T12-SRC-L15 resolved after its own liuli install. Whole-pack stays open at 11/37.",
   "l02_closure_2026_10_17": "T12-SRC-L02 resolved after its own liuli install. Whole-pack stays open at 10/37.",
-  "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。"
+  "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。 另：COV-EQUIP-TIMING-WINDOW 与 COV-TRIGGER-GETINDEX-BUCKETS 定案关闭。"
  },
  "items": [
   {
@@ -1891,13 +1891,21 @@
     "立项 ADR 或正式永久差异登记",
     "回归"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "kernel-engineer",
    "tags": [
     "COV",
     "行为差异"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "定案保留原生「装备即时生效」，不实现上游 equipBegin 窗口化（登记为已知语义差异）",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-cov-permanent-diffs/README.md"
+    ]
+   }
   },
   {
    "id": "COV-REWARD-OVER-VERIFY",
@@ -1936,7 +1944,7 @@
    "done_when_evidence": [
     "内容需求驱动的立项或明确不立项"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "architect",
    "tags": [
@@ -1946,16 +1954,12 @@
    "notes": "条件立项；与触发全序定案分层。关闭=立项 ADR 或明确不立项笔记",
    "ambiguous": false,
    "resolution": {
-    "date": "2026-10-16",
-    "kind": "keep_open",
-    "conclusion": "有内容需求再建模 getIndex/firstDo/lastDo；无需求可记「维持不立项」关闭",
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "定案明确不立项：firstDo/lastDo 已由 Timing 桶承载，getIndex 多次触发无内容需求；有内容依赖时再立项",
     "evidence": [
-     "docs/native-coverage-manifest.md",
-     "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
-     "docs/operations/evidence/2026-10-16-trigger-order-upstream/README.md"
-    ],
-    "disposition": "保持 open（条件立项）",
-    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+     "docs/operations/evidence/2026-10-17-cov-permanent-diffs/README.md"
+    ]
    }
   },
   {

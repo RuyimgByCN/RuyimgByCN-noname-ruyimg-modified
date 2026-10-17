@@ -3515,6 +3515,8 @@ switch` 不落表（门控并入 enabled，先例同构）。**登记待查**：
 | 濒死轮次结构 | 按轮重建名单（重建起点=濒死者） | `acted` **单趟**、救回者原位复问 | [濒死名单](../operations/evidence/2026-10-16-dying-save-roster-upstream/README.md) |
 | 延时锦囊无懈时点 | 仅**使用时**开窗 | 使用时 **+ 判定时（`phaseJudge`）** 均开窗 | [延时锦囊无懈时点](../operations/evidence/2026-10-16-delayed-trick-nullify-timing/README.md) |
 | 临时技能存续期 | 至**拥有者**回合结束（上界近似） | 逐站点 `addTempSkill` expire 规格（默认≈当前阶段结束） | [临时技能存续期](../operations/evidence/2026-10-16-temp-skill-expiry-audit/README.md) |
+| 装备即时生效 | 装备提交后**立即**参与距离/射程/防具判定 | 装备走 `equip` 事件（`equipBegin`/`equip` 窗口，`content.ts:1017`） | [装备/触发桶定案](../operations/evidence/2026-10-17-cov-permanent-diffs/README.md) |
+| 触发 `getIndex`/桶 | `firstDo`/`lastDo` 由 `Timing` 桶承载；`getIndex` 多次触发不建模 | `arrangeTrigger` 逐 `doing` 消费、`firstDo`/`lastDo` 不做优先级选择（`content.ts:4031`） | [装备/触发桶定案](../operations/evidence/2026-10-17-cov-permanent-diffs/README.md) |
 
 **定案依据**：①翻转属语义变化且会打破既有成批回归/golden 证据链；②数处是原生/旧线为**确定性重放与
 恢复契约**选定的结构（判定顺序确定性、窗口状态可编码），上游对应处依赖运行时交互或 UI 约定；
