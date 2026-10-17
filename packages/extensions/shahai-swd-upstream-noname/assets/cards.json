@@ -1014,7 +1014,7 @@
     },
     {
      "name": "yihua",
-     "mapping": null
+     "mapping": "host:yihua"
     }
    ]
   },

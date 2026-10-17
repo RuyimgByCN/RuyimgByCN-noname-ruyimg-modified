@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 移花（tag 498，swd deferred 消解批 140，`yihua`）：成为**单目标**牌
+    /// 的目标时可选——弃 2 张手牌，把该牌的「使用者/目标」对调（反弹给原
+    /// 使用者，且视为自己使用）。
+    Yihua,
     /// 贞烈（tag 497，swd deferred 消解批 139，`zhenlie`）：成为其他角色
     /// 【杀】或锦囊牌的目标时可选——失去 1 点体力，**将该牌从自己目标中
     /// 移除**（结算前写回帧 targets），并弃置使用者一张牌（手/装备）。
@@ -1740,6 +1744,7 @@ impl HostBehavior {
             HostBehavior::Mailun => 495,
             HostBehavior::Tianlun => 496,
             HostBehavior::Zhenlie => 497,
+            HostBehavior::Yihua => 498,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2478,6 +2483,7 @@ impl HostBehavior {
             495 => HostBehavior::Mailun,
             496 => HostBehavior::Tianlun,
             497 => HostBehavior::Zhenlie,
+            498 => HostBehavior::Yihua,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2498,7 +2504,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 494] = [
+        pub const ALL: [HostBehavior; 495] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2993,6 +2999,7 @@ impl HostBehavior {
         HostBehavior::Mailun,
         HostBehavior::Tianlun,
         HostBehavior::Zhenlie,
+        HostBehavior::Yihua,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3249,6 +3256,7 @@ impl HostBehavior {
             HostBehavior::Mailun => "host:mailun",
             HostBehavior::Tianlun => "host:tianlun",
             HostBehavior::Zhenlie => "host:zhenlie",
+            HostBehavior::Yihua => "host:yihua",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3723,6 +3731,14 @@ impl HostBehavior {
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 移花：成为单目标牌的目标（使用结算窗；可选）
+            HostBehavior::Yihua => Some(TriggerMeta {
+                event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -6059,6 +6075,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 移花（swd 批 140）：目录技能名（单目标牌反弹：弃 2 张手牌对调使用/目标）。
+pub const SWD_YIHUA_KEY: &str = "yihua";
+
 /// 贞烈（swd 批 139）：目录技能名（成为杀/锦囊目标时失体力并移出目标）。
 pub const SWD_ZHENLIE_KEY: &str = "zhenlie";
 
@@ -7089,6 +7108,7 @@ impl HostSkillBehavior {
             HostBehavior::Mailun => (None, None),
             HostBehavior::Tianlun => (None, None),
             HostBehavior::Zhenlie => (None, None),
+            HostBehavior::Yihua => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7427,6 +7447,17 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 移花：他人使用的**单目标**牌以自己为目标、且自己手牌 ≥2
+            HostBehavior::Yihua => match event {
+                EventData::CardUsed(u) => {
+                    !u.cancelled
+                        && u.player != owner
+                        && u.targets.len() == 1
+                        && u.targets[0] == owner
+                        && ctx.state.player(owner).hand.len() >= 2
+                }
+                _ => false,
+            },
             // 贞烈：他人使用【杀】或锦囊牌指定自己为目标且未取消
             HostBehavior::Zhenlie => match event {
                 EventData::CardUsed(u) => {
@@ -20745,6 +20776,78 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 移花：弃 2 张手牌 → 帧「使用者/目标」对调（反弹）
+            HostBehavior::Yihua => match self.stage {
+                HostStage::Act => {
+                    let frame = ctx.current_frame_id();
+                    let user = match ctx.res.frame(frame).map(|f| &f.data) {
+                        Some(EventData::CardUsed(u)) => u.player,
+                        _ => return Flow::Done,
+                    };
+                    self.target = Some(user);
+                    self.card = Some(frame as CardId);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.len() < 2 {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "yihua_discard",
+                            options,
+                            min: 2,
+                            max: 2,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.len() != 2 {
+                        return Flow::Done;
+                    }
+                    let Some(user) = self.target else {
+                        return Flow::Done;
+                    };
+                    let frame = self.card.unwrap_or(0) as crate::ids::EventId;
+                    for c in picked {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.discard_from_hand(self.owner, c);
+                        } else {
+                            return Flow::Done;
+                        }
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "移花",
+                        owner: self.owner,
+                    });
+                    // 帧改写：使用者=自己、目标=原使用者（反弹）
+                    if let Some(f) = ctx.res.frame_mut(frame) {
+                        if let EventData::CardUsed(u) = &mut f.data {
+                            u.player = self.owner;
+                            u.targets = vec![user];
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 贞烈：失去 1 体力 → 移出目标 → 弃置使用者一张牌（手/装备）
             HostBehavior::Zhenlie => match self.stage {
                 HostStage::Act => {
