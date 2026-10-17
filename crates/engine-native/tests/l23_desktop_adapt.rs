@@ -163,13 +163,16 @@ fn l23_eight_dimension_from_fresh_install() {
         lock_before,
         "组合：应用预设不改内容锁"
     );
+    // 依赖反例：预设应用不要求手杀界面包在场。2026-10-17 起 L13 手杀MVP
+    // 已作为独立转换包存在（`packages/extensions/shousha-mvp-upstream-liuli`），
+    // 故此处只断言手杀 UI 包仍未转换；预设仍走调用方数据。
     assert!(
         !store
             .read_active()
             .unwrap()
             .packages
             .iter()
-            .any(|(slot, _)| slot.contains("shousha-ui") || slot.contains("shousha-mvp")),
+            .any(|(slot, _)| slot.contains("shousha-ui")),
         "依赖反例：商店里没有手杀 UI 包"
     );
 

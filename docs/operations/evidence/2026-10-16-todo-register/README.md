@@ -4,6 +4,8 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
+> **2026-10-17 L13 手杀MVP 八项整包**：整包 18/37 → **19/37**、`T12-SRC-L13` 关闭（[证据](../2026-10-17-t12-l13-eight/README.md)）；同批修客户端扩展存储冒烟过期断言与 L23 过期依赖反例。
+
 > **2026-10-17 T13 AI 策略变体 1 批**：`T13-AI-STRONGER-POLICY` 关闭——全手牌候选 + 牌值评分（同 64 节点座位 0 胜率 2%→70%，见[证据](../2026-10-17-t13-ai-policy-v2/README.md)）；同批修复内核应答路由缺陷（合法命令 panic），1 场 golden 按依据重录。
 
 > **2026-10-17 swd 批 113**：灵矢（tag 460，无版本/无 golden 位移）消解——149/184 映射、deferred 33、计亭整将闭环；engine-native **895/0/1**、Gate 1b exit 0（[证据](../2026-10-17-t12-swd-deferred-b113/README.md)）。
@@ -18,8 +20,8 @@
 | engine-native（主稿快照） | 807/0/1 |
 | 条目数 | **89**（原 85 + 拆出 4） |
 | 标为模糊（ambiguous） | **0**（原 13 已消解，见 [ambiguous-resolutions.md](./ambiguous-resolutions.md)） |
-| 已 resolved | **51**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
-| 仍 open | **38**（2026-10-16 快照为 83；2026-10-17 又关 `T13-AI-STRONGER-POLICY`。整包总账仍 open，当前 18/37） |
+| 已 resolved | **52**（2026-10-16 快照为 6；2026-10-17 关闭 15 个 `T12-SRC-*`（U06/L06/L07/L23/U03/U04/L04/L05/L22/L02/L15/L17/L18/L26/L21）；2026-10-17 收口批再关 12 项：`T8-FILTER-COMPOSITE`、`T9-LX-BATTLE-TRACE`、`T11-BOSS-STAGE-SUBSYSTEM`、`T11-BOSS-HUANREN`、`T11-BOSS-HIDECHAIN-8`、`T11-BOSS-WING-ROTATION`、`T11-BOSS-BIANSHEN-CHANGEBOSS`、`T15-3-LEGACY-PORT`、`O4-WASM-OPT-COMPARE`、`O5-PROFILING-CLOSEOUT`、`COV-REWARD-OVER-VERIFY`、`COV-NULLIFY-JUDGE-EXPAND`） |
+| 仍 open | **37**（2026-10-16 快照为 83；2026-10-17 又关 `T13-AI-STRONGER-POLICY` 与 `T12-SRC-L13`。整包总账仍 open，当前 19/37） |
 
 ## 覆盖范围
 
@@ -96,7 +98,7 @@
 | `T12-SRC-L10` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L10 史诗卡牌 | 来源 L10（史诗卡牌）原生整包验收未完成。台账状态：待重构；未验收（D1 工作区口径）。建议批次：G3–G4。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | — | extension-engineer |
 | `T12-SRC-L11` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L11 太虚幻境 | 来源 L11（太虚幻境）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3→G4–G5。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | — | extension-engineer |
 | `T12-SRC-L12` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L12 如真似幻 | 来源 L12（如真似幻）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G3–G4。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | — | extension-engineer |
-| `T12-SRC-L13` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L13 手杀MVP | 来源 L13（手杀MVP）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G4。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | — | extension-engineer |
+| `T12-SRC-L13` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L13 手杀MVP | 来源 L13（手杀MVP）八项已于 2026-10-17 从真实安装验收：装载器 `shousha_mvp.rs`（MVP 计分/战绩/结算分组/排序/状态恢复）+ 包 `upstream-liuli/shousha-mvp@1.0.0` + 八项测试 + wasm 辅助。不替换内核终局，不画界面/播音/检测作弊/生成随机名单。 | [L13 证据](../2026-10-17-t12-l13-eight/README.md)；`l13_eight_dimension_from_fresh_install`；`shousha_mvp_pack_json_enters_wasm_helper` | resolved | — | extension-engineer |
 | `T12-SRC-L14` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L14 手杀ui | 来源 L14（手杀ui）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2→G4–G5。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | open | — | extension-engineer |
 | `T12-SRC-L15` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L15 手杀全扩 | 来源 L15（手杀全扩）八项已于 2026-10-17 从 liuli 真实安装验收。不播放奶龙音频，不画界面，不调用 clsPrefixName。HTML 配置名、CSS 和玩家排序仍为登记差异。 | [L15 证据](../2026-10-17-t12-l15-eight/README.md)；`l15_eight_dimension_from_fresh_install`；`shousha_pack_json_enters_wasm_helper` | resolved | — | extension-engineer |
 | `T12-SRC-L16` | docs/migration/upstream-extension-reconstruction.md · §3 全量逐项台账 / L16 拖拽读取 | 来源 L16（拖拽读取）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2;跨平台G5。 | 台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据；整包状态上调登记 | resolved | — | extension-engineer |

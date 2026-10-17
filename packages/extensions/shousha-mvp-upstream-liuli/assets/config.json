@@ -1,0 +1,34 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/手杀MVP/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "package_name": "手杀MVP",
+  "package_version": "1.1.7",
+  "author": "清瑶的“徒弟”、神秘喵",
+  "settings": {
+    "qingyao_shoushaMVP": true,
+    "yangshi": "on",
+    "mvplutou": "shousha",
+    "qingyao_shoushapeiyin": true,
+    "shoushajiesuan": true,
+    "jiesuanfix": true,
+    "oneMore": true
+  },
+  "labels": {
+    "identity": "阵营",
+    "player": "玩家姓名",
+    "level": "等级",
+    "general": "武将",
+    "star": "星级",
+    "hand": "手牌",
+    "damage": "伤害",
+    "damaged": "受伤",
+    "gain": "摸牌",
+    "play": "出牌",
+    "kill": "杀敌",
+    "attack": "攻击",
+    "heal": "治疗",
+    "support": "辅助",
+    "penalty": "惩罚"
+  }
+}

@@ -637,6 +637,14 @@ fn shousha_apply(config_json: &str, request_json: &str) -> String {
     }
 }
 
+/// L13 目标平台：跑手杀MVP 结算统计。不画界面，不播音，不检测作弊输入。
+fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    match content_native_loader::apply_mvp_line(config_json, request_json) {
+        Ok(text) => text,
+        Err(err) => format!("error:{err:?}"),
+    }
+}
+
 /// L17 目标平台：跑斗转星移。不打开菜单，不播放音频，不重启，不执行文本。
 fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_douzhuan_line(config_json, request_json) {
@@ -1119,6 +1127,36 @@ mod pack_roundtrip {
     }
 
     /// L17 目标平台：真实 config.json 的禁将方案、导入和描述。不播放音频，不重启。
+    #[test]
+    /// L13 目标平台：真实 config.json 的 MVP 计分与结算分组。不画界面。
+    #[test]
+    fn shousha_mvp_pack_json_enters_wasm_helper() {
+        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(
+            "../../packages/extensions/shousha-mvp-upstream-liuli/assets/config.json",
+        );
+        let config = std::fs::read_to_string(&path).expect("读手杀MVP config.json");
+        assert!(config.contains("\"source\": \"noname-liuli\""));
+        assert!(config.contains("手杀MVP/extension.js"));
+        assert!(config.contains("8485dbb29ff16f9b258a766b1a17ef75f883aade"));
+        assert!(!config.contains("playAudio"));
+        assert!(!config.contains("innerHTML"));
+        assert!(!config.contains("randomName"));
+        let request = r#"{"viewer":3,"result":"战斗胜利","mode":"identity","players":[{"id":0,"name":"p0","identity":"zhu","alive":false,"friends":[1],"enemies":[2,3]},{"id":1,"name":"p1","identity":"zhong","alive":true,"friends":[0],"enemies":[2,3]},{"id":2,"name":"p2","identity":"fan","alive":false,"friends":[],"enemies":[0,1]},{"id":3,"name":"p3","identity":"nei","alive":true,"friends":[],"enemies":[2]}],"facts":[{"seq":1,"kind":"useCard","player":0,"damageTag":true},{"seq":2,"kind":"damage","source":0,"target":2,"num":3,"attitudeNegative":true},{"seq":3,"kind":"recover","player":0,"source":1,"num":2,"friendOrSelf":true},{"seq":4,"kind":"die","victim":2,"source":0,"victimEnemy":true}]}"#;
+        let line = shousha_mvp_apply(&config, request);
+        assert_eq!(
+            line,
+            "enable:1 fix:1 | facts:4 dup:0 gated:0 | scores:0:14/0/0/0/82/96,1:0/4/0/0/100/104,2:0/0/0/0/82/82,3:0/0/0/0/102/102 | stats:0:3/0/0/1/1,1:0/0/0/0/0,2:0/3/0/0/0,3:0/0/0/0/0 | rank:1,3,0,2 | mvp:1 | win:3 fail:1,0,2 tie:-"
+        );
+        let gated = config.replace("\"shoushajiesuan\": true", "\"shoushajiesuan\": false");
+        let off = shousha_mvp_apply(&gated, request);
+        assert!(off.contains("enable:0"), "{off}");
+        assert!(off.contains("scores:0:0/0/0/0/100/100"), "{off}");
+        assert!(off.ends_with("| win:- fail:- tie:-"), "{off}");
+        let unknown = request.replace("\"kind\":\"die\"", "\"kind\":\"wat\"");
+        assert!(shousha_mvp_apply(&config, &unknown).starts_with("error:UnknownFact"));
+        assert!(shousha_mvp_apply("{", request).starts_with("error:Json"));
+    }
+
     #[test]
     fn douzhuan_pack_json_enters_wasm_helper() {
         let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))

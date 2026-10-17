@@ -124,13 +124,32 @@ check("revoke_blocks", threw);
 uninstall(k);
 check("uninstall", load().installed.length === 0);
 
-// 15 包目录文件面
+// 转换包目录文件面：原始 15 个 G1 转换包必须在场；包总数随逐来源验收增长
+// （2026-10-17 起不再断言精确 15）。
 import { readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 const ext = join(dirname(fileURLToPath(import.meta.url)), "../../../packages/extensions");
 const dirs = readdirSync(ext).filter((d) => existsSync(join(ext, d, "package.npack.json")));
-check("catalog_files_15", dirs.length === 15, `n=${dirs.length}`);
+const g1 = [
+  "huanle-upstream-noname",
+  "cardpile-upstream-noname",
+  "cardpile-upstream-liuli",
+  "wudian-upstream-noname",
+  "shahai-gujian-upstream-noname",
+  "shahai-gwent-upstream-noname",
+  "shahai-hearth-upstream-noname",
+  "shahai-yunchou-upstream-noname",
+  "shahai-swd-upstream-noname",
+  "shahai-mtg-upstream-noname",
+  "shahai-zhenfa-upstream-noname",
+  "wuxing-upstream-liuli",
+  "d3-upstream-noname",
+  "shaai-ow-upstream-noname",
+  "shaai-xianjian-upstream-noname",
+];
+const missing = g1.filter((d) => !dirs.includes(d));
+check("catalog_files_g1", dirs.length >= g1.length && missing.length === 0, `n=${dirs.length} missing=${missing.join(",")}`);
 
 console.log(JSON.stringify({ total: results.length, failed: results.filter((r) => !r.ok).length }));
 process.exit(results.some((r) => !r.ok) ? 1 : 0);

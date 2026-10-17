@@ -39,6 +39,7 @@ mod fool;
 mod martial;
 mod omnisearch;
 mod shousha;
+mod shousha_mvp;
 mod sj_settings;
 mod update_guard;
 pub use coin::{
@@ -98,6 +99,10 @@ pub use martial::{
 pub use omnisearch::{
     debug_execute, debug_inspect, parse_config, EntryKind, PublicEntry, PublicIndex, SearchConfig,
     SearchError,
+};
+pub use shousha_mvp::{
+    apply_mvp_line, parse_mvp_config, parse_mvp_request, MvpConfig, MvpError, MvpFact,
+    MvpPlayer, MvpScore, MvpSession, MvpSettlement, MvpStats,
 };
 pub use shousha::{
     apply_shousha, apply_shousha_line, format_report, parse_shousha_config, CharacterIn,
