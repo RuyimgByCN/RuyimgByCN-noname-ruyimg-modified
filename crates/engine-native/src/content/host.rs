@@ -1216,6 +1216,10 @@ pub enum HostBehavior {
     /// 幻音（tag 442，deferred 消解批 琴儿）：他人对你使用牌时，判定——
     /// 黑桃取消该牌、红桃摸 1、其余无事。
     SwdHuanyin,
+    /// 灵弦（tag 443，deferred 消解批 慕月）：非你回合时，你使用或打出牌后，
+    /// 与一名攻击距离大于 1 的角色各摸 1。登记差异：自选目标→座位序首个
+    /// 确定性近似；可放弃→恒发动近似。
+    SwdLingxian,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1500,6 +1504,7 @@ impl HostBehavior {
             HostBehavior::SwdGTiandao => 440,
             HostBehavior::SwdRexue => 441,
             HostBehavior::SwdHuanyin => 442,
+            HostBehavior::SwdLingxian => 443,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2183,6 +2188,7 @@ impl HostBehavior {
             440 => HostBehavior::SwdGTiandao,
             441 => HostBehavior::SwdRexue,
             442 => HostBehavior::SwdHuanyin,
+            443 => HostBehavior::SwdLingxian,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2203,7 +2209,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 439] = [
+        pub const ALL: [HostBehavior; 440] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2643,6 +2649,7 @@ impl HostBehavior {
         HostBehavior::SwdGTiandao,
         HostBehavior::SwdRexue,
         HostBehavior::SwdHuanyin,
+        HostBehavior::SwdLingxian,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2844,6 +2851,7 @@ impl HostBehavior {
             HostBehavior::SwdGTiandao => "host:g_tiandao",
             HostBehavior::SwdRexue => "host:rexue",
             HostBehavior::SwdHuanyin => "host:huanyin",
+            HostBehavior::SwdLingxian => "host:lingxian",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3937,6 +3945,14 @@ impl HostBehavior {
                 priority: 6,
                 optional: false,
                 extra_events: Vec::new(),
+            }),
+            // 灵弦：自己使用或打出牌（上游 respond/useCard；非自己回合）
+            HostBehavior::SwdLingxian => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::CardResponded],
             }),
             // 青木：死亡前置 First（上游 dieBegin hide）
             HostBehavior::BossQingmu2 => Some(TriggerMeta {
@@ -5792,6 +5808,7 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
                 _ => (None, None),
             },
+            HostBehavior::SwdLingxian => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
                 EventData::CardUsed(u) => (u.targets.first().copied(), None),
@@ -6031,6 +6048,21 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdHuanyin => matches!(event,
                 EventData::CardUsed(u)
                 if u.player != owner && u.targets.contains(&owner) && !u.cancelled),
+            // 灵弦：自己使用/打出牌，且非自己回合，且存在攻击距离 >1 的其他存活者
+            HostBehavior::SwdLingxian => {
+                let by_owner = match event {
+                    EventData::CardUsed(u) => u.player == owner,
+                    EventData::CardResponded { player, .. } => *player == owner,
+                    _ => false,
+                };
+                by_owner
+                    && ctx.state.turn.current != owner
+                    && (0..ctx.state.players.len() as u8).any(|t| {
+                        t != owner
+                            && ctx.state.player(t).alive
+                            && ctx.state.computed_distance(ctx.catalog, owner, t) > 1
+                    })
+            }
             // 铁壁：杀指定了与持有者距离 ≤1 的目标，持有者有黑牌
             HostBehavior::SwdTiebi => {
                 let hit = matches!(event,
@@ -17797,6 +17829,20 @@ impl crate::catalog::SkillMachine for HostMachine {
                         ctx.draw_cards(self.owner, 1);
                     }
                     _ => {}
+                }
+                Flow::Done
+            }
+            // 灵弦：与座位序首个攻击距离 >1 的其他存活者各摸 1
+            // （登记差异：自选目标→首个确定性近似；可放弃→恒发动近似）
+            HostBehavior::SwdLingxian => {
+                let n = ctx.core.players.len() as u8;
+                if let Some(t) = (0..n).find(|t| {
+                    *t != self.owner
+                        && ctx.core.player(*t).alive
+                        && ctx.core.computed_distance(ctx.catalog, self.owner, *t) > 1
+                }) {
+                    ctx.draw_cards(self.owner, 1);
+                    ctx.draw_cards(t, 1);
                 }
                 Flow::Done
             }

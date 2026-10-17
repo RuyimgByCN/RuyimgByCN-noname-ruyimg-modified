@@ -1570,7 +1570,7 @@
     },
     {
      "name": "lingxian",
-     "mapping": null
+     "mapping": "host:lingxian"
     },
     {
      "name": "shouyin",

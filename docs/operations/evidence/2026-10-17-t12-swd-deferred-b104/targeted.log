@@ -1,0 +1,12 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running tests/g1_shahai_swd.rs (target/debug/deps/g1_shahai_swd-eba24be2ade66ae5)
+
+running 5 tests
+test swd_deferred_gtiandao_rewrites_judge_with_any_he ... ok
+test swd_deferred_huanyin_judge_cancel_or_draw ... ok
+test swd_deferred_lanzhi_heals_le_own_hp_damaged ... ok
+test swd_deferred_lingxian_draws_with_far_target ... ok
+test swd_deferred_rexue_and_liuli ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 93 filtered out; finished in 0.33s
+
