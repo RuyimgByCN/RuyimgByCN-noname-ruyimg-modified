@@ -1074,11 +1074,11 @@
    "skills": [
     {
      "name": "rexue",
-     "mapping": null
+     "mapping": "host:rexue"
     },
     {
      "name": "liuli",
-     "mapping": null
+     "mapping": "builtin:流离"
     },
     {
      "name": "senluo",
@@ -1094,7 +1094,7 @@
    "skills": [
     {
      "name": "rexue",
-     "mapping": null
+     "mapping": "host:rexue"
     },
     {
      "name": "huopu",

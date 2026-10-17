@@ -1209,6 +1209,10 @@ pub enum HostBehavior {
     /// 并获得原判定牌（同 Boss 张角「天道」语义）。查询型能力：判定流程经
     /// `skill_by_name` 查询持有者，无独立触发时机。
     SwdGTiandao,
+    /// 热血（tag 441，deferred 消解批 墨耶/夜鸦熙）：任意角色阶段开始时，
+    /// 若其在你杀范围内且你有杀，视为对其使用一张杀，然后摸 1。
+    /// 登记差异：虚拟杀（不消耗实体杀）+ 恒发动近似（上游 chooseToUse 可放弃）。
+    SwdRexue,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1491,6 +1495,7 @@ impl HostBehavior {
             HostBehavior::D3Moyan => 438,
             HostBehavior::SwdLanzhi => 439,
             HostBehavior::SwdGTiandao => 440,
+            HostBehavior::SwdRexue => 441,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2172,6 +2177,7 @@ impl HostBehavior {
             438 => HostBehavior::D3Moyan,
             439 => HostBehavior::SwdLanzhi,
             440 => HostBehavior::SwdGTiandao,
+            441 => HostBehavior::SwdRexue,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2192,7 +2198,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 437] = [
+        pub const ALL: [HostBehavior; 438] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2630,6 +2636,7 @@ impl HostBehavior {
         HostBehavior::D3Moyan,
         HostBehavior::SwdLanzhi,
         HostBehavior::SwdGTiandao,
+        HostBehavior::SwdRexue,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2829,6 +2836,7 @@ impl HostBehavior {
             HostBehavior::D3Moyan => "host:d3_moyan",
             HostBehavior::SwdLanzhi => "host:lanzhi",
             HostBehavior::SwdGTiandao => "host:g_tiandao",
+            HostBehavior::SwdRexue => "host:rexue",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3902,6 +3910,14 @@ impl HostBehavior {
             // 兰芷：使用梅花牌后（上游含 check 可放弃→原生恒发动近似）
             HostBehavior::SwdLanzhi => Some(TriggerMeta {
                 event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 热血：任意角色阶段开始（global；目标在 machine() 提取）
+            HostBehavior::SwdRexue => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
@@ -5751,6 +5767,11 @@ impl HostSkillBehavior {
             // 归汉：目录锚（无提取）
             HostBehavior::WudianGuihan => (None, None),
             HostBehavior::SwdGTiandao => (None, None),
+            // 热血：阶段玩家为本次杀的目标
+            HostBehavior::SwdRexue => match event {
+                EventData::Phase { player, .. } => (Some(*player), None),
+                _ => (None, None),
+            },
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
                 EventData::CardUsed(u) => (u.targets.first().copied(), None),
@@ -5972,6 +5993,20 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianGuihan => false,
             HostBehavior::SwdGTiandao => false,
+            // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
+            HostBehavior::SwdRexue => {
+                if let EventData::Phase { player, begin: true, .. } = event {
+                    let actor = *player;
+                    actor != owner
+                        && ctx.state.player(owner).hand.iter().any(|c| {
+                            ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Sha
+                        })
+                        && ctx.state.computed_distance(ctx.catalog, owner, actor)
+                            <= ctx.state.attack_range(ctx.catalog, owner)
+                } else {
+                    false
+                }
+            }
             // 铁壁：杀指定了与持有者距离 ≤1 的目标，持有者有黑牌
             HostBehavior::SwdTiebi => {
                 let hit = matches!(event,
@@ -17716,6 +17751,15 @@ impl crate::catalog::SkillMachine for HostMachine {
             // 归汉：目录锚（无独立效果步）
             HostBehavior::WudianGuihan => Flow::Done,
             HostBehavior::SwdGTiandao => Flow::Done,
+            // 热血：对阶段玩家视为使用一张杀，然后摸 1
+            // （登记差异：虚拟杀不消耗实体杀；恒发动近似）
+            HostBehavior::SwdRexue => {
+                if let Some(actor) = self.target {
+                    ctx.use_virtual_card(self.owner, CardKind::Sha, vec![actor]);
+                    ctx.draw_cards(self.owner, 1);
+                }
+                Flow::Done
+            }
             // 禁言：查询锚（PlayCard 门），无独立效果步
             HostBehavior::WudianJinyan => Flow::Done,
             // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
