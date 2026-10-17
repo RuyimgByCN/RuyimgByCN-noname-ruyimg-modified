@@ -801,7 +801,7 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
       },
-      "description": "杀海拾遗·swd deferred 消解（核验 b99：133/184，deferred 49；2026-10-17 批 100–114 后：**159/184 映射，deferred 23**；多余 13 张另项）。",
+      "description": "杀海拾遗·swd deferred 消解（核验 b99：133/184，deferred 49；2026-10-17 批 100–114 后：**160/184 映射，deferred 22**；多余 13 张另项）。",
       "done_when_evidence": [
         "定向回归测试通过",
         "cargo test --offline -p engine-native --no-fail-fast 全绿",
@@ -817,7 +817,7 @@
         "U05",
         "swd"
       ],
-      "notes": "2026-10-17 批 100–112：兰芷/改天道/热血(+流离内置引用)/幻音/灵弦/拼点/蛇魂/魂身(v296/81)/待行(v297/82)/聚悉(v298/83)/破舟(v299/84)/陷阱(v300/85)/孤行(v301/86) 消解——148/184 映射，deferred 49→34。批 113：灵矢（tag 460，无版本批；距离/直中/摸牌/杀限次四臂内联，计亭整将闭环，51/79），149/184，deferred 33。批 114：锦鳞（tag 461/462，字段批 v302/存档 v87——limited 一次性授「锦鳞·退」按阶段递减；司空蔷整将闭环 52/79），150/184，deferred 32。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100..b113/ 批 120：灵武（tag 475）+ insertPhase 额外阶段原语（字段批 v307/存档 v92）——151/184，deferred 31。 批 121：神焰（tag 476，火伤+1+邻位蔓延；字段批 v308/存档 v93）——152/184，deferred 30。 批 122：入梦（tag 477；字段批 v309/存档 v94）——153/184，deferred 29。 批 123：义山（tag 478；字段批 v310/存档 v95）——154/184，deferred 28。 批 124：守印（tag 479；字段批 v311/存档 v96）——155/184，deferred 27。 批 125：魅惑（tag 480）+ CardsLost 失去牌事件原语（v312，无字段变化）——156/184，deferred 26。 批 126：集控（tag 481；无版本变化）——157/184，deferred 25。 批 127：林韵（tag 482；无版本变化）——158/184，deferred 24。 批 128：诛害（tag 483；无版本变化）——159/184，deferred 23；勘察确认 gongxin/songci/tianxiang/zhenlie 在其它角色文件有定义可续做。",
+      "notes": "2026-10-17 批 100–112：兰芷/改天道/热血(+流离内置引用)/幻音/灵弦/拼点/蛇魂/魂身(v296/81)/待行(v297/82)/聚悉(v298/83)/破舟(v299/84)/陷阱(v300/85)/孤行(v301/86) 消解——148/184 映射，deferred 49→34。批 113：灵矢（tag 460，无版本批；距离/直中/摸牌/杀限次四臂内联，计亭整将闭环，51/79），149/184，deferred 33。批 114：锦鳞（tag 461/462，字段批 v302/存档 v87——limited 一次性授「锦鳞·退」按阶段递减；司空蔷整将闭环 52/79），150/184，deferred 32。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100..b113/ 批 120：灵武（tag 475）+ insertPhase 额外阶段原语（字段批 v307/存档 v92）——151/184，deferred 31。 批 121：神焰（tag 476，火伤+1+邻位蔓延；字段批 v308/存档 v93）——152/184，deferred 30。 批 122：入梦（tag 477；字段批 v309/存档 v94）——153/184，deferred 29。 批 123：义山（tag 478；字段批 v310/存档 v95）——154/184，deferred 28。 批 124：守印（tag 479；字段批 v311/存档 v96）——155/184，deferred 27。 批 125：魅惑（tag 480）+ CardsLost 失去牌事件原语（v312，无字段变化）——156/184，deferred 26。 批 126：集控（tag 481；无版本变化）——157/184，deferred 25。 批 127：林韵（tag 482；无版本变化）——158/184，deferred 24。 批 128：诛害（tag 483；无版本变化）——159/184，deferred 23；勘察确认 gongxin/songci/tianxiang/zhenlie 在其它角色文件有定义可续做。 批 129：颂词（tag 484；字段批 v313/存档 v97）——160/184，deferred 22。",
       "ambiguous": false,
       "resolution": {
         "date": "2026-10-16",

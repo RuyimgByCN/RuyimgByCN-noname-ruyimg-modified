@@ -1309,6 +1309,11 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 颂词（tag 484，swd deferred 消解批 129，`songci`）：出牌阶段主动
+    /// （可重复）——选一名未发动过的角色（含自己）：其手牌多于体力则弃 2 张
+    /// （手/装备），否则摸 2 张；全部角色均已记录时弃牌阶段末摸 1（组技
+    /// `songci_draw`，内联于阶段收束）。
+    Songci,
     /// 诛害（tag 483，swd deferred 消解批 128，`zhuhai`）：任意角色结束
     /// 阶段开始时——若其本回合造成过伤害、自己手中有【杀】且其在你攻击
     /// 距离内，可对其使用一张【杀】（实体牌）。
@@ -1672,6 +1677,7 @@ impl HostBehavior {
             HostBehavior::SwdJikong => 481,
             HostBehavior::SwdLinyun => 482,
             HostBehavior::SwdZhuhai => 483,
+            HostBehavior::Songci => 484,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2396,6 +2402,7 @@ impl HostBehavior {
             481 => HostBehavior::SwdJikong,
             482 => HostBehavior::SwdLinyun,
             483 => HostBehavior::SwdZhuhai,
+            484 => HostBehavior::Songci,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2416,7 +2423,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 480] = [
+        pub const ALL: [HostBehavior; 481] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2897,6 +2904,7 @@ impl HostBehavior {
         HostBehavior::SwdJikong,
         HostBehavior::SwdLinyun,
         HostBehavior::SwdZhuhai,
+        HostBehavior::Songci,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3139,6 +3147,7 @@ impl HostBehavior {
             HostBehavior::SwdJikong => "host:jikong",
             HostBehavior::SwdLinyun => "host:linyun",
             HostBehavior::SwdZhuhai => "host:zhuhai",
+            HostBehavior::Songci => "host:songci",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3618,6 +3627,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 颂词：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Songci => None,
             // 诛害：任意角色结束阶段开始（可选）
             HostBehavior::SwdZhuhai => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -5880,6 +5891,18 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 颂词（swd 批 129）：目录技能名（选未记录角色：弃 2 或摸 2）。
+pub const SONGCI_KEY: &str = "songci";
+
+/// 颂词记录（按座位序插入，去重）。
+fn songci_record(ctx: &mut Ctx<'_>, owner: PlayerId, target: PlayerId) {
+    let p = ctx.core.player_mut(owner);
+    if !p.songci_targets.contains(&target) {
+        p.songci_targets.push(target);
+        p.songci_targets.sort_unstable();
+    }
+}
+
 /// 诛害（swd 批 128）：目录技能名（结束阶段角色造成过伤害则对其用杀）。
 pub const SWD_ZHUHAI_KEY: &str = "zhuhai";
 
@@ -6736,6 +6759,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdJikong => (None, None),
             HostBehavior::SwdLinyun => (None, None),
             HostBehavior::SwdZhuhai => (None, None),
+            HostBehavior::Songci => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7070,6 +7094,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
+            HostBehavior::Songci => false,
             // 诛害：他人结束阶段开始、其本回合造成过伤害、自己有杀且在射程内
             HostBehavior::SwdZhuhai => match event {
                 EventData::Phase {
@@ -9168,6 +9193,32 @@ impl SkillBehavior for HostSkillBehavior {
             //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
             HostBehavior::SwdJinlin => {
                 if ctx.state.player(owner).jinlin_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 颂词（swd 批 129）：出牌阶段主动——选未记录角色（含自己）
+            HostBehavior::Songci => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let recorded = &ctx.state.player(owner).songci_targets;
+                if !ctx
+                    .state
+                    .alive_players()
+                    .any(|p| !recorded.contains(&p))
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -20212,6 +20263,112 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 颂词：选未记录角色 → 手牌多于体力弃 2 否则摸 2 → 记录
+            HostBehavior::Songci => match self.stage {
+                HostStage::Act => {
+                    let recorded = &ctx.core.player(self.owner).songci_targets;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| !recorded.contains(p))
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "songci_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive {
+                        return Flow::Done;
+                    }
+                    self.target = Some(target);
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "颂词",
+                        owner: self.owner,
+                    });
+                    let hand = ctx.core.player(target).hand.len();
+                    let hp = ctx.core.player(target).hp.max(0) as usize;
+                    if hand > hp {
+                        // 手牌多于体力：强制弃 2 张（手/装备；不足则弃全部，
+                        // 登记差异）
+                        let cards: Vec<CardId> = ctx
+                            .core
+                            .player(target)
+                            .hand
+                            .iter()
+                            .chain(ctx.core.player(target).equips.iter())
+                            .copied()
+                            .collect();
+                        let need = cards.len().min(2);
+                        if need > 0 {
+                            self.cards = cards.into_iter().take(need).map(u32::from).collect();
+                            self.stage = HostStage::SelectCard;
+                            return Flow::WaitChoice {
+                                observer: target,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::SelectCards,
+                                    prompt: "songci_discard",
+                                    options: self
+                                        .cards
+                                        .iter()
+                                        .map(|c| ChoiceOption::Card(*c as CardId))
+                                        .collect(),
+                                    min: need,
+                                    max: need,
+                                    allow_cancel: false,
+                                },
+                            };
+                        }
+                    } else {
+                        ctx.draw_cards(target, 2);
+                    }
+                    songci_record(ctx, self.owner, target);
+                    Flow::Done
+                }
+                HostStage::SelectCard => {
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.is_empty() {
+                        return Flow::Done;
+                    }
+                    for c in picked {
+                        if ctx.core.player(t).hand.contains(&c) {
+                            ctx.discard_from_hand(t, c);
+                        } else if ctx.core.player(t).equips.contains(&c) {
+                            ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                            ctx.to_discard(c);
+                        }
+                    }
+                    songci_record(ctx, self.owner, t);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 诛害：选一张手中的【杀】→ 对结束阶段角色使用（实体牌）
             HostBehavior::SwdZhuhai => match self.stage {
                 HostStage::Act => {

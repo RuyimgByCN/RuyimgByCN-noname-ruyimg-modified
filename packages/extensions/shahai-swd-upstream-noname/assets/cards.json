@@ -1170,7 +1170,7 @@
    "skills": [
     {
      "name": "songci",
-     "mapping": null
+     "mapping": "host:songci"
     },
     {
      "name": "anlianying",

@@ -3500,6 +3500,27 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
             }
         }
     }
+    // 颂词组技 songci_draw（swd 批 129，规则 v313）：弃牌阶段**收束**时若
+    // 全部角色均已记录（无未记录者）→ 摸 1（上游 phaseDiscardEnd forced）
+    if !begin && phase == Phase::Discard {
+        if let Some(def) = ctx.catalog.skill_by_name(crate::content::host::SONGCI_KEY) {
+            if ctx.core.has_skill(player, def) {
+                // 上游 `game.hasPlayer(!storage.songci.contains(current))`：
+                // 计**全部角色**（含已阵亡者）——阵亡未记录即不触发
+                let all_recorded = {
+                    let p = ctx.core.player(player);
+                    ctx.core
+                        .players
+                        .iter()
+                        .enumerate()
+                        .all(|(idx, _)| p.songci_targets.contains(&(idx as PlayerId)))
+                };
+                if all_recorded {
+                    ctx.draw_cards(player, 1);
+                }
+            }
+        }
+    }
     // 乐不思蜀生效：摸牌阶段结束时若跳过出牌旗标在位，
     // 直接进入弃牌阶段（跳过 Play 的 End/Begin 事件对——挂账见清单）。
     if phase == Phase::Draw && ctx.core.turn.skip_play_phase {

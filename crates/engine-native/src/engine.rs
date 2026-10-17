@@ -5294,6 +5294,11 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
         // 守印限定位（swd 批 124，规则 v311）
         push_u8(&mut h, p.shouyin_used as u8);
+        // 颂词已发动目标（swd 批 129，规则 v313）
+        push_u32(&mut h, p.songci_targets.len() as u32);
+        for t in &p.songci_targets {
+            push_u8(&mut h, *t);
+        }
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

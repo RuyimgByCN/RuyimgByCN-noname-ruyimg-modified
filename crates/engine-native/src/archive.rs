@@ -90,7 +90,9 @@ use crate::state::{
 /// `yishan_lost`。v94 字节被版本门禁拒绝。
 /// v96（2026-10-17，swd 守印批 124）：`PlayerState` 追加守印限定位
 /// `shouyin_used`。v95 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 96;
+/// v97（2026-10-17，swd 颂词批 129）：`PlayerState` 追加颂词已发动目标表
+/// `songci_targets`。v96 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 97;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3400,6 +3402,11 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         }
         // 守印限定位（v96）
         w.boolean(p.shouyin_used);
+        // 颂词已发动目标（v97）
+        w.len(p.songci_targets.len());
+        for t in &p.songci_targets {
+            w.u8(*t);
+        }
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3772,6 +3779,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let skip_discard_phase = r.boolean()?;
         let yishan_lost = r.vec(|r| r.u32())?;
         let shouyin_used = r.boolean()?;
+        let songci_targets = r.vec(|r| r.u8())?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3852,6 +3860,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             skip_discard_phase,
             yishan_lost,
             shouyin_used,
+            songci_targets,
             off_court,
             shuiyun_count,
             wangyou3_round,

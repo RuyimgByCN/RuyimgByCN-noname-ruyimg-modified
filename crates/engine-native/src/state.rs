@@ -278,6 +278,9 @@ pub struct PlayerState {
     /// 守印·限定技已发动（swd 批 124，规则 v311）：上游
     /// `player.storage.shouyin`（awakenSkill 后 true）。
     pub shouyin_used: bool,
+    /// 颂词·已发动过的目标（swd 批 129，规则 v313）：上游
+    /// `storage.songci`（按座位序；全部角色均已记录时弃牌阶段末摸 1）。
+    pub songci_targets: Vec<PlayerId>,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -388,6 +391,7 @@ impl PlayerState {
             skip_discard_phase: false,
             yishan_lost: Vec::new(),
             shouyin_used: false,
+            songci_targets: Vec::new(),
         }
     }
 }
