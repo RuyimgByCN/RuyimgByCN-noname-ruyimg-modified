@@ -59,7 +59,8 @@
     "d5_longxue_117": "2026-10-17 批 117：潜龙道心值 + 卫统 + 曹髦包（规则 v305/存档 v90）；engine-native 914/0/1，14 golden 重录 + 探针。D5 仍 open（余外部手杀包四技与 ylyg*）。",
     "t11_pangtong_closure": "2026-10-17：T11-BOSS-PANGTONG-EXTERNAL 关闭（涅槃/浴火/神威 + loopType，v306/存档 v91）。看破/朱羽/ylygniepan 外部依赖与 D4 轮次起点登记。",
     "d5_qingzheng_119": "2026-10-17 批 119：清正（mbcmqingzheng）转换，道心值 25 解锁生效；engine-native 920/0/1，14 golden 零位移（无版本变化）。D5 仍 open（余酒诗/放逐/绝进三技与显示面）。",
-    "wholepack_count": "20/37（2026-10-17 L29 计入）"
+    "wholepack_count": "20/37（2026-10-17 L29 计入）",
+    "t9_samples_registry": "2026-10-17：37 来源行为样本/接口登记表（23/37 有样本与接口；G0 37/37）。T9-SOURCE-BEHAVIOR-SAMPLES 仍 open。"
   },
   "items": [
     {
@@ -138,7 +139,8 @@
         "T9",
         "E01",
         "G0"
-      ]
+      ],
+      "notes": "2026-10-17：来源行为样本/接口登记表落盘（23/37 已有动态样本与接口，14 个待实施来源标「待补」）——docs/operations/evidence/2026-10-17-t9-source-samples/README.md；G0 清单 37/37。本行保持 open（随各来源实施批次补齐样本）。"
     },
     {
       "id": "T9-LX-BATTLE-TRACE",
