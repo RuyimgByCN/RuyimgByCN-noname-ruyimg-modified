@@ -192,6 +192,10 @@ pub struct NativeGameSummary {
     pub catalog_cards: usize,
     /// 纯标准目录卡牌数（对照基线）。
     pub base_catalog_cards: usize,
+    /// 合并后目录武将数（T13 武将包产品面）。
+    pub catalog_generals: usize,
+    /// 纯标准目录武将数（对照基线）。
+    pub base_catalog_generals: usize,
     /// 实际驱动步数（每次规划/应用记一步）。
     pub steps: u64,
     /// 是否到达终局。
@@ -223,9 +227,13 @@ pub fn create_native_game(
     let pack_refs: Vec<&ExtensionPack> = loaded.iter().map(|l| &l.pack).collect();
 
     let base_catalog_cards = Engine::new(1, req.seats as usize).catalog().cards.len();
+    let base_catalog_generals = Engine::new(1, req.seats as usize)
+        .catalog()
+        .general_count();
     let mut e = Engine::new_with_extensions(req.seed, req.seats as usize, &pack_refs)
         .map_err(|err| format!("原生建局失败: {err:?}"))?;
     let catalog_cards = e.catalog().cards.len();
+    let catalog_generals = e.catalog().general_count();
 
     let mut steps = 0u64;
     let mut since_progress = 0u64;
@@ -264,6 +272,8 @@ pub fn create_native_game(
         seats: req.seats,
         catalog_cards,
         base_catalog_cards,
+        catalog_generals,
+        base_catalog_generals,
         steps,
         finished: e.outcome().is_some(),
         winner: e.outcome().map(|o| format!("{:?}", o.winner)),

@@ -60,6 +60,45 @@ fn t63_import_load_build_and_drive_with_extension() {
     );
 }
 
+/// T13-NATIVE-GENERALS-PRODUCT（武将包产品面）：玩点论杀武将包经
+/// `/native` 产品路径装载——generals 面并入目录，建局与目录计数可见。
+#[test]
+fn t13_generals_package_loads_via_native_path() {
+    let dir = tempfile::tempdir().unwrap();
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    let _ = content.import().expect("安装包");
+    let listed = content.installed().expect("列出已安装");
+    assert!(
+        listed.iter().any(|p| p.package_id == "wudian"),
+        "玩点论杀武将包应可发现"
+    );
+
+    let loaded = content.load("wudian").expect("装载武将包");
+    assert_eq!(loaded.pack.generals.len(), 9, "九名武将与 G1 装载口径一致");
+    assert_eq!(loaded.pack.card_count(), 14, "14 张实体牌与 G1 口径一致");
+
+    let req = NativeGameRequest {
+        packages: vec!["wudian".into()],
+        seed: 4242,
+        seats: 4,
+        max_steps: 0,
+        planner_nodes: 0,
+    };
+    let summary = create_native_game(&content, &req).expect("武将包建局");
+    assert_eq!(summary.packages, vec!["wudian".to_string()]);
+    assert_eq!(
+        summary.catalog_generals,
+        summary.base_catalog_generals + 9,
+        "武将包九名武将并入目录"
+    );
+    assert_eq!(
+        summary.catalog_cards,
+        summary.base_catalog_cards + 14,
+        "武将包 14 张实体牌并入目录"
+    );
+}
+
 /// T8 增量 4：drop-in 编译包（package.npack.json 含 rule-vm 模块）→
 /// 安装 → 装载器 bridge_vm_skill_decls → 建局 → 触发落账——不重编译
 /// 安装含新技能的包（C1 数据流的服务端磁盘路径）。
