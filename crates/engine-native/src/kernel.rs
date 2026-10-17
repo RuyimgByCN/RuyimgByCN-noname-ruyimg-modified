@@ -2848,6 +2848,8 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     }
                 }
                 ctx.core.turn.sha_used_play_phase = false;
+                // 极略（swd 批 136，规则 v315）：出牌阶段开始清零已用次数
+                ctx.core.player_mut(player).jilve_used = 0;
                 // 突击计数（U07 ow，规则 v118）：出牌阶段开始清零
                 ctx.core.turn.cards_used_play_phase = 0;
                 // 三类计数同步清零（T8 增量 14）

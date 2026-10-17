@@ -95,7 +95,9 @@ use crate::state::{
 /// v98（2026-10-17，swd 护天批 131）：`PlayerState` 追加护天四字段
 /// （`hutian_deposit`/`hutian_just_given`/`hutian_hold`/`hutian_owner`）。
 /// v97 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 98;
+/// v99（2026-10-17，swd 极略批 136）：`PlayerState` 追加极略本阶段已用
+/// 次数 `jilve_used`。v98 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 99;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3410,6 +3412,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for t in &p.songci_targets {
             w.u8(*t);
         }
+        // 极略已用次数（v99）
+        w.u8(p.jilve_used);
         // 护天四字段（v98）
         match p.hutian_deposit {
             None => w.u8(0),
@@ -3803,6 +3807,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let yishan_lost = r.vec(|r| r.u32())?;
         let shouyin_used = r.boolean()?;
         let songci_targets = r.vec(|r| r.u8())?;
+        let jilve_used = r.u8()?;
         let hutian_deposit = match r.u8()? {
             0 => None,
             1 => Some(r.u8()?),
@@ -3896,6 +3901,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             yishan_lost,
             shouyin_used,
             songci_targets,
+            jilve_used,
             hutian_deposit,
             hutian_just_given,
             hutian_hold,

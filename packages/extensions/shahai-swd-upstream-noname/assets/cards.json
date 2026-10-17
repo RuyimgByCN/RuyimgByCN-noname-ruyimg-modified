@@ -818,7 +818,7 @@
    "skills": [
     {
      "name": "jilve",
-     "mapping": null
+     "mapping": "host:jilve"
     },
     {
      "name": "gongshen",

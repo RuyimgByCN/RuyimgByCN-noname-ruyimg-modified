@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 极略（tag 494，swd deferred 消解批 136，`jilve`）：出牌阶段限三次
+    /// ——观看牌堆顶 3 张，从中选一张**基本牌或锦囊牌**使用（非手牌用牌；
+    /// 目标按通用目标规则表选定）。
+    Jilve,
     /// 革新印（tag 493，swd deferred 消解批 135，`gxianyin`）：出牌阶段限
     /// 一次——弃置自己一种花色的全部手牌（**不触发失去牌类事件**），再从
     /// 牌堆/弃牌堆获得等量张另一种花色的牌。
@@ -1719,6 +1723,7 @@ impl HostBehavior {
             HostBehavior::Bingfeng => 491,
             HostBehavior::Bingfeng2 => 492,
             HostBehavior::Gxianyin => 493,
+            HostBehavior::Jilve => 494,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2453,6 +2458,7 @@ impl HostBehavior {
             491 => HostBehavior::Bingfeng,
             492 => HostBehavior::Bingfeng2,
             493 => HostBehavior::Gxianyin,
+            494 => HostBehavior::Jilve,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2473,7 +2479,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 490] = [
+        pub const ALL: [HostBehavior; 491] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2964,6 +2970,7 @@ impl HostBehavior {
         HostBehavior::Bingfeng,
         HostBehavior::Bingfeng2,
         HostBehavior::Gxianyin,
+        HostBehavior::Jilve,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3216,6 +3223,7 @@ impl HostBehavior {
             HostBehavior::Bingfeng => "host:bingfeng",
             HostBehavior::Bingfeng2 => "host:bingfeng2",
             HostBehavior::Gxianyin => "host:gxianyin",
+            HostBehavior::Jilve => "host:jilve",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3695,6 +3703,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 极略：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Jilve => None,
             // 革新印：出牌阶段主动（activate 分支；无触发时机）
             HostBehavior::Gxianyin => None,
             // 冰封·封：自己翻回正面时（自移除）
@@ -6006,6 +6016,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 极略（swd 批 136）：目录技能名（牌堆顶 3 选 1 使用，每阶段 3 次）。
+pub const SWD_JILVE_KEY: &str = "jilve";
+
 /// 革新印（swd 批 135）：目录技能名（弃一花色手牌换另一花色等量牌）。
 pub const SWD_GXIANYIN_KEY: &str = "gxianyin";
 
@@ -7020,6 +7033,7 @@ impl HostSkillBehavior {
             HostBehavior::Bingfeng => (None, None),
             HostBehavior::Bingfeng2 => (None, None),
             HostBehavior::Gxianyin => (None, None),
+            HostBehavior::Jilve => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7357,6 +7371,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi => false,
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
+            HostBehavior::Jilve => false,
             // 冰封·封：自己已翻回正面（移除自身）
             HostBehavior::Bingfeng2 => matches!(event,
                 EventData::TurnOvered { player, .. } if *player == owner)
@@ -9489,6 +9504,26 @@ impl SkillBehavior for HostSkillBehavior {
             //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
             HostBehavior::SwdJinlin => {
                 if ctx.state.player(owner).jinlin_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 极略（swd 批 136）：出牌阶段主动（每阶段 3 次）
+            HostBehavior::Jilve => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.player(owner).jilve_used >= 3
+                    || ctx.state.deck.is_empty()
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -20639,6 +20674,114 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 极略：看牌堆顶 3 张 → 选一张基本/锦囊牌 → 选目标 → 使用
+            HostBehavior::Jilve => match self.stage {
+                HostStage::Act => {
+                    let top: Vec<CardId> = ctx.core.deck.iter().rev().take(3).copied().collect();
+                    let options: Vec<ChoiceOption> = top
+                        .into_iter()
+                        .filter(|c| {
+                            let kind = ctx.catalog.card_kind(*c);
+                            if kind.is_basic_kind() || kind.equip_slot().is_none() {
+                                // 基本牌或锦囊（非装备）且目标规则可满足
+                                let (min, _, targets) =
+                                    ctx.core.legal_targets(ctx.catalog, kind, self.owner);
+                                min == 0 || !targets.is_empty()
+                            } else {
+                                false
+                            }
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "jilve_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.deck.contains(&card) {
+                        return Flow::Done;
+                    }
+                    let kind = ctx.catalog.card_kind(card);
+                    let (min, max, targets) =
+                        ctx.core.legal_targets(ctx.catalog, kind, self.owner);
+                    self.card = Some(card);
+                    if min == 0 && max == 0 {
+                        // 无目标牌：直接使用（牌堆 → 手牌 → CardUsed）
+                        ctx.core.deck.retain(|c| *c != card);
+                        ctx.core.player_mut(self.owner).hand.push(card);
+                        ctx.core.player_mut(self.owner).jilve_used += 1;
+                        ctx.emit(EventData::CardUsed(crate::machine::card_use(
+                            card,
+                            self.owner,
+                            Vec::new(),
+                        )));
+                        self.stage = HostStage::ShuchuiTargetLoop;
+                        return Flow::Yield;
+                    }
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "jilve_targets",
+                            options: targets.into_iter().map(ChoiceOption::Player).collect(),
+                            min: min as usize,
+                            max: max as usize,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() || !ctx.core.deck.contains(&card) {
+                        return Flow::Done;
+                    }
+                    ctx.core.deck.retain(|c| *c != card);
+                    ctx.core.player_mut(self.owner).hand.push(card);
+                    ctx.core.player_mut(self.owner).jilve_used += 1;
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "极略",
+                        owner: self.owner,
+                    });
+                    ctx.emit(EventData::CardUsed(crate::machine::card_use(
+                        card,
+                        self.owner,
+                        targets,
+                    )));
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                HostStage::ShuchuiTargetLoop => Flow::Done,
+                _ => Flow::Done,
+            },
             // 革新印：选花色 → 静默弃该花色全部手牌 → 选另一花色 → 获得等量
             HostBehavior::Gxianyin => match self.stage {
                 HostStage::Act => {

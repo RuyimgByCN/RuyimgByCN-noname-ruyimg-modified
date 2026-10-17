@@ -5305,6 +5305,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         for t in &p.songci_targets {
             push_u8(&mut h, *t);
         }
+        // 极略已用次数（swd 批 136，规则 v315）
+        push_u8(&mut h, p.jilve_used);
         // 护天四字段（swd 批 131，规则 v314）
         match p.hutian_deposit {
             None => push_u8(&mut h, 0),

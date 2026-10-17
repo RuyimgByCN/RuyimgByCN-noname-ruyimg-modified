@@ -278,6 +278,9 @@ pub struct PlayerState {
     /// 守印·限定技已发动（swd 批 124，规则 v311）：上游
     /// `player.storage.shouyin`（awakenSkill 后 true）。
     pub shouyin_used: bool,
+    /// 极略·本出牌阶段已用次数（swd 批 136，规则 v315）：上游 `usable:3`
+    /// （每出牌阶段 3 次；出牌阶段开始清零）。
+    pub jilve_used: u8,
     /// 颂词·已发动过的目标（swd 批 129，规则 v313）：上游
     /// `storage.songci`（按座位序；全部角色均已记录时弃牌阶段末摸 1）。
     pub songci_targets: Vec<PlayerId>,
@@ -401,6 +404,7 @@ impl PlayerState {
             skip_discard_phase: false,
             yishan_lost: Vec::new(),
             shouyin_used: false,
+            jilve_used: 0,
             songci_targets: Vec::new(),
             hutian_deposit: None,
             hutian_just_given: false,
@@ -885,6 +889,75 @@ impl GameStateCore {
         match &self.mode {
             GameMode::Boss { stage, .. } => Some(stage),
             _ => None,
+        }
+    }
+
+    /// 通用目标规则（swd 批 136 极略）：按牌种给出 (min, max, 合法目标)。
+    /// 与 PlayCard 校验同口径的**近似镜像**（忽略逐技豁免/范围豁免等；
+    /// 登记差异：仅供机器发起「非手牌用牌」时选目标，命令路径仍走原校验）。
+    pub fn legal_targets(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        kind: crate::catalog::CardKind,
+        player: PlayerId,
+    ) -> (u8, u8, Vec<PlayerId>) {
+        use crate::catalog::CardKind as K;
+        let alive: Vec<PlayerId> = self.alive_players().collect();
+        let others: Vec<PlayerId> = alive.iter().copied().filter(|p| *p != player).collect();
+        let range = self.attack_range(catalog, player);
+        let in_range = |t: PlayerId| self.computed_distance(catalog, player, t) <= range;
+        match kind {
+            K::Sha | K::FireSha | K::LeiSha => {
+                let v: Vec<PlayerId> = others.iter().copied().filter(|t| in_range(*t)).collect();
+                (if v.is_empty() { 1 } else { 1 }, 1, v)
+            }
+            K::Tao => {
+                let wounded = self.player(player).hp < self.player(player).max_hp as i32;
+                (1, 1, if wounded { vec![player] } else { Vec::new() })
+            }
+            K::Jiu => (1, 1, vec![player]),
+            K::Wuzhong => (0, 0, Vec::new()),
+            K::Wugu => (0, 0, alive.clone()),
+            K::Taoyuan => (0, 0, alive.clone()),
+            K::SavageAttack | K::ArcheryAttack => (0, 0, others.clone()),
+            K::Duel => (1, 1, others.clone()),
+            K::Snatch | K::Dismantle => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| {
+                        in_range(*t)
+                            && (!self.player(*t).hand.is_empty()
+                                || !self.player(*t).equips.is_empty())
+                    })
+                    .collect();
+                (1, 1, v)
+            }
+            K::Chain => (1, 2, alive.clone()),
+            K::Le | K::Bing => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| {
+                        !self
+                            .player(*t)
+                            .judge
+                            .iter()
+                            .any(|c| catalog.card_kind(*c) == kind)
+                    })
+                    .collect();
+                (1, 1, v)
+            }
+            K::ShanDian => (1, 1, vec![player]),
+            K::Jiedao => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| self.player(*t).equips.iter().any(|c| catalog.card_kind(*c).equip_slot() == Some(crate::catalog::EquipSlot::Weapon)))
+                    .collect();
+                (1, 1, v)
+            }
+            _ => (0, 0, Vec::new()),
         }
     }
 
