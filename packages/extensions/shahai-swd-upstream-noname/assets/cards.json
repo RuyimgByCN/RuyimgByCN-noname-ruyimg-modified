@@ -990,7 +990,7 @@
    "skills": [
     {
      "name": "zhuhai",
-     "mapping": null
+     "mapping": "host:zhuhai"
     },
     {
      "name": "polang",
