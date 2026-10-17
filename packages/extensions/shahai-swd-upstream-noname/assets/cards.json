@@ -998,7 +998,7 @@
     },
     {
      "name": "jikong",
-     "mapping": null
+     "mapping": "host:jikong"
     }
    ]
   },

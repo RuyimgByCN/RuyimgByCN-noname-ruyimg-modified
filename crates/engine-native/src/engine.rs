@@ -1339,18 +1339,35 @@ impl Engine {
 
     /// 测试/工具：从手牌弃置一张（走正常弃置管线：移出手牌、入弃堆、
     /// 义山记录钩、日志）。
-    pub fn debug_discard_card(&mut self, player: PlayerId, card: CardId) {
-        let pos = self
-            .state
+    pub fn debug_discard_card(&mut self, player: PlayerId, card: CardId) -> CommandOutcome {
+        if self.state.core.outcome.is_some() {
+            return CommandOutcome::Rejected(RejectReason::MatchOver);
+        }
+        if self.state.resolution.open_choice.is_some() {
+            return CommandOutcome::Rejected(RejectReason::ChoicePending);
+        }
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        let pos = work
             .core
             .player(player)
             .hand
             .iter()
             .position(|c| *c == card)
             .expect("card in hand");
-        self.state.core.player_mut(player).hand.remove(pos);
-        self.state.core.discard.push(card);
-        crate::machine::note_cards_lost(&mut self.state.core, &self.catalog, player, &[card]);
+        work.core.player_mut(player).hand.remove(pos);
+        work.core.discard.push(card);
+        crate::machine::note_cards_lost(&mut work.core, &self.catalog, player, &[card]);
+        crate::resolution::push_frame(
+            &mut work.resolution,
+            EventData::CardsLost {
+                player,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Hand],
+            },
+        );
+        self.finish_segment(work, log_mark)
     }
 
     /// 测试布阵：把一张指定花色的牌放到某玩家手牌（从牌库或弃牌堆取；

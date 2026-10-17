@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 集控（tag 481，swd deferred 消解批 126，`jikong`）：每回合限一次——
+    /// 自己阶段开始，或自己失去手牌致手牌为空时，可对攻击距离内一名其他
+    /// 角色使用虚拟【雷杀】；取消不消耗次数（上游 `counttrigger--` 同口径）。
+    SwdJikong,
     /// 魅惑（tag 480，swd deferred 消解批 125，`meihuo`）：自己失去装备
     /// 且装备区已空时可选——选一名其他有牌角色，获得其一张牌（装备牌则
     /// 直接装备之）。
@@ -1658,6 +1662,7 @@ impl HostBehavior {
             HostBehavior::SwdYishan => 478,
             HostBehavior::SwdShouyin => 479,
             HostBehavior::SwdMeihuo => 480,
+            HostBehavior::SwdJikong => 481,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2379,6 +2384,7 @@ impl HostBehavior {
             478 => HostBehavior::SwdYishan,
             479 => HostBehavior::SwdShouyin,
             480 => HostBehavior::SwdMeihuo,
+            481 => HostBehavior::SwdJikong,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2399,7 +2405,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 477] = [
+        pub const ALL: [HostBehavior; 478] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2877,6 +2883,7 @@ impl HostBehavior {
         HostBehavior::SwdYishan,
         HostBehavior::SwdShouyin,
         HostBehavior::SwdMeihuo,
+        HostBehavior::SwdJikong,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3116,6 +3123,7 @@ impl HostBehavior {
             HostBehavior::SwdYishan => "host:yishan",
             HostBehavior::SwdShouyin => "host:shouyin",
             HostBehavior::SwdMeihuo => "host:meihuo",
+            HostBehavior::SwdJikong => "host:jikong",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3594,6 +3602,14 @@ impl HostBehavior {
                 priority: 0,
                 optional: true,
                 extra_events: Vec::new(),
+            }),
+            // 集控：自己阶段开始 或 自己失去手牌（可用：每回合一次）
+            HostBehavior::SwdJikong => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: vec![EventKind::CardsLost],
             }),
             // 魅惑：自己失去装备牌后（可选）
             HostBehavior::SwdMeihuo => Some(TriggerMeta {
@@ -5839,6 +5855,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 集控（swd 批 126）：目录技能名（阶段开始/失去手牌后虚拟雷杀；使用时消费次数）。
+pub const SWD_JIKONG_KEY: &str = "jikong";
+
 /// 魅惑（swd 批 125）：目录技能名（失去装备后取他人一张牌）。
 pub const SWD_MEIHUO_KEY: &str = "meihuo";
 
@@ -6683,6 +6702,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdYishan => (None, None),
             HostBehavior::SwdShouyin => (None, None),
             HostBehavior::SwdMeihuo => (None, None),
+            HostBehavior::SwdJikong => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7016,6 +7036,28 @@ impl SkillBehavior for HostSkillBehavior {
                     if *player == owner && !ctx.state.player(owner).niepan_used),
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
+            // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
+            HostBehavior::SwdJikong => {
+                // 每回合限一次（上游 usable:1）：**使用时**消费——取消目标窗
+                // 不消耗（上游 counttrigger-- 返还同口径）
+                let available = ctx
+                    .catalog
+                    .skill_by_name(SWD_JIKONG_KEY)
+                    .and_then(|d| ctx.state.skills.get(&(owner, d)).map(|i| !i.once_used))
+                    .unwrap_or(false);
+                available
+                    && match event {
+                        EventData::Phase { player, begin: true, .. } => *player == owner,
+                        EventData::CardsLost {
+                            player, origins, ..
+                        } => {
+                            *player == owner
+                                && origins.iter().any(|o| *o == crate::event::LostOrigin::Hand)
+                                && ctx.state.player(owner).hand.is_empty()
+                        }
+                        _ => false,
+                    }
+            },
             // 魅惑：自己失去装备牌（来源区=装备）且装备区已空
             HostBehavior::SwdMeihuo => match event {
                 EventData::CardsLost {
@@ -20092,6 +20134,55 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
+            // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            HostBehavior::SwdJikong => match self.stage {
+                HostStage::Act => {
+                    let range = ctx.core.attack_range(ctx.catalog, self.owner);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.computed_distance(ctx.catalog, self.owner, *p) <= range
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "jikong_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        // 取消：不消耗每回合一次（上游 counttrigger-- 同口径
+                        // ——原生可选门在取消时本就不消费）
+                        return Flow::Done;
+                    };
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "集控",
+                        owner: self.owner,
+                    });
+                    if let Some(def) = ctx.catalog.skill_by_name(SWD_JIKONG_KEY) {
+                        if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, def)) {
+                            inst.once_used = true;
+                        }
+                    }
+                    ctx.use_virtual_card(self.owner, crate::catalog::CardKind::LeiSha, vec![target]);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 魅惑：选目标 → 取其一张牌（装备牌则装备之）
             HostBehavior::SwdMeihuo => match self.stage {
                 HostStage::Act => {
