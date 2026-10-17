@@ -709,8 +709,7 @@
     },
     {
      "name": "niepan",
-     "mapping": null,
-     "reason": "涅槃=基础包限定技（庞统），native 已登记外部包技依赖不落（Boss 凤雏同口径）"
+     "mapping": "host:niepan"
     }
    ]
   },
