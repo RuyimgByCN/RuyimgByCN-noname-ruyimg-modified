@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 革新印（tag 493，swd deferred 消解批 135，`gxianyin`）：出牌阶段限
+    /// 一次——弃置自己一种花色的全部手牌（**不触发失去牌类事件**），再从
+    /// 牌堆/弃牌堆获得等量张另一种花色的牌。
+    Gxianyin,
     /// 冰封（tag 491，swd deferred 消解批 134，`bingfeng`）：出牌阶段限定
     /// 技——翻面自己与至多 3 名未翻面其他角色，失去 1 点体力上限，并给
     /// 双方授予「冰封·封」（tag 492：出牌/响应/求桃全封锁，翻回正面时移除）。
@@ -1714,6 +1718,7 @@ impl HostBehavior {
             HostBehavior::Cyqiaoxie => 490,
             HostBehavior::Bingfeng => 491,
             HostBehavior::Bingfeng2 => 492,
+            HostBehavior::Gxianyin => 493,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2447,6 +2452,7 @@ impl HostBehavior {
             490 => HostBehavior::Cyqiaoxie,
             491 => HostBehavior::Bingfeng,
             492 => HostBehavior::Bingfeng2,
+            493 => HostBehavior::Gxianyin,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2467,7 +2473,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 489] = [
+        pub const ALL: [HostBehavior; 490] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2957,6 +2963,7 @@ impl HostBehavior {
         HostBehavior::Cyqiaoxie,
         HostBehavior::Bingfeng,
         HostBehavior::Bingfeng2,
+        HostBehavior::Gxianyin,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3208,6 +3215,7 @@ impl HostBehavior {
             HostBehavior::Cyqiaoxie => "host:cyqiaoxie",
             HostBehavior::Bingfeng => "host:bingfeng",
             HostBehavior::Bingfeng2 => "host:bingfeng2",
+            HostBehavior::Gxianyin => "host:gxianyin",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3687,6 +3695,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 革新印：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Gxianyin => None,
             // 冰封·封：自己翻回正面时（自移除）
             HostBehavior::Bingfeng2 => Some(TriggerMeta {
                 event: EventKind::TurnOvered,
@@ -5996,6 +6006,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 革新印（swd 批 135）：目录技能名（弃一花色手牌换另一花色等量牌）。
+pub const SWD_GXIANYIN_KEY: &str = "gxianyin";
+
 /// 冰封（swd 批 134）：目录技能名（翻面封锁限定技）。
 pub const SWD_BINGFENG_KEY: &str = "bingfeng";
 /// 冰封·封（同批）：目录技能名（出牌封锁旗标；翻回正面自移除）。
@@ -7006,6 +7019,7 @@ impl HostSkillBehavior {
             HostBehavior::Cyqiaoxie => (None, None),
             HostBehavior::Bingfeng => (None, None),
             HostBehavior::Bingfeng2 => (None, None),
+            HostBehavior::Gxianyin => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7342,6 +7356,7 @@ impl SkillBehavior for HostSkillBehavior {
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
             HostBehavior::Hxunzhi => false,
             HostBehavior::Hxunzhi2 => false,
+            HostBehavior::Gxianyin => false,
             // 冰封·封：自己已翻回正面（移除自身）
             HostBehavior::Bingfeng2 => matches!(event,
                 EventData::TurnOvered { player, .. } if *player == owner)
@@ -9474,6 +9489,25 @@ impl SkillBehavior for HostSkillBehavior {
             //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
             HostBehavior::SwdJinlin => {
                 if ctx.state.player(owner).jinlin_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 革新印（swd 批 135）：出牌阶段主动（手牌非空）
+            HostBehavior::Gxianyin => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.player(owner).hand.is_empty()
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -20605,6 +20639,120 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 革新印：选花色 → 静默弃该花色全部手牌 → 选另一花色 → 获得等量
+            HostBehavior::Gxianyin => match self.stage {
+                HostStage::Act => {
+                    let mut suits: Vec<u8> = Vec::new();
+                    for c in ctx.core.player(self.owner).hand.iter().copied() {
+                        if let Some(suit) = mbcm_suit_of(ctx, c) {
+                            if !suits.contains(&suit) {
+                                suits.push(suit);
+                            }
+                        }
+                    }
+                    if suits.is_empty() {
+                        return Flow::Done;
+                    }
+                    suits.sort_unstable();
+                    self.stage = HostStage::SelectNature;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "gxianyin_suit",
+                            options: suits.into_iter().map(ChoiceOption::Tag).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectNature => {
+                    let Some(ChoiceOption::Tag(suit)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    // 静默弃置该花色全部手牌（上游 `_triggered=null`：不触发
+                    // 失去牌类事件）
+                    let cards: Vec<CardId> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| mbcm_suit_of(ctx, *c) == Some(suit))
+                        .collect();
+                    if cards.is_empty() {
+                        return Flow::Done;
+                    }
+                    let count = cards.len();
+                    self.cards = cards.iter().map(|c| u32::from(*c)).collect();
+                    for c in cards.iter().copied() {
+                        ctx.take_hand_card(self.owner, c);
+                        ctx.to_discard(c);
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "革新印",
+                        owner: self.owner,
+                    });
+                    // 选另一花色（其余三色）
+                    let rest: Vec<u8> = (0..=3u8).filter(|s| *s != suit).collect();
+                    self.card = Some(count as CardId);
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "gxianyin_gain_suit",
+                            options: rest.into_iter().map(ChoiceOption::Tag).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Tag(suit)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let count = self.card.unwrap_or(0) as usize;
+                    // 从牌堆（不足则弃牌堆）取该花色至多 count 张入手
+                    let mut gained: Vec<CardId> = Vec::new();
+                    for src_discard in [false, true] {
+                        if gained.len() >= count {
+                            break;
+                        }
+                        let pool: Vec<CardId> = if src_discard {
+                            ctx.core.discard.clone()
+                        } else {
+                            ctx.core.deck.clone()
+                        };
+                        for c in pool {
+                            if gained.len() >= count {
+                                break;
+                            }
+                            if mbcm_suit_of(ctx, c) != Some(suit) {
+                                continue;
+                            }
+                            if src_discard {
+                                ctx.core.discard.retain(|x| *x != c);
+                            } else {
+                                ctx.core.deck.retain(|x| *x != c);
+                            }
+                            ctx.core.player_mut(self.owner).hand.push(c);
+                            gained.push(c);
+                        }
+                    }
+                    if !gained.is_empty() {
+                        ctx.log(LogEvent::CardsGiven {
+                            from: self.owner,
+                            to: self.owner,
+                            cards: gained,
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 冰封·封：翻回正面 → 移除自身
             HostBehavior::Bingfeng2 => {
                 if let Some(def) = ctx.catalog.skill_by_name(SWD_BINGFENG2_KEY) {
@@ -33715,7 +33863,9 @@ pub fn host_skill_def(
         }
         // swd 装备主动技 usable:1（潜偷 v92 补执行/御夫录 v96）：出牌
         // 阶段限一次（上游 usable:1 同口径）
-        HostBehavior::SwdShentouEquipSkill
+        // 革新印（批 135）：每回合限一次（上游 usable:1）
+        HostBehavior::Gxianyin
+        | HostBehavior::SwdShentouEquipSkill
         | HostBehavior::SwdYufuluEquipSkill
         | HostBehavior::SwdLangeguaiyiEquipSkill
         | HostBehavior::MtgYixialanRecast
