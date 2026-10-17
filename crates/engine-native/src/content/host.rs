@@ -1291,6 +1291,14 @@ pub enum HostBehavior {
     /// 改命（tag 468，`hlss_gaiming`）：锁定旗标——判定前亮牌堆顶 7 张，
     /// 选 1 作为判定结果（其余弃置，改判/天妒窗跳过）；逻辑内联于判定机。
     HlssGaiming,
+    /// 潜龙·道心值（tag 469，D5 龙血玄黄批 117，`mbqianlong`）：开局
+    /// 20 点（另有魏势力持「卫统」者 60 点）；获得牌 +5、受伤 +10×伤害、
+    /// 造成伤害 +15×伤害（上限 99）；阈值 25/50/75/99 解锁清正/酒诗/
+    /// 放逐/绝进（外部技能存在才授予）。
+    MbQianlong,
+    /// 卫统（tag 470，`mbweitong`，主公技）：开局登记「修改潜龙初始道心值」
+    /// （实际 +60 由潜龙内容按同条件判定）。
+    MbWeitong,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1601,6 +1609,8 @@ impl HostBehavior {
             HostBehavior::HlssFengqi => 466,
             HostBehavior::HlssFengqi2 => 467,
             HostBehavior::HlssGaiming => 468,
+            HostBehavior::MbQianlong => 469,
+            HostBehavior::MbWeitong => 470,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2310,6 +2320,8 @@ impl HostBehavior {
             466 => HostBehavior::HlssFengqi,
             467 => HostBehavior::HlssFengqi2,
             468 => HostBehavior::HlssGaiming,
+            469 => HostBehavior::MbQianlong,
+            470 => HostBehavior::MbWeitong,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2330,7 +2342,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 465] = [
+        pub const ALL: [HostBehavior; 467] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2796,6 +2808,8 @@ impl HostBehavior {
         HostBehavior::HlssFengqi,
         HostBehavior::HlssFengqi2,
         HostBehavior::HlssGaiming,
+        HostBehavior::MbQianlong,
+        HostBehavior::MbWeitong,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3023,6 +3037,8 @@ impl HostBehavior {
             HostBehavior::HlssFengqi => "host:hlss_fengqi",
             HostBehavior::HlssFengqi2 => "host:hlss_fengqi2",
             HostBehavior::HlssGaiming => "host:hlss_gaiming",
+            HostBehavior::MbQianlong => "host:mbqianlong",
+            HostBehavior::MbWeitong => "host:mbweitong",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3474,6 +3490,26 @@ impl HostBehavior {
             // 起风·闭 / 改命：锁定旗标（无触发时机；效果内联）
             HostBehavior::HlssFengqi2 => None,
             HostBehavior::HlssGaiming => None,
+            // 潜龙：开局首阶段（phase_number==1）+ 获得牌 + 伤害两向
+            HostBehavior::MbQianlong => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::First,
+                priority: 6,
+                optional: false,
+                extra_events: vec![
+                    EventKind::CardsDrawn,
+                    EventKind::CardsMoved,
+                    EventKind::Damage,
+                ],
+            }),
+            // 卫统：开局首阶段（登记面）
+            HostBehavior::MbWeitong => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::First,
+                priority: 10,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 隐月·判：翻面前置取消（不能被翻面；判定不生效由 kernel 内联）
             HostBehavior::HlssYueyin2 => Some(TriggerMeta {
                 event: EventKind::TurnOverBefore,
@@ -5665,6 +5701,56 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 潜龙（D5 龙血玄黄批 117）：目录技能名（道心值系统）。
+pub const HLSS_MBQIANLONG_KEY: &str = "mbqianlong";
+/// 卫统（同批）：目录技能名（主公技登记面）。
+pub const HLSS_MBWEITONG_KEY: &str = "mbweitong";
+
+/// 潜龙阈值解锁：按道心值授予清正（25）/酒诗（50）/放逐（75）/绝进（99）
+/// ——先撤销四个（上游 removeAdditionalSkill），再按阈值授予；目录缺该
+/// 技能时跳过（上游 `if(!lib.skill[s]) return` 同口径，外部包未转换时
+/// 不虚构空操作）。
+fn mbqianlong_refresh(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    const THRESHOLDS: [(&str, u8); 4] = [
+        ("mbcmqingzheng", 25),
+        ("mbcmjiushi", 50),
+        ("mbcmfangzhu", 75),
+        ("mbjuejin", 99),
+    ];
+    let marks = ctx.core.player(owner).mbqianlong_marks;
+    for (name, threshold) in THRESHOLDS {
+        let Some(def) = ctx.catalog.skill_by_name(name) else {
+            continue;
+        };
+        let granted = marks >= threshold;
+        let has = ctx.core.skills.contains_key(&(owner, def));
+        if granted && !has {
+            ctx.core.skills.insert(
+                (owner, def),
+                crate::state::SkillInstance {
+                    owner,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+            ctx.log(LogEvent::SkillToggled {
+                player: owner,
+                skill: ctx.catalog.skill_name(def),
+                enabled: true,
+            });
+        } else if !granted && has {
+            ctx.core.skills.remove(&(owner, def));
+            ctx.log(LogEvent::SkillToggled {
+                player: owner,
+                skill: ctx.catalog.skill_name(def),
+                enabled: false,
+            });
+        }
+    }
+}
+
 /// 起风·闭（同批）：目录技能名（锁定——你的牌不可被无懈）。
 pub const HLSS_FENGQI2_KEY: &str = "hlss_fengqi2";
 /// 改命（同批）：目录技能名（锁定旗标——判定逻辑内联于判定机）。
@@ -6261,6 +6347,8 @@ impl HostSkillBehavior {
             HostBehavior::HlssFengqi => (None, None),
             HostBehavior::HlssFengqi2 => (None, None),
             HostBehavior::HlssGaiming => (None, None),
+            HostBehavior::MbQianlong => (None, None),
+            HostBehavior::MbWeitong => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6561,6 +6649,60 @@ impl SkillBehavior for HostSkillBehavior {
                 if *player == owner),
             HostBehavior::HlssFengqi2 => false,
             HostBehavior::HlssGaiming => false,
+            // 潜龙：开局首阶段（原生 phase_number 在触发前已 +1，故 ==1
+            // 等价上游 game.phaseNumber == 0）/ 自己获得牌 / 自己受伤 /
+            // 自己造成伤害（点数未满 99 才计）
+            HostBehavior::MbQianlong => match event {
+                // 开局面：游戏首个阶段帧（原生准备阶段开始在建局时隐式提交，
+                // 首个阶段帧为摸牌阶段开始——登记差异：时点后移一个阶段）
+                EventData::Phase { begin: true, .. } => ctx.state.turn.phase_number == 1,
+                EventData::CardsDrawn { player, .. } => {
+                    // 开局摸牌不是上游 gain 事件（gameDraw 不触发 gainEnd）：
+                    // 首个阶段帧之前不计（登记差异）
+                    ctx.state.turn.phase_number > 0
+                        && *player == owner
+                        && ctx.state.player(owner).mbqianlong_marks < 99
+                }
+                EventData::CardsMoved { to, .. } => {
+                    ctx.state.turn.phase_number > 0
+                        && *to == owner
+                        && ctx.state.player(owner).mbqianlong_marks < 99
+                }
+                EventData::Damage(d) => {
+                    ctx.state.player(owner).mbqianlong_marks < 99
+                        && !d.prevented
+                        && d.amount > 0
+                        && (d.target == owner || d.source == Some(owner))
+                }
+                _ => false,
+            },
+            // 卫统：开局首阶段 + 自己持潜龙 + 另有魏势力持本技者
+            HostBehavior::MbWeitong => match event {
+                EventData::Phase { begin: true, .. } => {
+                    ctx.state.turn.phase_number == 1
+                        && ctx
+                            .catalog
+                            .skill_by_name(HLSS_MBQIANLONG_KEY)
+                            .map(|d| ctx.state.has_skill(owner, d))
+                            .unwrap_or(false)
+                        && ctx.state.alive_players().any(|p| {
+                            p != owner
+                                && ctx.state.player(p).general_slots.iter().any(|g| {
+                                    g.map(|g| {
+                                        ctx.catalog.general_meta(g).map(|m| m.1)
+                                            == Some(crate::catalog::Faction::Wei)
+                                    })
+                                    .unwrap_or(false)
+                                })
+                                && ctx
+                                    .catalog
+                                    .skill_by_name(HLSS_MBWEITONG_KEY)
+                                    .map(|d| ctx.state.has_skill(p, d))
+                                    .unwrap_or(false)
+                        })
+                }
+                _ => false,
+            },
             // 隐月·判：自己未被翻面时取消翻面（上游 filter !isTurnedOver）
             HostBehavior::HlssYueyin2 => matches!(event,
                 EventData::TurnOverBefore { player, .. }
@@ -19484,6 +19626,46 @@ impl crate::catalog::SkillMachine for HostMachine {
             // 起风·闭 / 改命：锁定旗标（无机器步；无懈门/判定机内联）
             HostBehavior::HlssFengqi2 => Flow::Done,
             HostBehavior::HlssGaiming => Flow::Done,
+            // 潜龙：按触发面累加道心值（上限 99），随后按阈值刷新解锁
+            HostBehavior::MbQianlong => {
+                let is_phase = matches!(
+                    ctx.res
+                        .frame(ctx.current_frame_id())
+                        .map(|f| &f.data),
+                    Some(crate::event::EventData::Phase { begin: true, .. })
+                );
+                let inc: u32 = if is_phase {
+                    // 开局面：另有魏势力持「卫统」者 → 60，否则 20
+                    let boost = ctx.core.alive_players().any(|p| {
+                        p != self.owner
+                            && ctx.core.effective_faction(ctx.catalog, p)
+                                == Some(crate::catalog::Faction::Wei)
+                            && ctx
+                                .catalog
+                                .skill_by_name(HLSS_MBWEITONG_KEY)
+                                .map(|d| ctx.core.has_skill(p, d))
+                                .unwrap_or(false)
+                    });
+                    if boost {
+                        60
+                    } else {
+                        20
+                    }
+                } else {
+                    match ctx.current_damage() {
+                        Ok(d) if d.target == self.owner => d.amount.saturating_mul(10),
+                        Ok(d) => d.amount.saturating_mul(15),
+                        Err(_) => 5,
+                    }
+                };
+                let cur = u32::from(ctx.core.player(self.owner).mbqianlong_marks);
+                let next = (cur + inc).min(99);
+                ctx.core.player_mut(self.owner).mbqianlong_marks = next as u8;
+                mbqianlong_refresh(ctx, self.owner);
+                Flow::Done
+            }
+            // 卫统：登记面（实际加成由潜龙内容按同条件判定）
+            HostBehavior::MbWeitong => Flow::Done,
             // 隐月·判：取消翻面（写回前置帧取消位）
             HostBehavior::HlssYueyin2 => {
                 let (_, cancelled) = ctx.current_turn_over_before_mut();

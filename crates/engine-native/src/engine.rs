@@ -5122,6 +5122,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         for k in &p.hlss_fengqi_used {
             push_u32(&mut h, u32::from(*k));
         }
+        // 潜龙道心值（D5 批 117，规则 v305）
+        push_u8(&mut h, p.mbqianlong_marks);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

@@ -255,6 +255,10 @@ pub struct PlayerState {
     /// 起风·已用牌种码表（T11 Boss 诸葛亮族批 116，规则 v303 起同批）：
     /// 上游 `storage.hlss_fengqi_used`（牌名字符串表）——原生存目录牌种码。
     pub hlss_fengqi_used: Vec<u16>,
+    /// 潜龙·道心值（D5 龙血玄黄规则面批 117，规则 v305）：上游
+    /// `player.countMark('mbqianlong')`，0..=99；阈值 25/50/75/99 解锁
+    /// 清正/酒诗/放逐/绝进。
+    pub mbqianlong_marks: u8,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -358,6 +362,7 @@ impl PlayerState {
             hlss_count: 0,
             hlss_damage: 0,
             hlss_fengqi_used: Vec::new(),
+            mbqianlong_marks: 0,
         }
     }
 }

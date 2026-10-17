@@ -74,7 +74,9 @@ use crate::state::{
 /// v89（2026-10-17，T11 Boss 诸葛亮族批 116）：选择项新增牌种码
 /// `ChoiceOption::Kind(u16)`（判别 5），`PlayerState` 追加起风已用牌种表
 /// `hlss_fengqi_used`，判定机追加改命候选位。v88 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 89;
+/// v90（2026-10-17，D5 龙血玄黄批 117）：`PlayerState` 尾部追加潜龙
+/// 道心值 `mbqianlong_marks`。v89 字节被版本门禁拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 90;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3320,6 +3322,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for k in &p.hlss_fengqi_used {
             w.u32(u32::from(*k));
         }
+        // 潜龙道心值（v90）
+        w.u8(p.mbqianlong_marks);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3678,6 +3682,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         for _ in 0..fengqi_len {
             hlss_fengqi_used.push(r.u32()? as u16);
         }
+        let mbqianlong_marks = r.u8()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3751,6 +3756,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             hlss_count,
             hlss_damage,
             hlss_fengqi_used,
+            mbqianlong_marks,
             off_court,
             shuiyun_count,
             wangyou3_round,

@@ -55,7 +55,8 @@
     "swd_batch_114": "2026-10-17 swd 批 114 锦鳞（tag 461/462，规则 v302/存档 v87）：150/184 映射、deferred 32、司空蔷整将闭环；14 golden 重录 + 版本回退探针，engine-native 899/0/1、Gate 1b exit 0。",
     "d5_infinite_hp": "2026-10-17 D5 前置：无限体力哨兵（装载器 Infinity → INFINITE_HP；伤害/回复/上限减门控；不濒死；手牌上限按哨兵）。engine-native 901/0/1，14 golden 零扰动。D5/T11-BOSS-ZHUGE-LIANG 仍 open。",
     "t11_hlss_115": "2026-10-17 批 115：hlss 星系统三技（禳星/隐月/隐月·判）落地，规则 v303/存档 v88；engine-native 906/0/1、14 golden 重录 + 版本回退探针。T11-BOSS-ZHUGE-LIANG 仍 open（余起风/改命与 Boss 装配）。",
-    "t11_zhugeliang_closure": "2026-10-17：T11-BOSS-ZHUGE-LIANG 关闭（无限体力 + 四技 + Boss 包装配，v304/存档 v89）。Boss 关卡流程接入归 D4；D5/庞统外部依赖仍 open。"
+    "t11_zhugeliang_closure": "2026-10-17：T11-BOSS-ZHUGE-LIANG 关闭（无限体力 + 四技 + Boss 包装配，v304/存档 v89）。Boss 关卡流程接入归 D4；D5/庞统外部依赖仍 open。",
+    "d5_longxue_117": "2026-10-17 批 117：潜龙道心值 + 卫统 + 曹髦包（规则 v305/存档 v90）；engine-native 914/0/1，14 golden 重录 + 探针。D5 仍 open（余外部手杀包四技与 ylyg*）。"
   },
   "items": [
     {
@@ -581,7 +582,7 @@
         "T11",
         "L29"
       ],
-      "notes": "2026-10-17：无限体力前置原语已落地（装载器接受 `Infinity` → `INFINITE_HP` 哨兵；伤害/失去体力/回复不改体力、不濒死、手牌上限按哨兵基数；14 golden 零扰动）——证据 docs/operations/evidence/2026-10-17-d5-infinite-hp/。余：四技 `hlss_xiangxing`/`hlss_yueyin`/`hlss_fengqi`/`hlss_gaiming`（liuli `character/extra.js`）+ Boss 装配 + `mbqianlong`/`_CMeffects`。"
+      "notes": "2026-10-17：无限体力前置（哨兵）已落；批 115/116 完成 Boss 诸葛亮四技与装配（T11-BOSS-ZHUGE-LIANG 关闭）；批 117 完成龙血玄黄规则面 `mbqianlong`（道心值 + 阈值解锁 + 曹髦包 upstream-liuli/longxue@1.0.0，v305/存档 v90）。余：`_CMeffects`（纯显示面，登记差异）、四个 `mbcm*`（liuli 手杀包外部依赖）、`ylyg*`（归 T11-BOSS-PANGTONG-EXTERNAL）。"
     },
     {
       "id": "T15-3-LEGACY-PORT",
