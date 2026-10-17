@@ -1016,12 +1016,17 @@ type ScenarioFn = fn() -> [u8; 32];
 /// `STANDARD_RULESET_VERSION` 从 316 改回 315，新代码不动，14 场全 mismatch）
 /// 证明位移含规则版本字段。证据见
 /// docs/operations/evidence/2026-10-17-t12-swd-deferred-b137/。
+/// 2026-10-17 重录依据（v316 不变，swd 李香龙批 141）：新增事件种
+/// `ShaDodged`（杀被闪避）——**仅 `sha_dodge_then_damage` 一场位移**
+/// （该场景包含闪避路径，事件日志新增该事件；其余 13 场零位移，证明状态
+/// 语义未变、位移只在日志面）。规则/存档版本未变（无字段变化）。
+/// 证据见 docs/operations/evidence/2026-10-17-t12-swd-deferred-b141/。
 const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
     (
         "sha_dodge_then_damage",
         scenario_sha_dodge_then_damage,
         &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
-        "e6dc3757c348a626ce0057b13618f800421e3e6f4d34fbbab10a7d284c266a1b",
+        "1524674f71d499ea2da992160b764d08eaf5524ebe7a10c234d2e868fbfd0930",
     ),
     (
         "death_terminal_single",

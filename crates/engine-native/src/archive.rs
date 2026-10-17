@@ -376,6 +376,7 @@ fn enc_event_kind(w: &mut W, v: &EventKind) {
         LoseHp => 18,
         DyingSaved => 19,
         CardsLost => 20,
+        ShaDodged => 21,
     };
     w.u8(t);
 }
@@ -404,6 +405,7 @@ fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
         18 => LoseHp,
         19 => DyingSaved,
         20 => CardsLost,
+        21 => ShaDodged,
         t => return Err(ArchiveError::BadTag("event_kind", t)),
     })
 }
@@ -670,6 +672,17 @@ fn enc_event_data(w: &mut W, v: &EventData) {
                 });
             }
         }
+        EventData::ShaDodged {
+            card,
+            source,
+            target,
+        } => {
+            // swd 批 141（判别 19，表尾追加）
+            w.u8(19);
+            w.u32(*card);
+            enc_pid(w, source);
+            enc_pid(w, target);
+        }
         EventData::DyingSaved { player, source } => {
             // 濒死救回（tag 17，表尾追加；焚逝挂点规则 v157）
             w.u8(17);
@@ -839,6 +852,16 @@ fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
                 player,
                 cards,
                 origins,
+            }
+        }
+        19 => {
+            let card = r.u32()?;
+            let source = dec_pid(r)?;
+            let target = dec_pid(r)?;
+            EventData::ShaDodged {
+                card,
+                source,
+                target,
             }
         }
         t => return Err(ArchiveError::BadTag("event_data", t)),

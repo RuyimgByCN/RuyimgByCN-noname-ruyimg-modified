@@ -6361,6 +6361,17 @@ fn push_event_data(h: &mut Hasher, data: &EventData) {
             push_u8(h, *player);
             push_u32(h, *amount);
         }
+        EventData::ShaDodged {
+            card,
+            source,
+            target,
+        } => {
+            // swd 批 141（判别 16）
+            push_u8(h, 16);
+            push_u32(h, *card);
+            push_u8(h, *source);
+            push_u8(h, *target);
+        }
         EventData::DyingSaved { player, source } => {
             push_u8(h, 23);
             push_u8(h, *player);

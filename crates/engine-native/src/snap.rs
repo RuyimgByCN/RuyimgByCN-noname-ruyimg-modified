@@ -856,6 +856,15 @@ fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotE
             check_pids(&d.redirect_chain, b)?;
             check_opt_card(d.card, b)?;
         }
+        EventData::ShaDodged {
+            card,
+            source,
+            target,
+        } => {
+            check_card(*card, b)?;
+            check_pid(*source, b)?;
+            check_pid(*target, b)?;
+        }
         EventData::CardsLost {
             player,
             cards,

@@ -7707,6 +7707,13 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             return self.emit_sha_damage(ctx);
         }
+        // 杀被闪避（swd 批 141，规则 v316 同批）：发射 ShaDodged（上游
+        // shaMiss 触发窗；青龙/贯石斧等窗口之后——登记差异：窗口次序）
+        ctx.emit(EventData::ShaDodged {
+            card: self.card,
+            source: self.source,
+            target: self.target,
+        });
         // 目标已死等无伤害路径：推进队列/弃置杀本体。
         return self.advance_target(ctx);
     }

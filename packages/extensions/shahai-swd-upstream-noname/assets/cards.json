@@ -1190,7 +1190,7 @@
     },
     {
      "name": "lxianglong",
-     "mapping": null
+     "mapping": "host:lxianglong"
     }
    ]
   },

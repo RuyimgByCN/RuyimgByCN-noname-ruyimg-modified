@@ -35,6 +35,9 @@ pub enum EventKind {
     /// 发射（上游 `loseEnd` 触发窗；装备替换过程不发——上游 `equiping`
     /// 期过滤同口径）。
     CardsLost,
+    /// 杀被闪避（swd 批 141，规则 v316 同批）：目标成功闪避【杀】时发射
+    /// （上游 `shaMiss` 触发窗；用于李香龙等「杀被闪后反击」类技能）。
+    ShaDodged,
 }
 
 /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
@@ -167,6 +170,13 @@ pub enum EventData {
         cards: Vec<CardId>,
         origins: Vec<LostOrigin>,
     },
+    /// 杀被闪避（swd 批 141）：`card` = 被闪的【杀】，`source` = 使用者，
+    /// `target` = 闪避者（上游 `shaMiss` 的 trigger.card/player）。
+    ShaDodged {
+        card: CardId,
+        source: PlayerId,
+        target: PlayerId,
+    },
     /// 失去体力（逐技对照批三 v77）：直接扣减体力——不经护甲、不触发
     /// 伤害类窗口/铁索/伤害来源技；体力 ≤0 进入濒死（上游 loseHp）。
     LoseHp {
@@ -199,6 +209,7 @@ impl EventData {
             EventData::Linked { .. } => EventKind::Linked,
             EventData::CardsDiscarded { .. } => EventKind::CardsDiscarded,
             EventData::CardsLost { .. } => EventKind::CardsLost,
+            EventData::ShaDodged { .. } => EventKind::ShaDodged,
             EventData::TurnOverBefore { .. } => EventKind::TurnOverBefore,
             EventData::TurnOvered { .. } => EventKind::TurnOvered,
             EventData::LoseHp { .. } => EventKind::LoseHp,
