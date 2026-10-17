@@ -16,6 +16,8 @@ use std::path::PathBuf;
 enum Policy {
     /// 现状：BoundedPlanner 启发式规划（64 节点/50ms）。
     Planner,
+    /// 更强候选：两层搜索（512 节点/50ms）——每个候选后再模拟对手最优应对。
+    TwoPly,
     /// 基线：nodes=0——不做任何规划，动作退化为 NextPhase 兜底。
     NextPhaseOnly,
 }
@@ -24,6 +26,7 @@ impl Policy {
     fn label(self) -> &'static str {
         match self {
             Policy::Planner => "planner-heuristic",
+            Policy::TwoPly => "two-ply-512",
             Policy::NextPhaseOnly => "nextphase-baseline",
         }
     }
@@ -31,7 +34,15 @@ impl Policy {
     fn planner_nodes(self) -> usize {
         match self {
             Policy::Planner => 64,
+            Policy::TwoPly => 512,
             Policy::NextPhaseOnly => 0,
+        }
+    }
+
+    fn lookahead(self) -> u8 {
+        match self {
+            Policy::TwoPly => 2,
+            _ => 1,
         }
     }
 }
@@ -47,7 +58,7 @@ fn main() {
     let content = NativeContent::open(packages_root, store).expect("open content");
     let _ = content.import();
 
-    for policy in [Policy::Planner, Policy::NextPhaseOnly] {
+    for policy in [Policy::Planner, Policy::TwoPly, Policy::NextPhaseOnly] {
         let mut finished = 0u64;
         let mut total_steps = 0u64;
         let mut total_ms = 0u128;
@@ -62,6 +73,7 @@ fn main() {
                 seats: 4,
                 max_steps,
                 planner_nodes: policy.planner_nodes(),
+                planner_lookahead: policy.lookahead(),
             };
             let summary = native::create_native_game(&content, &req).expect("驱动");
             let ms = t0.elapsed().as_millis();

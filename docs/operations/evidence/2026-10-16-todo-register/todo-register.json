@@ -699,7 +699,8 @@
    "tags": [
     "T13",
     "N10"
-   ]
+   ],
+   "notes": "2026-10-17：两层搜索候选（BoundedPlanner.with_lookahead(2) + policy_head2head）已交付并评估；标准对称头对头未见质量提升（座位0胜率 2% vs 2%）——保持 open，下一步需牌值/身份启发式。证据 docs/operations/evidence/2026-10-17-t13-ai-two-ply/README.md"
   },
   {
    "id": "T13-PRODUCT-CLIENT",

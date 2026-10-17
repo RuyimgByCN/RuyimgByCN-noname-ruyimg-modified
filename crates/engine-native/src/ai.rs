@@ -22,6 +22,9 @@ pub struct BoundedPlanner {
     pub deadline_ms: Option<u64>,
     /// 取消标志（节点边界检查）。
     pub cancel: std::sync::Arc<AtomicBool>,
+    /// 搜索深度：1 = 单层启发式（现状）；2 = 两层（我方候选后再模拟
+    /// 对手最优应对）。T13 更强候选。
+    pub lookahead_depth: u8,
 }
 
 impl BoundedPlanner {
@@ -30,11 +33,18 @@ impl BoundedPlanner {
             node_budget,
             deadline_ms: None,
             cancel: std::sync::Arc::new(AtomicBool::new(false)),
+            lookahead_depth: 1,
         }
     }
 
     pub fn with_deadline_ms(mut self, ms: u64) -> Self {
         self.deadline_ms = Some(ms);
+        self
+    }
+
+    /// 两层搜索（T13 更强候选）：每个候选后再模拟对手最优应对。
+    pub fn with_lookahead(mut self, depth: u8) -> Self {
+        self.lookahead_depth = depth.max(1);
         self
     }
 
@@ -156,6 +166,60 @@ impl Engine {
     }
 }
 
+/// 两层搜索中对手应对的候选评估上限（防组合爆炸）。
+const MAX_LOOKAHEAD_CANDIDATES: usize = 8;
+
+/// 候选动作枚举（只依赖只读投影）：开放询问的合法回退（每个单选项 ∪
+/// `min≥2` 时按序取 min 的集合 ∪ `min=0` 的空应答）或出牌阶段的杀，
+/// 末尾附 `NextPhase` 兼底。单层与两层搜索共用。
+fn enumerate_candidates(sim: &Engine, seat: u8) -> Vec<GameAction> {
+    let input = sim.ai_session(seat).input();
+    let mut candidates: Vec<GameAction> = Vec::new();
+    if let Some(ChoiceView::Own {
+        id,
+        options,
+        min,
+        allow_cancel,
+        ..
+    }) = input.choice
+    {
+        for sel in options.iter().take(MAX_SINGLE_CANDIDATES).copied() {
+            candidates.push(GameAction::Answer {
+                choice_id: id,
+                selection: vec![sel],
+            });
+        }
+        if min >= 2 {
+            let sel: Vec<ChoiceOption> = options.iter().take(min).copied().collect();
+            candidates.push(GameAction::Answer {
+                choice_id: id,
+                selection: sel,
+            });
+        } else if min == 0 && allow_cancel && !options.is_empty() {
+            candidates.push(GameAction::Answer {
+                choice_id: id,
+                selection: vec![],
+            });
+        }
+    } else if input.view.turn == seat && input.view.phase == crate::event::Phase::Play {
+        for (card, kind) in &input.own_hand_kinds {
+            if *kind == CardKind::Sha {
+                let n = input.view.players.len();
+                for t in 0..n as u8 {
+                    if t != seat && input.view.players[t as usize].alive {
+                        candidates.push(GameAction::PlayCard {
+                            card: *card,
+                            targets: vec![t],
+                        });
+                    }
+                }
+            }
+        }
+    }
+    candidates.push(GameAction::NextPhase);
+    candidates
+}
+
 impl Engine {
     /// 有界规划：在克隆引擎上模拟候选动作（计算与规则推进隔离），
     /// 以启发式评分（敌方体力下降 − 己方体力下降）选最优动作。
@@ -185,61 +249,7 @@ impl Engine {
             .sum();
 
         // 候选生成（只依赖只读投影）
-        let input = sim.ai_session(seat).input();
-        let mut candidates: Vec<GameAction> = Vec::new();
-        if let Some(ChoiceView::Own {
-            id,
-            options,
-            min,
-            max,
-            allow_cancel,
-            ..
-        }) = input.choice
-        {
-            // 合法回退枚举（ADR 0776 修订）：候选 = 「每个单选项」∪
-            // 「min≥2 时按序取 min 的合法集合」∪「min=0 时的空应答」。
-            // 旧实现 `options.take(max)` 在 min=1/max=1 时只评估首选项
-            //（如出闪询问的 Pass），漏掉合法闪——已修。
-            let _max = max.max(min);
-            let n_options = options.len();
-            // 单选项候选（询问选项数 ≠ 应答数量，不受 max 裁剪；
-            // 候选总量由节点预算与评估循环约束）
-            for sel in options.iter().take(MAX_SINGLE_CANDIDATES).copied() {
-                candidates.push(GameAction::Answer {
-                    choice_id: id,
-                    selection: vec![sel],
-                });
-            }
-            if min >= 2 {
-                let sel: Vec<ChoiceOption> =
-                    options.iter().take(min).copied().collect();
-                candidates.push(GameAction::Answer { choice_id: id, selection: sel });
-            } else if min == 0 && allow_cancel && !options.is_empty() {
-                // 允许放弃：空应答 = 不发动（弃权也是合法回退）
-                candidates.push(GameAction::Answer {
-                    choice_id: id,
-                    selection: vec![],
-                });
-            }
-            let _ = n_options;
-        } else if input.view.turn == seat && input.view.phase == crate::event::Phase::Play {
-            for (card, kind) in &input.own_hand_kinds {
-                if *kind == CardKind::Sha {
-                    let n = input.view.players.len();
-                    for t in 0..n as u8 {
-                        if t != seat
-                            && input.view.players[t as usize].alive
-                        {
-                            candidates.push(GameAction::PlayCard {
-                                card: *card,
-                                targets: vec![t],
-                            });
-                        }
-                    }
-                }
-            }
-        }
-        candidates.push(GameAction::NextPhase);
+        let candidates = enumerate_candidates(&sim, seat);
 
         let mut nodes = 0usize;
         let mut best: Option<(i64, GameAction)> = None;
@@ -291,7 +301,57 @@ impl Engine {
                 .filter(|p| p.alive && p.seat != seat)
                 .map(|p| p.hp as i64)
                 .sum();
-            let score = (enemy_base - enemy_after) - (my_base - my_after);
+            let mut score = (enemy_base - enemy_after) - (my_base - my_after);
+            // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
+            //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
+            if planner.lookahead_depth >= 2 && trial.outcome().is_none() {
+                let opp = match trial.open_choice() {
+                    Some(open) => open.observer,
+                    None => trial.turn().current,
+                };
+                if opp != seat {
+                    let opp_candidates = enumerate_candidates(&trial, opp);
+                    let mut worst: Option<i64> = None;
+                    for opp_action in opp_candidates.into_iter().take(MAX_LOOKAHEAD_CANDIDATES) {
+                        if planner.cancelled() || nodes >= planner.node_budget {
+                            budget_exhausted = true;
+                            break;
+                        }
+                        if let (Some(t), Some(ms)) = (started, planner.deadline_ms) {
+                            if t.elapsed() > Duration::from_millis(ms) {
+                                timed_out = true;
+                                break;
+                            }
+                        }
+                        nodes += 1;
+                        let mut t2 = trial.clone();
+                        let o = t2.submit(GameCommand {
+                            actor: opp,
+                            expected_revision: t2.revision(),
+                            dedup_id: t2.last_dedup.saturating_add(1),
+                            action: opp_action,
+                        });
+                        if matches!(o, CommandOutcome::Rejected(_)) {
+                            continue;
+                        }
+                        let v = t2.ai_session(seat).view();
+                        let my = hp_of(&v, seat);
+                        let enemy: i64 = v
+                            .players
+                            .iter()
+                            .filter(|p| p.alive && p.seat != seat)
+                            .map(|p| p.hp as i64)
+                            .sum();
+                        let s = (enemy_base - enemy) - (my_base - my);
+                        if worst.map(|w| s < w).unwrap_or(true) {
+                            worst = Some(s);
+                        }
+                    }
+                    if let Some(w) = worst {
+                        score = w;
+                    }
+                }
+            }
             if best.as_ref().map(|(s, _)| score > *s).unwrap_or(true) {
                 best = Some((score, action.clone()));
             }

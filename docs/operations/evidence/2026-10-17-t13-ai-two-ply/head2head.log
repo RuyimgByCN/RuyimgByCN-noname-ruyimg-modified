@@ -1,0 +1,2 @@
+arm=control-all-shallow seeds=40 seat0_wins=1 seat0_win_rate_pct=2 avg_steps=229 avg_seat0_hp=0
+arm=seat0-two-ply seeds=40 seat0_wins=1 seat0_win_rate_pct=2 avg_steps=228 avg_seat0_hp=0

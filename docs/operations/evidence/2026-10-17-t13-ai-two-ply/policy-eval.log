@@ -1,0 +1,15 @@
+policy=planner-heuristic seed=8100 finished=true steps=199 elapsed_ms=7 winner=Some("Player(3)") stalled=false
+policy=planner-heuristic seed=8101 finished=true steps=152 elapsed_ms=4 winner=Some("Player(3)") stalled=false
+policy=planner-heuristic seed=8102 finished=true steps=244 elapsed_ms=7 winner=Some("Player(3)") stalled=false
+policy=planner-heuristic seed=8103 finished=true steps=392 elapsed_ms=14 winner=Some("Player(3)") stalled=false
+policy=planner-heuristic SUMMARY runs=4 finished=4 finish_rate_pct=100 avg_steps=246 avg_ms=8 stalled=0 winner_hist={"Player(3)": 4}
+policy=two-ply-512 seed=8100 finished=true steps=198 elapsed_ms=6 winner=Some("Player(3)") stalled=false
+policy=two-ply-512 seed=8101 finished=true steps=225 elapsed_ms=7 winner=Some("Player(3)") stalled=false
+policy=two-ply-512 seed=8102 finished=true steps=256 elapsed_ms=9 winner=Some("Player(1)") stalled=false
+policy=two-ply-512 seed=8103 finished=true steps=376 elapsed_ms=14 winner=Some("Player(2)") stalled=false
+policy=two-ply-512 SUMMARY runs=4 finished=4 finish_rate_pct=100 avg_steps=263 avg_ms=9 stalled=0 winner_hist={"Player(1)": 1, "Player(2)": 1, "Player(3)": 2}
+policy=nextphase-baseline seed=8100 finished=false steps=67 elapsed_ms=0 winner=None stalled=true
+policy=nextphase-baseline seed=8101 finished=false steps=67 elapsed_ms=0 winner=None stalled=true
+policy=nextphase-baseline seed=8102 finished=false steps=67 elapsed_ms=0 winner=None stalled=true
+policy=nextphase-baseline seed=8103 finished=false steps=67 elapsed_ms=0 winner=None stalled=true
+policy=nextphase-baseline SUMMARY runs=4 finished=0 finish_rate_pct=0 avg_steps=67 avg_ms=0 stalled=4 winner_hist={}

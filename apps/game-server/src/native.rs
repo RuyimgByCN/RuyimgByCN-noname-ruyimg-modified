@@ -169,10 +169,17 @@ pub struct NativeGameRequest {
     /// NextPhase 兜底；默认 64=现状）。
     #[serde(default = "default_planner_nodes")]
     pub planner_nodes: usize,
+    /// 搜索深度（T13 更强候选：1 = 单层启发式默认；2 = 两层）。
+    #[serde(default = "default_planner_lookahead")]
+    pub planner_lookahead: u8,
 }
 
 fn default_planner_nodes() -> usize {
     64
+}
+
+fn default_planner_lookahead() -> u8 {
+    1
 }
 
 fn default_max_steps() -> u64 {
@@ -239,7 +246,9 @@ pub fn create_native_game(
     let mut since_progress = 0u64;
     let mut stalled = false;
     if req.max_steps > 0 {
-        let planner = BoundedPlanner::new(req.planner_nodes).with_deadline_ms(50);
+        let planner = BoundedPlanner::new(req.planner_nodes)
+            .with_deadline_ms(50)
+            .with_lookahead(req.planner_lookahead);
         while e.outcome().is_none() && steps < req.max_steps {
             let seat = match e.open_choice() {
                 Some(open) => open.observer,

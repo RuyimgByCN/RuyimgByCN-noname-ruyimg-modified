@@ -347,3 +347,29 @@ fn plan_enumerates_confirm_and_cancel_fallbacks() {
         other => panic!("确认候选缺失: {other:?}"),
     }
 }
+
+/// T13 更强候选：两层搜索（`with_lookahead(2)`）确定性、受节点预算约束、
+/// 且计划可应用；默认单层行为不变（深度 1）。
+#[test]
+fn two_ply_lookahead_deterministic_and_bounded() {
+    let mut e = play_ready_with_sha(9301, 4);
+    let deep = engine_native::ai::BoundedPlanner::new(128).with_lookahead(2);
+    let p1 = e.plan_action(0, &deep);
+    let p2 = e.plan_action(0, &deep);
+    assert_eq!(format!("{:?}", p1.action), format!("{:?}", p2.action), "两层搜索应确定性");
+    assert!(p1.nodes_used <= 128, "节点预算受约束（used={}）", p1.nodes_used);
+    let out = e.apply_plan(&p1).expect("apply");
+    assert!(
+        !matches!(out, CommandOutcome::Rejected(_)),
+        "两层计划应可应用: {out:?}"
+    );
+
+    // 默认深度 1：不改变既有单层行为（确定性 + 可应用）。
+    let shallow = engine_native::ai::BoundedPlanner::new(128);
+    let mut e2 = play_ready_with_sha(9301, 4);
+    let s1 = e2.plan_action(0, &shallow);
+    let s2 = e2.plan_action(0, &shallow);
+    assert_eq!(format!("{:?}", s1.action), format!("{:?}", s2.action), "单层搜索应确定性");
+    let out = e2.apply_plan(&s1).expect("apply");
+    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
+}
