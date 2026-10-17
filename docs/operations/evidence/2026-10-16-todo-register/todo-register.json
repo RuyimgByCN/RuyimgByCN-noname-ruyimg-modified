@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 40,
-  "open_count": 49,
+  "resolved_count": 41,
+  "open_count": 48,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -532,7 +532,7 @@
     "14 golden 按 AGENTS.md 查明原因后重录或证明无位移",
     "命令/事件/随机/恢复四轨对照证据（投影后语义）"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "rules-auditor",
    "tags": [
@@ -542,15 +542,12 @@
    "notes": "可切片关闭；完成判定见 t11-open-rows 专节夹具 1–3（及 4–5 条件）",
    "ambiguous": false,
    "resolution": {
-    "date": "2026-10-16",
-    "kind": "keep_open",
-    "conclusion": "长期横切但可切片；t11-open-rows 已给出最小夹具集与完成判定",
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "扩面到 Identity/Versus/Boss 三模式：重放线逐命令比哈希+全量日志（哈希含 rng.state 与牌堆⇒RNG 序一致），恢复线在每个命令点恢复后跑完终态一致。",
     "evidence": [
-     "docs/operations/evidence/2026-10-16-t11-open-rows/README.md",
-     "docs/adr/0727-native-n06-replay-restore-per-command-parity.md"
-    ],
-    "disposition": "保持 open；不再标 ambiguous",
-    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+     "docs/operations/evidence/2026-10-17-t11-event-rng-restore-parity/README.md"
+    ]
    }
   },
   {

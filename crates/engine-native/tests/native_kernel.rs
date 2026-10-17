@@ -11732,6 +11732,68 @@ fn replay_and_restore_per_command_parity() {
     assert_eq!(r.state_hash(), *hashes.last().unwrap(), "恢复线终态与基准一致");
 }
 
+/// 非 Prototype 模式的逐命令重放/恢复对照（T11-EVENT-RNG-RESTORE-PARITY）。
+/// 同一确定性脚本在基准线/重放线逐命令比对状态哈希与全量日志；恢复线在
+/// **每一个命令点** save→restore 后跑完剩余脚本，终态哈希须与基准一致。
+/// `canonical_hash` 含 `rng.state()` 与牌堆，故哈希一致即随机流消费序一致。
+fn non_prototype_script_parity(build: impl Fn() -> Engine, label: &str) {
+    let mut base = build();
+    let mut script: Vec<GameCommand> = Vec::new();
+    let mut hashes: Vec<[u8; 32]> = vec![base.state_hash()];
+    let mut logs: Vec<Vec<LogEvent>> = vec![Vec::new()];
+    while script.len() < 80 && base.outcome().is_none() {
+        let cmd = next_script_command(&mut base);
+        let _ = base.submit(cmd.clone());
+        script.push(cmd);
+        hashes.push(base.state_hash());
+        logs.push(base.log().to_vec());
+    }
+    assert!(script.len() >= 20, "{label} 脚本应有足够命令量");
+    let terminal = *hashes.last().unwrap();
+
+    // 重放线：同脚本从零重跑，逐命令比对哈希与全量日志。
+    let mut rep = build();
+    for (i, cmd) in script.iter().enumerate() {
+        let _ = rep.submit(cmd.clone());
+        assert_eq!(rep.state_hash(), hashes[i + 1], "{label} 重放第 {i} 条命令后哈希不一致");
+        assert_eq!(rep.log(), &logs[i + 1][..], "{label} 重放第 {i} 条命令后日志不一致");
+    }
+
+    // 恢复线：每一个命令点恢复后跑完剩余脚本，终态须一致。
+    for k in 1..script.len() {
+        let mut half = build();
+        for cmd in &script[..k] {
+            let _ = half.submit(cmd.clone());
+        }
+        assert_eq!(half.state_hash(), hashes[k], "{label} 第 {k} 点基线不一致");
+        let snap = half.save();
+        let mut r = Engine::restore(&snap).expect("restore");
+        assert_eq!(r.state_hash(), hashes[k], "{label} 第 {k} 点恢复态不一致");
+        for cmd in &script[k..] {
+            let _ = r.submit(cmd.clone());
+        }
+        assert_eq!(
+            r.state_hash(), terminal,
+            "{label} 自第 {k} 点恢复后终态与基准不一致"
+        );
+    }
+}
+
+/// T11 横切：身份 5 人局、对决 2v2、Boss 关卡的逐命令重放/恢复一致性
+/// （三模式共享非 Prototype 路径；RNG/牌堆经哈希覆盖）。
+#[test]
+fn identity_versus_boss_replay_restore_parity() {
+    non_prototype_script_parity(|| Engine::new_identity(909, 5), "Identity5p");
+    non_prototype_script_parity(
+        || Engine::new_versus(911, [vec![0, 1], vec![2, 3]]),
+        "Versus2v2",
+    );
+    non_prototype_script_parity(
+        || Engine::new_boss_stage(913, 4, 1, 3, 6, 4, 0),
+        "BossStage",
+    );
+}
+
 // ---------------------------------------------------------------------------
 // N02：判定中死亡清队列专用回归（ADR 0728）
 // ---------------------------------------------------------------------------

@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running tests/native_kernel.rs (target/debug/deps/native_kernel-a5e2b4363d607405)
+
+running 2 tests
+test replay_and_restore_per_command_parity ... ok
+test identity_versus_boss_replay_restore_parity ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 339 filtered out; finished in 1.40s
+
