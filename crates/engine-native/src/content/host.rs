@@ -1243,6 +1243,11 @@ pub enum HostBehavior {
     SwdJuxi,
     /// 聚悉·计数（tag 452）：非当前回合角色弃牌后计数 +1。
     SwdJuxiCount,
+    /// 破舟（tag 453，deferred 消解批 刘承宣）：受伤后计数累加伤害值。
+    SwdPozhou,
+    /// 破舟·封印（tag 454）：出牌阶段消耗 1 计数，封印一名其他角色（全部
+    /// 技能禁用至其下一阶段开始）。
+    SwdPozhou2,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1537,6 +1542,8 @@ impl HostBehavior {
             HostBehavior::SwdDaixing3 => 450,
             HostBehavior::SwdJuxi => 451,
             HostBehavior::SwdJuxiCount => 452,
+            HostBehavior::SwdPozhou => 453,
+            HostBehavior::SwdPozhou2 => 454,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2230,6 +2237,8 @@ impl HostBehavior {
             450 => HostBehavior::SwdDaixing3,
             451 => HostBehavior::SwdJuxi,
             452 => HostBehavior::SwdJuxiCount,
+            453 => HostBehavior::SwdPozhou,
+            454 => HostBehavior::SwdPozhou2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2250,7 +2259,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 449] = [
+        pub const ALL: [HostBehavior; 451] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2700,6 +2709,8 @@ impl HostBehavior {
         HostBehavior::SwdDaixing3,
         HostBehavior::SwdJuxi,
         HostBehavior::SwdJuxiCount,
+        HostBehavior::SwdPozhou,
+        HostBehavior::SwdPozhou2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2911,6 +2922,8 @@ impl HostBehavior {
             HostBehavior::SwdDaixing3 => "host:daixing3",
             HostBehavior::SwdJuxi => "host:juxi",
             HostBehavior::SwdJuxiCount => "host:juxi_count",
+            HostBehavior::SwdPozhou => "host:pozhou",
+            HostBehavior::SwdPozhou2 => "host:pozhou2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3292,6 +3305,16 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 破舟：自己受伤后
+            HostBehavior::SwdPozhou => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 破舟·封印：主动技（无触发时机）
+            HostBehavior::SwdPozhou2 => None,
             HostBehavior::SwdShehun => None,
             HostBehavior::SwdNlianji => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
@@ -5928,6 +5951,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdDaixing3 => (None, None),
             HostBehavior::SwdJuxi => (None, None),
             HostBehavior::SwdJuxiCount => (None, None),
+            HostBehavior::SwdPozhou => (None, None),
+            HostBehavior::SwdPozhou2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6187,6 +6212,10 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdJuxiCount => matches!(event,
                 EventData::CardsDiscarded { player, .. }
                 if *player != ctx.state.turn.current),
+            // 破舟：自己受伤后
+            HostBehavior::SwdPozhou => matches!(event,
+                EventData::Damage(d) if d.target == owner && !d.prevented),
+            HostBehavior::SwdPozhou2 => false,
             HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
@@ -8079,6 +8108,33 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdJuxi => {
                 let alive = ctx.state.alive_players().count() as u8;
                 if ctx.state.player(owner).juxi_count < alive || alive == 0 {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 破舟·封印（deferred 消解批）：计数 >0 且存在未封印的其他角色
+            HostBehavior::SwdPozhou2 => {
+                let has_target = ctx.state.alive_players().any(|p| {
+                    if p == owner {
+                        return false;
+                    }
+                    let sealed = ctx
+                        .catalog
+                        .skill_by_name(SWD_FENGYIN_STATE_KEY)
+                        .map(|d| ctx.state.has_skill(p, d))
+                        .unwrap_or(false);
+                    !sealed
+                });
+                if ctx.state.player(owner).pozhou_count == 0 || !has_target {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -18480,6 +18536,83 @@ impl crate::catalog::SkillMachine for HostMachine {
                     ctx.core.player(self.owner).juxi_count.saturating_add(1);
                 Flow::Done
             }
+            // 破舟：受伤后计数累加伤害值
+            HostBehavior::SwdPozhou => {
+                let dmg = ctx.current_damage_mut().amount as u8;
+                ctx.core.player_mut(self.owner).pozhou_count =
+                    ctx.core.player(self.owner).pozhou_count.saturating_add(dmg);
+                Flow::Done
+            }
+            // 破舟·封印：消耗 1 计数，封印一名其他角色（全部技能禁用至其
+            // 下一阶段开始；登记差异：上游至其下一回合结束）
+            HostBehavior::SwdPozhou2 => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            if *p == self.owner {
+                                return false;
+                            }
+                            let sealed = ctx
+                                .catalog
+                                .skill_by_name(SWD_FENGYIN_STATE_KEY)
+                                .map(|d| ctx.core.has_skill(*p, d))
+                                .unwrap_or(false);
+                            !sealed
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "pozhou_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let cur = ctx.core.player(self.owner).pozhou_count;
+                    ctx.core.player_mut(self.owner).pozhou_count = cur.saturating_sub(1);
+                    if let Some(fdef) = ctx.catalog.skill_by_name(SWD_FENGYIN_STATE_KEY) {
+                        let keys: Vec<(PlayerId, crate::ids::SkillDefId)> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .map(|((p, d), _)| (*p, *d))
+                            .filter(|(p, d)| *p == t && *d != fdef)
+                            .collect();
+                        for k in keys {
+                            if let Some(inst) = ctx.core.skills.get_mut(&k) {
+                                inst.enabled = false;
+                            }
+                        }
+                        ctx.core.skills.insert(
+                            (t, fdef),
+                            crate::state::SkillInstance {
+                                owner: t,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 0,
+                            },
+                        );
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 聚悉：扣存活数并选一名角色——已受伤则自选受伤/回复，否则受伤
             HostBehavior::SwdJuxi => match self.stage {
                 HostStage::Act => {
@@ -30310,7 +30443,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdToudan
         | HostBehavior::SwdNlianji
         | HostBehavior::SwdShehun
-        | HostBehavior::SwdJuxi => {
+        | HostBehavior::SwdJuxi
+        | HostBehavior::SwdPozhou2 => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

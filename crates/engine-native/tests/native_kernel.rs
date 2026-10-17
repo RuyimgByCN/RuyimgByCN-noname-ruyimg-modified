@@ -18865,15 +18865,15 @@ fn d4_boss_b0_archive_format_v79_rejects_v78_without_migration() {
         decode_archive, encode_archive, ArchiveError, ARCHIVE_FORMAT_VERSION, ARCHIVE_MAGIC,
     };
 
-    assert_eq!(ARCHIVE_FORMAT_VERSION, 83);
+    assert_eq!(ARCHIVE_FORMAT_VERSION, 84);
     let e = Engine::new_boss(29102, 3, 0, 0);
     let mut bytes = encode_archive(&e.save());
-    // 伪造头格式版本 81（载荷仍为 v83 布局）——门禁应拒收。
-    bytes[4..6].copy_from_slice(&81u16.to_le_bytes());
+    // 伪造头格式版本 82（载荷仍为 v84 布局）——门禁应拒收。
+    bytes[4..6].copy_from_slice(&82u16.to_le_bytes());
     assert_eq!(&bytes[0..4], ARCHIVE_MAGIC);
     match decode_archive(&bytes) {
-        Err(ArchiveError::UnsupportedFormatVersion(81)) => {}
-        other => panic!("期望拒收 v81，得到 {other:?}"),
+        Err(ArchiveError::UnsupportedFormatVersion(82)) => {}
+        other => panic!("期望拒收 v82，得到 {other:?}"),
     }
 }
 

@@ -154,6 +154,9 @@ pub struct PlayerState {
     /// 聚悉计数（swd 小黄龙，规则 v298）：非当前回合角色弃牌累计；
     /// 达存活数时可发动聚悉（扣存活数）令目标受伤或回复。
     pub juxi_count: u8,
+    /// 破舟计数（swd 刘承宣，规则 v299）：受伤累计；出牌阶段可消耗 1
+    /// 封印一名其他角色（全部技能禁用至其下一阶段开始）。
+    pub pozhou_count: u8,
     /// 死亡拦截标记（规则 v171 死亡取消型基建；上游 dieBefore
     /// trigger.cancel 族——DeathMachine 直读跳过死亡执行）。
     pub death_cancelled: bool,
@@ -288,6 +291,7 @@ impl PlayerState {
             hyunshen_count: 0,
             daixing_count: 0,
             juxi_count: 0,
+            pozhou_count: 0,
             death_cancelled: false,
             shiying_used: false,
             huahu_used: false,

@@ -1730,7 +1730,7 @@
    "skills": [
     {
      "name": "pozhou",
-     "mapping": null
+     "mapping": "host:pozhou"
     },
     {
      "name": "huajian",
@@ -1739,6 +1739,10 @@
     {
      "name": "xuanyuan",
      "mapping": null
+    },
+    {
+     "name": "pozhou2",
+     "mapping": "host:pozhou2"
     }
    ]
   },
