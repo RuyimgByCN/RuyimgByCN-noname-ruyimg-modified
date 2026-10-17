@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 天伦（tag 496，swd deferred 消解批 138，`tianlun`）：任意判定时可选
+    /// ——从「本次判定牌 + 全场判定区牌」中选一张替换本次判定牌，旧判定牌
+    /// 弃置（判定机改判窗驱动；无触发时机）。
+    Tianlun,
     /// 脉轮（tag 495，swd deferred 消解批 137，`mailun`）：任意阶段开始时
     /// 可选——从 8 种效果中选一种（1 换体力上限/2 反向/3 首次伤害-1/4 首次
     /// 伤害+1/5 少摸一张且上限+1/6 多摸一张且上限-1/7 双向距离-1/8 双向
@@ -1730,6 +1734,7 @@ impl HostBehavior {
             HostBehavior::Gxianyin => 493,
             HostBehavior::Jilve => 494,
             HostBehavior::Mailun => 495,
+            HostBehavior::Tianlun => 496,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2466,6 +2471,7 @@ impl HostBehavior {
             493 => HostBehavior::Gxianyin,
             494 => HostBehavior::Jilve,
             495 => HostBehavior::Mailun,
+            496 => HostBehavior::Tianlun,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2486,7 +2492,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 492] = [
+        pub const ALL: [HostBehavior; 493] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2979,6 +2985,7 @@ impl HostBehavior {
         HostBehavior::Gxianyin,
         HostBehavior::Jilve,
         HostBehavior::Mailun,
+        HostBehavior::Tianlun,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3233,6 +3240,7 @@ impl HostBehavior {
             HostBehavior::Gxianyin => "host:gxianyin",
             HostBehavior::Jilve => "host:jilve",
             HostBehavior::Mailun => "host:mailun",
+            HostBehavior::Tianlun => "host:tianlun",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3712,6 +3720,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 天伦：判定机改判窗驱动（无触发时机）
+            HostBehavior::Tianlun => None,
             // 脉轮：任意阶段开始（可选）
             HostBehavior::Mailun => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -6033,6 +6043,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 天伦（swd 批 138）：目录技能名（判定区牌替换本次判定）。
+pub const SWD_TIANLUN_KEY: &str = "tianlun";
+
 /// 脉轮（swd 批 137）：目录技能名（阶段开始 8 选 1 效果）。
 pub const SWD_MAILUN_KEY: &str = "mailun";
 
@@ -7055,6 +7068,7 @@ impl HostSkillBehavior {
             HostBehavior::Gxianyin => (None, None),
             HostBehavior::Jilve => (None, None),
             HostBehavior::Mailun => (None, None),
+            HostBehavior::Tianlun => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7393,6 +7407,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            HostBehavior::Tianlun => false,
             // 脉轮：自己的任意阶段开始
             HostBehavior::Mailun => matches!(event,
                 EventData::Phase { player, begin: true, .. } if *player == owner),
@@ -20699,6 +20714,7 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            HostBehavior::Tianlun => Flow::Done,
             // 脉轮：选 1..8 效果 → 立即结算（1/2）或置模式位（3..8）
             HostBehavior::Mailun => match self.stage {
                 HostStage::Act => {

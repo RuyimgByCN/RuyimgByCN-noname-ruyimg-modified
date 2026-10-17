@@ -9178,6 +9178,51 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         }
                         let rewriter = cur.rewriters.remove(0);
                         let answer = ctx.answer().clone();
+                        // 天伦（swd 批 138）：从判定区取牌替换判定牌，旧判定
+                        // 牌**弃置**（上游 `judging[0].discard()` 同口径——与
+                        // 鬼道/鬼才「旧牌归改判者」不同）
+                        let tianlun = ctx
+                            .catalog
+                            .skill_by_name(crate::content::host::SWD_TIANLUN_KEY)
+                            .map(|d| ctx.core.has_skill(rewriter, d))
+                            .unwrap_or(false);
+                        if tianlun {
+                            if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                                if c != cur.judge_card {
+                                    let mut moved = false;
+                                    for p in 0..ctx.core.players.len() as PlayerId {
+                                        if ctx.core.player(p).judge.contains(&c) {
+                                            ctx.core.player_mut(p).judge.retain(|x| *x != c);
+                                            moved = true;
+                                            break;
+                                        }
+                                    }
+                                    if !moved && self.queue.contains(&c) {
+                                        self.queue.retain(|x| *x != c);
+                                        moved = true;
+                                    }
+                                    if !moved {
+                                        // 非判定区牌（异常路径）：忽略
+                                        if cur.rewriters.is_empty() {
+                                            cur.in_rewrite = false;
+                                        }
+                                        continue;
+                                    }
+                                    let old = cur.judge_card;
+                                    ctx.to_discard(old);
+                                    cur.judge_card = c;
+                                    ctx.log(LogEvent::JudgementRewritten {
+                                        player: rewriter,
+                                        card: c,
+                                        replaced: old,
+                                    });
+                                }
+                            }
+                            if cur.rewriters.is_empty() {
+                                cur.in_rewrite = false;
+                            }
+                            continue;
+                        }
                         if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                             // 打出的牌离开手牌或装备区、由判定流程持有（成为新判定牌）；
                             // 被替换的旧判定牌由改判者**获得**（对齐上游，ADR 0714）。
@@ -9247,6 +9292,54 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     }
                     let rewriter = cur.rewriters[0];
                     cur.asked = true;
+                    // 天伦（swd 批 138，规则 v316 同批）：候选=本次判定牌 +
+                    // 全场判定区牌（上游 tianlun 的 dialog list 同口径）
+                    if ctx
+                        .catalog
+                        .skill_by_name(crate::content::host::SWD_TIANLUN_KEY)
+                        .map(|d| ctx.core.has_skill(rewriter, d))
+                        .unwrap_or(false)
+                    {
+                        let mut options = vec![ChoiceOption::Pass];
+                        if cur.judge_held {
+                            options.push(ChoiceOption::Card(cur.judge_card));
+                        }
+                        for p in 0..ctx.core.players.len() as PlayerId {
+                            for c in ctx.core.player(p).judge.iter().copied() {
+                                if !options.contains(&ChoiceOption::Card(c)) {
+                                    options.push(ChoiceOption::Card(c));
+                                }
+                            }
+                        }
+                        // 判定机待结算队列（原生在判定阶段开始即把判定区
+                        // 整体取入队列，见 JudgePhaseMachine::new——同口径
+                        // 视为「判定区牌」）
+                        for c in self.queue.iter().copied() {
+                            // 正在结算的延时锦囊已离开判定区（上游
+                            // `judging[0]` 之外的判定区牌才可被选）
+                            if c == cur.trick {
+                                continue;
+                            }
+                            if !options.contains(&ChoiceOption::Card(c)) {
+                                options.push(ChoiceOption::Card(c));
+                            }
+                        }
+                        if options.len() == 1 {
+                            cur.rewriters.remove(0);
+                            continue;
+                        }
+                        return Flow::WaitChoice {
+                            observer: rewriter,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::RespondCard,
+                                prompt: "tianlun_rewrite",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
                     // 黑色手牌 + 黑色装备牌均可改判（对齐旧线
                     // `judgment_black_rewrite_cards`：hand + equip）。
                     let mut options = vec![ChoiceOption::Pass];
@@ -9502,7 +9595,11 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     let has = |d: Option<crate::ids::SkillDefId>| {
                         d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
                     };
-                    has(gui_dao) || has(gui_cai) || has(tian_dao) || has(g_tiandao)
+                    has(gui_dao)
+                        || has(gui_cai)
+                        || has(tian_dao)
+                        || has(g_tiandao)
+                        || has(ctx.catalog.skill_by_name(crate::content::host::SWD_TIANLUN_KEY))
                 })
                 .collect();
             self.current = Some(JudgementProgress {
