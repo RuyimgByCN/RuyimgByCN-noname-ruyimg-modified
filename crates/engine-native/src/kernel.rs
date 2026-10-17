@@ -4154,6 +4154,26 @@ pub fn intrinsic_machine(ctx: &mut Ctx<'_>, frame_id: EventId) -> Option<Box<dyn
             let effective_kind = u
                 .use_as
                 .unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+            // 目标被结算窗全部移出（贞烈等「移出目标」类，swd 批 139）：
+            // 需要「恰一名目标」的牌种在目标清空后不结算（避免机器对
+            // 空目标越界）；无目标/群体牌种照常（其机器自行处理空列表）
+            if u.targets.is_empty()
+                && matches!(
+                    effective_kind,
+                    CardKind::Sha
+                        | CardKind::FireSha
+                        | CardKind::LeiSha
+                        | CardKind::Duel
+                        | CardKind::Dismantle
+                        | CardKind::Snatch
+                        | CardKind::Le
+                        | CardKind::Bing
+                        | CardKind::Jiedao
+                        | CardKind::Chain
+                )
+            {
+                return None;
+            }
             match effective_kind {
             CardKind::Dismantle => {
                 let effect = DismantleMachine {
