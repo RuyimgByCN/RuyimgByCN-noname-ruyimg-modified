@@ -1622,6 +1622,7 @@ impl Engine {
             .map(|(i, p)| {
                 let i = i as PlayerId;
                 let own = seat == Some(i);
+                let kingdoms = matches!(core.mode, crate::state::GameMode::Kingdoms);
                 // 身份可见性（RULE-IDENTITY-VIEW-RESTORE）：本人、主公（公开）
                 // 与已死亡（遗言公开）可见；其余他人身份不可见。
                 let role = roles.and_then(|rs| {
@@ -1629,17 +1630,17 @@ impl Engine {
                     (own || r == crate::state::Role::Lord || !p.alive).then_some(r)
                 });
                 // 国战门控（ADR 0757）：本座位双将可见；他人只见明置槽。
+                // 非国战模式（原型/身份/对决/斗地主/Boss）无暗置概念，
+                // 武将公开可见（`effective_faction` 同口径）。名称/势力经
+                // `catalog.general_meta` 取——覆盖标准、扩展与 Boss 段。
                 let mut generals: [Option<crate::view::GeneralView>; 2] = [None, None];
                 for (s, g_slot) in p.general_slots.iter().enumerate() {
                     let Some(g) = g_slot else { continue };
-                    if !own && !p.revealed_generals[s] {
-                        continue; // 暗置槽：他人不可见
+                    if !own && kingdoms && !p.revealed_generals[s] {
+                        continue; // 国战暗置槽：他人不可见
                     }
-                    if let Some(f) = crate::content::standard::faction_of_general(*g) {
-                        generals[s] = Some(crate::view::GeneralView {
-                            name: crate::content::standard::STANDARD_GENERALS[*g as usize].0,
-                            faction: f,
-                        });
+                    if let Some((name, faction, _, _, _)) = self.catalog.general_meta(*g) {
+                        generals[s] = Some(crate::view::GeneralView { name, faction });
                     }
                 }
                 crate::view::PlayerCellView {

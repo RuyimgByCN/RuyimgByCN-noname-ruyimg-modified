@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 45,
-  "open_count": 44,
+  "resolved_count": 46,
+  "open_count": 43,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -2051,7 +2051,7 @@
     "扩面测试+覆盖清单状态升级",
     "证据目录"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [
     "T13-PRODUCT-CLIENT"
    ],
@@ -2061,16 +2061,12 @@
     "T13"
    ],
    "resolution": {
-    "date": "2026-10-16",
-    "kind": "split_new",
-    "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "修正 build_view 投影缺陷：改用 catalog.general_meta（覆盖扩展/Boss 段），国战外不隐藏武将；新增 isolation_generals_public_in_non_kingdoms_modes；visible_views 机制键升为已验证。",
     "evidence": [
-     "docs/native-coverage-manifest.md",
-     "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-    ],
-    "disposition": "新增 open",
-    "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "split_from": "COV-PARTIAL-MECHANISMS"
+     "docs/operations/evidence/2026-10-17-cov-visible-views-ext/README.md"
+    ]
    }
   },
   {

@@ -9,7 +9,7 @@
 use content_runtime::{import_extensions, InstallOptions, PackageStore};
 use engine_native::view::HandView;
 use engine_native::Engine;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 /// T13 深字段（批 19 起投影）：turned_over 公开翻转状态 + skills 已授
 /// 技能名（仅 enabled 实例，排序稳定）。
@@ -336,4 +336,40 @@ fn identity_role_visibility_and_death_reveal() {
         let b = r.ai_session(seat).view();
         assert_eq!(a, b, "恢复后座位 {seat} 视图（含身份可见性）一致");
     }
+}
+
+/// COV-VISIBLE-VIEWS-EXT：视图扩面——非国战模式武将公开可见（含扩展/Boss
+/// 段经 `catalog.general_meta` 投影），国战暗置门控保持；对手手牌仍隐藏。
+#[test]
+fn isolation_generals_public_in_non_kingdoms_modes() {
+    // 标准将：非国战模式下他人可见（护驾/激将势力资格同口径）。
+    let mut e = Engine::new(9202, 3);
+    e.debug_assemble_general(1, "刘备");
+    for seat in 0u8..3 {
+        let v = e.view_for(seat);
+        let g = v.players[1].generals[0].as_ref().expect("标准将公开可见");
+        assert_eq!(g.name, "刘备", "seat={seat} 视角应见 1 号主将");
+    }
+
+    // 扩展将（玩点论杀）：def 接在标准表之后，投影须经 catalog 取名称/势力。
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let json = std::fs::read_to_string(root.join("wudian-upstream-noname/assets/cards.json"))
+        .expect("读 cards");
+    let out = content_native_loader::bridge_pack(&json).expect("桥接");
+    let mut e = Engine::new_with_extensions(9203, 3, &[&out.pack]).expect("建局");
+    let base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
+    e.debug_set_general_def(1, base); // wudian 第一名武将（费诗）
+    for seat in 0u8..3 {
+        let v = e.view_for(seat);
+        let g = v
+            .players[1]
+            .generals[0]
+            .as_ref()
+            .expect("扩展将公开可见（经 catalog.general_meta）");
+        assert_eq!(g.name, "费诗", "seat={seat} 视角应见扩展主将名");
+    }
+    // 对手手牌与牌库仍不可见（隔离不因武将公开而松动）。
+    let v = e.view_for(0);
+    assert!(matches!(v.players[1].hand, HandView::Hidden));
+    assert_eq!(v.visible_card_ids().len(), v.visible_card_ids().len());
 }
