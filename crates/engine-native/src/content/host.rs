@@ -1224,6 +1224,10 @@ pub enum HostBehavior {
     /// 令两名角色拼点：赢者获得该牌、输者受赢者 1 伤。登记差异：拼点牌由
     /// 两目标自选→确定性与座位序近似。
     SwdNlianji,
+    /// 蛇魂（tag 445，deferred 消解批 山小小）：出牌阶段限一次，弃 1–4 张
+    /// 花色互异的手牌并选一名有牌角色：其弃等量 he 牌，若其中有与弃牌同花色
+    /// 者则其受 1 伤。登记差异：花色互异约束未强制（任意 1–4 张）。
+    SwdShehun,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1510,6 +1514,7 @@ impl HostBehavior {
             HostBehavior::SwdHuanyin => 442,
             HostBehavior::SwdLingxian => 443,
             HostBehavior::SwdNlianji => 444,
+            HostBehavior::SwdShehun => 445,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2195,6 +2200,7 @@ impl HostBehavior {
             442 => HostBehavior::SwdHuanyin,
             443 => HostBehavior::SwdLingxian,
             444 => HostBehavior::SwdNlianji,
+            445 => HostBehavior::SwdShehun,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2215,7 +2221,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 441] = [
+        pub const ALL: [HostBehavior; 442] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2657,6 +2663,7 @@ impl HostBehavior {
         HostBehavior::SwdHuanyin,
         HostBehavior::SwdLingxian,
         HostBehavior::SwdNlianji,
+        HostBehavior::SwdShehun,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2860,6 +2867,7 @@ impl HostBehavior {
             HostBehavior::SwdHuanyin => "host:huanyin",
             HostBehavior::SwdLingxian => "host:lingxian",
             HostBehavior::SwdNlianji => "host:nlianji",
+            HostBehavior::SwdShehun => "host:shehun",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3191,6 +3199,7 @@ impl HostBehavior {
             // 归汉：目录锚（limited 确认逻辑在 DyingSaveMachine 内联）
             HostBehavior::WudianGuihan => None,
             HostBehavior::SwdGTiandao => None,
+            HostBehavior::SwdShehun => None,
             HostBehavior::SwdNlianji => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
             // target shaBefore，原生以 CardUsed+targets 等价承载）
@@ -5818,6 +5827,7 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::SwdLingxian => (None, None),
+            HostBehavior::SwdShehun => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6040,6 +6050,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianGuihan => false,
             HostBehavior::SwdGTiandao => false,
+            HostBehavior::SwdShehun => false,
             HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
@@ -7898,6 +7909,22 @@ impl SkillBehavior for HostSkillBehavior {
             }
             // 拼点（deferred 消解批）：手牌有牌
             HostBehavior::SwdNlianji => {
+                if ctx.state.player(owner).hand.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 蛇魂（deferred 消解批）：手牌有牌
+            HostBehavior::SwdShehun => {
                 if ctx.state.player(owner).hand.is_empty() {
                     return None;
                 }
@@ -18033,6 +18060,165 @@ impl crate::catalog::SkillMachine for HostMachine {
                         crate::event::DamageNature::Normal,
                         None,
                     )));
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 蛇魂（deferred 消解批 山小小）：弃 1–4 张手牌并选一名有牌角色：
+            // 其弃等量 he 牌，若其中有与弃牌同花色者则其受 1 伤
+            // （登记差异：花色互异约束未强制——任意 1–4 张）
+            HostBehavior::SwdShehun => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "shehun_discard",
+                            options,
+                            min: 1,
+                            max: 4,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.cards = picked;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && (!ctx.core.player(*p).hand.is_empty()
+                                    || !ctx.core.player(*p).equips.is_empty())
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "shehun_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(t);
+                    let n = self.cards.len();
+                    let he: Vec<CardId> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(t).equips.iter())
+                        .copied()
+                        .collect();
+                    if he.is_empty() {
+                        return Flow::Done;
+                    }
+                    let take = n.min(he.len());
+                    self.stage = HostStage::CardsAsk;
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "shehun_target_discard",
+                            options: he.into_iter().map(ChoiceOption::Card).collect(),
+                            min: take,
+                            max: take,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::CardsAsk => {
+                    let t_discard: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    let own_suits: Vec<crate::catalog::Suit> = self
+                        .cards
+                        .iter()
+                        .map(|c| ctx.catalog.cards[*c as usize].suit)
+                        .collect();
+                    let own = std::mem::take(&mut self.cards);
+                    for c in own {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.discard_from_hand(self.owner, c);
+                        }
+                    }
+                    let mut damage = false;
+                    for c in t_discard {
+                        if own_suits.contains(&ctx.catalog.cards[c as usize].suit) {
+                            damage = true;
+                        }
+                        if ctx.core.player(t).hand.contains(&c) {
+                            ctx.discard_from_hand(t, c);
+                        } else {
+                            ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                            if ctx.catalog.card_kind(c).is_equip() {
+                                crate::kernel::revoke_equip_skills(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    t,
+                                    c,
+                                );
+                            }
+                            ctx.to_discard(c);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: t,
+                                cards: vec![c],
+                            });
+                        }
+                    }
+                    if damage {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            None,
+                        )));
+                    }
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -29786,7 +29972,8 @@ pub fn host_skill_def(
         | HostBehavior::SwdFuniao
         | HostBehavior::SwdHeihuo
         | HostBehavior::SwdToudan
-        | HostBehavior::SwdNlianji => {
+        | HostBehavior::SwdNlianji
+        | HostBehavior::SwdShehun => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
                 ..Default::default()

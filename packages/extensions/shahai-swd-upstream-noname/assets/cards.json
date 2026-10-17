@@ -1470,7 +1470,7 @@
    "skills": [
     {
      "name": "shehun",
-     "mapping": null
+     "mapping": "host:shehun"
     },
     {
      "name": "xiaomoyu",
