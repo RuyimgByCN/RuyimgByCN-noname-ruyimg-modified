@@ -1202,6 +1202,20 @@ impl GameStateCore {
         let plus = plus
             + count_named(&self.player(a).equips, CardKind::Xiayuncailing)
             + 2 * count_named(&self.player(b).equips, CardKind::Xiayuncailing);
+        // 灵矢（swd 计亭，swd deferred 消解批 113）：锁定——装备区每有一
+        // 张牌，攻击范围 +2（上游 lingshi mod attackFrom distance -=
+        // countCards("e")*2 同口径；攻击方一侧，非被算方；下限 1 由末尾
+        // 钳制）
+        let lingshi_minus = catalog
+            .skill_by_name("lingshi")
+            .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
+            .unwrap_or(false);
+        let minus = minus
+            + if lingshi_minus {
+                2 * self.player(a).equips.len() as u32
+            } else {
+                0
+            };
         (base + plus).saturating_sub(minus).max(1)
     }
 

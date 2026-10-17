@@ -1378,7 +1378,7 @@
     },
     {
      "name": "lingshi",
-     "mapping": null
+     "mapping": "host:lingshi"
     }
    ]
   },

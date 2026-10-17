@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.79s
+     Running tests/g1_shahai_swd.rs (target/debug/deps/g1_shahai_swd-eba24be2ade66ae5)
+
+running 1 test
+test swd_deferred_lingshi_range_direct_hit_draw_and_sha_limit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 106 filtered out; finished in 0.07s
+

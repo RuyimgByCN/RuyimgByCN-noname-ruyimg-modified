@@ -3132,6 +3132,7 @@ fn apply_command(
                     // 咆哮（张飞）：出牌阶段使用杀无次数限制
                     let mut mark_yuanbaorou = false;
                     let mut mark_huihuo = false;
+                    let mut mark_lingshi = false;
                     let player_id = core.turn.current;
                     // 焚天（Boss 朱雀，规则 v236）：锁定——红色牌使用无
                     // 次数限制且无距离限制（上游 mod cardUsable Infinity
@@ -3268,9 +3269,30 @@ fn apply_command(
                                 })
                                 .unwrap_or(false);
                             if !huihuo_extra {
-                                return Err(RejectReason::ShaLimit);
+                                // 灵矢（swd 计亭，swd deferred 消解批 113）：
+                                // 锁定——装备区有宝物时回合内可额外使用一
+                                // 张杀（上游 mod cardUsable num+1；每回合
+                                // 一次额度，元宝肉同款 once_used 语义）
+                                let lingshi_extra = catalog
+                                    .skill_by_name("lingshi")
+                                    .map(|def| {
+                                        core.skills
+                                            .get(&(core.turn.current, def))
+                                            .map(|i| i.enabled && !i.once_used)
+                                            .unwrap_or(false)
+                                    })
+                                    .unwrap_or(false)
+                                    && core.player(core.turn.current).equips.iter().any(|c| {
+                                        catalog.card_kind(*c).equip_slot()
+                                            == Some(crate::catalog::EquipSlot::Treasure)
+                                    });
+                                if !lingshi_extra {
+                                    return Err(RejectReason::ShaLimit);
+                                }
+                                mark_lingshi = true;
+                            } else {
+                                mark_huihuo = true;
                             }
-                            mark_huihuo = true;
                         } else {
                             mark_yuanbaorou = true;
                         }
@@ -3576,6 +3598,13 @@ fn apply_command(
                         if let Some(def) = catalog
                             .skill_by_name(crate::content::host::GJ_MUTOU_SKILL_KEY)
                         {
+                            if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
+                                inst.once_used = true;
+                            }
+                        }
+                    }
+                    if mark_lingshi {
+                        if let Some(def) = catalog.skill_by_name("lingshi") {
                             if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
                                 inst.once_used = true;
                             }

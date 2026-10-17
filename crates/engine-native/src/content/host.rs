@@ -1261,6 +1261,11 @@ pub enum HostBehavior {
     SwdGuxing,
     /// 孤行·计数（tag 459）：孤行杀造成伤害时计数 +1。
     SwdGuxing3,
+    /// 灵矢（tag 460，swd deferred 消解批 113 计亭）：锁定——装备区每有
+    /// 一张牌攻击范围 +2；有武器或防具时【杀】不可闪避；有马时摸牌阶段
+    /// 额外摸一张；有宝物时回合内可额外使用一张【杀】。四条效果全部内联
+    /// （距离/杀限次/直中/摸牌四臂），无机器步（天弦同款旗标行为）。
+    SwdLingshi,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1562,6 +1567,7 @@ impl HostBehavior {
             HostBehavior::SwdSxianjingDamage => 457,
             HostBehavior::SwdGuxing => 458,
             HostBehavior::SwdGuxing3 => 459,
+            HostBehavior::SwdLingshi => 460,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2262,6 +2268,7 @@ impl HostBehavior {
             457 => HostBehavior::SwdSxianjingDamage,
             458 => HostBehavior::SwdGuxing,
             459 => HostBehavior::SwdGuxing3,
+            460 => HostBehavior::SwdLingshi,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2282,7 +2289,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 456] = [
+        pub const ALL: [HostBehavior; 457] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2739,6 +2746,7 @@ impl HostBehavior {
         HostBehavior::SwdSxianjingDamage,
         HostBehavior::SwdGuxing,
         HostBehavior::SwdGuxing3,
+        HostBehavior::SwdLingshi,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2957,6 +2965,7 @@ impl HostBehavior {
             HostBehavior::SwdSxianjingDamage => "host:sxianjing_damage",
             HostBehavior::SwdGuxing => "host:guxing",
             HostBehavior::SwdGuxing3 => "host:guxing3",
+            HostBehavior::SwdLingshi => "host:lingshi",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3376,6 +3385,9 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 灵矢：锁定旗标（无触发时机；四条效果内联于距离/杀限次/
+            // 直中/摸牌四臂，天弦同款）
+            HostBehavior::SwdLingshi => None,
             HostBehavior::SwdShehun => None,
             HostBehavior::SwdNlianji => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
@@ -6023,6 +6035,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdSxianjingDamage => (None, None),
             HostBehavior::SwdGuxing => (None, None),
             HostBehavior::SwdGuxing3 => (None, None),
+            HostBehavior::SwdLingshi => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6303,6 +6316,8 @@ impl SkillBehavior for HostSkillBehavior {
                 EventData::Damage(d) if d.target == owner && !d.prevented
                     && !ctx.state.player(owner).sxianjing_traps.is_empty()),
             HostBehavior::SwdGuxing => false,
+            // 灵矢：锁定旗标（无触发；四臂内联）
+            HostBehavior::SwdLingshi => false,
             // 孤行·计数：孤行杀窗口内自己造成伤害
             HostBehavior::SwdGuxing3 => matches!(event,
                 EventData::Damage(d)
@@ -18929,6 +18944,8 @@ impl crate::catalog::SkillMachine for HostMachine {
                 ctx.core.turn.guxing_count = ctx.core.turn.guxing_count.saturating_add(1);
                 Flow::Done
             },
+            // 灵矢：锁定旗标行为（无机器步；距离/杀限次/直中/摸牌内联）
+            HostBehavior::SwdLingshi => Flow::Done,
             // 聚悉：扣存活数并选一名角色——已受伤则自选受伤/回复，否则受伤
             HostBehavior::SwdJuxi => match self.stage {
                 HostStage::Act => {

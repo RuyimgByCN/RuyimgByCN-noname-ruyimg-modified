@@ -1,0 +1,12 @@
+
+thread 'swd_deferred_lingshi_range_direct_hit_draw_and_sha_limit' (13659757) panicked at crates/engine-native/tests/g1_shahai_swd.rs:12938:5:
+灵矢：有武器 → 不出闪询问（直中）
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    swd_deferred_lingshi_range_direct_hit_draw_and_sha_limit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 106 filtered out; finished in 0.07s
+
+error: test failed, to rerun pass `-p engine-native --test g1_shahai_swd`

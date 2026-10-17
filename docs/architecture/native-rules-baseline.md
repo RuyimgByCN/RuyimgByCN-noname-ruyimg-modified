@@ -3539,8 +3539,8 @@ v3.3 恢复原有扩展机制。单个 STANDARD_RULESET_VERSION 不足以标识�
 本地 [standard 技能说明](../../../archive/upstream/noname/apps/core/character/standard/translate.js) 与实现的差异已在逐批收敛：
 流离弃牌选择与范围（v76）；倾国黑手牌、救援主公/吴势力、结姻受伤男性、急救回合外（**v202**）；反间花色选择+条件伤害（**v203**）；护驾自选代出+倾国转化（**v204**）——本块登记差异已**全部消除**（2026-10-11）。
 保留既有登记惯例：护驾代出转化牌以实体牌响应（上游 result 为虚拟闪）；激将借牌直结算非完整 chooseToRespond 通道（ADR 0776）。
-Boss 内容面余项已登记为差异（不实现）：地藏王「大愿」=判定改写机的 AI 态度面（`get.attitude`+`chooseControl`）、「无量」建局摸 3 面（上游 `gameDrawAfter`/`enterGame`）——缺态度模型与「建局帧」原语，见[证据](operations/evidence/2026-10-17-t11-boss-dizang-remainders/README.md)。
-swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–112 消解 13 技，映射 133/184 → 148/184（deferred 49→34）**，涵盖单触发/判定/多步机/状态字段；未映射余 34 项（多步/跨包引用/缺事件型）仍为暂缓，逐来源状态见[两仓台账](migration/upstream-extension-reconstruction.md)。
+Boss 内容面余项已登记为差异（不实现）：地藏王「大愿」=判定改写机的 AI 态度面（`get.attitude`+`chooseControl`）、「无量」建局摸 3 面（上游 `gameDrawAfter`/`enterGame`）——缺态度模型与「建局帧」原语，见[证据](../operations/evidence/2026-10-17-t11-boss-dizang-remainders/README.md)。
+swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–113 消解 14 技，映射 133/184 → 149/184（deferred 49→33）**，涵盖单触发/判定/多步机/状态字段与无版本锁定四臂批；未映射余 33 项（多步/跨包引用/缺事件型）仍为暂缓，逐来源状态见[两仓台账](../migration/upstream-extension-reconstruction.md)。
 完整差异和复现见 [进度主稿](native-progress.md)。
 
 ### 本地上游对齐的新增核查

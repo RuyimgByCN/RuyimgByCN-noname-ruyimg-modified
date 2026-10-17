@@ -2551,7 +2551,22 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                                 })
                             })
                             .unwrap_or(false);
-                    ctx.draw_cards(player, if baiyi_cut { 1 } else { 2 });
+                    // 灵矢（swd 计亭，swd deferred 消解批 113）：锁定——
+                    // 装备区有马时摸牌阶段额外摸一张（上游 lingshi_draw
+                    // phaseDrawBegin num++ 同口径；跳摸路径不进入本臂）
+                    let lingshi_draw = ctx
+                        .catalog
+                        .skill_by_name("lingshi")
+                        .map(|def| ctx.core.has_skill(player, def))
+                        .unwrap_or(false)
+                        && ctx.core.player(player).equips.iter().any(|c| {
+                            matches!(
+                                ctx.catalog.card_kind(*c).equip_slot(),
+                                Some(crate::catalog::EquipSlot::HorsePlus)
+                                    | Some(crate::catalog::EquipSlot::HorseMinus)
+                            )
+                        });
+                    ctx.draw_cards(player, if baiyi_cut { 1 } else { 2 } + usize::from(lingshi_draw));
                     // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
                     // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差
                     // 异上游玩家自选；置顶牌留待下位摸牌者）
@@ -6453,6 +6468,21 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 狩猎（swd deferred 消解批 95）：弃牌确认后本杀不可闪避（整杀
         // 有效=机器旗标）
         let shoulie_hit = self.shoulie_direct;
+        // 灵矢（swd 计亭，swd deferred 消解批 113）：锁定——装备区有武
+        // 器牌或防具牌时【杀】不可闪避（上游 lingshi_hit shaBegin forced
+        // directHit 同口径；跳过防具判定与出闪询问）
+        let lingshi_direct_hit = ctx
+            .catalog
+            .skill_by_name("lingshi")
+            .map(|def| ctx.core.has_skill(self.source, def))
+            .unwrap_or(false)
+            && ctx.core.player(self.source).equips.iter().any(|c| {
+                matches!(
+                    ctx.catalog.card_kind(*c).equip_slot(),
+                    Some(crate::catalog::EquipSlot::Weapon)
+                        | Some(crate::catalog::EquipSlot::Armor)
+                )
+            });
         let poyue_direct_hit = {
             let red = matches!(
                 ctx.catalog.cards[self.card as usize].suit,
@@ -6478,6 +6508,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 && !fentian_direct_hit
                 && !poyue_direct_hit
                 && !shoulie_hit
+                && !lingshi_direct_hit
                 && ctx.core.player(self.target).alive
                 && ctx
                     .core
@@ -7197,7 +7228,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀 directHit
             // ——整段跳过闪询问直接结算伤害
-            if poyue_direct_hit || shoulie_hit {
+            if poyue_direct_hit || shoulie_hit || lingshi_direct_hit {
                 return self.emit_sha_damage(ctx);
             }
             // 司圃（Boss 应昭，规则 v232）：应昭出牌阶段已用牌数≤2 期间
@@ -7213,7 +7244,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 })
                 .unwrap_or(false);
             let mut options = vec![ChoiceOption::Pass];
-            if !sipu_ban_respond && !poyue_direct_hit && !shoulie_hit {
+            if !sipu_ban_respond && !poyue_direct_hit && !shoulie_hit && !lingshi_direct_hit {
                 options.extend(shans);
             }
             return Flow::WaitChoice {
