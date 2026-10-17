@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 清正（tag 474，T11 Boss 庞统族后继批 119，`mbcmqingzheng`）：出牌
+    /// 阶段开始可选——弃置自己一种花色的全部手牌，再令一名其他角色弃置
+    /// 其一种花色的全部手牌；其弃牌数少于自己时受 1 点伤害（无来源）。
+    MbcmQingzheng,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1624,6 +1628,7 @@ impl HostBehavior {
             HostBehavior::Niepan => 471,
             HostBehavior::Yuhuo => 472,
             HostBehavior::Shenwei => 473,
+            HostBehavior::MbcmQingzheng => 474,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2338,6 +2343,7 @@ impl HostBehavior {
             471 => HostBehavior::Niepan,
             472 => HostBehavior::Yuhuo,
             473 => HostBehavior::Shenwei,
+            474 => HostBehavior::MbcmQingzheng,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2358,7 +2364,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 470] = [
+        pub const ALL: [HostBehavior; 471] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2829,6 +2835,7 @@ impl HostBehavior {
         HostBehavior::Niepan,
         HostBehavior::Yuhuo,
         HostBehavior::Shenwei,
+        HostBehavior::MbcmQingzheng,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3061,6 +3068,7 @@ impl HostBehavior {
             HostBehavior::Niepan => "host:niepan",
             HostBehavior::Yuhuo => "host:boss_yuhuo",
             HostBehavior::Shenwei => "host:shenwei",
+            HostBehavior::MbcmQingzheng => "host:mbcmqingzheng",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3527,6 +3535,14 @@ impl HostBehavior {
             // 涅槃：自己濒死（可选；出牌阶段面走 activate）
             HostBehavior::Niepan => Some(TriggerMeta {
                 event: EventKind::Dying,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 清正：出牌阶段开始（可选）
+            HostBehavior::MbcmQingzheng => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -5734,6 +5750,34 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 清正（批 119）：目录技能名（道心值 25 阈值解锁；手杀包外部技能已转换）。
+pub const MBCM_QINGZHENG_KEY: &str = "mbcmqingzheng";
+
+/// 清正候选花色：手牌中非空的花色（上游 filterButton：该花色手牌数 >0 且
+/// 全部可弃置；原生手牌默认可弃置，登记差异）。
+fn mbcm_qingzheng_suits(ctx: &Ctx<'_>, player: PlayerId) -> Vec<u8> {
+    let mut suits: Vec<u8> = Vec::new();
+    for c in ctx.core.player(player).hand.iter().copied() {
+        if let Some(s) = mbcm_suit_of(ctx, c) {
+            if !suits.contains(&s) {
+                suits.push(s);
+            }
+        }
+    }
+    suits.sort_unstable();
+    suits
+}
+
+/// 牌花色编码（0 黑桃 / 1 红桃 / 2 梅花 / 3 方块；与选择项 Tag 同口径）。
+fn mbcm_suit_of(ctx: &Ctx<'_>, card: CardId) -> Option<u8> {
+    Some(match ctx.catalog.cards[card as usize].suit {
+        crate::catalog::Suit::Spade => 0,
+        crate::catalog::Suit::Heart => 1,
+        crate::catalog::Suit::Club => 2,
+        crate::catalog::Suit::Diamond => 3,
+    })
+}
+
 /// 神威（T11 Boss 庞统族批 118）：目录技能名（浴火授予；摸牌/手牌上限臂）。
 pub const BOSS_SHENWEI_KEY: &str = "神威";
 /// 涅槃（T11 Boss 庞统族批 118）：目录技能名。
@@ -6464,6 +6508,7 @@ impl HostSkillBehavior {
             HostBehavior::Niepan => (None, None),
             HostBehavior::Yuhuo => (None, None),
             HostBehavior::Shenwei => (None, None),
+            HostBehavior::MbcmQingzheng => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6797,6 +6842,10 @@ impl SkillBehavior for HostSkillBehavior {
                     if *player == owner && !ctx.state.player(owner).niepan_used),
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
+            // 清正：自己出牌阶段开始且手牌非空
+            HostBehavior::MbcmQingzheng => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
+                if *player == owner && !ctx.state.player(owner).hand.is_empty()),
             // 卫统：开局首阶段 + 自己持潜龙 + 另有魏势力持本技者
             HostBehavior::MbWeitong => match event {
                 EventData::Phase { begin: true, .. } => {
@@ -19818,6 +19867,127 @@ impl crate::catalog::SkillMachine for HostMachine {
             }
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
+            // 清正：选花色 → 选目标 → 选目标花色 → 双向弃牌 → 少弃者受伤
+            HostBehavior::MbcmQingzheng => match self.stage {
+                HostStage::Act => {
+                    let suits = mbcm_qingzheng_suits(ctx, self.owner);
+                    if suits.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectNature;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "mbcmqingzheng_suit",
+                            options: suits.into_iter().map(ChoiceOption::Tag).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectNature => {
+                    let Some(ChoiceOption::Tag(suit)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let mut chosen: Vec<CardId> = Vec::new();
+                    for c in ctx.core.player(self.owner).hand.iter().copied() {
+                        if mbcm_suit_of(ctx, c) == Some(suit) {
+                            chosen.push(c);
+                        }
+                    }
+                    if chosen.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.cards = chosen.iter().map(|c| u32::from(*c)).collect();
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner && !ctx.core.player(*p).hand.is_empty()
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "mbcmqingzheng_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(target);
+                    let suits = mbcm_qingzheng_suits(ctx, target);
+                    if suits.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::CompareTargetPick;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "mbcmqingzheng_target_suit",
+                            options: suits.into_iter().map(ChoiceOption::Tag).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::CompareTargetPick => {
+                    let Some(ChoiceOption::Tag(suit)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    let mine: Vec<CardId> = self.cards.iter().map(|c| *c as CardId).collect();
+                    let theirs: Vec<CardId> = ctx
+                        .core
+                        .player(target)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| mbcm_suit_of(ctx, *c) == Some(suit))
+                        .collect();
+                    let mine_n = mine.len();
+                    let theirs_n = theirs.len();
+                    for c in mine {
+                        ctx.discard_from_hand(self.owner, c);
+                    }
+                    for c in theirs {
+                        ctx.discard_from_hand(target, c);
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "清正",
+                        owner: self.owner,
+                    });
+                    if theirs_n < mine_n {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            None,
+                            target,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            None,
+                        )));
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 卫统：登记面（实际加成由潜龙内容按同条件判定）
             HostBehavior::MbWeitong => Flow::Done,
             // 隐月·判：取消翻面（写回前置帧取消位）

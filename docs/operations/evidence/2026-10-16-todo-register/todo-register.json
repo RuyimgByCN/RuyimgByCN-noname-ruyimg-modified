@@ -57,7 +57,8 @@
     "t11_hlss_115": "2026-10-17 批 115：hlss 星系统三技（禳星/隐月/隐月·判）落地，规则 v303/存档 v88；engine-native 906/0/1、14 golden 重录 + 版本回退探针。T11-BOSS-ZHUGE-LIANG 仍 open（余起风/改命与 Boss 装配）。",
     "t11_zhugeliang_closure": "2026-10-17：T11-BOSS-ZHUGE-LIANG 关闭（无限体力 + 四技 + Boss 包装配，v304/存档 v89）。Boss 关卡流程接入归 D4；D5/庞统外部依赖仍 open。",
     "d5_longxue_117": "2026-10-17 批 117：潜龙道心值 + 卫统 + 曹髦包（规则 v305/存档 v90）；engine-native 914/0/1，14 golden 重录 + 探针。D5 仍 open（余外部手杀包四技与 ylyg*）。",
-    "t11_pangtong_closure": "2026-10-17：T11-BOSS-PANGTONG-EXTERNAL 关闭（涅槃/浴火/神威 + loopType，v306/存档 v91）。看破/朱羽/ylygniepan 外部依赖与 D4 轮次起点登记。"
+    "t11_pangtong_closure": "2026-10-17：T11-BOSS-PANGTONG-EXTERNAL 关闭（涅槃/浴火/神威 + loopType，v306/存档 v91）。看破/朱羽/ylygniepan 外部依赖与 D4 轮次起点登记。",
+    "d5_qingzheng_119": "2026-10-17 批 119：清正（mbcmqingzheng）转换，道心值 25 解锁生效；engine-native 920/0/1，14 golden 零位移（无版本变化）。D5 仍 open（余酒诗/放逐/绝进三技与显示面）。"
   },
   "items": [
     {
@@ -583,7 +584,7 @@
         "T11",
         "L29"
       ],
-      "notes": "2026-10-17：无限体力前置（哨兵）已落；批 115/116 完成 Boss 诸葛亮四技与装配（T11-BOSS-ZHUGE-LIANG 关闭）；批 117 完成龙血玄黄规则面 `mbqianlong`（道心值 + 阈值解锁 + 曹髦包 upstream-liuli/longxue@1.0.0，v305/存档 v90）。余：`_CMeffects`（纯显示面，登记差异）、四个 `mbcm*`（liuli 手杀包外部依赖）、`ylyg*`（归 T11-BOSS-PANGTONG-EXTERNAL）。"
+      "notes": "2026-10-17：无限体力前置（哨兵）；批 115/116 Boss 诸葛亮四技与装配（T11-BOSS-ZHUGE-LIANG 关闭）；批 117 龙血玄黄规则面 `mbqianlong`（道心值 + 阈值解锁 + 曹髦包，v305/存档 v90）；批 118 庞统涅槃/浴火/神威（T11-BOSS-PANGTONG-EXTERNAL 关闭，v306/存档 v91）；批 119 清正转换（道心值 25 解锁真实生效，无版本变化）。余：酒诗（需翻面后事件原语）/放逐（需技能禁用原语）/绝进（需移出游戏区）+ `_CMeffects` 显示面 + `ylyg*`。"
     },
     {
       "id": "T15-3-LEGACY-PORT",

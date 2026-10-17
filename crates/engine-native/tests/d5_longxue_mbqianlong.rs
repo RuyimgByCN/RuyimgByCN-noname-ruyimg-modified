@@ -110,9 +110,15 @@ fn longxue_package_maps_host_and_defers_external() {
     assert!(e.catalog().skill_by_name("mbqianlong").is_some());
     assert!(e.catalog().skill_by_name("mbweitong").is_some());
     assert!(
-        e.catalog().skill_by_name("mbcmqingzheng").is_none(),
-        "外部技能未入目录（不虚构空操作）"
+        e.catalog().skill_by_name("mbcmqingzheng").is_some(),
+        "清正已转换入目录（批 119）"
     );
+    for name in ["mbcmjiushi", "mbcmfangzhu", "mbjuejin"] {
+        assert!(
+            e.catalog().skill_by_name(name).is_none(),
+            "{name} 外部依赖未入目录（不虚构空操作）"
+        );
+    }
 }
 
 /// 开局面：首次阶段开始 +20；有另一魏势力持卫统者 +60（非当前回合座位，
@@ -165,8 +171,9 @@ fn longxue_marks_accumulate_and_cap() {
         base + 5,
         "获得牌 +5"
     );
-    // 阈值 25 已过：清正未在目录 → 不授予、不 panic
-    assert!(e.catalog().skill_by_name("mbcmqingzheng").is_none());
+    // 阈值 25 已过：清正已转换 → 授予（批 119）
+    let qz = e.catalog().skill_by_name("mbcmqingzheng").expect("清正入目录");
+    assert!(e.state_core().skills.contains_key(&(0, qz)), "25 阈值授予清正");
 
     // 受伤 2 点：+20
     let out = e.debug_deal_damage(Some(1), 0, 2, DamageNature::Normal);
@@ -277,5 +284,134 @@ fn longxue_weitong_registration_only() {
         restored.state_core().player(1).mbqianlong_marks,
         20,
         "开局面只触发一次"
+    );
+}
+
+/// 清正（道心值 25 阈值解锁的手杀包技能）：弃自己一种花色全部手牌 → 令目标
+/// 弃其一种花色全部手牌 → 其弃牌数少于自己时受 1 点伤害（无来源）。
+#[test]
+fn qingzheng_discards_both_sides_and_punishes_fewer() {
+    let pack = bridge_pack("longxue-upstream-liuli");
+    let mut e = Engine::new_with_extensions(94007, 4, &[&pack]).expect("建局");
+    let def = general_def_of(&e, "mb_caomao");
+    e.debug_assemble_general_def(0, def);
+    let qz = e.catalog().skill_by_name("mbcmqingzheng").expect("清正在目录");
+    next_phase(&mut e);
+    assert_eq!(e.state_core().player(0).mbqianlong_marks, 25);
+    assert!(
+        e.state_core().skills.contains_key(&(0, qz)),
+        "25 阈值授予清正"
+    );
+    // 布阵：0 号两张黑桃 + 一张红桃；1 号一张梅花
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_place_suit(0, engine_native::catalog::Suit::Spade);
+    e.debug_place_suit(0, engine_native::catalog::Suit::Spade);
+    e.debug_place_suit(0, engine_native::catalog::Suit::Heart);
+    e.debug_place_suit(1, engine_native::catalog::Suit::Club);
+    assert_eq!(e.debug_hand(0).len(), 3);
+    assert_eq!(e.debug_hand(1).len(), 1);
+    assert!(
+        advance_to_prompt(&mut e, "trigger_confirm"),
+        "清正确认门（出牌阶段开始）"
+    );
+    let gate = e.open_choice().cloned().expect("清正确认门");
+    assert_eq!(gate.spec.prompt, "trigger_confirm");
+    submit_answer(&mut e, gate.id, vec![engine_native::ChoiceOption::Confirm]);
+    let suit = e.open_choice().cloned().expect("花色选择窗");
+    assert_eq!(suit.spec.prompt, "mbcmqingzheng_suit");
+    submit_answer(&mut e, suit.id, vec![engine_native::ChoiceOption::Tag(0)]);
+    let tgt = e.open_choice().cloned().expect("目标选择窗");
+    assert_eq!(tgt.spec.prompt, "mbcmqingzheng_target");
+    submit_answer(&mut e, tgt.id, vec![engine_native::ChoiceOption::Player(1)]);
+    let tsuit = e.open_choice().cloned().expect("目标花色窗");
+    assert_eq!(tsuit.spec.prompt, "mbcmqingzheng_target_suit");
+    let hp1_before = e.debug_hp(1);
+    submit_answer(&mut e, tsuit.id, vec![engine_native::ChoiceOption::Tag(2)]);
+    drain(&mut e);
+    assert_eq!(e.debug_hand(0).len(), 1, "0 号弃 2 张黑桃，剩红桃");
+    assert_eq!(e.debug_hand(1).len(), 0, "1 号弃 1 张梅花");
+    assert_eq!(e.debug_hp(1), hp1_before - 1, "目标少弃 → 受 1 点伤害");
+}
+
+/// 清正对照：目标弃牌数不少于自己时不受伤害。
+#[test]
+fn qingzheng_no_damage_when_target_discards_enough() {
+    let pack = bridge_pack("longxue-upstream-liuli");
+    let mut e = Engine::new_with_extensions(94008, 4, &[&pack]).expect("建局");
+    let def = general_def_of(&e, "mb_caomao");
+    e.debug_assemble_general_def(0, def);
+    e.debug_grant(0, "mbcmqingzheng");
+    let qz = e.catalog().skill_by_name("mbcmqingzheng").expect("清正");
+    assert!(e.state_core().skills.contains_key(&(0, qz)));
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_place_suit(0, engine_native::catalog::Suit::Spade);
+    e.debug_place_suit(1, engine_native::catalog::Suit::Club);
+    e.debug_place_suit(1, engine_native::catalog::Suit::Club);
+    assert!(
+        advance_to_prompt(&mut e, "trigger_confirm"),
+        "清正确认门（出牌阶段开始）"
+    );
+    let gate = e.open_choice().cloned().expect("清正确认门");
+    submit_answer(&mut e, gate.id, vec![engine_native::ChoiceOption::Confirm]);
+    let suit = e.open_choice().cloned().expect("花色选择窗");
+    submit_answer(&mut e, suit.id, vec![engine_native::ChoiceOption::Tag(0)]);
+    let tgt = e.open_choice().cloned().expect("目标选择窗");
+    submit_answer(&mut e, tgt.id, vec![engine_native::ChoiceOption::Player(1)]);
+    let tsuit = e.open_choice().cloned().expect("目标花色窗");
+    let hp1 = e.debug_hp(1);
+    submit_answer(&mut e, tsuit.id, vec![engine_native::ChoiceOption::Tag(2)]);
+    drain(&mut e);
+    assert_eq!(e.debug_hand(1).len(), 0, "1 号弃 2 张梅花");
+    assert_eq!(e.debug_hp(1), hp1, "弃牌数不少于自己 → 不受伤害");
+}
+
+/// 推进阶段直到出现指定 prompt 的选择窗（其余选择按可选放弃处理；不吞目标窗）。
+fn advance_to_prompt(e: &mut Engine, prompt: &str) -> bool {
+    for _ in 0..12 {
+        if let Some(c) = e.open_choice() {
+            if c.spec.prompt == prompt {
+                return true;
+            }
+            drain(e);
+            continue;
+        }
+        let actor = e.turn().current;
+        let out = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        if !matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ) {
+            return false;
+        }
+    }
+    e.open_choice()
+        .map(|c| c.spec.prompt == prompt)
+        .unwrap_or(false)
+}
+
+/// 应答指定选择（断言被接受）。
+fn submit_answer(
+    e: &mut Engine,
+    choice_id: u64,
+    selection: Vec<engine_native::ChoiceOption>,
+) {
+    let out = e.submit(GameCommand {
+        actor: e.open_choice().map(|c| c.observer).unwrap_or(0),
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer { choice_id, selection },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
     );
 }

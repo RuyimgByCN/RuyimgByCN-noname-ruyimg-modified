@@ -15,8 +15,7 @@
   {
    "name": "mbcmqingzheng",
    "general": "mb_caomao",
-   "mapping": null,
-   "reason": "外部依赖：liuli mobile 包清正（道心值 25 阈值解锁），未转换——2026-10-17 登记"
+   "mapping": "host:mbcmqingzheng"
   },
   {
    "name": "mbcmjiushi",

@@ -4,6 +4,8 @@
 
 调研快照 + **ambiguous 消解批**。机器可读副本见 [`todo-register.json`](./todo-register.json)；决议全文 [`ambiguous-resolutions.md`](./ambiguous-resolutions.md)。不改 `crates/**`；尽量不改正文主稿/台账（仅给出基准表一行勘正建议）。并行 worker 可能同时改其他证据目录——以本目录当前文件为准。
 
+> **2026-10-17 D5 后继批 119**：清正（`mbcmqingzheng`）转换——道心值 25 阈值解锁真实生效（engine-native **920/0/1**，14 golden 零位移；[证据](../2026-10-17-d5-mbcm-qingzheng/README.md)）；`D5-LX-MIGRATION` 保持 open（余酒诗/放逐/绝进三技与 `_CMeffects` 显示面）。
+
 > **2026-10-17 T11 Boss 庞统族批 118**：涅槃/浴火/神威落地（**v306/存档 v91**）——`T11-BOSS-PANGTONG-EXTERNAL` **关闭**（engine-native 918/0/1；[证据](../2026-10-17-t11-boss-pangtong-niepan/README.md)）。
 
 > **2026-10-17 D5 龙血玄黄批 117**：潜龙道心值 `mbqianlong` + 卫统 + 曹髦包（**v305/存档 v90**）落地——engine-native **914/0/1**（[证据](../2026-10-17-d5-longxue-mbqianlong/README.md)）；`D5-LX-MIGRATION` 保持 open（余 `_CMeffects` 显示面、四个 `mbcm*` 手杀包外部技、`ylyg*`）。

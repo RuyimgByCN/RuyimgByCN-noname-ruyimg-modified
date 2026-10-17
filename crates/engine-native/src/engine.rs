@@ -1248,6 +1248,35 @@ impl Engine {
         })
     }
 
+    /// 测试布阵：把一张指定花色的牌放到某玩家手牌（从牌库或弃牌堆取；
+    /// 用于花色类技能布阵——清正/反间等）。
+    pub fn debug_place_suit(
+        &mut self,
+        player: PlayerId,
+        suit: crate::catalog::Suit,
+    ) -> CardId {
+        let card = if let Some(pos) = self
+            .state
+            .core
+            .deck
+            .iter()
+            .position(|c| self.catalog.cards[*c as usize].suit == suit)
+        {
+            self.state.core.deck.remove(pos)
+        } else {
+            let pos = self
+                .state
+                .core
+                .discard
+                .iter()
+                .position(|c| self.catalog.cards[*c as usize].suit == suit)
+                .expect("牌库/弃牌堆中有该花色");
+            self.state.core.discard.remove(pos)
+        };
+        self.state.core.player_mut(player).hand.push(card);
+        card
+    }
+
     /// 测试布阵：把一张具名牌放到某玩家手牌（从牌库或弃牌堆取）。
     pub fn debug_place(&mut self, player: PlayerId, name: &str) -> CardId {
         let kind = self.card_kind_by_name(name);
