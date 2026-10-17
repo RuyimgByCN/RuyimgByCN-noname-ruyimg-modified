@@ -1567,6 +1567,7 @@ fn commit_equip(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId, card: cr
     if let Some(old) = replaced {
         ctx.core.player_mut(player).equips.retain(|c| *c != old);
         revoke_equip_skills(ctx.core, ctx.catalog, player, old);
+        ctx.note_cards_lost(player, &[old]);
         ctx.to_discard(old);
     }
     ctx.core.player_mut(player).equips.push(card);

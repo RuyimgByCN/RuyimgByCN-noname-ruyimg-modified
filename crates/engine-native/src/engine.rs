@@ -1251,6 +1251,22 @@ impl Engine {
         })
     }
 
+    /// 测试/工具：从手牌弃置一张（走正常弃置管线：移出手牌、入弃堆、
+    /// 义山记录钩、日志）。
+    pub fn debug_discard_card(&mut self, player: PlayerId, card: CardId) {
+        let pos = self
+            .state
+            .core
+            .player(player)
+            .hand
+            .iter()
+            .position(|c| *c == card)
+            .expect("card in hand");
+        self.state.core.player_mut(player).hand.remove(pos);
+        self.state.core.discard.push(card);
+        crate::machine::note_cards_lost(&mut self.state.core, &self.catalog, player, &[card]);
+    }
+
     /// 测试布阵：把一张指定花色的牌放到某玩家手牌（从牌库或弃牌堆取；
     /// 用于花色类技能布阵——清正/反间等）。
     pub fn debug_place_suit(
@@ -5168,6 +5184,11 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
         // 入梦跳过弃牌阶段（swd 批 122，规则 v309）
         push_u8(&mut h, p.skip_discard_phase as u8);
+        // 义山最近失去的牌（swd 批 123，规则 v310）
+        push_u32(&mut h, p.yishan_lost.len() as u32);
+        for c in &p.yishan_lost {
+            push_u32(&mut h, *c);
+        }
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

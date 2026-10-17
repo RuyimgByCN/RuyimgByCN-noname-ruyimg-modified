@@ -271,6 +271,10 @@ pub struct PlayerState {
     /// 入梦·跳过弃牌阶段（swd 批 122，规则 v309）：上游 `skip('phaseDiscard')`
     /// ——弃牌阶段开始即跳过（本回合内一次性，用后清零）。
     pub skip_discard_phase: bool,
+    /// 义山·最近失去的牌（swd 批 123，规则 v310）：上游 `storage.yishan`
+    /// （`yishan2` loseEnd unshift 记录；新在前）——受伤后取回至多 2 张
+    /// 仍在他处者。
+    pub yishan_lost: Vec<CardId>,
 }
 
 /// 无限体力哨兵（上游 `Infinity`，D5/T11-BOSS-ZHUGE-LIANG 前置原语）：
@@ -379,6 +383,7 @@ impl PlayerState {
             shenyan_used: false,
             shenyan_pending: Vec::new(),
             skip_discard_phase: false,
+            yishan_lost: Vec::new(),
         }
     }
 }

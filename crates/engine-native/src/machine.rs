@@ -361,10 +361,19 @@ impl<'a> Ctx<'a> {
     pub fn discard_from_hand(&mut self, player: PlayerId, card: CardId) {
         self.take_hand_card(player, card);
         self.to_discard(card);
+        self.note_cards_lost(player, &[card]);
         self.out.push(LogEvent::CardDiscarded {
             player,
             cards: vec![card],
         });
+    }
+
+    /// 义山记录（swd 批 123，规则 v310）：持有者失去牌时登记（上游
+    /// `yishan2` loseEnd `storage.yishan.unshift` 同口径，新在前）。
+    /// 覆盖原生三类丢失路径：弃置/交出/装备离场（登记差异：其余丢失路径
+    /// 如移出游戏不记）。
+    pub fn note_cards_lost(&mut self, player: PlayerId, cards: &[CardId]) {
+        note_cards_lost(self.core, self.catalog, player, cards);
     }
 
     /// 手牌置武将牌上（离场区，规则 v162 基建）：实体牌守恒——离开全部
@@ -413,6 +422,7 @@ impl<'a> Ctx<'a> {
     /// 手牌直接给予另一玩家（不进弃牌堆）。
     pub fn give_hand_card(&mut self, from: PlayerId, to: PlayerId, card: CardId) {
         self.take_hand_card(from, card);
+        self.note_cards_lost(from, &[card]);
         self.core.player_mut(to).hand.push(card);
         self.emit(EventData::CardsMoved {
             cards: vec![card],
@@ -669,5 +679,27 @@ pub fn card_use_with_nature(
         nature,
         use_as,
         cancelled: false,
+    }
+}
+
+/// 义山记录（swd 批 123，规则 v310）自由函数：Ctx 与测试工具共用。
+pub fn note_cards_lost(
+    core: &mut GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    cards: &[CardId],
+) {
+    let Some(def) = catalog.skill_by_name("yishan") else {
+        return;
+    };
+    if !core.has_skill(player, def) {
+        return;
+    }
+    let list = &mut core.player_mut(player).yishan_lost;
+    for c in cards {
+        list.insert(0, *c);
+    }
+    if list.len() > 16 {
+        list.truncate(16);
     }
 }

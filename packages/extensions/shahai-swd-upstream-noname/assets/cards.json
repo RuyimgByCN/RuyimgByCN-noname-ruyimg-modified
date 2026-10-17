@@ -846,7 +846,7 @@
     },
     {
      "name": "yishan",
-     "mapping": null
+     "mapping": "host:yishan"
     }
    ]
   },
