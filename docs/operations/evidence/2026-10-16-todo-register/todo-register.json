@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 44,
-  "open_count": 45,
+  "resolved_count": 45,
+  "open_count": 44,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -1786,14 +1786,23 @@
     "证据目录",
     "台账 G0 深度清单"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "extension-auditor",
    "tags": [
     "E01",
     "G0",
     "T9"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-16",
+    "kind": "completed",
+    "conclusion": "37/37 来源 G0 深度文档交付（docs/migration/g0/），每份含功能清单/菜单与规则分支语义/目标接口/验证入口/旧行为样本引用；生成器可复跑。实际动态样本采样另见 T9-SOURCE-BEHAVIOR-SAMPLES。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-16-g0-depth/README.md",
+     "docs/migration/g0/README.md"
+    ]
+   }
   },
   {
    "id": "E02-OPEN-RULE",
