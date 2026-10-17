@@ -1762,7 +1762,7 @@
     },
     {
      "name": "linyun",
-     "mapping": null
+     "mapping": "host:linyun"
     },
     {
      "name": "hutian",

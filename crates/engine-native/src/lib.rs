@@ -63,7 +63,7 @@ mod a0_lib_tests {
             assert!(keys.insert(k, b).is_none(), "宿主行为数据键重复: {k}");
             assert_eq!(HostBehavior::from_key(k), Some(b), "键双射失败: {k}");
         }
-        assert_eq!(keys.len(), 478, "HostBehavior 数量应 478（2026-10-17 陷阱/孤行/灵矢/锦鳞/hlss 族/潜龙/涅槃族/清正/灵武/神焰/入梦/义山/守印/魅惑/集控 tag 445-481）；新增行为须同步键表");
+        assert_eq!(keys.len(), 479, "HostBehavior 数量应 479（2026-10-17 陷阱/孤行/灵矢/锦鳞/hlss 族/潜龙/涅槃族/清正/灵武/神焰/入梦/义山/守印/魅惑/集控/林韵 tag 445-482）；新增行为须同步键表");
     }
 
     /// standard 技能名序只追加：目录技能名序列与冻结表逐名相等——中间

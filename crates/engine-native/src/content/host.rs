@@ -1309,6 +1309,9 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 林韵（tag 482，swd deferred 消解批 127，`linyun`）：出牌阶段主动——
+    /// 两张牌（手牌或装备）当【杀】使用；转化杀照常结算（响应闪/伤害）。
+    SwdLinyun,
     /// 集控（tag 481，swd deferred 消解批 126，`jikong`）：每回合限一次——
     /// 自己阶段开始，或自己失去手牌致手牌为空时，可对攻击距离内一名其他
     /// 角色使用虚拟【雷杀】；取消不消耗次数（上游 `counttrigger--` 同口径）。
@@ -1663,6 +1666,7 @@ impl HostBehavior {
             HostBehavior::SwdShouyin => 479,
             HostBehavior::SwdMeihuo => 480,
             HostBehavior::SwdJikong => 481,
+            HostBehavior::SwdLinyun => 482,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2385,6 +2389,7 @@ impl HostBehavior {
             479 => HostBehavior::SwdShouyin,
             480 => HostBehavior::SwdMeihuo,
             481 => HostBehavior::SwdJikong,
+            482 => HostBehavior::SwdLinyun,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2405,7 +2410,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 478] = [
+        pub const ALL: [HostBehavior; 479] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2884,6 +2889,7 @@ impl HostBehavior {
         HostBehavior::SwdShouyin,
         HostBehavior::SwdMeihuo,
         HostBehavior::SwdJikong,
+        HostBehavior::SwdLinyun,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3124,6 +3130,7 @@ impl HostBehavior {
             HostBehavior::SwdShouyin => "host:shouyin",
             HostBehavior::SwdMeihuo => "host:meihuo",
             HostBehavior::SwdJikong => "host:jikong",
+            HostBehavior::SwdLinyun => "host:linyun",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3603,6 +3610,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 林韵：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::SwdLinyun => None,
             // 集控：自己阶段开始 或 自己失去手牌（可用：每回合一次）
             HostBehavior::SwdJikong => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -5855,6 +5864,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 林韵（swd 批 127）：目录技能名（两张牌当杀）。
+pub const SWD_LINYUN_KEY: &str = "linyun";
+
 /// 集控（swd 批 126）：目录技能名（阶段开始/失去手牌后虚拟雷杀；使用时消费次数）。
 pub const SWD_JIKONG_KEY: &str = "jikong";
 
@@ -6703,6 +6715,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdShouyin => (None, None),
             HostBehavior::SwdMeihuo => (None, None),
             HostBehavior::SwdJikong => (None, None),
+            HostBehavior::SwdLinyun => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7037,6 +7050,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Yuhuo => false,
             HostBehavior::Shenwei => false,
             // 集控：自己阶段开始（任意阶段）/ 自己失去手牌且手牌已空
+            HostBehavior::SwdLinyun => false,
             HostBehavior::SwdJikong => {
                 // 每回合限一次（上游 usable:1）：**使用时**消费——取消目标窗
                 // 不消耗（上游 counttrigger-- 返还同口径）
@@ -9112,6 +9126,27 @@ impl SkillBehavior for HostSkillBehavior {
             //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
             HostBehavior::SwdJinlin => {
                 if ctx.state.player(owner).jinlin_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 林韵（swd 批 127）：出牌阶段主动——两张牌（手/装备）当杀
+            HostBehavior::SwdLinyun => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                if ctx.state.player(owner).hand.len() + ctx.state.player(owner).equips.len() < 2 {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -20135,6 +20170,134 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 林韵：两张牌当杀（手牌或装备；首张为载荷牌，declared Sha）
+            HostBehavior::SwdLinyun => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.len() < 2 {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::CardsAsk;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "linyun_pick_two",
+                            options,
+                            min: 2,
+                            max: 2,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::CardsAsk => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.len() != 2 {
+                        return Flow::Done;
+                    }
+                    self.cards = picked;
+                    let candidates: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != self.owner
+                                && ctx.core.computed_distance(ctx.catalog, self.owner, *p)
+                                    <= ctx.core.attack_range(ctx.catalog, self.owner)
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if candidates.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "linyun_sha_target",
+                            options: candidates,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let (Some(ChoiceOption::Player(target)), [c1, c2]) =
+                        (ctx.answer().first(), self.cards.as_slice())
+                    else {
+                        return Flow::Done;
+                    };
+                    let target = *target;
+                    if !ctx.core.player(target).alive {
+                        return Flow::Done;
+                    }
+                    // 两张牌为转化素材（手牌/装备皆可）：次张弃置，首张为
+                    // 载荷牌并声明为杀
+                    for c in [*c2, *c1] {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            if c == *c1 {
+                                continue;
+                            }
+                            ctx.discard_from_hand(self.owner, c);
+                        } else if ctx.core.player(self.owner).equips.contains(&c) {
+                            if c == *c1 {
+                                continue;
+                            }
+                            ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+                            ctx.to_discard(c);
+                        } else {
+                            return Flow::Done;
+                        }
+                    }
+                    // 载荷牌须在手中（emit 后由杀结算弃置）
+                    if ctx.core.player(self.owner).equips.contains(c1) {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| x != c1);
+                        crate::kernel::revoke_equip_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            *c1,
+                        );
+                        ctx.core.player_mut(self.owner).hand.push(*c1);
+                    }
+                    if !ctx.core.player(self.owner).hand.contains(c1) {
+                        return Flow::Done;
+                    }
+                    ctx.core
+                        .declared_kinds
+                        .insert(*c1, crate::catalog::CardKind::Sha);
+                    ctx.emit(crate::event::EventData::CardUsed(
+                        crate::machine::card_use_as(
+                            *c1,
+                            self.owner,
+                            vec![target],
+                            Some(crate::catalog::CardKind::Sha),
+                        ),
+                    ));
+                    // 置终态：子帧（杀结算）结束后本机再次恢复时直接收束，
+                    // 不再读取已消费的应答
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
             HostBehavior::SwdJikong => match self.stage {
                 HostStage::Act => {
                     let range = ctx.core.attack_range(ctx.catalog, self.owner);
