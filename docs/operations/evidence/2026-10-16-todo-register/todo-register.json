@@ -30,8 +30,8 @@
   "ambiguous_ids": [],
   "ambiguous_resolved_date": "2026-10-16",
   "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-  "resolved_count": 47,
-  "open_count": 42,
+  "resolved_count": 49,
+  "open_count": 40,
   "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
   "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
   "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -754,7 +754,7 @@
     "doc": "docs/architecture/native-progress.md",
     "ref": "后续待做 / T12（约 L85）；台账「37 项均未完成原生整包验收」"
    },
-   "description": "T12 总账：2026-10-17 起为 16/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26、L21 与 L16 八项）。其余 21 个来源未验收。U04 不因同一经济再计一次。每来源八项通过后才计入。",
+   "description": "T12 总账：2026-10-17 起为 18/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26、L21、L16、U02 与 L03 八项）。其余 19 个来源未验收。U04 不因同一经济再计一次。每来源八项通过后才计入。",
    "done_when_evidence": [
     "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
     "整包状态上调登记"
@@ -980,12 +980,12 @@
     "doc": "docs/migration/upstream-extension-reconstruction.md",
     "ref": "§3 全量逐项台账 / U02 boss"
    },
-   "description": "来源 U02（boss）原生整包验收未完成。台账状态：待重构；未验收。建议批次：G2–G3。",
+   "description": "来源 U02（boss play 包）八项已于 2026-10-17 从 noname 真实安装验收。挑战/剑阁装配、体力归一、禁 AI、翻译/intro、isBossAllowed 过滤。arenaReady 异步模式加载与表现面仍为登记差异。",
    "done_when_evidence": [
     "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
     "整包状态上调登记"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "extension-engineer",
    "tags": [
@@ -993,7 +993,15 @@
     "整包",
     "U02",
     "G2"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "八项整包（与 L03 共享 boss_playpack 模块）；包由 gen_boss_packages 生成。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-t12-u02-l03-boss-play-eight/README.md"
+    ]
+   }
   },
   {
    "id": "T12-SRC-U03",
@@ -1192,12 +1200,12 @@
     "doc": "docs/migration/upstream-extension-reconstruction.md",
     "ref": "§3 全量逐项台账 / L03 boss"
    },
-   "description": "来源 L03（boss）原生整包验收未完成。台账状态：待重构；未验收（对照 U02）。建议批次：G2–G3。",
+   "description": "来源 L03（boss play 包）八项已于 2026-10-17 从 liuli 真实安装验收。mode_extension_* 包键、mode:boss/mode:versus 标签、bossallowed 旗标、8 条 intro 别名。",
    "done_when_evidence": [
     "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
     "整包状态上调登记"
    ],
-   "status": "open",
+   "status": "resolved",
    "depends_on": [],
    "role": "extension-engineer",
    "tags": [
@@ -1205,7 +1213,15 @@
     "整包",
     "L03",
     "G2"
-   ]
+   ],
+   "resolution": {
+    "date": "2026-10-17",
+    "kind": "completed",
+    "conclusion": "八项整包（与 U02 共享 boss_playpack 模块，liuli 变体）。",
+    "evidence": [
+     "docs/operations/evidence/2026-10-17-t12-u02-l03-boss-play-eight/README.md"
+    ]
+   }
   },
   {
    "id": "T12-SRC-L04",
@@ -2164,7 +2180,7 @@
     "doc": "docs/native-coverage-manifest.md",
     "ref": "扩展机制表「指定两仓全部扩展」"
    },
-   "description": "覆盖清单扩展行：原生整包验收 16/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26、L21 与 L16，2026-10-17），仍需处理 21/37，与 T12 总账同口径。U04 不因同一经济再计一次。",
+   "description": "覆盖清单扩展行：原生整包验收 18/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26、L21、L16、U02 与 L03，2026-10-17），仍需处理 19/37，与 T12 总账同口径。U04 不因同一经济再计一次。",
    "done_when_evidence": [
     "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
     "整包状态上调登记"

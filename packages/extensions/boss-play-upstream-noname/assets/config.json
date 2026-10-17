@@ -1,0 +1,14 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/boss/extension.js",
+  "upstream_commit": "df2682e66af9930fe02861a25cb6f2cd2ef6ae36",
+  "boss_pack_key": "boss",
+  "jiange_pack_key": "jiange",
+  "boss_translate_key": "boss_character_config",
+  "jiange_translate_key": "jiange_character_config",
+  "boss_translate_default": "挑战武将",
+  "jiange_translate_default": "剑阁武将",
+  "tag_boss": null,
+  "tag_versus": null,
+  "intro_aliases": [["boss_liedixuande", "liubei"], ["boss_gongshenyueying", "huangyueying"], ["boss_tianhoukongming", "shen_zhugeliang"], ["boss_yuhuoshiyuan", "pangtong"], ["boss_qiaokuijunyi", "zhanghe"], ["boss_jiarenzidan", "caozhen"], ["boss_duanyuzhongda", "simayi"], ["boss_juechenmiaocai", "xiahouyuan"], ["boss_kumuyuanrang", "xiahoudun"], ["boss_baijiwenyuan", "zhangliao"], ["boss_yihanyunchang", "guanyu"], ["boss_fuweizilong", "zhaoyun"], ["boss_lvbu1", "lvbu"], ["boss_lvbu2", "lvbu"], ["boss_lvbu3", "lvbu"]]
+}

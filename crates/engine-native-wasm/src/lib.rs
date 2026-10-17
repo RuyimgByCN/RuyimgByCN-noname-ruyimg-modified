@@ -661,6 +661,14 @@ fn drag_read_apply(config_json: &str, request_json: &str) -> String {
     }
 }
 
+/// U02/L03 目标平台：跑 boss play 包的装配决策。不读写 localStorage、不加载模式。
+fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    match content_native_loader::apply_boss_play_line(config_json, request_json) {
+        Ok(text) => text,
+        Err(err) => format!("error:{err:?}"),
+    }
+}
+
 /// L26 目标平台：跑笨蛋插件的仍在执行的决策。不画界面，不播放，不睡眠。
 fn fool_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_fool_line(config_json, request_json) {
@@ -1278,6 +1286,30 @@ mod pack_roundtrip {
         assert!(drag_read_apply(&config, "not json").starts_with("error:BadConfig"));
         assert!(drag_read_apply(&config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""), "{}")
             .starts_with("error:BadConfig"));
+    }
+
+    /// U02/L03 目标平台：两仓 boss play 包的真实 config.json。装配/归一/门控。
+    #[test]
+    fn boss_play_pack_json_enters_wasm_helper() {
+        let req = r#"{"mode":"prototype","enableai":true,"skills":["a","versus_ladder","b"],"storage":{"boss":{"甲":{"hp":4,"isBossAllowed":true},"乙":{"hp":"3"}},"versus":{"丙":{"hp":"3/4","tags":["bossallowed"]}},"translate":{"x":"y"}}}"#;
+        for (dir, source) in [
+            ("boss-play-upstream-noname", "noname"),
+            ("boss-play-upstream-liuli", "noname-liuli"),
+        ] {
+            let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join(format!("../../packages/extensions/{dir}/assets/config.json"));
+            let config = std::fs::read_to_string(&path).expect("读 boss play config.json");
+            assert!(config.contains(&format!("\"source\": \"{source}\"")));
+            assert!(config.contains("挑战武将") && config.contains("剑阁武将"));
+            assert!(!config.contains("localStorage"));
+            assert!(!config.contains("eval("));
+            let line = boss_play_apply(&config, req);
+            assert!(line.starts_with("skipped:0 | boss:2 | jiange:1 | chars:3 | forbidai:0 |"), "{line}");
+            assert!(line.contains("allowed_jiange:1 | skills:2 |"), "{line}");
+            let tafang = boss_play_apply(&config, r#"{"mode":"tafang"}"#);
+            assert!(tafang.starts_with("skipped:1 | boss:0 | jiange:0 |"), "{tafang}");
+            assert!(boss_play_apply(&config, "not json").starts_with("error:BadConfig"));
+        }
     }
 
     /// L26 目标平台：真实 config.json。不画界面，不播放，不睡眠。

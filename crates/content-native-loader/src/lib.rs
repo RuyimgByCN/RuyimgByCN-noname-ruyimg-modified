@@ -30,6 +30,7 @@ use engine_native::content::standard::Gender;
 use serde_json::Value;
 
 mod coin;
+mod boss_playpack;
 mod desktop_adapt;
 mod douzhuan;
 mod drag_read;
@@ -46,6 +47,11 @@ pub use coin::{
     start_item, stop_item, toggle_snow_fall, toggle_snow_size, CoinConfig, CoinDisplay, CoinError,
     CoinGate, CoinMode, CoinSession, IdentityRole, SettleOutcome, SettleRequest, ShopItem,
     SnowSize,
+};
+pub use boss_playpack::{
+    apply_boss_play_line, exclude_versus_ladder, filter_allowed, init_outcome, merge_translate,
+    normalize_boss_hp, normalize_jiange_hp, parse_boss_play_config, parse_storage, BossPlayConfig,
+    Entry, HpKind, InitOutcome, PlayError, PlayStorage,
 };
 pub use desktop_adapt::{
     apply as apply_desktop_adapt, classify_pointer, export_download, invoke_emoji,
