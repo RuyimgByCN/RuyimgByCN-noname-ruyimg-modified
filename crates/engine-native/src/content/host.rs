@@ -1266,6 +1266,12 @@ pub enum HostBehavior {
     /// 额外摸一张；有宝物时回合内可额外使用一张【杀】。四条效果全部内联
     /// （距离/杀限次/直中/摸牌四臂），无机器步（天弦同款旗标行为）。
     SwdLingshi,
+    /// 锦鳞（tag 461，swd deferred 消解批 114 司空蔷）：limited 一次性主动
+    /// 技——选任意名角色各 +3 护甲并授予「锦鳞·退」（每阶段开始 -1 护甲、
+    /// 计数 -1，护甲归零或计数归零时移除；计数 3）。
+    SwdJinlin,
+    /// 锦鳞·退（tag 462）：持有者阶段开始递减护甲与计数。
+    SwdJinlin2,
     /// 青木（tag 411，D4/B1）：Boss 死亡前置隐藏（dieBegin；filter=本人是 boss）。
     BossQingmu2,
     /// 青木·转阶（tag 412，D4/B1）：Boss 死亡前置晚窗转阶→勾芒+书精 fellow
@@ -1568,6 +1574,8 @@ impl HostBehavior {
             HostBehavior::SwdGuxing => 458,
             HostBehavior::SwdGuxing3 => 459,
             HostBehavior::SwdLingshi => 460,
+            HostBehavior::SwdJinlin => 461,
+            HostBehavior::SwdJinlin2 => 462,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2269,6 +2277,8 @@ impl HostBehavior {
             458 => HostBehavior::SwdGuxing,
             459 => HostBehavior::SwdGuxing3,
             460 => HostBehavior::SwdLingshi,
+            461 => HostBehavior::SwdJinlin,
+            462 => HostBehavior::SwdJinlin2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2289,7 +2299,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 457] = [
+        pub const ALL: [HostBehavior; 459] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -2747,6 +2757,8 @@ impl HostBehavior {
         HostBehavior::SwdGuxing,
         HostBehavior::SwdGuxing3,
         HostBehavior::SwdLingshi,
+        HostBehavior::SwdJinlin,
+        HostBehavior::SwdJinlin2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -2966,6 +2978,8 @@ impl HostBehavior {
             HostBehavior::SwdGuxing => "host:guxing",
             HostBehavior::SwdGuxing3 => "host:guxing3",
             HostBehavior::SwdLingshi => "host:lingshi",
+            HostBehavior::SwdJinlin => "host:jinlin",
+            HostBehavior::SwdJinlin2 => "host:jinlin2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3388,6 +3402,16 @@ impl HostBehavior {
             // 灵矢：锁定旗标（无触发时机；四条效果内联于距离/杀限次/
             // 直中/摸牌四臂，天弦同款）
             HostBehavior::SwdLingshi => None,
+            // 锦鳞：主动技（limited 一次性；无触发时机）
+            HostBehavior::SwdJinlin => None,
+            // 锦鳞·退：持有者阶段开始（silent）
+            HostBehavior::SwdJinlin2 => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             HostBehavior::SwdShehun => None,
             HostBehavior::SwdNlianji => None,
             // 铁壁：成为杀目标时（CardUsed 帧等价承载，登记差异：上游
@@ -5544,6 +5568,10 @@ pub const WUDIAN_XJ_SHUIYUN5_CARDS: &str = "xj_shuiyun5_cards";
 pub const WUDIAN_XJ_SHUIYUN_CARDS: &str = "xj_shuiyun_cards";
 pub const WUDIAN_XJ_TIANJIAN_CARDS: &str = "xj_tianjian_cards";
 pub const WUDIAN_XJ_TIANXIAN_KEY: &str = "tianxian";
+
+/// 锦鳞·退（swd 司空蔷，swd deferred 消解批 114）：目录技能名（包 `skills`
+/// 段声明 `swd_jinlin2` → `host:jinlin2`，运行时由锦鳞授予实例）。
+pub const SWD_JINLIN2_KEY: &str = "swd_jinlin2";
 pub const WUDIAN_XJ_WANGYOU_CARDS: &str = "xj_wangyou_cards";
 pub const WUDIAN_XJ_XIEPAN_CARDS: &str = "xj_xiepan_cards";
 pub const WUDIAN_XJ_XTANXI_CARDS: &str = "xj_xtanxi_cards";
@@ -6036,6 +6064,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdGuxing => (None, None),
             HostBehavior::SwdGuxing3 => (None, None),
             HostBehavior::SwdLingshi => (None, None),
+            HostBehavior::SwdJinlin => (None, None),
+            HostBehavior::SwdJinlin2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -6318,6 +6348,10 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::SwdGuxing => false,
             // 灵矢：锁定旗标（无触发；四臂内联）
             HostBehavior::SwdLingshi => false,
+            HostBehavior::SwdJinlin => false,
+            // 锦鳞·退：持有者阶段开始
+            HostBehavior::SwdJinlin2 => matches!(event,
+                EventData::Phase { player, begin: true, .. } if *player == owner),
             // 孤行·计数：孤行杀窗口内自己造成伤害
             HostBehavior::SwdGuxing3 => matches!(event,
                 EventData::Damage(d)
@@ -8269,6 +8303,23 @@ impl SkillBehavior for HostSkillBehavior {
                     !traps.contains(&ctx.catalog.cards[*c as usize].suit)
                 });
                 if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 锦鳞（deferred 消解批 114）：limited 一次性——已发动则无机器
+            //（技能实例仍在，门在 activate；上游 awakenSkill 同口径）
+            HostBehavior::SwdJinlin => {
+                if ctx.state.player(owner).jinlin_used {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -18946,6 +18997,91 @@ impl crate::catalog::SkillMachine for HostMachine {
             },
             // 灵矢：锁定旗标行为（无机器步；距离/杀限次/直中/摸牌内联）
             HostBehavior::SwdLingshi => Flow::Done,
+            // 锦鳞：选任意名角色各 +3 护甲并授予「锦鳞·退」（计数 3）
+            HostBehavior::SwdJinlin => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    let max = options.len();
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "jinlin_targets",
+                            options,
+                            min: 1,
+                            max,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let picked: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.is_empty() {
+                        return Flow::Done;
+                    }
+                    let Some(def) = ctx.catalog.skill_by_name(SWD_JINLIN2_KEY) else {
+                        return Flow::Done;
+                    };
+                    for t in &picked {
+                        if !ctx.core.player(*t).alive {
+                            continue;
+                        }
+                        ctx.change_hujia(*t, 3);
+                        ctx.core.skills.insert(
+                            (*t, def),
+                            crate::state::SkillInstance {
+                                owner: *t,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: false,
+                                rounds: 3,
+                            },
+                        );
+                    }
+                    ctx.core.player_mut(self.owner).jinlin_used = true;
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 锦鳞·退：阶段开始 -1 护甲与计数；护甲归零或计数归零移除
+            HostBehavior::SwdJinlin2 => {
+                if ctx.core.player(self.owner).hujia > 0 {
+                    ctx.change_hujia(self.owner, -1);
+                }
+                let def = ctx.catalog.skill_by_name(SWD_JINLIN2_KEY);
+                let hujia = ctx.core.player(self.owner).hujia;
+                let remove = match def {
+                    Some(def) => match ctx.core.skills.get_mut(&(self.owner, def)) {
+                        Some(inst) => {
+                            inst.rounds = inst.rounds.saturating_sub(1);
+                            hujia == 0 || inst.rounds == 0
+                        }
+                        None => false,
+                    },
+                    None => false,
+                };
+                if remove {
+                    if let Some(def) = def {
+                        ctx.core.skills.remove(&(self.owner, def));
+                    }
+                }
+                Flow::Done
+            },
             // 聚悉：扣存活数并选一名角色——已受伤则自选受伤/回复，否则受伤
             HostBehavior::SwdJuxi => match self.stage {
                 HostStage::Act => {

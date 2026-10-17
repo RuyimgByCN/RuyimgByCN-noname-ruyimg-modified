@@ -5088,6 +5088,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         push_u8(&mut h, p.nbianshen_toggle as u8);
         // 混乱标记（Boss 郭嘉鬼谋，规则 v259）
         push_u8(&mut h, p.boss_mad as u8);
+        // 锦鳞一次性发动（swd 司空蔷，规则 v302）
+        push_u8(&mut h, p.jinlin_used as u8);
         push_cards(&mut h, &p.hand);
         push_cards(&mut h, &p.equips);
         push_cards(&mut h, &p.judge);

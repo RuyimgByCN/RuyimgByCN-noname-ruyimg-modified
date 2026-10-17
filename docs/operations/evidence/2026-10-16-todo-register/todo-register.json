@@ -51,7 +51,8 @@
     "batch_2026_10_17_closeout": "12 项收口：T8-FILTER-COMPOSITE、T9-LX-BATTLE-TRACE、T11-BOSS-STAGE-SUBSYSTEM/HUANREN/HIDECHAIN-8/WING-ROTATION/BIANSHEN-CHANGEBOSS、T15-3-LEGACY-PORT、O4-WASM-OPT-COMPARE、O5-PROFILING-CLOSEOUT、COV-REWARD-OVER-VERIFY、COV-NULLIFY-JUDGE-EXPAND。 另：COV-EQUIP-TIMING-WINDOW 与 COV-TRIGGER-GETINDEX-BUCKETS 定案关闭。 另：T12-SWD-EXTRA-CARDS-DISPOSITION 处置关闭。 另：T11-BOSS-DIZANG-DAYUAN/WULIANG-GAMEDRAW 登记差异关闭。 另：T12-MTG-DEFERRED-LANDS 永久 deferred 关闭。 另：T13-NATIVE-GENERALS-PRODUCT 产品面接入关闭。",
     "swd_batch_113": "2026-10-17 swd 批 113 灵矢（tag 460，无版本/无 golden 位移）：149/184 映射、deferred 33、计亭整将闭环；engine-native 895/0/1、Gate 1b exit 0。",
     "t13_ai_policy_v2": "2026-10-17 T13-AI-STRONGER-POLICY 关闭：策略变体 1（全手牌候选+牌值评分）同 64 节点座位 0 胜率 2%→70%；附内核应答路由修复（1 场 golden 重录，无版本变化）。",
-    "l13_closure_2026_10_17": "T12-SRC-L13 resolved after eight-dimension evidence. Whole-pack 19/37; L13 not counted via any other source line."
+    "l13_closure_2026_10_17": "T12-SRC-L13 resolved after eight-dimension evidence. Whole-pack 19/37; L13 not counted via any other source line.",
+    "swd_batch_114": "2026-10-17 swd 批 114 锦鳞（tag 461/462，规则 v302/存档 v87）：150/184 映射、deferred 32、司空蔷整将闭环；14 golden 重录 + 版本回退探针，engine-native 899/0/1、Gate 1b exit 0。"
   },
   "items": [
     {
@@ -791,7 +792,7 @@
         "doc": "docs/migration/upstream-extension-reconstruction.md",
         "ref": "当前状态段 swd deferred（约批 98：131/184 映射，deferred≈51）"
       },
-      "description": "杀海拾遗·swd deferred 消解（核验 b99：133/184，deferred 49；2026-10-17 批 100–113 后：**149/184 映射，deferred 33**；多余 13 张另项）。",
+      "description": "杀海拾遗·swd deferred 消解（核验 b99：133/184，deferred 49；2026-10-17 批 100–114 后：**150/184 映射，deferred 32**；多余 13 张另项）。",
       "done_when_evidence": [
         "定向回归测试通过",
         "cargo test --offline -p engine-native --no-fail-fast 全绿",
@@ -807,7 +808,7 @@
         "U05",
         "swd"
       ],
-      "notes": "2026-10-17 批 100–112：兰芷/改天道/热血(+流离内置引用)/幻音/灵弦/拼点/蛇魂/魂身(v296/81)/待行(v297/82)/聚悉(v298/83)/破舟(v299/84)/陷阱(v300/85)/孤行(v301/86) 消解——148/184 映射，deferred 49→34。批 113：灵矢（tag 460，无版本批；距离/直中/摸牌/杀限次四臂内联，计亭整将闭环，51/79），149/184，deferred 33。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100..b113/",
+      "notes": "2026-10-17 批 100–112：兰芷/改天道/热血(+流离内置引用)/幻音/灵弦/拼点/蛇魂/魂身(v296/81)/待行(v297/82)/聚悉(v298/83)/破舟(v299/84)/陷阱(v300/85)/孤行(v301/86) 消解——148/184 映射，deferred 49→34。批 113：灵矢（tag 460，无版本批；距离/直中/摸牌/杀限次四臂内联，计亭整将闭环，51/79），149/184，deferred 33。批 114：锦鳞（tag 461/462，字段批 v302/存档 v87——limited 一次性授「锦鳞·退」按阶段递减；司空蔷整将闭环 52/79），150/184，deferred 32。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100..b113/",
       "ambiguous": false,
       "resolution": {
         "date": "2026-10-16",

@@ -240,6 +240,9 @@ pub struct PlayerState {
     /// "mad" 至该玩家 phaseAfter 同口径——其回合收束解除；上游 mad 仅
     /// 挂标记+AI 态度面，原生规则面消费=鬼谋去重过滤）。
     pub boss_mad: bool,
+    /// 锦鳞（swd 司空蔷，swd deferred 消解批 114，规则 v302）：limited
+    /// 一次性主动技已发动（上游 `awakenSkill` + `storage.jinlin`）。
+    pub jinlin_used: bool,
 }
 
 impl PlayerState {
@@ -326,6 +329,7 @@ impl PlayerState {
             wunature: None,
             boss_chongzheng: 0,
             boss_mad: false,
+            jinlin_used: false,
         }
     }
 }

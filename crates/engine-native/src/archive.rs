@@ -65,7 +65,10 @@ use crate::state::{
 /// `BossStageState`（kind/level/孟婆旗/禁将表/翼武装/pending）。v78 字节
 /// 被版本门禁拒绝（无生产迁移数据；存档仅测试与内部工具）。
 /// 80：核心末尾追加 `VmAux`（T8 标记/牌堆/丢失/once/旗标）。空表仍写长度 0。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 86;
+/// v87（2026-10-17，swd 批 114 锦鳞）：`PlayerState` 尾部追加
+/// `jinlin_used`（limited 一次性主动技已发动）。v86 字节被版本门禁拒绝
+///（无生产迁移数据；存档仅测试与内部工具）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 87;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3265,6 +3268,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         w.boolean(p.nbianshen_toggle);
         // 混乱标记（v60，Boss 郭嘉鬼谋）
         w.boolean(p.boss_mad);
+        // 锦鳞一次性发动（v87）
+        w.boolean(p.jinlin_used);
     }
     let _ = &s.core.turn;
     w.len(s.core.deck.len());
@@ -3614,6 +3619,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let xingxia_used_round = r.u32()?;
         let nbianshen_toggle = r.boolean()?;
         let boss_mad = r.boolean()?;
+        let jinlin_used = r.boolean()?;
         Ok(crate::state::PlayerState {
             alive,
             hp,
@@ -3682,6 +3688,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             xingxia_used_round,
             nbianshen_toggle,
             boss_mad,
+            jinlin_used,
             off_court,
             shuiyun_count,
             wangyou3_round,

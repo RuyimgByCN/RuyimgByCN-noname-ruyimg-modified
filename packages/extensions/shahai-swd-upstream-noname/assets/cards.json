@@ -1158,7 +1158,7 @@
     },
     {
      "name": "jinlin",
-     "mapping": null
+     "mapping": "host:jinlin"
     }
    ]
   },
@@ -2003,6 +2003,10 @@
   {
    "name": "swd_huajin2",
    "mapping": "host:huajin2"
+  },
+  {
+   "name": "swd_jinlin2",
+   "mapping": "host:jinlin2"
   }
  ]
 }
