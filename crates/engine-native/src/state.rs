@@ -278,6 +278,14 @@ pub struct PlayerState {
     /// 守印·限定技已发动（swd 批 124，规则 v311）：上游
     /// `player.storage.shouyin`（awakenSkill 后 true）。
     pub shouyin_used: bool,
+    /// 脉轮·当前效果（swd 批 137，规则 v316）：上游 `storage.mailun`
+    /// （1..8；0=未选）。每阶段开始重选（旧效果清除）。
+    pub mailun_mode: u8,
+    /// 脉轮·首次伤害（造成侧）已用（同批）：上游 `mailun31`/`mailun41`
+    /// 一次性子技（用后移除）。
+    pub mailun_out_used: bool,
+    /// 脉轮·首次伤害（受到侧）已用（同批）：上游 `mailun32`/`mailun42`。
+    pub mailun_in_used: bool,
     /// 极略·本出牌阶段已用次数（swd 批 136，规则 v315）：上游 `usable:3`
     /// （每出牌阶段 3 次；出牌阶段开始清零）。
     pub jilve_used: u8,
@@ -404,6 +412,9 @@ impl PlayerState {
             skip_discard_phase: false,
             yishan_lost: Vec::new(),
             shouyin_used: false,
+            mailun_mode: 0,
+            mailun_out_used: false,
+            mailun_in_used: false,
             jilve_used: 0,
             songci_targets: Vec::new(),
             hutian_deposit: None,
@@ -1390,7 +1401,18 @@ impl GameStateCore {
             } else {
                 0
             };
-        (base + plus).saturating_sub(minus).max(1)
+        // 脉轮（swd 批 137，规则 v316）：7=双方向距离 -1、8=双方向 +1
+        //（上游 mailun7/8 mod globalFrom/globalTo distance∓1——两端各自生效）
+        let mailun_delta: i32 = [a, b]
+            .iter()
+            .map(|p| match self.player(*p).mailun_mode {
+                7 => -1,
+                8 => 1,
+                _ => 0,
+            })
+            .sum();
+        let total = (base + plus).saturating_sub(minus) as i32 + mailun_delta;
+        total.max(1) as u32
     }
 
     /// 攻击范围：武器射程（泛型 Weapon 走 CardDef.range，命名武器走
@@ -1588,6 +1610,13 @@ impl GameStateCore {
         // 灵渠（Boss 玄武，规则 v237）：手牌上限 +受击计数（上游
         // boss_lingqu mod maxHandcard `num + storage` 同口径）
         limit += self.player(p).lingqu_count as usize;
+        // 脉轮（swd 批 137，规则 v316）：5=上限 +1、6=上限 -1（上游
+        // mailun5/6 mod maxHandcard num±1 同口径）
+        match self.player(p).mailun_mode {
+            5 => limit += 1,
+            6 => limit = limit.saturating_sub(1),
+            _ => {}
+        }
         // 神威（Boss 庞统浴火授予，批 118 规则 v306）：手牌上限
         // +min(3, 其他角色数)（上游 shenwei mod maxHandcard 同口径）
         if let Some(def) = catalog.skill_by_name(crate::content::host::BOSS_SHENWEI_KEY) {

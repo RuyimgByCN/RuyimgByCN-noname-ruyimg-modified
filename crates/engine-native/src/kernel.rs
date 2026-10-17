@@ -390,6 +390,30 @@ fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageD
             p.turn_damage = p.turn_damage.saturating_add(amount.min(255) as u8);
         }
     }
+    // 脉轮（swd 批 137，规则 v316）：3=首次造成/受到伤害 -1、4=+1（各自
+    // 一次性；上游 mailun31/32/41/42 damageBegin 用后移除同口径）
+    {
+        if let Some(src) = d.source {
+            let mode = ctx.core.player(src).mailun_mode;
+            if (mode == 3 || mode == 4) && !ctx.core.player(src).mailun_out_used {
+                amount = if mode == 3 {
+                    amount.saturating_sub(1)
+                } else {
+                    amount.saturating_add(1)
+                };
+                ctx.core.player_mut(src).mailun_out_used = true;
+            }
+        }
+        let mode = ctx.core.player(d.target).mailun_mode;
+        if (mode == 3 || mode == 4) && !ctx.core.player(d.target).mailun_in_used {
+            amount = if mode == 3 {
+                amount.saturating_sub(1)
+            } else {
+                amount.saturating_add(1)
+            };
+            ctx.core.player_mut(d.target).mailun_in_used = true;
+        }
+    }
     // 护天护体（swd 批 131，规则 v314）：目标寄存护天牌时伤害以「体力降至
     // 寄存数」为上限（上游 hutian2 damageBegin priority -55 `trigger.num =
     // hp - storage.hutian2.length` 同口径）
@@ -2672,11 +2696,18 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     } else {
                         0
                     };
+                    // 脉轮（swd 批 137，规则 v316）：5=少摸一张、6=多摸一张
+                    //（上游 mailun5/6 phaseDrawBegin trigger.num∓1 同口径）
+                    let mailun_draw: i32 = match ctx.core.player(player).mailun_mode {
+                        5 => -1,
+                        6 => 1,
+                        _ => 0,
+                    };
+                    let base_draw = (if baiyi_cut { 1i32 } else { 2i32 } + mailun_draw).max(0)
+                        as usize;
                     ctx.draw_cards(
                         player,
-                        if baiyi_cut { 1 } else { 2 }
-                            + usize::from(lingshi_draw)
-                            + shenwei_draw,
+                        base_draw + usize::from(lingshi_draw) + shenwei_draw,
                     );
                     // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
                     // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差

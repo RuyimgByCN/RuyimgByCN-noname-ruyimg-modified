@@ -1626,7 +1626,7 @@
     },
     {
      "name": "mailun",
-     "mapping": null
+     "mapping": "host:mailun"
     }
    ]
   },

@@ -97,7 +97,9 @@ use crate::state::{
 /// v97 字节被版本门禁拒绝。
 /// v99（2026-10-17，swd 极略批 136）：`PlayerState` 追加极略本阶段已用
 /// 次数 `jilve_used`。v98 字节被版本门禁拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 99;
+/// v100（2026-10-17，swd 脉轮批 137）：`PlayerState` 追加脉轮三字段
+/// （`mailun_mode`/`mailun_out_used`/`mailun_in_used`）。v99 字节被拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 100;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3414,6 +3416,10 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         }
         // 极略已用次数（v99）
         w.u8(p.jilve_used);
+        // 脉轮三字段（v100）
+        w.u8(p.mailun_mode);
+        w.boolean(p.mailun_out_used);
+        w.boolean(p.mailun_in_used);
         // 护天四字段（v98）
         match p.hutian_deposit {
             None => w.u8(0),
@@ -3808,6 +3814,9 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
         let shouyin_used = r.boolean()?;
         let songci_targets = r.vec(|r| r.u8())?;
         let jilve_used = r.u8()?;
+        let mailun_mode = r.u8()?;
+        let mailun_out_used = r.boolean()?;
+        let mailun_in_used = r.boolean()?;
         let hutian_deposit = match r.u8()? {
             0 => None,
             1 => Some(r.u8()?),
@@ -3902,6 +3911,9 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
             shouyin_used,
             songci_targets,
             jilve_used,
+            mailun_mode,
+            mailun_out_used,
+            mailun_in_used,
             hutian_deposit,
             hutian_just_given,
             hutian_hold,

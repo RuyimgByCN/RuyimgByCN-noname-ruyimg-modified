@@ -5307,6 +5307,10 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
         // 极略已用次数（swd 批 136，规则 v315）
         push_u8(&mut h, p.jilve_used);
+        // 脉轮三字段（swd 批 137，规则 v316）
+        push_u8(&mut h, p.mailun_mode);
+        push_u8(&mut h, p.mailun_out_used as u8);
+        push_u8(&mut h, p.mailun_in_used as u8);
         // 护天四字段（swd 批 131，规则 v314）
         match p.hutian_deposit {
             None => push_u8(&mut h, 0),
