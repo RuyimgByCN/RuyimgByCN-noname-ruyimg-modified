@@ -1125,13 +1125,42 @@ impl GameStateCore {
         }
     }
 
-    /// 座位最短距离（顺/逆时针取小）。
+    /// 座位**最短**距离（顺/逆时针取小；同座 0）。
+    ///
+    /// NC01 修正：旧实现用 `u8::wrapping_sub` 后在 256 上取模再 `% n`，
+    /// 5 人局 `d(0,1)` 会因 `0u8.wrapping_sub(1)=255 → 255%5=0` 得到 **0**
+    /// （审计反例）。现改为有符号取模（与 `seat_distance_alive` 同口径）。
+    ///
+    /// 语义边界（勿混用）：
+    /// - **最短距离**（本函数）：判断相邻、射程、±1 范围等；
+    /// - **顺座次序**（[`Self::seat_steps_from`]）：触发结算顺序、按座次轮转；
+    /// - **存活座位环**（[`Self::seat_distance_alive`] / [`Self::ring_next`]）：
+    ///   死亡玩家不占位的距离与轮转。
     pub fn seat_distance(&self, a: PlayerId, b: PlayerId) -> u8 {
-        let n = self.players.len() as u8;
-        let (a, b) = (a % n, b % n);
-        let cw = b.wrapping_sub(a) % n;
-        let ccw = a.wrapping_sub(b) % n;
+        let n = self.players.len() as i16;
+        if n <= 0 {
+            return 0;
+        }
+        let a = (a as i16).rem_euclid(n);
+        let b = (b as i16).rem_euclid(n);
+        let cw = (b - a).rem_euclid(n) as u8;
+        let ccw = (a - b).rem_euclid(n) as u8;
         cw.min(ccw)
+    }
+
+    /// **顺座次序**偏移：从 `from` 起沿座位环顺时针到 `p` 的步数（0..n-1）。
+    ///
+    /// 用于触发结算顺序、按座次轮转等**顺序**语义；不要用最短距离代替
+    /// （4 人局最短距离序为 `[0,1,3,2]`，顺座次序为 `[0,1,2,3]`，审计反例）。
+    pub fn seat_steps_from(&self, from: PlayerId, p: PlayerId) -> u8 {
+        let n = self.players.len();
+        if n == 0 {
+            return 0;
+        }
+        // 以**座位环**位置为准（swapSeat 后座位次序随之改变）
+        let pa = self.ring_pos(from) % n;
+        let pb = self.ring_pos(p) % n;
+        ((pb + n - pa) % n) as u8
     }
 
     // ---- 座位环（T19b/ADR 0781）----

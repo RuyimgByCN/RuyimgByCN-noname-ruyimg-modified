@@ -297,7 +297,8 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
             if !def.behavior.filter(&qctx, *owner, &event) {
                 continue;
             }
-            let seat_rel = core.seat_distance(turn_current, *owner);
+            // NC01：触发结算顺序按**顺座次序**（不是最短距离）
+            let seat_rel = core.seat_steps_from(turn_current, *owner);
             entries.push(QueuedTrigger {
                 def: def_id,
                 owner: *owner,

@@ -1,8 +1,57 @@
 # 原生重写进度与下一步
 
+<a id="native-convergence"></a>
+## 2026-10-18 架构收敛执行登记
+
+用户已采纳[原生架构收敛执行方案](native-convergence-plan.md)，要求后续 agent 完整实施；[执行提示词](../operations/native-convergence-agent-prompt.md)覆盖 NC01–NC12 和六阶段。**2026-10-18 审查轮只落文档与归档证据；此后执行轮开始修复代码（NC01 已修，见下表与证据）。** 本节是这些工作包的唯一当前状态入口；来源状态仍只在[两仓台账](../migration/upstream-extension-reconstruction.md)维护。
+
+最近一次源码审查为 2026-10-18，基准 `98e269a625accd823c062ba523eab475807ae3ce` 加 dirty 工作树，规则 v321、存档 v105；19,969 个维护文件在测试前后内容哈希一致。落文档时 HEAD 为后续 docs-only 提交 `985119c478a25b7992ddf9d0baa74455465f71e4`。源码快照、工具链、完整命令和输出见[审查证据](../operations/evidence/2026-10-18-architecture-audit/README.md)；不得用干净 HEAD 或测试计数替代该工作树的实际边界。
+
+| 核验面 | 2026-10-18 审查结果 | 尚未证明的范围 |
+|---|---|---|
+| 原生与相关包 | 原生 1095/0/1，装载器 32/0/0，包管理 33/0/0，native-wasm 20 次执行/0/0（含一个重复测试属性） | 不能外推为整包、平台或上游等价 |
+| Rust workspace | Homebrew 首轮 exit 101：LLVM 缺失 z3 动态库，未进入测试；既有 rustup 1.95.0 重跑 exit 0，5727/0/2 | 合计包含旧线；首轮环境故障记录保留 |
+| 前端与 WASM 冒烟 | `pnpm --dir apps/web-client typecheck` exit 2；`smoke:native` 12 通过/1 失败（目录数守护过期） | 冒烟使用既有 WASM 产物，未重建当前源码或启动浏览器 |
+| 源码行数 | 单测 1/1，8215 个受维护文件均不超过 2000 行 | 文件尺寸达标不证明职责已解耦 |
+| 确证反例 | 座位距离、安装包回读来源/混合包丢 VM、前端 token/结果适配问题已重现 | 本轮未修复；VM 故障传播和产品接线另有源码依据，均需正式回归与集成验证 |
+| 完成度口径 | 现有整包标签与实际 UI/平台功能边界存在不一致 | 不在本次编造新整包总数；NC11 逐来源复核后由台账汇总 |
+
+以下工作包状态均表示完整目标尚未验收，不否认已有实现切片。领取前复核当前源码，避免重复其他 agent 已完成的工作；回填时分别记录实现、反例、定向、全量、产品/平台及上游等价证据。
+
+| 工作包 | 当前状态 | 执行入口与依赖 |
+|---|---|---|
+| NC01 | **根因已修 + 回归已加 + 定向/全量通过（2026-10-18）**；版本升格与 3 处顺序调用方迁移待并行提交 | [座位与触发语义](native-convergence-plan.md#nc01)；[证据](../operations/evidence/2026-10-18-nc01-seat-semantics/README.md) |
+| NC02 | 待修复并核验 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；复用 PackageStore |
+| NC03 | 待修复并补齐 | [统一原生 API](native-convergence-plan.md#nc03)；与 NC02/NC04 同步接口 |
+| NC04 | 待修复并核验 | [VM 故障与事务](native-convergence-plan.md#nc04)；保留已有预算与回滚 |
+| NC05 | 待完整验收 | [独立扩展宿主](native-convergence-plan.md#nc05)；依赖 NC02–NC04，按需引入 NC06/NC07 切片 |
+| NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
+| NC07 | 待结构收敛 | [状态与持久化同源](native-convergence-plan.md#nc07)；与 NC06 逐职责迁移 |
+| NC08 | 待补齐原生门禁 | [规则与跨目标对照](native-convergence-plan.md#nc08)；贯穿迁移过程 |
+| NC09 | 待完整产品验收 | [原生客户端与联机](native-convergence-plan.md#nc09)；基于 NC03/NC05 接口并行推进 |
+| NC10 | 待产品排程与质量验收 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；复用已有预算和策略 |
+| NC11 | 已登记方案，验收数据收敛待执行 | [文档与证据模型](native-convergence-plan.md#nc11)；逐来源修正过宽声明，不用文字标签认证完成 |
+| NC12 | 待实测及最终切换 | [效能与旧线退出](native-convergence-plan.md#nc12)；先测基线，退出旧入口依赖全矩阵通过 |
+
+### NC01 核验（2026-10-18，规则 v321 未变）
+
+- 根因：`GameStateCore::seat_distance` 用 `u8::wrapping_sub` 后在 256 处环绕再取模 → 5 人局 `d(0,1)=0`（审计反例）。
+- 修复：改有符号 `rem_euclid`；**顺序**语义拆出 `seat_steps_from`（座位环顺座次序）并迁移触发结算序键（`resolution.rs`）与 3 处排序调用方（位于并行重构新建文件，待其提交）。
+- 回归：新增 `tests/nc01_seat_semantics.rs`（6 项：2–8 人局逐对/旋转/对称、审计反例、两概念分离、存活环、换位）。
+- 实测：定向 6/6；14 golden **哈希与修正前逐字一致**；engine-native 全量 **1101/0/1**（1095→+6）；相关包 85/0/0；Gate 1b exit 0；行数门禁 8216 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc01-seat-semantics/README.md)。
+- 待办：规则版本升格 v322 + golden 版本位移（依赖 `standard.rs` 并行提交）；3 处顺序调用方入库；触发优先序的上游场景对照。
+
+本节优先于下方批次记录中互相矛盾的“当前”说法。下方历史测试和实施证据保留，过宽的整包数量、旧版本描述和待办分类由 NC11 逐项核对整理；不得直接汇总历史绿色计数或把“八项整包”标题当作功能全量验收。既有 T/N/O 与 E/G 任务的有效剩余范围仍需纳入以上工作包，不因新编号消失。
+
+接手时记录并保护现有 dirty 工作树，不能为满足下方旧的“工作区干净”流程丢弃或提交他人修改；按功能控制自己的改动和回退点。所有状态变更仍须在写入前重读本页。
+
+## 既有批次记录的日期语境
+
 本页是当前状态主稿，按 **2026-10-12** [进度核对](../operations/evidence/2026-10-12-progress-check/README.md)更新（git `3d207394`，规则 v262、NGSA 存档格式 v60；同日 T21 改动后复跑 engine-native 全量与 Gate 1b，并定案 D1–D3）；2026-10-13/14 的 T11 续批（十殿阎罗 v267–v270）按批更新 T11 行与规则基准，头部快照版本/全量两行随 T13 工作池批（v277/存档 v64，2026-10-14）同步。2026-10-10 曾按可领取的粒度重排待做表（[待办整理核对](../operations/evidence/2026-10-10-todo-handoff/README.md)，只读源码，未重跑全量），并清理了过期文档（[清理核对](../operations/evidence/2026-10-10-doc-cleanup/README.md)）。目标见[性能架构 v3.3](../../noname-performance-architecture.md)；逐来源扩展状态见[两仓台账](../migration/upstream-extension-reconstruction.md)；逐版本规则语义见[规则基准](native-rules-baseline.md)；按批追加的历史流水与 10-10 事故恢复逐轮记录移至[批次流水存档](native-progress-history.md)，实现与决策过程见[证据目录](../operations/evidence/)和[ADR 索引](../adr/INDEX.md)。
 
 ## 当前核验快照
+
+本节沿用旧标题以保留既有引用；其中版本、结果与完成声明按各自日期读取，最新审查及收敛任务以[2026-10-18 登记](#native-convergence)为准。
 
 > **2026-10-10 事故与恢复**：v192（机关桶）批开发中 `crates/engine-native/src/content/host.rs` 被误截断为空。经会话记录回放与证据语义重建，九轮修复后全量转绿，14 golden 补齐 v191/v192 两批重录（[恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)，逐轮数字见[流水存档](native-progress-history.md#2026-10-10-hostrs-截断事故恢复记录)）。当日 `noname-next` 建立仅本地使用的 git 仓库（基线提交 `72583b2b`，pre-push 钩子拦截推送），此后以提交为回退点。恢复遗留项见下方“后续待做”T2–T3（T1 已于同日完成）。
 
