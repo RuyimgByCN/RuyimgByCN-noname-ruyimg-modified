@@ -1,0 +1,41 @@
+gw_yanziyaoshui: {
+		fullborder: "bronze",
+		type: "spell",
+		subtype: "spell_bronze",
+		enable: true,
+		filterTarget: true,
+		content() {
+			if (target.isMinHandcard()) {
+				target.draw(2);
+			} else {
+				target.draw();
+			}
+		},
+		ai: {
+			basic: {
+				order: 6,
+				value: [6, 1],
+				useful: [4, 1],
+			},
+			result: {
+				target(player, target) {
+					if (target.isMinHandcard()) {
+						return 2;
+					}
+					return 1;
+				},
+			},
+		},
+	},
+	gw_wenyi: {
+		fullborder: "bronze",
+		type: "spell",
+		subtype: "spell_bronze",
+		enable: true,
+		filterTarget(card, player, target) {
+			return target.isMinHp();
+		},
+		selectTarget: -1,
+		content() {
+			if (target.countCards("h")) {
+				target.rand
