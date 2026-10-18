@@ -30,7 +30,7 @@
 //!
 //! 未覆盖（登记）：`preHidden`/`ai` 属表现与策略面。
 
-use engine_native::{Engine, GameAction, GameCommand};
+use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -50,6 +50,23 @@ fn yunchou_engine(seed: u64) -> Engine {
     let bridged = content_native_loader::bridge_generals(&json).expect("桥接 generals 段");
     pack.generals = bridged.generals;
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
+}
+
+fn advance_to_play(e: &mut Engine, seat: u8) {
+    for _ in 0..24 {
+        if e.turn().current == seat && e.turn().phase == Phase::Play {
+            return;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(e);
+    }
+    panic!("未到 {seat} 号出牌阶段");
 }
 
 fn drain(e: &mut Engine) {
@@ -74,47 +91,65 @@ fn drain(e: &mut Engine) {
 
 /// 上游点 1+3：受到**带牌**伤害后，伤害牌被戏才持有者获得（不入弃牌堆）。
 ///
-/// **本轮未验收（登记）**：夹具未能稳定驱动该**可选触发**（`debug_deal_damage_with_card`
-/// 之后未观察到 `trigger_confirm`/取回效果，手牌未增长）；已由源码核对记录实现位置
-/// （`filtering/common.rs:521`、`step/yunchou.rs:413`），但**不写成通过**。修复夹具后移除
-/// `#[ignore]` 即可转为行为验收。
+/// 走**真实路径**：0 号对 1 号（戏才持有者）出【杀】→ 伤害牌在**处理区**（原生 `table`）→
+/// 戏才取回。此前用 `debug_deal_damage_with_card` 失败的原因：该助手只把 `card` 写入
+/// `DamageData`，**不把牌放入处理区**，而原生效果按「table 优先、弃堆兜底」取牌 → 取不到。
 #[test]
-#[ignore = "夹具未稳定驱动可选触发（登记未验收）；源码事实见 upstream_xicai_position_difference_is_registered"]
 fn upstream_xicai_gains_damage_card() {
     let mut e = yunchou_engine(20263401);
-    e.debug_grant(0, "ycnxicai");
-    let hand_before = e.debug_hand(0).len();
-    let card = e.debug_place(1, "sha");
-    // 带牌伤害：debug 助手会把该牌置于处理区并结算伤害（模拟「牌在 o 区」的窗口）
-    e.debug_deal_damage_with_card(
-        Some(1),
-        0,
-        1,
-        engine_native::event::DamageNature::Normal,
-        card,
+    e.debug_grant(1, "ycnxicai"); // 持有者为**受伤者**
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let sha = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 0, sha);
+    let hand1_before = e.debug_hand(1).len();
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: sha, targets: vec![1] },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
     );
-    // 戏才为可选触发：先确认再结算
-    if let Some(c) = e.open_choice().cloned() {
-        if c.spec.prompt == "trigger_confirm" {
-            let _ = e.submit(GameCommand {
-                actor: c.observer,
-                expected_revision: e.revision(),
-                dedup_id: next_dedup(),
-                action: GameAction::Answer {
-                    choice_id: c.id,
-                    selection: vec![engine_native::ChoiceOption::Confirm],
-                },
-            });
-        }
+    // 戏才为可选触发：确认发动
+    let mut confirmed = false;
+    for _ in 0..8 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        let sel: Vec<engine_native::ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            confirmed = true;
+            vec![engine_native::ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+            vec![engine_native::ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
     }
     drain(&mut e);
+    assert!(confirmed, "戏才应经触发确认门（可选技）");
     assert_eq!(
-        e.debug_hand(0).len(),
-        hand_before + 1,
-        "上游：gain(trigger.cards) → 持有者获得伤害牌"
+        e.debug_hand(1).len(),
+        hand1_before + 1,
+        "上游 gain(trigger.cards)：持有者获得伤害牌（【杀】）"
     );
     assert!(
-        !e.state_core().discard.contains(&card),
+        e.debug_hand(1).contains(&sha),
+        "获得的应是**该伤害牌**（{sha}）：{:?}",
+        e.debug_hand(1)
+    );
+    assert!(
+        !e.state_core().discard.contains(&sha),
         "伤害牌不应留在弃牌堆（已被获得）"
     );
 }
