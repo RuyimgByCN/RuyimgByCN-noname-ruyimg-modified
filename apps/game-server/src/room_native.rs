@@ -174,6 +174,25 @@ impl NativeRoomSession {
                         .collect()
                 },
             },
+            // 原生会话**建局即开局**（赛前大厅未建模）。旧线房间协议要求先发
+            // `StartGame`；这里接受它作为「开局确认」，但**参数必须与已建局的
+            // 座位数一致**，否则明确拒绝——不得让不匹配的开局参数被静默吞掉。
+            CommandKind::StartGame {
+                player_count,
+                rng_seed: _,
+                ..
+            } => {
+                let seats = self.engine.state_core().players.len() as u8;
+                if *player_count != seats {
+                    return Err(format!(
+                        "StartGame 座位数 {player_count} 与本局 {seats} 不一致（原生建局即开局）"
+                    ));
+                }
+                return Ok(CommandResult::Accepted {
+                    new_revision: self.engine.revision(),
+                    state_hash: self.engine.state_hash(),
+                });
+            }
             other => {
                 return Err(format!("unsupported command kind for native authority: {other:?}"))
             }

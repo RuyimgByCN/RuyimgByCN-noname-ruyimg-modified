@@ -182,3 +182,46 @@ async fn nc09_native_backend_rejects_illegal_command() {
         other => panic!("应返回命令结果: {other:?}"),
     }
 }
+
+/// 旧线协议兼容：`StartGame` 作为「开局确认」——参数匹配则接受（原生建局即开局），
+/// 不匹配则**明确拒绝**（不静默吞掉）。
+#[tokio::test]
+async fn nc09_native_backend_startgame_is_confirmation_only() {
+    let handle = room_native_actor::spawn_room_native(13, native_session(20261803, 4), 16, 4);
+    let _ = join(&handle, 1, Some(0), None).await.expect("入座");
+    // 匹配：接受
+    let ok = submit(
+        &handle,
+        1,
+        1,
+        CommandKind::StartGame {
+            player_count: 4,
+            rng_seed: 20261803,
+            ruleset: String::new(),
+        },
+        11,
+    )
+    .await
+    .expect("提交");
+    match ok {
+        ServerMessage::CommandOutcome { result, .. } => assert!(
+            matches!(result, CommandResult::Accepted { .. }),
+            "匹配的开局确认应接受: {result:?}"
+        ),
+        other => panic!("应返回命令结果: {other:?}"),
+    }
+    // 不匹配：明确拒绝（返回错误）
+    let bad = submit(
+        &handle,
+        1,
+        2,
+        CommandKind::StartGame {
+            player_count: 3,
+            rng_seed: 1,
+            ruleset: String::new(),
+        },
+        12,
+    )
+    .await;
+    assert!(bad.is_err(), "座位数不一致的开局确认必须报错: {bad:?}");
+}

@@ -42,3 +42,32 @@ python3 -B scripts/check-source-lines.py
 - [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`、`Recover`
 - [ ] 命令后个性化视图推送、actor 回包 `legal_actions`/`choice`
 - [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位
+
+## 4 追加：旧线协议兼容 `StartGame`（2026-10-18 同轮）
+
+旧线房间协议要求先发 `StartGame`；原生会话**建局即开局**（赛前大厅未建模）。为让旧线
+房间测试可参数化跑在原生后端，`NativeRoomSession::submit` 现将 `StartGame` 作为
+**开局确认**处理：
+
+- 参数（座位数）与已建局一致 → `Accepted`（不重复建局，修订/摘要不变）；
+- 参数不一致 → **明确报错**（`StartGame 座位数 N 与本局 M 不一致`），**不静默吞掉**。
+
+新增用例 `nc09_native_backend_startgame_is_confirmation_only`（第 3 项）：
+
+| 判据 | 结果 |
+|---|---|
+| 匹配的开局确认 → `Accepted` | 通过 |
+| 座位数不一致 → 明确报错 | 通过 |
+
+实测：定向 **3 passed / 0 failed**（含 `persist` 既有 2 项共 5 项；[targeted-2.log](targeted-2.log)）；
+game-server 全量 **81 passed / 0 failed**（[game-server-tests-2.log](game-server-tests-2.log)）；
+行数门禁 8254 文件（[source-lines-2.log](source-lines-2.log)）。
+
+### 仍未完成（更新）
+
+- [ ] **旧线房间测试套件参数化跑在原生后端**：`room_flow.rs`/`multi_room_stress.rs` 仍只跑
+      旧线；`StartGame` 兼容已具备（本批），仍需处理：密码校验、限流、慢消费者、
+      `Recover` 消息（原生 actor 明确返回未接线）
+- [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`
+- [ ] 命令后个性化视图推送、actor 回包 `legal_actions`/`choice`
+- [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位
