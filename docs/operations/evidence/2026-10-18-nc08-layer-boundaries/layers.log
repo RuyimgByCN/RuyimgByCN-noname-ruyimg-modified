@@ -1,0 +1,10 @@
+== 单元/性质测试（engine-native lib 面）
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+== 内核集成（engine-native tests 面，含 examples）
+passed=1153 failed=0 ignored=2
+== native/WASM（engine-native-wasm）
+passed=31 failed=0
+== 装载/包管理（content-native-loader + content-runtime）
+passed=65 failed=0
+== 生产适配器/服务端（game-server，含原生房间/视图桥接/生命周期）
+passed=87 failed=0

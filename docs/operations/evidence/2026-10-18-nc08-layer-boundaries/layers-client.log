@@ -1,0 +1,6 @@
+== 真实客户端（Web 前端：typecheck / node:test / 原生冒烟）
+typecheck exit=0
+{"total":32,"failed":0}
+== 异常输入（受控反例：篡改归档/越界引用/伪造动作/队列满）
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
