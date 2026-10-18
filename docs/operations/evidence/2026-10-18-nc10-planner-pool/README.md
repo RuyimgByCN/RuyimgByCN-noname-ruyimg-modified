@@ -59,3 +59,28 @@ python3 -B scripts/check-source-lines.py
 - [ ] 池的**压力/尾延迟**测量（NC12 口径：同设备同负载，前后对比）
 - [ ] 非静止态信息边界窗口（机器自省保引用重分配或关闭模拟评分）
 - [ ] 主动技/多选/多目标候选
+
+## 6 追加：宿主接线——`PlanPool::plan_seats` 改用长驻池（2026-10-18 同轮）
+
+源码依据：`ai.rs::PlanPool::plan_seats`（产品多座位规划入口，`ai_planner.rs` 有对照用例）
+此前用 `std::thread::scope` **逐调用创建线程**。本批改为：
+
+- 默认路径：`PlannerPool::new(workers.min(seats), seats.len())` → `plan_all` → `shutdown`
+  （池生命周期限于本次调用，`Drop` 时 join 工作线程）；
+- 旧实现保留为 `plan_seats_scoped`（`#[allow(dead_code)]`），作为对照与回退参考；
+- 队列容量 = 座位数（一次提交完），队列满仍走「本线程串行补齐」的降级路径。
+
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| `ai_planner`（含 `PlanPool` 对照用例：并行=串行、输入序一致） | **15 passed / 0 failed** | [targeted-planpool.log](targeted-planpool.log) |
+| engine-native 全量（含 examples） | **1152 passed / 0 failed / 2 ignored** | [engine-native-tests-2.log](engine-native-tests-2.log) |
+| Gate 1b（`-D warnings`，lib+tests） | exit 0 | [gate1b-lib-tests-2.log](gate1b-lib-tests-2.log) |
+| 行数门禁 | 8258 文件 ≤ 2000 行 | [source-lines-2.log](source-lines-2.log) |
+
+### 仍未完成（更新）
+
+- [ ] **跨命令复用同一池**：当前每次 `plan_seats` 建池/销毁（线程创建从「每座位」降到
+      「每调用一次」）；产品宿主应自持 `PlannerPool` 并复用（需把池注入宿主生命周期）
+- [ ] 消除每任务引擎克隆（`Arc` 共享或工作线程持有引擎）
+- [ ] 池的**压力/尾延迟**测量（NC12 口径：同设备同负载，前后对比）
+- [ ] 非静止态信息边界窗口、主动技/多选/多目标候选

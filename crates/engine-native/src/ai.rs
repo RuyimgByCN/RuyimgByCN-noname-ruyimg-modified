@@ -151,7 +151,30 @@ impl PlanPool {
     }
 
     /// 并行规划多个座位（同一引擎快照基线；输入序返回）。
+    ///
+    /// NC10：内部改用**长驻有界工作池**（`crate::ai_pool::PlannerPool`）——
+    /// 一次性建池、按座位提交任务、队列满则在本线程串行补齐（降级），
+    /// 不再每次调用 `std::thread::scope` 创建线程。池的生命周期限于本次调用
+    /// （`Drop` 时 join 工作线程）；产品宿主若需跨命令复用，应自持 `PlannerPool`。
     pub fn plan_seats(
+        &self,
+        engine: &Engine,
+        seats: &[u8],
+        planner: &BoundedPlanner,
+    ) -> Vec<Plan> {
+        if seats.is_empty() {
+            return Vec::new();
+        }
+        // 有界池：worker 数 = 本 planner 的 workers；队列容量 = 座位数（一次提交完）
+        let pool = crate::ai_pool::PlannerPool::new(self.workers.min(seats.len()).max(1), seats.len());
+        let (plans, _degraded) = pool.plan_all(engine, seats, planner);
+        pool.shutdown();
+        return plans;
+    }
+
+    /// 旧实现（逐调用 `std::thread::scope`）——保留为对照，默认路径已改用长驻池。
+    #[allow(dead_code)]
+    fn plan_seats_scoped(
         &self,
         engine: &Engine,
         seats: &[u8],
