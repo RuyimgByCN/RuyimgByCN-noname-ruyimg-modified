@@ -172,6 +172,31 @@ impl Engine {
 /// 候选探测触发内核不变量 panic 的累计次数（NC12 长程防护；供测试/诊断读取）。
 static PROBE_FAULTS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
 
+/// 探测故障上下文环形缓冲（NC12 根因诊断；不打印，仅内存记录，测试可读）。
+static PROBE_FAULT_LOG: std::sync::Mutex<Vec<String>> = std::sync::Mutex::new(Vec::new());
+
+/// 记录一次探测故障上下文（内部使用；最多 32 条）。
+pub(crate) fn note_probe_fault_context(context: String) {
+    if let Ok(mut log) = PROBE_FAULT_LOG.lock() {
+        if log.len() >= 32 {
+            log.remove(0);
+        }
+        log.push(context);
+    }
+}
+
+/// 读取探测故障上下文（诊断用；按发生顺序，最多 32 条）。
+pub fn probe_fault_log() -> Vec<String> {
+    PROBE_FAULT_LOG.lock().map(|l| l.clone()).unwrap_or_default()
+}
+
+/// 清空探测故障上下文（测试用）。
+pub fn clear_probe_fault_log() {
+    if let Ok(mut log) = PROBE_FAULT_LOG.lock() {
+        log.clear();
+    }
+}
+
 /// 记录一次探测故障（内部使用）。
 pub(crate) fn note_probe_fault() {
     PROBE_FAULTS.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
@@ -208,6 +233,12 @@ fn push_action(
         Ok(r) => r.is_ok(),
         Err(_) => {
             crate::engine::legal_actions::note_probe_fault();
+            crate::engine::legal_actions::note_probe_fault_context(format!(
+                "seat={seat} action={action:?} rev={} phase={:?} table={:?}",
+                engine.revision(),
+                engine.turn().phase,
+                engine.state_core().table
+            ));
             false
         }
     };

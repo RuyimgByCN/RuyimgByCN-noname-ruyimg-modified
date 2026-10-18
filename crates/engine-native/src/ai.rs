@@ -548,6 +548,36 @@ impl Engine {
                 Ok(out) => out,
                 Err(_) => {
                     sim_faults = sim_faults.saturating_add(1);
+                    {
+                        let core = trial.state_core();
+                        let hands: Vec<String> = core
+                            .players
+                            .iter()
+                            .enumerate()
+                            .map(|(i, p)| format!("p{i}:hp={}/{} hand={:?}", p.hp, p.max_hp, p.hand))
+                            .collect();
+                        // 事件栈与挂起机器：定位**发出失效用牌的路径**
+                        let res = trial.resolution();
+                        let frames: Vec<String> = res
+                            .stack
+                            .iter()
+                            .map(|f| format!("{:?}/{:?}/{:?}", f.id, f.kind, f.data))
+                            .collect();
+                        let parks: Vec<String> = res
+                            .parks
+                            .iter()
+                            .map(|p| format!("{:?}", p.machine.snapshot()))
+                            .collect();
+                        note_sim_fault(format!(
+                            "seat={seat} rev={} phase={:?} action={action:?} table={:?} hands=[{}] frames=[{}] parks=[{}]",
+                            trial.revision(),
+                            trial.turn().phase,
+                            core.table,
+                            hands.join(" | "),
+                            frames.join(" ; "),
+                            parks.join(" ; ")
+                        ));
+                    }
                     // 说明（2026-10-19）：现场切片诊断代码已按仓库维护门禁
                     // （`maintenance_guards::production_sources_have_no_debug_output_or_env_switches`
                     // 禁止生产源码出现 println!/eprintln!/env::var）**移除**；
@@ -678,6 +708,31 @@ impl Engine {
 /// 存档/恢复；旧实现从牌堆采样并复制 ID，会制造重复物理归属。
 /// 退化：牌堆为空时池=对手暗牌，重排后仍不复制、不读入任何观察者
 /// 不可知信息；确定性由座位号播种的 LCG 保证（无 OS 熵）。
+/// 模拟故障上下文环形缓冲（NC12 根因诊断；**不打印**，仅内存记录，测试可读）。
+static SIM_FAULT_LOG: std::sync::Mutex<Vec<String>> = std::sync::Mutex::new(Vec::new());
+
+/// 记录一次模拟故障上下文（内部使用；最多保留 32 条）。
+pub(crate) fn note_sim_fault(context: String) {
+    if let Ok(mut log) = SIM_FAULT_LOG.lock() {
+        if log.len() >= 32 {
+            log.remove(0);
+        }
+        log.push(context);
+    }
+}
+
+/// 读取模拟故障上下文（诊断用；按发生顺序，最多 32 条）。
+pub fn sim_fault_log() -> Vec<String> {
+    SIM_FAULT_LOG.lock().map(|l| l.clone()).unwrap_or_default()
+}
+
+/// 清空模拟故障上下文（测试用）。
+pub fn clear_sim_fault_log() {
+    if let Ok(mut log) = SIM_FAULT_LOG.lock() {
+        log.clear();
+    }
+}
+
 /// 诊断：最近一次遮蔽是否为静止态（1/0）、栈深、挂起机器数、是否有开放选择。
 static REDACT_LAST: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
 static REDACT_STACK: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);

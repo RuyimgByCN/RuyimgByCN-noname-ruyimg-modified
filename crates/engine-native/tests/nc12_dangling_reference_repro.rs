@@ -67,6 +67,9 @@ fn dump(e: &Engine, tag: &str) {
 #[test]
 #[ignore = "登记缺陷守护：seed 44170 第 10 步复现内核悬空引用；修复后应转为通过"]
 fn nc12_repro_seed_44170_step_10() {
+    // 打印故障上下文日志（非打印式记录，测试可读）——用于定位**发出失效用牌的路径**
+    engine_native::ai::clear_sim_fault_log();
+    engine_native::engine::legal_actions::clear_probe_fault_log();
     let planner = BoundedPlanner::new(8)
         .with_deadline_ms(50)
         .with_lookahead(1)
@@ -95,6 +98,14 @@ fn nc12_repro_seed_44170_step_10() {
         });
         if let CommandOutcome::Rejected(reason) = &out {
             eprintln!("[repro] step={step} 被拒：{reason:?}");
+        }
+    }
+    if faults > 0 {
+        for (i, line) in engine_native::ai::sim_fault_log().iter().enumerate() {
+            eprintln!("[sim-fault {i}] {line}");
+        }
+        for (i, line) in engine_native::engine::legal_actions::probe_fault_log().iter().enumerate() {
+            eprintln!("[probe-fault {i}] {line}");
         }
     }
     assert_eq!(

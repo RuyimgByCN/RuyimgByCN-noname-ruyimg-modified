@@ -263,3 +263,37 @@ panic: card 93 not in hand of 0
 
 **复现用例状态**：`nc12_dangling_reference_repro`（seed 44170）当前**失败**（断言 faults==0），
 这是**预期的**——它是该缺陷的守护用例；修复后应转为通过。已在进度主稿登记为未验收项。
+
+## 11 诊断能力补齐：**内存式故障上下文日志**（合规，测试可读）（2026-10-19 同轮）
+
+维护门禁禁止生产源码打印（`println!`/`eprintln!`/`env::var`），但**内存记录**是允许的 →
+新增两处环形缓冲（各保留最近 32 条，**不打印**）：
+
+| 位置 | API | 记录内容 |
+|---|---|---|
+| `crates/engine-native/src/ai.rs` | `note_sim_fault`（内部）/ `sim_fault_log()` / `clear_sim_fault_log()` | 模拟故障时的 `seat/rev/phase/action/table/各座位手牌/事件栈(frames)/挂起机器(parks)` |
+| `crates/engine-native/src/engine/legal_actions.rs` | `note_probe_fault_context`（内部）/ `probe_fault_log()` / `clear_probe_fault_log()` | 候选探测故障时的 `seat/action/rev/phase/table` |
+
+复现用例（`nc12_dangling_reference_repro`，seed 44170）已接入：命中故障时**由测试打印**上下文
+（测试允许输出）：
+
+```
+[sim-fault 0] seat=1 rev=10 phase=Play action=Answer { choice_id: 2, selection: [Pass] }
+  table=[161] hands=[p0:hp=3/4 hand=[78,152,123,144] | p1:[23,15,72,10] | p2 | p3]
+  frames=[23/CardUsed/CardUsed(CardUseData { card: 161, player: 1, targets: [0], … })]
+  parks=[NullifyWindow { card: 161, source: 1, queue: [1,2,3,4→0], window_open: true,
+           effect: Some(Host { def_key: "swd_zhongxinghujia", behavior: 228, owner: 1,
+                               target: Some(0), card: Some(161) }) }]
+```
+
+**本轮结论（不夸大）**：上下文已能固定「故障时的动作/栈/挂起机器」，但**仍未直接暴露发出失效
+用牌的路径**（panic 发生在被捕获的提交内部，状态为中途态）→ 根因修复仍待做；本能力为后续
+修复与回归提供**可复现的现场**（且合规、无输出污染）。
+
+### 仍未完成（更新）
+
+- [ ] panic 根因：定位「提交失效用牌」的具体机器（下一步：在被捕获提交**之前**记录状态，
+      或对 `commit_card_used` 的 else 分支加「记账式降级」安全网——后者触及未跟踪的
+      `kernel/events.rs`，待拆分落定）
+- [ ] 修复后：`sim_faults`/`probe_faults` 与两个日志缓冲应保持空
+- [ ] 长程同时开 `alloc=1`；RSS/句柄/线程数；温控；产品整机 30 分钟
