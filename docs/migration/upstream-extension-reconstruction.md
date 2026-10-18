@@ -151,6 +151,39 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | L28 [雷霆万钧](../../../archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js) | 新角色/技能、thunder_card、小游戏选择和 UI 补丁 | **部分重构（切片 1/N，2026-10-17，[证据](../operations/evidence/2026-10-17-l28-thunder-slice1/README.md)）**：转换包 `thunder-upstream-liuli` + 装载器（配置 10 项 / 同名替换表 12 对 / 隐藏专属包 / 禁同名开关 / 标记补丁三态）；`th_*` 武将内容与技能补丁 deferred；UI/立绘为渲染面 | 内容规则 + 自定义选择交互 + 显示模块；随机与最终结果由规则确定，交互输入可记录重放；全部角色/牌逐项验 | G3–G4 / 特大 |
 | L29 [龙血玄黄](../../../archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js) | 深度清单见 [G0/L29](g0/L29-龙血玄黄.md)（原行未单列本栏，2026-10-18 NC11 仅补列结构、未新增结论） | **八项整包（2026-10-17，[证据](../operations/evidence/2026-10-17-t12-l29-eight/README.md)）**：真实包 `packages/extensions/longxue-upstream-liuli`（`upstream-liuli/longxue@1.0.0`；宿主武将手杀曹髦 + 包配置 `config.shengjian`）。规则面：潜龙道心值（开局面 20/60、获得牌 +5、受伤 +10×、造成伤害 +15×、上限 99；阈值 25/50/75/99）+ 卫统登记面 + 清正（25 阈值解锁，批 119）；装载器模块 `content_native_loader::longxue`（配置解析 + 解锁报告）。显示面（`_CMeffects`/死亡动画/进度条）登记差异；酒诗/放逐/绝进为外部依赖（翻面后事件/技能禁用/移出游戏区原语缺）。八项测试 `l29_longxue_eight.rs`（engine-native 921/0/1，14 golden 零位移） | 待处理与验收未单列，见 §4/§5 与 [G0/L29](g0/L29-龙血玄黄.md) | （原行未单列批次/规模） |
 
+## 3.3 NC08 第⑦层：上游行为逐技能对照（样本台账，2026-10-19）
+
+**口径**：以**归档上游 JS 逐字引用**为基准，逐条列出「由 JS 推导的规则点」→ 原生行为验收；
+**差异一律登记**（`table 优先/弃堆兜底`、`rounds ↔ 标记`、`随机弃置 → 确定性首张`、`存活 ≥4 ↔ 存在大势力`、
+`处理区 ↔ 弃牌堆`、`标记/摸牌面未实现`、`覆盖范围` 等），**不写成对齐**。
+
+| # | 来源 | 技能/卡牌 | 结果 | 证据 |
+|---|---|---|---|---|
+| 1 | L20 苦无 | `kurou` / `fz_liegong` / `fz_xinkuanggu` | 对齐 + 1 处顺序差异登记 | [nc08-upstream-kurou](../operations/evidence/2026-10-18-nc08-upstream-kurou/README.md) |
+| 2 | U07 玩点论杀 | `ciqiu` | 对齐 | [nc08-upstream-ciqiu](../operations/evidence/2026-10-18-nc08-upstream-ciqiu/README.md) |
+| 3 | 标准面（卡牌） | `wuzhong` / `taoyuan` | 对齐 + 2 处差异登记 | [nc08-upstream-standard-tricks](../operations/evidence/2026-10-18-nc08-upstream-standard-tricks/README.md) |
+| 4 | L19 杀海拾遗（五行） | `_shengke` | 语义成立 + 4 处差异 | [nc08-upstream-wuxing](../operations/evidence/2026-10-18-nc08-upstream-wuxing/README.md) |
+| 5 | L06 苦无（五行盘） | `_shengke`（含 `usable:1` 失效发现） | 语义成立 + 差异登记 | 同上 / 待实施修复清单 |
+| 6 | U05 swd | `swd_xiuluo` | **3 点全通过**（2 差异 + 效果面三段询问机） | [nc08-upstream-xiuluo](../operations/evidence/2026-10-18-nc08-upstream-xiuluo/README.md) |
+| 7 | L10 史诗卡牌 | `rangjie` | 2 点通过 + **移动牌分支缺陷守护** | [nc08-upstream-rangjie](../operations/evidence/2026-10-18-nc08-upstream-rangjie/README.md) |
+| 8 | U05 运筹帷幄 | `xicai` | **2 点通过**（差异登记 + 真实出牌路径验证获得伤害牌） | [nc08-upstream-xicai](../operations/evidence/2026-10-18-nc08-upstream-xicai/README.md) |
+| 9 | U05 gwent | `gw_yanziyaoshui` | **3 点全对齐** | [nc08-upstream-gwent](../operations/evidence/2026-10-18-nc08-upstream-gwent/README.md) |
+| 10 | U05 古剑 | `chunbing` | 3 点通过（2 处差异登记） | [nc08-upstream-gujian](../operations/evidence/2026-10-18-nc08-upstream-gujian/README.md) |
+| 11 | U05 炉石 | `linghunzhihuo` | 3 点通过（1 处差异登记） | [nc08-upstream-hearth](../operations/evidence/2026-10-18-nc08-upstream-hearth/README.md) |
+| 12 | U05 mtg | `haidao` | **4 点全对齐** | [nc08-upstream-mtg](../operations/evidence/2026-10-18-nc08-upstream-mtg/README.md) |
+| 13 | U05 zhenfa | `tianfuzhen` | 3 点通过（1 处差异登记） | [nc08-upstream-zhenfa](../operations/evidence/2026-10-18-nc08-upstream-zhenfa/README.md) |
+| 14 | U05 ow | `zhiyuan` | **3 点全对齐** | [nc08-upstream-ow](../operations/evidence/2026-10-18-nc08-upstream-ow/README.md) |
+| 15 | U05 xianjian | `lingxue` | **3 点全对齐**（真实回复路径） | [nc08-upstream-xianjian](../operations/evidence/2026-10-18-nc08-upstream-xianjian/README.md) |
+| 16 | U05 ow | `duwen` | 4 点通过（1 处差异登记：铁索传导） | [nc08-upstream-duwen](../operations/evidence/2026-10-18-nc08-upstream-duwen/README.md) |
+| 17 | U05 ow | `ziyu` | 4 点通过 | [nc08-upstream-ziyu](../operations/evidence/2026-10-18-nc08-upstream-ziyu/README.md) |
+| 18 | 标准面（技能） | `jizhi` | 3 点通过 + **1 处规则损失**（原生仅覆盖 5 种锦囊；标记面未实现） | [nc08-upstream-jizhi](../operations/evidence/2026-10-18-nc08-upstream-jizhi/README.md) |
+| 19 | 标准面（技能） | `jianxiong` | 3 点通过（2 处差异登记：处理区↔弃牌堆、标记/摸牌面） | [nc08-upstream-jianxiong](../operations/evidence/2026-10-18-nc08-upstream-jianxiong/README.md) |
+
+**覆盖面**：**17/37 来源**已有第⑦层上游样本；**逐命令对照工具**（旧线↔原生线）见
+[nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
+**未完成**：接入**上游 JS harness**（当前以旧线为可执行参照，旧线≠上游等价）、其余 20 个来源、
+上述差异的逐项口径判定、以及 4 项**待实施修复**（[清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)）。
+
 ## 4. 实施顺序与交付门槛
 
 这里分批是依赖顺序，**不是把后批功能排除**；UI/平台可另轨开发，全部扩展支持的总验收仍需要其结果。
