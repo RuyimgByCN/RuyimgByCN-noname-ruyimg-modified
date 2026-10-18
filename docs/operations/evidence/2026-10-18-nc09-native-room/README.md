@@ -10,7 +10,7 @@
 `room.rs` 的 actor 循环绑定旧线 `engine_core::Engine`。NC09 要求「本地、WASM Worker 和
 服务端使用**同一原生会话契约**」。本切片实现**原生权威会话**（`apps/game-server/src/room_native.rs`）：
 
-- 使用原生引擎 + [`native_view`](apps/game-server/src/native_view.rs) 的协议映射（唯一映射点）；
+- 使用原生引擎 + [`native_view`](../../../../apps/game-server/src/native_view.rs) 的协议映射（唯一映射点）；
 - 覆盖：入座（座位分配/满座拒绝）、重连（令牌换绑、座位与令牌不变、无效令牌失败）、
   观战（公开投影、无权威动作、不能提交）、命令（协议 `CommandKind` → 内核动作 +
   结果/拒绝原因映射）、快照（`revision`/`state_hash` 与内核一致）；
