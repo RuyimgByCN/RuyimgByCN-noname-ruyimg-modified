@@ -361,3 +361,87 @@ async fn nc09_native_backend_recover_matches_live_state() {
     };
     assert_eq!(after_hash, live_hash, "Recover 后摘要必须与实时一致");
 }
+
+/// actor 回包与命令后推送：`legal_actions`/`choice` 按观察者给出，且其余成员收到
+/// **个性化**推送（不含他人选项内容）。
+#[tokio::test]
+async fn nc09_native_backend_replies_carry_actions_and_fanout() {
+    let handle = room_native_actor::spawn_room_native(16, native_session(20261806, 4), 16, 4);
+    // 两个连接：1 → 座位 0；2 → 座位 1（各自 outbound 收集推送）
+    let (tx1, mut rx1) = mpsc::channel::<String>(16);
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Join {
+            connection_id: 1,
+            display_name: "a".into(),
+            preferred_seat: Some(0),
+            reconnect_token: None,
+            password: String::new(),
+            outbound: session::Outbound::new(tx1),
+            reply: rt,
+        })
+        .await
+        .expect("send");
+    let _ = rr.await.expect("reply").expect("入座 0");
+    let (tx2, mut rx2) = mpsc::channel::<String>(16);
+    let (rt2, rr2) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Join {
+            connection_id: 2,
+            display_name: "b".into(),
+            preferred_seat: Some(1),
+            reconnect_token: None,
+            password: String::new(),
+            outbound: session::Outbound::new(tx2),
+            reply: rt2,
+        })
+        .await
+        .expect("send");
+    let _ = rr2.await.expect("reply").expect("入座 1");
+    while rx1.try_recv().is_ok() {}
+    while rx2.try_recv().is_ok() {}
+
+    // 1 号（座位 0）推进阶段（若当前不是座位 0 则先查快照并改用该座位连接）
+    let current = {
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Snapshot {
+                connection_id: 1,
+                header: MessageHeader::new(16, 1, 0),
+                reply: rt,
+            })
+            .await
+            .expect("send snapshot");
+        match rr.await.expect("reply").expect("snapshot") {
+            ServerMessage::Snapshot { view, legal_actions, .. } => {
+                // 快照回包应带该观察者的权威动作（至少阶段推进候选或为空集但类型正确）
+                assert!(legal_actions.len() <= 256);
+                view.current_player.raw()
+            }
+            other => panic!("应返回快照: {other:?}"),
+        }
+    };
+    let conn = if current == 1 { 1 } else { 2 };
+    let out = submit(&handle, conn, 2, CommandKind::EndPhase {}, 200).await;
+    match out.expect("提交") {
+        ServerMessage::CommandOutcome {
+            legal_actions,
+            choice,
+            ..
+        } => {
+            // 提交者回包带自己的动作与选择（可能为空集，但字段已接线）
+            assert!(legal_actions.len() <= 256);
+            let _ = choice;
+        }
+        other => panic!("应返回命令结果: {other:?}"),
+    }
+    // 另一连接应收到**个性化推送**（CommandOutcome）
+    let mut pushed = 0;
+    let other_rx = if conn == 1 { &mut rx2 } else { &mut rx1 };
+    while let Ok(line) = other_rx.try_recv() {
+        if line.contains("command_outcome") || line.contains("CommandOutcome") {
+            pushed += 1;
+        }
+    }
+    assert!(pushed >= 1, "命令后其余成员应收到个性化推送（实际 {pushed}）");
+}

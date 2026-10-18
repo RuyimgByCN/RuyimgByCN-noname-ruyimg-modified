@@ -123,6 +123,50 @@ pub fn observer_snapshot_for(
     }
 }
 
+/// 原生开放选择 → 协议 `ChoiceRequest`（**选项仅观察者可见**：非观察者返回 `None`，
+/// 与内核 `choice_view_for` 同口径；观战/裁判返回 `None`，不泄漏选项内容）。
+pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_api::ChoiceRequest> {
+    let seat = seat?;
+    let native_seat = seat.raw().saturating_sub(1) as u8;
+    let open = engine.open_choice()?;
+    if open.observer != native_seat {
+        return None;
+    }
+    // 协议 `ChoiceOption` 是 `{token, label_key}` 二元组（token 即 ResolveChoice 的
+    // 选择值；label_key 只用于本地化/显示，不参与规则）。token 与原生选项一一对应：
+    // 使用**候选下标**（与前端适配层/`answer()` 同口径），label_key 保留语义标签。
+    let options: Vec<engine_api::ChoiceOption> = open
+        .spec
+        .options
+        .iter()
+        .enumerate()
+        .map(|(idx, opt)| engine_api::ChoiceOption {
+            token: idx as u32,
+            label_key: match opt {
+                engine_native::ChoiceOption::Confirm => "confirm".to_string(),
+                engine_native::ChoiceOption::Pass => "pass".to_string(),
+                engine_native::ChoiceOption::Card(c) => format!("card:{c}"),
+                engine_native::ChoiceOption::Player(p) => format!("player:{}", *p as u32 + 1),
+                engine_native::ChoiceOption::Tag(t) => format!("tag:{t}"),
+                engine_native::ChoiceOption::Kind(k) => format!("kind:{k}"),
+            },
+        })
+        .collect();
+    Some(engine_api::ChoiceRequest {
+        choice_id: engine_api::ChoiceId::new(open.id as u32),
+        observer: seat,
+        options,
+        continuation_id: open.id,
+        // 原生 `ChoiceKind` 未映射为协议语义枚举时统一 `Custom`（**不猜测**具体语义）
+        kind: engine_api::ChoiceKind::Custom,
+        min_count: open.spec.min as u8,
+        max_count: open.spec.max as u8,
+        allow_cancel: open.spec.allow_cancel,
+        timeout_policy: engine_api::TimeoutPolicy::None,
+        revision: engine.revision(),
+    })
+}
+
 /// 权威动作 → 协议动作（只映射本内核可表达的形态；未覆盖形态见待办）。
 pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<LegalAction> {
     let seat_u8 = seat.raw().saturating_sub(1) as u8;

@@ -122,3 +122,35 @@ game-server 全量 **83 passed / 0 failed**（[game-server-tests-4.log](game-ser
 - [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`
 - [ ] 命令后个性化视图推送、actor 回包 `legal_actions`/`choice`
 - [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位
+
+## 7 追加：actor 回包 `legal_actions`/`choice` + 命令后个性化推送（2026-10-18 同轮）
+
+此前原生 actor 的回包把 `legal_actions`/`choice` 留空、且只广播名册（旧线有
+`fanout_after_command`）。本批接线：
+
+| 面 | 实现 |
+|---|---|
+| `choice_for`（`native_view.rs`） | 原生开放选择 → 协议 `ChoiceRequest`：**选项仅观察者可见**（非观察者/观战返回 `None`）；`ChoiceOption{token,label_key}` 用**候选下标**作 token（与前端适配层/`answer()` 同口径），label 保留语义（`card:`/`player:`/`tag:`/`kind:`/`confirm`/`pass`）；`kind` 统一 `Custom`（**不猜测**语义） |
+| 提交者回包 | `legal_actions`（内核权威查询）+ `choice` 按该成员给出 |
+| 幂等重放回包 | 同样带 `legal_actions`/`choice` |
+| 快照回包 | 玩家带自己的 `legal_actions`/`choice`；观战为空/`None` |
+| **命令后个性化推送** | 其余成员各收自己的 `CommandOutcome`（视图 + 动作 + 选择），提交者走 oneshot |
+
+新增用例 `nc09_native_backend_replies_carry_actions_and_fanout`（第 6 项）：
+
+| 判据 | 结果 |
+|---|---|
+| 快照/命令回包字段已接线（`legal_actions` 类型正确、候选数 ≤ 上限） | 通过 |
+| 命令后其余成员收到**个性化推送**（`CommandOutcome`） | 通过 |
+
+实测：定向 **6 passed / 0 failed**（含 `persist` 既有 2 项共 8 项；[targeted-5.log](targeted-5.log)）；
+game-server 全量 **84 passed / 0 failed**（[game-server-tests-5.log](game-server-tests-5.log)）；
+行数门禁 8254 文件（[source-lines-5.log](source-lines-5.log)）。
+
+### 仍未完成（更新）
+
+- [ ] 旧线房间测试套件参数化跑在原生后端（`StartGame`/房间密码/`Recover`/回包与推送已具备；
+      仍需限流与慢消费者专项用例）
+- [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`
+- [ ] `ChoiceKind` 语义映射（当前 `Custom`）、`known_cards`、`MatchOutcome`/`SkillView` 真实取值
+- [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位

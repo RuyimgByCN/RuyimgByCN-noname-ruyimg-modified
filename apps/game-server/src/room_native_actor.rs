@@ -11,6 +11,7 @@
 
 use crate::persist::RoomPersist;
 use crate::room::{JoinReply, RoomHandle, RoomMsg};
+use crate::native_view::{choice_for, legal_actions_for, observer_snapshot_for, RoomRole};
 use crate::room_native::{NativeRoomPersist, NativeRoomSession};
 use engine_api::{CommandKind, CommandResult, ExpectedRevision, IdempotencyKey};
 use engine_protocol::{ClientRole, MessageHeader, SeatPresence, ServerMessage};
@@ -161,12 +162,16 @@ async fn native_room_loop(
                             )
                         });
                         let _ = reply.send(Ok(ServerMessage::CommandOutcome {
-                            header: MessageHeader::new(id, header.conn_seq, session.engine().revision()),
+                            header: MessageHeader::new(
+                                id,
+                                header.conn_seq,
+                                session.engine().revision(),
+                            ),
                             idempotency_key,
                             result: prev.clone(),
                             view,
-                            legal_actions: Vec::new(),
-                            choice: None,
+                            legal_actions: legal_actions_for(session.engine(), m.player_id),
+                            choice: choice_for(session.engine(), Some(m.player_id)),
                             public_event_codes: vec![],
                         }));
                         continue;
@@ -216,21 +221,56 @@ async fn native_room_loop(
                 let view = session
                     .snapshot(connection_id)
                     .unwrap_or_else(|_| {
-                        crate::native_view::observer_snapshot_for(
+                        observer_snapshot_for(
                             session.engine(),
-                            crate::native_view::RoomRole::Player,
+                            RoomRole::Player,
                             Some(m.player_id),
                         )
                     });
+                let legal = legal_actions_for(session.engine(), m.player_id);
+                let choice = choice_for(session.engine(), Some(m.player_id));
                 let _ = reply.send(Ok(ServerMessage::CommandOutcome {
                     header: MessageHeader::new(id, header.conn_seq, last_revision),
                     idempotency_key,
-                    result,
+                    result: result.clone(),
                     view,
-                    legal_actions: Vec::new(),
-                    choice: None,
+                    legal_actions: legal,
+                    choice,
                     public_event_codes: vec![],
                 }));
+                // 命令后**个性化推送**：其余成员各收自己的视图/动作/选择（提交者走 oneshot）
+                for other in members.values() {
+                    if other.connection_id == connection_id {
+                        continue;
+                    }
+                    let Some(out) = other.outbound.as_ref() else {
+                        continue;
+                    };
+                    let role = match other.role {
+                        ClientRole::Player => RoomRole::Player,
+                        ClientRole::Spectator => RoomRole::Spectator,
+                        ClientRole::Referee => RoomRole::Referee,
+                    };
+                    let seat = if other.role == ClientRole::Player {
+                        Some(other.player_id)
+                    } else {
+                        None
+                    };
+                    let msg = ServerMessage::CommandOutcome {
+                        header: MessageHeader::new(id, 0, last_revision),
+                        idempotency_key,
+                        result: result.clone(),
+                        view: observer_snapshot_for(session.engine(), role, seat),
+                        legal_actions: if other.role == ClientRole::Player {
+                            legal_actions_for(session.engine(), other.player_id)
+                        } else {
+                            Vec::new()
+                        },
+                        choice: choice_for(session.engine(), seat),
+                        public_event_codes: vec![],
+                    };
+                    let _ = out.send(&msg).await;
+                }
                 broadcast_roster_native(id, &members, session.engine().outcome().is_some()).await;
             }
             RoomMsg::Snapshot {
@@ -240,6 +280,11 @@ async fn native_room_loop(
             } => {
                 match session.snapshot(connection_id) {
                     Ok(view) => {
+                        let member = members.get(&connection_id);
+                        let (seat, is_player) = match member {
+                            Some(m) if m.role == ClientRole::Player => (Some(m.player_id), true),
+                            _ => (None, false),
+                        };
                         let _ = reply.send(Ok(ServerMessage::Snapshot {
                             header: MessageHeader::new(
                                 id,
@@ -247,8 +292,12 @@ async fn native_room_loop(
                                 session.engine().revision(),
                             ),
                             view,
-                            choice: None,
-                            legal_actions: Vec::new(),
+                            choice: choice_for(session.engine(), seat),
+                            legal_actions: if is_player {
+                                legal_actions_for(session.engine(), seat.expect("player seat"))
+                            } else {
+                                Vec::new()
+                            },
                         }));
                     }
                     Err(e) => {
