@@ -1,0 +1,63 @@
+ganglie: {
+		audio: 2,
+		trigger: { player: "damageEnd" },
+		check(event, player) {
+			if (!event.source?.isIn()) {
+				return Math.random() < 0.5;
+			}
+			return get.attitude(player, event.source) <= 0;
+		},
+		prompt2(event, player) {
+			let str = "你可以判定。";
+			if (event.source?.isIn()) {
+				str += `若结果不为红桃，则${get.translation(event.source)}须弃置两张手牌，否则其受到来自你的1点伤害。`;
+			}
+			return str;
+		},
+		async content(event, trigger, player) {
+			const { source } = trigger;
+			let result = await player
+				.judge({
+					judge(card) {
+						if (get.suit(card) === "heart") {
+							return -2;
+						}
+						return 2;
+					},
+					judge2(result) {
+						return result.bool;
+					},
+				})
+				.forResult();
+			if (!result?.bool || !source?.isIn()) {
+				return;
+			}
+			result =
+				source.countDiscardableCards(source, "h") < 2
+					? { bool: false }
+					: await source
+							.chooseToDiscard({
+								prompt: `弃置两张手牌，否则${get.translation(player)}对你造成1点伤害`,
+								selectCard: 2,
+								ai(card) {
+									if (card.name === "tao") {
+										return -10;
+									}
+									if (card.name === "jiu" && get.player().hp === 1) {
+										return -10;
+									}
+									return get.unuseful(card) + 2.5 * (5 - (get.owner(card)?.hp ?? 0));
+								},
+							})
+							.forResult();
+			if (!result?.bool) {
+				await source.damage();
+			}
+		},
+		ai: {
+			maixie_defend: true,
+			effect: {
+				target(card, player, target) {
+					if (player.hasSkillTag("jueqing", false, target)) {
+						return [1, -1];
+				

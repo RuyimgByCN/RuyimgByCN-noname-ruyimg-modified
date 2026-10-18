@@ -101,3 +101,17 @@ if !hand.is_empty() {
 
 **另一处（差异②，待口径判定）**：上游 `sbjizhi` gaintag + `sbjizhi_mark` 子技（摸到的牌**本回合不可被弃置**）
 原生未实现。
+
+## 6 刚烈（`ganglie`）缺「弃两张手牌」分支（NC08 样本 21 新发现，2026-10-19）
+
+**症状（规则损失）**：标准面 `ganglie` 在判定**非红桃**后，先让**伤害来源二选一**：
+`source.chooseToDiscard({selectCard: 2})`（**弃置两张手牌**），未弃（或手牌不足 2）才 `source.damage()`；
+而原生 `crates/engine-native/src/content/standard/skills/gang_lie.rs` 判定非红桃后**直接**对来源造成 1 点伤害，
+**没有**弃牌询问分支。
+
+**修法**：判定成功后插入「来源手牌 ≥ 2 → `WaitChoice{SelectCards, min:2, max:2}` 弃两张；否则/未选 →
+对来源 1 点伤害」的机器步骤（需按 `HostMachine`/`SkillMachine` 既有模式实现，含可取消与不足两张的短路）。
+
+**验收**：`cargo test --offline -p engine-native --test nc08_upstream_ganglie` 中
+`upstream_ganglie_discard_branch_difference_is_fixed` 应改为断言**存在**弃牌询问，并新增
+「来源弃两张后不受伤害」的行为用例。
