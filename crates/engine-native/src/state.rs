@@ -1433,6 +1433,26 @@ impl GameStateCore {
                 _ => 0,
             })
             .sum();
+        // 每步·距离（L27 批 3，`new_meibu_range`）：临时——到「每步」弃牌者
+        // 的距离视为 1（上游 mod.globalFrom -Infinity → 下限钳制同口径；
+        // 目标座位存于标记）
+        if let Some(def) = catalog.skill_by_name(crate::content::host::L27_NEW_MEIBU_RANGE_KEY) {
+            let enabled = self
+                .skills
+                .get(&(a, def))
+                .map(|i| i.enabled)
+                .unwrap_or(false);
+            if enabled
+                && self
+                    .vm_aux
+                    .marks
+                    .get(&(a, u32::from(def)))
+                    .copied()
+                    == Some(i32::from(b))
+            {
+                return 1;
+            }
+        }
         // 撷芳（L27 选将美化批 1，`xiefang`）：锁定——你计算与其他角色的
         // 距离 -（场上存活**女性**角色数；上游 mod.globalFrom distance -
         // countPlayer(hasSex('female')) 同口径；下限 1 由末尾钳制）

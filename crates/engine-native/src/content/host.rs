@@ -1309,6 +1309,13 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 每步（tag 519，L27 选将美化批 3，`new_meibu`）：任意角色出牌阶段
+    /// 开始时可选——弃一张牌（手/装备），令其本回合**止息**（不能用牌）；
+    /// 若弃牌非【杀】非锦囊且非黑，另使其到你的距离视为 1。
+    NewMeibu,
+    /// 每步·距离（tag 520，L27 批 3，`new_meibu_range`）：临时——到「每步」
+    /// 弃牌者的距离视为 1（内联 `computed_distance`）。
+    NewMeibuRange,
     /// 止息（tag 518，L27 选将美化批 2，`new_zhixi`）：锁定——使用牌累计
     /// 标记；标记 ≥ 体力或本局已使用过**锦囊**时，不能使用/响应牌（状态
     /// 相关封锁）；标记显示「体力 - 计数」。
@@ -1833,6 +1840,8 @@ impl HostBehavior {
             HostBehavior::Rangjie => 516,
             HostBehavior::Xiefang => 517,
             HostBehavior::NewZhixi => 518,
+            HostBehavior::NewMeibu => 519,
+            HostBehavior::NewMeibuRange => 520,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2591,6 +2600,8 @@ impl HostBehavior {
             516 => HostBehavior::Rangjie,
             517 => HostBehavior::Xiefang,
             518 => HostBehavior::NewZhixi,
+            519 => HostBehavior::NewMeibu,
+            520 => HostBehavior::NewMeibuRange,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2611,7 +2622,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 514] = [
+        pub const ALL: [HostBehavior; 516] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3126,6 +3137,8 @@ impl HostBehavior {
         HostBehavior::Rangjie,
         HostBehavior::Xiefang,
         HostBehavior::NewZhixi,
+        HostBehavior::NewMeibu,
+        HostBehavior::NewMeibuRange,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3402,6 +3415,8 @@ impl HostBehavior {
             HostBehavior::Rangjie => "host:rangjie",
             HostBehavior::Xiefang => "host:xiefang",
             HostBehavior::NewZhixi => "host:new_zhixi",
+            HostBehavior::NewMeibu => "host:new_meibu",
+            HostBehavior::NewMeibuRange => "host:new_meibu_range",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3881,6 +3896,16 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 每步：任意角色出牌阶段开始（可选）
+            HostBehavior::NewMeibu => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 每步·距离：被动（无触发时机）
+            HostBehavior::NewMeibuRange => None,
             // 止息：自己使用牌（锁定；firstDo）
             HostBehavior::NewZhixi => Some(TriggerMeta {
                 event: EventKind::CardUsed,
@@ -6345,6 +6370,12 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 每步（L27 选将美化批 3）：目录技能名（弃牌令他人本回合止息）。
+pub const L27_NEW_MEIBU_KEY: &str = "new_meibu";
+
+/// 每步·距离（L27 批 3）：目录技能名（到弃牌者距离视为 1）。
+pub const L27_NEW_MEIBU_RANGE_KEY: &str = "new_meibu_range";
+
 /// 止息（L27 选将美化批 2）：目录技能名（用牌计数 + 锦囊记录 → 封锁出牌）。
 pub const L27_NEW_ZHIXI_KEY: &str = "new_zhixi";
 
@@ -7293,6 +7324,11 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
                 _ => (None, None),
             },
+            // 每步：出牌阶段开始者（被止息者）
+            HostBehavior::NewMeibu => match event {
+                EventData::Phase { player, begin: true, .. } => (Some(*player), None),
+                _ => (None, None),
+            },
             // 迅影：同一目标（杀结算后对同目标再杀）
             HostBehavior::XianjianXunying => match event {
                 EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
@@ -7596,6 +7632,7 @@ impl HostSkillBehavior {
             HostBehavior::Rangjie => (None, None),
             HostBehavior::Xiefang => (None, None),
             HostBehavior::NewZhixi => (None, None),
+            HostBehavior::NewMeibuRange => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7935,6 +7972,19 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
             HostBehavior::Gongxin => false,
+            // 每步：他人出牌阶段开始，自己有牌，且其在攻击范围内能及自己
+            HostBehavior::NewMeibu => match event {
+                EventData::Phase { player, phase: crate::event::Phase::Play, begin: true } => {
+                    *player != owner
+                        && ctx.state.player(*player).alive
+                        && (!ctx.state.player(owner).hand.is_empty()
+                            || !ctx.state.player(owner).equips.is_empty())
+                        && ctx.state.computed_distance(ctx.catalog, *player, owner)
+                            <= ctx.state.attack_range(ctx.catalog, *player)
+                }
+                _ => false,
+            },
+            HostBehavior::NewMeibuRange => false,
             // 止息：自己使用牌
             HostBehavior::NewZhixi => matches!(event,
                 EventData::CardUsed(u) if u.player == owner),
@@ -12554,6 +12604,8 @@ impl crate::catalog::SkillMachine for HostMachine {
         match self.behavior {
             // 平恤：无效果步（computed_distance 字段消费）
             HostBehavior::SwdPingxu => Flow::Done,
+            // 每步·距离：无效果步（computed_distance 字段消费）
+            HostBehavior::NewMeibuRange => Flow::Done,
             // 疾影：无效果步（sha_range_free 链查询）
             HostBehavior::SwdJiyingHeld => Flow::Done,
             // 沐风：确认门后摸 1（discoverCard 确定性=牌堆末摸 1）
@@ -21506,6 +21558,107 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 每步：弃一张牌 → 令目标本回合止息（+ 条件性距离视为 1）
+            HostBehavior::NewMeibu => match self.stage {
+                HostStage::Act => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive {
+                        return Flow::Done;
+                    }
+                    let mut options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    options.truncate(64);
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "new_meibu_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive {
+                        return Flow::Done;
+                    }
+                    let is_sha = ctx.catalog.card_kind(card).is_sha_like();
+                    let is_trick = {
+                        let k = ctx.catalog.card_kind(card);
+                        !k.is_basic_kind() && k.equip_slot().is_none()
+                    };
+                    let is_black = matches!(
+                        ctx.catalog.cards[card as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    );
+                    if ctx.core.player(self.owner).hand.contains(&card) {
+                        ctx.discard_from_hand(self.owner, card);
+                    } else if ctx.core.player(self.owner).equips.contains(&card) {
+                        ctx.core.player_mut(self.owner).equips.retain(|c| *c != card);
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, card);
+                        ctx.to_discard(card);
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "每步",
+                        owner: self.owner,
+                    });
+                    if let Some(def) = ctx.catalog.skill_by_name(L27_NEW_ZHIXI_KEY) {
+                        ctx.core.skills.insert(
+                            (target, def),
+                            crate::state::SkillInstance {
+                                owner: target,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: true,
+                                rounds: 0,
+                            },
+                        );
+                        let hp = ctx.core.player(target).hp.max(1);
+                        ctx.core.vm_aux.marks.insert((target, u32::from(def)), hp);
+                    }
+                    if !is_sha && !is_trick && !is_black {
+                        if let Some(def) = ctx.catalog.skill_by_name(L27_NEW_MEIBU_RANGE_KEY) {
+                            ctx.core.skills.insert(
+                                (target, def),
+                                crate::state::SkillInstance {
+                                    owner: target,
+                                    enabled: true,
+                                    once_used: false,
+                                    expires_end_of_turn: true,
+                                    rounds: 0,
+                                },
+                            );
+                            ctx.core
+                                .vm_aux
+                                .marks
+                                .insert((target, u32::from(def)), i32::from(self.owner));
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 止息：标记 +1；锦囊 → 置锦囊记录；显示标记 = 体力 - 计数
             HostBehavior::NewZhixi => {
                 let used_trick = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {

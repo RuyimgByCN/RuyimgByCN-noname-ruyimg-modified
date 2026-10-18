@@ -25,14 +25,16 @@ fn cards_json() -> String {
     out.push_str("  \"pack\": {\n");
     out.push_str("    \"name\": \"select-beautify-upstream-liuli\",\n");
     out.push_str("    \"version\": 1,\n");
-    out.push_str("    \"description\": \"G1 转换：上游选将美化批 1-2（撷芳/止息）\",\n");
+    out.push_str("    \"description\": \"G1 转换：上游选将美化批 1-3（撷芳/止息/每步）\",\n");
     out.push_str("    \"card_prefix\": \"sb_\"\n");
     out.push_str("  },\n");
     out.push_str("  \"cards\": [],\n");
     out.push_str("  \"skills\": [\n");
     out.push_str("    { \"name\": \"xiefang\", \"mapping\": \"host:xiefang\" },\n");
     out.push_str("    { \"name\": \"new_zhixi\", \"mapping\": \"host:new_zhixi\" },\n");
-    out.push_str("    { \"name\": \"new_zhixi_mark2\", \"mapping\": \"host:new_zhixi\" }\n");
+    out.push_str("    { \"name\": \"new_zhixi_mark2\", \"mapping\": \"host:new_zhixi\" },\n");
+    out.push_str("    { \"name\": \"new_meibu\", \"mapping\": \"host:new_meibu\" },\n");
+    out.push_str("    { \"name\": \"new_meibu_range\", \"mapping\": \"host:new_meibu_range\" }\n");
     out.push_str("  ],\n");
     out.push_str("  \"generals\": [],\n");
     out.push_str("  \"deferred\": [\n");
@@ -48,7 +50,7 @@ fn config_json() -> String {
     out.push_str("  \"source\": \"noname-liuli\",\n");
     out.push_str("  \"upstream_path\": \"noname/extension/选将美化/extension.js\",\n");
     out.push_str(&format!("  \"upstream_commit\": \"{UPSTREAM_COMMIT}\",\n"));
-    out.push_str("  \"skills\": [\"xiefang\", \"new_zhixi\", \"new_zhixi_mark2\"],\n");
+    out.push_str("  \"skills\": [\"xiefang\", \"new_zhixi\", \"new_zhixi_mark2\", \"new_meibu\", \"new_meibu_range\"],\n");
     out.push_str("  \"_note\": \"选将 UI 主面为混淆代码（不迁移）；技能面按批次移植\"\n");
     out.push_str("}\n");
     out
@@ -89,6 +91,22 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             content_schema::PackageSkillEntry {
                 skill_def_id: 2,
                 name: "new_zhixi_mark2".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 3,
+                name: "new_meibu".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 4,
+                name: "new_meibu_range".into(),
                 locked: false,
                 lord_only: false,
                 non_gainable: false,
