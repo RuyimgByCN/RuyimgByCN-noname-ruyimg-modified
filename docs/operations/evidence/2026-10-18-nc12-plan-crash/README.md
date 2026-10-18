@@ -123,3 +123,34 @@ engine_native::engine::legal_actions::push_action     ← 候选探测（克隆�
 - [ ] ≥30 分钟长程结果（`long-load-final.log` 运行中，04:25 启动）与故障率统计
 - [ ] AI 强度面评估：填充池收窄导致的对局变长（179→484）是否可接受，或需重新设计填充策略
 - [ ] 其余平台档位、真实网络 RTT、旧线对照
+
+## 7 关键诊断：故障**不是**遮蔽造成的（2026-10-19 同轮）
+
+给模拟/探测故障加了**现场状态切片**与**遮蔽时静止态诊断**后重跑，抓到一次完整现场
+（[fault-dump2.log](fault-dump2.log)）：
+
+```
+card 93 not in hand of 0
+AI_SIM_FAULT seat=1 redact_quiescent=false redact_stack=1 redact_parks=1 redact_choice=true
+  rev=10 phase=Play action=Answer { choice_id: 2, selection: [Pass] } table=[161]
+  deck_len=194 discard_len=3
+  p0:hp=3/4 hand=[78, 152, 123, 144] equips=[] judge=[] off=[]
+  p1:hp=4/4 hand=[23, 15, 72, 10] ... p2 ... p3 ...
+```
+
+**判读（重要）**：
+
+1. 遮蔽时 **`redact_quiescent=false`（stack=1、parks=1、choice=true）** → 身份遮蔽**已被正确跳过**，
+   只做了牌库顺序打乱（不打乱区域归属）；
+2. 但 panic 仍是 `card 93 not in hand of 0`，而切片显示 **p0 手牌 = [78,152,123,144]**，
+   且 93 不在任何列出的区域（`table=[161]`、`deck_len=194`、`discard_len=3`）→ **93 在牌库或弃牌堆**；
+3. 打乱牌库**不会**改变牌的**区域归属** → 因此**卡 93 在遮蔽之前就已不在 p0 手牌**，
+   而某台机器仍以它为「手牌牌」引用 → **这是内核自身状态里的悬空引用**，与 AI 遮蔽**无关**；
+4. 触发动作是 `Answer { choice_id: 2, selection: [Pass] }`（应答路由），发生在 **rev=10** 的早期局面
+   —— **现场足够小，可据此构造最小复现**。
+
+**下一步（明确）**：
+- [ ] 从该切片出发构造最小复现：按 seed/game 重放到 rev=10（或直接用 `debug_*` 布阵复刻
+      「p0 手牌 4 张、table=[161]、某机器引用 93」），定位是哪台机器/哪条路径把 93 移出手牌却保留引用；
+- [ ] 修复后重跑长程，确认 `sim_faults`/`probe_faults` 归零；
+- [ ] 该缺陷同时解释了此前「长程崩溃」与两处防护的必要性（防护保留：真实提交仍硬失败）。

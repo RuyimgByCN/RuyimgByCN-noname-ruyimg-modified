@@ -548,6 +548,32 @@ impl Engine {
                 Ok(out) => out,
                 Err(_) => {
                     sim_faults = sim_faults.saturating_add(1);
+                    // NC12 根因诊断：把故障现场的状态切片写到 stderr（默认 hook 已打印
+                    // panic 文本）；`NONAME_AI_FAULT_DUMP=0` 可关闭。
+                    if std::env::var("NONAME_AI_FAULT_DUMP").map(|v| v != "0").unwrap_or(true) {
+                        let core = trial.state_core();
+                        let shape: String = core
+                            .players
+                            .iter()
+                            .enumerate()
+                            .map(|(i, p)| {
+                                format!(
+                                    "p{i}:hp={}/{} hand={:?} equips={:?} judge={:?} off={:?}",
+                                    p.hp, p.max_hp, p.hand, p.equips, p.judge, p.off_court
+                                )
+                            })
+                            .collect::<Vec<_>>()
+                            .join(" | ");
+                        let (q, st, pk, ch) = redact_last_state();
+                        eprintln!(
+                            "AI_SIM_FAULT seat={seat} redact_quiescent={q} redact_stack={st} redact_parks={pk} redact_choice={ch} rev={} phase={:?} action={action:?} table={:?} deck_len={} discard_len={} {shape}",
+                            trial.revision(),
+                            trial.turn().phase,
+                            core.table,
+                            core.deck.len(),
+                            core.discard.len(),
+                        );
+                    }
                     continue; // 模拟故障候选不计分
                 }
             };
@@ -672,6 +698,23 @@ impl Engine {
 /// 存档/恢复；旧实现从牌堆采样并复制 ID，会制造重复物理归属。
 /// 退化：牌堆为空时池=对手暗牌，重排后仍不复制、不读入任何观察者
 /// 不可知信息；确定性由座位号播种的 LCG 保证（无 OS 熵）。
+/// 诊断：最近一次遮蔽是否为静止态（1/0）、栈深、挂起机器数、是否有开放选择。
+static REDACT_LAST: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+static REDACT_STACK: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+static REDACT_PARKS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+static REDACT_CHOICE: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+
+/// 读取最近一次遮蔽的静止态诊断（quiescent, stack_len, parks_len, has_choice）。
+pub fn redact_last_state() -> (bool, u64, u64, bool) {
+    use std::sync::atomic::Ordering::Relaxed;
+    (
+        REDACT_LAST.load(Relaxed) == 1,
+        REDACT_STACK.load(Relaxed),
+        REDACT_PARKS.load(Relaxed),
+        REDACT_CHOICE.load(Relaxed) == 1,
+    )
+}
+
 pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     use crate::ids::CardId;
     // NC10 修正（NC12 §5.2 根因）：重分配会改写对手手牌里的**实体牌 id**，
@@ -684,6 +727,20 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         let res = e.resolution();
         res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none()
     };
+    // NC12 诊断：记录最近一次遮蔽时的静止态判据与隐藏区重写情况（供故障切片比对）
+    {
+        let res = e.resolution();
+        REDACT_LAST.store(
+            if quiescent { 1 } else { 0 },
+            std::sync::atomic::Ordering::Relaxed,
+        );
+        REDACT_STACK.store(res.stack.len() as u64, std::sync::atomic::Ordering::Relaxed);
+        REDACT_PARKS.store(res.parks.len() as u64, std::sync::atomic::Ordering::Relaxed);
+        REDACT_CHOICE.store(
+            if res.open_choice.is_some() { 1 } else { 0 },
+            std::sync::atomic::Ordering::Relaxed,
+        );
+    }
     if !quiescent {
         // NC10：非静止态**仍可安全遮蔽牌库顺序**——牌库内容不变、区域不变，只是顺序
         // 打乱；挂起机器/在飞帧只记录实体牌 id，不记录牌库位置，故不会失效。
