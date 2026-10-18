@@ -1,0 +1,21 @@
+duwen: {
+		trigger: { source: "damageBegin" },
+		check(event, player) {
+			return get.attitude(player, event.player) <= 0;
+		},
+		forced: true,
+		filter(event, player) {
+			return player.countCards("h") === event.player.countCards("h") && event.notLink();
+		},
+		content() {
+			trigger.num++;
+		},
+		ai: {
+			threaten: 1.5,
+		},
+	},
+	duwen2: {
+		trigger: { source: "damageEnd" },
+		forced: true,
+		filter(event, player) {
+			return event.card && event.card.name === "sha" && player.hp === event.player.hp && event.notLin
