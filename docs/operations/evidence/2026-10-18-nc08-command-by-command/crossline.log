@@ -1,0 +1,7 @@
+CROSSLINE seed=1 首次分歧@step=0 旧(current=0,phase=Draw,seats=[(5, true), (3, true), (3, true), (6, true)]) 原生(current=0,phase=Judge,seats=[(5, true), (4, true), (4, true), (4, true)])
+CROSSLINE seed=42 首次分歧@step=0 旧(current=0,phase=Draw,seats=[(4, true), (4, true), (3, true), (4, true)]) 原生(current=0,phase=Judge,seats=[(5, true), (4, true), (4, true), (4, true)])
+CROSSLINE seed=99 首次分歧@step=0 旧(current=0,phase=Draw,seats=[(4, true), (3, true), (3, true), (3, true)]) 原生(current=0,phase=Judge,seats=[(5, true), (4, true), (4, true), (4, true)])
+CROSSLINE seed=777 首次分歧@step=0 旧(current=0,phase=Draw,seats=[(5, true), (4, true), (3, true), (4, true)]) 原生(current=0,phase=Judge,seats=[(5, true), (4, true), (4, true), (4, true)])
+CROSSLINE seed=12345 首次分歧@step=0 旧(current=0,phase=Draw,seats=[(4, true), (6, true), (4, true), (4, true)]) 原生(current=0,phase=Judge,seats=[(5, true), (4, true), (4, true), (4, true)])
+CROSSLINE seed=20261702 首次分歧@step=0 旧(current=0,phase=Draw,seats=[(5, true), (3, true), (4, true), (4, true)]) 原生(current=0,phase=Judge,seats=[(5, true), (4, true), (4, true), (4, true)])
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
