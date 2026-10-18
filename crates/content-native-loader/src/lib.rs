@@ -40,6 +40,7 @@ mod elo;
 mod fool;
 mod martial;
 mod omnisearch;
+mod qhly;
 mod shousha;
 mod shousha_mvp;
 mod sj_settings;
@@ -105,6 +106,7 @@ pub use martial::{
     OverOut,
     RecordBook, ReplaceOut, Seats,
 };
+pub use qhly::*;
 pub use omnisearch::{
     debug_execute, debug_inspect, parse_config, EntryKind, PublicEntry, PublicIndex, SearchConfig,
     SearchError,
