@@ -244,6 +244,35 @@ async function connectOnline(intent: OnlineIntent) {
     store.connected = false;
     pushLog(store, "连接已断开：服务端不可达或已停止");
   });
+  // NC09：自动重连状态可见
+  networkClient.onReconnect((state) => {
+    if (state === "reconnecting") {
+      statusLine.value = "连接已断开，正在重连…";
+      store.connected = false;
+    } else if (state === "reconnected") {
+      statusLine.value = "已重连（等待房间状态）";
+      store.connected = true;
+      void networkClient.joinRoom(
+        roomId.value || 1,
+        "",
+        localStorage.getItem(reconnectKey(roomId.value || 1)),
+      )
+        .then((s) => {
+          selfId.value = s.playerId;
+          roomId.value = s.roomId;
+          statusLine.value = `房间 #${s.roomId} · 已重连`;
+          return handleEnvelope(s.envelope);
+        })
+        .catch((error: unknown) => {
+          const message = error instanceof Error ? error.message : String(error);
+          statusLine.value = `重连后回房失败：${message}`;
+          pushLog(store, `重连后回房失败：${message}`);
+        });
+    } else {
+      statusLine.value = "重连失败（服务端不可达）";
+      store.connected = false;
+    }
+  });
   networkClient.onRoster((roster) => {
     roomRoster.value = roster;
     roomId.value = roster.room_id;

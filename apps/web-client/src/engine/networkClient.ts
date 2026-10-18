@@ -92,10 +92,18 @@ export class NetworkEngineClient {
   private closeListeners = new Set<() => void>();
   private heartbeat: number | null = null;
   private disposed = false;
+  /// NC09 自动重连：最近一次连接参数（断开后按退避重试）
+  private lastUrl: string | null = null;
+  private lastName = "";
+  private reconnectTimer: number | null = null;
+  private reconnectAttempts = 0;
+  private reconnectListeners = new Set<(state: "reconnecting" | "reconnected" | "failed") => void>();
 
   async connect(url: string, displayName: string): Promise<void> {
     if (this.socket?.readyState === WebSocket.OPEN) return;
     this.disposed = false;
+    this.lastUrl = url;
+    this.lastName = displayName;
 
     const welcome = new Promise<void>((resolve, reject) => {
       this.welcomeWaiter = { resolve, reject };
@@ -253,6 +261,11 @@ export class NetworkEngineClient {
 
   dispose(): void {
     this.disposed = true;
+    if (this.reconnectTimer != null) {
+      window.clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    this.reconnectAttempts = 0;
     if (this.heartbeat != null) window.clearInterval(this.heartbeat);
     this.heartbeat = null;
     this.socket?.close(1000, "client dispose");
@@ -452,7 +465,42 @@ export class NetworkEngineClient {
     }
     this.heartbeat = null;
     this.socket = null;
-    if (!this.disposed) this.rejectOutstanding(new Error("与服务端的连接已断开"));
+    if (!this.disposed) {
+      this.rejectOutstanding(new Error("与服务端的连接已断开"));
+      this.scheduleReconnect();
+    }
+  }
+
+  /// 断线自动重连（指数退避，最多 5 次；成功/失败均广播状态）。
+  private scheduleReconnect(): void {
+    if (this.reconnectTimer != null) return;
+    if (!this.lastUrl) return;
+    if (this.reconnectAttempts >= 5) {
+      for (const l of this.reconnectListeners) l("failed");
+      return;
+    }
+    const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 8000);
+    this.reconnectAttempts += 1;
+    for (const l of this.reconnectListeners) l("reconnecting");
+    this.reconnectTimer = window.setTimeout(() => {
+      this.reconnectTimer = null;
+      const url = this.lastUrl;
+      if (!url || this.disposed) return;
+      void this.connect(url, this.lastName)
+        .then(() => {
+          this.reconnectAttempts = 0;
+          for (const l of this.reconnectListeners) l("reconnected");
+        })
+        .catch(() => {
+          this.scheduleReconnect();
+        });
+    }, delay);
+  }
+
+  /// 自动重连状态通知（NC09）。
+  onReconnect(listener: (state: "reconnecting" | "reconnected" | "failed") => void): () => void {
+    this.reconnectListeners.add(listener);
+    return () => this.reconnectListeners.delete(listener);
   }
 
   private rejectOutstanding(error: Error): void {

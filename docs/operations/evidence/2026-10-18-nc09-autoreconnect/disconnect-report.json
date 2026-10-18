@@ -1,0 +1,16 @@
+{
+  "room_id": "0",
+  "after_kill": {
+    "len": 367,
+    "hasErrorText": true,
+    "errorLine": "连接已断开（服务端不可达）"
+  },
+  "after_restart": {
+    "len": 450,
+    "hasRoom": false,
+    "roomLine": "",
+    "hasErrorText": true,
+    "statusLine": "重连后回房失败：room not found"
+  },
+  "console_errors": []
+}

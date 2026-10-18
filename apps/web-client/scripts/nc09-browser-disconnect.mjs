@@ -104,19 +104,17 @@ const afterKill = await evalJs(`(() => {
   const t = document.body.innerText;
   return {
     len: t.length,
-    hasErrorText: /失败|错误|断开|关闭|无法|重试/i.test(t),
-    errorLine: (t.match(/[^\\n]*(失败|错误|断开|关闭|无法|重试)[^\\n]*/) || [])[0] ?? "",
+    hasErrorText: /失败|错误|断开|关闭|无法|重试|重连/i.test(t),
+    errorLine: (t.match(/[^\\n]*(失败|错误|断开|关闭|无法|重试|重连)[^\\n]*/) || [])[0] ?? "",
   };
 })()`);
 console.log("STEP after_kill " + JSON.stringify(afterKill));
 const shot = await send("Page.captureScreenshot", { format: "png" });
 writeFileSync(join(outDir, "disconnect-screenshot.png"), Buffer.from(shot.data, "base64"));
 
-// 重启服务端 → 重新导航（客户端自动重连）→ 应回到房间
+// 重启服务端 → **不刷新页面**，等待客户端自动重连 → 应回到房间
 server = startServer();
-await sleep(7000);
-await send("Page.navigate", { url: base });
-await sleep(7000);
+await sleep(12000);
 const afterRestart = await evalJs(`(() => {
   const t = document.body.innerText;
   return {
@@ -124,6 +122,7 @@ const afterRestart = await evalJs(`(() => {
     hasRoom: /房间 #\\d+/.test(t),
     roomLine: (t.match(/房间 #\\d+[^\\n]*/) || [])[0] ?? "",
     hasErrorText: /失败|错误|断开|关闭|无法/i.test(t),
+    statusLine: (t.match(/[^\\n]*(重连|已重连|房间 #\\d+)[^\\n]*/) || [])[0] ?? "",
   };
 })()`);
 console.log("STEP after_restart " + JSON.stringify(afterRestart));
