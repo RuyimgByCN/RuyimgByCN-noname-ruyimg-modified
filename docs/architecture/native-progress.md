@@ -22,7 +22,7 @@
 |---|---|---|
 | NC01 | **根因已修 + 回归已加 + 定向/全量通过（2026-10-18）**；版本升格与 3 处顺序调用方迁移待并行提交 | [座位与触发语义](native-convergence-plan.md#nc01)；[证据](../operations/evidence/2026-10-18-nc01-seat-semantics/README.md) |
 | NC02 | **根因已修 + 7 项验收回归 + game-server 全量通过（2026-10-18）**；`-D warnings` 门禁被并行重构阻断 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；[证据](../operations/evidence/2026-10-18-nc02-install-identity/README.md) |
-| NC03 | **前端适配层切片（token/值分离、kind、rejected 暴露、目录守护）已修 + 回归已加；内核权威动作查询已实现（`legal_actions`/`probe_action`）+ 4 项回归（2026-10-18）**；前端/AI 接线、协议共享、`events`/`hash_hex` 待续 | [统一原生 API](native-convergence-plan.md#nc03)；[前端证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)、[内核查询证据](../operations/evidence/2026-10-18-nc03-legal-actions/README.md) |
+| NC03 | **前端适配层切片（token/值分离、kind、rejected 暴露、目录守护）已修 + 回归已加；内核权威动作查询已实现（`legal_actions`/`probe_action`）+ 4 项回归（2026-10-18）**；前端接线（子 agent 进行中）、**AI 一致性回归已加**（规划动作须过权威校验；AI 因克隆校验代价 0.54 ms/候选暂不接线，登记待办）、协议共享、`events`/`hash_hex` 待续 | [统一原生 API](native-convergence-plan.md#nc03)；[前端证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)、[内核查询证据](../operations/evidence/2026-10-18-nc03-legal-actions/README.md) |
 | NC04 | **根因已修 + 3 项回归 + 全量通过（2026-10-18）**；挂起/非法效果/无效 token 等用例待补 | [VM 故障与事务](native-convergence-plan.md#nc04)；[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md) |
 | NC05 | 待完整验收 | [独立扩展宿主](native-convergence-plan.md#nc05)；依赖 NC02–NC04，按需引入 NC06/NC07 切片 |
 | NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
@@ -48,7 +48,8 @@
 - 实现：`Engine::legal_actions(seat)`（顺序稳定、上限 256）、`is_legal_action`、`probe_action`（克隆上走与正式提交相同的校验）——查询与提交同源。
 - 回归：新增 `tests/nc03_legal_actions.rs`（射程过滤与内核拒绝一致 / 只读 / 非本人回合无出牌候选 / 开放选择只给观察者且候选可被接受）。
 - 实测：定向 4/4；engine-native 全量 **1108/0/2**；Gate 1b exit 0；行数门禁 8225 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc03-legal-actions/README.md)。
-- 待办：前端与 AI 接线、Rust↔TS 协议共享、`events`/`hash_hex`、候选分页、主动技内部选择展开。
+- 代价实测：`legal_actions` **1.62 ms/次（0.54 ms/候选）**；AI 采用将达 ~16 ms/节点（64 节点约 1 s/决策）→ **AI 暂不接线**，改加一致性回归（`tests/nc03_ai_consistency.rs`：规划动作须过权威校验 + 伪造动作必被拒）。
+- 待办：前端接线（子 agent 进行中）、非克隆校验入口（AI 接线的性能前置）、Rust↔TS 协议共享、`events`/`hash_hex`、候选分页、主动技内部选择展开。
 
 ### NC04 核验（2026-10-18，规则 v321 / 存档 v105 未变）
 
