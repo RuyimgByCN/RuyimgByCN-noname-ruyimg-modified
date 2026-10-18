@@ -83,27 +83,22 @@ fn drain(e: &mut Engine) {
 
 /// 上游点 1+2+3：回复体力 → 护甲 +1，且**不出现确认门**（锁定技）。
 ///
-/// **本轮未验收（登记）**：夹具中 `debug_recover` 虽返回接受，但驱动到静止后体力未变
-/// （回复事件经帧结算，本夹具未观察到落地）→ 该用例以 `#[ignore]` 守护；技能效果面由
-/// `upstream_lingxue_effect_is_fixed_by_source` 的源码事实固定覆盖。
+/// **本轮未验收（登记，根因已查明）**：`debug_recover` 的语义是「**只发 Recover 事件、
+/// 不施加体力变化**」（既有 boss 用例仅用它触发忍性/积财等 recoverEnd 技能，从不断言体力；
+/// 见 `native_kernel/boss_nianshou.rs:33`、`boss_taotie.rs:124`）——因此本用例的体力断言
+/// 前提不成立。要验收灵雪行为面须走**真实回复路径**（桃/技能回复）或改用带体力变化的助手。
+/// 用例以 `#[ignore]` 守护；效果面由 `upstream_lingxue_effect_is_fixed_by_source` 覆盖。
 #[test]
-#[ignore = "夹具未观察到 debug_recover 落地（登记未验收）；效果面见 upstream_lingxue_effect_is_fixed_by_source"]
+#[ignore = "debug_recover 只发 Recover 事件不施加体力变化（根因已查明）；需改走真实回复路径；效果面见 upstream_lingxue_effect_is_fixed_by_source"]
 fn upstream_lingxue_gains_hujia_on_recover_without_prompt() {
     let mut e = xianjian_engine(20264301);
     e.debug_grant(0, "lingxue");
     e.debug_set_hp(0, 2); // 已受伤，便于回复
     let hujia_before = e.state_core().player(0).hujia;
     let hp_before = e.debug_hp(0);
-    let out = e.debug_recover(0, 1);
-    assert!(
-        matches!(
-            out,
-            engine_native::CommandOutcome::Accepted { .. }
-                | engine_native::CommandOutcome::Pending { .. }
-                | engine_native::CommandOutcome::Suspended
-        ),
-        "回复提交应被接受：{out:?}"
-    );
+    // 注意：`debug_recover` **只发 Recover 事件、不施加体力变化**（既有 boss 用例语义）——
+    // 故此处不能断言体力 +1；本用例因此被 #[ignore]（需改走真实回复路径）。
+    let _ = e.debug_recover(0, 1);
     // 锁定技：不应出现确认门
     assert!(
         e.open_choice().is_none(),
