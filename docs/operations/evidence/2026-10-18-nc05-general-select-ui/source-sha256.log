@@ -1,5 +1,6 @@
-# 本轮受维护文件哈希（采集时 HEAD=��
-# date: 2026-10-18T14:58:07Z
+# 本轮受维护文件哈希
+# 采集时 HEAD=f5fd1cf1c80ae6c8a2f450da801fe7c66d4d005b（采集后 HEAD 因并行提交前移，源码未变）
+# date: 2026-10-18T15:07:44Z
 
 $ shasum -a 256 <files>
 4c8607d805ff642df0ef3b9d315e6d654d43e3fa5317d8f3da2a3fa81da7c58a  apps/web-client/src/engine/generalSelectModel.ts
