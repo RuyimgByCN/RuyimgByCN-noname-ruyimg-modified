@@ -1,0 +1,8 @@
+STEP hello ok
+STEP room 1
+STEP join2 JoinOk
+STEP startgame Error {"code":"Internal","message":"room error","room_id":1}
+STEP first_rejection {}
+RESULT scenario=online_rtt tier=loopback n=30 p50_ns=100541 p95_ns=174166 max_ns=339917 mean_ns=110119
+RESULT scenario=online_rtt tier=loopback result_accepted=0 result_rejected=30 final_revision=0
+NOTE 本机回环、无真实网络；不含客户端渲染/动画；绝对值受负载影响。
