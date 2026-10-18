@@ -101,3 +101,24 @@ RESULT {"lobby_has_local_start":true,"battle_text_len":2383,"battle_has_phase":t
 - [ ] 未做视觉/交互/可访问性与平台档位验收
 - [ ] 客户端路由需服务端 SPA fallback（部署配置）
 - [ ] 本轮临时 `http.server` 已终止；CDP 驱动脚本仅 Node 内置依赖
+
+## 6 浏览器内完整会话驱动：选将 → 自动推进 → 存档/读档（2026-10-18 同轮）
+
+在 §5 修复后，把 CDP 驱动脚本扩展到**真实会话**（[drive-full-session.log](drive-full-session.log)、
+[drive-report.json](drive-report.json)、[battle-after-actions.png](battle-after-actions.png)）：
+
+| 步骤 | 实测 |
+|---|---|
+| ① 大厅 | `lobby_has_local_start: true` |
+| ② 本地开局 | 战斗页渲染，`rev 0 · native`（**原生后端在浏览器中运行**） |
+| ③ **选将**（点击候选「样例·张角组合」） | UI 显示 `✅ 已为 P1 装配 样例·张角组合 · state_hash 79543a31f338f687…` + `刷新后视图技能：天妒 · 鬼道` —— UI→Worker→WASM→内核→投影→UI 全链路 |
+| ④ **自动一步 ×3** | **`rev 0 → 3`**（按钮 `found:true/disabled:false`；对局在浏览器中真实推进） |
+| ⑤ **存档 / 读档** 点击 | `saveRes: true`、`loadRes: true`，**控制台零错误** |
+| ⑥ 控制台 | `console_errors: []`（全流程无 `SEVERE`/`Uncaught`/`console.error`） |
+
+### 仍未完成（更新）
+
+- [ ] **联机大厅**未走通（WebSocket 加入房间/提交命令/重连/旁观）——本轮只验证本地原生路径
+- [ ] 未验证**整局终局**（只推进 3 步）、未验证读档后状态一致性（只点击按钮未断言恢复结果）
+- [ ] 视觉/交互（点击、键盘、触摸、窄屏、中英文、可访问性）与平台档位未验收
+- [ ] 客户端路由需服务端 SPA fallback（部署配置）

@@ -3,5 +3,42 @@
   "battle_text_len": 2383,
   "battle_has_phase": true,
   "battle_has_seat": true,
-  "console_errors": []
+  "console_errors": [],
+  "choose_general": {
+    "beforeChoose": true,
+    "chooseRes": {
+      "clicked": true,
+      "name": "样例·张角组合"
+    },
+    "afterChoose": {
+      "hasSkills": true,
+      "snippet": "无名杀 Next\n大厅\n对局\n扩展\n设置\n录像\n武将库\n重新开局\n结束阶段\n自动一步\n连续自动\n存档\n读档\n倍速\n0.5×\n1×\n2×\n4×\n跳过动画\n观察者 P1\n\n选将 P1 · 样例·张角组合 · 79543a31f338…\n\n选将\n\nNC05 · 目标座位 P1 · 93 项候选 · 点击候选即按名装配 （原生正式入口，非 debug）\n\n刷新候选\n\n✅ 已为 P1 装配 样例·张角组合 · state_hash 79543a31f338f687…\n刷新后视图技能：天妒 · 鬼道\n\n样例·张角组合\n鬼道 ·"
+    }
+  },
+  "auto_step": {
+    "revBefore": "0",
+    "revAfter": "3",
+    "logLen": 2532,
+    "stepInfo": [
+      {
+        "found": true,
+        "tag": "BUTTON",
+        "disabled": false
+      },
+      {
+        "found": true,
+        "tag": "BUTTON",
+        "disabled": false
+      },
+      {
+        "found": true,
+        "tag": "BUTTON",
+        "disabled": false
+      }
+    ]
+  },
+  "save_load": {
+    "saveRes": true,
+    "loadRes": true
+  }
 }

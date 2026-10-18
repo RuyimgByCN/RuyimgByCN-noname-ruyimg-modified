@@ -120,13 +120,67 @@ console.log("STEP battle_view " + JSON.stringify(battle));
 const shot = await send(ws, "Page.captureScreenshot", { format: "png" });
 writeFileSync(join(outDir, "battle-screenshot.png"), Buffer.from(shot.data, "base64"));
 
-// ④ 报告
+// ④ 选将：点击第一个候选，断言技能/视图变化
+const beforeChoose = await evalJs(`document.body.innerText.includes('候选')`);
+const chooseRes = await evalJs(`(() => {
+  const buttons = Array.from(document.querySelectorAll('button,a'));
+  const el = buttons.find(b => (b.innerText||'').includes('·') && (b.innerText||'').length < 40);
+  if (!el) return { clicked: false, candidates: buttons.length };
+  const name = (el.innerText||'').split('\\n')[0];
+  el.click();
+  return { clicked: true, name };
+})()`);
+await sleep(2500);
+const afterChoose = await evalJs(`(() => {
+  const t = document.body.innerText;
+  return { hasSkills: /鬼道|鬼才|反馈|天妒|技能/.test(t), snippet: t.slice(0, 260) };
+})()`);
+console.log("STEP choose_general " + JSON.stringify({ beforeChoose, chooseRes, afterChoose }));
+
+// ⑤ 自动推进若干步：断言日志/修订增长
+const revBefore = await evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+const stepInfo = [];
+for (let i = 0; i < 3; i++) {
+  const info = await evalJs(`(() => {
+    const buttons = Array.from(document.querySelectorAll('button,a'));
+    const el = buttons.find(b => (b.innerText||'').trim() === '自动一步')
+      || buttons.find(b => (b.innerText||'').includes('自动一步'));
+    if (!el) return { found: false, labels: buttons.map(b => (b.innerText||'').trim()).slice(0, 20) };
+    el.click();
+    return { found: true, tag: el.tagName, disabled: !!el.disabled };
+  })()`);
+  stepInfo.push(info);
+  await sleep(1500);
+}
+const revAfter = await evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+const logLen = await evalJs(`document.body.innerText.length`);
+console.log("STEP auto_step " + JSON.stringify({ revBefore, revAfter, logLen, stepInfo }));
+
+// ⑥ 存档 / 读档
+const saveRes = await evalJs(`(() => {
+  const el = Array.from(document.querySelectorAll('button,a')).find(el => (el.innerText||'').trim() === '存档');
+  if (!el) return false; el.click(); return true;
+})()`);
+await sleep(1500);
+const loadRes = await evalJs(`(() => {
+  const el = Array.from(document.querySelectorAll('button,a')).find(el => (el.innerText||'').trim() === '读档');
+  if (!el) return false; el.click(); return true;
+})()`);
+await sleep(2000);
+const shot2 = await send(ws, "Page.captureScreenshot", { format: "png" });
+writeFileSync(join(outDir, "battle-after-actions.png"), Buffer.from(shot2.data, "base64"));
+console.log("STEP save_load " + JSON.stringify({ saveRes, loadRes }));
+
+// ⑦ 报告
 const report = {
   lobby_has_local_start: hasLocalStart,
   battle_text_len: battle?.len ?? 0,
   battle_has_phase: !!battle?.hasPhase,
   battle_has_seat: !!battle?.hasSeat,
   console_errors: consoleErrors,
+  choose_general: { beforeChoose, chooseRes, afterChoose },
+  auto_step: { revBefore, revAfter, logLen, stepInfo },
+  save_load: { saveRes, loadRes },
 };
 writeFileSync(join(outDir, "drive-report.json"), JSON.stringify(report, null, 2));
 console.log("RESULT " + JSON.stringify(report));
@@ -137,3 +191,4 @@ await sleep(300);
 rmSync(udd, { recursive: true, force: true });
 if (!report.battle_has_phase) process.exit(2);
 if (report.console_errors.length > 0) process.exit(3);
+if (Number(report.auto_step.revAfter) <= Number(report.auto_step.revBefore)) process.exit(4);
