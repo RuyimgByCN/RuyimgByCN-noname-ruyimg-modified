@@ -22,9 +22,9 @@
 |---|---|---|
 | NC01 | **根因已修 + 回归已加 + 定向/全量通过（2026-10-18）**；版本升格与 3 处顺序调用方迁移待并行提交 | [座位与触发语义](native-convergence-plan.md#nc01)；[证据](../operations/evidence/2026-10-18-nc01-seat-semantics/README.md) |
 | NC02 | **根因已修 + 7 项验收回归 + game-server 全量通过（2026-10-18）**；`-D warnings` 门禁被并行重构阻断 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；[证据](../operations/evidence/2026-10-18-nc02-install-identity/README.md) |
-| NC03 | **前端适配层切片（token/值分离、kind、rejected 暴露、目录守护）已修 + 回归已加；内核权威动作查询已实现（`legal_actions`/`probe_action`）+ 4 项回归（2026-10-18）**；前端接线（子 agent 进行中）、**AI 一致性回归已加**（规划动作须过权威校验；AI 因克隆校验代价 0.54 ms/候选暂不接线，登记待办）、协议共享、`events`/`hash_hex` 待续 | [统一原生 API](native-convergence-plan.md#nc03)；[前端证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)、[内核查询证据](../operations/evidence/2026-10-18-nc03-legal-actions/README.md) |
+| NC03 | **前端已接内核权威查询（2026-10-18）**：窄壳补 `legal_actions_json`/`activate_skill` 导出，前端删 `hand.slice(0,8)` 拼接与合成 `ResolveChoice`，候选来自内核并按 `(revision,seat)` 记忆化（实测 0.415 ms/次查询、缓存命中 0.051 ms/信封）；窄壳定向 5/5 + 前端 5 项 + 真实 WASM 冒烟 22/22、`typecheck`/构建 exit 0；此前**内核权威查询（`legal_actions`/`probe_action`）+ 4 项回归、前端适配层切片（token/值分离、kind、rejected 暴露、目录守护）、AI 一致性回归**均已入库（AI 因克隆校验代价 0.54 ms/候选暂不接线）；剩余：AI 接线、协议共享（Rust↔TS 手写两份）、`events`/`hash_hex` 空占位、候选上限 256 的分页/分步、主动技内部选择展开、`RevealGeneral` 未进候选、真实 Worker/浏览器端到端 | [统一原生 API](native-convergence-plan.md#nc03)；[前端接线证据](../operations/evidence/2026-10-18-nc03-frontend-authoritative/README.md)、[前端适配层证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)、[内核查询证据](../operations/evidence/2026-10-18-nc03-legal-actions/README.md) |
 | NC04 | **根因已修 + 3 项回归 + 全量通过（2026-10-18）**；挂起/非法效果/无效 token 等用例待补 | [VM 故障与事务](native-convergence-plan.md#nc04)；[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md) |
-| NC05 | **选将入口 + 第一类案例（重规则/嵌套选择）+ 第二类案例（战役/跨局档案 + 升级恢复）已通过（2026-10-18）**；第三类案例（皮肤/UI 组合）、产品持久化层与客户端入口、构造期钩子统一、跨版本迁移待续 | [独立扩展宿主](native-convergence-plan.md#nc05)；[选将入口](../operations/evidence/2026-10-18-nc05-general-select/README.md)、[第一类](../operations/evidence/2026-10-18-nc05-lifecycle-heavy/README.md)、[第二类](../operations/evidence/2026-10-18-nc05-campaign-profile/README.md) |
+| NC05 | **三类纵向案例全部通过（2026-10-18）**：①重规则/嵌套选择（swd 505 行为全生命周期）②战役/跨局档案 + 升级恢复 ③皮肤/UI 组合 + 资源/规则指纹分离；剩余：真实客户端渲染与平台档位、热切换、产品持久化层、卸载后重新取得 | [独立扩展宿主](native-convergence-plan.md#nc05)；[选将](../operations/evidence/2026-10-18-nc05-general-select/README.md)、[①](../operations/evidence/2026-10-18-nc05-lifecycle-heavy/README.md)、[②](../operations/evidence/2026-10-18-nc05-campaign-profile/README.md)、[③](../operations/evidence/2026-10-18-nc05-skin-ui/README.md) |
 | NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
 | NC07 | 待结构收敛 | [状态与持久化同源](native-convergence-plan.md#nc07)；与 NC06 逐职责迁移 |
 | NC08 | 待补齐原生门禁 | [规则与跨目标对照](native-convergence-plan.md#nc08)；贯穿迁移过程 |
@@ -41,6 +41,14 @@
 - 回归：新增 `apps/web-client/scripts/native-adapter.test.mjs`（三条反例 + 边界，7 项）与 `extension-inventory.test.mjs`（目录守护失败路径，3 项），`pnpm --dir apps/web-client test` 10/10 通过；冒烟新增真实 WASM 引擎的适配层 token 往返（提交 token 接受、提交候选值被拒）。
 - 实测：`typecheck` exit 0（修复前 exit 2）；`smoke:native` **15/15**（修复前 12/13，`extension_catalog_15` 硬编码 15 已改为按包数据推导的两个不变量）；`pnpm test` 10/10；`pnpm build` exit 0；行数门禁 8222 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)。
 - 待办：内核权威动作查询（含停止前端 `hand.slice(0,8)` 拼接 `PlayCard`/合成 `ResolveChoice`）；Rust↔TS 协议定义共享或自动校验；`events`/`hash_hex` 仍为空占位；真实 Worker 端到端与多选/取消/过期选择、大整数协议表示；客户端管理面仍只覆盖 15/41 个在盘包。
+
+### NC05 第三类案例核验（2026-10-18，规则 v321 / 存档 v105 未变）
+
+- 案例：`skin-switch-upstream-liuli`（纯配置/表现面）+ `select-beautify-upstream-liuli` + 规则包共存。
+- 验收：配置资源经 store 解析到**安装目录**（规范化确认在 `packages/upstream-liuli__skin-switch/...`）、资源索引可枚举、升级 1.0.1 生效且资源指纹变化、旧锁仍装旧版本、回退可装载；**资源/规则指纹分离**（同版本内存对照：仅换资产 `source_hash` → `asset_hash` 变、`logic_hash` 不变）；组合共存下建局/选将/权威动作查询/真实提交/存档往返全通。
+- 过程实证两条 store 不变量：同版本不同内容被拒（「安装失败保留旧版本」）、版本进入逻辑指纹（故分离断言用同版本内存对照）。
+- 实测：定向 2/2；game-server 全量 **61/0**；行数门禁 8236 文件 ≤2000 行（单测 OK）——[证据](../operations/evidence/2026-10-18-nc05-skin-ui/README.md)。
+- 待办：真实客户端渲染与平台档位、运行时热切换、产品持久化层、卸载后重新取得。
 
 ### NC05 第二类案例核验（2026-10-18，规则 v321 / 存档 v105 未变）
 
