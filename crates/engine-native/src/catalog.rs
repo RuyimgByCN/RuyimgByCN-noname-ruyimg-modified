@@ -1235,6 +1235,17 @@ pub trait SkillBehavior: Send + Sync {
     /// 出牌封锁原语（swd 批 134 冰封）：持有该行为的启用实例时，玩家
     /// 不能使用/打出/响应/求桃任何牌（上游 `bingfeng2` mod
     /// cardEnabled/cardUsable/cardRespondable/cardSavable 全 false 同口径）。
+    /// 出牌封锁的**状态相关**变体（L27 止息：标记/锦囊记录达条件才封锁）。
+    /// 默认委托静态值；状态相关技能覆盖之。
+    fn blocks_all_cards_when(
+        &self,
+        _catalog: &Catalog,
+        _core: &crate::state::GameStateCore,
+        _p: crate::ids::PlayerId,
+    ) -> bool {
+        self.blocks_all_cards()
+    }
+
     fn blocks_all_cards(&self) -> bool {
         false
     }
@@ -1432,7 +1443,11 @@ impl Catalog {
         p: crate::ids::PlayerId,
     ) -> bool {
         core.skills.iter().any(|((o, def), inst)| {
-            *o == p && inst.enabled && self.skills[*def as usize].behavior.blocks_all_cards()
+            *o == p
+                && inst.enabled
+                && self.skills[*def as usize]
+                    .behavior
+                    .blocks_all_cards_when(self, core, p)
         })
     }
 

@@ -25,12 +25,14 @@ fn cards_json() -> String {
     out.push_str("  \"pack\": {\n");
     out.push_str("    \"name\": \"select-beautify-upstream-liuli\",\n");
     out.push_str("    \"version\": 1,\n");
-    out.push_str("    \"description\": \"G1 转换：上游选将美化首批（撷芳）\",\n");
+    out.push_str("    \"description\": \"G1 转换：上游选将美化批 1-2（撷芳/止息）\",\n");
     out.push_str("    \"card_prefix\": \"sb_\"\n");
     out.push_str("  },\n");
     out.push_str("  \"cards\": [],\n");
     out.push_str("  \"skills\": [\n");
-    out.push_str("    { \"name\": \"xiefang\", \"mapping\": \"host:xiefang\" }\n");
+    out.push_str("    { \"name\": \"xiefang\", \"mapping\": \"host:xiefang\" },\n");
+    out.push_str("    { \"name\": \"new_zhixi\", \"mapping\": \"host:new_zhixi\" },\n");
+    out.push_str("    { \"name\": \"new_zhixi_mark2\", \"mapping\": \"host:new_zhixi\" }\n");
     out.push_str("  ],\n");
     out.push_str("  \"generals\": [],\n");
     out.push_str("  \"deferred\": [\n");
@@ -46,7 +48,7 @@ fn config_json() -> String {
     out.push_str("  \"source\": \"noname-liuli\",\n");
     out.push_str("  \"upstream_path\": \"noname/extension/选将美化/extension.js\",\n");
     out.push_str(&format!("  \"upstream_commit\": \"{UPSTREAM_COMMIT}\",\n"));
-    out.push_str("  \"skills\": [\"xiefang\"],\n");
+    out.push_str("  \"skills\": [\"xiefang\", \"new_zhixi\", \"new_zhixi_mark2\"],\n");
     out.push_str("  \"_note\": \"选将 UI 主面为混淆代码（不迁移）；技能面按批次移植\"\n");
     out.push_str("}\n");
     out
@@ -67,14 +69,32 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
     let mut package = ContentPackage {
         manifest,
         modules: vec![],
-        skill_index: vec![content_schema::PackageSkillEntry {
-            skill_def_id: 0,
-            name: "xiefang".into(),
-            locked: false,
-            lord_only: false,
-            non_gainable: false,
-            conversion: false,
-        }],
+        skill_index: vec![
+            content_schema::PackageSkillEntry {
+                skill_def_id: 0,
+                name: "xiefang".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 1,
+                name: "new_zhixi".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 2,
+                name: "new_zhixi_mark2".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+        ],
         character_index: vec![],
         skin_index: Default::default(),
         card_index: vec![],

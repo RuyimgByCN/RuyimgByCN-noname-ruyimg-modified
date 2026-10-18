@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 止息（tag 518，L27 选将美化批 2，`new_zhixi`）：锁定——使用牌累计
+    /// 标记；标记 ≥ 体力或本局已使用过**锦囊**时，不能使用/响应牌（状态
+    /// 相关封锁）；标记显示「体力 - 计数」。
+    NewZhixi,
     /// 撷芳（tag 517，L27 选将美化批 1，`xiefang`）：锁定——距离 -存活女性
     /// 数（内联于 `computed_distance`）；并在死亡/摸牌阶段结束时刷新
     /// 「女性数」标记（0 时移除）。
@@ -1828,6 +1832,7 @@ impl HostBehavior {
             HostBehavior::Reguhuo => 515,
             HostBehavior::Rangjie => 516,
             HostBehavior::Xiefang => 517,
+            HostBehavior::NewZhixi => 518,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2585,6 +2590,7 @@ impl HostBehavior {
             515 => HostBehavior::Reguhuo,
             516 => HostBehavior::Rangjie,
             517 => HostBehavior::Xiefang,
+            518 => HostBehavior::NewZhixi,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2605,7 +2611,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 513] = [
+        pub const ALL: [HostBehavior; 514] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3119,6 +3125,7 @@ impl HostBehavior {
         HostBehavior::Reguhuo,
         HostBehavior::Rangjie,
         HostBehavior::Xiefang,
+        HostBehavior::NewZhixi,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3394,6 +3401,7 @@ impl HostBehavior {
             HostBehavior::Reguhuo => "host:reguhuo",
             HostBehavior::Rangjie => "host:rangjie",
             HostBehavior::Xiefang => "host:xiefang",
+            HostBehavior::NewZhixi => "host:new_zhixi",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3871,6 +3879,15 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 止息：自己使用牌（锁定；firstDo）
+            HostBehavior::NewZhixi => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                // 上游 firstDo:true → 同事件内最先结算
+                timing: Timing::First,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 撷芳：全局死亡结束 / 摸牌阶段结束（锁定）
@@ -6328,6 +6345,12 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 止息（L27 选将美化批 2）：目录技能名（用牌计数 + 锦囊记录 → 封锁出牌）。
+pub const L27_NEW_ZHIXI_KEY: &str = "new_zhixi";
+
+/// 止息·锦囊记录（L27 批 2）：标记键所用技能名。
+pub const L27_NEW_ZHIXI_MARK2_KEY: &str = "new_zhixi_mark2";
+
 /// 撷芳（L27 选将美化批 1）：目录技能名（距离 -存活女性数 + 女性数标记）。
 pub const L27_XIEFANG_KEY: &str = "xiefang";
 
@@ -7572,6 +7595,7 @@ impl HostSkillBehavior {
             HostBehavior::Reguhuo => (None, None),
             HostBehavior::Rangjie => (None, None),
             HostBehavior::Xiefang => (None, None),
+            HostBehavior::NewZhixi => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7911,6 +7935,9 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
             HostBehavior::Gongxin => false,
+            // 止息：自己使用牌
+            HostBehavior::NewZhixi => matches!(event,
+                EventData::CardUsed(u) if u.player == owner),
             // 撷芳：死亡事件（任意角色）或**自己的**摸牌阶段结束
             HostBehavior::Xiefang => match event {
                 EventData::Death { .. } => true,
@@ -12167,6 +12194,29 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn blocks_all_cards(&self) -> bool {
         matches!(self.behavior, HostBehavior::Bingfeng2)
+    }
+
+    /// 止息（L27 批 2）：**计数标记 ≥ 体力** 或 **已使用过锦囊**（记录标记
+    /// 非零）→ 封锁出牌/响应。两个标记分别以 `new_zhixi` 与
+    /// `new_zhixi_mark2` 的技能定义为键存于 `vm_aux.marks`。
+    fn blocks_all_cards_when(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        if self.behavior != HostBehavior::NewZhixi {
+            return self.blocks_all_cards();
+        }
+        let mark_of = |name: &str| -> i32 {
+            catalog
+                .skill_by_name(name)
+                .and_then(|d| core.vm_aux.marks.get(&(p, u32::from(d))).copied())
+                .unwrap_or(0)
+        };
+        let count = mark_of(L27_NEW_ZHIXI_KEY);
+        let trick = mark_of(L27_NEW_ZHIXI_MARK2_KEY) > 0;
+        trick || count >= core.player(p).hp.max(1)
     }
 }
 impl HostMachine {
@@ -21456,6 +21506,45 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 止息：标记 +1；锦囊 → 置锦囊记录；显示标记 = 体力 - 计数
+            HostBehavior::NewZhixi => {
+                let used_trick = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    Some(EventData::CardUsed(u)) => {
+                        let kind = u
+                            .use_as
+                            .unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                        !kind.is_basic_kind() && kind.equip_slot().is_none()
+                    }
+                    _ => false,
+                };
+                let def = ctx
+                    .catalog
+                    .skill_by_name(L27_NEW_ZHIXI_KEY)
+                    .map(u32::from)
+                    .unwrap_or_default();
+                let entry = ctx
+                    .core
+                    .vm_aux
+                    .marks
+                    .entry((self.owner, def))
+                    .or_insert(0);
+                *entry += 1;
+                if used_trick {
+                    let mark2 = ctx
+                        .catalog
+                        .skill_by_name(L27_NEW_ZHIXI_MARK2_KEY)
+                        .map(u32::from)
+                        .unwrap_or_default();
+                    ctx.core.vm_aux.marks.insert((self.owner, mark2), 1);
+                }
+                // 上游显示标记 = 体力 - 计数（展示面）；原生保留**计数**语义
+                let _ = ctx.core.vm_aux.marks.get(&(self.owner, def)).copied();
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "止息",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
             // 撷芳：刷新「存活女性数」标记（0 时清除）
             HostBehavior::Xiefang => {
                 let count = (0..ctx.core.players.len() as PlayerId)

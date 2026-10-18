@@ -5,12 +5,14 @@
   "pack": {
     "name": "select-beautify-upstream-liuli",
     "version": 1,
-    "description": "G1 转换：上游选将美化首批（撷芳）",
+    "description": "G1 转换：上游选将美化批 1-2（撷芳/止息）",
     "card_prefix": "sb_"
   },
   "cards": [],
   "skills": [
-    { "name": "xiefang", "mapping": "host:xiefang" }
+    { "name": "xiefang", "mapping": "host:xiefang" },
+    { "name": "new_zhixi", "mapping": "host:new_zhixi" },
+    { "name": "new_zhixi_mark2", "mapping": "host:new_zhixi" }
   ],
   "generals": [],
   "deferred": [
