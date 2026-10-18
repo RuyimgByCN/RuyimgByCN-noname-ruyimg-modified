@@ -166,6 +166,24 @@ impl PlanPool {
         self.plan_seats_scoped(engine, seats, planner)
     }
 
+    /// 长驻有界池路径（**调用方自持池**，可跨调用复用；NC10 组件）。
+    ///
+    /// 与 [`Self::plan_seats_pooled`] 的差别：池由调用方创建并复用，故**不承担
+    /// 每次建池/销毁线程的开销**——这是池设计本应获得的收益来源。
+    pub fn plan_seats_with_pool(
+        &self,
+        pool: &crate::ai_pool::PlannerPool,
+        engine: &Engine,
+        seats: &[u8],
+        planner: &BoundedPlanner,
+    ) -> Vec<Plan> {
+        if seats.is_empty() {
+            return Vec::new();
+        }
+        let (plans, _degraded) = pool.plan_all(engine, seats, planner);
+        plans
+    }
+
     /// 长驻有界池路径（NC10 组件；实测较 scoped 慢，**默认不启用**）。
     pub fn plan_seats_pooled(
         &self,

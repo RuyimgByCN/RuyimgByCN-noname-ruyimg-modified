@@ -57,13 +57,17 @@ fn main() {
     let planner = BoundedPlanner::new(budget).with_deadline_ms(50);
     let pool = PlanPool::new(seats as usize);
     let all_seats: Vec<u8> = (0..seats).collect();
+    // 跨调用复用的池（NC10 设计意图：线程只创建一次）
+    let reused = engine_native::ai_pool::PlannerPool::new(seats as usize, seats as usize);
 
     // 预热（避免首轮页错误/线程创建污染）
     let _ = pool.plan_seats_pooled(&engine, &all_seats, &planner);
     let _ = pool.plan_seats_scoped(&engine, &all_seats, &planner);
+    let _ = pool.plan_seats_with_pool(&reused, &engine, &all_seats, &planner);
 
     let mut pooled: Vec<u128> = Vec::with_capacity(iters);
     let mut scoped: Vec<u128> = Vec::with_capacity(iters);
+    let mut reused_ns: Vec<u128> = Vec::with_capacity(iters);
     for i in 0..iters {
         // 交替顺序，避免系统性顺序偏差
         if i % 2 == 0 {
@@ -73,7 +77,13 @@ fn main() {
             let t = Instant::now();
             let _ = pool.plan_seats_scoped(&engine, &all_seats, &planner);
             scoped.push(t.elapsed().as_nanos());
+            let t = Instant::now();
+            let _ = pool.plan_seats_with_pool(&reused, &engine, &all_seats, &planner);
+            reused_ns.push(t.elapsed().as_nanos());
         } else {
+            let t = Instant::now();
+            let _ = pool.plan_seats_with_pool(&reused, &engine, &all_seats, &planner);
+            reused_ns.push(t.elapsed().as_nanos());
             let t = Instant::now();
             let _ = pool.plan_seats_scoped(&engine, &all_seats, &planner);
             scoped.push(t.elapsed().as_nanos());
@@ -86,7 +96,11 @@ fn main() {
     println!(
         "RESULT scenario=pool_bench tier={tier} config=seats={seats},iters={iters},budget={budget}"
     );
-    for (name, s) in [("pooled", &pooled), ("scoped", &scoped)] {
+    for (name, s) in [
+        ("scoped", &scoped),
+        ("pooled_per_call", &pooled),
+        ("pooled_reused", &reused_ns),
+    ] {
         println!(
             "RESULT scenario=pool_bench tier={tier} path={name} n={} p50_ns={} p95_ns={} max_ns={} mean_ns={}",
             s.len(),
@@ -97,7 +111,7 @@ fn main() {
         );
     }
     println!(
-        "RESULT scenario=pool_bench tier={tier} threads_per_call: scoped={seats} pooled=0（池在首次调用创建，之后复用）"
+        "RESULT scenario=pool_bench tier={tier} threads: scoped={seats}/call pooled_per_call={seats}/call pooled_reused=0/call（池只建一次）"
     );
     println!(
         "NOTE 同设备同负载前后对比；两路径在同一进程交替采样，p50 可比较，绝对值受并发负载影响。"
