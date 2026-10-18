@@ -1,0 +1,9 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/标记补充/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "mpfbmoshi": false,
+  "xueliangfanbei": false,
+  "daojianfu": false,
+  "_note": "上游以 lib.config 门控模式修正；原生以技能实例启用承载（宿主按配置注入）"
+}

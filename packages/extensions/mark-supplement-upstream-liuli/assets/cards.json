@@ -1,0 +1,22 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/标记补充/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "pack": {
+    "name": "mark-supplement-upstream-liuli",
+    "version": 1,
+    "description": "G1 转换：上游标记补充批 1（配置门控模式修正）",
+    "card_prefix": "ms_"
+  },
+  "cards": [],
+  "skills": [
+    { "name": "xigua_mopaifanbei", "mapping": "host:xigua_mopaifanbei" },
+    { "name": "xigua_xueliangfanbei", "mapping": "host:xigua_xueliangfanbei" }
+  ],
+  "generals": [],
+  "deferred": [
+    { "name": "mark_display", "reason": "纯标记展示（yinyang_mark/zhulianbihe_mark/yexinjia_mark 空定义 + wengua 组技）" },
+    { "name": "spine_effects", "reason": "Spine 动画/音效技能（_losehp_/_o_o_* 等，展示面不迁移）" },
+    { "name": "skill_batch_rest", "reason": "其余技能待批次（G0：75 技，中位 2.5 KB）" }
+  ]
+}

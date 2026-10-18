@@ -2741,6 +2741,14 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     } else {
                         0
                     };
+                    // 摸牌翻倍（L20 批 1，`_xigua_mopaifanbei_`）：摸牌 +2
+                    //（上游配置 mpfbmoshi 门控；原生以实例启用承载）
+                    let mopai_extra = usize::from(
+                        ctx.catalog
+                            .skill_by_name(crate::content::host::L20_MOPAI_KEY)
+                            .map(|def| ctx.core.has_skill(player, def))
+                            .unwrap_or(false),
+                    ) * 2;
                     // 脉轮（swd 批 137，规则 v316）：5=少摸一张、6=多摸一张
                     //（上游 mailun5/6 phaseDrawBegin trigger.num∓1 同口径）
                     let mailun_draw: i32 = match ctx.core.player(player).mailun_mode {
@@ -2756,7 +2764,8 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                             + usize::from(lingshi_draw)
                             + shenwei_draw
                             + miedao_draw
-                            + sbzhaxiang_draw,
+                            + sbzhaxiang_draw
+                            + mopai_extra,
                     );
                     // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
                     // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差

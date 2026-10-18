@@ -1309,6 +1309,13 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 摸牌翻倍（tag 531，L20 标记补充批 1，`_xigua_mopaifanbei_`）：锁定——
+    /// 摸牌阶段额外摸 2 张（上游配置 `mpfbmoshi` 门控；原生以实例启用承载）。
+    XiguaMopaiFanbei,
+    /// 血量翻倍（tag 532，L20 批 1，`_xigua_xueliangfanbei_`）：锁定——开局
+    /// 体力上限 + 当前体力并回复等量（上游配置 `xueliangfanbei` 门控；原生以
+    /// 首次阶段开始的一次性标记承载 `gameStart`，登记差异）。
+    XiguaXueliangFanbei,
     /// 门神（tag 528，U08 英雄杀批 2，`yxs_menshen`）：自己结束阶段可选——
     /// 选一名其他角色，令其获得「门神」标记（`yxs_menshen2` 实例 + 标记=自己
     /// 座位）。
@@ -1886,6 +1893,8 @@ impl HostBehavior {
             HostBehavior::YxsMenshen => 528,
             HostBehavior::YxsMenshen3 => 529,
             HostBehavior::YxsMenshen2 => 530,
+            HostBehavior::XiguaMopaiFanbei => 531,
+            HostBehavior::XiguaXueliangFanbei => 532,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2656,6 +2665,8 @@ impl HostBehavior {
             528 => HostBehavior::YxsMenshen,
             529 => HostBehavior::YxsMenshen3,
             530 => HostBehavior::YxsMenshen2,
+            531 => HostBehavior::XiguaMopaiFanbei,
+            532 => HostBehavior::XiguaXueliangFanbei,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2676,7 +2687,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 526] = [
+        pub const ALL: [HostBehavior; 528] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3203,6 +3214,8 @@ impl HostBehavior {
         HostBehavior::YxsMenshen,
         HostBehavior::YxsMenshen3,
         HostBehavior::YxsMenshen2,
+        HostBehavior::XiguaMopaiFanbei,
+        HostBehavior::XiguaXueliangFanbei,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3491,6 +3504,8 @@ impl HostBehavior {
             HostBehavior::YxsMenshen => "host:yxs_menshen",
             HostBehavior::YxsMenshen3 => "host:yxs_menshen3",
             HostBehavior::YxsMenshen2 => "host:yxs_menshen2",
+            HostBehavior::XiguaMopaiFanbei => "host:xigua_mopaifanbei",
+            HostBehavior::XiguaXueliangFanbei => "host:xigua_xueliangfanbei",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3968,6 +3983,16 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 摸牌翻倍：被动（摸牌收束内联，无触发时机）
+            HostBehavior::XiguaMopaiFanbei => None,
+            // 血量翻倍：首次阶段开始（一次性；近似 gameStart）
+            HostBehavior::XiguaXueliangFanbei => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 门神：自己结束阶段（可选）
@@ -6500,6 +6525,12 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 摸牌翻倍（L20 标记补充批 1）：目录技能名（摸牌 +2）。
+pub const L20_MOPAI_KEY: &str = "xigua_mopaifanbei";
+
+/// 血量翻倍（L20 批 1）：目录技能名（开局上限与体力翻倍）。
+pub const L20_XUELIANG_KEY: &str = "xigua_xueliangfanbei";
+
 /// 门神（U08 英雄杀批 2）：目录技能名（结束阶段给他人门神标记）。
 pub const U08_YXS_MENSHEN_KEY: &str = "yxs_menshen";
 
@@ -7810,6 +7841,8 @@ impl HostSkillBehavior {
             HostBehavior::YxsMenshen => (None, None),
             HostBehavior::YxsMenshen3 => (None, None),
             HostBehavior::YxsMenshen2 => (None, None),
+            HostBehavior::XiguaMopaiFanbei => (None, None),
+            HostBehavior::XiguaXueliangFanbei => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -8198,6 +8231,25 @@ impl SkillBehavior for HostSkillBehavior {
                     }
             }
             HostBehavior::YxsMenshen2 => false,
+            HostBehavior::XiguaMopaiFanbei => false,
+            // 血量翻倍：自己首次阶段开始（标记未置位）
+            HostBehavior::XiguaXueliangFanbei => match event {
+                EventData::Phase { player, begin: true, .. } if *player == owner => ctx
+                    .state
+                    .vm_aux
+                    .marks
+                    .get(&(
+                        owner,
+                        ctx.catalog
+                            .skill_by_name(L20_XUELIANG_KEY)
+                            .map(u32::from)
+                            .unwrap_or_default(),
+                    ))
+                    .copied()
+                    .unwrap_or(0)
+                    == 0,
+                _ => false,
+            },
             // 灾变：自己的出牌阶段开始
             HostBehavior::Zaibian => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
@@ -12855,8 +12907,29 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::YxsFanji2 => Flow::Done,
             // 门神·标记持有：无效果步（主体 70 KB 效果待批次）
             HostBehavior::YxsMenshen2 => Flow::Done,
+            // 摸牌翻倍：无效果步（摸牌收束内联消费）
+            HostBehavior::XiguaMopaiFanbei => Flow::Done,
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => Flow::Done,
+            // 血量翻倍：体力上限 + 当前体力并回复等量（一次性）
+            HostBehavior::XiguaXueliangFanbei => {
+                let hp = ctx.core.player(self.owner).hp.max(0);
+                if hp > 0 {
+                    ctx.core.player_mut(self.owner).max_hp += hp as u32;
+                    ctx.recover(self.owner, hp as u32, None);
+                }
+                if let Some(def) = ctx.catalog.skill_by_name(L20_XUELIANG_KEY) {
+                    ctx.core
+                        .vm_aux
+                        .marks
+                        .insert((self.owner, u32::from(def)), 1);
+                }
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "血量翻倍",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
             // 门神：选一名其他角色 → 授予门神标记
             HostBehavior::YxsMenshen => match self.stage {
                 HostStage::Act => {
