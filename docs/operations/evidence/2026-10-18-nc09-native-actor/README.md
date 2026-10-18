@@ -12,7 +12,7 @@
 锦标赛 WAL 分块签名等**已测试**能力。因此本切片**并行**实现原生 actor
 （`apps/game-server/src/room_native_actor.rs`）：
 
-- 复用 [`room_native`](apps/game-server/src/room_native.rs) 的 `NativeRoomSession`
+- 复用 [`room_native`](../../../../apps/game-server/src/room_native.rs) 的 `NativeRoomSession`
   （入座/重连/观战/命令/快照）与 `NativeRoomPersist`（原生归档快照 + WAL 重放恢复）；
 - 复用 `RoomMsg`/`RoomHandle`/`JoinReply`/`Outbound` 与协议消息类型（`RoomHandle::new`
   为复用新增的构造函数）；
