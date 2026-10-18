@@ -1309,6 +1309,13 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 反击（tag 526，U08 英雄杀批 1，`yxs_fanji`）：自己受到【杀】/【决斗】
+    /// 伤害后可选（手牌有【杀】）——获得临时「反击·红杀直伤」并对伤害来源
+    /// 使用一张【杀】。
+    YxsFanji,
+    /// 反击·红杀直伤（tag 527，U08 批 1，`yxs_fanji2`）：临时——自己使用的
+    /// **红色**【杀】不可被闪避（内联杀机器）。
+    YxsFanji2,
     /// 灾变（tag 525，L19 末日乱斗批 2，`zaibian`）：锁定——自己出牌阶段
     /// 开始时摸「忠 + 2 - 反 - 内」（下限 0）张牌。
     Zaibian,
@@ -1864,6 +1871,8 @@ impl HostBehavior {
             HostBehavior::Shishi => 523,
             HostBehavior::Xunmeng => 524,
             HostBehavior::Zaibian => 525,
+            HostBehavior::YxsFanji => 526,
+            HostBehavior::YxsFanji2 => 527,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2629,6 +2638,8 @@ impl HostBehavior {
             523 => HostBehavior::Shishi,
             524 => HostBehavior::Xunmeng,
             525 => HostBehavior::Zaibian,
+            526 => HostBehavior::YxsFanji,
+            527 => HostBehavior::YxsFanji2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2649,7 +2660,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 521] = [
+        pub const ALL: [HostBehavior; 523] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3171,6 +3182,8 @@ impl HostBehavior {
         HostBehavior::Shishi,
         HostBehavior::Xunmeng,
         HostBehavior::Zaibian,
+        HostBehavior::YxsFanji,
+        HostBehavior::YxsFanji2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3454,6 +3467,8 @@ impl HostBehavior {
             HostBehavior::Shishi => "host:shishi",
             HostBehavior::Xunmeng => "host:xunmeng",
             HostBehavior::Zaibian => "host:zaibian",
+            HostBehavior::YxsFanji => "host:yxs_fanji",
+            HostBehavior::YxsFanji2 => "host:yxs_fanji2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3933,6 +3948,16 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 反击：自己受到伤害后（可选）
+            HostBehavior::YxsFanji => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 反击·红杀直伤：被动（杀机器内联，无触发时机）
+            HostBehavior::YxsFanji2 => None,
             // 灾变：自己出牌阶段开始（锁定）
             HostBehavior::Zaibian => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -6435,6 +6460,12 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 反击（U08 英雄杀批 1）：目录技能名（受伤后反击）。
+pub const U08_YXS_FANJI_KEY: &str = "yxs_fanji";
+
+/// 反击·红杀直伤（U08 批 1）：目录技能名（红杀不可闪避）。
+pub const U08_YXS_FANJI2_KEY: &str = "yxs_fanji2";
+
 /// 灾变（L19 末日乱斗批 2）：目录技能名（出牌阶段开始按身份数摸牌）。
 pub const L19_ZAIBIAN_KEY: &str = "zaibian";
 
@@ -7725,6 +7756,8 @@ impl HostSkillBehavior {
             HostBehavior::Shishi => (None, None),
             HostBehavior::Xunmeng => (None, None),
             HostBehavior::Zaibian => (None, None),
+            HostBehavior::YxsFanji => (None, None),
+            HostBehavior::YxsFanji2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -8078,6 +8111,21 @@ impl SkillBehavior for HostSkillBehavior {
             },
             HostBehavior::NewMeibuRange => false,
             HostBehavior::SbZhaXiang => false,
+            // 反击：自己为伤害承受者、手牌有【杀】、伤害载体为【杀】或【决斗】
+            HostBehavior::YxsFanji => match event {
+                EventData::Damage(d) if d.target == owner => {
+                    let has_sha = ctx.state.player(owner).hand.iter().any(|c| {
+                        ctx.catalog.card_kind(*c).is_sha_like()
+                    });
+                    let by_sha_or_duel = d.card.is_some_and(|c| {
+                        let k = ctx.catalog.card_kind(c);
+                        k.is_sha_like() || k == crate::catalog::CardKind::Duel
+                    });
+                    has_sha && by_sha_or_duel
+                }
+                _ => false,
+            },
+            HostBehavior::YxsFanji2 => false,
             // 灾变：自己的出牌阶段开始
             HostBehavior::Zaibian => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
@@ -12731,8 +12779,86 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::SwdPingxu => Flow::Done,
             // 每步·距离：无效果步（computed_distance 字段消费）
             HostBehavior::NewMeibuRange => Flow::Done,
+            // 反击·红杀直伤：无效果步（杀机器内联消费）
+            HostBehavior::YxsFanji2 => Flow::Done,
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => Flow::Done,
+            // 反击：授予临时红杀直伤 → 选一张【杀】对来源使用
+            HostBehavior::YxsFanji => match self.stage {
+                HostStage::Act => {
+                    let Some(EventData::Damage(d)) =
+                        ctx.res.frame(ctx.current_frame_id()).map(|f| f.data.clone())
+                    else {
+                        return Flow::Done;
+                    };
+                    let Some(source) = d.source else {
+                        return Flow::Done;
+                    };
+                    self.target = Some(source);
+                    // 授予临时「反击·红杀直伤」
+                    if let Some(def) = ctx.catalog.skill_by_name(U08_YXS_FANJI2_KEY) {
+                        ctx.core.skills.insert(
+                            (self.owner, def),
+                            crate::state::SkillInstance {
+                                owner: self.owner,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: true,
+                                rounds: 0,
+                            },
+                        );
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.card_kind(*c).is_sha_like())
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "yxs_fanji_sha",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&card)
+                        || !ctx.core.player(target).alive
+                    {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "反击",
+                        owner: self.owner,
+                    });
+                    ctx.emit(EventData::CardUsed(crate::machine::card_use(
+                        card,
+                        self.owner,
+                        vec![target],
+                    )));
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
             // 灾变：摸「忠 + 2 - 反 - 内」（下限 0）张
             HostBehavior::Zaibian => {
                 let (mut loyal, mut rebel, mut renegade) = (0usize, 0usize, 0usize);

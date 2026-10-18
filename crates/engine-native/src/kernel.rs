@@ -6789,6 +6789,20 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 诈降（L27 批 4，`sbzhaxiang`）：本阶段用牌数 ≤ 已损失体力时，所用
         // 【杀】不可被闪避（上游 useCard forced directHit 全场同口径；原生
         // 直伤面仅【杀】有闪避窗口）
+        // 反击·红杀直伤（U08 批 1，`yxs_fanji2`）：持技者使用的**红色**【杀】
+        // 不可被闪避（上游 yxs_fanji2 shaBegin → trigger.directHit 同口径）
+        let yxs_fanji2_direct_hit = {
+            let red = matches!(
+                ctx.catalog.cards[self.card as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            );
+            red
+                && ctx
+                    .catalog
+                    .skill_by_name(crate::content::host::U08_YXS_FANJI2_KEY)
+                    .map(|def| ctx.core.has_skill(self.source, def))
+                    .unwrap_or(false)
+        };
         let sbzhaxiang_direct_hit = ctx
             .catalog
             .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
@@ -6823,6 +6837,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             self.armor_judged = true;
             let has_armor = !qinggang_pierce
                 && !fentian_direct_hit
+                && !yxs_fanji2_direct_hit
                 && !sbzhaxiang_direct_hit
                 && !poyue_direct_hit
                 && !shoulie_hit
@@ -7560,6 +7575,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 || shoulie_hit
                 || lingshi_direct_hit
                 || sbzhaxiang_direct_hit
+                || yxs_fanji2_direct_hit
             {
                 return self.emit_sha_damage(ctx);
             }
