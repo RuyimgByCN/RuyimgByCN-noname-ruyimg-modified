@@ -72,3 +72,12 @@ node apps/web-client/scripts/nc12-browser-coldstart.mjs http://127.0.0.1:8124/ <
 - [ ] 真实网络（非本机）与慢网/丢包
 - [ ] 浏览器内**完整对局**与动画帧/输入响应指标
 - [ ] 两档位的**功能等价**对照（本条只比冷启动耗时，不比功能面）
+
+## 6 工程注意：对照构建产物**不得留在门禁树内**（2026-10-19 同轮）
+
+`VITE_ENGINE_BACKEND=legacy vite build --outDir dist-legacy` 会把**构建产物**写入
+`apps/web-client/dist-legacy/`，而**行数门禁覆盖 `apps/`**（`scripts/check-source-lines.py`）→
+实测被拦下：`apps/web-client/dist-legacy/assets/index-*.js: 5013 lines (limit 2000)`。
+
+**处置**：对照测量完成后**删除该构建产物**（`rm -rf apps/web-client/dist-legacy`），
+门禁恢复通过（8297 文件 ≤ 2000 行）。**后续复跑该对照时同样需在测量后清理**（或将产物放到门禁树外）。
