@@ -71,3 +71,31 @@ p50 为 18,875 ns（none 档）/ 23,459 ns（swd 档）——但新线是**有�
 - [ ] 旧线**长程**（多局、内存/漂移）与新线同口径对照；
 - [ ] 跨线**规则等价**对照（属 NC08）；
 - [ ] 旧线基准（core/AI/WASM）纳入常规回归。
+
+## 7 追加：旧线 **WASM（`engine-wasm`）** 档位基准（2026-10-19 同轮）
+
+新增 `crates/engine-wasm/scripts/nc12-old-wasm-bench.mjs`（Node 驱动**既有产物**
+`crates/engine-wasm/pkg-node/`，sha256 见 [old-wasm-sha256.txt](old-wasm-sha256.txt)）：
+
+| 指标 | p50 | p95 | max |
+|---|---:|---:|---:|
+| `build_and_start`（`WasmEngine` + 内嵌标准 + `startGame(4)`） | **51,494,917 ns ≈ 51.5 ms** | 80.5 ms | 122.9 ms |
+| `end_phase` | **896,416 ns ≈ 896 µs** | 2.82 ms | 11.0 ms |
+| `observer_json` | **29,500 ns ≈ 29.5 µs** | 37.6 µs | 166.5 µs |
+| `state_hash_hex` | **17,208 ns ≈ 17.2 µs** | 19.5 µs | 59.0 µs |
+| `auto_step` | **149,750 ns ≈ 150 µs** | 1.37 ms | 3.61 ms |
+
+日志：[old-wasm.log](old-wasm.log)。
+
+**与新线 WASM 档并列（同机、同 Node；**不可直接比较**）**：新线 wasm 档（
+[证据](../2026-10-18-nc12-wasm-tier/README.md)）`build_standard` p50 为 **16,333 ns ≈ 16.3 µs**、
+`legal_actions` 43.3 µs、`save_hex` 119.8 µs、`view_json` 23.9 µs。两者**规则实现、序列化面与
+内容装载方式不同**（旧线为 `loadEmbeddedStandard` + 结构化 JSON 命令面；新线为窄壳 + 归档字节）
+→ **只并列、不计算收益**（方案 §NC12 纪律）。
+
+## 8 未完成（更新）
+
+- [ ] 旧线**长程**（多局、内存/漂移）与新线同口径对照；
+- [ ] 跨线**规则等价**对照（属 NC08）；
+- [ ] 旧线基准（core / AI / WASM）纳入常规回归；
+- [ ] 旧线 WASM 产物重建后的复测（当前为既有产物，sha256 已记录）。
