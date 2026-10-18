@@ -1,0 +1,16 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/AI优化/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "cf": { "gjcxs_zhugeliang3": 1.9, "gjcxs_caojie1": 0.7 },
+  "qz": { "shen_zhugeliang": 1.75 },
+  "applyCf": "off",
+  "applyQz": false,
+  "ckQz": "off",
+  "qzCf": false,
+  "viewAtt": false,
+  "nhFriends": false,
+  "ntAoe": false,
+  "banQh": false,
+  "_note": "身份/模式专项策略（dizhu/nongmin/nei/fan/findZhong/mjAi/sfjAi/btAi）与设置菜单交互未迁移（登记差异）"
+}
