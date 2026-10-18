@@ -1,0 +1,38 @@
+xicai: {
+		preHidden: true,
+		trigger: { player: "damageEnd" },
+		filter(event, player) {
+			return get.itemtype(event.cards) === "cards" && get.position(event.cards[0], true) === "o";
+		},
+		async content(event, trigger, player) {
+			await player.gain(trigger.cards, "gain2");
+		},
+		ai: {
+			maixie: true,
+			maixie_hp: true,
+			effect: {
+				target(card, player, target) {
+					if (player.hasSkillTag("jueqing", false, target)) {
+						return [1, -1];
+					}
+					if (get.tag(card, "damage")) {
+						return [1, 0.55];
+					}
+				},
+			},
+		},
+	},
+	diyjianxiong: {
+		mode: ["identity", "guozhan"],
+		trigger: { global: "dieBefore" },
+		filter(event, player) {
+			if (_status.currentPhase !== player) {
+				return false;
+			}
+			if (get.mode() === "identity") {
+				return event.player !== game.zhu;
+			}
+			return get.mode() === "guozhan" && event.player.isFriendOf(player);
+		},
+		forced: true,
+	
