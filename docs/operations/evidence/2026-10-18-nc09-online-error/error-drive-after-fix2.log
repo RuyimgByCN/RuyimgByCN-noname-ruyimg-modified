@@ -1,0 +1,3 @@
+STEP fill_create_bad_ws {"clicked":true}
+STEP error_state {"len":194,"hasErrorText":true,"errorLine":"WebSocket 连接失败","snippet":"无名杀 Next\n大厅\n对局\n扩展\n设置\n录像\n武将库\n联机房间 #…\n结束阶段\n倍速\n0.5×\n1×\n2×\n4×\n跳过动画\n观察者 P1\n\nWebSocket 连接失败\n\nWebSocket 连接失败\n\n手牌（0 张 · 点击或拖拽）\n\n无可见手牌\n\n战斗日志\n\n日志来自 DomainEvent 摘要，不是状态真相源。真相源为 Command Log + 投影（§22）。\n\n暂无事件"}
+RESULT {"bad_ws":"ws://127.0.0.1:7799/ws","state":{"len":194,"hasErrorText":true,"errorLine":"WebSocket 连接失败","snippet":"无名杀 Next\n大厅\n对局\n扩展\n设置\n录像\n武将库\n联机房间 #…\n结束阶段\n倍速\n0.5×\n1×\n2×\n4×\n跳过动画\n观察者 P1\n\nWebSocket 连接失败\n\nWebSocket 连接失败\n\n手牌（0 张 · 点击或拖拽）\n\n无可见手牌\n\n战斗日志\n\n日志来自 DomainEvent 摘要，不是状态真相源。真相源为 Command Log + 投影（§22）。\n\n暂无事件"},"console_errors":[]}

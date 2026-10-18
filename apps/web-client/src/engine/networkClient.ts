@@ -108,6 +108,9 @@ export class NetworkEngineClient {
       socket.onclose = () => this.handleClose();
     });
 
+    // NC09：`opened` 失败时 `welcome` 仍会在稍后 reject——必须预先挂一个 no-op catch，
+    // 否则控制台出现 `Uncaught (in promise)`（UI 已显示「WebSocket 连接失败」但仍有未处理拒绝）。
+    void welcome.catch(() => undefined);
     await opened;
     await welcome;
     this.send({

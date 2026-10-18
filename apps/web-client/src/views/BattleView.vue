@@ -446,7 +446,14 @@ onMounted(() => {
   window.addEventListener("keydown", onKeydown);
   // 整页跳转不会走 onUnmounted，需 pagehide 解冻内容锁
   window.addEventListener("pagehide", releaseMatchLocks);
-  void connectAndStart();
+  // NC09：连接失败必须**可见且不产生未处理拒绝**——此前 ws 不可达时 UI 显示了
+  // 「WebSocket 连接失败」但 promise 未捕获，控制台出现 `Uncaught (in promise)`。
+  void connectAndStart().catch((error: unknown) => {
+    const message = error instanceof Error ? error.message : String(error);
+    statusLine.value = `连接失败：${message}`;
+    pushLog(store, `连接失败：${message}`);
+    store.connected = false;
+  });
 });
 
 onUnmounted(() => {
