@@ -96,13 +96,10 @@ fn drive(e: &mut Engine, steps: usize) {
 
 /// 隐藏信息置换不改变规划结果（AI 合法信息边界）。
 ///
-/// **当前失败并登记为 NC10 缺陷**：seed 42022 warm 9 seat 1 下，置换对手手牌+牌库
-/// 后 `plan_action` 结果不同——非静止态跳过 `redact_opponent_hands`（为避免 NC12
-/// §5.2 的引用失效 panic）后，模拟评分可经结果侧信道读到隐藏信息。
-/// 复现：`cargo test --offline -p engine-native --test nc10_ai_information_boundary --
-/// --ignored planner_is_invariant_under_hidden_information`。
+/// 修复记录（2026-10-18）：旧实现把「对手手牌 ∪ 牌库」确定性洗牌后按原张数放回，
+/// 保留隐藏牌**多重集** → AI 仍可读到「对手有闪」（seed 42022 warm 9 seat 1 复现）。
+/// 现改为**内容无关填充**（从目录抽取互不相同的牌填满隐藏区，只保留张数）。
 #[test]
-#[ignore = "NC10 待修：规划结果依赖隐藏信息（非静止态跳过重分配所致，seed 42022 warm 9 seat 1 复现）"]
 fn planner_is_invariant_under_hidden_information() {
     let pack = swd_pack();
     let mut checked = 0usize;
@@ -138,10 +135,14 @@ fn planner_is_invariant_under_hidden_information() {
                     "置换不得改变体力（座位 {i}）"
                 );
             }
+            let res = base.resolution();
             assert_eq!(
                 format!("{a:?}"),
                 format!("{b:?}"),
-                "seed={seed} warm={warm} seat={seat}：规划结果依赖了隐藏信息"
+                "seed={seed} warm={warm} seat={seat}：规划结果依赖了隐藏信息（parks={} stack={} open_choice={}）",
+                res.parks.len(),
+                res.stack.len(),
+                res.open_choice.is_some()
             );
             checked += 1;
         }
@@ -164,6 +165,14 @@ fn planner_detects_own_hand_change() {
             }
             let seat = base.turn().current;
             let a = base.plan_action(seat, &planner()).action;
+            // 只在静止态改自己的手牌（非静止态挂起机器/在飞帧引用实体牌 id，
+            // 改区会让它们指向别的区域——与 redact 同一安全规则）
+            {
+                let res = base.resolution();
+                if !res.stack.is_empty() || !res.parks.is_empty() || res.open_choice.is_some() {
+                    continue;
+                }
+            }
             let mut own = base.clone();
             permute_own(&mut own, seat);
             if own.state_core().player(seat).hand == base.state_core().player(seat).hand {

@@ -53,3 +53,44 @@ python3 -B scripts/check-source-lines.py
 - [ ] AI 受控模拟的其余口径：候选上限与分页、预算耗尽时的降级策略、取消/过期拒绝
 - [ ] `ai.rs::redact_opponent_hands` 的确定性置换（LCG 播种）与「同种子同决策」一致性用例
 - [ ] 长局内存/时间预算下的 AI 有界性（NC12 已给 p50；缺长局 AI 侧数据）
+
+## 5 泄漏修复（2026-10-18 同轮完成）
+
+### 5.1 定位
+
+先测量泄漏点的结算位置：失败态 `parks=0 stack=0 open_choice=false`（**静止态**）——
+说明泄漏**不是**「非静止态跳过重分配」造成的，而是旧重分配本身：它把「对手手牌 ∪ 牌库」
+确定性洗牌后按原张数放回，**完整保留了隐藏牌的多重集**，AI 仍能经模拟读到
+「对手手里有闪」这类事实。
+
+### 5.2 修复（`ai.rs::redact_opponent_hands`）
+
+| 面 | 修复前 | 修复后 |
+|---|---|---|
+| 隐藏区填充 | 真实隐藏牌的多重集洗牌 | **内容无关填充**：从目录中确定性抽取**互不相同**的牌填满隐藏区（对手手牌 + 牌库），只保留**张数**（公开信息） |
+| 已知牌排除 | — | 排除 AI 合法已知的牌（自己手牌/装备/判定/场外 + 弃牌堆） |
+| 确定性 | 座位号播种 | 座位号 + 修订号播种（可重放） |
+| 非静止态 | 跳过（避免 NC12 §5.2 引用失效 panic） | 保持跳过（同一安全规则） |
+
+### 5.3 修复后实测
+
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| NC10 三项判据 | **3 passed / 0 failed**（隐藏不变性由失败转为通过；反向对照在静止态守卫下通过） | [targeted-after-fix.log](targeted-after-fix.log) |
+| engine-native 全量（含 examples） | **1134 passed / 0 failed / 2 ignored** | [engine-native-tests-after-fix.log](engine-native-tests-after-fix.log) |
+| 14 golden | **2/2 零位移** | [replay-golden.log](replay-golden.log) |
+| NC12 官方场景（combo/variant1） | **`plan_panics=0 degraded=false result=OK games=3 steps=803`**（NC12 §5.2 不变量保持） | [nc12-bench-combo-after-nc10-fix.log](nc12-bench-combo-after-nc10-fix.log) |
+| 行数门禁 | 8240 文件 ≤ 2000 行 | [source-lines.log](source-lines.log) |
+
+### 5.4 冻结值同步（策略变更须同步证据）
+
+`tests/ai_planner.rs::policy_v2_drives_all_seats_without_answer_routing_panic`
+冻结步数 **189 → 179**：AI 不再读到对手手牌内容，轨迹步数随之变化；**胜方断言不变**。
+改动原因已写入该断言上方注释（AGENTS.md：不能只更新期望值消错）。
+
+## 6 仍未完成（NC10）
+
+- [ ] 非静止态的信息边界：当前跳过重分配（保 NC12 §5.2 不变量），该窗口内模拟仍可读隐藏内容——需「机器自省保引用重分配」或「非静止态关闭模拟评分」
+- [ ] 泄漏面量化（置换下决策改变的比例）
+- [ ] AI 受控模拟其余口径：候选上限分页、预算耗尽降级、取消/过期拒绝
+- [ ] 置换确定性用例（同种子同决策）

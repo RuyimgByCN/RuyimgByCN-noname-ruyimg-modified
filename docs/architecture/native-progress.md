@@ -29,7 +29,7 @@
 | NC07 | **状态面同源审计已建立（12 项）+ 发现并修复 2 处不同源（座位环未入摘要、恢复期不校验座位环）；规则 v321→v322、14 golden 重录 + 回退探针（2026-10-18）**；修复入库待并行重构提交；`vm_aux` 逐表/扩展字段清单/跨版本迁移待续 | [状态与持久化同源](native-convergence-plan.md#nc07)；[证据](../operations/evidence/2026-10-18-nc07-same-source/README.md) |
 | NC08 | 待补齐原生门禁 | [规则与跨目标对照](native-convergence-plan.md#nc08)；贯穿迁移过程 |
 | NC09 | 待完整产品验收 | [原生客户端与联机](native-convergence-plan.md#nc09)；基于 NC03/NC05 接口并行推进 |
-| NC10 | **信息边界判据已建立（3 项：候选集合公开性 ✅、探针分辨力 ✅、规划结果隐藏不变性 ❌确证泄漏）**；泄漏修复、泄漏面量化、预算降级/取消过期、置换确定性待续 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；[证据](../operations/evidence/2026-10-18-nc10-information-boundary/README.md) |
+| NC10 | **信息边界判据 3 项全通过 + 隐藏信息泄漏已修（内容无关填充；冻结步数 189→179 同步证据）**；非静止态窗口、泄漏面量化、预算降级/取消过期、置换确定性待续 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；[证据](../operations/evidence/2026-10-18-nc10-information-boundary/README.md) |
 | NC11 | 已登记方案，验收数据收敛待执行 | [文档与证据模型](native-convergence-plan.md#nc11)；逐来源修正过宽声明，不用文字标签认证完成 |
 | NC12 | **基线已测（2026-10-18，macOS 27.0.1 / Apple M3 Max / HEAD `4cf05dd3` / 微基准 30 样本 + 整局 3 局每组）：无扩展档六项指标取得基线（建局 p50 4.75 µs、规则结算 p50 8.2 µs、端到端命令 p50 26.9 µs、`save()` 0.29 µs、`restore` 4.8 µs、850 步长局活字节增量 +1.4 KB）；扩展档仅部分覆盖——swd 单扩展读档 30/30 被拒（弃牌堆同牌重复）、扩展档 variant-1 规划 panic 且含 1 次权威结算路径 panic、huanle variant-1 未收敛**；优化前后对比待做（本机并发 load 36.9–44.7，p95/max 受污染）；旧线退出依赖全矩阵通过 | [效能与旧线退出](native-convergence-plan.md#nc12)；[基线证据](../operations/evidence/2026-10-18-nc12-baseline/README.md) |
 
@@ -51,6 +51,14 @@ NC12 基线测量（[证据](../operations/evidence/2026-10-18-nc12-baseline/REA
 3. ~~**swd variant-1 权威结算 panic（最严重）**~~ **未再复现（2026-10-18）**：判定与 §5.1 同根因，已由牌区唯一性修复解决；新增 swd/组合档权威路径稳定性用例（3 seeds × 200 步 + 逐步牌区唯一性校验）通过。原始记录：：`apply_plan`→`submit`→`commit_frame` 在 seed 42009 step 68 panic（`card 204 not in hand of 0`），`PANIC caught` 计数 0 → **不在模拟内**，属权威路径崩溃。→ 影响 NC09/NC10 与产品可用性，**优先修复**。
 
 ### NC10 信息边界核验（2026-10-18，规则 v322 工作树 / 存档 v105）
+
+- 判据：对对手手牌+牌库做确定性置换（公开视图不变），AI 决策须逐字段不变；反向对照用「替换自己一张手牌」证明探针有分辨力（仅在静止态施加，避免引用失效 panic）。
+- **确证并修复泄漏**：泄漏点在**静止态**，根因是旧重分配保留隐藏牌**多重集**（AI 可读到「对手有闪」）；改为**内容无关填充**（目录抽取互不相同的牌填满隐藏区，只保留张数，排除 AI 已知牌，座位号+修订号播种）。
+- 修复后：判据 **3/3**；全量（含 examples）**1134/0/2**；14 golden 零位移；NC12 combo/variant1 官方场景 **`plan_panics=0 degraded=false result=OK`**（§5.2 不变量保持）——[证据](../operations/evidence/2026-10-18-nc10-information-boundary/README.md)。
+- 冻结值同步：`ai_planner` 策略 v2 步数 **189 → 179**（原因写入断言注释，胜方不变）。
+- 待办：非静止态窗口的信息边界（需机器自省保引用重分配或关闭模拟评分）、泄漏面量化、预算降级/取消过期、置换确定性。
+
+### NC10 信息边界判据核验（2026-10-18 早前切片）
 
 - 判据：新增 `tests/nc10_ai_information_boundary.rs`——对对手手牌+牌库做确定性置换（公开视图不变），AI 决策须逐字段不变；反向对照用「替换自己一张手牌」证明探针有分辨力。
 - 结果：**候选集合（`legal_actions`）在置换下不变 ✅**；**规划结果依赖隐藏信息 ❌（确证泄漏）**：seed 42022 warm 9 seat 1 复现，已标 `#[ignore]` 登记（不伪造通过）。

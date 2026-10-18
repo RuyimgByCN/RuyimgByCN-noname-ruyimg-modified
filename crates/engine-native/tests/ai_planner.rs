@@ -438,7 +438,12 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
     //（原先按牌种——具名武器与泛型武器同栏却不互相替换的缺陷修复），
     // 轨迹步数随之变化；胜方不变（下方断言）。改动同步记录于
     // docs/operations/evidence/2026-10-17-t12-swd-deferred-b143/。
-    assert_eq!(steps, 189, "步数冻结（策略变更须同步证据）");
+    // 2026-10-18（NC10 信息边界修复）189 → 179：`redact_opponent_hands` 由
+    // 「隐藏牌多重集洗牌」改为**内容无关填充**（从目录抽取互不相同的牌填满隐藏
+    // 区，只保留张数），AI 模拟不再读到对手手牌内容（「对手有闪」类事实），
+    // 轨迹步数随之变化；胜方不变（下方断言）。改动与复现见
+    // docs/operations/evidence/2026-10-18-nc10-information-boundary/。
+    assert_eq!(steps, 179, "步数冻结（策略变更须同步证据）");
     assert!(
         matches!(e.outcome().map(|o| o.winner), Some(engine_native::Winner::Player(3))),
         "胜方冻结：{:?}",

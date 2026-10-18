@@ -605,18 +605,38 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
             return;
         }
     }
-    let core = &mut e.core_mut();
-    let n = core.players.len();
+    // NC10：模拟用的隐藏区改为**内容无关填充**——旧实现把「对手手牌 ∪ 牌库」
+    // 做确定性洗牌后按原张数放回，虽然打乱了「谁拿哪张」，却完整保留了隐藏牌的
+    // **多重集**，AI 仍可经模拟读到「对手手里有闪」这类事实（信息边界用例复现：
+    // seed 42022 warm 9 seat 1）。现在改为：从目录中确定性抽取互不相同的牌填满
+    // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
+    let n = e.state_core().players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
-    let mut hand_lens: Vec<usize> = Vec::with_capacity(opponents.len());
-    let mut pool: Vec<CardId> = Vec::new();
-    for &i in &opponents {
-        hand_lens.push(core.players[i].hand.len());
-        pool.append(&mut core.players[i].hand);
+    // 可见牌集合（AI 合法已知）：自己各区域 + 弃牌堆 + 场上/装备等公开区
+    let mut visible: std::collections::BTreeSet<crate::ids::CardId> =
+        std::collections::BTreeSet::new();
+    {
+        let core = e.state_core();
+        let me = &core.players[seat as usize];
+        visible.extend(me.hand.iter().copied());
+        visible.extend(me.equips.iter().copied());
+        visible.extend(me.judge.iter().copied());
+        visible.extend(me.off_court.iter().copied());
+        visible.extend(core.discard.iter().copied());
     }
-    pool.append(&mut core.deck);
-    // 确定性 Fisher–Yates（LCG：座位号播种，可重放）。
-    let mut rng_state: u64 = 0x5EED_CAFE_0000 ^ (seat as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15);
+    // 填充池：目录全部牌 id 去掉可见牌（保持确定性顺序）
+    let mut pool: Vec<CardId> = (0..e.catalog().cards.len() as CardId)
+        .filter(|c| !visible.contains(c))
+        .collect();
+    let hand_lens: Vec<usize> = opponents
+        .iter()
+        .map(|i| e.state_core().players[*i].hand.len())
+        .collect();
+    let deck_len = e.state_core().deck.len();
+    // 确定性 Fisher–Yates（LCG：座位号 + 修订号播种，可重放）
+    let mut rng_state: u64 = 0x5EED_CAFE_0000
+        ^ (seat as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
+        ^ e.revision().wrapping_mul(0x2545_F491_4F6C_DD1D);
     for k in (1..pool.len()).rev() {
         rng_state = rng_state
             .wrapping_mul(6364136223846793005)
@@ -624,11 +644,17 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         let j = ((rng_state >> 33) as usize) % (k + 1);
         pool.swap(j, k);
     }
-    // 按原手牌数重新分配；剩余全部回牌库（牌库顺序本就不可见）。
+    let need = hand_lens.iter().sum::<usize>() + deck_len;
+    assert!(
+        pool.len() >= need,
+        "目录牌数不足以填充隐藏区（need={need}, pool={}）",
+        pool.len()
+    );
+    let core = e.core_mut();
     let mut cursor = 0usize;
     for (&i, &len) in opponents.iter().zip(hand_lens.iter()) {
         core.players[i].hand = pool[cursor..cursor + len].to_vec();
         cursor += len;
     }
-    core.deck = pool[cursor..].to_vec();
+    core.deck = pool[cursor..cursor + deck_len].to_vec();
 }
