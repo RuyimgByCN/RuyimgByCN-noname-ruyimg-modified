@@ -17,8 +17,43 @@ use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
 use engine_protocol::ClientRole;
 use std::collections::HashMap;
 
+/// NC09 落盘状态（JSON 可序列化；**不含** IO 资源）。
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct NativeRoomState {
+    /// 引擎归档字节（hex）。
+    pub snapshot_hex: String,
+    /// 座位上限。
+    pub max_seats: u8,
+    /// 是否已开局。
+    pub started: bool,
+    /// 下一个重连令牌序号（延续，避免令牌复用）。
+    pub next_token: u64,
+    /// 下一个幂等键序号（延续，避免重放旧命令）。
+    pub next_dedup: u64,
+    /// 扩展包引用（`包名@版本`；恢复时按此重新装载同内容包）。
+    pub pack_refs: Vec<String>,
+    /// 成员（含重连令牌）。
+    pub members: Vec<NativeMember>,
+}
+
+/// hex 编码（小写）。
+fn hex_encode(bytes: &[u8]) -> String {
+    bytes.iter().map(|b| format!("{b:02x}")).collect()
+}
+
+/// hex 解码（长度奇数或非法字符返回 None）。
+fn hex_decode(text: &str) -> Option<Vec<u8>> {
+    if text.len() % 2 != 0 {
+        return None;
+    }
+    (0..text.len())
+        .step_by(2)
+        .map(|i| u8::from_str_radix(&text[i..i + 2], 16).ok())
+        .collect()
+}
+
 /// 房间成员（原生会话内）。
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct NativeMember {
     /// 连接 id。
     pub connection_id: u64,
@@ -183,6 +218,66 @@ impl NativeRoomSession {
                 .map(|b| format!("{b:02x}"))
                 .collect(),
         ))
+    }
+
+    /// NC09 跨进程/跨重启持久化：导出可落盘的房间状态。
+    ///
+    /// 内容：引擎归档字节（hex）+ 成员（含**重连令牌**）+ 座位数/开局位/令牌计数
+    /// + 扩展包引用（`namespace/package_id`）。**不含**连接句柄与 IO 资源。
+    pub fn export_state(&self, snapshot_hex: &str) -> NativeRoomState {
+        NativeRoomState {
+            snapshot_hex: snapshot_hex.to_string(),
+            max_seats: self.max_seats,
+            started: self.started,
+            next_token: self.next_token,
+            next_dedup: self.next_dedup,
+            pack_refs: self
+                .packs
+                .iter()
+                .map(|p| format!("{}@{}", p.def.name, p.def.version))
+                .collect(),
+            members: self.members.values().cloned().collect(),
+        }
+    }
+
+    /// 从落盘状态恢复会话（引擎由归档字节重建；`packs` 必须与导出时同内容）。
+    ///
+    /// 恢复后：成员与令牌映射重建（重连令牌可直接命中**原座位**）、`started` 与
+    /// 令牌/幂等计数器延续——不得重置为初始值，否则会重复接受旧令牌或重放命令。
+    pub fn from_saved(
+        state: &NativeRoomState,
+        packs: Vec<engine_native::content::extension::ExtensionPack>,
+    ) -> Result<Self, String> {
+        let bytes = hex_decode(&state.snapshot_hex).ok_or("快照 hex 解码失败")?;
+        let snapshot =
+            engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
+        let refs: Vec<&engine_native::content::extension::ExtensionPack> = packs.iter().collect();
+        let engine = if refs.is_empty() {
+            Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
+        } else {
+            Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("{e:?}"))?
+        };
+        let mut members = HashMap::new();
+        let mut by_token = HashMap::new();
+        for m in &state.members {
+            members.insert(m.connection_id, m.clone());
+            by_token.insert(m.reconnect_token.clone(), m.connection_id);
+        }
+        Ok(Self {
+            engine,
+            packs,
+            max_seats: state.max_seats,
+            members,
+            by_token,
+            started: state.started,
+            next_token: state.next_token,
+            next_dedup: state.next_dedup,
+        })
+    }
+
+    /// 当前引擎归档字节（hex）——落盘用。
+    pub fn snapshot_hex(&self) -> String {
+        hex_encode(&engine_native::archive::encode_archive(&self.engine.save()))
     }
 
     /// 快照（按角色投影）。

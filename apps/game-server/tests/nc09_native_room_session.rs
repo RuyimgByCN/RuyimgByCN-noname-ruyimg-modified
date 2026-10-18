@@ -315,3 +315,63 @@ async fn nc09_room_choose_general_is_room_level() {
     let err = rr.await.expect("reply").expect_err("观战者必须被拒");
     assert!(err.contains("spectator"), "{err}");
 }
+
+/// NC09 跨重启持久化（会话级）：导出 → 落盘 → 重建 → 状态/成员/令牌一致，
+/// 且重连令牌仍命中**原座位**；计数器延续（不重置）。
+#[test]
+fn nc09_session_export_and_restore_roundtrip() {
+    let dir = tempfile::tempdir().unwrap();
+    let content = NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("安装");
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("装载");
+    let pack = loaded.pack;
+    let engine =
+        engine_native::Engine::new_with_extensions(20262001, 4, &[&pack]).expect("建局");
+    let mut session = NativeRoomSession::new_with_packs(engine, vec![pack], 4);
+
+    // 两人入座 + 一条命令
+    let a = session.join(1, Some(0), None).expect("入座 1");
+    let b = session.join(2, Some(1), None).expect("入座 2");
+    let rev_before = session.engine().revision();
+    let _ = session.submit(1, &CommandKind::EndPhase {}, rev_before);
+
+    // 导出 → JSON 落盘 → 读回重建
+    let state = session.export_state(&session.snapshot_hex());
+    let json = serde_json::to_string(&state).expect("序列化");
+    std::fs::write(dir.path().join("room.json"), &json).expect("落盘");
+    let back: room_native::NativeRoomState =
+        serde_json::from_str(&std::fs::read_to_string(dir.path().join("room.json")).unwrap())
+            .expect("读回");
+    assert_eq!(back.members.len(), 2, "成员应随状态落盘");
+    assert!(
+        back.pack_refs.iter().any(|r| r.starts_with("shahai-swd")),
+        "包引用应落盘：{:?}",
+        back.pack_refs
+    );
+
+    // 恢复路径与产品启动一致：按 `pack_refs` **重新装载**同内容包（而非复用句柄）
+    let reloaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("重新装载");
+    let mut restored =
+        NativeRoomSession::from_saved(&back, vec![reloaded.pack]).expect("恢复");
+    assert_eq!(
+        restored.engine().revision(),
+        session.engine().revision(),
+        "修订号应延续"
+    );
+    assert_eq!(
+        restored.engine().state_hash(),
+        session.engine().state_hash(),
+        "状态摘要应与导出时一致"
+    );
+    // 令牌延续：用导出前的令牌重连 → 命中**原座位**
+    let rejoin = restored
+        .join(9, None, Some(a.member.reconnect_token.clone()))
+        .expect("令牌重连");
+    assert_eq!(rejoin.member.seat, 0, "重连令牌必须命中原座位");
+    assert_eq!(rejoin.member.player_id, a.member.player_id, "玩家 id 不变");
+    let _ = b;
+}
