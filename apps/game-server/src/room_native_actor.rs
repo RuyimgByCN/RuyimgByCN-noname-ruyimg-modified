@@ -26,11 +26,15 @@ use tracing::{debug, info};
 /// 已结束的房间无需跨重启恢复，避免落盘目录只增不减。
 ///
 /// `password` 参数此处是**密码哈希**（运行期不持有明文）。
+///
+/// 节流：`last_sig` 记录上次落盘签名（修订号、成员数、开局位、令牌计数）；未变化则**跳过**
+/// 写盘——同一回合内多次调用（如观战入座、重复落盘点）不会重复全量写。
 fn persist_room(
     store: &Option<NativeRoomStore>,
     id: u64,
     password: &str,
     session: &NativeRoomSession,
+    last_sig: &mut Option<(u64, usize, bool, u64)>,
 ) {
     let Some(store) = store else { return };
     if session.engine().outcome().is_some() {
@@ -39,14 +43,25 @@ fn persist_room(
         }
         return;
     }
+    let state = session.export_state(&session.snapshot_hex());
+    let sig = (
+        session.engine().revision(),
+        state.members.len(),
+        state.started,
+        state.next_token,
+    );
+    if last_sig.as_ref() == Some(&sig) {
+        return; // 节流：状态未变化
+    }
     let record = StoredRoom {
         room_id: id,
         password_hash: password.to_string(),
-        state: session.export_state(&session.snapshot_hex()),
+        state,
         checksum: String::new(),
     };
-    if let Err(e) = store.save(&record) {
-        tracing::warn!(room = id, error = %e, "原生房间落盘失败");
+    match store.save(&record) {
+        Ok(()) => *last_sig = Some(sig),
+        Err(e) => tracing::warn!(room = id, error = %e, "原生房间落盘失败"),
     }
 }
 
@@ -152,6 +167,8 @@ async fn native_room_loop(
     store: Option<NativeRoomStore>,
 ) {
     let mut persist = NativeRoomPersist::new();
+    // NC09 落盘节流：上次成功落盘的签名
+    let mut last_persist_sig: Option<(u64, usize, bool, u64)> = None;
     // 旧线锦标赛 WAL 面保留占位（原生分块签名未做，登记待办）
     let _legacy_wal = RoomPersist::new();
     let mut members: HashMap<u64, NativeActorMember> = HashMap::new();
@@ -201,7 +218,7 @@ async fn native_room_loop(
                         };
                         members.insert(connection_id, m);
                         // 名册/令牌变化必须持久化（否则重启后无法凭令牌回到原座位）
-                        persist_room(&store, id, &room_password, &session);
+                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
                         broadcast_roster_native(id, &members, session.engine().outcome().is_some())
                             .await;
                         let _ = reply.send(Ok(reply_payload));
@@ -227,7 +244,7 @@ async fn native_room_loop(
                     outbound: Some(outbound),
                 };
                 members.insert(connection_id, m);
-                persist_room(&store, id, &room_password, &session);
+                persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
                 let _ = reply.send(Ok(JoinReply {
                     player_id: 0,
                     seat: u8::MAX,
@@ -312,7 +329,7 @@ async fn native_room_loop(
                         }
                         last_revision = *new_revision;
                         // NC09 跨重启持久化：接受命令后写盘（原子 rename）
-                        persist_room(&store, id, &room_password, &session);
+                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
                     }
                     if idempotency_key.0 != 0 {
                         idempotency.insert(idempotency_key.0, result.clone());
@@ -443,7 +460,7 @@ async fn native_room_loop(
                             };
                             let _ = out.send(&msg).await;
                         }
-                        persist_room(&store, id, &room_password, &session);
+                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
                         let _ = reply.send(Ok(format!(
                             "{{\"revision\":{revision},\"state_hash\":\"{hash}\"}}"
                         )));
