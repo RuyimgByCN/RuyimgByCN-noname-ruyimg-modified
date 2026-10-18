@@ -593,6 +593,18 @@ impl Engine {
 /// 不可知信息；确定性由座位号播种的 LCG 保证（无 OS 熵）。
 pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     use crate::ids::CardId;
+    // NC10 修正（NC12 §5.2 根因）：重分配会改写对手手牌里的**实体牌 id**，
+    // 而挂起机器/开放选择/在飞帧记录着这些 id——非静止态下重分配会让它们指向
+    // 其它区域，随后 `take_hand_card` panic（machine.rs「card 90 not in hand of 0」、
+    // monkey.rs「被拦截的桃应在使用者手牌」）。故只在**静止态**重分配：
+    // 栈空、无挂起机器、无开放选择。非静止态跳过（对手手牌仍不进入 AI 输入视图
+    // `PolicyInput`；模拟过程中的信息泄漏面登记为 NC10 待办）。
+    {
+        let res = e.resolution();
+        if !res.stack.is_empty() || !res.parks.is_empty() || res.open_choice.is_some() {
+            return;
+        }
+    }
     let core = &mut e.core_mut();
     let n = core.players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();

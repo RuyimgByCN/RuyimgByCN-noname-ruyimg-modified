@@ -61,3 +61,46 @@ python3 -B scripts/check-source-lines.py
 - [ ] **NC12 §5.2/§5.3 两处 panic 未修**：① 规划内 panic（`take_hand_card`「card 90 not in hand of 0」、`monkey.rs:73` 被拦截的桃）；② **swd 权威结算 panic**（`apply_plan→submit→commit_frame`，非模拟内）——本轮只修了 §5.1
 - [ ] 更一般的不变量：牌区唯一性目前只在 `to_discard` 幂等化 + 恢复期校验兜底，未在**每次移动**统一强制（NC07 结构化收敛待办）
 - [ ] 其余牌区移动路径（`to_deck`/`to_hand`/装备进出）是否有同类重复入区路径，需逐路径审计
+
+## 5 追加：NC12 §5.2/§5.3 两处 panic 的处置（2026-10-18 同轮）
+
+### 5.1 §5.3 权威结算 panic —— 未再复现（判定为 §5.1 同根因）
+
+新增 `crates/engine-native/tests/nc12_swd_authoritative_stability.rs`：
+- `swd_authoritative_path_is_panic_free`：swd + variant1，seeds 42009/42010/42011 × 200 步，
+  **直接 `submit` 真实引擎**（不经模拟），并逐步校验牌区唯一性 → **通过**；
+- NC12 §5.3 记录的场景（seed 42009 step 68 `card 204 not in hand of 0`）**未再复现**。
+
+结论：§5.3 与 §5.1 同根因（一张牌在飞结算期间被换区 → 后续对不在手牌的牌 `take_hand_card`），
+已由本轮 `to_discard` 幂等化 + 玉蝉换形按牌 id 回写修复。
+
+### 5.2 §5.2 规划内 panic —— 已定位并修复（AI 信息遮蔽破坏状态一致性）
+
+- 复现（NC12 基线官方场景复跑，`nc12-bench-combo-variant1-rerun.log`）：
+  `plan_panics=2 degraded=true`，两条 panic：
+  `machine.rs:408 card 90 not in hand of 0`（step 5 seat 1）、
+  `kernel/monkey.rs:73 被拦截的桃应在使用者手牌`（step 236 seat 0）。
+- **根因**：`ai.rs::redact_opponent_hands` 把对手手牌与牌库合并后**重新分配实体牌 id**；
+  挂起机器/开放选择/在飞帧记录着这些 id → 重分配后它们指向别的区域 → 模拟内
+  `take_hand_card` panic。
+- **修复**：重分配只在**静止态**执行（栈空 + 无挂起机器 + 无开放选择）；非静止态跳过。
+  对手手牌仍不进入 AI 输入视图（`PolicyInput`），模拟过程中的信息泄漏面登记为 NC10 待办。
+- **复跑证据**（同一命令、同机、同负载档）：修复后 `plan_panics=0 degraded=false
+  result=OK games=3 steps=800 finished_games=3`（`nc12-bench-combo-variant1-after-redact-fix.log`）。
+
+### 5.3 本批验证结果
+
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| §5.3 稳定性定向（含组合档） | **2 passed / 0 failed** | [targeted.log](targeted.log) |
+| NC12 官方场景复跑（修复前） | `plan_panics=2 degraded=true` | [nc12-bench-combo-variant1-rerun.log](nc12-bench-combo-variant1-rerun.log) |
+| NC12 官方场景复跑（修复后） | **`plan_panics=0 degraded=false result=OK`** | [nc12-bench-combo-variant1-after-redact-fix.log](nc12-bench-combo-variant1-after-redact-fix.log) |
+| engine-native 全量（含 examples） | **1131 passed / 0 failed / 2 ignored** | [engine-native-tests-after-redact-fix.log](engine-native-tests-after-redact-fix.log) |
+| 14 golden | **2/2 零位移** | [replay-golden.log](replay-golden.log) |
+| 行数门禁 | 8239 文件 ≤ 2000 行 | [source-lines.log](source-lines.log) |
+
+### 5.4 仍未完成
+
+- [ ] AI 模拟过程中的信息泄漏面（非静止态跳过重分配 → 模拟可能经结果侧信道泄漏对手手牌信息）→ NC10 待办
+- [ ] `ai.rs` 为跟踪文件（可提交）；`swd_equipment.rs` 属并行重构未跟踪目录，随其提交入库
+- [ ] NC12 基线中 huanle variant1「3 局仅 1 局终局」的分组耗时基线仍不成立（需在 panic 修复后重跑该组）

@@ -47,8 +47,8 @@
 NC12 基线测量（[证据](../operations/evidence/2026-10-18-nc12-baseline/README.md)）在测量过程中确证三处缺陷，均已最小复现并记入该证据 §5；本轮只测量未修：
 
 1. ~~**swd 单扩展读档 30/30 被拒**~~ **已修（2026-10-18）**：根因为玉蝉换形把在飞手牌换出后重复入弃牌堆 → `to_discard` 幂等化 + 换形按牌 id 回写；回归 `tests/nc07_discard_duplicate_probe.rs`（60 步无重复 + swd 读档成功），全量 **1129/0/2**，14 golden 零位移——[证据](../operations/evidence/2026-10-18-nc07-zone-uniqueness/README.md)。原始记录：：`restore` → `IdOutOfBounds{what:"card_in_multiple_zones", got:13}`；诊断显示 card 13（sha）在**弃牌堆出现 2 次**（`counted=[discard=2]`，parks=0）——引擎允许的活状态被自己的所有权校验判非法。边界：steps=5 通过、steps=20/40 全失败；none/huanle/combo 同条件全通过。最小复现：`nc12_bench archive tier=swd samples=1 steps=20`。→ 影响 NC02/NC07（读档可用性）与 NC05（swd 案例的存读档面），**优先修复**。
-2. **扩展档 variant-1 规划 panic**：`machine.rs:408 take_hand_card`「card 90 not in hand of 0」（combo step5 seat1，parks=1）、`kernel/monkey.rs:73`「被拦截的桃应在使用者手牌」（combo step236 / huanle）；发生在 `plan_action` 模拟提交内。未验证根因的观察：`plan_action` 对克隆做 `redact_opponent_hands`，重分配后挂起机器/选择规格里记录的实体牌 id 可能失效。→ 影响 NC10（AI 合法信息与受控模拟）。
-3. **swd variant-1 权威结算 panic（最严重）**：`apply_plan`→`submit`→`commit_frame` 在 seed 42009 step 68 panic（`card 204 not in hand of 0`），`PANIC caught` 计数 0 → **不在模拟内**，属权威路径崩溃。→ 影响 NC09/NC10 与产品可用性，**优先修复**。
+2. ~~**扩展档 variant-1 规划 panic**~~ **已修（2026-10-18 同轮）**：根因 `redact_opponent_hands` 重分配对手手牌实体牌 id，使挂起机器/在飞帧引用失效；改为**仅静止态重分配**；官方场景复跑 `plan_panics=0 degraded=false result=OK`——[证据](../operations/evidence/2026-10-18-nc07-zone-uniqueness/README.md)。原始记录：：`machine.rs:408 take_hand_card`「card 90 not in hand of 0」（combo step5 seat1，parks=1）、`kernel/monkey.rs:73`「被拦截的桃应在使用者手牌」（combo step236 / huanle）；发生在 `plan_action` 模拟提交内。未验证根因的观察：`plan_action` 对克隆做 `redact_opponent_hands`，重分配后挂起机器/选择规格里记录的实体牌 id 可能失效。→ 影响 NC10（AI 合法信息与受控模拟）。
+3. ~~**swd variant-1 权威结算 panic（最严重）**~~ **未再复现（2026-10-18）**：判定与 §5.1 同根因，已由牌区唯一性修复解决；新增 swd/组合档权威路径稳定性用例（3 seeds × 200 步 + 逐步牌区唯一性校验）通过。原始记录：：`apply_plan`→`submit`→`commit_frame` 在 seed 42009 step 68 panic（`card 204 not in hand of 0`），`PANIC caught` 计数 0 → **不在模拟内**，属权威路径崩溃。→ 影响 NC09/NC10 与产品可用性，**优先修复**。
 
 ### NC07 同源审计核验（2026-10-18，规则 v321→v322 / 存档 v105）
 
