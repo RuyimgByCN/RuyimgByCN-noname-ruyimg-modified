@@ -117,9 +117,31 @@ Commit 跳过翻转；翻面帧 after 窗口静默（目录无「翻面后」触
 映射既有 `host:phase_end_recover_or_draw`——结束阶段可选受伤回 1 否则
 摸 1，与上游 frequent 语义一致，真实装备驱动 + 确认/放弃/恢复测试）。
 本批修正：猴子 ♦5（曾 ♥8）、面具 ♣3（曾 ♠1）。苦无登记差异：上游
-`damageSource` 过滤 `card.name=="sha"`（精确杀名）+ notLink + 目标 he 区
-有牌、目标自选弃牌；原生为 Damage 帧来源过滤 + `is_sha_like()`（含火/雷
-杀，超集）+ 不查连环 + 确定性弃目标首张手牌（仅手牌、无牌静默）。
+`damageSource` 过滤 `card.name=="sha"` + `notLink()` + 目标 `he` 区有牌
++ 目标自选弃牌 + `_notrigger` 排除；原生为 Damage 帧来源过滤 +
+`is_sha_like()` + 不查连环（铁索传导伤害仍触发）+ 不查 `_notrigger`
++ 目标仅持装备时也不弃（无「有牌」门槛）+ 确定性弃目标首张手牌
+（仅手牌、无牌静默）。**2026-10-18 更正**：旧文记「`is_sha_like()` 含
+火/雷杀，超集」有误——杀族牌 `name` 恒为 `"sha"`、火/雷只体现在
+`nature`（`card/extra.js:1481` `["heart",4,"sha","fire"]`、
+`library/element/card.js:315` `this.name = card[2]`、`card/standard.js:99-102`
+`sha: { nature: ["thunder","fire","kami","ice"] }`），故上游 `name==="sha"`
+对火/雷杀同为真，`is_sha_like()`（Sha/FireSha/LeiSha）与之**同口径**，
+不是超集。NC08 样本 5 逐条验收与行为固定见
+[证据](../operations/evidence/2026-10-18-nc08-upstream-kuwu/README.md)。
+
+五行生克登记差异（NC08 样本 6，2026-10-18，[证据](../operations/evidence/2026-10-18-nc08-upstream-shengke/README.md)）：
+上游 `_shengke` 是 `_` 前缀全局技（`game/index.js:8859-8861` 自动
+`addGlobalSkill`），被克 `chooseToDiscard(true,'he')`（角色自选）、被生摸 1；
+牌属性默认概率取 `lib.config.wuxing_num_playpackconfig`（未配置时 `||0`
+→ **0 张**，与扩展 help 文案「三分之一」不一致）。原生以每座位技能实例
+授予、被克确定性弃首张手牌（仅手牌；仅持装备时不弃）、开局钩子按包数据
+`nature_fraction` **1/3** 直接分配属性牌，触发事件面为 `CardUsed` 帧
+（顺序与上游 `useCardToBegin` 对齐：帧先于效果机器入栈）；属性随机流走
+引擎 RNG，不与上游 `Math.random` 逐局等价。**缺陷登记（未修，2026-10-18
+探针实测）**：五行盘主动技 `wuxingpan_skill` 上游 `usable:1`（每阶段一次），
+原生 `host_skill_def` 未登记 `once_per_turn`，同一出牌阶段可再次发动
+（`content/host.rs` 的 limits 分支缺 `HostBehavior::ChangeCardNature`）。
 写轮眼登记差异：原生无 charlotte 区分，全部技能实例可窃（上游滤除
 charlotte 技）。
 

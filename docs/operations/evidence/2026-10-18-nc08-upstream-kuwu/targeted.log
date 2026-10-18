@@ -1,0 +1,12 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s
+     Running tests/nc08_upstream_kuwu.rs (target/debug/deps/nc08_upstream_kuwu-b2b7bbdd67c0d01f)
+
+running 5 tests
+test upstream_kuwu_requires_sha_damage_and_is_forced ... ok
+test upstream_kuwu_is_equip_skill ... ok
+test upstream_kuwu_forces_target_discard ... ok
+test upstream_kuwu_filter_gaps ... ok
+test upstream_kuwu_chain_damage_difference ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

@@ -1,0 +1,35 @@
+// archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53-70（技能定义，逐字）
+	kuwu: {
+		audio: "ext:欢乐卡牌/audio/skill:true",
+		trigger: {
+			source: "damageSource",
+		},
+		forced: true,
+		equipSkill: true,
+		filter(event, player) {
+			if (event._notrigger.includes(event.player)) {
+				return false;
+			}
+			return event.card && event.card.name === "sha" && event.notLink() && event.player.countCards("he") > 0;
+		},
+		async content(event, trigger, player) {
+			await trigger.player.chooseToDiscard(true, "he");
+		},
+	},
+	xuelunyang: {
+
+// archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:81-94（武器卡定义，逐字）
+	kuwu: {
+		audio: "ext:欢乐卡牌/audio/card",
+		fullskin: true,
+		type: "equip",
+		subtype: "equip1",
+		skills: ["kuwu"],
+		nomod: true,
+		nopower: true,
+		unique: true,
+		distance: {
+			attackFrom: -1,
+		},
+		ai: {
+			equipValue: 6,
