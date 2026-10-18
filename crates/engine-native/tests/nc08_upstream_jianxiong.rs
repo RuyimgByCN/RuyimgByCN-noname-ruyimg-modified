@@ -1,6 +1,11 @@
 //! NC08 第⑦层（上游行为对照）样本 20：`jianxiong`（奸雄，**标准面** / 曹操）。
 //!
-//! 上游源码（`archive/upstream/noname/apps/core/character/sb/skill.js`）：
+//! **口径更正（2026-10-19 同轮）**：本样本初版把 `character/sb/skill.js` 当作基准（其中奸雄带
+//! `sbjianxiong` 标记与「改为摸牌」分支）。**规则基准来源是 `character/standard/skill.js`**，
+//! 其奸雄为 `filter: cards && position === 'o'` + `gain(cards)`，**没有**标记/摸牌面 →
+//! **「摸牌面未实现」不是差异**（已从基准差异表移除）。
+//!
+//! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
 //!
 //! ```js
 //! jianxiong: {
@@ -27,9 +32,7 @@
 //!
 //! **登记差异（本文件固定）**：
 //! - **①位置口径**：上游以「处理区」为准，原生以「**已在弃牌堆**」为准（原生注释明确
-//!   「牌已进弃牌堆」）→ 同一时机的观察窗口不同；
-//! - **②摸牌面未实现**：上游 `sbjianxiong` 标记 < 3 时可**改为摸牌**（`prompt2` 二选一），
-//!   原生只有「获得伤害牌」一条路径，且无标记计数。
+//!   「牌已进弃牌堆」）→ 同一时机的观察窗口不同。
 //!
 //! 未覆盖（登记）：`audio`/`frequent` 表现面。
 
@@ -167,9 +170,10 @@ fn upstream_jianxiong_position_difference_is_fixed() {
     );
 }
 
-/// 上游点 2/3 的**登记差异②**：`sbjianxiong` 标记 < 3 时的**摸牌面未实现**。
+/// **口径更正**：`sbjianxiong` 标记/摸牌面属 `sb` 面（非规则基准来源）→ 不作为差异登记；
+/// 本用例保留为「标准面定义核对」：标准面奸雄只有『获得伤害牌』一条路径。
 #[test]
-fn upstream_jianxiong_draw_face_difference_is_registered() {
+fn upstream_jianxiong_standard_face_has_no_mark_face() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/src/content/standard/skills/jian_xiong.rs"
@@ -181,13 +185,13 @@ fn upstream_jianxiong_draw_face_difference_is_registered() {
     );
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../archive/upstream/noname/apps/core/character/sb/skill.js"),
+            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
     )
-    .expect("读上游");
+    .expect("读上游 standard/skill.js");
     let idx = up.find("jianxiong: {").expect("上游奸雄");
-    let seg: String = up[idx..].chars().take(900).collect();
+    let seg: String = up[idx..].chars().take(700).collect();
     assert!(
-        seg.contains("countMark(\"sbjianxiong\")"),
-        "上游依据：标记计数参与门槛/二选一：{seg}"
+        seg.contains("player.gain(") && !seg.contains("countMark"),
+        "标准面依据：只有获得路径、无标记计数：{seg}"
     );
 }

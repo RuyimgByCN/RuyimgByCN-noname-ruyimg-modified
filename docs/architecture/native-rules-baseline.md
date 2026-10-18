@@ -3628,7 +3628,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **随机弃置** | `hs.randomGet()`（真随机） | **确定性首张**（`hand.first()`） | linghunzhihuo（同族多处） |
 | **门槛集合** | 阵法 `enable` 仅要求「**存在大势力**」 | 额外要求**存活 ≥ 4** | tianfuzhen |
 | **技能覆盖面** | 集智 = **任意锦囊**（`get.type === 'trick'`） | 仅 **5 种**锦囊（南蛮/万箭/决斗/铁索/无懈）→ **规则损失** | jizhi |
-| **标记/子技面未实现** | `sbjizhi`（摸到的牌本回合不可弃）、`sbjianxiong`（标记 < 3 可改为摸牌） | 均**未实现** | jizhi / jianxiong |
+| ~~标记/子技面未实现~~ | — | **口径更正（2026-10-19）**：`sbjizhi`/`sbjianxiong` 属 `character/sb/` 面，**非规则基准来源**；基准来源 `character/standard/skill.js` 的集智/奸雄**本就没有**标记面 → **不作为差异** | ~~jizhi / jianxiong~~ |
 | **传导事件判定** | `event.notLink()`：铁索传导**不**加成 | 传导为独立事件**照常判定** | duwen |
 | **阶段计数起点** | `game.phaseNumber`（全局阶段计数） | `turn.phase_number`（局内计数） | ziyu（待核对） |
 | **阶段锚点** | 上游有**准备阶段**；原生无（相位序列前移，起手 `Judge` vs 旧线 `Draw`） | 已登记（开局差异判定证据） | 身份局开局对照 |

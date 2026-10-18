@@ -25,10 +25,14 @@
 //! 原生实现引用：`content/standard/skills/ji_zhi.rs`（filter 仅列 **5 种**锦囊：
 //! 南蛮/万箭/决斗/铁索/无懈；效果 `draw_cards(owner, 1)`）。
 //!
+//! **口径更正（2026-10-19 同轮）**：本样本初版把 `character/sb/skill.js` 当作基准，其中
+//! 集智带 `sbjizhi` 标记与子技。**规则基准来源是 `character/standard/skill.js`**（本地 standard
+//! 规则），其集智为 `filter: get.type(event.card) === "trick"` + `draw`，**没有**标记/子技 →
+//! 因此**「标记面未实现」不是差异**（已从基准差异表移除）。
+//!
 //! **登记差异（本文件固定，属规则损失）**：
-//! - **①覆盖范围**：上游为**任意锦囊**，原生只覆盖 5 种 → 例如【无中生有】【桃园结义】
-//!   **不触发**集智（本文件以行为断言固定该现状）；
-//! - **②标记面**：上游 `sbjizhi` 标记（摸到的牌本回合不可弃置）**未实现**。
+//! - **①覆盖范围**：标准面上游为**任意锦囊**，原生只覆盖 5 种 → 例如【无中生有】【桃园结义】
+//!   **不触发**集智（本文件以行为断言固定该现状）。
 //!
 //! 未覆盖（登记）：`audio` 等表现面。
 
@@ -167,9 +171,10 @@ fn upstream_jizhi_scope_difference_is_registered() {
     );
 }
 
-/// 上游点 3 的**登记差异②**：`sbjizhi` 标记（摸到的牌本回合不可弃置）**未实现**。
+/// **口径更正**：`sbjizhi` 标记面属 `sb` 面（非规则基准来源）→ 不作为差异登记；
+/// 本用例保留为「标准面定义核对」：标准面集智**无**标记/子技。
 #[test]
-fn upstream_jizhi_gaintag_difference_is_registered() {
+fn upstream_jizhi_standard_face_has_no_gaintag() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/src/content/standard/skills/ji_zhi.rs"
@@ -179,15 +184,16 @@ fn upstream_jizhi_gaintag_difference_is_registered() {
         !src.contains("sbjizhi") && !src.contains("gaintag"),
         "差异②固定：原生未实现 sbjizhi 标记面（上游摸到的牌本回合不可弃置）"
     );
+    // 标准面（规则基准来源）：集智无 sbjizhi 标记/子技
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../archive/upstream/noname/apps/core/character/sb/skill.js"),
+            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
     )
-    .expect("读上游 sb/skill.js");
+    .expect("读上游 standard/skill.js");
     let idx = up.find("jizhi: {").expect("上游集智");
-    let seg: String = up[idx..].chars().take(900).collect();
+    let seg: String = up[idx..].chars().take(700).collect();
     assert!(
-        seg.contains("gaintag.add(\"sbjizhi\")"),
-        "上游依据：摸到的牌打 sbjizhi 标记：{seg}"
+        seg.contains("get.type(event.card) === \"trick\"") && !seg.contains("gaintag"),
+        "标准面依据：任意锦囊、无标记面：{seg}"
     );
 }

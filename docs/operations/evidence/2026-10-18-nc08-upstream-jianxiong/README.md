@@ -29,7 +29,7 @@ jianxiong: {
 |---|---|---|---|
 | 1+3 | `damageEnd` + 获得伤害牌 | 受到**带牌**伤害后确认发动 → 手牌增加（获得该牌） | 通过 |
 | 2 | `get.position(i, true) === "o"`（处理区） | **差异①（位置口径）**：原生门槛为「**牌已在弃牌堆**」（源码事实固定） | 通过（**差异登记①**） |
-| 2+3 | `countMark("sbjianxiong")` + `prompt2` | **差异②**：原生**无标记计数**、无「改为摸牌」分支 | 通过（**差异登记②**） |
+| 2+3 | `countMark("sbjianxiong")` + `prompt2` | **②已更正**：该面属 `character/sb/`（非基准来源）；基准 `character/standard/skill.js` 奸雄**只有**获得路径 → **不作为差异** | 通过（**口径更正**） |
 
 **原生实现引用**：`content/standard/skills/jian_xiong.rs`（filter：`d.card.is_some()` 且
 `discard.contains(card)`；机器：弃牌堆 → 手牌；`OptionalGate` 确认）。
@@ -52,3 +52,10 @@ jianxiong: {
 - [ ] 差异①（处理区 vs 弃牌堆）口径判定
 - [ ] 差异②（`sbjianxiong` 标记 + 摸牌面）是否补齐
 - [ ] 样本 21+：其余来源（当前 **17/37 来源**；标准面 2 个样本）
+
+## 6 口径更正（2026-10-19 同轮，重要）
+
+本样本初版以 `character/sb/skill.js` 为基准；**规则基准来源应为 `character/standard/skill.js`**
+（见[规则基准](../../../architecture/native-rules-baseline.md)「本地上游对齐的新增核查」）。
+经核对：`sb` 面的标记/子技面在 **standard 面并不存在** → 相关「差异」**已撤销**，不写入基准差异表。
+其余差异（若有）以 standard 面为准保留。

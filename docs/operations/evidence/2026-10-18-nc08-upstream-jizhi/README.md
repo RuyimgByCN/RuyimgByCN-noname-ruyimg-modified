@@ -30,7 +30,7 @@ jizhi: {
 |---|---|---|---|
 | 1+3 | `forced` + `draw("nodelay")` | 使用【决斗】（**原生已覆盖**的 5 种之一）→ 摸 1 张且**无确认门** | 通过 |
 | 2 | `get.type === "trick"`（**任意锦囊**） | **①覆盖范围差异（规则损失）**：原生 filter 仅列 5 种（南蛮/万箭/决斗/铁索/无懈）→ 使用【无中生有】**不触发**（手牌净 +1 而非 +2） | 通过（**差异登记①**） |
-| 3 | `gaintag.add("sbjizhi")` + subSkill | **②标记面未实现**：原生无 `sbjizhi`/gaintag（上游摸到的牌本回合不可弃置） | 通过（**差异登记②**） |
+| 3 | `gaintag.add("sbjizhi")` + subSkill | **②已更正**：该面属 `character/sb/`（非基准来源）；基准 `character/standard/skill.js` 集智**无**标记/子技 → **不作为差异** | 通过（**口径更正**） |
 
 **原生实现引用**：`content/standard/skills/ji_zhi.rs`（filter 仅 5 种锦囊；效果 `draw_cards(owner, 1)`）。
 
@@ -55,3 +55,10 @@ jizhi: {
       属 host/standard 拆分 → 已并入待实施修复清单）
 - [ ] **差异②（sbjizhi 标记面）**：是否实现（摸到的牌本回合不可弃）需口径判定
 - [ ] 样本 20+：其余来源（当前 **17/37 来源**）
+
+## 6 口径更正（2026-10-19 同轮，重要）
+
+本样本初版以 `character/sb/skill.js` 为基准；**规则基准来源应为 `character/standard/skill.js`**
+（见[规则基准](../../../architecture/native-rules-baseline.md)「本地上游对齐的新增核查」）。
+经核对：`sb` 面的标记/子技面在 **standard 面并不存在** → 相关「差异」**已撤销**，不写入基准差异表。
+其余差异（若有）以 standard 面为准保留。
