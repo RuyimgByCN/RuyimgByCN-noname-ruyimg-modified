@@ -34,6 +34,7 @@ mod boss_playpack;
 mod desktop_adapt;
 mod douzhuan;
 mod drag_read;
+mod epic_cards;
 mod elo;
 mod fool;
 mod martial;
@@ -71,6 +72,7 @@ pub use douzhuan::{
     DouzhuanConfig, DouzhuanError, DouzhuanReport, DouzhuanRequest, PackView, PickIn,
     SkillIn as DouzhuanSkillIn, SkillOut as DouzhuanSkillOut,
 };
+pub use epic_cards::*;
 pub use drag_read::{
     apply_drag_read_line, complete_package_tree, default_extension_name, detect_drop,
     dir_entry_visible, list_dir, parse_drag_config, plan_archive_import, plan_single_extension_js,
