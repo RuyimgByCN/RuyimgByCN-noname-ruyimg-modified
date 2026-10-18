@@ -28,7 +28,7 @@
 | NC06 | **核心专用字段普查（≈140 项）已量化 + 通用内容面 `vm_aux` 五形状同源契约验收（6 项）+ 修复 `vm_aux.piles` 未计入归属校验（2026-10-18）**；字段迁移试点、通用面四处缺口、编码/摘要同源、接入规范待续 | [内容私有状态](native-convergence-plan.md#nc06)；[证据](../operations/evidence/2026-10-18-nc06-generic-content-state/README.md) |
 | NC07 | **状态面同源审计已建立（12 项）+ 发现并修复 2 处不同源（座位环未入摘要、恢复期不校验座位环）；规则 v321→v322、14 golden 重录 + 回退探针（2026-10-18）**；修复入库待并行重构提交；`vm_aux` 逐表/扩展字段清单/跨版本迁移待续 | [状态与持久化同源](native-convergence-plan.md#nc07)；[证据](../operations/evidence/2026-10-18-nc07-same-source/README.md) |
 | NC08 | **跨目标运行/恢复门禁已建立（4 项，原生↔WASM 同源）+ 受控变异证明门禁可失败（2026-10-18）**；真 wasm32 目标往返、旧线对照、上游行为对照、各层边界清单待续 | [规则与跨目标对照](native-convergence-plan.md#nc08)；[证据](../operations/evidence/2026-10-18-nc08-cross-target/README.md) |
-| NC09 | 待完整产品验收 | [原生客户端与联机](native-convergence-plan.md#nc09)；基于 NC03/NC05 接口并行推进 |
+| NC09 | **座位投影/错误可见/恢复一致 4 项通过（2026-10-18）**；真实客户端渲染、原生权威接入联机房间、录像跳转、平台档位取证、真实组合界面验收待续 | [原生客户端与联机](native-convergence-plan.md#nc09)；[证据](../operations/evidence/2026-10-18-nc09-projection-errors/README.md) |
 | NC10 | **信息边界判据 3 项全通过 + 隐藏信息泄漏已修（内容无关填充；冻结步数 189→179 同步证据）**；非静止态窗口、泄漏面量化、预算降级/取消过期、置换确定性待续 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；[证据](../operations/evidence/2026-10-18-nc10-information-boundary/README.md) |
 | NC11 | 已登记方案，验收数据收敛待执行 | [文档与证据模型](native-convergence-plan.md#nc11)；逐来源修正过宽声明，不用文字标签认证完成 |
 | NC12 | **基线已测（2026-10-18，macOS 27.0.1 / Apple M3 Max / HEAD `4cf05dd3` / 微基准 30 样本 + 整局 3 局每组）：无扩展档六项指标取得基线（建局 p50 4.75 µs、规则结算 p50 8.2 µs、端到端命令 p50 26.9 µs、`save()` 0.29 µs、`restore` 4.8 µs、850 步长局活字节增量 +1.4 KB）；扩展档仅部分覆盖——swd 单扩展读档 30/30 被拒（弃牌堆同牌重复）、扩展档 variant-1 规划 panic 且含 1 次权威结算路径 panic、huanle variant-1 未收敛**；优化前后对比待做（本机并发 load 36.9–44.7，p95/max 受污染）；旧线退出依赖全矩阵通过 | [效能与旧线退出](native-convergence-plan.md#nc12)；[基线证据](../operations/evidence/2026-10-18-nc12-baseline/README.md) |
@@ -49,6 +49,12 @@ NC12 基线测量（[证据](../operations/evidence/2026-10-18-nc12-baseline/REA
 1. ~~**swd 单扩展读档 30/30 被拒**~~ **已修（2026-10-18）**：根因为玉蝉换形把在飞手牌换出后重复入弃牌堆 → `to_discard` 幂等化 + 换形按牌 id 回写；回归 `tests/nc07_discard_duplicate_probe.rs`（60 步无重复 + swd 读档成功），全量 **1129/0/2**，14 golden 零位移——[证据](../operations/evidence/2026-10-18-nc07-zone-uniqueness/README.md)。原始记录：：`restore` → `IdOutOfBounds{what:"card_in_multiple_zones", got:13}`；诊断显示 card 13（sha）在**弃牌堆出现 2 次**（`counted=[discard=2]`，parks=0）——引擎允许的活状态被自己的所有权校验判非法。边界：steps=5 通过、steps=20/40 全失败；none/huanle/combo 同条件全通过。最小复现：`nc12_bench archive tier=swd samples=1 steps=20`。→ 影响 NC02/NC07（读档可用性）与 NC05（swd 案例的存读档面），**优先修复**。
 2. ~~**扩展档 variant-1 规划 panic**~~ **已修（2026-10-18 同轮）**：根因 `redact_opponent_hands` 重分配对手手牌实体牌 id，使挂起机器/在飞帧引用失效；改为**仅静止态重分配**；官方场景复跑 `plan_panics=0 degraded=false result=OK`——[证据](../operations/evidence/2026-10-18-nc07-zone-uniqueness/README.md)。原始记录：：`machine.rs:408 take_hand_card`「card 90 not in hand of 0」（combo step5 seat1，parks=1）、`kernel/monkey.rs:73`「被拦截的桃应在使用者手牌」（combo step236 / huanle）；发生在 `plan_action` 模拟提交内。未验证根因的观察：`plan_action` 对克隆做 `redact_opponent_hands`，重分配后挂起机器/选择规格里记录的实体牌 id 可能失效。→ 影响 NC10（AI 合法信息与受控模拟）。
 3. ~~**swd variant-1 权威结算 panic（最严重）**~~ **未再复现（2026-10-18）**：判定与 §5.1 同根因，已由牌区唯一性修复解决；新增 swd/组合档权威路径稳定性用例（3 seeds × 200 步 + 逐步牌区唯一性校验）通过。原始记录：：`apply_plan`→`submit`→`commit_frame` 在 seed 42009 step 68 panic（`card 204 not in hand of 0`），`PANIC caught` 计数 0 → **不在模拟内**，属权威路径崩溃。→ 影响 NC09/NC10 与产品可用性，**优先修复**。
+
+### NC09 投影与错误面核验（2026-10-18，规则 v322 工作树 / 存档 v105）
+
+- 回归：新增 `tests/nc09_projection_and_errors.rs`（4 项）——自己手牌可见/他人仅数量/牌库仅数量/观战视图无手牌 id；开放选择选项仅观察者可见；非法命令三类明确拒绝（NotYourTurn/CardNotInHand/StaleRevision）；归档往返后座位与观战投影逐字段一致。
+- 实测：定向 4/4；engine-native 全量（含 examples）**1144/0/2**；行数门禁 8243 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc09-projection-errors/README.md)。
+- 待办：真实客户端渲染（Tauri/Web 表现路径）、**原生权威接入联机房间**（协议已含重连/观战/快照消息，房间仍走旧 `engine-core`）、录像与跳转、HTTP/WS 层信息隔离、平台档位取证、真实组合界面验收。
 
 ### NC08 跨目标门禁核验（2026-10-18，规则 v322 工作树 / 存档 v105）
 
