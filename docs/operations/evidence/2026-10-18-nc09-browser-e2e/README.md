@@ -36,7 +36,7 @@
       本轮只证明**构建产物在真实浏览器中加载、渲染大厅、无控制台错误**
 - [ ] 未做**视觉/交互验收**（点击、键盘、触摸、窄屏、中英文、可访问性）
 - [ ] 静态服务用 `python3 -m http.server`（**无 SPA fallback**）→ `/extensions`、`/collection`
-      直接 404（[dom__extensions.html](dom__extensions.html)、[dom__collection.html](dom__collection.html) 为空）
+      直接 404（[dom_extensions.html](dom_extensions.html)、[dom_collection.html](dom_collection.html) 为空）
       → 客户端路由需配合服务端 fallback 或 hash 路由，属**部署配置**待办
 - [ ] 未验证浏览器内的 **Worker + WASM 原生路径**是否真正进入（大厅文案如此声明，但未断言 Worker 已起、
       未读 Worker 内的引擎状态）
