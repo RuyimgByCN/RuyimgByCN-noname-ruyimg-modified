@@ -53,3 +53,16 @@ python3 -B scripts/check-source-lines.py
 - [ ] 故障对**随机流**的影响核对（本轮只验证状态摘要与修订号；RNG 位点需专门用例）
 - [ ] 产品侧展示：`RejectReason::VmFault` 经协议传到客户端 UI（NC03/NC09）
 - [ ] 段内已分片提交（`Suspended`）后发生故障的回滚路径用例（代码已走检查点回滚，未单测）
+
+## 6 追加：挂起→续跑 与 恢复后故障（手工字节码，2026-10-18）
+
+DSL 目前只有 `effect`/`if`/`loop`/`let` 语句（`parse.rs::parse_stmt`），**没有选择语句**，故 VM 的 `HOST_CHOICE` 路径无法从 DSL 触发；本批用**手工构造的 `BytecodeModule`** 覆盖，新增 `crates/engine-native/tests/nc04_vm_resume.rs`（2 项）：
+
+| 验收项 | 模块 | 用例 | 结果 |
+|---|---|---|---|
+| 选择挂起 → 续跑 → 段结算完成、无故障、VM 选择被消费 | push token 0/1 → `HOST_CHOICE 2` → `HALT` | `nc04_pause_resume_completes` | 通过 |
+| **恢复后故障**：续跑进入宿主调用边界失败（无效效果 tag）→ `VmFault` + **整段回滚**（摘要/修订号不变）+ 故障槽清空 | push token 0/1 → `HOST_CHOICE 2` → `HOST_EFFECT_EXT 0xFFFF` | `nc04_fault_after_resume_rolls_back` | 通过 |
+
+实测：定向 **2/2**；engine-native 全量 **1112/0/2**；Gate 1b exit 0；行数门禁 8228 文件 ≤2000 行。
+
+说明：各效果 tag 的参数出栈契约不同，效果**落账**已由 DSL 版 `nc04_normal_completion` 覆盖，本批只覆盖挂起/续跑机制与恢复后故障的事务语义（不重复覆盖同一语义）。
