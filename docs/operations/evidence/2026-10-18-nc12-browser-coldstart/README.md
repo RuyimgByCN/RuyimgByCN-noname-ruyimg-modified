@@ -46,3 +46,29 @@ node apps/web-client/scripts/nc12-browser-coldstart.mjs http://127.0.0.1:8123/ \
 - [ ] 真实网络（非本机）与慢网/丢包
 - [ ] 浏览器内**完整对局**（本轮只到可交互）与动画帧/输入响应指标
 - [ ] 与旧线前端（`VITE_ENGINE_BACKEND=legacy`）同口径对照
+
+## 5 追加：旧线前端同口径对照（`VITE_ENGINE_BACKEND=legacy`）（2026-10-19 同轮）
+
+```bash
+VITE_ENGINE_BACKEND=legacy pnpm --dir apps/web-client exec vite build --outDir dist-legacy
+(cd apps/web-client/dist-legacy && python3 -m http.server 8124 &)
+node apps/web-client/scripts/nc12-browser-coldstart.mjs http://127.0.0.1:8124/ <chrome> <outdir> 3
+```
+
+| 档位 | `to_interactive_ms`（3 轮） | p50 | 可交互 | 控制台 |
+|---|---|---:|---|---|
+| **原生（默认后端）** | 261 / 263 / 264 | **263 ms** | 3/3 | 0 |
+| **旧线（`legacy`）** | 260 / 260 / 260 | **260 ms** | 3/3 | 0 |
+
+**读法（不夸大）**：两者在本机 headless 口径下**基本相同（差 3 ms，落在噪声内）**——
+「点击到可交互」主要由 **worker 启动 + WASM 模块下载/实例化**决定，两条后端路径的**前端装配成本相当**；
+**本对照不构成性能优劣结论**（差异未超出测量噪声，且两条后端的功能面不等价）。
+日志：[legacy-coldstart.log](legacy-coldstart.log)、[legacy-coldstart.json](legacy-coldstart.json)。
+
+### 仍未完成（更新）
+
+- [ ] 拆分 263/260 ms（worker 内埋点或 worker 上下文 `PerformanceObserver`）
+- [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）
+- [ ] 真实网络（非本机）与慢网/丢包
+- [ ] 浏览器内**完整对局**与动画帧/输入响应指标
+- [ ] 两档位的**功能等价**对照（本条只比冷启动耗时，不比功能面）

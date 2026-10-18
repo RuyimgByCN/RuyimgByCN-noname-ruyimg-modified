@@ -4,13 +4,13 @@
       "iter": 0,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 263,
+      "to_interactive_ms": 260,
       "perf": {
-        "domContentLoaded": 51.30000001192093,
-        "loadEvent": 52.89999997615814,
+        "domContentLoaded": 38.19999998807907,
+        "loadEvent": 38.89999997615814,
         "wasm": [],
         "workerChunks": [
-          "engine.native.worker-JFW_PAlJ.js"
+          "engine.worker-DPXTqmfT.js"
         ]
       }
     },
@@ -18,13 +18,13 @@
       "iter": 1,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 264,
+      "to_interactive_ms": 260,
       "perf": {
-        "domContentLoaded": 48.10000002384186,
-        "loadEvent": 48.69999998807907,
+        "domContentLoaded": 35,
+        "loadEvent": 35.69999998807907,
         "wasm": [],
         "workerChunks": [
-          "engine.native.worker-JFW_PAlJ.js"
+          "engine.worker-DPXTqmfT.js"
         ]
       }
     },
@@ -32,13 +32,13 @@
       "iter": 2,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 261,
+      "to_interactive_ms": 260,
       "perf": {
-        "domContentLoaded": 42.60000002384186,
-        "loadEvent": 43.30000001192093,
+        "domContentLoaded": 39.10000002384186,
+        "loadEvent": 39.69999998807907,
         "wasm": [],
         "workerChunks": [
-          "engine.native.worker-JFW_PAlJ.js"
+          "engine.worker-DPXTqmfT.js"
         ]
       }
     }
