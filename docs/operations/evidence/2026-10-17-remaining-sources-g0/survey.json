@@ -1,0 +1,131 @@
+{
+ "L08": {
+  "name": "十周年UI",
+  "js_files": 20,
+  "total_js_bytes": 3446912,
+  "main_bytes": 452962,
+  "skills": 9,
+  "skill_median": 3712,
+  "skill_max": 259283,
+  "cards": 0,
+  "characters": 9,
+  "config_keys": [
+   "CPZS",
+   "EffectWood",
+   "JBDDZ",
+   "SSEquip",
+   "SanGuoShaGameOver",
+   "SanGuoShaGameStart",
+   "aloneEquip",
+   "aloneEquup",
+   "borderLevel",
+   "cardAlternateNameVisible",
+   "cardBorder",
+   "cardHelasisy"
+  ],
+  "obfuscated_identifiers": 0
+ },
+ "L11": {
+  "name": "太虚幻境",
+  "js_files": 18,
+  "total_js_bytes": 3928030,
+  "main_bytes": 260947,
+  "skills": 0,
+  "skill_median": 0,
+  "skill_max": 0,
+  "cards": 0,
+  "characters": 0,
+  "config_keys": [
+   "copy"
+  ],
+  "obfuscated_identifiers": 0
+ },
+ "L14": {
+  "name": "手杀ui",
+  "js_files": 15,
+  "total_js_bytes": 1048619,
+  "main_bytes": 297105,
+  "skills": 48,
+  "skill_median": 1103,
+  "skill_max": 73402,
+  "cards": 1,
+  "characters": 3,
+  "config_keys": [
+   "GTBBFont",
+   "GTBBTime",
+   "JDTSYangshi",
+   "KGMH",
+   "enable",
+   "jiangdeng",
+   "jindutiao",
+   "jindutiaoST",
+   "jindutiaoSet",
+   "jindutiaoUpdata",
+   "jindutiaoYangshi",
+   "jindutiaoaiUpdata"
+  ],
+  "obfuscated_identifiers": 0
+ },
+ "L19": {
+  "name": "末日乱斗",
+  "js_files": 1,
+  "total_js_bytes": 148549,
+  "main_bytes": 148549,
+  "skills": 66,
+  "skill_median": 479,
+  "skill_max": 32422,
+  "cards": 0,
+  "characters": 24,
+  "config_keys": [
+   "zuan_lock"
+  ],
+  "obfuscated_identifiers": 0
+ },
+ "L20": {
+  "name": "标记补充",
+  "js_files": 1,
+  "total_js_bytes": 364068,
+  "main_bytes": 364068,
+  "skills": 75,
+  "skill_median": 2592,
+  "skill_max": 27595,
+  "cards": 3,
+  "characters": 12,
+  "config_keys": [
+   "daojianfu",
+   "daojianfu_type",
+   "huajiatexiao"
+  ],
+  "obfuscated_identifiers": 0
+ },
+ "L25": {
+  "name": "祖安武将",
+  "js_files": 2,
+  "total_js_bytes": 4914170,
+  "main_bytes": 2845316,
+  "skills": 122,
+  "skill_median": 2114,
+  "skill_max": 946205,
+  "cards": 0,
+  "characters": 120,
+  "config_keys": [
+   "enable"
+  ],
+  "obfuscated_identifiers": 0
+ },
+ "U08": {
+  "name": "英雄杀",
+  "dir": "archive/upstream/noname/apps/core/extension/英雄杀",
+  "js_files": 9,
+  "total_js_bytes": 96119,
+  "main_bytes": 72461,
+  "skills": 305,
+  "skill_median": 0,
+  "skill_max": 0,
+  "cards": 0,
+  "characters": 43,
+  "config_keys": [],
+  "obfuscated_identifiers": 0,
+  "note": "skill.js 为「技能名: {…}」表（非 lib.skill.X = 形式）；character.js 为武将表"
+ }
+}
