@@ -226,3 +226,54 @@ fn nc10_stale_plan_is_rejected() {
         other => panic!("过期规划结果必须被拒绝（StaleRevision），实为 {other:?}"),
     }
 }
+
+/// 牌库顺序置换：**任意状态**（含非静止态）下规划结果不得依赖牌库顺序。
+///
+/// NC10 追加修复：非静止态原先直接跳过遮蔽 → 模拟可读到牌库顺序；现改为**只打乱
+/// 牌库顺序**（内容与区域不变，故不会让挂起机器/在飞帧的实体牌引用失效）。
+#[test]
+fn nc10_planner_is_invariant_under_deck_order() {
+    let pack = swd_pack();
+    let mut quiescent_total = 0usize;
+    let mut window_total = 0usize;
+    for seed in [20261521u64, 20261522, 20261523] {
+        for warm in [3usize, 7, 11, 15, 19] {
+            let mut base = Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局");
+            drive(&mut base, warm);
+            if base.outcome().is_some() {
+                continue;
+            }
+            let seat = base.turn().current;
+            let a = base.plan_action(seat, &planner()).action;
+            // 只置换牌库顺序（内容不变）
+            let mut permuted = base.clone();
+            {
+                let n = permuted.state_core().deck.len();
+                if n >= 2 {
+                    let core = permuted.state_core_mut();
+                    core.deck.rotate_left(1);
+                }
+            }
+            // 牌库内容必须守恒
+            let mut before = base.state_core().deck.clone();
+            let mut after = permuted.state_core().deck.clone();
+            before.sort_unstable();
+            after.sort_unstable();
+            assert_eq!(before, after, "牌库内容必须守恒（只改顺序）");
+            let b = permuted.plan_action(seat, &planner()).action;
+            if is_quiescent(&base) {
+                quiescent_total += 1;
+            } else {
+                window_total += 1;
+            }
+            assert_eq!(
+                format!("{a:?}"),
+                format!("{b:?}"),
+                "seed={seed} warm={warm} seat={seat}：规划结果依赖了牌库顺序"
+            );
+        }
+    }
+    eprintln!("DBG 牌库顺序不变性：静止态 {quiescent_total} 例、非静止态 {window_total} 例");
+    assert!(quiescent_total + window_total >= 8, "样本量不足");
+    assert!(window_total >= 1, "应至少覆盖 1 个非静止态样本");
+}

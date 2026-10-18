@@ -659,11 +659,30 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     // monkey.rs「被拦截的桃应在使用者手牌」）。故只在**静止态**重分配：
     // 栈空、无挂起机器、无开放选择。非静止态跳过（对手手牌仍不进入 AI 输入视图
     // `PolicyInput`；模拟过程中的信息泄漏面登记为 NC10 待办）。
-    {
+    let quiescent = {
         let res = e.resolution();
-        if !res.stack.is_empty() || !res.parks.is_empty() || res.open_choice.is_some() {
-            return;
+        res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none()
+    };
+    if !quiescent {
+        // NC10：非静止态**仍可安全遮蔽牌库顺序**——牌库内容不变、区域不变，只是顺序
+        // 打乱；挂起机器/在飞帧只记录实体牌 id，不记录牌库位置，故不会失效。
+        // 对手手牌的身份遮蔽在该窗口仍不可做（会改写被引用的实体牌 id → panic），
+        // 登记为待办（需机器自省保引用重分配）。
+        let n = e.state_core().deck.len();
+        if n >= 2 {
+            let mut rng_state: u64 = 0xD1CE_5EED_0000
+                ^ (seat as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
+                ^ e.revision().wrapping_mul(0x2545_F491_4F6C_DD1D);
+            let core = e.core_mut();
+            for k in (1..n).rev() {
+                rng_state = rng_state
+                    .wrapping_mul(6364136223846793005)
+                    .wrapping_add(1442695040888963407);
+                let j = ((rng_state >> 33) as usize) % (k + 1);
+                core.deck.swap(j, k);
+            }
         }
+        return;
     }
     // NC10：模拟用的隐藏区改为**内容无关填充**——旧实现把「对手手牌 ∪ 牌库」
     // 做确定性洗牌后按原张数放回，虽然打乱了「谁拿哪张」，却完整保留了隐藏牌的
