@@ -57,7 +57,8 @@
 - 修复：捕获为 `VmFault{skill,owner,event,kind,detail}` → 调度循环 `StepOutcome::Fault` → **整段回滚**（工作副本丢弃、日志截断、段检查点清除）→ 命令以 `RejectReason::VmFault{skill,detail}` 拒绝；新增 `Engine::resolution()` 诊断访问器。
 - 回归：新增 `tests/nc04_vm_fault.rs`（正常完成 / fuel 耗尽整段回滚且确定性重现 / 故障命令不消费去重键；1 项挂起用例 ignored 待补）。
 - 实测：定向 3/0/1；engine-native 全量 **1104/0/2**；Gate 1b exit 0；行数门禁 8223 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md)。
-- 待办：挂起→续跑→故障、非法效果、无效 token、内存/栈限额、RNG 位点、产品侧展示、分片段故障回滚用例。
+- 追加（手工字节码覆盖 `HOST_CHOICE`，因 DSL 无选择语句）：**挂起→续跑→段结算完成**、**恢复后故障整段回滚**（`tests/nc04_vm_resume.rs` 2 项）→ 全量 **1112/0/2**。
+- 待办：非法效果（更多 tag）、无效 token、内存/栈限额、RNG 位点、产品侧展示、分片段故障回滚用例、DSL 选择语句（可让挂起路径无需手工字节码）。
 
 ### NC02 核验（2026-10-18，规则 v321 / 存档 v105 未变）
 
