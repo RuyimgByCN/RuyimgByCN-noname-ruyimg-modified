@@ -4,6 +4,7 @@ mod config;
 mod lobby;
 mod native;
 mod native_view;
+mod room_native;
 mod outbox;
 mod persist;
 mod room;
