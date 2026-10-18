@@ -122,7 +122,19 @@ exit=0
 2. **平台结果缺口 6 个来源**（U05、U07、L08、L11、L14、L25）：无平台/真实客户端关键词证据；
    关键词判据不排除「有实机证据但没写进证据目录」的情况，需按来源补证。
 3. **生产接口缺口 5 个来源**（L08/L11/L12/L14/L25）：确实还没有转换包（G0 或切片阶段）。
-4. **CI 接线未做**：ADR 检查脚本已可跑（exit 0/1），但未写入 `.github/workflows/ci.yml`（该文件含他人改动）。
+4. **CI 接线未做**：ADR 检查脚本已可跑（exit 0/1，任意 cwd 均可，默认路径按脚本位置解析），
+   但未写入 `.github/workflows/ci.yml`（该文件含他人未提交改动）。待接线的补丁：
+
+   ```yaml
+         - name: Source files stay within 2,000 lines
+           run: |
+             python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+             python3 scripts/check-source-lines.py
+         - name: ADR index (duplicate numbers / heading mismatches)   # NC11 新增
+           run: |
+             python3 -B -m unittest discover -s scripts -p 'test_check_adr_index.py'
+             python3 -B scripts/check-adr-index.py
+   ```
 5. **登记表 README 与 JSON 不一致未改**：`docs/operations/evidence/2026-10-16-todo-register/README.md`
    仍写 resolved 54 / open 35 / 整包 20/37，与 `todo-register.json`（61/30、整包 24/13）矛盾；
    本切片只在主稿与登记表注明「以 JSON 为准」，未改该历史证据正文。
