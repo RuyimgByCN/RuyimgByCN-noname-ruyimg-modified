@@ -41,6 +41,7 @@ mod fool;
 mod martial;
 mod omnisearch;
 mod qhly;
+mod rzsh;
 mod shousha;
 mod shousha_mvp;
 mod sj_settings;
@@ -108,6 +109,7 @@ pub use martial::{
     RecordBook, ReplaceOut, Seats,
 };
 pub use qhly::*;
+pub use rzsh::*;
 pub use omnisearch::{
     debug_execute, debug_inspect, parse_config, EntryKind, PublicEntry, PublicIndex, SearchConfig,
     SearchError,

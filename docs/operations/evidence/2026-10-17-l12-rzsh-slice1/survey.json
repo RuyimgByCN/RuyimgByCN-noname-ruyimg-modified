@@ -1,0 +1,92 @@
+{
+ "bytes": 596082,
+ "all_js_bytes": 6539569,
+ "skills": [],
+ "cards": [],
+ "characters": [],
+ "config_keys": [],
+ "function_count": 59,
+ "portable_candidates": [
+  [
+   "a",
+   1150
+  ],
+  [
+   "b",
+   1009
+  ],
+  [
+   "czgcreat",
+   639
+  ],
+  [
+   "entermodegame",
+   684
+  ],
+  [
+   "flyIn",
+   617
+  ],
+  [
+   "getRandomSanguoText",
+   138
+  ],
+  [
+   "getRandomTip",
+   132
+  ],
+  [
+   "groupdown",
+   116
+  ],
+  [
+   "groupup",
+   2175
+  ],
+  [
+   "hideDrawer",
+   2557
+  ],
+  [
+   "lightcreat1",
+   466
+  ],
+  [
+   "lightcreat2",
+   643
+  ],
+  [
+   "menucreate",
+   251
+  ],
+  [
+   "modecreate",
+   261
+  ],
+  [
+   "modecreatex",
+   582
+  ],
+  [
+   "numtoroma",
+   581
+  ],
+  [
+   "onButtonDown",
+   3798
+  ],
+  [
+   "onButtonDownx",
+   403
+  ],
+  [
+   "onbuttonzu",
+   517
+  ],
+  [
+   "rzshcreate",
+   244
+  ]
+ ],
+ "portable_count": 42
+}
