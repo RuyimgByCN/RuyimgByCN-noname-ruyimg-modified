@@ -1,0 +1,56 @@
+# NC09 真实浏览器端到端（首切片，2026-10-18）
+
+- 日期：2026-10-18
+- 工作包：**NC09**（[方案 §NC09](../../../architecture/native-convergence-plan.md#nc09)）「真实客户端」层
+- 规则版本 v322（工作树）/ 存档格式 v105
+- 结论：**真实浏览器（headless Chrome 155）加载构建产物并渲染出原生后端大厅，控制台零错误**；**未驱动实际对局流程**（登记）
+
+## 1 环境与方法（可复跑）
+
+| 项 | 值 |
+|---|---|
+| 浏览器 | `Google Chrome 155.0.8059.82`（`/Applications/Google Chrome.app`），`--headless=new` |
+| 构建 | `pnpm --dir apps/web-client build` → exit 0（`dist/`，679 ms） |
+| 静态服务 | `python3 -m http.server 8123`（`apps/web-client/dist/`） |
+| 服务端（可选） | `NONAME_ALLOW_UNSIGNED_EXTENSIONS=1 NONAME_NATIVE_ROOMS=1 NONAME_NATIVE_ROOM_PACKAGES=shahai-swd ./target/release/game-server` → 日志 `native content ready packages=41`、`listening addr=127.0.0.1:7700` |
+| 命令 | `chrome --headless=new --user-data-dir=<tmp> --window-size=1280,800 --virtual-time-budget=12000 --screenshot=... --dump-dom <url>` |
+
+> `--user-data-dir` 必需：不带时 Chrome 报 `Failed to create a unique user data directory for headless`（首次尝试记录在 [chrome-stderr.log](chrome-stderr.log)）。
+
+## 2 实测结果
+
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| 页面加载与控制台 | **零 `SEVERE`/`Uncaught`/`Failed to load`** | [chrome-console-root.log](chrome-console-root.log) |
+| 根路由渲染 | `<main>` 有内容：2243 字节 / 368 字符文本 | [dom_.html](dom_.html) |
+| 渲染内容（节选） | 「确定性身份局 · 默认原生引擎后端（engine-native-wasm 窄壳，Worker 内运行）…人数 2–8、种子、本地开局、联机大厅（通过 game-server WebSocket 加入权威房间）…创建并入座/加入房间/旁观…」 | [dom_.html](dom_.html) |
+| 截图 | 顶部导航（大厅/对局/扩展/设置/录像/武将库）渲染正常 | [screenshot-root.png](screenshot-root.png) |
+
+**说明**：先前的两张截图（`screenshot.png`、`screenshot-with-server.png`）内容为空，原因是访问的是
+`/index.html` —— 该 SPA 的路由按路径匹配，`/index.html` 不匹配任何路由（`<main>` 仅 `<!---->`）；
+访问 `/` 即正常渲染（本轮已复现并区分，属**测试 URL 选择问题**，不是应用缺陷）。
+
+## 3 边界与未验收项（不得外推）
+
+- [ ] **未驱动实际对局**：未在浏览器内点击「本地开局」跑完整流程，也未走联机加入/命令/重连；
+      本轮只证明**构建产物在真实浏览器中加载、渲染大厅、无控制台错误**
+- [ ] 未做**视觉/交互验收**（点击、键盘、触摸、窄屏、中英文、可访问性）
+- [ ] 静态服务用 `python3 -m http.server`（**无 SPA fallback**）→ `/extensions`、`/collection`
+      直接 404（[dom__extensions.html](dom__extensions.html)、[dom__collection.html](dom__collection.html) 为空）
+      → 客户端路由需配合服务端 fallback 或 hash 路由，属**部署配置**待办
+- [ ] 未验证浏览器内的 **Worker + WASM 原生路径**是否真正进入（大厅文案如此声明，但未断言 Worker 已起、
+      未读 Worker 内的引擎状态）
+- [ ] 平台档位（Windows/Linux/Android/iOS）与性能档位（动画帧/输入响应）未验收
+- [ ] 本轮启动的服务端为**本地临时进程**，已在收尾时终止（非产品部署）
+
+## 4 复跑命令
+
+```bash
+cd noname-next
+pnpm --dir apps/web-client build
+(cd apps/web-client/dist && python3 -m http.server 8123 &)
+UDD=$(mktemp -d)
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu \
+  --user-data-dir="$UDD" --window-size=1280,800 --virtual-time-budget=12000 \
+  --screenshot=shot.png --dump-dom http://127.0.0.1:8123/ > dom.html 2> console.log
+```

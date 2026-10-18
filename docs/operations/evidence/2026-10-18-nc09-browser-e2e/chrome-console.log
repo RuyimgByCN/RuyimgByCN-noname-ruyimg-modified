@@ -1,0 +1,28 @@
+[1018/233916.062833:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:208] open /Users/ruyimg/Library/Application Support/Google/Chrome/Crashpad/settings.dat: Operation not permitted (1)
+[1018/233916.063149:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:208] open /Users/ruyimg/Library/Application Support/Google/Chrome/Crashpad/settings.dat: Operation not permitted (1)
+[69525:20799076:1018/233916.123335:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:208] open /Users/ruyimg/Library/Application Support/Google/Chrome/Crashpad/settings.dat: Operation not permitted (1)
+[69525:20798979:1018/233916.124723:INFO:components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc:241] No machine level policy manager exists.
+2026-10-18 23:39:16.227 Google Chrome Helper (Alerts)[69535:20799092] TISFileInterrogator updateSystemInputSources false but old data invalid: currentCacheHeaderPtr nonNULL? 0, ->cacheFormatVersion 0, ->magicCookie 00000000, inputSourceTableCountSys 0
+Keyboard Layouts: duplicate keyboard layout identifier -17410.
+Keyboard Layouts: keyboard layout identifier -17410 has been replaced with -28673.
+Keyboard Layouts: duplicate keyboard layout identifier -30769.
+Keyboard Layouts: keyboard layout identifier -30769 has been replaced with -28674.
+2026-10-18 23:39:16.282 Google Chrome[69525:20798979] TISFileInterrogator updateSystemInputSources false but old data invalid: currentCacheHeaderPtr nonNULL? 0, ->cacheFormatVersion 0, ->magicCookie 00000000, inputSourceTableCountSys 0
+Keyboard Layouts: duplicate keyboard layout identifier -14934.
+Keyboard Layouts: keyboard layout identifier -14934 has been replaced with -28675.
+Keyboard Layouts: duplicate keyboard layout identifier -17410.
+Keyboard Layouts: keyboard layout identifier -17410 has been replaced with -28673.
+Keyboard Layouts: duplicate keyboard layout identifier -30769.
+Keyboard Layouts: keyboard layout identifier -30769 has been replaced with -28674.
+Keyboard Layouts: duplicate keyboard layout identifier -14934.
+Keyboard Layouts: keyboard layout identifier -14934 has been replaced with -28675.
+Trying to load the allocator multiple times. This is *not* supported.
+[69532:20799127:1018/233916.409754:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[69532:20799127:1018/233916.413360:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[69532:20799127:1018/233916.414089:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[69532:20799127:1018/233916.418237:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[69532:20799127:1018/233916.418318:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[69532:20799127:1018/233916.418387:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[69532:20799127:1018/233916.418435:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[69532:20799127:1018/233916.479516:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+13473 bytes written to file /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-18-nc09-browser-e2e/screenshot.png
