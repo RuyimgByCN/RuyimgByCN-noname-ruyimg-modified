@@ -93,6 +93,84 @@ pub fn lowhp_decision(
     true
 }
 
+/// 动皮触发类别（上游 `skinSwitch.dynamic.getSpecial(player, 类别)`）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TransformKind {
+    /// 低血变身（`lowhp`）。
+    LowHp,
+    /// 受伤变身（`damage`）——每个头像位**仅一次**。
+    Damage,
+    /// 击杀变身（`jisha`，`dieBegin` 来源侧）。
+    Kill,
+    /// 换组变身（`changeGroup`）。
+    ChangeGroup,
+    /// 阶段开始变身（`phaseBegin`）。
+    PhaseBegin,
+}
+
+/// 变身标志（上游 `damagePrimaryTransform`/`damageDeputyTransform`）。
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct TransformFlags {
+    pub damage_primary: bool,
+    pub damage_deputy: bool,
+}
+
+/// 受伤变身是否允许（上游：已变身过则取消；否则置位并允许）。
+pub fn damage_transform_allowed(flags: &mut TransformFlags, is_primary: bool) -> bool {
+    let slot = if is_primary {
+        &mut flags.damage_primary
+    } else {
+        &mut flags.damage_deputy
+    };
+    if *slot {
+        return false;
+    }
+    *slot = true;
+    true
+}
+
+/// 势力归类（上游 `groupMap`：wei/shu/wu/qun 前缀匹配）。
+pub fn group_nature(group: &str) -> Option<&'static str> {
+    for key in ["wei", "shu", "wu", "qun"] {
+        if group.starts_with(key) {
+            return Some(match key {
+                "wei" => "wei",
+                "shu" => "shu",
+                "wu" => "wu",
+                _ => "qun",
+            });
+        }
+    }
+    None
+}
+
+/// 换组变身是否触发（上游 `_pfqh_check_changeGroup`：当前势力归类与特化配置不同）。
+pub fn group_changed(special_group: &str, current_group: &str) -> bool {
+    match (group_nature(special_group), group_nature(current_group)) {
+        (Some(a), Some(b)) => a != b,
+        _ => false,
+    }
+}
+
+/// 变身目标解析（上游：`effs.transform` 须在 `special` 表中，且
+/// `trans.name` 形如 `key/skinName`，两者均在动态皮肤表中存在）。
+pub fn resolve_transform(
+    transform_key: Option<&str>,
+    special: &BTreeMap<String, String>,
+    has_skin: impl Fn(&str, &str) -> bool,
+) -> Option<(String, String)> {
+    let key = transform_key?;
+    let name = special.get(key)?;
+    let (bone, skin) = name.split_once('/')?;
+    if bone.is_empty() || skin.is_empty() {
+        return None;
+    }
+    if !has_skin(bone, skin) {
+        return None;
+    }
+    Some((bone.to_string(), skin.to_string()))
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct SkinSwitchConfig {
     pub source: String,

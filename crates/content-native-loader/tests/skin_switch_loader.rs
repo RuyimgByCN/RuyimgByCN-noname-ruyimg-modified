@@ -69,3 +69,54 @@ fn lowhp_triggers_only_on_new_low() {
     assert_eq!(st.deputy_lowest, Some(4));
     assert_eq!(st.primary_lowest, Some(2), "主将记录不受副将影响");
 }
+
+// ---- 切片 2：其余动皮触发策略 ----
+
+use content_native_loader::{
+    damage_transform_allowed, group_changed, group_nature, resolve_transform, TransformFlags,
+};
+use std::collections::BTreeMap;
+
+#[test]
+fn damage_transform_is_once_per_avatar() {
+    let mut flags = TransformFlags::default();
+    assert!(damage_transform_allowed(&mut flags, true), "主将首次允许");
+    assert!(!damage_transform_allowed(&mut flags, true), "主将二次取消");
+    assert!(damage_transform_allowed(&mut flags, false), "副将独立首次允许");
+    assert!(!damage_transform_allowed(&mut flags, false));
+    assert!(flags.damage_primary && flags.damage_deputy);
+}
+
+#[test]
+fn group_nature_and_change_detection() {
+    assert_eq!(group_nature("wei"), Some("wei"));
+    assert_eq!(group_nature("shu_x"), Some("shu"));
+    assert_eq!(group_nature("wu"), Some("wu"));
+    assert_eq!(group_nature("qun"), Some("qun"));
+    assert_eq!(group_nature("shen"), None, "神/其它不归类");
+    assert!(group_changed("wei", "shu"));
+    assert!(!group_changed("wei", "wei_x"), "同归类不算换组");
+    assert!(!group_changed("shen", "wei"), "未知归类不触发");
+}
+
+#[test]
+fn resolves_transform_targets() {
+    let mut special = BTreeMap::new();
+    special.insert("t1".to_string(), "bone/skin_a".to_string());
+    special.insert("t2".to_string(), "bone/".to_string());
+    special.insert("t3".to_string(), "noslash".to_string());
+    let has_skin = |bone: &str, skin: &str| bone == "bone" && skin == "skin_a";
+    assert_eq!(
+        resolve_transform(Some("t1"), &special, has_skin),
+        Some(("bone".to_string(), "skin_a".to_string()))
+    );
+    assert_eq!(resolve_transform(Some("t2"), &special, has_skin), None, "空皮肤名");
+    assert_eq!(resolve_transform(Some("t3"), &special, has_skin), None, "无分隔符");
+    assert_eq!(resolve_transform(Some("missing"), &special, has_skin), None);
+    assert_eq!(resolve_transform(None, &special, has_skin), None, "无 transform 配置");
+    // 皮肤表中不存在 → 不解析
+    assert_eq!(
+        resolve_transform(Some("t1"), &special, |_, _| false),
+        None
+    );
+}
