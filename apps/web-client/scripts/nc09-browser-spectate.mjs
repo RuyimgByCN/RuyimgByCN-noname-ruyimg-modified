@@ -132,6 +132,24 @@ const specState = await b.evalJs(`(() => {
 })()`);
 console.log("STEP B_state " + JSON.stringify(specState));
 
+// 多客户端命令一致性：页面 A 结束阶段 → 旁观页面 B 的 rev 也应前进，且仍看不到手牌内容
+const revA0 = await a.evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+const revB0 = await b.evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+const cmdA = await a.evalJs(`(() => {
+  const el = Array.from(document.querySelectorAll('button')).find(x => (x.innerText||'').trim() === '结束阶段');
+  if (!el) return { found: false };
+  el.click();
+  return { found: true };
+})()`);
+await sleep(3000);
+const revA1 = await a.evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+const revB1 = await b.evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+const specStillPublic = await b.evalJs(`(() => {
+  const t = document.body.innerText;
+  return { handLine: (t.match(/手牌（[^）]*）/) || [])[0] ?? "", hasOwnHandCards: /手牌（[1-9]/.test(t) };
+})()`);
+console.log("STEP multi_client_command " + JSON.stringify({ revA0, revA1, revB0, revB1, cmdA, specStillPublic }));
+
 const shot = await b.send("Page.captureScreenshot", { format: "png" });
 writeFileSync(join(outDir, "spectator-screenshot.png"), Buffer.from(shot.data, "base64"));
 const shotA = await a.send("Page.captureScreenshot", { format: "png" });
@@ -142,6 +160,7 @@ const report = {
   spectator: specState,
   console_errors_host: errA,
   console_errors_spectator: errB,
+  multi_client_command: { revA0, revA1, revB0, revB1, cmdA, specStillPublic },
 };
 writeFileSync(join(outDir, "spectate-report.json"), JSON.stringify(report, null, 2));
 console.log("RESULT " + JSON.stringify(report));

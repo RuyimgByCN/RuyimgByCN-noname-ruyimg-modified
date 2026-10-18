@@ -39,3 +39,24 @@ node apps/web-client/scripts/nc09-browser-spectate.mjs http://127.0.0.1:8123/ \
 - [ ] 平台档位（Windows/Linux/Android/iOS）与性能档位
 - [ ] 服务端 SPA fallback（部署配置；本轮以根 URL 导航规避）
 - [ ] 本轮临时服务端/静态服务已终止
+
+## 4 追加：多客户端命令一致性（2026-10-18 同轮）
+
+页面 A（入座者）点击「结束阶段」→ 断言**旁观页面 B** 同步前进且不泄漏：
+
+| 判据 | 结果 |
+|---|---|
+| 页面 A rev | `0 → 1`（命令被权威服务端接受） |
+| **旁观页面 B rev** | **`0 → 1`**（收到同一权威状态更新） |
+| 旁观者更新后仍为公开面 | `手牌（0 张 · 点击或拖拽）`、`hasOwnHandCards: false` |
+| 双页面控制台 | `console_errors_host: []`、`console_errors_spectator: []` |
+
+证据：[spectate-drive-2.log](spectate-drive-2.log)、[spectate-report.json](spectate-report.json)、
+[host-screenshot.png](host-screenshot.png)、[spectator-screenshot.png](spectator-screenshot.png)。
+
+### 仍未完成（更新）
+
+- [ ] 断线（服务端侧）重连与过期/伪造令牌拒绝
+- [ ] 两名**入座玩家**之间的命令与投影一致性（本轮为「入座 + 旁观」）
+- [ ] 联机存读档/录像、网络异常（不可达/慢消费者/限流）与错误展示
+- [ ] 锦标赛面（manifest 固定/分块签名，原生未实现）、平台与性能档位、服务端 SPA fallback
