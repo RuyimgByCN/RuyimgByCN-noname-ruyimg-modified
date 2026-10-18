@@ -8,7 +8,7 @@
 //! 定位是哪条动作在提交后触发了 `take_hand_card` 对不在手牌的牌。
 
 use engine_native::ai::BoundedPlanner;
-use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
+use engine_native::{Engine, GameCommand};
 
 fn pack_of(dir: &str) -> engine_native::content::extension::ExtensionPack {
     let root =
@@ -106,6 +106,7 @@ fn swd_authoritative_path_is_panic_free() {
     for seed in [42009u64, 42010, 42011] {
         let mut e = Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局");
         let mut last: Option<(u64, u8, String)> = None;
+        let _ = &last;
         for step in 0..200u64 {
             if e.outcome().is_some() {
                 break;

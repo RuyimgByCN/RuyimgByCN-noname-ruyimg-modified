@@ -35,7 +35,7 @@ fn planner() -> BoundedPlanner {
 
 fn drive(e: &mut Engine, steps: usize) {
     let p = planner();
-    for step in 0..steps {
+    for _step in 0..steps {
         if e.outcome().is_some() {
             break;
         }
