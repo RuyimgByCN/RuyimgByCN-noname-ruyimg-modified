@@ -1,0 +1,21 @@
+ziyu: {
+		trigger: { global: "phaseEnd" },
+		direct: true,
+		filter(event, player) {
+			return game.phaseNumber % 4 === 0;
+		},
+		content() {
+			player.chooseDrawRecover(get.prompt("ziyu")).logSkill = "ziyu";
+		},
+	},
+	shouhu: {
+		mod: {
+			cardEnabled(card) {
+				if (card.name === "sha") {
+					return false;
+				}
+			},
+		},
+		enable: "phaseUse",
+		filter(event, player) {
+			return player.countCards("h", "sha") > 0;
