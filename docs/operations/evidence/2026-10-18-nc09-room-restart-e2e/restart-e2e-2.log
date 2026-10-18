@@ -1,0 +1,5 @@
+STEP online {"clicked":false}
+STEP joined_room 1
+STEP after_kill {"len":660,"hasErrorText":true,"errorLine":"连接已断开（服务端不可达）"}
+STEP after_restart {"len":743,"hasRoom":true,"roomLine":"房间 #1","hasErrorText":true,"statusLine":"联机房间 #1","seatLine":"► 第 1 轮 · P1"}
+RESULT {"room_id":"1","after_kill":{"len":660,"hasErrorText":true,"errorLine":"连接已断开（服务端不可达）"},"after_restart":{"len":743,"hasRoom":true,"roomLine":"房间 #1","hasErrorText":true,"statusLine":"联机房间 #1","seatLine":"► 第 1 轮 · P1"},"console_errors":[]}

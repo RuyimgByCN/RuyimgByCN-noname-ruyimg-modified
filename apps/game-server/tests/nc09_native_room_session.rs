@@ -446,3 +446,32 @@ async fn nc09_room_store_roundtrip_and_restore() {
     let err = store.load_all().expect_err("损坏文件必须报错");
     assert!(err.contains("解析"), "{err}");
 }
+
+/// NC09 终局清理：比赛结束后落盘记录被删除（不随重启恢复），且再次落盘不会重建。
+#[tokio::test]
+async fn nc09_room_store_is_removed_on_match_end() {
+    let dir = tempfile::tempdir().unwrap();
+    let store = native_room_store::NativeRoomStore::new(dir.path().join("rooms"));
+    // 未终局：写盘
+    let record = native_room_store::StoredRoom {
+        room_id: 7,
+        password: String::new(),
+        state: room_native::NativeRoomState {
+            snapshot_hex: String::new(),
+            max_seats: 4,
+            started: true,
+            next_token: 3,
+            next_dedup: 9,
+            pack_refs: Vec::new(),
+            members: Vec::new(),
+        },
+    };
+    store.save(&record).expect("写盘");
+    assert!(store.dir().join("7.json").exists());
+    // 终局清理路径：remove 后不再存在；load_all 为空
+    store.remove(7).expect("删除");
+    assert!(!store.dir().join("7.json").exists(), "终局后记录应删除");
+    assert!(store.load_all().expect("读回").is_empty(), "无残留记录");
+    // 幂等：重复删除不报错
+    store.remove(7).expect("重复删除应幂等");
+}

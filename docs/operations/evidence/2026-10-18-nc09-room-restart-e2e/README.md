@@ -45,3 +45,37 @@
 - [ ] 落盘**节流**与 WAL 增量（当前每条接受命令全量写）、校验和
 - [ ] 密码/令牌的落盘保护（当前明文，仅本地磁盘；生产需加密或外部存储）
 - [ ] 限流与慢消费者反馈、联机存读档/录像、锦标赛面、平台与性能档位、服务端 SPA fallback
+
+## 5 追加：座位恢复断言 + 终局清理（2026-10-18 同轮）
+
+### 5.1 座位恢复（E2E 复跑，[restart-e2e-2.log](restart-e2e-2.log)）
+
+重启后除房间号外**同时断言座位**：
+
+```
+STEP after_restart {"hasRoom":true,"roomLine":"房间 #1","statusLine":"联机房间 #1",
+                    "seatLine":"► 第 1 轮 · P1"}
+```
+
+→ 客户端不仅回到房间，还回到**原座位 P1**（令牌重连命中原座位）；`console_errors: []`。
+
+### 5.2 终局清理（落盘只增不减 → 已修）
+
+`persist_room` 增加终局分支：`session.engine().outcome().is_some()` 时 **`store.remove(id)`** 并
+停止写入（已结束房间无需跨重启恢复）。回归 `nc09_room_store_is_removed_on_match_end`：
+写盘 → `remove` → 文件不存在、`load_all` 为空、重复 `remove` 幂等。
+
+### 5.3 验证结果
+
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| 定向（含 persist 既有 2 项） | **12 passed / 0 failed** | [targeted.log](targeted.log) |
+| game-server 全量 | **93 passed / 0 failed**（92 → +1） | [game-server-tests-2.log](game-server-tests-2.log) |
+| E2E（浏览器，重启恢复房间+座位） | 见 §5.1 | [restart-e2e-2.log](restart-e2e-2.log) |
+
+### 仍未完成（更新）
+
+- [ ] 落盘**节流**与 WAL 增量/校验和（当前每条接受命令全量写）
+- [ ] 密码/令牌落盘保护（当前明文，仅本地磁盘）
+- [ ] 恢复后**主动**向已连接者重播名册（当前靠客户端重连 + 令牌回座）
+- [ ] 限流与慢消费者反馈、联机存读档/录像、锦标赛面、平台与性能档位、服务端 SPA fallback

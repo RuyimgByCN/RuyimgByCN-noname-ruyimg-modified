@@ -21,6 +21,9 @@ use tokio::sync::{mpsc, oneshot};
 use tracing::{debug, info};
 
 /// NC09 落盘：把当前会话状态写入存储（失败只记日志，不影响房间运行）。
+///
+/// 终局处理：比赛已有结果（`outcome().is_some()`）时**删除**落盘记录并停止写入——
+/// 已结束的房间无需跨重启恢复，避免落盘目录只增不减。
 fn persist_room(
     store: &Option<NativeRoomStore>,
     id: u64,
@@ -28,6 +31,12 @@ fn persist_room(
     session: &NativeRoomSession,
 ) {
     let Some(store) = store else { return };
+    if session.engine().outcome().is_some() {
+        if let Err(e) = store.remove(id) {
+            tracing::warn!(room = id, error = %e, "原生房间终局清理失败");
+        }
+        return;
+    }
     let record = StoredRoom {
         room_id: id,
         password: password.to_string(),

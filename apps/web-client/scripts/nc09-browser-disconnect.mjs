@@ -124,6 +124,7 @@ const afterRestart = await evalJs(`(() => {
     roomLine: (t.match(/房间 #\\d+[^\\n]*/) || [])[0] ?? "",
     hasErrorText: /失败|错误|断开|关闭|无法/i.test(t),
     statusLine: (t.match(/[^\\n]*(重连|已重连|房间 #\\d+)[^\\n]*/) || [])[0] ?? "",
+    seatLine: (t.match(/[^\\n]*(座位|P1|观察者 P\\d+)[^\\n]*/) || [])[0] ?? "",
   };
 })()`);
 console.log("STEP after_restart " + JSON.stringify(afterRestart));
