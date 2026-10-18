@@ -155,6 +155,36 @@ impl NativeRoomSession {
         }
     }
 
+    /// NC05：正式选将（按入座座位；观战者拒绝）。返回 `(revision, state_hash_hex)`。
+    ///
+    /// 注意：内核 `assign_general_named` **不推进 revision**（状态变化体现在 state_hash），
+    /// 调用方（客户端/房间）必须显式失效基于 revision 的缓存。
+    pub fn assign_general(
+        &mut self,
+        connection_id: u64,
+        name: &str,
+    ) -> Result<(u64, String), String> {
+        let m = self
+            .members
+            .get(&connection_id)
+            .cloned()
+            .ok_or("unknown connection")?;
+        if m.role != ClientRole::Player {
+            return Err("spectator cannot choose general".into());
+        }
+        self.engine
+            .assign_general_named(m.seat, name)
+            .map_err(|e| format!("选将被拒绝: {e:?}"))?;
+        Ok((
+            self.engine.revision(),
+            self.engine
+                .state_hash()
+                .iter()
+                .map(|b| format!("{b:02x}"))
+                .collect(),
+        ))
+    }
+
     /// 快照（按角色投影）。
     pub fn snapshot(&self, connection_id: u64) -> Result<ObserverSnapshot, String> {
         let m = self.members.get(&connection_id).ok_or("unknown connection")?;

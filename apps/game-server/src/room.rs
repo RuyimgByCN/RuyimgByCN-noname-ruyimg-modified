@@ -46,6 +46,13 @@ pub enum RoomMsg {
         header: MessageHeader,
         reply: oneshot::Sender<Result<ServerMessage, String>>,
     },
+    /// NC05/NC09：房间级**正式选将**（原生后端支持；旧线后端明确回「不支持」）。
+    /// 座位以入座座位为准（反冒充），请求里的名字仅作参数。
+    ChooseGeneral {
+        connection_id: u64,
+        name: String,
+        reply: oneshot::Sender<Result<String, String>>,
+    },
     /// Connection dropped.
     Disconnect { connection_id: u64 },
     /// Debug: force recover from WAL (tests).
@@ -476,6 +483,12 @@ async fn room_loop(
                     choice: choice_for(&engine, member.role, member.player_id),
                     legal_actions: legal_for(&engine, member.role, member.player_id),
                 }));
+            }
+
+            RoomMsg::ChooseGeneral { reply, .. } => {
+                let _ = reply.send(Err(
+                    "旧线房间后端不支持选将（请启用原生后端 NONAME_NATIVE_ROOMS=1）".into(),
+                ));
             }
 
             RoomMsg::Disconnect { connection_id } => {

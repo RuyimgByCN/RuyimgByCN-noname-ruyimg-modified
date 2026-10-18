@@ -305,6 +305,54 @@ async fn native_room_loop(
                     }
                 }
             }
+            RoomMsg::ChooseGeneral {
+                connection_id,
+                name,
+                reply,
+            } => {
+                // 座位以入座座位为准（反冒充）；成功后向全体推送新视图（选将不推进
+                // revision，故推送判据是「操作成功」而不是 revision 变化）。
+                match session.assign_general(connection_id, &name) {
+                    Ok((revision, hash)) => {
+                        for other in members.values() {
+                            let Some(out) = other.outbound.as_ref() else {
+                                continue;
+                            };
+                            let role = match other.role {
+                                ClientRole::Player => RoomRole::Player,
+                                ClientRole::Spectator => RoomRole::Spectator,
+                                ClientRole::Referee => RoomRole::Referee,
+                            };
+                            let seat = if other.role == ClientRole::Player {
+                                Some(other.player_id)
+                            } else {
+                                None
+                            };
+                            let msg = ServerMessage::Snapshot {
+                                header: MessageHeader::new(id, 0, revision),
+                                view: observer_snapshot_for(session.engine(), role, seat),
+                                choice: choice_for(session.engine(), seat),
+                                legal_actions: if other.role == ClientRole::Player {
+                                    legal_actions_for(
+                                        session.engine(),
+                                        seat.expect("player seat"),
+                                    )
+                                } else {
+                                    Vec::new()
+                                },
+                            };
+                            let _ = out.send(&msg).await;
+                        }
+                        let _ = reply.send(Ok(format!(
+                            "{{\"revision\":{revision},\"state_hash\":\"{hash}\"}}"
+                        )));
+                    }
+                    Err(e) => {
+                        let _ = reply.send(Err(e));
+                    }
+                }
+            }
+
             RoomMsg::Disconnect { connection_id } => {
                 if let Some(m) = members.get_mut(&connection_id) {
                     m.outbound = None;

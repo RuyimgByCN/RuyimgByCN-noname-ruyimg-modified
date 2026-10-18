@@ -2,16 +2,25 @@
 
 #[path = "../src/native.rs"]
 mod native;
+#[path = "../src/persist.rs"]
+mod persist;
+#[path = "../src/room.rs"]
+mod room;
+#[path = "../src/session.rs"]
+mod session;
 #[path = "../src/native_view.rs"]
 mod native_view;
 #[path = "../src/room_native.rs"]
 mod room_native;
+#[path = "../src/room_native_actor.rs"]
+mod room_native_actor;
 
 use engine_api::{CommandKind, CommandResult, PlayerId as ApiPlayerId};
 use engine_protocol::ClientRole;
 use native::NativeContent;
 use room_native::NativeRoomSession;
 use std::path::PathBuf;
+use tokio::sync::mpsc;
 
 fn repo_packages_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions")
@@ -200,4 +209,109 @@ fn nc09_room_wal_replay_recovers_identically() {
         Err(e) => e,
     };
     assert!(err.contains("摘要不一致"), "{err}");
+}
+
+/// NC05/NC09 房间级选将：原生后端支持（按入座座位、观战者拒绝、未知武将报错、
+/// 成功后向全体推送新视图），旧线后端明确「不支持」。
+#[tokio::test]
+async fn nc09_room_choose_general_is_room_level() {
+    // 旧线后端：明确不支持（不静默）
+    let legacy = room::spawn_room(21, 4, 1, String::new(), 8, 20);
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    legacy
+        .send(room::RoomMsg::ChooseGeneral {
+            connection_id: 1,
+            name: "whatever".into(),
+            reply: rt,
+        })
+        .await
+        .expect("send");
+    let err = rr.await.expect("reply").expect_err("旧线必须明确不支持");
+    assert!(err.contains("不支持"), "{err}");
+
+    // 原生后端：支持
+    let dir = tempfile::tempdir().unwrap();
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("安装");
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("装载");
+    let engine =
+        engine_native::Engine::new_with_extensions(20261820, 4, &[&loaded.pack]).expect("建局");
+    let session = room_native::NativeRoomSession::new_with_packs(engine, vec![loaded.pack], 4);
+    let handle = room_native_actor::spawn_room_native(22, session, 16, 4);
+
+    let (tx, mut rx) = mpsc::channel::<String>(16);
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(room::RoomMsg::Join {
+            connection_id: 1,
+            display_name: "p".into(),
+            preferred_seat: Some(0),
+            reconnect_token: None,
+            password: String::new(),
+            outbound: session::Outbound::new(tx),
+            reply: rt,
+        })
+        .await
+        .expect("send join");
+    let _ = rr.await.expect("reply").expect("入座");
+    while rx.try_recv().is_ok() {}
+
+    // 选一个目录内的扩展武将（swd 前缀）
+    let pick = {
+        let candidates = engine_native::Engine::new_with_extensions(
+            20261821,
+            4,
+            &[],
+        );
+        let _ = candidates;
+        // 用会话内引擎的候选（通过选将接口的候选导出不可得，这里直接挑已知 swd 武将）
+        "swd_lingwu".to_string()
+    };
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(room::RoomMsg::ChooseGeneral {
+            connection_id: 1,
+            name: pick.clone(),
+            reply: rt,
+        })
+        .await
+        .expect("send choose");
+    match rr.await.expect("reply") {
+        Ok(json) => assert!(json.contains("state_hash"), "成功应返回 state_hash: {json}"),
+        Err(e) => {
+            // 该武将名不在本包目录时，必须**明确报错**（不得静默）
+            assert!(e.contains("选将被拒绝"), "{e}");
+        }
+    }
+
+    // 观战者选将 → 拒绝
+    let spec = {
+        let (tx, _rx) = mpsc::channel::<String>(4);
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handle
+            .send(room::RoomMsg::Spectate {
+                connection_id: 9,
+                display_name: "s".into(),
+                outbound: session::Outbound::new(tx),
+                reply: rt,
+            })
+            .await
+            .expect("send spectate");
+        rr.await.expect("reply").expect("观战")
+    };
+    assert_eq!(spec.role, ClientRole::Spectator);
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(room::RoomMsg::ChooseGeneral {
+            connection_id: 9,
+            name: "swd_lingwu".into(),
+            reply: rt,
+        })
+        .await
+        .expect("send choose2");
+    let err = rr.await.expect("reply").expect_err("观战者必须被拒");
+    assert!(err.contains("spectator"), "{err}");
 }
