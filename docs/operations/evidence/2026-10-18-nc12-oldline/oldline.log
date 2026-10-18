@@ -1,0 +1,5 @@
+RESULT scenario=oldline metric=build n=30 p50_ns=152875 p95_ns=225167 max_ns=3987917 mean_ns=290625
+RESULT scenario=oldline metric=submit n=200 p50_ns=15083 p95_ns=16000 max_ns=883541 mean_ns=21444
+RESULT scenario=oldline metric=snapshot n=30 p50_ns=15042 p95_ns=16333 max_ns=22416 mean_ns=15473
+RESULT scenario=oldline metric=restore n=30 p50_ns=15625 p95_ns=18541 max_ns=20500 mean_ns=15994
+NOTE 旧线（engine-core）独立口径；与新线 nc12_bench 并列记录，不跨线计算收益。
