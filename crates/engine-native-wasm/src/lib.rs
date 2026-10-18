@@ -170,6 +170,46 @@ fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Va
 /// 不经 `wasm_bindgen`，宿主测试（`tests/nc03_legal_actions_export.rs`）可直接
 /// 调用，避免走到 `JsValue`。`revision` 是候选成立的状态修订号：客户端可据此
 /// 判断候选是否过期（`Engine::legal_actions` 只读，不改状态）。
+/// NC05/NC09：正式选将候选（宿主侧，非 wasm-bindgen）。
+pub fn general_candidates_json_for(engine: &Engine) -> String {
+    let rows: Vec<serde_json::Value> = engine
+        .general_candidates()
+        .into_iter()
+        .filter_map(|def| {
+            engine.catalog().general_meta(def).map(|m| {
+                serde_json::json!({
+                    "def": def,
+                    "name": m.0,
+                    "skills": m.2,
+                })
+            })
+        })
+        .collect();
+    serde_json::json!({ "count": rows.len(), "candidates": rows }).to_string()
+}
+
+/// NC05/NC09：按名字正式选将（宿主侧，非 wasm-bindgen）。
+pub fn assign_general_for(
+    engine: &mut Engine,
+    seat: u8,
+    name: &str,
+) -> Result<String, String> {
+    let seats = engine.view_for(0).players.len();
+    if seat as usize >= seats {
+        return Err(format!("assign_general: 座位越界（{seat} ≥ {seats}）"));
+    }
+    engine
+        .assign_general_named(seat, name)
+        .map_err(|e| format!("assign_general 被拒绝: {e:?}"))?;
+    Ok(serde_json::json!({
+        "seat": seat,
+        "name": name,
+        "revision": engine.revision(),
+        "state_hash": hex_encode(&engine.state_hash()),
+    })
+    .to_string())
+}
+
 pub fn legal_actions_json_for(engine: &Engine, seat: u8) -> Result<String, String> {
     let seats = engine.view_for(0).players.len();
     if seat as usize >= seats {
@@ -251,6 +291,16 @@ impl NativeEngine {
 
     pub fn is_finished(&self) -> bool {
         self.inner.outcome().is_some()
+    }
+
+    /// NC05/NC09 正式选将候选（客户端选将 UI 用）。
+    pub fn general_candidates_json(&self) -> String {
+        general_candidates_json_for(&self.inner)
+    }
+
+    /// NC05/NC09 正式选将（按名字；失败返回错误，不静默）。
+    pub fn assign_general(&mut self, seat: u8, name: &str) -> Result<String, JsValue> {
+        assign_general_for(&mut self.inner, seat, name).map_err(|e| JsValue::from_str(&e))
     }
 
     /// 座位可见视图 JSON（信息隔离面：自己手牌具体 id、他人仅数量）。
@@ -808,7 +858,10 @@ fn omnisearch_debug(source: &str) -> String {
 /// 不依赖浏览器或 wasm 运行时。
 #[doc(hidden)]
 pub mod test_support {
-    pub use super::{engine_from_archive, engine_from_packs, hex_encode};
+    pub use super::{
+        assign_general_for, engine_from_archive, engine_from_packs, general_candidates_json_for,
+        hex_encode,
+    };
 }
 
 #[cfg(test)]
