@@ -409,7 +409,19 @@ impl<'a> Ctx<'a> {
         hand.remove(pos);
     }
 
+    /// 入弃牌堆（**牌区唯一性**：同一张牌不得同时属于两个区域）。
+    ///
+    /// NC07 修正（NC12 基线 §5.1 缺陷根因）：旧实现是无条件 `push`，当技能在
+    /// 一张牌「正在被使用/结算」期间把它换出（如 swd 玉蝉换形）或某条路径重复
+    /// 入堆时，同一张牌会在弃牌堆出现两次——引擎允许的活状态随即被自己的所有权
+    /// 校验（`card_in_multiple_zones`）判非法，读档 30/30 被拒。现在：
+    /// - 已在弃牌堆 → 幂等返回（不重复入堆）；
+    /// - 从其它区域移出仍由调用方负责（`discard_from_hand`/`take_hand_card` 等），
+    ///   本原语只保证**不重复入堆**——不改变既有调用方的区域语义。
     pub fn to_discard(&mut self, card: CardId) {
+        if self.core.discard.contains(&card) {
+            return;
+        }
         self.core.discard.push(card);
     }
 
