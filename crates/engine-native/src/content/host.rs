@@ -1309,6 +1309,12 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 誓师（tag 523，L19 末日乱斗批 1，`shishi`）：锁定——自己击杀角色后
+    /// 体力上限 +1 并回复 1 点。
+    Shishi,
+    /// 循梦（tag 524，L19 末日乱斗批 1，`xunmeng`）：锁定——自己以【杀】
+    /// 造成的伤害 +1（非铁索传导），且自己体力 >1 时失去 1 点体力。
+    Xunmeng,
     /// 集舍（tag 522，L27 选将美化批 5，`jishe`）：出牌阶段主动（手牌上限
     /// >0）——摸一张牌并累计标记（上游 `jishe2` 的手牌上限削减面因该技在
     /// 上游被注释而**不生效**，登记差异）。
@@ -1852,6 +1858,8 @@ impl HostBehavior {
             HostBehavior::NewMeibuRange => 520,
             HostBehavior::SbZhaXiang => 521,
             HostBehavior::Jishe => 522,
+            HostBehavior::Shishi => 523,
+            HostBehavior::Xunmeng => 524,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2614,6 +2622,8 @@ impl HostBehavior {
             520 => HostBehavior::NewMeibuRange,
             521 => HostBehavior::SbZhaXiang,
             522 => HostBehavior::Jishe,
+            523 => HostBehavior::Shishi,
+            524 => HostBehavior::Xunmeng,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2634,7 +2644,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 518] = [
+        pub const ALL: [HostBehavior; 520] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3153,6 +3163,8 @@ impl HostBehavior {
         HostBehavior::NewMeibuRange,
         HostBehavior::SbZhaXiang,
         HostBehavior::Jishe,
+        HostBehavior::Shishi,
+        HostBehavior::Xunmeng,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3433,6 +3445,8 @@ impl HostBehavior {
             HostBehavior::NewMeibuRange => "host:new_meibu_range",
             HostBehavior::SbZhaXiang => "host:sbzhaxiang",
             HostBehavior::Jishe => "host:jishe",
+            HostBehavior::Shishi => "host:shishi",
+            HostBehavior::Xunmeng => "host:xunmeng",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3910,6 +3924,22 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 誓师：自己击杀角色后（锁定）
+            HostBehavior::Shishi => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 循梦：自己造成伤害（**伤害前置窗**；上游 damageBegin 同窗）
+            HostBehavior::Xunmeng => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 集舍：出牌阶段主动（activate 分支；无触发时机）
@@ -6390,6 +6420,12 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 誓师（L19 末日乱斗批 1）：目录技能名（击杀后上限 +1 并回复 1）。
+pub const L19_SHISHI_KEY: &str = "shishi";
+
+/// 循梦（L19 末日乱斗批 1）：目录技能名（杀伤害 +1，自己失去 1 体力）。
+pub const L19_XUNMENG_KEY: &str = "xunmeng";
+
 /// 集舍（L27 选将美化批 5）：目录技能名（摸 1 + 标记；手牌上限面上游已注释）。
 pub const L27_JISHE_KEY: &str = "jishe";
 
@@ -7668,6 +7704,8 @@ impl HostSkillBehavior {
             HostBehavior::NewMeibuRange => (None, None),
             HostBehavior::SbZhaXiang => (None, None),
             HostBehavior::Jishe => (None, None),
+            HostBehavior::Shishi => (None, None),
+            HostBehavior::Xunmeng => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -8021,6 +8059,14 @@ impl SkillBehavior for HostSkillBehavior {
             },
             HostBehavior::NewMeibuRange => false,
             HostBehavior::SbZhaXiang => false,
+            // 誓师：自己为击杀者
+            HostBehavior::Shishi => matches!(event,
+                EventData::Death { killer, .. } if *killer == Some(owner)),
+            // 循梦：自己为伤害来源、伤害载体为【杀】且非铁索传导
+            HostBehavior::Xunmeng => matches!(event,
+                EventData::Damage(d) if d.source == Some(owner)
+                    && !d.from_chain
+                    && d.card.is_some_and(|c| ctx.catalog.card_kind(c).is_sha_like())),
             HostBehavior::Jishe => false,
             // 止息：自己使用牌
             HostBehavior::NewZhixi => matches!(event,
@@ -12664,6 +12710,32 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::NewMeibuRange => Flow::Done,
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => Flow::Done,
+            // 誓师：体力上限 +1 并回复 1
+            HostBehavior::Shishi => {
+                ctx.core.player_mut(self.owner).max_hp += 1;
+                ctx.recover(self.owner, 1, None);
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "誓师",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
+            // 循梦：伤害 +1；体力 >1 时失去 1 点体力
+            HostBehavior::Xunmeng => {
+                ctx.current_damage_mut().amount += 1;
+                if ctx.core.player(self.owner).hp > 1 {
+                    // 失去体力（上游 loseHp）：无来源、不可防止
+                    ctx.emit(EventData::LoseHp {
+                        player: self.owner,
+                        amount: 1,
+                    });
+                }
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "循梦",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
             // 集舍：摸 1 + 累计标记（上游 jishe2 的手牌上限削减不生效）
             HostBehavior::Jishe => {
                 ctx.draw_cards(self.owner, 1);

@@ -1,0 +1,22 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/末日乱斗/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "pack": {
+    "name": "doomsday-brawl-upstream-liuli",
+    "version": 1,
+    "description": "G1 转换：上游末日乱斗首批（誓师/循梦）",
+    "card_prefix": "db_"
+  },
+  "cards": [],
+  "skills": [
+    { "name": "shishi", "mapping": "host:shishi" },
+    { "name": "xunmeng", "mapping": "host:xunmeng" }
+  ],
+  "generals": [],
+  "deferred": [
+    { "name": "wujinmoshi", "reason": "无尽模式配置面（_wujinmoshi* 系列，含 player==game.me 人类位判定）" },
+    { "name": "brawl_mode", "reason": "乱斗模式框架（24 处武将引用、chanceIdentity 系列多为注释）" },
+    { "name": "skill_batch_rest", "reason": "其余技能待批次实施（G0：66 技，中位 0.5 KB）" }
+  ]
+}

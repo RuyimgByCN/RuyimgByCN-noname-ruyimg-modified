@@ -1,0 +1,7 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/末日乱斗/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "skills": ["shishi", "xunmeng"],
+  "_note": "乱斗模式框架与无尽模式配置面未迁移（登记差异）"
+}
