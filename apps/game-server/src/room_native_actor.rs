@@ -35,8 +35,19 @@ pub fn spawn_room_native(
     mailbox: usize,
     snapshot_every: u64,
 ) -> RoomHandle {
+    spawn_room_native_with_password(id, session, mailbox, snapshot_every, String::new())
+}
+
+/// 启动原生房间 actor（带房间密码；空串 = 无密码）。
+pub fn spawn_room_native_with_password(
+    id: u64,
+    session: NativeRoomSession,
+    mailbox: usize,
+    snapshot_every: u64,
+    password: String,
+) -> RoomHandle {
     let (tx, rx) = mpsc::channel(mailbox);
-    tokio::spawn(native_room_loop(id, session, rx, snapshot_every));
+    tokio::spawn(native_room_loop(id, session, rx, snapshot_every, password));
     RoomHandle::new(id, tx)
 }
 
@@ -45,6 +56,7 @@ async fn native_room_loop(
     mut session: NativeRoomSession,
     mut rx: mpsc::Receiver<RoomMsg>,
     snapshot_every: u64,
+    room_password: String,
 ) {
     let mut persist = NativeRoomPersist::new();
     // 旧线锦标赛 WAL 面保留占位（原生分块签名未做，登记待办）
@@ -64,10 +76,14 @@ async fn native_room_loop(
                 display_name,
                 preferred_seat,
                 reconnect_token,
-                password: _pw,
+                password: pw,
                 outbound,
                 reply,
             } => {
+                if !room_password.is_empty() && pw != room_password {
+                    let _ = reply.send(Err("unauthorized".into()));
+                    continue;
+                }
                 match session.join(connection_id, preferred_seat, reconnect_token) {
                     Ok(joined) => {
                         let m = NativeActorMember {

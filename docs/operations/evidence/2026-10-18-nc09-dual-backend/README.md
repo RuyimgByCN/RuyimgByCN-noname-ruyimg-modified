@@ -71,3 +71,28 @@ game-server 全量 **81 passed / 0 failed**（[game-server-tests-2.log](game-ser
 - [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`
 - [ ] 命令后个性化视图推送、actor 回包 `legal_actions`/`choice`
 - [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位
+
+## 5 追加：房间密码（2026-10-18 同轮）
+
+原生 actor 原先**忽略** `Join.password`（旧线房间会校验）——这是双后端参数化的阻塞项之一。
+本批补齐：`spawn_room_native_with_password`（空串 = 无密码）在 Join 处按旧线同口径校验，
+不匹配返回 `unauthorized`；`spawn_room_native` 保持无密码默认。
+
+新增用例 `nc09_native_backend_enforces_room_password`（第 4 项）：
+
+| 判据 | 结果 |
+|---|---|
+| 非空房间密码 + 错误密码 → 拒绝（`unauthorized`） | 通过 |
+| 正确密码 → 入座成功 | 通过 |
+
+实测：定向 **4 passed / 0 failed**（含 `persist` 既有 2 项共 6 项；[targeted-3.log](targeted-3.log)）；
+game-server 全量 **82 passed / 0 failed**（[game-server-tests-3.log](game-server-tests-3.log)）；
+行数门禁 8254 文件（[source-lines-3.log](source-lines-3.log)）。
+
+### 仍未完成（更新）
+
+- [ ] 旧线房间测试套件参数化跑在原生后端：`StartGame` 兼容与**房间密码**已具备；仍需
+      限流（`max_cmds_per_sec`）、慢消费者背压、`Recover` 消息（原生 actor 明确未接线）
+- [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`
+- [ ] 命令后个性化视图推送、actor 回包 `legal_actions`/`choice`
+- [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位

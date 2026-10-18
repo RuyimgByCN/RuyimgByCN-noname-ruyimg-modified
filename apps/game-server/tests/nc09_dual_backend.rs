@@ -225,3 +225,52 @@ async fn nc09_native_backend_startgame_is_confirmation_only() {
     .await;
     assert!(bad.is_err(), "座位数不一致的开局确认必须报错: {bad:?}");
 }
+
+/// 房间密码：非空密码下错误密码必须被拒（与旧线同口径 `unauthorized`）。
+#[tokio::test]
+async fn nc09_native_backend_enforces_room_password() {
+    let handle = room_native_actor::spawn_room_native_with_password(
+        14,
+        native_session(20261804, 2),
+        16,
+        4,
+        "s3cret".to_string(),
+    );
+    // 错误密码 → 拒绝
+    let (tx, _rx) = mpsc::channel::<String>(4);
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Join {
+            connection_id: 1,
+            display_name: "bad".into(),
+            preferred_seat: Some(0),
+            reconnect_token: None,
+            password: "wrong".into(),
+            outbound: session::Outbound::new(tx),
+            reply: rt,
+        })
+        .await
+        .expect("send");
+    let err = rr.await.expect("reply").expect_err("错误密码必须被拒");
+    assert_eq!(err, "unauthorized");
+
+    // 正确密码 → 入座
+    let ok = {
+        let (tx, _rx) = mpsc::channel::<String>(4);
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Join {
+                connection_id: 2,
+                display_name: "good".into(),
+                preferred_seat: Some(0),
+                reconnect_token: None,
+                password: "s3cret".into(),
+                outbound: session::Outbound::new(tx),
+                reply: rt,
+            })
+            .await
+            .expect("send");
+        rr.await.expect("reply")
+    };
+    assert_eq!(ok.expect("正确密码应入座").seat, 0);
+}
