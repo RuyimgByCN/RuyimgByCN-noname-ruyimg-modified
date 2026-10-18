@@ -1,0 +1,9 @@
+PASS install_activate
+PASS upgrade
+PASS rollback
+PASS deactivate
+PASS frozen_blocks
+PASS revoke_blocks
+PASS uninstall
+PASS catalog_files_g1 | n=34 missing=
+{"total":8,"failed":0}

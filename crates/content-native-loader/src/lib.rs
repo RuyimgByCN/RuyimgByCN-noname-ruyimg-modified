@@ -29,6 +29,7 @@ use engine_native::content::pile::{PileEntry, PileSpec};
 use engine_native::content::standard::Gender;
 use serde_json::Value;
 
+mod ai_tuning;
 mod coin;
 mod boss_playpack;
 mod desktop_adapt;
@@ -45,6 +46,7 @@ mod sj_settings;
 mod thunder;
 mod longxue;
 mod update_guard;
+pub use ai_tuning::*;
 pub use coin::{
     apply_coin_commands, buy_item, change_coin, mark_phase_started, open_coin_session,
     parse_coin_config, persist_config, place_bet, restore_coin, settle_for, snapshot_coin,
