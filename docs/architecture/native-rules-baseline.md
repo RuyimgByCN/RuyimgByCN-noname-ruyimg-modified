@@ -3615,6 +3615,28 @@ Boss 内容面余项已登记为差异（不实现）：地藏王「大愿」=�
 swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–114 消解 15 技，映射 133/184 → 150/184（deferred 49→32）**，涵盖单触发/判定/多步机/状态字段、无版本锁定四臂批与 limited 一次性授技字段批；未映射余 32 项（多步/跨包引用/缺事件型）仍为暂缓，逐来源状态见[两仓台账](../migration/upstream-extension-reconstruction.md)。
 完整差异和复现见 [进度主稿](native-progress.md)。
 
+### NC08 第⑦层逐技能对照发现的**登记差异族**（2026-10-19）
+
+以下差异由「上游 JS 逐字引用 → 原生行为验收」逐技能对照发现（样本 1–20，17/37 来源；
+逐条见[扩展台账 §3.3](../migration/upstream-extension-reconstruction.md#33-nc08-第七层上游行为逐技能对照样本台账2026-10-19)）。
+**一律登记为差异，不写成对齐**：
+
+| 差异族 | 上游口径 | 原生现状 | 出现样本 |
+|---|---|---|---|
+| **取牌位置** | 伤害/使用牌在**处理区**（`position === 'o'`）时可取 | `table` 优先、**弃牌堆兜底**（`xicai`）；`jianxiong` 门槛为「**已在弃牌堆**」 | xicai / jianxiong |
+| **计数建模** | 技能标记数（如 `chunbing_markcount = 5`） | 建模为监听技 **`rounds`（剩余回合）** | chunbing |
+| **随机弃置** | `hs.randomGet()`（真随机） | **确定性首张**（`hand.first()`） | linghunzhihuo（同族多处） |
+| **门槛集合** | 阵法 `enable` 仅要求「**存在大势力**」 | 额外要求**存活 ≥ 4** | tianfuzhen |
+| **技能覆盖面** | 集智 = **任意锦囊**（`get.type === 'trick'`） | 仅 **5 种**锦囊（南蛮/万箭/决斗/铁索/无懈）→ **规则损失** | jizhi |
+| **标记/子技面未实现** | `sbjizhi`（摸到的牌本回合不可弃）、`sbjianxiong`（标记 < 3 可改为摸牌） | 均**未实现** | jizhi / jianxiong |
+| **传导事件判定** | `event.notLink()`：铁索传导**不**加成 | 传导为独立事件**照常判定** | duwen |
+| **阶段计数起点** | `game.phaseNumber`（全局阶段计数） | `turn.phase_number`（局内计数） | ziyu（待核对） |
+| **阶段锚点** | 上游有**准备阶段**；原生无（相位序列前移，起手 `Judge` vs 旧线 `Draw`） | 已登记（开局差异判定证据） | 身份局开局对照 |
+
+**修复状态**：其中 **4 项已给出修法与验收**（[待实施修复清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)），
+因涉及**未跟踪的 host/standard/kernel 拆分文件**而**未实施**；其余为**待口径判定**。
+
+
 ### 本地上游对齐的新增核查
 
 **采用玩法版本（2026-10-16 明确）**：本地 `archive/upstream/noname`（上游 v1.11.7，核对 HEAD `df2682e6`）的 standard 规则与标准包；Liuli 侧差异与扩展自带规则另见[两仓台账](../migration/upstream-extension-reconstruction.md)，旧线 `engine-core` 只作迁移对照、不是规则来源。距离/座距语义据此核对（[证据](../operations/evidence/2026-10-16-rule-source-distance-basis/README.md)）。
