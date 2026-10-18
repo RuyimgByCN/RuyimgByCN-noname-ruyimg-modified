@@ -1,0 +1,200 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=none seats=4 samples=30 steps=80 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=archive pid=22181 profile=release
+# NC12 archive：tier=none dirs= seats=4,samples=30,steps=80
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=save_ns	n=30	min_ns=250	p50_ns=292	p95_ns=2875	max_ns=44292	mean_ns=1845	total_ns=55374
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=encode_archive_ns	n=30	min_ns=2167	p50_ns=2291	p95_ns=5458	max_ns=16750	mean_ns=2972	total_ns=89167
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=decode_archive_ns	n=30	min_ns=3250	p50_ns=3334	p95_ns=4792	max_ns=36792	mean_ns=4580	total_ns=137417
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=restore_ns	n=30	min_ns=4750	p50_ns=4959	p95_ns=10250	max_ns=29083	mean_ns=6825	total_ns=204751
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=open,steps=0	result=OK	archive_bytes=1888	roundtrip_failures=0	state_hash_mismatch=0	state_hash=7475104ee23e6f2b4526129cebc67f85487b8a802e701491c665f5bb6849c11f	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=save_ns	n=30	min_ns=250	p50_ns=292	p95_ns=334	max_ns=1500	mean_ns=338	total_ns=10165
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=encode_archive_ns	n=30	min_ns=2250	p50_ns=2292	p95_ns=5917	max_ns=12458	mean_ns=2827	total_ns=84837
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=decode_archive_ns	n=30	min_ns=3375	p50_ns=3416	p95_ns=3542	max_ns=4042	mean_ns=3440	total_ns=103204
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=restore_ns	n=30	min_ns=4708	p50_ns=4791	p95_ns=5667	max_ns=8750	mean_ns=4965	total_ns=148958
+RESULT	scenario=archive	tier=none	config=seats=4,samples=30,steps=80,stage=played,steps=80	result=OK	archive_bytes=1918	roundtrip_failures=0	state_hash_mismatch=0	state_hash=eeb6f1daf62a8ef83170870eaf8d049f941f5d04f9503edb28ac05c3c7bd8e9e	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=84 discard=29 table=0 hand=11 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=205 revision=80	roundtrip_token=2400
+        0.00 real         0.00 user         0.00 sys
+             4653056  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 479  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                   9  involuntary context switches
+            89210870  instructions retired
+            23521259  cycles elapsed
+             2834816  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=swd seats=4 samples=30 steps=80 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=archive pid=22185 profile=release
+# NC12 archive：tier=swd dirs=shahai-swd-upstream-noname seats=4,samples=30,steps=80
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=save_ns	n=30	min_ns=333	p50_ns=375	p95_ns=1375	max_ns=7916	mean_ns=680	total_ns=20417
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=encode_archive_ns	n=30	min_ns=3083	p50_ns=3208	p95_ns=4917	max_ns=17292	mean_ns=3904	total_ns=117125
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=decode_archive_ns	n=30	min_ns=4375	p50_ns=4542	p95_ns=6833	max_ns=14500	mean_ns=5088	total_ns=152667
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=restore_ns	n=30	min_ns=59459	p50_ns=64250	p95_ns=106000	max_ns=113208	mean_ns=68934	total_ns=2068043
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=open,steps=0	result=OK	archive_bytes=2504	roundtrip_failures=0	state_hash_mismatch=0	state_hash=048f65363465eb7190866ac006f886529456485ca3193debb41f886248d64f09	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=save_ns	n=30	min_ns=375	p50_ns=500	p95_ns=542	max_ns=542	mean_ns=487	total_ns=14625
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=encode_archive_ns	n=30	min_ns=3125	p50_ns=3250	p95_ns=3916	max_ns=4084	mean_ns=3318	total_ns=99542
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=decode_archive_ns	n=30	min_ns=4666	p50_ns=4792	p95_ns=5084	max_ns=6167	mean_ns=4876	total_ns=146292
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=restore_ns	n=30	min_ns=61958	p50_ns=65708	p95_ns=77334	max_ns=89292	mean_ns=67347	total_ns=2020415
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=30,steps=80,stage=played,steps=80	result=FAIL	archive_bytes=2533	roundtrip_failures=30	state_hash_mismatch=0	state_hash=1392fce580dbe510d2446fcf0f5c8e8326df238079260020ee62ad55b179e6e8	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=170 discard=32 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=223 revision=80	roundtrip_token=0
+        0.06 real         0.01 user         0.04 sys
+             6668288  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 602  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  50  voluntary context switches
+                  30  involuntary context switches
+           757304767  instructions retired
+           224518918  cycles elapsed
+             4063640  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=huanle seats=4 samples=30 steps=80 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=archive pid=22189 profile=release
+# NC12 archive：tier=huanle dirs=huanle-upstream-noname seats=4,samples=30,steps=80
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=save_ns	n=30	min_ns=291	p50_ns=333	p95_ns=458	max_ns=2375	mean_ns=402	total_ns=12085
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=encode_archive_ns	n=30	min_ns=2291	p50_ns=2417	p95_ns=8875	max_ns=13917	mean_ns=3144	total_ns=94333
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=decode_archive_ns	n=30	min_ns=3375	p50_ns=3542	p95_ns=6250	max_ns=15458	mean_ns=4140	total_ns=124205
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=restore_ns	n=30	min_ns=15792	p50_ns=16792	p95_ns=27458	max_ns=41208	mean_ns=18783	total_ns=563501
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=open,steps=0	result=OK	archive_bytes=1916	roundtrip_failures=0	state_hash_mismatch=0	state_hash=42c8a818c7c0247c09c0c31209faac5c875680911543f098467fcbdf7816929a	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=115 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=save_ns	n=30	min_ns=291	p50_ns=292	p95_ns=375	max_ns=750	mean_ns=326	total_ns=9794
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=encode_archive_ns	n=30	min_ns=2292	p50_ns=2375	p95_ns=5250	max_ns=5458	mean_ns=2629	total_ns=78876
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=decode_archive_ns	n=30	min_ns=3458	p50_ns=3542	p95_ns=6625	max_ns=7541	mean_ns=3881	total_ns=116456
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=restore_ns	n=30	min_ns=16208	p50_ns=16458	p95_ns=31500	max_ns=47792	mean_ns=18544	total_ns=556334
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=30,steps=80,stage=played,steps=80	result=OK	archive_bytes=1946	roundtrip_failures=0	state_hash_mismatch=0	state_hash=9eaaa5225f328a32eef02e355fca537473a89b7ec07ad7dc5f50511e66fcca79	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=89 discard=30 table=0 hand=12 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=209 revision=80	roundtrip_token=2400
+        0.06 real         0.01 user         0.04 sys
+             5980160  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 561  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  50  voluntary context switches
+                  22  involuntary context switches
+           673439868  instructions retired
+           198446615  cycles elapsed
+             3522944  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=combo seats=4 samples=30 steps=80 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=archive pid=22193 profile=release
+# NC12 archive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,samples=30,steps=80
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=save_ns	n=30	min_ns=375	p50_ns=417	p95_ns=1666	max_ns=3334	mean_ns=572	total_ns=17164
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=encode_archive_ns	n=30	min_ns=3250	p50_ns=3375	p95_ns=4708	max_ns=11083	mean_ns=3712	total_ns=111371
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=decode_archive_ns	n=30	min_ns=4917	p50_ns=5083	p95_ns=6375	max_ns=14292	mean_ns=5541	total_ns=166250
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=open,steps=0	metric=restore_ns	n=30	min_ns=70375	p50_ns=73583	p95_ns=97333	max_ns=118833	mean_ns=77229	total_ns=2316874
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=open,steps=0	result=OK	archive_bytes=2724	roundtrip_failures=0	state_hash_mismatch=0	state_hash=c1cce8d468dbe6a1b8ea7a6cea2d4449d3e545157898751e16b9d5c13868c3fe	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=save_ns	n=30	min_ns=416	p50_ns=458	p95_ns=500	max_ns=542	mean_ns=454	total_ns=13626
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=encode_archive_ns	n=30	min_ns=3500	p50_ns=3542	p95_ns=4041	max_ns=5875	mean_ns=3658	total_ns=109747
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=decode_archive_ns	n=30	min_ns=5291	p50_ns=5375	p95_ns=6792	max_ns=33625	mean_ns=6376	total_ns=191293
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=played,steps=80	metric=restore_ns	n=30	min_ns=66375	p50_ns=67417	p95_ns=74708	max_ns=82750	mean_ns=69162	total_ns=2074875
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=30,steps=80,stage=played,steps=80	result=OK	archive_bytes=2898	roundtrip_failures=0	state_hash_mismatch=0	state_hash=87e8637a9a3ac92179750694041a61c99168662743f7748a4636cc537f8d4b13	state=players=4 frames=2 parks=1 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=219 discard=29 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=210 revision=80	roundtrip_token=2400
+        0.06 real         0.01 user         0.04 sys
+             6553600  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 596  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  50  voluntary context switches
+                  19  involuntary context switches
+           768723493  instructions retired
+           209773152  cycles elapsed
+             4030872  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38

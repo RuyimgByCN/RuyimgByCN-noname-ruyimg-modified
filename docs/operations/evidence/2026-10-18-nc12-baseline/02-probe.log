@@ -1,0 +1,33 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench probe samples=5
+load_before: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+# nc12_bench scenario=probe pid=21687 profile=release
+# NC12 probe：逐档 import_extensions → bridge_pack → 建局 → 单次规划
+RESULT	scenario=probe	tier=none	config=	metric=build_ns	n=5	min_ns=6333	p50_ns=8750	p95_ns=14875	max_ns=14875	mean_ns=9366	total_ns=46834
+RESULT	scenario=probe	tier=none	config=	result=OK	dirs=	load_ns=13667	build_ns=147125	tier_dirs=	cards=124	skills=215	extension_generals=0	ruleset_version=321	state0=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	archive_bytes=1888	plan_smoke_ns=196625	plan_smoke_nodes=1	apply_smoke=Ok
+RESULT	scenario=probe	tier=swd	config=	metric=build_ns	n=5	min_ns=71209	p50_ns=81750	p95_ns=111125	max_ns=111125	mean_ns=85616	total_ns=428084
+RESULT	scenario=probe	tier=swd	config=	result=OK	dirs=shahai-swd-upstream-noname	load_ns=53126875	import_ns=51794000	bridge_ns=665042	installed_packages=41	skipped_dirs=0	package_ids=shahai-swd	content_lock_id=18039999305147582495	build_ns=152583	tier_dirs=shahai-swd-upstream-noname	cards=214	skills=429	extension_generals=79	ruleset_version=18039999305147582814	state0=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	archive_bytes=2504	plan_smoke_ns=73667	plan_smoke_nodes=1	apply_smoke=Ok
+RESULT	scenario=probe	tier=huanle	config=	metric=build_ns	n=5	min_ns=17833	p50_ns=19958	p95_ns=26875	max_ns=26875	mean_ns=20850	total_ns=104250
+RESULT	scenario=probe	tier=huanle	config=	result=OK	dirs=huanle-upstream-noname	load_ns=43643958	import_ns=42944750	bridge_ns=198375	installed_packages=41	skipped_dirs=0	package_ids=huanle-cards	content_lock_id=2530077233847515367	build_ns=48958	tier_dirs=huanle-upstream-noname	cards=131	skills=220	extension_generals=0	ruleset_version=11753449270702291366	state0=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=115 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	archive_bytes=1916	plan_smoke_ns=26792	plan_smoke_nodes=1	apply_smoke=Ok
+RESULT	scenario=probe	tier=combo	config=	metric=build_ns	n=5	min_ns=78750	p50_ns=102208	p95_ns=147417	max_ns=147417	mean_ns=109333	total_ns=546666
+RESULT	scenario=probe	tier=combo	config=	result=OK	dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname	load_ns=43049000	import_ns=41803834	bridge_ns=710542	installed_packages=41	skipped_dirs=0	package_ids=huanle-cards+shahai-swd+shahai-gujian	content_lock_id=8221081234744234947	build_ns=157958	tier_dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname	cards=261	skills=452	extension_generals=79	ruleset_version=17444453271599010434	state0=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	archive_bytes=2724	plan_smoke_ns=38875	plan_smoke_nodes=1	apply_smoke=Ok
+        0.19 real         0.01 user         0.13 sys
+             6193152  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 573  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 264  voluntary context switches
+                 161  involuntary context switches
+          1777580545  instructions retired
+           566432436  cycles elapsed
+             3965336  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16

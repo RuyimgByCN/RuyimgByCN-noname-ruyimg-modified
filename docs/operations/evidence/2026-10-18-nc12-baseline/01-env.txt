@@ -1,0 +1,50 @@
+# NC12 基线测量环境记录
+
+$ date -u
+2026年10月18日 星期日 10時23分12秒 UTC
+
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+
+$ uname -a
+Darwin ruyimg-Book-Pro-14.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:05:42 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T6031 arm64
+
+$ sysctl machdep.cpu.brand_string hw.memsize hw.ncpu hw.model
+Apple M3 Max
+38654705664
+14
+Mac15,10
+
+$ sysctl hw.perflevel0.logicalcpu hw.perflevel1.logicalcpu
+10
+4
+
+$ rustc --version; cargo --version
+rustc 1.95.0 (59807616e 2026-04-14)
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+
+$ rustup show active-toolchain
+stable-aarch64-apple-darwin (default)
+
+$ git rev-parse HEAD
+4cf05dd34ff85bbccc264a304b7d16fadf7d5275
+
+$ git log -1 --format='%H %ad %s' --date=iso
+4cf05dd34ff85bbccc264a304b7d16fadf7d5275 2026-10-18 18:14:18 +0800 feat(engine-native): NC05 第二类案例（战役/跨局档案 + 升级恢复）
+
+$ git status --short | wc -l
+     261
+
+$ git diff --stat -- crates/engine-native crates/content-native-loader crates/content-runtime | tail -3
+ crates/engine-native/tests/native_kernel.rs        | 20439 +---------
+ crates/engine-native/tests/replay_scenarios.rs     |     7 +
+ 15 files changed, 2760 insertions(+), 114454 deletions(-)
+
+$ shasum -a 256 冻结二进制与工具源码
+27dfa5693c058dd26566657e3db8c54b00e61361615f866c9a36e3d5e119b5d5  nc12_bench(frozen)
+3f293b3435b0847932effe295704d7c5ec87c9140bc8ce5efae4606654c9df8c  crates/engine-native/examples/nc12_bench.rs
+
+$ uptime
+18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16

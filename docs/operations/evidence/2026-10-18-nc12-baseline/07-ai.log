@@ -1,0 +1,73 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench ai tier=none seats=4 budgets=8,64,256 configs=1/0,1/1,2/0,2/1 cmds=200 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=ai pid=22197 profile=release
+# NC12 ai：tier=none dirs= seats=4 seed=42007 cmds=200 budgets=[8, 64, 256] configs=[(1, 0), (1, 1), (2, 0), (2, 1)]
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=0	metric=plan_action_ns	n=200	min_ns=6875	p50_ns=19334	p95_ns=73542	max_ns=180333	mean_ns=29671	total_ns=5934337
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=0	metric=nodes_per_plan	n=200	min=1	p50=1	p95=7	max=8	mean=2	total=433
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=0	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=7757583	plan_total_ns=5934337	nodes_total=433	nodes_per_sec=72965	ns_per_step_wall=38787	final_state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=48 discard=71 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=509 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=1	metric=plan_action_ns	n=200	min_ns=9417	p50_ns=19084	p95_ns=107417	max_ns=147541	mean_ns=41869	total_ns=8373882
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=1	metric=nodes_per_plan	n=200	min=1	p50=1	p95=8	max=8	mean=3	total=725
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=1	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=10329041	plan_total_ns=8373882	nodes_total=725	nodes_per_sec=86578	ns_per_step_wall=51645	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=49 discard=66 table=0 hand=4 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=472 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=0	metric=plan_action_ns	n=166	min_ns=5250	p50_ns=18834	p95_ns=81667	max_ns=179208	mean_ns=29867	total_ns=4958047
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=0	metric=nodes_per_plan	n=166	min=1	p50=1	p95=8	max=8	mean=2	total=442
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=0	result=OK	steps=166	accepted=166	rejected=0	finished=true	plan_panics=0	degraded=false	panic_steps=-	wall_ns=6396458	plan_total_ns=4958047	nodes_total=442	nodes_per_sec=89148	ns_per_step_wall=38532	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=58 discard=61 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=428 revision=166
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=1	metric=plan_action_ns	n=118	min_ns=8875	p50_ns=28250	p95_ns=112000	max_ns=147375	mean_ns=44386	total_ns=5237578
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=1	metric=nodes_per_plan	n=118	min=1	p50=3	p95=8	max=8	mean=4	total=526
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=1	result=OK	steps=118	accepted=118	rejected=0	finished=true	plan_panics=0	degraded=false	panic_steps=-	wall_ns=6382417	plan_total_ns=5237578	nodes_total=526	nodes_per_sec=100428	ns_per_step_wall=54088	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=73 discard=45 table=0 hand=4 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=277 revision=118
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=0	metric=plan_action_ns	n=200	min_ns=5042	p50_ns=18458	p95_ns=75417	max_ns=146292	mean_ns=26949	total_ns=5389876
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=0	metric=nodes_per_plan	n=200	min=1	p50=1	p95=7	max=8	mean=2	total=433
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=0	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=7204125	plan_total_ns=5389876	nodes_total=433	nodes_per_sec=80335	ns_per_step_wall=36020	final_state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=48 discard=71 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=509 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=1	metric=plan_action_ns	n=200	min_ns=9584	p50_ns=19000	p95_ns=207708	max_ns=379042	mean_ns=63223	total_ns=12644705
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=1	metric=nodes_per_plan	n=200	min=1	p50=1	p95=21	max=25	mean=5	total=1176
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=1	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=14393791	plan_total_ns=12644705	nodes_total=1176	nodes_per_sec=93003	ns_per_step_wall=71968	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=50 discard=61 table=0 hand=7 equips=6 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=482 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=0	metric=plan_action_ns	n=200	min_ns=4959	p50_ns=18709	p95_ns=101000	max_ns=149375	mean_ns=31073	total_ns=6214707
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=0	metric=nodes_per_plan	n=200	min=1	p50=1	p95=7	max=17	mean=2	total=530
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=0	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=7910125	plan_total_ns=6214707	nodes_total=530	nodes_per_sec=85281	ns_per_step_wall=39550	final_state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=48 discard=71 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=509 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=1	metric=plan_action_ns	n=200	min_ns=10000	p50_ns=27792	p95_ns=240125	max_ns=300625	mean_ns=72420	total_ns=14484166
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=1	metric=nodes_per_plan	n=200	min=1	p50=2	p95=23	max=33	mean=7	total=1421
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=1	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=16261542	plan_total_ns=14484166	nodes_total=1421	nodes_per_sec=98107	ns_per_step_wall=81307	final_state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=49 discard=65 table=0 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=489 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=0	metric=plan_action_ns	n=200	min_ns=5042	p50_ns=16458	p95_ns=63750	max_ns=134458	mean_ns=25228	total_ns=5045789
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=0	metric=nodes_per_plan	n=200	min=1	p50=1	p95=7	max=8	mean=2	total=433
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=0	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=6711584	plan_total_ns=5045789	nodes_total=433	nodes_per_sec=85814	ns_per_step_wall=33557	final_state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=48 discard=71 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=509 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=1	metric=plan_action_ns	n=200	min_ns=9750	p50_ns=18375	p95_ns=226375	max_ns=339083	mean_ns=61857	total_ns=12371486
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=1	metric=nodes_per_plan	n=200	min=1	p50=1	p95=21	max=25	mean=5	total=1176
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=1	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=14070916	plan_total_ns=12371486	nodes_total=1176	nodes_per_sec=95057	ns_per_step_wall=70354	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=50 discard=61 table=0 hand=7 equips=6 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=482 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=0	metric=plan_action_ns	n=200	min_ns=4708	p50_ns=20667	p95_ns=92917	max_ns=183792	mean_ns=31041	total_ns=6208331
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=0	metric=nodes_per_plan	n=200	min=1	p50=1	p95=7	max=17	mean=2	total=530
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=0	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=8010708	plan_total_ns=6208331	nodes_total=530	nodes_per_sec=85369	ns_per_step_wall=40053	final_state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=48 discard=71 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=509 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=1	metric=plan_action_ns	n=200	min_ns=9500	p50_ns=27209	p95_ns=222167	max_ns=300333	mean_ns=69683	total_ns=13936662
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=1	metric=nodes_per_plan	n=200	min=1	p50=2	p95=23	max=33	mean=7	total=1421
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=1	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=15683875	plan_total_ns=13936662	nodes_total=1421	nodes_per_sec=101961	ns_per_step_wall=78419	final_state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=49 discard=65 table=0 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=489 revision=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=0	compare_base=seats=4,budget=8,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=0	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=1,variant=1	compare_base=seats=4,budget=8,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=104	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=0	compare_base=seats=4,budget=8,lookahead=1,variant=0	compare_steps=166	decision_diff_steps=37	decision_len_base=200	decision_len_cur=166
+RESULT	scenario=ai	tier=none	config=seats=4,budget=8,lookahead=2,variant=1	compare_base=seats=4,budget=8,lookahead=1,variant=0	compare_steps=118	decision_diff_steps=70	decision_len_base=200	decision_len_cur=118
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=0	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=0	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=1,variant=1	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=94	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=0	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=0	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=64,lookahead=2,variant=1	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=89	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=0	compare_base=seats=4,budget=256,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=0	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=1,variant=1	compare_base=seats=4,budget=256,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=94	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=0	compare_base=seats=4,budget=256,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=0	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=none	config=seats=4,budget=256,lookahead=2,variant=1	compare_base=seats=4,budget=256,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=89	decision_len_base=200	decision_len_cur=200
+        0.12 real         0.12 user         0.00 sys
+             5980160  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 552  page reclaims
+                   8  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  70  involuntary context switches
+          2114550097  instructions retired
+           449150152  cycles elapsed
+             4129176  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38

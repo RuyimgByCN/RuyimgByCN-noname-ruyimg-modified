@@ -31,7 +31,7 @@
 | NC09 | 待完整产品验收 | [原生客户端与联机](native-convergence-plan.md#nc09)；基于 NC03/NC05 接口并行推进 |
 | NC10 | 待产品排程与质量验收 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；复用已有预算和策略 |
 | NC11 | 已登记方案，验收数据收敛待执行 | [文档与证据模型](native-convergence-plan.md#nc11)；逐来源修正过宽声明，不用文字标签认证完成 |
-| NC12 | 待实测及最终切换 | [效能与旧线退出](native-convergence-plan.md#nc12)；先测基线，退出旧入口依赖全矩阵通过 |
+| NC12 | **基线已测（2026-10-18，macOS 27.0.1 / Apple M3 Max / HEAD `4cf05dd3` / 微基准 30 样本 + 整局 3 局每组）：无扩展档六项指标取得基线（建局 p50 4.75 µs、规则结算 p50 8.2 µs、端到端命令 p50 26.9 µs、`save()` 0.29 µs、`restore` 4.8 µs、850 步长局活字节增量 +1.4 KB）；扩展档仅部分覆盖——swd 单扩展读档 30/30 被拒（弃牌堆同牌重复）、扩展档 variant-1 规划 panic 且含 1 次权威结算路径 panic、huanle variant-1 未收敛**；优化前后对比待做（本机并发 load 36.9–44.7，p95/max 受污染）；旧线退出依赖全矩阵通过 | [效能与旧线退出](native-convergence-plan.md#nc12)；[基线证据](../operations/evidence/2026-10-18-nc12-baseline/README.md) |
 
 ### NC03 核验（2026-10-18，前端适配层切片；规则 v321 / 存档 v105 未变）
 

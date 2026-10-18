@@ -1,0 +1,112 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench build tiers=none samples=30 seats=4 seed=42007
+load_before: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+# nc12_bench scenario=build pid=21691 profile=release
+# NC12 build：标准目录构建 + 三档建局（samples=30, seats=4, seed=42007）
+RESULT	scenario=build	tier=none	config=seats=4,budget=0,lookahead=0,variant=0	metric=standard_catalog_ns	n=30	min_ns=4333	p50_ns=4542	p95_ns=12750	max_ns=48125	mean_ns=7045	total_ns=211378
+RESULT	scenario=build	tier=none	config=seats=4,budget=0,lookahead=0,variant=0	metric=engine_build_ns	n=30	min_ns=4666	p50_ns=4750	p95_ns=6125	max_ns=14750	mean_ns=5263	total_ns=157919
+RESULT	scenario=build	tier=none	config=seats=4,budget=0,lookahead=0,variant=0	dirs=	seats=4	samples=30	host_load_ns=417	ruleset_version=321	archive_bytes_at_open=1888	state_at_open=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	first_error=-	tier_dirs=	cards=124	skills=215	extension_generals=0	ruleset_version=321
+        0.00 real         0.00 user         0.00 sys
+             3014656  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 380  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  11  involuntary context switches
+            25477728  instructions retired
+             9722735  cycles elapsed
+             1802624  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench build tiers=swd samples=30 seats=4 seed=42007
+load_before: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+# nc12_bench scenario=build pid=21695 profile=release
+# NC12 build：标准目录构建 + 三档建局（samples=30, seats=4, seed=42007）
+RESULT	scenario=build	tier=none	config=seats=4,budget=0,lookahead=0,variant=0	metric=standard_catalog_ns	n=30	min_ns=4208	p50_ns=4708	p95_ns=16792	max_ns=32208	mean_ns=6726	total_ns=201789
+RESULT	scenario=build	tier=swd	config=seats=4,budget=0,lookahead=0,variant=0	metric=engine_build_ns	n=30	min_ns=64417	p50_ns=72500	p95_ns=194500	max_ns=223208	mean_ns=87912	total_ns=2637374
+RESULT	scenario=build	tier=swd	config=seats=4,budget=0,lookahead=0,variant=0	dirs=shahai-swd-upstream-noname	seats=4	samples=30	host_load_ns=52875458	ruleset_version=18039999305147582814	archive_bytes_at_open=2504	state_at_open=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	first_error=-	import_ns=51581833	bridge_ns=475500	package_ids=shahai-swd	installed_packages=41	content_lock_id=18039999305147582495	tier_dirs=shahai-swd-upstream-noname	cards=214	skills=429	extension_generals=79	ruleset_version=18039999305147582814
+        0.07 real         0.00 user         0.05 sys
+             5390336  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 524  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  54  voluntary context switches
+                 248  involuntary context switches
+           639432516  instructions retired
+           220408280  cycles elapsed
+             3490200  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench build tiers=huanle samples=30 seats=4 seed=42007
+load_before: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+# nc12_bench scenario=build pid=21699 profile=release
+# NC12 build：标准目录构建 + 三档建局（samples=30, seats=4, seed=42007）
+RESULT	scenario=build	tier=none	config=seats=4,budget=0,lookahead=0,variant=0	metric=standard_catalog_ns	n=30	min_ns=4375	p50_ns=6333	p95_ns=102250	max_ns=117667	mean_ns=15097	total_ns=452915
+RESULT	scenario=build	tier=huanle	config=seats=4,budget=0,lookahead=0,variant=0	metric=engine_build_ns	n=30	min_ns=15500	p50_ns=15958	p95_ns=23333	max_ns=58584	mean_ns=18048	total_ns=541457
+RESULT	scenario=build	tier=huanle	config=seats=4,budget=0,lookahead=0,variant=0	dirs=huanle-upstream-noname	seats=4	samples=30	host_load_ns=62939375	ruleset_version=11753449270702291366	archive_bytes_at_open=1916	state_at_open=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=115 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	first_error=-	import_ns=61810708	bridge_ns=73125	package_ids=huanle-cards	installed_packages=41	content_lock_id=2530077233847515367	tier_dirs=huanle-upstream-noname	cards=131	skills=220	extension_generals=0	ruleset_version=11753449270702291366
+        0.08 real         0.00 user         0.05 sys
+             4751360  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 487  page reclaims
+                   1  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  63  voluntary context switches
+                 260  involuntary context switches
+           609076462  instructions retired
+           214841827  cycles elapsed
+             2883992  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench build tiers=combo samples=30 seats=4 seed=42007
+load_before: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16
+# nc12_bench scenario=build pid=21706 profile=release
+# NC12 build：标准目录构建 + 三档建局（samples=30, seats=4, seed=42007）
+RESULT	scenario=build	tier=none	config=seats=4,budget=0,lookahead=0,variant=0	metric=standard_catalog_ns	n=30	min_ns=4333	p50_ns=4584	p95_ns=33208	max_ns=48667	mean_ns=7788	total_ns=233664
+RESULT	scenario=build	tier=combo	config=seats=4,budget=0,lookahead=0,variant=0	metric=engine_build_ns	n=30	min_ns=73417	p50_ns=76333	p95_ns=160542	max_ns=168250	mean_ns=92508	total_ns=2775250
+RESULT	scenario=build	tier=combo	config=seats=4,budget=0,lookahead=0,variant=0	dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname	seats=4	samples=30	host_load_ns=57393208	ruleset_version=17444453271599010434	archive_bytes_at_open=2724	state_at_open=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	first_error=-	import_ns=56279541	bridge_ns=539916	package_ids=huanle-cards+shahai-swd+shahai-gujian	installed_packages=41	content_lock_id=8221081234744234947	tier_dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname	cards=261	skills=452	extension_generals=79	ruleset_version=17444453271599010434
+        0.07 real         0.01 user         0.05 sys
+             5308416  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 519  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  54  voluntary context switches
+                 306  involuntary context switches
+           646791786  instructions retired
+           227974240  cycles elapsed
+             3408280  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:52, 3 users, load averages: 42.79 25.78 20.16

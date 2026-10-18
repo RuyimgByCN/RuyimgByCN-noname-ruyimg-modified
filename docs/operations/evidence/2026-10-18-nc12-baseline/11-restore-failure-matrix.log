@@ -1,0 +1,432 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=none samples=3 steps=5 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25040 profile=release
+# NC12 archive：tier=none dirs= seats=4,samples=3,steps=5
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=save_ns	n=3	min_ns=542	p50_ns=1250	p95_ns=3000	max_ns=3000	mean_ns=1597	total_ns=4792
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=2958	p50_ns=4458	p95_ns=12167	max_ns=12167	mean_ns=6527	total_ns=19583
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=3500	p50_ns=4083	p95_ns=13167	max_ns=13167	mean_ns=6916	total_ns=20750
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=restore_ns	n=3	min_ns=8416	p50_ns=11041	p95_ns=22541	max_ns=22541	mean_ns=13999	total_ns=41998
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=open,steps=0	result=OK	archive_bytes=1888	roundtrip_failures=0	state_hash_mismatch=0	state_hash=7475104ee23e6f2b4526129cebc67f85487b8a802e701491c665f5bb6849c11f	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=save_ns	n=3	min_ns=333	p50_ns=333	p95_ns=333	max_ns=333	mean_ns=333	total_ns=999
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=encode_archive_ns	n=3	min_ns=2583	p50_ns=2625	p95_ns=3542	max_ns=3542	mean_ns=2916	total_ns=8750
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=decode_archive_ns	n=3	min_ns=3417	p50_ns=4500	p95_ns=4875	max_ns=4875	mean_ns=4264	total_ns=12792
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=restore_ns	n=3	min_ns=5416	p50_ns=8708	p95_ns=9209	max_ns=9209	mean_ns=7777	total_ns=23333
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=5,stage=played,steps=5	result=OK	archive_bytes=1893	roundtrip_failures=0	state_hash_mismatch=0	state_hash=3a355cc577fe45187612808bc41089e432f26040786c425c43c287a349a53bc8	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=106 discard=2 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=12 revision=5	roundtrip_token=15
+        0.00 real         0.00 user         0.00 sys
+             3784704  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 427  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  20  involuntary context switches
+            27284353  instructions retired
+            11903977  cycles elapsed
+             1982848  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=none samples=3 steps=20 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25044 profile=release
+# NC12 archive：tier=none dirs= seats=4,samples=3,steps=20
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=save_ns	n=3	min_ns=375	p50_ns=458	p95_ns=2500	max_ns=2500	mean_ns=1111	total_ns=3333
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=3417	p50_ns=3875	p95_ns=11791	max_ns=11791	mean_ns=6361	total_ns=19083
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=3334	p50_ns=4583	p95_ns=11791	max_ns=11791	mean_ns=6569	total_ns=19708
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=restore_ns	n=3	min_ns=7542	p50_ns=10000	p95_ns=20833	max_ns=20833	mean_ns=12791	total_ns=38375
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=open,steps=0	result=OK	archive_bytes=1888	roundtrip_failures=0	state_hash_mismatch=0	state_hash=7475104ee23e6f2b4526129cebc67f85487b8a802e701491c665f5bb6849c11f	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=save_ns	n=3	min_ns=250	p50_ns=292	p95_ns=333	max_ns=333	mean_ns=291	total_ns=875
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=encode_archive_ns	n=3	min_ns=2416	p50_ns=2459	p95_ns=3375	max_ns=3375	mean_ns=2750	total_ns=8250
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=decode_archive_ns	n=3	min_ns=3250	p50_ns=3334	p95_ns=4125	max_ns=4125	mean_ns=3569	total_ns=10709
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=restore_ns	n=3	min_ns=7041	p50_ns=7541	p95_ns=8166	max_ns=8166	mean_ns=7582	total_ns=22748
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=20,stage=played,steps=20	result=OK	archive_bytes=1903	roundtrip_failures=0	state_hash_mismatch=0	state_hash=a74f4a7196d3065256b3b92663222feb29f591ca5b66a100c9099287dcbb2148	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=102 discard=7 table=0 hand=15 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=49 revision=20	roundtrip_token=60
+        0.00 real         0.00 user         0.00 sys
+             4014080  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 442  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                   8  involuntary context switches
+            35730663  instructions retired
+            12964550  cycles elapsed
+             2195840  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=none samples=3 steps=40 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25049 profile=release
+# NC12 archive：tier=none dirs= seats=4,samples=3,steps=40
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=save_ns	n=3	min_ns=458	p50_ns=1458	p95_ns=3375	max_ns=3375	mean_ns=1763	total_ns=5291
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=2833	p50_ns=4375	p95_ns=13708	max_ns=13708	mean_ns=6972	total_ns=20916
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=3500	p50_ns=3958	p95_ns=14625	max_ns=14625	mean_ns=7361	total_ns=22083
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=restore_ns	n=3	min_ns=8000	p50_ns=10750	p95_ns=21917	max_ns=21917	mean_ns=13555	total_ns=40667
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=open,steps=0	result=OK	archive_bytes=1888	roundtrip_failures=0	state_hash_mismatch=0	state_hash=7475104ee23e6f2b4526129cebc67f85487b8a802e701491c665f5bb6849c11f	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=save_ns	n=3	min_ns=292	p50_ns=292	p95_ns=375	max_ns=375	mean_ns=319	total_ns=959
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=encode_archive_ns	n=3	min_ns=2416	p50_ns=3041	p95_ns=5875	max_ns=5875	mean_ns=3777	total_ns=11332
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=decode_archive_ns	n=3	min_ns=3333	p50_ns=3834	p95_ns=7250	max_ns=7250	mean_ns=4805	total_ns=14417
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=restore_ns	n=3	min_ns=5584	p50_ns=7500	p95_ns=19000	max_ns=19000	mean_ns=10694	total_ns=32084
+RESULT	scenario=archive	tier=none	config=seats=4,samples=3,steps=40,stage=played,steps=40	result=OK	archive_bytes=1908	roundtrip_failures=0	state_hash_mismatch=0	state_hash=7156f950d774ed30bab9d1f27041b5989c192a8b85f2da60e70067badd008b23	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=96 discard=16 table=0 hand=12 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=102 revision=40	roundtrip_token=120
+        0.00 real         0.00 user         0.00 sys
+             4210688  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 452  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  11  involuntary context switches
+            44703133  instructions retired
+            14372735  cycles elapsed
+             2392448  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=huanle samples=3 steps=5 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25055 profile=release
+# NC12 archive：tier=huanle dirs=huanle-upstream-noname seats=4,samples=3,steps=5
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=save_ns	n=3	min_ns=333	p50_ns=500	p95_ns=2750	max_ns=2750	mean_ns=1194	total_ns=3583
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=3083	p50_ns=4250	p95_ns=9792	max_ns=9792	mean_ns=5708	total_ns=17125
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=3500	p50_ns=3708	p95_ns=11709	max_ns=11709	mean_ns=6305	total_ns=18917
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=restore_ns	n=3	min_ns=20250	p50_ns=21042	p95_ns=39459	max_ns=39459	mean_ns=26917	total_ns=80751
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=open,steps=0	result=OK	archive_bytes=1916	roundtrip_failures=0	state_hash_mismatch=0	state_hash=42c8a818c7c0247c09c0c31209faac5c875680911543f098467fcbdf7816929a	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=115 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=save_ns	n=3	min_ns=291	p50_ns=333	p95_ns=333	max_ns=333	mean_ns=319	total_ns=957
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=encode_archive_ns	n=3	min_ns=3375	p50_ns=3958	p95_ns=4167	max_ns=4167	mean_ns=3833	total_ns=11500
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=decode_archive_ns	n=3	min_ns=3500	p50_ns=4333	p95_ns=4542	max_ns=4542	mean_ns=4125	total_ns=12375
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=restore_ns	n=3	min_ns=18417	p50_ns=19708	p95_ns=20333	max_ns=20333	mean_ns=19486	total_ns=58458
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=5,stage=played,steps=5	result=OK	archive_bytes=1921	roundtrip_failures=0	state_hash_mismatch=0	state_hash=a313d742fa9e2b7390d237dbc624f9238eff807f4c24a2fe4aefb869d8dcf829	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=113 discard=2 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=12 revision=5	roundtrip_token=15
+        0.07 real         0.00 user         0.05 sys
+             5488640  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 531  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                 201  involuntary context switches
+           603132386  instructions retired
+           212512393  cycles elapsed
+             3064216  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=huanle samples=3 steps=20 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25059 profile=release
+# NC12 archive：tier=huanle dirs=huanle-upstream-noname seats=4,samples=3,steps=20
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=save_ns	n=3	min_ns=375	p50_ns=1375	p95_ns=2666	max_ns=2666	mean_ns=1472	total_ns=4416
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=2584	p50_ns=3208	p95_ns=10542	max_ns=10542	mean_ns=5444	total_ns=16334
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=3375	p50_ns=3750	p95_ns=11458	max_ns=11458	mean_ns=6194	total_ns=18583
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=restore_ns	n=3	min_ns=19583	p50_ns=21000	p95_ns=36000	max_ns=36000	mean_ns=25527	total_ns=76583
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=open,steps=0	result=OK	archive_bytes=1916	roundtrip_failures=0	state_hash_mismatch=0	state_hash=42c8a818c7c0247c09c0c31209faac5c875680911543f098467fcbdf7816929a	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=115 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=save_ns	n=3	min_ns=292	p50_ns=292	p95_ns=375	max_ns=375	mean_ns=319	total_ns=959
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=encode_archive_ns	n=3	min_ns=3375	p50_ns=3958	p95_ns=4125	max_ns=4125	mean_ns=3819	total_ns=11458
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=decode_archive_ns	n=3	min_ns=3458	p50_ns=3500	p95_ns=4334	max_ns=4334	mean_ns=3764	total_ns=11292
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=restore_ns	n=3	min_ns=18792	p50_ns=19458	p95_ns=20250	max_ns=20250	mean_ns=19500	total_ns=58500
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=20,stage=played,steps=20	result=OK	archive_bytes=1931	roundtrip_failures=0	state_hash_mismatch=0	state_hash=589c0ac1aae1610964b498fe3edd49da3808e72550df6f2cc067525d6ac5f0ba	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=109 discard=7 table=0 hand=15 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=49 revision=20	roundtrip_token=60
+        0.06 real         0.00 user         0.04 sys
+             5668864  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 541  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                 100  involuntary context switches
+           610362057  instructions retired
+           197408066  cycles elapsed
+             3211648  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=huanle samples=3 steps=40 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25065 profile=release
+# NC12 archive：tier=huanle dirs=huanle-upstream-noname seats=4,samples=3,steps=40
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=save_ns	n=3	min_ns=416	p50_ns=1625	p95_ns=2542	max_ns=2542	mean_ns=1527	total_ns=4583
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=2834	p50_ns=4042	p95_ns=9833	max_ns=9833	mean_ns=5569	total_ns=16709
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=3500	p50_ns=3750	p95_ns=11541	max_ns=11541	mean_ns=6263	total_ns=18791
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=restore_ns	n=3	min_ns=18667	p50_ns=21916	p95_ns=35500	max_ns=35500	mean_ns=25361	total_ns=76083
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=open,steps=0	result=OK	archive_bytes=1916	roundtrip_failures=0	state_hash_mismatch=0	state_hash=42c8a818c7c0247c09c0c31209faac5c875680911543f098467fcbdf7816929a	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=115 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=save_ns	n=3	min_ns=292	p50_ns=333	p95_ns=334	max_ns=334	mean_ns=319	total_ns=959
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=encode_archive_ns	n=3	min_ns=2583	p50_ns=2625	p95_ns=3875	max_ns=3875	mean_ns=3027	total_ns=9083
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=decode_archive_ns	n=3	min_ns=3458	p50_ns=3500	p95_ns=4959	max_ns=4959	mean_ns=3972	total_ns=11917
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=restore_ns	n=3	min_ns=17708	p50_ns=18917	p95_ns=21208	max_ns=21208	mean_ns=19277	total_ns=57833
+RESULT	scenario=archive	tier=huanle	config=seats=4,samples=3,steps=40,stage=played,steps=40	result=OK	archive_bytes=1941	roundtrip_failures=0	state_hash_mismatch=0	state_hash=ef8dfdd08eac566e3eba1725411a2fba43de842888a3f06ee25449c14d1ebd4f	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=103 discard=17 table=0 hand=11 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=103 revision=40	roundtrip_token=120
+        0.06 real         0.00 user         0.04 sys
+             5832704  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 553  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  54  involuntary context switches
+           622119788  instructions retired
+           192449696  cycles elapsed
+             3391896  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=swd samples=3 steps=5 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25069 profile=release
+# NC12 archive：tier=swd dirs=shahai-swd-upstream-noname seats=4,samples=3,steps=5
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=save_ns	n=3	min_ns=1375	p50_ns=1875	p95_ns=3334	max_ns=3334	mean_ns=2194	total_ns=6584
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=3666	p50_ns=5417	p95_ns=15084	max_ns=15084	mean_ns=8055	total_ns=24167
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=5125	p50_ns=5875	p95_ns=14542	max_ns=14542	mean_ns=8514	total_ns=25542
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=restore_ns	n=3	min_ns=74833	p50_ns=91583	p95_ns=110084	max_ns=110084	mean_ns=92166	total_ns=276500
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=open,steps=0	result=OK	archive_bytes=2504	roundtrip_failures=0	state_hash_mismatch=0	state_hash=048f65363465eb7190866ac006f886529456485ca3193debb41f886248d64f09	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=save_ns	n=3	min_ns=375	p50_ns=416	p95_ns=417	max_ns=417	mean_ns=402	total_ns=1208
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=encode_archive_ns	n=3	min_ns=3291	p50_ns=3666	p95_ns=5167	max_ns=5167	mean_ns=4041	total_ns=12124
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=decode_archive_ns	n=3	min_ns=4750	p50_ns=5375	p95_ns=5958	max_ns=5958	mean_ns=5361	total_ns=16083
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=restore_ns	n=3	min_ns=63500	p50_ns=66583	p95_ns=68416	max_ns=68416	mean_ns=66166	total_ns=198499
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=5,stage=played,steps=5	result=OK	archive_bytes=2509	roundtrip_failures=0	state_hash_mismatch=0	state_hash=c1a664c3416501579b39f80aa6193e2e42a2f9de2316ebfd7c28b31b187914b3	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=195 discard=3 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=14 revision=5	roundtrip_token=15
+        0.06 real         0.00 user         0.04 sys
+             6078464  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 566  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  37  involuntary context switches
+           616461171  instructions retired
+           191665289  cycles elapsed
+             3555736  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=swd samples=3 steps=20 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25073 profile=release
+# NC12 archive：tier=swd dirs=shahai-swd-upstream-noname seats=4,samples=3,steps=20
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=save_ns	n=3	min_ns=500	p50_ns=1583	p95_ns=3083	max_ns=3083	mean_ns=1722	total_ns=5166
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=3500	p50_ns=3875	p95_ns=10417	max_ns=10417	mean_ns=5930	total_ns=17792
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=4875	p50_ns=5667	p95_ns=13875	max_ns=13875	mean_ns=8139	total_ns=24417
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=restore_ns	n=3	min_ns=74209	p50_ns=86208	p95_ns=102459	max_ns=102459	mean_ns=87625	total_ns=262876
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=open,steps=0	result=OK	archive_bytes=2504	roundtrip_failures=0	state_hash_mismatch=0	state_hash=048f65363465eb7190866ac006f886529456485ca3193debb41f886248d64f09	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=save_ns	n=3	min_ns=416	p50_ns=542	p95_ns=667	max_ns=667	mean_ns=541	total_ns=1625
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=encode_archive_ns	n=3	min_ns=3500	p50_ns=3958	p95_ns=4041	max_ns=4041	mean_ns=3833	total_ns=11499
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=decode_archive_ns	n=3	min_ns=4917	p50_ns=5042	p95_ns=5666	max_ns=5666	mean_ns=5208	total_ns=15625
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=restore_ns	n=3	min_ns=69166	p50_ns=75209	p95_ns=81125	max_ns=81125	mean_ns=75166	total_ns=225500
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=20,stage=played,steps=20	result=FAIL	archive_bytes=2523	roundtrip_failures=3	state_hash_mismatch=0	state_hash=9d6fcb2ea85b527169489655e54b00f63346be7897f9df29047bb1c17ff804e9	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=191 discard=9 table=0 hand=15 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=58 revision=20	roundtrip_token=0
+        0.05 real         0.00 user         0.04 sys
+             6193152  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 574  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  26  involuntary context switches
+           628822325  instructions retired
+           186157804  cycles elapsed
+             3588504  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=swd samples=3 steps=40 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25077 profile=release
+# NC12 archive：tier=swd dirs=shahai-swd-upstream-noname seats=4,samples=3,steps=40
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=save_ns	n=3	min_ns=583	p50_ns=2875	p95_ns=3042	max_ns=3042	mean_ns=2166	total_ns=6500
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=3625	p50_ns=4667	p95_ns=13000	max_ns=13000	mean_ns=7097	total_ns=21292
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=5042	p50_ns=5708	p95_ns=14916	max_ns=14916	mean_ns=8555	total_ns=25666
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=restore_ns	n=3	min_ns=77084	p50_ns=91000	p95_ns=104625	max_ns=104625	mean_ns=90903	total_ns=272709
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=open,steps=0	result=OK	archive_bytes=2504	roundtrip_failures=0	state_hash_mismatch=0	state_hash=048f65363465eb7190866ac006f886529456485ca3193debb41f886248d64f09	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+restore 失败: IdOutOfBounds { what: "card_in_multiple_zones", got: 13 }
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	diagnostic=restore_reject	what=card_in_multiple_zones	card=13	card_name=sha	counted=[discard=2] uncounted=[declared_kinds] parks=0 card_name=sha
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=save_ns	n=3	min_ns=459	p50_ns=583	p95_ns=750	max_ns=750	mean_ns=597	total_ns=1792
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=encode_archive_ns	n=3	min_ns=3708	p50_ns=3875	p95_ns=4250	max_ns=4250	mean_ns=3944	total_ns=11833
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=decode_archive_ns	n=3	min_ns=4958	p50_ns=5208	p95_ns=6125	max_ns=6125	mean_ns=5430	total_ns=16291
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=restore_ns	n=3	min_ns=78125	p50_ns=81208	p95_ns=89792	max_ns=89792	mean_ns=83041	total_ns=249125
+RESULT	scenario=archive	tier=swd	config=seats=4,samples=3,steps=40,stage=played,steps=40	result=FAIL	archive_bytes=2533	roundtrip_failures=3	state_hash_mismatch=0	state_hash=ccad776a61bf3ebb8541c21df3762b41405b422a2fdf8831e7ee769d6de69375	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=184 discard=20 table=0 hand=11 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=117 revision=40	roundtrip_token=0
+        0.05 real         0.00 user         0.03 sys
+             6373376  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 584  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  21  involuntary context switches
+           644182861  instructions retired
+           175946622  cycles elapsed
+             3768728  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=combo samples=3 steps=5 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25081 profile=release
+# NC12 archive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,samples=3,steps=5
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=save_ns	n=3	min_ns=584	p50_ns=625	p95_ns=3750	max_ns=3750	mean_ns=1653	total_ns=4959
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=4083	p50_ns=5458	p95_ns=10958	max_ns=10958	mean_ns=6833	total_ns=20499
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=5666	p50_ns=6542	p95_ns=15500	max_ns=15500	mean_ns=9236	total_ns=27708
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=open,steps=0	metric=restore_ns	n=3	min_ns=90542	p50_ns=106375	p95_ns=124542	max_ns=124542	mean_ns=107153	total_ns=321459
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=open,steps=0	result=OK	archive_bytes=2724	roundtrip_failures=0	state_hash_mismatch=0	state_hash=c1cce8d468dbe6a1b8ea7a6cea2d4449d3e545157898751e16b9d5c13868c3fe	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=save_ns	n=3	min_ns=417	p50_ns=417	p95_ns=417	max_ns=417	mean_ns=417	total_ns=1251
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=encode_archive_ns	n=3	min_ns=3709	p50_ns=3709	p95_ns=4459	max_ns=4459	mean_ns=3959	total_ns=11877
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=decode_archive_ns	n=3	min_ns=5166	p50_ns=5334	p95_ns=6292	max_ns=6292	mean_ns=5597	total_ns=16792
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=played,steps=5	metric=restore_ns	n=3	min_ns=78667	p50_ns=80084	p95_ns=84750	max_ns=84750	mean_ns=81167	total_ns=243501
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=5,stage=played,steps=5	result=OK	archive_bytes=2729	roundtrip_failures=0	state_hash_mismatch=0	state_hash=db6b32c442097aa903d85abd55ab48efdb131b29ce7e0a05f4aa232b125c930f	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=243 discard=2 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=12 revision=5	roundtrip_token=15
+        0.06 real         0.00 user         0.03 sys
+             6078464  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 566  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  20  involuntary context switches
+           615995365  instructions retired
+           168542217  cycles elapsed
+             3604888  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=combo samples=3 steps=20 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25085 profile=release
+# NC12 archive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,samples=3,steps=20
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=save_ns	n=3	min_ns=625	p50_ns=2375	p95_ns=3084	max_ns=3084	mean_ns=2028	total_ns=6084
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=4042	p50_ns=4584	p95_ns=10333	max_ns=10333	mean_ns=6319	total_ns=18959
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=5250	p50_ns=5750	p95_ns=14500	max_ns=14500	mean_ns=8500	total_ns=25500
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=open,steps=0	metric=restore_ns	n=3	min_ns=85583	p50_ns=94583	p95_ns=116875	max_ns=116875	mean_ns=99013	total_ns=297041
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=open,steps=0	result=OK	archive_bytes=2724	roundtrip_failures=0	state_hash_mismatch=0	state_hash=c1cce8d468dbe6a1b8ea7a6cea2d4449d3e545157898751e16b9d5c13868c3fe	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=save_ns	n=3	min_ns=375	p50_ns=375	p95_ns=417	max_ns=417	mean_ns=389	total_ns=1167
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=encode_archive_ns	n=3	min_ns=3458	p50_ns=3708	p95_ns=4417	max_ns=4417	mean_ns=3861	total_ns=11583
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=decode_archive_ns	n=3	min_ns=5125	p50_ns=6125	p95_ns=6958	max_ns=6958	mean_ns=6069	total_ns=18208
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=played,steps=20	metric=restore_ns	n=3	min_ns=73833	p50_ns=79583	p95_ns=88167	max_ns=88167	mean_ns=80527	total_ns=241583
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=20,stage=played,steps=20	result=OK	archive_bytes=2739	roundtrip_failures=0	state_hash_mismatch=0	state_hash=8920368d37b4e515ceb23732fe93c486b4335e044e03310d9e05cdcc0001b3c2	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=239 discard=7 table=0 hand=15 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=49 revision=20	roundtrip_token=60
+        0.05 real         0.00 user         0.03 sys
+             6176768  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 572  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  12  involuntary context switches
+           631571447  instructions retired
+           169958834  cycles elapsed
+             3686808  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench archive tier=combo samples=3 steps=40 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35
+# nc12_bench scenario=archive pid=25089 profile=release
+# NC12 archive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,samples=3,steps=40
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=save_ns	n=3	min_ns=583	p50_ns=1833	p95_ns=3208	max_ns=3208	mean_ns=1874	total_ns=5624
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=encode_archive_ns	n=3	min_ns=4083	p50_ns=4667	p95_ns=11542	max_ns=11542	mean_ns=6764	total_ns=20292
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=decode_archive_ns	n=3	min_ns=5375	p50_ns=5917	p95_ns=14625	max_ns=14625	mean_ns=8639	total_ns=25917
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=open,steps=0	metric=restore_ns	n=3	min_ns=87334	p50_ns=98167	p95_ns=121167	max_ns=121167	mean_ns=102222	total_ns=306668
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=open,steps=0	result=OK	archive_bytes=2724	roundtrip_failures=0	state_hash_mismatch=0	state_hash=c1cce8d468dbe6a1b8ea7a6cea2d4449d3e545157898751e16b9d5c13868c3fe	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	roundtrip_token=0
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=save_ns	n=3	min_ns=375	p50_ns=416	p95_ns=417	max_ns=417	mean_ns=402	total_ns=1208
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=encode_archive_ns	n=3	min_ns=3625	p50_ns=3792	p95_ns=4208	max_ns=4208	mean_ns=3875	total_ns=11625
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=decode_archive_ns	n=3	min_ns=5125	p50_ns=5708	p95_ns=6375	max_ns=6375	mean_ns=5736	total_ns=17208
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=played,steps=40	metric=restore_ns	n=3	min_ns=76667	p50_ns=77417	p95_ns=81792	max_ns=81792	mean_ns=78625	total_ns=235876
+RESULT	scenario=archive	tier=combo	config=seats=4,samples=3,steps=40,stage=played,steps=40	result=OK	archive_bytes=2749	roundtrip_failures=0	state_hash_mismatch=0	state_hash=f2538cdf99c33b0e3c69e872f97699c89947451e3598be2456c29dcafbc064dd	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=233 discard=16 table=0 hand=12 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=102 revision=40	roundtrip_token=120
+        0.05 real         0.00 user         0.03 sys
+             6225920  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 576  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  10  involuntary context switches
+           647391849  instructions retired
+           172331345  cycles elapsed
+             3735960  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 36.85 25.83 20.35

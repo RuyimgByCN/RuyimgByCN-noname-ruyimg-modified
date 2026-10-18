@@ -1,0 +1,545 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=none seats=4 budget=8 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21942 profile=release
+# NC12 drive：tier=none dirs= seats=4,budget=8,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=0	game=0	steps=217	accepted=188	pending=29	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=11960084	events=514	nodes_total=773	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=43 discard=73 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=514 revision=217
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=plan_ns	n=217	min_ns=10542	p50_ns=20667	p95_ns=113583	max_ns=190791	mean_ns=45201	total_ns=9808749
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=submit_ns	n=217	min_ns=1542	p50_ns=8833	p95_ns=17334	max_ns=25959	mean_ns=9808	total_ns=2128370
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=cmd_ns	n=217	min_ns=14291	p50_ns=29376	p95_ns=129792	max_ns=213999	mean_ns=55009	total_ns=11937119
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=0	steps=217	accepted=188	pending=29	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=514	wall_ns=11960084	nodes_total=773	budget_exhausted_steps=48	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=43 discard=73 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=514 revision=217
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=1	game=1	steps=175	accepted=143	pending=32	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=8619916	events=402	nodes_total=648	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=59 discard=59 table=0 hand=4 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=402 revision=175
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=plan_ns	n=175	min_ns=9125	p50_ns=19583	p95_ns=102375	max_ns=125125	mean_ns=40543	total_ns=7095116
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=submit_ns	n=175	min_ns=1625	p50_ns=8042	p95_ns=19125	max_ns=22292	mean_ns=8581	total_ns=1501710
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=cmd_ns	n=175	min_ns=11458	p50_ns=27459	p95_ns=115709	max_ns=145583	mean_ns=49124	total_ns=8596826
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=1	steps=175	accepted=143	pending=32	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=402	wall_ns=8619916	nodes_total=648	budget_exhausted_steps=42	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=59 discard=59 table=0 hand=4 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=402 revision=175
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=2	game=2	steps=304	accepted=260	pending=44	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=17398834	events=708	nodes_total=1102	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=9 discard=107 table=0 hand=4 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=708 revision=304
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=plan_ns	n=304	min_ns=7500	p50_ns=23625	p95_ns=122666	max_ns=145875	mean_ns=47986	total_ns=14587793
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=submit_ns	n=304	min_ns=1292	p50_ns=8500	p95_ns=15375	max_ns=27834	mean_ns=9140	total_ns=2778656
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=cmd_ns	n=304	min_ns=10042	p50_ns=31834	p95_ns=134666	max_ns=160333	mean_ns=57126	total_ns=17366449
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,game=2	steps=304	accepted=260	pending=44	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=708	wall_ns=17398834	nodes_total=1102	budget_exhausted_steps=57	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=9 discard=107 table=0 hand=4 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=708 revision=304
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=plan_ns	n=696	min_ns=7500	p50_ns=21875	p95_ns=113959	max_ns=190791	mean_ns=45246	total_ns=31491658
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=submit_ns	n=696	min_ns=1292	p50_ns=8459	p95_ns=16708	max_ns=27834	mean_ns=9207	total_ns=6408736
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=cmd_ns	n=696	min_ns=10042	p50_ns=30666	p95_ns=127334	max_ns=213999	mean_ns=54454	total_ns=37900394
+RESULT	scenario=drive	tier=none	config=seats=4,budget=8,lookahead=1,variant=1,all_games	result=OK	games=3	steps=696	finished_games=3	stalled_games=0	plan_panics=0	degraded=false	wall_ns=37978834	ns_per_step_wall=54567	nodes_total=2523	nodes_per_sec_plan=80116	events=1624
+        0.04 real         0.03 user         0.00 sys
+             5931008  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 557  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  19  involuntary context switches
+           677465491  instructions retired
+           146854999  cycles elapsed
+             4129176  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=none seats=4 budget=64 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21946 profile=release
+# NC12 drive：tier=none dirs= seats=4,budget=64,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=0	game=0	steps=379	accepted=321	pending=58	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=30062334	events=933	nodes_total=1966	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=15 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=933 revision=379
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=plan_ns	n=379	min_ns=9750	p50_ns=25791	p95_ns=215417	max_ns=408708	mean_ns=70284	total_ns=26638007
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=submit_ns	n=379	min_ns=2041	p50_ns=8500	p95_ns=16375	max_ns=35125	mean_ns=8917	total_ns=3379910
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=cmd_ns	n=379	min_ns=16625	p50_ns=34584	p95_ns=223542	max_ns=427666	mean_ns=79202	total_ns=30017917
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=0	steps=379	accepted=321	pending=58	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=933	wall_ns=30062334	nodes_total=1966	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=15 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=933 revision=379
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=1	game=1	steps=406	accepted=345	pending=61	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=30505583	events=1009	nodes_total=2077	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=91 discard=24 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1009 revision=406
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=plan_ns	n=406	min_ns=9667	p50_ns=26834	p95_ns=215375	max_ns=388750	mean_ns=66393	total_ns=26955671
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=submit_ns	n=406	min_ns=1583	p50_ns=8375	p95_ns=15084	max_ns=45583	mean_ns=8637	total_ns=3506994
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=cmd_ns	n=406	min_ns=16667	p50_ns=35209	p95_ns=226959	max_ns=404458	mean_ns=75031	total_ns=30462665
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=1	steps=406	accepted=345	pending=61	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=1009	wall_ns=30505583	nodes_total=2077	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=91 discard=24 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1009 revision=406
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=2	game=2	steps=240	accepted=208	pending=32	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=15207416	events=599	nodes_total=1209	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=26 discard=90 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=599 revision=240
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=plan_ns	n=240	min_ns=9167	p50_ns=19750	p95_ns=170375	max_ns=240958	mean_ns=54820	total_ns=13156960
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=submit_ns	n=240	min_ns=2417	p50_ns=8083	p95_ns=15625	max_ns=23250	mean_ns=8444	total_ns=2026796
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=cmd_ns	n=240	min_ns=16125	p50_ns=28083	p95_ns=186125	max_ns=257792	mean_ns=63265	total_ns=15183756
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,game=2	steps=240	accepted=208	pending=32	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=599	wall_ns=15207416	nodes_total=1209	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=26 discard=90 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=599 revision=240
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=plan_ns	n=1025	min_ns=9167	p50_ns=25500	p95_ns=211792	max_ns=408708	mean_ns=65122	total_ns=66750638
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=submit_ns	n=1025	min_ns=1583	p50_ns=8333	p95_ns=15584	max_ns=45583	mean_ns=8696	total_ns=8913700
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=cmd_ns	n=1025	min_ns=16125	p50_ns=34125	p95_ns=221541	max_ns=427666	mean_ns=73818	total_ns=75664338
+RESULT	scenario=drive	tier=none	config=seats=4,budget=64,lookahead=1,variant=1,all_games	result=OK	games=3	steps=1025	finished_games=3	stalled_games=0	plan_panics=0	degraded=false	wall_ns=75775333	ns_per_step_wall=73927	nodes_total=5252	nodes_per_sec_plan=78680	events=2541
+        0.08 real         0.07 user         0.00 sys
+             6111232  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 569  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  29  involuntary context switches
+          1353058160  instructions retired
+           284661343  cycles elapsed
+             4325784  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=none seats=4 budget=256 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21951 profile=release
+# NC12 drive：tier=none dirs= seats=4,budget=256,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=0	game=0	steps=379	accepted=321	pending=58	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=30103958	events=933	nodes_total=1966	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=15 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=933 revision=379
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=plan_ns	n=379	min_ns=10375	p50_ns=26541	p95_ns=216375	max_ns=371583	mean_ns=70436	total_ns=26695493
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=submit_ns	n=379	min_ns=2084	p50_ns=8541	p95_ns=15458	max_ns=60792	mean_ns=8892	total_ns=3370422
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=cmd_ns	n=379	min_ns=17375	p50_ns=35708	p95_ns=225042	max_ns=390875	mean_ns=79329	total_ns=30065915
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=0	steps=379	accepted=321	pending=58	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=933	wall_ns=30103958	nodes_total=1966	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=15 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=933 revision=379
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=1	game=1	steps=406	accepted=345	pending=61	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=29867709	events=1009	nodes_total=2077	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=91 discard=24 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1009 revision=406
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=plan_ns	n=406	min_ns=9083	p50_ns=26500	p95_ns=206375	max_ns=380000	mean_ns=65050	total_ns=26410509
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=submit_ns	n=406	min_ns=2084	p50_ns=8167	p95_ns=15000	max_ns=27041	mean_ns=8400	total_ns=3410732
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=cmd_ns	n=406	min_ns=15916	p50_ns=34833	p95_ns=215125	max_ns=395291	mean_ns=73451	total_ns=29821241
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=1	steps=406	accepted=345	pending=61	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=1009	wall_ns=29867709	nodes_total=2077	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=91 discard=24 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1009 revision=406
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=2	game=2	steps=240	accepted=208	pending=32	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=15217167	events=599	nodes_total=1209	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=26 discard=90 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=599 revision=240
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=plan_ns	n=240	min_ns=9041	p50_ns=19542	p95_ns=168250	max_ns=239292	mean_ns=54685	total_ns=13124628
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=submit_ns	n=240	min_ns=2375	p50_ns=8042	p95_ns=15625	max_ns=22916	mean_ns=8632	total_ns=2071825
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=cmd_ns	n=240	min_ns=16208	p50_ns=27918	p95_ns=185626	max_ns=250834	mean_ns=63318	total_ns=15196453
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,game=2	steps=240	accepted=208	pending=32	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=599	wall_ns=15217167	nodes_total=1209	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=26 discard=90 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=599 revision=240
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=plan_ns	n=1025	min_ns=9041	p50_ns=26084	p95_ns=206375	max_ns=380000	mean_ns=64615	total_ns=66230630
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=submit_ns	n=1025	min_ns=2084	p50_ns=8333	p95_ns=15458	max_ns=60792	mean_ns=8637	total_ns=8852979
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=cmd_ns	n=1025	min_ns=15916	p50_ns=34667	p95_ns=217124	max_ns=395291	mean_ns=73252	total_ns=75083609
+RESULT	scenario=drive	tier=none	config=seats=4,budget=256,lookahead=1,variant=1,all_games	result=OK	games=3	steps=1025	finished_games=3	stalled_games=0	plan_panics=0	degraded=false	wall_ns=75188834	ns_per_step_wall=73354	nodes_total=5252	nodes_per_sec_plan=79298	events=2541
+        0.07 real         0.07 user         0.00 sys
+             6242304  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 577  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  20  involuntary context switches
+          1357773000  instructions retired
+           283491622  cycles elapsed
+             4456856  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=swd seats=4 budget=8 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21956 profile=release
+# NC12 drive：tier=swd dirs=shahai-swd-upstream-noname seats=4,budget=8,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=0	game=0	steps=100	accepted=87	pending=13	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=7467750	events=280	nodes_total=373	final_state=players=4 frames=0 parks=0 skills=8 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=160 discard=47 table=1 hand=5 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=280 revision=100
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=plan_ns	n=100	min_ns=12375	p50_ns=27000	p95_ns=137416	max_ns=277791	mean_ns=60857	total_ns=6085792
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=submit_ns	n=100	min_ns=1916	p50_ns=12791	p95_ns=20834	max_ns=37709	mean_ns=13702	total_ns=1370209
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=cmd_ns	n=100	min_ns=16250	p50_ns=41250	p95_ns=158541	max_ns=311208	mean_ns=74560	total_ns=7456001
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=0	steps=100	accepted=87	pending=13	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=280	wall_ns=7467750	nodes_total=373	budget_exhausted_steps=27	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=8 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=160 discard=47 table=1 hand=5 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=280 revision=100
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=1	game=1	steps=323	accepted=281	pending=42	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=25661292	events=848	nodes_total=1190	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=74 discard=137 table=3 hand=0 equips=0 judge=0 off_court=2 lianyaohu_store=0 zhucheng=0 log=848 revision=323
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=plan_ns	n=323	min_ns=12125	p50_ns=31750	p95_ns=162292	max_ns=200834	mean_ns=65864	total_ns=21274165
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=submit_ns	n=323	min_ns=1750	p50_ns=12708	p95_ns=23542	max_ns=43667	mean_ns=13485	total_ns=4355709
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=cmd_ns	n=323	min_ns=13875	p50_ns=44374	p95_ns=183542	max_ns=229168	mean_ns=79349	total_ns=25629874
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=1	steps=323	accepted=281	pending=42	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=848	wall_ns=25661292	nodes_total=1190	budget_exhausted_steps=81	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=74 discard=137 table=3 hand=0 equips=0 judge=0 off_court=2 lianyaohu_store=0 zhucheng=0 log=848 revision=323
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=2	game=2	steps=223	accepted=193	pending=30	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=16433709	events=551	nodes_total=827	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=123 discard=74 table=8 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=551 revision=223
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=plan_ns	n=223	min_ns=10791	p50_ns=27041	p95_ns=147459	max_ns=286250	mean_ns=59744	total_ns=13322950
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=submit_ns	n=223	min_ns=1625	p50_ns=12292	p95_ns=25834	max_ns=70542	mean_ns=13858	total_ns=3090465
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=cmd_ns	n=223	min_ns=14500	p50_ns=40709	p95_ns=173750	max_ns=304167	mean_ns=73602	total_ns=16413415
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,game=2	steps=223	accepted=193	pending=30	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=551	wall_ns=16433709	nodes_total=827	budget_exhausted_steps=55	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=123 discard=74 table=8 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=551 revision=223
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=plan_ns	n=646	min_ns=10791	p50_ns=30667	p95_ns=160000	max_ns=286250	mean_ns=62976	total_ns=40682907
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=submit_ns	n=646	min_ns=1625	p50_ns=12500	p95_ns=23542	max_ns=70542	mean_ns=13647	total_ns=8816383
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=cmd_ns	n=646	min_ns=13875	p50_ns=42667	p95_ns=178917	max_ns=311208	mean_ns=76624	total_ns=49499290
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=8,lookahead=1,variant=1,all_games	result=OK	games=3	steps=646	finished_games=3	stalled_games=0	plan_panics=0	degraded=false	wall_ns=49562751	ns_per_step_wall=76722	nodes_total=2390	nodes_per_sec_plan=58747	events=1679
+        0.11 real         0.05 user         0.04 sys
+             7684096  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 664  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  57  involuntary context switches
+          1439208274  instructions retired
+           364821964  cycles elapsed
+             5046680  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=swd seats=4 budget=64 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21962 profile=release
+# NC12 drive：tier=swd dirs=shahai-swd-upstream-noname seats=4,budget=64,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=0	game=0	steps=193	accepted=166	pending=27	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=20368667	events=498	nodes_total=1150	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=139 discard=67 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=498 revision=193
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=plan_ns	n=193	min_ns=16958	p50_ns=23791	p95_ns=324250	max_ns=504750	mean_ns=92619	total_ns=17875549
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=submit_ns	n=193	min_ns=3000	p50_ns=11958	p95_ns=21709	max_ns=49458	mean_ns=12813	total_ns=2472992
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=cmd_ns	n=193	min_ns=28458	p50_ns=38083	p95_ns=328875	max_ns=554208	mean_ns=105432	total_ns=20348541
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=0	steps=193	accepted=166	pending=27	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=498	wall_ns=20368667	nodes_total=1150	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=139 discard=67 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=498 revision=193
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=1	game=1	steps=273	accepted=228	pending=45	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=31071792	events=734	nodes_total=1733	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=100 table=1 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=734 revision=273
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=plan_ns	n=273	min_ns=10791	p50_ns=28625	p95_ns=355417	max_ns=531458	mean_ns=100878	total_ns=27539793
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=submit_ns	n=273	min_ns=1500	p50_ns=12209	p95_ns=23625	max_ns=59416	mean_ns=12823	total_ns=3500709
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=cmd_ns	n=273	min_ns=12291	p50_ns=41667	p95_ns=379667	max_ns=590874	mean_ns=113701	total_ns=31040502
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=64,lookahead=1,variant=1,game=1	steps=273	accepted=228	pending=45	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=734	wall_ns=31071792	nodes_total=1733	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=100 table=1 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=734 revision=273
+
+thread 'main' (19519388) panicked at crates/engine-native/src/machine.rs:408:32:
+card 204 not in hand of 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+        0.13 real         0.06 user         0.05 sys
+             7520256  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 654  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                 130  involuntary context switches
+          1629404461  instructions retired
+           420679072  cycles elapsed
+             4784536  peak memory footprint
+exit=101
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=swd seats=4 budget=256 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21966 profile=release
+# NC12 drive：tier=swd dirs=shahai-swd-upstream-noname seats=4,budget=256,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=0	game=0	steps=193	accepted=166	pending=27	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=20485959	events=498	nodes_total=1150	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=139 discard=67 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=498 revision=193
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=plan_ns	n=193	min_ns=16583	p50_ns=24083	p95_ns=325875	max_ns=430833	mean_ns=92967	total_ns=17942741
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=submit_ns	n=193	min_ns=3042	p50_ns=12500	p95_ns=23250	max_ns=38667	mean_ns=13075	total_ns=2523543
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=cmd_ns	n=193	min_ns=28083	p50_ns=37292	p95_ns=330458	max_ns=467666	mean_ns=106042	total_ns=20466284
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=0	steps=193	accepted=166	pending=27	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=498	wall_ns=20485959	nodes_total=1150	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=139 discard=67 table=0 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=498 revision=193
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=1	game=1	steps=273	accepted=228	pending=45	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=30617042	events=734	nodes_total=1733	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=100 table=1 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=734 revision=273
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=plan_ns	n=273	min_ns=11042	p50_ns=27959	p95_ns=350084	max_ns=493542	mean_ns=99520	total_ns=27169044
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=submit_ns	n=273	min_ns=1583	p50_ns=11958	p95_ns=22834	max_ns=42667	mean_ns=12500	total_ns=3412709
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=cmd_ns	n=273	min_ns=12625	p50_ns=40833	p95_ns=376042	max_ns=521876	mean_ns=112021	total_ns=30581753
+RESULT	scenario=drive	tier=swd	config=seats=4,budget=256,lookahead=1,variant=1,game=1	steps=273	accepted=228	pending=45	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=734	wall_ns=30617042	nodes_total=1733	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=100 table=1 hand=5 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=734 revision=273
+
+thread 'main' (19519427) panicked at crates/engine-native/src/machine.rs:408:32:
+card 204 not in hand of 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+        0.12 real         0.06 user         0.04 sys
+             7536640  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 655  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                  62  involuntary context switches
+          1624887920  instructions retired
+           406035846  cycles elapsed
+             4800920  peak memory footprint
+exit=101
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=huanle seats=4 budget=8 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21973 profile=release
+# NC12 drive：tier=huanle dirs=huanle-upstream-noname seats=4,budget=8,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+
+thread 'main' (19519445) panicked at crates/engine-native/src/kernel/monkey.rs:73:26:
+被拦截的桃应在使用者手牌
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+PANIC caught in plan_action: step=178 seat=3 revision=178 msg=被拦截的桃应在使用者手牌
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=0	game=0	steps=227	accepted=190	pending=37	rejected=0	finished=true	stalled=false	plan_panics=1	degraded=true	wall_ns=13059292	events=561	nodes_total=816	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=39 discard=85 table=0 hand=4 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=561 revision=227
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=plan_ns	n=227	min_ns=10750	p50_ns=23875	p95_ns=125833	max_ns=176375	mean_ns=47816	total_ns=10854326
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=submit_ns	n=227	min_ns=2083	p50_ns=9041	p95_ns=16667	max_ns=26958	mean_ns=9616	total_ns=2182947
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=cmd_ns	n=227	min_ns=15584	p50_ns=34374	p95_ns=136333	max_ns=197542	mean_ns=57432	total_ns=13037273
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=0	steps=227	accepted=190	pending=37	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=561	wall_ns=13059292	nodes_total=816	budget_exhausted_steps=53	deadline_timeout_steps=0	plan_panics=1	panic_steps=178@seat3	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=39 discard=85 table=0 hand=4 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=561 revision=227
+
+thread 'main' (19519445) panicked at crates/engine-native/src/kernel/monkey.rs:73:26:
+被拦截的桃应在使用者手牌
+PANIC caught in plan_action: step=310 seat=3 revision=310 msg=被拦截的桃应在使用者手牌
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=1	game=1	steps=509	accepted=442	pending=67	rejected=0	finished=true	stalled=false	plan_panics=1	degraded=true	wall_ns=35995458	events=1217	nodes_total=1758	final_state=players=4 frames=0 parks=0 skills=2 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=70 discard=54 table=0 hand=3 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1217 revision=509
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=plan_ns	n=509	min_ns=10209	p50_ns=33209	p95_ns=162542	max_ns=231958	mean_ns=60415	total_ns=30751634
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=submit_ns	n=509	min_ns=1541	p50_ns=9375	p95_ns=18042	max_ns=77000	mean_ns=10192	total_ns=5187991
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=cmd_ns	n=509	min_ns=17584	p50_ns=43000	p95_ns=176583	max_ns=243750	mean_ns=70608	total_ns=35939625
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=1	steps=509	accepted=442	pending=67	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=1217	wall_ns=35995458	nodes_total=1758	budget_exhausted_steps=86	deadline_timeout_steps=0	plan_panics=1	panic_steps=310@seat3	final_state=players=4 frames=0 parks=0 skills=2 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=70 discard=54 table=0 hand=3 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1217 revision=509
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=2	game=2	steps=196	accepted=172	pending=24	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=10000500	events=473	nodes_total=691	final_state=players=4 frames=0 parks=0 skills=1 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=50 discard=72 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=473 revision=196
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=plan_ns	n=196	min_ns=8041	p50_ns=19625	p95_ns=112750	max_ns=142791	mean_ns=41307	total_ns=8096216
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=submit_ns	n=196	min_ns=1625	p50_ns=9042	p95_ns=18125	max_ns=26208	mean_ns=9624	total_ns=1886417
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=cmd_ns	n=196	min_ns=11250	p50_ns=28917	p95_ns=127459	max_ns=155625	mean_ns=50931	total_ns=9982633
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,game=2	steps=196	accepted=172	pending=24	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=473	wall_ns=10000500	nodes_total=691	budget_exhausted_steps=42	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=1 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=50 discard=72 table=0 hand=5 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=473 revision=196
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=plan_ns	n=932	min_ns=8041	p50_ns=30833	p95_ns=147250	max_ns=231958	mean_ns=53328	total_ns=49702176
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=submit_ns	n=932	min_ns=1541	p50_ns=9166	p95_ns=17625	max_ns=77000	mean_ns=9932	total_ns=9257355
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=cmd_ns	n=932	min_ns=11250	p50_ns=40250	p95_ns=159458	max_ns=243750	mean_ns=63261	total_ns=58959531
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=8,lookahead=1,variant=1,all_games	result=OK	games=3	steps=932	finished_games=3	stalled_games=0	plan_panics=2	degraded=true	wall_ns=59055250	ns_per_step_wall=63364	nodes_total=3265	nodes_per_sec_plan=65691	events=2251
+        0.15 real         0.06 user         0.05 sys
+             7585792  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 658  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                 295  involuntary context switches
+          1559987340  instructions retired
+           433093767  cycles elapsed
+             4915608  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=huanle seats=4 budget=64 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 42.11 26.22 20.38
+# nc12_bench scenario=drive pid=21979 profile=release
+# NC12 drive：tier=huanle dirs=huanle-upstream-noname seats=4,budget=64,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=0	game=0	steps=4000	accepted=2451	pending=1549	rejected=0	finished=false	stalled=false	plan_panics=0	degraded=false	wall_ns=1756183250	events=11512	nodes_total=16390	final_state=players=4 frames=3 parks=1 skills=3 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=83 discard=30 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11512 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=plan_ns	n=4000	min_ns=10958	p50_ns=240875	p95_ns=1539917	max_ns=30532375	mean_ns=430523	total_ns=1722094294
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=submit_ns	n=4000	min_ns=1542	p50_ns=8500	p95_ns=16416	max_ns=120042	mean_ns=8399	total_ns=33599433
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=cmd_ns	n=4000	min_ns=15333	p50_ns=248166	p95_ns=1556501	max_ns=30537750	mean_ns=438923	total_ns=1755693727
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=0	steps=4000	accepted=2451	pending=1549	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=false	stalled=false	wall_exceeded=false	step_capped=true	events=11512	wall_ns=1756183250	nodes_total=16390	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=3 parks=1 skills=3 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=83 discard=30 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11512 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=1	game=1	steps=210	accepted=185	pending=25	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=14686625	events=514	nodes_total=1168	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=49 discard=77 table=0 hand=3 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=514 revision=210
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=plan_ns	n=210	min_ns=10875	p50_ns=19000	p95_ns=211042	max_ns=314875	mean_ns=60262	total_ns=12655208
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=submit_ns	n=210	min_ns=1792	p50_ns=8583	p95_ns=20000	max_ns=51584	mean_ns=9555	total_ns=2006713
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=cmd_ns	n=210	min_ns=15751	p50_ns=28208	p95_ns=221500	max_ns=335333	mean_ns=69818	total_ns=14661921
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=1	steps=210	accepted=185	pending=25	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=514	wall_ns=14686625	nodes_total=1168	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=49 discard=77 table=0 hand=3 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=514 revision=210
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=2	game=2	steps=4000	accepted=2519	pending=1481	rejected=0	finished=false	stalled=false	plan_panics=0	degraded=false	wall_ns=1675095542	events=11143	nodes_total=17081	final_state=players=4 frames=0 parks=0 skills=4 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=13 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11143 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=plan_ns	n=4000	min_ns=6500	p50_ns=233417	p95_ns=1420792	max_ns=18876792	mean_ns=409507	total_ns=1638029822
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=submit_ns	n=4000	min_ns=1416	p50_ns=8958	p95_ns=18167	max_ns=801083	mean_ns=9163	total_ns=36652337
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=cmd_ns	n=4000	min_ns=9708	p50_ns=242666	p95_ns=1427833	max_ns=18902208	mean_ns=418670	total_ns=1674682159
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,game=2	steps=4000	accepted=2519	pending=1481	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=false	stalled=false	wall_exceeded=false	step_capped=true	events=11143	wall_ns=1675095542	nodes_total=17081	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=4 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=13 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11143 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=plan_ns	n=8210	min_ns=6500	p50_ns=231125	p95_ns=1471792	max_ns=30532375	mean_ns=410813	total_ns=3372779324
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=submit_ns	n=8210	min_ns=1416	p50_ns=8708	p95_ns=17416	max_ns=801083	mean_ns=8801	total_ns=72258483
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=cmd_ns	n=8210	min_ns=9708	p50_ns=239500	p95_ns=1480792	max_ns=30537750	mean_ns=419614	total_ns=3445037807
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=64,lookahead=1,variant=1,all_games	result=OK	games=3	steps=8210	finished_games=1	stalled_games=0	plan_panics=0	degraded=false	wall_ns=3445965417	ns_per_step_wall=419727	nodes_total=34639	nodes_per_sec_plan=10270	events=23169
+        3.51 real         3.21 user         0.06 sys
+            14139392  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                1058  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                3553  involuntary context switches
+         58043341610  instructions retired
+         11869116661  cycles elapsed
+            11616688  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 39.78 26.00 20.34
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=huanle seats=4 budget=256 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 39.78 26.00 20.34
+# nc12_bench scenario=drive pid=22062 profile=release
+# NC12 drive：tier=huanle dirs=huanle-upstream-noname seats=4,budget=256,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=0	game=0	steps=4000	accepted=2451	pending=1549	rejected=0	finished=false	stalled=false	plan_panics=0	degraded=false	wall_ns=1668441834	events=11512	nodes_total=16390	final_state=players=4 frames=3 parks=1 skills=3 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=83 discard=30 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11512 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=plan_ns	n=4000	min_ns=11500	p50_ns=233167	p95_ns=1485583	max_ns=22004291	mean_ns=408894	total_ns=1635578477
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=submit_ns	n=4000	min_ns=1500	p50_ns=8417	p95_ns=15542	max_ns=99042	mean_ns=8090	total_ns=32361380
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=cmd_ns	n=4000	min_ns=17750	p50_ns=241917	p95_ns=1494168	max_ns=22008416	mean_ns=416984	total_ns=1667939857
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=0	steps=4000	accepted=2451	pending=1549	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=false	stalled=false	wall_exceeded=false	step_capped=true	events=11512	wall_ns=1668441834	nodes_total=16390	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=3 parks=1 skills=3 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=83 discard=30 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11512 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=1	game=1	steps=210	accepted=185	pending=25	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=14989125	events=514	nodes_total=1168	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=49 discard=77 table=0 hand=3 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=514 revision=210
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=plan_ns	n=210	min_ns=9584	p50_ns=19833	p95_ns=214917	max_ns=308125	mean_ns=61694	total_ns=12955753
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=submit_ns	n=210	min_ns=1917	p50_ns=8750	p95_ns=20792	max_ns=24875	mean_ns=9580	total_ns=2011825
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=cmd_ns	n=210	min_ns=16334	p50_ns=28791	p95_ns=226417	max_ns=328792	mean_ns=71274	total_ns=14967578
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=1	steps=210	accepted=185	pending=25	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=514	wall_ns=14989125	nodes_total=1168	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=49 discard=77 table=0 hand=3 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=514 revision=210
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=2	game=2	steps=4000	accepted=2519	pending=1481	rejected=0	finished=false	stalled=false	plan_panics=0	degraded=false	wall_ns=1716758416	events=11143	nodes_total=17081	final_state=players=4 frames=0 parks=0 skills=4 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=13 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11143 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=plan_ns	n=4000	min_ns=6875	p50_ns=238667	p95_ns=1436167	max_ns=31149250	mean_ns=420011	total_ns=1680047399
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=submit_ns	n=4000	min_ns=1458	p50_ns=8917	p95_ns=18667	max_ns=303167	mean_ns=9071	total_ns=36286613
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=cmd_ns	n=4000	min_ns=10417	p50_ns=246541	p95_ns=1452958	max_ns=31186250	mean_ns=429083	total_ns=1716334012
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,game=2	steps=4000	accepted=2519	pending=1481	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=false	stalled=false	wall_exceeded=false	step_capped=true	events=11143	wall_ns=1716758416	nodes_total=17081	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=4 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=100 discard=13 table=0 hand=8 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=11143 revision=4000
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=plan_ns	n=8210	min_ns=6875	p50_ns=230584	p95_ns=1453875	max_ns=31149250	mean_ns=405430	total_ns=3328581629
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=submit_ns	n=8210	min_ns=1458	p50_ns=8667	p95_ns=17084	max_ns=303167	mean_ns=8606	total_ns=70659818
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=cmd_ns	n=8210	min_ns=10417	p50_ns=239001	p95_ns=1464751	max_ns=31186250	mean_ns=414036	total_ns=3399241447
+RESULT	scenario=drive	tier=huanle	config=seats=4,budget=256,lookahead=1,variant=1,all_games	result=OK	games=3	steps=8210	finished_games=1	stalled_games=0	plan_panics=0	degraded=false	wall_ns=3400189375	ns_per_step_wall=414152	nodes_total=34639	nodes_per_sec_plan=10406	events=23169
+        3.47 real         3.18 user         0.06 sys
+            13418496  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                1016  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  68  voluntary context switches
+                2847  involuntary context switches
+         58019699891  instructions retired
+         11828920682  cycles elapsed
+            10158512  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=combo seats=4 budget=8 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=drive pid=22153 profile=release
+# NC12 drive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,budget=8,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=0	game=0	steps=142	accepted=122	pending=20	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=11823041	events=380	nodes_total=544	final_state=players=4 frames=0 parks=0 skills=10 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=197 discard=56 table=0 hand=3 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=380 revision=142
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=plan_ns	n=142	min_ns=15042	p50_ns=31959	p95_ns=166667	max_ns=354042	mean_ns=67911	total_ns=9643458
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=submit_ns	n=142	min_ns=1708	p50_ns=13291	p95_ns=35334	max_ns=44542	mean_ns=15214	total_ns=2160453
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=0	metric=cmd_ns	n=142	min_ns=18167	p50_ns=49042	p95_ns=198042	max_ns=393876	mean_ns=83126	total_ns=11803911
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=0	steps=142	accepted=122	pending=20	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=380	wall_ns=11823041	nodes_total=544	budget_exhausted_steps=32	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=10 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=197 discard=56 table=0 hand=3 equips=4 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=380 revision=142
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=1	game=1	steps=274	accepted=231	pending=43	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=21786292	events=712	nodes_total=1018	final_state=players=4 frames=0 parks=0 skills=10 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=143 discard=103 table=6 hand=3 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=712 revision=274
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=plan_ns	n=274	min_ns=11417	p50_ns=31000	p95_ns=161583	max_ns=341500	mean_ns=64757	total_ns=17743584
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=submit_ns	n=274	min_ns=1750	p50_ns=13958	p95_ns=23917	max_ns=50125	mean_ns=14649	total_ns=4013996
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=1	metric=cmd_ns	n=274	min_ns=16666	p50_ns=46292	p95_ns=181333	max_ns=391625	mean_ns=79407	total_ns=21757580
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=1	steps=274	accepted=231	pending=43	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=712	wall_ns=21786292	nodes_total=1018	budget_exhausted_steps=71	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=10 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=143 discard=103 table=6 hand=3 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=712 revision=274
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=2	game=2	steps=82	accepted=73	pending=9	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=5897959	events=238	nodes_total=303	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=217 discard=40 table=0 hand=3 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=238 revision=82
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=plan_ns	n=82	min_ns=14959	p50_ns=22000	p95_ns=150750	max_ns=227541	mean_ns=57797	total_ns=4739375
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=submit_ns	n=82	min_ns=4208	p50_ns=12542	p95_ns=26500	max_ns=31375	mean_ns=14030	total_ns=1150502
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=2	metric=cmd_ns	n=82	min_ns=25084	p50_ns=37041	p95_ns=171041	max_ns=241916	mean_ns=71827	total_ns=5889877
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,game=2	steps=82	accepted=73	pending=9	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=238	wall_ns=5897959	nodes_total=303	budget_exhausted_steps=19	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=217 discard=40 table=0 hand=3 equips=2 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=238 revision=82
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=plan_ns	n=498	min_ns=11417	p50_ns=30167	p95_ns=162333	max_ns=354042	mean_ns=64510	total_ns=32126417
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=submit_ns	n=498	min_ns=1708	p50_ns=13500	p95_ns=29000	max_ns=50125	mean_ns=14708	total_ns=7324951
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,all_games	metric=cmd_ns	n=498	min_ns=16666	p50_ns=45209	p95_ns=187749	max_ns=393876	mean_ns=79219	total_ns=39451368
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=8,lookahead=1,variant=1,all_games	result=OK	games=3	steps=498	finished_games=3	stalled_games=0	plan_panics=0	degraded=false	wall_ns=39507292	ns_per_step_wall=79331	nodes_total=1865	nodes_per_sec_plan=58051	events=1330
+        0.09 real         0.04 user         0.04 sys
+             7733248  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 668  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  53  voluntary context switches
+                  57  involuntary context switches
+          1270343463  instructions retired
+           331450047  cycles elapsed
+             5030296  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=combo seats=4 budget=64 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=drive pid=22158 profile=release
+# NC12 drive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,budget=64,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+
+thread 'main' (19521205) panicked at crates/engine-native/src/machine.rs:408:32:
+card 90 not in hand of 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+PANIC caught in plan_action: step=5 seat=1 revision=5 msg=card 90 not in hand of 0
+
+thread 'main' (19521205) panicked at crates/engine-native/src/kernel/monkey.rs:73:26:
+被拦截的桃应在使用者手牌
+PANIC caught in plan_action: step=236 seat=0 revision=236 msg=被拦截的桃应在使用者手牌
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=0	game=0	steps=412	accepted=344	pending=68	rejected=0	finished=true	stalled=false	plan_panics=2	degraded=true	wall_ns=46329208	events=1071	nodes_total=2279	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=144 table=2 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1071 revision=412
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=plan_ns	n=412	min_ns=15208	p50_ns=33500	p95_ns=316875	max_ns=542541	mean_ns=99163	total_ns=40855294
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=submit_ns	n=412	min_ns=1792	p50_ns=13042	p95_ns=21625	max_ns=64958	mean_ns=13187	total_ns=5433248
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=0	metric=cmd_ns	n=412	min_ns=17041	p50_ns=46625	p95_ns=332917	max_ns=572541	mean_ns=112350	total_ns=46288542
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=0	steps=412	accepted=344	pending=68	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=1071	wall_ns=46329208	nodes_total=2279	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=2	panic_steps=5@seat1|236@seat0	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=144 table=2 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1071 revision=412
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=1	game=1	steps=520	accepted=377	pending=143	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=63070042	events=1378	nodes_total=2708	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=93 discard=161 table=0 hand=4 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1378 revision=520
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=plan_ns	n=520	min_ns=10167	p50_ns=41334	p95_ns=411917	max_ns=628084	mean_ns=108848	total_ns=56601187
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=submit_ns	n=520	min_ns=1333	p50_ns=12583	p95_ns=23542	max_ns=56500	mean_ns=12330	total_ns=6411706
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=1	metric=cmd_ns	n=520	min_ns=11500	p50_ns=54291	p95_ns=424958	max_ns=663459	mean_ns=121178	total_ns=63012893
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=1	steps=520	accepted=377	pending=143	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=1378	wall_ns=63070042	nodes_total=2708	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=93 discard=161 table=0 hand=4 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1378 revision=520
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=2	game=2	steps=76	accepted=68	pending=8	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=8708417	events=232	nodes_total=462	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=219 discard=37 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=232 revision=76
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=plan_ns	n=76	min_ns=16458	p50_ns=23125	p95_ns=364541	max_ns=519584	mean_ns=99255	total_ns=7543454
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=submit_ns	n=76	min_ns=3917	p50_ns=13667	p95_ns=31375	max_ns=41750	mean_ns=15222	total_ns=1156877
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=2	metric=cmd_ns	n=76	min_ns=28958	p50_ns=39167	p95_ns=406291	max_ns=536543	mean_ns=114478	total_ns=8700331
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,game=2	steps=76	accepted=68	pending=8	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=232	wall_ns=8708417	nodes_total=462	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=219 discard=37 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=232 revision=76
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=plan_ns	n=1008	min_ns=10167	p50_ns=37958	p95_ns=371667	max_ns=628084	mean_ns=104166	total_ns=104999935
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=submit_ns	n=1008	min_ns=1333	p50_ns=12917	p95_ns=23542	max_ns=64958	mean_ns=12898	total_ns=13001831
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,all_games	metric=cmd_ns	n=1008	min_ns=11500	p50_ns=51666	p95_ns=398583	max_ns=663459	mean_ns=117065	total_ns=118001766
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1,all_games	result=OK	games=3	steps=1008	finished_games=3	stalled_games=0	plan_panics=2	degraded=true	wall_ns=118107667	ns_per_step_wall=117170	nodes_total=5449	nodes_per_sec_plan=51895	events=2681
+        0.17 real         0.12 user         0.04 sys
+             8470528  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 712  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  49  voluntary context switches
+                  65  involuntary context switches
+          2664989605  instructions retired
+           620211126  cycles elapsed
+             5652888  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=combo seats=4 budget=256 lookahead=1 variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=drive pid=22162 profile=release
+# NC12 drive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,budget=256,lookahead=1,variant=1 games=3 seed=42007 max_steps=4000 wall_secs=300
+
+thread 'main' (19521216) panicked at crates/engine-native/src/machine.rs:408:32:
+card 90 not in hand of 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+PANIC caught in plan_action: step=5 seat=1 revision=5 msg=card 90 not in hand of 0
+
+thread 'main' (19521216) panicked at crates/engine-native/src/kernel/monkey.rs:73:26:
+被拦截的桃应在使用者手牌
+PANIC caught in plan_action: step=236 seat=0 revision=236 msg=被拦截的桃应在使用者手牌
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=0	game=0	steps=412	accepted=344	pending=68	rejected=0	finished=true	stalled=false	plan_panics=2	degraded=true	wall_ns=57666916	events=1071	nodes_total=2279	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=144 table=2 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1071 revision=412
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=plan_ns	n=412	min_ns=14833	p50_ns=34042	p95_ns=384750	max_ns=2697584	mean_ns=125652	total_ns=51768928
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=submit_ns	n=412	min_ns=1791	p50_ns=13167	p95_ns=26042	max_ns=77458	mean_ns=14185	total_ns=5844255
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=0	metric=cmd_ns	n=412	min_ns=16624	p50_ns=48417	p95_ns=403167	max_ns=2720334	mean_ns=139837	total_ns=57613183
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=0	steps=412	accepted=344	pending=68	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=1071	wall_ns=57666916	nodes_total=2279	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=2	panic_steps=5@seat1|236@seat0	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=105 discard=144 table=2 hand=5 equips=5 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1071 revision=412
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=1	game=1	steps=520	accepted=377	pending=143	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=66153500	events=1378	nodes_total=2708	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=93 discard=161 table=0 hand=4 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1378 revision=520
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=plan_ns	n=520	min_ns=9541	p50_ns=42084	p95_ns=423042	max_ns=1048416	mean_ns=114924	total_ns=59760499
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=submit_ns	n=520	min_ns=1334	p50_ns=12583	p95_ns=23167	max_ns=43625	mean_ns=12184	total_ns=6335875
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=1	metric=cmd_ns	n=520	min_ns=11709	p50_ns=55417	p95_ns=436333	max_ns=1092041	mean_ns=127108	total_ns=66096374
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=1	steps=520	accepted=377	pending=143	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=1378	wall_ns=66153500	nodes_total=2708	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=93 discard=161 table=0 hand=4 equips=3 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1378 revision=520
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=2	game=2	steps=76	accepted=68	pending=8	rejected=0	finished=true	stalled=false	plan_panics=0	degraded=false	wall_ns=8747834	events=232	nodes_total=462	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=219 discard=37 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=232 revision=76
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=plan_ns	n=76	min_ns=16583	p50_ns=22917	p95_ns=381042	max_ns=516500	mean_ns=99646	total_ns=7573127
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=submit_ns	n=76	min_ns=3875	p50_ns=13791	p95_ns=32667	max_ns=46208	mean_ns=15348	total_ns=1166456
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=2	metric=cmd_ns	n=76	min_ns=27167	p50_ns=38084	p95_ns=407208	max_ns=530083	mean_ns=114994	total_ns=8739583
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,game=2	steps=76	accepted=68	pending=8	suspended=0	resumes=0	rejected=0	reject_kinds=-	finished=true	stalled=false	wall_exceeded=false	step_capped=false	events=232	wall_ns=8747834	nodes_total=462	budget_exhausted_steps=0	deadline_timeout_steps=0	plan_panics=0	panic_steps=-	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=219 discard=37 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=232 revision=76
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=plan_ns	n=1008	min_ns=9541	p50_ns=38583	p95_ns=405709	max_ns=2697584	mean_ns=118157	total_ns=119102554
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=submit_ns	n=1008	min_ns=1334	p50_ns=12917	p95_ns=25708	max_ns=77458	mean_ns=13240	total_ns=13346586
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,all_games	metric=cmd_ns	n=1008	min_ns=11709	p50_ns=52041	p95_ns=428583	max_ns=2720334	mean_ns=131397	total_ns=132449140
+RESULT	scenario=drive	tier=combo	config=seats=4,budget=256,lookahead=1,variant=1,all_games	result=OK	games=3	steps=1008	finished_games=3	stalled_games=0	plan_panics=2	degraded=true	wall_ns=132568250	ns_per_step_wall=131516	nodes_total=5449	nodes_per_sec_plan=45750	events=2681
+        0.18 real         0.12 user         0.04 sys
+             8192000  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 695  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                 262  involuntary context switches
+          2671395471  instructions retired
+           621589068  cycles elapsed
+             5374360  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38

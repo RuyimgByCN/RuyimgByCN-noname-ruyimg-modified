@@ -1,0 +1,53 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench drive tier=combo seats=4 budget=64 lookahead=1 variant=1 seed=42007 max_steps=4000 wall_secs=300 trace=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=drive pid=24919 profile=release
+# NC12 drive：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,budget=64,lookahead=1,variant=1 games=1 seed=42007 max_steps=4000 wall_secs=300
+TRACE step=0 seat=0 revision=0 choice=false phase=Judge turn=0 players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0
+TRACE step=1 seat=0 revision=1 choice=false phase=Draw turn=0 players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=243 discard=0 table=0 hand=18 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=3 revision=1
+TRACE step=2 seat=0 revision=2 choice=false phase=Play turn=0 players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=243 discard=0 table=0 hand=18 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=5 revision=2
+TRACE step=3 seat=0 revision=3 choice=false phase=Play turn=0 players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=243 discard=1 table=0 hand=17 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=7 revision=3
+TRACE step=4 seat=0 revision=4 choice=true phase=Play turn=0 players=4 frames=3 parks=1 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=241 discard=2 table=1 hand=17 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=10 revision=4
+TRACE step=5 seat=1 revision=5 choice=true phase=Play turn=0 players=4 frames=3 parks=1 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=241 discard=2 table=1 hand=17 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=12 revision=5
+
+thread 'main' (19524132) panicked at crates/engine-native/src/machine.rs:408:32:
+card 90 not in hand of 0
+stack backtrace:
+   0:        0x10449b6c8 - <<std[bb513d90a5cee88a]::sys::backtrace::BacktraceLock>::print::DisplayBacktrace as core[f63e075e1375d836]::fmt::Display>::fmt
+   1:        0x1042d418c - core[f63e075e1375d836]::fmt::write
+   2:        0x104499db0 - <std[bb513d90a5cee88a]::sys::stdio::unix::Stderr as std[bb513d90a5cee88a]::io::Write>::write_fmt
+   3:        0x10449999c - std[bb513d90a5cee88a]::panicking::panic_with_hook
+   4:        0x1044ba57c - std[bb513d90a5cee88a]::panicking::panic_handler::{closure#0}
+   5:        0x1044ba538 - std[bb513d90a5cee88a]::sys::backtrace::__rust_end_short_backtrace::<std[bb513d90a5cee88a]::panicking::panic_handler::{closure#0}, !>
+   6:        0x1044bab64 - __rustc[b7974e8690430dd9]::rust_begin_unwind
+   7:        0x1044cc1d0 - core[f63e075e1375d836]::panicking::panic_fmt
+   8:        0x1043dab4c - engine_native::kernel::commit_frame::h967da54e81e7d976
+   9:        0x104404398 - engine_native::engine::commands::<impl engine_native::engine::Engine>::finish_segment::hb029c539c3e65dc8
+  10:        0x1044013b4 - engine_native::engine::commands::<impl engine_native::engine::Engine>::submit::h3706918294941f54
+  11:        0x10442edb4 - engine_native::ai::<impl engine_native::engine::Engine>::plan_action::h2d507706517e5610
+  12:        0x10420feac - nc12_bench::plan_with_catch::h8e55832691a6c931
+  13:        0x1041f946c - nc12_bench::drive_game::h36849b13f9a27d0e
+  14:        0x10420b168 - nc12_bench::scenario_drive::h81e57d9a6d15618a
+  15:        0x10421762c - nc12_bench::main::h4397b9a02e4a7347
+  16:        0x1042201e8 - std::sys::backtrace::__rust_begin_short_backtrace::h5debc6d7371429c6
+  17:        0x104235678 - _main
+        0.07 real         0.00 user         0.05 sys
+             6733824  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 606  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                 217  involuntary context switches
+           649695596  instructions retired
+           227392754  cycles elapsed
+             3670424  peak memory footprint
+exit=101
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38

@@ -1,0 +1,50 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench ai tier=combo seats=4 budgets=64 configs=1/0,1/1,2/0,2/1 cmds=200 seed=42007 catch_panics=1
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=ai pid=22229 profile=release
+# NC12 ai：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4 seed=42007 cmds=200 budgets=[64] configs=[(1, 0), (1, 1), (2, 0), (2, 1)]
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0	metric=plan_action_ns	n=200	min_ns=10334	p50_ns=26458	p95_ns=81583	max_ns=214166	mean_ns=34553	total_ns=6910787
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0	metric=nodes_per_plan	n=200	min=1	p50=1	p95=7	max=8	mean=2	total=406
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=9685791	plan_total_ns=6910787	nodes_total=406	nodes_per_sec=58748	ns_per_step_wall=48428	final_state=players=4 frames=0 parks=0 skills=27 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=181 discard=73 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=537 revision=200
+
+thread 'main' (19521388) panicked at crates/engine-native/src/machine.rs:408:32:
+card 90 not in hand of 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+PANIC caught in plan_action: step=5 seat=1 revision=5 msg=card 90 not in hand of 0
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1	metric=plan_action_ns	n=200	min_ns=12625	p50_ns=27084	p95_ns=376250	max_ns=506125	mean_ns=107063	total_ns=21412795
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1	metric=nodes_per_plan	n=200	min=0	p50=1	p95=23	max=32	mean=6	total=1342
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=1	degraded=true	panic_steps=5@seat1	wall_ns=24244833	plan_total_ns=21412795	nodes_total=1342	nodes_per_sec=62672	ns_per_step_wall=121224	final_state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=178 discard=62 table=1 hand=10 equips=10 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=502 revision=200
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=0	metric=plan_action_ns	n=200	min_ns=9708	p50_ns=24542	p95_ns=79625	max_ns=221083	mean_ns=34886	total_ns=6977332
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=0	metric=nodes_per_plan	n=200	min=1	p50=1	p95=7	max=13	mean=2	total=469
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=0	result=OK	steps=200	accepted=200	rejected=0	finished=false	plan_panics=0	degraded=false	panic_steps=-	wall_ns=9537583	plan_total_ns=6977332	nodes_total=469	nodes_per_sec=67217	ns_per_step_wall=47687	final_state=players=4 frames=0 parks=0 skills=27 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=181 discard=73 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=537 revision=200
+
+thread 'main' (19521388) panicked at crates/engine-native/src/machine.rs:408:32:
+card 90 not in hand of 0
+PANIC caught in plan_action: step=5 seat=1 revision=5 msg=card 90 not in hand of 0
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=1	metric=plan_action_ns	n=107	min_ns=12708	p50_ns=43416	p95_ns=517208	max_ns=698334	mean_ns=130343	total_ns=13946748
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=1	metric=nodes_per_plan	n=107	min=0	p50=3	p95=36	max=53	mean=9	total=1023
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=1	result=OK	steps=107	accepted=107	rejected=0	finished=true	plan_panics=1	degraded=true	panic_steps=5@seat1	wall_ns=15452917	plan_total_ns=13946748	nodes_total=1023	nodes_per_sec=73350	ns_per_step_wall=144419	final_state=players=4 frames=0 parks=0 skills=11 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=207 discard=45 table=1 hand=7 equips=1 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=301 revision=107
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=0	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=1,variant=1	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=92	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=0	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=200	decision_diff_steps=0	decision_len_base=200	decision_len_cur=200
+RESULT	scenario=ai	tier=combo	config=seats=4,budget=64,lookahead=2,variant=1	compare_base=seats=4,budget=64,lookahead=1,variant=0	compare_steps=107	decision_diff_steps=58	decision_len_base=200	decision_len_cur=107
+        0.13 real         0.06 user         0.04 sys
+             7700480  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 665  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  49  voluntary context switches
+                  60  involuntary context switches
+          1627770288  instructions retired
+           404711037  cycles elapsed
+             4899224  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38

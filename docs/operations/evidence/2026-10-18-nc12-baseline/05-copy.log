@@ -1,0 +1,161 @@
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench copy tier=none seats=4 budget=64 steps=60 samples=30 growth_every=20 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=copy pid=22169 profile=release
+# NC12 copy：tier=none dirs= seats=4,budget=64,lookahead=1,variant=0 steps=60 samples=30
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	finished=false
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=save_ns	n=30	min_ns=250	p50_ns=292	p95_ns=1375	max_ns=3208	mean_ns=491	total_ns=14749
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=engine_clone_ns	n=30	min_ns=209	p50_ns=292	p95_ns=1292	max_ns=3125	mean_ns=431	total_ns=12959
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=plan_action_ns	n=30	min_ns=8875	p50_ns=9500	p95_ns=12791	max_ns=41084	mean_ns=11070	total_ns=332126
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=encode_archive_ns	n=30	min_ns=2416	p50_ns=2500	p95_ns=3625	max_ns=10042	mean_ns=2883	total_ns=86500
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	archive_bytes=1888	plan_nodes_p50=1	plan_nodes_max=1	nodes_per_sec_plan=90327	black_box_acc=56760
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=90 discard=21 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=153 revision=60	finished=false
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=save_ns	n=30	min_ns=250	p50_ns=291	p95_ns=458	max_ns=1375	mean_ns=315	total_ns=9458
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=engine_clone_ns	n=30	min_ns=1333	p50_ns=1375	p95_ns=2500	max_ns=4708	mean_ns=1566	total_ns=47000
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=plan_action_ns	n=30	min_ns=12958	p50_ns=13708	p95_ns=53792	max_ns=63625	mean_ns=17240	total_ns=517206
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=encode_archive_ns	n=30	min_ns=2583	p50_ns=2625	p95_ns=5209	max_ns=7167	mean_ns=2940	total_ns=88208
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	archive_bytes=1913	plan_nodes_p50=1	plan_nodes_max=1	nodes_per_sec_plan=58003	black_box_acc=59310
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	steps=259	finished=true	stalled=false	wall_ns=9489959	final_state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=30 discard=92 table=0 hand=2 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=661 revision=259
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=0	archive_bytes=1888	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=108 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=20	archive_bytes=1903	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=102 discard=7 table=0 hand=15 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=49 revision=20
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=40	archive_bytes=1908	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=96 discard=16 table=0 hand=12 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=102 revision=40
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=60	archive_bytes=1913	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=90 discard=21 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=153 revision=60
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=80	archive_bytes=1918	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=84 discard=29 table=0 hand=11 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=205 revision=80
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=100	archive_bytes=1928	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=78 discard=36 table=0 hand=10 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=253 revision=100
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=120	archive_bytes=1938	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=72 discard=42 table=0 hand=10 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=303 revision=120
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=140	archive_bytes=1948	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=66 discard=50 table=0 hand=8 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=356 revision=140
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=160	archive_bytes=1958	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=60 discard=57 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=406 revision=160
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=180	archive_bytes=1968	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=54 discard=65 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=459 revision=180
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=200	archive_bytes=2122	state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=48 discard=71 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=509 revision=200
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=220	archive_bytes=1988	state=players=4 frames=0 parks=0 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=42 discard=77 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=557 revision=220
+RESULT	scenario=copy	tier=none	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=240	archive_bytes=2137	state=players=4 frames=2 parks=1 skills=0 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=36 discard=84 table=0 hand=4 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=610 revision=240
+        0.01 real         0.01 user         0.00 sys
+             5455872  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 528  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                  15  involuntary context switches
+           243128344  instructions retired
+            55447094  cycles elapsed
+             3637656  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench copy tier=swd seats=4 budget=64 steps=60 samples=30 growth_every=20 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=copy pid=22173 profile=release
+# NC12 copy：tier=swd dirs=shahai-swd-upstream-noname seats=4,budget=64,lookahead=1,variant=0 steps=60 samples=30
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	finished=false
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=save_ns	n=30	min_ns=333	p50_ns=375	p95_ns=1625	max_ns=4333	mean_ns=598	total_ns=17957
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=engine_clone_ns	n=30	min_ns=375	p50_ns=416	p95_ns=25333	max_ns=47167	mean_ns=2867	total_ns=86039
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=plan_action_ns	n=30	min_ns=16125	p50_ns=17250	p95_ns=56875	max_ns=95375	mean_ns=24269	total_ns=728082
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=encode_archive_ns	n=30	min_ns=3500	p50_ns=3625	p95_ns=5416	max_ns=16708	mean_ns=4182	total_ns=125461
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	archive_bytes=2504	plan_nodes_p50=1	plan_nodes_max=1	nodes_per_sec_plan=41204	black_box_acc=75240
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=178 discard=26 table=0 hand=11 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=170 revision=60	finished=false
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=save_ns	n=30	min_ns=333	p50_ns=375	p95_ns=417	max_ns=541	mean_ns=375	total_ns=11250
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=engine_clone_ns	n=30	min_ns=1458	p50_ns=1500	p95_ns=1833	max_ns=4500	mean_ns=1636	total_ns=49083
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=plan_action_ns	n=30	min_ns=20583	p50_ns=20875	p95_ns=23084	max_ns=24250	mean_ns=21101	total_ns=633042
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=encode_archive_ns	n=30	min_ns=3500	p50_ns=3542	p95_ns=4917	max_ns=16125	mean_ns=4027	total_ns=120832
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	archive_bytes=2533	plan_nodes_p50=1	plan_nodes_max=1	nodes_per_sec_plan=47390	black_box_acc=77910
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	steps=241	finished=true	stalled=false	wall_ns=13935750	final_state=players=4 frames=0 parks=0 skills=8 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=119 discard=91 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=670 revision=241
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=0	archive_bytes=2504	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=198 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=20	archive_bytes=2523	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=191 discard=9 table=0 hand=15 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=58 revision=20
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=40	archive_bytes=2533	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=184 discard=20 table=0 hand=11 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=117 revision=40
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=60	archive_bytes=2533	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=178 discard=26 table=0 hand=11 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=170 revision=60
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=80	archive_bytes=2533	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=170 discard=32 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=223 revision=80
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=100	archive_bytes=2543	state=players=4 frames=0 parks=0 skills=32 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=164 discard=38 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=273 revision=100
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=120	archive_bytes=2688	state=players=4 frames=3 parks=1 skills=24 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=158 discard=48 table=0 hand=9 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=337 revision=120
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=140	archive_bytes=2430	state=players=4 frames=0 parks=0 skills=16 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=152 discard=55 table=0 hand=8 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=396 revision=140
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=160	archive_bytes=2435	state=players=4 frames=0 parks=0 skills=16 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=145 discard=64 table=0 hand=6 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=450 revision=160
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=180	archive_bytes=2440	state=players=4 frames=0 parks=0 skills=16 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=139 discard=71 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=502 revision=180
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=200	archive_bytes=2440	state=players=4 frames=0 parks=0 skills=16 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=133 discard=77 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=555 revision=200
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=220	archive_bytes=2440	state=players=4 frames=0 parks=0 skills=16 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=125 discard=83 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=608 revision=220
+RESULT	scenario=copy	tier=swd	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=240	archive_bytes=2445	state=players=4 frames=0 parks=0 skills=16 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=119 discard=89 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=658 revision=240
+        0.12 real         0.02 user         0.06 sys
+             7143424  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 632  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  49  voluntary context switches
+                 503  involuntary context switches
+           876173368  instructions retired
+           306316725  cycles elapsed
+             4538776  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+
+$ /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/tmp.k8kRd7vrJ8/nc12_bench copy tier=combo seats=4 budget=64 steps=60 samples=30 growth_every=20 seed=42007
+load_before: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
+# nc12_bench scenario=copy pid=22177 profile=release
+# NC12 copy：tier=combo dirs=huanle-upstream-noname+shahai-swd-upstream-noname+shahai-gujian-upstream-noname seats=4,budget=64,lookahead=1,variant=0 steps=60 samples=30
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0	finished=false
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=save_ns	n=30	min_ns=334	p50_ns=416	p95_ns=9667	max_ns=9958	mean_ns=1194	total_ns=35834
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=engine_clone_ns	n=30	min_ns=375	p50_ns=416	p95_ns=1541	max_ns=6250	mean_ns=681	total_ns=20454
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=plan_action_ns	n=30	min_ns=16917	p50_ns=17666	p95_ns=23667	max_ns=58791	mean_ns=19609	total_ns=588291
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	metric=encode_archive_ns	n=30	min_ns=3583	p50_ns=3666	p95_ns=4958	max_ns=13083	mean_ns=4038	total_ns=121163
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=open,steps=0	archive_bytes=2724	plan_nodes_p50=1	plan_nodes_max=1	nodes_per_sec_plan=50995	black_box_acc=81840
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=225 discard=23 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=157 revision=60	finished=false
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=save_ns	n=30	min_ns=333	p50_ns=333	p95_ns=375	max_ns=584	mean_ns=349	total_ns=10499
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=engine_clone_ns	n=30	min_ns=1250	p50_ns=1292	p95_ns=2917	max_ns=4083	mean_ns=1466	total_ns=44001
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=plan_action_ns	n=30	min_ns=19500	p50_ns=19875	p95_ns=20167	max_ns=21250	mean_ns=19886	total_ns=596584
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	metric=encode_archive_ns	n=30	min_ns=3541	p50_ns=3583	p95_ns=4000	max_ns=6792	mean_ns=3704	total_ns=111127
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,stage=mid,steps=60	archive_bytes=2749	plan_nodes_p50=1	plan_nodes_max=1	nodes_per_sec_plan=50286	black_box_acc=84390
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	steps=404	finished=true	stalled=false	wall_ns=19453792	final_state=players=4 frames=0 parks=0 skills=9 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=115 discard=144 table=0 hand=2 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1096 revision=404
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=0	archive_bytes=2724	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=245 discard=0 table=0 hand=16 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=0 revision=0
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=20	archive_bytes=2739	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=239 discard=7 table=0 hand=15 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=49 revision=20
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=40	archive_bytes=2749	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=233 discard=16 table=0 hand=12 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=102 revision=40
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=60	archive_bytes=2749	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=225 discard=23 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=157 revision=60
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=80	archive_bytes=2898	state=players=4 frames=2 parks=1 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=219 discard=29 table=0 hand=13 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=210 revision=80
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=100	archive_bytes=2908	state=players=4 frames=2 parks=1 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=213 discard=36 table=0 hand=12 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=261 revision=100
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=120	archive_bytes=2764	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=207 discard=46 table=0 hand=8 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=315 revision=120
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=140	archive_bytes=2764	state=players=4 frames=0 parks=0 skills=36 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=201 discard=52 table=0 hand=8 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=368 revision=140
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=160	archive_bytes=2697	state=players=4 frames=0 parks=0 skills=27 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=195 discard=59 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=430 revision=160
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=180	archive_bytes=2697	state=players=4 frames=0 parks=0 skills=27 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=187 discard=65 table=0 hand=9 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=483 revision=180
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=200	archive_bytes=2697	state=players=4 frames=0 parks=0 skills=27 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=181 discard=73 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=537 revision=200
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=220	archive_bytes=2697	state=players=4 frames=0 parks=0 skills=27 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=175 discard=79 table=0 hand=7 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=590 revision=220
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=240	archive_bytes=2697	state=players=4 frames=0 parks=0 skills=27 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=167 discard=85 table=0 hand=9 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=643 revision=240
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=260	archive_bytes=2635	state=players=4 frames=0 parks=0 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=163 discard=92 table=0 hand=6 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=703 revision=260
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=280	archive_bytes=2640	state=players=4 frames=0 parks=0 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=155 discard=100 table=0 hand=6 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=757 revision=280
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=300	archive_bytes=2784	state=players=4 frames=2 parks=1 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=149 discard=106 table=0 hand=6 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=810 revision=300
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=320	archive_bytes=2640	state=players=4 frames=0 parks=0 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=143 discard=114 table=0 hand=4 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=863 revision=320
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=340	archive_bytes=2645	state=players=4 frames=0 parks=0 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=137 discard=120 table=0 hand=4 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=915 revision=340
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=360	archive_bytes=2645	state=players=4 frames=0 parks=0 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=129 discard=127 table=0 hand=5 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=969 revision=360
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=380	archive_bytes=2645	state=players=4 frames=0 parks=0 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=123 discard=135 table=0 hand=3 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1023 revision=380
+RESULT	scenario=copy	tier=combo	config=seats=4,budget=64,lookahead=1,variant=0,growth	step=400	archive_bytes=2650	state=players=4 frames=0 parks=0 skills=18 vm_marks=0 vm_piles=0 vm_once=0 vm_flags=0 deck=117 discard=142 table=0 hand=2 equips=0 judge=0 off_court=0 lianyaohu_store=0 zhucheng=0 log=1075 revision=400
+        0.12 real         0.03 user         0.06 sys
+             7684096  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 666  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  48  voluntary context switches
+                 619  involuntary context switches
+          1050528805  instructions retired
+           341944521  cycles elapsed
+             5112216  peak memory footprint
+exit=0
+load_after: 18:23  up 4 days, 19:53, 3 users, load averages: 38.76 26.02 20.38
