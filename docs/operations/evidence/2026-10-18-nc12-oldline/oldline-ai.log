@@ -1,0 +1,6 @@
+RESULT scenario=oldline_ai metric=information_set n=20 p50_ns=18833 p95_ns=19916 max_ns=33583 mean_ns=19470
+RESULT scenario=oldline_ai metric=legal_actions n=20 p50_ns=44834 p95_ns=50167 max_ns=748459 mean_ns=80354
+RESULT scenario=oldline_ai metric=heuristic n=20 p50_ns=103042 p95_ns=106625 max_ns=106834 mean_ns=103083
+RESULT scenario=oldline_ai metric=beam n=20 p50_ns=2683959 p95_ns=2878583 max_ns=4210041 mean_ns=2751033
+RESULT scenario=oldline_ai metric=mcts n=20 p50_ns=10644708 p95_ns=11345166 max_ns=13200291 mean_ns=10816472
+NOTE 旧线 AI（engine-ai）独立口径；与新线 nc12_bench ai 并列记录，不跨线计算收益。
