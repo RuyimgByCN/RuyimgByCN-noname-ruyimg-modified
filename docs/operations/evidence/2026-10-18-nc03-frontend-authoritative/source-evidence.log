@@ -1,0 +1,26 @@
+# 修复前源码依据（git show 3ee01345:apps/web-client/src/worker/nativeBackend.ts）
+$ git show 3ee01345:apps/web-client/src/worker/nativeBackend.ts | grep -n 'hand.slice\|deriveLegalActions\|ResolveChoice'
+259:function deriveLegalActions(
+273:    for (const card of hand.slice(0, 8)) {
+282:        ResolveChoice: {
+291:          ResolveChoice: {
+340:    legal_actions: deriveLegalActions(handle, view, finished),
+
+# 修复后：适配层不再出现手牌拼接/合成应答
+$ grep -n 'hand.slice\|deriveLegalActions' apps/web-client/src/worker/nativeBackend.ts
+9: * 校验产出）。适配层不再按 `hand.slice(0, 8)` 拼接 `PlayCard`，也不再合成
+
+# 修复后：权威查询接线点
+8: * `legal_actions_json` 导出（内核 `Engine::legal_actions`，经与正式提交相同的
+273:  legal_actions_json: (seat: number) => string;
+277:/** 权威动作信封（`legal_actions_json` 返回面，与 TS `LegalAction` 同形）。 */
+288:  const missing = (["legal_actions_json", "activate_skill"] as const).filter(
+387:const legalCache = new WeakMap<
+401:function authoritativeLegalActions(handle: NativeHandle): LegalAction[] {
+403:  const cached = legalCache.get(handle);
+411:  const raw = requireAuthoritativeExports(handle).legal_actions_json(
+415:  legalCache.set(handle, {
+424:export function invalidateLegalActions(handle: NativeHandle): void {
+425:  legalCache.delete(handle);
+463:    legal_actions: authoritativeLegalActions(handle),
+574:      invalidateLegalActions(handle);

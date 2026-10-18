@@ -1,0 +1,29 @@
+# pnpm --dir apps/web-client test  (2026-10-18T10:13:02Z)
+
+> noname-next-web-client@0.1.0 test /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node --import ./scripts/ts-register.mjs --test
+
+✔ 实测仓库：包清单由实际数据推导，目录项全部可回查 (2.574292ms)
+✔ 目录项与包元数据不一致会被判失败 (0.743833ms)
+✔ 坏 npack、缺字段与重复包键会被判失败 (1.6765ms)
+✔ 反例 1：候选值 42/99 → token 是下标且能回查候选 (1.457333ms)
+✔ 反例 1 补充：裸数字/字符串候选的 token 同样是下标 (0.1645ms)
+✔ 反例 2：引擎 rejected 显式进入 envelope.result (0.109459ms)
+✔ 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null (0.1165ms)
+✔ 反例 3：ChoiceOption Kind(105) 不被归零 (0.137541ms)
+✔ 命令结果解析：非 JSON 或无 outcome 字段不臆造判决 (0.061625ms)
+✔ choice_id 不匹配时拒绝应答，不触发引擎调用 (0.068042ms)
+✔ 候选逐项等于内核返回：不按 hand.slice(0,8) 拼接 (1.121292ms)
+✔ 无合成：内核不给 EndPhase/应答候选就不出现 (0.2715ms)
+✔ 查询按 (handle, revision) 记忆化，读档后失效 (0.231792ms)
+✔ 旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接 (0.333833ms)
+✔ 内核候选逐项可提交：命令面覆盖每种候选，伪造动作的拒绝原因可见 (0.372417ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 221.481959
+exit=0

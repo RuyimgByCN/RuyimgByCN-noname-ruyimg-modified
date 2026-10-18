@@ -1,0 +1,30 @@
+# pnpm --dir apps/web-client smoke:native  (2026-10-18T10:13:34Z)
+# native-pkg 由 node apps/web-client/scripts/build-native.mjs 重建（wasm-pack 0.13 / wasm32-unknown-unknown）
+
+> noname-next-web-client@0.1.0 smoke:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node --import ./scripts/ts-register.mjs scripts/native-worker-smoke.mjs
+
+PASS init_web
+PASS create
+PASS observer_view
+PASS endPhase
+PASS autoStep_progress | steps=40
+PASS save_hex | bytes=1913
+PASS restore_hex | rev=41
+PASS playCard_shape | rev=41
+PASS extension_package_inventory | packs=41 dirs=41 no_npack=0
+PASS extension_catalog_consistent | catalog=15 uncovered=26
+PASS pack_enters_match | hnl_=7
+PASS missing_pack_refused
+PASS same_pack_restore
+PASS wrong_version_refused | 恢复失败: RuleVersionMismatch { snapshot: 11753449270702291366, catalog: 11737545934517934777 }
+PASS adapter_choice_token_roundtrip | choice=1 options=5 label=card:113 token=0 submission=[0] outcome=accepted value_as_token_refused=true
+PASS legal_actions_shape | seat=0 revision=2 n=6
+PASS legal_actions_revision_matches_engine | json=2 engine=2
+PASS legal_actions_non_empty | n=6 kinds=["PlayCard","PlayCard","PlayCard","PlayCard","PlayCard","EndPhase"]
+PASS adapter_passes_kernel_actions_verbatim | adapter=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"] kernel=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"]
+PASS legal_actions_sampled_all_accepted | sampled=6 refused=[]
+PASS forged_card_rejected_with_reason | result={"finished":false,"outcome":"rejected","reason":"CardNotInHand","revision":2}
+PASS legal_actions_seat_boundary_refused | legal_actions: 座位越界（9 ≥ 4）
+{"total":22,"failed":0}
+exit=0

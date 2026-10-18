@@ -1,0 +1,8 @@
+# 修复前探针：HEAD=3ee01345 2026-10-18T09:35:18Z
+# node --import ./scripts/ts-register.mjs ../../docs/operations/evidence/2026-10-18-nc03-frontend-authoritative/probe-before-authoritative.mjs
+PASS ①12 张手牌 → PlayCard 候选被 slice(0,8) 截断为 8 | hand=12 play=8 cards=100,101,102,103,104,105,106,107
+PASS ①适配层未调用内核权威查询 | calls=["open_choice_json","open_choice_json"]
+PASS ②3 个候选只合成 1 个 ResolveChoice（内核有 3 个逐项应答候选） | resolve=[{"ResolveChoice":{"choice_id":7,"selections":[0],"cancelled":false}},{"ResolveChoice":{"choice_id":7,"selections":[],"cancelled":true}}]
+PASS ③适配层不产出 ActivateSkill 候选（内核查询才会枚举） | kinds=["EndPhase","PlayCard","PlayCard","PlayCard","PlayCard","PlayCard","PlayCard","PlayCard","PlayCard"]
+{"total":4,"failed":0}
+exit=0

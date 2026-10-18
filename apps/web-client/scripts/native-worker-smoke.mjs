@@ -166,5 +166,115 @@ if (choice && choice.options.length > 0 && auto) {
 }
 check("adapter_choice_token_roundtrip", tokenRoundTrip, tokenDetail);
 
+// ── NC03 权威动作查询：候选来自内核，且逐项可被真实内核接受 ──
+// 修复前适配层用 `hand.slice(0, 8)` 拼 `PlayCard`、合成 `ResolveChoice`；
+// 现在 `legal_actions` 必须逐项等于窄壳 `legal_actions_json` 的输出。
+// 先自动推进到 0 号座位的出牌阶段：那里才有出牌/主动技候选（开局只有阶段推进）。
+const auth = nativeCreate(4, 4242, 0);
+let authEnv = nativeEnvelope(auth);
+for (let i = 0; i < 40; i++) {
+  if (authEnv.view.phase === "Play" && authEnv.view.current_player === 0) break;
+  authEnv = nativeDispatch(auth, { type: "autoStep" });
+}
+const authParsed = JSON.parse(auth.engine.legal_actions_json(0));
+check(
+  "legal_actions_shape",
+  authParsed.seat === 0 &&
+    Number.isInteger(authParsed.revision) &&
+    Array.isArray(authParsed.actions),
+  `seat=${authParsed.seat} revision=${authParsed.revision} n=${authParsed.actions?.length}`,
+);
+check(
+  "legal_actions_revision_matches_engine",
+  authParsed.revision === Number(auth.engine.revision()),
+  `json=${authParsed.revision} engine=${auth.engine.revision()}`,
+);
+check(
+  "legal_actions_non_empty",
+  authParsed.actions.length > 0,
+  `n=${authParsed.actions.length} kinds=${JSON.stringify(
+    authParsed.actions.map((a) => (typeof a === "string" ? a : Object.keys(a)[0])),
+  )}`,
+);
+check(
+  "adapter_passes_kernel_actions_verbatim",
+  JSON.stringify(authEnv.legal_actions) === JSON.stringify(authParsed.actions),
+  `adapter=${JSON.stringify(authEnv.legal_actions)} kernel=${JSON.stringify(authParsed.actions)}`,
+);
+
+/** 把一条权威候选按界面协议提交（与 BattleView/BattleBoard 同款映射）。 */
+function submitCandidate(handle, action) {
+  if (action === "EndPhase") return nativeDispatch(handle, { type: "endPhase" });
+  if (action.PlayCard) {
+    return nativeDispatch(handle, {
+      type: "playCard",
+      actor: 0,
+      card: action.PlayCard.card,
+      targets: action.PlayCard.targets,
+    });
+  }
+  if (action.ActivateSkill) {
+    return nativeDispatch(handle, {
+      type: "activateSkill",
+      actor: 0,
+      skill: action.ActivateSkill.skill,
+    });
+  }
+  return nativeDispatch(handle, {
+    type: "resolveChoice",
+    actor: 0,
+    choiceId: action.ResolveChoice.choice_id,
+    selections: action.ResolveChoice.selections,
+    cancelled: action.ResolveChoice.cancelled,
+  });
+}
+
+// 抽样逐项提交：每条候选都在**同一保存点**的新引擎上走前端提交路径，
+// 避免前一条候选改变状态影响后一条。
+const startHex = auth.engine.save_hex();
+const refused = [];
+const sampled = authParsed.actions.slice(0, 6);
+for (const action of sampled) {
+  const fresh = nativeCreate(4, 4242, 0);
+  nativeDispatch(fresh, { type: "restore", hex: startHex });
+  let outcome;
+  try {
+    outcome = submitCandidate(fresh, action).result?.outcome ?? null;
+  } catch (e) {
+    outcome = `throw:${e}`;
+  }
+  if (outcome !== "accepted" && outcome !== "pending") {
+    refused.push(`${JSON.stringify(action)}→${outcome}`);
+  }
+}
+check(
+  "legal_actions_sampled_all_accepted",
+  sampled.length > 0 && refused.length === 0,
+  `sampled=${sampled.length} refused=${JSON.stringify(refused)}`,
+);
+
+// 伪造卡 id／越权座位：内核拒绝且原因可见（不因投影而变合法）。
+const forged = nativeDispatch(auth, {
+  type: "playCard",
+  actor: 0,
+  card: 9999,
+  targets: [],
+});
+check(
+  "forged_card_rejected_with_reason",
+  forged.result?.outcome === "rejected" && typeof forged.result?.reason === "string",
+  `result=${JSON.stringify(forged.result)}`,
+);
+let seatRefused = false;
+let seatDetail = "";
+try {
+  auth.engine.legal_actions_json(9);
+  seatDetail = "accepted";
+} catch (e) {
+  seatRefused = String(e).includes("座位越界");
+  seatDetail = String(e);
+}
+check("legal_actions_seat_boundary_refused", seatRefused, seatDetail);
+
 console.log(JSON.stringify({ total: results.length, failed: results.filter((r) => !r.ok).length }));
 process.exit(results.some((r) => !r.ok) ? 1 : 0);

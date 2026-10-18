@@ -92,7 +92,14 @@ fn err<E: std::fmt::Debug>(e: E) -> JsValue {
 }
 
 /// 命令结果的 JSON 投影（窄面：Accepted/Pending/Rejected 摘要）。
+///
+/// `Rejected` 附带 `reason`（`RejectReason` 的调试名）：界面必须能区分
+/// 「被拒绝」与「为什么被拒绝」，否则伪造卡 id／越权座位只剩无因的失败。
 fn outcome_json(engine: &Engine, out: &CommandOutcome) -> String {
+    let reason = match out {
+        CommandOutcome::Rejected(reason) => Some(format!("{reason:?}")),
+        _ => None,
+    };
     serde_json::json!({
         "outcome": match out {
             CommandOutcome::Accepted { .. } => "accepted",
@@ -102,6 +109,7 @@ fn outcome_json(engine: &Engine, out: &CommandOutcome) -> String {
         },
         "revision": engine.revision(),
         "finished": engine.outcome().is_some(),
+        "reason": reason,
     })
     .to_string()
 }
@@ -114,6 +122,70 @@ fn phase_name(phase: Phase) -> &'static str {
         Phase::Discard => "discard",
         Phase::End => "end",
     }
+}
+
+/// 内核动作 → 客户端动作 JSON（与 TS `LegalAction` 联合类型同形，见
+/// `apps/web-client/src/types/engine.ts`）。
+///
+/// 为什么在这里投影而不是让客户端解析内核类型：窄壳不暴露内核类型面，
+/// 且 `Answer` 的候选值**必须先换算成下标**——窄壳 `answer()` 直取
+/// `spec.options[idx]`，候选值只用于展示。换算在权威侧做一次，客户端
+/// 拿到的 `selections` 就是可直接回传的 token。
+///
+/// 找不到候选下标的应答（理论不可达：候选即由同一 `spec.options` 生成）
+/// 与当前查询不枚举的国战明置一律不入列，避免给出**不可提交**的动作。
+fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Value> {
+    match action {
+        GameAction::NextPhase => Some(serde_json::json!("EndPhase")),
+        GameAction::PlayCard { card, targets } => Some(serde_json::json!({
+            "PlayCard": { "card": card, "targets": targets },
+        })),
+        GameAction::ActivateSkill { skill } => Some(serde_json::json!({
+            "ActivateSkill": { "skill": skill, "targets": [], "card_targets": [] },
+        })),
+        GameAction::Answer {
+            choice_id,
+            selection,
+        } => {
+            let spec = engine.open_choice().map(|c| c.spec.clone())?;
+            let mut selections = Vec::with_capacity(selection.len());
+            for option in selection {
+                selections.push(spec.options.iter().position(|o| o == option)? as u32);
+            }
+            Some(serde_json::json!({
+                "ResolveChoice": {
+                    "choice_id": choice_id,
+                    "selections": selections,
+                    "cancelled": selection.is_empty(),
+                },
+            }))
+        }
+        // 权威查询当前不产出明置候选（国战门控未接线）；出现也不投影。
+        GameAction::RevealGeneral { .. } => None,
+    }
+}
+
+/// NC03 权威动作查询的 JSON 投影：`{"seat", "revision", "actions"}`。
+///
+/// 不经 `wasm_bindgen`，宿主测试（`tests/nc03_legal_actions_export.rs`）可直接
+/// 调用，避免走到 `JsValue`。`revision` 是候选成立的状态修订号：客户端可据此
+/// 判断候选是否过期（`Engine::legal_actions` 只读，不改状态）。
+pub fn legal_actions_json_for(engine: &Engine, seat: u8) -> Result<String, String> {
+    let seats = engine.view_for(0).players.len();
+    if seat as usize >= seats {
+        return Err(format!("legal_actions: 座位越界（{seat} ≥ {seats}）"));
+    }
+    let actions: Vec<serde_json::Value> = engine
+        .legal_actions(seat)
+        .iter()
+        .filter_map(|action| action_to_json(engine, action))
+        .collect();
+    Ok(serde_json::json!({
+        "seat": seat,
+        "revision": engine.revision(),
+        "actions": actions,
+    })
+    .to_string())
 }
 
 /// 座位视图投影（`PlayerView` 手写 JSON；视图为只读投影不进哈希）。
@@ -264,7 +336,35 @@ impl NativeEngine {
         Ok(outcome_json(&self.inner, &out))
     }
 
-    /// 选择应答（选项索引直传：confirm/pass=0；card/player/tag=载荷值）。
+    /// NC03 权威动作查询：该座位此刻**可提交**的候选动作 JSON。
+    ///
+    /// 候选由内核经与正式提交相同的校验产出（`Engine::legal_actions`），
+    /// 顺序稳定（应答 → 主动技 → 出牌 → 阶段推进），上限 256；`actions`
+    /// 每项与 TS `LegalAction` 同形，可直接用于界面并原样回传。
+    ///
+    /// 代价：实测约 1.6 ms/次（5 人局，含克隆校验），**按需调用**——前端
+    /// 只在构建信封（用户动作/观察刷新）时查一次，并按 `revision` 记忆化。
+    pub fn legal_actions_json(&self, seat: u8) -> Result<String, JsValue> {
+        legal_actions_json_for(&self.inner, seat).map_err(|e| JsValue::from_str(&e))
+    }
+
+    /// 主动技发动（`skill` 取自权威查询的 `ActivateSkill` 候选）。
+    ///
+    /// 内核 `GameAction::ActivateSkill` 不接受目标：技能内部的选择走开放
+    /// 选择应答，因此窄壳也不接目标参数（前端传目标即协议误用）。
+    pub fn activate_skill(&mut self, actor: u32, skill: u16) -> Result<String, JsValue> {
+        let out = self.inner.submit(engine_native::GameCommand {
+            actor: actor as u8,
+            expected_revision: self.inner.revision(),
+            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+            action: GameAction::ActivateSkill { skill },
+        });
+        Ok(outcome_json(&self.inner, &out))
+    }
+
+    /// 选择应答（`selection` 是**候选下标**，直取 `spec.options[idx]`：与
+    /// [`NativeEngine::legal_actions_json`] 的 `ResolveChoice.selections` 同口径；
+    /// 空数组 = 取消）。
     pub fn answer(
         &mut self,
         observer: u32,

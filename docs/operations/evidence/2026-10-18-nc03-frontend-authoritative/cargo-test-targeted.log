@@ -1,0 +1,8 @@
+# cargo test --offline -p engine-native-wasm --test nc03_legal_actions_export -- --nocapture  (2026-10-18T10:15:56Z)
+test open_choice_candidates_round_trip_option_indices ... ok
+test forged_actions_are_rejected_by_kernel ... ok
+test export_surface_exists_and_returns_kernel_actions ... ok
+test every_projected_action_is_submittable ... ok
+test candidates_are_not_hand_padding_nor_truncated_at_eight ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+exit=0

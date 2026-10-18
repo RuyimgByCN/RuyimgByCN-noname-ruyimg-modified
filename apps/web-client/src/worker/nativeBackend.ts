@@ -4,6 +4,11 @@
  * 将 WorkerRequest 协议子集映射到 NativeEngine 窄 API，并合成 UI 可消费的
  * EngineEnvelope（view + legal_actions + revision/finished）。
  *
+ * **合法动作来自内核权威查询**（NC03）：`legal_actions` 由窄壳
+ * `legal_actions_json` 导出（内核 `Engine::legal_actions`，经与正式提交相同的
+ * 校验产出）。适配层不再按 `hand.slice(0, 8)` 拼接 `PlayCard`，也不再合成
+ * `ResolveChoice`——候选的合法性定义只有内核一处。
+ *
  * 扩展包装载：`NativeEngine.new_with_packs_json` /
  * `restore_hex_with_packs_json` 接收 cards.json 对象数组。空数组等于标准目录。
  * 管理面元数据仍由 extensionStore 保存；开局把包 JSON 经 packsJson 传入。
@@ -189,6 +194,8 @@ export interface NativeCommandOutcome {
   outcome: "accepted" | "pending" | "rejected" | "suspended";
   revision: number;
   finished: boolean;
+  /** 被拒原因（内核 `RejectReason` 的调试名）；非 rejected 为 null。 */
+  reason?: string | null;
 }
 
 /**
@@ -256,50 +263,166 @@ export function commandOutcome(
     : null;
 }
 
-function deriveLegalActions(
+/**
+ * 权威查询导出面（`crates/engine-native-wasm/src/lib.rs`）。
+ *
+ * 兼容旧 wasm 产物：方法缺失时**显式报错并给出重建命令**，而不是静默回落到
+ * 手牌拼接——回落会让「合法动作」又出现第二处定义，正是 NC03 要消除的缺陷。
+ */
+interface NativeAuthoritativeExports {
+  legal_actions_json: (seat: number) => string;
+  activate_skill: (actor: number, skill: number) => string;
+}
+
+/** 权威动作信封（`legal_actions_json` 返回面，与 TS `LegalAction` 同形）。 */
+export interface NativeLegalActionsJson {
+  seat: number;
+  revision: number;
+  actions: LegalAction[];
+}
+
+function requireAuthoritativeExports(
   handle: NativeHandle,
-  view: NativeView,
-  finished: boolean,
-): LegalAction[] {
-  if (finished) return [];
-  const actions: LegalAction[] = [];
-  const phase = PHASE_MAP[view.phase] ?? "Idle";
-  if (phase === "Play" || phase === "Discard" || phase === "End") {
-    actions.push("EndPhase");
+): NativeAuthoritativeExports {
+  const engine = handle.engine as unknown as Partial<NativeAuthoritativeExports>;
+  const missing = (["legal_actions_json", "activate_skill"] as const).filter(
+    (name) => typeof engine[name] !== "function",
+  );
+  if (missing.length > 0) {
+    throw new Error(
+      `native: wasm 产物缺少 ${missing.join("/")}（NC03 权威查询导出）——` +
+        "执行 pnpm --dir apps/web-client build:native 重建 native-pkg；不回落手牌拼接",
+    );
   }
-  const self = view.players.find((p) => p.seat === handle.observer);
-  const hand = self?.hand?.own ?? [];
-  if (phase === "Play" && hand.length > 0) {
-    for (const card of hand.slice(0, 8)) {
-      actions.push({ PlayCard: { card, targets: [] } });
-    }
+  // 返回引擎实例本身：这些是类方法，解构/绑定不当会丢 `this`。
+  return engine as NativeAuthoritativeExports;
+}
+
+function isNumberArray(value: unknown): value is number[] {
+  return Array.isArray(value) && value.every((n) => Number.isInteger(n));
+}
+
+/** 单项动作结构校验（与 `LegalAction` 联合类型逐项对应）。 */
+function isLegalAction(value: unknown): value is LegalAction {
+  if (value === "EndPhase") return true;
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    return false;
   }
+  const entries = Object.entries(value as Record<string, unknown>);
+  if (entries.length !== 1) return false;
+  const [kind, body] = entries[0];
+  if (body === null || typeof body !== "object") return false;
+  const b = body as Record<string, unknown>;
+  switch (kind) {
+    case "PlayCard":
+      return Number.isInteger(b.card) && isNumberArray(b.targets);
+    case "ActivateSkill":
+      return (
+        Number.isInteger(b.skill) &&
+        isNumberArray(b.targets) &&
+        isNumberArray(b.card_targets)
+      );
+    case "UseSkillCard":
+      return (
+        Number.isInteger(b.skill) &&
+        Number.isInteger(b.card_kind) &&
+        isNumberArray(b.targets) &&
+        Number.isInteger(b.equip_slot)
+      );
+    case "ResolveChoice":
+      return (
+        Number.isInteger(b.choice_id) &&
+        isNumberArray(b.selections) &&
+        typeof b.cancelled === "boolean"
+      );
+    default:
+      return false;
+  }
+}
+
+/**
+ * 解析并校验权威动作 JSON。
+ *
+ * 畸形返回（非 JSON／结构不符／动作形态未知）一律报错：静默丢弃会让界面把
+ * 「内核没给候选」与「查询坏了」显示成同一件事。
+ */
+export function parseLegalActionsJson(raw: string): NativeLegalActionsJson {
+  let value: unknown;
   try {
-    const choice = readChoiceJson(handle);
-    if (choice) {
-      const options = choice.options ?? [];
-      actions.push({
-        ResolveChoice: {
-          choice_id: Number(choice.id),
-          // token 即选项下标：0 号候选（如 {card:42}）以 token 0 回传。
-          selections: options.length > 0 ? [0] : [],
-          cancelled: false,
-        },
-      });
-      if (choice.allowCancel) {
-        actions.push({
-          ResolveChoice: {
-            choice_id: Number(choice.id),
-            selections: [],
-            cancelled: true,
-          },
-        });
-      }
-    }
+    value = JSON.parse(raw) as unknown;
   } catch {
-    /* 无开放选择 */
+    throw new Error(`native: 权威动作查询返回非 JSON: ${raw.slice(0, 120)}`);
   }
-  return actions;
+  const env = value as Partial<NativeLegalActionsJson> | null;
+  const seat = env?.seat;
+  const rawActions = env?.actions;
+  if (
+    env === null ||
+    typeof env !== "object" ||
+    typeof seat !== "number" ||
+    !Number.isInteger(seat) ||
+    !Array.isArray(rawActions)
+  ) {
+    throw new Error(
+      `native: 权威动作 JSON 结构不符（需 {seat, revision, actions}）: ${raw.slice(0, 120)}`,
+    );
+  }
+  const actions: LegalAction[] = [];
+  for (const [index, action] of rawActions.entries()) {
+    if (!isLegalAction(action)) {
+      throw new Error(
+        `native: 权威动作第 ${index} 项结构不符: ${JSON.stringify(action)}`,
+      );
+    }
+    actions.push(action);
+  }
+  return {
+    seat,
+    revision: Number(env.revision ?? 0),
+    actions,
+  };
+}
+
+/** 权威候选缓存：同一 `(handle, revision, seat)` 只查一次内核。 */
+const legalCache = new WeakMap<
+  object,
+  { revision: number; seat: number; actions: LegalAction[] }
+>();
+
+/**
+ * 权威动作查询（内核 `Engine::legal_actions`）。
+ *
+ * **性能策略**：一次查询实测约 1.6 ms（5 人局，含内核克隆校验），所以
+ * ① 只在构建信封时查询（用户动作／观察刷新触发），不在渲染循环里逐帧调用；
+ * ② 按 `(handle, revision, seat)` 记忆化——同一修订号重复构建信封不重复查询。
+ * 修订号只在命令被接受时前进，被拒绝的命令不改变候选，缓存因此安全；
+ * `restore` 会用另一份状态替换引擎实例，必须显式失效（见 `nativeDispatch`）。
+ */
+function authoritativeLegalActions(handle: NativeHandle): LegalAction[] {
+  const revision = Number(handle.engine.revision());
+  const cached = legalCache.get(handle);
+  if (
+    cached &&
+    cached.revision === revision &&
+    cached.seat === handle.observer
+  ) {
+    return cached.actions;
+  }
+  const raw = requireAuthoritativeExports(handle).legal_actions_json(
+    handle.observer,
+  );
+  const parsed = parseLegalActionsJson(raw);
+  legalCache.set(handle, {
+    revision: parsed.revision,
+    seat: parsed.seat,
+    actions: parsed.actions,
+  });
+  return parsed.actions;
+}
+
+/** 丢弃某句柄的候选缓存（读档等替换引擎状态的操作后必须调用）。 */
+export function invalidateLegalActions(handle: NativeHandle): void {
+  legalCache.delete(handle);
 }
 
 function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {
@@ -337,7 +460,7 @@ export function nativeEnvelope(
     events: [],
     choice: readChoice(handle),
     view: snap,
-    legal_actions: deriveLegalActions(handle, view, finished),
+    legal_actions: authoritativeLegalActions(handle),
     hash_hex: "",
     revision,
     finished,
@@ -347,6 +470,13 @@ export function nativeEnvelope(
 export type NativeDispatchReq =
   | { type: "endPhase"; actor?: number }
   | { type: "playCard"; actor: number; card: number; targets: number[] }
+  | {
+      type: "activateSkill";
+      actor: number;
+      skill: number;
+      targets?: number[];
+      cardTargets?: number[];
+    }
   | {
       type: "resolveChoice";
       actor: number;
@@ -375,6 +505,22 @@ export function nativeDispatch(
         req.actor,
         req.card,
         new Uint32Array(req.targets),
+      );
+      return nativeEnvelope(handle, parseCommandResult(out));
+    }
+    case "activateSkill": {
+      // 内核 `GameAction::ActivateSkill` 只有技能 id：技能内部的目标/牌选择走
+      // 开放选择应答。窄壳因此不接目标；传了目标即协议误用，显式报错而不是
+      // 悄悄丢掉调用方的选择。
+      const selected = [...(req.targets ?? []), ...(req.cardTargets ?? [])];
+      if (selected.length > 0) {
+        throw new Error(
+          "native: activateSkill 不接受预选目标（目标由内核开放选择应答决定）",
+        );
+      }
+      const out = requireAuthoritativeExports(handle).activate_skill(
+        req.actor,
+        req.skill,
       );
       return nativeEnvelope(handle, parseCommandResult(out));
     }
@@ -424,6 +570,8 @@ export function nativeDispatch(
       } else {
         handle.engine.restore_hex(req.hex);
       }
+      // 读档会把引擎换成另一份状态（修订号可能相同），候选缓存必须失效。
+      invalidateLegalActions(handle);
       return nativeEnvelope(handle);
     }
     case "status":

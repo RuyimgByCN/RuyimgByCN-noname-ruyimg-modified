@@ -61,14 +61,33 @@ const rejected = JSON.stringify({ outcome: "rejected", revision: 7, finished: fa
 
 /**
  * 窄壳 stub：只实现 nativeBackend 实际调用的方法面。
- * @param {{choice?: object|null, reply?: () => string}} [options]
+ *
+ * **NC03 起候选来自内核权威查询**：桩扮演内核，`legal_actions_json` 必须给出
+ * 候选；适配层不再自己按手牌拼接，也不再合成应答。默认按 `choice` 推导
+ * 「内核会说的候选」（逐项应答 + 可选取消），`legal` 可显式覆盖。
+ * @param {{choice?: object|null, reply?: () => string, legal?: unknown[]}} [options]
  */
-function stubHandle({ choice = null, reply = () => accepted } = {}) {
+function stubHandle({ choice = null, reply = () => accepted, legal } = {}) {
   const calls = [];
+  const kernelLegal = () => {
+    if (legal !== undefined) return legal;
+    if (choice === null) return ["EndPhase"];
+    const options = choice.options ?? [];
+    if (options.length === 0) return [];
+    return [
+      { ResolveChoice: { choice_id: choice.id, selections: [0], cancelled: false } },
+      ...(choice.allowCancel
+        ? [{ ResolveChoice: { choice_id: choice.id, selections: [], cancelled: true } }]
+        : []),
+    ];
+  };
   const engine = {
     view_json: () => VIEW_JSON,
     is_finished: () => false,
     revision: () => 7,
+    legal_actions_json: (seat) =>
+      JSON.stringify({ seat, revision: 7, actions: kernelLegal() }),
+    activate_skill: () => reply(),
     open_choice_json: (seat) => {
       calls.push({ call: "open_choice_json", seat });
       return choice === null ? "null" : JSON.stringify(choice);

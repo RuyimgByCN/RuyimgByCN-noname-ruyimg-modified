@@ -63,7 +63,19 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
         reply({ id: msg.id, ok: true, data: data as never });
         return;
       }
-      case "activateSkill":
+      case "activateSkill": {
+        // NC03：主动技候选来自内核权威查询；此处只把技能 id 交给内核，
+        // 目标/选牌由内核的开放选择应答流程决定（见 nativeDispatch）。
+        const data = nativeDispatch(handle, {
+          type: "activateSkill",
+          actor: msg.actor,
+          skill: msg.skill,
+          targets: msg.targets,
+          cardTargets: msg.cardTargets,
+        });
+        reply({ id: msg.id, ok: true, data: data as never });
+        return;
+      }
       case "useSkillCard":
       case "loadReplay":
       case "seekReplay":

@@ -1,0 +1,12 @@
+# 权威查询代价实测  (2026-10-18T10:17:07Z)  设备: Apple M3 Max
+{
+  "wasm_pkg": "apps/web-client/src/worker/native-pkg (web, release, --no-opt)",
+  "revision": 2,
+  "actions": 6,
+  "query_ms_avg": 0.415,
+  "query_runs": 30,
+  "envelope_cold_ms": 0.558,
+  "envelope_warm_cached_ms": 0.051,
+  "note": "envelope_cold 含一次查询；envelope_warm_cached 命中 (handle, revision) 记忆化"
+}
+exit=0
