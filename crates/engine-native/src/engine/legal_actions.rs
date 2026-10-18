@@ -169,6 +169,19 @@ impl Engine {
 }
 
 /// 候选入列：内核校验通过且未重复才加入。
+/// 候选探测触发内核不变量 panic 的累计次数（NC12 长程防护；供测试/诊断读取）。
+static PROBE_FAULTS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+
+/// 记录一次探测故障（内部使用）。
+pub(crate) fn note_probe_fault() {
+    PROBE_FAULTS.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+}
+
+/// 读取探测故障累计数（诊断用；0 = 未发生）。
+pub fn probe_faults() -> u64 {
+    PROBE_FAULTS.load(std::sync::atomic::Ordering::Relaxed)
+}
+
 fn push_action(
     engine: &Engine,
     seat: crate::ids::PlayerId,
@@ -183,7 +196,22 @@ fn push_action(
     if !dedup.insert(key) {
         return;
     }
-    if engine.probe_action(seat, &action).is_ok() {
+    // NC12 长程防护（2026-10-19）：候选探测同样在**克隆**上真实 `submit`，若内核在
+    // 该探测状态上触发不变量 panic（实测 `machine.rs:408 card N not in hand of P`，
+    // 回溯 legal_actions::push_action → submit → finish_segment → commit_frame），
+    // **不得杀死进程**——捕获后视为「该动作不合法」并计数。
+    // 真实提交路径不捕获（内核不变量在真实引擎仍硬失败）。
+    let probed = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        engine.probe_action(seat, &action)
+    }));
+    let legal = match probed {
+        Ok(r) => r.is_ok(),
+        Err(_) => {
+            crate::engine::legal_actions::note_probe_fault();
+            false
+        }
+    };
+    if legal {
         out.push(action);
     }
 }

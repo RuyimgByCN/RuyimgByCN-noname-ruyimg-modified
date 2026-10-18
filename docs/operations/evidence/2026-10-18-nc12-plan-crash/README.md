@@ -55,3 +55,42 @@ nc12_bench::plan_with_catch → drive_game → scenario_long → main
       （固定种子 + 命令序号 + 崩溃前状态快照）
 - [ ] 收集并分析 ≥30 分钟长程结果（内存/句柄/时延随时间漂移）
 - [ ] 其余平台档位、真实网络 RTT、旧线对照
+
+## 5 追加：第二处崩溃路径（候选探测）已加防护（2026-10-19 同轮）
+
+加防护后重跑，进程仍在 **7,027** 行后崩溃 → `RUST_BACKTRACE=1` 取得**第二条**回溯
+（[backtrace-2.log](backtrace-2.log)）：
+
+```
+engine_native::kernel::commit_frame
+engine_native::engine::commands::Engine::finish_segment
+engine_native::engine::commands::Engine::submit
+engine_native::engine::legal_actions::push_action     ← 候选探测（克隆上 submit）
+```
+
+即**候选探测**（`probe_action` = 克隆 + 真实 `submit`）同样会触发内核不变量 panic。
+
+**处置**（`crates/engine-native/src/engine/legal_actions.rs`，该文件**已被跟踪**、可独立提交）：
+
+- `probe_action` 调用包在 `catch_unwind(AssertUnwindSafe(..))` 中；
+- 捕获后视为「该动作**不合法**」（不计入候选）并累加全局计数
+  `legal_actions::probe_faults()`（`AtomicU64`，诊断可读）；
+- **真实提交路径不捕获**（内核不变量在真实引擎仍硬失败）。
+
+**验证**（[long-load-guarded2.log](long-load-guarded2.log)）：
+
+| 判据 | 结果 |
+|---|---|
+| 同参数长程不再中断 | **通过**：日志持续增长（12,641 → 17,477 `RESULT` 行，30 秒增量 4,836 行） |
+| 被捕获的 panic 不再杀死进程 | **通过**：日志中出现 2 次 panic 文本（默认 hook 打印）但进程继续运行 |
+| 定向回归 | `nc03_legal_actions` 4/4、`nc10_ai_bounds` 3/3（本文件）、`nc08_upstream_ciqiu` 5/5 通过 |
+
+> 长程（`min_cmds=20000000`，目标 ≥30 分钟）**正在后台运行**（04:13 启动）→ **结果下一轮收集**；
+> 本轮**仍不宣称 ≥30 分钟已验收**。
+
+### 仍未完成（更新）
+
+- [ ] **根因**：为何「克隆 + 遮蔽」后的模拟状态会让 `take_hand_card` 找不到牌（最小复现待做）
+- [ ] 收集 ≥30 分钟长程结果（内存/句柄/时延漂移）与 `probe_faults()`/`sim_faults` 计数
+- [ ] 是否将两类故障计数接入产品遥测（当前仅测试/诊断可读）
+- [ ] 其余平台档位、真实网络 RTT、旧线对照
