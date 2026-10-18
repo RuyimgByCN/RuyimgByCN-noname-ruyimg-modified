@@ -166,3 +166,33 @@ python3 -B scripts/check-source-lines.py
 退出码），不代表其他人的改动已验收。
 
 本目录日志与 README 的 SHA-256 见 [SHA256SUMS](SHA256SUMS)。
+
+## 主 agent 独立复核（2026-10-18）
+
+| 复核项 | 命令 | 结果 |
+|---|---|---|
+| 型别检查 | `pnpm --dir apps/web-client typecheck` | **exit 0** |
+| 前端测试 | `pnpm --dir apps/web-client test` | **41/41 pass / 0 fail**（与报告一致） |
+| 原生冒烟 | `pnpm --dir apps/web-client smoke:native` | **exit 0**，`{"total":32,"failed":0}` |
+| 行数门禁 | `python3 -B scripts/check-source-lines.py` | 8266 文件 ≤ 2000 行 |
+| 提交范围 | `git show --stat f5fd1cf1` / `0c483c3b` | 其自有文件（源码/测试/证据） |
+
+### 并行协作事件（如实记录）
+
+- 本切片报告：其在 HEAD 被并行提交前移后执行 `git commit --amend --no-edit`，**误改到父 agent 的
+  NC08 提交**（原 `fd1d1afd` → 现 `b73df256`），使该提交额外包含 7 个 NC05 UI 证据文件。
+- **父 agent 复核**：`b73df256` 的**源码/测试改动与本提交消息完整无缺**（`nc08_prepare_phase_mapping.rs`
+  67 行、`native-progress.md` NC08 行、`2026-10-18-nc08-prepare-phase/README.md` 均在），
+  仅额外携带对方证据文件；未做 reset/rebase，无内容丢失。按「不重写历史、保留他人变更」处理：
+  **只记录，不修历史**。
+- 教训（供后续 agent）：共享工作区中 **禁止 `--amend`**（HEAD 可能已被并行提交前移）；
+  需要补证据时应新建提交。
+
+### 仍未完成（沿用其清单，未验收项）
+
+1. 真实浏览器端到端（Worker+Vite 打包、实际点击/渲染）与视觉验收；
+2. 联机房间协议选将的**客户端入口**（`NetworkEngineClient` 无 `chooseGeneral`，online 模式面板隐藏）；
+3. 候选**按座位门控**（内核仍目录全量）、双将/明置未建模；
+4. 原生观察者投影 `character_def` 仍为 0（技能 id 占位）→ 选将后立绘/名字不随动；
+5. 对局中选将与开放选择/回放的一致性未定义；
+6. 若改 Rust 导出面需 `build:native` 重建并复核冒烟。
