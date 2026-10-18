@@ -1,0 +1,38 @@
+tianfuzhen: {
+		type: "zhenfa",
+		recastable: true,
+		enable() {
+			return game.hasPlayer(function (current) {
+				return current.isMajor();
+			});
+		},
+		filterTarget(card, player, target) {
+			return target.isMajor() && target.countCards("he") > 0;
+		},
+		selectTarget: -1,
+		content() {
+			target.chooseToDiscard("he", true).delay = false;
+		},
+		mode: ["guozhan"],
+		ai: {
+			order: 7,
+			result: {
+				target: -1,
+			},
+			tag: {
+				discard: 1,
+			},
+		},
+	},
+	dizaizhen: {
+		type: "zhenfa",
+		recastable: true,
+		enable() {
+			return game.hasPlayer(function (current) {
+				return current.isNotMajor();
+			});
+		},
+		filterTarget(card, player, target) {
+			return target.isNotMajor();
+		},
+		s
