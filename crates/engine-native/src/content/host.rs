@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 集舍（tag 522，L27 选将美化批 5，`jishe`）：出牌阶段主动（手牌上限
+    /// >0）——摸一张牌并累计标记（上游 `jishe2` 的手牌上限削减面因该技在
+    /// 上游被注释而**不生效**，登记差异）。
+    Jishe,
     /// 诈降（tag 521，L27 选将美化批 4，`sbzhaxiang`）：锁定——本阶段已用
     /// 牌数 < 已损失体力时：用牌**无距离/次数限制**且【杀】**不可被闪避**；
     /// 摸牌阶段额外摸「已损失体力」张。
@@ -1847,6 +1851,7 @@ impl HostBehavior {
             HostBehavior::NewMeibu => 519,
             HostBehavior::NewMeibuRange => 520,
             HostBehavior::SbZhaXiang => 521,
+            HostBehavior::Jishe => 522,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2608,6 +2613,7 @@ impl HostBehavior {
             519 => HostBehavior::NewMeibu,
             520 => HostBehavior::NewMeibuRange,
             521 => HostBehavior::SbZhaXiang,
+            522 => HostBehavior::Jishe,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2628,7 +2634,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 517] = [
+        pub const ALL: [HostBehavior; 518] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3146,6 +3152,7 @@ impl HostBehavior {
         HostBehavior::NewMeibu,
         HostBehavior::NewMeibuRange,
         HostBehavior::SbZhaXiang,
+        HostBehavior::Jishe,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3425,6 +3432,7 @@ impl HostBehavior {
             HostBehavior::NewMeibu => "host:new_meibu",
             HostBehavior::NewMeibuRange => "host:new_meibu_range",
             HostBehavior::SbZhaXiang => "host:sbzhaxiang",
+            HostBehavior::Jishe => "host:jishe",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3904,6 +3912,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 集舍：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Jishe => None,
             // 诈降：被动（mod/摸牌/直伤面内联，无触发时机）
             HostBehavior::SbZhaXiang => None,
             // 每步：任意角色出牌阶段开始（可选）
@@ -6380,6 +6390,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 集舍（L27 选将美化批 5）：目录技能名（摸 1 + 标记；手牌上限面上游已注释）。
+pub const L27_JISHE_KEY: &str = "jishe";
+
 /// 诈降（L27 选将美化批 4）：目录技能名（用牌数 < 已损失体力 → 无限制+直伤）。
 pub const L27_SBZHAXIANG_KEY: &str = "sbzhaxiang";
 
@@ -7654,6 +7667,7 @@ impl HostSkillBehavior {
             HostBehavior::NewZhixi => (None, None),
             HostBehavior::NewMeibuRange => (None, None),
             HostBehavior::SbZhaXiang => (None, None),
+            HostBehavior::Jishe => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -8007,6 +8021,7 @@ impl SkillBehavior for HostSkillBehavior {
             },
             HostBehavior::NewMeibuRange => false,
             HostBehavior::SbZhaXiang => false,
+            HostBehavior::Jishe => false,
             // 止息：自己使用牌
             HostBehavior::NewZhixi => matches!(event,
                 EventData::CardUsed(u) if u.player == owner),
@@ -10299,6 +10314,25 @@ impl SkillBehavior for HostSkillBehavior {
             }
             // 轩辕（swd 批 146）：结束阶段触发（无主动面）
             HostBehavior::Xuanyuan => None,
+            // 集舍（L27 批 5）：出牌阶段主动（手牌上限 > 0）
+            HostBehavior::Jishe => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.hand_limit(ctx.catalog, owner) == 0
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 蛊惑（史诗卡牌批 1）：出牌阶段主动（每回合一次；手牌非空）
             HostBehavior::Reguhuo => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
@@ -12630,6 +12664,27 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::NewMeibuRange => Flow::Done,
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => Flow::Done,
+            // 集舍：摸 1 + 累计标记（上游 jishe2 的手牌上限削减不生效）
+            HostBehavior::Jishe => {
+                ctx.draw_cards(self.owner, 1);
+                let def = ctx
+                    .catalog
+                    .skill_by_name(L27_JISHE_KEY)
+                    .map(u32::from)
+                    .unwrap_or_default();
+                let entry = ctx
+                    .core
+                    .vm_aux
+                    .marks
+                    .entry((self.owner, def))
+                    .or_insert(0);
+                *entry += 1;
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "集舍",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
             // 疾影：无效果步（sha_range_free 链查询）
             HostBehavior::SwdJiyingHeld => Flow::Done,
             // 沐风：确认门后摸 1（discoverCard 确定性=牌堆末摸 1）
