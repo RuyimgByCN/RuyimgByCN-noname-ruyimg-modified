@@ -1,0 +1,30 @@
+jianxiong: {
+		audio: 2,
+		trigger: { player: "damageEnd" },
+		frequent: true,
+		group: "sbjianxiong_mark",
+		filter(event, player) {
+			return (get.itemtype(event.cards) === "cards" && event.cards.some(i => get.position(i, true) === "o")) || 3 - player.countMark("sbjianxiong") > 0;
+		},
+		prompt2(event, player) {
+			const gain = get.itemtype(event.cards) === "cards" && event.cards.some(i => get.position(i, true) === "o");
+			const draw = 3 - player.countMark("sbjianxiong");
+			let str = "";
+			if (gain) {
+				str += `获得${get.translation(event.cards)}`;
+			}
+			if (gain && draw > 0) {
+				str += "并";
+			}
+			if (draw > 0) {
+				str += `摸${get.cnNumber(3 - player.countMark("sbjianxiong"))}张牌`;
+			}
+			if (player.countMark("sbjianxiong")) {
+				str += "，然后可以弃1枚“治世”";
+			}
+			return str;
+		},
+		async content(event, trigger, player) {
+			const { cards } = trigger;
+			if (get.itemtype(cards) === "cards" && cards.someInD()) {
+				await player.gain({ cards: cards.filterInD(), animate: "gain2"
