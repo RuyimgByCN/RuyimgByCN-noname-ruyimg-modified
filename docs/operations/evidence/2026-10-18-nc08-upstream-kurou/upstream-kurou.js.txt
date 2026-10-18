@@ -1,0 +1,19 @@
+               //修改苦肉时机
+                lib.skill.kurou = {
+                    audio: 2,
+                    enable: "phaseUse",
+                    direct: true,
+                    content: function () {
+                        player.logSkill('kurou');
+                        player.loseHp(1);
+                        player.draw(2);
+                    },
+                    ai: {
+                        basic: {
+                            order: 1,
+                        },
+                        result: {
+                            player: function (player) {
+                                if (player.countCards('h') >= player.hp - 1) return -1;
+                                if (player.hp < 3) return -1;
+              
