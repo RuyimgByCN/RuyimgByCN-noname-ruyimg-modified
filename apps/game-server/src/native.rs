@@ -68,48 +68,75 @@ impl NativeContent {
         Ok(metas.iter().map(Self::meta_info).collect())
     }
 
-    /// 装载：按包 id 找安装记录 → 读安装后包数据 → 装载器桥接。
-    /// T8 增量 4：存在编译包 `package.npack.json` 时优先读——rule-vm
-    /// 模块经 `bridge_vm_skill_decls` 入 `vm_skills`（不重编译装包含新
-    /// 技能的包）；此时 `assets/cards.json` 可选（vm-only 包）。无编译
-    /// 包时维持 T6③ 口径（cards.json 必需，暂缓牌清单透传）。
+    /// 装载：**以已验证的安装副本为权威**（NC02）——按内容锁装载并校验
+    /// logic/content 指纹，卡牌资源经 store 解析安装目录读取；不再回读
+    /// drop-in 原始来源目录（`extension_root` 仅保留来源信息）。
+    ///
+    /// 同 id 多命名空间时报错要求显式命名空间；见 [`Self::load_scoped`]。
     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+        self.load_scoped(None, package_id)
+    }
+
+    /// 装载（可指定命名空间）：`namespace = None` 时若同 id 出现在多个
+    /// 命名空间则明确失败，不静默挑一个。
+    pub fn load_scoped(
+        &self,
+        namespace: Option<&str>,
+        package_id: &str,
+    ) -> Result<LoadedPack, String> {
         use engine_native::content::extension::{ExtensionDef, ExtensionPack};
-        let metas = self.store.list_installed().map_err(|e| e.to_string())?;
-        let meta = metas
+
+        // ① 内容锁 + 安装副本（load_locked_packages 校验 logic/content 指纹）
+        let lock = self.store.current_lock().map_err(|e| e.to_string())?;
+        let packages = self
+            .store
+            .load_locked_packages(&lock)
+            .map_err(|e| format!("装载安装副本失败: {e}"))?;
+        let matched: Vec<&content_schema::ContentPackage> = packages
             .iter()
-            .find(|m| m.package_id == package_id)
-            .ok_or_else(|| format!("包未安装: {package_id}"))?;
-        let root = meta
-            .extension_root
-            .as_ref()
-            .ok_or_else(|| format!("包缺少安装根: {package_id}"))?;
-        let cards_path = PathBuf::from(root).join("assets/cards.json");
-        let npack_path = PathBuf::from(root).join("package.npack.json");
-        let (pack, deferred) = if npack_path.is_file() {
-            let raw = std::fs::read_to_string(&npack_path)
-                .map_err(|e| format!("读取编译包失败 {npack_path:?}: {e}"))?;
-            let parsed: content_schema::ContentPackage =
-                serde_json::from_str(&raw).map_err(|e| format!("编译包解析失败: {e}"))?;
-            let outcome = content_native_loader::bridge_vm_skill_decls(&parsed)
+            .filter(|p| {
+                p.manifest.package_id == package_id
+                    && namespace
+                        .map(|ns| p.manifest.namespace == ns)
+                        .unwrap_or(true)
+            })
+            .collect();
+        let parsed: &content_schema::ContentPackage = match matched.len() {
+            0 => return Err(format!("包未安装或未激活: {package_id}")),
+            1 => matched[0],
+            n => {
+                return Err(format!(
+                    "包 id 在 {n} 个命名空间下存在，请显式指定命名空间: {package_id}"
+                ))
+            }
+        };
+        let ns = parsed.manifest.namespace.clone();
+        let pid = parsed.manifest.package_id.clone();
+
+        // ② 卡牌资源：按 asset_paths 里的相对路径解析到**安装目录**（不读源目录）
+        let cards_path = self
+            .store_asset_path(parsed, "assets/cards.json")
+            .map_err(|e| format!("解析安装资源失败: {e}"))?;
+
+        let (pack, deferred) = {
+            let outcome = content_native_loader::bridge_vm_skill_decls(parsed)
                 .map_err(|e| e.to_string())?;
             let vm_skills = outcome.decls;
-            let bridged = if cards_path.is_file() {
+            if let Some(cards_path) = cards_path {
                 let json = std::fs::read_to_string(&cards_path)
-                    .map_err(|e| format!("读取包数据失败 {cards_path:?}: {e}"))?;
+                    .map_err(|e| format!("读取安装包数据失败 {cards_path:?}: {e}"))?;
                 let b: BridgedPack =
                     content_native_loader::bridge_pack(&json).map_err(|e| e.to_string())?;
-                (b.pack, b.deferred)
+                let mut pack = b.pack;
+                // 混合包：VM 声明并入桥接产物（不得因存在 cards.json 丢技能）
+                pack.vm_skills.extend(vm_skills);
+                (pack, b.deferred)
             } else {
-                // vm-only 包：无卡牌桥接面，元数据取自 npack manifest。
+                // vm-only 包：无卡牌桥接面，元数据取自锁内 manifest。
                 (
                     ExtensionPack {
                         def: ExtensionDef {
-                            name: engine_native::content::names::intern(
-                                parsed.manifest.package_id.clone(),
-                            ),
-                            // npack version 为类 semver 字符串——取首个数
-                            // 字段（无法解析取 0；生命周期指纹另含内容锁）。
+                            name: engine_native::content::names::intern(pid.clone()),
                             version: parsed
                                 .manifest
                                 .version
@@ -117,9 +144,7 @@ impl NativeContent {
                                 .next()
                                 .and_then(|v| v.parse::<u32>().ok())
                                 .unwrap_or(0),
-                            description: engine_native::content::names::intern(
-                                parsed.manifest.namespace.clone(),
-                            ),
+                            description: engine_native::content::names::intern(ns.clone()),
                         },
                         generals: Vec::new(),
                         cards: Vec::new(),
@@ -130,20 +155,36 @@ impl NativeContent {
                     },
                     Vec::new(),
                 )
-            };
-            bridged
-        } else {
-            let json = std::fs::read_to_string(&cards_path)
-                .map_err(|e| format!("读取包数据失败 {cards_path:?}: {e}"))?;
-            let bridged: BridgedPack =
-                content_native_loader::bridge_pack(&json).map_err(|e| e.to_string())?;
-            (bridged.pack, bridged.deferred)
+            }
         };
         Ok(LoadedPack {
             package_id: package_id.to_string(),
             pack,
             deferred,
         })
+    }
+
+    /// 包内资产相对路径 → 安装目录中的不可变路径（未登记该路径时返回 None）。
+    fn store_asset_path(
+        &self,
+        package: &content_schema::ContentPackage,
+        rel: &str,
+    ) -> Result<Option<PathBuf>, String> {
+        let Some((asset_id, _)) = package
+            .asset_paths
+            .iter()
+            .find(|(_, path)| path.as_str() == rel)
+        else {
+            return Ok(None);
+        };
+        self.store
+            .resolve_active_asset(
+                &package.manifest.namespace,
+                &package.manifest.package_id,
+                asset_id,
+            )
+            .map(Some)
+            .map_err(|e| e.to_string())
     }
 }
 

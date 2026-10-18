@@ -21,7 +21,7 @@
 | 工作包 | 当前状态 | 执行入口与依赖 |
 |---|---|---|
 | NC01 | **根因已修 + 回归已加 + 定向/全量通过（2026-10-18）**；版本升格与 3 处顺序调用方迁移待并行提交 | [座位与触发语义](native-convergence-plan.md#nc01)；[证据](../operations/evidence/2026-10-18-nc01-seat-semantics/README.md) |
-| NC02 | 待修复并核验 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；复用 PackageStore |
+| NC02 | **根因已修 + 7 项验收回归 + game-server 全量通过（2026-10-18）**；`-D warnings` 门禁被并行重构阻断 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；[证据](../operations/evidence/2026-10-18-nc02-install-identity/README.md) |
 | NC03 | 待修复并补齐 | [统一原生 API](native-convergence-plan.md#nc03)；与 NC02/NC04 同步接口 |
 | NC04 | 待修复并核验 | [VM 故障与事务](native-convergence-plan.md#nc04)；保留已有预算与回滚 |
 | NC05 | 待完整验收 | [独立扩展宿主](native-convergence-plan.md#nc05)；依赖 NC02–NC04，按需引入 NC06/NC07 切片 |
@@ -32,6 +32,15 @@
 | NC10 | 待产品排程与质量验收 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；复用已有预算和策略 |
 | NC11 | 已登记方案，验收数据收敛待执行 | [文档与证据模型](native-convergence-plan.md#nc11)；逐来源修正过宽声明，不用文字标签认证完成 |
 | NC12 | 待实测及最终切换 | [效能与旧线退出](native-convergence-plan.md#nc12)；先测基线，退出旧入口依赖全矩阵通过 |
+
+### NC02 核验（2026-10-18，规则 v321 / 存档 v105 未变）
+
+- 根因：`NativeContent::load` 以 `InstalledMeta.extension_root`（drop-in **源目录**）为执行内容来源 → 删除来源即装载失败、改来源即改执行内容（审计 `loader-probe.log` 两条反例）。
+- 修复：改走**内容锁 + 安装副本**（`current_lock()` → `load_locked_packages()` 逐包校验 logic/content 指纹）；包身份含命名空间/包 ID/版本/指纹，同 id 多命名空间明确失败并可 `load_scoped` 精确选择；卡牌资源经 `asset_paths` → `resolve_active_asset` 从安装目录读取；混合包 VM 声明并入桥接产物（不再丢技能）；`extension_root` 降为来源信息。
+- 回归：新增 `apps/game-server/tests/nc02_install_identity.rs`（7 项：删除来源/改来源/混合包/同 id 异命名空间/损坏副本/重复装载/升级不改写固定锁）。
+- 实测：定向 7/7；game-server 全量 **56/0/0**；相关包 85/0/0；行数门禁 8220 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc02-install-identity/README.md)。
+- 阻断：`RUSTFLAGS=-D warnings` 的 game-server 检查因并行重构中的 `engine-core`（106 处 unused import）无法编译依赖而失败；**无一条告警位于 `apps/game-server`**。
+- 待办：配置/立绘/音频等其它资源同源化；玩家侧安装/启用/升级/回退/卸载产品入口（NC03/NC05）；已安装内容回收后的重新取得与缺失拒绝。
 
 ### NC01 核验（2026-10-18，规则 v321 未变）
 
