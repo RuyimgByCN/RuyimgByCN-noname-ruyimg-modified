@@ -31,6 +31,8 @@ pub struct Lobby {
     content_catalog: ActiveCatalog,
     content_assets: BTreeMap<(String, String, String), ActiveAssetInfo>,
     native: std::sync::Arc<crate::native::NativeContent>,
+    /// NC09：原生房间落盘存储（`None` = 不落盘）。
+    native_room_store: Option<crate::native_room_store::NativeRoomStore>,
 }
 
 /// Point-in-time lobby statistics for Prometheus export (§40.2).
@@ -59,6 +61,7 @@ impl Lobby {
         content_assets: BTreeMap<(String, String, String), ActiveAssetInfo>,
         native: std::sync::Arc<crate::native::NativeContent>,
     ) -> Self {
+        let cfg_native_store = cfg.native_room_store.clone();
         Self {
             cfg,
             next_conn: AtomicU64::new(1),
@@ -73,8 +76,67 @@ impl Lobby {
             content_lock,
             content_catalog,
             content_assets,
+            native_room_store: if cfg_native_store.is_empty() {
+                None
+            } else {
+                Some(crate::native_room_store::NativeRoomStore::new(cfg_native_store))
+            },
             native,
         }
+    }
+
+    /// NC09 启动恢复：扫描落盘房间并按 `pack_refs` 重新装载包恢复房间。
+    ///
+    /// 返回恢复的房间数。**单个房间恢复失败不阻断启动**，但会记录告警（并保留落盘记录
+    /// 以便人工处理）；恢复成功的房间以**原房间号**重新进入房间表，并把 `next_room`
+    /// 推进到最大房间号之后（避免新建房间撞号）。
+    pub fn restore_native_rooms(&self) -> Result<usize, String> {
+        let Some(store) = self.native_room_store.clone() else {
+            return Ok(0);
+        };
+        let records = store.load_all()?;
+        if records.is_empty() {
+            return Ok(0);
+        }
+        let mut restored = 0usize;
+        let mut max_id = 0u64;
+        for record in &records {
+            max_id = max_id.max(record.room_id);
+            let content = self.native.clone();
+            let namespace = self.cfg.native_room_namespace.clone();
+            let mut load_pack = move |r: &str| -> Result<
+                engine_native::content::extension::ExtensionPack,
+                String,
+            > {
+                // `包名@版本` → 按名在当前命名空间查找并装载
+                let name = r.split('@').next().unwrap_or(r);
+                let installed = content.installed()?;
+                let found = installed
+                    .iter()
+                    .find(|p| p.package_id == name || p.package_id.ends_with(name))
+                    .ok_or_else(|| format!("恢复房间失败：包未安装 {name}"))?;
+                let loaded = content.load_scoped(Some(&namespace), &found.package_id)?;
+                Ok(loaded.pack)
+            };
+            match crate::room_native_actor::restore_room_from_disk(
+                record,
+                &mut load_pack,
+                self.cfg.room_mailbox,
+                self.cfg.snapshot_every,
+                store.clone(),
+            ) {
+                Ok(handle) => {
+                    self.rooms.lock().insert(record.room_id, handle);
+                    restored += 1;
+                    tracing::info!(room = record.room_id, "原生房间已从落盘恢复");
+                }
+                Err(e) => {
+                    tracing::warn!(room = record.room_id, error = %e, "原生房间恢复失败（保留落盘记录）");
+                }
+            }
+        }
+        self.next_room.fetch_max(max_id + 1, Ordering::SeqCst);
+        Ok(restored)
     }
 
     /// T6③：列出已安装原生包。
@@ -238,6 +300,7 @@ impl Lobby {
                         self.cfg.native_rooms,
                         &self.cfg.native_room_namespace,
                         &self.cfg.native_room_packages,
+                        self.native_room_store.clone(),
                     )
                     .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
                     let handle = match native_handle {

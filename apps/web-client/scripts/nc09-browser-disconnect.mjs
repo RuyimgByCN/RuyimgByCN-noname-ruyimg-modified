@@ -24,6 +24,7 @@ function startServer() {
       NONAME_NATIVE_ROOMS: "1",
       NONAME_NATIVE_ROOM_PACKAGES: "shahai-swd",
       GAME_SERVER_ADDR: "127.0.0.1:7700",
+      NONAME_NATIVE_ROOM_STORE: process.env.NONAME_NATIVE_ROOM_STORE ?? "data/native-rooms",
     },
   });
 }

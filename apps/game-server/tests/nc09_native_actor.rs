@@ -187,6 +187,7 @@ async fn nc09_backend_selection_is_explicit() {
         false,
         "upstream-noname",
         &["shahai-swd".to_string()],
+        None,
     )
     .expect("未启用不应报错");
     assert!(none.is_none(), "未启用原生后端时不得接管");
@@ -202,6 +203,7 @@ async fn nc09_backend_selection_is_explicit() {
         true,
         "upstream-noname",
         &["shahai-swd".to_string()],
+        None,
     )
     .expect("启用后应成功")
     .expect("应返回原生句柄");
@@ -233,6 +235,7 @@ async fn nc09_backend_selection_is_explicit() {
         true,
         "upstream-noname",
         &["no-such-package".to_string()],
+        None,
     ) {
         Ok(_) => panic!("包缺失必须报错"),
         Err(e) => e,

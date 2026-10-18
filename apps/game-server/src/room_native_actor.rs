@@ -506,6 +506,7 @@ pub fn spawn_native_room_if_configured(
     native: bool,
     namespace: &str,
     packages: &[String],
+    store: Option<NativeRoomStore>,
 ) -> Result<Option<RoomHandle>, String> {
     if !native {
         return Ok(None);
@@ -523,7 +524,14 @@ pub fn spawn_native_room_if_configured(
             .map_err(|e| format!("原生房间建局失败: {e:?}"))?
     };
     let session = NativeRoomSession::new(engine, players);
-    Ok(Some(spawn_room_native(id, session, mailbox, snapshot_every)))
+    Ok(Some(spawn_room_native_persisted(
+        id,
+        session,
+        mailbox,
+        snapshot_every,
+        String::new(),
+        store,
+    )))
 }
 
 /// 供测试构造：把原生会话交给 actor 的便捷入口（`oneshot` 回复通道）。

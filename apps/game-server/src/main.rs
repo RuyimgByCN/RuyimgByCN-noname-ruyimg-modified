@@ -103,6 +103,13 @@ async fn main() {
         content_assets,
         Arc::new(native_content),
     ));
+    // NC09：启动时恢复落盘的原生房间（存储目录为空/未启用时为空操作）
+    match lobby.restore_native_rooms() {
+        Ok(0) => {}
+        Ok(n) => tracing::info!(rooms = n, "已恢复落盘原生房间"),
+        Err(e) => tracing::warn!(error = %e, "原生房间恢复失败（服务端继续启动）"),
+    }
+
     let original_content = ServeDir::new(&cfg.original_content_root);
 
     let app = Router::new()

@@ -36,6 +36,8 @@ pub struct ServerConfig {
     pub native_room_packages: Vec<String>,
     /// NC09：原生房间包所属命名空间。
     pub native_room_namespace: String,
+    /// NC09：原生房间落盘目录（空串 = 不落盘）。
+    pub native_room_store: String,
 }
 
 impl Default for ServerConfig {
@@ -56,6 +58,7 @@ impl Default for ServerConfig {
             native_rooms: false,
             native_room_packages: Vec::new(),
             native_room_namespace: "upstream-noname".to_string(),
+            native_room_store: "data/native-rooms".to_string(),
         }
     }
 }
@@ -101,6 +104,9 @@ impl ServerConfig {
         }
         if let Ok(ns) = std::env::var("NONAME_NATIVE_ROOM_NAMESPACE") {
             c.native_room_namespace = ns;
+        }
+        if let Ok(dir) = std::env::var("NONAME_NATIVE_ROOM_STORE") {
+            c.native_room_store = dir;
         }
         c.extension_verify_key = std::env::var("NONAME_EXTENSION_VERIFY_KEY").ok();
         if let Ok(value) = std::env::var("NONAME_ALLOW_UNSIGNED_EXTENSIONS") {
