@@ -16,10 +16,35 @@ use std::path::{Path, PathBuf};
 pub struct StoredRoom {
     /// 房间号。
     pub room_id: u64,
-    /// 房间密码（空串 = 无密码）。
-    pub password: String,
+    /// 房间密码的**加盐哈希**（空串 = 无密码）——不落明文。
+    ///
+    /// 盐为房间号（本地磁盘口径；生产环境应改为随机盐 + 外部密钥存储，见证据待办）。
+    #[serde(default)]
+    pub password_hash: String,
     /// 会话状态。
     pub state: NativeRoomState,
+    /// 状态校验和（`blake3(state JSON)` 的 hex）——读回时校验，防篡改/截断。
+    #[serde(default)]
+    pub checksum: String,
+}
+
+/// 密码加盐哈希（房间号作盐）。空密码 → 空串（表示无密码）。
+pub fn password_hash(room_id: u64, password: &str) -> String {
+    if password.is_empty() {
+        return String::new();
+    }
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(b"noname-native-room-pw-v1:");
+    hasher.update(&room_id.to_le_bytes());
+    hasher.update(b":");
+    hasher.update(password.as_bytes());
+    hasher.finalize().to_hex().to_string()
+}
+
+/// 状态校验和（`blake3(JSON)`）。
+pub fn state_checksum(state: &NativeRoomState) -> String {
+    let json = serde_json::to_vec(state).unwrap_or_default();
+    blake3::hash(&json).to_hex().to_string()
 }
 
 /// 房间落盘存储（目录级）。
@@ -42,9 +67,12 @@ impl NativeRoomStore {
     /// 原子写入一个房间（先写临时文件再 rename）。
     pub fn save(&self, record: &StoredRoom) -> Result<(), String> {
         std::fs::create_dir_all(&self.dir).map_err(|e| format!("创建房间目录失败: {e}"))?;
+        // 校验和始终按当前状态重算（调用方无需维护）
+        let mut record = record.clone();
+        record.checksum = state_checksum(&record.state);
         let final_path = self.dir.join(format!("{}.json", record.room_id));
         let tmp_path = self.dir.join(format!("{}.json.tmp", record.room_id));
-        let json = serde_json::to_vec_pretty(record).map_err(|e| format!("序列化失败: {e}"))?;
+        let json = serde_json::to_vec_pretty(&record).map_err(|e| format!("序列化失败: {e}"))?;
         std::fs::write(&tmp_path, &json).map_err(|e| format!("写临时文件失败: {e}"))?;
         std::fs::rename(&tmp_path, &final_path).map_err(|e| format!("rename 失败: {e}"))?;
         Ok(())
@@ -68,6 +96,17 @@ impl NativeRoomStore {
                 .map_err(|e| format!("读 {} 失败: {e}", path.display()))?;
             let record: StoredRoom = serde_json::from_str(&text)
                 .map_err(|e| format!("解析 {} 失败: {e}", path.display()))?;
+            // 校验和验证：非空且不匹配 → 明确报错（不静默接受损坏/篡改的状态）
+            if !record.checksum.is_empty() {
+                let expect = state_checksum(&record.state);
+                if expect != record.checksum {
+                    return Err(format!(
+                        "{} 校验和不匹配（期望 {expect}，实际 {}）",
+                        path.display(),
+                        record.checksum
+                    ));
+                }
+            }
             out.push(record);
         }
         out.sort_by_key(|r| r.room_id);

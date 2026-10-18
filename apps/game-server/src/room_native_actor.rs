@@ -24,6 +24,8 @@ use tracing::{debug, info};
 ///
 /// 终局处理：比赛已有结果（`outcome().is_some()`）时**删除**落盘记录并停止写入——
 /// 已结束的房间无需跨重启恢复，避免落盘目录只增不减。
+///
+/// `password` 参数此处是**密码哈希**（运行期不持有明文）。
 fn persist_room(
     store: &Option<NativeRoomStore>,
     id: u64,
@@ -39,8 +41,9 @@ fn persist_room(
     }
     let record = StoredRoom {
         room_id: id,
-        password: password.to_string(),
+        password_hash: password.to_string(),
         state: session.export_state(&session.snapshot_hex()),
+        checksum: String::new(),
     };
     if let Err(e) = store.save(&record) {
         tracing::warn!(room = id, error = %e, "原生房间落盘失败");
@@ -87,13 +90,27 @@ pub fn spawn_room_native_persisted(
     password: String,
     store: Option<NativeRoomStore>,
 ) -> RoomHandle {
+    // 运行期只保留**哈希**（明文仅在入座比对时短暂存在）
+    let hash = crate::native_room_store::password_hash(id, &password);
+    spawn_room_native_persisted_with_hash(id, session, mailbox, snapshot_every, hash, store)
+}
+
+/// 带**密码哈希**启动（恢复路径用：磁盘上只有哈希，没有明文）。
+pub fn spawn_room_native_persisted_with_hash(
+    id: u64,
+    session: NativeRoomSession,
+    mailbox: usize,
+    snapshot_every: u64,
+    password_hash: String,
+    store: Option<NativeRoomStore>,
+) -> RoomHandle {
     let (tx, rx) = mpsc::channel(mailbox);
     tokio::spawn(native_room_loop(
         id,
         session,
         rx,
         snapshot_every,
-        password,
+        password_hash,
         store,
     ));
     RoomHandle::new(id, tx)
@@ -115,12 +132,13 @@ pub fn restore_room_from_disk(
         packs.push(load_pack(r)?);
     }
     let session = NativeRoomSession::from_saved(&record.state, packs)?;
-    Ok(spawn_room_native_persisted(
+    // 恢复时把**哈希**带回运行期：入座校验用哈希比对（运行期不再持有明文）
+    Ok(spawn_room_native_persisted_with_hash(
         record.room_id,
         session,
         mailbox,
         snapshot_every,
-        record.password.clone(),
+        record.password_hash.clone(),
         Some(store),
     ))
 }
@@ -155,7 +173,10 @@ async fn native_room_loop(
                 outbound,
                 reply,
             } => {
-                if !room_password.is_empty() && pw != room_password {
+                // 入座校验：输入密码 → 哈希 → 与运行期哈希比对（磁盘/内存均无明文）
+                if !room_password.is_empty()
+                    && crate::native_room_store::password_hash(id, &pw) != room_password
+                {
                     let _ = reply.send(Err("unauthorized".into()));
                     continue;
                 }

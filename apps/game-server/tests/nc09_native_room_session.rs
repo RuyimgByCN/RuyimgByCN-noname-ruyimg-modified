@@ -398,7 +398,8 @@ async fn nc09_room_store_roundtrip_and_restore() {
     let a = session.join(1, Some(0), None).expect("入座");
     let record = native_room_store::StoredRoom {
         room_id: 42,
-        password: "pw".into(),
+        password_hash: native_room_store::password_hash(42, "pw"),
+        checksum: String::new(),
         state: session.export_state(&session.snapshot_hex()),
     };
     store.save(&record).expect("落盘");
@@ -455,7 +456,8 @@ async fn nc09_room_store_is_removed_on_match_end() {
     // 未终局：写盘
     let record = native_room_store::StoredRoom {
         room_id: 7,
-        password: String::new(),
+        password_hash: String::new(),
+        checksum: String::new(),
         state: room_native::NativeRoomState {
             snapshot_hex: String::new(),
             max_seats: 4,
@@ -474,4 +476,44 @@ async fn nc09_room_store_is_removed_on_match_end() {
     assert!(store.load_all().expect("读回").is_empty(), "无残留记录");
     // 幂等：重复删除不报错
     store.remove(7).expect("重复删除应幂等");
+}
+
+/// NC09 落盘硬化：密码不落明文（只存加盐哈希）；校验和不匹配**明确报错**。
+#[test]
+fn nc09_room_store_hashes_password_and_verifies_checksum() {
+    let dir = tempfile::tempdir().unwrap();
+    let store = native_room_store::NativeRoomStore::new(dir.path().join("rooms"));
+    let hash = native_room_store::password_hash(5, "secret");
+    assert_ne!(hash, "secret", "不得落明文");
+    assert_eq!(hash, native_room_store::password_hash(5, "secret"), "哈希稳定");
+    assert_ne!(hash, native_room_store::password_hash(6, "secret"), "盐=房间号");
+    assert_eq!(native_room_store::password_hash(5, ""), "", "空密码 → 空串");
+
+    let record = native_room_store::StoredRoom {
+        room_id: 5,
+        password_hash: hash.clone(),
+        checksum: String::new(),
+        state: room_native::NativeRoomState {
+            snapshot_hex: String::new(),
+            max_seats: 4,
+            started: false,
+            next_token: 1,
+            next_dedup: 1,
+            pack_refs: Vec::new(),
+            members: Vec::new(),
+        },
+    };
+    store.save(&record).expect("落盘");
+    let text = std::fs::read_to_string(store.dir().join("5.json")).unwrap();
+    assert!(!text.contains("secret"), "磁盘不得出现明文密码：{text}");
+    assert!(text.contains("checksum"), "应写入校验和");
+    let back = store.load_all().expect("校验和匹配应可读");
+    assert_eq!(back.len(), 1);
+    assert_eq!(back[0].password_hash, hash);
+
+    // 篡改状态但保留旧校验和 → 明确报错
+    let tampered = text.replace("\"max_seats\": 4", "\"max_seats\": 8");
+    std::fs::write(store.dir().join("5.json"), tampered).unwrap();
+    let err = store.load_all().expect_err("校验和不匹配必须报错");
+    assert!(err.contains("校验和"), "{err}");
 }
