@@ -1,0 +1,3 @@
+iter 0 DCL_ms 51.3 load_ms 52.9 worker_chunks ['engine.native.worker-JFW_PAlJ.js']
+iter 1 DCL_ms 48.1 load_ms 48.7 worker_chunks ['engine.native.worker-JFW_PAlJ.js']
+iter 2 DCL_ms 42.6 load_ms 43.3 worker_chunks ['engine.native.worker-JFW_PAlJ.js']
