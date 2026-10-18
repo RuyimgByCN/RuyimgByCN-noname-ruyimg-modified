@@ -1,0 +1,14 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/千幻聆音/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "qhly_randskin": true,
+  "qhly_randskin_me": false,
+  "qhly_autoChangeSkin": "close",
+  "qhly_banskinlist": ["liubei-[original]"],
+  "qhly_skinShare": { "gz_liubei": "liubei" },
+  "qhly_skinChange": {
+    "sunce": { "skin_a": { "source": "hp_1", "phase": false, "target": "skin_b" } }
+  },
+  "_note": "皮肤/语音数据（BGM 库/立绘索引）与详情页插件系统不迁移（登记差异）"
+}
