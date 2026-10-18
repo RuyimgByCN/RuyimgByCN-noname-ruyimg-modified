@@ -1,0 +1,68 @@
+=== wuzhong ===
+wuzhong: {
+			audio: true,
+			fullskin: true,
+			type: "trick",
+			enable: true,
+			selectTarget: -1,
+			cardcolor: "red",
+			toself: true,
+			filterTarget(card, player, target) {
+				return target === player;
+			},
+			modTarget: true,
+			async content(event, trigger, player) {
+				const { target } = event;
+				if (get.is.versus()) {
+					if (game.friend.includes(target)) {
+						if (game.friend.length < game.enemy.length) {
+							await target.draw(3);
+							return;
+						}
+					} else {
+						if (game.friend.length > game.enemy.length) {
+							await target.draw(3);
+							return;
+						}
+					}
+				}
+				await target.draw(2);
+			},
+			ai: {
+				wuxie(target, card, player, viewer) {
+					if (get.mode() === "guozhan") {
+						if (!_status._aozhan) {
+							if (!player.isMajor()) {
+						
+
+=== taoyuan ===
+taoyuan: {
+			audio: true,
+			fullskin: true,
+			type: "trick",
+			enable: true,
+			selectTarget: -1,
+			cardcolor: "red",
+			reverseOrder: true,
+			defaultYingbianEffect: "remove",
+			filterTarget(card, player, target) {
+				//return target.hp<target.maxHp;
+				return true;
+			},
+			ignoreTarget(card, player, target) {
+				return target.isHealthy();
+			},
+			async content(event, trigger, player) {
+				event.target.recover();
+			},
+			ai: {
+				basic: {
+					order: (item, player) => {
+						if (game.hasPlayer(current => current.hp <= 1 && get.recoverEffect(current, player, _status.event.player) < 0)) {
+							return 1;
+						}
+						return 10;
+					},
+					useful: [3, 1],
+					value: 0,
+				
