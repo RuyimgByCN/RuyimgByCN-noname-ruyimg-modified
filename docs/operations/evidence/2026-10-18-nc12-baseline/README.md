@@ -391,7 +391,7 @@ $B drive tier=none seats=4 budget=64 lookahead=1 variant=0 games=3 seed=42007
 $B copy  tier=swd budget=64 steps=60 samples=30 growth_every=20
 $B archive tier=swd samples=30 steps=80
 $B ai tier=none budgets=8,64,256 configs=1/0,1/1,2/0,2/1 cmds=200 seed=42007
-/usr/bin/time -l $B long tier=none min_cmds=800 max_games=4 sample_budget=8 alloc=1   # 见下方注
+/usr/bin/time -l $B long tier=none seats=4 budget=8 min_cmds=800 max_games=4 sample_every=25 alloc=1
 # 崩溃现场（首次失败原样保留）：
 RUST_BACKTRACE=full $B drive tier=combo seats=4 budget=64 lookahead=1 variant=1 seed=42007 trace=1
 RUST_BACKTRACE=1    $B drive tier=swd   seats=4 budget=64 lookahead=1 variant=1 games=3 seed=42007 catch_panics=1 trace=1
