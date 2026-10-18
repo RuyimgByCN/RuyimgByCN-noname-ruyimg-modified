@@ -5,13 +5,14 @@
   "pack": {
     "name": "doomsday-brawl-upstream-liuli",
     "version": 1,
-    "description": "G1 转换：上游末日乱斗首批（誓师/循梦）",
+    "description": "G1 转换：上游末日乱斗批 1-2（誓师/循梦/灾变）",
     "card_prefix": "db_"
   },
   "cards": [],
   "skills": [
     { "name": "shishi", "mapping": "host:shishi" },
-    { "name": "xunmeng", "mapping": "host:xunmeng" }
+    { "name": "xunmeng", "mapping": "host:xunmeng" },
+    { "name": "zaibian", "mapping": "host:zaibian" }
   ],
   "generals": [],
   "deferred": [

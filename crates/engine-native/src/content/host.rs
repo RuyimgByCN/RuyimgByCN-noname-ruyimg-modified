@@ -1309,6 +1309,9 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 灾变（tag 525，L19 末日乱斗批 2，`zaibian`）：锁定——自己出牌阶段
+    /// 开始时摸「忠 + 2 - 反 - 内」（下限 0）张牌。
+    Zaibian,
     /// 誓师（tag 523，L19 末日乱斗批 1，`shishi`）：锁定——自己击杀角色后
     /// 体力上限 +1 并回复 1 点。
     Shishi,
@@ -1860,6 +1863,7 @@ impl HostBehavior {
             HostBehavior::Jishe => 522,
             HostBehavior::Shishi => 523,
             HostBehavior::Xunmeng => 524,
+            HostBehavior::Zaibian => 525,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2624,6 +2628,7 @@ impl HostBehavior {
             522 => HostBehavior::Jishe,
             523 => HostBehavior::Shishi,
             524 => HostBehavior::Xunmeng,
+            525 => HostBehavior::Zaibian,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2644,7 +2649,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 520] = [
+        pub const ALL: [HostBehavior; 521] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3165,6 +3170,7 @@ impl HostBehavior {
         HostBehavior::Jishe,
         HostBehavior::Shishi,
         HostBehavior::Xunmeng,
+        HostBehavior::Zaibian,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3447,6 +3453,7 @@ impl HostBehavior {
             HostBehavior::Jishe => "host:jishe",
             HostBehavior::Shishi => "host:shishi",
             HostBehavior::Xunmeng => "host:xunmeng",
+            HostBehavior::Zaibian => "host:zaibian",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3924,6 +3931,14 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 灾变：自己出牌阶段开始（锁定）
+            HostBehavior::Zaibian => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 誓师：自己击杀角色后（锁定）
@@ -6420,6 +6435,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 灾变（L19 末日乱斗批 2）：目录技能名（出牌阶段开始按身份数摸牌）。
+pub const L19_ZAIBIAN_KEY: &str = "zaibian";
+
 /// 誓师（L19 末日乱斗批 1）：目录技能名（击杀后上限 +1 并回复 1）。
 pub const L19_SHISHI_KEY: &str = "shishi";
 
@@ -7706,6 +7724,7 @@ impl HostSkillBehavior {
             HostBehavior::Jishe => (None, None),
             HostBehavior::Shishi => (None, None),
             HostBehavior::Xunmeng => (None, None),
+            HostBehavior::Zaibian => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -8059,6 +8078,10 @@ impl SkillBehavior for HostSkillBehavior {
             },
             HostBehavior::NewMeibuRange => false,
             HostBehavior::SbZhaXiang => false,
+            // 灾变：自己的出牌阶段开始
+            HostBehavior::Zaibian => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
+                    if *player == owner),
             // 誓师：自己为击杀者
             HostBehavior::Shishi => matches!(event,
                 EventData::Death { killer, .. } if *killer == Some(owner)),
@@ -12710,6 +12733,33 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::NewMeibuRange => Flow::Done,
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => Flow::Done,
+            // 灾变：摸「忠 + 2 - 反 - 内」（下限 0）张
+            HostBehavior::Zaibian => {
+                let (mut loyal, mut rebel, mut renegade) = (0usize, 0usize, 0usize);
+                let roles = ctx.core.identity_roles().map(|r| r.to_vec()).unwrap_or_default();
+                for p in 0..ctx.core.players.len() as PlayerId {
+                    if !ctx.core.player(p).alive {
+                        continue;
+                    }
+                    match roles.get(p as usize) {
+                        Some(crate::state::Role::Lord) | Some(crate::state::Role::Loyalist) => {
+                            loyal += 1;
+                        }
+                        Some(crate::state::Role::Rebel) => rebel += 1,
+                        Some(crate::state::Role::Traitor) => renegade += 1,
+                        _ => {}
+                    }
+                }
+                let n = (loyal as i64 + 2 - rebel as i64 - renegade as i64).max(0) as usize;
+                if n > 0 {
+                    ctx.draw_cards(self.owner, n);
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "灾变",
+                        owner: self.owner,
+                    });
+                }
+                Flow::Done
+            }
             // 誓师：体力上限 +1 并回复 1
             HostBehavior::Shishi => {
                 ctx.core.player_mut(self.owner).max_hp += 1;

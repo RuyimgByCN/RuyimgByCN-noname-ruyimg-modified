@@ -33,6 +33,7 @@ mod ai_tuning;
 mod coin;
 mod boss_playpack;
 mod desktop_adapt;
+mod doomsday;
 mod douzhuan;
 mod drag_read;
 mod epic_cards;
@@ -71,6 +72,7 @@ pub use desktop_adapt::{
     AppliedProfile, DesktopConfig, DesktopError, DeviceProfile, Download, EmojiBridgeState,
     HostKind, Layout, PointerClass, PointerContext,
 };
+pub use doomsday::*;
 pub use douzhuan::{
     apply_douzhuan, apply_douzhuan_line, export_plan, format_report as format_douzhuan_report,
     parse_douzhuan_config, parse_plan_text, rank_score, request_from_json, rewrite_skill_text,

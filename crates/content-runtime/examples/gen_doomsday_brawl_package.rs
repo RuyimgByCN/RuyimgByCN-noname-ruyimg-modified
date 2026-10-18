@@ -25,13 +25,14 @@ fn cards_json() -> String {
     out.push_str("  \"pack\": {\n");
     out.push_str("    \"name\": \"doomsday-brawl-upstream-liuli\",\n");
     out.push_str("    \"version\": 1,\n");
-    out.push_str("    \"description\": \"G1 转换：上游末日乱斗首批（誓师/循梦）\",\n");
+    out.push_str("    \"description\": \"G1 转换：上游末日乱斗批 1-2（誓师/循梦/灾变）\",\n");
     out.push_str("    \"card_prefix\": \"db_\"\n");
     out.push_str("  },\n");
     out.push_str("  \"cards\": [],\n");
     out.push_str("  \"skills\": [\n");
     out.push_str("    { \"name\": \"shishi\", \"mapping\": \"host:shishi\" },\n");
-    out.push_str("    { \"name\": \"xunmeng\", \"mapping\": \"host:xunmeng\" }\n");
+    out.push_str("    { \"name\": \"xunmeng\", \"mapping\": \"host:xunmeng\" },\n");
+    out.push_str("    { \"name\": \"zaibian\", \"mapping\": \"host:zaibian\" }\n");
     out.push_str("  ],\n");
     out.push_str("  \"generals\": [],\n");
     out.push_str("  \"deferred\": [\n");
@@ -48,7 +49,7 @@ fn config_json() -> String {
     out.push_str("  \"source\": \"noname-liuli\",\n");
     out.push_str("  \"upstream_path\": \"noname/extension/末日乱斗/extension.js\",\n");
     out.push_str(&format!("  \"upstream_commit\": \"{UPSTREAM_COMMIT}\",\n"));
-    out.push_str("  \"skills\": [\"shishi\", \"xunmeng\"],\n");
+    out.push_str("  \"skills\": [\"shishi\", \"xunmeng\", \"zaibian\"],\n");
     out.push_str("  \"_note\": \"乱斗模式框架与无尽模式配置面未迁移（登记差异）\"\n");
     out.push_str("}\n");
     out
@@ -81,6 +82,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             content_schema::PackageSkillEntry {
                 skill_def_id: 1,
                 name: "xunmeng".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 2,
+                name: "zaibian".into(),
                 locked: false,
                 lord_only: false,
                 non_gainable: false,
