@@ -418,7 +418,11 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
         .with_deadline_ms(50)
         .with_policy_variant(1);
     let mut steps = 0u64;
-    while e.outcome().is_none() && steps < 400 {
+    // NC12 长程根因修正（2026-10-19）：遮蔽填充池排除**公开区/在飞区**后，AI 的
+    // 隐藏区填充内容变化 → 本用例的对局长度随之变化（同 seed 下不再于 400 步内终局）。
+    // 上界放宽到 900 步以保留「不 panic、能终局」的守护语义；步数与胜方在下方断言中
+    // 重新冻结（改动原因与语义见 docs/operations/evidence/2026-10-18-nc12-plan-crash/）。
+    while e.outcome().is_none() && steps < 900 {
         let seat = match e.open_choice() {
             Some(open) => open.observer,
             None => e.turn().current,
@@ -433,7 +437,7 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
         }
         steps += 1;
     }
-    assert!(e.outcome().is_some(), "400 步内终局（实走 {steps} 步）");
+    assert!(e.outcome().is_some(), "900 步内终局（实走 {steps} 步）");
     // 2026-10-17（swd 改造批 143）218 → 189：装备替换改为按**栏位**判定
     //（原先按牌种——具名武器与泛型武器同栏却不互相替换的缺陷修复），
     // 轨迹步数随之变化；胜方不变（下方断言）。改动同步记录于
@@ -443,7 +447,11 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
     // 区，只保留张数），AI 模拟不再读到对手手牌内容（「对手有闪」类事实），
     // 轨迹步数随之变化；胜方不变（下方断言）。改动与复现见
     // docs/operations/evidence/2026-10-18-nc10-information-boundary/。
-    assert_eq!(steps, 179, "步数冻结（策略变更须同步证据）");
+    // 2026-10-19（NC12 长程根因修正）：遮蔽填充池排除**公开区/在飞区**（对手装备区/
+    // 判定区/离场区、`table`、回合级持牌字段）后，填充内容变化 → 本用例步数
+    // 179 → **484**（对局变长：AI 强度随填充池收窄而变化；胜方见下）。
+    // 该变化是**策略面**的，不是规则面：语义（不 panic、能终局、胜方）保持不变。
+    assert_eq!(steps, 484, "步数冻结（策略变更须同步证据）");
     assert!(
         matches!(e.outcome().map(|o| o.winner), Some(engine_native::Winner::Player(3))),
         "胜方冻结：{:?}",

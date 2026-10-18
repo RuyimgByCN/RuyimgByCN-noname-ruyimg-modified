@@ -723,6 +723,27 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         visible.extend(me.judge.iter().copied());
         visible.extend(me.off_court.iter().copied());
         visible.extend(core.discard.iter().copied());
+        // NC12 长程根因修正（2026-10-19）：**公开区与在飞区不得被重分配**。
+        // 此前只保护「自己的区域 + 弃牌堆」，于是对手的**装备区/判定区/离场区**以及
+        // `table`（在飞牌）可能被当作隐藏牌抽走并塞进隐藏区——这些牌被机器/帧/回合
+        // 状态字段引用，重分配后 `take_hand_card` 找不到牌 → panic（实测
+        // `machine.rs:408 card N not in hand of P`）。
+        for p in &core.players {
+            visible.extend(p.equips.iter().copied());
+            visible.extend(p.judge.iter().copied());
+            visible.extend(p.off_court.iter().copied());
+        }
+        visible.extend(core.table.iter().copied());
+        // 回合级状态里被引用的实体牌（登记式列举：新增持有牌字段需同步）。
+        // 这些字段被机器在后续步骤中直接 `take_hand_card`/移动，重分配会让其失效。
+        for (c, _) in core.turn.huanxia_track.iter() {
+            visible.insert(*c);
+        }
+        for (_, a, b, c) in core.turn.kunlunjing_snapshot.iter() {
+            visible.extend(a.iter().copied());
+            visible.extend(b.iter().copied());
+            visible.extend(c.iter().copied());
+        }
     }
     // 填充池：目录全部牌 id 去掉可见牌（保持确定性顺序）
     let mut pool: Vec<CardId> = (0..e.catalog().cards.len() as CardId)
