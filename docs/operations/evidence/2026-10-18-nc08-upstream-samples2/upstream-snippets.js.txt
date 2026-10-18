@@ -1,0 +1,44 @@
+=== fz_liegong ===
+lib.skill.fz_liegong = {
+                        audio: true,
+                        mark: true,
+                        marktext: "眩惑 黄忠烈弓",
+                        intro: { name: '眩惑', content: 'info', },
+                        inherit: "liegong",
+                        shaRelated: true,
+                        audioname: ["re_huangzhong"],
+                        trigger: {
+                            player: "useCardToPlayered",
+                        },
+                        check: function (event, player) {
+                            return get.attitude(player, event.target) <= 0;
+                        },
+                        logTarget: "target",
+                        filter: function (event, player) {
+                            if (event.card.name != 'sha') return false;
+                            var length = event.target.countCards('h');
+                         
+
+=== fz_xinkuanggu ===
+lib.skill.fz_xinkuanggu = {
+                        audio: true,
+                        inherit: "xinkuanggu",
+                        mark: true,
+                        marktext: "眩惑 魏延狂骨",
+                        intro: { name: '眩惑', content: 'info', },
+                        trigger: {
+                            source: "damageSource",
+                        },
+                        filter: function (event, player) {
+                            return get.distance(player, event.player) <= 1 && event.num > 0;
+                        },
+                        direct: true,
+                        audioname: ["re_weiyan", "ol_weiyan"],
+                        preHidden: true,
+                        content: function () {
+                            'step 0'
+                            event.num = trigger.num;
+                            'step 1'
+                            var choice;
+                            if (player.isDamaged() && get.recoverEffect(player) > 0 && (player.countCards('hs', function (card) {
+                                return card.name == 'sha' && pl
