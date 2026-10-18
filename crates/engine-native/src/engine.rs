@@ -3590,7 +3590,14 @@ fn apply_command(
                             .any(|c| {
                                 catalog.card_kind(*c) == crate::catalog::CardKind::Weapon
                             });
-                    let max_targets = if tianxian_inf || kuangxiao_inf {
+                    // 疾风（swd 批 150）：单目标牌目标数无限（上游 mod
+                    // selectTarget range[1]=Infinity 同口径）
+                    let jifeng_inf = kind.is_sha_like()
+                        && catalog
+                            .skill_by_name(crate::content::host::SWD_JIFENG_KEY)
+                            .map(|def| core.has_skill(player_id, def))
+                            .unwrap_or(false);
+                    let max_targets = if tianxian_inf || kuangxiao_inf || jifeng_inf {
                         usize::MAX
                     } else {
                         (if fangtian { 3 } else { 1 })

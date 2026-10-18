@@ -2036,6 +2036,10 @@
   {
    "name": "xuanyuan",
    "mapping": "host:xuanyuan"
+  },
+  {
+   "name": "jifeng",
+   "mapping": "host:jifeng"
   }
  ]
 }

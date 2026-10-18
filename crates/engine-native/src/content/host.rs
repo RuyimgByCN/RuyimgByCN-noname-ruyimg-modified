@@ -1309,6 +1309,9 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 疾风（tag 509，swd 批 150，`jifeng`）：单目标牌可指定任意数量目标
+    /// （Sha/单目标锦囊）；多目标使用时按概率「失误」——整张牌取消。
+    Jifeng,
     /// 昆仑镜（tag 507，swd deferred 消解批 149，`kunlunjing`）：组技两
     /// 面——阶段收束记录全场（手牌/装备/判定区）快照与当时体力；之后自己
     /// 阶段开始时若体力低于快照值，可**回滚**：把快照中的牌拉回各自原位。
@@ -1786,6 +1789,7 @@ impl HostBehavior {
             HostBehavior::Xuanyuan => 505,
             HostBehavior::Shengong => 506,
             HostBehavior::Kunlunjing => 507,
+            HostBehavior::Jifeng => 509,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2534,6 +2538,7 @@ impl HostBehavior {
             505 => HostBehavior::Xuanyuan,
             506 => HostBehavior::Shengong,
             507 => HostBehavior::Kunlunjing,
+            509 => HostBehavior::Jifeng,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2554,7 +2559,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 504] = [
+        pub const ALL: [HostBehavior; 505] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3059,6 +3064,7 @@ impl HostBehavior {
         HostBehavior::Xuanyuan,
         HostBehavior::Shengong,
         HostBehavior::Kunlunjing,
+        HostBehavior::Jifeng,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3325,6 +3331,7 @@ impl HostBehavior {
             HostBehavior::Xuanyuan => "host:xuanyuan",
             HostBehavior::Shengong => "host:shengong",
             HostBehavior::Kunlunjing => "host:kunlunjing",
+            HostBehavior::Jifeng => "host:jifeng",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3802,6 +3809,14 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 疾风：自己使用多目标单目标牌（结算窗；锁定）
+            HostBehavior::Jifeng => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 昆仑镜：阶段收束（锁定记录快照）+ 阶段开始（体力低于快照值
@@ -6205,6 +6220,19 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 疾风（swd 批 150）：目录技能名（单目标牌可多目标，多目标时概率失误）。
+pub const SWD_JIFENG_KEY: &str = "jifeng";
+
+/// 疾风范围扩展适用牌种（上游：`card.name=='sha'` 或 `selectTarget` 为
+/// [1,1] 的锦囊——原生按「恰一名目标」的既有牌种集合判定）。
+pub fn jifeng_single_target_trick(kind: crate::catalog::CardKind) -> bool {
+    use crate::catalog::CardKind as K;
+    matches!(
+        kind,
+        K::Duel | K::Snatch | K::Dismantle | K::Le | K::Bing | K::Jiedao
+    )
+}
+
 /// 昆仑镜（swd 批 149）：目录技能名（阶段收束快照 / 体力下降时回滚）。
 pub const SWD_KUNLUNJING_KEY: &str = "kunlunjing";
 
@@ -7367,6 +7395,7 @@ impl HostSkillBehavior {
             HostBehavior::Xuanyuan => (None, None),
             HostBehavior::Shengong => (None, None),
             HostBehavior::Kunlunjing => (None, None),
+            HostBehavior::Jifeng => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7705,6 +7734,17 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 疾风：自己使用【杀】或单目标锦囊且目标数 >1、未取消
+            HostBehavior::Jifeng => match event {
+                EventData::CardUsed(u) => {
+                    if u.player != owner || u.cancelled || u.targets.len() <= 1 {
+                        return false;
+                    }
+                    let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                    kind.is_sha_like() || jifeng_single_target_trick(kind)
+                }
+                _ => false,
+            },
             // 昆仑镜：自己的阶段收束（快照）或阶段开始（体力低于快照值）
             HostBehavior::Kunlunjing => match event {
                 EventData::Phase { player, begin: false, .. } => *player == owner,
@@ -21143,6 +21183,27 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 疾风：多目标使用 → 按概率整牌取消（上游 `trigger.cancel()`）
+            HostBehavior::Jifeng => {
+                let n = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    Some(EventData::CardUsed(u)) => u.targets.len() as u32,
+                    _ => return Flow::Done,
+                };
+                // 上游：Math.random() > (1.3 + n/5)/n 时取消（即取消概率
+                // = 1 - (1.3 + n/5)/n）。原生以 gen_range(1000) 千分位判定。
+                let cancel_permille =
+                    ((1000.0 * (1.0 - (1.3 + n as f64 / 5.0) / n as f64)).round()).max(0.0)
+                        as u32;
+                let roll = ctx.core.rng.gen_range(1000);
+                if roll < cancel_permille {
+                    ctx.current_card_use_mut().cancelled = true;
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "疾风·失误",
+                        owner: self.owner,
+                    });
+                }
+                Flow::Done
+            }
             // 昆仑镜：阶段收束记录快照 / 阶段开始（机器内确认门）回滚
             HostBehavior::Kunlunjing => {
                 let begin = matches!(
