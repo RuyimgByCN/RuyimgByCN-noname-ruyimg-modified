@@ -162,7 +162,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 1 | L20 苦无 | `kurou` / `fz_liegong` / `fz_xinkuanggu` | 对齐 + 1 处顺序差异登记 | [nc08-upstream-kurou](../operations/evidence/2026-10-18-nc08-upstream-kurou/README.md) |
 | 2 | U07 玩点论杀 | `ciqiu` | 对齐 | [nc08-upstream-ciqiu](../operations/evidence/2026-10-18-nc08-upstream-ciqiu/README.md) |
 | 3 | 标准面（卡牌） | `wuzhong` / `taoyuan` | 对齐 + 2 处差异登记 | [nc08-upstream-standard-tricks](../operations/evidence/2026-10-18-nc08-upstream-standard-tricks/README.md) |
-| 4 | L19 杀海拾遗（五行） | `_shengke` | 语义成立 + 4 处差异 | [nc08-upstream-wuxing](../operations/evidence/2026-10-18-nc08-upstream-wuxing/README.md) |
+| 4 | L19 杀海拾遗（五行） | `_shengke` | 语义成立 + 4 处差异 | [nc08-upstream-wuxing](../operations/evidence/2026-10-18-nc08-upstream-shengke/README.md) |
 | 5 | L06 苦无（五行盘） | `_shengke`（含 `usable:1` 失效发现） | 语义成立 + 差异登记 | 同上 / 待实施修复清单 |
 | 6 | U05 swd | `swd_xiuluo` | **3 点全通过**（2 差异 + 效果面三段询问机） | [nc08-upstream-xiuluo](../operations/evidence/2026-10-18-nc08-upstream-xiuluo/README.md) |
 | 7 | L10 史诗卡牌 | `rangjie` | 2 点通过 + **移动牌分支缺陷守护** | [nc08-upstream-rangjie](../operations/evidence/2026-10-18-nc08-upstream-rangjie/README.md) |
