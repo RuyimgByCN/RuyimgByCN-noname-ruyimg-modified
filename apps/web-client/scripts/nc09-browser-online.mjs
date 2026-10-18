@@ -116,6 +116,36 @@ console.log("STEP online_state " + JSON.stringify(online));
 const shot = await send(ws, "Page.captureScreenshot", { format: "png" });
 writeFileSync(join(outDir, "online-screenshot.png"), Buffer.from(shot.data, "base64"));
 
+// 联机命令：点击「结束阶段」→ 断言房间 rev 增长
+const revOnlineBefore = await evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+const cmdClick = await evalJs(`(() => {
+  const el = Array.from(document.querySelectorAll('button')).find(b => (b.innerText||'').trim() === '结束阶段');
+  if (!el) return { found: false };
+  el.click();
+  return { found: true, disabled: !!el.disabled };
+})()`);
+await sleep(2500);
+const revOnlineAfter = await evalJs(`(document.body.innerText.match(/rev (\\d+)/) || [])[1] || '0'`);
+console.log("STEP online_command " + JSON.stringify({ revOnlineBefore, revOnlineAfter, cmdClick }));
+
+// 重连：回到根 URL 重新加载（不用 Page.reload——当前 URL 已是 /battle，
+// 而静态服务无 SPA fallback 会 404，属部署配置差异而非应用缺陷）→ 客户端应以令牌回到原座位
+await send(ws, "Page.navigate", { url: base });
+await sleep(6000);
+const rejoin = await evalJs(`(() => {
+  const t = document.body.innerText;
+  return {
+    len: t.length,
+    hasRoom: /房间\s*#?\d+/.test(t) || /联机房间/.test(t),
+    hasSeat: /cdp-p1|在线|P1/.test(t),
+    hasError: /失败|错误|unauthorized/i.test(t),
+    snippet: t.slice(0, 300),
+  };
+})()`);
+console.log("STEP rejoin " + JSON.stringify(rejoin));
+const shot2 = await send(ws, "Page.captureScreenshot", { format: "png" });
+writeFileSync(join(outDir, "online-after-reload.png"), Buffer.from(shot2.data, "base64"));
+
 const report = {
   filled,
   clicked_create: clicked,
@@ -124,6 +154,8 @@ const report = {
   online_has_error_text: !!online?.hasError,
   online_snippet: online?.snippet ?? "",
   console_errors: consoleErrors,
+  online_command: { revOnlineBefore, revOnlineAfter, cmdClick },
+  rejoin,
 };
 writeFileSync(join(outDir, "online-report.json"), JSON.stringify(report, null, 2));
 console.log("RESULT " + JSON.stringify(report));
