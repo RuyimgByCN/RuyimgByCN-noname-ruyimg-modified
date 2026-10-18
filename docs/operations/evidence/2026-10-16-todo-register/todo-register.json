@@ -2474,7 +2474,13 @@
         "复核结论写入台账 §3.3",
         "伪差异清零"
       ],
-      "status": "open"
+      "status": "resolved",
+      "resolution": {
+        "date": "2026-10-19",
+        "summary": "21 个样本基准来源复核完毕：17 个扩展来源（唯一面）正确；6 个基础仓库面样本正确（其中 jizhi/jianxiong 已于 15e7c6f5 从 sb 面更正为 standard 面）；伪差异清零。",
+        "evidence": "docs/operations/evidence/2026-10-18-nc08-baseline-face-audit/README.md",
+        "remaining": "新样本模板强制标注基准面（惯例化）；上游 harness 接入后与 harness 读取文件一致。"
+      }
     },
     {
       "id": "NC12-BROWSER-TIERS",
