@@ -126,3 +126,31 @@ RESULT scenario=browser_fullgame tier=web {"clicks":319,"final_revision":318,"en
 - [ ] 引擎 `outcome` → 协议形态的**Rust 侧**自动化断言（当前 Rust 侧只有编译期映射，无断言测试）
 - [ ] 固定种子可重复多局、浏览器长时负载、动画帧/输入响应
 - [ ] 移动（Android/iOS）与桌面（Tauri）档位；多浏览器；真实网络；旧线前端同口径完整对局
+
+## 8 Rust 侧映射**抽为纯函数 + 单元断言**（2026-10-19 同轮）
+
+§7 登记的「Rust 侧只有编译期映射、无断言测试」已补齐：把内联 `match` 抽为
+**纯函数** `engine_native_wasm::winner_to_protocol_json(&Option<Winner>)`，并加两组单元测试
+（`winner_protocol_tests`，与 wasm 壳同 crate，宿主侧可直接 `cargo test`）：
+
+| 输入（引擎侧） | 期望（协议形态） |
+|---|---|
+| `Winner::LordSide` | `{"LoyalistWin": null}` |
+| `Winner::Rebels` | `{"RebelWin": null}` |
+| `Winner::Traitor` | `{"RenegadeWin": null}` |
+| `Winner::Player(3)` | `{"SingleWin": {"player": 4}}`（**1 基座位**） |
+| `Winner::Faction(Shu)` | 含 `GroupWin`（group 为小写势力名） |
+| `None` | `null` |
+| `Winner::Versus(0)` / `Winner::Doudizhu{..}` | `"finished"`（**未建模，不猜测语义**） |
+
+**结果**：`cargo test -p engine-native-wasm` → **33 passed / 0 failed**（原 31 + 2；
+[wasm-outcome-tests.log](wasm-outcome-tests.log)）；重建 WASM + 前端后浏览器整局复测：
+`319 次点击 / rev 319 / ended_marker / 控制台零错误`，终局行仍为「**终局 · 单挑胜者 P4 · rev 319**」
+（[fullgame-outcome3.log](fullgame-outcome3.log)）。
+
+### 仍未完成（更新）
+
+- [ ] **身份局端到端**：以身份局开局跑到终局并核对文案（本地开局为原型/单挑口径；
+      身份局需联机房间路径或新增身份局开局入口）
+- [ ] 固定种子可重复多局、浏览器长时负载、动画帧/输入响应
+- [ ] 移动（Android/iOS）与桌面（Tauri）档位；多浏览器；真实网络；旧线前端同口径完整对局

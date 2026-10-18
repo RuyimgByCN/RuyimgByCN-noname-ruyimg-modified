@@ -257,20 +257,7 @@ fn view_to_json(v: &PlayerView) -> serde_json::Value {
         // NC09/NC12 修正：终局**胜负类型**必须随视图下发（此前只发 `"finished"`，
         // 前端无法显示胜者）。此处直接序列化协议 `MatchOutcome`（如
         // `{"LoyalistWin":null}` / `{"RebelWin":null}` / `{"RenegadeWin":{"player":3}}` …）。
-        "outcome": match &v.outcome {
-            None => serde_json::Value::Null,
-            Some(engine_native::Winner::LordSide) => serde_json::json!({ "LoyalistWin": null }),
-            Some(engine_native::Winner::Rebels) => serde_json::json!({ "RebelWin": null }),
-            Some(engine_native::Winner::Traitor) => serde_json::json!({ "RenegadeWin": null }),
-            Some(engine_native::Winner::Player(p)) => {
-                serde_json::json!({ "SingleWin": { "player": *p as u32 + 1 } })
-            }
-            Some(engine_native::Winner::Faction(f)) => {
-                serde_json::json!({ "GroupWin": { "group": format!("{f:?}").to_lowercase() } })
-            }
-            // 未建模的模式胜者（对决/斗地主/Boss）：保持旧口径 `"finished"`，不猜测语义
-            Some(_) => serde_json::json!("finished"),
-        },
+        "outcome": winner_to_protocol_json(&v.outcome),
         "rulesetVersion": v.ruleset_version,
     })
 }
@@ -1615,5 +1602,68 @@ mod pack_roundtrip {
             "{}"
         )
         .starts_with("error:BadConfig"));
+    }
+}
+
+/// 终局胜负 → 协议形态（NC09/NC12）。**纯函数**，便于在宿主侧单测：
+/// `{LoyalistWin:null}` / `{RebelWin:null}` / `{RenegadeWin:null}` /
+/// `{SingleWin:{player:n}}`（**1 基座位**）/ `{GroupWin:{group:..}}`；
+/// `None` → `null`；**未建模的模式胜者**（对决/斗地主/Boss）→ 字符串 `"finished"`（不猜测语义）。
+pub fn winner_to_protocol_json(outcome: &Option<engine_native::Winner>) -> serde_json::Value {
+    match outcome {
+        None => serde_json::Value::Null,
+        Some(engine_native::Winner::LordSide) => serde_json::json!({ "LoyalistWin": null }),
+        Some(engine_native::Winner::Rebels) => serde_json::json!({ "RebelWin": null }),
+        Some(engine_native::Winner::Traitor) => serde_json::json!({ "RenegadeWin": null }),
+        Some(engine_native::Winner::Player(p)) => {
+            serde_json::json!({ "SingleWin": { "player": *p as u32 + 1 } })
+        }
+        Some(engine_native::Winner::Faction(f)) => {
+            serde_json::json!({ "GroupWin": { "group": format!("{f:?}").to_lowercase() } })
+        }
+        Some(_) => serde_json::json!("finished"),
+    }
+}
+
+#[cfg(test)]
+mod winner_protocol_tests {
+    use super::winner_to_protocol_json;
+    use engine_native::Winner;
+
+    #[test]
+    fn identity_outcomes_map_to_protocol_shapes() {
+        assert_eq!(
+            winner_to_protocol_json(&Some(Winner::LordSide)),
+            serde_json::json!({"LoyalistWin": null})
+        );
+        assert_eq!(
+            winner_to_protocol_json(&Some(Winner::Rebels)),
+            serde_json::json!({"RebelWin": null})
+        );
+        assert_eq!(
+            winner_to_protocol_json(&Some(Winner::Traitor)),
+            serde_json::json!({"RenegadeWin": null})
+        );
+    }
+
+    #[test]
+    fn single_and_group_and_none_and_unmodelled() {
+        // 1 基座位：内部 3 → 对外 4
+        assert_eq!(
+            winner_to_protocol_json(&Some(Winner::Player(3))),
+            serde_json::json!({"SingleWin": {"player": 4}})
+        );
+        let g = winner_to_protocol_json(&Some(Winner::Faction(engine_native::catalog::Faction::Shu)));
+        assert!(g.get("GroupWin").is_some(), "势力胜应映射为 GroupWin：{g}");
+        assert_eq!(winner_to_protocol_json(&None), serde_json::Value::Null);
+        // 未建模（对决/斗地主/Boss）→ 保持 "finished"
+        assert_eq!(
+            winner_to_protocol_json(&Some(Winner::Versus(0))),
+            serde_json::json!("finished")
+        );
+        assert_eq!(
+            winner_to_protocol_json(&Some(Winner::Doudizhu { lord_won: true })),
+            serde_json::json!("finished")
+        );
     }
 }
