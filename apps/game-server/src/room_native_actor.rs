@@ -12,12 +12,31 @@
 use crate::persist::RoomPersist;
 use crate::room::{JoinReply, RoomHandle, RoomMsg};
 use crate::native_view::{choice_for, legal_actions_for, observer_snapshot_for, RoomRole};
+use crate::native_room_store::{NativeRoomStore, StoredRoom};
 use crate::room_native::{NativeRoomPersist, NativeRoomSession};
 use engine_api::{CommandKind, CommandResult, ExpectedRevision, IdempotencyKey};
 use engine_protocol::{ClientRole, MessageHeader, SeatPresence, ServerMessage};
 use std::collections::HashMap;
 use tokio::sync::{mpsc, oneshot};
 use tracing::{debug, info};
+
+/// NC09 落盘：把当前会话状态写入存储（失败只记日志，不影响房间运行）。
+fn persist_room(
+    store: &Option<NativeRoomStore>,
+    id: u64,
+    password: &str,
+    session: &NativeRoomSession,
+) {
+    let Some(store) = store else { return };
+    let record = StoredRoom {
+        room_id: id,
+        password: password.to_string(),
+        state: session.export_state(&session.snapshot_hex()),
+    };
+    if let Err(e) = store.save(&record) {
+        tracing::warn!(room = id, error = %e, "原生房间落盘失败");
+    }
+}
 
 /// 原生房间成员（含广播句柄）。
 struct NativeActorMember {
@@ -47,9 +66,54 @@ pub fn spawn_room_native_with_password(
     snapshot_every: u64,
     password: String,
 ) -> RoomHandle {
+    spawn_room_native_persisted(id, session, mailbox, snapshot_every, password, None)
+}
+
+/// 带**落盘存储**启动（每条接受命令后写盘；`None` = 不落盘，测试/临时房间）。
+pub fn spawn_room_native_persisted(
+    id: u64,
+    session: NativeRoomSession,
+    mailbox: usize,
+    snapshot_every: u64,
+    password: String,
+    store: Option<NativeRoomStore>,
+) -> RoomHandle {
     let (tx, rx) = mpsc::channel(mailbox);
-    tokio::spawn(native_room_loop(id, session, rx, snapshot_every, password));
+    tokio::spawn(native_room_loop(
+        id,
+        session,
+        rx,
+        snapshot_every,
+        password,
+        store,
+    ));
     RoomHandle::new(id, tx)
+}
+
+/// 从落盘记录恢复并启动房间（服务端启动时调用）。
+///
+/// `load_pack(ref)` 由调用方提供：按 `包名@版本` 重新装载同内容包（缺包/版本不符由
+/// `from_saved` 明确报错）。
+pub fn restore_room_from_disk(
+    record: &StoredRoom,
+    load_pack: &mut dyn FnMut(&str) -> Result<engine_native::content::extension::ExtensionPack, String>,
+    mailbox: usize,
+    snapshot_every: u64,
+    store: NativeRoomStore,
+) -> Result<RoomHandle, String> {
+    let mut packs = Vec::new();
+    for r in &record.state.pack_refs {
+        packs.push(load_pack(r)?);
+    }
+    let session = NativeRoomSession::from_saved(&record.state, packs)?;
+    Ok(spawn_room_native_persisted(
+        record.room_id,
+        session,
+        mailbox,
+        snapshot_every,
+        record.password.clone(),
+        Some(store),
+    ))
 }
 
 async fn native_room_loop(
@@ -58,6 +122,7 @@ async fn native_room_loop(
     mut rx: mpsc::Receiver<RoomMsg>,
     snapshot_every: u64,
     room_password: String,
+    store: Option<NativeRoomStore>,
 ) {
     let mut persist = NativeRoomPersist::new();
     // 旧线锦标赛 WAL 面保留占位（原生分块签名未做，登记待办）
@@ -105,6 +170,8 @@ async fn native_room_loop(
                             legal_actions: joined.legal_actions,
                         };
                         members.insert(connection_id, m);
+                        // 名册/令牌变化必须持久化（否则重启后无法凭令牌回到原座位）
+                        persist_room(&store, id, &room_password, &session);
                         broadcast_roster_native(id, &members, session.engine().outcome().is_some())
                             .await;
                         let _ = reply.send(Ok(reply_payload));
@@ -130,6 +197,7 @@ async fn native_room_loop(
                     outbound: Some(outbound),
                 };
                 members.insert(connection_id, m);
+                persist_room(&store, id, &room_password, &session);
                 let _ = reply.send(Ok(JoinReply {
                     player_id: 0,
                     seat: u8::MAX,
@@ -213,6 +281,8 @@ async fn native_room_loop(
                             );
                         }
                         last_revision = *new_revision;
+                        // NC09 跨重启持久化：接受命令后写盘（原子 rename）
+                        persist_room(&store, id, &room_password, &session);
                     }
                     if idempotency_key.0 != 0 {
                         idempotency.insert(idempotency_key.0, result.clone());
@@ -343,6 +413,7 @@ async fn native_room_loop(
                             };
                             let _ = out.send(&msg).await;
                         }
+                        persist_room(&store, id, &room_password, &session);
                         let _ = reply.send(Ok(format!(
                             "{{\"revision\":{revision},\"state_hash\":\"{hash}\"}}"
                         )));

@@ -2,6 +2,7 @@
 
 mod config;
 mod lobby;
+mod native_room_store;
 mod native;
 mod native_view;
 mod room_native;

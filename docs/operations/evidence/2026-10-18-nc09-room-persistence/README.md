@@ -47,3 +47,37 @@
 - [ ] 恢复后的名册广播与在座客户端的连接重建（客户端自动重连已实现，见
       [autoreconnect 证据](../2026-10-18-nc09-autoreconnect/README.md)）
 - [ ] 限流与慢消费者反馈、联机存读档/录像、锦标赛面、平台与性能档位、服务端 SPA fallback
+
+## 5 追加：落盘存储 + 启动恢复入口（2026-10-18 同轮）
+
+新增 `apps/game-server/src/native_room_store.rs`（`NativeRoomStore`）：
+
+| 能力 | 实现 |
+|---|---|
+| 落盘 | `save(&StoredRoom{room_id, password, state})`——先写 `<id>.json.tmp` 再 **rename**（同目录原子） |
+| 读回 | `load_all()` 按房间号升序；**单文件损坏明确报错**（不跳过、不静默）；跳过 `.tmp` |
+| 删除 | `remove(room_id)` |
+| 启动恢复 | `room_native_actor::restore_room_from_disk(record, load_pack, …)`——按 `pack_refs` 重新装载包 → `from_saved` → 带存储重新 spawn |
+| actor 落盘点 | ① 命令被接受（`new_revision > before`）；② 入座/重连（名册与令牌变化）；③ 房间级选将成功。`None` 存储 = 不落盘（测试/临时房间） |
+
+回归 `nc09_room_store_roundtrip_and_restore`（第 9 项）：
+
+| 判据 | 结果 |
+|---|---|
+| 落盘后 `42.json` 存在且 `.tmp` 已 rename | 通过 |
+| `load_all` → `restore_room_from_disk` → 房间可用 | 通过 |
+| 恢复后**凭导出前令牌入座命中座位 0** | 通过 |
+| 损坏文件（`{ not json`）→ `load_all` **明确报错**（含「解析」） | 通过 |
+
+实测：定向 **11 passed / 0 failed**（[targeted-2.log](targeted-2.log)）；game-server 全量
+**92 passed / 0 failed**（[game-server-tests-2.log](game-server-tests-2.log)）；行数门禁 8274 文件
+（[source-lines-2.log](source-lines-2.log)）。
+
+### 仍未完成（更新）
+
+- [ ] **服务端启动自动扫描**：`main.rs`/`Lobby` 尚未在启动时调用 `load_all` + `restore_room_from_disk`
+      （存储与恢复入口已就绪并被测试覆盖，接线待做）
+- [ ] 房间关闭/终局时 `remove` 落盘记录（当前只增不减）
+- [ ] WAL 增量与校验和、落盘节流（当前每条接受命令全量写）
+- [ ] 恢复后名册广播与在座客户端连接重建；限流/慢消费者反馈；联机存读档/录像；锦标赛面；
+      平台与性能档位；服务端 SPA fallback

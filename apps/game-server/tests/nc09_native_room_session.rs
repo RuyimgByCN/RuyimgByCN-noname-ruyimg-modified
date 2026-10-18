@@ -8,6 +8,8 @@ mod persist;
 mod room;
 #[path = "../src/session.rs"]
 mod session;
+#[path = "../src/native_room_store.rs"]
+mod native_room_store;
 #[path = "../src/native_view.rs"]
 mod native_view;
 #[path = "../src/room_native.rs"]
@@ -374,4 +376,73 @@ fn nc09_session_export_and_restore_roundtrip() {
     assert_eq!(rejoin.member.seat, 0, "重连令牌必须命中原座位");
     assert_eq!(rejoin.member.player_id, a.member.player_id, "玩家 id 不变");
     let _ = b;
+}
+
+/// NC09 落盘存储 + 启动恢复：写盘（原子）→ `load_all` → `restore_room_from_disk`
+/// → 房间可用且令牌命中原座位；损坏文件**明确报错**（不跳过）。
+#[tokio::test]
+async fn nc09_room_store_roundtrip_and_restore() {
+    let dir = tempfile::tempdir().unwrap();
+    let content = NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("安装");
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("装载");
+    let pack = loaded.pack;
+    let engine = engine_native::Engine::new_with_extensions(20262002, 4, &[&pack]).expect("建局");
+    let session = NativeRoomSession::new_with_packs(engine, vec![pack], 4);
+
+    let store = native_room_store::NativeRoomStore::new(dir.path().join("rooms"));
+    // 直接构造记录并落盘（actor 路径在 E2E 中覆盖）
+    let mut session = session;
+    let a = session.join(1, Some(0), None).expect("入座");
+    let record = native_room_store::StoredRoom {
+        room_id: 42,
+        password: "pw".into(),
+        state: session.export_state(&session.snapshot_hex()),
+    };
+    store.save(&record).expect("落盘");
+    assert!(store.dir().join("42.json").exists(), "应生成 42.json");
+    assert!(!store.dir().join("42.json.tmp").exists(), "临时文件应已 rename");
+
+    // 读回并按启动路径恢复（重新装载包）
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("重新装载");
+    let mut packs = vec![loaded.pack];
+    let mut load_pack = |_ref: &str| -> Result<engine_native::content::extension::ExtensionPack, String> {
+        packs.pop().ok_or_else(|| "包只可装载一次".to_string())
+    };
+    let handle = room_native_actor::restore_room_from_disk(
+        &record,
+        &mut load_pack,
+        8,
+        4,
+        store.clone(),
+    )
+    .expect("恢复房间");
+    assert_eq!(handle.id, 42);
+
+    // 恢复后的房间可用：用导出前的令牌重连 → 原座位
+    let (tx, _rx) = mpsc::channel::<String>(4);
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(room::RoomMsg::Join {
+            connection_id: 7,
+            display_name: "back".into(),
+            preferred_seat: None,
+            reconnect_token: Some(a.member.reconnect_token.clone()),
+            password: "pw".into(),
+            outbound: session::Outbound::new(tx),
+            reply: rt,
+        })
+        .await
+        .expect("send");
+    let joined = rr.await.expect("reply").expect("恢复后凭令牌入座");
+    assert_eq!(joined.seat, 0, "恢复后令牌必须命中原座位");
+
+    // 损坏文件：明确报错（不跳过）
+    std::fs::write(store.dir().join("99.json"), b"{ not json").unwrap();
+    let err = store.load_all().expect_err("损坏文件必须报错");
+    assert!(err.contains("解析"), "{err}");
 }

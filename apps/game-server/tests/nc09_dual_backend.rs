@@ -7,6 +7,8 @@
 
 #[path = "../src/native.rs"]
 mod native;
+#[path = "../src/native_room_store.rs"]
+mod native_room_store;
 #[path = "../src/native_view.rs"]
 mod native_view;
 #[path = "../src/persist.rs"]
