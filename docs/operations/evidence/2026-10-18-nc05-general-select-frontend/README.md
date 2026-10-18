@@ -137,3 +137,23 @@ python3 -B scripts/check-source-lines.py
 | `apps/web-client/scripts/native-worker-smoke.mjs` | 407 | 冒烟 +9 项（含真实 Worker 协议） |
 | `apps/web-client/scripts/ts-hook.mjs` | 70 | 解析钩子（免扩展相对导入） |
 | `apps/web-client/scripts/ts-register.mjs` | 16 | 注册解析钩子 |
+
+## 主 agent 独立复核（2026-10-18）
+
+| 复核项 | 命令 | 结果 |
+|---|---|---|
+| 型别检查 | `pnpm --dir apps/web-client typecheck` | **exit 0** |
+| 前端测试 | `pnpm --dir apps/web-client test` | **exit 0**（27 项，与其报告一致） |
+| 原生冒烟 | `pnpm --dir apps/web-client smoke:native` | **exit 0**，`{"total":32,"failed":0}`（含 `adapter_choice_token_roundtrip`、`adapter_passes_kernel_actions_verbatim`） |
+| 行数门禁 | `python3 -B scripts/check-source-lines.py` | 8259 文件 ≤ 2000 行 |
+| 提交范围 | `git show --stat a1f60ed9` | 18 文件，仅其自有路径 |
+
+### 复核中发现的**新缺口**（登记，未在本批修）
+
+- **原生房间协议没有选将入口**：`apps/game-server/src/room_native.rs::submit` 只映射
+  `PlayCard`/`EndPhase`/`ResolveChoice`/`StartGame`；`Engine::assign_general*` 未进入房间协议
+  → **联机房间内玩家无法选将**（客户端已能通过 WASM 选将，但那是本地/单机路径）。
+  需要协议层扩展（`CommandKind` 变体或房间级消息），属 NC03/NC09 待办；协议 crate 为共享面，
+  需与并行任务协调后再改。
+- 子 agent 提示的「`assign_general` 不推进 revision」：已核对其影响面——NC09 actor 的个性化
+  推送判据是「命令被接受」（非 revision 变化），故不受影响；客户端缓存失效已由其实现覆盖。
