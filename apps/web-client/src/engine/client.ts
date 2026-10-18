@@ -11,6 +11,9 @@ import type {
   WorkerResponse,
 } from "../types/engine";
 import { desktopContentBundle, isTauriShell } from "./desktopHost";
+// Vite `?worker` 形式：保证生产构建产出 worker chunk（含 WASM 依赖）
+import NativeEngineWorker from "../worker/engine.native.worker.ts?worker";
+import LegacyEngineWorker from "../worker/engine.worker.ts?worker";
 
 /**
  * Main-thread client for the engine Worker.
@@ -35,16 +38,16 @@ export class EngineClient {
     this.native = backend !== "legacy" && backend !== "wasm" && backend !== "old";
     const bundle =
       !this.native && isTauriShell() ? await desktopContentBundle() : undefined;
-    this.worker = new Worker(
-      new URL(
-        this.native
-          ? "../worker/engine.native.worker.ts"
-          : "../worker/engine.worker.ts",
-        import.meta.url,
-      ),
-      { type: "module" },
-    );
-    this.worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
+    // Vite `?worker` 导入：构建期把 worker 及其依赖（含 native-pkg 的 WASM 导入）
+    // 打成独立 chunk。此前的 `new Worker(new URL(...))` 在**生产构建**下未生成
+    // worker chunk（dist 仅有 index.js），真实浏览器里 worker 加载失败 →
+    // 控制台 `engine worker error Event`、战斗页「未连接」。见证据
+    // docs/operations/evidence/2026-10-18-nc09-browser-e2e/。
+    const worker: Worker = this.native
+      ? new NativeEngineWorker()
+      : new LegacyEngineWorker();
+    this.worker = worker;
+    worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
       const msg = ev.data;
       const p = this.pending.get(msg.id);
       if (!p) return;
@@ -52,7 +55,7 @@ export class EngineClient {
       if (msg.ok) p.resolve(msg.data);
       else p.reject(new Error(msg.error));
     };
-    this.worker.onerror = (e) => {
+    worker.onerror = (e) => {
       console.error("engine worker error", e);
     };
     try {

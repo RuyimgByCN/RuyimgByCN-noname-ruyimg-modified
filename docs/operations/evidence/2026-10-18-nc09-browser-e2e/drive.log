@@ -1,0 +1,4 @@
+STEP lobby_ready ok
+STEP clicked_local_start ok
+STEP battle_view {"len":180,"hasPhase":true,"hasSeat":false,"snippet":"无名杀 Next\n大厅\n对局\n扩展\n设置\n录像\n武将库\n重新开局\n结束阶段\n自动一步\n连续自动\n存档\n读档\n倍速\n0.5×\n1×\n2×\n4×\n跳过动画\n观察者 P1\n\n未连接\n\n手牌（0 张 · 点击或拖拽）\n\n无可见手牌\n\n战斗日志\n\n日志来自 DomainEvent 摘要，不是状态真相源。真相源为 Command Log + 投影（§22）。\n\n暂无事件"}
+RESULT {"lobby_has_local_start":true,"battle_text_len":180,"battle_has_phase":true,"battle_has_seat":false,"console_errors":["console.error: engine worker error Event"]}

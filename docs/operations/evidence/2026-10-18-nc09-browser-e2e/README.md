@@ -54,3 +54,50 @@ UDD=$(mktemp -d)
   --user-data-dir="$UDD" --window-size=1280,800 --virtual-time-budget=12000 \
   --screenshot=shot.png --dump-dom http://127.0.0.1:8123/ > dom.html 2> console.log
 ```
+
+## 5 CDP 驱动：本地开局 → 发现并修复**生产构建缺陷**（2026-10-18 同轮）
+
+### 5.1 驱动方式
+
+新增 `apps/web-client/scripts/nc09-browser-drive.mjs`：headless Chrome + **CDP**
+（`--remote-debugging-port` + Node 内置 `WebSocket`，**无新增依赖**）——导航 → 断言大厅 →
+点击「本地开局」→ 等待战斗界面 → 截图 + 报告（`drive-report.json`）。
+
+### 5.2 首次驱动：暴露真实缺陷（修复前）
+
+```
+STEP lobby_ready ok
+STEP clicked_local_start ok
+STEP battle_view {"len":180,"hasPhase":true,"hasSeat":false, ... "未连接 ... 手牌（0 张）"}
+RESULT {"console_errors":["console.error: engine worker error Event"]}
+```
+
+- 现象：战斗页出现但 **worker 未连接**（「未连接」、手牌 0）、控制台 `engine worker error Event`；
+- 根因（构建产物核对）：`dist/assets/` **只有 `index.js` + css，没有 worker chunk**，
+  `index.js` 中 `engine_native_wasm` 出现 **0 次** → `new Worker(new URL("../worker/engine.native.worker.ts", import.meta.url))`
+  在**生产构建**下未产出 worker chunk → 浏览器加载 worker 失败。
+
+### 5.3 修复与复测（修复后）
+
+- 修复（`src/engine/client.ts`）：改用 Vite 的 **`?worker` 导入**
+  （`import NativeEngineWorker from "../worker/engine.native.worker.ts?worker"`，旧线同理），
+  并新增 `src/vite-worker.d.ts` 类型声明；
+- 构建产物（`pnpm build` exit 0）：`engine.native.worker-*.js`、`engine.worker-*.js`、
+  **`engine_native_wasm_bg-*.wasm`**（原生 WASM）均产出；
+- 复测（[drive-after-fix.log](drive-after-fix.log)、[battle-screenshot.png](battle-screenshot.png)）：
+
+```
+STEP battle_view {"len":2383,"hasPhase":true,"hasSeat":true, "rev 0 · native ... 选将
+   NC05 · 目标座位 P1 · 93 项候选 · 点击候选即按名装配（原生正式入口，非 debug）"}
+RESULT {"lobby_has_local_start":true,"battle_text_len":2383,"battle_has_phase":true,"battle_has_seat":true,"console_errors":[]}
+```
+
+→ **真实浏览器中本地开局成功、原生 worker 运行（`rev 0 · native`）、选将面板显示 93 项候选、控制台零错误**。
+
+### 5.4 仍未完成（更新）
+
+- [ ] 未在浏览器内**完成一整局**（未点选将、未出牌、未存档/读档、未点自动一步）
+- [ ] 未走**联机大厅**（WebSocket 加入/命令/重连）
+- [ ] 未做视觉/交互/可访问性与平台档位验收
+- [ ] 客户端路由需服务端 SPA fallback（部署配置）
+- [ ] 本轮临时 `http.server` 已终止；CDP 驱动脚本仅 Node 内置依赖
