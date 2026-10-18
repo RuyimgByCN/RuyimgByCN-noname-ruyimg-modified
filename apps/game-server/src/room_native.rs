@@ -236,6 +236,80 @@ impl NativeRoomSession {
     }
 }
 
+/// 原生权威房间的持久化面（NC09：存档/录像/跨进程恢复）。
+///
+/// 与旧线 `RoomPersist` 的区别：快照用**原生归档字节**（`encode_archive`），
+/// WAL 记录**内核动作**（`GameAction`）与提交后的修订/摘要；恢复时先载入快照再
+/// 顺序重放 WAL，重放结束的修订号与摘要必须与记录一致——否则明确失败。
+#[derive(Default)]
+pub struct NativeRoomPersist {
+    /// 快照：修订号 → 归档字节。
+    pub snapshots: std::collections::BTreeMap<u64, Vec<u8>>,
+    /// WAL：`(修订号, 座位, 动作, 提交后摘要)`。
+    pub wal: Vec<(u64, u8, GameAction, [u8; 32])>,
+}
+
+impl NativeRoomPersist {
+    /// 空持久化面。
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 记录一次**被接受**的提交。
+    pub fn record(&mut self, revision: u64, seat: u8, action: GameAction, hash: [u8; 32]) {
+        self.wal.push((revision, seat, action, hash));
+    }
+
+    /// 写入快照（原生归档字节）。
+    pub fn put_snapshot(&mut self, revision: u64, bytes: Vec<u8>) {
+        self.snapshots.insert(revision, bytes);
+    }
+
+    /// 按快照 + WAL 重放恢复（返回恢复后的引擎与重放条数）。
+    ///
+    /// `from_revision` 之后（严格大于）的 WAL 条目会被重放；每条重放后的摘要必须
+    /// 与记录一致，否则返回错误（**不得静默接受**不一致的录像）。
+    pub fn recover(
+        &self,
+        from_revision: u64,
+        packs: &[&engine_native::content::extension::ExtensionPack],
+    ) -> Result<(Engine, usize), String> {
+        let bytes = self
+            .snapshots
+            .get(&from_revision)
+            .ok_or_else(|| format!("缺少修订 {from_revision} 的快照"))?;
+        let snapshot = engine_native::archive::decode_archive(bytes).map_err(|e| format!("{e:?}"))?;
+        let mut engine = if packs.is_empty() {
+            Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
+        } else {
+            Engine::restore_with_extensions(&snapshot, packs).map_err(|e| format!("{e:?}"))?
+        };
+        let mut replayed = 0usize;
+        for (revision, seat, action, hash) in &self.wal {
+            if *revision <= from_revision {
+                continue;
+            }
+            let dedup = revision.wrapping_mul(2).max(1);
+            let out = engine.submit(GameCommand {
+                actor: *seat,
+                expected_revision: engine.revision(),
+                dedup_id: dedup,
+                action: action.clone(),
+            });
+            if let CommandOutcome::Rejected(reason) = out {
+                return Err(format!("重放修订 {revision} 被拒绝: {reason:?}"));
+            }
+            if engine.state_hash() != *hash {
+                return Err(format!(
+                    "重放修订 {revision} 摘要不一致（录像或内容不符）"
+                ));
+            }
+            replayed += 1;
+        }
+        Ok((engine, replayed))
+    }
+}
+
 /// 内核拒绝原因 → 协议拒绝原因（协议枚举较小，未覆盖形态归入 `IllegalAction`
 /// 并带稳定短码；不得把故障伪装成成功）。
 fn map_reject(reason: &engine_native::RejectReason, current: u64, expected: u64) -> ApiRejectReason {

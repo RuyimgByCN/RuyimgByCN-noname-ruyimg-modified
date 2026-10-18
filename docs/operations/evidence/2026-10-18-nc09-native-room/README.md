@@ -49,3 +49,28 @@ python3 -B scripts/check-source-lines.py
 - [ ] `MatchOutcome`/`SkillView` 字段/`known_cards` 真实映射（见视图桥接证据）
 - [ ] 录像与跳转、真实客户端渲染、平台档位取证
 - [ ] HTTP/WS 层端到端（本切片无 IO，未覆盖网络边界）
+
+## 5 追加：原生持久化面（快照 + WAL 重放恢复，2026-10-18 同轮）
+
+`room_native.rs` 新增 `NativeRoomPersist`：快照用**原生归档字节**（`encode_archive`），
+WAL 记录**内核动作**与提交后摘要；`recover(from_revision, packs)` 先载入快照再顺序重放，
+**每条重放后的摘要必须与记录一致**，否则明确失败（不得静默接受不一致的录像）。
+
+新增用例 `nc09_room_wal_replay_recovers_identically`（第 6 项）：
+
+| 判据 | 结果 |
+|---|---|
+| 快照 + WAL 重放后**修订号与状态摘要**与实时推进一致；重放条数与记录条数一致 | 通过 |
+| **受控变异**：篡改一条 WAL 的期望摘要 → `recover` 明确失败（`摘要不一致`） | 通过 |
+
+实测：定向 **6 passed / 0 failed**（[targeted-2.log](targeted-2.log)）；game-server 全量
+**72 passed / 0 failed**（[game-server-tests-2.log](game-server-tests-2.log)）；行数门禁
+8251 文件（[source-lines-2.log](source-lines-2.log)）。
+
+### 仍未完成（更新）
+
+- [ ] **actor 循环接线**：`room.rs` 仍用旧线 `engine_core::Engine` + 旧线 `RoomPersist`
+      （`engine_api::Snapshot` 是结构化旧线状态，不能直接装原生归档）→ 需并行实现
+      `NativeRoomPersist` 的 actor 接线（广播/Outbound/幂等缓存/WAL 落盘）
+- [ ] 录像**导出/跳转**的产品入口（本批只做重放恢复，未做时间轴跳转与导出格式）
+- [ ] WAL 落盘与跨进程（当前为内存结构；跨进程恢复用例待补）

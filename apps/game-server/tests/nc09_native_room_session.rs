@@ -126,3 +126,78 @@ fn nc09_room_snapshot_matches_engine() {
     assert_eq!(snap.revision, room.engine().revision(), "修订一致");
     assert_eq!(snap.state_hash, room.engine().state_hash(), "摘要一致");
 }
+
+/// 存档/录像/恢复：快照 + WAL 重放后修订与摘要必须与记录一致。
+#[test]
+fn nc09_room_wal_replay_recovers_identically() {
+    let dir = tempfile::tempdir().unwrap();
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("安装");
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("装载");
+
+    let mut room = session(20261410, 4);
+    let mut persist = room_native::NativeRoomPersist::new();
+
+    // 快照点：初始状态
+    let start_rev = room.engine().revision();
+    persist.put_snapshot(
+        start_rev,
+        engine_native::archive::encode_archive(&room.engine().save()),
+    );
+
+    // 逐命令推进并记录 WAL（只记录被接受的动作）
+    let mut accepted = 0usize;
+    for _ in 0..12 {
+        if room.engine().outcome().is_some() {
+            break;
+        }
+        let seat = room.engine().turn().current;
+        let conn = 1000 + seat as u64;
+        let _ = room.join(conn, Some(seat), None);
+        let before = room.engine().revision();
+        let out = room
+            .submit(conn, &CommandKind::EndPhase {}, room.engine().revision())
+            .expect("提交");
+        if let CommandResult::Accepted { new_revision, state_hash } = out {
+            if new_revision > before {
+                persist.record(
+                    new_revision,
+                    seat,
+                    engine_native::GameAction::NextPhase,
+                    state_hash,
+                );
+                accepted += 1;
+            }
+        }
+    }
+    assert!(accepted >= 3, "至少记录 3 条被接受的提交（实际 {accepted}）");
+
+    let final_rev = room.engine().revision();
+    let final_hash = room.engine().state_hash();
+
+    // 从快照重放 WAL → 修订与摘要必须一致
+    let packs = [&loaded.pack];
+    let (restored, replayed) = persist.recover(start_rev, &packs).expect("WAL 重放恢复");
+    assert_eq!(replayed, accepted, "重放条数一致");
+    assert_eq!(restored.revision(), final_rev, "重放后修订一致");
+    assert_eq!(restored.state_hash(), final_hash, "重放后摘要一致");
+
+    // 受控变异：篡改一条 WAL 的期望摘要 → 必须明确失败（录像不可信）
+    let mut tampered = room_native::NativeRoomPersist::new();
+    for (i, (rev, seat, action, hash)) in persist.wal.iter().enumerate() {
+        let mut h = *hash;
+        if i == 0 {
+            h[0] ^= 0xFF; // 篡改期望摘要
+        }
+        tampered.record(*rev, *seat, action.clone(), h);
+    }
+    tampered.snapshots = persist.snapshots.clone();
+    let err = match tampered.recover(start_rev, &packs) {
+        Ok(_) => panic!("摘要不符必须失败"),
+        Err(e) => e,
+    };
+    assert!(err.contains("摘要不一致"), "{err}");
+}
