@@ -1,0 +1,6 @@
+== l20_liegong_batch3（定向）
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+== l20_kurou_batch2（批 2 回归）
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+== l20_config_mods_batch1（批 1 回归）
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
