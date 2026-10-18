@@ -2727,6 +2727,20 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     } else {
                         0
                     };
+                    // 诈降（L27 批 4，`sbzhaxiang`）：摸牌阶段额外摸「已损失
+                    // 体力」张（上游 sbzhaxiang_draw：trigger.num +=
+                    // getDamagedHp()，已损失体力 > 0 时）
+                    let sbzhaxiang_draw = if ctx
+                        .catalog
+                        .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+                        .map(|def| ctx.core.has_skill(player, def))
+                        .unwrap_or(false)
+                    {
+                        (ctx.core.player(player).max_hp as i32 - ctx.core.player(player).hp)
+                            .max(0) as usize
+                    } else {
+                        0
+                    };
                     // 脉轮（swd 批 137，规则 v316）：5=少摸一张、6=多摸一张
                     //（上游 mailun5/6 phaseDrawBegin trigger.num∓1 同口径）
                     let mailun_draw: i32 = match ctx.core.player(player).mailun_mode {
@@ -2738,7 +2752,11 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         as usize;
                     ctx.draw_cards(
                         player,
-                        base_draw + usize::from(lingshi_draw) + shenwei_draw + miedao_draw,
+                        base_draw
+                            + usize::from(lingshi_draw)
+                            + shenwei_draw
+                            + miedao_draw
+                            + sbzhaxiang_draw,
                     );
                     // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
                     // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差
@@ -6768,6 +6786,20 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         | Some(crate::catalog::EquipSlot::Armor)
                 )
             });
+        // 诈降（L27 批 4，`sbzhaxiang`）：本阶段用牌数 ≤ 已损失体力时，所用
+        // 【杀】不可被闪避（上游 useCard forced directHit 全场同口径；原生
+        // 直伤面仅【杀】有闪避窗口）
+        let sbzhaxiang_direct_hit = ctx
+            .catalog
+            .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+            .map(|def| ctx.core.has_skill(self.source, def))
+            .unwrap_or(false)
+            && {
+                let lost = (ctx.core.player(self.source).max_hp as i64
+                    - ctx.core.player(self.source).hp as i64)
+                    .max(0) as u32;
+                ctx.core.turn.cards_used_play_phase <= lost
+            };
         let poyue_direct_hit = {
             let red = matches!(
                 ctx.catalog.cards[self.card as usize].suit,
@@ -6791,6 +6823,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             self.armor_judged = true;
             let has_armor = !qinggang_pierce
                 && !fentian_direct_hit
+                && !sbzhaxiang_direct_hit
                 && !poyue_direct_hit
                 && !shoulie_hit
                 && !lingshi_direct_hit
@@ -7523,7 +7556,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀 directHit
             // ——整段跳过闪询问直接结算伤害
-            if poyue_direct_hit || shoulie_hit || lingshi_direct_hit {
+            if poyue_direct_hit
+                || shoulie_hit
+                || lingshi_direct_hit
+                || sbzhaxiang_direct_hit
+            {
                 return self.emit_sha_damage(ctx);
             }
             // 司圃（Boss 应昭，规则 v232）：应昭出牌阶段已用牌数≤2 期间

@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 诈降（tag 521，L27 选将美化批 4，`sbzhaxiang`）：锁定——本阶段已用
+    /// 牌数 < 已损失体力时：用牌**无距离/次数限制**且【杀】**不可被闪避**；
+    /// 摸牌阶段额外摸「已损失体力」张。
+    SbZhaXiang,
     /// 每步（tag 519，L27 选将美化批 3，`new_meibu`）：任意角色出牌阶段
     /// 开始时可选——弃一张牌（手/装备），令其本回合**止息**（不能用牌）；
     /// 若弃牌非【杀】非锦囊且非黑，另使其到你的距离视为 1。
@@ -1842,6 +1846,7 @@ impl HostBehavior {
             HostBehavior::NewZhixi => 518,
             HostBehavior::NewMeibu => 519,
             HostBehavior::NewMeibuRange => 520,
+            HostBehavior::SbZhaXiang => 521,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2602,6 +2607,7 @@ impl HostBehavior {
             518 => HostBehavior::NewZhixi,
             519 => HostBehavior::NewMeibu,
             520 => HostBehavior::NewMeibuRange,
+            521 => HostBehavior::SbZhaXiang,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2622,7 +2628,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 516] = [
+        pub const ALL: [HostBehavior; 517] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3139,6 +3145,7 @@ impl HostBehavior {
         HostBehavior::NewZhixi,
         HostBehavior::NewMeibu,
         HostBehavior::NewMeibuRange,
+        HostBehavior::SbZhaXiang,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3417,6 +3424,7 @@ impl HostBehavior {
             HostBehavior::NewZhixi => "host:new_zhixi",
             HostBehavior::NewMeibu => "host:new_meibu",
             HostBehavior::NewMeibuRange => "host:new_meibu_range",
+            HostBehavior::SbZhaXiang => "host:sbzhaxiang",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3896,6 +3904,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 诈降：被动（mod/摸牌/直伤面内联，无触发时机）
+            HostBehavior::SbZhaXiang => None,
             // 每步：任意角色出牌阶段开始（可选）
             HostBehavior::NewMeibu => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
@@ -6370,6 +6380,16 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 诈降（L27 选将美化批 4）：目录技能名（用牌数 < 已损失体力 → 无限制+直伤）。
+pub const L27_SBZHAXIANG_KEY: &str = "sbzhaxiang";
+
+/// 诈降条件（上游 `player.countUsed() < player.getDamagedHp()`）：本阶段已
+/// 用牌数 < 已损失体力（`max_hp - hp`，下限 0）。
+pub fn sbzhaxiang_active(core: &crate::state::GameStateCore, p: PlayerId) -> bool {
+    let lost = (core.player(p).max_hp as i64 - core.player(p).hp as i64).max(0) as u32;
+    core.turn.cards_used_play_phase < lost
+}
+
 /// 每步（L27 选将美化批 3）：目录技能名（弃牌令他人本回合止息）。
 pub const L27_NEW_MEIBU_KEY: &str = "new_meibu";
 
@@ -7633,6 +7653,7 @@ impl HostSkillBehavior {
             HostBehavior::Xiefang => (None, None),
             HostBehavior::NewZhixi => (None, None),
             HostBehavior::NewMeibuRange => (None, None),
+            HostBehavior::SbZhaXiang => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7985,6 +8006,7 @@ impl SkillBehavior for HostSkillBehavior {
                 _ => false,
             },
             HostBehavior::NewMeibuRange => false,
+            HostBehavior::SbZhaXiang => false,
             // 止息：自己使用牌
             HostBehavior::NewZhixi => matches!(event,
                 EventData::CardUsed(u) if u.player == owner),
@@ -12606,6 +12628,8 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::SwdPingxu => Flow::Done,
             // 每步·距离：无效果步（computed_distance 字段消费）
             HostBehavior::NewMeibuRange => Flow::Done,
+            // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
+            HostBehavior::SbZhaXiang => Flow::Done,
             // 疾影：无效果步（sha_range_free 链查询）
             HostBehavior::SwdJiyingHeld => Flow::Done,
             // 沐风：确认门后摸 1（discoverCard 确定性=牌堆末摸 1）

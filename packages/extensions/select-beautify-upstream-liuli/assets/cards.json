@@ -5,7 +5,7 @@
   "pack": {
     "name": "select-beautify-upstream-liuli",
     "version": 1,
-    "description": "G1 转换：上游选将美化批 1-3（撷芳/止息/每步）",
+    "description": "G1 转换：上游选将美化批 1-4（撷芳/止息/每步/诈降）",
     "card_prefix": "sb_"
   },
   "cards": [],
@@ -14,7 +14,8 @@
     { "name": "new_zhixi", "mapping": "host:new_zhixi" },
     { "name": "new_zhixi_mark2", "mapping": "host:new_zhixi" },
     { "name": "new_meibu", "mapping": "host:new_meibu" },
-    { "name": "new_meibu_range", "mapping": "host:new_meibu_range" }
+    { "name": "new_meibu_range", "mapping": "host:new_meibu_range" },
+    { "name": "sbzhaxiang", "mapping": "host:sbzhaxiang" }
   ],
   "generals": [],
   "deferred": [

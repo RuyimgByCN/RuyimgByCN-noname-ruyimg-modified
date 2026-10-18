@@ -3485,7 +3485,17 @@ fn apply_command(
                                         catalog.card_slot_of(core, *c)
                                             == Some(crate::catalog::EquipSlot::Treasure)
                                     });
-                                if !lingshi_extra {
+                                // 诈降（L27 批 4）：已用牌数 < 已损失体力 →
+                                // 出杀不限次数（上游 mod cardUsable Infinity）
+                                let sbzhaxiang_extra = catalog
+                                    .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+                                    .map(|def| core.has_skill(core.turn.current, def))
+                                    .unwrap_or(false)
+                                    && crate::content::host::sbzhaxiang_active(
+                                        core,
+                                        core.turn.current,
+                                    );
+                                if !lingshi_extra && !sbzhaxiang_extra {
                                     return Err(RejectReason::ShaLimit);
                                 }
                                 mark_lingshi = true;
@@ -3733,7 +3743,13 @@ fn apply_command(
                             .skill_by_name(crate::content::standard::BOSS_SHOUYI)
                             .map(|def| core.has_skill(core.turn.current, def))
                             .unwrap_or(false);
-                    let feiren_range_free = sha_range_free;
+                    // 诈降（L27 批 4）：已用牌数 < 已损失体力 → 用牌无距离限制
+                    let sbzhaxiang_free = catalog
+                        .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+                        .map(|d| core.has_skill(player_id, d))
+                        .unwrap_or(false)
+                        && crate::content::host::sbzhaxiang_active(core, player_id);
+                    let feiren_range_free = sha_range_free || sbzhaxiang_free;
                     let zfs_free = core.turn.zhufangshenshi_target == Some(target);
                     // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
                     // 无距离限制（上游 mod targetInRange 同口径）

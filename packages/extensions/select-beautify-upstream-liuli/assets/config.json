@@ -2,6 +2,6 @@
   "source": "noname-liuli",
   "upstream_path": "noname/extension/选将美化/extension.js",
   "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
-  "skills": ["xiefang", "new_zhixi", "new_zhixi_mark2", "new_meibu", "new_meibu_range"],
+  "skills": ["xiefang", "new_zhixi", "new_zhixi_mark2", "new_meibu", "new_meibu_range", "sbzhaxiang"],
   "_note": "选将 UI 主面为混淆代码（不迁移）；技能面按批次移植"
 }

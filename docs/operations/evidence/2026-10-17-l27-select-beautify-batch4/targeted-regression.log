@@ -1,0 +1,7 @@
+（回归三批：批 1 撷芳 / 批 2 止息 / 批 3 每步）
+== l27_xiefang_batch1
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+== l27_new_zhixi_batch2
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+== l27_new_meibu_batch3
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
