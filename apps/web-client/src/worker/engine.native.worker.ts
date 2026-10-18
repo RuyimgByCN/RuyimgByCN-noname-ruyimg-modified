@@ -4,7 +4,9 @@
  */
 import type { WorkerRequest, WorkerResponse } from "../types/engine";
 import {
+  chooseGeneral,
   ensureNativeReady,
+  generalCandidates,
   nativeCreate,
   nativeCreateWithPacks,
   nativeDispatch,
@@ -74,6 +76,22 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
           cardTargets: msg.cardTargets,
         });
         reply({ id: msg.id, ok: true, data: data as never });
+        return;
+      }
+      case "generalCandidates": {
+        // NC05：候选来自内核目录（含扩展武将）；畸形返回在适配层即抛错。
+        reply({ id: msg.id, ok: true, data: generalCandidates(handle) });
+        return;
+      }
+      case "chooseGeneral": {
+        // NC05：正式选将（按名字）；失败带原始错误文本上抛，不静默。
+        // 成功回包带刷新后的信封：该座位技能集变化对界面可见。
+        const assignment = chooseGeneral(handle, msg.seat, msg.name);
+        reply({
+          id: msg.id,
+          ok: true,
+          data: { assignment, envelope: nativeEnvelope(handle) },
+        });
         return;
       }
       case "useSkillCard":

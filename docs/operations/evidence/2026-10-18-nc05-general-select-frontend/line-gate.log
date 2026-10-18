@@ -1,0 +1,4 @@
+# 采集：2026-10-18 21:49:52 +0800
+$ python3 -B scripts/check-source-lines.py
+Source line limit passed: 8259 files <= 2000 lines
+exit=0

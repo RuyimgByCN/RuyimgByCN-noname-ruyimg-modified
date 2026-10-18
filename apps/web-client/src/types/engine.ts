@@ -211,6 +211,35 @@ export interface ContentBundle {
   packages: string[];
 }
 
+/** NC05 选将候选的一项（`general_candidates_json` 同形）。 */
+export interface GeneralCandidate {
+  /** 目录内武将定义 id；候选主键，提交仍按 `name`。 */
+  def: number;
+  name: string;
+  skills: string[];
+}
+
+/** NC05 选将候选面（worker `generalCandidates` 回包）。 */
+export interface GeneralCandidatesPayload {
+  count: number;
+  candidates: GeneralCandidate[];
+}
+
+/** NC05 选将结果（`assign_general` 返回面）。 */
+export interface GeneralAssignment {
+  seat: number;
+  name: string;
+  /** 装配**不推进** revision：状态变化只能看 `state_hash`。 */
+  revision: number;
+  state_hash: string;
+}
+
+/** NC05 选将回包：装配结果 + 刷新后的信封（新技能集可见）。 */
+export interface ChooseGeneralPayload {
+  assignment: GeneralAssignment;
+  envelope: EngineEnvelope;
+}
+
 export type WorkerRequest =
   | { id: number; type: "init"; bundle?: ContentBundle; packsJson?: string }
   | {
@@ -250,6 +279,9 @@ export type WorkerRequest =
     }
   | { id: number; type: "autoStep" }
   | { id: number; type: "observer" }
+  // NC05 选将：候选来自内核目录；选将按名字装配到座位（未知武将/越界显式报错）。
+  | { id: number; type: "generalCandidates" }
+  | { id: number; type: "chooseGeneral"; seat: number; name: string }
   | { id: number; type: "save" }
   | { id: number; type: "restore"; hex: string; packsJson?: string }
   | { id: number; type: "loadReplay"; json: string }
@@ -266,7 +298,15 @@ export type WorkerResponse =
   | {
       id: number;
       ok: true;
-      data: EngineEnvelope | ObserverSnapshot | ReplayMetadata | ReplayFrame | StatusPayload | string;
+      data:
+        | EngineEnvelope
+        | ObserverSnapshot
+        | ReplayMetadata
+        | ReplayFrame
+        | StatusPayload
+        | GeneralCandidatesPayload
+        | ChooseGeneralPayload
+        | string;
     }
   | { id: number; ok: false; error: string };
 

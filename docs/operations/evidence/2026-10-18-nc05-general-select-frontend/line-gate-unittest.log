@@ -1,0 +1,8 @@
+# 采集：2026-10-18 21:49:52 +0800
+$ python3 -B -m unittest discover -s scripts -p test_check_source_lines.py
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.016s
+
+OK
+exit=0

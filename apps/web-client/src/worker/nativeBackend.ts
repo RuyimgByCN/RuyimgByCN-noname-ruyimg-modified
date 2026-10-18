@@ -12,9 +12,16 @@
  * 扩展包装载：`NativeEngine.new_with_packs_json` /
  * `restore_hex_with_packs_json` 接收 cards.json 对象数组。空数组等于标准目录。
  * 管理面元数据仍由 extensionStore 保存；开局把包 JSON 经 packsJson 传入。
+ *
+ * 选将（NC05）：`generalCandidates()` / `chooseGeneral(seat, name)` 走正式选将
+ * 导出面（`general_candidates_json` / `assign_general`，非 `debug_*`）；候选与
+ * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
  */
 import type {
   EngineEnvelope,
+  GeneralAssignment,
+  GeneralCandidate,
+  GeneralCandidatesPayload,
   LegalAction,
   ObserverSnapshot,
 } from "../types/engine";
@@ -423,6 +430,223 @@ function authoritativeLegalActions(handle: NativeHandle): LegalAction[] {
 /** 丢弃某句柄的候选缓存（读档等替换引擎状态的操作后必须调用）。 */
 export function invalidateLegalActions(handle: NativeHandle): void {
   legalCache.delete(handle);
+}
+
+/**
+ * NC05 选将导出面（`crates/engine-native-wasm/src/lib.rs`）。
+ *
+ * 与 NC03 权威动作查询同款纪律：旧 wasm 产物缺导出时**显式报错并给出重建
+ * 命令**。静默降级（当作「无候选」或「忽略选将」）会让「目录里真的没收这个
+ * 武将」与「产物过期」在界面上变成同一件事。
+ */
+interface NativeGeneralSelectExports {
+  general_candidates_json: () => string;
+  assign_general: (seat: number, name: string) => string;
+}
+
+function requireGeneralSelectExports(
+  handle: NativeHandle,
+): NativeGeneralSelectExports {
+  const engine = handle.engine as unknown as Partial<NativeGeneralSelectExports>;
+  const missing = (
+    ["general_candidates_json", "assign_general"] as const
+  ).filter((name) => typeof engine[name] !== "function");
+  if (missing.length > 0) {
+    throw new Error(
+      `native: wasm 产物缺少 ${missing.join("/")}（NC05 选将导出）——` +
+        "执行 pnpm --dir apps/web-client build:native 重建 native-pkg；" +
+        "不静默降级为「无候选/忽略选将」",
+    );
+  }
+  return engine as NativeGeneralSelectExports;
+}
+
+/** wasm-bindgen 的错误是 JS 字符串（`JsValue::from_str`），不是 `Error`。 */
+function errorText(error: unknown): string {
+  if (typeof error === "string") return error;
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((s) => typeof s === "string");
+}
+
+/**
+ * 解析并逐项校验选将候选 JSON（内核 `Engine::general_candidates` 投影）。
+ *
+ * 畸形返回（非 JSON／缺字段／类型错／def 重复／count 与候选数不一致）一律
+ * 报错：候选面是「哪些武将能选」的唯一来源，坏数据必须可见，不能被过滤成
+ * 一个更小的候选集。
+ */
+export function parseGeneralCandidatesJson(
+  raw: string,
+): GeneralCandidatesPayload {
+  let value: unknown;
+  try {
+    value = JSON.parse(raw) as unknown;
+  } catch {
+    throw new Error(`native: 选将候选返回非 JSON: ${raw.slice(0, 120)}`);
+  }
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(
+      `native: 选将候选 JSON 结构不符（需 {count, candidates}）: ${raw.slice(0, 120)}`,
+    );
+  }
+  const env = value as { count?: unknown; candidates?: unknown };
+  const count = env.count;
+  if (
+    typeof count !== "number" ||
+    !Number.isInteger(count) ||
+    !Array.isArray(env.candidates)
+  ) {
+    throw new Error(
+      `native: 选将候选 JSON 结构不符（需 {count:int, candidates:[]}）: ${raw.slice(0, 120)}`,
+    );
+  }
+  const candidates: GeneralCandidate[] = [];
+  const seen = new Set<number>();
+  for (const [index, item] of env.candidates.entries()) {
+    if (item === null || typeof item !== "object" || Array.isArray(item)) {
+      throw new Error(
+        `native: 选将候选第 ${index} 项结构不符: ${JSON.stringify(item)}`,
+      );
+    }
+    const row = item as Record<string, unknown>;
+    const def = row.def;
+    const name = row.name;
+    const skills = row.skills;
+    if (
+      typeof def !== "number" ||
+      !Number.isInteger(def) ||
+      def < 0 ||
+      typeof name !== "string" ||
+      name.length === 0 ||
+      !isStringArray(skills)
+    ) {
+      throw new Error(
+        `native: 选将候选第 ${index} 项结构不符（需 {def:非负整数, name:非空字符串, skills:字符串数组}）: ${JSON.stringify(item)}`,
+      );
+    }
+    if (seen.has(def)) {
+      throw new Error(`native: 选将候选第 ${index} 项 def=${def} 与前面重复`);
+    }
+    seen.add(def);
+    candidates.push({ def, name, skills: [...skills] });
+  }
+  if (candidates.length !== count) {
+    throw new Error(
+      `native: 选将候选 count=${count} 与候选数 ${candidates.length} 不一致`,
+    );
+  }
+  return { count: candidates.length, candidates };
+}
+
+/**
+ * 解析并校验选将返回（`assign_general` 投影）。
+ *
+ * 回包必须自证与请求一致（`seat`/`name` 回显）：错座位的装配结果若被当成
+ * 成功，界面会把「选了 A 座」显示成「B 座已装配」。
+ */
+export function parseGeneralAssignmentJson(
+  raw: string,
+  expected: { seat: number; name: string },
+): GeneralAssignment {
+  let value: unknown;
+  try {
+    value = JSON.parse(raw) as unknown;
+  } catch {
+    throw new Error(`native: 选将返回非 JSON: ${raw.slice(0, 120)}`);
+  }
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(
+      `native: 选将返回结构不符（需 {seat, name, revision, state_hash}）: ${raw.slice(0, 120)}`,
+    );
+  }
+  const row = value as Record<string, unknown>;
+  const seat = row.seat;
+  const name = row.name;
+  const revision = row.revision;
+  const stateHash = row.state_hash;
+  if (
+    typeof seat !== "number" ||
+    !Number.isInteger(seat) ||
+    seat !== expected.seat ||
+    typeof name !== "string" ||
+    name !== expected.name ||
+    typeof revision !== "number" ||
+    !Number.isInteger(revision) ||
+    typeof stateHash !== "string" ||
+    !/^[0-9a-f]+$/.test(stateHash)
+  ) {
+    throw new Error(
+      `native: 选将返回结构不符或与请求不一致（期望 seat=${expected.seat}, name=${expected.name}）: ${raw.slice(0, 120)}`,
+    );
+  }
+  return { seat, name, revision, state_hash: stateHash };
+}
+
+/**
+ * NC05 选将候选（内核 `Engine::general_candidates`，只读、顺序稳定）。
+ *
+ * 候选面**当前不含座位**：内核 `general_candidates()` 是目录全量，尚未按座位
+ * 门控（赛前大厅阶段、双将明置与选将信息隔离是 NC05 待办）。适配层如实透传，
+ * 不假装做过座位过滤。
+ */
+export function generalCandidates(
+  handle: NativeHandle,
+): GeneralCandidatesPayload {
+  const raw = requireGeneralSelectExports(handle).general_candidates_json();
+  return parseGeneralCandidatesJson(raw);
+}
+
+/**
+ * NC05 正式选将（按名字装配到座位；不使用 `debug_grant`）。
+ *
+ * 失败（座位越界／未知武将／对局已结束）由 WASM 抛出：这里带上下文重抛，
+ * **原始错误文本原样保留**，调用方能区分「武将名打错」与「产物过期」。
+ * 成功后调用 `invalidateSeatCaches`：装配路径**不推进 revision**（实测装配
+ * 前后 `revision()` 相同），缓存若按 `(revision, seat)` 记忆化会命中装配前的
+ * 旧候选。
+ */
+export function chooseGeneral(
+  handle: NativeHandle,
+  seat: number,
+  name: string,
+): GeneralAssignment {
+  const exports = requireGeneralSelectExports(handle);
+  let raw: string;
+  try {
+    raw = exports.assign_general(seat, name);
+  } catch (error) {
+    throw new Error(
+      `native: 选将失败(seat=${seat}, name=${name}): ${errorText(error)}`,
+    );
+  }
+  // 正常返回 = 装配已生效（内核 `Err` 才表示拒绝）。**先失效缓存再解析**：
+  // 解析失败时状态同样已经变了，留着旧候选会让界面继续按装配前的技能集渲染。
+  invalidateSeatCaches(handle, seat);
+  try {
+    return parseGeneralAssignmentJson(raw, { seat, name });
+  } catch (error) {
+    throw new Error(
+      `native: 选将已生效但返回无法解析（该座位候选缓存已失效）: ${errorText(error)}`,
+    );
+  }
+}
+
+/**
+ * 选将后使该座位的动作/选择缓存失效。
+ *
+ * 粒度说明：`legalCache` 每句柄一条 `(revision, seat)` 记录，且装配会改变
+ * **共享状态**（`state_hash` 变而 `revision` 不变）——只丢该座位的话，观察者
+ * 座位的旧候选仍会被命中。因此这里保守地丢弃整条记录（是该座位失效的超集）。
+ * 选择面（`open_choice_json`）逐次直读引擎、无缓存，无需处理。
+ */
+export function invalidateSeatCaches(handle: NativeHandle, seat: number): void {
+  invalidateLegalActions(handle);
+  // seat 参与缓存键的历史设计；当前实现按句柄整体失效（见上）。
+  void seat;
 }
 
 function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {

@@ -1,5 +1,7 @@
 import type {
+  ChooseGeneralPayload,
   EngineEnvelope,
+  GeneralCandidatesPayload,
   ObserverSnapshot,
   ReplayFrame,
   ReplayMetadata,
@@ -174,6 +176,16 @@ export class EngineClient {
 
   autoStep(): Promise<EngineEnvelope> {
     return this.request({ id: this.nextId(), type: "autoStep" }) as Promise<EngineEnvelope>;
+  }
+
+  /** NC05 选将候选（原生目录全量；旧线后端会显式报 unknown message）。 */
+  generalCandidates(): Promise<GeneralCandidatesPayload> {
+    return this.request({ id: this.nextId(), type: "generalCandidates" }) as Promise<GeneralCandidatesPayload>;
+  }
+
+  /** NC05 正式选将（按名字装配到座位）；未知武将/越界由 worker 显式报错。 */
+  chooseGeneral(seat: number, name: string): Promise<ChooseGeneralPayload> {
+    return this.request({ id: this.nextId(), type: "chooseGeneral", seat, name }) as Promise<ChooseGeneralPayload>;
   }
 
   observer(): Promise<ObserverSnapshot> {

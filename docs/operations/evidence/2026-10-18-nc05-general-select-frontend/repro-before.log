@@ -1,0 +1,52 @@
+# NC05 前端选将接线 —— 缺口复现（repro-before）
+# 采集时间：2026-10-18 21:35:58 +0800
+# 采集基线：git HEAD（本轮改动之前）
+
+$ git rev-parse HEAD
+5b7e079d09d66f63157b129bf03601ca03f012f9
+
+$ git log --oneline -1
+5b7e079d feat(engine-native): NC10 PlanPool::plan_seats 改用长驻有界池（宿主接线）
+
+# ① 适配层（nativeBackend.ts）是否有选将面：
+$ git show HEAD:apps/web-client/src/worker/nativeBackend.ts | grep -c 'general_candidates\|assign_general\|generalCandidates\|chooseGeneral'
+0
+
+# ② Worker 入口（engine.native.worker.ts）是否有选将面：
+$ git show HEAD:apps/web-client/src/worker/engine.native.worker.ts | grep -c 'general\|chooseGeneral'
+0
+
+# ③ 共享协议（types/engine.ts）是否有选将消息：
+$ git show HEAD:apps/web-client/src/types/engine.ts | grep -c 'generalCandidates\|chooseGeneral\|GeneralCandidate'
+0
+
+# ④ 主线程客户端（engine/client.ts）是否有选将方法：
+$ git show HEAD:apps/web-client/src/engine/client.ts | grep -c 'generalCandidates\|chooseGeneral'
+0
+
+# ⑤ 整个前端是否引用过选将导出（含 UI）：
+$ git grep -n 'general_candidates\|assign_general\|generalCandidates\|chooseGeneral' HEAD -- apps/web-client/src | wc -l
+       0
+
+# ⑥ 旧 WASM 产物（native-pkg，未跟踪）是否含新导出：
+#    重建前实测（同一命令在本轮 build:native 之前执行）：无输出
+#    （= 旧产物只有 NC03 面，缺 general_candidates_json/assign_general）
+$ grep -n 'general\|assign' apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts
+#    （重建前：无输出）
+#    该产物构建于选将导出面引入之前；源码依据：
+$ git log --oneline -1 -- crates/engine-native-wasm/src/lib.rs
+30d10e34 feat(engine-native-wasm): NC05 正式选将导出面（候选 + 按名选将）
+$ git show 30d10e34^:crates/engine-native-wasm/src/lib.rs | grep -c 'general_candidates_json'
+0
+$ git show 30d10e34:crates/engine-native-wasm/src/lib.rs | grep -c 'general_candidates_json'
+4
+#    重建后（本轮 build:native）同一 grep：
+26:    assign_general(seat: number, name: string): string;
+40:    general_candidates_json(): string;
+104:    readonly nativeengine_assign_general: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+107:    readonly nativeengine_general_candidates_json: (a: number) => [number, number];
+
+# 结论：前端只有建局随机装配（nativeCreate/new_with_packs_json）一条路径，
+#       玩家无法选将；候选与装配两个导出面在适配层/Worker/协议/客户端四处皆缺。
+#       注：仓库内有并行任务在飞，采集期间 HEAD 已由 30d10e34 前进到上面的提交；
+#       ①–⑤ 以采集时的 HEAD 为准（同一命令可复跑）。

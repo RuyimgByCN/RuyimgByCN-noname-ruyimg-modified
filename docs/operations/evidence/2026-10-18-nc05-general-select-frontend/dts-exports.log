@@ -1,0 +1,35 @@
+# 采集：2026-10-18 21:50:14 +0800
+# 重建后的 native-pkg 导出面（build-native.log 之后采集）
+$ grep -n 'assign_general\|general_candidates_json' apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts
+26:    assign_general(seat: number, name: string): string;
+40:    general_candidates_json(): string;
+104:    readonly nativeengine_assign_general: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+107:    readonly nativeengine_general_candidates_json: (a: number) => [number, number];
+
+$ sed -n '20,42p' apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts
+     * 空数组 = 取消）。
+     */
+    answer(observer: number, choice_id: bigint, selection: Uint32Array): string;
+    /**
+     * NC05/NC09 正式选将（按名字；失败返回错误，不静默）。
+     */
+    assign_general(seat: number, name: string): string;
+    /**
+     * 一步自动推进：挂起选择按 min/首选自动应答；否则当前座位经
+     * `BoundedPlanner` 规划并应用（game-server `/native` 同款）。返回
+     * 一步摘要 JSON。
+     */
+    auto_step(): string;
+    /**
+     * 目录中牌名以前缀开头的张数（扩展牌并入对局的可观察计数）。
+     */
+    cards_with_prefix(prefix: string): number;
+    /**
+     * NC05/NC09 正式选将候选（客户端选将 UI 用）。
+     */
+    general_candidates_json(): string;
+    is_finished(): boolean;
+    /**
+
+$ shasum -a 256 apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm
+a94417beb3e1d56bbf6941798ea996431ae1dae251a7f66a83811ea872c3a0a0  apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm

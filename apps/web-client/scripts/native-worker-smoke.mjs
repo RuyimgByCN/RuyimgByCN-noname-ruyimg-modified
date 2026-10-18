@@ -122,7 +122,7 @@ check("wrong_version_refused", wrongRefused, wrongDetail);
 // 适配层 × 真实引擎：choice token 必须是候选下标并可按原样回传。
 // 依据 crates/engine-native-wasm `answer()` 直取 `spec.options[idx]`；对应
 // adapter-probe 反例 1（stub 版回归见 scripts/native-adapter.test.mjs）。
-const { nativeCreate, nativeDispatch, nativeEnvelope } = await import(
+const { chooseGeneral, generalCandidates, nativeCreate, nativeDispatch, nativeEnvelope } = await import(
   pathToFileURL(join(root, "src/worker/nativeBackend.ts")).href
 );
 const adapter = nativeCreate(4, 4242, 0);
@@ -275,6 +275,133 @@ try {
   seatDetail = String(e);
 }
 check("legal_actions_seat_boundary_refused", seatRefused, seatDetail);
+
+// ── NC05 选将：候选来自内核目录，装配走正式入口（非 debug_*） ──
+// 接线前缺口：适配层/worker 完全没有 general_candidates_json / assign_general
+// 面（HEAD 版 grep 计数 0），前端唯一能改座位技能的路径是建局随机装配。
+const gen = nativeCreate(4, 4242, 0);
+const genBefore = nativeEnvelope(gen);
+const genCandidates = generalCandidates(gen);
+check(
+  "general_candidates_from_catalog",
+  genCandidates.count > 0 && genCandidates.count === genCandidates.candidates.length,
+  `count=${genCandidates.count} before_skills=${JSON.stringify(
+    genBefore.view.seats.find((s) => s.seat === 0)?.skills.map((s) => s.name) ?? [],
+  )}`,
+);
+const pickGeneral = genCandidates.candidates.find((c) => c.skills.length > 0);
+const genAssignment = chooseGeneral(gen, 0, pickGeneral.name);
+const genAfter = nativeEnvelope(gen);
+const genSkills = (genAfter.view.seats.find((s) => s.seat === 0)?.skills ?? [])
+  .map((s) => s.name)
+  .sort();
+check(
+  "choose_general_changes_skills",
+  JSON.stringify(genSkills) === JSON.stringify([...pickGeneral.skills].sort()),
+  `name=${pickGeneral.name} skills=${JSON.stringify(genSkills)}`,
+);
+check(
+  "choose_general_assignment_shape",
+  /^[0-9a-f]{64}$/.test(genAssignment.state_hash) &&
+    genAssignment.seat === 0 &&
+    genAssignment.name === pickGeneral.name &&
+    genAssignment.revision === Number(gen.engine.revision()),
+  `seat=${genAssignment.seat} revision=${genAssignment.revision} hash=${genAssignment.state_hash.slice(0, 12)}…`,
+);
+let genUnknownRefused = false;
+let genUnknownDetail = "";
+try {
+  chooseGeneral(gen, 0, "查无此将");
+  genUnknownDetail = "accepted";
+} catch (e) {
+  genUnknownDetail = String(e);
+  genUnknownRefused =
+    genUnknownDetail.includes("查无此将") && genUnknownDetail.includes("NoSuchGeneral");
+}
+check("choose_general_unknown_refused", genUnknownRefused, genUnknownDetail);
+let genSeatRefused = false;
+let genSeatDetail = "";
+try {
+  chooseGeneral(gen, 9, pickGeneral.name);
+  genSeatDetail = "accepted";
+} catch (e) {
+  genSeatDetail = String(e);
+  genSeatRefused = genSeatDetail.includes("座位越界");
+}
+check("choose_general_seat_boundary_refused", genSeatRefused, genSeatDetail);
+
+// ── NC05 worker 协议面：真实 engine.native.worker.ts 的 onmessage ──
+// 适配层已测过；这里补产品入口那一段（消息 → worker switch → 适配层 → 内核），
+// 包括失败消息必须回 ok:false 且错误文本可读（绝不静默成功）。
+// Node 下补 `self`：wasm-bindgen 的 init 已在本进程用字节完成，worker 的
+// `ensureNativeReady()` 会直接复用，不再 fetch（浏览器路径仍走 URL）。
+let workerResolve = null;
+globalThis.self = {
+  postMessage: (resp) => {
+    const settle = workerResolve;
+    workerResolve = null;
+    if (settle) settle(resp);
+  },
+};
+await import(pathToFileURL(join(root, "src/worker/engine.native.worker.ts")).href);
+const workerSend = (msg) =>
+  new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      workerResolve = null;
+      reject(new Error(`worker 回包超时: ${msg.type}`));
+    }, 30000);
+    workerResolve = (resp) => {
+      clearTimeout(timer);
+      resolve(resp);
+    };
+    globalThis.self.onmessage({ data: msg });
+  });
+
+try {
+  const initReply = await workerSend({ id: 901, type: "init" });
+  check("worker_native_init", initReply?.ok === true, JSON.stringify(initReply).slice(0, 200));
+
+  const candReply = await workerSend({ id: 902, type: "generalCandidates" });
+  const candData = candReply?.data;
+  check(
+    "worker_general_candidates",
+    candReply?.ok === true &&
+      candData?.count > 0 &&
+      candData.count === candData.candidates?.length,
+    `count=${candData?.count} error=${candReply?.error ?? ""}`,
+  );
+
+  const pick = candData.candidates.find((c) => c.skills.length > 0);
+  const chosen = await workerSend({ id: 903, type: "chooseGeneral", seat: 0, name: pick.name });
+  const chosenSkills = (
+    chosen?.data?.envelope?.view?.seats?.find((s) => s.seat === 0)?.skills ?? []
+  )
+    .map((s) => s.name)
+    .sort();
+  check(
+    "worker_choose_general_reply",
+    chosen?.ok === true &&
+      chosen.data.assignment.name === pick.name &&
+      JSON.stringify(chosenSkills) === JSON.stringify([...pick.skills].sort()),
+    `name=${pick.name} skills=${JSON.stringify(chosenSkills)} hash=${chosen?.data?.assignment?.state_hash?.slice(0, 12)}…`,
+  );
+
+  const unknown = await workerSend({ id: 904, type: "chooseGeneral", seat: 0, name: "查无此将" });
+  check(
+    "worker_choose_general_unknown_refused",
+    unknown?.ok === false && /NoSuchGeneral/.test(unknown.error ?? ""),
+    `reply=${JSON.stringify(unknown).slice(0, 200)}`,
+  );
+
+  const oob = await workerSend({ id: 905, type: "chooseGeneral", seat: 9, name: pick.name });
+  check(
+    "worker_choose_general_seat_refused",
+    oob?.ok === false && /座位越界/.test(oob?.error ?? ""),
+    `reply=${JSON.stringify(oob).slice(0, 200)}`,
+  );
+} catch (e) {
+  check("worker_general_select_protocol", false, `throw: ${e}`);
+}
 
 console.log(JSON.stringify({ total: results.length, failed: results.filter((r) => !r.ok).length }));
 process.exit(results.some((r) => !r.ok) ? 1 : 0);

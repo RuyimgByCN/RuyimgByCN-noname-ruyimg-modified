@@ -1,0 +1,7 @@
+# 采集：2026-10-18 21:49:48 +0800
+$ pnpm --dir apps/web-client typecheck
+
+> noname-next-web-client@0.1.0 typecheck /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> vue-tsc --noEmit
+
+exit=0
