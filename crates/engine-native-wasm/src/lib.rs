@@ -36,7 +36,7 @@ fn packs_from_json(packs_json: &str) -> Result<Vec<ExtensionPack>, String> {
     Ok(out)
 }
 
-fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Engine, String> {
+pub fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Engine, String> {
     let packs = packs_from_json(packs_json)?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
     if refs.is_empty() {
@@ -46,7 +46,7 @@ fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Engine,
     }
 }
 
-fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String> {
+pub fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String> {
     let packs = packs_from_json(packs_json)?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
     let bytes = hex_decode(hex).map_err(|e| format!("{e:?}"))?;
@@ -69,7 +69,7 @@ fn prefix_count(engine: &Engine, prefix: &str) -> u32 {
 }
 
 /// 十六进制编解码（无 base64 依赖；存档字节面）。
-fn hex_encode(bytes: &[u8]) -> String {
+pub fn hex_encode(bytes: &[u8]) -> String {
     let mut s = String::with_capacity(bytes.len() * 2);
     for b in bytes {
         s.push_str(&format!("{b:02x}"));
@@ -801,6 +801,14 @@ fn omnisearch_debug(source: &str) -> String {
         Ok(text) => format!("executed:{text}"),
         Err(err) => format!("error:{err:?}"),
     }
+}
+
+/// NC08 跨目标门禁用的宿主侧入口（**非 wasm-bindgen 导出**）：让集成测试
+/// （`tests/nc08_cross_target.rs`）直接驱动与 WASM 导出相同的实现路径，
+/// 不依赖浏览器或 wasm 运行时。
+#[doc(hidden)]
+pub mod test_support {
+    pub use super::{engine_from_archive, engine_from_packs, hex_encode};
 }
 
 #[cfg(test)]
