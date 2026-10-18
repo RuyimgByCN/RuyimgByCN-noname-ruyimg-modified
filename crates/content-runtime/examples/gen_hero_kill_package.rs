@@ -25,17 +25,20 @@ fn cards_json() -> String {
     out.push_str("  \"pack\": {\n");
     out.push_str("    \"name\": \"hero-kill-upstream-noname\",\n");
     out.push_str("    \"version\": 1,\n");
-    out.push_str("    \"description\": \"G1 转换：上游英雄杀首批（反击族）\",\n");
+    out.push_str("    \"description\": \"G1 转换：上游英雄杀批 1-2（反击族/门神标记）\",\n");
     out.push_str("    \"card_prefix\": \"yxs_\"\n");
     out.push_str("  },\n");
     out.push_str("  \"cards\": [],\n");
     out.push_str("  \"skills\": [\n");
     out.push_str("    { \"name\": \"yxs_fanji\", \"mapping\": \"host:yxs_fanji\" },\n");
-    out.push_str("    { \"name\": \"yxs_fanji2\", \"mapping\": \"host:yxs_fanji2\" }\n");
+    out.push_str("    { \"name\": \"yxs_fanji2\", \"mapping\": \"host:yxs_fanji2\" },\n");
+    out.push_str("    { \"name\": \"yxs_menshen\", \"mapping\": \"host:yxs_menshen\" },\n");
+    out.push_str("    { \"name\": \"yxs_menshen3\", \"mapping\": \"host:yxs_menshen3\" },\n");
+    out.push_str("    { \"name\": \"yxs_menshen2\", \"mapping\": \"host:yxs_menshen2\" }\n");
     out.push_str("  ],\n");
     out.push_str("  \"generals\": [],\n");
     out.push_str("  \"deferred\": [\n");
-    out.push_str("    { \"name\": \"yxs_menshen2\", \"reason\": \"门神主体（70 KB 单技）单列评估\" },\n");
+    out.push_str("    ");
     out.push_str("    { \"name\": \"character_table\", \"reason\": \"43 条武将（character.js）引用大量外部技能（nvquan/qiandu/yxsweiyi 等，本仓他处定义）——依赖未齐\" },\n");
     out.push_str("    { \"name\": \"skill_batch_rest\", \"reason\": \"yxs_menshen/yxs_menshen3 与外部技能待批次\" }\n");
     out.push_str("  ]\n");
@@ -48,7 +51,7 @@ fn config_json() -> String {
     out.push_str("  \"source\": \"noname\",\n");
     out.push_str("  \"upstream_path\": \"apps/core/extension/英雄杀/character/skill.js\",\n");
     out.push_str(&format!("  \"upstream_commit\": \"{UPSTREAM_COMMIT}\",\n"));
-    out.push_str("  \"skills\": [\"yxs_fanji\", \"yxs_fanji2\"],\n");
+    out.push_str("  \"skills\": [\"yxs_fanji\", \"yxs_fanji2\", \"yxs_menshen\", \"yxs_menshen3\", \"yxs_menshen2\"],\n");
     out.push_str("  \"_note\": \"武将表依赖外部技能，未随包发布（登记差异）\"\n");
     out.push_str("}\n");
     out
@@ -81,6 +84,30 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             content_schema::PackageSkillEntry {
                 skill_def_id: 1,
                 name: "yxs_fanji2".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 2,
+                name: "yxs_menshen".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 3,
+                name: "yxs_menshen3".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 4,
+                name: "yxs_menshen2".into(),
                 locked: false,
                 lord_only: false,
                 non_gainable: false,

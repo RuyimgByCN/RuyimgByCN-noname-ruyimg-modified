@@ -1309,6 +1309,16 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 门神（tag 528，U08 英雄杀批 2，`yxs_menshen`）：自己结束阶段可选——
+    /// 选一名其他角色，令其获得「门神」标记（`yxs_menshen2` 实例 + 标记=自己
+    /// 座位）。
+    YxsMenshen,
+    /// 门神·清除（tag 529，U08 批 2，`yxs_menshen3`）：锁定——任意阶段开始或
+    /// 任意角色死亡时，清除全场「门神」标记与实例。
+    YxsMenshen3,
+    /// 门神·标记持有（tag 530，U08 批 2，`yxs_menshen2`）：被动占位（主体
+    /// 70 KB 效果待后续批次，登记差异）。
+    YxsMenshen2,
     /// 反击（tag 526，U08 英雄杀批 1，`yxs_fanji`）：自己受到【杀】/【决斗】
     /// 伤害后可选（手牌有【杀】）——获得临时「反击·红杀直伤」并对伤害来源
     /// 使用一张【杀】。
@@ -1873,6 +1883,9 @@ impl HostBehavior {
             HostBehavior::Zaibian => 525,
             HostBehavior::YxsFanji => 526,
             HostBehavior::YxsFanji2 => 527,
+            HostBehavior::YxsMenshen => 528,
+            HostBehavior::YxsMenshen3 => 529,
+            HostBehavior::YxsMenshen2 => 530,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2640,6 +2653,9 @@ impl HostBehavior {
             525 => HostBehavior::Zaibian,
             526 => HostBehavior::YxsFanji,
             527 => HostBehavior::YxsFanji2,
+            528 => HostBehavior::YxsMenshen,
+            529 => HostBehavior::YxsMenshen3,
+            530 => HostBehavior::YxsMenshen2,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2660,7 +2676,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 523] = [
+        pub const ALL: [HostBehavior; 526] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3184,6 +3200,9 @@ impl HostBehavior {
         HostBehavior::Zaibian,
         HostBehavior::YxsFanji,
         HostBehavior::YxsFanji2,
+        HostBehavior::YxsMenshen,
+        HostBehavior::YxsMenshen3,
+        HostBehavior::YxsMenshen2,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3469,6 +3488,9 @@ impl HostBehavior {
             HostBehavior::Zaibian => "host:zaibian",
             HostBehavior::YxsFanji => "host:yxs_fanji",
             HostBehavior::YxsFanji2 => "host:yxs_fanji2",
+            HostBehavior::YxsMenshen => "host:yxs_menshen",
+            HostBehavior::YxsMenshen3 => "host:yxs_menshen3",
+            HostBehavior::YxsMenshen2 => "host:yxs_menshen2",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3948,6 +3970,24 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 门神：自己结束阶段（可选）
+            HostBehavior::YxsMenshen => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 门神·清除：任意阶段开始 + 任意角色死亡（锁定）
+            HostBehavior::YxsMenshen3 => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::Death],
+            }),
+            // 门神·标记持有：被动（无触发时机）
+            HostBehavior::YxsMenshen2 => None,
             // 反击：自己受到伤害后（可选）
             HostBehavior::YxsFanji => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -6460,6 +6500,15 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 门神（U08 英雄杀批 2）：目录技能名（结束阶段给他人门神标记）。
+pub const U08_YXS_MENSHEN_KEY: &str = "yxs_menshen";
+
+/// 门神·清除（U08 批 2）：目录技能名（阶段开始/死亡时清除标记）。
+pub const U08_YXS_MENSHEN3_KEY: &str = "yxs_menshen3";
+
+/// 门神·标记持有（U08 批 2）：目录技能名（主体效果待批次）。
+pub const U08_YXS_MENSHEN2_KEY: &str = "yxs_menshen2";
+
 /// 反击（U08 英雄杀批 1）：目录技能名（受伤后反击）。
 pub const U08_YXS_FANJI_KEY: &str = "yxs_fanji";
 
@@ -7758,6 +7807,9 @@ impl HostSkillBehavior {
             HostBehavior::Zaibian => (None, None),
             HostBehavior::YxsFanji => (None, None),
             HostBehavior::YxsFanji2 => (None, None),
+            HostBehavior::YxsMenshen => (None, None),
+            HostBehavior::YxsMenshen3 => (None, None),
+            HostBehavior::YxsMenshen2 => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -8126,6 +8178,26 @@ impl SkillBehavior for HostSkillBehavior {
                 _ => false,
             },
             HostBehavior::YxsFanji2 => false,
+            // 门神：自己结束阶段且存活角色 >1
+            HostBehavior::YxsMenshen => matches!(event,
+                EventData::Phase { player, begin: false, .. } if *player == owner)
+                && ctx.state.alive_players().count() > 1,
+            // 门神·清除：任意阶段开始 / 任意死亡，且场上存在门神标记
+            HostBehavior::YxsMenshen3 => {
+                let has_marker = ctx.state.alive_players().any(|p| {
+                    ctx.catalog
+                        .skill_by_name(U08_YXS_MENSHEN2_KEY)
+                        .map(|def| ctx.state.skills.contains_key(&(p, def)))
+                        .unwrap_or(false)
+                });
+                has_marker
+                    && match event {
+                        EventData::Phase { begin: true, .. } => true,
+                        EventData::Death { .. } => true,
+                        _ => false,
+                    }
+            }
+            HostBehavior::YxsMenshen2 => false,
             // 灾变：自己的出牌阶段开始
             HostBehavior::Zaibian => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
@@ -12781,8 +12853,88 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::NewMeibuRange => Flow::Done,
             // 反击·红杀直伤：无效果步（杀机器内联消费）
             HostBehavior::YxsFanji2 => Flow::Done,
+            // 门神·标记持有：无效果步（主体 70 KB 效果待批次）
+            HostBehavior::YxsMenshen2 => Flow::Done,
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => Flow::Done,
+            // 门神：选一名其他角色 → 授予门神标记
+            HostBehavior::YxsMenshen => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "yxs_menshen_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive || target == self.owner {
+                        return Flow::Done;
+                    }
+                    let Some(def) = ctx.catalog.skill_by_name(U08_YXS_MENSHEN2_KEY) else {
+                        return Flow::Done;
+                    };
+                    ctx.core.skills.insert(
+                        (target, def),
+                        crate::state::SkillInstance {
+                            owner: target,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: false,
+                            rounds: 0,
+                        },
+                    );
+                    ctx.core
+                        .vm_aux
+                        .marks
+                        .insert((target, u32::from(def)), i32::from(self.owner));
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "门神",
+                        owner: self.owner,
+                    });
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 门神·清除：移除全场门神实例与标记
+            HostBehavior::YxsMenshen3 => {
+                let Some(def) = ctx.catalog.skill_by_name(U08_YXS_MENSHEN2_KEY) else {
+                    return Flow::Done;
+                };
+                let seats: Vec<PlayerId> = (0..ctx.core.players.len() as PlayerId)
+                    .filter(|p| ctx.core.skills.contains_key(&(*p, def)))
+                    .collect();
+                if seats.is_empty() {
+                    return Flow::Done;
+                }
+                for p in seats {
+                    ctx.core.skills.remove(&(p, def));
+                    ctx.core.vm_aux.marks.remove(&(p, u32::from(def)));
+                }
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "门神·清除",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
             // 反击：授予临时红杀直伤 → 选一张【杀】对来源使用
             HostBehavior::YxsFanji => match self.stage {
                 HostStage::Act => {

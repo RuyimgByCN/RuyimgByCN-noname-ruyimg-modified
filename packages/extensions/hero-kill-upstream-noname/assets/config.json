@@ -2,6 +2,6 @@
   "source": "noname",
   "upstream_path": "apps/core/extension/英雄杀/character/skill.js",
   "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
-  "skills": ["yxs_fanji", "yxs_fanji2"],
+  "skills": ["yxs_fanji", "yxs_fanji2", "yxs_menshen", "yxs_menshen3", "yxs_menshen2"],
   "_note": "武将表依赖外部技能，未随包发布（登记差异）"
 }
