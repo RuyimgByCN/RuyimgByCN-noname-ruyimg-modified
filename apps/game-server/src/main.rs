@@ -5,6 +5,7 @@ mod lobby;
 mod native;
 mod native_view;
 mod room_native;
+mod room_native_actor;
 mod outbox;
 mod persist;
 mod room;

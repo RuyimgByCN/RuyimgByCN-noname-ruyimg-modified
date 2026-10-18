@@ -94,6 +94,11 @@ pub struct RoomHandle {
 }
 
 impl RoomHandle {
+    /// 由房间 actor 构造（原生 actor 复用同一 handle 类型）。
+    pub fn new(id: u64, tx: mpsc::Sender<RoomMsg>) -> Self {
+        Self { id, tx }
+    }
+
     /// Send message to room.
     pub async fn send(&self, msg: RoomMsg) -> Result<(), String> {
         self.tx
