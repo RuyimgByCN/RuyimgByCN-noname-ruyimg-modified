@@ -148,7 +148,7 @@
         "E01",
         "G0"
       ],
-      "notes": "实测重建（脚本 gen_registry.py 可复现）：来源行为样本/接口登记表 docs/operations/evidence/2026-10-17-t9-source-samples/README.md——37 来源逐行登记台账状态/证据目录/测试入口；实测计数：**整包 24 / 部分重构 9 / G0 完成 4 / 待重构 0**，**33/37 已有动态样本与测试入口**（余 4 个 G0 来源待实施后补齐）。（更正：早前该 README 为空文件、其「23/37」无据；现值以脚本实测为准，台账状态变化后重跑脚本。）"
+      "notes": "实测重建（脚本 gen_registry.py 可复现）：来源行为样本/接口登记表 docs/operations/evidence/2026-10-17-t9-source-samples/README.md——37 来源逐行登记台账状态/证据目录/测试入口；实测计数：**整包 24 / 部分重构 9 / G0 完成 4 / 待重构 0**，**33/37 已有动态样本与测试入口**（余 4 个 G0 来源待实施后补齐）。（更正：早前该 README 为空文件、其「23/37」无据；现值以脚本实测为准，台账状态变化后重跑脚本。） 另：**NC08 上游行为对照样本**（2026-10-18，以归档上游 JS 逐条推导规则点）——`kurou`（L20，4 点对齐+1 处顺序差异登记）、`fz_liegong`/`fz_xinkuanggu`（L20，7 点对齐）、身份局开局（上游 `identity.js`：主公起手/每人 4 张 → 原生一致、旧线偏差、Prepare 缺失登记）+ Prepare 落点核查（并入判定起点，修罗过滤差异登记）。证据：[kurou](../2026-10-18-nc08-upstream-kurou/README.md)、[样本2](../2026-10-18-nc08-upstream-samples2/README.md)、[开局判定](../2026-10-18-nc08-upstream-identity-start/README.md)、[Prepare](../2026-10-18-nc08-prepare-phase/README.md)。此类样本**强于**「有测试入口」：规则点由上游源码推导并固定为可执行断言。"
     },
     {
       "id": "T9-LX-BATTLE-TRACE",
