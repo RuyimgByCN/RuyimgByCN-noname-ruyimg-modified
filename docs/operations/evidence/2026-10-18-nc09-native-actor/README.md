@@ -52,3 +52,35 @@ python3 -B scripts/check-source-lines.py
 - [ ] 广播面：命令后的**个性化视图推送**（当前只广播名册；旧线有 `fanout_after_command`）
 - [ ] `legal_actions`/`choice` 在 actor 回包中暂为空（会话已能给出，接线待补）
 - [ ] 录像导出/跳转、WAL 落盘与跨进程恢复、客户端渲染、平台档位
+
+## 5 追加：入口按后端选择（2026-10-18 同轮）
+
+原生路径此前**不可达**（`lobby`/`main` 只起旧线房间）。本批接线：
+
+| 面 | 实现 |
+|---|---|
+| 配置 | `ServerConfig` 新增 `native_rooms: bool`、`native_room_packages: Vec<String>`、`native_room_namespace: String`；env `NONAME_NATIVE_ROOMS` / `NONAME_NATIVE_ROOM_PACKAGES` / `NONAME_NATIVE_ROOM_NAMESPACE`。**默认关闭**（切换需显式启用并逐项验收） |
+| 选择 | `room_native_actor::spawn_native_room_if_configured(...)`：未启用 → `Ok(None)`（调用方走旧线）；启用 → 装载配置包并起原生 actor；**装载失败明确报错，不静默回退旧线**（回退会让「已启用」成假象） |
+| lobby | 建房处按配置选择后端；原生失败以 `ErrorCode::Internal` 返回 |
+
+新增用例 `nc09_backend_selection_is_explicit`（第 2 项）：
+
+| 判据 | 结果 |
+|---|---|
+| `native=false` → 不接管（`Ok(None)`） | 通过 |
+| `native=true` + 包可装载 → 起原生房间且可入座（真实 tokio） | 通过 |
+| `native=true` + 包缺失 → **明确报错**（错误含包名，不静默回退） | 通过 |
+
+实测：定向 **4 passed / 0 failed**（含 `persist` 既有 2 项；[targeted-2.log](targeted-2.log)）；
+game-server 全量 **76 passed / 0 failed**（[game-server-tests-2.log](game-server-tests-2.log)）；
+行数门禁 8253 文件（[source-lines-2.log](source-lines-2.log)）。
+
+### 仍未完成（更新）
+
+- [ ] **旧线房间测试跑在原生后端**：`room_flow.rs`/`multi_room_stress.rs` 仍走旧线；
+      需要「同测试双后端」或为原生后端补等价用例（含断线重连、满座、密码、限流）
+- [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`、`Recover` 消息
+      （原生 actor 当前明确返回未接线错误）
+- [ ] 命令后**个性化视图推送**（`fanout_after_command` 等价物）、actor 回包
+      `legal_actions`/`choice` 接线
+- [ ] 原生后端的**真实客户端/HTTP/WS 端到端**与平台档位

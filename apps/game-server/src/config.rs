@@ -29,6 +29,13 @@ pub struct ServerConfig {
     pub native_packages_root: PathBuf,
     /// Native path (T6③): versioned package store for installed native packs.
     pub native_store_root: PathBuf,
+    /// NC09：房间后端选择——true 时房间使用**原生权威会话**（`room_native_actor`），
+    /// false 时沿用旧线 `engine_core` 房间。默认关闭（切换需显式启用并逐项验收）。
+    pub native_rooms: bool,
+    /// NC09：原生房间启用的包 id（按命名空间限定见 `native_room_packages`）。
+    pub native_room_packages: Vec<String>,
+    /// NC09：原生房间包所属命名空间。
+    pub native_room_namespace: String,
 }
 
 impl Default for ServerConfig {
@@ -46,6 +53,9 @@ impl Default for ServerConfig {
             allow_unsigned_extensions: cfg!(debug_assertions),
             native_packages_root: PathBuf::from("packages/extensions"),
             native_store_root: PathBuf::from("data/native-content"),
+            native_rooms: false,
+            native_room_packages: Vec::new(),
+            native_room_namespace: "upstream-noname".to_string(),
         }
     }
 }
@@ -78,6 +88,19 @@ impl ServerConfig {
         }
         if let Ok(path) = std::env::var("NONAME_NATIVE_STORE_ROOT") {
             c.native_store_root = path.into();
+        }
+        if let Ok(value) = std::env::var("NONAME_NATIVE_ROOMS") {
+            c.native_rooms = matches!(value.as_str(), "1" | "true" | "yes");
+        }
+        if let Ok(list) = std::env::var("NONAME_NATIVE_ROOM_PACKAGES") {
+            c.native_room_packages = list
+                .split(',')
+                .map(|s| s.trim().to_string())
+                .filter(|s| !s.is_empty())
+                .collect();
+        }
+        if let Ok(ns) = std::env::var("NONAME_NATIVE_ROOM_NAMESPACE") {
+            c.native_room_namespace = ns;
         }
         c.extension_verify_key = std::env::var("NONAME_EXTENSION_VERIFY_KEY").ok();
         if let Ok(value) = std::env::var("NONAME_ALLOW_UNSIGNED_EXTENSIONS") {

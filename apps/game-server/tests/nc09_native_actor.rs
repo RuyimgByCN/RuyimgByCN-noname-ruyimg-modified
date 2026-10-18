@@ -164,3 +164,76 @@ async fn nc09_native_actor_join_command_snapshot() {
         other => panic!("应返回命令结果: {other:?}"),
     }
 }
+
+/// 后端选择：`native=false` 不接管（调用方走旧线）；`native=true` 装载配置包并起原生房间；
+/// 装载失败**明确报错**（不静默回退旧线）。
+#[tokio::test]
+async fn nc09_backend_selection_is_explicit() {
+    let dir = tempfile::tempdir().unwrap();
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("安装");
+
+    // 未启用 → 不接管（返回 None，由调用方走旧线）
+    let none = room_native_actor::spawn_native_room_if_configured(
+        1,
+        4,
+        1,
+        8,
+        20,
+        &content,
+        false,
+        "upstream-noname",
+        &["shahai-swd".to_string()],
+    )
+    .expect("未启用不应报错");
+    assert!(none.is_none(), "未启用原生后端时不得接管");
+
+    // 启用且包可装载 → 起原生房间（句柄可发送消息）
+    let handle = room_native_actor::spawn_native_room_if_configured(
+        2,
+        4,
+        20261702,
+        8,
+        20,
+        &content,
+        true,
+        "upstream-noname",
+        &["shahai-swd".to_string()],
+    )
+    .expect("启用后应成功")
+    .expect("应返回原生句柄");
+    let (tx, _rx) = mpsc::channel::<String>(4);
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Join {
+            connection_id: 9,
+            display_name: "p".into(),
+            preferred_seat: Some(0),
+            reconnect_token: None,
+            password: String::new(),
+            outbound: session::Outbound::new(tx),
+            reply: rt,
+        })
+        .await
+        .expect("send");
+    let joined = rr.await.expect("reply").expect("原生房间入座");
+    assert_eq!(joined.seat, 0);
+
+    // 启用但包不可装载 → **明确报错**（不静默回退旧线）
+    let err = match room_native_actor::spawn_native_room_if_configured(
+        3,
+        4,
+        20261703,
+        8,
+        20,
+        &content,
+        true,
+        "upstream-noname",
+        &["no-such-package".to_string()],
+    ) {
+        Ok(_) => panic!("包缺失必须报错"),
+        Err(e) => e,
+    };
+    assert!(err.contains("no-such-package"), "{err}");
+}

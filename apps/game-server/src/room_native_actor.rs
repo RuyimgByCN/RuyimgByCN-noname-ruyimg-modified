@@ -288,6 +288,41 @@ async fn broadcast_roster_native(
     }
 }
 
+/// NC09 后端选择：按配置构造房间句柄。
+///
+/// - `native = false` → 由调用方走旧线 `room::spawn_room_with_engine`（本函数返回 `None`）；
+/// - `native = true` → 用 `NativeContent` 装载配置指定的包构建原生会话并起原生 actor。
+///   装载失败**明确报错**（不静默回退旧线——回退会让「原生后端已启用」变成假象）。
+pub fn spawn_native_room_if_configured(
+    id: u64,
+    players: u8,
+    seed: u64,
+    mailbox: usize,
+    snapshot_every: u64,
+    content: &crate::native::NativeContent,
+    native: bool,
+    namespace: &str,
+    packages: &[String],
+) -> Result<Option<RoomHandle>, String> {
+    if !native {
+        return Ok(None);
+    }
+    let mut packs = Vec::new();
+    for id in packages {
+        let loaded = content.load_scoped(Some(namespace), id)?;
+        packs.push(loaded.pack);
+    }
+    let refs: Vec<&engine_native::content::extension::ExtensionPack> = packs.iter().collect();
+    let engine = if refs.is_empty() {
+        engine_native::Engine::new(seed, players as usize)
+    } else {
+        engine_native::Engine::new_with_extensions(seed, players as usize, &refs)
+            .map_err(|e| format!("原生房间建局失败: {e:?}"))?
+    };
+    let session = NativeRoomSession::new(engine, players);
+    Ok(Some(spawn_room_native(id, session, mailbox, snapshot_every)))
+}
+
 /// 供测试构造：把原生会话交给 actor 的便捷入口（`oneshot` 回复通道）。
 pub fn join_reply_channel() -> (oneshot::Sender<Result<JoinReply, String>>, oneshot::Receiver<Result<JoinReply, String>>) {
     oneshot::channel()

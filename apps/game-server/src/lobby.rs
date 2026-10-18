@@ -226,15 +226,32 @@ impl Lobby {
                         ));
                     }
                     let id = self.next_room.fetch_add(1, Ordering::Relaxed);
-                    let handle = spawn_room_with_engine(
+                    // NC09：后端选择——原生权威房间（显式启用）或旧线房间。
+                    // 原生装载失败**明确报错**，不静默回退（避免「已启用」成假象）。
+                    let native_handle = crate::room_native_actor::spawn_native_room_if_configured(
                         id,
                         players,
                         seed,
-                        password.clone(),
                         self.cfg.room_mailbox,
                         self.cfg.snapshot_every,
-                        self.engine_template.clone(),
-                    );
+                        &self.native,
+                        self.cfg.native_rooms,
+                        &self.cfg.native_room_namespace,
+                        &self.cfg.native_room_packages,
+                    )
+                    .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
+                    let handle = match native_handle {
+                        Some(h) => h,
+                        None => spawn_room_with_engine(
+                            id,
+                            players,
+                            seed,
+                            password.clone(),
+                            self.cfg.room_mailbox,
+                            self.cfg.snapshot_every,
+                            self.engine_template.clone(),
+                        ),
+                    };
                     rooms.insert(id, handle);
                     id
                 }; // MutexGuard dropped here before any await
