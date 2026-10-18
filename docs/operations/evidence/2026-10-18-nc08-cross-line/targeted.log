@@ -1,0 +1,5 @@
+DBG 初始阶段/当前：旧 ("Draw", 1) / 原生 ("Judge", 0)
+DBG 初始手牌数：旧 [6, 4, 4, 4] / 原生 [4, 4, 4, 4]（开局长发牌差异，已登记规则基准）
+DBG 对照差异：seed=20261602 step=0 公开面差异：旧 (1, 1, "Play", [(0, 5, 5, true, 6), (1, 4, 4, true, 4), (2, 3, 3, true, 4), (3, 4, 4, true, 4)]) / 原生 (1, 0, "Draw", [(0, 5, 5, true, 6), (1, 4, 4, true, 4), (2, 4, 4, true, 4), (3, 4, 4, true, 4)])
+DBG 对照差异：seed=20261603 step=0 公开面差异：旧 (1, 1, "Play", [(0, 4, 4, true, 6), (1, 4, 4, true, 4), (2, 4, 4, true, 4), (3, 4, 4, true, 4)]) / 原生 (1, 0, "Draw", [(0, 5, 5, true, 6), (1, 4, 4, true, 4), (2, 4, 4, true, 4), (3, 4, 4, true, 4)])
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
