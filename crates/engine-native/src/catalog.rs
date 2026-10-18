@@ -311,6 +311,10 @@ pub enum CardKind {
     /// 青釭剑（P2/N08 批③-b 第一把，上游标准牌堆 ♠6，equip1 武器射程 2）：
     /// 锁定——无视目标防具（八卦阵判定与仁王盾免疫均不生效）。
     Qinggang,
+    /// 轩辕剑（swd 批 146）：独特武器——攻击范围 +2（上游 `distance
+    /// attackFrom:-2`）、装备时 +1 护甲（体力 ≤2 且无「轩辕」则弃置）、
+    /// 造成伤害 +1 并转为雷属性、伤害后若无「轩辕」则失去 1 体力。
+    Xuanyuanjian,
     /// 麒麟弓（P2/N08 批③-b 第二把，上游标准牌堆 ♥5，equip1 武器射程 5）：
     /// 杀造成伤害时可弃目标装备区一张坐骑牌。
     Qilin,
@@ -685,6 +689,7 @@ impl CardKind {
             CardKind::Mianju => EquipSlot::Armor,
             CardKind::Renwang => EquipSlot::Armor,
             CardKind::Qinggang => EquipSlot::Weapon,
+            CardKind::Xuanyuanjian => EquipSlot::Weapon,
             CardKind::Qilin => EquipSlot::Weapon,
             CardKind::Hanbing => EquipSlot::Weapon,
             CardKind::Zhuge => EquipSlot::Weapon,
@@ -717,6 +722,8 @@ impl CardKind {
     pub fn named_weapon_range(self) -> Option<u32> {
         match self {
             CardKind::Qinggang => Some(2),
+            // 轩辕剑：攻击范围 +2（上游 attackFrom -2；基础 1 → 3）
+            CardKind::Xuanyuanjian => Some(3),
             CardKind::Qilin => Some(5),
             CardKind::Hanbing => Some(2),
             CardKind::Zhuge => Some(1),
@@ -734,7 +741,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 173] = [
+    pub const ALL: [CardKind; 174] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -831,6 +838,7 @@ impl CardKind {
         CardKind::Jiedao,
         CardKind::Renwang,
         CardKind::Qinggang,
+        CardKind::Xuanyuanjian,
         CardKind::Qilin,
         CardKind::Hanbing,
         CardKind::Zhuge,
@@ -1010,6 +1018,7 @@ impl CardKind {
             CardKind::Jiedao => "jiedao",
             CardKind::Renwang => "renwang",
             CardKind::Qinggang => "qinggang",
+            CardKind::Xuanyuanjian => "xuanyuanjian",
             CardKind::Qilin => "qilin",
             CardKind::Hanbing => "hanbing",
             CardKind::Zhuge => "zhuge",

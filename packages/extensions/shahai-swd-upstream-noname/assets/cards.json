@@ -1741,7 +1741,8 @@
     },
     {
      "name": "xuanyuan",
-     "mapping": null
+     "mapping": null,
+     "reason": "牌实体【轩辕剑】待补（加牌改变种子化牌堆与武将分配 → 须同批重导 8 项种子敏感用例）；引擎侧技能与装备钩已落地"
     },
     {
      "name": "pozhou2",
@@ -2018,6 +2019,18 @@
   {
    "name": "bingfeng2",
    "mapping": "host:bingfeng2"
+  },
+  {
+   "name": "xuanyuanjian2",
+   "mapping": "host:xuanyuanjian2"
+  },
+  {
+   "name": "xuanyuanjian3",
+   "mapping": "host:xuanyuanjian3"
+  },
+  {
+   "name": "xuanyuan",
+   "mapping": "host:xuanyuan"
   }
  ]
 }

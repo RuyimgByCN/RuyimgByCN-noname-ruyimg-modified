@@ -1309,6 +1309,15 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 轩辕剑·伤增（tag 503，swd 批 146，`xuanyuanjian2`）：装备者造成
+    /// 伤害时 +1 并转为雷属性（未横置伤害）。
+    XuanyuanjianDamage,
+    /// 轩辕剑·反噬（tag 504，同批，`xuanyuanjian3`）：上项加伤生效后，
+    /// 装备者若无「轩辕」则失去 1 点体力。
+    XuanyuanjianBacklash,
+    /// 轩辕（tag 505，同批，`xuanyuan`）：结束阶段限定技——弃一张黑桃牌，
+    /// 从弃牌堆取【轩辕剑】装备。
+    Xuanyuan,
     /// 燎原（tag 502，swd deferred 消解批 145，`liaoyuan`）：自己使用【杀】
     /// 时可选——弃置任意张与该杀同花色的牌（手/装备），令目标额外需打出
     /// 等量张【闪】；未能全部打出则该杀**直接命中**且伤害 +张数。
@@ -1764,6 +1773,9 @@ impl HostBehavior {
             HostBehavior::SwdTianshu => 500,
             HostBehavior::Gaizao => 501,
             HostBehavior::Liaoyuan => 502,
+            HostBehavior::XuanyuanjianDamage => 503,
+            HostBehavior::XuanyuanjianBacklash => 504,
+            HostBehavior::Xuanyuan => 505,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2507,6 +2519,9 @@ impl HostBehavior {
             500 => HostBehavior::SwdTianshu,
             501 => HostBehavior::Gaizao,
             502 => HostBehavior::Liaoyuan,
+            503 => HostBehavior::XuanyuanjianDamage,
+            504 => HostBehavior::XuanyuanjianBacklash,
+            505 => HostBehavior::Xuanyuan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2527,7 +2542,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 499] = [
+        pub const ALL: [HostBehavior; 502] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3027,6 +3042,9 @@ impl HostBehavior {
         HostBehavior::SwdTianshu,
         HostBehavior::Gaizao,
         HostBehavior::Liaoyuan,
+        HostBehavior::XuanyuanjianDamage,
+        HostBehavior::XuanyuanjianBacklash,
+        HostBehavior::Xuanyuan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3288,6 +3306,9 @@ impl HostBehavior {
             HostBehavior::SwdTianshu => "host:swdtianshu",
             HostBehavior::Gaizao => "host:gaizao",
             HostBehavior::Liaoyuan => "host:liaoyuan",
+            HostBehavior::XuanyuanjianDamage => "host:xuanyuanjian2",
+            HostBehavior::XuanyuanjianBacklash => "host:xuanyuanjian3",
+            HostBehavior::Xuanyuan => "host:xuanyuan",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3762,6 +3783,30 @@ impl HostBehavior {
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 轩辕剑·伤增：装备者造成伤害前（锁定）
+            HostBehavior::XuanyuanjianDamage => Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 轩辕剑·反噬：装备者造成伤害后（锁定）
+            HostBehavior::XuanyuanjianBacklash => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 轩辕：自己结束阶段（限定；可选）
+            HostBehavior::Xuanyuan => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -6132,6 +6177,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 轩辕（swd 批 146）：目录技能名（结束阶段弃黑桃取【轩辕剑】）。
+pub const SWD_XUANYUAN_KEY: &str = "xuanyuan";
+
 /// 燎原（swd 批 145）：目录技能名（弃同花色牌换额外闪需求与加伤）。
 pub const SWD_LIAOYUAN_KEY: &str = "liaoyuan";
 
@@ -7206,6 +7254,9 @@ impl HostSkillBehavior {
             HostBehavior::SwdTianshu => (None, None),
             HostBehavior::Gaizao => (None, None),
             HostBehavior::Liaoyuan => (None, None),
+            HostBehavior::XuanyuanjianDamage => (None, None),
+            HostBehavior::XuanyuanjianBacklash => (None, None),
+            HostBehavior::Xuanyuan => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7544,6 +7595,21 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 轩辕剑·伤增：自己是伤害来源且未横置伤害
+            HostBehavior::XuanyuanjianDamage => matches!(event,
+                EventData::Damage(d)
+                    if d.source == Some(owner) && !d.prevented && !d.from_chain),
+            // 轩辕剑·反噬：自己是伤害来源且本次加伤生效（标记位）
+            HostBehavior::XuanyuanjianBacklash => matches!(event,
+                EventData::Damage(d) if d.source == Some(owner) && ctx.state.turn.xuanyuanjian_marked),
+            // 轩辕：自己结束阶段且有黑桃牌且弃牌堆有【轩辕剑】
+            HostBehavior::Xuanyuan => matches!(event, EventData::Phase { begin: false, .. })
+                && ctx.state.player(owner).hand.iter().chain(
+                    ctx.state.player(owner).equips.iter(),
+                ).any(|c| ctx.catalog.cards[*c as usize].suit == crate::catalog::Suit::Spade)
+                && ctx.state.discard.iter().any(|c| {
+                    ctx.catalog.cards[*c as usize].kind == crate::catalog::CardKind::Xuanyuanjian
+                }),
             // 燎原：自己是【杀】的使用者且持有与该杀同花色的牌
             HostBehavior::Liaoyuan => match event {
                 EventData::CardUsed(u) => {
@@ -9767,6 +9833,8 @@ impl SkillBehavior for HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            // 轩辕（swd 批 146）：结束阶段触发（无主动面）
+            HostBehavior::Xuanyuan => None,
             // 天书（swd 批 142）：出牌阶段主动（限定——实例启用时）
             HostBehavior::SwdTianshu => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
@@ -20954,6 +21022,108 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 轩辕剑·伤增：帧内 +1 并转雷属性、置标记
+            HostBehavior::XuanyuanjianDamage => {
+                let frame = ctx.current_frame_id();
+                if let Some(f) = ctx.res.frame_mut(frame) {
+                    if let EventData::Damage(d) = &mut f.data {
+                        d.amount = d.amount.saturating_add(1);
+                        if d.nature == crate::event::DamageNature::Normal {
+                            d.nature = crate::event::DamageNature::Thunder;
+                        }
+                    }
+                }
+                ctx.core.turn.xuanyuanjian_marked = true;
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "轩辕剑",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
+            // 轩辕剑·反噬：失去 1 点体力（无「轩辕」时）
+            HostBehavior::XuanyuanjianBacklash => {
+                let has_xuanyuan = ctx
+                    .catalog
+                    .skill_by_name(SWD_XUANYUAN_KEY)
+                    .map(|d| ctx.core.has_skill(self.owner, d))
+                    .unwrap_or(false);
+                ctx.core.turn.xuanyuanjian_marked = false;
+                if !has_xuanyuan {
+                    ctx.emit(EventData::LoseHp {
+                        player: self.owner,
+                        amount: 1,
+                    });
+                }
+                Flow::Done
+            }
+            // 轩辕：弃一张黑桃牌 → 从弃牌堆取【轩辕剑】装备（限定）
+            HostBehavior::Xuanyuan => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .filter(|c| {
+                            ctx.catalog.cards[*c as usize].suit == crate::catalog::Suit::Spade
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "xuanyuan_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(self.owner).hand.contains(&c) {
+                        ctx.discard_from_hand(self.owner, c);
+                    } else if ctx.core.player(self.owner).equips.contains(&c) {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+                        ctx.to_discard(c);
+                    } else {
+                        return Flow::Done;
+                    }
+                    // 弃牌堆取【轩辕剑】入手后经装备帧入槽
+                    let sword = ctx.core.discard.iter().copied().find(|c| {
+                        ctx.catalog.cards[*c as usize].kind
+                            == crate::catalog::CardKind::Xuanyuanjian
+                    });
+                    if let Some(sword) = sword {
+                        ctx.core.discard.retain(|x| *x != sword);
+                        ctx.core.player_mut(self.owner).hand.push(sword);
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "轩辕",
+                            owner: self.owner,
+                        });
+                        ctx.emit(EventData::Equipped {
+                            player: self.owner,
+                            card: sword,
+                            replaced: None,
+                        });
+                        self.stage = HostStage::ShuchuiTargetLoop;
+                        return Flow::Yield;
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 燎原：循环弃同花色牌（首张必问；弃后余 >1 张才续问）→ 记额外闪数
             HostBehavior::Liaoyuan => match self.stage {
                 HostStage::Act => {

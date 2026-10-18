@@ -497,6 +497,9 @@ pub struct TurnState {
     /// 燎原·本次【杀】的额外闪需求/加伤数（swd 批 145，规则 v319）：
     /// 上游 `storage.liaoyuan`（杀结算开始置数、伤害时加伤、杀结束清零）。
     pub liaoyuan_count: u8,
+    /// 轩辕剑加伤标记（swd 批 146，规则 v320）：上游 `event._xuanyuanjian`
+    /// （加伤生效后反噬子技据此失去体力）。
+    pub xuanyuanjian_marked: bool,
     /// 额外阶段队列（同批）：`insertPhase` 原语——阶段结束时若非空则弹出
     /// 该阶段作为下一阶段（码同 `Phase`：0 准备/1 摸牌/2 出牌/3 弃牌/4 结束）。
     pub extra_phases: Vec<u8>,

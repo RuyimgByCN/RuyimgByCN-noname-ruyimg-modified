@@ -482,6 +482,7 @@ impl Engine {
                 cards_used_play_phase: 0,
                 cards_used_turn: 0,
                 liaoyuan_count: 0,
+                xuanyuanjian_marked: false,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
@@ -3256,6 +3257,20 @@ fn apply_command(
                 }
             }
             match kind {
+                CardKind::Xuanyuanjian => {
+                    // 轩辕剑（swd 批 146）：无目标；装备者须持有「轩辕」或
+                    // 体力 >2（上游 enable 同口径）
+                    if !targets.is_empty() {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                    let has_xuanyuan = catalog
+                        .skill_by_name(crate::content::host::SWD_XUANYUAN_KEY)
+                        .map(|d| core.has_skill(core.turn.current, d))
+                        .unwrap_or(false);
+                    if !has_xuanyuan && core.player(core.turn.current).hp <= 2 {
+                        return Err(RejectReason::CardLimit);
+                    }
+                }
                 CardKind::Xuejibingbao => {
                     // 雪霁冰雹（swd 卡牌面补切批②）：恰 1 名存活目标且未
                     // 处于标记中（上游 filterTarget 无同标记者同口径）
@@ -5410,6 +5425,8 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u32(&mut h, c.turn.cards_used_turn);
     // 燎原计数（swd 批 145，规则 v319）
     push_u8(&mut h, c.turn.liaoyuan_count);
+    // 轩辕剑加伤标记（swd 批 146，规则 v320）
+    push_u8(&mut h, c.turn.xuanyuanjian_marked as u8);
     push_u32(&mut h, c.turn.extra_phases.len() as u32);
     for p in &c.turn.extra_phases {
         push_u8(&mut h, *p);
@@ -6600,6 +6617,7 @@ mod tests {
                 cards_used_play_phase: 0,
                 cards_used_turn: 0,
                 liaoyuan_count: 0,
+                xuanyuanjian_marked: false,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
@@ -6707,6 +6725,7 @@ mod tests {
                 cards_used_play_phase: 0,
                 cards_used_turn: 0,
                 liaoyuan_count: 0,
+                xuanyuanjian_marked: false,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,

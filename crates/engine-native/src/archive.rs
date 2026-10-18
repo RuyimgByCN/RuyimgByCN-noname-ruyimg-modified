@@ -105,7 +105,9 @@ use crate::state::{
 /// `declared_slots`。v101 字节被拒绝。
 /// v103（2026-10-17，swd 燎原批 145）：`TurnState` 追加燎原计数
 /// `liaoyuan_count`。v102 字节被拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 103;
+/// v104（2026-10-17，swd 轩辕剑批 146）：`TurnState` 追加轩辕剑加伤标记
+/// `xuanyuanjian_marked`。v103 字节被拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 104;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3542,6 +3544,8 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     w.u32(t.cards_used_turn);
     // 燎原计数（v103，swd 批 145）
     w.u8(t.liaoyuan_count);
+    // 轩辕剑加伤标记（v104，swd 批 146）
+    w.boolean(t.xuanyuanjian_marked);
     w.len(t.extra_phases.len());
     for p in &t.extra_phases {
         w.u8(*p);
@@ -4041,6 +4045,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let cards_used_play_phase = r.u32()?;
     let cards_used_turn = r.u32()?;
     let liaoyuan_count = r.u8()?;
+    let xuanyuanjian_marked = r.boolean()?;
     let extra_phases = r.vec(|r| r.u8())?;
     let extra_phase_lingwu = r.boolean()?;
     let bte_used_play_phase = r.u32()?;
@@ -4194,6 +4199,7 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 cards_used_play_phase,
                 cards_used_turn,
                 liaoyuan_count,
+                xuanyuanjian_marked,
                 extra_phases,
                 extra_phase_lingwu,
                 bte_used_play_phase,
@@ -4368,6 +4374,7 @@ fn card_kind_to_num(k: &CardKind) -> u32 {
         Zhangba => 101,
         Cixiong => 102,
         Fangtian => 103,
+        Xuanyuanjian => 174,
         Hufu => 104,
         Liuxinghuoyu => 105,
         Caoyao => 106,
@@ -4556,6 +4563,7 @@ fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         101 => Zhangba,
         102 => Cixiong,
         103 => Fangtian,
+        174 => Xuanyuanjian,
         104 => Hufu,
         105 => Liuxinghuoyu,
         106 => Caoyao,

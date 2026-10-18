@@ -1647,6 +1647,22 @@ fn commit_equip(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId, card: cr
     }
     ctx.core.player_mut(player).equips.push(card);
     grant_equip_skills(ctx, player, card);
+    // 轩辕剑装备钩（swd 批 146，规则 v320）：体力 ≤2 且无「轩辕」→ 弃置；
+    // 否则 +1 护甲（上游 onEquip 同口径）
+    if ctx.catalog.card_kind(card) == crate::catalog::CardKind::Xuanyuanjian {
+        let has_xuanyuan = ctx
+            .catalog
+            .skill_by_name(crate::content::host::SWD_XUANYUAN_KEY)
+            .map(|d| ctx.core.has_skill(player, d))
+            .unwrap_or(false);
+        if !has_xuanyuan && ctx.core.player(player).hp <= 2 {
+            ctx.core.player_mut(player).equips.retain(|c| *c != card);
+            revoke_equip_skills(ctx.core, ctx.catalog, player, card);
+            ctx.to_discard(card);
+        } else {
+            ctx.change_hujia(player, 1);
+        }
+    }
     // G1 索链甲：装备时横置
     if ctx.catalog.cards[card as usize].link_on_equip {
         let was = ctx.core.player(player).linked;
