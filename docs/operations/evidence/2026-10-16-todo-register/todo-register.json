@@ -2432,6 +2432,91 @@
       "description": "魔化（`mohua2`）前置四技：`jifeng`（✅ 批 150）/ `moyan`（✅ 批 151）/ `miedao`（组技两面，✅ 批 152）/ `swd_xiuluo`（✅ 批 153，定义取自离线包）；四技齐备后 `mohua2` 可落地（换将 + 技能重装配 + 回复 2 + 摸 2）。",
       "notes": "2026-10-17 批 150：`jifeng` 已落地并验证（3 测）；其余三技待做；`swd_xiuluo` 在 swd.js 中未找到定义（需在其它角色文件定位或登记为外部依赖）。 批 151：moyan 已落地并验证（3 测）；剩 miedao、swd_xiuluo。 批 152：miedao 已落地并验证（3 测）；仅剩 swd_xiuluo。 批 153：swd_xiuluo 已落地并验证（3 测）——**四技齐备（4/4）**，`mohua2` 本体可落。",
       "done_when_evidence": "四技各自定向测试 + `mohua2` 换将装配测试 + 全量/装载/golden 复跑记录。"
+    },
+    {
+      "id": "NC08-BLOCKED-FIXES",
+      "source": {
+        "doc": "docs/operations/evidence/2026-10-18-blocked-fixes/README.md",
+        "ref": "待实施修复清单（5 项）"
+      },
+      "description": "NC08/NC12 已定位但未实施的修复：①悬空引用 panic（commit_equip 与 swd_zhongxinghujia 同帧先装后弃竞态，修法 A/B）；②rangjie 移动牌分支补摸 1 张；③五行盘 usable:1 limits；④集智 filter 覆盖范围（应任意锦囊）；⑤刚烈缺『来源弃两张手牌』分支。均因目标文件属未跟踪的 host/standard/kernel 拆分而未实施。",
+      "done_when_evidence": [
+        "5 项修复各自落地并移除对应 #[ignore]/差异断言",
+        "nc12_dangling_reference_repro（seed 44170）通过",
+        "长程 sim_faults/probe_faults 与两个故障日志保持空",
+        "各样本证据 README 更新为对齐"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "NC08-UPSTREAM-HARNESS",
+      "source": {
+        "doc": "docs/operations/evidence/2026-10-18-nc08-command-by-command/README.md",
+        "ref": "口径与边界"
+      },
+      "description": "逐命令对照的基准目前是旧线 engine-core（旧线≠上游等价）。需接入上游 JS harness（或在 Node 中驱动归档 JS），把参照实现替换为上游输出；现有比较框架可复用。",
+      "done_when_evidence": [
+        "上游 JS 可在仓库内确定性驱动（含随机流固定）",
+        "同种子逐命令对照以**上游**为参照，首次分歧清单与差异登记一致",
+        "证据目录 README+日志"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "NC08-BASELINE-FACE",
+      "source": {
+        "doc": "docs/architecture/native-rules-baseline.md",
+        "ref": "本地上游对齐的新增核查"
+      },
+      "description": "上游同名技能可能存在于多个面（character/standard、character/sb、mobile、newjiang 等）且语义不同。已发生一次误用（集智/奸雄初版按 sb 面登记，后撤销 2 项伪差异）。需：①对既有 21 个样本逐条复核基准面；②在样本模板中强制写明基准文件路径。",
+      "done_when_evidence": [
+        "21 个样本的『上游源码』一节均标注基准面与文件路径",
+        "复核结论写入台账 §3.3",
+        "伪差异清零"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "NC12-BROWSER-TIERS",
+      "source": {
+        "doc": "docs/operations/evidence/2026-10-18-nc12-browser-coldstart/README.md",
+        "ref": "未完成 / 待办"
+      },
+      "description": "浏览器档位已有：可交互 263 ms、完整对局（单局 + 3/3 多局）、旧线前端 260 ms。缺：移动端（Android/iOS）与桌面（Tauri）档位、多浏览器（Safari/Firefox）、真实网络与慢网/丢包、263 ms 的拆分（worker 埋点）、动画帧/输入响应指标。",
+      "done_when_evidence": [
+        "各档位同口径测量日志与 README",
+        "263 ms 拆分为 worker 启动/WASM 下载编译/建局/首帧",
+        "真实网络（非本机）数据与限制说明"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "NC12-PRODUCT-LONG",
+      "source": {
+        "doc": "docs/operations/evidence/2026-10-18-nc12-plan-crash/README-30min.md",
+        "ref": "口径边界"
+      },
+      "description": "内核长程 ≥30 分钟已达成（34 分 29 秒 / 33,000,020 命令 / result=OK / 崩溃 0）。仍缺：产品整机 30 分钟（含渲染/网络/多客户端）、长程同时开计数分配器、RSS/句柄/线程数（沙箱禁 ps）、温控与降频。",
+      "done_when_evidence": [
+        "产品整机 30 分钟日志（浏览器 + 服务端 + 多客户端）",
+        "alloc=1 的长程数据与 2M 口径可比",
+        "RSS/句柄/线程曲线（外部工具）"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "NC09-IDENTITY-E2E",
+      "source": {
+        "doc": "docs/operations/evidence/2026-10-18-nc12-browser-fullgame/README.md",
+        "ref": "§7 仍未完成"
+      },
+      "description": "终局胜负展示已接线（前端文案 44/0、Rust 映射 33/0），但端到端实测走的是原型/单挑口径（本地开局）。需以**身份局**开局跑到终局并核对『主公方胜/反贼胜/内奸胜』文案；身份局需联机房间路径或新增本地身份局入口。",
+      "done_when_evidence": [
+        "身份局端到端日志（浏览器或服务端驱动）",
+        "终局行文案与引擎 outcome 一致",
+        "断言化（非人工读日志）"
+      ],
+      "status": "open"
     }
   ]
 }
