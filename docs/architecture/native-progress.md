@@ -25,7 +25,7 @@
 | NC03 | **前端已接内核权威查询（2026-10-18）**：窄壳补 `legal_actions_json`/`activate_skill` 导出，前端删 `hand.slice(0,8)` 拼接与合成 `ResolveChoice`，候选来自内核并按 `(revision,seat)` 记忆化（实测 0.415 ms/次查询、缓存命中 0.051 ms/信封）；窄壳定向 5/5 + 前端 5 项 + 真实 WASM 冒烟 22/22、`typecheck`/构建 exit 0；此前**内核权威查询（`legal_actions`/`probe_action`）+ 4 项回归、前端适配层切片（token/值分离、kind、rejected 暴露、目录守护）、AI 一致性回归**均已入库（AI 因克隆校验代价 0.54 ms/候选暂不接线）；剩余：AI 接线、协议共享（Rust↔TS 手写两份）、`events`/`hash_hex` 空占位、候选上限 256 的分页/分步、主动技内部选择展开、`RevealGeneral` 未进候选、真实 Worker/浏览器端到端 | [统一原生 API](native-convergence-plan.md#nc03)；[前端接线证据](../operations/evidence/2026-10-18-nc03-frontend-authoritative/README.md)、[前端适配层证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)、[内核查询证据](../operations/evidence/2026-10-18-nc03-legal-actions/README.md) |
 | NC04 | **根因已修 + 3 项回归 + 全量通过（2026-10-18）**；挂起/非法效果/无效 token 等用例待补 | [VM 故障与事务](native-convergence-plan.md#nc04)；[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md) |
 | NC05 | **三类纵向案例全部通过（2026-10-18）**：①重规则/嵌套选择（swd 505 行为全生命周期）②战役/跨局档案 + 升级恢复 ③皮肤/UI 组合 + 资源/规则指纹分离；剩余：真实客户端渲染与平台档位、热切换、产品持久化层、卸载后重新取得 | [独立扩展宿主](native-convergence-plan.md#nc05)；[选将](../operations/evidence/2026-10-18-nc05-general-select/README.md)、[①](../operations/evidence/2026-10-18-nc05-lifecycle-heavy/README.md)、[②](../operations/evidence/2026-10-18-nc05-campaign-profile/README.md)、[③](../operations/evidence/2026-10-18-nc05-skin-ui/README.md) |
-| NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
+| NC06 | **核心专用字段普查（≈140 项）已量化 + 通用内容面 `vm_aux` 五形状同源契约验收（6 项）+ 修复 `vm_aux.piles` 未计入归属校验（2026-10-18）**；字段迁移试点、通用面四处缺口、编码/摘要同源、接入规范待续 | [内容私有状态](native-convergence-plan.md#nc06)；[证据](../operations/evidence/2026-10-18-nc06-generic-content-state/README.md) |
 | NC07 | **状态面同源审计已建立（12 项）+ 发现并修复 2 处不同源（座位环未入摘要、恢复期不校验座位环）；规则 v321→v322、14 golden 重录 + 回退探针（2026-10-18）**；修复入库待并行重构提交；`vm_aux` 逐表/扩展字段清单/跨版本迁移待续 | [状态与持久化同源](native-convergence-plan.md#nc07)；[证据](../operations/evidence/2026-10-18-nc07-same-source/README.md) |
 | NC08 | 待补齐原生门禁 | [规则与跨目标对照](native-convergence-plan.md#nc08)；贯穿迁移过程 |
 | NC09 | 待完整产品验收 | [原生客户端与联机](native-convergence-plan.md#nc09)；基于 NC03/NC05 接口并行推进 |
@@ -49,6 +49,14 @@ NC12 基线测量（[证据](../operations/evidence/2026-10-18-nc12-baseline/REA
 1. ~~**swd 单扩展读档 30/30 被拒**~~ **已修（2026-10-18）**：根因为玉蝉换形把在飞手牌换出后重复入弃牌堆 → `to_discard` 幂等化 + 换形按牌 id 回写；回归 `tests/nc07_discard_duplicate_probe.rs`（60 步无重复 + swd 读档成功），全量 **1129/0/2**，14 golden 零位移——[证据](../operations/evidence/2026-10-18-nc07-zone-uniqueness/README.md)。原始记录：：`restore` → `IdOutOfBounds{what:"card_in_multiple_zones", got:13}`；诊断显示 card 13（sha）在**弃牌堆出现 2 次**（`counted=[discard=2]`，parks=0）——引擎允许的活状态被自己的所有权校验判非法。边界：steps=5 通过、steps=20/40 全失败；none/huanle/combo 同条件全通过。最小复现：`nc12_bench archive tier=swd samples=1 steps=20`。→ 影响 NC02/NC07（读档可用性）与 NC05（swd 案例的存读档面），**优先修复**。
 2. ~~**扩展档 variant-1 规划 panic**~~ **已修（2026-10-18 同轮）**：根因 `redact_opponent_hands` 重分配对手手牌实体牌 id，使挂起机器/在飞帧引用失效；改为**仅静止态重分配**；官方场景复跑 `plan_panics=0 degraded=false result=OK`——[证据](../operations/evidence/2026-10-18-nc07-zone-uniqueness/README.md)。原始记录：：`machine.rs:408 take_hand_card`「card 90 not in hand of 0」（combo step5 seat1，parks=1）、`kernel/monkey.rs:73`「被拦截的桃应在使用者手牌」（combo step236 / huanle）；发生在 `plan_action` 模拟提交内。未验证根因的观察：`plan_action` 对克隆做 `redact_opponent_hands`，重分配后挂起机器/选择规格里记录的实体牌 id 可能失效。→ 影响 NC10（AI 合法信息与受控模拟）。
 3. ~~**swd variant-1 权威结算 panic（最严重）**~~ **未再复现（2026-10-18）**：判定与 §5.1 同根因，已由牌区唯一性修复解决；新增 swd/组合档权威路径稳定性用例（3 seeds × 200 步 + 逐步牌区唯一性校验）通过。原始记录：：`apply_plan`→`submit`→`commit_frame` 在 seed 42009 step 68 panic（`card 204 not in hand of 0`），`PANIC caught` 计数 0 → **不在模拟内**，属权威路径崩溃。→ 影响 NC09/NC10 与产品可用性，**优先修复**。
+
+### NC06 通用内容面核验（2026-10-18，规则 v322 工作树 / 存档 v105）
+
+- 普查（实测）：`TurnState` 60 字段中约 55 项、`PlayerState` 104 项中约 85 项为**内容专用类型字段**（按技能命名），合计约 140 项——NC06 迁移的量化基线。
+- 通用面验收：新增 `tests/nc06_generic_content_state.rs`（6 项）——`marks`/`flags`/`once`/`piles`/`hits` 五形状均 hashed+encoded+恢复一致；换回合清理语义（回合范围清、整局范围留）通过。
+- **发现并修复**：`vm_aux.piles` 未计入牌归属校验 → 把牌放进内容牌堆的合法活状态被恢复期判 `card_missing_from_all_zones`；校验加入内容牌堆后通过。
+- 实测：定向 6/6；全量（含 examples）**1140/0/2**；14 golden 零位移；行数门禁 8241 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc06-generic-content-state/README.md)。
+- 待办：字段迁移试点（1–2 个真实字段，保持 golden）、通用面四处缺口（作用域旗标/全局状态/值类型/按牌状态）、编码与摘要同源、新内容接入规范。
 
 ### NC10 信息边界核验（2026-10-18，规则 v322 工作树 / 存档 v105）
 
