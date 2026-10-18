@@ -1,0 +1,41 @@
+chunbing: {
+		fullskin: true,
+		type: "food",
+		enable: true,
+		filterTarget(card, player, target) {
+			return !target.hasSkill("chunbing");
+		},
+		//range:{global:1},
+		content() {
+			target.$gain2(cards);
+			target.storage.chunbing = card;
+			target.storage.chunbing_markcount = 5;
+			target.addSkill("chunbing");
+		},
+		ai: {
+			order: 2,
+			value: 4,
+			result: {
+				target(player, target) {
+					var num = target.needsToDiscard();
+					if (num) {
+						if (target === player && num > 1) {
+							return num;
+						}
+						return Math.sqrt(num);
+					}
+					return 0;
+				},
+			},
+		},
+	},
+	gudonggeng: {
+		fullskin: true,
+		type: "food",
+		enable: true,
+		filterTarget(card, player, target) {
+			return !target.hasSkill("gudonggeng");
+		},
+		//range:{global:1},
+		content() {
+			target.$gain2(c
