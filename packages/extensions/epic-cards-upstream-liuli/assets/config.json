@@ -1,0 +1,15 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/史诗卡牌/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "cardEffects": true,
+  "skillEffects": true,
+  "skillEffectsScale": 1.0,
+  "cardEmoji": false,
+  "cardFold": false,
+  "cardPhantom": false,
+  "meihuaskills": false,
+  "shichangshi": false,
+  "skinEffects": false,
+  "_note": "展示面配置（原生不迁移特效渲染，仅登记配置面）"
+}

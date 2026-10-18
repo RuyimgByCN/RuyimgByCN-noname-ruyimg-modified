@@ -1,0 +1,1009 @@
+warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+  --> crates/engine-core/src/effect/mod.rs:10:5
+   |
+10 |     choose_gain_other_skill, lose_gained_skill, resolve_choose_gain_other_skill,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+11 |     resolve_lose_gained_skill, resolve_potheyun, resolve_potheyun_pick,
+   |                                ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `primitives::enable_equip_slot`
+  --> crates/engine-core/src/effect/mod.rs:18:16
+   |
+18 | pub(crate) use primitives::enable_equip_slot;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_xinfu_qiai`
+  --> crates/engine-core/src/effect/mod.rs:21:16
+   |
+21 | pub(crate) use primitives::resolve_xinfu_qiai;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_twxiongjun`
+  --> crates/engine-core/src/effect/mod.rs:59:16
+   |
+59 | pub(crate) use primitives::resolve_twxiongjun;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_yixiang`
+  --> crates/engine-core/src/effect/mod.rs:60:16
+   |
+60 | pub(crate) use primitives::resolve_yixiang;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_qiangyong`
+  --> crates/engine-core/src/effect/mod.rs:61:16
+   |
+61 | pub(crate) use primitives::resolve_qiangyong;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_duoduan`
+  --> crates/engine-core/src/effect/mod.rs:63:16
+   |
+63 | pub(crate) use primitives::resolve_duoduan;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_reliangyin`
+  --> crates/engine-core/src/effect/mod.rs:67:16
+   |
+67 | pub(crate) use primitives::resolve_reliangyin;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `commit_hand_compare`
+  --> crates/engine-core/src/effect/mod.rs:72:26
+   |
+72 |     commit_guanxing_top, commit_hand_compare, commit_hand_compare_between,
+   |                          ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+   --> crates/engine-core/src/effect/mod.rs:142:31
+    |
+142 |     resolve_potzhouyu_choice, resolve_rechuhai_choice, skill_pile_def, twchengpu_field_cards,
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^
+...
+203 |     RESOLVE_ZHENGRONG_CUSTOM_CHOICE, RESOLVE_ZHENGSU_CHOICE, RESOLVE_ZHENLIANG_DAMAGE,
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `actor`
+    --> crates/engine-core/src/command/resolve_choice/group_pre_2.rs:3318:9
+     |
+3318 |     let actor = PlayerId::new(payload[1]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:2845:9
+     |
+2845 |     let skill = engine_api::SkillId::new(payload[2]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:3031:9
+     |
+3031 |     let skill = engine_api::SkillId::new(*skill);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3.rs:3180:17
+     |
+3180 |             let skill = engine_api::SkillId::new(*skill);
+     |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:203:13
+    |
+203 |         let target = PlayerId::new(payload[3]);
+    |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:679:9
+    |
+679 |     let mut target = PlayerId::new(*payload.get(3).unwrap_or(&0));
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1579:9
+     |
+1579 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1636:9
+     |
+1636 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1820:5
+     |
+1820 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1824:5
+     |
+1824 |     skill: engine_api::SkillId,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:1881:9
+     |
+1881 |     let skill = engine_api::SkillId::new(*payload.get(5).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2051:9
+     |
+2051 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2131:9
+     |
+2131 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2178:9
+     |
+2178 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2370:9
+     |
+2370 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2424:9
+     |
+2424 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2634:9
+     |
+2634 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2822:9
+     |
+2822 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2859:9
+     |
+2859 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2936:9
+     |
+2936 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4.rs:2970:9
+     |
+2970 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `pile_zone`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1450:9
+     |
+1450 |     let pile_zone = tx
+     |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_zone`
+
+warning: unused variable: `phase`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1826:9
+     |
+1826 |     let phase = *payload.get(2).unwrap_or(&0);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:1828:9
+     |
+1828 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/command/resolve_choice/group_post_5.rs:2126:21
+     |
+2126 |                 let mut next_payload = vec![
+     |                     ----^^^^^^^^^^^^
+     |                     |
+     |                     help: remove this `mut`
+
+warning: unused variable: `count`
+  --> crates/engine-core/src/command/resolve_choice/group_post_6.rs:87:9
+   |
+87 |     let count = payload.get(6).copied().unwrap_or(0) as usize;
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: unused variable: `draw`
+   --> crates/engine-core/src/command/resolve_choice/group_post_6.rs:277:17
+    |
+277 |             let draw = tx
+    |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:628:9
+    |
+628 |     let skill = engine_api::SkillId::new(payload[2]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2516:9
+     |
+2516 |     let target = payload[5];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2558:9
+     |
+2558 |     let target = payload[6];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `kind`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:2614:9
+     |
+2614 |     let kind = payload[4];
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+
+warning: unused variable: `mode`
+    --> crates/engine-core/src/command/resolve_choice/group_post_9.rs:1526:9
+     |
+1526 |     let mode = payload[3] as u8;
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_mode`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_9.rs:2205:9
+     |
+2205 |     let skill = engine_api::SkillId::new(payload[4]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/content/registry.rs:2532:9
+     |
+2507 |         ModifierValueSource::OwnerSkillPileCount => {
+     |         ---------------------------------------- matches all the relevant values
+...
+2532 |         ModifierValueSource::OwnerSkillPileCount => "owner_skill_pile_count",
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+     |
+     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1088:5
+     |
+1088 |     mut targets: Vec<PlayerId>,
+     |     ----^^^^^^^
+     |     |
+     |     help: remove this `mut`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1504:5
+     |
+1504 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:1664:5
+     |
+1664 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2202:5
+     |
+2202 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2321:5
+     |
+2321 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `targets`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1.rs:2478:5
+     |
+2478 |     targets: &[PlayerId],
+     |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_targets`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:550:52
+    |
+550 | pub(crate) fn turn_discard_count(tx: &Transaction, player: PlayerId) -> u32 {
+    |                                                    ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `value`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:998:23
+    |
+998 |                 .map(|value| vec![card])
+    |                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:1336:9
+     |
+1336 |     let mut events = run_effects(
+     |         ----^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `kongsheng_def`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:1504:5
+     |
+1504 |     kongsheng_def: engine_api::SkillDefId,
+     |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_kongsheng_def`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_huicui.rs:2095:9
+     |
+2095 |     let mut effects = vec![EffectRequest::RevealCards {
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `view`
+    --> crates/engine-core/src/effect/primitives/pack_huicui.rs:2020:5
+     |
+2020 |     view: Vec<CardId>,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_view`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:497:5
+    |
+497 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:3366:9
+     |
+3366 |     let mut options: Vec<_> = tx
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4190:5
+     |
+4190 |     skill: engine_api::SkillId,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4844:9
+     |
+4844 |     let skill = engine_api::SkillId::new(skill_raw);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5063:9
+     |
+5063 |     let skill = engine_api::SkillId::new(skill_raw);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `count`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5237:5
+     |
+5237 |     count: u32,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:6640:9
+     |
+6640 |     let mut payload = vec![
+     |         ----^^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7124:17
+     |
+7124 |             let mut events = crate::effect::draw_cards(tx, player, 1)?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7285:5
+     |
+7285 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `dodger`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7801:5
+     |
+7801 |     dodger: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_dodger`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7875:17
+     |
+7875 |             let mut drawn = crate::effect::draw_cards(tx, player, draw_n)?;
+     |                 ----^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9080:5
+     |
+9080 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9497:9
+     |
+9497 |     let mut events = crate::effect::draw_cards(tx, source, 2)?;
+     |         ----^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:9840:5
+     |
+9840 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_refresh.rs:3557:9
+     |
+3557 |     let skill = engine_api::SkillId::new(*payload.get(2).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_tw_1.rs:3478:24
+     |
+3478 |     let [player, _sub, skill] = payload else {
+     |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_xianding_2.rs:2755:5
+     |
+2755 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_ddd_2.rs:2403:5
+     |
+2403 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `source`
+   --> crates/engine-core/src/effect/primitives/pack_shiji.rs:162:5
+    |
+162 |     source: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_source`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1205:17
+     |
+1205 |             let mut events = add_skill(tx, target, engine_api::SkillDefId::new(def))?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `action`
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1569:5
+     |
+1569 |     action: u8,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_action`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:2634:5
+     |
+2634 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:559:9
+    |
+559 |     let skill = engine_api::SkillId::new(*skill);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:1371:18
+     |
+1371 |     let [player, skill] = payload else {
+     |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/mod.rs:2561:9
+     |
+2377 | /         EffectRequest::ResolveQiaobian {
+2378 | |             player,
+2379 | |             phase,
+2380 | |             stage,
+2381 | |             skill,
+2382 | |         } => resolve_qiaobian(tx, player, phase, stage, skill),
+     | |_________- matches all the relevant values
+...
+2561 |           EffectRequest::ResolveQiaobian { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/mod.rs:2563:9
+     |
+2563 |         EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+     |
+note: multiple earlier patterns match some of the same values
+    --> crates/engine-core/src/effect/primitives/mod.rs:2563:9
+     |
+2417 |           EffectRequest::BanUseAgainst { user, target } => ban_use_against(tx, user, target),
+     |           --------------------------------------------- matches some of the same values
+2418 | /         EffectRequest::ResolveJuzhan {
+2419 | |             player,
+2420 | |             source,
+2421 | |             card,
+...    |
+2424 | |             skill,
+2425 | |         } => resolve_juzhan(tx, player, source, card, &targets, stage, skill),
+     | |_________- matches some of the same values
+...
+2563 |           EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ collectively making this unreachable
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/mod.rs:115:49
+    |
+115 |         EffectRequest::SetDrawPhaseFromBottom { player } => {
+    |                                                 ^^^^^^ help: try ignoring the field: `player: _`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/mod.rs:4019:13
+     |
+4019 |             skill,
+     |             ^^^^^ help: try ignoring the field: `skill: _`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1052:15
+     |
+ 933 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               -------------------------------------------- matches all the relevant values
+...
+1052 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1053:15
+     |
+ 936 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               -------------------------------------------------- matches all the relevant values
+...
+1053 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1054:15
+     |
+ 937 |             | EffectRequest::GainTargetHandCard { skill, .. }
+     |               ----------------------------------------------- matches all the relevant values
+...
+1054 |             | EffectRequest::GainTargetHandCard { skill, .. } => skill.raw(),
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1086:15
+     |
+1085 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               -------------------------------------------------------- matches all the relevant values
+1086 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2937:9
+     |
+2774 | /         EffectRequest::ResolveRechuhai {
+2775 | |             player,
+2776 | |             target,
+2777 | |             card,
+...    |
+2780 | |             skill,
+2781 | |         } => {
+     | |_________- matches all the relevant values
+...
+2937 |           EffectRequest::ResolveRechuhai { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2942:9
+     |
+2791 | /         EffectRequest::ResolveXiongshu {
+2792 | |             player,
+2793 | |             target,
+2794 | |             card,
+...    |
+2797 | |             skill,
+2798 | |         } => {
+     | |_________- matches all the relevant values
+...
+2942 |           EffectRequest::ResolveXiongshu { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2946:9
+     |
+2836 | /         EffectRequest::ResolveSpshanxi {
+2837 | |             player,
+2838 | |             target,
+2839 | |             stage,
+2840 | |             skill,
+2841 | |         } => {
+     | |_________- matches all the relevant values
+...
+2946 |           EffectRequest::ResolveSpshanxi { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/hash.rs:2950:9
+     |
+2849 | /         EffectRequest::ResolveSpshanxiSuoming {
+2850 | |             player,
+2851 | |             actor,
+2852 | |             stage,
+2853 | |             skill,
+2854 | |         } => {
+     | |_________- matches all the relevant values
+...
+2950 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+     --> crates/engine-core/src/hash.rs:10437:9
+      |
+  766 | /         EffectRequest::ModifyCurrentDamage {
+  767 | |             player,
+  768 | |             delta,
+  769 | |             skill,
+  770 | |         } => {
+      | |_________- matches all the relevant values
+...
+10437 | /         EffectRequest::ModifyCurrentDamage {
+10438 | |             player,
+10439 | |             delta,
+10440 | |             skill,
+10441 | |         } => {
+      | |_________^ no value can reach this
+
+warning: unused variable: `flipped`
+    --> crates/engine-core/src/hash.rs:1531:13
+     |
+1531 |             flipped,
+     |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+
+warning: function `validate_sha_target` is never used
+    --> crates/engine-core/src/command/play.rs:4156:15
+     |
+4156 | pub(super) fn validate_sha_target(
+     |               ^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `wuxie_tokens` is never used
+    --> crates/engine-core/src/command/play.rs:7126:15
+     |
+7126 | pub(crate) fn wuxie_tokens(state: &crate::state::GameState, player: PlayerId) -> Vec<u32> {
+     |               ^^^^^^^^^^^^
+
+warning: function `mingren_color_mask` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:357:15
+    |
+357 | pub(crate) fn mingren_color_mask(tx: &Transaction, player: PlayerId, skill: engine_api::SkillId) -> u8 {
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `kongsheng_pile_cards_by_def` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2.rs:779:15
+    |
+779 | pub(crate) fn kongsheng_pile_cards_by_def(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `suit_from_tag` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:4570:4
+     |
+4570 | fn suit_from_tag(tag: u32) -> engine_api::Suit {
+     |    ^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:5133:7
+     |
+5133 | const RESOLVE_TWMOUZHI_MAGIC: u32 = 0x4D4F_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7007:7
+     |
+7007 | const RESOLVE_BIAOZHAO2_MAGIC: u32 = 0x425A_0002;
+     |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7092:7
+     |
+7092 | const RESOLVE_DCNIJI_MAGIC: u32 = 0x4E4A_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:7846:7
+     |
+7846 | const RESOLVE_QINMIAN_MAGIC: u32 = 0x514D_0001;
+     |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shiji.rs:919:18
+    |
+919 | pub(crate) const RESOLVE_ZHENGSU_CHOICE: u32 = 0xDCDA_4320;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `resolve_rechuhai_choice` is never used
+    --> crates/engine-core/src/effect/primitives/pack_shiji.rs:1268:15
+     |
+1268 | pub(crate) fn resolve_rechuhai_choice(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused `Result` that must be used
+    --> crates/engine-core/src/command/resolve_choice/group_post_8.rs:1003:13
+     |
+1003 | /             crate::command::play::make_saved_sha_target_unrespondable(
+1004 | |                 tx,
+1005 | |                 source,
+1006 | |                 card,
+1007 | |                 player,
+1008 | |             );
+     | |_____________^
+     |
+     = note: this `Result` may be an `Err` variant, which should be handled
+     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+     |
+1003 |             let _ = crate::command::play::make_saved_sha_target_unrespondable(
+     |             +++++++
+
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+warning: unused imports: `discover_extensions` and `import_extensions`
+ --> crates/content-runtime/tests/c3_dependency_conflict.rs:8:23
+  |
+8 | use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
+  |                       ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `sample_package` is never used
+  --> crates/content-runtime/tests/c3_dependency_conflict.rs:30:4
+   |
+30 | fn sample_package(namespace: &str, id: &str, version: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-core` (lib) generated 106 warnings (run `cargo fix --lib -p engine-core` to apply 82 suggestions)
+warning: `content-runtime` (test "c3_dependency_conflict") generated 2 warnings (run `cargo fix --test "c3_dependency_conflict" -p content-runtime` to apply 1 suggestion)
+warning: unused variable: `c`
+   --> crates/engine-ai/src/fork_strategy.rs:166:78
+    |
+166 |         self.snapshot_bytes.len() as u64 + self.applied_commands.iter().map(|c| 100).sum::<u64>()
+    |                                                                              ^ help: if this is intentional, prefix it with an underscore: `_c`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `ForkMeta` is never constructed
+  --> crates/engine-ai/src/fork.rs:69:12
+   |
+69 | pub struct ForkMeta {
+   |            ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `assert_no_foreign_hand_faces` is never used
+  --> crates/engine-ai/src/info_set.rs:56:8
+   |
+56 | pub fn assert_no_foreign_hand_faces(view: &InformationSetView) -> bool {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `fork2`
+   --> crates/engine-ai/src/fork_strategy.rs:826:13
+    |
+826 |         let fork2 = pool.fork(&authority);
+    |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_fork2`
+
+warning: unused import: `PackageSignature`
+ --> crates/content-runtime/tests/signature_trust_chain.rs:7:5
+  |
+7 |     PackageSignature, RuntimeError,
+  |     ^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused `Result` that must be used
+  --> crates/content-runtime/tests/signature_trust_chain.rs:99:5
+   |
+99 |     store.revoke_content_hash(&h2, "验收：撤销 v2", true);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+99 |     let _ = store.revoke_content_hash(&h2, "验收：撤销 v2", true);
+   |     +++++++
+
+warning: `engine-ai` (lib) generated 3 warnings (run `cargo fix --lib -p engine-ai` to apply 1 suggestion)
+warning: `engine-ai` (lib test) generated 4 warnings (3 duplicates) (run `cargo fix --lib -p engine-ai --tests` to apply 1 suggestion)
+warning: `content-runtime` (test "signature_trust_chain") generated 2 warnings (run `cargo fix --test "signature_trust_chain" -p content-runtime` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.41s
+     Running unittests src/lib.rs (target/debug/deps/content_native_loader-ecec920d2e1c7674)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/loader_acceptance.rs (target/debug/deps/loader_acceptance-994cdf1929c1b40f)
+
+running 3 tests
+test bridge_pile_parses_installed_cardpile_asset ... ok
+test bridge_pile_rejects_bad_data ... ok
+test loader_acceptance_bounded_names_and_clear_errors ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/symbol_table_limit.rs (target/debug/deps/symbol_table_limit-d68b38d22e1f1ff7)
+
+running 1 test
+test bridge_rejected_at_symbol_table_limit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.93s
+
+     Running unittests src/lib.rs (target/debug/deps/content_runtime-3084a20a5a64b720)
+
+running 11 tests
+test lock::tests::lock_hash_stable ... ok
+test sign::tests::roundtrip ... ok
+test compat::tests::abi6_host_rejects_abi7_package ... ok
+test compat::tests::abi5_host_rejects_abi6_package ... ok
+test compat::tests::abi7_host_rejects_abi8_package ... ok
+test compat::tests::abi8_host_rejects_abi9_package ... ok
+test compat::tests::previous_host_rejects_current_package ... ok
+test compat::tests::abi3_host_rejects_abi4_package ... ok
+test compat::tests::abi4_host_rejects_abi5_package ... ok
+test compat::tests::additive_hosts_accept_older_additive_packages ... ok
+test channel::tests::plan_and_apply_channel ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/active_catalog.rs (target/debug/deps/active_catalog-18676700e68fd6f4)
+
+running 5 tests
+test package_rejects_bad_skin_resources_and_unsafe_renderer_values ... ok
+test catalog_pages_are_bounded_and_keep_page_aliases_and_names ... ok
+test skin_index_changes_only_asset_hash_and_round_trips_at_package_root ... ok
+test catalog_rejects_missing_targets_and_duplicate_active_skin_ids ... ok
+test active_store_aggregates_cross_package_skins_and_legacy_assets ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/atomic_install.rs (target/debug/deps/atomic_install-5495ca9c5d5248be)
+
+running 7 tests
+test lock_empty_stable ... ok
+test staging_gc_clears_orphan ... ok
+test bad_signature_rejected ... ok
+test unsigned_rejected_unless_allowed ... ok
+test revoke_blocks_activate ... ok
+test activation_requires_exact_dependencies ... ok
+test signed_install_activate_rollback ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/c3_dependency_conflict.rs (target/debug/deps/c3_dependency_conflict-108e20300cadcdda)
+
+running 1 test
+test c3_dependency_cascade_and_activation_atomicity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/cold_import_all_26.rs (target/debug/deps/cold_import_all_26-706072901953aaff)
+
+running 1 test
+test cold_import_all_26 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.39s
+
+     Running tests/extension_import.rs (target/debug/deps/extension_import-a1f51031efe547e1)
+
+running 5 tests
+test bad_asset_leaves_staging_and_active_unchanged ... ok
+test catalog_validation_failure_does_not_change_active ... ok
+test drop_in_directories_import_dependencies_metadata_and_assets ... ok
+test exact_dependency_cycle_imports_as_an_atomic_group ... ok
+test reconcile_removes_deleted_disabled_and_broken_dependents ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/offline_npack.rs (target/debug/deps/offline_npack-acc4ae279d8c6dd0)
+
+running 1 test
+test offline_package_imports_with_current_host_and_exact_dependencies ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.98s
+
+     Running tests/signature_trust_chain.rs (target/debug/deps/signature_trust_chain-668a8f3dabbdcb14)
+
+running 1 test
+test signature_trust_chain_and_version_history ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/standard_npack.rs (target/debug/deps/standard_npack-c713b3daa5bb9e51)
+
+running 1 test
+test standard_npack_parses_installs_and_activates ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.55s
+
+     Running unittests src/lib.rs (target/debug/deps/engine_ai-13227b6e49b2dffa)
+
+running 23 tests
+test fork_strategy::tests::undo_journal_tracks_entries ... ok
+test fork_strategy::tests::arena_reuses_buffers ... ok
+test fork_strategy::tests::arena_fork_isolates_authority ... ok
+test fork_strategy::tests::undo_journal_fork_isolates_authority ... ok
+test fork_strategy::tests::clone_fork_isolates_authority ... ok
+test rng::tests::deterministic ... ok
+test fork_strategy::tests::undo_journal_memory_nonzero ... ok
+test fork_strategy::tests::snapshot_delta_memory_is_snapshot_size ... ok
+test legal::tests::draw_phase_only_end_phase ... ok
+test fork_strategy::tests::clone_fork_memory_nonzero ... ok
+test submit::tests::non_current_actor_decision_is_rejected_without_state_change ... ok
+test info_set::tests::info_set_hides_opponent_hand ... ok
+test fork_strategy::tests::arena_reuse_ratio_after_cycles ... ok
+test submit::tests::search_does_not_mutate_authority ... ok
+test submit::tests::stale_decision_discarded ... ok
+test submit::tests::stale_decision_never_commits ... ok
+test legal::tests::same_suit_choice_enumeration_never_offers_mixed_cards ... ok
+test fork_strategy::tests::cow_fork_lazy_materialization ... ok
+test fork_strategy::tests::cow_fork_isolates_authority ... ok
+test fork_strategy::tests::snapshot_delta_fork_isolates_authority ... ok
+test fork_strategy::tests::cow_fork_memory_grows_on_materialization ... ok
+test legal::tests::active_skill_is_enumerated_and_accepted ... ok
+test fork_strategy::tests::comparison_reports_five_strategies ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/search_policies.rs (target/debug/deps/search_policies-9ed5b7084b976b20)
+
+running 6 tests
+test info_set_no_foreign_hand ... ok
+test fork_does_not_touch_authority_hash ... ok
+test apply_fresh_works_then_stale_fails ... ok
+test heuristic_reproducible_under_fixed_budget ... ok
+test beam_reproducible ... ok
+test mcts_reproducible_under_fixed_nodes ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+   Doc-tests content_native_loader
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests content_runtime
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_ai
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 蛊惑（tag 515，史诗卡牌批 1，`reguhuo`）：出牌阶段限一次——弃一张
+    /// 手牌并声明任意**基本牌/锦囊牌**名，以该牌使用（转化声明；原生实体
+    /// 花色点数保留=登记差异）。
+    Reguhuo,
     /// 攻心（tag 514，swd 批 155，`gongxin`）：出牌阶段限一次——看一名
     /// 其他角色的手牌，选其一张**红桃**牌：弃置之，或将其置于牌堆顶。
     Gongxin,
@@ -1813,6 +1817,7 @@ impl HostBehavior {
             HostBehavior::Xiuluo => 512,
             HostBehavior::Mohua2 => 513,
             HostBehavior::Gongxin => 514,
+            HostBehavior::Reguhuo => 515,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2567,6 +2572,7 @@ impl HostBehavior {
             512 => HostBehavior::Xiuluo,
             513 => HostBehavior::Mohua2,
             514 => HostBehavior::Gongxin,
+            515 => HostBehavior::Reguhuo,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2587,7 +2593,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 510] = [
+        pub const ALL: [HostBehavior; 511] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3098,6 +3104,7 @@ impl HostBehavior {
         HostBehavior::Xiuluo,
         HostBehavior::Mohua2,
         HostBehavior::Gongxin,
+        HostBehavior::Reguhuo,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3370,6 +3377,7 @@ impl HostBehavior {
             HostBehavior::Xiuluo => "host:swd_xiuluo",
             HostBehavior::Mohua2 => "host:mohua2",
             HostBehavior::Gongxin => "host:gongxin",
+            HostBehavior::Reguhuo => "host:reguhuo",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3849,6 +3857,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 蛊惑：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Reguhuo => None,
             // 攻心：出牌阶段主动（activate 分支；无触发时机）
             HostBehavior::Gongxin => None,
             // 魔化：自己进入濒死（锁定）
@@ -6286,6 +6296,45 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 蛊惑（史诗卡牌批 1）：目录技能名（弃手牌声明任意基本/锦囊牌使用）。
+pub const EPIC_REGUHUO_KEY: &str = "reguhuo";
+
+/// 蛊惑可声明的牌种表（基本牌 + 锦囊；顺序固定，Tag=下标）。
+const REGUHUO_KINDS: [crate::catalog::CardKind; 20] = [
+    crate::catalog::CardKind::Sha,
+    crate::catalog::CardKind::FireSha,
+    crate::catalog::CardKind::LeiSha,
+    crate::catalog::CardKind::Shan,
+    crate::catalog::CardKind::Tao,
+    crate::catalog::CardKind::Jiu,
+    crate::catalog::CardKind::Wuzhong,
+    crate::catalog::CardKind::Wugu,
+    crate::catalog::CardKind::Taoyuan,
+    crate::catalog::CardKind::SavageAttack,
+    crate::catalog::CardKind::ArcheryAttack,
+    crate::catalog::CardKind::Duel,
+    crate::catalog::CardKind::Snatch,
+    crate::catalog::CardKind::Dismantle,
+    crate::catalog::CardKind::Chain,
+    crate::catalog::CardKind::Le,
+    crate::catalog::CardKind::Bing,
+    crate::catalog::CardKind::ShanDian,
+    crate::catalog::CardKind::Jiedao,
+    crate::catalog::CardKind::Nullify,
+];
+
+/// 蛊惑声明选项（Tag=下标）。
+fn reguhuo_kind_options() -> Vec<ChoiceOption> {
+    (0..REGUHUO_KINDS.len())
+        .map(|i| ChoiceOption::Tag(i as u8))
+        .collect()
+}
+
+/// 蛊惑下标 → 牌种。
+fn reguhuo_kind_at(idx: u8) -> Option<crate::catalog::CardKind> {
+    REGUHUO_KINDS.get(idx as usize).copied()
+}
+
 /// 攻心（swd 批 155）：目录技能名（看手牌选红桃：弃置或置牌堆顶）。
 pub const SWD_GONGXIN_KEY: &str = "gongxin";
 
@@ -7482,6 +7531,7 @@ impl HostSkillBehavior {
             HostBehavior::Xiuluo => (None, None),
             HostBehavior::Mohua2 => (None, None),
             HostBehavior::Gongxin => (None, None),
+            HostBehavior::Reguhuo => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7821,6 +7871,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
             HostBehavior::Gongxin => false,
+            HostBehavior::Reguhuo => false,
             // 魔化：自己进入濒死
             HostBehavior::Mohua2 => matches!(event,
                 EventData::Dying { player, .. } if *player == owner),
@@ -10098,6 +10149,25 @@ impl SkillBehavior for HostSkillBehavior {
             }
             // 轩辕（swd 批 146）：结束阶段触发（无主动面）
             HostBehavior::Xuanyuan => None,
+            // 蛊惑（史诗卡牌批 1）：出牌阶段主动（每回合一次；手牌非空）
+            HostBehavior::Reguhuo => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.player(owner).hand.is_empty()
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 攻心（swd 批 155）：出牌阶段主动（每回合一次；存在有手牌的其他角色）
             HostBehavior::Gongxin => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
@@ -21335,6 +21405,132 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 蛊惑：弃一张手牌 → 声明基本/锦囊牌名 → 选目标 → 转化使用
+            HostBehavior::Reguhuo => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "reguhuo_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&card) {
+                        return Flow::Done;
+                    }
+                    self.card = Some(card);
+                    self.stage = HostStage::SelectNature;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "reguhuo_name",
+                            options: reguhuo_kind_options(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectNature => {
+                    let Some(ChoiceOption::Tag(idx)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(kind) = reguhuo_kind_at(idx) else {
+                        return Flow::Done;
+                    };
+                    let (min, max, targets) = ctx.core.legal_targets(ctx.catalog, kind, self.owner);
+                    self.card = Some(card);
+                    // 存**下标**（非 CardKind 判别值）——TargetChoice 按同表映射
+                    self.cards = vec![u32::from(idx)];
+                    if min == 0 && max == 0 {
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "蛊惑",
+                            owner: self.owner,
+                        });
+                        ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                            card,
+                            self.owner,
+                            Vec::new(),
+                            Some(kind),
+                        )));
+                        self.stage = HostStage::ShuchuiTargetLoop;
+                        return Flow::Yield;
+                    }
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "reguhuo_targets",
+                            options: targets.into_iter().map(ChoiceOption::Player).collect(),
+                            min: min as usize,
+                            max: max as usize,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(kind) = self.cards.first().and_then(|k| reguhuo_kind_at(*k as u8))
+                    else {
+                        return Flow::Done;
+                    };
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "蛊惑",
+                        owner: self.owner,
+                    });
+                    ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                        card,
+                        self.owner,
+                        targets,
+                        Some(kind),
+                    )));
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
             // 攻心：选目标 → 看其手牌选一张红桃 → 弃置或置于牌堆顶
             HostBehavior::Gongxin => match self.stage {
                 HostStage::Act => {

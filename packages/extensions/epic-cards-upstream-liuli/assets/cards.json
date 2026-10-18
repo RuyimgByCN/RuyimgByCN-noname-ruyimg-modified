@@ -1,0 +1,21 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/史诗卡牌/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "pack": {
+    "name": "epic-cards-upstream-liuli",
+    "version": 1,
+    "description": "G1 转换：上游史诗卡牌首切片（蛊惑）",
+    "card_prefix": "epic_"
+  },
+  "cards": [],
+  "skills": [
+    { "name": "reguhuo", "mapping": "host:reguhuo" }
+  ],
+  "generals": [],
+  "deferred": [
+    { "name": "rangjie", "reason": "让节：受伤后获得指定类型牌/移动场上牌" },
+    { "name": "shichangshi", "reason": "十常侍面" },
+    { "name": "card_effects", "reason": "卡面/技能特效（展示面不迁移）" }
+  ]
+}
