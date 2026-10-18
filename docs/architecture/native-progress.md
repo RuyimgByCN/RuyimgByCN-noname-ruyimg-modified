@@ -42,6 +42,14 @@
 - 实测：`typecheck` exit 0（修复前 exit 2）；`smoke:native` **15/15**（修复前 12/13，`extension_catalog_15` 硬编码 15 已改为按包数据推导的两个不变量）；`pnpm test` 10/10；`pnpm build` exit 0；行数门禁 8222 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)。
 - 待办：内核权威动作查询（含停止前端 `hand.slice(0,8)` 拼接 `PlayCard`/合成 `ResolveChoice`）；Rust↔TS 协议定义共享或自动校验；`events`/`hash_hex` 仍为空占位；真实 Worker 端到端与多选/取消/过期选择、大整数协议表示；客户端管理面仍只覆盖 15/41 个在盘包。
 
+### NC12 基线发现的缺陷（2026-10-18，待修，优先级高）
+
+NC12 基线测量（[证据](../operations/evidence/2026-10-18-nc12-baseline/README.md)）在测量过程中确证三处缺陷，均已最小复现并记入该证据 §5；本轮只测量未修：
+
+1. **swd 单扩展读档 30/30 被拒**：`restore` → `IdOutOfBounds{what:"card_in_multiple_zones", got:13}`；诊断显示 card 13（sha）在**弃牌堆出现 2 次**（`counted=[discard=2]`，parks=0）——引擎允许的活状态被自己的所有权校验判非法。边界：steps=5 通过、steps=20/40 全失败；none/huanle/combo 同条件全通过。最小复现：`nc12_bench archive tier=swd samples=1 steps=20`。→ 影响 NC02/NC07（读档可用性）与 NC05（swd 案例的存读档面），**优先修复**。
+2. **扩展档 variant-1 规划 panic**：`machine.rs:408 take_hand_card`「card 90 not in hand of 0」（combo step5 seat1，parks=1）、`kernel/monkey.rs:73`「被拦截的桃应在使用者手牌」（combo step236 / huanle）；发生在 `plan_action` 模拟提交内。未验证根因的观察：`plan_action` 对克隆做 `redact_opponent_hands`，重分配后挂起机器/选择规格里记录的实体牌 id 可能失效。→ 影响 NC10（AI 合法信息与受控模拟）。
+3. **swd variant-1 权威结算 panic（最严重）**：`apply_plan`→`submit`→`commit_frame` 在 seed 42009 step 68 panic（`card 204 not in hand of 0`），`PANIC caught` 计数 0 → **不在模拟内**，属权威路径崩溃。→ 影响 NC09/NC10 与产品可用性，**优先修复**。
+
 ### NC07 同源审计核验（2026-10-18，规则 v321→v322 / 存档 v105）
 
 - 审计：新增 `tests/nc07_state_same_source.rs`（12 项）——每个状态面验收 hashed / encoded / validated 三件事。
