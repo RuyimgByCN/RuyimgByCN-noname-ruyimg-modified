@@ -26,7 +26,7 @@
 | NC04 | **根因已修 + 3 项回归 + 全量通过（2026-10-18）**；挂起/非法效果/无效 token 等用例待补 | [VM 故障与事务](native-convergence-plan.md#nc04)；[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md) |
 | NC05 | **三类纵向案例全部通过（2026-10-18）**：①重规则/嵌套选择（swd 505 行为全生命周期）②战役/跨局档案 + 升级恢复 ③皮肤/UI 组合 + 资源/规则指纹分离；剩余：真实客户端渲染与平台档位、热切换、产品持久化层、卸载后重新取得 | [独立扩展宿主](native-convergence-plan.md#nc05)；[选将](../operations/evidence/2026-10-18-nc05-general-select/README.md)、[①](../operations/evidence/2026-10-18-nc05-lifecycle-heavy/README.md)、[②](../operations/evidence/2026-10-18-nc05-campaign-profile/README.md)、[③](../operations/evidence/2026-10-18-nc05-skin-ui/README.md) |
 | NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
-| NC07 | 待结构收敛 | [状态与持久化同源](native-convergence-plan.md#nc07)；与 NC06 逐职责迁移 |
+| NC07 | **状态面同源审计已建立（12 项）+ 发现并修复 2 处不同源（座位环未入摘要、恢复期不校验座位环）；规则 v321→v322、14 golden 重录 + 回退探针（2026-10-18）**；修复入库待并行重构提交；`vm_aux` 逐表/扩展字段清单/跨版本迁移待续 | [状态与持久化同源](native-convergence-plan.md#nc07)；[证据](../operations/evidence/2026-10-18-nc07-same-source/README.md) |
 | NC08 | 待补齐原生门禁 | [规则与跨目标对照](native-convergence-plan.md#nc08)；贯穿迁移过程 |
 | NC09 | 待完整产品验收 | [原生客户端与联机](native-convergence-plan.md#nc09)；基于 NC03/NC05 接口并行推进 |
 | NC10 | 待产品排程与质量验收 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；复用已有预算和策略 |
@@ -41,6 +41,15 @@
 - 回归：新增 `apps/web-client/scripts/native-adapter.test.mjs`（三条反例 + 边界，7 项）与 `extension-inventory.test.mjs`（目录守护失败路径，3 项），`pnpm --dir apps/web-client test` 10/10 通过；冒烟新增真实 WASM 引擎的适配层 token 往返（提交 token 接受、提交候选值被拒）。
 - 实测：`typecheck` exit 0（修复前 exit 2）；`smoke:native` **15/15**（修复前 12/13，`extension_catalog_15` 硬编码 15 已改为按包数据推导的两个不变量）；`pnpm test` 10/10；`pnpm build` exit 0；行数门禁 8222 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)。
 - 待办：内核权威动作查询（含停止前端 `hand.slice(0,8)` 拼接 `PlayCard`/合成 `ResolveChoice`）；Rust↔TS 协议定义共享或自动校验；`events`/`hash_hex` 仍为空占位；真实 Worker 端到端与多选/取消/过期选择、大整数协议表示；客户端管理面仍只覆盖 15/41 个在盘包。
+
+### NC07 同源审计核验（2026-10-18，规则 v321→v322 / 存档 v105）
+
+- 审计：新增 `tests/nc07_state_same_source.rs`（12 项）——每个状态面验收 hashed / encoded / validated 三件事。
+- **发现 2 处真实缺陷并修复**：① `seat_ring` 未进入规范摘要（仅座位次序不同的状态摘要相同）→ `canonical_hash` 纳入座位环；② 恢复期不校验座位环（越界/重复可被接受）→ `validate_core` 新增长度/取值/排列校验。其余 10 项一次通过。
+- 规则 v322：座位环入摘要 ⇒ 14 场 golden 全部位移（原因：摘要覆盖变化），重录后 2/2 通过；**回退探针 14/14 mismatch**。
+- 实测：审计定向 12/12；engine-native 测试面 **1128/0/2**；`-D warnings`（lib+tests）exit 0；行数门禁 8237 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc07-same-source/README.md)。
+- 提交范围：两处修复在并行重构未跟踪文件（`engine/hash.rs`/`snap/validation.rs`）、版本常量在 `content/standard.rs` → 本次只提交审计用例+证据+文档，修复与 v322 待并行提交后入库。
+- 待办：修复入库、`vm_aux` 逐表、扩展字段同源清单、跨版本迁移、编码层与摘要层结构化收敛。
 
 ### NC05 第三类案例核验（2026-10-18，规则 v321 / 存档 v105 未变）
 
