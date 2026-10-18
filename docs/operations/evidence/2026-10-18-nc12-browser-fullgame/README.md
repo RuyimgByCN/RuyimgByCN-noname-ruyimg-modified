@@ -1,0 +1,48 @@
+# NC12/NC09 真实浏览器：**完整对局到终局**（headless Chrome）（2026-10-19）
+
+- 日期：2026-10-19
+- 工作包：**NC12**（浏览器档位）+ **NC09**（真实客户端）
+- 规则版本 v322（工作树）/ 存档格式 v105
+- 结论：**在真实浏览器内推进一整局至「终局」**（319 次「自动一步」、rev 0→319、**控制台零错误**）
+
+## 1 方法（可复跑）
+
+```bash
+(cd apps/web-client/dist && python3 -m http.server 8123 &)
+node apps/web-client/scripts/nc12-browser-fullgame.mjs http://127.0.0.1:8123/ \
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" <outdir> 400
+```
+
+`apps/web-client/scripts/nc12-browser-fullgame.mjs`（新增）：CDP 驱动 headless Chrome →
+点击「本地开局」→ 循环点击「自动一步」（**脚本节流 120 ms/次**，避免把节流当作引擎耗时）
+→ 记录点击次数、`rev` 终值、墙钟、终局标记与最终正文。
+
+## 2 实测（[fullgame.log](fullgame.log)、[fullgame-report.json](fullgame-report.json)）
+
+| 指标 | 值 |
+|---|---|
+| 点击「自动一步」次数 | **319** |
+| 引擎修订号 | **rev 0 → 319**（正文显示「**终局 · rev 319**」） |
+| **终局标记** | **`ended_marker: true`**（界面出现「终局」） |
+| 墙钟 | 54.0 s（**含脚本 120 ms/次节流**，非引擎耗时） |
+| **控制台错误** | **0**（`console_errors: []`，整局无异常/`console.error`） |
+| 局面规模（节选） | 「► 第 14 轮 · P3 · 出牌」 |
+
+**读法**：真实浏览器中，**整局**（含选将面板、阶段推进、自动一步、投影刷新）从 rev 0 跑到 **rev 319 终局**，
+全程无控制台错误 → 浏览器档位的「**可完整对局**」这一项有实测证据（此前只到「可交互」）。
+
+## 3 口径边界（不得外推）
+
+- **headless Chrome + 本机静态服务**；不含真实网络、不含 GPU 合成与真实输入设备；
+- 墙钟含**脚本节流**（120 ms/次）→ **不能当作引擎或 UI 的单步耗时**；单步耗时应用
+  `rev` 增量与引擎侧基准（见 [NC12 基线](../2026-10-18-nc12-baseline/README.md)）；
+- 「终局」判据是界面文本出现「终局」；**未**断言胜负结果与引擎 `outcome` 的一致性（登记待办）；
+- 单局、单档（默认原生后端）；未做多局稳定性与内存曲线。
+
+## 4 未完成 / 待办
+
+- [ ] 终局**胜负**与引擎 `outcome` 的一致性断言（界面文本 → 投影 → 引擎）
+- [ ] 多局连续（稳定性/内存曲线）与长时浏览器负载
+- [ ] 浏览器内**动画帧/输入响应**指标（需真实渲染路径与 `requestAnimationFrame` 采样）
+- [ ] 移动（Android/iOS）与桌面（Tauri）档位；多浏览器（Safari/Firefox）；真实网络
+- [ ] 旧线前端同口径完整对局对照
