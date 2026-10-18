@@ -259,6 +259,10 @@ pub struct Plan {
     pub budget_exhausted: bool,
     pub timed_out: bool,
     pub cancelled: bool,
+    /// 规划期间**模拟提交触发内核不变量 panic** 的候选数（NC12 长程缺陷防护；
+    /// 0 = 未发生。真实提交路径不捕获 panic，内核不变量仍硬失败）。
+    pub sim_faults: u32,
+
 }
 
 /// 应用计划的失败方式。
@@ -493,6 +497,7 @@ impl Engine {
         let candidates = enumerate_candidates_variant(&sim, seat, planner.policy_variant);
 
         let mut nodes = 0usize;
+        let mut sim_faults = 0u32;
         let mut best: Option<(i64, GameAction)> = None;
         let mut budget_exhausted = false;
         let mut timed_out = false;
@@ -506,6 +511,7 @@ impl Engine {
                     budget_exhausted,
                     timed_out,
                     cancelled: true,
+                    sim_faults,
                 };
             }
             if let (Some(t), Some(ms)) = (started, planner.deadline_ms) {
@@ -525,12 +531,26 @@ impl Engine {
             // （真实高水位越过该区间时合法候选全部被当重复拒绝，
             // 规划退化为 NextPhase）。
             let mut trial = sim.clone();
-            let out = trial.submit(GameCommand {
-                actor: seat,
-                expected_revision: trial.revision(),
-                dedup_id: trial.last_dedup.saturating_add(1),
-                action: action.clone(),
-            });
+            // NC12 长程缺陷防护（2026-10-19）：模拟提交在**克隆**上推进规则，
+            // 若内核在模拟状态上触发不变量 panic（实测 `machine.rs:408
+            // card 93 not in hand of 0`，发生在 plan_action→submit→finish_segment
+            // →commit_frame），**不得让整个进程崩溃**——捕获该 panic、记录一次
+            // 模拟故障、跳过本候选。真实提交路径**不**捕获（内核不变量仍硬失败）。
+            let sim_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                trial.submit(GameCommand {
+                    actor: seat,
+                    expected_revision: trial.revision(),
+                    dedup_id: trial.last_dedup.saturating_add(1),
+                    action: action.clone(),
+                })
+            }));
+            let out = match sim_result {
+                Ok(out) => out,
+                Err(_) => {
+                    sim_faults = sim_faults.saturating_add(1);
+                    continue; // 模拟故障候选不计分
+                }
+            };
             if matches!(out, CommandOutcome::Rejected(_)) {
                 continue; // 非法候选不计分
             }
@@ -615,6 +635,7 @@ impl Engine {
             budget_exhausted,
             timed_out,
             cancelled: false,
+                    sim_faults,
         }
     }
 

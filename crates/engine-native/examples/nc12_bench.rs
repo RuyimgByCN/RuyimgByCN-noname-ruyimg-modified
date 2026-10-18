@@ -453,6 +453,8 @@ fn catalog_shape(tier: &str, e: &Engine) -> Vec<(&'static str, String)> {
 
 struct GameRun {
     steps: usize,
+    /// NC12 长程防护：规划模拟提交触发内核不变量 panic 的候选数（Plan.sim_faults 汇总）。
+    sim_faults: u32,
     accepted: usize,
     pending: usize,
     rejected: usize,
@@ -480,6 +482,7 @@ impl GameRun {
     fn new() -> Self {
         Self {
             steps: 0,
+            sim_faults: 0,
             accepted: 0,
             pending: 0,
             rejected: 0,
@@ -592,6 +595,7 @@ fn plan_with_catch(
             );
             (
                 Plan {
+                    sim_faults: 0,
                     seat,
                     revision: e.revision(),
                     action: fallback_action(e),
@@ -653,6 +657,8 @@ fn drive_game(
         if let Some(msg) = panic_msg {
             run.panics.push((run.steps, seat, msg));
         }
+        // NC12 长程防护：把「规划模拟内部被捕获的 panic 数」计入运行统计（不静默）
+        run.sim_faults = run.sim_faults.saturating_add(plan.sim_faults);
         let plan_ns = t_plan.elapsed().as_nanos();
         let t_submit = Instant::now();
         let out = e.apply_plan(&plan);
@@ -1563,8 +1569,8 @@ fn scenario_long(args: &Args, _csv: &mut CsvSink) {
         total_cmds += run.steps;
         let heap_game = heap_snapshot();
         println!(
-            "RESULT\tscenario=long\ttier={tier}\tconfig={cfg},game={g}\tgame={g}\tsteps={}\taccepted={}\tfinished={}\tstalled={}\tplan_panics={}\twall_ns={}\trss_before_kb={rss_before}\trss_after_kb={rss_after}\trss_delta_kb={}\theap_allocated_bytes={}\theap_freed_bytes={}\theap_live_bytes={}\tfinal_state={}",
-            run.steps, run.accepted, run.finished, run.stalled, run.panics.len(), run.wall_ns,
+            "RESULT\tscenario=long\ttier={tier}\tconfig={cfg},game={g}\tgame={g}\tsteps={}\taccepted={}\tfinished={}\tstalled={}\tplan_panics={}\tsim_faults={}\twall_ns={}\trss_before_kb={rss_before}\trss_after_kb={rss_after}\trss_delta_kb={}\theap_allocated_bytes={}\theap_freed_bytes={}\theap_live_bytes={}\tfinal_state={}",
+            run.steps, run.accepted, run.finished, run.stalled, run.panics.len(), run.sim_faults, run.wall_ns,
             rss_after as i64 - rss_before as i64,
             heap_game.0, heap_game.1, heap_game.0.saturating_sub(heap_game.1),
             run.final_shape
