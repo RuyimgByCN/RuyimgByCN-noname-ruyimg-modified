@@ -1,0 +1,15 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/皮肤切换/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "dynamicSkin": true,
+  "useDynamic": true,
+  "attackEffect": true,
+  "isAttackFlipX": false,
+  "hideHuanFu": false,
+  "czgEnable": true,
+  "cugDynamicBg": false,
+  "showTopArc": false,
+  "savedPositions": { "stand_x": 0.5, "stand_y": -0.25 },
+  "_note": "520 KB 动皮参数表、Spine/Worker 渲染与十周年/千幻互调不迁移（登记差异）"
+}
