@@ -30,8 +30,8 @@
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 57,
-    "open_count": 34,
+    "resolved_count": 58,
+    "open_count": 33,
     "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
     "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
     "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -59,9 +59,9 @@
     "d5_longxue_117": "2026-10-17 批 117：潜龙道心值 + 卫统 + 曹髦包（规则 v305/存档 v90）；engine-native 914/0/1，14 golden 重录 + 探针。D5 仍 open（余外部手杀包四技与 ylyg*）。",
     "t11_pangtong_closure": "2026-10-17：T11-BOSS-PANGTONG-EXTERNAL 关闭（涅槃/浴火/神威 + loopType，v306/存档 v91）。看破/朱羽/ylygniepan 外部依赖与 D4 轮次起点登记。",
     "d5_qingzheng_119": "2026-10-17 批 119：清正（mbcmqingzheng）转换，道心值 25 解锁生效；engine-native 920/0/1，14 golden 零位移（无版本变化）。D5 仍 open（余酒诗/放逐/绝进三技与显示面）。",
-    "wholepack_count": "20/37（2026-10-17 L29 计入）",
+    "wholepack_count": 21,
     "t9_samples_registry": "2026-10-17：37 来源行为样本/接口登记表（23/37 有样本与接口；G0 37/37）。T9-SOURCE-BEHAVIOR-SAMPLES 仍 open。",
-    "l10_slice": "2026-10-17：L10 切片 3（装载器 + 依赖判定）；规则面完整（reguhuo/rangjie）；十常侍面结构性阻塞。"
+    "l10_slice": "2026-10-17：L10 八项整包通过（21/37）。"
   },
   "items": [
     {
@@ -1384,7 +1384,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1393,7 +1393,7 @@
         "L10",
         "G3"
       ],
-      "notes": " 2026-10-17 切片 1：G1 包 + reguhuo 落地（3 测）；rangjie/十常侍面/展示面 deferred。 切片 2（2026-10-17）：rangjie 落地（3 测）；余十常侍面/展示面。 切片 3（2026-10-17）：装载器模块 + 十常侍面依赖判定（外部技能 k_danggu/k_mowang 本仓未定义→结构性阻塞）；规则面完整。"
+      "notes": " 2026-10-17 切片 1：G1 包 + reguhuo 落地（3 测）；rangjie/十常侍面/展示面 deferred。 切片 2（2026-10-17）：rangjie 落地（3 测）；余十常侍面/展示面。 切片 3（2026-10-17）：装载器模块 + 十常侍面依赖判定（外部技能 k_danggu/k_mowang 本仓未定义→结构性阻塞）；规则面完整。 八项整包验收通过（2026-10-17，八项证据目录）；十常侍面结构性阻塞（外部技能缺失）与展示面不迁移已登记。"
     },
     {
       "id": "T12-SRC-L11",
