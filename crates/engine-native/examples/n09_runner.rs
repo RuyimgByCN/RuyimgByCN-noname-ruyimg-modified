@@ -118,6 +118,7 @@ impl Metrics {
                     RejectReason::WrongMode => "wrong_mode",
                     RejectReason::NoSuchGeneral => "no_such_general",
                     RejectReason::AlreadyRevealed => "already_revealed",
+                    RejectReason::VmFault { .. } => "vm_fault",
                     RejectReason::CardLimit => "card_limit",
                     RejectReason::CardBlocked => "card_blocked",
                 };

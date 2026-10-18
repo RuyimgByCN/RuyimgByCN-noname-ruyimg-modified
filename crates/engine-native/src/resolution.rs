@@ -54,6 +54,8 @@ pub struct Resolution {
     /// 已校验、待机器读取的应答。
     pub answer: Option<Selection>,
     pub budget: u32,
+    /// VM 执行故障（NC04，瞬态：命令结束时清空，不入快照/哈希）。
+    pub fault: Option<crate::machine::VmFault>,
 }
 
 impl Resolution {
@@ -66,6 +68,7 @@ impl Resolution {
             open_choice: None,
             answer: None,
             budget,
+            fault: None,
         }
     }
 
@@ -134,6 +137,9 @@ pub enum StepOutcome {
     /// 宿主时间片耗尽：状态在当前步边界一致，可在续行时无损接续
     /// （与硬性预算上限不同——不回滚，见 ADR 0707）。
     Yielded,
+    /// VM 执行故障（NC04）：上层必须整段回滚并以 `RejectReason::VmFault`
+    /// 拒绝命令，不得按正常规则继续。
+    Fault,
 }
 
 /// 阶段推进表。
@@ -335,6 +341,10 @@ pub fn run(
 ) -> StepOutcome {
     let mut steps: u32 = 0;
     loop {
+        if let Some(fault) = res.fault.take() {
+            res.fault = Some(fault);
+            return StepOutcome::Fault;
+        }
         if res.budget == 0 {
             return StepOutcome::BudgetExhausted;
         }

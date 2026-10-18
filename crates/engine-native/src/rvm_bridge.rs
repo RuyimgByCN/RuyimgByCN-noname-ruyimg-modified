@@ -882,7 +882,29 @@ impl VmMachine {
                     },
                 }
             }
-            Err(_) => self.trap_done(),
+            Err(e) => {
+                // NC04：故障必须可定位并向上传播——记录技能/座位/事件/错误类别，
+                // 由调度循环（StepOutcome::Fault）整段回滚并以 VmFault 拒绝命令。
+                ctx.res.fault = Some(crate::machine::VmFault {
+                    skill: self.program.skill_name.clone(),
+                    owner: self.owner,
+                    event: format!("{:?}", self.trig.kind),
+                    kind: match &e {
+                        rule_vm::VmError::OutOfFuel => "OutOfFuel",
+                        rule_vm::VmError::StackOverflow => "StackOverflow",
+                        rule_vm::VmError::MemoryLimit => "MemoryLimit",
+                        rule_vm::VmError::InvalidBytecode(_) => "InvalidBytecode",
+                        rule_vm::VmError::CapabilityDenied(_) => "CapabilityDenied",
+                        rule_vm::VmError::Host(_) => "Host",
+                        rule_vm::VmError::Arithmetic(_) => "Arithmetic",
+                        rule_vm::VmError::BadControlFlow(_) => "BadControlFlow",
+                        rule_vm::VmError::Stack(_) => "Stack",
+                    }
+                    .to_string(),
+                    detail: e.to_string(),
+                });
+                self.trap_done()
+            }
         }
     }
 

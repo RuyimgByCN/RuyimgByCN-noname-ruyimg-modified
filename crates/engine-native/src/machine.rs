@@ -162,6 +162,25 @@ pub enum Flow {
     },
 }
 
+/// VM 执行故障（NC04）：可定位的错误类型与来源，供命令结果与日志使用。
+///
+/// 故障发生时该段必须整体回滚（排队效果丢弃、段状态不提交），命令以
+/// `RejectReason::VmFault` 拒绝——不得以 `Flow::Done` 吞掉故障后按正常
+/// 规则继续。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct VmFault {
+    /// 触发故障的 VM 技能名。
+    pub skill: String,
+    /// 技能持有者座位。
+    pub owner: crate::ids::PlayerId,
+    /// 触发事件类别（如 `PhaseEnd`/`Damage`）。
+    pub event: String,
+    /// 错误类别（`VmError` 变体名）。
+    pub kind: String,
+    /// 错误详情（`VmError` 的显示文本）。
+    pub detail: String,
+}
+
 /// 机器推进上下文。
 pub struct Ctx<'a> {
     pub core: &'a mut GameStateCore,

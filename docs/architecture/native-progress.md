@@ -23,7 +23,7 @@
 | NC01 | **根因已修 + 回归已加 + 定向/全量通过（2026-10-18）**；版本升格与 3 处顺序调用方迁移待并行提交 | [座位与触发语义](native-convergence-plan.md#nc01)；[证据](../operations/evidence/2026-10-18-nc01-seat-semantics/README.md) |
 | NC02 | **根因已修 + 7 项验收回归 + game-server 全量通过（2026-10-18）**；`-D warnings` 门禁被并行重构阻断 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；[证据](../operations/evidence/2026-10-18-nc02-install-identity/README.md) |
 | NC03 | **前端适配层切片已修 + 回归已加（2026-10-18）**：token/值分离、`kind` 候选、`rejected` 暴露、目录守护去硬编码；权威动作查询/协议定义共享等剩余 | [统一原生 API](native-convergence-plan.md#nc03)；[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md) |
-| NC04 | 待修复并核验 | [VM 故障与事务](native-convergence-plan.md#nc04)；保留已有预算与回滚 |
+| NC04 | **根因已修 + 3 项回归 + 全量通过（2026-10-18）**；挂起/非法效果/无效 token 等用例待补 | [VM 故障与事务](native-convergence-plan.md#nc04)；[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md) |
 | NC05 | 待完整验收 | [独立扩展宿主](native-convergence-plan.md#nc05)；依赖 NC02–NC04，按需引入 NC06/NC07 切片 |
 | NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
 | NC07 | 待结构收敛 | [状态与持久化同源](native-convergence-plan.md#nc07)；与 NC06 逐职责迁移 |
@@ -41,6 +41,14 @@
 - 回归：新增 `apps/web-client/scripts/native-adapter.test.mjs`（三条反例 + 边界，7 项）与 `extension-inventory.test.mjs`（目录守护失败路径，3 项），`pnpm --dir apps/web-client test` 10/10 通过；冒烟新增真实 WASM 引擎的适配层 token 往返（提交 token 接受、提交候选值被拒）。
 - 实测：`typecheck` exit 0（修复前 exit 2）；`smoke:native` **15/15**（修复前 12/13，`extension_catalog_15` 硬编码 15 已改为按包数据推导的两个不变量）；`pnpm test` 10/10；`pnpm build` exit 0；行数门禁 8222 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)。
 - 待办：内核权威动作查询（含停止前端 `hand.slice(0,8)` 拼接 `PlayCard`/合成 `ResolveChoice`）；Rust↔TS 协议定义共享或自动校验；`events`/`hash_hex` 仍为空占位；真实 Worker 端到端与多选/取消/过期选择、大整数协议表示；客户端管理面仍只覆盖 15/41 个在盘包。
+
+### NC04 核验（2026-10-18，规则 v321 / 存档 v105 未变）
+
+- 根因：`VmMachine::run` 的 `Err(_)` 丢弃 VM 错误并返回 `Flow::Done`（错误类型/来源丢失、故障被当正常规则继续）。
+- 修复：捕获为 `VmFault{skill,owner,event,kind,detail}` → 调度循环 `StepOutcome::Fault` → **整段回滚**（工作副本丢弃、日志截断、段检查点清除）→ 命令以 `RejectReason::VmFault{skill,detail}` 拒绝；新增 `Engine::resolution()` 诊断访问器。
+- 回归：新增 `tests/nc04_vm_fault.rs`（正常完成 / fuel 耗尽整段回滚且确定性重现 / 故障命令不消费去重键；1 项挂起用例 ignored 待补）。
+- 实测：定向 3/0/1；engine-native 全量 **1104/0/2**；Gate 1b exit 0；行数门禁 8223 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md)。
+- 待办：挂起→续跑→故障、非法效果、无效 token、内存/栈限额、RNG 位点、产品侧展示、分片段故障回滚用例。
 
 ### NC02 核验（2026-10-18，规则 v321 / 存档 v105 未变）
 
