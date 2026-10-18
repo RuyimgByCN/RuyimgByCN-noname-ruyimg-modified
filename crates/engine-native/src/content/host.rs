@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 魔焰（tag 510，swd 批 151，`moyan`）：出牌阶段限一次——弃 N 张红色
+    /// 手牌（N ≤ min(其他存活数, 体力上限-体力)），对 N 名其他角色各造成
+    /// 1 点**火焰**伤害。
+    Moyan,
     /// 疾风（tag 509，swd 批 150，`jifeng`）：单目标牌可指定任意数量目标
     /// （Sha/单目标锦囊）；多目标使用时按概率「失误」——整张牌取消。
     Jifeng,
@@ -1790,6 +1794,7 @@ impl HostBehavior {
             HostBehavior::Shengong => 506,
             HostBehavior::Kunlunjing => 507,
             HostBehavior::Jifeng => 509,
+            HostBehavior::Moyan => 510,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2539,6 +2544,7 @@ impl HostBehavior {
             506 => HostBehavior::Shengong,
             507 => HostBehavior::Kunlunjing,
             509 => HostBehavior::Jifeng,
+            510 => HostBehavior::Moyan,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2559,7 +2565,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 505] = [
+        pub const ALL: [HostBehavior; 506] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3065,6 +3071,7 @@ impl HostBehavior {
         HostBehavior::Shengong,
         HostBehavior::Kunlunjing,
         HostBehavior::Jifeng,
+        HostBehavior::Moyan,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3332,6 +3339,7 @@ impl HostBehavior {
             HostBehavior::Shengong => "host:shengong",
             HostBehavior::Kunlunjing => "host:kunlunjing",
             HostBehavior::Jifeng => "host:jifeng",
+            HostBehavior::Moyan => "host:moyan",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3811,6 +3819,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 魔焰：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Moyan => None,
             // 疾风：自己使用多目标单目标牌（结算窗；锁定）
             HostBehavior::Jifeng => Some(TriggerMeta {
                 event: EventKind::CardUsed,
@@ -6220,6 +6230,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 魔焰（swd 批 151）：目录技能名（弃红牌对等量目标各 1 点火焰伤害）。
+pub const SWD_MOYAN_KEY: &str = "moyan";
+
 /// 疾风（swd 批 150）：目录技能名（单目标牌可多目标，多目标时概率失误）。
 pub const SWD_JIFENG_KEY: &str = "jifeng";
 
@@ -7396,6 +7409,7 @@ impl HostSkillBehavior {
             HostBehavior::Shengong => (None, None),
             HostBehavior::Kunlunjing => (None, None),
             HostBehavior::Jifeng => (None, None),
+            HostBehavior::Moyan => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7734,6 +7748,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            HostBehavior::Moyan => false,
             // 疾风：自己使用【杀】或单目标锦囊且目标数 >1、未取消
             HostBehavior::Jifeng => match event {
                 EventData::CardUsed(u) => {
@@ -9996,6 +10011,34 @@ impl SkillBehavior for HostSkillBehavior {
             }
             // 轩辕（swd 批 146）：结束阶段触发（无主动面）
             HostBehavior::Xuanyuan => None,
+            // 魔焰（swd 批 151）：出牌阶段主动（每回合一次；体力未满且有红牌）
+            HostBehavior::Moyan => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let p = ctx.state.player(owner);
+                let has_red = p.hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                });
+                if p.hp >= p.max_hp as i32 || !has_red {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 天书（swd 批 142）：出牌阶段主动（限定——实例启用时）
             HostBehavior::SwdTianshu => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
@@ -21183,6 +21226,135 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 魔焰：选 N 张红牌 → 选恰 N 名其他角色 → 逐个 1 点火焰伤害
+            HostBehavior::Moyan => match self.stage {
+                HostStage::Act => {
+                    let reds: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                            )
+                        })
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if reds.is_empty() {
+                        return Flow::Done;
+                    }
+                    let others = ctx.core.alive_players().filter(|p| *p != self.owner).count();
+                    let hp_gap =
+                        (ctx.core.player(self.owner).max_hp as i32 - ctx.core.player(self.owner).hp)
+                            .max(0) as usize;
+                    let max = reds.len().min(others).min(hp_gap);
+                    if max == 0 {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "moyan_cards",
+                            options: reds,
+                            min: 1,
+                            max,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.is_empty() {
+                        return Flow::Done;
+                    }
+                    // 弃置红色手牌（phaseUse 用牌消耗）
+                    for c in picked.iter().copied() {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.discard_from_hand(self.owner, c);
+                        }
+                    }
+                    let need = picked.len();
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.len() < need {
+                        return Flow::Done;
+                    }
+                    self.cards = picked.iter().map(|c| u32::from(*c)).collect();
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "moyan_targets",
+                            options,
+                            min: need,
+                            max: need,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "魔焰",
+                        owner: self.owner,
+                    });
+                    self.targets = targets;
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                HostStage::ShuchuiTargetLoop => {
+                    // 逐个目标造成 1 点火焰伤害（保持目标序：每次发一帧再让出）
+                    if self.targets.is_empty() {
+                        return Flow::Done;
+                    }
+                    let target = self.targets.remove(0);
+                    if ctx.core.player(target).alive {
+                        ctx.emit(EventData::Damage(crate::event::DamageData {
+                            source: Some(self.owner),
+                            target,
+                            amount: 1,
+                            nature: crate::event::DamageNature::Fire,
+                            prevented: false,
+                            redirect_chain: Vec::new(),
+                            card: None,
+                            from_chain: false,
+                        }));
+                    }
+                    if self.targets.is_empty() {
+                        Flow::Done
+                    } else {
+                        Flow::Yield
+                    }
+                }
+                _ => Flow::Done,
+            },
             // 疾风：多目标使用 → 按概率整牌取消（上游 `trigger.cancel()`）
             HostBehavior::Jifeng => {
                 let n = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {

@@ -2040,6 +2040,10 @@
   {
    "name": "jifeng",
    "mapping": "host:jifeng"
+  },
+  {
+   "name": "moyan",
+   "mapping": "host:moyan"
   }
  ]
 }
