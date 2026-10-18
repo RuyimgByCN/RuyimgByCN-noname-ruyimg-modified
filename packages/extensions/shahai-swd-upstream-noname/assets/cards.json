@@ -580,6 +580,12 @@
    "kind": "shencaojie",
    "suit": "spade",
    "rank": 4
+  },
+  {
+   "name": "xuanyuanjian",
+   "kind": "xuanyuanjian",
+   "suit": "spade",
+   "rank": 1
   }
  ],
  "host_skills": [],
@@ -1741,8 +1747,7 @@
     },
     {
      "name": "xuanyuan",
-     "mapping": null,
-     "reason": "牌实体【轩辕剑】待补（加牌改变种子化牌堆与武将分配 → 须同批重导 8 项种子敏感用例）；引擎侧技能与装备钩已落地"
+     "mapping": "host:xuanyuan"
     },
     {
      "name": "pozhou2",

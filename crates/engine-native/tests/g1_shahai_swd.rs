@@ -38,7 +38,7 @@ fn bridge(json: &str) -> ExtensionPack {
     out.pack
 }
 
-/// T12-SWD-EXTRA-CARDS-DISPOSITION 守护（2026-10-17）：包内 89 张；上游
+/// T12-SWD-EXTRA-CARDS-DISPOSITION 守护（2026-10-17）：包内 90 张（批 147 轩辕剑 +1）；上游
 /// `list.js` 无行的 7 张为灵剑池（hslingjian，v198 有意建模），非「多余」；
 /// 错位旧值已随补切批勘误（hufu/zhiluxiaohu/mujiaren/shentoumianju/
 /// xingjunyan/zhufangshenshi/yangpijuan）。
@@ -49,7 +49,7 @@ fn swd_extra_cards_disposition_guard() {
     )
     .expect("读 swd cards.json");
     let pack = bridge(&json);
-    assert_eq!(pack.cards.len(), 89, "对账勘误后包内 89 张");
+    assert_eq!(pack.cards.len(), 90, "对账勘误后包内 90 张（批 147 轩辕剑 +1）");
     assert_eq!(
         pack.cards
             .iter()
@@ -139,7 +139,7 @@ fn swd_hufu_self_dying_only() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 89, "swd 全 89 张（对账勘误+6，批①；窗口机批+2 神秘果）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 90, "swd 全 90 张（对账勘误+6，批①；窗口机批+2 神秘果；批 147 轩辕剑 +1）");
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
     let h0 = hufu_id(&e, 0);
@@ -234,7 +234,7 @@ fn swd_real_host_full_lifecycle() {
     let pack = bridge(&json);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 89, "swd 全 89 张（对账勘误+6，批①；窗口机批+2 神秘果）");
+    assert_eq!(e.catalog().cards.len(), base_cards + 90, "swd 全 90 张（对账勘误+6，批①；窗口机批+2 神秘果；批 147 轩辕剑 +1）");
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
 
@@ -249,7 +249,7 @@ fn swd_real_host_full_lifecycle() {
         &[&pack],
     )
     .expect("对局中卸载后恢复");
-    assert_eq!(resumed.catalog().cards.len(), base_cards + 89, "锁定副本仍可用（窗口机批+2）");
+    assert_eq!(resumed.catalog().cards.len(), base_cards + 90, "锁定副本仍可用（窗口机批+2；批 147 轩辕剑 +1）");
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
 
@@ -4301,7 +4301,7 @@ fn swd_cards_alignment_guard_b29() {
         assert!(hit, "对账守护：{name} {suit}{rank} 应在包内");
     }
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
-    assert_eq!(pack.cards.len(), 89, "窗口机批后 89 张（批⑬ 神草结 87+神秘果 2）");
+    assert_eq!(pack.cards.len(), 90, "窗口机批后 90 张（批⑬ 神草结 87+神秘果 2；批 147 轩辕剑 +1）");
 }
 
 /// T12 swd 卡牌面补切批②：basic 族——雪霁冰雹（目标摸牌阶段 +1 持续 2
@@ -5563,7 +5563,7 @@ fn swd_cards_trick_b42_yuchan_autoviewas() {
     )
     .unwrap();
     let pack = bridge(&json);
-    assert_eq!(pack.cards.len(), 89, "窗口机批后 89 张（批⑬ 神草结 87+神秘果 2）");
+    assert_eq!(pack.cards.len(), 90, "窗口机批后 90 张（批⑬ 神草结 87+神秘果 2；批 147 轩辕剑 +1）");
     let mut e = Engine::new_with_extensions(62021, 4, &[&pack]).expect("建局");
     advance_to_play(&mut e, 0);
     for p in 0..4 {
@@ -6383,32 +6383,30 @@ fn swd_generals_b63_lianwu_yuchen_duishi_xielei() {
 
     // ① 连舞（尚章）：锁定——红杀双目标 + 红杀直击（p2 有闪不出闪窗）
     e.debug_grant(0, "lianwu");
-    let red_sha = e.debug_place(0, "sha");
-    {
-        // 红杀：把 placed 杀置为 heart（上帝视角改花色不可行——改布阵：
-        // 取目录中红杀实体；若无则用普通杀+跳过红面判定）
-        let red = (0..e.catalog().cards.len() as u32)
-            .find(|c| {
-                matches!(
+    // 红杀：取目录中红杀实体（**任意区**——牌堆/手牌/弃牌堆，牌堆序随
+    // 种子变化，不能假定红杀仍在牌堆），移入 p0 手牌
+    let red_sha = {
+        let red = (0..e.catalog().cards.len() as u32).find(|c| {
+            e.catalog().card_kind(*c) == engine_native::catalog::CardKind::Sha
+                && matches!(
                     e.catalog().cards[*c as usize].suit,
                     engine_native::catalog::Suit::Heart
                         | engine_native::catalog::Suit::Diamond
                 )
-            })
-            .filter(|c| {
-                e.catalog().card_kind(*c) == engine_native::catalog::CardKind::Sha
-                    && e.state_core().deck.contains(c)
-            });
-        {
-            let core = e.state_core_mut();
-            core.players[0].hand.retain(|x| *x != red_sha);
-            if let Some(r) = red {
-                core.deck.retain(|x| *x != r);
-                core.players[0].hand.push(r);
-            }
+                && (e.state_core().deck.contains(c)
+                    || e.state_core().discard.contains(c)
+                    || (0..4).any(|p| e.state_core().player(p).hand.contains(c)))
+        });
+        let red = red.expect("目录中有红杀实体");
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != red);
+        core.discard.retain(|x| *x != red);
+        for p in 0..4usize {
+            core.players[p].hand.retain(|x| *x != red);
         }
-    }
-    let red_sha = *e.debug_hand(0).last().expect("红杀已布");
+        core.players[0].hand.push(red);
+        red
+    };
     let shan_p2 = e.debug_place(1, "shan");
     let is_red = matches!(
         e.catalog().cards[red_sha as usize].suit,
@@ -7823,12 +7821,15 @@ fn swd_generals_b69_lingxin_yueren() {
         sp
     };
     let h2 = {
+        // 排除已压顶的 h1（同一张牌不可取两次——牌堆序随种子变化，须显式排除）
         let h = (0..e.catalog().cards.len() as u32)
             .find(|c| {
-                matches!(
-                    e.catalog().cards[*c as usize].suit,
-                    engine_native::catalog::Suit::Heart
-                ) && e.state_core().deck.contains(c)
+                *c != h1
+                    && matches!(
+                        e.catalog().cards[*c as usize].suit,
+                        engine_native::catalog::Suit::Heart
+                    )
+                    && e.state_core().deck.contains(c)
             })
             .expect("红桃 2 在牌库");
         e.state_core_mut().deck.retain(|x| *x != h);

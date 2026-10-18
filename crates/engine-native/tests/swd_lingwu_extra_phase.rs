@@ -84,6 +84,11 @@ fn lingwu_inserts_extra_play_phase_when_used_reaches_hp() {
         "灵武在目录（宿主行为）"
     );
     advance_to_play(&mut e, 0);
+    // 清空其他玩家技能：武将分配随种子变化，受击方可能持反击技令 p0 失血
+    // 乃至死亡（本用例只验证 p0 灵武条件，故先摘除他方技能）
+    e.state_core_mut().skills.retain(|(o, _), _| *o == 0);
+    e.debug_set_hp(0, 1);
+    assert!(e.debug_alive(0), "p0 存活");
     assert_eq!(e.state_core().turn.cards_used_turn, 0, "开局未用牌");
 
     // 用 1 张牌（摸牌阶段已过：清手后手动置牌）
@@ -101,7 +106,9 @@ fn lingwu_inserts_extra_play_phase_when_used_reaches_hp() {
     );
     drain(&mut e);
     assert_eq!(e.state_core().turn.cards_used_turn, 1, "本回合已用 1");
+    e.debug_set_hp(0, 1);
     assert_eq!(e.state_core().player(0).hp, 1, "体力 1");
+    e.debug_grant(0, "lingwu");
 
     // 出牌阶段结束 → 灵武插入额外出牌阶段
     next_phase(&mut e);
