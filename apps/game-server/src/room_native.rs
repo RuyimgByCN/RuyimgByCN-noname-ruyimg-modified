@@ -35,6 +35,8 @@ pub struct NativeMember {
 /// 原生权威房间会话（无 IO）。
 pub struct NativeRoomSession {
     engine: Engine,
+    /// 建局所用扩展包（Recover 重放需要同内容）。
+    packs: Vec<engine_native::content::extension::ExtensionPack>,
     max_seats: u8,
     members: HashMap<u64, NativeMember>,
     by_token: HashMap<String, u64>,
@@ -57,8 +59,18 @@ pub struct NativeJoinReply {
 impl NativeRoomSession {
     /// 以原生引擎为模板建会话（模板状态即开局状态）。
     pub fn new(engine: Engine, max_seats: u8) -> Self {
+        Self::new_with_packs(engine, Vec::new(), max_seats)
+    }
+
+    /// 建会话并保存扩展包集合（`Recover` 重放需要）。
+    pub fn new_with_packs(
+        engine: Engine,
+        packs: Vec<engine_native::content::extension::ExtensionPack>,
+        max_seats: u8,
+    ) -> Self {
         Self {
             engine,
+            packs,
             max_seats,
             members: HashMap::new(),
             by_token: HashMap::new(),
@@ -71,6 +83,16 @@ impl NativeRoomSession {
     /// 只读引擎（测试/宿主查询）。
     pub fn engine(&self) -> &Engine {
         &self.engine
+    }
+
+    /// 建局所用扩展包引用（`Recover` 重放用）。
+    pub fn pack_refs(&self) -> Vec<&engine_native::content::extension::ExtensionPack> {
+        self.packs.iter().collect()
+    }
+
+    /// 用恢复出的引擎替换当前引擎（`Recover` 接线；成员/令牌/座位保持不变）。
+    pub fn replace_engine(&mut self, engine: Engine) {
+        self.engine = engine;
     }
 
     /// 入座（满座或座位被占时返回错误；同令牌为重连）。

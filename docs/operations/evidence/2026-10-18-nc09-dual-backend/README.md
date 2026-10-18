@@ -96,3 +96,29 @@ game-server 全量 **82 passed / 0 failed**（[game-server-tests-3.log](game-ser
 - [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`
 - [ ] 命令后个性化视图推送、actor 回包 `legal_actions`/`choice`
 - [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位
+
+## 6 追加：`Recover` 接线（2026-10-18 同轮）
+
+原生 actor 的 `Recover` 原先明确返回「未接线」；本批接通：会话保存建局所用**扩展包集合**
+（`NativeRoomSession::new_with_packs` / `pack_refs` / `replace_engine`），actor 取
+「不晚于最后已接受修订号的最新快照」调用 `NativeRoomPersist::recover`，成功则替换引擎并
+更新修订高水位；内容不符或摘要不符由 `recover` **明确失败**（成员/令牌/座位保持不变）。
+
+新增用例 `nc09_native_backend_recover_matches_live_state`（第 5 项）：
+
+| 判据 | 结果 |
+|---|---|
+| 若干条被接受的推进后 `Recover`（快照 + WAL 重放）成功 | 通过 |
+| **恢复后状态摘要与实时推进一致** | 通过 |
+
+实测：定向 **5 passed / 0 failed**（含 `persist` 既有 2 项共 7 项；[targeted-4.log](targeted-4.log)）；
+game-server 全量 **83 passed / 0 failed**（[game-server-tests-4.log](game-server-tests-4.log)）；
+行数门禁 8254 文件（[source-lines-4.log](source-lines-4.log)）。
+
+### 仍未完成（更新）
+
+- [ ] 旧线房间测试套件参数化跑在原生后端：`StartGame` 兼容、房间密码、`Recover` 已具备；
+      仍需限流（`max_cmds_per_sec`，位于 lobby 层，双后端共用）与慢消费者背压专项用例
+- [ ] 旧线能力对齐：锦标赛 WAL 分块签名、`pin_manifest`
+- [ ] 命令后个性化视图推送、actor 回包 `legal_actions`/`choice`
+- [ ] 真实客户端/HTTP/WS 端到端、录像导出/跳转、平台档位

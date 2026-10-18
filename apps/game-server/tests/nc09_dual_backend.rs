@@ -43,7 +43,8 @@ fn native_session(seed: u64, seats: u8) -> NativeRoomSession {
     let engine =
         engine_native::Engine::new_with_extensions(seed, seats as usize, &[&loaded.pack])
             .expect("建局");
-    NativeRoomSession::new(engine, seats)
+    // 保存包集合：Recover 重放需要同内容
+    NativeRoomSession::new_with_packs(engine, vec![loaded.pack], seats)
 }
 
 async fn join(
@@ -273,4 +274,90 @@ async fn nc09_native_backend_enforces_room_password() {
         rr.await.expect("reply")
     };
     assert_eq!(ok.expect("正确密码应入座").seat, 0);
+}
+
+/// `Recover`：快照 + WAL 重放恢复后，修订与摘要与实时推进一致；内容不符时明确失败。
+#[tokio::test]
+async fn nc09_native_backend_recover_matches_live_state() {
+    let handle = room_native_actor::spawn_room_native(15, native_session(20261805, 4), 16, 1);
+    let _ = join(&handle, 1, Some(0), None).await.expect("入座");
+    // 记录若干条被接受的阶段推进（snapshot_every=1 → 每条都落快照）
+    let mut accepted = 0;
+    for i in 0..6u64 {
+        let current = {
+            let (rt, rr) = tokio::sync::oneshot::channel();
+            handle
+                .send(RoomMsg::Snapshot {
+                    connection_id: 1,
+                    header: MessageHeader::new(15, 1, 0),
+                    reply: rt,
+                })
+                .await
+                .expect("send snapshot");
+            match rr.await.expect("reply").expect("snapshot") {
+                ServerMessage::Snapshot { view, .. } => view.current_player.raw(),
+                other => panic!("应返回快照: {other:?}"),
+            }
+        };
+        let conn = 1 + current as u64; // 连接 id 与座位约定：1 号连接=座位 0
+        let conn = if current == 1 { 1 } else { conn };
+        let seat = current as u8 - 1;
+        if seat != 0 {
+            // 该座位未入座 → 先入座（幂等：已入座会失败，忽略）
+            let _ = join(&handle, 1 + current as u64, Some(seat), None).await;
+        }
+        match submit(&handle, conn, 10 + i, CommandKind::EndPhase {}, 100 + i).await {
+            Ok(ServerMessage::CommandOutcome { result, .. }) => {
+                if matches!(result, CommandResult::Accepted { .. }) {
+                    accepted += 1;
+                }
+            }
+            Ok(other) => panic!("应返回命令结果: {other:?}"),
+            Err(_) => {}
+        }
+    }
+    assert!(accepted >= 2, "至少 2 条被接受（实际 {accepted}）");
+
+    // 实时状态（恢复前）
+    let live_hash = {
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Snapshot {
+                connection_id: 1,
+                header: MessageHeader::new(15, 99, 0),
+                reply: rt,
+            })
+            .await
+            .expect("send snapshot");
+        match rr.await.expect("reply").expect("snapshot") {
+            ServerMessage::Snapshot { view, .. } => view.state_hash,
+            other => panic!("应返回快照: {other:?}"),
+        }
+    };
+
+    // Recover：快照 + WAL 重放
+    let (rt, rr) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Recover { reply: rt })
+        .await
+        .expect("send recover");
+    rr.await.expect("reply").expect("recover 应成功");
+
+    // 恢复后状态摘要必须与实时一致
+    let after_hash = {
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Snapshot {
+                connection_id: 1,
+                header: MessageHeader::new(15, 100, 0),
+                reply: rt,
+            })
+            .await
+            .expect("send snapshot");
+        match rr.await.expect("reply").expect("snapshot") {
+            ServerMessage::Snapshot { view, .. } => view.state_hash,
+            other => panic!("应返回快照: {other:?}"),
+        }
+    };
+    assert_eq!(after_hash, live_hash, "Recover 后摘要必须与实时一致");
 }

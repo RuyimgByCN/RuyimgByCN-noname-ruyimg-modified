@@ -265,10 +265,29 @@ async fn native_room_loop(
                 broadcast_roster_native(id, &members, session.engine().outcome().is_some()).await;
             }
             RoomMsg::Recover { reply } => {
-                let _ = reply.send(Err(
-                    "原生房间恢复请使用 NativeRoomPersist::recover（本 actor 未接线，登记待办）"
-                        .into(),
-                ));
+                // NC09：按「快照 + WAL 重放」恢复（内容不符/摘要不符都会明确失败）。
+                // 快照点取持久化面中最新的、不晚于最后已接受修订号的快照。
+                let from = persist
+                    .snapshots
+                    .keys()
+                    .filter(|r| **r <= last_revision)
+                    .next_back()
+                    .copied();
+                let Some(from) = from else {
+                    let _ = reply.send(Err("无可用于恢复的快照".into()));
+                    continue;
+                };
+                match persist.recover(from, &session.pack_refs()) {
+                    Ok((engine, replayed)) => {
+                        last_revision = engine.revision();
+                        session.replace_engine(engine);
+                        debug!(room = id, from, replayed, "native room recovered");
+                        let _ = reply.send(Ok(()));
+                    }
+                    Err(e) => {
+                        let _ = reply.send(Err(e));
+                    }
+                }
             }
         }
     }
