@@ -1,0 +1,43 @@
+jizhi: {
+		audio: 2,
+		trigger: { player: "useCard" },
+		filter(event, player) {
+			return get.type(event.card) === "trick";
+		},
+		forced: true,
+		async content(event, trigger, player) {
+			const next = player.draw("nodelay");
+			next.gaintag.add("sbjizhi");
+			await next;
+			player.addTempSkill("sbjizhi_mark");
+		},
+		subSkill: {
+			mark: {
+				charlotte: true,
+				onremove(player) {
+					player.removeGaintag("sbjizhi");
+				},
+				mod: {
+					ignoredHandcard(card, player) {
+						if (card.hasGaintag("sbjizhi")) {
+							return true;
+						}
+					},
+					cardDiscardable(card, player, name) {
+						if (name === "phaseDiscard" && card.hasGaintag("sbjizhi")) {
+							return false;
+						}
+					},
+				},
+			},
+		},
+	},
+	//诸葛亮
+	sbhuoji: {
+		audio: 3,
+		dutySkill: true,
+		onremove(player, skill) {
+			player.removeSkill("sbhuoji_count");
+		},
+		derivation: ["sbguanxing", "sbkongcheng"],
+		gro
