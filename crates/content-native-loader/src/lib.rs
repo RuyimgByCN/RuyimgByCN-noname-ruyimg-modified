@@ -44,6 +44,7 @@ mod qhly;
 mod shousha;
 mod shousha_mvp;
 mod sj_settings;
+mod skin_switch;
 mod thunder;
 mod longxue;
 mod update_guard;
@@ -120,6 +121,7 @@ pub use shousha::{
     CharacterOut, ShoushaConfig, ShoushaError, ShoushaReport, ShoushaRequest, SkillIn, SkillOut,
 };
 pub use thunder::*;
+pub use skin_switch::*;
 pub use sj_settings::{
     apply_external, apply_sj_commands, boot, catalog_mark, choose_download, classify_fault,
     compare_version, decode_text, decode_uri, encode_text, eval_update_script, filter_downloads,
