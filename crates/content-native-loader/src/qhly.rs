@@ -167,3 +167,74 @@ pub fn parse_qhly_config(json: &str) -> Result<QhlyConfig, QhlyError> {
 
 /// 皮肤表（角色 → 皮肤 → 规则）。
 pub type SkinChangeTable = BTreeMap<String, BTreeMap<String, SkinChangeRule>>;
+
+/// 皮肤共享表（别名 → 真名；上游 `lib.qhly_skinShare`）。
+pub type SkinShareTable = BTreeMap<String, String>;
+
+/// 国战皮肤回退（上游 `qhly_getSkin`/`qhly_getSkinList` 的 `gz_` 兼容）：
+/// 名字以 `gz_` 开头且（未启用国战 或 非国战模式 或 无国战皮肤）时，若去掉
+/// 前缀后的名字是已知角色，则回退到该名字。
+pub fn resolve_gz_fallback(
+    name: &str,
+    guozhan_enabled: bool,
+    is_guozhan_mode: bool,
+    has_guozhan_skin: bool,
+    is_known_character: impl Fn(&str) -> bool,
+) -> String {
+    if !name.starts_with("gz_") {
+        return name.to_string();
+    }
+    if guozhan_enabled && is_guozhan_mode && has_guozhan_skin {
+        return name.to_string();
+    }
+    let sub = &name[3..];
+    if is_known_character(sub) {
+        sub.to_string()
+    } else {
+        name.to_string()
+    }
+}
+
+/// 真名解析（上游 `qhly_getRealName`：皮肤共享别名 → 真名）。
+pub fn real_name(name: &str, share: &SkinShareTable) -> String {
+    share
+        .get(name)
+        .filter(|v| !v.is_empty())
+        .cloned()
+        .unwrap_or_else(|| name.to_string())
+}
+
+/// 去扩展名（上游 `qhly_earse_ext`：取最后一个 `.` 之前）。
+pub fn erase_ext(path: &str) -> String {
+    match path.rfind('.') {
+        Some(i) => path[..i].to_string(),
+        None => path.to_string(),
+    }
+}
+
+/// 皮肤是否被封禁（上游 `qhly_skinIsBanned`：名单含 `名字-皮肤`；
+/// 空皮肤视为 `[original]`；未配置名单 → 不封禁）。
+pub fn is_skin_banned(name: &str, skin: Option<&str>, ban_list: &[String]) -> bool {
+    if ban_list.is_empty() {
+        return false;
+    }
+    let key = format!("{}-{}", name, skin.unwrap_or("[original]"));
+    ban_list.iter().any(|b| *b == key)
+}
+
+/// 皮肤列表过滤（上游 `qhly_getSkinList` 的过滤链：`hideSkin` → 锁定皮肤）。
+///
+/// `locked == false` 时剔除被锁皮肤（`skin_lock` 返回 true 者）；`hidden`
+/// 返回 true 的皮肤始终剔除。
+pub fn filter_skin_list(
+    list: &[String],
+    hidden: impl Fn(&str) -> bool,
+    skin_lock: impl Fn(&str) -> bool,
+    locked: bool,
+) -> Vec<String> {
+    list.iter()
+        .filter(|skin| !hidden(skin))
+        .filter(|skin| locked || !skin_lock(skin))
+        .cloned()
+        .collect()
+}

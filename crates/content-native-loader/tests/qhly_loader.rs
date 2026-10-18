@@ -100,3 +100,72 @@ fn random_skin_filters_banned_and_terms() {
         None
     );
 }
+
+// ---- 切片 2：索引面（真名/回退/封禁/列表过滤）----
+
+use content_native_loader::{
+    erase_ext, filter_skin_list, is_skin_banned, real_name, resolve_gz_fallback, SkinShareTable,
+};
+
+#[test]
+fn resolves_real_name_and_gz_fallback() {
+    let mut share = SkinShareTable::new();
+    share.insert("alias_a".to_string(), "real_a".to_string());
+    share.insert("alias_empty".to_string(), String::new());
+    assert_eq!(real_name("alias_a", &share), "real_a");
+    assert_eq!(real_name("alias_empty", &share), "alias_empty", "空别名不生效");
+    assert_eq!(real_name("plain", &share), "plain");
+
+    // gz_ 前缀：国战开启且模式匹配且有国战皮肤 → 保持
+    assert_eq!(
+        resolve_gz_fallback("gz_zhangfei", true, true, true, |_| true),
+        "gz_zhangfei"
+    );
+    // 否则回退到已知角色
+    assert_eq!(
+        resolve_gz_fallback("gz_zhangfei", false, false, false, |n| n == "zhangfei"),
+        "zhangfei"
+    );
+    // 子名非已知角色 → 保持原名
+    assert_eq!(
+        resolve_gz_fallback("gz_unknown", false, false, false, |_| false),
+        "gz_unknown"
+    );
+    // 无前缀 → 原样
+    assert_eq!(resolve_gz_fallback("zhangfei", false, false, false, |_| true), "zhangfei");
+}
+
+#[test]
+fn erases_extension_and_checks_bans() {
+    assert_eq!(erase_ext("skin/liubei.png"), "skin/liubei");
+    assert_eq!(erase_ext("noext"), "noext");
+    assert_eq!(erase_ext("a.b.c"), "a.b");
+    assert_eq!(erase_ext(""), "");
+    let bans = vec!["liubei-[original]".to_string(), "caocao-skin1".to_string()];
+    assert!(is_skin_banned("liubei", None, &bans), "空皮肤=[original]");
+    assert!(is_skin_banned("caocao", Some("skin1"), &bans));
+    assert!(!is_skin_banned("liubei", Some("skin1"), &bans));
+    assert!(!is_skin_banned("liubei", None, &[]), "未配置名单 → 不封禁");
+}
+
+#[test]
+fn filters_skin_list_by_hide_and_lock() {
+    let list = vec![
+        "s1".to_string(),
+        "hidden".to_string(),
+        "locked".to_string(),
+        "s2".to_string(),
+    ];
+    let hidden = |s: &str| s == "hidden";
+    let lock = |s: &str| s == "locked";
+    // locked=true（默认）：只剔隐藏
+    assert_eq!(
+        filter_skin_list(&list, hidden, lock, true),
+        vec!["s1".to_string(), "locked".to_string(), "s2".to_string()]
+    );
+    // locked=false：隐藏与锁定都剔
+    assert_eq!(
+        filter_skin_list(&list, hidden, lock, false),
+        vec!["s1".to_string(), "s2".to_string()]
+    );
+}
