@@ -242,3 +242,88 @@ async fn nc09_backend_selection_is_explicit() {
     };
     assert!(err.contains("no-such-package"), "{err}");
 }
+
+/// 入座助手（沿用既有报文形态）：返回座位号；失败返回 Err。
+async fn join(
+    handle: &room::RoomHandle,
+    connection_id: u64,
+    preferred_seat: Option<u8>,
+    reconnect_token: Option<String>,
+) -> Result<u8, String> {
+    let (tx, _rx) = mpsc::channel::<String>(8);
+    let (reply_tx, reply_rx) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Join {
+            connection_id,
+            display_name: format!("p{connection_id}"),
+            preferred_seat,
+            reconnect_token,
+            password: String::new(),
+            outbound: session::Outbound::new(tx),
+            reply: reply_tx,
+        })
+        .await
+        .map_err(|e| format!("send: {e}"))?;
+    reply_rx
+        .await
+        .map_err(|e| format!("reply: {e}"))?
+        .map(|r| r.seat)
+}
+
+/// NC09 惰性缺席座位回收：满员且某成员超过时限未活动时，新入座者顶替其座位；
+/// 时限为 0 时关闭该行为（不得回收）。
+#[tokio::test]
+async fn nc09_actor_reclaims_idle_seat_lazily() {
+    let dir = tempfile::tempdir().unwrap();
+    let content = NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("安装");
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("装载");
+    let engine = engine_native::Engine::new_with_extensions(20263900, 2, &[&loaded.pack])
+        .expect("建局（2 座）");
+    let session = room_native::NativeRoomSession::new_with_packs(engine, vec![loaded.pack], 2);
+
+    // 时限设为 1 秒，便于观察
+    room_native_actor::set_seat_timeout_secs(1);
+    let handle = room_native_actor::spawn_room_native(70, session, 8, 4);
+
+    let (tx1, _rx1) = mpsc::channel::<String>(8);
+    let j1 = join(&handle, 1, Some(0), None).await.expect("入座 1");
+    assert_eq!(j1, 0);
+    let (tx2, _rx2) = mpsc::channel::<String>(8);
+    let j2 = join(&handle, 2, Some(1), None).await.expect("入座 2");
+    assert_eq!(j2, 1);
+    let _ = tx1;
+    let _ = tx2;
+
+    // 满员：立即入座应失败（座位被占）
+    let busy = join(&handle, 3, None, None).await;
+    assert!(busy.is_err(), "满员且未超时 → 入座应失败：{busy:?}");
+
+    // 等待超过时限 → 惰性回收最久未活动者（conn=1）
+    tokio::time::sleep(std::time::Duration::from_millis(1200)).await;
+    let taken = join(&handle, 4, None, None).await.expect("超时后应可入座");
+    assert!(
+        taken == 0 || taken == 1,
+        "回收后应拿到释放的座位：{taken}"
+    );
+
+    // 关闭回收（0）→ 满员时不得回收
+    room_native_actor::set_seat_timeout_secs(0);
+    let session2 = {
+        let loaded = content
+            .load_scoped(Some("upstream-noname"), "shahai-swd")
+            .expect("重装");
+        let engine = engine_native::Engine::new_with_extensions(20263901, 2, &[&loaded.pack])
+            .expect("建局 2");
+        room_native::NativeRoomSession::new_with_packs(engine, vec![loaded.pack], 2)
+    };
+    let handle2 = room_native_actor::spawn_room_native(71, session2, 8, 4);
+    let _ = join(&handle2, 1, Some(0), None).await.expect("入座 a");
+    let _ = join(&handle2, 2, Some(1), None).await.expect("入座 b");
+    tokio::time::sleep(std::time::Duration::from_millis(1200)).await;
+    let closed = join(&handle2, 3, None, None).await;
+    assert!(closed.is_err(), "时限 0 → 不回收，入座应失败：{closed:?}");
+    room_native_actor::set_seat_timeout_secs(600); // 复位默认
+}

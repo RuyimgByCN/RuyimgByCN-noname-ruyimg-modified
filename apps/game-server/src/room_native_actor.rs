@@ -20,6 +20,15 @@ use std::collections::HashMap;
 use tokio::sync::{mpsc, oneshot};
 use tracing::{debug, info};
 
+/// NC09 缺席座位回收时限（秒；0 = 关闭）。由 `spawn_*` 侧从配置/环境写入，
+/// 使 actor 循环不直接读环境变量（生产源码门禁：禁止 env::var）。
+pub static SEAT_TIMEOUT_SECS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(600);
+
+/// 设置缺席座位回收时限（秒；0 = 关闭）。
+pub fn set_seat_timeout_secs(secs: u64) {
+    SEAT_TIMEOUT_SECS.store(secs, std::sync::atomic::Ordering::Relaxed);
+}
+
 /// NC09 落盘：把当前会话状态写入存储（失败只记日志，不影响房间运行）。
 ///
 /// 终局处理：比赛已有结果（`outcome().is_some()`）时**删除**落盘记录并停止写入——
@@ -73,6 +82,8 @@ struct NativeActorMember {
     seat: u8,
     role: ClientRole,
     outbound: Option<crate::session::Outbound>,
+    /// NC09 缺席座位回收：该成员最后一次活动的时刻（惰性超时判据）。
+    last_seen: std::time::Instant,
 }
 
 /// 启动原生权威房间 actor（与 `room::spawn_room*` 同签名形态）。
@@ -166,6 +177,10 @@ async fn native_room_loop(
     room_password: String,
     store: Option<NativeRoomStore>,
 ) {
+    // NC09 缺席座位回收（惰性）：入座满员且新客户端要座位时，回收**最久未活动**且超过
+    // 该时限的成员（0 = 关闭）。时限来自环境变量 `NONAME_NATIVE_SEAT_TIMEOUT_SECS`
+    // （默认 600 秒），由 spawn 侧读取后传入，避免在生产源码里直接读环境变量。
+    let seat_timeout_secs = SEAT_TIMEOUT_SECS.load(std::sync::atomic::Ordering::Relaxed);
     let mut persist = NativeRoomPersist::new();
     // NC09 落盘节流：上次成功落盘的签名
     let mut last_persist_sig: Option<(u64, usize, bool, u64)> = None;
@@ -190,6 +205,42 @@ async fn native_room_loop(
                 outbound,
                 reply,
             } => {
+                // NC09 惰性缺席回收：本次入座若会因满员失败，先回收最久未活动的过期成员。
+                if seat_timeout_secs > 0 && reconnect_token.is_none() {
+                    let idle = std::time::Duration::from_secs(seat_timeout_secs);
+                    let now = std::time::Instant::now();
+                    let occupied = members
+                        .values()
+                        .filter(|m| m.role == ClientRole::Player)
+                        .count();
+                    if occupied >= session.max_seats() as usize {
+                        let victim = members
+                            .values()
+                            .filter(|m| m.role == ClientRole::Player)
+                            .min_by_key(|m| m.last_seen)
+                            .map(|m| (m.connection_id, m.seat, m.last_seen));
+                        if let Some((conn, seat, seen)) = victim {
+                            if now.duration_since(seen) >= idle {
+                                members.remove(&conn);
+                                session.reclaim_seat(conn);
+                                info!(room = id, conn, seat, "原生房间回收缺席座位（惰性超时）");
+                                persist_room(
+                                    &store,
+                                    id,
+                                    &room_password,
+                                    &session,
+                                    &mut last_persist_sig,
+                                );
+                                broadcast_roster_native(
+                                    id,
+                                    &members,
+                                    session.engine().outcome().is_some(),
+                                )
+                                .await;
+                            }
+                        }
+                    }
+                }
                 // 入座校验：输入密码 → 哈希 → 与运行期哈希比对（磁盘/内存均无明文）
                 if !room_password.is_empty()
                     && crate::native_room_store::password_hash(id, &pw) != room_password
@@ -200,6 +251,7 @@ async fn native_room_loop(
                 match session.join(connection_id, preferred_seat, reconnect_token) {
                     Ok(joined) => {
                         let m = NativeActorMember {
+                            last_seen: std::time::Instant::now(),
                             connection_id,
                             display_name,
                             player_id: joined.member.player_id,
@@ -236,6 +288,7 @@ async fn native_room_loop(
             } => {
                 let spec = session.spectate(connection_id);
                 let m = NativeActorMember {
+                    last_seen: std::time::Instant::now(),
                     connection_id,
                     display_name,
                     player_id: engine_api::PlayerId::NONE,
@@ -262,6 +315,9 @@ async fn native_room_loop(
                 idempotency_key,
                 reply,
             } => {
+                if let Some(m) = members.get_mut(&connection_id) {
+                    m.last_seen = std::time::Instant::now();
+                }
                 let Some(m) = members.get(&connection_id) else {
                     let _ = reply.send(Err("not in room".into()));
                     continue;

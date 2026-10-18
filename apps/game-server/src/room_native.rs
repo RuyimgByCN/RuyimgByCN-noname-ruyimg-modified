@@ -184,6 +184,22 @@ impl NativeRoomSession {
     }
 
     /// 断开（保留成员与令牌，供重连）。
+    /// 座位上限（NC09 惰性缺席回收判据）。
+    pub fn max_seats(&self) -> u8 {
+        self.max_seats
+    }
+
+    /// NC09 缺席座位回收：把某成员从名册与令牌表中**彻底移除**（座位释放）。
+    ///
+    /// 与 `disconnect` 的差别：`disconnect` 只清 outbound（保留座位与令牌，供重连），
+    /// 本方法用于「长时间缺席」的座位回收——**令牌随之失效**（调用方须先广播名册）。
+    /// 返回被移除的成员（不存在则 None）。
+    pub fn reclaim_seat(&mut self, connection_id: u64) -> Option<NativeMember> {
+        let m = self.members.remove(&connection_id)?;
+        self.by_token.remove(&m.reconnect_token);
+        Some(m)
+    }
+
     pub fn disconnect(&mut self, connection_id: u64) {
         if let Some(m) = self.members.get(&connection_id).cloned() {
             self.by_token.insert(m.reconnect_token.clone(), connection_id);
