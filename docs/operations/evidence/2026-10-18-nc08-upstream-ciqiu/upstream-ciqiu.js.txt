@@ -1,0 +1,41 @@
+ciqiu: {
+		trigger: { source: "damageBegin1" },
+		forced: true,
+		filter(event) {
+			return event.card && event.card.name === "sha" && event.player.isHealthy();
+		},
+		content() {
+			"step 0";
+			trigger.num++;
+			if (trigger.num >= trigger.player.hp) {
+				trigger.player.addTempSkill("ciqiu_dying");
+				player.removeSkill("ciqiu");
+			}
+		},
+		ai: {
+			effect: {
+				player(card, player, target) {
+					if (card.name === "sha" && target.isHealthy() && get.attitude(player, target) > 0) {
+						return [1, -2];
+					}
+				},
+			},
+		},
+	},
+	ciqiu_dying: {
+		trigger: { player: "dyingBegin" },
+		forced: true,
+		silent: true,
+		firstDo: true,
+		content() {
+			player.die();
+		},
+		popup: false,
+	},
+	duoqi: {
+		trigger: { global: "discardAfter" },
+		filter(event, player) {
+			if (_status.currentPhase === player) {
+				return false;
+			}
+			if (!player.storage.zhucheng || !player.storage.zhucheng.
