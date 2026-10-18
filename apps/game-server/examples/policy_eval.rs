@@ -84,6 +84,7 @@ fn main() {
             let t0 = std::time::Instant::now();
             let req = NativeGameRequest {
                 packages: vec![],
+generals: Vec::new(),
                 seed,
                 seats: 4,
                 max_steps,

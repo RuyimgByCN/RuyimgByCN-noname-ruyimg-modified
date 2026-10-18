@@ -201,6 +201,10 @@ pub struct NativeGameRequest {
     /// 参与建局的扩展包 id（空 = 纯标准目录）。
     #[serde(default)]
     pub packages: Vec<String>,
+    /// NC05 正式选将：按座位顺序给出武将名（空/缺省 = 保持建局随机装配）。
+    /// 走 `Engine::assign_general_named`（产品入口，非 `debug_grant`）。
+    #[serde(default)]
+    pub generals: Vec<String>,
     pub seed: u64,
     pub seats: u8,
     /// AI 驱动步数上限（0 = 只建局不驱动）。
@@ -286,6 +290,12 @@ pub fn create_native_game(
         .map_err(|err| format!("原生建局失败: {err:?}"))?;
     let catalog_cards = e.catalog().cards.len();
     let catalog_generals = e.catalog().general_count();
+
+    // NC05 正式选将（产品入口）：按座位顺序装配；失败整体报错。
+    for (seat, name) in req.generals.iter().enumerate() {
+        e.assign_general_named(seat as u8, name)
+            .map_err(|reason| format!("选将失败（座位 {seat} → {name}）: {reason:?}"))?;
+    }
 
     let mut steps = 0u64;
     let mut since_progress = 0u64;

@@ -38,6 +38,7 @@ fn t63_import_load_build_and_drive_with_extension() {
 
     let req = NativeGameRequest {
         packages: vec!["huanle-cards".into()],
+generals: Vec::new(),
         seed: 7301,
         seats: 3,
         max_steps: 600,
@@ -82,6 +83,7 @@ fn t13_generals_package_loads_via_native_path() {
 
     let req = NativeGameRequest {
         packages: vec!["wudian".into()],
+generals: Vec::new(),
         seed: 4242,
         seats: 4,
         max_steps: 0,
@@ -219,6 +221,7 @@ fn t63_standard_only_build_and_drive() {
         NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
     let req = NativeGameRequest {
         packages: vec![],
+generals: Vec::new(),
         seed: 7302,
         seats: 3,
         max_steps: 300,

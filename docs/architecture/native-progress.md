@@ -24,7 +24,7 @@
 | NC02 | **根因已修 + 7 项验收回归 + game-server 全量通过（2026-10-18）**；`-D warnings` 门禁被并行重构阻断 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；[证据](../operations/evidence/2026-10-18-nc02-install-identity/README.md) |
 | NC03 | **前端适配层切片（token/值分离、kind、rejected 暴露、目录守护）已修 + 回归已加；内核权威动作查询已实现（`legal_actions`/`probe_action`）+ 4 项回归（2026-10-18）**；前端接线（子 agent 进行中）、**AI 一致性回归已加**（规划动作须过权威校验；AI 因克隆校验代价 0.54 ms/候选暂不接线，登记待办）、协议共享、`events`/`hash_hex` 待续 | [统一原生 API](native-convergence-plan.md#nc03)；[前端证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)、[内核查询证据](../operations/evidence/2026-10-18-nc03-legal-actions/README.md) |
 | NC04 | **根因已修 + 3 项回归 + 全量通过（2026-10-18）**；挂起/非法效果/无效 token 等用例待补 | [VM 故障与事务](native-convergence-plan.md#nc04)；[证据](../operations/evidence/2026-10-18-nc04-vm-fault/README.md) |
-| NC05 | **产品级选将入口已实现（`general_candidates`/`assign_general`/`assign_general_named`）+ 4 项回归（2026-10-18）**；三类纵向案例全生命周期闭环、赛前大厅、双将明置、前端选将 UI、独立安装→卸载产品入口待续 | [独立扩展宿主](native-convergence-plan.md#nc05)；[选将入口证据](../operations/evidence/2026-10-18-nc05-general-select/README.md) |
+| NC05 | **选将入口（`general_candidates`/`assign_general`）+ 第一类纵向案例（重规则/嵌套选择：swd 包全生命周期闭环）已通过（2026-10-18）**；第二/三类案例、客户端/Worker 入口、赛前大厅、卸载后重新取得待续 | [独立扩展宿主](native-convergence-plan.md#nc05)；[选将入口证据](../operations/evidence/2026-10-18-nc05-general-select/README.md)、[第一类案例证据](../operations/evidence/2026-10-18-nc05-lifecycle-heavy/README.md) |
 | NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
 | NC07 | 待结构收敛 | [状态与持久化同源](native-convergence-plan.md#nc07)；与 NC06 逐职责迁移 |
 | NC08 | 待补齐原生门禁 | [规则与跨目标对照](native-convergence-plan.md#nc08)；贯穿迁移过程 |
@@ -41,6 +41,13 @@
 - 回归：新增 `apps/web-client/scripts/native-adapter.test.mjs`（三条反例 + 边界，7 项）与 `extension-inventory.test.mjs`（目录守护失败路径，3 项），`pnpm --dir apps/web-client test` 10/10 通过；冒烟新增真实 WASM 引擎的适配层 token 往返（提交 token 接受、提交候选值被拒）。
 - 实测：`typecheck` exit 0（修复前 exit 2）；`smoke:native` **15/15**（修复前 12/13，`extension_catalog_15` 硬编码 15 已改为按包数据推导的两个不变量）；`pnpm test` 10/10；`pnpm build` exit 0；行数门禁 8222 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)。
 - 待办：内核权威动作查询（含停止前端 `hand.slice(0,8)` 拼接 `PlayCard`/合成 `ResolveChoice`）；Rust↔TS 协议定义共享或自动校验；`events`/`hash_hex` 仍为空占位；真实 Worker 端到端与多选/取消/过期选择、大整数协议表示；客户端管理面仍只覆盖 15/41 个在盘包。
+
+### NC05 第一类案例核验（2026-10-18，规则 v321 / 存档 v105 未变）
+
+- 案例：`shahai-swd-upstream-noname`（505 宿主行为、含嵌套选择/多步机器）走**产品入口**全生命周期：安装 → 装载（安装副本为权威）→ **正式选将**（`NativeGameRequest.generals` → `assign_general_named`）→ 建局驱动 → 真实交互（`legal_actions` 取候选并提交）→ 存读档 → 升级/回退（固定内容锁不变）→ 重新激活后恢复。全程未用 `debug_grant`。
+- 产品接线：`NativeGameRequest` 新增 `generals: Vec<String>`（按座位顺序选将，失败整体报错）。
+- 实测：定向 1/1；game-server 全量 **57/0**；行数门禁 8232 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc05-lifecycle-heavy/README.md)。
+- 待办：第二/三类案例、客户端/Worker 与浏览器入口、产品会话上的多选/取消/过期选择与信息隔离、赛前大厅阶段、卸载后按锁重新取得；`-D warnings` 仍被 engine-core 并行重构阻断。
 
 ### NC05 选将入口核验（2026-10-18，规则 v321 / 存档 v105 未变）
 
