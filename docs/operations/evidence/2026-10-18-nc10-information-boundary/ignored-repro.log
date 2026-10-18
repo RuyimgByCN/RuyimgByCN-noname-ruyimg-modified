@@ -1,0 +1,3 @@
+thread 'planner_is_invariant_under_hidden_information' (19748049) panicked at crates/engine-native/tests/nc10_ai_information_boundary.rs:141:13:
+assertion `left == right` failed: seed=42022 warm=9 seat=1：规划结果依赖了隐藏信息
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.05s
