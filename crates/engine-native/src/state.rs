@@ -1433,6 +1433,25 @@ impl GameStateCore {
                 _ => 0,
             })
             .sum();
+        // 撷芳（L27 选将美化批 1，`xiefang`）：锁定——你计算与其他角色的
+        // 距离 -（场上存活**女性**角色数；上游 mod.globalFrom distance -
+        // countPlayer(hasSex('female')) 同口径；下限 1 由末尾钳制）
+        let xiefang_minus = if catalog
+            .skill_by_name(crate::content::host::L27_XIEFANG_KEY)
+            .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
+            .unwrap_or(false)
+        {
+            (0..self.players.len() as u8)
+                .filter(|p| {
+                    self.player(*p).alive
+                        && self.effective_gender(*p)
+                            == crate::content::standard::Gender::Female
+                })
+                .count() as u32
+        } else {
+            0
+        };
+        let minus = minus + xiefang_minus;
         let total = (base + plus).saturating_sub(minus) as i32 + mailun_delta;
         total.max(1) as u32
     }

@@ -1,0 +1,20 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/选将美化/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "pack": {
+    "name": "select-beautify-upstream-liuli",
+    "version": 1,
+    "description": "G1 转换：上游选将美化首批（撷芳）",
+    "card_prefix": "sb_"
+  },
+  "cards": [],
+  "skills": [
+    { "name": "xiefang", "mapping": "host:xiefang" }
+  ],
+  "generals": [],
+  "deferred": [
+    { "name": "select_ui", "reason": "选将 UI 主面混淆（_0x 标识符 17844 次/唯一 2178 + 字符串表）——仅登记可观测接口" },
+    { "name": "skill_batch_rest", "reason": "其余 41 个在用技能待批次实施（G0 见 evidence/2026-10-17-l27-select-beautify-g0）" }
+  ]
+}

@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 撷芳（tag 517，L27 选将美化批 1，`xiefang`）：锁定——距离 -存活女性
+    /// 数（内联于 `computed_distance`）；并在死亡/摸牌阶段结束时刷新
+    /// 「女性数」标记（0 时移除）。
+    Xiefang,
     /// 让节（tag 516，史诗卡牌批 2，`rangjie`）：自己受到伤害后可选（按
     /// 伤害点数逐次）——「获得牌」（摸 1 + 从牌堆取一张指定类型牌）或
     /// 「移动牌」（把场上可见区一张牌移到一名角色处）或取消。
@@ -1823,6 +1827,7 @@ impl HostBehavior {
             HostBehavior::Gongxin => 514,
             HostBehavior::Reguhuo => 515,
             HostBehavior::Rangjie => 516,
+            HostBehavior::Xiefang => 517,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2579,6 +2584,7 @@ impl HostBehavior {
             514 => HostBehavior::Gongxin,
             515 => HostBehavior::Reguhuo,
             516 => HostBehavior::Rangjie,
+            517 => HostBehavior::Xiefang,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2599,7 +2605,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 512] = [
+        pub const ALL: [HostBehavior; 513] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3112,6 +3118,7 @@ impl HostBehavior {
         HostBehavior::Gongxin,
         HostBehavior::Reguhuo,
         HostBehavior::Rangjie,
+        HostBehavior::Xiefang,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3386,6 +3393,7 @@ impl HostBehavior {
             HostBehavior::Gongxin => "host:gongxin",
             HostBehavior::Reguhuo => "host:reguhuo",
             HostBehavior::Rangjie => "host:rangjie",
+            HostBehavior::Xiefang => "host:xiefang",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3864,6 +3872,14 @@ impl HostBehavior {
                 priority: 0,
                 optional: true,
                 extra_events: Vec::new(),
+            }),
+            // 撷芳：全局死亡结束 / 摸牌阶段结束（锁定）
+            HostBehavior::Xiefang => Some(TriggerMeta {
+                event: EventKind::PhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::Death],
             }),
             // 让节：自己受到伤害后（可选）
             HostBehavior::Rangjie => Some(TriggerMeta {
@@ -6312,6 +6328,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 撷芳（L27 选将美化批 1）：目录技能名（距离 -存活女性数 + 女性数标记）。
+pub const L27_XIEFANG_KEY: &str = "xiefang";
+
 /// 让节（史诗卡牌批 2）：目录技能名（受伤后获得指定类型牌/移动场上牌）。
 pub const EPIC_RANGJIE_KEY: &str = "rangjie";
 
@@ -7552,6 +7571,7 @@ impl HostSkillBehavior {
             HostBehavior::Gongxin => (None, None),
             HostBehavior::Reguhuo => (None, None),
             HostBehavior::Rangjie => (None, None),
+            HostBehavior::Xiefang => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7891,6 +7911,14 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
             HostBehavior::Gongxin => false,
+            // 撷芳：死亡事件（任意角色）或**自己的**摸牌阶段结束
+            HostBehavior::Xiefang => match event {
+                EventData::Death { .. } => true,
+                EventData::Phase { player, phase: crate::event::Phase::Draw, begin: false } => {
+                    *player == owner
+                }
+                _ => false,
+            },
             // 让节：自己为该伤害承受者且未防止
             HostBehavior::Rangjie => matches!(event,
                 EventData::Damage(d) if d.target == owner && !d.prevented),
@@ -21428,6 +21456,27 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 撷芳：刷新「存活女性数」标记（0 时清除）
+            HostBehavior::Xiefang => {
+                let count = (0..ctx.core.players.len() as PlayerId)
+                    .filter(|p| {
+                        ctx.core.player(*p).alive
+                            && ctx.core.effective_gender(*p)
+                                == crate::content::standard::Gender::Female
+                    })
+                    .count() as i32;
+                let def = ctx
+                    .catalog
+                    .skill_by_name(L27_XIEFANG_KEY)
+                    .map(u32::from)
+                    .unwrap_or_default();
+                if count > 0 {
+                    ctx.core.vm_aux.marks.insert((self.owner, def), count);
+                } else {
+                    ctx.core.vm_aux.marks.remove(&(self.owner, def));
+                }
+                Flow::Done
+            }
             // 让节：按伤害点数逐次——获得牌（摸 1 + 牌堆取指定类型）或移动牌
             HostBehavior::Rangjie => match self.stage {
                 HostStage::Act => {
