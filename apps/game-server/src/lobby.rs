@@ -562,6 +562,8 @@ fn map_room_err(e: &str) -> HandlerError {
         "unauthorized" => HandlerError::new(ErrorCode::Unauthorized, "bad password"),
         "room full" | "seat taken" => HandlerError::new(ErrorCode::RoomFull, e),
         "not in room" => HandlerError::new(ErrorCode::NotInRoom, e),
-        _ => HandlerError::new(ErrorCode::Internal, "room error"),
+        // NC09/NC12：未知房间错误**带上原文**（此前统一成 "room error"，联机排障时看不到原因；
+        // 已用 RTT 探针复现过「只看到 room error」的情况，见 2026-10-18-nc12-online-rtt 证据）。
+        _ => HandlerError::new(ErrorCode::Internal, format!("room error: {e}")),
     }
 }

@@ -67,7 +67,7 @@ console.log("STEP hello ok");
 const created = waitFor((m) => m.type === "JoinOk");
 send("CreateRoom", { players: 2, seed: 20262800, password: "" });
 const join = await created;
-const roomId = join.payload?.session?.room_id ?? join.payload?.room_id ?? 0;
+let roomId = join.payload?.session?.room_id ?? join.payload?.room_id ?? 0;
 console.log("STEP room " + roomId);
 
 function pct(samples, p) {
@@ -132,27 +132,27 @@ socket2.send(
 const j2 = await joined2;
 console.log("STEP join2 " + j2.type);
 
-// 原生房间在建房时即开局（不需要 StartGame）；此处保留一次探测以记录服务端答复
-// 说明：若本步报错，仅表示原生会话不支持 StartGame 形态，不影响后续命令测量。
-const started = waitFor((m) => m.type === "CommandOutcome" || m.type === "Error");
-send("SubmitCommand", {
-  header: { protocol_version: 1, room_id: roomId, conn_seq: 1, revision: 0 },
-  command: {
-    actor: 1,
-    expected_revision: 0,
-    idempotency_key: 1000,
-    kind: { StartGame: { player_count: 4, rng_seed: 20262800, ruleset: "" } },
-  },
-  idempotency_key: 1000,
-});
-const startMsg = await started;
-console.log("STEP startgame " + startMsg.type + " " + JSON.stringify(startMsg.payload ?? {}).slice(0, 160));
-
+// 原生房间**建局即开局**，无需 StartGame（发送会因座位数不一致被拒）。
+// 每 4 条命令换一个新房间：避免对局进入需要 `ResolveChoice` 的阶段（本探针只测
+// 「提交 → 回包」往返，不模拟选择应答）；换房后仍走完整 WS 往返，不引入额外等待。
 const rtts = [];
 let revision = 0;
 let accepted = 0;
 let rejected = 0;
+let roomSeq = 0;
 for (let i = 0; i < iters; i++) {
+  if (i > 0 && i % 4 === 0) {
+    const again = waitFor((m) => m.type === "JoinOk" || m.type === "Error");
+    send("CreateRoom", { players: 2, seed: 20262800 + i, password: "" });
+    const j = await again;
+    roomSeq += 1;
+    // 新房间号必须更新：否则后续命令仍打到旧房间（会被拒）
+    roomId = j.payload?.session?.room_id ?? j.payload?.room_id ?? roomId;
+    if (j.type === "Error") {
+      console.log("STEP recreate_error " + JSON.stringify(j.payload ?? {}).slice(0, 160));
+    }
+    revision = 0;
+  }
   const outcome = waitFor((m) => m.type === "CommandOutcome" || m.type === "Error");
   const header = { protocol_version: 1, room_id: roomId, conn_seq: i + 1, revision };
   const t0 = process.hrtime.bigint();
@@ -162,19 +162,20 @@ for (let i = 0; i < iters; i++) {
       actor: 1,
       expected_revision: revision,
       idempotency_key: i + 1,
-      kind: { EndPhase: {} },
+      kind: "EndPhase", // 单元变体：serde 外部标签枚举用字符串（{EndPhase:{}} 会 BadMessage）
     },
     idempotency_key: i + 1,
   });
   const msg = await outcome;
   const dt = Number(process.hrtime.bigint() - t0);
-  rtts.push(dt);
   const result = msg.payload?.result ?? {};
+  // 只把**被接受**的命令计入时延（被拒命令走快速失败路径，不是本指标口径）
+  if (result.Accepted) rtts.push(dt);
   if (result.Accepted) accepted += 1;
   else {
     rejected += 1;
     if (rejected === 1) {
-      console.log("STEP first_rejection " + JSON.stringify(result).slice(0, 220));
+      console.log("STEP first_non_accepted " + JSON.stringify(msg).slice(0, 260));
     }
   }
   revision = msg.payload?.header?.revision ?? revision;
