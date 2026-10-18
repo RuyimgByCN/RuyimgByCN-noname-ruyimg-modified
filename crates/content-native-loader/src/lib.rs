@@ -42,6 +42,7 @@ mod omnisearch;
 mod shousha;
 mod shousha_mvp;
 mod sj_settings;
+mod thunder;
 mod longxue;
 mod update_guard;
 pub use coin::{
@@ -114,6 +115,7 @@ pub use shousha::{
     apply_shousha, apply_shousha_line, format_report, parse_shousha_config, CharacterIn,
     CharacterOut, ShoushaConfig, ShoushaError, ShoushaReport, ShoushaRequest, SkillIn, SkillOut,
 };
+pub use thunder::*;
 pub use sj_settings::{
     apply_external, apply_sj_commands, boot, catalog_mark, choose_download, classify_fault,
     compare_version, decode_text, decode_uri, encode_text, eval_update_script, filter_downloads,

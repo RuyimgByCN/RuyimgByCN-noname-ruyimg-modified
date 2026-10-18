@@ -1,0 +1,16 @@
+{
+  "source": "noname-liuli",
+  "upstream_path": "noname/extension/雷霆万钧/extension.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "gameSpeed": 4,
+  "replaceCha": true,
+  "hidePack": true,
+  "forbidSame": false,
+  "UIpatch": true,
+  "jinyu": true,
+  "shhbiaoji": true,
+  "shh_new": false,
+  "jiufatext": true,
+  "guanning": false,
+  "_note": "UI补丁/立绘/主题为渲染面（原生不迁移）；小游戏武将包内容待后续切片"
+}

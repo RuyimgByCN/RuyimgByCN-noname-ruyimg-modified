@@ -1,0 +1,4 @@
+     Running tests/thunder_loader.rs (target/debug/deps/thunder_loader-0b66e15af4fdaf13)
+test replace_plan_pairs_parallel_tables ... ok
+test mark_labels_follow_shh_new_switch ... ok
+test parses_config_and_speed_bounds ... ok
