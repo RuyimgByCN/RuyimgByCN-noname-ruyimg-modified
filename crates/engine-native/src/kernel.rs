@@ -2713,6 +2713,20 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                     } else {
                         0
                     };
+                    // 灭道（swd 批 152，规则 v321 同批）：摸牌阶段多摸
+                    // 「已损失体力」张（上游 miedao1 phaseDrawBegin
+                    // trigger.num += maxHp-hp 同口径）
+                    let miedao_draw = if ctx
+                        .catalog
+                        .skill_by_name(crate::content::host::SWD_MIEDAO_KEY)
+                        .map(|def| ctx.core.has_skill(player, def))
+                        .unwrap_or(false)
+                    {
+                        (ctx.core.player(player).max_hp as i32 - ctx.core.player(player).hp)
+                            .max(0) as usize
+                    } else {
+                        0
+                    };
                     // 脉轮（swd 批 137，规则 v316）：5=少摸一张、6=多摸一张
                     //（上游 mailun5/6 phaseDrawBegin trigger.num∓1 同口径）
                     let mailun_draw: i32 = match ctx.core.player(player).mailun_mode {
@@ -2724,7 +2738,7 @@ fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) 
                         as usize;
                     ctx.draw_cards(
                         player,
-                        base_draw + usize::from(lingshi_draw) + shenwei_draw,
+                        base_draw + usize::from(lingshi_draw) + shenwei_draw + miedao_draw,
                     );
                     // 拷贝栏（swd deferred 消解批 肯迪）：锁定——摸牌后额
                     // 外摸 1 并将一张手牌（确定性首张）置于牌堆顶（登记差

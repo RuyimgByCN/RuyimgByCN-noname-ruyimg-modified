@@ -2407,8 +2407,8 @@
     {
       "id": "T12-SWD-MOHUA2-PREREQ",
       "status": "open",
-      "description": "魔化（`mohua2`）前置四技：`jifeng`（✅ 批 150）/ `moyan`（✅ 批 151）/ `miedao`（组技两面）/ `swd_xiuluo`（定义待定位）；四技齐备后 `mohua2` 可落地（换将 + 技能重装配 + 回复 2 + 摸 2）。",
-      "notes": "2026-10-17 批 150：`jifeng` 已落地并验证（3 测）；其余三技待做；`swd_xiuluo` 在 swd.js 中未找到定义（需在其它角色文件定位或登记为外部依赖）。 批 151：moyan 已落地并验证（3 测）；剩 miedao、swd_xiuluo。",
+      "description": "魔化（`mohua2`）前置四技：`jifeng`（✅ 批 150）/ `moyan`（✅ 批 151）/ `miedao`（组技两面，✅ 批 152）/ `swd_xiuluo`（定义待定位）；四技齐备后 `mohua2` 可落地（换将 + 技能重装配 + 回复 2 + 摸 2）。",
+      "notes": "2026-10-17 批 150：`jifeng` 已落地并验证（3 测）；其余三技待做；`swd_xiuluo` 在 swd.js 中未找到定义（需在其它角色文件定位或登记为外部依赖）。 批 151：moyan 已落地并验证（3 测）；剩 miedao、swd_xiuluo。 批 152：miedao 已落地并验证（3 测）；仅剩 swd_xiuluo。",
       "done_when_evidence": "四技各自定向测试 + `mohua2` 换将装配测试 + 全量/装载/golden 复跑记录。"
     }
   ]

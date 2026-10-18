@@ -2044,6 +2044,10 @@
   {
    "name": "moyan",
    "mapping": "host:moyan"
+  },
+  {
+   "name": "miedao",
+   "mapping": "host:miedao"
   }
  ]
 }

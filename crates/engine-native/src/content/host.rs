@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 灭道（tag 511，swd 批 152，`miedao`）：组技两面——摸牌阶段多摸
+    /// 「已损失体力」张（内联于摸牌收束）；弃牌阶段须额外弃等量张（手/装备，
+    /// 强制）。
+    Miedao,
     /// 魔焰（tag 510，swd 批 151，`moyan`）：出牌阶段限一次——弃 N 张红色
     /// 手牌（N ≤ min(其他存活数, 体力上限-体力)），对 N 名其他角色各造成
     /// 1 点**火焰**伤害。
@@ -1795,6 +1799,7 @@ impl HostBehavior {
             HostBehavior::Kunlunjing => 507,
             HostBehavior::Jifeng => 509,
             HostBehavior::Moyan => 510,
+            HostBehavior::Miedao => 511,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2545,6 +2550,7 @@ impl HostBehavior {
             507 => HostBehavior::Kunlunjing,
             509 => HostBehavior::Jifeng,
             510 => HostBehavior::Moyan,
+            511 => HostBehavior::Miedao,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2565,7 +2571,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 506] = [
+        pub const ALL: [HostBehavior; 507] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3072,6 +3078,7 @@ impl HostBehavior {
         HostBehavior::Kunlunjing,
         HostBehavior::Jifeng,
         HostBehavior::Moyan,
+        HostBehavior::Miedao,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3340,6 +3347,7 @@ impl HostBehavior {
             HostBehavior::Kunlunjing => "host:kunlunjing",
             HostBehavior::Jifeng => "host:jifeng",
             HostBehavior::Moyan => "host:moyan",
+            HostBehavior::Miedao => "host:miedao",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3817,6 +3825,14 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 灭道·弃：自己弃牌阶段开始（锁定）
+            HostBehavior::Miedao => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 魔焰：出牌阶段主动（activate 分支；无触发时机）
@@ -6230,6 +6246,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 灭道（swd 批 152）：目录技能名（摸牌多摸/弃牌多弃「已损失体力」）。
+pub const SWD_MIEDAO_KEY: &str = "miedao";
+
 /// 魔焰（swd 批 151）：目录技能名（弃红牌对等量目标各 1 点火焰伤害）。
 pub const SWD_MOYAN_KEY: &str = "moyan";
 
@@ -7410,6 +7429,7 @@ impl HostSkillBehavior {
             HostBehavior::Kunlunjing => (None, None),
             HostBehavior::Jifeng => (None, None),
             HostBehavior::Moyan => (None, None),
+            HostBehavior::Miedao => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7748,6 +7768,11 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 灭道·弃：自己弃牌阶段开始且体力未满
+            HostBehavior::Miedao => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Discard, begin: true }
+                    if *player == owner)
+                && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32,
             HostBehavior::Moyan => false,
             // 疾风：自己使用【杀】或单目标锦囊且目标数 >1、未取消
             HostBehavior::Jifeng => match event {
@@ -21226,6 +21251,72 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 灭道·弃：强制弃「已损失体力」张（手/装备）
+            HostBehavior::Miedao => match self.stage {
+                HostStage::Act => {
+                    let gap = (ctx.core.player(self.owner).max_hp as i32
+                        - ctx.core.player(self.owner).hp)
+                        .max(0) as usize;
+                    let cards: Vec<CardId> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
+                        .copied()
+                        .collect();
+                    let need = cards.len().min(gap);
+                    if need == 0 {
+                        return Flow::Done;
+                    }
+                    self.cards = cards.iter().map(|c| u32::from(*c)).collect();
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "miedao_discard",
+                            options: cards.into_iter().map(ChoiceOption::Card).collect(),
+                            min: need,
+                            max: need,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked: Vec<CardId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Card(c) => Some(*c),
+                            _ => None,
+                        })
+                        .collect();
+                    if picked.is_empty() {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "灭道",
+                        owner: self.owner,
+                    });
+                    for c in picked {
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.discard_from_hand(self.owner, c);
+                        } else if ctx.core.player(self.owner).equips.contains(&c) {
+                            ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                c,
+                            );
+                            ctx.to_discard(c);
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 魔焰：选 N 张红牌 → 选恰 N 名其他角色 → 逐个 1 点火焰伤害
             HostBehavior::Moyan => match self.stage {
                 HostStage::Act => {
