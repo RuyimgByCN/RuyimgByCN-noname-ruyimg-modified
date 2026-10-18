@@ -26,8 +26,63 @@ pub struct BoundedPlanner {
     /// 对手最优应对）。T13 更强候选。
     pub lookahead_depth: u8,
     /// 策略变体：0 = 现状（仅杀候选 + 体力差评分）；1 = 更强候选
-    /// （全手牌候选 + 牌值/存活/护甲/装备评分）。T13 更强候选。
+    /// （全手牌候选 + 牌值/存活/护甲/装备评分）；2 = 变体 1 + **内容调参**
+    /// （L01 AI优化：按席位/技能威胁度加权）。T13 更强候选。
     pub policy_variant: u8,
+    /// 内容调参（L01 AI优化装载面）：`Some` 且变体 2 时参与评分。
+    pub content_tuning: Option<ContentTuning>,
+}
+
+/// L01 AI优化（noname-liuli）的参数消费面。
+///
+/// 由装载面（`content-native-loader::ai_tuning`）的配置映射而来：席位权重
+/// （由武将权重表或技能威胁度表解析）、技能威胁度表（供宿主按需查询）、
+/// `qzCf`（权重参与效益结算）。
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ContentTuning {
+    /// 席位权重（缺省 1.0）。调用方按武将/技能解析后注入。
+    pub seat_weights: Vec<(u8, f64)>,
+    /// 技能威胁度表（技能名 → 威胁度）。
+    pub skill_threat: Vec<(String, f64)>,
+    /// 权重参与效益结算（上游 `qzCf`）。
+    pub qz_cf: bool,
+}
+
+impl ContentTuning {
+    /// 席位权重（缺省 1.0；越界钳制到 `[0.1, 10.0]`）。
+    pub fn weight_of(&self, seat: u8) -> f64 {
+        self.seat_weights
+            .iter()
+            .find(|(s, _)| *s == seat)
+            .map(|(_, w)| w.clamp(0.1, 10.0))
+            .unwrap_or(1.0)
+    }
+
+    /// 技能集合的威胁度（取最大值；无记录 → 1.0）——对应装载面
+    /// `weight(..., QzMode::Threat)`。
+    pub fn threat_of_skills<'a>(&self, skills: impl IntoIterator<Item = &'a str>) -> f64 {
+        skills
+            .into_iter()
+            .filter_map(|s| {
+                self.skill_threat
+                    .iter()
+                    .find(|(k, _)| k == s)
+                    .map(|(_, v)| *v)
+            })
+            .fold(None, |acc: Option<f64>, v| {
+                Some(acc.map_or(v, |a| a.max(v)))
+            })
+            .unwrap_or(1.0)
+    }
+
+    /// 效益结算：`qzCf` 开启时「权重 × 结果」。
+    pub fn benefit(&self, weight: f64, value: f64) -> f64 {
+        if self.qz_cf {
+            weight * value
+        } else {
+            value
+        }
+    }
 }
 
 impl BoundedPlanner {
@@ -38,6 +93,7 @@ impl BoundedPlanner {
             cancel: std::sync::Arc::new(AtomicBool::new(false)),
             lookahead_depth: 1,
             policy_variant: 0,
+            content_tuning: None,
         }
     }
 
@@ -55,6 +111,12 @@ impl BoundedPlanner {
     /// 策略变体选择（T13 更强候选）：1 = 全手牌候选 + 牌值评分。
     pub fn with_policy_variant(mut self, variant: u8) -> Self {
         self.policy_variant = variant;
+        self
+    }
+
+    /// 注入内容调参（L01 AI优化装载面）；变体 2 时参与评分。
+    pub fn with_content_tuning(mut self, tuning: ContentTuning) -> Self {
+        self.content_tuning = Some(tuning);
         self
     }
 
@@ -306,6 +368,7 @@ fn policy_score(
     after: &crate::view::PlayerView,
     seat: u8,
     variant: u8,
+    tuning: Option<&ContentTuning>,
 ) -> i64 {
     let hp_of = |v: &crate::view::PlayerView, s: u8| v.players[s as usize].hp as i64;
     let enemy_hp = |v: &crate::view::PlayerView| -> i64 {
@@ -330,15 +393,23 @@ fn policy_score(
     let mut score = 8 * (me_a.hp as i64 - me_b.hp as i64)
         + 3 * (me_a.hand_count as i64 - me_b.hand_count as i64)
         + 4 * (me_a.equips.len() as i64 - me_b.equips.len() as i64);
+    // 变体 2：内容调参——敌方损失按**席位权重**加权（L01 AI优化）。
+    let weighted = variant >= 2;
     for (pb, pa) in base.players.iter().zip(after.players.iter()) {
         if pb.seat == seat {
             continue;
         }
-        score -= 8 * (pa.hp as i64 - pb.hp as i64);
-        score -= pa.hand_count as i64 - pb.hand_count as i64;
-        score -= 2 * (pa.equips.len() as i64 - pb.equips.len() as i64);
+        let w = if weighted {
+            tuning.map(|t| t.weight_of(pa.seat)).unwrap_or(1.0)
+        } else {
+            1.0
+        };
+        score -= (8.0 * w * (pa.hp as i64 - pb.hp as i64) as f64).round() as i64;
+        score -= (w * (pa.hand_count as i64 - pb.hand_count as i64) as f64).round() as i64;
+        score -= (2.0 * w * (pa.equips.len() as i64 - pb.equips.len() as i64) as f64).round()
+            as i64;
         if pb.alive && !pa.alive {
-            score += 24;
+            score += (24.0 * w).round() as i64;
         }
     }
     score
@@ -410,7 +481,13 @@ impl Engine {
                 continue; // 非法候选不计分
             }
             let after = trial.ai_session(seat).view();
-            let mut score = policy_score(&baseline_view, &after, seat, planner.policy_variant);
+            let mut score = policy_score(
+                &baseline_view,
+                &after,
+                seat,
+                planner.policy_variant,
+                planner.content_tuning.as_ref(),
+            );
             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
             if planner.lookahead_depth >= 2 && trial.outcome().is_none() {
@@ -445,7 +522,13 @@ impl Engine {
                             continue;
                         }
                         let v = t2.ai_session(seat).view();
-                        let s = policy_score(&baseline_view, &v, seat, planner.policy_variant);
+                        let s = policy_score(
+                            &baseline_view,
+                            &v,
+                            seat,
+                            planner.policy_variant,
+                            planner.content_tuning.as_ref(),
+                        );
                         if worst.map(|w| s < w).unwrap_or(true) {
                             worst = Some(s);
                         }
