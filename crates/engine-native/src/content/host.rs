@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 神弓（tag 506，swd deferred 消解批 148，`shengong`）：需要打出
+    /// 【闪】/【杀】时，可借用**其他角色**的防具/武器作为响应（上游
+    /// `chooseToRespondBegin` 借用装备；原生在响应窗追加借用候选）。
+    Shengong,
     /// 轩辕剑·伤增（tag 503，swd 批 146，`xuanyuanjian2`）：装备者造成
     /// 伤害时 +1 并转为雷属性（未横置伤害）。
     XuanyuanjianDamage,
@@ -1776,6 +1780,7 @@ impl HostBehavior {
             HostBehavior::XuanyuanjianDamage => 503,
             HostBehavior::XuanyuanjianBacklash => 504,
             HostBehavior::Xuanyuan => 505,
+            HostBehavior::Shengong => 506,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2522,6 +2527,7 @@ impl HostBehavior {
             503 => HostBehavior::XuanyuanjianDamage,
             504 => HostBehavior::XuanyuanjianBacklash,
             505 => HostBehavior::Xuanyuan,
+            506 => HostBehavior::Shengong,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2542,7 +2548,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 502] = [
+        pub const ALL: [HostBehavior; 503] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3045,6 +3051,7 @@ impl HostBehavior {
         HostBehavior::XuanyuanjianDamage,
         HostBehavior::XuanyuanjianBacklash,
         HostBehavior::Xuanyuan,
+        HostBehavior::Shengong,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3309,6 +3316,7 @@ impl HostBehavior {
             HostBehavior::XuanyuanjianDamage => "host:xuanyuanjian2",
             HostBehavior::XuanyuanjianBacklash => "host:xuanyuanjian3",
             HostBehavior::Xuanyuan => "host:xuanyuan",
+            HostBehavior::Shengong => "host:shengong",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3788,6 +3796,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 神弓：被动修饰（无触发时机；响应窗内联候选）
+            HostBehavior::Shengong => None,
             // 轩辕剑·伤增：装备者造成伤害前（锁定）
             HostBehavior::XuanyuanjianDamage => Some(TriggerMeta {
                 event: EventKind::DamageBefore,
@@ -6177,6 +6187,53 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 神弓（swd 批 148）：目录技能名（借用他人防具/武器响应）。
+pub const SWD_SHENGONG_KEY: &str = "shengong";
+
+/// 神弓借用候选（swd 批 148）：持有神弓的 `responder` 需要打出【闪】
+/// （want_shan=true，借他人**防具**）或【杀】（借他人**武器**）时，返回
+/// 其他角色对应装备栏的牌作为候选；否则空。
+pub fn shengong_borrow_options(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    want_shan: bool,
+) -> Vec<ChoiceOption> {
+    let Some(def) = ctx.catalog.skill_by_name(SWD_SHENGONG_KEY) else {
+        return Vec::new();
+    };
+    if !ctx.core.has_skill(responder, def) {
+        return Vec::new();
+    }
+    let want = if want_shan {
+        crate::catalog::EquipSlot::Armor
+    } else {
+        crate::catalog::EquipSlot::Weapon
+    };
+    let mut out = Vec::new();
+    for p in ctx.core.alive_players() {
+        if p == responder {
+            continue;
+        }
+        for c in ctx.core.player(p).equips.iter().copied() {
+            if ctx.catalog.card_slot_of(ctx.core, c) == Some(want) {
+                out.push(ChoiceOption::Card(c));
+            }
+        }
+    }
+    out
+}
+
+/// 借用的装备是否属于 `responder` 之外的角色（若是则返回其所有者）。
+pub fn shengong_borrowed_owner(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    card: CardId,
+) -> Option<PlayerId> {
+    ctx.core
+        .alive_players()
+        .find(|p| *p != responder && ctx.core.player(*p).equips.contains(&card))
+}
+
 /// 轩辕（swd 批 146）：目录技能名（结束阶段弃黑桃取【轩辕剑】）。
 pub const SWD_XUANYUAN_KEY: &str = "xuanyuan";
 
@@ -7257,6 +7314,7 @@ impl HostSkillBehavior {
             HostBehavior::XuanyuanjianDamage => (None, None),
             HostBehavior::XuanyuanjianBacklash => (None, None),
             HostBehavior::Xuanyuan => (None, None),
+            HostBehavior::Shengong => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7595,6 +7653,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            HostBehavior::Shengong => false,
             // 轩辕剑·伤增：自己是伤害来源且未横置伤害
             HostBehavior::XuanyuanjianDamage => matches!(event,
                 EventData::Damage(d)
@@ -21022,6 +21081,7 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            HostBehavior::Shengong => Flow::Done,
             // 轩辕剑·伤增：帧内 +1 并转雷属性、置标记
             HostBehavior::XuanyuanjianDamage => {
                 let frame = ctx.current_frame_id();

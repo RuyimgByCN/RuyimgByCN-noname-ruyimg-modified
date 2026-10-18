@@ -7440,7 +7440,13 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
             }
 
-            if shans.is_empty() || !ctx.core.player(self.target).alive {
+            // 神弓（swd 批 148）：借用他人防具也视为「可响应」——须在
+            // 「无闪直接命中」判定之前纳入
+            let shengong_borrow =
+                crate::content::host::shengong_borrow_options(ctx, self.target, true);
+            if (shans.is_empty() && shengong_borrow.is_empty())
+                || !ctx.core.player(self.target).alive
+            {
                 // 风雪刃（U05 swd 第十一批，规则 v95）：命中后可选择——
                 // 防止伤害，目标翻面并摸一张牌（上游 shaHit → unhurt +
                 // turnOver + draw；Confirm 可放弃则照常伤害）
@@ -7527,6 +7533,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 && !ctx.catalog.blocks_all_cards(ctx.core, self.target)
             {
                 options.extend(shans);
+                // 神弓（swd 批 148）：借用他人防具作为闪
+                options.extend(shengong_borrow);
             }
             return Flow::WaitChoice {
                 observer: self.target,
@@ -7573,11 +7581,24 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             let in_hand = ctx.core.player(self.target).hand.contains(&shan);
             if in_hand {
                 ctx.discard_from_hand(self.target, shan);
-            } else {
+            } else if ctx.core.player(self.target).equips.contains(&shan) {
                 ctx.core
                     .player_mut(self.target)
                     .equips
                     .retain(|x| *x != shan);
+                ctx.to_discard(shan);
+            } else if let Some(owner) =
+                crate::content::host::shengong_borrowed_owner(ctx, self.target, shan)
+            {
+                // 神弓借用（swd 批 148）：从所有者装备区取走并撤技
+                ctx.core.player_mut(owner).equips.retain(|x| *x != shan);
+                revoke_equip_skills(ctx.core, ctx.catalog, owner, shan);
+                ctx.to_discard(shan);
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "神弓",
+                    owner: self.target,
+                });
+            } else {
                 ctx.to_discard(shan);
             }
             ctx.emit(EventData::CardResponded {
@@ -8060,6 +8081,10 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 let mut options = vec![ChoiceOption::Pass];
                 if !ctx.catalog.blocks_all_cards(ctx.core, responder) {
                     options.extend(shas.into_iter().map(ChoiceOption::Card));
+                    // 神弓（swd 批 148）：借用他人武器作为杀
+                    options.extend(crate::content::host::shengong_borrow_options(
+                        ctx, responder, false,
+                    ));
                 }
                 return Flow::WaitChoice {
                     observer: responder,
@@ -9986,6 +10011,12 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
         let mut options = vec![ChoiceOption::Pass];
         if !ctx.catalog.blocks_all_cards(ctx.core, self.target) {
             options.extend(holders.into_iter().map(ChoiceOption::Card));
+            // 神弓（swd 批 148）：按需求牌种借用他人装备
+            options.extend(crate::content::host::shengong_borrow_options(
+                ctx,
+                self.target,
+                self.need == CardKind::Shan,
+            ));
         }
         Flow::WaitChoice {
             observer: self.target,
