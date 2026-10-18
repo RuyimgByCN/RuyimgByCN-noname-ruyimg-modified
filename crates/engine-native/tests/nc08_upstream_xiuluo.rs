@@ -57,6 +57,25 @@ fn answer(e: &mut Engine, pick: Vec<ChoiceOption>) {
     });
 }
 
+fn drain(e: &mut Engine) {
+    for _ in 0..64 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+}
+
 fn advance_to_judge_of(e: &mut Engine, seat: u8) {
     for _ in 0..24 {
         if e.turn().current == seat && e.turn().phase == Phase::Judge {
@@ -92,13 +111,139 @@ fn advance_to_judge_of(e: &mut Engine, seat: u8) {
     panic!("未到 {seat} 号判定阶段");
 }
 
-// 上游点 3+4（**未验收，登记**）：效果面「弃一张手牌 → 弃一张同花色判定牌」的三段询问机
-// 在测试夹具中未能稳定触发——推进到判定阶段起点的辅助函数会在同一次提交内既到达阶段
-// 又消费掉询问（`advance_to_judge_of` 的取消循环），需要改写为「按阶段逐步驱动 + 断点
-// 停在 xiuluo 询问」的夹具；本轮按证据不足处理，**不写成通过**。
-//
-// 已由源码核对（`content/host/step/skills_cards.rs:674-745`）：手牌询问 → 同花色过滤 →
-// 判定牌询问 → 双方离区；花色过滤与上游 `filterButton` 同口径。
+/// 上游点 3+4：效果面——**逐阶段驱动**（每步后检查是否出现 `xiuluo*` 询问，出现即停）。
+#[test]
+fn upstream_xiuluo_discards_matching_suit_judge_card() {
+    let mut e = swd_engine(20262901);
+    e.debug_grant(0, "swd_xiuluo");
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 布阵：0 号手牌一张黑桃【杀】（判定牌在**回到 0 号回合前**再放——首轮判定阶段
+    // 在授予技能之前就已开始，且判定区会被首轮结算清空）
+    let hand_spade = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 0, hand_spade);
+    let mut judge_spade = 0u32;
+    let mut judge_heart = 0u32;
+    let mut placed = false;
+
+    // 逐步推进：出现 xiuluo 询问即停（不取消它）
+    let mut found = None;
+    // 迭代上限含**选择处理**轮次（选择分支会 continue，不推进阶段）→ 放宽到 120
+    for _ in 0..120 {
+        if let Some(c) = e.open_choice().cloned() {
+            if c.spec.prompt.starts_with("xiuluo") {
+                found = Some(c);
+                break;
+            }
+            // 触发确认门（`trigger_confirm`）：**确认**（修罗是可选技，取消它就不会发动——
+            // 这正是此前夹具失败的根因）；其它询问取消/放弃
+            let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+                vec![ChoiceOption::Confirm]
+            } else if c.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else if c.spec.allow_cancel {
+                Vec::new()
+            } else {
+                c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+            };
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: sel },
+            });
+            continue;
+        }
+        // 0 号本轮判定阶段已结束（进入 Draw）→ 此时补放判定牌，可存活到**下一轮**判定阶段起点
+        if !placed && e.turn().current == 0 && e.turn().phase == Phase::Draw {
+            judge_spade = e.debug_place_judge(0, "le");
+            judge_heart = e.debug_place_judge(0, "shan");
+            placed = true;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+    }
+    eprintln!(
+        "DBG 循环结束：found={:?} placed={} turn={} phase={:?} judge0={:?} hand0={:?}",
+        found.as_ref().map(|c| c.spec.prompt.clone()),
+        placed,
+        e.turn().current,
+        e.turn().phase,
+        e.state_core().player(0).judge,
+        e.debug_hand(0)
+    );
+    let c = found.expect("应出现修罗手牌询问（准备/判定阶段起点）");
+    assert!(placed, "判定牌应在回到 0 号回合前补放成功");
+    assert_eq!(c.spec.prompt, "xiuluo_hand", "第一段应为手牌选择");
+    let hand_before = e.debug_hand(0).len();
+    let judge_before = e.state_core().player(0).judge.len();
+    // 选一张**与判定区某张牌同花色**的当前手牌（布阵期的牌可能已被首轮结算消耗）
+    let judge_now = e.state_core().player(0).judge.clone();
+    let catalog = e.catalog();
+    let pick = c
+        .spec
+        .options
+        .iter()
+        .filter_map(|o| match o {
+            ChoiceOption::Card(cd) => Some(*cd),
+            _ => None,
+        })
+        .find(|cd| {
+            judge_now
+                .iter()
+                .any(|j| catalog.cards[*j as usize].suit == catalog.cards[*cd as usize].suit)
+        })
+        .expect("手牌中应存在与判定牌同花色者");
+    let expected_judge: Vec<ChoiceOption> = judge_now
+        .iter()
+        .filter(|j| catalog.cards[**j as usize].suit == catalog.cards[pick as usize].suit)
+        .map(|j| ChoiceOption::Card(*j))
+        .collect();
+    // 询问 1：选手牌
+    let _ = e.submit(GameCommand {
+        actor: c.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c.id,
+            selection: vec![ChoiceOption::Card(pick)],
+        },
+    });
+    // 询问 2：只应出现**同花色**判定牌
+    let c2 = e.open_choice().cloned().expect("修罗判定牌询问");
+    assert_eq!(c2.spec.prompt, "xiuluo_judge", "第二段应为判定牌选择");
+    assert_eq!(
+        c2.spec.options, expected_judge,
+        "只允许同花色判定牌（上游 filterButton 同口径）"
+    );
+    let chosen_judge = expected_judge[0];
+    let _ = e.submit(GameCommand {
+        actor: c2.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer { choice_id: c2.id, selection: vec![chosen_judge] },
+    });
+    drain(&mut e);
+    assert_eq!(e.debug_hand(0).len(), hand_before - 1, "弃一张手牌");
+    let judge_after = e.state_core().player(0).judge.clone();
+    // 判定区数量受**判定阶段自身结算**影响（判定牌会被本阶段消耗）→ 只断言「所选判定牌已离开」
+    assert!(
+        judge_after.len() <= judge_before,
+        "判定区不应增加（判定阶段自身亦会消耗判定牌）：{judge_before} → {}",
+        judge_after.len()
+    );
+    if let ChoiceOption::Card(cj) = chosen_judge {
+        assert!(!judge_after.contains(&cj), "被弃的应是所选同花色判定牌");
+    }
+    let _ = (judge_spade, judge_heart);
+}
+
 /// 上游点 2（**登记差异**）：判定区有牌但**手牌为空**时——上游仍可发动，原生不触发。
 #[test]
 fn upstream_xiuluo_filter_difference_is_registered() {
