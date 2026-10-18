@@ -36,6 +36,7 @@ import {
 import BattleBoard from "../components/battle/BattleBoard.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
+import { outcomeText } from "../engine/outcome";
 
 const route = useRoute();
 const router = useRouter();
@@ -94,28 +95,6 @@ async function handleEnvelope(env: EngineEnvelope) {
         localClient.isNative() ? " · native" : ""
       }`;
   syncGeneralSelectProjection();
-}
-
-/// 终局胜负文案（NC09/NC12）：把视图下发的 `outcome` 映射为可读文本；
-/// 未知/未建模形态**如实显示原始 JSON**（不猜测语义）。
-function outcomeText(outcome: unknown): string {
-  if (outcome === null || outcome === undefined) return "胜负未知";
-  if (outcome === "finished") return "已结束（胜负类型未建模）";
-  if (typeof outcome === "object") {
-    const o = outcome as Record<string, unknown>;
-    if ("LoyalistWin" in o) return "主公方胜";
-    if ("RebelWin" in o) return "反贼胜";
-    if ("RenegadeWin" in o) return "内奸胜";
-    if ("SingleWin" in o) {
-      const p = (o.SingleWin as { player?: number } | null)?.player;
-      return p ? `单挑胜者 P${p}` : "单挑结束";
-    }
-    if ("GroupWin" in o) {
-      const g = (o.GroupWin as { group?: string } | null)?.group ?? "?";
-      return `势力胜（${g}）`;
-    }
-  }
-  return `已结束（${JSON.stringify(outcome)}）`;
 }
 
 /** 选将面板的座位投影跟随主视图更新（开局/读档/动作后都能看到技能刷新）。 */

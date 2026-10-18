@@ -100,3 +100,29 @@ RESULT scenario=browser_fullgame tier=web {"clicks":319,"final_revision":318,"en
 - [ ] 终局胜负与引擎 `outcome` 的**自动化一致性断言**（当前为人工读日志）
 - [ ] 固定种子可重复多局、浏览器长时负载、动画帧/输入响应
 - [ ] 移动（Android/iOS）与桌面（Tauri）档位；多浏览器；真实网络；旧线前端同口径完整对局
+
+## 7 文案映射**抽为模块 + 自动化断言**（2026-10-19 同轮）
+
+§6 的 `outcomeText` 原先内联在 `BattleView.vue`（无法单测）→ 抽为
+`apps/web-client/src/engine/outcome.ts`，并新增 `scripts/outcome-text.test.mjs`：
+
+| 断言 | 期望 |
+|---|---|
+| `{LoyalistWin:null}` / `{RebelWin:null}` / `{RenegadeWin:null}` | 主公方胜 / 反贼胜 / 内奸胜 |
+| `{SingleWin:{player:4}}` | 单挑胜者 P4 |
+| `{GroupWin:{group:"shu"}}` | 势力胜（shu） |
+| `"finished"` / `null` | 已结束（胜负类型未建模） / 胜负未知 |
+| **未知形态** `{SomethingNew:1}` | `已结束（{"SomethingNew":1}）`（**如实显示，不猜测语义**） |
+
+**结果**：客户端测试 **44 passed / 0 failed**（[client-tests.log](client-tests.log)，原 41 + 本 3）；
+`typecheck` exit 0；`vite build` exit 0；重建后浏览器整局复测：
+`319 次点击 / rev 319 / ended_marker=true / 控制台零错误`，终局行仍为「**终局 · 单挑胜者 P4 · rev 319**」
+（[fullgame-outcome2.log](fullgame-outcome2.log)）。
+
+### 仍未完成（更新）
+
+- [ ] **身份局端到端**：以身份局开局跑到终局并核对文案（本地开局为原型/单挑口径；
+      身份局需联机房间路径或新增身份局开局入口）
+- [ ] 引擎 `outcome` → 协议形态的**Rust 侧**自动化断言（当前 Rust 侧只有编译期映射，无断言测试）
+- [ ] 固定种子可重复多局、浏览器长时负载、动画帧/输入响应
+- [ ] 移动（Android/iOS）与桌面（Tauri）档位；多浏览器；真实网络；旧线前端同口径完整对局
