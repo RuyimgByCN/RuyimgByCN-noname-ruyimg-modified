@@ -173,3 +173,45 @@ AI_SIM_FAULT seat=1 redact_quiescent=false redact_stack=1 redact_parks=1 redact_
 
 > 教训（写入证据）：新增诊断**先查维护门禁**（`tests/maintenance_guards.rs`），生产源码只允许
 > 计数器/返回式诊断，输出与开关须留在测试或工具侧。
+
+## 9 最小复现：**确定性命中**（seed 44170 / 第 10 步 / 无懈窗口）（2026-10-19 同轮）
+
+新增两个测试文件（测试侧允许输出）：
+
+- `crates/engine-native/tests/nc12_dangling_reference_probe.rs`：按长程同参数（swd 档、4 座、
+  variant 0 / budget 8 / lookahead 1）扫描 seed 序列 → **命中**；
+- `crates/engine-native/tests/nc12_dangling_reference_repro.rs`：把命中局面固定为
+  **seed 44170，第 10 步**（seat 1 回答 choice 2），逐步打印现场。
+
+**命中现场**：
+
+```
+[repro] step=10 seat=1 命中 sim_faults=1
+[fault] rev=10 phase=Play turn=1 stack=1 parks=1 choice=Some((2, "nullify_window")) table=[161]
+[fault]   p0: hp=3/4 hand=[78, 152, 123, 144] equips=[] judge=[] off=[]
+[fault]   p1: hp=4/4 hand=[23, 15, 72, 10] ... p2 ... p3 ...
+[fault]   park[0] resume_depth=1 slot=Intrinsic { frame: 23 }
+         snapshot=NullifyWindow { card: 161, source: 1, nullified: false, queue: [1, 2, 3, 0],
+           asked: true, window_open: true, owns_disposal: true,
+           effect: Some(Host { def_key: "swd_zhongxinghujia", behavior: 228, stage: 0,
+             owner: 1, target: Some(0), card: Some(161), cards: [], targets: [] }) }
+```
+
+**判读（定位到具体机器）**：
+
+1. 故障发生在**无懈可击窗口**（`choice_id=2`，prompt `nullify_window`）的应答路径上；
+2. 挂起机器是 `NullifyWindow`，其内层效果为 **`swd_zhongxinghujia`**（swd 众星护甲，行为 228），
+   `owner=1`、`target=0`、`card=161`；
+3. panic 为 `card 93 not in hand of 0`，而现场 p0 手牌 = `[78,152,123,144]` → **93 已不在 p0 手牌**；
+4. 外层快照只持有 `card=161`，**93 出现在内层效果机器自身的阶段状态里** → 即
+   **该效果机器（或其窗口包装）跨窗口保留了会失效的手牌牌引用**。
+
+**下一步（明确、可执行）**：
+
+- [ ] 检查 `swd_zhongxinghujia` 效果机器（`content/host/step/*`，行为 228）在
+      `HostStage` 各阶段对牌 id 的持有方式：窗口期间牌被移动/弃置后，机器再次 `take_hand_card`
+      即 panic → 应改为「按需重查（重新解析目标手牌/弃牌堆）」或在使用前校验存在性并降级；
+- [ ] 修复后本复现用例（seed 44170）应保持 `faults == 0`，并重跑长程确认
+      `sim_faults` / `probe_faults` 归零；
+- [ ] 该文件属**未跟踪的 host 拆分目录**（`content/host/` 仍为 `??`）→ 修复需待其落定，
+      或与拆分作者协调后一并提交（登记）。

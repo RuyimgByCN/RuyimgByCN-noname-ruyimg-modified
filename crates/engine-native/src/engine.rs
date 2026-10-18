@@ -518,7 +518,7 @@ use apply_command::*;
 mod boss_campaign;
 mod general_select;
 mod hash;
-mod legal_actions;
+pub mod legal_actions;
 use hash::*;
 mod play_card;
 use play_card::*;
