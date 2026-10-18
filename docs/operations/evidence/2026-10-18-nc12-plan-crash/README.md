@@ -154,3 +154,22 @@ AI_SIM_FAULT seat=1 redact_quiescent=false redact_stack=1 redact_parks=1 redact_
       「p0 手牌 4 张、table=[161]、某机器引用 93」），定位是哪台机器/哪条路径把 93 移出手牌却保留引用；
 - [ ] 修复后重跑长程，确认 `sim_faults`/`probe_faults` 归零；
 - [ ] 该缺陷同时解释了此前「长程崩溃」与两处防护的必要性（防护保留：真实提交仍硬失败）。
+
+## 8 合规修正：诊断输出不得进入生产源码（2026-10-19 同轮）
+
+§7 的现场切片曾以 `eprintln!` + `NONAME_AI_FAULT_DUMP` 环境开关实现 → **被仓库既有维护门禁
+拦下**（`crates/engine-native/tests/maintenance_guards.rs::production_sources_have_no_debug_output_or_env_switches`
+禁止生产源码出现 `println!`/`eprintln!`/`env::var(`）。
+
+**处置**：移除生产源码中的诊断输出与环境开关；诊断信息改由**计数器**承载：
+
+- `Plan.sim_faults`（模拟提交被捕获的 panic 数）；
+- `legal_actions::probe_faults()`（候选探测被捕获的 panic 数）；
+- `ai::redact_last_state()`（最近一次遮蔽的静止态判据，纯 getter、无输出）。
+
+现场切片内容（§7 引用）来自**修正前**的运行日志，仍作为诊断证据保留（其结论不依赖输出形式）。
+
+**回归**：`maintenance_guards` 通过；全量 **1184 passed / 0 failed / 2 ignored**。
+
+> 教训（写入证据）：新增诊断**先查维护门禁**（`tests/maintenance_guards.rs`），生产源码只允许
+> 计数器/返回式诊断，输出与开关须留在测试或工具侧。

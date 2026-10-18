@@ -548,32 +548,12 @@ impl Engine {
                 Ok(out) => out,
                 Err(_) => {
                     sim_faults = sim_faults.saturating_add(1);
-                    // NC12 根因诊断：把故障现场的状态切片写到 stderr（默认 hook 已打印
-                    // panic 文本）；`NONAME_AI_FAULT_DUMP=0` 可关闭。
-                    if std::env::var("NONAME_AI_FAULT_DUMP").map(|v| v != "0").unwrap_or(true) {
-                        let core = trial.state_core();
-                        let shape: String = core
-                            .players
-                            .iter()
-                            .enumerate()
-                            .map(|(i, p)| {
-                                format!(
-                                    "p{i}:hp={}/{} hand={:?} equips={:?} judge={:?} off={:?}",
-                                    p.hp, p.max_hp, p.hand, p.equips, p.judge, p.off_court
-                                )
-                            })
-                            .collect::<Vec<_>>()
-                            .join(" | ");
-                        let (q, st, pk, ch) = redact_last_state();
-                        eprintln!(
-                            "AI_SIM_FAULT seat={seat} redact_quiescent={q} redact_stack={st} redact_parks={pk} redact_choice={ch} rev={} phase={:?} action={action:?} table={:?} deck_len={} discard_len={} {shape}",
-                            trial.revision(),
-                            trial.turn().phase,
-                            core.table,
-                            core.deck.len(),
-                            core.discard.len(),
-                        );
-                    }
+                    // 说明（2026-10-19）：现场切片诊断代码已按仓库维护门禁
+                    // （`maintenance_guards::production_sources_have_no_debug_output_or_env_switches`
+                    // 禁止生产源码出现 println!/eprintln!/env::var）**移除**；
+                    // 诊断信息改由 `sim_faults`（本函数）与 `legal_actions::probe_faults()`
+                    // 计数承载，现场比对结论见
+                    // docs/operations/evidence/2026-10-18-nc12-plan-crash/README.md §7。
                     continue; // 模拟故障候选不计分
                 }
             };
