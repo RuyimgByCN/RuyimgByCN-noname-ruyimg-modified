@@ -115,3 +115,57 @@ fn nc09_bridge_out_of_range_seat_is_empty() {
     let actions = legal_actions_for(&e, ApiPlayerId::new(99));
     assert!(actions.is_empty(), "越界座位不得给出候选");
 }
+
+/// NC09 投影字段：`character_def`/`identity`/`known_cards`/`outcome` 的真实映射。
+#[test]
+fn nc09_bridge_maps_character_identity_cards_and_outcome() {
+    // 身份局（投影含身份面）；标准目录即可（选将用标准武将）
+    let mut e = engine_native::Engine::new_identity(20261910, 4);
+    let general = e
+        .general_candidates()
+        .into_iter()
+        .filter_map(|d| e.catalog().general_meta(d).map(|m| (d, m.0)))
+        .find(|(_, name)| !name.is_empty())
+        .expect("标准武将");
+    e.assign_general_named(0, general.1).expect("选将");
+
+    let snap = observer_snapshot_for(&e, RoomRole::Player, Some(ApiPlayerId::new(1)));
+    let seat0 = snap.seats.iter().find(|s| s.seat.0 == 0).expect("座位 0");
+    assert_eq!(
+        seat0.character_def, general.0 as u32,
+        "character_def 应为主将槽 def（选将后非 0）"
+    );
+    // identity：本人可见
+    assert!(
+        seat0.identity.is_some(),
+        "本人身份应可见（身份局）；当前为 {:?}",
+        seat0.identity
+    );
+    // known_cards：本人手牌可见、他人手牌不进入
+    assert_eq!(
+        snap.known_cards.len(),
+        e.debug_hand(0).len(),
+        "known_cards 应等于本人手牌数"
+    );
+    assert!(
+        snap.known_cards.iter().all(|c| c.zone == engine_api::CardZoneTag::Hand),
+        "known_cards 仅含手牌区"
+    );
+    // 观战者：无身份（非本人/非主公/未死亡者）、无 known_cards
+    let spec = observer_snapshot_for(&e, RoomRole::Spectator, None);
+    assert!(spec.known_cards.is_empty(), "观战者无 known_cards");
+    let spec_seat1 = spec.seats.iter().find(|s| s.seat.0 == 1).expect("座位 1");
+    assert!(
+        spec_seat1.identity.is_none(),
+        "观战者对存活非主公他人不可见身份"
+    );
+    // 主公（座位 0）身份公开
+    let spec_seat0 = spec.seats.iter().find(|s| s.seat.0 == 0).expect("座位 0");
+    assert!(
+        matches!(spec_seat0.identity, Some(engine_api::IdentityTag::Lord)),
+        "主公身份公开：{:?}",
+        spec_seat0.identity
+    );
+    // outcome：未终局 → InProgress
+    assert!(matches!(snap.outcome, engine_api::MatchOutcome::InProgress));
+}

@@ -14,8 +14,8 @@
 //! - 摘要：`Engine::state_hash`（规范摘要）逐字节带上，供客户端比对修订。
 
 use engine_api::{
-    LegalAction, MatchOutcome, ObserverKind, ObserverSnapshot, PlayerId as ApiPlayerId, SeatView,
-    SkillId, SkillView, TurnPhaseTag,
+    CardKindTag, CardView, CardZoneTag, IdentityTag, LegalAction, MatchOutcome, ObserverKind,
+    ObserverSnapshot, PlayerId as ApiPlayerId, SeatView, SkillId, SkillView, TurnPhaseTag,
 };
 use engine_native::view::{HandView, PlayerView};
 use engine_native::{Engine, GameAction};
@@ -29,6 +29,76 @@ pub enum RoomRole {
     Spectator,
     /// 裁判（完整信息角色；原生投影仍不暴露他人手牌内容）。
     Referee,
+}
+
+/// 身份可见性：本人、主公、已死亡者可见（与内核 `view_for` 同口径）；其余 None。
+fn identity_tag_for(engine: &Engine, viewer: Option<ApiPlayerId>, seat: u8) -> Option<IdentityTag> {
+    let roles = engine.state_core().identity_roles()?;
+    let role = roles.get(seat as usize)?;
+    let is_self = viewer.map(|v| v.raw().saturating_sub(1) as u8 == seat).unwrap_or(false);
+    let dead = !engine.state_core().player(seat).alive;
+    if !(is_self || *role == engine_native::state::Role::Lord || dead) {
+        return None;
+    }
+    Some(match role {
+        engine_native::state::Role::Lord => IdentityTag::Lord,
+        engine_native::state::Role::Loyalist => IdentityTag::Loyalist,
+        engine_native::state::Role::Rebel => IdentityTag::Rebel,
+        engine_native::state::Role::Traitor => IdentityTag::Renegade,
+    })
+}
+
+/// 观察者授权可见的牌：本人手牌（他人手牌仅数量，不进入 known_cards）。
+///
+/// 协议 `CardView` 只暴露**公开规则类别**（`CardKindTag`），不含具体牌种码：
+/// 未在协议枚举中建模的牌种 → `CardKindTag::Other`（**不猜测**）。
+fn known_cards_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Vec<CardView> {
+    let Some(seat) = seat else {
+        return Vec::new();
+    };
+    let native_seat = seat.raw().saturating_sub(1) as u8;
+    if native_seat as usize >= engine.state_core().players.len() {
+        return Vec::new();
+    }
+    let catalog = engine.catalog();
+    engine
+        .state_core()
+        .player(native_seat)
+        .hand
+        .iter()
+        .map(|c| {
+            let kind = catalog.card_kind(*c);
+            CardView {
+                id: engine_api::CardId::new(*c as u32),
+                def: Some(kind_code_u32(kind)),
+                suit: None,
+                rank: None,
+                owner: Some(seat),
+                zone: CardZoneTag::Hand,
+                kind: kind_tag(kind),
+            }
+        })
+        .collect()
+}
+
+/// 原生牌种 → 协议公开规则类别（未建模者 `Other`，不猜测）。
+fn kind_tag(kind: engine_native::catalog::CardKind) -> CardKindTag {
+    use engine_native::catalog::CardKind as K;
+    match kind {
+        K::Sha => CardKindTag::Sha,
+        K::Tao => CardKindTag::Tao,
+        K::Shan => CardKindTag::Shan,
+        K::Jiu => CardKindTag::Jiu,
+        K::FireSha => CardKindTag::ShaFire,
+        K::LeiSha => CardKindTag::ShaThunder,
+        _ => CardKindTag::Other,
+    }
+}
+
+/// 牌种码（仅用于 `CardView.def` 的稳定标识）：取牌种在目录枚举中的序号。
+fn kind_code_u32(kind: engine_native::catalog::CardKind) -> u32 {
+    // `CardKind` 是 `#[repr(u16)]` 风格枚举：用 `as u16` 得到稳定序号
+    kind as u16 as u32
 }
 
 /// 原生 `Phase` → 协议 `TurnPhaseTag`。
@@ -63,7 +133,13 @@ pub fn observer_snapshot_for(
         .iter()
         .map(|cell| SeatView {
             player: ApiPlayerId::new(cell.seat as u32 + 1),
-            character_def: 0,
+            // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
+            character_def: engine
+                .state_core()
+                .player(cell.seat)
+                .general_slots[0]
+                .map(|d| d as u32)
+                .unwrap_or(0),
             seat: engine_api::SeatIndex::new(cell.seat),
             hp: cell.hp,
             max_hp: cell.max_hp,
@@ -74,7 +150,8 @@ pub fn observer_snapshot_for(
                 HandView::Own(cards) => cards.len() as u32,
                 HandView::Hidden => cell.hand_count as u32,
             },
-            identity: None,
+            // 身份可见性：本人、主公（公开）与已死亡者（遗言公开）可见；其余为 None
+            identity: identity_tag_for(engine, seat, cell.seat),
             // 技能：按名字回查目录定义 id（协议 `SkillView` 需要 def id）
             skills: cell
                 .skills
@@ -102,12 +179,30 @@ pub fn observer_snapshot_for(
     let outcome = match engine.outcome() {
         None => MatchOutcome::InProgress,
         Some(o) => match o.winner {
-            engine_native::Winner::Player(p) => {
-                // 座位 → 玩家 id（1 基）；身份局语义待 NC09 接线时按模式映射
-                let _ = p;
+            // 原型/单挑：唯一存活者
+            engine_native::Winner::Player(p) => MatchOutcome::SingleWin {
+                player: ApiPlayerId::new(p as u32 + 1),
+            },
+            engine_native::Winner::LordSide => MatchOutcome::LoyalistWin,
+            engine_native::Winner::Rebels => MatchOutcome::RebelWin,
+            engine_native::Winner::Traitor => {
+                // 内奸胜：取仍存活的座位（通常唯一）
+                let renegade = (0..engine.state_core().players.len() as u8)
+                    .find(|s| engine.state_core().player(*s).alive)
+                    .unwrap_or(0);
+                MatchOutcome::RenegadeWin {
+                    player: ApiPlayerId::new(renegade as u32 + 1),
+                }
+            }
+            engine_native::Winner::Faction(f) => MatchOutcome::GroupWin {
+                group: format!("{f:?}").to_lowercase(),
+            },
+            engine_native::Winner::Versus(_)
+            | engine_native::Winner::Doudizhu { .. }
+            | engine_native::Winner::Boss { .. } => {
+                // 协议枚举无对应项：**不猜测**，保持 InProgress 并在证据中登记
                 MatchOutcome::InProgress
             }
-            _ => MatchOutcome::InProgress,
         },
     };
     ObserverSnapshot {
@@ -118,7 +213,7 @@ pub fn observer_snapshot_for(
         current_player: ApiPlayerId::new(view.turn as u32 + 1),
         phase: phase_tag(view.phase),
         seats,
-        known_cards: Vec::new(),
+        known_cards: known_cards_for(engine, seat),
         outcome,
     }
 }
