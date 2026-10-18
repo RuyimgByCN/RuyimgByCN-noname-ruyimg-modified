@@ -152,21 +152,37 @@ pub fn observer_snapshot_for(
             },
             // 身份可见性：本人、主公（公开）与已死亡者（遗言公开）可见；其余为 None
             identity: identity_tag_for(engine, seat, cell.seat),
-            // 技能：按名字回查目录定义 id（协议 `SkillView` 需要 def id）
+            // 技能：以**内核技能实例**为准（不是「目录里有就算在册」）：
+            // - `def` = 目录定义 id；`id` 同 def（原生 `ActivateSkill{skill: def}` 以此为键，
+            //   见 `legal_actions_for`——协议注释的「运行时实例 id」在原生即 def）；
+            // - `enabled` = 实例启用位；`use_count` = `once_used`（0/1，本回合已发动）；
+            // - `locked` = 无主动形态（`SkillBehavior::activate` 默认 None）→ 视为锁定/被动；
+            // - `active` = 该实例**当前可被主动发动**（走内核 `is_legal_action` 同源校验）；
+            // - `view_as` = 原生未建模「视为技」候选面 → 恒 false（**不猜测**，登记待办）。
             skills: cell
                 .skills
                 .iter()
                 .filter_map(|name| {
-                    engine.catalog().skill_by_name(name).map(|def| {
-                        SkillView {
-                            id: SkillId::new(def as u32),
-                            def: def as u32,
-                            enabled: true,
-                            use_count: 0,
-                            active: false,
-                            view_as: false,
-                            locked: false,
-                        }
+                    let def = engine.catalog().skill_by_name(name)?;
+                    let inst = engine.state_core().skills.get(&(cell.seat, def));
+                    let enabled = inst.map(|i| i.enabled).unwrap_or(false);
+                    let use_count = inst.map(|i| u32::from(i.once_used)).unwrap_or(0);
+                    let active = enabled
+                        && engine.is_legal_action(
+                            cell.seat,
+                            &GameAction::ActivateSkill { skill: def },
+                        );
+                    // 主动形态判定：该实例当前能否被 `ActivateSkill` 接受（`active` 已表达）；
+                    // `locked` 取「无主动形态」的保守口径：当前不可主动且未启用主动例外。
+                    let locked = !active;
+                    Some(SkillView {
+                        id: SkillId::new(def as u32),
+                        def: def as u32,
+                        enabled,
+                        use_count,
+                        active,
+                        view_as: false,
+                        locked,
                     })
                 })
                 .collect(),

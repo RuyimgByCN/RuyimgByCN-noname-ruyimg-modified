@@ -43,3 +43,30 @@
 - [ ] `CardKindTag` 覆盖更多公开类别（当前未建模者 `Other`）
 - [ ] `SkillView.enabled/use_count/active/view_as/locked` 仍为占位（需从内核技能实例真实取值）
 - [ ] 真实浏览器/桌面端到端与平台档位；online 选将客户端入口；锦标赛面（manifest/分块签名）
+
+## 5 追加：`SkillView` 字段真实取值（2026-10-18 同轮）
+
+| 字段 | 修复前 | 修复后（取自**内核技能实例**，不是「目录里有就算在册」） |
+|---|---|---|
+| 来源 | 目录里查到名字即投影 | `state_core().skills.get(&(seat, def))` 必须存在；未装配武将的座位**技能列表为空** |
+| `enabled` | 恒 `true` | 实例 `enabled` |
+| `use_count` | 恒 `0` | 实例 `once_used`（0/1，本回合已发动） |
+| `active` | 恒 `false` | `enabled && engine.is_legal_action(seat, ActivateSkill{def})`（**与内核权威校验同源**） |
+| `locked` | 恒 `false` | `!active`（保守口径：当前不可主动即视为锁定/被动） |
+| `id` / `def` | `def` | 均为目录 def（原生 `ActivateSkill{skill: def}` 以 def 为键，见 `legal_actions_for`） |
+| `view_as` | 恒 `false` | **仍恒 false**：原生未建模「视为技」候选面 → **不猜测**，登记待办 |
+
+新增用例 `nc09_bridge_maps_skill_view_from_instances`（第 5 项）：`enabled`/`use_count` 与实例逐项一致、
+`active` 与内核权威校验一致、`locked == !active`、`view_as` 恒 false、**未装配座位技能列表为空**。
+
+实测：定向 **5 passed / 0 failed**（[targeted-2.log](targeted-2.log)）；game-server 全量
+**90 passed / 0 failed**（[game-server-tests-2.log](game-server-tests-2.log)）；行数门禁 8266 文件
+（[source-lines-2.log](source-lines-2.log)）。
+
+### 仍未完成（更新）
+
+- [ ] `view_as`（视为技）候选面未建模 → 客户端无法展示「视为」类主动技
+- [ ] `locked` 目前是「当前不可主动」的**保守口径**，未区分「被动技」与「主动技但当前不合法」
+      （需目录侧主动形态标记，如 `SkillBehavior::activate` 是否被覆写）
+- [ ] Versus/斗地主/Boss 胜者的协议表达；`CardKindTag` 扩展
+- [ ] 真实浏览器/桌面端到端与平台档位；online 选将客户端入口；锦标赛面

@@ -169,3 +169,52 @@ fn nc09_bridge_maps_character_identity_cards_and_outcome() {
     // outcome：未终局 → InProgress
     assert!(matches!(snap.outcome, engine_api::MatchOutcome::InProgress));
 }
+
+/// NC09：`SkillView` 字段取自**内核技能实例**（enabled/use_count/active/locked），
+/// 未建模的 `view_as` 恒 false（不猜测）。
+#[test]
+fn nc09_bridge_maps_skill_view_from_instances() {
+    let mut e = engine_native::Engine::new_identity(20261920, 4);
+    // 装配一个带技能的武将到座位 0
+    let general = e
+        .general_candidates()
+        .into_iter()
+        .filter_map(|d| e.catalog().general_meta(d).map(|m| (d, m.0, m.2)))
+        .find(|(_, _, skills)| !skills.is_empty())
+        .expect("带技能武将");
+    e.assign_general_named(0, general.1).expect("选将");
+    let snap = observer_snapshot_for(&e, RoomRole::Player, Some(ApiPlayerId::new(1)));
+    let seat0 = snap.seats.iter().find(|s| s.seat.0 == 0).expect("座位 0");
+    assert!(!seat0.skills.is_empty(), "选将后应投影技能实例");
+    for sv in &seat0.skills {
+        // def 与内核实例一致
+        let def = sv.def as u16;
+        let inst = e.state_core().skills.get(&(0, def));
+        assert_eq!(
+            sv.enabled,
+            inst.map(|i| i.enabled).unwrap_or(false),
+            "enabled 应取实例启用位（技能 {}）",
+            sv.def
+        );
+        assert_eq!(
+            sv.use_count,
+            inst.map(|i| u32::from(i.once_used)).unwrap_or(0),
+            "use_count 应取实例 once_used"
+        );
+        assert!(!sv.view_as, "view_as 未建模 → 恒 false（不猜测）");
+        // active/locked 互斥且与内核权威校验一致
+        assert_eq!(
+            sv.active,
+            sv.enabled && e.is_legal_action(0, &engine_native::GameAction::ActivateSkill { skill: def }),
+            "active 应与内核权威校验一致"
+        );
+        assert_eq!(sv.locked, !sv.active, "locked = 当前不可主动（保守口径）");
+    }
+    // 未持技座位：技能列表为空（不是「目录里有就算」）
+    let seat1 = snap.seats.iter().find(|s| s.seat.0 == 1).expect("座位 1");
+    assert!(
+        seat1.skills.is_empty(),
+        "未装配武将的座位不得投影技能：{:?}",
+        seat1.skills
+    );
+}
