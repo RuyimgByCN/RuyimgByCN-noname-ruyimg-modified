@@ -48,6 +48,16 @@ function bench(label, fn) {
   return samples;
 }
 
+// ⓪ 冷启动：本进程从「已 initSync」到「首次可操作」的墙钟时间（含首次建局与首次查询）
+{
+  const t0 = process.hrtime.bigint();
+  const e0 = new mod.NativeEngine(4, 20262500n);
+  e0.legal_actions_json(0);
+  const cold = Number(process.hrtime.bigint() - t0);
+  e0.free();
+  console.log(`RESULT scenario=wasm_bench tier=wasm metric=cold_start_first_usable n=1 p50_ns=${cold} p95_ns=${cold} max_ns=${cold} mean_ns=${cold}`);
+}
+
 // ① 建局（含扩展包）
 bench("build_with_packs", () => {
   const e = mod.NativeEngine.new_with_packs_json(4, 20262501n, PACKS);
