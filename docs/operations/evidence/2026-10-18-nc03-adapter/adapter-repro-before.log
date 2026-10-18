@@ -1,0 +1,7 @@
+$ node --version
+v26.4.0
+$ node --import ./apps/web-client/scripts/ts-register.mjs docs/operations/evidence/2026-10-18-nc03-adapter/probe-before-adapter.mjs
+REPRODUCED: emitted card choice token 0 (label 42) cannot be consumed for card 42; legal action sends [42]: Error: native: 选项值 0 不在候选
+REPRODUCED: engine outcome=rejected discarded; returned envelope.result is null
+REPRODUCED: ChoiceOption Kind(105) becomes label 0
+EXIT=0

@@ -158,11 +158,102 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
   };
 }
 
-function optionValue(
-  o: number | { card?: number; player?: number; tag?: number } | string,
-): number | string {
+/**
+ * 选择候选 JSON，与 engine-native-wasm `open_choice_json` 同口径：
+ * `"confirm"`、`"pass"`、`{card}`、`{player}`、`{tag}`、`{kind}`。
+ */
+export type ChoiceOptionJson = number | string | ChoiceOptionPayload;
+
+/** 载荷型候选（每项恰有一个键）。 */
+export interface ChoiceOptionPayload {
+  card?: number;
+  player?: number;
+  tag?: number;
+  kind?: number;
+}
+
+/** observer 本人可见的开放选择 JSON（他人视图只有 `{id, observer, hidden}`）。 */
+interface NativeChoiceJson {
+  id: number;
+  prompt?: string;
+  options?: ChoiceOptionJson[];
+  min?: number;
+  max?: number;
+  allowCancel?: boolean;
+  hidden?: boolean;
+  kind?: string;
+}
+
+/** 窄壳命令结果，与 engine-native-wasm `outcome_json` 同口径。 */
+export interface NativeCommandOutcome {
+  outcome: "accepted" | "pending" | "rejected" | "suspended";
+  revision: number;
+  finished: boolean;
+}
+
+/**
+ * 候选的**值**（卡牌 id／座位／tag／kind 载荷）。
+ *
+ * 值只用于展示与标注，**不得当作回传 token**：窄壳 `answer()` 按选项下标直取
+ * `spec.options[idx]`（`crates/engine-native-wasm/src/lib.rs`）。把值当 token
+ * 会在 `{card: 42}` 一类载荷候选上失配（提交值 → 找不到下标）。
+ */
+export function optionValue(o: ChoiceOptionJson): number | string {
   if (typeof o === "number" || typeof o === "string") return o;
-  return o.card ?? o.player ?? o.tag ?? 0;
+  return o.card ?? o.player ?? o.tag ?? o.kind ?? 0;
+}
+
+/**
+ * 候选展示标注：带上字段名，避免 `Kind(105)` 与裸卡牌值都退化成同一个数字
+ * （旧实现 `String(optionValue(o))` 对 `{kind: 105}` 给出 `"0"`）。
+ */
+export function optionLabel(o: ChoiceOptionJson): string {
+  if (typeof o === "string") return o;
+  if (typeof o === "number") return String(o);
+  if (o.card !== undefined) return `card:${o.card}`;
+  if (o.player !== undefined) return `player:${o.player}`;
+  if (o.tag !== undefined) return `tag:${o.tag}`;
+  if (o.kind !== undefined) return `kind:${o.kind}`;
+  return "unknown";
+}
+
+/** 读取当前开放选择；异常（无选择/窄壳报错）按 null 处理。 */
+function readChoiceJson(
+  handle: NativeHandle,
+  seat: number = handle.observer,
+): NativeChoiceJson | null {
+  try {
+    const raw = handle.engine.open_choice_json(seat);
+    return (JSON.parse(raw) as NativeChoiceJson | null) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** 解析窄壳命令返回（`outcome_json` 或 autoStep 步骤摘要）；非 JSON 返回 null。 */
+export function parseCommandResult(raw: unknown): unknown {
+  if (typeof raw !== "string") return null;
+  try {
+    return JSON.parse(raw) as unknown;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 取命令结果里的窄壳判决（`accepted`/`pending`/`rejected`/`suspended`）。
+ *
+ * 旧适配层把所有命令返回值丢弃、信封 `result` 恒为 null，引擎的 `rejected`
+ * 因此对界面不可见；回传必须原样放进 `EngineEnvelope.result`。
+ */
+export function commandOutcome(
+  result: unknown,
+): NativeCommandOutcome["outcome"] | null {
+  if (result === null || typeof result !== "object") return null;
+  const outcome = (result as { outcome?: unknown }).outcome;
+  return typeof outcome === "string"
+    ? (outcome as NativeCommandOutcome["outcome"])
+    : null;
 }
 
 function deriveLegalActions(
@@ -184,22 +275,14 @@ function deriveLegalActions(
     }
   }
   try {
-    const raw = handle.engine.open_choice_json(handle.observer);
-    const choice = JSON.parse(raw) as {
-      id: number;
-      options: Array<number | { card: number } | { player: number } | { tag: number } | { kind: number } | string>;
-      min?: number;
-      max?: number;
-      allowCancel?: boolean;
-    } | null;
+    const choice = readChoiceJson(handle);
     if (choice) {
-      const first = choice.options[0];
-      const sel =
-        first === undefined ? [] : [Number(optionValue(first)) || 0];
+      const options = choice.options ?? [];
       actions.push({
         ResolveChoice: {
           choice_id: Number(choice.id),
-          selections: sel,
+          // token 即选项下标：0 号候选（如 {card:42}）以 token 0 回传。
+          selections: options.length > 0 ? [0] : [],
           cancelled: false,
         },
       });
@@ -220,36 +303,29 @@ function deriveLegalActions(
 }
 
 function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {
-  try {
-    const raw = handle.engine.open_choice_json(handle.observer);
-    const choice = JSON.parse(raw) as {
-      id: number;
-      options: unknown[];
-      min?: number;
-      max?: number;
-      allowCancel?: boolean;
-      kind?: string;
-    } | null;
-    if (!choice) return null;
-    return {
-      choice_id: Number(choice.id),
-      observer: handle.observer,
-      min_count: choice.min,
-      max_count: choice.max,
-      allow_cancel: choice.allowCancel,
-      kind: choice.kind ?? "Custom",
-      options: (choice.options ?? []).map((o, i) => ({
-        token: typeof o === "number" ? o : i,
-        label_key: String(optionValue(o as never)),
-      })),
-    };
-  } catch {
-    return null;
-  }
+  const choice = readChoiceJson(handle);
+  if (!choice) return null;
+  const options = choice.options ?? [];
+  return {
+    choice_id: Number(choice.id),
+    observer: handle.observer,
+    min_count: choice.min,
+    max_count: choice.max,
+    allow_cancel: choice.allowCancel,
+    kind: choice.kind ?? "Custom",
+    // token = 候选下标（回传即 `answer()` 的索引）；候选值只进 label_key。
+    options: options.map((o, index) => ({
+      token: index,
+      label_key: optionLabel(o),
+    })),
+  };
 }
 
-/** 合成 UI 信封：动作后刷新座位视图与合法动作。 */
-export function nativeEnvelope(handle: NativeHandle): EngineEnvelope {
+/** 合成 UI 信封：动作后刷新座位视图与合法动作。`result` 为窄壳命令结果。 */
+export function nativeEnvelope(
+  handle: NativeHandle,
+  result: unknown = null,
+): EngineEnvelope {
   const raw = handle.engine.view_json(handle.observer);
   const view = JSON.parse(raw) as NativeView;
   const finished = handle.engine.is_finished();
@@ -257,7 +333,7 @@ export function nativeEnvelope(handle: NativeHandle): EngineEnvelope {
   const snap = nativeObserverToSnapshot(view);
   snap.revision = revision;
   return {
-    result: null,
+    result,
     events: [],
     choice: readChoice(handle),
     view: snap,
@@ -291,49 +367,52 @@ export function nativeDispatch(
 ): EngineEnvelope | { kind: "save"; hex: string } | { kind: "status"; revision: number; finished: boolean } {
   switch (req.type) {
     case "endPhase": {
-      handle.engine.next_phase(req.actor ?? handle.observer);
-      return nativeEnvelope(handle);
+      const out = handle.engine.next_phase(req.actor ?? handle.observer);
+      return nativeEnvelope(handle, parseCommandResult(out));
     }
     case "playCard": {
-      handle.engine.play_card(
+      const out = handle.engine.play_card(
         req.actor,
         req.card,
         new Uint32Array(req.targets),
       );
-      return nativeEnvelope(handle);
+      return nativeEnvelope(handle, parseCommandResult(out));
     }
     case "resolveChoice": {
-      const choice = JSON.parse(
-        handle.engine.open_choice_json(req.actor),
-      ) as {
-        id: number;
-        options: Array<
-          number | { card?: number; player?: number; tag?: number } | string
-        >;
-      } | null;
+      const choice = readChoiceJson(handle, req.actor);
       if (!choice || Number(choice.id) !== req.choiceId) {
         throw new Error(`native: choice ${req.choiceId} 不匹配/不存在`);
       }
+      const options = choice.options ?? [];
       if (req.cancelled) {
         // 窄壳无显式 cancel：传空选择索引；若不允许取消则由引擎拒
-        handle.engine.answer(req.actor, BigInt(choice.id), new Uint32Array([]));
-        return nativeEnvelope(handle);
+        const out = handle.engine.answer(
+          req.actor,
+          BigInt(choice.id),
+          new Uint32Array([]),
+        );
+        return nativeEnvelope(handle, parseCommandResult(out));
       }
-      const idxs = req.selections.map((v) => {
-        const i = choice.options.findIndex((o) => optionValue(o) === v || o === v);
-        if (i < 0) throw new Error(`native: 选项值 ${v} 不在候选`);
-        return i;
+      // selections 是 token（= 候选下标），不是候选值：值只用于选择，
+      // 回传必须能按下标回查候选，否则 `{card:42}` 一类载荷永远失配。
+      const idxs = req.selections.map((token) => {
+        if (!Number.isInteger(token) || token < 0 || token >= options.length) {
+          throw new Error(
+            `native: 选项 token ${token} 不在候选（0..${options.length - 1}）`,
+          );
+        }
+        return token;
       });
-      handle.engine.answer(
+      const out = handle.engine.answer(
         req.actor,
         BigInt(choice.id),
         new Uint32Array(idxs),
       );
-      return nativeEnvelope(handle);
+      return nativeEnvelope(handle, parseCommandResult(out));
     }
     case "autoStep": {
-      handle.engine.auto_step();
-      return nativeEnvelope(handle);
+      const out = handle.engine.auto_step();
+      return nativeEnvelope(handle, parseCommandResult(out));
     }
     case "observer":
       return nativeEnvelope(handle);

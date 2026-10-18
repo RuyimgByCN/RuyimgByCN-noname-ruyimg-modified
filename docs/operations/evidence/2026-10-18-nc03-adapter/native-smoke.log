@@ -1,0 +1,22 @@
+$ pnpm --dir apps/web-client smoke:native
+
+> noname-next-web-client@0.1.0 smoke:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node --import ./scripts/ts-register.mjs scripts/native-worker-smoke.mjs
+
+PASS init_web
+PASS create
+PASS observer_view
+PASS endPhase
+PASS autoStep_progress | steps=40
+PASS save_hex | bytes=1596
+PASS restore_hex | rev=41
+PASS playCard_shape | rev=41
+PASS extension_package_inventory | packs=41 dirs=41 no_npack=0
+PASS extension_catalog_consistent | catalog=15 uncovered=26
+PASS pack_enters_match | hnl_=7
+PASS missing_pack_refused
+PASS same_pack_restore
+PASS wrong_version_refused | 恢复失败: RuleVersionMismatch { snapshot: 11753449270702291392, catalog: 11737545934517934815 }
+PASS adapter_choice_token_roundtrip | choice=1 options=5 label=card:113 token=0 submission=[0] outcome=accepted value_as_token_refused=true
+{"total":15,"failed":0}
+EXIT=0

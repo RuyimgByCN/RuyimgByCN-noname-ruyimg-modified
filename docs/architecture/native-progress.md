@@ -22,7 +22,7 @@
 |---|---|---|
 | NC01 | **根因已修 + 回归已加 + 定向/全量通过（2026-10-18）**；版本升格与 3 处顺序调用方迁移待并行提交 | [座位与触发语义](native-convergence-plan.md#nc01)；[证据](../operations/evidence/2026-10-18-nc01-seat-semantics/README.md) |
 | NC02 | **根因已修 + 7 项验收回归 + game-server 全量通过（2026-10-18）**；`-D warnings` 门禁被并行重构阻断 | [安装包身份与内容一致](native-convergence-plan.md#nc02)；[证据](../operations/evidence/2026-10-18-nc02-install-identity/README.md) |
-| NC03 | 待修复并补齐 | [统一原生 API](native-convergence-plan.md#nc03)；与 NC02/NC04 同步接口 |
+| NC03 | **前端适配层切片已修 + 回归已加（2026-10-18）**：token/值分离、`kind` 候选、`rejected` 暴露、目录守护去硬编码；权威动作查询/协议定义共享等剩余 | [统一原生 API](native-convergence-plan.md#nc03)；[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md) |
 | NC04 | 待修复并核验 | [VM 故障与事务](native-convergence-plan.md#nc04)；保留已有预算与回滚 |
 | NC05 | 待完整验收 | [独立扩展宿主](native-convergence-plan.md#nc05)；依赖 NC02–NC04，按需引入 NC06/NC07 切片 |
 | NC06 | 待结构收敛 | [内容私有状态](native-convergence-plan.md#nc06)；以 NC05 真案例驱动 |
@@ -32,6 +32,15 @@
 | NC10 | 待产品排程与质量验收 | [AI 工作池与信息边界](native-convergence-plan.md#nc10)；复用已有预算和策略 |
 | NC11 | 已登记方案，验收数据收敛待执行 | [文档与证据模型](native-convergence-plan.md#nc11)；逐来源修正过宽声明，不用文字标签认证完成 |
 | NC12 | 待实测及最终切换 | [效能与旧线退出](native-convergence-plan.md#nc12)；先测基线，退出旧入口依赖全矩阵通过 |
+
+### NC03 核验（2026-10-18，前端适配层切片；规则 v321 / 存档 v105 未变）
+
+- 本轮范围仅为前端/适配层切片；**不改 Rust 内核**，`crates/` 无改动。
+- 根因（审计 `adapter-probe.log` 三反例）：① `readChoice` 对载荷候选发**下标 token**、对裸数字发**值**，`resolveChoice` 却一律按候选值查下标，`{card:42}` 的 token 0 无法消费；② 命令返回值被丢弃，`nativeEnvelope.result` 恒为 `null`，引擎 `rejected` 对界面不可见；③ `optionValue` 不认 `{kind}`，`Kind(105)` 被标成 `0`（同一处类型遗漏导致 `typecheck` exit 2）。
+- 修复：token 统一为**候选下标**（与窄壳 `answer()` 直取 `spec.options[idx]` 同口径），候选值只进 `label_key`（`card:42`/`kind:105`/`confirm`），越界 token 显式报错；命令结果经 `parseCommandResult` 原样进入 `envelope.result`；`optionValue` 收 `kind` 并集中为 `ChoiceOptionJson` 类型。
+- 回归：新增 `apps/web-client/scripts/native-adapter.test.mjs`（三条反例 + 边界，7 项）与 `extension-inventory.test.mjs`（目录守护失败路径，3 项），`pnpm --dir apps/web-client test` 10/10 通过；冒烟新增真实 WASM 引擎的适配层 token 往返（提交 token 接受、提交候选值被拒）。
+- 实测：`typecheck` exit 0（修复前 exit 2）；`smoke:native` **15/15**（修复前 12/13，`extension_catalog_15` 硬编码 15 已改为按包数据推导的两个不变量）；`pnpm test` 10/10；`pnpm build` exit 0；行数门禁 8222 文件 ≤2000 行——[证据](../operations/evidence/2026-10-18-nc03-adapter/README.md)。
+- 待办：内核权威动作查询（含停止前端 `hand.slice(0,8)` 拼接 `PlayCard`/合成 `ResolveChoice`）；Rust↔TS 协议定义共享或自动校验；`events`/`hash_hex` 仍为空占位；真实 Worker 端到端与多选/取消/过期选择、大整数协议表示；客户端管理面仍只覆盖 15/41 个在盘包。
 
 ### NC02 核验（2026-10-18，规则 v321 / 存档 v105 未变）
 

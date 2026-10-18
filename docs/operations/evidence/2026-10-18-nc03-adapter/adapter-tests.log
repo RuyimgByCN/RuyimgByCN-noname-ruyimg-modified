@@ -1,0 +1,24 @@
+$ pnpm --dir apps/web-client test
+
+> noname-next-web-client@0.1.0 test /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node --import ./scripts/ts-register.mjs --test
+
+✔ 实测仓库：包清单由实际数据推导，目录项全部可回查 (2.285459ms)
+✔ 目录项与包元数据不一致会被判失败 (0.801833ms)
+✔ 坏 npack、缺字段与重复包键会被判失败 (1.564875ms)
+✔ 反例 1：候选值 42/99 → token 是下标且能回查候选 (1.113084ms)
+✔ 反例 1 补充：裸数字/字符串候选的 token 同样是下标 (0.1475ms)
+✔ 反例 2：引擎 rejected 显式进入 envelope.result (0.107625ms)
+✔ 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null (0.116667ms)
+✔ 反例 3：ChoiceOption Kind(105) 不被归零 (0.1335ms)
+✔ 命令结果解析：非 JSON 或无 outcome 字段不臆造判决 (0.056167ms)
+✔ choice_id 不匹配时拒绝应答，不触发引擎调用 (0.072375ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 213.551542
+EXIT=0
