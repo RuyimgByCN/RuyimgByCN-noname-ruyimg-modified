@@ -10,11 +10,11 @@
   },
   "cards": [],
   "skills": [
-    { "name": "reguhuo", "mapping": "host:reguhuo" }
+    { "name": "reguhuo", "mapping": "host:reguhuo" },
+    { "name": "rangjie", "mapping": "host:rangjie" }
   ],
   "generals": [],
   "deferred": [
-    { "name": "rangjie", "reason": "让节：受伤后获得指定类型牌/移动场上牌" },
     { "name": "shichangshi", "reason": "十常侍面" },
     { "name": "card_effects", "reason": "卡面/技能特效（展示面不迁移）" }
   ]

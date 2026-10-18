@@ -34,11 +34,11 @@ fn cards_json() -> String {
     out.push_str("  },\n");
     out.push_str("  \"cards\": [],\n");
     out.push_str("  \"skills\": [\n");
-    out.push_str("    { \"name\": \"reguhuo\", \"mapping\": \"host:reguhuo\" }\n");
+    out.push_str("    { \"name\": \"reguhuo\", \"mapping\": \"host:reguhuo\" },\n");
+    out.push_str("    { \"name\": \"rangjie\", \"mapping\": \"host:rangjie\" }\n");
     out.push_str("  ],\n");
     out.push_str("  \"generals\": [],\n");
     out.push_str("  \"deferred\": [\n");
-    out.push_str("    { \"name\": \"rangjie\", \"reason\": \"让节：受伤后获得指定类型牌/移动场上牌\" },\n");
     out.push_str("    { \"name\": \"shichangshi\", \"reason\": \"十常侍面\" },\n");
     out.push_str("    { \"name\": \"card_effects\", \"reason\": \"卡面/技能特效（展示面不迁移）\" }\n");
     out.push_str("  ]\n");
@@ -87,6 +87,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             lord_only: false,
             non_gainable: false,
             conversion: false,
+        },
+        PackageSkillEntry {
+            skill_def_id: 1,
+            name: "rangjie".into(),
+            locked: false,
+            lord_only: false,
+            non_gainable: false,
+            conversion: false,
         }],
         character_index: vec![],
         skin_index: Default::default(),
@@ -100,6 +108,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             BTreeMap::from([
                 ("epic-cards".to_string(), "史诗卡牌".to_string()),
                 ("reguhuo".to_string(), "蛊惑".to_string()),
+                ("rangjie".to_string(), "让节".to_string()),
             ]),
         )]),
         asset_manifest: None,

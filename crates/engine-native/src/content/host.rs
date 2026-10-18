@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 让节（tag 516，史诗卡牌批 2，`rangjie`）：自己受到伤害后可选（按
+    /// 伤害点数逐次）——「获得牌」（摸 1 + 从牌堆取一张指定类型牌）或
+    /// 「移动牌」（把场上可见区一张牌移到一名角色处）或取消。
+    Rangjie,
     /// 蛊惑（tag 515，史诗卡牌批 1，`reguhuo`）：出牌阶段限一次——弃一张
     /// 手牌并声明任意**基本牌/锦囊牌**名，以该牌使用（转化声明；原生实体
     /// 花色点数保留=登记差异）。
@@ -1818,6 +1822,7 @@ impl HostBehavior {
             HostBehavior::Mohua2 => 513,
             HostBehavior::Gongxin => 514,
             HostBehavior::Reguhuo => 515,
+            HostBehavior::Rangjie => 516,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2573,6 +2578,7 @@ impl HostBehavior {
             513 => HostBehavior::Mohua2,
             514 => HostBehavior::Gongxin,
             515 => HostBehavior::Reguhuo,
+            516 => HostBehavior::Rangjie,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2593,7 +2599,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 511] = [
+        pub const ALL: [HostBehavior; 512] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3105,6 +3111,7 @@ impl HostBehavior {
         HostBehavior::Mohua2,
         HostBehavior::Gongxin,
         HostBehavior::Reguhuo,
+        HostBehavior::Rangjie,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3378,6 +3385,7 @@ impl HostBehavior {
             HostBehavior::Mohua2 => "host:mohua2",
             HostBehavior::Gongxin => "host:gongxin",
             HostBehavior::Reguhuo => "host:reguhuo",
+            HostBehavior::Rangjie => "host:rangjie",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3852,6 +3860,14 @@ impl HostBehavior {
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 让节：自己受到伤害后（可选）
+            HostBehavior::Rangjie => Some(TriggerMeta {
+                event: EventKind::Damage,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -6296,6 +6312,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 让节（史诗卡牌批 2）：目录技能名（受伤后获得指定类型牌/移动场上牌）。
+pub const EPIC_RANGJIE_KEY: &str = "rangjie";
+
 /// 蛊惑（史诗卡牌批 1）：目录技能名（弃手牌声明任意基本/锦囊牌使用）。
 pub const EPIC_REGUHUO_KEY: &str = "reguhuo";
 
@@ -7532,6 +7551,7 @@ impl HostSkillBehavior {
             HostBehavior::Mohua2 => (None, None),
             HostBehavior::Gongxin => (None, None),
             HostBehavior::Reguhuo => (None, None),
+            HostBehavior::Rangjie => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7871,6 +7891,9 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
             HostBehavior::Gongxin => false,
+            // 让节：自己为该伤害承受者且未防止
+            HostBehavior::Rangjie => matches!(event,
+                EventData::Damage(d) if d.target == owner && !d.prevented),
             HostBehavior::Reguhuo => false,
             // 魔化：自己进入濒死
             HostBehavior::Mohua2 => matches!(event,
@@ -21405,6 +21428,224 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 让节：按伤害点数逐次——获得牌（摸 1 + 牌堆取指定类型）或移动牌
+            HostBehavior::Rangjie => match self.stage {
+                HostStage::Act => {
+                    if self.cards.is_empty() {
+                        // 首次进入：按伤害点数初始化剩余次数
+                        let count = ctx.current_damage().map(|d| d.amount).unwrap_or(0);
+                        if count == 0 {
+                            return Flow::Done;
+                        }
+                        self.cards = (0..count).map(|_| 0u32).collect();
+                    }
+                    let movable = ctx
+                        .core
+                        .players
+                        .iter()
+                        .any(|p| !p.equips.is_empty() || !p.judge.is_empty());
+                    self.stage = HostStage::SelectNature;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "rangjie_choice",
+                            // 0=获得牌 1=移动牌 2=取消
+                            options: if movable {
+                                vec![
+                                    ChoiceOption::Tag(0),
+                                    ChoiceOption::Tag(1),
+                                    ChoiceOption::Tag(2),
+                                ]
+                            } else {
+                                vec![ChoiceOption::Tag(0), ChoiceOption::Tag(2)]
+                            },
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectNature => {
+                    let Some(ChoiceOption::Tag(choice)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    self.cards.pop();
+                    match choice {
+                        0 => {
+                            // 获得牌：摸 1 → 选类型 → 牌堆取一张
+                            ctx.draw_cards(self.owner, 1);
+                            self.stage = HostStage::SelectCard;
+                            Flow::WaitChoice {
+                                observer: self.owner,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::PickTag,
+                                    prompt: "rangjie_type",
+                                    // 0=基本 1=锦囊 2=装备
+                                    options: vec![
+                                        ChoiceOption::Tag(0),
+                                        ChoiceOption::Tag(1),
+                                        ChoiceOption::Tag(2),
+                                    ],
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: false,
+                                },
+                            }
+                        }
+                        1 => {
+                            // 移动牌：选场上可见区一张牌
+                            let mut options: Vec<ChoiceOption> = Vec::new();
+                            for p in 0..ctx.core.players.len() as PlayerId {
+                                for c in ctx
+                                    .core
+                                    .player(p)
+                                    .equips
+                                    .iter()
+                                    .chain(ctx.core.player(p).judge.iter())
+                                    .copied()
+                                {
+                                    options.push(ChoiceOption::Card(c));
+                                }
+                            }
+                            if options.is_empty() {
+                                return Flow::Done;
+                            }
+                            self.stage = HostStage::TargetChoice;
+                            Flow::WaitChoice {
+                                observer: self.owner,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::SelectCards,
+                                    prompt: "rangjie_move_card",
+                                    options,
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: false,
+                                },
+                            }
+                        }
+                        _ => Flow::Done,
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Tag(t)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let want = match t {
+                        0 => 0u8, // 基本
+                        1 => 1,   // 锦囊
+                        _ => 2,   // 装备
+                    };
+                    // 实体发现：牌堆中首张该类型牌入手（登记差异：上游
+                    // get.cardPile2 随机/搜索面）
+                    let found = ctx.core.deck.iter().copied().find(|c| {
+                        let kind = ctx.catalog.card_kind(*c);
+                        match want {
+                            0 => kind.is_basic_kind(),
+                            1 => !kind.is_basic_kind() && !kind.is_equip(),
+                            _ => kind.is_equip(),
+                        }
+                    });
+                    if let Some(card) = found {
+                        ctx.core.deck.retain(|c| *c != card);
+                        ctx.core.player_mut(self.owner).hand.push(card);
+                        ctx.log(LogEvent::CardsGiven {
+                            from: self.owner,
+                            to: self.owner,
+                            cards: vec![card],
+                        });
+                    }
+                    if self.cards.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::Yield
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let mut owner_seat = None;
+                    for p in 0..ctx.core.players.len() as PlayerId {
+                        if ctx.core.player(p).equips.contains(&card)
+                            || ctx.core.player(p).judge.contains(&card)
+                        {
+                            owner_seat = Some(p);
+                            break;
+                        }
+                    }
+                    let Some(from) = owner_seat else {
+                        return Flow::Done;
+                    };
+                    // 目的地：其他存活角色（含自己）
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    self.card = Some(card);
+                    self.target = Some(from);
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "rangjie_move_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::ShuchuiTargetLoop => {
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(from) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Player(to)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(to).alive {
+                        return Flow::Done;
+                    }
+                    let was_equip = ctx.core.player(from).equips.contains(&card);
+                    if was_equip {
+                        ctx.core.player_mut(from).equips.retain(|c| *c != card);
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, from, card);
+                    } else {
+                        ctx.core.player_mut(from).judge.retain(|c| *c != card);
+                        ctx.note_cards_lost(from, &[card]);
+                    }
+                    let slot = ctx.catalog.card_slot_of(ctx.core, card);
+                    let free = slot.is_some_and(|s| {
+                        !ctx.core
+                            .player(to)
+                            .equips
+                            .iter()
+                            .any(|c| ctx.catalog.card_slot_of(ctx.core, *c) == Some(s))
+                    });
+                    if was_equip && free {
+                        ctx.core.player_mut(to).equips.push(card);
+                        crate::kernel::grant_equip_skills(ctx, to, card);
+                    } else {
+                        ctx.core.player_mut(to).hand.push(card);
+                    }
+                    ctx.log(LogEvent::CardsGiven {
+                        from,
+                        to,
+                        cards: vec![card],
+                    });
+                    if self.cards.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::Act;
+                    Flow::Yield
+                }
+                _ => Flow::Done,
+            },
             // 蛊惑：弃一张手牌 → 声明基本/锦囊牌名 → 选目标 → 转化使用
             HostBehavior::Reguhuo => match self.stage {
                 HostStage::Act => {
