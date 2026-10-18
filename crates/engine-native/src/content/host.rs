@@ -1309,6 +1309,12 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 苦肉（tag 533，L20 标记补充批 2，`kurou`）：出牌阶段主动——失去 1 点
+    /// 体力并摸 2 张牌。
+    Kurou,
+    /// 主亡忠继（tag 534，L20 批 2，`_xigua_zhuwanzhongji_`）：锁定——主公
+    /// 阵亡时，忠臣**继位为主公**（身份互换）。
+    ZhuWanzhongJi,
     /// 摸牌翻倍（tag 531，L20 标记补充批 1，`_xigua_mopaifanbei_`）：锁定——
     /// 摸牌阶段额外摸 2 张（上游配置 `mpfbmoshi` 门控；原生以实例启用承载）。
     XiguaMopaiFanbei,
@@ -1895,6 +1901,8 @@ impl HostBehavior {
             HostBehavior::YxsMenshen2 => 530,
             HostBehavior::XiguaMopaiFanbei => 531,
             HostBehavior::XiguaXueliangFanbei => 532,
+            HostBehavior::Kurou => 533,
+            HostBehavior::ZhuWanzhongJi => 534,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2667,6 +2675,8 @@ impl HostBehavior {
             530 => HostBehavior::YxsMenshen2,
             531 => HostBehavior::XiguaMopaiFanbei,
             532 => HostBehavior::XiguaXueliangFanbei,
+            533 => HostBehavior::Kurou,
+            534 => HostBehavior::ZhuWanzhongJi,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2687,7 +2697,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 528] = [
+        pub const ALL: [HostBehavior; 530] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3216,6 +3226,8 @@ impl HostBehavior {
         HostBehavior::YxsMenshen2,
         HostBehavior::XiguaMopaiFanbei,
         HostBehavior::XiguaXueliangFanbei,
+        HostBehavior::Kurou,
+        HostBehavior::ZhuWanzhongJi,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3506,6 +3518,8 @@ impl HostBehavior {
             HostBehavior::YxsMenshen2 => "host:yxs_menshen2",
             HostBehavior::XiguaMopaiFanbei => "host:xigua_mopaifanbei",
             HostBehavior::XiguaXueliangFanbei => "host:xigua_xueliangfanbei",
+            HostBehavior::Kurou => "host:kurou",
+            HostBehavior::ZhuWanzhongJi => "host:zhuwanzhongji",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3983,6 +3997,16 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 苦肉：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Kurou => None,
+            // 主亡忠继：任意角色死亡（锁定）
+            HostBehavior::ZhuWanzhongJi => Some(TriggerMeta {
+                event: EventKind::Death,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 摸牌翻倍：被动（摸牌收束内联，无触发时机）
@@ -6525,6 +6549,12 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 苦肉（L20 标记补充批 2）：目录技能名（失 1 体力摸 2 张）。
+pub const L20_KUROU_KEY: &str = "kurou";
+
+/// 主亡忠继（L20 批 2）：目录技能名（主公阵亡时忠臣继位）。
+pub const L20_ZHUWANZHONGJI_KEY: &str = "zhuwanzhongji";
+
 /// 摸牌翻倍（L20 标记补充批 1）：目录技能名（摸牌 +2）。
 pub const L20_MOPAI_KEY: &str = "xigua_mopaifanbei";
 
@@ -7843,6 +7873,8 @@ impl HostSkillBehavior {
             HostBehavior::YxsMenshen2 => (None, None),
             HostBehavior::XiguaMopaiFanbei => (None, None),
             HostBehavior::XiguaXueliangFanbei => (None, None),
+            HostBehavior::Kurou => (None, None),
+            HostBehavior::ZhuWanzhongJi => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -8232,6 +8264,16 @@ impl SkillBehavior for HostSkillBehavior {
             }
             HostBehavior::YxsMenshen2 => false,
             HostBehavior::XiguaMopaiFanbei => false,
+            HostBehavior::Kurou => false,
+            // 主亡忠继：死亡者为主公且自己为忠臣
+            HostBehavior::ZhuWanzhongJi => match event {
+                EventData::Death { player, .. } => {
+                    let roles = ctx.state.identity_roles().unwrap_or_default();
+                    roles.get(*player as usize) == Some(&crate::state::Role::Lord)
+                        && roles.get(owner as usize) == Some(&crate::state::Role::Loyalist)
+                }
+                _ => false,
+            },
             // 血量翻倍：自己首次阶段开始（标记未置位）
             HostBehavior::XiguaXueliangFanbei => match event {
                 EventData::Phase { player, begin: true, .. } if *player == owner => ctx
@@ -10555,6 +10597,24 @@ impl SkillBehavior for HostSkillBehavior {
             }
             // 轩辕（swd 批 146）：结束阶段触发（无主动面）
             HostBehavior::Xuanyuan => None,
+            // 苦肉（L20 批 2）：出牌阶段主动
+            HostBehavior::Kurou => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 集舍（L27 批 5）：出牌阶段主动（手牌上限 > 0）
             HostBehavior::Jishe => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
@@ -12911,6 +12971,40 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::XiguaMopaiFanbei => Flow::Done,
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => Flow::Done,
+            // 苦肉：失去 1 点体力并摸 2 张
+            HostBehavior::Kurou => {
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "苦肉",
+                    owner: self.owner,
+                });
+                ctx.emit(EventData::LoseHp {
+                    player: self.owner,
+                    amount: 1,
+                });
+                ctx.draw_cards(self.owner, 2);
+                Flow::Done
+            }
+            // 主亡忠继：忠臣继位为主公（身份互换）
+            HostBehavior::ZhuWanzhongJi => {
+                let Some(EventData::Death { player, .. }) =
+                    ctx.res.frame(ctx.current_frame_id()).map(|f| f.data.clone())
+                else {
+                    return Flow::Done;
+                };
+                if let crate::state::GameMode::Identity { roles } = &mut ctx.core.mode {
+                    if let Some(slot) = roles.get_mut(self.owner as usize) {
+                        *slot = crate::state::Role::Lord;
+                    }
+                    if let Some(slot) = roles.get_mut(player as usize) {
+                        *slot = crate::state::Role::Loyalist;
+                    }
+                }
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "主亡忠继",
+                    owner: self.owner,
+                });
+                Flow::Done
+            }
             // 血量翻倍：体力上限 + 当前体力并回复等量（一次性）
             HostBehavior::XiguaXueliangFanbei => {
                 let hp = ctx.core.player(self.owner).hp.max(0);

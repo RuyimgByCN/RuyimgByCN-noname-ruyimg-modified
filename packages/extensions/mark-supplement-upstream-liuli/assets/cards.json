@@ -5,13 +5,15 @@
   "pack": {
     "name": "mark-supplement-upstream-liuli",
     "version": 1,
-    "description": "G1 转换：上游标记补充批 1（配置门控模式修正）",
+    "description": "G1 转换：上游标记补充批 1-2（配置门控 + 苦肉/主亡忠继）",
     "card_prefix": "ms_"
   },
   "cards": [],
   "skills": [
     { "name": "xigua_mopaifanbei", "mapping": "host:xigua_mopaifanbei" },
-    { "name": "xigua_xueliangfanbei", "mapping": "host:xigua_xueliangfanbei" }
+    { "name": "xigua_xueliangfanbei", "mapping": "host:xigua_xueliangfanbei" },
+    { "name": "kurou", "mapping": "host:kurou" },
+    { "name": "zhuwanzhongji", "mapping": "host:zhuwanzhongji" }
   ],
   "generals": [],
   "deferred": [

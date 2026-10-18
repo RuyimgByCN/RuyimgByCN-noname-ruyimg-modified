@@ -1573,6 +1573,12 @@ impl Engine {
         }
     }
 
+    /// 调试：覆写身份局身份分布（仅测试用；长度须与座位数一致）。
+    pub fn debug_set_identity_roles(&mut self, roles: Vec<crate::state::Role>) {
+        assert_eq!(roles.len(), self.state.core.players.len(), "身份数须等于座位数");
+        self.state.core.mode = crate::state::GameMode::Identity { roles };
+    }
+
     pub fn debug_set_hp(&mut self, player: PlayerId, hp: i32) {
         self.state.core.player_mut(player).hp = hp;
     }
