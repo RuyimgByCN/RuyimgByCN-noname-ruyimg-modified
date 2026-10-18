@@ -73,3 +73,30 @@ node apps/web-client/scripts/nc12-browser-fullgame.mjs http://127.0.0.1:8123/ \
 - [ ] 浏览器长时负载（内存曲线）、动画帧/输入响应
 - [ ] 移动（Android/iOS）与桌面（Tauri）档位；多浏览器（Safari/Firefox）；真实网络
 - [ ] 旧线前端同口径完整对局对照
+
+## 6 终局胜负展示：**已接线并实测通过**（2026-10-19 同轮）
+
+§5 登记的「界面不显示胜负」缺口已修复，链路三处：
+
+| 层 | 变更 |
+|---|---|
+| WASM 壳（`crates/engine-native-wasm/src/lib.rs`） | 视图 `outcome` 由固定 `"finished"` 改为**下发胜负类型**：`LoyalistWin`/`RebelWin`/`RenegadeWin`/`SingleWin{player}`/`GroupWin{group}`；未建模的模式胜者（对决/斗地主/Boss）**保持 `"finished"`**（不猜测语义） |
+| 前端（`BattleView.vue`） | 新增 `outcomeText()`：映射为「主公方胜 / 反贼胜 / 内奸胜 / 单挑胜者 P# / 势力胜（xx）」；未知形态**如实显示原始 JSON** |
+| 数据源 | 读 `env.view.outcome`（`EngineEnvelope` 无顶层 `outcome` 字段——typecheck 首轮即报错纠正） |
+
+**实测**（重建 WASM + 前端后，同脚本整局）：
+
+```
+RESULT scenario=browser_fullgame tier=web {"clicks":319,"final_revision":318,"ended_marker":true,"console_errors":[]}
+终局行: 终局 · 单挑胜者 P4 · rev 319
+```
+
+→ 终局行现为「**终局 · <胜负> · rev N**」；本局经「本地开局」进入的是**原型/单挑口径**的对局，
+故引擎给出 `Winner::Player(3)` → 显示「单挑胜者 P4」，**与引擎语义一致**（未硬编码身份局文案）。
+
+### 仍未完成（更新）
+
+- [ ] 身份局路径的胜负文案实测（需以身份局开局：`new_identity` 路径或联机房间）
+- [ ] 终局胜负与引擎 `outcome` 的**自动化一致性断言**（当前为人工读日志）
+- [ ] 固定种子可重复多局、浏览器长时负载、动画帧/输入响应
+- [ ] 移动（Android/iOS）与桌面（Tauri）档位；多浏览器；真实网络；旧线前端同口径完整对局

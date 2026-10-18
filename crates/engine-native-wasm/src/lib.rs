@@ -254,7 +254,23 @@ fn view_to_json(v: &PlayerView) -> serde_json::Value {
         "turn": v.turn,
         "phase": phase_name(v.phase),
         "round": v.round,
-        "outcome": v.outcome.as_ref().map(|_| "finished"),
+        // NC09/NC12 修正：终局**胜负类型**必须随视图下发（此前只发 `"finished"`，
+        // 前端无法显示胜者）。此处直接序列化协议 `MatchOutcome`（如
+        // `{"LoyalistWin":null}` / `{"RebelWin":null}` / `{"RenegadeWin":{"player":3}}` …）。
+        "outcome": match &v.outcome {
+            None => serde_json::Value::Null,
+            Some(engine_native::Winner::LordSide) => serde_json::json!({ "LoyalistWin": null }),
+            Some(engine_native::Winner::Rebels) => serde_json::json!({ "RebelWin": null }),
+            Some(engine_native::Winner::Traitor) => serde_json::json!({ "RenegadeWin": null }),
+            Some(engine_native::Winner::Player(p)) => {
+                serde_json::json!({ "SingleWin": { "player": *p as u32 + 1 } })
+            }
+            Some(engine_native::Winner::Faction(f)) => {
+                serde_json::json!({ "GroupWin": { "group": format!("{f:?}").to_lowercase() } })
+            }
+            // 未建模的模式胜者（对决/斗地主/Boss）：保持旧口径 `"finished"`，不猜测语义
+            Some(_) => serde_json::json!("finished"),
+        },
         "rulesetVersion": v.ruleset_version,
     })
 }
