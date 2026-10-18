@@ -515,6 +515,7 @@ mod sessions;
 mod snapshot;
 mod views;
 use apply_command::*;
+mod boss_campaign;
 mod general_select;
 mod hash;
 mod legal_actions;
