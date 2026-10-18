@@ -297,3 +297,34 @@ panic: card 93 not in hand of 0
       `kernel/events.rs`，待拆分落定）
 - [ ] 修复后：`sim_faults`/`probe_faults` 与两个日志缓冲应保持空
 - [ ] 长程同时开 `alloc=1`；RSS/句柄/线程数；温控；产品整机 30 分钟
+
+## 12 **根因定位完成**：`commit_equip` ↔ 同帧「先装后弃」竞态（2026-10-19 同轮）
+
+用「提交前/提交后上下文 + 完整回溯」把根因钉到**具体函数**：
+
+```
+machine::Ctx::take_hand_card
+kernel::equipment::commit_equip        ← 发出取牌提交的路径
+kernel::commit_frame
+resolution::run
+commands::finish_segment
+commands::submit
+ai::plan_action（模拟提交）
+```
+
+**因果链（已闭合）**：`swd_zhongxinghujia`（众星护甲，`step/swd_card_effects.rs`）的效果在**同一步**内：
+
+1. 从牌堆+弃堆**发现**一张防具实体 `x`（本例 `x = 93`）→ `hand.push(x)` → **emit `Equipped{player: t, card: x}`**
+   （事件是**排队帧**，稍后才提交）；
+2. 紧接着**随机弃置目标一张手牌**（`hand[k]`）→ 若 `k` 恰好选中**刚放入的 `x`**，则该牌被移出手牌；
+3. 随后 `Equipped` 帧提交 → `commit_equip` → `take_hand_card(t, 93)` → **牌已不在手牌** → panic。
+
+**为何此前难定位**：panic 发生在**被捕获的模拟提交内部**、且提交用的是 `work` 克隆（panic 时未提交）
+→ 事后状态里看不到「93 曾被放入手牌」这一步（PRE/POST 上下文完全相同）。
+
+**修法（明确、待拆分落定后实施）**：二选一——
+- **A**：把「随机弃置」移到**发现/装配之前**（上游顺序为 `chooseToDiscard` → 装配？需按上游 `haidao` 同族核对）；
+- **B**：随机弃置的候选**排除**刚放入的 `x`（或改为「从**原有**手牌中随机弃一张」）。
+两处都在 `content/host/step/swd_card_effects.rs`（**未跟踪**，属他人 host 拆分）→ 按「只提交自己的文件」
+登记，待拆分落定后修复；修复后 `nc12_dangling_reference_repro`（seed 44170）应转为通过、
+长程 `sim_faults`/`probe_faults` 应归零。

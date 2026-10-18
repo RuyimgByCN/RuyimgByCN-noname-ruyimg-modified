@@ -531,6 +531,28 @@ impl Engine {
             // （真实高水位越过该区间时合法候选全部被当重复拒绝，
             // 规划退化为 NextPhase）。
             let mut trial = sim.clone();
+            // NC12 根因诊断：记录**提交前**上下文（提交失败会把状态留在中途态，仅看提交后
+            // 无法定位发出失效用牌的机器）
+            let pre_context = {
+                let res = trial.resolution();
+                let frames: Vec<String> = res
+                    .stack
+                    .iter()
+                    .map(|f| format!("{:?}/{:?}/{:?}", f.id, f.kind, f.data))
+                    .collect();
+                let parks: Vec<String> = res
+                    .parks
+                    .iter()
+                    .map(|p| format!("{:?}", p.machine.snapshot()))
+                    .collect();
+                format!(
+                    "PRE rev={} phase={:?} action={action:?} frames=[{}] parks=[{}]",
+                    trial.revision(),
+                    trial.turn().phase,
+                    frames.join(" ; "),
+                    parks.join(" ; ")
+                )
+            };
             // NC12 长程缺陷防护（2026-10-19）：模拟提交在**克隆**上推进规则，
             // 若内核在模拟状态上触发不变量 panic（实测 `machine.rs:408
             // card 93 not in hand of 0`，发生在 plan_action→submit→finish_segment
@@ -568,8 +590,9 @@ impl Engine {
                             .iter()
                             .map(|p| format!("{:?}", p.machine.snapshot()))
                             .collect();
+                        note_sim_fault(pre_context.clone());
                         note_sim_fault(format!(
-                            "seat={seat} rev={} phase={:?} action={action:?} table={:?} hands=[{}] frames=[{}] parks=[{}]",
+                            "POST seat={seat} rev={} phase={:?} action={action:?} table={:?} hands=[{}] frames=[{}] parks=[{}]",
                             trial.revision(),
                             trial.turn().phase,
                             core.table,
