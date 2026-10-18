@@ -30,8 +30,8 @@
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 56,
-    "open_count": 35,
+    "resolved_count": 57,
+    "open_count": 34,
     "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
     "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
     "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -2406,9 +2406,9 @@
     },
     {
       "id": "T12-SWD-MOHUA2-PREREQ",
-      "status": "open",
-      "description": "魔化（`mohua2`）前置四技：`jifeng`（✅ 批 150）/ `moyan`（✅ 批 151）/ `miedao`（组技两面，✅ 批 152）/ `swd_xiuluo`（定义待定位）；四技齐备后 `mohua2` 可落地（换将 + 技能重装配 + 回复 2 + 摸 2）。",
-      "notes": "2026-10-17 批 150：`jifeng` 已落地并验证（3 测）；其余三技待做；`swd_xiuluo` 在 swd.js 中未找到定义（需在其它角色文件定位或登记为外部依赖）。 批 151：moyan 已落地并验证（3 测）；剩 miedao、swd_xiuluo。 批 152：miedao 已落地并验证（3 测）；仅剩 swd_xiuluo。",
+      "status": "resolved",
+      "description": "魔化（`mohua2`）前置四技：`jifeng`（✅ 批 150）/ `moyan`（✅ 批 151）/ `miedao`（组技两面，✅ 批 152）/ `swd_xiuluo`（✅ 批 153，定义取自离线包）；四技齐备后 `mohua2` 可落地（换将 + 技能重装配 + 回复 2 + 摸 2）。",
+      "notes": "2026-10-17 批 150：`jifeng` 已落地并验证（3 测）；其余三技待做；`swd_xiuluo` 在 swd.js 中未找到定义（需在其它角色文件定位或登记为外部依赖）。 批 151：moyan 已落地并验证（3 测）；剩 miedao、swd_xiuluo。 批 152：miedao 已落地并验证（3 测）；仅剩 swd_xiuluo。 批 153：swd_xiuluo 已落地并验证（3 测）——**四技齐备（4/4）**，`mohua2` 本体可落。",
       "done_when_evidence": "四技各自定向测试 + `mohua2` 换将装配测试 + 全量/装载/golden 复跑记录。"
     }
   ]

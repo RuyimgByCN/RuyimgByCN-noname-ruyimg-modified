@@ -1309,6 +1309,9 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 修罗（tag 512，swd 批 153，`swd_xiuluo`）：准备阶段可选——弃一张
+    /// 手牌，弃置判定区一张**同花色**延时锦囊。
+    Xiuluo,
     /// 灭道（tag 511，swd 批 152，`miedao`）：组技两面——摸牌阶段多摸
     /// 「已损失体力」张（内联于摸牌收束）；弃牌阶段须额外弃等量张（手/装备，
     /// 强制）。
@@ -1800,6 +1803,7 @@ impl HostBehavior {
             HostBehavior::Jifeng => 509,
             HostBehavior::Moyan => 510,
             HostBehavior::Miedao => 511,
+            HostBehavior::Xiuluo => 512,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2551,6 +2555,7 @@ impl HostBehavior {
             509 => HostBehavior::Jifeng,
             510 => HostBehavior::Moyan,
             511 => HostBehavior::Miedao,
+            512 => HostBehavior::Xiuluo,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2571,7 +2576,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 507] = [
+        pub const ALL: [HostBehavior; 508] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3079,6 +3084,7 @@ impl HostBehavior {
         HostBehavior::Jifeng,
         HostBehavior::Moyan,
         HostBehavior::Miedao,
+        HostBehavior::Xiuluo,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3348,6 +3354,7 @@ impl HostBehavior {
             HostBehavior::Jifeng => "host:jifeng",
             HostBehavior::Moyan => "host:moyan",
             HostBehavior::Miedao => "host:miedao",
+            HostBehavior::Xiuluo => "host:swd_xiuluo",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3821,6 +3828,14 @@ impl HostBehavior {
             }),
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 修罗：自己准备阶段开始（可选）
+            HostBehavior::Xiuluo => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
@@ -6246,6 +6261,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 修罗（swd 批 153）：目录技能名（弃手牌清同花色判定区延时锦囊）。
+pub const SWD_XIULUO_KEY: &str = "swd_xiuluo";
+
 /// 灭道（swd 批 152）：目录技能名（摸牌多摸/弃牌多弃「已损失体力」）。
 pub const SWD_MIEDAO_KEY: &str = "miedao";
 
@@ -7430,6 +7448,7 @@ impl HostSkillBehavior {
             HostBehavior::Jifeng => (None, None),
             HostBehavior::Moyan => (None, None),
             HostBehavior::Miedao => (None, None),
+            HostBehavior::Xiuluo => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7768,6 +7787,12 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 修罗：自己准备阶段开始、判定区有牌且手牌非空
+            HostBehavior::Xiuluo => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                    if *player == owner)
+                && !ctx.state.player(owner).judge.is_empty()
+                && !ctx.state.player(owner).hand.is_empty(),
             // 灭道·弃：自己弃牌阶段开始且体力未满
             HostBehavior::Miedao => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Discard, begin: true }
@@ -21251,6 +21276,90 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 修罗：选一张手牌 → 选一张同花色判定区牌 → 一并弃置
+            HostBehavior::Xiuluo => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "xiuluo_hand",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(hand)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&hand) {
+                        return Flow::Done;
+                    }
+                    self.card = Some(hand);
+                    let suit = ctx.catalog.cards[hand as usize].suit;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.owner)
+                        .judge
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.catalog.cards[*c as usize].suit == suit)
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "xiuluo_judge",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Card(judge)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let Some(hand) = self.card else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).judge.contains(&judge) {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "修罗",
+                        owner: self.owner,
+                    });
+                    ctx.discard_from_hand(self.owner, hand);
+                    ctx.core.player_mut(self.owner).judge.retain(|c| *c != judge);
+                    // 判定区失去牌（origins 由内核按实际所在区推断）
+                    ctx.note_cards_lost(self.owner, &[judge]);
+                    ctx.to_discard(judge);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 灭道·弃：强制弃「已损失体力」张（手/装备）
             HostBehavior::Miedao => match self.stage {
                 HostStage::Act => {

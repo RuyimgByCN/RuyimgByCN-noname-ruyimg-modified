@@ -2048,6 +2048,10 @@
   {
    "name": "miedao",
    "mapping": "host:miedao"
+  },
+  {
+   "name": "swd_xiuluo",
+   "mapping": "host:swd_xiuluo"
   }
  ]
 }
