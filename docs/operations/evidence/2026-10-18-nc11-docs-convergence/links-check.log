@@ -1,0 +1,9 @@
+$ python3 -B docs/operations/evidence/2026-10-18-nc11-docs-convergence/check_links.py <四主稿 + ADR 索引 + 登记表 + 本 README>
+checked 7 files, 0 link problems
+exit=0
+
+$ 探针（检查器有分辨力）：好锚点通过、错锚点/缺文件失败
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-18-nc11-docs-convergence/_probe.md:2 -> ../../../architecture/native-progress.md#native-convergence-typo [anchor_missing]
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-18-nc11-docs-convergence/_probe.md:3 -> ../../../architecture/native-progress-missing.md [target_missing]
+checked 1 files, 2 link problems
+exit=1

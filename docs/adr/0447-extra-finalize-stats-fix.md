@@ -1,4 +1,9 @@
-# 0445 extra 收尾与统计口径修正（Hermes E 段）
+# 0447 extra 收尾与统计口径修正（Hermes E 段）
+
+> 2026-10-18 标题勘正（NC11）：原标题写作 `0445`，与文件名 `0447` 冲突（0445 已由
+> `0445-abi559-shenhua-zhanghe-qiaobian.md` / `0445-shiji-xinyangjie-qingyu-mifuren.md`
+> 占用，且 `ABI-COORDINATION.md` 的 extra 收尾行引用的是 0447）；按文件名更正为 0447，
+> 正文与决策未改。检查脚本：`python3 -B scripts/check-adr-index.py`。
 
 日期：2026-08-03
 状态：已落地

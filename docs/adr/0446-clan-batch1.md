@@ -1,4 +1,8 @@
-# 0444 clan 批次一（Hermes E 段）
+# 0446 clan 批次一（Hermes E 段）
+
+> 2026-10-18 标题勘正（NC11）：原标题写作 `0444`，与文件名 `0446` 及已占用编号
+> `0444-shiji-sp-cuiyan-yajun-zundi.md` 冲突，按文件名更正为 0446；正文与决策未改。
+> 检查脚本：`python3 -B scripts/check-adr-index.py`。
 
 日期：2026-08-03
 状态：已落地

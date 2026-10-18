@@ -1,0 +1,10 @@
+$ grep -n 'pub const STANDARD_RULESET_VERSION' crates/engine-native/src/content/standard.rs ; git show HEAD:...standard.rs | grep -n ...
+126:pub const STANDARD_RULESET_VERSION: u64 = 322;
+127:pub const STANDARD_RULESET_VERSION: u64 = 321;
+$ grep -n 'pub const ARCHIVE_FORMAT_VERSION' crates/engine-native/src/archive.rs
+113:pub const ARCHIVE_FORMAT_VERSION: u16 = 105;
+$ git rev-parse HEAD ; git status --porcelain | wc -l
+3012d960e51dcd3a7777677cfab424d4938511b6
+     262
+$ grep -n 'v322，NC07 同源审计修正' crates/engine-native/tests/replay_scenarios.rs
+1061:/// 2026-10-18 重录依据（v322，NC07 同源审计修正）：`seat_ring`（换位结果）

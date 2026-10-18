@@ -1,0 +1,7 @@
+$ python3 - <<'PY' (todo-register.json 机器字段 + 逐条整包状态)
+meta.item_count = 89 | 实际 items = 91
+meta.resolved_count = 61 | meta.open_count = 30 | meta.wholepack_count = 24
+按 status 实测: {'resolved': 61, 'open': 30}
+整包条目: 37 {'open': 13, 'resolved': 24}
+整包 open: ['T12-SRC-U01', 'T12-SRC-U05', 'T12-SRC-U07', 'T12-SRC-U08', 'T12-SRC-L08', 'T12-SRC-L11', 'T12-SRC-L12', 'T12-SRC-L14', 'T12-SRC-L19', 'T12-SRC-L20', 'T12-SRC-L25', 'T12-SRC-L27', 'T12-SRC-L28']
+整包 resolved: ['T12-SRC-U02', 'T12-SRC-U03', 'T12-SRC-U04', 'T12-SRC-U06', 'T12-SRC-L01', 'T12-SRC-L02', 'T12-SRC-L03', 'T12-SRC-L04', 'T12-SRC-L05', 'T12-SRC-L06', 'T12-SRC-L07', 'T12-SRC-L09', 'T12-SRC-L10', 'T12-SRC-L13', 'T12-SRC-L15', 'T12-SRC-L16', 'T12-SRC-L17', 'T12-SRC-L18', 'T12-SRC-L21', 'T12-SRC-L22', 'T12-SRC-L23', 'T12-SRC-L24', 'T12-SRC-L26', 'T12-SRC-L29']

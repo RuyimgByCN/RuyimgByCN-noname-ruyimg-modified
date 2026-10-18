@@ -1,0 +1,45 @@
+$ ls -d packages/extensions/*/ | wc -l ; ls packages/extensions/*/package.npack.json | wc -l
+      41
+      41
+$ python3 - <<'PY' (包清单 namespace/package_id/version)
+ai-tuning-upstream-liuli                   upstream-liuli   ai-tuning              1.0.0
+boss-play-upstream-liuli                   upstream-liuli   boss-play              1.0.0
+boss-play-upstream-noname                  upstream-noname  boss-play              1.0.0
+boss-zhugeliang-upstream-liuli             upstream-liuli   boss-zhugeliang        1.0.0
+cardpile-upstream-liuli                    upstream-liuli   cardpile               1.0.0
+cardpile-upstream-noname                   upstream-noname  cardpile               1.0.0
+coin-upstream-liuli                        upstream-liuli   coin                   1.0.0
+coin-upstream-noname                       upstream-noname  coin                   1.0.0
+d3-upstream-noname                         upstream-noname  d3-select              1.0.0
+desktop-adapt-upstream-liuli               upstream-liuli   desktop-adapt          1.0.0
+doomsday-brawl-upstream-liuli              upstream-liuli   doomsday-brawl         1.0.0
+douzhuan-xingyi-upstream-liuli             upstream-liuli   douzhuan-xingyi        1.0.0
+drag-read-upstream-liuli                   upstream-liuli   drag-read              1.0.0
+elo-sanction-upstream-liuli                upstream-liuli   elo-sanction           1.0.0
+epic-cards-upstream-liuli                  upstream-liuli   epic-cards             1.0.0
+fool-plugin-upstream-liuli                 upstream-liuli   fool-plugin            1.0.0
+hero-kill-upstream-noname                  upstream-noname  hero-kill              1.0.0
+huanle-upstream-noname                     upstream-noname  huanle-cards           1.0.0
+longxue-upstream-liuli                     upstream-liuli   longxue                1.0.0
+mark-supplement-upstream-liuli             upstream-liuli   mark-supplement        1.0.0
+martial-upstream-liuli                     upstream-liuli   martial                1.0.0
+omnisearch-upstream-liuli                  upstream-liuli   omnisearch             1.0.0
+qhly-upstream-liuli                        upstream-liuli   qhly                   1.0.0
+select-beautify-upstream-liuli             upstream-liuli   select-beautify        1.0.0
+shaai-ow-upstream-noname                   upstream-noname  shaai-ow               1.0.0
+shaai-xianjian-upstream-noname             upstream-noname  shaai-xianjian         1.0.0
+shahai-gujian-upstream-noname              upstream-noname  shahai-gujian          1.0.0
+shahai-gwent-upstream-noname               upstream-noname  shahai-gwent           1.0.0
+shahai-hearth-upstream-noname              upstream-noname  shahai-hearth          1.0.0
+shahai-mtg-upstream-noname                 upstream-noname  shahai-mtg             1.0.0
+shahai-swd-upstream-noname                 upstream-noname  shahai-swd             1.0.0
+shahai-yunchou-upstream-noname             upstream-noname  shahai-yunchou         1.0.0
+shahai-zhenfa-upstream-noname              upstream-noname  shahai-zhenfa          1.0.0
+shousha-full-upstream-liuli                upstream-liuli   shousha-full           1.0.0
+shousha-mvp-upstream-liuli                 upstream-liuli   shousha-mvp            1.0.0
+sj-settings-upstream-liuli                 upstream-liuli   sj-settings            1.0.0
+skin-switch-upstream-liuli                 upstream-liuli   skin-switch            1.0.0
+thunder-upstream-liuli                     upstream-liuli   thunder                1.0.0
+update-guard-upstream-liuli                upstream-liuli   update-guard           1.0.0
+wudian-upstream-noname                     upstream-noname  wudian                 1.0.0
+wuxing-upstream-liuli                      upstream-liuli   wuxing                 1.0.0
