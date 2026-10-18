@@ -1,3 +1,4 @@
+# HEAD=f5fd1cf1c80ae6c8a2f450da801fe7c66d4d005b  date=2026-10-18T14:58:06Z
 $ pnpm --dir apps/web-client smoke:native
 
 > noname-next-web-client@0.1.0 smoke:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client

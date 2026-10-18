@@ -80,7 +80,7 @@
 | `pnpm --dir apps/web-client test` | **41/41 通过、0 失败**（新增 14 项） | [test.log](test.log) |
 | `pnpm --dir apps/web-client smoke:native` | **32/32 PASS、0 failed** | [smoke.log](smoke.log) |
 | `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'` | OK（Ran 1 test） | [line-gate-unittest.log](line-gate-unittest.log) |
-| `python3 -B scripts/check-source-lines.py` | `8265 files <= 2000 lines`，exit 0 | [line-gate.log](line-gate.log) |
+| `python3 -B scripts/check-source-lines.py` | `8266 files <= 2000 lines`，exit 0 | [line-gate.log](line-gate.log) |
 
 新增 `apps/web-client/scripts/general-select-ui.test.mjs`（398 行，14 项）：
 

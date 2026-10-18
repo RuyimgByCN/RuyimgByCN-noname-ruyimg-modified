@@ -1,3 +1,4 @@
+# HEAD=f5fd1cf1c80ae6c8a2f450da801fe7c66d4d005b  date=2026-10-18T14:58:06Z
 $ python3 -B scripts/check-source-lines.py
-Source line limit passed: 8265 files <= 2000 lines
+Source line limit passed: 8266 files <= 2000 lines
 [exit=0]
