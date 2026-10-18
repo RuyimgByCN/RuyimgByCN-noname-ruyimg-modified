@@ -1,0 +1,49 @@
+
+	linghunzhihuo: {
+		fullskin: true,
+		type: "trick",
+		cardnature: "fire",
+		enable: true,
+		filterTarget: true,
+		content() {
+			"step 0";
+			target.damage("fire");
+			"step 1";
+			var hs = player.getCards("h");
+			if (hs.length) {
+				player.discard(hs.randomGet());
+			}
+		},
+		ai: {
+			basic: {
+				order: 1.8,
+				value: [6, 1],
+				useful: [4, 1],
+			},
+			result: {
+				player(player, target) {
+					if (player === target) {
+						return -1;
+					}
+					if (player.countCards("h") >= player.hp) {
+						return -0.1;
+					}
+					if (player.countCards("h") > 1) {
+						return -0.5;
+					}
+					return 0;
+				},
+				target: -1,
+			},
+			tag: {
+				damage: 1,
+				fireDamage: 1,
+				natureDamage: 1,
+			},
+		},
+	},
+	jihuocard: {
+		fullskin: true,
+		type: "trick",
+		enable: true,
+		toself: true,
