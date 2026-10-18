@@ -215,3 +215,51 @@ AI_SIM_FAULT seat=1 redact_quiescent=false redact_stack=1 redact_parks=1 redact_
       `sim_faults` / `probe_faults` 归零；
 - [ ] 该文件属**未跟踪的 host 拆分目录**（`content/host/` 仍为 `??`）→ 修复需待其落定，
       或与拆分作者协调后一并提交（登记）。
+
+## 10 根因链闭合：`commit_card_used` 的 else 分支 + 事件栈现场（2026-10-19 同轮）
+
+在复现用例中加入**事件栈**打印后，现场完整（[repro 输出](../../../operations/evidence/2026-10-18-nc12-plan-crash/README.md)）：
+
+```
+[repro] step=10 seat=1 命中 sim_faults=1
+[fault] frame[0] id=23 parent=None kind=CardUsed stage=Intrinsic
+        data=CardUsed(CardUseData { card: 161, player: 1, targets: [0], nature: Normal,
+                                    use_as: None, cancelled: false })
+[fault] park[0] snapshot=NullifyWindow { card: 161, source: 1, queue: [1,2,3,0], window_open: true,
+        effect: Some(Host { def_key: "swd_zhongxinghujia", behavior: 228, stage: 0,
+                            owner: 1, target: Some(0), card: Some(161) }) }
+panic: card 93 not in hand of 0
+```
+
+**根因链（已闭合到代码行）**：
+
+1. 崩溃点是 `crates/engine-native/src/kernel/events.rs::commit_card_used`：
+   ```rust
+   if ctx.core.player(u.player).hand.contains(&u.card) {
+       ctx.take_hand_card(u.player, u.card);
+   } else if ctx.core.table.contains(&u.card) {
+       ctx.core.table.retain(|c| *c != u.card);
+   } else {
+       // 保持原 panic 语义（调用方先验证）。
+       ctx.take_hand_card(u.player, u.card);   // ← panic 在此
+   }
+   ```
+   → 当某次 **用牌提交**的牌**既不在手牌也不在桌面**时，走 else 分支硬 panic；
+2. 现场显示栈上只有一张 `CardUsed`（**161**，seat 1 → p0，未取消）与持有该窗口的
+   `NullifyWindow` 机器；而 panic 的牌是 **93**（另一张，p0 手牌 `[78,152,123,144]` 中无 93，
+   93 在牌库）→ 说明**另一条路径**（无懈窗口内的效果恢复/后续用牌）提交了一张**已失效的牌 id**；
+3. 因此：`commit_card_used` 的 else 分支是**硬失败点**，而真正的失效引用产生于
+   **效果机器跨窗口持有的牌 id**（与 §9 的结论一致）。
+
+**修复选项（登记，需在 host/kernel 拆分落定后实施）**：
+
+- **A（治本）**：定位提交 93 的路径，改为**提交前重查**（手牌/桌面/弃牌堆）或在牌离区时同步更新
+  持有者（效果机器/窗口包装）——需要更细的机器自省；
+- **B（安全网）**：`commit_card_used` 的 else 分支由 panic 改为**记账式降级**（不移动牌、记一次
+  异常计数，与 `sim_faults`/`probe_faults` 同风格），使**真实提交**也不会因该类失效引用崩溃；
+  语义上仍是缺陷（少一次牌的区转移），故必须同时保留计数与告警；
+- 两个选项都触及**未跟踪的 host/kernel 拆分文件**（`content/host/`、`kernel/events.rs` 均为 `??`）
+  → 按「只提交自己的文件」登记，待拆分落定后实施。
+
+**复现用例状态**：`nc12_dangling_reference_repro`（seed 44170）当前**失败**（断言 faults==0），
+这是**预期的**——它是该缺陷的守护用例；修复后应转为通过。已在进度主稿登记为未验收项。

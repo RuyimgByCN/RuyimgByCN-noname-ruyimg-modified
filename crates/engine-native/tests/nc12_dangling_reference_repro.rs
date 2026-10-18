@@ -46,6 +46,13 @@ fn dump(e: &Engine, tag: &str) {
             p.hp, p.max_hp, p.hand, p.equips, p.judge, p.off_court
         );
     }
+    // 事件栈：定位**发出用牌事件**的帧（panic 来自 commit_card_used，需知道谁在提交）
+    for (i, frame) in res.stack.iter().enumerate() {
+        eprintln!(
+            "[{tag}]   frame[{i}] id={:?} parent={:?} kind={:?} stage={:?} data={:?}",
+            frame.id, frame.parent, frame.kind, frame.stage, frame.data
+        );
+    }
     for (i, park) in res.parks.iter().enumerate() {
         // `Park` 无 Debug：打印可读字段 + 机器快照（若可序列化）
         eprintln!(
