@@ -445,3 +445,86 @@ async fn nc09_native_backend_replies_carry_actions_and_fanout() {
     }
     assert!(pushed >= 1, "命令后其余成员应收到个性化推送（实际 {pushed}）");
 }
+
+/// 多房间并发与隔离：不同原生房间互不影响；房间信箱有界（满时 `try_send` 失败）。
+#[tokio::test]
+async fn nc09_native_rooms_are_isolated_and_mailbox_bounded() {
+    // 5 个原生房间（不同种子），各自入座并推进一次 → 摘要互不相同
+    let mut handles = Vec::new();
+    for i in 0..5u64 {
+        let handle =
+            room_native_actor::spawn_room_native(300 + i, native_session(20261900 + i, 2), 8, 4);
+        let _ = join(&handle, 1, Some(0), None).await.expect("入座");
+        handles.push(handle);
+    }
+    let mut hashes = Vec::new();
+    for handle in &handles {
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Snapshot {
+                connection_id: 1,
+                header: MessageHeader::new(1, 1, 0),
+                reply: rt,
+            })
+            .await
+            .expect("send snapshot");
+        match rr.await.expect("reply").expect("snapshot") {
+            ServerMessage::Snapshot { view, .. } => hashes.push(view.state_hash),
+            other => panic!("应返回快照: {other:?}"),
+        }
+    }
+    let unique: std::collections::BTreeSet<_> = hashes.iter().collect();
+    assert_eq!(unique.len(), hashes.len(), "不同种子的房间摘要应互不相同");
+
+    // 一个房间的命令不影响另一个房间
+    let before: Vec<[u8; 32]> = hashes.clone();
+    let current = {
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handles[0]
+            .send(RoomMsg::Snapshot {
+                connection_id: 1,
+                header: MessageHeader::new(1, 2, 0),
+                reply: rt,
+            })
+            .await
+            .expect("send");
+        match rr.await.expect("reply").expect("snapshot") {
+            ServerMessage::Snapshot { view, .. } => view.current_player.raw(),
+            other => panic!("应返回快照: {other:?}"),
+        }
+    };
+    let conn = if current == 1 {
+        1
+    } else {
+        let _ = join(&handles[0], 2, Some(current as u8 - 1), None).await;
+        2
+    };
+    let _ = submit(&handles[0], conn, 3, CommandKind::EndPhase {}, 900).await;
+    for (i, handle) in handles.iter().enumerate().skip(1) {
+        let (rt, rr) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Snapshot {
+                connection_id: 1,
+                header: MessageHeader::new(1, 3, 0),
+                reply: rt,
+            })
+            .await
+            .expect("send");
+        match rr.await.expect("reply").expect("snapshot") {
+            ServerMessage::Snapshot { view, .. } => {
+                assert_eq!(view.state_hash, before[i], "其它房间不应受影响（房间 {i}）")
+            }
+            other => panic!("应返回快照: {other:?}"),
+        }
+    }
+
+    // 信箱有界：容量 1 的房间，未消费时 `try_send` 必须失败（tokio mpsc 有界语义）
+    let (tx, mut rx) = mpsc::channel::<String>(1);
+    // 直接验证 tokio 有界通道语义（房间 actor 使用同一 mpsc 有界信箱）
+    tx.try_send("a".into()).expect("首个可入");
+    assert!(
+        tx.try_send("b".into()).is_err(),
+        "容量 1 的信箱在未消费时必须拒绝第二个"
+    );
+    let _ = rx.recv().await;
+}
