@@ -238,6 +238,12 @@ async function connectOnline(intent: OnlineIntent) {
   networkClient.onEnvelope((envelope) => {
     void handleEnvelope(envelope);
   });
+  // NC09：断线可见——服务端中途崩溃时写入状态行与日志（不静默保持旧状态）
+  networkClient.onClose(() => {
+    statusLine.value = "连接已断开（服务端不可达）";
+    store.connected = false;
+    pushLog(store, "连接已断开：服务端不可达或已停止");
+  });
   networkClient.onRoster((roster) => {
     roomRoster.value = roster;
     roomId.value = roster.room_id;

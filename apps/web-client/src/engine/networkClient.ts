@@ -89,6 +89,7 @@ export class NetworkEngineClient {
   >();
   private envelopeListeners = new Set<(envelope: EngineEnvelope) => void>();
   private rosterListeners = new Set<(roster: RoomRoster) => void>();
+  private closeListeners = new Set<() => void>();
   private heartbeat: number | null = null;
   private disposed = false;
 
@@ -166,6 +167,12 @@ export class NetworkEngineClient {
   onEnvelope(listener: (envelope: EngineEnvelope) => void): () => void {
     this.envelopeListeners.add(listener);
     return () => this.envelopeListeners.delete(listener);
+  }
+
+  /// 断线通知（NC09）：注册后返回取消函数。
+  onClose(listener: () => void): () => void {
+    this.closeListeners.add(listener);
+    return () => this.closeListeners.delete(listener);
   }
 
   onRoster(listener: (roster: RoomRoster) => void): () => void {
@@ -434,6 +441,15 @@ export class NetworkEngineClient {
 
   private handleClose(): void {
     if (this.heartbeat != null) window.clearInterval(this.heartbeat);
+    // NC09：断线必须**可见**——此前服务端中途崩溃时界面保持旧状态、无任何提示。
+    // 这里向监听者广播一次「已断开」，由界面写入状态行与日志。
+    for (const listener of this.closeListeners) {
+      try {
+        listener();
+      } catch {
+        /* 监听者异常不得影响其它监听者 */
+      }
+    }
     this.heartbeat = null;
     this.socket = null;
     if (!this.disposed) this.rejectOutstanding(new Error("与服务端的连接已断开"));

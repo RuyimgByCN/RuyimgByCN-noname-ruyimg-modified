@@ -1,0 +1,5 @@
+STEP online {"clicked":true}
+STEP joined_room 1
+STEP after_kill {"len":583,"hasErrorText":false,"errorLine":""}
+STEP after_restart {"len":583,"hasRoom":true,"roomLine":"房间 #1","hasErrorText":false}
+RESULT {"room_id":"1","after_kill":{"len":583,"hasErrorText":false,"errorLine":""},"after_restart":{"len":583,"hasRoom":true,"roomLine":"房间 #1","hasErrorText":false},"console_errors":[]}
