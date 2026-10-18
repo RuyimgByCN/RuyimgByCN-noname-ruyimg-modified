@@ -1707,7 +1707,7 @@
     },
     {
      "name": "gongxin",
-     "mapping": null
+     "mapping": "host:gongxin"
     },
     {
      "name": "jqimou",

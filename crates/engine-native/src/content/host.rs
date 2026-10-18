@@ -1309,6 +1309,9 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 攻心（tag 514，swd 批 155，`gongxin`）：出牌阶段限一次——看一名
+    /// 其他角色的手牌，选其一张**红桃**牌：弃置之，或将其置于牌堆顶。
+    Gongxin,
     /// 魔化（tag 513，swd 批 154，`mohua2`）：自己进入濒死时**锁定**——
     /// 移除旧三技（血裔/傲剑/魔化）、获得撒旦四技（魔焰/灭道/疾风/修罗）、
     /// 体力上限改 4、回复 2、摸 2。
@@ -1809,6 +1812,7 @@ impl HostBehavior {
             HostBehavior::Miedao => 511,
             HostBehavior::Xiuluo => 512,
             HostBehavior::Mohua2 => 513,
+            HostBehavior::Gongxin => 514,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2562,6 +2566,7 @@ impl HostBehavior {
             511 => HostBehavior::Miedao,
             512 => HostBehavior::Xiuluo,
             513 => HostBehavior::Mohua2,
+            514 => HostBehavior::Gongxin,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2582,7 +2587,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 509] = [
+        pub const ALL: [HostBehavior; 510] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3092,6 +3097,7 @@ impl HostBehavior {
         HostBehavior::Miedao,
         HostBehavior::Xiuluo,
         HostBehavior::Mohua2,
+        HostBehavior::Gongxin,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3363,6 +3369,7 @@ impl HostBehavior {
             HostBehavior::Miedao => "host:miedao",
             HostBehavior::Xiuluo => "host:swd_xiuluo",
             HostBehavior::Mohua2 => "host:mohua2",
+            HostBehavior::Gongxin => "host:gongxin",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3842,6 +3849,8 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 攻心：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::Gongxin => None,
             // 魔化：自己进入濒死（锁定）
             HostBehavior::Mohua2 => Some(TriggerMeta {
                 event: EventKind::Dying,
@@ -6277,6 +6286,9 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 攻心（swd 批 155）：目录技能名（看手牌选红桃：弃置或置牌堆顶）。
+pub const SWD_GONGXIN_KEY: &str = "gongxin";
+
 /// 魔化（swd 批 154）：目录技能名（濒死变身撒旦形态）。
 pub const SWD_MOHUA2_KEY: &str = "mohua2";
 
@@ -7469,6 +7481,7 @@ impl HostSkillBehavior {
             HostBehavior::Miedao => (None, None),
             HostBehavior::Xiuluo => (None, None),
             HostBehavior::Mohua2 => (None, None),
+            HostBehavior::Gongxin => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7807,6 +7820,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            HostBehavior::Gongxin => false,
             // 魔化：自己进入濒死
             HostBehavior::Mohua2 => matches!(event,
                 EventData::Dying { player, .. } if *player == owner),
@@ -10084,6 +10098,28 @@ impl SkillBehavior for HostSkillBehavior {
             }
             // 轩辕（swd 批 146）：结束阶段触发（无主动面）
             HostBehavior::Xuanyuan => None,
+            // 攻心（swd 批 155）：出牌阶段主动（每回合一次；存在有手牌的其他角色）
+            HostBehavior::Gongxin => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || !ctx
+                        .state
+                        .alive_players()
+                        .any(|p| p != owner && !ctx.state.player(p).hand.is_empty())
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 魔焰（swd 批 151）：出牌阶段主动（每回合一次；体力未满且有红牌）
             HostBehavior::Moyan => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
@@ -21299,6 +21335,138 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 攻心：选目标 → 看其手牌选一张红桃 → 弃置或置于牌堆顶
+            HostBehavior::Gongxin => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner && !ctx.core.player(*p).hand.is_empty())
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "gongxin_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive || ctx.core.player(target).hand.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.target = Some(target);
+                    self.stage = HostStage::SelectCard;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(target)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "gongxin_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).hand.contains(&card) {
+                        return Flow::Done;
+                    }
+                    if ctx.catalog.cards[card as usize].suit != crate::catalog::Suit::Heart {
+                        self.stage = HostStage::SelectCard;
+                        let options: Vec<ChoiceOption> = ctx
+                            .core
+                            .player(target)
+                            .hand
+                            .iter()
+                            .copied()
+                            .map(ChoiceOption::Card)
+                            .collect();
+                        return Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: "gongxin_card",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: true,
+                            },
+                        };
+                    }
+                    self.card = Some(card);
+                    self.stage = HostStage::SelectNature;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "gongxin_choice",
+                            options: vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectNature => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Tag(choice)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).hand.contains(&card) {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "攻心",
+                        owner: self.owner,
+                    });
+                    if choice == 0 {
+                        ctx.discard_from_hand(target, card);
+                    } else {
+                        ctx.take_hand_card(target, card);
+                        ctx.core.deck.push(card);
+                        ctx.log(LogEvent::CardsGiven {
+                            from: target,
+                            to: self.owner,
+                            cards: vec![card],
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 魔化：移除旧三技 → 获得撒旦四技 → 上限 4 → 回复 2 → 摸 2
             HostBehavior::Mohua2 => {
                 for name in ["miles_xueyi", "aojian", "mohua2"] {
