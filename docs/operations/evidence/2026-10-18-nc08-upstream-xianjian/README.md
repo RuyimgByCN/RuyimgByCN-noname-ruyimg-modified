@@ -70,3 +70,28 @@ PROBE out=Accepted { state_hash: … } hp 2 -> 2 stack=0 choice=None
   的测试助手 → **登记为待办**；
 - **命名/易误用风险登记**：`debug_recover` 名称暗示「回复」但只发事件，建议重命名或在文档注明
   （属测试面改动，待 host/kernel 拆分落定后统一处理）。
+
+## 6 行为面**已补验收通过**（2026-10-19 同轮）
+
+按 §5 的根因结论改走**真实回复路径**后，行为面用例转为通过（不再需要 `#[ignore]`）：
+
+```rust
+// ① 推进到出牌阶段（桃在出牌阶段使用）
+// ② 布阵：已受伤（hp=2）+ 手牌一张【桃】
+// ③ 打出【桃】：PlayCard { card: tao, targets: vec![] }   ← 自目标牌按「无目标」建模
+// ④ 断言：无确认门（锁定技）；体力 +1（回复本身生效）；护甲 +1（灵雪 changeHujia）
+```
+
+`upstream_lingxue_gains_hujia_on_real_recover` → **通过**（3 passed / 0 failed / 0 ignored）。
+
+**顺带确认的两条口径**：
+1. **桃（自目标牌）在原生按「无目标」建模**（`targets: vec![]`），与无中生有同口径——传
+   `vec![0]` 会被判 `IllegalTargets`；
+2. 回复必须走**真实使用路径**（打牌）才会施加体力变化；`debug_recover` 只发事件（§5）。
+
+## 7 验证结果（更新）
+
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| 定向 | **3 passed / 0 failed / 0 ignored** | [targeted-2.log](targeted-2.log) |
+| engine-native 全量（含 examples） | 见提交说明 | — |
