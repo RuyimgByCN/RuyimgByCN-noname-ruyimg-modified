@@ -107,7 +107,9 @@ use crate::state::{
 /// `liaoyuan_count`。v102 字节被拒绝。
 /// v104（2026-10-17，swd 轩辕剑批 146）：`TurnState` 追加轩辕剑加伤标记
 /// `xuanyuanjian_marked`。v103 字节被拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 104;
+/// v105（2026-10-17，swd 昆仑镜批 149）：`TurnState` 追加昆仑镜快照
+/// （`kunlunjing_snapshot`/`kunlunjing_hp`）。v104 字节被拒绝。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 105;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -3546,6 +3548,24 @@ fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     w.u8(t.liaoyuan_count);
     // 轩辕剑加伤标记（v104，swd 批 146）
     w.boolean(t.xuanyuanjian_marked);
+    // 昆仑镜快照（v105，swd 批 149）：逐玩家（手牌/装备/判定区）+ 体力
+    w.len(t.kunlunjing_snapshot.len());
+    for (p, hand, equips, judge) in &t.kunlunjing_snapshot {
+        w.u8(*p);
+        w.len(hand.len());
+        for c in hand {
+            w.u32(*c);
+        }
+        w.len(equips.len());
+        for c in equips {
+            w.u32(*c);
+        }
+        w.len(judge.len());
+        for c in judge {
+            w.u32(*c);
+        }
+    }
+    w.u32(t.kunlunjing_hp as u32);
     w.len(t.extra_phases.len());
     for p in &t.extra_phases {
         w.u8(*p);
@@ -4046,6 +4066,15 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let cards_used_turn = r.u32()?;
     let liaoyuan_count = r.u8()?;
     let xuanyuanjian_marked = r.boolean()?;
+    let mut kunlunjing_snapshot = Vec::new();
+    for _ in 0..r.len()? {
+        let p = r.u8()?;
+        let hand = r.vec(|r| r.u32())?;
+        let equips = r.vec(|r| r.u32())?;
+        let judge = r.vec(|r| r.u32())?;
+        kunlunjing_snapshot.push((p, hand, equips, judge));
+    }
+    let kunlunjing_hp = r.u32()? as i32;
     let extra_phases = r.vec(|r| r.u8())?;
     let extra_phase_lingwu = r.boolean()?;
     let bte_used_play_phase = r.u32()?;
@@ -4200,6 +4229,8 @@ fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
                 cards_used_turn,
                 liaoyuan_count,
                 xuanyuanjian_marked,
+                kunlunjing_snapshot,
+                kunlunjing_hp,
                 extra_phases,
                 extra_phase_lingwu,
                 bte_used_play_phase,

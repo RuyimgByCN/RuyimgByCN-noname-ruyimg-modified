@@ -955,7 +955,7 @@
     },
     {
      "name": "kunlunjing",
-     "mapping": null
+     "mapping": "host:kunlunjing"
     }
    ]
   },

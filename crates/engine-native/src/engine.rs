@@ -483,6 +483,8 @@ impl Engine {
                 cards_used_turn: 0,
                 liaoyuan_count: 0,
                 xuanyuanjian_marked: false,
+                kunlunjing_snapshot: Vec::new(),
+                kunlunjing_hp: 0,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
@@ -5427,6 +5429,18 @@ fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_u8(&mut h, c.turn.liaoyuan_count);
     // 轩辕剑加伤标记（swd 批 146，规则 v320）
     push_u8(&mut h, c.turn.xuanyuanjian_marked as u8);
+    // 昆仑镜快照（swd 批 149，规则 v321）
+    push_u32(&mut h, c.turn.kunlunjing_snapshot.len() as u32);
+    for (p, hand, equips, judge) in &c.turn.kunlunjing_snapshot {
+        push_u8(&mut h, *p);
+        for list in [hand, equips, judge] {
+            push_u32(&mut h, list.len() as u32);
+            for card in list {
+                push_u32(&mut h, *card);
+            }
+        }
+    }
+    push_u32(&mut h, c.turn.kunlunjing_hp as u32);
     push_u32(&mut h, c.turn.extra_phases.len() as u32);
     for p in &c.turn.extra_phases {
         push_u8(&mut h, *p);
@@ -6618,6 +6632,8 @@ mod tests {
                 cards_used_turn: 0,
                 liaoyuan_count: 0,
                 xuanyuanjian_marked: false,
+                kunlunjing_snapshot: Vec::new(),
+                kunlunjing_hp: 0,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,
@@ -6726,6 +6742,8 @@ mod tests {
                 cards_used_turn: 0,
                 liaoyuan_count: 0,
                 xuanyuanjian_marked: false,
+                kunlunjing_snapshot: Vec::new(),
+                kunlunjing_hp: 0,
                 extra_phases: Vec::new(),
                 extra_phase_lingwu: false,
                 bte_used_play_phase: 0,

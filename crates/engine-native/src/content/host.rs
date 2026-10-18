@@ -1309,6 +1309,10 @@ pub enum HostBehavior {
     /// 神威（tag 473，`shenwei`）：锁定——摸牌阶段多摸 min(3, 其他角色数)，
     /// 手牌上限同量加成。
     Shenwei,
+    /// 昆仑镜（tag 507，swd deferred 消解批 149，`kunlunjing`）：组技两
+    /// 面——阶段收束记录全场（手牌/装备/判定区）快照与当时体力；之后自己
+    /// 阶段开始时若体力低于快照值，可**回滚**：把快照中的牌拉回各自原位。
+    Kunlunjing,
     /// 神弓（tag 506，swd deferred 消解批 148，`shengong`）：需要打出
     /// 【闪】/【杀】时，可借用**其他角色**的防具/武器作为响应（上游
     /// `chooseToRespondBegin` 借用装备；原生在响应窗追加借用候选）。
@@ -1781,6 +1785,7 @@ impl HostBehavior {
             HostBehavior::XuanyuanjianBacklash => 504,
             HostBehavior::Xuanyuan => 505,
             HostBehavior::Shengong => 506,
+            HostBehavior::Kunlunjing => 507,
             HostBehavior::GuisheqiCard => 301,
             HostBehavior::XianluhuiCard => 302,
             HostBehavior::ShaDamageForceDiscard => 0,
@@ -2528,6 +2533,7 @@ impl HostBehavior {
             504 => HostBehavior::XuanyuanjianBacklash,
             505 => HostBehavior::Xuanyuan,
             506 => HostBehavior::Shengong,
+            507 => HostBehavior::Kunlunjing,
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
@@ -2548,7 +2554,7 @@ impl HostBehavior {
     pub const fn wugu_remain_gain(self) -> bool {
         matches!(self, Self::WudianLiangceRemain)
     }
-        pub const ALL: [HostBehavior; 503] = [
+        pub const ALL: [HostBehavior; 504] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -3052,6 +3058,7 @@ impl HostBehavior {
         HostBehavior::XuanyuanjianBacklash,
         HostBehavior::Xuanyuan,
         HostBehavior::Shengong,
+        HostBehavior::Kunlunjing,
     ];
 
     /// 扩展包数据 `mapping` 键（宿主 ABI：与 tag 一一对应，只增不改）。
@@ -3317,6 +3324,7 @@ impl HostBehavior {
             HostBehavior::XuanyuanjianBacklash => "host:xuanyuanjian3",
             HostBehavior::Xuanyuan => "host:xuanyuan",
             HostBehavior::Shengong => "host:shengong",
+            HostBehavior::Kunlunjing => "host:kunlunjing",
             HostBehavior::GuisheqiCard => "guisheqi_card",
             HostBehavior::XianluhuiCard => "xianluhui_card",
             HostBehavior::SwdJiefen => "host:jiefen",
@@ -3795,6 +3803,16 @@ impl HostBehavior {
                 priority: 0,
                 optional: true,
                 extra_events: Vec::new(),
+            }),
+            // 昆仑镜：阶段收束（锁定记录快照）+ 阶段开始（体力低于快照值
+            // 时**机器内确认门**回滚——上游两面可选性不同，故不用
+            // TriggerMeta.optional）
+            HostBehavior::Kunlunjing => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                optional: false,
+                extra_events: vec![EventKind::PhaseEnd],
             }),
             // 神弓：被动修饰（无触发时机；响应窗内联候选）
             HostBehavior::Shengong => None,
@@ -6187,6 +6205,39 @@ pub const HLSS_DAMAGE_FIRE: u8 = 2;
 pub const HLSS_DAMAGE_TRICK: u8 = 4;
 /// 起风（同批）：目录技能名。
 pub const HLSS_FENGQI_KEY: &str = "hlss_fengqi";
+/// 昆仑镜（swd 批 149）：目录技能名（阶段收束快照 / 体力下降时回滚）。
+pub const SWD_KUNLUNJING_KEY: &str = "kunlunjing";
+
+/// 昆仑镜回滚：把 `card` 从当前所在任意区移到 `player` 的第 `zone` 区
+/// （0=手牌 1=装备 2=判定区）；装备区变更同步授予/撤销装备技。
+fn kunlunjing_move_to(
+    ctx: &mut Ctx<'_>,
+    card: CardId,
+    player: PlayerId,
+    zone: u8,
+) {
+    // 先自任意区移除（含装备技撤销）
+    for p in 0..ctx.core.players.len() as PlayerId {
+        if ctx.core.player(p).equips.contains(&card) {
+            ctx.core.player_mut(p).equips.retain(|x| *x != card);
+            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, card);
+        }
+        ctx.core.player_mut(p).hand.retain(|x| *x != card);
+        ctx.core.player_mut(p).judge.retain(|x| *x != card);
+    }
+    ctx.core.table.retain(|x| *x != card);
+    ctx.core.deck.retain(|x| *x != card);
+    ctx.core.discard.retain(|x| *x != card);
+    match zone {
+        0 => ctx.core.player_mut(player).hand.push(card),
+        1 => {
+            ctx.core.player_mut(player).equips.push(card);
+            crate::kernel::grant_equip_skills(ctx, player, card);
+        }
+        _ => ctx.core.player_mut(player).judge.push(card),
+    }
+}
+
 /// 神弓（swd 批 148）：目录技能名（借用他人防具/武器响应）。
 pub const SWD_SHENGONG_KEY: &str = "shengong";
 
@@ -7315,6 +7366,7 @@ impl HostSkillBehavior {
             HostBehavior::XuanyuanjianBacklash => (None, None),
             HostBehavior::Xuanyuan => (None, None),
             HostBehavior::Shengong => (None, None),
+            HostBehavior::Kunlunjing => (None, None),
             HostBehavior::SwdNlianji => (None, None),
             // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
             HostBehavior::SwdTiebi => match event {
@@ -7653,6 +7705,16 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::Hxunzhi2 => false,
             HostBehavior::Gxianyin => false,
             HostBehavior::Jilve => false,
+            // 昆仑镜：自己的阶段收束（快照）或阶段开始（体力低于快照值）
+            HostBehavior::Kunlunjing => match event {
+                EventData::Phase { player, begin: false, .. } => *player == owner,
+                EventData::Phase { player, begin: true, .. } => {
+                    *player == owner
+                        && !ctx.state.turn.kunlunjing_snapshot.is_empty()
+                        && ctx.state.player(owner).hp < ctx.state.turn.kunlunjing_hp
+                }
+                _ => false,
+            },
             HostBehavior::Shengong => false,
             // 轩辕剑·伤增：自己是伤害来源且未横置伤害
             HostBehavior::XuanyuanjianDamage => matches!(event,
@@ -21081,6 +21143,52 @@ impl crate::catalog::SkillMachine for HostMachine {
             HostBehavior::Yuhuo => Flow::Done,
             HostBehavior::Shenwei => Flow::Done,
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
+            // 昆仑镜：阶段收束记录快照 / 阶段开始（机器内确认门）回滚
+            HostBehavior::Kunlunjing => {
+                let begin = matches!(
+                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data),
+                    Some(EventData::Phase { begin: true, .. })
+                );
+                if !begin {
+                    let mut snap = Vec::new();
+                    for p in 0..ctx.core.players.len() as PlayerId {
+                        let pl = ctx.core.player(p);
+                        snap.push((p, pl.hand.clone(), pl.equips.clone(), pl.judge.clone()));
+                    }
+                    let hp = ctx.core.player(self.owner).hp;
+                    ctx.core.turn.kunlunjing_snapshot = snap;
+                    ctx.core.turn.kunlunjing_hp = hp;
+                    return Flow::Done;
+                }
+                if self.stage == HostStage::Act {
+                    self.stage = HostStage::SelectNature;
+                    return Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec::confirm("trigger_confirm"),
+                    };
+                }
+                if !ctx.answer().contains(&ChoiceOption::Confirm) {
+                    return Flow::Done;
+                }
+                ctx.log(LogEvent::SkillTriggered {
+                    skill: "昆仑镜",
+                    owner: self.owner,
+                });
+                // 回滚：把快照中的牌拉回各自原位（当前所在区任意）
+                let snap = std::mem::take(&mut ctx.core.turn.kunlunjing_snapshot);
+                for (p, hand, equips, judge) in snap {
+                    for c in hand.iter().copied() {
+                        kunlunjing_move_to(ctx, c, p, 0);
+                    }
+                    for c in equips.iter().copied() {
+                        kunlunjing_move_to(ctx, c, p, 1);
+                    }
+                    for c in judge.iter().copied() {
+                        kunlunjing_move_to(ctx, c, p, 2);
+                    }
+                }
+                Flow::Done
+            }
             HostBehavior::Shengong => Flow::Done,
             // 轩辕剑·伤增：帧内 +1 并转雷属性、置标记
             HostBehavior::XuanyuanjianDamage => {

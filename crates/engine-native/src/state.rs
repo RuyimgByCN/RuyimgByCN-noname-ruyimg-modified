@@ -500,6 +500,10 @@ pub struct TurnState {
     /// 轩辕剑加伤标记（swd 批 146，规则 v320）：上游 `event._xuanyuanjian`
     /// （加伤生效后反噬子技据此失去体力）。
     pub xuanyuanjian_marked: bool,
+    /// 昆仑镜·快照（swd 批 149，规则 v321）：逐玩家（手牌/装备/判定区）。
+    pub kunlunjing_snapshot: Vec<(PlayerId, Vec<CardId>, Vec<CardId>, Vec<CardId>)>,
+    /// 昆仑镜·快照时体力（同批）。
+    pub kunlunjing_hp: i32,
     /// 额外阶段队列（同批）：`insertPhase` 原语——阶段结束时若非空则弹出
     /// 该阶段作为下一阶段（码同 `Phase`：0 准备/1 摸牌/2 出牌/3 弃牌/4 结束）。
     pub extra_phases: Vec<u8>,
