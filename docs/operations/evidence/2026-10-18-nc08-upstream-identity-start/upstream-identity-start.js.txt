@@ -1,0 +1,41 @@
+o('markSkill', current, ['stratagem_fury']);
+					current.ai.shown = 0;
+				}
+				game.stratagemCamouflage();
+			}
+		},
+		async (event, trigger, player) => {
+			if (_status.mode != "stratagem") {
+				event.beginner = _status.firstAct2 || game.zhong || game.zhu || _status.firstAct || game.me;
+			}
+			game.gameDraw(event.beginner, player => {
+				if (_status.mode == "purple" && player.seatNum > 5) {
+					return 5;
+				}
+				return 4;
+			});
+			if (_status.connectMode && lib.configOL.change_card) {
+				game.replaceHandcards(game.players.slice(0));
+			}
+		},
+		async (event, trigger, player) => {
+			game.phaseLoop(event.beginner);
+		},
+	],
+	game: {
+		/**
+		 * 是否能在菜单中切换角色（换人）
+		 *
+		 * @returns {boolean}
+		 */
+		canReplaceViewpoint() {
+			return true;
+		},
+		// 联机相关
+		/**
+		 * 联机中获取当前所有玩家的状态对象
+		 */
+		getState() {
+			const state = {};
+			for (const id in lib.playerOL) {
+				const player = lib.
