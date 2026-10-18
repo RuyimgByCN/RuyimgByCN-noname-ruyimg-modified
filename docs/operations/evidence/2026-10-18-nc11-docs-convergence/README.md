@@ -25,7 +25,7 @@
 | 4 | 转换包数量：台账写「packages/extensions 现为 **15 个**转换包目录」；进度/清单多处沿用「15 个转换包」 | 统一标注为 **实测 41 个目录 / 41 份 `package.npack.json`**（其中 40 个对应 37 来源，1 个 `boss-zhugeliang-upstream-liuli` 属 T11 Boss 内容）；15 的句子保留为 2026-10-10 时点 | [`package-manifests.log`](package-manifests.log)（`ls -d ... | wc -l` = 41、`package.npack.json` = 41） |
 | 5 | 整包数量：台账同一页出现 **18/37、19/37**，覆盖清单写 **20/37**，进度完成状态写 **18/37** 而同页批次行一路推到 **24/37** | 全部改为引用 **登记表机器字段**：37 条「整包」条目 resolved **24** / open **13**（`meta.wholepack_count = 24`），并保留各处原数字为「2026-10-17 批次快照」 | [`register-fields.log`](register-fields.log)：`整包条目: 37 {'open': 13, 'resolved': 24}` |
 | 6 | 台账行尾「总账 18/37 / 19/37」逐行互相矛盾；L13 行写 19/37、L23 行写 18/37、E06 行写 18/37 | 在 §3 表头加「整包计数勘正（2026-10-18）」块，注明行尾字样为当时记录、读数以机器字段为准 | 同上 |
-| 7 | 待做登记：进度写「登记表 resolved 21→39、open 68→50、剩余 50 项」；登记表 README 写「resolved 54 / open 35、整包 20/37」；而 `todo-register.json` 机器字段为 61/30，`items` 91 条 | 进度行改为引用机器字段（**resolved 61 / open 30 / `items` 91**，`meta.item_count = 89` 已过期），并注明目录 README 与 JSON 不一致、以 JSON 为准 | [`register-fields.log`](register-fields.log) |
+| 7 | 待做登记：进度写「登记表 resolved 21→39、open 68→50、剩余 50 项」；登记表 README 写「resolved 54 / open 35、整包 20/37」；而 `todo-register.json` 机器字段为 61/30，`items` 91 条（`meta.item_count` 89 亦过期，已由 2026-10-18 复核提交 `9cc8560f` 修正为 91） | 进度行改为引用机器字段（**resolved 61 / open 30 / `items` 91**，`meta.item_count = 89` 已过期），并注明目录 README 与 JSON 不一致、以 JSON 为准 | [`register-fields.log`](register-fields.log) |
 | 8 | 台账 L29 行只有 2 个单元格（缺「已完成的核查 / 待处理与验收 / 批次」三列），与表头 5 列不符，机器解析失败 | 只补列结构（原内容留在「原生重构状态」列；缺列写明「原行未单列」），不新增结论；解析已验证 37/37 行均为 5 列 | `gen_registry.py` 行解析（[`registry-gen.log`](registry-gen.log)） |
 | 9 | 台账 L01/L09/L24/L27/U07 行未写出转换包目录，证据关系断链 | 按在盘包补链接（`ai-tuning-upstream-liuli`、`qhly-upstream-liuli`、`skin-switch-upstream-liuli`、`select-beautify-upstream-liuli`、`wudian-upstream-noname`） | [`package-manifests.log`](package-manifests.log)（目录存在）；登记表「生产接口」列 |
 | 10 | 「行数门禁 8215 文件」等历史计数被当作当前值 | 当前结论改为「门禁通过（本次实测 8254 文件，计数随并行提交增长）」，历史计数保留在日期表中 | [`source-lines-gate.log`](source-lines-gate.log) |
@@ -138,7 +138,7 @@ exit=0
 5. **登记表 README 与 JSON 不一致未改**：`docs/operations/evidence/2026-10-16-todo-register/README.md`
    仍写 resolved 54 / open 35 / 整包 20/37，与 `todo-register.json`（61/30、整包 24/13）矛盾；
    本切片只在主稿与登记表注明「以 JSON 为准」，未改该历史证据正文。
-6. **登记表 `meta.item_count = 89` 与实际 91 条不一致**：属历史证据快照的机器字段漂移，本切片未改证据文件。
+6. ~~**登记表 `meta.item_count = 89` 与实际 91 条不一致**~~ **已修（2026-10-18 复核，提交 `9cc8560f`）**：`meta.item_count` 89→91，与 `items` 91 条一致；本切片当时未改该证据文件。
 7. **27 组重复编号未消解为唯一编号**：按 NC11 只做标注与防新增，不重命名历史 ADR。
 8. 本切片未跑 cargo/前端/WASM 门禁（不改产品源码）；相关状态以各 NC 证据与进度主稿为准。
 
