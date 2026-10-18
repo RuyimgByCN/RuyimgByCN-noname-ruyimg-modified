@@ -516,6 +516,7 @@ mod snapshot;
 mod views;
 use apply_command::*;
 mod hash;
+mod legal_actions;
 use hash::*;
 mod play_card;
 use play_card::*;
