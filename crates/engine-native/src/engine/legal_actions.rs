@@ -157,7 +157,9 @@ impl Engine {
         match probe.submit(GameCommand {
             actor: seat,
             expected_revision: self.revision(),
-            dedup_id: self.last_dedup + 1,
+            // 去重高水位耗尽（u64::MAX）时用饱和值：探针会以 DuplicateCommand 被拒，
+            // 表现为「无候选」而不是算术溢出 panic。
+            dedup_id: self.last_dedup.saturating_add(1),
             action: action.clone(),
         }) {
             crate::engine::CommandOutcome::Rejected(reason) => Err(reason),

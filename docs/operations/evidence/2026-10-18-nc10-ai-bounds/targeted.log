@@ -1,0 +1,3 @@
+DBG 预算 0：该座位此刻无合法动作，规划返回占位 NextPhase
+DBG NC10 泄漏面：静止态 0/28 改变；非静止态窗口 0/4 改变
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.68s

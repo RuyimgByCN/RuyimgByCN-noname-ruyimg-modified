@@ -544,9 +544,15 @@ impl Engine {
             // 模拟推进回退：单层评分不需要回退——每个候选独立从 sim 克隆
             let _ = &mut sim; // sim 保持基线（候选都从同一基线出发）
         }
-        let action = best
-            .map(|(_, a)| a)
-            .unwrap_or(GameAction::NextPhase);
+        // NC10：回退动作也必须**合法**——预算为 0/全部候选被拒时不得盲目返回
+        // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
+        // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
+        let action = best.map(|(_, a)| a).unwrap_or_else(|| {
+            self.legal_actions(seat)
+                .into_iter()
+                .next()
+                .unwrap_or(GameAction::NextPhase)
+        });
         Plan {
             seat,
             revision: submitted_revision,
