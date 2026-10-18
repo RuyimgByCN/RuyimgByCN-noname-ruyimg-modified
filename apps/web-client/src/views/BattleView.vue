@@ -23,7 +23,18 @@ import {
   presentationDelay,
   pushLog,
 } from "../engine/viewStore";
+import {
+  applyCandidatePayload,
+  failCandidateLoad,
+  initialGeneralSelectState,
+  markCandidatesLoading,
+  seatProjectionFromView,
+  setGeneralSelectSeat,
+  submitGeneralSelection,
+  withSeatProjection,
+} from "../engine/generalSelectModel";
 import BattleBoard from "../components/battle/BattleBoard.vue";
+import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
 
 const route = useRoute();
@@ -42,6 +53,10 @@ const roomId = ref(0);
 const roomStarted = ref(false);
 const isOnline = computed(() => route.query.mode === "online");
 const isSpectator = computed(() => isOnline.value && selfId.value === 0);
+const generalSelect = ref(initialGeneralSelectState(selfId.value));
+const showGeneralSelect = computed(
+  () => !isOnline.value && store.connected && localClient.isNative(),
+);
 
 interface OnlineIntent {
   action: "create" | "join" | "spectate";
@@ -78,6 +93,62 @@ async function handleEnvelope(env: EngineEnvelope) {
     : `${prefix}rev ${env.revision}${hashHint ? ` · ${hashHint}…` : ""}${
         localClient.isNative() ? " · native" : ""
       }`;
+  syncGeneralSelectProjection();
+}
+
+/** 选将面板的座位投影跟随主视图更新（开局/读档/动作后都能看到技能刷新）。 */
+function syncGeneralSelectProjection() {
+  generalSelect.value = withSeatProjection(
+    generalSelect.value,
+    seatProjectionFromView(store.view, generalSelect.value.seat),
+  );
+}
+
+/**
+ * 拉取原生目录候选。失败（旧产物缺导出 / 畸形回包）显示在面板里，不静默变成
+ * 「没有候选」；空列表由模型区分为合法空目录。
+ */
+async function loadGeneralCandidates() {
+  if (isOnline.value || !localClient.isNative()) return;
+  generalSelect.value = markCandidatesLoading(generalSelect.value);
+  try {
+    const payload = await localClient.generalCandidates();
+    generalSelect.value = applyCandidatePayload(generalSelect.value, payload);
+  } catch (error) {
+    generalSelect.value = failCandidateLoad(generalSelect.value, error);
+  }
+}
+
+/** 点击候选：按名装配到面板座位；成功后应用刷新信封，失败把错误留在面板。 */
+async function chooseGeneralCandidate(name: string) {
+  if (isOnline.value || !localClient.isNative()) return;
+  if (store.busy || generalSelect.value.selectionStatus === "pending") return;
+  const state = generalSelect.value;
+  await withBusy(async () => {
+    generalSelect.value = await submitGeneralSelection(
+      state,
+      name,
+      {
+        chooseGeneral: (seat, generalName) =>
+          localClient.chooseGeneral(seat, generalName),
+        applyEnvelope: (env) => {
+          applyEnvelope(store, env);
+          pushLog(store, `选将 P${state.seat} → ${name}`);
+        },
+      },
+      (pending) => {
+        generalSelect.value = pending;
+      },
+    );
+    if (generalSelect.value.selectionStatus === "accepted") {
+      const hash = generalSelect.value.lastStateHash ?? "";
+      statusLine.value = `选将 P${state.seat} · ${name}${
+        hash ? ` · ${hash.slice(0, 12)}…` : ""
+      }`;
+    } else if (generalSelect.value.selectionStatus === "rejected") {
+      statusLine.value = generalSelect.value.error ?? "选将失败";
+    }
+  });
 }
 
 async function connectAndStart() {
@@ -99,9 +170,11 @@ async function connectAndStart() {
     // 原生座位从 0 起；旧线观察者常为 1。保持 query 兼容，原生路径夹到 [0, players)。
     if (localClient.isNative()) {
       selfId.value = Math.max(0, Math.min(selfId.value, players.value - 1));
+      generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
     }
     const env = await localClient.start(players.value, seed.value, selfId.value);
     await handleEnvelope(env);
+    if (localClient.isNative()) await loadGeneralCandidates();
     const lock = contentLockSummary();
     pushLog(
       store,
@@ -151,6 +224,11 @@ async function loadLatestSave() {
       );
     }
     const env = await localClient.restoreHex(slot.hex);
+    // 读档替换了引擎状态：上一局的选将成功态不能留到读档后的界面。
+    generalSelect.value = setGeneralSelectSeat(
+      generalSelect.value,
+      generalSelect.value.seat,
+    );
     await handleEnvelope(env);
     pushLog(store, `读档 ${slot.id} · rev ${slot.revision}`);
   });
@@ -526,6 +604,14 @@ const turnInfo = computed(() => {
       <p class="status" role="status" aria-live="polite">{{ statusLine }}</p>
       <p v-if="store.error" class="error" role="alert">{{ store.error }}</p>
     </section>
+
+    <GeneralSelectPanel
+      v-if="showGeneralSelect"
+      :state="generalSelect"
+      :busy="store.busy"
+      @choose="chooseGeneralCandidate"
+      @reload="loadGeneralCandidates"
+    />
 
     <section v-if="isOnline && roomRoster" class="panel online-roster" aria-label="联机房间座位">
       <div class="row online-roster-head">

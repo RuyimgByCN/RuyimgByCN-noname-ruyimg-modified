@@ -1,0 +1,90 @@
+# NC05 选将 UI 面板接线证据（改动后工作树）
+# date: 2026-10-18T14:46:38Z
+
+## 1. 玩家界面中的选将引用
+$ grep -rn "generalCandidates\|chooseGeneral\|GeneralSelectPanel" apps/web-client/src/views apps/web-client/src/components
+apps/web-client/src/views/BattleView.vue:37:import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
+apps/web-client/src/views/BattleView.vue:115:    const payload = await localClient.generalCandidates();
+apps/web-client/src/views/BattleView.vue:123:async function chooseGeneralCandidate(name: string) {
+apps/web-client/src/views/BattleView.vue:132:        chooseGeneral: (seat, generalName) =>
+apps/web-client/src/views/BattleView.vue:133:          localClient.chooseGeneral(seat, generalName),
+apps/web-client/src/views/BattleView.vue:608:    <GeneralSelectPanel
+apps/web-client/src/views/BattleView.vue:612:      @choose="chooseGeneralCandidate"
+
+## 2. 面板模板：候选按钮绑定与状态展示
+$ grep -n "candidate\|@click\|@choose\|@reload\|selectionStatus\|loadStatus" apps/web-client/src/components/battle/GeneralSelectPanel.vue
+16:  () => props.busy || props.state.selectionStatus === "pending",
+25:  switch (props.state.loadStatus) {
+33:      return `${props.state.candidates.length} 项候选`;
+50:        :disabled="locked || state.loadStatus === 'loading'"
+52:        @click="emit('reload')"
+59:      v-if="state.loadStatus === 'loading' && state.candidates.length === 0"
+66:      v-else-if="state.loadStatus === 'empty'"
+76:      v-if="state.selectionStatus === 'accepted' && state.assignment"
+89:    <ul v-if="state.candidates.length > 0" class="gs-grid">
+90:      <li v-for="candidate in state.candidates" :key="candidate.def">
+93:          class="candidate"
+94:          :class="{ selected: selectedName === candidate.name }"
+96:          :aria-pressed="selectedName === candidate.name"
+97:          :aria-label="`选择 ${candidate.name}（${candidate.skillLabel}）`"
+98:          @click="emit('choose', candidate.name)"
+100:          <span class="candidate-name">{{ candidate.name }}</span>
+101:          <span class="candidate-skills">{{ candidate.skillLabel }}</span>
+102:          <span class="candidate-def muted">#{{ candidate.def }}</span>
+134:.candidate {
+146:.candidate:hover:not(:disabled) {
+149:.candidate.selected {
+153:.candidate-name {
+156:.candidate-skills {
+160:.candidate-def {
+
+## 3. BattleView：候选拉取 / 点击调用 / 每信封刷新投影 / 新对局与读档重置
+$ grep -n "loadGeneralCandidates\|chooseGeneralCandidate\|submitGeneralSelection\|generalCandidates()\|chooseGeneral(\|syncGeneralSelectProjection\|setGeneralSelectSeat\|GeneralSelectPanel" apps/web-client/src/views/BattleView.vue
+32:  setGeneralSelectSeat,
+33:  submitGeneralSelection,
+37:import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
+96:  syncGeneralSelectProjection();
+100:function syncGeneralSelectProjection() {
+111:async function loadGeneralCandidates() {
+115:    const payload = await localClient.generalCandidates();
+123:async function chooseGeneralCandidate(name: string) {
+128:    generalSelect.value = await submitGeneralSelection(
+133:          localClient.chooseGeneral(seat, generalName),
+173:      generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
+177:    if (localClient.isNative()) await loadGeneralCandidates();
+228:    generalSelect.value = setGeneralSelectSeat(
+608:    <GeneralSelectPanel
+612:      @choose="chooseGeneralCandidate"
+613:      @reload="loadGeneralCandidates"
+
+## 4. 纯函数层：候选→行、提交、错误、投影
+$ grep -n "export function\|export async function" apps/web-client/src/engine/generalSelectModel.ts
+77:export function errorText(error: unknown): string {
+102:export function candidateRowsFromPayload(payload: unknown): GeneralCandidateRow[] {
+164:export function emptySeatProjection(): SeatProjection {
+168:export function initialGeneralSelectState(
+199:export function seatProjectionFromView(
+233:export function withSeatProjection(
+245:export function setGeneralSelectSeat(
+261:export function markCandidatesLoading(
+268:export function applyCandidatePayload(
+291:export function failCandidateLoad(
+335:export async function submitGeneralSelection(
+
+## 5. 行数（门禁单文件 ≤ 2000）
+$ wc -l apps/web-client/src/engine/generalSelectModel.ts apps/web-client/src/components/battle/GeneralSelectPanel.vue apps/web-client/src/views/BattleView.vue apps/web-client/scripts/general-select-ui.test.mjs apps/web-client/src/types/engine.ts
+     409 apps/web-client/src/engine/generalSelectModel.ts
+     178 apps/web-client/src/components/battle/GeneralSelectPanel.vue
+    1086 apps/web-client/src/views/BattleView.vue
+     402 apps/web-client/scripts/general-select-ui.test.mjs
+     320 apps/web-client/src/types/engine.ts
+    2395 total
+
+## 6. 本轮改动文件
+$ git status --short -- apps/web-client/src apps/web-client/scripts docs/architecture/native-progress.md
+ M apps/web-client/src/types/engine.ts
+ M apps/web-client/src/views/BattleView.vue
+ M docs/architecture/native-progress.md
+?? apps/web-client/scripts/general-select-ui.test.mjs
+?? apps/web-client/src/components/battle/GeneralSelectPanel.vue
+?? apps/web-client/src/engine/generalSelectModel.ts

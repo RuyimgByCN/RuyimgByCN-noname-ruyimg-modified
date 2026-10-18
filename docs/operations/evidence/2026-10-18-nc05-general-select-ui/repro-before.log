@@ -1,0 +1,84 @@
+# NC05 选将 UI 缺口复现（采集于改动前）
+# 日期: 2026-10-18T14:17:41Z
+# worktree HEAD: 503ae70385837569bb16f3d596048666af907621
+
+## 1. 玩家界面结构（Vue SFC + 视图/组件两层）
+$ find apps/web-client/src/views apps/web-client/src/components -type f | sort
+apps/web-client/src/components/battle/BattleBoard.vue
+apps/web-client/src/components/battle/HandStrip.vue
+apps/web-client/src/components/battle/SeatCard.vue
+apps/web-client/src/views/BattleView.vue
+apps/web-client/src/views/CollectionView.vue
+apps/web-client/src/views/ExtensionsView.vue
+apps/web-client/src/views/HomeView.vue
+apps/web-client/src/views/ReplayView.vue
+apps/web-client/src/views/SettingsView.vue
+
+$ wc -l apps/web-client/src/views/*.vue apps/web-client/src/components/battle/*.vue
+    1000 apps/web-client/src/views/BattleView.vue
+     218 apps/web-client/src/views/CollectionView.vue
+     173 apps/web-client/src/views/ExtensionsView.vue
+     211 apps/web-client/src/views/HomeView.vue
+     162 apps/web-client/src/views/ReplayView.vue
+     224 apps/web-client/src/views/SettingsView.vue
+     466 apps/web-client/src/components/battle/BattleBoard.vue
+     135 apps/web-client/src/components/battle/HandStrip.vue
+     380 apps/web-client/src/components/battle/SeatCard.vue
+    2969 total
+
+## 2. 视图/组件层是否渲染选将候选或调用 chooseGeneral
+$ git grep -n 'generalCandidates' HEAD -- apps/web-client/src/views apps/web-client/src/components
+[exit=1 matches=0]
+
+$ git grep -n 'chooseGeneral' HEAD -- apps/web-client/src/views apps/web-client/src/components
+[exit=1 matches=0]
+
+$ git grep -n 'GeneralCandidate' HEAD -- apps/web-client/src/views apps/web-client/src/components
+[exit=1 matches=0]
+
+$ git grep -n 'general_candidates' HEAD -- apps/web-client/src/views apps/web-client/src/components
+[exit=1 matches=0]
+
+$ git grep -n 'assign_general' HEAD -- apps/web-client/src/views apps/web-client/src/components
+[exit=1 matches=0]
+
+## 3. 全前端层计数（适配层/Worker/Client 有，UI 无）
+$ git grep -c 'generalCandidates\|chooseGeneral' HEAD -- apps/web-client/src/views
+[exit=1]
+$ git grep -c 'generalCandidates\|chooseGeneral' HEAD -- apps/web-client/src/components
+[exit=1]
+
+$ git grep -l "generalCandidates\|chooseGeneral" HEAD -- apps/web-client/src
+HEAD:apps/web-client/src/engine/client.ts
+HEAD:apps/web-client/src/types/engine.ts
+HEAD:apps/web-client/src/worker/engine.native.worker.ts
+HEAD:apps/web-client/src/worker/nativeBackend.ts
+
+## 4. 视图里现有座位/技能展示面（只有数字 def 与 skill id，没有候选名）
+$ git show HEAD:apps/web-client/src/types/engine.ts | grep -n "character_def\|skills"
+18:  character_def: number;
+26:  skills: SkillView[];
+157:    skills: number[];
+219:  skills: string[];
+
+$ git grep -n "skills" HEAD -- apps/web-client/src/views apps/web-client/src/components
+HEAD:apps/web-client/src/components/battle/BattleBoard.vue:54:  return seats().find((seat) => seat.player === props.selfId)?.skills
+HEAD:apps/web-client/src/views/CollectionView.vue:13:  skills: string[];
+HEAD:apps/web-client/src/views/CollectionView.vue:14:  resolved_skills: string[];
+HEAD:apps/web-client/src/views/CollectionView.vue:37:  skills: Skill[];
+HEAD:apps/web-client/src/views/CollectionView.vue:49:const skillById = computed(() => new Map(catalog.value?.skills.map((skill) => [skill.id, skill])));
+HEAD:apps/web-client/src/views/CollectionView.vue:62:  selected.value?.resolved_skills.map((id) => skillById.value.get(id)).filter(Boolean) as Skill[] ?? [],
+HEAD:apps/web-client/src/views/CollectionView.vue:109:        {{ catalog.counts.skills }} 技能 · {{ catalog.counts.static_skins }} 静态皮肤 ·
+HEAD:apps/web-client/src/views/CollectionView.vue:154:        <ul v-if="selectedSkills.length" class="skills">
+HEAD:apps/web-client/src/views/CollectionView.vue:203:.skills { padding: 0; list-style: none; }
+HEAD:apps/web-client/src/views/CollectionView.vue:204:.skills li { border-top: 1px solid var(--border); padding: 0.65rem 0; }
+HEAD:apps/web-client/src/views/CollectionView.vue:205:.skills li > span { margin-left: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 999px; font-size: 0.72rem; }
+HEAD:apps/web-client/src/views/CollectionView.vue:206:.skills .ported { color: var(--ok); border: 1px solid var(--ok); }
+HEAD:apps/web-client/src/views/CollectionView.vue:207:.skills .source_synced { color: var(--muted); border: 1px solid var(--border); }
+HEAD:apps/web-client/src/views/CollectionView.vue:208:.skills p { margin: 0.35rem 0 0; color: var(--muted); }
+[exit=0]
+
+## 5. 结论
+选将适配层/Worker/Client 已有 generalCandidates()/chooseGeneral()，但玩家界面
+（views/components）0 处引用：没有候选列表渲染、没有 chooseGeneral 调用、没有
+任何选将面板；玩家只能看到建局随机装配后的数字 character_def 与技能 id。

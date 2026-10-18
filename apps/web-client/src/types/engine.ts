@@ -6,6 +6,8 @@ export type CardId = number;
 export interface SkillView {
   id: number;
   def: number;
+  /** 原生窄壳按技能名投影（选将后刷新可见）；旧线可能不提供。 */
+  name?: string;
   enabled: boolean;
   use_count: number;
   active: boolean;
