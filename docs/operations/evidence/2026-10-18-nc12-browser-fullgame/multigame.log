@@ -1,0 +1,3 @@
+RESULT scenario=browser_fullgame tier=web {"clicks":319,"final_revision":319,"wall_ms":56918,"ended_marker":true,"console_errors":[]}
+RESULT scenario=browser_fullgame tier=web {"clicks":319,"final_revision":318,"wall_ms":66151,"ended_marker":true,"console_errors":[]}
+RESULT scenario=browser_fullgame tier=web {"clicks":301,"final_revision":300,"wall_ms":69106,"ended_marker":true,"console_errors":[]}
