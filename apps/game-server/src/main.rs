@@ -3,6 +3,7 @@
 mod config;
 mod lobby;
 mod native;
+mod native_view;
 mod outbox;
 mod persist;
 mod room;
