@@ -246,3 +246,14 @@ if !core.player(core.turn.current).hand.contains(&card) {
 `changeToZero` 语义（取消摸牌，不弃任何牌）。
 
 **验收**：`upstream_tuxi_takes_cards_and_skips_draw` 的净变化断言应改为 **+取牌数**（选 2 名目标 → +2）。
+
+## 16 淑慎（`shushen`）未按回复点数计次（NC08 样本 43 新发现，2026-10-19）
+
+**症状（规则损失）**：上游 `shushen` 的 `getIndex(event) { return event.num || 1; }` 表示
+**一次回复 N 点应触发 N 次**（每次各自选目标、各自摸牌）；原生 `content/standard/skills/shu_shen.rs`
+的 filter 只判 `amount > 0`，机器在 `Read` 阶段**单次结算** → 回复 2 点只触发 1 次。
+
+**修法**：按 `Recover.amount` 计次（循环 N 次询问/结算，或改为按次挂起多个询问）。
+
+**验收**：新增「一次回复 2 点 → 两次目标选择与两次摸牌」的行为用例；
+现有两条单点用例保持不变。
