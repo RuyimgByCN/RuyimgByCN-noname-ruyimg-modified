@@ -201,6 +201,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 39 | 标准面（技能） | `tuxi` | 发动 + 放弃摸牌通过 + **3 处差异登记**（`numFixed` 族第 3 例、取牌确定性族第 2 例、**③无条件弃 2 张手牌**） | [nc08-upstream-tuxi](../operations/evidence/2026-10-18-nc08-upstream-tuxi/README.md) |
 | 40 | `boss-zhugeliang`（T11 Boss 诸葛亮族 / hlss_*） | `hlss_xiangxing` | 3 点通过 + 2 处差异登记（随机分配→确定性；回满调用点） | [nc08-upstream-boss-zhugeliang](../operations/evidence/2026-10-18-nc08-upstream-boss-zhugeliang/README.md) |
 | 41 | `longxue`（龙血玄黄 / D5） | `mbqianlong` / `mbweitong` | 3 点通过，**但为弱对照**（上游 `jsjiami` 混淆、连说明文本不可读；对照依据为原生注释所载口径）→ **不计入「上游规则等价」通过数** | [nc08-upstream-longxue](../operations/evidence/2026-10-18-nc08-upstream-longxue/README.md) |
+| 42 | 标准面（技能） | `kuangfu` | 3 点通过 + 1 处差异登记（每阶段一次的表示方式；两分支实测：目标血低→摸 2、否则→失去 1 体力） | [nc08-upstream-kuangfu](../operations/evidence/2026-10-18-nc08-upstream-kuangfu/README.md) |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
