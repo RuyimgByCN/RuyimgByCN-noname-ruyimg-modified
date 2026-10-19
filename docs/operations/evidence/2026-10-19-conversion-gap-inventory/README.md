@@ -68,6 +68,24 @@ fengyangzhen huyizhen longfeizhen shepanzhen yunchuizhen
 
 **归一表补**：`hslingjian_`（**第 6 条精度更正**：前缀表须覆盖**子件命名**）。
 
+## gwent 缺口（30 项，已逐项确认**非误报**）
+
+**核实**：去 `gw_` 前缀后 `dieyi`/`hudiewu`/`yigeniyin`/`zhuoshao` **均 0 命中** ⇒ 与 swd 的
+`hslingjian_*` 不同，**gwent 的缺口全部为真**。
+
+| 组 | 数量 | 明细 |
+|---|---:|---|
+| **蝶翼系** | 7 | `gw_dieyi`（蝶翼，equip）+ `gw_dieyi_equip1..5`（器/衣/攻/防/宝）+ `gw_dieyi_judge`（判，delay） |
+| **法术** | 23 | 蝴蝶舞 / 伊格尼印 / 雷咒术 / 阿尔德印 / 新生 / 纽曲之镜 / 终末之战 / 干旱 / 皇家审判 / 吞噬 / 冲刺 / 诱饵 / 通敌 / 复原 / 灼烧 / 卜天术 / 十字召唤 / 最后愿望 / 自然馈赠 / 怒海风暴 / 白霜 / 雹暴术 / 怪物巢穴（均 `spell`） |
+
+**注**：`gw_dieyi_equip1..5` 与 `gw_dieyi_judge` 为**蝶翼的子件**（同 `hslingjian_*` 的形态），
+但**基础件 `dieyi` 亦 0 命中** ⇒ 整族**确未转换**（**非**「子件命名误报」）。
+
+## swd 两张 `basic` 的译名（未取到）
+
+`xiangyuye`、`huanpodan`（均 `type: "basic"`、`enable: true`）在 swd 的 `translate.js` 中
+**无对应键** ⇒ **中文名待补**（不影响「未转换」判定）。
+
 ## swd 其余缺口（11 项，含中文名与类型）
 
 | 键 | 中文名 | 类型 |
