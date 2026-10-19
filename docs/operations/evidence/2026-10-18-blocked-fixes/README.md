@@ -1496,4 +1496,10 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 而 `card_kind` 正确 ⇒ **命名不影响 kind 匹配**，但**影响按名字查找**的健壮性（本会话已多次因命名踩坑）⇒
 建议登记为**数据规范**待办（非本项阻塞点）。
 
+**✅ 已普查（同日）**：`packages/extensions/*/assets/cards.json` 的 **231 个包内卡名 0 异常**；
+但**桥接叠加 `card_prefix`** 后，**3 个包出现双前缀**：`shahai-mtg`（`mtg_`，**10/10**）、
+`shahai-swd`（`swd_`，**89/90**，如 `swd_swd_huanglinzhicong_73`）、`shahai-zhenfa`（`zf_`，**3/8**）。
+⇒ **不影响 `card_kind` 匹配**（本项探针已证），**影响按名字查找**（须用 `contains`/归一）。
+**建议**：桥接时检测卡名是否已含 `card_prefix`，已含则不再叠加；并加一条「目录名不得出现 `<prefix><prefix>`」的回归断言。
+
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
