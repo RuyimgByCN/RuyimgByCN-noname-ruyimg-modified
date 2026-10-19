@@ -1,0 +1,39 @@
+	hujia: {
+		audio: 2,
+		audioname: ["re_caocao"],
+		audioname2: {
+			pe_jun_caocao: "sbhujia",
+		},
+		zhuSkill: true,
+		trigger: { player: ["chooseToRespondBefore", "chooseToUseBefore"] },
+		filter(event, player) {
+			if (event.responded) {
+				return false;
+			}
+			if (player.storage.hujiaing) {
+				return false;
+			}
+			if (!player.hasZhuSkill("hujia")) {
+				return false;
+			}
+			if (!event.filterCard({ name: "shan", isCard: true }, player, event)) {
+				return false;
+			}
+			return game.hasPlayer(current => current !== player && current.group === "wei");
+		},
+		check(event, player) {
+			if (get.damageEffect(player, event.player, player) >= 0) {
+				return false;
+			}
+			return true;
+		},
+		async content(event, trigger, player) {
+			let current = player.next;
+			while (true) {
+				event.current = current;
+				if (current === player) {
+					return;
+				}
+
+				let bool = false;
+				if (
