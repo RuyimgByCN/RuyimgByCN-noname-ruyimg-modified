@@ -142,6 +142,7 @@ fn run(seed: u64, fixed: Option<(engine_native::CardId, u8)>, target_nature: Opt
 /// 用例以 `#[ignore]` 作为修复后的验收条件（第 51 项）。
 #[test]
 #[ignore = "五行生克两支未能在行为面复现（三次均 −1）——见第 51 项"]
+fn upstream_wuxing_shengke_three_branches() {
     // 先探明一张有属性牌及其属性
     let Some((card0, _d0, nat)) = run(20287501, None, None) else {
         eprintln!("NOTE 未取到可用的有属性牌——本用例不构成验收");
