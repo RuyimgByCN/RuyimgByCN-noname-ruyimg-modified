@@ -1,0 +1,3 @@
+DBG 林中尖塔：发动=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "mtg_linzhongjianta_discover", options: [Card(123), Card(114), Card(119)], min: 1, max: 1, allow_cancel: false } } }
+DBG 林中尖塔：询问=["mtg_linzhongjianta_discover@obs0"] 已选=true；装备区 0 → 1；手牌 1 → 0；牌堆 −1
+NOTE 林中尖塔（生成 vs 实体）：上游为 `game.createCard`（**生成**）；实测牌堆 −1 ⇒ 若为 0 则一致（生成），为 1 则属「生成 vs 实体取牌」族（须登记）
