@@ -737,5 +737,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 **验收**：样本 84 的 `upstream_qiankunbiao_target_needs_he_cards`（当前 `#[ignore]`）应能通过（`Rejected`）。
 
-**同类提示**：`shenhuofeiya`（神火飞鸦）与乾坤镖共用该校验分支 → 修完乾坤镖后须**复核神火飞鸦**
-不应被误加 `he` 门槛。
+**同类提示（已有反向证据）**：`shenhuofeiya`（神火飞鸦）与乾坤镖**共用**该校验分支 →
+修完乾坤镖后须**复核神火飞鸦**不应被误加 `he` 门槛。
+**证据**：样本 85（`nc08_upstream_gujian_shenhuofeiya.rs`）已断言「神火飞鸦目标 `he` 无牌时
+**必须仍被受理**（`Accepted`）」→ **若把两卡校验合并，该断言会失败**。
