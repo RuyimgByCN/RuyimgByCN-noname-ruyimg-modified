@@ -192,6 +192,9 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 30 | 标准面（技能） | `jijiu` | 3 点通过 + 1 处差异登记（缺回合外限制，**原生更宽松**） | [nc08-upstream-jijiu](../operations/evidence/2026-10-18-nc08-upstream-jijiu/README.md) |
 | 31 | 标准面（技能） | `guose` | 4 点通过 + 2 处差异登记（牌区 `hes` 入口、`viewAs` 固定优先级） | [nc08-upstream-guose](../operations/evidence/2026-10-18-nc08-upstream-guose/README.md) |
 | 32 | 标准面（技能） | `xiaoji` | 3 点通过 + **规则损失**（只覆盖「替换」失去装备） | [nc08-upstream-xiaoji](../operations/evidence/2026-10-18-nc08-upstream-xiaoji/README.md) |
+| 33 | 标准面（技能） | `qicai` | 4 点通过 + 2 处差异登记；**附带发现【兵粮寸断】无距离限制（原生更宽松）** | [nc08-upstream-qicai](../operations/evidence/2026-10-18-nc08-upstream-qicai/README.md) |
+| 34 | 标准面（技能） | `tiandu` | 3 点通过 + 2 处差异登记（毒牌未除外、处理区门槛以 `judge_held` 等价表达） | [nc08-upstream-tiandu](../operations/evidence/2026-10-18-nc08-upstream-tiandu/README.md) |
+| 35 | 标准面（技能） | `lijian` | 3 点通过 + 2 处差异登记（牌区族第 4 例、**自动选目标**无玩家选择权） | [nc08-upstream-lijian](../operations/evidence/2026-10-18-nc08-upstream-lijian/README.md) |
 
 **覆盖面**：**21/37 来源**已有第⑦层上游样本；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
