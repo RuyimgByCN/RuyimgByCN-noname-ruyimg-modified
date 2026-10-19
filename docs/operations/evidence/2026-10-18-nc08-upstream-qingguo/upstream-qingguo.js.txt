@@ -1,0 +1,64 @@
+	qingguo: {
+		mod: {
+			aiValue(player, card, num) {
+				if (get.name(card) != "shan" && get.color(card) != "black") {
+					return;
+				}
+				const cards = player.getCards("hs", card => get.name(card) == "shan" || get.color(card) == "black");
+				cards.sort((a, b) => {
+					return (get.name(b) == "shan" ? 1 : 2) - (get.name(a) == "shan" ? 1 : 2);
+				});
+				const geti = () => {
+					if (cards.includes(card)) {
+						cards.indexOf(card);
+					}
+					return cards.length;
+				};
+				if (get.name(card) == "shan") {
+					return Math.min(num, [6, 4, 3][Math.min(geti(), 2)]) * 0.6;
+				}
+				return Math.max(num, [6.5, 4, 3][Math.min(geti(), 2)]);
+			},
+			aiUseful(...args) {
+				return lib.skill.qingguo.mod?.aiValue?.(...args) ?? 0;
+			},
+		},
+		locked: false,
+		audio: 2,
+		audioname: ["sb_zhenji"],
+		audioname2: {
+			re_zhenji: "reqingguo",
+		},
+		enable: ["chooseToRespond", "chooseToUse"],
+		filterCard(card) {
+			return get.color(card) === "black";
+		},
+		viewAs: { name: "shan" },
+		viewAsFilter(player) {
+			if (!player.hasCards("hs", { color: "black" })) {
+				return false;
+			}
+		},
+		position: "hs",
+		prompt: "将一张黑色手牌当闪使用或打出",
+		check() {
+			return 1;
+		},
+		ai: {
+			order: 3,
+			respondShan: true,
+			skillTagFilter(player) {
+				if (!player.hasCards("hs", { color: "black" })) {
+					return false;
+				}
+			},
+			effect: {
+				target(card, player, target, current) {
+					if (get.tag(card, "respondShan") && current < 0) {
+						return 0.6;
+					}
+				},
+			},
+		},
+	},
+	rende: {
