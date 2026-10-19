@@ -1,0 +1,4 @@
+DBG 海岛：wounded=false discard=false → hp+0、护甲+1（询问[]）
+DBG 海岛：wounded=true discard=true → hp+1、护甲+0（询问["mtg_haidao_discard"]）
+DBG 海岛：wounded=true discard=false → hp+0、护甲+1（询问["mtg_haidao_discard"]）
+DBG 海岛：满血 → hp+0/护甲+1；受伤弃牌 → hp+1/护甲+0；受伤取消 → hp+0/护甲+1
