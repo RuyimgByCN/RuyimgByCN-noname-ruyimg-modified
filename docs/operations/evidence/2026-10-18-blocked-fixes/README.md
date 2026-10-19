@@ -1139,6 +1139,26 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ⇒ 剩余候选收窄为：**宿主技实例是否挂到「该牌/该角色」**、以及 **`ShengkeCheck` 机器是否被 `CardUsed` 实际驱动**。
 
+**最终诊断（同日，第 4 项事实）**：**挂载链路在源码层面完整**——
+
+```rust
+// engine/construction.rs:426-450（WuxingNatures 钩子）
+for pl in core.players.iter_mut() { if pl.alive { pl.wunature = Some(core.rng.gen_range(5) as u8); } }
+for i in 0..deck_len { if core.rng.gen_range(3) == 0 { … card_natures.insert(card, nature); } }
+// 生克技能授予全部存活角色（上游 `_` 前缀全局技能语义）
+let shengke: Vec<SkillDefId> = e.catalog.skills.iter().enumerate()
+    .filter(|(_, def)| def.behavior.as_host_behavior() == Some(HostBehavior::ShengkeCheck)) …
+```
+
+且包数据 `skills: [{"name":"wuxing_shengke","mapping":"host:shengke_check"}]` 提供该技能；
+触发过滤（`filtering/common.rs:539`）三项在本用例**均满足**。
+
+⇒ **源码层面「属性 + 授技 + 过滤」三者齐备**，而**行为面未见效果** ⇒
+剩余排查**必须在运行时插桩**（在 `ShengkeCheck` 分支加日志/断点，确认机器是否被驱动、`cnat/onat` 实值）。
+
+**阻塞说明（如实）**：插桩需改 `crates/engine-native/src/content/host/**`，该目录在当前工作区**未跟踪**
+（并行拆分未提交）⇒ **本项与核心修复清单同因受阻**，**保持待办**，不在未跟踪文件上改动。
+
 **修法（先诊断后修）**：①确认该卡是否声明 `ShengkeCheck`；②改用**自身无弃/摸效果**的有属性牌；
 ③必要时增加 `debug_set_wunature` 类钩子。
 
