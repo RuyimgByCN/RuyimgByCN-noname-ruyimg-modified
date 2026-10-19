@@ -3855,6 +3855,6 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | 2 | 花色按 club/diamond/heart/spade 排序（只改生成顺序） |
 | 3 | 点数不是 `Math.random`（确定性） |
 | 4 | 未配置时不追加——113 张比例牌**不是上游默认追加** |
-| 5 | `playpackconfig` **未逐项对照**；**不记为上游等价** |
+| 5 | `playpackconfig` **未逐项对照**；**不记为上游等价**（**上游口径已整理**：`cardpile_<类型>_playpackconfig` 乘数 → `dn` 公式 → **上限 1000** → `Math.random` 点数 → **未配置即不补**；见[口径整理](../operations/evidence/2026-10-19-playpackconfig-upstream/README.md)） |
 
 > L04 与 U03 条目基本相同，但台账明确「不因此把两行合成一次验收」⇒ **分来源登记**。
