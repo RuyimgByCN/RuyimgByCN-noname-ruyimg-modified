@@ -197,3 +197,15 @@ if !core.player(core.turn.current).hand.contains(&card) {
 请求先被拒）→ 二者在该路径上**等价**，**不构成问题**（本条登记后即撤回，不写成缺陷）。
 
 **验收**：为 `zhiheng`/`qixi`/`guose` 各补「装备区牌可参与」的行为用例；既有手牌路径用例保持不变。
+
+## 12 枭姬（`xiaoji`）只覆盖「替换」失去装备（NC08 样本 32 新发现，2026-10-19）
+
+**症状（规则损失）**：上游 `xiaoji` 的 `trigger` 为 `loseAfter` + `es` 计数（覆盖**所有**失去装备方式：
+替换 / 被弃置 / 被获得 / 被拆…）；原生 `content/standard/skills/xiao_ji.rs` 的 filter **仅**匹配
+`EventData::Equipped { replaced: Some(_) }` → 装备被【过河拆桥】拆走时**不触发**（行为断言已复现）。
+
+**修法**：为「装备区失去牌」引入统一事件（或在各 `equips.retain(...)` 路径补发 `Equipped`/
+新的 `EquipLost` 事件），`xiao_ji.rs` 的 filter 改为「失去的装备区牌数 > 0」，并按数量 ×2 摸牌。
+
+**验收**：`upstream_xiaoji_discard_loss_difference_is_registered` 应改为断言**触发并摸 2**；
+补「一次失去两张装备 → 摸 4」的用例。

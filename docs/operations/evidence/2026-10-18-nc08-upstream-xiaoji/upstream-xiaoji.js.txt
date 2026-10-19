@@ -1,0 +1,24 @@
+xiaoji: {
+		audio: 2,
+		audioname: ["sp_sunshangxiang", "re_sunshangxiang"],
+		trigger: {
+			player: "loseAfter",
+			global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+		},
+		frequent: true,
+		getIndex(event, player) {
+			const evt = event.getl(player);
+			if (evt?.player === player && evt.es) {
+				return evt.es.length;
+			}
+			return false;
+		},
+		async content(event, trigger, player) {
+			await player.draw(2);
+		},
+		ai: {
+			noe: true,
+			reverseEquip: true,
+			effect: {
+				target(card, player, target, current) {
+					if (get.type(card) == "equip" && !get.cardtag(c
