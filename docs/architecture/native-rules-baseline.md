@@ -3652,7 +3652,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
 | **取消摸牌的弃置面**（标准面 `tuxi`） | `trigger.changeToZero()`：**取消摸牌**（不摸不弃） | `Read` 阶段**无条件 `hand.pop()` 弃 2 张** → 若固定摸牌尚未发生即弃原有手牌（净变化 0，应为 +取牌数） | tuxi |
-| **必中排除**（标准面 `wushuang`） | `wushuang1` 的 filter 排除 `event.getParent()?.directHit.includes(event.target)`（**必中时无双不加倍**） | `source_has_wushuang` **只判是否持技**，未见 `directHit` 判定（行为面待办） | wushuang |
+| **必中排除**（标准面 `wushuang`） | **`wushuang1`（【杀】方向）**的 filter 排除 `event.getParent()?.directHit.includes(event.target)`（**必中时无双不加倍**）；**`wushuang2`（决斗方向）filter 仅判牌名、无必中语义**（已核对） | `source_has_wushuang` **只判是否持技**，未见 `directHit` 判定（**修复范围仅限【杀】方向**） | wushuang |
 | **规则量修饰方式**（`kongcheng`/`qianxun`/`paoxiao`） | `mod`：`targetEnabled`（统一拦截目标）/ `cardUsable`（把【杀】上限设为 `Infinity`） | 显式分支：`kongcheng` **3 处**校验、`qianxun` **2 处**校验、`paoxiao` **限次处 bypass** → 语义等价，但**规则量新增消费点时会漏**（**维护性风险**，非缺陷）；建议一次性收敛为「规则量修饰器」 | **kongcheng + qianxun + paoxiao（3 例）** |
 | **主公技资格判定**（`hujia`/`jijiang`/`wang_zun`/`jiuyuan`） | `hasZhuSkill(...)`（**仅身份局**具主公技旗标时成立） | `is_lord` 在**非身份局返回 true** → 四处调用在**原型模式**下均可发动；**经核对为有意设计**（`state.rs:1118` 注释：「无身份体系的模式持技即可」；原型模式非上游模式 → 等价性无定义）→ **设计差异，非缺陷**；旧线 `owner_is_lord` 用显式主公身份（若将来对齐可参照） | hujia（+3 处） |
 | **限次表示方式**（标准面 `kuangfu`） | `addTempSkill("stdkuangfu_used", "phaseChange")` 记每阶段一次 | 以「当前回合 + 出牌阶段」判定表达（源码自述**等价**，因触发仅在自身出牌阶段） | kuangfu |
