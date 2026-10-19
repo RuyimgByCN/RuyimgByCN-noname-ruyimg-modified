@@ -1494,6 +1494,23 @@ grep 结果：`card_kind_host_skills(` 的调用**只有**——
 **旁证待查**：`qinglongzhigui` 的**摸 2 确实发生**，与本根因矛盾 ⇒ 其摸牌**另有路径**
 （可能由 `draw_cards` 的其它钩子或旧实现残留）⇒ 需单独定位。
 
+## ⚠ **上述根因部分更正**（同日）：`card_kind_host_skills` **确有生产调用方**
+
+我最初的 grep **只扫 `crates/engine-native/src/`** ✗，遗漏了 **装载器 crate**。补查后：
+
+```
+crates/content-native-loader/src/lib.rs:575   for decl in card_kind_host_skills(kind)
+```
+
+⇒ **桥接期确实把「按牌种的宿主技能」并入了包的 `host_skills`** ✅
+⇒ 再由 `content/standard.rs:428`（`for decl in &pack.host_skills`）**注册进目录** ✅。
+
+**因此**：技能 **def 在目录中存在** ✅ —— 问题**不在声明**，而在「**是否进入 `core.skills` 实例表**」
+（`plan_triggers` 遍历的是 `core.skills`，不是 `catalog.skills`）。
+
+**修正后的下一步**：核对**「手持牌技能」进入/离开手牌时是否 `core.skills.insert`**
+（若无 ⇒ 与先前结论方向一致，但**断点位置不同**：不在声明，而在**实例授予**）。
+
 **✅ 触发器注册与 `PhaseBegin` 机制均已排除（同日）**：
 
 | 核对 | 结果 |
