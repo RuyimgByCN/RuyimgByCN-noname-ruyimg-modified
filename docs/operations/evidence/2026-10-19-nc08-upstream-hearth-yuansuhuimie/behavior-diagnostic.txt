@@ -1,0 +1,2 @@
+DBG 元素毁灭：发动=Pending { choice: OpenChoice { id: 1, observer: 1, spec: ChoiceSpec { kind: SelectCards, prompt: "hh_yuansu_discard", options: [Card(41), Card(39)], min: 1, max: 2, allow_cancel: true } } }
+DBG 元素毁灭：询问=["hh_yuansu_discard@obs1", "hh_yuansu_discard@obs2"]；1 号（弃 2）掉血 0；2 号（弃 1）掉血 1；3 号（无牌）掉血 2
