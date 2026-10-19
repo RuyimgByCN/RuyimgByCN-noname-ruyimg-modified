@@ -1,0 +1,35 @@
+# B 类来源的「技能 -> 宿主键存在性」清单（自动抽取，2026-10-19）
+# 方法：抽取上游 lib.skill 的键名 + 原生 content/host/keys.rs 的键名，做存在性比对
+# 注意：上游技能名与原生 host 键名**命名空间不同**，同名不代表已实现；
+#       本清单只给出「上游技能名 -> 原生是否已有同名键」的**初步**对照，需人工复核语义。
+
+## L19 末日乱斗
+  目录: /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/末日乱斗
+  抽取到的疑似技能键: 16（其中前缀可疑 0）
+  与原生 host 键**同名**者: 0 []
+  样例技能名: ['card', 'character', 'chooseButton', 'content', 'draw', 'filterCard', 'intro', 'maxlevel', 'mod', 'mode', 'result', 'skill']
+
+## L20 标记补充
+  目录: /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/标记补充
+  抽取到的疑似技能键: 151（其中前缀可疑 0）
+  与原生 host 键**同名**者: 0 []
+  样例技能名: ['Delete', 'SF_jiesuan_eff_fanzeishengli', 'SF_jiesuan_eff_neijianshengli', 'SF_jiesuan_eff_zczgshengli', 'SSZBB_DDZ_eff_juedou', 'SSZBB_PJN_yexinjia', 'SSZBB_dizhu_jineng', 'SS_PaijuTubiao_Hujia', 'SS_cmmask', 'SS_eff_xianqu', 'SS_eff_yinyangyu', 'SS_eff_zhulianbihe']
+
+## L27 选将美化
+  目录: /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/选将美化
+  抽取到的疑似技能键: 45（其中前缀可疑 0）
+  与原生 host 键**同名**者: 0 []
+  样例技能名: ['SS_skillwqx', 'add', 'backup', 'begin', 'broadcast', 'cancel', 'card', 'change', 'character', 'chooseButton', 'clear', 'damage']
+
+## L10 史诗卡牌
+  目录: /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/史诗卡牌
+  抽取到的疑似技能键: 37（其中前缀可疑 0）
+  与原生 host 键**同名**者: 0 []
+  样例技能名: ['back', 'bounce', 'cardEmoji', 'cardFold', 'cardFold_proportion', 'cardPhantom', 'character', 'chooseButton', 'conflictMap', 'die', 'die2', 'effect']
+
+## U08 英雄杀
+  目录: /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀
+  抽取到的疑似技能键: 172（其中前缀可疑 48）
+  与原生 host 键**同名**者: 0 []
+  样例技能名: ['add', 'baihe', 'batu', 'biaoqi', 'bingsheng', 'bolehuiyan', 'bolehuiyan2', 'bolehuiyan3', 'bolehuiyan4', 'chajue', 'chajue2', 'chujia']
+
