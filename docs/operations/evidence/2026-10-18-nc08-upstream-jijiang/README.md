@@ -30,6 +30,7 @@ jijiang: {
 |---|---|---|---|
 | 1 | `hasZhuSkill` + `group === "shu"` | 原生 `activate` 要求 `is_lord(owner)` + 存在 `Faction::Shu` 角色；注释「**不以暗手牌预筛**」（与上游一致） | 通过 |
 | 2 | `filterCard() → false` + `selectCard: -1` | 原生以 **`HelperAsk`（代打）** 形态实现；`activate` **不检查手牌**（对照：青囊/离间要求手牌非空） | 通过 |
+| 2 | **代打行为面** | 构造「决斗中 1 号（持激将、无杀）需出杀」→ 实测 **`询问=[]`**、代打未发生、0 号 hp 4 → 4 | **未验收（登记）** |
 | 1 | `hasZhuSkill` | **同族设计差异引用**：原生用 `is_lord`，其在**非身份局返回 true**（`state.rs` 注释「无身份体系的模式持技即可」）→ **原型模式下激将亦可发动**（与 `hujia` 同族，**已核对为有意设计**，见修复清单第 17 项） | 通过（**同族引用**） |
 
 **原生实现引用**：`content/standard/skills/jijiang.rs`（`activate`：`is_lord` + `Faction::Shu`；
@@ -39,11 +40,12 @@ jijiang: {
 
 | 检查 | 结果 | 证据 |
 |---|---|---|
-| 定向 | **3 passed / 0 failed** | [targeted.log](targeted.log) |
+| 定向 | **3 passed / 0 failed / 1 ignored**（代打行为面**未构成验收**） | [targeted.log](targeted.log)、[diagnostic.txt](diagnostic.txt) |
 | 行数门禁 | 见提交说明 | — |
 
 ## 4 未完成 / 待办
 
-- [ ] **代打询问队列的行为面**（需构造「需要【杀】」场景：如响应【杀】或主动使用）
+- [ ] **代打行为面根因待查**：决斗场景下**询问为空**（`[diagnostic.txt](diagnostic.txt)`），
+      疑与「决斗的杀响应是否经激将入口」有关；用例已 `#[ignore]`（**不写成通过**）
 - [ ] `jijiang3` 相关分支；`audio` 表现面
 - [ ] 样本 59+：其余来源/技能（标准面技能 **36 个样本**；来源覆盖 **23/37**）

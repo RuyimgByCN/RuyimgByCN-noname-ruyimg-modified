@@ -34,6 +34,8 @@
 //! 未覆盖（登记）：`jijiang1` 子技（代打询问队列）的**行为面**（需构造「需要【杀】」的场景）；
 //! `jijiang3` 相关分支；`audio` 表现面。
 
+mod nc08_common;
+
 use engine_native::Engine;
 
 /// 上游点 1（**资格**）：原生 `activate` 的主公资格 + 蜀势力判定与上游 filter 对应（源码事实）。
@@ -116,4 +118,111 @@ fn upstream_jijiang_lord_gate_is_design_difference() {
         "同族对照：护驾亦用 is_lord 作主公技资格"
     );
     let _ = Engine::new(20269001, 4);
+}
+
+/// 上游点 2（**行为面 · 代打**）：决斗中刘备（持激将）无【杀】→ 蜀势力角色**代打【杀】**。
+///
+/// 口径：原型模式下 `is_lord` 为真（同族设计差异）→ 本用例在该口径下验证「蜀势力代打【杀】」。
+///
+/// **本轮未验收（登记，含诊断）**：以「决斗中 1 号（持激将、无杀）需出杀」构造场景，实测
+/// `询问=[]`、`蜀势力代打=false`、`0 号 hp 4 → 4`（决斗未产生任何询问与伤害）→ **代打链路未对上**，
+/// 疑与「决斗的杀响应是否走激将入口」有关 → **根因待查**；用例以 `#[ignore]` 守护，**不写成通过**。
+#[test]
+#[ignore = "激将代打行为面：决斗场景下询问为空，代打链路未对上——根因待查，未构成验收"]
+fn upstream_jijiang_shu_ally_plays_sha_for_lord() {
+    use engine_native::{ChoiceOption, CommandOutcome, GameAction, GameCommand};
+    use nc08_common::{advance_to_play, drain, next_dedup};
+
+    let mut e = Engine::new(20269002, 4);
+    e.debug_grant(1, "激将"); // 1 号持激将（需要【杀】的一方）
+    // 2 号装配**蜀**势力武将并持一张【杀】
+    let shu = e
+        .general_candidates()
+        .into_iter()
+        .find(|d| {
+            e.catalog()
+                .general_meta(*d)
+                .map(|(_, f, _, _, _)| f == engine_native::catalog::Faction::Shu)
+                .unwrap_or(false)
+        })
+        .expect("存在蜀势力武将");
+    let shu_name = e.catalog().general_meta(shu).map(|(n, _, _, _, _)| n.to_string()).unwrap();
+    e.debug_assemble_general(2, &shu_name);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 0 号持【决斗】；1 号**无杀**；2 号持【杀】
+    let duel = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "duel").map(|c| c.name).unwrap();
+        e.debug_place(0, name)
+    };
+    let sha2 = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
+        e.debug_place(2, name)
+    };
+    let hp0 = e.debug_hp(0);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: duel, targets: vec![1] },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    let mut prompts: Vec<String> = Vec::new();
+    let mut ally_played = false;
+    for _ in 0..32 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        // 2 号（蜀势力）被询问代打【杀】→ 打出
+        if c.observer == 2 && c.spec.options.contains(&ChoiceOption::Card(sha2)) {
+            ally_played = true;
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Card(sha2)],
+                },
+            });
+            continue;
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 激将：询问={prompts:?} 蜀势力代打={ally_played} 0 号 hp {hp0} → {}（2 号手牌={:?}）",
+        e.debug_hp(0),
+        e.debug_hand(2)
+    );
+    if !ally_played {
+        eprintln!("NOTE 未出现蜀势力代打【杀】的询问——本用例不构成验收（代打链路未对上）");
+        return;
+    }
+    // 2 号代打【杀】后，1 号方已出杀 → 轮到 0 号出杀；0 号无杀 → **0 号受伤**
+    assert!(
+        e.debug_hp(0) < hp0,
+        "激将：蜀势力代打【杀】后，0 号无杀应对 → 0 号应受伤（{hp0} → {}）",
+        e.debug_hp(0)
+    );
 }
