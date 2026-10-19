@@ -1,0 +1,9 @@
+DBG 升级-降级：移除 `Some("xuanyuanjian")` 后桥接结果 = 成功
+test upgrade_downgrade_still_bridges ... ok
+DBG 升级-版本：version 1 → 2；目录卡数 214 → 214（应相同）
+test upgrade_version_bump_keeps_content ... ok
+DBG 升级-增量：目录 214 → 215（应 +1）
+test upgrade_card_addition_is_additive ... ok
+DBG 升级-并存：old 214 / new 214 / old_again 214（old 应 == old_again）
+test upgrade_old_and_new_coexist ... ok
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
