@@ -758,3 +758,21 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 （使用者装备区 +1、目标装备区 −1）。
 
 **注**：目标门槛（须有可获得装备）**已正确实现**（实测无装备目标 `Rejected(IllegalTargets)`）。
+
+## 37 鲤鱼汤（`liyutang`）**效果为空**（样本 89，2026-10-19）
+
+**症状**：上游 `liyutang` 的 `content` 为——`target.$gain2(cards)`（**目标获得此牌**）+
+`target.storage.liyutang = card` + `target.storage.liyutang_markcount = 2` + `target.addSkill("liyutang")`。
+原生实测：发动 `Accepted`，但**目标手牌 0 → 0**、**使用者手牌为空**、**该牌进入弃牌堆**
+（`弃堆含此牌=true`）⇒ **只完成用牌与弃置，未执行获得牌/计数/授技**。
+
+**已核对**：门槛**已正确实现**（目标已持子技时 `Rejected(IllegalTargets)`）；
+键存在（`keys.rs:882` `host:gujian_food_liyutang`）；子技目录名 `gj_food_liyutang`（`constants.rs:58`）。
+
+**修法**：在食物牌效果分支实现「目标获得此牌 + 记 `storage` + `markcount=2` + 授予计时子技」，
+并实现**计数的逐轮结算**（子技效果）。
+
+**验收**：样本 89 的 `upstream_liyutang_target_gains_the_card`（当前 `#[ignore]`）应能通过
+（目标手牌 +1 且含此牌）；另补计数结算用例。
+
+**同族**：与同批 `chunbing`（春饼，已有样本）**同为食物计数机** → 修法可一并评估。

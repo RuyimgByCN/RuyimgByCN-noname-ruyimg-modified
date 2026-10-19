@@ -1,0 +1,3 @@
+DBG 鲤鱼汤：发动=Accepted { state_hash: [..] }
+DBG 鲤鱼汤：1 号手牌 0 → 0（含此牌=false）；0 号手牌=[]；弃堆含此牌=true
+DBG 鲤鱼汤门槛（目标已持子技）→ Rejected(IllegalTargets)
