@@ -1,0 +1,3 @@
+DBG 玉衡：装备=Accepted { state_hash: [..] }
+DBG 玉衡：技能已授予=true；发动=Accepted { state_hash: [..] }
+DBG 玉衡：询问=[]；1 号手牌 1 → 0；0 号手牌 0 → 1；黑桃牌（0）现在 0 号手中=true
