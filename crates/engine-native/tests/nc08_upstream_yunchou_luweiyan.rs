@@ -176,10 +176,13 @@ fn upstream_luweiyan_zone_difference_is_registered() {
 
 /// 上游点 3（**行为面 · 链杀**）：厉焰使用后**视为对目标使用一张【杀】**。
 ///
-/// **本轮未验收（登记，含诊断）**：实测 **`询问=[]`**、1 号手牌不变（【闪】仍在）→
-/// **虚拟杀未产生**。链杀**已注册**（`factory.rs:420` 机器 + `support.rs:3` 过滤器
-/// `u_matches_lw2`（按 `use_as == Shuigong` 判定））→ 疑因机器 `self.targets` 为空
-/// （`factory.rs` 该行为返回 `(Some(owner), None)`，未传目标表）→ **根因待查**；
+/// **本轮未验收（登记，含诊断）**：**根因已推进两步**——
+/// ①**夹具缺口已修**：厉焰与**链杀子技**在包内是**两名技能**（`character.json`：
+///   `ycnluweiyan` + `ycnluweiyan2`）→ 只授予前者时**完全不触发**（`询问=[]`）；同时授予后
+///   **出现 `trigger_confirm`** ⇒ 链杀**确实被派发**；
+/// ②**剩余问题**：确认后**虚拟杀未产生响应询问**（`respond_shan` 未出现、1 号手牌仍含【闪】，
+///   而水攻本身已结算：1 号装备 1 → 0）→ 疑**嵌套结算**（虚拟杀在【水攻】自身结算内发起被丢弃）
+///   → 详见修复清单第 31 项。
 /// 用例以 `#[ignore]` 守护，**不写成通过**。
 ///
 /// **登记差异（原生注释自述）**：上游 `luweiyan2` 为
@@ -187,10 +190,13 @@ fn upstream_luweiyan_zone_difference_is_registered() {
 /// 原生为**自动取座位序首目标**（`yunchou.rs:280` 注释「登记差异：上游玩家选目标+可取消，
 /// 原生自动首目标」）→ 本用例固定该差异（断言**无目标询问**、但**确实产生了【杀】**）。
 #[test]
-#[ignore = "链杀虚拟杀未产生（询问=[]，1 号手牌不变）——疑机器 targets 为空，根因待查"]
+#[ignore = "链杀：确认询问已出现（trigger_confirm），但虚拟杀未产生响应询问——嵌套结算待查"]
 fn upstream_luweiyan_chain_kill_fires_on_first_target() {
     let mut e = yunchou_engine(20270903);
+    // 厉焰与**链杀子技**在包内是**两名技能**（character.json：`ycnluweiyan` + `ycnluweiyan2`）
+    // → 夹具须**同时授予**（上游以 `group: "luweiyan2"` 关联，包数据把它们并列列出）
     e.debug_grant(0, "ycnluweiyan");
+    e.debug_grant(0, "ycnluweiyan2");
     advance_to_play(&mut e, 0);
     for p in 0..4 {
         e.debug_clear_hand(p);
@@ -232,6 +238,7 @@ fn upstream_luweiyan_chain_kill_fires_on_first_target() {
         nc08_common::put_hand(&mut e, 0, id);
         id
     };
+    let equips_before = e.debug_equips(1).len();
     let out = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
@@ -291,8 +298,10 @@ fn upstream_luweiyan_chain_kill_fires_on_first_target() {
     }
     drain(&mut e);
     eprintln!(
-        "DBG 厉焰·链杀：询问={prompts:?} 出现闪响应={saw_shan_response} 出现选目标={saw_target_choice} 1 号手牌={:?}",
-        e.debug_hand(1)
+        "DBG 厉焰·链杀：询问={prompts:?} 出现闪响应={saw_shan_response} 出现选目标={saw_target_choice} \
+         1 号手牌={:?} 1 号装备 {equips_before} → {}（水攻是否结算）",
+        e.debug_hand(1),
+        e.debug_equips(1).len()
     );
     assert!(
         saw_shan_response,
