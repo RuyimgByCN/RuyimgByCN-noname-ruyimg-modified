@@ -187,6 +187,9 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 25 | 标准面（技能） | `zhiheng` | 3 点通过 + **规则损失**（候选缺装备区牌） | [nc08-upstream-zhiheng](../operations/evidence/2026-10-18-nc08-upstream-zhiheng/README.md) |
 | 26 | 标准面（技能） | `qixi` | 4 点通过 + 1 处差异登记（viewAs 候选 ↔ 固定优先级） | [nc08-upstream-qixi](../operations/evidence/2026-10-18-nc08-upstream-qixi/README.md) |
 | 27 | 标准面（技能） | `biyue` / `yingzi` | 4 点通过 + 1 处差异登记（英姿未建模 `numFixed`） | [nc08-upstream-biyue-yingzi](../operations/evidence/2026-10-18-nc08-upstream-biyue-yingzi/README.md) |
+| 28 | 标准面（技能） | `luoshen` | 4 点通过 + 2 处差异登记（时机锚点、循环询问粒度） | [nc08-upstream-luoshen](../operations/evidence/2026-10-18-nc08-upstream-luoshen/README.md) |
+| 29 | 标准面（技能） | `qingnang` | 4 点通过 + **规则损失**（不能自我治疗） | [nc08-upstream-qingnang](../operations/evidence/2026-10-18-nc08-upstream-qingnang/README.md) |
+| 30 | 标准面（技能） | `jijiu` | 3 点通过 + 1 处差异登记（缺回合外限制，**原生更宽松**） | [nc08-upstream-jijiu](../operations/evidence/2026-10-18-nc08-upstream-jijiu/README.md) |
 
 **覆盖面**：**21/37 来源**已有第⑦层上游样本；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。

@@ -157,3 +157,15 @@ if !hand.is_empty() {
 
 **验收**：`upstream_qingnang_self_target_difference_is_registered` 应改为断言**可发动**，
 并补「青囊自己后体力 +1」的行为用例。
+
+## 10 急救（`jijiu`）缺回合外限制（NC08 样本 30 新发现，2026-10-19）
+
+**症状（原生更宽松）**：上游 `jijiu` 的 `viewAsFilter` 含 `player !== _status.currentPhase`
+（**回合外**）；原生 `crates/engine-native/src/snap/asks.rs` 的 `is_tao_like` 只判花色为红
+→ **自己回合内濒死救援时也可用红牌当桃**（上游不允许）。
+
+**修法**：`is_tao_like` 的急救分支加入「响应者不是当前回合角色」判定（需把 `turn.current` 或
+等价状态传入该函数——当前签名已含 `core`，可直接读取）。
+
+**验收**：`upstream_jijiu_turn_restriction_difference_is_fixed` 应改为断言**存在**回合判定，
+并补行为用例（自己回合内红牌**不可**当桃 / 他人回合内**可**当桃）。

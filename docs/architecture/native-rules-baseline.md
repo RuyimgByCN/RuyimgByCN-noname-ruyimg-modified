@@ -3637,11 +3637,14 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **主公技分支**（标准面 `wusheng`） | `get.zhu(player,"shouyue")` → **任意**牌可转化 | 原生**未建模**守约（全 crate 无 `shouyue`） | wusheng |
 | **门槛历史范围**（标准面 `keji`） | `useCard` **与** `respond` 两历史都查【杀】 | 原生只看 `turn.sha_used_play_phase`（出牌阶段使用） | keji |
 | **实现层级**（标准面 `keji`） | 事件级「跳过弃牌阶段」 | 上限级「手牌上限视为无限」（结果等价、事件面不同） | keji |
+| **循环询问粒度**（标准面 `luoshen`） | 每轮 `chooseBool` 询问是否继续 | **整链一次确认**（源码注释自述） | luoshen |
+| **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
+| **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
 | **转化候选选择**（标准面 `qixi`） | 多个 `viewAs` 之间由**玩家选择** | **固定优先级**（杀类优先，`play_card.rs:156`）；黑色【杀】持奇袭时只作【杀】 | qixi |
 | **摸牌数固定分支**（标准面 `yingzi`） | `filter: !event.numFixed`（摸牌数被固定时**不**加成） | filter **只判阶段**；全 crate 无 `numFixed`/`num_fixed` | yingzi |
 | **弃牌执行时机**（口径，非差异） | — | 上限裁剪发生在**进入弃牌阶段时**（探针实测 15→4）；夹具须在**回合前**堆手牌 | keji |
 
-**标准面规则损失汇总（2026-10-19，7 个标准面样本）**：逐技能对照发现**4 处规则损失**
+**标准面规则损失汇总（2026-10-19，12 个标准面样本）**：逐技能对照发现**5 处规则损失**
 （均有行为/源码证据，修法与验收见[待实施修复清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)）：
 
 | 技能 | 规则损失 | 上游依据 | 修复项 |
@@ -3650,6 +3653,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | `ganglie` 刚烈 | **缺**「来源弃置两张手牌」分支 | `source.chooseToDiscard({selectCard: 2})` | 清单第 5 项 |
 | `wusheng` 武圣 / `longdan` 龙胆 | **「杀」方向响应转化缺失**（「闪」方向已实现，方向不对称） | `enable: [chooseToUse, chooseToRespond]` | 清单第 7 项 |
 | `zhiheng` 制衡 | 候选**只取手牌**，缺**装备区**牌 | `position: "he"` | 清单第 8 项 |
+| `qingnang` 青囊 | **不能自我治疗**（`activate` 排除 owner） | `filterTarget` 仅排除满血（含自己） | 清单第 9 项 |
 
 **共性判读（不夸大）**：4 处损失集中在**「候选集合/转化入口」**类——即**规则覆盖面**而非结算逻辑；
 结算主路径（伤害、弃置、摸牌、判定）在 7 个样本中均与上游一致。
