@@ -1,0 +1,4 @@
+DBG 火山：targets=[] → Rejected(IllegalTargets)
+DBG 火山：targets=[0] → Rejected(IllegalTargets)
+DBG 火山（登记基线）：发动=Rejected(IllegalTargets)；询问=[]；0 号判定区 0 → 0
+NOTE 火山：源码核对——crates/engine-native/src 全库 0 命中、docs/** 0 命中 ⇒ 包内交付但无实现且无登记（第 47 项）；本用例只记录受理基线，不写成通过
