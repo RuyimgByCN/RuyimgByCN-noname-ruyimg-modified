@@ -1,0 +1,2 @@
+DBG 冰河要塞：发动=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "mtg_bingheyaosai_discard", options: [Card(30), Card(37), Card(72), Card(112)], min: 2, max: 2, allow_cancel: false } } }
+DBG 冰河要塞：询问=["mtg_bingheyaosai_discard"]；牌堆 114 → 112（应 −2）；手牌 3 → 2（打出 −1、摸 2、弃 2 ⇒ 净 −1）
