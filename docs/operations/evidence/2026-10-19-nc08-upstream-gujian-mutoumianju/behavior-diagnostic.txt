@@ -1,0 +1,2 @@
+DBG 木头面具：装备=Accepted { state_hash: [..] }
+DBG 木头面具：装备区 0 → 1；是否获得技能 gj_mutoumianju_skill=true
