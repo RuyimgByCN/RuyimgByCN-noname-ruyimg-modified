@@ -1,0 +1,3 @@
+DBG 结姻前置：自己 hp=3 手牌=2 目标 hp=2 目标将槽=[Some(0), None]
+DBG 结姻门槛：候选=[Player(3)]（1 号满血男 / 2 号受伤女 / 3 号未装配）
+DBG 结姻：询问=["jieyin_cards", "jieyin_target"] 自己 hp 3 → 4 目标 hp 2 → 3（目标武将=样例·张角组合）

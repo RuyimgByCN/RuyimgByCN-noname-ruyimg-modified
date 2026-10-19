@@ -3,7 +3,7 @@
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层
 - 规则版本 v322（工作树）/ 存档格式 v105
-- 结论：**0 项通过 / 2 项未验收（登记）** —— **行为面受阻于夹具/入口问题**，**不写成通过**
+- 结论：**2 项通过**（**根因已查明并修复夹具**：初版把目标 hp 设为 `max_hp`，导致「未受伤」→ 技能不可发动）
 - **基准面**：`character/standard/skill.js`
 
 ## 1 上游源码（归档快照，逐字引用；见 [upstream-jieyin.js.txt](upstream-jieyin.js.txt)）
@@ -24,7 +24,23 @@ jieyin: {
 },
 ```
 
-## 2 本轮状态：**未验收（如实登记，含诊断）**
+## 2 根因查明（**夹具问题，非缺陷**）与最终结果
+
+**根因**：`activate` 要求目标 **`hp < max_hp`**；初版夹具用 `debug_set_hp(1, 3)` 写死 3，
+而装配后的武将 **`max_hp` 恰为 3** → 目标实为**满血** → 技能不可发动 → `Rejected(InvalidChoice)`。
+**修法**：改为按 **`max_hp - 1`** 设置受伤体力 → 用例通过。
+
+**最终实测**（[diagnostic.txt](diagnostic.txt)）：
+
+```
+DBG 结姻：询问=["jieyin_cards","jieyin_target"] 自己 hp 3 → 4 目标 hp 2 → 3
+DBG 结姻门槛：候选=[Player(3)]（1 号满血男 / 2 号受伤女）
+```
+
+→ ①**双方各回复 1**（自己 3→4、目标 2→3）；②**门槛**：候选**只有受伤男性**（满血男性与受伤女性
+均被排除）。
+
+## 2b 原「未验收」记录（保留）
 
 **已满足的前置**（[diagnostic.txt](diagnostic.txt) 实测）：
 `自己 hp=3 手牌=2 目标 hp=3 目标将槽=[Some(0), None]`
@@ -51,11 +67,11 @@ jieyin: {
 
 | 检查 | 结果 | 证据 |
 |---|---|---|
-| 定向 | **0 passed / 0 failed / 2 ignored**（未构成验收） | [diagnostic.txt](diagnostic.txt) |
+| 定向 | **2 passed / 0 failed / 0 ignored**（NOTE 行数 0） | [targeted.log](targeted.log)、[diagnostic.txt](diagnostic.txt) |
 | 行数门禁 | 见提交说明 | — |
 
 ## 5 未完成 / 待办
 
-- [ ] **查清 `ActivateSkill` 被拒的根因**（将槽性别 or 技能注册面），随后补行为验收
+- [x] **根因已查明**：夹具把目标 hp 设为 `max_hp`（未受伤）→ 改为 `max_hp - 1` 后通过
 - [ ] `check` 评分与 `audio` 表现/策略面
 - [ ] 样本 57+：其余来源/技能（标准面技能 **34 个样本 + 1 个未验收**；来源覆盖 **23/37**）

@@ -46,7 +46,6 @@ fn skill_id(e: &Engine, name: &str) -> u16 {
 /// 目标将槽 `[Some(0), None]`），但 `ActivateSkill` 仍返回 `Rejected(InvalidChoice)`
 /// → **根因待查**（疑与将槽性别判定或技能注册面有关）。用例以 `#[ignore]` 守护，**不写成通过**。
 #[test]
-#[ignore = "结姻 ActivateSkill 被拒（前置已满足）——根因待查，未构成验收"]
 fn upstream_jieyin_heals_both() {
     let mut e = Engine::new(20268801, 4);
     e.debug_grant(0, "结姻");
@@ -77,7 +76,9 @@ fn upstream_jieyin_heals_both() {
         .map(|(n, _, _, _, _)| n.to_string())
         .unwrap();
     e.debug_assemble_general(1, &male_name);
-    e.debug_set_hp(1, 3); // 受伤（装配之后设置，避免被重置）
+    // 受伤：设为 **max_hp - 1**（装配可能把 max_hp 改为该武将的上限，写死 3 可能等于满血）
+    let max1 = e.state_core().player(1).max_hp as i32;
+    e.debug_set_hp(1, max1 - 1);
     let hp0 = e.debug_hp(0);
     let hp1 = e.debug_hp(1);
     eprintln!(
@@ -168,7 +169,6 @@ fn upstream_jieyin_heals_both() {
 ///
 /// **本轮未验收（登记）**：同用例 1，`ActivateSkill` 被拒（`Rejected(InvalidChoice)`）→ 待查。
 #[test]
-#[ignore = "同用例 1：结姻 ActivateSkill 被拒——根因待查，未构成验收"]
 fn upstream_jieyin_target_gates() {
     let mut e = Engine::new(20268802, 4);
     e.debug_grant(0, "结姻");
@@ -206,8 +206,22 @@ fn upstream_jieyin_target_gates() {
         .expect("女性武将");
     let female_name = e.catalog().general_meta(female).map(|(n, _, _, _, _)| n.to_string()).unwrap();
     e.debug_assemble_general(2, &female_name);
-    e.debug_set_hp(1, 4); // 满血
-    e.debug_set_hp(2, 2); // 受伤但女性（装配之后设置）
+    e.debug_set_hp(1, e.state_core().player(1).max_hp as i32); // 满血（男性）
+    e.debug_set_hp(2, e.state_core().player(2).max_hp as i32 - 1); // 受伤但女性
+    // 另设 3 号：**受伤男性** → 保证技能可发动，从而能检查候选过滤
+    let male3 = e
+        .general_candidates()
+        .into_iter()
+        .find(|d| {
+            e.catalog()
+                .general_meta(*d)
+                .map(|(_, _, _, _, g)| g == engine_native::content::standard::Gender::Male)
+                .unwrap_or(false)
+        })
+        .expect("男性武将");
+    let male3_name = e.catalog().general_meta(male3).map(|(n, _, _, _, _)| n.to_string()).unwrap();
+    e.debug_assemble_general(3, &male3_name);
+    e.debug_set_hp(3, e.state_core().player(3).max_hp as i32 - 1); // 受伤男性
     let skill = skill_id(&e, "结姻");
     let out = e.submit(GameCommand {
         actor: 0,
@@ -215,9 +229,31 @@ fn upstream_jieyin_target_gates() {
         dedup_id: next_dedup(),
         action: GameAction::ActivateSkill { skill },
     });
-    if !matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }) {
-        eprintln!("NOTE 结姻发动被拒：{out:?}（同用例 1，根因待查）——本用例不构成验收");
-        return;
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "3 号（受伤男性）存在时结姻应可发动：{out:?}"
+    );
+    // 弃两张手牌 → 进入目标询问
+    for _ in 0..8 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if c.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).count() >= 2 {
+            let sel: Vec<ChoiceOption> = c
+                .spec
+                .options
+                .iter()
+                .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                .take(2)
+                .copied()
+                .collect();
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: sel },
+            });
+            continue;
+        }
+        break;
     }
     let Some(c) = e.open_choice().cloned() else {
         eprintln!("NOTE 未出现目标询问——本用例不构成验收");
