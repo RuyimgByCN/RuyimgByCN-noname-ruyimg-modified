@@ -1078,3 +1078,20 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 且原生**已实现**该卡（`intrinsic.rs:693` → `SwdNiaoxiangzhenCard`）。
 
 （另：未交付的 5 张阵法卡正是转换缺口清单的 5 项 —— **两份独立核对一致**。）
+
+## 50 重型护甲（`hslingjian_zhongxinghujia`）**门槛口径不一致**（样本 128，2026-10-19）
+
+**症状（门槛口径）**：上游 `filterTarget: !target.isMin()`（**体力不是最少**）；
+原生 `engine/play_card.rs:1645` 的 `zhongxinghujia` 分支为
+`alive && hand.len() as i32 > hp`（**手牌多于体力**）⇒ **两者不等价**。
+
+**行为面证据**：
+①目标**手牌 3 > 体力 2** ⇒ `Accepted`（与**原生**口径一致）；
+②目标**手牌 1 ≤ 体力 4** 且**体力非最少**（上游应受理）⇒ **`Rejected(IllegalTargets)`** ⇒ **反例成立**。
+
+**修法**：把该卡目标门槛改为与上游一致（`!target.isMin()`）；
+**同时排查 `CardKind::Hslingjian` 其余逐卡分支**是否也存在「口径自创」而非照上游 `filterTarget`。
+
+**验收**：样本 128 应能断言局面②**受理**（并保留局面①）。
+
+**族**：「**门槛集合/缺失**」族**第 4 例**（tianfuzhen 集合 / dizaizhen 模式 / qiankunbiao he / 本项口径）。

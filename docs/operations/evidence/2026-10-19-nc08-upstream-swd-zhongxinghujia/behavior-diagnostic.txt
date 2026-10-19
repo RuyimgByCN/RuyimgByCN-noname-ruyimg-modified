@@ -1,0 +1,3 @@
+DBG 重型护甲：1 号手牌=3、体力=2 ⇒ Accepted { state_hash: [..] }
+DBG 重型护甲：1 号手牌=1、体力=4 ⇒ Rejected(IllegalTargets)
+DBG 重型护甲：①手牌>体力 → Accepted { state_hash: [..] }；②体力非最少但手牌≤体力 → Rejected(IllegalTargets)
