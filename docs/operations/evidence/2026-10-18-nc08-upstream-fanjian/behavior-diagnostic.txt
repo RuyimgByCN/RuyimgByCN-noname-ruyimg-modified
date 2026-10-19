@@ -1,0 +1,1 @@
+DBG 反间：询问=["fanjian_target", "fanjian_suit", "fanjian_pick"] 1 号 hp 4 → 4（1 号手牌=[30]，牌=30）

@@ -1,0 +1,46 @@
+	fanjian: {
+		audio: 2,
+		enable: "phaseUse",
+		usable: 1,
+		filter(event, player) {
+			return player.hasCards("h");
+		},
+		filterTarget(card, player, target) {
+			return player !== target;
+		},
+		async content(event, trigger, player) {
+			const target = event.target;
+			const { control } = await target
+				.chooseControl({
+					controls: ["heart2", "diamond2", "club2", "spade2"],
+					ai() {
+						switch (Math.floor(Math.random() * 6)) {
+							case 0:
+								return "heart2";
+							case 1:
+							case 4:
+							case 5:
+								return "diamond2";
+							case 2:
+								return "club2";
+							case 3:
+								return "spade2";
+						}
+					}
+				})
+				.forResult();
+			game.log(target, `选择了${get.translation(control)}`);
+			event.choice = control;
+			target.chat(`我选${get.translation(event.choice)}`);
+			const { bool, cards } = await target
+				.gainPlayerCard({
+					target: player,
+					position: "h",
+					forced: true,
+				})
+				.forResult();
+			if (bool && cards?.length && get.suit(cards[0], player) + "2" !== event.choice) {
+				await target.damage({ nocard: true });
+			}
+		},
+		ai:
