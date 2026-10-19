@@ -1346,4 +1346,28 @@ HostBehavior::SwdQinglongzhiguiHeld => match self.stage {
 
 **修法（先诊断）**：先确认 `Flw::WaitChoice` 的登记/读取是否同源；再判断是否需要 `NextPhase` 之后再推进一次。
 
+**✅ 登记/读取同源性已确认（候选③排除）**：
+
+```rust
+// resolution.rs:375-390（WaitChoice 的唯一落点）
+Flow::WaitChoice { observer, spec } => {
+    let id = res.next_choice_id; res.next_choice_id += 1;
+    out.push(LogEvent::ChoiceOpened { id, observer, prompt: spec.prompt });
+    res.open_choice = Some(OpenChoice { id, observer, spec });   // ← 写入
+    …
+}
+// accessors.rs:35-37
+pub fn open_choice(&self) -> Option<&OpenChoice> { self.state.resolution.open_choice.as_ref() }  // ← 读取
+```
+
+⇒ **写入与读取同一字段** ⇒ **候选③排除**。
+
+**进一步收窄**：**draw 2 已发生** ⇒ `HostStage::Act` **确实执行**，且当时手牌 **3 张**（非空）
+⇒ 按源码必然走 `self.stage = SelectCard; return Flow::WaitChoice{…}` ⇒
+**剩余唯一解释：`Flow::WaitChoice` 未被返回，或返回后未走到 `resolution.rs:375` 的分支**
+（即**机器在 `Act` 后未继续**——与「阶段机只执行首步」的候选②一致）。
+
+**修法（更新）**：沿 `HostStage::Act` → `SelectCard` 的**状态迁移**排查（机器是否在返回 `WaitChoice` 前
+被判定为 `Done`/被丢弃）。
+
 **验收**：样本 156 的 `#[ignore]` 用例应能断言**牌堆 −2** 且**手牌净 +1**。
