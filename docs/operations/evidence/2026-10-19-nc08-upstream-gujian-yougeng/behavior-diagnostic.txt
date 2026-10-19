@@ -1,0 +1,3 @@
+DBG 酉羹：子技=true（wounded=true）；hp 3 → 4
+DBG 酉羹：子技=true（wounded=false）；hp 4 → 4
+DBG 酉羹：受伤且最少 → hp+1；满血 → hp+0
