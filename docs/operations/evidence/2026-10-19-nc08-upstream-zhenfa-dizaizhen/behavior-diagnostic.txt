@@ -1,0 +1,4 @@
+DBG 地载阵：targets=[1] → Rejected(IllegalTargets)
+DBG 地载阵：targets=[] → Accepted { state_hash: [..] }
+DBG 地载阵：询问=[]；1 号手牌 1 → 2
+NOTE 地载阵：**身份局下仍可发动** ⇒ 上游 `mode: ["guozhan"]` 的**模式门槛缺失**（登记待办）
