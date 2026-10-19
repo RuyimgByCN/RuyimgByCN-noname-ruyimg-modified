@@ -34,6 +34,8 @@
 //!
 //! 未覆盖（登记）：**行为面**（牌堆底牌移动的逐帧验证；本样本为源码事实级）。
 
+mod nc08_common;
+
 use engine_native::Engine;
 
 /// 上游点 2（**牌堆底**）：原生实现取牌堆底一张。
@@ -102,4 +104,82 @@ fn upstream_jijie_allows_self_target() {
         "命名依据：translate.js 中 xinfu_jijie → 「机捷」"
     );
     let _ = Engine::new(20269401, 4);
+}
+
+/// 上游点 2+3（**行为面**）：发动机捷 → 选目标 → **牌堆底那张**进入目标手牌。
+///
+/// 原生把牌堆底表示为 `deck[0]`（注释「取牌堆底（deck 首位）」），故本用例先记录
+/// `deck[0]`，发动后断言该牌出现在目标手牌中、且牌堆长度 −1。
+#[test]
+fn upstream_jijie_moves_bottom_card_to_target() {
+    use engine_native::{ChoiceOption, CommandOutcome, GameAction, GameCommand};
+    use nc08_common::{advance_to_play, drain, next_dedup};
+
+    let mut e = Engine::new(20269402, 4);
+    e.debug_grant(0, "机捷");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let bottom = e.state_core().deck[0];
+    let deck_len = e.state_core().deck.len();
+    let skill = e.catalog().skill_by_name("机捷").expect("机捷在目录");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "机捷应可发动：{out:?}"
+    );
+    let mut prompts: Vec<String> = Vec::new();
+    let mut gave = false;
+    for _ in 0..16 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        if c.spec.options.contains(&ChoiceOption::Player(1)) {
+            gave = true;
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Player(1)],
+                },
+            });
+            continue;
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 机捷：询问={prompts:?} 选目标={gave} 牌堆底牌={bottom} 目标手牌={:?} 牌堆 {deck_len} → {}",
+        e.debug_hand(1),
+        e.state_core().deck.len()
+    );
+    assert!(gave, "应出现目标选择询问（jijie_give_target）");
+    assert!(
+        e.debug_hand(1).contains(&bottom),
+        "机捷：**牌堆底**那张（deck[0]={bottom}）应进入目标手牌"
+    );
+    assert_eq!(
+        e.state_core().deck.len(),
+        deck_len - 1,
+        "机捷：牌堆应减少一张"
+    );
 }

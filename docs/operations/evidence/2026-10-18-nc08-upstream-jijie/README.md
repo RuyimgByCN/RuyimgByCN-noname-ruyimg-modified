@@ -3,7 +3,7 @@
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层
 - 规则版本 v322（工作树）/ 存档格式 v105
-- 结论：**2 项通过，未发现差异**（取牌位置 / 目标范围 / 限次均与上游一致）
+- 结论：**3 项通过（含行为面），未发现差异**（取牌位置 / 目标范围 / 限次均与上游一致）
 - **基准面**：`character/standard/skill.js`
 - **命名提示**：上游键 `xinfu_jijie` 在 **`translate.js`** 中映射为「**机捷**」（**不是**「新服结姻」）；
   原生常量 **`JI_JIE`**（`names.rs:46`）——按上游键名检索原生源码会**查不到**（见实现索引）
@@ -29,6 +29,7 @@ xinfu_jijie: {
 | 2 | `get.bottomCards()[0]` | 原生注释与实现取**牌堆底**一张 | 通过 |
 | 3 | `chooseTarget({forced:true})` 且**无 `filterTarget`** | 原生注释「上游 `chooseTarget` **无过滤器**，AI 含自引加成，原生**同允许自选**」→ **任意存活角色（含自己）** | 通过 |
 | — | 命名 | `translate.js` 中 **`xinfu_jijie: "机捷"`**（本用例同时断言该映射，固定命名提示） | 通过 |
+| 2+3 | **行为面** | 发动机捷 → 询问 `jijie_give_target` → 选 1 号 → **牌堆底那张（`deck[0]=56`）进入目标手牌**（`[56]`），牌堆 **106 → 105** | 通过 |
 
 **原生实现引用**：`content/standard/skills/ji_jie.rs`。
 
@@ -36,11 +37,11 @@ xinfu_jijie: {
 
 | 检查 | 结果 | 证据 |
 |---|---|---|
-| 定向 | **2 passed / 0 failed** | [targeted.log](targeted.log) |
+| 定向 | **3 passed / 0 failed** | [targeted.log](targeted.log)、[behavior-diagnostic.txt](behavior-diagnostic.txt) |
 | 行数门禁 | 见提交说明 | — |
 
 ## 4 未完成 / 待办
 
-- [ ] **行为面**（牌堆底牌移动的逐帧验证；本样本为源码事实级）
+- [x] **行为面已验收**（牌堆底 `deck[0]` → 目标手牌；牌堆 −1）
 - [ ] `ai(target)` 自引加成评分与 `audio` 表现面
 - [ ] 样本 63+：其余来源/技能（标准面技能 **40 个样本**；来源覆盖 **23/37**）
