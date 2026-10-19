@@ -1,0 +1,44 @@
+biyue: {
+		audio: 2,
+		trigger: { player: "phaseJieshuBegin" },
+		frequent: true,
+		preHidden: true,
+		async content(event, trigger, player) {
+			player.draw();
+		},
+	},
+	yaowu: {
+		trigger: { player: "damageBegin3" },
+		audio: 2,
+		filter(event, player) {
+			return event.card?.name === "sha" && get.color(event.card) === "red" && event.source?.isIn();
+		},
+		forced: true,
+		check() {
+			return false;
+		},
+		async con
+
+yingzi: {
+		audio: 2,
+		audioname: ["sp_lvmeng"],
+		trigger: { player: "phaseDrawBegin2" },
+		frequent: true,
+		filter(event, player) {
+			return !event.numFixed;
+		},
+		async content(event, trigger, player) {
+			trigger.num++;
+		},
+		ai: {
+			threaten: 1.3,
+		},
+	},
+	fanjian: {
+		audio: 2,
+		enable: "phaseUse",
+		usable: 1,
+		filter(event, player) {
+			return player.hasCards("h");
+		},
+		filterTarget(card, player, t
