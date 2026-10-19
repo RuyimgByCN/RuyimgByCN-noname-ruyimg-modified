@@ -1430,4 +1430,22 @@ ctx.emit(EventData::Phase { player: next, phase: Phase::Judge, begin: true });
 **修法（待拆分解除后可做）**：核对**宿主机器的事件订阅/派发路径**（`content/host/**`，**当前未跟踪**）
 ——确认 `Phase{begin:true}` 是否进入 `HostBehavior` 的触发派发，若否，补该帧的派发。
 
+**✅ 派发结构已确认（同日，只读）**：宿主行为**不是独立通道**，而是以 **`SkillBehavior`** 接入目录
+（`content/host.rs:145-155`）：
+
+```rust
+impl SkillBehavior for HostSkillBehavior {
+    fn filter(&self, ctx, owner, event) -> bool { self.filter_behavior(ctx, owner, event) }
+    fn start(&self, owner, event) -> Box<dyn SkillMachine> { Box::new(self.machine(owner, event)) }
+    fn activate(...) -> Option<Box<dyn SkillMachine>> { self.activate_behavior(ctx, owner) }
+}
+```
+
+⇒ **宿主行为与普通技能走同一套「filter → start」触发机制**；因此「`Phase{begin:true}` 未派发」
+等价于「**该事件未进入技能触发通道**」——**影响面可能大于器族五件**。
+
+**未定位**：`SkillBehavior::filter` 的**实际调用点**（在 `kernel/`/`engine/` 中多次 grep 未果，
+可能经 `dyn SkillBehavior` 的**统一驱动**在别处调用）。**下一步**：从 `content/standard.rs`（行为实现聚集处）
+**反查调用方**，或直接检索 `SkillMachine` 的驱动循环。
+
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
