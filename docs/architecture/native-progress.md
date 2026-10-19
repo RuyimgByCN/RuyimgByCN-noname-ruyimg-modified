@@ -57,6 +57,9 @@
 >
 > **第 407 轮（重要撤回与解决）**：①**样本 153（神草结反向分支）已通过**——根因是 **AOE 的目录名**为 **`savage`/`archery`**（`catalog.rs:934/935` 的 `"nanman"`/`"wanjian"` 是 **archive 键**，非目录名）；改用正确目录名后：**0 号持神草结 → 1 号用 AOE → `trigger_confirm` → Confirm ⇒ 0 号受伤 0 点**（`num--` 生效）✅②**撤回第 406 轮的「9 种核心标准牌无实例」结论**——实为**手写 kind 变体名**导致的**误报**；从实例反查的**真实分布**显示 9 种牌**全部在牌组中**（`SavageAttack ×3`/`ArcheryAttack ×1`/`Duel ×3`/`Dismantle ×6`/`Snatch ×5`/`Nullify ×4`/`Le ×3`/`ShanDian ×2`/`Bing ×1`）⇒ **牌组构成无缺陷**。
 >
+> **第 408 轮**：**`global` 卡窗口第 3 张验证**——样本 157 `zhuquezhizhang`（朱雀之璋）：**持有者受伤后（`damageEnd`）对来源造成 1 点火伤**（`forced`，无确认询问）；实测原始伤害 0 号 1 点、反伤 1 号 1 点 ⇒ **通过，未发现差异**。
+>
+
 
 
 
