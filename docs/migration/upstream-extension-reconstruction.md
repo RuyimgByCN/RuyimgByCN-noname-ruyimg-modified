@@ -264,6 +264,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 104 | U05 古剑（食物牌） | `qingtuan`（青团） | 1 点通过（含行为面：**首张杀摸 1**，手牌净 0）（门控**已由样本 105 补验闭环**） | [gujian-qingtuan](../operations/evidence/2026-10-19-nc08-upstream-gujian-qingtuan/README.md) |
 | 105 | U05 古剑（食物牌） | `yuanbaorou`（元宝肉） | 2 点通过：①**同回合第二张杀被允许**（额外一张杀）②**青团门控补验**（首杀摸 1、第二杀不再摸）⇒ 样本 104 的未验收项**闭环** | [gujian-yuanbaorou](../operations/evidence/2026-10-19-nc08-upstream-gujian-yuanbaorou/README.md) |
 | 106 | U05 古剑（食物牌） | `gudonggeng`（骨董羹） | 1 点通过（含行为面 · 两要点），**未发现差异**：受杀伤害 **−1**（hp 4→4）；**一次性**（第二张杀 hp 4→3，不再减免）——用同族元宝肉解开 `ShaLimit` | [gujian-gudonggeng](../operations/evidence/2026-10-19-nc08-upstream-gujian-gudonggeng/README.md) |
+| 107 | U05 古剑（食物牌） | `tanhuadong`（昙花冻） | 1 点通过（含行为面 · 时机面），**未发现差异**：**出牌阶段结束 → 摸 1**（手牌 0→1）；**依据为原生注释**（上游逐字待补，已登记） | [gujian-tanhuadong](../operations/evidence/2026-10-19-nc08-upstream-gujian-tanhuadong/README.md) |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
