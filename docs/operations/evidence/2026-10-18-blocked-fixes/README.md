@@ -501,3 +501,21 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 届时改为断言**不含**「限一次」）。
 
 **注**：`rende.rs` **未跟踪**（属并行拆分）→ 随拆分落定后改，**不阻塞**其它工作。
+
+## 26 耀武（`yaowu`）注释所称「差异」**不成立**（样本 60 核对，2026-10-19）
+
+**症状（注释滞后，与第 25 项仁德同类）**：`crates/engine-native/src/content/standard/skills/yao_wu.rs`
+的头注释写「**登记差异**：上游 `chooseDrawRecover` 由 AI/玩家确认，原生为**强制二选**」。
+
+**核对结论（逐字读上游实现）**：`noname/library/element/player.js:6968` 的 `chooseDrawRecover`：
+- `next.num1` / `next.num2` 默认均为 **1** → 「**摸 1 或回复 1**」（与原生一致）；
+- **`next.forced = arg`**（布尔参数）→ 耀武传入 `{ forced: true }` → **`forced = true`**
+  → **玩家必须二选、不可取消** —— 与原生「**强制二选**」**同义**。
+
+→ 因此该「登记差异」**不成立** ✗，应**删除**该表述（**不是**原生与上游不一致）。
+
+**修法**：把 `yao_wu.rs` 头注释中的「登记差异：…原生为强制二选」删去，改为
+「上游 `chooseDrawRecover({forced:true})` 与原生『强制二选』同义」。
+
+**验收**：本目录样本 60 的 `upstream_yaowu_note_may_be_stale` 用例改为断言注释**不含**
+「登记差异」字样（届时随拆分落定一并改）。
