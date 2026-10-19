@@ -70,6 +70,7 @@ for (let i = 0; i < iters; i++) {
   const c = await connect(page.webSocketDebuggerUrl);
   await c.send("Runtime.enable");
   await c.send("Page.enable");
+  // NC12：worker 初始化分段耗时由客户端诊断钩子写入 window.__nativeInitTimings（见 client.ts）
   await c.send("Page.navigate", { url: base });
   // 等待大厅就绪（出现「本地开局」）
   let ready = 0;
@@ -92,6 +93,7 @@ for (let i = 0; i < iters; i++) {
     if (ok) { interactive = 1; break; }
   }
   const toInteractiveMs = Date.now() - t0;
+  const workerTimings = await c.evalJs(`window.__nativeInitTimings || []`);
   const perf = await c.evalJs(`(() => {
     const nav = performance.getEntriesByType('navigation')[0] || {};
     const res = performance.getEntriesByType('resource').map(r => ({ name: r.name.split('/').pop(), dur: r.duration, size: r.transferSize }));
@@ -103,7 +105,10 @@ for (let i = 0; i < iters; i++) {
       workerChunks: res.filter(r => r.name.includes('worker')).map(r => r.name),
     };
   })()`);
-  results.push({ iter: i, lobby_ready: ready, interactive, to_interactive_ms: toInteractiveMs, perf });
+  results.push({
+    iter: i, lobby_ready: ready, interactive, to_interactive_ms: toInteractiveMs,
+    worker_init_timings: workerTimings, perf,
+  });
   c.ws.close();
   chrome.kill("SIGTERM");
   await sleep(400);

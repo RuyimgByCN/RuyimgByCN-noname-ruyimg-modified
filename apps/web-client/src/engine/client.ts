@@ -48,6 +48,16 @@ export class EngineClient {
       : new LegacyEngineWorker();
     this.worker = worker;
     worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
+      // NC12 诊断钩子：worker 初始化分段耗时（fetch/instantiate）随 init 回包上报，
+      // 供浏览器档位测量读取（`window.__nativeInitTimings`）。不参与任何业务逻辑。
+      const maybe = ev.data as unknown as { type?: string; timings?: unknown };
+      if (maybe?.type === "init_timings" && maybe.timings) {
+        (globalThis as unknown as { __nativeInitTimings?: unknown[] }).__nativeInitTimings ??= [];
+        (globalThis as unknown as { __nativeInitTimings: unknown[] }).__nativeInitTimings.push(
+          maybe.timings,
+        );
+        return;
+      }
       const msg = ev.data;
       const p = this.pending.get(msg.id);
       if (!p) return;

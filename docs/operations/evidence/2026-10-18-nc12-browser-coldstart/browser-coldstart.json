@@ -5,12 +5,20 @@
       "lobby_ready": 1,
       "interactive": 1,
       "to_interactive_ms": 260,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 7.3,
+          "instantiate_ms": 1.8,
+          "total_ms": 9.1,
+          "wasm_bytes": 2644903
+        }
+      ],
       "perf": {
-        "domContentLoaded": 38.19999998807907,
-        "loadEvent": 38.89999997615814,
+        "domContentLoaded": 43.39999997615814,
+        "loadEvent": 44,
         "wasm": [],
         "workerChunks": [
-          "engine.worker-DPXTqmfT.js"
+          "engine.native.worker-Cl7Ed0z4.js"
         ]
       }
     },
@@ -19,12 +27,20 @@
       "lobby_ready": 1,
       "interactive": 1,
       "to_interactive_ms": 260,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 6.5,
+          "instantiate_ms": 1.7,
+          "total_ms": 8.2,
+          "wasm_bytes": 2644903
+        }
+      ],
       "perf": {
-        "domContentLoaded": 35,
-        "loadEvent": 35.69999998807907,
+        "domContentLoaded": 33,
+        "loadEvent": 33.69999998807907,
         "wasm": [],
         "workerChunks": [
-          "engine.worker-DPXTqmfT.js"
+          "engine.native.worker-Cl7Ed0z4.js"
         ]
       }
     },
@@ -33,12 +49,20 @@
       "lobby_ready": 1,
       "interactive": 1,
       "to_interactive_ms": 260,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 5.9,
+          "instantiate_ms": 1.9,
+          "total_ms": 7.8,
+          "wasm_bytes": 2644903
+        }
+      ],
       "perf": {
-        "domContentLoaded": 39.10000002384186,
-        "loadEvent": 39.69999998807907,
+        "domContentLoaded": 41,
+        "loadEvent": 41.60000002384186,
         "wasm": [],
         "workerChunks": [
-          "engine.worker-DPXTqmfT.js"
+          "engine.native.worker-Cl7Ed0z4.js"
         ]
       }
     }

@@ -81,3 +81,31 @@ node apps/web-client/scripts/nc12-browser-coldstart.mjs http://127.0.0.1:8124/ <
 
 **处置**：对照测量完成后**删除该构建产物**（`rm -rf apps/web-client/dist-legacy`），
 门禁恢复通过（8297 文件 ≤ 2000 行）。**后续复跑该对照时同样需在测量后清理**（或将产物放到门禁树外）。
+
+## 7 追加：**263 ms 的拆分**（worker 内计时，2026-10-19 同轮）
+
+**做法**：在原生 worker 内对初始化分段计时（`apps/web-client/src/worker/nativeBackend.ts`
+的 `ensureNativeReady`）：①`fetch` 下载 `.wasm` 字节；②`init({module_or_path: bytes})` 编译+实例化；
+结果随 `init` 回包以 `init_timings` 上报，客户端诊断钩子写入 `window.__nativeInitTimings`
+（`src/engine/client.ts`，**不参与业务逻辑**），测量脚本读取。
+
+**实测（3 轮，[coldstart-split.log](coldstart-split.log)）**：
+
+| 轮 | `to_interactive_ms` | `fetch_ms` | `instantiate_ms` | worker 初始化合计 | `wasm_bytes` |
+|---|---:|---:|---:|---:|---:|
+| 0 | 260 | 7.3 | 1.8 | **9.1** | 2,644,903 |
+| 1 | 260 | 6.5 | 1.7 | **8.2** | 2,644,903 |
+| 2 | 260 | 5.9 | 1.9 | **7.8** | 2,644,903 |
+
+**读法与更正（重要）**：WASM **下载 + 编译实例化合计仅 ~8–9 ms**（模块 **2.64 MB**），
+而「点击到可交互」为 **260 ms** → **模块装载只占 ~3%**，**不是**主要成本。
+因此 §2/§5 中「263 ms 主要由 worker 启动 + WASM 下载/实例化决定」的推断**不成立，予以更正**：
+余下 **~251 ms** 属**应用侧**（worker 启动、建局、选将面板 93 项候选渲染、Vue 首帧等），
+**尚未进一步拆分**（登记待办）。
+
+### 仍未完成（更新）
+
+- [ ] 应用侧 ~251 ms 的进一步拆分（建局 / 候选面板 / Vue 首帧；需在客户端埋点）
+- [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）
+- [ ] 真实网络（非本机）与慢网/丢包
+- [ ] 浏览器内**完整对局**（已在 [fullgame 证据](../2026-10-18-nc12-browser-fullgame/README.md)）与动画帧/输入响应

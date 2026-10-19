@@ -4,6 +4,7 @@
  */
 import type { WorkerRequest, WorkerResponse } from "../types/engine";
 import {
+  nativeInitTimings,
   chooseGeneral,
   ensureNativeReady,
   generalCandidates,
@@ -25,6 +26,11 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
   try {
     await ensureNativeReady();
     if (msg.type === "init") {
+      // NC12：把 worker 内初始化分段耗时随 init 回包发出（浏览器档位测量读取）
+      const timings = nativeInitTimings();
+      if (timings) {
+        reply({ type: "init_timings", timings } as unknown as WorkerResponse);
+      }
       handle = msg.packsJson
         ? nativeCreateWithPacks(4, 4242, 0, msg.packsJson)
         : nativeCreate(4, 4242, 0);

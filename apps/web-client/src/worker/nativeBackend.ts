@@ -37,15 +37,50 @@ export interface NativeHandle {
 let ready: Promise<void> | null = null;
 
 /** 浏览器/Worker 侧必须先初始化 wasm（web 目标）。 */
+/// NC12 冷启动拆分（worker 内计时；`performance` 在 worker 上下文可用）：
+/// 记录 **fetch**（下载 .wasm）与 **instantiate**（编译+实例化）两段耗时，
+/// 供浏览器档位测量读取（`nativeInitTimings()`），不改变任何行为。
+export interface NativeInitTimings {
+  fetch_ms: number;
+  instantiate_ms: number;
+  total_ms: number;
+  wasm_bytes: number;
+}
+
+let initTimings: NativeInitTimings | null = null;
+
+/** 读取 worker 内初始化分段耗时（未初始化时为 null）。 */
+export function nativeInitTimings(): NativeInitTimings | null {
+  return initTimings;
+}
+
 export async function ensureNativeReady(): Promise<void> {
   if (!ready) {
     ready = (async () => {
-      await init({
-        module_or_path: new URL(
-          "./native-pkg/engine_native_wasm_bg.wasm",
-          import.meta.url,
-        ),
-      });
+      const url = new URL("./native-pkg/engine_native_wasm_bg.wasm", import.meta.url);
+      const t0 = performance.now();
+      // ① 下载：显式 fetch（随后用同一 Response 的 bytes 实例化，避免二次请求）
+      let bytes: ArrayBuffer | undefined;
+      let fetchMs = 0;
+      try {
+        const resp = await fetch(url);
+        bytes = await resp.arrayBuffer();
+        fetchMs = performance.now() - t0;
+      } catch {
+        fetchMs = performance.now() - t0; // 失败时仍记录，交由 init 报错
+      }
+      const t1 = performance.now();
+      // ② 编译 + 实例化
+      await (bytes
+        ? init({ module_or_path: bytes })
+        : init({ module_or_path: url }));
+      const t2 = performance.now();
+      initTimings = {
+        fetch_ms: Math.round(fetchMs * 100) / 100,
+        instantiate_ms: Math.round((t2 - t1) * 100) / 100,
+        total_ms: Math.round((t2 - t0) * 100) / 100,
+        wasm_bytes: bytes?.byteLength ?? 0,
+      };
     })();
   }
   await ready;
