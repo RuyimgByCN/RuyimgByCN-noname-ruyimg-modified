@@ -251,6 +251,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 91 | U05 古剑（机关牌） | `feibiao`（飞镖） | 1 点通过（含行为面**三分支**），**未发现差异**：有黑牌且弃 → hp 不变（询问 `gj_feibiao_discard`）；无黑牌 → 无询问且 hp −1；有黑牌未弃 → hp −1 | [gujian-feibiao](../operations/evidence/2026-10-19-nc08-upstream-gujian-feibiao/README.md) |
 | 92 | U05 古剑（机关牌） | `mianlijinzhen`（绵里金针） | 2 点通过（含行为面），**未发现差异**：目标手牌 0→1（摸 1）、hp 4→3（失去 1 点体力）；门槛反例：目标体力更低 → `Rejected` | [gujian-mianlijinzhen](../operations/evidence/2026-10-19-nc08-upstream-gujian-mianlijinzhen/README.md) |
 | 93 | U05 古剑（食物牌） | `mapodoufu`（麻婆豆腐） | **未验收**（登记）：与样本 89 **同现象**（目标手牌 0→0、牌入弃堆）⇒ **食物牌共性（2/2）** → 第 37 项 | [gujian-mapodoufu](../operations/evidence/2026-10-19-nc08-upstream-gujian-mapodoufu/README.md) |
+| 94 | U05 古剑（**食物牌普查**） | 12 张 `type:"food"` 卡 | 1 点通过（普查）：**本体归属缺失 12/12**（获得 = 0）⇒ 共性**无例外**；第 37 项覆盖面由 3/3 扩至 **12/12** | [gujian-food-survey](../operations/evidence/2026-10-19-nc08-upstream-gujian-food-survey/README.md) |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
