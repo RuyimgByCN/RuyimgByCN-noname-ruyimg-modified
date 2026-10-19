@@ -81,6 +81,8 @@ for (let i = 0; i < iters; i++) {
   }
   // 可选：先点「跳过动画」（若存在）→ 用于测**纯计算**冷启动（剔除 presentationDelay 节流）
   if (process.env.NC12_SKIP_ANIMS === "1") {
+    // 首选：在点击开局前预置 localStorage（BattleView setup 读取）
+    await c.evalJs(`(() => { try { localStorage.setItem('noname-next-skip-anims','1'); return true; } catch { return false; } })()`);
     // 「跳过动画」是 BattleView 内的 checkbox（`<input type="checkbox" v-model="store.skipAnims">`）
     // → 直接勾选该 checkbox（此前点击文案未命中，故改为按控件类型驱动）
     const toggled = await c.evalJs(`(() => {

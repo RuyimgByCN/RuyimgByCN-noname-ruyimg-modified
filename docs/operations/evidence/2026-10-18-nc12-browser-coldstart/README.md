@@ -199,3 +199,28 @@ iter 0/1/2 | envelope+首帧 123.0–124.0 ms（与未跳过时一致）
 - [ ] 纯计算冷启动补测（查询参数 / 文档创建前注入 / speed=4 口径，三选一）
 - [ ] 候选生成 126 ms 的引擎侧拆分与优化（worker 内埋点）
 - [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）；真实网络；动画帧/输入响应
+
+## 11 **纯计算冷启动已测得**：点击 → 首帧 **25.3–36.2 ms**（2026-10-19 同轮）
+
+按 §10 登记的补测方式实现并复测（**产品侧新增一个测量/QA 入口**）：
+`BattleView` setup 读取 `localStorage["noname-next-skip-anims"] === "1"`（或查询参数 `?skipAnims=1`）
+→ 置 `store.skipAnims`（`presentationDelay` 随之立即返回）→ 脚本在**点击开局前**预置该键。
+
+**实测（3 轮，[coldstart-compute-only.log](coldstart-compute-only.log)、[compute-only-detail.txt](compute-only-detail.txt)）**：
+
+| 轮 | worker 连接 | 建局 | **`handleEnvelope` + 首帧** | **点击 → 首帧（t0→t4）** |
+|---|---:|---:|---:|---:|
+| 0 | 19.3 | 2.5 | **4.1** | **25.9** |
+| 1 | 18.8 | 2.3 | **4.2** | **25.3** |
+| 2 | 28.2 | 3.2 | **4.8** | **36.2** |
+
+**结论（与本轮前几节一致且更精确）**：
+- **纯计算冷启动 ≈ 25–36 ms**（worker 连接 19–28 ms + 建局 2–3 ms + 信封处理/首帧 4–5 ms）；
+- **`envelope+首帧` 由 123 ms → 4 ms**，**直接证实 §9 的结论**：那 ~120 ms 是 `presentationDelay` 刻意节流；
+- 默认体验下的 142–165 ms 是**产品节奏**（可在设置中跳过/降速），**不是性能瓶颈**。
+
+### 仍未完成（更新）
+
+- [ ] 候选生成 126 ms 的引擎侧拆分与优化（worker 内埋点）
+- [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）；真实网络；动画帧/输入响应
+- [ ] 将 `?skipAnims`/`localStorage` 入口写入客户端文档（供 QA 与后续测量复用）

@@ -45,6 +45,21 @@ const store = createViewStore();
 const localClient = new EngineClient();
 const networkClient = new NetworkEngineClient();
 const selfId = ref(1);
+// NC12 冷启动测量/QA 支持：`?skipAnims=1` 或 `?speed=4` 可在**开局前**设定表现节流
+// （`presentationDelay` 尊重 `skipAnims`/`reduceMotion`/`speed`）。此前无法在 UI 上驱动
+// ——开关在 BattleView 内、而首个信封的 120 ms 延迟发生在控件可达之前。
+// 也支持 `localStorage["noname-next-skip-anims"]="1"`（本地开局由**点击**触发，
+// 战斗路由通常不带查询参数，故查询参数未必可用；localStorage 可在点击前预置）。
+try {
+  if (globalThis.localStorage?.getItem("noname-next-skip-anims") === "1") store.skipAnims = true;
+} catch {
+  /* 隐私模式等场景忽略 */
+}
+if (route.query.skipAnims === "1") store.skipAnims = true;
+if (route.query.speed !== undefined) {
+  const sp = Number(route.query.speed);
+  if (Number.isFinite(sp) && sp > 0) store.speed = sp;
+}
 const players = ref(Number(route.query.players ?? 4) || 4);
 const seed = ref(Number(route.query.seed ?? 42) || 42);
 const autoTimer = ref<number | null>(null);
