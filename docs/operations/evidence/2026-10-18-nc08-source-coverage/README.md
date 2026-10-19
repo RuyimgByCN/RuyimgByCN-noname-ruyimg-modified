@@ -1,0 +1,47 @@
+# NC08 第⑦层来源覆盖：**21/37 的天花板来自「未转换」而非「未采样」**（2026-10-19）
+
+- 日期：2026-10-19
+- 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）
+- 规则版本 v322（工作树）/ 存档格式 v105
+- 结论：**已转换的 14 个包全部有第⑦层样本**；**其余来源尚未转换（G1 未做）** → 第⑦层**无法**为其建样本
+
+## 1 方法
+
+枚举 `packages/extensions/*/assets/cards.json` 的 `cards + generals` 数量，按「有无可执行内容」分类
+（清单见 [package-inventory.txt](package-inventory.txt)）：
+
+| 类别 | 包数 | 说明 |
+|---|---:|---|
+| **有内容（cards+generals > 0）** | **14** | 可做第⑦层行为对照（原生已有对应行为） |
+| **无内容（= 0）** | **5** | 仅包元数据/配置面 → **无可对照的原生行为** |
+
+**有内容的 14 个包**：`shaai-ow`(24) / `shaai-xianjian`(36) / `shahai-gujian`(40) / `shahai-gwent`(21) /
+`shahai-hearth`(17) / `shahai-mtg`(10) / `shahai-swd`(169) / `shahai-yunchou`(23) / `shahai-zhenfa`(8) /
+`wudian`(23) / `wuxing`(1) / `huanle`(7) / `longxue`(1) / `boss-zhugeliang`(1)。
+
+**无内容的 5 个包**：`doomsday-brawl`(L19) / `epic-cards`(L10) / `hero-kill`(U08) /
+`mark-supplement`(L20) / `select-beautify`(L27)。
+
+## 2 判读（不夸大）
+
+- 第⑦层样本已覆盖 **21 个来源**（见台账 §3.3）——其中包含**同一包的多来源**（如 U05 杀海拾遗的
+  各子包）与**标准面**；
+- 剩余来源（L08/L11/L12/L14/L19/L20/L25/L27/L28/U01/U05 余项/U07/U08 等）中，
+  **多数在 `packages/extensions/` 下只有包元数据（0 卡 0 将）** → 属**未转换（G1 未做）**，
+  **不是**「第⑦层漏采样」→ 因此**不能**通过继续加样本来提升 37 来源覆盖；
+- 要推进这些来源，需先做**内容转换（G1）**：把上游 JS 的功能面转成包数据 + 宿主行为键
+  （属 T12/T9 面，见[进度主稿](../../../architecture/native-progress.md)与[台账](../../../migration/upstream-extension-reconstruction.md)）。
+
+## 3 验证
+
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| 枚举脚本可复跑 | 是（清单文件随附） | [package-inventory.txt](package-inventory.txt) |
+| 与台账 §3.3 的 21 来源一致 | 是（含标准面与同包多来源） | 台账 §3.3 |
+| 行数门禁 | 8324 文件 ≤ 2000 行 | — |
+
+## 4 未完成 / 待办
+
+- [ ] **未转换来源的 G1 内容转换**（5 个空包 + 其余来源的余项）——第⑦层样本的**前置条件**
+- [ ] `longxue`(L16?) / `boss-zhugeliang` 等仅 1 条目的包，是否值得建样本（评估）
+- [ ] 台账「覆盖面」一栏补充本口径（避免把「未转换」误读为「未采样」）
