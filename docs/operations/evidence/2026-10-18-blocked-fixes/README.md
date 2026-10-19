@@ -1444,8 +1444,27 @@ impl SkillBehavior for HostSkillBehavior {
 ⇒ **宿主行为与普通技能走同一套「filter → start」触发机制**；因此「`Phase{begin:true}` 未派发」
 等价于「**该事件未进入技能触发通道**」——**影响面可能大于器族五件**。
 
-**未定位**：`SkillBehavior::filter` 的**实际调用点**（在 `kernel/`/`engine/` 中多次 grep 未果，
-可能经 `dyn SkillBehavior` 的**统一驱动**在别处调用）。**下一步**：从 `content/standard.rs`（行为实现聚集处）
-**反查调用方**，或直接检索 `SkillMachine` 的驱动循环。
+**未定位**：`SkillBehavior::filter` 的**实际调用点**。**下一步**：反查调用方或检索 `SkillMachine` 驱动循环。
+
+**✅ 调用点已定位（同日）**：两处——
+
+```rust
+// resolution.rs:301-304（**入队时**）：遍历技能，filter 为真才入队
+if !def.behavior.filter(&qctx, *owner, &event) { continue; }
+entries.push(QueuedTrigger { … });
+// resolution.rs:488（**出队后重查**）：再次 filter 后才 start
+if !def.behavior.filter(&qctx, qt.owner, &event) { return; }
+```
+
+⇒ **filter 在「入队时」就被调用** ⇒ 若 filter 返回 false，则**永不入队**、也就**永不执行**。
+
+**关键依赖已核对**：`hand_has_kind`（`content/host/support.rs:1106-1112`）实现为
+`ctx.state.player(owner).hand.iter().any(|c| ctx.catalog.card_kind(*c) == kind)` —— **按 `card_kind` 比对，正确**。
+
+⇒ **按源码推理，本用例的 filter 条件全部成立**（阶段＝`Judge`+`begin`、`hujia == 0`、手牌含该 kind）
+⇒ **与行为面「未触发」矛盾** ⇒ **必须运行时插桩**（在 `filter_behavior` 或 `run_queued_trigger` 加日志，
+打印 `event` 与各条件实值）。
+
+**阻塞**：插桩需改 `crates/engine-native/src/content/host/**`（**未跟踪**）⇒ **与核心修复清单同因受阻**。
 
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
