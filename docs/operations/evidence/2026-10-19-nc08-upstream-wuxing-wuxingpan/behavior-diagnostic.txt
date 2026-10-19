@@ -1,0 +1,3 @@
+DBG 五行盘：装备=Accepted { state_hash: [..] }
+DBG 五行盘：装备区 0 → 1；技能候选命中=["wuxingpan_skill"]
+NOTE 五行盘：技能候选命中=["wuxingpan_skill"]（若为空，须先按原生常量核对命名再判定是否缺失）；上游为 equip5 宝物位 + 授予 wuxingpan_skill（出牌阶段限一次，永久改变一张手牌的五行属性）
