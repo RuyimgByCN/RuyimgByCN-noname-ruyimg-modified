@@ -3650,7 +3650,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **循环询问粒度**（标准面 `luoshen`） | 每轮 `chooseBool` 询问是否继续 | **整链一次确认**（源码注释自述） | luoshen |
 | **目标集合范围**（运筹 `jieyan` / 古剑 `dinvxuanshuang`） | `filterTarget: true` + `selectTarget: -1` → **全部角色**（**含使用者**；依据 `library/index.js:11681` `targetEnabled` 对布尔 `filterTarget` 直接返回，**无隐式排除使用者**） | 原生 `seats` 过滤 **`i != self.owner`** → **排除使用者** → **规则损失**（上游应伤害使用者） | **jieyan（已裁定）+ dinvxuanshuang（2 例，方向相反）** |
 | **结算顺序**（swd `jiguantong`） | 上游 `reverseOrder: true` → **逆序**结算 AOE 目标 | 原生按**座位序**（`engine/play_card.rs:1526` 注释自述「结算序=座位序**登记差异**」） | **jiguantong（1 例，待扩展核对其它 AOE）** |
-| **生成 vs 实体取牌**（swd `mujiaren`/`yangpijuan`） | 上游 `game.createCard(...)` 按**牌定义池****凭空造牌**（候选牌**不属于**牌堆） | 原生从**牌堆/弃堆**取**实体牌**（原生注释自述「实体发现」；候选择定前**留在牌堆**；数量受 `pool.len().min(n)` 限制） | **mujiaren + yangpijuan（2 例）** |
+| **生成 vs 实体取牌**（swd `mujiaren`/`yangpijuan`、古剑 `liufengsan`） | 上游 `game.createCard(...)` 按**牌定义池****凭空造牌**（候选牌**不属于**牌堆） | 原生从**牌堆/弃堆**取**实体牌**（原生注释自述「实体发现」；候选择定前**留在牌堆**；数量受 `pool.len().min(n)` 限制） | **3 例：mujiaren + yangpijuan + liufengsan（牌堆 −2 量化证据）** |
 | **牌区入口**（`zhiheng`/`qixi`/`guose`/`wusheng`/`lijian`/`qingguo`/`luweiyan`） | `position: "he"`/`"hes"`/`"hs"`（含装备区、判定区） | **命令面/候选生成限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中；`qingguo` 的响应候选只遍历 `.hand` | **7 例** |
 | **改判牌区**（标准面 `guicai`） | 非国战 `hs`（手牌 + **装备区**），**不限花色** | 手牌全量 ✅；**装备区候选受 `is_black` 限制**（鬼道口径）→ 鬼才非黑装备不能改判 | guicai |
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
