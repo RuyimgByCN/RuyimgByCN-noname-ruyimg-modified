@@ -571,20 +571,17 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 **同族提示**：与 `HU_JIA`（护驾，`kernel/sha.rs` 可达）**结构同源**，可参照其接入方式。
 
-## 29 运筹（`yunchou`）武将技「宿主已实现、包未交付」→ 产品路径不可达（样本 69，2026-10-19）
+## 29 【已撤回】运筹武将技「不可达」——实为**夹具数据源错误**（2026-10-19 同轮更正）
 
-**症状（规则损失/可达性缺口）**：宿主侧已实现 `HostBehavior::YunchouXiongzi`（雄姿，tag 243）等
-运筹武将技行为（`content/host/step/yunchou.rs`、`behavior.rs:619`、`filtering/common.rs:507`），
-但 **`packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json` 只有 23 张卡、无 `generals` 段**
-（卡牌条目仅 `{name, kind, suit, rank}`；全库无任何包携带 `host:` 键）→
-**`debug_grant(0, "雄姿")` 直接 panic `unknown skill`**，技能在**产品路径上不可达**。
+**原登记（错误）**：据「`shahai-yunchou` 包只有 23 张卡、无 generals 段」判定运筹武将技
+（雄姿等）在产品路径上**不可达**。
 
-**修法（二选一）**：
-1. **补包数据**：在运筹包中增加 `generals` 段，把武将技能映射到 `host:yunchou` 系键（需确认键名规范）；
-2. **宿主按 tag 注册技能名**：为已实现但无包交付的宿主技能注册可授予的技能定义（并同步包契约文档）。
+**更正**：该包**另有 `character.json`**（10 名武将，技能形如
+`{"name": "ycnxiongzi", "title": "雄姿", "mapping": "host:xiongzi"}`）——武将面在
+**`character.json`**，`cards.json` **只有卡牌段**。夹具须**双产物桥接**
+（`bridge_pack` + `bridge_generals`）后才可 `debug_grant("ycnxiongzi")`。
+**实测**：修正夹具后 `雄姿` 行为面**通过**（装备 0/2/3 件 → 摸牌阶段净增 **3/4/4** 张，
+向下取整边界成立）→ **技能可达，原判定撤回**。
 
-**验收**：样本 69 的 `upstream_xiongzi_draw_bonus_with_floor`（当前 `#[ignore]`）应能运行并通过
-（0 件→3 张、2 件→4 张、**3 件→4 张**（⌊3/2⌋=1））。
-
-**波及面（建议普查）**：所有「宿主有 behavior、包无交付」的技能——与第 28 项（激将不可达）
-**同类不同因**（28 项=缺调用点；本项=缺包交付）。
+**教训（已并入方法学）**：与第 12/14 条同源——**断言「缺失/不可达」前必须先查全数据来源**
+（本例漏查同包 `character.json`）。

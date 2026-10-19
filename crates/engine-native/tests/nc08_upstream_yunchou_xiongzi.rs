@@ -24,25 +24,36 @@
 //! **登记差异**：本样本**未发现**差异（含**向下取整**边界：3 件装备仍只 +1）；
 //! 保留项：`audio` 表现面。
 //!
-//! 未覆盖（登记）：运筹**其它**武将技（厉焰/雅量/蝉缘变体/悲歌 refresh 变体）各自的行为面；
-//! 该来源**包内仅 23 张卡、无武将**（武将技由宿主 `host:yunchou` 承载）——见下方待办。
+//! **夹具要点（重要，避免误判）**：运筹的**武将面在 `character.json`**（`cards.json` 只有卡牌段）
+//! → 必须**双产物桥接**（`bridge_pack` + `bridge_generals`），否则技能不在目录中、
+//! `debug_grant("ycnxiongzi")` 会 **panic `unknown skill`**（本样本初版即因此**误判为「不可达」**，
+//! 已更正——属「先查完整数据来源」方法学的又一次命中）。
+//! 另：宿主技能在**目录中的名字**是 `ycn`+拼音（如 `ycnxiongzi`），包面向 `mapping` 为 `host:xiongzi`。
+//!
+//! 未覆盖（登记）：运筹**其它**武将技（厉焰/雅量/蝉缘变体/悲歌 refresh 变体）各自的行为面。
 
 mod nc08_common;
 use engine_native::{Engine, Phase};
 use nc08_common::advance_to_phase;
 
+/// 运筹帷幄：**双产物桥接**（武将面在 `character.json`）。
+fn yunchou_engine(seed: u64) -> Engine {
+    let root =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let json =
+        std::fs::read_to_string(root.join("shahai-yunchou-upstream-noname/assets/character.json"))
+            .expect("读运筹 character.json");
+    let mut pack = content_native_loader::bridge_pack(&json).expect("桥接 pack 段").pack;
+    let bridged = content_native_loader::bridge_generals(&json).expect("桥接 generals 段");
+    pack.generals = bridged.generals;
+    Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
+}
+
 /// 在「授予雄姿 + 装备 n 件」下走完摸牌阶段，返回该阶段净增手牌数。
-///
-/// **本轮未验收（登记）**：`debug_grant(0, "雄姿")` 直接 **panic（unknown skill）** ——
-/// 该技能的**行为**在原生侧已实现（`HostBehavior::YunchouXiongzi`，tag 243），
-/// 但**没有任何包数据交付该技能**：`packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json`
-/// **只有 23 张卡、0 个武将**（全库扫描：无任何包的 cards/generals 携带 `host:` 键；
-/// 包内卡牌条目仅 `{name, kind, suit, rank}`）→ **运筹武将技在产品路径上不可达**。
-/// 本函数保留为**复现入口**，用例以 `#[ignore]` 守护，**不写成通过**。
 fn draw_phase_gain(seed: u64, equips: usize) -> i64 {
-    let mut e = Engine::new(seed, 4);
+    let mut e = yunchou_engine(seed);
     // 引擎初态为 0 号**判定阶段**：此刻授予雄姿，摸牌阶段尚未开始 → 可正常触发
-    e.debug_grant(0, "雄姿");
+    e.debug_grant(0, "ycnxiongzi"); // 宿主技能在**目录中的名字**为 `ycn`+拼音（包面向键为 host:xiongzi）
     let names: Vec<String> = e
         .catalog()
         .cards
@@ -67,7 +78,6 @@ fn draw_phase_gain(seed: u64, equips: usize) -> i64 {
 
 /// 上游点 2（**行为面 · 含向下取整边界**）：0 件 → +3；2 件 → +4；3 件 → +4（⌊3/2⌋=1）。
 #[test]
-#[ignore = "运筹武将技不可达（无包数据交付 host:yunchou 技能，debug_grant panic）——未构成验收"]
 fn upstream_xiongzi_draw_bonus_with_floor() {
     let g0 = draw_phase_gain(20270101, 0);
     let g2 = draw_phase_gain(20270102, 2);
@@ -108,20 +118,28 @@ fn upstream_xiongzi_source_matches() {
             && seg.contains("trigger.num += 1 + Math.floor(player.countCards(\"e\") / 2)"),
         "上游依据：摸牌阶段开始 + 1+⌊装备数/2⌋：{seg}"
     );
-    // **不可达事实固定**：包内无武将 → 技能不被交付
-    let pack = std::fs::read_to_string(
-        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json"),
+    // **数据来源固定**：武将面在 character.json（cards.json 只有卡牌段）
+    let root =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let chars = std::fs::read_to_string(
+        root.join("shahai-yunchou-upstream-noname/assets/character.json"),
     )
-    .expect("读 yunchou 包");
-    let v: serde_json::Value = serde_json::from_str(&pack).expect("解析包");
+    .expect("读运筹 character.json");
+    let v: serde_json::Value = serde_json::from_str(&chars).expect("解析 character.json");
+    let gens = v["generals"].as_array().expect("generals 段");
+    assert_eq!(gens.len(), 10, "运筹包应有 10 名武将");
     assert!(
-        v.get("generals").is_none(),
-        "登记：运筹包**无 generals 段**（武将技不被交付）"
+        chars.contains("\"ycnxiongzi\"") && chars.contains("\"mapping\": \"host:xiongzi\""),
+        "数据依据：雄姿以 `ycnxiongzi`（目录名）+ `host:xiongzi`（包面向键）交付"
     );
+    let cards = std::fs::read_to_string(
+        root.join("shahai-yunchou-upstream-noname/assets/cards.json"),
+    )
+    .expect("读运筹 cards.json");
+    let cv: serde_json::Value = serde_json::from_str(&cards).expect("解析 cards.json");
     assert_eq!(
-        v["cards"].as_array().map(|a| a.len()).unwrap_or(0),
+        cv["cards"].as_array().map(|a| a.len()).unwrap_or(0),
         23,
-        "登记：运筹包仅 23 张卡"
+        "运筹 cards.json 为 23 张卡（卡牌段）"
     );
 }
