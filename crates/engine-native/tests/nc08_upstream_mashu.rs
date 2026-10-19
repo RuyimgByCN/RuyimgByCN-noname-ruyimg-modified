@@ -83,3 +83,37 @@ fn upstream_feiying_difference_is_registered() {
     );
     let _ = Engine::new(20268301, 4);
 }
+
+/// 上游点（**行为面**）：马术使距离 −1，但**下限为 1**（相邻座位不会变成 0）。
+///
+/// 原生注释自述「计算与他人的距离时始终 -1（**下限 1**）」；上游 `globalFrom` 返回
+/// `distance - 1`，而 noname 的距离计算本身以 **1** 为下限 → 本用例验证原生口径一致。
+#[test]
+fn upstream_mashu_distance_floor_is_one() {
+    let mut e = Engine::new(20268302, 4);
+    // 未持马术：相邻座位距离应为 1
+    let base = e.state_core().computed_distance(e.catalog(), 0, 1);
+    // 授予马术后：距离 −1，但不得低于 1
+    e.debug_grant(0, "马术");
+    let with_skill = e.state_core().computed_distance(e.catalog(), 0, 1);
+    // 远距离座位（0 → 2）应确实 −1
+    let far_base = {
+        let mut e2 = Engine::new(20268302, 4);
+        e2.state_core().computed_distance(e2.catalog(), 0, 2)
+    };
+    let mut e3 = Engine::new(20268302, 4);
+    e3.debug_grant(0, "马术");
+    let far_with = e3.state_core().computed_distance(e3.catalog(), 0, 2);
+    eprintln!(
+        "DBG 马术距离：相邻 {base} → {with_skill}（下限 1）；远处 {far_base} → {far_with}"
+    );
+    assert_eq!(base, 1, "未持马术时相邻座位距离应为 1");
+    assert_eq!(
+        with_skill, 1,
+        "马术：相邻座位距离不得低于 **1**（{base} → {with_skill}）"
+    );
+    assert!(
+        far_with < far_base,
+        "马术：远距离应确实 −1（{far_base} → {far_with}）"
+    );
+}
