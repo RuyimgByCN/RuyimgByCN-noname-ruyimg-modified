@@ -35,6 +35,7 @@ fn swd_engine(seed: u64) -> Engine {
 /// ③在标准牌组补 AOE 实例（属牌组构成面，非本项）。
 #[test]
 #[ignore = "目录无 AOE 锦囊实例（标准牌组 124 张不含南蛮/万箭）——见证据与第 54 项"]
+fn upstream_shencaojie_reverse_branch_reduces_damage() {
     let mut e = swd_engine(20288501);
     // 0 号持神草结
     let shencao = {
