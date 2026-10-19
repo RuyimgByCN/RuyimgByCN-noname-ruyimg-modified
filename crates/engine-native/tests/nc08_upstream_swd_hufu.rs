@@ -201,3 +201,99 @@ fn upstream_swd_hufu_dying_only() {
         "虎符（**未濒死**）：应被拒绝（`play_card.rs:1178`：`kind == Hufu && !p.dying`）（实测 {tag_alive}）"
     );
 }
+
+/// **决定性对照（第 52 项）**：同一局面下，救援牌为**【桃】**时救援窗口是否开启。
+///
+/// 对照逻辑：若【桃】**能**开启救援窗口而**虎符不能** ⇒ 确认「**虎符未纳入救援检测**」；
+/// 若【桃】**也不能** ⇒ 问题在**救援流程本身**。
+#[test]
+fn upstream_rescue_contrast_tao_vs_hufu() {
+    fn probe(card_name: &str, seed: u64) -> (bool, i32) {
+        let mut e = swd_engine(seed);
+        assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
+        for p in 0..4 {
+            e.debug_clear_hand(p);
+        }
+        // 0 号持救援牌；1 号 1 血
+        let rescue = {
+            let id = e
+                .catalog()
+                .cards
+                .iter()
+                .enumerate()
+                .find(|(_, c)| c.name.contains(card_name))
+                .map(|(i, _)| i as engine_native::CardId)
+                .expect("救援牌在目录");
+            nc08_common::put_hand(&mut e, 0, id);
+            id
+        };
+        e.debug_set_hp(1, 1);
+        // 0 号出【杀】→ 1 号无【闪】⇒ 受伤至 0
+        let sha = {
+            let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
+            e.debug_place(0, name)
+        };
+        let out = e.submit(GameCommand {
+            actor: 0,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard { card: sha, targets: vec![1] },
+        });
+        let mut offered = false;
+        let mut prompts: Vec<String> = Vec::new();
+        for _ in 0..24 {
+            let Some(c) = e.open_choice().cloned() else { break };
+            if !prompts.iter().any(|p| p == c.spec.prompt) {
+                prompts.push(format!("{}@obs{}", c.spec.prompt, c.observer));
+            }
+            if c.spec.options.contains(&engine_native::ChoiceOption::Card(rescue)) {
+                offered = true;
+                let _ = e.submit(GameCommand {
+                    actor: c.observer,
+                    expected_revision: e.revision(),
+                    dedup_id: next_dedup(),
+                    action: GameAction::Answer {
+                        choice_id: c.id,
+                        selection: vec![engine_native::ChoiceOption::Card(rescue)],
+                    },
+                });
+                continue;
+            }
+            let sel: Vec<engine_native::ChoiceOption> =
+                if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+                    vec![engine_native::ChoiceOption::Pass]
+                } else if c.spec.allow_cancel {
+                    Vec::new()
+                } else {
+                    c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+                };
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: sel },
+            });
+        }
+        drain(&mut e);
+        eprintln!(
+            "DBG 救援对照：{card_name} → 出杀={out:?}；询问={prompts:?}；救援牌获提供={offered}；             1 号 hp={} dying={} alive={}",
+            e.debug_hp(1),
+            e.state_core().player(1).dying,
+            e.state_core().player(1).alive
+        );
+        (offered, e.debug_hp(1))
+    }
+    let (tao_offered, tao_hp) = probe("tao", 20287701);
+    let (hufu_offered, hufu_hp) = probe("hufu", 20287702);
+    eprintln!(
+        "DBG 救援对照结论：【桃】获提供={tao_offered}（hp={tao_hp}）；【虎符】获提供={hufu_offered}（hp={hufu_hp}）"
+    );
+    // **不预设结论**：记录两支的对照事实；若【桃】能触发而虎符不能 ⇒ 虎符未纳入救援检测
+    eprintln!(
+        "NOTE 救援对照：若【桃】触发而【虎符】不触发 ⇒ **虎符未纳入救援检测**（差异）；         若两者均不触发 ⇒ 问题在**救援流程本身**"
+    );
+    assert!(
+        !tao_offered || hufu_offered || true,
+        "对照实验：记录事实即可（本用例不预设结论）"
+    );
+}
