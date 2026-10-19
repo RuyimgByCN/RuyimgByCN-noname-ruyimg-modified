@@ -83,18 +83,23 @@ fn drain(e: &mut Engine) {
 /// 用于验证「转化」而非「本体可用」：取名为 `shan`（【闪】，出牌阶段不可主动使用）的实体。
 fn place_colored_nonplayable(e: &mut Engine, player: u8, red: bool) -> engine_native::CardId {
     use engine_native::catalog::Suit;
-    let name = e
+    // **按 card id 布阵**（不能只按名字）：`debug_place(player, name)` 只按名字查找，
+    // 同名牌可能有不同花色实例（奇袭样本即因此误判为「状态依赖」）。
+    // 【闪】（`shan`，出牌阶段不可主动使用 → 「被接受」只可能来自转化）
+    let id = e
         .catalog()
         .cards
         .iter()
-        .find(|c| {
+        .position(|c| {
             let is_red = matches!(c.suit, Suit::Heart | Suit::Diamond);
-            // 【闪】（`shan`，出牌阶段不可主动使用 → 「被接受」只可能来自转化）
             is_red == red && c.name == "shan"
         })
-        .map(|c| c.name)
-        .expect("存在该颜色的【闪】");
-    e.debug_place(player, name)
+        .expect("存在该颜色的【闪】") as engine_native::CardId;
+    {
+        let core = e.state_core_mut();
+        core.player_mut(player).hand.push(id);
+    }
+    id
 }
 
 /// 上游点 1+2（使用面）：**红色**牌当【杀】使用 → 被接受，且目标受到伤害。
@@ -126,8 +131,12 @@ fn upstream_wusheng_red_card_used_as_sha() {
     );
 }
 
-/// 上游点 1（门槛）+ **登记差异②**：黑色牌**不可**当【杀】；但实测**黑色【无懈可击】**
-/// 在出牌阶段被**接受**（原生允许主动使用无懈——上游 `chooseToUse` 面不允许）。
+/// 上游点 1（门槛）：黑色牌**不可**当【杀】。
+///
+/// **口径更正（2026-10-19 同轮）**：初版以「黑色【无懈可击】被接受」登记了
+/// 「原生允许出牌阶段主动使用无懈」这一差异 —— 那是**夹具假象**：当时按名字布阵命中了
+/// **♦ 红色**无懈，被武圣转化 → `Accepted`。改为**按 card id 取黑色实例**后实测为
+/// **`Rejected(WrongPhase)`**（黑牌不转化、无懈不可主动使用）→ **该差异不成立，已撤回**。
 #[test]
 fn upstream_wusheng_black_card_rejected() {
     let mut e = Engine::new(20265202, 4);
@@ -136,19 +145,21 @@ fn upstream_wusheng_black_card_rejected() {
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    // 黑色【闪】在标准目录不存在（闪全为红），故取黑色**非杀**实体：用【无懈可击】
+    // 黑色【闪】在标准目录不存在（闪全为红），故取黑色**非杀**实体：用【无懈可击】。
+    // **按 card id 布阵**（同名牌有 ♦ 红实例，按名字查找会命中错误花色）。
     let black_nullify = {
         use engine_native::catalog::Suit;
-        let name = e
+        let id = e
             .catalog()
             .cards
             .iter()
-            .find(|c| {
-                matches!(c.suit, Suit::Spade | Suit::Club) && c.name == "nullify"
-            })
-            .map(|c| c.name)
-            .expect("存在黑色【无懈可击】");
-        e.debug_place(0, name)
+            .position(|c| matches!(c.suit, Suit::Spade | Suit::Club) && c.name == "nullify")
+            .expect("存在黑色【无懈可击】") as engine_native::CardId;
+        {
+            let core = e.state_core_mut();
+            core.player_mut(0).hand.push(id);
+        }
+        id
     };
     let out = e.submit(GameCommand {
         actor: 0,
@@ -156,11 +167,10 @@ fn upstream_wusheng_black_card_rejected() {
         dedup_id: next_dedup(),
         action: GameAction::PlayCard { card: black_nullify, targets: vec![1] },
     });
-    // **登记差异②**：实测被接受（原生允许出牌阶段主动使用无懈）；上游 chooseToUse 面不允许
     eprintln!("DBG 黑色无懈在出牌阶段：{out:?}");
     assert!(
-        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
-        "登记差异②：原生**接受**出牌阶段主动使用【无懈可击】（上游不允许）：{out:?}"
+        matches!(out, CommandOutcome::Rejected(_)),
+        "黑色牌不满足 `get.color === 'red'` → 不应被转化；无懈亦不可在出牌阶段主动使用：{out:?}"
     );
 }
 
