@@ -585,3 +585,21 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 **教训（已并入方法学）**：与第 12/14 条同源——**断言「缺失/不可达」前必须先查全数据来源**
 （本例漏查同包 `character.json`）。
+
+## 30 隙焰（`jieyan`）**目标集合范围**：原生排除使用者（样本 76 新发现，2026-10-19）
+
+**症状（待裁定的规则差异）**：上游 `jieyan` 为 `filterTarget: true` + `selectTarget: -1`
+（`multitarget`/`multiline`）→ 按 noname 语义**全部角色**（**含使用者**）各受 1 点火焰伤害；
+原生 `content/host/step/yunchou.rs:191` 的 `seats` 过滤 **`i != self.owner`** →
+**排除使用者**（实测 hp `[4,4,4,4] → [4,3,3,3]`：0 号不受伤害）。
+
+**修法（先裁定后修）**：
+1. **裁定**：按上游 `chooseTarget` 在 `filterTarget: true` + `selectTarget: -1` 下**是否把使用者
+   计入合法目标**（noname 中 `selectTarget: -1` 通常表示「所有合法目标」，而 `filterTarget: true`
+   使使用者亦合法 → **应为含使用者**）；必要时用上游 harness 对照确认；
+2. **修**：若裁定为「含使用者」，则去掉 `i != self.owner` 过滤（或按 `toself` 语义处理）。
+
+**验收**：样本 76 的 `upstream_jieyan_discards_red_and_damages_others` 中
+「0 号 hp 不变」的断言应改为 **hp −1**（并同步更新证据与台账）。
+
+**同族**：与「目标集合范围」族（本项为该族**唯一**成员）后续可扩展核对其它 `selectTarget: -1` 技能。
