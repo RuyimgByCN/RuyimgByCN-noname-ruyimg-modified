@@ -3652,7 +3652,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
 | **取消摸牌的弃置面**（标准面 `tuxi`） | `trigger.changeToZero()`：**取消摸牌**（不摸不弃） | `Read` 阶段**无条件 `hand.pop()` 弃 2 张** → 若固定摸牌尚未发生即弃原有手牌（净变化 0，应为 +取牌数） | tuxi |
-| **主公技资格判定**（`hujia`/`jijiang`/`wang_zun`/`jiuyuan`） | `hasZhuSkill(...)`（**仅身份局**具主公技旗标时成立） | 用 `is_lord`，而其在**非身份局返回 true** → **四处调用全部越权可用**（同一根因、四个症状） | hujia（+3 处排查） |
+| **主公技资格判定**（`hujia`/`jijiang`/`wang_zun`/`jiuyuan`） | `hasZhuSkill(...)`（**仅身份局**具主公技旗标时成立） | 用 `is_lord`，而其在**非身份局返回 true** → **四处调用全部越权可用**（同一根因、四个症状）；**旧线 `owner_is_lord` 用 `identity == Identity::Lord`（严格）** → 修法可直接采用旧线口径 | hujia（+3 处排查） |
 | **限次表示方式**（标准面 `kuangfu`） | `addTempSkill("stdkuangfu_used", "phaseChange")` 记每阶段一次 | 以「当前回合 + 出牌阶段」判定表达（源码自述**等价**，因触发仅在自身出牌阶段） | kuangfu |
 | **失去事件覆盖面**（标准面 `lianying`） | `loseAfter` + 5 个全局异步面 | 四类显式事件（`CardUsed`/`CardResponded`/`CardsMoved`/`CardsDiscarded`）；注释自述**批量弃置未覆盖** | lianying |
 | **阈值 off-by-one**（标准面 `lianying`） | 失去后**手牌为空**才触发 | filter `hand.len() > 1` 在**牌已离手后**求值 → 剩 1 张即触发（**原生更宽松**，实测出现确认门） | lianying |

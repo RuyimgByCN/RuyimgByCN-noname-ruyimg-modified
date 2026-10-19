@@ -281,4 +281,13 @@ if !core.player(core.turn.current).hand.contains(&card) {
 `identity_roles().is_some() && is_lord(p)`），并把上述 4 处调用改到该判定；
 **不要**直接改 `is_lord` 的语义（`state.rs:1124` 的 `None => true` 可能被非主公技路径依赖——改动前需核对）。
 
+**风险核对（同轮完成）**：`is_lord` 在**引擎内**的调用点**恰为上表 4 处**（其余命中在测试夹具字段、
+DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改这 4 处即可**，
+`state.rs` 的 `None => true` **当前无其它依赖**（仍建议改动时保留该函数语义、另加主公技判定）。
+
+**参照实现（旧线）**：`crates/engine-core` 的 DSL 过滤 `owner_is_lord`
+（`trigger/dispatch/filters_owner_alive_ddd_fengzheng_round_pending.rs:1255`）用的是
+**`p.identity == Identity::Lord`**（**要求显式主公身份**）→ 旧线**严格**、原生**宽松**
+→ 修法可直接采用旧线口径（**跨线一致性**）。
+
 **验收**：为四处各补「**原型模式下不可发动/不生效**」的行为用例；身份局主公用例保持通过。
