@@ -623,10 +623,21 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 - 效果分支：`content/host/step/yunchou.rs:280`（座位序取**首目标**用虚拟杀；注释自述
   「登记差异：上游玩家选目标+可取消，原生自动首目标」）。
 
-**疑点（根因待查）**：`factory.rs` 该行为返回的 `(source, target)` 中 **target 为 `None`**，
-机器 `self.targets` 可能因此为空 → `find(...)` 返回 None → **不产生虚拟杀**。
+**根因排查（2026-10-19 同轮，**两个假设已被排除**）**：
 
-**修法**：让链杀机器取得**本张水攻的目标表**（如经 `CardUsed.targets` 注入），再按座位序取首目标。
+| 假设 | 结论 | 依据 |
+|---|---|---|
+| ①「机器 `targets` 为空」 | **已排除** ✗ | `factory.rs:511` 明确 `EventData::CardUsed(u) => u.targets.clone()` → 目标表**已注入** |
+| ②「`use_as` 未声明（过滤器失配）」 | **已排除** ✗ | `play_card.rs:1025` 对转化牌置 `declared = Some(kind)`；`machine.rs:728` `card_use_as` 写入 `use_as: as_kind` |
+
+**剩余候选（下一步）**：
+- ③ **触发时机**：原生 `metadata/common.rs:588` 为 **`EventKind::CardUsed` + `Timing::Normal`**
+  （＝用牌**当时**），上游为 **`useCardAfter`**（＝用牌**结算后**）→ 若该事件在原生**不派发**
+  给宿主技能，则 `optional: true` 的确认询问也不会出现（与实测 `询问=[]` 一致）；
+- ④ **嵌套结算**：虚拟杀在【水攻】自身结算**内部**发起，可能被丢弃/延后。
+
+**修法（待 ③/④ 定位后确定）**：若为 ③ → 把触发改挂到**用牌结算后**的事件（或补派发）；
+若为 ④ → 改为**结算外**发起虚拟杀。
 
 **验收**：样本 77 的 `upstream_luweiyan_chain_kill_fires_on_first_target`（当前 `#[ignore]`）
 应能运行并通过（出现【闪】响应询问、1 号手牌不含该【闪】）。
