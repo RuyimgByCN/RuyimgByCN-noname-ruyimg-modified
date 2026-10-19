@@ -204,6 +204,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 42 | 标准面（技能） | `kuangfu` | 3 点通过 + 1 处差异登记（每阶段一次的表示方式；两分支实测：目标血低→摸 2、否则→失去 1 体力） | [nc08-upstream-kuangfu](../operations/evidence/2026-10-18-nc08-upstream-kuangfu/README.md) |
 | 43 | 标准面（技能） | `shushen` | 3 点通过 + **规则损失**（上游按回复点数计次、原生单次结算；两分支实测 摸 2/摸 1） | [nc08-upstream-shushen](../operations/evidence/2026-10-18-nc08-upstream-shushen/README.md) |
 | 44 | 标准面（技能） | `hujia` | 3 点通过 + 2 处差异登记（①`is_lord` 在非身份局为真→**原生更宽松**；②未检查 `hujiaing` 防重入）；**源码事实级**（借闪行为面待办） | [nc08-upstream-hujia](../operations/evidence/2026-10-18-nc08-upstream-hujia/README.md) |
+| 45 | 标准面（技能） | `fankui` | 2 点通过 + 2 处差异登记（①取牌为确定性首张——**玩家选择权缺失族第 2 例**；②自伤时仍可拿手牌——**原生更宽松**） | [nc08-upstream-fankui](../operations/evidence/2026-10-18-nc08-upstream-fankui/README.md) |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
