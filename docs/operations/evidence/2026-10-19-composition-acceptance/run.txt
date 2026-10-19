@@ -1,0 +1,7 @@
+DBG 组合：参与组合的卡牌包 10 个
+DBG 组合：跨包同名卡 0 组（前 6：[]）
+test composition_duplicate_card_names_report ... ok
+DBG 组合：同启建局成功；目录**牌实例**数 355；各包牌实例之和 231（上界）；单包最大 90（下界）
+DBG 组合：逐包抽查未命中的包 = []
+test composition_all_card_packs_together ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
