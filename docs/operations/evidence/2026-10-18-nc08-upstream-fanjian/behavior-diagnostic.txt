@@ -1,1 +1,4 @@
+DBG 反间花色选项=[Tag(0), Tag(1), Tag(2), Tag(3)]
+DBG 反间花色选项=[Card(30)]
 DBG 反间：询问=["fanjian_target", "fanjian_suit", "fanjian_pick"] 1 号 hp 4 → 4（1 号手牌=[30]，牌=30）
+DBG 反间（不符分支）：选中 Tag(1)=true 1 号 hp 4 → 3（手牌=[30]）

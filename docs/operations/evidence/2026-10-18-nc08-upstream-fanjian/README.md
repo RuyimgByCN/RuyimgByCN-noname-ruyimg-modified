@@ -1,4 +1,4 @@
-# NC08 第⑦层样本 55：`fanjian`（反间，**标准面** / 周瑜）（2026-10-19）
+# NC08 第⑦层样本 55：`fanjian`（反间，**标准面** / 周瑜）（2026-10-19，同轮补不符分支）
 
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层
@@ -30,6 +30,7 @@ fanjian: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 2+3 | `chooseControl` → `gainPlayerCard` → 条件 `damage` | 询问序列实测 **`["fanjian_target","fanjian_suit","fanjian_pick"]`**（与上游三步一一对应）；目标**获得一张手牌**（手牌 `[30]`）；**花色相符时 hp 不变**（4 → 4） | 通过 |
+| 3 | 条件 `damage`（**不符分支**） | 花色选项为 `Tag(0..3)`；选 **`Tag(1)`**（与红桃不符）→ 目标仍获得手牌，且 **hp 4 → 3**（**受 1 点伤害**） | 通过 |
 | 1 | `usable: 1` + `hasCards("h")` + `player !== target` | 原生注释与实现一致（限一次、须有手牌、目标为其他角色）——源码事实 | 通过 |
 
 **原生实现引用**：`content/standard/skills/fan_jian.rs`（注释「v203 对齐上游 `chooseControl`：♥/♦/♣/♠」
@@ -44,11 +45,11 @@ fanjian: {
 
 | 检查 | 结果 | 证据 |
 |---|---|---|
-| 定向 | **2 passed / 0 failed** | [targeted.log](targeted.log)、[behavior-diagnostic.txt](behavior-diagnostic.txt) |
+| 定向 | **3 passed / 0 failed**（NOTE 行数 0） | [targeted.log](targeted.log)、[behavior-diagnostic.txt](behavior-diagnostic.txt) |
 | 行数门禁 | 见提交说明 | — |
 
 ## 5 未完成 / 待办
 
-- [ ] 花色**不符**分支的行为面（本样本只验证相符分支；不符分支需定向选另一花色）
+- [x] 花色**不符**分支行为面已补（选 `Tag(1)` → hp 4 → 3）
 - [ ] 表现面（`chat`/`log`）与 AI 花色分布
 - [ ] 样本 56+：其余来源/技能（标准面技能 **34 个样本**；来源覆盖 **23/37**）

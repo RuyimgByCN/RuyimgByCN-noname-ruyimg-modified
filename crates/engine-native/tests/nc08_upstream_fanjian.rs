@@ -96,6 +96,7 @@ fn upstream_fanjian_matching_suit_no_damage() {
         }
         // 花色选择：优先「红桃」选项（选项文本/编号由引擎给出，取首个含 heart 的；否则取首个）
         if c.spec.prompt.contains("suit") || c.spec.prompt.contains("fanjian") {
+            eprintln!("DBG 反间花色选项={:?}", c.spec.options);
             let sel: Vec<ChoiceOption> = c.spec.options.iter().take(1).copied().collect();
             let _ = e.submit(GameCommand {
                 actor: c.observer,
@@ -130,6 +131,105 @@ fn upstream_fanjian_matching_suit_no_damage() {
         "反间：目标应获得一张手牌（或花色不符受伤）——两者必居其一"
     );
     let _ = Phase::Play;
+}
+
+/// 上游点 3（**花色不符 → 1 点伤害**）：目标选与所获牌**不同**的花色。
+///
+/// 花色选项为 `Tag(0..3)`（四花色），`Tag(0)` 与红桃牌相符（见相符分支用例），
+/// 故本用例选 **`Tag(1)`** 以制造不符。
+#[test]
+fn upstream_fanjian_mismatched_suit_deals_damage() {
+    let mut e = Engine::new(20268702, 4);
+    e.debug_grant(0, "反间");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let _card = {
+        let id = e
+            .catalog()
+            .cards
+            .iter()
+            .position(|c| c.suit == engine_native::catalog::Suit::Heart && c.name == "shan")
+            .expect("红桃闪") as engine_native::CardId;
+        nc08_common::put_hand(&mut e, 0, id);
+        id
+    };
+    let hp1 = e.debug_hp(1);
+    let skill = skill_id(&e, "反间");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    let mut picked_mismatch = false;
+    for _ in 0..24 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if c.spec.options.contains(&ChoiceOption::Player(1)) && c.spec.prompt.contains("target") {
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Player(1)],
+                },
+            });
+            continue;
+        }
+        // 花色选择：选 Tag(1)（与 Tag(0) 不同 → 制造不符）
+        if c.spec.options.iter().any(|o| matches!(o, ChoiceOption::Tag(_))) && !picked_mismatch {
+            let alt = c
+                .spec
+                .options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(t) if *t == 1))
+                .copied();
+            if let Some(alt) = alt {
+                picked_mismatch = true;
+                let _ = e.submit(GameCommand {
+                    actor: c.observer,
+                    expected_revision: e.revision(),
+                    dedup_id: next_dedup(),
+                    action: GameAction::Answer { choice_id: c.id, selection: vec![alt] },
+                });
+                continue;
+            }
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 反间（不符分支）：选中 Tag(1)={picked_mismatch} 1 号 hp {hp1} → {}（手牌={:?}）",
+        e.debug_hp(1),
+        e.debug_hand(1)
+    );
+    if !picked_mismatch {
+        eprintln!("NOTE 未出现 Tag(1) 花色选项——本用例不构成验收");
+        return;
+    }
+    assert!(
+        e.debug_hp(1) < hp1,
+        "反间：花色不符 → 目标受 1 点伤害（{hp1} → {}）",
+        e.debug_hp(1)
+    );
 }
 
 /// **登记（未发现差异）**：流程三步与上游一致（源码事实）。
