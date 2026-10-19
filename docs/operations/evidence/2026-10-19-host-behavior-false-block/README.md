@@ -162,9 +162,23 @@ HostBehavior::ChangeCardNature => false,      // ← 五行盘技能（样本 14
 `TargetDiscardEquipOrDamage`、`LinghunzhihuoCard`（灵魂之火，**效果在 `skills_damage.rs:749`**；样本 123）、
 `ZhaomingdanCard`（照明弹；样本 121）、`ZhangbaSha`（丈八蛇矛相关？）。
 
-**性质**：`filter_common => false` 对它们**无影响**（行为从未实例化）；
-其中 **3 项效果已有实现/样本**（野升、灵魂之火、照明弹）⇒ **只缺「窗口挂载」**；
-其余 **5 项**待逐项核对（是否已有其它实现路径）。
+**性质**：`filter_common => false` 对它们**无影响**（行为从未实例化）。
+
+**5 项补核（本轮，8 项全部完成定性）**：
+
+| 行为 | `step/*.rs` 实现 | 定性 |
+|---|---|---|
+| **`Gxianyin`**（革新印） | **有实现块**（`match self.stage`；注释「选花色 → 静默弃该花色全部手牌 → 选另一花色 → 获得等量」） | **实现存在但未挂载** ⇒ **只缺窗口挂载** |
+| **`TargetDiscardEquipOrDamage`** | **有实现块**（`skills_damage.rs:566`） | 同上（**通用原语**，可能经其它路径调用） |
+| **`ZhangbaSha`**（丈八蛇矛相关） | **有实现块**（`skills_card_use.rs:359`） | 同上 |
+| **`Shenwei`** | **`=> Flow::Done`（空步）** | **stub**——**效果未实现**（另一类） |
+| **`Shengong`** | **`=> Flow::Done`（空步）** | **stub**——**效果未实现**（另一类） |
+
+⇒ **8 项未挂载的最终分解**：**3 项效果已有实现/样本**（野升、灵魂之火、照明弹）+
+**3 项有实现但未挂载**（革新印、TargetDiscardEquipOrDamage、ZhangbaSha）+
+**2 项空步 stub**（Shenwei、Shengong）= **8** ✅。
+`filter_common => false` 对这 8 项**均无实际影响**；待办性质分别为「**补挂载**」（前 6 项）
+与「**补效果**」（后 2 项）。
 
 ## 意义与边界
 
