@@ -1,0 +1,40 @@
+keji: {
+		audio: 2,
+		audioname: ["re_lvmeng", "sp_lvmeng"],
+		trigger: { player: "phaseDiscardBefore" },
+		frequent(event, player) {
+			return player.needsToDiscard();
+		},
+		filter(event, player) {
+			if (player.getHistory("skipped").includes("phaseUse")) {
+				return true;
+			}
+			const history = player.getHistory("useCard").concat(player.getHistory("respond"));
+			for (const evt of history) {
+				if (evt.card.name === "sha" && evt.isPhaseUsing()) {
+					return false;
+				}
+			}
+			return true;
+		},
+		async content(event, trigger, player) {
+			trigger.cancel();
+		},
+	},
+	kurou: {
+		audio: 2,
+		enable: "phaseUse",
+		prompt: "失去1点体力并摸两张牌",
+		delay: false,
+		manualConfirm: true,
+		async content(event, trigger, player) {
+			player.loseHp(1);
+			player.draw(2, "nodelay");
+		},
+		ai: {
+			basic: {
+				order: 1,
+			},
+			result: {
+				player(player) {
+					if (player.needsToDiscard(3) && !pl
