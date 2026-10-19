@@ -1,0 +1,1 @@
+DBG 无双（只出一张闪）：询问=["respond_shan"] 目标 hp 4 → 3

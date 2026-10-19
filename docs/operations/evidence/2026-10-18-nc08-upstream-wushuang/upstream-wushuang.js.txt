@@ -1,0 +1,66 @@
+	wushuang: {
+		audio: 2,
+		audioname: ["re_lvbu", "shen_lvbu", "lvlingqi", "mb_shen_lvbu"],
+		audioname2: { sb_lvbu: "sbliyu_effect" },
+		forced: true,
+		locked: true,
+		group: ["wushuang1", "wushuang2"],
+		preHidden: ["wushuang1", "wushuang2"],
+	},
+	wushuang1: {
+		audio: "wushuang",
+		audioname: ["re_lvbu", "shen_lvbu", "lvlingqi", "mb_shen_lvbu"],
+		audioname2: {
+			sb_lvbu: "sbliyu_effect",
+			gz_lvlingqi: "wushuang_lvlingqi",
+		},
+		trigger: { player: "useCardToPlayered" },
+		forced: true,
+		sourceSkill: "wushuang",
+		filter(event, player) {
+			return event.card.name === "sha" && !event.getParent()?.directHit.includes(event.target);
+		},
+		//priority:-1,
+		logTarget: "target",
+		async content(event, trigger, player) {
+			const id = trigger.target.playerid;
+			const map = trigger.getParent()?.customArgs;
+			if (id != null) {
+				if (!map[id]) {
+					map[id] = {};
+				}
+				if (typeof map[id].shanRequired == "number") {
+					map[id].shanRequired++;
+				} else {
+					map[id].shanRequired = 2;
+				}
+			}
+		},
+		ai: {
+			directHit_ai: true,
+			skillTagFilter(player, tag, arg) {
+				if (arg.card.name !== "sha" || arg.target.countCards("h", "shan") > 1) {
+					return false;
+				}
+			},
+		},
+	},
+	wushuang2: {
+		audio: "wushuang",
+		audioname: ["re_lvbu", "shen_lvbu", "lvlingqi", "mb_shen_lvbu"],
+		audioname2: {
+			sb_lvbu: "sbliyu_effect",
+			gz_lvlingqi: "wushuang_lvlingqi",
+		},
+		trigger: { player: "useCardToPlayered", target: "useCardToTargeted" },
+		forced: true,
+		sourceSkill: "wushuang",
+		logTarget(trigger, player) {
+			return player === trigger.player ? trigger.target : trigger.player;
+		},
+		filter(event, player) {
+			return event.card.name === "juedou";
+		},
+		//priority:-1,
+		async content(event, trigger, player) {
+			const id = (player === trigger.player ? trig
