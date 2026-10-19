@@ -584,3 +584,7 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 413 轮**：**`global` 窗口第 6 张**——样本 157 `huanglinzhicong`（黄麟之琮）：**正例未通过**（`hujia` **0 → 0**，应 0 → 1）→ **第 56 项**；且**负例（hujia=2 ⇒ 2）虽通过但不可信**（窗口不触发时同样通过）⇒ **负例不构成证据**；与第 55 项同属**`phaseBegin` 类**（`qinglongzhigui` 的摸 2 已证窗口会触发，但本卡 `changeHujia` 分支未生效）；**第 414 轮决定性探针**：手动推进并**停在 `Judge` 阶段**读护甲仍为 **0** ⇒ **`Judge` 的 `begin` 窗口未派发到宿主机器**（系统面，影响器族五件）；两卡 `filter_swd` 条件（`filtering/swd.rs:387/462`）**成立而效果未发生** ⇒ **第 415 轮**：**事件层已确认正常**——`kernel/events.rs:753/789` 两处 `ctx.emit(EventData::Phase{player: next, phase: Judge, begin: true})` ⇒ 事件确实发射；剩余唯一候选＝**该事件未派发到宿主机器**（宿主机器的派发清单未含「回合更替帧的 Phase 事件」）⇒ 修法需改 `content/host/**`（**未跟踪，受阻**）；**第 416 轮（只读）**：派发结构＝宿主行为以 `SkillBehavior` 接入目录（`host.rs:145-155` 的 filter→start），**与普通技能同一触发机制** ⇒ 「Phase{begin:true} 未派发」等价于「该事件未进入技能触发通道」，**影响面可能大于器族五件**；**第 417 轮**：**调用点已定位**——filter 在**入队时**（`resolution.rs:301-304`）与**出队后**（`:488`）各调一次，filter=false 则永不入队；`hand_has_kind`（`support.rs:1106`）按 `card_kind` 比对**正确** ⇒ **源码推理与行为面矛盾** ⇒ **必须运行时插桩**（`content/host/**` 未跟踪）⇒ **受阻**。
 >
 
+- 追加（2026-10-19）：
+> **第 418 轮**：**`global` 卡窗口第 7 张**——样本 158 `zhufangshenshi`（朱fang神石）：**使用本卡后摸 1**（`forced`；牌堆 196→195）⇒ **通过，未发现差异**；**归结论证**：本卡窗口为 **`useCardAfter`（非 `Phase` 事件）**⇒ **正常触发**，而 `qinglongzhigui`/`huanglinzhicong` 依赖 **`Phase{begin:true}`** ⇒ **未触发**⇒ **支持「问题特异于 `Phase` 事件，而非宿主派发整体失效」**。
+>
+

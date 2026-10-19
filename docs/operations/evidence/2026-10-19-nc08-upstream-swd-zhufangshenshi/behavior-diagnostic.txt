@@ -1,0 +1,2 @@
+DBG 朱fang神石：使用=Accepted { state_hash: [..] }
+DBG 朱fang神石：牌堆 196 → 195（使用后摸 1 ⇒ 应 −1）
