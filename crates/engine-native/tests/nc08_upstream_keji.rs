@@ -97,42 +97,49 @@ fn advance_to_phase(e: &mut Engine, seat: u8, phase: Phase) -> bool {
 fn upstream_keji_no_sha_means_no_discard() {
     let mut e = Engine::new(20265001, 4);
     e.debug_grant(0, "克己");
-    assert!(advance_to_phase(&mut e, 0, Phase::Discard), "应到达 0 号弃牌阶段");
-    // 手牌 5 张 > 体力上限 4 → 若无克己须弃 1
-    for _ in 0..5 {
-        let c = place_by_prefix(&mut e, "sha", 0);
+    // **先**把 0 号手牌堆到 9 张（上限检查发生在**弃牌阶段开始**，故必须在进入该阶段前堆高）
+    for _ in 0..9 {
+        let c = place_by_prefix(&mut e, "shan", 0);
         e.debug_give_hand_card(0, 0, c);
     }
     let hand_before = e.debug_hand(0).len();
-    // 推进弃牌阶段（结束该阶段）
-    let _ = e.submit(GameCommand {
-        actor: 0,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::NextPhase,
-    });
-    drain(&mut e);
-    assert_eq!(
-        e.debug_hand(0).len(),
-        hand_before,
-        "克己生效：本回合未使用杀 → 不弃牌（手牌 {hand_before} 保持）"
+    assert!(advance_to_phase(&mut e, 0, Phase::Discard), "应到达 0 号弃牌阶段");
+    // 诊断（登记）：克己是否真的抑制了裁剪
+    let at_discard = e.debug_hand(0).len();
+    eprintln!(
+        "DBG 克己：回合前 hand={hand_before}，弃牌阶段 hand={at_discard}，上限={}，sha_flag={}，有克己={}",
+        e.state_core().hand_limit(e.catalog(), 0),
+        e.state_core().turn.sha_used_play_phase,
+        e.catalog()
+            .skill_by_name("克己")
+            .map(|d| e.state_core().has_skill(0, d))
+            .unwrap_or(false)
+    );
+    // 克己生效的判据：进入弃牌阶段后手牌**仍高于上限**（未被裁剪）。
+    // 注意不能与「回合前手牌」比较——摸牌阶段会+2（实测 13 → 15）。
+    let limit = e.state_core().hand_limit(e.catalog(), 0);
+    assert!(
+        at_discard > limit,
+        "克己生效：本回合未使用杀 → 弃牌阶段开始不裁剪（hand={at_discard} 应 > 上限 {limit}）"
     );
 }
 
 /// 上游点 2（不满足）：本回合**使用过【杀】** → 克己不生效（须按上限弃牌）。
 ///
-/// **本轮未验收（登记，含诊断数据）**：推进到弃牌阶段时实测
-/// `sha_flag=true, hand=9, limit=4, open_choice=None`；推进后 `hand=9, discarded=0`
-/// —— **既无弃牌询问、也未记录弃置**。两种可能（未判定，不写成结论）：
-/// ① 夹具未走到强制弃牌的触发点（`NextPhase` 直接结束该阶段）；
-/// ② 该路径下弃牌上限未被强制执行（**待查**）。
-/// 以 `#[ignore]` 守护并保留诊断；门槛侧由 `upstream_keji_no_sha_means_no_discard`
-/// 与 `upstream_keji_respond_history_difference_is_fixed` 覆盖。
+/// **根因已查明（2026-10-19 同轮）**：弃牌上限的裁剪发生在**进入弃牌阶段时**（阶段开始），
+/// 而初版夹具是在**进入该阶段之后**才堆手牌 → 阶段开始的检查已过，故看不到任何裁剪。
+/// 探针实测（正常角色、回合前堆到 15 张）：`Play: hand=15 → Discard: hand=4`（上限 4）——
+/// **弃牌确实被强制执行**，此前「上限未强制执行」的猜测**不成立**（已撤回）。
+/// 本用例改为在**回合开始前**堆手牌后再比较。
 #[test]
-#[ignore = "夹具未驱动强制弃牌（诊断：sha_flag=true/hand=9/limit=4，但弃牌阶段无询问、discarded=0）；门槛侧见另外两个用例"]
 fn upstream_keji_after_using_sha_must_discard() {
     let mut e = Engine::new(20265002, 4);
     e.debug_grant(0, "克己");
+    // 同样先堆手牌（进入弃牌阶段前）
+    for _ in 0..9 {
+        let c = place_by_prefix(&mut e, "shan", 0);
+        e.debug_give_hand_card(0, 0, c);
+    }
     // 出牌阶段使用一张【杀】
     assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达 0 号出牌阶段");
     let sha = place_by_prefix(&mut e, "sha", 0);
@@ -148,37 +155,13 @@ fn upstream_keji_after_using_sha_must_discard() {
     );
     drain(&mut e);
     assert!(e.state_core().turn.sha_used_play_phase, "出牌阶段使用杀应置位");
-    assert!(advance_to_phase(&mut e, 0, Phase::Discard), "应到达弃牌阶段");
-    for _ in 0..5 {
-        let c = place_by_prefix(&mut e, "shan", 0);
-        e.debug_give_hand_card(0, 0, c);
-    }
     let hand_before = e.debug_hand(0).len();
-    eprintln!(
-        "DBG 弃牌阶段前：sha_flag={} hand={} limit={:?} open={:?}",
-        e.state_core().turn.sha_used_play_phase,
-        hand_before,
-        e.state_core().hand_limit(e.catalog(), 0),
-        e.open_choice().map(|c| c.spec.prompt.clone())
-    );
-    let _ = e.submit(GameCommand {
-        actor: 0,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::NextPhase,
-    });
-    // 弃牌询问：按默认（放弃/取需弃数）处理
-    drain(&mut e);
-    eprintln!(
-        "DBG 弃牌阶段后：sha_flag={} hand={} discarded={}",
-        e.state_core().turn.sha_used_play_phase,
-        e.debug_hand(0).len(),
-        e.state_core().turn.discard_phase_discarded
-    );
+    assert!(advance_to_phase(&mut e, 0, Phase::Discard), "应到达弃牌阶段");
+    let hand_at_discard = e.debug_hand(0).len();
     assert!(
-        e.debug_hand(0).len() < hand_before,
-        "使用过杀 → 克己不生效，应弃牌：{hand_before} → {}",
-        e.debug_hand(0).len()
+        hand_at_discard < hand_before,
+        "使用过杀 → 克己不生效，弃牌阶段开始即按上限裁剪：{hand_before} → {hand_at_discard}（上限 {}）",
+        e.state_core().hand_limit(e.catalog(), 0)
     );
 }
 
