@@ -73,12 +73,12 @@ fn upstream_tuxi_takes_cards_and_skips_draw() {
         });
     }
     assert_eq!(e.turn().phase, Phase::Draw, "应到达摸牌阶段");
-    // 给 1、2 号各一张手牌（供取）。注意：`debug_give_hand_card` 会压帧，
-    // 但**不能在此 drain**——drain 会把已开放的 `tuxi_target` 询问默认应答掉。
+    // 给 1、2 号各一张手牌（供取）：**必须用 `debug_place`**（它直接把牌放入该玩家手牌）；
+    // `debug_give_hand_card(from, to, card)` 要求牌**已在 from 手牌**，从空手牌调用会**静默失败**
+    //（返回值被忽略）→ 这正是此前「取牌落地未验收」的根因（目标手里其实没有牌）。
     for p in [1u8, 2] {
         let name = e.catalog().cards.iter().find(|c| c.name == "shan").map(|c| c.name).unwrap();
-        let c = e.debug_place(p, name);
-        e.debug_give_hand_card(p, p, c);
+        let _ = e.debug_place(p, name);
     }
     let hand_before = e.debug_hand(0).len();
     let mut picked = false;
@@ -134,13 +134,19 @@ fn upstream_tuxi_takes_cards_and_skips_draw() {
             action: GameAction::Answer { choice_id: c.id, selection: sel },
         });
     }
-    let _ = e.submit(GameCommand {
-        actor: 0,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::NextPhase,
-    });
-    drain(&mut e);
+    // 驱动到**离开摸牌阶段**（取牌可能落在阶段推进的后续帧）
+    for _ in 0..8 {
+        if !(e.turn().current == 0 && e.turn().phase == Phase::Draw) {
+            break;
+        }
+        let _ = e.submit(GameCommand {
+            actor: 0,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e);
+    }
     let after = e.debug_hand(0).len();
     eprintln!(
         "DBG 突袭：基线 hand={base} 持技 hand={after}（发动前 {hand_before}）picked={picked}"
@@ -154,10 +160,17 @@ fn upstream_tuxi_takes_cards_and_skips_draw() {
         after <= hand_before,
         "突袭：放弃本次摸牌（发动前 {hand_before} → {after}；基线正常摸 2 后为 {base}）"
     );
-    // **未验收（登记）**：取牌是否落地——实测手牌未增加（{hand_before} → {after}），
-    // 可能取牌发生在后续帧/阶段，本夹具未观察到 → 不写成通过。
+    // **差异③（新发现，已定位到源码）**：净手牌变化应为 **+取牌数**（上游 `changeToZero`
+    // **取消摸牌** → 不摸也不弃）；实测净变化为 **0**。
+    // 源码（`tu_xi.rs` Read 阶段）：机器**无条件 `hand.pop()` 弃置 2 张**（注释称「弃置本阶段
+    // 固定摸到的牌」）→ 若固定摸牌尚未发生，就会**弃掉玩家原有手牌** → 净变化 = 取牌 − 2。
+    assert_eq!(
+        after, hand_before,
+        "差异③：实测净手牌变化为 0（取 2 − 弃 2）；上游 changeToZero 为「不摸不弃」→ 净应为 +取牌数"
+    );
     eprintln!(
-        "NOTE 突袭取牌落地未验收：hand {hand_before} → {after}（picked={picked}）"
+        "NOTE 差异③（取牌落地形态）：hand {hand_before} → {after}（picked={picked}）；\
+         源码 Read 阶段无条件 hand.pop() 弃 2 张"
     );
 }
 

@@ -234,3 +234,15 @@ if !core.player(core.turn.current).hand.contains(&card) {
 
 **验收**：`upstream_lianying_threshold_off_by_one_is_registered` 应改为断言**无确认门**，
 并补「剩 1 张手牌时失去 1 张 → 不摸牌」的行为用例。
+
+## 15 突袭（`tuxi`）无条件弃 2 张手牌（NC08 样本 39 定位，2026-10-19）
+
+**症状**：上游 `tuxi` 用 `trigger.changeToZero()` **取消本次摸牌**（不摸也不弃）+ `gainMultiple`
+取 1–2 张 → 净手牌应为 **+取牌数**；原生 `crates/engine-native/src/content/standard/skills/tu_xi.rs`
+的 `Read` 阶段**无条件 `hand.pop()` 弃置 2 张**（注释称「弃置本阶段固定摸到的牌」）→ 若固定摸牌
+**尚未发生**，就弃掉玩家**原有手牌** → 实测净变化 **0**（取 2 − 弃 2）。
+
+**修法**：按「本阶段是否已固定摸牌」决定弃置张数（记录已摸数并只弃这些牌），或直接实现
+`changeToZero` 语义（取消摸牌，不弃任何牌）。
+
+**验收**：`upstream_tuxi_takes_cards_and_skips_draw` 的净变化断言应改为 **+取牌数**（选 2 名目标 → +2）。
