@@ -1,0 +1,37 @@
+qingnang: {
+		audio: 2,
+		enable: "phaseUse",
+		filterCard: true,
+		usable: 1,
+		check(card) {
+			return 9 - get.value(card);
+		},
+		filterTarget(card, player, target) {
+			if (target.hp >= target.maxHp) {
+				return false;
+			}
+			return true;
+		},
+		async content(event, trigger, player) {
+			await event.target.recover();
+		},
+		ai: {
+			order: 9,
+			result: {
+				target(player, target) {
+					if (target.hp === 1) {
+						return 5;
+					}
+					if (player === target && player.countCards("h") > player.hp) {
+						return 5;
+					}
+					return 2;
+				},
+			},
+			threaten: 2,
+		},
+	},
+	jijiu: {
+		mod: {
+			aiValue(player, card, num) {
+				if (get.name(card) !== "tao" && get.color(card) !== "red"

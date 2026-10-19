@@ -1,0 +1,1 @@
+DBG 仅自己受伤时发动青囊：Rejected(InvalidChoice)

@@ -145,3 +145,15 @@ if !hand.is_empty() {
 
 **验收**：`upstream_zhiheng_equip_zone_difference_is_registered` 应改为断言**包含**装备牌，
 并补「弃装备后该装备技被撤销」的行为用例。
+
+## 9 青囊（`qingnang`）不能自我治疗（NC08 样本 29 新发现，2026-10-19）
+
+**症状（规则损失）**：上游 `qingnang` 的 `filterTarget` **未排除自己**（只要已受伤即可，含自己）；
+原生 `content/standard/skills/qing_nang.rs` 的 `activate` 要求存在 **`i as PlayerId != owner`**
+的已受伤角色 → **仅自己受伤时不可发动**（行为断言已复现，见样本证据的 self-target-diagnostic）。
+
+**修法**：`activate` 的受伤者判定去掉 `i != owner`；`TargetAsk` 阶段的候选生成同步放开自己
+（若候选生成另有 `!= owner` 过滤）。
+
+**验收**：`upstream_qingnang_self_target_difference_is_registered` 应改为断言**可发动**，
+并补「青囊自己后体力 +1」的行为用例。
