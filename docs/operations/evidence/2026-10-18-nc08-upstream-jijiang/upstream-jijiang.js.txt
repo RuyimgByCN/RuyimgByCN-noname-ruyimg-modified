@@ -1,0 +1,46 @@
+	jijiang: {
+		audio: "jijiang1",
+		audioname: ["liushan", "re_liubei", "re_liushan", "ol_liushan"],
+		audioname2: {
+			pe_jun_liubei: "sbjijiang",
+		},
+		group: ["jijiang1"],
+		zhuSkill: true,
+		filter(event, player) {
+			if (!player.hasZhuSkill("jijiang") || !game.hasPlayer(current => current !== player && current.group === "shu")) {
+				return false;
+			}
+			return !event.jijiang && (event.type !== "phase" || !player.hasSkill("jijiang3"));
+		},
+		enable: ["chooseToUse", "chooseToRespond"],
+		viewAs: { name: "sha" },
+		filterCard() {
+			return false;
+		},
+		selectCard: -1,
+		ai: {
+			order() {
+				return get.order({ name: "sha" }) + 0.3;
+			},
+			respondSha: true,
+			skillTagFilter(player) {
+				if (!player.hasZhuSkill("jijiang") || !game.hasPlayer(current => current != player && current.group == "shu")) {
+					return false;
+				}
+			},
+		},
+	},
+	jijiang1: {
+		audio: 2,
+		audioname: ["liushan", "re_liubei", "re_liushan", "ol_liushan"],
+		audioname2: {
+			pe_jun_liubei: "sbjijiang",
+		},
+		trigger: { player: ["useCardBegin", "respondBegin"] },
+		logTarget: "targets",
+		sourceSkill: "jijiang",
+		filter(event, player) {
+			return event.skill === "jijiang";
+		},
+		forced: true,
+		asyn
