@@ -1228,6 +1228,20 @@ DBG 虎符：杀结算后 1 号 hp=0 dying=false alive=false
 **下一步**：核对原生是否声明 `damageEnd` 窗口宿主技（`HostBehavior`/`keys`）；
 若已声明，逐个排查其**过滤条件**（恐与上游 `filter` 的差异有关）。
 
+**✅ 根因确定（同日）**：`HostBehavior::ChenhuodajieCard` **已声明**（`keys.rs:33/862` →
+`host:chenhuodajie_card`），但在 **`filtering/common.rs` 的 `filter_common` 中硬编码为 `=> false`**
+⇒ **窗口永不触发**（属「**触发面未接入**」的显式占位，与同臂中正常接入的
+`YunchouLuweiyan2 => u_matches_lw2(…)`、`ShengkeCheck => matches!(…)` 形成对比）。
+
+**并且**该块共 **67 个** `=> false` 行为（见 [清单](../2026-10-19-host-behavior-false-block/README.md)），
+其中含 `ChangeCardNature`（**五行盘技能触发面**，样本 140 仅验证「授予」）⇒ **系统性登记**。
+
+**修法**：①把 `ChenhuodajieCard` 的过滤改为上游 `damageEnd` 语义（任意角色受伤后）；
+②同时给 `packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json` 补 `skills` 声明
+（当前为 `null`）——**两处都不可缺**。
+
+**验收**：样本 152 的 `#[ignore]` 用例应能在**他人受伤后**打开窗口并**获得其一张 `he` 牌**。
+
 **验收**：样本 152 的 `#[ignore]` 用例应能在**他人受伤后**打开窗口并**获得其一张 `he` 牌**。
 
 **验收**：样本 152 的 `#[ignore]` 用例应能在**他人受伤后**打开窗口并**获得其一张 `he` 牌**。
