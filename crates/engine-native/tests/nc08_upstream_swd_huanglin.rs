@@ -164,3 +164,31 @@ fn probe_huanglin_at_judge_phase() {
         e.turn().phase
     );
 }
+
+/// **决定性探针（只读）**：比对「放入手牌的该牌的 `catalog.card_kind`」与「期望的 `CardKind`」。
+///
+/// 背景：第 56 项的 filter 条件里唯一未验证的是 `hand_has_kind(ctx, owner, CardKind::Huanglinzhicong)`。
+#[test]
+fn probe_hand_has_kind_matches_catalog_kind() {
+    let e = swd_engine(20288904);
+    let id = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.name.contains("huanglinzhicong"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("黄麟之琮在目录");
+    let actual = e.catalog().card_kind(id);
+    let expected = engine_native::CardKind::Huanglinzhicong;
+    eprintln!(
+        "DBG hand_has_kind 探针：目录名={}；card_kind={actual:?}；期望={expected:?}；相等={}",
+        e.catalog().cards[id as usize].name,
+        format!("{actual:?}") == format!("{expected:?}")
+    );
+    assert_eq!(
+        format!("{actual:?}"),
+        format!("{expected:?}"),
+        "放入手牌的该牌的 catalog.card_kind 应等于 filter 中期望的 CardKind"
+    );
+}

@@ -1482,4 +1482,18 @@ if !def.behavior.filter(&qctx, qt.owner, &event) { return; }
 
 **下一步（决定性、可读）**：写探针打印「放入手牌的该牌的 `catalog.card_kind`」与「期望的 `CardKind`」，比对是否相等。
 
+**✅ 探针已执行（同日，只读）**：新增 `probe_hand_has_kind_matches_catalog_kind`：
+
+```
+DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huanglinzhicong；
+                        期望=Huanglinzhicong；相等=true
+```
+
+⇒ **`card_kind` 与期望一致** ✅ ⇒ **filter 的全部条件（阶段、`begin`、`hujia==0`、手牌含该 kind）均成立**
+⇒ **与行为面「未触发」的矛盾依旧** ⇒ **只能靠运行时插桩**（`content/host/**`，**未跟踪**）⇒ **受阻**。
+
+**附带观察（数据质量）**：该卡的**目录名**为 `swd_swd_huanglinzhicong_73`——**双 `swd_` 前缀 + 数字后缀**，
+而 `card_kind` 正确 ⇒ **命名不影响 kind 匹配**，但**影响按名字查找**的健壮性（本会话已多次因命名踩坑）⇒
+建议登记为**数据规范**待办（非本项阻塞点）。
+
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
