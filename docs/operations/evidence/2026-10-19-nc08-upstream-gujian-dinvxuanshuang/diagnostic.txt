@@ -1,0 +1,2 @@
+DBG 帝女玄霜：发动=Accepted { state_hash: [..] }
+DBG 帝女玄霜：询问=[] 使用者 hp 3 → 4；1 号 hp 3 → 3
