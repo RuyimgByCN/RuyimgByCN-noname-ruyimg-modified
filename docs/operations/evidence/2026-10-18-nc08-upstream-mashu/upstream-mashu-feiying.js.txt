@@ -1,0 +1,19 @@
+	mashu: {
+		mod: {
+			globalFrom(from, to, distance) {
+				return distance - 1;
+			},
+		},
+	},
+	feiying: {
+		mod: {
+			globalTo(from, to, distance) {
+				return distance + 1;
+			},
+		},
+	},
+	tieji: {
+		audio: 2,
+		trigger: { player: "useCardToPlayered" },
+		check(event, player) {
+			return get.attitude(player, event.ta
