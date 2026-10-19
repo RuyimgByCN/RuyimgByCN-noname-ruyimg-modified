@@ -3641,11 +3641,13 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **牌区入口**（`zhiheng`/`qixi`/`guose`） | `position: "he"`/`"hes"`（含装备区、判定区） | **命令面限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中 → 装备/判定区入口不可达 | zhiheng/qixi/guose |
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
+| **失去方式覆盖面**（标准面 `xiaoji`） | `loseAfter` + `es`（替换/弃置/获得/被拆**全部**） | 仅 `Equipped{replaced}`（**替换**）→ 规则损失 | xiaoji |
+| **`viewAs` 固定优先级**（`qixi`/`guose`/`wusheng`） | 多候选由**玩家选择** | 固定顺序（国色 > 武圣 > 龙胆/奇袭等，`play_card.rs` 注释） | qixi/guose/wusheng |
 | **转化候选选择**（标准面 `qixi`） | 多个 `viewAs` 之间由**玩家选择** | **固定优先级**（杀类优先，`play_card.rs:156`）；黑色【杀】持奇袭时只作【杀】 | qixi |
 | **摸牌数固定分支**（标准面 `yingzi`） | `filter: !event.numFixed`（摸牌数被固定时**不**加成） | filter **只判阶段**；全 crate 无 `numFixed`/`num_fixed` | yingzi |
 | **弃牌执行时机**（口径，非差异） | — | 上限裁剪发生在**进入弃牌阶段时**（探针实测 15→4）；夹具须在**回合前**堆手牌 | keji |
 
-**标准面规则损失汇总（2026-10-19，12 个标准面样本）**：逐技能对照发现**5 处规则损失**
+**标准面规则损失汇总（2026-10-19，14 个标准面样本）**：逐技能对照发现**6 处规则损失**
 （均有行为/源码证据，修法与验收见[待实施修复清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)）：
 
 | 技能 | 规则损失 | 上游依据 | 修复项 |
@@ -3655,6 +3657,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | `wusheng` 武圣 / `longdan` 龙胆 | **「杀」方向响应转化缺失**（「闪」方向已实现，方向不对称） | `enable: [chooseToUse, chooseToRespond]` | 清单第 7 项 |
 | `zhiheng` 制衡 | 候选**只取手牌**，缺**装备区**牌 | `position: "he"` | 清单第 8 项 |
 | `qingnang` 青囊 | **不能自我治疗**（`activate` 排除 owner） | `filterTarget` 仅排除满血（含自己） | 清单第 9 项 |
+| `xiaoji` 枭姬 | 只覆盖**替换**失去装备（拆/弃/获得不触发） | `loseAfter` + `es` 计数（**所有**失去方式） | 清单第 12 项 |
 
 **共性判读（不夸大）**：4 处损失集中在**「候选集合/转化入口」**类——即**规则覆盖面**而非结算逻辑；
 结算主路径（伤害、弃置、摸牌、判定）在 7 个样本中均与上游一致。

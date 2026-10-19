@@ -190,6 +190,8 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 28 | 标准面（技能） | `luoshen` | 4 点通过 + 2 处差异登记（时机锚点、循环询问粒度） | [nc08-upstream-luoshen](../operations/evidence/2026-10-18-nc08-upstream-luoshen/README.md) |
 | 29 | 标准面（技能） | `qingnang` | 4 点通过 + **规则损失**（不能自我治疗） | [nc08-upstream-qingnang](../operations/evidence/2026-10-18-nc08-upstream-qingnang/README.md) |
 | 30 | 标准面（技能） | `jijiu` | 3 点通过 + 1 处差异登记（缺回合外限制，**原生更宽松**） | [nc08-upstream-jijiu](../operations/evidence/2026-10-18-nc08-upstream-jijiu/README.md) |
+| 31 | 标准面（技能） | `guose` | 4 点通过 + 2 处差异登记（牌区 `hes` 入口、`viewAs` 固定优先级） | [nc08-upstream-guose](../operations/evidence/2026-10-18-nc08-upstream-guose/README.md) |
+| 32 | 标准面（技能） | `xiaoji` | 3 点通过 + **规则损失**（只覆盖「替换」失去装备） | [nc08-upstream-xiaoji](../operations/evidence/2026-10-18-nc08-upstream-xiaoji/README.md) |
 
 **覆盖面**：**21/37 来源**已有第⑦层上游样本；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
