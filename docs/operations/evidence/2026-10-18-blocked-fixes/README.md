@@ -1069,5 +1069,11 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 | **`dizaizhen`（地载阵）** | `[]` → **受理** | **门槛缺失（已确认）** |
 | `tianfuzhen` / `qixingzhen` / `niaoxiangzhen` / `changshezhen` | 三形态均**被拒** | **原因未定**（门槛可能已生效，或其它条件未满足） |
 
-⇒ 修法范围**至少**含 `dizaizhen`；其余 4 张**须逐卡核对** `enable`/`filterTarget`/`mode` 后再定。
+⇒ 修法范围**至少**含 `dizaizhen`。
+
+**逐卡定性（读上游 `enable`/`filterTarget` 后）**：`tianfuzhen`（需**存在大势力**）、`qixingzhen`（需**围攻/被围攻**）、
+`changshezhen`（需 **`inline` 队列**关系）三张的拒绝**合理**（条件依赖国战概念，身份局天然不满足）；
+**`niaoxiangzhen` 待专项核对**——其上游 `enable` **恒真**、`filterTarget` 仅要求**双方身份不同**，
+身份局**满足该条件**却实测三形态均被拒 ⇒ **须专项用例确认**（可能另缺条件或另有门槛）。
+
 （另：未交付的 5 张阵法卡正是转换缺口清单的 5 项 —— **两份独立核对一致**。）

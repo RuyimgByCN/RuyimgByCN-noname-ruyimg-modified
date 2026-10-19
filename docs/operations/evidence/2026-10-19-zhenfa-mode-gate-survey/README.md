@@ -36,3 +36,15 @@
 1. 本普查只判「**是否受理**」；**被拒 ≠ 门槛已实现**（须逐卡核对 `enable`/`filterTarget`/`mode`）；
 2. 建议后续：为 `tianfuzhen`/`qixingzhen`/`niaoxiangzhen`/`changshezhen` 各建**国战模式用例**
    （或补模式开关），以区分「门槛已实现」与「条件未满足」。
+
+## 逐卡定性（2026-10-19 补，读上游 `enable`/`filterTarget`）
+
+| 卡 | 上游 `enable` | 上游 `filterTarget` | 身份局被拒是否合理 |
+|---|---|---|---|
+| `tianfuzhen`（天覆阵） | `game.hasPlayer(current => current.isMajor())`（**存在大势力**） | `target.isMajor() && target.countCards("he") > 0` | **合理**：身份局**无势力/大势力**概念 ⇒ 条件不满足 |
+| `qixingzhen`（七星阵） | `player.siege() \|\| player.sieged()`（**围攻/被围攻**） | `target === player` | **合理**：无围攻关系 |
+| `changshezhen`（长蛇阵） | `player.inline()` 或 `identity === "unknown"` 分支 | （无 `filterTarget`） | **合理**：无 `inline`（队列）关系 |
+| **`niaoxiangzhen`（鸟翔阵）** | **`: true`（恒真）** | `if (player.identity === target.identity) return false`（**须身份不同**） | **待核**：身份局**有身份**且我方与目标身份不同 ⇒ **理应可指定**，实测三形态均被拒 ⇒ **须专项核对** |
+
+⇒ **3 张为合理拒绝**（条件依赖**势力/围攻/队列**，身份局天然不满足）；
+**`niaoxiangzhen` 待专项核对**（其 `enable` 恒真、`filterTarget` 仅要求身份不同）。
