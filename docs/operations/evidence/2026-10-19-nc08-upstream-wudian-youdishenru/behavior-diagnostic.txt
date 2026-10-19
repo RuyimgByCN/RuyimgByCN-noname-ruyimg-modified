@@ -1,0 +1,2 @@
+DBG 诱敌深入：0 号出杀=Pending { choice: OpenChoice { id: 1, observer: 1, spec: ChoiceSpec { kind: RespondCard, prompt: "respond_shan", options: [Pass, Card(133)], min: 1, max: 1, allow_cancel: false } } }
+DBG 诱敌深入：使用=true；询问=["respond_shan@obs1"]；0 号掉血 1；1 号掉血 0
