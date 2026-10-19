@@ -96,6 +96,32 @@ HostBehavior::ChangeCardNature => false,      // ← 五行盘技能（样本 14
 ⇒ **需要触发的 42 项（50−8）中，31 已登记、11 未登记** ⇒ **待处理 = 11 项**（口径与上一轮一致，
 但 **`false` 恒不生效这一事实**本轮才被**分派核对**确证）。
 
+## 11 项候选的**挂载核对**（决定性，收窄到 3 项）
+
+对 11 项候选，核对**包数据是否声明**对应宿主键（`skills`/`cards` 的 `mapping`）：
+
+| 行为 | host 键 | 包数据声明 |
+|---|---|---|
+| `Hxunzhi2` | `host:hxunzhi2` | ✅ **swd**（`hxunzhi2`） |
+| `YxsMenshen2` | `host:yxs_menshen2` | ✅ **hero-kill**（`yxs_menshen2`；注释自述「主体 70 KB 效果**待批次**」） |
+| `MoshouImmunity` | `host:moshou_immunity` | ✅ **wudian**（`moshou`） |
+| `YunchouYiesheng` | `host:yiesheng` | ❌ **未声明** |
+| `Shenwei` | `host:shenwei` | ❌ **未声明** |
+| `Gxianyin` | `host:gxianyin` | ❌ **未声明** |
+| `Shengong` | `host:shengong` | ❌ **未声明** |
+| `TargetDiscardEquipOrDamage` | `host:target_discard_equip_or_damage` | ❌ **未声明** |
+| `LinghunzhihuoCard` | `host:linghunzhihuo_card` | ❌ **未声明** |
+| `ZhaomingdanCard` | `host:zhaomingdan_card` | ❌ **未声明** |
+| `ZhangbaSha` | `host:zhangba_sha` | ❌ **未声明** |
+
+⇒ **再收窄**：11 项中**仅 3 项被包数据挂载**（`hxunzhi2`/`yxs_menshen2`/`moshou`）⇒ 它们的
+`filter_common => false` **真的会挡掉触发**；其余 **8 项压根未挂载** ⇒ **`false` 无关**
+（属「**未挂载**」而非「**触发面未接**」，**另一类待办**）。
+
+**旁证**：`LinghunzhihuoCard`/`ZhaomingdanCard` **未挂载卡窗口**，但二者**效果已实现**
+（灵魂之火经 `skills_damage.rs:749`、照明弹经其弃牌选择路径；样本 121/123 已验证）
+⇒ **与「未挂载」一致**（效果走别的路径，窗口未接）。
+
 ## 意义与边界
 
 1. **性质**：这是**系统性登记**（显式 `false`），**不是隐式 bug**——但**从产品视角即「未接入」**；
