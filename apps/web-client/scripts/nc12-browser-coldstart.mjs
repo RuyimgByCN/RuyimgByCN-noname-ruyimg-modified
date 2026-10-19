@@ -17,6 +17,8 @@ const iters = Number(process.argv[5] ?? 3);
 // 第 6 参数：视口档位（`desktop` 默认 | `mobile` 用 CDP 模拟移动视口 + 触摸）
 // **注意**：这是**视口模拟**，不是真机——结论须标注为「模拟档位」。
 const tier = process.argv[6] ?? "desktop";
+// 第 7 参数：网络档位（`none` 默认 | `slow3g` | `fast3g`）——**CDP 模拟**，不是真实网络
+const net = process.argv[7] ?? "none";
 const port = 9338;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

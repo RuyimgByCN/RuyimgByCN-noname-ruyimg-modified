@@ -1,0 +1,3 @@
+none RESULT scenario=browser_coldstart tier=web {"iters":3,"to_interactive_ms":[260,260,261],"p50_ms":260,"max_ms":261,"all_interactive":true,"console_errors":[]}
+slow3g RESULT scenario=browser_coldstart tier=web {"iters":3,"to_interactive_ms":[260,261,262],"p50_ms":261,"max_ms":262,"all_interactive":true,"console_errors":[]}
+fast3g RESULT scenario=browser_coldstart tier=web {"iters":3,"to_interactive_ms":[261,261,263],"p50_ms":261,"max_ms":263,"all_interactive":true,"console_errors":[]}

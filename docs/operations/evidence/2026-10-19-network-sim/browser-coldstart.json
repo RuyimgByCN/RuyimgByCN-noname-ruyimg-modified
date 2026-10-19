@@ -1,0 +1,134 @@
+{
+  "results": [
+    {
+      "iter": 0,
+      "lobby_ready": 1,
+      "interactive": 1,
+      "to_interactive_ms": 261,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 9.43,
+          "instantiate_ms": 1.99,
+          "total_ms": 11.42,
+          "wasm_bytes": 2646047
+        }
+      ],
+      "start_marks": {
+        "t0_click": 263,
+        "t1_worker_ready": 282.43,
+        "t2_start_done": 284.65,
+        "t5_apply_envelope": 284.89,
+        "t3_candidates_loaded": 289.38,
+        "t4_first_frame": 406.34
+      },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.36,
+          "parse_ms": 0.16,
+          "json_bytes": 4567
+        }
+      ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.13,
+          "delay_ms": 120.43
+        }
+      ],
+      "perf": {
+        "domContentLoaded": 39.77999997138977,
+        "loadEvent": 40.514999985694885,
+        "wasm": [],
+        "workerChunks": [
+          "engine.native.worker-DOR1X5rj.js"
+        ]
+      }
+    },
+    {
+      "iter": 1,
+      "lobby_ready": 1,
+      "interactive": 1,
+      "to_interactive_ms": 263,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 8.69,
+          "instantiate_ms": 2.71,
+          "total_ms": 11.4,
+          "wasm_bytes": 2646047
+        }
+      ],
+      "start_marks": {
+        "t0_click": 267.24,
+        "t1_worker_ready": 287.48,
+        "t2_start_done": 290.41,
+        "t5_apply_envelope": 290.69,
+        "t3_candidates_loaded": 295.26,
+        "t4_first_frame": 414.39
+      },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.46,
+          "parse_ms": 0.15,
+          "json_bytes": 4567
+        }
+      ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.14,
+          "delay_ms": 122.69
+        }
+      ],
+      "perf": {
+        "domContentLoaded": 48.84999996423721,
+        "loadEvent": 49.52999997138977,
+        "wasm": [],
+        "workerChunks": [
+          "engine.native.worker-DOR1X5rj.js"
+        ]
+      }
+    },
+    {
+      "iter": 2,
+      "lobby_ready": 1,
+      "interactive": 1,
+      "to_interactive_ms": 261,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 6.31,
+          "instantiate_ms": 1.97,
+          "total_ms": 8.28,
+          "wasm_bytes": 2646047
+        }
+      ],
+      "start_marks": {
+        "t0_click": 261.02,
+        "t1_worker_ready": 276.39,
+        "t2_start_done": 278.56,
+        "t5_apply_envelope": 278.79,
+        "t3_candidates_loaded": 295.98,
+        "t4_first_frame": 402.73
+      },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.31,
+          "parse_ms": 0.14,
+          "json_bytes": 4567
+        }
+      ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.13,
+          "delay_ms": 122.97
+        }
+      ],
+      "perf": {
+        "domContentLoaded": 59.5450000166893,
+        "loadEvent": 60.29000002145767,
+        "wasm": [],
+        "workerChunks": [
+          "engine.native.worker-DOR1X5rj.js"
+        ]
+      }
+    }
+  ],
+  "consoleErrors": []
+}
