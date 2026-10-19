@@ -63,7 +63,6 @@ fn yunchou_engine(seed: u64) -> Engine {
 /// ⇒ 确认后**效果未执行**——与样本 80（纵火）**同一现象**（详见修复清单第 34 项）。
 /// 用例以 `#[ignore]` 守护，**不写成通过**。
 #[test]
-#[ignore = "烧营：确认后效果未执行（红牌亮出后 2 号未受火伤）——与纵火同现象，见第 34 项"]
 fn upstream_shaoying_reveals_deck_top_and_burns_red() {
     let mut e = yunchou_engine(20271201);
     e.debug_grant(0, "ycnshaoying");
@@ -71,22 +70,34 @@ fn upstream_shaoying_reveals_deck_top_and_burns_red() {
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    // 把一张**红色**牌置于牌堆顶（原生 `deck.pop()` 取顶）
-    let red_top = {
-        let name = e
-            .catalog()
-            .cards
-            .iter()
-            .find(|c| {
-                matches!(
-                    c.suit,
-                    engine_native::catalog::Suit::Heart | engine_native::catalog::Suit::Diamond
-                )
-            })
-            .map(|c| c.name)
-            .expect("红色牌");
-        e.debug_set_deck_top(name)
-    };
+    // 把一张**确实为红色**的牌置于牌堆顶。
+    // 注意：`debug_set_deck_top(name)` 按**牌种**取牌，同种牌可能有多张不同花色 →
+    // 置顶后须**回读 `deck.last()`** 确认花色，必要时换名重试。
+    let red_names: Vec<&'static str> = e
+        .catalog()
+        .cards
+        .iter()
+        .filter(|c| {
+            matches!(
+                c.suit,
+                engine_native::catalog::Suit::Heart | engine_native::catalog::Suit::Diamond
+            )
+        })
+        .map(|c| c.name)
+        .collect();
+    let mut red_top = None;
+    for name in red_names.iter().take(40) {
+        let id = e.debug_set_deck_top(name);
+        let is_red = matches!(
+            e.state_core().deck.last().map(|c| e.catalog().cards[*c as usize].suit),
+            Some(engine_native::catalog::Suit::Heart) | Some(engine_native::catalog::Suit::Diamond)
+        );
+        if is_red {
+            red_top = Some(id);
+            break;
+        }
+    }
+    let red_top = red_top.expect("应能置顶一张确实为红色的牌");
     let hp_before: Vec<i32> = (0..4).map(|p| e.debug_hp(p)).collect();
     // 0 号对 1 号造成**火焰**伤害 → 触发烧营
     e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Fire);
@@ -141,19 +152,28 @@ fn upstream_shaoying_black_reveal_no_burn() {
         e.debug_clear_hand(p);
     }
     {
-        let name = e
+        let black_names: Vec<&'static str> = e
             .catalog()
             .cards
             .iter()
-            .find(|c| {
+            .filter(|c| {
                 matches!(
                     c.suit,
                     engine_native::catalog::Suit::Spade | engine_native::catalog::Suit::Club
                 )
             })
             .map(|c| c.name)
-            .expect("黑色牌");
-        let _ = e.debug_set_deck_top(name);
+            .collect();
+        for name in black_names.iter().take(40) {
+            let _ = e.debug_set_deck_top(name);
+            let is_black = matches!(
+                e.state_core().deck.last().map(|c| e.catalog().cards[*c as usize].suit),
+                Some(engine_native::catalog::Suit::Spade) | Some(engine_native::catalog::Suit::Club)
+            );
+            if is_black {
+                break;
+            }
+        }
     }
     let hp_before: Vec<i32> = (0..4).map(|p| e.debug_hp(p)).collect();
     e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Fire);

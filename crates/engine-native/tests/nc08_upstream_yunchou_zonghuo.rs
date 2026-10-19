@@ -76,7 +76,7 @@ fn upstream_zonghuo_discards_one_without_asking() {
     for _ in 0..16 {
         let Some(c) = e.open_choice().cloned() else { break };
         if !prompts.iter().any(|p| p == c.spec.prompt) {
-            prompts.push(c.spec.prompt.to_string());
+            prompts.push(format!("{}@obs{}", c.spec.prompt, c.observer));
         }
         let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
             vec![ChoiceOption::Pass]
