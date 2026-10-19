@@ -79,6 +79,15 @@ for (let i = 0; i < iters; i++) {
     const ok = await c.evalJs(`Array.from(document.querySelectorAll('button,a')).some(el => (el.innerText||'').includes('本地开局'))`);
     if (ok) { ready = 1; break; }
   }
+  // 可选：先点「跳过动画」（若存在）→ 用于测**纯计算**冷启动（剔除 presentationDelay 节流）
+  if (process.env.NC12_SKIP_ANIMS === "1") {
+    await c.evalJs(`(() => {
+      const el = Array.from(document.querySelectorAll('button,a,label')).find(x => (x.innerText||'').includes('跳过动画'));
+      if (el) el.click();
+      return !!el;
+    })()`);
+    await sleep(300);
+  }
   // 「创建到可操作」：点击本地开局 → 战斗界面出现（含阶段/座位标记）
   const t0 = Date.now();
   await c.evalJs(`(() => {

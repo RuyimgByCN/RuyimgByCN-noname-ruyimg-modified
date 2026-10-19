@@ -139,3 +139,36 @@ node apps/web-client/scripts/nc12-browser-coldstart.mjs http://127.0.0.1:8124/ <
 - [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）
 - [ ] 真实网络（非本机）与慢网/丢包
 - [ ] 动画帧/输入响应指标；浏览器内完整对局见 [fullgame 证据](../2026-10-18-nc12-browser-fullgame/README.md)
+
+## 9 追加：**首帧的 123 ms 中 ~120 ms 是刻意动画节流**（2026-10-19 同轮）
+
+**发现**：把「选将候选拉取」改为**不阻塞首帧**后（`BattleView.connectAndStart`：先 `nextTick` 标首帧、
+再 `await` 候选），首帧仍在 **142–165 ms** → 进一步查得 `handleEnvelope` 内
+`await presentationDelay(store, 120)`（`src/engine/viewStore.ts:184`，**尊重 `skipAnims`/`reduceMotion`/`speed`**）
+→ 即**每步之间刻意保留 120 ms 表现节流**。
+
+**实测分解（3 轮，[coldstart-optimized.log](coldstart-optimized.log)、[optimized-detail.txt](optimized-detail.txt)）**：
+
+| 阶段 | 耗时 | 性质 |
+|---|---:|---|
+| worker 连接（含 WASM 初始化 8–9 ms） | 16.5–39.4 ms | 计算 |
+| 建局（start 往返） | 2.2–2.5 ms | 计算 |
+| `handleEnvelope` + 首帧 | **123.2–123.6 ms** | **其中 ~120 ms 为刻意动画节流**，计算仅 ~3 ms |
+| 选将候选拉取（**现已非阻塞**） | 125.5–126.2 ms | 计算（worker 侧生成 + 传输） |
+| **点击 → 首帧（含节流）** | **142–165 ms** | |
+| **点击 → 面板就绪** | **144–167 ms** | |
+
+**结论**：
+1. **真实计算成本很小**：worker 连接 + 建局 + 首帧计算 ≈ **20–45 ms**；其余 ~120 ms 是**产品刻意的
+   表现节流**（可在设置里跳过/降速）；
+2. **候选拉取 126 ms 已不阻塞首帧**（面板先 loading 后填充）——结构性改善，但**总时长不变**
+   （面板就绪仍需该往返）；
+3. **尝试测量「跳过动画」口径未成功**（[coldstart-skipanims.log](coldstart-skipanims.log)：脚本点击
+   「跳过动画」后首帧仍 123 ms，说明该控件未被驱动或非按钮）→ **如实登记为未完成**，不作为结论。
+
+### 仍未完成（更新）
+
+- [ ] **候选生成 126 ms** 的引擎侧拆分与优化（worker 往返 = 生成 + 序列化 + 传输；需 worker 内埋点）
+- [ ] **跳过动画口径**的正确驱动方式（设置项类型/状态字段）并复测纯计算冷启动
+- [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）
+- [ ] 真实网络（非本机）与慢网/丢包；动画帧/输入响应

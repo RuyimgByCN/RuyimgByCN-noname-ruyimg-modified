@@ -189,10 +189,14 @@ async function connectAndStart() {
     const env = await localClient.start(players.value, seed.value, selfId.value);
     nc12Mark("t2_start_done");
     await handleEnvelope(env);
-    if (localClient.isNative()) await loadGeneralCandidates();
-    nc12Mark("t3_candidates_loaded");
+    // NC12 冷启动优化（2026-10-19）：选将候选拉取**不再阻塞首帧**——面板先进入 loading
+    // 态，候选就绪后再填充（`loadGeneralCandidates` 自身已有 loading/失败态）。
+    // 实测该往返约 126 ms（worker 侧生成 + 传输），阻塞时占「点击→可交互」的绝大部分。
+    const candidates = localClient.isNative() ? loadGeneralCandidates() : Promise.resolve();
     await nextTick();
     nc12Mark("t4_first_frame");
+    await candidates;
+    nc12Mark("t3_candidates_loaded");
     const lock = contentLockSummary();
     pushLog(
       store,

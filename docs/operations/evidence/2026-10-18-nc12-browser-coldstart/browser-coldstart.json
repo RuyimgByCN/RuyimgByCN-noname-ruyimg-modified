@@ -4,25 +4,25 @@
       "iter": 0,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 261,
+      "to_interactive_ms": 270,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.8,
-          "instantiate_ms": 2.1,
-          "total_ms": 8.9,
+          "fetch_ms": 10.5,
+          "instantiate_ms": 3.5,
+          "total_ms": 14,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 267.7,
-        "t1_worker_ready": 285.5,
-        "t2_start_done": 287.8,
-        "t3_candidates_loaded": 413.3,
-        "t4_first_frame": 413.3
+        "t0_click": 576.1,
+        "t1_worker_ready": 609.7,
+        "t2_start_done": 612.5,
+        "t4_first_frame": 735.8,
+        "t3_candidates_loaded": 738.1
       },
       "perf": {
-        "domContentLoaded": 40.60000002384186,
-        "loadEvent": 41.200000047683716,
+        "domContentLoaded": 44.69999998807907,
+        "loadEvent": 45.39999997615814,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"
@@ -33,25 +33,25 @@
       "iter": 1,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 261,
+      "to_interactive_ms": 266,
       "worker_init_timings": [
         {
-          "fetch_ms": 6,
-          "instantiate_ms": 2,
-          "total_ms": 8,
+          "fetch_ms": 7.7,
+          "instantiate_ms": 2.4,
+          "total_ms": 10.1,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 259.3,
-        "t1_worker_ready": 274.7,
-        "t2_start_done": 277,
-        "t3_candidates_loaded": 403.1,
-        "t4_first_frame": 403.2
+        "t0_click": 564.5,
+        "t1_worker_ready": 586.5,
+        "t2_start_done": 589.4,
+        "t4_first_frame": 713.4,
+        "t3_candidates_loaded": 715.7
       },
       "perf": {
-        "domContentLoaded": 37.39999997615814,
-        "loadEvent": 38,
+        "domContentLoaded": 34.39999997615814,
+        "loadEvent": 35,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"
@@ -62,25 +62,25 @@
       "iter": 2,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 260,
+      "to_interactive_ms": 271,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.2,
-          "instantiate_ms": 1.9,
-          "total_ms": 8.1,
+          "fetch_ms": 6.6,
+          "instantiate_ms": 2.5,
+          "total_ms": 9.1,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 260.5,
-        "t1_worker_ready": 276.2,
-        "t2_start_done": 278.5,
-        "t3_candidates_loaded": 404.4,
-        "t4_first_frame": 404.4
+        "t0_click": 567.7,
+        "t1_worker_ready": 594.8,
+        "t2_start_done": 597.7,
+        "t4_first_frame": 721.4,
+        "t3_candidates_loaded": 723.8
       },
       "perf": {
-        "domContentLoaded": 31.600000023841858,
-        "loadEvent": 32.30000001192093,
+        "domContentLoaded": 31.30000001192093,
+        "loadEvent": 31.900000035762787,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"
