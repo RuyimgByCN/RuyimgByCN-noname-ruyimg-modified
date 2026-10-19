@@ -1,0 +1,68 @@
+luoshen: {
+		audio: 2,
+		trigger: { player: "phaseZhunbeiBegin" },
+		frequent: true,
+		preHidden: true,
+		async content(event, trigger, player) {
+			event.cards ??= [];
+			while (true) {
+				const judgeEvent = player.judge({
+					judge(card) {
+						if (get.color(card) == "black") {
+							return 1.5;
+						}
+						return -1.5;
+					},
+					judge2(result) {
+						return result.bool;
+					},
+				});
+				if (get.mode() !== "guozhan" && !player.hasSkillTag("rejudge")) {
+					judgeEvent.set("callback", async (event, trigger, player) => {
+						if (event.judgeResult.color === "black" && get.position(event.card, true) === "o") {
+							await player.gain({
+								cards: [event.card],
+								animate: "gain2",
+							});
+						}
+					});
+				} else {
+					judgeEvent.set("callback", async event => {
+						if (event.judgeResult.color === "black") {
+							event.getParent().orderingCards.remove(event.card);
+						}
+					});
+				}
+				const result = await judgeEvent.forResult();
+				if (!result?.bool || !result.card) {
+					break;
+				}
+
+				event.cards.push(result.card);
+				const result2 = await player
+					.chooseBool({
+						prompt: "是否再次发动【洛神】？",
+					})
+					.set("frequentSkill", "luoshen")
+					.forResult();
+				if (!result2?.bool) {
+					break;
+				}
+			}
+			if (event.cards.someInD()) {
+				await player.gain({
+					cards: event.cards.filterInD(),
+					animate: "gain2",
+				});
+			}
+		},
+	},
+	qingguo: {
+		mod: {
+			aiValue(player, card, num) {
+				if (get.name(card) != "shan" && get.color(card) != "black") {
+					return;
+				}
+				const cards = player.getCards("hs", card => get.name(card) == "shan" || get.color(card) == "black");
+				cards.sort((a, b) => {
+					return (get.na
