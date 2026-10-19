@@ -1,0 +1,2 @@
+DBG 升级-映射：同版本号改名 `host:zhenjiu2` → `host:__unregistered_probe__`；桥接结果 = **拒绝**
+NOTE 技能映射：**已知映射改名**（改到另一个已登记值）不在本用例范围——其存档语义由 `e02_c3_lifecycle`（内容锁/回滚）覆盖
