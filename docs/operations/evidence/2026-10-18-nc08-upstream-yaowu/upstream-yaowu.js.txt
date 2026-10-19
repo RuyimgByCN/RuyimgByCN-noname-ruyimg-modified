@@ -1,0 +1,30 @@
+	yaowu: {
+		trigger: { player: "damageBegin3" },
+		audio: 2,
+		filter(event, player) {
+			return event.card?.name === "sha" && get.color(event.card) === "red" && event.source?.isIn();
+		},
+		forced: true,
+		check() {
+			return false;
+		},
+		async content(event, trigger, player) {
+			await trigger.source.chooseDrawRecover({ forced: true });
+		},
+		ai: {
+			neg: true,
+			effect: {
+				target(card, player, target, current) {
+					if (card.name === "sha" && get.color(card) === "red") {
+						return [1, -2];
+					}
+				},
+			},
+		},
+	},
+	new_jiangchi: {
+		audio: "jiangchi",
+		trigger: {
+			player: "phaseDrawEnd",
+		},
+		logAudio: (event, player, name, indexedData, costResult) => (costResult.cost_

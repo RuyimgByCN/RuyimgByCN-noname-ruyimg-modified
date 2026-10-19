@@ -1,0 +1,2 @@
+DBG 耀武（黑杀）：询问=[]
+DBG 耀武（红杀）：询问=["yaowu_draw_or_recover"] 1 号 hp=3
