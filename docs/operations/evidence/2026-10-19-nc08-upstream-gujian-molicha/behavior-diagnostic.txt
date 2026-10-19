@@ -1,0 +1,3 @@
+DBG 茉莉茶：子技=true；1 号用**黑**【杀】打 0 号 → Rejected(IllegalTargets)
+DBG 茉莉茶：子技=true；1 号用**红**【杀】打 0 号 → Accepted { state_hash: [..] }
+DBG 茉莉茶：黑牌结果=Rejected(IllegalTargets)；红牌结果=Accepted { state_hash: [..] }
