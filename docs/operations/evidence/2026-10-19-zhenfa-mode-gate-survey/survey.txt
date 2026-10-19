@@ -1,0 +1,6 @@
+DBG 阵法门槛普查：zf_dizaizhen → [] → 受理
+DBG 阵法门槛普查：swd_tianfuzhen1 → 三种形态均被拒
+DBG 阵法门槛普查：swd_qixingzhen1 → 三种形态均被拒
+DBG 阵法门槛普查：swd_niaoxiangzhen1 → 三种形态均被拒
+DBG 阵法门槛普查：swd_changshezhen1 → 三种形态均被拒
+DBG 阵法门槛普查：身份局下**仍可发动** 1 张 / 共 5 张（上游均为 mode: ["guozhan"]）
