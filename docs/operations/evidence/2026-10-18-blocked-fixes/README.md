@@ -1395,4 +1395,21 @@ pub fn open_choice(&self) -> Option<&OpenChoice> { self.state.resolution.open_ch
 
 **修法（先诊断）**：与第 55 项**合并排查** `phaseBegin` 类窗口的分支派发与状态写入。
 
+**✅ 决定性探针（同日）**：新增 `probe_huanglin_at_judge_phase`——**手动推进并停在 `Judge`（准备）阶段**
+（不 `drain`）后读护甲：
+
+```
+DBG 黄麟之琮探针：当前阶段=Judge；护甲=0（若在 Judge 且已触发应为 1）
+```
+
+⇒ **在精确的目标阶段（`Judge` + `begin`）窗口仍未触发**。
+
+**根因收窄（与第 55 项合并）**：两卡的 `filter_swd` 条件都是
+`EventData::Phase { player: owner, phase: Judge, begin: true } && hand_has_kind(…)`（`filtering/swd.rs:387/462`），
+条件**成立**而**效果未发生** ⇒ **「`Judge` 阶段的 `begin` 窗口未派发到宿主机器」**（**系统面**，影响**器族五件**）。
+而 `qinglongzhigui` 的**摸 2 发生了** ⇒ 其触发**另有路径**（需查明），**不代表 `phaseBegin` 正常**。
+
+**下一步（决定性）**：核对 `EventData::Phase{phase: Judge, begin: true}` 是否**实际发射**，
+以及该事件是否进入**宿主机器的派发清单**（而非仅进 `AfterTriggers`）。
+
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。

@@ -68,9 +68,10 @@ fn upstream_huanglinzhicong_gains_hujia_on_phase_begin() {
         }
     }
     let hj_before = e.state_core().player(0).hujia;
+    // **窗口在 `Judge`（准备）阶段**（上游 `phaseBegin` + 原生 `filtering/swd.rs:462` 要求 `Phase::Judge`）
     assert!(
         advance_to_phase(&mut e, 0, Phase::Play),
-        "应到达 0 号出牌阶段（阶段开始即触发）"
+        "应到达 0 号出牌阶段（准备阶段已过）"
     );
     let hj_after = e.state_core().player(0).hujia;
     eprintln!("DBG 黄麟之琮：护甲 {hj_before} → {hj_after}（应 +1）");
@@ -116,5 +117,50 @@ fn upstream_huanglinzhicong_no_gain_when_armored() {
     assert_eq!(
         hj_after, hj_before,
         "黄麟之琮：**已有护甲**时不应触发（`!player.hujia` 条件；{hj_before} → {hj_after}）"
+    );
+}
+
+/// **决定性探针**：停在 **`Judge`（准备）阶段**检查护甲——上游/原生 filter 都要求该阶段。
+#[test]
+fn probe_huanglin_at_judge_phase() {
+    let mut e = swd_engine(20288903);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let id = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.name.contains("huanglinzhicong"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("黄麟之琮在目录");
+    nc08_common::put_hand(&mut e, 0, id);
+    {
+        let core = e.state_core_mut();
+        if let Some(p) = core.players.get_mut(0) {
+            p.hujia = 0;
+        }
+    }
+    // 手动推进（不 drain），**一旦到 Judge 就停**
+    for _ in 0..16 {
+        if e.turn().current == 0 && e.turn().phase == Phase::Judge {
+            break;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(engine_native::GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: nc08_common::next_dedup(),
+            action: engine_native::GameAction::NextPhase,
+        });
+        if e.open_choice().is_some() {
+            break;
+        }
+    }
+    let hj_judge = e.state_core().player(0).hujia;
+    eprintln!(
+        "DBG 黄麟之琮探针：当前阶段={:?}；护甲={hj_judge}（若在 Judge 且已触发应为 1）",
+        e.turn().phase
     );
 }
