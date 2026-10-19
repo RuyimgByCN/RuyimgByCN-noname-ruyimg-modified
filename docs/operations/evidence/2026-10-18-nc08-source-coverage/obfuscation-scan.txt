@@ -1,0 +1,10 @@
+# jsjiami 全库扫描（2026-10-19）
+# 命令: grep -rl "jsjiami" archive/upstream/
+# 命中文件数: 6
+noname-liuli/noname/extension/龙血玄黄/extension.js        <- 来源 longxue（已建弱对照样本 41）
+noname-liuli/noname/extension/如真似幻/extension.js        <- 来源 L12 如真似幻（未建样本；预期同为弱对照）
+noname-liuli/noname/game/game.js                           <- 核心（非来源）
+noname/apps/core/noname/init/compatible.js                 <- 核心（非来源；疑为混淆检测器）
+noname/apps/core/noname/init/import.ts                     <- 核心（非来源；疑为混淆检测器）
+noname/apps/core/noname/library/init/index.js              <- 核心（非来源；疑为混淆检测器）
+# 扩展目录内命中（apps/core/extension/ + noname/extension/）: 0

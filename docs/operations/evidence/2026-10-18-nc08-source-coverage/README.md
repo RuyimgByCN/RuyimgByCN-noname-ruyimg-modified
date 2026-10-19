@@ -44,6 +44,22 @@
 **`extension.js` 只是加载器**。
 规模上 **L10 史诗卡牌（10,710 行）** 与 **L27 选将美化（64 将 + 121 技）** 最大。
 
+## 1c `jsjiami` 混淆来源全库盘清（2026-10-19）
+
+`grep -rl "jsjiami" archive/upstream/` → **6 个文件**（[obfuscation-scan.txt](obfuscation-scan.txt)）：
+
+| 文件 | 归类 |
+|---|---|
+| `noname-liuli/noname/extension/龙血玄黄/extension.js` | **来源 `longxue`** → 已建**弱对照**样本 41 |
+| `noname-liuli/noname/extension/如真似幻/extension.js` | **来源 L12 如真似幻** → 未建样本，**预期同为弱对照** |
+| `noname-liuli/noname/game/game.js` | 核心（非来源） |
+| `noname/apps/core/noname/init/compatible.js` | 核心（疑为混淆**检测器**） |
+| `noname/apps/core/noname/init/import.ts` | 核心（同上） |
+| `noname/apps/core/noname/library/init/index.js` | 核心（同上） |
+
+→ **受影响来源恰为 2 个**（`longxue`、L12 如真似幻）；**扩展目录内命中为 0**，
+故其余来源的上游源码**可读**，可做**源码级**对照。
+
 ## 2 判读（不夸大）
 
 - 第⑦层样本已覆盖 **21 个来源**（见台账 §3.3）——其中包含**同一包的多来源**（如 U05 杀海拾遗的
