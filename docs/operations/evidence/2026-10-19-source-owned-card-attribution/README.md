@@ -48,3 +48,27 @@
 
 **结论**：各来源的「自有卡」清单可由**包内卡名 − 标准牌**得到；
 本会话已对 **mtg（10）**、**玩点论杀（2）**、**运筹（10 自有）** 等来源完成自有卡行为面覆盖。
+
+## `wuxing` 项闭合：`wuxingpan`（五行盘）**是来源自有卡**（2026-10-19）
+
+`wuxing-upstream-liuli/assets/cards.json` 的唯一卡为 **`wuxingpan`（五行盘）**：
+
+```json
+{"name": "wuxingpan", "kind": "wuxingpan", "suit": "spade", "rank": 5,
+ "equip_skills": ["wuxingpan_skill"]}
+```
+
+其上游为 **`noname/extension/wuxing/extension.js`**（**230 行**，结构为扩展对象：`element`/`player`/`card`/
+`skill`/`_shengke`/`trigger`，**非 `card.js` 格式**）⇒ **本普查工具无法解析**（**工具限制**，非「非自有」）。
+
+**原生实现**：`catalog.rs:946`（**`CardKind::WuxingPan => "wuxingpan"`**）⇒ **已实现**。
+
+## 最终归属账（**185 项全部有归属**）
+
+| 类别 | 数量 |
+|---|---:|
+| **来源自有** | **179**（178 + `wuxingpan`） |
+| **标准牌**（包内复用） | **6**（`wudian` 5 + `yunchou` 1） |
+| **合计** | **185** |
+
+⇒ **无未归属卡名**；「非自有」的 6 项均为**标准牌复用**，**不是**该来源的待办。
