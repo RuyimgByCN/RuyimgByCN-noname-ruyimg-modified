@@ -1,0 +1,2 @@
+DBG 蜜汁藕（对照）：普通【桃】对自己 → Accepted { state_hash: [..] }
+DBG 蜜汁藕：子技=true；对照后 hp=4；红桃牌（非桃）当桃使用=Rejected(IllegalTargets)；         hp 4 → 4
