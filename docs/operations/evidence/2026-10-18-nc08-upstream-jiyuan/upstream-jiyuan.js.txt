@@ -1,0 +1,40 @@
+	xinfu_jiyuan: {
+		trigger: {
+			global: ["dying", "gainAfter", "loseAsyncAfter"],
+		},
+		audio: 2,
+		getIndex(event, player) {
+			if (event.name !== "loseAsync") {
+				return [event.player];
+			} else {
+				return game.filterPlayer(current => current !== player && event.getg(current).length > 0).sortBySeat();
+			}
+		},
+		filter(event, player, triggername, target) {
+			if (!target?.isIn()) {
+				return false;
+			}
+			if (event.name === "dying") {
+				return true;
+			}
+			if (event.giver !== player) {
+				return false;
+			}
+			if (event.name === "gain") {
+				return event.player != player && event.getg(target).length > 0;
+			}
+			return game.hasPlayer(current => current != player && event.getg(current).length > 0);
+		},
+		logTarget(event, player, triggername, target) {
+			return target;
+		},
+		check(event, player, triggername, target) {
+			return get.attitude(player, target) > 0;
+		},
+		async content(event, trigger, player) {
+			await event.targets[0].draw();
+		},
+	},
+};
+
+export default skills;
