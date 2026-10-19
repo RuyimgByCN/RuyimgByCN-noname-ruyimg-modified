@@ -1467,4 +1467,19 @@ if !def.behavior.filter(&qctx, qt.owner, &event) { return; }
 
 **阻塞**：插桩需改 `crates/engine-native/src/content/host/**`（**未跟踪**）⇒ **与核心修复清单同因受阻**。
 
+**✅ 触发器注册与 `PhaseBegin` 机制均已排除（同日）**：
+
+| 核对 | 结果 |
+|---|---|
+| 两个行为的 `TriggerMeta` | **均已注册 `event: EventKind::PhaseBegin`**（`metadata/swd.rs:337-350`）✅ |
+| `PhaseBegin` 是否可用 | **`SwdHyunshen2`（同为 `PhaseBegin`，且要求「自己准备阶段」）的既有用例 `hyunshen::swd_deferred_hyunshen_counter_draw_and_distance` **通过** ✅ |
+
+⇒ **`PhaseBegin`（含 `Judge` 阶段）的派发机制正常** ✅ ⇒ **两个法器失败的原因不在触发器注册、也不在 `PhaseBegin` 派发**。
+
+**剩余唯一可疑条件**：`hand_has_kind(ctx, owner, CardKind::…Held)` ——
+即 `catalog.card_kind(手牌中的该牌)` **是否等于** 声明的 `CardKind`。
+（`hand_has_kind` 实现本身正确，`support.rs:1106`；但**目录里该牌的 kind 可能与声明不一致**。）
+
+**下一步（决定性、可读）**：写探针打印「放入手牌的该牌的 `catalog.card_kind`」与「期望的 `CardKind`」，比对是否相等。
+
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
