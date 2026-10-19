@@ -170,7 +170,10 @@ if !hand.is_empty() {
 **验收**：`upstream_jijiu_turn_restriction_difference_is_fixed` 应改为断言**存在**回合判定，
 并补行为用例（自己回合内红牌**不可**当桃 / 他人回合内**可**当桃）。
 
-## 11 「牌区 `hes`/`he`」差异族：**命令面限定手牌**（NC08 样本 25/26/31 汇总，2026-10-19）
+## 11 「牌区 `he`/`hes`/`hs`」差异族（**6 例**）：命令面/候选生成限定手牌（NC08 样本 25/26/31/61 汇总，2026-10-19）
+
+> **族内 6 例**：`zhiheng`(he) / `qixi`(hes) / `guose`(hes) / `wusheng`(hes) / `lijian`(he) /
+> **`qingguo`(hs，样本 61 新增——响应候选只遍历 `.hand`)**。
 
 **现象（3 例）**：`zhiheng`（`position: "he"`）、`qixi`/`guose`（`position: "hes"`）等上游技能允许
 **装备区（及判定区）**的牌参与转化或作为费用；原生对应路径只覆盖**手牌**。
