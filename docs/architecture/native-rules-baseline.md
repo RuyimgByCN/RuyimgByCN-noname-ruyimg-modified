@@ -3825,7 +3825,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 |---|---|---|---|---|
 | 1 | **`damageBegin1` 时点** | 目标**受伤前体力**判定 | 原生时点不同 | 时机锚点（`host:wudian_ciqiu`） |
 | 2 | **`chooseControl` 的 AI 默认项** | 由 `attitude` 推导 | **不迁移**（固定选项） | AI 面（非规则差异）（`nsshuaiyan`） |
-| 3 | **守卫弃牌张数** | **一次性选 n 张** | **首张自选 + 余随机代抽** | 确定性首张（`zhucheng`） |
+| 3 | **守卫弃牌张数** | **一次性选 n 张** | **首张自选 + 余随机代抽** | 确定性首张（`zhucheng`）；**回放确定性已验证**：同 seed 完全可复现（`nc08_replay_determinism_five_sources`，4 包通过），差异仅「与上游 RNG 流不可比」 |
 | 4 | **`discardPlayerCard(target, true)`** | **被弃者自选** | **确定性首张** | 确定性首张（`host:wudian_kangyin`） |
 
 **另 3 条「差异：无」**（纯数据钩语义等价 / `filterCard` 无弃牌代价 / `frequent` 无确认）——

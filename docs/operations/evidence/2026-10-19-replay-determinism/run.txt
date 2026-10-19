@@ -1,0 +1,4 @@
+DBG 回放确定性：cardpile-upstream-noname 同 seed 一致=true；异 seed 不同=true
+DBG 回放确定性：shahai-swd-upstream-noname 同 seed 一致=true；异 seed 不同=true
+DBG 回放确定性：d3-upstream-noname 同 seed 一致=true；异 seed 不同=true
+DBG 回放确定性：wudian-upstream-noname 同 seed 一致=true；异 seed 不同=true

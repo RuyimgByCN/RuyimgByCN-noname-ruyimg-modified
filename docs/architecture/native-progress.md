@@ -616,6 +616,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 440 轮（里程碑）**：**U07 逐批核对完成**——7 个 skill batch 逐条定位到**行为键**：batch1 `wudian_ciqiu`（`damageBegin1` 时点）／batch2 `nsshuaiyan`（`chooseControl` AI 默认项）／batch3 `zhucheng`（守卫弃牌 n 张 vs 首张+随机）／batch4 `wudian_kangyin`（`discardPlayerCard` 选择权）＝**4 条实质**；batch5/6/7（`chezhen`/`juedao`/`geju`）＝**无差异** ⇒ **与第 435 轮主题归并的 4 条完全一致** ✅（归并准确性已被逐批核对验证）。
 >
+> **第 441 轮**：**差异 #3 的 RNG 面验证**（`nc08_replay_determinism_five_sources.rs`）——「**同 seed + 相同指令序列 ⇒ `state_hash` 必须相等**」+「**异 seed 应不同**（反向对照）」；实测 **4/4 通过**（cardpile/swd/d3/wudian）⇒ 「首张自选+余随机代抽」**不破坏回放确定性**，差异属性为「**与上游 RNG 流不可比**」而非「回放不可复现」。
+>
+
 
 _playpackconfig`** 为乘数 → `getn` 缩放 → **`dn` 补充公式** → **上限 1000** → **`Math.random` 点数** → **未配置时 `NaN` 导致不补牌**（与差异 #4 一致）；原生有 `scale_plan`/`extension_pack_from_scale`（另一套）⇒ **差异 #5 本身不变，但对照所需口径已备齐**。
 >
