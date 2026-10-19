@@ -1,0 +1,27 @@
+lianying: {
+		audio: 2,
+		trigger: {
+			player: "loseAfter",
+			global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+		},
+		frequent: true,
+		filter(event, player) {
+			if (player.hasCards("h")) {
+				return false;
+			}
+			const evt = event.getl(player);
+			return evt && evt.player === player && evt.hs && evt.hs.length > 0;
+		},
+		async content(event, trigger, player) {
+			await player.draw();
+		},
+		ai: {
+			threaten: 0.8,
+			effect: {
+				player_use(card, player, target) {
+					if (player.countCards("h") === 1) {
+						return [1, 0.8];
+					}
+				},
+				target(card, player, target) {
+					if (get.tag(card, "loseCard") && target.countCards("h") === 

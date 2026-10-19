@@ -1,0 +1,2 @@
+DBG 两张手牌时出牌：Rejected(ChoicePending)（手牌=[19, 20]）
+SKIP：该出牌未被接受（可能第一张不是【杀】）
