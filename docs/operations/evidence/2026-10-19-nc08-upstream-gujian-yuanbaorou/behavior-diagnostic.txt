@@ -1,0 +1,1 @@
+DBG 元宝肉+青团：子技 qingtuan=true yuanbaorou=true；吃后手牌=2；首杀后=2（Accepted { state_hash: [..] }）；第二杀后=1（Accepted { state_hash: [..] }）
