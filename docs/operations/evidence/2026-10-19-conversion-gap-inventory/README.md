@@ -51,6 +51,20 @@ baihupifeng cangchizhibi fuxiqin g_yuchan_equip guangshatianyi guiyanfadao hslin
 fengyangzhen huyizhen longfeizhen shepanzhen yunchuizhen
 ```
 
+## 已逐名确认的缺口（2026-10-19 续核）
+
+| 包 | 键 | 中文名 | 类型 | 双向核对（原生 src + 全部包） | 判定 |
+|---|---|---|---|---|---|
+| zhenfa | `fengyangzhen` | **风扬阵** | `zhenfa` | **0 命中** | **确认未转换** |
+| zhenfa | `huyizhen` | **虎翼阵** | `zhenfa` | **0 命中** | **确认未转换** |
+| zhenfa | `longfeizhen` | **龙飞阵** | `zhenfa` | **0 命中** | **确认未转换** |
+| zhenfa | `shepanzhen` | **蛇蟠阵** | `zhenfa` | **0 命中** | **确认未转换** |
+| zhenfa | `yunchuizhen` | **云垂阵** | `zhenfa` | **0 命中** | **确认未转换** |
+| hearth | `shihuawuqi` | **石化武器** | `basic` | **0 命中** | **确认未转换** |
+
+**注**：`shahai-zhenfa` 包内既有 `swd_*` 前缀卡（如 `swd_changshezhen1`）也有 `zf_*` 前缀卡
+（`zf_dizaizhen`）⇒ 该包为**复合来源**；上表 5 项为其中**尚未转换**的阵法卡。
+
 ## 边界
 
 1. 只判「**是否转换**」，不判玩法面等价；
