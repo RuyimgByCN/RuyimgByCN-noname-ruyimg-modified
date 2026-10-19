@@ -601,6 +601,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 431 轮**：**保存恢复补充**（`nc08_save_restore_four_sources.rs`）——**U01（d3）/U07（wudian）单进程往返通过**（`state_hash` 一致 + 恢复后可继续推进）；**U03/L04（cardpile 两包）资产为 `pile.json`**（牌堆补丁包，不在 card/general 管线）⇒ 未覆盖、登记待办 ⇒ 五来源签署表「保存恢复」由 **1/5 → 3/5**。
 >
+> **第 433 轮**：**按来源的「升级」验收**（`nc08_upgrade_five_sources.rs`）——五来源各取一真实包：**v2 错版被拒绝（`RuleVersionMismatch`）+ v1 回滚恢复成功 + `state_hash` 一致**，**5/5 通过**；`pile.json` 包（U03/L04）经 `extension_pack_from_pile` 构包后同样通过 ⇒ 五来源签署表「升级」**0/5 → 5/5**。
+>
+
 
 
 

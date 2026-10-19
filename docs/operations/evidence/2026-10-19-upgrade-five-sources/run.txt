@@ -1,0 +1,10 @@
+DBG 升级：cardpile-upstream-liuli v1→v2 错版**被拒绝** ✅
+DBG 升级：cardpile-upstream-liuli 回滚 v1 恢复成功（hash 一致）✅
+DBG 升级：d3-upstream-noname v1→v2 错版**被拒绝** ✅
+DBG 升级：d3-upstream-noname 回滚 v1 恢复成功（hash 一致）✅
+DBG 升级：cardpile-upstream-noname v1→v2 错版**被拒绝** ✅
+DBG 升级：cardpile-upstream-noname 回滚 v1 恢复成功（hash 一致）✅
+DBG 升级：shahai-swd-upstream-noname v1→v2 错版**被拒绝** ✅
+DBG 升级：shahai-swd-upstream-noname 回滚 v1 恢复成功（hash 一致）✅
+DBG 升级：wudian-upstream-noname v2→v3 错版**被拒绝** ✅
+DBG 升级：wudian-upstream-noname 回滚 v1 恢复成功（hash 一致）✅
