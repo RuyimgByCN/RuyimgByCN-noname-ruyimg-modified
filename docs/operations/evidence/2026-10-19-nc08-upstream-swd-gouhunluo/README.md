@@ -3,7 +3,7 @@
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层
 - 规则版本 v322（工作树）/ 存档格式 v105
-- 结论：**2 项通过**（含 1 项差异登记）；**来源 U05 样本深度 +1**
+- 结论：**3 项通过**（**原登记差异已更正为「已校验」**）；**来源 U05 样本深度 +1**
 
 ## 1 上游源码（归档快照，逐字引用）
 
@@ -26,7 +26,11 @@ gouhunluo: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 2 | `storage.gouhunluo = 3` + `storage.gouhunluo2 = player` | **行为面**：0 号打出勾魂锣指定 1 号 → 目标 **`rounds=3`**、**`source=Some(0)`**（实测 `rounds=3 source=Some(0)`） | 通过 |
-| 1 | `filterTarget: !target.hasSkill("gouhunluo")` | **登记差异**：原生分支只做效果（`if alive`），**未见**对「目标已持该技」的拒绝（是否由 `filter_swd` 承载**未核对**） | 通过（**差异登记**） |
+| 1 | `filterTarget: !target.hasSkill("gouhunluo")` | **门槛已校验（2026-10-19 更正）**：原生在**出牌命令面** `engine/play_card.rs:1534` 校验 `gouhunluo_rounds > 0 → IllegalTargets`；**行为面实测**：第一张命中后目标 `rounds=3`，**第二张对同一目标 `Rejected(IllegalTargets)`** | 通过（**非差异**） |
+
+> **更正说明（诚实记录）**：初版把该项登记为「差异」，原因是**只读了效果分支、未查完整校验链**
+> —— 属本仓库已沉淀方法学「断言缺陷前先读完整校验链」的**再次命中**（第 5 条）。现以**行为面**
+> （两张勾魂锣）钉死：门槛**确实生效**。
 
 **原生实现引用**：`content/host/step/swd_card_effects.rs:613`（`gouhunluo_rounds = 3`；
 `gouhunluo_source = Some(self.owner)`；授予 `SWD_GOUHUNLUO_SUB_KEY` 实例）。

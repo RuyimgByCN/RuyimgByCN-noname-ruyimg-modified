@@ -23,9 +23,10 @@
 //! （`pl.gouhunluo_rounds = 3`；`pl.gouhunluo_source = Some(self.owner)`；
 //! 授予 `SWD_GOUHUNLUO_SUB_KEY` 实例）。
 //!
-//! **登记差异（本文件固定）**：**目标门槛未在原生侧校验**——上游 `filterTarget` 要求
-//! `!target.hasSkill("gouhunluo")`；原生该分支只做效果（`if alive`），**未见**对
-//! 「目标已持该技」的拒绝（与同类 host 卡的门槛承载方式一致，**未核对** `filter_swd` 是否覆盖）。
+//! **门槛（已核对，2026-10-19 更正）**：上游 `filterTarget` 要求 `!target.hasSkill("gouhunluo")`
+//! → 原生**确在校验**，位置在 **`engine/play_card.rs:1534`**（出牌命令面）：
+//! `if core.player(targets[0]).gouhunluo_rounds > 0 { return Err(RejectReason::IllegalTargets) }`
+//! —— **不是**差异（初次登记为差异系**只读效果分支、未查完整校验链**所致，已更正）。
 //!
 //! 未覆盖（登记）：3 轮倒计时的**逐轮结算行为**（需跨多回合驱动）；`wuxieable` 的无懈面。
 
@@ -86,9 +87,60 @@ fn upstream_gouhunluo_marks_target() {
     );
 }
 
-/// 上游点 1（**门槛**）：上游要求目标**未持** `gouhunluo`；原生是否校验 → 源码事实登记。
+/// 上游点 1（**门槛行为面**）：已挂倒计时的目标**不可再次成为目标**（第二张勾魂锣被拒）。
 #[test]
-fn upstream_gouhunluo_target_gate_note() {
+fn upstream_gouhunluo_rejects_already_marked_target() {
+    let mut e = swd_engine(20269702);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 包内有两张勾魂锣（swd_gouhunluo1 / 2）
+    let cards: Vec<engine_native::CardId> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.name.contains("gouhunluo"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .collect();
+    assert!(cards.len() >= 2, "包内应有两张勾魂锣，实测 {}", cards.len());
+    for c in cards.iter().take(2) {
+        nc08_common::put_hand(&mut e, 0, *c);
+    }
+    // 第一张：命中 1 号 → 挂 3 轮
+    let out1 = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: cards[0], targets: vec![1] },
+    });
+    assert!(
+        matches!(
+            out1,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "第一张勾魂锣应可发动：{out1:?}"
+    );
+    drain(&mut e);
+    assert_eq!(e.state_core().player(1).gouhunluo_rounds, 3, "目标应已挂倒计时");
+    // 第二张：同一目标 → 应被拒（上游 filterTarget !hasSkill("gouhunluo")）
+    let out2 = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: cards[1], targets: vec![1] },
+    });
+    eprintln!("DBG 勾魂锣门槛：第二张对同一目标 = {out2:?}");
+    assert!(
+        matches!(out2, CommandOutcome::Rejected(_)),
+        "已挂倒计时的目标不应再次成为目标（上游 filterTarget）：{out2:?}"
+    );
+}
+
+/// 上游点 1（**门槛源码事实，已核对**）：原生在**出牌命令面**校验「目标未挂倒计时」。
+#[test]
+fn upstream_gouhunluo_target_gate_is_enforced() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/src/content/host/step/swd_card_effects.rs"
@@ -101,8 +153,20 @@ fn upstream_gouhunluo_target_gate_note() {
         "原生依据：3 轮倒计时 + 来源记录：{seg}"
     );
     assert!(
-        !seg.contains("has_skill") || !seg.contains("gouhunluo_rounds > 0"),
-        "登记：原生该分支**未**校验「目标已持该技」（上游 filterTarget 要求）：{seg}"
+        seg.contains("gouhunluo_rounds = 3"),
+        "效果分支：挂 3 轮倒计时：{seg}"
+    );
+    // 门槛在**命令面**（不是效果分支）——须读完整校验链
+    let play_card = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/engine/play_card.rs"
+    ))
+    .expect("读 play_card");
+    let idx = play_card.find("gouhunluo_rounds > 0").expect("勾魂锣门槛");
+    let gate: String = play_card[idx.saturating_sub(160)..idx].chars().take(400).collect();
+    assert!(
+        gate.contains("IllegalTargets"),
+        "门槛依据：命令面对已挂倒计时目标返回 IllegalTargets：{gate}"
     );
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(
