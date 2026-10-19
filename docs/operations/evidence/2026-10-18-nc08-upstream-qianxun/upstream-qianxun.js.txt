@@ -1,0 +1,17 @@
+	qianxun: {
+		mod: {
+			targetEnabled(card, player, target, now) {
+				if (card.name === "shunshou" || card.name === "lebu") {
+					return false;
+				}
+			},
+		},
+		audio: 2,
+	},
+	lianying: {
+		audio: 2,
+		trigger: {
+			player: "loseAfter",
+			global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+		},
+		frequent: true
