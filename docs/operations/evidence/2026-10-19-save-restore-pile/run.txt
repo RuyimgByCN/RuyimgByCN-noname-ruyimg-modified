@@ -1,0 +1,4 @@
+DBG pile 保存恢复：cardpile-upstream-noname 构包成功，卡 113 张（source=noname entries=12）
+DBG pile 保存恢复：cardpile-upstream-noname 往返成功
+DBG pile 保存恢复：cardpile-upstream-liuli 构包成功，卡 113 张（source=noname-liuli entries=12）
+DBG pile 保存恢复：cardpile-upstream-liuli 往返成功
