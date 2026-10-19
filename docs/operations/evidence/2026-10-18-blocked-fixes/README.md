@@ -1095,3 +1095,22 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **验收**：样本 128 应能断言局面②**受理**（并保留局面①）。
 
 **族**：「**门槛集合/缺失**」族**第 4 例**（tianfuzhen 集合 / dizaizhen 模式 / qiankunbiao he / 本项口径）。
+
+### 第 50 项扩展：`CardKind::Hslingjian` **全部分支口径对照**（2026-10-19）
+
+按修法要求逐一对照**上游 `filterTarget`**（`swd/card.js`）与**原生分支**（`engine/play_card.rs:1619–1656`）：
+
+| 卡 | 上游 `filterTarget`（**逐字**） | 原生条件（**逐字**） | 一致？ |
+|---|---|---|---|
+| `xuanfengzhiren`（旋风之刃） | `target.countCards("he") > 0` | **无专属分支** ⇒ 走默认 `alive && (hand 非空 \|\| equips 非空)` | **一致**（`he` ≡ 手牌+装备） |
+| `xingtigaizao`（型体改造） | **`target === player`**（自己） | `targets[0] == core.turn.current`（**当前回合角色**） | ✗ **不一致**（「自己」↔「当前回合角色」） |
+| `shijianhuisu`（时间回溯） | **`target !== player`**（≠使用者）且 `countCards("e") > 0` | `targets[0] != core.turn.current` 且 `equips` 非空 | ✗ **不一致**（≠当前回合角色 ↔ ≠使用者） |
+| `jinjilengdong`（禁忌冷冻） | **`!target.isTurnedOver()`** 且 `target !== player` | `targets[0] != current && alive` | ✗ **不一致**（**缺 `isTurnedOver`**） |
+| `yinmilichang`（隐秘力场） | `player !== target` 且 **`!target.hasSkill("qianxing")`** | `targets[0] != current && alive` | ✗ **不一致**（**缺 `qianxing` 检查**） |
+| `shengxiuhaojiao`（生锈号角） | **`!target.hasSkill("hslingjian_chaofeng")`** | `alive` | ✗ **不一致**（**缺 `chaofeng` 检查**） |
+| `zhongxinghujia`（重型护甲） | **`!target.isMin()`** | `alive && hand.len() > hp` | ✗ **不一致**（见上文，行为面已证） |
+
+⇒ **7 张中 6 张口径不一致**（仅 `xuanfengzhiren` 经默认分支等价）；
+**共同模式**：原生把「**≠使用者**」写成「**≠当前回合角色**」，并**省略**了
+`isTurnedOver`/`qianxing`/`chaofeng` 等**状态检查** ⇒ 属**系统性口径自创**，
+修法应**整块**按上游 `filterTarget` 重写，而非逐卡打补丁。
