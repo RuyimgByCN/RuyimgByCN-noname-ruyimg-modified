@@ -1,0 +1,28 @@
+	kongcheng: {
+		mod: {
+			targetEnabled(card, player, target, now) {
+				if (!target.hasCards("h")) {
+					if (card.name === "sha" || card.name === "juedou") {
+						return false;
+					}
+				}
+			},
+		},
+		group: "kongcheng1",
+		audio: "kongcheng1",
+		audioname: ["re_zhugeliang"],
+		ai: {
+			noh: true,
+			skillTagFilter(player, tag) {
+				if (tag === "noh") {
+					if (player.countCards("h") != 1) {
+						return false;
+					}
+				}
+			},
+		},
+	},
+	kongcheng1: {
+		audio: 2,
+		trigger: { player: "loseEnd" },
+		forced:
