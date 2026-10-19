@@ -1,0 +1,1 @@
+DBG 飞镖：有黑牌且弃 → hp+0（询问["gj_feibiao_discard"]）；无黑牌 → hp-1（询问[]）；有黑牌不弃 → hp-1
