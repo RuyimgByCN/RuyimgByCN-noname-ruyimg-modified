@@ -3651,12 +3651,23 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **改判牌区**（标准面 `guicai`） | 非国战 `hs`（手牌 + **装备区**），**不限花色** | 手牌全量 ✅；**装备区候选受 `is_black` 限制**（鬼道口径）→ 鬼才非黑装备不能改判 | guicai |
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
+| **失去事件覆盖面**（标准面 `lianying`） | `loseAfter` + 5 个全局异步面 | 四类显式事件（`CardUsed`/`CardResponded`/`CardsMoved`/`CardsDiscarded`）；注释自述**批量弃置未覆盖** | lianying |
+| **阈值 off-by-one**（标准面 `lianying`） | 失去后**手牌为空**才触发 | filter `hand.len() > 1` 在**牌已离手后**求值 → 剩 1 张即触发（**原生更宽松**，实测出现确认门） | lianying |
 | **多目标选择权**（标准面 `lijian`） | `selectTarget: 2` + `filterTarget`：玩家手动选 2 名男性（顺序决定谁先出杀） | **自动选目标**（全程仅 `lijian_discard` 询问）→ 玩家无目标/顺序选择权 | lijian |
 | **失去方式覆盖面**（标准面 `xiaoji`） | `loseAfter` + `es`（替换/弃置/获得/被拆**全部**） | 仅 `Equipped{replaced}`（**替换**）→ 规则损失 | xiaoji |
 | **`viewAs` 固定优先级**（`qixi`/`guose`/`wusheng`） | 多候选由**玩家选择** | 固定顺序（国色 > 武圣 > 龙胆/奇袭等，`play_card.rs` 注释） | qixi/guose/wusheng |
 | **转化候选选择**（标准面 `qixi`） | 多个 `viewAs` 之间由**玩家选择** | **固定优先级**（杀类优先，`play_card.rs:156`）；黑色【杀】持奇袭时只作【杀】 | qixi |
 | **摸牌数固定分支**（标准面 `yingzi`） | `filter: !event.numFixed`（摸牌数被固定时**不**加成） | filter **只判阶段**；全 crate 无 `numFixed`/`num_fixed` | yingzi |
 | **弃牌执行时机**（口径，非差异） | — | 上限裁剪发生在**进入弃牌阶段时**（探针实测 15→4）；夹具须在**回合前**堆手牌 | keji |
+
+**标准面「原生更宽松」汇总（2026-10-19）**：逐技能对照发现 **4 处**原生比上游宽松的差异：
+
+| 技能 | 更宽松之处 | 上游依据 | 修复项 |
+|---|---|---|---|
+| `jijiu` 急救 | 缺**回合外**限制（自己回合内亦可用红牌当桃） | `viewAsFilter: player !== _status.currentPhase` | 清单第 10 项 |
+| 兵粮寸断（牌种） | **无距离限制**（对所有人） | 延时锦囊默认距离 1 | 清单第 13 项 |
+| `guicai` 鬼才 | 装备区候选受 `is_black` 限制（鬼道口径）→ **手牌面**反而更宽 ✓ 装备面更窄 ✗ | 非国战 `hs` 不限花色 | 清单第 11 项 |
+| `lianying` 连营 | **阈值 off-by-one**：剩 1 张手牌即触发 | 失去后手牌为空 | 清单第 14 项 |
 
 **标准面规则损失汇总（2026-10-19，14 个标准面样本）**：逐技能对照发现**6 处规则损失**
 （均有行为/源码证据，修法与验收见[待实施修复清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)）：
