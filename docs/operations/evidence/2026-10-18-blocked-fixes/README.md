@@ -1371,3 +1371,28 @@ pub fn open_choice(&self) -> Option<&OpenChoice> { self.state.resolution.open_ch
 被判定为 `Done`/被丢弃）。
 
 **验收**：样本 156 的 `#[ignore]` 用例应能断言**牌堆 −2** 且**手牌净 +1**。
+
+## 56 黄麟之琮：**无护甲时未 +1**，负例「通过」但**不构成证据**（样本 157，2026-10-19）
+
+**上游**：`g_huanglinzhicong`——`trigger { player: phaseBegin }`、`forced`、
+`filter: !player.hujia && 持有该卡`、`content: player.changeHujia()`。
+
+**实测**：
+
+| 用例 | 构造 | 实测 | 判读 |
+|---|---|---|---|
+| 正例 | `hujia = 0` + 持有卡 | **`hujia` 0 → 0** | ❌ 应 **0 → 1** |
+| 负例 | `hujia = 2` + 持有卡 | **`hujia` 2 → 2** | ⚠ **通过，但不可信**——窗口完全不触发时同样通过 |
+
+⇒ **负例的通过理由不成立**（**不能**作为「`!player.hujia` 条件正确」的证据）。
+
+**与第 55 项的共同点**：二者都依赖 **`phaseBegin`**；而 `qinglongzhigui` 的**摸 2 确实发生**
+⇒ **`phaseBegin` 本身会触发**，但本卡的 `changeHujia` 分支**未生效**。
+
+**剩余候选**：①`changeHujia` 原语在本上下文未生效（护甲字段被覆盖/回滚）；
+②`phaseBegin` 机器的**分支选择**问题（与本卡 filter 或 stage 有关）；
+③`forced` 窗口的**驱动顺序**（`phaseBegin` 时护甲尚未可写）。
+
+**修法（先诊断）**：与第 55 项**合并排查** `phaseBegin` 类窗口的分支派发与状态写入。
+
+**验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
