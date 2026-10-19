@@ -1,0 +1,43 @@
+luoyi: {
+		audio: 2,
+		trigger: { player: "phaseDrawBegin2" },
+		check(event, player) {
+			if (player.skipList.includes("phaseUse") || player.countCards("h") < 3) {
+				return false;
+			}
+			if (!player.hasSha()) {
+				return false;
+			}
+			return game.hasPlayer(current => get.attitude(player, current) < 0 && player.canUse("sha", current));
+		},
+		preHidden: true,
+		filter(event, player) {
+			return !event.numFixed && event.num > 0;
+		},
+		async content(event, trigger, player) {
+			player.addTempSkill("luoyi2", "phaseJieshuBegin");
+			trigger.num--;
+		},
+	},
+	luoyi2: {
+		trigger: { source: "damageBegin1" },
+		sourceSkill: "luoyi",
+		filter(event) {
+			return event.card && (event.card.name === "sha" || event.card.name === "juedou") && event.notLink();
+		},
+		charlotte: true,
+		forced: true,
+		async content(event, trigger, player) {
+			trigger.num++;
+		},
+		ai: {
+			damageBonus: true,
+		},
+	},
+	tiandu: {
+		audio: 2,
+		audioname: ["re_guojia", "xizhicai", "gz_nagisa"],
+		trigger: { player: "judgeEnd" },
+		preHidden: true,
+		frequent(event) {
+			//if(get.mode()=='guozhan') return false;

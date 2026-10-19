@@ -1,0 +1,3 @@
+SKIP：未出现裸衣确认门
+DBG 裸衣：基线 hand=6 持技 hand=5 confirmed=false
+SKIP：未出现裸衣确认门（摸牌阶段触发未对上）
