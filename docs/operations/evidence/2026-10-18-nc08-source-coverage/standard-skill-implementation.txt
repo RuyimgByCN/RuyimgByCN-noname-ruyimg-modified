@@ -1,0 +1,45 @@
+# 标准面技能实现清单（来源：content/standard/names.rs 的常量 + 文档注释）
+# 方法说明：本文件每个技能常量都带一行文档注释（含武将名与技能名），是**可靠的实现信号**；
+#           先前用「上游键名 grep 源码」的方法**不可靠**（命名不同：如遗计 → JI_JI），已废弃。
+# 常量条目数: 216
+鬼道	GUI_DAO	张角
+天妒	TIAN_DU	郭嘉
+忘隙	WANG_XI	李典
+妄尊	WANG_ZUN	且其手牌上限 -1 直到回合结束（印记技
+妄尊印	WANG_ZUN_MARK	袁术
+反馈	FAN_KUI	司马懿
+奸雄	JIAN_XIONG	曹操
+闭月	BI_YUE	貂蝉
+武圣	WU_SHENG	关羽
+龙胆	LONG_DAN	赵云
+国色	GUO_SE	大乔
+无双	WU_SHUANG	吕布
+英姿	YING_ZI	周瑜
+枭姬	XIAO_JI	孙尚香
+青囊	QING_NANG	华佗
+集智	JI_ZHI	黄月英
+克己	KE_JI	吕蒙
+咆哮	PAO_XIAO	张飞
+奇袭	QI_XI	甘宁
+苦肉	KU_ROU	黄盖
+制衡	ZHI_HENG	孙权
+遗计	JI_JI	郭嘉
+刚烈	GANG_LIE	夏侯惇
+突袭	TU_XI	张辽
+裸衣	LUO_YI	许褚
+倾国	QING_GUO	甄姬
+奇才	QI_CAI	黄月英
+救援	JIU_YUAN	孙权
+急救	JI_JIU	华佗
+护驾	HU_JIA	曹操
+流离	LIU_LI	大乔
+结姻	JIE_YIN	（v202 对齐上游 filterTarget；旧
+空城	KONG_CHENG	诸葛亮
+谦逊	QIAN_XUN	陆逊
+连营	LIAN_YING	陆逊
+马术	MA_SHU	马超
+邪酬	BOSS_ECHOU	活；除你之外的角色使用
+封冻	BOSS_FENGDONG	色获得
+服毒	BOSS_FUDU	定性近似登记；勘误——勘验存量误记
+拾忧	BOSS_SHIYOU	名勘误——勘验存量误记
+往事	BOSS_WANGSHI	窗未落=登记差异；显示名勘误——勘验存量误记
