@@ -1511,6 +1511,33 @@ crates/content-native-loader/src/lib.rs:575   for decl in card_kind_host_skills(
 **修正后的下一步**：核对**「手持牌技能」进入/离开手牌时是否 `core.skills.insert`**
 （若无 ⇒ 与先前结论方向一致，但**断点位置不同**：不在声明，而在**实例授予**）。
 
+## ✅ **授予链也已存在**（同日）：`construction.rs:468-500`
+
+```rust
+// G1 swd 器族手持技初始化钩子（卡牌面补切批⑩）：四象五件手持触发技授予全部存活角色
+//（效果由手持 filter 门控——未持牌不触发）。
+if packs.iter().any(|p| p.enabled && p.init_hook == InitHook::SwdJiqiHeld) {
+    let jiqi_defs = …filter(|def| matches!(def.behavior.as_host_behavior(),
+        Some(SwdQinglongzhiguiHeld | SwdZhuquezhizhangHeld | SwdBaishouzhihuHeld
+           | SwdXuanwuzhihuangHeld | SwdHuanglinzhicongHeld | …)))…;
+    for def in jiqi_defs { for p in 0..seats { e.state.core.skills.insert((p, def), …); } }
+}
+```
+
+且 **swd 包的 `init_hook` = `swd_jiqi_held`**（配置验收实测取值之一）⇒ **该分支应被进入** ✅。
+
+**于是整条链在源码层面是完整的**：
+`init_hook` ✅ → `core.skills` 实例 ✅ → `TriggerMeta{PhaseBegin}` ✅ → `filter`（阶段/`begin`/`hujia`/`hand_has_kind`）✅
+—— **而行为面仍不触发** ❌。
+
+**剩余未查（仅 2 项）**：
+1. **`SkillInstance.enabled`** 是否为 `true`（插入时设为 true，但可能在别处被禁用）；
+2. **`catalog.candidates(EventKind::PhaseBegin)`** 的派发表是否**包含**这些 `def_id`
+   （`plan_triggers` 先按 kind 取候选，再过滤）。
+
+**说明**：这两项**都能用只读探针检查**（打印 `core.skills` 中该 def 的实例、打印
+`catalog.candidates(PhaseBegin)` 的长度与包含关系）⇒ **下一轮可直接做**，无需插桩、不受阻塞。
+
 **✅ 触发器注册与 `PhaseBegin` 机制均已排除（同日）**：
 
 | 核对 | 结果 |
