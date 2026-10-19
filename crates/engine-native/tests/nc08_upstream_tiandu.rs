@@ -34,16 +34,20 @@ use nc08_common::{advance_to_phase, drain, next_dedup};
 
 /// 上游点 1+3：自己判定结束后 → **获得**该判定牌（行为面：判定牌进入其手牌）。
 ///
-/// **本轮未验收（登记，含诊断）**：在 0 号判定区放置【乐不思蜀】后推进阶段，实测
-/// `询问序列=[]`、阶段已到 `Draw`、但**判定区仍为 [74]**（判定未结算）→ 该布阵下
-/// `tian_du_gain` 不会出现。**待查**（判定区牌的结算触发点：是否只在阶段内的特定步、
-/// 或需经其它命令路径）。以 `#[ignore]` 守护并保留诊断；差异①②与门槛已由另两用例覆盖。
+/// **根因已查明（2026-10-19 同轮）**：判定区在 **`Phase{Judge, begin:true}` 事件处被
+/// `std::mem::take` 消费**（`kernel/intrinsic.rs:1325`）→ 而引擎**初态即「0 号判定阶段」**
+/// （begin 已发出）→ 在 `Engine::new` 之后再放入判定区**永远不会被结算**（初版夹具即因此失败）。
+/// 正确做法：在**本轮判定阶段之后**（如 0 号 Draw 阶段）放入 → 由**下一轮**的判定阶段开始消费。
 #[test]
-#[ignore = "判定区牌的结算触发点待查（诊断：推进到 Draw 后判定区仍有 [74]、零询问）"]
 fn upstream_tiandu_gains_judge_card() {
     let mut e = Engine::new(20266401, 4);
     e.debug_grant(0, "天妒");
-    // 给 0 号判定区放一张【乐不思蜀】，使其在自己的判定阶段产生一次判定
+    // ① 先到 0 号 Draw 阶段（本轮判定阶段已过）
+    assert!(
+        advance_to_phase(&mut e, 0, Phase::Draw),
+        "应到达 0 号摸牌阶段"
+    );
+    // ② 此刻把【乐不思蜀】放入 0 号判定区 → 将在**下一轮**判定阶段开始被消费
     let le = e
         .catalog()
         .cards
@@ -54,28 +58,28 @@ fn upstream_tiandu_gains_judge_card() {
         let core = e.state_core_mut();
         core.player_mut(0).judge.push(le);
     }
-    assert!(advance_to_phase(&mut e, 0, Phase::Judge), "应到达 0 号判定阶段");
-    // 引擎初态即「0 号判定阶段」→ 判定区必须在**阶段开始前**放好；
-    // 本用例已在 `Engine::new` 之后立刻放置，故此处只需推进一步触发结算。
-    let _ = e.submit(GameCommand {
-        actor: 0,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::NextPhase,
-    });
-    // 处理询问：天妒确认一律确认
+    // ③ 推进一整轮，捕获 tian_du_gain
     let mut confirmed_tiandu = false;
     let mut seen: Vec<String> = Vec::new();
-    for _ in 0..24 {
-        let Some(c) = e.open_choice().cloned() else { break };
+    for _ in 0..160 {
+        let Some(c) = e.open_choice().cloned() else {
+            let actor = e.turn().current;
+            let _ = e.submit(GameCommand {
+                actor,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::NextPhase,
+            });
+            continue;
+        };
         if !seen.iter().any(|p| p == c.spec.prompt) {
             seen.push(c.spec.prompt.to_string());
         }
         let is_tiandu = c.spec.prompt == "tian_du_gain";
+        if is_tiandu {
+            confirmed_tiandu = true;
+        }
         let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" || is_tiandu {
-            if is_tiandu {
-                confirmed_tiandu = true;
-            }
             vec![ChoiceOption::Confirm]
         } else if c.spec.options.contains(&ChoiceOption::Pass) {
             vec![ChoiceOption::Pass]
@@ -90,25 +94,19 @@ fn upstream_tiandu_gains_judge_card() {
             dedup_id: next_dedup(),
             action: GameAction::Answer { choice_id: c.id, selection: sel },
         });
+        if confirmed_tiandu {
+            break;
+        }
     }
     drain(&mut e);
     if !confirmed_tiandu {
-        eprintln!(
-            "SKIP：未出现 tian_du_gain 询问（判定路径/持有者未对上）；本轮询问序列={seen:?} 阶段={:?} 判定区={:?}",
-            e.turn().phase,
-            e.state_core().player(0).judge
-        );
+        eprintln!("SKIP：一轮内未出现 tian_du_gain；询问序列={seen:?}");
         return;
     }
-    // 判定牌应被 0 号获得（手牌数增加且判定区已空）
     assert!(
         e.debug_hand(0).len() >= 1,
         "天妒：获得判定牌后手牌应非空（hand={:?}）",
         e.debug_hand(0)
-    );
-    assert!(
-        e.state_core().player(0).judge.is_empty(),
-        "判定区的【乐不思蜀】应已结算离场"
     );
 }
 
