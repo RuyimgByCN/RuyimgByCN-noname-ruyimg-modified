@@ -192,3 +192,57 @@ fn probe_hand_has_kind_matches_catalog_kind() {
         "放入手牌的该牌的 catalog.card_kind 应等于 filter 中期望的 CardKind"
     );
 }
+
+/// **决定性只读探针（第 56 项剩余 2 项）**：
+/// ①`core.skills` 中是否存在该行为的**实例**、其 `enabled` 为何；
+/// ②`catalog.candidates(EventKind::PhaseBegin)` 是否**包含**该 `def_id`。
+#[test]
+fn probe_instance_and_candidates() {
+    let e = swd_engine(20288905);
+    // 找出「黄麟之琮手持技」的 def_id
+    let def_id = e
+        .catalog()
+        .skills
+        .iter()
+        .position(|d| {
+            matches!(
+                d.behavior.as_host_behavior(),
+                Some(engine_native::content::host::HostBehavior::SwdHuanglinzhicongHeld)
+            )
+        })
+        .map(|i| i as engine_native::ids::SkillDefId);
+    eprintln!("DBG 探针：黄麟之琮 def_id = {def_id:?}");
+    let Some(def_id) = def_id else {
+        eprintln!("NOTE 探针：目录中不存在该行为的 SkillDef——本探针不构成结论");
+        return;
+    };
+    // ① core.skills 实例
+    let mut instances = 0;
+    let mut enabled_true = 0;
+    for p in 0..4u8 {
+        if let Some(inst) = e.state_core().skills.get(&(p, def_id)) {
+            instances += 1;
+            if inst.enabled {
+                enabled_true += 1;
+            }
+        }
+    }
+    // ② candidates
+    let cand = e
+        .catalog()
+        .candidates(engine_native::event::EventKind::PhaseBegin);
+    let in_cand = cand.contains(&def_id);
+    eprintln!(
+        "DBG 探针：core.skills 实例 {instances}/4（enabled {enabled_true}）；\
+         candidates(PhaseBegin) 共 {} 项，包含该 def = {in_cand}",
+        cand.len()
+    );
+    assert!(
+        instances > 0,
+        "该行为的 SkillInstance 应存在于 core.skills（否则 plan_triggers 取不到）"
+    );
+    assert!(
+        in_cand,
+        "catalog.candidates(PhaseBegin) 应包含该 def（否则入队阶段就被跳过）"
+    );
+}

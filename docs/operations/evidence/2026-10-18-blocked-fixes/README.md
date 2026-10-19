@@ -1538,6 +1538,32 @@ if packs.iter().any(|p| p.enabled && p.init_hook == InitHook::SwdJiqiHeld) {
 **说明**：这两项**都能用只读探针检查**（打印 `core.skills` 中该 def 的实例、打印
 `catalog.candidates(PhaseBegin)` 的长度与包含关系）⇒ **下一轮可直接做**，无需插桩、不受阻塞。
 
+## ✅ 探针完成（同日）：**两项全部通过**
+
+```
+DBG 探针：黄麟之琮 def_id = Some(238)
+DBG 探针：core.skills 实例 4/4（enabled 4）；candidates(PhaseBegin) 共 41 项，包含该 def = true
+```
+
+| 环节 | 结果 |
+|---|---|
+| 目录 `SkillDef` 存在 | ✅ def_id **238** |
+| `TriggerMeta` = `PhaseBegin` | ✅（前轮已核） |
+| **`core.skills` 实例** | ✅ **4/4 玩家**、**enabled 4** |
+| **`candidates(PhaseBegin)` 包含该 def** | ✅（41 项中含它） |
+| `init_hook == SwdJiqiHeld` 分支 | ✅（前轮已核） |
+| `filter` 四条件 | ✅（阶段/`begin`/`hujia==0`/`hand_has_kind` 均已分别核验） |
+
+⇒ **整条链的每个环节都已验证通过，而行为面仍不触发** ❌ ⇒
+**唯一剩余解释：`filter` 在运行时的实参与静态假设不同**——最可能是 **`event` 的
+`begin` 或 `phase` 字段**（静态读到的 `emit` 是 `{Judge, begin:true}`，但 `plan_triggers`
+取的是 `f.data.clone()`，可能被**帧内改写**）。
+
+**修法（受阻）**：在 `filter_behavior` 打印 `event` 与各条件实值（`content/host/**`，**未跟踪**）。
+
+**结论性说明**：第 56 项已从「卡不可用」收敛为**一个具体的运行时字段问题**；
+所有可静态验证的环节均已排除，剩余工作**必须插桩**。
+
 **✅ 触发器注册与 `PhaseBegin` 机制均已排除（同日）**：
 
 | 核对 | 结果 |
