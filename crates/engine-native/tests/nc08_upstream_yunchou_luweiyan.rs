@@ -173,3 +173,137 @@ fn upstream_luweiyan_zone_difference_is_registered() {
         "上游依据：非基本牌：{seg}"
     );
 }
+
+/// 上游点 3（**行为面 · 链杀**）：厉焰使用后**视为对目标使用一张【杀】**。
+///
+/// **本轮未验收（登记，含诊断）**：实测 **`询问=[]`**、1 号手牌不变（【闪】仍在）→
+/// **虚拟杀未产生**。链杀**已注册**（`factory.rs:420` 机器 + `support.rs:3` 过滤器
+/// `u_matches_lw2`（按 `use_as == Shuigong` 判定））→ 疑因机器 `self.targets` 为空
+/// （`factory.rs` 该行为返回 `(Some(owner), None)`，未传目标表）→ **根因待查**；
+/// 用例以 `#[ignore]` 守护，**不写成通过**。
+///
+/// **登记差异（原生注释自述）**：上游 `luweiyan2` 为
+/// `chooseTarget("是否视为使用一张杀？", …)` —— **玩家选目标 + 可取消**；
+/// 原生为**自动取座位序首目标**（`yunchou.rs:280` 注释「登记差异：上游玩家选目标+可取消，
+/// 原生自动首目标」）→ 本用例固定该差异（断言**无目标询问**、但**确实产生了【杀】**）。
+#[test]
+#[ignore = "链杀虚拟杀未产生（询问=[]，1 号手牌不变）——疑机器 targets 为空，根因待查"]
+fn upstream_luweiyan_chain_kill_fires_on_first_target() {
+    let mut e = yunchou_engine(20270903);
+    e.debug_grant(0, "ycnluweiyan");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 1 号：有装备（水攻合法目标）+ 一张【闪】（用于观测「虚拟杀」确实指向它）
+    let equip = {
+        let id = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.name.contains("armor") || c.name.contains("weapon"))
+            .map(|(i, _)| i as engine_native::CardId)
+            .expect("装备牌");
+        nc08_common::put_equips(&mut e, 1, id);
+        id
+    };
+    let shan = {
+        let id = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.name == "shan")
+            .map(|(i, _)| i as engine_native::CardId)
+            .expect("闪");
+        nc08_common::put_hand(&mut e, 1, id);
+        id
+    };
+    let trick = {
+        let id = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.name.contains("dismantle"))
+            .map(|(i, _)| i as engine_native::CardId)
+            .expect("锦囊牌");
+        nc08_common::put_hand(&mut e, 0, id);
+        id
+    };
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: trick, targets: vec![1] },
+    });
+    assert!(
+        matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "厉焰应可发动：{out:?}（装备={equip}）"
+    );
+    let mut prompts: Vec<String> = Vec::new();
+    let mut saw_shan_response = false;
+    let mut saw_target_choice = false;
+    for _ in 0..24 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        if c.spec.prompt.contains("respond_shan") {
+            saw_shan_response = true;
+        }
+        // 「选目标」类询问（原生不应出现——差异点）
+        if c.spec.options.iter().filter(|o| matches!(o, engine_native::ChoiceOption::Player(_))).count() > 0
+            && c.spec.prompt.contains("sha")
+        {
+            saw_target_choice = true;
+        }
+        // 1 号打出【闪】以观测虚拟杀
+        if c.observer == 1 && c.spec.options.contains(&engine_native::ChoiceOption::Card(shan)) {
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![engine_native::ChoiceOption::Card(shan)],
+                },
+            });
+            continue;
+        }
+        let sel: Vec<engine_native::ChoiceOption> = if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+            vec![engine_native::ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 厉焰·链杀：询问={prompts:?} 出现闪响应={saw_shan_response} 出现选目标={saw_target_choice} 1 号手牌={:?}",
+        e.debug_hand(1)
+    );
+    assert!(
+        saw_shan_response,
+        "链杀：厉焰结算后应对座位序首目标（1 号）**视为使用【杀】**（应出现【闪】响应询问），实测 {prompts:?}"
+    );
+    assert!(
+        !saw_target_choice,
+        "**差异登记**：原生自动取首目标（无「是否视为使用一张杀」的目标询问），上游为玩家选目标+可取消"
+    );
+    assert!(
+        !e.debug_hand(1).contains(&shan),
+        "链杀：1 号已用【闪】响应虚拟杀（手牌应不含该【闪】）"
+    );
+}

@@ -609,3 +609,26 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 「0 号 hp 不变」的断言应改为 **hp −1**（并同步更新证据与台账）。
 
 **同族**：与「目标集合范围」族（本项为该族**唯一**成员）后续可扩展核对其它 `selectTarget: -1` 技能。
+
+## 31 厉焰·链杀（`luweiyan2`）**未产生虚拟杀**（样本 77 行为面，2026-10-19）
+
+**症状**：样本 77 实测——0 号以厉焰把非基本牌当【水攻】指定 1 号（有装备、持【闪】）后，
+**`询问=[]`**、1 号手牌不变（【闪】仍在）→ **虚拟杀未产生**（上游 `luweiyan2` 应在
+`useCardAfter` 时询问「是否视为使用一张杀？」并对可杀目标用杀）。
+
+**已核对的部分**：
+- 机器已注册：`content/host/factory.rs:420`（`HostBehavior::YunchouLuweiyan2 => (Some(owner), None)`）；
+- 过滤器已注册：`content/host/filtering/common.rs:16` → `support.rs:3` `u_matches_lw2`
+  （`CardUsed` 且 `player == owner` 且 `use_as|card_kind == Shuigong` 且 `targets` 非空）；
+- 效果分支：`content/host/step/yunchou.rs:280`（座位序取**首目标**用虚拟杀；注释自述
+  「登记差异：上游玩家选目标+可取消，原生自动首目标」）。
+
+**疑点（根因待查）**：`factory.rs` 该行为返回的 `(source, target)` 中 **target 为 `None`**，
+机器 `self.targets` 可能因此为空 → `find(...)` 返回 None → **不产生虚拟杀**。
+
+**修法**：让链杀机器取得**本张水攻的目标表**（如经 `CardUsed.targets` 注入），再按座位序取首目标。
+
+**验收**：样本 77 的 `upstream_luweiyan_chain_kill_fires_on_first_target`（当前 `#[ignore]`）
+应能运行并通过（出现【闪】响应询问、1 号手牌不含该【闪】）。
+
+**同时登记**：上游「玩家选目标 + 可取消」↔ 原生「自动首目标」（即使修好 targets，该差异仍在）。
