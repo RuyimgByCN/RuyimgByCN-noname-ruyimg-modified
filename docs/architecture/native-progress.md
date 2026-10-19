@@ -32,6 +32,9 @@
 >
 > **第 385 轮续**：完成 **`global` 卡窗口映射表**（台账第 151 行 + 证据目录）——12 张逐卡定位 `skill.js` 的 `trigger`：**金莲珠 damageBefore / 神草结 damageBegin / 石灰粉 phaseUseBegin / 神秘果 useCardAfter** 四条与既有样本或源码注释**逐条一致**（交叉验证通过）；其余 8 张亦已定位（趁火打劫 damageEnd、朱fang神石 useCardAfter、器族三件 phaseBegin、白首之虎 discardEnd、玄武/朱雀 damageEnd）。
 >
+> **第 386 轮**：按映射表验证**第 2 张** `global` 窗口——`chenhuodajie`（趁火打劫，样本 152）：**伤害已确认发生**（1 号 hp 4→3），但**仅出现 `respond_shan`**、**未见 `damageEnd` 窗口** ⇒ **未验收**（第 53 项）；**对照**：主动使用路径可用（样本 145）⇒ 缺的是**窗口路径**；诊断候选＝窗口未实现/需目标/`{global:}` 语义差异（下一步用**受伤者本人持有**的对照实验区分）。
+>
+
 
 
  与**核对 4 项（144–147）**；**全量 1480/0/19（engine-native）**；行数门禁通过。
