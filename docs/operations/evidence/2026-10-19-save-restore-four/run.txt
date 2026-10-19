@@ -1,0 +1,4 @@
+NOTE 保存恢复：cardpile-upstream-liuli 无 cards.json / character.json —— 跳过
+NOTE 保存恢复：cardpile-upstream-noname 无 cards.json / character.json —— 跳过
+DBG 保存恢复：d3-upstream-noname 往返成功（hash 一致、可继续推进）
+DBG 保存恢复：wudian-upstream-noname 往返成功（hash 一致、可继续推进）
