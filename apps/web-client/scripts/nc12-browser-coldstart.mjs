@@ -94,6 +94,7 @@ for (let i = 0; i < iters; i++) {
   }
   const toInteractiveMs = Date.now() - t0;
   const workerTimings = await c.evalJs(`window.__nativeInitTimings || []`);
+  const startMarks = await c.evalJs(`window.__nativeStartMarks || {}`);
   const perf = await c.evalJs(`(() => {
     const nav = performance.getEntriesByType('navigation')[0] || {};
     const res = performance.getEntriesByType('resource').map(r => ({ name: r.name.split('/').pop(), dur: r.duration, size: r.transferSize }));
@@ -107,7 +108,7 @@ for (let i = 0; i < iters; i++) {
   })()`);
   results.push({
     iter: i, lobby_ready: ready, interactive, to_interactive_ms: toInteractiveMs,
-    worker_init_timings: workerTimings, perf,
+    worker_init_timings: workerTimings, start_marks: startMarks, perf,
   });
   c.ws.close();
   chrome.kill("SIGTERM");

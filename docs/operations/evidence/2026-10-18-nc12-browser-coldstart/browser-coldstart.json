@@ -4,18 +4,25 @@
       "iter": 0,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 260,
+      "to_interactive_ms": 261,
       "worker_init_timings": [
         {
-          "fetch_ms": 7.3,
-          "instantiate_ms": 1.8,
-          "total_ms": 9.1,
+          "fetch_ms": 6.8,
+          "instantiate_ms": 2.1,
+          "total_ms": 8.9,
           "wasm_bytes": 2644903
         }
       ],
+      "start_marks": {
+        "t0_click": 267.7,
+        "t1_worker_ready": 285.5,
+        "t2_start_done": 287.8,
+        "t3_candidates_loaded": 413.3,
+        "t4_first_frame": 413.3
+      },
       "perf": {
-        "domContentLoaded": 43.39999997615814,
-        "loadEvent": 44,
+        "domContentLoaded": 40.60000002384186,
+        "loadEvent": 41.200000047683716,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"
@@ -26,18 +33,25 @@
       "iter": 1,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 260,
+      "to_interactive_ms": 261,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.5,
-          "instantiate_ms": 1.7,
-          "total_ms": 8.2,
+          "fetch_ms": 6,
+          "instantiate_ms": 2,
+          "total_ms": 8,
           "wasm_bytes": 2644903
         }
       ],
+      "start_marks": {
+        "t0_click": 259.3,
+        "t1_worker_ready": 274.7,
+        "t2_start_done": 277,
+        "t3_candidates_loaded": 403.1,
+        "t4_first_frame": 403.2
+      },
       "perf": {
-        "domContentLoaded": 33,
-        "loadEvent": 33.69999998807907,
+        "domContentLoaded": 37.39999997615814,
+        "loadEvent": 38,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"
@@ -51,15 +65,22 @@
       "to_interactive_ms": 260,
       "worker_init_timings": [
         {
-          "fetch_ms": 5.9,
+          "fetch_ms": 6.2,
           "instantiate_ms": 1.9,
-          "total_ms": 7.8,
+          "total_ms": 8.1,
           "wasm_bytes": 2644903
         }
       ],
+      "start_marks": {
+        "t0_click": 260.5,
+        "t1_worker_ready": 276.2,
+        "t2_start_done": 278.5,
+        "t3_candidates_loaded": 404.4,
+        "t4_first_frame": 404.4
+      },
       "perf": {
-        "domContentLoaded": 41,
-        "loadEvent": 41.60000002384186,
+        "domContentLoaded": 31.600000023841858,
+        "loadEvent": 32.30000001192093,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"

@@ -109,3 +109,33 @@ node apps/web-client/scripts/nc12-browser-coldstart.mjs http://127.0.0.1:8124/ <
 - [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）
 - [ ] 真实网络（非本机）与慢网/丢包
 - [ ] 浏览器内**完整对局**（已在 [fullgame 证据](../2026-10-18-nc12-browser-fullgame/README.md)）与动画帧/输入响应
+
+## 8 追加：**应用侧 ~251 ms 的拆分**（页面内埋点，2026-10-19 同轮）
+
+**做法**：在 `BattleView.vue::connectAndStart` 的本地开局路径埋 `performance.now()` 标记
+（诊断钩子 `window.__nativeStartMarks`，**不参与业务逻辑**）：
+`t0_click`（进入开局流程）→ `t1_worker_ready`（worker 连接完成，含 WASM 初始化）
+→ `t2_start_done`（建局往返完成）→ `t3_candidates_loaded`（选将候选拉取完成）
+→ `t4_first_frame`（`nextTick` 后首帧）。
+
+**实测（3 轮，[coldstart-appsplit.log](coldstart-appsplit.log)）**：
+
+| 轮 | worker 连接 | 建局 | 候选拉取 + 首帧 | 合计（t0→t4） | 其中 WASM 初始化 |
+|---|---:|---:|---:|---:|---:|
+| 0 | 17.8 | 2.3 | **125.5** | **145.6** | 8.9 |
+| 1 | 15.4 | 2.3 | **126.2** | **143.9** | 8.0 |
+| 2 | 15.7 | 2.3 | **125.9** | **143.9** | 8.1 |
+
+**结论与更正（重要）**：
+1. **应用侧主成本是「选将候选拉取 + 首帧渲染」≈ 126 ms**（候选 93 项），而非 worker 启动或建局
+   （两者合计 < 20 ms，建局仅 2.3 ms）；
+2. **此前的 `to_interactive_ms` 260 ms 是「轮询口径」**（脚本每 **250 ms** 轮询一次可交互标志）→
+   含最多 250 ms 的**测量延迟**；页面内埋点的精确值为 **≈ 144–146 ms**。
+   → 后续结论应以**埋点值**为准，`to_interactive_ms` 保留为跨轮可比的历史口径（同一脚本、同一轮询间隔）。
+
+### 仍未完成（更新）
+
+- [ ] 选将候选 126 ms 的进一步优化/拆分（候选生成在引擎侧还是渲染侧；可否懒加载）
+- [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）
+- [ ] 真实网络（非本机）与慢网/丢包
+- [ ] 动画帧/输入响应指标；浏览器内完整对局见 [fullgame 证据](../2026-10-18-nc12-browser-fullgame/README.md)

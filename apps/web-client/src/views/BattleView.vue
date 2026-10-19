@@ -37,6 +37,7 @@ import BattleBoard from "../components/battle/BattleBoard.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
 import { outcomeText } from "../engine/outcome";
+import { nextTick } from "vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -163,7 +164,19 @@ async function connectAndStart() {
       return;
     }
     configureLocalAppearanceCatalog();
+    // NC12 应用侧冷启动拆分（诊断钩子，不参与业务逻辑）：
+    // t0→t1 = worker 连接（含 worker 脚本加载与 init 回包）
+    // t1→t2 = 建局（start 往返）
+    // t2→t3 = 选将候选拉取 + 首帧渲染（下一 tick）
+    const nc12Mark = (name: string) => {
+      (globalThis as unknown as { __nativeStartMarks?: Record<string, number> })
+        .__nativeStartMarks ??= {};
+      (globalThis as unknown as { __nativeStartMarks: Record<string, number> })
+        .__nativeStartMarks[name] = Math.round(performance.now() * 100) / 100;
+    };
+    nc12Mark("t0_click");
     await localClient.connect();
+    nc12Mark("t1_worker_ready");
     store.connected = true;
     statusLine.value = localClient.isNative()
       ? "原生 Worker 就绪，开局中…"
@@ -174,8 +187,12 @@ async function connectAndStart() {
       generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
     }
     const env = await localClient.start(players.value, seed.value, selfId.value);
+    nc12Mark("t2_start_done");
     await handleEnvelope(env);
     if (localClient.isNative()) await loadGeneralCandidates();
+    nc12Mark("t3_candidates_loaded");
+    await nextTick();
+    nc12Mark("t4_first_frame");
     const lock = contentLockSummary();
     pushLog(
       store,
