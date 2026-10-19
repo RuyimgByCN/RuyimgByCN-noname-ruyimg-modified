@@ -69,6 +69,22 @@ RESULT scenario=browser_identity_fullgame tier=web
 `LordSide` / `Traitor`（以及原型模式的 `Winner::Player`）**未覆盖** → **待办**：需要能主动进攻的
 驱动（或定向构造局面）才能覆盖其余类别。
 
+## 2a-3 三类身份局结果**全部覆盖**（引擎侧定向构造，2026-10-19 同轮）
+
+用 `debug_set_identity_roles` 固定身份 + 定向击杀，覆盖身份局全部三类结果：
+
+| 结果类别 | 构造方式 | 实测 |
+|---|---|---|
+| `Winner::Rebels` | 5 席自然推进（浏览器侧 4 种子亦得此结果） | ✅ `Outcome { winner: Rebels }` |
+| `Winner::LordSide` | 4 席 `[Lord, Loyalist, Rebel, Traitor]` → 击杀**反贼与内奸** | ✅ `Outcome { winner: LordSide }` |
+| `Winner::Traitor` | 同上 → 击杀**忠臣与反贼**，再杀主公（场上仅剩内奸） | ✅ `Outcome { winner: Traitor }` |
+
+原始输出：[outcome-classes.txt](outcome-classes.txt)。
+
+**夹具经验（写入本条）**：**每次击杀前后都要驱动**——前一人的濒死/死亡结算若仍挂起，
+后续 `debug_deal_damage` **不会落地**（初版主公阵营用例即因此 `outcome=None`，诊断显示
+内奸仍 `alive=true hp=1`）。
+
 ## 2b （历史）浏览器侧前置的受阻与打通记录
 
 | 步骤 | 状态 |
@@ -92,7 +108,9 @@ src/worker/native-pkg`，目标 crate `engine-native-wasm`）；`build-wasm.mjs`
 - [x] 浏览器身份局端到端：跑到终局且**胜负展示**出现（反贼胜利）
 - [ ] 与「浏览器整局（原型口径，319 步 / 3 局 3 胜）」**并列记录**（两者口径不同，已分列）
 - [x] 多种子重跑已做（4 种子，均到达终局、0 console error）——但**仅覆盖「反贼胜」一类**
-- [ ] 覆盖其余结果类别（`LordSide` / `Traitor`；原型模式 `Winner::Player`）——需主动进攻驱动或定向局面
+- [x] **身份局三类结果已在引擎侧全部覆盖**（Rebels / LordSide / Traitor，定向构造）
+- [ ] **浏览器侧**覆盖 `LordSide` / `Traitor`（需主动进攻驱动或定向局面；当前浏览器只观测到 Rebels）
+- [ ] 原型模式的 `Winner::Player`（另一模式，非身份局）
 
 ## 4 验证结果
 

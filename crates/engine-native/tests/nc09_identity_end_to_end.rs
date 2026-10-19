@@ -8,7 +8,7 @@
 //!   `Winner::{LordSide, Rebels, Traitor}` 三者之一（`Winner` 的其它变体属原型/国战/对决/斗地主）；
 //! - **浏览器侧**身份局端到端（真实构建产物 + WASM worker）**仍未**完成（登记待办）。
 
-use engine_native::state::{Outcome, Winner};
+use engine_native::state::{Outcome, Role, Winner};
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
 use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -128,4 +128,62 @@ fn identity_game_is_stable_after_terminal() {
     );
     assert_eq!(h1, e.state_hash(), "被拒命令不应改变状态哈希");
     let _ = Phase::Play;
+}
+
+/// 结果类别覆盖（定向构造）：**主公阵营胜**——杀死全部反贼与内奸。
+#[test]
+fn identity_outcome_lord_side() {
+    let mut e = Engine::new_identity(20267301, 4);
+    e.debug_set_identity_roles(vec![
+        Role::Lord,
+        Role::Loyalist,
+        Role::Rebel,
+        Role::Traitor,
+    ]);
+    let _ = drive(&mut e, 200);
+    for seat in [2u8, 3] {
+        // 每次击杀前后都驱动一次：前一人的濒死/死亡结算若仍挂起，后续伤害不会落地
+        let _ = drive(&mut e, 200);
+        e.debug_set_hp(seat, 1);
+        let _ = drive(&mut e, 50);
+        e.debug_deal_damage(Some(seat), seat, 1, engine_native::event::DamageNature::Normal);
+        let _ = drive(&mut e, 200);
+    }
+    let outcome = e.state_core().outcome.clone();
+    let alive: Vec<(u8, bool, i32)> = (0..4u8)
+        .map(|p| (p, e.state_core().player(p).alive, e.state_core().player(p).hp))
+        .collect();
+    eprintln!("DBG 主公阵营：outcome={outcome:?} roles={:?} alive/hp={alive:?}", e.state_core().identity_roles());
+    let Some(Outcome { winner }) = outcome else {
+        panic!("杀死反贼与内奸后应到达终局");
+    };
+    assert_eq!(winner, Winner::LordSide, "应为主公阵营胜");
+}
+
+/// 结果类别覆盖（定向构造）：**内奸胜**——主公死亡时场上只剩内奸。
+#[test]
+fn identity_outcome_traitor() {
+    let mut e = Engine::new_identity(20267302, 4);
+    e.debug_set_identity_roles(vec![
+        Role::Lord,
+        Role::Loyalist,
+        Role::Rebel,
+        Role::Traitor,
+    ]);
+    let _ = drive(&mut e, 200);
+    // 先清掉忠臣与反贼，再杀主公 → 场上只剩内奸
+    for seat in [1u8, 2] {
+        e.debug_set_hp(seat, 1);
+        e.debug_deal_damage(Some(seat), seat, 1, engine_native::event::DamageNature::Normal);
+        let _ = drive(&mut e, 200);
+    }
+    e.debug_set_hp(0, 1);
+    e.debug_deal_damage(Some(0), 0, 1, engine_native::event::DamageNature::Normal);
+    let _ = drive(&mut e, 200);
+    let outcome = e.state_core().outcome.clone();
+    eprintln!("DBG 内奸：outcome={outcome:?}");
+    let Some(Outcome { winner }) = outcome else {
+        panic!("主公死亡且仅剩内奸后应到达终局");
+    };
+    assert_eq!(winner, Winner::Traitor, "应为内奸胜");
 }

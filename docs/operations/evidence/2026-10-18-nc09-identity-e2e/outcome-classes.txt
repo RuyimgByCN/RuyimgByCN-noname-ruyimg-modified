@@ -1,0 +1,3 @@
+DBG 内奸：outcome=Some(Outcome { winner: Traitor })
+DBG 身份局：座位=5 主公=0 驱动步数=600 outcome=Some(Outcome { winner: Rebels }) 阶段=Judge
+DBG 主公阵营：outcome=Some(Outcome { winner: LordSide }) roles=Some([Lord, Loyalist, Rebel, Traitor]) alive/hp=[(0, true, 5), (1, true, 4), (2, false, 0), (3, false, 0)]
