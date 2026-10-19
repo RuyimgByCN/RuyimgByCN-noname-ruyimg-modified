@@ -1,0 +1,1 @@
+DBG 悲歌：询问=["trigger_confirm", "beige_discard"] 弃牌=true 1 号 hp 4 → 4
