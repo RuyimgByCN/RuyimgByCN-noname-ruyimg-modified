@@ -3634,7 +3634,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 |---|---|---|---|
 | **取牌位置** | 伤害/使用牌在**处理区**（`position === 'o'`）时可取 | `table` 优先、**弃牌堆兜底**（`xicai`）；`jianxiong` 门槛为「**已在弃牌堆**」 | xicai / jianxiong |
 | **计数建模** | 技能标记数（如 `chunbing_markcount = 5`） | 建模为监听技 **`rounds`（剩余回合）** | chunbing |
-| **随机弃置** | `hs.randomGet()`（真随机） | **确定性首张**（`hand.first()`） | linghunzhihuo（同族多处） |
+| **随机取/弃牌** | `hs.randomGet()` / `gainMultiple`（真随机） | **确定性首张**（`hand.first()`；突袭为「各区首张」） | **linghunzhihuo + tuxi** |
 | **门槛集合** | 阵法 `enable` 仅要求「**存在大势力**」 | 额外要求**存活 ≥ 4** | tianfuzhen |
 | **技能覆盖面** | 集智 = **任意锦囊**（`get.type === 'trick'`） | 仅 **5 种**锦囊（南蛮/万箭/决斗/铁索/无懈）→ **规则损失** | jizhi |
 | ~~标记/子技面未实现~~ | — | **口径更正（2026-10-19）**：`sbjizhi`/`sbjianxiong` 属 `character/sb/` 面，**非规则基准来源**；基准来源 `character/standard/skill.js` 的集智/奸雄**本就没有**标记面 → **不作为差异** | ~~jizhi / jianxiong~~ |
@@ -3651,6 +3651,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **改判牌区**（标准面 `guicai`） | 非国战 `hs`（手牌 + **装备区**），**不限花色** | 手牌全量 ✅；**装备区候选受 `is_black` 限制**（鬼道口径）→ 鬼才非黑装备不能改判 | guicai |
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
+| **取消摸牌的弃置面**（标准面 `tuxi`） | `trigger.changeToZero()`：**取消摸牌**（不摸不弃） | `Read` 阶段**无条件 `hand.pop()` 弃 2 张** → 若固定摸牌尚未发生即弃原有手牌（净变化 0，应为 +取牌数） | tuxi |
 | **失去事件覆盖面**（标准面 `lianying`） | `loseAfter` + 5 个全局异步面 | 四类显式事件（`CardUsed`/`CardResponded`/`CardsMoved`/`CardsDiscarded`）；注释自述**批量弃置未覆盖** | lianying |
 | **阈值 off-by-one**（标准面 `lianying`） | 失去后**手牌为空**才触发 | filter `hand.len() > 1` 在**牌已离手后**求值 → 剩 1 张即触发（**原生更宽松**，实测出现确认门） | lianying |
 | **多目标选择权**（标准面 `lijian`） | `selectTarget: 2` + `filterTarget`：玩家手动选 2 名男性（顺序决定谁先出杀） | **自动选目标**（全程仅 `lijian_discard` 询问）→ 玩家无目标/顺序选择权 | lijian |
@@ -3658,7 +3659,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **`viewAs` 固定优先级**（`qixi`/`guose`/`wusheng`） | 多候选由**玩家选择** | 固定顺序（国色 > 武圣 > 龙胆/奇袭等，`play_card.rs` 注释） | qixi/guose/wusheng |
 | **转化候选选择**（标准面 `qixi`） | 多个 `viewAs` 之间由**玩家选择** | **固定优先级**（杀类优先，`play_card.rs:156`）；黑色【杀】持奇袭时只作【杀】 | qixi |
 | **摸牌数固定分支**（标准面 `yingzi`） | `filter: !event.numFixed`（摸牌数被固定时**不**加成） | filter **只判阶段**；全 crate 无 `numFixed`/`num_fixed` | yingzi |
-| **摸牌数固定分支**（`luoyi` 同族） | `filter: !event.numFixed && event.num > 0` | filter 只判阶段（同一缺口；两技能同族） | **yingzi + luoyi** |
+| **摸牌数固定分支**（`luoyi`/`tuxi` 同族） | `filter: !event.numFixed`（`luoyi` 另含 `num > 0`） | filter 只判阶段（同一缺口；三技能同族） | **yingzi + luoyi + tuxi** |
 | **弃牌执行时机**（口径，非差异） | — | 上限裁剪发生在**进入弃牌阶段时**（探针实测 15→4）；夹具须在**回合前**堆手牌 | keji |
 
 **标准面「原生更宽松」汇总（2026-10-19）**：逐技能对照发现 **4 处**原生比上游宽松的差异：

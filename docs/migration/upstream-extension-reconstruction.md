@@ -198,6 +198,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 36 | 标准面（技能） | `guicai` | 3 点通过 + 1 处差异登记（鬼才装备区受 `is_black` 限制）+ 同类登记（`guidao` 非标准面） | [nc08-upstream-guicai](../operations/evidence/2026-10-18-nc08-upstream-guicai/README.md) |
 | 37 | 标准面（技能） | `lianying` | 3 点通过 + 3 处差异登记（事件覆盖面、门槛写法、**阈值 off-by-one（原生更宽松）**） | [nc08-upstream-lianying](../operations/evidence/2026-10-18-nc08-upstream-lianying/README.md) |
 | 38 | 标准面（技能） | `luoyi` | 3 点全部通过（少摸 1 + 伤害 +1）+ 2 处差异登记（`numFixed` 未建模、helper 未检查牌种/`notLink`，未判定） | [nc08-upstream-luoyi](../operations/evidence/2026-10-18-nc08-upstream-luoyi/README.md) |
+| 39 | 标准面（技能） | `tuxi` | 发动 + 放弃摸牌通过 + **3 处差异登记**（`numFixed` 族第 3 例、取牌确定性族第 2 例、**③无条件弃 2 张手牌**） | [nc08-upstream-tuxi](../operations/evidence/2026-10-18-nc08-upstream-tuxi/README.md) |
 
 **覆盖面**：**21/37 来源**已有第⑦层上游样本；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
