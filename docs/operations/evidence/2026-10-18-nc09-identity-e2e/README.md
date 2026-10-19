@@ -30,8 +30,25 @@
   **不是**「AI/玩家自然打完整局」（后者由 NC12 浏览器整局覆盖，口径为原型/单挑）。
 - 座位数 5（身份局标准）；`Winner` 的其它变体（`Player`/`Faction`/`Versus`/`Doudizhu`）属其它模式。
 
+## 2b 浏览器侧前置：WASM 身份局构造已加，前端接线**受阻于 wasm 包重建路径**
+
+| 步骤 | 状态 |
+|---|---|
+| ① `NativeEngine::new_identity`（Rust/WASM 导出） | ✅ 已实现并提交（`f0118062`）；`engine-native-wasm` 定向全通过 |
+| ② 前端接线（HomeView 模式选择 / `client.start` 的 `mode` / worker 分派 / `nativeBackend` 封装 / 协议类型） | ⚠️ **已写好但已回退**：补丁存于 [frontend-identity-wiring.patch](frontend-identity-wiring.patch)（153 行） |
+| ③ wasm 包重建 | ❌ **未打通**：worker 从 `src/worker/native-pkg/engine_native_wasm.*` 导入，而
+`pnpm --dir apps/web-client build:wasm`（`scripts/build-wasm.mjs`）输出到 **`src/wasm-pkg/engine_wasm.*`**（**不同包名/目录**）→ 重建后 `native-pkg` 仍**不含** `new_identity` → 类型检查报错 |
+
+**处置（不破坏工作区）**：因 ② 依赖 ③，若把 ② 留在工作区会让 `vue-tsc --noEmit` **报错**
+（`new_identity` 不存在）→ 故**把 ② 回退并把补丁存证**，待 ③ 打通后 `git apply` 该补丁即可。
+
+**③ 的打通线索**：需确认 `native-pkg` 的生成方式（疑为另一条 wasm-pack 命令，`--out-dir
+src/worker/native-pkg`，目标 crate `engine-native-wasm`）；`build-wasm.mjs` 的 `outDir`
+指向 `src/wasm-pkg` 且产物名为 `engine_wasm.*`，与本包不一致。
+
 ## 3 未完成（**浏览器侧**身份局端到端）
 
+- [ ] **打通 wasm 包重建路径**（见 §2b ③）→ 再 `git apply frontend-identity-wiring.patch`
 - [ ] 真实构建产物 + WASM worker 下，以**身份局**开局跑到终局并检查胜负**展示**（前端文案）
 - [ ] 与已完成的「浏览器整局（原型口径，319 步 / 3 局 3 胜）」并列记录，**不混记**
 

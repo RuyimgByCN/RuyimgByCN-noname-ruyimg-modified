@@ -1,0 +1,153 @@
+diff --git a/apps/web-client/src/engine/client.ts b/apps/web-client/src/engine/client.ts
+index 90662f0a..2b5748ef 100644
+--- a/apps/web-client/src/engine/client.ts
++++ b/apps/web-client/src/engine/client.ts
+@@ -116,6 +116,7 @@ export class EngineClient {
+     seed: number,
+     observer = 1,
+     packsJson?: string,
++    mode?: "identity",
+   ): Promise<EngineEnvelope> {
+     return this.request({
+       id: this.nextId(),
+@@ -124,6 +125,7 @@ export class EngineClient {
+       seed,
+       observer,
+       packsJson,
++      mode,
+     }) as Promise<EngineEnvelope>;
+   }
+ 
+diff --git a/apps/web-client/src/types/engine.ts b/apps/web-client/src/types/engine.ts
+index 747ce664..e69aaedd 100644
+--- a/apps/web-client/src/types/engine.ts
++++ b/apps/web-client/src/types/engine.ts
+@@ -251,6 +251,8 @@ export type WorkerRequest =
+       seed: number;
+       observer: number;
+       packsJson?: string;
++      /** 对局模式：`"identity"` = 身份局（NC09 身份局端到端）；缺省原型模式。 */
++      mode?: "identity";
+     }
+   | { id: number; type: "endPhase"; actor?: number }
+   | { id: number; type: "playCard"; actor: number; card: number; targets: number[] }
+diff --git a/apps/web-client/src/views/BattleView.vue b/apps/web-client/src/views/BattleView.vue
+index 9f19d4fd..431b4211 100644
+--- a/apps/web-client/src/views/BattleView.vue
++++ b/apps/web-client/src/views/BattleView.vue
+@@ -215,7 +215,14 @@ async function connectAndStart() {
+       selfId.value = Math.max(0, Math.min(selfId.value, players.value - 1));
+       generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
+     }
+-    const env = await localClient.start(players.value, seed.value, selfId.value);
++    // mode=identity → 身份局（NC09 身份局端到端）；缺省原型模式
++    const env = await localClient.start(
++      players.value,
++      seed.value,
++      selfId.value,
++      undefined,
++      route.query.mode === "identity" ? "identity" : undefined,
++    );
+     nc12Mark("t2_start_done");
+     // NC12 冷启动优化（2026-10-19，两处）：
+     // ① 选将候选拉取与**开局信封处理并发**（此前在 `handleEnvelope` 之后才发起 → 被其
+diff --git a/apps/web-client/src/views/HomeView.vue b/apps/web-client/src/views/HomeView.vue
+index 8acefff3..4fdd383c 100644
+--- a/apps/web-client/src/views/HomeView.vue
++++ b/apps/web-client/src/views/HomeView.vue
+@@ -9,6 +9,8 @@ import {
+ const router = useRouter();
+ const players = ref(4);
+ const seed = ref(42);
++/** 对局模式：prototype（原型，默认）| identity（身份局，NC09 身份局端到端）。 */
++const mode = ref<"prototype" | "identity">("prototype");
+ const displayName = ref(`player-${Math.floor(Math.random() * 900 + 100)}`);
+ const password = ref("");
+ const roomId = ref(1);
+@@ -23,7 +25,12 @@ onMounted(async () => {
+ function goBattle() {
+   router.push({
+     path: "/battle",
+-    query: { players: String(players.value), seed: String(seed.value) },
++    query: {
++      players: String(players.value),
++      seed: String(seed.value),
++      // 身份局（NC09 身份局端到端）；原型模式不写该参数
++      ...(mode.value === "identity" ? { mode: "identity" } : {}),
++    },
+   });
+ }
+ 
+@@ -98,6 +105,13 @@ const roomLabel = computed(() => (roomId.value > 0 ? `#${roomId.value}` : "—")
+             aria-label="随机种子"
+           />
+         </label>
++        <label class="field">
++          <span>模式</span>
++          <select v-model="mode" aria-label="对局模式">
++            <option value="prototype">原型（唯一存活者）</option>
++            <option value="identity">身份局（主忠/反贼/内奸）</option>
++          </select>
++        </label>
+         <button class="primary" type="button" @click="goBattle">
+           本地开局
+         </button>
+diff --git a/apps/web-client/src/worker/engine.native.worker.ts b/apps/web-client/src/worker/engine.native.worker.ts
+index 66bad6e3..c0435c3d 100644
+--- a/apps/web-client/src/worker/engine.native.worker.ts
++++ b/apps/web-client/src/worker/engine.native.worker.ts
+@@ -10,6 +10,7 @@ import {
+   generalCandidates,
+   lastCandidateTimings,
+   nativeCreate,
++  nativeCreateIdentity,
+   nativeCreateWithPacks,
+   nativeDispatch,
+   nativeEnvelope,
+@@ -42,9 +43,13 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
+ 
+     switch (msg.type) {
+       case "start": {
+-        handle = msg.packsJson
+-          ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
+-          : nativeCreate(msg.players, msg.seed, msg.observer);
++        // mode: "identity" → 身份局（NC09 身份局端到端）；缺省为原型模式
++        handle =
++          msg.mode === "identity"
++            ? nativeCreateIdentity(msg.players, msg.seed, msg.observer)
++            : msg.packsJson
++              ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
++              : nativeCreate(msg.players, msg.seed, msg.observer);
+         reply({ id: msg.id, ok: true, data: nativeEnvelope(handle) });
+         return;
+       }
+diff --git a/apps/web-client/src/worker/nativeBackend.ts b/apps/web-client/src/worker/nativeBackend.ts
+index 53ba8073..cb4a3bc0 100644
+--- a/apps/web-client/src/worker/nativeBackend.ts
++++ b/apps/web-client/src/worker/nativeBackend.ts
+@@ -99,6 +99,25 @@ export function nativeCreate(
+   };
+ }
+ 
++/**
++ * **身份局**建局（NC09 身份局端到端，浏览器侧）。
++ *
++ * 与 {@link nativeCreate} 的唯一区别是 `GameMode::Identity`（主公/忠臣/反贼/内奸），
++ * 胜负结果走 `Winner::{LordSide, Rebels, Traitor}`。
++ */
++export function nativeCreateIdentity(
++  players: number,
++  seed: number,
++  observer = 0,
++): NativeHandle {
++  return {
++    engine: NativeEngine.new_identity(players, BigInt(seed)),
++    seed,
++    players,
++    observer,
++  };
++}
++
+ /** 已安装扩展的 cards.json 数组建局。空数组与 nativeCreate 相同。 */
+ export function nativeCreateWithPacks(
+   players: number,
