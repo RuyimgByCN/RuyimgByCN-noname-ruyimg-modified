@@ -539,3 +539,15 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 **同族**：与 `xiaoji`（第 12 项）、`lianying`（覆盖面）同属「**事件臂覆盖面**」族（**3 例**）——
 修法可一并评估：**统一以「全局失去/获得事件」为入口**，而非逐臂补丁。
+
+### 27b 急援的濒死臂多一层 `dying` 守卫（样本 63 行为面新发现，2026-10-19）
+
+**症状（规则损失）**：`crates/engine-native/src/content/standard/skills/ji_yuan.rs` 的 `step` 为
+`if ctx.core.player(player).dying { ctx.draw_cards(player, 1) }` —— **额外要求 `dying == true`**；
+上游 `content` 是 `await event.targets[0].draw()`（**无条件**）。实测（真实伤害打至 hp=0）：
+`询问=["trigger_confirm","discard_to_limit"]`、`2 号 hp=0 dying=false alive=false`、**手牌未增加**
+→ 濒死未被救回时**少摸一张**。
+
+**修法**：去掉 `dying` 守卫（或改为「事件帧中即为濒死者」的判据），与上游无条件 `draw()` 对齐。
+
+**验收**：`upstream_jiyuan_dying_arm_draws_one` 改为断言**手牌 +1**（当前为「登记差异」断言）。

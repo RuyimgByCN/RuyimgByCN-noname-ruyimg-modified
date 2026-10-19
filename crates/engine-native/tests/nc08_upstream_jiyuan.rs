@@ -37,6 +37,8 @@
 //! 未覆盖（登记）：**濒死臂的行为面**（需构造「角色进入濒死 + 伊籍存活」场景并驱动结算）；
 //! `audio` 表现面。
 
+mod nc08_common;
+
 use engine_native::Engine;
 
 /// 上游点 2（**共用效果**）：原生濒死臂与上游 `content` 同为「目标摸一张」。
@@ -94,4 +96,78 @@ fn upstream_jiyuan_missing_arms_are_registered() {
         "原生已自述该差异（仅濒死臂）：{head}"
     );
     let _ = Engine::new(20269501, 4);
+}
+
+/// 上游点 2（**行为面 · 濒死臂**）：任一角色进入濒死 → 伊籍（持急援）令其**摸一张**。
+#[test]
+fn upstream_jiyuan_dying_arm_draws_one() {
+    use engine_native::{ChoiceOption, GameAction, GameCommand};
+    use nc08_common::{advance_to_play, drain, next_dedup};
+
+    let mut e = Engine::new(20269502, 4);
+    e.debug_grant(0, "急援");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 2 号进入濒死：必须走**真实伤害路径**（直接写 hp=0 不会置 dying，见既有教训）
+    let hand2_before = e.debug_hand(2).len();
+    let max2 = e.state_core().player(2).max_hp as i32;
+    e.debug_deal_damage(
+        Some(0),
+        2,
+        max2 as u32,
+        engine_native::event::DamageNature::Normal,
+    );
+    let mut prompts: Vec<String> = Vec::new();
+    for _ in 0..48 {
+        let Some(c) = e.open_choice().cloned() else {
+            let actor = e.turn().current;
+            let _ = e.submit(GameCommand {
+                actor,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::NextPhase,
+            });
+            continue;
+        };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 急援（濒死臂）：询问={prompts:?} 2 号手牌 {hand2_before} → {}（hp={} dying={} alive={}）",
+        e.debug_hand(2).len(),
+        e.debug_hp(2),
+        e.state_core().player(2).dying,
+        e.state_core().player(2).alive
+    );
+    // **登记差异（新发现，行为面）**：原生机器在 `step` 中额外要求 `player.dying == true`
+    // （`ji_yuan.rs`：「if ctx.core.player(player).dying { ctx.draw_cards(player, 1) }」），
+    // 而濒死结算推进到该步时 `dying` 可能已为 false（本例：2 号 hp=0、dying=false、alive=false
+    // → 已死亡）→ **摸牌未发生**；上游 `content` 为 `await event.targets[0].draw()`（**无条件**）
+    // → **原生多了一层 `dying` 守卫 = 规则损失**（濒死未被救回时少摸一张）。
+    assert_eq!(
+        e.debug_hand(2).len(),
+        hand2_before,
+        "差异登记：濒死臂实测未摸牌（2 号 hp=0 / dying=false / alive=false）——\
+         原生多一层 `dying` 守卫，上游为无条件 draw()"
+    );
+    let _ = Engine::new(20269503, 4);
 }

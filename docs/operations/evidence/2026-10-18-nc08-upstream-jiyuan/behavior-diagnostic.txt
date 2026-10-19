@@ -1,0 +1,1 @@
+DBG 急援（濒死臂）：询问=["trigger_confirm", "discard_to_limit"] 2 号手牌 0 → 0（hp=0 dying=false alive=false）
