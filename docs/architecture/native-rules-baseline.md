@@ -3659,6 +3659,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **规则量修饰方式**（`kongcheng`/`qianxun`/`paoxiao`） | `mod`：`targetEnabled`（统一拦截目标）/ `cardUsable`（把【杀】上限设为 `Infinity`） | 显式分支：`kongcheng` **3 处**校验、`qianxun` **2 处**校验、`paoxiao` **限次处 bypass** → 语义等价，但**规则量新增消费点时会漏**（**维护性风险**，非缺陷）；建议一次性收敛为「规则量修饰器」 | **kongcheng + qianxun + paoxiao（3 例）** |
 | **主公技资格判定**（`hujia`/`jijiang`/`wang_zun`/`jiuyuan`） | `hasZhuSkill(...)`（**仅身份局**具主公技旗标时成立） | `is_lord` 在**非身份局返回 true** → 四处调用在**原型模式**下均可发动；**经核对为有意设计**（`state.rs:1118` 注释：「无身份体系的模式持技即可」；原型模式非上游模式 → 等价性无定义）→ **设计差异，非缺陷**；旧线 `owner_is_lord` 用显式主公身份（若将来对齐可参照） | hujia（+3 处） |
 | **限次表示方式**（标准面 `kuangfu`） | `addTempSkill("stdkuangfu_used", "phaseChange")` 记每阶段一次 | 以「当前回合 + 出牌阶段」判定表达（源码自述**等价**，因触发仅在自身出牌阶段） | kuangfu |
+| **事件臂覆盖面**（`xiaoji`/`lianying`/`xinfu_jiyuan`） | 上游以**全局事件 + 多臂**表达：`loseAfter`+5 全局异步面（xiaoji/lianying）、`dying`+`gainAfter`+`loseAsyncAfter`（急援） | 原生只实现**其中一臂/四类显式事件**（枭姬仅 `Equipped{replaced}`；急援仅 `Dying`）→ **3 臂 → 1 臂**类缺口（**规则损失/覆盖面差异**） | **xiaoji + lianying + xinfu_jiyuan（3 例）** |
 | **失去事件覆盖面**（标准面 `lianying`） | `loseAfter` + 5 个全局异步面 | 四类显式事件（`CardUsed`/`CardResponded`/`CardsMoved`/`CardsDiscarded`）；注释自述**批量弃置未覆盖** | lianying |
 | **阈值 off-by-one**（标准面 `lianying`） | 失去后**手牌为空**才触发 | filter `hand.len() > 1` 在**牌已离手后**求值 → 剩 1 张即触发（**原生更宽松**，实测出现确认门） | lianying |
 | **多目标选择权**（标准面 `lijian`） | `selectTarget: 2` + `filterTarget`：玩家手动选 2 名男性（顺序决定谁先出杀） | **自动选目标**（全程仅 `lijian_discard` 询问）→ 玩家无目标/顺序选择权 | lijian |
