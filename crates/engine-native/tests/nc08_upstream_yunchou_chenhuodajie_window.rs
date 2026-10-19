@@ -158,3 +158,92 @@ fn upstream_chenhuodajie_window_after_damage() {
         "趁火打劫（窗口内使用）：打出 −1、获得 1 ⇒ 持有者手牌数不变（{h0_before} → {h0_after}）"
     );
 }
+
+/// **决定性对照（第 53 项）**：把趁火打劫放在**受伤者本人**（1 号）手中，重复同一局面。
+///
+/// 判读：
+/// - 若 **1 号获提供** 而 0 号不获提供 ⇒ **窗口只对受伤者本人开放**（`{ global: … }` **语义差异**，候选③成立）；
+/// - 若 **1 号也不获提供** ⇒ 窗口**未实现/需其它条件**（候选①/②）。
+#[test]
+fn upstream_chenhuodajie_window_damaged_player_holds_it() {
+    let mut e = yunchou_engine(20288402);
+    assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // **1 号持有趁火打劫**；0 号出【杀】打 1 号
+    let card1 = {
+        let id = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.name.contains("chenhuodajie"))
+            .map(|(i, _)| i as engine_native::CardId)
+            .expect("趁火打劫在目录");
+        nc08_common::put_hand(&mut e, 1, id);
+        id
+    };
+    let sha = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
+        e.debug_place(0, name)
+    };
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: sha, targets: vec![1] },
+    });
+    eprintln!("DBG 趁火打劫对照：0 号出杀={out:?}");
+    let mut prompts: Vec<String> = Vec::new();
+    let mut offered_to: Vec<usize> = Vec::new();
+    let mut used = false;
+    for _ in 0..32 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if !prompts.iter().any(|p| p == &c.spec.prompt.to_string()) {
+            prompts.push(format!("{}@obs{}", c.spec.prompt, c.observer));
+        }
+        if c.spec.options.contains(&ChoiceOption::Card(card1)) {
+            let obs = c.observer as usize;
+            if !offered_to.contains(&obs) {
+                offered_to.push(obs);
+            }
+            if !used {
+                used = true;
+                let _ = e.submit(GameCommand {
+                    actor: c.observer,
+                    expected_revision: e.revision(),
+                    dedup_id: next_dedup(),
+                    action: GameAction::Answer {
+                        choice_id: c.id,
+                        selection: vec![ChoiceOption::Card(card1)],
+                    },
+                });
+                continue;
+            }
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 趁火打劫对照（**受伤者本人持有**）：询问={prompts:?}；**获提供的观察者={offered_to:?}**；\
+         使用={used}；1 号 hp={}",
+        e.debug_hp(1)
+    );
+    eprintln!(
+        "NOTE 对照判读：若 offered_to 含 1 而不含 0 ⇒ **窗口只对受伤者本人开放**（候选③语义差异）；\
+         若两边都没有 ⇒ 候选①/②（窗口未实现或需其它条件）"
+    );
+}
