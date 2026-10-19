@@ -1,1 +1,3 @@
+DBG 裸衣伤害用例：确认门出现=false（不强制要求）
 DBG 裸衣：基线 hand=6 持技 hand=5 confirmed=false
+DBG 裸衣后【杀】造成伤害=2（无裸衣应为 1）

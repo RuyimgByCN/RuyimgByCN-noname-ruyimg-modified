@@ -105,16 +105,16 @@ fn upstream_luoyi_draws_one_less() {
 
 /// 上游点 3：本回合【杀】造成的伤害 **+1**（对比同种子基线）。
 ///
-/// **本轮未验收（登记，含诊断）**：夹具**未捕获裸衣确认门**（`SKIP：未出现裸衣确认门`）→
-/// 无法确认「本回合」加成旗标是否置位 → 该用例以 `#[ignore]` 守护（**不写成通过**）。
-/// 注：少摸 1 张已由 `upstream_luoyi_draws_one_less` 用**手牌数对照**独立验证（基线 6 → 持技 5）。
+/// **夹具已修（同轮）**：初版要求「捕获确认门」才继续，但裸衣在该路径下**无需确认即生效**
+/// （证据：少摸 1 张已由手牌数对照证实 6 → 5）→ 改为**不依赖确认门**：直接推进到出牌阶段，
+/// 用【杀】对比伤害。`#[ignore]` 已移除。
 #[test]
-#[ignore = "夹具未捕获裸衣确认门，无法验证伤害 +1（登记未验收）"]
 fn upstream_luoyi_sha_damage_plus_one() {
     let mut e = Engine::new(20266802, 4);
     e.debug_grant(0, "裸衣");
     // 直接置旗标：确认发动（模拟摸牌阶段已发动）——用 debug 驱动可减少布阵复杂度
     advance_to_phase(&mut e, 0, Phase::Draw);
+    // 有确认门则确认（该路径下裸衣可能无需确认即生效，故不强制要求出现）
     let mut confirmed = false;
     for _ in 0..16 {
         let Some(c) = e.open_choice().cloned() else { break };
@@ -134,10 +134,7 @@ fn upstream_luoyi_sha_damage_plus_one() {
         break;
     }
     drain(&mut e);
-    if !confirmed {
-        // 未捕获确认门 → 该用例**不构成验收**：显式 panic（避免静默 SKIP 被读成通过）
-        panic!("未验收：未捕获裸衣确认门（摸牌阶段触发未对上），无法验证伤害 +1");
-    }
+    eprintln!("DBG 裸衣伤害用例：确认门出现={confirmed}（不强制要求）");
     assert!(advance_to_phase(&mut e, 0, Phase::Play), "到出牌阶段");
     for p in 0..4 {
         e.debug_clear_hand(p);
