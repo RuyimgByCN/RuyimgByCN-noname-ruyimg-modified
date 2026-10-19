@@ -1,0 +1,31 @@
+tiandu: {
+		audio: 2,
+		audioname: ["re_guojia", "xizhicai", "gz_nagisa"],
+		trigger: { player: "judgeEnd" },
+		preHidden: true,
+		frequent(event) {
+			//if(get.mode()=='guozhan') return false;
+			return event.result.card?.name !== "du";
+		},
+		check(event) {
+			return event.result.card?.name !== "du";
+		},
+		filter(event, player) {
+			return get.position(event.result.card, true) === "o";
+		},
+		async content(event, trigger, player) {
+			player.gain({
+				cards: [trigger.result.card],
+				animate: "gain2",
+			});
+		},
+	},
+	yiji: {
+		audio: 2,
+		trigger: { player: "damageEnd" },
+		frequent: true,
+		filter(event) {
+			return event.num > 0;
+		},
+		getIndex(event, player, triggername) {
+			retur
