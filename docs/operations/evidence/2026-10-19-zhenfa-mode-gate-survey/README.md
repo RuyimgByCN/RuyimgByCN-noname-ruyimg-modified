@@ -44,7 +44,29 @@
 | `tianfuzhen`（天覆阵） | `game.hasPlayer(current => current.isMajor())`（**存在大势力**） | `target.isMajor() && target.countCards("he") > 0` | **合理**：身份局**无势力/大势力**概念 ⇒ 条件不满足 |
 | `qixingzhen`（七星阵） | `player.siege() \|\| player.sieged()`（**围攻/被围攻**） | `target === player` | **合理**：无围攻关系 |
 | `changshezhen`（长蛇阵） | `player.inline()` 或 `identity === "unknown"` 分支 | （无 `filterTarget`） | **合理**：无 `inline`（队列）关系 |
-| **`niaoxiangzhen`（鸟翔阵）** | **`: true`（恒真）** | `if (player.identity === target.identity) return false`（**须身份不同**） | **待核**：身份局**有身份**且我方与目标身份不同 ⇒ **理应可指定**，实测三形态均被拒 ⇒ **须专项核对** |
+| **`niaoxiangzhen`（鸟翔阵）** | **`: true`（恒真）** | 见下（**完整读全后**） | **合理**（**同日更正**，见 §更正） |
 
 ⇒ **3 张为合理拒绝**（条件依赖**势力/围攻/队列**，身份局天然不满足）；
 **`niaoxiangzhen` 待专项核对**（其 `enable` 恒真、`filterTarget` 仅要求身份不同）。
+
+## 更正：`niaoxiangzhen` 的 `filterTarget` 须**读全**（2026-10-19，同日）
+
+上一版只截取了 `filterTarget` 的**前两行**，误判为「**仅要求身份不同**」⇒ 记为「待核」。
+**完整读全**后（上游 `zhenfa/card.js`）：
+
+```js
+filterTarget(card, player, target) {
+    if (player.identity === target.identity) return false;          // ① 不能与自己同身份
+    if (target.identity === "unknown" || target.identity === "ye") return false;   // ② 目标身份须明确
+    return target.identity === target.next.identity
+        || target.identity === target.previous.identity;            // ③ **目标身份须与其相邻座位相同**
+},
+```
+
+⇒ 真实条件是「**目标的身份与其相邻座位相同**」（国战**同势力相邻**语义）——
+**身份局下通常不满足** ⇒ 三形态被拒**合理**；且原生**已实现**该卡
+（`kernel/intrinsic.rs:693` → `HostBehavior::SwdNiaoxiangzhenCard`；`content/host/step/swd_card_effects.rs:1329`；
+`engine/play_card.rs:903` 目标校验）。
+
+**方法教训**：核对 `filterTarget` **必须读完整函数体**；**截断读取会把「多条件」误判为「单条件」**，
+进而把**合理拒绝**误记为**门槛缺失/待核**。
