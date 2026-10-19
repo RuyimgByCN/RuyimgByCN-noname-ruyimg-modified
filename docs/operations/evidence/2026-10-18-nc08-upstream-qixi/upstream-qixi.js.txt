@@ -1,0 +1,28 @@
+qixi: {
+		audio: 2,
+		audioname: ["re_ganning"],
+		audioname2: { re_heqi: "duanbing_heqi" },
+		enable: "chooseToUse",
+		filterCard(card) {
+			return get.color(card) === "black";
+		},
+		position: "hes",
+		viewAs: { name: "guohe" },
+		viewAsFilter(player) {
+			if (!player.hasCards("hes", { color: "black" })) {
+				return false;
+			}
+		},
+		prompt: "将一张黑色牌当过河拆桥使用",
+		check(card) {
+			return 4 - get.value(card);
+		},
+	},
+	keji: {
+		audio: 2,
+		audioname: ["re_lvmeng", "sp_lvmeng"],
+		trigger: { player: "phaseDiscardBefore" },
+		frequent(event, player) {
+			return player.needsToDiscard();
+		},
+		filter(event, player) 
