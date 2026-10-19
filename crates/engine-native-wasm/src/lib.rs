@@ -526,6 +526,21 @@ impl NativeEngine {
         Ok(())
     }
 
+    /// **身份局**建局（NC09 身份局端到端：浏览器侧需要非原型模式）。
+    ///
+    /// 与 [`new`] 的区别只在 `GameMode`：身份局由 `Engine::new_identity` 装配
+    /// （主公/忠臣/反贼/内奸），胜负结果走 `Winner::{LordSide, Rebels, Traitor}`。
+    pub fn new_identity(players: u8, seed: u64) -> Result<NativeEngine, JsValue> {
+        if players < 2 {
+            return Err(JsValue::from_str("身份局至少 2 席"));
+        }
+        Ok(NativeEngine {
+            inner: Engine::new_identity(seed, players as usize),
+            planner_nodes: 64,
+            deadline_ms: 50,
+        })
+    }
+
     /// 已安装扩展的 cards.json 数组建局。空数组与 [`new`] 相同。
     pub fn new_with_packs_json(
         players: u8,
