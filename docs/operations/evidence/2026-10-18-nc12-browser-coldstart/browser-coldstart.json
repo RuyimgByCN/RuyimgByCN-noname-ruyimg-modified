@@ -7,22 +7,22 @@
       "to_interactive_ms": 270,
       "worker_init_timings": [
         {
-          "fetch_ms": 10.5,
-          "instantiate_ms": 3.5,
-          "total_ms": 14,
+          "fetch_ms": 10.3,
+          "instantiate_ms": 2.4,
+          "total_ms": 12.7,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
         "t0_click": 576.1,
-        "t1_worker_ready": 609.7,
-        "t2_start_done": 612.5,
-        "t4_first_frame": 735.8,
-        "t3_candidates_loaded": 738.1
+        "t1_worker_ready": 608,
+        "t2_start_done": 610.6,
+        "t4_first_frame": 733.9,
+        "t3_candidates_loaded": 736.1
       },
       "perf": {
-        "domContentLoaded": 44.69999998807907,
-        "loadEvent": 45.39999997615814,
+        "domContentLoaded": 40.799999952316284,
+        "loadEvent": 41.39999997615814,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"
@@ -33,25 +33,25 @@
       "iter": 1,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 266,
+      "to_interactive_ms": 263,
       "worker_init_timings": [
         {
-          "fetch_ms": 7.7,
-          "instantiate_ms": 2.4,
-          "total_ms": 10.1,
+          "fetch_ms": 7.2,
+          "instantiate_ms": 2.2,
+          "total_ms": 9.4,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 564.5,
-        "t1_worker_ready": 586.5,
-        "t2_start_done": 589.4,
-        "t4_first_frame": 713.4,
-        "t3_candidates_loaded": 715.7
+        "t0_click": 574.5,
+        "t1_worker_ready": 654.4,
+        "t2_start_done": 657,
+        "t4_first_frame": 780,
+        "t3_candidates_loaded": 783.1
       },
       "perf": {
-        "domContentLoaded": 34.39999997615814,
-        "loadEvent": 35,
+        "domContentLoaded": 43.40000003576279,
+        "loadEvent": 44,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"
@@ -65,22 +65,22 @@
       "to_interactive_ms": 271,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.6,
-          "instantiate_ms": 2.5,
-          "total_ms": 9.1,
+          "fetch_ms": 9.7,
+          "instantiate_ms": 3.1,
+          "total_ms": 12.8,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 567.7,
-        "t1_worker_ready": 594.8,
-        "t2_start_done": 597.7,
-        "t4_first_frame": 721.4,
-        "t3_candidates_loaded": 723.8
+        "t0_click": 568.9,
+        "t1_worker_ready": 598.6,
+        "t2_start_done": 601.5,
+        "t4_first_frame": 725.5,
+        "t3_candidates_loaded": 728
       },
       "perf": {
-        "domContentLoaded": 31.30000001192093,
-        "loadEvent": 31.900000035762787,
+        "domContentLoaded": 36.5,
+        "loadEvent": 37.19999998807907,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-Cl7Ed0z4.js"

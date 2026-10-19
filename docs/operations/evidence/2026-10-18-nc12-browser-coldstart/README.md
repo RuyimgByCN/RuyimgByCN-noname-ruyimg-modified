@@ -172,3 +172,30 @@ node apps/web-client/scripts/nc12-browser-coldstart.mjs http://127.0.0.1:8124/ <
 - [ ] **跳过动画口径**的正确驱动方式（设置项类型/状态字段）并复测纯计算冷启动
 - [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）
 - [ ] 真实网络（非本机）与慢网/丢包；动画帧/输入响应
+
+## 10 「跳过动画」口径：**已查明不可在 UI 上驱动**（2026-10-19 同轮）
+
+复测结论（[coldstart-skipanims.log](coldstart-skipanims.log)、[skipanims-detail.txt](skipanims-detail.txt)）：
+
+```
+NOTE skip-anims toggled=false   ← 3/3 轮未找到可切换控件
+iter 0/1/2 | envelope+首帧 123.0–124.0 ms（与未跳过时一致）
+```
+
+**原因（源码核对）**：
+1. `store.skipAnims` 的开关控件位于 **BattleView 内**（`<input type="checkbox" v-model="store.skipAnims">`），
+   而 BattleView 只在**点击「本地开局」之后**才渲染 → 脚本在点击前找不到控件；
+2. `presentationDelay` 的 **120 ms 延迟发生在「开局信封」处理时**（即点击后的第一个 `handleEnvelope`），
+   此时**任何控件都还不可达** → 因此**无法通过 UI 在冷启动路径上跳过该节流**；
+3. `SettingsView` 的「跳过动画」是 **a11y 设置**（`noname-next-a11y`），与 `store.skipAnims` **不是同一开关**。
+
+**结论与处置**：纯计算冷启动（剔除 120 ms 节流）**无法在当前 UI 路径下测得** → 如实登记；
+可行的补测方式（待办）：①URL 查询参数（如 `?skipAnims=1`）或持久化设置注入；②`Page.addScriptToEvaluateOnNewDocument`
+在文档创建前写入 `store` 初值；③直接以 `store.speed=4` 口径测量（节流降为 30 ms）。
+**这不影响既有结论**：计算成本 ≈ 20–45 ms、~120 ms 为刻意节流（§9）。
+
+### 仍未完成（更新）
+
+- [ ] 纯计算冷启动补测（查询参数 / 文档创建前注入 / speed=4 口径，三选一）
+- [ ] 候选生成 126 ms 的引擎侧拆分与优化（worker 内埋点）
+- [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）；真实网络；动画帧/输入响应

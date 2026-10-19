@@ -81,12 +81,17 @@ for (let i = 0; i < iters; i++) {
   }
   // 可选：先点「跳过动画」（若存在）→ 用于测**纯计算**冷启动（剔除 presentationDelay 节流）
   if (process.env.NC12_SKIP_ANIMS === "1") {
-    await c.evalJs(`(() => {
-      const el = Array.from(document.querySelectorAll('button,a,label')).find(x => (x.innerText||'').includes('跳过动画'));
-      if (el) el.click();
-      return !!el;
+    // 「跳过动画」是 BattleView 内的 checkbox（`<input type="checkbox" v-model="store.skipAnims">`）
+    // → 直接勾选该 checkbox（此前点击文案未命中，故改为按控件类型驱动）
+    const toggled = await c.evalJs(`(() => {
+      const boxes = Array.from(document.querySelectorAll('input[type=checkbox]'));
+      const el = boxes.find(b => (b.closest('label')?.innerText || b.parentElement?.innerText || '').includes('跳过动画')) || boxes[0];
+      if (!el) return false;
+      if (!el.checked) { el.click(); }
+      return el.checked;
     })()`);
     await sleep(300);
+    console.log(`NOTE skip-anims toggled=${toggled}`);
   }
   // 「创建到可操作」：点击本地开局 → 战斗界面出现（含阶段/座位标记）
   const t0 = Date.now();
