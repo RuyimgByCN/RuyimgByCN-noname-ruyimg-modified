@@ -4,32 +4,39 @@
       "iter": 0,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 260,
+      "to_interactive_ms": 263,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.5,
-          "instantiate_ms": 2,
-          "total_ms": 8.5,
+          "fetch_ms": 6.1,
+          "instantiate_ms": 2.2,
+          "total_ms": 8.3,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 263.3,
-        "t1_worker_ready": 279.3,
-        "t2_start_done": 282.1,
-        "t4_first_frame": 405.8,
-        "t3_candidates_loaded": 408.7
+        "t0_click": 267.3,
+        "t1_worker_ready": 284.1,
+        "t2_start_done": 286.3,
+        "t5_apply_envelope": 286.6,
+        "t3_candidates_loaded": 291.2,
+        "t4_first_frame": 409.6
       },
       "candidate_timings": [
         {
-          "engine_ms": 0.5,
+          "engine_ms": 0.3,
           "parse_ms": 0.3,
           "json_bytes": 4567
         }
       ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.1,
+          "delay_ms": 122.2
+        }
+      ],
       "perf": {
-        "domContentLoaded": 40.09999996423721,
-        "loadEvent": 40.59999996423721,
+        "domContentLoaded": 42.09999996423721,
+        "loadEvent": 42.799999952316284,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-uIa5Rzm0.js"
@@ -40,32 +47,39 @@
       "iter": 1,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 260,
+      "to_interactive_ms": 261,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.6,
-          "instantiate_ms": 2,
-          "total_ms": 8.6,
+          "fetch_ms": 6.3,
+          "instantiate_ms": 1.7,
+          "total_ms": 8,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 266.3,
-        "t1_worker_ready": 281.8,
-        "t2_start_done": 284.1,
-        "t4_first_frame": 407.1,
-        "t3_candidates_loaded": 409.5
+        "t0_click": 267.8,
+        "t1_worker_ready": 283.5,
+        "t2_start_done": 286.1,
+        "t5_apply_envelope": 286.3,
+        "t3_candidates_loaded": 290.9,
+        "t4_first_frame": 409.9
       },
       "candidate_timings": [
         {
-          "engine_ms": 0.5,
-          "parse_ms": 0.3,
+          "engine_ms": 0.4,
+          "parse_ms": 0.1,
           "json_bytes": 4567
         }
       ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.1,
+          "delay_ms": 122.8
+        }
+      ],
       "perf": {
-        "domContentLoaded": 44.90000003576279,
-        "loadEvent": 45.5,
+        "domContentLoaded": 41,
+        "loadEvent": 41.60000002384186,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-uIa5Rzm0.js"
@@ -76,32 +90,39 @@
       "iter": 2,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 261,
+      "to_interactive_ms": 260,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.1,
-          "instantiate_ms": 2.1,
-          "total_ms": 8.2,
+          "fetch_ms": 36.3,
+          "instantiate_ms": 2.5,
+          "total_ms": 38.8,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 266.8,
-        "t1_worker_ready": 283.2,
-        "t2_start_done": 285.5,
-        "t4_first_frame": 408,
-        "t3_candidates_loaded": 410.4
+        "t0_click": 266.7,
+        "t1_worker_ready": 312.9,
+        "t2_start_done": 315.6,
+        "t5_apply_envelope": 315.9,
+        "t3_candidates_loaded": 333.8,
+        "t4_first_frame": 439.3
       },
       "candidate_timings": [
         {
           "engine_ms": 0.5,
-          "parse_ms": 0.2,
+          "parse_ms": 0.1,
           "json_bytes": 4567
         }
       ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.2,
+          "delay_ms": 122.6
+        }
+      ],
       "perf": {
-        "domContentLoaded": 37.30000001192093,
-        "loadEvent": 38,
+        "domContentLoaded": 45.89999997615814,
+        "loadEvent": 46.39999997615814,
         "wasm": [],
         "workerChunks": [
           "engine.native.worker-uIa5Rzm0.js"

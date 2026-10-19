@@ -1,0 +1,2 @@
+RESULT scenario=browser_coldstart tier=web {"iters":3,"to_interactive_ms":[260,261,263],"p50_ms":261,"max_ms":263,"all_interactive":true,"console_errors":[]}
+NOTE headless Chrome + 本机静态服务；含模块下载/编译与首屏，不含真实网络与磁盘冷缓存。

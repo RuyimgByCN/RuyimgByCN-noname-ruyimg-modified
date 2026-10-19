@@ -2497,9 +2497,9 @@
       "status": "open",
       "resolution": {
         "date": "2026-10-19",
-        "summary": "部分完成：①263 ms 已拆分（WASM 装载 8–9 ms / 应用侧；应用侧再拆为 worker 连接 19–28 ms、建局 2–3 ms、信封+首帧 4–5 ms，其余 ~120 ms 为 presentationDelay 刻意节流）；②纯计算冷启动已测得 25.3–36.2 ms（新增 localStorage/查询参数入口）；③候选拉取 126 ms 已改为非阻塞首帧；④完整对局单局+3/3 多局、零控制台错误。 ⑤候选 126 ms 真因已查明：引擎生成 0.5 ms + 解析 0.2–0.3 ms（JSON 4.5 KB），页面侧 125 ms 系主线程繁忙（渲染期间 Promise 才 resolve）→ 无需优化候选生成。",
+        "summary": "部分完成：①263 ms 已拆分（WASM 装载 8–9 ms）；②纯计算冷启动 25.3–36.2 ms（新增 localStorage/查询参数入口）；③候选拉取改为与开局信封并发 + 非阻塞首帧，真实就绪由 ~125 ms → 4.8–4.9 ms（引擎生成 0.3–0.5 ms、解析 0.1–0.3 ms）；④applyEnvelope 0.1–0.2 ms；⑤首帧 ~142 ms 中 ~122 ms 为 presentationDelay 刻意节流（§12 的『主线程繁忙』归因已更正）；⑥完整对局单局+3/3 多局、零控制台错误。",
         "evidence": "docs/operations/evidence/2026-10-18-nc12-browser-coldstart/README.md（§7–§11）、docs/operations/evidence/2026-10-18-nc12-browser-fullgame/README.md",
-        "remaining": "移动（Android/iOS）与桌面（Tauri）档位、多浏览器（Safari/Firefox）、真实网络与慢网/丢包、动画帧/输入响应、主线程渲染耗时拆分（候选生成已排除）。"
+        "remaining": "移动（Android/iOS）与桌面（Tauri）档位、多浏览器（Safari/Firefox）、真实网络与慢网/丢包、动画帧/输入响应、候选面板懒挂载评估。"
       }
     },
     {

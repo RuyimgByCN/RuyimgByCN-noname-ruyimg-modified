@@ -1,0 +1,3 @@
+iter 0 | 候选真实就绪(t2->t3) 4.9 | 首帧(t0->t4) 142.3 | engine/parse (0.3, 0.3) | apply/delay (0.1, 122.2)
+iter 1 | 候选真实就绪(t2->t3) 4.8 | 首帧(t0->t4) 142.1 | engine/parse (0.4, 0.1) | apply/delay (0.1, 122.8)
+iter 2 | 候选真实就绪(t2->t3) 18.2 | 首帧(t0->t4) 172.6 | engine/parse (0.5, 0.1) | apply/delay (0.2, 122.6)

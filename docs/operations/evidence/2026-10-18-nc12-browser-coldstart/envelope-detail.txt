@@ -1,0 +1,3 @@
+iter 0 | envelope timings: [{'apply_ms': 0.1, 'delay_ms': 122.1}]
+iter 1 | envelope timings: [{'apply_ms': 0.2, 'delay_ms': 122.6}]
+iter 2 | envelope timings: [{'apply_ms': 0.1, 'delay_ms': 121.4}]

@@ -99,9 +99,29 @@ async function withBusy<T>(fn: () => Promise<T>): Promise<T | undefined> {
   }
 }
 
+/// NC12 冷启动诊断标记（页面全局钩子；不参与业务逻辑）。
+function nc12Mark(name: string) {
+  (globalThis as unknown as { __nativeStartMarks?: Record<string, number> })
+    .__nativeStartMarks ??= {};
+  (globalThis as unknown as { __nativeStartMarks: Record<string, number> })
+    .__nativeStartMarks[name] = Math.round(performance.now() * 100) / 100;
+}
+
 async function handleEnvelope(env: EngineEnvelope) {
+  // NC12 诊断：拆分「同步应用信封（视图状态重建）」与「刻意表现节流」
+  const tA = performance.now();
   applyEnvelope(store, env);
+  const tB = performance.now();
+  nc12Mark("t5_apply_envelope");
   await presentationDelay(store, 120);
+  const tC = performance.now();
+  (globalThis as unknown as { __nativeEnvelopeTimings?: unknown[] })
+    .__nativeEnvelopeTimings ??= [];
+  (globalThis as unknown as { __nativeEnvelopeTimings: unknown[] })
+    .__nativeEnvelopeTimings.push({
+      apply_ms: Math.round((tB - tA) * 100) / 100,
+      delay_ms: Math.round((tC - tB) * 100) / 100,
+    });
   clearEffects(store);
   const prefix = isOnline.value ? `房间 #${roomId.value} · ` : "";
   const hashHint = (env.hash_hex || "").slice(0, 12);
@@ -183,12 +203,6 @@ async function connectAndStart() {
     // t0→t1 = worker 连接（含 worker 脚本加载与 init 回包）
     // t1→t2 = 建局（start 往返）
     // t2→t3 = 选将候选拉取 + 首帧渲染（下一 tick）
-    const nc12Mark = (name: string) => {
-      (globalThis as unknown as { __nativeStartMarks?: Record<string, number> })
-        .__nativeStartMarks ??= {};
-      (globalThis as unknown as { __nativeStartMarks: Record<string, number> })
-        .__nativeStartMarks[name] = Math.round(performance.now() * 100) / 100;
-    };
     nc12Mark("t0_click");
     await localClient.connect();
     nc12Mark("t1_worker_ready");
@@ -203,15 +217,22 @@ async function connectAndStart() {
     }
     const env = await localClient.start(players.value, seed.value, selfId.value);
     nc12Mark("t2_start_done");
+    // NC12 冷启动优化（2026-10-19，两处）：
+    // ① 选将候选拉取与**开局信封处理并发**（此前在 `handleEnvelope` 之后才发起 → 被其
+    //    120 ms 表现节流挡住；实测引擎侧仅 0.5 ms + 解析 0.3 ms）；
+    // ② 候选**不阻塞首帧**（面板先 loading 后填充；`loadGeneralCandidates` 自带 loading/失败态）。
+    // 标记写在 **promise 内部**（此前写在 await 之后 → 被其后的 122 ms 表现节流污染，
+    // 无法反映候选真实就绪时刻）
+    const candidates = (localClient.isNative() ? loadGeneralCandidates() : Promise.resolve()).then(
+      (v) => {
+        nc12Mark("t3_candidates_loaded");
+        return v;
+      },
+    );
     await handleEnvelope(env);
-    // NC12 冷启动优化（2026-10-19）：选将候选拉取**不再阻塞首帧**——面板先进入 loading
-    // 态，候选就绪后再填充（`loadGeneralCandidates` 自身已有 loading/失败态）。
-    // 实测该往返约 126 ms（worker 侧生成 + 传输），阻塞时占「点击→可交互」的绝大部分。
-    const candidates = localClient.isNative() ? loadGeneralCandidates() : Promise.resolve();
     await nextTick();
     nc12Mark("t4_first_frame");
     await candidates;
-    nc12Mark("t3_candidates_loaded");
     const lock = contentLockSummary();
     pushLog(
       store,
