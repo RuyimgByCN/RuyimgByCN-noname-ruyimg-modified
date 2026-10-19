@@ -1,0 +1,24 @@
+	fankui: {
+		audio: 2,
+		trigger: { player: "damageEnd" },
+		logTarget: "source",
+		preHidden: true,
+		filter(event, player) {
+			return event.num > 0 && event.source?.hasGainableCards(player, event.source !== player ? "he" : "e");
+		},
+		async content(event, trigger, player) {
+			player.gainPlayerCard({
+				target: trigger.source,
+				position: trigger.source !== player ? "he" : "e",
+				forced: true,
+			});
+		},
+		ai: {
+			maixie_defend: true,
+			effect: {
+				target(card, player, target) {
+					if (player.countCards("he") > 1 && get.tag(card, "damage")) {
+						if (player.hasSkillTag("jueqing", false, target)) {
+							return [1, -1.5];
+						}
+						if (get.attitude(target, player) < 0) 
