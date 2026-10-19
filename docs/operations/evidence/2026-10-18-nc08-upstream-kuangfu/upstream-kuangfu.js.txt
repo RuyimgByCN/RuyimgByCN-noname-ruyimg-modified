@@ -1,0 +1,39 @@
+kuangfu: {
+		audio: "xinkuangfu",
+		trigger: { source: "damageSource" },
+		forced: true,
+		filter(event, player) {
+			if (player.hasSkill("stdkuangfu_used")) {
+				return false;
+			}
+			return player.isPhaseUsing() && event.card && event.card.name === "sha" && event.player !== player && event.player.isIn();
+		},
+		async content(event, trigger, player) {
+			player.addTempSkill("stdkuangfu_used", "phaseChange");
+			if (trigger.player.hp < player.hp) {
+				await player.draw(2);
+			} else {
+				await player.loseHp();
+			}
+		},
+		ai: {
+			halfneg: true,
+		},
+		subSkill: {
+			used: {
+				charlotte: true,
+			},
+		},
+	},
+	rewangzun: {
+		trigger: { global: "phaseZhunbeiBegin" },
+		forced: true,
+		audio: "wangzun",
+		filter(event, player) {
+			return event.player.hp > player.hp;
+		},
+		logTarget: "player",
+		async content(event, trigger, player) {
+			await player.draw();
+			let zhu = false;
+			con
