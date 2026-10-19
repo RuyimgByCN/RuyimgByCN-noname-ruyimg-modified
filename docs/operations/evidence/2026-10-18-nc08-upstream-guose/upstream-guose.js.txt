@@ -1,0 +1,26 @@
+guose: {
+		audio: 2,
+		filter(event, player) {
+			return player.hasCards("hes", { suit: "diamond" });
+		},
+		enable: "chooseToUse",
+		filterCard(card) {
+			return get.suit(card) === "diamond";
+		},
+		position: "hes",
+		viewAs: { name: "lebu" },
+		prompt: "将一张方片牌当乐不思蜀使用",
+		check(card) {
+			return 6 - get.value(card);
+		},
+		ai: {
+			threaten: 1.5,
+		},
+	},
+	liuli: {
+		audio: 2,
+		audioname: ["re_daqiao", "daxiaoqiao"],
+		trigger: { target: "useCardToTarget" },
+		preHidden: true,
+		filter(event, player) {
+			if (eve
