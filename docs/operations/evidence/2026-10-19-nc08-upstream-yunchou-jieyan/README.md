@@ -33,9 +33,32 @@ jieyan: {
 **原生实现引用**：`content/host/step/yunchou.rs:191`（弃红手牌 → 除使用者外全部存活角色
 → 逐座位 `Damage(Fire, 1, card=None)`）。
 
+## 2b 差异裁定（**已完成**，2026-10-19 同轮）
+
+**结论：上游含使用者 → 原生排除使用者 = 规则损失。**
+
+依据 `archive/upstream/noname/apps/core/noname/library/index.js:11681` 的
+`lib.filter.targetEnabled(card, player, target)`：
+
+```js
+const filterTarget = info.filterTarget;
+if (typeof filterTarget === "boolean") {
+    return filterTarget;              // 布尔 filterTarget 直接返回，**无「目标不得为使用者」隐式检查**
+}
+if (typeof filterTarget === "function") return Boolean(filterTarget(card, player, target));
+return false;
+```
+
+配合 `selectTarget: -1`（全部合法目标）⇒ **使用者是合法目标** ⇒ 隙焰**应波及使用者**。
+对照：上游需要排除使用者时会显式写 `filterTarget: (card, player, target) => target !== player`
+（如 `jiguantong`、`liuli` 等）——`jieyan` 写的是 `filterTarget: true`，**不排除**。
+
+**分类**：**规则损失**（原生少造成 1 点火焰伤害）；已并入修复清单**第 30 项**（修法：去掉
+`i != self.owner` 过滤；验收：本文件「0 号 hp 不变」断言改为 **hp −1**）。
+
 ## 3 未完成 / 待办
 
-- [ ] **差异裁定**：使用者是否应被隙焰波及（需按上游 `chooseTarget` 语义确认；本样本只固定差异）
+- [x] **差异裁定已完成**（上游含使用者，见 §2b）
 - [ ] `multitarget`/`multiline` UI 表现面
 - [ ] `sortBySeat` 与原生座位序的**起始点**（原生自 0 号起 vs 上游自当前回合角色起）
 - [ ] 运筹其余武将技（纵火/烧营/归汉/厉焰×2/精械/巧思/奸雄变体/蛊惑变体/悲歌变体）

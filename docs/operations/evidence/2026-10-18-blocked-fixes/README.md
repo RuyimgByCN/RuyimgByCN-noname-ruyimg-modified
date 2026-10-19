@@ -593,11 +593,17 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 原生 `content/host/step/yunchou.rs:191` 的 `seats` 过滤 **`i != self.owner`** →
 **排除使用者**（实测 hp `[4,4,4,4] → [4,3,3,3]`：0 号不受伤害）。
 
-**修法（先裁定后修）**：
-1. **裁定**：按上游 `chooseTarget` 在 `filterTarget: true` + `selectTarget: -1` 下**是否把使用者
-   计入合法目标**（noname 中 `selectTarget: -1` 通常表示「所有合法目标」，而 `filterTarget: true`
-   使使用者亦合法 → **应为含使用者**）；必要时用上游 harness 对照确认；
-2. **修**：若裁定为「含使用者」，则去掉 `i != self.owner` 过滤（或按 `toself` 语义处理）。
+**裁定（已完成，2026-10-19 同轮）**：**上游含使用者** —— 依据
+`noname/library/index.js:11681` 的 `lib.filter.targetEnabled(card, player, target)`：
+其对 **布尔** `filterTarget` 直接 `return filterTarget;`（**无「目标不得为使用者」的隐式检查**），
+而 `selectTarget: -1` 表示「**全部合法目标**」→ 使用者**是**合法目标 ⇒ 隙焰**应波及使用者**。
+（对照：需要排除使用者时上游会写 `filterTarget: (card, player, target) => target !== player`，
+如 `jiguantong`/`liuli` 等。）
+
+**修法（已定）**：去掉 `content/host/step/yunchou.rs:204` 的 `i != self.owner` 过滤
+（改为「全部存活角色」；如需 `toself` 语义则另行处理）。
+
+**分类**：**规则损失**（上游应对使用者造成 1 点火焰伤害，原生未造成）。
 
 **验收**：样本 76 的 `upstream_jieyan_discards_red_and_damages_others` 中
 「0 号 hp 不变」的断言应改为 **hp −1**（并同步更新证据与台账）。
