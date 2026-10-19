@@ -192,8 +192,8 @@ if !core.player(core.turn.current).hand.contains(&card) {
 2. 或新增**独立命令**（如 `PlayCardFromZone`）以避免影响既有手牌路径的校验强度；
 3. 各 `viewAs`/费用候选生成处同步放开牌区。
 
-**附带发现（登记，待判定）**：该校验用 `core.turn.current` 而非命令的 `actor` —— 若存在
-「actor 与当前回合角色不一致」的合法路径，会以当前回合角色的手牌做校验；建议核对调用方是否
-已先行校验 actor（本清单只登记，不写成缺陷结论）。
+**附带发现（已核对，**不成立，已撤回**）**：曾疑「校验用 `core.turn.current` 而非 `actor`」有风险；
+经核对 `play_card.rs:12` **已有 `if actor != core.turn.current { … }` 守卫**（非当前回合角色的出牌
+请求先被拒）→ 二者在该路径上**等价**，**不构成问题**（本条登记后即撤回，不写成缺陷）。
 
 **验收**：为 `zhiheng`/`qixi`/`guose` 各补「装备区牌可参与」的行为用例；既有手牌路径用例保持不变。
