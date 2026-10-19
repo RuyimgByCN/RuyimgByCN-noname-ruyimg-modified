@@ -1242,6 +1242,39 @@ DBG 虎符：杀结算后 1 号 hp=0 dying=false alive=false
 
 **验收**：样本 152 的 `#[ignore]` 用例应能在**他人受伤后**打开窗口并**获得其一张 `he` 牌**。
 
-**验收**：样本 152 的 `#[ignore]` 用例应能在**他人受伤后**打开窗口并**获得其一张 `he` 牌**。
+**✅ 修复方案已落文档（同日）**：见 [第 53 项修复方案](../2026-10-19-item53-fix-plan/README.md)——
+精确到**文件/位置/改动**的三步：
+
+| # | 文件 | 改动 |
+|---|---|---|
+| 1 | `filtering/common.rs`（`ChenhuodajieCard` 臂） | `=> false` 改为 **`Damage{begin:false}` + 持有者存活**（上游 `{ global: "damageEnd" }`） |
+| 2 | `packages/.../shahai-yunchou.../cards.json` | 新增 `skills: [{"name":"chenhuodajie_window","mapping":"host:chenhuodajie_card"}]`（当前 `null`） |
+| 3 | `content/host/step/*.rs`（`ChenhuodajieCard` 臂） | 补**目标选择**（受伤者作为 `he` 来源） |
+
+**阻塞**：步骤 1/3 的文件在**未跟踪目录**（并行拆分）⇒ **不在此处改动**，第 53 项保持待办。
 
 **验收**：样本 152 的 `#[ignore]` 用例应能在**他人受伤后**打开窗口并**获得其一张 `he` 牌**。
+
+**✅ 修复方案已落文档（同日）**：见 [第 53 项修复方案](../2026-10-19-item53-fix-plan/README.md)——
+精确到**文件/位置/改动**的三步：
+
+| # | 文件 | 改动 |
+|---|---|---|
+| 1 | `filtering/common.rs`（`ChenhuodajieCard` 臂） | `=> false` 改为 **`Damage{begin:false}` + 持有者存活**（上游 `{ global: "damageEnd" }`） |
+| 2 | `packages/.../shahai-yunchou.../cards.json` | 新增 `skills: [{"name":"chenhuodajie_window","mapping":"host:chenhuodajie_card"}]`（当前 `null`） |
+| 3 | `content/host/step/*.rs`（`ChenhuodajieCard` 臂） | 补**目标选择**（受伤者作为 `he` 来源） |
+
+**阻塞**：步骤 1/3 的文件在**未跟踪目录**（并行拆分）⇒ **不在此处改动**，第 53 项保持待办。
+
+**验收**：样本 152 的 `#[ignore]` 用例应能在**他人受伤后**打开窗口并**获得其一张 `he` 牌**。
+
+**✅ 修复方案已落文档（同日）**：见 [第 53 项修复方案](../2026-10-19-item53-fix-plan/README.md)——
+精确到**文件/位置/改动**的三步：
+
+| # | 文件 | 改动 |
+|---|---|---|
+| 1 | `filtering/common.rs`（`ChenhuodajieCard` 臂） | `=> false` 改为 **`Damage{begin:false}` + 持有者存活**（上游 `{ global: "damageEnd" }`） |
+| 2 | `packages/.../shahai-yunchou.../cards.json` | 新增 `skills: [{"name":"chenhuodajie_window","mapping":"host:chenhuodajie_card"}]`（当前 `null`） |
+| 3 | `content/host/step/*.rs`（`ChenhuodajieCard` 臂） | 补**目标选择**（受伤者作为 `he` 来源） |
+
+**阻塞**：步骤 1/3 的文件在**未跟踪目录**（并行拆分）⇒ **不在此处改动**，第 53 项保持待办。
