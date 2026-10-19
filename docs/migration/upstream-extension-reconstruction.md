@@ -179,9 +179,14 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 18 | 标准面（技能） | `jizhi` | 3 点通过 + **1 处规则损失**（原生仅覆盖 5 种锦囊；标记面未实现） | [nc08-upstream-jizhi](../operations/evidence/2026-10-18-nc08-upstream-jizhi/README.md) |
 | 19 | 标准面（技能） | `jianxiong` | 3 点通过（2 处差异登记：处理区↔弃牌堆、标记/摸牌面） | [nc08-upstream-jianxiong](../operations/evidence/2026-10-18-nc08-upstream-jianxiong/README.md) |
 
-**覆盖面**：**17/37 来源**已有第⑦层上游样本；**逐命令对照工具**（旧线↔原生线）见
+| 20 | 标准面（技能） | `ganglie` | 3 点通过 + **规则损失**（缺「来源弃两张手牌」分支） | [nc08-upstream-ganglie](../operations/evidence/2026-10-18-nc08-upstream-ganglie/README.md) |
+| 21 | 标准面（技能） | `keji` | **3 点全部通过** + 2 处差异登记（实现层级、respond 历史） | [nc08-upstream-keji](../operations/evidence/2026-10-18-nc08-upstream-keji/README.md) |
+| 22 | 标准面（技能） | `wusheng` | **5 点通过** + 2 处差异登记（打出路径未验证、守约未建模） | [nc08-upstream-wusheng](../operations/evidence/2026-10-18-nc08-upstream-wusheng/README.md) |
+| 23 | 标准面（技能） | `jianxiong` / `jizhi` | 见第 18–19 行（口径更正后：各 1 处差异） | [nc08-upstream-jianxiong](../operations/evidence/2026-10-18-nc08-upstream-jianxiong/README.md) / [nc08-upstream-jizhi](../operations/evidence/2026-10-18-nc08-upstream-jizhi/README.md) |
+
+**覆盖面**：**20/37 来源**已有第⑦层上游样本；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
-**未完成**：接入**上游 JS harness**（当前以旧线为可执行参照，旧线≠上游等价）、其余 20 个来源、
+**未完成**：接入**上游 JS harness**（当前以旧线为可执行参照，旧线≠上游等价）、其余 17 个来源、
 上述差异的逐项口径判定、以及 4 项**待实施修复**（[清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)）。
 
 ## 4. 实施顺序与交付门槛
