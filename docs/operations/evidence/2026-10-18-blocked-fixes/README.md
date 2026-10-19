@@ -132,3 +132,16 @@ if !hand.is_empty() {
 
 **验收**：`upstream_wusheng_respond_path_not_covered` 应改为断言**包含**红牌候选；
 并补「用红牌响应决斗后该牌进入弃牌堆、决斗继续」的行为用例。
+
+## 8 制衡（`zhiheng`）候选缺装备区牌（NC08 样本 25 新发现，2026-10-19）
+
+**症状（规则损失）**：上游 `zhiheng` 的 `position: "he"` 含**装备区**；原生
+`content/standard/skills/zhi_heng.rs` 的 `Select` 阶段候选**只由 `player.hand` 构成**，
+`activate` 也要求**手牌非空** → 装备牌不可用于制衡（行为断言已复现）。
+
+**修法**：候选改为 `hand ∪ equips`（并放宽 `activate` 的空手牌前置为「手牌或装备非空」）；
+`Draw` 阶段的弃置需按牌区分别走 `discard_from_hand` / 卸装撤销装备技（既有 `mtg.rs` 的
+海岛弃装备分支可参考）。
+
+**验收**：`upstream_zhiheng_equip_zone_difference_is_registered` 应改为断言**包含**装备牌，
+并补「弃装备后该装备技被撤销」的行为用例。

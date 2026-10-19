@@ -1,0 +1,49 @@
+zhiheng: {
+		audio: 2,
+		audioname: ["gz_jun_sunquan"],
+		audioname2: {
+			new_simayi: "rezhiheng_new_simayi",
+		},
+		mod: {
+			aiOrder(player, card, num) {
+				if (num <= 0 || get.itemtype(card) !== "card" || get.type(card) !== "equip") {
+					return num;
+				}
+				const eq = player.getEquip(get.subtype(card));
+				if (eq != null && get.equipValue(card) - get.equipValue(eq) < Math.max(1.2, 6 - player.hp)) {
+					return 0;
+				}
+			},
+		},
+		locked: false,
+		enable: "phaseUse",
+		usable: 1,
+		position: "he",
+		filterCard: true,
+		selectCard: [1, Infinity],
+		allowChooseAll: true,
+		prompt: "弃置任意张牌并摸等量的牌",
+		check(card) {
+			let player = get.player();
+			if (get.position(card) === "e") {
+				let subs = get.subtypes(card);
+				if (subs.includes("equip2") || subs.includes("equip3")) {
+					return player.getHp() - get.value(card);
+				}
+			}
+			return 6 - get.value(card);
+		},
+		async content(event, trigger, player) {
+			await player.draw(event.cards.length);
+		},
+		ai: {
+			order: 1,
+			result: {
+				player: 1,
+			},
+			threaten: 1.5,
+		},
+	},
+	jiuyuan: {
+		audio: 2,
+		trigger: { target
