@@ -1313,7 +1313,7 @@ DBG 虎符：杀结算后 1 号 hp=0 dying=false alive=false
 （`Nanman`/`Wanjian`/`Guohe`…）比对，而**真实变体名/目录名不同**（目录名 `savage`/`archery`/`duel`/`dismantle`…）。
 **教训**：**按名字比对的清单必须由代码反查生成，不能手写**。
 
-## 55 青龙之圭：**摸 2 生效、强制弃 1 未发生**（样本 156，2026-10-19）
+## 55 青龙之圭：**摸 2 生效、强制弃 1 未复现**（样本 156，2026-10-19）——**已降级：实现存在**
 
 **上游**：`g_qinglongzhigui` 的 `content` 为**两步**——`step 0` `player.draw(2)`、`step 1` `player.chooseToDiscard("he", true)`。
 
@@ -1325,6 +1325,25 @@ DBG 虎符：杀结算后 1 号 hp=0 dying=false alive=false
 **剩余候选**：①**强制弃牌分支未实现**（`chooseToDiscard` 的 `true` 语义未承载）；
 ②**`step 1` 被跳过**（多步窗口未串行）；③~~`he` 区无牌~~（不成立，手牌 5 张）。
 
-**修法（先诊断）**：核对宿主实现是否声明「先摸后弃」两步；缺则补 `step 1`。
+**✅ 同日更正（降级）**：宿主实现**确实声明了两步**——`content/host/step/swd_equipment.rs:298-320`：
+
+```rust
+HostBehavior::SwdQinglongzhiguiHeld => match self.stage {
+    HostStage::Act => {
+        ctx.draw_cards(self.owner, 2);                       // 摸 2
+        let options = hand + equips → ChoiceOption::Card;
+        if options.is_empty() { return Flow::Done; }
+        self.stage = HostStage::SelectCard;
+        Flow::WaitChoice { prompt: "qinglongzhigui_discard", min: 1, … }
+```
+
+⇒ **不是「实现缺失」**，而是「**该 `WaitChoice` 未在 `open_choice()` 可见**」。
+
+**新增已排除**：④提示被 `advance_to_phase` 的 `drain` 吞掉——已改**手动推进、不 drain**，仍不可见。
+
+**剩余候选**：①`WaitChoice` 出现在 `NextPhase` 的**返回值**而非 `open_choice()`；
+②机器未进入 `SelectCard`（`options` 空——手牌 5 张，不成立）；③`Flow::WaitChoice` 登记路径与读取路径不一致。
+
+**修法（先诊断）**：先确认 `Flw::WaitChoice` 的登记/读取是否同源；再判断是否需要 `NextPhase` 之后再推进一次。
 
 **验收**：样本 156 的 `#[ignore]` 用例应能断言**牌堆 −2** 且**手牌净 +1**。

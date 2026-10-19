@@ -36,14 +36,28 @@ fn swd_engine(seed: u64) -> Engine {
 ///
 /// **本轮未通过（登记，含诊断）**：阶段开始后 **牌堆 −2（摸 2 生效 ✅）**，
 /// 但**手牌 +2**（应 **+1**）、且**全程无弃牌询问**（`prompts=[]`）⇒
-/// **上游 `step 1` 的 `chooseToDiscard("he", true)` 未执行**。
+/// **上游 `step 1` 的 `chooseToDiscard("he", true)` 未在行为面复现**。
 ///
-/// 已排除：①持有条件（`filter` 仅要求持有，**成立**）②询问形态（用例同时处理 `SelectCards`/`Confirm`/`Pass`）
-/// ③阶段未开始（摸 2 已证窗口运行）。
-/// **剩余候选**：①强制弃牌分支未实现；②`step 1` 被跳过（阶段机只执行首步）；
-/// ③`chooseToDiscard` 在 `he` 区无牌可弃时静默跳过——但实测手牌有 5 张，**不成立**。
+/// **重要更正**：原判「实现缺失」**已降级**——宿主实现**确实声明了两步**：
+/// ```rust
+/// // content/host/step/swd_equipment.rs:298-320
+/// HostBehavior::SwdQinglongzhiguiHeld => match self.stage {
+///     HostStage::Act => {
+///         ctx.draw_cards(self.owner, 2);                       // 摸 2
+///         let options = hand + equips → ChoiceOption::Card;
+///         if options.is_empty() { return Flow::Done; }
+///         self.stage = HostStage::SelectCard;
+///         Flow::WaitChoice { prompt: "qinglongzhigui_discard", min: 1, … }
+/// ```
+/// ⇒ **实现存在**；问题在**「该 `WaitChoice` 为何不在 `open_choice()` 中可见」**。
+///
+/// 已排除：①持有条件 ②询问形态（覆盖 SelectCards/Confirm/Pass）③阶段未开始（摸 2 已证）
+/// ④提示被 `advance_to_phase` 的 `drain` 吞掉（已改**手动推进、不 drain**，仍不可见）。
+/// **剩余候选**：①`WaitChoice` 在 `NextPhase` 的**返回值**里而非 `open_choice()`；
+/// ②机器在 `Act` 后**未进入 `SelectCard`**（如 `options` 为空——但手牌 5 张，不成立）；
+/// ③`Flow::WaitChoice` 的登记路径与 `open_choice()` 读取路径不一致。
 #[test]
-#[ignore = "青龙之圭：摸 2 生效但强制弃 1 未发生（手牌 +2、无弃牌询问）——见第 55 项"]
+#[ignore = "青龙之圭：实现已声明两步（draw2→qinglongzhigui_discard），但 WaitChoice 未在 open_choice() 可见——第 55 项"]
 fn upstream_qinglongzhigui_draw2_discard1() {
     let mut e = swd_engine(20288801);
     // 0 号在**开局前**就持青龙之圭（阶段开始时才触发）
@@ -70,8 +84,24 @@ fn upstream_qinglongzhigui_draw2_discard1() {
     let deck_before = e.state_core().deck.len();
     let h_before = e.debug_hand(0).len();
     let mut prompts: Vec<String> = Vec::new();
-    // 推进到 0 号出牌阶段（**阶段开始即触发**）
-    assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
+    // **手动推进**（`advance_to_phase` 会 `drain`，把阶段开始时的弃牌询问一起吞掉 ⇒ 不可用）
+    for _ in 0..16 {
+        if e.turn().current == 0 && e.turn().phase == Phase::Play {
+            break;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        // **不吃询问**：仅在**无**待答询问时继续推进
+        if e.open_choice().is_some() {
+            break;
+        }
+    }
+    assert_eq!(e.turn().current, 0, "应轮到 0 号");
     // 处理**强制弃 1** 询问
     for _ in 0..16 {
         let Some(c) = e.open_choice().cloned() else { break };
