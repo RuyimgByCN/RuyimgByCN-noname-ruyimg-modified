@@ -3815,3 +3815,18 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 后续处理顺序和完成条件统一见[进度主稿](native-progress.md#后续待做按阻塞关系)，避免在本页保留另一套易过期待办。规则任务按本表固定来源与语义，逐技能/将/牌/模式比较命令、事件、随机流和中间恢复轨迹；逐来源扩展与组合验收见[两仓台账](../migration/upstream-extension-reconstruction.md)。
 
 [覆盖清单](../native-coverage-manifest.md) 登记机制证据；[ADR 索引](../adr/INDEX.md) 保留历史决策。
+
+## U07（玩点论杀）差异族（2026-10-19，由 10 个证据目录提炼）
+
+> 来源：`docs/operations/evidence/*-u07-*`（deferral-closeout / moshou-wiring / skill-batch1–7 / lifecycle），
+> 提取方式见[提炼证据](../operations/evidence/2026-10-19-u07-diff-extraction/README.md)。
+
+| # | 差异 | 上游 | 原生 | 族 |
+|---|---|---|---|---|
+| 1 | **`damageBegin1` 时点** | 目标**受伤前体力**判定 | 原生时点不同 | 时机锚点 |
+| 2 | **`chooseControl` 的 AI 默认项** | 由 `attitude` 推导 | **不迁移**（固定选项） | AI 面（非规则差异） |
+| 3 | **守卫弃牌张数** | **一次性选 n 张** | **首张自选 + 余随机代抽** | 确定性首张 |
+| 4 | **`discardPlayerCard(target, true)`** | **被弃者自选** | **确定性首张** | 确定性首张 |
+
+**另 3 条「差异：无」**（纯数据钩语义等价 / `filterCard` 无弃牌代价 / `frequent` 无确认）——
+保留在证据中，不计入差异族。
