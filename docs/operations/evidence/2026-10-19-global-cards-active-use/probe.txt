@@ -1,0 +1,13 @@
+DBG global 普查：shahai-yunchou-upstream-noname / chenhuodajie → 在目录=true；[]→Rejected [0]→Rejected [1]→Accepted 
+DBG global 普查：shahai-gujian-upstream-noname / jinlianzhu → 在目录=true；[]→Rejected [0]→Rejected [1]→Rejected 
+DBG global 普查：shahai-gujian-upstream-noname / shihuifen → 在目录=true；[]→Rejected [0]→Rejected [1]→Pending 
+DBG global 普查：shahai-swd-upstream-noname / shencaojie → 在目录=true；[]→Accepted 
+DBG global 普查：shahai-swd-upstream-noname / zhuquezhizhang → 在目录=true；[]→Accepted 
+DBG global 普查：shahai-swd-upstream-noname / xuanwuzhihuang → 在目录=true；[]→Accepted 
+DBG global 普查：shahai-swd-upstream-noname / huanglinzhicong → 在目录=true；[]→Accepted 
+DBG global 普查：shahai-swd-upstream-noname / cangchizhibi → 在目录=false；不在目录
+DBG global 普查：shahai-swd-upstream-noname / qinglongzhigui → 在目录=true；[]→Accepted 
+DBG global 普查：shahai-swd-upstream-noname / baishouzhihu → 在目录=true；[]→Accepted 
+DBG global 普查：shahai-swd-upstream-noname / shenmiguo → 在目录=true；[]→Rejected [0]→Rejected [1]→Rejected 
+DBG global 普查：shahai-swd-upstream-noname / zhufangshenshi → 在目录=true；[]→Rejected [0]→Rejected [1]→Accepted 
+DBG global 普查结论：12 张中 **在目录 11 张**；其余属转换缺口（见台账第 117 行）
