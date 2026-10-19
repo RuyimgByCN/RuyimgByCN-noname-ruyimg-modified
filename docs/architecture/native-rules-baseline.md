@@ -3638,6 +3638,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **门槛历史范围**（标准面 `keji`） | `useCard` **与** `respond` 两历史都查【杀】 | 原生只看 `turn.sha_used_play_phase`（出牌阶段使用） | keji |
 | **实现层级**（标准面 `keji`） | 事件级「跳过弃牌阶段」 | 上限级「手牌上限视为无限」（结果等价、事件面不同） | keji |
 | **循环询问粒度**（标准面 `luoshen`） | 每轮 `chooseBool` 询问是否继续 | **整链一次确认**（源码注释自述） | luoshen |
+| **牌区入口**（`zhiheng`/`qixi`/`guose`） | `position: "he"`/`"hes"`（含装备区、判定区） | **命令面限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中 → 装备/判定区入口不可达 | zhiheng/qixi/guose |
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
 | **转化候选选择**（标准面 `qixi`） | 多个 `viewAs` 之间由**玩家选择** | **固定优先级**（杀类优先，`play_card.rs:156`）；黑色【杀】持奇袭时只作【杀】 | qixi |

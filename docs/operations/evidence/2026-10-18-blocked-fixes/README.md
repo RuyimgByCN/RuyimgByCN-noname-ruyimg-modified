@@ -169,3 +169,31 @@ if !hand.is_empty() {
 
 **验收**：`upstream_jijiu_turn_restriction_difference_is_fixed` 应改为断言**存在**回合判定，
 并补行为用例（自己回合内红牌**不可**当桃 / 他人回合内**可**当桃）。
+
+## 11 「牌区 `hes`/`he`」差异族：**命令面限定手牌**（NC08 样本 25/26/31 汇总，2026-10-19）
+
+**现象（3 例）**：`zhiheng`（`position: "he"`）、`qixi`/`guose`（`position: "hes"`）等上游技能允许
+**装备区（及判定区）**的牌参与转化或作为费用；原生对应路径只覆盖**手牌**。
+
+**精确定位（本轮核对）**：`crates/engine-native/src/engine/play_card.rs:71`
+
+```rust
+if !core.player(core.turn.current).hand.contains(&card) {
+    return Err(RejectReason::CardNotInHand);
+}
+```
+
+→ 原生**出牌命令**（`PlayCard`）要求牌在**当前回合角色手牌**中 → **装备区/判定区的牌无法经该命令使用**
+→ 因此 `hes` 类技能的「装备/判定区入口」在**命令面**即不可达（**不是**结算逻辑缺失）。
+
+**修法（建议一并做）**：
+1. `PlayCard` 的牌区校验放宽为「手牌 ∪ 装备区 ∪ 判定区（按技能声明的 `position` 允许的牌区）」，
+   并在结算时按牌区正确移除（装备需撤销装备技、判定区需从 `judge` 移除）；
+2. 或新增**独立命令**（如 `PlayCardFromZone`）以避免影响既有手牌路径的校验强度；
+3. 各 `viewAs`/费用候选生成处同步放开牌区。
+
+**附带发现（登记，待判定）**：该校验用 `core.turn.current` 而非命令的 `actor` —— 若存在
+「actor 与当前回合角色不一致」的合法路径，会以当前回合角色的手牌做校验；建议核对调用方是否
+已先行校验 actor（本清单只登记，不写成缺陷结论）。
+
+**验收**：为 `zhiheng`/`qixi`/`guose` 各补「装备区牌可参与」的行为用例；既有手牌路径用例保持不变。
