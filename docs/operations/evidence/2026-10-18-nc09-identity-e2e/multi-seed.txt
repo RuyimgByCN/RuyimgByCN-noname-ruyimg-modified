@@ -1,0 +1,4 @@
+RESULT scenario=browser_identity_fullgame tier=web seed=20267201 {"clicks":223,"final_revision":223,"wall_ms":39372,"ended_marker":true,"console_errors":[],"outcome_line":"反贼胜利"}
+RESULT scenario=browser_identity_fullgame tier=web seed=20267202 {"clicks":231,"final_revision":231,"wall_ms":37829,"ended_marker":true,"console_errors":[],"outcome_line":"反贼胜利"}
+RESULT scenario=browser_identity_fullgame tier=web seed=20267203 {"clicks":167,"final_revision":167,"wall_ms":29106,"ended_marker":true,"console_errors":[],"outcome_line":"反贼胜利"}
+RESULT scenario=browser_identity_fullgame tier=web seed=20267204 {"clicks":222,"final_revision":222,"wall_ms":37838,"ended_marker":true,"console_errors":[],"outcome_line":"反贼胜利"}

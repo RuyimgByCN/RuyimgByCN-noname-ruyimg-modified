@@ -12,6 +12,9 @@ const base = process.argv[2] ?? "http://127.0.0.1:8123/";
 const chromeBin = process.argv[3] ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const outDir = process.argv[4] ?? ".";
 const maxSteps = Number(process.argv[5] ?? 400);
+// 第 6 参数：种子（默认 20267201）；第 7 参数：座位数（默认 5）
+const seedArg = Number(process.argv[6] ?? 20267201);
+const playersArg = Number(process.argv[7] ?? 5);
 const port = 9339;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -61,7 +64,9 @@ const evalJs = async (expression) => {
 };
 await send("Runtime.enable");
 await send("Page.enable");
-const identityUrl = base.replace(/\/+$/, "") + "/battle?players=5&seed=20267201&mode=identity";
+const identityUrl =
+  base.replace(/\/+$/, "") +
+  `/battle?players=${playersArg}&seed=${seedArg}&mode=identity`;
 await send("Page.navigate", { url: identityUrl });
 await sleep(3000);
 
@@ -99,9 +104,13 @@ const report = {
   final_text: finalText,
   console_errors: consoleErrors,
 };
-writeFileSync(join(outDir, "identity-fullgame-report.json"), JSON.stringify(report, null, 2));
-console.log("RESULT scenario=browser_identity_fullgame tier=web " + JSON.stringify({
+writeFileSync(
+  join(outDir, `identity-fullgame-report-${seedArg}.json`),
+  JSON.stringify(report, null, 2),
+);
+console.log("RESULT scenario=browser_identity_fullgame tier=web seed=" + seedArg + " " + JSON.stringify({
   clicks, final_revision: lastRev, wall_ms: wallMs, ended_marker: ended, console_errors: consoleErrors,
+  outcome_line: (finalText.match(/([\u4e00-\u9fff]{2,6}(胜利|获胜|胜))/) || [])[0] ?? null,
 }));
 console.log("NOTE headless Chrome + 本机静态服务；点击间隔 120ms 为脚本节流，非引擎耗时。");
 console.log("NOTE 身份局（players=5, mode=identity）：终局胜负文案来自 view.outcome 的映射。");
