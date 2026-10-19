@@ -1,0 +1,4 @@
+DBG 救援集合：tao → 获提供=true 被救回=true 询问=["dying_save"]
+DBG 救援集合：jiu → 获提供=true 被救回=true 询问=["dying_save"]
+DBG 救援集合：hufu → 获提供=false 被救回=false 询问=[]
+DBG 救援集合结论：[("tao", true, true), ("jiu", true, true), ("hufu", false, false)]
