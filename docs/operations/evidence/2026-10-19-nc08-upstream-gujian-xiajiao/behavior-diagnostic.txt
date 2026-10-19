@@ -1,0 +1,1 @@
+DBG 虾饺：子技=true；结束出牌阶段=Some(Accepted { state_hash: [..] })；询问=["gj_xiajiao_discard", "discard_to_limit"]；弃牌=true；手牌 0 → 4（固定摸 2 + 额外 1 − 弃 1 = 净 +2）
