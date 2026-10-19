@@ -1,0 +1,30 @@
+	liuli: {
+		audio: 2,
+		audioname: ["re_daqiao", "daxiaoqiao"],
+		trigger: { target: "useCardToTarget" },
+		preHidden: true,
+		filter(event, player) {
+			if (event.card.name !== "sha") {
+				return false;
+			}
+			if (!player.hasCards("he")) {
+				return false;
+			}
+			return game.hasPlayer(current => {
+				return player.inRange(current) && current !== event.player && current !== player && !!lib.filter.targetEnabled(event.card, event.player, current);
+			});
+		},
+		async cost(event, trigger, player) {
+			event.result = await player
+				.chooseCardTarget({
+					filterTarget(card, player, target) {
+						const trigger = _status.event;
+						if (player.inRange(target) && target != trigger.source) {
+							if (lib.filter.targetEnabled(trigger.card, trigger.source, target)) {
+								return true;
+							}
+						}
+						return false;
+					},
+					filterCard: lib.filter.cardDiscardable,
+					pos

@@ -1,0 +1,2 @@
+DBG 流离×空城：出现目标询问=false 把空城者列为候选=false
+DBG 流离：询问=["liuli_discard_choose", "liuli_transfer"] 已转移=true 费用牌仍在 1 号手牌=false 2 号 hp=3
