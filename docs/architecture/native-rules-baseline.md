@@ -3650,6 +3650,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **牌区入口**（`zhiheng`/`qixi`/`guose`） | `position: "he"`/`"hes"`（含装备区、判定区） | **命令面限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中 → 装备/判定区入口不可达 | zhiheng/qixi/guose |
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
+| **多目标选择权**（标准面 `lijian`） | `selectTarget: 2` + `filterTarget`：玩家手动选 2 名男性（顺序决定谁先出杀） | **自动选目标**（全程仅 `lijian_discard` 询问）→ 玩家无目标/顺序选择权 | lijian |
 | **失去方式覆盖面**（标准面 `xiaoji`） | `loseAfter` + `es`（替换/弃置/获得/被拆**全部**） | 仅 `Equipped{replaced}`（**替换**）→ 规则损失 | xiaoji |
 | **`viewAs` 固定优先级**（`qixi`/`guose`/`wusheng`） | 多候选由**玩家选择** | 固定顺序（国色 > 武圣 > 龙胆/奇袭等，`play_card.rs` 注释） | qixi/guose/wusheng |
 | **转化候选选择**（标准面 `qixi`） | 多个 `viewAs` 之间由**玩家选择** | **固定优先级**（杀类优先，`play_card.rs:156`）；黑色【杀】持奇袭时只作【杀】 | qixi |

@@ -91,8 +91,17 @@ fn upstream_lijian_makes_two_males_duel() {
     );
     // 依次回答：选目标（两名男性）、弃费用牌
     let mut picked: Vec<u8> = Vec::new();
+    let mut specs: Vec<String> = Vec::new();
     for _ in 0..24 {
         let Some(c) = e.open_choice().cloned() else { break };
+        specs.push(format!(
+            "prompt={} kind={:?} min={} max={} opts={:?}",
+            c.spec.prompt,
+            c.spec.kind,
+            c.spec.min,
+            c.spec.max,
+            c.spec.options
+        ));
         if c.spec.prompt == "trigger_confirm" {
             let _ = e.submit(GameCommand {
                 actor: c.observer,
@@ -144,6 +153,9 @@ fn upstream_lijian_makes_two_males_duel() {
     drain(&mut e);
     let hp = (e.debug_hp(1), e.debug_hp(2));
     eprintln!("DBG 离间后 hp1={} hp2={} picked={picked:?}", hp.0, hp.1);
+    for (i, sp) in specs.iter().enumerate() {
+        eprintln!("DBG spec[{i}] {sp}");
+    }
     assert!(
         hp.0 < 4 || hp.1 < 4,
         "离间：两名男性应发生决斗（一方体力下降），实测 hp1={} hp2={}",
