@@ -1,0 +1,5 @@
+DBG 五行生克：牌属性表条目数 = 38
+DBG 五行生克：取牌 1（属性 0）
+DBG 五行生克：使用有属性牌 = Pending { choice: OpenChoice { id: 1, observer: 1, spec: ChoiceSpec { kind: RespondCard, prompt: "respond_shan", options: [Pass, Card(35)], min: 1, max: 1, allow_cancel: false } } }
+DBG 五行生克：询问=["respond_shan@obs1"]；1 号手牌 4 → 3（-1）
+NOTE 五行生克：属性表已启用（38 条），本局使用有属性牌后目标手牌变化 -1；**克/生两向的精确判定**与「角色属性」面登记为待办
