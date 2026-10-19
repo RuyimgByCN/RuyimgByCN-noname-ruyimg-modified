@@ -1,0 +1,4 @@
+DBG 治疗波（满血目标）→ Rejected(IllegalTargets)
+DBG 治疗波：red=true → 1 号 hp+1、护甲+0
+DBG 治疗波：red=false → 1 号 hp+0、护甲+1
+DBG 治疗波：红 → hp+1/护甲+0；非红 → hp+0/护甲+1
