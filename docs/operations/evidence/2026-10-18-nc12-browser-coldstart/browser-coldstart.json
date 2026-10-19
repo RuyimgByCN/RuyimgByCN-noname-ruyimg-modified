@@ -4,28 +4,35 @@
       "iter": 0,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 266,
+      "to_interactive_ms": 260,
       "worker_init_timings": [
         {
-          "fetch_ms": 6.9,
+          "fetch_ms": 6.5,
           "instantiate_ms": 2,
-          "total_ms": 8.9,
+          "total_ms": 8.5,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 576.3,
-        "t1_worker_ready": 595.6,
-        "t2_start_done": 598.1,
-        "t4_first_frame": 602.2,
-        "t3_candidates_loaded": 618.4
+        "t0_click": 263.3,
+        "t1_worker_ready": 279.3,
+        "t2_start_done": 282.1,
+        "t4_first_frame": 405.8,
+        "t3_candidates_loaded": 408.7
       },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.5,
+          "parse_ms": 0.3,
+          "json_bytes": 4567
+        }
+      ],
       "perf": {
-        "domContentLoaded": 39.39999997615814,
-        "loadEvent": 40.09999996423721,
+        "domContentLoaded": 40.09999996423721,
+        "loadEvent": 40.59999996423721,
         "wasm": [],
         "workerChunks": [
-          "engine.native.worker-Cl7Ed0z4.js"
+          "engine.native.worker-uIa5Rzm0.js"
         ]
       }
     },
@@ -33,28 +40,35 @@
       "iter": 1,
       "lobby_ready": 1,
       "interactive": 1,
-      "to_interactive_ms": 268,
+      "to_interactive_ms": 260,
       "worker_init_timings": [
         {
-          "fetch_ms": 7.4,
-          "instantiate_ms": 2.3,
-          "total_ms": 9.8,
+          "fetch_ms": 6.6,
+          "instantiate_ms": 2,
+          "total_ms": 8.6,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 567.7,
-        "t1_worker_ready": 586.5,
-        "t2_start_done": 588.8,
-        "t4_first_frame": 593,
-        "t3_candidates_loaded": 595.5
+        "t0_click": 266.3,
+        "t1_worker_ready": 281.8,
+        "t2_start_done": 284.1,
+        "t4_first_frame": 407.1,
+        "t3_candidates_loaded": 409.5
       },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.5,
+          "parse_ms": 0.3,
+          "json_bytes": 4567
+        }
+      ],
       "perf": {
-        "domContentLoaded": 42.69999998807907,
-        "loadEvent": 43.30000001192093,
+        "domContentLoaded": 44.90000003576279,
+        "loadEvent": 45.5,
         "wasm": [],
         "workerChunks": [
-          "engine.native.worker-Cl7Ed0z4.js"
+          "engine.native.worker-uIa5Rzm0.js"
         ]
       }
     },
@@ -65,25 +79,32 @@
       "to_interactive_ms": 261,
       "worker_init_timings": [
         {
-          "fetch_ms": 7.5,
-          "instantiate_ms": 2.5,
-          "total_ms": 10,
+          "fetch_ms": 6.1,
+          "instantiate_ms": 2.1,
+          "total_ms": 8.2,
           "wasm_bytes": 2644903
         }
       ],
       "start_marks": {
-        "t0_click": 594.8,
-        "t1_worker_ready": 623,
-        "t2_start_done": 626.2,
-        "t4_first_frame": 631,
-        "t3_candidates_loaded": 634.2
+        "t0_click": 266.8,
+        "t1_worker_ready": 283.2,
+        "t2_start_done": 285.5,
+        "t4_first_frame": 408,
+        "t3_candidates_loaded": 410.4
       },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.5,
+          "parse_ms": 0.2,
+          "json_bytes": 4567
+        }
+      ],
       "perf": {
-        "domContentLoaded": 64,
-        "loadEvent": 64.59999996423721,
+        "domContentLoaded": 37.30000001192093,
+        "loadEvent": 38,
         "wasm": [],
         "workerChunks": [
-          "engine.native.worker-Cl7Ed0z4.js"
+          "engine.native.worker-uIa5Rzm0.js"
         ]
       }
     }

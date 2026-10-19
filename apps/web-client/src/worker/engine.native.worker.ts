@@ -8,6 +8,7 @@ import {
   chooseGeneral,
   ensureNativeReady,
   generalCandidates,
+  lastCandidateTimings,
   nativeCreate,
   nativeCreateWithPacks,
   nativeDispatch,
@@ -86,7 +87,15 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
       }
       case "generalCandidates": {
         // NC05：候选来自内核目录（含扩展武将）；畸形返回在适配层即抛错。
-        reply({ id: msg.id, ok: true, data: generalCandidates(handle) });
+        const data = generalCandidates(handle);
+        // NC12：候选生成分段耗时随回包发出（页面侧钩子记录；不参与业务逻辑）
+        if (lastCandidateTimings) {
+          reply({
+            type: "candidate_timings",
+            timings: lastCandidateTimings,
+          } as unknown as WorkerResponse);
+        }
+        reply({ id: msg.id, ok: true, data });
         return;
       }
       case "chooseGeneral": {

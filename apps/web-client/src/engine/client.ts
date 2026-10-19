@@ -58,6 +58,14 @@ export class EngineClient {
         );
         return;
       }
+      if (maybe?.type === "candidate_timings" && maybe.timings) {
+        (globalThis as unknown as { __nativeCandidateTimings?: unknown[] })
+          .__nativeCandidateTimings ??= [];
+        (
+          globalThis as unknown as { __nativeCandidateTimings: unknown[] }
+        ).__nativeCandidateTimings.push(maybe.timings);
+        return;
+      }
       const msg = ev.data;
       const p = this.pending.get(msg.id);
       if (!p) return;

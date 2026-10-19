@@ -224,3 +224,29 @@ iter 0/1/2 | envelope+首帧 123.0–124.0 ms（与未跳过时一致）
 - [ ] 候选生成 126 ms 的引擎侧拆分与优化（worker 内埋点）
 - [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）；真实网络；动画帧/输入响应
 - [ ] 将 `?skipAnims`/`localStorage` 入口写入客户端文档（供 QA 与后续测量复用）
+
+## 12 **候选 126 ms 的真因：不是生成，而是主线程繁忙**（2026-10-19 同轮）
+
+**做法**：在 worker 侧对 `generalCandidates` 分段计时（`nativeBackend.ts`：`engine_ms` = 引擎生成+序列化、
+`parse_ms` = JS 解析、`json_bytes`），随回包以 `candidate_timings` 上报 → 客户端钩子
+`window.__nativeCandidateTimings`（不参与业务逻辑）。
+
+**实测（3 轮，[coldstart-candidates.log](coldstart-candidates.log)、[candidate-detail.txt](candidate-detail.txt)）**：
+
+| 轮 | 候选往返（页面侧 `t2→t3`） | **引擎生成** | **JS 解析** | JSON 大小 |
+|---|---:|---:|---:|---:|
+| 0 | 126.6 ms | **0.5 ms** | **0.3 ms** | 4,567 B |
+| 1 | 125.4 ms | **0.5 ms** | **0.3 ms** | 4,567 B |
+| 2 | 124.9 ms | **0.5 ms** | **0.2 ms** | 4,567 B |
+
+**结论与更正（重要）**：
+1. **候选生成与解析合计 < 1 ms**（JSON 仅 4.5 KB）→ **不存在候选生成瓶颈**；
+2. 页面侧 125 ms 的「往返」**不是 worker 计算**，而是**主线程繁忙**：该 Promise 在
+   **战斗视图渲染期间**才被 resolve（§9/§11 已证明同一时段的主线程被 `handleEnvelope` +
+   Vue 渲染占用；非阻塞改造后 `t4_first_frame` 已先于 `t3_candidates_loaded`，两标记顺序改变）；
+3. → 因此**无需优化候选生成**；若要缩短「面板就绪」，应优化**主线程渲染**（或让候选面板懒挂载）。
+
+### 仍未完成（更新）
+
+- [ ] 主线程渲染（战斗视图首帧）耗时拆分与优化（Vue 组件级埋点）
+- [ ] 多浏览器（Safari/Firefox）与移动端（Android/iOS）、桌面（Tauri）；真实网络；动画帧/输入响应

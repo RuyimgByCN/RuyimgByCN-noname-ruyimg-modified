@@ -628,11 +628,29 @@ export function parseGeneralAssignmentJson(
  * 门控（赛前大厅阶段、双将明置与选将信息隔离是 NC05 待办）。适配层如实透传，
  * 不假装做过座位过滤。
  */
+/// 最近一次 `generalCandidates` 的分段耗时（worker 内；由 worker 回传给页面）。
+export let lastCandidateTimings: {
+  engine_ms: number;
+  parse_ms: number;
+  json_bytes: number;
+} | null = null;
+
 export function generalCandidates(
   handle: NativeHandle,
 ): GeneralCandidatesPayload {
+  // NC12 诊断（不参与业务逻辑）：拆分「引擎生成 + 序列化」与「JS 侧解析」两段耗时，
+  // 供浏览器档位测量读取（客户端钩子 window.__nativeCandidateTimings）。
+  const t0 = performance.now();
   const raw = requireGeneralSelectExports(handle).general_candidates_json();
-  return parseGeneralCandidatesJson(raw);
+  const t1 = performance.now();
+  const parsed = parseGeneralCandidatesJson(raw);
+  const t2 = performance.now();
+  lastCandidateTimings = {
+    engine_ms: Math.round((t1 - t0) * 100) / 100,
+    parse_ms: Math.round((t2 - t1) * 100) / 100,
+    json_bytes: raw.length,
+  };
+  return parsed;
 }
 
 /**

@@ -1,0 +1,3 @@
+iter 0 | 候选往返(t2->t3) 126.6 | timings: {'engine_ms': 0.5, 'parse_ms': 0.3, 'json_bytes': 4567}
+iter 1 | 候选往返(t2->t3) 125.4 | timings: {'engine_ms': 0.5, 'parse_ms': 0.3, 'json_bytes': 4567}
+iter 2 | 候选往返(t2->t3) 124.9 | timings: {'engine_ms': 0.5, 'parse_ms': 0.2, 'json_bytes': 4567}
