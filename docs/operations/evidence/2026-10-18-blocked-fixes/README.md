@@ -960,3 +960,19 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 **验收**：样本 122 的 `upstream_shenenshu_replaces_hand_with_basics`（当前 `#[ignore]`）应能通过
 （原手牌全失去、新得 `1 + n` 张且全为基本牌）。
+
+## 45 视界术（`shijieshu`）**目标集合 + 末尾弃 1**（样本 124，2026-10-19）
+
+**症状一（目标集合）**：上游 `filterTarget: !target.isMin()` ⇒ **指定其他角色**；
+原生 `engine/play_card.rs:1481-1485` 注释「**世界树：自-target**」且**要求 `targets` 为空**
+（传显式目标 → `Rejected(IllegalTargets)`）⇒ **效果只作用于使用者**。
+
+**症状二（末尾弃 1 缺失）**：上游 `step 3` 为 `if (target.countCards("he")) target.chooseToDiscard("he", true)`
+（**强制弃 1**）；原生实测 `弃牌=false`，`he` 总数 `1 → 2`（= **+2 装备 −1 打出本体**）
+⇒ **末尾弃牌未发生**。
+
+**修法**：①按上游把目标改为**其他非体力最少角色**；②补**末尾弃 1**（`he`，强制）。
+
+**验收**：样本 124 应能断言「指定其他角色成功」且「`he` 净 **+1**（+2 −1）」。
+
+**族**：「目标集合范围」**第 3 例**（前两例 `jieyan`/`dinvxuanshuang`）。
