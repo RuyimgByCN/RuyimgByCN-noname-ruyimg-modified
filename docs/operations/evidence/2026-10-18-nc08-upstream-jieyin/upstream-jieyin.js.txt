@@ -1,0 +1,34 @@
+	jieyin: {
+		audio: 2,
+		enable: "phaseUse",
+		filterCard: true,
+		usable: 1,
+		selectCard: 2,
+		check(card) {
+			const player = get.owner(card);
+			if (player == null) {
+				return 0;
+			}
+			if (player.countCards("h") > player.hp) {
+				return 8 - get.value(card);
+			}
+			if (player.hp < player.maxHp) {
+				return 6 - get.value(card);
+			}
+			return 4 - get.value(card);
+		},
+		filterTarget(card, player, target) {
+			if (!target.hasSex("male")) {
+				return false;
+			}
+			if (target.hp >= target.maxHp) {
+				return false;
+			}
+			if (target === player) {
+				return false;
+			}
+			return true;
+		},
+		async content(event, trigger, player) {
+			await player.recover();
+			await event.target.rec
