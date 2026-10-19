@@ -1,0 +1,1 @@
+DBG 鬼才：红牌入候选=true 询问序列=["discard_to_limit:6", "discard_to_limit:6"]

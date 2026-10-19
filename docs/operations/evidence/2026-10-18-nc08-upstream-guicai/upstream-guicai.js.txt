@@ -1,0 +1,32 @@
+guicai: {
+		audio: 2,
+		audioname2: { new_simayi: "reguicai_new_simayi" },
+		trigger: { global: "judge" },
+		preHidden: true,
+		filter(event, player) {
+			return player.hasCards(get.mode() === "guozhan" ? "hes" : "hs");
+		},
+		async cost(event, trigger, player) {
+			event.result = await player
+				.chooseCard({
+					prompt: `${get.translation(trigger.player)}的${trigger.judgestr || ""}判定为${get.translation(trigger.player.judging[0])}，${get.prompt(event.skill)}`,
+					filterCard(card) {
+						const player = get.player();
+						const mod2 = game.checkMod(card, player, "unchanged", "cardEnabled2", player);
+						if (mod2 !== "unchanged") {
+							return !!mod2;
+						}
+						const mod = game.checkMod(card, player, "unchanged", "cardRespondable", player);
+						if (mod !== "unchanged") {
+							return !!mod;
+						}
+						return true;
+					},
+					position: get.mode() === "guozhan" ? "hes" : "hs",
+					ai(card) {
+						const trigger = get.event().getTrigger();
+						const { player, judging } = get.event();
+						const result = trigger.judge(card) - trigger.judge(judging);
+						const attitude = get.attitude(player, trigger.player);
+						let val = get.value(card);
+						if (get.subtype(c
