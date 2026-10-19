@@ -1412,4 +1412,22 @@ DBG 黄麟之琮探针：当前阶段=Judge；护甲=0（若在 Judge 且已触�
 **下一步（决定性）**：核对 `EventData::Phase{phase: Judge, begin: true}` 是否**实际发射**，
 以及该事件是否进入**宿主机器的派发清单**（而非仅进 `AfterTriggers`）。
 
+**✅ 事件层已确认（同日）**：`kernel/events.rs` **两处**发射该事件——
+
+```rust
+// events.rs:753（回合更替：next 玩家的 Judge 开始）
+ctx.emit(EventData::Phase { player: next, phase: Phase::Judge, begin: true });
+// events.rs:789（另一分支：同上）
+ctx.emit(EventData::Phase { player: next, phase: Phase::Judge, begin: true });
+```
+
+⇒ **事件确实发射** ⇒ **事件层正常**。
+
+**再收窄**：filter 的 `hand_has_kind(ctx, owner, CardKind::Huanglinzhicong)` 也应成立
+（牌确在手、`card_kind` 即该 kind）⇒ 剩余唯一候选：**该事件未派发到宿主机器**
+（`emit` 进入引擎的触发通道，但**宿主机器的派发清单未包含「回合更替帧的 `Phase` 事件」**）。
+
+**修法（待拆分解除后可做）**：核对**宿主机器的事件订阅/派发路径**（`content/host/**`，**当前未跟踪**）
+——确认 `Phase{begin:true}` 是否进入 `HostBehavior` 的触发派发，若否，补该帧的派发。
+
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
