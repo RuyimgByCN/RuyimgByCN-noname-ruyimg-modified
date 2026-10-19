@@ -1,0 +1,63 @@
+jijiu: {
+		mod: {
+			aiValue(player, card, num) {
+				if (get.name(card) !== "tao" && get.color(card) !== "red") {
+					return;
+				}
+				const cards = player.getCards("hs", card => get.name(card) === "tao" || get.color(card) === "red");
+				cards.sort((a, b) => (get.name(a) === "tao" ? 1 : 2) - (get.name(b) === "tao" ? 1 : 2));
+				const geti = () => {
+					if (cards.includes(card)) {
+						cards.indexOf(card);
+					}
+					return cards.length;
+				};
+				return Math.max(num, [6.5, 4, 3, 2][Math.min(geti(), 2)]);
+			},
+			aiUseful(...args) {
+				return lib.skill.jijiu.mod?.aiValue?.(...args);
+			},
+		},
+		locked: false,
+		audio: 2,
+		audioname: ["re_huatuo"],
+		audioname2: { old_huatuo: "jijiu_re_huatuo" },
+		enable: "chooseToUse",
+		viewAsFilter(player) {
+			return player !== _status.currentPhase && player.hasCards("hes", { color: "red" });
+		},
+		filterCard(card) {
+			return get.color(card) === "red";
+		},
+		position: "hes",
+		viewAs: { name: "tao" },
+		prompt: "将一张红色牌当桃使用",
+		check(card) {
+			return 15 - get.value(card);
+		},
+		ai: {
+			threaten: 1.5,
+		},
+	},
+	jijiu_re_huatuo: { audio: 2 },
+	wushuang: {
+		audio: 2,
+		audioname: ["re_lvbu", "shen_lvbu", "lvlingqi", "mb_shen_lvbu"],
+		audioname2: { sb_lvbu: "sbliyu_effect" },
+		forced: true,
+		locked: true,
+		group: ["wushuang1", "wushuang2"],
+		preHidden: ["wushuang1", "wushuang2"],
+	},
+	wushuang1: {
+		audio: "wushuang",
+		audioname: ["re_lvbu", "shen_lvbu", "lvlingqi", "mb_shen_lvbu"],
+		audioname2: {
+			sb_lvbu: "sbliyu_effect",
+			gz_lvlingqi: "wushuang_lvlingqi",
+		},
+		trigger: { player: "useCardToPlayered" },
+		forced: true,
+		sourceSkill: "wushuang",
+		filter(event, player) {
+			return event.card.name === "sha" 
