@@ -8,15 +8,23 @@
 对候选救援牌逐一构造**同一濒死局面**：0 号持该牌、1 号 **1 血**、0 号出**【杀】**（1 号无【闪】⇒ 受伤至 0），
 观察濒死时该牌**是否出现在 `dying_save` 窗口中**。
 
-## 结果（**可复核清单**）
+## 结果（**全量 `savable` 清单核对**，可复核）
 
-| 救援牌 | 获提供 | 被救回 | 询问 |
-|---|---|---|---|
-| **【桃】** | **true** | **true** | `dying_save` |
-| **【酒】** | **true** | **true** | `dying_save` |
-| **【虎符】** | **false** | **false** | **`[]`**（无窗口） |
+上游 `savable` 清单（自各包 `card.js` 提取）：gujian `dinvxuanshuang`(true)、gwent `gw_fuyuan`(true)、
+swd `hufu`(func)/`yuchanzhen`(func)/`yuchanxun`(**true**)/`yuchanli`(func)/`tianxianjiu`(func)。
 
-⇒ **救援检测的卡牌集合 = {【桃】,【酒】}**，**不含【虎符】** ⇒ 与第 52 项结论一致。
+| 包 | 救援牌 | 获提供 | 被救回 | 判读 |
+|---|---|---|---|---|
+| swd | **【桃】`tao`** | **true** | **true** | ✅ 正常 |
+| swd | **【酒】`jiu`** | **true** | **true** | ✅ 正常 |
+| swd | **`tianxianjiu`（天仙酒）** | **true** | **true** | ✅ 正常 |
+| gujian | **`dinvxuanshuang`（帝女玄霜）** | **true** | **true** | ✅ 正常 |
+| swd | **`hufu`（虎符）** | **false** | **false** | ✗ **缺失**（第 52 项） |
+| swd | **`yuchanxun`（渔产·巽）** | **false** | **false** | ✗ **缺失**（**本轮新发现**） |
+| gwent | `gw_fuyuan`（复原） | — | — | 未交付（**转换缺口**，见第 117 行清单） |
+
+⇒ **救援检测的卡牌集合 = {桃, 酒, 天仙酒, 帝女玄霜}**；
+**缺失 2 张：`hufu`（虎符）、`yuchanxun`（渔产·巽）** ⇒ 与第 52 项同因，**修法范围明确为 2 张**。
 
 ## 用途
 

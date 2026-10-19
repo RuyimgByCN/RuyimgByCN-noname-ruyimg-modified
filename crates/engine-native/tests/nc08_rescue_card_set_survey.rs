@@ -12,17 +12,24 @@ mod nc08_common;
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
 use nc08_common::{advance_to_phase, drain, next_dedup};
 
-fn swd_engine(seed: u64) -> Engine {
+fn pack_engine(pkg: &str, seed: u64) -> Engine {
     let dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../packages/extensions/shahai-swd-upstream-noname/assets");
-    let cards = std::fs::read_to_string(dir.join("cards.json")).expect("读 swd cards");
-    let pack = content_native_loader::bridge_pack(&cards).expect("桥接").pack;
+        .join("../../packages/extensions")
+        .join(pkg)
+        .join("assets");
+    let cards = std::fs::read_to_string(dir.join("cards.json")).expect("读 cards");
+    let mut pack = content_native_loader::bridge_pack(&cards).expect("桥接").pack;
+    if let Ok(chars) = std::fs::read_to_string(dir.join("character.json")) {
+        if let Ok(b) = content_native_loader::bridge_generals(&chars) {
+            pack.generals = b.generals;
+        }
+    }
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
 }
 
 /// 返回 `(是否获提供, 是否被救回, 询问名)`。
-fn probe(card_name: &str, seed: u64) -> (bool, bool, Vec<String>) {
-    let mut e = swd_engine(seed);
+fn probe(pkg: &str, card_name: &str, seed: u64) -> (bool, bool, Vec<String>) {
+    let mut e = pack_engine(pkg, seed);
     assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
     for p in 0..4 {
         e.debug_clear_hand(p);
@@ -88,11 +95,20 @@ fn probe(card_name: &str, seed: u64) -> (bool, bool, Vec<String>) {
 /// **普查**：候选救援牌在 `dying_save` 窗口中是否获提供。
 #[test]
 fn rescue_card_set_survey() {
-    let names = ["tao", "jiu", "hufu"];
+    // 标准【桃】/【酒】 + 各包 `savable` 卡（上游 `savable` 清单）
+    let cases = [
+        ("shahai-swd-upstream-noname", "tao"),
+        ("shahai-swd-upstream-noname", "jiu"),
+        ("shahai-swd-upstream-noname", "hufu"),
+        ("shahai-swd-upstream-noname", "yuchanxun"),
+        ("shahai-swd-upstream-noname", "tianxianjiu"),
+        ("shahai-gujian-upstream-noname", "dinvxuanshuang"),
+        ("shahai-gwent-upstream-noname", "gw_fuyuan"),
+    ];
     let mut rows = Vec::new();
-    for (i, n) in names.iter().enumerate() {
-        let (offered, saved, prompts) = probe(n, 20287800 + i as u64);
-        eprintln!("DBG 救援集合：{n} → 获提供={offered} 被救回={saved} 询问={prompts:?}");
+    for (i, (pkg, n)) in cases.iter().enumerate() {
+        let (offered, saved, prompts) = probe(pkg, n, 20287800 + i as u64);
+        eprintln!("DBG 救援集合：{pkg} / {n} → 获提供={offered} 被救回={saved} 询问={prompts:?}");
         rows.push((*n, offered, saved));
     }
     eprintln!("DBG 救援集合结论：{rows:?}");
