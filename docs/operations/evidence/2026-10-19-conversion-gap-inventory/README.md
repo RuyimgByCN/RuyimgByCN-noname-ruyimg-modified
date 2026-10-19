@@ -1,19 +1,25 @@
-# 转换缺口清单（确认版，2026-10-19）
+# 转换缺口清单（确认版 v2，2026-10-19）
 
 - 工作包：**NC08 / 扩展台账**；规则版本 v322（工作树）/ 存档格式 v105
-- 方法：上游同名 `card.js` 中「紧邻出现 `type:`」的卡键 → 依次核对 **①包内卡名（前缀归一）** →
-  **②原生核心 `crates/engine-native/src/**`** → **③其它包 `packages/extensions/*/assets/*.json`**
-  → 三者**均无**才判「未转换」
-- 检索文本：原生 src + 全部包 JSON 合并（约 3.6 MB，小写匹配）
+- **v2 变更**：①上游定位改为**多基址解析**（`archive/upstream/noname/`、`noname-liuli/`、
+  `apps/core/extension/` 前缀补全）②目录型路径改为 **walk 全部 `.js`**（不再只找 `card.js`）
+  ⇒ **可筛选包由 4 增至 10**，并**新发现 `shahai-zhenfa` 的 5 项缺口**
+- 判定顺序：**包内卡名（前缀归一）→ 原生核心 → 其它包** → 三者均无才判「未转换」
 
 | 包 | 上游卡键 | 包内卡名 | **确认缺口** |
 |---|---:|---:|---:|
+| `huanle-upstream-noname` | 6 | 6 | **0** |
 | `shahai-gujian-upstream-noname` | 33 | 30 | **2** |
 | `shahai-gwent-upstream-noname` | 43 | 12 | **30** |
 | `shahai-hearth-upstream-noname` | 13 | 12 | **1** |
-| `shahai-swd-upstream-noname` | 79 | 90 | **17** |
+| `shahai-mtg-upstream-noname` | 13 | 10 | **0** |
+| `shahai-swd-upstream-noname` | 80 | 90 | **18** |
+| `shahai-yunchou-upstream-noname` | 10 | 11 | **0** |
+| `shahai-zhenfa-upstream-noname` | 11 | 6 | **5** |
+| `wudian-upstream-noname` | 6 | 7 | **0** |
+| `wuxing-upstream-liuli` | 0 | 1 | **0** |
 
-**合计确认缺口：50 个**
+**合计确认缺口：56 个（10 包可筛选）**
 
 ## shahai-gujian-upstream-noname（2）
 
@@ -33,17 +39,22 @@ gw_aerdeyin gw_baishuang gw_baobaoshu gw_butianshu gw_chongci gw_dieyi gw_dieyi_
 shihuawuqi
 ```
 
-## shahai-swd-upstream-noname（17）
+## shahai-swd-upstream-noname（18）
 
 ```
-baihupifeng cangchizhibi fuxiqin guangshatianyi guiyanfadao hslingjian_shengxiuhaojiao hslingjian_shijianhuisu hslingjian_xingtigaizao hslingjian_xuanfengzhiren hslingjian_yinmilichang hslingjian_zhongxinghujia huanpodan lingjiandai pangufu qinglianxindeng qipoguyu xiangyuye
+baihupifeng cangchizhibi fuxiqin g_yuchan_equip guangshatianyi guiyanfadao hslingjian_shengxiuhaojiao hslingjian_shijianhuisu hslingjian_xingtigaizao hslingjian_xuanfengzhiren hslingjian_yinmilichang hslingjian_zhongxinghujia huanpodan lingjiandai pangufu qinglianxindeng qipoguyu xiangyuye
 ```
 
-## 说明与边界
+## shahai-zhenfa-upstream-noname（5）
 
-1. **本清单是「未转换」判定**（包内、原生核心、其它包三者均无），**不含**「已实现但不在该包包内」
-   （如 gwent 的 `aozuzhilei`/`ansha` 已在**原生核心**实现）；
-2. **gujian 的 2 项**（`gjyuheng_plus`/`gjyuheng_pro`）为**已知暂缓**（基准记「升级机制暂缓」）；
-3. **未定位包不覆盖**：8 个包的 `upstream_path` 下无 `card.js`（≠ 未转换）；
-4. 前缀归一表：`swd_`/`gw_`/`gj_`/`ycn_`/`wd_`/`hl_`/`xz_`/`ow_`/`hearth_`；
-5. 本清单只判「**是否转换**」，**不判玩法面等价**（后者须逐卡样本）。
+```
+fengyangzhen huyizhen longfeizhen shepanzhen yunchuizhen
+```
+
+## 边界
+
+1. 只判「**是否转换**」，不判玩法面等价；
+2. 「包内没有」≠「未实现」（已在**原生核心/其它包**实现的不计入，如 gwent `aozuzhilei`/`ansha`）；
+3. `wuxing`（liuli）**卡键 0**：其卡定义在 `extension.js` 内、格式不同 ⇒ **本筛选不覆盖**；
+4. `gujian` 的 2 项为**已知暂缓**（升级机制）；
+5. `swd` 的 `g_yuchan_equip` 为**全局子技**（非卡）⇒ **噪声项**，需人工剔除。
