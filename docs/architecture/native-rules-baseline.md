@@ -3666,7 +3666,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **失去事件覆盖面**（标准面 `lianying`） | `loseAfter` + 5 个全局异步面 | 四类显式事件（`CardUsed`/`CardResponded`/`CardsMoved`/`CardsDiscarded`）；注释自述**批量弃置未覆盖** | lianying |
 | **阈值 off-by-one**（标准面 `lianying`） | 失去后**手牌为空**才触发 | filter `hand.len() > 1` 在**牌已离手后**求值 → 剩 1 张即触发（**原生更宽松**，实测出现确认门） | lianying |
 | **多目标选择权**（标准面 `lijian`） | `selectTarget: 2` + `filterTarget`：玩家手动选 2 名男性（顺序决定谁先出杀） | **自动选目标**（全程仅 `lijian_discard` 询问）→ 玩家无目标/顺序选择权 | lijian |
-| **取牌选择权**（标准面 `fankui`） | `gainPlayerCard({forced:true})`：玩家**选一张**牌 | 取**确定性首张**（`.hand` 优先、否则 `equips.first()`）→ 玩家无选牌权 | **lijian + fankui** |
+| **取牌选择权**（`fankui`/`lijian`/运筹 `diyguhuo`/运筹 `zonghuo`） | 上游凡「玩家选牌」处均为**自选**：`gainPlayerCard({forced:true})`（离间/反馈）、`discardPlayerCard(player,"hej",2,true)`（蛊惑·变体）、`chooseToDiscard`（纵火，**可取消**） | 原生多以**确定性取牌**代替：`.hand` 优先/`equips.first()`（反馈/离间）、**固定顺序**判定区→装备→手牌（蛊惑·变体）、**手牌首张**（纵火）→ 玩家无选牌权 | **4 例：lijian + fankui + diyguhuo + zonghuo** |
 | **失去方式覆盖面**（标准面 `xiaoji`） | `loseAfter` + `es`（替换/弃置/获得/被拆**全部**） | 仅 `Equipped{replaced}`（**替换**）→ 规则损失 | xiaoji |
 | **`viewAs` 固定优先级**（`qixi`/`guose`/`wusheng`） | 多候选由**玩家选择** | 固定顺序（国色 > 武圣 > 龙胆/奇袭等，`play_card.rs` 注释） | qixi/guose/wusheng |
 | **转化候选选择**（标准面 `qixi`） | 多个 `viewAs` 之间由**玩家选择** | **固定优先级**（杀类优先，`play_card.rs:156`）；黑色【杀】持奇袭时只作【杀】 | qixi |
