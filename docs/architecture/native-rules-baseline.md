@@ -3647,10 +3647,10 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **门槛历史范围**（标准面 `keji`） | `useCard` **与** `respond` 两历史都查【杀】 | 原生只看 `turn.sha_used_play_phase`（出牌阶段使用） | keji |
 | **实现层级**（标准面 `keji`） | 事件级「跳过弃牌阶段」 | 上限级「手牌上限视为无限」（结果等价、事件面不同） | keji |
 | **循环询问粒度**（标准面 `luoshen`） | 每轮 `chooseBool` 询问是否继续 | **整链一次确认**（源码注释自述） | luoshen |
-| **牌区入口**（`zhiheng`/`qixi`/`guose`） | `position: "he"`/`"hes"`（含装备区、判定区） | **命令面限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中 → 装备/判定区入口不可达 | zhiheng/qixi/guose |
+| **牌区入口**（`zhiheng`/`qixi`/`guose`/`wusheng`/`lijian`） | `position: "he"`/`"hes"`（含装备区、判定区） | **命令面限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中 → 装备/判定区入口不可达 | **zhiheng/qixi/guose/wusheng/lijian（5 例）** |
 | **改判牌区**（标准面 `guicai`） | 非国战 `hs`（手牌 + **装备区**），**不限花色** | 手牌全量 ✅；**装备区候选受 `is_black` 限制**（鬼道口径）→ 鬼才非黑装备不能改判 | guicai |
 | **自我目标**（标准面 `qingnang`） | `filterTarget` 仅排除满血（**含自己**） | `activate` 要求 `i != owner` → **不能青囊自己**（规则损失） | qingnang |
-| **守约变体**（`wusheng`/`tieji`） | `get.zhu(player, "shouyue")` 时判据变化（武圣：红色→非红桃？；铁骑：红色→**非黑桃**） | 两处**均未建模守约变体** | **wusheng + tieji（2 例）** |
+| **守约变体**（`wusheng`/`tieji`） | `get.zhu(player, "shouyue")` 时判据变化——**已逐字核对上游**：武圣 `filterCard` 守约时 **`return true`（任意牌）**、否则 `get.color(card) === "red"`；铁骑守约时判据为**非黑桃**、否则**红色** | 两处**均未建模守约变体** | **wusheng + tieji（2 例）** |
 | **回合限制**（标准面 `jijiu`） | `viewAsFilter: player !== _status.currentPhase`（**回合外**） | `is_tao_like` 只判花色 → 自己回合内亦可用（**原生更宽松**） | jijiu |
 | **取消摸牌的弃置面**（标准面 `tuxi`） | `trigger.changeToZero()`：**取消摸牌**（不摸不弃） | `Read` 阶段**无条件 `hand.pop()` 弃 2 张** → 若固定摸牌尚未发生即弃原有手牌（净变化 0，应为 +取牌数） | tuxi |
 | **必中标记通道**（`tieji` 写入 / `wushuang` 读取） | 铁骑判定成功 → `directHit.add(target)`（**通用标记**）；无双 filter **读取** `directHit` 以决定是否加倍 | **两端均未走通用标记**：写入方存 `tieji_red`（杀机器字段）、读取方只判持技 → **同一机制面缺口**（宜一并修：写入方写 `directHit` + 读取方检查） | **tieji + wushuang（2 例，互为印证）** |
