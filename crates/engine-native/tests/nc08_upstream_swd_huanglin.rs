@@ -43,6 +43,7 @@ fn swd_engine(seed: u64) -> Engine {
 /// 「`phaseBegin` 机器的**分支选择**」与「`WaitChoice` 可见性」。
 #[test]
 #[ignore = "黄麟之琮：无护甲时未 +1（0→0），负例通过但不可信——见第 56 项"]
+fn upstream_huanglinzhicong_gains_hujia_on_phase_begin() {
     let mut e = swd_engine(20288901);
     for p in 0..4 {
         e.debug_clear_hand(p);
@@ -80,8 +81,6 @@ fn swd_engine(seed: u64) -> Engine {
     );
 }
 
-/// **负例**（上游 `!player.hujia`）：**已有护甲**时**不应**再加。
-#[test]
 /// **负例**（上游 `!player.hujia`）：**已有护甲**时**不应**再加。
 ///
 /// ⚠ **本用例的通过不构成证据**：若窗口完全不触发，本用例也会通过 ⇒ 仅作**辅助**，
