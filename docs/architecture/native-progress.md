@@ -459,4 +459,4 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 - 追加（2026-10-19）：+ **NC12 移动档位（**视口模拟**，非真机）**：CDP 模拟 390×844 + 触摸 + 移动 UA → 首屏可交互 p50 **263 ms**（桌面 260 ms，**+1.2%**）；**触摸手势端到端**（`Input.dispatchTouchEvent` → 进入对局 `/battle?players=4&seed=42`、`interactive=true`、0 console error）；**移动/桌面真机档位仍未验收**（证据：operations/evidence/2026-10-19-mobile-viewport-sim）
 + **NC12 弱网档位（CDP 网络模拟）——**对 loopback 无效，如实登记**：slow3g/fast3g/none 三档位 p50 分别 261/261/260 ms（差异 ≤1 ms，模拟未生效）→ **不能**用于弱网验收；真实网络项仍为未验收 （证据：operations/evidence/2026-10-19-network-sim）
 
-+ **来源 U05（swd）卡牌 shijianhuisu/时间回溯（2 点通过含 1 处差异登记：目标装备区牌收回手牌 行为面实测 装备 1→0 / 手牌 0→1；上游 filterTarget 的「有装备」门槛原生未见校验）** 
++ **来源 U05（swd）卡牌 shijianhuisu/时间回溯（2 点通过含 1 处差异登记：目标装备区牌收回手牌 行为面实测 装备 1→0 / 手牌 0→1；上游 filterTarget 的「有装备」门槛原生未见校验）** + **来源 U05（swd）机关牌 gouhunluo/勾魂锣（2 点通过含 1 处差异登记：目标挂 3 轮倒计时 + 来源记录 实测 rounds=3/source=Some(0)；上游 filterTarget 的「未持该技」门槛原生未见校验）** 

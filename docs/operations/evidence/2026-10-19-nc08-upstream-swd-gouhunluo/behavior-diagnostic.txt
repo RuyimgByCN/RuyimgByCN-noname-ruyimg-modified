@@ -1,0 +1,2 @@
+DBG 勾魂锣：发动=Accepted { state_hash: [..] }（目标倒计时前值=0）
+DBG 勾魂锣：目标 rounds=3 source=Some(0)
