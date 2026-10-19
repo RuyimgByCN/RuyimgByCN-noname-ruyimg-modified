@@ -121,12 +121,15 @@ fn upstream_keji_no_sha_means_no_discard() {
 
 /// 上游点 2（不满足）：本回合**使用过【杀】** → 克己不生效（须按上限弃牌）。
 ///
-/// **本轮未验收（登记）**：夹具推进到弃牌阶段后手牌未减少（`9 → 9`）——强制弃牌的驱动
-/// 方式未对上（`drain` 以放弃/取前 N 项处理，未触发实际弃置）→ 以 `#[ignore]` 守护；
-/// 门槛侧由 `upstream_keji_no_sha_means_no_discard`（未使用杀 → 不弃牌）与
-/// `upstream_keji_respond_history_difference_is_fixed`（源码事实）覆盖。
+/// **本轮未验收（登记，含诊断数据）**：推进到弃牌阶段时实测
+/// `sha_flag=true, hand=9, limit=4, open_choice=None`；推进后 `hand=9, discarded=0`
+/// —— **既无弃牌询问、也未记录弃置**。两种可能（未判定，不写成结论）：
+/// ① 夹具未走到强制弃牌的触发点（`NextPhase` 直接结束该阶段）；
+/// ② 该路径下弃牌上限未被强制执行（**待查**）。
+/// 以 `#[ignore]` 守护并保留诊断；门槛侧由 `upstream_keji_no_sha_means_no_discard`
+/// 与 `upstream_keji_respond_history_difference_is_fixed` 覆盖。
 #[test]
-#[ignore = "夹具未驱动强制弃牌（登记未验收）；门槛侧见另外两个用例"]
+#[ignore = "夹具未驱动强制弃牌（诊断：sha_flag=true/hand=9/limit=4，但弃牌阶段无询问、discarded=0）；门槛侧见另外两个用例"]
 fn upstream_keji_after_using_sha_must_discard() {
     let mut e = Engine::new(20265002, 4);
     e.debug_grant(0, "克己");
@@ -151,6 +154,13 @@ fn upstream_keji_after_using_sha_must_discard() {
         e.debug_give_hand_card(0, 0, c);
     }
     let hand_before = e.debug_hand(0).len();
+    eprintln!(
+        "DBG 弃牌阶段前：sha_flag={} hand={} limit={:?} open={:?}",
+        e.state_core().turn.sha_used_play_phase,
+        hand_before,
+        e.state_core().hand_limit(e.catalog(), 0),
+        e.open_choice().map(|c| c.spec.prompt.clone())
+    );
     let _ = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
@@ -159,6 +169,12 @@ fn upstream_keji_after_using_sha_must_discard() {
     });
     // 弃牌询问：按默认（放弃/取需弃数）处理
     drain(&mut e);
+    eprintln!(
+        "DBG 弃牌阶段后：sha_flag={} hand={} discarded={}",
+        e.state_core().turn.sha_used_play_phase,
+        e.debug_hand(0).len(),
+        e.state_core().turn.discard_phase_discarded
+    );
     assert!(
         e.debug_hand(0).len() < hand_before,
         "使用过杀 → 克己不生效，应弃牌：{hand_before} → {}",
