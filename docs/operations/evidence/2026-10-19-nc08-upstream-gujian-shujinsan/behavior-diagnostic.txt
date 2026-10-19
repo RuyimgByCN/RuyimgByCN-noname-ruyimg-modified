@@ -1,0 +1,3 @@
+DBG 舒筋散（目标无 he 牌）→ Rejected(IllegalTargets)
+DBG 舒筋散：发动=Pending { choice: OpenChoice { idtest upstream_shujinsan_target_needs_he_cards ... : ok
+DBG 舒筋散：询问=["gj_shujinsan_discard"] 弃牌=true 1 号手牌 2 → 2（装备仍在=true）
