@@ -1,0 +1,2 @@
+DBG 星界沟通：发动=Accepted { state_hash: [..] }
+DBG 星界沟通：上限 4 → 5；体力 3 → 4；手牌 3 → 0
