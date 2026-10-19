@@ -667,11 +667,21 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **已排除**：①触发未派发（`trigger_confirm` 已出现）；②伤害未落地（hp −1 已证）；
 ③手牌为空（2 张）；④技能未授予（已 `debug_grant("ycnzonghuo")`）。
 
-**剩余候选**：①`direct: true` 的语义映射（上游 `direct` 表示**不询问是否发动**，而原生把该技能
-做成 `optional: true` → 确认后应直接执行效果，实测未执行）；②效果分支取 `hand.first()` 的时机
-（`damageBefore` 帧内）或 `discard_from_hand` 的落点问题；③机器 stage 初值。
+**接线核对（2026-10-19 同轮，**接线完整**）**：
 
-**修法（待定位）**：核对 `YunchouZonghuo` 的触发元数据（`optional`）与效果分支的 stage 起点。
+| 环节 | 状态 |
+|---|---|
+| 触发元数据 | `metadata/common.rs:49`：`EventKind::DamageBefore` + `Timing::Normal` + `optional: true` |
+| 过滤器 | `filtering/common.rs:495`：来源为本人 + 未防止 + `amount > 0` + **非火焰** |
+| 机器工厂 | `factory.rs:212`（目标 = 受伤者）；`stage` **默认 `HostStage::Act`** |
+| 步进路由 | `step.rs:694` → `step_yunchou`；效果分支 `step/yunchou.rs:357`（弃手牌首张 + 改伤害性质） |
+
+⇒ **接线完整**，但确认后仍**未弃牌** → 失败点位于**机器/触发运行时内部**（非接线）——
+相关文件属**并行拆分的未跟踪文件**（`content/host/**`）→ **受拆分阻塞**（与 28 项修复同类）。
+
+**剩余候选（拆分落定后定位）**：①`optional: true` 确认后**是否真的构造并步进机器**；
+②`discard_from_hand` 在该帧内的落点；③`current_frame_id()` 是否指向**伤害帧**（影响性质改写，
+但不影响弃牌）。
 
 **验收**：样本 80 的 `upstream_zonghuo_discards_one_without_asking`（当前 `#[ignore]`）应能通过
 （0 号手牌 −1；并补「伤害性质变为火焰」的观测用例）。
