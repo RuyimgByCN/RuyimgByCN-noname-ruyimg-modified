@@ -1,2 +1,1 @@
 DBG 身份局：座位=5 主公=0 驱动步数=600 outcome=Some(Outcome { winner: Rebels }) 阶段=Judge
-SKIP：未在步数上限内到达终局

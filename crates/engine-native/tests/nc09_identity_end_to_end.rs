@@ -101,11 +101,19 @@ fn identity_game_reaches_terminal_outcome() {
 #[test]
 fn identity_game_is_stable_after_terminal() {
     let mut e = Engine::new_identity(20267202, 4);
-    let _ = drive(&mut e, 4000);
-    if e.state_core().outcome.is_none() {
-        eprintln!("SKIP：未在步数上限内到达终局");
-        return;
-    }
+    // 与用例 1 同法：驱动一段后杀死主公，确保到达终局（被动驱动不会自然分胜负）
+    let _ = drive(&mut e, 400);
+    let seats = e.state_core().players.len() as u8;
+    let lord = (0..seats)
+        .find(|p| e.state_core().is_lord(*p))
+        .expect("身份局必有主公");
+    e.debug_set_hp(lord, 1);
+    e.debug_deal_damage(Some(lord), lord, 1, engine_native::event::DamageNature::Normal);
+    let _ = drive(&mut e, 400);
+    assert!(
+        e.state_core().outcome.is_some(),
+        "杀死主公后应到达终局（否则本用例不构成验收）"
+    );
     let h1 = e.state_hash();
     let actor = e.turn().current;
     let out = e.submit(GameCommand {
