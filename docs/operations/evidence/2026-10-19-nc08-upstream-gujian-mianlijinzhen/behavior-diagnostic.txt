@@ -1,0 +1,3 @@
+DBG 绵里金针（目标体力更低）→ Rejected(IllegalTargets)
+DBG 绵里金针：发动=Accepted { state_hash: [..] }
+DBG 绵里金针：1 号手牌 0 → 1；hp 4 → 3
