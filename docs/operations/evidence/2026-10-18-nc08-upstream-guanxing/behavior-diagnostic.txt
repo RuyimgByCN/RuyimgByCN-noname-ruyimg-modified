@@ -1,0 +1,1 @@
+DBG 观星：询问序列=["discard_to_limit", "trigger_confirm", "guanxing_arrange"] 出现 arrange=true
