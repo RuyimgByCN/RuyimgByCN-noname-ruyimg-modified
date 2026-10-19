@@ -257,3 +257,15 @@ if !core.player(core.turn.current).hand.contains(&card) {
 
 **验收**：新增「一次回复 2 点 → 两次目标选择与两次摸牌」的行为用例；
 现有两条单点用例保持不变。
+
+## 17 护驾（`hujia`）在非身份局亦可发动（NC08 样本 44 新发现，2026-10-19）
+
+**症状（原生更宽松）**：上游 `hujia` 的 `filter` 要求 `player.hasZhuSkill("hujia")`（**主公技旗标**，
+仅身份局成立）；原生 `crates/engine-native/src/kernel/sha.rs` 的 `hujia_active` 用
+`ctx.core.is_lord(self.target)`，而 `state.rs` 的 `is_lord` 在**非身份局返回 `true`**
+（`match self.identity_roles() { Some(roles) => …, None => true }`）→ **原型/单挑模式下护驾可发动**。
+
+**修法**：`hujia_active` 改为「**身份局且为主公**」判定（或为 `is_lord` 增加「须身份局」的调用口径），
+并核对其它使用 `is_lord` 的技能是否同样受影响（**建议全库排查**）。
+
+**验收**：新增「原型模式下护驾不可发动」的行为用例；身份局主公用例保持通过。
