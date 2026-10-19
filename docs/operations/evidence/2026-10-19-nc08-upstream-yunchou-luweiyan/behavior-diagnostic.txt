@@ -1,0 +1,2 @@
+DBG 厉焰：目标无装备 → Rejected(IllegalTargets)
+DBG 厉焰：非基本牌当水攻 → Accepted { state_hash: [..] }（1 号装备=89）
