@@ -30,6 +30,9 @@
 >
 > **第 385 轮（使用者指示「繼續」后）**：完成 `global` 卡窗口定位的**首张**——`shencaojie`（神草结，样本 150 / 台账第 150 行）：窗口为 **`trigger_confirm`**（Confirm 即使用），效果为**锦囊伤害 +1**（`evt.num++`）⇒ **确立可复用的定位方法**（读 `global` 子技的 `trigger` → 构造该事件 → 观察窗口与效果）。
 >
+> **第 385 轮续**：完成 **`global` 卡窗口映射表**（台账第 151 行 + 证据目录）——12 张逐卡定位 `skill.js` 的 `trigger`：**金莲珠 damageBefore / 神草结 damageBegin / 石灰粉 phaseUseBegin / 神秘果 useCardAfter** 四条与既有样本或源码注释**逐条一致**（交叉验证通过）；其余 8 张亦已定位（趁火打劫 damageEnd、朱fang神石 useCardAfter、器族三件 phaseBegin、白首之虎 discardEnd、玄武/朱雀 damageEnd）。
+>
+
 
  与**核对 4 项（144–147）**；**全量 1480/0/19（engine-native）**；行数门禁通过。
 >
