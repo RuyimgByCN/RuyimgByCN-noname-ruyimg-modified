@@ -1,0 +1,4 @@
+DBG 虎符：造成伤害 → Accepted { state_hash: [..] }；1 号 hp=0
+DBG 虎符（救援窗口）：询问=[] 用虎符=false ⇒ 1 号 hp=0
+DBG 虎符：dying=false → Rejected(IllegalTargets)；1 号 hp 4 → 4（+0）
+DBG 虎符：濒死支 → RescueNoOffer（hp 至 0）；未濒死支 → Rejected(IllegalTargets)
