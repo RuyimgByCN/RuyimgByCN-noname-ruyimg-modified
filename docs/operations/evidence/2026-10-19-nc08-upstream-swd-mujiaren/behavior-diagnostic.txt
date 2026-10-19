@@ -1,0 +1,2 @@
+DBG 木甲人：发动=Accepted { state_hash: [..] }（发动前手牌 3 张）
+DBG 木甲人：手牌 3 → 3（其中机关牌 3 张；非基本牌是否仍在=false/false）
