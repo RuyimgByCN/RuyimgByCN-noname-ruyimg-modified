@@ -1,0 +1,40 @@
+	tieji: {
+		audio: 2,
+		trigger: { player: "useCardToPlayered" },
+		check(event, player) {
+			return get.attitude(player, event.target) <= 0;
+		},
+		filter(event, player) {
+			return event.card.name === "sha";
+		},
+		logTarget: "target",
+		preHidden: true,
+		async content(event, trigger, player) {
+			const { bool } = await player
+				.judge({
+					judge(card) {
+						if (get.zhu(get.player(), "shouyue")) {
+							if (get.suit(card) !== "spade") {
+								return 2;
+							}
+						} else {
+							if (get.color(card) === "red") {
+								return 2;
+							}
+						}
+						return -0.5;
+					},
+					judge2(result) {
+						return result.bool;
+					},
+				})
+				.forResult();
+			if (bool) {
+				trigger.getParent()?.directHit.add(trigger.target);
+			}
+		},
+		ai: {
+			directHit_ai: true,
+			skillTagFilter(player, tag, arg) {
+				if (get.attitude(player, arg.target) > 0 || arg.card.name !== "sha" || !ui.cardPile.firstChild || get.color(ui.cardPile.firstChild, player) !== "red") {
+					return false
