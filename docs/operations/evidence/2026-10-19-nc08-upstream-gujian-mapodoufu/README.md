@@ -29,7 +29,8 @@ mapodoufu: {
 |---|---|---|
 | 发动 | `Accepted` | 可发动 ✅ |
 | **目标获得此牌** | **手牌 0 → 0（含此牌=false）** | ✗ |
-| 该牌去向 | **弃堆含此牌=true** | ✗ 直接入弃堆 |
+| 该牌去向 | **弃堆含此牌=true** | ✗ 直接入弃堆（**本体归属缺失**） |
+| **子技授予** | **`debug_has_skill(1, "gj_food_mapodoufu") = true`** | ✅ **正常**（`storage`/`markcount`/`addSkill` 面正常） |
 
 **原生实现引用**：`content/host/step/gujian.rs:212`（食物机通用映射
 `CardKind::Mapodoufu => (GJ_FOOD_MAPODOUFU_KEY, GJ_FOOD_ROUNDS_DEFAULT)`）、`:267`（分支）。
@@ -41,8 +42,10 @@ mapodoufu: {
 | 89 | `liyutang`（鲤鱼汤） | ✗ 牌入弃堆 |
 | **93** | **`mapodoufu`（麻婆豆腐）** | ✗ 牌入弃堆 |
 
-⇒ 「用牌效果（`$gain2` + `storage` + `markcount` + `addSkill`）缺失」**至少是食物牌共性**；
-子技的**逐轮 tick 已实现**（如鲤鱼汤：阶段开始体力最少 → +1 护甲）——缺的是**用牌那一段**。
+⇒ **精度更正**：缺失的**只是「本体归属」**（`target.$gain2(cards)`：牌应进目标手牌，实测入弃堆）；
+`storage`/`markcount`（原生以 `rounds` 建模）与 `addSkill` **均正常**（本样本子技授予 `true`；
+春饼样本 `rounds == 5` 断言通过）；子技 tick 亦已实现。
+⇒ **共性结论（3/3 抽样：春饼/鲤鱼汤/麻婆豆腐）：食物牌「本体归属」缺失**。
 
 **建议**：对古剑包**全部食物牌**（春饼/青团/油羹/茉莉茶/虾饺/蜜汁莲藕/鲈鱼汤/古洞羹…）
 按本检查点做**逐卡抽样**，并检查 `GJ_FOOD_*` 机器的**用牌入口**。

@@ -87,7 +87,8 @@ fn upstream_mapodoufu_target_gains_the_card() {
     drain(&mut e);
     let hand = e.debug_hand(1);
     eprintln!(
-        "DBG 麻婆豆腐：1 号手牌 {h1_before} → {}（含此牌={}）；弃堆含此牌={}",
+        "DBG 麻婆豆腐：1 号是否获得子技 gj_food_mapodoufu={}；1 号手牌 {h1_before} → {}（含此牌={}）；弃堆含此牌={}",
+        e.debug_has_skill(1, "gj_food_mapodoufu"),
         hand.len(),
         hand.contains(&card),
         e.state_core().discard.contains(&card)
