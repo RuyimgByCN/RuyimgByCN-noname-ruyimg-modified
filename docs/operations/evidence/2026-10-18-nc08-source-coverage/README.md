@@ -77,6 +77,13 @@ U01/U05/U07）、B（待重构：14 个）、C（规则面迁移 D5：L29）、D
 L12/L29）。**口径警示**：登记表 `status = resolved` **不等于**来源完成（例：L29 为 resolved，
 但描述写明「非整包」）→ 一律以**描述文本**判定。
 
+## 1f G1 转换配方（从真实转换包反推）
+
+见 **[g1-conversion-recipe.md](g1-conversion-recipe.md)**：实测 `huanle-upstream-noname` 的
+`manifest.json` + `assets/cards.json` 字段结构，给出可机械执行的 1–3 步与**关键前置**
+（步骤 4 的技能 → `host:<key>` 映射，键必须已存在于 `content/host/keys.rs`）。
+→ 凡上游技能在原生**没有**对应键者，属 **A 类（需先实现）**，**不能**靠写数据蒙混。
+
 ## 2 判读（不夸大）
 
 - 第⑦层样本已覆盖 **21 个来源**（见台账 §3.3）——其中包含**同一包的多来源**（如 U05 杀海拾遗的
