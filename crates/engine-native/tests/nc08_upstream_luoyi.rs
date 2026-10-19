@@ -93,20 +93,23 @@ fn upstream_luoyi_draws_one_less() {
         (confirmed, e.debug_hand(0).len())
     };
     eprintln!("DBG 裸衣：基线 hand={base} 持技 hand={} confirmed={}", with_luoyi.1, with_luoyi.0);
-    if !with_luoyi.0 {
-        eprintln!("SKIP：未出现裸衣确认门（摸牌阶段触发未对上）");
-        return;
-    }
+    // 判据用**手牌数对照**（不依赖确认门是否被夹具捕获）：持裸衣者摸牌阶段少摸 1 张。
     assert_eq!(
         with_luoyi.1,
         base - 1,
-        "裸衣：确认发动后本回合少摸 1 张（基线 {base} → {}）",
-        with_luoyi.1
+        "裸衣：本回合少摸 1 张（基线 {base} → 持技 {}；确认门是否出现={}）",
+        with_luoyi.1,
+        with_luoyi.0
     );
 }
 
 /// 上游点 3：本回合【杀】造成的伤害 **+1**（对比同种子基线）。
+///
+/// **本轮未验收（登记，含诊断）**：夹具**未捕获裸衣确认门**（`SKIP：未出现裸衣确认门`）→
+/// 无法确认「本回合」加成旗标是否置位 → 该用例以 `#[ignore]` 守护（**不写成通过**）。
+/// 注：少摸 1 张已由 `upstream_luoyi_draws_one_less` 用**手牌数对照**独立验证（基线 6 → 持技 5）。
 #[test]
+#[ignore = "夹具未捕获裸衣确认门，无法验证伤害 +1（登记未验收）"]
 fn upstream_luoyi_sha_damage_plus_one() {
     let mut e = Engine::new(20266802, 4);
     e.debug_grant(0, "裸衣");
@@ -132,8 +135,8 @@ fn upstream_luoyi_sha_damage_plus_one() {
     }
     drain(&mut e);
     if !confirmed {
-        eprintln!("SKIP：未出现裸衣确认门");
-        return;
+        // 未捕获确认门 → 该用例**不构成验收**：显式 panic（避免静默 SKIP 被读成通过）
+        panic!("未验收：未捕获裸衣确认门（摸牌阶段触发未对上），无法验证伤害 +1");
     }
     assert!(advance_to_phase(&mut e, 0, Phase::Play), "到出牌阶段");
     for p in 0..4 {
