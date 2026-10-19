@@ -1,0 +1,4 @@
+DBG 龙颅山峰：pick_sha=true → 手牌+0、牌堆−1、获得目标牌=true（询问["mtg_longshanfeng_gain"]）
+DBG 龙颅山峰：pick_sha=false → 手牌+0、牌堆−1、获得目标牌=true（询问["mtg_longshanfeng_gain"]）
+DBG 龙颅山峰：选杀 → 手牌+0/牌堆−1/获得杀=true；选闪 → 手牌+0/牌堆−1/获得闪=true
+NOTE 龙颅山峰（生成 vs 实体）：上游为 `game.createCard(...)`（**生成**）；实测牌堆变化 选杀 −1、选闪 −1 ⇒ 若为 0 则与上游一致（生成），若为 1 则属「生成 vs 实体取牌」族第 4 例（须登记）
