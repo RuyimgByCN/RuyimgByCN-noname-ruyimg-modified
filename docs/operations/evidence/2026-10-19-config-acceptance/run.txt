@@ -1,0 +1,9 @@
+DBG 配置-非法数据：三类畸形输入均被拒
+test config_invalid_data_rejected ... ok
+DBG 配置-init_hook：出现的取值 = {"swd_jiqi_held", "wuxing_natures"}
+test config_init_hook_parses ... ok
+DBG 配置-元数据：检查 19 个包，全部通过
+test config_metadata_complete ... ok
+DBG 配置-enabled：包卡 90；开-目录 214；关-目录 124（应更少）
+test config_enabled_flag_gates_cards ... ok
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
