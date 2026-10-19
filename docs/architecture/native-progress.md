@@ -614,6 +614,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 438 轮**：**`playpackconfig` 上游口径整理**（台账第 165 行补充 + 证据目录）——上游机制：**配置键 `cardpile_<类型>
 > **第 439 轮**：**`playpackconfig` 对照完成**（读 `content/pile.rs:144-200` 的 `scale_plan`）——**配置键/未配置不补/`dn` 公式/上限 1000/取整 五项全部一致** ✅；**唯一差异＝补牌点数**（上游 `Math.random` vs 原生确定性，**并入差异 #3**）⇒ U03/L04 差异 #5 由「未逐项对照」升级为「**已逐项对照：机制一致，点数差异见 #3**」。
 >
+> **第 440 轮（里程碑）**：**U07 逐批核对完成**——7 个 skill batch 逐条定位到**行为键**：batch1 `wudian_ciqiu`（`damageBegin1` 时点）／batch2 `nsshuaiyan`（`chooseControl` AI 默认项）／batch3 `zhucheng`（守卫弃牌 n 张 vs 首张+随机）／batch4 `wudian_kangyin`（`discardPlayerCard` 选择权）＝**4 条实质**；batch5/6/7（`chezhen`/`juedao`/`geju`）＝**无差异** ⇒ **与第 435 轮主题归并的 4 条完全一致** ✅（归并准确性已被逐批核对验证）。
+>
+
 _playpackconfig`** 为乘数 → `getn` 缩放 → **`dn` 补充公式** → **上限 1000** → **`Math.random` 点数** → **未配置时 `NaN` 导致不补牌**（与差异 #4 一致）；原生有 `scale_plan`/`extension_pack_from_scale`（另一套）⇒ **差异 #5 本身不变，但对照所需口径已备齐**。
 >
 
