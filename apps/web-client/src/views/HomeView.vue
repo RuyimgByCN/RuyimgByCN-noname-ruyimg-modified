@@ -9,6 +9,8 @@ import {
 const router = useRouter();
 const players = ref(4);
 const seed = ref(42);
+/** 对局模式：prototype（原型，默认）| identity（身份局，NC09 身份局端到端）。 */
+const mode = ref<"prototype" | "identity">("prototype");
 const displayName = ref(`player-${Math.floor(Math.random() * 900 + 100)}`);
 const password = ref("");
 const roomId = ref(1);
@@ -23,7 +25,12 @@ onMounted(async () => {
 function goBattle() {
   router.push({
     path: "/battle",
-    query: { players: String(players.value), seed: String(seed.value) },
+    query: {
+      players: String(players.value),
+      seed: String(seed.value),
+      // 身份局（NC09 身份局端到端）；原型模式不写该参数
+      ...(mode.value === "identity" ? { mode: "identity" } : {}),
+    },
   });
 }
 
@@ -97,6 +104,13 @@ const roomLabel = computed(() => (roomId.value > 0 ? `#${roomId.value}` : "—")
             min="0"
             aria-label="随机种子"
           />
+        </label>
+        <label class="field">
+          <span>模式</span>
+          <select v-model="mode" aria-label="对局模式">
+            <option value="prototype">原型（唯一存活者）</option>
+            <option value="identity">身份局（主忠/反贼/内奸）</option>
+          </select>
         </label>
         <button class="primary" type="button" @click="goBattle">
           本地开局

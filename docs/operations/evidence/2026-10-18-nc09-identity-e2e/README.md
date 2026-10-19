@@ -30,7 +30,29 @@
   **不是**「AI/玩家自然打完整局」（后者由 NC12 浏览器整局覆盖，口径为原型/单挑）。
 - 座位数 5（身份局标准）；`Winner` 的其它变体（`Player`/`Faction`/`Versus`/`Doudizhu`）属其它模式。
 
-## 2b 浏览器侧前置：WASM 身份局构造已加，前端接线**受阻于 wasm 包重建路径**
+## 2a 浏览器侧身份局端到端：**已完成**（2026-10-19 同轮打通）
+
+| 步骤 | 结果 |
+|---|---|
+| ③ wasm 包重建 | ✅ **打通**：`npm --prefix apps/web-client run build:native`（`scripts/build-native.mjs`）输出到 `src/worker/native-pkg`，重建后 d.ts 含 `new_identity` |
+| ② 前端接线 | ✅ 已 `git apply frontend-identity-wiring.patch` 并提交；`vue-tsc --noEmit` **无报错** |
+| 浏览器运行 | ✅ `node apps/web-client/scripts/nc09-identity-fullgame.mjs http://localhost:8123/ …` |
+
+**实测（[identity-fullgame-report.json](identity-fullgame-report.json)）**：
+
+```
+RESULT scenario=browser_identity_fullgame tier=web
+  {"clicks":223,"final_revision":223,"wall_ms":36000,"ended_marker":true,"console_errors":[]}
+```
+
+终局文案（报告 `final_text` 摘录）：**「💀 反贼胜利！」**、**「反贼阵营获胜 · rev 223」**、
+状态栏 **「终局 · 反贼胜 · rev 223」** → **身份局胜负展示确实接线并渲染**。
+口径：headless Chrome + 真实构建产物 + 真实 WASM worker（**不 mock 引擎**）；5 席身份局；
+点击间隔 120 ms 为脚本节流，**非引擎耗时**。
+
+→ 登记项 **`NC09-IDENTITY-E2E`** 的**引擎侧与浏览器侧均已验收**（此前浏览器侧走的是原型/单挑口径）。
+
+## 2b （历史）浏览器侧前置的受阻与打通记录
 
 | 步骤 | 状态 |
 |---|---|
@@ -46,11 +68,13 @@
 src/worker/native-pkg`，目标 crate `engine-native-wasm`）；`build-wasm.mjs` 的 `outDir`
 指向 `src/wasm-pkg` 且产物名为 `engine_wasm.*`，与本包不一致。
 
-## 3 未完成（**浏览器侧**身份局端到端）
+## 3 已完成 / 仍待办
 
-- [ ] **打通 wasm 包重建路径**（见 §2b ③）→ 再 `git apply frontend-identity-wiring.patch`
-- [ ] 真实构建产物 + WASM worker 下，以**身份局**开局跑到终局并检查胜负**展示**（前端文案）
-- [ ] 与已完成的「浏览器整局（原型口径，319 步 / 3 局 3 胜）」并列记录，**不混记**
+- [x] 打通 wasm 包重建路径（`build:native` → `src/worker/native-pkg`）
+- [x] 前端接线（模式选择 / `client.start` mode / worker 分派 / 协议类型）并 `vue-tsc` 通过
+- [x] 浏览器身份局端到端：跑到终局且**胜负展示**出现（反贼胜利）
+- [ ] 与「浏览器整局（原型口径，319 步 / 3 局 3 胜）」**并列记录**（两者口径不同，已分列）
+- [ ] 多次重跑（不同种子）以确认胜负文案覆盖四类结果（当前仅观测到「反贼胜」）
 
 ## 4 验证结果
 

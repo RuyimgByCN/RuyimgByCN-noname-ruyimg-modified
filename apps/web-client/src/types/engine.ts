@@ -251,6 +251,8 @@ export type WorkerRequest =
       seed: number;
       observer: number;
       packsJson?: string;
+      /** 对局模式：`"identity"` = 身份局（NC09 身份局端到端）；缺省原型模式。 */
+      mode?: "identity";
     }
   | { id: number; type: "endPhase"; actor?: number }
   | { id: number; type: "playCard"; actor: number; card: number; targets: number[] }

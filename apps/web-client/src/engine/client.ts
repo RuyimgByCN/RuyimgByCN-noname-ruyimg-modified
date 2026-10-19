@@ -116,6 +116,7 @@ export class EngineClient {
     seed: number,
     observer = 1,
     packsJson?: string,
+    mode?: "identity",
   ): Promise<EngineEnvelope> {
     return this.request({
       id: this.nextId(),
@@ -124,6 +125,7 @@ export class EngineClient {
       seed,
       observer,
       packsJson,
+      mode,
     }) as Promise<EngineEnvelope>;
   }
 

@@ -99,6 +99,25 @@ export function nativeCreate(
   };
 }
 
+/**
+ * **身份局**建局（NC09 身份局端到端，浏览器侧）。
+ *
+ * 与 {@link nativeCreate} 的唯一区别是 `GameMode::Identity`（主公/忠臣/反贼/内奸），
+ * 胜负结果走 `Winner::{LordSide, Rebels, Traitor}`。
+ */
+export function nativeCreateIdentity(
+  players: number,
+  seed: number,
+  observer = 0,
+): NativeHandle {
+  return {
+    engine: NativeEngine.new_identity(players, BigInt(seed)),
+    seed,
+    players,
+    observer,
+  };
+}
+
 /** 已安装扩展的 cards.json 数组建局。空数组与 nativeCreate 相同。 */
 export function nativeCreateWithPacks(
   players: number,

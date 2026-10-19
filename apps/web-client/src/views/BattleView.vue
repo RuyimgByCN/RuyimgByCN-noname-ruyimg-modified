@@ -215,7 +215,14 @@ async function connectAndStart() {
       selfId.value = Math.max(0, Math.min(selfId.value, players.value - 1));
       generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
     }
-    const env = await localClient.start(players.value, seed.value, selfId.value);
+    // mode=identity → 身份局（NC09 身份局端到端）；缺省原型模式
+    const env = await localClient.start(
+      players.value,
+      seed.value,
+      selfId.value,
+      undefined,
+      route.query.mode === "identity" ? "identity" : undefined,
+    );
     nc12Mark("t2_start_done");
     // NC12 冷启动优化（2026-10-19，两处）：
     // ① 选将候选拉取与**开局信封处理并发**（此前在 `handleEnvelope` 之后才发起 → 被其

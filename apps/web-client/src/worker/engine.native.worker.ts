@@ -10,6 +10,7 @@ import {
   generalCandidates,
   lastCandidateTimings,
   nativeCreate,
+  nativeCreateIdentity,
   nativeCreateWithPacks,
   nativeDispatch,
   nativeEnvelope,
@@ -42,9 +43,13 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
 
     switch (msg.type) {
       case "start": {
-        handle = msg.packsJson
-          ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
-          : nativeCreate(msg.players, msg.seed, msg.observer);
+        // mode: "identity" → 身份局（NC09 身份局端到端）；缺省为原型模式
+        handle =
+          msg.mode === "identity"
+            ? nativeCreateIdentity(msg.players, msg.seed, msg.observer)
+            : msg.packsJson
+              ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
+              : nativeCreate(msg.players, msg.seed, msg.observer);
         reply({ id: msg.id, ok: true, data: nativeEnvelope(handle) });
         return;
       }
