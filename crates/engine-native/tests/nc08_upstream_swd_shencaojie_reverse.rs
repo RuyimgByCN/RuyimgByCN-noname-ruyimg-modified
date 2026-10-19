@@ -25,16 +25,11 @@ fn swd_engine(seed: u64) -> Engine {
 
 /// 上游 `evt.player === player` 分支（**受伤者＝持有者**）⇒ 伤害 **-1**。
 ///
-/// **本轮未验收（登记，含诊断）**：本引擎**标准牌组为 124 张**，其中**不含 AOE 锦囊实例**——
-/// `catalog.rs:934/935` 虽把 `SavageAttack → "nanman"`、`ArcheryAttack → "wanjian"` 映射好（**kind 与行为已实现**），
-/// 但**牌组里没有这两种牌的实例** ⇒ 无法用 AOE 制造「持有者自己受锦囊伤害」的局面。
-/// `?.name == "nanman" || "wanjian"` 在目录中**两个包 + 标准牌**都找不到 ⇒ 本用例退化为「不构成验收」。
-///
-/// **候选解法**：①用 `debug_*` 构造指定 `CardKind` 的牌实例（未见现成钩子）；
-/// ②改用**其它**能造成「持有者自己受伤」的锦囊（如决斗互伤——但持有者须为受伤者，需构造）；
-/// ③在标准牌组补 AOE 实例（属牌组构成面，非本项）。
+/// **已验收（2026-10-19 修正后）**：AOE 的**目录名**是 **`savage`/`archery`**
+/// （`catalog.rs:934/935` 的 `SavageAttack → "nanman"` 是 **archive 键映射**，**不是目录名**）；
+/// 用正确目录名后窗口正常触发：**1 号用 AOE → 0 号（持有者）出现 `trigger_confirm` → Confirm 使用 →
+/// 0 号受伤 0 点**（`num--` 把 1 点伤害减为 0）✅
 #[test]
-#[ignore = "目录无 AOE 锦囊实例（标准牌组 124 张不含南蛮/万箭）——见证据与第 54 项"]
 fn upstream_shencaojie_reverse_branch_reduces_damage() {
     let mut e = swd_engine(20288501);
     // 0 号持神草结
@@ -62,7 +57,8 @@ fn upstream_shencaojie_reverse_branch_reduces_damage() {
             .cards
             .iter()
             .enumerate()
-            .find(|(_, c)| c.name == "nanman" || c.name == "wanjian")
+            // **目录名**为 `savage`/`archery`（非 `nanman`/`wanjian`——后两者是 archive 键映射）
+            .find(|(_, c)| c.name == "savage" || c.name == "archery")
             .map(|(i, _)| i as engine_native::CardId);
         match id {
             Some(id) => {

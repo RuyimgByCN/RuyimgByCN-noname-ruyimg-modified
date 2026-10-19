@@ -8,42 +8,42 @@
 
 use std::collections::BTreeSet;
 
-/// 输出：有实现、但标准牌组无实例的 kind 清单。
+/// **正确口径**：直接从目录实例反查 `CardKind`，**不手写 kind 名**（手写名极易与枚举变体不符）。
+///
+/// 判据：输出「标准建局目录中**实际出现**的 kind 集合与实例数」；**不判定应否出现**——
+/// 目录构成的正确性由既有 `catalog_inventory`（`standard_catalog_matches_declared_inventory`）守护。
 #[test]
 fn standard_deck_kind_instance_coverage() {
     let e = engine_native::Engine::new_with_extensions(29, 4, &[]).expect("标准建局");
-    let cards = &e.catalog().cards;
-    let mut present: BTreeSet<String> = BTreeSet::new();
-    for (i, _) in cards.iter().enumerate() {
+    let cards = e.catalog().cards.len();
+    use std::collections::BTreeMap;
+    let mut by_kind: BTreeMap<String, usize> = BTreeMap::new();
+    for i in 0..cards {
         let k = e.catalog().card_kind(i as engine_native::CardId);
-        present.insert(format!("{k:?}"));
+        *by_kind.entry(format!("{k:?}")).or_insert(0) += 1;
     }
-    // 枚举全部 CardKind（用 Debug 字符串，避免依赖内部顺序）
-    // 通过「全部卡种名」——从 catalog 的 name 映射反推不可行，改为：以 present 之外的常用 kind 名清单核对。
-    let known = [
-        "Sha", "Shan", "Tao", "Jiu", "Guohe", "Shunshou", "Wuzhong", "Juedou", "Jiedao",
-        "Nanman", "Wanjian", "Taoyuan", "Wugu", "Wuxie", "LeBu", "Shandian", "Bingliang",
-        "SavageAttack", "ArcheryAttack", "Hufu", "Tianxianjiu", "Caoyao", "Liuxinghuoyu",
-        "Chilongya", "Xixueguizhihuan", "Guiyoujie", "Shentoumianju", "Xingjunyan",
-        "Qinglonglingzhu", "Zhufangshenshi", "Fengxueren", "Yufulu", "Yangpijuan",
-        "Daihuofenglun", "Xiayuncailing", "Langeguaiyi", "Jiguan",
-    ];
-    let mut missing: Vec<&str> = Vec::new();
-    for k in known {
-        if !present.contains(k) {
-            missing.push(k);
+    eprintln!(
+        "DBG 标准牌组：{cards} 张实例、{} 个不同 kind",
+        by_kind.len()
+    );
+    let mut list: Vec<_> = by_kind.iter().collect();
+    list.sort_by(|a, b| b.1.cmp(a.1));
+    eprintln!("DBG 各 kind 实例数（降序）：{:?}", list);
+    // **不设硬断言**：目录构成由 catalog_inventory 守护；本用例只提供可核的分布快照
+    // 输出 AOE/关键锦囊的**目录名**（用于核对「按名字找卡」的口径）
+    let mut probe_names: Vec<(String, String)> = Vec::new();
+    for i in 0..cards {
+        let k = e.catalog().card_kind(i as engine_native::CardId);
+        let dbg = format!("{k:?}");
+        if ["SavageAttack", "ArcheryAttack", "Duel", "Dismantle", "Snatch", "Nullify", "Bing", "Le", "ShanDian"]
+            .contains(&dbg.as_str())
+        {
+            probe_names.push((dbg, e.catalog().cards[i].name.to_string()));
         }
     }
+    eprintln!("DBG 关键锦囊的目录名：{probe_names:?}");
     eprintln!(
-        "DBG 标准牌组：目录 {} 张实例、覆盖 {} 个不同 kind\nDBG 有实现但**牌组无实例**的 kind（{} 个）：{:?}",
-        cards.len(),
-        present.len(),
-        missing.len(),
-        missing
-    );
-    // 不设硬断言：本用例的作用是**输出清单**（台账化），避免把「牌组构成」误当缺陷
-    eprintln!(
-        "NOTE 口径：本清单是「**kind 实现 vs 牌组实例**」的差集；\
-         差集非缺陷——部分 kind 只由扩展包提供实例（如 Hufu/Tianxianjiu 属 swd 包）"
+        "NOTE 口径：本用例**只输出分布**；目录构成的正确性由 \
+         `standard_catalog_matches_declared_inventory`（覆盖清单 `catalog_inventory`）守护"
     );
 }
