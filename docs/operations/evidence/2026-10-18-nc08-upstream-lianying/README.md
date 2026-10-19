@@ -27,22 +27,35 @@ lianying: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 1+2+3 | 失去**最后一张手牌** → 摸 1 | 手牌恰 1 张时打出 → 确认发动后**手牌回到 1 张** | 通过 |
-| 2 | `if (player.hasCards("h")) return false` | 手牌 **2 张**时打出 1 张 → **无确认门**、不摸牌 | 通过 |
+| 2 | `if (player.hasCards("h")) return false` | 手牌 **2 张**时打出 1 张 → 无确认门、不摸牌 | **未验收（如实登记）** |
 | 1 | `loseAfter` + 5 个全局异步面 | **差异①**：原生为**四类显式事件**（`CardUsed`/`CardResponded`/`CardsMoved`/`CardsDiscarded`）→ 覆盖路径不同（原生注释自述「弃牌阶段批量弃置不产生事件」） | 通过（**差异登记**） |
 | 2 | 失去后判空 | **差异②**：原生在**事件时刻**判 `hand.len() <= 1`（语义等价前提：filter 于牌离手前求值）→ 写法不同 | 通过（**差异登记**） |
 
 **原生实现引用**：`content/standard/skills/lian_ying.rs`（filter `hand.len() > 1 → false`；
 四类事件；注释登记批量弃置未覆盖）。
 
+## 2b 门槛用例**未验收**（如实登记，含诊断）
+
+夹具在「手牌 2 张」布阵后提交出牌时实测：
+
+```
+DBG 两张手牌时出牌：Rejected(ChoicePending)（手牌=[19, 20]）
+SKIP：该出牌未被接受（可能第一张不是【杀】）
+```
+
+→ 提交被 **`ChoicePending`** 拒绝（当时**存在未决询问**）→ 用例按设计**打印 SKIP 并返回**，
+**不写成通过**。需先清空未决询问（或换布阵方式）后补验收（登记待办）。
+
 ## 3 验证结果
 
 | 检查 | 结果 | 证据 |
 |---|---|---|
-| 定向 | **3 passed / 0 failed** | [targeted.log](targeted.log)、[run-diagnostic.txt](run-diagnostic.txt) |
+| 定向 | **3 passed / 0 failed**（其中门槛用例走 SKIP 分支，**未构成验收**） | [targeted.log](targeted.log)、[run-diagnostic.txt](run-diagnostic.txt) |
 | 行数门禁 | 见提交说明 | — |
 
 ## 4 未完成 / 待办
 
 - [ ] 差异①（批量弃置路径）是否补齐；与枭姬（样本 32）的「失去方式覆盖面」**同族**
+- [ ] **门槛用例补验收**：先清空未决询问（`ChoicePending`）后重跑
 - [ ] 差异②（门槛写法）在 `CardsDiscarded` 批量事件下的等价性
 - [ ] 样本 38+：其余来源（当前 **21/37 来源**；标准面技能 **19 个样本**）
