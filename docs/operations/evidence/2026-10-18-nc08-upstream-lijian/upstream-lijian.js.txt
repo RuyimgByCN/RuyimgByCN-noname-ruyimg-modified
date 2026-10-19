@@ -1,0 +1,37 @@
+lijian: {
+		audio: 2,
+		audioname: ["re_diaochan"],
+		enable: "phaseUse",
+		usable: 1,
+		filter(event, player) {
+			return game.countPlayer(current => current !== player && current.hasSex("male")) > 1;
+		},
+		check(card) {
+			return 10 - get.value(card);
+		},
+		filterCard: true,
+		position: "he",
+		filterTarget(card, player, target) {
+			if (player === target) {
+				return false;
+			}
+			if (!target.hasSex("male")) {
+				return false;
+			}
+			if (ui.selected.targets.length === 1) {
+				return target.canUse({ name: "juedou" }, ui.selected.targets[0]);
+			}
+			return true;
+		},
+		targetprompt: ["先出杀", "后出杀"],
+		selectTarget: 2,
+		multitarget: true,
+		async content(event, trigger, player) {
+			const next = event.targets[1]
+				.useCard({
+					card: get.autoViewAs({ name: "juedou", isCard: true }),
+					targets: [event.targets[0]],
+					nowuxie: true,
+					noai: true,
+				})
+				.set("animat
