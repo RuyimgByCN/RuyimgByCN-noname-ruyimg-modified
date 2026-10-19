@@ -1,0 +1,32 @@
+shushen: {
+		audio: "shushen",
+		trigger: { player: "recoverEnd" },
+		getIndex(event) {
+			return event.num || 1;
+		},
+		async cost(event, trigger, player) {
+			event.result = await player
+				.chooseTarget({
+					prompt: get.prompt2(event.skill),
+					filterTarget: lib.filter.notMe,
+					ai(target) {
+						return get.attitude(get.player(), target)
+					}
+				})
+				.forResult();
+		},
+		async content(event, trigger, player) {
+			const target = event.targets[0];
+			await target.draw(target.hasCards("h") ? 1 : 2);
+		},
+		ai: { threaten: 0.8, expose: 0.1 },
+	},
+	stdkuangfu: {
+		audio: "xinkuangfu",
+		trigger: { source: "damageSource" },
+		forced: true,
+		filter(event, player) {
+			if (player.hasSkill("stdkuangfu_used")) {
+				return false;
+			}
+			return player.isPhaseUsing() && event.card &&
