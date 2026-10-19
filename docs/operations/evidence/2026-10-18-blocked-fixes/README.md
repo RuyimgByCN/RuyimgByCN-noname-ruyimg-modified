@@ -551,3 +551,22 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **修法**：去掉 `dying` 守卫（或改为「事件帧中即为濒死者」的判据），与上游无条件 `draw()` 对齐。
 
 **验收**：`upstream_jiyuan_dying_arm_draws_one` 改为断言**手牌 +1**（当前为「登记差异」断言）。
+
+## 28 激将（`jijiang`）**在原生侧不可达**（样本 58 行为面根因，2026-10-19）
+
+**症状（规则损失）**：`crates/engine-native/src/content/standard/skills/jijiang.rs` 实现了 `activate`
+与 `HelperAsk` 机器，但**全库检索 `JI_JIANG` 仅命中其自身定义**（`standard_skills.rs` 的注册、
+`names.rs` 的名称、`generals.rs` 的武将表）——**没有任何调用点**（对照：`HU_JIA` 在
+`kernel/sha.rs`、`JIU_YUAN` 在 `kernel/dying.rs`、`JIE_YIN` 经 `ActivateSkill` 均可达）
+→ **激将的代打链路在原生侧不可达**：既不在【杀】响应/使用处被查询，也不在**决斗**处被查询
+（样本 58 实测：决斗场景 `询问=[]`、代打未发生）。
+
+**修法**：
+1. 在【杀】的**响应/使用**入口（`kernel/sha/step.rs` 的 `respond_sha` 候选面）与**决斗**的杀响应面
+   （`kernel/duel.rs`）加入「持激将且具主公资格 → 询问蜀势力代打」；
+2. 复用 `jijiang.rs` 现有 `HelperAsk` 机器（无需重写）。
+
+**验收**：样本 58 的 `upstream_jijiang_shu_ally_plays_sha_for_lord`（当前 `#[ignore]`）应改为通过；
+另补「【杀】响应面代打」用例。
+
+**同族提示**：与 `HU_JIA`（护驾，`kernel/sha.rs` 可达）**结构同源**，可参照其接入方式。
