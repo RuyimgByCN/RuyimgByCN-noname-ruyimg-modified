@@ -1,0 +1,33 @@
+	jiuyuan: {
+		audio: 2,
+		trigger: { target: "taoBegin" },
+		zhuSkill: true,
+		forced: true,
+		filter(event, player) {
+			if (event.player === player) {
+				return false;
+			}
+			if (!player.hasZhuSkill("jiuyuan")) {
+				return false;
+			}
+			if (event.player.group !== "wu") {
+				return false;
+			}
+			return true;
+		},
+		async content(event, trigger, player) {
+			trigger.baseDamage++;
+		},
+	},
+	qixi: {
+		audio: 2,
+		audioname: ["re_ganning"],
+		audioname2: { re_heqi: "duanbing_heqi" },
+		enable: "chooseToUse",
+		filterCard(card) {
+			return get.color(card) === "black";
+		},
+		position: "hes",
+		viewAs: { name: "guohe" },
+		viewAsFilter(player) {
+			if (!player.hasCards("hes", { color: "blac

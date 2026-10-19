@@ -215,6 +215,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 54 | 标准面（技能） | `liuli` | 2 点通过，**未发现差异**（四条判据逐条对应；含空城目标被正确排除的**跨技能交互**；询问序列先选牌后选目标） | [nc08-upstream-liuli](../operations/evidence/2026-10-18-nc08-upstream-liuli/README.md) |
 | 56 | 标准面（技能） | `jieyin` | 2 点通过（双方各回复 1：3→4 / 2→3；门槛候选仅受伤男性）；**根因曾为夹具把 hp 设为 `max_hp`** | [nc08-upstream-jieyin](../operations/evidence/2026-10-18-nc08-upstream-jieyin/README.md) |
 | 57 | 标准面（技能） | `rende` | 3 点通过（一次给 2 张回复 1；**1+1+1 累计语义逐点对齐** 2→2→3→3；可多次发动）+ 1 项**文档不一致**登记（`rende.rs` 头注释滞后） | [nc08-upstream-rende](../operations/evidence/2026-10-18-nc08-upstream-rende/README.md) |
+| 58 | 标准面（技能） | `jijiang` | 3 点通过（**源码事实级**：主公资格+蜀势力与上游 filter 对应；代打形态不检查手牌；主公技资格**同族设计差异引用**） | [nc08-upstream-jijiang](../operations/evidence/2026-10-18-nc08-upstream-jijiang/README.md) |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
