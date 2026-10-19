@@ -75,31 +75,35 @@ fn advance_to_play(e: &mut Engine, seat: u8) {
     panic!("未到 {seat} 号出牌阶段");
 }
 
+/// 按**花色**精确布阵：`debug_place(player, name)` 只按**名字**查找，会返回**任意实例**
+/// （同名牌可能有 ♦ 红与 ♣ 黑两种）→ 必须先按花色取到**card id**，再直接放入手牌。
+/// （这正是此前误判为「种子依赖」的真相：两个种子下 `debug_place` 命中了不同实例。）
 fn place_colored(e: &mut Engine, player: u8, black: bool, name: &str) -> engine_native::CardId {
     use engine_native::catalog::Suit;
-    let card_name = e
+    let id = e
         .catalog()
         .cards
         .iter()
-        .find(|c| {
+        .position(|c| {
             let is_black = matches!(c.suit, Suit::Spade | Suit::Club);
             is_black == black && c.name == name
         })
-        .map(|c| c.name)
-        .unwrap_or_else(|| panic!("存在该颜色的 {name}"));
-    e.debug_place(player, card_name)
+        .unwrap_or_else(|| panic!("存在该颜色的 {name}")) as engine_native::CardId;
+    {
+        let core = e.state_core_mut();
+        core.player_mut(player).hand.push(id);
+    }
+    id
 }
 
 /// 上游点 1（使用面）：**黑色**牌当【过河拆桥】使用 → 被接受并拆除目标一张牌。
 ///
-/// **本轮仍未验收（登记，含两处实测对照）**：同一逻辑布阵在**两个种子上结果不同**——
-/// - 探针（seed 20265601，`to_play` 不处理选择）：**持奇袭 → `Accepted`**；
-/// - 本用例（seed 20265501，`advance_to_play` 会 drain 选择）：**持奇袭 → `Rejected(WrongPhase)`**；
-/// - 两者**不持奇袭**时均为 `Rejected(WrongPhase)`。
-/// → 说明该路径存在**状态依赖**（种子/推进方式），**不能**据此断言「转化生效」或「不生效」；
-/// 两种此前的猜测（牌种限制 / 检查顺序）**均未证实**。以 `#[ignore]` 守护并保留两处对照。
+/// **根因已查明（2026-10-19 同轮）**：所谓「种子依赖」是**夹具假象** —— `debug_place(player, name)`
+/// **只按名字查找**，同名的【无懈可击】既有 ♦（红）也有 ♣（黑）实例；两个种子下它命中了
+/// **不同实例**（seed 20265501 → ♦ 红 → 奇袭不转化 → `WrongPhase`；seed 20265601 → ♣ 黑 →
+/// 转化 → `Accepted`）。**原生行为本身一致且正确**（黑→转化、红→不转化）。
+/// 本用例改为**按花色取 card id** 后直接布阵 → 不再依赖实例顺序。
 #[test]
-#[ignore = "同逻辑布阵在两种子/推进方式下结果不同（Accepted vs WrongPhase）→ 状态依赖，未判定"]
 fn upstream_qixi_black_card_used_as_dismantle() {
     let mut e = Engine::new(20265501, 4);
     advance_to_play(&mut e, 0);
