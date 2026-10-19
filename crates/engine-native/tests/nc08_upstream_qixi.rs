@@ -92,16 +92,18 @@ fn place_colored(e: &mut Engine, player: u8, black: bool, name: &str) -> engine_
 
 /// 上游点 1（使用面）：**黑色**牌当【过河拆桥】使用 → 被接受并拆除目标一张牌。
 ///
-/// **本轮未验收（登记，含诊断）**：以**黑色【无懈可击】**为载体时实测
-/// `Rejected(WrongPhase)` —— 转化**未生效**（或可玩性检查先于转化）。两种可能（**未判定**）：
-/// ① 转化对**牌种**有限制（只覆盖部分黑色牌）；② 可玩性检查在转化之前执行。
-/// 以 `#[ignore]` 守护并保留诊断；门槛侧由红色拒绝/未持技两用例覆盖。
+/// **本轮仍未验收（登记，含两处实测对照）**：同一逻辑布阵在**两个种子上结果不同**——
+/// - 探针（seed 20265601，`to_play` 不处理选择）：**持奇袭 → `Accepted`**；
+/// - 本用例（seed 20265501，`advance_to_play` 会 drain 选择）：**持奇袭 → `Rejected(WrongPhase)`**；
+/// - 两者**不持奇袭**时均为 `Rejected(WrongPhase)`。
+/// → 说明该路径存在**状态依赖**（种子/推进方式），**不能**据此断言「转化生效」或「不生效」；
+/// 两种此前的猜测（牌种限制 / 检查顺序）**均未证实**。以 `#[ignore]` 守护并保留两处对照。
 #[test]
-#[ignore = "黑色无懈作载体时转化未生效（WrongPhase）；两种可能未判定，见用例注释"]
+#[ignore = "同逻辑布阵在两种子/推进方式下结果不同（Accepted vs WrongPhase）→ 状态依赖，未判定"]
 fn upstream_qixi_black_card_used_as_dismantle() {
     let mut e = Engine::new(20265501, 4);
-    e.debug_grant(0, "奇袭");
     advance_to_play(&mut e, 0);
+    e.debug_grant(0, "奇袭"); // 与探针一致：到达出牌阶段后再授予
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
