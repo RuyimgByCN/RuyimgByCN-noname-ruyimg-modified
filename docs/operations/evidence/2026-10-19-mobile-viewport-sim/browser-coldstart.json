@@ -1,0 +1,134 @@
+{
+  "results": [
+    {
+      "iter": 0,
+      "lobby_ready": 1,
+      "interactive": 1,
+      "to_interactive_ms": 262,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 10.31,
+          "instantiate_ms": 2.21,
+          "total_ms": 12.53,
+          "wasm_bytes": 2646047
+        }
+      ],
+      "start_marks": {
+        "t0_click": 269.84,
+        "t1_worker_ready": 289.82,
+        "t2_start_done": 292.19,
+        "t5_apply_envelope": 292.42,
+        "t3_candidates_loaded": 296.65,
+        "t4_first_frame": 416.54
+      },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.33,
+          "parse_ms": 0.14,
+          "json_bytes": 4567
+        }
+      ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.13,
+          "delay_ms": 123.02
+        }
+      ],
+      "perf": {
+        "domContentLoaded": 62.139999985694885,
+        "loadEvent": 62.8400000333786,
+        "wasm": [],
+        "workerChunks": [
+          "engine.native.worker-DOR1X5rj.js"
+        ]
+      }
+    },
+    {
+      "iter": 1,
+      "lobby_ready": 1,
+      "interactive": 1,
+      "to_interactive_ms": 260,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 10.55,
+          "instantiate_ms": 2.25,
+          "total_ms": 12.79,
+          "wasm_bytes": 2646047
+        }
+      ],
+      "start_marks": {
+        "t0_click": 297.05,
+        "t1_worker_ready": 317.8,
+        "t2_start_done": 320.09,
+        "t5_apply_envelope": 320.32,
+        "t3_candidates_loaded": 324.78,
+        "t4_first_frame": 442.12
+      },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.33,
+          "parse_ms": 0.15,
+          "json_bytes": 4567
+        }
+      ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.13,
+          "delay_ms": 121.07
+        }
+      ],
+      "perf": {
+        "domContentLoaded": 108.55500000715256,
+        "loadEvent": 109.35000002384186,
+        "wasm": [],
+        "workerChunks": [
+          "engine.native.worker-DOR1X5rj.js"
+        ]
+      }
+    },
+    {
+      "iter": 2,
+      "lobby_ready": 1,
+      "interactive": 1,
+      "to_interactive_ms": 258,
+      "worker_init_timings": [
+        {
+          "fetch_ms": 6.7,
+          "instantiate_ms": 1.7,
+          "total_ms": 8.4,
+          "wasm_bytes": 2646047
+        }
+      ],
+      "start_marks": {
+        "t0_click": 268.84,
+        "t1_worker_ready": 284.23,
+        "t2_start_done": 286.42,
+        "t5_apply_envelope": 286.64,
+        "t3_candidates_loaded": 290.89,
+        "t4_first_frame": 410.68
+      },
+      "candidate_timings": [
+        {
+          "engine_ms": 0.37,
+          "parse_ms": 0.22,
+          "json_bytes": 4567
+        }
+      ],
+      "envelope_timings": [
+        {
+          "apply_ms": 0.12,
+          "delay_ms": 122.94
+        }
+      ],
+      "perf": {
+        "domContentLoaded": 60.50499999523163,
+        "loadEvent": 61.214999973773956,
+        "wasm": [],
+        "workerChunks": [
+          "engine.native.worker-DOR1X5rj.js"
+        ]
+      }
+    }
+  ],
+  "consoleErrors": []
+}

@@ -14,6 +14,9 @@ const base = process.argv[2] ?? "http://127.0.0.1:8123/";
 const chromeBin = process.argv[3] ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const outDir = process.argv[4] ?? ".";
 const iters = Number(process.argv[5] ?? 3);
+// 第 6 参数：视口档位（`desktop` 默认 | `mobile` 用 CDP 模拟移动视口 + 触摸）
+// **注意**：这是**视口模拟**，不是真机——结论须标注为「模拟档位」。
+const tier = process.argv[6] ?? "desktop";
 const port = 9338;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
