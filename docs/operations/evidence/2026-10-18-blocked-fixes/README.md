@@ -633,3 +633,25 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **已排除假设（累计 4 项）**：①机器 `targets` 为空（`factory.rs:511` 已注入）；②`use_as` 未声明
 （`Dismantle` 臂 `card_use_as` 已声明）；③`CardUsed` 未派发（狡黠样本 71 已证派发；水攻已结算）；
 ④子技未授予（**本轮修正**：授予后确认询问出现）。
+
+## 32 运筹（`yunchou`）三项技能未实现（样本 79，2026-10-19）
+
+**症状（未实现）**：运筹包 **10 将 / 21 技**中，以下 **3 项在原生侧无任何实现**
+（`grep -rli` 全库 0 命中；`behavior.rs`/`keys.rs` 亦无对应变体/键）：
+
+| 上游键 | 译名 | 上游要点 |
+|---|---|---|
+| `diyjianxiong` | 奸雄·变体 | `mode: ["identity","guozhan"]` + `trigger: { global: "dieBefore" }`；当前回合角色为持技者且身份局死者**非主公** → 改身份并亮明 |
+| `xinfu_qiaosi` | 巧思 | 出牌阶段限一次：**投掷六面骰** X 点 → 亮出牌堆顶 X 张并获得 → 二选（交给其他角色 X 张 / 弃 X 张） |
+| `xinfu_jingxie` | 精械 | 马钧技能（定义在 `character/mobile/skill.js`） |
+
+**修法**：
+1. `diyjianxiong`：宿主行为 + 身份局模式钩子（原生已有 `new_identity` 与身份字段）；
+2. `xinfu_qiaosi`：**先核对骰子机制**是否已存在（若无则需新增随机骰面 API + 牌堆顶亮牌 + 二选）；
+3. `xinfu_jingxie`：从 `character/mobile/skill.js` 取语义后实现。
+
+**验收**：样本 79 的 `native_lacks_the_three_skills` 断言**逐项翻转**（实现后改为「存在」），
+并为三项各补**行为面**用例。
+
+**同族**：与标准面第 22 项（6 项未实现技能）同类；**建议**把「宿主已实现/未实现」纳入
+来源台账的逐包状态（G0–G5）。
