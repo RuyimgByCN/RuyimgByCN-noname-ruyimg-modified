@@ -1,0 +1,14 @@
+==== u01
+2026-10-08-u01-d3-lifecycle
+2026-10-17-t12-u01-moyan
+==== u03
+2026-10-08-u03-cardpile-lifecycle
+2026-10-17-t12-u03-eight
+==== u07
+2026-10-08-u07-deferral-closeout
+2026-10-08-u07-moshou-wiring
+2026-10-08-u07-skill-batch1
+2026-10-08-u07-skill-batch2
+==== l04
+2026-10-08-l04-cardpile-liuli-lifecycle
+2026-10-17-t12-l04-eight
