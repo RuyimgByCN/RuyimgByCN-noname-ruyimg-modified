@@ -724,3 +724,18 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 `discard_from_hand` 在该帧内的落点（**注意**：出杀路径下 `hand.first()` 可能取到**已被使用的牌**）、
 `current_frame_id()` 是否指向伤害帧。
 **验收**：样本 80 的 `#[ignore]` 用例应能通过（标记牌被弃）。
+
+## 35 乾坤镖（`qiankunbiao`）目标门槛**未校验 `he` 有牌**（样本 84，2026-10-19）
+
+**症状（原生更宽松）**：上游 `filterTarget(card, player, target)` 为
+`target !== player && target.countCards("he") > 0`；原生 `engine/play_card.rs:1684` 的校验只要求
+「**恰 1 名**其他存活目标」⇒ 目标 `he` **无牌**时**仍被受理**（实测 `Accepted`）。
+
+**修法**：在 `play_card.rs:1684` 的 `CardKind::Qiankunbiao | CardKind::Shenhuofeiya` 分支补
+「目标 `he` 有牌」校验（**注意**：`shenhuofeiya` 的上游 `filterTarget` **只要求 `target !== player`**，
+**不要求** `he` 有牌 ⇒ 两者需**分别**校验，不可合并）。
+
+**验收**：样本 84 的 `upstream_qiankunbiao_target_needs_he_cards`（当前 `#[ignore]`）应能通过（`Rejected`）。
+
+**同类提示**：`shenhuofeiya`（神火飞鸦）与乾坤镖共用该校验分支 → 修完乾坤镖后须**复核神火飞鸦**
+不应被误加 `he` 门槛。
