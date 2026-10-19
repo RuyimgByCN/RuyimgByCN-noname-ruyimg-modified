@@ -247,7 +247,12 @@ if !core.player(core.turn.current).hand.contains(&card) {
 
 **验收**：`upstream_tuxi_takes_cards_and_skips_draw` 的净变化断言应改为 **+取牌数**（选 2 名目标 → +2）。
 
-## 16 淑慎（`shushen`）未按回复点数计次（NC08 样本 43 新发现，2026-10-19）
+## 16 **「按点数计次」族**：淑慎（`shushen`）/ 遗计（`yiji`）（2026-10-19；样本 46 后升为族项）
+
+> **族化说明**：样本 46（遗计）发现**同一缺口** → 本项由单技能修复项**升级为族项**，
+> 修法与验收需**覆盖两处**（并建议排查其它 `getIndex → event.num` 的技能）。
+
+### 16.1 淑慎（`shushen`）
 
 **症状（规则损失）**：上游 `shushen` 的 `getIndex(event) { return event.num || 1; }` 表示
 **一次回复 N 点应触发 N 次**（每次各自选目标、各自摸牌）；原生 `content/standard/skills/shu_shen.rs`
@@ -257,6 +262,21 @@ if !core.player(core.turn.current).hand.contains(&card) {
 
 **验收**：新增「一次回复 2 点 → 两次目标选择与两次摸牌」的行为用例；
 现有两条单点用例保持不变。
+
+### 16.2 遗计（`yiji`）（样本 46 追加）
+
+**症状（规则损失）**：上游 `yiji` 的 `getIndex(event, player, triggername) { return event.num; }`
+表示**受 N 点伤害应触发 N 次**；原生 `content/standard/skills/ji_ji.rs` 的 filter 只判
+`amount > 0`，机器**单次结算**（`draw_cards(owner, 2)` 一次）。
+
+**修法**：按 `Damage.amount` 计次（与 16.1 同一改法）。
+
+**验收**：新增「一次受到 2 点伤害 → 触发两次遗计」的行为用例。
+
+### 16.3 族内排查（建议）
+
+`getIndex` 在上游标准面还有其它用法；建议对**所有** `getIndex → event.num` 的技能做一次全表比对
+（与本族同一判定口径），结果并入本项。
 
 ## 17 护驾（`hujia`）在非身份局亦可发动 —— **经核对为「有意的设计差异」，非缺陷**（2026-10-19）
 
