@@ -1,0 +1,3 @@
+DBG 石灰粉：发动=Accepted { state_hash: [..] }
+DBG 石灰粉：询问=[]
+DBG 石灰粉：1 号对其他角色出杀 → Accepted { state_hash: [..] }

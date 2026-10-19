@@ -785,3 +785,29 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 （目标手牌 +1 且含此牌）；另补计数结算用例。
 
 **同族**：与同批 `chunbing`（春饼，已有样本）**同为食物计数机** → 修法可一并评估。
+
+## 38 石灰粉（`shihuifen`）的**限制未生效**（样本 90，2026-10-19）
+
+**症状**：上游 `shihuifen`（`global: "g_shihuifen"`，`filterTarget: true`）的 `content` 为——
+`_status.currentPhase.chooseToRespond({ name: "shan" })`（**当前回合角色须出【闪】**）→
+**未出**则 `_status.currentPhase.addTempSkill("shihuifen", "phaseUseAfter")`
+（**该角色本回合无法对其他角色使用卡牌**）。原生实测（由**当前回合角色自己**使用石灰粉，避开
+`NotYourTurn`）：
+
+| 观测点 | 实测 |
+|---|---|
+| 发动 | `Accepted` ✅ |
+| **闪的询问** | **`询问=[]`**（无任何询问）✗ —— 上游应有 `chooseToRespond` |
+| 限制 | 该角色随后对**其他角色**出【杀】**仍被受理**（`Accepted`）✗ |
+
+**已核对**：`content/host/step/gujian.rs:439` 存在 `GujianShihuifenCard` 阶段机；
+`GujianFoodShihuifenBan => Flow::Done`（限制子技**自身为空**——其执行应在出牌校验路径）。
+
+**修法（待定位）**：①核对阶段机的入口/stage（为何无询问）；②在**出牌校验路径**实现
+「持 `shihuifen` 限制技时不得对其他角色使用牌」，并在 `phaseUseAfter` 解除。
+
+**验收**：样本 90 的 `upstream_shihuifen_blocks_cards_on_others`（当前 `#[ignore]`）应能通过
+（出现闪询问、且未出闪后对其他角色出牌被 `Rejected`）。
+
+**同类提示**：`jinlianzhu`（金莲珠，样本 87）同为 `global` 子技但**打断窗口可达且生效** ⇒
+本项**不是**「global 子技一律不可达」，须按卡定位。
