@@ -1,0 +1,1 @@
+DBG 闪响应：prompt=respond_shan options=[Pass, Card(2)]

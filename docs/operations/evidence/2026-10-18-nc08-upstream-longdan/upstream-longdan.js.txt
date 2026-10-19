@@ -1,0 +1,119 @@
+longdan: {
+		audio: "longdan_sha",
+		audioname: ["re_zhaoyun"],
+		audioname2: { old_zhaoyun: "longdan_sha_re_zhaoyun" },
+		group: ["longdan_sha", "longdan_shan", "longdan_draw"],
+		subSkill: {
+			draw: {
+				trigger: { player: ["useCard", "respond"] },
+				forced: true,
+				popup: false,
+				filter(event, player) {
+					if (!get.zhu(player, "shouyue")) {
+						return false;
+					}
+					return event.skill === "longdan_sha" || event.skill === "longdan_shan";
+				},
+				async content(event, trigger, player) {
+					await player.draw();
+					player.storage.fanghun2++;
+				},
+			},
+			sha: {
+				audio: 2,
+				audioname: ["re_zhaoyun"],
+				audioname2: { old_zhaoyun: "longdan_sha_re_zhaoyun" },
+				enable: ["chooseToUse", "chooseToRespond"],
+				filterCard: { name: "shan" },
+				viewAs: { name: "sha" },
+				viewAsFilter(player) {
+					if (!player.hasCards("hs", "shan")) {
+						return false;
+					}
+				},
+				position: "hs",
+				prompt: "将一张闪当杀使用或打出",
+				check() {
+					return 1;
+				},
+				ai: {
+					effect: {
+						target(card, player, target, current) {
+							if (get.tag(card, "respondSha") && current < 0) {
+								return 0.6;
+							}
+						},
+					},
+					respondSha: true,
+					skillTagFilter(player) {
+						if (!player.hasCards("hs", "shan")) {
+							return false;
+						}
+					},
+					order() {
+						return get.order({ name: "sha" }) + 0.1;
+					},
+					useful: -1,
+					value: -1,
+				},
+			},
+			shan: {
+				audio: "longdan_sha",
+				audioname: ["re_zhaoyun"],
+				audioname2: { old_zhaoyun: "longdan_sha_re_zhaoyun" },
+				enable: ["chooseToRespond", "chooseToUse"],
+				filterCard: { name: "sha" },
+				viewAs: { name: "shan" },
+				prompt: "将一张杀当闪使用或打出",
+				check() {
+					return 1;
+				},
+				position: "hs",
+				viewAsFilter(player) {
+					if (!player.hasCards("hs", "sha")) {
+						return false;
+					}
+				},
+				ai: {
+					respondShan: true,
+					skillTagFilter(player) {
+						if (!player.hasCards("hs", "sha")) {
+							return false;
+						}
+					},
+					effect: {
+						target(card, player, target, current) {
+							if (get.tag(card, "respondShan") && current < 0) {
+								return 0.6;
+							}
+						},
+					},
+					order: 4,
+					useful: -1,
+					value: -1,
+				},
+			},
+		},
+	},
+	longdan_sha_re_zhaoyun: { audio: 2 },
+	mashu: {
+		mod: {
+			globalFrom(from, to, distance) {
+				return distance - 1;
+			},
+		},
+	},
+	feiying: {
+		mod: {
+			globalTo(from, to, distance) {
+				return distance + 1;
+			},
+		},
+	},
+	tieji: {
+		audio: 2,
+		trigger: { player: "useCardToPlayered" },
+		check(event, player) {
+			return get.attitude(player, event.target) <= 0;
+		},
+		
