@@ -37,9 +37,19 @@ qixi: {
 | 探针（seed 20265601，`to_play` **不**处理选择） | `Rejected(WrongPhase)` | **`Accepted`** |
 | 用例（seed 20265501，`advance_to_play` **会** drain 选择） | `Rejected(WrongPhase)` | **`Rejected(WrongPhase)`** |
 
-→ **状态依赖**（种子或推进方式影响结果）→ **不能**据此断言「转化生效」或「不生效」；
-此前的两种猜测（**牌种限制** / **可玩性检查顺序**）**均未证实**，**已撤回**。
-`#[ignore]` 保留两处对照；后续需以**固定种子 + 统一推进方式**的最小复现来定位。
+→ **状态依赖** → **不能**据此断言「转化生效」或「不生效」。
+
+**进一步矩阵探针（同轮，2 种子 × 2 推进方式 × 2 授予时机 = 8 组）**：
+
+```
+seed=20265501 drain=false/true grant_before=true/false → 全部 Rejected(WrongPhase)
+seed=20265601 drain=false/true grant_before=true/false → 全部 Accepted
+```
+
+→ **唯一决定因素是「种子」**（推进方式与授予时机**均无影响**）；机制**仍未查明**（已排除
+「选择 drain」与「授予时机」两个假设）。此前两种猜测（**牌种限制** / **可玩性检查顺序**）**均未证实，已撤回**。
+`#[ignore]` 保留对照；后续需按**固定种子**逐步定位（建议：打印该黑色无懈的 **card id/suit** 与
+转化前后的 `kind`）。
 
 ## 4 夹具经验（写入证据）
 
