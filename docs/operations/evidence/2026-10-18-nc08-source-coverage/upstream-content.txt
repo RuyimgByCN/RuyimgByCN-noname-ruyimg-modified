@@ -1,6 +1,7 @@
-source	lines	lib.character	lib.skill	lib.card
+# 整目录统计（含 main/ character/ 等子目录的全部 .js）
+source	total_js_lines	lib.character	lib.skill	lib.card
 末日乱斗	3410	32	75	2
-史诗卡牌	2974	4	31	5
-英雄杀	23	0	0	0
+史诗卡牌	10710	4	32	5
+英雄杀	3855	2	5	1
 标记补充	6518	13	84	4
 选将美化	9093	64	121	6

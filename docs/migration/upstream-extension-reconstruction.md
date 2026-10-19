@@ -200,7 +200,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 38 | 标准面（技能） | `luoyi` | 3 点全部通过（少摸 1 + 伤害 +1）+ 2 处差异登记（`numFixed` 未建模、helper 未检查牌种/`notLink`，未判定） | [nc08-upstream-luoyi](../operations/evidence/2026-10-18-nc08-upstream-luoyi/README.md) |
 | 39 | 标准面（技能） | `tuxi` | 发动 + 放弃摸牌通过 + **3 处差异登记**（`numFixed` 族第 3 例、取牌确定性族第 2 例、**③无条件弃 2 张手牌**） | [nc08-upstream-tuxi](../operations/evidence/2026-10-18-nc08-upstream-tuxi/README.md) |
 
-**覆盖面**：**21/37 来源**已有第⑦层上游样本；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）** → 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
+**覆盖面**：**21/37 来源**已有第⑦层上游样本；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
 **未完成**：接入**上游 JS harness**（当前以旧线为可执行参照，旧线≠上游等价）、其余 16 个来源、
 上述差异的逐项口径判定、以及 4 项**待实施修复**（[清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)）。
