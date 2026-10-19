@@ -1,5 +1,5 @@
 //! NC08 第⑦层（上游行为对照）样本 98：**来源 U05（古剑）** 锦囊
-//! `liufengsan`（六风散）。
+//! `liufengsan`（流风散）。
 //!
 //! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`liufengsan`）：
 //!
@@ -56,7 +56,7 @@ fn upstream_liufengsan_grants_two_shan() {
             .enumerate()
             .find(|(_, c)| c.name.contains("liufengsan"))
             .map(|(i, _)| i as engine_native::CardId)
-            .expect("六风散在目录");
+            .expect("流风散在目录");
         nc08_common::put_hand(&mut e, 0, id);
         id
     };
@@ -68,13 +68,13 @@ fn upstream_liufengsan_grants_two_shan() {
         dedup_id: next_dedup(),
         action: GameAction::PlayCard { card, targets: vec![1] },
     });
-    eprintln!("DBG 六风散：发动={out:?}");
+    eprintln!("DBG 流风散：发动={out:?}");
     assert!(
         matches!(
             out,
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ),
-        "六风散应可发动：{out:?}"
+        "流风散应可发动：{out:?}"
     );
     drain(&mut e);
     let hand = e.debug_hand(1);
@@ -84,22 +84,22 @@ fn upstream_liufengsan_grants_two_shan() {
         .count();
     let deck_after = e.state_core().deck.len();
     eprintln!(
-        "DBG 六风散：1 号手牌 {h1_before} → {}（其中【闪】{shan_count} 张）；牌堆 {deck_before} → {deck_after}",
+        "DBG 流风散：1 号手牌 {h1_before} → {}（其中【闪】{shan_count} 张）；牌堆 {deck_before} → {deck_after}",
         hand.len()
     );
     assert_eq!(
         hand.len(),
         h1_before + 2,
-        "六风散：目标应**获得 2 张牌**（{h1_before} → {}）",
+        "流风散：目标应**获得 2 张牌**（{h1_before} → {}）",
         hand.len()
     );
     assert_eq!(
         shan_count, 2,
-        "六风散：获得的 2 张应均为**【闪】**（上游 `game.createCard(\"shan\")`）"
+        "流风散：获得的 2 张应均为**【闪】**（上游 `game.createCard(\"shan\")`）"
     );
     // **登记差异线索**：上游为**生成**（牌堆不变）；若原生从牌堆取牌，则牌堆减少
     eprintln!(
-        "DBG 六风散（生成 vs 实体）：牌堆 {deck_before} → {deck_after}（减少 {}）",
+        "DBG 流风散（生成 vs 实体）：牌堆 {deck_before} → {deck_after}（减少 {}）",
         deck_before as i64 - deck_after as i64
     );
 }

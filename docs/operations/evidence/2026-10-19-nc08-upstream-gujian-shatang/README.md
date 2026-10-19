@@ -1,4 +1,4 @@
-# NC08 第⑦层样本 **100**：**来源 U05（古剑）** 锦囊 `shatang`（砂糖）（2026-10-19）
+# NC08 第⑦层样本 **100**：**来源 U05（古剑）** 锦囊 `shatang`（沙棠）（2026-10-19）
 
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层
@@ -41,4 +41,4 @@ shatang: {
 
 - [ ] `cardnature: fire` 的**属性面**（火伤修饰/藤甲等载体）
 - [ ] `ai.result` 策略面
-- [ ] 古剑包其余卡牌（机关族余：`bingpotong` 冰魄筒、`liutouge` 六头葛）
+- [ ] 古剑包其余卡牌（机关族余：`bingpotong` 天女散花、`liutouge` 六骰格）

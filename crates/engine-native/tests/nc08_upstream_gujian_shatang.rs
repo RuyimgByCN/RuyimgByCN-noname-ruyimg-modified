@@ -1,5 +1,5 @@
 //! NC08 第⑦层（上游行为对照）样本 **100**：**来源 U05（古剑）** 锦囊
-//! `shatang`（砂糖）。
+//! `shatang`（沙棠）。
 //!
 //! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`shatang`）：
 //!
@@ -56,7 +56,7 @@ fn upstream_shatang_damages_then_grants_hujia() {
             .enumerate()
             .find(|(_, c)| c.name.contains("shatang"))
             .map(|(i, _)| i as engine_native::CardId)
-            .expect("砂糖在目录");
+            .expect("沙棠在目录");
         nc08_common::put_hand(&mut e, 0, id);
         id
     };
@@ -68,30 +68,30 @@ fn upstream_shatang_damages_then_grants_hujia() {
         dedup_id: next_dedup(),
         action: GameAction::PlayCard { card, targets: vec![1] },
     });
-    eprintln!("DBG 砂糖：发动={out:?}");
+    eprintln!("DBG 沙棠：发动={out:?}");
     assert!(
         matches!(
             out,
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ),
-        "砂糖应可发动：{out:?}"
+        "沙棠应可发动：{out:?}"
     );
     drain(&mut e);
     let p1 = e.state_core().player(1);
     eprintln!(
-        "DBG 砂糖：1 号 hp {hp_before} → {}；护甲 {hujia_before} → {}",
+        "DBG 沙棠：1 号 hp {hp_before} → {}；护甲 {hujia_before} → {}",
         p1.hp, p1.hujia
     );
     assert_eq!(
         p1.hp,
         hp_before - 1,
-        "砂糖：目标应先受 **1 点火焰伤害**（hp {hp_before} → {}）",
+        "沙棠：目标应先受 **1 点火焰伤害**（hp {hp_before} → {}）",
         p1.hp
     );
     assert_eq!(
         p1.hujia,
         hujia_before + 1,
-        "砂糖：随后应 **+1 护甲**（护甲 {hujia_before} → {}）——两步顺序不变量",
+        "沙棠：随后应 **+1 护甲**（护甲 {hujia_before} → {}）——两步顺序不变量",
         p1.hujia
     );
 }

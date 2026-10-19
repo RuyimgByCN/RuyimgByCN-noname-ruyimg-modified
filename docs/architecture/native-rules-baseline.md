@@ -45,9 +45,9 @@
 | 48 | G1 古剑食物效果面：青团（首杀摸 1，once_per_turn）/元宝肉（额外一张杀——杀次数校验钩子）/咕咚羹（受杀伤害 -1，一次性移除）/麻婆豆腐（结束阶段确定性弃牌，登记差异：随机改确定性）/春饼（手牌上限 +1——弃牌上限计算钩子）；`CardKind::Qingtuan`/`Yuanbaorou`/`Gudonggeng`/`Mapodoufu`/`Chunbing`——ADR 0776 G1；14 golden 因目录变化重录 |
 | 49 | G1 护甲原语 + 食物第三批：`PlayerState.hujia`（伤害 1:1 先行抵扣，入哈希/存档；HujiaAbsorbed 日志）+ 鲤鱼汤（体力最少得护甲）/麻茶（黑色牌目标限制——出牌校验钩子，登记差异：不含响应路径）/菱角（摸牌阶段额外摸 1 后弃 1——选择机）；`CardKind::Liyutang`/`Molicha`/`Xiajiao`——ADR 0776 G1；14 golden 因状态编码与目录变化重录 |
 | 50 | G1 古剑食物簇收官：蜜链藕（红桃当桃——状态驱动 view-as：出牌转化链+通用尾部 use_as+濒死 is_tao_like 并入；登记差异：转化并存按既有优先级）/卤玉羹（出牌阶段限一次弃基本牌获得牌堆顶——主动型宿主监听技 activate；登记差异：发现牌简化为牌堆顶）；`CardKind::Mizhilianou`/`Luyugeng`——ADR 0776 G1；14 golden 因目录变化重录 |
-| 51 | G1 古剑机关簇：冰魄通（逐目标首张同色比对——同色弃+伤害；登记差异：确定性首张+失去体力简化为伤害）/乾坤镖（目标及邻座各弃首张；登记差异：随机改确定性）/龙须钩（获得目标首张装备）/神火飞鸦（目标及邻座需闪否则 1 火伤——targets 响应队列逐目标循环+挂起派生）；`CardKind::Bingpotong`/`Qiankunbiao`/`Longxugou`/`Shenhuofeiya`——ADR 0776 G1；14 golden 因目录变化重录 |
-| 52 | G1 古剑余簇：紫阳丹（+3 护甲可叠加，结束阶段 -1；登记差异：上游每阶段衰减）/玉女元神（Dying 触发一次性回复标记）/石会粉（需闪否则禁用对其他角色用牌——出牌校验钩子+expires_end_of_turn；登记差异：响应使用改主动使用）/六风散（获得两张实体闪；登记差异：虚拟牌改实体牌）；`CardKind::Ziyangdan`/`Yunvyuanshen`/`Shihuifen`/`Liufengsan`——ADR 0776 G1；14 golden 因目录变化重录 |
-| 53 | G1 古剑最后一批：砂糖（1 火伤+1 护甲——emit/Yield 两段式时序）/黑龙鳞片（+1 护甲；登记差异：防御距离临时技暂缓）/硫头阁（自己摸 1/他人弃首张；登记差异：随机效果池简化为确定性）/木头面具（view-as 装备技——equip_skills+once_used，EquipSlot::Armor 注册）；`CardKind::Shatang`/`Heilonglinpian`/`Liutouge`/`Mutoumianju`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 51 | G1 古剑机关簇：天女散花（逐目标首张同色比对——同色弃+伤害；登记差异：确定性首张+失去体力简化为伤害）/乾坤镖（目标及邻座各弃首张；登记差异：随机改确定性）/龙须钩（获得目标首张装备）/神火飞鸦（目标及邻座需闪否则 1 火伤——targets 响应队列逐目标循环+挂起派生）；`CardKind::Bingpotong`/`Qiankunbiao`/`Longxugou`/`Shenhuofeiya`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 52 | G1 古剑余簇：紫阳丹（+3 护甲可叠加，结束阶段 -1；登记差异：上游每阶段衰减）/玉女元参（Dying 触发一次性回复标记）/石会粉（需闪否则禁用对其他角色用牌——出牌校验钩子+expires_end_of_turn；登记差异：响应使用改主动使用）/流风散（获得两张实体闪；登记差异：虚拟牌改实体牌）；`CardKind::Ziyangdan`/`Yunvyuanshen`/`Shihuifen`/`Liufengsan`——ADR 0776 G1；14 golden 因目录变化重录 |
+| 53 | G1 古剑最后一批：沙棠（1 火伤+1 护甲——emit/Yield 两段式时序）/黑龙鳞片（+1 护甲；登记差异：防御距离临时技暂缓）/硫头阁（自己摸 1/他人弃首张；登记差异：随机效果池简化为确定性）/木头面具（view-as 装备技——equip_skills+once_used，EquipSlot::Armor 注册）；`CardKind::Shatang`/`Heilonglinpian`/`Liutouge`/`Mutoumianju`——ADR 0776 G1；14 golden 因目录变化重录 |
 | 54 | G1 古剑收官双卡：帝女玄霜（濒死特殊牌——is_tao_like 并入按桃救回 + 主动使用回复+rider 弃任意摸等量；登记差异：濒死救援弃摸骑乘暂缓）/玉衡（主动型装备技——确定性取其他角色首张黑桃；登记差异：升级机制+随机敌暂缓）；`CardKind::Dinvxuanshuang`/`Gjyuheng`——ADR 0776 G1；14 golden 因目录变化重录 |
 | 55 | G1 炉石余量：盾牌格挡（+1 护甲摸 1 弃 1，登记差异：确定性首张）/治疗波（判定红回 1 否则+1 护甲）/元素毁灭（逐目标弃 1–2 每少弃一张受 1 雷伤——逐目标弃减伤循环）/星界沟通（上限+1 回 1 弃全部）/传送门（获得牌堆顶；登记差异：立即使用链暂缓）/坦蛇至人（座位序链式弃牌；登记差异：随机改确定性）；`CardKind` 67–72——ADR 0776 G1；14 golden 因目录变化重录 |
 | 56 | G1 炉石收官：世界树（`HearthShijieshuCard` 装备搜索+穿戴机——牌堆自顶扫描两张不同槽位装备，同槽替换+grant_equip_skills 授予；登记差异：按槽位去重近似上游 subtype、机器直穿不经 Equipped 帧）；`CardKind::Shijieshu` 73——ADR 0776 G1；14 golden 因目录变化重录 |
@@ -392,7 +392,7 @@ ShaResolveMachine 新增 `hanbing_pending: u8`（快照/存档/哈希三处接�
    快照边界检查、presentation 双投影。近期存档兼容由规则版本门禁覆盖
    （v76→77 拒绝旧规则存档）。
 2. **发射点替换（四处）**：面里金针（目标摸 1 后失去 1 点体力）、
-   飞镖（取消分支）、瘟疫（无手牌分支）、冰魄通（同色分支）——均由
+   飞镖（取消分支）、瘟疫（无手牌分支）、天女散花（同色分支）——均由
    Damage 改 LoseHp。
 3. **保留登记**：草船借箭/舌战群儒等「失去体力」与其他大差异（自选
    展示/多轮问答链）捆绑的条目不在本批（单点替换会半对齐）；随机类
@@ -422,7 +422,7 @@ ShaResolveMachine 新增 `hanbing_pending: u8`（快照/存档/哈希三处接�
 | 舌战群儒 | 多轮 Bool 问答链+随机牌 | **保留登记**（结构差异捆绑） |
 | 草船借箭/金莲烛/卤玉羹 | 随机牌捆绑自选/发现机制 | **保留登记**（结构差异捆绑） |
 | 暴雪药水 | `chooseToDiscard("h",2,true)` **目标自选两张** | **更正归类**（自选类）→ **v79 消除**：目标 SelectCards 强制两张（不足全选）后摸 1 |
-| 冰魄通比对牌 | 双方**自选**展示一张手牌 | **更正归类**（自选类）→ **v79 消除**：双段展示（ComparePlayerPick/TargetPick 逐目标队列），同色弃展示牌+目标失去 1 体力（v77 原语），异色无事；任一方无手牌该目标跳过 |
+| 天女散花比对牌 | 双方**自选**展示一张手牌 | **更正归类**（自选类）→ **v79 消除**：双段展示（ComparePlayerPick/TargetPick 逐目标队列），同色弃展示牌+目标失去 1 体力（v77 原语），异色无事；任一方无手牌该目标跳过 |
 | 龙须钩 | 使用者自选目标装备区一张 | **v79 消除**：使用者 SelectCards 选目标装备（装备区明牌）；原登记「目标自选」系措辞不准，上游 `choosePlayerCard` 为使用者选 |
 
 随机抽取实现口径：`ctx.core.rng.gen_range(候选数)` 均匀抽取；rng 流
@@ -436,17 +436,17 @@ ShaResolveMachine 新增 `hanbing_pending: u8`（快照/存档/哈希三处接�
 1. **暴雪药水**：目标自选弃两张手牌（SelectCards 强制 min=max=min(2,手牌数)，
    `gw_baoxue_discard`；不足则全选，无手牌跳过弃牌仍摸 1=上游 step1
    draw 恒执行）——上游 `chooseToDiscard("h",2,true)`。
-2. **冰魄通**：双段自选展示——使用者选展示牌（暂存 `cards` 入快照）→
+2. **天女散花**：双段自选展示——使用者选展示牌（暂存 `cards` 入快照）→
    目标选展示牌 → 同色使用者弃展示牌+目标失去 1 体力（v77 原语）、
    异色无事（展示不移动牌）；任一方无手牌该目标直接跳过（上游 step0
    finish 条件）；复用拼点双段 stage（ComparePlayerPick/CompareTargetPick）
    逐目标队列推进。
 3. **龙须钩**：使用者自选目标装备区一张获得（上游 `choosePlayerCard
    ("e", target)`——装备区明牌由使用者选，原登记「目标自选」措辞更正）。
-派生面：三询问（暴雪/冰魄通两段/龙须钩）入 active_ask 派生表；创建
-stage 按 behavior 特例（暴雪=SelectCard、冰魄通=ComparePlayerPick、
+派生面：三询问（暴雪/天女散花两段/龙须钩）入 active_ask 派生表；创建
+stage 按 behavior 特例（暴雪=SelectCard、天女散花=ComparePlayerPick、
 龙须钩=SelectCard）。版本 78→79 入 canonical_hash——14 golden 重录
-（无场景触及三卡，纯版本位移）。回归适配：冰魄通测试改双段应答
+（无场景触及三卡，纯版本位移）。回归适配：天女散花测试改双段应答
 （并覆盖「使用者无手牌后续目标跳过」分支、展示牌保留断言）、龙须钩
 加选牌询问断言、暴雪测试验证自选语义（选 s2/s3 保留 s1）。
 
@@ -3701,13 +3701,18 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 **共性判读（不夸大）**：4 处损失集中在**「候选集合/转化入口」**类——即**规则覆盖面**而非结算逻辑；
 结算主路径（伤害、弃置、摸牌、判定）在 7 个样本中均与上游一致。
 
+**中文名须取自 `translate.js`（2026-10-19，样本 88–101 批量更正）**：卡牌**中文名不可按拼音猜**
+（本会话曾把 `liutouge` 猜为「六头葛」（实为**六骰格**）、`shatang` 猜为「砂糖」（实为**沙棠**）、
+`yunvyuanshen` 猜为「玉女元神」（实为**玉女元参**）、`liufengsan` 猜为「六风散」（实为**流风散**）等，
+共 **9 处**）⇒ 一律**读上游 `translate.js`** 取值；**历史证据目录不因改名回改**（保留日期语境）。
+
 **按卡名 grep 会漏（2026-10-19，样本 97 黑龙鳞片）**：宿主**行为枚举名可能与卡名不同**
-（`HostBehavior::JiguanHeilongCard` ↔ 卡名 `heilonglinpian`；玉女元神为 `*_LISTENER_KEY`）
+（`HostBehavior::JiguanHeilongCard` ↔ 卡名 `heilonglinpian`；玉女元参为 `*_LISTENER_KEY`）
 ⇒ **按卡名检索会漏判为「无实现」**。做法：按**行为枚举名**、**键常量**（`GJ_*_KEY`）或
 `keys.rs` 的 `host:*` 映射检索；必要时**顺 `intrinsic.rs` 的 `CardKind::X =>` 分支**找到真实行为。
 
-**技能授予的探测方式（2026-10-19，样本 99 玉女元神）**：判定「某子技是否被授予」时，
-**不要凭上游键猜名**（原生可能用 `*_LISTENER_KEY` 等**不同词**命名——玉女元神即为
+**技能授予的探测方式（2026-10-19，样本 99 玉女元参）**：判定「某子技是否被授予」时，
+**不要凭上游键猜名**（原生可能用 `*_LISTENER_KEY` 等**不同词**命名——玉女元参即为
 `gj_yunvyuanshen_listener`）。做法：**先读原生 `constants.rs` 的键常量**（或 `keys.rs` 的
 `host:*` 映射），**再按该名探测**；否则会**漏判为「未授予」**（本会话已因此产生一次误判并更正）。
 

@@ -1,5 +1,5 @@
 //! NC08 第⑦层（上游行为对照）样本 101：**来源 U05（古剑）** 机关牌
-//! `liutouge`（六头葛）。
+//! `liutouge`（六骰格）。
 //!
 //! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`liutouge`）：
 //!
@@ -60,7 +60,7 @@ fn upstream_liutouge_two_branches() {
                 .enumerate()
                 .find(|(_, c)| c.name.contains("liutouge"))
                 .map(|(i, _)| i as engine_native::CardId)
-                .expect("六头葛在目录");
+                .expect("六骰格在目录");
             nc08_common::put_hand(&mut e, 0, id);
             id
         };
@@ -77,7 +77,7 @@ fn upstream_liutouge_two_branches() {
                 out,
                 CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
             ),
-            "六头葛（对自己）应可发动：{out:?}"
+            "六骰格（对自己）应可发动：{out:?}"
         );
         drain(&mut e);
         // 打出本体 −1、增益摸 1 → 手牌数不变
@@ -100,7 +100,7 @@ fn upstream_liutouge_two_branches() {
                 .enumerate()
                 .find(|(_, c)| c.name.contains("liutouge"))
                 .map(|(i, _)| i as engine_native::CardId)
-                .expect("六头葛在目录");
+                .expect("六骰格在目录");
             nc08_common::put_hand(&mut e, 0, id);
             id
         };
@@ -116,17 +116,17 @@ fn upstream_liutouge_two_branches() {
                 out,
                 CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
             ),
-            "六头葛（对其他角色）应可发动：{out:?}"
+            "六骰格（对其他角色）应可发动：{out:?}"
         );
         drain(&mut e);
         e.debug_hand(1).len() as i64 - h1_before as i64
     };
     eprintln!(
-        "DBG 六头葛：对自己（增益）手牌净变化={self_gain}（打出本体 −1、摸 1 ⇒ 0）；\
+        "DBG 六骰格：对自己（增益）手牌净变化={self_gain}（打出本体 −1、摸 1 ⇒ 0）；\
          对其他角色（减益）手牌净变化={other}（应 −1）"
     );
-    assert_eq!(self_gain, 0, "六头葛（增益简化）：对自己应**摸 1**（打出本体 −1 ⇒ 净 0）");
-    assert_eq!(other, -1, "六头葛（减益简化）：其他角色应**弃一张手牌**（净 −1）");
+    assert_eq!(self_gain, 0, "六骰格（增益简化）：对自己应**摸 1**（打出本体 −1 ⇒ 净 0）");
+    assert_eq!(other, -1, "六骰格（减益简化）：其他角色应**弃一张手牌**（净 −1）");
 }
 
 /// **登记差异**（源码事实固定）：随机效果池 → 确定性简化。
@@ -137,7 +137,7 @@ fn upstream_liutouge_random_pool_difference_is_registered() {
         "/src/content/host/step/jiguan.rs"
     ))
     .expect("读 jiguan");
-    let idx = src.find("JiguanLiutougeCard =>").expect("六头葛分支");
+    let idx = src.find("JiguanLiutougeCard =>").expect("六骰格分支");
     let seg: String = src[idx..].chars().take(700).collect();
     assert!(
         seg.contains("增益简化") && seg.contains("减益简化") && seg.contains("上游随机效果池"),
@@ -149,7 +149,7 @@ fn upstream_liutouge_random_pool_difference_is_registered() {
         ),
     )
     .expect("读上游 gujian/card.js");
-    let idx = up.find("\tliutouge: {").expect("上游六头葛");
+    let idx = up.find("\tliutouge: {").expect("上游六骰格");
     let seg: String = up[idx..].chars().take(400).collect();
     assert!(
         seg.contains("getDebuff()") && seg.contains("getBuff()"),

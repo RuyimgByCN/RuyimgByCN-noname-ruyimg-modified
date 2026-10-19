@@ -1,4 +1,4 @@
-# NC08 第⑦层样本 92：**来源 U05（古剑）** 机关牌 `mianlijinzhen`（绵里金针）（2026-10-19）
+# NC08 第⑦层样本 92：**来源 U05（古剑）** 机关牌 `mianlijinzhen`（棉里针）（2026-10-19）
 
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层

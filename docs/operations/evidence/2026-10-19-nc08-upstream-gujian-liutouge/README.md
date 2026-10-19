@@ -1,4 +1,4 @@
-# NC08 第⑦层样本 101：**来源 U05（古剑）** 机关牌 `liutouge`（六头葛）（2026-10-19）
+# NC08 第⑦层样本 101：**来源 U05（古剑）** 机关牌 `liutouge`（六骰格）（2026-10-19）
 
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层
@@ -43,4 +43,4 @@ liutouge: {
 
 - [ ] 上游**效果池的具体条目**（需读 `getBuff`/`getDebuff` 实现）
 - [ ] `wuxieable` 无懈面
-- [ ] 古剑包其余卡牌（机关族余：`bingpotong` 冰魄筒）
+- [ ] 古剑包其余卡牌（机关族余：`bingpotong` 天女散花）

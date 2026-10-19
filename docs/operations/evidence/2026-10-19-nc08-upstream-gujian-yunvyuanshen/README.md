@@ -1,4 +1,4 @@
-# NC08 第⑦层样本 99：**来源 U05（古剑）** 基本牌 `yunvyuanshen`（玉女元神）（2026-10-19）
+# NC08 第⑦层样本 99：**来源 U05（古剑）** 基本牌 `yunvyuanshen`（玉女元参）（2026-10-19）
 
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层

@@ -1,5 +1,5 @@
 //! NC08 第⑦层（上游行为对照）样本 99：**来源 U05（古剑）** 基本牌
-//! `yunvyuanshen`（玉女元神）。
+//! `yunvyuanshen`（玉女元参）。
 //!
 //! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`yunvyuanshen`）：
 //!
@@ -65,7 +65,7 @@ fn upstream_yunvyuanshen_grants_skill() {
             .enumerate()
             .find(|(_, c)| c.name.contains("yunvyuanshen"))
             .map(|(i, _)| i as engine_native::CardId)
-            .expect("玉女元神在目录");
+            .expect("玉女元参在目录");
         nc08_common::put_hand(&mut e, 0, id);
         id
     };
@@ -75,13 +75,13 @@ fn upstream_yunvyuanshen_grants_skill() {
         dedup_id: next_dedup(),
         action: GameAction::PlayCard { card, targets: vec![1] },
     });
-    eprintln!("DBG 玉女元神：发动={out:?}");
+    eprintln!("DBG 玉女元参：发动={out:?}");
     assert!(
         matches!(
             out,
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ),
-        "玉女元神应可发动：{out:?}"
+        "玉女元参应可发动：{out:?}"
     );
     drain(&mut e);
     let hits: Vec<&str> = CANDIDATES
@@ -89,10 +89,10 @@ fn upstream_yunvyuanshen_grants_skill() {
         .copied()
         .filter(|n| e.debug_has_skill(1, n))
         .collect();
-    eprintln!("DBG 玉女元神：1 号子技候选命中={hits:?}");
+    eprintln!("DBG 玉女元参：1 号子技候选命中={hits:?}");
     assert!(
         !hits.is_empty(),
-        "玉女元神：目标应获得子技（上游 `target.addSkill(\"yunvyuanshen_skill\")`）——\
+        "玉女元参：目标应获得子技（上游 `target.addSkill(\"yunvyuanshen_skill\")`）——\
          候选名 {CANDIDATES:?} 均未命中"
     );
 }
