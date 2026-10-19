@@ -230,6 +230,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 70 | U05 运筹（武将技） | `yaliang`（雅量） | 2 点通过（含行为面，**未发现差异**）：来源与受伤者**各摸 1**（实测双方 0 → 1）；原生座位序与上游 `sortBySeat()` 一致 | [yunchou-yaliang](../operations/evidence/2026-10-19-nc08-upstream-yunchou-yaliang/README.md) |
 | 71 | U05 运筹（武将技） | `diy_jiaoxia`（狡黠） | 2 点通过（含行为面两分支，**未发现差异**）：成为**红色**牌目标 → 摸 1（净增 1）；**黑色**牌 → 不触发（净增 0） | [yunchou-jiaoxia](../operations/evidence/2026-10-19-nc08-upstream-yunchou-jiaoxia/README.md) |
 | 72 | U05 运筹（武将技） | `diychanyuan`（蝉缘·变体） | 2 点通过（含行为面，**未发现差异**）：击杀者**体力上限 4 → 3** 且 hp 被钳到新上限 | [yunchou-chanyuan](../operations/evidence/2026-10-19-nc08-upstream-yunchou-chanyuan/README.md) |
+| 73 | U05 运筹（武将技） | `diykuanggu`（狂骨·变体） | 2 点通过（含行为面**三分支**，**未发现差异**）：相邻+未满血 → **回复 1**；距离>1 → **摸 1**；相邻+满血 → **不触发** | [yunchou-kuanggu](../operations/evidence/2026-10-19-nc08-upstream-yunchou-kuanggu/README.md) |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
