@@ -15,13 +15,20 @@
 | `xinfu_qiaosi` | 巧思 | `skill.js:489` + `translate.js`：「出牌阶段限一次，你可以**投掷一枚六面骰子**，亮出牌堆顶的 X 张牌并获得之。然后选择一项：1.交给一名其他角色 X 张牌。2.弃置 X 张牌。（X 为骰子点数）」 |
 | `xinfu_jingxie` | 精械 | `character.js:71`：马钧技能列为 `["xinfu_jingxie", "xinfu_qiaosi"]`（定义在 `character/mobile/skill.js`） |
 
-## 2 原生（全库检索）
+## 2 原生（**精确**检索）
 
-```
-grep -rli "jianxiong|jingxie|qiaosi" crates/engine-native/src/   → 0 命中
-```
+**更正说明（2026-10-19 同轮）**：初版用**不区分大小写**的合并模式 `jianxiong|jingxie|qiaosi`，
+命中了 **标准面的奸雄**（`JianXiong`，如 `content/standard/skills/jian_xiong.rs`）→ 「0 命中」的写法
+**不准确** ✗。改为**逐标识**检索（区分大小写）：
 
-（原始输出：[native-scan.txt](native-scan.txt)）⇒ **三项均未实现**；
+| 标识 | 命中文件数 | 判读 |
+|---|---:|---|
+| `diyjianxiong`（运筹变体键） | **0** | 运筹**变体**未实现 |
+| `JianXiong`（**标准面**奸雄） | ≥1 | **存在**，但**与运筹变体无关** |
+| `xinfu_jingxie` / `Jingxie` | **0** / **0** | 精械**未实现** |
+| `xinfu_qiaosi` / `Qiaosi` | **0** / **0** | 巧思**未实现** |
+
+（原始输出：[native-scan.txt](native-scan.txt)）⇒ **运筹三项均未实现**（标准面同名技能的存在不改变该结论）；
 样本 `nc08_upstream_yunchou_unimplemented.rs` 同时断言 `behavior.rs`/`keys.rs` **不含**
 `Diyjianxiong`/`Jingxie`/`Qiaosi`（**实现后请翻转该断言**）。
 

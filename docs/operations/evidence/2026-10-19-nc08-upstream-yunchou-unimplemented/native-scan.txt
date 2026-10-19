@@ -1,6 +1,15 @@
+# 精确检索（2026-10-19）：区分『标准面同名技能』与『运筹变体』
+# 命令：grep -rn <标识> crates/engine-native/src/
+标识 diyjianxiong : 命中 0 文件
+标识 JianXiong : 命中 8 文件
+标识 Jianxiong : 命中 0 文件
+标识 xinfu_jingxie : 命中 0 文件
+标识 Jingxie : 命中 0 文件
+标识 xinfu_qiaosi : 命中 0 文件
+标识 Qiaosi : 命中 0 文件
+
+## JianXiong（标准面奸雄，**与运筹变体无关**）命中示例：
 crates/engine-native/src/archive/machine_encode.rs
 crates/engine-native/src/archive/machine_decode.rs
 crates/engine-native/src/content/standard.rs
 crates/engine-native/src/content/standard/standard_skills.rs
-crates/engine-native/src/content/standard/skills/jian_xiong.rs
-(空 = 无命中)
