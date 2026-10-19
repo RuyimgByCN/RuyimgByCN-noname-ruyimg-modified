@@ -3642,7 +3642,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **取牌位置** | 伤害/使用牌在**处理区**（`position === 'o'`）时可取 | `table` 优先、**弃牌堆兜底**（`xicai`）；`jianxiong` 门槛为「**已在弃牌堆**」 | xicai / jianxiong |
 | **计数建模** | 技能标记数（如 `chunbing_markcount = 5`） | 建模为监听技 **`rounds`（剩余回合）** | chunbing |
 | **随机取/弃牌** | `hs.randomGet()` / `gainMultiple`（真随机） | **确定性首张**（`hand.first()`；突袭为「各区首张」） | **linghunzhihuo + tuxi** |
-| **门槛集合** | 阵法 `enable` 仅要求「**存在大势力**」 | 额外要求**存活 ≥ 4** | tianfuzhen |
+| **门槛集合/缺失** | 阵法 `enable` 仅要求「**存在大势力**」；`dizaizhen` 带 **`mode: ["guozhan"]`**（仅国战）；`qiankunbiao` 要求目标 **`he` 有牌** | ①`tianfuzhen` **额外要求存活 ≥ 4**；②**`dizaizhen` 模式门槛未校验**（身份局仍可发动，第 49 项）；③**`qiankunbiao` `he` 门槛未校验**（第 35 项） | **tianfuzhen + dizaizhen + qiankunbiao（3 例）** |
 | **技能覆盖面** | 集智 = **任意锦囊**（`get.type === 'trick'`） | 仅 **5 种**锦囊（南蛮/万箭/决斗/铁索/无懈）→ **规则损失** | jizhi |
 | ~~标记/子技面未实现~~ | — | **口径更正（2026-10-19）**：`sbjizhi`/`sbjianxiong` 属 `character/sb/` 面，**非规则基准来源**；基准来源 `character/standard/skill.js` 的集智/奸雄**本就没有**标记面 → **不作为差异** | ~~jizhi / jianxiong~~ |
 | **传导事件判定** | `event.notLink()`：铁索传导**不**加成 | duwen：传导为独立事件**照常判定**（已登记）；luoyi：helper **未检查** `notLink`（由调用方决定，**未判定**） | **duwen + luoyi** |
