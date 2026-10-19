@@ -1,0 +1,2 @@
+DBG 倾国：询问=["respond_shan"] 黑色手牌入候选=true 1 号 hp 4 → 4
+DBG 倾国（装备区）：出现 respond_shan=true 装备区黑色牌入候选=false 1 号 hp 4 → 3
