@@ -83,3 +83,29 @@ DBG   REJECTED wudian-upstream-noname / youdishenru
 `swd_zhongxinghujia1`（重型护甲）为**装备牌**——装备牌通常按「无显式目标」受理
 （样本 103 木头面具即如此）⇒ 其被拒**不合常理**，**须专项核对**（可能该卡为 `hslingjian_*` 子件、
 或需特定条件）。其余 18 项多为**响应/回复/机关**类，条件受限的可能性较大。
+
+## 逐卡定性（第二批：swd，2026-10-19）
+
+按「**完整读取上游 `filterTarget`/`enable`**」口径逐卡核对（`swd/card.js`）：
+
+| 卡 | 上游条件（**逐字要点**） | 定性 |
+|---|---|---|
+| `caoyao`（草药） | `type: basic`；`filterTarget: target.hp < target.maxHp`（**须受伤**）；`enable: !hasSkill("tianxianjiu")` | **合理**（普查全员满血） |
+| `shijianhuisu1`（时间回溯） | `filterTarget: target !== player && countCards("e") > 0`（**须有装备**） | **合理** |
+| `jiguanshu`（机关术） | `filterTarget: target === player`；`enable`: **装备区须含指定牌** | **合理**（普查未给 0 号装备） |
+| **`guilingzhitao`（龟龄芝桃）** | `type: equip`；**无 `filterTarget`** | **候选**（装备牌按「无显式目标」应受理，同样本 103） |
+| **`hufu`（虎符）** | `type: basic`；**无 `filterTarget`** | **候选** |
+| **`jiguantong`（机关筒）** | `filterTarget: target !== player` | **候选**（`[1]` 形态本应受理） |
+| **`jiguanyaoshu`（机关妖术）** | `filterTarget`: 目标**有空装备位**且 `!hasSkill("jiguany…")` | **候选**（普查局面两条件均满足） |
+| **`shenmiguo`（神秘果）** | `filterTarget: target === player`（**自己**） | **候选**（`[0]` 形态本应受理） |
+| **`yuchankan`/`yuchankun`/`yuchanxun`（渔产三件）** | `type: jiqi`；**无 `filterTarget`** | **候选** |
+
+⇒ 本批 **2 合理 + 8 候选**；**候选累计 8 项**（全部在 swd）。
+
+### 候选的共同点与下一步
+
+8 项候选**均为「无 `filterTarget`」或「条件明显满足」**的卡（装备/基本/机器类）⇒
+**大概率存在实现侧问题**（与「重型护甲口径自创」同类，或**未接入 `CardKind` 分派**）。
+
+**下一步**：对这 8 项**逐卡**核对原生 `CardKind` 分派与目标校验
+（用 `contains` 匹配行为枚举名，**不按卡名 grep**——见样本 97/99 的命名教训）。
