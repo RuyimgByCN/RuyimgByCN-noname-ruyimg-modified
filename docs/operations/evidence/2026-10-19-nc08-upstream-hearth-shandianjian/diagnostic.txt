@@ -1,0 +1,2 @@
+DBG 闪电箭（登记基线）：发动=Pending { choice: OpenChoice { id: 1, observer: 1, spec: ChoiceSpec { kind: RespondCard, prompt: "respond_shan", options: [Pass, Card(36)], min: 1, max: 1, allow_cancel: false } } }；询问=["respond_shan@obs1"]；1 号 hp 4 → 3
+NOTE 闪电箭：源码核对——`shandianjian` 在 crates/engine-native/src 全库 0 命中、文档未提及⇒ 包内交付但无实现且无登记（第 46 项）；实测受理结果见上
