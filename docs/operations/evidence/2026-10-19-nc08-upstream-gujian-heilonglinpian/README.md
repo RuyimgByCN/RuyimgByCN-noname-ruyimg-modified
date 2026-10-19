@@ -26,7 +26,7 @@ heilonglinpian: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 2 | `target.changeHujia()` | **行为面**：使用者**护甲 0 → 1** | 通过 |
-| 2 | `addTempSkill("heilonglinpian", …)` | **源码层面未见对应行为**：`grep -rli heilonglinpian src/` 仅命中 `archive/card_codes.rs`、`content/host/constants.rs`（键常量）、`catalog.rs`、`engine/play_card.rs`（**目标校验**）、`engine/snapshot.rs`——**`content/host/` 下无该临时技的行为/键/步进** ⇒ 临时技**疑未授予**（护甲 +1 由**其它路径**完成，实测已生效） | **待修（登记）** |
+| 2 | `addTempSkill("heilonglinpian", …)` | **双重确认未授予**：①**5 个候选名探测**（`heilonglinpian`/`gj_heilonglinpian`/`gj:heilonglinpian`/`host:heilonglinpian`/`heilonglinpian_skill`）**命中集合为空**；②**全库 grep** 仅命中 `card_codes`/`constants`（键）/`catalog`/`play_card`（目标校验）/`snapshot`——**`content/host/` 下无行为/键/步进** ⇒ **非名称不匹配**（护甲 +1 已生效，由其它路径完成） | **待修（第 40 项）** |
 
 **原生实现引用**：`content/host/constants.rs:84`（`GJ_HEILONGLINPIAN_CARD_KEY = "gj:heilonglinpian"`）。
 

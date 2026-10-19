@@ -864,11 +864,16 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 **症状**：上游 `content` 为 `target.changeHujia()`（**+1 护甲**）+ 
 `target.addTempSkill("heilonglinpian", { player: "phaseBegin" })`（临时技至**自己回合开始**）。
-原生实测：**护甲 +1 生效** ✅（由**其它路径**完成）；但**临时技**：
-以**上游键**查询返回 `false`，且 `grep -rli heilonglinpian crates/engine-native/src/` **仅**命中
-`archive/card_codes.rs`、`content/host/constants.rs`（键常量）、`catalog.rs`、`engine/play_card.rs`
-（**目标校验**）、`engine/snapshot.rs` —— **`content/host/` 下无该临时技的行为/键/步进**
-⇒ **疑未授予**（亦无到期移除路径）。
+原生实测：**护甲 +1 生效** ✅（由**其它路径**完成）；但**临时技**经**双重确认未授予**：
+
+1. **名称探测（5 个候选）**：`heilonglinpian` / `gj_heilonglinpian` / `gj:heilonglinpian` /
+   `host:heilonglinpian` / `heilonglinpian_skill` → **命中集合为空**（`候选命中=[]`）；
+2. **全库 grep**：`grep -rli heilonglinpian crates/engine-native/src/` **仅**命中
+   `archive/card_codes.rs`、`content/host/constants.rs`（**键常量**）、`catalog.rs`、
+   `engine/play_card.rs`（**目标校验**）、`engine/snapshot.rs` —— **`content/host/` 下无该临时技的
+   行为/键/步进**。
+
+⇒ **临时技未实现**（亦无到期移除路径）—— **非「名称不匹配」**（已用多候选名排除）。
 
 **修法**：实现该临时技（授予 + 效果 + 至**自己回合开始**移除），并确认其与护甲 +1 的**先后关系**。
 

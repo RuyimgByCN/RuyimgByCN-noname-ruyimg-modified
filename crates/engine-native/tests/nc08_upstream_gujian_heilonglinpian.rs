@@ -75,10 +75,22 @@ fn upstream_heilonglinpian_grants_hujia() {
     drain(&mut e);
     let p0 = e.state_core().player(0);
     // 临时技在目录中的名字待核对（上游键为 `heilonglinpian`；原生可能用 `gj_...` 前缀）
+    // 逐个候选目录名查询临时技（避免「名称不匹配」被误判为缺失）
+    let candidates = [
+        "heilonglinpian",
+        "gj_heilonglinpian",
+        "gj:heilonglinpian",
+        "host:heilonglinpian",
+        "heilonglinpian_skill",
+    ];
+    let hits: Vec<&str> = candidates
+        .iter()
+        .copied()
+        .filter(|n| e.debug_has_skill(0, n))
+        .collect();
     eprintln!(
-        "DBG 黑龙鳞片：使用者护甲 {hujia_before} → {}；临时技查询（上游键）= {}",
-        p0.hujia,
-        e.debug_has_skill(0, "heilonglinpian")
+        "DBG 黑龙鳞片：使用者护甲 {hujia_before} → {}；临时技候选命中={hits:?}",
+        p0.hujia
     );
     assert_eq!(
         p0.hujia,
