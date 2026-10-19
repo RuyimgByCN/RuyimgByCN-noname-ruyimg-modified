@@ -36,21 +36,22 @@ fn run(seed: u64, dying: bool) -> (String, i32) {
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
+    // **先备牌**（第 52 项诊断：救援窗口可能在伤害结算中开闭，故虎符须先在手）
+    let card_id = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.name.contains("hufu"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("虎符在目录");
+    nc08_common::put_hand(&mut e, 0, card_id);
     if dying {
         // **真实伤害**造成濒死（写 hp=0 不会设置 dying）
         let hp1 = e.debug_hp(1).max(0) as u32;
         let dmg = e.debug_deal_damage(None, 1, hp1, engine_native::event::DamageNature::Normal);
         eprintln!("DBG 虎符：造成伤害 → {dmg:?}；1 号 hp={}", e.debug_hp(1));
         // 濒死救援窗口：若其中**提供虎符**（或救援类牌）则打出之
-        let card_id = e
-            .catalog()
-            .cards
-            .iter()
-            .enumerate()
-            .find(|(_, c)| c.name.contains("hufu"))
-            .map(|(i, _)| i as engine_native::CardId)
-            .expect("虎符在目录");
-        nc08_common::put_hand(&mut e, 0, card_id);
         let mut prompts: Vec<String> = Vec::new();
         let mut used = false;
         for _ in 0..16 {
