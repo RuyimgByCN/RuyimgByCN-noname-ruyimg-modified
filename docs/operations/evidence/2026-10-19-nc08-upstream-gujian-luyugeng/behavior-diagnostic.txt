@@ -1,0 +1,2 @@
+DBG 鲈鱼羹：子技=true；发动=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "gj_luyugeng_cost", options: [Card(31)], min: 1, max: 1, allow_cancel: false } } }
+DBG 鲈鱼羹：弃基本牌=true；手牌 1 → 1；获得牌堆顶（Some(27)）=true
