@@ -1502,4 +1502,8 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 ⇒ **不影响 `card_kind` 匹配**（本项探针已证），**影响按名字查找**（须用 `contains`/归一）。
 **建议**：桥接时检测卡名是否已含 `card_prefix`，已含则不再叠加；并加一条「目录名不得出现 `<prefix><prefix>`」的回归断言。
 
+**✅ 已修复（同日）**：`content-native-loader/src/lib.rs` 的 `bridge_pack` 增加前缀去重（包内名已含前缀则不叠加）；
+`swd_swd_huanglinzhicong_73` → **`swd_huanglinzhicong_73`**；白名单清空、回归断言改为「目录名不得双前缀」
+（19 包 0 违规）。安全性：`hash.rs` 只用 `cards.len()` 与 `card_kind`、**不用卡名** ⇒ 不影响摘要/golden。
+
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。

@@ -541,7 +541,13 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
             .ok_or_else(|| BridgeError::UnknownCardKind(kind_key.to_string()))?;
         let suit = suit_of(req_str(c, "suit", "cards[].suit")?)?;
         let rank = req_int(c, "rank", "cards[].rank", 1..=13)? as u8;
-        let def_name = names::intern(format!("{}{}_{}", meta.card_prefix, name, i));
+        // 目录名 = `<card_prefix><name>_<i>`；若包内名**已含该前缀**则不重复叠加
+        //（mtg/swd/zhenfa 三包的卡名自带前缀；双前缀会破坏按名字查找，且不影响 kind/摘要）。
+        let def_name = if name.starts_with(meta.card_prefix.as_str()) {
+            names::intern(format!("{}_{}", name, i))
+        } else {
+            names::intern(format!("{}{}_{}", meta.card_prefix, name, i))
+        };
         let mut def = match opt_int(c, "range", "cards[].range", 1..=u64::from(u32::MAX))? {
             Some(range) => {
                 if kind.equip_slot() != Some(EquipSlot::Weapon) {

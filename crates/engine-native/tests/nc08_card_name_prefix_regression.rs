@@ -17,11 +17,8 @@ use std::path::PathBuf;
 
 /// 已登记的「双前缀」包 → 期望数量上限（普查日 2026-10-19）。
 fn whitelist() -> BTreeMap<&'static str, usize> {
-    BTreeMap::from([
-        ("shahai-mtg-upstream-noname", 10),
-        ("shahai-swd-upstream-noname", 89),
-        ("shahai-zhenfa-upstream-noname", 3),
-    ])
+    // 2026-10-19：桥接层已加「前缀去重」⇒ 白名单收紧为**空**（目录名中任何 `<prefix><prefix>` 都算违规）
+    BTreeMap::new()
 }
 
 fn packs() -> Vec<(String, String, String)> {
@@ -50,17 +47,19 @@ fn card_name_double_prefix_regression() {
     let wl = whitelist();
     let mut rows: Vec<(String, usize, usize)> = Vec::new();
     for (pkg, pref, json) in packs() {
-        let v: serde_json::Value = serde_json::from_str(&json).expect("JSON");
+        // **检查目录名**（桥接后的实际名字），而不是包内名
+        let pack = match content_native_loader::bridge_pack(&json) {
+            Ok(b) => b.pack,
+            Err(_) => continue,
+        };
+        let e = engine_native::Engine::new_with_extensions(31, 4, &[&pack]).expect("建局");
         let mut hit = 0usize;
         let mut total = 0usize;
-        if let Some(arr) = v.get("cards").and_then(|c| c.as_array()) {
-            for c in arr {
-                if let Some(n) = c.get("name").and_then(|x| x.as_str()) {
-                    total += 1;
-                    if n.starts_with(&pref) {
-                        hit += 1;
-                    }
-                }
+        for c in &e.catalog().cards {
+            total += 1;
+            let doubled = format!("{pref}{pref}");
+            if c.name.starts_with(&doubled) {
+                hit += 1;
             }
         }
         rows.push((pkg, hit, total));
