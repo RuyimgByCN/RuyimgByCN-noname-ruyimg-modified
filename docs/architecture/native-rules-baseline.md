@@ -3655,7 +3655,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **实现层级**（标准面 `keji`） | 事件级「跳过弃牌阶段」 | 上限级「手牌上限视为无限」（结果等价、事件面不同） | keji |
 | **时机锚点**（`luoshen`/`guanxing`） | `phaseZhunbeiBegin`（**准备阶段开始**） | 折入 **`Phase::Judge + begin`**（原生无准备阶段；`luoshen` 注释「判定阶段」、`guanxing` 注释「判定阶段占位」） | **luoshen + guanxing（2 例）** |
 | **循环询问粒度**（标准面 `luoshen`） | 每轮 `chooseBool` 询问是否继续 | **整链一次确认**（源码注释自述） | luoshen |
-| **目标集合范围**（运筹 `jieyan` / 古剑 `dinvxuanshuang` / 炉石 `shijieshu`） | `filterTarget: true` + `selectTarget: -1` → **全部角色**（**含使用者**；依据 `library/index.js:11681` `targetEnabled` 对布尔 `filterTarget` 直接返回，**无隐式排除使用者**） | 原生 `seats` 过滤 **`i != self.owner`** → **排除使用者** → **规则损失**（上游应伤害使用者） | **3 例：jieyan（已裁定）+ dinvxuanshuang + shijieshu（自-target）** |
+| **目标集合范围**（运筹 `jieyan`/`huoshan` / 古剑 `dinvxuanshuang` / 炉石 `shijieshu`） | `filterTarget: true` + `selectTarget: -1` → **全部角色**（**含使用者**；依据 `library/index.js:11681` `targetEnabled` 对布尔 `filterTarget` 直接返回，**无隐式排除使用者**） | 原生 `seats` 过滤 **`i != self.owner`** → **排除使用者** → **规则损失**（上游应伤害使用者） | **4 例：jieyan（已裁定）+ dinvxuanshuang + shijieshu（自-target）+ huoshan（只受理其他角色，与 toself 相反）** |
 | **结算顺序**（swd `jiguantong`） | 上游 `reverseOrder: true` → **逆序**结算 AOE 目标 | 原生按**座位序**（`engine/play_card.rs:1526` 注释自述「结算序=座位序**登记差异**」） | **jiguantong（1 例，待扩展核对其它 AOE）** |
 | **生成 vs 实体取牌**（swd `mujiaren`/`yangpijuan`、古剑 `liufengsan`） | 上游 `game.createCard(...)` 按**牌定义池****凭空造牌**（候选牌**不属于**牌堆） | 原生从**牌堆/弃堆**取**实体牌**（原生注释自述「实体发现」；候选择定前**留在牌堆**；数量受 `pool.len().min(n)` 限制） | **3 例：mujiaren + yangpijuan + liufengsan（牌堆 −2 量化证据）** |
 | **牌区入口**（`zhiheng`/`qixi`/`guose`/`wusheng`/`lijian`/`qingguo`/`luweiyan`） | `position: "he"`/`"hes"`/`"hs"`（含装备区、判定区） | **命令面/候选生成限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中；`qingguo` 的响应候选只遍历 `.hand` | **7 例** |

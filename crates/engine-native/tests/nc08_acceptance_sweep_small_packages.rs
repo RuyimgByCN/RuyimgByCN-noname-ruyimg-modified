@@ -30,8 +30,51 @@ fn engine_for(pkg: &str, seed: u64) -> Engine {
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
 }
 
-/// 对一张卡尝试两种目标形态，返回 `(空目标结果, 显式目标结果)`。
-fn try_play(pkg: &str, name: &str, seed: u64) -> Option<(String, String)> {
+
+/// **应答所有中途询问**（关键：不应答会让引擎以**空选**恢复 ⇒ `answer_first` panic，
+/// 从而把**夹具问题**误报为**崩溃**——本普查首轮即如此）。
+fn answer_all(e: &mut Engine) -> Vec<String> {
+    let mut prompts = Vec::new();
+    for _ in 0..24 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        let cards: Vec<engine_native::ChoiceOption> = c
+            .spec
+            .options
+            .iter()
+            .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
+            .copied()
+            .collect();
+        let need = c.spec.min.max(1);
+        let sel: Vec<engine_native::ChoiceOption> = if cards.len() >= need {
+            cards.into_iter().take(need).collect()
+        } else if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+            vec![engine_native::ChoiceOption::Pass]
+        } else if c.spec.options.contains(&engine_native::ChoiceOption::Confirm) {
+            vec![engine_native::ChoiceOption::Confirm]
+        } else if !cards.is_empty() {
+            cards
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(need).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(e);
+    prompts
+}
+
+/// 对一张卡尝试**三种**目标形态（`[]` / 显式自己 `[0]` / **其他角色 `[1]`**），
+/// 返回 `(空目标, 显式自己, 其他角色)` 的结果。
+fn try_play(pkg: &str, name: &str, seed: u64) -> Option<(String, String, String)> {
     let mut e = engine_for(pkg, seed);
     advance_to_phase(&mut e, 0, Phase::Play);
     for p in 0..4 {
@@ -74,8 +117,8 @@ fn try_play(pkg: &str, name: &str, seed: u64) -> Option<(String, String)> {
         other => format!("{other:?}"),
     };
     if first == "Accepted" || first == "Pending" {
-        drain(&mut e);
-        return Some((first.clone(), first));
+        let _ = answer_all(&mut e);
+        return Some((first.clone(), first.clone(), first));
     }
     let b = e.submit(GameCommand {
         actor: 0,
@@ -89,8 +132,25 @@ fn try_play(pkg: &str, name: &str, seed: u64) -> Option<(String, String)> {
         CommandOutcome::Rejected(r) => format!("Rejected({r:?})"),
         other => format!("{other:?}"),
     };
-    drain(&mut e);
-    Some((first, second))
+    if second == "Accepted" || second == "Pending" {
+        let _ = answer_all(&mut e);
+        return Some((first, second.clone(), second));
+    }
+    // **第三种：其他角色**（多数锦囊的目标形态；缺此形态会造成大量误报）
+    let c = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: id, targets: vec![1] },
+    });
+    let third = match c {
+        CommandOutcome::Accepted { .. } => "Accepted".to_string(),
+        CommandOutcome::Pending { .. } => "Pending".to_string(),
+        CommandOutcome::Rejected(r) => format!("Rejected({r:?})"),
+        other => format!("{other:?}"),
+    };
+    let _ = answer_all(&mut e);
+    Some((first, second, third))
 }
 
 /// **受理面普查**：逐包逐卡记录两种形态的受理结果。
@@ -102,7 +162,7 @@ fn acceptance_sweep_small_packages() {
         "shahai-yunchou-upstream-noname",
         "shahai-zhenfa-upstream-noname",
     ];
-    let mut never: Vec<(String, String, String, String)> = Vec::new();
+    let mut never: Vec<(String, String, String, String, String)> = Vec::new();
     let mut total = 0usize;
     for (pi, pkg) in packages.iter().enumerate() {
         let dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -121,21 +181,30 @@ fn acceptance_sweep_small_packages() {
             .unwrap_or_default();
         for (ci, name) in names.iter().enumerate() {
             total += 1;
+            // **逐卡追踪**：panic 时最后一行即肇事卡
+            eprintln!("TRACE {pkg} / {name}");
             let seed = 20276000 + (pi as u64) * 100 + ci as u64;
             match try_play(pkg, name, seed) {
-                Some((a, b)) => {
-                    if a.starts_with("Rejected") && b.starts_with("Rejected") {
-                        never.push((pkg.to_string(), name.clone(), a, b));
+                Some((a, b, c)) => {
+                    if a.starts_with("Rejected") && b.starts_with("Rejected") && c.starts_with("Rejected")
+                    {
+                        never.push((pkg.to_string(), name.clone(), a, b, c));
                     }
                 }
                 // **不静默跳过**：目录中找不到该卡也要显式记录
-                None => never.push((pkg.to_string(), name.clone(), "NOT_IN_CATALOG".into(), String::new())),
+                None => never.push((
+                    pkg.to_string(),
+                    name.clone(),
+                    "NOT_IN_CATALOG".into(),
+                    String::new(),
+                    String::new(),
+                )),
             }
         }
     }
-    eprintln!("DBG 受理面普查：共试 {total} 张；两种形态**均被拒** {} 张", never.len());
-    for (pkg, name, a, b) in &never {
-        eprintln!("DBG   {pkg} / {name}: [] → {a}；[0] → {b}");
+    eprintln!("DBG 受理面普查：共试 {total} 张；**三种形态均被拒** {} 张", never.len());
+    for (pkg, name, a, b, c) in &never {
+        eprintln!("DBG   {pkg} / {name}: [] → {a}；[0] → {b}；[1] → {c}");
     }
     eprintln!(
         "NOTE 本普查只产出**候选**（被拒可能是阶段/条件不合）；须逐卡核对上游 filterTarget/enable 后定性"

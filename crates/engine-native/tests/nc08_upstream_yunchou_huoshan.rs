@@ -101,6 +101,16 @@ fn upstream_huoshan_record_acceptance() {
         });
         eprintln!("DBG 火山：targets=[0] → {out:?}");
     }
+    // **第三种形态**：其他角色（受理面普查显示此形态可能被受理——须核实，避免以偏概全）
+    if matches!(out, CommandOutcome::Rejected(_)) {
+        out = e.submit(GameCommand {
+            actor: 0,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard { card, targets: vec![1] },
+        });
+        eprintln!("DBG 火山：targets=[1] → {out:?}");
+    }
     let mut prompts: Vec<String> = Vec::new();
     for _ in 0..16 {
         let Some(c) = e.open_choice().cloned() else { break };
