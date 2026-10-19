@@ -209,3 +209,15 @@ if !core.player(core.turn.current).hand.contains(&card) {
 
 **验收**：`upstream_xiaoji_discard_loss_difference_is_registered` 应改为断言**触发并摸 2**；
 补「一次失去两张装备 → 摸 4」的用例。
+
+## 13 兵粮寸断无距离限制（NC08 样本 33 附带发现，2026-10-19）
+
+**症状（原生更宽松）**：上游【兵粮寸断】要求**距离 1**（延时锦囊的 `targetInRange` 默认距离限制）；
+原生 `crates/engine-native/src/engine/play_card.rs:764–769` 的 `CardKind::Bing` 分支
+**只查目标数 / 非自己 / 存活**，**无距离检查** → **任何距离**都可使用（对所有人，不只奇才持有者）。
+
+**修法**：在 `CardKind::Bing` 分支补距离校验（`computed_distance > 1 → IllegalTargets`），
+并把既有豁免位（奇才/神恩/守翼/探囊等，见 `CardKind::Snatch` 分支的写法）一并纳入
+→ 同时**自动收敛**样本 33 登记的「奇才覆盖面」差异（同一豁免位）。
+
+**验收**：新增「未持奇才时距离 >1 的兵粮寸断被拒」与「持奇才时可用」两条行为用例。

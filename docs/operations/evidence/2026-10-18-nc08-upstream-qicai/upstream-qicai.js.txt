@@ -1,0 +1,18 @@
+qicai: {
+		mod: {
+			targetInRange(card, player, target, now) {
+				if (["trick", "delay"].includes(get.type(card))) {
+					return true;
+				}
+			},
+		},
+	},
+	zhiheng: {
+		audio: 2,
+		audioname: ["gz_jun_sunquan"],
+		audioname2: {
+			new_simayi: "rezhiheng_new_simayi",
+		},
+		mod: {
+			aiOrder(player, card, num) {
+				
