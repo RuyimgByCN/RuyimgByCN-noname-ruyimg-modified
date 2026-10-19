@@ -1,0 +1,43 @@
+	paoxiao: {
+		audio: 2,
+		firstDo: true,
+		audioname: ["re_zhangfei", "xiahouba"],
+		audioname2: {
+			old_guanzhang: "paoxiao_old_guanzhang",
+			guanzhang: "paoxiao_guanzhang",
+		},
+		trigger: { player: "useCard1" },
+		forced: true,
+		filter(event, player) {
+			return !event.audioed && event.card.name === "sha" && player.countUsed("sha", true) > 1 && event.getParent()?.type === "phase";
+		},
+		async content(event, trigger, player) {
+			trigger.audioed = true;
+		},
+		mod: {
+			cardUsable(card, player, num) {
+				if (card.name == "sha") {
+					return Infinity;
+				}
+			},
+		},
+		ai: {
+			unequip: true,
+			skillTagFilter(player, tag, arg) {
+				if (!get.zhu(player, "shouyue")) {
+					return false;
+				}
+				if (arg && arg.name == "sha") {
+					return true;
+				}
+				return false;
+			},
+		},
+	},
+	paoxiao_xiahouba: { audio: 2 },
+	guanxing_fail: {},
+	guanxing: {
+		audio: 2,
+		audioname: ["jiangwei", "re_jiangwei", "re_zhugeliang", "ol_jiangwei"],
+		trigger: { player: "phaseZhunbeiBegin" },
+	

@@ -1,0 +1,3 @@
+DBG 咆哮第 1 张【杀】：Accepted { state_hash: [..] }
+DBG 无咆哮第二张【杀】：Rejected(ShaLimit)
+DBG 咆哮第 2 张【杀】：Accepted { state_hash: [..] }
