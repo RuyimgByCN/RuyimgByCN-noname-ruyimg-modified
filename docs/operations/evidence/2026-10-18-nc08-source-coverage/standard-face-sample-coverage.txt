@@ -1,0 +1,7 @@
+# 标准面技能「第⑦层样本覆盖」核算（2026-10-19）
+# 上游顶层键 70；有中文名（真实技能）62；无中文名（子技/变体）8
+# 已建样本 43；未实现（第 22 项）6；其余未采样 13
+## 已建样本技能: biyue fanjian fankui ganglie guanxing guicai guose hujia jianxiong jieyin jijiang jijiu jiuyuan jizhi keji kongcheng kurou lianying lijian liuli longdan luoshen luoyi mashu paoxiao qianxun qicai qingguo qingnang qixi rende tiandu tieji tuxi wusheng wushuang xiaoji xinfu_jijie xinfu_jiyuan yaowu yiji yingzi zhiheng
+## 未实现: feiying(飞影) new_jiangchi(将驰) shenji(神戟) stdqingjiao(轻狡) zhanshen(战神) zhongyi(忠义)
+## 其余未采样: ganglie_three(刚烈) jijiang1(激将) kongcheng1(空城) luoyi2(裸衣) retongji(同疾) rewangzun(妄尊) rewangzun2(妄尊) stdkuangfu(狂斧) stdshushen(淑慎) stdxiaoguo(骁果) wushuang1(无双) wushuang2(无双) zhongyi2(忠义)
+## 子技/变体（不单独建样本）: guanxing_fail jijiang3 jijiu_re_huatuo longdan_sha_re_zhaoyun new_jiangchi3 paoxiao_xiahouba rende1 wusheng_re_guanyu

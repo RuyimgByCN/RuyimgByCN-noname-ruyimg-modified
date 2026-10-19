@@ -220,6 +220,8 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 62 | 标准面（技能） | `xinfu_jijie`（机捷） | 2 点通过，**未发现差异**（牌堆底取牌 + 目标无过滤器含自己）；**命名提示**：`xinfu_jijie`→「机捷」（`translate.js`），原生常量 `JI_JIE` | [nc08-upstream-jijie](../operations/evidence/2026-10-18-nc08-upstream-jijie/README.md) |
 | 63 | 标准面（技能） | `xinfu_jiyuan`（急援） | 2 点通过（源码事实级）+ **规则损失**：仅濒死臂（上游三臂 `dying`/`gainAfter`/`loseAsyncAfter` → 原生 1 臂，原生已自述） | [nc08-upstream-jiyuan](../operations/evidence/2026-10-18-nc08-upstream-jiyuan/README.md) |
 
+**标准面技能采样核算（2026-10-19）**：上游标准面 70 个顶层键 → **62 个真实技能** = **43 已建样本** + **6 未实现（第 22 项）** + **13 变体/子臂（属已采样技能）** ⇒ **标准面技能的第⑦层采样维度已收敛**（口径与清单见 [standard-face-sample-coverage.txt](../operations/evidence/2026-10-18-nc08-source-coverage/standard-face-sample-coverage.txt)）；**该收敛不等于规则等价**。
+
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
 **未完成**：接入**上游 JS harness**（当前以旧线为可执行参照，旧线≠上游等价）、其余 16 个来源、
