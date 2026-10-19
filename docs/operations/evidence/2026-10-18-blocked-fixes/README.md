@@ -463,9 +463,20 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 → 持「**遗志**」+「观星」时 **X 固定为 5**；原生 `content/standard/skills/guan_xing.rs` 注释只写
 「X = 存活角色数且至多 5」，**未见 `yizhi` 判定**。
 
-**症状②（`guanxing_fail`）**：上游在 `!result.bool || !result.moved[0].length`（**未移动任何牌**）时
+**症状②（`guanxing_fail`）——已核对消费方，**属 AI 面而非规则面**（2026-10-19 同轮更正）**：
+上游在 `!result.bool || !result.moved[0].length`（**未移动任何牌**）时
 `player.addTempSkill("guanxing_fail")`；原生**未见该标记**（该键在上游标准面存在但无中文名，
 故未进入第 22 项的 6 项清单）。
+
+**消费方核对**（`grep -rn guanxing_fail archive/upstream/noname/apps/core/`）：
+
+| 消费点 | 用途 |
+|---|---|
+| `card/standard.js:4367` / `:4743` | **AI 决策**：`source.hasSkillTag("guanxing") && (source !== player \|\| !source.hasSkill("guanxing_fail"))` —— 据上游 typings 注释：「若有此标签且没有 `guanxing_fail`，**人机（队友）将不会对你判定区的延时锦囊使用【无懈可击】**」 |
+| `character/offline/.../offline_piracyS.js:1340` | 另一来源（offline），非标准面 |
+
+→ **`guanxing_fail` 只被 AI 决策消费**，**不改变规则判定** → 本症状应记为 **AI 面差异**，
+**不计入规则损失**（优先级低于规则面条目）。
 
 **修法**：① X 计算加入 `yizhi` 组合判定；② 未移动任何牌时加 `guanxing_fail` 临时技能
 （需先登记该技能键与用途——**其消费方未核对**，登记待办）。
