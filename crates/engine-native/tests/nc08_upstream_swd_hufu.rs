@@ -47,10 +47,45 @@ fn run(seed: u64, dying: bool) -> (String, i32) {
         .expect("虎符在目录");
     nc08_common::put_hand(&mut e, 0, card_id);
     if dying {
-        // **真实伤害**造成濒死（写 hp=0 不会设置 dying）
-        let hp1 = e.debug_hp(1).max(0) as u32;
-        let dmg = e.debug_deal_damage(None, 1, hp1, engine_native::event::DamageNature::Normal);
-        eprintln!("DBG 虎符：造成伤害 → {dmg:?}；1 号 hp={}", e.debug_hp(1));
+        // **候选④：改用正常伤害路径**——真实【杀】结算造成濒死（而非 debug_deal_damage）
+        let max1 = e.state_core().player(1).max_hp as i32;
+        e.debug_set_hp(1, 1); // **先降到 1 血**（再受 1 点杀伤害 ⇒ 0 ⇒ 濒死）
+        let _ = max1;
+        let sha = {
+            let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
+            e.debug_place(0, name)
+        };
+        let out_sha = e.submit(GameCommand {
+            actor: 0,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard { card: sha, targets: vec![1] },
+        });
+        eprintln!("DBG 虎符：出【杀】={out_sha:?}（1 号 hp={}）", e.debug_hp(1));
+        // 1 号**放弃出【闪】** ⇒ 受伤 ⇒ 濒死
+        for _ in 0..8 {
+            let Some(c) = e.open_choice().cloned() else { break };
+            let sel: Vec<engine_native::ChoiceOption> =
+                if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+                    vec![engine_native::ChoiceOption::Pass]
+                } else if c.spec.allow_cancel {
+                    Vec::new()
+                } else {
+                    c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+                };
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: sel },
+            });
+        }
+        eprintln!(
+            "DBG 虎符：杀结算后 1 号 hp={} dying={} alive={}",
+            e.debug_hp(1),
+            e.state_core().player(1).dying,
+            e.state_core().player(1).alive
+        );
         // 濒死救援窗口：若其中**提供虎符**（或救援类牌）则打出之
         let mut prompts: Vec<String> = Vec::new();
         let mut used = false;
