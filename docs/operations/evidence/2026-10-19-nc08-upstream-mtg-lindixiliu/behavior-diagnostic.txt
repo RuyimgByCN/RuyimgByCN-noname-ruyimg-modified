@@ -1,0 +1,2 @@
+DBG 林地溪流：发动=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "mtg_lindixiliu_discard", options: [Card(50)], min: 0, max: 1, allow_cancel: true } } }
+DBG 林地溪流：询问=["mtg_lindixiliu_discard"]；牌堆 116 → 115；手牌 1 → 1（其中红桃 1 张）
