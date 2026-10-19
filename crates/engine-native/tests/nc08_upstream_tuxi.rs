@@ -59,7 +59,20 @@ fn upstream_tuxi_takes_cards_and_skips_draw() {
     // 实验组：持突袭并选 2 名有手牌的目标
     let mut e = Engine::new(20266901, 4);
     e.debug_grant(0, "突袭");
-    advance_to_phase(&mut e, 0, Phase::Draw);
+    // **不 drain** 地推进到摸牌阶段：drain 会把 tuxi_target 询问以默认应答（放弃）掉
+    for _ in 0..24 {
+        if e.turn().current == 0 && e.turn().phase == Phase::Draw {
+            break;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+    }
+    assert_eq!(e.turn().phase, Phase::Draw, "应到达摸牌阶段");
     // 给 1、2 号各一张手牌（供取）
     for p in [1u8, 2] {
         let name = e.catalog().cards.iter().find(|c| c.name == "shan").map(|c| c.name).unwrap();
@@ -69,8 +82,12 @@ fn upstream_tuxi_takes_cards_and_skips_draw() {
     drain(&mut e);
     let hand_before = e.debug_hand(0).len();
     let mut picked = false;
+    let mut seen: Vec<String> = Vec::new();
     for _ in 0..24 {
         let Some(c) = e.open_choice().cloned() else { break };
+        if !seen.iter().any(|p| p == c.spec.prompt) {
+            seen.push(c.spec.prompt.to_string());
+        }
         if c.spec.prompt == "trigger_confirm" {
             let _ = e.submit(GameCommand {
                 actor: c.observer,
@@ -129,7 +146,7 @@ fn upstream_tuxi_takes_cards_and_skips_draw() {
         "DBG 突袭：基线 hand={base} 持技 hand={after}（发动前 {hand_before}）picked={picked}"
     );
     if !picked {
-        eprintln!("SKIP：未出现 tuxi_target 询问（发动路径未对上）");
+        eprintln!("SKIP：未出现 tuxi_target 询问；本轮询问序列={seen:?} 阶段={:?}", e.turn().phase);
         return;
     }
     assert!(

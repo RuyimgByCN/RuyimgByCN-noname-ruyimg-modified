@@ -37,6 +37,16 @@ tuxi: {
 **原生实现引用**：`content/standard/skills/tu_xi.rs`（filter `Phase::Draw + begin`；`tuxi_target`
 询问 1–2 名；注释「各区首张，Dismantle 同款确定性取牌」；弃权 = 不发动）。
 
+## 2b 夹具根因（同轮）：共享 `advance_to_phase` 会 **drain**，把 `tuxi_target` 询问应答掉
+
+初版实测 `picked=false`、`询问序列=[]`（[diagnostics.txt](diagnostics.txt)）→ 根因：
+`nc08_common::advance_to_phase` **每步都会 drain**（对可取消询问取「放弃」）→ 到达摸牌阶段时
+`tuxi_target` 已被**默认应答为放弃** → 突袭未发动。
+**修法**：本用例改为**手写推进且不 drain**（与探针一致）→ 用例转为通过（3 passed / 0 failed）。
+
+**方法学（第 7 条，建议写入规则基准）**：共享助手若**自动 drain**，会与「需要观察/应答特定询问」
+的用例冲突 → 此类用例应使用**不 drain** 的推进方式。
+
 ## 3 验证结果
 
 | 检查 | 结果 | 证据 |

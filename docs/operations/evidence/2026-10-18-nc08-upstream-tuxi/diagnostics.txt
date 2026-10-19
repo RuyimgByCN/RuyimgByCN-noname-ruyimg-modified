@@ -1,2 +1,2 @@
 DBG 突袭：基线 hand=6 持技 hand=6（发动前 6）picked=false
-SKIP：未出现 tuxi_target 询问（发动路径未对上）
+SKIP：未出现 tuxi_target 询问；本轮询问序列=[] 阶段=Play
