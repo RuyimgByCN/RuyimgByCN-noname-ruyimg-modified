@@ -1,0 +1,1 @@
+DBG 护驾：询问=["hujia_respond"] 魏势力代出闪=true 1 号 hp 4 → 4（2 号手牌=[]）

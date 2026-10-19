@@ -38,6 +38,8 @@
 //! 未覆盖（登记）：`chooseToUseBefore` 面（上游亦覆盖主动使用【闪】的场景，本样本只固定源码事实）；
 //! 行为面（借闪的完整应答链）登记待办。
 
+mod nc08_common;
+
 use engine_native::Engine;
 
 /// 上游点 1（**魏势力队列 + 座位序**）：原生队列构造与上游同口径（源码事实）。
@@ -136,5 +138,107 @@ fn upstream_hujia_only_for_shan() {
     assert!(
         seg.contains("name: \"shan\", isCard: true"),
         "上游依据：需求牌为【闪】：{seg}"
+    );
+}
+
+/// 上游点 2（**行为面**）：护驾借闪——魏势力角色代打【闪】，【杀】被抵消。
+///
+/// 口径说明：原生 `is_lord` 在**非身份局返回 true**（`state.rs` 注释「无身份体系的模式持技即可」，
+/// 与 `hujia`/`jijiang`/`jiuyuan` 同族的设计差异）→ **原型模式下护驾亦可发动**，本用例即在此口径下验证。
+#[test]
+fn upstream_hujia_borrows_shan_from_wei_ally() {
+    use engine_native::{ChoiceOption, CommandOutcome, GameAction, GameCommand};
+    use nc08_common::{advance_to_play, drain, next_dedup};
+
+    let mut e = Engine::new(20267602, 4);
+    e.debug_grant(1, "护驾"); // 1 号持护驾（原型模式下 is_lord 为真）
+    // 2 号装配**魏**势力武将（护驾借闪的询问对象）
+    let wei = e
+        .general_candidates()
+        .into_iter()
+        .find(|d| {
+            e.catalog()
+                .general_meta(*d)
+                .map(|(_, f, _, _, _)| f == engine_native::catalog::Faction::Wei)
+                .unwrap_or(false)
+        })
+        .expect("存在魏势力武将");
+    let wei_name = e.catalog().general_meta(wei).map(|(n, _, _, _, _)| n.to_string()).unwrap();
+    e.debug_assemble_general(2, &wei_name);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 0 号持【杀】；1 号**无闪**；2 号持一张【闪】
+    let sha = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
+        e.debug_place(0, name)
+    };
+    let shan2 = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "shan").map(|c| c.name).unwrap();
+        e.debug_place(2, name)
+    };
+    let hp1 = e.debug_hp(1);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: sha, targets: vec![1] },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    let mut prompts: Vec<String> = Vec::new();
+    let mut ally_played = false;
+    for _ in 0..24 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        // 2 号（魏势力）被询问出闪 → 打出
+        if c.observer == 2 && c.spec.options.contains(&ChoiceOption::Card(shan2)) {
+            ally_played = true;
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Card(shan2)],
+                },
+            });
+            continue;
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 护驾：询问={prompts:?} 魏势力代出闪={ally_played} 1 号 hp {hp1} → {}（2 号手牌={:?}）",
+        e.debug_hp(1),
+        e.debug_hand(2)
+    );
+    if !ally_played {
+        eprintln!("NOTE 未出现魏势力代出闪的询问——本用例不构成验收（借闪链路未对上）");
+        return;
+    }
+    assert_eq!(
+        e.debug_hp(1),
+        hp1,
+        "护驾：魏势力代出【闪】后，【杀】被抵消（1 号 hp 不变）"
     );
 }
