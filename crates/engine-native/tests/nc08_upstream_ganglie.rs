@@ -33,7 +33,9 @@
 //!
 //! 未覆盖（登记）：`check`/`ai` 策略面；`judge2` 的判定牌去向（原生走判定区结算）。
 
+mod nc08_common;
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use nc08_common::put_judge;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -94,18 +96,15 @@ fn place_by_prefix(e: &mut Engine, prefix: &str, player: u8) -> engine_native::C
     e.debug_place(player, name)
 }
 
-/// 取一张**非红桃**的【杀】实体（判定用；按 id 布阵，避免名字查找命中红桃实例）。
-fn place_non_heart_sha(e: &mut Engine, player: u8) -> engine_native::CardId {
+/// 取一张**非红桃**的【杀】实体并置入**判定区**（走共享助手：按 id 布阵）。
+fn place_non_heart_sha_judge(e: &mut Engine, player: u8) -> engine_native::CardId {
     let id = e
         .catalog()
         .cards
         .iter()
         .position(|c| c.name.contains("sha") && c.suit != engine_native::catalog::Suit::Heart)
         .expect("存在非红桃【杀】") as engine_native::CardId;
-    {
-        let core = e.state_core_mut();
-        core.player_mut(player).hand.push(id);
-    }
+    put_judge(e, player, id);
     id
 }
 
@@ -117,12 +116,7 @@ fn upstream_ganglie_non_heart_hits_source_directly() {
     advance_to_play(&mut e, 0);
     // 判定牌：非红桃（用【杀】=黑桃/梅花/红桃混合 → 取一张非红桃实体）
     // 判定牌必须是**非红桃**：按 id 布阵到判定区（不能只按名字）
-    let judge_card = place_non_heart_sha(&mut e, 0);
-    {
-        let core = e.state_core_mut();
-        core.player_mut(0).hand.retain(|c| *c != judge_card);
-        core.player_mut(0).judge.push(judge_card);
-    }
+    let _judge_card = place_non_heart_sha_judge(&mut e, 0);
     // 来源（1 号）受伤前体力
     let hp1_before = e.debug_hp(1);
     let _ = e.debug_deal_damage(Some(1), 0, 1, engine_native::event::DamageNature::Normal);

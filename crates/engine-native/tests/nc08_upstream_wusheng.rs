@@ -32,7 +32,9 @@
 //! 未覆盖（登记）：`prompt`/`audio`/`check` 表现与策略面；`position: "hes"` 中装备/判定区
 //! 的转化路径（原生 PlayCard 走手牌为主，**未单独验证**）。
 
+mod nc08_common;
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use nc08_common::give_colored;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -81,25 +83,10 @@ fn drain(e: &mut Engine) {
 
 /// 取一张指定颜色、且**本身不是【杀】/【闪】等可直接使用牌**的实体（如【桃】以外的普通牌），
 /// 用于验证「转化」而非「本体可用」：取名为 `shan`（【闪】，出牌阶段不可主动使用）的实体。
+/// 取一张指定颜色的【闪】（出牌阶段不可主动使用 → 「被接受」只可能来自转化）。
+/// 走共享助手（**按 card id 布阵**，不经 `debug_place` 的名字查找）。
 fn place_colored_nonplayable(e: &mut Engine, player: u8, red: bool) -> engine_native::CardId {
-    use engine_native::catalog::Suit;
-    // **按 card id 布阵**（不能只按名字）：`debug_place(player, name)` 只按名字查找，
-    // 同名牌可能有不同花色实例（奇袭样本即因此误判为「状态依赖」）。
-    // 【闪】（`shan`，出牌阶段不可主动使用 → 「被接受」只可能来自转化）
-    let id = e
-        .catalog()
-        .cards
-        .iter()
-        .position(|c| {
-            let is_red = matches!(c.suit, Suit::Heart | Suit::Diamond);
-            is_red == red && c.name == "shan"
-        })
-        .expect("存在该颜色的【闪】") as engine_native::CardId;
-    {
-        let core = e.state_core_mut();
-        core.player_mut(player).hand.push(id);
-    }
-    id
+    give_colored(e, player, "shan", Some(red))
 }
 
 /// 上游点 1+2（使用面）：**红色**牌当【杀】使用 → 被接受，且目标受到伤害。

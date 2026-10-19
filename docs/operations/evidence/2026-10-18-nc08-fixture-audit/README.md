@@ -33,8 +33,21 @@
 | engine-native 全量 | 1249 passed / 0 failed / 5 ignored | — |
 | 行数门禁 | 8310 文件 ≤ 2000 行 | — |
 
+## 4b 共享助手已落地（同轮）
+
+新增 `crates/engine-native/tests/nc08_common/mod.rs`（集成测试共享模块，**按 id 布阵**）：
+
+| 助手 | 作用 |
+|---|---|
+| `card_id(e, name, want_red)` / `give_colored(e, player, name, red)` | 按**名字+颜色**取 card id（**不经** `debug_place`）并入手 |
+| `put_hand` / `put_judge` / `put_equips` | 按 id 放入**手牌 / 判定区 / 装备区** |
+| `drain` / `advance_to_phase` / `advance_to_play` / `next_dedup` | 通用驱动（触发确认一律确认） |
+
+**已迁移**：`wusheng`（6/6）、`qixi`（4/4）、`ganglie`（3/3）→ 三样本定向全通过，
+`engine-native` 全量见 [after-helper.log](after-helper.log)。**其余样本**按新增/改动时逐步迁移。
+
 ## 5 未完成 / 待办
 
 - [ ] 其余来源样本（扩展类）同类审计：`kurou`/`kuwu`/`shengke`/`ciqiu` 等**未**使用花色断言
       （本轮 grep 已确认不含 `Suit::`）→ 但**新增样本**应统一采用「按 id 布阵」模板
-- [ ] 建议把「按 id 布阵」抽成**共享测试助手**（当前各样本各自实现）
+- [x] **共享测试助手已落地**（`tests/nc08_common/mod.rs`）并迁移 3 个样本

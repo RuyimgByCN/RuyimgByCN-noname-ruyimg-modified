@@ -28,7 +28,9 @@
 //!
 //! 未覆盖（登记）：`check`/`audio` 表现与策略面；装备/判定区转化路径未单独验证。
 
+mod nc08_common;
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use nc08_common::give_colored;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -78,22 +80,9 @@ fn advance_to_play(e: &mut Engine, seat: u8) {
 /// 按**花色**精确布阵：`debug_place(player, name)` 只按**名字**查找，会返回**任意实例**
 /// （同名牌可能有 ♦ 红与 ♣ 黑两种）→ 必须先按花色取到**card id**，再直接放入手牌。
 /// （这正是此前误判为「种子依赖」的真相：两个种子下 `debug_place` 命中了不同实例。）
+/// 按颜色取牌并入手指定玩家（走共享助手：**按 card id 布阵**）。
 fn place_colored(e: &mut Engine, player: u8, black: bool, name: &str) -> engine_native::CardId {
-    use engine_native::catalog::Suit;
-    let id = e
-        .catalog()
-        .cards
-        .iter()
-        .position(|c| {
-            let is_black = matches!(c.suit, Suit::Spade | Suit::Club);
-            is_black == black && c.name == name
-        })
-        .unwrap_or_else(|| panic!("存在该颜色的 {name}")) as engine_native::CardId;
-    {
-        let core = e.state_core_mut();
-        core.player_mut(player).hand.push(id);
-    }
-    id
+    give_colored(e, player, name, Some(!black))
 }
 
 /// 上游点 1（使用面）：**黑色**牌当【过河拆桥】使用 → 被接受并拆除目标一张牌。
