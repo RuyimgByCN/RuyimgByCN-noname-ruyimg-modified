@@ -1,0 +1,22 @@
+INLINE(非缺口):
+WudianJianbi	// 坚壁：锁定查询面（AOE 目标段查询），无独立效果步
+WudianFuchou	// 复仇：目录锚（取消逻辑在 ShaResolveMachine 内联）
+WudianLiangceRemain	// 良策·余获：锁定查询面（五谷机器内联查询），无独立效果步
+HlssFengqi2	// 起风·闭 / 改命：锁定旗标（无机器步；无懈门/判定机内联）
+HlssGaiming	// 起风·闭 / 改命：锁定旗标（无机器步；无懈门/判定机内联）
+YxsFanji2	// 反击·红杀直伤：无效果步（杀机器内联消费）
+XiguaMopaiFanbei	// 摸牌翻倍：无效果步（摸牌收束内联消费）
+FzLiegong	// 烈弓：无效果步（杀机器内联消费）
+
+REAL(缺口候选):
+YunchouYiesheng	// 野升：自选任意张黑手牌 → 弃所选摸等量（舒筋散机器同构）
+Shenwei	
+Hxunzhi2	
+Gxianyin	// 革新印：选花色 → 静默弃该花色全部手牌 → 选另一花色 → 获得等量
+YxsMenshen2	// 门神·标记持有：无效果步（主体 70 KB 效果待批次）
+Shengong	
+TargetDiscardEquipOrDamage	
+LinghunzhihuoCard	
+ZhaomingdanCard	
+MoshouImmunity	
+ZhangbaSha	
