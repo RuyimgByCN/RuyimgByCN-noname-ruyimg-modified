@@ -1,0 +1,79 @@
+	rende: {
+		audio: 2,
+		enable: "phaseUse",
+		filterCard: true,
+		selectCard: [1, Infinity],
+		allowChooseAll: true,
+		discard: false,
+		lose: false,
+		delay: 0,
+		filterTarget(card, player, target) {
+			return player != target;
+		},
+		check(card) {
+			if (ui.selected.cards.length > 1) {
+				return 0;
+			}
+			if (ui.selected.cards.length && ui.selected.cards[0].name == "du") {
+				return 0;
+			}
+			if (!ui.selected.cards.length && card.name == "du") {
+				return 20;
+			}
+			const player = get.owner(card);
+			if (player == null) {
+				return 0;
+			}
+			// let num = 0;
+			const evt2 = _status.event.getParent();
+			const num = player
+				.iterHistory("lose", evt => evt.getParent()?.skill === "rende" && evt.getParent(3) === evt2)
+				.map(evt => evt.cards.length)
+				.reduce((a, b) => a + b, 0);
+			if (player.hp === player.maxHp || num > 1 || player.countCards("h") <= 1) {
+				if (ui.selected.cards.length) {
+					return -1;
+				}
+				const players = game.filterPlayer();
+				for (const current of players) {
+					if (current.hasSkill("haoshi") && !current.isTurnedOver() && !current.hasJudge("lebu") && get.attitude(player, current) >= 3 && get.attitude(current, player) >= 3) {
+						return 11 - get.value(card);
+					}
+				}
+				if (player.countCards("h") > player.hp) {
+					return 10 - get.value(card);
+				}
+				if (player.countCards("h") > 2) {
+					return 6 - get.value(card);
+				}
+				return -1;
+			}
+			return 10 - get.value(card);
+		},
+		async content(event, trigger, player) {
+			const evt2 = event.getParent(3);
+			const num = player
+				.iterHistory("lose", evt => evt.getParent(2)?.name === "rende" && evt.getParent(5) === evt2)
+				.map(evt => evt.cards.length)
+				.reduce((a, b) => a + b, 0);
+			await player.give(event.cards, event.target);
+			if (num < 2 && num + event.cards.length > 1) {
+				await player.recover();
+			}
+		},
+		ai: {
+			order(skill, player) {
+				if (player == null) {
+					return 0;
+				}
+				if (player.hp < player.maxHp && player.storage.rende < 2 && player.countCards("h") > 1) {
+					return 10;
+				}
+				return 1;
+			},
+			result: {
+				target(player, target) {
+					if (target.hasSkillTag("nogain")) {
+						return 0;
+					}
+					if (ui.selecte
