@@ -202,7 +202,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 40 | `boss-zhugeliang`（T11 Boss 诸葛亮族 / hlss_*） | `hlss_xiangxing` | 3 点通过 + 2 处差异登记（随机分配→确定性；回满调用点） | [nc08-upstream-boss-zhugeliang](../operations/evidence/2026-10-18-nc08-upstream-boss-zhugeliang/README.md) |
 | 41 | `longxue`（龙血玄黄 / D5） | `mbqianlong` / `mbweitong` | 3 点通过，**但为弱对照**（上游 `jsjiami` 混淆、连说明文本不可读；对照依据为原生注释所载口径）→ **不计入「上游规则等价」通过数** | [nc08-upstream-longxue](../operations/evidence/2026-10-18-nc08-upstream-longxue/README.md) |
 
-**覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
+**覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
 **未完成**：接入**上游 JS harness**（当前以旧线为可执行参照，旧线≠上游等价）、其余 16 个来源、
 上述差异的逐项口径判定、以及 4 项**待实施修复**（[清单](../operations/evidence/2026-10-18-blocked-fixes/README.md)）。
