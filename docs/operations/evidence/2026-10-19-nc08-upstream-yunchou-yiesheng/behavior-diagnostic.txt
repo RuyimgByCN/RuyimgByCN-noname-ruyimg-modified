@@ -1,0 +1,1 @@
+DBG 野升：询问=["yiesheng_discard"] 红色入候选=false 手牌 3 → 3（红牌仍在=true，黑牌仍在=false）
