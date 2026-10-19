@@ -1,0 +1,2 @@
+DBG 羊皮卷：发动=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: "swd_yangpijuan_category", options: [Tag(0), Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }
+DBG 羊皮卷：询问=["swd_yangpijuan_category", "swd_yangpijuan_pick"] 类别选项=[0, 1, 2] 择定=Some(76) 手牌 1 → 1
