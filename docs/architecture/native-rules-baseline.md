@@ -3646,6 +3646,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **主公技分支**（标准面 `wusheng`） | `get.zhu(player,"shouyue")` → **任意**牌可转化 | 原生**未建模**守约（全 crate 无 `shouyue`） | wusheng |
 | **门槛历史范围**（标准面 `keji`） | `useCard` **与** `respond` 两历史都查【杀】 | 原生只看 `turn.sha_used_play_phase`（出牌阶段使用） | keji |
 | **实现层级**（标准面 `keji`） | 事件级「跳过弃牌阶段」 | 上限级「手牌上限视为无限」（结果等价、事件面不同） | keji |
+| **时机锚点**（`luoshen`/`guanxing`） | `phaseZhunbeiBegin`（**准备阶段开始**） | 折入 **`Phase::Judge + begin`**（原生无准备阶段；`luoshen` 注释「判定阶段」、`guanxing` 注释「判定阶段占位」） | **luoshen + guanxing（2 例）** |
 | **循环询问粒度**（标准面 `luoshen`） | 每轮 `chooseBool` 询问是否继续 | **整链一次确认**（源码注释自述） | luoshen |
 | **牌区入口**（`zhiheng`/`qixi`/`guose`/`wusheng`/`lijian`） | `position: "he"`/`"hes"`（含装备区、判定区） | **命令面限定手牌**：`play_card.rs:71` 要求牌在当前回合角色手牌中 → 装备/判定区入口不可达 | **zhiheng/qixi/guose/wusheng/lijian（5 例）** |
 | **改判牌区**（标准面 `guicai`） | 非国战 `hs`（手牌 + **装备区**），**不限花色** | 手牌全量 ✅；**装备区候选受 `is_black` 限制**（鬼道口径）→ 鬼才非黑装备不能改判 | guicai |

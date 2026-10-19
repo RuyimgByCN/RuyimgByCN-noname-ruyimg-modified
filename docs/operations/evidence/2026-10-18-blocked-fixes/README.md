@@ -455,3 +455,22 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 **附**：样本 52 的差异①（**守约变体**）与既有 `wusheng` 守约登记**同族**（当前 2 例），
 随该族一并评估，**不单列修复项**。
+
+## 24 观星（`guanxing`）的 `yizhi` 组合与 `guanxing_fail` 未建模（样本 53 新发现，2026-10-19）
+
+**症状①（`yizhi` 组合）**：上游 `guanxing` 的 X 取值为
+`player.hasSkill("yizhi") && player.hasSkill("guanxing") ? 5 : Math.min(5, game.countPlayer())`
+→ 持「**遗志**」+「观星」时 **X 固定为 5**；原生 `content/standard/skills/guan_xing.rs` 注释只写
+「X = 存活角色数且至多 5」，**未见 `yizhi` 判定**。
+
+**症状②（`guanxing_fail`）**：上游在 `!result.bool || !result.moved[0].length`（**未移动任何牌**）时
+`player.addTempSkill("guanxing_fail")`；原生**未见该标记**（该键在上游标准面存在但无中文名，
+故未进入第 22 项的 6 项清单）。
+
+**修法**：① X 计算加入 `yizhi` 组合判定；② 未移动任何牌时加 `guanxing_fail` 临时技能
+（需先登记该技能键与用途——**其消费方未核对**，登记待办）。
+
+**验收**：①「持遗志 + 观星 → X=5」用例（可用存活人数不同的对局对比）；②「未移动任何牌 → 挂
+`guanxing_fail`」用例。
+
+**注**：差异①（时机锚点，判定阶段占位）与 `luoshen` **同族**，随该族评估、**不单列**。
