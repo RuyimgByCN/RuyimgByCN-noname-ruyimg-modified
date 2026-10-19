@@ -1,0 +1,2 @@
+DBG 青团：子技已授予=true；吃完后手牌=2；首张杀后=2；第二张杀后=2（第二张结果 Rejected(ShaLimit)）
+NOTE 青团门控未验收：第二张杀被 Rejected(ShaLimit) 拒绝（ShaLimit）——需额外出杀载体或跨回合驱动
