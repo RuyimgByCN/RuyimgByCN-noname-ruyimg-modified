@@ -1467,6 +1467,33 @@ if !def.behavior.filter(&qctx, qt.owner, &event) { return; }
 
 **阻塞**：插桩需改 `crates/engine-native/src/content/host/**`（**未跟踪**）⇒ **与核心修复清单同因受阻**。
 
+## ✅ **根因确定（同日）**：`card_kind_host_skills` **无生产调用方**
+
+grep 结果：`card_kind_host_skills(` 的调用**只有**——
+
+| 位置 | 性质 |
+|---|---|
+| `content/host.rs:308` | **定义** |
+| `archive.rs:264` | **测试** |
+
+⇒ **没有任何生产代码**把「**按牌种声明的手持宿主技能**」授予玩家 ⇒ **`CardKind::Qinglongzhigui`/
+`Huanglinzhicong`/… 声明的 `HostSkillDecl` 从未进入 `core.skills`** ⇒
+`plan_triggers` 的 `for ((owner, idef), inst) in core.skills.range(..)` **取不到实例** ⇒ **filter 从不被调用**
+⇒ **窗口永不触发**。
+
+**对照**：**包级** `pack.host_skills` **有**生产消费（`content/standard.rs:428` 注册进目录）；
+差异在于「**按牌种**声明的技能」缺少**授予时机**（应为「**卡进入手牌/装备**时同步授予」）。
+
+**这也解释了**：为何 `TriggerMeta`/`PhaseBegin`/`hand_has_kind` 三项核对**全部成立**却仍不触发——
+**技能实例根本不存在**。
+
+**修法（受阻）**：在**卡进入手牌/离开手牌**的路径上调用 `card_kind_host_skills`
+（授予/撤销），位置在 `engine/construction.rs`、`content/standard.rs` 等**未跟踪**文件
+⇒ **与核心修复清单同因受阻**，**保持待办**。
+
+**旁证待查**：`qinglongzhigui` 的**摸 2 确实发生**，与本根因矛盾 ⇒ 其摸牌**另有路径**
+（可能由 `draw_cards` 的其它钩子或旧实现残留）⇒ 需单独定位。
+
 **✅ 触发器注册与 `PhaseBegin` 机制均已排除（同日）**：
 
 | 核对 | 结果 |
