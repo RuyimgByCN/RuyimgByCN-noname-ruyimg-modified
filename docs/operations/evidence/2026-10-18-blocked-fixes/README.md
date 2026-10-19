@@ -1233,7 +1233,7 @@ DBG 虎符：杀结算后 1 号 hp=0 dying=false alive=false
 ⇒ **窗口永不触发**（属「**触发面未接入**」的显式占位，与同臂中正常接入的
 `YunchouLuweiyan2 => u_matches_lw2(…)`、`ShengkeCheck => matches!(…)` 形成对比）。
 
-**并且**该块共 **67 个** `=> false` 行为（见 [清单](../2026-10-19-host-behavior-false-block/README.md)），
+**并且**该块（`filter_common`）共 **50 个** `=> false` 行为（整文件计数 67，含其它过滤函数 17 处；见 [清单](../2026-10-19-host-behavior-false-block/README.md)），
 其中含 `ChangeCardNature`（**五行盘技能触发面**，样本 140 仅验证「授予」）⇒ **系统性登记**。
 
 **修法**：①把 `ChenhuodajieCard` 的过滤改为上游 `damageEnd` 语义（任意角色受伤后）；
