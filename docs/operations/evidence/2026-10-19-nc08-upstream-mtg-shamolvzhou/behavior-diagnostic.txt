@@ -1,0 +1,2 @@
+DBG 沙漠绿洲：发动=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "mtg_shamolvzhou_discover", options: [Card(26), Card(33), Card(8)], min: 1, max: 1, allow_cancel: false } } }
+DBG 沙漠绿洲：询问=["mtg_shamolvzhou_discover@obs0"] 已选=true；手牌 1 → 1（其中基本牌 1）
