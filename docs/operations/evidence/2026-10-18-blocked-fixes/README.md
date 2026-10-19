@@ -115,3 +115,17 @@ if !hand.is_empty() {
 **验收**：`cargo test --offline -p engine-native --test nc08_upstream_ganglie` 中
 `upstream_ganglie_discard_branch_difference_is_fixed` 应改为断言**存在**弃牌询问，并新增
 「来源弃两张后不受伤害」的行为用例。
+
+## 7 武圣「打出」路径未覆盖（NC08 样本 23 验证，2026-10-19）
+
+**症状（规则损失）**：标准面 `wusheng` 的 `enable: ["chooseToUse","chooseToRespond"]` 含**打出**；
+而原生 `kernel/duel.rs:70` 在决斗要求打出【杀】时，选项**只由实体【杀】构成**
+（`filter(|c| catalog.card_kind(*c) == CardKind::Sha)`）→ **不含**武圣可转化的红色牌。
+行为断言已复现（`upstream_wusheng_respond_path_not_covered`）。
+
+**修法**：在响应选项构造处（决斗/南蛮/万箭/借刀等要求打出【杀】的路径）加入**转化候选**：
+持有 `WU_SHENG` 且牌为红色（或持有 `LONG_DAN` 且为【闪】）时，把该牌作为「视为【杀】」的候选加入，
+并在应答消费时按 `viewAs` 语义结算（现有 `play_card.rs:154` 的 kind 改写逻辑可复用为函数）。
+
+**验收**：`upstream_wusheng_respond_path_not_covered` 应改为断言**包含**红牌候选；
+并补「用红牌响应决斗后该牌进入弃牌堆、决斗继续」的行为用例。

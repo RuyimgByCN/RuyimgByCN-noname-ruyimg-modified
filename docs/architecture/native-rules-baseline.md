@@ -3633,7 +3633,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **阶段计数起点** | `game.phaseNumber`（全局阶段计数） | `turn.phase_number`（局内计数） | ziyu（待核对） |
 | **阶段锚点** | 上游有**准备阶段**；原生无（相位序列前移，起手 `Judge` vs 旧线 `Draw`） | 已登记（开局差异判定证据） | 身份局开局对照 |
 
-| **转化入口范围**（标准面 `wusheng`） | `enable: ["chooseToUse","chooseToRespond"]`（**使用或打出**） | 原生转化位于 `PlayCard`（**使用**）路径；**打出**路径未验证 | wusheng |
+| **转化入口范围**（标准面 `wusheng`） | `enable: ["chooseToUse","chooseToRespond"]`（**使用或打出**） | **已验证不覆盖打出路径（规则损失）**：决斗要求打出【杀】时选项只含实体【杀】（`kernel/duel.rs:70` 按 `card_kind == Sha` 过滤），不含可转化的红牌 | wusheng |
 | **主公技分支**（标准面 `wusheng`） | `get.zhu(player,"shouyue")` → **任意**牌可转化 | 原生**未建模**守约（全 crate 无 `shouyue`） | wusheng |
 | **主动使用门槛**（标准面 `wusheng` 反例） | 无懈不可在出牌阶段主动使用 | 原生**接受**出牌阶段主动使用【无懈可击】 | wusheng |
 | **门槛历史范围**（标准面 `keji`） | `useCard` **与** `respond` 两历史都查【杀】 | 原生只看 `turn.sha_used_play_phase`（出牌阶段使用） | keji |

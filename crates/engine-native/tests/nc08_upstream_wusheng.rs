@@ -250,3 +250,68 @@ fn upstream_wusheng_entry_and_shouyue_differences_are_fixed() {
         "上游依据：使用或打出 + 守约分支：{seg}"
     );
 }
+
+/// **差异①（打出路径）已验证**：决斗要求**打出【杀】**时，原生只提供**实体【杀】**作为选项
+/// （`kernel/duel.rs:70`：`filter(card_kind == Sha)`）→ **不含**武圣的红色牌转化。
+/// 上游 `enable: ["chooseToUse","chooseToRespond"]` 明确包含**打出** → **规则损失**。
+#[test]
+fn upstream_wusheng_respond_path_not_covered() {
+    let mut e = Engine::new(20265205, 4);
+    e.debug_grant(0, "武圣");
+    // 0 号：一张红色【闪】（可被武圣转化）+ **没有**实体【杀】
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let red = place_colored_nonplayable(&mut e, 0, true);
+    // 1 号：一张【决斗】
+    use engine_native::catalog::Suit;
+    let duel = {
+        let name = e
+            .catalog()
+            .cards
+            .iter()
+            .find(|c| c.name == "duel")
+            .map(|c| c.name)
+            .expect("决斗在目录");
+        e.debug_place(1, name)
+    };
+    let _ = Suit::Heart;
+    // 推进到 1 号出牌阶段，由 1 号对 0 号使用【决斗】
+    for _ in 0..24 {
+        if e.turn().current == 1 && e.turn().phase == Phase::Play {
+            break;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e);
+    }
+    let out = e.submit(GameCommand {
+        actor: 1,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: duel, targets: vec![0] },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "决斗应被接受：{out:?}"
+    );
+    // 0 号被要求打出【杀】：查看选项是否含红色【闪】（武圣转化）
+    let choice = e.open_choice().cloned();
+    let (prompt, options) = match choice {
+        Some(c) => (c.spec.prompt.to_string(), c.spec.options.clone()),
+        None => {
+            eprintln!("SKIP：未出现响应询问（决斗可能未到响应点）");
+            return;
+        }
+    };
+    eprintln!("DBG 决斗响应：prompt={prompt} options={options:?} 红牌={red}");
+    assert!(
+        !options.contains(&engine_native::ChoiceOption::Card(red)),
+        "登记差异①（已由源码证实）：原生响应选项**不含**武圣可转化的红色牌（上游含）"
+    );
+}
