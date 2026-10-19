@@ -32,6 +32,8 @@
 //! 未覆盖（登记）：**回复 2 点的行为面**（需构造「主公濒死 + 吴势力角色持桃救援」场景）；
 //! `audio` 表现面。
 
+mod nc08_common;
+
 use engine_native::Engine;
 
 /// 上游点 2+3（**源码事实**）：原生资格四条件与回复量 +1 的实现。
@@ -107,4 +109,111 @@ fn upstream_jiuyuan_lord_gate_is_same_family() {
         "同族对照：护驾/激将/救援三处均以 is_lord 作主公技资格（第 3 例）"
     );
     let _ = Engine::new(20269101, 4);
+}
+
+/// 上游点 2+3（**行为面**）：吴势力角色以【桃】救援主公 → **回复 2 点**（救援 +1）。
+///
+/// 口径：原型模式下 `is_lord` 为真（同族设计差异）→ 本用例在该口径下验证「吴势力代桃回复 2」。
+#[test]
+fn upstream_jiuyuan_wu_tao_recovers_two() {
+    use engine_native::{ChoiceOption, GameAction, GameCommand};
+    use nc08_common::{advance_to_play, drain, next_dedup};
+
+    let mut e = Engine::new(20269102, 4);
+    e.debug_grant(1, "救援"); // 1 号持救援（濒死者）
+    // 2 号装配**吴**势力武将（持桃救援者）
+    let wu = e
+        .general_candidates()
+        .into_iter()
+        .find(|d| {
+            e.catalog()
+                .general_meta(*d)
+                .map(|(_, f, _, _, _)| f == engine_native::catalog::Faction::Wu)
+                .unwrap_or(false)
+        })
+        .expect("存在吴势力武将");
+    let wu_name = e.catalog().general_meta(wu).map(|(n, _, _, _, _)| n.to_string()).unwrap();
+    e.debug_assemble_general(2, &wu_name);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 2 号持一张【桃】
+    let tao = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "tao").map(|c| c.name).unwrap();
+        e.debug_place(2, name)
+    };
+    // 1 号被打至濒死（真实伤害路径）
+    let max1 = e.state_core().player(1).max_hp as i32;
+    e.debug_set_hp(1, max1 - 1);
+    e.debug_deal_damage(
+        Some(0),
+        1,
+        1,
+        engine_native::event::DamageNature::Normal,
+    );
+    let mut prompts: Vec<String> = Vec::new();
+    let mut saved = false;
+    for _ in 0..48 {
+        let Some(c) = e.open_choice().cloned() else {
+            let actor = e.turn().current;
+            let _ = e.submit(GameCommand {
+                actor,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::NextPhase,
+            });
+            continue;
+        };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        if c.observer == 2 && c.spec.options.contains(&ChoiceOption::Card(tao)) {
+            saved = true;
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Card(tao)],
+                },
+            });
+            continue;
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 救援：询问={prompts:?} 吴势力代桃={saved} 1 号 hp={} alive={}（2 号手牌={:?}）",
+        e.debug_hp(1),
+        e.state_core().player(1).alive,
+        e.debug_hand(2)
+    );
+    if !saved {
+        eprintln!("NOTE 未出现吴势力以桃救援的询问——本用例不构成验收");
+        return;
+    }
+    // 上游：救援使该【桃】回复量 +1 → 从 0 回复到 **2**
+    assert_eq!(
+        e.debug_hp(1),
+        2,
+        "救援：吴势力【桃】应回复 **2** 点（救援 +1），实测 hp={}",
+        e.debug_hp(1)
+    );
+    assert!(e.state_core().player(1).alive, "1 号应被救回（存活）");
 }
