@@ -1,0 +1,1 @@
+DBG 纵火：询问=["trigger_confirm"] 0 号手牌 2 → 2；1 号 hp 4 → 3
