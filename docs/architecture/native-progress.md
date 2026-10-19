@@ -421,3 +421,5 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 - `noname-next` 自 2026-10-10 起用本地 git 管理（不推送远端，`.git/hooks/pre-push` 拦截）；核验记录写明对应提交，回退以提交为准。
 - [规则基准](native-rules-baseline.md)记语义和版本，[覆盖清单](../native-coverage-manifest.md)记机制范围，[扩展台账](../migration/upstream-extension-reconstruction.md)记逐来源状态。新增实现同步源码、定向回归、全量结果和台账。
 - “反例已修”“已加测试”“子包切片完成”“整包验收通过”“上游规则等价”是不同结论；性能收益必须有同负载测量。
+
+- 追加（2026-10-19）：+ **夹具审计（4 个花色相关样本）**：wusheng 撤回 2 处伪差异、qixi 查明夹具假象、ganglie 判定牌改为按 id 布阵、xiuluo 本就安全 
