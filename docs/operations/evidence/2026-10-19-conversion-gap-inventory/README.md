@@ -51,6 +51,39 @@ baihupifeng cangchizhibi fuxiqin g_yuchan_equip guangshatianyi guiyanfadao hslin
 fengyangzhen huyizhen longfeizhen shepanzhen yunchuizhen
 ```
 
+## 精度更正：swd 的 6 项 `hslingjian_*` 为**误报**（2026-10-19 续核）
+
+`hslingjian_*` 为**子件命名**（前缀未在归一表中）⇒ 去掉 `hslingjian_` 前缀后**均有 12–18 处命中**
+（原生核心/包内已实现）⇒ **6 项为误报**，**swd 实际缺口由 18 降为 11**（另 1 项 `g_yuchan_equip`
+为全局子技噪声）⇒ **全清单合计由 56 修正为 49**。
+
+| 键 | 去 `hslingjian_` 后 | 判定 |
+|---|---|---|
+| `xuanfengzhiren`（旋风之刃） | 12 命中 | 已实现（**误报**） |
+| `zhongxinghujia`（重型护甲） | 13 命中 | 已实现（**误报**） |
+| `xingtigaizao`（型体改造） | 18 命中 | 已实现（**误报**） |
+| `shijianhuisu`（时间回溯） | 13 命中 | 已实现（**误报**；样本 64 已验其行为面） |
+| `shengxiuhaojiao`（生锈号角） | 13 命中 | 已实现（**误报**） |
+| `yinmilichang`（隐秘力场） | 13 命中 | 已实现（**误报**） |
+
+**归一表补**：`hslingjian_`（**第 6 条精度更正**：前缀表须覆盖**子件命名**）。
+
+## swd 其余缺口（11 项，含中文名与类型）
+
+| 键 | 中文名 | 类型 |
+|---|---|---|
+| `cangchizhibi` | 苍螭之璧 | `jiqi` |
+| `lingjiandai` | 零件袋 | `jiguan` |
+| `pangufu` | 盘古斧 | `equip` |
+| `fuxiqin` | 伏羲琴 | `equip` |
+| `qinglianxindeng` | 青莲心灯 | `equip` |
+| `baihupifeng` | 白狐披风 | `equip` |
+| `guangshatianyi` | 光纱天衣 | `equip` |
+| `qipoguyu` | 奇魄古玉 | `equip` |
+| `guiyanfadao` | 鬼眼法刀 | `equip` |
+| `xiangyuye` | （未取到译名） | `basic` |
+| `huanpodan` | （未取到译名） | `basic` |
+
 ## 已逐名确认的缺口（2026-10-19 续核）
 
 | 包 | 键 | 中文名 | 类型 | 双向核对（原生 src + 全部包） | 判定 |
