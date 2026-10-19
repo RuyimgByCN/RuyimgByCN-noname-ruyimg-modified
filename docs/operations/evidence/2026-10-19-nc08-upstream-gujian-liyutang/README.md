@@ -3,7 +3,7 @@
 - 日期：2026-10-19
 - 工作包：**NC08**（[方案 §NC08](../../../architecture/native-convergence-plan.md#nc08)）第⑦层
 - 规则版本 v322（工作树）/ 存档格式 v105
-- 结论：**1 项通过**（门槛）+ **1 项未验收**（效果为空）
+- 结论：**1 项通过**（门槛）+ **1 项未验收**（**用牌效果缺失**；子技效果**已实现**）
 
 ## 1 上游源码（归档快照，逐字引用）
 
@@ -27,7 +27,7 @@ liyutang: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 1 | `!target.hasSkill("liyutang")` | **门槛通过**：用 `debug_grant(1, "gj_food_liyutang")` 预置子技后，再对 1 号使用 → **`Rejected(IllegalTargets)`** | 通过 |
-| 2 | `target.$gain2(cards)` + `storage` + `addSkill` | **未验收（效果为空）**：实测发动 `Accepted`，但**目标手牌 0 → 0**、**使用者手牌为空**、**该牌进入弃牌堆**（`弃堆含此牌=true`）⇒ 只完成用牌与弃置 | 登记（第 37 项） |
+| 2 | `target.$gain2(cards)` + `storage` + `addSkill` | **未验收（用牌效果缺失）**：实测发动 `Accepted`，但**目标手牌 0 → 0**、**使用者手牌为空**、**该牌进入弃牌堆**（`弃堆含此牌=true`）⇒ 只完成用牌与弃置。**注**：其**子技效果已实现**（`step/gujian.rs:318`：阶段开始体力最少 → +1 护甲 + `food_tick`）→ 缺的是**用牌那一段** | 登记（第 37 项） |
 
 **原生实现引用**：`content/host/keys.rs:882`（`HostBehavior::GujianFoodLiyutang => "host:gujian_food_liyutang"`）；
 子技在**目录中的名字**为 **`gj_food_liyutang`**（`constants.rs:58`）。

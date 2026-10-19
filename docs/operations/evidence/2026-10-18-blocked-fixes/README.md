@@ -761,10 +761,19 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ## 37 鲤鱼汤（`liyutang`）**效果为空**（样本 89，2026-10-19）
 
-**症状**：上游 `liyutang` 的 `content` 为——`target.$gain2(cards)`（**目标获得此牌**）+
-`target.storage.liyutang = card` + `target.storage.liyutang_markcount = 2` + `target.addSkill("liyutang")`。
-原生实测：发动 `Accepted`，但**目标手牌 0 → 0**、**使用者手牌为空**、**该牌进入弃牌堆**
-（`弃堆含此牌=true`）⇒ **只完成用牌与弃置，未执行获得牌/计数/授技**。
+**症状（精确化，2026-10-19 同轮更正）**：上游 `liyutang` 的 `content` 为——`target.$gain2(cards)`
+（**目标获得此牌**）+ `target.storage.liyutang = card` + `target.storage.liyutang_markcount = 2`
++ `target.addSkill("liyutang")`。原生实测：发动 `Accepted`，但**目标手牌 0 → 0**、
+**使用者手牌为空**、**该牌进入弃牌堆**（`弃堆含此牌=true`）⇒ **用牌效果（获得牌/计数/授技）缺失**。
+
+**精度更正（避免以偏概全）**：初版写作「效果为空」**不准确** ✗ ——
+`step/gujian.rs:318` 的 `HostBehavior::GujianFoodLiyutang` **已实现子技效果**
+（「阶段开始：体力值为全场最少或之一 → **获得 1 点护甲**」+ `food_tick` 计数结算）⇒
+缺的是**用牌（`content`）那一段**，**不是**整个技能为空。
+
+**静态普查结论（同日）**：对 `behavior.rs` 中 **23 个 `Gujian*` 行为**逐一检查
+`content/host/step/**.rs` 是否引用 → **23/23 均有 step 代码** ⇒ **「用牌效果缺失」无法靠静态引用检出** ✗
+→ 只能靠**逐卡行为面抽样**（如本样本）发现 ⇒ **建议**对古剑/同类卡包做**逐卡行为面抽样**。
 
 **已核对**：门槛**已正确实现**（目标已持子技时 `Rejected(IllegalTargets)`）；
 键存在（`keys.rs:882` `host:gujian_food_liyutang`）；子技目录名 `gj_food_liyutang`（`constants.rs:58`）。
