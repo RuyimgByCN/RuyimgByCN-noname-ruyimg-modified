@@ -741,3 +741,20 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 修完乾坤镖后须**复核神火飞鸦**不应被误加 `he` 门槛。
 **证据**：样本 85（`nc08_upstream_gujian_shenhuofeiya.rs`）已断言「神火飞鸦目标 `he` 无牌时
 **必须仍被受理**（`Accepted`）」→ **若把两卡校验合并，该断言会失败**。
+
+## 36 龙须钩（`longxugou`）获得装备后**未自己装备**（样本 86，2026-10-19）
+
+**症状（规则损失）**：上游 `longxugou` 的 `content` 为三段——① `choosePlayerCard("e", target, true)`
+（**使用者自选**目标装备区一张）→ ② 目标 `lose(..., ui.special)` → ③
+**`if (get.position(event.card) === "s") player.equip(event.card)`（自己装备之）**。
+原生实测：询问 `gj_longxu_pick`（**自选，与上游一致** ✅）、目标装备区 `1 → 0` ✅，
+但**使用者装备区 `0 → 0`**、该牌进入**使用者手牌**（`手牌含该装备=true`）✗
+⇒ **只「获得」未「装备」**。
+
+**修法**：在龙须钩的效果分支把「入手」改为「**直接装备**」（对应上游 step 2 的 `player.equip`），
+或保留入手后立即调用装备路径（含装备技生效/替换旧装备的处理）。
+
+**验收**：样本 86 的 `upstream_longxugou_steals_and_equips`（当前 `#[ignore]`）应能通过
+（使用者装备区 +1、目标装备区 −1）。
+
+**注**：目标门槛（须有可获得装备）**已正确实现**（实测无装备目标 `Rejected(IllegalTargets)`）。
