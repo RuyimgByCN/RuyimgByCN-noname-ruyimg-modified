@@ -570,3 +570,21 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 另补「【杀】响应面代打」用例。
 
 **同族提示**：与 `HU_JIA`（护驾，`kernel/sha.rs` 可达）**结构同源**，可参照其接入方式。
+
+## 29 运筹（`yunchou`）武将技「宿主已实现、包未交付」→ 产品路径不可达（样本 69，2026-10-19）
+
+**症状（规则损失/可达性缺口）**：宿主侧已实现 `HostBehavior::YunchouXiongzi`（雄姿，tag 243）等
+运筹武将技行为（`content/host/step/yunchou.rs`、`behavior.rs:619`、`filtering/common.rs:507`），
+但 **`packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json` 只有 23 张卡、无 `generals` 段**
+（卡牌条目仅 `{name, kind, suit, rank}`；全库无任何包携带 `host:` 键）→
+**`debug_grant(0, "雄姿")` 直接 panic `unknown skill`**，技能在**产品路径上不可达**。
+
+**修法（二选一）**：
+1. **补包数据**：在运筹包中增加 `generals` 段，把武将技能映射到 `host:yunchou` 系键（需确认键名规范）；
+2. **宿主按 tag 注册技能名**：为已实现但无包交付的宿主技能注册可授予的技能定义（并同步包契约文档）。
+
+**验收**：样本 69 的 `upstream_xiongzi_draw_bonus_with_floor`（当前 `#[ignore]`）应能运行并通过
+（0 件→3 张、2 件→4 张、**3 件→4 张**（⌊3/2⌋=1））。
+
+**波及面（建议普查）**：所有「宿主有 behavior、包无交付」的技能——与第 28 项（激将不可达）
+**同类不同因**（28 项=缺调用点；本项=缺包交付）。
