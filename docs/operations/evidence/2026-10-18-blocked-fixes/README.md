@@ -410,3 +410,26 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **附：未实现技能的**排查方式**（重要）**：两次**自动**排查（上游键名匹配、中文名匹配）**均失败**
 （详见 [source-coverage §1h/§1i](../2026-10-18-nc08-source-coverage/README.md)）→ 未实现清单
 只能**人工逐条**建立（以 `names.rs` 索引 + 逐个读上游为准），**不采信**任何名称匹配脚本的输出。
+
+## 22 标准面**未实现技能清单**（6 项，2026-10-19 第 3 次排查成功）
+
+**来源**：[source-coverage §1j](../2026-10-18-nc08-source-coverage/README.md)（映射来源修正为
+`character/standard/translate.js` 后成功）。上游标准面 **70 个键 → 6 个未实现**：
+
+| 技能 | 上游键 | 上游实现要点 | 原生 |
+|---|---|---|---|
+| 轻狡 | `stdqingjiao` | `zhuSkill`（主公技，`phaseJieshuBegin`） | 无 |
+| 忠义 | `zhongyi` | `phaseUse` + `limited`（限定技） | 无 |
+| 飞影 | `feiying` | `mod.globalTo → distance + 1` | 无（第 21 项） |
+| 战神 | `zhanshen` | `phaseZhunbeiBegin` + `juexingji`（觉醒技） | 无 |
+| 神戟 | `shenji` | `mod.selectTarget/cardUsable`（【杀】多目标） | 无 |
+| 将驰 | `new_jiangchi` | `phaseDrawEnd` | 无 |
+
+**修法**：逐项按上游语义实现（飞影可直接复用 `plus` 累加面；神戟可参照多目标校验；
+战神/忠义为觉醒/限定技，可参照现有 `juexingji`/`limited` 实现模式）。
+
+**验收**：每项各补行为用例（**轻狡/忠义/战神/将驰**需构造对应阶段场景；**飞影**可用
+`computed_distance` 直接断言；**神戟**可断言【杀】目标数上限）。
+
+**注**：本条与第 21 项（飞影）**部分重叠**——飞影单列在前，本条给出**完整 6 项清单**；
+实现时以本条为总表。

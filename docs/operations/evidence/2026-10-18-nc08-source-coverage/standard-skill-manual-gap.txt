@@ -1,0 +1,25 @@
+# 标准面技能「未实现」清单（2026-10-19，第 3 次尝试：**成功**）
+# 关键修正：中文名映射**不在 skill.js**，而在同目录的 **translate.js**（`mashu: "马术",` 形式）。
+# 判定：上游键 → translate.js 中文名 → names.rs 常量/注释 → **再对全 src 原始中文名 grep 复核**。
+# 结果：15 个候选，其中 7 个是**子技/变体**（无独立中文名，如 paoxiao_xiahouba/longdan_sha_re_zhaoyun），
+#       6 个经上游源码复核为**真实技能**且原生 0 命中 → 确认为**未实现**：
+#         轻狡 stdqingjiao（zhuSkill 主公技）/ 忠义 zhongyi（限定技）/ 飞影 feiying（globalTo +1）
+#         战神 zhanshen（觉醒技）/ 神戟 shenji（mod：杀多目标）/ 将驰 new_jiangchi（phaseDrawEnd）
+
+# 上游顶层技能键 70；translate 映射 62；names.rs 常量 216
+# 未在 names.rs 索引中命中: 15
+stdqingjiao	轻狡
+rende1	<无中文名>
+jijiang3	<无中文名>
+wusheng_re_guanyu	<无中文名>
+zhongyi	忠义
+zhongyi2	忠义
+paoxiao_xiahouba	<无中文名>
+guanxing_fail	<无中文名>
+longdan_sha_re_zhaoyun	<无中文名>
+feiying	飞影
+jijiu_re_huatuo	<无中文名>
+zhanshen	战神
+shenji	神戟
+new_jiangchi	将驰
+new_jiangchi3	<无中文名>
