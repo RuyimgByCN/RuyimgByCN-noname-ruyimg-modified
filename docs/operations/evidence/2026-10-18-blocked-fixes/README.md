@@ -929,3 +929,19 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 「出现弃牌询问且可选中装备」。
 
 **族**：「确定性首张」（选择权/随机 → 确定性），修法方向见基准 v78（可改用种子 RNG 或恢复玩家选择）。
+
+## 43 激活（`jihuocard`）的**临时技 `jihuocard2` 未实现**（样本 121，2026-10-19）
+
+**症状**：上游 `jihuocard` 的 `content` 为
+`if (_status.currentPhase === target) target.addTempSkill("jihuocard2")` + `target.draw()`。
+原生实测：**摸 1 生效** ✅（牌堆 `123 → 122`）；但**临时技未授予** ❌ ——
+①**候选名探测**（`jihuocard2`/`gj_jihuocard2`/`hearth_jihuocard2`/`gj_hearth_jihuocard2`/`host:jihuocard2`）
+**命中集合为空**；②**全库 grep `jihuocard2`**（`crates/engine-native/src/` + 全部 `packages/extensions/*`）
+**0 命中** ⇒ **确未实现**（**非**名称不匹配）。
+
+**源码印证**：`kernel/intrinsic.rs:1292` 映射到 `HostBehavior::JihuocardDraw`，
+`content/host/step/skills_status.rs:790` 的该分支**只做摸牌**，**无授予临时技**。
+
+**修法**：在**自己回合内**使用本卡时**授予临时技 `jihuocard2`**，并实现其**效果**与**到期移除**。
+
+**验收**：样本 121 应能断言「临时技已授予」（并按原生常量取名，不猜名）。
