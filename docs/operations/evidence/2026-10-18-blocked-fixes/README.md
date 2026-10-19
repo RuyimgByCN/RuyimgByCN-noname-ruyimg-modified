@@ -221,3 +221,16 @@ if !core.player(core.turn.current).hand.contains(&card) {
 → 同时**自动收敛**样本 33 登记的「奇才覆盖面」差异（同一豁免位）。
 
 **验收**：新增「未持奇才时距离 >1 的兵粮寸断被拒」与「持奇才时可用」两条行为用例。
+
+## 14 连营（`lianying`）阈值 off-by-one（NC08 样本 37 新发现，2026-10-19）
+
+**症状（原生更宽松）**：上游 `lianying` 要求**失去后手牌为空**（`if (player.hasCards("h")) return false`）；
+原生 `crates/engine-native/src/content/standard/skills/lian_ying.rs` 的 filter 为
+`if ctx.state.player(owner).hand.len() > 1 { return false }`，而该判定发生在**牌已离手之后**
+→ **手牌剩 1 张时仍触发**（实测出现 `trigger_confirm`，上游不应触发）。
+
+**修法**：filter 改为按「失去后手牌为空」判定（`hand.len() > 0 → false`，或改为在事件前取手牌数
+并判断「将失去的是最后一张手牌」）。
+
+**验收**：`upstream_lianying_threshold_off_by_one_is_registered` 应改为断言**无确认门**，
+并补「剩 1 张手牌时失去 1 张 → 不摸牌」的行为用例。

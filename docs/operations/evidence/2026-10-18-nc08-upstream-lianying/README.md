@@ -27,35 +27,41 @@ lianying: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 1+2+3 | 失去**最后一张手牌** → 摸 1 | 手牌恰 1 张时打出 → 确认发动后**手牌回到 1 张** | 通过 |
-| 2 | `if (player.hasCards("h")) return false` | 手牌 **2 张**时打出 1 张 → 无确认门、不摸牌 | **未验收（如实登记）** |
+| 2 | `if (player.hasCards("h")) return false` | 手牌 **2 张**时打出 1 张（剩 1 张）→ 上游**不应触发**；实测**出现 `trigger_confirm`** → **差异③（阈值 off-by-one，规则更宽松）** | 通过（**差异登记③**） |
 | 1 | `loseAfter` + 5 个全局异步面 | **差异①**：原生为**四类显式事件**（`CardUsed`/`CardResponded`/`CardsMoved`/`CardsDiscarded`）→ 覆盖路径不同（原生注释自述「弃牌阶段批量弃置不产生事件」） | 通过（**差异登记**） |
 | 2 | 失去后判空 | **差异②**：原生在**事件时刻**判 `hand.len() <= 1`（语义等价前提：filter 于牌离手前求值）→ 写法不同 | 通过（**差异登记**） |
 
 **原生实现引用**：`content/standard/skills/lian_ying.rs`（filter `hand.len() > 1 → false`；
 四类事件；注释登记批量弃置未覆盖）。
 
-## 2b 门槛用例**未验收**（如实登记，含诊断）
+## 2b 门槛用例：**夹具已修 + 发现差异③（阈值 off-by-one）**
 
-夹具在「手牌 2 张」布阵后提交出牌时实测：
+**夹具修复**：`debug_give_hand_card` 会**压入帧** → 布阵后必须 `drain`，否则提交被
+`Rejected(ChoicePending)`（初版即因此走 SKIP 分支）。
+
+**修复后实测**（[off-by-one-diagnostic.txt](off-by-one-diagnostic.txt)）：
 
 ```
-DBG 两张手牌时出牌：Rejected(ChoicePending)（手牌=[19, 20]）
-SKIP：该出牌未被接受（可能第一张不是【杀】）
+DBG 剩 1 张手牌时：open_choice=Some("trigger_confirm") hand=[20]
+DBG 差异③确认后：hand=[20]（若为 2 则多摸了 1 张）
 ```
 
-→ 提交被 **`ChoicePending`** 拒绝（当时**存在未决询问**）→ 用例按设计**打印 SKIP 并返回**，
-**不写成通过**。需先清空未决询问（或换布阵方式）后补验收（登记待办）。
+→ **手牌剩 1 张时仍出现连营确认门** ✗，而上游要求**手牌为空**（`if (player.hasCards("h")) return false`）
+→ **不是「写法不同、语义等价」，而是阈值 off-by-one（原生更宽松）** → **登记差异③**
+（根因：原生 filter `hand.len() > 1 → false` 在**牌已离手之后**求值 → 剩 1 张即通过）。
+**行为后果**（确认后是否立即摸牌）受帧结算影响，本轮只固定「不该出现的触发门出现了」这一事实。
 
 ## 3 验证结果
 
 | 检查 | 结果 | 证据 |
 |---|---|---|
-| 定向 | **3 passed / 0 failed**（其中门槛用例走 SKIP 分支，**未构成验收**） | [targeted.log](targeted.log)、[run-diagnostic.txt](run-diagnostic.txt) |
+| 定向 | **3 passed / 0 failed** | [targeted.log](targeted.log)、[off-by-one-diagnostic.txt](off-by-one-diagnostic.txt) |
 | 行数门禁 | 见提交说明 | — |
 
 ## 4 未完成 / 待办
 
 - [ ] 差异①（批量弃置路径）是否补齐；与枭姬（样本 32）的「失去方式覆盖面」**同族**
-- [ ] **门槛用例补验收**：先清空未决询问（`ChoicePending`）后重跑
+- [x] **门槛用例夹具已修**（布阵后 drain）；并据此**发现差异③（阈值 off-by-one）**
+- [ ] 差异③修复：filter 改为「失去后手牌为空」（`hand.len() > 0 → false`，或按事件后置状态判定）
 - [ ] 差异②（门槛写法）在 `CardsDiscarded` 批量事件下的等价性
 - [ ] 样本 38+：其余来源（当前 **21/37 来源**；标准面技能 **19 个样本**）

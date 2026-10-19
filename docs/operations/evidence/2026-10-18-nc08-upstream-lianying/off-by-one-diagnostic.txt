@@ -1,0 +1,2 @@
+DBG 剩 1 张手牌时：open_choice=Some("trigger_confirm") hand=[20]
+DBG 差异③确认后：hand=[20]（若为 2 则多摸了 1 张）
