@@ -1312,3 +1312,19 @@ DBG 虎符：杀结算后 1 号 hp=0 dying=false alive=false
 `Snatch ×5`、`Nullify ×4`、`Le ×3`、`ShanDian ×2`、`Bing ×1`）。**根因**：我用**手写的 `CardKind` 变体名**
 （`Nanman`/`Wanjian`/`Guohe`…）比对，而**真实变体名/目录名不同**（目录名 `savage`/`archery`/`duel`/`dismantle`…）。
 **教训**：**按名字比对的清单必须由代码反查生成，不能手写**。
+
+## 55 青龙之圭：**摸 2 生效、强制弃 1 未发生**（样本 156，2026-10-19）
+
+**上游**：`g_qinglongzhigui` 的 `content` 为**两步**——`step 0` `player.draw(2)`、`step 1` `player.chooseToDiscard("he", true)`。
+
+**实测**（同一局面）：**牌堆 196 → 194**（**摸 2 生效** ✅）；**手牌 3 → 5**（应 **3 → 4**）❌；
+**弃牌询问 `prompts = []`** ❌。
+
+**已排除**：①持有条件成立 ②询问形态（用例覆盖 `SelectCards`/`Confirm`/`Pass`）③阶段未开始（摸 2 已证）。
+
+**剩余候选**：①**强制弃牌分支未实现**（`chooseToDiscard` 的 `true` 语义未承载）；
+②**`step 1` 被跳过**（多步窗口未串行）；③~~`he` 区无牌~~（不成立，手牌 5 张）。
+
+**修法（先诊断）**：核对宿主实现是否声明「先摸后弃」两步；缺则补 `step 1`。
+
+**验收**：样本 156 的 `#[ignore]` 用例应能断言**牌堆 −2** 且**手牌净 +1**。
