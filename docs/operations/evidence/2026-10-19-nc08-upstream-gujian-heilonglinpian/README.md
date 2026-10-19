@@ -26,13 +26,13 @@ heilonglinpian: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 2 | `target.changeHujia()` | **行为面**：使用者**护甲 0 → 1** | 通过 |
-| 2 | `addTempSkill("heilonglinpian", …)` | **待核对**：以**上游键**查询临时技返回 `false`——原生可能使用**带前缀的目录名**（如 `gj_...`）⇒ **未判定为缺失** | 待核对 |
+| 2 | `addTempSkill("heilonglinpian", …)` | **源码层面未见对应行为**：`grep -rli heilonglinpian src/` 仅命中 `archive/card_codes.rs`、`content/host/constants.rs`（键常量）、`catalog.rs`、`engine/play_card.rs`（**目标校验**）、`engine/snapshot.rs`——**`content/host/` 下无该临时技的行为/键/步进** ⇒ 临时技**疑未授予**（护甲 +1 由**其它路径**完成，实测已生效） | **待修（登记）** |
 
 **原生实现引用**：`content/host/constants.rs:84`（`GJ_HEILONGLINPIAN_CARD_KEY = "gj:heilonglinpian"`）。
 
 ## 3 未完成 / 待办
 
-- [ ] **临时技的目录名**核对（再判定是否授予成功）
+- [ ] **临时技**：源码层面未见对应行为（疑未授予）→ 并入修复清单第 40 项
 - [ ] 临时技的**到期移除**（至自己回合开始，需跨回合驱动）
 - [ ] `modTarget` 的额外影响面
 - [ ] 古剑包其余卡牌
