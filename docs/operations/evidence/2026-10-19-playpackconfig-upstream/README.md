@@ -39,8 +39,21 @@ if (dn > 0) for (const i in data) for (const j in data[i]) {
 **差异 #5「`playpackconfig` 未逐项对照」**本身**不变**，但**对照所需的「上游口径」已整理成文**：
 配置键格式、`dn` 公式、上限 1000、`Math.random` 点数、**未配置即不补**。
 
-## 4 待办（**可做**）
+## 4 ✅ 对照已完成（同日，读 `content/pile.rs:144-200` 的 `scale_plan`）
 
-- [ ] 读原生 `scale_plan` 的实现，与本文 §1 的**四个要点**逐项对照；
-- [ ] 若原生采用**确定性点数**（差异 #3 已登记），对照时只比**数量**、不比点数；
-- [ ] 对照完成后，把 U03/L04 差异 #5 从「未对照」改为「已对照（差异清单）」。
+| # | 要点 | 上游 | 原生 `scale_plan` | 一致 |
+|---|---|---|---|---|
+| 1 | 配置键/乘数 | `cardpile_<类型>_playpackconfig` | `factors.get(&entry.card)` | ✅ |
+| 2 | **未配置 ⇒ 不补** | `NaN` ⇒ `dn > 0` 为 false | **`return Ok(ScaleStatus::Unconfigured)`** | ✅ |
+| 3 | **`dn` 公式** | `num*(list-total)/(total-num)` | `num*(deck_len-total)/(total-num)` | ✅ |
+| 4 | **上限 1000** | `if (dn > 1000) dn = 1000` | `if … || dn > 1000.0 { dn = 1000.0 }` | ✅ |
+| 5 | **补牌点数** | **`Math.random`** | **确定性** | ❌ 差异 #3（已登记） |
+| — | 取整方式 | `Math.round` | `.round()` | ✅ |
+| — | 分母为 0 的处理 | JS `Infinity/NaN` 自然传播 | **显式** `Infinity`/`NaN`，并归入 1000 上限或 `NoAddition` | ✅ 更严格 |
+
+⇒ **`playpackconfig` 的机制本身与上游一致**（配置键/未配置不补/公式/上限/取整），
+**唯一差异是「补牌点数」**（上游 `Math.random`，原生确定性）——**已在差异 #3 登记** ✅。
+
+## 5 结论
+
+**U03/L04 差异 #5 从「未逐项对照」升级为「已逐项对照：机制一致，点数差异见 #3」**。
