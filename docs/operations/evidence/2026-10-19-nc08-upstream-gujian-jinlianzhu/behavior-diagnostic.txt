@@ -1,0 +1,2 @@
+DBG 金莲珠：1 号出杀=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: Confirm, prompt: "gj_jinlianzhu_confirm", options: [Confirm, Pass], min: 1, max: 1, allow_cancel: false } } }
+DBG 金莲珠：询问=["gj_jinlianzhu_confirm@obs0"] 使用=true 2 号 hp 4 → 4；1 号手牌 3 → 3
