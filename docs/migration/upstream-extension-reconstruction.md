@@ -221,6 +221,10 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 63 | 标准面（技能） | `xinfu_jiyuan`（急援） | 2 点通过（源码事实级）+ **规则损失**：仅濒死臂（上游三臂 `dying`/`gainAfter`/`loseAsyncAfter` → 原生 1 臂，原生已自述） | [nc08-upstream-jiyuan](../operations/evidence/2026-10-18-nc08-upstream-jiyuan/README.md) |
 
 **标准面技能采样核算（2026-10-19）**：上游标准面 70 个顶层键 → **62 个真实技能** = **43 已建样本** + **6 未实现（第 22 项）** + **13 变体/子臂（属已采样技能）** ⇒ **标准面技能的第⑦层采样维度已收敛**（口径与清单见 [standard-face-sample-coverage.txt](../operations/evidence/2026-10-18-nc08-source-coverage/standard-face-sample-coverage.txt)）；**该收敛不等于规则等价**。
+| 64 | U05 swd（卡牌） | `hslingjian_shijianhuisu`（时间回溯） | 2 点通过（含 1 差异登记）：装备区全部牌收回手牌（实测装备 1→0、手牌 0→1）；上游 `filterTarget` 的「有装备」门槛原生未见校验 | [swd-shijianhuisu](../operations/evidence/2026-10-19-nc08-upstream-swd-shijianhuisu/README.md) |
+| 65 | U05 swd（机关牌） | `gouhunluo`（勾魂锣） | 2 点通过（含 1 差异登记）：目标挂 3 轮倒计时 + 来源记录（实测 `rounds=3`/`source=Some(0)`）；「未持该技」门槛未见校验 | [swd-gouhunluo](../operations/evidence/2026-10-19-nc08-upstream-swd-gouhunluo/README.md) |
+| 66 | U05 swd（机关牌） | `mujiaren`（木甲人） | 2 点通过（含 **2 差异登记**）：失去全部非基本手牌 → 得 **1+N** 机关牌（实测 3=1+2）；①定义池造牌 vs 实体取牌、②未见 `derivation` 排除 | [swd-mujiaren](../operations/evidence/2026-10-19-nc08-upstream-swd-mujiaren/README.md) |
+| 67 | U05 swd（锦囊） | `yangpijuan`（羊皮卷） | 2 点通过（含 **3 差异登记**）：两段询问 `category`→`pick`（类别 [0,1,2]、择定牌入手）；①造牌 vs 牌堆发现、②候选是否属牌堆、③候选数 `min(3)` vs 恒 3 | [swd-yangpijuan](../operations/evidence/2026-10-19-nc08-upstream-swd-yangpijuan/README.md) |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
