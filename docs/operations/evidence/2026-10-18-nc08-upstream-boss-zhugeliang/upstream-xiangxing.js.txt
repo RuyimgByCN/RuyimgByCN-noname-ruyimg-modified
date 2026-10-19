@@ -1,0 +1,32 @@
+hlss_xiangxing:{
+				audio:1,
+				unique:true,
+				juexingtx:true,
+				init:function(player){
+					player.storage.hlss_xiangxing=3;
+					player.storage.hlss_xiangxing_count=0;
+					player.addSkill('hlss_xiangxing3');
+					player.update();
+					setTimeout(function(){
+					if(player.name=='shen_nebula') {
+					    player.node.avatar.style.transition='all 1s';
+					    player.node.avatar.setBackground('shen_nebula_init','character');
+					}
+					if(player.name2&&player.name2=='shen_nebula') {
+					    player.node.avatar2.style.transition='all 1s';
+					    player.node.avatar2.setBackground('shen_nebula_init','character');
+					}
+					},1000);
+				},
+				mark:true,
+				intro:{
+					content:'当前有#枚星'
+				},
+				group:'hlss_xiangxing_hp',
+				trigger:{player:['damageEnd','loseHpEnd']},
+				forced:true,
+				popup:false,
+				content:function(){
+					'step 0'
+					var num=trigger.num;
+					if(num)
