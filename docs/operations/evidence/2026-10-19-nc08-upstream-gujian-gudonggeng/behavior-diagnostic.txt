@@ -1,0 +1,1 @@
+DBG 骨董羹：子技=true；元宝肉发动=Accepted { state_hash: [..] }；第一张杀=Accepted { state_hash: [..] } hp 4 → 4；第二张杀=Accepted { state_hash: [..] } hp 4 → 3
