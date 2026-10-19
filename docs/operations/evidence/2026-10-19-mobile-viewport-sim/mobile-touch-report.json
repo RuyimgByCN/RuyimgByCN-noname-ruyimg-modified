@@ -1,0 +1,10 @@
+{
+  "tapped_at": {
+    "x": 289,
+    "y": 407
+  },
+  "url_after_tap": "/battle?players=4&seed=42",
+  "interactive": true,
+  "viewport": "{\"w\":390,\"h\":844,\"touch\":true}",
+  "console_errors": []
+}

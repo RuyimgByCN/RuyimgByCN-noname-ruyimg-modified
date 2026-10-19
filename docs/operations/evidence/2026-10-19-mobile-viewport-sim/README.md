@@ -29,12 +29,33 @@
 **差值**：移动视口 p50 比桌面 **+3 ms（+1.2%）** —— 在**视口模拟**范围内**无可感知劣化**；
 但**不**代表真机（真机还涉及 CPU 性能、GPU、内存压力、触摸事件分发、真实网络）。
 
+## 2b 触摸手势端到端（**视口模拟**，2026-10-19 同轮）
+
+新增 `apps/web-client/scripts/nc12-mobile-touch.mjs`：在**移动视口 + 触摸模拟**下用 CDP
+`Input.dispatchTouchEvent`（touchStart → touchEnd）**真实触摸点击**「本地开局」，并检查是否进入对局。
+
+**实测**（[mobile-touch.txt](mobile-touch.txt)、`mobile-touch-report.json`）：
+
+```json
+{"tapped_at":{"x":289,"y":407},
+ "url_after_tap":"/battle?players=4&seed=42",
+ "interactive":true,
+ "viewport":"{\"w\":390,\"h\":844,\"touch\":true}",
+ "console_errors":[]}
+```
+
+→ ① 触摸事件**成功驱动**路由跳转到对局页；② 对局页「自动一步」按钮**存在且可用**（`interactive=true`）；
+③ 视口确为 **390×844 且 `ontouchstart` 存在**；④ **0 console error**。
+
+**口径**：仍是 **CDP 视口/触摸模拟**，**不是真机** ✗（真机的触摸分发、GPU、内存压力、真实网络未覆盖）。
+
 ## 3 未验收（照旧，**不得**用本节替代）
 
 - [ ] **Android / iOS 真机**档位（无设备，**平台验收无法在本机完成**）
 - [ ] 桌面壳（Tauri 等）档位
 - [ ] 真实网络（弱网/高延迟）下的冷启动与可交互
-- [ ] 触摸交互路径的**端到端**（本脚本只做视口/UA 模拟，未驱动触摸手势）
+- [x] 触摸交互端到端**已在视口模拟下验收**（`Input.dispatchTouchEvent` → 进入对局且可交互）——
+      **真机**触摸路径仍未验收
 
 ## 4 与主稿的关系
 

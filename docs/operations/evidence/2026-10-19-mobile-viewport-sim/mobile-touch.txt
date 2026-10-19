@@ -1,0 +1,2 @@
+RESULT scenario=mobile_touch tier=web {"tapped_at":{"x":289,"y":407},"url_after_tap":"/battle?players=4&seed=42","interactive":true,"viewport":"{\"w\":390,\"h\":844,\"touch\":true}","console_errors":[]}
+NOTE 视口/触摸为 CDP 模拟，非真机；仅验证触摸事件可驱动应用进入对局。
