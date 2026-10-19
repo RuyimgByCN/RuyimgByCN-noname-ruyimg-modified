@@ -272,6 +272,7 @@ noname 的 `packages/extension` 当前只有 `.gitignore`，不另计扩展。
 | 112 | U05 古剑（食物牌） | `mizhilianou`（蜜汁藕） | **未验收**（登记）：**对照组**普通【桃】`Accepted`（夹具无问题）而**红桃非桃牌当桃 `Rejected(IllegalTargets)`** ⇒ **转化未实现** → 第 41 项；**食物族非归属效果抽样至此 9/9 全覆盖** | [gujian-mizhilianou](../operations/evidence/2026-10-19-nc08-upstream-gujian-mizhilianou/README.md) |
 | 113 | U05 古剑（装备牌） | `gjyuheng`（玉衡） | 1 点通过（含行为面），**未发现差异**：装备授予 `gj_yuheng_skill`；发动后 **1 号手牌 1→0、0 号 0→1** 且**那张黑桃牌确在 0 号手中**；`询问=[]` **印证**基准「确定性取首张黑桃」登记 | [gujian-gjyuheng](../operations/evidence/2026-10-19-nc08-upstream-gujian-gjyuheng/README.md) |
 | 114 | U05 古剑（**转换完整性核对**） | 上游 33 卡键 vs 包内 30 | **核对通过（口径已明确）**：上游 **33 键** = 包内 **30 个不同卡名** + **2 个玉衡升级变体**（`gjyuheng_plus`/`gjyuheng_pro`，基准记「**升级机制暂缓**」）+ **1 个占位 stub**（`yuheng`，仅 `fullskin`，**无 type/content** ⇒ 无玩法）⇒ **未转换项均有明确归类**，无遗漏 | [gujian-gjyuheng](../operations/evidence/2026-10-19-nc08-upstream-gujian-gjyuheng/README.md) |
+| 115 | **全包转换完整性筛选**（18 个已转换包） | 上游 `card.js` 含 `type` 的卡键 vs 包内卡名（前缀归一） | **筛选结果（工具性，非判定）**：**0 未匹配**＝`huanle`（6/6）、`shahai-yunchou`（11/10）；**已知归类**＝`shahai-gujian`（3：2 升级变体 + 1 stub）；**待逐名核对**＝`shahai-hearth`（`shihuawuqi`）、`wudian`（`diaobingqianjiang`）、`shahai-swd`（29）、`shahai-gwent`（43）；**8 包上游未定位**（`upstream_path` 下无 `card.js`） | 见下「方法与注意」 |
 
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
@@ -322,3 +323,20 @@ diff -u docs/migration/evidence/2026-09-23-extension-scope/inventory.json /tmp/n
 [第 18 轮证据](../operations/evidence/2026-09-23-native-review-18/README.md) 记录 cardpile 数据型纵向样本：转换产物可发现/导入，`g1_cardpile_vertical_install_enable_newgame_saverestore` 贯通建局与保存恢复；该样本不含扩展机器载荷。后续 G1 已交付多项内置宿主行为与选择续行，但通用独立新规则/SDK 仍未验收，不能沿用当轮“规则宿主无交付”的现状描述。**archive/upstream 原始旧目录未改动，仍不可直接作为原生包导入**。早期 235 项原型证据仍见 [历史记录](../operations/evidence/2026-09-23-extension-status/README.md)。
 本轮是入口、关键实现、混合能力、目录/资源及现有宿主边界核查；未逐技能解析所有 JS，也未执行浏览器/联机/平台验收。
 旧 [upstream 清点](upstream-noname-inventory.md) 和 [ruyimg 清点](ruyimg-extensions-inventory.md) 保留历史证据，但其“非内容不可迁移/全部完成”不再决定本任务范围。
+
+### 转换完整性筛选：方法与注意（2026-10-19，台账第 115 行）
+
+**方法**：对每个 `packages/extensions/*/assets/cards.json`，取其 `upstream_path`，在
+**同名 `card.js`** 中提取「**紧邻 400 字符内出现 `type:`**」的顶层键（＝**卡定义**，排除
+`skill.js` 的技能/子技与 `config`/`files` 等非卡条目），与包内卡名（**剥离 `swd_`/`gw_`/`gj_`/
+`ycn_`/`wd_`/`hl_`/`xz_`/`ow_` 前缀后**）比对。
+
+**注意（三条，缺一即会误判）**：
+
+1. **名称前缀**：包内卡名常带来源前缀（`swd_`/`gw_`…），**不归一化会把整包误判为未转换**；
+2. **多文件上游**：部分来源的卡定义分散在多个文件或使用不同缩进 ⇒ 单读 `card.js` 会**漏键**
+   （`shahai-swd` 出现「包内 90 > 上游 79」即为此类）；
+3. **未定位包**：8 个包的 `upstream_path` 下**无 `card.js`** ⇒ 本筛选**不覆盖**它们（≠ 未转换）。
+
+**结论**：本筛选是**发现候选缺口**的工具；每个「未匹配」键**须逐名核对**（对照
+`translate.js` 与包内卡名）后才能判定，**不得**直接记为未转换。
