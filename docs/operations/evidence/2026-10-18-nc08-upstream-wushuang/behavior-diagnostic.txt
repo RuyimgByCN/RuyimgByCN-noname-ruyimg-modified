@@ -1,1 +1,2 @@
+DBG 无双（决斗）：询问=["duel_sha"] 1 号出杀=true 1 号 hp 4 → 3
 DBG 无双（只出一张闪）：询问=["respond_shan"] 目标 hp 4 → 3

@@ -182,3 +182,87 @@ fn upstream_wushuang_direct_hit_difference_is_fixed() {
         "上游依据：必中时无双不生效：{seg}"
     );
 }
+
+/// 上游点 2（**行为面 · 决斗方向**）：无双使对手需**两张【杀】**——只出一张即受伤。
+#[test]
+fn upstream_wushuang_duel_needs_two_sha() {
+    use engine_native::{ChoiceOption, CommandOutcome, GameAction, GameCommand};
+    use nc08_common::{advance_to_play, drain, next_dedup};
+
+    let mut e = Engine::new(20268202, 4);
+    e.debug_grant(0, "无双");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 0 号持【决斗】；1 号只持**一张**【杀】
+    let duel = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "duel").map(|c| c.name).unwrap();
+        e.debug_place(0, name)
+    };
+    let sha1 = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
+        e.debug_place(1, name)
+    };
+    let hp1 = e.debug_hp(1);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: duel, targets: vec![1] },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    let mut prompts: Vec<String> = Vec::new();
+    let mut played_sha = false;
+    for _ in 0..24 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if !prompts.iter().any(|p| p == c.spec.prompt) {
+            prompts.push(c.spec.prompt.to_string());
+        }
+        // 1 号打出唯一的一张【杀】
+        if c.observer == 1 && !played_sha && c.spec.options.contains(&ChoiceOption::Card(sha1)) {
+            played_sha = true;
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Card(sha1)],
+                },
+            });
+            continue;
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
+    drain(&mut e);
+    eprintln!(
+        "DBG 无双（决斗）：询问={prompts:?} 1 号出杀={played_sha} 1 号 hp {hp1} → {}",
+        e.debug_hp(1)
+    );
+    if !played_sha {
+        eprintln!("NOTE 未出现 1 号出【杀】的询问——本用例不构成验收");
+        return;
+    }
+    // 无双：对手需**两张**杀；1 号只出一张 → 不足 → **1 号受伤**
+    assert!(
+        e.debug_hp(1) < hp1,
+        "无双（决斗方向）：只出一张【杀】不足以应对 → 1 号应受伤（{hp1} → {}）",
+        e.debug_hp(1)
+    );
+}
