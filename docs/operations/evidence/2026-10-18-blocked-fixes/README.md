@@ -868,12 +868,26 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 1. **名称探测（5 个候选）**：`heilonglinpian` / `gj_heilonglinpian` / `gj:heilonglinpian` /
    `host:heilonglinpian` / `heilonglinpian_skill` → **命中集合为空**（`候选命中=[]`）；
-2. **全库 grep**：`grep -rli heilonglinpian crates/engine-native/src/` **仅**命中
+2. **全库 grep（按卡名）**：`grep -rli heilonglinpian crates/engine-native/src/` **仅**命中
    `archive/card_codes.rs`、`content/host/constants.rs`（**键常量**）、`catalog.rs`、
-   `engine/play_card.rs`（**目标校验**）、`engine/snapshot.rs` —— **`content/host/` 下无该临时技的
-   行为/键/步进**。
+   `engine/play_card.rs`（**目标校验**）、`engine/snapshot.rs`；
+3. **源码级自述（决定性）**：该卡的**行为枚举名为 `HostBehavior::JiguanHeilongCard`**
+   （`kernel/intrinsic.rs:417` 映射；实现在 `content/host/step/jiguan.rs:352`），其代码为：
 
-⇒ **临时技未实现**（亦无到期移除路径）—— **非「名称不匹配」**（已用多候选名排除）。
+   ```rust
+   HostBehavior::JiguanHeilongCard => {
+       // 获得 1 点护甲（登记差异：防御距离 +1 临时技暂缓）
+       ctx.change_hujia(self.owner, 1);
+   ```
+
+   ⇒ **原生自己登记了该差异**：临时技的**具体效果是「防御距离 +1」**，状态为**「暂缓」**（未实现）。
+
+⇒ **临时技未实现**（亦无到期移除路径）—— **非「名称不匹配」**（已用多候选名排除，
+且已定位到行为实现本身）。
+
+**教训（命名陷阱）**：行为枚举名可能与卡名**不同**（`JiguanHeilongCard` vs `heilonglinpian`）⇒
+**按卡名 grep 会漏**；应改按**行为枚举名**或**键常量**检索（与样本 99 玉女元神的
+`*_LISTENER_KEY` 同源教训）。
 
 **修法**：实现该临时技（授予 + 效果 + 至**自己回合开始**移除），并确认其与护甲 +1 的**先后关系**。
 

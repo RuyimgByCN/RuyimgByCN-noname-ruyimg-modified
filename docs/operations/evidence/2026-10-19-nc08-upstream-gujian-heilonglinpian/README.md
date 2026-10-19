@@ -26,13 +26,13 @@ heilonglinpian: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 2 | `target.changeHujia()` | **行为面**：使用者**护甲 0 → 1** | 通过 |
-| 2 | `addTempSkill("heilonglinpian", …)` | **双重确认未授予**：①**5 个候选名探测**（`heilonglinpian`/`gj_heilonglinpian`/`gj:heilonglinpian`/`host:heilonglinpian`/`heilonglinpian_skill`）**命中集合为空**；②**全库 grep** 仅命中 `card_codes`/`constants`（键）/`catalog`/`play_card`（目标校验）/`snapshot`——**`content/host/` 下无行为/键/步进** ⇒ **非名称不匹配**（护甲 +1 已生效，由其它路径完成） | **待修（第 40 项）** |
+| 2 | `addTempSkill("heilonglinpian", …)`（**防御距离 +1**） | **未实现（源码级自述）**：行为枚举名为 **`HostBehavior::JiguanHeilongCard`**（`intrinsic.rs:417`；实现 `step/jiguan.rs:352`），其代码注释即 **「获得 1 点护甲（登记差异：防御距离 +1 临时技暂缓）」** ⇒ **原生自己登记**该差异（**暂缓** = 未实现）；配合 5 候选名探测为空 | **待修（第 40 项）** |
 
 **原生实现引用**：`content/host/constants.rs:84`（`GJ_HEILONGLINPIAN_CARD_KEY = "gj:heilonglinpian"`）。
 
 ## 3 未完成 / 待办
 
-- [ ] **临时技**：源码层面未见对应行为（疑未授予）→ 并入修复清单第 40 项
+- [x] **临时技**：已定位到行为实现（`JiguanHeilongCard`），**源码注释自述「登记差异：防御距离 +1 临时技暂缓」** → 修复清单第 40 项（**已确定**）
 - [ ] 临时技的**到期移除**（至自己回合开始，需跨回合驱动）
 - [ ] `modTarget` 的额外影响面
 - [ ] 古剑包其余卡牌
