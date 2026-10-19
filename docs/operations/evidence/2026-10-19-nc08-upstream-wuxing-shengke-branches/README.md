@@ -33,7 +33,17 @@
 2. **`wunature` 设置未生效**：用例经 `state_core_mut()` 直写，可能被其它路径覆盖；
 3. **被卡自身效果掩盖**：所选牌的自身效果即为「目标弃 1」，与「被克」同向。
 
-**修法（先诊断后修）**：①确认该卡是否声明 `ShengkeCheck`；②改用**自身无弃/摸效果**的有属性牌
-（如纯伤害或纯摸牌锦囊）；③必要时增加 `debug_set_wunature` 类钩子以保证设置生效。
+**同日诊断收窄（三个事实已核对）**：
+
+1. **触发条件逐条成立**：`filtering/common.rs:539` 的过滤为
+   `CardUsed(u) if u.targets.contains(&owner) && card_natures.contains_key(&u.card) && player(owner).wunature.is_some()`
+   —— 本用例**三项均满足**；
+2. **声明面存在**：包数据 `wuxing-upstream-liuli/assets/cards.json` **含 `shengke` 声明**；`keys.rs:853` 映射 `host:shengke_check`；
+3. **`init_hook` 已生效**：样本 141 实测**牌属性表 38 条 = 牌堆 114/3**。
+
+⇒ 剩余候选：**宿主技实例是否挂到「该牌/该角色」**、**`ShengkeCheck` 机器是否被 `CardUsed` 实际驱动**。
+
+**修法（先诊断后修）**：①核对宿主技实例的挂载对象；②改用**自身无弃/摸效果**的有属性牌；
+③必要时增加 `debug_set_wunature` 类钩子。
 
 **验收**：本用例（当前 `#[ignore]`）应能断言三支分别为 **−1 / +1 / 0**。

@@ -1125,8 +1125,19 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 与上游九条生克规则**逐条一致**；`skills_status.rs:680` 的 `ShengkeCheck` 实现「被克弃一张 / 被生摸一张」；
 `construction.rs:431` 角色开局随机属性。
 
-**诊断候选**：①**生克未接入该卡**（`ShengkeCheck` 需由**宿主技声明**挂到具体牌）②`wunature` 直写未生效
+**诊断候选（同日收窄）**：①**生克未接入该卡**（`ShengkeCheck` 需由**宿主技声明**挂到具体牌）②`wunature` 直写未生效
 ③**被卡自身效果掩盖**（所选牌自身即「目标弃 1」，与「被克」同向）。
+
+**同日诊断收窄（已核对的三个事实）**：
+
+1. **触发条件逐条成立**：`filtering/common.rs:539` 的 `ShengkeCheck` 过滤为
+   `EventData::CardUsed(u) if u.targets.contains(&owner) && card_natures.contains_key(&u.card) && player(owner).wunature.is_some()`
+   —— 本用例三项**均满足**（目标含 1 号、牌有属性、1 号属性已设）；
+2. **声明面存在**：`packages/extensions/wuxing-upstream-liuli/assets/cards.json` **确实含 `shengke` 声明**，
+   且 `keys.rs:853` 映射 `host:shengke_check`；
+3. **`init_hook` 已生效**：样本 141 实测**牌属性表 38 条**（= 牌堆 114/3）⇒ 属性赋予链路**正常**。
+
+⇒ 剩余候选收窄为：**宿主技实例是否挂到「该牌/该角色」**、以及 **`ShengkeCheck` 机器是否被 `CardUsed` 实际驱动**。
 
 **修法（先诊断后修）**：①确认该卡是否声明 `ShengkeCheck`；②改用**自身无弃/摸效果**的有属性牌；
 ③必要时增加 `debug_set_wunature` 类钩子。
