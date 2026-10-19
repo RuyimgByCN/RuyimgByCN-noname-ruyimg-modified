@@ -265,7 +265,20 @@ if !core.player(core.turn.current).hand.contains(&card) {
 `ctx.core.is_lord(self.target)`，而 `state.rs` 的 `is_lord` 在**非身份局返回 `true`**
 （`match self.identity_roles() { Some(roles) => …, None => true }`）→ **原型/单挑模式下护驾可发动**。
 
-**修法**：`hujia_active` 改为「**身份局且为主公**」判定（或为 `is_lord` 增加「须身份局」的调用口径），
-并核对其它使用 `is_lord` 的技能是否同样受影响（**建议全库排查**）。
+**全库排查结果（同轮完成，`grep -rn is_lord crates/engine-native/src/` → 定义 1 处 + 调用 4 处）**：
 
-**验收**：新增「原型模式下护驾不可发动」的行为用例；身份局主公用例保持通过。
+| 调用点 | 技能/机制 | 是否主公技语义 | 是否受影响 |
+|---|---|---|---|
+| `kernel/sha.rs:300` | `hujia` 护驾 | 是（上游 `zhuSkill`） | **是**（本项） |
+| `content/standard/skills/jijiang.rs:29` | `jijiang` 激将 | 是（注释明写「**身份局须主公身份**」，但实现用 `is_lord`） | **是** |
+| `content/standard/skills/wang_zun.rs:46` | `wang_zun` 王尊 | 是（摸牌加成随主公资格） | **是** |
+| `kernel/dying.rs:167` | `jiuyuan` 救援 | 是（孙权主公技，吴势力他人代桃） | **是** |
+
+→ **4 处调用全部为主公技语义**，因此 `is_lord` 的「非身份局返回 true」使**四处均在原型/单挑模式下越权可用** ✗
+（**同一根因、四个症状**）。
+
+**修法（建议改在根因处）**：为「主公技资格」引入**独立判定**（如 `has_zhu_skill(p)` =
+`identity_roles().is_some() && is_lord(p)`），并把上述 4 处调用改到该判定；
+**不要**直接改 `is_lord` 的语义（`state.rs:1124` 的 `None => true` 可能被非主公技路径依赖——改动前需核对）。
+
+**验收**：为四处各补「**原型模式下不可发动/不生效**」的行为用例；身份局主公用例保持通过。
