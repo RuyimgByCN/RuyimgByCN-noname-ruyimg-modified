@@ -1,0 +1,2 @@
+DBG 突袭：基线 hand=6 持技 hand=6（发动前 6）picked=true
+NOTE 突袭取牌落地未验收：hand 6 → 6（picked=true）
