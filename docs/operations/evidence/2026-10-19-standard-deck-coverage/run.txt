@@ -1,0 +1,2 @@
+DBG 标准牌组：目录 124 张实例、覆盖 34 个不同 kind
+DBG 有实现但**牌组无实例**的 kind（27 个）：["Guohe", "Shunshou", "Juedou", "Nanman", "Wanjian", "Wuxie", "LeBu", "Shandian", "Bingliang", "Hufu", "Tianxianjiu", "Caoyao", "Liuxinghuoyu", "Chilongya", "Xixueguizhihuan", "Guiyoujie", "Shentoumianju", "Xingjunyan", "Qinglonglingzhu", "Zhufangshenshi", "Fengxueren", "Yufulu", "Yangpijuan", "Daihuofenglun", "Xiayuncailing", "Langeguaiyi", "Jiguan"]
