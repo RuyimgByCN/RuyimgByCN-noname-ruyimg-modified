@@ -5272,3 +5272,40 @@ Judge  Draw  Play  Discard  End
 
 **我此前把 `Phase` 当成「完整覆盖阶段」** ❌ —— **实际缺「准备阶段」** ✅
 ⇒ **任何「按阶段」的分析，都必须先核「枚举是否覆盖全部阶段」** ✅
+
+### L10 史诗卡牌 · `reguhuo`（蛊惑）差异族（2026-10-19，第 679 轮）
+
+**上游**：`noname-liuli/noname/extension/史诗卡牌/extension.js:297`
+
+```js
+lib.skill.reguhuo = {
+  enable: ['chooseToUse', 'chooseToRespond'],      // 出牌 + 响应
+  filter: 手牌非空 且 未持有 reguhuo_phase,
+  chooseButton: 「蛊惑」— 任意基本/锦囊牌名,
+  // 用后加 reguhuo_phase 标记（本回合不可再用）
+  hiddenCard: 告诉 AI 可当任意基本/锦囊
+}
+```
+
+**原生**：`step/skills_cards.rs:416` + `activation/common.rs:50`
+
+```rust
+HostStage::Act          → 选一张手牌
+HostStage::SelectCard   → 声明牌名（reguhuo_kind_options）
+HostStage::SelectNature → 选目标 → 转化使用
+// activation 门槛：出牌阶段 && 当前回合是 owner && 手牌非空
+```
+
+| # | 面 | 上游 | 原生 | 判定 |
+|---:|---|---|---|---|
+| 1 | **使用时机** | **`chooseToUse` + `chooseToRespond`** | **仅出牌阶段主动（无响应面）** | ⚠️ **响应面缺失** |
+| 2 | **每回合一次** | **`reguhuo_phase` 标记** | **注释写「每回合一次」**，但 **`reguhuo_phase` 在 Rust 里零命中** | ❓ **实现方式不明**（**未追到**）|
+| 3 | **可声明牌名** | 任意基本/锦囊（`chooseButton`） | `reguhuo_kind_options()` 枚举 | ✅ **一致**（**逐个核对未做**）|
+| 4 | **AI 提示** | `hiddenCard` | —— | ⚠️ **无对应**（**属 AI 面**）|
+
+### 结论
+
+**`reguhuo` 是「已实现但不完整」**：**核心流程有**、**响应面与 AI 面缺** ⚠️
+⇒ **`L10` 的差异族现在覆盖 2/2**（`rangjie` ✅ + `reguhuo` ⚠️）
+⇒ **但 #1/#2 是两处未收口** ⇒ **`L10` 仍不能签「已对照且可接受」** ❗
+⇒ **要签它，需要先把 #1（响应面）与 #2（每回合一次的实现）查清** ✅
