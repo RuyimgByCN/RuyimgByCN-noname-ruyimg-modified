@@ -815,6 +815,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 550 轮**：**U05-SWD v1：16/16 完整**（台账第 211 行）——改用「**按分支切片**」+ **扫全部 metadata 文件** ✓ ⇒ 可信的 16 行：**8 一致 ✅**（含 **`moyan` 由 v0 的 `CardUsed` 修正为 `None`** ✓）、**6 需判定 ⚠️**（**粒度 2**：`huanxing_state`/`xuanyuanjian3`；**`hxunzhi2`：上游 `phaseUseEnd` ⇒ 原生 `None`** —— **根本没有触发** ✗，**比 v0 记的 `PhaseEnd` 更严重** ✓；`jifeng` **缺「指定目标前」档**；`swd_xiuluo` **准备阶段 vs 阶段开始**；`miedao` 上游无 ⇒ 原生 `PhaseBegin`）、**2 上游未取/无定义 ❓**（`tianxiang2` 在上游 `character/shenhua/skill.js`、`xuanyuanjian2` **上游只有 translate 无定义** ✓）；**最可疑：`hxunzhi2`** ✓；**并用注释交叉验证了 `Hxunzhi2`/`Jifeng`/`Moyan` 三条** ✓。
 >
+> **第 551 轮**：**`hxunzhi2` 定案 = 未实现（占位禁用）**（U05-SWD v2，台账第 211 行更新）——上游：「`phaseUseEnd` ⇒ 移除 `xunzhi2` + **`player.die()`（自身死亡）**」✓；**原生三处都不动作**：**filter 恒 `false`**（`filtering/common.rs:78`）✗、**step `Flow::Done`**（`step/skills_status.rs:642`）✗、**meta `None`**（`metadata/common.rs:408`）✗ ⇒ **即使事件发生也不会执行** ✓；**性质**：**未实现（占位禁用）** ✓ —— **既不是粒度差异，也不是内联实现** ✓，**与 `cangchizhibi` 的「转换缺口」同类** ✓；**可能原因**：上游含 **`player.die()`** ✓，**宿主是否允许「技能致死不进濒死询问」未证实** ✗（未查）；**处置**：**登记为待实现** ✓；⇒ **U05-SWD v2：8 一致 / 5 需判定 / 2 上游未取 / 1 未实现** ✓。
+>
+
 
 
 

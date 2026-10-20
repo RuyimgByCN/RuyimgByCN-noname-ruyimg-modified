@@ -4311,3 +4311,37 @@ HostBehavior::XianjianAnwugu2 => match self.stage {
 **最可疑**：**`hxunzhi2`**（上游 `phaseUseEnd`，**原生 `None`**）—— **不是粒度问题，是根本没有触发** ⚠️。
 
 **方法（本轮修正）**：**按分支切片** + **扫全部 metadata 文件**；并用**注释交叉验证**了 `Hxunzhi2`/`Jifeng`/`Moyan` 三条 ✅。
+
+### U05-SWD **v2**：`hxunzhi2` 定案 —— **未实现（占位禁用）**（同日）
+
+**上游**（`character/swd/skill.js`）：
+
+```js
+hxunzhi2: {
+  trigger: { player: "phaseUseEnd" }, forced: true, popup: false,
+  content() { player.removeSkill("xunzhi2"); player.die(); },
+}
+```
+
+⇒ 上游语义：**出牌阶段结束时 ⇒ 移除 `xunzhi2` + 自身死亡**（**自杀式**）。
+
+**原生**（三处均为「不动作」）：
+
+| 面 | 代码 | 含义 |
+|---|---|---|
+| filter | `filtering/common.rs:78` → **`HostBehavior::Hxunzhi2 => false`** | **filter 恒 false** ❗ |
+| step | `step/skills_status.rs:642` → **`Flow::Done`** | 无步骤机 |
+| 触发元数据 | `metadata/common.rs:408` → **`None`** | 无触发 |
+
+⇒ **`hxunzhi2` 是「有键、有 filter 但恒 false」的占位** —— **即使事件发生也不会执行** ✅（**判定确定**）
+
+#### 结论
+
+| 项 | 判定 |
+|---|---|
+| 性质 | **未实现（占位禁用）**，**不是粒度差异、不是内联实现** |
+| 与谁同类 | `upstream_cangchizhibi_target_discards` 的「**转换缺口**」一类 |
+| 可能的原因 | 上游效果含 **`player.die()`（强制死亡）**；宿主是否允许技能自杀未证实（**未查**）|
+| 处置 | **登记为待实现**（**需宿主支持「技能致死不进濒死询问」** 或明确的近似口径）|
+
+⇒ **U05-SWD v2**：**8 一致 ✅ / 5 需判定 ⚠️ / 2 上游未取 ❓ / 1 未实现 ❗**
