@@ -1,7 +1,7 @@
 # 本会话（第 400–508 轮）**交接索引**（2026-10-19）
 
 > 目的：让接手者**不必重读全部进度主稿**就能知道「新增了什么、推翻了什么、还差什么」。
-> 完整流水见[进度主稿](../../architecture/native-progress.md)；台账见[上游扩展台账](../../migration/upstream-extension-reconstruction.md)。
+> 完整流水见[进度主稿](../../../architecture/native-progress.md)；台账见[上游扩展台账](../../../migration/upstream-extension-reconstruction.md)。
 > 原始提交清单：[commits.txt](commits.txt)（最近 60 条）。
 
 ## 1 新增的**可复用工具**
@@ -103,7 +103,7 @@
 
 | # | 决策点 | 现状 | 影响 |
 |---|---|---|---|
-| **D1** | **U05-XJ 的 8 条「结束后」时机差异是否接受** | 22 条已全部归类：**13 条无问题、8 条引擎粒度不足、0 条未判**（[基准](../2026-10-19-dsl-gap/../../architecture/native-rules-baseline.md)）| 接受 ⇒ 该来源「规则差异」可签署（**5/32 → 6/32**）；不接受 ⇒ 需升级 `EventKind`（**要改未跟踪的 `kernel/events.rs`**）|
+| **D1** | **U05-XJ 的 8 条「结束后」时机差异是否接受** | 22 条已全部归类：**13 条无问题、8 条引擎粒度不足、0 条未判**（[基准](../2026-10-19-rules-diff-handover/README.md)）| 接受 ⇒ 该来源「规则差异」可签署（**5/32 → 6/32**）；不接受 ⇒ 需升级 `EventKind`（**要改未跟踪的 `kernel/events.rs`**）|
 | **D2** | **`nc04_pause_and_resume` 的 DSL 选择语句关键字** | 用例 `#[ignore]`，文案「关键字待确认后补挂起→续跑→故障覆盖」 | 决定 NC04 覆盖能否完成 |
 
 ### 7.2 需要**放开未跟踪文件**（核心阻塞，1 类 4 处）
