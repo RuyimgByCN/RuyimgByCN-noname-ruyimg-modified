@@ -114,6 +114,30 @@
 | **U08 英雄杀** | `yxs_fanji`/`yxs_fanji2`/`yxs_menshen`/`yxs_menshen2`/`yxs_menshen3` | ✅ **5 个都有 `TriggerMeta` + 步骤机 + ABI tag** | 包内 **`generals = 0`**，**全库 41 包无武将授予它们** | 迁移 **43 条武将**，或支持「卡牌/装备授予宿主技能」 |
 | **U05-Gwent** | `gwent_birin_state`/`gwent_cigu_state`/`gwent_qinpen_state` | ✅ 3 个都有 filter + keys 映射 | 包内 **21 张卡、0 张带 `skills`、无 `skills[]`**；**全库除 `keys.rs` 外零引用** | 迁移 **gwent 的 74 个技能定义对应的武将**，或支持卡牌授技 |
 
+### 4.4.1 **更广的一层：宿主键可达性扫描**（520 键）
+
+用 `scripts/host_key_reachability.py` 扫全库（详见[可达性证据](../2026-10-19-host-reachability/README.md)）：
+
+```
+宿主键 520；包引用 370；host.rs 声明 56；并集 426；仍无引用 94（上界）
+```
+
+**三条挂载路径**（缺一不可）：
+1. **包数据 JSON**（`skills[].mapping` / `generals[].skills[].mapping`）—— **370**；
+2. **`content/host.rs` 的 `CardKind → HostSkillDecl` 表** —— **56**（**漏查这条会把 150 误报，已更正到 94**）；
+3. **运行时授予** —— **必经 `catalog.skill_by_name`** ⇒ **不进目录就授不了**（`support.rs:1020`）。
+
+**94 条的处置分类**：
+
+| 类 | 条数 | 例 | 处置 |
+|---|---:|---|---|
+| **确认可删** | **2** | `huanren*`（**两侧上游都无**）| ✅ 删键 |
+| **应挂卡牌** | **8** | `jiguan_*`（**上游在 `card/swd.js`**，属卡牌效果）| **挂 `CardKind`/`cards[].skills`** |
+| **未转换来源** | **2** | `baiyi*`（**tw 包 / AI优化**）| **等 G1 迁移** |
+| **待查** | **82** | `swd` 22 / `gwent` 10 / `hearth` 7 / `gujian` 6 / 38 个单条 | **补声明 / 挂卡牌 / 建包**，逐条判定 |
+
+**已实测**：**抽查 6 条均不在 `catalog.skills`**（用例 `nc08_dead_host_keys`）✅
+
 ### 为什么单列一类
 
 | 如果归入… | 后果 |
