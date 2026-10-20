@@ -94,8 +94,27 @@ EventData::Phase { player, phase, timing: PhaseTiming }
 **上游**：`趁火打劫` 用 `damageEnd`（**伤害结算完成后**），原生**窗口未出现**。
 **现状**：`EventKind::Damage` 是「伤害发生」后，但**可能早于「伤害结算完成」**（如濒死插入）。
 
-**建议**：**明确 `Damage` 与「结算完成」的边界**，或新增 `DamageResolved`。
-**这一条需要先确认语义**（**不是纯加枚举**）⚠️
+### ✅ 已查（第 703 轮）：`Dying` 是**内联**发射的 ⇒ `Damage` 确实早于「结算完成」
+
+`crates/engine-native/src/kernel/damage.rs:977-987`：
+
+```rust
+// 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
+let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
+if entering {
+    ctx.core.player_mut(d.target).dying = true;
+    ctx.log(LogEvent::DyingEntered { player: d.target });
+    ctx.emit(EventData::Dying { player: d.target, source: d.source });   // ← 内联
+}
+// 铁索连环传导：属性伤害结算后…
+```
+
+⇒ **濒死是在「伤害结算函数的中途」内联发射的**，**不是独立阶段** ✅
+⇒ **所以 `EventKind::Damage` 若在此之前发射，就必然早于「濒死救援完成」** ❗
+⇒ **「`damageEnd`（全部结算完成后）」这一档确实不存在** ⚠️
+
+**建议**：**新增 `EventKind::DamageResolved`**，在**濒死处理与铁索传导之后**发射，用于覆盖 `damageEnd`。
+⇒ **批 B 第 1 问已回答：需要新档位，不是语义澄清** ✅
 
 ### 7.3 嵌套结算（虚拟杀在水攻内发起被丢弃）—— **覆盖 1 条**
 
