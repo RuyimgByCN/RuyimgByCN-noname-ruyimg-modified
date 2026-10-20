@@ -182,12 +182,12 @@
 
 | 序 | 缺陷 | 条数 | 改哪里 | 成本 | 备注 |
 |---:|---|---:|---|---|---|
-| **1** | **G14：`phaseBegin` ⇒ `Phase::Judge`** | **8** | **新增「任意阶段开始」的 filter 表达**（或 `EventKind::PhaseBeginAny`），**8 个 filter 各改一行** | **小-中** | **一次修 8 条**，**收益最大** ✅ |
+| **1** | **G14：`phaseBegin` ⇒ `Phase::Judge`** | **8** | **照 `SwdJinlin2` 的现成写法**：`EventData::Phase { player, begin: true, .. }`（**省略 `phase`**），**8 个 filter 各改一个 pattern** | **小** ✅ | **范本已核**（`jinlin2` 上游也是 `phaseBegin`）；**一次修 8 条** |
 | **2** | **G16：`GujianFoodTanhuadong` 阶段不同** | **1** | `filtering` 里 `Phase::Play, begin=false` ⇒ **`Phase::End`** | **1 行** | 最小 ✅ |
 | **3** | **`swd_xiuluo` 阶段错位** | **1** | `filtering/common.rs:219` 的 **`Phase::Judge` ⇒ 准备阶段** | **1 行** | 最小 ✅ |
 | **4** | **`huajin2` 完全错位** | **1** | `filtering/swd.rs` 的 **`Phase::Judge` ⇒ `damageBegin`（`EventKind::DamageBefore`）** | **1 行** | **技能目前完全不生效** ❗ |
 | **5** | **`hlss_fengqi` 多值触发** | **1** | `filtering` 改回**多值**（`extra_events` 或两组 filter）| **1 处** | 上游 `[准备, 结束]` |
-| **6** | **`miedao` 缺多摸** | **1** | **`filtering` 加 `Phase::Draw` 分支 + `step` 加 `draw_num += maxHp - hp`** | **2 处** | 与 `miedao2` 对称 |
+| **6** | **`miedao` 缺多摸** | **1** | **`filtering` 加 `Phase::Draw` 分支 + `step` 加 `draw_num += maxHp - hp`**；**`Phase::Draw` 的 filter 写法有 5 处现成范本**（`SwdReyingzi`/`YunchouXiongzi`/`XianjianZhaoyao` 等）✅ | **2 处** | 与 `miedao2` 对称；**范本齐全** |
 | **7** | **G15：`before`/`after`/`Begin2` 缺档** | **≥5** | **新增「阶段之前/之后/第二次」档**（或 `EventKind` 扩展）| **中** | **需设计**，非修补 ⚠️ |
 | **8** | **`ziyu` 触发→主动** | **1** | **改回 `global: phaseEnd` 触发式**（`direct` 自动）| **中** | 与 `wudian_ziyu` 的 `End begin=true` **并存需一并理清** ❓ |
 | **9** | **`baiyi` 主动→触发** | **1** | **改成 `enable` 主动技**（去掉 `Phase::Judge`）| **中** | 上游只有 `enable` |

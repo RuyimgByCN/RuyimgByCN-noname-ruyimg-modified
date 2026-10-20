@@ -963,6 +963,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 614 轮**：**先例的可靠性已核**——读上游 **`jinlin2`（332 B）：`trigger: { player: "phaseBegin" }`** ✓，**而原生 `SwdJinlin2` 用 `EventData::Phase { player, begin: true, .. }`（省略 phase）** ✓ ⇒ **两者一致** ✅ ⇒ **`SwdJinlin2` 是 G14 的「正确范本」** ✅；⇒ **8 条 G14 的修法 = 把各自 filter 改成 `SwdJinlin2` 那种写法** ✓（**而 `jinlin2` 恰不在 `Phase::Judge` 组** —— **它是「做对了的兄弟技能」** ✓）⇒ **批 1 的可行性、成本、验证三者齐备** ✅。
 >
+> **第 615 轮**：**§4.5 的修法栏改为「照现成范本」**——**G14（8 条）**：改法从「**新增表达（或 `EventKind::PhaseBeginAny`）**」✗ 改为「**照 `SwdJinlin2` 的 `EventData::Phase { player, begin: true, .. }`（省略 `phase`）**」✅（**范本已核**：**`jinlin2` 上游也是 `phaseBegin`** ✓）；**`miedao`（多摸）**：补注「**`Phase::Draw` 的 filter 写法有 5 处现成范本**」（`SwdReyingzi`/`YunchouXiongzi`/`XianjianZhaoyao` 等 ✓）✅；⇒ **批 1 与批 2 都不需要「设计」，只需要「对齐」** ✓。
+>
+
 
 
 
