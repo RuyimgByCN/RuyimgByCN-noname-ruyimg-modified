@@ -743,6 +743,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 513 轮（继续）**：**「待迁移技能量」收窄到 5**（台账第 194 行）——在 181 个「疑似规则」上加**效果原语过滤**（`\.(draw|damage|recover|loseHp|discardCards|gain|equip|judge)\(` 正项 + 15 个 UI/标记/动画/配置负项）：**仅 5 个**命中，**全部在 L11**（`dz_gs_yinfu` 300B `recover`、`boss_danshu` 368B `judge`+`recover`、`boss_xixing` 396B 选目标+雷伤、`polu_damage` 440B `draw`+找装备、`boss_tianyun` 728B 选目标+伤害）；**L08 0 / L12 0 / L25 0** —— L25 的 63 个抽样证明是 **`game.zuanExp(...)` 自建经验/成就系统** + `trigger.cancel()` 钩子（**不是牌局规则** ✗）；⇒ **待迁移量 179 → 181 → 5**（**收窄 36 倍** ✓）；**但 DSL 覆盖度仍未验证** ❗（如 `dz_gs_yinfu` 要「次数计数 + 移除技能」、`boss_xixing` 要「选目标 + 属性伤害」）⇒ **本轮未迁移任何技能**。
 >
+> **第 514 轮**：**DSL 原语缺口清单（9 个）**（台账第 195 行）——把 5 个真规则候选逐个对 DSL 词汇表比对：**全部至少缺 1 个原语** ⇒ **今天一个也写不成纯 DSL**；缺的**不是宿主逻辑**而是 **9 个基础原语**：`round`、`remove_skill`、`history_count`、**`judge`**、**`choose_target`**、`is_chained`、**`trigger.num`**、`card_pile_search`、`force_die`；**关键更正**：阻塞性质**不是**「需改未跟踪的 `kernel/**`」，而是「**DSL 缺原语**，而 `content-compiler`/`rule-vm` **都已跟踪**」⇒ **这部分本代理本来就能做** ✅；**最短路径**：先补 `judge` ⇒ `boss_danshu`（**只需 1 个原语**）；**本轮未实现任何原语**（只做缺口分析）。
+>
+
 
 
 
