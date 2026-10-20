@@ -1,0 +1,23 @@
+# 全量测试快照 2026-10-20T08:14:22Z
+HEAD: a55978d5
+engine-native=1532/0/21
+game-server=115/0/0
+rule-vm=15/0/0
+content-compiler=533/0/0
+content-native-loader=32/0/0
+content-schema=0/0/0
+---- 门禁
+Source line limit passed: 8479 files <= 2000 lines
+OK
+---- 我提交的未跟踪文件检查（应为空）
+?? content/original/ported/shahai/shahai_meta_gujian.skill
+?? content/original/ported/shahai/shahai_meta_gwent.skill
+?? content/original/ported/shahai/shahai_meta_hearth.skill
+?? content/original/ported/shahai/shahai_meta_mtg.skill
+?? content/original/ported/shahai/shahai_meta_ow.skill
+?? content/original/ported/shahai/shahai_meta_swd_characters.skill
+?? content/original/ported/shahai/shahai_meta_swd_combat_and_cards.skill
+?? content/original/ported/shahai/shahai_meta_xianjian.skill
+?? content/original/ported/shahai/shahai_meta_yunchou.skill
+?? crates/content-compiler/src/abi.rs
+(end)
