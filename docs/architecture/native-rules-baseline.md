@@ -5394,14 +5394,20 @@ step:   首次进入按 ctx.current_damage().amount 初始化剩余次数
 
 | # | 技能 | 上游 | 原生 | 判定 |
 |---:|---|---|---|---|
-| 1 | **`wuxing_shengke` 相克** | **`trigger: { target: 'useCardToBegin' }`** + `forced` + filter：**`event.card.wunature && player.wunature`** ⇒ **被指定为目标时**按五行相克结算 | **`HostBehavior::ShengkeCheck`**：`filtering/common.rs:539` 有内容、`metadata` 有 trigger meta、`step/skills_status.rs:680` 有效果、**`factory` 用 `EventData::CardUsed(u) => (None, Some(u.card))`** | ⚠️ **时机待核**：上游是 **`useCardToBegin`（指定目标时）**，原生拿的是 **`CardUsed`（使用后）** 的牌 ⇒ **需核 filter 实际匹配哪个事件** |
-| 2 | **`wuxingpan_skill` 改属性** | **`enable: 'phaseUse'`** + **`usable: 1`（每阶段一次）** + `filterCard` + **`lose: false`（不弃牌）** + 改变一张手牌五行属性 | **`activation/common.rs:259`**：**只检查 `hand.is_empty()`** | ⚠️ **次数限制待核**：**`usable: 1` 是否有对应实现**（**`reguhuo` 的 5b 是同类问题**）|
+| 1 | **`wuxing_shengke` 相克** | **`trigger: { target: 'useCardToBegin' }`** + `forced` + filter：**`event.card.wunature && player.wunature`** ⇒ **被指定为目标时**按五行相克结算 | **`HostBehavior::ShengkeCheck`**：`filtering/common.rs:539` 有内容、`metadata` 有 trigger meta、`step/skills_status.rs:680` 有效果、**`factory` 用 `EventData::CardUsed(u) => (None, Some(u.card))`** | ❗ **确认缺陷**：上游 `useCardToBegin`（**指定目标时**），原生 **`EventKind::CardUsed`**（**使用后**）⇒ **时机错位**（第 688 轮定案）|
+| 2 | **`wuxingpan_skill` 改属性** | **`enable: 'phaseUse'`** + **`usable: 1`（每阶段一次）** + `filterCard` + **`lose: false`（不弃牌）** + 改变一张手牌五行属性 | **`activation/common.rs:259`**：**只检查 `hand.is_empty()`** | ✅ **不是缺陷**：**`usable:1` 走命令层 `once_used`**（见 `activation/common.rs:739` 注释与既有 `XianjianXuanmo`）⇒ **次数限制由命令层处理** |
 
 ### 这两条都属于「同一类可疑」
 
 **①时机错位**（`useCardToBegin` vs `CardUsed`）—— 与 G14/G18 同族（**引擎缺少对应档位**）
 **②次数限制**（`usable: 1`）—— 与 `reguhuo` 的 5b 同族（**每阶段/每回合一次未实现**）
 
-⇒ **两条都记为「待核」，不记为确认缺陷** ✅
-⇒ **要定案需各读一次 `filtering/common.rs` 的完整臂 + `step` 的效果步** ⚠️
-⇒ **本轮未做**（**避免重犯「单点推断整条链」的错误** ✓）
+### 定案结果（第 688 轮）
+
+| # | 原判定 | 定案 | 依据 |
+|---:|---|---|---|
+| 1 | ⚠️ 时机待核 | ❗ **确认缺陷** | `filtering/common.rs:539` 用 **`EventKind::CardUsed`** + `metadata` 也写 `EventKind::CardUsed`；上游是 **`useCardToBegin`** ⇒ **在「使用后」而非「指定目标时」** |
+| 2 | ⚠️ 次数待核 | ✅ **不是缺陷** | **`usable:1` 走命令层 `once_used`**（`activation/common.rs:739` 注释明写；`XianjianXuanmo` 同例）|
+
+⇒ **`L06` 现在有 1 条确认缺陷**（`wuxing_shengke` 时机）⇒ **加入缺陷清单为第 17 条** ❗
+⇒ **`L06` 的另一个技能 `wuxingpan_skill` 无缺陷** ✅
