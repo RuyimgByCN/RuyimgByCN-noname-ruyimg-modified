@@ -5172,3 +5172,31 @@ shihuifen   qiankundai   zhufangshenshi   hslingjian_*_equip3_dist   hslingjian_
 
 **本条目只做了第 1 步（普查）** —— **第 2 步（抽样定模式）尚未做** ❗
 ⇒ **因此只能叫「新缺口类（待核）」，不能叫「112 条缺陷」** ✅
+
+### `mod` 面**第 2 步：抽样 5 条**（第 617 轮）
+
+从 `card/swd/skill.js`（**177 个定义**）里抽前 5 个带 `mod` 的：
+
+| 技能 | `mod` 内容 | 语义 | 原生对应 |
+|---|---|---|---|
+| `qiankundai`（94 B）| **`maxHandcard(player, num) ⇒ num + 1`** | **手牌上限 +1** | ❓ 未见 |
+| `zhufangshenshi`（216 B）| **`targetInRange(card, player, target, now)`** | **射程判定覆写** | ❓ 未见 |
+| **`hslingjian_xuanfengzhiren_equip3_dist`**（83 B）| **`globalTo(from,to,d): d + 1`** | **距离 +1** | ❗ **未见** |
+| **`hslingjian_xuanfengzhiren_equip4_dist`**（85 B）| **`globalFrom(from,to,d): d - 1`** | **距离 -1** | ❗ **未见** |
+| **`hslingjian_zhongxinghujia_equip3`**（116 B）| **`globalTo(...)`: 有装备则 +1** | **条件距离修正** | ❗ **未见** |
+
+### 原生侧
+
+- `content/host/` 里 **有 `computed_distance` 的「读」**（`filtering/swd.rs:92/207/229/241`、`filtering/xianjian.rs:40/138`）✅；
+- **但没有「改距离」的入口**（**`globalTo`/`globalFrom` 等价物**）❌。
+
+### 判定（**抽样级**）
+
+| 结论 | 状态 |
+|---|---|
+| **3/5 抽样是「距离修正」（`globalTo`/`globalFrom`）** | ✅ 事实 |
+| **原生只有「读距离」，没有「改距离」** | ✅ 事实（grep）|
+| **⇒ G17（`mod` 面距离修正缺失）成立** | ✅ **抽样级** |
+| **但「装备的距离修正」可能由装备系统另实现** | ❓ **未查** |
+
+**⇒ G17 记为「抽样成立、待全量」** ✅ —— **不记 112 条**。
