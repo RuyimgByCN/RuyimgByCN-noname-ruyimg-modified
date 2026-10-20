@@ -949,6 +949,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 607 轮**：**建「阶段过滤审计登记表」**（`docs/operations/evidence/2026-10-19-phase-audit/`）——**52 条全部列出**（**行为 / key / Phase / begin / 状态 / 依据** ✓），**状态：已核 36 / 不适用 4 / 未核 12** ✓（**此前记 35，因 `Miedao`+`Xiuluo` 计入 ⇒ 36** ✓）；**并写明「怎么用」四步**（**①筛未核 ②按 key 到 `skills[].mapping` 反查上游名 ③读上游 `trigger` ④比对后改状态** ✓）—— **第 2 步是本会话踩过的坑**（**跳过会白查** ✓）；**边界**：**「已核」不等于「无问题」**（**含「需判定」** ✓），**本表只记「有没有比对过」** ✓。
 >
+> **第 608 轮**：**剩余 12 条核完（已核 36→45，86%）**——用「`skills[].mapping` 反查」✓，**12 条里 9 条一次成功**：**6 条一致** ✅（`lingquan`/`longhuo`/`shenwu`/`xjzhimeng`/`shuiyun`/`xiyang`/`owliyong` 的 `phaseEnd`/`phaseDrawBegin` ✓）、**1 条 G15**（`fenglue` `phaseUseBefore` ✓）、**1 条 G14 新成员** ❗（**`wudian_geju` = `geju`，上游 `player: phaseBegin` ⇒ 原生 `Phase::Judge`** ✓ ⇒ **G14 扩到 8 条** ✓）、**2 条未定位**（`hlss_fengqi`/`zaibian` ✓）、**1 条不适用**（`gujian_food_xiajiao` **无 mapping** ✓）；⇒ **52 处最终账：已核 45 / 不适用 5 / 未核 2 = 52** ✓（**86% 已比对** ✓）；**registry.txt 状态已同步** ✓。
+>
+
 
 
 

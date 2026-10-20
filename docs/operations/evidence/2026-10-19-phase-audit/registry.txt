@@ -10,17 +10,17 @@ SwdZhenjiu2	zhenjiu2	Judge	true	已核	基准对应章节
 SwdHuanxing	huanxing	Judge	true	已核	基准对应章节
 SwdHuajin2	huajin2	Judge	true	已核	基准对应章节
 XianjianChangnian2	xj_changnian2	End	false	已核	基准对应章节
-XianjianFenglue	xj_fenglue	Play	true	未核	
+XianjianFenglue	xj_fenglue	Play	true	已核	v607 反查比对
 XianjianHusha	xj_husha	End	false	已核	基准对应章节
 XianjianLiguang	xj_liguang	End	false	已核	基准对应章节
 XianjianLinghuo	xj_linghuo	End	false	已核	基准对应章节
-XianjianLingquan	xj_lingquan	End	false	未核	
-XianjianLonghuo	xj_longhuo	End	false	未核	
+XianjianLingquan	xj_lingquan	End	false	已核	v607 反查比对
+XianjianLonghuo	xj_longhuo	End	false	已核	v607 反查比对
 XianjianQianfang	xj_qianfang	Judge	true	已核	基准对应章节
-XianjianShenwu	xj_shenwu	End	false	未核	
+XianjianShenwu	xj_shenwu	End	false	已核	v607 反查比对
 XianjianWangyou	xj_wangyou	End	false	已核	基准对应章节
-XianjianXjzhimeng	xj_xjzhimeng	End	false	未核	
-XianjianShuiyun	xj_shuiyun	End	false	未核	
+XianjianXjzhimeng	xj_xjzhimeng	End	false	已核	v607 反查比对
+XianjianShuiyun	xj_shuiyun	End	false	已核	v607 反查比对
 XianjianZhaoyao	xj_zhaoyao	Draw	true	已核	基准对应章节
 WudianFuchou2	fuchou2	End	false	已核	基准对应章节
 HlssFengqi	hlss_fengqi	Judge	true	未核	
@@ -34,7 +34,7 @@ YunchouDiyguhuo	diyguhuo	Judge	true	已核	基准对应章节
 YunchouXiongzi	xiongzi	Draw	true	已核	基准对应章节
 PhaseEndRecoverOrDraw	phase_end_recover_or_draw	End	true	不适用	卡牌效果宿主，上游无 trigger
 WudianZiyu	wudian_ziyu	End	true	已核	基准对应章节
-GujianFoodXiajiao	gujian_food_xiajiao	Draw	true	未核	
+GujianFoodXiajiao	gujian_food_xiajiao	Draw	true	不适用	卡牌效果宿主，上游无 trigger
 GujianFoodLiyutang	gujian_food_liyutang	End	true	不适用	卡牌效果宿主，上游无 trigger
 GujianFoodMapodoufu	gujian_food_mapodoufu	End	true	不适用	卡牌效果宿主，上游无 trigger
 GujianFoodTanhuadong	gujian_food_tanhuadong	Play	false	已核	基准对应章节
@@ -44,9 +44,9 @@ GwentBirinState	gwent_birin_state	Play	false	已核	基准对应章节
 GwentCiguState	gwent_cigu_state	Draw	false	已核	基准对应章节
 GwentQinpenState	gwent_qinpen_state	Discard	false	已核	基准对应章节
 HuanleXuelunyangCard	huanle_xuelunyang	Judge	true	已核	基准对应章节
-WudianGeju	wudian_geju	Judge	true	未核	
-WudianOwliyong	wudian_owliyong	Draw	true	未核	
-WudianXiyang	wudian_xiyang	End	false	未核	
+WudianGeju	wudian_geju	Judge	true	已核	v607 反查比对
+WudianOwliyong	wudian_owliyong	Draw	true	已核	v607 反查比对
+WudianXiyang	wudian_xiyang	End	false	已核	v607 反查比对
 WudianYuedong	wudian_yuedong	Play	false	已核	基准对应章节
 WudianZhucheng	wudian_zhucheng	End	true	已核	基准对应章节
 WudianPaotaiFire	wudian_paotai_fire	End	true	已核	基准对应章节

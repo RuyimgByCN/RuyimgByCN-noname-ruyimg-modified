@@ -5001,3 +5001,40 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 **每核一条就在表里打勾** —— **否则「谁知道核了几条」会永远依赖人工记忆** ❗
 
 **本轮未建**（**需逐条回填 52 条**，超出单轮预算）✗ —— **留给下一轮或维护者** ✓
+
+### 剩余 12 条核完（第 607 轮）：**6 一致 / 1 G15 / 1 G14 新成员 / 2 未定位 / 1 不适用 / 1 待看**
+
+用「包内 `skills[].mapping` → 上游名」反查，**12 条里 9 条一次成功**：
+
+| key | 包技能 | 上游 `trigger` | 原生 | 判定 |
+|---|---|---|---|---|
+| `xj_lingquan` | `lingquan` | **`phaseEnd`** | `End, begin=false` | ✅ 一致 |
+| `xj_longhuo` | `longhuo` | **`phaseEnd`** | 同上 | ✅ 一致 |
+| `xj_shenwu` | `shenwu` | **`global: phaseEnd`** | 同上 | ✅ 一致 |
+| `xj_xjzhimeng` | `xjzhimeng` | **`phaseEnd`** | 同上 | ✅ 一致 |
+| `xj_shuiyun` | `shuiyun` | **`phaseEnd`** | 同上 | ✅ 一致 |
+| `wudian_owliyong` | `owliyong` | **`phaseDrawBegin`** | `Draw, begin=true` | ✅ 一致 |
+| `wudian_xiyang` | `xiyang` | **`phaseEnd`** | `End, begin=false` | ✅ 一致 |
+| `xj_fenglue` | `fenglue` | **`phaseUseBefore`** | `Play, begin=true` | ⚠️ **G15（before 类）** |
+| **`wudian_geju`** | **`geju`** | **`player: phaseBegin`** | **`Judge, begin=true`** | ❗ **G14 第 8 条** |
+| `hlss_fengqi` | `hlss_fengqi` | 未找到 | `Judge, begin=true` | ❓ |
+| `zaibian` | `zaibian` | 未找到 | `Play, begin=true` | ❓ |
+| `gujian_food_xiajiao` | **无 `mapping`** | —— | `Draw, begin=true` | **不适用（卡牌）** |
+
+### **G14 扩到 8 条**
+
+`wudian_geju`（**`geju`**）**与 `daixing2`/`qianfang`/`diyguhuo`/`xuelunyang`/`zhenjiu2`/`yougeng` 完全同类**：
+**上游 `phaseBegin`（任意阶段）⇒ 原生 `Phase::Judge`（判定阶段）** ❗
+⇒ **G14 = 8 条**，**且覆盖率仍在上升**（**8 条都出现在 12 条抽样里**）
+
+### 阶段过滤最终账
+
+| 状态 | 条数 |
+|---|---:|
+| ✅ **已核** | **45** |
+| **不适用**（卡牌效果）| **5** |
+| ❓ **未核** | **2**（`hlss_fengqi`/`zaibian`，**上游未找到**）|
+| **合计** | **52** |
+
+**结论**：**52 处阶段过滤，45 处已与上游比对**（**86%**）；
+**错误集中在 G14（8 条）/ G15（≥5 条）/ G16（1 条）/ 单点 4 条** ✅
