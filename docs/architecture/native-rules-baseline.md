@@ -4576,3 +4576,28 @@ v7 的「只实现一半」判断，经**三条独立证据**确认：
 
 **修正**：v6 说「档位偏晚 + 随机语义未对」—— **这两点都不成立** ❌（**`CardUsed` 与 `useCardToBefore` 的先后已由 filter/step 处理，随机也已实现** ✅）；
 真正缺的**只有 `mod` 面** ✅。
+
+## 宿主「按阶段过滤」的行为统计（2026-10-19，第 571 轮普查）
+
+扫 `content/host/filtering*.rs` + `filtering/*.rs`，**共 52 处**用 `EventData::Phase { phase, begin }` 过滤：
+
+| 阶段 | `begin=true` | `begin=false` |
+|---|---:|---:|
+| **`Phase::Judge`**（判定）| **14** | 0 |
+| `Phase::End`（结束）| 8 | **13** |
+| `Phase::Play`（出牌）| 5 | 3 |
+| `Phase::Draw`（摸牌）| **5** | 2 |
+| `Phase::Discard`（弃牌）| **1** | 1 |
+
+### 两个已知缺陷在这个表里的位置
+
+| 缺陷 | 在表中的位置 | 说明 |
+|---|---|---|
+| **`Xiuluo`（`swd_xiuluo`）** | **`Phase::Judge, begin=true`**（14 条之一）| **上游是 `phaseZhunbeiBegin`（准备阶段）** ⇒ **它被归进了「判定阶段」组** ❗ |
+| **`Miedao`** | **`Phase::Discard, begin=true`**（**全表唯一**）| 上游**两个组技**：`phaseDrawBegin` + `phaseDiscardBegin` ⇒ **只有 Discard 那一半** ❗（`Phase::Draw` 组里没有它）|
+
+### 这张表的用途（**不是缺陷清单**）
+
+1. **52 处都是「按阶段触发」的宿主行为** —— **其中绝大多数需要与各自上游的 `phase*Begin/End` 逐一对照**；
+2. **本轮只对照了 2 个**（`Xiuluo`/`Miedao`），**其余 50 个未对照** ❗；
+3. **`Phase::Judge` 组最大（14 条）** —— **若上游对应的是准备阶段，则可能有同类错位** ⇒ **按组核对比逐条核对便宜** ✅。
