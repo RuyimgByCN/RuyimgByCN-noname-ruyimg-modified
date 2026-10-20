@@ -27,7 +27,9 @@ UI_TOKENS = ("ui.", "document.", "getElementsByClassName", "innerHTML",
              # 动画/特效类（第 502 轮补充：`_HpRecover` 这类「骨骼动画」曾被判成规则）
              "animation", "skeleton", "scale:", "frame", "as_showImage", "player.say",
              "addChatWord", "setTimeout")
-MARK_TOKENS = ("mark:true", "markimage", "intro:")
+MARK_TOKENS = ("mark:true", "markimage", "intro:",
+               # 标记 API（第 504 轮补充：最小的 content-only 技能全是标记清理/累加）
+               "addMark", "unmarkSkill", "addTempSkill", "markSkill", "player.storage.")
 RULE_TOKENS = ("content:", "player.", "game.", "effect", "damage", "draw", "recover")
 
 

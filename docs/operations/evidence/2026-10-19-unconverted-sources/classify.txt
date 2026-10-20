@@ -1,14 +1,14 @@
 == 十周年UI
-   总定义数=332  去重后=329  规则=51  UI=101  标记=169  其它=8
-   规则样例: mozhip (268B, markskill.js, 副本 1)
-   规则样例: xinfu_guanchaog3 (328B, markskill.js, 副本 1)
-   规则样例: xinfu_fuyin2 (357B, markskill.js, 副本 1)
-   规则样例: xinfu_guagua1 (382B, markskill.js, 副本 1)
-   规则样例: xinquanbian_xg (385B, markskill.js, 副本 1)
+   总定义数=332  去重后=329  规则=14  UI=101  标记=209  其它=5
+   规则样例: _decadeUI_dieKillEffect (424B, extension.js, 副本 1)
+   规则样例: rexiemu3 (477B, markskill.js, 副本 1)
+   规则样例: rejingce (507B, markskill.js, 副本 1)
+   规则样例: wangong2 (582B, markskill.js, 副本 1)
+   规则样例: _ui_auto_cheat (754B, extension.js, 副本 1)
 == 手杀ui
    总定义数=92  去重后=87  规则=0  UI=87  标记=0  其它=0
 == 祖安武将
-   总定义数=244  去重后=182  规则=86  UI=92  标记=2  其它=2
+   总定义数=244  去重后=182  规则=63  UI=92  标记=25  其它=2
    规则样例: _ssrnohuahensskill (345B, extension_mess.js, 副本 2)
    规则样例: _saveskill (349B, extension_mess.js, 副本 2)
    规则样例: _linkskill (349B, extension_mess.js, 副本 2)
