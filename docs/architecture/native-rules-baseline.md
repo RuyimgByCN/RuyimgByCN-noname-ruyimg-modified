@@ -4534,3 +4534,27 @@ HostBehavior::Miedao => matches!(event,
 | `hxunzhi2` | ❗ 未实现 | 不变 |
 
 ⇒ **U05-SWD 的真实缺口：`miedao`（半个）、`swd_xiuluo`（阶段错位）、`jifeng`（缺 `mod`）、`hxunzhi2`（未实现）= 4 条**，**比 v6 估计多 1 条**。
+
+### U05-SWD **v8**：`miedao` 缺「多摸」已三重确认（filter + step + `Phase::Draw` 使用者）
+
+v7 的「只实现一半」判断，经**三条独立证据**确认：
+
+| 证据 | 内容 |
+|---|---|
+| **filter** | `filtering/common.rs:225` ⇒ **只有 `Phase::Discard`** 🔹 |
+| **step** | `step/skills_cards.rs:761` ⇒ **「灭道·弃：强制弃『已损失体力』张（手/装备）」** ⇒ **只对应 `miedao2`** 🔹 |
+| **全库 `Phase::Draw` 使用者** | **只有 `Xiefang`（撷芳）** ⇒ **没有任何「多摸」实现** 🔹 |
+
+⇒ **`miedao1`（上游 `phaseDrawBegin`：「`trigger.num += maxHp - hp`」）在原生无对应** ✅ **确认**
+
+#### v8 最终账（U05-SWD）
+
+| 类 | 条数 | 明细 |
+|---|---:|---|
+| ✅ 一致 | **8** | 8 个同名同档 |
+| ✅ 归入共性限制 | **2** | `huanxing_state`/`xuanyuanjian3`（`damageAfter`）|
+| ❗ **确认缺陷** | **4** | **`miedao`（缺多摸半个）**、**`swd_xiuluo`（`Phase::Judge` vs 准备阶段）**、**`jifeng`（缺 `mod` 面）**、**`hxunzhi2`（未实现）** |
+| ❓ 上游缺口 | **2** | `tianxiang2`（上游在 `character/shenhua/skill.js`）、`xuanyuanjian2`（仅 translate）|
+
+⇒ **U05-SWD：8 一致 / 2 粒度 / 4 确认缺陷 / 2 上游缺口 = 16** ✅
+—— **v5 的「合并型一致」被彻底推翻**（**当时只看了 `TriggerMeta` 的 `PhaseBegin`，没看 filter** ❌）。
