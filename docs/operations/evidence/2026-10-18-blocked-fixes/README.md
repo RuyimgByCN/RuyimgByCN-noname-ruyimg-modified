@@ -1647,7 +1647,13 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 ⇒ **非装备牌的 `global` 子技能没有任何声明通道** ⇒ `host:chenhuodajie_card` **永远不会被实例化**
 ⇒ `damageEnd` 窗口无法触发（与第 57 项不同：57 是**元数据/过滤器矛盾**，53 是**缺声明通道**）。
 
-**修法（**可做**——`content-native-loader` 与 `packages/` 均已被跟踪）**：
+**⚠ 修法可行性更正（同日）**：仅补 `cards[].skills` **不足以生效**——技能声明进入目录后，
+仍需**授予**才有实例；而**授予侧**（`kernel/equipment.rs:6 grant_equip_skills`、`construction.rs` 的授予清单）
+同样位于**未跟踪**目录（`git ls-files crates/engine-native/src/kernel/` = **0**）⇒ **本项仍受阻**。
+**可做的部分**：`cards[].skills` 的**装载器支持**（`content-native-loader`，已跟踪）+ 包数据 + **桥接层断言**
+（skill 出现在 `pack.host_skills`）；**授予**待解阻后再接。
+
+**原计划的完整修法**：
 1. `bridge_pack` 增加 `cards[].skills`（按 `HostBehavior::from_key` 解析，并入 `pack.host_skills`），
    与 `equip_skills` 并列；
 2. 在 3 张 `chenhuodajie` 条目补 `"skills": ["host:chenhuodajie_card"]`；

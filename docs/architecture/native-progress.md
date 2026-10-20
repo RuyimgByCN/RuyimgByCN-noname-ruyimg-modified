@@ -625,6 +625,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 444–449 轮（重大更正）**：**第 55/56 项结案——实现正确，此前是误判**。关键事实：`EventData::Phase{begin:true}` **只在回合起点的判定阶段发射**（`kernel/events.rs:753/789`），建局时第 1 轮已发过 ⇒ 旧用例只推进 16–32 步必然错过。改为推进到 `round>
 > **第 449 轮追加**：**第 53 项（趁火打劫）根因确定**——`bridge_pack` **只支持 `cards[].equip_skills`**（`lib.rs:567-572`）、**不支持 `cards[].skills`**；`host:chenhuodajie_card` 键存在（`keys.rs:862`）但**不在** `construction.rs` 授予清单、也**不在** `card_kind_host_skills` ⇒ **非装备牌的 `global` 子技能无任何声明通道**⇒ 永不实例化 ⇒ `damageEnd` 窗口无法触发（与第 57 项的「元数据/过滤器矛盾」是**不同根因**）；**修法可做**（`content-native-loader` 与 `packages/` 均已跟踪）：加 `cards[].skills` 支持 + 补 3 张卡的 skills + 行为用例。
 >
+> **第 450 轮**：①**样本 160 `shenmiguo`（神秘果）通过**——出牌阶段使用【杀】⇒ `turn.shenmiguo_used` **false→true**（该字段仅由本窗口置位，**无假阳性**）；**`global` 卡窗口第 8 张验证**。②**第 53 项修法可行性更正**：仅补 `cards[].skills` **不足以生效**——授予侧（`kernel/equipment.rs`、`construction.rs`）**同样未跟踪**（`git ls-files crates/engine-native/src/kernel/` = 0）⇒ **本项仍受阻**；可做的只有装载器支持 + 桥接层断言。③踩坑：首版按名字取【杀】命中 `swd_shandian`（闪电）⇒ `IllegalTargets`，改按 `CardKind::Sha` 通过。
+>
+
 =2`：**青龙之圭**（牌堆 196→194、手牌 3→4，净 +1）与**黄麟之琮**（**20 步**到 round 2，`hujia` **0→1**）**均 test ok**，`#[ignore]` 已移除；**第 413–443 轮「宿主派发 Phase{begin} 失效」的结论撤回**。同时发现**新第 57 项**：`baishouzhihu`（白兽之琥）**永不触发**——`metadata/swd.rs:360` 注册 `EventKind::PhaseEnd` 而 `filtering/swd.rs:409-421` 要求 `begin==true`，引擎只有 `begin:true` 的 Phase 事件 ⇒ **元数据与过滤器矛盾**；实测推到**第 14 回合**仍无询问；修法在**未跟踪**目录（受阻），正例已按第 57 项 `#[ignore]`。全量 **1514 passed / 0 failed / 21 ignored**。
 >
 
