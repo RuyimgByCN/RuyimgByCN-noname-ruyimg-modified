@@ -840,6 +840,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 563 轮**：**U05-SWD v6：`jifeng`/`swd_xiuluo` 定案**——读上游全文 ✓：**`jifeng`（941 B）有两面**：**`mod.selectTarget`**（**单目标 `sha`/`trick` ⇒ `range[1]=Infinity`，可变任意多目标** ✓）**+ `trigger: useCardToBefore`（`priority 6`、`forced`、随机分支）** ⇒ **原生只做 `CardUsed`** ✗ ⇒ **`jifeng` 从「待判定」升为「缺 `mod` 面」的明确缺口** ✓（**不是时点问题** ✓）；**`swd_xiuluo`（1152 B）**：`phaseZhunbeiBegin` + `direct` + 「用一张手牌换同花色判定牌」✓ ⇒ **档位（准备阶段 vs 阶段开始）与 `direct` 自动性两点待确认** ⚠️；⇒ **v6 账：8 一致 / 2 粒度 / 1 合并定案 / 1 缺 `mod` 面 / 1 档位待确认 / 1 未实现 / 2 上游缺口** ✓。
 >
+> **第 564 轮**：**交接索引缺口表补 G9/G10**（由 7 条到 9 条）——**G9 `jifeng`**（**缺 `mod.selectTarget` 面**：上游「单目标 `sha`/`trick` ⇒ 可指定任意多目标」，**原生未见对应** ✗）；**G10 `swd_xiuluo`**（**`phaseZhunbeiBegin` vs `PhaseBegin` + `direct` 自动性** ⇒ **读 `step` 是否按「准备阶段」过滤** ✓）；⇒ **缺口表：G1、G2、G4–G10 = 9 条** ✓（**G3 已消解** ✓）；**汇总表同步为「12 项外部依赖 + 9 条实现缺口」** ✓。
+>
+
 
 
 
