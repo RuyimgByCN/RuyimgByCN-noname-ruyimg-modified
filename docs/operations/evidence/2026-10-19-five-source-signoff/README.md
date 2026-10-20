@@ -22,7 +22,7 @@
 | **升级** | **无**逐来源升级用例（通用用例 `nc08_upgrade_acceptance` 用 swd 包，**不等于**来源级签署） | 0/5 |
 | **配置** | `nc08_config_acceptance`（**19 包**元数据/开关/`init_hook`/非法数据） | 5/5 **通用**覆盖 |
 | **组合** | `nc08_composition_pair_matrix`（**10 卡牌包 45 对**） | 5/5 **通用**覆盖 |
-| **保存恢复** | `t12-g5-batch2`（双进程）+ `nc08_save_restore_four_sources`/`nc08_save_restore_pile`（**单进程往返**） | **5/5**（U05 双进程；U01/U03/U07/L04 单进程，**U03/L04 走 `pile.json` 管线**） |
+| **保存恢复** | `t12-g5-batch2`（双进程）+ `nc08_save_restore_four_sources`/`nc08_save_restore_pile` + **`nc08_save_restore_matrix`（13/13 包）** | **5/5 + 全包矩阵 13/13**（U05 双进程；U01/U03/U07/L04 单进程，**U03/L04 走 `pile.json` 管线**） |
 | **目标平台** | **构建级**：`engine-native` @ `aarch64-apple-ios` ✅ / `x86_64-apple-ios` ✅ / `wasm32-unknown-unknown` ✅；`engine-native-wasm` ✅、`content-native-loader` ✅；**Android/Windows FAIL**（缺 NDK / MSVC C 工具链）| **部分**（构建级通过；**真机与浏览器运行未验收**）|
 | **规则差异** | 13 族 + 修复清单 + 缺口清单 | 仅 U05 较完整 |
 | **性能** | `nc12_bench` 引擎级基线 + **逐来源跑批**（含 `character.json`/`pile.json` 装载）：U01(d3) 298 步、U03(cardpile) 261 步、U05(swd) 268 步 **14.2 ms**、U07(wudian) 213 步 **9.18 ms**、L04(cardpile-liuli) 261 步，**全部 rejected=0、收敛** | **5/5 部分**（五来源均有数据；**仍非前后对比、非产品级**）|

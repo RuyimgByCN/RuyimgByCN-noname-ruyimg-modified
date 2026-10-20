@@ -1,0 +1,14 @@
+DBG 保存恢复矩阵：shahai-gujian-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：shahai-mtg-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：shahai-swd-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：shahai-hearth-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：shahai-yunchou-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：shahai-zhenfa-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：shahai-gwent-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：huanle-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：wuxing-upstream-liuli 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：wudian-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：d3-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：cardpile-upstream-noname 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：cardpile-upstream-liuli 往返 ✅（hash 一致、可继续推进）
+DBG 保存恢复矩阵：通过 13/13 个包
