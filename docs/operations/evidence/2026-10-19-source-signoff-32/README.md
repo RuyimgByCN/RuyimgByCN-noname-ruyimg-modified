@@ -150,7 +150,7 @@ L08  L11  L12  L14  L25   U09  U10  U11
 
 | 缺陷 | 涉及包 |
 |---|---|
-| **G14（8 条）** | `SwdHyunshen2`/`SwdDaixing2`/`SwdLexue`/`SwdZhenjiu2`/`SwdHuanxing` 等 —— **均在 `shahai-swd`/`shaai-ow`** |
+| **G14（9 条）** | `SwdHyunshen2`/`SwdDaixing2`/`SwdLexue`/`SwdZhenjiu2`/`SwdHuanxing` 等 —— **均在 `shahai-swd`/`shaai-ow`** |
 | **G15（≥5 条）** | `rumeng`/`fenglue`/`fuchou2`/`reyingzi` |
 | **G16 / `swd_xiuluo` / `huajin2` / `hlss_fengqi`** | `shahai-swd` / `boss-zhugeliang` |
 | **G17a/b（`mod`）** | **`hslingjian_*`/`qiankundai`** —— **`card/swd`** |
