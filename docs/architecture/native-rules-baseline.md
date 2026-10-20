@@ -4218,3 +4218,40 @@ HostBehavior::XianjianAnwugu2 => match self.stage {
 这属**产品决策**（**不是文档或测试能单方面决定的事**）。
 
 ⇒ **U05-XJ 差异族 v2 完成**；**签署状态 = 待决策**（**决策点：8 条「结束后」时机差异是否可接受**）。
+
+## U05-SWD（杀海拾遗 / swd 子包）差异族 **v0**（2026-10-19，第 546 轮）
+
+**来源**：`archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js`（**注意是 `character/` 不是 `card/`**）
+**原生包**：`packages/extensions/shahai-swd-upstream-noname`（**90 卡牌 / 79 武将 / 16 技能**）
+**宿主**：`HostBehavior::Swd*` / 复用 `Xuanyuan`/`Jifeng`/`Moyan`/`Miedao`/`Xiuluo` 等
+
+### 13 个技能可对照（另 3 个上游未在本文件定义）
+
+| 包技能 | 上游 `trigger` | 原生 `EventKind` | 判定 |
+|---|---|---|---|
+| `swd_zhenjiu2` | `phaseBegin` | `PhaseBegin` | ✅ |
+| `swd_lmazui2` | `damageBegin` | `DamageBefore` | ✅ |
+| `swd_huajin2` | `damageBegin` | `DamageBefore` | ✅ |
+| `swd_jinlin2` | `phaseBegin` | `PhaseBegin` | ✅ |
+| `swd_guiyan2` | `dying` | `Dying` | ✅ |
+| `bingfeng2` | `turnOverAfter` | **`TurnOvered`** | ✅ |
+| `xuanyuan` | `phaseEnd` | `PhaseEnd` | ✅ |
+| `swd_huanxing_state` | `damageAfter` | `Damage` | ⚠️ **粒度**（引擎无 after 档）|
+| `hxunzhi2` | **`phaseUseEnd`** | **`PhaseEnd`** | ⚠️ **阶段不同**（出牌阶段结束 vs 阶段结束）|
+| `jifeng` | **`useCardToBefore`** | **`CardUsed`** | ⚠️ **缺「指定目标前」这一档** |
+| `swd_xiuluo` | **`phaseZhunbeiBegin`** | **`PhaseBegin`** | ⚠️ **准备阶段 vs 阶段开始**（可能不同）|
+| `moyan` | **（无 trigger）** | **`CardUsed`** | ⚠️ 上游无 ⇒ 原生有 |
+| `miedao` | **（无 trigger）** | **`PhaseBegin`** | ⚠️ 同上 |
+
+**未找到（3）**：`tianxiang2`、`xuanyuanjian2`、`xuanyuanjian3` —— 上游**不在本文件**（\(\`xuanyuanjian*\`\) 在两个文件里都出现过一次，需再定位）。
+
+### 小结
+
+| 类 | 条数 |
+|---|---:|
+| ✅ 一致 | **7** |
+| ⚠️ 需判定（粒度/阶段/缺档/上游无）| **6** |
+| ❓ 未定位上游 | **3** |
+
+⇒ **`hxunzhi2`（`phaseUseEnd`⇒`PhaseEnd`）与 `jifeng`（`useCardToBefore`⇒`CardUsed`）是最可疑的两条** ⚠️
+（前者是**不同阶段**，后者**缺「指定目标前」档**）；**不签署规则差异**。
