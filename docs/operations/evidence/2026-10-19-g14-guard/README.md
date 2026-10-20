@@ -51,3 +51,38 @@ EventData::Phase { player, begin: true, .. } if *player == owner   // `..` 省�
 | **多挂一个分支（`huajin2`）** | **1** | **删掉 `Phase::Judge` 分支** | **批 1（对齐）** ✅ |
 
 ⇒ **批 1 从「9 行」变成「12 处」**（**9 改 pattern + 3 删分支**），**仍是「对齐」类** ✅
+
+---
+
+## 6 **全 52 条的机器对照**（第 649 轮，`all52.tsv`）
+
+用同一链路把**全部 52 处**都回查上游，判定分布：
+
+| 判定 | 条数 | 说明 |
+|---|---:|---|
+| **相符（待逐条确认）** | **21** | 上游 `phaseEnd`/`phaseUseBegin`/`phaseDrawBegin` 等与原生一致 |
+| **未定位** | **13** | `Gwent*` 3（不可达）、`gujian_food_*` 3（卡牌宿主）、`Xiefang`/`Xiongzi`/`Miedao`/`zaibian`/`PhaseEndRecoverOrDraw`/`GujianFoodTanhuadong` 等 |
+| **G14（`phaseBegin` ⇒ `Judge`）** | **9** | 见前文 |
+| **G15（时长/档位不符）** | **4** | `fuchou2`（`phaseAfter`）、`rumeng`/`fenglue`（`phaseUseBefore`）、`reyingzi`（`phaseDrawBegin2`）|
+| **G18（准备阶段）** | **2** | `swd_xiuluo`、`hlss_fengqi` |
+| **凭空新增触发** | **2** | `baiyi`、`lexue` |
+| **非阶段类** | **1** | `huajin2`（`damageBegin`）|
+| **合计** | **52** | 4+2+21+13+9+2+1 = 52 ✅ |
+
+### 分组对照
+
+| Phase 组 | 条数 | 有上游 | 未定位 |
+|---|---:|---:|---:|
+| **End** | 21 | **16** | 4（+1 卡牌类）|
+| **Judge** | 14 | **12** | 2 |
+| **Play** | 8 | 5 | 3 |
+| **Draw** | 7 | 3 | 4 |
+| **Discard** | 2 | 0 | 2 |
+
+### 与手工审计的关系
+
+- **手工审计（`registry.txt`）记「已核 46 / 不适用 5 / 未核 1」**；
+- **脚本记「有结论 36 / 未定位 13」**；
+- **两者不矛盾**：**「不适用」在脚本里落入「未定位」**（**卡牌宿主与不可达都没有上游 `trigger` 可查**）⇒
+  **脚本的「未定位 13」≈ 手工的「不适用 5 + 不可达 3 + 其他 5」** ✅
+- **但脚本多认了 `fuchou2` 的 `phaseAfter`** ⇒ **属 G15**（**手工此前归「需判定」** ✓，**现确认**）

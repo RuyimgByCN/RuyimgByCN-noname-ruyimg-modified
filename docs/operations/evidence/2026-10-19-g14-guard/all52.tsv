@@ -1,0 +1,53 @@
+行为	key	Phase	begin	上游trigger	判定
+WudianFuchou2	fuchou2	End	false	global: "phaseAfter"	时长/档位不符(G15)
+HlssFengqi	hlss_fengqi	Judge	true	player: ['phaseZhunbeiBegin','phaseJieshuBegin']	准备阶段(G18)
+NewMeibu	new_meibu	Play	true	global: "phaseUseBegin",	相符(待逐条确认)
+Zaibian	zaibian	Play	true		未定位
+Xiefang	xiefang	Draw	false		未定位
+Xiuluo	swd_xiuluo	Judge	true	player: "phaseZhunbeiBegin"	准备阶段(G18)
+Miedao	miedao	Discard	true		未定位
+MbcmQingzheng	mbcmqingzheng	Play	true	player: "phaseUseBegin"	相符(待逐条确认)
+YunchouDiyguhuo	diyguhuo	Judge	true	player: "phaseBegin"	G14
+YunchouXiongzi	xiongzi	Draw	true		未定位
+PhaseEndRecoverOrDraw	phase_end_recover_or_draw	End	true		未定位
+WudianZiyu	wudian_ziyu	End	true	global: "phaseEnd"	相符(待逐条确认)
+GujianFoodXiajiao	gujian_food_xiajiao	Draw	true		未定位
+GujianFoodLiyutang	gujian_food_liyutang	End	true		未定位
+GujianFoodMapodoufu	gujian_food_mapodoufu	End	true		未定位
+GujianFoodTanhuadong	gujian_food_tanhuadong	Play	false		未定位
+GujianFoodYougeng	gujian_food_yougeng	Judge	true	player: "phaseBegin"	G14
+GujianFoodZiyangdan	gujian_food_ziyangdan	End	true		未定位
+GwentBirinState	gwent_birin_state	Play	false		未定位
+GwentCiguState	gwent_cigu_state	Draw	false		未定位
+GwentQinpenState	gwent_qinpen_state	Discard	false		未定位
+HuanleXuelunyangCard	huanle_xuelunyang	Judge	true	player: "phaseBegin"	G14
+WudianGeju	wudian_geju	Judge	true	player: "phaseBegin"	G14
+WudianOwliyong	wudian_owliyong	Draw	true	player: "phaseDrawBegin"	相符(待逐条确认)
+WudianXiyang	wudian_xiyang	End	false	player: "phaseEnd"	相符(待逐条确认)
+WudianYuedong	wudian_yuedong	Play	false	player: "phaseUseEnd"	相符(待逐条确认)
+WudianZhucheng	wudian_zhucheng	End	true	player: "phaseEnd"	相符(待逐条确认)
+WudianPaotaiFire	wudian_paotai_fire	End	true	player: "phaseEnd"	相符(待逐条确认)
+BossBaiyi	baiyi	Judge	true	(无 trigger，enable 主动技)	凭空新增
+SwdHyunshen2	hyunshen2	Judge	true	player: "phaseBegin"	G14
+SwdDaixing	daixing	End	false	player: "phaseEnd"	相符(待逐条确认)
+SwdDaixing2	daixing2	Judge	true	player: "phaseBegin"	G14
+SwdZhuhai	zhuhai	End	true	global: "phaseJieshuBegin"	相符(待逐条确认)
+SwdRumeng	rumeng	Play	true	global: "phaseUseBefore"	时长/档位不符(G15)
+SwdReyingzi	reyingzi	Draw	true	player: "phaseDrawBegin2"	时长/档位不符(G15)
+SwdLexue	lexue	Judge	true	(无 trigger)	凭空新增
+SwdZhenjiu2	zhenjiu2	Judge	true	player: "phaseBegin"	G14
+SwdHuanxing	huanxing	Judge	true	player: "phaseBegin"	G14
+SwdHuajin2	huajin2	Judge	true	player: "damageBegin"	非阶段类
+XianjianChangnian2	xj_changnian2	End	false	player: "phaseEnd"	相符(待逐条确认)
+XianjianFenglue	xj_fenglue	Play	true	player: "phaseUseBefore"	时长/档位不符(G15)
+XianjianHusha	xj_husha	End	false	player: "phaseEnd"	相符(待逐条确认)
+XianjianLiguang	xj_liguang	End	false	player: "phaseEnd"	相符(待逐条确认)
+XianjianLinghuo	xj_linghuo	End	false	global: "phaseEnd"	相符(待逐条确认)
+XianjianLingquan	xj_lingquan	End	false	player: "phaseEnd"	相符(待逐条确认)
+XianjianLonghuo	xj_longhuo	End	false	player: "phaseEnd"	相符(待逐条确认)
+XianjianQianfang	xj_qianfang	Judge	true	player: "phaseBegin"	G14
+XianjianShenwu	xj_shenwu	End	false	global: "phaseEnd"	相符(待逐条确认)
+XianjianWangyou	xj_wangyou	End	false	global: "phaseEnd"	相符(待逐条确认)
+XianjianXjzhimeng	xj_xjzhimeng	End	false	player: "phaseEnd"	相符(待逐条确认)
+XianjianShuiyun	xj_shuiyun	End	false	player: "phaseEnd"	相符(待逐条确认)
+XianjianZhaoyao	xj_zhaoyao	Draw	true	global: "phaseDrawBegin"	相符(待逐条确认)
