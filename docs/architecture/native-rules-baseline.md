@@ -5324,3 +5324,40 @@ HostStage::SelectNature → 选目标 → 转化使用
 
 ⇒ **`L10` 的差异族覆盖 2/2** ✅，**但仍有 1 条确认缺陷 + 2 处待收口** ⇒ **不能签「已对照且可接受」** ❗
 ⇒ **`L10` 已从「最接近可签」退回「有缺陷待修」** ⚠️
+
+### L10 史诗卡牌 · `rangjie`（让节）深度核对（2026-10-19，第 681 轮）
+
+**上游**（`史诗卡牌/extension.js`，5562 B）：
+
+```js
+lib.skill.rangjie = {
+  trigger: { player: "damageEnd" },   // 自己受伤后
+  direct: true,                        // 不询问，直接进入流程
+  content: count = trigger.num;        // 按伤害点数
+           每次选「获得牌」/「移动牌」/「取消」，逐步递减
+}
+```
+
+**原生**（`filtering/common.rs:210` + `step/skills_cards.rs:201` + `metadata/common.rs:253`）：
+
+```rust
+filter: Damage(d) if d.target == owner && !d.prevented
+meta:   EventKind::Damage, Timing::Normal, optional: true
+step:   首次进入按 ctx.current_damage().amount 初始化剩余次数
+        选项 0=获得牌 1=移动牌 2=取消（不可移动时去掉 1）
+```
+
+| # | 面 | 上游 | 原生 | 判定 |
+|---:|---|---|---|---|
+| 1 | **触发** | **`damageEnd`**（受伤**结束后**）| **`Damage` + `Timing::Normal`** | ⚠️ **时机待核**（`Normal` 是否即「后」，未查 `Timing` 定义）|
+| 2 | **次数** | **`count = trigger.num`**（伤害点数）| **`d.amount` 初始化剩余次数** | ✅ **一致** |
+| 3 | **选项** | **获得牌 / 移动牌 / 取消**（`canMoveCard` 决定有无移动）| **Tag 0/1/2**，`movable` 决定有无 1 | ✅ **一致** |
+| 4 | **是否询问发动** | **`direct: true`（不问）** | **`optional: true`（会问）** | ⚠️ **UI 层差异**（**规则上等价，不计缺陷**）|
+
+### 结论
+
+**`rangjie` 核心一致**（次数、选项、逐次递减都对）✅
+**两处标注**：①`Damage` vs `damageEnd` 的时机；②`direct` vs `optional` 的询问
+⇒ **①需查 `Timing` 定义才能定案**；**②是 UI 层，不影响规则等价** ✅
+
+⇒ **`L10` 的状态**：**`rangjie` 基本可用**、**`reguhuo` 有确认缺陷（5b）** ⇒ **仍不可签** ❗
