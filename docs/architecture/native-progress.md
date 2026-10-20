@@ -846,7 +846,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 566 轮**：**U05-SWD v8：`miedao` 缺「多摸」三重确认 + G10 升格 + G11 新增**——**三条独立证据**：**filter 只有 `Phase::Discard`** ✓、**step 注释「灭道·弃：强制弃『已损失体力』张」** ✓、**全库 `Phase::Draw` 使用者只有 `Xiefang`** ✓ ⇒ **`miedao1`（上游 `phaseDrawBegin`「`num += maxHp - hp`」）无对应** ✅；⇒ **U05-SWD v8：8 一致 / 2 粒度 / 4 确认缺陷（`miedao` 半、`swd_xiuluo` 阶段错位、`jifeng` 缺 `mod`、`hxunzhi2` 未实现）/ 2 上游缺口 = 16** ✓；**交接索引缺口表**：**G10 升格为「阶段错位（改 filter）」** ✓、**新增 G11「`miedao` 缺多摸」** ✓ ⇒ **共 10 条**（**G1、G2、G4–G11**）✓。
 >
-> **第 567 轮**：**U05-SWD v8.1：`jifeng` 三重确认**——**`trigger` 面已实现** ✅（**filter** 匹配上游：`targets.len()>1` + `is_sha_like() || jifeng_single_target_trick` ✓；**step** `skills_status.rs:294+` 有实现，注释「上游 `Math.random() > (1.3+n/5)/n`。原生以 `cancel_permille`」✓）⇒ **v6 说的「档位偏晚 + 随机未对」两点都不成立** ❌；**真正缺的只有 `mod.selectTarget` 面** ✗（**全库无「目标数修改器」** ✓）⇒ **归入「引擎表达力」类**（**与 `duoqi`/`youzhan` 同类** ✓）；**G9 描述改为「只缺 `mod` 面」** ✓，**G1 标注「三面均为空」** ✓。
+> **第 567 轮**：**U05-SWD v8.1：`jifeng` 三重确认**——**`trigger` 面已实现** ✅（**filter** 匹配上游：`targets.len()>
+> **第 568 轮**：**4 条确认缺陷的修复成本排序**（交接页 §4.2）——**①`swd_xiuluo`**：**1 处**（`filtering` 把 `Phase::Judge` 改为准备阶段 ✓）**最小** ✅；**②`miedao`**：**2 处**（`filtering` 加 `Phase::Draw` 分支 + `step` 加 `draw_num += maxHp - hp` ✓）**小** ✅；**③`jifeng`**：**引擎层**（**「单目标牌可多选目标」是新能力** ✗，**与 `duoqi`/`youzhan` 同属引擎表达力** ✓）**大** ⚠️；**④`hxunzhi2`**：**宿主能力 + 决策**（**「技能致死是否进濒死询问」口径未定** ✗）**最大** ❗；⇒ **建议顺序 1→2→3→4** ✓ —— **1、2 各 1–2 处当天可完成** ✓；**四条都在未跟踪的 `host/**`** ❌ ⇒ **本代理不可改，表供有权限者排期** ✓。
+>
+1` + `is_sha_like() || jifeng_single_target_trick` ✓；**step** `skills_status.rs:294+` 有实现，注释「上游 `Math.random() > (1.3+n/5)/n`。原生以 `cancel_permille`」✓）⇒ **v6 说的「档位偏晚 + 随机未对」两点都不成立** ❌；**真正缺的只有 `mod.selectTarget` 面** ✗（**全库无「目标数修改器」** ✓）⇒ **归入「引擎表达力」类**（**与 `duoqi`/`youzhan` 同类** ✓）；**G9 描述改为「只缺 `mod` 面」** ✓，**G1 标注「三面均为空」** ✓。
 >
 
 
