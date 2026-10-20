@@ -779,6 +779,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 532 轮**：**U05-OW（`shaai-ow`）差异族 v0**（台账第 203 行 + 规则基准）——上游 `ow/skill.js` vs 原生 `TriggerMeta`：该包 **24 武将 / 11 技能全部 `host:` 映射**（**复用 `host:wudian_*`** ✓）；**6 条 trigger 对照全部不一致** ⚠️：`guangshu`（无→`Damage`）、**`ziyu`（`global:phaseEnd`→`PhaseBegin`：时机+作用域都不同）**、`shouhu`（无→`PhaseBegin`）、**`duwen`（`source:damageBegin`→`PhaseBegin`：差异最明显）**、`paotai`（无→`PhaseBegin`）、**`bshaowei`（`player:phaseEnd`→`CardUsed`）**；**重要 caveat**：`TriggerMeta` 只是**唤醒入口** ✓，语义在 **`step` 步骤机**里 ⇒ **不能直接判语义不同** ❗（**唤醒时机可以故意不同** ✓）；**该包有 24 武将 ⇒ 载体存在 ⇒ 可写行为样本** ✅（**与 U08 不同** ✓）；**本轮不签署规则差异** ✓，**规则差异仍 5/32** ✓。
 >
+> **第 533 轮**：**U05-OW v1：两条硬结论**（台账第 204 行 + 规则基准）——读 `step/wudian_status.rs` 与**源码注释**（**本仓库用「规则 v122/v124」版本号标注改动** ✓）：**①`duwen`**：**真正实现在 `commit_damage`（`kernel.rs:167`）** ✓，`TriggerMeta` 的 `PhaseBegin` **只是轮询入口**（**step 立即 `Done`** ✓）⇒ **与上游 `damageBegin` 时机接近** ✅（**代码注释自述** ✓，**待样本** ✓）；**②`bshaowei`**：**上游是「双技各 `phaseEnd` 确认切换」** ✓，**原生合并为单确认式三态翻转** ✓（**规则 v124 注释自述** ✓）⇒ **有意为之的差异，非缺陷** ✅，**须保留为登记项** ✓；**其余 4 条**（`guangshu`/`ziyu`/`shouhu`/`paotai`）**未读 step ⇒ 未判定** ❗ ⇒ **从「6 条全不一致」变成「2 条有解释 + 4 条未判」** ✓；**规则差异仍 5/32** ✓（**仍不签署** ✓）。
+>
+
 
 
 
