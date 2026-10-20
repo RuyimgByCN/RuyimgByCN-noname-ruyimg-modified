@@ -654,6 +654,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 464 轮**：**扩到 30 盘 + 趋势判据**——**30/30 全部跑到终局**（`LoyalistWin` 27 / `RenegadeWin{player:2}` 3）、**1959 步 / 6.15 s**；堆 **312908 → 546868（+228 KB）**、**前 5 盘均值 → 后 5 盘均值 +47832 B（≈1.6 KB/盘）**、峰值 **838 KB** ⇒ **未见阶跃式泄漏**，但**非零增长**且**30 盘不足以区分「稳定缓存」与「缓慢泄漏」** ⇒ **不宣称无泄漏**（需 ≥500 盘或稳态检测）。附带观察：随机走步下 `LoyalistWin` 27/30 **只反映机器人偏差**，**不能**用于评价身份局平衡。
 >
+> **第 465 轮**：**网络路径的结构性障碍已移除**——`apps/game-server/src/main.rs` 把内联的 `Router::new()…` 抽成 **`fn build_router(lobby, original_content) -> Router`**（`main()` 只负责装配→bind→serve），`cargo build -p game-server` 通过 ✅。**但仍无网络测试** ❌：`Lobby::new` 需 6 个装配参数且均在 `main()` 就地装配 ⇒ **下一步（机械可做）**抽出 `bootstrap_lobby(cfg)`，再用**裸 HTTP/1.1 + `TcpStream`（零新依赖）**在 `127.0.0.1:0` 做真实 socket 往返；**环境限制**：`/bin/ps` 已实测被沙箱拒绝，监听取证未尝试 ⇒ 「真实网络」**仍未验收**。
+>
+
 
 
 ` 与 `legal_actions`**（`messages.rs:168-177`）⇒ 本连接无动作时**取快照**、按 `min_count` 构造 `ResolveChoice{selections: 0..min_count}` ⇒ **`submitted=178 accepted=178`（100%）**、**`max_revision=72`**（room2；另 69/30/15）、240 次快照全响应；用例**`#[ignore]` 已移除**，game-server 套件 **102 passed / 0 failed / 0 ignored**。**仍未做**：强 AI 选步、终局断言、内存/句柄观测、真实网络。

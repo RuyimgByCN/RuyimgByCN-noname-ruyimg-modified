@@ -1,0 +1,3 @@
+## build_router 抽取验证
+build: 0
+122:fn build_router(lobby: Arc<Lobby>, original_content: ServeDir) -> Router {

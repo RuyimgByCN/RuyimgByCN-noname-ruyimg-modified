@@ -110,9 +110,17 @@ async fn main() {
         Err(e) => tracing::warn!(error = %e, "原生房间恢复失败（服务端继续启动）"),
     }
 
-    let original_content = ServeDir::new(&cfg.original_content_root);
+    let app = build_router(lobby.clone(), ServeDir::new(&cfg.original_content_root));
 
-    let app = Router::new()
+    let addr = cfg.listen_addr;
+    info!(%addr, "game-server listening");
+    let listener = tokio::net::TcpListener::bind(addr).await.expect("bind");
+    axum::serve(listener, app).await.expect("serve");
+}
+
+/// 构造 HTTP/WS 路由（**从 `main` 抽出**，便于测试在 `127.0.0.1:0` 上起真实监听）。
+fn build_router(lobby: Arc<Lobby>, original_content: ServeDir) -> Router {
+    Router::new()
         .route("/health", get(|| async { "ok" }))
         .route("/metrics", get(metrics_handler))
         .route("/rooms", get(rooms_handler))
@@ -128,12 +136,7 @@ async fn main() {
         .route("/ws", get(ws_handler))
         .nest_service("/original-content", original_content)
         .layer(CorsLayer::permissive())
-        .with_state(lobby.clone());
-
-    let addr = cfg.listen_addr;
-    info!(%addr, "game-server listening");
-    let listener = tokio::net::TcpListener::bind(addr).await.expect("bind");
-    axum::serve(listener, app).await.expect("serve");
+        .with_state(lobby)
 }
 
 #[derive(Debug, Default, Deserialize)]
