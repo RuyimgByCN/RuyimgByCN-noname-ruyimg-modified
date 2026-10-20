@@ -25,8 +25,8 @@ hp0-2 断言被 1 护甲吸收打为 7。修法：hujia/手牌清零置于 advan
 | 项 | 结果 |
 |---|---|
 | 定向 g1_shahai_swd | **49/49** |
-| engine-native 全量 | **768/0/0**（golden 不变——4 kind 无行为接线）——[日志](engine-native-tests.log) |
-| Gate 1b | exit 0——[日志](gate1b-all-targets.log) |
+| engine-native 全量 | **768/0/0**（golden 不变——4 kind 无行为接线）——`engine-native-tests.log`（**未入库**） |
+| Gate 1b | exit 0——`gate1b-all-targets.log`（**未入库**） |
 
 ## 登记边界与下一步
 

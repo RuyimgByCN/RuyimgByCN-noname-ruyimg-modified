@@ -1,6 +1,6 @@
 # 2026-10-11 T11 Boss 关卡骨架（规则 v207）
 
-任务来源：[进度主稿 T11](../../../architecture/native-progress.md)（领取锁 `e0e154e4`；承接 [boss 专属技能包首切片评估](../../2026-10-11-t9-lx-trace-survey/README.md)——消费面先行）。上游依据：`mode/boss.js` 各关卡 `bossinfo.gameDraw`（如穷奇 boss 8/玩家 4）与 `bossinfo.loopFirst`（回合起点座位）。
+任务来源：[进度主稿 T11](../../../architecture/native-progress.md)（领取锁 `e0e154e4`；承接 [boss 专属技能包首切片评估](../2026-10-11-t9-lx-trace-survey/README.md)——消费面先行）。上游依据：`mode/boss.js` 各关卡 `bossinfo.gameDraw`（如穷奇 boss 8/玩家 4）与 `bossinfo.loopFirst`（回合起点座位）。
 
 ## 建模
 

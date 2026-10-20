@@ -1,6 +1,6 @@
 # 2026-10-11 T11 boss 内容落包首批：烛阴+凶兽（规则 v208）
 
-任务来源：[进度主稿 T11](../../../architecture/native-progress.md)（领取锁 `63b64ff1`；[首切片评估](../../2026-10-11-t9-lx-trace-survey/README.md)的落包步，消费面=v207 关卡骨架）。上游依据：`mode/boss.js` `boss_zhuyin`（男/群/hp4/单技/`isHiddenBoss` 随从且 `isBossAllowed`）与 `boss_xiongshou`（5911–5941：damage/turn 双子技+globalFrom mod）。
+任务来源：[进度主稿 T11](../../../architecture/native-progress.md)（领取锁 `63b64ff1`；[首切片评估](../2026-10-11-t9-lx-trace-survey/README.md)的落包步，消费面=v207 关卡骨架）。上游依据：`mode/boss.js` `boss_zhuyin`（男/群/hp4/单技/`isHiddenBoss` 随从且 `isBossAllowed`）与 `boss_xiongshou`（5911–5941：damage/turn 双子技+globalFrom mod）。
 
 ## 建模（内置模式内容，非扩展包）
 

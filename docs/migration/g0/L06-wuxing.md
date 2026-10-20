@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：无
-- 台账原生重构状态（摘录）：**部分重构；纵向样本已验收（第 20 轮）**：真实包 `packages/extensions/wuxing-upstream-liuli`；五行属性入状态（引擎 RNG 可重放，登记差异：上游 Math.random 不逐局等价）、生克宿主行为（被生摸牌/被克弃牌——弃牌为确定性首张，登记差异）、五行盘 Treasure 占栏 + 改属性主动技（PickTag 两段选择字节恢复）。暂缓：联机/视频/帮助表现层；装备技能挂载生命周期（五行盘技能以授予验证）。**真实宿主全生命周期验收完成（2026-10-08，[wuxing 生命周期](../operations/evidence/2026-10-08-u05-wuxing-lifecycle/README.md)——第六例即本包）**：安装+激活→安装包→原生建局→对局中卸载→锁定副本续玩→重装/import 守卫
+- 台账原生重构状态（摘录）：**部分重构；纵向样本已验收（第 20 轮）**：真实包 `packages/extensions/wuxing-upstream-liuli`；五行属性入状态（引擎 RNG 可重放，登记差异：上游 Math.random 不逐局等价）、生克宿主行为（被生摸牌/被克弃牌——弃牌为确定性首张，登记差异）、五行盘 Treasure 占栏 + 改属性主动技（PickTag 两段选择字节恢复）。暂缓：联机/视频/帮助表现层；装备技能挂载生命周期（五行盘技能以授予验证）。**真实宿主全生命周期验收完成（2026-10-08，[wuxing 生命周期](../../operations/evidence/2026-10-08-u05-wuxing-lifecycle/README.md)——第六例即本包）**：安装+激活→安装包→原生建局→对局中卸载→锁定副本续玩→重装/import 守卫
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -56,5 +56,5 @@
 ## 6. 阻塞与后续
 
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
-- 2026-10-17：五行盘 `equip_skills` 已随装备授予 `wuxingpan_skill`。八项证据见 [2026-10-17-t12-l06-eight](../operations/evidence/2026-10-17-t12-l06-eight/README.md)。联机提前返回、录像和帮助 HTML 仍未迁入。
+- 2026-10-17：五行盘 `equip_skills` 已随装备授予 `wuxingpan_skill`。八项证据见 [2026-10-17-t12-l06-eight](../../operations/evidence/2026-10-17-t12-l06-eight/README.md)。联机提前返回、录像和帮助 HTML 仍未迁入。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。

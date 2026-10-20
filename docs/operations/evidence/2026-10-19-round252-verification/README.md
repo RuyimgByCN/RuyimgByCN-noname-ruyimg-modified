@@ -30,4 +30,4 @@
 ## 3 与主稿的关系
 
 数字与[进度主稿](../../../architecture/native-progress.md)第 250 轮里程碑一致；差异项与修复项以
-[修复清单](../../2026-10-18-blocked-fixes/README.md)（**28 项**）为准。
+[修复清单](../2026-10-18-blocked-fixes/README.md)（**28 项**）为准。

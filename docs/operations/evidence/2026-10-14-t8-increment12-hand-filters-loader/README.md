@@ -22,5 +22,5 @@
 |---|---|
 | t8_rvm_bridge 定向 | **16/16** 不变绿——[日志](bridge-targeted.log) |
 | engine-native 全量 | **715/0/0**（不变，纯映射补齐）——[日志](engine-native-tests.log) |
-| content-native-loader | **0/0**——[日志](loader-tests.log) |
+| content-native-loader | **0/0**——`loader-tests.log`（**未入库**） |
 | Gate 1b | exit 0——[gate1b-all-targets.log](gate1b-all-targets.log) |

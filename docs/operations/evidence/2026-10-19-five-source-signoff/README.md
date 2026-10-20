@@ -8,11 +8,11 @@
 
 | 来源 | 安装 | 升级 | 配置 | 组合 | 保存恢复 | 目标平台 | 规则差异 | 性能 |
 |---|---|---|---|---|---|---|---|---|
-| **L04**（cardpile-liuli） | ✅ [lifecycle](../../2026-10-08-l04-cardpile-liuli-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ `nc08_config_acceptance` | ✅ `nc08_composition_pair_matrix` | ✅ **单进程（`pile.json` 管线）** `nc08_save_restore_pile` | ❌ | ⚠ 台账行 | ❌ |
-| **U01**（d3） | ✅ [lifecycle](../../2026-10-08-u01-d3-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ **单进程**（`nc08_save_restore_four_sources`） | ❌ | ⚠ 台账行 | ❌ |
-| **U03**（cardpile） | ✅ [lifecycle](../../2026-10-08-u03-cardpile-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ **单进程（`pile.json` 管线）** `nc08_save_restore_pile` | ❌ | ⚠ 台账行 | ❌ |
-| **U05**（杀海拾遗，5 子包） | ✅ [lifecycle](../../2026-10-08-u05-gwent-lifecycle/README.md) 等 5 份 | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ `t12-g5-batch2`（六子包，**双进程**）+ `nc08_save_restore_four_sources`（单进程） | ❌ | ✅ 13 族 + 缺口清单 | ❌ |
-| **U07**（wudian） | ✅ [lifecycle](../../2026-10-08-u07-wudian-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ **单进程**（同上用例） | ❌ | ⚠ 台账行 | ❌ |
+| **L04**（cardpile-liuli） | ✅ [lifecycle](../2026-10-08-l04-cardpile-liuli-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ `nc08_config_acceptance` | ✅ `nc08_composition_pair_matrix` | ✅ **单进程（`pile.json` 管线）** `nc08_save_restore_pile` | ❌ | ⚠ 台账行 | ❌ |
+| **U01**（d3） | ✅ [lifecycle](../2026-10-08-u01-d3-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ **单进程**（`nc08_save_restore_four_sources`） | ❌ | ⚠ 台账行 | ❌ |
+| **U03**（cardpile） | ✅ [lifecycle](../2026-10-08-u03-cardpile-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ **单进程（`pile.json` 管线）** `nc08_save_restore_pile` | ❌ | ⚠ 台账行 | ❌ |
+| **U05**（杀海拾遗，5 子包） | ✅ [lifecycle](../2026-10-08-u05-gwent-lifecycle/README.md) 等 5 份 | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ `t12-g5-batch2`（六子包，**双进程**）+ `nc08_save_restore_four_sources`（单进程） | ❌ | ✅ 13 族 + 缺口清单 | ❌ |
+| **U07**（wudian） | ✅ [lifecycle](../2026-10-08-u07-wudian-lifecycle/README.md) | ✅ **`nc08_upgrade_five_sources`** | ✅ 同上 | ✅ 同上 | ✅ **单进程**（同上用例） | ❌ | ⚠ 台账行 | ❌ |
 
 ## 2 逐项说明（**口径**）
 

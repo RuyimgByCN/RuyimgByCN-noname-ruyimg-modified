@@ -19,7 +19,7 @@
 
 ## ② 技能名统一
 
-上游对照：`玩点论杀/character/translate.js:4` moshou="墨守"；`杀海拾遗/character/ow/translate.js:124` xiandan="霰弹"。规则基准与进度流水中的错名已由同日[文档清理批](../../2026-10-10-doc-cleanup/README.md)改正；本批改其余位置：
+上游对照：`玩点论杀/character/translate.js:4` moshou="墨守"；`杀海拾遗/character/ow/translate.js:124` xiandan="霰弹"。规则基准与进度流水中的错名已由同日[文档清理批](../2026-10-10-doc-cleanup/README.md)改正；本批改其余位置：
 
 - "莫守"→"墨守"（12 处）：`engine.rs`、`catalog.rs`、`content/standard.rs`、`content/host.rs`×2、`tests/g1_wudian.rs`×10、`docs/architecture/legacy-reference.md`×1（实改 16 处含 tests）。
 - "闪弹"→"霰弹"（9 处）：`kernel.rs`×6、`snap.rs`、`tests/g1_wudian.rs`×2。
