@@ -676,6 +676,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 477 轮**：**修「软链包静默装 0 个」**——`apps/game-server/src/native.rs::import()` 增加**空结果检查**：drop-in 根**非空**却**一个包都没装上**时**返回错误**（说明「包目录须为真实目录、不支持符号链接且需含 manifest」）；新增 `symlinked_package_dir_is_rejected_explicitly` **锁住**该行为，`nc08_install_matrix` 仍 **41/41 无回归** ✅；**取舍**：选**报错**而非警告——「非空根 + 0 安装」几乎总是配置错误，而 `main()` 对 `import()` 已是容忍路径（warn + 降级），不会让服务起不来。
 >
+> **第 478 轮**：**逐包配置矩阵 41/41、0 问题**（`nc08_manifest_matrix`）——manifest 齐全、**`(namespace, package_id)` 全库唯一**（`package_id` 允许跨 namespace 重名：`cardpile`/`boss-play`/`coin`）、**namespace 与目录名一致**、**25 个 `assets/config.json` 全部可解析且非空**；与既有 `nc08_config_acceptance`（19 包**装载行为**：元数据交叉/`enabled` 214→124/`init_hook` 取值/3 种非法数据被拒）**互补** ⇒ 八项「配置」覆盖 **19 → 41 包**；**边界**：只验形状与唯一性，**不验配置项语义**；运行时改配置的持久化未覆盖。
+>
+
 
 
 

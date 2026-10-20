@@ -20,7 +20,7 @@
 |---|---|---|
 | **安装** | `*lifecycle*` 目录 + **`nc08_install_matrix`（41/41 包目录，安装 + 幂等）** | **5/5 + 全包 41/41** ✅ |
 | **升级** | **无**逐来源升级用例（通用用例 `nc08_upgrade_acceptance` 用 swd 包，**不等于**来源级签署） | 0/5 |
-| **配置** | `nc08_config_acceptance`（**19 包**元数据/开关/`init_hook`/非法数据） | 5/5 **通用**覆盖 |
+| **配置** | `nc08_config_acceptance`（19 包装载行为）+ **`nc08_manifest_matrix`（41/41 包 manifest 契约、25 个 `config.json`）** | **5/5 + 全包 41/41** ✅ |
 | **组合** | `nc08_composition_pair_matrix`（**10 卡牌包 45 对**） | 5/5 **通用**覆盖 |
 | **保存恢复** | `t12-g5-batch2`（双进程）+ `nc08_save_restore_four_sources`/`nc08_save_restore_pile` + **`nc08_save_restore_matrix`（13/13 包）** | **5/5 + 全包矩阵 13/13**（U05 双进程；U01/U03/U07/L04 单进程，**U03/L04 走 `pile.json` 管线**） |
 | **目标平台** | **构建级**：`engine-native` @ `aarch64-apple-ios` ✅ / `x86_64-apple-ios` ✅ / `wasm32-unknown-unknown` ✅；`engine-native-wasm` ✅、`content-native-loader` ✅；**Android/Windows FAIL**（缺 NDK / MSVC C 工具链）| **部分**（构建级通过；**真机与浏览器运行未验收**）|

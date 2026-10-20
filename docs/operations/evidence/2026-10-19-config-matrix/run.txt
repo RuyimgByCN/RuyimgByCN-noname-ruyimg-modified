@@ -1,0 +1,1 @@
+DBG 配置矩阵：目录 41 个、manifest 合格 41 个、含 config.json 25 个、问题 0 项
