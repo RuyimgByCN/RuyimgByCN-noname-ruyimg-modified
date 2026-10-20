@@ -262,7 +262,7 @@
 
 ### 批 1 改完怎么验证（**必读**）
 
-按[交接页 §4.5 的批 1](../2026-10-19-rules-diff-handover/README.md)（**G14 9 条 + G16 + `swd_xiuluo` + `huajin2` + `hlss_fengqi`，约 12 行**）改完后：
+按[交接页 §4.5 的批 1](../2026-10-19-rules-diff-handover/README.md)（**G14 10 条 + G16 + `huajin2` + G19 3 条，约 15 行**；`swd_xiuluo`/`hlss_fengqi` 已归批 3）改完后：
 
 1. **编译 + 全量**：`cargo test --offline -p engine-native` ⇒ **应仍为 1538/0/21**（**若有 golden 因 filter 变化而红，先查语义再重录** ⚠️）；
 2. **阶段审计**：打开 [`2026-10-19-phase-audit/registry.txt`](../2026-10-19-phase-audit/registry.txt)，
