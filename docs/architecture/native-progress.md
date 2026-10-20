@@ -961,6 +961,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 613 轮**：**批 1 可行性实测确认**——担心「G14 要新增 `EventKind` ⇒ 会动未跟踪的 `kernel/**`」✗；**实测否定** ✅：**`filtering/swd.rs:73` 已有现成写法** `EventData::Phase { player, begin: true, .. }` ✓（**`..` 省略 `phase` ⇒ 任意阶段开始** ✓）⇒ **G14 的修法只是「把 `phase: Phase::Judge` 改成 `..`」** ✓ —— **只改 `filtering` 层 pattern，不动 `event.rs`/`kernel`** ✅ ⇒ **批 1 成本成立（甚至更低）** ✅（**8 个 filter 各改一个 pattern** ✓）。
 >
+> **第 614 轮**：**先例的可靠性已核**——读上游 **`jinlin2`（332 B）：`trigger: { player: "phaseBegin" }`** ✓，**而原生 `SwdJinlin2` 用 `EventData::Phase { player, begin: true, .. }`（省略 phase）** ✓ ⇒ **两者一致** ✅ ⇒ **`SwdJinlin2` 是 G14 的「正确范本」** ✅；⇒ **8 条 G14 的修法 = 把各自 filter 改成 `SwdJinlin2` 那种写法** ✓（**而 `jinlin2` 恰不在 `Phase::Judge` 组** —— **它是「做对了的兄弟技能」** ✓）⇒ **批 1 的可行性、成本、验证三者齐备** ✅。
+>
+
 
 
 

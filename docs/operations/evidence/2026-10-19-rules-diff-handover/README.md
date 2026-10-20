@@ -209,6 +209,19 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 
 ⇒ **批 1 的成本估计成立（甚至更低）** ✅ —— **8 个 filter 各改一个 pattern** ✓
 
+#### **先例的可靠性已核**（上游 `jinlin2` 也是 `phaseBegin`）
+
+| 面 | 内容 |
+|---|---|
+| 上游 `jinlin2`（332 B）| **`trigger: { player: "phaseBegin" }`**（**任意阶段开始**）|
+| 原生 `SwdJinlin2` | `EventData::Phase { player, begin: true, .. }`（**省略 phase**）|
+| 判定 | ✅ **一致** —— **同一份上游语义，这里做对了** ✅ |
+
+⇒ **`SwdJinlin2` 就是 G14 的「正确范本」** ✅ ——
+**8 条 G14 的修法 = 把各自的 filter 改成 `SwdJinlin2` 那种写法** ✓
+（**而 `jinlin2` 恰好不在 `Phase::Judge` 组里** —— **它是「做对了的兄弟技能」** ✅）
+
+
 ### 建议排期（按「成本 / 收益」）
 
 | 批 | 条目 | 预计 |
