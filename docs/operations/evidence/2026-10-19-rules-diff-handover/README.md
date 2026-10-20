@@ -307,7 +307,7 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 | **U05 杀海拾遗** | **G15×3 + G18×1 = 4 条**（**批 3**）| ❌ **仍不能** |
 | **L03 boss** | **G18×1**（`hlss_fengqi`，**批 3**）| ❌ **仍不能** |
 | **U07 玩点论杀** | **G15×1**（`fuchou2`，**批 3**）| ❌ **仍不能** |
-| **L10 史诗卡牌** | 批 1 后**无已知缺陷** | ❌ **仍不能**（**包内 0 卡 / 2 技能，差异族只覆盖 1 个（`让节`）⇒ 覆盖 1/2**）|
+| **L10 史诗卡牌** | 批 1 后**无已知缺陷** | ⚠️ **最接近**（**0 卡 / 2 技能，`rangjie` 已有差异族、`reguhuo` 已实现但缺差异族 ⇒ 只差 1 条**）|
 
 ⇒ **批 1 即使全做完，也签不了任何一个来源的规则差异** ⚠️ ——
 **因为剩下的 G15/G18 恰好落在同一批来源上（U05/L03/U07）** ❗
@@ -455,3 +455,50 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 **「注册结构里没出现」不等于「没实现」** ——
 **`factory.rs` 只是多条分发路径中的一条**，**必须把所有分发点（`step.rs`、`step/*`、`activation*`、`support`）都查过才能说「未实现」** ⚠️
 **这是本会话第 4 次「扫描范围不足」**（前三次：`skill.js` 漏 `mode/`、包数据漏 `host.rs`、只扫 `noname`）❌
+
+---
+
+## 4.9 ❌ **撤回：`reguhuo` 未实现 —— 它也做了**（第 678 轮）
+
+### 全部出现位置（这次查全了）
+
+| 位置 | 内容 |
+|---|---|
+| `keys.rs:531/825` | 键注册 |
+| `factory.rs:317` | `(None, None)` |
+| `filtering.rs:116` / `filtering/common.rs:212` | **`=> false`** |
+| **`activation.rs:44` / `activation/common.rs:50`** | **主动面：`activate_common`** ✅ |
+| **`step.rs:591` / `step/skills_cards.rs:416`** | **效果步：`step_skills_cards`** ✅ |
+| **`tags.rs:279/1056`** | **tag 515（双向）** ✅ |
+| `metadata.rs:126` / `metadata/common.rs:261` | meta |
+
+⇒ **它有主动面、有效果步、有 tag** ⇒ **已实现** ✅
+
+### 那 `filtering => false` 是什么意思
+
+**`reguhuo` 是主动技（`enable: ['chooseToUse','chooseToRespond']`）⇒ 不需要触发过滤 ⇒ `filter` 恒 `false` 是正常写法** ✅
+**我把它读成了「不触发 ⇒ 没做」** ❌ —— **这是同一个错误的第二次**
+
+### 两次撤回的同一个根因
+
+| 轮 | 错在哪 | 正确做法 |
+|---|---|---|
+| **675–677** | 用 `factory.rs` 的 `(None, None)` 推断「95 个未实现」 | **要查全 `step`/`activation`/`support`** |
+| **674/678** | 用 `filtering => false` + `factory => None` 推断「`reguhuo` 未实现」 | **主动技的 `filter` 恒 false 是正常** |
+
+⇒ **共同错误：把「某一个分发点没有」当成「整条链没有」** ❌
+
+### 修正后的结论
+
+| 结论 | 状态 |
+|---|---|
+| **`reguhuo` 未实现** | ❌ **撤回** |
+| **`L10` 的缺口 = 1 条差异族 + 1 个未实现技能** | ❌ **撤回** ⇒ **`L10` 只差 1 条差异族** ✅ |
+| **`L10` 是最接近「可签来源」的** | ✅ **恢复成立**（**2 技能中 1 个已有差异族、无确认缺陷**）|
+
+### 方法上的修正
+
+**判断「某技能是否实现」只认一个信号是不够的**。
+**可靠做法**：`grep -rn "HostBehavior::X"` **列出全部出现位置**，
+**看有没有 `activation*.rs`（主动面）或 `step/skills_*.rs`（效果步）的内容** ✅
+**仅有 `keys.rs`/`factory.rs`/`filtering.rs`/`metadata.rs` 四类 = 真未实现** ✅
