@@ -41,7 +41,11 @@
 
 ⇒ **提案**：[阶段时机扩展](../../proposals/phase-timing-extension.md)（**批 A 8 条可立即设计 / 批 B 2 条均已答**）
 
-## 2 新增的可复现工具（6 个脚本 + 单测）
+## 2 新增的可复现工具（**本会话新增 6 个脚本 + 5 个单测文件**）
+
+> `scripts/` 下共 **15 个脚本、8 个单测文件**；其中**本会话新增的是下面 6 个脚本**
+> 与 `test_check_local_links` / `test_check_stale_numbers` / `test_map_package_sources` /
+> `test_refresh_recent_rounds` / `test_report_g14` / `test_report_phase_filters`（**6 个**）。
 
 | 脚本 | 作用 |
 |---|---|
