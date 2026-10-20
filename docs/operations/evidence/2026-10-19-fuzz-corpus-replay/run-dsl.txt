@@ -1,0 +1,6 @@
+DBG DSL 语料回放：3 个样本
+DBG DSL 语料 empty.txt ⇒ 解析成功
+DBG DSL 语料 garbage.txt ⇒ 结构化错误：Parse { pos: 1, message: "expected identifier" }
+DBG DSL 语料 partial_skill.txt ⇒ 结构化错误：Parse { pos: 16, message: "expected LParen, got LBrace" }
+DBG DSL 语料回放：ok=1 err=2（**无 panic / 无 hang**）
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

@@ -696,6 +696,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 488 轮**：**fuzz 语料刷新**（台账 186 行的待办已清）——新增维护工具 `crates/rule-vm/examples/gen_fuzz_seed.rs`：用 `BytecodeModule::to_bytes()` 生成**当前格式**种子 `valid_nnvm.bin`（**70 字节 / magic `NNVM`**），**写盘前先回读自检**（不自洽则 exit(1)）；回放用例新增断言「**该种子必须能解码**」⇒ 实测 **ok=1 / err=3、无 panic**（**刷新前 ok=0** ⇒ 用例只测过「被拒」路径，**从未验证成功路径**）；**旧 `NVM1` 样本保留**作为「**旧格式必须被拒**」的回归样本（清理另开任务）。
 >
+> **第 489 轮**：**`fuzz_dsl_parser` 语料回放**（`crates/content-compiler/tests/fuzz_dsl_parser_replay.rs`）——**与 fuzz target 同一 API**（`parse_source`，UTF-8 lossy 入口一致）：3 样本 ⇒ **`empty.txt` 解析成功**（ok=1）、`garbage.txt` / `partial_skill.txt` 均给**带 `pos` 的结构化 Parse 错误**、**无 panic / 无 hang** ✅；⇒ **三个主要 fuzz 目标中已有两个有 stable 回放**（bytecode ✓ + DSL parser ✓），`snapshot_decode` 因需 `engine-core` 依赖**不做**（替代 API 会测错，已记录）；`bytecode_verify`/`command_json`/`content_package` **仍未覆盖**（**不是「已验证」**）。
+>
+
 
 
 

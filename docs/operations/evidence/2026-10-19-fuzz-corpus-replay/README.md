@@ -86,3 +86,34 @@ test result: ok. 1 passed; 0 failed; 0 ignored
 `valid_seed.bin`（`NVM1`）**仍在语料里**：本会话**不删除**它——
 它现在是一个**有价值的「旧格式必须被拒」回归样本**；已在用例里注释说明。
 若要清理，应另开一次「语料迁移」任务（不在本切片范围）。
+
+---
+
+## 7 ✅ 第三轮：**`fuzz_dsl_parser` 语料回放**（三个目标中第二个补上）
+
+用例：`crates/content-compiler/tests/fuzz_dsl_parser_replay.rs` —— **与 fuzz target 同一 API**
+（`content_compiler::parse_source`，UTF-8 lossy 入口一致）。
+
+```
+DBG DSL 语料回放：3 个样本
+DBG DSL 语料 empty.txt ⇒ 解析成功
+DBG DSL 语料 garbage.txt ⇒ 结构化错误：Parse { pos: 1, message: "expected identifier" }
+DBG DSL 语料 partial_skill.txt ⇒ 结构化错误：Parse { pos: 16, message: "expected LParen, got LBrace" }
+DBG DSL 语料回放：ok=1 err=2（**无 panic / 无 hang**）
+test result: ok. 1 passed; 0 failed; 0 ignored
+```
+
+| 判据 | 结果 |
+|---|---|
+| **不 panic / 不 hang** | ✅ 3/3 |
+| **至少 1 个可解析**（覆盖成功路径）| ✅ `empty.txt` |
+| **失败样本给结构化错误**（带 `pos` 与 message）| ✅ 2/2 |
+
+### 7.1 fuzz 目标覆盖现状
+
+| target | API | stable 回放 |
+|---|---|---|
+| `fuzz_bytecode_module` | `rule_vm::BytecodeModule::from_bytes` | ✅（含**当前格式**种子 `valid_nnvm.bin`）|
+| **`fuzz_dsl_parser`** | **`content_compiler::parse_source`** | ✅ **本轮补上** |
+| `fuzz_snapshot_decode` | `engine_core::Snapshot::from_bytes` | ❌ **不做**：`engine-core` 非本工作区相关 crate 的依赖，**不为测试加依赖**（替代 API 会测错，已记录）|
+| `fuzz_bytecode_verify` / `fuzz_command_json` / `fuzz_content_package` | 见 targets | ❌ **未做**（本轮未覆盖，**不是"已验证"**）|
