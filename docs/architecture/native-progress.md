@@ -941,6 +941,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 603 轮**：**`Phase::End, begin=true` 组（8 条）：1 一致 / 7 未定位**——**`SwdZhuhai` 上游 `global: phaseJieshuBegin`**（**`Jieshu`=结束阶段** ✓）= **原生 `End, begin=true`** ✅ **一致**；**`PhaseEndRecoverOrDraw` 是通用宿主行为非技能** ✓；**其余 6 条（`WudianZiyu`/`GujianFood*`×3/`WudianZhucheng`/`WudianPaotaiFire`）key 是原生自定义命名** ✗ ⇒ **按 key 查上游 `skill.js` 查不到** ❗ ⇒ **需反查「包内 `skills[]` 的 name ↔ mapping」** ✓ ⇒ **「key 名 ≠ 上游名」的条目不能靠 `grep` 定位** ✅；**进度**：**已核 33 / 正确 13 / 未核 19** ✓（**交接页已同步** ✓）。
 >
+> **第 604 轮**：**反查自定义命名 key（+2 一致）**——用「**包数据 `skills[].mapping` ↔ `name`**」反查 ✓：**`WudianZhucheng` = `zhucheng`，上游 `player: phaseEnd`** ✅ **一致**、**`WudianPaotaiFire` = `paotai2`，上游 `player: phaseEnd`** ✅ **一致**；**`WudianZiyu` = `ziyu`，上游 `global: phaseEnd`** ⚠️（**已知 G2「触发→主动」** ✓，**但这里 filter 是 `End begin=true` ⇒ 与「Act 主动」并存，需再核** ❓）；**3 条 `GujianFood*` 包内无 `mapping` 指向** ❓（**可能由 `cards[].skills` 授予** ✓）；**进度**：**已核 35 / 正确 15 / 未核 17** ✓；**方法确认**：**「包内 skills[] 是定位上游的正确桥梁」** ✅（**6 条里 3 条一次成功** ✓）。
+>
+
 
 
 

@@ -4935,3 +4935,27 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 | 已核 | 32 | **33** |
 | ✅ 正确 | 12 | **13** |
 | ❓ 未核 | 20 | **19** |
+
+### 反查「自定义命名 key」的上游(**+2 一致**，第 603 轮)
+
+用「包数据 `skills[].mapping` ↔ `name`」反查上一轮未定位的 key：
+
+| 行为 | 包内技能名 | 上游 `trigger` | 判定 |
+|---|---|---|---|
+| **`WudianZhucheng`** | `zhucheng`（`wudian` 包）| **`player: phaseEnd`** | ✅ **一致**（**结束阶段**）|
+| **`WudianPaotaiFire`** | `paotai2`（`shaai-ow` 包）| **`player: phaseEnd`** | ✅ **一致**（**结束阶段**）|
+| **`WudianZiyu`** | **`ziyu`**（`shaai-ow`）| **`global: phaseEnd`** | ⚠️ **已知 G2**（**上游触发技，原生做成主动技**）—— **而这里 filter 是 `End, begin=true`** ⇒ **与「Act 主动」并存，需再核** ❓ |
+| `GujianFoodLiyutang`/`Mapodoufu`/`Ziyangdan` | **包内无 `mapping` 指向** | —— | ❓ **可能由 `cards[].skills` 授予** |
+
+#### 进度
+
+| 项 | 之前 | **现在** |
+|---|---:|---:|
+| 已核 | 33 | **35** |
+| ✅ 正确 | 13 | **15** |
+| ❓ 未核 | 19 | **17** |
+
+#### 方法确认
+
+**「包内 `skills[].mapping` ↔ `name`」是定位上游的正确桥梁** ✅ ——
+**6 条里 3 条一次反查成功**（**另 3 条不在 `skills[]` 里，可能在 `cards[].skills`** ❗）。
