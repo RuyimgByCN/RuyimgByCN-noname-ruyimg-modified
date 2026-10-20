@@ -971,6 +971,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 618 轮**：**`mod` 面第 2 步抽样 5 条**——从 `card/swd/skill.js`（**177 定义**）抽 5 个：**3/5 是距离修正**（`hslingjian_*_equip3_dist` = **`globalTo: d+1`**、`equip4_dist` = **`globalFrom: d-1`**、`zhongxinghujia_equip3` = **条件 `globalTo`** ✓）、**`qiankundai` = 手牌上限 +1**、**`zhufangshenshi` = 射程判定覆写** ✓；**原生侧**：**有 `computed_distance` 的「读」**（`filtering/swd.rs:92/207/229/241` ✓）**但没有「改距离」的入口** ❌ ⇒ **G17（`mod` 面距离修正缺失）抽样成立** ✅；**但「装备的距离修正」可能由装备系统另实现** ❓（**未查** ✓）⇒ **G17 记「抽样成立、待全量」，不记 112 条** ✅。
 >
+> **第 619 轮**：**`mod` 面拆成三分类（G17a/b/c）**——**G17a 距离修正**：**只有 `computed_distance` 读、无「改」入口** ❗（**抽样 3/5** ✓）；**G17b 手牌上限**：**`state.hand_limit` 是查询**（`activation/common.rs:34` ✓、`metadata.rs:430` 注释「手牌上限=体力上限在 state.hand_limit 查询」✓）**无修正器** ❗（**抽样 1/5** ✓）；**G17c 射程/目标覆写**：**有 case-by-case 的 `*_target_ok`**（`cyqiaoxie_target_ok`/`hlss_fengqi_target_ok` ✓）⇒ ⚠️ **部分（个案式，非通用 `mod`）** ✓；⇒ **「112 个带 `mod` 的技能」最终归为 2 个确认缺口 + 1 个「同构但个案化」** ✅ —— **不是 112 条，是 3 个「面」** ✅；**并给出与 G14/G15 的对照表**（**G14 对齐 / G15 设计 / G17a-b 设计 / G17c 可选** ✓）。
+>
+
 
 
 
