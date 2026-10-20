@@ -1,0 +1,9 @@
+DBG PhaseEnd：目录注册 PhaseEnd 技能 14 个（其中进入 candidates 14 个）；candidates(PhaseEnd) 共 15；PhaseBegin 技能 40 → candidates 41
+DBG PhaseEnd 技能：#205 `还人` 在 candidates 中=true
+DBG PhaseEnd 技能：#220 `swd_jiguanyuan_gain` 在 candidates 中=true
+DBG PhaseEnd 技能：#229 `donghuangzhong` 在 candidates 中=true
+DBG PhaseEnd 技能：#236 `baishouzhihu` 在 candidates 中=true
+DBG PhaseEnd 技能：#253 `xuanyuan` 在 candidates 中=true
+DBG PhaseEnd 技能：#260 `datong` 在 candidates 中=true
+DBG PhaseEnd 技能：#262 `huanling` 在 candidates 中=true
+DBG PhaseEnd 技能：#293 `mufeng` 在 candidates 中=true

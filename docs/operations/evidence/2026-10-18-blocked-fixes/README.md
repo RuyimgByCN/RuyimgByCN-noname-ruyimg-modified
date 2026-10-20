@@ -1634,6 +1634,7 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 - **修法（受阻）**：`event` 改为 `EventKind::PhaseBegin`，并建议按上游 `discardEnd` 补「阶段名＝弃牌」判定；
   **`content/host/metadata/` 未跟踪** ⇒ 与核心修复清单同因受阻。
 - 用例 `nc08_upstream_swd_baishouzhihu.rs` 的正例已 `#[ignore = "第 57 项…"]` 并写明原因。
+- **影响面已核对（同日探针）**：`PhaseEnd` **派发面正常**——目录 **14 个** `PhaseEnd` 技能**全部**进入 `candidates(PhaseEnd)`（15 项），且引擎**确实发射** `begin:false` 的 `Phase` 帧（`kernel/phase.rs:125`）⇒ 本项是**单技能**的元数据/过滤器矛盾，**不是**引擎缺陷（见[探针](../2026-10-19-phase-end-dispatch/README.md)）。
 
 **53 项根因补充（2026-10-19，NC08）**：`chenhuodajie` 的 `global` 子技能**无声明途径**。
 

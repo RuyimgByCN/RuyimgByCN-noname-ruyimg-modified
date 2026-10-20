@@ -627,6 +627,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 450 轮**：①**样本 160 `shenmiguo`（神秘果）通过**——出牌阶段使用【杀】⇒ `turn.shenmiguo_used` **false→true**（该字段仅由本窗口置位，**无假阳性**）；**`global` 卡窗口第 8 张验证**。②**第 53 项修法可行性更正**：仅补 `cards[].skills` **不足以生效**——授予侧（`kernel/equipment.rs`、`construction.rs`）**同样未跟踪**（`git ls-files crates/engine-native/src/kernel/` = 0）⇒ **本项仍受阻**；可做的只有装载器支持 + 桥接层断言。③踩坑：首版按名字取【杀】命中 `swd_shandian`（闪电）⇒ `IllegalTargets`，改按 `CardKind::Sha` 通过。
 >
+> **第 450 轮追加**：**`PhaseEnd` 派发面探针**——目录注册 `PhaseEnd` 的技能 **14 个**、**全部**进入 `candidates(PhaseEnd)`（15 项），且引擎**确实发射** `begin:false` 的 `Phase` 帧（`kernel/phase.rs:125`）⇒ **`PhaseEnd` 正常**，第 57 项是**单技能**元数据/过滤器矛盾，**非引擎缺陷**（影响面已排除）。
+>
+
 
 =2`：**青龙之圭**（牌堆 196→194、手牌 3→4，净 +1）与**黄麟之琮**（**20 步**到 round 2，`hujia` **0→1**）**均 test ok**，`#[ignore]` 已移除；**第 413–443 轮「宿主派发 Phase{begin} 失效」的结论撤回**。同时发现**新第 57 项**：`baishouzhihu`（白兽之琥）**永不触发**——`metadata/swd.rs:360` 注册 `EventKind::PhaseEnd` 而 `filtering/swd.rs:409-421` 要求 `begin==true`，引擎只有 `begin:true` 的 Phase 事件 ⇒ **元数据与过滤器矛盾**；实测推到**第 14 回合**仍无询问；修法在**未跟踪**目录（受阻），正例已按第 57 项 `#[ignore]`。全量 **1514 passed / 0 failed / 21 ignored**。
 >
