@@ -323,7 +323,7 @@
 
 差异是 **`Xiefang`**：它写成跨行 `||` 的多 `matches!`，**B 会把它整条丢掉**。
 详见 [切片说明](../2026-10-19-g14-guard/slicing.md)。
-**未解**：`BossBaiyi` 为何也命中（臂体看不出含 `Phase`）——**留待下轮**。
+**已解**：`BossBaiyi` 在 `filtering/common.rs` 有真实臂（`filtering.rs:669` 只是同名转发）⇒ **52 无虚计** ✅
 
 ## 7.12 **G14 守卫（9 条，可复现）**
 

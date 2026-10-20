@@ -126,12 +126,14 @@ def main(argv: list[str]) -> int:
             skill, trig, src = MANUAL[key][0], MANUAL[key][1], MANUAL[key][2]
         if not trig:
             verdict = "未定位"
+        elif trig.startswith("(无"):
+            verdict = "不符(凭空新增触发)"  # 上游无 trigger，原生却挂了判定阶段触发
         elif "phaseBegin" in trig:
             verdict = "G14(不符)"  # 上游任意阶段开始，原生却挂判定阶段
         elif "phaseZhunbeiBegin" in trig:
             verdict = "不符(准备阶段)"  # 原生无 Prepare 档（G18）
         else:
-            verdict = "其他(非阶段类)"
+            verdict = "不符(非阶段类)"  # 上游是 damageBegin 等非阶段触发
         rows.append((beh, key, skill, trig, verdict))
 
     tsv = ["行为\tkey\t包内技能名\t上游trigger\t判定"]

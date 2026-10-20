@@ -25,7 +25,16 @@ HostBehavior::Xiefang => matches!(event, EventData::Death{..})
 - **但这类计数对切片规则敏感** ⇒ **任何脚本必须写明切片规则**，否则换个人重算就是 51；
 - **脚本单测里必须钉住条数**（`test_scans_52_phase_filters`），**条数一变就报错**，让人去看是「新增」还是「切片出了问题」。
 
-## 未解
+## ✅ 已解：`BossBaiyi` 不是误报（第 647 轮）
 
-**`BossBaiyi`（`filtering.rs:669`）为什么也命中** ❓ —— 它的臂体是 `self.filter_common(ctx, owner, event)`，
-**看不出含 `Phase`**。**本轮未查清**，**留作待办**（若它是误报，则总数应为 51 而不是 52）。
+它在 **`filtering/common.rs`** 里**另有一个真实臂**（`filtering.rs:669` 那条是**同名转发**）：
+
+```rust
+HostBehavior::BossBaiyi => {
+    let armed = ctx.state.boss_stage().map(|s| s.wing_armed).unwrap_or(0);
+    matches!(event, EventData::Phase { player, phase: crate::event::Phase::Judge, .. })
+}
+```
+
+⇒ **同名的两个臂分处两个文件**（`filtering.rs` 转发 / `common.rs` 实体）——
+**脚本按文件逐个扫，所以只认到 `common.rs` 那条** ✅ ⇒ **52 成立，无虚计** ✅
