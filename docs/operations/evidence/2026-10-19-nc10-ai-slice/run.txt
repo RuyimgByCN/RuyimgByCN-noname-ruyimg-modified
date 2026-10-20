@@ -1,0 +1,4 @@
+DBG NC10 取消：cancelled=true nodes_used=0 budget_exhausted=false
+DBG NC10 预算：nodes_used=1 budget_exhausted=false timed_out=false cancelled=false
+DBG NC10 信息边界：座位0输入长度 before=1730 after=1730（应相同）
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
