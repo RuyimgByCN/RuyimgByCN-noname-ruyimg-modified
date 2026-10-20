@@ -464,6 +464,37 @@ L29  龙血玄黄             3    0.46M       2      0      0         3
 | 213 | **U05-OW v3：4 条待判定按上游字段集定案** | 读 `ow/skill.js` 的**字段集**（`enable`/`trigger`/`mod`/`group`）| **`guangshu`（仅 `enable`）/`paotai`（`enable`+`group`）/`shouhu`（`enable`+`mod`）⇒ 上游都是主动技 ⇒ 原生 `Act` 形式一致 ✅（`mod`/`group` 子面未判 ❓）**；**`ziyu` 是 `trigger`+`direct`（无 `enable`）⇒ 上游「全局 `phaseEnd` 自动摸/回」vs 原生「自己出牌阶段主动」⇒ 发动时机/方式/次数三者都不同 ⚠️ 实质差异**；⇒ **U05-OW 的 4 条待判收敛为 1 条实质差异 + 2 个子面未判** | [rules-baseline](../../architecture/native-rules-baseline.md) |
 | 214 | **5 条未映射技能的**分类**（实现缺口清单补全）** | 读各包 `skills[].reason` | **全库唯一 5 条未映射**全部有 `reason`：**3 条「外部依赖」**（`longxue` 的 `mbcmjiushi`/`mbcmfangzhu`/`mbjuejin` ⇒ **依赖 liuli mobile 包的酒诗/放逐/绝进，未转换**）、**2 条「引擎/DSL 缺口」**（`wudian` 的 `duoqi` ⇒ **`phaseUse` 中止未建模**+筑城标记；`youzhan` ⇒ **`shaBefore` 时点映射偏晚**+虚拟 `useCard` 组合）⇒ **这 5 条是「已登记缺口」而非「未发现」**；与 `hxunzhi2`（未实现）共同构成**明确的实现缺口清单** | [skill-inventory](../operations/evidence/2026-10-19-skill-inventory/README.md) |
 
+## **包 ↔ 来源 ID 对照**（2026-10-19：**只确定 5 条**，其余待维护者登记）
+
+**背景**：台账的「来源 ID」（`U01`/`L04`…）与包数据的 `upstream_path` 目录名**是两套体系**，
+**没有映射表**（详见[包→来源映射证据](../operations/evidence/2026-10-19-package-source-map/README.md)）。
+
+### 已确定（**台账行里唯一出现，可反查**）
+
+| 包 | 来源 ID | `upstream_path` |
+|---|---|---|
+| `hero-kill-upstream-noname` | **U08** | `apps/core/extension/英雄杀/character/skill.js` |
+| `longxue-upstream-liuli` | **L29** | `noname/extension/龙血玄黄/extension.js` |
+| `doomsday-brawl-upstream-liuli` | **L19** | `extension/末日乱斗/...` |
+| `select-beautify-upstream-liuli` | **L27** | `extension/选将美化/...` |
+| `thunder-upstream-liuli` | **L28** | `extension/雷霆万钧/...` |
+
+### 未能确定（**36 个包**）
+
+- **29 个**：**只出现在「批次汇总行」**（一行列 20+ 个来源）⇒ 无法反查；
+- **7 个**：**`upstream_path` 两处都没有**（`boss-zhugeliang`/`cardpile`×2/`coin-noname`/`d3`/`desktop-adapt`/`omnisearch`）。
+
+### 建议（**完成条件的一部分**）
+
+**在 `package.npack.json` 里加 `source_id` 字段**（`U05`/`L19`…），与 `upstream_path` 并列 ⇒
+之后「按来源」的安装/配置/升级/保存恢复/组合/规则/性能统计**都可自动算** ✅。
+⚠ **改包会变更内容锁**（`ARCHIVE_FORMAT_VERSION`/内容哈希）⇒ 需与「升级/保存恢复」验收一并评估。
+
+## 影响
+
+**「组合 13/32」「性能 13/32」是否已达理论上限 —— 目前无法判定** ❓ ——
+**只有补齐上述映射，才能给出「按来源的最大可能值」**。
+
 **覆盖面**：**23/37 来源**已有第⑦层上游样本（本轮新增 `boss-zhugeliang`、`longxue`；**其中 `longxue` 为弱对照**）；**上游混淆来源经全库扫描确认为 2 个**（`longxue`、L12 如真似幻）→ L12 预期同为弱对照；`longxue` 的**静态提取升级已尝试并失败**（十六进制表无中文、目录内无明文）→ 升级须走 D5 运行期采集（见 [混淆扫描](../operations/evidence/2026-10-18-nc08-source-coverage/obfuscation-scan.txt)）；**已转换的 14 个包（有卡/将内容）全部有样本**，其余来源**多为未转换（G1 未做）**（**上游确有内容**；注意 `extension.js` 常为加载器，须按**整目录**统计）→ 第⑦层**无法**为其建样本（口径见 [source-coverage 证据](../operations/evidence/2026-10-18-nc08-source-coverage/README.md)）；**逐命令对照工具**（旧线↔原生线）见
 [nc08-command-by-command](../operations/evidence/2026-10-18-nc08-command-by-command/README.md)。
 **未完成**：接入**上游 JS harness**（当前以旧线为可执行参照，旧线≠上游等价）、其余 16 个来源、
