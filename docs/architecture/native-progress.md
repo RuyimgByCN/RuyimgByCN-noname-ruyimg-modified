@@ -660,6 +660,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 468 轮**：**WS 全链路跑通**（`net_smoke::websocket_creates_joins_and_submits_over_wire`）——两条真实 WS 连接：A `CreateRoom` ⇒ **`JoinOk{room=1, player=1}`**、B `JoinRoom` ⇒ **`JoinOk{player=2}`**、A `SubmitCommand{EndPhase}` ⇒ **`CommandOutcome{Accepted{new_revision:2}}`（含 `state_hash`）** ✅；编解码全走 `engine-protocol::{encode_c2s, decode_s2c}`（**真实线上格式**）⇒ **「建局→加入→提交命令→个人化结果」在 WS 上已验证**；**未做**：用 WS 跑整局、TLS、跨机、浏览器端。
 >
+> **第 469 轮（真实网络整局达成）**：`net_smoke::websocket_plays_match_to_completion`——两条真实 WS 连接驱动到终局（`legal_actions` 空时用 `RequestSnapshot` 刷新、快照带 `choice`）：**`outcome=LoyalistWin`、52 步 / 52 次快照 / rev=53、0.22 s**，并断言 `steps>0 && snapshots>0`、`outcome != InProgress`；协议全走 `encode_c2s`/`decode_s2c` ⇒ **「真实网络（loopback 明文 WS）上的完整对局」达成** ✅；**未做**：TLS、跨机、浏览器端、**WS 下多房间并发与断线重连**。
+>
+
 
  Arc<Lobby>`**，并在 `main.rs` 增 `#[cfg(test)] mod net_smoke`：**真实 `TcpListener("127.0.0.1:0")` + `axum::serve`**，用 **`std::net::TcpStream` 发裸 HTTP/1.1**（**零新依赖**）⇒ `/health` **200 ok**、**有状态 `/metrics` 200（877 B）** ✅ ⇒ **「真实网络」由 ❌ 变 ✅（loopback 档）**；**未做**：WS 升级回路、TLS、跨机、浏览器端。
 >

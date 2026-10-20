@@ -784,4 +784,243 @@ mod net_smoke {
             .expect("frame ok");
         frame.to_text().expect("text").to_string()
     }
+    /// **WS 整局**：两条 WS 连接驱动到 `MatchOutcome != InProgress`（"真实网络上的完整对局"）。
+    ///
+    /// 选步口径同 `long_run_bot.rs`：`ResolveChoice` 原样用权威 `selections` → 出牌/技能 → `EndPhase`；
+    /// `legal_actions` 为空时用 `RequestSnapshot` 刷新（快照带 `choice`）。
+    /// **不是**强 AI，只用于驱动推进。
+    #[test]
+    fn websocket_plays_match_to_completion() {
+        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, LegalAction, PlayerId};
+        use engine_protocol::{
+            decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
+        };
+        use futures_util::{SinkExt, StreamExt};
+        use tokio_tungstenite::tungstenite::Message;
+
+        const MAX_STEPS: usize = 4000;
+
+        fn pick(legal: &[LegalAction]) -> Option<LegalAction> {
+            if let Some(a) = legal
+                .iter()
+                .find(|a| matches!(a, LegalAction::ResolveChoice { .. }))
+            {
+                return Some(a.clone());
+            }
+            for a in legal {
+                if matches!(
+                    a,
+                    LegalAction::PlayCard { .. }
+                        | LegalAction::ActivateSkill { .. }
+                        | LegalAction::UseSkillCard { .. }
+                        | LegalAction::EndPhase
+                ) {
+                    return Some(a.clone());
+                }
+            }
+            legal.first().cloned()
+        }
+
+        let cfg = test_cfg("wsfull");
+        let lobby = bootstrap(&cfg);
+        let app = build_router(lobby, ServeDir::new(&cfg.original_content_root));
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .expect("runtime");
+
+        rt.block_on(async move {
+            let l = tokio::net::TcpListener::bind("127.0.0.1:0").await.expect("bind");
+            let addr = l.local_addr().expect("addr");
+            let server = tokio::spawn(async move {
+                let _ = axum::serve(l, app).await;
+            });
+            let url = format!("ws://{addr}/ws");
+
+            // A 建局
+            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+            let _ = next_text(&mut a).await;
+            a.send(Message::Text(
+                encode_c2s(&ClientMessage::CreateRoom {
+                    players: 2,
+                    seed: 20_260_101,
+                    password: String::new(),
+                })
+                .expect("enc create")
+                .into(),
+            ))
+            .await
+            .expect("send create");
+            let (room_id, pid_a) = loop {
+                let t = next_text(&mut a).await;
+                if let Ok(ServerMessage::JoinOk {
+                    room_id, player_id, ..
+                }) = decode_s2c(&t)
+                {
+                    break (room_id, player_id);
+                }
+            };
+            // B 加入
+            let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
+            let _ = next_text(&mut b).await;
+            b.send(Message::Text(
+                encode_c2s(&ClientMessage::JoinRoom {
+                    room_id,
+                    password: String::new(),
+                    preferred_seat: Some(1),
+                    reconnect_token: None,
+                })
+                .expect("enc join")
+                .into(),
+            ))
+            .await
+            .expect("send join");
+            let pid_b = loop {
+                let t = next_text(&mut b).await;
+                if let Ok(ServerMessage::JoinOk { player_id, .. }) = decode_s2c(&t) {
+                    break player_id;
+                }
+            };
+            eprintln!("DBG WS 整局：room={room_id} A={pid_a} B={pid_b}");
+
+            let actors = [PlayerId::new(pid_a), PlayerId::new(pid_b)];
+            let mut legal: [Vec<LegalAction>; 2] = [Vec::new(), Vec::new()];
+            let mut rev = 0u64;
+            let mut seq = 0u64;
+            let mut outcome = engine_api::MatchOutcome::InProgress;
+            let mut steps = 0usize;
+            let mut snapshots = 0usize;
+
+            for _ in 0..MAX_STEPS {
+                let mut acted = false;
+                for conn in 0..2 {
+                    let ws = if conn == 0 { &mut a } else { &mut b };
+                    if legal[conn].is_empty() {
+                        seq += 1;
+                        snapshots += 1;
+                        ws.send(Message::Text(
+                            encode_c2s(&ClientMessage::RequestSnapshot {
+                                header: MessageHeader::new(room_id, seq, rev),
+                                last_revision: rev,
+                            })
+                            .expect("enc snap")
+                            .into(),
+                        ))
+                        .await
+                        .expect("send snap");
+                        loop {
+                            let t = next_text(ws).await;
+                            if let Ok(ServerMessage::Snapshot {
+                                view,
+                                choice,
+                                legal_actions,
+                                ..
+                            }) = decode_s2c(&t)
+                            {
+                                outcome = view.outcome.clone();
+                                if view.revision > 0 {
+                                    rev = view.revision;
+                                }
+                                legal[conn] = legal_actions;
+                                if legal[conn].is_empty() {
+                                    if let Some(c) = choice {
+                                        if c.observer.0 == actors[conn].0 {
+                                            let take = (c.min_count as usize).min(c.options.len());
+                                            legal[conn].push(LegalAction::ResolveChoice {
+                                                choice_id: c.choice_id,
+                                                selections: (0..take as u32).collect(),
+                                                cancelled: take == 0 && c.allow_cancel,
+                                            });
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    let Some(action) = pick(&legal[conn]) else { continue };
+                    let cmd = action.to_command(actors[conn], rev);
+                    seq += 1;
+                    ws.send(Message::Text(
+                        encode_c2s(&ClientMessage::SubmitCommand {
+                            header: MessageHeader::new(room_id, seq, rev),
+                            command: cmd.clone(),
+                            idempotency_key: IdempotencyKey(seq),
+                        })
+                        .expect("enc submit")
+                        .into(),
+                    ))
+                    .await
+                    .expect("send submit");
+                    loop {
+                        let t = next_text(ws).await;
+                        if let Ok(ServerMessage::CommandOutcome {
+                            result,
+                            view,
+                            legal_actions,
+                            ..
+                        }) = decode_s2c(&t)
+                        {
+                            outcome = view.outcome.clone();
+                            if view.revision > 0 {
+                                rev = view.revision;
+                            }
+                            legal[conn] = legal_actions;
+                            let _ = result;
+                            break;
+                        }
+                    }
+                    acted = true;
+                    steps += 1;
+                    if outcome != engine_api::MatchOutcome::InProgress {
+                        break;
+                    }
+                }
+                if outcome != engine_api::MatchOutcome::InProgress {
+                    break;
+                }
+                if !acted {
+                    // 双方都无动作：再刷一次 A 的快照看是否终局
+                    seq += 1;
+                    a.send(Message::Text(
+                        encode_c2s(&ClientMessage::RequestSnapshot {
+                            header: MessageHeader::new(room_id, seq, rev),
+                            last_revision: rev,
+                        })
+                        .expect("enc snap2")
+                        .into(),
+                    ))
+                    .await
+                    .expect("send snap2");
+                    loop {
+                        let t = next_text(&mut a).await;
+                        if let Ok(ServerMessage::Snapshot { view, .. }) = decode_s2c(&t) {
+                            outcome = view.outcome.clone();
+                            break;
+                        }
+                    }
+                    if outcome != engine_api::MatchOutcome::InProgress {
+                        break;
+                    }
+                }
+            }
+
+            eprintln!(
+                "DBG WS 整局结果：outcome={outcome:?} steps={steps} snapshots={snapshots} rev={rev}"
+            );
+            assert!(
+                steps > 0 && snapshots > 0,
+                "WS 整局应至少走一步并取过快照（steps={steps}, snapshots={snapshots}）"
+            );
+            assert_ne!(
+                outcome,
+                engine_api::MatchOutcome::InProgress,
+                "WS 整局应在 {MAX_STEPS} 步内结束（outcome={outcome:?}, rev={rev}）"
+            );
+            let _ = a.close(None).await;
+            let _ = b.close(None).await;
+            server.abort();
+            steps
+        });
+    }
 }

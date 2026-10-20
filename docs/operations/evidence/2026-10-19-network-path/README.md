@@ -75,6 +75,26 @@ DBG WS 命令结果：result=Accepted { new_revision: 2, state_hash: [216, 37, �
 
 ⇒ **WS 上的「建局→加入→提交命令→拿回个人化结果」全链路已验证**。
 
+## 1.4 ✅ 第五轮：**WS 上的整局对局**
+
+`net_smoke::websocket_plays_match_to_completion`：两条真实 WS 连接驱动到终局，
+`legal_actions` 为空时用 **`RequestSnapshot`** 刷新（快照带 `choice`）。
+
+```
+DBG WS 整局：room=1 A=1 B=2
+DBG WS 整局结果：outcome=LoyalistWin steps=52 snapshots=52 rev=53
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.22s
+```
+
+| 判据 | 结果 |
+|---|---|
+| **WS 上跑完整对局** | ✅ **`outcome=LoyalistWin`**，**52 步 / 52 次快照 / rev=53**，0.22 s |
+| 断言 | ✅ `steps>0 && snapshots>0`、`outcome != InProgress` |
+| 协议 | ✅ 全部经 `encode_c2s`/`decode_s2c`（**真实线上格式**）|
+| 机器人选步 | 同 `long_run_bot.rs`（`ResolveChoice` 原样 → 出牌 → `EndPhase`），**非强 AI** |
+
+⇒ **「真实网络（loopback WS）上的完整对局」已达成本轮之前未做的最后一块**。
+
 ## 2 做到了什么 / 没做到什么（**如实**）
 
 | 项 | 状态 |
@@ -83,8 +103,9 @@ DBG WS 命令结果：result=Accepted { new_revision: 2, state_hash: [216, 37, �
 | 真实监听 + HTTP 往返测试 | ✅ **已做**（`/health` + `/metrics`，见 §1.1）|
 | WS 握手/回路测试 | ✅ **已做**（升级 101 + `Welcome` + `Error` 往返，见 §1.2）|
 | **WS 上的建局/加入/命令/结果** | ✅ **已做**（见 §1.3）|
-| **用 WS 跑整局**（机器人搬到 WS 上）| ❌ **未做** |
-| TLS / 跨机 / 浏览器端 | ❌ **未做** |
+| **用 WS 跑整局** | ✅ **已做**（52 步跑到 `LoyalistWin`，见 §1.4）|
+| TLS / 跨机 / 浏览器端 | ❌ **未做**（**仅 loopback 明文**）|
+| WS 下的**多房间并发**、断线重连 | ❌ **未做** |
 
 ## 3 为什么**还**写不出网络测试（**精确前置条件**）
 
