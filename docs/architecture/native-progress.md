@@ -692,6 +692,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 486 轮**：**金色一致性套件全通过**（`cargo run -p conformance`，CI 入口 `run_all()`）——**19/19 通过、0 失败、退出码 0、`ALL PASS`** ✅；场景覆盖**标准/国战复现**（`package_jianxiong_repro`、`guozhan_*` 4 项、`guozhan_zhulian_bihe_abi641`）、**VM 双实现**（`dual_vm_standard_m1`、`shahai_impl_repro`）、**三扩展包 ABI 断言**（`huanle_shoulijian_abi642`、`gwent_dudayuanshuai_abi643`、`shahai_hupeng_abi644`）；**边界**：属**产品回归**，**不等于**完整产品长程与 37 来源逐项验收，且未覆盖真机/浏览器/性能。
 >
+> **第 487 轮**：**Fuzz 语料回放（stable）**——`cargo fuzz` 需 **nightly** ✗，改用 stable `cargo test` 回放 `fuzz/corpus/`：**3/3 字节码样本不 panic、仅结构化错误** ✅；**重要发现**：`valid_seed.bin` 头 4 字节为 **`NVM1`** 而当前 `MODULE_MAGIC = b"NNVM"`（`bytecode.rs:6`）⇒ **语料未随格式更新**（连 valid 也进不了解码器）——**不是解码器缺陷**，**待办：用当前写入器重生成语料**；**未覆盖**：`fuzz_snapshot_decode`（target 用 `engine_core::Snapshot::from_bytes`，**非本 crate 依赖**；**首版误用 `decode_archive` 已删** ✓）、`fuzz_dsl_parser`、**新随机输入（需 nightly）**。
+>
+
 
 
 

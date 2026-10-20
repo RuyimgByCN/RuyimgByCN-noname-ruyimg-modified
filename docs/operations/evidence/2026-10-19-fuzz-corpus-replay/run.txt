@@ -1,0 +1,7 @@
+DBG 语料回放：fuzz_bytecode_module 3 个样本
+DBG 语料 bad_magic.bin ⇒ 结构化错误：bad magic
+DBG 语料 truncated_seed.bin ⇒ 结构化错误：bad magic
+DBG 语料 valid_seed.bin ⇒ 结构化错误：bad magic
+DBG 语料回放：bytecode ok=0 err=3（**无 panic**）
+NOTE 语料回放：ok=0 表示语料为旧格式（NVM1 vs NNVM）——待办：刷新 fuzz 语料
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
