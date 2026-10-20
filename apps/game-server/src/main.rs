@@ -1023,4 +1023,167 @@ mod net_smoke {
             steps
         });
     }
+    /// **断线重连**：连上 → 建局 → 走一步 → **断开** → 用 `reconnect_token` 重连，
+    /// 断言「同一 `player_id`」且「修订号未丢」。
+    ///
+    /// 口径：loopback 明文 WS；覆盖 `JoinRoom{reconnect_token}` 路径与修订号保持；
+    /// **不含**网络中断的 TCP 层重试、鉴权与跨机。
+    #[test]
+    fn websocket_reconnect_restores_seat_and_revision() {
+        use engine_api::{
+            Command, CommandKind, ExpectedRevision, IdempotencyKey, LegalAction, PlayerId,
+        };
+        use engine_protocol::{
+            decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
+        };
+        use futures_util::SinkExt;
+        use tokio_tungstenite::tungstenite::Message;
+
+        let cfg = test_cfg("wsreconnect");
+        let lobby = bootstrap(&cfg);
+        let app = build_router(lobby, ServeDir::new(&cfg.original_content_root));
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .expect("runtime");
+
+        rt.block_on(async move {
+            let l = tokio::net::TcpListener::bind("127.0.0.1:0").await.expect("bind");
+            let addr = l.local_addr().expect("addr");
+            let server = tokio::spawn(async move {
+                let _ = axum::serve(l, app).await;
+            });
+            let url = format!("ws://{addr}/ws");
+
+            // ① 建局
+            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+            let _ = next_text(&mut a).await;
+            a.send(Message::Text(
+                encode_c2s(&ClientMessage::CreateRoom {
+                    players: 2,
+                    seed: 20_260_102,
+                    password: String::new(),
+                })
+                .expect("enc create")
+                .into(),
+            ))
+            .await
+            .expect("send create");
+            let (room_id, pid, token) = loop {
+                let t = next_text(&mut a).await;
+                if let Ok(ServerMessage::JoinOk {
+                    room_id,
+                    player_id,
+                    reconnect_token,
+                    ..
+                }) = decode_s2c(&t)
+                {
+                    break (room_id, player_id, reconnect_token);
+                }
+            };
+            eprintln!("DBG 重连：建局 room={room_id} player={pid} token_len={}", token.len());
+
+            // ①.5 第二名玩家加入（房间需凑齐座位才接受命令）
+            let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
+            let _ = next_text(&mut b).await;
+            b.send(Message::Text(
+                encode_c2s(&ClientMessage::JoinRoom {
+                    room_id,
+                    password: String::new(),
+                    preferred_seat: Some(1),
+                    reconnect_token: None,
+                })
+                .expect("enc join b")
+                .into(),
+            ))
+            .await
+            .expect("send join b");
+            let pid_b = loop {
+                let t = next_text(&mut b).await;
+                if let Ok(ServerMessage::JoinOk { player_id, .. }) = decode_s2c(&t) {
+                    break player_id;
+                }
+            };
+            eprintln!("DBG 重连：B 加入 player={pid_b}");
+
+            // ② 走一步（让修订号 > 0）
+            let mut rev = 0u64;
+            let mut legal: Vec<LegalAction> = Vec::new();
+            a.send(Message::Text(
+                encode_c2s(&ClientMessage::SubmitCommand {
+                    header: MessageHeader::new(room_id, 1, 0),
+                    command: Command {
+                        actor: PlayerId::new(pid),
+                        expected_revision: ExpectedRevision(0),
+                        idempotency_key: IdempotencyKey(1),
+                        kind: CommandKind::EndPhase,
+                    },
+                    idempotency_key: IdempotencyKey(1),
+                })
+                .expect("enc submit")
+                .into(),
+            ))
+            .await
+            .expect("send submit");
+            loop {
+                let t = next_text(&mut a).await;
+                if let Ok(ServerMessage::CommandOutcome {
+                    view,
+                    legal_actions,
+                    ..
+                }) = decode_s2c(&t)
+                {
+                    rev = view.revision;
+                    legal = legal_actions;
+                    break;
+                }
+            }
+            eprintln!("DBG 重连：命令后 rev={rev} legal={}", legal.len());
+            // ③ 断开
+            let _ = a.close(None).await;
+            drop(a);
+
+            // ④ 用 token 重连
+            let (mut a2, _) = tokio_tungstenite::connect_async(&url).await.expect("A2");
+            let _ = next_text(&mut a2).await;
+            a2.send(Message::Text(
+                encode_c2s(&ClientMessage::JoinRoom {
+                    room_id,
+                    password: String::new(),
+                    preferred_seat: None,
+                    reconnect_token: Some(token.clone()),
+                })
+                .expect("enc reconnect")
+                .into(),
+            ))
+            .await
+            .expect("send reconnect");
+            let mut rejoin: Option<(u32, u64)> = None;
+            for _ in 0..12 {
+                let t = next_text(&mut a2).await;
+                match decode_s2c(&t) {
+                    Ok(ServerMessage::JoinOk {
+                        player_id, view, ..
+                    }) => {
+                        rejoin = Some((player_id, view.revision));
+                        break;
+                    }
+                    Ok(ServerMessage::Error { code, message, .. }) => {
+                        eprintln!("DBG 重连失败：{code:?} {message}");
+                        break;
+                    }
+                    _ => {}
+                }
+            }
+            let (pid2, rev2) = rejoin.expect("重连应收到 JoinOk");
+            eprintln!("DBG 重连：重连后 player={pid2} rev={rev2}");
+            assert_eq!(pid2, pid, "重连应恢复同一 player_id");
+            assert!(
+                rev2 >= rev,
+                "重连后的视野修订号不应倒退（断开前 {rev}，重连后 {rev2}）"
+            );
+            let _ = a2.close(None).await;
+            server.abort();
+        });
+    }
 }

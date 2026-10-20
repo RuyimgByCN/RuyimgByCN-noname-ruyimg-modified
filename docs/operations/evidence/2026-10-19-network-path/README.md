@@ -95,6 +95,32 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; fin
 
 ⇒ **「真实网络（loopback WS）上的完整对局」已达成本轮之前未做的最后一块**。
 
+## 1.5 ✅ 第六轮：**断线重连（`reconnect_token`）**
+
+`net_smoke::websocket_reconnect_restores_seat_and_revision`：
+
+```
+DBG 重连：建局 room=1 player=1 token_len=36
+DBG 重连：B 加入 player=2
+DBG 重连：命令后 rev=2 legal=7
+DBG 重连：重连后 player=1 rev=2
+```
+
+| 判据 | 结果 |
+|---|---|
+| 建局拿到 `reconnect_token` | ✅ 长度 **36** |
+| 走一步后 `rev=2`、`legal=7` | ✅ |
+| **断开后用 token 重连** | ✅ 恢复 **同一 `player_id`（1）** |
+| **修订号不倒退** | ✅ 重连后 `rev=2`（= 断开前）|
+
+### 1.5.1 顺带发现的**产品行为**（重要）
+
+**房间需凑齐座位才接受命令**：首版只用一条连接（建局后未让 B 加入）就提交 `EndPhase`
+⇒ **收不到任何 `CommandOutcome`**（10 s 超时）。补上 B 加入后立刻正常（`rev=2`）。
+
+⇒ 这不是缺陷，是**等待开局**的语义；但它**没有显式错误回推**（客户端只会「静默等待」），
+建议后续在「座位未满时提交命令」返回明确错误码（**已登记为待办**）。
+
 ## 2 做到了什么 / 没做到什么（**如实**）
 
 | 项 | 状态 |
@@ -105,7 +131,9 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; fin
 | **WS 上的建局/加入/命令/结果** | ✅ **已做**（见 §1.3）|
 | **用 WS 跑整局** | ✅ **已做**（52 步跑到 `LoyalistWin`，见 §1.4）|
 | TLS / 跨机 / 浏览器端 | ❌ **未做**（**仅 loopback 明文**）|
-| WS 下的**多房间并发**、断线重连 | ❌ **未做** |
+| **断线重连**（`reconnect_token`）| ✅ **已做**（同一席位 + 修订号保持，见 §1.5）|
+| WS 下的**多房间并发** | ❌ **未做** |
+| 「座位未满时提交命令」的错误回推 | ❌ **缺失**（静默等待，已登记）|
 
 ## 3 为什么**还**写不出网络测试（**精确前置条件**）
 

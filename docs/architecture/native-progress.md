@@ -660,7 +660,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 468 轮**：**WS 全链路跑通**（`net_smoke::websocket_creates_joins_and_submits_over_wire`）——两条真实 WS 连接：A `CreateRoom` ⇒ **`JoinOk{room=1, player=1}`**、B `JoinRoom` ⇒ **`JoinOk{player=2}`**、A `SubmitCommand{EndPhase}` ⇒ **`CommandOutcome{Accepted{new_revision:2}}`（含 `state_hash`）** ✅；编解码全走 `engine-protocol::{encode_c2s, decode_s2c}`（**真实线上格式**）⇒ **「建局→加入→提交命令→个人化结果」在 WS 上已验证**；**未做**：用 WS 跑整局、TLS、跨机、浏览器端。
 >
-> **第 469 轮（真实网络整局达成）**：`net_smoke::websocket_plays_match_to_completion`——两条真实 WS 连接驱动到终局（`legal_actions` 空时用 `RequestSnapshot` 刷新、快照带 `choice`）：**`outcome=LoyalistWin`、52 步 / 52 次快照 / rev=53、0.22 s**，并断言 `steps>0 && snapshots>0`、`outcome != InProgress`；协议全走 `encode_c2s`/`decode_s2c` ⇒ **「真实网络（loopback 明文 WS）上的完整对局」达成** ✅；**未做**：TLS、跨机、浏览器端、**WS 下多房间并发与断线重连**。
+> **第 469 轮（真实网络整局达成）**：`net_smoke::websocket_plays_match_to_completion`——两条真实 WS 连接驱动到终局（`legal_actions` 空时用 `RequestSnapshot` 刷新、快照带 `choice`）：**`outcome=LoyalistWin`、52 步 / 52 次快照 / rev=53、0.22 s**，并断言 `steps>
+> **第 470 轮**：**断线重连跑通**（`net_smoke::websocket_reconnect_restores_seat_and_revision`）——建局得 `reconnect_token`（36 字符）→ 走一步 `rev=2 legal=7` → **断开** → 用 token `JoinRoom` ⇒ **恢复同一 `player_id`（1）且 `rev` 不倒退（=2）** ✅。**顺带发现产品行为**：**房间需凑齐座位才接受命令**（首版单连接提交 `EndPhase` **收不到任何 `CommandOutcome`**，补 B 加入后立刻正常）——不是缺陷，但**未满座位时无明确错误回推**（客户端静默等待）⇒ **已登记待办**：为「座位未满时提交命令」返回明确错误码。
+>
+0 && snapshots>0`、`outcome != InProgress`；协议全走 `encode_c2s`/`decode_s2c` ⇒ **「真实网络（loopback 明文 WS）上的完整对局」达成** ✅；**未做**：TLS、跨机、浏览器端、**WS 下多房间并发与断线重连**。
 >
 
 
