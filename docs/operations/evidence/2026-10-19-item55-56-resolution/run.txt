@@ -1,0 +1,18 @@
+test upstream_baishouzhihu_opens_target_window ... ignored, 第 57 项：TriggerMeta 注册 PhaseEnd 而 filter 要求 begin==true（引擎 Phase 事件只有 begin:true）⇒ 永不入队；修法在未跟踪的 content/host/metadata/swd.rs
+test probe_baishouzhihu_hand_persists ... ok
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test probe_instance_and_candidates ... ok
+test probe_hand_has_kind_matches_catalog_kind ... ok
+DBG 黄麟之琮探针：当前阶段=Judge；护甲=0（若在 Judge 且已触发应为 1）
+test probe_huanglin_at_judge_phase ... ok
+DBG 黄麟之琮（负例）：护甲 2 → 2（应不变）
+test upstream_huanglinzhicong_no_gain_when_armored ... ok
+DBG 黄麟之琮：推进 20 步至 round 2
+DBG 黄麟之琮：护甲 0 → 1（应 +1）
+test upstream_huanglinzhicong_gains_hujia_on_phase_begin ... ok
+DBG 黄麟之琮（下一轮判定）：步数 20；回合 2 阶段 Judge；hujia 0 → 1
+test probe_huanglin_at_next_round_judge ... ok
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+DBG 青龙之圭：询问=["discard_to_limit@obs0"]；牌堆 196 → 194（应 −2）；手牌 3 → 4（摸 2 弃 1 ⇒ 净 +1）
+test upstream_qinglongzhigui_draw2_discard1 ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

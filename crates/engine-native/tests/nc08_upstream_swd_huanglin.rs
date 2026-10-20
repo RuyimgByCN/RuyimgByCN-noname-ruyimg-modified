@@ -20,8 +20,8 @@
 //! 未覆盖（登记）：**已有护甲时不应触发**（`!player.hujia` 的负例）——建议下一轮补。
 
 mod nc08_common;
-use engine_native::{Engine, Phase};
-use nc08_common::advance_to_phase;
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
+use nc08_common::{advance_to_phase, next_dedup, put_hand};
 
 fn swd_engine(seed: u64) -> Engine {
     let dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -42,7 +42,6 @@ fn swd_engine(seed: u64) -> Engine {
 /// ⇒ **`phaseBegin` 本身会触发**，但**本卡的 `changeHujia` 分支未生效**——需与第 55 项一并排查
 /// 「`phaseBegin` 机器的**分支选择**」与「`WaitChoice` 可见性」。
 #[test]
-#[ignore = "黄麟之琮：无护甲时未 +1（0→0），负例通过但不可信——见第 56 项"]
 fn upstream_huanglinzhicong_gains_hujia_on_phase_begin() {
     let mut e = swd_engine(20288901);
     for p in 0..4 {
@@ -68,12 +67,43 @@ fn upstream_huanglinzhicong_gains_hujia_on_phase_begin() {
         }
     }
     let hj_before = e.state_core().player(0).hujia;
-    // **窗口在 `Judge`（准备）阶段**（上游 `phaseBegin` + 原生 `filtering/swd.rs:462` 要求 `Phase::Judge`）
-    assert!(
-        advance_to_phase(&mut e, 0, Phase::Play),
-        "应到达 0 号出牌阶段（准备阶段已过）"
-    );
+    // **窗口在 `Judge`（准备）阶段**（上游 `phaseBegin` + 原生 `filtering/swd.rs:462` 要求 `Phase::Judge`）。
+    //
+    // ⚠ **第 55/56 项的更正经纬**：`Phase { begin: true }` 事件**只在回合起点的判定阶段发射**
+    // （`kernel/events.rs:753/789`），而建局时**第 1 轮的判定开始已经发过** ⇒ 必须推进到**下一轮**
+    // （`round >= 2`）的判定阶段。此前用例只推进 16–32 步、停在 `Play`/`End`，因此**看到 0→0**，
+    // 被误判为「派发缺陷」。实测 **20 步**即可到达。
+    let mut steps = 0;
+    for _ in 0..260 {
+        if e.turn().round >= 2 {
+            break;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        steps += 1;
+        while let Some(c) = e.open_choice().cloned() {
+            let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else if c.spec.allow_cancel {
+                Vec::new()
+            } else {
+                c.spec.options.iter().take(c.spec.max.max(1)).copied().collect()
+            };
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: sel },
+            });
+        }
+    }
     let hj_after = e.state_core().player(0).hujia;
+    eprintln!("DBG 黄麟之琮：推进 {steps} 步至 round {}", e.turn().round);
     eprintln!("DBG 黄麟之琮：护甲 {hj_before} → {hj_after}（应 +1）");
     assert_eq!(
         hj_after as i32 - hj_before as i32,
@@ -244,5 +274,68 @@ fn probe_instance_and_candidates() {
     assert!(
         in_cand,
         "catalog.candidates(PhaseBegin) 应包含该 def（否则入队阶段就被跳过）"
+    );
+}
+
+/// **决定性探针（关键更正）**：`Phase{begin:true}` 事件**只在回合起点的判定阶段发射**
+/// （`kernel/events.rs:753/789`）。此前用例只推进 16–32 步，**从未到达下一轮判定阶段**，
+/// 因此「窗口未触发」是**用例步数不足**，而非派发缺陷。
+///
+/// 本探针推进到 **round ≥ 2**（下一轮判定阶段），观察 `hujia` 是否 0 → 1。
+#[test]
+fn probe_huanglin_at_next_round_judge() {
+    let mut e = swd_engine(20288906);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let card = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.name.contains("huanglinzhicong"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("黄麟之琮在目录");
+    put_hand(&mut e, 0, card);
+    let before = e.state_core().player(0).hujia;
+    let mut steps = 0;
+    for _ in 0..260 {
+        if e.turn().round >= 2 {
+            break;
+        }
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        steps += 1;
+        while let Some(c) = e.open_choice().cloned() {
+            let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else if c.spec.allow_cancel {
+                Vec::new()
+            } else {
+                c.spec.options.iter().take(c.spec.max.max(1)).copied().collect()
+            };
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: sel },
+            });
+        }
+    }
+    let after = e.state_core().player(0).hujia;
+    eprintln!(
+        "DBG 黄麟之琮（下一轮判定）：步数 {steps}；回合 {} 阶段 {:?}；hujia {before} → {after}",
+        e.turn().round,
+        e.turn().phase
+    );
+    assert_eq!(
+        after,
+        before + 1,
+        "到达下一轮判定阶段后，黄麟之琮应令 hujia +1（{before} → {after}）"
     );
 }

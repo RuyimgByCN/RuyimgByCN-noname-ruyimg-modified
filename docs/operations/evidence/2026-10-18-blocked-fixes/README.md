@@ -1604,3 +1604,33 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 （19 包 0 违规）。安全性：`hash.rs` 只用 `cards.len()` 与 `card_kind`、**不用卡名** ⇒ 不影响摘要/golden。
 
 **验收**：正例应断言 `hujia` **0 → 1**；负例在**正例成立后**才具证据力。
+
+---
+
+### 55/56 结案 + 57 登记（2026-10-19，NC08）
+
+**55（青龙之圭）与 56（黄麟之琮）：实现正确，此前是「用例步数不足」的误判。**
+
+关键事实：`EventData::Phase { begin: true }` **只在回合起点的判定阶段发射**（`kernel/events.rs:753/789`），
+建局时第 1 轮已发过 ⇒ 旧用例只推进 16–32 步、停在 `Play`/`End`，**永远错过该事件**。
+改为推进到 **`round >= 2`** 后：
+
+| 项 | 实测 | 结果 |
+|---|---|---|
+| **55 青龙之圭** | 牌堆 **196→194**（摸 2）、手牌 **3→4**（净 +1） | ✅ `test ok` |
+| **56 黄麟之琮** | **20 步**到 round 2，`hujia` **0→1** | ✅ `test ok` |
+
+两处 `#[ignore]` 均已移除；证据见
+[结案说明](../2026-10-19-item55-56-resolution/README.md)。
+
+**撤回**：第 413–443 轮曾判定「宿主派发 `Phase{begin:true}` 失效、必须插桩」——**该结论错误**。
+
+**57（新登记，真实缺陷）：`baishouzhihu`（白兽之琥）永不触发。**
+
+- `content/host/metadata/swd.rs:360` 注册 **`EventKind::PhaseEnd`**；
+- `content/host/filtering/swd.rs:409-421` 的 filter 要求 **`begin == true`**；
+- 引擎的 `Phase` 事件**只有** `begin: true`（回合起点判定阶段）⇒ **元数据与过滤器自相矛盾** ⇒ 永不入队。
+- 实测：推进到**第 14 回合**判定阶段仍无 `baishouzhihu_target` 询问。
+- **修法（受阻）**：`event` 改为 `EventKind::PhaseBegin`，并建议按上游 `discardEnd` 补「阶段名＝弃牌」判定；
+  **`content/host/metadata/` 未跟踪** ⇒ 与核心修复清单同因受阻。
+- 用例 `nc08_upstream_swd_baishouzhihu.rs` 的正例已 `#[ignore = "第 57 项…"]` 并写明原因。

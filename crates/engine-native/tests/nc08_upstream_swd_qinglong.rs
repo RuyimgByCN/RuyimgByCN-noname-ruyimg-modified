@@ -57,7 +57,6 @@ fn swd_engine(seed: u64) -> Engine {
 /// ②机器在 `Act` 后**未进入 `SelectCard`**（如 `options` 为空——但手牌 5 张，不成立）；
 /// ③`Flow::WaitChoice` 的登记路径与 `open_choice()` 读取路径不一致。
 #[test]
-#[ignore = "青龙之圭：实现已声明两步（draw2→qinglongzhigui_discard），但 WaitChoice 未在 open_choice() 可见——第 55 项"]
 fn upstream_qinglongzhigui_draw2_discard1() {
     let mut e = swd_engine(20288801);
     // 0 号在**开局前**就持青龙之圭（阶段开始时才触发）
@@ -85,8 +84,10 @@ fn upstream_qinglongzhigui_draw2_discard1() {
     let h_before = e.debug_hand(0).len();
     let mut prompts: Vec<String> = Vec::new();
     // **手动推进**（`advance_to_phase` 会 `drain`，把阶段开始时的弃牌询问一起吞掉 ⇒ 不可用）
-    for _ in 0..16 {
-        if e.turn().current == 0 && e.turn().phase == Phase::Play {
+    // ⚠ **第 55 项的更正经纬**：`Phase { begin: true }` 只在**回合起点的判定阶段**发射
+    // （`kernel/events.rs:753/789`），建局时第 1 轮已发过 ⇒ 必须推进到**下一轮**（`round >= 2`）。
+    for _ in 0..260 {
+        if e.turn().round >= 2 {
             break;
         }
         let actor = e.turn().current;

@@ -622,6 +622,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 443 轮**：**差异 #3 的源码级确认**——`wudian_cards.rs:156-178`（`WudianZhuchengGuard`）**自带登记注释**（「上游一次性选 n 张，原生首张自选 + 其余随机代抽」）；**Stage 精读**：`Act` 构造 `[Pass] + 攻击者手牌` 并发 `WaitChoice{observer: attacker, SelectCards}` ⇒ **「首张自选」在源码层面成立** ✅；**行为面单点验证**（需构造筑城标记 + 杀指向）登记待办。
 >
+> **第 444–449 轮（重大更正）**：**第 55/56 项结案——实现正确，此前是误判**。关键事实：`EventData::Phase{begin:true}` **只在回合起点的判定阶段发射**（`kernel/events.rs:753/789`），建局时第 1 轮已发过 ⇒ 旧用例只推进 16–32 步必然错过。改为推进到 `round>=2`：**青龙之圭**（牌堆 196→194、手牌 3→4，净 +1）与**黄麟之琮**（**20 步**到 round 2，`hujia` **0→1**）**均 test ok**，`#[ignore]` 已移除；**第 413–443 轮「宿主派发 Phase{begin} 失效」的结论撤回**。同时发现**新第 57 项**：`baishouzhihu`（白兽之琥）**永不触发**——`metadata/swd.rs:360` 注册 `EventKind::PhaseEnd` 而 `filtering/swd.rs:409-421` 要求 `begin==true`，引擎只有 `begin:true` 的 Phase 事件 ⇒ **元数据与过滤器矛盾**；实测推到**第 14 回合**仍无询问；修法在**未跟踪**目录（受阻），正例已按第 57 项 `#[ignore]`。全量 **1514 passed / 0 failed / 21 ignored**。
+>
+
 
 
 
