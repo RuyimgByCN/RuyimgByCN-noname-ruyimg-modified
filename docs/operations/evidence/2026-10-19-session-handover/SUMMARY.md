@@ -37,7 +37,7 @@
 | **`damageEnd` 后的窗口** | **1 条** |
 | **嵌套结算** | **1 条** |
 
-⇒ **提案**：[阶段时机扩展](../proposals/phase-timing-extension.md)（**批 A 8 条可立即设计 / 批 B 2 条均已答**）
+⇒ **提案**：[阶段时机扩展](../../proposals/phase-timing-extension.md)（**批 A 8 条可立即设计 / 批 B 2 条均已答**）
 
 ## 2 新增的可复现工具（6 个脚本 + 单测）
 
