@@ -56,10 +56,27 @@ impl NativeContent {
     }
 
     /// 安装：扫描 drop-in 根下包目录并装入存储（重复安装同版本幂等）。
+    ///
+    /// **空结果检查**（2026-10-19）：若 drop-in 根**非空**却**一个包都没装上**，
+    /// 返回**错误**而不是静默成功——最常见的原因是**包目录是符号链接**
+    /// （扫描不跟随 symlink），或目录里缺 `package.npack.json`。
+    /// 此前这种情形返回 `Ok(空)`，部署者会误以为安装成功。
     pub fn import(&self) -> Result<Vec<NativePackageInfo>, String> {
         let report = import_extensions(&self.store, &self.root, &Self::options())
             .map_err(|e| e.to_string())?;
-        Ok(report.installed.iter().map(Self::meta_info).collect())
+        let out: Vec<NativePackageInfo> = report.installed.iter().map(Self::meta_info).collect();
+        if out.is_empty() {
+            if let Ok(rd) = std::fs::read_dir(&self.root) {
+                let entries = rd.flatten().count();
+                if entries > 0 {
+                    return Err(format!(
+                        "drop-in 根非空（{entries} 个条目）却未安装任何包：\
+                         包目录须为**真实目录**（不支持符号链接）且含 package.npack.json"
+                    ));
+                }
+            }
+        }
+        Ok(out)
     }
 
     /// 列出存储中已安装的包（不触发扫描）。

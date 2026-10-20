@@ -674,6 +674,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 476 轮**：**逐包安装矩阵 41/41 通过**（`apps/game-server/tests/nc08_install_matrix.rs`）——每包**独立临时 root + store**：`import()` 成功、`installed()` 恰 1 条、**重复 import 幂等**，0.25 s ✅；**过程中两个发现**：① **`import` 不跟随 symlink**（首版用软链 ⇒ 全部「安装 0 个包」且 `Ok` 无报错）⇒ 建议对「扫到 0 包而目录非空」告警；② `package_id` 重名（`cardpile`/`boss-play`/`coin` 跨 namespace）⇒ 单看 id 不能区分（本矩阵因独立 store 不受影响）。**边界**：**无 uninstall API**（卸载/回滚未覆盖）、版本升级见升级矩阵。
 >
+> **第 477 轮**：**修「软链包静默装 0 个」**——`apps/game-server/src/native.rs::import()` 增加**空结果检查**：drop-in 根**非空**却**一个包都没装上**时**返回错误**（说明「包目录须为真实目录、不支持符号链接且需含 manifest」）；新增 `symlinked_package_dir_is_rejected_explicitly` **锁住**该行为，`nc08_install_matrix` 仍 **41/41 无回归** ✅；**取舍**：选**报错**而非警告——「非空根 + 0 安装」几乎总是配置错误，而 `main()` 对 `import()` 已是容忍路径（warn + 降级），不会让服务起不来。
+>
+
 
 
 

@@ -115,3 +115,34 @@ fn install_matrix_over_package_dirs() {
         passed.len()
     );
 }
+
+/// **符号链接包目录 ⇒ 明确报错**（而不是「静默装 0 个」）。
+///
+/// 背景：`import` 扫描**不跟随 symlink**；此前对「非空 root 但装 0 个包」返回 `Ok(空)`，
+/// 部署者会误以为安装成功。本用例锁住新的**报错**行为。
+#[cfg(unix)]
+#[test]
+fn symlinked_package_dir_is_rejected_explicitly() {
+    let root = pkg_root();
+    let pkg = root.join("shahai-swd-upstream-noname");
+    assert!(pkg.is_dir(), "样本包应存在");
+    let base = std::env::temp_dir().join(format!("nc08-symlink-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&base);
+    let dropin = base.join("root");
+    std::fs::create_dir_all(&dropin).expect("mkdir");
+    std::os::unix::fs::symlink(&pkg, dropin.join("swd-link")).expect("symlink");
+
+    let nc = NativeContent::open(dropin.clone(), base.join("store")).expect("open");
+    let err = nc.import();
+    match err {
+        Err(msg) => {
+            eprintln!("DBG 软链安装：被明确拒绝 ✅ —— {msg}");
+            assert!(
+                msg.contains("非空") || msg.contains("符号链接"),
+                "错误信息应说明原因，实得：{msg}"
+            );
+        }
+        Ok(v) => panic!("软链包目录应被拒绝，实得 Ok({} 个包)", v.len()),
+    }
+    let _ = std::fs::remove_dir_all(&base);
+}
