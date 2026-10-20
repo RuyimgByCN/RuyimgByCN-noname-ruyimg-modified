@@ -885,6 +885,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 574 轮**：**`Phase::Judge` 组 2 条确认缺陷（含本会话最严重一条）**——读上游全文 ✓：**`huajin2`（115 B）上游 `trigger: source damageBegin` + `content: trigger.num++`（自己造成伤害时伤害 +1）+ `group: huajin3`** ✓ **与判定阶段毫无关系** ❗ ⇒ **原生 filter 是 `Phase::Judge`** ✗ ⇒ **技能完全不生效** ❗❗（**本会话最严重** ✓）；**`zhenjiu2`（276 B）上游 `player: phaseBegin`（不限阶段）+ 回复 1 + 收回存储牌 + 移除自身** ✓ ⇒ **原生只在 `Phase::Judge`** ✗ ⇒ **其他阶段漏触发** ❗；⇒ **新增 G12（严重）、G13（中）** ✓，**缺口 10 → 12 条** ✓；**`Phase::Judge` 组 14 条：已核 5 条（2 缺陷 + 3 待核上游 filter）** ✓，**剩 9 条同样需要核对** ❗。
 >
+> **第 575 轮**：**❗❗ 系统性发现：「`phaseBegin` ⇒ `Phase::Judge`」是批量映射错误（6/6）**——扫 46 个 `skill.js` 后核对 `Phase::Judge` 组剩余技能 ✓：**`daixing2`/`qianfang`/`diyguhuo`/`xuelunyang`/`geju` 上游都是 `player: phaseBegin`** ✓ **而原生全是 `Phase::Judge`** ✗ —— **连同已记的 `zhenjiu2` 正好 6/6 一一对应** ✓ ⇒ **可以确定项目里存在「`phaseBegin` → `Phase::Judge`」的固定映射** ❗；**而 `phaseBegin` = 任意阶段开始、`Phase::Judge` = 判定阶段开始** ⇒ **语义上不成立** ❌；**另 `baiyi`（1202 B）上游只有 `enable`（主动技）而原生给了触发** ✗；⇒ **新增 G14（批量缺陷，不逐条修）** ✓ —— **建议新增「任意阶段开始」的 filter 表达，一次性覆盖 6+ 条** ✓；**并核对其它阶段组是否有相反错误** ✓；**缺口 12 → 13 条** ✓。
+>
+
 
 
 

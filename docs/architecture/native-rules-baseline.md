@@ -4670,3 +4670,37 @@ zhenjiu2: { trigger: { player: "phaseBegin" }, forced: true, mark: "card",
 
 ⇒ **`Phase::Judge` 组的 14 条里，已核 5 条，2 条确认缺陷、3 条待核上游 `filter`** ⚠️
 —— **剩余 9 条（`daixing2`/`xj_qianfang`/`hlss_fengqi`/`swd_xiuluo`/`diyguhuo`/`gujian_food_yougeng`/`huanle_xuelunyang`/`wudian_geju`/`baiyi`）同样需要核对** ❗
+
+### ❗❗ **系统性发现：「上游 `phaseBegin` ⇒ 原生 `Phase::Judge`」是批量映射错误（6/6）**（第 574 轮）
+
+扫 46 个 `skill.js` 后，把 `Phase::Judge` 组剩下的技能逐一核对：
+
+| 技能 | 上游 `trigger` | 上游字段 | 原生 filter | 判定 |
+|---|---|---|---|---|
+| `daixing2`（195 B）| **`player: phaseBegin`** | `trigger` | `Phase::Judge` | ❌ **窄化** |
+| `qianfang`（1873 B）| **`player: phaseBegin`** | `direct`/`forced`/`group` | `Phase::Judge` | ❌ **窄化** |
+| `diyguhuo`（638 B）| **`player: phaseBegin`** | `forced` | `Phase::Judge` | ❌ **窄化** |
+| `xuelunyang`（1517 B）| **`player: phaseBegin`** | `trigger` | `Phase::Judge` | ❌ **窄化** |
+| `geju`（1025 B）| **`player: phaseBegin`** | `trigger` | `Phase::Judge` | ❌ **窄化** |
+| **`baiyi`（1202 B）** | **（无 trigger）** | **仅 `enable`**（**主动技**）| `Phase::Judge` | ❌ **上游主动、原生触发** |
+| `zhenjiu2`（v7 已记）| `phaseBegin` | `forced`/`mark` | `Phase::Judge` | ❌ 窄化 |
+| **`huajin2`**（v7 已记）| **`source: damageBegin`** | `group` | `Phase::Judge` | ❌ **完全错位** |
+| `hlss_fengqi` / `gujian_food_yougeng` | 未找到 | — | `Phase::Judge` | ❓ |
+
+### 结论：**这是批量映射，不是零散失误**
+
+**6 个「上游 `phaseBegin`」的技能，原生 6 个都是 `Phase::Judge`** —— **一一对应、无例外** ✅
+⇒ **可以确定：项目里存在「`phaseBegin` → `Phase::Judge`」的固定映射** ❗
+⇒ **而 `phaseBegin` 的语义是「任意阶段开始」，`Phase::Judge` 是「判定阶段开始」** ⇒ **这个映射在语义上不成立** ❌
+
+#### 影响面（**估算**）
+
+- **`Phase::Judge, begin=true` 共 14 条**，**已核 8 条**（**6 窄化 + 1 完全错位 + 1 主动技** ❗），**2 条未定位上游**；
+- **若其余 `phaseBegin` 类技能也走了这个映射**（**其它阶段组可能有同样问题** ❗）⇒ **影响面可能远超 14 条**；
+- **受影响技能的共同后果**：**只在「判定阶段开始」触发** ⇒ **漏触发 + 误触发** ❌。
+
+#### 建议
+
+1. **把「`phaseBegin` ⇒ `Phase::Judge`」当作一个独立的批量缺陷（G14）**，**不要逐条修**；
+2. **修复方式**：**新增「任意阶段开始」的 filter 表达**（或 `EventKind::PhaseBeginAny`）⇒ **一次性覆盖 6+ 条**；
+3. **同时核对**：**其它「非 `phaseBegin`」的组（`Draw`/`Play`/`End`）是否也存在把「特定阶段」当「任意阶段」的相反错误**。
