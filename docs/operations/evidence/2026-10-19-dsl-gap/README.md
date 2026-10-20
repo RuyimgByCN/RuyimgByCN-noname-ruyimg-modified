@@ -114,3 +114,62 @@ DSL 关键字
    - 例如 `is_chained`/`force_die` 可能已存在（**未查**）；`round` 可能无对应；
 2. 只有「**必须新增变体**」的那些，才是**真正的未跟踪阻塞**；
 3. 若确实需要新增变体，则**唯一出路**是把 `engine-core` 纳入可修改范围（**需人工决策**）。
+
+---
+
+## 8 逐项核对：9 个缺口 ↔ **已有 46 个 `QueryRequest` 变体**
+
+`crates/rule-api/src/query.rs` 的 46 个变体（全文）：
+
+```
+Distance AttackRange CardUsable TargetLegal HandLimit SkillUsesRemaining CardAttribute
+Relation Hp HandCount EquippedCount EmptyEquipSlots MaxHp Zone CardZone MarkCount
+AliveCount CardActionCount AliveGroupCount UniqueMaxCurrentHp UniqueMaxCurrentHpAt
+LifetimeDamageDealt PublicCardKindCount **RoundNumberCapped** FieldEquipmentKindCount
+AliveWoundedOrGuimingWuCount HandEquipSuitCount CurrentPhasePlayer HandSuitCount
+HandColorCount SkillContentFlag SkillPileCount CardsDrawnThisTurn DamageDealtThisTurn
+HasSkill CardNameLength InPlayPhase CardHasTag StorageGet StorageHas CardsUsedThisRound
+Int Bool Relation Error SkillPileCount
+```
+
+### 8.1 结果：**9 个缺口里 1 个已有对应**
+
+| 缺口 | 已有变体？ | 说明 |
+|---|---|---|
+| **`round`**（当前轮数）| ✅ **`RoundNumberCapped`** | **但语义不同**：它是「**轮数被内容提供的上限截断**」⇒ 需传一个大上限才能近似「当前轮数」|
+| `history_count` | ❌ 无 | |
+| `is_chained`（链状态）| ❌ 无 | |
+| `trigger.num`（事件数值参数）| ❌ 无 | |
+| `remove_skill` | ❌ 无（**且这不是 query，是 effect**）| |
+| `judge` | ❌ 无（**effect**）| |
+| `choose_target` | ❌ 无（**effect**）| |
+| `card_pile_search` | ❌ 无（**effect**）| |
+| `force_die` | ❌ 无（**effect**）| |
+
+### 8.2 更要紧的：**effect 派发也在未跟踪区**
+
+| 文件 | tracked? |
+|---|---|
+| `crates/engine-core/src/effect/primitives/mod.rs`（派发表）| ✅ **tracked** |
+| `crates/engine-core/src/effect/primitives/dispatch_*.rs`（**每个效果一个文件**）| ❌ **UNTRACKED** |
+
+⇒ 9 个缺口里 **5 个是 effect**（`remove_skill`/`judge`/`choose_target`/`card_pile_search`/`force_die`），
+它们要**新增效果派发** ⇒ 必然落在 **`dispatch_*.rs`（未跟踪）** ⇒ **同样被阻塞** ❌。
+
+### 8.3 更正后的结论
+
+| 缺口类型 | 数量 | 状态 |
+|---|---:|---|
+| **已存在**（`round` ⇒ `RoundNumberCapped`，语义近似）| **1** | ✅ 可用（需大上限）|
+| **query 类，需新增变体** | **3**（`history_count`/`is_chained`/`trigger.num`）| ❌ 阻塞（`engine-core` 穷举 match）|
+| **effect 类，需新增派发文件** | **5** | ❌ 阻塞（`dispatch_*.rs` 未跟踪）|
+| **可纯 DSL 完成的** | **0** | — |
+
+⇒ **5 个真规则候选里，`dz_gs_yinfu` 只差 `remove_skill`+`history_count`，`boss_danshu` 只差 `judge`**
+—— **无一能在当前可修改范围内落地** ❌。**这不是分析不足，是边界** ✅。
+
+### 8.4 仍可能的例外（**未验证**）
+
+- 若某个 effect **已有派发**、只是 **DSL 关键字没接**（如 `damage`/`draw_cards` 已有 ✓），
+  那么**只在 `content-compiler` 加关键字**即可 ⇒ **这类才是可做的**；
+- 本轮**未逐一核对**「5 个 effect 是否已有派发」⇒ **下一步**：查 `dispatch_*.rs` 里是否已有 judge/choose_target 的实现。

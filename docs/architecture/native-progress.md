@@ -747,6 +747,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 515 轮**：⚠ **更正第 514 轮**——「DSL 原语补在已跟踪 crate 就能做」**是错的** ❌。实际调用链：`content-compiler`(tracked) → `rule-vm/bytecode.rs`(tracked) → `rule-vm/vm.rs`(tracked) → **`QueryRequest`（`rule-api/src/query.rs`，46 个变体）** → **host 侧 match**：`engine-native/src/rvm_ops.rs` 有 **7 个 catch-all** ✓，但 **`engine-core/src/query/cache.rs` 41 臂 / `mod.rs` 16 臂，catch-all 均为 0**（覆盖全部 46 变体）⇒ **新增任何 `QueryRequest` 变体都必然要改这两个未跟踪文件** ⇒ **DSL 原语扩展路径被阻塞** ✓；**仍留的例外**：**不必新增变体**、可用**已有 46 变体**组合表达的缺口（如 `is_chained`/`force_die` 是否已存在**未查**）⇒ 下一步逐个核对 ✓。**方法学**：我把「编译端 tracked」当成了「整条链 tracked」—— **又犯了「只看一段就下结论」** ✗。
 >
+> **第 516 轮**：**9 个缺口 ↔ 46 个已有 `QueryRequest` 变体逐个核对**——**结论：只有 1 个已有对应**：**`round` ⇒ `RoundNumberCapped`**（**语义近似但不同**：它是「轮数被内容提供的上限截断」⇒ 需传大上限 ✓）；其余 **8 个全无**：`history_count`/`is_chained`/`trigger.num`（**query 类，需新增变体 ⇒ 撞 `engine-core` 穷举 match** ✗）与 `remove_skill`/`judge`/`choose_target`/`card_pile_search`/`force_die`（**effect 类**）；**更要紧的发现**：**effect 派发也在未跟踪区** —— `effect/primitives/mod.rs`（派发表）**tracked** ✓，但 `dispatch_*.rs`（每个效果一个文件）**全部 UNTRACKED** ✗ ⇒ **5 个 effect 缺口同样被阻塞**；⇒ **5 个真规则候选无一能在当前可修改范围内落地** ❌ （`dz_gs_yinfu` 差 `remove_skill`+`history_count`、`boss_danshu` 只差 `judge`）；**仍可能的例外**：若某 effect **已有派发**只是 DSL 关键字没接（如 `damage`/`draw_cards` ✓）⇒ **只在 `content-compiler` 加关键字即可** ✓，**本轮未查**。
+>
+
 
 
 
