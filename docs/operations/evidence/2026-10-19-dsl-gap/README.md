@@ -203,3 +203,50 @@ Int Bool Relation Error SkillPileCount
 3. `effect_tag` 的 **45 个常量**里有没有 map 到 judge/choose_target 的（**未逐个读注释**）。
 
 ⇒ **下一步最省力的一步**：查 `Op::HostEffect` 的 host 实现落在哪个文件，以及 `effect_tag` 里是否已有 judge/choose_target 的 tag。
+
+---
+
+## 10 ⚠ 再更正：上一节的「arms/ca」测量**方法有误**
+
+§9 我按 `grep -c 'EffectRequest::' 文件` 数「臂数」、按 `grep -cE '^\s+_ =>'` 数「catch-all」，
+据此判断 `crates/rule-api/src/effect/choose_other_give_then_recover.rs`（**arms=3 / ca=0**）是「**穷举 match**」
+⇒ 推出「新增 `EffectRequest` 变体会破坏未跟踪文件」。
+
+**打开文件后发现**：它根本不是 matcher，而是**宏定义的输入片段**：
+
+```
+([$($tail:ident),*] [$($variants:tt)*]) => { … }     // macro_rules! 规则
+/// Engine-owned prepared form of [`EffectRequest::DealDamageBanActiveIfDying`].   // 文档注释
+```
+
+⇒ 那 3 个「`EffectRequest::`」**全是文档注释里的链接** ❌ ⇒ **arms/ca 的统计是假的** ❌。
+
+### 10.1 真实情况
+
+| 项 | §9 的说法 | **实际** |
+|---|---|---|
+| `EffectRequest` 定义 | —— | **宏生成**（`rule-api/src/effect.rs:220`，**tracked** ✅）|
+| 判定「哪些文件会因新增变体而编译失败」 | 「至少一个未跟踪文件无 catch-all」 | ❌ **未验证，且测量方法错误** |
+| 真实 matcher 的 catch-all | —— | **未统计**（`resolve_qixing.rs` 等 100+ 臂文件确有 `ca=1`，但同文件可能还有别处 match）|
+
+⇒ **「effect 5 个缺口是否可做」重新回到「未知」** ⚠️。
+
+### 10.2 唯一可信的判定办法（**下一步**）
+
+**做一次真实实验**（不改仓库永久状态）：
+
+1. 在 `rule-api/src/effect.rs` 的变体列表里**加一个** `EffectRequest::__Probe`（或复用现成变体改一个字段）；
+2. `cargo build --offline -p engine-core` —— **能编过 ⇒ effect 缺口可做**；**编不过 ⇒ 看报错文件是否未跟踪**；
+3. **立即 `git checkout` 还原**（或只在临时分支上做）。
+
+这是**唯一**能把「未知」变成结论的办法；继续用 grep 统计只会制造第二个假结论。
+
+### 10.3 本轮方法论教训（**第三次同类**）
+
+| 次数 | 假结论 | 原因 |
+|---:|---|---|
+| 1 | 「组合矩阵 130 个缺陷」 | 判据不适用 |
+| 2 | 「179 个待迁移技能」 | 三个不同口径相加 |
+| 3 | **「effect 缺口被未跟踪文件阻塞」** | **`grep` 把文档注释当成 match 臂** |
+
+⇒ 共同点：**用文本统计代替结构判断**。**凡是「数 match 臂」这类问题，应直接看 AST/编译结果**。

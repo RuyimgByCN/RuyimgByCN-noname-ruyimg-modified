@@ -751,6 +751,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 517 轮**：**effect 缺口的接线路径追踪**（比 query 类宽）——已确认六条事实：①**`rule-api` 没有 effect 种类枚举**（`effect.rs` 的 6 个变体是**区域选择**不是效果种类）；②VM 效果是**通用 `Op::HostEffect(u16)`**，由**宿主按 tag** 处理；③tag 常量在 **`rule-vm`（tracked ✓，45 个）**；④DSL 效果接线在 **`content-compiler/src/codegen/effect_*.rs`（混合跟踪 ✓✗）**；⑤query 的 host match **穷举无 catch-all** ⇒ **query 类 3 个缺口确定阻塞** ❌；⑥**effect 的 host 处理位置未确认** ⚠️ （若在 `rvm_ops.rs` tracked ⇒ **5 个 effect 缺口可做**）；⇒ **本轮把「query 类确定阻塞 / effect 类待定」分开** ✓，**未回答问题**：`judge` 等是否已在 `engine-core` 实现、`Op::HostEffect` 的 host 实现在哪个 crate、`effect_tag` 里是否已有对应 tag。
 >
+> **第 518 轮**：⚠ **再更正**——§9 的「effect 缺口被未跟踪文件阻塞」**结论作废** ❌。原因：我用 `grep -c 'EffectRequest::'` 数「match 臂」、`grep -cE '^\s+_ =>'` 数 catch-all ✗，据此判定 `rule-api/src/effect/choose_other_give_then_recover.rs`（**arms=3/ca=0**）是穷举 match ✗；**打开文件发现**它其实是 **`macro_rules!` 的输入片段**（`([$($tail:ident),*] [$($variants:tt)*]) => …`）✓，那 3 个「`EffectRequest::`」**全是文档注释里的链接** ❌ ⇒ **统计是假的** ✗。**另确认**：`EffectRequest` 由**宏生成**（`rule-api/src/effect.rs:220`，**tracked** ✓）、主要 matcher（`resolve_qixing.rs` 等 100+ 臂）**都有 catch-all** ✓ ⇒ **「effect 5 个缺口是否可做」重回「未知」** ⚠️；**唯一可信的判定**：**加一个探针变体 + 编译 `-p engine-core` + 立即还原** ✓（下一轮做）。**方法论教训（本会话第 3 次同类）**：**用文本统计代替结构判断**（①组合矩阵判据不适用 ②179 三口径相加 ③grep 把注释当臂）。
+>
+
 
 
 
