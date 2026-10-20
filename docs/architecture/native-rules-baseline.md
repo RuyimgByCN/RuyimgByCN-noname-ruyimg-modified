@@ -5349,7 +5349,7 @@ step:   首次进入按 ctx.current_damage().amount 初始化剩余次数
 
 | # | 面 | 上游 | 原生 | 判定 |
 |---:|---|---|---|---|
-| 1 | **触发** | **`damageEnd`**（受伤**结束后**）| **`Damage` + `Timing::Normal`** | ⚠️ **时机待核**（`Normal` 是否即「后」，未查 `Timing` 定义）|
+| 1 | **触发** | **`damageEnd`**（受伤**结束后**）| **`EventKind::Damage` + `Timing::Normal`** | ✅ **一致**（**`Damage` 即「后」，`DamageBefore` 才是「前」**；`event.rs:12-13` + `:223`）|
 | 2 | **次数** | **`count = trigger.num`**（伤害点数）| **`d.amount` 初始化剩余次数** | ✅ **一致** |
 | 3 | **选项** | **获得牌 / 移动牌 / 取消**（`canMoveCard` 决定有无移动）| **Tag 0/1/2**，`movable` 决定有无 1 | ✅ **一致** |
 | 4 | **是否询问发动** | **`direct: true`（不问）** | **`optional: true`（会问）** | ⚠️ **UI 层差异**（**规则上等价，不计缺陷**）|
@@ -5357,7 +5357,13 @@ step:   首次进入按 ctx.current_damage().amount 初始化剩余次数
 ### 结论
 
 **`rangjie` 核心一致**（次数、选项、逐次递减都对）✅
-**两处标注**：①`Damage` vs `damageEnd` 的时机；②`direct` vs `optional` 的询问
-⇒ **①需查 `Timing` 定义才能定案**；**②是 UI 层，不影响规则等价** ✅
+**#1 已定案一致** ✅（第 682 轮）：
+- **`Timing` 只有 `First`/`Normal`/`Last` 三档**，**是同一事件内的次序**，**不是「前/后」**；
+- **「前/后」由 `EventKind` 区分**：**`DamageBefore`（前）** 与 **`Damage`（后）**，见 `event.rs:12-13` 与 `:223`（`if before => DamageBefore`）
+⇒ **原生用 `EventKind::Damage` = 伤害后 = 上游 `damageEnd`** ✅
 
-⇒ **`L10` 的状态**：**`rangjie` 基本可用**、**`reguhuo` 有确认缺陷（5b）** ⇒ **仍不可签** ❗
+**#4 是 UI 层**（`direct` 不问 vs `optional` 会问），**规则上等价** ✅
+
+⇒ **`rangjie` 四面全一致**（**仅 #4 为 UI 差异**）✅
+⇒ **`L10` 的状态**：**`rangjie` 可用**、**`reguhuo` 有确认缺陷（5b）** ⇒ **修 5b 后 `L10` 即可签「已对照且可接受」** ✅
+⇒ **`L10` 是「只差 1 处修复」的来源** —— 这是本会话首次能给出这样的判断 ❗
