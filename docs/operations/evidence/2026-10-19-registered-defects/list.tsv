@@ -1,0 +1,22 @@
+文件	行	登记理由
+xly.rs	6	诊断探针：手动运行观察规模曲线"
+nc04_vm_fault.rs	149	NC04 待办：DSL 选择语句关键字待确认后补挂起→续跑→故障覆盖"
+nc08_upstream_gujian_dinvxuanshuang.rs	53	帝女玄霜：selectTarget -1 应令全部角色各回复 1——原生只回复使用者，见第 39 项"
+nc08_upstream_gujian_liyutang.rs	64	鲤鱼汤：目标应获得此牌（上游 $gain2 + storage + addSkill）——原生效果为空，见第 37 项"
+nc08_upstream_gujian_longxugou.rs	60	龙须钩：获得后应自己装备（上游 player.equip）——原生仅入手，见第 36 项"
+nc08_upstream_gujian_mapodoufu.rs	53	麻婆豆腐：目标应获得此牌（上游 $gain2 + storage + addSkill）——与鲤鱼汤同现象，见第 37 项"
+nc08_upstream_gujian_mizhilianou.rs	51	蜜汁藕：红桃牌应可当【桃】使用（上游 viewAs tao）——实测 Rejected，见第 41 项"
+nc08_upstream_gujian_qiankunbiao.rs	122	乾坤镖目标 he 无牌时应被拒（上游 filterTarget）——原生更宽松，见第 35 项"
+nc08_upstream_gujian_shihuifen.rs	56	石灰粉：未出闪后应限制对其他角色用牌——实测无询问且限制未生效，见第 38 项"
+nc08_upstream_hearth_shenenshu.rs	59	神恩术：效果未实现（原生注释自述『shenenshu 等复杂牌暂缓』）——见第 44 项"
+nc08_upstream_jijiang.rs	131	激将代打行为面：决斗场景下询问为空，代打链路未对上——根因待查，未构成验收"
+nc08_upstream_rangjie.rs	174	登记缺陷：原生 rangjie 分支 1（移动牌）未摸牌，违反上游 player.draw() 在分支前无条件执行；
+nc08_upstream_swd_baishouzhihu.rs	60	第 57 项：TriggerMeta 注册 PhaseEnd 而 filter 要求 begin==true（引擎 Phase 事件只有 begin:true）
+nc08_upstream_swd_cangchizhibi.rs	64	苍螭之璧属转换缺口（未交付）——转换后启用本用例，见台账第 117 行"
+nc08_upstream_swd_hufu.rs	189	虎符濒死支未复现（救援窗口未打开）——未濒死支已验为 Rejected，见第 52 项"
+nc08_upstream_wuxing_shengke_branches.rs	144	五行生克两支未能在行为面复现（三次均 −1）——见第 51 项"
+nc08_upstream_yunchou_chenhuodajie_window.rs	47	趁火打劫 damageEnd 窗口未出现（伤害已确认发生）——见第 53 项"
+nc08_upstream_yunchou_luweiyan.rs	193	链杀：确认询问已出现（trigger_confirm），但虚拟杀未产生响应询问——嵌套结算待查"
+nc08_upstream_yunchou_zonghuo.rs	62	纵火：确认后未弃牌（标记牌仍在手；两种伤害路径均复现）——根因待查，见第 33/34 项"
+nc12_dangling_reference_probe.rs	85	登记缺陷守护：命中内核悬空引用故障即失败（当前 seed 44170 命中）；修复后应转为通过"
+nc12_dangling_reference_repro.rs	68	登记缺陷守护：seed 44170 第 10 步复现内核悬空引用；修复后应转为通过"
