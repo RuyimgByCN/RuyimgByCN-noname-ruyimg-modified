@@ -4456,3 +4456,39 @@ miedao: { locked: true, group: ["miedao1", "miedao2"], ai: { threaten: 1.4 } }
 | ⚠️ 待判定 | **2** | `jifeng`（缺 toBefore + `mod` 未判）、`swd_xiuluo`（档位）|
 | ❗ 未实现 | **1** | `hxunzhi2` |
 | ❓ 上游缺口 | **2** | `tianxiang2`/`xuanyuanjian2` |
+
+### U05-SWD **v6**：`jifeng` / `swd_xiuluo` 定案（同日收尾）
+
+#### `jifeng`（上游 **941 B**，**两个面**）
+
+| 面 | 上游 | 原生 | 判定 |
+|---|---|---|---|
+| **`mod.selectTarget`** | 对**单目标 `sha`/`trick`** ⇒ **`range[1] = Infinity`**（**可变任意多目标**）| **未见对应实现** | ❗ **缺 `mod` 面** |
+| **`trigger: useCardToBefore`**（`priority: 6`, `forced`, 随机分支）| 目标 >1 且（`sha` 或单目标 `trick`）时**随机**触发 | `CardUsed` | ⚠️ **档位偏晚 + 随机语义未对** |
+
+⇒ **`jifeng` 从「待判定」升为「明确缺口」**：**缺的是「单目标牌可变多目标」这一 `mod` 面**，不是时点问题。
+
+#### `swd_xiuluo`（上游 **1152 B**）
+
+```js
+trigger: { player: "phaseZhunbeiBegin" }, direct: true, filter: countCards("j") > 0,
+content: discardPlayerCard(player, 2, "hj", "是否一张手牌来弃置一张花色相同的判定牌？")
+```
+
+⇒ 语义：**准备阶段开始**（有判定牌时）⇒ **用一张手牌换掉一张同花色判定牌**。
+原生：`PhaseBegin` + **`direct` 是否等价「自动发动」未对**。
+
+⇒ **判定**：**档位（准备阶段 vs 阶段开始）与 `direct` 自动性两点待确认** ⚠️
+—— **但「上游是 `phaseZhunbeiBegin`」这一事实已确认**，**若 `step` 按「准备阶段」过滤则等价** ❓。
+
+#### v6 账
+
+| 类 | 条数 |
+|---|---:|
+| ✅ 一致 | **8** |
+| ✅ 归入共性限制 | **2** |
+| ✅ 定案（合并型）| **1**（`miedao`）|
+| ❗ **缺 `mod` 面** | **1**（**`jifeng`**）|
+| ⚠️ 档位待确认 | **1**（`swd_xiuluo`，准备阶段 vs 阶段开始）|
+| ❗ 未实现 | **1**（`hxunzhi2`）|
+| ❓ 上游缺口 | **2**（`tianxiang2`/`xuanyuanjian2`）|
