@@ -458,10 +458,16 @@ fn load_pack_dir(
 }
 
 fn load_tier(tier: &str) -> Result<Option<PackHost>, String> {
+    // **逐包档**：`dir:<包目录名>` —— 直接按 drop-in 目录名装载一个包，
+    // 便于用 shell 循环把 `probe` 跑到**每一个**包上（不必往 TIER_TABLE 里逐个登记）。
+    if let Some(dir) = tier.strip_prefix("dir:") {
+        let one = [dir];
+        return PackHost::load(&one).map(Some);
+    }
     let (_, dirs) = TIER_TABLE
         .iter()
         .find(|(name, _)| *name == tier)
-        .ok_or_else(|| format!("未知档位 {tier}（可选 {}）", tier_names()))?;
+        .ok_or_else(|| format!("未知档位 {tier}（可选 {}，或 dir:<目录名>）", tier_names()))?;
     if dirs.is_empty() {
         Ok(None)
     } else {
