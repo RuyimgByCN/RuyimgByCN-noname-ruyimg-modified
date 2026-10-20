@@ -4704,3 +4704,37 @@ zhenjiu2: { trigger: { player: "phaseBegin" }, forced: true, mark: "card",
 1. **把「`phaseBegin` ⇒ `Phase::Judge`」当作一个独立的批量缺陷（G14）**，**不要逐条修**；
 2. **修复方式**：**新增「任意阶段开始」的 filter 表达**（或 `EventKind::PhaseBeginAny`）⇒ **一次性覆盖 6+ 条**；
 3. **同时核对**：**其它「非 `phaseBegin`」的组（`Draw`/`Play`/`End`）是否也存在把「特定阶段」当「任意阶段」的相反错误**。
+
+### G14 补强 + **第二类系统性映射**：「`phase*Before` ⇒ `begin: true`」（第 575 轮）
+
+#### ① G14 达到 **7/7**
+
+新定位 **`yougeng`**（`gujian`，617 B）⇒ **上游 `player: phaseBegin`** ⇒ **原生 `Phase::Judge`** ❗
+⇒ **G14 = 7 条**（`daixing2`/`qianfang`/`diyguhuo`/`xuelunyang`/`geju`/`zhenjiu2`/**`yougeng`**）
+（**`hlss_fengqi` 上游未找到** ❓）
+
+#### ② 抽查其它阶段组 —— 发现**第二类**映射问题
+
+| 技能 | 上游 `trigger` | 原生 | 判定 |
+|---|---|---|---|
+| `zhaoyao`（1619 B）| **`global: phaseDrawBegin`** | `Phase::Draw, begin=true` | ✅ **正确**（**阶段同、`begin` 同**）|
+| **`rumeng`（986 B）** | **`global: phaseUseBefore`** | `Phase::Play, begin=true` | ⚠️ **`before` 被当成 `begin`** |
+| **`fenglue`（3410 B）** | **`player: phaseUseBefore`** | `Phase::Play, begin=true` | ⚠️ **`before` 被当成 `begin`** |
+| **`changnian`（981 B）** | **`player: dieBegin`** | `Phase::End, begin=false` | ❗ **完全不同**（**死亡 vs 阶段结束**）|
+
+⇒ **第二类系统性映射**：**上游 `phase*Before`（阶段开始前）被映射到原生的 `begin: true`（阶段开始）** ⚠️
+—— **`rumeng`/`fenglue` 两例一致** ⇒ **可能是同一个约定** ❗
+（**引擎没有「相之前」这一档** ⇒ **属表达力边界，但方向相反于 G14**）
+
+#### ③ `changnian` 需要单独看（**可能是 `extra_events` 覆盖**）
+
+上游 `dieBegin`（**死亡开始**）vs 原生 `Phase::End, begin=false` ✗ —— **但也可能该行为的 `TriggerMeta` 里
+`extra_events` 含 `Death`** ❗ **本轮未读它的 metadata** ✗ ⇒ **不判缺陷**，**记为待核** ✓。
+
+### 三类系统性问题的对比
+
+| 类 | 上游 | 原生 | 性质 | 影响 |
+|---|---|---|---|---|
+| **G14** | **`phaseBegin`（任意阶段）** | **`Phase::Judge`** | ❌ **语义错误**（**窄化到判定阶段**）| **7 条漏触发/误触发** |
+| **新类** | **`phase*Before`** | **`begin: true`** | ⚠️ **缺少「之前」档** | 至少 **2 条** |
+| 正常 | `phaseDrawBegin`/`phaseEnd` | 对应阶段 + `begin` | ✅ | —— |

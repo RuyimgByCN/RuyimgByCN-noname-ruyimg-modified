@@ -887,6 +887,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 575 轮**：**❗❗ 系统性发现：「`phaseBegin` ⇒ `Phase::Judge`」是批量映射错误（6/6）**——扫 46 个 `skill.js` 后核对 `Phase::Judge` 组剩余技能 ✓：**`daixing2`/`qianfang`/`diyguhuo`/`xuelunyang`/`geju` 上游都是 `player: phaseBegin`** ✓ **而原生全是 `Phase::Judge`** ✗ —— **连同已记的 `zhenjiu2` 正好 6/6 一一对应** ✓ ⇒ **可以确定项目里存在「`phaseBegin` → `Phase::Judge`」的固定映射** ❗；**而 `phaseBegin` = 任意阶段开始、`Phase::Judge` = 判定阶段开始** ⇒ **语义上不成立** ❌；**另 `baiyi`（1202 B）上游只有 `enable`（主动技）而原生给了触发** ✗；⇒ **新增 G14（批量缺陷，不逐条修）** ✓ —— **建议新增「任意阶段开始」的 filter 表达，一次性覆盖 6+ 条** ✓；**并核对其它阶段组是否有相反错误** ✓；**缺口 12 → 13 条** ✓。
 >
+> **第 576 轮**：**G14 补到 7/7 + 发现第二类系统性映射**——①新定位 **`yougeng`（`gujian`，617 B）⇒ 上游 `phaseBegin`、原生 `Phase::Judge`** ✓ ⇒ **G14 = 7 条** ✓（`hlss_fengqi` 上游未找到 ❓）；②抽查其它阶段组：**`zhaoyao`（`global: phaseDrawBegin`）= `Phase::Draw, begin=true`** ✅ **正确** ✓；**`rumeng`（`global: phaseUseBefore`）/`fenglue`（`player: phaseUseBefore`）⇒ 原生 `begin: true`** ⚠️ ⇒ **第二类系统性问题：上游 `phase*Before`（阶段开始前）被映射到 `begin: true`（阶段开始）** ✓（**引擎无「之前」档** ⇒ **表达力边界，方向与 G14 相反** ✓）；③**`changnian`（上游 `dieBegin` vs 原生 `Phase::End`）** 不判缺陷 ✗ —— **可能由 `extra_events` 的 `Death` 覆盖** ✓（**本轮未读其 metadata** ✗）；⇒ **新增 G15** ✓。
+>
+
 
 
 
