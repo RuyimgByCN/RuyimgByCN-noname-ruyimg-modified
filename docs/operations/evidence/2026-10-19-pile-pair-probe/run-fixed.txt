@@ -1,0 +1,4 @@
+DBG 牌堆配对：牌堆包 2 个、卡牌包 10 个 ⇒ 20 对
+DBG 牌堆配对：标准牌 124 张
+DBG 牌堆配对：20 对、失败 0 项
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s

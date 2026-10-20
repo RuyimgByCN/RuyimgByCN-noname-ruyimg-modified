@@ -12,7 +12,7 @@
 | 安装 | `nc08_install_matrix` | **41/41 包目录** |
 | 配置 | `nc08_manifest_matrix` + `nc08_config_acceptance` | **41/41 manifest** + 19 包装载行为 |
 | 升级 | `nc08_upgrade_matrix`（**asset 级 22 包**）+ **`nc08_identity_gate_matrix`（identity 级 41 包）** | **41/41 版本闸门** |
-| 组合 | `nc08_skill_pair_matrix`（190 对）+ `nc08_composition_pair_matrix`（45 对） | **20 个有增量包** |
+| 组合 | `nc08_skill_pair_matrix`（190 对）+ `nc08_composition_pair_matrix`（45 对）+ **`nc08_pile_pair_matrix`（牌堆包 × 卡牌包 20 对）** | **20 有增量包 + 2 牌堆包** |
 | 保存恢复 | `nc08_save_restore_matrix`（22 asset 级）+ `t12-g5-batch2` + **`nc08_identity_gate_matrix`（41 identity 级）** | **22 asset + 41 identity** |
 | 目标平台 | 构建级 5 项 | **全局**（非按来源）|
 | 规则差异 | 规则基准差异族 | **U01/U03/L04/U05/U07** |
@@ -62,7 +62,7 @@
 | 安装 | **32/32** |
 | 配置 | **32/32** |
 | 升级 | **32/32**（**13 asset 级 + 19 identity 级**）|
-| 组合 | **11/32** |
+| 组合 | **13/32**（新增 `cardpile`/U03 与 `cardpile-liuli`/L04）|
 | 保存恢复 | **32/32**（**13 asset 级 + 19 identity 级**）|
 | 规则差异 | **5/32** |
 | 性能 | **13/32** |

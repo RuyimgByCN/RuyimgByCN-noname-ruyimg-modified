@@ -58,11 +58,11 @@ fn load_cards(dir: &Path) -> Option<ExtensionPack> {
     Some(out.pack)
 }
 
-/// ⚠ **本判据被实验否定**（见 `docs/operations/evidence/2026-10-19-pile-pair-probe/`）：
-/// 「目录 = 牌堆包 + 卡牌包」**不成立** —— 实测 `cardpile-liuli + huanle` 目录 **244**、
-/// 而两者卡数之和只有 **120**（差 124 = **标准牌**），说明**标准牌仍然计入目录**。
-/// 保留本用例为 **`#[ignore]` 探针**：它打印 20 组的实测数字，供后续重新设计判据。
-#[ignore = "判据被否定：牌堆包+卡牌包的目录构成不是简单加和（标准牌仍计入）——保留为探针，见 pile-pair-probe 证据"]
+/// **修正后的判据**（第 523 轮实验否定了首版）：
+/// 「目录 = **标准牌** + 牌堆包 + 卡牌包」。
+///
+/// 首版误以为「pile 替换牌堆 ⇒ 目录不计标准牌」，实测 `cardpile-liuli + huanle`
+/// 目录 **244**、两包之和 **120**，**差 124 = 标准牌** ⇒ 标准牌**仍计入目录**。
 #[test]
 fn pile_pair_matrix_over_card_packs() {
     let root = root();
@@ -92,12 +92,19 @@ fn pile_pair_matrix_over_card_packs() {
         piles.len() * packs.len()
     );
 
+    // 空扩展建局时的目录规模（标准牌数）
+    let std_cards = engine_native::Engine::new_with_extensions(73, 4, &[])
+        .expect("空包建局")
+        .catalog()
+        .cards
+        .len();
+    eprintln!("DBG 牌堆配对：标准牌 {std_cards} 张");
     let mut pairs = 0usize;
     let mut failures: Vec<String> = Vec::new();
     for (pname, pile) in &piles {
         for (cname, cards) in &packs {
             pairs += 1;
-            let want = pile.cards.len() + cards.cards.len();
+            let want = std_cards + pile.cards.len() + cards.cards.len();
             let e = match engine_native::Engine::new_with_extensions(73, 4, &[pile, cards]) {
                 Ok(e) => e,
                 Err(err) => {
