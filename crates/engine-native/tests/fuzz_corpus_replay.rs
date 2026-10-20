@@ -55,7 +55,24 @@ fn replay_fuzz_bytecode_module_corpus() {
         }
     }
     eprintln!("DBG 语料回放：bytecode ok={ok} err={err}（**无 panic**）");
-    // **如实记录**：当前语料全部被拒（含 `valid_*`）——`valid_seed.bin` 用旧 magic `NVM1`，
-    // 而现格式为 `NNVM` ⇒ 语料过期。这**不是**解码器缺陷，但需要刷新语料（已登记待办）。
-    eprintln!("NOTE 语料回放：ok=0 表示语料为旧格式（NVM1 vs NNVM）——待办：刷新 fuzz 语料");
+    // **语料刷新后的断言**：`valid_nnvm.bin` 由 `cargo run -p rule-vm --example gen_fuzz_seed`
+    // 用**当前格式**生成（magic `NNVM`，70 字节）⇒ 它**必须能解码**，否则说明写入器/读取器不自洽。
+    let fresh = list.iter().find(|p| {
+        p.file_name()
+            .map(|n| n.to_string_lossy().contains("valid_nnvm"))
+            .unwrap_or(false)
+    });
+    match fresh {
+        Some(f) => {
+            let data = std::fs::read(f).expect("读新种子");
+            match rule_vm::bytecode::BytecodeModule::from_bytes(&data) {
+                Ok(m) => eprintln!("DBG 语料回放：新种子 {} 解码成功 name={}", f.display(), m.name),
+                Err(e) => panic!("新种子（当前格式）应能解码，实得 {e}"),
+            }
+        }
+        None => eprintln!("NOTE 语料回放：未找到 valid_nnvm.bin（先跑 gen_fuzz_seed 生成）"),
+    }
+    eprintln!(
+        "NOTE 语料回放：ok={ok} err={err}；旧格式 `NVM1` 样本仍在（已登记为历史遗留，可清理）"
+    );
 }

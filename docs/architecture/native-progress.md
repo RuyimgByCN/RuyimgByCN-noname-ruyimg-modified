@@ -694,6 +694,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 487 轮**：**Fuzz 语料回放（stable）**——`cargo fuzz` 需 **nightly** ✗，改用 stable `cargo test` 回放 `fuzz/corpus/`：**3/3 字节码样本不 panic、仅结构化错误** ✅；**重要发现**：`valid_seed.bin` 头 4 字节为 **`NVM1`** 而当前 `MODULE_MAGIC = b"NNVM"`（`bytecode.rs:6`）⇒ **语料未随格式更新**（连 valid 也进不了解码器）——**不是解码器缺陷**，**待办：用当前写入器重生成语料**；**未覆盖**：`fuzz_snapshot_decode`（target 用 `engine_core::Snapshot::from_bytes`，**非本 crate 依赖**；**首版误用 `decode_archive` 已删** ✓）、`fuzz_dsl_parser`、**新随机输入（需 nightly）**。
 >
+> **第 488 轮**：**fuzz 语料刷新**（台账 186 行的待办已清）——新增维护工具 `crates/rule-vm/examples/gen_fuzz_seed.rs`：用 `BytecodeModule::to_bytes()` 生成**当前格式**种子 `valid_nnvm.bin`（**70 字节 / magic `NNVM`**），**写盘前先回读自检**（不自洽则 exit(1)）；回放用例新增断言「**该种子必须能解码**」⇒ 实测 **ok=1 / err=3、无 panic**（**刷新前 ok=0** ⇒ 用例只测过「被拒」路径，**从未验证成功路径**）；**旧 `NVM1` 样本保留**作为「**旧格式必须被拒**」的回归样本（清理另开任务）。
+>
+
 
 
 

@@ -1,0 +1,8 @@
+DBG 语料回放：fuzz_bytecode_module 4 个样本
+DBG 语料 bad_magic.bin ⇒ 结构化错误：bad magic
+DBG 语料 truncated_seed.bin ⇒ 结构化错误：bad magic
+DBG 语料 valid_seed.bin ⇒ 结构化错误：bad magic
+DBG 语料回放：bytecode ok=1 err=3（**无 panic**）
+DBG 语料回放：新种子 /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/../../fuzz/corpus/fuzz_bytecode_module/valid_nnvm.bin 解码成功 name=fuzz_seed_nnvm
+NOTE 语料回放：ok=1 err=3；旧格式 `NVM1` 样本仍在（已登记为历史遗留，可清理）
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
