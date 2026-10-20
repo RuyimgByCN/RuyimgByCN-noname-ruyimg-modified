@@ -1634,3 +1634,21 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 - **修法（受阻）**：`event` 改为 `EventKind::PhaseBegin`，并建议按上游 `discardEnd` 补「阶段名＝弃牌」判定；
   **`content/host/metadata/` 未跟踪** ⇒ 与核心修复清单同因受阻。
 - 用例 `nc08_upstream_swd_baishouzhihu.rs` 的正例已 `#[ignore = "第 57 项…"]` 并写明原因。
+
+**53 项根因补充（2026-10-19，NC08）**：`chenhuodajie` 的 `global` 子技能**无声明途径**。
+
+| 环节 | 现状 |
+|---|---|
+| 包数据 `cards.json` | 3 张 `chenhuodajie` 条目**均无 `skills` 字段** |
+| `bridge_pack`（**已跟踪**） | 仅支持 **`cards[].equip_skills`**（`lib.rs:567-572`），**不支持 `cards[].skills`** |
+| 宿主键表 | `host:chenhuodajie_card` **存在**（`keys.rs:862`） |
+| 授予路径 | `ChenhuodajieCard` **不在** `construction.rs:468-500` 的授予清单、也**不在** `card_kind_host_skills` |
+
+⇒ **非装备牌的 `global` 子技能没有任何声明通道** ⇒ `host:chenhuodajie_card` **永远不会被实例化**
+⇒ `damageEnd` 窗口无法触发（与第 57 项不同：57 是**元数据/过滤器矛盾**，53 是**缺声明通道**）。
+
+**修法（**可做**——`content-native-loader` 与 `packages/` 均已被跟踪）**：
+1. `bridge_pack` 增加 `cards[].skills`（按 `HostBehavior::from_key` 解析，并入 `pack.host_skills`），
+   与 `equip_skills` 并列；
+2. 在 3 张 `chenhuodajie` 条目补 `"skills": ["host:chenhuodajie_card"]`；
+3. 补一条「使用后 `damageEnd` 窗口」的行为用例（样本 145 已有半成品）。
