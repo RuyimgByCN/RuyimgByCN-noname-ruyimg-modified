@@ -745,6 +745,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 514 轮**：**DSL 原语缺口清单（9 个）**（台账第 195 行）——把 5 个真规则候选逐个对 DSL 词汇表比对：**全部至少缺 1 个原语** ⇒ **今天一个也写不成纯 DSL**；缺的**不是宿主逻辑**而是 **9 个基础原语**：`round`、`remove_skill`、`history_count`、**`judge`**、**`choose_target`**、`is_chained`、**`trigger.num`**、`card_pile_search`、`force_die`；**关键更正**：阻塞性质**不是**「需改未跟踪的 `kernel/**`」，而是「**DSL 缺原语**，而 `content-compiler`/`rule-vm` **都已跟踪**」⇒ **这部分本代理本来就能做** ✅；**最短路径**：先补 `judge` ⇒ `boss_danshu`（**只需 1 个原语**）；**本轮未实现任何原语**（只做缺口分析）。
 >
+> **第 515 轮**：⚠ **更正第 514 轮**——「DSL 原语补在已跟踪 crate 就能做」**是错的** ❌。实际调用链：`content-compiler`(tracked) → `rule-vm/bytecode.rs`(tracked) → `rule-vm/vm.rs`(tracked) → **`QueryRequest`（`rule-api/src/query.rs`，46 个变体）** → **host 侧 match**：`engine-native/src/rvm_ops.rs` 有 **7 个 catch-all** ✓，但 **`engine-core/src/query/cache.rs` 41 臂 / `mod.rs` 16 臂，catch-all 均为 0**（覆盖全部 46 变体）⇒ **新增任何 `QueryRequest` 变体都必然要改这两个未跟踪文件** ⇒ **DSL 原语扩展路径被阻塞** ✓；**仍留的例外**：**不必新增变体**、可用**已有 46 变体**组合表达的缺口（如 `is_chained`/`force_die` 是否已存在**未查**）⇒ 下一步逐个核对 ✓。**方法学**：我把「编译端 tracked」当成了「整条链 tracked」—— **又犯了「只看一段就下结论」** ✗。
+>
+
 
 
 

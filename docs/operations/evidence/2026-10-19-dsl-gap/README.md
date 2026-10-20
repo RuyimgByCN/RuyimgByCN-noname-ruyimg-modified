@@ -69,3 +69,48 @@
 - 词汇表来自**补全表与编译器关键字**（`lsp/completions/`、`content-compiler/src`），**未穷举**；
 - 「缺」的判定基于**关键词搜索**，**不排除**存在未列入补全的隐藏原语；
 - 未实际编译任何 DSL（本轮只比对词汇）。
+
+---
+
+## 7 ⚠ **更正**（同日）：DSL 原语路径**同样被未跟踪代码阻塞**
+
+§4 第 3 条我写：「阻塞性质不是『需改 `kernel/**`』，而是『DSL 缺 9 个原语，补在
+`content-compiler`/`rule-vm`（均已跟踪）即可推进』⇒ **这部分本代理本来就能做**」。
+**这个判断是错的** ❌ —— 我只看了**编译端**是否 tracked，没看**求值端**。
+
+### 7.1 实际调用链
+
+```
+DSL 关键字
+  → content-compiler/codegen.rs       (tracked ✓)
+  → rule-vm/bytecode.rs  query_tag::* (tracked ✓)
+  → rule-vm/vm.rs  →  QueryRequest::*  (tracked ✓, crates/rule-api/src/query.rs 定义 **46 个变体**)
+  → **host 侧 match QueryRequest**  ← 这里断掉
+```
+
+### 7.2 断点在哪里（**实测**）
+
+| 文件 | `QueryRequest::` 臂数 | **`_ =>` catch-all** | tracked? |
+|---|---:|---:|---|
+| `crates/engine-native/src/rvm_ops.rs` | 42 | **7** | ✅ tracked |
+| **`crates/engine-core/src/query/cache.rs`** | **41** | **0** ❗ | ❌ **未跟踪** |
+| **`crates/engine-core/src/query/mod.rs`** | **16** | **0** ❗ | ❌ **未跟踪** |
+
+⇒ `engine-core` 的这两处 match **没有 catch-all**，且**覆盖全部 46 个变体**（41 臂 + 多变体合并臂）。
+⇒ **新增任何一个 `QueryRequest` 变体，都必然要让这两个未跟踪文件编译通过** ❌
+⇒ **按仓库纪律不得修改未跟踪文件** ⇒ **DSL 原语扩展路径被阻塞**。
+
+### 7.3 更正后的准确表述
+
+| 说法 | 正误 |
+|---|---|
+| 「补原语只动 `content-compiler`/`rule-vm`（tracked）」 | ❌ **错**：求值端在 `engine-core`（未跟踪），且 **match 无 catch-all** |
+| 「DSL 原语扩展被未跟踪代码阻塞」 | ✅ **对**：具体是 `engine-core/src/query/{cache.rs,mod.rs}` 的**穷举 match** |
+| 「所以完全无法推进」 | ❌ **也不对**：**不需要新增变体**的缺口仍可能用**已有变体**组合表达（**未逐一核对**）|
+
+### 7.4 下一步（**修正后**）
+
+1. 对 9 个缺口**逐个**核对：能否用**已有 46 个变体**组合表达？
+   - 例如 `is_chained`/`force_die` 可能已存在（**未查**）；`round` 可能无对应；
+2. 只有「**必须新增变体**」的那些，才是**真正的未跟踪阻塞**；
+3. 若确实需要新增变体，则**唯一出路**是把 `engine-core` 纳入可修改范围（**需人工决策**）。
