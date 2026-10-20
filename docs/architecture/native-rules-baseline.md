@@ -5411,3 +5411,30 @@ step:   首次进入按 ctx.current_damage().amount 初始化剩余次数
 
 ⇒ **`L06` 现在有 1 条确认缺陷**（`wuxing_shengke` 时机）⇒ **加入缺陷清单为第 17 条** ❗
 ⇒ **`L06` 的另一个技能 `wuxingpan_skill` 无缺陷** ✅
+
+### 5c 的修法判定：**需要扩 `EventKind`**（2026-10-19，第 689 轮）
+
+**`EventKind` 现有 22 个变体**：
+
+```
+DamageBefore  Damage  Recover  CardsDrawn  CardsMoved  CardUsed  CardResponded
+Dying  Death  PhaseBegin  PhaseEnd  TurnEnded  SkillToggled  Equipped  Linked
+CardsDiscarded  TurnOverBefore  TurnOvered  LoseHp  DyingSaved  CardsLost  ShaDodged
+```
+
+**没有「指定目标时」（`useCardToBegin` / `CardTargeted`）这一档** ❌
+
+⇒ **修 5c 不能只改 filter，必须扩 `EventKind`** ⚠️
+⇒ **与 G18（`Phase` 缺 `Prepare`）同类**：**都是枚举缺档，而非映射写错** ❗
+
+### 完整缺档清单（本会话累计）
+
+| 缺档 | 影响 | 修法 |
+|---|---|---|
+| **`Phase::Prepare`**（准备阶段）| **G18 2 条 + `dddmoyan` + G14 的 10 条（借 `Judge`）** | **扩 `Phase` 枚举** ⚠️ |
+| **「之前/之后/第二次」**（`before`/`after`/`Begin2`）| **G15 4 条** | **扩 `EventKind` 或加档位字段** ⚠️ |
+| **「指定目标时」**（`useCardToBegin`）| **5c 1 条** | **扩 `EventKind`** ⚠️ |
+| **`mod` 类钩子**（距离/手牌上限）| **G17a/b，112 候选** | **新增钩子** ⚠️ |
+
+⇒ **四类引擎缺档共覆盖 17+ 条确认缺陷与 112 个候选** ✅
+⇒ **这是「规则差异」的根因结构** —— **不是某几个技能写错，而是引擎缺 4 类表达** ❗
