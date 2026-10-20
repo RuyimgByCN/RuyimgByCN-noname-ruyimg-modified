@@ -56,7 +56,7 @@
 | `docs/architecture/phase8-ai.md` | 将投影和完整状态 fork 连成已隔离路径；以本文 AI 边界及源码为准 |
 | `docs/operations/ai-fork-strategies.md` | 零内存/零分配等结论没有同负载证据；保留策略源码和测试 |
 | `docs/operations/phase25-game-content.md` | 早期占位技能、旧牌数和完成勾选失效；**该文件已删除（10-10 文档清理）**，改读两条线各自的覆盖清单 |
-| `docs/operations/phase28-mobile-shell.md` | WebView 固定路线被取代，清单测试不能代表真机通过；**该文件已删除（10-10 文档清理）**，ADR 0702 历史说明保留于 [0702-m7-mobile-blocking](adr/0702-m7-mobile-blocking.md) |
+| `docs/operations/phase28-mobile-shell.md` | WebView 固定路线被取代，清单测试不能代表真机通过；**该文件已删除（10-10 文档清理）**，ADR 0702 历史说明保留于 [0702-m7-mobile-blocking](../adr/0702-m7-mobile-blocking.md) |
 | `docs/operations/phase32-battle-renderer.md` | 将 DOM 策略类型登记为完整渲染器；以源码和新线进度为准 |
 | `docs/adr/notes/task1-continuation-analysis.md` | 一次性底稿已由 ADR 0596 固化 |
 | `docs/adr/notes/task3-guozhan-investigation.md` | 一次性底稿已由 ADR 0598 固化 |

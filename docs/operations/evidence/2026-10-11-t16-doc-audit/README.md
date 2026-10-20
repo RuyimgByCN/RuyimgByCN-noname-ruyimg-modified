@@ -68,7 +68,7 @@
 
 ## 横幅补注（19 份）
 
-`docs/operations/phase{10–23,26,27,29,30}*.md`（含双 19；24/25/28 基线前已删除）全部在标题后补统一横幅：**历史阶段记录（T16④ 补注，2026-10-11）**，链接指向[进度主稿](../../../architecture/native-progress.md)、[覆盖清单](../../native-coverage-manifest.md)、[规则基准](../../../architecture/native-rules-baseline.md)。逐份链接核查通过（脚本断言三链接在每份前 800 字符内）。
+`docs/operations/phase{10–23,26,27,29,30}*.md`（含双 19；24/25/28 基线前已删除）全部在标题后补统一横幅：**历史阶段记录（T16④ 补注，2026-10-11）**，链接指向[进度主稿](../../../architecture/native-progress.md)、[覆盖清单](../native-coverage-manifest.md)、[规则基准](../../../architecture/native-rules-baseline.md)。逐份链接核查通过（脚本断言三链接在每份前 800 字符内）。
 
 ## 附带发现：legacy-reference 两处死链
 

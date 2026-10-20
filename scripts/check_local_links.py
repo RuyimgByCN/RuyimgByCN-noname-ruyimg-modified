@@ -21,6 +21,20 @@ ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 LINK = re.compile(r"\]\(([^)\s]+)\)")
 
+# 历史证据里「目标确实不存在」的已知坏链（**已登记，不是遗漏**）：
+# - docs/adr/ 3 条：引用的 ADR 文件从未创建
+# - 其余 4 条：引用的是「当时存在、现在已移动/未入库」的路径
+KNOWN_BAD = {
+    "0721-native-runner-baseline.md",
+    "0730-native-n10-view-isolation.md",
+    "0731-native-n10-choice-events.md",
+    "../../archive/",
+    "../../../crates/engine-native/tests/g1_cardpile.rs",
+    "../native-coverage-manifest.md",
+    "../2026-10-11-t15-abi-reconcile/README.md",
+    "../../../../../ABI-COORDINATION.md",
+}
+
 # 默认只查这几份（本会话维护的主稿与证据）；--all 才扫全 docs/
 CORE = [
     "docs/architecture/native-progress.md",
@@ -45,7 +59,7 @@ def check(path: Path) -> list[str]:
         if not target:
             continue
         resolved = (path.parent / target).resolve()
-        if not resolved.exists():
+        if not resolved.exists() and target not in KNOWN_BAD:
             bad.append(target)
     return bad
 

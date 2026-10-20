@@ -18,7 +18,7 @@
   noname-liuli `8485dbb2` 的 `noname/extension/cardpile/extension.js`；两仓 data 表语义一致
   （160 张目标、12 条目），各自保留独立包身份。
 - 生成器：`crates/content-runtime/examples/gen_cardpile_packages.rs`（可复跑）；
-  [G1 测试](../../crates/engine-native/tests/g1_cardpile.rs) 断言仓库产物与生成器输出逐字节一致（防漂移）。
+  [G1 测试](../../../crates/engine-native/tests/g1_cardpile.rs) 断言仓库产物与生成器输出逐字节一致（防漂移）。
 
 ## 纵向样本验收点（g1_cardpile_vertical_install_enable_newgame_saverestore）
 
