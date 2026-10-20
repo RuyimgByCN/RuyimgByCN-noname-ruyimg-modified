@@ -1,0 +1,7 @@
+DBG 技能清单：总 94、已映射 89、未映射 5
+DBG 未映射：longxue-upstream-liuli/mbcmjiushi
+DBG 未映射：longxue-upstream-liuli/mbcmfangzhu
+DBG 未映射：longxue-upstream-liuli/mbjuejin
+DBG 未映射：wudian-upstream-noname/duoqi
+DBG 未映射：wudian-upstream-noname/youzhan
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
