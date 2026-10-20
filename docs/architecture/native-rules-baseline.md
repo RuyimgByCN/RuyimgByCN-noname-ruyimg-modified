@@ -3880,5 +3880,28 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
    本代理**只读不改**，且本轮**未逐行读完**（`factory.rs`/`filtering.rs` 两处派发）；
 3. **U08-4 未判定**。
 
+### U08 复核：**一条被否定的假设**（同日）
+
+我一度以为 `factory.rs:327-331`（`HostBehavior::YxsFanji => (None, None)` 等五行）意味着
+「**这 5 个技能没有实现**」。读函数签名后**否定**该判断：
+
+```rust
+pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine
+// 返回的是 (target, card) —— 事件的**上下文**，不是 trigger/effect
+```
+
+⇒ `(None, None)` 只表示「**该事件不提供额外的 target/card 上下文**」，**不表示技能未实现** ❌。
+
+**已确认的部分**：
+
+| 面 | 位置 | 状态 |
+|---|---|---|
+| **键映射** | `content/host/keys.rs:836-840` | ✅ 5 个键都在 |
+| **filter** | `content/host/filtering/common.rs:101+`（`YxsFanji` 有 `EventData::Damage(d) if d.target == owner` + `has_sha` 判定）| ✅ **有实际条件** |
+| **触发/效果** | **未定位** | ❓ |
+| **元数据面**（priority 等）| —— | ❓ |
+
+⇒ **U08-2/3 仍为「未判定」** ✅（**只是范围缩小到「trigger/effect 在哪」**）。
+
 **因此 U08 记为「差异族 v0（部分登记）」**，**不记为已签约的规则差异项**；
 要完成需：①读宿主实现 ②对 `yxs_fanji`/`yxs_menshen` 各写一个**行为样本** ③判定 `priority` 一类元数据是否影响结果。
