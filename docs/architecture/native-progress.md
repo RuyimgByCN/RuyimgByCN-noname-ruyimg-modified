@@ -690,6 +690,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 485 轮**：**NC12 `long`（长局）模式跑批**——4 档 × 2 局 = **8 局**：**全部 `finished=true`、`stalled=false`、`plan_panics=0`** ✅，步数合计 **2082**；**存档循环 0.43–0.99 ms**（`save_cycle_total_ns` 453.7 µs / 427.0 / 994.0 / 952.3）；**`rss_kb=NA`** —— bench **自述**「`ps -o rss=` 沙箱禁止时 NA，外部用 `/usr/bin/time -l`」⇒ **如实无内存指标、不外推**（堆内存由**计数式全局分配器**另行测量：6 盘 +0 B、30 盘 +228 KB）⇒ 八项「性能」再补**长局**侧面。
 >
+> **第 486 轮**：**金色一致性套件全通过**（`cargo run -p conformance`，CI 入口 `run_all()`）——**19/19 通过、0 失败、退出码 0、`ALL PASS`** ✅；场景覆盖**标准/国战复现**（`package_jianxiong_repro`、`guozhan_*` 4 项、`guozhan_zhulian_bihe_abi641`）、**VM 双实现**（`dual_vm_standard_m1`、`shahai_impl_repro`）、**三扩展包 ABI 断言**（`huanle_shoulijian_abi642`、`gwent_dudayuanshuai_abi643`、`shahai_hupeng_abi644`）；**边界**：属**产品回归**，**不等于**完整产品长程与 37 来源逐项验收，且未覆盖真机/浏览器/性能。
+>
+
 
 
 
