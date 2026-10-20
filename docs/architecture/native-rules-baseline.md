@@ -5132,3 +5132,43 @@ trigger: { player: ['phaseZhunbeiBegin', 'phaseJieshuBegin'] }   // 准备阶段
 2. **抽样**：抽了几条？**有没有抽到「做对的」**？
 3. **全量**：**是否经 `skills[].mapping` 反查过上游名**？
 4. **分级**：**每条是否有「改法 + 成本 + 验证」**？
+
+## **新缺口类：`mod` 面**（第 616 轮普查，**待核**）
+
+### 数据
+
+| 观察 | 数字 |
+|---|---:|
+| 「杀海拾遗」`skill.js` 里的技能定义 | **1093** |
+| **其中带 `mod:` 字段的** | **112**（**10.2%**）|
+| **原生 `content/host/` 里 `select_target`/`Modifier` 相关实现** | **0 处** ❗ |
+
+**上游 `mod` 的典型内容**（前 15 个带 `mod` 的技能里）：
+
+```
+mtg_shamolvzhou_skill   chunbing   molicha   yuanbaorou   heilonglinpian
+shihuifen   qiankundai   zhufangshenshi   hslingjian_*_equip3_dist   hslingjian_*_equip3
+```
+
+—— **现代码多为「装备的距离/护甲修正」**（`equip3_dist`/`equip4`），**以及卡牌的「目标/距离」修正**。
+
+### 判定（**谨慎**）
+
+| 结论 | 状态 |
+|---|---|
+| **`jifeng` 的 `mod.selectTarget` 缺失** | ✅ **已确认**（§U05-SWD v8.1）|
+| **`mod` 面在 `content/host/` 里没有统一抽象** | ✅ **grep 零命中** |
+| **112 个带 `mod` 的技能「全部缺失」** | ❌ **未证实** —— **原生可能用 case-by-case 方式实现了部分**（如 `jifeng_single_target_trick` 式的辅助函数）|
+
+⇒ **记为「新缺口类（待核）」，不记为 112 条缺陷** ✅
+
+### 下一步（未做）
+
+1. **抽 5 个带 `mod` 的技能**（**优先 `dist`/`equip` 类** —— **它们最可能被 case-by-case 实现**）；
+2. 查原生**是否有一等价的距离/数目修正**；
+3. ⇒ 若**多数缺失** ⇒ **G17（批量）**；若**多数等价** ⇒ **只记 `jifeng` 单点** ✅
+
+### 与「四步法」的关系
+
+**本条目只做了第 1 步（普查）** —— **第 2 步（抽样定模式）尚未做** ❗
+⇒ **因此只能叫「新缺口类（待核）」，不能叫「112 条缺陷」** ✅
