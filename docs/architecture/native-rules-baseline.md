@@ -5387,3 +5387,21 @@ step:   首次进入按 ctx.current_damage().amount 初始化剩余次数
 **`U01` 两个技能都有差异** ⇒ **不能签「已对照且可接受」** ❌
 ⇒ **队列第 1 项（内容量 1）也不便宜** —— **它不是「1 个武将所以简单」，而是「2 个技能都错位」** ⚠️
 ⇒ **「第一个可签来源」仍只有 `L10`**（**只差修 5b**）✅
+
+### L06 wuxing（五行）差异族（2026-10-19，第 687 轮）
+
+**包**：`wuxing-upstream-liuli`，**1 卡（`wuxingpan` 五行盘，黑桃 5）+ 2 技能**
+
+| # | 技能 | 上游 | 原生 | 判定 |
+|---:|---|---|---|---|
+| 1 | **`wuxing_shengke` 相克** | **`trigger: { target: 'useCardToBegin' }`** + `forced` + filter：**`event.card.wunature && player.wunature`** ⇒ **被指定为目标时**按五行相克结算 | **`HostBehavior::ShengkeCheck`**：`filtering/common.rs:539` 有内容、`metadata` 有 trigger meta、`step/skills_status.rs:680` 有效果、**`factory` 用 `EventData::CardUsed(u) => (None, Some(u.card))`** | ⚠️ **时机待核**：上游是 **`useCardToBegin`（指定目标时）**，原生拿的是 **`CardUsed`（使用后）** 的牌 ⇒ **需核 filter 实际匹配哪个事件** |
+| 2 | **`wuxingpan_skill` 改属性** | **`enable: 'phaseUse'`** + **`usable: 1`（每阶段一次）** + `filterCard` + **`lose: false`（不弃牌）** + 改变一张手牌五行属性 | **`activation/common.rs:259`**：**只检查 `hand.is_empty()`** | ⚠️ **次数限制待核**：**`usable: 1` 是否有对应实现**（**`reguhuo` 的 5b 是同类问题**）|
+
+### 这两条都属于「同一类可疑」
+
+**①时机错位**（`useCardToBegin` vs `CardUsed`）—— 与 G14/G18 同族（**引擎缺少对应档位**）
+**②次数限制**（`usable: 1`）—— 与 `reguhuo` 的 5b 同族（**每阶段/每回合一次未实现**）
+
+⇒ **两条都记为「待核」，不记为确认缺陷** ✅
+⇒ **要定案需各读一次 `filtering/common.rs` 的完整臂 + `step` 的效果步** ⚠️
+⇒ **本轮未做**（**避免重犯「单点推断整条链」的错误** ✓）
