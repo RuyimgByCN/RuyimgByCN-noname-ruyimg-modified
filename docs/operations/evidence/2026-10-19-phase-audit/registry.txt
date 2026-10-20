@@ -1,27 +1,4 @@
 行为	key	Phase	begin	状态	依据
-SwdHyunshen2	hyunshen2	Judge	true	已核	基准对应章节
-SwdDaixing	daixing	End	false	已核	基准对应章节
-SwdDaixing2	daixing2	Judge	true	已核	基准对应章节
-SwdZhuhai	zhuhai	End	true	已核	基准对应章节
-SwdRumeng	rumeng	Play	true	已核	基准对应章节
-SwdReyingzi	reyingzi	Draw	true	已核	基准对应章节
-SwdLexue	lexue	Judge	true	已核	基准对应章节
-SwdZhenjiu2	zhenjiu2	Judge	true	已核	基准对应章节
-SwdHuanxing	huanxing	Judge	true	已核	基准对应章节
-SwdHuajin2	huajin2	Judge	true	已核	基准对应章节
-XianjianChangnian2	xj_changnian2	End	false	已核	基准对应章节
-XianjianFenglue	xj_fenglue	Play	true	已核	v607 反查比对
-XianjianHusha	xj_husha	End	false	已核	基准对应章节
-XianjianLiguang	xj_liguang	End	false	已核	基准对应章节
-XianjianLinghuo	xj_linghuo	End	false	已核	基准对应章节
-XianjianLingquan	xj_lingquan	End	false	已核	v607 反查比对
-XianjianLonghuo	xj_longhuo	End	false	已核	v607 反查比对
-XianjianQianfang	xj_qianfang	Judge	true	已核	基准对应章节
-XianjianShenwu	xj_shenwu	End	false	已核	v607 反查比对
-XianjianWangyou	xj_wangyou	End	false	已核	基准对应章节
-XianjianXjzhimeng	xj_xjzhimeng	End	false	已核	v607 反查比对
-XianjianShuiyun	xj_shuiyun	End	false	已核	v607 反查比对
-XianjianZhaoyao	xj_zhaoyao	Draw	true	已核	基准对应章节
 WudianFuchou2	fuchou2	End	false	已核	基准对应章节
 HlssFengqi	hlss_fengqi	Judge	true	已核	v608 上游 boss.js：多值触发
 NewMeibu	new_meibu	Play	true	已核	基准对应章节
@@ -51,3 +28,26 @@ WudianYuedong	wudian_yuedong	Play	false	已核	基准对应章节
 WudianZhucheng	wudian_zhucheng	End	true	已核	基准对应章节
 WudianPaotaiFire	wudian_paotai_fire	End	true	已核	基准对应章节
 BossBaiyi	baiyi	Judge	true	已核	基准对应章节
+SwdHyunshen2	hyunshen2	Judge	true	已核	基准对应章节
+SwdDaixing	daixing	End	false	已核	基准对应章节
+SwdDaixing2	daixing2	Judge	true	已核	基准对应章节
+SwdZhuhai	zhuhai	End	true	已核	基准对应章节
+SwdRumeng	rumeng	Play	true	已核	基准对应章节
+SwdReyingzi	reyingzi	Draw	true	已核	基准对应章节
+SwdLexue	lexue	Judge	true	已核	基准对应章节
+SwdZhenjiu2	zhenjiu2	Judge	true	已核	基准对应章节
+SwdHuanxing	huanxing	Judge	true	已核	基准对应章节
+SwdHuajin2	huajin2	Judge	true	已核	基准对应章节
+XianjianChangnian2	xj_changnian2	End	false	已核	基准对应章节
+XianjianFenglue	xj_fenglue	Play	true	已核	v607 反查比对
+XianjianHusha	xj_husha	End	false	已核	基准对应章节
+XianjianLiguang	xj_liguang	End	false	已核	基准对应章节
+XianjianLinghuo	xj_linghuo	End	false	已核	基准对应章节
+XianjianLingquan	xj_lingquan	End	false	已核	v607 反查比对
+XianjianLonghuo	xj_longhuo	End	false	已核	v607 反查比对
+XianjianQianfang	xj_qianfang	Judge	true	已核	基准对应章节
+XianjianShenwu	xj_shenwu	End	false	已核	v607 反查比对
+XianjianWangyou	xj_wangyou	End	false	已核	基准对应章节
+XianjianXjzhimeng	xj_xjzhimeng	End	false	已核	v607 反查比对
+XianjianShuiyun	xj_shuiyun	End	false	已核	v607 反查比对
+XianjianZhaoyao	xj_zhaoyao	Draw	true	已核	基准对应章节
