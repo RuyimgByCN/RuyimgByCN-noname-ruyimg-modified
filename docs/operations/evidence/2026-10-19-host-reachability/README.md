@@ -181,3 +181,29 @@ pub(super) fn grant_shihuifen_ban(…) {
 
 **上游扫描只覆盖了 `archive/upstream/noname`** ❗ —— **`archive/upstream/noname-liuli`（29 个来源）没扫**。
 ⇒ **`jiguan`/`huanren` 可能来自 liuli 侧** ⇒ **本轮结论只能写「在 noname 侧未找到」** ✅
+
+---
+
+## 12 补扫 **`archive/upstream/noname-liuli`** 后的定案（第 593 轮）
+
+| 前缀 | 条数 | **noname 侧** | **liuli 侧** | 判定 |
+|---|---:|---|---|---|
+| **`jiguan_*`** | **8** | 仅作子串（`gujian/card.js`）| ✅ **`noname-liuli/noname/card/swd.js`** | **有上游** ⇒ **不是该删**；**但它在「卡牌」文件里** ⇒ **属「卡牌效果」而非「技能」** ❗ |
+| **`baiyi*`** | **2** | ✅ `character/tw/character.js` | ✅ `AI优化/extension_old.js` | **两处有** ⇒ **属未转换来源** ✅ |
+| **`huanren*`** | **2** | ❌ 未找到 | ❌ **未找到** | ❗ **两侧均无** ⇒ **可判「无上游」** |
+
+### 结论（**定案**）
+
+| 类 | 条目 | 处置 |
+|---|---|---|
+| **`huanren`（2 条）** | **两侧都无上游** | ✅ **确认可删**（**唯一一组**）|
+| **`baiyi`（2 条）** | **tw 包 + AI优化** | **属 G1 未转换** ⇒ **等迁移** |
+| **`jiguan`（8 条）** | **liuli 的 `card/swd.js`** | **有上游，但属「卡牌效果」** ⇒ **应挂到卡牌（`CardKind`/`cards[].skills`）而非技能** ❗ |
+
+⇒ **94 条死键里，只有 `huanren` 的 2 条确认「无上游」** ✅
+⇒ **其余 92 条都有上游或未查完** ❗（**`jiguan` 8 条的方向已明确：挂卡牌**）
+
+### 更新后的边界
+
+**上游两侧（`noname` + `noname-liuli`）现已都扫过** ✅ ——
+**`huanren` 是唯一「两侧都无」的前缀** ✓
