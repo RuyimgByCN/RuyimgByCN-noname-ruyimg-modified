@@ -5448,14 +5448,31 @@ CardsDiscarded  TurnOverBefore  TurnOvered  LoseHp  DyingSaved  CardsLost  ShaDo
 | **`kurou` 苦肉** | ✅ 找到（**390 B，无 `trigger`、无 `enable`**）| ⚠️ **形态待核**（经典苦肉是 `enable: 'phaseUse'`；此处无 enable，**疑为 `mod`/`subSkill` 变体**）|
 | **`fz_liegong`** | ✅ 找到（**45 B**）| ⚠️ **近乎空壳**（**45 B 放不下内容，疑为 `subSkill` 桩**）|
 | **`fz_xinkuanggu`** | ✅ 找到（**48 B**）| ⚠️ 同上 |
-| **`xigua_mopaifanbei`** | ❌ **未找到** | ❗ **上游无同名定义** |
-| **`xigua_xueliangfanbei`** | ❌ **未找到** | ❗ 同上 |
-| **`zhuwanzhongji`** | ❌ **未找到** | ❗ 同上 |
+| **`xigua_mopaifanbei`** | ✅ **`lib.skill._xigua_mopaifanbei_`**（`extension.js:2276`）| ✅ **是「下划线内部名」**（**去掉前后 `_` 即包名**）|
+| **`xigua_xueliangfanbei`** | ✅ **`lib.skill._xigua_xueliangfanbei_`**（`:2261`）| ✅ 同上 |
+| **`zhuwanzhongji`** | ✅ **`lib.skill._xigua_zhuwanzhongji_`**（`:2290`）| ✅ 同上（**包名少了 `xigua_` 前缀**）|
 
-### 结论（**只是初查，未定案**）
+### ✅ 定案：3 个「找不到」全是**下划线内部名**（第 708 轮）
 
-**6 个技能里**：**3 个有定义（1 实体 + 2 空壳）、3 个上游找不到** ⚠️
-⇒ **找不到的 3 个**可能：①**定义在别的扩展**（`非 skill.js` 文件）②**是 `mark-supplement` 自己新增的**（**「标记补充」本身就是补充机制**）③**名字被改写** ❗
+上游在 `标记补充/extension.js` 里用 **`lib.skill._xigua_*_ = {…}`** 定义（**前后带下划线**）：
 
-⇒ **本轮未定案**（**需扩大搜索范围到全部 `*.js` 与 `card/`** ✓）
-⇒ **但已确认：`L20` 不能简单按「6 个技能逐个对照」推进** ⚠️
+| 包内名 | 上游定义 | 行 |
+|---|---|---|
+| `xigua_mopaifanbei` | **`_xigua_mopaifanbei_`** | **2276** |
+| `xigua_xueliangfanbei` | **`_xigua_xueliangfanbei_`** | **2261** |
+| `zhuwanzhongji` | **`_xigua_zhuwanzhongji_`** | **2290** |
+
+⇒ **不是「找不到」，而是「名字带下划线前缀/包名少一段」** ✅
+
+### ⚠ 这是「名字被改写」的第 5 次
+
+| # | 现象 |
+|---:|---|
+| 1 | `xj_zhaoyao` vs `zhaoyao` |
+| 2 | `wudian_ziyu` vs `ziyu` |
+| 3 | `geju` vs `wudian_geju` |
+| 4 | `wuxing_shengke` vs `shengke_check` |
+| **5** | **`xigua_*` vs `_xigua_*_`（前后下划线）** |
+
+⇒ **「查不到」的第一反应应该是「试加/去下划线、试加/去扩展前缀」** ✅
+⇒ **`L20` 的 6 个技能现已全部定位** ✅ —— **可以进入真正的逐条对照**
