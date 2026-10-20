@@ -1,0 +1,8 @@
+DBG 牌堆配对：牌堆包 2 个、卡牌包 10 个 ⇒ 20 对
+DBG 牌堆配对：20 对、失败 20 项
+DBG 牌堆配对失败：cardpile-upstream-liuli+huanle-upstream-noname: 目录 244 != 期望 120
+DBG 牌堆配对失败：cardpile-upstream-liuli+shahai-gujian-upstream-noname: 目录 277 != 期望 153
+DBG 牌堆配对失败：cardpile-upstream-liuli+shahai-gwent-upstream-noname: 目录 258 != 期望 134
+DBG 牌堆配对失败：cardpile-upstream-liuli+shahai-hearth-upstream-noname: 目录 254 != 期望 130
+DBG 牌堆配对失败：cardpile-upstream-liuli+shahai-mtg-upstream-noname: 目录 247 != 期望 123
+DBG 牌堆配对失败：cardpile-upstream-liuli+shahai-swd-upstream-noname: 目录 327 != 期望 203
