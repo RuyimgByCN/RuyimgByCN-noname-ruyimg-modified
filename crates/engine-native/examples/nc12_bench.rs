@@ -48,6 +48,8 @@ const TIER_TABLE: &[(&str, &[&str])] = &[
     ("gwent", &["shahai-gwent-upstream-noname"]),
     ("wuxing", &["wuxing-upstream-liuli"]),
     ("d3", &["d3-upstream-noname"]),
+    ("cardpile", &["cardpile-upstream-noname"]),
+    ("cardpile_liuli", &["cardpile-upstream-liuli"]),
     (
         "combo",
         &[
@@ -344,12 +346,9 @@ impl PackHost {
             let (pid, path) = by_dir
                 .get(*d)
                 .ok_or_else(|| format!("环境失败：目录 {d} 未被 import_extensions 安装"))?;
-            let cards = path.join("assets/cards.json");
-            let json = std::fs::read_to_string(&cards)
-                .map_err(|e| format!("环境失败：读 {} 失败 {e}", cards.display()))?;
-            let out = content_native_loader::bridge_pack(&json)
-                .map_err(|e| format!("环境失败：桥接 {d} 失败 {e}"))?;
-            packs.push(out.pack);
+            let pack = load_pack_dir(&path)
+                .map_err(|e| format!("环境失败：{d} {e}"))?;
+            packs.push(pack);
             package_ids.push(pid.clone());
         }
         let bridge_ns = t_bridge.elapsed().as_nanos();
@@ -383,6 +382,79 @@ fn build_engine(tier: &str, host: Option<&PackHost>, seed: u64, seats: usize) ->
                 .map_err(|e| format!("环境失败：{tier} 建局被拒 {e:?}"))
         }
     }
+}
+
+
+/// 按**资产形态**装载一个来源目录（NC12 逐来源档用）：
+/// 1. `cards.json`（多数卡牌包；若同目录还有 `character.json` 则并入武将）；
+/// 2. 仅 `character.json`（纯武将包，如 `d3`）；
+/// 3. `pile.json`（牌堆补丁包，如 `cardpile-*`；走 `extension_pack_from_pile`）。
+///
+/// 返回 `ExtensionPack`；**不改变产品行为**，只让 bench 覆盖更多来源。
+fn load_pack_dir(
+    path: &std::path::Path,
+) -> Result<engine_native::content::extension::ExtensionPack, String> {
+    let assets = path.join("assets");
+    let cards = assets.join("cards.json");
+    if cards.is_file() {
+        let json = std::fs::read_to_string(&cards)
+            .map_err(|e| format!("读 {} 失败 {e}", cards.display()))?;
+        let mut out = content_native_loader::bridge_pack(&json)
+            .map_err(|e| format!("桥接 cards.json 失败 {e}"))?;
+        let chars = assets.join("character.json");
+        if chars.is_file() {
+            if let Ok(cj) = std::fs::read_to_string(&chars) {
+                if let Ok(b) = content_native_loader::bridge_generals(&cj) {
+                    out.pack.generals = b.generals;
+                }
+            }
+        }
+        return Ok(out.pack);
+    }
+    let chars = assets.join("character.json");
+    if chars.is_file() {
+        let json = std::fs::read_to_string(&chars)
+            .map_err(|e| format!("读 {} 失败 {e}", chars.display()))?;
+        let mut out = content_native_loader::bridge_pack(&json)
+            .map_err(|e| format!("桥接 character.json 失败 {e}"))?;
+        if let Ok(b) = content_native_loader::bridge_generals(&json) {
+            out.pack.generals = b.generals;
+        }
+        return Ok(out.pack);
+    }
+    let pile = assets.join("pile.json");
+    if pile.is_file() {
+        let json = std::fs::read_to_string(&pile)
+            .map_err(|e| format!("读 {} 失败 {e}", pile.display()))?;
+        let v: serde_json::Value = serde_json::from_str(&json)
+            .map_err(|e| format!("解析 pile.json 失败 {e}"))?;
+        let source = v.get("source").and_then(|x| x.as_str()).unwrap_or("").to_string();
+        let total = v.get("total").and_then(|x| x.as_u64()).unwrap_or(0) as u32;
+        let mut entries = Vec::new();
+        for e in v.get("entries").and_then(|x| x.as_array()).cloned().unwrap_or_default() {
+            let card = e.get("card").and_then(|x| x.as_str()).unwrap_or("").to_string();
+            let mut counts: Vec<(String, u32)> = Vec::new();
+            if let Some(obj) = e.get("counts").and_then(|x| x.as_object()) {
+                for suit in ["spade", "heart", "club", "diamond"] {
+                    if let Some(n) = obj.get(suit).and_then(|x| x.as_u64()) {
+                        counts.push((suit.to_string(), n as u32));
+                    }
+                }
+            }
+            entries.push(engine_native::content::pile::PileEntry { card, counts });
+        }
+        return engine_native::content::pile::extension_pack_from_pile(
+            engine_native::content::extension::ExtensionDef {
+                name: "bench-pile",
+                version: 1,
+                description: "bench pile",
+            },
+            "bench_pile",
+            &engine_native::content::pile::PileSpec { source, total, entries },
+        )
+        .map_err(|e| format!("pile 构包失败 {e:?}"));
+    }
+    Err("资产目录既无 cards.json / character.json / pile.json".to_string())
 }
 
 fn load_tier(tier: &str) -> Result<Option<PackHost>, String> {

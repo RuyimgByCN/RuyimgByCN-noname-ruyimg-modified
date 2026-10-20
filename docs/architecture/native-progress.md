@@ -635,6 +635,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 453 轮**：**逐来源效能跑批**（`nc12_bench` 新增 **9 个逐来源档**，改动在**已跟踪** examples/）——**8 个来源**通过：整局 AI（4 人、种子 42007）**全部收敛、`rejected=0`**，墙钟 **7.70–12.69 ms**（156–292 步，≈15–20k 步/秒）；构建 32–59 µs（gujian 首档 521 µs 为冷缓存离群）、装载 36.8–42.7 ms；**d3（U01）**因 probe 按 `cards.json` 读取而**环境失败**（工具限制）、**pile.json 包（U03/L04）**bench 不支持 ⇒ 五来源签署表「性能」**1/5 → 2/5（部分）**（U05/U07 有数据）。
 >
+> **第 454 轮**：**bench 支持 `character.json` / `pile.json`**（`load_pack_dir`，已跟踪 examples/）——新增 `cardpile`/`cardpile_liuli` 两档；`d3`（124 卡/217 技/1 将）、`cardpile`（237 卡）、`cardpile_liuli`（237 卡）**均 result=OK**；drive：**d3 298 步、cardpile/cardpile_liuli 261 步，全部 rejected=0 收敛** ⇒ 五来源签署表「性能」**2/5 → 5/5（部分）**。**工具限制如实记录**：两 cardpile 包 `package_id` 同为 `cardpile`（仅 namespace 不同）、`content_lock_id` 相同 ⇒ **不能用锁 id 断言两档内容不同**。
+>
+
 
 
 
