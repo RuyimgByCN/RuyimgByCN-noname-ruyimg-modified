@@ -650,6 +650,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 461 轮（整局连续推进达成）**：关键发现——**`ServerMessage::Snapshot` 同时携带 `choice: Option<ChoiceRequest>
 > **第 462 轮（跑到终局）**：新增 `bot_runs_matches_to_completion`——机器人推进到 `MatchOutcome != InProgress`：room0 **`RenegadeWin{player:2}`**（**100 步**、rev=102）、room1 **`LoyalistWin`**（6 步、rev=8），上限 4000 步内**全部结束** ⇒ 产品路径「**完整对局**」验证通过（覆盖两种终局类型）。**未做**：进程 RSS **取不到（`ps` 返回空）**⇒ 无内存泄漏结论；多盘连续/整夜、真实网络与浏览器端未做；选步为固定优先级（非强 AI），终局分布**不代表规则平衡**。
 >
+> **第 463 轮**：**多盘连续 + 堆内存观测**（`apps/game-server/tests/long_run_memory.rs`）——环境限制实测：`/bin/ps` **被沙箱拒绝**（`Operation not permitted`）、工区无 `libc` ⇒ 改用**计数式全局分配器**（`#[global_allocator]` + `System`，**零新依赖**）统计当前/峰值堆字节；**6 盘连续全部跑到终局**（5 `LoyalistWin` + 1 `RenegadeWin{player:2}`），堆曲线 312→314→239→258→258→313 KB，**首盘后 vs 末盘后增长 0 字节**、峰值 **474 KB**（751 ms）⇒ **本口径内未见堆泄漏**；**口径限制如实登记**：测的是进程堆**非 RSS**、6 盘不足以排除缓慢泄漏、阈值 32 MB 仅用于防阶跃。
+>
+
 ` 与 `legal_actions`**（`messages.rs:168-177`）⇒ 本连接无动作时**取快照**、按 `min_count` 构造 `ResolveChoice{selections: 0..min_count}` ⇒ **`submitted=178 accepted=178`（100%）**、**`max_revision=72`**（room2；另 69/30/15）、240 次快照全响应；用例**`#[ignore]` 已移除**，game-server 套件 **102 passed / 0 failed / 0 ignored**。**仍未做**：强 AI 选步、终局断言、内存/句柄观测、真实网络。
 >
 ` JSON）下发，而测试把该通道丢弃了** ⇒ 下一步：保留并解析 **`ChoiceRequest`**（含 `choice_id` 与合法选项）为正确连接构造 `ResolveChoice`；用例保持 `#[ignore]`。

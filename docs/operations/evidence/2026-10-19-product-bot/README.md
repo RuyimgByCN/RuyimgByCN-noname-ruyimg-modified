@@ -175,7 +175,7 @@ RESULT bot_finish rooms=2 steps_total=106 elapsed_ms=313 rss_before_kb=None rss_
 
 ### 8.1 仍未做（**如实**）
 
-1. **内存/句柄观测**：`ps -o rss=` 在本环境返回空 ⇒ **无数据**，需换 `libc::getrusage` 或 `vmmap`（未做）；
+1. **内存/句柄观测**：`ps -o rss=` 被沙箱拒绝（`Operation not permitted`）⇒ 改用**计数式全局分配器**（无新依赖），见[多盘内存观测](../2026-10-19-product-memory/README.md)：6 盘连续、堆增长 **0 字节**、峰值 474 KB ✅；
 2. **多盘连续/长时**：目前每房**一局**；「整夜跑」需要循环多局并观察 RSS 曲线；
 3. **真实网络**（TCP/WebSocket）与浏览器端：未做；
 4. 选步仍是**固定优先级**（非强 AI），终局分布不代表规则平衡性。
