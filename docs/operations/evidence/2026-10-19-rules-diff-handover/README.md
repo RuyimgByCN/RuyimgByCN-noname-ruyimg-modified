@@ -83,7 +83,7 @@
 | `Phase::Play` | 5 | 1 | ⚠️ 1 `before` 类（`fenglue`）|
 | **`Phase::End`** | **13** | **6** | ✅ **5 正确** + ⚠️ 1 `after` 类 |
 | 其余 | 15 | 1 | ⚠️ `Miedao` 缺一半 |
-| **合计** | **52** | **24** | **✅ 9 正确 / ❌ G14(7) + G15(≥3) + G16 + 4 单点 / ❓ 28 未核** |
+| **合计** | **52** | **27** | **✅ 9 正确 / ❌ G14(7) + G15(≥3) + G16 + 4 单点 / ⛔ 3 不可达（Gwent）/ ❓ 22 未核** |
 
 ### 两条根因链
 
@@ -97,7 +97,7 @@
 - **`GujianFoodTanhuadong`**：上游 `phaseEnd`，原生 `Phase::Play, begin=false`（**出牌阶段结束**）⇒ **G16（阶段不同）** ❗
 - **`WudianYuedong`**：上游 `phaseUseEnd` = 原生 `Phase::Play, begin=false` ⇒ ✅ **正确**（**第 2 个确认正确的「出牌阶段结束」**）
 - **`Xiefang`**：上游无 `trigger`（186 B）⚠️
-- **Gwent 三条**（`birin`/`cigu`/`qinpen`）：**上游按拼音未找到**（`gwent/skill.js` 74 个定义里没有）❓ —— **需要用中文名反查**（**本轮未做**）
+- **Gwent 三条**（`birin`/`cigu`/`qinpen`）：**定案为「不可达」** ⛔ —— **`shahai-gwent` 包只有 21 张卡、0 张带 `skills`、没有 `skills[]`**，**全库除 `keys.rs` 外无任何引用** ⇒ **永远不会被授予**（**与 U08 同类**）✅
 
 ### 结论
 
