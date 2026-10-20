@@ -1,0 +1,25 @@
+[repro] step=10 seat=1 命中 sim_faults=1
+[fault] rev=10 phase=Play turn=1 stack=1 parks=1 choice=Some((2, "nullify_window")) table=[161]
+[fault]   p0: hp=3/4 hand=[78, 152, 123, 144] equips=[] judge=[] off=[]
+[fault]   p1: hp=4/4 hand=[23, 15, 72, 10] equips=[] judge=[] off=[]
+[fault]   p2: hp=4/4 hand=[174, 39, 37, 74] equips=[] judge=[] off=[]
+[fault]   p3: hp=4/4 hand=[103, 102, 193, 49] equips=[] judge=[] off=[]
+[fault]   frame[0] id=23 parent=None kind=CardUsed stage=Intrinsic data=CardUsed(CardUseData { card: 161, player: 1, targets: [0], nature: Normal, use_as: None, cancelled: false })
+[fault]   park[0] resume_depth=1 slot=Intrinsic { frame: 23 } snapshot=NullifyWindow { card: 161, source: 1, nullified: false, queue: [1, 2, 3, 0], asked: true, window_open: true, owns_disposal: true, effect: Some(Host { def_key: "swd_zhongxinghujia", behavior: 228, stage: 0, owner: 1, target: Some(0), card: Some(161), cards: [], targets: [] }) }
+[sim-fault 0] PRE rev=10 phase=Play action=Answer { choice_id: 2, selection: [Pass] } frames=[23/CardUsed/CardUsed(CardUseData { card: 161, player: 1, targets: [0], nature: Normal, use_as: None, cancelled: false })] parks=[NullifyWindow { card: 161, source: 1, nullified: false, queue: [1, 2, 3, 0], asked: true, window_open: true, owns_disposal: true, effect: Some(Host { def_key: "swd_zhongxinghujia", behavior: 228, stage: 0, owner: 1, target: Some(0), card: Some(161), cards: [], targets: [] }) }]
+[sim-fault 1] POST seat=1 rev=10 phase=Play action=Answer { choice_id: 2, selection: [Pass] } table=[161] hands=[p0:hp=3/4 hand=[78, 152, 123, 144] | p1:hp=4/4 hand=[23, 15, 72, 10] | p2:hp=4/4 hand=[174, 39, 37, 74] | p3:hp=4/4 hand=[103, 102, 193, 49]] frames=[23/CardUsed/CardUsed(CardUseData { card: 161, player: 1, targets: [0], nature: Normal, use_as: None, cancelled: false })] parks=[NullifyWindow { card: 161, source: 1, nullified: false, queue: [1, 2, 3, 0], asked: true, window_open: true, owns_disposal: true, effect: Some(Host { def_key: "swd_zhongxinghujia", behavior: 228, stage: 0, owner: 1, target: Some(0), card: Some(161), cards: [], targets: [] }) }]
+
+thread 'nc12_repro_seed_44170_step_10' (71579603) panicked at crates/engine-native/tests/nc12_dangling_reference_repro.rs:111:5:
+assertion `left == right` failed: 内核悬空引用复现（seed 44170）——现场已打印；修复后本断言应保持 0
+  left: 1
+ right: 0
+test nc12_repro_seed_44170_step_10 ... FAILED
+
+failures:
+
+failures:
+    nc12_repro_seed_44170_step_10
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+error: test failed, to rerun pass `-p engine-native --test nc12_dangling_reference_repro`
