@@ -1,0 +1,14 @@
+DBG 升级矩阵：shahai-gujian-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-mtg-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-swd-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-hearth-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-yunchou-upstream-noname v2→v3 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-zhenfa-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-gwent-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：huanle-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：wuxing-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：wudian-upstream-noname v2→v3 拒版 ✅、回滚 ✅
+DBG 升级矩阵：d3-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：cardpile-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：cardpile-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：通过 13/13 个包

@@ -666,6 +666,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 471 轮（更正 + 小修）**：**撤回**上一轮「座位未满时无错误回推」❌——服务端**一直**回 `Error`，是**我的测试只等 `CommandOutcome`、忽略了 `Error` 帧**；新增 `websocket_submit_before_match_start_returns_error` 实测 **`code=Conflict message=match not started`** ✅。**同时修一真实小问题**：该错误原经 `map_room_err` 兜底映射为 **`ErrorCode::Internal`**（服务端故障语义 ✗）⇒ 在 `lobby.rs` 增加 `"match not started" =>
 > **第 472 轮**：**WS 多房间隔离验证**（`net_smoke::websocket_multi_room_isolation`）——**3 个房间**（id **1/2/3**）各两条 WS 连接交替推进 3 轮：每房 `EndPhase` 均 `Accepted`、**各房 rev=4 独立**、**不同 seed ⇒ `state_hash` 互不相同**（断言通过）⇒ **房间不共享引擎、互不干扰** ✅；**未做**：TLS、跨机、浏览器端。
 >
+> **第 473 轮**：**逐包升级矩阵 13/13 通过**（`nc08_upgrade_matrix`）——13 个可装载包**全部**：v2（仅版本号 +1）恢复**被拒**（`RuleVersionMismatch`）、v1 回滚恢复 **hash 一致**；覆盖 **cards / character / pile** 三种资产形态 ⇒ 内容锁的**版本绑定在所有形态上生效**（不是只在 cards 包）✅；八项「升级」由 **5 来源**扩到**全 13 包**。**边界**：只验版本号；同版本内容漂移与删包降级未覆盖。
+>
+
  Conflict`，并用 `assert_eq!(code, Conflict)` 锁住。
 >
 
