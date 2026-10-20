@@ -1,0 +1,6 @@
+RESULT bot rooms=4 rounds=60 submitted=178 accepted=178 snapshots=240 max_revision=72 elapsed_ms=953 throughput_cmds_per_s=187
+DBG bot 终局：reasons={"accepted": 178}
+DBG bot 终局：room 0 rev=30 legal=[0, 0]
+DBG bot 终局：room 1 rev=15 legal=[0, 0]
+DBG bot 终局：room 2 rev=72 legal=[0, 3]
+DBG bot 终局：room 3 rev=69 legal=[0, 1]

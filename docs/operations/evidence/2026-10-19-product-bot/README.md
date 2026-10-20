@@ -110,3 +110,44 @@ DBG bot 终局：room 0 rev=9 legal=[0, 0]
 
 ⇒ **下一步（明确）**：保留 `_rx`，从推送的 JSON 中解析 **`ChoiceRequest`**（含 `choice_id` 与合法选项），
 据此为**正确连接**构造 `ResolveChoice`。做完这一步才能真正「整局连续推进」。
+
+---
+
+## 7 ✅ **整局连续推进达成**（同日第三轮）
+
+### 7.1 关键发现
+
+`ServerMessage::Snapshot`（`messages.rs:168-177`）**同时携带**：
+
+```rust
+Snapshot { header, view, choice: Option<ChoiceRequest>, legal_actions: Vec<LegalAction> }
+```
+
+⇒ **本连接没有合法动作时，取一次个人化快照**就能拿到**待答选择**（`choice`）；
+按 `ChoiceRequest.min_count` 构造 `ResolveChoice{ selections: 0..min_count }`（选项下标）即可越过。
+
+### 7.2 实测（**用例已去掉 `#[ignore]`**）
+
+```
+RESULT bot rooms=4 rounds=60 submitted=178 accepted=178 snapshots=240 max_revision=72 elapsed_ms=1029
+DBG bot 终局：reasons={"accepted": 178}
+DBG bot 终局：room 0 rev=30 legal=[0, 0]
+DBG bot 终局：room 1 rev=15 legal=[0, 0]
+DBG bot 终局：room 2 rev=72 legal=[0, 3]
+DBG bot 终局：room 3 rev=69 legal=[0, 1]
+```
+
+| 判据 | 结果 |
+|---|---|
+| **接受率** | **178 / 178 = 100%** ✅（此前 14/960）|
+| **权威修订号推进** | **max=72**（room2）、room3=69、room0=30、room1=15 ✅（此前 9）|
+| 240 次快照探活 | 全部响应 ✅ |
+| 4 房间互不干扰 | ✅ |
+
+⇒ **机器人已能连续推进真实对局**（跨多回合、跨多名行动者、越过选择窗口）。
+
+### 7.3 仍未做（**如实**）
+
+1. 选步是**固定优先级**，**不是**强 AI ⇒ 不用于胜负评估；
+2. 未断言「对局**终局**」（`finished`）——本用例只验**连续推进会持续**（修订号大幅提升）；
+3. 未做**内存/句柄**观测与**真实网络**（仍属产品级长程的剩余部分）。

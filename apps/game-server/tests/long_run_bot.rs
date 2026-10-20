@@ -3,11 +3,13 @@
 //! 与 `long_run_soak.rs` 的区别：那个只发 `EndPhase`（到「等待选择」即停）；本用例用
 //! `LegalAction::to_command` 把**权威合法动作**直接转成命令，因此能越过选择窗口。
 //!
-//! **两个关键修正**（2026-10-19）：
+//! **三次关键修正**（2026-10-19）：
 //! 1. `ResolveChoice` 必须**原样使用权威给出的 `selections`**——自己构造 `selections: vec![]`
 //!    会得到 `InvalidChoice`；
 //! 2. 每步都要**用最新结果里的 `legal_actions` 覆盖**（过期动作会得到 `not current` / `choice` 拒绝）；
-//! 3. 房间有**两条连接**，当前行动者可能是任一方 ⇒ 逐连接维护 `actor` 与 `legal`，谁有动作谁走。
+//! 3. 房间有**两条连接**，当前行动者可能是任一方 ⇒ 逐连接维护 `actor` 与 `legal`，谁有动作谁走；
+//! 4. **本连接没有合法动作时取 `Snapshot`**——它携带 `choice: Option<ChoiceRequest>`，
+//!    据此按 `min_count` 构造 `ResolveChoice{selections: 0..min_count}`（**这才是越过选择窗口的关键**）。
 //!
 //! 口径：选步策略是**固定优先级**（`ResolveChoice` → `PlayCard`/`ActivateSkill` → `EndPhase`），
 //! **不是**强 AI；只用于**驱动状态推进**。断言只看「有实质推进 + 房间始终可响应」。
@@ -85,6 +87,34 @@ async fn submit(
             Vec::new(),
             format!("{other:?}").chars().take(28).collect(),
         ),
+    }
+}
+
+/// 取一条连接的个人化快照：返回 (修订号, 合法动作, 待答选择)。
+async fn snapshot(
+    handle: &room::RoomHandle,
+    id: u64,
+    conn: usize,
+    seq: u64,
+    rev: u64,
+) -> Option<(u64, Vec<LegalAction>, Option<engine_api::ChoiceRequest>)> {
+    let (rs, ws) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Snapshot {
+            connection_id: (conn + 1) as u64,
+            header: MessageHeader::new(id, seq, rev),
+            reply: rs,
+        })
+        .await
+        .ok()?;
+    match ws.await {
+        Ok(Ok(ServerMessage::Snapshot {
+            view,
+            choice,
+            legal_actions,
+            ..
+        })) => Some((view.revision, legal_actions, choice)),
+        _ => None,
     }
 }
 
@@ -172,9 +202,6 @@ async fn bootstrap(room: &mut Room) -> Vec<String> {
 
 /// **机器人长程**：4 房间 × 60 轮，两条连接轮流走；总计最多 4×60 步。
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-#[ignore = "整局机器人未完成：修正 ResolveChoice+legal 刷新后 acceptance 达 14/14（100%），\
-            但随后**两条连接的 legal_actions 同时为空**（room0 rev=9 legal=[0,0]）——选择请求经 outbound \
-            通道下发（本测试丢弃了该通道），需要解析 ChoiceRequest 才能继续；见 2026-10-19-product-bot"]
 async fn bot_drives_matches_long_run() {
     const ROOMS: usize = 4;
     const ROUNDS: usize = 60;
@@ -204,6 +231,43 @@ async fn bot_drives_matches_long_run() {
         for room in rooms.iter_mut() {
             // 两条连接：谁有合法动作谁走（一般只有当前行动者那侧非空）
             for conn in 0..CONNS {
+                // **刷新**：本连接没有合法动作时，取个人化快照；若快照带「待答选择」，
+                // 就按 `min_count` 构造 `ResolveChoice`（selections 为选项下标）。
+                if room.legal[conn].is_empty() {
+                    if let Some((rev, legal, choice)) =
+                        snapshot(&room.handle, room.id, conn, room.seq + 1, room.rev).await
+                    {
+                        if rev > 0 {
+                            room.rev = rev;
+                            max_rev = max_rev.max(rev);
+                        }
+                        room.legal[conn] = legal;
+                        if room.legal[conn].is_empty() {
+                            if let Some(c) = choice {
+                                if c.observer.0 == room.actors[conn].0 {
+                                    let take = (c.min_count as usize).min(c.options.len());
+                                    let selections: Vec<u32> =
+                                        (0..take as u32).collect();
+                                    room.legal[conn].push(LegalAction::ResolveChoice {
+                                        choice_id: c.choice_id,
+                                        selections,
+                                        cancelled: take == 0 && c.allow_cancel,
+                                    });
+                                    eprintln!(
+                                        "DBG bot 选择：room {} conn {} choice={:?} min={} opts={} \
+                                         构造 selections={:?}",
+                                        room.id,
+                                        conn,
+                                        c.choice_id,
+                                        c.min_count,
+                                        c.options.len(),
+                                        (0..take as u32).collect::<Vec<_>>()
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
                 let Some(action) = pick(&room.legal[conn], &mut room.cursor[conn]) else {
                     continue;
                 };
