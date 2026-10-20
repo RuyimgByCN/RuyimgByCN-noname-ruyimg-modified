@@ -4765,3 +4765,37 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 ```
 
 ⇒ **13 条全部未与上游对照** ❗ —— **但同组的 `changnian2`（`PhaseEnd`）本身需先确认上游 `changnian2` 是否存在** ❓
+
+### `Phase::End, begin=false` 组核对：**5/6 正确，1 条归入 G15**（第 577 轮）
+
+| 行为 | 原生 | 上游 | 判定 |
+|---|---|---|---|
+| `SwdDaixing` | `PhaseEnd` | **`player: phaseEnd`** | ✅ 一致 |
+| `XianjianHusha` | `PhaseEnd` | **`player: phaseEnd`** | ✅ 一致 |
+| `XianjianLiguang` | `PhaseEnd` | **`player: phaseEnd`** | ✅ 一致 |
+| `XianjianLinghuo` | `PhaseEnd` | **`global: phaseEnd`** | ✅（**作用域 `global` vs 自己** ⚠️ 未判）|
+| `XianjianWangyou` | `PhaseEnd` | **`global: phaseEnd`** | ✅（同上）|
+| **`WudianFuchou2`** | `PhaseEnd` | **`global: phaseAfter`** | ⚠️ **`after` vs `end`** ⇒ **归入 G15** |
+
+⇒ **该组基本正确** ✅ —— **不是第三个批量问题** ✓
+
+## **「52 处阶段过滤」总评**（第 577 轮定稿）
+
+| 组 | 条数 | 已核 | 结论 |
+|---|---:|---:|---|
+| **`Phase::Judge, begin=true`** | **14** | 8 | ❌ **系统性错误（G14：7 条 `phaseBegin` 被窄化；另 `huajin2` 完全错位、`baiyi` 主动变触发）** |
+| `Phase::Draw, begin=true` | 5 | 2 | ✅ 1 正确（`zhaoyao`）+ ⚠️ 1 `before` 类（`rumeng`）|
+| `Phase::Play, begin=true` | 5 | 1 | ⚠️ 1 `before` 类（`fenglue`）|
+| **`Phase::End, begin=false`** | **13** | **6** | ✅ **5 正确** + ⚠️ **1 `after` 类**（`WudianFuchou2`）|
+| 其余（`End begin=true` 8、`Play begin=false` 3、`Draw begin=false` 2、`Discard` 2）| 15 | 1（`Miedao`）| ⚠️ `Miedao` 缺一半 |
+
+### 总结论（**可交付**）
+
+**52 处阶段过滤里，已核 18 处**：
+- **✅ 正确 8 处**（**`zhaoyao` + `End` 组 5 + 2 条自述对齐**）；
+- **❌ 系统性错误 1 类**（**G14：`phaseBegin` ⇒ `Phase::Judge`，7 条**）；
+- **⚠️ 表达力缺口 1 类**（**G15：`before`/`after` ⇒ `begin`/`end`，≥3 条**）；
+- **❗ 单点缺陷 4 条**（**`huajin2`/`baiyi`/`Miedao`/`swd_xiuluo`**）；
+- **❓ 未核 34 处**。
+
+**结论**：**错误不是普遍的，而是集中在两条映射链上** ✅ —— **可修、范围可控**。

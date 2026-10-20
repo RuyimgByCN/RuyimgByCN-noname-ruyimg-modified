@@ -891,6 +891,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 577 轮**：**更正：`changnian` 不是缺陷**（我把 `Changnian2` 当成了 `Changnian`）——读 `metadata/xianjian.rs` ✓：**`XianjianChangnian` 的 `TriggerMeta.event = EventKind::Death`** ✅（**上游 `dieBegin` ⇒ 正确** ✓）、**`XianjianChangnian2` 才是 `PhaseEnd`** ✓ ⇒ **我上一轮看到的是「`Changnian2` 的 filter」** ✗ ⇒ **`changnian` 实现正确** ✅；⇒ **本会话同类错误第 4 次**（`Xiuluo`/`Anwugu`/`Miedao1-2`/`Changnian2` ✓）⇒ **强化纪律：行为名以「完整标识符」比对，`X`/`X2`/`X3` 是三个独立行为** ✓，**不能用前缀或子串** ✓；**另列出 `Phase::End, begin=false` 组 13 条（全部未对照）** ✓。
 >
+> **第 578 轮**：**`Phase::End` 组核对 + 「52 处阶段过滤」总评定稿**——`End begin=false` 组 **6 条**：**`SwdDaixing`/`XianjianHusha`/`XianjianLiguang` 上游都是 `player: phaseEnd`** ✅、**`XianjianLinghuo`/`XianjianWangyou` 是 `global: phaseEnd`** ✅（**作用域差未判** ✓）、**`WudianFuchou2` 上游 `global: phaseAfter`** ⚠️（**归入 G15** ✓）⇒ **该组基本正确** ✅，**不是第三个批量问题** ✓；⇒ **总评（已核 18/52）**：**✅ 正确 8 处**、**❌ 系统性错误 1 类（G14: 7 条）**、**⚠️ 表达力缺口 1 类（G15: ≥3）**、**❗ 单点 4 条**（`huajin2`/`baiyi`/`Miedao`/`swd_xiuluo`）、**❓ 未核 34 处** ⇒ **「错误不普遍，集中在两条映射链上」** ✓ —— **可修、范围可控** ✅。
+>
+
 
 
 
