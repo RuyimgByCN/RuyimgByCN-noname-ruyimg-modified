@@ -52,3 +52,19 @@ class RenderTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ArmSlicingTest(unittest.TestCase):
+    """钉住「段切片」规则：52 条，且 `Xiefang` 的 Draw 分支必须在。"""
+
+    def test_arms_count_matches(self) -> None:
+        rows = rp.scan()
+        self.assertEqual(len(rows), 52)
+
+    def test_xiefang_has_draw_branch(self) -> None:
+        got = [(p, b) for beh, _key, p, b in rp.scan() if beh == "Xiefang"]
+        self.assertIn(("Draw", "false"), got, "Xiefang 的 Draw 分支丢了 ⇒ 切片规则被改坏")
+
+    def test_slicing_rule_documented(self) -> None:
+        doc = rp.__doc__ or ""
+        self.assertIn("段切片", rp.arms.__doc__ or "")
