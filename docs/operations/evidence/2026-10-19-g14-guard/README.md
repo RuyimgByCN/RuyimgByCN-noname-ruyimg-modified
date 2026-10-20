@@ -122,3 +122,35 @@ EventData::Phase { player, begin: true, .. } if *player == owner   // `..` 省�
 
 **`swd_xiuluo` 的注释是「准备阶段」、上游也是「准备阶段」，代码却是 `Judge`** ——
 **它证明「引 `Judge`」是「没有 `Prepare`」的妥协**，**不是笔误** ✅
+
+---
+
+## 8 **新候选类：「`global` 触发被写成 `!= owner`」**（第 651 轮，**未定案** ⚠️）
+
+读全部命中臂体后，发现 **5 条的上游是 `global`（所有角色），而原生 filter 写 `*player != owner`**：
+
+| 行为 | 上游 | 原生 | 是否漏掉自己 |
+|---|---|---|---|
+| `NewMeibu` | **`global: phaseUseBegin`** | `Play,begin=true` + **`*player != owner`** | ⚠️ **可能** |
+| `XianjianZhaoyao` | **`global: phaseDrawBegin`** | `Draw,begin=true` + **`*player != owner`** | ⚠️ **可能** |
+| `SwdZhuhai` | **`global: phaseJieshuBegin`** | `End,begin=true` + **`t != owner`** | ⚠️ **可能** |
+| `XianjianLinghuo` | **`global: phaseEnd`** | `End,begin=false` + **`*player != owner`** | ⚠️ **可能** |
+| `XianjianWangyou` | **`global: phaseEnd`** | `End,begin=false` + **`*player != owner`** | ⚠️ **可能** |
+
+### 为什么只是「可能」
+
+**noname 的 `trigger: { global: … }` 指「所有角色」，含自己**；
+**但每个技能还有自己的 `filter(event, player)`** —— **上游可能在那里排除自己**。
+⇒ **`!= owner` 是否错误，取决于该技能的 `filter`**，**本轮未逐条读** ❗
+
+### 若要定案，需要做的事
+
+1. 读 5 个上游技能的 `filter`，看是否含 `player != target`/`target != player` 之类；
+2. **若上游不过滤自己** ⇒ **原生 `!= owner` 是「漏触发」** ⇒ **新类 G19**；
+3. **若上游过滤自己** ⇒ **一致** ✅。
+
+### 为什么仍要登记
+
+**「`global` 被写成 `!= owner`」是一个可批量核查的模式**：
+**`grep 'global:'` × `grep '!= owner'`** 就能筛出全部候选 ——
+**比逐个技能读 filter 便宜得多**。⇒ **登记为「候选类」，附 5 条清单** ✅
