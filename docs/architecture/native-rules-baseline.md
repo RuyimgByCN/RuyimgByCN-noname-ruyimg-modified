@@ -4738,3 +4738,30 @@ zhenjiu2: { trigger: { player: "phaseBegin" }, forced: true, mark: "card",
 | **G14** | **`phaseBegin`（任意阶段）** | **`Phase::Judge`** | ❌ **语义错误**（**窄化到判定阶段**）| **7 条漏触发/误触发** |
 | **新类** | **`phase*Before`** | **`begin: true`** | ⚠️ **缺少「之前」档** | 至少 **2 条** |
 | 正常 | `phaseDrawBegin`/`phaseEnd` | 对应阶段 + `begin` | ✅ | —— |
+
+### 更正：`changnian` **不是缺陷**（我把 `Changnian2` 当成了 `Changnian`）（第 576 轮）
+
+上一轮把 `changnian`（上游 `dieBegin`）与 **`Phase::End, begin=false`** 对比后记为「完全不同」❌ —— **错了**：
+
+| 原生行为 | `TriggerMeta.event` | 上游对应 |
+|---|---|---|
+| **`XianjianChangnian`** | **`EventKind::Death`** ✅ | **`dieBegin`** ⇒ **正确** ✅ |
+| `XianjianChangnian2` | `EventKind::PhaseEnd` | **另一个技能**（**`changnian2`** ✓）|
+
+⇒ **`changnian` 的实现是对的** ✅ —— 我上一轮看到的是 **`XianjianChangnian2` 的 filter** ❗
+⇒ **又一次「把带 `2` 的后缀当成同一个技能」** —— 本会话同类错误 **第 4 次**（**`Xiuluo` vs `swd_xiuluo`、`Anwugu` vs `Anwugu2`、`Miedao1/2`、`Changnian/Changnian2`**）
+
+#### 纪律（**再次强化**）
+
+**行为名以「完整标识符」为单位比对** —— `X`、`X2`、`X3` 是**三个独立行为**，
+**在 `keys.rs`、`filtering`、`metadata`、`tags` 里都必须逐字匹配**，**不能用前缀或子串**。
+
+### `Phase::End, begin=false` 组（13 条，**未对照**）
+
+```
+SwdDaixing  XianjianChangnian2  XianjianHusha  XianjianLiguang  XianjianLinghuo
+XianjianLingquan  XianjianLonghuo  XianjianShenwu  XianjianWangyou
+XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
+```
+
+⇒ **13 条全部未与上游对照** ❗ —— **但同组的 `changnian2`（`PhaseEnd`）本身需先确认上游 `changnian2` 是否存在** ❓

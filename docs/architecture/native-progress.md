@@ -889,6 +889,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 576 轮**：**G14 补到 7/7 + 发现第二类系统性映射**——①新定位 **`yougeng`（`gujian`，617 B）⇒ 上游 `phaseBegin`、原生 `Phase::Judge`** ✓ ⇒ **G14 = 7 条** ✓（`hlss_fengqi` 上游未找到 ❓）；②抽查其它阶段组：**`zhaoyao`（`global: phaseDrawBegin`）= `Phase::Draw, begin=true`** ✅ **正确** ✓；**`rumeng`（`global: phaseUseBefore`）/`fenglue`（`player: phaseUseBefore`）⇒ 原生 `begin: true`** ⚠️ ⇒ **第二类系统性问题：上游 `phase*Before`（阶段开始前）被映射到 `begin: true`（阶段开始）** ✓（**引擎无「之前」档** ⇒ **表达力边界，方向与 G14 相反** ✓）；③**`changnian`（上游 `dieBegin` vs 原生 `Phase::End`）** 不判缺陷 ✗ —— **可能由 `extra_events` 的 `Death` 覆盖** ✓（**本轮未读其 metadata** ✗）；⇒ **新增 G15** ✓。
 >
+> **第 577 轮**：**更正：`changnian` 不是缺陷**（我把 `Changnian2` 当成了 `Changnian`）——读 `metadata/xianjian.rs` ✓：**`XianjianChangnian` 的 `TriggerMeta.event = EventKind::Death`** ✅（**上游 `dieBegin` ⇒ 正确** ✓）、**`XianjianChangnian2` 才是 `PhaseEnd`** ✓ ⇒ **我上一轮看到的是「`Changnian2` 的 filter」** ✗ ⇒ **`changnian` 实现正确** ✅；⇒ **本会话同类错误第 4 次**（`Xiuluo`/`Anwugu`/`Miedao1-2`/`Changnian2` ✓）⇒ **强化纪律：行为名以「完整标识符」比对，`X`/`X2`/`X3` 是三个独立行为** ✓，**不能用前缀或子串** ✓；**另列出 `Phase::End, begin=false` 组 13 条（全部未对照）** ✓。
+>
+
 
 
 
