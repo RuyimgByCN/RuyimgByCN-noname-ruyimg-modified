@@ -51,3 +51,38 @@ RESULT mem_summary base_bytes=72800 after_first_bytes=312902 end_bytes=312879 gr
 cd noname-next
 cargo test --offline -p game-server --test long_run_memory -- --nocapture
 ```
+
+---
+
+## 4 扩到 **30 盘** + 趋势判据（同日第二轮）
+
+### 4.1 结果
+
+```
+RESULT mem_summary matches=30 base_bytes=72806 after_first_bytes=312908 end_bytes=546868
+       growth_bytes=233960 peak_bytes=858256 slack_bytes=33554432 elapsed_ms=6151
+RESULT mem_trend head5_avg=276477 tail5_avg=324309 delta=47832 steps_total=1959
+       outcomes={"LoyalistWin": 27, "RenegadeWin { player: PlayerId(2) }": 3}
+```
+
+| 判据 | 结果 |
+|---|---|
+| **30 盘全部跑到终局** | ✅ **30/30** |
+| 结局分布 | **`LoyalistWin` 27** / **`RenegadeWin{player:2}` 3** |
+| 总步数 / 耗时 | **1959 步** / **6.15 s** |
+| **首盘后 → 末盘后** | 312908 → 546868（**+233960 B ≈ 228 KB**）|
+| **前 5 盘均值 → 后 5 盘均值** | 276477 → 324309（**+47832 B ≈ 47 KB**，约 **1.6 KB/盘**）|
+| 峰值 | **858256 B ≈ 838 KB** |
+| 阈值 | 32 MB（**仅防阶跃**）|
+
+### 4.2 判读（**如实，不夸大**）
+
+1. **无阶跃**：曲线随对局起伏，**没有**每盘固定 +N 的线性增长证据；
+2. **但非零**：30 盘累计 +228 KB、后 5 盘均值 +47 KB ⇒ 可能是**稳定缓存/任务池**，**也可能是缓慢泄漏**；
+3. **30 盘、6 秒不足以区分**这两者 ⇒ **不宣称「无泄漏」**，只宣称「**未见阶跃式泄漏**」；
+4. 若要定论：需 **≥ 500 盘** 或**固定工作量下的稳态检测**（如连续 100 盘后均值是否仍上升）。
+
+### 4.3 附带观察（**不是规则结论**）
+
+随机走步下 **`LoyalistWin` 27/30** —— 这只反映**固定优先级机器人的行为偏差**，
+**不能**用于评价身份局平衡性（选步非强 AI）。

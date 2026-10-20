@@ -1,0 +1,62 @@
+RESULT mem_match idx=0 finished=true outcome=LoyalistWin steps=69 rev=71 heap_bytes=312908
+RESULT mem_match idx=1 finished=true outcome=LoyalistWin steps=69 rev=71 heap_bytes=314593
+RESULT mem_match idx=2 finished=true outcome=RenegadeWin { player: PlayerId(2) } steps=5 rev=7 heap_bytes=238854
+RESULT mem_match idx=3 finished=true outcome=LoyalistWin steps=26 rev=28 heap_bytes=258142
+RESULT mem_match idx=4 finished=true outcome=LoyalistWin steps=30 rev=32 heap_bytes=257889
+RESULT mem_match idx=5 finished=true outcome=LoyalistWin steps=69 rev=71 heap_bytes=313110
+RESULT mem_match idx=6 finished=true outcome=LoyalistWin steps=8 rev=10 heap_bytes=243775
+RESULT mem_match idx=7 finished=true outcome=RenegadeWin { player: PlayerId(2) } steps=108 rev=110 heap_bytes=318745
+RESULT mem_match idx=8 finished=true outcome=LoyalistWin steps=37 rev=39 heap_bytes=277962
+RESULT mem_match idx=9 finished=true outcome=LoyalistWin steps=132 rev=134 heap_bytes=393992
+RESULT mem_match idx=10 finished=true outcome=LoyalistWin steps=74 rev=76 heap_bytes=313636
+RESULT mem_match idx=11 finished=true outcome=LoyalistWin steps=56 rev=58 heap_bytes=278605
+RESULT mem_match idx=12 finished=true outcome=LoyalistWin steps=60 rev=62 heap_bytes=278044
+RESULT mem_match idx=13 finished=true outcome=LoyalistWin steps=32 rev=34 heap_bytes=277985
+RESULT mem_match idx=14 finished=true outcome=LoyalistWin steps=67 rev=69 heap_bytes=314364
+RESULT mem_match idx=15 finished=true outcome=LoyalistWin steps=7 rev=9 heap_bytes=245951
+RESULT mem_match idx=16 finished=true outcome=LoyalistWin steps=15 rev=17 heap_bytes=258726
+RESULT mem_match idx=17 finished=true outcome=LoyalistWin steps=42 rev=44 heap_bytes=278753
+RESULT mem_match idx=18 finished=true outcome=LoyalistWin steps=31 rev=33 heap_bytes=278573
+RESULT mem_match idx=19 finished=true outcome=LoyalistWin steps=349 rev=351 heap_bytes=552548
+RESULT mem_match idx=20 finished=true outcome=LoyalistWin steps=67 rev=69 heap_bytes=314700
+RESULT mem_match idx=21 finished=true outcome=LoyalistWin steps=85 rev=87 heap_bytes=315401
+RESULT mem_match idx=22 finished=true outcome=LoyalistWin steps=20 rev=22 heap_bytes=258100
+RESULT mem_match idx=23 finished=true outcome=LoyalistWin steps=43 rev=45 heap_bytes=279225
+RESULT mem_match idx=24 finished=true outcome=LoyalistWin steps=44 rev=46 heap_bytes=279450
+RESULT mem_match idx=25 finished=true outcome=RenegadeWin { player: PlayerId(2) } steps=5 rev=7 heap_bytes=240421
+RESULT mem_match idx=26 finished=true outcome=LoyalistWin steps=22 rev=24 heap_bytes=258425
+RESULT mem_match idx=27 finished=true outcome=LoyalistWin steps=29 rev=31 heap_bytes=259930
+RESULT mem_match idx=28 finished=true outcome=LoyalistWin steps=67 rev=69 heap_bytes=315351
+RESULT mem_match idx=29 finished=true outcome=LoyalistWin steps=291 rev=293 heap_bytes=547420
+RESULT mem_summary matches=30 base_bytes=74368 after_first_bytes=312908 end_bytes=547047 growth_bytes=234139 peak_bytes=858256 slack_bytes=33554432 elapsed_ms=6370
+RESULT mem_curve idx=0 finished=true outcome=LoyalistWin steps=69 heap_bytes=312908
+RESULT mem_curve idx=1 finished=true outcome=LoyalistWin steps=69 heap_bytes=314593
+RESULT mem_curve idx=2 finished=true outcome=RenegadeWin { player: PlayerId(2) } steps=5 heap_bytes=238854
+RESULT mem_curve idx=3 finished=true outcome=LoyalistWin steps=26 heap_bytes=258142
+RESULT mem_curve idx=4 finished=true outcome=LoyalistWin steps=30 heap_bytes=257889
+RESULT mem_curve idx=5 finished=true outcome=LoyalistWin steps=69 heap_bytes=313110
+RESULT mem_curve idx=6 finished=true outcome=LoyalistWin steps=8 heap_bytes=243775
+RESULT mem_curve idx=7 finished=true outcome=RenegadeWin { player: PlayerId(2) } steps=108 heap_bytes=318745
+RESULT mem_curve idx=8 finished=true outcome=LoyalistWin steps=37 heap_bytes=277962
+RESULT mem_curve idx=9 finished=true outcome=LoyalistWin steps=132 heap_bytes=393992
+RESULT mem_curve idx=10 finished=true outcome=LoyalistWin steps=74 heap_bytes=313636
+RESULT mem_curve idx=11 finished=true outcome=LoyalistWin steps=56 heap_bytes=278605
+RESULT mem_curve idx=12 finished=true outcome=LoyalistWin steps=60 heap_bytes=278044
+RESULT mem_curve idx=13 finished=true outcome=LoyalistWin steps=32 heap_bytes=277985
+RESULT mem_curve idx=14 finished=true outcome=LoyalistWin steps=67 heap_bytes=314364
+RESULT mem_curve idx=15 finished=true outcome=LoyalistWin steps=7 heap_bytes=245951
+RESULT mem_curve idx=16 finished=true outcome=LoyalistWin steps=15 heap_bytes=258726
+RESULT mem_curve idx=17 finished=true outcome=LoyalistWin steps=42 heap_bytes=278753
+RESULT mem_curve idx=18 finished=true outcome=LoyalistWin steps=31 heap_bytes=278573
+RESULT mem_curve idx=19 finished=true outcome=LoyalistWin steps=349 heap_bytes=552548
+RESULT mem_curve idx=20 finished=true outcome=LoyalistWin steps=67 heap_bytes=314700
+RESULT mem_curve idx=21 finished=true outcome=LoyalistWin steps=85 heap_bytes=315401
+RESULT mem_curve idx=22 finished=true outcome=LoyalistWin steps=20 heap_bytes=258100
+RESULT mem_curve idx=23 finished=true outcome=LoyalistWin steps=43 heap_bytes=279225
+RESULT mem_curve idx=24 finished=true outcome=LoyalistWin steps=44 heap_bytes=279450
+RESULT mem_curve idx=25 finished=true outcome=RenegadeWin { player: PlayerId(2) } steps=5 heap_bytes=240421
+RESULT mem_curve idx=26 finished=true outcome=LoyalistWin steps=22 heap_bytes=258425
+RESULT mem_curve idx=27 finished=true outcome=LoyalistWin steps=29 heap_bytes=259930
+RESULT mem_curve idx=28 finished=true outcome=LoyalistWin steps=67 heap_bytes=315351
+RESULT mem_curve idx=29 finished=true outcome=LoyalistWin steps=291 heap_bytes=547420
+RESULT mem_trend head5_avg=276477 tail5_avg=324309 delta=47832 steps_total=1959 outcomes={"LoyalistWin": 27, "RenegadeWin { player: PlayerId(2) }": 3}

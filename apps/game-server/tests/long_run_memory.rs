@@ -81,7 +81,7 @@ fn heap_peak() -> usize {
 
 const CONNS: usize = 2;
 /// 连续盘数。
-const MATCHES: usize = 6;
+const MATCHES: usize = 30;
 /// 单盘步数上限（防止不收敛）。
 const MAX_STEPS: usize = 4000;
 /// 允许的堆增长（宽松阈值，只用于抓**阶跃式**泄漏）。
@@ -292,9 +292,10 @@ async fn play_one(room_id: u64, seed: u64) -> (bool, engine_api::MatchOutcome, u
     )
 }
 
-/// **多盘连续**：6 盘逐盘跑完，记录每盘后的堆占用。
+/// **多盘连续**：30 盘逐盘跑完，记录每盘后的堆占用与结局分布，
+/// 并比较**前 5 盘均值**与**后 5 盘均值**（用于发现缓慢上升趋势）。
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn six_consecutive_matches_do_not_leak_heap() {
+async fn thirty_consecutive_matches_do_not_leak_heap() {
     let t0 = Instant::now();
     let base = heap_now();
     let mut after_first: Option<usize> = None;
@@ -324,6 +325,23 @@ async fn six_consecutive_matches_do_not_leak_heap() {
     for (i, finished, outcome, steps, heap) in &curve {
         println!("RESULT mem_curve idx={i} finished={finished} outcome={outcome} steps={steps} heap_bytes={heap}");
     }
+    // 结局分布
+    let mut tally: std::collections::BTreeMap<String, usize> = std::collections::BTreeMap::new();
+    for (_, _, outcome, _, _) in &curve {
+        *tally.entry(outcome.clone()).or_insert(0) += 1;
+    }
+    let steps_total: usize = curve.iter().map(|c| c.3).sum();
+    // 前后各 5 盘的堆均值（趋势判据）
+    let head: usize = curve.iter().take(5).map(|c| c.4).sum::<usize>() / 5;
+    let tail: usize = curve.iter().rev().take(5).map(|c| c.4).sum::<usize>() / 5;
+    println!(
+        "RESULT mem_trend head5_avg={head} tail5_avg={tail} delta={} steps_total={steps_total} outcomes={tally:?}",
+        tail as i64 - head as i64
+    );
+    assert!(
+        (tail as i64 - head as i64).abs() < SLACK_BYTES as i64,
+        "后 5 盘堆均值与首 5 盘相差过大（head={head}, tail={tail}）"
+    );
     assert!(
         growth < SLACK_BYTES,
         "连续 {MATCHES} 盘后堆增长 {growth} 字节，超出宽松阈值 {SLACK_BYTES}（疑似泄漏）"
