@@ -38,6 +38,16 @@ const TIER_TABLE: &[(&str, &[&str])] = &[
     ("none", &[]),
     ("swd", &["shahai-swd-upstream-noname"]),
     ("huanle", &["huanle-upstream-noname"]),
+    // 逐来源档（NC08 第 8 项「逐来源性能」用）：一个来源目录一档，便于按来源签署。
+    ("gujian", &["shahai-gujian-upstream-noname"]),
+    ("mtg", &["shahai-mtg-upstream-noname"]),
+    ("wudian", &["wudian-upstream-noname"]),
+    ("hearth", &["shahai-hearth-upstream-noname"]),
+    ("yunchou", &["shahai-yunchou-upstream-noname"]),
+    ("zhenfa", &["shahai-zhenfa-upstream-noname"]),
+    ("gwent", &["shahai-gwent-upstream-noname"]),
+    ("wuxing", &["wuxing-upstream-liuli"]),
+    ("d3", &["d3-upstream-noname"]),
     (
         "combo",
         &[
