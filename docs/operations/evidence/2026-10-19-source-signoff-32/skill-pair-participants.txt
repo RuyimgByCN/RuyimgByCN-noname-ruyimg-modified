@@ -1,0 +1,4 @@
+DBG 技能矩阵：标准 (cards,skills,generals)=(124, 215, 0)；参与配对 20 个包
+DBG 技能矩阵：配对 190 对、失败 0 项
+DBG 技能矩阵参与包：boss-zhugeliang-upstream-liuli,d3-upstream-noname,doomsday-brawl-upstream-liuli,epic-cards-upstream-liuli,hero-kill-upstream-noname,huanle-upstream-noname,longxue-upstream-liuli,mark-supplement-upstream-liuli,select-beautify-upstream-liuli,shaai-ow-upstream-noname,shaai-xianjian-upstream-noname,shahai-gujian-upstream-noname,shahai-gwent-upstream-noname,shahai-hearth-upstream-noname,shahai-mtg-upstream-noname,shahai-swd-upstream-noname,shahai-yunchou-upstream-noname,shahai-zhenfa-upstream-noname,wudian-upstream-noname,wuxing-upstream-liuli
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s

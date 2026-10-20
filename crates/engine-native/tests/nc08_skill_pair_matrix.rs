@@ -103,6 +103,9 @@ fn skill_pair_matrix_over_general_packs() {
         "DBG 技能矩阵：配对 {pairs} 对、失败 {} 项",
         failures.len()
     );
+    // **参与配对的包清单**：供「按来源归集」使用（此前只报对数，无法归到来源）。
+    let names: Vec<String> = packs.iter().map(|(n, _, _)| n.clone()).collect();
+    eprintln!("DBG 技能矩阵参与包：{}", names.join(","));
     for f in failures.iter().take(10) {
         eprintln!("DBG 技能矩阵失败：{f}");
     }
