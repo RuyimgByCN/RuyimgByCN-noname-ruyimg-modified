@@ -56,6 +56,25 @@ DBG WS 错误回复：{"type":"Error","payload":{"code":"BadMessage","message":"
 | **客户端→服务端→回复** | ✅ 发非法文本 ⇒ 收到 `Error{BadMessage, "json: expected ident …"}` |
 | 关闭 | ✅ `ws.close(None)` 正常收尾 |
 
+## 1.3 ✅ 第四轮：**WS 全链路（建局 / 加入 / 命令 / 个人化结果）**
+
+`net_smoke::websocket_creates_joins_and_submits_over_wire`：**两条真实 WS 连接**走完整协议。
+
+```
+DBG WS 建局：room=1 player=1
+DBG WS 加入：room=1 player=2
+DBG WS 命令结果：result=Accepted { new_revision: 2, state_hash: [216, 37, …] } revision=2
+```
+
+| 判据 | 结果 |
+|---|---|
+| A 连接 → `CreateRoom` → **`JoinOk{room=1, player=1}`** | ✅ |
+| B 连接 → `JoinRoom{room=1, seat=1}` → **`JoinOk{player=2}`** | ✅ |
+| A 发 **`SubmitCommand{EndPhase}`** → **`CommandOutcome{Accepted{new_revision:2}}`** | ✅（含 `state_hash`）|
+| 编解码 | ✅ 全部走 `engine-protocol::{encode_c2s, decode_s2c}`（**真实线上格式**）|
+
+⇒ **WS 上的「建局→加入→提交命令→拿回个人化结果」全链路已验证**。
+
 ## 2 做到了什么 / 没做到什么（**如实**）
 
 | 项 | 状态 |
@@ -63,7 +82,9 @@ DBG WS 错误回复：{"type":"Error","payload":{"code":"BadMessage","message":"
 | 路由可从测试侧构造 | ✅ **已抽取**（`build_router`，`cargo build -p game-server` 通过）|
 | 真实监听 + HTTP 往返测试 | ✅ **已做**（`/health` + `/metrics`，见 §1.1）|
 | WS 握手/回路测试 | ✅ **已做**（升级 101 + `Welcome` + `Error` 往返，见 §1.2）|
-| TLS / 跨机 / 浏览器端 / 真实对局走 WS | ❌ **未做**（本轮 WS 只验握手与错误回路，**未**用 WS 跑整局）|
+| **WS 上的建局/加入/命令/结果** | ✅ **已做**（见 §1.3）|
+| **用 WS 跑整局**（机器人搬到 WS 上）| ❌ **未做** |
+| TLS / 跨机 / 浏览器端 | ❌ **未做** |
 
 ## 3 为什么**还**写不出网络测试（**精确前置条件**）
 

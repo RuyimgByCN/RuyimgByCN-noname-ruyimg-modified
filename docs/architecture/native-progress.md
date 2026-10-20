@@ -658,6 +658,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 466 轮**：**真实 socket 往返跑通**——把 `main()` 的装配段抽成 **`fn bootstrap(cfg) ->
 > **第 467 轮**：**真实 WebSocket 往返跑通**（`net_smoke::websocket_welcome_and_error_roundtrip`）——升级 **101 Switching Protocols**、首帧 **`Welcome{protocol_version:5, versions}`**（服务端主动推送）、发非法文本得 **`Error{BadMessage, "json: expected ident at line 1 column 2"}`**（客户端→服务端→回复）⇒ **WS 升级 + 双向消息已验证**；**未做**：TLS、跨机、浏览器端、**用 WS 跑整局对局**。
 >
+> **第 468 轮**：**WS 全链路跑通**（`net_smoke::websocket_creates_joins_and_submits_over_wire`）——两条真实 WS 连接：A `CreateRoom` ⇒ **`JoinOk{room=1, player=1}`**、B `JoinRoom` ⇒ **`JoinOk{player=2}`**、A `SubmitCommand{EndPhase}` ⇒ **`CommandOutcome{Accepted{new_revision:2}}`（含 `state_hash`）** ✅；编解码全走 `engine-protocol::{encode_c2s, decode_s2c}`（**真实线上格式**）⇒ **「建局→加入→提交命令→个人化结果」在 WS 上已验证**；**未做**：用 WS 跑整局、TLS、跨机、浏览器端。
+>
+
  Arc<Lobby>`**，并在 `main.rs` 增 `#[cfg(test)] mod net_smoke`：**真实 `TcpListener("127.0.0.1:0")` + `axum::serve`**，用 **`std::net::TcpStream` 发裸 HTTP/1.1**（**零新依赖**）⇒ `/health` **200 ok**、**有状态 `/metrics` 200（877 B）** ✅ ⇒ **「真实网络」由 ❌ 变 ✅（loopback 档）**；**未做**：WS 升级回路、TLS、跨机、浏览器端。
 >
  Router`**（`main()` 只负责装配→bind→serve），`cargo build -p game-server` 通过 ✅。**但仍无网络测试** ❌：`Lobby::new` 需 6 个装配参数且均在 `main()` 就地装配 ⇒ **下一步（机械可做）**抽出 `bootstrap_lobby(cfg)`，再用**裸 HTTP/1.1 + `TcpStream`（零新依赖）**在 `127.0.0.1:0` 做真实 socket 往返；**环境限制**：`/bin/ps` 已实测被沙箱拒绝，监听取证未尝试 ⇒ 「真实网络」**仍未验收**。

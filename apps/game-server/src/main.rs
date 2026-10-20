@@ -638,4 +638,150 @@ mod net_smoke {
             server.abort();
         });
     }
+    /// **真实 WebSocket 对局命令往返**：A 建局、B 加入、A 提交 `EndPhase`，读回 `CommandOutcome`。
+    ///
+    /// 口径：覆盖 **建局 / 加入 / 命令提交 / 个人化结果回推** 全链路的 **WS** 路径；
+    /// **不含**整局机器人（那是 `long_run_bot.rs` 走直连 `RoomMsg` 的面）、TLS、跨机与浏览器。
+    #[test]
+    fn websocket_creates_joins_and_submits_over_wire() {
+        use futures_util::{SinkExt, StreamExt};
+        use engine_protocol::{
+            decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
+        };
+        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+
+        let cfg = test_cfg("wsgame");
+        let lobby = bootstrap(&cfg);
+        let app = build_router(lobby, ServeDir::new(&cfg.original_content_root));
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .expect("runtime");
+
+        rt.block_on(async move {
+            let l = tokio::net::TcpListener::bind("127.0.0.1:0").await.expect("bind");
+            let addr = l.local_addr().expect("addr");
+            let server = tokio::spawn(async move {
+                let _ = axum::serve(l, app).await;
+            });
+            let url = format!("ws://{addr}/ws");
+
+            // --- A：连接 + Welcome + 建局 ---
+            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A connect");
+            let _welcome = next_text(&mut a).await;
+            a.send(tokio_tungstenite::tungstenite::Message::Text(
+                encode_c2s(&ClientMessage::CreateRoom {
+                    players: 2,
+                    seed: 424_242,
+                    password: String::new(),
+                })
+                .expect("encode create")
+                .into(),
+            ))
+            .await
+            .expect("send create");
+
+            // 读到 JoinOk（拿到 room_id / player_id），最多等 12 帧
+            let mut a_room: Option<u64> = None;
+            let mut a_pid: Option<u32> = None;
+            for _ in 0..12 {
+                let t = next_text(&mut a).await;
+                if let Ok(msg) = decode_s2c(&t) {
+                    if let ServerMessage::JoinOk {
+                        room_id, player_id, ..
+                    } = &msg
+                    {
+                        a_room = Some(*room_id);
+                        a_pid = Some(*player_id);
+                        eprintln!("DBG WS 建局：room={room_id} player={player_id}");
+                        break;
+                    }
+                }
+            }
+            let room_id = a_room.expect("A 应收到 JoinOk(room_id)");
+            let pid = a_pid.expect("A 应收到 JoinOk(player_id)");
+
+            // --- B：连接 + 加入同一房间 ---
+            let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B connect");
+            let _welcome_b = next_text(&mut b).await;
+            b.send(tokio_tungstenite::tungstenite::Message::Text(
+                encode_c2s(&ClientMessage::JoinRoom {
+                    room_id,
+                    password: String::new(),
+                    preferred_seat: Some(1),
+                    reconnect_token: None,
+                })
+                .expect("encode join")
+                .into(),
+            ))
+            .await
+            .expect("send join");
+            let mut b_joined = false;
+            for _ in 0..12 {
+                let t = next_text(&mut b).await;
+                if let Ok(ServerMessage::JoinOk { player_id, .. }) = decode_s2c(&t) {
+                    eprintln!("DBG WS 加入：room={room_id} player={player_id}");
+                    b_joined = true;
+                    break;
+                }
+            }
+            assert!(b_joined, "B 应在 12 帧内收到 JoinOk");
+
+            // --- A：提交一条 EndPhase ---
+            let header = MessageHeader::new(room_id, 1, 0);
+            a.send(tokio_tungstenite::tungstenite::Message::Text(
+                encode_c2s(&ClientMessage::SubmitCommand {
+                    header: header.clone(),
+                    command: Command {
+                        actor: PlayerId::new(pid),
+                        expected_revision: ExpectedRevision(0),
+                        idempotency_key: IdempotencyKey(1),
+                        kind: CommandKind::EndPhase,
+                    },
+                    idempotency_key: IdempotencyKey(1),
+                })
+                .expect("encode submit")
+                .into(),
+            ))
+            .await
+            .expect("send submit");
+
+            let mut seen_outcome = false;
+            for _ in 0..16 {
+                let t = next_text(&mut a).await;
+                if let Ok(ServerMessage::CommandOutcome {
+                    result, view, ..
+                }) = decode_s2c(&t)
+                {
+                    eprintln!(
+                        "DBG WS 命令结果：result={result:?} revision={} hash_prefix={:?}",
+                        view.revision,
+                        &view.state_hash[..4]
+                    );
+                    seen_outcome = true;
+                    break;
+                }
+            }
+            assert!(seen_outcome, "A 应在 16 帧内收到 CommandOutcome（WS 全链路）");
+            let _ = a.close(None).await;
+            let _ = b.close(None).await;
+            server.abort();
+        });
+    }
+
+    /// 读一条文本帧（10s 超时）。
+    async fn next_text<S>(ws: &mut S) -> String
+    where
+        S: futures_util::Sink<tokio_tungstenite::tungstenite::Message>
+            + futures_util::Stream<Item = Result<tokio_tungstenite::tungstenite::Message, tokio_tungstenite::tungstenite::Error>>
+            + Unpin,
+    {
+        use futures_util::StreamExt;
+        let frame = tokio::time::timeout(std::time::Duration::from_secs(10), ws.next())
+            .await
+            .expect("frame timeout")
+            .expect("frame")
+            .expect("frame ok");
+        frame.to_text().expect("text").to_string()
+    }
 }

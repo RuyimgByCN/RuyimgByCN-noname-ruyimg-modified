@@ -1,0 +1,6 @@
+DBG WS 升级：ws://127.0.0.1:58195/ws -> status 101 Switching Protocols
+DBG WS Welcome：{"type":"Welcome","payload":{"connection_id":1,"protocol_version":5,"versions":{"engine_ap
+DBG WS 错误回复：{"type":"Error","payload":{"code":"BadMessage","message":"json: expected ident at line 1 column 2","room_id":null}}
+DBG WS 建局：room=1 player=1
+DBG WS 加入：room=1 player=2
+DBG WS 命令结果：result=Accepted { new_revision: 2, state_hash: [216, 37, 118, 6, 15, 195, 172, 187, 27, 151, 13, 24, 87, 18, 237, 228, 61, 37, 180, 236, 182, 74, 140, 189, 205, 249, 184, 232, 95, 43, 8, 160] } revision=2 hash_prefix=[216, 37, 118, 6]
