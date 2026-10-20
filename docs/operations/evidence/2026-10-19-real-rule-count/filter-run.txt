@@ -1,0 +1,9 @@
+L08 十周年UI: 疑似规则 14 → 含效果原语 0
+L11 太虚幻境: 疑似规则 104 → 含效果原语 5
+   dz_gs_yinfu  300B  extension_skill.js
+   boss_danshu  368B  extension_skill.js
+   boss_xixing  396B  extension_skill.js
+   polu_damage  440B  extension_skill.js
+   boss_tianyun  728B  extension_skill.js
+L12 如真似幻: 疑似规则 0 → 含效果原语 0
+L25 祖安武将: 疑似规则 63 → 含效果原语 0
