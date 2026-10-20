@@ -631,6 +631,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 451 轮**：**第 53 项声明侧落地**——`content-native-loader`（**已跟踪**）新增 `cards[].skills` 支持：按 `HostBehavior::from_key` 解析、按名去重、**未知键报错**（不静默忽略），并入 `pack.host_skills`；**4 项验收全过**（正向 `host:chenhuodajie_card` 解析正确 / 去重 1 次 / 未知键 `InvalidField` / swd 真实包 **214 项无重名**）；**包数据暂不改**（未授予时不产生行为且扰动目录计数）⇒ **第 53 项仍待授予侧解阻**。
 >
+> **第 452 轮**：**NC12 效能基线实测**（`nc12_bench`，Apple M3 Max / rustc 1.95 / release）——建局 p50 **9.7 µs（none）～87.9 µs（combo）**、装载 import **40–50 ms**；快照 **417 ns**、编码 3.2 µs、解码 4.75 µs、**恢复 62.7 µs**；`engine_clone` **416 ns**；**整局 AI 对局（swd，268 步）墙钟 14.2 ms**（≈18.9k 步/秒，**rejected=0 / stalled=false / panics=0**）⇒ 八项第 8 项由「0 证据」推进为「**引擎级基线已测**」；**仍未做**：同负载前后对比（无旧实现）、产品级（server/网络/浏览器）、逐来源签署（仅 U05）。
+>
+
 
 
 
