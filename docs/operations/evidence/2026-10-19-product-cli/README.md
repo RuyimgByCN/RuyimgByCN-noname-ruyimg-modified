@@ -12,7 +12,8 @@
 | 2 | `engine-cli match 4 42 200` | `steps=64 revisions=64 capped=false`，终局 `hash=b351f487…` |
 | 3 | `engine-cli replay-export 4 42` | `replay_bytes=1738`、`export_manifest_hash=1a54d2ed…`、**`imported_state_hash=8fe8316a…`（= 第 1 步！）**、`imported_manifest_hash` **一致**、**`replay_roundtrip=ok`** |
 | 4 | `engine-cli full-demo 4 42 200` | **「忠臣/主公胜利！所有反贼和内奸已阵亡」**、`✓ 对局自然结束，用时 64 步 / 64 次状态变更` |
-| 5 | `engine-cli load-hash <cards.json> 4 42` | **无输出**（参数/输出面待查，**未验证**）|
+| 5 | `engine-cli load-hash`（无包路径） | `hash=86daeaff…` ✅（**正确用法**；详见第 5 节）|
+| 5b | `engine-cli load-hash <cards.json>` | **`exit=2`** + stderr 结构化错误 ⇒ **用法错（非缺陷）**，见第 5 节 |
 | 6 | `replay-export 4 42 <file>` → **另进程** `replay-import <file>` | **见第 4 节**：落盘 1738 B、`chain=ok`、`hash` 与第 1 行**逐字相同** ✅ |
 
 ## 2 判读（**如实**）
@@ -78,6 +79,44 @@ CLI **本就支持**输出路径参数；**是本轮我漏传参数**。现已�
 
 ### 4.3 剩余边界
 
-1. **`load-hash` 仍无输出**（**未验证**，需查参数或该子命令的输出面）；
+1. ~~`load-hash` 无输出~~ ⇒ **已查清**（第 5 节）：**正确用法可用**；`cards.json` 不是 `ContentPackage` ⇒ `exit=2`；
 2. **debug 构建** ⇒ 性能数字不可用；
 3. 未覆盖：真机、浏览器、TLS、跨机。
+
+---
+
+## 5 ✅ 第三轮：`load-hash` 查清（**又一例「用法错非缺陷」**）
+
+### 5.1 读实现
+
+`run_load_hash`（`main.rs:336-356`）：
+
+* **有包路径**：`content_schema::ContentPackage::from_json_bytes(&data)` —— **要 `ContentPackage` JSON**，
+  不是 `cards.json`（内容资产）；失败走 `eprintln!` + **`exit(2)`**，**stdout 不输出**；
+* **无包路径**：直接 `Engine::new()` 并打印 `hash=…`。
+
+### 5.2 实测
+
+```
+== load-hash（无包路径）
+hash=86daeaffe7f71fb6facda6e6ebe358a87076f5d9e2e7be196deb111b698c31a7
+
+== load-hash cards.json
+exit=2        （stdout 为空；错误走 stderr，是**结构化拒绝**而非崩溃）
+```
+
+| 判据 | 结果 |
+|---|---|
+| `load-hash`（**正确用法**，无包路径） | ✅ 打印 `hash=…` |
+| `load-hash <cards.json>` | ✅ **`exit=2` + stderr 结构化错误**（**用法错，非缺陷**）|
+| 上一轮「无输出」的结论 | ❌ **错误**——我把 `stderr` 丢到 `/dev/null`、又传了**非 ContentPackage** 文件 |
+
+### 5.3 ⚠ **两个 hash 不是同一个量**（**不要混用**）
+
+| 命令 | 输出 |
+|---|---|
+| `hash 4 42` | `8fe8316a…` |
+| `load-hash`（无路径） | `86daeaff…` |
+
+⇒ 两者**口径不同**（`load-hash` 在 `Engine::new()` 默认态上取 hash；`hash` 命令按 `players/seed` 建局）。
+**本证据不据此判断谁对谁错**，只登记「**不可混用**」。

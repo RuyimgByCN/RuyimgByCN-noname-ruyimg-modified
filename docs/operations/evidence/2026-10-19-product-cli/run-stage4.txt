@@ -1,0 +1,9 @@
+== load-hash（无包路径）
+hash=86daeaffe7f71fb6facda6e6ebe358a87076f5d9e2e7be196deb111b698c31a7
+== load-hash cards.json：stdout / stderr 分列
+exit=2
+--stdout--
+--stderr(过滤 warning)--
+
+
+
