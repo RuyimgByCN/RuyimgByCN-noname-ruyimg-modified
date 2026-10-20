@@ -150,7 +150,7 @@ L08  L11  L12  L14  L25   U09  U10  U11
 
 | 缺陷 | 涉及包 |
 |---|---|
-| **G14（9 条）** | `SwdHyunshen2`/`SwdDaixing2`/`SwdLexue`/`SwdZhenjiu2`/`SwdHuanxing` 等 —— **均在 `shahai-swd`/`shaai-ow`** |
+| **G14（10 条）** | `SwdHyunshen2`/`SwdDaixing2`/`SwdLexue`/`SwdZhenjiu2`/`SwdHuanxing` 等 —— **均在 `shahai-swd`/`shaai-ow`** |
 | **G15（≥5 条）** | `rumeng`/`fenglue`/`fuchou2`/`reyingzi` |
 | **G16 / `swd_xiuluo` / `huajin2` / `hlss_fengqi`** | `shahai-swd` / `boss-zhugeliang` |
 | **G17a/b（`mod`）** | **`hslingjian_*`/`qiankundai`** —— **`card/swd`** |
@@ -661,7 +661,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; finished in 0.04s
 | 来源 | 差异族 | 能否签「已对照且可接受」| 原因 |
 |---|---|---|---|
 | **`U08` 英雄杀** | ✅ **5/5 已对照** | ❌ | **5 个技能全部不可达**（无武将授予）⇒ 行为无法验证 |
-| **`U05` 杀海拾遗** | ⚠️ **57 条已对照** | ❌ | **15 条确认缺陷未修**（G14 9 / G15 4 / G18 2 / 凭空新增 2 / 非阶段 1 / G19 3，**有重叠**）|
+| **`U05` 杀海拾遗** | ⚠️ **57 条已对照** | ❌ | **16 条确认缺陷未修**（G14 10 / G15 4 / G18 2 / 凭空新增 2 / 非阶段 1 / G19 3，**有重叠**）|
 | **其余 20–22 个有规则内容的来源** | ❌ **无差异族** | ❌ | **未查** |
 
 ⇒ **分子 0 的三个理由各不相同**：一个「无法验证」、一个「有缺陷未修」、其余「未查」 ⚠️

@@ -8,7 +8,7 @@
 
 | 判定 | 条数 | 说明 |
 |---|---:|---|
-| **G14（不符）** | **9** | **上游 `phaseBegin`（任意阶段开始）⇒ 原生 `Phase::Judge`（判定阶段）** |
+| **G14（不符）** | **10** | **上游 `phaseBegin`（任意阶段开始）⇒ 原生 `Phase::Judge`（判定阶段）** |
 | **不符（准备阶段）** | **2** | `swd_xiuluo` / `hlss_fengqi` —— **上游含 `phaseZhunbeiBegin`，而引擎 `Phase` 无 `Prepare`**（G18） |
 | **不符（凭空新增触发）** | **2** | `baiyi`（上游 `enable` 主动技、**无 trigger**）、`lexue`（上游 **35 B 无 trigger**）—— **原生却挂了判定阶段触发** ❗ |
 | **不符（非阶段类）** | **1** | `huajin2` —— 上游 `damageBegin`；原生 filter **两个分支**：`Damage(source==owner)` ✅ 正确 + `Phase::Judge` 是**自加的「自清」分支** ❗ |
@@ -62,7 +62,7 @@ EventData::Phase { player, begin: true, .. } if *player == owner   // `..` 省�
 |---|---:|---|
 | **相符（待逐条确认）** | **21** | 上游 `phaseEnd`/`phaseUseBegin`/`phaseDrawBegin` 等与原生一致 |
 | **未定位** | **13** | `Gwent*` 3（不可达）、`gujian_food_*` 3（卡牌宿主）、`Xiefang`/`Xiongzi`/`Miedao`/`zaibian`/`PhaseEndRecoverOrDraw`/`GujianFoodTanhuadong` 等 |
-| **G14（`phaseBegin` ⇒ `Judge`）** | **9** | 见前文 |
+| **G14（`phaseBegin` ⇒ `Judge`）** | **10** | 见前文 |
 | **G15（时长/档位不符）** | **4** | `fuchou2`（`phaseAfter`）、`rumeng`/`fenglue`（`phaseUseBefore`）、`reyingzi`（`phaseDrawBegin2`）|
 | **G18（准备阶段）** | **2** | `swd_xiuluo`、`hlss_fengqi` |
 | **凭空新增触发** | **2** | `baiyi`、`lexue` |
