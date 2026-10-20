@@ -4105,3 +4105,43 @@ HostBehavior::WudianDuwen => { … Flow::Done }
 2. **11 条待判**，其中 **`xjyufeng`（loseEnd vs CardsDiscarded）** 与 **`anwugu2`（phaseAfter vs None）**
    是**最可疑的两条**（前者语义不同、后者少了触发）；
 3. **不签署规则差异** —— 需先读 `EventKind` 语义 + 写样本。
+
+### U05-XJ **v1**：`EventKind` 变体表读出后的三点结论（同日）
+
+`crates/engine-native/src/event.rs`（**tracked**）的 `EventKind` **共 22 个变体**：
+
+```
+DamageBefore Damage Recover CardsDrawn CardsMoved CardUsed CardResponded Dying Death
+PhaseBegin PhaseEnd TurnEnded SkillToggled Equipped Linked CardsDiscarded TurnOverBefore
+TurnOvered LoseHp DyingSaved CardsLost ShaDodged
+```
+
+#### 结论 1：**「结束 / 之后」类时机在引擎里没有独立变体**（共性限制）
+
+`DamageBefore` / `Damage` **只有两档**；`Recover`、`LoseHp`、`CardsDrawn` **各只有一档**，**不分 before/after**。
+⇒ v0 里 8 条「待判」（`damageEnd`×3、`damageAfter`、`recoverEnd`、`recoverAfter`、`loseHpAfter`、`drawBegin`）
+**不是映射错误，而是引擎粒度不足** ❗ —— 属**引擎层共性限制**，需在**基准里统一登记**，而非逐包重复。
+
+#### 结论 2：**`xjyufeng` 的映射可疑**（⚠️ 可能是真缺陷）
+
+上游 `xjyufeng` 是 **`loseEnd`（失去牌之后）**；原生挂在 **`CardsDiscarded`（弃牌）**。
+但引擎里**存在 `CardsLost` 变体** ⇒ **「失去牌」应有独立事件** ⇒ 原生**可能挂错事件** ⚠️。
+**判定需要**：读 `CardsLost` 的触发时机 + 写样本（**弃装备/被拿走** vs **主动弃牌**）。
+
+#### 结论 3：**`anwugu2` 可能少挂**
+
+上游 `phaseAfter`（**阶段之后**）；原生 `TriggerMeta = None`（注释自述「伤害前置窗口」）。
+引擎里有 **`TurnEnded`**（回合结束）但**没有「phaseAfter」** ⇒
+**要么该用 `PhaseEnd`，要么它确实由别的窗口驱动** ⚠️ —— **需读 step/filter 才能定**。
+
+### v1 小结
+
+| 类 | 条数 | 性质 |
+|---|---:|---|
+| ✅ 一致 | 7 | 触发时机同名同档 |
+| ✅ 被动一致 | 4 | 上游无 trigger ⇒ `None` |
+| **⚠️ 引擎粒度不足**（非缺陷）| **8** | `damageEnd`/`recoverEnd`/`recoverAfter`/`loseHpAfter`/`drawBegin`/`damageAfter` 类 |
+| **⚠️ 可疑映射**（待样本）| **2** | `xjyufeng`（`loseEnd`⇒`CardsDiscarded`，而 `CardsLost` 存在）、`anwugu2`（`phaseAfter`⇒`None`）|
+| | **21** | （`lingxue` 归入粒度不足；**`guiyuan`/`tannang`/`xuanyan`/`diewu` 计 4 条被动**）|
+
+⇒ **U05-XJ 仍不能签署**，但**22 条全部有了明确归类**（**7 ✅ / 4 ✅ / 8 ⚠️粒度 / 2 ⚠️可疑**）。
