@@ -23,7 +23,7 @@
 | 全量测试 | **6 crate 2227 通过 / 0 失败 / 21 忽略** | [final-snapshot](../2026-10-19-final-snapshot/README.md) |
 | 行数门禁 / 脚本自检 | **8479 文件 ≤ 2000 行** / **OK** | 同上 |
 | 安装 / 配置（按来源） | **32/32** | [signoff-32](../2026-10-19-source-signoff-32/README.md) |
-| 升级 / 保存恢复（按来源） | **13/32**（= **全部 22 个有资产包**）| [upgrade](../2026-10-19-upgrade-matrix/)、[save-restore](../2026-10-19-save-restore-matrix/) |
+| 升级 / 保存恢复（按来源） | **32/32**（**13 asset 级 + 19 identity 级**；asset 级覆盖 15 个有资产包）| [upgrade](../2026-10-19-upgrade-matrix/)、[save-restore](../2026-10-19-save-restore-matrix/) |
 | 组合 | **11/32**（190 对 / 20 包）| [skill-pair](../2026-10-19-skill-pair-matrix/) |
 | 规则差异 | **5/32** | [rules-baseline](../../../architecture/native-rules-baseline.md) |
 | 性能（引擎级） | **13/32**（22 包 probe + drive + 长局）| [nc12-all](../2026-10-19-nc12-all-packages/)、[drive-all](../2026-10-19-nc12-drive-all/)、[long](../2026-10-19-nc12-long/) |

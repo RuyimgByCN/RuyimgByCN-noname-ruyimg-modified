@@ -383,7 +383,7 @@ wudian  wuxing
 
 | 层级 | 用例 | 覆盖 | 判据 |
 |---|---|---|---|
-| **asset 级（13 来源）** | `nc08_upgrade_matrix` / `nc08_save_restore_matrix` | **22 个有资产包** | **真实内容装载 + 错版拒绝** |
+| **asset 级（13 来源）** | `nc08_upgrade_matrix` / `nc08_save_restore_matrix` | **15 个有资产包**（22 个可装载包的子集）| **真实内容装载 + 错版拒绝** |
 | **identity 级（19 来源）** | **`nc08_identity_gate_matrix`** | **41 个包**（**含 19 个无引擎资产**）| **版本闸门 + 包身份** |
 
 ### identity 级到底验了什么（读用例头注释 + 实跑）

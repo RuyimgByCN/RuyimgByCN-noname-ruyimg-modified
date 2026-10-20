@@ -12,7 +12,7 @@
 >
 > **正式做法（未做）**：每包 ≥3 次取中位 + 记极差 + 限制后台干扰（`taskset`/`caffeinate`）。
 
-# 22 个有资产包的**逐包吞吐**：µs / 命令（2026-10-19）
+# 22 个**可装载包**的逐包吞吐：µs / 命令（2026-10-19；其中 15 个有 `cards`/`generals`）
 
 - 工作包：**NC12 / 八项第 8 项（性能）**
 - 工具：`nc12_bench drive tier=dir:<包> seats=4 budget=64 lookahead=1 variant=0 seed=42007`
