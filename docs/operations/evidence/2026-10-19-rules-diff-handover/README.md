@@ -83,7 +83,7 @@
 | `Phase::Play` | 5 | 1 | ⚠️ 1 `before` 类（`fenglue`）|
 | **`Phase::End`** | **13** | **6** | ✅ **5 正确** + ⚠️ 1 `after` 类 |
 | 其余 | 15 | 1 | ⚠️ `Miedao` 缺一半 |
-| **合计** | **52** | **18** | **✅ 8 正确 / ❌ 1 类系统错 / ⚠️ 1 类表达力缺 / ❗ 4 单点 / ❓ 34 未核** |
+| **合计** | **52** | **24** | **✅ 9 正确 / ❌ G14(7) + G15(≥3) + G16 + 4 单点 / ❓ 28 未核** |
 
 ### 两条根因链
 
@@ -91,6 +91,13 @@
 |---|---|---|---:|---|
 | **G14** | **`phaseBegin`（任意阶段）** | **`Phase::Judge`（判定阶段）** | **7** | **新增「任意阶段开始」表达**，一次修 7 条 |
 | **G15** | **`phase*Before` / `phaseAfter`** | **`begin: true` / `begin: false`** | **≥3**（`rumeng`/`fenglue`/`WudianFuchou2`）| **新增「之前/之后」档**，或明确登记为可接受近似 |
+
+### 新增（第 585 轮）
+
+- **`GujianFoodTanhuadong`**：上游 `phaseEnd`，原生 `Phase::Play, begin=false`（**出牌阶段结束**）⇒ **G16（阶段不同）** ❗
+- **`WudianYuedong`**：上游 `phaseUseEnd` = 原生 `Phase::Play, begin=false` ⇒ ✅ **正确**（**第 2 个确认正确的「出牌阶段结束」**）
+- **`Xiefang`**：上游无 `trigger`（186 B）⚠️
+- **Gwent 三条**（`birin`/`cigu`/`qinpen`）：**上游按拼音未找到**（`gwent/skill.js` 74 个定义里没有）❓ —— **需要用中文名反查**（**本轮未做**）
 
 ### 结论
 
