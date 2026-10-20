@@ -758,6 +758,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 521 轮**：**把新定案并入交接索引**（`2026-10-19-session-handover`）——①**更正表由 6 条扩到 9 条**（+「待迁移 179/181 ⇒ **收窄到 5**」、「『补在 tracked crate 就能做』**错**」、「effect 阻塞**先作废后定案**：`grep` 曾把文档注释当 match 臂 ⇒ 改用**编译实验**」）；②**阻塞表新增两行**：**DSL 原语（query 3 + effect 5）**（**query 求值端在未跟踪的 `engine-core` 穷举 match**、**effect 变体新增会让未跟踪的 `resolve_choice/**` 报 `E0004`** ⇒ **编译实验已定案** ❌）与**行数门禁当前红**（`rule-api/src/effect.rs` **10778 行**，**基线即如此、非本会话引入** ✓ × **需 `rule-api` 负责人拆分**）；③**下一步按价值重排**：**先把行数门禁修好**（**唯一让所有提交不合规的问题**）⇒ 再推升级/保存恢复 32/32 ⇒ **「迁移」在可修改范围内已到边界，不要再投** ✓ ⇒ 扩规则差异 ⇒ 补工具链。
 >
+> **第 522 轮**：**逐包版本闸门（identity 级）41/41 通过**（台账第 196 行）——用**每个包真实的 `package.npack.json`**（namespace/package_id/version，版本按 `major*10000+minor*100+patch` 映射）构造**空内容** `ExtensionPack`：**`version+1` 恢复全部被拒**（`RuleVersionMismatch` ✓）、**`version` 回滚 hash 一致** ✓ ⇒ **41/41、0 跳过、0 失败**（0.04 s）；**口径（重要）**：这是 **identity 级** ✗ 不是 **asset 级** ✓ —— **「41/41」= 版本闸门全生效** ✓，**不等于「41 个包都能升级/恢复」** ❗；**按来源**：32/32 都有版本闸门证据（**其中 13 个是 asset 级** ✓）⇒ 八项签署表的「升级/保存恢复」由 **13/32** 升级为 **32/32（13 asset + 19 identity）** ✓。
+>
+
 
 
 '` 数 catch-all ✗，据此判定 `rule-api/src/effect/choose_other_give_then_recover.rs`（**arms=3/ca=0**）是穷举 match ✗；**打开文件发现**它其实是 **`macro_rules!` 的输入片段**（`([$($tail:ident),*] [$($variants:tt)*]) => …`）✓，那 3 个「`EffectRequest::`」**全是文档注释里的链接** ❌ ⇒ **统计是假的** ✗。**另确认**：`EffectRequest` 由**宏生成**（`rule-api/src/effect.rs:220`，**tracked** ✓）、主要 matcher（`resolve_qixing.rs` 等 100+ 臂）**都有 catch-all** ✓ ⇒ **「effect 5 个缺口是否可做」重回「未知」** ⚠️；**唯一可信的判定**：**加一个探针变体 + 编译 `-p engine-core` + 立即还原** ✓（下一轮做）。**方法论教训（本会话第 3 次同类）**：**用文本统计代替结构判断**（①组合矩阵判据不适用 ②179 三口径相加 ③grep 把注释当臂）。
