@@ -5230,3 +5230,45 @@ shihuifen   qiankundai   zhufangshenshi   hslingjian_*_equip3_dist   hslingjian_
 | **G15**（`before`/`after`/`Begin2`）| **档位缺** | **设计**（扩 `EventKind` 或登记近似）|
 | **G17a/b**（`mod` 距离/手牌上限）| **钩子缺** | **设计**（新增 `mod` 类钩子）|
 | **G17c**（射程覆写）| **个案化** | **可选**（统一为标准 `mod`）|
+
+## **G18：`Phase` 枚举里没有「准备阶段」**（第 620 轮，**重要**）
+
+### 事实
+
+`crates/engine-native/src/event.rs` 的 **`Phase` 只有 5 个变体**：
+
+```rust
+Judge  Draw  Play  Discard  End
+```
+
+⇒ **没有 `Prepare`（准备阶段）** ❗ —— **而 `grep -rn "Phase::Prepare"` 在 `content/host/` 里零命中** ✅
+
+### 后果
+
+| 上游触发 | 能否表达 | 说明 |
+|---|---|---|
+| `phaseZhunbeiBegin` / `phaseZhunbeiEnd`（**准备阶段**）| ❌ **无法表达** | **枚举里没有这一档** |
+| `phaseJudgeBegin` / `phaseDrawBegin` / `phaseUseBegin` / `phaseDiscardBegin` / `phaseJieshuBegin` | ✅ | 5 个变体分别对应 |
+
+⇒ **所有依赖「准备阶段」的上游技能，在原生里都不可能被正确表达** ❗
+
+### 受影响的已知条目
+
+| 条目 | 上游 | 原生 | 影响 |
+|---|---|---|---|
+| **`swd_xiuluo`** | **`phaseZhunbeiBegin`** | `Phase::Judge` ✗ | **§4.5 里写的「改成准备阶段」** ❌ **不可行** |
+| **`hlss_fengqi`** | **`['phaseZhunbeiBegin','phaseJieshuBegin']`** | `Phase::Judge` ✗ | **只能表达「结束」那一半** |
+
+### 修法（**必须改 §4.5**）
+
+| 原修法 | 实际问题 | 新修法 |
+|---|---|---|
+| **`swd_xiuluo` 改成「准备阶段」** ❌ | **枚举里没有** | **要么扩 `Phase` 加 `Prepare`（改 `event.rs` + 未跟踪的 `kernel`）**；**要么用「回合开始」（`TurnEnded` 的反面不存在）** —— **两条都需改未跟踪区** ⚠️ |
+| **`hlss_fengqi` 改「多值触发」** | 一半可表达（**结束**），**一半不可表达**（**准备**）| **同上** |
+
+⇒ **G18 使 `swd_xiuluo` 与 `hlss_fengqi` 从「批 1（对齐）」升级为「批 3（需设计）」** ❗
+
+### 这是「四步法」第 1 步（普查）的又一次收获
+
+**我此前把 `Phase` 当成「完整覆盖阶段」** ❌ —— **实际缺「准备阶段」** ✅
+⇒ **任何「按阶段」的分析，都必须先核「枚举是否覆盖全部阶段」** ✅
