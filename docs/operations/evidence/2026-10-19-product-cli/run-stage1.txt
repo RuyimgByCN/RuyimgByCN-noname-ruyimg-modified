@@ -1,0 +1,13 @@
+== hash
+8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff
+== match
+steps=64
+revisions=64
+capped=false
+hash=b351f4876316e27bb5e5aea05dbe3fc29c127e910eacd7b28b4f24a07681abd1
+== replay-export
+replay_bytes=1738
+export_manifest_hash=1a54d2ed4e4ff107e1d5348c620c00776f9f29fd13c03dd95bfee17217cbdefd
+imported_state_hash=8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff
+imported_manifest_hash=1a54d2ed4e4ff107e1d5348c620c00776f9f29fd13c03dd95bfee17217cbdefd
+replay_roundtrip=ok
