@@ -637,6 +637,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 454 轮**：**bench 支持 `character.json` / `pile.json`**（`load_pack_dir`，已跟踪 examples/）——新增 `cardpile`/`cardpile_liuli` 两档；`d3`（124 卡/217 技/1 将）、`cardpile`（237 卡）、`cardpile_liuli`（237 卡）**均 result=OK**；drive：**d3 298 步、cardpile/cardpile_liuli 261 步，全部 rejected=0 收敛** ⇒ 五来源签署表「性能」**2/5 → 5/5（部分）**。**工具限制如实记录**：两 cardpile 包 `package_id` 同为 `cardpile`（仅 namespace 不同）、`content_lock_id` 相同 ⇒ **不能用锁 id 断言两档内容不同**。
 >
+> **第 455 轮**：**「目标平台」构建级验收**（`engine-native`/`engine-native-wasm`/`content-native-loader` 交叉编译）——**5 项通过**：iOS **双架构**（`aarch64-apple-ios`、`x86_64-apple-ios`）+ **WASM 三层**（engine-native / engine-native-wasm / content-native-loader）；**2 项环境失败**：`aarch64-linux-android`（`failed to find tool "aarch64-linux-android-clang"`，NDK 未装）、`x86_64-pc-windows-msvc`（`blake3` 构建脚本需 MSVC C 工具链）⇒ 第 6 项由「0 证据/无设备」推进为「**构建级 5 项通过**」，**真机与浏览器运行仍未验收**；另：**`game-server` 产品侧测试 96 passed / 0 failed**（含 `native_product_path` 6 项、故障注入 11 项、滚动升级 4 项）。
+>
+
 
 
 

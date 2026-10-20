@@ -1,0 +1,24 @@
+# 2026-10-20T04:21:42Z
+rustc 1.95.0 (59807616e 2026-04-14)
+aarch64-apple-darwin
+aarch64-apple-ios
+aarch64-apple-ios-sim
+aarch64-linux-android
+armv7-linux-androideabi
+i686-linux-android
+i686-pc-windows-msvc
+wasm32-unknown-unknown
+x86_64-apple-ios
+x86_64-linux-android
+x86_64-pc-windows-msvc
+
+engine-native @ aarch64-apple-ios => OK
+engine-native @ x86_64-apple-ios => OK
+engine-native @ aarch64-linux-android => FAIL
+engine-native @ x86_64-pc-windows-msvc => FAIL
+engine-native @ wasm32-unknown-unknown => OK
+engine-native-wasm @ wasm32-unknown-unknown => OK
+content-native-loader @ wasm32-unknown-unknown => OK
+## android 失败原因
+warning: blake3@1.8.5: Compiler family detection failed due to error: ToolNotFound: failed to find tool "aarch64-linux-android-clang": No such file or directory (os error 2)
+  cargo:warning=Compiler family detection failed due to error: ToolNotFound: failed to find tool "aarch64-linux-android-clang": No such file or directory (os error 2)
