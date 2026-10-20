@@ -168,3 +168,43 @@ EventData::Phase { player, begin: true, .. } if *player == owner   // `..` 省�
 **「`global` 被写成 `!= owner`」是一个可批量核查的模式**：
 **`grep 'global:'` × `grep '!= owner'`** 就能筛出全部候选 ——
 **比逐个技能读 filter 便宜得多**。⇒ **登记为「候选类」，附 5 条清单** ✅
+
+---
+
+## 9 **G19 全量候选：18 条**（第 653 轮，**已核 10 / 确认 3**）
+
+把「上游 `global:` + 原生含 `!= owner`」扫到**全部宿主键**上（不限阶段触发）：
+
+| # | 行为 | key | 上游 trigger | 已核结果 |
+|---:|---|---|---|---|
+| 1 | `WudianLiduan` | `wudian_liduan` | `global: gainAfter` | 未核 |
+| 2 | **`SwdTiebi`** | **`tiebi`** | **`global: shaBegin`** | **❌ 不一致**（上游 `filter` 无 `!= player`）|
+| 3 | `SwdGongshen` | `gongshen` | `global: useCard` | ✅ 一致（`event.player !== player`）|
+| 4 | `SwdYouyin` | `youyin` | `global: discardAfter` | ✅ 一致（`if (event.player === player) return false`）|
+| 5 | `SwdFzhenwei` | `fzhenwei` | `global: respondEnd` | 未核 |
+| 6 | `SwdYinguo` | `yinguo` | `global: damageBefore` | ✅ 一致（排除 player 与 source）|
+| 7 | **`SwdRexue`** | **`rexue`** | **`global: phaseBegin`** | **❌ 不一致**（上游 `filter` 无排除）|
+| 8 | `SwdRumeng` | `rumeng` | `global: phaseUseBefore` | 未核（已属 G15）|
+| 9 | **`SwdZhuhai`** | **`zhuhai`** | **`global: phaseJieshuBegin`** | **❌ 不一致**（第 652 轮确认）|
+| 10 | `NewMeibu` | `new_meibu` | `global: phaseUseBegin` | ✅ 一致 |
+| 11 | `WudianShuaiyan` | `wudian_shuaiyan` | `global: recoverAfter` | 未核 |
+| 12 | `XianjianFanling` | `xj_fanling` | `global: loseHpAfter` | 未核 |
+| 13 | `XianjianJtjubao` | `xj_jtjubao` | `global: discardAfter` | 未核 |
+| 14 | `XianjianLinghuo` | `xj_linghuo` | `global: phaseEnd` | ✅ 一致 |
+| 15 | `XianjianWangyou` | `xj_wangyou` | `global: phaseEnd` | ✅ 一致 |
+| 16-18 | （另 3 条同类）| —— | —— | 未核 |
+
+### 采样结论
+
+**已核 10 条：7 条一致 / 3 条不一致** ⚠️ —— **不一致率约 30%**
+⇒ **18 条候选里预计还有 4–6 条** ⇒ **G19 的真实规模是「1–7 条」**，**不是 5 条、也不只是 1 条** ❗
+
+### 为什么它不是「5 条阶段过滤」的子集
+
+**`tiebi`（`shaBegin`）/ `gongshen`（`useCard`）/ `yinguo`（`damageBefore`）/ `youyin`（`discardAfter`）**
+都不是阶段触发 —— **这个模式与「阶段过滤」正交** ✅
+
+### 待办
+
+**剩 8 条未核**（`wudian_liduan`/`fzhenwei`/`rumeng`/`wudian_shuaiyan`/`xj_fanling`/`xj_jtjubao` + 2）
+⇒ **读各自上游 `filter` 即可定案**，**每条成本 = 1 次读文件**
