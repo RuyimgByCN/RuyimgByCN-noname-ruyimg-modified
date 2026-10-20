@@ -709,6 +709,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 495 轮**：**产品入口 `engine-cli` 验证**（台账第 189 行）——`hash 4 42`=`8fe8316a…`；`match` **64 步/64 修订/capped=false**；**`replay-export` ⇒ `replay_roundtrip=ok`**，且 `imported_state_hash` 与 `hash` 命令**逐字相同**、manifest hash 一致；`full-demo` ⇒ **「忠臣/主公胜利」64 步自然结束** ✅；**未通过/未验**：`load-hash` **无输出**、**`replay-export` 未落盘 ⇒ 跨进程 import 未验**；**debug 构建 ⇒ 性能数字不可用**。
 >
+> **第 496 轮**：**跨进程重放往返验证** + **更正上轮误判**——发现 `replay-export` **本就支持可选输出路径**（`replay-export [players] [seed] [out.json]`，`main.rs:53-57`）⇒ 上轮「未落盘」**是我漏传参数** ❌ 而非功能缺失；实测：`replay-export 4 42 <file>` 落盘 **1738 字节** ⇒ **另进程** `replay-import <file>` ⇒ `format=replay_log`、`records=1`、**`chain=ok`**、`hash=8fe8316a…`（**与 `hash 4 42` 逐字相同**）、manifest 一致 ✅；**仍余**：`load-hash` 无输出（未验证）、debug 构建性能不可用、真机/浏览器/TLS/跨机未做。
+>
+
 
 
 
