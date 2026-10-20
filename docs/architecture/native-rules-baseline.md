@@ -3858,3 +3858,27 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | 5 | `playpackconfig` **已逐项对照**：配置键/**未配置不补**/`dn` 公式/**上限 1000**/取整**全部一致**；**唯一差异＝补牌点数**（上游 `Math.random`，原生确定性，见 #3）⇒ 升级为「已对照，点数差异并入 #3」；见[口径与对照](../operations/evidence/2026-10-19-playpackconfig-upstream/README.md) |
 
 > L04 与 U03 条目基本相同，但台账明确「不因此把两行合成一次验收」⇒ **分来源登记**。
+
+## U08（英雄杀）差异族（2026-10-19，第 524 轮）
+
+**来源**：`archive/upstream/noname/apps/core/extension/英雄杀/`
+**原生包**：`packages/extensions/hero-kill-upstream-noname`（`cards: 0` / `generals: 0` / `skills: 5` / `deferred: 2`）
+
+| # | 上游（读源码） | 原生（读包数据） | 性质 |
+|---|---|---|---|
+| **U08-1** | `character/` 下 **43 条武将**（`character.js`）引用大量外部技能（`nvquan`/`qiandu`/`yxsweiyi` 等） | **`generals: 0`** —— **武将全部未迁移**，包内 `deferred[0]` **自述**「43 条武将……依赖未齐」 | **缺口（量化）**：43 → 0 |
+| **U08-2** | `yxs_fanji`（反击）：`damageEnd` + `direct` + `clearTime` + **`priority 12`**；filter 要求**手牌有【杀】**且事件牌为 `sha`/`juedou`；content = `addTempSkill("yxs_fanji2","shaAfter")` + **`chooseToUse`** 对来源出【杀】 | `skills[0] = { name: "yxs_fanji", mapping: "host:yxs_fanji" }` —— **宿主实现**（`content/host/**`，**本工作树未跟踪**）| **未逐条判定**（宿主实现未读）|
+| **U08-3** | `yxs_menshen`（门神）：`phaseEnd` + **`priority 15`** + `group: yxs_menshen3` + `onremove`；content = **`chooseTarget`** ⇒ `target.storage.yxs_menshen2 = player` + **`target.addSkill("yxs_menshen2")`**（**跨角色施加技能**）| `host:yxs_menshen` + `host:yxs_menshen2` + `host:yxs_menshen3`（三个宿主键**都在**）| **未逐条判定**（同上）|
+| **U08-4** | 上游技能依赖 `priority`/`clearTime`/`onremove`/`group` 等**元数据**参与调度 | 原生宿主行为的**元数据面未核对** | **未判定** |
+
+**当前的可靠结论**：
+
+1. **U08-1 是量化的缺口**：上游 43 条武将 ⇒ 原生 **0**；包内 `deferred` **自我登记**「依赖未齐」，
+   与台账「部分重构」一致；
+2. **U08-2/3 只能在「键存在」层面确认**（`host:yxs_fanji` 等 5 个键**都已映射**），
+   **行为等价性未判定** —— 宿主实现在 `crates/engine-native/src/content/host/**`，**本工作树为未跟踪文件**，
+   本代理**只读不改**，且本轮**未逐行读完**（`factory.rs`/`filtering.rs` 两处派发）；
+3. **U08-4 未判定**。
+
+**因此 U08 记为「差异族 v0（部分登记）」**，**不记为已签约的规则差异项**；
+要完成需：①读宿主实现 ②对 `yxs_fanji`/`yxs_menshen` 各写一个**行为样本** ③判定 `priority` 一类元数据是否影响结果。
