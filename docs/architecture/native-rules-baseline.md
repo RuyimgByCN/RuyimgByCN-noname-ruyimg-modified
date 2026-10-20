@@ -3880,6 +3880,44 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
    本代理**只读不改**，且本轮**未逐行读完**（`factory.rs`/`filtering.rs` 两处派发）；
 3. **U08-4 未判定**。
 
+### U08 差异族 **v1**：已定位实现，且**发现 2 条实质差异**（同日）
+
+**实现位置已定位**（`crates/engine-native/src/content/host/**`）：
+
+| 面 | 位置 |
+|---|---|
+| 键映射 | `keys.rs:836-840` |
+| 触发元数据 | **`metadata/common.rs:170/188`（`TriggerMeta`）** |
+| filter | `filtering/common.rs:101/119` |
+| **步骤机** | **`step/skills_damage.rs:7`（反击）、`step/skills_targets.rs:7`（门神）** |
+| ABI tag | `tags.rs:290/292` ⇒ **526（反击）/ 528（门神）** |
+
+#### v1 差异表
+
+| # | 上游 | 原生 `TriggerMeta` | 判定 |
+|---|---|---|---|
+| **U08-2a** | `yxs_fanji`：**`damageEnd`** | **`EventKind::Damage`** | ⚠️ **实质差异**：**时机不同**（伤害**结束**后 vs 伤害**发生时**）|
+| **U08-2b** | `yxs_fanji`：**`priority 12`** | **`priority: 0`** | ⚠️ **实质差异**：多技能同事件时的**排序**可能不同 |
+| **U08-3a** | `yxs_menshen`：`phaseEnd` | **`PhaseEnd`** | ✅ **一致** |
+| **U08-3b** | `yxs_menshen`：**`priority 15`** | **`priority: 0`** | ⚠️ **实质差异**：排序 |
+| **U08-3c** | `yxs_menshen`：`optional`（可选发动）| **`optional: true`** | ✅ **一致** |
+| **U08-4** | `yxs_menshen3`：上游以 **`group`** 挂在门神上（任意阶段开始/死亡时清除）| **`EventKind::PhaseBegin` + `extra_events: [Death]`** | ✅ **形式一致** |
+| **U08-5** | `yxs_menshen2`：上游 `addSkill` 施加的**被动标记** | **`None`**（注释：标记持有，被动无触发时机）| ✅ **形式一致** |
+| **U08-6** | `yxs_fanji2`：上游 `addTempSkill(..., "shaAfter")` ⇒ **杀结算后**时机 | **`None`**（注释：红杀直伤在杀机器内联）| ⚠️ **未判定**（内联实现未读）|
+
+#### v1 结论（**如实**）
+
+1. **U08 的 5 个技能都有实现**（触发元数据 + filter + 步骤机 + ABI tag 齐全）✅ ——
+   **推翻**了「只有键映射、没有实现」的担心；
+2. **发现 2 类实质差异**：**`yxs_fanji` 的时机（`Damage` vs `damageEnd`）** 与 **两者的 `priority` 都是 0**
+   （上游 12 / 15）⚠️ —— 后者在**同事件有多个技能**时可能改变结算顺序；
+3. **形式一致 3 条**（`menshen` 事件、`menshen3` 的 `PhaseBegin+Death`、`menshen2` 的被动）✅；
+4. **仍未判定 2 条**：`yxs_fanji2` 的内联实现、以及**行为等价**（需要样本）。
+
+⇒ **U08 记为「差异族 v1」**：**有实质内容（2 条 ⚠️ + 3 条 ✅ + 2 条 ❓）**，
+但**仍不足以签署「规则差异通过」** ❌ —— 签署需要：①`priority` 差异是否真的影响结果（**写样本**）
+②`Damage` vs `damageEnd` 的语义差（**写样本**）。
+
 ### U08 复核：**一条被否定的假设**（同日）
 
 我一度以为 `factory.rs:327-331`（`HostBehavior::YxsFanji => (None, None)` 等五行）意味着

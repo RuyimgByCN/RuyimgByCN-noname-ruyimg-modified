@@ -768,7 +768,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 526 轮**：**U08（英雄杀）差异族 v0**（台账第 199 行 + 规则基准新增「U08 差异族」）——读上游 `character/skill.js` 与原生包（`cards: 0 / generals: 0 / skills: 5 / deferred: 2`）：**U08-1 是量化缺口**（上游 **43 条武将** ⇒ 原生 **0**，包内 `deferred` **自述**「依赖未齐」✓）；**U08-2/3** 只能确认**键存在**（`host:yxs_fanji`/`yxs_menshen`/`menshen2`/`menshen3` **五键均已映射** ✓），**行为等价性未判定** ✗（宿主实现在**未跟踪**的 `content/host/**`，**只读且未逐行读完** ✗）；**U08-4**（`priority`/`clearTime`/`onremove`/`group` 元数据面）**未判定** ✗。⇒ **记为「差异族 v0（部分登记）」**，**不记为已签约** ✓ —— **规则差异仍 5/32** ✓（**不因「写了一个 v0」而 +1** ✓）。
 >
-> **第 527 轮**：**U08-2/3 复核：一条假设被否定**——我曾以为 `factory.rs:327-331` 的 `HostBehavior::YxsFanji => (None, None)`（5 行）意味着「**这 5 个技能没有实现**」✗；读签名后**否定**：`machine()` 返回的是 **`(target, card)` 上下文** ✓，`(None, None)` 只表示「该事件不提供额外上下文」✓，**不表示技能未实现** ❌。**已确认**：**键映射**（`keys.rs:836-840` **5 键都在** ✓）+ **filter 有实际条件**（`filtering/common.rs:101+`：`Damage(d) if d.target==owner` + **`has_sha`** 判定 ✓）；**未定位**：**trigger/effect 在哪** ✗、**元数据面** ✗ ⇒ **U08-2/3 仍为「未判定」** ✓（**范围已缩小到「trigger/effect 位置」** ✓）。**规则差异仍 5/32** ✓。
+> **第 527 轮**：**U08-2/3 复核：一条假设被否定**——我曾以为 `factory.rs:327-331` 的 `HostBehavior::YxsFanji =>
+> **第 528 轮**：**U08 差异族 v1——实现已定位，且有 2 条实质差异**（规则基准 + 台账第 199 行更新）——定位到：**`TriggerMeta`**（`metadata/common.rs:170/188`）、**filter**（`filtering/common.rs:101/119`）、**步骤机**（`step/skills_damage.rs:7` 反击 / `step/skills_targets.rs:7` 门神）、**ABI tag**（`tags.rs` **526/528**）⇒ **5 个技能都有实现** ✅（**推翻**「只有键映射」的担心 ✓）；**实质差异 2 类**：**①`yxs_fanji` 原生用 `EventKind::Damage` 而上游是 `damageEnd`** ⚠️ **②两者 `priority` 都是 0，上游是 12/15** ⚠️（同事件多技能时可能改变顺序）；**形式一致 3 条** ✅（`menshen` 的 `PhaseEnd`+`optional`、`menshen3` 的 `PhaseBegin+Death`、`menshen2` 的被动 `None`）；**未判定 2 条** ❓（`yxs_fanji2` 内联实现、行为等价）⇒ **「差异族 v1」仍不足以签署规则差异** ✗ —— **签署需先用样本验证 `priority` 与时机差** ✓；**规则差异仍 5/32** ✓。
+>
+ (None, None)`（5 行）意味着「**这 5 个技能没有实现**」✗；读签名后**否定**：`machine()` 返回的是 **`(target, card)` 上下文** ✓，`(None, None)` 只表示「该事件不提供额外上下文」✓，**不表示技能未实现** ❌。**已确认**：**键映射**（`keys.rs:836-840` **5 键都在** ✓）+ **filter 有实际条件**（`filtering/common.rs:101+`：`Damage(d) if d.target==owner` + **`has_sha`** 判定 ✓）；**未定位**：**trigger/effect 在哪** ✗、**元数据面** ✗ ⇒ **U08-2/3 仍为「未判定」** ✓（**范围已缩小到「trigger/effect 位置」** ✓）。**规则差异仍 5/32** ✓。
 >
 
 
