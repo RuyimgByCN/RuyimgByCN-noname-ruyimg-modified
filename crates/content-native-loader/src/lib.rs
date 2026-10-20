@@ -572,6 +572,21 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
             equip_skills.push(names::intern(s.to_string()));
         }
         def.equip_skills = equip_skills;
+        // cards[].skills：**牌的宿主技能声明**（非装备牌用；装备牌仍走 `equip_skills`）。
+        // 说明：本字段只负责**声明**（并入 `pack.host_skills`，由目录注册）；**授予**
+        // 由内核侧的授予清单决定，不在装载器范围（见台账第 53 项）。
+        for s in opt_array(c, "skills", "cards[].skills")? {
+            let s = s.as_str().ok_or_else(|| {
+                invalid("cards[].skills", format!("元素须为字符串，实为 {s}"))
+            })?;
+            let behavior = HostBehavior::from_key(s).ok_or_else(|| {
+                invalid("cards[].skills", format!("未知宿主技能键 {s}"))
+            })?;
+            let name = names::intern(s.to_string());
+            if !host_skills.iter().any(|d| d.name == name) {
+                host_skills.push(HostSkillDecl { name, behavior });
+            }
+        }
         for decl in card_kind_host_skills(kind) {
             if !host_skills.iter().any(|d| d.name == decl.name) {
                 host_skills.push(decl.clone());

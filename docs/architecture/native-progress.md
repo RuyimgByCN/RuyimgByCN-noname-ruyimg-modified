@@ -629,6 +629,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 450 轮追加**：**`PhaseEnd` 派发面探针**——目录注册 `PhaseEnd` 的技能 **14 个**、**全部**进入 `candidates(PhaseEnd)`（15 项），且引擎**确实发射** `begin:false` 的 `Phase` 帧（`kernel/phase.rs:125`）⇒ **`PhaseEnd` 正常**，第 57 项是**单技能**元数据/过滤器矛盾，**非引擎缺陷**（影响面已排除）。
 >
+> **第 451 轮**：**第 53 项声明侧落地**——`content-native-loader`（**已跟踪**）新增 `cards[].skills` 支持：按 `HostBehavior::from_key` 解析、按名去重、**未知键报错**（不静默忽略），并入 `pack.host_skills`；**4 项验收全过**（正向 `host:chenhuodajie_card` 解析正确 / 去重 1 次 / 未知键 `InvalidField` / swd 真实包 **214 项无重名**）；**包数据暂不改**（未授予时不产生行为且扰动目录计数）⇒ **第 53 项仍待授予侧解阻**。
+>
+
 
 
 =2`：**青龙之圭**（牌堆 196→194、手牌 3→4，净 +1）与**黄麟之琮**（**20 步**到 round 2，`hujia` **0→1**）**均 test ok**，`#[ignore]` 已移除；**第 413–443 轮「宿主派发 Phase{begin} 失效」的结论撤回**。同时发现**新第 57 项**：`baishouzhihu`（白兽之琥）**永不触发**——`metadata/swd.rs:360` 注册 `EventKind::PhaseEnd` 而 `filtering/swd.rs:409-421` 要求 `begin==true`，引擎只有 `begin:true` 的 Phase 事件 ⇒ **元数据与过滤器矛盾**；实测推到**第 14 回合**仍无询问；修法在**未跟踪**目录（受阻），正例已按第 57 项 `#[ignore]`。全量 **1514 passed / 0 failed / 21 ignored**。

@@ -1,0 +1,4 @@
+DBG cards[].skills：host_skills = ["host:chenhuodajie_card"]
+DBG cards[].skills 负例：is_err=true；错误=Some(InvalidField { field: "cards[].skills", reason: "未知宿主技能键 host:no_such_behavior" })
+DBG cards[].skills 去重：同名声明出现 1 次（应为 1）
+DBG swd：host_skills 214 项、去重后 214

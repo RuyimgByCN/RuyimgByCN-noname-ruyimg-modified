@@ -1651,8 +1651,7 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 **⚠ 修法可行性更正（同日）**：仅补 `cards[].skills` **不足以生效**——技能声明进入目录后，
 仍需**授予**才有实例；而**授予侧**（`kernel/equipment.rs:6 grant_equip_skills`、`construction.rs` 的授予清单）
 同样位于**未跟踪**目录（`git ls-files crates/engine-native/src/kernel/` = **0**）⇒ **本项仍受阻**。
-**可做的部分**：`cards[].skills` 的**装载器支持**（`content-native-loader`，已跟踪）+ 包数据 + **桥接层断言**
-（skill 出现在 `pack.host_skills`）；**授予**待解阻后再接。
+**可做的部分已完成（同日）**：`cards[].skills` 的**装载器支持**已落地（`content-native-loader`，**已跟踪**），4 项验收全过——正向声明/去重/未知键拒绝/真实包无重名 214 项（见[装载支持证据](../2026-10-19-loader-card-skills/README.md)）；**包数据暂不改**（未授予时不产生行为，且会扰动目录计数）；**授予**待解阻后再接。
 
 **原计划的完整修法**：
 1. `bridge_pack` 增加 `cards[].skills`（按 `HostBehavior::from_key` 解析，并入 `pack.host_skills`），
