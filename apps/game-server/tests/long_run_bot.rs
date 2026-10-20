@@ -43,7 +43,7 @@ async fn submit(
     id: u64,
     seq: u64,
     cmd: Command,
-) -> (bool, u64, Vec<LegalAction>) {
+) -> (bool, u64, Vec<LegalAction>, String, engine_api::PlayerId) {
     let (rs, ws) = tokio::sync::oneshot::channel();
     if handle
         .send(RoomMsg::Submit {
@@ -56,7 +56,7 @@ async fn submit(
         .await
         .is_err()
     {
-        return (false, 0, Vec::new());
+        return (false, 0, Vec::new(), "send-fail".into(), engine_api::PlayerId::new(0));
     }
     match ws.await {
         Ok(Ok(ServerMessage::CommandOutcome {
@@ -64,12 +64,22 @@ async fn submit(
             view,
             legal_actions,
             ..
-        })) => (
-            matches!(result, engine_api::CommandResult::Accepted { .. }),
-            view.revision,
-            legal_actions,
+        })) => {
+            let ok = matches!(result, engine_api::CommandResult::Accepted { .. });
+            let why = if ok {
+                "accepted".to_string()
+            } else {
+                format!("{result:?}").chars().take(48).collect()
+            };
+            (ok, view.revision, legal_actions, why, view.current_player)
+        }
+        other => (
+            false,
+            0,
+            Vec::new(),
+            format!("{other:?}").chars().take(32).collect(),
+            engine_api::PlayerId::new(0),
         ),
-        _ => (false, 0, Vec::new()),
     }
 }
 
@@ -170,14 +180,19 @@ async fn bot_drives_matches_long_run() {
             idempotency_key: engine_api::IdempotencyKey(room.seq),
             kind: engine_api::CommandKind::EndPhase,
         };
-        let (_ok, rev, legal) = submit(&room.handle, room.id, room.seq, cmd).await;
+        let (_ok, rev, legal, why, cur) = submit(&room.handle, room.id, room.seq, cmd).await;
+        eprintln!("DBG bot 引导结果：room {} why={why}", room.id);
         if rev > 0 {
             room.rev = rev;
         }
         room.legal = legal;
+        if cur.0 != room.actor.0 {
+            room.actor = cur; // **关键**：actor 跟随 `view.current_player`
+        }
         eprintln!(
-            "DBG bot 引导：room {} rev={} legal_actions={}",
+            "DBG bot 引导：room {} actor={} rev={} legal_actions={}",
             room.id,
+            room.actor.0,
             room.rev,
             room.legal.len()
         );
@@ -187,14 +202,37 @@ async fn bot_drives_matches_long_run() {
     let mut accepted = 0u64;
     let mut snapshots = 0u64;
     let mut max_rev = 0u64;
+    let mut reasons: std::collections::BTreeMap<String, u64> = std::collections::BTreeMap::new();
     for _round in 0..ROUNDS {
         for room in rooms.iter_mut() {
             for _ in 0..PER_ROUND {
                 let Some(action) = pick(&room.legal, &mut room.cursor) else { break };
-                let cmd = action.to_command(room.actor, room.rev);
-                room.seq += 1;
-                submitted += 1;
-                let (ok, rev, legal) = submit(&room.handle, room.id, room.seq, cmd).await;
+                // **重试**：若被拒的原因是「不是当前行动者」，用新 actor 重发**同一动作**一次。
+                let mut ok = false;
+                let mut rev = 0u64;
+                let mut legal_now = Vec::new();
+                let mut why = String::new();
+                for _attempt in 0..2 {
+                    let cmd = action.to_command(room.actor, room.rev);
+                    room.seq += 1;
+                    submitted += 1;
+                    let (a, r, l, w, cur) = submit(&room.handle, room.id, room.seq, cmd).await;
+                    ok = a;
+                    rev = r;
+                    legal_now = l;
+                    why = w;
+                    if ok {
+                        break;
+                    }
+                    // 首次被拒且行动者变化 ⇒ 更新 actor 后重试
+                    if cur.0 != 0 && cur.0 != room.actor.0 {
+                        room.actor = cur;
+                        continue;
+                    }
+                    break;
+                }
+                let legal = legal_now;
+                *reasons.entry(if ok { "accepted".to_string() } else { why }).or_insert(0u64) += 1;
                 if ok {
                     accepted += 1;
                     room.cursor = 0; // 成功则回到首个优先动作
@@ -233,6 +271,20 @@ async fn bot_drives_matches_long_run() {
         elapsed.as_millis(),
         submitted as f64 / elapsed.as_secs_f64().max(1e-9)
     );
+    eprintln!("DBG bot 终局：reasons={reasons:?}");
+    for room in rooms.iter() {
+        eprintln!(
+            "DBG bot 终局：room {} actor={} rev={} legal={} 变体={:?}",
+            room.id,
+            room.actor.0,
+            room.rev,
+            room.legal.len(),
+            room.legal
+                .iter()
+                .map(|a| format!("{a:?}").chars().take(28).collect::<String>())
+                .collect::<Vec<_>>()
+        );
+    }
     assert!(submitted > 0, "机器人应至少提交过命令");
     // 当前实现只能推进到 ~9；提高门槛前需先解决「精确 selections / 正确 actor」两件事。
     assert!(

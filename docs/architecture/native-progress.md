@@ -643,7 +643,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 457 轮**：**产品级长程稳定性切片**（`apps/game-server/tests/long_run_soak.rs`，已跟踪）——8 房间 × 25 轮 × 4 命令 = **800 条命令**、**200 次快照探活**：**全部通过**（无 panic/死锁、200/200 响应、8 房间互不干扰、修订号推进 max=5、收尾仍可响应；2.63 s，305 cmds/s）。**限制如实登记**：只发 `EndPhase` ⇒ 到「等待选择」后不再推进（accepted=27/800），**不构成完整对局长程**；待办：按 `legal_actions` 构造 `Answer`/`PlayCard` 的**对局机器人**。
 >
-> **第 458 轮**：**对局机器人（`legal_actions` 驱动）——部分完成 + 诊断**（`apps/game-server/tests/long_run_bot.rs`）——用 `LegalAction::to_command` 把权威合法动作转命令；**引导步**先发 `EndPhase` 换取 `legal_actions`（6–7 条）；实测 4 房间 × 40 轮 × 6 步 = **960 条**，**推进到 rev=9**、**160 次快照全响应**，但 **960 条仅 14 条被接受** ⇒ **卡在 rev≈9**；**诊断两条**：①`ResolveChoice.selections` 当前只能 `cancelled:true`，无法构造精确选择；②`actor` 固定 `player1`，遇到「应 player2 应答」窗口必然被拒 ⇒ **整局连续推进未完成**（用例暂 `#[ignore]`，待办：解析合法 selections + 按应行动者设 actor，完成后提门槛到 `max_revision>=20`）。
+> **第 458 轮**：**对局机器人（`legal_actions` 驱动）——部分完成 + 诊断**（`apps/game-server/tests/long_run_bot.rs`）——用 `LegalAction::to_command` 把权威合法动作转命令；**引导步**先发 `EndPhase` 换取 `legal_actions`（6–7 条）；实测 4 房间 × 40 轮 × 6 步 = **960 条**，**推进到 rev=9**、**160 次快照全响应**，但 **960 条仅 14 条被接受** ⇒ **卡在 rev≈9**；**诊断两条**：①`ResolveChoice.selections` 当前只能 `cancelled:true`，无法构造精确选择；②`actor` 固定 `player1`，遇到「应 player2 应答」窗口必然被拒 ⇒ **整局连续推进未完成**（用例暂 `#[ignore]`，待办：解析合法 selections + 按应行动者设 actor，完成后提门槛到 `max_revision>
+> **第 459 轮**：**机器人拒绝分类定位**（同 173 行）——960 条中 **accept 14**，拒绝分三类：**`IllegalAction("choice…")` 475**（选择窗口内非选择类动作不合法）、**`IllegalAction("not current…")` 233**（actor 过期）、**`InvalidChoice` 238**（`ResolveChoice` 空 selections + cancelled 仍不满足约束）⇒ 「**动作类型 × 行动者 × 选择载荷**」需**同时**正确；**已试无效**：①被拒轮换 ②actor 跟随 `view.current_player` 并重发同一动作（accepted 仍 14）⇒ **整局机器人仍未完成**（用例保持 `#[ignore]`）。
+>
+=20`）。
 >
 
 

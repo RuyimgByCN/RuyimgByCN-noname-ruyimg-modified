@@ -27,6 +27,32 @@ RESULT bot rooms=4 rounds=40 per_round=6 submitted=960 accepted=14 snapshots=160
 | **继续推进** | ❌ **卡在 rev≈9**（960 条中仅 **14** 条被接受）|
 | 房间始终可响应（160 次快照）| ✅ |
 
+## 2.1 **拒绝分类计数**（本轮新增的关键信息）
+
+```
+DBG bot 终局：reasons={
+  "Rejected { reason: IllegalAction { code: \"choice...\" }" : 475,
+  "Rejected { reason: IllegalAction { code: \"not current...\" }" : 233,
+  "Rejected { reason: InvalidChoice }" : 238,
+  "accepted" : 14 }
+```
+
+| 拒绝类别 | 次数 | 成因（已定位）|
+|---|---:|---|
+| `IllegalAction { code: "choice..." }` | **475** | 当前处于**选择窗口**，非选择类动作（`PlayCard`/`EndPhase`）**不合法** |
+| `IllegalAction { code: "not current..." }` | **233** | `actor` **不是当前行动者**（`to_command` 传入的 actor 已过期）|
+| `InvalidChoice` | **238** | `ResolveChoice` 的 `selections` **为空 + cancelled** 仍不符合该 choice 的约束 |
+| accepted | **14** | —— |
+
+终局状态：room0 `rev=9 actor=2 legal=[EndPhase]`、room1 `rev=4`（只剩两个 `ResolveChoice`）、
+room2 `rev=5`、room3 `rev=4`（仍有 `PlayCard`）。
+
+⇒ **三个类别合计 946/960**，说明「**动作类型 × 行动者 × 选择载荷**」三者必须**同时**正确才可能推进；
+当前实现三者都不完整。
+
+> **已尝试并无效**：①被拒后**轮换**下一个合法动作（计数不变）；②`actor` 跟随 `view.current_player`
+> 并在被拒后**重发同一动作**一次（`accepted` 仍 14）⇒ 说明**仅修 actor 不足以越过选择窗口**。
+
 ## 3 诊断（**未解决的部分**）
 
 1. **`ResolveChoice` 的 `selections: Vec<u32>`**：当前只能发 `cancelled: true`，

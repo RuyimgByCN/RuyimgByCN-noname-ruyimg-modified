@@ -1,5 +1,6 @@
-DBG bot 引导：room 0 rev=2 legal_actions=6
-DBG bot 引导：room 1 rev=2 legal_actions=6
-DBG bot 引导：room 2 rev=2 legal_actions=6
-DBG bot 引导：room 3 rev=2 legal_actions=7
-RESULT bot rooms=4 rounds=40 per_round=6 submitted=960 accepted=14 snapshots=160 max_revision=9 elapsed_ms=568 throughput_cmds_per_s=1689
+DBG bot 引导：room 0 actor=1 rev=2 legal_actions=6
+DBG bot 引导：room 1 actor=1 rev=2 legal_actions=6
+DBG bot 引导：room 2 actor=1 rev=2 legal_actions=6
+DBG bot 引导：room 3 actor=1 rev=2 legal_actions=7
+RESULT bot rooms=4 rounds=40 per_round=6 submitted=961 accepted=14 snapshots=160 max_revision=9 elapsed_ms=575 throughput_cmds_per_s=1669
+DBG bot 终局：reasons={"Rejected { reason: IllegalAction { code: \"choice": 475, "Rejected { reason: IllegalAction { code: \"not cu": 233, "Rejected { reason: InvalidChoice }": 238, "accepted": 14}
