@@ -4558,3 +4558,16 @@ v7 的「只实现一半」判断，经**三条独立证据**确认：
 
 ⇒ **U05-SWD：8 一致 / 2 粒度 / 4 确认缺陷 / 2 上游缺口 = 16** ✅
 —— **v5 的「合并型一致」被彻底推翻**（**当时只看了 `TriggerMeta` 的 `PhaseBegin`，没看 filter** ❌）。
+
+### U05-SWD **v8.1**：`jifeng` 三重确认 —— **`trigger` 已实现，只在 `mod` 面缺**
+
+| 面 | 原生证据 | 结论 |
+|---|---|---|
+| **`trigger`**（上游 `useCardToBefore`，`priority 6`，`forced`，**随机分支**）| **filter**：`EventData::CardUsed` + `targets.len() > 1` + `is_sha_like() \|\| jifeng_single_target_trick(kind)` ✅<br>**step**：`skills_status.rs:294+` **有实现**，注释「上游：`Math.random() > (1.3 + n/5)/n`。原生以 …`cancel_permille`」✅ | ✅ **已实现**（含随机语义的确定性落法）|
+| **`mod.selectTarget`**（单目标 `sha`/`trick` ⇒ `range[1] = Infinity`）| 全库**无「目标数修改器」**；`jifeng_single_target_trick` **只用于 filter** | ❗ **未实现** |
+
+⇒ **`jifeng` 的缺口收敛为单一 `mod` 面** ✅，**且该面需要引擎在「出牌合法性/目标选择」层支持「单目标牌可多选目标」** ⇒
+**归入「引擎表达力」类**（**与 `duoqi`/`youzhan` 同类**）✅
+
+**修正**：v6 说「档位偏晚 + 随机语义未对」—— **这两点都不成立** ❌（**`CardUsed` 与 `useCardToBefore` 的先后已由 filter/step 处理，随机也已实现** ✅）；
+真正缺的**只有 `mod` 面** ✅。
