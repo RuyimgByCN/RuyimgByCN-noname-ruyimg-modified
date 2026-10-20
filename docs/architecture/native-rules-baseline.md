@@ -4852,3 +4852,33 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 | ❌ 缺陷 | **G14(7) + G15(≥3) + G16 + 4 单点** |
 | **⛔ 不可达** | **3**（Gwent 三条）|
 | ❓ 未核 | **22** |
+
+### `Phase::Draw`/`Phase::Play` 组核对：**3 一致 / 2 需判定 / 5 未定位**（第 600 轮）
+
+| 行为 | 原生 | 上游 `trigger` | 判定 |
+|---|---|---|---|
+| **`NewMeibu`** | `Play, begin=true` | **`global: phaseUseBegin`** | ✅ **一致** |
+| **`MbcmQingzheng`** | `Play, begin=true` | **`player: phaseUseBegin`** | ✅ **一致** |
+| **`YunchouXiongzi`** | `Draw, begin=true` | **`player: phaseDrawBegin`** | ✅ **一致** |
+| **`SwdRumeng`** | `Play, begin=true` | **`global: phaseUseBefore`** | ⚠️ **G15（before 类）** |
+| **`SwdReyingzi`** | `Draw, begin=true` | **`player: phaseDrawBegin2`** | ⚠️ **上游有「Begin2」（二次触发）**，原生只有一次 |
+| `XianjianFenglue` | `Play, begin=true` | 未找到（`xj_fenglue`）| ❓ |
+| `XianjianZhaoyao` | `Draw, begin=true` | 未找到（`xj_zhaoyao`；`zhaoyao` 有 `phaseDrawBegin` ✅）| ❓ **key 名与上游名不同** |
+| `Zaibian` | `Play, begin=true` | 未找到 | ❓ |
+| `GujianFoodXiajiao` | `Draw, begin=true` | 未找到 | ❓ |
+| `WudianOwliyong` | `Draw, begin=true` | 未找到 | ❓ |
+
+#### 新发现：**`phase*Begin2`（带「2」）在引擎里没有对应档**
+
+上游 `phaseDrawBegin2` —— **`Begin2` 通常表示「阶段开始的第二次触发」**（**同一阶段内可再触发一次**）
+⇒ **原生 `begin: bool` 只能表达「第一次」** ⇒ **属 G15 家族（缺档）** ⚠️
+
+#### 「52 处阶段过滤」更新
+
+| 项 | 之前 | **现在** |
+|---|---:|---:|
+| 已核 | 27 | **32** |
+| ✅ 正确 | 9 | **12** |
+| ❌/⚠️ 异常 | G14+G15+G16+4 单点 | **+ `SwdReyingzi`（Begin2 缺档）** |
+| ⛔ 不可达 | 3 | 3 |
+| ❓ 未核 | 22 | **17** |
