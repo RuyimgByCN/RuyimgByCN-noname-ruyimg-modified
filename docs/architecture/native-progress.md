@@ -655,7 +655,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 464 轮**：**扩到 30 盘 + 趋势判据**——**30/30 全部跑到终局**（`LoyalistWin` 27 / `RenegadeWin{player:2}` 3）、**1959 步 / 6.15 s**；堆 **312908 → 546868（+228 KB）**、**前 5 盘均值 → 后 5 盘均值 +47832 B（≈1.6 KB/盘）**、峰值 **838 KB** ⇒ **未见阶跃式泄漏**，但**非零增长**且**30 盘不足以区分「稳定缓存」与「缓慢泄漏」** ⇒ **不宣称无泄漏**（需 ≥500 盘或稳态检测）。附带观察：随机走步下 `LoyalistWin` 27/30 **只反映机器人偏差**，**不能**用于评价身份局平衡。
 >
 > **第 465 轮**：**网络路径的结构性障碍已移除**——`apps/game-server/src/main.rs` 把内联的 `Router::new()…` 抽成 **`fn build_router(lobby, original_content) ->
-> **第 466 轮**：**真实 socket 往返跑通**——把 `main()` 的装配段抽成 **`fn bootstrap(cfg) -> Arc<Lobby>`**，并在 `main.rs` 增 `#[cfg(test)] mod net_smoke`：**真实 `TcpListener("127.0.0.1:0")` + `axum::serve`**，用 **`std::net::TcpStream` 发裸 HTTP/1.1**（**零新依赖**）⇒ `/health` **200 ok**、**有状态 `/metrics` 200（877 B）** ✅ ⇒ **「真实网络」由 ❌ 变 ✅（loopback 档）**；**未做**：WS 升级回路、TLS、跨机、浏览器端。
+> **第 466 轮**：**真实 socket 往返跑通**——把 `main()` 的装配段抽成 **`fn bootstrap(cfg) ->
+> **第 467 轮**：**真实 WebSocket 往返跑通**（`net_smoke::websocket_welcome_and_error_roundtrip`）——升级 **101 Switching Protocols**、首帧 **`Welcome{protocol_version:5, versions}`**（服务端主动推送）、发非法文本得 **`Error{BadMessage, "json: expected ident at line 1 column 2"}`**（客户端→服务端→回复）⇒ **WS 升级 + 双向消息已验证**；**未做**：TLS、跨机、浏览器端、**用 WS 跑整局对局**。
+>
+ Arc<Lobby>`**，并在 `main.rs` 增 `#[cfg(test)] mod net_smoke`：**真实 `TcpListener("127.0.0.1:0")` + `axum::serve`**，用 **`std::net::TcpStream` 发裸 HTTP/1.1**（**零新依赖**）⇒ `/health` **200 ok**、**有状态 `/metrics` 200（877 B）** ✅ ⇒ **「真实网络」由 ❌ 变 ✅（loopback 档）**；**未做**：WS 升级回路、TLS、跨机、浏览器端。
 >
  Router`**（`main()` 只负责装配→bind→serve），`cargo build -p game-server` 通过 ✅。**但仍无网络测试** ❌：`Lobby::new` 需 6 个装配参数且均在 `main()` 就地装配 ⇒ **下一步（机械可做）**抽出 `bootstrap_lobby(cfg)`，再用**裸 HTTP/1.1 + `TcpStream`（零新依赖）**在 `127.0.0.1:0` 做真实 socket 往返；**环境限制**：`/bin/ps` 已实测被沙箱拒绝，监听取证未尝试 ⇒ 「真实网络」**仍未验收**。
 >

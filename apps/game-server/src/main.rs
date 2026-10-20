@@ -565,4 +565,77 @@ mod net_smoke {
         );
         handle.abort();
     }
+    /// **真实 WebSocket 往返**：升级 `/ws` → 收到 `Welcome` → 发一条非法文本 → 收到错误回复。
+    ///
+    /// 口径：覆盖 **WS 升级握手 + 服务端主动推送 + 客户端→服务端→回复** 三段；
+    /// 不含 TLS、代理与浏览器实现差异。
+    #[test]
+    fn websocket_welcome_and_error_roundtrip() {
+        use futures_util::{SinkExt, StreamExt};
+
+        let cfg = test_cfg("ws");
+        let lobby = bootstrap(&cfg);
+        let app = build_router(lobby, ServeDir::new(&cfg.original_content_root));
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .expect("runtime");
+
+        rt.block_on(async move {
+            let l = tokio::net::TcpListener::bind("127.0.0.1:0")
+                .await
+                .expect("bind");
+            let addr = l.local_addr().expect("addr");
+            let server = tokio::spawn(async move {
+                let _ = axum::serve(l, app).await;
+            });
+
+            let url = format!("ws://{addr}/ws");
+            let (mut ws, resp) = tokio_tungstenite::connect_async(&url)
+                .await
+                .expect("ws connect");
+            eprintln!("DBG WS 升级：{url} -> status {}", resp.status());
+
+            // ① 服务端主动推送 Welcome
+            let first = tokio::time::timeout(std::time::Duration::from_secs(10), ws.next())
+                .await
+                .expect("welcome timeout")
+                .expect("welcome frame")
+                .expect("welcome ok");
+            let first_text = first.to_text().expect("text frame").to_string();
+            eprintln!(
+                "DBG WS Welcome：{}",
+                first_text.chars().take(90).collect::<String>()
+            );
+            assert!(
+                first_text.contains("Welcome") || first_text.contains("welcome"),
+                "首帧应为 Welcome：{first_text}"
+            );
+
+            // ② 发一条非法文本 ⇒ 应收到解析错误回复
+            ws.send(tokio_tungstenite::tungstenite::Message::Text(
+                "not-a-json".to_string().into(),
+            ))
+            .await
+            .expect("send bad");
+            let second = tokio::time::timeout(std::time::Duration::from_secs(10), ws.next())
+                .await
+                .expect("error timeout")
+                .expect("error frame")
+                .expect("error ok");
+            let second_text = second.to_text().expect("text frame2").to_string();
+            eprintln!(
+                "DBG WS 错误回复：{}",
+                second_text.chars().take(120).collect::<String>()
+            );
+            assert!(
+                second_text.to_lowercase().contains("error")
+                    || second_text.contains("BadMessage")
+                    || second_text.contains("bad"),
+                "非法文本应得到错误回复：{second_text}"
+            );
+            let _ = ws.close(None).await;
+            server.abort();
+        });
+    }
 }

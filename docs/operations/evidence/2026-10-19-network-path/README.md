@@ -39,14 +39,31 @@ test result: ok. 1 passed; 0 failed; 0 ignored
 | **有状态端点 `/metrics`** | ✅ **200 OK**，body **877 字节** |
 | 依赖 | ✅ **零新增**（只用 `std`）|
 
+## 1.2 ✅ 第三轮：**真实 WebSocket 往返跑通**
+
+`#[cfg(test)] mod net_smoke::websocket_welcome_and_error_roundtrip`（`tokio-tungstenite` 已是依赖）：
+
+```
+DBG WS 升级：ws://127.0.0.1:57880/ws -> status 101 Switching Protocols
+DBG WS Welcome：{"type":"Welcome","payload":{"connection_id":1,"protocol_version":5,"versions":{"engine_ap…
+DBG WS 错误回复：{"type":"Error","payload":{"code":"BadMessage","message":"json: expected ident at line 1 column 2","room_id":null}}
+```
+
+| 判据 | 结果 |
+|---|---|
+| **WS 升级握手** | ✅ **101 Switching Protocols** |
+| **服务端主动推送** | ✅ 首帧 `Welcome`（`protocol_version: 5`、含 `versions`）|
+| **客户端→服务端→回复** | ✅ 发非法文本 ⇒ 收到 `Error{BadMessage, "json: expected ident …"}` |
+| 关闭 | ✅ `ws.close(None)` 正常收尾 |
+
 ## 2 做到了什么 / 没做到什么（**如实**）
 
 | 项 | 状态 |
 |---|---|
 | 路由可从测试侧构造 | ✅ **已抽取**（`build_router`，`cargo build -p game-server` 通过）|
 | 真实监听 + HTTP 往返测试 | ✅ **已做**（`/health` + `/metrics`，见 §1.1）|
-| WS 握手/回路测试 | ❌ **未做** |
-| TLS / 跨机 / 浏览器端 | ❌ **未做** |
+| WS 握手/回路测试 | ✅ **已做**（升级 101 + `Welcome` + `Error` 往返，见 §1.2）|
+| TLS / 跨机 / 浏览器端 / 真实对局走 WS | ❌ **未做**（本轮 WS 只验握手与错误回路，**未**用 WS 跑整局）|
 
 ## 3 为什么**还**写不出网络测试（**精确前置条件**）
 

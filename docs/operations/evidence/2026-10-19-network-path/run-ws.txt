@@ -1,0 +1,6 @@
+DBG WS 升级：ws://127.0.0.1:57896/ws -> status 101 Switching Protocols
+DBG WS Welcome：{"type":"Welcome","payload":{"connection_id":1,"protocol_version":5,"versions":{"engine_ap
+DBG WS 错误回复：{"type":"Error","payload":{"code":"BadMessage","message":"json: expected ident at line 1 column 2","room_id":null}}
+DBG 真实网络往返：127.0.0.1:57898 -> HTTP/1.1 200 OK
+DBG 真实网络往返（有状态端点 /metrics）：127.0.0.1:57898 -> HTTP/1.1 200 OK；body_len=877
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.01s
