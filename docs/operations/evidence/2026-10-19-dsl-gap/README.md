@@ -173,3 +173,33 @@ Int Bool Relation Error SkillPileCount
 - 若某个 effect **已有派发**、只是 **DSL 关键字没接**（如 `damage`/`draw_cards` 已有 ✓），
   那么**只在 `content-compiler` 加关键字**即可 ⇒ **这类才是可做的**；
 - 本轮**未逐一核对**「5 个 effect 是否已有派发」⇒ **下一步**：查 `dispatch_*.rs` 里是否已有 judge/choose_target 的实现。
+
+---
+
+## 9 追踪：effect 缺口的**接线路径**（比 query 类宽）
+
+### 9.1 已确认的事实
+
+| # | 事实 | 依据 |
+|---|---|---|
+| 1 | **`rule-api` 里没有 effect 种类枚举** —— `effect.rs` 只有 6 个**区域选择**变体（`Equip`/`HandEquip`/`HandEquipJudge`/`Judge`/`EquipJudge`/`Hand`），**不是效果种类** | `crates/rule-api/src/effect.rs` |
+| 2 | VM 的效果指令是**通用的 `Op::HostEffect(u16)`** —— 效果由**宿主按 tag 编号**处理，不是固定枚举 | `rule-vm/src/bytecode.rs:227` |
+| 3 | tag 常量在 **`rule-vm`**（**tracked** ✅）| `effect_tag`（45 个常量）|
+| 4 | DSL 效果接线在 **`content-compiler/src/codegen/effect_*.rs`** —— **混合跟踪**（`effect_resolve_wdb_yangyi.rs`、`effect_ban_active_until_turn_end.rs` 等**未跟踪** ❌）| `git ls-files` |
+| 5 | query 类的 host 端 match **穷举且无 catch-all** ⇒ **新增 query 变体必然改未跟踪文件** ❌ | `engine-core/src/query/{cache.rs,mod.rs}` |
+| 6 | effect 的 **host 处理位置未确认**（可能在 `engine-native/src/rvm_ops.rs` ✅ 或 `engine-core` ❌）| **未查** |
+
+### 9.2 因此
+
+| 缺口类型 | 能否在可修改范围落地 | 理由 |
+|---|---|---|
+| **query（3 个）**：`history_count`/`is_chained`/`trigger.num` | ❌ **不能** | 需新增 `QueryRequest` 变体 ⇒ 撞 §7.2 的穷举 match |
+| **effect（5 个）**：`remove_skill`/`judge`/`choose_target`/`card_pile_search`/`force_die` | ⚠️ **待定** | tag 与 DSL 接线层**部分 tracked**；**host 处理位置未确认** ⇒ 若在 `rvm_ops.rs`（tracked）则**可做** |
+
+### 9.3 本轮**没有**回答的问题
+
+1. `judge`/`choose_target`/`remove_skill`/`card_pile_search`/`force_die` 在 **`engine-core` 里是否已有实现**（**部分可能已有** —— §8.4 的例外）；
+2. `Op::HostEffect(tag)` 的 **host 实现在哪个 crate**（决定 5 个 effect 缺口是否可做）；
+3. `effect_tag` 的 **45 个常量**里有没有 map 到 judge/choose_target 的（**未逐个读注释**）。
+
+⇒ **下一步最省力的一步**：查 `Op::HostEffect` 的 host 实现落在哪个文件，以及 `effect_tag` 里是否已有 judge/choose_target 的 tag。

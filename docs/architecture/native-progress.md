@@ -749,6 +749,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 516 轮**：**9 个缺口 ↔ 46 个已有 `QueryRequest` 变体逐个核对**——**结论：只有 1 个已有对应**：**`round` ⇒ `RoundNumberCapped`**（**语义近似但不同**：它是「轮数被内容提供的上限截断」⇒ 需传大上限 ✓）；其余 **8 个全无**：`history_count`/`is_chained`/`trigger.num`（**query 类，需新增变体 ⇒ 撞 `engine-core` 穷举 match** ✗）与 `remove_skill`/`judge`/`choose_target`/`card_pile_search`/`force_die`（**effect 类**）；**更要紧的发现**：**effect 派发也在未跟踪区** —— `effect/primitives/mod.rs`（派发表）**tracked** ✓，但 `dispatch_*.rs`（每个效果一个文件）**全部 UNTRACKED** ✗ ⇒ **5 个 effect 缺口同样被阻塞**；⇒ **5 个真规则候选无一能在当前可修改范围内落地** ❌ （`dz_gs_yinfu` 差 `remove_skill`+`history_count`、`boss_danshu` 只差 `judge`）；**仍可能的例外**：若某 effect **已有派发**只是 DSL 关键字没接（如 `damage`/`draw_cards` ✓）⇒ **只在 `content-compiler` 加关键字即可** ✓，**本轮未查**。
 >
+> **第 517 轮**：**effect 缺口的接线路径追踪**（比 query 类宽）——已确认六条事实：①**`rule-api` 没有 effect 种类枚举**（`effect.rs` 的 6 个变体是**区域选择**不是效果种类）；②VM 效果是**通用 `Op::HostEffect(u16)`**，由**宿主按 tag** 处理；③tag 常量在 **`rule-vm`（tracked ✓，45 个）**；④DSL 效果接线在 **`content-compiler/src/codegen/effect_*.rs`（混合跟踪 ✓✗）**；⑤query 的 host match **穷举无 catch-all** ⇒ **query 类 3 个缺口确定阻塞** ❌；⑥**effect 的 host 处理位置未确认** ⚠️ （若在 `rvm_ops.rs` tracked ⇒ **5 个 effect 缺口可做**）；⇒ **本轮把「query 类确定阻塞 / effect 类待定」分开** ✓，**未回答问题**：`judge` 等是否已在 `engine-core` 实现、`Op::HostEffect` 的 host 实现在哪个 crate、`effect_tag` 里是否已有对应 tag。
+>
+
 
 
 
