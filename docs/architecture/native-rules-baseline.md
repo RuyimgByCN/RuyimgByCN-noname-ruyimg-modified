@@ -4601,3 +4601,34 @@ v7 的「只实现一半」判断，经**三条独立证据**确认：
 1. **52 处都是「按阶段触发」的宿主行为** —— **其中绝大多数需要与各自上游的 `phase*Begin/End` 逐一对照**；
 2. **本轮只对照了 2 个**（`Xiuluo`/`Miedao`），**其余 50 个未对照** ❗；
 3. **`Phase::Judge` 组最大（14 条）** —— **若上游对应的是准备阶段，则可能有同类错位** ⇒ **按组核对比逐条核对便宜** ✅。
+
+### ⚠ **`Phase::Judge` 组（14 条）抽查：5 条中 5 条与上游不符**（2026-10-19，第 572 轮）
+
+**14 条**（`begin=true` 且 `Phase::Judge`）的 key：
+
+```
+host:hyunshen2  host:daixing2  host:lexue  host:zhenjiu2  host:huanxing
+host:huajin2    host:xj_qianfang  host:hlss_fengqi  host:swd_xiuluo
+host:diyguhuo   host:gujian_food_yougeng  host:huanle_xuelunyang
+host:wudian_geju  host:baiyi
+```
+
+**抽查 5 条**（都来自 `character/swd/skill.js`）与上游 `trigger` 对照：
+
+| 技能 | 上游 `trigger` | 原生 filter | 判定 |
+|---|---|---|---|
+| `zhenjiu2`（276 B）| **`player: phaseBegin`** | `Phase::Judge` | ⚠️ **窄化**（**任意阶段开始 → 只在判定阶段**）|
+| `hyunshen2`（409 B）| **`player: phaseBegin`** | `Phase::Judge` | ⚠️ **窄化** |
+| `huanxing`（**2168 B**）| **`player: phaseBegin`** | `Phase::Judge` | ⚠️ **窄化** |
+| `lexue`（**35 B**）| **（无 `trigger`）** | `Phase::Judge` | ⚠️ **上游无触发、原生有限定** |
+| **`huajin2`（115 B）** | **`source: damageBegin`** | **`Phase::Judge`** | ❗ **完全不同**（**伤害开始 vs 判定阶段**）|
+
+### 结论（**谨慎**）
+
+1. **5/5 抽查都与上游不符** —— 其中 **4 条是「任意阶段 → 仅判定阶段」的窄化** ⚠️，**1 条是「伤害开始 → 判定阶段」的错位** ❗；
+2. **但不能直接判缺陷** ❗ —— **上游 `phaseBegin` 常配合 `filter` 限定**（如「若你有判定牌」），
+   **本轮未读上游 `filter` 内容** ✗ ⇒ **「窄化」可能是「把 filter 条件提进了阶段判断」** ✓；
+3. **`huajin2` 的差异最可疑**（**`damageBegin` 与判定阶段无关** ❗）—— **需优先核对**；
+4. ⇒ **`Phase::Judge` 组标记为「高度可疑（5/5 抽查不符）」** ⚠️ —— **不是确认缺陷，但是最值得下一步核对的一组** ✅。
+
+**下一步**：读 `huajin2` 的上游 `filter`/`content`（**115 B，很小** ✅）+ 原生 step ⇒ **一条即可定性**。

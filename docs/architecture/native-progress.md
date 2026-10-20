@@ -881,6 +881,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 572 轮**：**宿主「按阶段过滤」行为普查（52 处）**——扫 `filtering*.rs` + `filtering/*.rs` ✓：**`Phase::Judge` begin=true × 14** ✓、**`Phase::End` begin=false × 13** ✓、`Phase::End` begin=true × 8 ✓、`Phase::Play` 5+3 ✓、**`Phase::Draw` begin=true × 5** ✓、**`Phase::Discard` begin=true × 1**（**全表唯一** ✓）；⇒ **两个已确认缺陷在表中的位置**：**`Xiuluo` 属 `Phase::Judge` 组** ✗（**上游是准备阶段** ✓）、**`Miedao` 是全表唯一 `Phase::Discard`** ✓（**缺 `Phase::Draw` 那一半** ✓）；**用途**：**52 处中只对照了 2 个** ✗，**其余 50 个未对照** ✓ ⇒ **`Phase::Judge` 组最大（14 条）⇒ 按组核对比逐条便宜** ✓。
 >
+> **第 573 轮**：**`Phase::Judge` 组抽查：5/5 与上游不符**（**重要发现**）——列出 14 条 key 后抽查 5 条上游 `trigger`：**`zhenjiu2`/`hyunshen2`/`huanxing`（2168 B）上游都是 `player: phaseBegin`**（**任意阶段开始** ✓）**而原生 filter 是 `Phase::Judge`** ✗ ⇒ **窄化** ⚠️；**`lexue`（35 B）上游无 trigger** ✗ 而原生有限定 ⚠️；**`huajin2`（115 B）上游是 `source: damageBegin`** ✗ 而原生是 `Phase::Judge` ⇒ **完全不同** ❗；**谨慎结论**：**5/5 不符** ✓ 但**不能直判缺陷** ✗ —— **上游 `phaseBegin` 常配合 `filter` 限定** ✓，**本轮未读上游 filter** ✗ ⇒ **「窄化」可能是「把 filter 提进阶段判断」** ✓；**`huajin2` 最可疑**（**115 B 很小，一条即可定性** ✓）；⇒ **`Phase::Judge` 组标记「高度可疑（5/5 抽查不符）」** ✓。
+>
+
 
 
 
