@@ -842,6 +842,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 564 轮**：**交接索引缺口表补 G9/G10**（由 7 条到 9 条）——**G9 `jifeng`**（**缺 `mod.selectTarget` 面**：上游「单目标 `sha`/`trick` ⇒ 可指定任意多目标」，**原生未见对应** ✗）；**G10 `swd_xiuluo`**（**`phaseZhunbeiBegin` vs `PhaseBegin` + `direct` 自动性** ⇒ **读 `step` 是否按「准备阶段」过滤** ✓）；⇒ **缺口表：G1、G2、G4–G10 = 9 条** ✓（**G3 已消解** ✓）；**汇总表同步为「12 项外部依赖 + 9 条实现缺口」** ✓。
 >
+> **第 565 轮**：**U05-SWD v7：读 filter 发现两处真差异（重要更正）**——`Phase` 事件**携带 `phase` 字段** ✓，**宿主 filter 按阶段过滤** ✓ ⇒ **「`PhaseBegin`」不等于「任意阶段开始」** ❗：**①`swd_xiuluo` 的 filter 是 `Phase::Judge`（判定阶段）** ✗，**上游是 `phaseZhunbeiBegin`（准备阶段）** ✗ ⇒ **G10 升级为「确认缺陷（阶段错位）」** ✓；**②`miedao` 的 filter 只有 `Phase::Discard`** ✗ —— **上游 `miedao1` 是 `phaseDrawBegin`（多摸）+ `miedao2` 是 `phaseDiscardBegin`（多弃）** ✓ ⇒ **「多摸」那一半没有对应** ✗ ⇒ **v5 的「合并型一致」判断错误** ❌，**应记为「部分实现」** ✓；⇒ **U05-SWD 真实缺口 4 条**（`miedao` 半、`swd_xiuluo` 阶段错位、`jifeng` 缺 `mod`、`hxunzhi2` 未实现 ✓）**比 v6 多 1 条** ✓。
+>
+
 
 
 

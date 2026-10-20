@@ -4492,3 +4492,45 @@ content: discardPlayerCard(player, 2, "hj", "是否一张手牌来弃置一张�
 | ⚠️ 档位待确认 | **1**（`swd_xiuluo`，准备阶段 vs 阶段开始）|
 | ❗ 未实现 | **1**（`hxunzhi2`）|
 | ❓ 上游缺口 | **2**（`tianxiang2`/`xuanyuanjian2`）|
+
+### U05-SWD **v7**：读 filter 后发现**两处真差异**（同日，重要更正）
+
+`Phase` 事件**携带 `phase` 字段**（`event.rs:204-205`），宿主 filter 会**按阶段过滤**
+（例：`filtering/common.rs:24` 的 `Phase::End` 过滤）—— **因此「`PhaseBegin`」不等于「任意阶段开始」** ❗
+
+#### ① `swd_xiuluo`：filter 用的是 **`Phase::Judge`（判定阶段）**，上游是**准备阶段**
+
+```rust
+HostBehavior::Xiuluo => matches!(event,
+    EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+        if *player == owner)
+    && !judge.is_empty() && !hand.is_empty()
+```
+
+上游：**`phaseZhunbeiBegin`（准备阶段）** ⇒ 原生：**`Phase::Judge`（判定阶段）** ⇒ **阶段不同** ❗
+⇒ **G10 从「档位待确认」升级为「确认缺陷（阶段错位）」** ✅
+
+#### ② `miedao`：**v5 的「合并」结论错误** —— 它只实现了 `miedao2` 那一半
+
+```rust
+// 灭道·弃：自己弃牌阶段开始且体力未满
+HostBehavior::Miedao => matches!(event,
+    EventData::Phase { player, phase: crate::event::Phase::Discard, begin: true }
+```
+
+上游是**两个组技**：**`miedao1` = `phaseDrawBegin`（摸牌阶段，多摸）** + **`miedao2` = `phaseDiscardBegin`（弃牌阶段，多弃）**。
+原生 filter **只有 `Phase::Discard`** ⇒ **「多摸」那一半没有对应** ❗
+
+⇒ **v5 的「两个 `phase*Begin` 合并为一个 `PhaseBegin`」判断错误** ❌ ——
+实际是 **「只实现了弃牌阶段的那一半」** ⚠️ ⇒ **`miedao` 应记为「部分实现」**，不是「合并型一致」。
+
+#### v7 账（**取代 v5/v6 的对应条目**）
+
+| 项 | v5/v6 记录 | **v7 实测** |
+|---|---|---|
+| `miedao` | ✅ 合并型一致 | ❗ **只实现 `miedao2`（弃牌）一半，缺 `miedao1`（摸牌）** |
+| `swd_xiuluo` | ⚠️ 档位待确认 | ❗ **确认：`Phase::Judge` vs 上游准备阶段** |
+| `jifeng` | ❗ 缺 `mod` 面 | 不变 |
+| `hxunzhi2` | ❗ 未实现 | 不变 |
+
+⇒ **U05-SWD 的真实缺口：`miedao`（半个）、`swd_xiuluo`（阶段错位）、`jifeng`（缺 `mod`）、`hxunzhi2`（未实现）= 4 条**，**比 v6 估计多 1 条**。
