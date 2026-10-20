@@ -268,3 +268,43 @@ L08  L11  L12  L14  L25   U09  U10  U11
 | 目标平台 | 构建级 | **构建级**（不变）|
 
 **⇒ 「完成八项 = 0」这个结论不变** ✅ —— 但**规则差异的真实进度从「5」变成「0」** ❗
+
+---
+
+## 附 6：**「组合 11」的来源归属复核：可能是 12**（2026-10-19）
+
+### 参与包（`compose-packages.txt`，**20 个**）
+
+```
+boss-zhugeliang  d3  doomsday-brawl  epic-cards  hero-kill  huanle  longxue
+mark-supplement  select-beautify  shaai-ow  shaai-xianjian
+shahai-gujian  shahai-gwent  shahai-hearth  shahai-mtg  shahai-swd  shahai-yunchou  shahai-zhenfa
+wudian  wuxing
+```
+
+### 按来源归并
+
+| 来源 | 包 | 计 |
+|---|---|---:|
+| **杀海拾遗（`U05`）** | `shaai-ow`/`shaai-xianjian`/`shahai-{gujian,gwent,hearth,mtg,swd,yunchou,zhenfa}` | **9 包 = 1 来源** |
+| **其余 11 个包** | `boss-zhugeliang`/`d3`/`doomsday-brawl`/`epic-cards`/`hero-kill`/`huanle`/`longxue`/`mark-supplement`/`select-beautify`/`wudian`/`wuxing` | **11 包 = 11 来源**？|
+
+⇒ **1 + 11 = 12 个来源** ❗（**不是 11** ✗）
+
+### 但 `boss-zhugeliang` 的归属**未确定** ❓
+
+**本会话此前已发现**：**`boss-zhugeliang-upstream-liuli` 没有计入签署表的任何一行**（**见附 1**）。
+
+| 情形 | 来源数 |
+|---|---:|
+| **`boss-zhugeliang` 归 `L03`（boss，第 2 个包）** | **12** |
+| **`boss-zhugeliang` 是独立来源** | **13** |
+| **`boss-zhugeliang` 不计**（**当前表**） | **11** ✅ **= 表现值** |
+
+⇒ **「组合 11」与「`boss-zhugeliang` 未计入」是一致的** ✅
+⇒ **一旦把 `boss-zhugeliang` 补进 `L03`，组合应变为 12** ⚠️
+
+### 结论
+
+**「11」不是错的** —— **它是「不含 `boss-zhugeliang`」时的值** ✓
+⇒ **与附 1 的「包数合计 40 ≠ 41」是同一个根因** ✅ —— **两处必须一起改** ❗
