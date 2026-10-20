@@ -187,6 +187,7 @@
 | **3** | **`swd_xiuluo` 阶段错位** | **1** | ~~`Phase::Judge` ⇒ 准备阶段~~ **不可行**（`Phase` 无 `Prepare`，见 G18）⇒ **需扩枚举** | **中-大** ⚠️ | **原估计作废** ❌ |
 | **4** | **`huajin2` 完全错位** | **1** | `filtering/swd.rs` 的 **`Phase::Judge` ⇒ `damageBegin`（`EventKind::DamageBefore`）** | **1 行** | **技能目前完全不生效** ❗ |
 | **5a** | **G19：`global` 被写成 `!= owner`（`swd_zhuhai`/`swd_tiebi`/`swd_rexue`）** | **3** | **删掉 `!= owner`**（各 1 行）| **3 行** | **18 条候选全核完，15 条一致、3 条确认（第 652–654 轮）** |
+| **5b** | **`reguhuo` 每回合一次未实现（可无限次用）** | **1** | **用后加 `reguhuo_phase` 标记**（`EPIC_REGUHUO_KEY` 已定义未接线）| **1 处 + 1 处读数** | **第 680 轮追查：常量、step 收尾、activation 门槛三处均无痕迹** |
 | **5** | **`hlss_fengqi` 多值触发** | **1** | **只有「结束」可表达；「准备」不可表达**（G18）| **中-大** ⚠️ | **原「1 处」作废** ❌ |
 | **6** | **`miedao` 缺多摸** | **1** | **`filtering` 加 `Phase::Draw` 分支 + `step` 加 `draw_num += maxHp - hp`**；**`Phase::Draw` 的 filter 写法有 5 处现成范本**（`SwdReyingzi`/`YunchouXiongzi`/`XianjianZhaoyao` 等）✅ | **2 处** | 与 `miedao2` 对称；**范本齐全** |
 | **7** | **G15：`before`/`after`/`Begin2` 缺档** | **≥5** | **新增「阶段之前/之后/第二次」档**（或 `EventKind` 扩展）| **中** | **需设计**，非修补 ⚠️ |
