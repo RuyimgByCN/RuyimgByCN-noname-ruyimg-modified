@@ -75,3 +75,38 @@ room2 `rev=5`、room3 `rev=4`（仍有 `PlayCard`）。
 cd noname-next
 cargo test --offline -p game-server --test long_run_bot -- --ignored --nocapture
 ```
+
+---
+
+## 6 **重大修正**（同日第二轮）：`ResolveChoice` 与 `legal_actions` 刷新
+
+### 6.1 修了什么
+
+| # | 修正 | 依据 |
+|---|---|---|
+| 1 | `ResolveChoice` **原样使用**权威给出的 `selections`（此前自行构造 `selections: vec![]`）| 该动作**由引擎生成**，选择向量本就合法 |
+| 2 | **每步**都用最新结果的 `legal_actions` **覆盖**（此前只在非空时覆盖）| 过期动作 ⇒ `not current` / `choice` 拒绝 |
+| 3 | 两条连接各自维护 `actor` 与 `legal`（改用 `connection_id = conn+1`）| 行动者可能是任一方 |
+
+### 6.2 效果：**接受率 14/14 = 100%**（此前 14/960）
+
+```
+RESULT bot rooms=4 rounds=60 submitted=14 accepted=14 snapshots=240 max_revision=9
+DBG bot 终局：reasons={"accepted": 14}
+```
+
+⇒ **此前 946 条拒绝的两大主因已被消除**（`InvalidChoice` 238 + `not current` 233 + `choice` 475 全部消失）。
+
+### 6.3 新瓶颈（**根因已定位**）
+
+```
+DBG bot 终局：room 0 rev=9 legal=[0, 0]
+```
+
+**两条连接的 `legal_actions` 同时为空** ⇒ 对局停在**等待选择**，而：
+* `legal_actions` 只随**该连接自己的** `CommandOutcome` 下发；
+* **选择请求**是经 **`Outbound` 通道**推送的（`mpsc::Sender<String>`，JSON 文本）——
+  本测试**把该通道丢弃了**（`let (tx, _rx) = ...`）✗。
+
+⇒ **下一步（明确）**：保留 `_rx`，从推送的 JSON 中解析 **`ChoiceRequest`**（含 `choice_id` 与合法选项），
+据此为**正确连接**构造 `ResolveChoice`。做完这一步才能真正「整局连续推进」。

@@ -1,0 +1,10 @@
+DBG bot 引导：room 0 rev=2 legal=[6, 0] why=["accepted", "Rejected { reason: IllegalAction { code: \"no"]
+DBG bot 引导：room 1 rev=2 legal=[6, 0] why=["accepted", "Rejected { reason: IllegalAction { code: \"no"]
+DBG bot 引导：room 2 rev=2 legal=[6, 0] why=["accepted", "Rejected { reason: IllegalAction { code: \"no"]
+DBG bot 引导：room 3 rev=2 legal=[7, 0] why=["accepted", "Rejected { reason: IllegalAction { code: \"no"]
+RESULT bot rooms=4 rounds=60 submitted=14 accepted=14 snapshots=240 max_revision=9 elapsed_ms=198 throughput_cmds_per_s=71
+DBG bot 终局：reasons={"accepted": 14}
+DBG bot 终局：room 0 rev=9 legal=[0, 0]
+DBG bot 终局：room 1 rev=4 legal=[0, 0]
+DBG bot 终局：room 2 rev=5 legal=[0, 0]
+DBG bot 终局：room 3 rev=4 legal=[0, 0]
