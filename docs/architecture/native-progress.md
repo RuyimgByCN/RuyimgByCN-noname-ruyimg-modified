@@ -939,6 +939,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 602 轮**：**批处理启发式不可靠 + 算术修正（未核 17 → 20）**——试了一次性判定 52 处（`Phase::X`↔`phaseX` 前缀 + `begin`↔`Begin/End`）✓：**得到 一致 5 / 需判定 14 / 未定位 33** ✗ ⇒ **与手工核对的「12 正确」不一致** ❌ ⇒ **启发式太粗** ✓，原因四条：**key 名不同**（`xj_zhaoyao` vs `zhaoyao` ✓）、**`trigger` 多值** ✓、**`before` 既非 Begin 也非 End** ✓、**同一行为多个 `Phase` 分支** ✓（`Xiefang` ✓）⇒ **批处理只能找候选，不能定案** ✅；**另修正算术**：**上一轮写「已核 32 / 未核 17」——32+17=49≠52** ❌ ⇒ **正确未核 20** ✅（**已改三处** ✓）。
 >
+> **第 603 轮**：**`Phase::End, begin=true` 组（8 条）：1 一致 / 7 未定位**——**`SwdZhuhai` 上游 `global: phaseJieshuBegin`**（**`Jieshu`=结束阶段** ✓）= **原生 `End, begin=true`** ✅ **一致**；**`PhaseEndRecoverOrDraw` 是通用宿主行为非技能** ✓；**其余 6 条（`WudianZiyu`/`GujianFood*`×3/`WudianZhucheng`/`WudianPaotaiFire`）key 是原生自定义命名** ✗ ⇒ **按 key 查上游 `skill.js` 查不到** ❗ ⇒ **需反查「包内 `skills[]` 的 name ↔ mapping」** ✓ ⇒ **「key 名 ≠ 上游名」的条目不能靠 `grep` 定位** ✅；**进度**：**已核 33 / 正确 13 / 未核 19** ✓（**交接页已同步** ✓）。
+>
+
 
 
 

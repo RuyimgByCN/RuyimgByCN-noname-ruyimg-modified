@@ -4908,3 +4908,30 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 ### 算术修正
 
 上一轮写「已核 32 / 未核 17」—— **32 + 17 = 49 ≠ 52** ❌ ⇒ **正确是未核 20** ✅（**已改**）
+
+### `Phase::End, begin=true` 组（8 条）：**1 一致 / 7 未定位**（第 602 轮）
+
+| 行为 | 原生 | 上游 `trigger` | 判定 |
+|---|---|---|---|
+| **`SwdZhuhai`** | `End, begin=true` | **`global: phaseJieshuBegin`**（**`Jieshu` = 结束阶段**）| ✅ **一致** |
+| `PhaseEndRecoverOrDraw` | `End, begin=true` | **（通用宿主行为，非技能）** | —— |
+| `WudianZiyu` | `End, begin=true` | 未找到（`wudian_ziyu`）| ❓ |
+| `GujianFoodLiyutang` | `End, begin=true` | 未找到 | ❓ |
+| `GujianFoodMapodoufu` | `End, begin=true` | 未找到 | ❓ |
+| `GujianFoodZiyangdan` | `End, begin=true` | 未找到 | ❓ |
+| `WudianZhucheng` | `End, begin=true` | 未找到 | ❓ |
+| `WudianPaotaiFire` | `End, begin=true` | 未找到 | ❓ |
+
+#### 为什么 7 条「未定位」
+
+**它们的 key 是原生自定义命名**（`gujian_food_*`/`wudian_*`），**上游对应名在包数据的 `skills[].name` 里**，
+**我按 key 直接查上游 `skill.js` 查不到** ❗ ⇒ **要反查「包内 `skills[]` 的 name ↔ mapping」** 才能定位上游。
+⇒ **这类「key 名 ≠ 上游名」的条目，不能靠 `grep` 定位** ✅
+
+#### 「52 处」进度
+
+| 项 | 之前 | **现在** |
+|---|---:|---:|
+| 已核 | 32 | **33** |
+| ✅ 正确 | 12 | **13** |
+| ❓ 未核 | 20 | **19** |
