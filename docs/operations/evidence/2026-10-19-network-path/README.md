@@ -15,13 +15,38 @@ fn build_router(lobby: Arc<Lobby>, original_content: ServeDir) -> Router { … }
 **动机**：此前路由**在 `main()` 内部构造**，测试**无法**在 `127.0.0.1:0` 上起真实监听 ⇒
 「真实网络往返」这一面**没有任何可复现证据**。
 
+## 1.1 ✅ 第二轮：**真实 socket 往返已跑通**
+
+把 `main()` 里装配 Lobby 的那段抽成：
+
+```rust
+fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby>   // 扩展导入 → 内容锁 → 目录/资产 → 原生内容 → Lobby
+```
+
+并在 `main.rs` 内新增 `#[cfg(test)] mod net_smoke`：**起真实 `TcpListener("127.0.0.1:0")` + `axum::serve`**，
+用 **`std::net::TcpStream` 发裸 HTTP/1.1**（**零新依赖**）打两个端点：
+
+```
+DBG 真实网络往返：127.0.0.1:57632 -> HTTP/1.1 200 OK
+DBG 真实网络往返（有状态端点 /metrics）：127.0.0.1:57632 -> HTTP/1.1 200 OK；body_len=877
+test result: ok. 1 passed; 0 failed; 0 ignored
+```
+
+| 判据 | 结果 |
+|---|---|
+| 真实 TCP 监听（**临时端口**）| ✅ `127.0.0.1:0` → 实际端口 |
+| 无状态端点 `/health` | ✅ **200 OK**，body `ok` |
+| **有状态端点 `/metrics`** | ✅ **200 OK**，body **877 字节** |
+| 依赖 | ✅ **零新增**（只用 `std`）|
+
 ## 2 做到了什么 / 没做到什么（**如实**）
 
 | 项 | 状态 |
 |---|---|
 | 路由可从测试侧构造 | ✅ **已抽取**（`build_router`，`cargo build -p game-server` 通过）|
-| 真实监听 + HTTP 往返测试 | ❌ **未做** |
+| 真实监听 + HTTP 往返测试 | ✅ **已做**（`/health` + `/metrics`，见 §1.1）|
 | WS 握手/回路测试 | ❌ **未做** |
+| TLS / 跨机 / 浏览器端 | ❌ **未做** |
 
 ## 3 为什么**还**写不出网络测试（**精确前置条件**）
 

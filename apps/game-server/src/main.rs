@@ -50,6 +50,27 @@ async fn main() {
         .init();
 
     let cfg = ServerConfig::from_env();
+    let lobby = bootstrap(&cfg);
+
+    // NC09：启动时恢复落盘的原生房间（存储目录为空/未启用时为空操作）
+    match lobby.restore_native_rooms() {
+        Ok(0) => {}
+        Ok(n) => tracing::info!(rooms = n, "已恢复落盘原生房间"),
+        Err(e) => tracing::warn!(error = %e, "原生房间恢复失败（服务端继续启动）"),
+    }
+
+    let app = build_router(lobby.clone(), ServeDir::new(&cfg.original_content_root));
+
+    let addr = cfg.listen_addr;
+    info!(%addr, "game-server listening");
+    let listener = tokio::net::TcpListener::bind(addr).await.expect("bind");
+    axum::serve(listener, app).await.expect("serve");
+}
+
+/// 装配服务端运行所需的一切（扩展导入、内容锁、目录/资产索引、原生内容、Lobby）。
+///
+/// **从 `main()` 抽出**：便于测试用临时目录构造 Lobby 并在 `127.0.0.1:0` 上起真实监听。
+fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
     let store = PackageStore::open(&cfg.content_store_root).expect("open content store");
     let report = import_extensions(
         &store,
@@ -103,19 +124,7 @@ async fn main() {
         content_assets,
         Arc::new(native_content),
     ));
-    // NC09：启动时恢复落盘的原生房间（存储目录为空/未启用时为空操作）
-    match lobby.restore_native_rooms() {
-        Ok(0) => {}
-        Ok(n) => tracing::info!(rooms = n, "已恢复落盘原生房间"),
-        Err(e) => tracing::warn!(error = %e, "原生房间恢复失败（服务端继续启动）"),
-    }
-
-    let app = build_router(lobby.clone(), ServeDir::new(&cfg.original_content_root));
-
-    let addr = cfg.listen_addr;
-    info!(%addr, "game-server listening");
-    let listener = tokio::net::TcpListener::bind(addr).await.expect("bind");
-    axum::serve(listener, app).await.expect("serve");
+    lobby
 }
 
 /// 构造 HTTP/WS 路由（**从 `main` 抽出**，便于测试在 `127.0.0.1:0` 上起真实监听）。
@@ -458,4 +467,102 @@ async fn handle_socket(socket: WebSocket, lobby: Arc<Lobby>) {
     drop(tx);
     let _ = writer.await;
     info!(conn = conn_id, "connection closed");
+}
+
+#[cfg(test)]
+mod net_smoke {
+    //! **真实 socket 往返**（loopback）：起真实 `TcpListener` + `axum::serve`，用**裸 HTTP/1.1**
+    //! 请求 `/health`（**零新依赖**：只用 `std::net::TcpStream`）。
+    //!
+    //! 口径：验证的是**真实 TCP + HTTP 处理链**（不是 mock、不是直调 handler）；
+    //! **不含** TLS、跨机、WebSocket 升级与浏览器端。
+
+    use super::*;
+    use std::io::{Read, Write};
+    use std::net::TcpStream;
+
+    fn test_cfg(tag: &str) -> ServerConfig {
+        let base = std::env::temp_dir().join(format!("gs-net-{tag}-{}", std::process::id()));
+        let mut cfg = ServerConfig::default();
+        cfg.original_content_root = base.join("orig");
+        cfg.content_store_root = base.join("store");
+        cfg.extensions_root = base.join("ext");
+        cfg.native_packages_root = base.join("np");
+        cfg.native_store_root = base.join("ns");
+        for d in [
+            &cfg.original_content_root,
+            &cfg.content_store_root,
+            &cfg.extensions_root,
+            &cfg.native_packages_root,
+            &cfg.native_store_root,
+        ] {
+            let _ = std::fs::create_dir_all(d);
+        }
+        cfg
+    }
+
+    #[test]
+    fn health_over_real_tcp() {
+        let cfg = test_cfg("health");
+        let lobby = bootstrap(&cfg);
+        let app = build_router(lobby, ServeDir::new(&cfg.original_content_root));
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .expect("runtime");
+        let (addr, handle) = rt.block_on(async {
+            let l = tokio::net::TcpListener::bind("127.0.0.1:0")
+                .await
+                .expect("bind 127.0.0.1:0");
+            let a = l.local_addr().expect("local_addr");
+            let h = tokio::spawn(async move {
+                let _ = axum::serve(l, app).await;
+            });
+            (a, h)
+        });
+
+        let mut sock = TcpStream::connect(addr).expect("connect");
+        sock.set_read_timeout(Some(std::time::Duration::from_secs(10)))
+            .expect("set timeout");
+        write!(
+            sock,
+            "GET /health HTTP/1.1\r\nHost: {addr}\r\nConnection: close\r\n\r\n"
+        )
+        .expect("write request");
+        let mut buf = String::new();
+        sock.read_to_string(&mut buf).expect("read response");
+        let first = buf.lines().next().unwrap_or("<empty>").to_string();
+        eprintln!("DBG 真实网络往返：{addr} -> {first}");
+        assert!(
+            first.starts_with("HTTP/1.1 200"),
+            "应返回 200，实得：{first}"
+        );
+        assert!(
+            buf.trim_end().ends_with("ok"),
+            "响应体应为 ok，实得：{buf}"
+        );
+
+        // 第二个真实请求：`/metrics`（需要 Lobby 状态，验证有状态端点同样可达）
+        let mut sock2 = TcpStream::connect(addr).expect("connect2");
+        sock2
+            .set_read_timeout(Some(std::time::Duration::from_secs(10)))
+            .expect("set timeout2");
+        write!(
+            sock2,
+            "GET /metrics HTTP/1.1\r\nHost: {addr}\r\nConnection: close\r\n\r\n"
+        )
+        .expect("write request2");
+        let mut buf2 = String::new();
+        sock2.read_to_string(&mut buf2).expect("read response2");
+        let first2 = buf2.lines().next().unwrap_or("<empty>").to_string();
+        eprintln!(
+            "DBG 真实网络往返（有状态端点 /metrics）：{addr} -> {first2}；body_len={}",
+            buf2.split("\r\n\r\n").nth(1).map(|b| b.len()).unwrap_or(0)
+        );
+        assert!(
+            first2.starts_with("HTTP/1.1 200"),
+            "/metrics 应返回 200，实得：{first2}"
+        );
+        handle.abort();
+    }
 }
