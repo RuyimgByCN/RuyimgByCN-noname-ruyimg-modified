@@ -5476,3 +5476,23 @@ CardsDiscarded  TurnOverBefore  TurnOvered  LoseHp  DyingSaved  CardsLost  ShaDo
 
 ⇒ **「查不到」的第一反应应该是「试加/去下划线、试加/去扩展前缀」** ✅
 ⇒ **`L20` 的 6 个技能现已全部定位** ✅ —— **可以进入真正的逐条对照**
+
+#### `L20` 三张「西瓜」牌技能的对照（2026-10-19，第 710 轮）
+
+| 技能 | 上游（`标记补充/extension.js`）| 判定 |
+|---|---|---|
+| **`_xigua_xueliangfanbei_`**（`xigua_xueliangfanbei`）| **`trigger: global gameStart`** + `silent` + `charlotte` + `forced`，**`gainMaxHp(hp)` + `recover(hp)`**（**开局按当前体力加体力上限并回复**）| ⚠️ **`gameStart` 这一档在引擎里没有**（**`EventKind` 22 变体无「游戏开始」**）⇒ **需新档位** ❗ |
+| **`_xigua_mopaifanbei_`**（`xigua_mopaifanbei`）| **`trigger: player phaseDrawBegin2`** + `silent` + **`trigger.num += 2`**（**摸牌阶段多摸 2 张**）| ⚠️ **`phaseDrawBegin2` = 「第二次开始」** ⇒ **G15 家族（缺档）** |
+| **`_xigua_zhuwanzhongji_`**（`zhuwanzhongji`）| **`trigger: global dieBegin`** + filter（**死者是主公、自己是忠臣/内奸**）+ 1075 B | ⚠️ **`dieBegin`（死亡前）** ⇒ 引擎有 **`Death`（死亡后）** 但**无 `DeathBefore`** ⇒ **需新档位** ❗ |
+
+### 三条都指向「缺档」，不是「写错」
+
+| 缺档 | 覆盖 |
+|---|---|
+| **「游戏开始」** | `_xigua_xueliangfanbei_` |
+| **「摸牌阶段第二次开始」** | `_xigua_mopaifanbei_`（**G15 家族**）|
+| **「死亡前」** | `_xigua_zhuwanzhongji_` |
+
+⇒ **`L20` 的 6 个技能里，至少 3 个卡在缺档上** ⚠️
+⇒ **加上 `kurou`（390 B，形态待核）与 2 个空壳桩（45/48 B）** ⇒ **`L20` 是「小内容量、高缺档密度」的来源** ❗
+⇒ **这解释了为什么按「内容量升序」的队列不能直接当「便宜程度」用** ⚠️
