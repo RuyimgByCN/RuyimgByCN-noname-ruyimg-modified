@@ -4245,6 +4245,26 @@ HostBehavior::XianjianAnwugu2 => match self.stage {
 
 **未找到（3）**：`tianxiang2`、`xuanyuanjian2`、`xuanyuanjian3` —— 上游**不在本文件**（\(\`xuanyuanjian*\`\) 在两个文件里都出现过一次，需再定位）。
 
+### ⚠ **v0 更正**：原生列的提取脚本有误，至少 1 行是错的（同日）
+
+我的提取正则 `HostBehavior::X\b[^\n]*\n((?:\s{12,}[^\n]*\n){0,9})` 会**越过分支边界**，
+把**下一个分支的字段**当成当前分支的 —— 逐条复核后**已确认一处错误**：
+
+| 行为 | v0 记录 | **复核实测** | 结论 |
+|---|---|---|---|
+| **`Hxunzhi2`** | **`PhaseEnd`** ❌ | **`None`** ✅（注释：「魂殉志 / 殉：**无触发时机（主动面 + 内联臂）**」）| **v0 错** |
+| `Jifeng` | `CardUsed` | **`CardUsed`** ✅（注释：「疾风：自己使用多目标单目标牌（结算窗；锁定）」）| 一致 |
+| `Xiuluo` | `PhaseBegin` | **`PhaseBegin`** ✅ | 一致 |
+| `SwdZhenjiu2` / `SwdHuanxing2` | `PhaseBegin` / `Damage` | **不在 `metadata/common.rs`** ❗（在别的 metadata 文件）| **未复核** |
+
+⇒ **U05-SWD 的「7 一致 / 6 需判定」中，`Hxunzhi2` 那条作废**；
+**其余 5 条「需判定」与 7 条「一致」的数字，在逐条复核前都应视为「未复核」** ❗。
+
+### 正确做法（下一步）
+
+按 `HostBehavior::X =>` 的**分支起始位置切片**（`m.start()` 到**下一个** `HostBehavior::`），
+而不是用固定缩进宽度 —— 这也说明**「用正则读结构化代码」本身就是脆弱手段**。
+
 ### 小结
 
 | 类 | 条数 |
