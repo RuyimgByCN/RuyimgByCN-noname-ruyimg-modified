@@ -943,6 +943,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 604 轮**：**反查自定义命名 key（+2 一致）**——用「**包数据 `skills[].mapping` ↔ `name`**」反查 ✓：**`WudianZhucheng` = `zhucheng`，上游 `player: phaseEnd`** ✅ **一致**、**`WudianPaotaiFire` = `paotai2`，上游 `player: phaseEnd`** ✅ **一致**；**`WudianZiyu` = `ziyu`，上游 `global: phaseEnd`** ⚠️（**已知 G2「触发→主动」** ✓，**但这里 filter 是 `End begin=true` ⇒ 与「Act 主动」并存，需再核** ❓）；**3 条 `GujianFood*` 包内无 `mapping` 指向** ❓（**可能由 `cards[].skills` 授予** ✓）；**进度**：**已核 35 / 正确 15 / 未核 17** ✓；**方法确认**：**「包内 skills[] 是定位上游的正确桥梁」** ✅（**6 条里 3 条一次成功** ✓）。
 >
+> **第 605 轮**：**3 条 `GujianFood*` 定案为「卡牌效果，无上游 trigger 可比」**——检查 ✓：**`shahai-gujian` 的 21 张卡里带 `skills` 的 = 0** ✗、**三个 key 都不在「死键」列表** ✅（**说明它们经 `host.rs` 的 `CardKind → HostSkillDecl` 表挂载** ✓）、**上游 `skills[]` 无对应 `mapping`** ✗ ⇒ **它们是「卡牌效果宿主」** ✓ ⇒ **上游「卡牌」没有 `trigger` 字段** ⇒ **「未定位」是必然的，不是缺失** ✅；**归类修正**：**52 = 35 已核 + 4 不适用（`GujianFood*`×3 + `PhaseEndRecoverOrDraw`）+ 13 未核** ✓（**此前把 4 条「不适用」误算进「未核」** ❌）；**交接页合计行已同步** ✓。
+>
+
 
 
 

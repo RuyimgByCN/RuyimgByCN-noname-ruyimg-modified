@@ -4959,3 +4959,24 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 
 **「包内 `skills[].mapping` ↔ `name`」是定位上游的正确桥梁** ✅ ——
 **6 条里 3 条一次反查成功**（**另 3 条不在 `skills[]` 里，可能在 `cards[].skills`** ❗）。
+
+### 3 条 `GujianFood*` 定案：**卡牌效果，无上游 `trigger` 可比**（第 604 轮）
+
+| 检查 | 结果 |
+|---|---|
+| `shahai-gujian` 的 **21 张卡里带 `skills` 的** | **0 张** |
+| 三个 key **是否在「死键」列表里** | **都不在** ✅ ⇒ **它们通过 `content/host.rs` 的 `CardKind → HostSkillDecl` 表挂载** |
+| 上游 `skills[]` 里是否有对应 `mapping` | **没有** |
+
+⇒ **这三条是「卡牌效果宿主」** ✅ —— **由卡牌触发，不是技能** ⇒
+**上游「卡牌」没有 `trigger` 字段** ⇒ **「未定位」是必然的，不是缺失** ✅
+
+### 归类修正
+
+| 类 | 条数 |
+|---|---:|
+| 已核（有人工对照）| **35** |
+| **不适用**（卡牌效果，无 `trigger` 可比）| **4**（`GujianFood*`×3 + `PhaseEndRecoverOrDraw`）|
+| **未核** | **13** |
+
+⇒ **52 = 35 + 4 + 13** ✅（**此前写「未核 17」时把 4 条「不适用」误算进「未核」** ❌）
