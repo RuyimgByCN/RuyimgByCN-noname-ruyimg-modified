@@ -663,7 +663,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 469 轮（真实网络整局达成）**：`net_smoke::websocket_plays_match_to_completion`——两条真实 WS 连接驱动到终局（`legal_actions` 空时用 `RequestSnapshot` 刷新、快照带 `choice`）：**`outcome=LoyalistWin`、52 步 / 52 次快照 / rev=53、0.22 s**，并断言 `steps>
 > **第 470 轮**：**断线重连跑通**（`net_smoke::websocket_reconnect_restores_seat_and_revision`）——建局得 `reconnect_token`（36 字符）→ 走一步 `rev=2 legal=7` → **断开** → 用 token `JoinRoom` ⇒ **恢复同一 `player_id`（1）且 `rev` 不倒退（=2）** ✅。**顺带发现产品行为**：**房间需凑齐座位才接受命令**（首版单连接提交 `EndPhase` **收不到任何 `CommandOutcome`**，补 B 加入后立刻正常）——不是缺陷，但**未满座位时无明确错误回推**（客户端静默等待）⇒ **已登记待办**：为「座位未满时提交命令」返回明确错误码。
 >
-> **第 471 轮（更正 + 小修）**：**撤回**上一轮「座位未满时无错误回推」❌——服务端**一直**回 `Error`，是**我的测试只等 `CommandOutcome`、忽略了 `Error` 帧**；新增 `websocket_submit_before_match_start_returns_error` 实测 **`code=Conflict message=match not started`** ✅。**同时修一真实小问题**：该错误原经 `map_room_err` 兜底映射为 **`ErrorCode::Internal`**（服务端故障语义 ✗）⇒ 在 `lobby.rs` 增加 `"match not started" => Conflict`，并用 `assert_eq!(code, Conflict)` 锁住。
+> **第 471 轮（更正 + 小修）**：**撤回**上一轮「座位未满时无错误回推」❌——服务端**一直**回 `Error`，是**我的测试只等 `CommandOutcome`、忽略了 `Error` 帧**；新增 `websocket_submit_before_match_start_returns_error` 实测 **`code=Conflict message=match not started`** ✅。**同时修一真实小问题**：该错误原经 `map_room_err` 兜底映射为 **`ErrorCode::Internal`**（服务端故障语义 ✗）⇒ 在 `lobby.rs` 增加 `"match not started" =>
+> **第 472 轮**：**WS 多房间隔离验证**（`net_smoke::websocket_multi_room_isolation`）——**3 个房间**（id **1/2/3**）各两条 WS 连接交替推进 3 轮：每房 `EndPhase` 均 `Accepted`、**各房 rev=4 独立**、**不同 seed ⇒ `state_hash` 互不相同**（断言通过）⇒ **房间不共享引擎、互不干扰** ✅；**未做**：TLS、跨机、浏览器端。
+>
+ Conflict`，并用 `assert_eq!(code, Conflict)` 锁住。
 >
 
 0 && snapshots>0`、`outcome != InProgress`；协议全走 `encode_c2s`/`decode_s2c` ⇒ **「真实网络（loopback 明文 WS）上的完整对局」达成** ✅；**未做**：TLS、跨机、浏览器端、**WS 下多房间并发与断线重连**。

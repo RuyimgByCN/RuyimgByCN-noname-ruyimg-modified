@@ -1,0 +1,4 @@
+DBG 多房间：room#0 id=1 A=1
+DBG 多房间：room#1 id=2 A=1
+DBG 多房间：room#2 id=3 A=1
+DBG 多房间结果：revs=[4, 4, 4]

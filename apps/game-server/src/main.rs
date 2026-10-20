@@ -1279,4 +1279,164 @@ mod net_smoke {
             server.abort();
         });
     }
+    /// **WS 多房间并发**：3 个房间各自两条连接，同时（交替）推进，验证房间间的**隔离**。
+    ///
+    /// 判据：
+    /// 1. 三个 `room_id` 互不相同；
+    /// 2. 每个房间的 `EndPhase` 都拿到 `Accepted`，且**修订号各自独立**；
+    /// 3. 不同 `seed` 的房间 **`state_hash` 不同**（种子真的影响状态，房间不共享引擎）。
+    #[test]
+    fn websocket_multi_room_isolation() {
+        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+        use engine_protocol::{decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage};
+        use futures_util::SinkExt;
+        use tokio_tungstenite::tungstenite::Message;
+
+        type Ws = tokio_tungstenite::WebSocketStream<
+            tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>,
+        >;
+
+        async fn open(url: &str) -> Ws {
+            let (ws, _) = tokio_tungstenite::connect_async(url).await.expect("ws");
+            let mut ws = ws;
+            let _ = next_text(&mut ws).await; // Welcome
+            ws
+        }
+
+        async fn create_room(ws: &mut Ws, seed: u64) -> (u64, u32) {
+            ws.send(Message::Text(
+                encode_c2s(&ClientMessage::CreateRoom {
+                    players: 2,
+                    seed,
+                    password: String::new(),
+                })
+                .expect("enc create")
+                .into(),
+            ))
+            .await
+            .expect("send create");
+            loop {
+                let t = next_text(ws).await;
+                if let Ok(ServerMessage::JoinOk {
+                    room_id, player_id, ..
+                }) = decode_s2c(&t)
+                {
+                    return (room_id, player_id);
+                }
+            }
+        }
+
+        async fn join_room(ws: &mut Ws, room_id: u64) -> u32 {
+            ws.send(Message::Text(
+                encode_c2s(&ClientMessage::JoinRoom {
+                    room_id,
+                    password: String::new(),
+                    preferred_seat: Some(1),
+                    reconnect_token: None,
+                })
+                .expect("enc join")
+                .into(),
+            ))
+            .await
+            .expect("send join");
+            loop {
+                let t = next_text(ws).await;
+                if let Ok(ServerMessage::JoinOk { player_id, .. }) = decode_s2c(&t) {
+                    return player_id;
+                }
+            }
+        }
+
+        /// 提交一条 `EndPhase`，返回 (revision, state_hash)
+        async fn end_phase(ws: &mut Ws, room_id: u64, pid: u32, seq: u64) -> (u64, [u8; 32]) {
+            ws.send(Message::Text(
+                encode_c2s(&ClientMessage::SubmitCommand {
+                    header: MessageHeader::new(room_id, seq, 0),
+                    command: Command {
+                        actor: PlayerId::new(pid),
+                        expected_revision: ExpectedRevision(0),
+                        idempotency_key: IdempotencyKey(seq),
+                        kind: CommandKind::EndPhase,
+                    },
+                    idempotency_key: IdempotencyKey(seq),
+                })
+                .expect("enc submit")
+                .into(),
+            ))
+            .await
+            .expect("send submit");
+            loop {
+                let t = next_text(ws).await;
+                if let Ok(ServerMessage::CommandOutcome { view, result, .. }) = decode_s2c(&t) {
+                    match result {
+                        engine_api::CommandResult::Accepted { .. } => {
+                            return (view.revision, view.state_hash)
+                        }
+                        other => panic!("EndPhase 应被接受，实得 {other:?}"),
+                    }
+                }
+            }
+        }
+
+        let cfg = test_cfg("wsmulti");
+        let lobby = bootstrap(&cfg);
+        let app = build_router(lobby, ServeDir::new(&cfg.original_content_root));
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .expect("runtime");
+
+        rt.block_on(async move {
+            let l = tokio::net::TcpListener::bind("127.0.0.1:0").await.expect("bind");
+            let addr = l.local_addr().expect("addr");
+            let server = tokio::spawn(async move {
+                let _ = axum::serve(l, app).await;
+            });
+            let url = format!("ws://{addr}/ws");
+            const ROOMS: usize = 3;
+
+            let mut a_ws: Vec<Ws> = Vec::new();
+            let mut b_ws: Vec<Ws> = Vec::new();
+            let mut rooms: Vec<(u64, u32)> = Vec::new();
+            for i in 0..ROOMS {
+                let mut a = open(&url).await;
+                let (room_id, pid) = create_room(&mut a, 30_000 + i as u64).await;
+                let mut b = open(&url).await;
+                let _pid_b = join_room(&mut b, room_id).await;
+                eprintln!("DBG 多房间：room#{i} id={room_id} A={pid}");
+                a_ws.push(a);
+                b_ws.push(b);
+                rooms.push((room_id, pid));
+            }
+            let ids: Vec<u64> = rooms.iter().map(|r| r.0).collect();
+            let mut uniq = ids.clone();
+            uniq.sort_unstable();
+            uniq.dedup();
+            assert_eq!(uniq.len(), ROOMS, "三个 room_id 应互不相同：{ids:?}");
+
+            // 交替推进：每轮对每个房间各发一条
+            let mut revs = vec![0u64; ROOMS];
+            let mut hashes: Vec<[u8; 32]> = vec![[0u8; 32]; ROOMS];
+            for round in 0..3u64 {
+                for i in 0..ROOMS {
+                    let (room_id, pid) = rooms[i];
+                    let (rev, hash) = end_phase(&mut a_ws[i], room_id, pid, round + 1).await;
+                    revs[i] = rev;
+                    hashes[i] = hash;
+                }
+            }
+            eprintln!("DBG 多房间结果：revs={revs:?}");
+            for i in 0..ROOMS {
+                assert!(revs[i] > 0, "房间 {i} 应有修订号推进");
+            }
+            assert!(
+                hashes[0] != hashes[1] && hashes[1] != hashes[2] && hashes[0] != hashes[2],
+                "不同 seed 的房间 state_hash 应互不相同（房间不共享引擎）"
+            );
+            for ws in a_ws.iter_mut().chain(b_ws.iter_mut()) {
+                let _ = ws.close(None).await;
+            }
+            server.abort();
+        });
+    }
 }

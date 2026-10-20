@@ -135,6 +135,24 @@ DBG 未开局提交：code=Conflict message=match not started
 
 并用断言的 `assert_eq!(code, Conflict)` **锁住**该映射。
 
+## 1.6 ✅ 第七轮：**WS 多房间隔离**
+
+`net_smoke::websocket_multi_room_isolation`：**3 个房间各自两条 WS 连接**，交替推进 3 轮。
+
+```
+DBG 多房间：room#0 id=1 A=1
+DBG 多房间：room#1 id=2 A=1
+DBG 多房间：room#2 id=3 A=1
+DBG 多房间结果：revs=[4, 4, 4]
+```
+
+| 判据 | 结果 |
+|---|---|
+| 三个 `room_id` 互不相同 | ✅ **1 / 2 / 3** |
+| 每房间 `EndPhase` 均 `Accepted` | ✅ |
+| **各房间修订号独立** | ✅ 每房间各自 **rev=4** |
+| **不同 seed ⇒ `state_hash` 不同** | ✅ 断言通过（**房间不共享引擎**）|
+
 ## 2 做到了什么 / 没做到什么（**如实**）
 
 | 项 | 状态 |
@@ -146,7 +164,7 @@ DBG 未开局提交：code=Conflict message=match not started
 | **用 WS 跑整局** | ✅ **已做**（52 步跑到 `LoyalistWin`，见 §1.4）|
 | TLS / 跨机 / 浏览器端 | ❌ **未做**（**仅 loopback 明文**）|
 | **断线重连**（`reconnect_token`）| ✅ **已做**（同一席位 + 修订号保持，见 §1.5）|
-| WS 下的**多房间并发** | ❌ **未做** |
+| **WS 下的多房间并发** | ✅ **已做**（3 房间隔离，见 §1.6）|
 | **座位未满时提交命令的错误回推** | ✅ **有**（`Conflict` / `match not started`）——上一轮「静默等待」的判断已**更正** |
 | 错误码语义 | ✅ 由 `Internal` 修正为 **`Conflict`**（`map_room_err`）|
 
