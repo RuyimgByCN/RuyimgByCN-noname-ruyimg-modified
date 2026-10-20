@@ -1,0 +1,5 @@
+DBG bot 引导：room 0 rev=2 legal_actions=6
+DBG bot 引导：room 1 rev=2 legal_actions=6
+DBG bot 引导：room 2 rev=2 legal_actions=6
+DBG bot 引导：room 3 rev=2 legal_actions=7
+RESULT bot rooms=4 rounds=40 per_round=6 submitted=960 accepted=14 snapshots=160 max_revision=9 elapsed_ms=568 throughput_cmds_per_s=1689
