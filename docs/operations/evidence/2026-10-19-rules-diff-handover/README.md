@@ -184,9 +184,9 @@
 |---:|---|---:|---|---|---|
 | **1** | **G14：`phaseBegin` ⇒ `Phase::Judge`** | **8** | **照 `SwdJinlin2` 的现成写法**：`EventData::Phase { player, begin: true, .. }`（**省略 `phase`**），**8 个 filter 各改一个 pattern** | **小** ✅ | **范本已核**（`jinlin2` 上游也是 `phaseBegin`）；**一次修 8 条** |
 | **2** | **G16：`GujianFoodTanhuadong` 阶段不同** | **1** | `filtering` 里 `Phase::Play, begin=false` ⇒ **`Phase::End`** | **1 行** | 最小 ✅ |
-| **3** | **`swd_xiuluo` 阶段错位** | **1** | `filtering/common.rs:219` 的 **`Phase::Judge` ⇒ 准备阶段** | **1 行** | 最小 ✅ |
+| **3** | **`swd_xiuluo` 阶段错位** | **1** | ~~`Phase::Judge` ⇒ 准备阶段~~ **不可行**（`Phase` 无 `Prepare`，见 G18）⇒ **需扩枚举** | **中-大** ⚠️ | **原估计作废** ❌ |
 | **4** | **`huajin2` 完全错位** | **1** | `filtering/swd.rs` 的 **`Phase::Judge` ⇒ `damageBegin`（`EventKind::DamageBefore`）** | **1 行** | **技能目前完全不生效** ❗ |
-| **5** | **`hlss_fengqi` 多值触发** | **1** | `filtering` 改回**多值**（`extra_events` 或两组 filter）| **1 处** | 上游 `[准备, 结束]` |
+| **5** | **`hlss_fengqi` 多值触发** | **1** | **只有「结束」可表达；「准备」不可表达**（G18）| **中-大** ⚠️ | **原「1 处」作废** ❌ |
 | **6** | **`miedao` 缺多摸** | **1** | **`filtering` 加 `Phase::Draw` 分支 + `step` 加 `draw_num += maxHp - hp`**；**`Phase::Draw` 的 filter 写法有 5 处现成范本**（`SwdReyingzi`/`YunchouXiongzi`/`XianjianZhaoyao` 等）✅ | **2 处** | 与 `miedao2` 对称；**范本齐全** |
 | **7** | **G15：`before`/`after`/`Begin2` 缺档** | **≥5** | **新增「阶段之前/之后/第二次」档**（或 `EventKind` 扩展）| **中** | **需设计**，非修补 ⚠️ |
 | **8** | **`ziyu` 触发→主动** | **1** | **改回 `global: phaseEnd` 触发式**（`direct` 自动）| **中** | 与 `wudian_ziyu` 的 `End begin=true` **并存需一并理清** ❓ |
@@ -199,9 +199,10 @@
 | 层级 | 性质 | 缺口 | 覆盖 | 修法 | 批 |
 |---|---|---|---|---:|---|
 | **① 映射错** | **对齐即可** | **G14** | **8 条** | **照 `SwdJinlin2`**（`Phase { begin: true, .. }`）| **1** ✅ |
-| **① 映射错** | **对齐即可** | **G16 / `swd_xiuluo` / `huajin2` / `hlss_fengqi`** | **4 条** | **各改 1 行** | **1** ✅ |
+| **① 映射错** | **对齐即可** | **G16 / `huajin2`** | **2 条** | **各改 1 行** | **1** ✅ |
 | **① 对齐** | **补分支** | **`miedao`** | **1 条** | **照 5 处 `Phase::Draw` 范本** | **2** |
 | **② 档位缺** | **需设计** | **G15**（`before`/`after`/`Begin2`）| **≥5 条** | **扩 `EventKind` 或登记近似** | **3** ⚠️ |
+| **② 阶段缺** | **需设计** | **G18（`Phase` 无 `Prepare`）⇒ `swd_xiuluo` / `hlss_fengqi`** | **2 条** | **扩 `Phase` 加 `Prepare`（需改未跟踪 `kernel`）或找等价表达** | **3** ⚠️ |
 | **③ 钩子缺** | **需设计** | **G17a（距离）** | **112 候选 / 1 类** | **新增 `globalTo`/`globalFrom` 等价钩子** | **3** ⚠️ |
 | **③ 钩子缺** | **需设计** | **G17b（手牌上限）** | 同上 / 1 类 | **新增 `maxHandcard` 修正器** | **3** ⚠️ |
 | **④ 个案化** | **可选** | **G17c（射程覆写）** | 1 类 | **统一为标准 `mod`**（**现有个案可用**）| **4** |

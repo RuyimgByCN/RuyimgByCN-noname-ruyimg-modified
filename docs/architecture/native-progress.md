@@ -977,6 +977,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 621 轮**：**❗ G18：`Phase` 枚举里没有「准备阶段」**——`event.rs` 的 **`Phase` 只有 5 个变体**（`Judge`/`Draw`/`Play`/`Discard`/`End` ✓），**没有 `Prepare`** ✗，**且 `Phase::Prepare` 在 `content/host/` 零命中** ✅ ⇒ **所有依赖「准备阶段」（`phaseZhunbei*`）的上游技能都无法正确表达** ❗ ⇒ **受影响**：**`swd_xiuluo`**（§4.5 写的「改成准备阶段」**不可行** ✗）、**`hlss_fengqi`**（**只能表达「结束」那一半** ✗）；⇒ **这两条从「批 1（对齐）」升级为「批 3（需设计）」** ❗ —— **要么扩 `Phase` 加 `Prepare`（改 `event.rs` + 未跟踪 `kernel`），要么另找等价表达** ⚠️；**教训**：**任何「按阶段」的分析，都必须先核「枚举是否覆盖全部阶段」** ✅。
 >
+> **第 622 轮**：**§4.5 批次与成本修正 + G18 影响面确认**——**核对全部已核条目的上游触发** ✓：**`Judge` 组 14 条里 12 条是 `phaseBegin`、1 条 `damageBegin`、1 条无** ✓ ⇒ **只有 `hlss_fengqi`（含 `phaseZhunbei`）与 `swd_xiuluo`（`phaseZhunbeiBegin`）受影响** ✅；**§4.5 修正**：**批 1 从「G16 + swd_xiuluo + huajin2 + hlss_fengqi 4 条」缩为「G16 + huajin2 2 条」** ✗、**批 3 增「G18（`Phase` 无 `Prepare`）⇒ 2 条」** ✓、**`swd_xiuluo`/`hlss_fengqi` 成本从「1 行/1 处」改为「中-大」** ⚠️ —— **两条原估计作废** ❌。
+>
+
 
 
 
