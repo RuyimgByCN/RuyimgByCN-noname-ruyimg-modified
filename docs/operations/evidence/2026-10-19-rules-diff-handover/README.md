@@ -504,3 +504,41 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 **可靠做法**：`grep -rn "HostBehavior::X"` **列出全部出现位置**，
 **看有没有 `activation*.rs`（主动面）或 `step/skills_*.rs`（效果步）的内容** ✅
 **仅有 `keys.rs`/`factory.rs`/`filtering.rs`/`metadata.rs` 四类 = 真未实现** ✅
+
+---
+
+## 4.10 ⚠ **`L10` 不是「只差 1 处」，是「只差 2 处」（第 694 轮，读既有测试后）**
+
+### 发现
+
+`crates/engine-native/tests/nc08_upstream_rangjie.rs` **早已存在**，且其中已登记一条缺陷：
+
+> **已知缺陷（本文件用 `#[ignore]` 守护，登记未修）**：原生只在分支 0 摸牌，
+> **分支 1（移动牌）不摸牌** → 违反上游点 4（`player.draw()` 在分支**之前**无条件执行）。
+
+`#[ignore = "登记缺陷：原生 rangjie 分支 1（移动牌）未摸牌…"]`（第 171–174 行）
+
+⇒ **`rangjie` 有 1 条已登记缺陷** ❗ —— **我此前把它记成「四面全一致」** ❌
+
+### 修正 `L10` 的缺陷清单
+
+| # | 缺陷 | 位置 |
+|---|---|---|
+| **5b** | `reguhuo` 每回合一次未实现 | `step/skills_cards.rs` + `constants.rs` |
+| **新增（26）** | `rangjie` 分支 1 不摸牌 | **`step/skills_cards.rs`** |
+
+⇒ **`L10` = 2 条缺陷，且都在同一个未跟踪文件里** ⚠️
+⇒ **「只差 1 处」撤回** ❌ —— **但「最接近可签」的相对地位不变** ✅（**其他来源是 4–14 条或需要扩枚举**）
+
+### 我为什么会漏
+
+**我没有去读「已存在的测试」** —— `nc08_upstream_rangjie.rs` 就在 `tests/` 里，
+**里面写着一条我没算进去的缺陷** ❗
+
+⇒ **教训**：**「缺陷清单」不能只靠自己的分析，还要扫一遍 `tests/` 里已有的 `#[ignore]` 登记** ✅
+⇒ **可执行的做法**：`grep -rn "#\[ignore" crates/engine-native/tests/` —— **每个 `#[ignore]` 背后都是一条已登记缺陷** ✅
+
+### 下一步（本轮未做）
+
+**跑一次 `grep -rn "#\[ignore" crates/engine-native/tests/`**，把全部已登记的缺陷并入清单 ——
+**数量可能显著大于 25** ⚠️
