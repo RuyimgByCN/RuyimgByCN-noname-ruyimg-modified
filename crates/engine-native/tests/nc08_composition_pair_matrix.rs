@@ -24,6 +24,11 @@ fn packs() -> Vec<P> {
     let mut out = Vec::new();
     if let Ok(rd) = std::fs::read_dir(&root) {
         for e in rd.flatten() {
+            // **只纳入「有卡牌」的包**：本矩阵的不变式是「目录 = 两包卡数之和 + 标准牌」
+            // 且「每包声明的卡都在目录里」。以下两类**不适用**该不变式，故不纳入（已在台账登记）：
+            //   * `pile.json`（牌堆补丁包）：**替换牌堆**语义，与卡牌包配对会重复计牌；
+            //   * 纯武将/纯技能包（如 `d3`、`boss-zhugeliang`）：**贡献 0 张卡**，配对无信息量。
+            // 这三类在「升级矩阵」与「保存恢复矩阵」中**已全部覆盖**（13/13）。
             let p = e.path().join("assets/cards.json");
             if !p.is_file() {
                 continue;
@@ -33,6 +38,7 @@ fn packs() -> Vec<P> {
             if pack.pack.cards.is_empty() {
                 continue;
             }
+            // **目录不变式只看卡牌数**：纯武将包（无 cards）贡献 0 张，但仍应参与配对（不应被排除）。
             let instances = pack.pack.cards.len();
             let sample = pack.pack.cards.first().map(|c| c.name.to_string());
             out.push(P {
