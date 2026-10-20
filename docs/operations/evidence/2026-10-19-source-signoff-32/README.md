@@ -462,3 +462,48 @@ test result: ok. 1 passed; 0 failed; 0 ignored; finished in 0.04s
 
 ⇒ **「完成八项 = 0」这个结论不变** ✅ ——
 **但「N/32」这个记法对「目标平台」和「规则差异」以外的项都是「投影值」** ⚠️
+
+---
+
+## 附 11：**「包 → 来源」映射本身存在歧义**（2026-10-19，**重要**）
+
+### 按 `upstream_path` 自动映射的结果
+
+用「台账 37 个来源行里的目录名」× 「包内 `upstream_path` 的目录名」做精确匹配：
+
+| 结果 | 数量 |
+|---|---:|
+| **包总数** | **41** |
+| **靠 `upstream_path` 直接匹配成功** | **35** |
+| **`upstream_path` 为 `None`** | **6** |
+
+那 6 个（`cardpile-liuli`/`cardpile-noname`/`coin-noname`/`desktop-adapt`/`omnisearch`/`boss-zhugeliang`）
+只能按**包名前缀**猜来源。
+
+### ❗ 歧义的根源：**同名来源有两个**
+
+| 名字 | 出现在 | 包 |
+|---|---|---|
+| **`boss`** | **`U02`（noname）** 与 **`L03`（liuli）** | `boss-play-noname` / `boss-play-liuli` / `boss-zhugeliang-liuli` |
+| **`cardpile`** | **`U03`（noname）** 与 **`L04`（liuli）** | `cardpile-noname` / `cardpile-liuli` |
+| **`coin`** | **`U04`（noname）** 与 **`L05`（liuli）** | `coin-noname`（**liuli 侧无包**）|
+
+⇒ **按名字映射会把 `boss-play-liuli` 记到 `U02`、把 `cardpile-liuli` 记到 `U03`** ❌
+⇒ **正确做法是按包名后缀 `-liuli` / `-noname` 判定** ✓（**但 `upstream_path` 为 `None` 时无其他依据** ⚠️）
+
+### 由此产生的分母问题
+
+| 口径 | 值 |
+|---|---:|
+| **台账来源总数** | **37** |
+| **有包可测的来源** | **29–32**（**取决于同名映射的处理**）|
+| **签署表分母** | **32** |
+
+⇒ **「32」这个分母的来历，本轮仍未完全复现** ⚠️
+⇒ **但已确认：它等于「37 减去 5–8 个无包来源」**，**而这 5–8 个里 `L25`（祖安武将，G0 only）是确定的** ✅
+
+### 建议
+
+**在每个包的 `package.npack.json` 里加 `source_id` 字段**（或加到 `assets/*.json`）——
+**从此「包 → 来源」不再依赖目录名匹配**，**也不会因同名而歧义** ✅
+**本会话无法做这个改动**（**包数据是他人维护的** ⚠️）⇒ **记为建议** ✅
