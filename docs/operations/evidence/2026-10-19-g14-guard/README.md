@@ -192,19 +192,38 @@ EventData::Phase { player, begin: true, .. } if *player == owner   // `..` 省�
 | 13 | `XianjianJtjubao` | `xj_jtjubao` | `global: discardAfter` | 未核 |
 | 14 | `XianjianLinghuo` | `xj_linghuo` | `global: phaseEnd` | ✅ 一致 |
 | 15 | `XianjianWangyou` | `xj_wangyou` | `global: phaseEnd` | ✅ 一致 |
-| 16-18 | （另 3 条同类）| —— | —— | 未核 |
+| 16 | **`XianjianSheling`** | `xj_sheling` | `global: ["useCardAfter","respondAfter"]` | ✅ 一致（`player === event.player` 排除）|
+| 17 | **`XianjianShiying`** | `xj_shiying` | `global: dieBefore` | ✅ 一致（`event.player !== player`）|
+| 18 | **`XianjianZhaoyao`** | `xj_zhaoyao` | `global: phaseDrawBegin` | ✅ 一致 |
 
-### 采样结论
+### ✅ 全 18 条已核完（第 654 轮）
 
-**已核 10 条：7 条一致 / 3 条不一致** ⚠️ —— **不一致率约 30%**
-⇒ **18 条候选里预计还有 4–6 条** ⇒ **G19 的真实规模是「1–7 条」**，**不是 5 条、也不只是 1 条** ❗
+**剩 8 条的上游 `filter` 全部排除自己**：
+
+| 技能 | 上游 filter 关键句 |
+|---|---|
+| `fzhenwei` | `if (event.player === player) return false;` |
+| `liduan` | `if (event.player === player) return false;` |
+| `nsshuaiyan` | `event.player !== player && _status.currentPhase !== player` |
+| `fanling` | `event.player !== player && player.isDamaged()` |
+| `jtjubao` | `if (event.player === player) return false;` |
+| `sheling` | `if (player !== _status.currentPhase \|\| player === event.player) return false;` |
+| `shiying` | `event.player !== player` |
+| `rumeng` | `event.player !== player && …` |
+
+⇒ **G19 最终：18 条候选 = 15 条一致 + 3 条确认缺陷** ✅
 
 ### 为什么它不是「5 条阶段过滤」的子集
 
 **`tiebi`（`shaBegin`）/ `gongshen`（`useCard`）/ `yinguo`（`damageBefore`）/ `youyin`（`discardAfter`）**
 都不是阶段触发 —— **这个模式与「阶段过滤」正交** ✅
 
-### 待办
+### 确认的 3 条（修法都是「删掉 `!= owner`」，各 1 行）
 
-**剩 8 条未核**（`wudian_liduan`/`fzhenwei`/`rumeng`/`wudian_shuaiyan`/`xj_fanling`/`xj_jtjubao` + 2）
-⇒ **读各自上游 `filter` 即可定案**，**每条成本 = 1 次读文件**
+| 技能 | 上游 trigger | 上游 filter 为何不排除自己 |
+|---|---|---|
+| **`swd_zhuhai`** | `global: phaseJieshuBegin` | `event.player.isIn() && …`，无排除 |
+| **`swd_tiebi`** | `global: shaBegin` | `player.countCards("h",{color:"black"}) && !event.target.hujia && distance<=1`，无排除 |
+| **`swd_rexue`** | `global: phaseBegin` | `lib.filter.targetEnabled({name:"sha"}, player, event.player) && player.hasSha()`，无排除 |
+
+⇒ **属批 1「对齐」，批 1 从 13 处增为 15 处** ✅
