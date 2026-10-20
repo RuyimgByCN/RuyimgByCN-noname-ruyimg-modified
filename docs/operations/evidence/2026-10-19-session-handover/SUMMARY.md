@@ -80,3 +80,28 @@
 2. **可立即做**：**批 A 提案的设计**（`event.rs` 已跟踪）—— 但**落地需 `kernel` 权限**；
 3. **不要做**：**未经确认就修改 `content/host/**`**（**属他人**）；
 4. **每个数字都要能追到证据**：本会话的 9 次撤回，8 次源于「单点推断整条链」或「凭记忆填数」。
+
+---
+
+## 6 最终验证（2026-10-19，第 706 轮，**逐条不带管道**）
+
+| # | 检查 | 命令 | 结果 |
+|---:|---|---|---|
+| 1 | **行数门禁** | `scripts/check-source-lines.py` | ❌ **exit=1**（`rule-api/effect.rs` 10778 行，**既有**）|
+| 2 | **门禁自测** | `unittest discover -p 'test_check_source_lines.py'` | ✅ **OK** |
+| 3 | **全部脚本单测** | `unittest discover -s scripts` | ✅ **42 tests, OK** |
+| 4 | **链接（core）** | `check_local_links.py` | ✅ **坏链 0** |
+| 5 | **链接（`--all`，1744 文件）** | `check_local_links.py --all` | ✅ **exit=0** |
+| 6 | **旧值残留** | `check_stale_numbers.py` | ✅ **0 处** |
+| 7 | **索引新鲜** | `refresh_recent_rounds.py --check` | ✅ **最新（20 轮）** |
+| 8 | **包→来源映射** | `map_package_sources.py --check` | ✅ **41 包 → 32 来源，符合预期** |
+| 9 | **阶段过滤表** | `report_phase_filters.py --check` | ✅ **一致（52 条）** |
+| 10 | **G14 对照** | `report_g14.py` | ✅ **14 条：G14 9 / 准备 2 / 凭空 2 / 非阶段 1** |
+| 11 | **全量** | `cargo test --offline -p engine-native` | ✅ **1538 / 0 / 21** |
+
+### ⚠ 验证方法上的一个坑（本会话同类第 N 次）
+
+**第一次跑时用 `| tail -2` 接 `check-source-lines.py`，显示 `exit=0`** ❌ ——
+**管道吞掉了退出码**。**不加管道重跑，`exit=1`** ✅
+
+⇒ **任何「是否失败」的判断，都不能经过管道** ❗
