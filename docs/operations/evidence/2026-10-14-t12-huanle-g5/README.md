@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[扩展台账 U06 欢乐卡牌](../../migration/upstream-extension-reconstruction.md)：G1/整包生命周期已于 2026-10-08 验收（独立安装→建局→在局卸载→锁定副本续玩→重装拒绝），状态「G1 完成 → G3」。本切片补 **G5 联机/存档面**：同内容锁**真双进程**存档接力 + 错版/缺包拒绝（进程内字节恢复此前已测，真双进程未测）。
+[扩展台账 U06 欢乐卡牌](../../../migration/upstream-extension-reconstruction.md)：G1/整包生命周期已于 2026-10-08 验收（独立安装→建局→在局卸载→锁定副本续玩→重装拒绝），状态「G1 完成 → G3」。本切片补 **G5 联机/存档面**：同内容锁**真双进程**存档接力 + 错版/缺包拒绝（进程内字节恢复此前已测，真双进程未测）。
 
 ## 交付（crates/engine-native/tests/g1_huanle.rs 新增 `huanle_g5_cross_process_relay`）
 

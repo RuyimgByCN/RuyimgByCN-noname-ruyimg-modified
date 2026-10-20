@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 4 续批：
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 4 续批：
 剩余三将（蔡文姬/陆抗/马钧）勘察与全量入册。
 
 ## 勘察定案（三机制缺口 + 两条引用缺口）

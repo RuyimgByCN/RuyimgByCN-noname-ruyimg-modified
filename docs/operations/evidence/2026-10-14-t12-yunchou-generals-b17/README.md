@@ -2,7 +2,7 @@
 
 ## 任务来源与承载
 
-[T12 运筹武将面](../../architecture/native-progress.md)批 15 续批：三类可立项
+[T12 运筹武将面](../../../architecture/native-progress.md)批 15 续批：三类可立项
 缺口中「归汉濒死主动技面」立项落地。
 
 - **limited 承载**：`PlayerState.guihan_used: bool`（暴雪 baoxue_used v127

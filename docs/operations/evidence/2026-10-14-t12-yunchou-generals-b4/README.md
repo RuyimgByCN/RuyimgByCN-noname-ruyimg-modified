@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 3 续批。
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 3 续批。
 同批完成**全部十名武将的技能归属勘察**（character.js 映射表）：
 
 | 武将 | 上游技能 | 状态 |

@@ -1,0 +1,15 @@
+DSL functional split byte audit
+Original bytes: 663798
+Fragments: 9
+Ordered concatenation matches original: True
+SHA256: f784c11ab491745eb5fb4d8c634f63b85e012b37e391d910d405d0fab7507800
+Skill declarations: 1051
+705	content/original/ported/shahai/shahai_meta_gujian.skill
+656	content/original/ported/shahai/shahai_meta_gwent.skill
+1934	content/original/ported/shahai/shahai_meta_hearth.skill
+132	content/original/ported/shahai/shahai_meta_mtg.skill
+895	content/original/ported/shahai/shahai_meta_ow.skill
+1956	content/original/ported/shahai/shahai_meta_swd_characters.skill
+1559	content/original/ported/shahai/shahai_meta_swd_combat_and_cards.skill
+1107	content/original/ported/shahai/shahai_meta_xianjian.skill
+181	content/original/ported/shahai/shahai_meta_yunchou.skill

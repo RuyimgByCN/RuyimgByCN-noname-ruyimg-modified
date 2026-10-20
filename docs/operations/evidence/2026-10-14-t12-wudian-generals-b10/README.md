@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 玩点论杀武将面](../../migration/upstream-extension-reconstruction.md)勘察续批：
+[T12 玩点论杀武将面](../../../migration/upstream-extension-reconstruction.md)勘察续批：
 存量 6 将（四整将：费诗/韩龙/刘焉/留赞；刘孚 2/3、田豫 1/2）——本批补入剩余
 **三将**（西真夕红/造之仁君/杨仪），玩点论杀武将面全量入册。
 

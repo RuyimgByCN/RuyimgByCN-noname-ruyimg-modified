@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+    "test",
+    "--offline",
+    "--workspace",
+    "--no-fail-fast"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 572.93,
+  "log": "/tmp/noname-next-audit-20261018-rustup-workspace-tests.log",
+  "rustc": "rustup stable 1.95.0"
+}

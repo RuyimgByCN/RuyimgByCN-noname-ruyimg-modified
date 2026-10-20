@@ -2,7 +2,7 @@
 
 ## 任务来源与勘察定案
 
-[T12 玩点论杀武将面](../../migration/upstream-extension-reconstruction.md)批 10 续批：
+[T12 玩点论杀武将面](../../../migration/upstream-extension-reconstruction.md)批 10 续批：
 
 | 技 | 勘察结论 | 处置 |
 |---|---|---|

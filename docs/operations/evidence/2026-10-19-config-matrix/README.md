@@ -38,6 +38,6 @@ DBG 配置矩阵：目录 41 个、manifest 合格 41 个、含 config.json 25 �
 
 ## 4 边界（**如实**）
 
-1. 只验**形状与唯一性**；**不验配置项语义**（各包语义差异写在[规则基准](../../architecture/native-rules-baseline.md)）；
+1. 只验**形状与唯一性**；**不验配置项语义**（各包语义差异写在[规则基准](../../../architecture/native-rules-baseline.md)）；
 2. `enabled` 开关的**运行时效果**仍由 `nc08_config_acceptance` 覆盖（19 包）；
 3. 未覆盖**运行时改配置后持久化**（已登记待办）。

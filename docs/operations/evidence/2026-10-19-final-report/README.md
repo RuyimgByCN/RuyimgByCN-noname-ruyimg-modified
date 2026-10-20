@@ -13,7 +13,7 @@
 | 新增/扩展的验收用例 | **8 组**（真实网络 8 个、产品长程 3 件、安装/配置 41 包、升级/保存恢复 22 包、190 对组合、NC10 六用例、fuzz 回放 3 个目标、金色套件复核）| [交接索引](../2026-10-19-session-handover/README.md) §2 |
 | 新增脚本/工具 | **4 个** | 同上 §1 |
 | 证据目录 | **40+** | `docs/operations/evidence/2026-10-19-*` |
-| 台账新增行 | **第 164–193 行 + §1.1 规模口径** | [台账](../../migration/upstream-extension-reconstruction.md) |
+| 台账新增行 | **第 164–193 行 + §1.1 规模口径** | [台账](../../../migration/upstream-extension-reconstruction.md) |
 | **被推翻/更正**的既有结论 | **6 条** | 交接索引 §3 |
 
 ## 2 已**真实验收**的部分（口径明确）
@@ -25,7 +25,7 @@
 | 安装 / 配置（按来源） | **32/32** | [signoff-32](../2026-10-19-source-signoff-32/README.md) |
 | 升级 / 保存恢复（按来源） | **13/32**（= **全部 22 个有资产包**）| [upgrade](../2026-10-19-upgrade-matrix/)、[save-restore](../2026-10-19-save-restore-matrix/) |
 | 组合 | **11/32**（190 对 / 20 包）| [skill-pair](../2026-10-19-skill-pair-matrix/) |
-| 规则差异 | **5/32** | [rules-baseline](../../architecture/native-rules-baseline.md) |
+| 规则差异 | **5/32** | [rules-baseline](../../../architecture/native-rules-baseline.md) |
 | 性能（引擎级） | **13/32**（22 包 probe + drive + 长局）| [nc12-all](../2026-10-19-nc12-all-packages/)、[drive-all](../2026-10-19-nc12-drive-all/)、[long](../2026-10-19-nc12-long/) |
 | 产品面 | **server / WS / CLI / 金色套件** 均有实测 | [network-path](../2026-10-19-network-path/)、[product-cli](../2026-10-19-product-cli/)、[conformance](../2026-10-19-conformance-golden/) |
 

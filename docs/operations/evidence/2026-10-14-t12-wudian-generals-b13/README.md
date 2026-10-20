@@ -2,7 +2,7 @@
 
 ## 任务来源与承载
 
-[T12 玩点论杀武将面](../../migration/upstream-extension-reconstruction.md)批 12 续批：
+[T12 玩点论杀武将面](../../../migration/upstream-extension-reconstruction.md)批 12 续批：
 坚壁（西真夕红）的「目标排除/转移面」缺口按**通用原语**立项落地——
 
 - **catalog 通用查询** `Catalog::aoe_excludes_target(core, target)`：目标持有的

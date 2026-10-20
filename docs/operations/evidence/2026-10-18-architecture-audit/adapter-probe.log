@@ -1,0 +1,4 @@
+REPRODUCED: emitted card choice token 0 cannot be consumed for card 42.
+REPRODUCED: rejected result from engine is discarded; returned envelope.result is null.
+REPRODUCED: ChoiceOption Kind(105) becomes label 0.
+3 source-level adapter counterexamples reproduced with stubbed boundary; no browser/WASM execution.

@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 7 续批：
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 7 续批：
 三类可立项缺口之首「内置技能引用面」——mapping `builtin:*` 形态一次性解锁
 护驾/悲歌/谦逊三技中的**有实现者**。
 

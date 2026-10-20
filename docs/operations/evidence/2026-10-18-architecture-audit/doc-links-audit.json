@@ -1,0 +1,157 @@
+{
+  "checked_files": 13,
+  "checked_file_bytes": 1012236,
+  "checked_file_lines": 5679,
+  "local_link_occurrences": 1607,
+  "unique_local_link_destinations": 750,
+  "missing_occurrences": 1,
+  "missing_unique_targets": 1,
+  "fenced_local_links_ignored": 0,
+  "docs_markdown_files": 1429,
+  "docs_markdown_bytes": 5692131,
+  "docs_markdown_lines": 74313,
+  "adr_markdown_files": 732,
+  "numbered_adr_files": 731,
+  "unique_adr_numbers": 702,
+  "adr_markdown_bytes": 1551268,
+  "duplicate_adr_numbers": {
+    "0398": [
+      "0398-abi526-shenhua-feijun-binglve.md",
+      "0398-shiji-mb-shen-machao.md"
+    ],
+    "0422": [
+      "0422-shiji-db-wenyang.md",
+      "0422-xianding-batch13.md"
+    ],
+    "0431": [
+      "0431-abi549-551-shenhua-zhangjiao-releiji-guidao-huangtian.md",
+      "0431-shiji-wujing.md"
+    ],
+    "0442": [
+      "0442-standard-m1-repack-extensions.md",
+      "0442-xianding-batch19.md"
+    ],
+    "0443": [
+      "0443-newjiang-batch1.md",
+      "0443-xianding-batch20.md"
+    ],
+    "0445": [
+      "0445-abi559-shenhua-zhanghe-qiaobian.md",
+      "0445-shiji-xinyangjie-qingyu-mifuren.md"
+    ],
+    "0446": [
+      "0446-abi560-shenhua-liushan-xiangle-fangquan-ruoyu.md",
+      "0446-clan-batch1.md",
+      "0446-shiji-zhengsu-zhujun-lvfan.md"
+    ],
+    "0453": [
+      "0453-abi563-shenhua-zhugezhan-zuilun-fuyin.md",
+      "0453-key-batch1.md"
+    ],
+    "0454": [
+      "0454-abi571-shenhua-yanyan-juzhan.md",
+      "0454-yijiang-batch4-gaps.md"
+    ],
+    "0455": [
+      "0455-abi565-skill-pile-count.md",
+      "0455-shiji-zhouchu-zhanhai-zhangming.md"
+    ],
+    "0456": [
+      "0456-xianding-batch21.md",
+      "0456-yingbian-xiongshu.md"
+    ],
+    "0457": [
+      "0457-abi566-owner-skill-pile-count.md",
+      "0457-xianding-batch22.md",
+      "0457-yingbian-jiachong-jianhui.md"
+    ],
+    "0458": [
+      "0458-abi564-bingshi-pot-lvyi.md",
+      "0458-shiji-spqiai.md"
+    ],
+    "0462": [
+      "0462-abi567-choose-other-hand-store.md",
+      "0462-shiji-wangcan-shanxi-suoming.md"
+    ],
+    "0463": [
+      "0463-abi569-gain-all-skill-pile.md",
+      "0463-shiji-tongduo.md"
+    ],
+    "0465": [
+      "0465-abi573-shenhua-wangji-qizhi-jinqu.md",
+      "0465-shiji-liuba-duanbi.md"
+    ],
+    "0466": [
+      "0466-abi574-shenhua-kuailiangkuaiyue-jianxiang-shenshi.md",
+      "0466-shiji-sunyi-zaoli.md"
+    ],
+    "0467": [
+      "0467-abi570-bingshi-pot-yuji.md",
+      "0467-shiji-guying.md"
+    ],
+    "0547": [
+      "0547-abi624-ddd-caomao.md",
+      "0547-xianding-batch28.md"
+    ],
+    "0550": [
+      "0550-abi626-ddd-xianglang.md",
+      "0550-xianding-batch28-ref-fix.md"
+    ],
+    "0552": [
+      "0552-abi627-ddd-yujin.md",
+      "0552-xianding-batch30.md"
+    ],
+    "0556": [
+      "0556-abi629-ddd-baosanniang.md",
+      "0556-xianding-batch32.md"
+    ],
+    "0561": [
+      "0561-xianding-batch33-ref-fix.md",
+      "0561-xianding-batch34.md"
+    ],
+    "0571": [
+      "0571-xianding-batch36-ref-fix.md",
+      "0571-xianding-batch39.md"
+    ],
+    "0580": [
+      "0580-abi640-ddd-liangxi.md",
+      "0580-xianding-batch41.md"
+    ],
+    "0587": [
+      "0587-xianding-batch43-ref-fix.md",
+      "0587-xianding-batch45.md"
+    ],
+    "0590": [
+      "0590-xianding-batch45-ref-fix.md",
+      "0590-xianding-batch48.md"
+    ]
+  },
+  "missing": [
+    {
+      "source": "docs/architecture/legacy-reference.md",
+      "line": 59,
+      "target": "adr/0702-m7-mobile-blocking.md",
+      "resolved": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/architecture/adr/0702-m7-mobile-blocking.md",
+      "exists": false
+    }
+  ],
+  "fenced_missing": [],
+  "adr_heading_filename_id_mismatches": [
+    {
+      "file": "docs/adr/0446-clan-batch1.md",
+      "line": 1,
+      "filename_id": "0446",
+      "heading_id": "0444",
+      "heading": "# 0444 clan 批次一（Hermes E 段）"
+    },
+    {
+      "file": "docs/adr/0447-extra-finalize-stats-fix.md",
+      "line": 1,
+      "filename_id": "0447",
+      "heading_id": "0445",
+      "heading": "# 0445 extra 收尾与统计口径修正（Hermes E 段）"
+    }
+  ],
+  "all_docs_regular_files": 3052,
+  "all_docs_regular_file_bytes": 46737075
+}

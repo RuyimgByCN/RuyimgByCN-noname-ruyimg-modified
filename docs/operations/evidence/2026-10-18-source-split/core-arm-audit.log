@@ -1,0 +1,5 @@
+hash.rs original_arms 820 current_arms 820 missing 0 extra 0
+effect/primitives/mod.rs original_arms 816 current_arms 816 missing 0 extra 0
+vm_host.rs original_arms 482 current_arms 482 missing 0 extra 0
+trigger/dispatch.rs original_arms 675 current_arms 675 missing 0 extra 0
+command/resolve_choice/mod.rs original_arms 555 current_arms 555 missing 0 extra 0

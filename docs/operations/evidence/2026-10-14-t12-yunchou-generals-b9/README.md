@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 8 续批：
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 8 续批：
 三类可立项缺口中体量最小的「max_hp 减面」立项落地。
 
 ## 承载

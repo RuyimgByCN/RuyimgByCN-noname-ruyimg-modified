@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[台账 U06](../../migration/upstream-extension-reconstruction.md) G1+G5 已达成后，按 E04/G2–G4 契约（「AI 只见合法座位信息，配置持久、资源释放与交互可复查」）补产品通道验收——U06 为示例来源。
+[台账 U06](../../../migration/upstream-extension-reconstruction.md) G1+G5 已达成后，按 E04/G2–G4 契约（「AI 只见合法座位信息，配置持久、资源释放与交互可复查」）补产品通道验收——U06 为示例来源。
 
 ## 交付（g1_huanle.rs 新增 `u06_g2g4_channels_acceptance`，五通道一测）
 

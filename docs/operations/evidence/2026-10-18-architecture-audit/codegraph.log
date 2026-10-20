@@ -1,0 +1,15 @@
+┌  Syncing CodeGraph
+│
+Scanning files...
+Parsing code...
+Resolving refs...
+Linking dynamic dispatch...
+│
+◆  Synced 4,310 changed files
+│
+●  Added: 1949, Modified: 243, Removed: 2118 — 36,117 nodes in 31.6s
+│
+●  Resolved 8 pending references (8,028 unresolved)
+│
+└  Done
+

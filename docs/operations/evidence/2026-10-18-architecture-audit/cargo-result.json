@@ -1,0 +1,18 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "-p",
+    "content-native-loader",
+    "-p",
+    "content-runtime",
+    "-p",
+    "engine-native-wasm"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 267.81,
+  "log": "/tmp/noname-next-audit-20261018-cargo-tests.log"
+}

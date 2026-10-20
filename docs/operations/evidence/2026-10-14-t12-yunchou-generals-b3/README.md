@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 2 续批：
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 2 续批：
 diy_luxun（陆逊，吴 3 血）两技全部转正——**第二个整将完成**。
 
 ## 上游语义与承载

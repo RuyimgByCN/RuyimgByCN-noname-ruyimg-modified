@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 5 续批：
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 5 续批：
 厉焰（luweiyan）为批 5 勘察定案的「可立项」项（viewAs 转化循国色先例）。
 
 ## 承载

@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 1 续批：
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 1 续批：
 diy_sp_zhouyu（周瑜·SP，吴 3 血）两技全部转正——**批 2 达成首个整将完成**。
 
 ## 上游语义（杀海拾遗/character/yunchou/skill.js）

@@ -1,0 +1,6 @@
+$ python3 -B -m unittest discover -s scripts -p test_check_source_lines.py
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+OK

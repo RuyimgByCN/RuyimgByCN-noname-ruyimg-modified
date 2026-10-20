@@ -1,0 +1,123 @@
+$ cargo test --offline --workspace --no-fail-fast
+warning: output filename collision at /Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/examples/rehash_npack
+  |
+  = note: the example target `rehash_npack` in package `content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)` has the same output filename as the example target `rehash_npack` in package `content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+warning: output filename collision at /Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/examples/rehash_npack.dSYM
+  |
+  = note: the example target `rehash_npack` in package `content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)` has the same output filename as the example target `rehash_npack` in package `content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)`
+  = note: this may become a hard error in the future; see <https://github.com/rust-lang/cargo/issues/6313>
+  = help: consider changing their names to be unique or compiling them separately
+   Compiling memchr v2.8.3
+   Compiling once_cell v1.21.4
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling errno v0.3.14
+   Compiling scopeguard v1.2.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling bytes v1.12.1
+   Compiling writeable v0.6.3
+   Compiling litemap v0.8.2
+   Compiling pin-project-lite v0.2.17
+   Compiling utf8_iter v1.0.4
+   Compiling futures-core v0.3.32
+   Compiling smallvec v1.15.2
+   Compiling rustix v1.1.4
+   Compiling lock_api v0.4.14
+   Compiling rand_chacha v0.9.0
+   Compiling strsim v0.11.1
+   Compiling icu_properties_data v2.2.0
+   Compiling icu_normalizer_data v2.2.0
+   Compiling futures-sink v0.3.32
+   Compiling stable_deref_trait v1.2.1
+   Compiling slab v0.4.12
+   Compiling aho-corasick v1.1.4
+   Compiling futures-task v0.3.32
+   Compiling http v1.4.2
+   Compiling serde_json v1.0.150
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling synstructure v0.13.2
+   Compiling rand v0.9.4
+   Compiling zerovec-derive v0.11.3
+   Compiling displaydoc v0.2.6
+   Compiling futures-macro v0.3.32
+   Compiling parking_lot_core v0.9.12
+   Compiling log v0.4.33
+   Compiling typenum v1.20.1
+   Compiling tempfile v3.27.0
+   Compiling regex-automata v0.4.15
+   Compiling tokio-macros v2.7.0
+   Compiling signal-hook-registry v1.4.8
+   Compiling serde v1.0.228
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling rusty-fork v0.3.1
+   Compiling futures-util v0.3.32
+   Compiling parking_lot v0.12.5
+   Compiling socket2 v0.6.4
+   Compiling thiserror v2.0.18
+   Compiling generic-array v0.14.7
+   Compiling mio v1.2.1
+   Compiling base64 v0.22.1
+   Compiling httparse v1.10.1
+   Compiling tracing-core v0.1.36
+   Compiling resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/licensing-schema)
+   Compiling proptest v1.11.0
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling utf8parse v0.2.2
+   Compiling http-body v1.0.1
+   Compiling tokio v1.52.3
+   Compiling zerofrom v0.1.8
+   Compiling tracing-attributes v0.1.31
+   Compiling cpufeatures v0.2.17
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle v1.0.14
+   Compiling anstyle-query v1.1.5
+   Compiling colorchoice v1.0.5
+   Compiling anstyle-parse v1.0.0
+   Compiling percent-encoding v2.3.2
+   Compiling yoke v0.8.3
+   Compiling data-encoding v2.11.0
+   Compiling digest v0.10.7
+   Compiling tower-service v0.3.3
+   Compiling tracing v0.1.44
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling clap_lex v1.1.0
+   Compiling clap_derive v4.6.1
+   Compiling phf_macros v0.13.1
+   Compiling tower-layer v0.3.3
+   Compiling anstream v1.0.0
+   Compiling mime v0.3.17
+   Compiling zerovec v0.11.6
+   Compiling sha1 v0.10.7
+   Compiling zerotrie v0.2.4
+   Compiling unicase v2.9.0
+   Compiling httpdate v1.0.3
+   Compiling form_urlencoded v1.2.2
+   Compiling phf v0.13.1
+   Compiling http-body-util v0.1.3
+   Compiling string_cache_codegen v0.6.1
+   Compiling clap_builder v4.6.0
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling futures-channel v0.3.32
+   Compiling mime_guess v2.0.5
+   Compiling sync_wrapper v1.0.2
+   Compiling atomic-waker v1.1.2
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling wasm-bindgen-macro-support v0.2.126
+   Compiling tungstenite v0.29.0
+   Compiling web_atoms v0.2.5
+dyld[45262]: Library not loaded: /opt/homebrew/opt/z3/lib/libz3.5.1.dylib
+  Referenced from: <FEEEDBDC-8A1F-3A50-8847-BA7A5AB41125> /opt/homebrew/Cellar/llvm/23.1.3_1/lib/libLLVM.23.1.dylib
+  Reason: tried: '/opt/homebrew/opt/z3/lib/libz3.5.1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/z3/lib/libz3.5.1.dylib' (no such file), '/opt/homebrew/opt/z3/lib/libz3.5.1.dylib' (no such file), '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/deps/libz3.5.1.dylib' (no such file), '/Users/ruyimg/lib/libz3.5.1.dylib' (no such file), '/usr/local/lib/libz3.5.1.dylib' (no such file), '/usr/lib/libz3.5.1.dylib' (no such file, not in dyld cache), '/opt/homebrew/Cellar/z3/5.3.1/lib/libz3.5.1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/Cellar/z3/5.3.1/lib/libz3.5.1.dylib' (no such file), '/opt/homebrew/Cellar/z3/5.3.1/lib/libz3.5.1.dylib' (no such file), '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/deps/libz3.5.1.dylib' (no such file), '/Users/ruyimg/lib/libz3.5.1.dylib' (no such file), '/usr/local/lib/libz3.5.1.dylib' (no such file), '/usr/lib/libz3.5.1.dylib' (no such file, not in dyld cache)
+error: could not compile `web_atoms` (build script)
+
+Caused by:
+  process didn't exit successfully: `rustc --crate-name build_script_build --edition=2021 /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/web_atoms-0.2.5/build.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type bin --emit=dep-info,link -C embed-bitcode=no --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("serde"))' -C metadata=b86dd58399c19aa4 -C extra-filename=-9e9874ffff153e71 --out-dir /Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/build/web_atoms-9e9874ffff153e71 -L dependency=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/deps --extern phf_codegen=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/deps/libphf_codegen-49d22ad3db486cf3.rlib --extern string_cache_codegen=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/deps/libstring_cache_codegen-90bfc0a6cec658ef.rlib --cap-lints allow` (signal: 6, SIGABRT: process abort signal)
+warning: build failed, waiting for other jobs to finish...

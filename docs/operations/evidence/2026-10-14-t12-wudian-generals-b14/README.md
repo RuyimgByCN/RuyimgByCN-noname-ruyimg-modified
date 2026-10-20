@@ -2,7 +2,7 @@
 
 ## 任务来源
 
-[T12 玩点论杀武将面](../../migration/upstream-extension-reconstruction.md)批 13 续批：
+[T12 玩点论杀武将面](../../../migration/upstream-extension-reconstruction.md)批 13 续批：
 「跨回合存储面」立项落地（面级工程——ShaResolveMachine 注入+字段批）。
 
 ## 承载

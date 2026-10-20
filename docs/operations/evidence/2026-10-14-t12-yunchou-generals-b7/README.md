@@ -2,7 +2,7 @@
 
 ## 任务来源与勘察修正
 
-[T12 运筹武将面](../../migration/upstream-extension-reconstruction.md)批 6 续批。
+[T12 运筹武将面](../../../migration/upstream-extension-reconstruction.md)批 6 续批。
 批 5 曾把「出牌主动技面」登记为机制缺口——**本批勘察推翻该结论**：原生
 `GameAction::ActivateSkill`（N11）主动技通道**完备**（出牌阶段门控/启用与
 限次校验/`behavior.activate()` 机器面/SkillToggled 帧），潜偷/丈八/炮台等

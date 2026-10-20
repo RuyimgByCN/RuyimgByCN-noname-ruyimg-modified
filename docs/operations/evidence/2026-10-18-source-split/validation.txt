@@ -1,0 +1,48 @@
+Source split validation — 2026-10-18 (Asia/Taipei)
+
+Scope and source:
+Task-start HEAD: cef2b0f5 with existing uncommitted user edits.
+Validation HEAD: 98e269a625accd823c062ba523eab475807ae3ce with the current working tree.
+The user stopped other edits before final validation. Existing edits and the intervening L20 batch2 commit are retained. This task did not reset, commit or change rule semantics.
+Native STANDARD_RULESET_VERSION: 321 (unchanged).
+
+96 oversized maintained code files split: 95 Rust source/test files and one DSL file.
+Modules follow existing skill/effect/command/archive/validation/test boundaries; public import paths are retained. Two native command bodies and five core dispatches were extracted into function helpers to keep single functions below the file cap. Moved resource paths and the huanle self-spawn test selector were updated for their new modules.
+All 8,215 maintained source/test files are <=2,000 lines. Maximum: 1,993 lines in crates/engine-core/tests/original_merged_extra/original_extra_wuhun.rs.
+Source roots: crates, apps, packages, scripts, content, fuzz, tests. Upstream raw legacy-source snapshots, .scratch excerpts, archived repositories, build/dependency output and historical docs/evidence are excluded.
+
+Commands and results (offline Rust checks):
+1. cargo test --offline -p engine-native
+   EXIT 0: 1,095 passed, 0 failed, 1 existing ignored, 105 harness/doc-test groups.
+   No compiler warnings. Full output: native-tests.log
+   Ignored: xly::xly_state_growth_probe (manual diagnostic probe).
+2. cargo check --offline -p engine-native --all-targets
+   EXIT 0, no compiler warnings. Full output: native-all-targets.log
+3. cargo test --offline -p engine-core -p content-compiler -p content-schema -p rule-api -p rule-vm
+   EXIT 0: 4,326 passed, 0 failed, 1 existing ignored, 180 harness/doc-test groups.
+   content-compiler 532; engine-core 3,779; rule-vm 15; content-schema/rule-api 0.
+   Existing legacy core warnings remain. Full output: affected-tests.log
+   Ignored: original_extra_relonghun::two_hearts_can_save_a_dying_player_for_two_hp.
+4. python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+   EXIT 0: boundary/exclusion self-test passed (2,000 accepted, 2,001 rejected for maintained Rust, JS/TS, fuzz/tests and DSL; vendor/build/upstream snapshots excluded).
+5. python3 -B scripts/check-source-lines.py
+   EXIT 0: 8,215 files <=2,000 lines. The same guard/self-test is included in CI.
+6. git diff --check
+   EXIT 0. Empty output in diff-check.log.
+
+7. cargo check --offline --workspace --all-targets
+   EXIT 0: all workspace targets compiled successfully on this host. Existing warnings in legacy core/server/other targets remain. Full output: workspace-check.log
+
+Additional checks:
+- Literal include_str/include_bytes path audit: 2,207 paths, zero missing. Changed READMEs have no local Markdown links to repair. reference-check.log
+- Ordered DSL fragment concatenation exactly matches the original 663,798 bytes, SHA256 f784c11ab491745eb5fb4d8c634f63b85e012b37e391d910d405d0fab7507800; 1,051 declarations. dsl-byte-audit.log
+- The added DSL regression compiles embedded fragments and sorted file discovery with pack boundary newlines, then compares full package output and all 1,051 skill entries. Passed in engine-core tests.
+- Core function/match branch token comparisons retain original bodies, apart from five routing wrappers and rustfmt-only delimiters. These source audits supplement the passing tests; they do not establish upstream rule equivalence. core-body-audit.log and core-arm-audit.log
+
+Environment:
+rustc 1.99.0 (b940084d7 2026-09-28) (Homebrew)
+cargo 1.99.0 (5f94df478 2026-08-27) (Homebrew)
+Darwin arm64
+
+Limits:
+No cross-platform CI or wasm-target execution was run. This is a structural refactor and does not change extension acceptance status or claim upstream rule equivalence.

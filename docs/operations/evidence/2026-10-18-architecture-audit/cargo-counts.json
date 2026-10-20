@@ -1,0 +1,34 @@
+{
+  "content_native_loader": {
+    "binaries": 11,
+    "passed": 32,
+    "failed": 0,
+    "ignored": 0,
+    "measured": 0,
+    "filtered": 0
+  },
+  "content_runtime": {
+    "binaries": 10,
+    "passed": 33,
+    "failed": 0,
+    "ignored": 0,
+    "measured": 0,
+    "filtered": 0
+  },
+  "engine_native": {
+    "binaries": 105,
+    "passed": 1095,
+    "failed": 0,
+    "ignored": 1,
+    "measured": 0,
+    "filtered": 0
+  },
+  "engine_native_wasm": {
+    "binaries": 2,
+    "passed": 20,
+    "failed": 0,
+    "ignored": 0,
+    "measured": 0,
+    "filtered": 0
+  }
+}

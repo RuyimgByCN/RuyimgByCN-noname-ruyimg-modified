@@ -1,0 +1,19 @@
+
+> noname-next-web-client@0.1.0 smoke:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node scripts/native-worker-smoke.mjs
+
+PASS init_web
+PASS create
+PASS observer_view
+PASS endPhase
+PASS autoStep_progress | steps=40
+PASS save_hex | bytes=1596
+PASS restore_hex | rev=41
+PASS playCard_shape | rev=41
+FAIL extension_catalog_15 | n=41
+PASS pack_enters_match | hnl_=7
+PASS missing_pack_refused
+PASS same_pack_restore
+PASS wrong_version_refused | 恢复失败: RuleVersionMismatch { snapshot: 11753449270702291392, catalog: 11737545934517934815 }
+{"total":13,"failed":1}
+ ELIFECYCLE  Command failed with exit code 1.

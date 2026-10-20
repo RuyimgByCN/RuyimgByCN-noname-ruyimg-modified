@@ -1,0 +1,120 @@
+Functional source split inventory (2026-10-18)
+
+Task-start HEAD: cef2b0f5 (plus pre-existing working tree edits)
+Validation HEAD: 98e269a625accd823c062ba523eab475807ae3ce
+Working tree included pre-existing and concurrently completed user edits; no reset or commit performed.
+
+Original oversized maintained sources: 96
+path	before_lines	after_root_lines
+crates/content-compiler/src/codegen.rs	10199	1685
+crates/content-compiler/src/lib.rs	19702	275
+crates/content-compiler/src/lsp.rs	6838	633
+crates/content-compiler/src/typecheck.rs	17351	110
+crates/content-schema/src/ir.rs	9172	561
+crates/engine-core/src/command/play.rs	9470	136
+crates/engine-core/src/command/resolve_choice/group_post_1.rs	3237	14
+crates/engine-core/src/command/resolve_choice/group_post_2.rs	3020	14
+crates/engine-core/src/command/resolve_choice/group_post_3.rs	3589	14
+crates/engine-core/src/command/resolve_choice/group_post_4.rs	3067	14
+crates/engine-core/src/command/resolve_choice/group_post_5.rs	3057	14
+crates/engine-core/src/command/resolve_choice/group_post_6.rs	3067	14
+crates/engine-core/src/command/resolve_choice/group_post_7.rs	3032	14
+crates/engine-core/src/command/resolve_choice/group_post_8.rs	5912	16
+crates/engine-core/src/command/resolve_choice/group_post_9.rs	2593	12
+crates/engine-core/src/command/resolve_choice/group_pre_1.rs	3063	14
+crates/engine-core/src/command/resolve_choice/group_pre_2.rs	4268	14
+crates/engine-core/src/command/resolve_choice/group_pre_3.rs	3136	14
+crates/engine-core/src/command/resolve_choice/mod.rs	5482	470
+crates/engine-core/src/command/skill.rs	3270	22
+crates/engine-core/src/content/registry.rs	5187	632
+crates/engine-core/src/effect/primitives/mod.rs	5882	933
+crates/engine-core/src/effect/primitives/pack_bingshi_1.rs	9923	150
+crates/engine-core/src/effect/primitives/pack_bingshi_2.rs	3046	12
+crates/engine-core/src/effect/primitives/pack_bingshi_3.rs	3018	130
+crates/engine-core/src/effect/primitives/pack_bingshi_4.rs	3120	46
+crates/engine-core/src/effect/primitives/pack_ddd_1.rs	3088	34
+crates/engine-core/src/effect/primitives/pack_ddd_2.rs	3143	39
+crates/engine-core/src/effect/primitives/pack_ddd_3.rs	3051	36
+crates/engine-core/src/effect/primitives/pack_extra_1.rs	3154	63
+crates/engine-core/src/effect/primitives/pack_extra_2.rs	3029	26
+crates/engine-core/src/effect/primitives/pack_huicui.rs	3131	28
+crates/engine-core/src/effect/primitives/pack_mobile.rs	3276	21
+crates/engine-core/src/effect/primitives/pack_old.rs	3096	14
+crates/engine-core/src/effect/primitives/pack_refresh.rs	4193	32
+crates/engine-core/src/effect/primitives/pack_shenhua_1.rs	3071	195
+crates/engine-core/src/effect/primitives/pack_shenhua_2.rs	3118	18
+crates/engine-core/src/effect/primitives/pack_shiji.rs	2661	83
+crates/engine-core/src/effect/primitives/pack_sp_1.rs	3332	14
+crates/engine-core/src/effect/primitives/pack_sp_2.rs	3381	40
+crates/engine-core/src/effect/primitives/pack_tw_1.rs	3530	14
+crates/engine-core/src/effect/primitives/pack_tw_2.rs	3045	18
+crates/engine-core/src/effect/primitives/pack_tw_3.rs	2929	23
+crates/engine-core/src/effect/primitives/pack_wandianlunsha.rs	3039	30
+crates/engine-core/src/effect/primitives/pack_xianding_1.rs	3100	18
+crates/engine-core/src/effect/primitives/pack_xianding_2.rs	3039	42
+crates/engine-core/src/hash.rs	10699	1751
+crates/engine-core/src/query/mod.rs	5073	479
+crates/engine-core/src/query/modifier.rs	3108	934
+crates/engine-core/src/state/mod.rs	2734	1492
+crates/engine-core/src/state/skills.rs	2498	96
+crates/engine-core/src/trigger/catalog.rs	2504	126
+crates/engine-core/src/trigger/dispatch.rs	10344	233
+crates/engine-core/src/vm_host.rs	6465	829
+crates/engine-core/tests/original_merged_bingshi.rs	9223	100
+crates/engine-core/tests/original_merged_clan.rs	3079	37
+crates/engine-core/tests/original_merged_collab.rs	4697	61
+crates/engine-core/tests/original_merged_diy.rs	3434	49
+crates/engine-core/tests/original_merged_extension.rs	8611	100
+crates/engine-core/tests/original_merged_extra.rs	5781	31
+crates/engine-core/tests/original_merged_huicui.rs	4341	52
+crates/engine-core/tests/original_merged_jsrg.rs	4331	49
+crates/engine-core/tests/original_merged_key.rs	9368	124
+crates/engine-core/tests/original_merged_mobile.rs	9792	124
+crates/engine-core/tests/original_merged_modifier.rs	2063	4
+crates/engine-core/tests/original_merged_offline.rs	15750	208
+crates/engine-core/tests/original_merged_old.rs	4181	61
+crates/engine-core/tests/original_merged_onlyol.rs	2551	28
+crates/engine-core/tests/original_merged_refresh.rs	12293	151
+crates/engine-core/tests/original_merged_shahai.rs	2611	7
+crates/engine-core/tests/original_merged_shenhua.rs	18124	181
+crates/engine-core/tests/original_merged_shiji.rs	7090	88
+crates/engine-core/tests/original_merged_sixiang.rs	12041	148
+crates/engine-core/tests/original_merged_sp.rs	29405	391
+crates/engine-core/tests/original_merged_sp2.rs	8348	121
+crates/engine-core/tests/original_merged_standard.rs	5175	76
+crates/engine-core/tests/original_merged_tw.rs	9591	169
+crates/engine-core/tests/original_merged_xianding.rs	15794	250
+crates/engine-core/tests/original_merged_yijiang.rs	13755	157
+crates/engine-native/src/archive.rs	4966	302
+crates/engine-native/src/content/host.rs	37521	607
+crates/engine-native/src/content/standard.rs	8472	491
+crates/engine-native/src/engine.rs	7022	516
+crates/engine-native/src/kernel.rs	10952	77
+crates/engine-native/src/snap.rs	4562	33
+crates/engine-native/tests/boundary_snapshot.rs	2663	1032
+crates/engine-native/tests/g1_huanle.rs	3163	146
+crates/engine-native/tests/g1_shahai_gujian.rs	3188	212
+crates/engine-native/tests/g1_shahai_swd.rs	17120	423
+crates/engine-native/tests/g1_shahai_yunchou.rs	2686	156
+crates/engine-native/tests/g1_wudian.rs	12359	483
+crates/engine-native/tests/native_kernel.rs	22124	1731
+crates/rule-api/src/effect.rs	10778	223
+crates/rule-vm/src/bytecode.rs	2079	465
+crates/rule-vm/src/vm.rs	9196	884
+content/original/ported/shahai/shahai_meta.skill	9125	replaced by 9 functional DSL files
+
+Current maintained sources checked: 8215
+Largest maintained source: crates/engine-core/tests/original_merged_extra/original_extra_wuhun.rs (1993 lines)
+Raw upstream legacy-source snapshots, archived repositories, .scratch excerpts, generated build/dependency output and historical documentation/evidence are outside maintained code scope.
+
+Largest maintained source files:
+1993	crates/engine-core/tests/original_merged_extra/original_extra_wuhun.rs
+1990	crates/engine-core/src/effect/mod.rs
+1971	crates/engine-native/tests/t8_rvm_bridge.rs
+1956	content/original/ported/shahai/shahai_meta_swd_characters.skill
+1934	content/original/ported/shahai/shahai_meta_hearth.skill
+1896	crates/engine-core/tests/original_merged_modifier/original_modifier_temp_skills.rs
+1881	scripts/sync-original-content.mjs
+1827	crates/engine-core/tests/original_merged_sp/original_sp_batch_af_dsl.rs
+1773	crates/engine-core/src/content/registry/map_filter.rs
+1767	crates/engine-native/src/engine/play_card.rs

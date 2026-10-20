@@ -1039,6 +1039,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 634 轮**：**新增 `scripts/check_local_links.py` + 单测**（**链接检查从「临时脚本」变成「可复现」** ✓）——**首次跑出 14 条坏链** ✗：**台账 11 条 `../../architecture/`（少一层 ⇒ `../architecture/`）** ✓、**进度主稿 2 条 `operations/evidence/`（应为 `../operations/`）** ✓、**`host-reachability` 1 条 typo（`rules-diff-handler` ⇒ `handover`）** ✓、**台账 1 条指向不存在的证据目录**（**改为指向 `blocked-fixes`** ✓）；**修完 `core` 坏链 0** ✅；**单测 2 例**（存在/缺失 + 嵌套 `../` ✓）；**三条检查现状**：**门禁 exit=1（既有）✗、索引 exit=0 ✅、链接 exit=0 ✅**；**⚠ 又一次「pipe 吞 exit code」**（`--all | tail` 报 exit=0 ✗）。
 >
+> **第 635 轮**：**批量修坏链时误伤 1000+ 正确链接，已回滚并改为条件式** ⚠️——**首次用「全局替换 `../operations/evidence/X/` → `../X/`」** ✗ ⇒ **把 `docs/architecture/` 里的正确链接也改了** ✗ ⇒ **坏链从 51 暴增到 1487** ❗ ⇒ **立即 `git checkout -- docs/` 回滚** ✓（**恢复到 52** ✓，**core 仍 0** ✅）；**改为「只在 `docs/operations/evidence/**` 下替换 `../../migration/` 与 `../../architecture/`」** ✓（**这两类无歧义** ✓）⇒ **改 19 个文件、坏链 52 → 31** ✓、**core 保持 0** ✅；**剩下 31 条是「缺失 `.log` / 跨 `../../DATE-DIR/` 类」** ✗（**歧义大，需人工** ✓）。
+>
+
 
 
 
