@@ -4799,3 +4799,27 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 - **❓ 未核 34 处**。
 
 **结论**：**错误不是普遍的，而是集中在两条映射链上** ✅ —— **可修、范围可控**。
+
+### 剩余 6 条（`begin=false` 组）核对：**1 一致 / 1 阶段不同 / 4 未定位**（第 584 轮）
+
+| 行为 | 原生 | 上游 `trigger` | 判定 |
+|---|---|---|---|
+| **`WudianYuedong`** | `Phase::Play, begin=false` | **`player: phaseUseEnd`** | ✅ **一致**（**出牌阶段结束**）|
+| **`GujianFoodTanhuadong`** | `Phase::Play, begin=false` | **`player: phaseEnd`** | ❗ **阶段不同**（**出牌阶段结束 vs 阶段结束**）⇒ **新增 G16** |
+| `Xiefang` | `Phase::Draw, begin=false` | **（无 `trigger`，186 B）** | ⚠️ 上游无触发（**可能有 `group`**，未读）|
+| `GwentBirinState` | `Phase::Play, begin=false` | **未找到** | ❓ |
+| `GwentCiguState` | `Phase::Draw, begin=false` | **未找到** | ❓ |
+| `GwentQinpenState` | `Phase::Discard, begin=false` | **未找到** | ❓ |
+
+⇒ **Gwent 三条上游未定位**（**可能是「状态类」技能，定义在 `gwent/` 之外** ❓）
+
+### 「52 处阶段过滤」进度更新
+
+| 项 | 之前 | **现在** |
+|---|---:|---:|
+| **已核** | 18 | **24** |
+| ✅ 正确 | 8 | **9** |
+| ❌ 批量/单点缺陷 | 8 条（G14 7 + G15 ≥3 + 4 单点，**有重叠**）| **+ G16** |
+| ❓ 未核 | 34 | **28** |
+
+**结论不变**：**错误集中在 `phaseBegin`（G14）与 `before/after`（G15）两条链 + 少量单点（G16 属「阶段粒度」类）** ✅

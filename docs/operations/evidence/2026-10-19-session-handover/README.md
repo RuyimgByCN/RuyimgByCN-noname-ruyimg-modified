@@ -173,6 +173,7 @@
 | **G7** | **`duoqi`**（`wudian`，**`phaseUse` 中止未建模** + 筑城标记）| **引擎表达力** | 需 DSL/引擎支持 |
 | **G9** | **`jifeng` 只缺 `mod` 面**（U05-SWD；**`trigger` 与随机分支已实现** ✅ —— 三重确认：filter 匹配上游、step 有 `cancel_permille` 随机落法、`jifeng_single_target_trick` 只用于 filter）| **引擎表达力**（目标选择层）| 需支持「单目标牌可多选目标」 |
 | **G12** | **`huajin2` 完全错位**（上游「自己造成伤害时伤害 +1」，原生 filter 是 `Phase::Judge`）| **实现（改 filter）** | ❗❗ **技能不生效**，改回 `damageBegin` |
+| **G16** | **`GujianFoodTanhuadong` 阶段不同**（上游 `phaseEnd`，原生 `Phase::Play, begin=false` 即「出牌阶段结束」）| **实现（改阶段）** | ❗ 出牌阶段结束 ≠ 阶段结束 |
 | **G15** | **第二类映射：上游 `phase*Before` ⇒ 原生 `begin: true`**（`rumeng`/`fenglue` 两例；引擎无「阶段之前」档）| **引擎表达力** | ⚠️ 至少 2 条，方向与 G14 相反 |
 | **G14** | **批量映射错误：上游 `phaseBegin`（任意阶段）⇒ 原生 `Phase::Judge`（判定阶段）** —— **7/7 一一对应**（`daixing2`/`qianfang`/`diyguhuo`/`xuelunyang`/`geju`/`zhenjiu2`/`yougeng`）| **实现（新增「任意阶段开始」表达）** | ❗❗ **应作为批量缺陷一次性修**，不逐条修 |
 | **G13** | **`zhenjiu2` 窄化**（上游 `phaseBegin` 不限阶段，原生只在 `Phase::Judge`）| **实现（改 filter）** | ❗ **漏触发**，改为任意阶段开始 |
