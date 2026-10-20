@@ -28,7 +28,8 @@
 > 客观事实：**生命周期证据仅覆盖 5 个来源**（L04/U01/U03/U05/U07，见
 > [口径核对证据](../operations/evidence/2026-10-19-g-lifecycle-vs-counted/README.md)）；
 > **八项验收通过数 = 0 来源**（安装/保存恢复 仅部分来源有证据；配置/组合/升级 有用例但**未按来源签署**；
-> 目标平台/性能 **0 证据**）。详见[八项验收清单化](../operations/evidence/2026-10-19-eight-item-acceptance/README.md)
+> 目标平台/性能 **0 证据**）。**逐项签署状态见[五来源签署表](../operations/evidence/2026-10-19-five-source-signoff/README.md)**
+> （2026-10-19 更新：**安装 5/5、升级 5/5、配置 5/5、组合 5/5、保存恢复 5/5**；目标平台/性能 0/5、规则差异见基准各差异族）。详见[八项验收清单化](../operations/evidence/2026-10-19-eight-item-acceptance/README.md)
 > 与 [G0–G5 状态矩阵](../operations/evidence/2026-10-19-g-state-matrix/README.md)。
 
 ## 1. 范围与来源基线
