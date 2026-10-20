@@ -813,6 +813,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 549 轮**：**U05-SWD v0 更正**——逐条复核发现**原生列的提取脚本有误** ✗：正则`HostBehavior::X\b[^\n]*\n((?:\s{12,}[^\n]*\n){0,9})` **越过分支边界**、把**下一个分支的字段**当成当前分支 ✓ ⇒ **已确认 1 处错**：**`Hxunzhi2` 实为 `None`** ✓（注释「魂殉志：**无触发时机（主动面 + 内联臂）**」✓）而 v0 记成 **`PhaseEnd`** ✗；`Jifeng`=`CardUsed` ✅、`Xiuluo`=`PhaseBegin` ✅ 复核一致；**`SwdZhenjiu2`/`SwdHuanxing2` 不在 `metadata/common.rs`** ✗ ⇒ **未复核**；⇒ **「7 一致 / 6 需判定」中 `Hxunzhi2` 作废**，**其余在逐条复核前均视为「未复核」** ✓；**教训**：**用正则读结构化代码是脆弱手段** ✓（**应按分支切片** ✓）。
 >
+> **第 550 轮**：**U05-SWD v1：16/16 完整**（台账第 211 行）——改用「**按分支切片**」+ **扫全部 metadata 文件** ✓ ⇒ 可信的 16 行：**8 一致 ✅**（含 **`moyan` 由 v0 的 `CardUsed` 修正为 `None`** ✓）、**6 需判定 ⚠️**（**粒度 2**：`huanxing_state`/`xuanyuanjian3`；**`hxunzhi2`：上游 `phaseUseEnd` ⇒ 原生 `None`** —— **根本没有触发** ✗，**比 v0 记的 `PhaseEnd` 更严重** ✓；`jifeng` **缺「指定目标前」档**；`swd_xiuluo` **准备阶段 vs 阶段开始**；`miedao` 上游无 ⇒ 原生 `PhaseBegin`）、**2 上游未取/无定义 ❓**（`tianxiang2` 在上游 `character/shenhua/skill.js`、`xuanyuanjian2` **上游只有 translate 无定义** ✓）；**最可疑：`hxunzhi2`** ✓；**并用注释交叉验证了 `Hxunzhi2`/`Jifeng`/`Moyan` 三条** ✓。
+>
+
 
 
 

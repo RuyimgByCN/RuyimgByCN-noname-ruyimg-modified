@@ -4275,3 +4275,39 @@ HostBehavior::XianjianAnwugu2 => match self.stage {
 
 ⇒ **`hxunzhi2`（`phaseUseEnd`⇒`PhaseEnd`）与 `jifeng`（`useCardToBefore`⇒`CardUsed`）是最可疑的两条** ⚠️
 （前者是**不同阶段**，后者**缺「指定目标前」档**）；**不签署规则差异**。
+
+### U05-SWD **v1**：按分支切片重取原生列（**16/16 完整**，同日）
+
+改用「`HostBehavior::X =>` 到**下一个** `HostBehavior::`」切片、并**扫全部 metadata 文件**
+（`metadata/common.rs` + `metadata/swd.rs` 等），得到**可信的 16 行**：
+
+| 包技能 | 上游 `trigger` | 原生 `EventKind` | 判定 |
+|---|---|---|---|
+| `swd_zhenjiu2` | `phaseBegin` | `PhaseBegin` | ✅ |
+| `swd_lmazui2` | `damageBegin` | `DamageBefore` | ✅ |
+| `swd_huajin2` | `damageBegin` | `DamageBefore` | ✅ |
+| `swd_jinlin2` | `phaseBegin` | `PhaseBegin` | ✅ |
+| `swd_guiyan2` | `dying` | `Dying` | ✅ |
+| `bingfeng2` | `turnOverAfter` | `TurnOvered` | ✅ |
+| `xuanyuan` | `phaseEnd` | `PhaseEnd` | ✅ |
+| **`moyan`** | **（无 trigger）** | **`None`** | ✅（**v0 误记为 `CardUsed`，已修正**）|
+| `swd_huanxing_state` | `damageAfter` | `Damage` | ⚠️ 粒度 |
+| `xuanyuanjian3` | `damageAfter` | `Damage` | ⚠️ 粒度 |
+| **`hxunzhi2`** | **`phaseUseEnd`** | **`None`** | ⚠️ **原生无触发**（v0 记 `PhaseEnd`，**错**）|
+| `jifeng` | `useCardToBefore` | `CardUsed` | ⚠️ 缺「指定目标前」档 |
+| `swd_xiuluo` | `phaseZhunbeiBegin` | `PhaseBegin` | ⚠️ 准备阶段 vs 阶段开始 |
+| `miedao` | （无 trigger） | `PhaseBegin` | ⚠️ 上游无 ⇒ 原生有 |
+| `tianxiang2` | **未取**（上游在 `apps/core/character/shenhua/skill.js`）| `Damage` | ❓ |
+| `xuanyuanjian2` | **上游只有 translate、无定义** | `DamageBefore` | ❓ |
+
+### v1 小结
+
+| 类 | 条数 |
+|---|---:|
+| ✅ 一致 | **8** |
+| ⚠️ 需判定（粒度 2 / 无触发 1 / 缺档 1 / 阶段 1 / 上游无 1）| **6** |
+| ❓ 上游未取或无定义 | **2** |
+
+**最可疑**：**`hxunzhi2`**（上游 `phaseUseEnd`，**原生 `None`**）—— **不是粒度问题，是根本没有触发** ⚠️。
+
+**方法（本轮修正）**：**按分支切片** + **扫全部 metadata 文件**；并用**注释交叉验证**了 `Hxunzhi2`/`Jifeng`/`Moyan` 三条 ✅。
