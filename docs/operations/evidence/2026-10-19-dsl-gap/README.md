@@ -250,3 +250,44 @@ Int Bool Relation Error SkillPileCount
 | 3 | **「effect 缺口被未跟踪文件阻塞」** | **`grep` 把文档注释当成 match 臂** |
 
 ⇒ 共同点：**用文本统计代替结构判断**。**凡是「数 match 臂」这类问题，应直接看 AST/编译结果**。
+
+---
+
+## 11 ✅ **决定性实验**：新增 `EffectRequest` 变体 ⇒ **`engine-core` 编译失败**（2 处穷举 match）
+
+不再用 grep 猜，直接做实验（**已完全还原**）。
+
+### 11.1 做法
+
+1. 在 `crates/rule-api/src/effect.rs` 的 `pub enum EffectRequest {` 后插入一个**探针变体** `__ProbeVariant`；
+2. `cargo build --offline -p engine-core`；
+3. **立即 `git checkout -- crates/rule-api/src/effect.rs` 还原**（`git status` 已确认为空）。
+
+### 11.2 结果（原始日志：[probe-build.log](probe-build.log)）
+
+```
+exit=101
+error[E0004]: non-exhaustive patterns: `rule_api::EffectRequest::__ProbeVariant` not covered
+error[E0004]: non-exhaustive patterns: `&rule_api::EffectRequest::__ProbeVariant` not covered
+error: could not compile `engine-core` (lib) due to 2 previous errors; 94 warnings emitted
+```
+
+报错指向 **`crates/engine-core/src/command/resolve_choice/…`**（`group_post_3`/`group_post_4`/`group_post_5`/`group_post_6`
+下的多个文件；**均为未跟踪** ❌）。
+
+### 11.3 结论（**确定**，不再是「未知」）
+
+| 缺口类型 | 数量 | 能否在可修改范围落地 | **证据** |
+|---|---:|---|---|
+| **query 类**（`history_count`/`is_chained`/`trigger.num`）| 3 | ❌ **不能** | `engine-core/src/query/{cache.rs,mod.rs}` 穷举 match（41/16 臂、**0 catch-all**）|
+| **effect 类**（`remove_skill`/`judge`/`choose_target`/`card_pile_search`/`force_die`）| 5 | ❌ **不能** | **本实验**：新增变体 ⇒ **2 处 `E0004`**，均在**未跟踪**的 `resolve_choice/**` |
+| `round` | 1 | ✅ 可用近似 | `RoundNumberCapped`（需传大上限）|
+
+⇒ **5 个真规则候选（`dz_gs_yinfu`/`boss_danshu`/`boss_xixing`/`polu_damage`/`boss_tianyun`）
+在当前可修改范围内一个也无法迁移** ❌ —— 这是**边界**，不是分析不足 ✅。
+
+### 11.4 顺带的方法论收获
+
+- 本实验**一次就终结了三轮猜测**（§9 猜「无 catch-all」、§10 推翻、§11 定案）；
+- **失败过的第一次尝试**：把锚点 `DealDamageBanActiveIfDying`（不存在）当作插入点 ⇒ 插到了文件首行 ⇒ **语法错误** ⇒
+  **这次失败不是答案**（我差点把它当成「编译失败=阻塞」的证据 ✗）—— **必须区分「实验机制失败」与「实验对象失败」** ✅。
