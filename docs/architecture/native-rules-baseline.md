@@ -4066,3 +4066,42 @@ HostBehavior::WudianDuwen => { … Flow::Done }
 4. ⇒ **U05-OW 差异族 v2 完成**（**6 条全部有对照**），但**仍不签署「规则差异通过」** ——
    需要**行为样本**来证明 ②③ 两种口径在实际对局中**等价或差异可接受**；
 5. **该包有 24 个武将 ⇒ 载体存在 ⇒ 样本可写** ✅（**这是它比 U08 强的唯一一点**）。
+
+## U05-XJ（杀海拾遗 / xianjian 子包）差异族 **v0**（2026-10-19，第 533 轮）
+
+**来源**：`archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js`
+**原生包**：`packages/extensions/shaai-xianjian-upstream-noname`（**36 武将 / 22 技能**，全部 `host:xj_*`）
+**宿主实现**：`content/host/metadata/xianjian.rs`（**该组共 73 个 `HostBehavior::Xianjian*` 行为**）
+
+### 22 个声明技能的 trigger 对照
+
+| 技能 | 上游 `trigger` | 原生 `EventKind` | 判定 |
+|---|---|---|---|
+| `tianshe` | `damageBefore` | **`DamageBefore`** | ✅ 一致 |
+| `ya` / `song` / `xuanyan2` / `txianqu` | `damageBegin` | **`DamageBefore`** | ✅ 一致 |
+| `lingyu` | `phaseEnd` | **`PhaseEnd`** | ✅ 一致 |
+| `feixu` | `useCard`/`respond` | **`CardUsed`** | ✅ 基本一致 |
+| `guiyuan` / `tannang` / `xuanyan` / `diewu` | **（无）** 被动 | **`None`** | ✅ 一致 |
+| `tianshe2` | `damageAfter` | **`Damage`** | ⚠️ 待判（`Damage` 是否含 after）|
+| `xuanyan3` / `ningbin` / `anwugu` | `damageEnd` | **`Damage`** | ⚠️ 待判 |
+| `lingxue` | `recoverEnd` | **`Recover`** | ⚠️ 待判 |
+| `huimeng` | `recoverAfter` | **`Recover`** | ⚠️ 待判 |
+| `fanling` | `loseHpAfter` | **`LoseHp`** | ⚠️ 待判 |
+| `feng` | `drawBegin` | **`CardsDrawn`** | ⚠️ 待判 |
+| `xjyufeng` | `loseEnd` | **`CardsDiscarded`** | ⚠️ **语义可能不同**（失去牌 vs 弃牌）|
+| `anwugu2` | `phaseAfter` | **`None`** | ⚠️ **上游有触发，原生无** |
+
+**小计**：**7 条一致** ✅ / **11 条待判** ⚠️ / **4 条被动一致** ✅。
+
+### 关键 caveat：`EventKind` 的语义粒度**未确认**
+
+`damageBefore` / `Damage` / `DamageEnd` 在引擎里是**不同变体**（`DamageBefore` 已出现 ✓），
+所以「`damageEnd` ⇒ `Damage`」**可能只是命名映射**，也可能**真的少了一档** ❗
+⇒ 必须**读 `EventKind` 定义**（或写样本）才能判定，**不能由名字直接下结论**。
+
+### v0 结论
+
+1. **22 条全部有对照** ✅（**比 U05-OW 的 v0 更完整**）；
+2. **11 条待判**，其中 **`xjyufeng`（loseEnd vs CardsDiscarded）** 与 **`anwugu2`（phaseAfter vs None）**
+   是**最可疑的两条**（前者语义不同、后者少了触发）；
+3. **不签署规则差异** —— 需先读 `EventKind` 语义 + 写样本。

@@ -783,6 +783,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 534 轮**：**U05-OW v2：6 条全部有对照（收尾）**（台账第 205 行）——补读 `step/wudian_cards.rs` / `step/wudian_recovery.rs`：**6/6 都有原生语义注释** ✅（作者写「**上游是什么 / 原生是什么 / 规则 vNNN**」）；**2 条作者自述对齐** ✅（`duwen` 时机接近、`bshaowei` 有意合并）；**4 条有实质口径差异** ⚠️：**`guangshu`/`shouhu`/`paotai` 由「被动/触发」变「`Act` 主动技」**、**`ziyu` 由「全局 `phaseEnd`」变「对自己 `PhaseBegin`」**；⇒ **差异族 v2 完成**（**6 条全有对照** ✓）但**仍不签署** ✗（**需行为样本证等价或差异可接受** ✓）；**该包 24 武将 ⇒ 载体存在 ⇒ 样本可写** ✅（**这是它比 U08 强的唯一一点** ✓）；**规则差异仍 5/32** ✓。
 >
+> **第 535 轮**：**U05-XJ（`shaai-xianjian`）差异族 v0**（台账第 206 行 + 规则基准）——上游 `xianjian/skill.js` vs 原生 `metadata/xianjian.rs`：**36 武将 / 22 技能全部 `host:xj_*`** ✓，**该组共 73 个 `Xianjian*` 行为** ✓；**22 条 trigger 全部有对照** ✓：**7 一致 ✅**、**4 被动一致 ✅**（上游无 trigger ⇒ 原生 `None`）、**11 待判 ⚠️**（`damageEnd`⇒`Damage` 三例、`recoverEnd/After`⇒`Recover`、`loseHpAfter`⇒`LoseHp`、`drawBegin`⇒`CardsDrawn`、**`xjyufeng`：`loseEnd`⇒`CardsDiscarded`（语义可能不同）**、**`anwugu2`：`phaseAfter`⇒`None`（少了触发）**）；**caveat**：**`EventKind` 粒度未确认** ✓（`DamageBefore` 已存在 ⇒ `damageEnd`⇒`Damage` 可能只是命名映射 ✗）⇒ **不签署** ✓；**规则差异仍 5/32** ✓。
+>
+
 
 
 
