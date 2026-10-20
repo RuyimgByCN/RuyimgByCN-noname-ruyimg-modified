@@ -308,3 +308,32 @@ wudian  wuxing
 
 **「11」不是错的** —— **它是「不含 `boss-zhugeliang`」时的值** ✓
 ⇒ **与附 1 的「包数合计 40 ≠ 41」是同一个根因** ✅ —— **两处必须一起改** ❗
+
+---
+
+## 附 7：**「组合 11」的来源—包账目核实**（2026-10-19）
+
+### 三张矩阵的实测底账
+
+| 矩阵 | 参与包 | 配对数 | 失败 | 证据 |
+|---|---:|---:|---:|---|
+| **`nc08_skill_pair_matrix`** | **20** | **190**（C(20,2)）| **0** ✅ | [skill-pair-matrix](../2026-10-19-skill-pair-matrix/README.md) |
+| **`nc08_composition_pair_matrix`** | 10 卡牌包 | **45** | 0 ✅ | [composition-pair-matrix](../2026-10-19-composition-pair-matrix/README.md) |
+| **`nc08_pile_pair_matrix`** | 20（牌堆 × 卡牌）| **20** | 0 ✅ | [pile-pair-probe](../2026-10-19-pile-pair-probe/README.md) |
+
+### 20 个参与包 → 来源
+
+| 来源 | 包 | 计 |
+|---|---|---:|
+| **U05 杀海拾遗** | `shaai-ow`/`shaai-xianjian`/`shahai-{gujian,gwent,hearth,mtg,swd,yunchou,zhenfa}` | **9 包 = 1 来源** |
+| **其余** | `d3`(U01)、`huanle`(U06)、`wudian`(U07)、`hero-kill`(U08)、`doomsday-brawl`(L19)、`mark-supplement`(L20)、`select-beautify`(L27)、`longxue`(L29)、`epic-cards`(?)、`wuxing`(?) | **11 包** |
+| **未计入** | **`boss-zhugeliang`** | ⚠️ 见附 1 |
+
+⇒ **1 + 10 = 11 个来源**（**`boss-zhugeliang` 不计时** ✅）
+⇒ **若补进 `L03` ⇒ 12**（**与附 1 同一疏漏** ⚠️）
+
+### 结论
+
+**「组合 11/32」有真实测试支撑** ✅ ——
+**190 对（技能/武将层）+ 45 对（卡牌层）+ 20 对（牌堆层）= 255 对，全部 0 失败**；
+**11 = 参与包的来源去重数**，**`boss-zhugeliang` 未计入即 11** —— **与包数 40≠41 同源** ✅
