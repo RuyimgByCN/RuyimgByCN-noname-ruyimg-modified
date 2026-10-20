@@ -416,3 +416,42 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 **「95 个已挂载未实现」应改为「65 个纯注册 + 14 个待核 + 16 个有逻辑」** ✅
 ⇒ **65 是确认下界** ⚠️ —— 而 **`U05` 占 40 个**，**这才是它「规则差异」真正的缺口主体** ❗
 ⇒ **比 15 条「映射错」缺陷大一个量级** ⚠️
+
+---
+
+## 4.8 ❌ **撤回：「95 个未实现」是错的**（第 677 轮）
+
+### 我错在哪
+
+**假设**：`factory.rs` 里 `HostBehavior::X => (None, None)` ⇒ **无主动面、无效果步 ⇒ 未实现**。
+
+**实测反驳**：抽查 4 个「11 次」的行为（`Bingfeng2`/`Cyqiaoxie`/`Gaizao`/`Gongxin`），**它们全都有实现**：
+
+| 行为 | 出现位置（节选）|
+|---|---|
+| `Bingfeng2` | `filtering/common.rs:365` **有逻辑**、`metadata/common.rs:389` **有 trigger meta**、`step/skills_status.rs:558` **有效果步**、`tags.rs:257` **有 tag** |
+| `Cyqiaoxie` | `filtering/common.rs:372`、`metadata/common.rs:399`、`step/skills_cards.rs:1214`、`tags.rs:255` |
+| `Gongxin` | `step/skills_cards.rs:542`、`activation/common.rs:69`、`tags.rs:278` |
+| `Niepan` | `step/skills_status.rs:231`、`activation/common.rs:238`、`tags.rs:236` |
+
+⇒ **`(None, None)` 只表示「没有 `activatable` 与 `factory` 层面的 step」** ✅
+⇒ **实际效果走 `step.rs` 的分发 + `step/skills_*.rs`** ✅ ⇒ **与「未实现」无关** ❌
+
+### 出现次数也不代表实现度
+
+`11` 与 `13` 的差别只是**多不多一处 `activation*.rs` 条目**
+（**`Gongxin`/`Niepan` 有 `activatable` 入口，`Bingfeng2`/`Cyqiaoxie` 没有**）⇒ **都是已实现** ✅
+
+### 撤回范围
+
+| 结论 | 状态 |
+|---|---|
+| **「95 个已挂载未实现」** | ❌ **撤回** |
+| **「65 个纯注册、无任何逻辑」** | ❌ **撤回** |
+| **`reguhuo` 未实现（§4.6.2）** | ✅ **仍然成立** —— 它的依据是 **`filtering => false` + `factory => (None,None)` + `EPIC_REGUHUO_KEY` 未使用 + 无 `step` 条目**，**多条证据一致** |
+
+### 教训
+
+**「注册结构里没出现」不等于「没实现」** ——
+**`factory.rs` 只是多条分发路径中的一条**，**必须把所有分发点（`step.rs`、`step/*`、`activation*`、`support`）都查过才能说「未实现」** ⚠️
+**这是本会话第 4 次「扫描范围不足」**（前三次：`skill.js` 漏 `mode/`、包数据漏 `host.rs`、只扫 `noname`）❌
