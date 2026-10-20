@@ -1,5 +1,10 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+> ## ⚠ **当前值（第 568 轮实测，2026-10-19）**
+> `STANDARD_RULESET_VERSION = 322`（`crates/engine-native/src/content/standard.rs:126`）、
+> `ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native/src/archive.rs:113`）。
+> 下面「2026-10-10 复核」为**历史语境**；**以本行为准**。
+
 状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：已提交 HEAD 为 v321 / 存档 v105，当前 dirty 工作树为 v322 / 存档 v105**——`crates/engine-native/src/content/standard.rs:126`、`crates/engine-native/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v322 为最新（工作树）**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
