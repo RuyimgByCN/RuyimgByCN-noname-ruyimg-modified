@@ -27,8 +27,8 @@
 | **D1** | **产品决策** | **U05-XJ 的 8 条「结束后」粒度差异是否接受** | 接受 ⇒ **U05-XJ 可签署**，规则差异 **5/32 → 6/32** |
 | **I1** | **实现** | **`hxunzhi2`（U05-SWD）未实现**：上游「`phaseUseEnd` ⇒ 移除技能 + `player.die()`」，原生 **filter 恒 `false`** | **U05-SWD 不可签署**，直至实现或以明确口径近似 |
 | **I2** | **可达性** | **U08 的 5 个技能无载体**（全库 0 条武将授予） | 需迁 43 武将 或 支持「卡牌/装备授予宿主技能」 |
-| **P1** | **待判定** | U05-SWD：`jifeng`（缺「指定目标前」档）、`swd_xiuluo`（准备阶段 vs 阶段开始）、`miedao`（上游无 ⇒ 原生 `PhaseBegin`）| 3 条 |
-| **P2** | **待判定** | U05-OW：`guangshu`/`shouhu`/`paotai`（主动技化）、`ziyu`（作用域由全局改自身）| 4 条 |
+| **P1** | **待判定（已定性）** | U05-SWD：`jifeng`（**缺「指定目标前」档 + `mod` 面未判**）、`swd_xiuluo`（**准备阶段 vs 阶段开始**）、**`miedao`（上游**仅有 `group`**，原生却给 `PhaseBegin`）** | 3 条（**各有明确定性**，见基准 §U05-SWD v4）|
+| **P2** | **已定案** | U05-OW：`guangshu`/`paotai`/`shouhu` **上游都是主动技 ⇒ 形式一致 ✅**；**`ziyu` 是 `trigger`+`direct` ⇒ 原生做成主动技 = 实质差异 ⚠️** | **1 条 + 2 个子面** |
 | **U1** | **上游缺口** | U05-SWD：`tianxiang2`（上游在 `character/shenhua/skill.js`）、`xuanyuanjian2`（**仅 translate**）| 2 条 |
 
 ## 4 状态（**如实**）

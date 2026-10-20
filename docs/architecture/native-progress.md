@@ -826,6 +826,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 555 轮**：**本地链接全检 + 修复 5 条坏链**（AGENTS.md 要求「文档改动至少检查本地链接」✓）——脚本扫 4 个文件共 **367 个本地链接**：**首次 5 条坏链** ✗（`rules-diff-handover` 2 条、`session-handover` 3 条）⇒ **根因**：从 `docs/operations/evidence/<目录>
 > **第 556 轮**：**U05-OW v3：4 条待判定按「上游字段集」定案**（台账第 213 行）——读 `ow/skill.js` 的字段集本身就能判断技能类型 ✓：**`guangshu`（仅 `enable`）/`paotai`（`enable`+`group`）/`shouhu`（`enable`+`mod`）⇒ 上游都是主动技** ✓ ⇒ **原生 `Act` 形式一致 ✅**（**`mod`/`group` 子面未判** ❓）；**`ziyu` 是 `trigger`+`direct`、无 `enable`** ✓ ⇒ **上游「全局 `phaseEnd` 自动摸/回」vs 原生「自己出牌阶段主动」** ✗ ⇒ **发动时机/方式/次数三者都不同** ⚠️ **实质差异** ✓；⇒ **U05-OW 的 4 条待判收敛为「1 条实质差异（`ziyu`）+ 2 个子面未判」** ✓；**规则差异仍 5/32** ✓。
 >
+> **第 557 轮**：**U05-SWD v4 + 交接页更新**——用「上游字段集」判定 P1 三条 ✓：**`jifeng`（`trigger`+`mod`+`forced`+`priority`）** ⇒ **缺「指定目标前」档、`mod` 面未判** ⚠️；**`swd_xiuluo`（`trigger`+`direct`）** ⇒ **准备阶段 vs 阶段开始档位不同** ⚠️；**`miedao`（仅 `group`，84 B）** ⇒ **上游没有自身触发** ❗ ⇒ **原生给它 `PhaseBegin` 可能是把「组技宿主」当成「触发技」** ✓（**需看 `group` 指向谁，未查** ✗）；⇒ **P1 从「3 条待判」变为「3 条有明确定性」** ✓；**交接页同步更新**：**P2 标为「已定案」**（**1 条实质差异 + 2 子面** ✓）、**P1 标为「已定性」** ✓。
+>
+
 /` 到 `docs/architecture/` 需 **`../../../`** ✗（**我只写了 `../../`** ✗）；**另** `session-handover` 里一条**既有坏链**（`../2026-10-19-dsl-gap/../../architecture/…`）✓ —— **修复后重检 367 链接、坏链 0** ✅；**另跑 AGENTS.md 要求的门禁自测**：`unittest discover -s scripts` ⇒ **1 test OK** ✅；`check-source-lines.py` ⇒ **exit=1** ✗（`rule-api/effect.rs` **10778 行**，**既有** ✓）。
 >
 
