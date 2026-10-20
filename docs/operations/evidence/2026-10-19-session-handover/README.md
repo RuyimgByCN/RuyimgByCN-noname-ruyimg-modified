@@ -1,3 +1,25 @@
+## 0 **当前验证状态（本次实测，2026-10-19）**
+
+命令与结果（**均为 `--offline`**，在 `noname-next/` 根执行）：
+
+| 包 | 命令 | 结果 |
+|---|---|---|
+| `engine-native` | `cargo test --offline -p engine-native` | **1537 passed / 0 failed / 21 ignored** |
+| `game-server` | `cargo test --offline -p game-server` | **115 / 0 / 0** |
+| `content-compiler` | `cargo test --offline -p content-compiler` | **533 / 0 / 0** |
+| `content-native-loader` | 同上 | **32 / 0 / 0** |
+| `rule-vm` | 同上 | **15 / 0 / 0** |
+| `content-schema` | 同上 | **0 / 0 / 0** |
+**合计 2232 passed / 0 failed / 21 ignored**（engine-native 为当前值；其余包本次实测）。
+
+**行数门禁**：`python3 -B scripts/check-source-lines.py` ⇒ **exit=1**
+（`crates/rule-api/src/effect.rs: 10778 lines (limit 2000)`）—— **既有状态**，见[门禁事故](../2026-10-19-line-gate-incident/README.md)。
+**门禁自测**：`python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'` ⇒ **OK** ✅。
+
+### 0.1 21 个 `#[ignore]` 的分类（不变）
+
+**17 缺陷守卫 / 3 根因未知 / 1 诊断探针** —— 详见[终局快照的 ignored 清单](../2026-10-19-final-snapshot/ignored-inventory.md)。
+
 # 本会话（第 400–508 轮）**交接索引**（2026-10-19）
 
 > 目的：让接手者**不必重读全部进度主稿**就能知道「新增了什么、推翻了什么、还差什么」。
