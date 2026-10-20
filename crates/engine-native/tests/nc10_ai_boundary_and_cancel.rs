@@ -169,3 +169,80 @@ fn pool_parallel_matches_sequential_and_records_tail() {
     }
     assert_eq!(samples.len(), 2);
 }
+
+/// ⑤ **过期结果拒绝**：规划后引擎修订号前进 ⇒ `apply_plan` 必须返回 `Stale`；
+/// 重新规划后同一位置应可应用成功。
+#[test]
+fn stale_plan_is_rejected() {
+    use engine_native::ai::ApplyPlanError;
+
+    let mut e = swd_engine(20261005);
+    let planner = BoundedPlanner {
+        node_budget: 16,
+        deadline_ms: Some(5_000),
+        cancel: Default::default(),
+        lookahead_depth: 1,
+        policy_variant: 0,
+        content_tuning: None,
+    };
+    let plans = PlanPool::new(1).plan_seats(&e, &[0], &planner);
+    let stale = plans.into_iter().next().expect("plan");
+    assert_eq!(stale.revision, e.revision(), "计划应携带规划时的修订号");
+
+    // 让修订号前进（换人/换阶段），使旧计划过期
+    let actor = e.turn().current;
+    let _ = e.submit(engine_native::GameCommand {
+        actor,
+        expected_revision: e.revision(),
+        dedup_id: 1,
+        action: engine_native::GameAction::NextPhase,
+    });
+    let now = e.revision();
+    assert!(now > stale.revision, "修订号应已前进（{}）", stale.revision);
+
+    match e.apply_plan(&stale) {
+        Err(ApplyPlanError::Stale { submitted, current }) => {
+            eprintln!("DBG NC10 过期：Stale submitted={submitted} current={current} ✅");
+            assert_eq!(submitted, stale.revision);
+            assert_eq!(current, now);
+        }
+        Err(other) => panic!("期望 Stale，实得 {other:?}"),
+        Ok(_) => panic!("陈旧计划**不应**被应用"),
+    }
+
+    // 重新规划：新计划应携带当前修订号，并能应用
+    let fresh = PlanPool::new(1).plan_seats(&e, &[0], &planner);
+    let fresh = fresh.into_iter().next().expect("fresh plan");
+    assert_eq!(fresh.revision, e.revision(), "新计划应携带当前修订号");
+    let out = e.apply_plan(&fresh);
+    eprintln!("DBG NC10 重规划：apply_plan = {:?}", out.is_ok());
+    assert!(out.is_ok(), "重新规划后的计划应可应用：{out:?}");
+}
+
+/// ⑥ **不同策略变体下结果确定**：同一引擎、同一规划器，跑两次 ⇒ 逐字段相同。
+#[test]
+fn policy_variants_are_deterministic() {
+    let e = swd_engine(20261006);
+    for variant in [0u8, 1, 2] {
+        let planner = BoundedPlanner {
+            node_budget: 16,
+            deadline_ms: Some(5_000),
+            cancel: Default::default(),
+            lookahead_depth: 1,
+            policy_variant: variant,
+            content_tuning: None,
+        };
+        let a = PlanPool::new(1).plan_seats(&e, &[0, 1, 2, 3], &planner);
+        let b = PlanPool::new(4).plan_seats(&e, &[0, 1, 2, 3], &planner);
+        let ka: Vec<String> = a
+            .iter()
+            .map(|p| format!("{}:{:?}:{}", p.seat, p.action, p.nodes_used))
+            .collect();
+        let kb: Vec<String> = b
+            .iter()
+            .map(|p| format!("{}:{:?}:{}", p.seat, p.action, p.nodes_used))
+            .collect();
+        eprintln!("DBG NC10 变体：variant={variant} 两次结果相同={}", ka == kb);
+        assert_eq!(ka, kb, "variant={variant} 的规划结果应确定");
+    }
+}

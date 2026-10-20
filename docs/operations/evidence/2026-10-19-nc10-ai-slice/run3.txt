@@ -1,0 +1,11 @@
+DBG NC10 取消：cancelled=true nodes_used=0 budget_exhausted=false
+DBG NC10 预算：nodes_used=1 budget_exhausted=false timed_out=false cancelled=false
+DBG NC10 过期：Stale submitted=0 current=1 ✅
+DBG NC10 变体：variant=0 两次结果相同=true
+DBG NC10 重规划：apply_plan = true
+DBG NC10 变体：variant=1 两次结果相同=true
+DBG NC10 信息边界：座位0输入长度 before=1730 after=1730（应相同）
+DBG NC10 变体：variant=2 两次结果相同=true
+DBG NC10 并发：workers=1 n=30 p50=545µs p95=613µs p99=2326µs
+DBG NC10 并发：workers=4 n=30 p50=329µs p95=425µs p99=730µs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
