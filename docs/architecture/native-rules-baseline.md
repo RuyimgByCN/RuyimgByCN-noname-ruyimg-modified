@@ -4632,3 +4632,41 @@ host:wudian_geju  host:baiyi
 4. ⇒ **`Phase::Judge` 组标记为「高度可疑（5/5 抽查不符）」** ⚠️ —— **不是确认缺陷，但是最值得下一步核对的一组** ✅。
 
 **下一步**：读 `huajin2` 的上游 `filter`/`content`（**115 B，很小** ✅）+ 原生 step ⇒ **一条即可定性**。
+
+### ❗ **`Phase::Judge` 组：2 条确认缺陷（含本会话最严重一条）**（第 573 轮）
+
+读了 `huajin2`（115 B）与 `zhenjiu2`（276 B）的上游全文：
+
+#### `huajin2` —— **完全错位**（本会话最严重）
+
+```js
+huajin2: { trigger: { source: "damageBegin" }, forced: true,
+           content() { trigger.num++; },        // 自己为伤害来源时，伤害 +1
+           group: "huajin3" }
+```
+
+⇒ **上游语义：「自己造成伤害时伤害 +1」** —— **与「判定阶段」毫无关系** ❗
+⇒ **原生 filter 是 `Phase::Judge, begin=true`** ⇒ **这个「伤害 +1」技能被挂到了判定阶段** ❌
+⇒ **判定**：**确认缺陷（严重）** —— **技能完全不会在应触发时触发**。
+
+#### `zhenjiu2` —— **窄化**
+
+```js
+zhenjiu2: { trigger: { player: "phaseBegin" }, forced: true, mark: "card",
+            content() { player.recover(); player.gain(player.storage.zhenjiu2, "gain2", "log");
+                        player.removeSkill("zhenjiu2"); delete player.storage.zhenjiu2; } }
+```
+
+⇒ **上游语义：「任意阶段开始时 ⇒ 回复 1 + 收回存储牌 + 移除自身（一次性）」** —— **`phaseBegin` 不限阶段**
+⇒ **原生只在 `Phase::Judge` 触发** ⇒ **在其他阶段开始时会漏触发** ❌
+⇒ **判定**：**确认缺陷（窄化）**。
+
+### 更新后的缺口清单
+
+| # | 缺口 | 严重度 |
+|---|---|---|
+| **G12** | **`huajin2` 完全错位**（`damageBegin` ⇒ `Phase::Judge`）| ❗❗ **严重**（**技能不生效**）|
+| **G13** | **`zhenjiu2` 窄化**（`phaseBegin` ⇒ `Phase::Judge`）| ❗ **中**（**漏触发**）|
+
+⇒ **`Phase::Judge` 组的 14 条里，已核 5 条，2 条确认缺陷、3 条待核上游 `filter`** ⚠️
+—— **剩余 9 条（`daixing2`/`xj_qianfang`/`hlss_fengqi`/`swd_xiuluo`/`diyguhuo`/`gujian_food_yougeng`/`huanle_xuelunyang`/`wudian_geju`/`baiyi`）同样需要核对** ❗

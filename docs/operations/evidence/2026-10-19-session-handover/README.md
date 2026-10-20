@@ -172,11 +172,13 @@
 | **G6** | **`mbjuejin`**（**「绝进」**）| 同上 | 同上 |
 | **G7** | **`duoqi`**（`wudian`，**`phaseUse` 中止未建模** + 筑城标记）| **引擎表达力** | 需 DSL/引擎支持 |
 | **G9** | **`jifeng` 只缺 `mod` 面**（U05-SWD；**`trigger` 与随机分支已实现** ✅ —— 三重确认：filter 匹配上游、step 有 `cancel_permille` 随机落法、`jifeng_single_target_trick` 只用于 filter）| **引擎表达力**（目标选择层）| 需支持「单目标牌可多选目标」 |
+| **G12** | **`huajin2` 完全错位**（上游「自己造成伤害时伤害 +1」，原生 filter 是 `Phase::Judge`）| **实现（改 filter）** | ❗❗ **技能不生效**，改回 `damageBegin` |
+| **G13** | **`zhenjiu2` 窄化**（上游 `phaseBegin` 不限阶段，原生只在 `Phase::Judge`）| **实现（改 filter）** | ❗ **漏触发**，改为任意阶段开始 |
 | **G11** | **`miedao` 缺「多摸」半个**（U05-SWD，上游 `miedao1` = `phaseDrawBegin` 多摸，原生**只有弃牌阶段那一半**，`Phase::Draw` 全库仅 `Xiefang` 使用）| **实现（摸牌阶段修正）** | 需在摸牌阶段支持「`num += maxHp - hp`」 |
 | **G10** | **`swd_xiuluo` 阶段错位**（U05-SWD，**上游 `phaseZhunbeiBegin`（准备阶段）vs 原生 `Phase::Judge`（判定阶段）**）| **实现（改 filter 阶段）** | 把 `Phase::Judge` 改为准备阶段 |
 | **G8** | **`youzhan`**（`wudian`，**`shaBefore` 时点映射偏晚** + 虚拟 `useCard`）| **引擎表达力** | 同上 |
 
-⇒ **10 条**（**G1、G2、G4–G11**）—— **原 G3（`miedao`）已定案为「合并型」**（上游 `miedao1`/`miedao2` 两个 `phase*Begin` ⇒ 原生 `PhaseBegin` 单入口，与 `bshaowei` 同类）✅ —— 其中 **G4–G6 同一原因**（liuli mobile）、**G7–G8 同一原因**（引擎表达力）。
+⇒ **12 条**（**G1、G2、G4–G13**）—— **原 G3（`miedao`）已定案为「合并型」**（上游 `miedao1`/`miedao2` 两个 `phase*Begin` ⇒ 原生 `PhaseBegin` 单入口，与 `bshaowei` 同类）✅ —— 其中 **G4–G6 同一原因**（liuli mobile）、**G7–G8 同一原因**（引擎表达力）。
 
 ### 7.6 汇总
 

@@ -883,6 +883,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 573 轮**：**`Phase::Judge` 组抽查：5/5 与上游不符**（**重要发现**）——列出 14 条 key 后抽查 5 条上游 `trigger`：**`zhenjiu2`/`hyunshen2`/`huanxing`（2168 B）上游都是 `player: phaseBegin`**（**任意阶段开始** ✓）**而原生 filter 是 `Phase::Judge`** ✗ ⇒ **窄化** ⚠️；**`lexue`（35 B）上游无 trigger** ✗ 而原生有限定 ⚠️；**`huajin2`（115 B）上游是 `source: damageBegin`** ✗ 而原生是 `Phase::Judge` ⇒ **完全不同** ❗；**谨慎结论**：**5/5 不符** ✓ 但**不能直判缺陷** ✗ —— **上游 `phaseBegin` 常配合 `filter` 限定** ✓，**本轮未读上游 filter** ✗ ⇒ **「窄化」可能是「把 filter 提进阶段判断」** ✓；**`huajin2` 最可疑**（**115 B 很小，一条即可定性** ✓）；⇒ **`Phase::Judge` 组标记「高度可疑（5/5 抽查不符）」** ✓。
 >
+> **第 574 轮**：**`Phase::Judge` 组 2 条确认缺陷（含本会话最严重一条）**——读上游全文 ✓：**`huajin2`（115 B）上游 `trigger: source damageBegin` + `content: trigger.num++`（自己造成伤害时伤害 +1）+ `group: huajin3`** ✓ **与判定阶段毫无关系** ❗ ⇒ **原生 filter 是 `Phase::Judge`** ✗ ⇒ **技能完全不生效** ❗❗（**本会话最严重** ✓）；**`zhenjiu2`（276 B）上游 `player: phaseBegin`（不限阶段）+ 回复 1 + 收回存储牌 + 移除自身** ✓ ⇒ **原生只在 `Phase::Judge`** ✗ ⇒ **其他阶段漏触发** ❗；⇒ **新增 G12（严重）、G13（中）** ✓，**缺口 10 → 12 条** ✓；**`Phase::Judge` 组 14 条：已核 5 条（2 缺陷 + 3 待核上游 filter）** ✓，**剩 9 条同样需要核对** ❗。
+>
+
 
 
 
