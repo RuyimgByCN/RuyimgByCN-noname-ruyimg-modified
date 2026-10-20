@@ -789,6 +789,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 537 轮**：**U05-XJ v1：22 条全部归类**（台账第 207 行 + 规则基准）——读 `event.rs` 的 `EventKind`（**22 变体** ✓）：**①`DamageBefore`/`Damage` 只有两档，`Recover`/`LoseHp`/`CardsDrawn` 各只有一档** ✓ ⇒ v0 的 **8 条「待判」实为「引擎粒度不足」** ✓（**共性限制，不是映射错** ✓ ⇒ **应在基准统一登记，而非逐包重复** ✓）；**②2 条可疑** ⚠️：**`xjyufeng`**（上游 `loseEnd` ⇒ 原生 `CardsDiscarded`，**而引擎存在 `CardsLost`** ⇒ **可能挂错事件** ✓）、**`anwugu2`**（上游 `phaseAfter` ⇒ 原生 `None`，**引擎有 `TurnEnded` 但无 `phaseAfter`** ✓）；⇒ **22 条全部归类**（**7 ✅ + 4 ✅被动 + 8 ⚠️粒度 + 2 ⚠️可疑**）✓；**规则差异仍 5/32** ✓（**仍不签署**）。
 >
+> **第 538 轮**：**引擎层共性限制立节 + `xjyufeng` 定案**（台账第 208 行 + 规则基准新节）——①在基准新增**跨来源**小节「**引擎层共性限制：事件时机的表达力边界**」：**`EventKind` 仅 22 变体** ✓，**`DamageBefore`/`Damage` 两档、`Recover`/`LoseHp`/`CardsDrawn` 各一档、无 `phaseAfter`** ⇒ **上游「结束/之后」类无法一一对应** ✓（**表达力边界，非映射错** ✓ ⇒ **应统一登记，不逐包重复** ✓）；②**`xjyufeng` 定案**：`kernel/events.rs:478-481` **源码自述**「上游 `loseAfter`+`loseAsync` 族的 **`CardsDiscarded` 面**；`gain`/`addJudge`/`equip` 等**其余卡牌移动面登记差异**」⇒ **原生挂 `CardsDiscarded` 是遵循既定口径，不是挂错** ✅（**`CardsLost` 只是「失去牌来源区」载荷，不是触发点** ✓）；**规则差异仍 5/32** ✓。
+>
+
 
 
 

@@ -4145,3 +4145,40 @@ TurnOvered LoseHp DyingSaved CardsLost ShaDodged
 | | **21** | （`lingxue` 归入粒度不足；**`guiyuan`/`tannang`/`xuanyan`/`diewu` 计 4 条被动**）|
 
 ⇒ **U05-XJ 仍不能签署**，但**22 条全部有了明确归类**（**7 ✅ / 4 ✅ / 8 ⚠️粒度 / 2 ⚠️可疑**）。
+
+## 引擎层共性限制：**事件时机的表达力边界**（2026-10-19，第 536 轮）
+
+> 这一节是**跨来源**的：任何包的「before/after 类时机差异」都应先对照本节，**不要逐包重复登记**。
+
+### 1 `EventKind` 只有 22 个变体（`crates/engine-native/src/event.rs`）
+
+```
+DamageBefore Damage Recover CardsDrawn CardsMoved CardUsed CardResponded Dying Death
+PhaseBegin PhaseEnd TurnEnded SkillToggled Equipped Linked CardsDiscarded TurnOverBefore
+TurnOvered LoseHp DyingSaved CardsLost ShaDodged
+```
+
+### 2 因此**上游的「结束/之后」粒度无法一一对应**
+
+| 上游时机 | 引擎有无对应 | 说明 |
+|---|---|---|
+| `damageBegin` | ✅ `DamageBefore` | |
+| `damageEnd` / `damageAfter` | ⚠️ **只有 `Damage`（一档）** | **「结束后」无独立变体** |
+| `recoverEnd` / `recoverAfter` | ⚠️ **只有 `Recover`** | 同上 |
+| `loseHpAfter` | ⚠️ **只有 `LoseHp`** | 同上 |
+| `drawBegin` / `drawEnd` | ⚠️ **只有 `CardsDrawn`** | 同上 |
+| `phaseAfter` | ⚠️ **只有 `PhaseEnd` / `TurnEnded`** | 「阶段之后」无独立变体 |
+
+⇒ **这类差异不是「映射错」，是「引擎根本没这一档」** —— 属**表达力边界**，
+处理方式：**要么在基准统一登记，要么升级 `EventKind`**（后者需改未跟踪的 `kernel/events.rs`）。
+
+### 3 「失去牌」族的**既定口径**（已由源码自述）
+
+`crates/engine-native/src/kernel/events.rs:478-481`：
+
+> 「……玩家失去手牌后（上游 `loseAfter`+`loseAsync` 族的 **`CardsDiscarded` 面**；
+> `gain`/`addJudge`/`equip` 等**其余卡牌移动面登记差异**）」
+
+⇒ **项目把上游「失去牌」族统一挂到 `CardsDiscarded`**，**其余移动面登记为差异**。
+**因此 U05-XJ 的 `xjyufeng`（上游 `loseEnd` ⇒ 原生 `CardsDiscarded`）是「遵循既定口径」，不是挂错** ✅。
+（引擎虽有 `CardsLost` 变体，但它承载的是**「失去牌的来源区」载荷**，不是 `loseEnd` 触发点。）
