@@ -1,0 +1,2 @@
+RESULT soak rooms=8 rounds=25 per_round=4 submitted=800 accepted=27 snapshots=200 max_revision=5 elapsed_ms=2589 throughput_cmds_per_s=309
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.61s

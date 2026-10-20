@@ -641,6 +641,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 456 轮**：**41 包逐包清单**（数据驱动，台账第 171 行 + 证据目录）——枚举 `packages/extensions/*/`：**41 个包目录** = 10 卡牌包（cards 125–237 张）+ 2 个 `pile.json`（各 160 条）+ `d3`（character）+ `boss-zhugeliang`（`cards(0)+skills(1)`）+ **3 个仅 `config.json`**（`ai-tuning` 14 项、`boss-play` 12 项×2）；**已跑过验收**：配置/组合 10 包、保存恢复/升级 5 来源、效能 12 档；**未做**：真机运行、产品长程、逐来源规则差异签署；另记录 **`package_id` 重名**（`cardpile`、`boss-play` 各跨两 namespace）⇒ bench 的 `package_ids` 不能区分。
 >
+> **第 457 轮**：**产品级长程稳定性切片**（`apps/game-server/tests/long_run_soak.rs`，已跟踪）——8 房间 × 25 轮 × 4 命令 = **800 条命令**、**200 次快照探活**：**全部通过**（无 panic/死锁、200/200 响应、8 房间互不干扰、修订号推进 max=5、收尾仍可响应；2.63 s，305 cmds/s）。**限制如实登记**：只发 `EndPhase` ⇒ 到「等待选择」后不再推进（accepted=27/800），**不构成完整对局长程**；待办：按 `legal_actions` 构造 `Answer`/`PlayCard` 的**对局机器人**。
+>
+
 
 
 
