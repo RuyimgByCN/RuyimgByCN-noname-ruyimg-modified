@@ -777,6 +777,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 531 轮**：**全库技能映射清单：94 / 89 已映射 / 5 未映射**（台账第 202 行）——扫全部包的 `skills[]` 声明：**13 个含技能的包共 94 条**，**89 已映射**、**5 未映射**（`longxue` 3：`mbcmjiushi`/`mbcmfangzhu`/`mbjuejin`；`wudian` 2：`duoqi`/`youzhan` ✓），且**每条都有非空 `reason`** ✅；新用例 `nc08_skill_mapping_inventory` 作为**回归护栏**（**新增未映射或删 `reason` 即失败** ✓）；**定位**：这是「规则差异」的**声明面基线** ✓，**不替代等价性验收** ❗（**只证明「有映射」，不证明「与上游等价」** ✗ —— U08 已证「**有实现 ≠ 可达 ≠ 等价**」✓）；**边界**：未扫 `generals[].skills`/`cards[].skills`、未判 89 条等价。
 >
+> **第 532 轮**：**U05-OW（`shaai-ow`）差异族 v0**（台账第 203 行 + 规则基准）——上游 `ow/skill.js` vs 原生 `TriggerMeta`：该包 **24 武将 / 11 技能全部 `host:` 映射**（**复用 `host:wudian_*`** ✓）；**6 条 trigger 对照全部不一致** ⚠️：`guangshu`（无→`Damage`）、**`ziyu`（`global:phaseEnd`→`PhaseBegin`：时机+作用域都不同）**、`shouhu`（无→`PhaseBegin`）、**`duwen`（`source:damageBegin`→`PhaseBegin`：差异最明显）**、`paotai`（无→`PhaseBegin`）、**`bshaowei`（`player:phaseEnd`→`CardUsed`）**；**重要 caveat**：`TriggerMeta` 只是**唤醒入口** ✓，语义在 **`step` 步骤机**里 ⇒ **不能直接判语义不同** ❗（**唤醒时机可以故意不同** ✓）；**该包有 24 武将 ⇒ 载体存在 ⇒ 可写行为样本** ✅（**与 U08 不同** ✓）；**本轮不签署规则差异** ✓，**规则差异仍 5/32** ✓。
+>
+
 
 
 

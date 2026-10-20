@@ -3970,3 +3970,34 @@ pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine
 
 **因此 U08 记为「差异族 v0（部分登记）」**，**不记为已签约的规则差异项**；
 要完成需：①读宿主实现 ②对 `yxs_fanji`/`yxs_menshen` 各写一个**行为样本** ③判定 `priority` 一类元数据是否影响结果。
+
+## U05-OW（杀海拾遗 / ow 子包）差异族 **v0**（2026-10-19，第 530 轮）
+
+**来源**：`archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/skill.js`
+**原生包**：`packages/extensions/shaai-ow-upstream-noname`（**24 武将 / 11 技能，全部 `host:` 映射**）
+**宿主行为**：**复用 `host:wudian_*`**（`guangshu*`/`ziyu`/`shouhu`/`duwen`/`paotai*`/`baolei_switch`）
+
+### trigger 对照（上游 `trigger:` vs 原生 `TriggerMeta.event`）
+
+| 技能 | 上游 trigger | 原生 `TriggerMeta` | 判定 |
+|---|---|---|---|
+| `guangshu` | **（无）** —— 被动 | **`EventKind::Damage`** | ⚠️ 上游无触发时机，原生有 |
+| `ziyu` | **`global: phaseEnd`** | **`PhaseBegin`** | ⚠️ **时机 + 作用域都不同**（结束/全局 vs 开始/自己）|
+| `shouhu` | **（无）** | **`PhaseBegin`** | ⚠️ |
+| `duwen` | **`source: damageBegin`** | **`PhaseBegin`** | ⚠️ **差异最明显**（伤害开始 vs 阶段开始）|
+| `paotai` | **（无）** | **`PhaseBegin`** | ⚠️ |
+| `bshaowei` | **`player: phaseEnd`** | **`CardUsed`** | ⚠️ **差异明显**（阶段结束 vs 卡牌使用）|
+
+⇒ **6/6 的 `TriggerMeta.event` 与上游 `trigger` 不一致** ❗
+
+### 但**不能直接判「语义不同」**（重要 caveat）
+
+`TriggerMeta` 只决定**宿主何时被唤醒**；真正的语义在 **`step` 步骤机**（`step/skills_*.rs`）里，
+唤醒时机可以**故意不同**（例如用 `PhaseBegin` 作为「每回合检查一次」的**轮询入口**）。
+⇒ 必须**读对应 step 机器**才能判定等价性。
+
+### 本轮结论（**如实**）
+
+1. **6 条 trigger 全部不一致** —— 这是**已登记的事实**，不是「差异已判定」；
+2. **判定等价需要**：①读 `step` 步骤机 ②写**行为样本**（该包有 **24 个武将**，**载体存在** ⇒ **可写样本** ✅）；
+3. 因此 **U05-OW 记为「差异族 v0」**，**不签署规则差异**。
