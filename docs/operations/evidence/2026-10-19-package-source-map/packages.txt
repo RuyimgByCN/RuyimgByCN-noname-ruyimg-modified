@@ -1,0 +1,44 @@
+包                                      来源               upstream_path
+ai-tuning-upstream-liuli               AI优化             noname/extension/AI优化/extension.js
+boss-play-upstream-liuli               boss             noname/extension/boss/extension.js
+boss-play-upstream-noname              boss             apps/core/extension/boss/extension.js
+boss-zhugeliang-upstream-liuli         noname/character/extra.js + noname/mode/boss.js noname/character/extra.js + noname/mode/boss.js
+cardpile-upstream-liuli                (未声明)            
+cardpile-upstream-noname               (未声明)            
+coin-upstream-liuli                    coin             noname/extension/coin/extension.js
+coin-upstream-noname                   (未声明)            
+d3-upstream-noname                     (未声明)            
+desktop-adapt-upstream-liuli           (未声明)            
+doomsday-brawl-upstream-liuli          末日乱斗             noname/extension/末日乱斗/extension.js
+douzhuan-xingyi-upstream-liuli         斗转星移             noname/extension/斗转星移/extension.js
+drag-read-upstream-liuli               拖拽读取             noname/extension/拖拽读取/extension.js
+elo-sanction-upstream-liuli            段位制裁             noname/extension/段位制裁/extension.js
+epic-cards-upstream-liuli              史诗卡牌             noname/extension/史诗卡牌/extension.js
+fool-plugin-upstream-liuli             笨蛋插件             noname/extension/笨蛋插件/extension.js
+hero-kill-upstream-noname              英雄杀              apps/core/extension/英雄杀/character/skill.js
+huanle-upstream-noname                 欢乐卡牌             apps/core/extension/欢乐卡牌/
+longxue-upstream-liuli                 龙血玄黄             noname/extension/龙血玄黄/extension.js
+mark-supplement-upstream-liuli         标记补充             noname/extension/标记补充/extension.js
+martial-upstream-liuli                 武皇争霸             noname/extension/武皇争霸/extension.js
+omnisearch-upstream-liuli              (未声明)            
+qhly-upstream-liuli                    千幻聆音             noname/extension/千幻聆音/extension.js
+select-beautify-upstream-liuli         选将美化             noname/extension/选将美化/extension.js
+shaai-ow-upstream-noname               杀海拾遗             extension/杀海拾遗/character/ow/
+shaai-xianjian-upstream-noname         杀海拾遗             extension/杀海拾遗/character/xianjian/
+shahai-gujian-upstream-noname          杀海拾遗             apps/core/extension/杀海拾遗/card/gujian/
+shahai-gwent-upstream-noname           杀海拾遗             apps/core/extension/杀海拾遗/card/gwent/
+shahai-hearth-upstream-noname          杀海拾遗             apps/core/extension/杀海拾遗/card/hearth/
+shahai-mtg-upstream-noname             杀海拾遗             extension/杀海拾遗/card/mtg/
+shahai-swd-upstream-noname             杀海拾遗             apps/core/extension/杀海拾遗/card/swd/
+shahai-yunchou-upstream-noname         杀海拾遗             apps/core/extension/杀海拾遗/card/yunchou/
+shahai-zhenfa-upstream-noname          杀海拾遗             extension/杀海拾遗/card/zhenfa/
+shousha-full-upstream-liuli            手杀全扩             noname/extension/手杀全扩/extension.js
+shousha-mvp-upstream-liuli             手杀MVP            noname/extension/手杀MVP/extension.js
+sj-settings-upstream-liuli             SJ Settings      noname/extension/SJ Settings/extension.js
+skin-switch-upstream-liuli             皮肤切换             noname/extension/皮肤切换/extension.js
+thunder-upstream-liuli                 雷霆万钧             noname/extension/雷霆万钧/extension.js
+update-guard-upstream-liuli            更新保护             noname/extension/更新保护/extension.js
+wudian-upstream-noname                 玩点论杀             apps/core/extension/玩点论杀/
+wuxing-upstream-liuli                  wuxing           noname/extension/wuxing/extension.js
+
+包数 41；有 upstream_path 35；未声明 6

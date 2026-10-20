@@ -1,0 +1,29 @@
+(未声明)                6 包：cardpile-upstream-liuli, cardpile-upstream-noname, coin-upstream-noname, d3-upstream-noname, desktop-adapt-upstream-liuli, omnisearch-upstream-liuli
+AI优化                 1 包：ai-tuning-upstream-liuli
+SJ Settings          1 包：sj-settings-upstream-liuli
+boss                 2 包：boss-play-upstream-liuli, boss-play-upstream-noname
+coin                 1 包：coin-upstream-liuli
+noname/character/extra.js + noname/mode/boss.js   1 包：boss-zhugeliang-upstream-liuli
+wuxing               1 包：wuxing-upstream-liuli
+千幻聆音                 1 包：qhly-upstream-liuli
+史诗卡牌                 1 包：epic-cards-upstream-liuli
+手杀MVP                1 包：shousha-mvp-upstream-liuli
+手杀全扩                 1 包：shousha-full-upstream-liuli
+拖拽读取                 1 包：drag-read-upstream-liuli
+斗转星移                 1 包：douzhuan-xingyi-upstream-liuli
+更新保护                 1 包：update-guard-upstream-liuli
+末日乱斗                 1 包：doomsday-brawl-upstream-liuli
+杀海拾遗                 9 包：shaai-ow-upstream-noname, shaai-xianjian-upstream-noname, shahai-gujian-upstream-noname, shahai-gwent-upstream-noname, shahai-hearth-upstream-noname, shahai-mtg-upstream-noname, shahai-swd-upstream-noname, shahai-yunchou-upstream-noname, shahai-zhenfa-upstream-noname
+标记补充                 1 包：mark-supplement-upstream-liuli
+欢乐卡牌                 1 包：huanle-upstream-noname
+武皇争霸                 1 包：martial-upstream-liuli
+段位制裁                 1 包：elo-sanction-upstream-liuli
+玩点论杀                 1 包：wudian-upstream-noname
+皮肤切换                 1 包：skin-switch-upstream-liuli
+笨蛋插件                 1 包：fool-plugin-upstream-liuli
+英雄杀                  1 包：hero-kill-upstream-noname
+选将美化                 1 包：select-beautify-upstream-liuli
+雷霆万钧                 1 包：thunder-upstream-liuli
+龙血玄黄                 1 包：longxue-upstream-liuli
+
+来源数（去重，含未声明）：27；包数：41
