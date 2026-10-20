@@ -42,3 +42,33 @@ test result: ok. 1 passed; 0 failed; 0 ignored
 - 本用例检查的是**武将授技**（`extension_generals[].skills`）；
   **不排除**未来通过 ①迁移武将 ②`cards[].skills` 赠予 ③模式/事件直接授予 而变得可达；
 - **未检查** `config.json` 里的 `skills` 列表是否构成另一种授予通道（**它只是声明面**，见 `nc08_manifest_matrix`）。
+
+---
+
+## 5 解锁尝试：**被未跟踪代码挡住**（同日）
+
+想给 U08 造一个载体（让技能可达），先确认**载体授予面在哪**：
+
+| 文件 | 作用 | tracked? |
+|---|---|---|
+| `crates/engine-native/src/kernel/construction.rs` | **武将/角色的构建与技能授予** | ❌ **UNTRACKED** |
+| `crates/engine-native/src/content/host/mod.rs` | **宿主技能注册** | ❌ **UNTRACKED** |
+| `crates/engine-native/src/catalog.rs` | 目录（只读查询面）| ✅ tracked |
+
+⇒ **「给技能加载体」必须改 `construction.rs` / `content/host/mod.rs`** ⇒ **未跟踪** ⇒ **本代理不得修改** ❌。
+
+### 5.1 因此 U08 的结论是**闭合的**
+
+1. **技能已实现** ✅（v1）；
+2. **无载体 ⇒ 不可达** ❗（v2，用例已固定）；
+3. **加载体这条路也被未跟踪代码挡住** ❌（本节）；
+4. ⇒ **U08 在「本代理可修改范围」内既不能签通过、也不能造出可测场景** ——
+   **这是一条完整的、可交付的结论**，而不是「还没做」。
+
+### 5.2 解锁清单（**给有权限的人**）
+
+| 路径 | 需要改什么 | 工作量 |
+|---|---|---|
+| **A. 迁移 43 条武将** | 上游 `character/character.js` → 包内 `generals`，并补齐其引用的外部技能（`nvquan`/`qiandu`/`yxsweiyi` 等）| **大**（43 条 + 外部依赖）|
+| **B. 造一个赠予载体** | 在 `construction.rs`/`content/host/mod.rs` 支持「卡牌/装备授予宿主技能」| **中** |
+| **C. 用现有武将引用** | 检查是否有**其它包的武将**可引用 `yxs_*`（**已实测：全库 0 条**）| **已排除** |
