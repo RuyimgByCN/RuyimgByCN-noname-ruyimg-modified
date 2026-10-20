@@ -143,11 +143,25 @@ EventData::Phase { player, begin: true, .. } if *player == owner   // `..` 省�
 **但每个技能还有自己的 `filter(event, player)`** —— **上游可能在那里排除自己**。
 ⇒ **`!= owner` 是否错误，取决于该技能的 `filter`**，**本轮未逐条读** ❗
 
-### 若要定案，需要做的事
+### ✅ 已定案（第 652 轮，读 5 个上游 `filter`）
 
-1. 读 5 个上游技能的 `filter`，看是否含 `player != target`/`target != player` 之类；
-2. **若上游不过滤自己** ⇒ **原生 `!= owner` 是「漏触发」** ⇒ **新类 G19**；
-3. **若上游过滤自己** ⇒ **一致** ✅。
+| 技能 | 上游 `filter` 里排除自己吗 | 原生 `!= owner` | 判定 |
+|---|---|---|---|
+| **`new_meibu`** | **`event.player != player`** ✅ 排除 | ✅ | **一致** ✅ |
+| **`xj_zhaoyao`** | **`event.player !== player`** ✅ 排除 | ✅ | **一致** ✅ |
+| **`xj_linghuo`** | **`event.player !== player`** ✅ 排除 | ✅ | **一致** ✅ |
+| **`xj_wangyou`** | **`if (player === event.player) return false;`** ✅ 排除 | ✅ | **一致** ✅ |
+| **`zhuhai`** | **`event.player.isIn() && …`（无 `!= player`）** ❌ **不排除** | ❌ **`t != owner`** | **❌ 不一致** ⚠️ |
+
+⇒ **G19 = 4 条一致 + 1 条确认缺陷**（**不是 5 条全部**）
+
+### 确认的那 1 条
+
+**`swd_zhuhai`**（诛害）：上游 `global: phaseJieshuBegin` + `filter` **只要求 `event.player.isIn()`**，
+**未排除自己** ⇒ **玩家自己回合的结束阶段也应触发**；
+原生 `filtering/swd.rs` 写 **`t != owner`** ⇒ **漏触发自己** ❗
+
+**修法**：**删掉 `t != owner`**（1 处，属**批 1「对齐」**）✅
 
 ### 为什么仍要登记
 
