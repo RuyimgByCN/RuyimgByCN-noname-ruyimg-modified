@@ -647,7 +647,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 459 轮**：**机器人拒绝分类定位**（同 173 行）——960 条中 **accept 14**，拒绝分三类：**`IllegalAction("choice…")` 475**（选择窗口内非选择类动作不合法）、**`IllegalAction("not current…")` 233**（actor 过期）、**`InvalidChoice` 238**（`ResolveChoice` 空 selections + cancelled 仍不满足约束）⇒ 「**动作类型 × 行动者 × 选择载荷**」需**同时**正确；**已试无效**：①被拒轮换 ②actor 跟随 `view.current_player` 并重发同一动作（accepted 仍 14）⇒ **整局机器人仍未完成**（用例保持 `#[ignore]`）。
 >
 > **第 460 轮（机器人重大修正）**：①`ResolveChoice` **原样使用**权威 `selections`（此前自造空选择）②**每步刷新** `legal_actions`（此前仅非空时覆盖）③**两连接分别驱动**（`connection_id=conn+1`）⇒ **acceptance 14/14 = 100%**（此前 14/960；`InvalidChoice`/`not current`/`choice` 三类拒绝**全部消失**）；**新瓶颈根因已定位**：两连接 `legal_actions` **同时为空**（room0 rev=9 legal=[0,0]）——**选择请求经 `Outbound` 通道（`mpsc::Sender<String>
-> **第 461 轮（整局连续推进达成）**：关键发现——**`ServerMessage::Snapshot` 同时携带 `choice: Option<ChoiceRequest>` 与 `legal_actions`**（`messages.rs:168-177`）⇒ 本连接无动作时**取快照**、按 `min_count` 构造 `ResolveChoice{selections: 0..min_count}` ⇒ **`submitted=178 accepted=178`（100%）**、**`max_revision=72`**（room2；另 69/30/15）、240 次快照全响应；用例**`#[ignore]` 已移除**，game-server 套件 **102 passed / 0 failed / 0 ignored**。**仍未做**：强 AI 选步、终局断言、内存/句柄观测、真实网络。
+> **第 461 轮（整局连续推进达成）**：关键发现——**`ServerMessage::Snapshot` 同时携带 `choice: Option<ChoiceRequest>
+> **第 462 轮（跑到终局）**：新增 `bot_runs_matches_to_completion`——机器人推进到 `MatchOutcome != InProgress`：room0 **`RenegadeWin{player:2}`**（**100 步**、rev=102）、room1 **`LoyalistWin`**（6 步、rev=8），上限 4000 步内**全部结束** ⇒ 产品路径「**完整对局**」验证通过（覆盖两种终局类型）。**未做**：进程 RSS **取不到（`ps` 返回空）**⇒ 无内存泄漏结论；多盘连续/整夜、真实网络与浏览器端未做；选步为固定优先级（非强 AI），终局分布**不代表规则平衡**。
+>
+` 与 `legal_actions`**（`messages.rs:168-177`）⇒ 本连接无动作时**取快照**、按 `min_count` 构造 `ResolveChoice{selections: 0..min_count}` ⇒ **`submitted=178 accepted=178`（100%）**、**`max_revision=72`**（room2；另 69/30/15）、240 次快照全响应；用例**`#[ignore]` 已移除**，game-server 套件 **102 passed / 0 failed / 0 ignored**。**仍未做**：强 AI 选步、终局断言、内存/句柄观测、真实网络。
 >
 ` JSON）下发，而测试把该通道丢弃了** ⇒ 下一步：保留并解析 **`ChoiceRequest`**（含 `choice_id` 与合法选项）为正确连接构造 `ResolveChoice`；用例保持 `#[ignore]`。
 >

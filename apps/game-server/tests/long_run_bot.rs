@@ -97,7 +97,12 @@ async fn snapshot(
     conn: usize,
     seq: u64,
     rev: u64,
-) -> Option<(u64, Vec<LegalAction>, Option<engine_api::ChoiceRequest>)> {
+) -> Option<(
+    u64,
+    Vec<LegalAction>,
+    Option<engine_api::ChoiceRequest>,
+    engine_api::MatchOutcome,
+)> {
     let (rs, ws) = tokio::sync::oneshot::channel();
     handle
         .send(RoomMsg::Snapshot {
@@ -113,7 +118,7 @@ async fn snapshot(
             choice,
             legal_actions,
             ..
-        })) => Some((view.revision, legal_actions, choice)),
+        })) => Some((view.revision, legal_actions, choice, view.outcome)),
         _ => None,
     }
 }
@@ -234,7 +239,7 @@ async fn bot_drives_matches_long_run() {
                 // **刷新**：本连接没有合法动作时，取个人化快照；若快照带「待答选择」，
                 // 就按 `min_count` 构造 `ResolveChoice`（selections 为选项下标）。
                 if room.legal[conn].is_empty() {
-                    if let Some((rev, legal, choice)) =
+                    if let Some((rev, legal, choice, _outcome)) =
                         snapshot(&room.handle, room.id, conn, room.seq + 1, room.rev).await
                     {
                         if rev > 0 {
@@ -327,4 +332,133 @@ async fn bot_drives_matches_long_run() {
         "两条连接轮流驱动后应把对局推进到较高修订号（max_revision={max_rev}）"
     );
     assert_eq!(snapshots, (ROOMS * ROUNDS) as u64, "快照总数应为 房间×轮次");
+}
+
+
+/// **跑到终局**：机器人持续推进直到 `MatchOutcome != InProgress`，并记录步数、耗时与进程 RSS。
+///
+/// 断言：**两个房间都必须在步数上限内结束**（这是「整局可收敛」的证据，不只是「能推进」）。
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn bot_runs_matches_to_completion() {
+    const ROOMS: usize = 2;
+    const MAX_STEPS: usize = 4000;
+
+    fn rss_kb() -> Option<u64> {
+        let pid = std::process::id().to_string();
+        let out = std::process::Command::new("ps")
+            .args(["-o", "rss=", "-p", &pid])
+            .output()
+            .ok()?;
+        String::from_utf8_lossy(&out.stdout).trim().parse().ok()
+    }
+
+    let rss_before = rss_kb();
+    let t0 = Instant::now();
+    let mut rooms = Vec::new();
+    for r in 0..ROOMS as u64 {
+        let mut room = open(r, 9_100 + r).await;
+        let _ = bootstrap(&mut room).await;
+        rooms.push((room, engine_api::MatchOutcome::InProgress, 0usize));
+    }
+
+    let mut steps_total = 0usize;
+    for round in 0..MAX_STEPS {
+        let mut all_done = true;
+        for (room, outcome, steps) in rooms.iter_mut() {
+            if *outcome != engine_api::MatchOutcome::InProgress {
+                continue;
+            }
+            all_done = false;
+            // 任一条连接有动作就走
+            let mut acted = false;
+            for conn in 0..CONNS {
+                if room.legal[conn].is_empty() {
+                    if let Some((rev, legal, choice, view_outcome)) =
+                        snapshot(&room.handle, room.id, conn, room.seq + 1, room.rev).await
+                    {
+                        *outcome = view_outcome;
+                        if rev > 0 {
+                            room.rev = rev;
+                        }
+                        room.legal[conn] = legal;
+                        if room.legal[conn].is_empty() {
+                            if let Some(c) = choice {
+                                if c.observer.0 == room.actors[conn].0 {
+                                    let take = (c.min_count as usize).min(c.options.len());
+                                    room.legal[conn].push(LegalAction::ResolveChoice {
+                                        choice_id: c.choice_id,
+                                        selections: (0..take as u32).collect(),
+                                        cancelled: take == 0 && c.allow_cancel,
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+                let Some(action) = pick(&room.legal[conn], &mut room.cursor[conn]) else {
+                    continue;
+                };
+                let cmd = action.to_command(room.actors[conn], room.rev);
+                room.seq += 1;
+                let (ok, rev, legal, _why) = submit(&room.handle, room.id, conn, room.seq, cmd).await;
+                if ok {
+                    room.cursor[conn] = 0;
+                } else {
+                    room.cursor[conn] += 1;
+                }
+                if rev > 0 {
+                    room.rev = rev;
+                }
+                room.legal[conn] = legal;
+                acted = true;
+                *steps += 1;
+                steps_total += 1;
+                if *outcome != engine_api::MatchOutcome::InProgress {
+                    break;
+                }
+            }
+            if !acted {
+                // 本房间暂时无动作：再取一次快照确认终局状态，避免空转
+                if let Some((_, _, _, view_outcome)) =
+                    snapshot(&room.handle, room.id, 0, room.seq + 1, room.rev).await
+                {
+                    if view_outcome != engine_api::MatchOutcome::InProgress {
+                        *outcome = view_outcome;
+                    }
+                }
+            }
+        }
+        if all_done {
+            break;
+        }
+        if round == MAX_STEPS - 1 {
+            break;
+        }
+    }
+
+    let elapsed = t0.elapsed();
+    let rss_after = rss_kb();
+    for (room, outcome, steps) in rooms.iter() {
+        println!(
+            "RESULT bot_finish room={} outcome={:?} steps={steps} rev={} elapsed_ms={}",
+            room.id,
+            outcome,
+            room.rev,
+            elapsed.as_millis()
+        );
+    }
+    println!(
+        "RESULT bot_finish rooms={ROOMS} steps_total={steps_total} elapsed_ms={} rss_before_kb={:?} rss_after_kb={:?}",
+        elapsed.as_millis(),
+        rss_before,
+        rss_after
+    );
+    for (room, outcome, _steps) in rooms.iter() {
+        assert_ne!(
+            *outcome,
+            engine_api::MatchOutcome::InProgress,
+            "room {} 应在 {MAX_STEPS} 步内结束（当前 outcome={outcome:?}）",
+            room.id
+        );
+    }
 }

@@ -151,3 +151,31 @@ DBG bot 终局：room 3 rev=69 legal=[0, 1]
 1. 选步是**固定优先级**，**不是**强 AI ⇒ 不用于胜负评估；
 2. 未断言「对局**终局**」（`finished`）——本用例只验**连续推进会持续**（修订号大幅提升）；
 3. 未做**内存/句柄**观测与**真实网络**（仍属产品级长程的剩余部分）。
+
+---
+
+## 8 ✅ **跑到终局达成**（同日第四轮）
+
+新增用例 `bot_runs_matches_to_completion`：机器人持续推进直到 **`MatchOutcome != InProgress`**。
+
+```
+RESULT bot_finish room=0 outcome=RenegadeWin { player: PlayerId(2) } steps=100 rev=102 elapsed_ms=313
+RESULT bot_finish room=1 outcome=LoyalistWin steps=6 rev=8 elapsed_ms=313
+RESULT bot_finish rooms=2 steps_total=106 elapsed_ms=313 rss_before_kb=None rss_after_kb=None
+```
+
+| 判据 | 结果 |
+|---|---|
+| **对局能跑到终局** | ✅ room0 **`RenegadeWin{player:2}`**（**100 步**、rev=102）、room1 **`LoyalistWin`**（6 步、rev=8）|
+| 终局类型覆盖 | 至少两种（**野心家胜** / **忠臣胜**）|
+| 步数上限保护 | ✅ 上限 4000，实际 **106** 步总和 |
+| 进程 RSS 观测 | ❌ **`ps` 取不到（None）** —— 本环境未取到 RSS，**如实记录**，未做内存泄漏结论 |
+
+⇒ **产品路径上「完整对局」已被机器人跑到终局**（不只是「能推进」）。
+
+### 8.1 仍未做（**如实**）
+
+1. **内存/句柄观测**：`ps -o rss=` 在本环境返回空 ⇒ **无数据**，需换 `libc::getrusage` 或 `vmmap`（未做）；
+2. **多盘连续/长时**：目前每房**一局**；「整夜跑」需要循环多局并观察 RSS 曲线；
+3. **真实网络**（TCP/WebSocket）与浏览器端：未做；
+4. 选步仍是**固定优先级**（非强 AI），终局分布不代表规则平衡性。

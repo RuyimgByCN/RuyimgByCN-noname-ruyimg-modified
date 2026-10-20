@@ -1,0 +1,4 @@
+RESULT bot_finish room=0 outcome=RenegadeWin { player: PlayerId(2) } steps=100 rev=102 elapsed_ms=304
+RESULT bot_finish room=1 outcome=LoyalistWin steps=6 rev=8 elapsed_ms=304
+RESULT bot_finish rooms=2 steps_total=106 elapsed_ms=304 rss_before_kb=None rss_after_kb=None
+RESULT bot rooms=4 rounds=60 submitted=178 accepted=178 snapshots=240 max_revision=72 elapsed_ms=990 throughput_cmds_per_s=180
