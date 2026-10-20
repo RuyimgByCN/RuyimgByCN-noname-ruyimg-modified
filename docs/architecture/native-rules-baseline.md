@@ -4424,3 +4424,35 @@ hxunzhi2: {
 **`miedao` 值得单独注意**：上游对象**只有 `group` 一个字段**（84 B），
 说明它是**「挂在别的技能上的组技」**（`group` 指向宿主）—— 原生却给了它 `PhaseBegin` 触发 ⚠️。
 **若要判定，需看 `group` 的值指向谁**（**本轮未查**）。
+
+### U05-SWD **v5**：`miedao` 定案（G3）—— 不是「组技当触发」，是**两个 `phase*Begin` 合并成 `PhaseBegin`**
+
+**上游 `miedao` 本体**（`character/swd/skill.js`）：
+
+```js
+miedao: { locked: true, group: ["miedao1", "miedao2"], ai: { threaten: 1.4 } }
+```
+
+⇒ **它是「容器技」**，真正的内容在两个组技里：
+
+| 组技 | `trigger` | 效果 |
+|---|---|---|
+| **`miedao1`** | **`player: phaseDrawBegin`** | **`forced`**，`filter: hp < maxHp` ⇒ **`trigger.num += maxHp - hp`**（**多摸牌**）|
+| **`miedao2`** | **`player: phaseDiscardBegin`** | `forced`，`filter: hp < maxHp` ⇒ **`chooseToDiscard(maxHp - hp, "he", …)`**（**多弃牌**）|
+
+**原生**：`HostBehavior::Miedao => PhaseBegin`（单一入口）。
+
+⇒ **判定**：**上游是「摸牌阶段开始 + 弃牌阶段开始」两个触发**，原生**合并为 `PhaseBegin` 单入口** ——
+**与 `bshaowei`（上游双 `phaseEnd` ⇒ 原生单确认式翻转）同类** ✅
+（**是否为「按阶段分派的轮询入口」，需读 `step` 确认** ❓ —— **但「上游无触发」的疑虑已解除** ✅）。
+
+#### 更新后的 U05-SWD 账
+
+| 类 | 条数 | 变化 |
+|---|---:|---|
+| ✅ 一致 | **8** | 不变 |
+| ✅ 归入共性限制 | **2** | 不变 |
+| ✅ **定案（合并型）** | **1** | **`miedao`**（**+`bshaowei` 同类先例**）|
+| ⚠️ 待判定 | **2** | `jifeng`（缺 toBefore + `mod` 未判）、`swd_xiuluo`（档位）|
+| ❗ 未实现 | **1** | `hxunzhi2` |
+| ❓ 上游缺口 | **2** | `tianxiang2`/`xuanyuanjian2` |

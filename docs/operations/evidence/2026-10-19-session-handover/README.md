@@ -166,14 +166,14 @@
 |---|---|---|---|
 | **G1** | **`hxunzhi2`**（U05-SWD，**filter 恒 `false`**）| 宿主是否支持「**技能致死不进濒死询问**」| 实现该效果或定近似口径 |
 | **G2** | **`ziyu`**（U05-OW，**上游触发技 → 原生主动技**）| **实现选择** | 改回触发式或决策接受 |
-| **G3** | **`miedao`**（U05-SWD，**上游仅 `group`，原生给了 `PhaseBegin`**）| **`group` 指向未读** | 读 `group` 值后判定 |
+
 | **G4** | **`mbcmjiushi`**（`longxue`，**liuli mobile「酒诗」未转换**）| **上游包转换** | 转换 liuli mobile 包 |
 | **G5** | **`mbcmfangzhu`**（**「放逐」**）| 同上 | 同上 |
 | **G6** | **`mbjuejin`**（**「绝进」**）| 同上 | 同上 |
 | **G7** | **`duoqi`**（`wudian`，**`phaseUse` 中止未建模** + 筑城标记）| **引擎表达力** | 需 DSL/引擎支持 |
 | **G8** | **`youzhan`**（`wudian`，**`shaBefore` 时点映射偏晚** + 虚拟 `useCard`）| **引擎表达力** | 同上 |
 
-⇒ **8 条**（**G1–G8**）—— 其中 **G4–G6 是同一原因**（liuli mobile）、**G7–G8 是同一原因**（引擎表达力）。
+⇒ **7 条**（**G1、G2、G4–G8**）—— **原 G3（`miedao`）已定案为「合并型」**（上游 `miedao1`/`miedao2` 两个 `phase*Begin` ⇒ 原生 `PhaseBegin` 单入口，与 `bshaowei` 同类）✅ —— 其中 **G4–G6 同一原因**（liuli mobile）、**G7–G8 同一原因**（引擎表达力）。
 
 ### 7.6 汇总
 
