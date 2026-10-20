@@ -698,6 +698,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 489 轮**：**`fuzz_dsl_parser` 语料回放**（`crates/content-compiler/tests/fuzz_dsl_parser_replay.rs`）——**与 fuzz target 同一 API**（`parse_source`，UTF-8 lossy 入口一致）：3 样本 ⇒ **`empty.txt` 解析成功**（ok=1）、`garbage.txt` / `partial_skill.txt` 均给**带 `pos` 的结构化 Parse 错误**、**无 panic / 无 hang** ✅；⇒ **三个主要 fuzz 目标中已有两个有 stable 回放**（bytecode ✓ + DSL parser ✓），`snapshot_decode` 因需 `engine-core` 依赖**不做**（替代 API 会测错，已记录）；`bytecode_verify`/`command_json`/`content_package` **仍未覆盖**（**不是「已验证」**）。
 >
+> **第 490 轮**：**`fuzz_bytecode_verify` 回放**（第三个目标补上）——首版复用 `valid_nnvm.bin`（`code: []`）⇒ **校验器拒绝** `InvalidBytecode("empty code")`、`verified_ok=0`（**又只覆盖拒绝路径** ✗）；**修法**：`gen_fuzz_seed` 扩展为**同时生成两份**种子（`valid_nnvm.bin` 解码成功/校验拒绝 + **`verify_ok_nnvm.bin`（`assemble(&[Op::Halt])`，写盘前自检 `verify_module`）**），用例加断言 `verified_ok>=1` ⇒ 实测 **5 样本：解码 2 / 校验通过 1 / 结构化拒绝 1、无 panic** ✅；**仍未做**：`snapshot_decode`（需 `engine-core`）、`command_json`/`content_package`（**无语料，合成样本不等于 fuzz**）。
+>
+
 
 
 

@@ -1,0 +1,6 @@
+DBG 语料回放：fuzz_bytecode_module 5 个样本
+DBG 校验器拒绝 valid_nnvm.bin ⇒ InvalidBytecode("empty code")（结构化错误，非 panic）
+DBG 语料回放：bytecode ok=2 err=3（**无 panic**）
+DBG 语料回放：verify 解码 2 个、校验通过 1、结构化拒绝 1（**无 panic**）
+DBG 语料回放：新种子 /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/../../fuzz/corpus/fuzz_bytecode_module/valid_nnvm.bin 解码成功 name=fuzz_seed_nnvm
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

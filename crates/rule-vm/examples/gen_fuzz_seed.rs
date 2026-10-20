@@ -12,7 +12,7 @@
 //! cargo run --offline -p rule-vm --example gen_fuzz_seed
 //! ```
 
-use rule_vm::bytecode::{BytecodeModule, MODULE_MAGIC};
+use rule_vm::bytecode::{assemble, BytecodeModule, Op, MODULE_MAGIC};
 
 fn main() {
     let module = BytecodeModule {
@@ -44,5 +44,28 @@ fn main() {
         out.display(),
         bytes.len(),
         String::from_utf8_lossy(&bytes[..4])
+    );
+
+    // 第二份种子：**能过校验器**的最小模块（`Op::Halt`）。
+    // 动机：`valid_nnvm.bin` 的 `code` 为空 ⇒ 解码成功但 **校验器拒绝**
+    // （`InvalidBytecode("empty code")`），导致 verify 回放只覆盖拒绝路径。
+    let verifiable = BytecodeModule {
+        name: "fuzz_seed_nnvm_halt".to_string(),
+        code: assemble(&[Op::Halt]),
+        local_count: 0,
+        max_stack: 1,
+        entry_pc: 0,
+        logic_hash: [0u8; 32],
+        caps_mask: 0,
+    };
+    let vbytes = verifiable.to_bytes();
+    let vm = BytecodeModule::from_bytes(&vbytes).expect("可校验种子应能解码");
+    rule_vm::verify_module(&vm).expect("可校验种子应通过 verify_module");
+    let vout = dir.join("verify_ok_nnvm.bin");
+    std::fs::write(&vout, &vbytes).expect("write verify seed");
+    println!(
+        "已写入 {} （{} 字节，带 Op::Halt，**校验通过**）",
+        vout.display(),
+        vbytes.len()
     );
 }

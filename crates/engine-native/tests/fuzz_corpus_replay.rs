@@ -15,6 +15,9 @@
 //! * `fuzz_dsl_parser`：解析器 API 面在 `rule-vm`，未在此引入。
 //! * **新随机输入**：那是 libFuzzer 的职责（需 nightly）。
 //!
+//! 另：`fuzz_bytecode_verify` **没有独立语料**，但其属性可直接复用字节码语料验证
+//! （解码成功的模块再过 `verify_module`，不得 panic）——见本文件第三个用例。
+//!
 //! **重要发现**：`valid_seed.bin` 以 **`NVM1`** 开头，而当前 `MODULE_MAGIC = b"NNVM"`
 //! ⇒ **语料是旧格式**（`valid_*` 也会被拒）。本用例**如实断言「不 panic」**，
 //! 并把「`valid_*` 亦被拒」记为**待办：刷新语料**。
@@ -74,5 +77,49 @@ fn replay_fuzz_bytecode_module_corpus() {
     }
     eprintln!(
         "NOTE 语料回放：ok={ok} err={err}；旧格式 `NVM1` 样本仍在（已登记为历史遗留，可清理）"
+    );
+}
+
+
+/// `fuzz_bytecode_verify` 的属性：**能解码的模块必须能安全过校验器**（不得 panic）。
+///
+/// 该 target **没有独立语料**，直接用 `fuzz_bytecode_module` 的语料：解码成功者再过 `verify_module`。
+#[test]
+fn replay_bytecode_verify_on_decoded_corpus() {
+    let dir = corpus_dir("fuzz_bytecode_module");
+    let list = files(&dir);
+    assert!(!list.is_empty(), "语料目录应存在且非空：{}", dir.display());
+    let mut decoded = 0usize;
+    let mut verified_ok = 0usize;
+    let mut verify_err = 0usize;
+    for f in &list {
+        let data = std::fs::read(f).expect("读语料");
+        if let Ok(module) = rule_vm::bytecode::BytecodeModule::from_bytes(&data) {
+            decoded += 1;
+            match rule_vm::verify_module(&module) {
+                Ok(()) => verified_ok += 1,
+                Err(e) => {
+                    verify_err += 1;
+                    eprintln!(
+                        "DBG 校验器拒绝 {} ⇒ {e:?}（结构化错误，非 panic）",
+                        f.file_name().unwrap().to_string_lossy()
+                    );
+                }
+            }
+        }
+    }
+    eprintln!(
+        "DBG 语料回放：verify 解码 {decoded} 个、校验通过 {verified_ok}、结构化拒绝 {verify_err}（**无 panic**）"
+    );
+    // 必须至少有一个样本走到校验器，否则本用例只测了「解码失败」路径。
+    assert!(
+        decoded >= 1,
+        "应至少有一个语料样本能解码并进入校验器（decoded={decoded}）"
+    );
+    // 更进一步：必须有样本**校验通过**，否则只覆盖了「拒绝」路径
+    //（`valid_nnvm.bin` 的 code 为空 ⇒ 解码成功但被拒；`verify_ok_nnvm.bin` 带 Op::Halt ⇒ 应通过）。
+    assert!(
+        verified_ok >= 1,
+        "应至少有一个语料样本**校验通过**（verified_ok={verified_ok}、verify_err={verify_err}）"
     );
 }

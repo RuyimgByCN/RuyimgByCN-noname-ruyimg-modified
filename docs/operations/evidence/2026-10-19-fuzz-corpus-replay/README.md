@@ -117,3 +117,52 @@ test result: ok. 1 passed; 0 failed; 0 ignored
 | **`fuzz_dsl_parser`** | **`content_compiler::parse_source`** | ✅ **本轮补上** |
 | `fuzz_snapshot_decode` | `engine_core::Snapshot::from_bytes` | ❌ **不做**：`engine-core` 非本工作区相关 crate 的依赖，**不为测试加依赖**（替代 API 会测错，已记录）|
 | `fuzz_bytecode_verify` / `fuzz_command_json` / `fuzz_content_package` | 见 targets | ❌ **未做**（本轮未覆盖，**不是"已验证"**）|
+
+---
+
+## 8 ✅ 第四轮：**`fuzz_bytecode_verify` 回放**（第三个目标补上）
+
+该 target **没有独立语料**，但属性可**直接复用**字节码语料：解码成功的模块再过 `verify_module`，**不得 panic**。
+
+### 8.1 先发现「只覆盖拒绝路径」
+
+首版复用 `valid_nnvm.bin`（`code: []`）⇒ 解码成功但 **校验器拒绝** `InvalidBytecode("empty code")`
+⇒ `verified_ok = 0`，**用例只测了拒绝路径**（与第 6 节同一类问题）。
+
+### 8.2 修法：生成**可校验**种子
+
+`gen_fuzz_seed` 扩展为**同时生成两份**：
+
+| 种子 | 内容 | 用途 |
+|---|---|---|
+| `valid_nnvm.bin`（70 B） | `code: []` | **解码成功 / 校验拒绝**（拒绝路径）|
+| **`verify_ok_nnvm.bin`（76 B）** | **`assemble(&[Op::Halt])`** | **解码成功 / 校验通过**（成功路径）；写盘前**自检 `verify_module`** |
+
+用例新增断言：`verified_ok >= 1`。
+
+### 8.3 结果
+
+```
+DBG 语料回放：fuzz_bytecode_module 5 个样本
+DBG 校验器拒绝 valid_nnvm.bin ⇒ InvalidBytecode("empty code")（结构化错误，非 panic）
+DBG 语料回放：bytecode ok=2 err=3（**无 panic**）
+DBG 语料回放：verify 解码 2 个、校验通过 1、结构化拒绝 1（**无 panic**）
+test result: ok. 2 passed; 0 failed; 0 ignored
+```
+
+| 判据 | 结果 |
+|---|---|
+| 解码成功样本 | **2 / 5**（两份新种子）|
+| **校验通过** | **1** ✅（`verify_ok_nnvm.bin`）|
+| 结构化拒绝 | 1（`valid_nnvm.bin`，`empty code`）|
+| 不 panic | ✅ |
+
+### 8.4 fuzz 目标覆盖现状（**最终**）
+
+| target | stable 回放 |
+|---|---|
+| `fuzz_bytecode_module` | ✅ 含**当前格式**两份种子（解码 / 校验两条路径）|
+| `fuzz_bytecode_verify` | ✅ **本轮**（复用字节码语料 + 可校验种子）|
+| `fuzz_dsl_parser` | ✅ 第 7 节 |
+| `fuzz_snapshot_decode` | ❌ 需 `engine-core` 依赖（**不做**，已记录）|
+| `fuzz_command_json` / `fuzz_content_package` | ❌ **无语料**且**合成样本不等于 fuzz** ⇒ **未做**（不宣称已验证）|
