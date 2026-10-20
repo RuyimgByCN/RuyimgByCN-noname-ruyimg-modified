@@ -27,6 +27,23 @@ def host_keys() -> list[str]:
     return sorted(set(re.findall(r'"(host:[A-Za-z0-9_]+)"', text)))
 
 
+def declared_in_host_rs() -> set[str]:
+    """`content/host.rs` 的 `CardKind → HostSkillDecl` 表（**第三条挂载路径**）。
+
+    该表把「卡牌种类」直接绑定到宿主行为（如 `CardKind::Chunbing =>
+    behavior: HostBehavior::GujianFoodChunbing`），**不经过包数据** ——
+    漏掉这条路径会把大量「卡牌宿主行为」误判为不可达。
+    """
+    keys_src = KEYS.read_text(encoding="utf-8")
+    beh2key = dict(re.findall(r'HostBehavior::(\w+)\s*=>\s*"(host:[A-Za-z0-9_]+)"', keys_src))
+    host_rs = (ROOT / "crates/engine-native/src/content/host.rs").read_text(encoding="utf-8")
+    return {
+        beh2key[b]
+        for b in re.findall(r"behavior:\s*HostBehavior::(\w+)", host_rs)
+        if b in beh2key
+    }
+
+
 def referenced() -> set[str]:
     """收集所有包数据里出现的 `host:` 引用（任何 JSON 字段、任何层级）。"""
     refs: set[str] = set()
@@ -53,8 +70,13 @@ def referenced() -> set[str]:
 def main(argv: list[str]) -> int:
     keys = host_keys()
     refs = referenced()
-    unreachable = [k for k in keys if k not in refs]
-    print(f"宿主键 {len(keys)} 个；被包引用 {len(keys) - len(unreachable)}；不可达 {len(unreachable)}")
+    declared = declared_in_host_rs()
+    reachable = refs | declared
+    unreachable = [k for k in keys if k not in reachable]
+    print(
+        f"宿主键 {len(keys)} 个；包引用 {len(refs)}；host.rs 声明 {len(declared)}；"
+        f"并集 {len(reachable)}；仍无引用 {len(unreachable)}（上界）"
+    )
     if "--list" in argv:
         for k in unreachable:
             print(f"  {k}")

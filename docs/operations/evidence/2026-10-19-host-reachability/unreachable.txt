@@ -1,4 +1,4 @@
-宿主键 520 个；被包引用 370；不可达 150
+宿主键 520 个；包引用 370；host.rs 声明 56；并集 426；仍无引用 94（上界）
   host:baimang2
   host:baimang2x
   host:baimang3
@@ -18,41 +18,18 @@
   host:chiyan3x
   host:chiyi
   host:chiyi2
-  host:donghuangzhong
   host:fudichouxin_compare
   host:geanguanhuo_compare
   host:gujian_feibiao_card
-  host:gujian_food_chunbing
   host:gujian_food_grant
-  host:gujian_food_gudonggeng
-  host:gujian_food_liyutang
-  host:gujian_food_luyugeng
-  host:gujian_food_mapodoufu
-  host:gujian_food_mizhilianou
-  host:gujian_food_molicha
-  host:gujian_food_qingtuan
-  host:gujian_food_shihuifen_ban
-  host:gujian_food_tanhuadong
-  host:gujian_food_xiajiao
-  host:gujian_food_yougeng
-  host:gujian_food_yuanbaorou
-  host:gujian_food_ziyangdan
   host:gujian_liufengsan_card
   host:gujian_mianli_card
-  host:gujian_mutou_equip_skill
   host:gujian_shihuifen_card
   host:gujian_shujinsan_card
-  host:gujian_yuheng_equip_skill
-  host:gujian_yunvyuanshen
   host:gwent_aozu_card
   host:gwent_baoxue_card
-  host:gwent_birin_state
-  host:gwent_cigu_state
-  host:gwent_fengyin_state
   host:gwent_kunen_card
-  host:gwent_kunen_state
   host:gwent_poxiao_card
-  host:gwent_qinpen_state
   host:gwent_shanbeng_card
   host:gwent_weather_grant
   host:gwent_wenyi_card
@@ -66,9 +43,6 @@
   host:hearth_xingjie_card
   host:hearth_yuansu_card
   host:hearth_zhiliaobo_card
-  host:huanle_mianju
-  host:huanle_monkey
-  host:huanle_xuelunyang
   host:huanren
   host:huanren_die
   host:jiguan_bingpo_card
@@ -80,65 +54,35 @@
   host:jiguan_shatang_card
   host:jiguan_shenhuo_card
   host:jihuocard_draw
-  host:jinlianzhu_cancel
-  host:kongdongyin
-  host:kunlunjingc
-  host:lianyaohu_lianhua
-  host:lianyaohu_shouna
   host:linghunzhihuo_card
-  host:mtg_bingheyaosai_land
-  host:mtg_feixu_land
-  host:mtg_haidao_land
-  host:mtg_lindixiliu_land
-  host:mtg_linzhongjianta_land
-  host:mtg_linzhongjianta_strike
-  host:mtg_longshanfeng_land
-  host:mtg_shamolvzhou_land
-  host:mtg_shuimomuxue_land
-  host:mtg_yixialan_land
-  host:mtg_yixialan_recast
-  host:mtg_youlin_discover
-  host:mtg_youlin_land
-  host:nvwashi
   host:qingmu2
   host:qingmu2x
   host:qingmu3
   host:qingmu3x
   host:qingyi
-  host:shenmiguo_window
-  host:shennongding
   host:shenwei
   host:shezhanqunru_compare
-  host:shuchui
   host:shuigong_card
   host:swd_changshezhen_card
-  host:swd_fengyin_state
   host:swd_gouhunluo_card
-  host:swd_gouhunluo_sub
   host:swd_jiguanfeng_card
   host:swd_jiguanshu_card
   host:swd_jiguantong_card
-  host:swd_jiguanyao_gain
-  host:swd_jiguanyao_state
   host:swd_jiguanyaoshu_card
   host:swd_jiguanyuan_card
-  host:swd_jiguanyuan_gain
   host:swd_jinjilengdong_card
-  host:swd_langeguaiyi_equip_skill
   host:swd_liuxinghuoyu_card
   host:swd_mujiaren_card
   host:swd_niaoxiangzhen_card
   host:swd_pozhenjue_card
   host:swd_qixingzhen_card
   host:swd_shengxiuhaojiao_card
-  host:swd_shentou_equip_skill
   host:swd_shijianhuisu_card
   host:swd_tianfuzhen_card
   host:swd_xingtigaizao_card
   host:swd_xuanfengzhiren_card
   host:swd_yangpijuan_card
   host:swd_yinmilichang_card
-  host:swd_yufulu_equip_skill
   host:swd_zhiluxiaohu_card
   host:swd_zhongxinghujia_card
   host:target_discard_equip_or_damage
