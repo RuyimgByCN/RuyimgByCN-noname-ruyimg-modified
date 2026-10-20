@@ -1,0 +1,23 @@
+DBG 升级矩阵：shahai-gujian-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-mtg-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-swd-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-hearth-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-yunchou-upstream-noname v2→v3 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-zhenfa-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shahai-gwent-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：huanle-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：wuxing-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：wudian-upstream-noname v2→v3 拒版 ✅、回滚 ✅
+DBG 升级矩阵：d3-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：cardpile-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：cardpile-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：boss-zhugeliang-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：doomsday-brawl-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：epic-cards-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：hero-kill-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：longxue-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：mark-supplement-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：select-beautify-upstream-liuli v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shaai-ow-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：shaai-xianjian-upstream-noname v1→v2 拒版 ✅、回滚 ✅
+DBG 升级矩阵：通过 22/22 个包

@@ -125,6 +125,16 @@ fn save_restore_matrix_over_packages() {
         "d3-upstream-noname",
         "cardpile-upstream-noname",
         "cardpile-upstream-liuli",
+        // 第二轮（第 493 轮）：补齐其余**有资产**的包（由 `nc12_bench probe` 的 22 个 OK 包反推）
+        "boss-zhugeliang-upstream-liuli",
+        "doomsday-brawl-upstream-liuli",
+        "epic-cards-upstream-liuli",
+        "hero-kill-upstream-noname",
+        "longxue-upstream-liuli",
+        "mark-supplement-upstream-liuli",
+        "select-beautify-upstream-liuli",
+        "shaai-ow-upstream-noname",
+        "shaai-xianjian-upstream-noname",
     ];
     let mut passed = Vec::new();
     for pkg in candidates {
@@ -138,8 +148,8 @@ fn save_restore_matrix_over_packages() {
         candidates.len()
     );
     assert!(
-        passed.len() >= 12,
-        "应至少 12 个包通过保存恢复矩阵，实得 {}：{passed:?}",
+        passed.len() >= 20,
+        "应至少 20 个包通过保存恢复矩阵，实得 {}：{passed:?}",
         passed.len()
     );
 }
