@@ -105,3 +105,67 @@ fn tiny_budget_marks_exhausted() {
         plans[0].nodes_used
     );
 }
+
+/// ④ **并发压力与尾延迟**：同一引擎快照下，`PlanPool` 以 1 / 4 个 worker 各跑 N 次四座规划：
+/// * **结果必须逐一相同**（并行 == 顺序，模块文档承诺的确定性）；
+/// * 记录 p50 / p95 / p99 墙钟，作为**基线**（不是优化前后对比）。
+#[test]
+fn pool_parallel_matches_sequential_and_records_tail() {
+    const N: usize = 30;
+    let e = swd_engine(20261004);
+    let seats = [0u8, 1, 2, 3];
+    let planner = BoundedPlanner {
+        node_budget: 32,
+        deadline_ms: Some(5_000),
+        cancel: Default::default(),
+        lookahead_depth: 1,
+        policy_variant: 0,
+        content_tuning: None,
+    };
+
+    fn key(plans: &[engine_native::ai::Plan]) -> Vec<String> {
+        plans
+            .iter()
+            .map(|p| format!("{}:{:?}:{}:{}", p.seat, p.action, p.nodes_used, p.budget_exhausted))
+            .collect()
+    }
+    fn pct(mut v: Vec<u128>, p: f64) -> u128 {
+        v.sort_unstable();
+        if v.is_empty() {
+            return 0;
+        }
+        let idx = ((v.len() as f64 - 1.0) * p).round() as usize;
+        v[idx.min(v.len() - 1)]
+    }
+
+    let mut samples: Vec<(usize, Vec<u128>)> = Vec::new();
+    let mut reference: Option<Vec<String>> = None;
+    for workers in [1usize, 4] {
+        let pool = PlanPool::new(workers);
+        let mut times = Vec::new();
+        for _ in 0..N {
+            let t0 = std::time::Instant::now();
+            let plans = pool.plan_seats(&e, &seats, &planner);
+            times.push(t0.elapsed().as_nanos());
+            assert_eq!(plans.len(), seats.len(), "四座规划应返回 4 个 Plan");
+            let k = key(&plans);
+            match &reference {
+                None => reference = Some(k),
+                Some(r) => assert_eq!(r, &k, "并行结果必须与顺序结果逐一相同（worker={workers}）"),
+            }
+        }
+        let (p50, p95, p99) = (
+            pct(times.clone(), 0.50),
+            pct(times.clone(), 0.95),
+            pct(times.clone(), 0.99),
+        );
+        eprintln!(
+            "DBG NC10 并发：workers={workers} n={N} p50={}µs p95={}µs p99={}µs",
+            p50 / 1000,
+            p95 / 1000,
+            p99 / 1000
+        );
+        samples.push((workers, times));
+    }
+    assert_eq!(samples.len(), 2);
+}
