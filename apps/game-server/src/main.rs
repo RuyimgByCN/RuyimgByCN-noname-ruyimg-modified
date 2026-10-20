@@ -1186,4 +1186,97 @@ mod net_smoke {
             server.abort();
         });
     }
+    /// **座位未满时提交命令 ⇒ 明确错误回推**（此前我用错判：我的循环只等 `CommandOutcome`，
+    /// 把 `Error` 帧忽略了，才误以为「静默等待」）。
+    #[test]
+    fn websocket_submit_before_match_start_returns_error() {
+        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+        use engine_protocol::{decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage};
+        use futures_util::SinkExt;
+        use tokio_tungstenite::tungstenite::Message;
+
+        let cfg = test_cfg("wsnotstarted");
+        let lobby = bootstrap(&cfg);
+        let app = build_router(lobby, ServeDir::new(&cfg.original_content_root));
+        let rt = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()
+            .expect("runtime");
+
+        rt.block_on(async move {
+            let l = tokio::net::TcpListener::bind("127.0.0.1:0").await.expect("bind");
+            let addr = l.local_addr().expect("addr");
+            let server = tokio::spawn(async move {
+                let _ = axum::serve(l, app).await;
+            });
+            let url = format!("ws://{addr}/ws");
+            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+            let _ = next_text(&mut a).await;
+            a.send(Message::Text(
+                encode_c2s(&ClientMessage::CreateRoom {
+                    players: 2,
+                    seed: 20_260_103,
+                    password: String::new(),
+                })
+                .expect("enc create")
+                .into(),
+            ))
+            .await
+            .expect("send create");
+            let (room_id, pid) = loop {
+                let t = next_text(&mut a).await;
+                if let Ok(ServerMessage::JoinOk {
+                    room_id, player_id, ..
+                }) = decode_s2c(&t)
+                {
+                    break (room_id, player_id);
+                }
+            };
+            // 只有一名玩家（座位未满）就提交
+            a.send(Message::Text(
+                encode_c2s(&ClientMessage::SubmitCommand {
+                    header: MessageHeader::new(room_id, 1, 0),
+                    command: Command {
+                        actor: PlayerId::new(pid),
+                        expected_revision: ExpectedRevision(0),
+                        idempotency_key: IdempotencyKey(1),
+                        kind: CommandKind::EndPhase,
+                    },
+                    idempotency_key: IdempotencyKey(1),
+                })
+                .expect("enc submit")
+                .into(),
+            ))
+            .await
+            .expect("send submit");
+
+            let mut got_error = None;
+            for _ in 0..8 {
+                let t = next_text(&mut a).await;
+                if let Ok(ServerMessage::Error {
+                    code,
+                    message,
+                    ..
+                }) = decode_s2c(&t)
+                {
+                    got_error = Some((code, message));
+                    break;
+                }
+            }
+            let (code, message) = got_error.expect("座位未满时提交命令应收到明确 Error 帧");
+            eprintln!("DBG 未开局提交：code={code:?} message={message}");
+            assert!(
+                message.to_lowercase().contains("not started")
+                    || message.to_lowercase().contains("match"),
+                "错误信息应说明「对局未开始」，实得：{message}"
+            );
+            assert_eq!(
+                format!("{code:?}"),
+                "Conflict",
+                "座位未满提交命令应映射为 Conflict（而非 Internal），实得 {code:?}"
+            );
+            let _ = a.close(None).await;
+            server.abort();
+        });
+    }
 }

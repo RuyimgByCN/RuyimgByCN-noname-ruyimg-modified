@@ -562,6 +562,9 @@ fn map_room_err(e: &str) -> HandlerError {
         "unauthorized" => HandlerError::new(ErrorCode::Unauthorized, "bad password"),
         "room full" | "seat taken" => HandlerError::new(ErrorCode::RoomFull, e),
         "not in room" => HandlerError::new(ErrorCode::NotInRoom, e),
+        // 座位未满/对局未开始时提交命令：属**状态冲突**（客户端时序问题），
+        // 不应报成 `Internal`（那是服务端故障的语义）。
+        "match not started" => HandlerError::new(ErrorCode::Conflict, "match not started"),
         // NC09/NC12：未知房间错误**带上原文**（此前统一成 "room error"，联机排障时看不到原因；
         // 已用 RTT 探针复现过「只看到 room error」的情况，见 2026-10-18-nc12-online-rtt 证据）。
         _ => HandlerError::new(ErrorCode::Internal, format!("room error: {e}")),

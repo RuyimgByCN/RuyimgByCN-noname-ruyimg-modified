@@ -1,0 +1,5 @@
+DBG 重连：建局 room=1 player=1 token_len=36
+DBG 未开局提交：code=Conflict message=match not started
+DBG 重连：B 加入 player=2
+DBG 重连：命令后 rev=2 legal=7
+DBG 重连：重连后 player=1 rev=2
