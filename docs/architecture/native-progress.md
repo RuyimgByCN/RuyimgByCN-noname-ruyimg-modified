@@ -785,6 +785,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 535 轮**：**U05-XJ（`shaai-xianjian`）差异族 v0**（台账第 206 行 + 规则基准）——上游 `xianjian/skill.js` vs 原生 `metadata/xianjian.rs`：**36 武将 / 22 技能全部 `host:xj_*`** ✓，**该组共 73 个 `Xianjian*` 行为** ✓；**22 条 trigger 全部有对照** ✓：**7 一致 ✅**、**4 被动一致 ✅**（上游无 trigger ⇒ 原生 `None`）、**11 待判 ⚠️**（`damageEnd`⇒`Damage` 三例、`recoverEnd/After`⇒`Recover`、`loseHpAfter`⇒`LoseHp`、`drawBegin`⇒`CardsDrawn`、**`xjyufeng`：`loseEnd`⇒`CardsDiscarded`（语义可能不同）**、**`anwugu2`：`phaseAfter`⇒`None`（少了触发）**）；**caveat**：**`EventKind` 粒度未确认** ✓（`DamageBefore` 已存在 ⇒ `damageEnd`⇒`Damage` 可能只是命名映射 ✗）⇒ **不签署** ✓；**规则差异仍 5/32** ✓。
 >
+> **第 536 轮**：**规则差异三份差异族并入签署表**（`source-signoff-32`）——把 U08（**闭合**：技能已实现但**无载体 ⇒ 不可达**）、**U05-OW v2**（**6 条全有对照**：2 条自述对齐 + 4 条口径差异）、**U05-XJ v0**（**22 条全有对照**：**7 一致 + 4 被动一致 + 11 待判**）三类状态写进签署表的「规则差异」行 ⇒ **明确「三份差异族已完成、但一项都不能签署」** ✓；**规则差异仍 5/32** ✓；**另**：本轮查 `xjyufeng`/`anwugu2` 两条可疑项：**`xjyufeng` 的 `CardsDiscarded` 无注释** ✗、**`anwugu2` 为 `None` 但注释自述「甜香去：伤害前置窗口（上游 source damageBefore check 询问式）」** ✓ ⇒ **两条仍待判**，但**线索明确** ✓（**`anwugu2` 靠窗口而非触发挂载** ✓）。
+>
+
 
 
 
