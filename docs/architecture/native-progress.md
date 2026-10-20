@@ -639,6 +639,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 455 轮**：**「目标平台」构建级验收**（`engine-native`/`engine-native-wasm`/`content-native-loader` 交叉编译）——**5 项通过**：iOS **双架构**（`aarch64-apple-ios`、`x86_64-apple-ios`）+ **WASM 三层**（engine-native / engine-native-wasm / content-native-loader）；**2 项环境失败**：`aarch64-linux-android`（`failed to find tool "aarch64-linux-android-clang"`，NDK 未装）、`x86_64-pc-windows-msvc`（`blake3` 构建脚本需 MSVC C 工具链）⇒ 第 6 项由「0 证据/无设备」推进为「**构建级 5 项通过**」，**真机与浏览器运行仍未验收**；另：**`game-server` 产品侧测试 96 passed / 0 failed**（含 `native_product_path` 6 项、故障注入 11 项、滚动升级 4 项）。
 >
+> **第 456 轮**：**41 包逐包清单**（数据驱动，台账第 171 行 + 证据目录）——枚举 `packages/extensions/*/`：**41 个包目录** = 10 卡牌包（cards 125–237 张）+ 2 个 `pile.json`（各 160 条）+ `d3`（character）+ `boss-zhugeliang`（`cards(0)+skills(1)`）+ **3 个仅 `config.json`**（`ai-tuning` 14 项、`boss-play` 12 项×2）；**已跑过验收**：配置/组合 10 包、保存恢复/升级 5 来源、效能 12 档；**未做**：真机运行、产品长程、逐来源规则差异签署；另记录 **`package_id` 重名**（`cardpile`、`boss-play` 各跨两 namespace）⇒ bench 的 `package_ids` 不能区分。
+>
+
 
 
 
