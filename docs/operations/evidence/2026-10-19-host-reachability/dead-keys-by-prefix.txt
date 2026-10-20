@@ -1,0 +1,45 @@
+前缀	数量	候选包（同名/同前缀）	键
+swd	22	shahai-swd-upstream-noname	swd_changshezhen_card,swd_gouhunluo_card,swd_jiguanfeng_card,swd_jiguanshu_card,swd_jiguantong_card,swd_jiguanyaoshu_card,swd_jiguanyuan_card,swd_jinjilengdong_card,swd_liuxinghuoyu_card,swd_mujiaren_card,swd_niaoxiangzhen_card,swd_pozhenjue_card,swd_qixingzhen_card,swd_shengxiuhaojiao_card,swd_shijianhuisu_card,swd_tianfuzhen_card,swd_xingtigaizao_card,swd_xuanfengzhiren_card,swd_yangpijuan_card,swd_yinmilichang_card,swd_zhiluxiaohu_card,swd_zhongxinghujia_card
+gwent	10	shahai-gwent-upstream-noname	gwent_aozu_card,gwent_baoxue_card,gwent_kunen_card,gwent_poxiao_card,gwent_shanbeng_card,gwent_weather_grant,gwent_wenyi_card,gwent_yanzhi_card,gwent_zhihuan_card,gwent_zumo_card
+jiguan	8		jiguan_bingpo_card,jiguan_dinv_card,jiguan_heilong_card,jiguan_liutouge_card,jiguan_longxu_card,jiguan_qiankun_card,jiguan_shatang_card,jiguan_shenhuo_card
+hearth	7	shahai-hearth-upstream-noname	hearth_chuansong_card,hearth_dunpai_card,hearth_shijieshu_card,hearth_tanshe_card,hearth_xingjie_card,hearth_yuansu_card,hearth_zhiliaobo_card
+gujian	6	shahai-gujian-upstream-noname	gujian_feibiao_card,gujian_food_grant,gujian_liufengsan_card,gujian_mianli_card,gujian_shihuifen_card,gujian_shujinsan_card
+baiyi	2		baiyi,baiyi_thunder
+huanren	2		huanren,huanren_die
+baimang2	1		baimang2
+baimang2x	1		baimang2x
+baimang3	1		baimang3
+baimang3x	1		baimang3x
+bianshen3	1		bianshen3
+bianshen3x	1		bianshen3x
+bianshen4	1		bianshen4
+bianshen4x	1		bianshen4x
+boss	1	boss-play-upstream-liuli,boss-zhugeliang-upstream-liuli	boss_yuhuo
+caochuan	1		caochuan_card
+chenhuodajie	1		chenhuodajie_card
+chiyan2	1		chiyan2
+chiyan2x	1		chiyan2x
+chiyan3	1		chiyan3
+chiyan3x	1		chiyan3x
+chiyi	1		chiyi
+chiyi2	1		chiyi2
+fudichouxin	1		fudichouxin_compare
+geanguanhuo	1		geanguanhuo_compare
+jihuocard	1		jihuocard_draw
+linghunzhihuo	1		linghunzhihuo_card
+qingmu2	1		qingmu2
+qingmu2x	1		qingmu2x
+qingmu3	1		qingmu3
+qingmu3x	1		qingmu3x
+qingyi	1		qingyi
+shenwei	1		shenwei
+shezhanqunru	1		shezhanqunru_compare
+shuigong	1		shuigong_card
+target	1		target_discard_equip_or_damage
+touliang	1		touliang_swap
+xuanlin2	1		xuanlin2
+xuanlin2x	1		xuanlin2x
+xuanlin3	1		xuanlin3
+xuanlin3x	1		xuanlin3x
+zhangba	1		zhangba_sha
+zhaomingdan	1		zhaomingdan_card
