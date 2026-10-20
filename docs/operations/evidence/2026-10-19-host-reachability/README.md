@@ -89,3 +89,43 @@
 **「不可达」的判定必须枚举全部挂载路径** ❗ ——
 **我第一版只查了包数据**，得出 150；**补上 `host.rs` 的表后降到 94**；
 **如果还有第三条，还会再降** ⇒ **任何「不可达」结论必须写明「查了哪几条路径」** ✅。
+
+---
+
+## 9 **死键抽查：6 个样本键全部不在目录里**（实测，非推理）
+
+用例 `crates/engine-native/tests/nc08_dead_host_keys.rs`：
+
+```
+DBG 死键抽查：装载 18 个包；样本 6 个；出现在目录里的 0 个 []
+test result: ok. 1 passed
+```
+
+**抽查样本**（来自 94 条里）：
+`host:baimang2`、`host:baimang3x`、`host:chiyan2`、`host:qingmu2`、`host:xuanlin2`、`host:zhaomingdan`
+
+⇒ **装载全部包后，这 6 个键都不在 `catalog.skills` 里** ✅
+
+### 为什么「不在目录里」= 死键
+
+**运行时授予必须经目录查名** —— 例（`support.rs:1020`）：
+
+```rust
+pub(super) fn grant_shihuifen_ban(…) {
+    if let Some(def) = ctx.catalog.skill_by_name(…) { ctx.core.skills.insert(…); }
+}
+```
+
+⇒ **目录来自「包数据 + `host.rs` 的 `HostSkillDecl` 表」** ⇒
+**两者都没有的键，运行时也查不到、授不了** ✅
+
+### 因此
+
+| 结论 | 证据 |
+|---|---|
+| **94 键既不在包数据、也不在 `host.rs` 表** | 静态扫描（§6）|
+| **抽查 6 个都不在目录里** | 本用例 |
+| **运行时授予要过目录** | `support.rs:1020` 的 `skill_by_name` |
+| ⇒ **这 94 个键无法被授予** | **三者合起来** ✅ |
+
+**边界**：抽查 **6/94**（**不是全部**）；**其余 88 条未逐个验证**。
