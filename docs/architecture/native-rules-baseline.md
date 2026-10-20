@@ -5038,3 +5038,45 @@ XianjianXjzhimeng  XianjianShuiyun  WudianFuchou2  WudianXiyang
 
 **结论**：**52 处阶段过滤，45 处已与上游比对**（**86%**）；
 **错误集中在 G14（8 条）/ G15（≥5 条）/ G16（1 条）/ 单点 4 条** ✅
+
+### 最后两条（第 608 轮）：**1 条错位 / 1 条未找到**
+
+#### ① `hlss_fengqi` —— **多值触发，原生只挂判定阶段** ❗
+
+**上游**（`noname-liuli/noname/mode/boss.js`，**1745 B**）：
+
+```js
+trigger: { player: ['phaseZhunbeiBegin', 'phaseJieshuBegin'] }   // 准备阶段 + 结束阶段
+```
+
+**原生**：`Phase::Judge, begin=true`（**判定阶段**）⇒ **与两条上游触发都不符** ❗
+⇒ **新增确认缺陷**（**多值触发在引擎里由 `extra_events` 表达，此处未用** ❗）
+
+⇒ **这也是「非 `skill.js` 文件里的技能」案例** —— **我的 `skill.js` 扫描扫不到它** ✅
+
+#### ② `zaibian` —— 上游**该文件里未找到定义** ❓
+
+- 包：`doomsday-brawl-upstream-liuli`（`upstream_path: 末日乱斗/extension.js`）；
+- 该文件里**没有 `zaibian:` 的定义** ✗（**可能定义在别的文件，或键名不同**）；
+- ⇒ **仍为未核** ❓
+
+### 阶段过滤**最终账**（52 条）
+
+| 状态 | 条数 |
+|---|---:|
+| ✅ **已核** | **46** |
+| **不适用**（卡牌效果）| **5** |
+| ❓ **未核** | **1**（`zaibian`）|
+| **合计** | **52** |
+
+**缺陷分布**（已核 46 条中）：
+
+| 类 | 条数 |
+|---|---:|
+| ✅ **一致** | **21** |
+| ❗ **G14（`phaseBegin` ⇒ `Judge`）** | **8** |
+| ⚠️ **G15（`before`/`after`/`Begin2` 缺档）** | **≥5** |
+| ❗ **G16（阶段不同）** | **1** |
+| ❗ **单点（`miedao`/`swd_xiuluo`/`huajin2`/`ziyu`/`baiyi`/`hlss_fengqi`）** | **6** |
+| ⛔ **不可达** | **3** |
+| ❓ **待核** | **2** |

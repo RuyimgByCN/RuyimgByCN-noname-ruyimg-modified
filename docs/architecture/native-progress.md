@@ -951,6 +951,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 608 轮**：**剩余 12 条核完（已核 36→45，86%）**——用「`skills[].mapping` 反查」✓，**12 条里 9 条一次成功**：**6 条一致** ✅（`lingquan`/`longhuo`/`shenwu`/`xjzhimeng`/`shuiyun`/`xiyang`/`owliyong` 的 `phaseEnd`/`phaseDrawBegin` ✓）、**1 条 G15**（`fenglue` `phaseUseBefore` ✓）、**1 条 G14 新成员** ❗（**`wudian_geju` = `geju`，上游 `player: phaseBegin` ⇒ 原生 `Phase::Judge`** ✓ ⇒ **G14 扩到 8 条** ✓）、**2 条未定位**（`hlss_fengqi`/`zaibian` ✓）、**1 条不适用**（`gujian_food_xiajiao` **无 mapping** ✓）；⇒ **52 处最终账：已核 45 / 不适用 5 / 未核 2 = 52** ✓（**86% 已比对** ✓）；**registry.txt 状态已同步** ✓。
 >
+> **第 609 轮**：**最后两条定案**——①**`hlss_fengqi`**：上游在 **`noname-liuli/noname/mode/boss.js`**（**不在 `skill.js`** ✓ ⇒ **我的扫描扫不到它** ✓），**`trigger: ['phaseZhunbeiBegin','phaseJieshuBegin']`（准备 + 结束）** ✗ **而原生是 `Phase::Judge`** ✗ ⇒ **新增确认缺陷** ❗（**多值触发应由 `extra_events` 表达，此处未用** ✓）；②**`zaibian`**：**上游 `末日乱斗/extension.js` 里没有该定义** ✗ ⇒ **仍未核** ❓；⇒ **52 条最终账：已核 46 / 不适用 5 / 未核 1** ✓；**缺陷分布**：**一致 21 / G14 8 / G15 ≥5 / G16 1 / 单点 6 / 不可达 3 / 待核 2** ✓。
+>
+
 
 
 

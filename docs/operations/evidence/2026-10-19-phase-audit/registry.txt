@@ -23,7 +23,7 @@ XianjianXjzhimeng	xj_xjzhimeng	End	false	已核	v607 反查比对
 XianjianShuiyun	xj_shuiyun	End	false	已核	v607 反查比对
 XianjianZhaoyao	xj_zhaoyao	Draw	true	已核	基准对应章节
 WudianFuchou2	fuchou2	End	false	已核	基准对应章节
-HlssFengqi	hlss_fengqi	Judge	true	未核	
+HlssFengqi	hlss_fengqi	Judge	true	已核	v608 上游 boss.js：多值触发
 NewMeibu	new_meibu	Play	true	已核	基准对应章节
 Zaibian	zaibian	Play	true	未核	
 Xiefang	xiefang	Draw	false	已核	基准对应章节
