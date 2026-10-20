@@ -823,7 +823,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 554 轮**：**文档闭环**——把[规则差异交接页](../operations/evidence/2026-10-19-rules-diff-handover/README.md)接进三处 ✓：**①签署表**的「规则差异」行 ✓（**「5/32」点进去就是 7 行待办** ✓）；**②交接索引**新增 §4.1 ✓（四份差异族状态一览 ✓）；**③规则基准**的 U08 章节前加「差异族索引」✓（并指向共性限制节 ✓）⇒ **从任何入口都能两跳内到达具体待办** ✓。
 >
-> **第 555 轮**：**本地链接全检 + 修复 5 条坏链**（AGENTS.md 要求「文档改动至少检查本地链接」✓）——脚本扫 4 个文件共 **367 个本地链接**：**首次 5 条坏链** ✗（`rules-diff-handover` 2 条、`session-handover` 3 条）⇒ **根因**：从 `docs/operations/evidence/<目录>/` 到 `docs/architecture/` 需 **`../../../`** ✗（**我只写了 `../../`** ✗）；**另** `session-handover` 里一条**既有坏链**（`../2026-10-19-dsl-gap/../../architecture/…`）✓ —— **修复后重检 367 链接、坏链 0** ✅；**另跑 AGENTS.md 要求的门禁自测**：`unittest discover -s scripts` ⇒ **1 test OK** ✅；`check-source-lines.py` ⇒ **exit=1** ✗（`rule-api/effect.rs` **10778 行**，**既有** ✓）。
+> **第 555 轮**：**本地链接全检 + 修复 5 条坏链**（AGENTS.md 要求「文档改动至少检查本地链接」✓）——脚本扫 4 个文件共 **367 个本地链接**：**首次 5 条坏链** ✗（`rules-diff-handover` 2 条、`session-handover` 3 条）⇒ **根因**：从 `docs/operations/evidence/<目录>
+> **第 556 轮**：**U05-OW v3：4 条待判定按「上游字段集」定案**（台账第 213 行）——读 `ow/skill.js` 的字段集本身就能判断技能类型 ✓：**`guangshu`（仅 `enable`）/`paotai`（`enable`+`group`）/`shouhu`（`enable`+`mod`）⇒ 上游都是主动技** ✓ ⇒ **原生 `Act` 形式一致 ✅**（**`mod`/`group` 子面未判** ❓）；**`ziyu` 是 `trigger`+`direct`、无 `enable`** ✓ ⇒ **上游「全局 `phaseEnd` 自动摸/回」vs 原生「自己出牌阶段主动」** ✗ ⇒ **发动时机/方式/次数三者都不同** ⚠️ **实质差异** ✓；⇒ **U05-OW 的 4 条待判收敛为「1 条实质差异（`ziyu`）+ 2 个子面未判」** ✓；**规则差异仍 5/32** ✓。
+>
+/` 到 `docs/architecture/` 需 **`../../../`** ✗（**我只写了 `../../`** ✗）；**另** `session-handover` 里一条**既有坏链**（`../2026-10-19-dsl-gap/../../architecture/…`）✓ —— **修复后重检 367 链接、坏链 0** ✅；**另跑 AGENTS.md 要求的门禁自测**：`unittest discover -s scripts` ⇒ **1 test OK** ✅；`check-source-lines.py` ⇒ **exit=1** ✗（`rule-api/effect.rs` **10778 行**，**既有** ✓）。
 >
 
 
