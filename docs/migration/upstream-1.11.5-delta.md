@@ -427,7 +427,7 @@ clanzhongliu 外，clanzhugezhan 为上游真 no-op（`charlotte: true`，无正
 谏直依赖惬诣（上一轮已完整落地），是 roadmap「cross-skill state query」簇的首个实现：
 
 - **跨技能计数**：惬诣实例的 `turn_fire_count`（触发分发器每次发动 +1，
-  dispatch.rs:1993）近似上游 `getHistory("useSkill", clanqieyi).length`。谏直在
+  dispatch.rs）近似上游 `getHistory("useSkill", clanqieyi).length`。谏直在
   phase_end 时读取该值，>0 才发动。
 - **判定数选择**（`JianzhiCountChoice`，261）：1..=惬诣发动次数 → 原始判定 =
   公开揭示牌堆顶并移入弃牌堆（引擎无 limbo/expansion 区，判定牌暂存弃牌堆，分配时

@@ -6,8 +6,8 @@
 
 | 线 | 存续期语义 | 依据 |
 |---|---|---|
-| 原生 | 至**拥有者**回合结束（`expires_end_of_turn`；5 处授技站点：妄尊印/移伤/乐学/幻形/石会粉禁用） | `machine.rs:499-552`、`kernel.rs:3706`；`cursor` 结构扫描见 [temp-skill-expiry-audit.txt](temp-skill-expiry-audit.txt) |
-| 旧线 | 至**授技时当前回合玩家**的回合结束 | `engine-core/src/effect/primitives/pack_tw_1.rs:388-434`、`command/turn.rs:110-118` |
+| 原生 | 至**拥有者**回合结束（`expires_end_of_turn`；5 处授技站点：妄尊印/移伤/乐学/幻形/石会粉禁用） | `machine.rs:499-552`、`kernel.rs`；`cursor` 结构扫描见 [temp-skill-expiry-audit.txt](temp-skill-expiry-audit.txt) |
+| 旧线 | 至**授技时当前回合玩家**的回合结束 | `engine-core/src/effect/primitives/pack_tw_1.rs`、`command/turn.rs:110-118` |
 | 上游 | 逐站点 `addTempSkill(skill, expire)` 规格：默认 `{global:['phaseAfter','phaseBeforeStart']}`（`phaseAfter` 无触发点、`phaseBeforeStart` 每阶段开始触发 ⇒ 默认≈至当前阶段结束）；乐学=`addSkill`+拥有者阶段边界重掷；幻形=`addAdditionalSkill`+受伤移除 | `player.js:11952-11970`、`gameEvent.ts:585-619`、`content.ts:4742`、`swd/skill.js:5950-6010/3039-3129`、`character/standard/skill.js:141-176` |
 
 **处置**：已并入[规则基准「语义选择：窗口/顺序口径（2026-10-16 定案）」](../../../architecture/native-rules-baseline.md)——

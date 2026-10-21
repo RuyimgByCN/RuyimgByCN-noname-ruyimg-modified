@@ -26,7 +26,7 @@
 - 调 `compute_group_from_pair` 算势力写入 `group_overrides`。
 - 复用身份局的 zone/牌堆/开局摸牌/触发器/首回合摸牌逻辑。
 
-### `kill_player` 胜利检查分发（`pack_tw_1.rs:1057`）
+### `kill_player` 胜利检查分发（`pack_tw_1.rs`）
 按 ruleset 分发：guozhan → `apply_guozhan_victory_if_any`；否则身份局路径不变。
 
 ### `run_guozhan_match`（`runner.rs`）

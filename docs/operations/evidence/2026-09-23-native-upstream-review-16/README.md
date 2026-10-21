@@ -13,10 +13,10 @@
 ## 新确认的上游差距
 
 - 标准包范围：上游 `apps/core/character/standard/character.js` 有 33 条武将，原生 `STANDARD_GENERALS` 仅 25 个非样例 + 3 个样例；缺的 8 个 ID 已列在[规则基准](../../../architecture/native-rules-baseline.md#本地上游对齐的新增核查)。上游 `apps/core/card/standard.js` 的 `list` 有 108 张物理牌，原生 `standard_catalog()` 是 80 张测试牌，五谷、桃园、无中、借刀等牌种未建模。`apps/core/mode` 有 12 个顶层入口，原生 `GameMode` 仅 Prototype、Identity、Kingdoms；入口数不是规则完成率。
-- 主动技时机：上游 `standard/skill.js:961` 限仁德为 `phaseUse`；原生 `engine.rs:1340-1367` 的 `ActivateSkill` 只查当前回合玩家。探针在 Judge 阶段成功进入 `rende_cards`，需要共享阶段门控和逐技能例外。
-- 激将：上游 `standard/skill.js:1087-1178` 有主公资格、使用/响应杀入口并逐名询问蜀将；原生 `standard.rs:757-937` 预筛蜀将暗杀、刘备选一人，首人拒绝即结束。探针在刘备视图相同的两局观察到不同公开候选，也证实第二名持杀蜀将未被问及。
-- 护驾：上游 `standard/skill.js:275-315` 按资格逐名询问魏将；原生 `kernel.rs:642-660` 预筛暗闪，`engine.rs:739-761` 向其他座位暴露询问对象。探针显示攻击者可从是否出现询问推断第三人的暗闪。
-- 仁德累计：上游 `standard/skill.js:1013-1023` 按同阶段此前给牌累计，跨过两张时回复；原生 `standard.rs:614-615,748-750,3086-3091` 限每回合一次、按单次给牌数判断。探针中先给一张后第二次发动被 `SkillAlreadyUsed` 拒绝。
-- 扩展 G1 样本：两版 `cardpile/extension.js` 都包含 `jiu`、`leisha`；原生 `catalog.rs:35-70` 没有酒/雷杀种类，`standard.rs:2844-2903` 也无对应牌，不能只迁牌堆比例。两个上游旧目录与当前 `content-runtime/src/extension.rs:61-82` 的包发现格式不一致，需先转换/打包真实来源，再验证开局、结算与恢复。
+- 主动技时机：上游 `standard/skill.js:961` 限仁德为 `phaseUse`；原生 `engine.rs` 的 `ActivateSkill` 只查当前回合玩家。探针在 Judge 阶段成功进入 `rende_cards`，需要共享阶段门控和逐技能例外。
+- 激将：上游 `standard/skill.js:1087-1178` 有主公资格、使用/响应杀入口并逐名询问蜀将；原生 `standard.rs` 预筛蜀将暗杀、刘备选一人，首人拒绝即结束。探针在刘备视图相同的两局观察到不同公开候选，也证实第二名持杀蜀将未被问及。
+- 护驾：上游 `standard/skill.js:275-315` 按资格逐名询问魏将；原生 `kernel.rs` 预筛暗闪，`engine.rs` 向其他座位暴露询问对象。探针显示攻击者可从是否出现询问推断第三人的暗闪。
+- 仁德累计：上游 `standard/skill.js:1013-1023` 按同阶段此前给牌累计，跨过两张时回复；原生 `standard.rs,748-750,3086-3091` 限每回合一次、按单次给牌数判断。探针中先给一张后第二次发动被 `SkillAlreadyUsed` 拒绝。
+- 扩展 G1 样本：两版 `cardpile/extension.js` 都包含 `jiu`、`leisha`；原生 `catalog.rs:35-70` 没有酒/雷杀种类，`standard.rs` 也无对应牌，不能只迁牌堆比例。两个上游旧目录与当前 `content-runtime/src/extension.rs:61-82` 的包发现格式不一致，需先转换/打包真实来源，再验证开局、结算与恢复。
 
 当前状态和按优先级排列的后续项见[进度主稿](../../../architecture/native-progress.md)，逐包计划见[两仓扩展台账](../../../migration/upstream-extension-reconstruction.md)。上述探针是独立复核，不计入 238 项工程测试；后续实现修复时应把相应反例改为正确行为的工程回归。

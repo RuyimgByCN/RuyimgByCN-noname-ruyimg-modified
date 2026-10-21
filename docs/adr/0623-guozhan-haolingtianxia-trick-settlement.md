@@ -55,7 +55,7 @@ guozhan.js:65 `gz_haolingtianxia`（黑桃 12，牌堆 1 张）：
 
 上游①为「视为使用一张【杀】」——目标可响应【闪】。引擎杀管线
 （`handle_card_with_policies_and_flags` → `ResumePlayedSha`/`FinishPlayedSha`）**独占
-resume 单槽**且无条件覆写调用方已挂的 `IndependentTrickQueue` resume（play.rs:2151），
+resume 单槽**且无条件覆写调用方已挂的 `IndependentTrickQueue` resume（play.rs），
 杀完成后无父级续链钩子（kefuzhongyuan ADR 0617 的杀分支同理：单目标局内队列静默停滞，
 不可观测）。因此**号令天下①以对目标造成 1 点普通伤害近似**（无闪响应、不消耗杀使用
 次数、不触发杀专属卡牌修饰）。已在 resolver 注释与本节双重记录。

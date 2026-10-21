@@ -36,7 +36,7 @@ CHECKS: list[tuple[str, list[str], bool]] = [
     ("台账↔枚举一致", [PY, "-B", "scripts/check_ledger_consistency.py", "--strict"], True),
     ("守卫引用名存在", [PY, "-B", "scripts/check_guard_references.py", "--strict"], False),
     ("脚本单测", [PY, "-B", "-m", "unittest", "discover", "-s", "scripts"], True),
-    ("文档 file:line 引用（报告）", [PY, "-B", "scripts/check_doc_line_refs.py"], False),
+    ("文档 file:line 引用", [PY, "-B", "scripts/check_doc_line_refs.py", "--strict"], False),
     ("行数门禁", [PY, "-B", "scripts/check-source-lines.py"], False),
 ]
 

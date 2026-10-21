@@ -8,7 +8,7 @@
 新增 `identity_versus_boss_replay_restore_parity`（`crates/engine-native/tests/native_kernel.rs`）+ 通用夹具 `non_prototype_script_parity`，对**身份 5 人局 / 对决 2v2 / Boss 关卡**三种非 Prototype 模式各跑：
 
 1. **扩场景夹具**：由 `next_script_command` 生成同一确定性脚本（≥20 命令，最多 80 直至终局）。
-2. **RNG 序断言**：`canonical_hash` 含 `rng.state()`（`engine.rs:5050`）与牌堆/弃堆/牌桌（`engine.rs:5043-5049`），故**状态哈希一致即随机流消费序与牌堆顺序一致**；重放线逐命令比对哈希 + 全量日志事件序列（事件轨迹对照）。
+2. **RNG 序断言**：`canonical_hash` 含 `rng.state()`（`engine.rs`）与牌堆/弃堆/牌桌（`engine.rs`），故**状态哈希一致即随机流消费序与牌堆顺序一致**；重放线逐命令比对哈希 + 全量日志事件序列（事件轨迹对照）。
 3. **非 Prototype 模式中间恢复**：恢复线在**每一个命令点** save→restore 后跑完剩余脚本，逐点断言恢复态哈希与基准一致、终态哈希与基准终态一致。
 
 既有的 `replay_and_restore_per_command_parity`（Prototype）与 `restore_at_every_choice_point_continues_identically` 覆盖 Prototype 路径；本批把同口径扩到三个模式入口。

@@ -11,10 +11,10 @@
 
 | 维度 | 上游 | 原生 | 旧线 |
 |---|---|---|---|
-| 名单起点 | `_save` 起点 = `[_status.currentPhase, event.source, event.player, game.me, game.players[0]]` 首个在场（`content.ts:12422-12433`） | 首轮 `seat_order_from(turn.current)`（`kernel.rs:3835`） | `[turn.current, source, player]` 首个命中（`pack_tw_1.rs:284-291`） |
-| 轮内名单 | **不预建名单**：循环 `event.player = player.next` 推进，`acted` 集合记录已问者；推进时遇 `acted`/出局即 `break outer`（`content.ts:98-116`） | 预建队列（帧启动时），逐项消费（`kernel.rs:7412-7426`） | 预建队列（请求时一次），逐项消费（`pack_tw_1.rs:293-347`） |
-| 能力动态性 | 每人被问时实时 `player.canSave(dying)` + `cardSavable`（`:29-30`） | 逐应答者复查 `alive` + `is_tao_like` 持桃（`kernel.rs:7413-7423`） | 逐应答者复查 `alive` + 可救牌/无消耗响应（`pack_tw_1.rs:318-341`） |
-| 救回者复问 | 原位循环：`result.bool` 但 hp 仍 ≤0 → 同一 `event.player` 再次被问（直到 hp>0 或不再救）（`:88-95`） | 本轮内被移除；**下一轮重建**后可再问（`round_used` + 场上仍有桃 → 重建名单，`:7427-7434`） | 救回者被**前插回队首**，立即复问（`resolve_choice/mod.rs:1516-1520`） |
+| 名单起点 | `_save` 起点 = `[_status.currentPhase, event.source, event.player, game.me, game.players[0]]` 首个在场（`content.ts:12422-12433`） | 首轮 `seat_order_from(turn.current)`（`kernel.rs`） | `[turn.current, source, player]` 首个命中（`pack_tw_1.rs`） |
+| 轮内名单 | **不预建名单**：循环 `event.player = player.next` 推进，`acted` 集合记录已问者；推进时遇 `acted`/出局即 `break outer`（`content.ts:98-116`） | 预建队列（帧启动时），逐项消费（`kernel.rs`） | 预建队列（请求时一次），逐项消费（`pack_tw_1.rs`） |
+| 能力动态性 | 每人被问时实时 `player.canSave(dying)` + `cardSavable`（`:29-30`） | 逐应答者复查 `alive` + `is_tao_like` 持桃（`kernel.rs`） | 逐应答者复查 `alive` + 可救牌/无消耗响应（`pack_tw_1.rs`） |
+| 救回者复问 | 原位循环：`result.bool` 但 hp 仍 ≤0 → 同一 `event.player` 再次被问（直到 hp>0 或不再救）（`:88-95`） | 本轮内被移除；**下一轮重建**后可再问（`round_used` + 场上仍有桃 → 重建名单，`:7427-7434`） | 救回者被**前插回队首**，立即复问（`resolve_choice/mod.rs`） |
 | 轮次重建起点 | 无重建（单趟） | `seat_order_from(self.dying)`（濒死者，`:7431`） | 无重建（同一名单，save 者前插） |
 
 ## 2. 差异登记（方向明确）

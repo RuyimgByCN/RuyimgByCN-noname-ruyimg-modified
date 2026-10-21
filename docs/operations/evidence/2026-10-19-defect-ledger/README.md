@@ -492,10 +492,10 @@ if trigger.startswith("(enable"):
 
 | 文档 | 引用 | 实际 |
 |---|---|---|
-| `native-coverage-manifest.md` | `kernel.rs:1044`、`kernel.rs:5100` | 现存 `kernel.rs` **只有 77 行**（已拆分）|
-| `adr/0599` | `pack_tw_1.rs:1724` | 现存文件 **14 行** |
-| `adr/0623` | `play.rs:2151` | 现存 **136 行** |
-| `adr/0643` | `content/registry.rs:2272` | 现存 **632 行** |
+| `native-coverage-manifest.md` | `kernel.rs`、`kernel.rs` | 现存 `kernel.rs` **只有 77 行**（已拆分）|
+| `adr/0599` | `pack_tw_1.rs` | 现存文件 **14 行** |
+| `adr/0623` | `play.rs` | 现存 **136 行** |
+| `adr/0643` | `content/registry.rs` | 现存 **632 行** |
 
 ⇒ **成因**：本会话期间 `kernel/`、`content/host/` 被大幅拆分，**行号引用随之失效** ⚠️
 ⇒ **处理**：检查以**报告模式**接入 `preflight`（不阻塞），**22 处待清理**；`--strict` 会失败，可用于清理进度跟踪 ✅
@@ -504,3 +504,12 @@ if trigger.startswith("(enable"):
 
 它**只能验证「行号在文件范围内」**，不能验证「那一行还是文档说的那段代码」——
 后者需要语义匹配，**假装能查比不查更糟**。所以脚本注释里写明了这条限制 ⚠️
+
+### 处理结果（第 787 轮）：**103 处失效行号已清除**
+
+初测报 22 处，实际逐条扫描 **103 处**（此前统计被 `head` 截断）。
+
+**处理方式**：**只去掉失效行号、保留文件名**（`play.rs` 的旧行号 → 只保留 `play.rs`），
+不猜新行号 —— 因为源码拆分后行号对应的是**新的位置**，猜一个数字等于制造新的假精度 ⚠️
+
+**清理后**：`check_doc_line_refs.py --strict` **exit 0**，已把 `preflight` 里该检查**从报告改为严格** ✅

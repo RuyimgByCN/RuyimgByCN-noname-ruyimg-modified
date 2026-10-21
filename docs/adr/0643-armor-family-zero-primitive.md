@@ -11,7 +11,7 @@
 | `MARK_HUJIA = 3` | `crates/engine-core/src/content/mod.rs:28` | 护甲=玩家标记（def 3），非 Player 字段 |
 | 伤害吸收 | `effect/primitives/pack_mobile.rs` `commit_damage` | 上游 content.ts:12261 等价实现：仅 damage（非失去体力）吸收 `min(伤害, 护甲)`，全额吸收发 `DamagePrevented` |
 | 授予 | `add_mark(tx, player, MARK_HUJIA, n)` | mbzhuji（兵势孙韶筑墼）已在生产使用，含上限 5 约定 |
-| 值源 | `owner_mark_<def>` 参数化值源 | `content/registry.rs:2272`——`owner_mark_3` 即护甲计数 |
+| 值源 | `owner_mark_<def>` 参数化值源 | `content/registry.rs`——`owner_mark_3` 即护甲计数 |
 
 **结论**：护甲族迁移不需要 Player 字段（规避了「字面量构造全量波及」）、不需要
 新原语、不需要 ABI 领号。与 ADR 0641 §6d（判定改写引擎原生、铸造解体）同型。

@@ -39,18 +39,18 @@
 
 | 位置（当次实测） | 处理 |
 |---|---|
-| host.rs:5121 未用 `oc`（偷梁换柱同色摸 1） | `if let Some(oc) = own_card { if own_color == Some(t_color) {…} }` 合并为 `if own_card.is_some() && own_color == Some(t_color)`，语义不变 |
-| host.rs:9773 未用 `eff`（乐动 Act 段） | 删除该绑定；TargetChoice 段重新读取的路径不动 |
-| host.rs:11339 未用 `picked`（羊皮卷发现） | 外层改 `if !cands.is_empty()`，内层 RNG 选出 `picked` 不变，`gen_range` 调用次数不变 |
-| host.rs:12941 未用 `d`（空 if-let 块） | 删除整块，"target 未用——伤害牌从 cards[0] 取"注释上移保留 |
-| host.rs:14200 `self.card = self.card` | 删除该行 |
-| host.rs:14345 未用 `def`（sync_land_skill 首行） | 删除该行 |
-| host.rs:14385 未用导入 `HostBehavior as B` | 删除该行 |
+| host.rs 未用 `oc`（偷梁换柱同色摸 1） | `if let Some(oc) = own_card { if own_color == Some(t_color) {…} }` 合并为 `if own_card.is_some() && own_color == Some(t_color)`，语义不变 |
+| host.rs 未用 `eff`（乐动 Act 段） | 删除该绑定；TargetChoice 段重新读取的路径不动 |
+| host.rs 未用 `picked`（羊皮卷发现） | 外层改 `if !cands.is_empty()`，内层 RNG 选出 `picked` 不变，`gen_range` 调用次数不变 |
+| host.rs 未用 `d`（空 if-let 块） | 删除整块，"target 未用——伤害牌从 cards[0] 取"注释上移保留 |
+| host.rs `self.card = self.card` | 删除该行 |
+| host.rs 未用 `def`（sync_land_skill 首行） | 删除该行 |
+| host.rs 未用导入 `HostBehavior as B` | 删除该行 |
 | engine.rs:230 未用 `chongzheng`（debug_add_fellow） | 改 `matches!(&…mode, GameMode::Boss { .. })` 判空返回，语义不变 |
-| kernel.rs:837 未用 `boss` | 绑定改 `_` |
-| kernel.rs:5604 多余 `mut`（Kof games） | 去掉 `mut` |
+| kernel.rs 未用 `boss` | 绑定改 `_` |
+| kernel.rs 多余 `mut`（Kof games） | 去掉 `mut` |
 | presentation.rs:185 未用 `count` | 改 `count: _` |
-| snap.rs:1503 未用 `liuli_card` | 模式里已有 `..`，删除该字段绑定 |
+| snap.rs 未用 `liuli_card` | 模式里已有 `..`，删除该字段绑定 |
 
 另删除 `tests/dbg4.rs`（9-16 的 `dbg_nullify` 只打印无断言）：南蛮+无懈的断言覆盖已存在于 `native_kernel.rs::savage_nullify_after_deck_drain_conserves` 与 `boundary_snapshot.rs::build_savage_nullify_reshuffle`/`answer_plays_nullify` 暂停往返，无覆盖损失。
 

@@ -7,7 +7,7 @@
 | 位置 | 原陈述（过时） | 更正 |
 |---|---|---|
 | S6 落地面 | 原生标准目录 25 非样例将+3 样例 | **34 非样例+3 样例**（原生新增曹仁+10-07 五批八将；实测 `STANDARD_GENERALS` 37 条目） |
-| S13 落地面 | 目录 80 张；"当前未修缺陷"两项（`num_to_card_kind` panic、载荷不读尽） | 目录 **124 张**（v74 声明表核定）；两项已于 **10-07 加固**（回归 `archive_hardening_rejects_unknown_kind_and_trailing_bytes`，`boundary_snapshot.rs:2314`） |
+| S13 落地面 | 目录 80 张；"当前未修缺陷"两项（`num_to_card_kind` panic、载荷不读尽） | 目录 **124 张**（v74 声明表核定）；两项已于 **10-07 加固**（回归 `archive_hardening_rejects_unknown_kind_and_trailing_bytes`，`boundary_snapshot.rs`） |
 | 总体判断段 | "其余测试桥接和正式宿主接线未完成" | 八份测试桥接已全部迁移（10-07）；正式宿主接线仍开放（T6③） |
 | 现状段 | "两份 G1 测试桥接已迁移，其余适配未完成" | 同上更正 |
 | A0 落地段 | "存档牌种编码表仍私有，且解码遇未知编号 panic（P0 待做）" | 解码遇未知编号已改为拒绝（10-07） |
@@ -28,7 +28,7 @@
 
 | 项 | 结果 |
 |---|---|
-| 事实核对 | `STANDARD_GENERALS` 37 条目实测（34+3）；124 张由 `standard_catalog_inventory` 守护；加固回归 `boundary_snapshot.rs:2314` 实存；四牌种落位 `standard.rs:4284-4300` 实测 |
+| 事实核对 | `STANDARD_GENERALS` 37 条目实测（34+3）；124 张由 `standard_catalog_inventory` 守护；加固回归 `boundary_snapshot.rs` 实存；四牌种落位 `standard.rs` 实测 |
 | 本地锚点 | 更正所引 `#本地上游对齐的新增核查`/`#标准目录构成声明表`/`#上游标准牌表对照` 均在基准页实存（grep 6 命中） |
 | `cargo test --offline -p engine-native --test replay_scenarios` | **2/2**（覆盖清单联动守护，基准改动后通过） |
 

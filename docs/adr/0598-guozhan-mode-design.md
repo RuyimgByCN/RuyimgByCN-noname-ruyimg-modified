@@ -18,7 +18,7 @@
 ## 现状与缺口
 
 ### 既有可复用基础
-- **`player_group(player) -> Option<&str>`**（`state/mod.rs:2053`）：优先查 `group_overrides`，
+- **`player_group(player) -> Option<&str>`**（`state/mod.rs`）：优先查 `group_overrides`，
   否则 fallback 到角色 `character.group`。身份局里袁术「群」、孙权「吴」已可查。
   trigger/dispatch.rs 有 10+ 处依赖它。**国战可复用此入口，无需新查询函数。**
 - **`group_overrides: BTreeMap<PlayerId, String>`**（`state/mod.rs:95`）：可承载国战运行时势力。

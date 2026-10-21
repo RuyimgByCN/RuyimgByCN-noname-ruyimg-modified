@@ -8,7 +8,7 @@
 |---|---|
 | [ABI-COORDINATION.md](../../../../ABI-COORDINATION.md) 领取表 | 735–753 全部登记（2026-09-13/14/15），备注均为"host bump N 随本批落地"；743 空号与 content-compiler 常量缺 743 一致 |
 | `content-compiler` additive 常量 | `ADDITIVE_RULE_VM_ABI_VERSION_{726…742,744…753}` 全在（`lib.rs:750` 起）；`codegen.rs` 按 `required_abi.max(常量)` 计算包需求 |
-| `engine-core` 宿主实现 | 753 号 `ResolveXiangshu` 在 `effect/primitives/mod.rs:4079` 与 `hash.rs:7220`（canonical hash 臂）落地；抽查 735–752 同型在位 |
+| `engine-core` 宿主实现 | 753 号 `ResolveXiangshu` 在 `effect/primitives/mod.rs` 与 `hash.rs`（canonical hash 臂）落地；抽查 735–752 同型在位 |
 | 源 npack | `content/original/ported/{sp,sp2,xianding}` 要求 **745/753/751**（编译器计算所得，证明打包时工具链认为宿主批已落地） |
 | 部署副本（改前） | `extensions/{sp,sp2,xianding}` 为 **714/713/706**——旧打包，落后于源 |
 | 宿主声明 | `engine-api/src/version.rs` `RULE_VM_ABI_VERSION=734`、ABI-MAX 734 |

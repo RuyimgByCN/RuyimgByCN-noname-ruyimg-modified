@@ -13,7 +13,7 @@
 ## 2. `T11-BOSS-DIZANG-WULIANG-GAMEDRAW`（无量：建局摸 3）
 
 - **上游**：`boss_wuliang` 的 `gameDrawAfter`（global）与 `enterGame`（player）触发 `draw(3)`；`phaseZhunbeiBegin`（hp<3）回复至 3；`phaseJieshuBegin` 摸 2。
-- **原生**：准备阶段回复至 3 与结束阶段摸 2 已落（v274，`kernel.rs:2194/2957`）；**建局摸 3 未落**——原生 Boss 建局在 `Engine::new_boss_stage` 按关卡配置发牌（分列发牌数），武将技随后由装配授予（`reinit_boss_seat`/`debug_set_general_def` → `apply_general_assembly`），**不存在**与上游 `gameDrawAfter`/`enterGame` 对应的「建局帧」；产品路径亦未接线 Boss 关卡。
+- **原生**：准备阶段回复至 3 与结束阶段摸 2 已落（v274，`kernel.rs/2957`）；**建局摸 3 未落**——原生 Boss 建局在 `Engine::new_boss_stage` 按关卡配置发牌（分列发牌数），武将技随后由装配授予（`reinit_boss_seat`/`debug_set_general_def` → `apply_general_assembly`），**不存在**与上游 `gameDrawAfter`/`enterGame` 对应的「建局帧」；产品路径亦未接线 Boss 关卡。
 - **处置**：**登记差异（不实现）**。理由：需要「建局/入场帧」原语才能承载；纯为标准场景不可达的 Boss 建局面，无现状内容依赖。有开局帧/关卡起始钩需求时另批立项（届时若改语义递增规则版本并重录 golden）。
 
 ## 影响

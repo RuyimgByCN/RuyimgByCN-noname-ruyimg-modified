@@ -6,8 +6,8 @@
 
 `hand_limit_bonus`（`GameState` 上的 `BTreeMap<u32, i32>`，按玩家的手牌上限修正）是**真实玩法面**：
 
-- 写入点：`command/resolve_choice/group_post_3.rs:3392`（Muyin 选择结算，令目标本回合手牌上限 +1）；
-- 读取点：`query/mod.rs:1372`（弃牌阶段手牌上限查询的响应值）。
+- 写入点：`command/resolve_choice/group_post_3.rs`（Muyin 选择结算，令目标本回合手牌上限 +1）；
+- 读取点：`query/mod.rs`（弃牌阶段手牌上限查询的响应值）。
 
 两个仅此字段不同的状态在旧 hash 下哈希相同——事务一致性对照、回放比对无法发现这类分歧，属于一致性缺口而非"可安全排除的派生面"，故排除方案不成立。
 

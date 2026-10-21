@@ -17,7 +17,7 @@ pub character_def2: u32,
 #[serde(default = "default_unseen")]
 pub unseen: [bool; 2],
 ```
-全 `#[serde(default)]`，身份局序列化向后兼容。`bootstrap_match`（`pack_tw_1.rs:1724`）
+全 `#[serde(default)]`，身份局序列化向后兼容。`bootstrap_match`（`pack_tw_1.rs`）
 补 `character_def2: 0, unseen: [false, false]`。
 
 ### D2：`hash.rs` 条件编码（身份局零漂移的保证）

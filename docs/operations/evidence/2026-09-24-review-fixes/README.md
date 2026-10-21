@@ -11,7 +11,7 @@
 |---|---|
 | 源码版本 | STANDARD_RULESET_VERSION=60、ARCHIVE_FORMAT_VERSION=2（均未递增：没有合法对局轨迹、存档字节或哈希变化，golden 未变） |
 | 基线校验 | `shasum -a 256 -c ../2026-09-24-e02-pack-loader/source-hashes.txt`：16 项中 10 项一致；不一致的 6 项均为本轮改动（装载器 lib 与验收测试、`host.rs`、`names.rs`、`g1_wudian.rs`、`g1_shahai_gujian.rs`）。文档主稿开工时与 E02 证据同源 |
-| 无懈崩溃（修复前） | 旧代码出牌阶段主动打出无懈，无目标与有目标都在 `engine.rs:2296` 触发 `unreachable!("handled above")`；打出闪（对照）返回 `Rejected(WrongPhase)`（[experiments.log](experiments.log) 实验一） |
+| 无懈崩溃（修复前） | 旧代码出牌阶段主动打出无懈，无目标与有目标都在 `engine.rs` 触发 `unreachable!("handled above")`；打出闪（对照）返回 `Rejected(WrongPhase)`（[experiments.log](experiments.log) 实验一） |
 | 无懈修复 | `PlayCard` 牌种路由把 `Nullify` 与 `Shan` 同列为仅响应牌，返回 `WrongPhase`；删去被遮蔽的重复分支（原 6 处 unreachable-pattern 警告）；`lib.rs` 加 `#![deny(unreachable_patterns)]`，此后重复匹配臂编译失败 |
 | 回归测试 | `native_kernel::nullify_rejected_when_played_actively`：无目标/有目标均为 `WrongPhase`，状态不变，恢复件同样拒绝。该测试在旧代码上先失败（同一 panic），修复后通过 |
 | 数据键表 | `CardKind::key/from_key/ALL`（86）、`HostBehavior::key/from_key/ALL`（74）、`InitHook::key/from_key`、牌种伴随技能表（23 个牌种）。`a0_tag_registry.rs` 新增 3 项：两张键表双射且键唯一、伴随技能名全局唯一并覆盖固有装备技 |

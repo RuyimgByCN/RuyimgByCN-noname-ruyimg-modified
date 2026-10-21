@@ -4024,7 +4024,7 @@ pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine
 HostBehavior::WudianDuwen => { … Flow::Done }
 ```
 
-⇒ **真正的实现在 `commit_damage`（`kernel.rs:167`）**，**不是** `TriggerMeta` 也不是 step 机器；
+⇒ **真正的实现在 `commit_damage`（`kernel.rs`）**，**不是** `TriggerMeta` 也不是 step 机器；
 **`PhaseBegin` 的 `TriggerMeta` 只是轮询入口**（step 立即 `Done`）—— 这**证实了 v0 的 caveat** ✅。
 
 **判定**：上游 `source: damageBegin` ⇒ 原生 **`commit_damage`（伤害提交时）** ⇒ **时机语义接近** ✅，

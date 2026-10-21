@@ -23,8 +23,8 @@
 ## 2. 原生线现状
 
 `EventData::Phase(Judge, begin)` 构造 `JudgePhaseMachine` 队列时先取非闪电、再
-追加闪电（`kernel.rs:5083-5100`），因此：**非闪电之间 FIFO（放置序）、闪电恒在最后**
-（组内保持原相对序；`kernel.rs:8552-8571` 注释）。旧线为同款分组
+追加闪电（`kernel.rs`），因此：**非闪电之间 FIFO（放置序）、闪电恒在最后**
+（组内保持原相对序；`kernel.rs` 注释）。旧线为同款分组
 （`engine-core/src/command/judge.rs:365-378` `collect_delayed_queue`），ADR 0713 即据此落地。
 
 ## 3. 差异与本批处理

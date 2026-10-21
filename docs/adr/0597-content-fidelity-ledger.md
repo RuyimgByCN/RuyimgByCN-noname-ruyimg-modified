@@ -34,7 +34,7 @@
 - 注释在编译期被 lexer 跳过（`content-compiler/src/lexer.rs:60-66`，遇 `//` 跳到行尾），
   不进入 IR。
 - `required_rule_vm_abi` 由技能 IR 结构（view_as cost、trigger filter 等）计算
-  （`content-compiler/src/lib.rs:667`），不读注释。故加/改注释零编译影响。
+  （`content-compiler/src/lib.rs`），不读注释。故加/改注释零编译影响。
 
 ## 验证
 
