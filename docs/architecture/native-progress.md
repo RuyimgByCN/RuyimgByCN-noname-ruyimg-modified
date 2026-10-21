@@ -1573,6 +1573,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 892 轮**：**两条 `GujianFood*` 升级为效果等价（④ → 42）** ✅——**`GujianFoodLiyutang`**：上游 `isMinHp() ⇒ changeHujia()` + `markcount--`，原生 `isMinHp ⇒ change_hujia(owner,1)` + `food_tick` ⇒ **效果等价**（**窗口 `phaseEnd` vs 阶段开始已由 G20 记录**）✓；**`GujianFoodZiyangdan`**：上游 `hujia>
 > **第 895 轮**：**`XianjianCtianfu3` 升级为等价（④ → 43）** ✅——**上游子技能 `ctianfu3`**：**`dieBegin`** forced ⇒ **`storage.ctianfu2.discard()`** + 清两个 storage + **`removeSkill('ctianfu2')`**；**原生**：`dieBegin` 窗口 **`ctianfu_clear`（挂附闪入弃堆）+ 移除 `ctianfu2`/`ctianfu3` 两实例** ⇒ **等价** ✓；**并解释了第 834 轮解析器/dumper 的分歧**：**它对应子技能 `ctianfu3`（`dieBegin`），而 `xianjian_ctianfu` 是父技能（`use`）——两者都对，只是层级不同** ✅；**维度 ④：等价 43 / 形态 9 / 效果不符 2 / 待查 1** ⇒ **逐分支 19 → 43（80%）** ✓。
 >
+> **第 896–897 轮**：**收尾同步与门禁误报处置** ✅⚠️——**四维 ④ 同步为「等价 43 / 形态 9」（80% 逐分支）**（SUMMARY 两处 + 台账头部）✓；**旧值门禁处置**：**新增的「等价 42」「形态 10」两条命中第 892/837 轮历史日志的换行续行，属误报** ⇒ **撤掉这两条**，保留「等价 40 → 43」「形态 13 → 9」✓；**教训**：**门禁的价值取决于能否区分「历史」与「现状」**，按行首匹配在长行换行时失效 ⚠️；**实测 `残留旧值 0 处`、`preflight` 通过** ✅。
+>
+
 0 ⇒ changeHujia(-1)` + `storage--` + 归零移除，原生 `change_hujia(-1)` + `food_tick` ⇒ **效果等价**（**窗口 `phaseBegin` vs 结束阶段已由 G14 记录**）✓；**维度 ④：等价 42 / 形态 10 / 效果不符 2 / 待查 1**；**口径**：**「效果等价」与「窗口正确」分开记账，同一差异不重复计** ✓。
 >
 
