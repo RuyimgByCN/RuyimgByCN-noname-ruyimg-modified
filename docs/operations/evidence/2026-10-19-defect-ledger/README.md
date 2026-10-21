@@ -976,9 +976,9 @@ Xiuluo     => matches!(event, EventData::Phase { ... Phase::Judge, begin: true .
 
 | 档 | 条数 | 含义 |
 |---|---:|---|
-| **等价已确认** | **6** | 两侧逻辑逐条对过（`WudianZhucheng`、`SwdBaishouzhihuHeld`、`WudianGuangshuSpade`、`WudianJidong`、`XianjianLingyu`、`YxsMenshen`）|
+| **等价已确认** | **7** | 两侧逻辑逐条对过（`WudianZhucheng`、`SwdBaishouzhihuHeld`、`WudianGuangshuSpade`、`WudianJidong`、`XianjianLingyu`、`YxsMenshen`、`Hutian`）|
 | **效果已读、等价未定** | **0** | —— |
-| **未读** | **49** | 仍未开始 |
+| **未读** | **46** | 仍未开始 |
 
 ⇒ **把「看过一半」和「确认等价」分开记**，避免把「读了原生」当成「核过等价」 ✅
 
@@ -1006,8 +1006,20 @@ Xiuluo     => matches!(event, EventData::Phase { ... Phase::Judge, begin: true .
 
 | 行为 | 原生 | 上游 | 状态 |
 |---|---|---|---|
-| `Hutian` | 「选**红桃**手牌 → 选目标 → 弃牌 + 伤害转移 + 授予天香·受」| `phaseEnd`，`filterCard:true`（**任意牌**），`filterTarget: maxHp >= 选牌数` | ⚠️ **原生多「红桃」限制，待核** |
+| **`Hutian`** | 「选手牌/装备 → 选目标 → 弃牌 + 伤害转移 + 授予天香·受」| `phaseEnd`，`filterCard:true`（**任意牌**），`filterTarget: maxHp >= 选牌数`，`selectCard:[1, he]` | ✅ **等价**（**注释里的「红桃」是过时的**，实际代码 `hand.chain(equips)` 不限花色）|
 | `SwdLingxin` | 「渔人：锁定（sha 机器内联臂查询），**无独立效果步**」| 上游未定位 | 🔍 效果在 sha 机器里，需另查 |
 | `Xuanyuan` | 「循环弃同花色牌 → 记额外闪数」| `phaseEnd`，需黑桃牌 + 弃牌堆有 `xuanyuanjian` | 🔍 上游 content 被截断，待核 |
 
 ⇒ **维度 ④：等价 6 / 待核 3 / 未读 46**
+
+### 第 812 轮：`Hutian` 也是「注释与实际不符」
+
+读 `step/skills_recovery.rs` 的实际分支：`hand.iter().chain(equips.iter())` ⇒ **不限花色**；
+上游 `filterCard: true` + `selectCard: [1, countCards('he')]` + `filterTarget: maxHp >= 选牌数` ⇒ **同样不限** ✅
+
+⇒ **「选红桃手牌」这句注释是过时的**（或从标准版天香复制而来）❌
+⇒ **效果等价**，维度 ④ **等价 7 / 待核 2 / 未读 46** ✅
+
+**本会话已发现 3 处注释与实际不符**：`YxsMenshen`（「清除」实为「标记」）、`Hutian`（「红桃」实为任意）、
+以及更早的 `GujianFoodRangjie` 变体名（`Rangjie`）⚠️
+⇒ **建议**：注释修正清单已并入 D 类待办（**未跟踪区，本会话不能改**）。
