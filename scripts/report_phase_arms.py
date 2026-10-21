@@ -1,0 +1,251 @@
+#!/usr/bin/env python3
+"""Enumerate every phase-pinned filter arm and classify it against upstream triggers.
+
+The native host filters pin a specific `Phase` in many arms:
+
+    EventData::Phase { player, phase: Phase::Judge, begin: true } if ...
+
+Upstream, the same skill often uses `phaseBegin` (any phase) or `phaseEnd`
+(turn end, after every phase).  Pinning the wrong phase is the single largest
+family of rule differences found so far (G14: 10, G20: 5, plus one End-pinned
+variant), so this script replaces ad-hoc sampling with an enumeration:
+
+1. collect every arm containing `Phase::(Judge|Draw|Play|Discard|End), begin: <bool>`;
+2. resolve behavior -> host key (`keys.rs`) -> skill name (package JSON);
+3. resolve the upstream trigger (scan `archive/upstream` for the skill name,
+   trying the forms that have historically hidden definitions: bare name,
+   `lib.skill.X =`, leading/trailing underscores, extension prefix on/off);
+4. classify:
+
+   * `phaseBegin` + pinned phase          -> G14 family (should not pin)
+   * `phaseEnd`   + `begin: true`         -> G20 (one step early)
+   * `phaseXxxBegin` matching the pin     -> OK
+   * `phaseXxxEnd` + `begin: false`       -> OK
+   * everything else                      -> REVIEW
+
+Usage:
+    python3 -B scripts/report_phase_arms.py             # TSV + summary
+    python3 -B scripts/report_phase_arms.py --check     # exit 1 on new REVIEW rows
+"""
+
+from __future__ import annotations
+
+import argparse
+import glob
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+UPSTREAM = ROOT.parent / "archive" / "upstream"
+
+ARM_RE = re.compile(r"Phase::(Judge|Draw|Play|Discard|End),\s*begin:\s*(true|false)")
+BEH_RE = re.compile(r"HostBehavior::([A-Za-z0-9_]+)\s*=>")
+
+#: Hand-checked upstream triggers for skills the automatic scan cannot resolve.
+MANUAL_TRIGGERS = {
+    "diyguhuo": 'player: "phaseBegin"',
+    "gujian_food_yougeng": 'player: "phaseBegin"',
+    "huanle_xuelunyang": 'player: "phaseBegin"',
+    "zhenjiu2": 'player: "phaseBegin"',
+    "lexue": 'player: "phaseBegin"',
+    "fengqi": "player: ['phaseZhunbeiBegin','phaseJieshuBegin']",
+    "tanhuadong": 'player: "phaseJieshuBegin"',
+    "phase_end_recover_or_draw": 'player: "phaseEnd"',
+    "gujian_food_liyutang": 'player: "phaseEnd"',
+    "gujian_food_mapodoufu": 'player: "phaseJieshuBegin"',
+    "gujian_food_ziyangdan": 'player: "phaseBegin"',
+    "gujian_food_xiajiao": 'player: "phaseDrawBegin"',
+}
+
+#: Engine phase -> the upstream event name stem (`Play` is `phaseUse…` in noname).
+PHASE_STEM = {
+    "Judge": "Judge",
+    "Draw": "Draw",
+    "Play": "Use",
+    "Discard": "Discard",
+    "End": "Jieshu",
+}
+
+#: Rows whose verdict is a documented semantic choice rather than a defect.
+SEMANTIC_CHOICE = {
+    "GujianFoodTanhuadong": "上游代码 phaseEnd 与文案『剩余N回合』矛盾，原生取每回合一次（见规则基准）",
+}
+
+
+def host_keys() -> dict[str, str]:
+    src = (HOST / "keys.rs").read_text(encoding="utf-8")
+    return {m.group(1): m.group(2) for m in re.finditer(r'HostBehavior::([A-Za-z0-9_]+)\s*=>\s*"(host:[^"]+)"', src)}
+
+
+def skill_names() -> dict[str, str]:
+    """host key -> package skill name."""
+    out: dict[str, str] = {}
+    for path in glob.glob(str(ROOT / "packages" / "extensions" / "*" / "assets" / "*.json")):
+        try:
+            doc = json.load(open(path, encoding="utf-8"))
+        except Exception:
+            continue
+        for skill in doc.get("skills") or []:
+            if isinstance(skill, dict) and skill.get("mapping"):
+                out[skill["mapping"]] = skill.get("name")
+    return out
+
+
+_UPSTREAM_CACHE: dict[str, str] | None = None
+
+
+def upstream_sources() -> dict[str, str]:
+    global _UPSTREAM_CACHE
+    if _UPSTREAM_CACHE is None:
+        _UPSTREAM_CACHE = {}
+        for path in glob.glob(str(UPSTREAM / "**" / "*.js"), recursive=True):
+            try:
+                _UPSTREAM_CACHE[path] = Path(path).read_text(encoding="utf-8", errors="replace")
+            except Exception:
+                continue
+    return _UPSTREAM_CACHE
+
+
+def _block(text: str, start: int) -> str:
+    i = start - 1
+    depth = 0
+    while i < len(text):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start - 1 : i + 1]
+        i += 1
+    return text[start - 1 :]
+
+
+def upstream_trigger(skill: str, key: str = "") -> str:
+    """Resolve the upstream trigger for a behavior.
+
+    `MANUAL_TRIGGERS` is keyed by **host key** (the `host:` prefix stripped),
+    matching `report_g14.py`; skill names are the fallback.
+    """
+    if key in MANUAL_TRIGGERS:
+        return MANUAL_TRIGGERS[key]
+    candidates = [name for name in (skill, key, key.rsplit("_", 1)[-1]) if name]
+    for candidate in candidates:
+        found = _lookup_trigger(candidate)
+        if found:
+            return found
+    return ""
+
+
+def _lookup_trigger(skill: str) -> str:
+    if not skill:
+        return ""
+    patterns = [
+        r"\n\s*" + re.escape(skill) + r"\s*:\s*\{",
+        r"lib\.skill\." + re.escape(skill) + r"\s*=\s*\{",
+        r"\n\s*_" + re.escape(skill) + r"_\s*:\s*\{",
+        r"lib\.skill\._" + re.escape(skill) + r"_\s*=\s*\{",
+    ]
+    for text in upstream_sources().values():
+        for pattern in patterns:
+            m = re.search(pattern, text)
+            if not m:
+                continue
+            block = _block(text, m.end())
+            # 跳过卡片定义（`type:...` 开头），继续找同名技能定义。
+            head = block[:60]
+            if re.search(r"\btype\s*:", head) and "trigger" not in head:
+                continue
+            trigger = re.search(r"trigger\s*:\s*\{([^}]*)\}", block)
+            if trigger:
+                return " ".join(trigger.group(1).split())
+            if "enable" in block:
+                return "(enable 主动技)"
+            return "(无 trigger)"
+    return ""
+
+
+def arms() -> list[tuple[str, str, str, str, int]]:
+    """[(behavior, phase, begin, file, line)]"""
+    rows: list[tuple[str, str, str, str, int]] = []
+    for path in sorted(HOST.rglob("*.rs")):
+        if "filtering" not in str(path):
+            continue
+        lines = path.read_text(encoding="utf-8").splitlines()
+        for idx, line in enumerate(lines):
+            for m in ARM_RE.finditer(line):
+                behavior = None
+                for back in range(idx, max(0, idx - 8), -1):
+                    hit = BEH_RE.search(lines[back])
+                    if hit:
+                        behavior = hit.group(1)
+                        break
+                rows.append((behavior or "?", m.group(1), m.group(2), path.name, idx + 1))
+    return rows
+
+
+def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
+    if behavior in SEMANTIC_CHOICE:
+        return "语义选择"
+    if not trigger:
+        return "REVIEW(上游未定位)"
+    if trigger.startswith("(enable"):
+        return "REVIEW(上游无 trigger)"
+    if "phaseBegin" in trigger and "phaseZhunbei" not in trigger:
+        return "G14(钉死阶段)"
+    stem = PHASE_STEM[phase]
+    if f"phase{stem}Begin" in trigger:
+        return "OK" if begin == "true" else "REVIEW(begin 相反)"
+    if f"phase{stem}End" in trigger:
+        return "OK" if begin == "false" else "REVIEW(begin 相反)"
+    if f"phase{stem}Before" in trigger:
+        return "G15(之前档)" if begin == "true" else "REVIEW(begin 相反)"
+    if "phaseAfter" in trigger:
+        return "G15(phaseAfter)" if begin == "false" else "REVIEW(begin 相反)"
+    if "phaseBegin" in trigger and "phaseZhunbei" not in trigger:
+        return "G14(钉死阶段)"
+    if "phaseEnd" in trigger:
+        return "G20(早一步)" if begin == "true" else "OK"
+    if "phaseZhunbeiBegin" in trigger:
+        return "REVIEW(准备阶段缺档)"
+    if "damageBegin" in trigger:
+        return "自加分支(上游伤害前)"
+    return "REVIEW(非阶段触发)"
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--check", action="store_true", help="exit 1 when a REVIEW row appears")
+    args = ap.parse_args()
+
+    keys = host_keys()
+    skills = skill_names()
+    out = []
+    counts: dict[str, int] = {}
+    for behavior, phase, begin, file, line in arms():
+        key = keys.get(behavior, "")
+        skill = skills.get(key, "") or ""
+        trigger = upstream_trigger(skill, key.removeprefix("host:"))
+        verdict = classify(behavior, phase, begin, trigger)
+        counts[verdict] = counts.get(verdict, 0) + 1
+        out.append((behavior, phase, begin, f"{file}:{line}", skill, trigger, verdict))
+
+    print("behavior\tphase\tbegin\t位置\tskill\t上游trigger\t判定")
+    for row in sorted(out, key=lambda r: (r[6], r[0])):
+        print("\t".join(row))
+    print(f"\n共 {len(out)} 个相位钉死臂", file=sys.stderr)
+    for verdict, n in sorted(counts.items(), key=lambda kv: -kv[1]):
+        print(f"  {verdict}: {n}", file=sys.stderr)
+
+    review = [r for r in out if r[6].startswith("REVIEW")]
+    if review:
+        print(f"\n{len(review)} 行需人工复核", file=sys.stderr)
+        return 1 if args.check else 0
+    print("\n无 REVIEW 行", file=sys.stderr)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
