@@ -8,7 +8,6 @@
 >
 > ### **最近 20 轮索引**（最新在底部；正文按轮次追加）
 >
-> - **第 863 轮**：**`SwdJiang` 的上游是卡牌 `jiang`，定义仍未找到** ⚠️——**`keys.rs`…
 > - **第 864 轮**：**`host:jiang` 在归档的上游里不存在——`SwdJiang` 的归因到此为止** ✅——*…
 > - **第 865 轮**：**`SwdMufengHeld` 效果缺陷不新增行 + 全量复测** ✅——**决定**：**该行为已…
 > - **第 866 轮**：**`SwdMufengHeld` 的效果缺陷属 B 类（缺 `discover` 原语）** ✅——*…
@@ -28,6 +27,7 @@
 > - **第 882 轮**：**`SwdYuchen` 升级为等价（④ → 36）** ✅——**上游**：`useCard`/`r…
 > - **第 883 轮**：**`HuanleMonkeyCard` 升级为等价（④ → 37）** ✅——**上游 `monkey…
 > - **第 884 轮**：**`Jifeng`/`ShaDamageForceDiscard` 升级为等价（④ → 39）** ✅…
+> - **第 885 轮**：**`XianjianXshuangren2` 升级为等价（④ → 40）** ✅——**上游 `xsh…
 >
 > **更早的内容****：按轮次向下检索（`第 N 轮`），或直接读[交接索引](../operations/evidence/2026-10-19-session-handover/README.md)。
 
@@ -1557,7 +1557,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 882 轮**：**`SwdYuchen` 升级为等价（④ → 36）** ✅——**上游**：`useCard`/`respondAfter` + 黑色牌 ⇒ `chooseTarget`（`countCards('he')>
 > **第 883 轮**：**`HuanleMonkeyCard` 升级为等价（④ → 37）** ✅——**上游 `monkey`**（`欢乐卡牌/card/skill.js`）：`equipSkill` + `useCardToBegin`，filter 要**自己装备 `monkey*`** + **`event.name==='tao'`** + 牌在弃牌堆 ⇒ **「猴子偷桃」：夺桃 + 弃猴子**；**原生**：**取消桃结算（夺桃 → 弃猴子 → 写回取消位）** ⇒ **等价** ✓，**`kernel/monkey.rs` 的「使用不发生，无 `CardUsed` 帧」正是取消位的实现** ✓；**维度 ④：等价 37 / 形态 16 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 37（69%）** ✓。
 >
-> **第 884 轮**：**`Jifeng`/`ShaDamageForceDiscard` 升级为等价（④ → 39）** ✅——**`Jifeng`**：上游取消概率 **`1 − (1.3+n/5)/n`**，原生 **千分位整数化同式** ⇒ **等价**（**舍入差 ≤ 0.0005**）✓；**`ShaDamageForceDiscard`**：上游 `kuwu`（`damageSource` forced、`equipSkill`，filter 要杀+`notLink()`+`he>0`）⇒ **`chooseToDiscard(true,'he')`**，原生「弃首张手牌」⇒ **等价**（**自选 → 确定性首张已登记**）✓；**维度 ④：等价 39 / 形态 14 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 39（72%）** ✓。
+> **第 884 轮**：**`Jifeng`/`ShaDamageForceDiscard` 升级为等价（④ → 39）** ✅——**`Jifeng`**：上游取消概率 **`1 − (1.3+n/5)/n`**，原生 **千分位整数化同式** ⇒ **等价**（**舍入差 ≤ 0.0005**）✓；**`ShaDamageForceDiscard`**：上游 `kuwu`（`damageSource` forced、`equipSkill`，filter 要杀+`notLink()`+`he>
+> **第 885 轮**：**`XianjianXshuangren2` 升级为等价（④ → 40）** ✅——**上游 `xshuangren2`**：**`dieBegin`** + filter `storage.xshuangren` ⇒ **`storage.xshuangren.discard()`**；**原生**：`dieBegin` 窗口取 `off_court` 全部牌 `to_discard` ⇒ **等价**（**「一张 → 离场区全部」是已登记差异**，`off_court` 只存该牌时二者相同）✓；**维度 ④：等价 40 / 形态 13 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 40（74%）** ✓。
+>
+0`）⇒ **`chooseToDiscard(true,'he')`**，原生「弃首张手牌」⇒ **等价**（**自选 → 确定性首张已登记**）✓；**维度 ④：等价 39 / 形态 14 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 39（72%）** ✓。
 >
 
 0`）⇒ **`discardPlayerCard`**；**原生**：候选 = 有手牌/装备的存活角色 ⇒ `TargetChoice` ⇒ **随机取目标 `he` 一张 ⇒ 弃置**（手牌/装备分流处理）⇒ **等价** ✓；**维度 ④：等价 36 / 形态 17 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 36（67%）** ✓。
