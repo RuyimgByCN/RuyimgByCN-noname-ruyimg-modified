@@ -8,7 +8,6 @@
 >
 > ### **最近 20 轮索引**（最新在底部；正文按轮次追加）
 >
-> - **第 855 轮**：**`HlssGaiming` 等价（消费方 `kernel/judge.rs:517`）；`Xigua…
 > - **第 856 轮**：**`ShaDamageForceDiscard` 形态相符；`XiguaXueliangFanbei`…
 > - **第 857 轮**：**`Rangjie`/`BossBaiyi` 形态相符（已核 89%）** ✅——**`Rangjie…
 > - **第 858 轮**：**`GwentCiguState`（G22「晚一步」）代码窗口与台账一致（已核 91%）** ✅——*…
@@ -28,6 +27,7 @@
 > - **第 874 轮**：**`SwdDunxing`/`SwdNingshuang` 升级为等价（④ → 21）** ✅——**…
 > - **第 875 轮**：**`Zhenlie`/`Yihua` 升级为等价（④ → 23）** ✅——**`Zhenlie`**…
 > - **第 876 轮**：**`Xuanyuan`/`Liaoyuan` 升级为等价（④ → 25）** ✅——**`Xuanyu…
+> - **第 877 轮**：**`SwdLianda`/`SwdCyxianjiang` 升级为等价（④ → 27）** ✅——**…
 >
 > **更早的内容****：按轮次向下检索（`第 N 轮`），或直接读[交接索引](../operations/evidence/2026-10-19-session-handover/README.md)。
 
@@ -1544,7 +1544,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 874 轮**：**`SwdDunxing`/`SwdNingshuang` 升级为等价（④ → 21）** ✅——**`SwdDunxing`**：上游 `prompt2` 写明「弃一张牌并判定，**结果不为红桃则该牌失效**」，原生 `SelectCard` 弃 1（含 `revoke_equip_skills`）⇒ `draw_judge_card()` 判红桃 ⇒ **连判定方向都一致** ✓；**`SwdNingshuang`**：原生三分支（**已翻面 ⇒ 失 1 体力 / 已横置 ⇒ 翻面 / 否则 ⇒ 横置 + 自己摸 1**，注释标「上游代码原样」）↔ 上游「弃黑牌令来源横置或翻面」⇒ **等价** ✓；**维度 ④：等价 21 / 形态 32 / 效果不符 1 / 待查 1** ⇒ **21 条达逐分支强度** ✓。
 >
 > **第 875 轮**：**`Zhenlie`/`Yihua` 升级为等价（④ → 23）** ✅——**`Zhenlie`**：原生三步（**① 移出目标 ② `LoseHp{1}` ③ 弃置使用者一张牌（`min:1,max:1,allow_cancel:false`）**）↔ 上游贞烈「失去 1 体力 ⇒ 弃使用者一张牌 ⇒ 取消效果」⇒ **顺序与语义一致** ✓；**`Yihua`**：原生 `min:2,max:2` + **`if options.len() < 2 { return }`** ↔ 上游 filter `hand>
-> **第 876 轮**：**`Xuanyuan`/`Liaoyuan` 升级为等价（④ → 25）** ✅——**`Xuanyuan`**：原生弃黑桃（手牌/装备分别处理 + `revoke_equip_skills`）⇒ **`discard.iter().find(CardKind::Xuanyuanjian)` 入手 + `emit(Equipped)`** ↔ 上游「弃黑桃 ⇒ 从弃牌堆装备轩辕剑」⇒ **等价** ✓；**`Liaoyuan`**：原生循环（**首张必问、弃后余 >1 才续问**）+ `liaoyuan_count = 弃牌数` ↔ 上游 `storage.liaoyuan=0; event.num=0` 循环计数 ⇒ **等价** ✓；**维度 ④：等价 25 / 形态 28 / 效果不符 1 / 待查 1** ⇒ **逐分支强度从第 862 轮的 19 条提升到 25 条** ✅。
+> **第 876 轮**：**`Xuanyuan`/`Liaoyuan` 升级为等价（④ → 25）** ✅——**`Xuanyuan`**：原生弃黑桃（手牌/装备分别处理 + `revoke_equip_skills`）⇒ **`discard.iter().find(CardKind::Xuanyuanjian)` 入手 + `emit(Equipped)`** ↔ 上游「弃黑桃 ⇒ 从弃牌堆装备轩辕剑」⇒ **等价** ✓；**`Liaoyuan`**：原生循环（**首张必问、弃后余 >
+> **第 877 轮**：**`SwdLianda`/`SwdCyxianjiang` 升级为等价（④ → 27）** ✅——**`SwdLianda`**：上游 step 1 是 **`addTempSkill('lianda2')` + `useCard({name:'sha'}, trigger.target)`**，原生 **`lianda_used = true` + `use_virtual_card(owner, Sha, targets)`** ⇒ **等价** ✓；**`SwdCyxianjiang`**：上游 **`choosePlayerCard(target,'e')` ⇒ `player.equip(game.createCard(card), true)`**，原生 **同 kind 实体发现（牌堆优先、弃堆兜底）+ `emit(Equipped)`** ⇒ **等价**（**`createCard` → 实体发现是已登记差异**）✓；**维度 ④：等价 27 / 形态 26 / 效果不符 1 / 待查 1** ⇒ **逐分支强度 19 → 27** ✓。
+>
+1 才续问**）+ `liaoyuan_count = 弃牌数` ↔ 上游 `storage.liaoyuan=0; event.num=0` 循环计数 ⇒ **等价** ✓；**维度 ④：等价 25 / 形态 28 / 效果不符 1 / 待查 1** ⇒ **逐分支强度从第 862 轮的 19 条提升到 25 条** ✅。
 >
 =2` ⇒ **等价**，**并更正第 836 轮「原生未见 `hand>=2` 门槛」的说法**（**它就在 `options.len() < 2` 那一行**）✓；**维度 ④：等价 23 / 形态 30 / 效果不符 1 / 待查 1** ✓。
 >

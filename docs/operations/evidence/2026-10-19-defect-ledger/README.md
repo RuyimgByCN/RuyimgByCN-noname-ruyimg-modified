@@ -19,7 +19,7 @@
 > | ① 上游定位 | **54 / 54** | 每行都能指出上游出处 |
 > | ② 上游同质 | **36 行** | 相位族全族上游 trigger 一致 |
 > | ③ 效果步存在 | **54 / 54** | 无一条是「功能没做」|
-> | ④ **效果等价** | **25 已确认 + 28 形态相符** | 已核 **53/54 = 98%**：**1 效果不符**（`SwdMufengHeld`）、**1 待查**（`SwdJiang`）、**0 未读** ⚠️ |
+> | ④ **效果等价** | **27 已确认 + 26 形态相符** | 已核 **53/54 = 98%**：**1 效果不符**（`SwdMufengHeld`）、**1 待查**（`SwdJiang`）、**0 未读** ⚠️ |
 >
 > **归因层代码级复核 21 行（含复合技、消费方、公式对照）**；**注释与实际不符累计 18 处**（**完全无关 15 / 错位 2 / 描述代码里没有的效果 1**）；**自我更正累计 21 次**。
 
@@ -2390,3 +2390,28 @@ let yxs_fanji2_direct_hit = {
 
 ⇒ **维度 ④：等价 25 / 形态相符 28 / 效果不符 1 / 待查 1**
 ⇒ **53/54 已核，其中 25 条逐分支** ✅（**从第 862 轮的 19 条提升到 25 条**）
+
+---
+
+## 87 第 877 轮：`SwdLianda` / `SwdCyxianjiang` 升级为**等价**（④ → 27）
+
+### `SwdLianda`
+
+| 侧 | 全流程 |
+|---|---|
+| 上游 `swd_lianda` | `shaAfter` ⇒ `chooseToDiscard('he')` ⇒ **step 1：`addTempSkill('lianda2')` + `useCard({name:'sha'}, trigger.target)`** |
+| 原生 | `SelectCard` 弃 1（手牌/装备）⇒ **`lianda_used = true`**（临时技标记等价物）⇒ **`use_virtual_card(owner, Sha, targets)`** |
+
+⇒ **等价** ✅（**「弃一张 ⇒ 再对同目标用一张杀」完整对应**）
+
+### `SwdCyxianjiang`
+
+| 侧 | 全流程 |
+|---|---|
+| 上游 `cyxianjiang` | `useCardToBegin`；`choosePlayerCard(target, 'e')`（从**目标装备区**选牌）⇒ **step 1：`player.equip(game.createCard(card), true)`** + `storage.add` |
+| 原生 | `Act` 取 `CardUsed.targets.first()` ⇒ 以**目标装备**为候选（过滤「自己没有同名牌」）⇒ `SelectCard` ⇒ **同 kind 实体发现（牌堆优先、弃堆兜底）⇒ 入手 + `emit(Equipped)`** |
+
+⇒ **等价** ✅（**`createCard` 用「实体发现」替代，是已登记差异**）
+
+⇒ **维度 ④：等价 27 / 形态相符 26 / 效果不符 1 / 待查 1**
+⇒ **逐分支强度 19（第 862 轮）→ 27** ✅
