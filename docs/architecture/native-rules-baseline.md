@@ -5623,3 +5623,20 @@ food_tick(ctx, self.owner, &self.def_key);   // 倒计时扣减，归零移除
 | **A（改逻辑/条件）** | 26 | **25** |
 | **非缺陷** | 2 | **3**（`cangchizhibi` 未转换、`swd_hufu` 夹具、**`tanhuadong` 语义选择**）|
 | **合计** | 42 | **42**（不变）|
+
+### U06 欢乐卡牌（`huanle-upstream-noname`）差异族：**初查**（2026-10-19，第 724 轮）
+
+**包**：**7 张卡 + 2 个装备技**
+
+| 项 | 上游 | 原生 | 判定 |
+|---|---|---|---|
+| **`kuwu` 苦无**（武器，`equip1`）| **`trigger: { source: "damageSource" }`** + `forced` + `equipSkill`；filter：**`event.card.name === "sha"`** && **`event.notLink()`** && **`event.player.countCards("he") > 0`** && 不在 `_notrigger` | **`host:sha_damage_force_discard`** | ⚠️ **名实相符，逐条件待核**（`notLink` = 非连环传导；`_notrigger` = 上游防重复机制）|
+| **`jiuwei` 九尾**（坐骑，`equip5`）| **`trigger: { player: "phaseEnd" }`** + `frequent`；`if (player.isDamaged()) recover else draw` | **`host:phase_end_recover_or_draw`** | ✅ **名实完全对应**（**顺序：先判已伤 → 回复，否则摸牌**）|
+| **`xuelunyang` 雪轮扬**（卡）| **`trigger: { player: "phaseBegin" }`** | **`HuanleXuelunyangCard`**：**`Phase::Judge, begin: true`** | ❗ **G14 确认缺陷**（**已在守卫 `g14_xuelunyang_any_phase`**）|
+| 其余 5 卡（`shoulijian`×2 / `monkey` / `mianju` / `jiuwei` 卡面）| 卡面数据（`type`/`subtype`/`distance`）| 包内 JSON | ⚠️ **卡面属数据级，本轮未逐字段核对** |
+
+### 状态
+
+**2 个装备技语义对齐** ✅（`kuwu` 的 4 个 filter 条件、`jiuwei` 的回复/摸牌分支仍需逐个核对 ⚠️）
+**1 张卡的技能有 G14 缺陷** ❗ ⇒ **`U06` 不能签** ❌
+**卡面数据级未核** ⚠️ ⇒ **差异族只覆盖技能面，卡面待补** ⚠️

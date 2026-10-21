@@ -8,7 +8,6 @@
 >
 > ### **最近 20 轮索引**（最新在底部；正文按轮次追加）
 >
-> - **第 703 轮**：**批 B 第 1 问回答：`Dying` 是内联发射 ⇒ `Damage` 确实早于「结算完成」** …
 > - **第 704 轮**：**头部「当前交接状态」由第 567 轮更新为第 704 轮** ✅——**旧块已明显过时** ✗（**…
 > - **第 705 轮**：**写出会话总结 `SUMMARY.md`**（交接索引目录）——**一句话**：**把「规则差异」从一…
 > - **第 706 轮**：**最终验证 11 项，只有行数门禁红**（总结 §6）——**逐条不带管道** ✓：**①行数门禁 e…
@@ -28,6 +27,7 @@
 > - **第 721 轮**：**❗查证时发现 `lexue` 分类错了——它不是「凭空新增」，是 G14** ✅——**上游 `le…
 > - **第 722 轮**：**❗`tanhuadong` 不是缺陷，是上游「代码与文案自相矛盾」下的语义选择** ✅——**上游代…
 > - **第 723 轮**：**对 4 条已登记 A 类缺陷做上游原文复核——4 条全部成立，本轮无更正** ✅——**`liyut…
+> - **第 724 轮**：**复核剩余 3 条已登记缺陷（全部成立）+ 写 `U06` 欢乐卡牌差异族初查** ✅——**复核**…
 >
 > **更早的内容****：按轮次向下检索（`第 N 轮`），或直接读[交接索引](../operations/evidence/2026-10-19-session-handover/README.md)。
 
@@ -1254,7 +1254,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 722 轮**：**❗`tanhuadong` 不是缺陷，是上游「代码与文案自相矛盾」下的语义选择** ✅——**上游代码** `trigger: { player: "phaseEnd" }`（**任意阶段结束**递减，一回合 5 次 ⇒ `markcount=3` 一回合就耗尽）✗ vs **上游文案**「剩余 N **回合**」✓ **自相矛盾** ❗；**原生**取 `Phase::Play, begin: false`（**出牌阶段结束 = 每回合一次**）+ `food_tick` 扣减归零移除 ⇒ **与文案一致、与代码不一致** ✓；⇒ **判定改为「登记差异（语义选择）」，不是确认缺陷** ✓ ⇒ **A 26 → 25、非缺陷 2 → 3、合计仍 42** ✓；**保留偏差**：若严格照上游**代码**，倒计时应每次阶段结束递减 —— **需维护者裁决**，本会话不改 ⚠️；**这是本会话第 3 次「查上游原文后推翻自己的判定」**（前两次：`lexue` 分类、`rangjie` 遗漏）✅。
 >
-> **第 723 轮**：**对 4 条已登记 A 类缺陷做上游原文复核——4 条全部成立，本轮无更正** ✅——**`liyutang`**：上游 `target.$gain2(cards)` + `markcount=2` + `addSkill` ⇒ **目标应获得此牌** ✓；**`qiankunbiao`**：`filterTarget: target != player && target.countCards("he") > 0` ⇒ **目标无牌应被拒** ✓；**`longxugou`**：`"step 2" if(...) { player.equip(event.card) }` ⇒ **获得后自己装备** ✓；**`shihuifen`**：`chooseToRespond({name:"shan"})` + `addTempSkill("shihuifen","phaseUseAfter")` ⇒ **未出闪后限制用牌** ✓；⇒ **「复核后没变」也记为结论** ✓（**否则后人无法区分「复核过」与「照抄旧结论」** —— **`tanhuadong` 正是照抄三轮的教训** ❗）；**剩余 4 条待复核**（`zonghuo`/`dinvxuanshuang`/`shenenshu`/`jijiang`）⚠️。
+> **第 723 轮**：**对 4 条已登记 A 类缺陷做上游原文复核——4 条全部成立，本轮无更正** ✅——**`liyutang`**：上游 `target.$gain2(cards)` + `markcount=2` + `addSkill` ⇒ **目标应获得此牌** ✓；**`qiankunbiao`**：`filterTarget: target != player && target.countCards("he") >
+> **第 724 轮**：**复核剩余 3 条已登记缺陷（全部成立）+ 写 `U06` 欢乐卡牌差异族初查** ✅——**复核**：**`zonghuo`** 上游 `trigger:{source:"damageBefore"}` + `chooseToDiscard` ⇒ **确认后应弃牌** ✓；**`dinvxuanshuang`** 上游 `selectTarget:-1` ⇒ **全部目标各回复** ✓；**`shenenshu`** 上游 `getCards("h")`+`lose`+`num=1+cards.length` ⇒ **效果真实存在** ✓；**`U06` 初查**：**7 卡 + 2 装备技** ✓ —— **`jiuwei`（九尾）名实完全对应**（`phaseEnd` + 已伤回复/否则摸牌 ⇒ `host:phase_end_recover_or_draw`）✅；**`kuwu`（苦无）名实相符但 4 个 filter 条件逐条待核**（`sha`/`notLink`/`countCards("he")>0`/`_notrigger`）⚠️；**`xuelunyang` 是 G14 确认缺陷** ❗ ⇒ **`U06` 不能签**；**卡面数据级未核** ⚠️。
+>
+ 0` ⇒ **目标无牌应被拒** ✓；**`longxugou`**：`"step 2" if(...) { player.equip(event.card) }` ⇒ **获得后自己装备** ✓；**`shihuifen`**：`chooseToRespond({name:"shan"})` + `addTempSkill("shihuifen","phaseUseAfter")` ⇒ **未出闪后限制用牌** ✓；⇒ **「复核后没变」也记为结论** ✓（**否则后人无法区分「复核过」与「照抄旧结论」** —— **`tanhuadong` 正是照抄三轮的教训** ❗）；**剩余 4 条待复核**（`zonghuo`/`dinvxuanshuang`/`shenenshu`/`jijiang`）⚠️。
 >
 
 
