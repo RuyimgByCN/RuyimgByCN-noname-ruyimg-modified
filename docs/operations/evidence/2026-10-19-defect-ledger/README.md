@@ -19,7 +19,7 @@
 > | ① 上游定位 | **54 / 54** | 每行都能指出上游出处 |
 > | ② 上游同质 | **36 行** | 相位族全族上游 trigger 一致 |
 > | ③ 效果步存在 | **54 / 54** | 无一条是「功能没做」|
-> | ④ **效果等价** | **17 已确认 + 33 形态相符** | 已核 **51/54 = 94%**：**1 效果不符**（`SwdMufengHeld`）、**1 待查**（`SwdJiang`）、**3 未读** ⚠️ |
+> | ④ **效果等价** | **18 已确认 + 34 形态相符** | 已核 **52/54 = 96%**：**1 效果不符**（`SwdMufengHeld`）、**1 待查**（`SwdJiang`）、**1 未读** ⚠️ |
 >
 > **归因层代码级复核 21 行（含复合技、消费方、公式对照）**；**注释与实际不符累计 18 处**（**完全无关 15 / 错位 2 / 描述代码里没有的效果 1**）；**自我更正累计 21 次**。
 
@@ -2145,3 +2145,32 @@ let yxs_fanji2_direct_hit = {
 ### 剩余 3 行
 
 `XiguaXueliangFanbei`、`ShengkeCheck`、`XianjianXjzhimeng2`
+
+---
+
+## 77 第 861 轮：`XiguaXueliangFanbei` **等价**、`ShengkeCheck` **形态相符**（已核 96%）
+
+### `XiguaXueliangFanbei`
+
+| 侧 | 代码 |
+|---|---|
+| 上游 `lib.skill._xigua_xueliangfanbei_` | `trigger: {global: 'gameStart'}`、forced ⇒ **`player.gainMaxHp(player.hp)`** + **`player.recover(player.hp)`** |
+| 原生 | **`max_hp += hp as u32`** + **`recover(owner, hp)`** |
+
+⇒ **逐语句一致** ✅ **等价**
+
+### `ShengkeCheck`
+
+| 侧 | 内容 |
+|---|---|
+| 上游 `_shengke` | `trigger: {target: 'useCardToBegin'}`、forced ⇒ 五行生克：**被克/被生** 分支 |
+| 原生 | **被克 ⇒ 弃一张手牌**（确定性首张，已登记「上游为目标自选 `he`」）；**被生 ⇒ 摸一张**；无关 ⇒ 无事 |
+
+⇒ **形态相符** ✅（含已登记差异）
+
+### 顺带确认 L20a
+
+上游 `lib.skill._xigua_mopaifanbei_` 的 trigger 是 **`player: "phaseDrawBegin2"`** ⇒ **与台账 L20a 的标注完全一致** ✅
+
+⇒ **维度 ④：等价 18 / 形态 34 / 未读 1 / 效果不符 1 / 待查 1**
+⇒ **已核 52/54 = 96%** ✅

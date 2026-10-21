@@ -8,7 +8,6 @@
 >
 > ### **最近 20 轮索引**（最新在底部；正文按轮次追加）
 >
-> - **第 841 轮**：**`SwdHyunshen`/`SwdLingxian` 形态相符（形态 → 18，已核 54%）**…
 > - **第 842 轮**：**`SwdLuomei`/`SwdXielei` 形态相符（形态 → 20，已核 57%）** ✅——…
 > - **第 843 轮**：**`XianjianRunxin` 等价、`SwdYuchen` 形态相符（已核 61%）** ✅——…
 > - **第 844 轮**：**`YunchouJiaoxia` 等价、`Zhenlie` 形态相符（已核 65%）** ✅——**…
@@ -28,6 +27,7 @@
 > - **第 858 轮**：**`GwentCiguState`（G22「晚一步」）代码窗口与台账一致（已核 91%）** ✅——*…
 > - **第 859 轮**：**按语义搜找到 `GujianFoodLiyutang` 的上游——窗口与台账一致（已核 93%）**…
 > - **第 860 轮**：**`GujianFoodZiyangdan` 上游定位成功——G14「钉死阶段」确认（已核 94%）*…
+> - **第 861 轮**：**`XiguaXueliangFanbei` 等价、`ShengkeCheck` 形态相符（已核 96…
 >
 > **更早的内容****：按轮次向下检索（`第 N 轮`），或直接读[交接索引](../operations/evidence/2026-10-19-session-handover/README.md)。
 
@@ -1516,7 +1516,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 859 轮**：**按语义搜找到 `GujianFoodLiyutang` 的上游——窗口与台账一致（已核 93%）** ✅——**不再猜名字**：`grep -rl liyutang` ⇒ **`card/gujian.js`**，**第一处是卡牌定义**（`type:'food'` ⇒ 目标获得牌 + `markcount=2` + `addSkill`），**第二处是技能定义**：**`trigger: {player:'phaseEnd'}` + `isMinHp()` ⇒ `changeHujia()` + `markcount--`** ✓；**原生注释写「阶段开始」** ⇒ **晚于/早于不符，台账 G20「早一步」确认** ✓；**上游描述精确化**（`phaseEnd` + `isMinHp` + `changeHujia` + `markcount--`）✓；**维度 ④：等价 17 / 形态 32 / 未读 4** ⇒ **已核 50/54 = 93%**；**方法验证**：**「按语义搜」有效**，剩 3 行应同样处理 ✅。
 >
-> **第 860 轮**：**`GujianFoodZiyangdan` 上游定位成功——G14「钉死阶段」确认（已核 94%）** ✅——**卡牌 `ziyangdan`**（`type:'basic'` ⇒ `changeHujia(3)` + `addSkill`）与**技能 `ziyangdan`**：**`trigger: {player:'phaseBegin'}`**、`init: storage.ziyangdan=3`、content `hujia>0 ⇒ changeHujia(-1)` + `storage--` + **归零移除** ✓；**原生在「结束阶段」执行** ⇒ **窗口不符，G14 确认**；**「倒计时扣减、归零移除」与上游一致** ✓；**维度 ④：等价 17 / 形态 33 / 未读 3** ⇒ **已核 51/54 = 94%**；**剩 3 行**：`XiguaXueliangFanbei`/`ShengkeCheck`/`XianjianXjzhimeng2` ✓。
+> **第 860 轮**：**`GujianFoodZiyangdan` 上游定位成功——G14「钉死阶段」确认（已核 94%）** ✅——**卡牌 `ziyangdan`**（`type:'basic'` ⇒ `changeHujia(3)` + `addSkill`）与**技能 `ziyangdan`**：**`trigger: {player:'phaseBegin'}`**、`init: storage.ziyangdan=3`、content `hujia>
+> **第 861 轮**：**`XiguaXueliangFanbei` 等价、`ShengkeCheck` 形态相符（已核 96%）** ✅——**`XiguaXueliangFanbei`**：上游 `_xigua_xueliangfanbei_`（`global: gameStart`）⇒ **`gainMaxHp(player.hp)` + `recover(player.hp)`**，原生 **`max_hp += hp` + `recover(hp)`** ⇒ **逐语句一致** ✓；**`ShengkeCheck`**：上游 `_shengke`（`target: useCardToBegin`，五行生克）⇒ 被克/被生分支，原生「被克弃一张、被生摸一张」⇒ 形态相符（含已登记差异）✓；**顺带确认 L20a**：上游 `_xigua_mopaifanbei_` 的 trigger 是 **`player: "phaseDrawBegin2"`**，**与台账标注完全一致** ✓；**维度 ④：等价 18 / 形态 34 / 未读 1** ⇒ **已核 52/54 = 96%** ✓。
+>
+0 ⇒ changeHujia(-1)` + `storage--` + **归零移除** ✓；**原生在「结束阶段」执行** ⇒ **窗口不符，G14 确认**；**「倒计时扣减、归零移除」与上游一致** ✓；**维度 ④：等价 17 / 形态 33 / 未读 3** ⇒ **已核 51/54 = 94%**；**剩 3 行**：`XiguaXueliangFanbei`/`ShengkeCheck`/`XianjianXjzhimeng2` ✓。
 >
 
 
