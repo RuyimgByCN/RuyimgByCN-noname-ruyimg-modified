@@ -10,8 +10,8 @@
 | 台账 | **54 条 = A 25 / B 29**（`ledger.tsv` 为唯一事实源）|
 | 四维 | **①54/54 ②36 行 ③54/54 ④等价 16 + 形态 25 = 已核 42/54（78%）** |
 | 守卫 | **`nc08_registered_defect_guards` 50 个 `#[ignore]`，`--ignored` 实测 0 passed / 50 failed**；覆盖率 **有守卫 53 / 缺 1 / 共 54 = 98.1%** |
-| 门禁 | **`preflight.py` 18 项**（数字一致性 4 处 + 名称存在 2 处 + 链接/旧值/索引/映射/登记/枚举/覆盖/行数）|
-| 脚本单测 | **141 个全绿**；`engine-native` **1538 passed** |
+| 门禁 | **`preflight.py` 19 项**（第 870 轮新增「已登记差异口径 20/54」）|（数字一致性 4 处 + 名称存在 2 处 + 链接/旧值/索引/映射/登记/枚举/覆盖/行数）|
+| 脚本单测 | **145 个全绿**；`engine-native` **1538 passed / 0 failed / 71 ignored** |
 | 自我更正 | **21 次**（清单见台账 README 各轮小节）|
 | 八项 | **完成 0**；唯一未过项 = **规则差异**（0/12 已转换来源，待 D1/D2 口径）|
 
@@ -168,3 +168,15 @@
 * **规则差异 12/12**（当前 **0/12**，卡在 D1/D2）
 
 ⇒ **八项完成数 = 0**，**这一条本会话没有改变** ✅
+
+### 99.5 第 873 轮终局核验（可直接引用）
+
+| 检查 | 命令 | 结果 |
+|---|---|---|
+| 门禁全量 | `python3 -B scripts/preflight.py` | **通过（19 项，含 1 项预期失败）** |
+| 行数门禁 | `python3 -B scripts/check-source-lines.py` | **exit=1（唯一预期失败：`crates/rule-api/src/effect.rs: 10778 行 / 上限 2000`）** |
+| 旧值扫描 | `python3 -B scripts/check_stale_numbers.py` | **残留旧值 0 处** |
+| 台账↔枚举 | `python3 -B scripts/check_ledger_consistency.py` | **一致 ✅** |
+| 脚本单测 | `python3 -B -m unittest discover -s scripts` | **145 个全绿** |
+| 缺陷守卫 | `cargo test -p engine-native --test nc08_registered_defect_guards -- --ignored` | **0 passed / 50 failed（全部为红）** |
+| 原生全量 | `cargo test --offline -p engine-native` | **1538 passed / 0 failed / 71 ignored** |
