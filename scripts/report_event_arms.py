@@ -87,6 +87,37 @@ def arms() -> list[tuple[str, str, str, int]]:
     return rows
 
 
+CARD_AFTER = ("useCardAfter", "useCardEnd", "respondCardAfter")
+CARD_BEFORE = ("useCardToBegin", "useCardToTargeted", "useCardBefore", "useCardBegin")
+
+
+def classify_card(which: str, trigger: str) -> str:
+    """Card-use surface: native `CardUsed` == after the card resolved."""
+    if not trigger:
+        return "REVIEW(上游未定位)"
+    if any(tok in trigger for tok in CARD_BEFORE):
+        return "需档(使用前/指定目标)" if which == "CardUsed" else "REVIEW(前置档却用 After 面)"
+    if any(tok in trigger for tok in CARD_AFTER):
+        return "OK" if which == "CardUsed" else "REVIEW(After 面却用前置档)"
+    if "useCard" in trigger:
+        return "需档(使用前/指定目标)" if which == "CardUsed" else "OK"
+    if "respond" in trigger or "chooseToRespond" in trigger:
+        return "OK" if which in ("CardResponded", "CardUsed") else "REVIEW(响应面)"
+    return "REVIEW(非用牌触发)"
+
+
+def classify_death(which: str, trigger: str) -> str:
+    if not trigger:
+        return "REVIEW(上游未定位)"
+    if "dieAfter" in trigger or "die" in trigger and "dieBegin" not in trigger:
+        return "OK" if which == "Death" else "REVIEW(死亡面档位)"
+    if "dieBegin" in trigger or "dieBefore" in trigger:
+        return "需档(死亡前)" if which == "Death" else "OK"
+    if "dying" in trigger:
+        return "OK" if which == "Dying" else "REVIEW(濒死面)"
+    return "REVIEW(非死亡触发)"
+
+
 def classify(which: str, trigger: str) -> str:
     """`which` is the native event kind (`DamageBefore` / `Damage` / `Death` ...)."""
     if not trigger:
@@ -107,6 +138,7 @@ def classify(which: str, trigger: str) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--check", action="store_true", help="exit 1 when REVIEW rows exist")
+    ap.add_argument("--family", choices=["damage", "card", "death", "all"], default="damage")
     args = ap.parse_args()
 
     phase = _load_phase_helpers()
@@ -115,19 +147,35 @@ def main() -> int:
     skills = phase.skill_names()
     out = []
     counts: dict[str, int] = {}
-    for behavior, which, file, line in arms():
+    all_meta = metadata_events()
+    if args.family == "all":
+        selected = sorted(all_meta.items())
+        if args.family == "all":
+            selected = [(b, e) for b, e in selected if e in {"CardUsed", "CardResponded", "Death", "Dying"}]
+        rows = [(b, e, "metadata", 0) for b, e in selected]
+        classifier = lambda which, trig: (classify_card(which, trig) if which.startswith("Card") else classify_death(which, trig))
+    elif args.family == "card":
+        rows = [(b, e, "metadata", 0) for b, e in sorted(all_meta.items()) if e in {"CardUsed", "CardResponded"}]
+        classifier = classify_card
+    elif args.family == "death":
+        rows = [(b, e, "metadata", 0) for b, e in sorted(all_meta.items()) if e in {"Death", "Dying"}]
+        classifier = classify_death
+    else:
+        rows = arms()
+        classifier = classify
+    for behavior, which, file, line in rows:
         key = keys.get(behavior, "")
         skill = skills.get(key, "") or ""
         trigger = phase.upstream_trigger(skill, key.removeprefix("host:"))
         native = meta.get(behavior, which)
-        verdict = classify(native, trigger)
+        verdict = classifier(native, trigger)
         counts[verdict] = counts.get(verdict, 0) + 1
         out.append((behavior, native, f"{file}:{line}", skill, trigger, verdict))
 
     print("behavior\tnative\t位置\tskill\t上游trigger\t判定")
     for row in sorted(out, key=lambda r: (r[5], r[0])):
         print("\t".join(row))
-    print(f"\n共 {len(out)} 个伤害触发臂", file=sys.stderr)
+    print(f"\n共 {len(out)} 个 {args.family} 触发臂", file=sys.stderr)
     for verdict, n in sorted(counts.items(), key=lambda kv: -kv[1]):
         print(f"  {verdict}: {n}", file=sys.stderr)
 

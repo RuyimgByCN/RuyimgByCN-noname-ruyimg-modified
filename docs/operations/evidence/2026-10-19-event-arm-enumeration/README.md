@@ -55,3 +55,49 @@
 python3 -B scripts/report_event_arms.py           # TSV + 汇总
 python3 -B scripts/report_event_arms.py --check   # 有 REVIEW 行时 exit=1
 ```
+
+---
+
+## 6 扩展：**用牌面**与**死亡面**的枚举（第 731 轮）
+
+`report_event_arms.py` 增加 `--family {damage,card,death}`，把同一套方法用到另外两个面。
+
+### 6.1 用牌面（`CardUsed` / `CardResponded`）：**42 条**
+
+| 判定 | 条数 |
+|---|---:|
+| ✅ **OK**（上游 `useCardAfter` 等「之后」面）| **6** |
+| ⚠️ **需档（用牌前 / 指定目标时）** | **23** |
+| 🔍 REVIEW | 13 |
+
+**需档的 23 条，上游 trigger 都是「使用牌之前/指定目标时」**：
+`useCardToBegin`、`useCardToBefore`、`useCardToTargeted`、`useCard`（= 使用的瞬间），
+而原生一律用 **`CardUsed`（使用之后）** —— 正是 **5c 那一条缺档**的 23 个实例 ❗
+
+### 6.2 死亡面（`Death` / `Dying`）：**27 条**
+
+| 判定 | 条数 |
+|---|---:|
+| ✅ **OK**（上游 `die` / `dieAfter`）| **10** |
+| ⚠️ **需档（死亡前 `dieBegin`）** | **4** |
+| 🔍 REVIEW | 13 |
+
+需档的 4 条：`XianjianChangnian` / `XianjianCtianfu3` / `XianjianXshuangren2` / `YunchouDiychanyuan`，
+上游都是 **`player: 'dieBegin'`**，原生用 **`Death`（死亡后）** ⇒ 与 `L20` 的 `_xigua_zhuwanzhongji_` 同源 ❗
+
+### 6.3 ⚠ **这改变了提案的收益判断**
+
+| 缺档 | 原先记录 | **枚举后** |
+|---|---:|---:|
+| **「指定目标时 / 用牌前」** | **2 处**（5c + 五行生克）| **25 处**（**+23**）|
+| **「死亡前 `dieBegin`」** | **1 处**（`L20`）| **5 处**（**+4**）|
+
+⇒ **扩 `EventKind::CardTargeted` 的收益从「2 条」变成「25 条」** ❗
+⇒ **扩 `EventKind::DeathBefore` 的收益从「1 条」变成「5 条」** ❗
+⇒ **提案**（[阶段时机扩展](../../proposals/phase-timing-extension.md)）**的批 A 覆盖条数应从 8 条重估为约 30 条**
+
+### 6.4 未做完
+
+**26 条 REVIEW**（用牌面 13 + 死亡面 13）**未逐条核实** ⚠️ ——
+其中多数是**上游未定位**（内部行为或解析质量），**不按缺陷登记**。
+另有 **10 条「非用牌触发」/「非死亡触发」**，属解析错位，也**不按缺陷登记**。

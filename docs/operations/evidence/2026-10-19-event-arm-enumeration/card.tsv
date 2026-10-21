@@ -1,0 +1,43 @@
+behavior	native	位置	skill	上游trigger	判定
+SwdFzhenwei	CardResponded	metadata:0		global:'respondEnd'	OK
+SwdHlingbo	CardResponded	metadata:0		player:['respond','useCard']	OK
+SwdHwendao	CardUsed	metadata:0		player:['useCardAfter','respondAfter',]	OK
+XianjianSheling	CardUsed	metadata:0		global:['useCardAfter','respondAfter','discardAfter']	OK
+XianjianXjyingfeng	CardUsed	metadata:0		player:'useCardAfter'	OK
+YunchouLuweiyan2	CardUsed	metadata:0		player:'useCardAfter'	OK
+SwdShenmiguoWindow	CardUsed	metadata:0			REVIEW(上游未定位)
+SwdYuchanSwap	CardUsed	metadata:0			REVIEW(上游未定位)
+WudianQiangguGuard	CardUsed	metadata:0			REVIEW(上游未定位)
+GujianFoodQingtuan	CardUsed	metadata:0		player: "phaseAfter"	REVIEW(非用牌触发)
+Liaoyuan	CardUsed	metadata:0		player:'shaBegin'	REVIEW(非用牌触发)
+ShengkeCheck	CardUsed	metadata:0	wuxing_shengke	player: "loseAfter", global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],	REVIEW(非用牌触发)
+SwdLianda	CardUsed	metadata:0		player:'shaAfter'	REVIEW(非用牌触发)
+SwdMojian	CardUsed	metadata:0		player:'shaBegin'	REVIEW(非用牌触发)
+SwdSxianjingGain	CardUsed	metadata:0		player: 'damageEnd', source: 'damageSource'	REVIEW(非用牌触发)
+SwdTiebi	CardUsed	metadata:0		global:'shaBegin'	REVIEW(非用牌触发)
+WudianZhenchaDraw	CardUsed	metadata:0		player:'phaseDrawBegin'	REVIEW(非用牌触发)
+WudianZhuchengGuard	CardUsed	metadata:0	zhucheng2	target:'shaBefore'	REVIEW(非用牌触发)
+XianjianXunying	CardUsed	metadata:0		player:'shaAfter'	REVIEW(非用牌触发)
+HuanleMonkeyCard	CardUsed	metadata:0		global: "useCardToBegin",	需档(使用前/指定目标)
+Jifeng	CardUsed	metadata:0	jifeng	player:'useCardToBefore'	需档(使用前/指定目标)
+NewZhixi	CardUsed	metadata:0	new_zhixi_mark2	player: "useCard",	需档(使用前/指定目标)
+SwdCyxianjiang	CardUsed	metadata:0		player:'useCardToBegin'	需档(使用前/指定目标)
+SwdDunxing	CardUsed	metadata:0		target:'useCardToBefore'	需档(使用前/指定目标)
+SwdGongshen	CardUsed	metadata:0		global:'useCard'	需档(使用前/指定目标)
+SwdHuanyin	CardUsed	metadata:0		target:'useCardToBefore'	需档(使用前/指定目标)
+SwdHyunshen	CardUsed	metadata:0		player:['respond','useCard']	需档(使用前/指定目标)
+SwdJiang	CardUsed	metadata:0		player:'useCardToPlayered', target:'useCardToTargeted',	需档(使用前/指定目标)
+SwdLanzhi	CardUsed	metadata:0		player:'useCard'	需档(使用前/指定目标)
+SwdLingxian	CardUsed	metadata:0		player:['respond','useCard']	需档(使用前/指定目标)
+SwdLiuhong	CardUsed	metadata:0		player:['useCard']	需档(使用前/指定目标)
+SwdLuomei	CardUsed	metadata:0		player:['useCard','respond']	需档(使用前/指定目标)
+SwdNingshuang	CardUsed	metadata:0		target:'useCardToBegin'	需档(使用前/指定目标)
+SwdXielei	CardUsed	metadata:0		player:['useCard','respondAfter']	需档(使用前/指定目标)
+SwdYuchen	CardUsed	metadata:0		player:['useCard','respondAfter']	需档(使用前/指定目标)
+XianjianFeixu	CardUsed	metadata:0	feixu	global:['useCard','respond']	需档(使用前/指定目标)
+XianjianLiefeng	CardUsed	metadata:0		player:'useCard'	需档(使用前/指定目标)
+XianjianRunxin	CardUsed	metadata:0		player:['useCard','respondEnd']	需档(使用前/指定目标)
+XianjianXjzhimeng2	CardUsed	metadata:0		target: "useCardToBegin"	需档(使用前/指定目标)
+Yihua	CardUsed	metadata:0		target:'useCardToBefore'	需档(使用前/指定目标)
+YunchouJiaoxia	CardUsed	metadata:0		target:'useCardToTargeted'	需档(使用前/指定目标)
+Zhenlie	CardUsed	metadata:0		target:'useCardToTargeted'	需档(使用前/指定目标)

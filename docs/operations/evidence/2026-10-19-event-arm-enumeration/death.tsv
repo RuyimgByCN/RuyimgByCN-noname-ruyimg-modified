@@ -1,0 +1,28 @@
+behavior	native	位置	skill	上游trigger	判定
+Mohua2	Dying	metadata:0		player:'dying'	OK
+Shishi	Death	metadata:0	shishi	source:'dieAfter'	OK
+SwdBusi	Dying	metadata:0		player:'dying'	OK
+SwdGuiyan2	Dying	metadata:0	swd_guiyan2	player:'dying'	OK
+SwdHuanhun	Dying	metadata:0		global:'dying'	OK
+SwdKongdongyinGuard	Death	metadata:0		player: "dieBefore"	OK
+SwdNvwashiGuard	Dying	metadata:0		global: "dying"	OK
+SwdSusheng	Death	metadata:0		global:'dieBefore'	OK
+XianjianShenmu	Dying	metadata:0		global:'dying'	OK
+XianjianShiying	Death	metadata:0		global:'dieBefore'	OK
+BossBianshen4	Death	metadata:0			REVIEW(上游未定位)
+BossBianshen4x	Death	metadata:0			REVIEW(上游未定位)
+BossQingmu2	Death	metadata:0			REVIEW(上游未定位)
+BossQingmu2x	Death	metadata:0			REVIEW(上游未定位)
+BossQingmu3	Death	metadata:0			REVIEW(上游未定位)
+BossQingmu3x	Death	metadata:0			REVIEW(上游未定位)
+GujianYunvyuanshen	Dying	metadata:0			REVIEW(上游未定位)
+ZhuWanzhongJi	Death	metadata:0	zhuwanzhongji		REVIEW(上游未定位)
+BossHuanrenDie	Death	metadata:0		player: 'phaseAfter'	REVIEW(非死亡触发)
+Niepan	Dying	metadata:0		(enable 主动技)	REVIEW(非死亡触发)
+SwdShouyin	Dying	metadata:0		(enable 主动技)	REVIEW(非死亡触发)
+XianjianChengxin	Dying	metadata:0		(enable 主动技)	REVIEW(非死亡触发)
+XianjianShuiyun5	Dying	metadata:0		(enable 主动技)	REVIEW(非死亡触发)
+XianjianChangnian	Death	metadata:0		player:'dieBegin'	需档(死亡前)
+XianjianCtianfu3	Death	metadata:0		player:'dieBegin'	需档(死亡前)
+XianjianXshuangren2	Death	metadata:0		player:'dieBegin'	需档(死亡前)
+YunchouDiychanyuan	Death	metadata:0		player:'dieBegin'	需档(死亡前)
