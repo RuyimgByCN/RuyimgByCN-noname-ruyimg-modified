@@ -5788,3 +5788,36 @@ event.trigger('phaseAfter');
 
 ⇒ **`L03` 与 `L19`（0 缺陷）、`L10`（2 缺陷）形成对比**：
 **同为小内容量来源，`L19` 一条都没有，`L03` 六分之四有缺陷。**
+
+### L27 选将美化（`select-beautify-upstream-liuli`）差异族：**7 技能 / 3 缺陷**（2026-10-19，第 751 轮）
+
+**先回答一个口径问题**：`L27` **不是纯 UI** —— 包内 `skills` 是 7 个**真技能**
+（`xiefang` 泄芳 / `new_zhixi` 止息 / `new_meibu` 每步 / `sbzhaxiang` 诈降 / `jishe` 集舍 + 2 个内部子技）
+⇒ **它属于「有规则内容」的来源，分母不变** ✅
+
+| 技能 | 上游 trigger | 原生 meta | 判定 |
+|---|---|---|---|
+| **`xiefang` 泄芳** | **`global: ["dieEnd", "gameDrawEnd"]`** | **`EventKind::PhaseEnd`** | ❗ **事件种类完全错**（死亡结束/摸牌结束 ≠ 阶段结束）|
+| **`new_zhixi` 止息** | **`player: "useCard"`**（使用瞬间）| `EventKind::CardUsed`（使用之后）| ⚠️ **需档（用牌前）**（已在台账 `需档` 中）|
+| `new_zhixi_mark2` | 未定位 | 无 | ✅ **内部标记子技** |
+| **`new_meibu` 每步** | **`global: "phaseUseBegin"`** | **`EventKind::PhaseBegin`** + `Play` 钉死 | ✅ **相符** |
+| `new_meibu_range` | 未定位 | 无 | ✅ **内部子技** |
+| **`sbzhaxiang` 诈降** | **`player: "useCard"`** | **无 TriggerMeta** | ❗ **未挂触发 ⇒ 效果不生效** |
+| `jishe` 集舍 | **`enable` 主动技** | 无 meta | ✅ **一致** |
+
+### 三条缺陷
+
+| id | 行为 | 缺陷 |
+|---|---|---|
+| **`L27a`** | `Xiefang` | **meta 用 `PhaseEnd`**，上游是死亡结束 + 摸牌结束 ⇒ **事件种类全错** |
+| **`L27b`** | `SbZhaXiang` | **无 TriggerMeta** ⇒ **技能不触发** |
+| （已在册）| `NewZhixi` | **用牌前 vs 用牌后**（缺档）|
+
+### `L27` 的状态
+
+| 检查 | 结果 |
+|---|---|
+| 技能数 | **7**（**5 真技能 + 2 内部子技**）|
+| **确认缺陷** | **3**（`L27a`、`L27b`、`NewZhixi` 需档）|
+| **一致** | **4**（2 内部 + `new_meibu` + `jishe`）|
+| **可签？** | ❌ **不可** |

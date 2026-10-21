@@ -61,6 +61,10 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "上游双幕（第4次 + 伤害后），原生单幕"),
     ("L03c", "B", "HlssGaiming", "L03", "player: judgeBefore", "无 TriggerMeta",
      "技能完全不触发（缺 judge-before 幕）"),
+    ("L27a", "A", "Xiefang", "L27", 'global: ["dieEnd", "gameDrawEnd"]', "EventKind::PhaseEnd",
+     "事件种类完全错（应为死亡后/摸牌后）"),
+    ("L27b", "A", "SbZhaXiang", "L27", 'player: "useCard"', "无 TriggerMeta",
+     "未挂触发（效果不生效）"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
 ]
 
