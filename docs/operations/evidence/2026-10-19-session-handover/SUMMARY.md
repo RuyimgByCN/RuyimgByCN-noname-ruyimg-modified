@@ -9,7 +9,7 @@
 |---|---|
 | 台账 | **54 条 = A 25 / B 29**（`ledger.tsv` 为唯一事实源）|
 | 四维 | **①54/54 ②36 行 ③54/54 ④等价 40 + 形态 13 = 已核 53/54（98%）** |
-| 守卫 | **`nc08_registered_defect_guards` 50 个 `#[ignore]`，`--ignored` 实测 0 passed / 50 failed**；覆盖率 **有守卫 53 / 缺 1 / 共 54 = 98.1%** |
+| 守卫 | **`nc08_registered_defect_guards` 51 个 `#[ignore]`，`--ignored` 实测 0 passed / 51 failed**；覆盖率 **有守卫 53 / 缺 1 / 共 54 = 98.1%** |
 | 门禁 | **`preflight.py` 19 项**（第 870 轮新增「已登记差异口径 20/54」）|（数字一致性 4 处 + 名称存在 2 处 + 链接/旧值/索引/映射/登记/枚举/覆盖/行数）|
 | 脚本单测 | **145 个全绿**；`engine-native` **1538 passed / 0 failed / 71 ignored** |
 | 自我更正 | **21 次**（清单见台账 README 各轮小节）|
@@ -137,7 +137,7 @@
 |---|---|
 | 缺陷总数 | **54**（A 25 / B 29）；**已修 0** |
 | 为什么一条都没修 | **每一行的 `location` 都落在未跟踪区**（`content/host/**`、`kernel/**`）⇒ **D9 需要维护者授权** |
-| 守卫 | **50 个 `#[ignore]`，`--ignored` 实测 50 failed / 0 passed**（全部为红）|
+| 守卫 | **51 个 `#[ignore]`，`--ignored` 实测 51 failed / 0 passed**（全部为红）|
 | 覆盖率 | `report_guard_coverage.py`：**54/55 = 98.2%**（月末复核口径：只剩 `SwdBaishouzhihuHeld` 待 D 类判定）|
 | 维度 ④ | **等价 40 / 形态相符 13 / 效果不符 1 / 待查 1 / 未读 0** ⇒ **74% 的行已逐分支核对** |
 
@@ -178,5 +178,5 @@
 | 旧值扫描 | `python3 -B scripts/check_stale_numbers.py` | **残留旧值 0 处** |
 | 台账↔枚举 | `python3 -B scripts/check_ledger_consistency.py` | **一致 ✅** |
 | 脚本单测 | `python3 -B -m unittest discover -s scripts` | **145 个全绿** |
-| 缺陷守卫 | `cargo test -p engine-native --test nc08_registered_defect_guards -- --ignored` | **0 passed / 50 failed（全部为红）** |
+| 缺陷守卫 | `cargo test -p engine-native --test nc08_registered_defect_guards -- --ignored` | **0 passed / 51 failed（全部为红）** |
 | 原生全量 | `cargo test --offline -p engine-native` | **1538 passed / 0 failed / 71 ignored** |
