@@ -1,16 +1,5 @@
 id	class	behavior	source	location	upstream	native	severity	fix	permission
-G14	A	GujianFoodYougeng	?	common.rs:620	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
 G14	A	GujianFoodZiyangdan	?	common.rs:623	player: "phaseBegin"	End, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	HuanleXuelunyangCard	?	common.rs:652	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdDaixing2	?	swd.rs:36	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHuanglinzhicongHeld	?	swd.rs:465	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHuanxing	?	swd.rs:701	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHujing	?	swd.rs:985	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHyunshen2	?	swd.rs:26	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdLexue	?	swd.rs:671	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdQinglongzhiguiHeld	?	swd.rs:390	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	XianjianQianfang	?	xianjian.rs:236	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	YunchouDiyguhuo	?	common.rs:467	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
 G20	A	GujianFoodLiyutang	?	common.rs:605	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G22	A	GwentCiguState	?	common.rs:631	player: "phaseDrawBegin"	Draw, begin:false	中	filter 从 `begin: false` 改为 `begin: true`（须在摸牌数确定前生效）	blocked
 G23	A	Hutian	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
@@ -52,7 +41,6 @@ L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	�
 6	A	Rangjie	L10	content/host/**	分支前无条件 draw()	仅分支 0 摸牌	高	分支 1 不摸牌	blocked
 L20a	B	XiguaMopaiFanbei	L20	content/host/**	player: phaseDrawBegin2	无 TriggerMeta	中	不触发 + 需「摸牌阶段第 2 次」档	blocked
 L20b	B	XiguaXueliangFanbei	L20	content/host/**	global: gameStart	EventKind::PhaseBegin	中	事件错（应为 GameStart，缺档）	blocked
-G14	A	SwdZhenjiu2	U05	swd.rs:675	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
 G19	A	SwdTiebi	U05	content/host/**	global: useCardToBegin	filter 含 t != owner	高	技能主被排除	blocked
 G20	A	WudianPaotaiFire	U05	common.rs:795	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G20	A	WudianZiyu	U05	common.rs:592	global:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
@@ -64,7 +52,6 @@ G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind:
 需档	B	Jifeng	U05	meta:0	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 5a	A	ShaDamageForceDiscard	U06	content/host/**	sha && notLink && countCards>0	共享行为仅 is_sha_like	高	共享行为未含苦无的 2 个条件（待复核）	blocked
 G20	A	PhaseEndRecoverOrDraw	U06	common.rs:536	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-G14	A	WudianGeju	U07	common.rs:684	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
 G20	A	WudianZhucheng	U07	common.rs:766	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 需档	B	WudianZhuchengGuard	U07	meta:0	target:'shaBefore'	CardUsed	高	修触发时机/补档位	blocked
 G23	A	YxsMenshen	U08	filtering/*	player:"phaseEnd",	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked

@@ -357,8 +357,19 @@ def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
         # 上游是主动技（无 trigger），原生却挂了阶段触发 ⇒ 凭空新增
         return "凭空新增触发"
     if "phaseBegin" in trigger and "phaseZhunbei" not in trigger:
+        # 上游是「回合开始」。原生**没有准备阶段**（`Phase` 只有 Judge/Draw/Play/Discard/End，
+        # **Judge 是第一相位**）⇒ 钉在 `Judge, begin: true` 等价于回合开始，不计缺陷；
+        # 钉在其它阶段才是真错位。（第 804 轮据此撤回 13 行，仅留 `GujianFoodZiyangdan`）
+        if PHASE_STEM[phase] == "Judge" and begin == "true":
+            return "OK"
         return "G14(钉死阶段)"
     stem = PHASE_STEM[phase]
+    if f"phase{stem}Begin" in trigger and begin == "true" and PHASE_STEM[phase] == "Judge":
+        # 上游是「回合开始」（`phaseBegin`），原生钉在 `Judge, begin: true`。
+        # 原生没有「准备阶段」（`Phase` 只有 Judge/Draw/Play/Discard/End，**Judge 是第一相位**）
+        # ⇒ **判定阶段开始 == 回合开始** ⇒ **等价**，不计缺陷。
+        # （第 804 轮：13 行据此撤回；只有钉在 End/Play/Draw/Discard 的才是真错位）
+        return "OK"
     if f"phase{stem}Begin" in trigger and begin == "false":
         # 上游在阶段「开始」生效，原生却在「结束」⇒ 晚一步（摸牌数已定，效果失效）
         return "G22(晚一步)"

@@ -145,15 +145,6 @@ macro_rules! g14_guard {
     };
 }
 
-g14_guard!(g14_diyguhuo_any_phase, "YunchouDiyguhuo", "filtering/common.rs");
-g14_guard!(g14_yougeng_any_phase, "GujianFoodYougeng", "filtering/common.rs");
-g14_guard!(g14_xuelunyang_any_phase, "HuanleXuelunyangCard", "filtering/common.rs");
-g14_guard!(g14_geju_any_phase, "WudianGeju", "filtering/common.rs");
-g14_guard!(g14_hyunshen2_any_phase, "SwdHyunshen2", "filtering/swd.rs");
-g14_guard!(g14_daixing2_any_phase, "SwdDaixing2", "filtering/swd.rs");
-g14_guard!(g14_zhenjiu2_any_phase, "SwdZhenjiu2", "filtering/swd.rs");
-g14_guard!(g14_huanxing_any_phase, "SwdHuanxing", "filtering/swd.rs");
-g14_guard!(g14_qianfang_any_phase, "XianjianQianfang", "filtering/xianjian.rs");
 
 // ------------------------------------------------- 凭空新增 / 自加分支（A 类）
 
@@ -318,9 +309,6 @@ fn jiguanyuan_gain_must_trigger_on_damage() {
 
 // ------------------------------------------- G14 补充：相等比较写法与卡片 global 技能
 
-g14_guard!(g14_hujing_any_phase, "SwdHujing", "filtering/swd.rs");
-g14_guard!(g14_qinglongzhigui_any_phase, "SwdQinglongzhiguiHeld", "filtering/swd.rs");
-g14_guard!(g14_huanglinzhicong_any_phase, "SwdHuanglinzhicongHeld", "filtering/swd.rs");
 
 // ------------------------------------- 能力守卫：缺失的事件/阶段槽位是否已补
 
