@@ -165,3 +165,58 @@ python3 -B scripts/report_event_arms.py --check   # 有 REVIEW 行时 exit=1
 
 ⇒ **若要排优先级，G23 应在 G20 之前**；但它属「把 `..` 补成 `End, begin: false`」的**一行改动**，
 **与 G20 的修法相同**（都是把阶段钉对）⇒ **可合并为一次批处理** ✅
+
+---
+
+## 8 反向核查：**`PhaseBegin` 未钉阶段的 18 条**（第 735 轮）
+
+G23 查的是「`PhaseEnd` 未钉阶段 ⇒ 多触发」。反过来，`PhaseBegin` 未钉阶段是**正确的**
+（上游 `phaseBegin` 本来就指「任意阶段开始」）。逐条核对 18 条：
+
+| 类 | 条数 | 说明 |
+|---|---:|---|
+| ✅ **与上游一致**（上游 `phaseBegin`，任意阶段）| **16** | **不钉阶段是对的** ✅ |
+| ⚠️ **上游是 `phaseDiscardEnd`** | **2** | `SwdWangchenHeld` / `SwdXielv` |
+| ❗ **meta 与 filter 自相矛盾** | **1** | `SwdBaishouzhihuHeld`（**见下**，与上两项有重叠计数）|
+
+### 8.1 `SwdWangchenHeld` / `SwdXielv`：**相邻相位，不是 5 倍**
+
+两者的 filter 其实是**钉死**的（用相等比较而不是解构绑定）：
+
+```rust
+matches!(event, EventData::Phase { player, phase, begin }
+    if *player == owner && *phase == Phase::End && *begin && ...)
+```
+
+⇒ **只在「结束阶段开始」触发，每回合一次** ✅ —— 我第一版的「未钉阶段」检测**漏掉了这种写法**（只找 `phase:` 绑定），
+把它们误记为「5 倍」。**这是本轮自查出的第二类假阳性** ⚠️
+
+上游是 **`phaseDiscardEnd`（弃牌阶段结束）**，原生是 **`Phase::End, begin`（结束阶段开始）** ——
+两者在流程上**相邻**（弃牌阶段结束 → 结束阶段开始），**只差「结束阶段自身动作之前/之后」** ⇒ **轻微时机差异** ⚠️
+
+### 8.2 `SwdBaishouzhihuHeld`：**meta 与 filter 矛盾 ⇒ 永不触发** ❗
+
+| 层 | 内容 |
+|---|---|
+| **meta** | `EventKind::PhaseEnd` ⇒ 事件带 `begin: false` |
+| **filter** | `Phase { player, begin, .. } if *player == owner && **\*begin** && …` ⇒ **要求 `begin: true`** |
+
+⇒ **两者不可能同时成立** ⇒ **该触发永远不会发生** ❗
+⇒ 这解释了它为什么在枚举里既「未定位上游」又「无闸门」：**它根本没在跑**。
+
+**判定**：**登记为「触发器失效」缺陷**（与 G23 的多触发相反，属**不触发**）❗
+**修法**：把 filter 的 `*begin` 改成 `!*begin`（一行）⇒ **A 类**
+
+### 8.3 计数影响
+
+| 类 | 变化 |
+|---|---|
+| **A 类** | **43 → 44**（+`SwdBaishouzhihuHeld` 触发失效）|
+| **确认总数** | **88 → 89** |
+| **轻微时机差异（不计缺陷）** | +2（`SwdWangchenHeld` / `SwdXielv`），记入**登记差异** ⚠️ |
+
+### 8.4 方法教训（本会话第 3 次同类）
+
+**「没匹配到我的正则」≠「代码里没有」** ——
+本轮两次假阳性都来自**检测手段的形状**（`phase:` 绑定 vs `*phase ==` 比较），
+**而不是代码本身有问题**。 ⇒ **检测器必须先证明它能识别两种写法，再报数** ✅
