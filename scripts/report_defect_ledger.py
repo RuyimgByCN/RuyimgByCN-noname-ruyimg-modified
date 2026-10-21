@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 import re
 import sys
 from pathlib import Path
@@ -158,9 +159,44 @@ def event_out():
             yield behavior, native, f"{loc}:{line}", skills.get(key, "") or "", trigger, classifier(native, trigger)
 
 
+def source_of(behavior: str) -> str:
+    """behavior -> 来源 id（经 host 键 -> 包 -> 来源），查不到返回 `?`。"""
+    try:
+        mapper = _load("map_package_sources", ROOT / "scripts" / "map_package_sources.py")
+        by_src, _name = mapper.mapping()
+    except Exception:
+        return "?"
+    keys = phase.host_keys()
+    key = keys.get(behavior, "").removeprefix("host:")
+    if not key:
+        return "?"
+    for source, packages in by_src.items():
+        for package in packages:
+            path = ROOT / "packages" / "extensions" / package / "assets"
+            if not path.is_dir():
+                continue
+            for asset in path.glob("*.json"):
+                try:
+                    doc = json.loads(asset.read_text(encoding="utf-8"))
+                except Exception:
+                    continue
+                for skill in doc.get("skills") or []:
+                    if isinstance(skill, dict) and skill.get("mapping") == f"host:{key}":
+                        return source
+    return "?"
+
+
+def by_source(rows: list[list[str]]) -> dict[str, list[str]]:
+    out: dict[str, list[str]] = {}
+    for row in rows:
+        out.setdefault(source_of(row[2]), []).append(row[0])
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--write", type=Path, help="write TSV to this path")
+    ap.add_argument("--by-source", action="store_true", help="also print per-source counts")
     args = ap.parse_args()
 
     rows = build()
@@ -178,6 +214,12 @@ def main() -> int:
     for r in rows:
         by_class[r[1]] = by_class.get(r[1], 0) + 1
     print(f"合计 {len(rows)} 条：{by_class}", file=sys.stderr)
+
+    if args.by_source:
+        counts = by_source(rows)
+        print("\n来源\t条数\t缺陷族", file=sys.stderr)
+        for source, ids in sorted(counts.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+            print(f"{source}\t{len(ids)}\t{','.join(sorted(set(ids)))}", file=sys.stderr)
     return 0
 
 
