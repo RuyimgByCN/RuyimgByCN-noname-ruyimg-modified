@@ -147,9 +147,14 @@ def classify_death(which: str, trigger: str) -> str:
     if not trigger:
         return "REVIEW(上游未定位)"
     if trigger.startswith("(enable"):
-        # 上游是主动技（`enable:'chooseToUse'` + filter 要求 `event.type=='dying'`），
-        # 即「濒死自救」；原生却用 `Death`（死亡已结算）⇒ 触发太晚，无法自救
-        return "G24(濒死主动技挂成 Death)"
+        # 上游是主动技（`enable:'chooseToUse'` + filter 要求 `event.type=='dying'`）。
+        # ⚠ 必须先看原生事件：若原生已是 `Dying` 则正确；只有原生用 `Death` 才是缺陷。
+        # （第 781 轮：原规则只看上游 ⇒ 4 条 `Dying` 正确行为被误判成 G24）
+        if which == "Dying":
+            return "OK"
+        if which == "Death":
+            return "G24(濒死主动技挂成 Death)"
+        return "REVIEW(濒死主动技)"
     if "dieAfter" in trigger or "die" in trigger and "dieBegin" not in trigger:
         return "OK" if which == "Death" else "REVIEW(死亡面档位)"
     if "dieBegin" in trigger or "dieBefore" in trigger:

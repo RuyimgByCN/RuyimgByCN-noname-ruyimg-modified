@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**91 条**）—— 2026-10-19 第 771 轮
+# 缺陷台账（机器可读，**87 条**）—— 2026-10-19 第 781 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -7,9 +7,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **46** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **42** |
 | **B（需扩枚举或引擎能力）** | **45** |
-| **合计** | **91** |
+| **合计** | **87** |
 
 ## 2 按缺陷族
 
@@ -317,3 +317,44 @@ python3 -B -m unittest discover -s scripts -p 'test_report_defect_ledger.py'
 |---|---|
 | `G23 Hutian`、`G23 SwdMufengHeld` | **偶合正确**（未钉阶段但本地只在该帧触发）⇒ **无需守卫** |
 | `失效 SwdBaishouzhihuHeld` | **语义缺口**，需产品判定后才能写断言（D 类）|
+
+---
+
+## 14 第 781 轮：❌ 撤回 G24 四行（91 → 87）——规则缺了「原生」前提
+
+对 91 行做**逐族抽查 6 行**（G14/G18/G19/G20/G22/G23/G23b/G24），**6 行里 5 行准确、1 族全错**：
+
+| 行 | 代码实际 | 台账判定 | 结论 |
+|---|---|---|---|
+| `HlssFengqi` | `Phase::Judge, begin: true` | **G18**（应 `phaseZhunbeiBegin`）| ✅ 准确 |
+| `Hutian` | `Phase { begin: false }` 未钉阶段 | **G23**（5×/回合）| ✅ 准确 |
+| `SwdJiguanyuanGain` | `Phase { begin: false }` | **G23b**（上游 `damageEnd`）| ✅ 准确 |
+| `GwentCiguState` | `Phase::Draw, begin: false` | **G22**（晚了）| ✅ 准确 |
+| `WudianZhucheng` | `Phase::End, begin: true` | **G20**（早了）| ✅ 准确 |
+| **`Niepan` 等 4 条** | **`EventKind::Dying`** | **G24（挂成 Death）** | ❌ **全错** |
+
+### 错因：规则只看上游，不看原生
+
+```python
+if trigger.startswith("(enable"):        # 上游是主动技
+    return "G24(濒死主动技挂成 Death)"    # ← 直接判缺陷，没检查原生事件
+```
+
+**上游是「濒死主动技」只说明它需要 `Dying`，不代表原生没有 `Dying`。**
+实际 4 条全部是 `event: EventKind::Dying` + `filter` 要求 `Dying` ⇒ **完全正确**。
+
+**修正后规则**：
+
+```python
+if trigger.startswith("(enable"):
+    if which == "Dying": return "OK"
+    if which == "Death": return "G24(...)"
+```
+
+⇒ **`death` 族从 10 OK / 4 G24 变成 14 OK / 0 G24** ✅
+⇒ **台账 91 → 87（A 42 / B 45）**
+
+### 教训（第 8 次自我更正）
+
+**判定规则里的每一项都必须有「原生侧」的对应检查。** 只看上游就给结论，
+等价于「假定原生一定是错的」—— 这是**反向的确认偏误** ⚠️
