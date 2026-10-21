@@ -6160,3 +6160,30 @@ event.trigger('phaseAfter');
 1. **张数与登记：201 张卡 / 128 个 kind，`catalog.rs` 100% 登记** ✅
 2. **源码挂接：128/128 在 `catalog.rs` 之外有引用** ✅
 3. **效果是否正确：未核对**（需逐张读效果步，`EffectRequest` 级对照工具仍未备）⚠️
+
+### 卡面覆盖率已脚本化：`report_card_coverage.py`（第 775 轮）
+
+**卡面数字在 773–774 两轮里出现过 3 个不同结果**（48/79 → 128/128 → ……）——
+原因是**手工测量每次换搜索范围**。⇒ 现已固化为脚本 + 单测：
+
+```text
+python3 -B scripts/report_card_coverage.py --check
+合计                         201
+唯一 kind                     128
+catalog 已登记               128  (100.0%)
+catalog 之外有源码引用        128  (100.0%)
+完全无引用                     0
+```
+
+**脚本固化的口径**（这也是 774 轮更正的结论）：
+
+* 卡牌来源 = 6 个带卡的 U05 子包（`xianjian`/`ow` 的 `cards` 为空，**不入统计**）
+* 「有引用」= `crates/**/*.rs`（**排除 `catalog.rs`**）里出现 `CardKind::X` **或** `kind` 字面量
+* **不判断效果正确性**（脚本末尾会打印这条限定）
+
+**单测 7 个**，其中两条是为这次踩的坑加的：
+
+| 测试 | 防什么 |
+|---|---|
+| `test_pack_names_match_real_directories` | **包名写错会静默数到 0**（第 775 轮真的发生了）|
+| `test_check_mode_passes` | 数字漂移（`--check` 依赖 `EXPECTED`）|
