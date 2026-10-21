@@ -5558,3 +5558,27 @@ lib.skill.zaibian = { trigger: { player: 'phaseUseBegin' }, filter: 人口计算
 ⇒ **若「已对照且可接受」的标准是「差异族完备 + 无确认缺陷」** ⇒ **`L19` 已满足** ✅
 ⇒ **它比 `L10` 更接近「第一个可签来源」** —— **`L10` 还有 2 条缺陷待修，`L19` 一条都没有** ❗
 ⇒ **但仍需产品判定**：**「实现位置不同（filter vs step）但净效相同」是否算「已对照」** ⚠️
+
+### L29 龙血玄黄（`longxue-upstream-liuli`）初查：**6 技能中 5 个卡在缺档**（2026-10-19，第 717 轮）
+
+**包**：**0 卡、4 技能、1 武将（`mb_caomao` 带 2 个技能）**
+
+| 技能 | 上游 | 挂载 | 判定 |
+|---|---|---|---|
+| **`mbcmqingzheng`** | **`player: phaseUseBegin` + `enable: phaseUse`**（**335 754 B** ❗）| ✅ `host:mbcmqingzheng` | ⚠️ **触发相符**（**52 条已核 ✅**），**但 335 KB 的内容未逐条对** ❗ |
+| **`mbcmjiushi`** | **`player: damageBegin3`**（**7 334 B**）| ❌ **`None`** | ⚠️ **`damageBegin3` = 「第三次」⇒ G15 家族** |
+| **`mbcmfangzhu`** | **`player: phaseUseAfter`**（3 907 B）| ❌ `None` | ⚠️ **「出牌阶段后」⇒ G15 家族** |
+| **`mbjuejin`** | **无 trigger**（**7 035 B**，在 `十周年UI`）| ❌ `None` | ❓ **无触发 ⇒ 可能是 `enable`/`mod` 型，需细读** |
+| **`mbqianlong`** | **`global: phaseBefore` + `player: enterGame`** | ✅ `host:mbqianlong` | ❗ **「阶段前」+「入场」⇒ 两类缺档** |
+| **`mbweitong`** | **`global: phaseBefore` + `player: enterGame`**（891 B）| ✅ `host:mbweitong` | ❗ 同上 |
+
+### 新增的两类缺档
+
+| 缺档 | 覆盖 |
+|---|---|
+| **「入场」（`enterGame`）** | `mbqianlong` / `mbweitong` |
+| **「阶段前」（`phaseBefore`）** | 同上（**可能可归入既有「之前」类** ⚠️）|
+
+⇒ **缺档分类可能由七类增至八类**（**「入场」是新的**）❗
+⇒ **`L29` 是「小内容量、高缺档密度」的第二个例子**（**第一个是 `L20`**）⚠️
+⇒ **`L29` 不能签** —— **6 技能里 5 个卡在缺档或未挂载** ❌
