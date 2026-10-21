@@ -36,6 +36,7 @@ class CommentCountTests(unittest.TestCase):
 
     def test_known_family_counts(self):
         self.assertEqual(self.counts.get("G14"), 1)
+        self.assertIsNone(self.counts.get("G18"))
         self.assertEqual(self.counts.get("G23"), 12)
         self.assertEqual(self.counts.get("G20"), 5)
         self.assertEqual(self.counts.get("G19"), 1)

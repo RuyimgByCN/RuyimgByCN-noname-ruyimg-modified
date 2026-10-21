@@ -389,7 +389,10 @@ def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
     if "phaseEnd" in trigger:
         return "G20(早一步)" if begin == "true" else "OK"
     if "phaseZhunbeiBegin" in trigger:
-        return "G18(准备阶段缺档)"
+        # 上游是「准备阶段开始」。原生**没有准备阶段**，`Judge, begin: true` 即回合开始 ⇒
+        # 与 prepare 开始同刻（prepare 是回合的第一个阶段）⇒ **等价**；钉在其它相位才是错位。
+        # （第 805 轮：2 行据此撤回，G18 类消失）
+        return "OK" if PHASE_STEM[phase] == "Judge" and begin == "true" else "G18(准备阶段缺档)"
     if "phaseDiscardEnd" in trigger and phase == "End" and begin == "true":
         # 弃牌阶段结束 → 结束阶段开始 是相邻帧，差异仅在「结束阶段自身动作之前/之后」
         return "相邻相位(可接受)"

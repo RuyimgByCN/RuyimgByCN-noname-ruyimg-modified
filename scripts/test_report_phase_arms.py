@@ -68,6 +68,10 @@ class ClassificationTests(unittest.TestCase):
         # 原生无准备阶段 ⇒ Judge 是首相位 ⇒ 钉 Judge 等价于回合开始（第 804 轮）
         self.assertEqual(self.mod.classify("X", "Judge", "true", 'player: "phaseBegin"'), "OK")
 
+    def test_classify_prepare_is_turn_start(self):
+        # 原生无准备阶段 ⇒ prepare 开始与 Judge 开始同刻（第 805 轮）
+        self.assertEqual(self.mod.classify("X", "Judge", "true", 'player: "phaseZhunbeiBegin"'), "OK")
+
     def test_classify_nonfirst_phase_is_g14(self):
         # 钉在 End（非首相位）才是真错位
         self.assertTrue(self.mod.classify("X", "End", "true", 'player: "phaseBegin"').startswith("G14"))
