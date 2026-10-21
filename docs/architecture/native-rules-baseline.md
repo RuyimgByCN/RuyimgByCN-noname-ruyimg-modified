@@ -5892,3 +5892,28 @@ event.trigger('phaseAfter');
 
 ⇒ **`mbcmqingzheng` 有 335 754 B**，是本包内容的主体；**只核了触发面，内容未逐条对照** ⚠️
 ⇒ **因此 `L29` 的「一致 1」只覆盖触发，不覆盖行为** —— 这条限定必须保留 ❗
+
+### U08 英雄杀（`hero-kill-upstream-noname`）差异族：**5 技能 / 4 缺陷**（2026-10-19，第 757 轮）
+
+| 技能 | 上游 trigger | 原生 meta | 判定 |
+|---|---|---|---|
+| `yxs_fanji` 反击 | `player: "damageEnd"` | `EventKind::Damage` | ✅ **相符** |
+| **`yxs_fanji2`** | **`player: "shaBegin"`** | **无 TriggerMeta** | ❗ **不触发**（sha 幕缺档）|
+| **`yxs_menshen` 门神** | **`player: "phaseEnd"`** | **`EventKind::PhaseEnd` 未钉阶段** | ❗ **G23（每阶段 5×）**（**已在守卫 `g23_menshen_turn_end`**）|
+| **`yxs_menshen2`** | **`target: ["shaBegin", "juedouBegin"]`** | **无 TriggerMeta** | ❗ **不触发**（sha 幕 + 决斗幕）|
+| **`yxs_menshen3`** | **`player: ["phaseBegin", "dieBegin"]`** | `EventKind::PhaseBegin` | ⚠️ **少「死亡前」幕** |
+
+### ❌ 更正：此前记的「5/5 全不可达」是错的
+
+会话早期把 `U08` 记为「**5 条已对照但全不可达**」。
+本轮逐个核 meta：**5 个技能里 1 个相符、4 个有明确缺陷**，**没有一条是「不可达」** ❌
+
+⇒ **「不可达」这个判定当时依据的是「无 host 挂载」，而这 5 个技能都有 `host:` 键** ⚠️
+⇒ **再次印证：`(None,None)`/「无挂载」不能推出「不可达」**（本会话第 2 次同类更正）
+
+### 计数
+
+| 类 | 条数 |
+|---|---:|
+| **缺陷** | **4**（`U08a`/`U08b`/`U08c` 新增 + `YxsMenshen` G23 已在册）|
+| **一致** | **1**（`yxs_fanji`）|

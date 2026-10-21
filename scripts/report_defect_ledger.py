@@ -79,6 +79,11 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "缺「阶段前」与「入场」两幕"),
     ("L29b", "B", "MbWeitong", "L29", "global: phaseBefore + player: enterGame", "EventKind::PhaseBegin",
      "缺「阶段前」与「入场」两幕"),
+    ("U08a", "B", "YxsFanji2", "U08", 'player: "shaBegin"', "无 TriggerMeta", "不触发（sha 幕缺档）"),
+    ("U08b", "B", "YxsMenshen2", "U08", 'target: ["shaBegin", "juedouBegin"]', "无 TriggerMeta",
+     "不触发（sha 幕 + 决斗幕缺档）"),
+    ("U08c", "B", "YxsMenshen3", "U08", 'player: ["phaseBegin", "dieBegin"]', "EventKind::PhaseBegin",
+     "少「死亡前」幕"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
 ]
 
