@@ -1275,17 +1275,20 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 | **`SwdMufengHeld`** | `ctx.draw_cards(owner,1)` | 「结束阶段…**发现**一张牌」`discoverCard` | ✅ **归因正确**，注释「翻面」错 |
 | **`YxsMenshen3`** | 移除全场 `yxs_menshen2`（skills+marks）| **同** | ✅ **归因正确**，注释「反击」错 |
 | **`SwdLqingcheng`** | `for _ in 0..3 { 摸牌; 红色则收集 }` | `phaseEnd` 判定循环收 3 张 | ✅ **归因正确**，注释「狩猎」错 |
-| **`WudianFuchou2`** | `fuchou_marked` 里每个来源：摸 1 + 对其用虚拟【杀】| **`target: 'shaBefore'`**（不是 `phaseAfter`）| ⚠️ **归因待改**：**不属相位族**，应记「事件种类错（上游 `shaBefore`）」|
+| **`WudianFuchou2`** | `fuchou_marked` 里**每个**来源：摸 1 + 对其用虚拟【杀】| **`fuchou2`：`global: phaseAfter`**，`storage.fuchou2` **`shift()` 一个**目标，`draw()` + 若能则用【杀】| ✅ **归因正确（G15 phaseAfter 成立）**；**但多出「一次处理全部 vs 逐个」的差异** ⚠️ |
 
 ⇒ **第 819–820 轮的「44% 不符」彻底作废** ✅
 ⇒ **真正的偏差是「注释」，不是「归因」** —— **本会话已累计 5 处注释与实际不符**：
 `YxsMenshen`、`Hutian`、`SwdMufengHeld`、`YxsMenshen3`、`SwdLqingcheng`（外加变体名错 1 处）⚠️
 
-### `WudianFuchou2` 的处理
+### `WudianFuchou2` 的处理（第 823 轮更正）
 
-* 其 **G15（phaseAfter）标签来自解析器误配**（解析到 `phaseAfter` 而非 `shaBefore`）
-* **缺陷本身仍在**（原生在 `Phase{begin:false}` 触发，上游在 `shaBefore` 触发 ⇒ **事件种类完全错**）
-* ⇒ **台账中该行保留，但标签应改为「事件种类错」**；**因分类系统未改，暂以本注记说明** ⚠️
+**我上一轮说「上游实为 `shaBefore`」是错的** —— 那是 `wudian_fuchou`；本行解析的是 **`fuchou2`**，上游确为 **`global: phaseAfter`** ⇒ **G15 分类成立** ✅
+
+**但读上游 `content` 发现第二个差异**：
+上游 `player.storage.fuchou2.shift()` ⇒ **每次触发只处理一个标记目标**；
+原生 `for src in marked` ⇒ **一次处理全部** ⚠️
+⇒ **该行可能同时有两个缺陷（时机 + 批量）** ⇒ **记为「G15 + 批量差异待核」**
 
 ### 结论（归因层的最终判断）
 
