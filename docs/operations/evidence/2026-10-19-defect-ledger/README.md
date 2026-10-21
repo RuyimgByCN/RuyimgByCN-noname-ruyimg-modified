@@ -976,8 +976,38 @@ Xiuluo     => matches!(event, EventData::Phase { ... Phase::Judge, begin: true .
 
 | 档 | 条数 | 含义 |
 |---|---:|---|
-| **等价已确认** | **5** | 两侧逻辑逐条对过（`WudianZhucheng`、`SwdBaishouzhihuHeld`、`WudianGuangshuSpade`、`WudianJidong`、`XianjianLingyu`）|
+| **等价已确认** | **6** | 两侧逻辑逐条对过（`WudianZhucheng`、`SwdBaishouzhihuHeld`、`WudianGuangshuSpade`、`WudianJidong`、`XianjianLingyu`、`YxsMenshen`）|
 | **效果已读、等价未定** | **0** | —— |
-| **未读** | **50** | 仍未开始 |
+| **未读** | **49** | 仍未开始 |
 
 ⇒ **把「看过一半」和「确认等价」分开记**，避免把「读了原生」当成「核过等价」 ✅
+
+---
+
+## 35 第 811 轮：`YxsMenshen` 等价——**但代码注释是错的**
+
+| 侧 | 逻辑 |
+|---|---|
+| **上游**（`yxs_menshen`）| `phaseEnd` + `filter: players.length>1` ⇒ **选一名非自己角色** ⇒ `target.storage.yxs_menshen2 = player` + `target.addSkill('yxs_menshen2')` |
+| **原生**（`step/skills_targets.rs`）| `Act`：`alive_players` 过滤 `!= owner` ⇒ **选一名非自己角色**；`TargetChoice`：校验存活/非自己 ⇒ 标记目标 |
+
+⇒ **效果等价** ✅
+
+### ⚠ 原生注释写的是「门神·清除：移除全场门神实例与标记」
+
+**注释与实际代码相反**：代码是**选目标 + 标记**，不是「清除」。
+
+**我一开始按注释判了「疑似不等价」**，直到读进 `TargetChoice` 的实际分支才发现注释是错的 ❌
+
+⇒ **教训（第 15 次）：注释也会错。判断等价必须读代码，注释只能当索引。**
+⇒ **建议**：该注释应改为「门神·标记：选一名非自己角色并标记」，**已记入待办**（不改未跟踪区）。
+
+### 同时观察到的三行（仍未判）
+
+| 行为 | 原生 | 上游 | 状态 |
+|---|---|---|---|
+| `Hutian` | 「选**红桃**手牌 → 选目标 → 弃牌 + 伤害转移 + 授予天香·受」| `phaseEnd`，`filterCard:true`（**任意牌**），`filterTarget: maxHp >= 选牌数` | ⚠️ **原生多「红桃」限制，待核** |
+| `SwdLingxin` | 「渔人：锁定（sha 机器内联臂查询），**无独立效果步**」| 上游未定位 | 🔍 效果在 sha 机器里，需另查 |
+| `Xuanyuan` | 「循环弃同花色牌 → 记额外闪数」| `phaseEnd`，需黑桃牌 + 弃牌堆有 `xuanyuanjian` | 🔍 上游 content 被截断，待核 |
+
+⇒ **维度 ④：等价 6 / 待核 3 / 未读 46**
