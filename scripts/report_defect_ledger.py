@@ -54,8 +54,6 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
     ("6", "A", "Rangjie", "L10", "分支前无条件 draw()", "仅分支 0 摸牌", "分支 1 不摸牌"),
     ("G23b", "A", "SwdJiguanyuanGain", "U05", "damageEnd + damageSource", "EventKind::PhaseEnd", "事件种类完全错"),
     ("G23b", "A", "SwdBaishouzhihuHeld", "U05", "player: 'discardEnd'（弃牌阶段结束）", "Phase { begin: true } 未钉阶段", "上游是弃牌阶段结束，原生每个阶段开始都触发"),
-    ("L03b", "B", "HlssYueyin", "L03", "player: [damageBegin4, damage]", "meta 仅 DamageBefore",
-     "上游双幕（第4次 + 伤害后），原生单幕"),
     ("L03c", "B", "HlssGaiming", "L03", "player: judgeBefore", "无 TriggerMeta",
      "技能完全不触发（缺 judge-before 幕）"),
     ("L20a", "B", "XiguaMopaiFanbei", "L20", 'player: phaseDrawBegin2', "无 TriggerMeta",
