@@ -559,3 +559,24 @@ macro_rules! pin_phase_guard {
 
 pin_phase_guard!(guard_hutian_pin_end, "Hutian", "End", "上游 phaseEnd（回合末一次）");
 pin_phase_guard!(guard_mufeng_pin_end, "SwdMufengHeld", "End", "上游 phaseEnd（有每回合标记，但仍应钉 End）");
+
+// ------------------------------------- 效果缺陷：`Tianxiang` 第一步选错对象
+
+#[test]
+#[ignore = "把候选改成「有 sbtianxiang 标记的角色」后本守卫转绿"]
+fn guard_tianxiang_selects_marked_target() {
+    use std::path::Path;
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("src/content/host/step/skills_damage.rs");
+    let text = std::fs::read_to_string(&path).expect("读不到 skills_damage.rs");
+    let start = text.find("HostBehavior::Tianxiang =>").expect("没有 Tianxiang 臂");
+    let end = text[start + 10..]
+        .find("HostBehavior::")
+        .map(|offset| start + 10 + offset)
+        .unwrap_or(text.len());
+    let arm = &text[start..end];
+    assert!(
+        arm.contains("sbtianxiang"),
+        "上游选的是带 sbtianxiang 标记的角色；原生却按红桃手牌选（效果不符）",
+    );
+}

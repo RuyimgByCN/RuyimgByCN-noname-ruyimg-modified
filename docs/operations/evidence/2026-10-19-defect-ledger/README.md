@@ -2599,3 +2599,12 @@ let yxs_fanji2_direct_hit = {
 ⇒ **判为效果不符**（**第 2 例**；第 1 例是 `SwdMufengHeld` 的 discover vs draw）
 
 ⇒ **维度 ④：等价 40 / 形态相符 12 / 效果不符 2 / 待查 1**
+
+### 第 888 轮：给 `Tianxiang` 的效果缺陷补守卫
+
+新增 `guard_tianxiang_selects_marked_target`（`#[ignore]`），断言 `skills_damage.rs` 的 `Tianxiang` 臂里出现 **`sbtianxiang`**（上游的标记名）。
+
+**实测为红** ✅ —— 原生臂里没有该标记，印证「选红桃手牌」而非「选带标记的角色」。
+
+⇒ **守卫总数 50 → 51；`--ignored` 51 failed / 0 passed** ✅
+⇒ **覆盖率仍 98.1%（53/54）**：`Tianxiang` 此前已由相位行覆盖，**本轮新增的是「效果」维度的守卫** ⚠️
