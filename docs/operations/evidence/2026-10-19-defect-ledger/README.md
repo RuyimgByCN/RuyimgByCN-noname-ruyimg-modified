@@ -764,3 +764,42 @@ if has_yueyin && need != 0 && recorded & need != 0 { /* 免除 */ }
 
 ⇒ **凡是「缺某个幕」的判断，都必须确认效果步没有等价逻辑** ⚠️
 ⇒ 这条对剩余的 `需档` 21 条同样适用：**它们也需要同样的确认**（当前只确认了「引擎没有该槽位」，**未确认效果步没有等价实现**）❗
+
+---
+
+## 28 第 799 轮：21 条 `需档` 的**效果步全部已实现**——缺陷只剩「触发时机」
+
+承第 798 轮的教训（`L03b` 是「效果步里有等价实现」），本轮把 21 条 `需档` 逐一查效果步：
+
+| 结果 | 条数 |
+|---|---:|
+| **效果步有真实现**（非 `Flow::Done` 平凡臂）| **21 / 21（100%）** |
+| 效果步缺失或平凡 | **0** |
+
+| 行为 | 上游缺失的槽位 | 效果步 |
+|---|---|---|
+| `HuanleMonkeyCard` | `useCardToBegin` | ✅ 有实现 |
+| `Liaoyuan` | `shaBegin` | ✅ |
+| `SwdCyxianjiang` / `SwdNingshuang` / `XianjianXjzhimeng2` | `useCardToBegin` | ✅ |
+| `SwdDunxing` / `SwdHuanyin` / `Yihua` / `Jifeng` | `useCardToBefore` | ✅ |
+| `SwdJiang` | `useCardToPlayered` | ✅ |
+| `SwdLianda` / `XianjianXunying` | `shaAfter` | ✅ |
+| `SwdMojian` / `SwdTiebi` | `shaBegin` | ✅ |
+| `XianjianChangnian` / `Ctianfu3` / `Xshuangren2` / `YunchouDiychanyuan` | `dieBegin` | ✅ |
+| `YunchouJiaoxia` / `Zhenlie` | `useCardToTargeted` | ✅ |
+| `WudianZhuchengGuard` | `shaBefore` | ✅ |
+
+### 这意味着什么
+
+**这 21 条不是「效果没写」，而是「效果写好了但触发时机不对」** ✅
+
+⇒ **修法固定为两件事**：**①加枚举槽位**（3 个新 `EventKind` 变体）**②把 meta 从 `CardUsed`/`Death` 改成新槽位** ⇒
+**每个行为约 2 行改动 + 1 个枚举** ✅
+
+⇒ **这也解释了为什么 `L03b` 能被效果步吸收**：`damageBegin4` 只需要「计数到第 4 次」，可以在 `Damage` 幕加计数器；
+而 `useCardToBegin`/`shaBegin`/`dieBegin` 需要**在另一个时刻被调用**，效果步再完整也没用 ⚠️
+
+### 边界
+
+**本轮只确认「效果步非平凡」**，**没有逐条读效果逻辑是否与上游一致** ⚠️
+⇒ **「时机错」已确认，「效果对不对」仍未核** —— 这两件事必须分开记 ✅
