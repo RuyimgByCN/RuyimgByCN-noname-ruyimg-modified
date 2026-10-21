@@ -40,6 +40,20 @@ class CommentCountTests(unittest.TestCase):
         self.assertEqual(self.counts.get("G20"), 5)
         self.assertEqual(self.counts.get("G19"), 3)
 
+    def test_progress_total_matches_ledger(self):
+        # 进度主稿头部的 `N 条 = A x / B y` 必须与台账一致（新增校验）
+        import re
+
+        text = self.mod.PROGRESS.read_text(encoding="utf-8")
+        match = self.mod.TOTAL_CLAIM.search(text)
+        self.assertIsNotNone(match, "进度主稿里找不到总账行")
+        total, a, b = (int(match.group(i)) for i in (1, 2, 3))
+        counts = {"A": 0, "B": 0}
+        for line in self.mod.LEDGER.read_text(encoding="utf-8").splitlines()[1:]:
+            if line.strip():
+                counts[line.split("\t")[1]] = counts.get(line.split("\t")[1], 0) + 1
+        self.assertEqual((total, a, b), (counts["A"] + counts["B"], counts["A"], counts["B"]))
+
     def test_strict_mode_passes(self):
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--strict"],
                               capture_output=True, text=True, cwd=ROOT)

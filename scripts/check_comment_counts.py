@@ -28,6 +28,10 @@ LEDGER = ROOT / "docs" / "operations" / "evidence" / "2026-10-19-defect-ledger" 
 FAMILY_CLAIM = re.compile(r"(\d+)\s*条\s*`([^`]+)`")
 UNLOCK_CLAIM = re.compile(r"解锁\s*(\d+)\s*条")
 
+#: 进度主稿头部的总账行：`**73 条 = A 41 / B 32**`
+PROGRESS = ROOT / "docs" / "architecture" / "native-progress.md"
+TOTAL_CLAIM = re.compile(r"\*\*(\d+) 条 = A (\d+) / B (\d+)\*\*")
+
 
 def ledger_counts() -> dict[str, int]:
     counts: dict[str, int] = {}
@@ -66,6 +70,27 @@ def main() -> int:
         # 「解锁 N 条」应等于该槽位覆盖的需档行数；至少不能超过总需档数
         if claimed > unlock_expected:
             problems.append(f"注释写「解锁 {claimed} 条」，超过台账 `需档` 总数 {unlock_expected}")
+
+    # 进度主稿头部的总账行也要与台账一致
+    try:
+        progress_text = PROGRESS.read_text(encoding="utf-8")
+    except OSError:
+        progress_text = ""
+    totals = {"A": 0, "B": 0}
+    for line in LEDGER.read_text(encoding="utf-8").splitlines()[1:]:
+        if not line.strip():
+            continue
+        cls = line.split("\t")[1]
+        if cls in totals:
+            totals[cls] += 1
+    for match in TOTAL_CLAIM.finditer(progress_text):
+        total, a, b = (int(match.group(i)) for i in (1, 2, 3))
+        actual = totals["A"] + totals["B"]
+        if (total, a, b) != (actual, totals["A"], totals["B"]):
+            problems.append(
+                f"进度主稿写 {total} 条 = A {a} / B {b}，台账实际 {actual} = A {totals['A']} / B {totals['B']}"
+            )
+        break  # 只校验第一条（头部总账）
 
     print(f"台账族计数：{ {k: v for k, v in sorted(counts.items()) if k.startswith('需档') or k in ('G14', 'G23', 'G20', 'G18', 'G22', 'G15', 'G19')} }")
     if problems:
