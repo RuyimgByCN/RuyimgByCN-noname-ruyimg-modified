@@ -155,6 +155,45 @@ def upstream_trigger(skill: str, key: str = "") -> str:
     return ""
 
 
+def upstream_trigger_with_path(skill: str, key: str = "") -> tuple[str, str]:
+    """(trigger, 上游文件路径) —— 路径用于把缺陷归到「代码实际所在来源」。"""
+    if key in MANUAL_TRIGGERS:
+        return MANUAL_TRIGGERS[key], ""
+    candidates = [name for name in (skill, key, key.rsplit("_", 1)[-1]) if name]
+    for candidate in candidates:
+        found = _lookup_trigger_with_path(candidate)
+        if found[0]:
+            return found
+    return "", ""
+
+
+def _lookup_trigger_with_path(skill: str) -> tuple[str, str]:
+    if not skill:
+        return "", ""
+    patterns = [
+        r"\n\s*" + re.escape(skill) + r"\s*:\s*\{",
+        r"lib\.skill\." + re.escape(skill) + r"\s*=\s*\{",
+        r"\n\s*_" + re.escape(skill) + r"_\s*:\s*\{",
+        r"lib\.skill\._" + re.escape(skill) + r"_\s*=\s*\{",
+    ]
+    for path, text in upstream_sources().items():
+        for pattern in patterns:
+            m = re.search(pattern, text)
+            if not m:
+                continue
+            block = _block(text, m.end())
+            head = block[:60]
+            if re.search(r"\btype\s*:", head) and "trigger" not in head:
+                continue
+            trigger = re.search(r"trigger\s*:\s*\{([^}]*)\}", block)
+            if trigger:
+                return " ".join(trigger.group(1).split()), path
+            if "enable" in block:
+                return "(enable 主动技)", path
+            return "(无 trigger)", path
+    return "", ""
+
+
 def _lookup_trigger(skill: str) -> str:
     if not skill:
         return ""
