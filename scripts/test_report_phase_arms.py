@@ -27,7 +27,7 @@ class EnumerationTests(unittest.TestCase):
         cls.rows = cls.mod.arms()
 
     def test_counts_every_phase_pinned_arm(self):
-        self.assertEqual(len(self.rows), 48)
+        self.assertEqual(len(self.rows), 53)
 
     def test_every_row_has_a_behavior(self):
         for behavior, *_ in self.rows:
@@ -51,7 +51,8 @@ class ClassificationTests(unittest.TestCase):
         ]
 
     def test_g14_count_matches_manual_audit(self):
-        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 11)
+        # 12 = 11 条 + `SwdHujing`（第 736 轮补上「相等比较」写法后新发现）
+        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 12)
 
     def test_g20_count_matches_manual_audit(self):
         self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G20")), 5)

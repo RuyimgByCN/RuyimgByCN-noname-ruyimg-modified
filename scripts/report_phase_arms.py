@@ -42,6 +42,12 @@ HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
 UPSTREAM = ROOT.parent / "archive" / "upstream"
 
 ARM_RE = re.compile(r"Phase::(Judge|Draw|Play|Discard|End),\s*begin:\s*(true|false)")
+#: Some arms pin the phase by comparison instead of destructuring:
+#:   `Phase { player, phase, begin } if *player == owner && *phase == Phase::End && *begin`
+#: Both shapes are real, so both are enumerated (missing the second produced
+#: false "unpinned" verdicts in an earlier round).
+EQ_RE = re.compile(r"\*phase\s*==\s*crate::event::Phase::(Judge|Draw|Play|Discard|End)")
+NEG_BEGIN_RE = re.compile(r"!\*begin\b")
 BEH_RE = re.compile(r"HostBehavior::([A-Za-z0-9_]+)\s*=>")
 
 #: Hand-checked upstream triggers for skills the automatic scan cannot resolve.
@@ -173,16 +179,23 @@ def arms() -> list[tuple[str, str, str, str, int]]:
     for path in sorted(HOST.rglob("*.rs")):
         if "filtering" not in str(path):
             continue
-        lines = path.read_text(encoding="utf-8").splitlines()
+        text = path.read_text(encoding="utf-8")
+        lines = text.splitlines()
         for idx, line in enumerate(lines):
+            behavior = None
+            for back in range(idx, max(0, idx - 8), -1):
+                hit = BEH_RE.search(lines[back])
+                if hit:
+                    behavior = hit.group(1)
+                    break
             for m in ARM_RE.finditer(line):
-                behavior = None
-                for back in range(idx, max(0, idx - 8), -1):
-                    hit = BEH_RE.search(lines[back])
-                    if hit:
-                        behavior = hit.group(1)
-                        break
                 rows.append((behavior or "?", m.group(1), m.group(2), path.name, idx + 1))
+                continue
+            hit = EQ_RE.search(line)
+            if hit:
+                # `!*begin` in the same line/arm means the end edge.
+                begin = "false" if NEG_BEGIN_RE.search(line) else "true"
+                rows.append((behavior or "?", hit.group(1), begin, path.name, idx + 1))
     return rows
 
 

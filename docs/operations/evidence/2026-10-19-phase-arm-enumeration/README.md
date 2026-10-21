@@ -13,19 +13,35 @@
 4. 上游 trigger：按**六种「查不到」形态**逐一尝试（裸名 / `lib.skill.X =` / 前后下划线 / 加去扩展前缀），并跳过卡片定义；
 5. 用**阶段名映射**对照：**`Play` ↔ `phaseUse…`**、`End` ↔ `phaseJieshu…`、`Judge`/`Draw`/`Discard` 同名。
 
-## 2 枚举结果：**48 条**
+## ⚠ 修订（第 736 轮）：**48 → 53 条**，`G14` 11 → **12**
+
+**第一版只识别「解构绑定」写法**（`phase: Phase::Judge, begin: true`），
+**漏掉了「相等比较」写法**（`Phase { player, phase, begin } if *phase == Phase::Judge && *begin`）。
+后者多了 **5 条**：
+
+| 行为 | 钉的阶段 | 上游 | 判定 |
+|---|---|---|---|
+| **`SwdHujing`** | **`Judge`** | **`player: 'phaseBegin'`** | ❗ **G14 第 12 条**（新发现）|
+| `SwdQinglongzhiguiHeld` | `Judge` | 未定位（装备子技）| 🔍 REVIEW |
+| `SwdHuanglinzhicongHeld` | `Judge` | 未定位 | 🔍 REVIEW |
+| `SwdXielv` | `End` | `phaseDiscardEnd` | ⚠️ 相邻相位（登记差异）|
+| `SwdWangchenHeld` | `End` | `phaseDiscardEnd` | ⚠️ 相邻相位（登记差异）|
+
+⇒ **脚本已修**（`EQ_RE` + 负向 `*begin` 判定），单测期望同步为 **53 / G14 12** ✅
+
+## 2 枚举结果：**53 条**
 
 | 判定 | 条数 | 含义 |
 |---|---:|---|
 | ✅ **OK** | **21** | 上游 `phaseXxxBegin`/`phaseXxxEnd` 与原生 `begin` 一致 |
-| ❗ **G14（钉死阶段）** | **11** | 上游 **`phaseBegin`（任意阶段）**，原生钉死 `Judge` **或 `End`** |
+| ❗ **G14（钉死阶段）** | **12** | 上游 **`phaseBegin`（任意阶段）**，原生钉死 `Judge` **或 `End`** |
 | ⚠️ **G20（早一步）** | **5** | 上游 **`phaseEnd`（全部阶段后）**，原生 `End, begin: true`（结束阶段开始）|
 | ⚠️ **G15（`phaseAfter`）** | **1** | `fuchou2`：上游 `global: phaseAfter`，无对应档位 |
 | ⚠️ **G15（「之前」档）** | **1** | `fenglue`：上游 `phaseUseBefore`，原生 `begin: true` |
 | ❗ **自加分支** | **1** | `huajin2`：上游只有 `damageBegin`，原生 OR 了阶段分支 |
 | ✅ **语义选择** | **1** | `tanhuadong`（上游代码与文案矛盾，见规则基准）|
-| 🔍 **REVIEW** | **7** | 见下（**全部是已知项**）|
-| **合计** | **48** | |
+| 🔍 **REVIEW** | **11** | **新增 5 条里 4 条进 REVIEW**（见修订节）|
+| **合计** | **53** | |
 
 ## 3 那 7 条 REVIEW **全都是已知的**
 
