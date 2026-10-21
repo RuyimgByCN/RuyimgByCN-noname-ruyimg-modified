@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**77 条**）—— 2026-10-19 第 747 轮
+# 缺陷台账（机器可读，**83 条**）—— 2026-10-19 第 748 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -8,14 +8,14 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **43** |
-| **B（需扩枚举或引擎能力）** | **34** |
-| **合计** | **77** |
+| **B（需扩枚举或引擎能力）** | **40** |
+| **合计** | **83** |
 
 ## 2 按缺陷族
 
 | id | 条数 | 说明 |
 |---|---:|---|
-| **需档** | **27** | 「用牌前/指定目标时」23 + 「死亡前」4 |
+| **需档** | **33** | 「用牌前/指定目标时」23 + **「sha 幕」6** + 「死亡前」4 |
 | **G14** | **14** | 上游 `phaseBegin`（任意阶段）却钉死 `Judge`/`End` |
 | **G23** | **12** | `PhaseEnd` 未钉阶段 ⇒ 每阶段触发（含 1 条事件种类错 `G23b`）|
 | **G20** | **5** | 上游 `phaseEnd` 写成 `End, begin: true`（早一步）|
@@ -139,3 +139,32 @@ python3 -B -m unittest discover -s scripts -p 'test_report_defect_ledger.py'
   **猜错会让「按来源验收」产生假数字**，而本会话已因「猜」误判过多次 ❌
 - **要真正修好**，需要**包数据的 `skills[]` 补齐内部子技能登记**，或在
   `HostBehavior` 上加来源字段 —— **属数据结构决策**，需维护者定 ⚠️
+
+---
+
+## 7 第 748 轮：新增「sha 幕」缺档类（6 条）并修掉一个归因隐患
+
+### 7.1 新缺档：`shaBegin` / `shaAfter` / `shaBefore`
+
+上游有一整套**【杀】专用事件幕**，引擎只有 `ShaDodged` 一种：
+
+| 行为 | 上游 |
+|---|---|
+| `Liaoyuan` | `player: 'shaBegin'` |
+| `SwdMojian` | `player: 'shaBegin'` |
+| `SwdTiebi` | `global: 'shaBegin'` |
+| `SwdLianda` | `player: 'shaAfter'` |
+| `XianjianXunying` | `player: 'shaAfter'` |
+| `WudianZhuchengGuard` | `target: 'shaBefore'` |
+
+⇒ **6 条归入「需档(sha 幕)」**（B 类）✅
+⇒ **这是第 8 类缺档**（前七类：阶段前后 / 准备阶段 / 用牌前 / 死亡前 / `phaseAfter` / `GameStart` / `damageEnd` 后窗口）
+
+### 7.2 ⚠ 修掉一个归因隐患：删掉「键尾段」回退
+
+`upstream_trigger()` 原本在包内技能名查不到时，会退回试 **`host:` 键的最后一段**。
+这个回退曾把 `shengke_check` 解析到**另一扩展的同名技能**，得出 `loseAfter` 这种错误 trigger
+（而 `5c` 的真实上游是 wuxing 扩展的 `_shengke: { target: 'useCardToBegin' }`）❌
+
+⇒ **已删掉该回退**：只试「包内技能名」与「host 键本身」✅
+⇒ **代价**：REVIEW 会略增（宁可标「未定位」，也不要标错）✅

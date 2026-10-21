@@ -91,6 +91,9 @@ CARD_AFTER = ("useCardAfter", "useCardEnd", "respondCardAfter")
 CARD_BEFORE = ("useCardToBegin", "useCardToTargeted", "useCardBefore", "useCardBegin")
 
 
+SHA_STAGES = ("shaBegin", "shaAfter", "shaBefore", "shaDodged")
+
+
 def classify_card(which: str, trigger: str) -> str:
     """Card-use surface: native `CardUsed` == after the card resolved."""
     if not trigger:
@@ -101,6 +104,9 @@ def classify_card(which: str, trigger: str) -> str:
         return "OK" if which == "CardUsed" else "REVIEW(After 面却用前置档)"
     if "useCard" in trigger:
         return "需档(使用前/指定目标)" if which == "CardUsed" else "OK"
+    if any(tok in trigger for tok in SHA_STAGES):
+        # 上游用【杀】专用事件幕（shaBegin/shaAfter/shaBefore），引擎只有 ShaDodged
+        return "需档(sha 幕)"
     if "respond" in trigger or "chooseToRespond" in trigger:
         return "OK" if which in ("CardResponded", "CardUsed") else "REVIEW(响应面)"
     return "REVIEW(非用牌触发)"

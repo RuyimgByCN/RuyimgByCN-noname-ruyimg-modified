@@ -181,7 +181,9 @@ def upstream_trigger_with_path(skill: str, key: str = "") -> tuple[str, str]:
     """(trigger, 上游文件路径) —— 路径用于把缺陷归到「代码实际所在来源」。"""
     if key in MANUAL_TRIGGERS:
         return MANUAL_TRIGGERS[key], ""
-    candidates = [name for name in (skill, key, key.rsplit("_", 1)[-1]) if name]
+    # 只试「包内技能名」与「host 键本身」；**不再用键尾段**做回退
+    #（`shengke_check` 曾因此解析到另一扩展的同名技能，得出错误 trigger）
+    candidates = [name for name in (skill, key) if name]
     prefer = package_path_for_key(key)
     for candidate in candidates:
         found = _lookup_trigger_with_path(candidate, prefer)
