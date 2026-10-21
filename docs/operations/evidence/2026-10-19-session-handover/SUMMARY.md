@@ -226,3 +226,13 @@
 其余：D1（分母）、D2（`L19`）、D10（子帧）、D-j（`host:jiang`）、D3–D8。
 
 ### 八项完成数 = 0（未变）
+
+### 101.1 工作区边界核查（第 899 轮）
+
+| 检查 | 结果 |
+|---|---|
+| 本会话提交只触及 `docs/`、`scripts/`、`crates/engine-native/tests/` | ✅（逐个 `git show --stat` 核对）|
+| 未提交的 `content/original/ported/**`、`packages/extensions/**/assets/*.json`、`apps/web-client/dist/**` | **属其他 agent 的任务，本会话未 stage 也未修改** ✅ |
+| 已提交的历史里是否混入未跟踪区文件 | **没有**（`git show --stat` 三例均为文档/脚本/测试）|
+
+⇒ **「保留其他任务的变更」这一条已按 AGENTS.md 执行并留有可核对记录** ✅
