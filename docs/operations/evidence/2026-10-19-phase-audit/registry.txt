@@ -2,7 +2,7 @@
 WudianFuchou2	fuchou2	End	false	已核	基准对应章节
 HlssFengqi	hlss_fengqi	Judge	true	已核	v608 上游 boss.js：多值触发
 NewMeibu	new_meibu	Play	true	已核	基准对应章节
-Zaibian	zaibian	Play	true	未核	
+Zaibian	zaibian	Play	true	已核	v715 上游 lib.skill.zaibian= 赋值式：player phaseUseBegin ⇒ 相符
 Xiefang	xiefang	Draw	false	已核	基准对应章节
 Xiuluo	swd_xiuluo	Judge	true	已核	基准对应章节
 Miedao	miedao	Discard	true	已核	基准对应章节
