@@ -1373,3 +1373,24 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 
 ⇒ **代码级复核 5 行、5 行归因正确、0 行归因错** ✅
 ⇒ **注释级判断 6 次、6 次错** ⚠️
+
+---
+
+## 45 第 827 轮：`SwdLianda` / `SwdCyxianjiang` 代码级形态核对——均**形态相符**
+
+| 行为 | 原生代码 | 上游 | 判定 |
+|---|---|---|---|
+| **`SwdLianda`** | `Act` 取当前用牌目标 → 组手牌+装备池 → `SelectCard` 弃 1（`min:0,max:1` 可取消）→ 取出该牌 | `swd_lianda`（`shaAfter`）：`chooseToDiscard('he')` → step 1（未读）| ✅ **形态相符**（都是弃 1 张再结算），**效果待证** |
+| **`SwdCyxianjiang`** | `Act` 从当前 `CardUsed` 取 `targets.first()` → 以**该目标的装备**为候选 | `swd_cyxianjiang`（`useCardToBegin`）：filter 检查 **`event.target.countCards('e')`** | ✅ **形态相符**（都作用于目标装备），**效果待证** |
+
+⇒ **归因层代码级累计：7 行复核、7 行归因正确、0 行错** ✅
+⇒ 但其中 **2 行只核到「形态」**（效果分支未逐条读），不能与「等价已确认」混记 ⚠️
+
+### 分层记法（第三次收紧）
+
+| 档 | 条数 | 含义 |
+|---|---:|---|
+| **等价已确认**（代码逐分支）| **5** | `WudianZhucheng`、`SwdBaishouzhihuHeld`、`WudianGuangshuSpade`、`WudianJidong`、`XianjianLingyu` |
+| **形态相符、效果待证** | **2** | `SwdLianda`、`SwdCyxianjiang` |
+| **未读** | **47** | —— |
+| **归因错** | **0** | 代码级复核至今未发现 |
