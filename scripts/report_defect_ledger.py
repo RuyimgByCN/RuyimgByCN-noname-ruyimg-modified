@@ -54,8 +54,6 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
     ("6", "A", "GujianFoodRangjie", "L10", "分支前无条件 draw()", "仅分支 0 摸牌", "分支 1 不摸牌"),
     ("G23b", "A", "SwdJiguanyuanGain", "U05", "damageEnd + damageSource", "EventKind::PhaseEnd", "事件种类完全错"),
     ("失效", "A", "SwdBaishouzhihuHeld", "U05", "PhaseEnd(begin:false)", "filter 要求 *begin", "永不触发"),
-    ("L03a", "B", "HlssXiangxing", "L03", "player: [damageEnd, loseHpEnd]", "meta 仅 Damage",
-     "少「失去体力后」幕"),
     ("L03b", "B", "HlssYueyin", "L03", "player: [damageBegin4, damage]", "meta 仅 DamageBefore",
      "上游双幕（第4次 + 伤害后），原生单幕"),
     ("L03c", "B", "HlssGaiming", "L03", "player: judgeBefore", "无 TriggerMeta",

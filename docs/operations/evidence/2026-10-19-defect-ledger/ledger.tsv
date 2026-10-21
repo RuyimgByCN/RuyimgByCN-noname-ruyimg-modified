@@ -57,7 +57,6 @@ G18	B	Xiuluo	?	common.rs:219	player: "phaseZhunbeiBegin"	Judge, begin:true	中	�
 需档	B	YunchouDiychanyuan	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	YunchouJiaoxia	?	meta:0	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	Zhenlie	?	meta:0	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
-L03a	B	HlssXiangxing	L03	content/host/**	player: [damageEnd, loseHpEnd]	meta 仅 Damage	中	少「失去体力后」幕	blocked
 L03b	B	HlssYueyin	L03	content/host/**	player: [damageBegin4, damage]	meta 仅 DamageBefore	中	上游双幕（第4次 + 伤害后），原生单幕	blocked
 L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	技能完全不触发（缺 judge-before 幕）	blocked
 5c	B	ShengkeCheck	L06	content/host/**	target: useCardToBegin	EventKind::CardUsed	中	需 CardTargeted 档	blocked
