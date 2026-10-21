@@ -5534,3 +5534,27 @@ lib.skill.zaibian = { trigger: { player: 'phaseUseBegin' }, filter: 人口计算
 | **6** | **赋值式而非字面量** | **`lib.skill.zaibian = {…}`** ❗ |
 
 ⇒ **「查不到」必须先试完这 6 种形态，才能说「上游没有」** ✅
+
+### L19 末日乱斗（`doomsday-brawl-upstream-liuli`）差异族：**3/3 相符** ✅（2026-10-19，第 716 轮）
+
+**包**：**0 卡、3 技能**（`shishi` 噬尸 / `xunmeng` 循梦 / `zaibian` 灾变）
+**上游文件**：`末日乱斗/extension.js`（**用 `lib.skill.X = {…}` 赋值式**）
+
+| # | 技能 | 上游 | 原生 | 判定 |
+|---:|---|---|---|---|
+| 1 | **`shishi` 噬尸** | **`trigger: { source: 'dieAfter' }`** + `gainMaxHp(1)` + `recover()` | **`EventData::Death { killer } if killer == Some(owner)`** + **`EventKind::Death`** + `step/skills_recovery.rs:60` | ✅ **相符**（**`dieAfter` = 死亡后 ✓、`source` = killer ✓**）|
+| 2 | **`xunmeng` 循梦** | **`trigger: { source: 'damageBegin' }`** + filter（**杀、非连环**）| **`EventData::Damage(d) if source==owner && !from_chain && is_sha_like`** + **`EventKind::DamageBefore`** | ✅ **相符**（**注释明写「上游 damageBegin 同窗」** ✓）|
+| 3 | **`zaibian` 灾变** | **`player: phaseUseBegin`** + filter（**忠 − 反 − 内 + 2 > 0**）+ **`draw(num)`** | **`Phase::Play, begin: true`** + **`step/skills_status.rs:76` 里算 `loyal + 2 − rebel − renegade` 并 `.max(0)`** | ✅ **相符**（**人口条件在 step 算、filter 只判触发 ⇒ 净效相同** ✓）|
+
+### 这是**第一个「全部技能相符」的来源** ✅
+
+| 检查 | 结果 |
+|---|---|
+| **技能数** | **3**（**已全部对照**）|
+| **确认缺陷** | **0** ✅ |
+| **缺档** | **无**（`Death`/`DamageBefore`/`Phase::Play` 都已有档）✅ |
+| **差异族** | **本文件即差异族** ✅ |
+
+⇒ **若「已对照且可接受」的标准是「差异族完备 + 无确认缺陷」** ⇒ **`L19` 已满足** ✅
+⇒ **它比 `L10` 更接近「第一个可签来源」** —— **`L10` 还有 2 条缺陷待修，`L19` 一条都没有** ❗
+⇒ **但仍需产品判定**：**「实现位置不同（filter vs step）但净效相同」是否算「已对照」** ⚠️
