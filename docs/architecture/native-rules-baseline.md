@@ -6039,3 +6039,28 @@ event.trigger('phaseAfter');
 **影响**：重跑 card / death 两族，**结论未变**（23 需档前 + 6 sha 幕 + 6 OK；10 OK + 8 未定位 + 4 G24）
 ⇒ 说明这两族的判定原本就建立在**真 meta** 上 ✅
 ⇒ 但**回退路径已移除**，以后不会再有「meta 缺失却给出 OK」的情况 ⚠️
+
+### ✅ 结构化事实：**275 条有字面 `TriggerMeta`，242 条「无触发面」由其他通道承载**（2026-10-19，第 767 轮）
+
+`metadata.rs` 用 **`self.trigger_meta_*(…)` helper** 分派；helper 模块里没有该行为的字面 `Some(TriggerMeta{…})` 时，
+`trigger_meta_*()` 返回 **`None`** —— 这是**设计**，不是缺陷。
+
+| 类 | 条数 | 含义 |
+|---|---:|---|
+| **有字面 `TriggerMeta`** | **275** | 触发面带 `EventKind` |
+| **无触发面（helper 返回 `None`）** | **242** | **由激活 / `mod` / PlayCard 臂 / kernel 钩承载** |
+| **合计** | **517** | host 行为中参与 metadata 的部分 |
+
+**抽样 8 条，代码注释全部自述「无触发面」或「出牌主动技」**：
+
+| 行为 | 注释 |
+|---|---|
+| `SwdHuanxia` | 还侠：**无触发面**（PlayCard 转化臂 + kernel 跟踪钩承载）|
+| `SwdPoyue` | 破月：**无触发面**（PlayCard 臂 + kernel 计数/闪询问钩承载）|
+| `SwdJiyingHeld` | 疾影：**锁定 mod 无触发面**（`sha_range_free` 链查询）|
+| `SwdYudun` | 愚钝·福面：**锁定 marker**（PlayCard 禁锦囊臂 + 双卡 `viewAs` 臂查询），**无触发面** |
+| 其余 4 条 | 「出牌主动技（ActivateSkill 通道，`usable:1` 走 limits）」|
+
+⇒ **「没有 `TriggerMeta`」≠「技能不触发」** —— **这是本会话第 5 次相关教训** ✅
+⇒ **工具侧**：`metadata_classes()` 现在给出三态（字面 / 无触发面），**不再把 helper 形态误记成「缺 meta」** ✓
+⇒ **限定**：**注释是维护者的自述**；若注释与实现不符，需逐条读效果步 —— **本会话未做** ⚠️

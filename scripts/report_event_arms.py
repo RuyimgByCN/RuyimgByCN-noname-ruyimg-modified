@@ -65,6 +65,37 @@ def metadata_events() -> dict[str, str]:
     return out
 
 
+def metadata_classes() -> dict[str, tuple[str, str]]:
+    """behavior -> (kind, event) where kind ∈ {"literal", "helper", "none"}.
+
+    `metadata.rs` dispatches most behaviors through `self.trigger_meta_*(...)`
+    helpers; the concrete `Some(TriggerMeta { event: … })` literal may live in
+    `metadata/<mod>.rs`.  A behavior whose helper arm exists but has **no** arm in
+    the helper module returns `None` — the codebase documents those as
+    「无触发面（由 X 承载）」 and they are **by design**, not defects.
+    """
+    meta_dir = HOST / "metadata"
+    literal: dict[str, str] = {}
+    for path in list(HOST.glob("metadata*.rs")) + list(meta_dir.glob("*.rs")):
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for m in re.finditer(r"HostBehavior::([A-Za-z0-9_]+)\s*=>\s*Some\(TriggerMeta\s*\{", text):
+            hit = re.search(r"event:\s*EventKind::([A-Za-z0-9_]+)", text[m.end() : m.end() + 400])
+            if hit:
+                literal.setdefault(m.group(1), hit.group(1))
+    helper: set[str] = set()
+    top = (HOST / "metadata.rs").read_text(encoding="utf-8")
+    for m in re.finditer(r"HostBehavior::([A-Za-z0-9_]+)\s*=>\s*self\.trigger_meta_", top):
+        helper.add(m.group(1))
+    out: dict[str, tuple[str, str]] = {}
+    for behavior in literal:
+        out[behavior] = ("literal", literal[behavior])
+    for behavior in helper - set(literal):
+        out[behavior] = ("none", "")
+    return out
+
+
 def arms() -> list[tuple[str, str, str, int]]:
     """[(behavior, which, file, line)] for arms matching a damage event."""
     rows: list[tuple[str, str, str, int]] = []

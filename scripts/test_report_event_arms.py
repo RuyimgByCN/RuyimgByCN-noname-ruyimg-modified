@@ -39,6 +39,33 @@ class MetadataTests(unittest.TestCase):
             self.assertRegex(event, r"^[A-Z][A-Za-z0-9]*$", f"{behavior} 的 event 不像 EventKind")
 
 
+class MetadataClassTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = load()
+        cls.cls = cls.mod.metadata_classes()
+
+    def test_two_kinds_only(self):
+        self.assertEqual({k for k, _ in self.cls.values()}, {"literal", "none"})
+
+    def test_literal_has_event_name(self):
+        for behavior, (kind, event) in self.cls.items():
+            if kind == "literal":
+                self.assertRegex(event, r"^[A-Z][A-Za-z0-9]*$", behavior)
+
+    def test_none_kind_has_no_event(self):
+        for behavior, (kind, event) in self.cls.items():
+            if kind == "none":
+                self.assertEqual(event, "", behavior)
+
+    def test_known_none_case(self):
+        # 还侠：代码注释自述「无触发面（PlayCard 转化臂+kernel 跟踪钩承载）」
+        self.assertEqual(self.cls["SwdHuanxia"], ("none", ""))
+
+    def test_known_literal_case(self):
+        self.assertEqual(self.cls["Shishi"], ("literal", "Death"))
+
+
 class ArmTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
