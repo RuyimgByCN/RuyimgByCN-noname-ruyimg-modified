@@ -6000,3 +6000,34 @@ event.trigger('phaseAfter');
 
 **`U05` 的触发面覆盖率是 141/239 = 59%**（**不含 40 条本就不需要 meta 的**）。
 把它按「有 meta / 无需 meta / 候选缺陷 / 未定位」四分，比「407 项」或「239 键」都更能指导工作 ✅
+
+#### ❗ 20 个候选里的 15 个：**四条派发路径全空 ⇒ 效果步不可达（技能不触发）**（第 763 轮）
+
+上一节把「上游触发型 + 无 meta」记为 **20 条候选**。本轮逐个检查**四条派发路径**：
+
+| 路径 | 检查方式 |
+|---|---|
+| ① `TriggerMeta` | `metadata*.rs` 是否有该行为 |
+| ② `factory` 机器 | `factory.rs` 该行为的 arm 是否非 `(None, None)` |
+| ③ `activation` 入口 | `activation*.rs` 是否有该行为 |
+| ④ 外部创建 | `kernel/intrinsic.rs` 与 `snap/restore.rs` 是否 `HostMachine { behavior: … }` |
+
+结果：**15 条四个路径全空**（其余 5 条上游未定位，仍在 `?` 里）：
+
+| 行为 | 上游 | 类 |
+|---|---|---|
+| `huanxia` | `source: damageAfter` | **A**（加 `Damage` meta）|
+| `hxunzhi2` | `player: phaseUseEnd` | **A**（`PhaseEnd` 钉 `Play`）|
+| `juxi` | `global: discardAfter` | **A**（加 `CardsDiscarded` meta）|
+| `kbolan` | `player: drawBegin` | **B**（缺「摸牌前」幕）|
+| `lianwu` / `lingshi` / `lingyue` / `shoulie` / `yueren` | `player: shaBegin` | **B**（缺 sha 幕 ×5）|
+| `lingwu` | `player: phaseAfter` | **B**（缺「阶段之后」）|
+| `poyue` / `yudun` | `player: useCard` | **B**（缺「用牌前」×2）|
+| `shengong` | `player: chooseToRespondBegin` | **B**（缺「响应前」）|
+| `sxianjing` | `target: useCardToBegin` | **B**（缺「指定目标时」）|
+| `tianlun` | `global: judge` | **B**（缺「判定」幕）|
+
+⇒ **A 类 3 条 + B 类 12 条 = 15 条确认缺陷** ✅
+⇒ **⚠ 限定**：**「四条路径全空」是「不可达」的强证据，但仍不等于「运行时一定不触发」**——
+若存在**本会话未发现的第五条路径**（如 `rule-vm` 侧的机器创建），结论需再核 ⚠️
+（**已检查**：`HostMachine {` 在 `crates/` 里除 `content/host` 外只出现在 `snap/restore.rs` 与 `kernel/intrinsic.rs`，两者都无这 15 个行为 ✅）
