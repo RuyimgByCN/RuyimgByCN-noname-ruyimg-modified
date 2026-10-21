@@ -5844,3 +5844,29 @@ event.trigger('phaseAfter');
 
 ⇒ **`L20` 修正此前「3 技能缺档」的初查**（**实际 4 条**）⚠️
 ⇒ **`L20` 不可签** ❌
+
+### U07 玩点论杀（`wudian-upstream-noname`）差异族：**13 技能 / 4 缺陷 + 2 未转换**（2026-10-19，第 755 轮）
+
+| 技能 | 上游 trigger | 原生 | 判定 |
+|---|---|---|---|
+| **`ciqiu` 慈秋** | **`source: "damageBegin1"`**（伤害前第 1 次）| **无 TriggerMeta** | ❗ **不触发**（可用现有 `DamageBefore`）|
+| **`geju` 割据** | **`player: "phaseBegin"`** | `PhaseBegin` + 钉 `Judge` | ❗ **G14**（已在册）|
+| **`zhucheng` 筑城** | **`player: "phaseEnd"`** | `End, begin: true` | ⚠️ **G20 早一步**（已在册）|
+| **`zhucheng2` 筑城护** | **`target: "shaBefore"`** | `CardUsed` | ⚠️ **需档（sha 幕）**（已在册）|
+| `nsshuaiyan` 帅严 | `global: "recoverAfter"` | `Recover` | ✅ |
+| `moshou` / `chezhen` / `kangyin` / `juedao` | 无 trigger / 主动技 | 无 meta | ✅（4 条）|
+| `wd_wangmeizhike` / `wd_sanjian` | 未定位 | 无 / `Damage` | 🔍 **待核**（2 条）|
+| **`duoqi`** | **`global: 'discardAfter'`** | **无对应 `HostBehavior`** | ❗ **未转换** |
+| **`youzhan`** | **`global: 'shaBefore'`** | **无对应 `HostBehavior`** | ❗ **未转换** |
+
+### 三类要分开记（不能混成一个数）
+
+| 类 | 条数 | 说明 |
+|---|---:|---|
+| **确认缺陷** | **4** | `ciqiu`（新增）、`geju`、`zhucheng`、`zhucheng2`（后三条已在册）|
+| **一致** | **5** | 4 个无触发/主动技 + `nsshuaiyan` |
+| **未转换** | **2** | `duoqi` / `youzhan` —— **不是「实现错」，是「没搬过来」** ⚠️ |
+| **待核** | **2** | `wd_wangmeizhike` / `wd_sanjian` 上游未定位 |
+
+⇒ **`U07` 不可签**（4 缺陷 + 2 未转换）❌
+⇒ **「未转换」与「缺陷」必须分开**：前者是覆盖缺口（台账外），后者是规则差异（台账内）✅

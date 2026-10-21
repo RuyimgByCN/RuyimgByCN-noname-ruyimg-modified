@@ -93,5 +93,6 @@ G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind:
 G20	A	PhaseEndRecoverOrDraw	U06	common.rs:536	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G14	A	WudianGeju	U07	common.rs:684	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
 G20	A	WudianZhucheng	U07	common.rs:766	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+L07a	A	WudianCiqiu	U07	content/host/**	source: "damageBegin1"	无 TriggerMeta	高	不触发（伤害前第 1 次，可用现有 DamageBefore）	blocked
 需档	B	WudianZhuchengGuard	U07	meta:0	target:'shaBefore'	CardUsed	高	修触发时机/补档位	blocked
 G23	A	YxsMenshen	U08	filtering/*	player:"phaseEnd",	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked

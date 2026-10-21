@@ -73,6 +73,8 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "死亡前 vs 死亡后"),
     ("L20d", "B", "FzLiegong", "L20", 'player: useCardToPlayered', "无 TriggerMeta",
      "不触发（用牌目标后幕缺档）"),
+    ("L07a", "A", "WudianCiqiu", "U07", 'source: "damageBegin1"', "无 TriggerMeta",
+     "不触发（伤害前第 1 次，可用现有 DamageBefore）"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
 ]
 
