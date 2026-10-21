@@ -84,6 +84,9 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "不触发（sha 幕 + 决斗幕缺档）"),
     ("U08c", "B", "YxsMenshen3", "U08", 'player: ["phaseBegin", "dieBegin"]', "EventKind::PhaseBegin",
      "少「死亡前」幕"),
+    ("U05a", "A", "Duwen", "U05", "source: damageBegin", "无 TriggerMeta", "不触发（可用 DamageBefore）"),
+    ("U05b", "A", "Bshaowei", "U05", "player: phaseEnd", "无 TriggerMeta", "不触发（可用 PhaseEnd 钉 End）"),
+    ("U05c", "A", "Hxunzhi2", "U05", "player: phaseUseEnd", "无 TriggerMeta", "不触发（可用 PhaseEnd 钉 Play）"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
 ]
 
