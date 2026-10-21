@@ -5582,3 +5582,44 @@ lib.skill.zaibian = { trigger: { player: 'phaseUseBegin' }, filter: 人口计算
 ⇒ **缺档分类可能由七类增至八类**（**「入场」是新的**）❗
 ⇒ **`L29` 是「小内容量、高缺档密度」的第二个例子**（**第一个是 `L20`**）⚠️
 ⇒ **`L29` 不能签** —— **6 技能里 5 个卡在缺档或未挂载** ❌
+
+### `tanhuadong`（贪花冬瓜？食物牌）不是缺陷，是**上游自相矛盾下的语义选择**（2026-10-19，第 722 轮）
+
+**编号 G16 此前记为「确认缺陷（改 1 行）」，第 722 轮查上游原文后**更正为**登记差异**。
+
+**上游 `archive/upstream/noname-liuli/noname/card/gujian.js`**：
+
+```js
+tanhuadong: {
+    mark: 'card', trigger: { player: 'phaseEnd' },      // ← 任意阶段结束
+    intro: { content: () => '出牌阶段结束时，你摸一张牌（剩余' + markcount + '回合）' },
+    content() { markcount--; if (markcount == 0) { …removeSkill('tanhuadong') } },
+    group: 'tanhuadong_draw',
+    subSkill: { draw: { trigger: { player: 'phaseUseEnd' }, content() { player.draw(); } } },
+}
+```
+
+**矛盾点**：
+- **代码**用 `phaseEnd`（**任意阶段结束**）递减，一个回合有 5 个阶段 ⇒ `markcount = 3` **一回合内就耗尽**；
+- **文案**却写「剩余 N **回合**」⇒ 语义是**每回合减 1**。
+
+**原生实现**（`filtering/common.rs` + `step/gujian.rs:175`）：
+
+```rust
+// filter: Phase::Play, begin: false（出牌阶段结束）
+ctx.draw_cards(self.owner, 1);
+food_tick(ctx, self.owner, &self.def_key);   // 倒计时扣减，归零移除
+```
+
+⇒ **原生取「出牌阶段结束」= 每回合一次**，与**上游文案**一致 ✅、与**上游代码**不一致 ⚠️
+
+**判定**：**上游代码与自身文案冲突，原生择一并与文案对齐** ⇒ **登记差异（语义选择）**，**不是确认缺陷** ✅
+**保留的偏差**：若按上游**代码**严格对齐，倒计时应在**每次阶段结束**递减 —— **需维护者裁决**（**本会话不改**）
+
+### 计数影响
+
+| 类 | 原 | 现 |
+|---|---:|---:|
+| **A（改逻辑/条件）** | 26 | **25** |
+| **非缺陷** | 2 | **3**（`cangchizhibi` 未转换、`swd_hufu` 夹具、**`tanhuadong` 语义选择**）|
+| **合计** | 42 | **42**（不变）|
