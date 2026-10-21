@@ -54,6 +54,21 @@ class CommentCountTests(unittest.TestCase):
                 counts[line.split("\t")[1]] = counts.get(line.split("\t")[1], 0) + 1
         self.assertEqual((total, a, b), (counts["A"] + counts["B"], counts["A"], counts["B"]))
 
+    def test_readme_table_matches_ledger(self):
+        # 台账 README 的 A/B/合计 行必须与 ledger.tsv 一致
+        text = self.mod.README.read_text(encoding="utf-8")
+        counts = {"A": 0, "B": 0}
+        for line in self.mod.LEDGER.read_text(encoding="utf-8").splitlines()[1:]:
+            if line.strip():
+                counts[line.split("\t")[1]] = counts.get(line.split("\t")[1], 0) + 1
+        a = self.mod.README_A.search(text)
+        b = self.mod.README_B.search(text)
+        total = self.mod.README_TOTAL.search(text)
+        self.assertIsNotNone(a); self.assertIsNotNone(b); self.assertIsNotNone(total)
+        self.assertEqual(int(a.group(1)), counts["A"])
+        self.assertEqual(int(b.group(1)), counts["B"])
+        self.assertEqual(int(total.group(1)), counts["A"] + counts["B"])
+
     def test_strict_mode_passes(self):
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--strict"],
                               capture_output=True, text=True, cwd=ROOT)

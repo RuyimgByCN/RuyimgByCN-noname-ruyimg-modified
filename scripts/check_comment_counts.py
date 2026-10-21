@@ -32,6 +32,12 @@ UNLOCK_CLAIM = re.compile(r"解锁\s*(\d+)\s*条")
 PROGRESS = ROOT / "docs" / "architecture" / "native-progress.md"
 TOTAL_CLAIM = re.compile(r"\*\*(\d+) 条 = A (\d+) / B (\d+)\*\*")
 
+#: 台账 README 的汇总表：`| **合计** | **73** |`
+README = ROOT / "docs" / "operations" / "evidence" / "2026-10-19-defect-ledger" / "README.md"
+README_A = re.compile(r"\| \*\*A[^|]*\|\s*\*\*(\d+)\*\*")
+README_B = re.compile(r"\| \*\*B[^|]*\|\s*\*\*(\d+)\*\*")
+README_TOTAL = re.compile(r"\| \*\*合计\*\* \| \*\*(\d+)\*\* \|")
+
 
 def ledger_counts() -> dict[str, int]:
     counts: dict[str, int] = {}
@@ -91,6 +97,23 @@ def main() -> int:
                 f"进度主稿写 {total} 条 = A {a} / B {b}，台账实际 {actual} = A {totals['A']} / B {totals['B']}"
             )
         break  # 只校验第一条（头部总账）
+
+    # 台账 README 的汇总表也要一致
+    try:
+        readme_text = README.read_text(encoding="utf-8")
+    except OSError:
+        readme_text = ""
+    if readme_text:
+        for pattern, label, expected in (
+            (README_A, "A 类", totals["A"]),
+            (README_B, "B 类", totals["B"]),
+            (README_TOTAL, "合计", totals["A"] + totals["B"]),
+        ):
+            match = pattern.search(readme_text)
+            if match and int(match.group(1)) != expected:
+                problems.append(
+                    f"台账 README 写 {label} = {match.group(1)}，台账实际 {expected}"
+                )
 
     print(f"台账族计数：{ {k: v for k, v in sorted(counts.items()) if k.startswith('需档') or k in ('G14', 'G23', 'G20', 'G18', 'G22', 'G15', 'G19')} }")
     if problems:
