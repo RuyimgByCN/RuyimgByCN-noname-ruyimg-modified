@@ -6187,3 +6187,29 @@ catalog 之外有源码引用        128  (100.0%)
 |---|---|
 | `test_pack_names_match_real_directories` | **包名写错会静默数到 0**（第 775 轮真的发生了）|
 | `test_check_mode_passes` | 数字漂移（`--check` 依赖 `EXPECTED`）|
+
+### ❌ 更正：`U05` 是 **9 个包**，host 键 **314** 而非 239（第 776 轮）
+
+第 761–762 轮我按「8 个子包」统计，得出 **239 个 host 键**。
+本轮把来源映射查全（`scripts/report_host_keys.py`），`U05` 实际挂 **9 个包**：
+
+| 包 | `host:` 唯一键 |
+|---|---:|
+| **`shahai-swd`** | **187** |
+| **`shaai-xianjian`** ← **此前漏掉** | **75** |
+| **`shaai-ow`** | **36** |
+| `shahai-yunchou` | 16 |
+| `shahai-gujian` / `shahai-hearth` / `shahai-gwent` / `shahai-mtg` / `shahai-zhenfa` ← **最后一个此前漏掉** | 各 0 |
+| **合计** | **314** |
+
+**漏掉的两个包**：
+
+* **`shaai-xianjian`**（**75 键**）—— 名字是 `shaai-` 不是 `shahai-`，**按前缀筛包时被排除** ❌
+* **`shahai-zhenfa`**（0 键）—— 同样没进我的 8 包子包清单
+
+⇒ **这是本会话第 7 次「筛选范围造成的假结论」**：
+**用「包名前缀」当来源归属，而归属其实要查 `map_package_sources` 的映射表** ⚠️
+
+### 全部包合计
+
+**370 个 `host:` 键**（按包求和），分布在 **20 个包**里，其中 U05 占 **314（85%）**。
