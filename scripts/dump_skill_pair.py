@@ -29,20 +29,34 @@ def _load_phase():
     return module
 
 
+PREFIXES = ("swd_", "xj_", "xianjian_", "wudian_", "hlss_", "gujian_", "yunchou_",
+            "hearth_", "gwent_", "mtg_", "ow_", "boss_", "huanle_", "longxue_")
+
+
+def _candidates(name: str) -> list[str]:
+    out = [name, f"g_{name}"]
+    for prefix in PREFIXES:
+        if name.startswith(prefix) and len(name) > len(prefix):
+            stripped = name[len(prefix):]
+            out.extend([stripped, f"g_{stripped}"])
+    return out
+
+
 def upstream_block(name: str, width: int) -> str:
     phase = _load_phase()
     sources = phase.upstream_sources()
-    patterns = [
-        r'\n\s*"?' + re.escape(name) + r'"?\s*:\s*\{',
-        r"lib\.skill\." + re.escape(name) + r"\s*=\s*\{",
-    ]
-    for _path, text in sources.items():
-        for pattern in patterns:
-            match = re.search(pattern, text)
-            if not match:
-                continue
-            block = phase._block(text, match.end())
-            return " ".join(block.split())[:width]
+    for candidate in _candidates(name):
+        patterns = [
+            r'\n\s*"?' + re.escape(candidate) + r'"?\s*:\s*\{',
+            r"lib\.skill\." + re.escape(candidate) + r"\s*=\s*\{",
+        ]
+        for _path, text in sources.items():
+            for pattern in patterns:
+                match = re.search(pattern, text)
+                if not match:
+                    continue
+                block = phase._block(text, match.end())
+                return " ".join(block.split())[:width]
     return "(上游未找到)"
 
 

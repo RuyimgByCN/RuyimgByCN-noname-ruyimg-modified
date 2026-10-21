@@ -1023,3 +1023,37 @@ Xiuluo     => matches!(event, EventData::Phase { ... Phase::Judge, begin: true .
 **本会话已发现 3 处注释与实际不符**：`YxsMenshen`（「清除」实为「标记」）、`Hutian`（「红桃」实为任意）、
 以及更早的 `GujianFoodRangjie` 变体名（`Rangjie`）⚠️
 ⇒ **建议**：注释修正清单已并入 D 类待办（**未跟踪区，本会话不能改**）。
+
+---
+
+## 36 第 813 轮：⚠ **去前缀解析会“找到”同名但不同语义的技能**——`SwdHuanling` 是一例
+
+给解析器加「去扩展前缀」候选后（`swd_huanling` → `huanling`），四条上游立刻定位成功。
+但**其中一条找到的是不同的技能**：
+
+| 项 | 内容 |
+|---|---|
+| 包数据 | 一张**卡牌** `huanling` → `mapping: host:huanling` |
+| 解析器现在匹配到 | `character/swd.js` 的 **`huanling`**：`phaseEnd` + `chooseTarget` |
+| **原生行为注释** | 「**断月**：选**装备牌** → 选其他角色 → 弃牌 + 造成 1 点伤害」|
+| **语义对应的上游** | **`duanyue`**：`enable: phaseUse`、`filterCard: {type:'equip'}`、`usable:1` |
+
+⇒ **原生 `SwdHuanling` 实现的是「断月」，不是 `huanling`** ❗
+⇒ **因此它的 G23 判定（`PhaseEnd` 未钉阶段）建立在错误的上游之上**：
+**`duanyue` 是主动技（`enable: phaseUse`），根本不该有 `PhaseEnd` 触发** ⚠️
+
+### 结论：去前缀匹配必须**语义确认**
+
+| 匹配方式 | 风险 |
+|---|---|
+| 原名 / 键名 | 低（仍是名字匹配）|
+| **去前缀** | **中—可直接撞上同名不同义**（本例）|
+| 语义确认（注释 + 上游 `enable/trigger` 形态一致）| 高置信 |
+
+⇒ **`SwdHuanling` 记为「归因待复核」**，其 G23 行**暂时保留但不作为可信结论**
+⇒ **同类风险**：其余 3 条（`SwdLqingcheng`/`XianjianBinxin`/`SwdDonghuangzhongCard`）**需同样做语义确认**
+
+### 教训（第 16 次）
+
+**「名字对上了」不等于「是同一个东西」** —— 这在第 12 次（`!= owner`）之后再次出现，
+只是这次发生在**工具的名字解析层**，而不是我的推理层 ⚠️

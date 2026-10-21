@@ -14,7 +14,6 @@ G23	A	Xuanyuan	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `.
 G15	B	WudianFuchou2	?	common.rs:24	global:'phaseAfter'	End, begin:false	中	按对照结论修改 filter / 删除分支	blocked
 G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true	中	按对照结论修改 filter / 删除分支	blocked
 第3次	B	Tianxiang	?	common.rs:390	player:"damageBegin3",	DamageBefore	高	修触发时机/补档位	blocked
-需档	B	HuanleMonkeyCard	?	meta:0	global: "useCardToBegin",	CardUsed	高	修触发时机/补档位	blocked
 需档	B	Liaoyuan	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdDunxing	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
@@ -26,7 +25,6 @@ G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true
 需档	B	SwdTiebi	?	meta:0	global:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianChangnian	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianCtianfu3	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	XianjianXjzhimeng2	?	meta:0	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXshuangren2	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianXunying	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	Yihua	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
@@ -48,8 +46,10 @@ G23	A	XianjianLingyu	U05	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	�
 G23b	A	SwdBaishouzhihuHeld	U05	content/host/**	player: 'discardEnd'（弃牌阶段结束）	Phase { begin: true } 未钉阶段	高	上游是弃牌阶段结束，原生每个阶段开始都触发	blocked
 G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
 需档	B	Jifeng	U05	meta:0	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	XianjianXjzhimeng2	U05	meta:0	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
 5a	A	ShaDamageForceDiscard	U06	content/host/**	sha && notLink && countCards>0	共享行为仅 is_sha_like	高	共享行为未含苦无的 2 个条件（待复核）	blocked
 G20	A	PhaseEndRecoverOrDraw	U06	common.rs:536	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+需档	B	HuanleMonkeyCard	U06	meta:0	global: "useCardToBegin",	CardUsed	高	修触发时机/补档位	blocked
 G20	A	WudianZhucheng	U07	common.rs:766	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 需档	B	WudianZhuchengGuard	U07	meta:0	target:'shaBefore'	CardUsed	高	修触发时机/补档位	blocked
 G23	A	YxsMenshen	U08	filtering/*	player:"phaseEnd",	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked

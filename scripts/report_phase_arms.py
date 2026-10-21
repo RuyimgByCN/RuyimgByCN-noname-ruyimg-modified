@@ -189,8 +189,15 @@ def upstream_trigger_with_path(skill: str, key: str = "") -> tuple[str, str]:
         return MANUAL_TRIGGERS[key], ""
     # 只试「包内技能名」与「host 键本身」；**不再用键尾段**做回退
     #（`shengke_check` 曾因此解析到另一扩展的同名技能，得出错误 trigger）
-    # 第 7 种名字形态：卡牌的 `global: 'g_<name>'` 技能（如 `baishouzhihu` → `g_baishouzhihu`）
-    candidates = [name for name in (skill, key, f"g_{key}" if key else "", f"g_{skill}" if skill else "") if name]
+    # 名字形态：原名 / 键名 / 卡牌 `global: 'g_<name>'` / **去掉扩展前缀**
+    # （`swd_huanling` 的上游其实叫 `huanling`，见第 813 轮）
+    base = [skill, key, f"g_{key}" if key else "", f"g_{skill}" if skill else ""]
+    for name in (skill, key):
+        for prefix in ("swd_", "xj_", "xianjian_", "wudian_", "hlss_", "gujian_", "yunchou_",
+                       "hearth_", "gwent_", "mtg_", "ow_", "boss_", "huanle_", "longxue_"):
+            if name.startswith(prefix) and len(name) > len(prefix):
+                base.append(name[len(prefix):])
+    candidates = [name for name in base if name]
     prefer = package_path_for_key(key)
     for candidate in candidates:
         found = _lookup_trigger_with_path(candidate, prefer)
