@@ -101,3 +101,40 @@ python3 -B scripts/report_event_arms.py --check   # 有 REVIEW 行时 exit=1
 **26 条 REVIEW**（用牌面 13 + 死亡面 13）**未逐条核实** ⚠️ ——
 其中多数是**上游未定位**（内部行为或解析质量），**不按缺陷登记**。
 另有 **10 条「非用牌触发」/「非死亡触发」**，属解析错位，也**不按缺陷登记**。
+
+---
+
+## 7 ⚠ **新候选类 G23：`PhaseEnd` 未钉阶段 ⇒ 每阶段结束都触发（上游每回合一次）**
+
+### 7.1 事实链
+
+1. **上游语义**：`phaseEnd` **每回合只触发一次**，在**全部阶段跑完之后**
+   （`game.js:15999-16003`：只有 `event.num >= event.phaseList.length` 才 `event.trigger('phaseEnd')`）✅
+2. **原生派发**：`EventKind::PhaseEnd` 在**每个阶段结束**都派发
+   （`kernel/phase.rs:113` 的 `// PhaseEnd` 分支对每个 `phase` 都执行）✅
+3. **因此**：filter 若只写 `EventData::Phase { begin: false, .. }`（**不钉具体阶段**），
+   就会**一回合触发 5 次**（判定/摸牌/出牌/弃牌/结束各一次），而上游是 **1 次** ❗
+
+### 7.2 抽验 3 条（filter 与上游都读了原文）
+
+| 行为 | 原生 filter | 上游 | 结论 |
+|---|---|---|---|
+| **`Hutian`** | `matches!(event, Phase { begin: false, .. })` + 手牌非空 + `hutian_deposit.is_none()` | **`player: 'phaseEnd'`** | ⚠️ **未钉阶段**，但**有 `deposit` 自限闸门** ⇒ 可能实际只触发一次，**需逐条确认** |
+| **`SwdHuanling`** | `Phase { player, begin, .. } if player == owner && !begin` | **`player: 'phaseEnd'`** | ❗ **无自限闸门** ⇒ **每回合 5 次** |
+| **`SwdJiguanyuanGain`** | `Phase { player, begin: false, .. } if owner && jiguanyuan_cards 非空` | **`player: "phaseEnd"`** | ⚠️ 依赖 `jiguanyuan_cards` 是否被清空 |
+
+### 7.3 规模
+
+**`PhaseEnd` meta 共 39 条，其中 17 条在 filter 里不钉具体阶段** ⇒ **17 条候选** ⚠️
+（**已抽验 3 条，1 条确认、2 条需看自限闸门**）
+
+⇒ **登记为「G23 候选 17 条」，不并入确认缺陷总数** ✅
+⇒ **确认总数仍为 77**；**候选另计 17**
+
+### 7.4 为什么这一条比 G20 严重
+
+- **G20（早一步）**：触发**次数相同**，只是时机偏早 ⇒ 影响局部结算顺序；
+- **G23（多触发 4 次）**：触发**次数是上游的 5 倍** ⇒ 回复/摸牌/给牌类效果**直接翻 5 倍** ❗
+
+⇒ **若要排优先级，G23 应在 G20 之前**；但它属「把 `..` 补成 `End, begin: false`」的**一行改动**，
+**与 G20 的修法相同**（都是把阶段钉对）⇒ **可合并为一次批处理** ✅
