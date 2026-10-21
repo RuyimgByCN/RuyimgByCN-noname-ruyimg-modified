@@ -421,3 +421,30 @@ if trigger.startswith("(enable"):
 就判「缺 `loseHpEnd`」——**又是一次「只看一处代表全部」**（第 9 次自我更正）。
 
 **台账 87 → 86（A 42 / B 44）**
+
+---
+
+## 17 第 784 轮：一致性检查新增「行为名必须存在」——当场抓出 3 个错名
+
+台账的 `behavior` 列曾出现**源码里根本不存在的变体名**，且**没有任何门禁能发现**：
+
+| 台账写法 | 实际 | 后果 |
+|---|---|---|
+| `HuanleKuwu` | **`ShaDamageForceDiscard`**（U06 的 `huanle_kuwu` 映射到**共享行为**）| 5a 的缺陷描述指向了不存在的对象 |
+| `GujianFoodRangjie` | **`Rangjie`** | 6 号行同上 |
+| `Huanxia`（已撤回的 15 行里）| **`SwdHuanxia`** | 15 条假缺陷的根因之一 |
+
+⇒ **新增检查**：`check_ledger_consistency.py` 现在要求**每行的 `behavior` 出现在 `keys.rs` 的 `HostBehavior` 列表里**
+（用枚举全集而不是 `host:` 键映射 —— `SwdQinglongzhiguiHeld`、`SwdBaishouzhihuHeld` 这类卡片全局技能**没有 `host:` 键**）✅
+
+### 同时修掉的
+
+* `5a` 改为 `ShaDamageForceDiscard`，并注明**这是共享行为** ⇒ 缺陷描述改为「共享行为未含苦无的 2 个条件（**待复核**）」；
+* `6` 改为 `Rangjie`。
+
+### 这条检查的价值
+
+**行为名写错时，之前的检查全都通过**（因为它只比对判定字符串，不校验对象是否存在）。
+现在这类错误会在提交前失败。
+
+⇒ **台账 86 行（A 42 / B 44）不变**（只改名字，未改计数）✅

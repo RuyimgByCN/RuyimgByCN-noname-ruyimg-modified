@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import re
 import sys
 from pathlib import Path
 
@@ -91,6 +92,9 @@ def main() -> int:
     event = event_rows()
     ledger_mod = _load("report_defect_ledger", "report_defect_ledger.py")
     g23_behaviors = {row[0] for row in ledger_mod.g23_rows()}
+    # 行为必须在 keys.rs 的枚举里出现（有些行为没有 `host:` 键，如卡片全局技能）
+    keys_src = (ROOT / "crates/engine-native/src/content/host/keys.rs").read_text(encoding="utf-8")
+    known_behaviors = set(re.findall(r"HostBehavior::([A-Za-z0-9_]+)", keys_src))
     phase_pairs = {(b, v) for b, v in phase}
     event_pairs = {(b, v) for b, v in event}
     phase_behaviors = {b for b, _ in phase}
@@ -98,6 +102,9 @@ def main() -> int:
 
     problems: list[str] = []
     for row in ledger():
+        if row[2] not in known_behaviors:
+            problems.append(f"{row[0]} {row[2]}: 不是已知的 HostBehavior 变体（名字写错了？）")
+            continue
         rid, _cls, behavior = row[0], row[1], row[2]
         if rid in HANDWRITTEN:
             continue
