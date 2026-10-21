@@ -5971,30 +5971,26 @@ event.trigger('phaseAfter');
 
 ⇒ **`U05` 远未完成对照** —— 本轮只是**把「407 项」拆成了可推进的三块** ✅
 
-#### `TriggerMeta` 覆盖率普查：**239 键 → 141 有 meta / 98 无**（第 762 轮）
+#### ❌ 撤回（第 765 轮）：`U05` 的「98 条无 meta」与「15 条不可达」全是**工具假象**
 
-对 `U05` 家族全部 **239 个 `host:` 键**逐个查 `TriggerMeta`：
+第 762–763 轮我得出两个结论，**都是错的**：
 
-| 类 | 条数 | 说明 |
-|---|---:|---|
-| **有 meta** | **141** | 触发面已接 |
-| **无 meta —— 主动技 / 无 trigger** | **40** | ✅ **正确**（主动技本就不需要 meta）|
-| **无 meta —— 上游是触发型** | **20** | ❗ **候选缺陷**（**不触发**）|
-| **无 meta —— 上游未定位** | **38** | 🔍 **待查**（多为 `wudian_*` 等键名与上游技能名不同）|
-| **合计** | **239** | 与上一节一致 ✅ |
-
-**候选缺陷示例**（上游有 trigger、原生无 meta）：
-
-| 键 | 上游 |
+| 曾宣称 | 实际 |
 |---|---|
-| `lingwu` | `player: 'phaseAfter'` |
-| `shengong` | `player: ['chooseToRespondBegin']` |
-| `kbolan` | `player: 'drawBegin'` |
-| `hxunzhi2` | `player: 'phaseUseEnd'`（**已确认，见上**）|
+| 「239 键中 141 有 meta、98 无」 | **239 键全部有 metadata arm**（**141 条字面 `TriggerMeta{` + 98 条经 `self.trigger_meta_*()` helper**）|
+| 「20 条候选里 15 条四路全空 ⇒ 不触发」 | **15 条全部可达**（12 条在 `metadata.rs` 有 helper arm，另 3 条同样）|
+| 「`duwen`/`bshaowei`/`hxunzhi2` 三条无 meta」 | **三条都有** —— **我把变体名前缀丢了**（实为 `WudianDuwen`/`SwdBshaowei`(?) / `Hxunzhi2`）|
 
-⇒ **20 条候选** —— **本轮只登记为候选，不并入缺陷总数** ⚠️
-⇒ 因为**「上游触发型 + 无 meta」到「确实不触发」之间还差一步**：
-需确认该行为是否**由 `step`/`activation` 直接驱动**（如前文 `reguhuo` 的教训）✅
+**根因两条**（都很低级，但影响 18 条记录）：
+
+1. **`metadata_events()` 只匹配字面量 `Some(TriggerMeta {`**，而大量行为用 **`self.trigger_meta_*()` helper**
+   ⇒ 「无 meta」把 helper 形态全算漏了 ❌
+2. **我手写候选清单时把 `HostBehavior` 的变体前缀丢了**（`SwdHuanxia` 写成 `Huanxia`）
+   ⇒ 后续所有 `HostBehavior::X` 检索全部落空 ⇒ 「四路全空」是**查错了名字** ❌
+
+**已撤回**：**18 条台账记录**（15 条 inert + 3 条 no-meta）⇒ **台账 120 → 102（A 50 / B 52）** ✅
+
+
 
 ### 这条普查的意义
 

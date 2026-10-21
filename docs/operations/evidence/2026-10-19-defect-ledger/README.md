@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**120 条**）—— 2026-10-19 第 764 轮
+# 缺陷台账（机器可读，**102 条**）—— 2026-10-19 第 765 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -7,9 +7,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **56** |
-| **B（需扩枚举或引擎能力）** | **64** |
-| **合计** | **120** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **50** |
+| **B（需扩枚举或引擎能力）** | **52** |
+| **合计** | **102** |
 
 ## 2 按缺陷族
 
@@ -212,17 +212,16 @@ python3 -B -m unittest discover -s scripts -p 'test_report_defect_ledger.py'
 **`L03` 此前按「1 技能 + 1 武将」计为 2 项**，实际武将 `boss_zhugeliang` **自带 5 个技能**
 ⇒ **`L03` 的真实内容是 6 个技能** ⚠️ —— 这也是「按包内 `skills[]` 计」与「按武将挂载计」的差别。
 
+
 ---
 
-## 10 第 763–764 轮：并入 `U05` 的 15 条「四路全空」行为（台账 105 → **120**）
+## 10 ❌ 撤回：第 763–764 轮并入的 18 条（台账 120 → **102**）
 
-`U05` 的 20 条「上游触发型但无 meta」候选里，**15 条四条派发路径全空**
-（`TriggerMeta` / `factory` / `activation` / `intrinsic`+`restore` 的 `HostMachine` 创建）
-⇒ **效果步不可达 ⇒ 技能不触发**：
+**两条工具/转录错误**导致 18 条假缺陷：
 
-| 类 | 条数 | 明细 |
-|---|---:|---|
-| **A** | **3** | `Huanxia`（`damageAfter`）、`Hxunzhi2`（`phaseUseEnd`）、`Juxi`（`discardAfter`）——加 meta 即可 |
-| **B** | **12** | `shaBegin` ×5、`useCard` ×2、`drawBegin`/`phaseAfter`/`chooseToRespondBegin`/`useCardToBegin`/`judge` 各 1 |
+1. **`metadata_events()` 只匹配字面 `Some(TriggerMeta {`**，漏掉 **`self.trigger_meta_*()` helper** 形态
+   ⇒ `U05` 的「98 条无 meta」实际是 **0 条**（239 键全部有 metadata arm）；
+2. **候选清单里丢了 `HostBehavior` 变体前缀**（`SwdHuanxia` → `Huanxia`）
+   ⇒ 后续 `HostBehavior::X` 检索全部落空 ⇒ 「15 条四路全空」是**查错了名字**。
 
-⇒ **台账 120 条 = A 56 / B 64** ✅
+**撤回 18 条**（15 inert + 3 no-meta）⇒ **台账回到 102（A 50 / B 52）** ✅

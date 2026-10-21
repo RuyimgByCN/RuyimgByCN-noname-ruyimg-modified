@@ -87,26 +87,8 @@ G23	A	SwdDonghuangzhongCard	U05	filtering/*	player: "phaseEnd"	PhaseEnd, 未钉�
 G23	A	WudianGuangshuSpade	U05	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
 G23	A	XianjianLingyu	U05	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
 G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
-U05a	A	Duwen	U05	content/host/**	source: damageBegin	无 TriggerMeta	高	不触发（可用 DamageBefore）	blocked
-U05b	A	Bshaowei	U05	content/host/**	player: phaseEnd	无 TriggerMeta	高	不触发（可用 PhaseEnd 钉 End）	blocked
-U05c	A	Hxunzhi2	U05	content/host/**	player: phaseUseEnd	无 TriggerMeta	高	不触发（可用 PhaseEnd 钉 Play）	blocked
-U05i	A	Huanxia	U05	content/host/**	source: damageAfter	无 meta / 无 factory / 无 activation	高	加 meta `Damage`	blocked
-U05i	A	Hxunzhi2	U05	content/host/**	player: phaseUseEnd	无 meta / 无 factory / 无 activation	高	加 meta `PhaseEnd` 并钉 `Play`	blocked
-U05i	A	Juxi	U05	content/host/**	global: discardAfter	无 meta / 无 factory / 无 activation	高	加 meta `CardsDiscarded`	blocked
 失效	A	SwdBaishouzhihuHeld	U05	content/host/**	PhaseEnd(begin:false)	filter 要求 *begin	高	永不触发	blocked
 自加	A	SwdHuajin2	U05	content/host/**	source: damageBegin	Damage OR 判定阶段分支	高	自加分支	blocked
-U05i	B	Kbolan	U05	content/host/**	player: drawBegin	无 meta / 无 factory / 无 activation	高	需「摸牌前」幕	blocked
-U05i	B	Lianwu	U05	content/host/**	player: shaBegin	无 meta / 无 factory / 无 activation	高	需「sha 幕」	blocked
-U05i	B	Lingshi	U05	content/host/**	player: shaBegin	无 meta / 无 factory / 无 activation	高	需「sha 幕」	blocked
-U05i	B	Lingwu	U05	content/host/**	player: phaseAfter	无 meta / 无 factory / 无 activation	高	需「阶段之后」幕	blocked
-U05i	B	Lingyue	U05	content/host/**	player: shaBegin	无 meta / 无 factory / 无 activation	高	需「sha 幕」	blocked
-U05i	B	Poyue	U05	content/host/**	player: useCard	无 meta / 无 factory / 无 activation	高	需「用牌前」幕	blocked
-U05i	B	Shengong	U05	content/host/**	player: chooseToRespondBegin	无 meta / 无 factory / 无 activation	高	需「响应前」幕	blocked
-U05i	B	Shoulie	U05	content/host/**	player: shaBegin	无 meta / 无 factory / 无 activation	高	需「sha 幕」	blocked
-U05i	B	Sxianjing	U05	content/host/**	target: useCardToBegin	无 meta / 无 factory / 无 activation	高	需「指定目标时」幕	blocked
-U05i	B	Tianlun	U05	content/host/**	global: judge	无 meta / 无 factory / 无 activation	高	需「判定」幕	blocked
-U05i	B	Yudun	U05	content/host/**	player: useCard	无 meta / 无 factory / 无 activation	高	需「用牌前」幕	blocked
-U05i	B	Yueren	U05	content/host/**	player: shaBegin	无 meta / 无 factory / 无 activation	高	需「sha 幕」	blocked
 需档	B	Jifeng	U05	meta:0	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianFeixu	U05	meta:0	global:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
 5a	A	HuanleKuwu	U06	content/host/**	sha && notLink && countCards>0	仅 is_sha_like	高	少 2 个 filter 条件	blocked

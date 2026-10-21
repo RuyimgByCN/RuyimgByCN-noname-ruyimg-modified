@@ -84,33 +84,7 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "不触发（sha 幕 + 决斗幕缺档）"),
     ("U08c", "B", "YxsMenshen3", "U08", 'player: ["phaseBegin", "dieBegin"]', "EventKind::PhaseBegin",
      "少「死亡前」幕"),
-    ("U05a", "A", "Duwen", "U05", "source: damageBegin", "无 TriggerMeta", "不触发（可用 DamageBefore）"),
-    ("U05b", "A", "Bshaowei", "U05", "player: phaseEnd", "无 TriggerMeta", "不触发（可用 PhaseEnd 钉 End）"),
-    ("U05c", "A", "Hxunzhi2", "U05", "player: phaseUseEnd", "无 TriggerMeta", "不触发（可用 PhaseEnd 钉 Play）"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
-]
-
-
-#: U05 的 15 条「三重缺失」行为：无 TriggerMeta、无 factory 机器、无 activation 入口，
-#: 且在 `kernel/intrinsic.rs` 与 `snap/restore.rs` 里也没有创建点 ⇒ 效果步不可达（技能不触发）。
-#: 逐条均在上游找到 trigger（第 763 轮普查）。
-U05_INERT: list[tuple[str, str, str, str]] = [
-    # (behavior, class, upstream, fix)
-    ("Huanxia", "A", "source: damageAfter", "加 meta `Damage`"),
-    ("Hxunzhi2", "A", "player: phaseUseEnd", "加 meta `PhaseEnd` 并钉 `Play`"),
-    ("Juxi", "A", "global: discardAfter", "加 meta `CardsDiscarded`"),
-    ("Kbolan", "B", "player: drawBegin", "需「摸牌前」幕"),
-    ("Lianwu", "B", "player: shaBegin", "需「sha 幕」"),
-    ("Lingshi", "B", "player: shaBegin", "需「sha 幕」"),
-    ("Lingwu", "B", "player: phaseAfter", "需「阶段之后」幕"),
-    ("Lingyue", "B", "player: shaBegin", "需「sha 幕」"),
-    ("Poyue", "B", "player: useCard", "需「用牌前」幕"),
-    ("Shengong", "B", "player: chooseToRespondBegin", "需「响应前」幕"),
-    ("Shoulie", "B", "player: shaBegin", "需「sha 幕」"),
-    ("Sxianjing", "B", "target: useCardToBegin", "需「指定目标时」幕"),
-    ("Tianlun", "B", "global: judge", "需「判定」幕"),
-    ("Yudun", "B", "player: useCard", "需「用牌前」幕"),
-    ("Yueren", "B", "player: shaBegin", "需「sha 幕」"),
 ]
 
 
@@ -186,10 +160,6 @@ def build() -> list[list[str]]:
         cls = "A" if verdict.startswith(("G21", "G24")) else "B"
         rows.append([verdict.split("(")[0], cls, behavior, source_of(behavior), _loc,
                      trigger, which, "高", "修触发时机/补档位", "blocked"])
-
-    for behavior, cls, upstream, fix in U05_INERT:
-        rows.append([f"U05i", cls, behavior, "U05", "content/host/**", upstream,
-                     "无 meta / 无 factory / 无 activation", "高", fix, "blocked"])
 
     for rid, cls, behavior, source, upstream, native, note in MANUAL:
         rows.append([rid, cls, behavior, source, "content/host/**", upstream, native,
