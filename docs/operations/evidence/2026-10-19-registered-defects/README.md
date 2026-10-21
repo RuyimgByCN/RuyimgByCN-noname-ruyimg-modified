@@ -190,3 +190,29 @@ test result: FAILED. 0 passed; 13 failed; 0 ignored
 | 已登记缺陷守卫 | 21 | **34** |
 
 **新增 13 条守卫全部计入 `ignored`（不参与默认运行），默认套件仍 1538 通过、0 失败** ✅
+
+---
+
+## 7 已登记 A 类缺陷的上游**复核**（2026-10-19，第 723 轮）
+
+前三轮连续出现「查上游原文后推翻自己判定」（`lexue` 分类错、`rangjie` 遗漏、`tanhuadong` 语义选择），
+因此对**既有 21 条登记缺陷**中的 4 条做了同样的原文复核。**结论：4 条全部成立** ✅（本轮无更正）。
+
+| 缺陷 | 上游原文关键点 | 复核 |
+|---|---|---|
+| **`liyutang`（37）** | `content() { target.$gain2(cards); target.storage.liyutang = card; markcount = 2; addSkill('liyutang') }` | ✅ **目标应获得此牌**；原生「效果为空」⇒ 缺陷成立 |
+| **`qiankunbiao`（35）** | `filterTarget: target != player && target.countCards('he') > 0` | ✅ **目标无牌时应被拒**；原生更宽松 ⇒ 成立 |
+| **`longxugou`（36）** | `'step 2' if(event.card && get.position(event.card)=='s') { player.equip(event.card); }` | ✅ **获得后自己装备**；原生仅入手 ⇒ 成立 |
+| **`shihuifen`（38）** | `var next = _status.currentPhase.chooseToRespond({name:'shan'}); if(!result.bool){ addTempSkill('shihuifen','phaseUseAfter') }` | ✅ **未出闪后限制用牌**；原生「无询问且限制未生效」⇒ 成立 |
+
+### 为什么这条要记下来
+
+**「复核后没变」也是结论** ✅ ——
+若不记，下一个人无法区分「这 4 条复核过」与「这 4 条只是照抄旧结论」；
+而本会话已证明**照抄旧结论是有风险的**（`tanhuadong` 就是照抄了三轮的「确认缺陷」，实为语义选择）。
+
+### 未复核的 5 条（**仍需原文核对**）
+
+`zonghuo`(33/34) / `dinvxuanshuang`(39) / `mizhilianou`(41) / `shenenshu`(44) / `jijiang`（范围外）。
+⇒ **其中 `mizhilianou` 已在本会话复核过**（`phaseAfter` ⇒ 归 B 类）✅
+⇒ **剩余 4 条待复核** ⚠️
