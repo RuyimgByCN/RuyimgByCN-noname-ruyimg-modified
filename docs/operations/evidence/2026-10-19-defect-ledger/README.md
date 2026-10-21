@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**86 条**）—— 2026-10-19 第 783 轮
+# 缺陷台账（机器可读，**85 条**）—— 2026-10-19 第 788 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -7,9 +7,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **42** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **41** |
 | **B（需扩枚举或引擎能力）** | **44** |
-| **合计** | **86** |
+| **合计** | **85** |
 
 ## 2 按缺陷族
 
@@ -513,3 +513,33 @@ if trigger.startswith("(enable"):
 不猜新行号 —— 因为源码拆分后行号对应的是**新的位置**，猜一个数字等于制造新的假精度 ⚠️
 
 **清理后**：`check_doc_line_refs.py --strict` **exit 0**，已把 `preflight` 里该检查**从报告改为严格** ✅
+
+---
+
+## 20 第 788 轮：逐条读 `huajin` 家族 ⇒ 撤回「自加分支」（86 → 85）
+
+**上游 `huajin` 是三个技能的组合**：
+
+| 技能 | 触发 | 效果 |
+|---|---|---|
+| `huajin` | `enable: phaseUse, usable:1` | 弃一张 `he`，**授予 `huajin2`** |
+| `huajin2` | `trigger: {source: 'damageBegin'}` | `trigger.num++`（伤害 +1）|
+| **`huajin3`** | **`trigger: {player: 'phaseBegin'}`** | **移除 `huajin2`**（效果只持续到自己回合开始）|
+
+**原生** `SwdHuajin2` 的过滤臂：
+
+```rust
+matches!(event, EventData::Damage(d) if d.source == Some(owner) && !d.prevented)
+|| matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true } if *player == owner)
+```
+
+⇒ **伤害面 = `huajin2` ✓、相位面 = `huajin3` ✓** —— **两面都有上游依据，不是「自加分支」** ❌
+
+**错因**：`classify` 见到上游 `damageBegin` 就把「同时有相位分支」判成自加，
+**没有考虑上游通过 `group` 挂的子技能**（**第三例**：`lexue`、`miedao`、`huajin2`）。
+
+**处理**：登记 `behavior_has_damage_and_phase_two_faces()` 白名单（当前只有 `SwdHuajin2`，
+且要求**已逐条读过上游**才能进），并**不**做通用的 `group` 合并 ——
+因为**合并会把「清理型子技能」的触发面误当成主触发面**（实测会让 `G14` 从 14 涨到 17，属误判）。
+
+**台账 86 → 85（A 41 / B 44）**

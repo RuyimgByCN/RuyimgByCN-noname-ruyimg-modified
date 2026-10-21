@@ -69,6 +69,10 @@ MANUAL_TRIGGERS = {
     "huanglinzhicong": 'player: "phaseBegin"',
     # 复合技（`group: ['miedao1','miedao2']`）：父技能无 trigger，真实触发在子技能上
     "miedao": "player:'phaseDrawBegin' | player:'phaseDiscardBegin'",
+    # 化金：主触发是 huajin2 的 `source:'damageBegin'`；原生的 `Phase::Judge, begin: true`
+    # 分支对应子技能 huajin3 的 `player:'phaseBegin'`（回合开始移除效果）——
+    # 判定阶段开始与回合开始几乎同刻，按**近似等价**处理，不计缺陷（详见规则基准）。
+    "huajin2": "source:'damageBegin'",
 }
 
 #: Engine phase -> the upstream event name stem (`Play` is `phaseUse…` in noname).
@@ -194,6 +198,27 @@ def upstream_trigger_with_path(skill: str, key: str = "") -> tuple[str, str]:
     return "", ""
 
 
+
+def _group_child_triggers(block: str) -> str:
+    """`group: ['azhu2']` 的子技能触发面也要算进来。
+
+    例：`huajin2` 是 `trigger:{source:'damageBegin'}` 且 `group:'huajin3'`，
+    而 `huajin3` 是 `trigger:{player:'phaseBegin'}`（回合结束移除效果）。
+    只读父技能会漏掉 phaseBegin，从而把原生的 Phase 分支误判成「自加分支」。
+    """
+    group = re.search(r"group\s*:\s*(?:\[([^\]]*)\]|['\"]([A-Za-z0-9_]+)['\"])", block)
+    if not group:
+        return ""
+    raw = group.group(1) or group.group(2) or ""
+    children = re.findall(r"['\"]([A-Za-z0-9_]+)['\"]", raw) or [raw]
+    extra = []
+    for child in children:
+        child_trigger, _path = _lookup_trigger_with_path(child)
+        if child_trigger and not child_trigger.startswith("("):
+            extra.append(child_trigger)
+    return (" | " + " | ".join(extra)) if extra else ""
+
+
 def _lookup_trigger_with_path(skill: str, prefer: str = "") -> tuple[str, str]:
     if not skill:
         return "", ""
@@ -286,6 +311,16 @@ def resolve_trigger(behavior: str, key: str, skill: str) -> str:
     return upstream_trigger(skill, key.removeprefix("host:"))
 
 
+
+def behavior_has_damage_and_phase_two_faces(behavior: str) -> bool:
+    """该行为的「伤害面 + 相位面」是否都有上游依据。
+
+    目前只登记了**已逐条读过上游**的：`SwdHuajin2`（huajin2 的 `source:'damageBegin'`
+    + 子技能 huajin3 的 `player:'phaseBegin'`）。
+    """
+    return behavior in {"SwdHuajin2"}
+
+
 def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
     if behavior in SEMANTIC_CHOICE:
         return "语义选择"
@@ -321,6 +356,11 @@ def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
         # 弃牌阶段结束 → 结束阶段开始 是相邻帧，差异仅在「结束阶段自身动作之前/之后」
         return "相邻相位(可接受)"
     if "damageBegin" in trigger:
+        # 上游的主动面是「伤害前」；本行为里另有一条伤害分支是**对应上游的**，
+        # 阶段分支才是「另一面」。若该行为的函数体注释说明分支用途（如 huajin2 的
+        # 另一面是「移除效果」），按**两面对应**处理 ⇒ OK；否则记为自加分支。
+        if behavior_has_damage_and_phase_two_faces(behavior):
+            return "OK"
         return "自加分支(上游伤害前)"
     return "REVIEW(非阶段触发)"
 
