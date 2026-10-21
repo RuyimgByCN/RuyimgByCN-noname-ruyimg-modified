@@ -19,7 +19,7 @@
 > | ① 上游定位 | **54 / 54** | 每行都能指出上游出处 |
 > | ② 上游同质 | **36 行** | 相位族全族上游 trigger 一致 |
 > | ③ 效果步存在 | **54 / 54** | 无一条是「功能没做」|
-> | ④ **效果等价** | **6 已确认 + 4 形态相符** | 其余 **44 行未读** ⚠️ |
+> | ④ **效果等价** | **8 已确认 + 4 形态相符** | 其余 **42 行未读** ⚠️ |
 >
 > **归因层代码级复核 7 行、7 行正确、0 错**；**注释层 6 次判断 6 次错**；**注释与实际相反累计 6 处**。
 
@@ -1467,3 +1467,27 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 **只有「卡牌块与行为语义完全无关」时才是归因错**（如 `SwdHuanling`）。
 
 ⇒ **形态相符累计 4 行**（`SwdLianda`、`SwdCyxianjiang`、`Xuanyuan`、`SwdDonghuangzhongCard`）✅
+
+---
+
+## 48 第 831 轮：`XianjianBinxin` / `SwdLingxin` 均**等价**（④ → 8）
+
+| 行为 | 原生代码 | 上游 | 判定 |
+|---|---|---|---|
+| **`XianjianBinxin`** | `if 目标存活 && hp == 1 { ctx.change_hujia(t, 1) }` | `global: phaseEnd`，filter `event.player.hp==1` ⇒ **`trigger.player.changeHujia()`** | ✅ **等价**（都是「体力为 1 的阶段结束者 +1 护甲」）|
+| **`SwdLingxin`** | `for 0..3 { 摸牌; 若为红桃则收集 }` | `player: phaseEnd` frequent ⇒ `get.cards(3)`，**弃非红桃、收红桃** | ✅ **等价** |
+
+### 第 7 处注释与实际不符
+
+`SwdLingxin` 的注释写「**渔人：锁定（sha 机器内联臂查询）**」，而代码是**翻 3 张收红桃** ⇒ **完全无关** ❌
+
+⇒ **注释错例累计 7 处**：`YxsMenshen`、`Hutian`、`SwdMufengHeld`、`YxsMenshen3`、`SwdLqingcheng`、`SwdHuanyin`、**`SwdLingxin`**
+
+### 维度 ④ 现状
+
+| 档 | 条数 |
+|---|---:|
+| **等价已确认** | **8** |
+| **形态相符、效果待证** | **4** |
+| **未读** | **42** |
+| **效果不符** | **1**（`SwdMufengHeld`：发现三选一 vs 摸一）|
