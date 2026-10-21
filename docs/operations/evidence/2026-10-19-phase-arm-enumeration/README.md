@@ -112,3 +112,38 @@ python3 -B scripts/report_phase_arms.py --check   # 有 REVIEW 行时 exit=1
 
 `phaseUseAfter` / `phaseDiscardAfter` 是「阶段**之后**」，原生 `begin: false` 是「阶段**结束**」——
 在原生的事件模型里两者是**同一帧**（阶段结束即该阶段之后），**不影响任何结算顺序** ⇒ **登记差异，不计缺陷** ✅
+
+---
+
+## 10 ✅ 第 768 轮：`miedao` 结案，**53 条全部有判定（REVIEW 归零）**
+
+`miedao` 上游是**复合技**：
+
+```js
+miedao:  { group: ['miedao1', 'miedao2'], ai: { threaten: 1.4 } }   // 父技能无 trigger
+miedao1: { trigger: { player: 'phaseDrawBegin' } }                  // 摸牌阶段开始
+miedao2: { trigger: { player: 'phaseDiscardBegin' } }               // 弃牌阶段开始
+```
+
+**原生**：`Phase::Discard, begin: true` ⇒ **对应 `miedao2` ✓**
+⇒ **判定「OK」**（**此前记 REVIEW，是因为只看了父技能** ⚠️ —— **与 `lexue` 同一形态**）
+
+**`miedao` 已补进 `MANUAL_TRIGGERS`**（复合技无法靠单一名字解析）✅
+
+### ⇒ 相位枚举最终账
+
+| 判定 | 条数 |
+|---|---:|
+| ✅ **OK** | **24** |
+| ❗ G14 | **14** |
+| ⚠️ G20 | **5** |
+| ❗ G18 | **2** |
+| ✅ 相邻相位（可接受）| **2** |
+| ⚠️ G15（`phaseAfter` / 「之前」）| **2** |
+| ✅ 语义选择 | **1** |
+| ❗ G22（晚一步）| **1** |
+| ❗ 凭空新增 | **1** |
+| ❗ 自加分支 | **1** |
+| **合计** | **53** ✅ **REVIEW 0** |
+
+⇒ **`report_phase_arms.py --check` 现已 exit 0** ✅

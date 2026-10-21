@@ -15,14 +15,20 @@ XianjianQianfang	Judge	true	xianjian.rs:236		player:'phaseBegin'	G14(钉死阶�
 YunchouDiyguhuo	Judge	true	common.rs:467		player: "phaseBegin"	G14(钉死阶段)
 WudianFuchou2	End	false	common.rs:24		global:'phaseAfter'	G15(phaseAfter)
 XianjianFenglue	Play	true	xianjian.rs:142		player:'phaseUseBefore'	G15(之前档)
+HlssFengqi	Judge	true	common.rs:39		player:['phaseZhunbeiBegin']	G18(准备阶段缺档)
+Xiuluo	Judge	true	common.rs:219	swd_xiuluo	player: "phaseZhunbeiBegin"	G18(准备阶段缺档)
 GujianFoodLiyutang	End	true	common.rs:605		player: "phaseEnd"	G20(早一步)
 PhaseEndRecoverOrDraw	End	true	common.rs:536	huanle_jiuwei	player: "phaseEnd"	G20(早一步)
 WudianPaotaiFire	End	true	common.rs:795	paotai2	player:'phaseEnd'	G20(早一步)
 WudianZhucheng	End	true	common.rs:766	zhucheng	player:'phaseEnd'	G20(早一步)
 WudianZiyu	End	true	common.rs:592	ziyu	global:'phaseEnd'	G20(早一步)
+GwentCiguState	Draw	false	common.rs:631		player: "phaseDrawBegin"	G22(晚一步)
 GujianFoodMapodoufu	End	true	common.rs:608		player: "phaseJieshuBegin"	OK
 GujianFoodXiajiao	Draw	true	common.rs:602		player: "phaseDrawBegin"	OK
+GwentBirinState	Play	false	common.rs:628		player: "phaseUseAfter"	OK
+GwentQinpenState	Discard	false	common.rs:640		player: "phaseDiscardAfter"	OK
 MbcmQingzheng	Play	true	common.rs:404	mbcmqingzheng	player: "phaseUseBegin",	OK
+Miedao	Discard	true	common.rs:227	miedao	player:'phaseDrawBegin' | player:'phaseDiscardBegin'	OK
 SwdDaixing	End	false	swd.rs:30		player:'phaseEnd'	OK
 SwdReyingzi	Draw	true	swd.rs:657		player:'phaseDrawBegin2'	OK
 WudianOwliyong	Draw	true	common.rs:715		player:'phaseDrawBegin'	OK
@@ -41,14 +47,8 @@ XianjianXjzhimeng	End	false	xianjian.rs:309		player: "phaseEnd"	OK
 XianjianZhaoyao	Draw	true	xianjian.rs:372		global:'phaseDrawBegin'	OK
 YunchouXiongzi	Draw	true	common.rs:509		player:'phaseDrawBegin'	OK
 Zaibian	Play	true	common.rs:185	zaibian	player:'phaseUseBegin'	OK
-BossBaiyi	Judge	true	common.rs:853		(enable 主动技)	REVIEW(上游无 trigger)
-GwentBirinState	Play	false	common.rs:628			REVIEW(上游未定位)
-GwentCiguState	Draw	false	common.rs:631			REVIEW(上游未定位)
-GwentQinpenState	Discard	false	common.rs:640			REVIEW(上游未定位)
-HlssFengqi	Judge	true	common.rs:39		player:['phaseZhunbeiBegin']	REVIEW(准备阶段缺档)
-Xiuluo	Judge	true	common.rs:219	swd_xiuluo	player: "phaseZhunbeiBegin"	REVIEW(准备阶段缺档)
-Miedao	Discard	true	common.rs:227	miedao	(无 trigger)	REVIEW(非阶段触发)
-SwdWangchenHeld	End	true	swd.rs:447		player:'phaseDiscardEnd'	REVIEW(非阶段触发)
-SwdXielv	End	true	swd.rs:346		player:'phaseDiscardEnd'	REVIEW(非阶段触发)
+BossBaiyi	Judge	true	common.rs:853		(enable 主动技)	凭空新增触发
+SwdWangchenHeld	End	true	swd.rs:447		player: "phaseDiscardEnd"	相邻相位(可接受)
+SwdXielv	End	true	swd.rs:346		player: "phaseDiscardEnd"	相邻相位(可接受)
 SwdHuajin2	Judge	true	swd.rs:821	swd_huajin2	source:'damageBegin'	自加分支(上游伤害前)
 GujianFoodTanhuadong	Play	false	common.rs:617		player: "phaseEnd"	语义选择

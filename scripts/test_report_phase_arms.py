@@ -76,11 +76,12 @@ class ClassificationTests(unittest.TestCase):
 
 
 class CliTests(unittest.TestCase):
-    def test_check_exits_one_while_review_rows_remain(self):
+    def test_check_passes_when_every_row_is_classified(self):
+        # 第 768 轮：`miedao` 作为复合技补进 MANUAL 后，53 条全部有判定 ⇒ --check 归零
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--check"],
                               capture_output=True, text=True, cwd=ROOT)
-        self.assertEqual(proc.returncode, 1)
-        self.assertIn("REVIEW", proc.stderr)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn("共 53 个相位钉死臂", proc.stderr)
 
 
 if __name__ == "__main__":

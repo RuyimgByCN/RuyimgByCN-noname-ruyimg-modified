@@ -67,6 +67,8 @@ MANUAL_TRIGGERS = {
     # 装备/机巧卡的效果挂在卡片的 `global: 'g_<name>'` 技能上 —— 第 7 种「查不到」形态。
     "qinglongzhigui": 'player: "phaseBegin"',
     "huanglinzhicong": 'player: "phaseBegin"',
+    # 复合技（`group: ['miedao1','miedao2']`）：父技能无 trigger，真实触发在子技能上
+    "miedao": "player:'phaseDrawBegin' | player:'phaseDiscardBegin'",
 }
 
 #: Engine phase -> the upstream event name stem (`Play` is `phaseUse…` in noname).
