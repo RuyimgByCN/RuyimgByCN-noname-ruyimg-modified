@@ -6027,3 +6027,15 @@ event.trigger('phaseAfter');
 ⇒ **⚠ 限定**：**「四条路径全空」是「不可达」的强证据，但仍不等于「运行时一定不触发」**——
 若存在**本会话未发现的第五条路径**（如 `rule-vm` 侧的机器创建），结论需再核 ⚠️
 （**已检查**：`HostMachine {` 在 `crates/` 里除 `content/host` 外只出现在 `snap/restore.rs` 与 `kernel/intrinsic.rs`，两者都无这 15 个行为 ✅）
+
+### 工具修正：`report_event_arms.py` **不再用「过滤臂模式」冒充 meta**（第 766 轮）
+
+**背景**：第 765 轮发现 `metadata_events()` 只匹配字面 `Some(TriggerMeta {`，漏了 `self.trigger_meta_*()` helper 形态。
+当时 `report_event_arms.py` 在 meta 缺失时会**回退到过滤臂里写的 `EventData::X`**，这就等于
+**用「代码里出现的字符串」冒充「运行时派发的事件」** —— 正是第 730 轮已经踩过、并写过教训的坑。
+
+**修正**：meta 严格取 `TriggerMeta`；缺失即判定 **`REVIEW(meta 未解析)`**，**不再回退** ✅
+
+**影响**：重跑 card / death 两族，**结论未变**（23 需档前 + 6 sha 幕 + 6 OK；10 OK + 8 未定位 + 4 G24）
+⇒ 说明这两族的判定原本就建立在**真 meta** 上 ✅
+⇒ 但**回退路径已移除**，以后不会再有「meta 缺失却给出 OK」的情况 ⚠️
