@@ -5870,3 +5870,25 @@ event.trigger('phaseAfter');
 
 ⇒ **`U07` 不可签**（4 缺陷 + 2 未转换）❌
 ⇒ **「未转换」与「缺陷」必须分开**：前者是覆盖缺口（台账外），后者是规则差异（台账内）✅
+
+### L29 龙血玄黄 —— 定稿：**6 技能 / 2 缺陷 + 3 未转换 + 1 一致**（2026-10-19，第 756 轮）
+
+| 技能 | 上游 trigger | 原生 | 判定 |
+|---|---|---|---|
+| `mbcmqingzheng` 清正 | **`phaseUseBegin` + `enable: phaseUse`** | `PhaseBegin` + 钉 `Play` | ✅ **触发相符**（**335 KB 内容未逐条对** ⚠️）|
+| **`mbqianlong` 潜龙** | **`global: phaseBefore` + `player: enterGame`** | **`EventKind::PhaseBegin`** | ❗ **缺「阶段前」与「入场」两幕** |
+| **`mbweitong` 威统** | **同上** | **同上** | ❗ 同上 |
+| **`mbcmjiushi` 旧事** | **`player: damageBegin3`** | **未挂载（`mapping: null`）** | ❗ **未转换** |
+| **`mbcmfangzhu` 放逐** | **`player: phaseUseAfter`** | **未挂载** | ❗ **未转换** |
+| **`mbjuejin` 掘金** | **无 trigger**（定义在 `十周年UI`）| **未挂载** | ❗ **未转换** |
+
+### 三类分开记
+
+| 类 | 条数 |
+|---|---:|
+| **确认缺陷** | **2**（`L29a` `mbqianlong`、`L29b` `mbweitong`）|
+| **未转换** | **3**（`mbcmjiushi` / `mbcmfangzhu` / `mbjuejin`）|
+| **一致** | **1**（`mbcmqingzheng` 触发面；**内容层未核** ⚠️）|
+
+⇒ **`mbcmqingzheng` 有 335 754 B**，是本包内容的主体；**只核了触发面，内容未逐条对照** ⚠️
+⇒ **因此 `L29` 的「一致 1」只覆盖触发，不覆盖行为** —— 这条限定必须保留 ❗

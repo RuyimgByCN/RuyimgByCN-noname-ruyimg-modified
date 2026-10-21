@@ -75,6 +75,10 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "不触发（用牌目标后幕缺档）"),
     ("L07a", "A", "WudianCiqiu", "U07", 'source: "damageBegin1"', "无 TriggerMeta",
      "不触发（伤害前第 1 次，可用现有 DamageBefore）"),
+    ("L29a", "B", "MbQianlong", "L29", "global: phaseBefore + player: enterGame", "EventKind::PhaseBegin",
+     "缺「阶段前」与「入场」两幕"),
+    ("L29b", "B", "MbWeitong", "L29", "global: phaseBefore + player: enterGame", "EventKind::PhaseBegin",
+     "缺「阶段前」与「入场」两幕"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
 ]
 

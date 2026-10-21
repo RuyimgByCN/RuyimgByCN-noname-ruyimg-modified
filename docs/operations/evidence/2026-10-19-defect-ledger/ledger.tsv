@@ -75,6 +75,8 @@ L20d	B	FzLiegong	L20	content/host/**	player: useCardToPlayered	无 TriggerMeta	�
 L27a	A	Xiefang	L27	content/host/**	global: ["dieEnd", "gameDrawEnd"]	EventKind::PhaseEnd	高	事件种类完全错（应为死亡后/摸牌后）	blocked
 L27b	A	SbZhaXiang	L27	content/host/**	player: "useCard"	无 TriggerMeta	高	未挂触发（效果不生效）	blocked
 需档	B	NewZhixi	L27	meta:0	player: "useCard",	CardUsed	高	修触发时机/补档位	blocked
+L29a	B	MbQianlong	L29	content/host/**	global: phaseBefore + player: enterGame	EventKind::PhaseBegin	中	缺「阶段前」与「入场」两幕	blocked
+L29b	B	MbWeitong	L29	content/host/**	global: phaseBefore + player: enterGame	EventKind::PhaseBegin	中	缺「阶段前」与「入场」两幕	blocked
 G14	A	SwdZhenjiu2	U05	swd.rs:675	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
 G19	A	SwdRexue	U05	content/host/**	global: phaseEnd	filter 含 actor != owner	高	技能主被排除	blocked
 G19	A	SwdTiebi	U05	content/host/**	global: useCardToBegin	filter 含 t != owner	高	技能主被排除	blocked
