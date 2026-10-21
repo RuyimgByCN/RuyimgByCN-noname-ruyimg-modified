@@ -5673,3 +5673,46 @@ food_tick(ctx, self.owner, &self.def_key);   // 倒计时扣减，归零移除
 |---|---:|---:|
 | **A** | 25 | **26**（+`kuwu` 缺 2 条件）|
 | **合计** | 42 | **43** |
+
+### ✅ 非名 `phaseEnd` 的真实语义：**每回合一次，且在所有阶段跑完之后**（2026-10-19，第 726 轮）
+
+**证据**：`archive/upstream/noname-liuli/noname/game/game.js:15999-16003`
+
+```js
+'step 11'
+if (event.num < event.phaseList.length) { event.goto(8); }
+else if (!event._phaseEndTriggered) {
+    event._phaseEndTriggered = true;
+    event.trigger('phaseEnd');      // ← 只在「所有阶段跑完」后触发
+    event.redo();
+}
+'step 12'
+event.trigger('phaseAfter');
+```
+
+⇒ **`phaseEnd` = 一回合只触发一次，时机在「全部阶段结束之后、`phaseAfter` 之前」** ✅
+⇒ **不是「每个阶段结束都触发」** ❌（**我上一轮的担心不成立** —— 上游 `jiuwei` 不是「一回合 5 次」）
+
+### 由此得到的映射规则
+
+| 上游事件 | 语义 | 原生应对应 |
+|---|---|---|
+| **`phaseEnd`** | **回合末一次**（全部阶段后）| **`Phase::End, begin: false`**（结束阶段结束）|
+| **`phaseAfter`** | **回合末再一次**（`phaseEnd` 之后）| ⚠️ **无独立档位**（**与 `phaseEnd` 难分辨**，属 G15 家族）|
+| **`phaseBegin`** | **任意阶段开始** | `Phase { player, begin: true, .. }`（**不钉 `Judge`**）|
+| **`phaseZhunbeiBegin`** | **准备阶段开始** | ❌ **`Phase` 无 `Prepare`**（G18）|
+
+### `jiuwei`（九尾）的更正
+
+| 项 | 值 |
+|---|---|
+| 上游 | **`player: "phaseEnd"`** ⇒ **回合末一次** |
+| 原生 | **`Phase::End, begin: true`**（**结束阶段开始**）|
+| 判定 | ⚠️ **轻微时机差异**：**比上游早一步**（结束阶段开始 vs 全部阶段之后）；**粒度一致（都是每回合一次）** |
+| 结论 | **不是「每阶段触发」的严重差异**；**登记为轻微时机差异**，**待裁决** |
+
+### ⚠ 需回查的候选：**`End, begin: true` 共 8 处**
+
+原生 `filtering*/` 里 **`Phase::End, begin: true` 有 8 处、`begin: false` 有 13 处**。
+**凡上游是 `phaseEnd` 却用了 `begin: true` 的，都偏早一步** ⇒
+**这 8 处应逐个回查上游触发事件**（**`jiuwei` 已确认其一**）⚠️
