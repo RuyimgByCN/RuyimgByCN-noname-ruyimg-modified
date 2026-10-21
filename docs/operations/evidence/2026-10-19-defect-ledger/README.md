@@ -448,3 +448,29 @@ if trigger.startswith("(enable"):
 现在这类错误会在提交前失败。
 
 ⇒ **台账 86 行（A 42 / B 44）不变**（只改名字，未改计数）✅
+
+---
+
+## 18 第 785 轮：守卫也查「名字存在」——`guard_rangjie_branch1_draws` 引用了不存在的变体
+
+新增 [`check_guard_references.py`](../../../../scripts/check_guard_references.py)（已进 `preflight`）：
+解析守卫文件里的 `HostBehavior::X` / `EventKind::X` / `Phase::X` 与双引号 CamelCase，逐个核对是否存在于
+`keys.rs`、`event.rs`，或属于**待补能力白名单**。
+
+**首跑抓出 3 个名字**：
+
+| 名字 | 判定 |
+|---|---|
+| `Damage4` | ✅ 待补能力（与 `DamageBegin4` 同义的候选名）⇒ 进白名单 |
+| `EPIC_REGUHUO_KEY` | ✅ `constants.rs` 里真有的**常量**⇒ 进 `ALLOWED_CONSTANTS` |
+| **`GujianFoodRangjie`** | ❌ **不存在的变体** ⇒ 守卫的 `src.find(...)` **永远 panic**（`expect("找不到 rangjie 的效果步")`）|
+
+⇒ **`guard_rangjie_branch1_draws` 已改为 `Rangjie`** ✅
+⇒ **重跑 `--ignored`：60 failed / 0 passed**（**改名后仍为真反例**）✓
+
+### 为什么这类错误特别隐蔽
+
+守卫用 `expect("…")` 取字符串位置：**名字错了不会编译失败，只在 `--ignored` 跑时才 panic**，
+而 `#[ignore]` 的守卫**平时根本不跑** ⇒ 一个永远 panic 的守卫可以存活很久，还给人「有覆盖」的错觉 ⚠️
+
+⇒ **现在它是一条提交前门禁**（`preflight` 里的「守卫引用名存在」）✅

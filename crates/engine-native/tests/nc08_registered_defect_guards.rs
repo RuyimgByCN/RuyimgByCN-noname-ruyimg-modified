@@ -508,7 +508,7 @@ fn guard_mopaifanbei_second_draw() {
     );
 }
 
-/// `GujianFoodRangjie`（`6`）缺少分支 1 的摸牌动作。
+/// `Rangjie`（`6`）缺少分支 1 的摸牌动作。
 #[test]
 #[ignore = "补 `draw_cards` 后转绿（分支 1 应摸牌）"]
 fn guard_rangjie_branch1_draws() {
@@ -517,7 +517,7 @@ fn guard_rangjie_branch1_draws() {
         "/src/content/host/step/skills_cards.rs"
     ))
     .expect("读 step/skills_cards.rs");
-    let idx = src.find("GujianFoodRangjie").expect("找不到 rangjie 的效果步");
+    let idx = src.find("Rangjie").expect("找不到 rangjie 的效果步");
     let body = &src[idx..(idx + 1200).min(src.len())];
     assert!(
         body.contains("draw") || body.contains("Draw"),
