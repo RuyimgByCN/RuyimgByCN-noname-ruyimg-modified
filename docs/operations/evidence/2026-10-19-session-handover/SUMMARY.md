@@ -180,3 +180,27 @@
 | 脚本单测 | `python3 -B -m unittest discover -s scripts` | **145 个全绿** |
 | 缺陷守卫 | `cargo test -p engine-native --test nc08_registered_defect_guards -- --ignored` | **0 passed / 51 failed（全部为红）** |
 | 原生全量 | `cargo test --offline -p engine-native` | **1538 passed / 0 failed / 71 ignored** |
+
+---
+
+## 100 第 891 轮收尾核验（会话结束状态）
+
+| 检查 | 结果 |
+|---|---|
+| `preflight.py`（19 项） | **rc=0** |
+| `nc08_registered_defect_guards -- --ignored` | **0 passed / 51 failed**（51 个守卫全红）|
+| 台账行数 | **54** |
+| 工作区 | **只有 `packages/extensions/*/dist/` 等未跟踪变更属其他任务**，本会话未触碰 |
+
+### 结论：**八项完成数 = 0**，goal 保持 active
+
+**未完成的核心原因（都与本会话无关）**：
+
+| 项 | 状态 | 阻塞 |
+|---|---|---|
+| 规则差异 | **0/12** | **D1（分母）+ D2（`L19`）+ D9（未跟踪区授权）** |
+| 目标平台 | 构建级 | 缺 **Android/Windows 工具链、Linux CI** |
+| 性能 | 14/14（旧口径）| 缺 **legacy-vs-native 同机对比** |
+| 组合/安装/升级 | 已完成 | —— |
+
+**如果要继续，第一件事是拿 D9 授权**——54 条缺陷每一行的 `location` 都在未跟踪区。
