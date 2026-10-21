@@ -5716,3 +5716,42 @@ event.trigger('phaseAfter');
 原生 `filtering*/` 里 **`Phase::End, begin: true` 有 8 处、`begin: false` 有 13 处**。
 **凡上游是 `phaseEnd` 却用了 `begin: true` 的，都偏早一步** ⇒
 **这 8 处应逐个回查上游触发事件**（**`jiuwei` 已确认其一**）⚠️
+
+### ✅ 回查 8 处 `End, begin: true`：**1 正确 / 5 偏早 / 1 钉死错向**（2026-10-19，第 727 轮）
+
+按上一轮给出的候选清单逐个回查上游 `filtering*/` 里的 **`Phase::End, begin: true`**：
+
+| 行为 | 上游 trigger | 原生 | 判定 |
+|---|---|---|---|
+| **`GujianFoodMapodoufu`** | **`player: "phaseJieshuBegin"`**（结束阶段**开始**）| `End, begin: true` if owner | ✅ **完全正确** |
+| **`PhaseEndRecoverOrDraw`**（`jiuwei`）| **`player: "phaseEnd"`** | 同上 | ⚠️ **早一步** |
+| **`GujianFoodLiyutang`** | **`player: "phaseEnd"`** | 同上 | ⚠️ **早一步** |
+| **`WudianZhucheng`**（`zhucheng`）| **`player: "phaseEnd"`** | 同上 | ⚠️ **早一步** |
+| **`WudianPaotaiFire`**（`paotai2`）| **`player: "phaseEnd"`** | 同上 + `paotai_lv > 0` | ⚠️ **早一步** |
+| **`WudianZiyu`**（`ziyu`）| **`global: "phaseEnd"`** | `End, begin: true` + **`player: _`**（任意玩家）| ⚠️ **global 面对 ✅ / 早一步 ✗** |
+| **`GujianFoodZiyangdan`**（`ziyangdan`）| **`player: "phaseBegin"`**（**任意阶段开始**）| **`End, begin: true` if owner** | ❌ **钉死错向**：应为「任意阶段」，却钉死「结束阶段」|
+
+### 三类结论
+
+| 类 | 条数 | 说明 |
+|---|---:|---|
+| ✅ **正确** | **1** | `mapodoufu`（`phaseJieshuBegin` ⇒ `End, begin: true`）|
+| ⚠️ **偏早一步**（**新差异族 G20**）| **5** | 上游 `phaseEnd`（**全部阶段跑完后**）写成 **`End, begin: true`（结束阶段开始）** |
+| ❌ **钉死错向**（**归入「钉死单一阶段」家族**）| **1** | `ziyangdan`：上游 `phaseBegin`（任意阶段）⇒ 原生钉死 `End` |
+
+### 由此归纳：**「钉死单一阶段」是同一个错误模式的两副面孔**
+
+| 子形态 | 上游 | 原生钉死 | 条数 |
+|---|---|---|---:|
+| **G14（钉 Judge）** | `phaseBegin`（任意）| **`Judge`** | **10** |
+| **G14 变体（钉 End）** | `phaseBegin`（任意）| **`End`** | **1**（`ziyangdan`）|
+
+⇒ **共同根因：`Phase` 枚举没有「任意阶段」的表达**（**只能靠 `..` 忽略 phase 字段**），
+而作者用「找一个最像的阶段」代替 ⇒ **根因与 G18 同属「枚举缺档」** ✅
+
+### 计数变化
+
+| 类 | 原 | 现 |
+|---|---:|---:|
+| **A（改逻辑/条件）** | 26 | **32**（+5 G20 +1 `ziyangdan`）|
+| **合计** | 43 | **49** |
