@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**80 条**）—— 2026-10-19 第 792 轮
+# 缺陷台账（机器可读，**73 条**）—— 2026-10-19 第 793 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -8,8 +8,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **41** |
-| **B（需扩枚举或引擎能力）** | **39** |
-| **合计** | **80** |
+| **B（需扩枚举或引擎能力）** | **32** |
+| **合计** | **73** |
 
 ## 2 按缺陷族
 
@@ -670,3 +670,31 @@ matches!(event, EventData::Damage(d) if d.source == Some(owner) && !d.prevented)
 这属于**口径判定**（见[待决事项 D10](../2026-10-19-open-decisions/README.md)），**不是「缺枚举」** ⚠️
 
 ⇒ **台账 85 → 80（A 41 / B 39）**，并把 5 条移入 D 类清单 ✅
+
+---
+
+## 25 第 793 轮：`respond` 族也归入 D10——台账 80 → **73**
+
+D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差异只在子帧」。按这个判据，
+`respond` / `respondAfter` / `respondEnd` 与 `CardResponded` 同样成立：
+
+| 上游 trigger | 条数 | 引擎槽位 |
+|---|---:|---|
+| `['respond','useCard']` | 4 | `CardResponded` + `CardUsed` ✅ |
+| `['respondAfter','useCard']` | 2 | 同上 ✅ |
+| `['respondEnd','useCard']` | 1 | 同上 ✅ |
+| `['useCardToTargeted']` | 2 | **无** ⇒ **真缺档** |
+| `['useCardToPlayered','useCardToTargeted']` | 1 | **无** ⇒ **真缺档** |
+
+⇒ **7 条移入 D10**（子帧判定），**2+1 条保留为真缺档** ✅
+
+### 现在 `需档` 的真实构成
+
+| 缺的槽位 | 条数 |
+|---|---:|
+| **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **14** |
+| **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
+| `dieBegin`（死亡前）| 4 |
+| **合计** | **24** |
+
+⇒ **台账 73（A 41 / B 32）**，其中 **B 类 24 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅

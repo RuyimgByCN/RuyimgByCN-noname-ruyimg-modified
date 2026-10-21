@@ -139,17 +139,38 @@ def _is_bare_use_card(trigger: str) -> bool:
     return bool(tokens) and set(tokens) == {"useCard"}
 
 
+#: 上游只由「使用牌 / 响应」相关幕组成时，引擎的 `CardUsed`/`CardResponded` 已能承载；
+#: 差异只在子帧（use 瞬间 vs after 窗口）⇒ 交 D10 判定，不计缺陷。
+USECARD_TOKENS = {"useCard", "respond", "respondAfter", "respondEnd"}
+
+
+def _only_usecard_family(trigger: str) -> bool:
+    core = (
+        trigger.replace("player:", "")
+        .replace("target:", "")
+        .replace("source:", "")
+        .replace("global:", "")
+        .replace("[", " ")
+        .replace("]", " ")
+        .replace(",", " ")
+    )
+    tokens = {tok.strip("'\" ") for tok in core.split() if tok.strip("'\" ")}
+    return bool(tokens) and tokens <= USECARD_TOKENS
+
+
 def classify_card(which: str, trigger: str) -> str:
     """Card-use surface: native `CardUsed` == after the card resolved."""
     if not trigger:
         return "REVIEW(上游未定位)"
+    if _only_usecard_family(trigger):
+        return "REVIEW(useCard 子帧需判定)"
     if any(tok in trigger for tok in CARD_BEFORE):
         return "需档(使用前/指定目标)" if which == "CardUsed" else "REVIEW(前置档却用 After 面)"
     if any(tok in trigger for tok in CARD_AFTER):
         return "OK" if which == "CardUsed" else "REVIEW(After 面却用前置档)"
     if "useCard" in trigger:
         return "需档(使用前/指定目标)" if which == "CardUsed" else "OK"
-    if _is_bare_use_card(trigger):
+    if _is_bare_use_card(trigger) or _only_usecard_family(trigger):
         # 上游是裸 `useCard`（使用牌时）——引擎已有 `CardUsed`，**不是缺档**；
         # 子帧先后（use 瞬间 vs after 窗口）属口径问题，交 D 类判定。
         return "REVIEW(useCard 子帧需判定)"
@@ -183,6 +204,8 @@ def classify_death(which: str, trigger: str) -> str:
 
 
 def classify(which: str, trigger: str) -> str:
+    if trigger and _only_usecard_family(trigger):
+        return "REVIEW(useCard 子帧需判定)"
     """`which` is the native event kind (`DamageBefore` / `Damage` / `Death` ...)."""
     if not trigger:
         return "REVIEW(上游未定位)"

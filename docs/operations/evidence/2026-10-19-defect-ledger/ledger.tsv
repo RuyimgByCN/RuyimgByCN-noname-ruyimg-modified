@@ -32,19 +32,13 @@ G18	B	Xiuluo	?	common.rs:219	player: "phaseZhunbeiBegin"	Judge, begin:true	中	�
 需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdDunxing	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdHuanyin	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdHyunshen	?	meta:0	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdLianda	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLingxian	?	meta:0	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLuomei	?	meta:0	player:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdMojian	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdNingshuang	?	meta:0	target:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdTiebi	?	meta:0	global:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdXielei	?	meta:0	player:['useCard','respondAfter']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdYuchen	?	meta:0	player:['useCard','respondAfter']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianChangnian	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianCtianfu3	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	XianjianRunxin	?	meta:0	player:['useCard','respondEnd']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXjzhimeng2	?	meta:0	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXshuangren2	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianXunying	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
@@ -71,7 +65,6 @@ G23	A	XianjianLingyu	U05	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	�
 G23b	A	SwdBaishouzhihuHeld	U05	content/host/**	player: 'discardEnd'（弃牌阶段结束）	Phase { begin: true } 未钉阶段	高	上游是弃牌阶段结束，原生每个阶段开始都触发	blocked
 G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
 需档	B	Jifeng	U05	meta:0	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	XianjianFeixu	U05	meta:0	global:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
 5a	A	ShaDamageForceDiscard	U06	content/host/**	sha && notLink && countCards>0	共享行为仅 is_sha_like	高	共享行为未含苦无的 2 个条件（待复核）	blocked
 G20	A	PhaseEndRecoverOrDraw	U06	common.rs:536	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G14	A	WudianGeju	U07	common.rs:684	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
