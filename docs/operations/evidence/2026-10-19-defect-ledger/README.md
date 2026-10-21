@@ -2298,6 +2298,9 @@ let yxs_fanji2_direct_hit = {
 | 只看**效果步**（`step/*.rs`）| **7 / 54** |
 | **看全部行为臂** | **20 / 54（37%）** |
 
+**已固化为脚本**：`python3 -B scripts/report_registered_deviations.py`
+⇒ 输出 `台账 54 行；已登记差异 20 行；未登记 34 行`（**4 个单测**，`test_report_registered_deviations.py`）✅
+
 ⇒ **54 条里有 20 条自己承认「与上游有差异」** ⚠️
 ⇒ 这些差异**多数是「上游玩家自选 → 原生确定性首张」**这类近似（本会话在 `SwdCyxianjiang`、`SwdLianda`、`WudianZhuchengGuard`、`ShengkeCheck`、`XianjianXunying` 等都读到过）
 
