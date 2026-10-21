@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""Tests for report_defect_ledger.py."""
+
+from __future__ import annotations
+
+import importlib.util
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+SCRIPT = ROOT / "scripts" / "report_defect_ledger.py"
+
+
+def load():
+    spec = importlib.util.spec_from_file_location("report_defect_ledger", SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class LedgerTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = load()
+        cls.rows = cls.mod.build()
+
+    def test_ledger_is_populated(self):
+        self.assertGreaterEqual(len(self.rows), 60)
+
+    def test_rows_have_all_columns(self):
+        for row in self.rows:
+            self.assertEqual(len(row), 8, row)
+
+    def test_classes_are_a_or_b(self):
+        self.assertEqual({r[1] for r in self.rows}, {"A", "B"})
+
+    def test_no_duplicate_id_behavior_pairs(self):
+        seen = [(r[0], r[2]) for r in self.rows]
+        self.assertEqual(len(seen), len(set(seen)))
+
+    def test_damage_family_yields_no_false_positive_g21(self):
+        # 时序权威是 TriggerMeta；读过滤臂模式会产生 G21 假阳性（见枚举证据 §1）
+        self.assertEqual([r for r in self.rows if r[0].startswith("G21")], [])
+
+    def test_known_defects_present(self):
+        behaviors = {r[2] for r in self.rows}
+        for expected in ("SwdZhuhai", "Reguhuo", "BossBaiyi", "SwdHujing"):
+            self.assertIn(expected, behaviors)
+
+    def test_permission_is_recorded_for_every_row(self):
+        self.assertEqual({r[7] for r in self.rows}, {"blocked"})
+
+
+if __name__ == "__main__":
+    unittest.main()
