@@ -11,7 +11,7 @@
 | 四维 | **①54/54 ②36 行 ③54/54 ④等价 42 + 形态 10 = 已核 53/54（98%）** |
 | 守卫 | **`nc08_registered_defect_guards` 51 个 `#[ignore]`，`--ignored` 实测 0 passed / 51 failed**；覆盖率 **有守卫 53 / 缺 1 / 共 54 = 98.1%** |
 | 门禁 | **`preflight.py` 19 项**（第 870 轮新增「已登记差异口径 20/54」）|（数字一致性 4 处 + 名称存在 2 处 + 链接/旧值/索引/映射/登记/枚举/覆盖/行数）|
-| 脚本单测 | **145 个全绿**；`engine-native` **1538 passed / 0 failed / 71 ignored** |
+| 脚本单测 | **145 个全绿**；`engine-native` **1538 passed / 0 failed / 72 ignored**（新增 1 个 Tianxiang 守卫）|
 | 自我更正 | **21 次**（清单见台账 README 各轮小节）|
 | 八项 | **完成 0**；唯一未过项 = **规则差异**（0/12 已转换来源，待 D1/D2 口径）|
 
@@ -179,7 +179,7 @@
 | 台账↔枚举 | `python3 -B scripts/check_ledger_consistency.py` | **一致 ✅** |
 | 脚本单测 | `python3 -B -m unittest discover -s scripts` | **145 个全绿** |
 | 缺陷守卫 | `cargo test -p engine-native --test nc08_registered_defect_guards -- --ignored` | **0 passed / 51 failed（全部为红）** |
-| 原生全量 | `cargo test --offline -p engine-native` | **1538 passed / 0 failed / 71 ignored** |
+| 原生全量 | `cargo test --offline -p engine-native` | **1538 passed / 0 failed / 72 ignored** |
 
 ---
 
