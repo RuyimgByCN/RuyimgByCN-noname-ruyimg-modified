@@ -186,8 +186,16 @@ test result: FAILED. 0 passed; 13 failed; 0 ignored
 
 | 指标 | 加入前 | 加入后 |
 |---|---:|---:|
-| `engine-native` passed / failed / **ignored** | 1538 / 0 / **21** | **1538 / 0 / 43** |
-| 已登记缺陷守卫 | 21 | **43** |
+| `engine-native` passed / failed / **ignored** | 1538 / 0 / **21** | **1538 / 0 / 57** |
+| 已登记缺陷守卫 | 21 | **57** |
+
+**第 740 轮再补 14 条**（G23 十处 + `Jiguanyuan` + G14 三处）：
+
+| 守卫 | 断言（修正后应成立）|
+|---|---|
+| `g23_{huanling,lingxin,lqingcheng,donghuangzhong,guangshu_spade,jidong,binxin,lingyu,xuanyuan,menshen}_turn_end` | 该 arm **钉住结束阶段**（`phase: crate::event::Phase::End`）|
+| `jiguanyuan_gain_must_trigger_on_damage` | `SwdJiguanyuanGain` 的 **meta 是伤害事件**，不是 `PhaseEnd` |
+| `g14_{hujing,qinglongzhigui,huanglinzhicong}_any_phase` | 该 arm **不再出现 `Phase::Judge`** |
 
 **第 728 轮再补 6 条**（G20 五处 + `ziyangdan`）：
 
@@ -196,7 +204,7 @@ test result: FAILED. 0 passed; 13 failed; 0 ignored
 | `g20_jiuwei_turn_end` / `g20_liyutang_turn_end` / `g20_zhucheng_turn_end` / `g20_paotai2_turn_end` / `g20_ziyu_turn_end` | 该 arm 匹配 **`Phase::End, begin: false`**（`phaseEnd` = 全部阶段跑完之后）|
 | `ziyangdan_must_not_pin_the_end_phase` | 该 arm **不再出现 `Phase::End`**（上游是任意阶段开始）|
 
-**新增 22 条守卫全部计入 `ignored`（不参与默认运行），默认套件仍 1538 通过、0 失败** ✅
+**新增 36 条守卫全部计入 `ignored`（不参与默认运行），默认套件仍 1538 通过、0 失败** ✅
 
 ---
 

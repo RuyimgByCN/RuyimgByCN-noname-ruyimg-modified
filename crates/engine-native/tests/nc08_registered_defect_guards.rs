@@ -254,3 +254,70 @@ fn ziyangdan_must_not_pin_the_end_phase() {
         "ziyangdan 上游为任意阶段开始（phaseBegin），不应钉死结束阶段；当前 arm：\n{seg}"
     );
 }
+
+// ------------------------------------- G23 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发
+
+/// G23 守卫：上游 `player: "phaseEnd"` 是**每回合一次**（`game.js:15999-16003`），
+/// 而原生 meta 用 `EventKind::PhaseEnd`（**每个阶段结束都派发**）。
+/// 修正后该 arm 必须**钉住结束阶段**（`phase: crate::event::Phase::End`），
+/// 否则一回合会触发 5 次。
+macro_rules! g23_guard {
+    ($fn_name:ident, $variant:literal,) => {
+        #[test]
+        #[ignore = "登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；\
+                    修复需改未跟踪的 content/host/filtering/{common,swd}.rs"]
+        fn $fn_name() {
+            let src = {
+                let a = read("filtering/common.rs");
+                if a.contains(concat!("HostBehavior::", $variant, " =>")) {
+                    a
+                } else {
+                    read("filtering/swd.rs")
+                }
+            };
+            let seg = arm_until_next(&src, concat!("HostBehavior::", $variant, " =>"));
+            assert!(
+                seg.contains("phase: crate::event::Phase::End")
+                    || seg.contains("*phase == crate::event::Phase::End"),
+                concat!(
+                    $variant,
+                    " 上游 phaseEnd 每回合一次，filter 应钉住结束阶段；当前未钉 ⇒ 每阶段结束都触发：\n{seg}",
+                ),
+                seg = seg,
+            );
+        }
+    };
+}
+
+g23_guard!(g23_huanling_turn_end, "SwdHuanling",);
+g23_guard!(g23_lingxin_turn_end, "SwdLingxin",);
+g23_guard!(g23_lqingcheng_turn_end, "SwdLqingcheng",);
+g23_guard!(g23_donghuangzhong_turn_end, "SwdDonghuangzhongCard",);
+g23_guard!(g23_guangshu_spade_turn_end, "WudianGuangshuSpade",);
+g23_guard!(g23_jidong_turn_end, "WudianJidong",);
+g23_guard!(g23_binxin_turn_end, "XianjianBinxin",);
+g23_guard!(g23_lingyu_turn_end, "XianjianLingyu",);
+g23_guard!(g23_xuanyuan_turn_end, "Xuanyuan",);
+g23_guard!(g23_menshen_turn_end, "YxsMenshen",);
+
+/// `SwdJiguanyuanGain` 的问题不是「未钉阶段」，而是**事件种类完全错**：
+/// 上游是 `player: "damageEnd"` + `source: "damageSource"`（伤害事件），
+/// 原生却把它挂在 `EventKind::PhaseEnd` 上 ⇒ 永不按伤害触发。
+/// 修正后 meta 应为伤害事件。
+#[test]
+#[ignore = "登记缺陷 G23b：SwdJiguanyuanGain 上游 damageEnd+damageSource，原生挂 PhaseEnd；\
+            修复需改未跟踪的 content/host/metadata/swd.rs 与 filtering/swd.rs"]
+fn jiguanyuan_gain_must_trigger_on_damage() {
+    let meta = read("metadata/swd.rs");
+    let seg = arm_until_next(&meta, "HostBehavior::SwdJiguanyuanGain =>");
+    assert!(
+        seg.contains("EventKind::Damage"),
+        "SwdJiguanyuanGain 上游是伤害事件（damageEnd + damageSource），meta 不应用 PhaseEnd：\n{seg}"
+    );
+}
+
+// ------------------------------------------- G14 补充：相等比较写法与卡片 global 技能
+
+g14_guard!(g14_hujing_any_phase, "SwdHujing", "filtering/swd.rs");
+g14_guard!(g14_qinglongzhigui_any_phase, "SwdQinglongzhiguiHeld", "filtering/swd.rs");
+g14_guard!(g14_huanglinzhicong_any_phase, "SwdHuanglinzhicongHeld", "filtering/swd.rs");
