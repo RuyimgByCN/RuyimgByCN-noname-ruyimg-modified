@@ -3,7 +3,6 @@ G14	A	GujianFoodZiyangdan	?	common.rs:623	player: "phaseBegin"	End, begin:true	�
 G20	A	GujianFoodLiyutang	?	common.rs:605	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G22	A	GwentCiguState	?	common.rs:631	player: "phaseDrawBegin"	Draw, begin:false	中	filter 从 `begin: false` 改为 `begin: true`（须在摸牌数确定前生效）	blocked
 G23	A	Hutian	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	SwdHuanling	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
 G23	A	SwdLingxin	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
 G23	A	SwdLqingcheng	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
 G23	A	SwdMufengHeld	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked

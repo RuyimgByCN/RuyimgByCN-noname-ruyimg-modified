@@ -85,6 +85,8 @@ def g23_rows() -> list[tuple[str, str, str, str, str]]:
     for behavior, kind in sorted(meta.items()):
         if kind != "PhaseEnd" or behavior in pinned:
             continue
+        if behavior in UNRESOLVED_ATTRIBUTION:
+            continue
         key = keys.get(behavior, "")
         trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
         if "phaseEnd" not in trigger:
@@ -155,6 +157,11 @@ def build() -> list[list[str]]:
 
 #: 上游是**裸 `useCard`**（使用牌时）的行为：引擎已有 `CardUsed`，**不是缺档**。
 #: 子帧先后（use 瞬间 vs after 窗口）属于口径问题 ⇒ 交 D 类判定，不计缺陷。
+#: 归因无效：包内是**卡牌** `huanling` 映射到 `host:huanling`，而上游同名 `huanling`
+#: 是**另一个技能**（`phaseEnd`）；行为注释写的是「断月」（`duanyue`，主动技）。
+#: ⇒ 无法确定上游，移出缺陷清单待复核（第 813–814 轮）。
+UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
+
 BARE_USE_CARD_REVIEW = {
     "SwdGongshen", "SwdLanzhi", "SwdLiuhong", "XianjianLiefeng", "NewZhixi",
 }
