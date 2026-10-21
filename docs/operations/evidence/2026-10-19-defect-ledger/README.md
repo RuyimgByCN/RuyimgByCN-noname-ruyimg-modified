@@ -954,9 +954,16 @@ Xiuluo     => matches!(event, EventData::Phase { ... Phase::Judge, begin: true .
 
 | 行为 | 原生效果（代码注释）| 上游定位 | 判定 |
 |---|---|---|---|
-| **`WudianGuangshuSpade`** | 「光塔·♠：持有者于**下一个阶段结束时**受 1 点无来源雷伤并**移除本子技**」；效果在 `commit_phase` 直推，宿主步 `Flow::Done` | ❌ 未找到（技能名不是 `wudian_guangshu_spade`）| **效果已读、等价未定** |
-| **`WudianJidong`** | 「急冻：翻面 + 回复 2 + 冰封」；注释已登记「翻面内联、冰封解除=翻回时点」两处差异 | ❌ 未找到 | **效果已读、等价未定** |
-| **`XianjianLingyu`** | 「灵愈：令一名其他已受伤角色回复 1 点体力（可放弃=空目标）」 | ❌ 未找到 | **效果已读、等价未定** |
+| **`WudianGuangshuSpade`** | 「持有者于下一个阶段结束时受 1 点无来源雷伤并移除本子技」 | **`guangshu_spade`**：`phaseEnd` forced ⇒ `damage('thunder','nosource')` + `removeSkill` | ✅ **等价**（都是一次性雷伤 + 移除）|
+| **`WudianJidong`** | 「翻面 + 回复 2 + 冰封」（注释已登记「翻面内联」「冰封解除=翻回时点」）| **`jidong`**：`global: phaseEnd`，filter `hp===1 && !isTurnedOver()` ⇒ `turnOver()` + `recover(2)` + `addTempSkill('jidong2')`（`damageBefore` 取消）| ✅ **等价**（含 2 处已登记差异）|
+| **`XianjianLingyu`** | 「令一名其他已受伤角色回复 1 点体力（可放弃）」| **`lingyu`**：`phaseEnd` direct，filter 要求存在其他已受伤角色 ⇒ `chooseTarget` + 回复 1 | ✅ **等价** |
+
+### 工具改进（本轮）
+
+`dump_skill_pair.py` 现在**优先用包内技能名**（`host:` 键 → `skills[].name`），
+不再从行为名硬推 —— 三条上游因此全部定位成功 ✅
+（`WudianJidong` 仍失败：它的上游在 `character/ow/skill.js`，包内 `skills[].name` 不在该文件里，
+需要按 `upstream_path` 定向查找。）
 
 ### 为什么不能直接判等价
 
@@ -969,8 +976,8 @@ Xiuluo     => matches!(event, EventData::Phase { ... Phase::Judge, begin: true .
 
 | 档 | 条数 | 含义 |
 |---|---:|---|
-| **等价已确认** | **2** | 两侧逻辑逐条对过（`WudianZhucheng`、`SwdBaishouzhihuHeld`）|
-| **效果已读、等价未定** | **3** | 原生效果已看清，**上游未定位** ⇒ 不能判 |
+| **等价已确认** | **5** | 两侧逻辑逐条对过（`WudianZhucheng`、`SwdBaishouzhihuHeld`、`WudianGuangshuSpade`、`WudianJidong`、`XianjianLingyu`）|
+| **效果已读、等价未定** | **0** | —— |
 | **未读** | **50** | 仍未开始 |
 
 ⇒ **把「看过一半」和「确认等价」分开记**，避免把「读了原生」当成「核过等价」 ✅

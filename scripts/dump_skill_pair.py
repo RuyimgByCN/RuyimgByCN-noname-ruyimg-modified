@@ -86,6 +86,11 @@ def main() -> int:
 
     skill = args.skill
     if not skill:
+        # 优先用包内技能名（`host:` 键 → `skills[].name`）——这比从行为名推导可靠
+        phase = _load_phase()
+        key = phase.host_keys().get(args.behavior, "")
+        skill = phase.skill_names().get(key, "")
+    if not skill:
         name = args.behavior
         for suffix in ("Held", "Card", "Use", "Gain", "Remain", "2", "3"):
             if name.endswith(suffix):
