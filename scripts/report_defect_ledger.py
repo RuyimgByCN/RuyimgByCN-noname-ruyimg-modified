@@ -127,7 +127,8 @@ def build() -> list[list[str]]:
     ]:
         if verdict.startswith("OK") or verdict.startswith("REVIEW"):
             continue
-        cls = "A" if verdict.startswith("G21") else "B"
+        # G21/G24 是「改触发时机」⇒ A 类；「需档」与「第 N 次」需扩枚举 ⇒ B 类
+        cls = "A" if verdict.startswith(("G21", "G24")) else "B"
         rows.append([verdict.split("(")[0], cls, behavior, source_of(behavior), _loc,
                      trigger, which, "高", "修触发时机/补档位", "blocked"])
 

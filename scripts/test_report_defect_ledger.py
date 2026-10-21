@@ -42,6 +42,14 @@ class LedgerTests(unittest.TestCase):
         # 时序权威是 TriggerMeta；读过滤臂模式会产生 G21 假阳性（见枚举证据 §1）
         self.assertEqual([r for r in self.rows if r[0].startswith("G21")], [])
 
+    def test_class_matches_verdict_family(self):
+        # 「需档」需扩枚举 ⇒ B；G21/G24 是改触发时机 ⇒ A
+        for row in self.rows:
+            if row[0].startswith("需档"):
+                self.assertEqual(row[1], "B", row)
+            if row[0] in ("G21", "G24"):
+                self.assertEqual(row[1], "A", row)
+
     def test_known_defects_present(self):
         behaviors = {r[2] for r in self.rows}
         for expected in ("SwdZhuhai", "Reguhuo", "BossBaiyi", "SwdHujing"):
