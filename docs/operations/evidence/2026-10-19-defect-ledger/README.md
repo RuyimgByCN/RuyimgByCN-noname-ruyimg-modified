@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**101 条**）—— 2026-10-19 第 769 轮
+# 缺陷台账（机器可读，**91 条**）—— 2026-10-19 第 771 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -7,9 +7,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **49** |
-| **B（需扩枚举或引擎能力）** | **52** |
-| **合计** | **101** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **46** |
+| **B（需扩枚举或引擎能力）** | **45** |
+| **合计** | **91** |
 
 ## 2 按缺陷族
 
@@ -284,3 +284,36 @@ python3 -B -m unittest discover -s scripts -p 'test_report_defect_ledger.py'
    ⇒ **是假象**（`SwdHuanxing` 会被 `Huanxing` 之类误配）⇒ **改回精确匹配** ✅
 
 ⇒ **真实覆盖率 37.6%**，**63 条待补** —— 这是本会话留给下一位的**最明确的待办**之一 ⚠️
+
+---
+
+## 13 第 771 轮：守卫覆盖率 **88/91 = 96.7%**；并撤回 9 条「无 meta」假缺陷（101 → 91）
+
+### 13.1 新增 60 个 `#[ignore]` 守卫（全部实测为红）
+
+| 守卫族 | 数量 | 断言 |
+|---|---:|---|
+| **能力守卫**（`capability_guard!`）| 8 | `event.rs` 里是否出现 `CardTargeted`/`ShaBegin`/`ShaAfter`/`ShaBefore`/`DeathBefore`/`GameStart`/`JudgeBefore`/`DamageBegin2` |
+| **无 meta 行为**（`meta_event_guard!`）| 7 | 行为 arm 附近的期望事件名 |
+| **能力/幕位**（手写）| 10 | `Prepare`/`LoseHpEnd`/`DamageBegin4`/`JudgeBefore`/`CardTargeted`/`DrawBegin2`/`dieBegin`/`EnterGame` 等 |
+| **分支动作** | 1 | `rangjie` 分支 1 必须有 `draw` |
+
+**`cargo test … -- --ignored` 结果：60 failed / 0 passed** ⇒ **每个守卫都是真反例** ✅
+
+### 13.2 ❌ 撤回 9 条「无 meta」缺陷（与第 765 轮同一根因）
+
+`no_meta_arm_guard!` 断言「`metadata*.rs` 里有该行为的 arm」——**9 个守卫直接通过**，
+说明这些行为**确实有 arm**，只是此前 `metadata_events()` 只认字面量而漏判：
+
+`L20c` `ZhuWanzhongJi`、`L20d` `FzLiegong`、`L27a` `Xiefang`、`L27b` `SbZhaXiang`、
+`L29a` `MbQianlong`、`L29b` `MbWeitong`、`L07a` `WudianCiqiu`、`U08a` `YxsFanji2`、`U08b` `YxsMenshen2`
+
+⇒ **9 条全部撤回**（**没有足够证据说它们缺 meta**）⇒ **台账 101 → 92**，再删 `Tianxiang` 重复行 ⇒ **91（A 46 / B 45）** ✅
+⇒ **教训**：**守卫若一开始就是绿的，它守的不是缺陷，而是我的误判** ⚠️
+
+### 13.3 剩余 3 条无守卫
+
+| 行 | 理由 |
+|---|---|
+| `G23 Hutian`、`G23 SwdMufengHeld` | **偶合正确**（未钉阶段但本地只在该帧触发）⇒ **无需守卫** |
+| `失效 SwdBaishouzhihuHeld` | **语义缺口**，需产品判定后才能写断言（D 类）|

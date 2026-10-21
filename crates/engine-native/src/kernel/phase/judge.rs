@@ -1,0 +1,754 @@
+use super::super::*;
+
+pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
+    if !ctx.core.turn.turn_opened {
+        ctx.reset_turn_limits(player);
+        ctx.core.turn.turn_opened = true;
+        // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零
+        ctx.core.turn.cards_used_turn = 0;
+        // 回合伤害统计清零（U05 xianjian 明绣，规则 v160 灵火
+        // 门控；上游 getStat 每回合重置同口径）——在本人回合
+        // 开始清（PhaseEnd 触发晚于收束提交，见规则基准）
+        ctx.core.player_mut(player).turn_damage = 0;
+        // 忘忧戳清零（U05 xianjian 紫萱，规则 v162）：存活至
+        // 标记者自己下回合开始（上游 addTempSkill 当前回合结
+        // 束——登记差异：保留期延长）
+        ctx.core.player_mut(player).wangyou3_round = 0;
+        // 摄灵回合次数清零（U05 xianjian 南宫煌，规则 v168）
+        ctx.core.turn.sheling_used = 0;
+        // 射影回合清零（U05 xianjian 苏媚，规则 v175）
+        ctx.core.turn.sheying_used = false;
+        // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
+        ctx.core.turn.zhangmu_used = false;
+        // 红莲（Boss 毕方，规则 v228）：回合开始——顺序获牌
+        // 堆前缀红牌至多 3 张（上游随机 0-3 确定性近似），并对
+        // 座位序前至多 3 名其他角色各造成 1 点火伤（上游随机
+        // 3-0 名确定性近似）
+        if let Some(hdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_HONGLIANX)
+        {
+            if ctx.core.has_skill(player, hdef) {
+                let mut gained = 0usize;
+                while gained < 3 && !ctx.core.deck.is_empty() {
+                    let c = ctx.core.deck[ctx.core.deck.len() - 1];
+                    if matches!(
+                        ctx.catalog.cards[c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    ) {
+                        ctx.core.deck.pop();
+                        ctx.core.player_mut(player).hand.push(c);
+                        gained += 1;
+                    } else {
+                        break;
+                    }
+                }
+                if gained > 0 {
+                    ctx.log(LogEvent::CardsDrawn {
+                        player,
+                        cards: ctx
+                            .core
+                            .player(player)
+                            .hand
+                            .iter()
+                            .rev()
+                            .take(gained)
+                            .copied()
+                            .collect::<Vec<_>>(),
+                    });
+                }
+                let targets: Vec<PlayerId> = ctx
+                    .core
+                    .seat_order_from(player)
+                    .into_iter()
+                    .filter(|t| *t != player && ctx.core.player(*t).alive)
+                    .take(3)
+                    .collect();
+                for t in targets {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(player),
+                        t,
+                        1,
+                        crate::event::DamageNature::Fire,
+                        None,
+                    )));
+                }
+            }
+        }
+        // 绝红（Boss 共工，规则 v244）：准备阶段——敌方全
+        // 体逐个：有牌者，有装备 → 装备全弃（撤技能+入弃堆）；
+        // 无装备 → 随机弃一张手牌（随机→手牌首张确定性近似
+        // 登记先例族）
+        if let Some(jhdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_JUEHONG)
+        {
+            if ctx.core.has_skill(player, jhdef) {
+                let seats = ctx.core.players.len() as PlayerId;
+                for t in 0..seats {
+                    if t == player || !ctx.core.player(t).alive {
+                        continue;
+                    }
+                    if ctx.core.is_boss_side(t) == ctx.core.is_boss_side(player) {
+                        continue;
+                    }
+                    let has_cards = !ctx.core.player(t).hand.is_empty()
+                        || !ctx.core.player(t).equips.is_empty();
+                    if !has_cards {
+                        continue;
+                    }
+                    let equips: Vec<crate::ids::CardId> =
+                        ctx.core.player(t).equips.iter().copied().collect();
+                    if !equips.is_empty() {
+                        for c in equips {
+                            ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                            revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                            ctx.to_discard(c);
+                        }
+                    } else if !ctx.core.player(t).hand.is_empty() {
+                        let c = ctx.core.player(t).hand[0];
+                        ctx.discard_from_hand(t, c);
+                    }
+                }
+            }
+        }
+        // 夹击（Boss 明星，规则 v245）：准备阶段——相邻（环
+        // 上/下家）敌方中有坐骑（+1/-1 马槽）者 → 坐骑全弃
+        //（撤技能+入弃堆）
+        if let Some(jzdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_JIAZU)
+        {
+            if ctx.core.has_skill(player, jzdef) {
+                for t in [ctx.core.ring_prev(player), ctx.core.ring_next(player)] {
+                    if t == player || !ctx.core.player(t).alive {
+                        continue;
+                    }
+                    if ctx.core.is_boss_side(t) == ctx.core.is_boss_side(player) {
+                        continue;
+                    }
+                    let mounts: Vec<crate::ids::CardId> = ctx
+                        .core
+                        .player(t)
+                        .equips
+                        .iter()
+                        .copied()
+                        .filter(|c| {
+                            matches!(
+                                ctx.catalog.card_slot_of(ctx.core, *c),
+                                Some(crate::catalog::EquipSlot::HorsePlus)
+                                    | Some(crate::catalog::EquipSlot::HorseMinus)
+                            )
+                        })
+                        .collect();
+                    for c in mounts {
+                        ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                        revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                        ctx.to_discard(c);
+                    }
+                }
+            }
+        }
+        // 造异异变（运行时授予技，规则 v246）：回合开始——
+        // 敌方中体力最低者全体失去全部体力（上游 boss_zaoyi_
+        // hp phaseZhunbeiBegin loseHp(min) 同口径）
+        if let Some(zhdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ZAOYI_HP)
+        {
+            if ctx.core.has_skill(player, zhdef) {
+                let seats = ctx.core.players.len() as PlayerId;
+                let enemies: Vec<PlayerId> = (0..seats)
+                    .filter(|&t| {
+                        ctx.core.player(t).alive
+                            && ctx.core.is_boss_side(t) != ctx.core.is_boss_side(player)
+                    })
+                    .collect();
+                if let Some(min) = enemies.iter().map(|&t| ctx.core.player(t).hp).min() {
+                    if min > 0 {
+                        for t in enemies {
+                            if ctx.core.player(t).hp == min {
+                                ctx.emit(EventData::LoseHp {
+                                    player: t,
+                                    amount: min as u32,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // 形态轮换（Boss 年兽系，规则 v249）：回合开始——
+        // 交替旗标首次置位不换将（初始形态即条目形态），此后
+        // 每回合轮换至另一「形态轮换」携带将（assembly 重挂+
+        // hp 保留——versus 替补换将先例同构；随机序列→确定性
+        // 互斥轮转登记）
+        if let Some(nbdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_NBIANSHEN)
+        {
+            if ctx.core.has_skill(player, nbdef) {
+                let armed = ctx.core.player(player).nbianshen_toggle;
+                if armed {
+                    // 启动后每回合轮换（上游 storage 存在后每
+                    // 次 phaseBefore 均换同口径）
+                    // 轮换：找另一携带「形态轮换」的 BOSS 段将
+                    let base = (ctx.catalog.general_count()
+                        - crate::content::standard::BOSS_GENERALS.len())
+                        as u16;
+                    let cur = ctx.core.player(player).general_slots[0];
+                    let other = (base..ctx.catalog.general_count() as u16).find(|&d| {
+                        Some(d) != cur
+                            && ctx
+                                .catalog
+                                .general_meta(d)
+                                .map(|m| m.2.contains(&crate::content::standard::BOSS_NBIANSHEN))
+                                .unwrap_or(false)
+                    });
+                    if let (Some(other), Some(cur)) = (other, cur) {
+                        let _ = cur;
+                        // 技能实例清空+重挂（区域保留）
+                        let removed: Vec<crate::ids::SkillDefId> = ctx
+                            .core
+                            .skills
+                            .keys()
+                            .filter(|(o, _)| *o == player)
+                            .map(|(_, d)| *d)
+                            .collect();
+                        for d in removed {
+                            ctx.core.skills.remove(&(player, d));
+                        }
+                        ctx.core.player_mut(player).general_slots[0] = Some(other);
+                        crate::engine::apply_general_assembly(ctx.core, ctx.catalog, player, 0);
+                        // hp/手牌/装备/判定区保留（上游 init 保
+                        // 留 hp/maxHp/hujia 同口径）
+                        ctx.log(LogEvent::SkillToggled {
+                            player,
+                            skill: "形态轮换",
+                            enabled: true,
+                        });
+                    }
+                }
+                ctx.core.player_mut(player).nbianshen_toggle = true;
+            }
+        }
+        // 自润（Boss 玄冥，规则 v247）：准备阶段——全体角色
+        // 按座位序各摸牌：有装备者摸 2、无装备者摸 1（上游
+        // boss_zirun phaseZhunbeiBegin asyncDraw 同口径）
+        if let Some(zrdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ZIRUN)
+        {
+            if ctx.core.has_skill(player, zrdef) {
+                let seats = ctx.core.players.len() as PlayerId;
+                for t in 0..seats {
+                    if !ctx.core.player(t).alive {
+                        continue;
+                    }
+                    let n = if ctx.core.player(t).equips.is_empty() {
+                        1
+                    } else {
+                        2
+                    };
+                    ctx.draw_cards(t, n);
+                }
+            }
+        }
+        // 魔道（Boss 夜叉，规则 v253）：准备阶段摸 2 张牌
+        if let Some(mddef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_MODAO)
+        {
+            if ctx.core.has_skill(player, mddef) {
+                ctx.draw_cards(player, 2);
+            }
+        }
+        // 轮回（十殿阎罗转轮王，规则 v269）：准备阶段，若体力
+        // ≤2——与体力最高且大于 2 的一名其他角色交换体力值
+        //（上游 boss_lunhui hp 直写 min(maxHp) 双封顶同口径；
+        // randomGet→座位序首个确定性近似登记；无事件面直写）
+        if let Some(lhdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_LUNHUI)
+        {
+            if ctx.core.has_skill(player, lhdef) && ctx.core.player(player).hp <= 2 {
+                let seats = ctx.core.players.len() as PlayerId;
+                let cands: Vec<i32> = (0..seats)
+                    .filter(|&t| {
+                        t != player && ctx.core.player(t).alive && ctx.core.player(t).hp > 2
+                    })
+                    .map(|t| ctx.core.player(t).hp)
+                    .collect();
+                let best = cands.iter().copied().max().and_then(|maxhp| {
+                    (0..seats).find(|&t| {
+                        t != player && ctx.core.player(t).alive && ctx.core.player(t).hp == maxhp
+                    })
+                });
+                if let Some(t) = best {
+                    let hp1 = ctx.core.player(player).hp;
+                    let hp2 = ctx.core.player(t).hp;
+                    let my_max = ctx.core.player(player).max_hp as i32;
+                    let t_max = ctx.core.player(t).max_hp as i32;
+                    ctx.core.player_mut(player).hp = hp2.min(my_max);
+                    ctx.core.player_mut(t).hp = hp1.min(t_max);
+                }
+            }
+        }
+        // 猛态（Boss 年兽，规则 v248）：准备阶段置双旗标
+        //（上游 boss_mengtai_begin storage 置 true 同口径；
+        // 摸牌/出牌阶段开始时清位）
+        if let Some(mtdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_MENGTAI)
+        {
+            if ctx.core.has_skill(player, mtdef) {
+                ctx.core.turn.mengtai_draw_pending = true;
+                ctx.core.turn.mengtai_use_pending = true;
+            }
+        }
+        // 睿智（年兽睿智形态，规则 v250）：准备阶段——其余
+        // 角色（手牌>1 或装备>1）保留一张手牌和一张装备区内
+        // 的牌，弃置其余（保留哪张由目标自选——原生保留首张
+        // 确定性近似登记）
+        if let Some(rzdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_RUIZHI)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == rzdef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .filter(|o| ctx.core.player(*o).alive)
+                .collect();
+            if !holders.is_empty() {
+                let seats = ctx.core.players.len() as PlayerId;
+                for t in 0..seats {
+                    if !ctx.core.player(t).alive {
+                        continue;
+                    }
+                    let p = ctx.core.player(t);
+                    if p.hand.len() <= 1 && p.equips.len() <= 1 {
+                        continue;
+                    }
+                    // 保留首张手牌+首张装备，其余弃置
+                    let keep_hand = ctx.core.player(t).hand.first().copied();
+                    let keep_equip = ctx.core.player(t).equips.first().copied();
+                    let extra_hand: Vec<crate::ids::CardId> =
+                        ctx.core.player(t).hand.iter().skip(1).copied().collect();
+                    for c in extra_hand {
+                        ctx.discard_from_hand(t, c);
+                    }
+                    let extra_equip: Vec<crate::ids::CardId> =
+                        ctx.core.player(t).equips.iter().skip(1).copied().collect();
+                    for c in extra_equip {
+                        ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                        revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                        ctx.to_discard(c);
+                    }
+                    let _ = (keep_hand, keep_equip);
+                }
+            }
+        }
+        // 鬼计（Boss 黑无常，规则 v256）：准备阶段——弃置自
+        // 己判定区一张牌（随机→首张确定性近似登记）
+        if let Some(gjdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_GUIJI)
+        {
+            if ctx.core.has_skill(player, gjdef) {
+                if let Some(c) = ctx.core.player(player).judge.first().copied() {
+                    ctx.core.player_mut(player).judge.retain(|x| *x != c);
+                    ctx.to_discard(c);
+                }
+            }
+        }
+        // 公正（十殿阎罗五官王，规则 v265）：准备阶段（判定
+        // 阶段开始锚点）若判定区有牌则弃置首张（上游
+        // phaseZhunbeiBegin 判定区 randomGet 弃置→首张确定性
+        // 近似登记；鬼计同款臂）
+        if let Some(gzdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_GONGZHENG)
+        {
+            if ctx.core.has_skill(player, gzdef) {
+                if let Some(c) = ctx.core.player(player).judge.first().copied() {
+                    ctx.core.player_mut(player).judge.retain(|x| *x != c);
+                    ctx.to_discard(c);
+                }
+            }
+        }
+        // 吸行（Boss 黑无常，规则 v256）：准备阶段——对座位序
+        // 首个已链接的其他存活角色造成 1 点雷伤并回复 1 点体力
+        //（目标自选→首个已链接确定性近似登记）
+        if let Some(xxdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_XIXING)
+        {
+            if ctx.core.has_skill(player, xxdef) {
+                let seats = ctx.core.players.len() as PlayerId;
+                let linked: Vec<PlayerId> = (0..seats)
+                    .filter(|&t| {
+                        t != player && ctx.core.player(t).alive && ctx.core.player(t).linked
+                    })
+                    .collect();
+                if let Some(&t) = linked.first() {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(player),
+                        t,
+                        1,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                    ctx.recover(player, 1, None);
+                }
+            }
+        }
+        // 雷舟（十殿阎罗卞城王，规则 v267）：准备阶段——随机
+        // 一名其他存活角色受 1 点雷伤（randomGet→首个确定性
+        // 近似登记；吸行同位）
+        if let Some(lzdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_LEIZHOU)
+        {
+            if ctx.core.has_skill(player, lzdef) {
+                let seats = ctx.core.players.len() as PlayerId;
+                if let Some(t) = (0..seats).find(|&t| t != player && ctx.core.player(t).alive) {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(player),
+                        t,
+                        1,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                }
+            }
+        }
+        // 苦酒（十殿阎罗泰山王，规则 v268）：其他角色的准备阶
+        // 段——其失去 1 点体力，然后视为使用一张【酒】（上游
+        // global phaseZhunbeiBegin boss_kujiu；useCard jiu 同口
+        // 径置位 jiu_active 不占 jiu_used；无 useCard 事件面=登
+        // 记差异）
+        if let Some(kjdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_KUJIU)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == kjdef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .collect();
+            if holders
+                .iter()
+                .any(|h| *h != player && ctx.core.player(*h).alive)
+            {
+                ctx.emit(EventData::LoseHp { player, amount: 1 });
+                ctx.core.turn.jiu_active = true;
+            }
+        }
+        // 不佛（Boss 地藏王，规则 v274）：准备阶段——距离
+        // 1 以内的其他存活角色受 1 点火焰伤害（有来源同上游
+        // target.damage(1, player, "fire")；炼狱同款臂内循环）
+        if let Some(bfdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_BUFO)
+        {
+            if ctx.core.has_skill(player, bfdef) {
+                let seats = ctx.core.players.len() as PlayerId;
+                for t in 0..seats {
+                    if t == player || !ctx.core.player(t).alive {
+                        continue;
+                    }
+                    if ctx.core.computed_distance(ctx.catalog, player, t) <= 1 {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(player),
+                            t,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        )));
+                    }
+                }
+            }
+        }
+        // 无量（Boss 地藏王，规则 v274）：准备阶段体力小于 3
+        // 时回复至 3 点（上游 boss_wuliang recover(3-hp) 同口
+        // 径；ctx.recover 落 hp——v234 坑位）
+        if let Some(wldef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_WULIANG)
+        {
+            if ctx.core.has_skill(player, wldef)
+                && ctx.core.player(player).alive
+                && ctx.core.player(player).hp < 3
+                && ctx.core.player(player).hp < ctx.core.player(player).max_hp as i32
+            {
+                let amount = (3 - ctx.core.player(player).hp)
+                    .min(ctx.core.player(player).max_hp as i32 - ctx.core.player(player).hp)
+                    as u32;
+                ctx.recover(player, amount, None);
+            }
+        }
+        // 炙焚（Boss 都市王，规则 v273）：准备阶段——随机
+        // 一名其他角色获得其一张随机手牌（若有）并受 1 点火
+        // 焰伤害（上游 gainPlayerCard randomGet+damage 无来
+        // 源→座位序首个+首张确定性近似登记）
+        if let Some(zfdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ZHIFEN)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == zfdef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .collect();
+            if let Some(holder) = holders.first() {
+                // 上游 trigger player: phaseZhunbeiBegin——仅
+                // 持有者本人准备阶段触发（他人阶段开始不触发）
+                if *holder == player && ctx.core.player(*holder).alive {
+                    let seats = ctx.core.players.len() as PlayerId;
+                    if let Some(t) = (0..seats).find(|&t| t != *holder && ctx.core.player(t).alive)
+                    {
+                        // 获得其首张手牌（若有）
+                        let taken = ctx.core.player(t).hand.first().copied();
+                        if let Some(c) = taken {
+                            ctx.core.player_mut(t).hand.retain(|&x| x != c);
+                            ctx.core.player_mut(*holder).hand.push(c);
+                            ctx.log(LogEvent::CardsGiven {
+                                from: t,
+                                to: *holder,
+                                cards: vec![c],
+                            });
+                        }
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            None,
+                            t,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        )));
+                    }
+                }
+            }
+        }
+        // 锁足（Boss 平等王，规则 v272）：准备阶段——全部
+        // 其他存活角色横置（上游 boss_suozu content link 同
+        // 口径；不分阵营；索链甲/星囚 linked 直写同款）
+        if let Some(szdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_SUOZU)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == szdef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .collect();
+            if holders
+                .iter()
+                .any(|h| *h == player && ctx.core.player(*h).alive)
+            {
+                let seats = ctx.core.players.len() as PlayerId;
+                for t in 0..seats {
+                    if t == player || !ctx.core.player(t).alive || ctx.core.player(t).linked {
+                        continue;
+                    }
+                    ctx.core.player_mut(t).linked = true;
+                    ctx.log(LogEvent::Linked {
+                        player: t,
+                        linked: true,
+                    });
+                }
+            }
+        }
+        // 往事（十殿阎罗孟婆，规则 v270）：其他角色的回合开始
+        // 时——其本回合不能使用或打出一种类型的牌（上游
+        // boss_wangshi randomGet basic/trick/equip→恒定基本牌
+        // 确定性近似登记；敌方面→全部其他近似；PlayCard 拒绝
+        // 位+回合结束全清）
+        if let Some(wsdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_WANGSHI)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == wsdef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .collect();
+            if holders
+                .iter()
+                .any(|h| *h != player && ctx.core.player(*h).alive)
+            {
+                ctx.core.player_mut(player).wangshi_ban = true;
+            }
+        }
+        // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
+        // 存活角色获「封印」（本回合无法使用手牌；回合结束解
+        // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
+        // 同口径）
+        if let Some(fddef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_FENGDONG)
+        {
+            if ctx.core.has_skill(player, fddef) {
+                for t in ctx.core.seat_order_from(player) {
+                    if t != player && ctx.core.player(t).alive {
+                        ctx.core.player_mut(t).fengyin_active = true;
+                    }
+                }
+            }
+        }
+        // 巡游（Boss 应昭，规则 v231）：其他角色回合开始——
+        // 获得座位序首名有手牌的其他角色的一张手牌（确定性近
+        // 似：hej 全区域/随机以座位序+手牌首张近似登记）；装
+        // 备牌自动使用（直接装上，v180 双刃系 grant 先例）
+        if let Some(xdef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_XUNYOU)
+        {
+            // global phaseBegin：任意 enabled 持有者（≠当前回
+            // 合玩家）在场即触发（炎狱 holders 先例同构）
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == xdef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .filter(|o| *o != player && ctx.core.player(*o).alive)
+                .collect();
+            if !holders.is_empty() {
+                let holder = holders[0];
+                let mut victim: Option<PlayerId> = None;
+                for t in ctx.core.seat_order_from(holder) {
+                    if t != holder
+                        && ctx.core.player(t).alive
+                        && !ctx.core.player(t).hand.is_empty()
+                    {
+                        victim = Some(t);
+                        break;
+                    }
+                }
+                if let Some(v) = victim {
+                    let c = ctx.core.player(v).hand[0];
+                    let kind = ctx.catalog.card_kind(c);
+                    ctx.core.player_mut(v).hand.retain(|x| *x != c);
+                    if let Some(slot) = kind.equip_slot() {
+                        // 装备牌自动使用：同栏替换（旧装备入弃
+                        // 堆并撤销技能——931 区 play 装备先例）
+                        if let Some(old) = ctx
+                            .core
+                            .player(player)
+                            .equips
+                            .iter()
+                            .copied()
+                            .find(|e| ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot))
+                        {
+                            ctx.core.player_mut(holder).equips.retain(|x| *x != old);
+                            revoke_equip_skills(ctx.core, ctx.catalog, holder, old);
+                            ctx.to_discard(old);
+                        }
+                        ctx.core.player_mut(holder).equips.push(c);
+                        grant_equip_skills(ctx, holder, c);
+                    } else {
+                        ctx.core.player_mut(holder).hand.push(c);
+                    }
+                    ctx.log(LogEvent::CardsGiven {
+                        from: v,
+                        to: player,
+                        cards: vec![c],
+                    });
+                }
+            }
+        }
+        // 炎狱（Boss 毕方，规则 v229）：global phaseBegin——
+        // 其他角色的回合开始判定（确定性判定铁骑先例），红色 →
+        // 该角色受 1 点来自毕方的火伤；每回合至多 3 次（TurnState
+        // 计数器，回合更替清零；上游 getIndex 3 同口径）
+        if let Some(ydef) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_YANYU)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == ydef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .filter(|o| *o != player && ctx.core.player(*o).alive)
+                .collect();
+            if ctx.core.turn.yanyu_count < 3 {
+                for holder in holders {
+                    let judged = ctx.draw_judge_card();
+                    let red = matches!(
+                        ctx.catalog.cards[judged as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    );
+                    ctx.to_discard(judged);
+                    if red {
+                        ctx.core.turn.yanyu_count += 1;
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(holder),
+                            player,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        )));
+                    }
+                    break; // 每次判定至多一持技者结算（单 Boss 场景）
+                }
+            }
+        }
+        // 中毒（Boss 书精授技，规则 v220）：回合开始判定——
+        // 非红桃受 1 点无来源伤害；非黑桃失去此技（上游
+        // boss_zhongdu phaseZhunbeiBegin judge 同口径；确定性
+        // 判定=铁骑内联先例）
+        if let Some(zd) = ctx
+            .catalog
+            .skill_by_name(crate::content::standard::BOSS_ZHONGDU)
+        {
+            if ctx.core.has_skill(player, zd) {
+                let judged = ctx.draw_judge_card();
+                let suit = ctx.catalog.cards[judged as usize].suit;
+                ctx.to_discard(judged);
+                match suit {
+                    crate::catalog::Suit::Heart => {}
+                    crate::catalog::Suit::Spade => {
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "中毒",
+                            owner: player,
+                        });
+                    }
+                    _ => {
+                        // 方片/梅花：伤 1 后失去此技
+                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+                            None, player, 1,
+                        )));
+                        ctx.core.skills.remove(&(player, zd));
+                    }
+                }
+            }
+        }
+        ctx.core.turn.yingfeng_chain = false;
+        ctx.core.turn.luanjian_card = None;
+        ctx.core.turn.mujiaren_used = false;
+    }
+    // 废墟地图效果（mtg 第四批，规则 v103）：锁定全局——回合
+    // 开始（准备阶段）随机将弃牌堆一张置于牌堆顶（上游
+    // phaseBegin silent 同口径；RNG 真消除口径）
+    if ctx.core.current_land == Some(crate::catalog::CardKind::Feixu)
+        && !ctx.core.discard.is_empty()
+    {
+        let n = ctx.core.discard.len() as u32;
+        let i = ctx.core.rng.gen_range(n) as usize;
+        let c = ctx.core.discard.remove(i);
+        ctx.core.deck.push(c);
+    }
+}

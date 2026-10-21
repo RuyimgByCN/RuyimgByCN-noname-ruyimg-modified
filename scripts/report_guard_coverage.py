@@ -44,6 +44,36 @@ def guard_behaviors() -> set[str]:
     return out
 
 
+#: 能力守卫解锁的缺陷族：`cap_*` 守卫断言枚举槽位，按「它覆盖哪些 id」计入。
+CAPABILITY_IDS = {
+    "cap_card_targeted": {"需档"},
+    "cap_sha_begin": {"需档"},
+    "cap_sha_after": {"需档"},
+    "cap_sha_before": {"需档"},
+    "cap_death_before": {"需档"},
+    "cap_game_start": {"L20b"},
+    "cap_judge_before": {"L03c"},
+    "cap_damage_begin_second": {"第3次"},
+    "guard_prepare_phase_exists": {"G18"},
+    "guard_xiangxing_lose_hp_end": {"L03a"},
+    "guard_yueyin_fourth_damage": {"L03b"},
+    "guard_gaiming_judge_before": {"L03c"},
+    "guard_kuwu_and_shengke_card_targeted": {"5a", "5c"},
+    "guard_mopaifanbei_second_draw": {"L20a"},
+    "guard_rangjie_branch1_draws": {"6"},
+}
+
+
+def capability_guard_names() -> set[str]:
+    text = (TESTS / "nc08_registered_defect_guards.rs").read_text(encoding="utf-8")
+    # 守卫可能由宏生成：源码里是 `capability_guard!(cap_x, ...)` 而不是 `fn cap_x(`
+    return {
+        name
+        for name in CAPABILITY_IDS
+        if f"fn {name}(" in text or f"capability_guard!({name}" in text
+    }
+
+
 def ledger_rows() -> list[list[str]]:
     lines = LEDGER.read_text(encoding="utf-8").splitlines()
     return [line.split("\t") for line in lines[1:] if line.strip()]
@@ -56,13 +86,17 @@ def main() -> int:
     args = ap.parse_args()
 
     guarded = guard_behaviors()
+    caps = capability_guard_names()
+    capability_ids: set[str] = set()
+    for name in caps:
+        capability_ids |= CAPABILITY_IDS[name]
     rows = ledger_rows()
     covered = []
     missing = []
     for row in rows:
         behavior = row[2]
         # 守卫文本里可能写的是变体名（`SwdHuanxia`）也可能只写行为片段
-        if behavior in guarded or any(behavior.endswith(g) or g.endswith(behavior) for g in guarded):
+        if row[0] in capability_ids or behavior in guarded:
             covered.append(behavior)
         else:
             missing.append((row[0], behavior))

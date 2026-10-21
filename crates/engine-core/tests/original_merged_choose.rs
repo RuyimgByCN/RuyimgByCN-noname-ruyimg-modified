@@ -23,7 +23,7 @@ const SHAHAI: &[u8] = include_bytes!("../../../content/original/ported/shahai/sh
 const MBZHENFU_SRC: &str =
     include_str!("../../../content/original/ported/mobile/mbzhenfu.skill");
 const CANGCHIZHIBI_SRC_RAW: &str =
-    include_str!("../../../content/original/ported/shahai/shahai_meta.skill");
+    include_str!("../../../content/original/ported/shahai/shahai_meta_swd_combat_and_cards.skill");
 
 fn bootstrap(source: &str, skill_def: u32) -> (Transaction, PlayerId, PlayerId) {
     let compiled = content_compiler::compile_source_named("coam", source).unwrap();

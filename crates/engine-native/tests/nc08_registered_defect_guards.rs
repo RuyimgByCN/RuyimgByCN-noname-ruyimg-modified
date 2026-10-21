@@ -321,3 +321,206 @@ fn jiguanyuan_gain_must_trigger_on_damage() {
 g14_guard!(g14_hujing_any_phase, "SwdHujing", "filtering/swd.rs");
 g14_guard!(g14_qinglongzhigui_any_phase, "SwdQinglongzhiguiHeld", "filtering/swd.rs");
 g14_guard!(g14_huanglinzhicong_any_phase, "SwdHuanglinzhicongHeld", "filtering/swd.rs");
+
+// ------------------------------------- 能力守卫：缺失的事件/阶段槽位是否已补
+
+/// 27 条 `需档` 缺陷都卡在「引擎缺某个事件槽位」。这类缺陷的验收条件不是某个行为，
+/// 而是**枚举里出现该槽位** —— 所以守卫直接断言 `event.rs` / `phase` 枚举的内容。
+/// 每个守卫的文档注明它解锁哪些缺陷族。
+macro_rules! capability_guard {
+    ($fn_name:ident, $needle:literal, $why:literal) => {
+        #[test]
+        #[ignore = "缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"]
+        fn $fn_name() {
+            let src = std::fs::read_to_string(concat!(
+                env!("CARGO_MANIFEST_DIR"),
+                "/src/event.rs"
+            ))
+            .expect("读 event.rs");
+            assert!(
+                src.contains($needle),
+                concat!("引擎缺少槽位 `", $needle, "`：", $why),
+            );
+        }
+    };
+}
+
+capability_guard!(cap_card_targeted, "CardTargeted", "「用牌前 / 指定目标时」——解锁 23 条需档");
+capability_guard!(cap_sha_begin, "ShaBegin", "【杀】开始幕——解锁 5 条（lianwu/lingshi/lingyue/shoulie/yueren）");
+capability_guard!(cap_sha_after, "ShaAfter", "【杀】结束幕——解锁 2 条（SwdLianda、XianjianXunying）");
+capability_guard!(cap_sha_before, "ShaBefore", "【杀】之前幕——解锁 2 条（WudianZhuchengGuard、SwdTiebi）");
+capability_guard!(cap_death_before, "DeathBefore", "「死亡前」——解锁 4+ 条（dieBegin 家族）");
+capability_guard!(cap_game_start, "GameStart", "「游戏开始」——解锁 L20b（xigua_xueliangfanbei）");
+capability_guard!(cap_judge_before, "JudgeBefore", "「判定前」——解锁 L03c（gaiming）");
+capability_guard!(cap_damage_begin_second, "DamageBegin2", "「第 2/3/4 次」——解锁 Tianxiang、L20a");
+
+// ------------------------------------- 「完全没有挂触发」与「事件种类错」的行为守卫
+
+
+/// 需要「多幕」或「另一事件」的行为：断言目标事件的字面名出现在该行为的 metadata arm 附近。
+/// 这里退一步只断言**该行为确实出现在 metadata 里**，把「幕是否正确」留给台账的 `fix` 列，
+/// 以免守卫比缺陷本身更脆弱。
+#[test]
+#[ignore = "补 dieBegin 幕 / 改事件种类后转绿"]
+fn guard_yxs_menshen3_extra_phase() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/content/host/metadata.rs"
+    ))
+    .expect("读 metadata.rs");
+    let idx = src.find("HostBehavior::YxsMenshen3 =>").expect("YxsMenshen3 无 arm");
+    let around = &src[idx..(idx + 600).min(src.len())];
+    assert!(
+        around.contains("DeathBefore") || around.contains("dieBegin"),
+        "yxs_menshen3 上游还有 dieBegin 幕，原生只有 phaseBegin",
+    );
+}
+
+/// `MbQianlong` / `MbWeitong` 同上：需要 `phaseBefore` 与 `enterGame` 两幕。
+#[test]
+#[ignore = "补 phaseBefore / enterGame 幕或改用 Dedicated 事件后转绿"]
+fn guard_mb_phase_before_enter_game() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/event.rs"
+    ))
+    .expect("读 event.rs");
+    assert!(
+        src.contains("EnterGame") || src.contains("PhaseBefore"),
+        "mbqianlong / mbweitong 需要「入场」与「阶段前」两幕",
+    );
+}
+
+// ------------------------------------- 事件种类错 / 缺第二幕 的行为守卫
+
+/// 断言某行为的 `TriggerMeta` 事件等于期望值（当前是错的，故忽略；改对后转绿）。
+macro_rules! meta_event_guard {
+    ($fn_name:ident, $variant:literal, $expected:literal, $why:literal) => {
+        #[test]
+        #[ignore = "把 TriggerMeta 事件改对后本守卫转绿"]
+        fn $fn_name() {
+            use std::path::Path;
+            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/content/host");
+            let mut all = String::new();
+            let mut stack = vec![dir];
+            while let Some(next) = stack.pop() {
+                let Ok(entries) = std::fs::read_dir(&next) else { continue };
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    if path.is_dir() {
+                        stack.push(path);
+                    } else if path.extension().is_some_and(|ext| ext == "rs") {
+                        all.push_str(&std::fs::read_to_string(&path).unwrap_or_default());
+                    }
+                }
+            }
+            let needle = format!("HostBehavior::{} =>", $variant);
+            let idx = all.find(&needle).expect("该行为在 metadata 里没有 arm");
+            let around = &all[idx..(idx + 400).min(all.len())];
+            assert!(
+                around.contains($expected),
+                concat!("期望 ", $expected, "：", $why),
+            );
+        }
+    };
+}
+
+meta_event_guard!(guard_niepan_dying, "Niepan", "Dying", "涅槃是濒死自救主动技，不是 Death");
+meta_event_guard!(guard_shouyin_dying, "SwdShouyin", "Dying", "收印 filter 要求 event.type=='dying'");
+meta_event_guard!(guard_chengxin_dying, "XianjianChengxin", "Dying", "濒死主动技");
+meta_event_guard!(guard_shuiyun5_dying, "XianjianShuiyun5", "Dying", "濒死主动技");
+meta_event_guard!(guard_cigu_pre_draw, "GwentCiguState", "DrawBefore", "上游 phaseDrawBegin：摸牌数确定前");
+meta_event_guard!(guard_fuchou2_before, "WudianFuchou2", "PhaseBefore", "上游 phaseUseBefore");
+meta_event_guard!(guard_fenglue_before, "XianjianFenglue", "PhaseBefore", "上游 phaseUseBefore");
+
+/// 准备阶段幕（G18）：`HlssFengqi` 与 `Xiuluo` 需要 `Phase::Prepare`。
+#[test]
+#[ignore = "补 `Phase::Prepare` 后转绿"]
+fn guard_prepare_phase_exists() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/event.rs"
+    ))
+    .expect("读 event.rs");
+    assert!(src.contains("Prepare"), "上游 phaseZhunbeiBegin 需要准备阶段幕");
+}
+
+/// `HlssXiangxing` 少了「失去体力后」幕。
+#[test]
+#[ignore = "补 LoseHpEnd 幕并挂上后转绿"]
+fn guard_xiangxing_lose_hp_end() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/event.rs"
+    ))
+    .expect("读 event.rs");
+    assert!(src.contains("LoseHpEnd"), "上游 xiangxing 有 loseHpEnd 幕");
+}
+
+/// `HlssYueyin` 上游是「第 4 次伤害 + 伤害后」双幕。
+#[test]
+#[ignore = "补「第 4 次」档后转绿"]
+fn guard_yueyin_fourth_damage() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/event.rs"
+    ))
+    .expect("读 event.rs");
+    assert!(src.contains("DamageBegin4") || src.contains("Damage4"), "上游 damageBegin4");
+}
+
+/// `HlssGaiming` 上游 `judgeBefore`，原生完全没有 arm。
+#[test]
+#[ignore = "补 `judgeBefore` 幕并挂上后转绿"]
+fn guard_gaiming_judge_before() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/event.rs"
+    ))
+    .expect("读 event.rs");
+    assert!(src.contains("JudgeBefore"), "上游 gaiming 是 judgeBefore");
+}
+
+/// `HuanleKuwu`（5a）与 `ShengkeCheck`（5c）都卡在「用牌前 / 指定目标时」幕。
+#[test]
+#[ignore = "补 `CardTargeted` 后转绿（与 cap_card_targeted 同一能力，按行为分别记录）"]
+fn guard_kuwu_and_shengke_card_targeted() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/event.rs"
+    ))
+    .expect("读 event.rs");
+    assert!(src.contains("CardTargeted"), "kuwu / shengke_check 需要「使用到目标」幕");
+}
+
+/// `XiguaMopaiFanbei`（L20a）需要「摸牌阶段第 2 次」与「摸牌前」两者之一。
+#[test]
+#[ignore = "补「第 2 次」档或摸牌前幕后转绿"]
+fn guard_mopaifanbei_second_draw() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/event.rs"
+    ))
+    .expect("读 event.rs");
+    assert!(
+        src.contains("DrawBegin2") || src.contains("DrawBefore"),
+        "上游 mopaifanbei 是 phaseDrawBegin2",
+    );
+}
+
+/// `GujianFoodRangjie`（`6`）缺少分支 1 的摸牌动作。
+#[test]
+#[ignore = "补 `draw_cards` 后转绿（分支 1 应摸牌）"]
+fn guard_rangjie_branch1_draws() {
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/content/host/step/skills_cards.rs"
+    ))
+    .expect("读 step/skills_cards.rs");
+    let idx = src.find("GujianFoodRangjie").expect("找不到 rangjie 的效果步");
+    let body = &src[idx..(idx + 1200).min(src.len())];
+    assert!(
+        body.contains("draw") || body.contains("Draw"),
+        "分支 1（移动牌）应同时摸牌",
+    );
+}

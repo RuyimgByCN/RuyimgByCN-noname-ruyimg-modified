@@ -1,0 +1,1090 @@
+use super::super::*;
+
+impl HostSkillBehavior {
+    pub(super) fn activate_common(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+    ) -> Option<Box<dyn crate::catalog::SkillMachine>> {
+        match self.behavior {
+            // 轩辕（swd 批 146）：结束阶段触发（无主动面）
+            HostBehavior::Xuanyuan => None,
+            // 苦肉（L20 批 2）：出牌阶段主动
+            HostBehavior::Kurou => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 集舍（L27 批 5）：出牌阶段主动（手牌上限 > 0）
+            HostBehavior::Jishe => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.hand_limit(ctx.catalog, owner) == 0
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 蛊惑（史诗卡牌批 1）：出牌阶段主动（每回合一次；手牌非空）
+            HostBehavior::Reguhuo => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.player(owner).hand.is_empty()
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 攻心（swd 批 155）：出牌阶段主动（每回合一次；存在有手牌的其他角色）
+            HostBehavior::Gongxin => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || !ctx
+                        .state
+                        .alive_players()
+                        .any(|p| p != owner && !ctx.state.player(p).hand.is_empty())
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 魔焰（swd 批 151）：出牌阶段主动（每回合一次；体力未满且有红牌）
+            HostBehavior::Moyan => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let p = ctx.state.player(owner);
+                let has_red = p.hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                });
+                if p.hp >= p.max_hp as i32 || !has_red {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 极略（swd 批 136）：出牌阶段主动（每阶段 3 次）
+            HostBehavior::Jilve => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.player(owner).jilve_used >= 3
+                    || ctx.state.deck.is_empty()
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 革新印（swd 批 135）：出牌阶段主动（手牌非空）
+            HostBehavior::Gxianyin => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                    || ctx.state.player(owner).hand.is_empty()
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 冰封（swd 批 134）：出牌阶段主动（限定——实例启用时）
+            HostBehavior::Bingfeng => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let enabled = ctx
+                    .catalog
+                    .skill_by_name(SWD_BINGFENG_KEY)
+                    .and_then(|d| ctx.state.skills.get(&(owner, d)).map(|i| i.enabled))
+                    .unwrap_or(false);
+                if !enabled
+                    || !ctx
+                        .state
+                        .alive_players()
+                        .any(|p| p != owner && !ctx.state.player(p).face_down)
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 魂殉志（swd 批 132）：出牌阶段主动（限定——实例启用时）
+            HostBehavior::Hxunzhi => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let enabled = ctx
+                    .catalog
+                    .skill_by_name(SWD_HXUNZHI_KEY)
+                    .and_then(|d| ctx.state.skills.get(&(owner, d)).map(|i| i.enabled))
+                    .unwrap_or(false);
+                if !enabled {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 颂词（swd 批 129）：出牌阶段主动——选未记录角色（含自己）
+            HostBehavior::Songci => {
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                let recorded = &ctx.state.player(owner).songci_targets;
+                if !ctx.state.alive_players().any(|p| !recorded.contains(&p)) {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 涅槃（T11 Boss 庞统族批 118）：出牌阶段主动面——限定技未发动
+            // 时可用（濒死面走触发路径；两面共用收束）。
+            HostBehavior::Niepan => {
+                if ctx.state.player(owner).niepan_used {
+                    return None;
+                }
+                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
+                    || ctx.state.turn.current != owner
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 五行盘：出牌阶段限一次（阶段门控在命令边界），需手牌非空
+            HostBehavior::ChangeCardNature => {
+                if ctx.state.player(owner).hand.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::GujianFoodLuyugeng => {
+                let has_basic = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.card_kind(*c),
+                        CardKind::Sha | CardKind::Shan | CardKind::Tao | CardKind::Jiu
+                    )
+                });
+                if !has_basic {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::GujianYuhengEquipSkill => {
+                let has = ctx.state.alive_players().any(|p| {
+                    p != owner
+                        && ctx.state.player(p).hand.iter().any(|c| {
+                            matches!(
+                                ctx.catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Spade
+                            )
+                        })
+                });
+                if !has {
+                    return None;
+                }
+                // 潜偷同款校验已在 SwdShentouEquipSkill 臂单独实现
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::YunchouBeige => Some(Box::new(HostMachine {
+                def_key: self.name.clone(),
+                behavior: self.behavior,
+                owner,
+                target: None,
+                card: None,
+                cards: Vec::new(),
+                targets: Vec::new(),
+                stage: HostStage::Act,
+            })),
+            // 屯田·DIY：有装备牌（手/场）才可发动
+            HostBehavior::WudianDiyjuntun => {
+                let has = !ctx.state.player(owner).equips.is_empty()
+                    || ctx
+                        .state
+                        .player(owner)
+                        .hand
+                        .iter()
+                        .any(|c| ctx.catalog.card_slot_of(ctx.state, *c).is_some());
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            // 隙焰：有红手牌才可发动
+            HostBehavior::YunchouJieyan => {
+                let has = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                });
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 野升：有黑手牌才可发动（自选多张）
+            HostBehavior::YunchouYiesheng => {
+                let has = ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                });
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::ZhangbaSha => {
+                // 丈八蛇矛：两张手牌当杀的主动技（机器见 HostMachine）。
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianPaotai => {
+                // 炮台（U05 ow v123）：手牌有杀且等级 <3 才可发动
+                if !ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c).is_sha_like())
+                    || ctx.state.player(owner).paotai_lv >= 3
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianShouhu => {
+                // 守护（U07 ow v121）：手牌有杀才可发动
+                if !ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c).is_sha_like())
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianBaoleiSwitch => {
+                // 堡垒/侦察切换（U05 ow v124）：无前置（上游 filter 仅
+                // zhencha2 互斥锁——原生以机器推进天然互斥）
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::XianjianXtanxi => {
+                if ctx.state.player(owner).hand.is_empty()
+                    || !ctx
+                        .state
+                        .alive_players()
+                        .any(|t| t != owner && !ctx.state.player(t).hand.is_empty())
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianHuahu => {
+                if ctx.state.player(owner).huahu_used {
+                    return None;
+                }
+                let has_other = ctx.state.alive_players().any(|t| t != owner);
+                if !has_other {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::TargetChoice,
+                }))
+            }
+            HostBehavior::XianjianLuanjian => {
+                let sha_count = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .filter(|c| ctx.catalog.card_kind(**c) == crate::catalog::CardKind::Sha)
+                    .count();
+                if sha_count < 2 {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::XianjianCtianfu => {
+                let has_shan = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Shan);
+                let Some(ctianfu2) = ctx.catalog.skill_by_name("ctianfu2") else {
+                    return None;
+                };
+                let has_target = ctx
+                    .state
+                    .alive_players()
+                    .any(|t| t != owner && !ctx.state.skills.contains_key(&(t, ctianfu2)));
+                if !has_shan || !has_target {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::XianjianTianjian => {
+                let has_sha = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Sha);
+                if !has_sha {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianSajin => {
+                let p = ctx.state.player(owner);
+                let wounded = ctx
+                    .state
+                    .alive_players()
+                    .any(|t| (ctx.state.player(t).hp as u32) < ctx.state.player(t).max_hp);
+                if p.hand.is_empty() || !wounded {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianMinsha => {
+                let enough =
+                    ctx.state.player(owner).hand.len() + ctx.state.player(owner).equips.len() >= 2;
+                let has_target = ctx
+                    .state
+                    .alive_players()
+                    .any(|t| t != owner && ctx.state.player(t).hp > 1);
+                if !enough || !has_target {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianZhuyue => {
+                let has_nonbasic = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| yangpijuan_class(ctx.catalog.card_kind(*c)) != Some(0));
+                let has_target = ctx.state.alive_players().any(|t| {
+                    t != owner
+                        && (!ctx.state.player(t).hand.is_empty()
+                            || !ctx.state.player(t).equips.is_empty())
+                });
+                if !has_nonbasic || !has_target {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianGuanri => {
+                if ctx.state.player(owner).guanri_used {
+                    return None;
+                }
+                let reds = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .filter(|c| {
+                        matches!(
+                            ctx.catalog.cards[**c as usize].suit,
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    })
+                    .count();
+                let has_target = ctx
+                    .state
+                    .alive_players()
+                    .any(|t| t != owner && ctx.state.player(t).hp >= ctx.state.player(owner).hp);
+                if reds < 2 || !has_target {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianDiewu => {
+                let has_sha = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c).is_sha_like());
+                if !has_sha {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianGuiyuan => {
+                let p = ctx.state.player(owner);
+                let has_sha = p
+                    .hand
+                    .iter()
+                    .chain(p.equips.iter())
+                    .any(|c| ctx.catalog.card_kind(*c).is_sha_like());
+                if !has_sha || (p.hp as u32) >= p.max_hp {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianGuijin => {
+                if ctx.state.turn.round < ctx.state.player(owner).guijin_ready_round {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            // 玄墨（U05 xianjian 夏侯瑾轩，规则 v174）：手牌中有三类牌
+            //（usable:1 走命令层 once_used）
+            HostBehavior::XianjianXuanmo => {
+                let has = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| yangpijuan_class(ctx.catalog.card_kind(*c)).is_some());
+                if !has {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::XianjianYuexing => {
+                let has_other = ctx.state.alive_players().any(|t| t != owner);
+                if !has_other {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianKangyin => {
+                // 抗yin（U07 批四 v114）：存在其他存活且 he 非空目标
+                if !ctx.state.alive_players().any(|p| {
+                    p != owner
+                        && (!ctx.state.player(p).hand.is_empty()
+                            || !ctx.state.player(p).equips.is_empty())
+                }) {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianJuedao => {
+                // 绝道（U07 批六 v116）：未横置才可发动（上游 filter
+                // isLinked()===false 同口径）
+                if ctx.state.player(owner).linked {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianMujing => {
+                // 目镜（U07 ow v118）：手牌有黑色牌才可发动（上游
+                // filterCard 黑色 + viewAsFilter 同口径）
+                if !ctx.state.player(owner).hand.iter().any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                }) {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianGuangshu => {
+                // 光书（U07 ow v119）：he 有牌才可发动
+                if ctx.state.player(owner).hand.is_empty()
+                    && ctx.state.player(owner).equips.is_empty()
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianZiyu => {
+                // 自愈（U07 ow v120）：触发技经 OptionalGate 确认
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::WudianKuoyin => {
+                let t = &ctx.state.turn;
+                if t.yuedong_eff > 0 && t.yuedong_num > 0 {
+                    return None;
+                }
+                let p = ctx.state.player(owner);
+                if p.hand.is_empty() && p.equips.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::WudianHuhuan => {
+                let p = ctx.state.player(owner);
+                if p.hand.len() + p.equips.len() < 2 || ctx.state.turn.yuedong_recover {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::WudianBaoxue => {
+                if ctx.state.player(owner).baoxue_used {
+                    return None;
+                }
+                let p = ctx.state.player(owner);
+                let black = p
+                    .hand
+                    .iter()
+                    .chain(p.equips.iter())
+                    .filter(|c| {
+                        matches!(
+                            ctx.catalog.cards[**c as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        )
+                    })
+                    .count();
+                if black == 0 {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::WudianLiangou => {
+                let p = ctx.state.player(owner);
+                if p.hand.is_empty() && p.equips.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::WudianYinbo => {
+                let p = ctx.state.player(owner);
+                let has_spade = p.hand.iter().chain(p.equips.iter()).any(|c| {
+                    matches!(
+                        ctx.catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Spade
+                    )
+                });
+                if !has_spade {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::WudianQianggu => {
+                let p = ctx.state.player(owner);
+                if p.hand.len() + p.equips.len() < 2 {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::WudianFeitiao => {
+                let p = ctx.state.player(owner);
+                if p.hand.is_empty() && p.equips.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::SelectCard,
+                }))
+            }
+            HostBehavior::MtgYixialanRecast => {
+                // 依夏兰重铸（mtg 第五批 v104）：地附主动技——仅当地图
+                // 在场（current_land=依夏兰，全局技同口径）且手牌有基本
+                // 牌（上游 filterCard basic + canRecast；canRecast 为引
+                // 擎内置归档不可核验，原生取手牌基本牌并登记）
+                if ctx.state.current_land != Some(CardKind::Yixialan) {
+                    return None;
+                }
+                let has_basic = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| yangpijuan_class(ctx.catalog.card_kind(*c)) == Some(0));
+                if !has_basic {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::MtgYoulinDiscard => {
+                // 幽林地附技（mtg 第九批 v108）：current_land=幽林 + 手
+                // 牌有锦囊（yangpijuan_class==1）
+                if ctx.state.current_land != Some(CardKind::Youlin) {
+                    return None;
+                }
+                let has_trick = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| yangpijuan_class(ctx.catalog.card_kind(*c)) == Some(1));
+                if !has_trick {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::MtgLinzhongjiantaStrike => {
+                // 塔击（mtg 第七批 v106）：地附主动技——current_land=林
+                // 中尖塔 + 装备区有武器（上游 viewAsFilter getEquip(1)
+                // 同口径）+ 手牌有基本牌
+                if ctx.state.current_land != Some(CardKind::Linzhongjianta) {
+                    return None;
+                }
+                let has_weapon = ctx.state.player(owner).equips.iter().any(|c| {
+                    ctx.catalog.card_slot_of(ctx.state, *c)
+                        == Some(crate::catalog::EquipSlot::Weapon)
+                });
+                let has_basic = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| yangpijuan_class(ctx.catalog.card_kind(*c)) == Some(0));
+                if !has_weapon || !has_basic {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            _ => unreachable!("behavior routed to the wrong activate module"),
+        }
+    }
+}

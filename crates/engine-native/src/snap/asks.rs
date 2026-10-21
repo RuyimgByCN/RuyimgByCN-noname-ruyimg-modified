@@ -1,0 +1,1051 @@
+use super::*;
+
+// ---------------------------------------------------------------------------
+// 开放选择承接派生（N04-e）
+// ---------------------------------------------------------------------------
+
+/// 开放选择的期望形状（由挂起机器的 stage/asked 派生）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ExpectedAsk {
+    pub observer: PlayerId,
+    pub prompt: &'static str,
+    pub kind: ChoiceKind,
+    pub options: Vec<ChoiceOption>,
+    pub min: usize,
+    pub max: usize,
+    pub allow_cancel: bool,
+}
+
+pub(super) fn ask(
+    observer: PlayerId,
+    prompt: &'static str,
+    kind: ChoiceKind,
+    options: Vec<ChoiceOption>,
+    min: usize,
+    max: usize,
+    allow_cancel: bool,
+) -> ExpectedAsk {
+    ExpectedAsk {
+        observer,
+        prompt,
+        kind,
+        options,
+        min,
+        max,
+        allow_cancel,
+    }
+}
+
+pub(super) fn confirm_ask(observer: PlayerId, prompt: &'static str) -> ExpectedAsk {
+    ask(
+        observer,
+        prompt,
+        ChoiceKind::Confirm,
+        vec![ChoiceOption::Confirm],
+        1,
+        1,
+        true,
+    )
+}
+
+pub(super) fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {
+    hand.iter().copied().map(ChoiceOption::Card).collect()
+}
+
+pub(super) fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {
+    core.alive_players()
+        .filter(|p| *p != owner)
+        .map(ChoiceOption::Player)
+        .collect()
+}
+
+/// 濒死救援的桃判定扩面（与 kernel `is_tao_like` 一致）。
+pub(super) fn is_tao_like(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    responder: PlayerId,
+    card: CardId,
+    dying: PlayerId,
+) -> bool {
+    if catalog.card_kind(card) == CardKind::Hufu {
+        return responder == dying;
+    }
+    let kind = catalog.card_kind(card);
+    if matches!(
+        kind,
+        CardKind::Tao | CardKind::Jiu | CardKind::Dinvxuanshuang
+    ) {
+        return true;
+    }
+    let suit = catalog.cards[card as usize].suit;
+    let jijiu = catalog
+        .skill_by_name(JI_JIU)
+        .map(|d| core.has_skill(responder, d))
+        .unwrap_or(false);
+    if jijiu
+        && matches!(
+            suit,
+            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+        )
+    {
+        return true;
+    }
+    let mizhilianou = catalog
+        .skill_by_name(GJ_FOOD_MIZHLIANOU_KEY)
+        .map(|d| core.has_skill(responder, d))
+        .unwrap_or(false);
+    if mizhilianou && suit == crate::catalog::Suit::Heart {
+        return true;
+    }
+    false
+}
+
+/// 性别门控（与 standard.rs `seat_is_male` 一致）：双将槽全空 → 不适用。
+pub(super) fn seat_is_male_core(core: &GameStateCore, p: PlayerId) -> bool {
+    let slots = core.player(p).general_slots;
+    if slots.iter().all(|s| s.is_none()) {
+        return true;
+    }
+    slots
+        .iter()
+        .flatten()
+        .any(|g| general_gender(*g) == Some(Gender::Male))
+}
+
+/// 从挂起机器派生当前应有的开放选择询问。
+///
+/// 返回 `Some` 当且仅当机器处于「已发出询问、等待应答」的静止状态；
+/// 派生形状与机器创建该询问时的 `ChoiceSpec` 逐字段一致（选项含顺序）。
+/// 恢复期以本函数核对 `open_choice` 的承接关系（N04-e）。
+pub fn active_ask(
+    machine: &MachineSnapshot,
+    core: &GameStateCore,
+    catalog: &Catalog,
+) -> Option<ExpectedAsk> {
+    match machine {
+        // ---- 内核机器 ----
+        MachineSnapshot::MonkeySteal { holders, asked, .. } => {
+            if !*asked {
+                return None;
+            }
+            let holder = *holders.first()?;
+            Some(ask(
+                holder,
+                "huanle_monkey_confirm",
+                ChoiceKind::RespondCard,
+                vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                1,
+                1,
+                false,
+            ))
+        }
+        MachineSnapshot::Sha {
+            target,
+            source,
+            asked,
+            tieji_red,
+            liuli_stage,
+            hujia_holder,
+            ..
+        } => {
+            if *liuli_stage == 1 {
+                // 流离弃牌自选（逐技对照批二 v76）：手牌+装备选一张，可取消
+                let mut options: Vec<ChoiceOption> = core
+                    .player(*target)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                options.extend(
+                    core.player(*target)
+                        .equips
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card),
+                );
+                return Some(ask(
+                    *target,
+                    "liuli_discard_choose",
+                    ChoiceKind::SelectCards,
+                    options,
+                    0,
+                    1,
+                    true,
+                ));
+            }
+            if *liuli_stage == 2 {
+                // 流离转移目标询问：在（被转移者）攻击范围内、非来源非己、
+                // 非空城（kernel liuli_candidate_ok 同口径）
+                let candidates: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != *target
+                            && *p != *source
+                            && {
+                                let kc = catalog
+                                    .skill_by_name(crate::content::standard::KONG_CHENG)
+                                    .map(|d| core.has_skill(*p, d))
+                                    .unwrap_or(false);
+                                !(kc && core.player(*p).hand.is_empty())
+                            }
+                            && core.computed_distance(catalog, *target, *p)
+                                <= core.attack_range(catalog, *target)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                return Some(ask(
+                    *target,
+                    "liuli_transfer",
+                    ChoiceKind::SelectPlayers,
+                    candidates,
+                    1,
+                    1,
+                    false,
+                ));
+            }
+            if let Some(h) = hujia_holder {
+                // v204：持牌者自选一张闪（含倾国转化黑手牌）；空选=拒绝
+                let qingguo_h = catalog
+                    .skill_by_name(QING_GUO)
+                    .map(|d| core.has_skill(*h, d))
+                    .unwrap_or(false);
+                let options: Vec<ChoiceOption> = core
+                    .player(*h)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| {
+                        let kind = catalog.card_kind(*c);
+                        kind == CardKind::Shan
+                            || (qingguo_h
+                                && matches!(
+                                    catalog.cards[*c as usize].suit,
+                                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                                ))
+                    })
+                    .map(ChoiceOption::Card)
+                    .collect();
+                return Some(ask(
+                    *h,
+                    "hujia_respond",
+                    ChoiceKind::SelectCards,
+                    options,
+                    0,
+                    1,
+                    false, // 空选=拒绝本位（非取消）
+                ));
+            }
+            if *asked {
+                // 出闪响应：Pass + 目标的闪（龙胆并入杀、倾国并入装备黑牌、
+                // 铁骑红色判定封锁常规闪；诱敌深入独立并入一张）
+                let tieji_blocks = *tieji_red == Some(true);
+                let longdan = catalog
+                    .skill_by_name(LONG_DAN)
+                    .map(|d| core.has_skill(*target, d))
+                    .unwrap_or(false);
+                let qingguo = catalog
+                    .skill_by_name(QING_GUO)
+                    .map(|d| core.has_skill(*target, d))
+                    .unwrap_or(false);
+                let mut options: Vec<ChoiceOption> = vec![ChoiceOption::Pass];
+                for c in core.player(*target).hand.iter().copied() {
+                    let kind = catalog.card_kind(c);
+                    if !tieji_blocks
+                        && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha))
+                    {
+                        options.push(ChoiceOption::Card(c));
+                    }
+                }
+                for c in core.player(*target).hand.iter().copied() {
+                    if catalog.card_kind(c) == CardKind::Youdishenru {
+                        options.push(ChoiceOption::Card(c));
+                        break;
+                    }
+                }
+                if qingguo && !tieji_blocks {
+                    // 倾国（v202 对齐上游 position "hs"）：黑色手牌并入
+                    for c in core.player(*target).hand.iter().copied() {
+                        let kind = catalog.card_kind(c);
+                        let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
+                        let black = matches!(
+                            catalog.cards[c as usize].suit,
+                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        );
+                        if black && !already {
+                            options.push(ChoiceOption::Card(c));
+                        }
+                    }
+                }
+                return Some(ask(
+                    *target,
+                    "respond_shan",
+                    ChoiceKind::RespondCard,
+                    options,
+                    1,
+                    1,
+                    false,
+                ));
+            }
+            None
+        }
+        MachineSnapshot::DyingSave {
+            responders,
+            asked,
+            dying,
+            ..
+        } => {
+            if !*asked {
+                return None;
+            }
+            let responder = *responders.first()?;
+            let mut options = vec![ChoiceOption::Pass];
+            options.extend(
+                core.player(responder)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| is_tao_like(core, catalog, responder, *c, *dying))
+                    .map(ChoiceOption::Card),
+            );
+            Some(ask(
+                responder,
+                "dying_save",
+                ChoiceKind::RespondCard,
+                options,
+                1,
+                1,
+                false,
+            ))
+        }
+        MachineSnapshot::Duel {
+            source,
+            target,
+            on_target,
+            asked,
+            ..
+        } => {
+            if !*asked {
+                return None;
+            }
+            let responder = if *on_target { *target } else { *source };
+            let mut options = vec![ChoiceOption::Pass];
+            options.extend(
+                core.player(responder)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| catalog.card_kind(*c) == CardKind::Sha)
+                    .map(ChoiceOption::Card),
+            );
+            Some(ask(
+                responder,
+                "duel_sha",
+                ChoiceKind::RespondCard,
+                options,
+                1,
+                1,
+                false,
+            ))
+        }
+        MachineSnapshot::NullifyWindow {
+            queue,
+            asked,
+            window_open,
+            effect,
+            ..
+        } => {
+            if *window_open {
+                if !*asked {
+                    return None;
+                }
+                let responder = *queue.first()?;
+                let mut options = vec![ChoiceOption::Pass];
+                options.extend(
+                    core.player(responder)
+                        .hand
+                        .iter()
+                        .copied()
+                        .filter(|c| catalog.card_kind(*c) == CardKind::Nullify)
+                        .map(ChoiceOption::Card),
+                );
+                Some(ask(
+                    responder,
+                    "nullify_window",
+                    ChoiceKind::Confirm,
+                    options,
+                    1,
+                    1,
+                    false,
+                ))
+            } else {
+                // 窗口已关闭：委托效果机器
+                let e = effect.as_deref()?;
+                active_ask(e, core, catalog)
+            }
+        }
+        MachineSnapshot::JudgePhase { current, .. } => {
+            let c = current.as_deref()?;
+            if c.in_rewrite {
+                if !c.asked {
+                    return None;
+                }
+                let rewriter = *c.rewriters.first()?;
+                // 黑色手牌 + 黑色装备；鬼才持有者全部手牌可打
+                let gui_cai = catalog
+                    .skill_by_name(GUI_CAI)
+                    .map(|d| core.has_skill(rewriter, d))
+                    .unwrap_or(false);
+                let is_black = |id: CardId| {
+                    matches!(
+                        catalog.cards[id as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                };
+                let mut options = vec![ChoiceOption::Pass];
+                for c in core.player(rewriter).hand.iter().copied() {
+                    if gui_cai || is_black(c) {
+                        options.push(ChoiceOption::Card(c));
+                    }
+                }
+                for c in core.player(rewriter).equips.iter().copied() {
+                    if is_black(c) {
+                        options.push(ChoiceOption::Card(c));
+                    }
+                }
+                return Some(ask(
+                    rewriter,
+                    "gui_dao_rewrite",
+                    ChoiceKind::RespondCard,
+                    options,
+                    1,
+                    1,
+                    false,
+                ));
+            }
+            // 天妒询问（判定确定后、获得前、判定牌仍由机器持有）
+            if c.finalized && !c.tian_du.is_empty() && c.asked && !c.gained && c.judge_held {
+                return Some(confirm_ask(c.tian_du[0], "tian_du_gain"));
+            }
+            None
+        }
+        MachineSnapshot::PlaceDelayed { .. } => None,
+        MachineSnapshot::Aoe { inner, .. } => {
+            let e = inner.as_deref()?;
+            active_ask(e, core, catalog)
+        }
+        MachineSnapshot::AoeTarget {
+            target,
+            need,
+            asked,
+            ..
+        } => {
+            if !*asked {
+                return None;
+            }
+            let mut options = vec![ChoiceOption::Pass];
+            options.extend(
+                core.player(*target)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| catalog.card_kind(*c) == *need)
+                    .map(ChoiceOption::Card),
+            );
+            Some(ask(
+                *target,
+                "aoe_response",
+                ChoiceKind::RespondCard,
+                options,
+                1,
+                1,
+                false,
+            ))
+        }
+        // 铁索逐目标无懈窗口（规则 v290）：当前目标窗口内的询问由窗口机器回答；
+        // 派发层自身不产生询问。
+        MachineSnapshot::Chain { inner, .. } => {
+            let e = inner.as_deref()?;
+            active_ask(e, core, catalog)
+        }
+        MachineSnapshot::DiscardToLimit {
+            player,
+            need,
+            asked,
+        } => {
+            if !*asked {
+                return None;
+            }
+            let options = hand_card_options(&core.player(*player).hand);
+            Some(ask(
+                *player,
+                "discard_to_limit",
+                ChoiceKind::SelectCards,
+                options,
+                *need,
+                *need,
+                false,
+            ))
+        }
+        MachineSnapshot::Death { .. } => None,
+        MachineSnapshot::OptionalGate {
+            owner,
+            asked,
+            inner,
+            ..
+        } => {
+            if let Some(e) = inner {
+                return active_ask(e, core, catalog);
+            }
+            if !*asked {
+                return None;
+            }
+            Some(confirm_ask(*owner, "trigger_confirm"))
+        }
+        // ---- 内容机器 ----
+        MachineSnapshot::SanCai { owner, stage, .. } => match stage {
+            SanCaiStageSnap::GiveCard => Some(ask(
+                *owner,
+                "sancai_target",
+                ChoiceKind::SelectPlayers,
+                other_player_options(core, *owner),
+                1,
+                1,
+                false,
+            )),
+            SanCaiStageSnap::Finish => Some(ask(
+                *owner,
+                "sancai_card",
+                ChoiceKind::SelectCards,
+                hand_card_options(&core.player(*owner).hand),
+                1,
+                1,
+                false,
+            )),
+            _ => None,
+        },
+        MachineSnapshot::YiShang { owner, stage } => match stage {
+            YiShangStageSnap::Apply => Some(ask(
+                *owner,
+                "yishang_target",
+                ChoiceKind::SelectPlayers,
+                other_player_options(core, *owner),
+                1,
+                1,
+                false,
+            )),
+            _ => None,
+        },
+        MachineSnapshot::TuXi { owner, stage } => match stage {
+            TuXiStageSnap::Read => {
+                let candidates: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|p| *p != *owner && !core.player(*p).hand.is_empty())
+                    .map(ChoiceOption::Player)
+                    .collect();
+                Some(ask(
+                    *owner,
+                    "tuxi_target",
+                    ChoiceKind::SelectPlayers,
+                    candidates,
+                    1,
+                    2,
+                    true,
+                ))
+            }
+            _ => None,
+        },
+        MachineSnapshot::Rende { owner, stage, .. } => match stage {
+            RendeStageSnap::TargetAsk => {
+                let hand = &core.player(*owner).hand;
+                let max = hand.len();
+                Some(ask(
+                    *owner,
+                    "rende_cards",
+                    ChoiceKind::SelectCards,
+                    hand_card_options(hand),
+                    0,
+                    max,
+                    true,
+                ))
+            }
+            RendeStageSnap::TargetRead => Some(ask(
+                *owner,
+                "rende_target",
+                ChoiceKind::SelectPlayers,
+                other_player_options(core, *owner),
+                1,
+                1,
+                true,
+            )),
+            _ => None,
+        },
+        MachineSnapshot::Jijiang {
+            owner,
+            stage,
+            helper,
+            sha,
+            inner,
+            ..
+        } => {
+            if let Some(e) = inner {
+                return active_ask(e, core, catalog);
+            }
+            match stage {
+                JijiangStageSnap::HelperAsk => {
+                    let h = (*helper)?;
+                    Some(ask(
+                        h,
+                        "jijiang_respond",
+                        ChoiceKind::Confirm,
+                        vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                        1,
+                        1,
+                        false,
+                    ))
+                }
+                JijiangStageSnap::TargetAsk => {
+                    // 目标询问仅在借杀成功后存在
+                    if helper.is_none() || sha.is_none() {
+                        return None;
+                    }
+                    let candidates: Vec<ChoiceOption> = core
+                        .alive_players()
+                        .filter(|p| {
+                            *p != *owner
+                                && core.computed_distance(catalog, *owner, *p)
+                                    <= core.attack_range(catalog, *owner)
+                        })
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    Some(ask(
+                        *owner,
+                        "jijiang_target",
+                        ChoiceKind::SelectPlayers,
+                        candidates,
+                        1,
+                        1,
+                        true,
+                    ))
+                }
+            }
+        }
+        MachineSnapshot::JieYin { owner, stage, .. } => match stage {
+            JieYinStageSnap::TargetAsk => {
+                let hand = &core.player(*owner).hand;
+                Some(ask(
+                    *owner,
+                    "jieyin_cards",
+                    ChoiceKind::SelectCards,
+                    hand_card_options(hand),
+                    2,
+                    2,
+                    true,
+                ))
+            }
+            JieYinStageSnap::TargetRead => {
+                let candidates: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|t| {
+                        *t != *owner
+                            && !core.player(*t).equips.is_empty()
+                            && seat_is_male_core(core, *t)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                Some(ask(
+                    *owner,
+                    "jieyin_target",
+                    ChoiceKind::SelectPlayers,
+                    candidates,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
+        MachineSnapshot::BossXiangde { .. } => {
+            // 相德：无挂起一步机（永不等待应答），恢复无询问
+            None
+        }
+        MachineSnapshot::BossFutai { .. } => {
+            // 覆泰：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossLuanchang { .. } => {
+            // 乱常：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossZhaohuo { .. } => {
+            // 招祸：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossQizuo { .. } => {
+            // 奇佐：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossXiaoxiong { .. } => {
+            // 枭雄：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossLingbo { .. } => {
+            // 凌波：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossTashui { .. } => {
+            // 踏水：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossZjLeiji { .. } => {
+            // 雷击·张角：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossHeisheng { .. } => {
+            // 黑绳：无挂起一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossLeizhu { .. } => {
+            // 雷诛：逐发机器不产生询问（救援询问属濒死机），恢复无询问
+            None
+        }
+        MachineSnapshot::BossRenao { .. } => {
+            // 热恼：同雷诛，恢复无询问
+            None
+        }
+        MachineSnapshot::BossWanghun { .. } => {
+            // 忘魂：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossZhuxin { .. } => {
+            // 诛心：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossPingdeng { .. } => {
+            // 平等：直写两波机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossHuoxing { .. } => {
+            // 火刑：直写逐座机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossBingfeng { .. } => {
+            // 冰封：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::BossWangxiang { .. } => {
+            // 望乡：直写一步机，恢复无询问
+            None
+        }
+        MachineSnapshot::Rvm {
+            owner,
+            paused: Some(p),
+            ..
+        } => {
+            // T8 增量 2：VM 选择挂起——选项 tokens 派生（PickTag）
+            let options: Vec<ChoiceOption> = p
+                .options
+                .iter()
+                .map(|t| ChoiceOption::Tag(*t as u8))
+                .collect();
+            Some(ask(
+                *owner,
+                "rvm_choice",
+                ChoiceKind::PickTag,
+                options,
+                1,
+                1,
+                false,
+            ))
+        }
+        MachineSnapshot::Rvm { .. } => {
+            // 非挂起态：无询问
+            None
+        }
+        MachineSnapshot::BossBuchun { owner, stage, .. } if *stage == 3 => {
+            // 不臣恢复线目标询问挂起：同阵营受伤角色逐字段派生
+            let seats = core.players.len() as u8;
+            let candidates: Vec<ChoiceOption> = (0..seats)
+                .filter(|&t| {
+                    let p = core.player(t);
+                    p.alive
+                        && p.hp < p.max_hp as i32
+                        && core.is_boss_side(t) == core.is_boss_side(*owner)
+                })
+                .map(ChoiceOption::Player)
+                .collect();
+            Some(ask(
+                *owner,
+                "buchun_target",
+                ChoiceKind::SelectPlayers,
+                candidates,
+                1,
+                1,
+                false,
+            ))
+        }
+        MachineSnapshot::BossBuchun { .. } => {
+            // 复活线/恢复线非挂起阶段：无询问
+            None
+        }
+        MachineSnapshot::BossXingxia { owner, stage, .. } if *stage == 1 => {
+            // 星夏敌方询问挂起：异侧存活角色派生
+            let seats = core.players.len() as u8;
+            let candidates: Vec<ChoiceOption> = (0..seats)
+                .filter(|&t| {
+                    core.player(t).alive && core.is_boss_side(t) != core.is_boss_side(*owner)
+                })
+                .map(ChoiceOption::Player)
+                .collect();
+            Some(ask(
+                *owner,
+                "xingxia_enemy",
+                ChoiceKind::SelectPlayers,
+                candidates,
+                0,
+                1,
+                true,
+            ))
+        }
+        MachineSnapshot::BossXingxia { actor, stage, .. } if *stage == 3 => {
+            // 星夏弃红询问挂起：焦点敌方的手牌+装备红色牌派生
+            let t = *actor as u8;
+            let mut candidates: Vec<ChoiceOption> = core
+                .player(t)
+                .hand
+                .iter()
+                .copied()
+                .filter(|c| {
+                    matches!(
+                        catalog.cards[*c as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
+                })
+                .map(ChoiceOption::Card)
+                .collect();
+            for c in core.player(t).equips.iter().copied() {
+                if matches!(
+                    catalog.cards[c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                ) {
+                    candidates.push(ChoiceOption::Card(c));
+                }
+            }
+            Some(ask(
+                t,
+                "xingxia_discard",
+                ChoiceKind::SelectCards,
+                candidates,
+                0,
+                1,
+                true,
+            ))
+        }
+        MachineSnapshot::BossXingxia { .. } => {
+            // 非挂起阶段：无询问
+            None
+        }
+        MachineSnapshot::Shedu { owner, .. } => {
+            // 蛇毒：挂起态询问重挂（弃 X 或失 X）
+            Some(ask(
+                *owner,
+                "shedu_discard_or_lose",
+                ChoiceKind::SelectCards,
+                hand_card_options(&core.player(*owner).hand),
+                0,
+                core.player(*owner).shedu as usize,
+                true,
+            ))
+        }
+        MachineSnapshot::FanJian {
+            owner,
+            stage,
+            target,
+            ..
+        } => match stage {
+            // stage 名 = 消费者：SuitAsk 消费 fanjian_target 应答、
+            // PickAsk 消费 fanjian_suit、Consume 消费 fanjian_pick（v203）
+            FanJianStageSnap::SuitAsk => Some(ask(
+                *owner,
+                "fanjian_target",
+                ChoiceKind::SelectPlayers,
+                other_player_options(core, *owner),
+                1,
+                1,
+                true,
+            )),
+            FanJianStageSnap::PickAsk => {
+                let t = (*target)?;
+                Some(ask(
+                    t,
+                    "fanjian_suit",
+                    ChoiceKind::PickTag,
+                    (0..=3).map(crate::choice::ChoiceOption::Tag).collect(),
+                    1,
+                    1,
+                    false,
+                ))
+            }
+            FanJianStageSnap::Consume => {
+                let t = (*target)?;
+                Some(ask(
+                    t,
+                    "fanjian_pick",
+                    ChoiceKind::SelectCards,
+                    hand_card_options(&core.player(*owner).hand),
+                    1,
+                    1,
+                    false,
+                ))
+            }
+            FanJianStageSnap::TargetAsk => None,
+        },
+        MachineSnapshot::LiJian {
+            owner,
+            stage,
+            inner,
+            ..
+        } => {
+            if let Some(e) = inner {
+                return active_ask(e, core, catalog);
+            }
+            match stage {
+                LiJianStageSnap::TargetsAsk => {
+                    let hand = &core.player(*owner).hand;
+                    Some(ask(
+                        *owner,
+                        "lijian_discard",
+                        ChoiceKind::SelectCards,
+                        hand_card_options(hand),
+                        1,
+                        1,
+                        true,
+                    ))
+                }
+                LiJianStageSnap::Launch => {
+                    let candidates: Vec<ChoiceOption> = core
+                        .alive_players()
+                        .filter(|p| *p != *owner && seat_is_male_core(core, *p))
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    Some(ask(
+                        *owner,
+                        "lijian_targets",
+                        ChoiceKind::SelectPlayers,
+                        candidates,
+                        2,
+                        2,
+                        true,
+                    ))
+                }
+                _ => None,
+            }
+        }
+        MachineSnapshot::GuanXing { owner, stage, top } => match stage {
+            GuanXingStageSnap::Place => {
+                let take = top.len();
+                Some(ask(
+                    *owner,
+                    "guanxing_arrange",
+                    ChoiceKind::SelectCards,
+                    hand_card_options(top),
+                    0,
+                    take,
+                    false,
+                ))
+            }
+            _ => None,
+        },
+        MachineSnapshot::QingNang { owner, stage, .. } => match stage {
+            QingNangStageSnap::TargetRead => {
+                let wounded: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != *owner && {
+                            let pl = core.player(*p);
+                            pl.alive && (pl.hp as i64) < (pl.max_hp as i64)
+                        }
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                Some(ask(
+                    *owner,
+                    "qingnang_target",
+                    ChoiceKind::SelectPlayers,
+                    wounded,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            QingNangStageSnap::CardRead => Some(ask(
+                *owner,
+                "qingnang_card",
+                ChoiceKind::SelectCards,
+                hand_card_options(&core.player(*owner).hand),
+                1,
+                1,
+                true,
+            )),
+            _ => None,
+        },
+        MachineSnapshot::JiJi { owner, stage, .. } => match stage {
+            JiJiStageSnap::GiveCard => Some(ask(
+                *owner,
+                "jiji_target",
+                ChoiceKind::SelectPlayers,
+                other_player_options(core, *owner),
+                0,
+                1,
+                true,
+            )),
+            JiJiStageSnap::GiveChooseCard => Some(ask(
+                *owner,
+                "jiji_card",
+                ChoiceKind::SelectCards,
+                hand_card_options(&core.player(*owner).hand),
+                1,
+                1,
+                true,
+            )),
+            _ => None,
+        },
+        MachineSnapshot::ZhiHeng { owner, stage } => match stage {
+            ZhiHengStageSnap::Draw => {
+                let hand = &core.player(*owner).hand;
+                let max = hand.len();
+                Some(ask(
+                    *owner,
+                    "zhiheng_select",
+                    ChoiceKind::SelectCards,
+                    hand_card_options(hand),
+                    0,
+                    max,
+                    true,
+                ))
+            }
+            _ => None,
+        },
+        // ---- G1 规则宿主机器 ----
+        MachineSnapshot::Host {
+            behavior,
+            stage,
+            owner,
+            target,
+            targets,
+            cards,
+            ..
+        } => active_ask_host(
+            u16::from(*behavior),
+            *stage,
+            *owner,
+            *target,
+            targets,
+            cards,
+            core,
+            catalog,
+        ),
+        // ---- 无询问机器 ----
+        _ => None,
+    }
+}

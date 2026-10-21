@@ -1,0 +1,138 @@
+use super::*;
+
+/// 杀的结算：询问目标闪，未闪则造成伤害子事件。
+/// 裸衣伤害加成：来源本回合已发动裸衣（`once_used` 旗标，判定阶段
+/// 开始时随 `reset_turn_limits` 清除）→ 杀/决斗伤害 +1。
+pub(super) fn luoyi_bonus(ctx: &Ctx<'_>, source: Option<PlayerId>) -> u32 {
+    let Some(s) = source else { return 0 };
+    let Some(def) = ctx.catalog.skill_by_name(crate::content::standard::LUO_YI) else {
+        return 0;
+    };
+    match ctx.core.skills.get(&(s, def)) {
+        Some(inst) if inst.enabled && inst.once_used => 1,
+        _ => 0,
+    }
+}
+
+/// 凶兽（Boss 模式共有技，规则 v208）：来源持凶兽且目标体力小于来源
+/// 时，来源使用【杀】造成的伤害 +1（上游 boss_xiongshou_damage
+/// `damageBegin1` filter hp< 同口径）。
+pub(super) fn xiongshou_bonus(ctx: &Ctx<'_>, source: PlayerId, target: PlayerId) -> u32 {
+    let Some(def) = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_XIONGSHOU)
+    else {
+        return 0;
+    };
+    let enabled = ctx
+        .core
+        .skills
+        .get(&(source, def))
+        .map(|i| i.enabled)
+        .unwrap_or(false);
+    if enabled && ctx.core.player(target).hp < ctx.core.player(source).hp {
+        1
+    } else {
+        0
+    }
+}
+
+/// 贪欲手牌「全场最多」判定：持有者手牌数不少于任何其他存活角色。
+pub(crate) fn tanyu_is_max_hand(core: &crate::state::GameStateCore, holder: PlayerId) -> bool {
+    let my = core.player(holder).hand.len();
+    core.alive_players()
+        .all(|o| o == holder || core.player(o).hand.len() <= my)
+}
+
+/// 覆泰2（Boss 穷奇，规则 v214）：场上存有持覆泰的穷奇、用/救桃者非
+/// 穷奇且当前回合非穷奇时，桃不可用/不可救（上游 boss_futai2
+/// cardSavable/cardEnabled 双 mod 同口径）。
+pub(crate) fn tao_futai2_banned(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    user: PlayerId,
+) -> bool {
+    let Some(fdef) = catalog.skill_by_name(crate::content::standard::BOSS_FUTAI) else {
+        return false;
+    };
+    let holders: Vec<PlayerId> = core
+        .skills
+        .iter()
+        .filter(|((_, dd), i)| *dd == fdef && i.enabled)
+        .map(|((o, _), _)| *o)
+        .filter(|o| core.player(*o).alive && *o != user)
+        .collect();
+    match holders.first() {
+        Some(&boss) => core.turn.current != boss,
+        None => false,
+    }
+}
+
+/// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
+pub(super) fn is_tao_like(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    card: crate::ids::CardId,
+    dying: PlayerId,
+) -> bool {
+    if ctx.catalog.card_kind(card) == CardKind::Tao {
+        // 覆泰2（规则 v214）：全场禁桃时真桃不可救
+        return !tao_futai2_banned(ctx.core, ctx.catalog, responder);
+    }
+    // 酒（G1 cardpile 前置）：濒死时对自身使用回复 1 点体力
+    if ctx.catalog.card_kind(card) == CardKind::Jiu {
+        return true;
+    }
+    // 护符（U05 swd 首切片，规则 v85）：仅濒死者本人的桃形救援
+    //（上游 savable: dying === player）
+    if ctx.catalog.card_kind(card) == CardKind::Hufu {
+        return responder == dying;
+    }
+    // 天仙酒（U05 swd 第五批，规则 v89）：酒的 swd 变体——濒死自救
+    if ctx.catalog.card_kind(card) == CardKind::Tianxianjiu {
+        return true;
+    }
+    // 急救（v202 对齐上游 viewAsFilter）：限持有者回合外——自己是当前
+    // 回合角色时不可发动
+    let jijiu = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::JI_JIU)
+        .map(|d| ctx.core.has_skill(responder, d) && ctx.core.turn.current != responder)
+        .unwrap_or(false);
+    if jijiu
+        && matches!(
+            ctx.catalog.cards[card as usize].suit,
+            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+        )
+    {
+        return true;
+    }
+    // 复燃（Boss 焰灵，规则 v241）：焰灵濒死时其敌方可用红色牌当桃救
+    //（上游 boss_furan2 dying chooseToUse viewAs tao 同口径）
+    let furan = ctx
+        .catalog
+        .skill_by_name(crate::content::standard::BOSS_FURAN)
+        .map(|d| ctx.core.has_skill(dying, d))
+        .unwrap_or(false);
+    if furan
+        && ctx.core.is_boss_side(responder) != ctx.core.is_boss_side(dying)
+        && matches!(
+            ctx.catalog.cards[card as usize].suit,
+            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+        )
+    {
+        return true;
+    }
+    // 蜜链藕（G1 古剑食物）：持有者红桃手牌可当桃（濒死响应）
+    let mizhilianou = ctx
+        .catalog
+        .skill_by_name(crate::content::host::GJ_FOOD_MIZHLIANOU_KEY)
+        .map(|d| ctx.core.has_skill(responder, d))
+        .unwrap_or(false);
+    if mizhilianou && ctx.catalog.cards[card as usize].suit == crate::catalog::Suit::Heart {
+        return true;
+    }
+    // 帝女玄霜（G1 古剑，濒死可救基本牌）：按桃结算回复 1 体力
+    //（弃摸骑乘由 DyingSaveMachine rider 承担）
+    ctx.catalog.card_kind(card) == CardKind::Dinvxuanshuang
+}

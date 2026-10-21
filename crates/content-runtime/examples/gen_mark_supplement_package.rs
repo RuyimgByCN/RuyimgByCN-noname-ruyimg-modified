@@ -25,7 +25,7 @@ fn cards_json() -> String {
     out.push_str("  \"pack\": {\n");
     out.push_str("    \"name\": \"mark-supplement-upstream-liuli\",\n");
     out.push_str("    \"version\": 1,\n");
-    out.push_str("    \"description\": \"G1 转换：上游标记补充批 1-2（配置门控 + 苦肉/主亡忠继）\",\n");
+    out.push_str("    \"description\": \"G1 转换：上游标记补充批 1-3（配置门控 + 苦肉/主亡忠继/烈弓/狂骨）\",\n");
     out.push_str("    \"card_prefix\": \"ms_\"\n");
     out.push_str("  },\n");
     out.push_str("  \"cards\": [],\n");
@@ -33,7 +33,9 @@ fn cards_json() -> String {
     out.push_str("    { \"name\": \"xigua_mopaifanbei\", \"mapping\": \"host:xigua_mopaifanbei\" },\n");
     out.push_str("    { \"name\": \"xigua_xueliangfanbei\", \"mapping\": \"host:xigua_xueliangfanbei\" },\n");
     out.push_str("    { \"name\": \"kurou\", \"mapping\": \"host:kurou\" },\n");
-    out.push_str("    { \"name\": \"zhuwanzhongji\", \"mapping\": \"host:zhuwanzhongji\" }\n");
+    out.push_str("    { \"name\": \"zhuwanzhongji\", \"mapping\": \"host:zhuwanzhongji\" },\n");
+    out.push_str("    { \"name\": \"fz_liegong\", \"mapping\": \"host:fz_liegong\" },\n");
+    out.push_str("    { \"name\": \"fz_xinkuanggu\", \"mapping\": \"host:fz_xinkuanggu\" }\n");
     out.push_str("  ],\n");
     out.push_str("  \"generals\": [],\n");
     out.push_str("  \"deferred\": [\n");
@@ -101,6 +103,22 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             content_schema::PackageSkillEntry {
                 skill_def_id: 3,
                 name: "zhuwanzhongji".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 4,
+                name: "fz_liegong".into(),
+                locked: false,
+                lord_only: false,
+                non_gainable: false,
+                conversion: false,
+            },
+            content_schema::PackageSkillEntry {
+                skill_def_id: 5,
+                name: "fz_xinkuanggu".into(),
                 locked: false,
                 lord_only: false,
                 non_gainable: false,
