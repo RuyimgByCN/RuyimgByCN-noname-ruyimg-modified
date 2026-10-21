@@ -35,6 +35,7 @@ CHECKS: list[tuple[str, list[str], bool]] = [
     ("卡面覆盖（201/128）", [PY, "-B", "scripts/report_card_coverage.py", "--check"], False),
     ("台账↔枚举一致", [PY, "-B", "scripts/check_ledger_consistency.py", "--strict"], True),
     ("守卫引用名存在", [PY, "-B", "scripts/check_guard_references.py", "--strict"], False),
+    ("注释计数=台账", [PY, "-B", "scripts/check_comment_counts.py", "--strict"], False),
     ("脚本单测", [PY, "-B", "-m", "unittest", "discover", "-s", "scripts"], True),
     ("文档 file:line 引用", [PY, "-B", "scripts/check_doc_line_refs.py", "--strict"], False),
     ("行数门禁", [PY, "-B", "scripts/check-source-lines.py"], False),
