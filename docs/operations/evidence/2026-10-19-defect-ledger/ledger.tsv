@@ -88,7 +88,6 @@ G23	A	WudianGuangshuSpade	U05	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶�
 G23	A	XianjianLingyu	U05	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
 G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
 失效	A	SwdBaishouzhihuHeld	U05	content/host/**	PhaseEnd(begin:false)	filter 要求 *begin	高	永不触发	blocked
-自加	A	SwdHuajin2	U05	content/host/**	source: damageBegin	Damage OR 判定阶段分支	高	自加分支	blocked
 需档	B	Jifeng	U05	meta:0	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianFeixu	U05	meta:0	global:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
 5a	A	HuanleKuwu	U06	content/host/**	sha && notLink && countCards>0	仅 is_sha_like	高	少 2 个 filter 条件	blocked

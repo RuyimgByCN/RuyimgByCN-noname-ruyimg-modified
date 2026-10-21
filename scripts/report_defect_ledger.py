@@ -50,7 +50,6 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
     ("G19", "A", "SwdTiebi", "U05", "global: useCardToBegin", "filter 含 t != owner", "技能主被排除"),
     ("G19", "A", "SwdRexue", "U05", "global: phaseEnd", "filter 含 actor != owner", "技能主被排除"),
     ("5c", "B", "ShengkeCheck", "L06", "target: useCardToBegin", "EventKind::CardUsed", "需 CardTargeted 档"),
-    ("自加", "A", "SwdHuajin2", "U05", "source: damageBegin", "Damage OR 判定阶段分支", "自加分支"),
     ("5a", "A", "HuanleKuwu", "U06", "sha && notLink && countCards>0", "仅 is_sha_like", "少 2 个 filter 条件"),
     ("6", "A", "GujianFoodRangjie", "L10", "分支前无条件 draw()", "仅分支 0 摸牌", "分支 1 不摸牌"),
     ("G23b", "A", "SwdJiguanyuanGain", "U05", "damageEnd + damageSource", "EventKind::PhaseEnd", "事件种类完全错"),
