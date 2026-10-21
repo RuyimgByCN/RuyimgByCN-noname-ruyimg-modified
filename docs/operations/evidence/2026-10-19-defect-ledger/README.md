@@ -2268,3 +2268,21 @@ let yxs_fanji2_direct_hit = {
 
 ⇒ **台账仍为 54 行** ✅
 ⇒ **`SwdMufengHeld` 是唯一同时有「触发缺陷」与「效果缺陷」的行** ⚠️
+
+---
+
+## 82 第 866 轮：`SwdMufengHeld` 的效果缺陷属 **B 类（缺 `discover` 原语）**
+
+| 检查 | 结果 |
+|---|---|
+| 原生是否有 `discover` 原语 | **没有**（`grep -rn discover crates/engine-native/src/` 只命中 MTG 的**字符串常量**与 `CardKind` 映射，**无实现**）|
+| `step/mtg.rs` 里是否有 `discover` | **无** |
+| 上游 `discoverCard()` 的语义 | **`num=3` 随机取 3 张 ⇒ 选 1 张**（`game.js:17582`）|
+
+⇒ 修复 `SwdMufengHeld` 需要**新增 `discover`（三选一）能力** —— 属 **B 类（需扩引擎能力）**，不是改一行能解决的 ✅
+⇒ **这也解释了为什么它被实现成「摸 1」**：**当时没有 discover 原语，用最接近的 `draw` 代替** ⚠️
+
+### 台账登记
+
+* **不新增行**（第 865 轮决定），**在 G23 行说明里标为「触发缺陷 + 效果缺陷（B 类：缺 discover）」** ✅
+* **它现在是台账里唯一一条「B 类且需要新原语」的效果缺陷** ⚠️
