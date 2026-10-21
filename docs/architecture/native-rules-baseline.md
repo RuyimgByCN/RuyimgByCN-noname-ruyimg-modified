@@ -6129,3 +6129,34 @@ event.trigger('phaseAfter');
 
 1. **128 个 kind 全部登记 → 「卡牌子包张数完成」这一项成立** ✅
 2. **48 个 kind 能直接指到行为面；其余 79 个待逐类核对**（**需 `gw:`/`swd:` 键常量 → 效果步的对照表**）⚠️
+
+### ✅ 卡面覆盖的最终口径：**128/128 都能在 `catalog.rs` 之外找到引用**（第 774 轮更正第 773 轮）
+
+第 773 轮先报「48 个直接变体 / 79 个仅在登记」，第 774 轮把**扫描范围放宽到 `crates/**/*.rs`（排除 `catalog.rs`）**并同时接受
+「`CardKind::X` 变体名」与「`kind` 字面量」两种落点，结果：
+
+| 口径 | 结果 |
+|---|---:|
+| 唯一 kind | **128** |
+| **`catalog.rs` 已登记** | **128 / 128** ✅ |
+| **`catalog.rs` 之外任何 `src/*.rs` 提到** | **128 / 128（100%）** ✅ |
+| **完全无源码引用** | **0** |
+
+**为什么上一轮会得出 48/79**：扫描时把范围限在 `content/host/`，且只认
+`CardKind::X` 变体与「键常量名」两种写法 ⇒ **漏掉 `engine/play_card.rs`、`kernel/events.rs`、`host.rs` 等处的落点** ❌
+
+**抽查三例**（上一轮被判「仅在登记」）：
+
+| kind | 实际落点 |
+|---|---|
+| `caoyao` | **`engine/play_card.rs`、`kernel/events.rs`** |
+| `donghuangzhong` | **`host.rs`、`host/keys.rs`、`host/step/swd_card_effects.rs`**（**作为 host 键**）|
+| `guilingzhitao` | 仅 `catalog.rs` + 翻译 —— **唯一一例真的没有行为落点**（但仍在 `host.rs` 的某个列表里出现过）|
+
+⇒ **这是本会话第 6 次「检测范围/写法」造成的假结论**（前五次：filter 模式、正则漏相等、数 `skills[]`、`(None,None)`、metadata 字面量）⚠️
+
+### 卡面能下的结论（收口）
+
+1. **张数与登记：201 张卡 / 128 个 kind，`catalog.rs` 100% 登记** ✅
+2. **源码挂接：128/128 在 `catalog.rs` 之外有引用** ✅
+3. **效果是否正确：未核对**（需逐张读效果步，`EffectRequest` 级对照工具仍未备）⚠️
