@@ -19,7 +19,7 @@
 > | ① 上游定位 | **54 / 54** | 每行都能指出上游出处 |
 > | ② 上游同质 | **36 行** | 相位族全族上游 trigger 一致 |
 > | ③ 效果步存在 | **54 / 54** | 无一条是「功能没做」|
-> | ④ **效果等价** | **15 已确认 + 25 形态相符** | 其余 **14 行未读** ⚠️ |
+> | ④ **效果等价** | **16 已确认 + 25 形态相符** | 其余 **13 行未读** ⚠️ |
 >
 > **归因层代码级复核 7 行、7 行正确、0 错**；**注释层 6 次判断 6 次错**；**注释与实际相反累计 6 处**。
 
@@ -1883,7 +1883,7 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 | 行为 | 原生代码 | 上游 | 判定 |
 |---|---|---|---|
 | **`YxsFanji`** | `Act`：从 `Damage` 帧取 `source` ⇒ 记为 `self.target`（后续对该来源发临时技）| `damageEnd`，filter 要手牌有【杀】且 `event.card` 为杀或决斗 ⇒ `addTempSkill` | ✅ **形态相符**（都是「受到杀/决斗伤害后 → 临时技」）|
-| **`YxsFanji2`** | **`Flow::Done`**（注释：有档但未用（internals）——杀机器内联消费）| `shaBegin`，filter 要**红杀** ⇒ **`trigger.directHit = true`** | 🔍 **待核**（`direct_hit` 在原生代码里**查不到同名字段**；注释说「杀机器消费」，未验证）|
+| **`YxsFanji2`** | **`Flow::Done`**（宿主无效果步）| `shaBegin` + 红杀 ⇒ **`trigger.directHit = true`** | ✅ **等价**（**消费方已找到，见第 850 轮**）|
 
 **`YxsFanji` 的注释写「灾变：摸忠+2-反-内」** ⇒ **注释错例 18 处** ⚠️
 
@@ -1894,3 +1894,34 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 **没有同名字段** ⇒ **不能确认**，记为待核 ✅
 
 ⇒ **「有档未用」类行的判据**：**必须在消费方找到实际逻辑**，不能只看「空实现 + 一句注释」⚠️
+
+---
+
+## 67 第 850 轮：`YxsFanji2` 的消费方**找到了** ⇒ 等价（16）
+
+第 849 轮我判它「待核」，因为 grep `direct_hit` 只命中注释。**换查法**（查常量 `U08_YXS_FANJI2_KEY` 的所有引用）后找到：
+
+**`crates/engine-native/src/kernel/sha/step.rs:552`**
+
+```rust
+let yxs_fanji2_direct_hit = {
+    let red = matches!(ctx.catalog.cards[self.card as usize].suit, Heart | Diamond);
+    red && ctx.catalog.skill_by_name(U08_YXS_FANJI2_KEY)
+             .map(|def| ctx.core.has_skill(self.source, def))
+             .unwrap_or(false)
+};
+```
+
+| 侧 | 语义 |
+|---|---|
+| 上游 | `shaBegin` + **红杀** ⇒ `trigger.directHit = true`（不可闪避）|
+| 原生 | **红牌 && 来源有 `yxs_fanji2`** ⇒ `yxs_fanji2_direct_hit` ⇒ 不可闪避 |
+
+⇒ **完全一致** ✅ **等价**
+
+### 教训（第 20 次）：查「消费方」要用**常量名**而不是**语义名**
+
+第 849 轮我按 `directHit`/`direct_hit` 找，找不到就判待核；
+**换成查 `U08_YXS_FANJI2_KEY`（行为名派生的常量）一次就命中** ⚠️
+
+⇒ **「没找到」往往是我的检索键错了，而不是不存在** ✅
