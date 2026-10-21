@@ -1829,3 +1829,32 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 | 原生 | `Act`：候选 = **红桃手牌** ⇒ 后续按本次伤害量摸牌并移除自身 |
 
 ⇒ **形态相符**（红桃/标记 → 摸牌）✅；**但「第 3 次」这个计数窗口原生未见**（`damageBegin3` 无对应槽位）⇒ **与台账「第3次」标签一致** ✓
+
+---
+
+## 64 第 847 轮：**全表复扫复合技** —— 9 行（8 个行为）上游带 `group`
+
+用「解析到的上游块里是否出现 `group:`」复扫全表：
+
+| 行 | 行为 | 上游 `group` 内容 | 已核状态 |
+|---|---|---|---|
+| `G23` | `Hutian` | `'hutian3'` | ✅ 主块已核（等价）|
+| `G23` | `SwdMufengHeld` | `'mufeng_count'` | ✅ 已核（**效果不符**：发现 vs 摸）|
+| `需档` | `Liaoyuan` | `['liaoyuan2','liaoyuan3']` | ✅ 形态相符 |
+| `需档` | `SwdCyxianjiang` | `'cyxianjiang_clear'` + `subSkill` | ✅ 形态相符 |
+| **`5b`** | **`Reguhuo`** | **`['reguhuo_shan','reguhuo_wuxie','reguhuo…']`** | 🔍 **本轮新查：待核** |
+| `G20` | `WudianZhucheng` | `'zhucheng2'` | ✅ 等价 |
+| `G23` | `YxsMenshen` | `'yxs_menshen3'` | ✅ 等价 |
+
+⇒ **8 个行为里 7 个已核，只剩 `Reguhuo`** ✅
+
+### `Reguhuo` 本轮读到的
+
+| 侧 | 内容 |
+|---|---|
+| 上游 `reguhuo` | `enable: ['chooseToUse','chooseToRespond']` + `hiddenCard` + filter（需 `countCards('hs')` 且 **`!hasSkill('reguhuo_phase')`**）；**`group: ['reguhuo_shan','reguhuo_wuxie',…]`** |
+| 原生 | `Act`：选手牌（`reguhuo_car…`）⇒ 后续未读 |
+| 原生注释 | 「**攻心**：选目标 → 看其手牌选一张红桃 → 弃置或置于牌堆顶」 |
+
+⇒ **注释与上游完全不同**（攻心 ≠ 若谷）；**代码只读到「选手牌」**，后续未读 ⇒ **待核** 🔍
+⇒ **但台账 5b 的核心论断（缺 `reguhuo_phase` 每回合标记）与上游一致** ✓ ——**上游确有 `hasSkill('reguhuo_phase')` 检查** ✅
