@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**83 条**）—— 2026-10-19 第 748 轮
+# 缺陷台账（机器可读，**87 条**）—— 2026-10-19 第 749 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -7,9 +7,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **43** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **47** |
 | **B（需扩枚举或引擎能力）** | **40** |
-| **合计** | **83** |
+| **合计** | **87** |
 
 ## 2 按缺陷族
 
@@ -168,3 +168,28 @@ python3 -B -m unittest discover -s scripts -p 'test_report_defect_ledger.py'
 
 ⇒ **已删掉该回退**：只试「包内技能名」与「host 键本身」✅
 ⇒ **代价**：REVIEW 会略增（宁可标「未定位」，也不要标错）✅
+
+---
+
+## 8 第 749 轮：新增 `G24` —— **濒死自救主动技被挂成 `Death` 触发**（4 条）
+
+### 8.1 证据（读了两条上游函数体）
+
+| 技能 | 上游形态 | 关键点 |
+|---|---|---|
+| **`niepan`（涅槃）** | `enable: 'chooseToUse'`, `limited`, `storage.niepan`, `filter(event, player)` | **主动技**，`filter` 要求 `event.type` 为濒死 |
+| **`shouyin`（收印）** | `enable: 'chooseToUse'`, `skillAnimation`, `filter` | **`filter: if (event.type != 'dying') return false;`** ⇒ **只在濒死时可用** |
+
+⇒ **两者都是「濒死时主动发动」**，**不是「死亡后触发」** ✅
+
+### 8.2 原生的问题
+
+原生 meta 是 **`EventKind::Death`** ⇒ **死亡已经结算完成后才触发** ⇒
+**这类「自救」效果永远来不及** ❗（等同失效）
+
+### 8.3 影响 4 条
+
+`Niepan` / `SwdShouyin` / `XianjianChengxin` / `XianjianShuiyun5`
+（**已读体 2 条，另 2 条按 `enable` 形态推定** ⚠️ —— 保留这条限定）
+
+**修法**：meta 从 `Death` 改成 **`Dying`**（`EventKind::Dying` 已存在）⇒ **A 类**

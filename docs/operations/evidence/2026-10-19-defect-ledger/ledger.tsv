@@ -28,6 +28,10 @@ G15	B	WudianFuchou2	?	common.rs:24	global:'phaseAfter'	End, begin:false	中	按�
 G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true	中	按对照结论修改 filter / 删除分支	blocked
 G18	B	HlssFengqi	?	common.rs:39	player:['phaseZhunbeiBegin']	Judge, begin:true	中	需 `Phase::Prepare`（G18 缺档）	blocked
 G18	B	Xiuluo	?	common.rs:219	player: "phaseZhunbeiBegin"	Judge, begin:true	中	需 `Phase::Prepare`（G18 缺档）	blocked
+G24	B	Niepan	?	meta:0	(enable 主动技)	Dying	高	修触发时机/补档位	blocked
+G24	B	SwdShouyin	?	meta:0	(enable 主动技)	Dying	高	修触发时机/补档位	blocked
+G24	B	XianjianChengxin	?	meta:0	(enable 主动技)	Dying	高	修触发时机/补档位	blocked
+G24	B	XianjianShuiyun5	?	meta:0	(enable 主动技)	Dying	高	修触发时机/补档位	blocked
 第3次	B	Tianxiang	?	common.rs:390	player:"damageBegin3",	DamageBefore	高	修触发时机/补档位	blocked
 需档	B	HuanleMonkeyCard	?	meta:0	global: "useCardToBegin",	CardUsed	高	修触发时机/补档位	blocked
 需档	B	Liaoyuan	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
