@@ -575,3 +575,35 @@ matches!(event, EventData::Damage(d) if d.source == Some(owner) && !d.prevented)
 | **统计被输出截断** | 2（22 vs 103、早期管道吞 exit code）| `preflight.py` 一次跑完并汇总 |
 
 ⇒ **这张表本身是本会话最有价值的产出之一**：它把「我犯过的错」变成了**可检查的清单** ✅
+
+---
+
+## 22 第 790 轮：**「上游未定位」归零**——最后 1 行是卡牌 `global:` 技能
+
+上一轮留下的唯一未定位行 `失效 SwdBaishouzhihuHeld` 本轮查清：
+
+| 层 | 名字 |
+|---|---|
+| 原生 `HostBehavior` | **`SwdBaishouzhihuHeld`**（**没有 `host:` 键** —— 卡片全局技能）|
+| 上游卡牌 | `baishouzhihu`（`card/swd.js`，`global: 'g_baishouzhihu'`）|
+| **上游技能** | **`g_baishouzhihu`**：`trigger: {player: 'discardEnd'}`，`direct: true` |
+
+⇒ **原生**：`Phase { begin: true }` **未钉阶段** ⇒ **每个阶段开始都触发**；
+**上游**：**弃牌阶段结束**一次 ⇒ **事件与边沿全错** ❌
+⇒ **台账行已从「失效」改为 `G23b`**，并写清 `upstream`/`native` 两列 ✅
+
+### 同时补的解析能力：**无 `host:` 键的行为也能定位上游**
+
+新增 `_behavior_name_candidates()`：**仅当没有 `host:` 键时**，把变体名去前缀（`Swd`/`Wudian`/…）与去后缀（`Held`/`Card`/…）后，
+试 `g_<snake>` 与原名两种形态 —— **不做任意切词猜测** ✅
+
+### 台账完整度
+
+| 项 | 条数 |
+|---|---:|
+| 台账行 | **85** |
+| **上游已定位** | **85（100%）** |
+| 上游未定位 | **0** ✅ |
+| 主动技 / 无触发（正常）| 2 |
+
+⇒ **「上游未定位」这一类在台账里归零** ✅

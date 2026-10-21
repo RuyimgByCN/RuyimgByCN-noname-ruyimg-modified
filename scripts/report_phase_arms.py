@@ -189,7 +189,8 @@ def upstream_trigger_with_path(skill: str, key: str = "") -> tuple[str, str]:
         return MANUAL_TRIGGERS[key], ""
     # 只试「包内技能名」与「host 键本身」；**不再用键尾段**做回退
     #（`shengke_check` 曾因此解析到另一扩展的同名技能，得出错误 trigger）
-    candidates = [name for name in (skill, key) if name]
+    # 第 7 种名字形态：卡牌的 `global: 'g_<name>'` 技能（如 `baishouzhihu` → `g_baishouzhihu`）
+    candidates = [name for name in (skill, key, f"g_{key}" if key else "", f"g_{skill}" if skill else "") if name]
     prefer = package_path_for_key(key)
     for candidate in candidates:
         found = _lookup_trigger_with_path(candidate, prefer)
@@ -304,11 +305,37 @@ def arms() -> list[tuple[str, str, str, str, int]]:
     return rows
 
 
+def _behavior_name_candidates(behavior: str) -> list[str]:
+    """从 `HostBehavior` 变体名推上游技能名（**仅当没有 `host:` 键时**使用）。
+
+    卡片全局技能没有 host 键，变体名形如 `SwdBaishouzhihuHeld` ⇒ 上游是
+    `g_baishouzhihu`（卡牌的 `global:` 技能）。这里只做**去前缀/去后缀**，
+    再试 `g_` 与原名两种形态 —— 不做任意切词猜测。
+    """
+    name = behavior
+    for suffix in ("Held", "Card", "Use", "Gain", "Remain"):
+        if name.endswith(suffix):
+            name = name[: -len(suffix)]
+    for prefix in ("Swd", "Wudian", "Xianjian", "Gujian", "Yunchou", "Hearth", "Gwent", "Mtg", "Shahai", "Ow"):
+        if name.startswith(prefix) and len(name) > len(prefix):
+            name = name[len(prefix):]
+            break
+    snake = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
+    return [f"g_{snake}", f"g_{behavior.lower()}", snake, behavior.lower()]
+
+
 def resolve_trigger(behavior: str, key: str, skill: str) -> str:
-    """Upstream trigger for one arm: behavior override -> key -> skill name."""
+    """Upstream trigger for one arm: behavior override -> key -> skill -> 变体名推断。"""
     if behavior in BEHAVIOR_TRIGGERS:
         return BEHAVIOR_TRIGGERS[behavior]
-    return upstream_trigger(skill, key.removeprefix("host:"))
+    found = upstream_trigger(skill, key.removeprefix("host:"))
+    if found or key:
+        return found
+    for candidate in _behavior_name_candidates(behavior):
+        hit = upstream_trigger(candidate, candidate)
+        if hit:
+            return hit
+    return ""
 
 
 
