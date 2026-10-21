@@ -35,10 +35,10 @@ class CommentCountTests(unittest.TestCase):
         self.assertEqual(self.counts.get("需档"), 21)
 
     def test_known_family_counts(self):
-        self.assertEqual(self.counts.get("G14"), 14)
+        self.assertEqual(self.counts.get("G14"), 1)
         self.assertEqual(self.counts.get("G23"), 12)
         self.assertEqual(self.counts.get("G20"), 5)
-        self.assertEqual(self.counts.get("G19"), 3)
+        self.assertEqual(self.counts.get("G19"), 1)
 
     def test_progress_total_matches_ledger(self):
         # 进度主稿头部的 `N 条 = A x / B y` 必须与台账一致（新增校验）

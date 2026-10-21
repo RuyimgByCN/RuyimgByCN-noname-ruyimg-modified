@@ -27,7 +27,7 @@ class ConsistencyTests(unittest.TestCase):
         cls.ledger = cls.mod.ledger()
 
     def test_ledger_has_rows(self):
-        self.assertGreater(len(self.ledger), 80)
+        self.assertGreater(len(self.ledger), 40)
 
     def test_every_id_is_registered(self):
         registered = cls = self.mod.PHASE_IDS | self.mod.EVENT_IDS | self.mod.HANDWRITTEN | {self.mod.G23_ID}

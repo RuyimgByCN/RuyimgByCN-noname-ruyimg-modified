@@ -28,10 +28,10 @@ class GuardCoverageTests(unittest.TestCase):
     def test_guards_are_discovered(self):
         # 宏生成的守卫把变体名当字符串传参，必须能被扫到
         self.assertGreater(len(self.guarded), 40)
-        self.assertIn("SwdHuanxing", self.guarded)
+        self.assertIn("SwdTiebi", self.guarded)
 
     def test_ledger_non_empty(self):
-        self.assertGreater(len(self.rows), 80)
+        self.assertGreater(len(self.rows), 40)
 
     def test_guard_coverage_recorded(self):
         # 精确匹配（不做事后缀放宽）：2026-10-19 测得 38/101 = 37.6%

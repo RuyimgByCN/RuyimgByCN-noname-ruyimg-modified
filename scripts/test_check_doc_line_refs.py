@@ -46,10 +46,11 @@ class DocLineRefTests(unittest.TestCase):
                               capture_output=True, text=True, cwd=ROOT)
         self.assertEqual(proc.returncode, 0, proc.stderr)
 
-    def test_strict_mode_flags_known_rot(self):
+    def test_strict_mode_passes_after_cleanup(self):
+        # 第 787 轮已清除全部失效行号引用 ⇒ 严格模式应为 0
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--strict"],
                               capture_output=True, text=True, cwd=ROOT)
-        self.assertEqual(proc.returncode, 1, "严格模式应报出已知的失效引用")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
 
 
 if __name__ == "__main__":

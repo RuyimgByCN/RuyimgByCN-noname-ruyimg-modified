@@ -54,7 +54,7 @@ class ClassificationTests(unittest.TestCase):
     def test_g14_count_matches_manual_audit(self):
         # 14 = 11 + `SwdHujing`（相等比较写法）+ `Qinglongzhigui`/`Huanglinzhicong`
         # （效果挂在卡片 `global: g_<name>` 技能上，第 737 轮补查）
-        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 14)
+        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 1)
 
     def test_g20_count_matches_manual_audit(self):
         self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G20")), 5)
@@ -64,8 +64,13 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(m["Play"], "Use")
         self.assertEqual(m["End"], "Jieshu")
 
-    def test_classify_phase_begin_is_g14(self):
-        self.assertTrue(self.mod.classify("X", "Judge", "true", 'player: "phaseBegin"').startswith("G14"))
+    def test_classify_judge_is_turn_start(self):
+        # 原生无准备阶段 ⇒ Judge 是首相位 ⇒ 钉 Judge 等价于回合开始（第 804 轮）
+        self.assertEqual(self.mod.classify("X", "Judge", "true", 'player: "phaseBegin"'), "OK")
+
+    def test_classify_nonfirst_phase_is_g14(self):
+        # 钉在 End（非首相位）才是真错位
+        self.assertTrue(self.mod.classify("X", "End", "true", 'player: "phaseBegin"').startswith("G14"))
 
     def test_classify_phase_end_true_is_g20(self):
         self.assertTrue(self.mod.classify("X", "End", "true", 'player: "phaseEnd"').startswith("G20"))

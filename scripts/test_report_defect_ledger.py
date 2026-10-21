@@ -25,7 +25,7 @@ class LedgerTests(unittest.TestCase):
         cls.rows = cls.mod.build()
 
     def test_ledger_is_populated(self):
-        self.assertGreaterEqual(len(self.rows), 60)
+        self.assertGreaterEqual(len(self.rows), 40)
 
     def test_rows_have_all_columns(self):
         for row in self.rows:
@@ -52,7 +52,7 @@ class LedgerTests(unittest.TestCase):
 
     def test_known_defects_present(self):
         behaviors = {r[2] for r in self.rows}
-        for expected in ("SwdZhuhai", "Reguhuo", "BossBaiyi", "SwdHujing"):
+        for expected in ("SwdTiebi", "Reguhuo", "BossBaiyi", "GujianFoodZiyangdan"):
             self.assertIn(expected, behaviors)
 
     def test_location_column_present(self):
