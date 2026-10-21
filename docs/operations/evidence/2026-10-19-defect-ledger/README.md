@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**87 条**）—— 2026-10-19 第 781 轮
+# 缺陷台账（机器可读，**86 条**）—— 2026-10-19 第 783 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -8,8 +8,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **42** |
-| **B（需扩枚举或引擎能力）** | **45** |
-| **合计** | **87** |
+| **B（需扩枚举或引擎能力）** | **44** |
+| **合计** | **86** |
 
 ## 2 按缺陷族
 
@@ -397,3 +397,27 @@ if trigger.startswith("(enable"):
 * **57 行（66%）**：**机器判定**（其中 33 行是「缺能力」类，机器判定已足够）⚠️
 
 ⇒ **不能笼统说「87 条都确认过」**；正确的说法是**「30 条已读码确认 + 33 条能力缺口 + 24 条待读码」** ⚠️
+
+---
+
+## 16 第 783 轮：9 行逐条读码，1 行撤回（`L03a`）、1 行子标签修正（`G15`）
+
+| 行 | 代码实际 | 台账 | 结论 |
+|---|---|---|---|
+| `XianjianFenglue` | `Phase::Play, begin: true` | G15（上游 `phaseUseBefore`）| 准确 |
+| `SwdHuajin2` | `Damage` 或 `Phase{…}` 双分支 | 自加分支 | 准确 |
+| `BossBaiyi` | `Phase{…}` + `boss_stage` | 凭空新增触发 | 准确 |
+| `SwdBaishouzhihuHeld` | `Phase { begin: true }` 未钉阶段 | 失效 | 准确 |
+| `ShengkeCheck` | `CardUsed(u) if u.targets.contains(owner)` | 5c | 准确 |
+| `HlssYueyin` | 仅 `Damage` | L03b | 准确 |
+| `HlssXiangxing` | `Damage` 与 `LoseHp` 双分支 | L03a | 撤回（两个幕都已覆盖）|
+| `WudianFuchou2` | `Phase::End, begin: false` | G15 | 分类对、子标签应为 `phaseAfter` |
+| `HuanleKuwu` | 过滤臂无 `matches!` | 5a | 待查 |
+
+### 撤回 `L03a` 的原因
+
+`HlssXiangxing` 的过滤臂是 `match` 双分支，`EventData::Damage` 与 `EventData::LoseHp` 都在，
+上游 `['damageEnd','loseHpEnd']` 两个幕全覆盖。我此前只看 `metadata` 登记了 `EventKind::Damage`
+就判「缺 `loseHpEnd`」——**又是一次「只看一处代表全部」**（第 9 次自我更正）。
+
+**台账 87 → 86（A 42 / B 44）**
