@@ -1925,3 +1925,31 @@ let yxs_fanji2_direct_hit = {
 **换成查 `U08_YXS_FANJI2_KEY`（行为名派生的常量）一次就命中** ⚠️
 
 ⇒ **「没找到」往往是我的检索键错了，而不是不存在** ✅
+
+---
+
+## 68 第 851 轮：`Rangjie`（L10）是「有档未用」，且**消费方也找不到**
+
+| 项 | 内容 |
+|---|---|
+| 台账行 | `6 A Rangjie L10` |
+| `keys.rs` | `HostBehavior::Rangjie => "host:rangjie"` ✅ 存在 |
+| `factory.rs` | `HostBehavior::Rangjie => (None, None)` —— **无效果步** |
+| `filtering.rs` | `filter_common(...)` —— 只注册过滤 |
+| **消费方** | **`EPIC_RANGJIE_KEY` 在 `constants.rs` 之外无任何引用** ❌ |
+
+### 与 `YxsFanji2` 的对比（同样是「有档未用」）
+
+| 行为 | 常量引用（`constants.rs` 外）| 结论 |
+|---|---|---|
+| `YxsFanji2` | **`kernel/sha/step.rs:552`** ✅ | 有消费方 ⇒ **等价** |
+| **`Rangjie`** | **无** ❌ | **无消费方** ⇒ **待核/疑似缺效果** |
+
+⇒ **「有档未用」不是一族，必须逐个查消费方** ✅
+⇒ 本轮把 `Rangjie` 从「未读」推进到「**已查消费方：找不到**」——**这是负面证据，比「未读」更有价值** ⚠️
+
+### 说明
+
+`Rangjie` 的台账行属于 A 类（改 pattern / 删分支 / 补动作），
+**本轮不能确定它是缺陷还是我的检索键又错了**（第 850 轮的教训）；
+但**已确认 `EPIC_RANGJIE_KEY` 无外部引用**是一个可复现的事实 ✅
