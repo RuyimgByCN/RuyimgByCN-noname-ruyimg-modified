@@ -26,7 +26,7 @@ cargo test --offline -p engine-native
 
 | 项 | 状态 | 说明 |
 |---|---|---|
-| **`check-source-lines.py`** | ❌ **exit=1** | **`crates/rule-api/src/effect.rs` 10778 行**（限制 2000）——**基线提交 `72583b2b` 起即红**，属**既有欠账**，非本会话引入 |
+| **`check-source-lines.py`** | ❌ **exit=1** | **`crates/rule-api/src/effect.rs` 10778 行**（限制 2000）——**基线 `72583b2b` 起即红**。**已量化**：枚举体 10573 行 / **815 变体**；除 `resolve`（5513 行）外 14 个桶全部合规；**拆分需改 1069 个未跟踪文件 ⇒ 本会话不可执行**。见[量化分析与拆分计划](evidence/2026-10-19-effect-request-split-plan/README.md) |
 
 ⇒ **除这一条外，其余 4 条应全绿**；**提交信息里必须写明门禁状态**。
 
