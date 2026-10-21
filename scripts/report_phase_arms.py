@@ -83,6 +83,13 @@ PHASE_STEM = {
 BEHAVIOR_TRIGGERS = {
     "SwdQinglongzhiguiHeld": 'player: "phaseBegin"',      # g_qinglongzhigui（卡片 global 技能）
     "SwdHuanglinzhicongHeld": 'player: "phaseBegin"',     # g_huanglinzhicong
+    # 三条 gwent 天气状态技：定义在 杀海拾遗/card/gwent/skill.js（名 gw_*，非 gw_*_state）
+    "GwentBirinState": 'player: "phaseUseAfter"',
+    "GwentCiguState": 'player: "phaseDrawBegin"',
+    "GwentQinpenState": 'player: "phaseDiscardAfter"',
+    # 两条相邻相位（弃牌阶段结束 vs 结束阶段开始）
+    "SwdWangchenHeld": 'player: "phaseDiscardEnd"',
+    "SwdXielv": 'player: "phaseDiscardEnd"',
 }
 
 #: Rows whose verdict is a documented semantic choice rather than a defect.
@@ -281,13 +288,20 @@ def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
     if not trigger:
         return "REVIEW(上游未定位)"
     if trigger.startswith("(enable"):
-        return "REVIEW(上游无 trigger)"
+        # 上游是主动技（无 trigger），原生却挂了阶段触发 ⇒ 凭空新增
+        return "凭空新增触发"
     if "phaseBegin" in trigger and "phaseZhunbei" not in trigger:
         return "G14(钉死阶段)"
     stem = PHASE_STEM[phase]
+    if f"phase{stem}Begin" in trigger and begin == "false":
+        # 上游在阶段「开始」生效，原生却在「结束」⇒ 晚一步（摸牌数已定，效果失效）
+        return "G22(晚一步)"
     if f"phase{stem}Begin" in trigger:
         return "OK" if begin == "true" else "REVIEW(begin 相反)"
     if f"phase{stem}End" in trigger:
+        return "OK" if begin == "false" else "REVIEW(begin 相反)"
+    if f"phase{stem}After" in trigger or f"phase{stem}End" in trigger:
+        # 「阶段之后/结束」与原生 `begin: false` 是同一帧
         return "OK" if begin == "false" else "REVIEW(begin 相反)"
     if f"phase{stem}Before" in trigger:
         return "G15(之前档)" if begin == "true" else "REVIEW(begin 相反)"
@@ -298,7 +312,10 @@ def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
     if "phaseEnd" in trigger:
         return "G20(早一步)" if begin == "true" else "OK"
     if "phaseZhunbeiBegin" in trigger:
-        return "REVIEW(准备阶段缺档)"
+        return "G18(准备阶段缺档)"
+    if "phaseDiscardEnd" in trigger and phase == "End" and begin == "true":
+        # 弃牌阶段结束 → 结束阶段开始 是相邻帧，差异仅在「结束阶段自身动作之前/之后」
+        return "相邻相位(可接受)"
     if "damageBegin" in trigger:
         return "自加分支(上游伤害前)"
     return "REVIEW(非阶段触发)"

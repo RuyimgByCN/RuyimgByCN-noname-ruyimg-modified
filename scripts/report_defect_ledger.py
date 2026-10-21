@@ -50,13 +50,11 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
     ("G19", "A", "SwdTiebi", "U05", "global: useCardToBegin", "filter 含 t != owner", "技能主被排除"),
     ("G19", "A", "SwdRexue", "U05", "global: phaseEnd", "filter 含 actor != owner", "技能主被排除"),
     ("5c", "B", "ShengkeCheck", "L06", "target: useCardToBegin", "EventKind::CardUsed", "需 CardTargeted 档"),
-    ("凭空", "A", "BossBaiyi", "L03", "enable: phaseUse, limited", "第 5 轮判定阶段触发", "凭空新增触发"),
     ("自加", "A", "SwdHuajin2", "U05", "source: damageBegin", "Damage OR 判定阶段分支", "自加分支"),
     ("5a", "A", "HuanleKuwu", "U06", "sha && notLink && countCards>0", "仅 is_sha_like", "少 2 个 filter 条件"),
     ("6", "A", "GujianFoodRangjie", "L10", "分支前无条件 draw()", "仅分支 0 摸牌", "分支 1 不摸牌"),
     ("G23b", "A", "SwdJiguanyuanGain", "U05", "damageEnd + damageSource", "EventKind::PhaseEnd", "事件种类完全错"),
     ("失效", "A", "SwdBaishouzhihuHeld", "U05", "PhaseEnd(begin:false)", "filter 要求 *begin", "永不触发"),
-    ("G16", "A", "GwentCiguState", "U05", "phaseDrawBegin 减 event.num", "Draw, begin:false", "摸牌已结束，效果失效"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
 ]
 
@@ -100,12 +98,19 @@ def build() -> list[list[str]]:
         key = keys.get(behavior, "")
         trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
         verdict = phase.classify(behavior, p, begin, trigger)
-        if verdict.startswith("OK") or verdict.startswith("REVIEW") or verdict in ("语义选择",):
+        if (
+            verdict.startswith("OK")
+            or verdict.startswith("REVIEW")
+            or verdict in ("语义选择", "相邻相位(可接受)")
+        ):
             continue
-        cls = "A" if not verdict.startswith(("G15",)) else "B"
+        cls = "A" if not verdict.startswith(("G15", "G18")) else "B"
         fix = {
             "G14(钉死阶段)": "filter 改为 `begin: true, ..`（不钉阶段）",
             "G20(早一步)": "filter 改为 `Phase::End, begin: false`",
+            "G22(晚一步)": "filter 从 `begin: false` 改为 `begin: true`（须在摸牌数确定前生效）",
+            "G18(准备阶段缺档)": "需 `Phase::Prepare`（G18 缺档）",
+            "凭空新增触发": "删除阶段触发（上游是主动技）",
         }.get(verdict, "按对照结论修改 filter / 删除分支")
         _t, path = phase.upstream_trigger_with_path(skills.get(key, "") or "", key.removeprefix("host:"))
         src = source_of_path(path) if path else source_of(behavior)
