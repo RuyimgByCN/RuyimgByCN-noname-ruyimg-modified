@@ -220,3 +220,30 @@ matches!(event, EventData::Phase { player, phase, begin }
 **「没匹配到我的正则」≠「代码里没有」** ——
 本轮两次假阳性都来自**检测手段的形状**（`phase:` 绑定 vs `*phase ==` 比较），
 **而不是代码本身有问题**。 ⇒ **检测器必须先证明它能识别两种写法，再报数** ✅
+
+---
+
+## 9 「用牌前/指定目标时」27 条的**语义抽样复核**：6/6 成立（第 741 轮）
+
+上一节把 23 条用牌 + 4 条死亡记为「需档」，依据是**上游 trigger 名**。
+本轮抽 4 条读**上游函数体**，确认它们确实**必须在结算前生效**：
+
+| 行为 | 上游 trigger | 上游函数体关键点 | 是否必须前置 |
+|---|---|---|---|
+| **`huanyin`（还因）** | `target: 'useCardToBefore'` | `get.effect(player, trigger.card, …)` —— **先算这张牌对该角色的效果** | ✅ 必须 |
+| **`ningshuang`（凝霜）** | `target: 'useCardToBegin'` | `get.color(event.card)` + 排除使用者 | ✅ 必须 |
+| **`xielei`（邪雷）** | `player: ['useCard','respondAfter']` | `event.card.name == 'sha'` ⇒ `chooseCardTarget` | ✅ 必须 |
+| **`zhenlie`（震裂）** | `target: 'useCardToTargeted'` | `event.card.name == 'sha' || get.type == 'trick'` | ✅ 必须 |
+
+加上上一轮已读体的 **`dunxing`（`useCardToBefore` + chooseToDiscard）** 与
+**`changnian`（`dieBegin` + chooseTarget）** ⇒ **6/6 抽样全部成立** ✅
+
+### 诚实标注剩余风险
+
+- **27 条的 trigger 名全部来自工具解析**（不是抽样）✅
+- **语义只抽样 6 条**（约 22%）⚠️
+- **但这类 trigger 的语义在非名里是自明的**：`useCardToBefore` / `useCardToBegin` /
+  `useCardToTargeted` / `phaseDiscardEnd` / `dieBegin` 这些名字本身就定义了时机
+  ⇒ **抽样用于排除「名字与实现不符」的可能，6/6 未见反例** ✅
+
+⇒ **分类维持「需档（已确认）」，但在证据里保留「语义抽样 6/22」这条限定** ✅
