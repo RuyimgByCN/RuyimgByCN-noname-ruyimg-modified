@@ -19,7 +19,7 @@
 > | ① 上游定位 | **54 / 54** | 每行都能指出上游出处 |
 > | ② 上游同质 | **36 行** | 相位族全族上游 trigger 一致 |
 > | ③ 效果步存在 | **54 / 54** | 无一条是「功能没做」|
-> | ④ **效果等价** | **17 已确认 + 32 形态相符** | 已核 **50/54 = 93%**：**1 效果不符**（`SwdMufengHeld`）、**1 待查**（`SwdJiang`）、**4 未读** ⚠️ |
+> | ④ **效果等价** | **17 已确认 + 33 形态相符** | 已核 **51/54 = 94%**：**1 效果不符**（`SwdMufengHeld`）、**1 待查**（`SwdJiang`）、**3 未读** ⚠️ |
 >
 > **归因层代码级复核 21 行（含复合技、消费方、公式对照）**；**注释与实际不符累计 18 处**（**完全无关 15 / 错位 2 / 描述代码里没有的效果 1**）；**自我更正累计 21 次**。
 
@@ -2119,3 +2119,29 @@ let yxs_fanji2_direct_hit = {
 
 **第 858 轮提出的「按语义搜」有效**：一次 grep + 两次读块就定位了「上游名字找不到」的行 ✅
 ⇒ **剩下的 3 行（`Ziyangdan`/`XueliangFanbei`/`ShengkeCheck`）应同样处理** ⚠️
+
+---
+
+## 76 第 860 轮：`GujianFoodZiyangdan` 上游定位成功 —— **G14「钉死阶段」确认**
+
+同法（语义搜）在 `card/gujian.js` 找到两块：
+
+| 块 | 内容 |
+|---|---|
+| **卡牌** `ziyangdan` | `type:'basic'`、`enable:true` ⇒ `target.changeHujia(3)`；若已有技则 `storage += 3`，否则 `addSkill('ziyangdan')` |
+| **技能** `ziyangdan` | **`trigger: {player: 'phaseBegin'}`**、silent、`init: storage.ziyangdan = 3`；content：`hujia>0 ⇒ changeHujia(-1)`、`storage--`、**`hujia==0 或 storage==0 ⇒ removeSkill`** |
+
+| 侧 | 窗口 | 效果 |
+|---|---|---|
+| **上游技能** | **`phaseBegin`（每阶段开始）** | 护甲 -1、倒计时 -1、归零移除 |
+| **原生** | **结束阶段**（注释与代码一致）| `change_hujia(-1)` + `food_tick` |
+
+⇒ **窗口不符** ⇒ **台账 G14（钉死阶段）的判断得到确认** ✅
+⇒ **「倒计时扣减、归零移除」也与上游一致** ✅
+
+⇒ **维度 ④：等价 17 / 形态 33 / 未读 3 / 效果不符 1 / 待查 1**
+⇒ **已核 51/54 = 94%** ✅
+
+### 剩余 3 行
+
+`XiguaXueliangFanbei`、`ShengkeCheck`、`XianjianXjzhimeng2`
