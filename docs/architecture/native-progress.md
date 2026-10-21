@@ -8,7 +8,6 @@
 >
 > ### **最近 20 轮索引**（最新在底部；正文按轮次追加）
 >
-> - **第 861 轮**：**`XiguaXueliangFanbei` 等价、`ShengkeCheck` 形态相符（已核 96…
 > - **第 862 轮**：**`XianjianXjzhimeng2` 等价——维度 ④ 54 行全部读过（98%）** ✅——*…
 > - **第 863 轮**：**`SwdJiang` 的上游是卡牌 `jiang`，定义仍未找到** ⚠️——**`keys.rs`…
 > - **第 864 轮**：**`host:jiang` 在归档的上游里不存在——`SwdJiang` 的归因到此为止** ✅——*…
@@ -28,6 +27,7 @@
 > - **第 880 轮**：**`SwdLuomei`/`SwdXielei` 升级为等价（④ → 33）** ✅——**`SwdL…
 > - **第 881 轮**：**`SwdHyunshen`/`SwdLingxian` 升级为等价（④ → 35）** ✅——**`…
 > - **第 882 轮**：**`SwdYuchen` 升级为等价（④ → 36）** ✅——**上游**：`useCard`/`r…
+> - **第 883 轮**：**`HuanleMonkeyCard` 升级为等价（④ → 37）** ✅——**上游 `monkey…
 >
 > **更早的内容****：按轮次向下检索（`第 N 轮`），或直接读[交接索引](../operations/evidence/2026-10-19-session-handover/README.md)。
 
@@ -1554,7 +1554,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 > **第 880 轮**：**`SwdLuomei`/`SwdXielei` 升级为等价（④ → 33）** ✅——**`SwdLuomei`**：上游 content 是 `var num=0; for(…) if(club) num++; player.draw(num)`，**但 filter 已限定「单张梅花」** ⇒ `num ≤ 1` ⇒ 与原生 **`draw_cards(owner,1)` 等价** ✓；**`SwdXielei`**：原生记**排除面**（原目标）⇒ 弃 1（手牌/装备）⇒ `TargetChoice` **候选排除 `self.targets`** ↔ 上游 `chooseCardTarget` 的弃牌 + 选目标 ⇒ **等价** ✓；**维度 ④：等价 33 / 形态 20 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 33（61%）** ✓。
 >
 > **第 881 轮**：**`SwdHyunshen`/`SwdLingxian` 升级为等价（④ → 35）** ✅——**`SwdHyunshen`**：上游 `storage.hyunshen++` + `markSkill`，原生 `hyunshen_count.saturating_add(1)` ⇒ **等价**（**`markSkill` 是纯展示、饱和加避免溢出**）✓；**`SwdLingxian`**：上游 `chooseTarget`（距离 >
-> **第 882 轮**：**`SwdYuchen` 升级为等价（④ → 36）** ✅——**上游**：`useCard`/`respondAfter` + 黑色牌 ⇒ `chooseTarget`（`countCards('he')>0`）⇒ **`discardPlayerCard`**；**原生**：候选 = 有手牌/装备的存活角色 ⇒ `TargetChoice` ⇒ **随机取目标 `he` 一张 ⇒ 弃置**（手牌/装备分流处理）⇒ **等价** ✓；**维度 ④：等价 36 / 形态 17 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 36（67%）** ✓。
+> **第 882 轮**：**`SwdYuchen` 升级为等价（④ → 36）** ✅——**上游**：`useCard`/`respondAfter` + 黑色牌 ⇒ `chooseTarget`（`countCards('he')>
+> **第 883 轮**：**`HuanleMonkeyCard` 升级为等价（④ → 37）** ✅——**上游 `monkey`**（`欢乐卡牌/card/skill.js`）：`equipSkill` + `useCardToBegin`，filter 要**自己装备 `monkey*`** + **`event.name==='tao'`** + 牌在弃牌堆 ⇒ **「猴子偷桃」：夺桃 + 弃猴子**；**原生**：**取消桃结算（夺桃 → 弃猴子 → 写回取消位）** ⇒ **等价** ✓，**`kernel/monkey.rs` 的「使用不发生，无 `CardUsed` 帧」正是取消位的实现** ✓；**维度 ④：等价 37 / 形态 16 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 37（69%）** ✓。
+>
+0`）⇒ **`discardPlayerCard`**；**原生**：候选 = 有手牌/装备的存活角色 ⇒ `TargetChoice` ⇒ **随机取目标 `he` 一张 ⇒ 弃置**（手牌/装备分流处理）⇒ **等价** ✓；**维度 ④：等价 36 / 形态 17 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 36（67%）** ✓。
 >
  1）⇒ 双方摸 1，原生**座位序首个**满足条件者 ⇒ 各摸 1 ⇒ **等价**（**「自选 → 座位序首个」已登记**）✓；**维度 ④：等价 35 / 形态 18 / 效果不符 1 / 待查 1** ⇒ **逐分支 19 → 35（65%）** ✓。
 >
