@@ -39,5 +39,15 @@ class ViolationTest(unittest.TestCase):
         self.assertEqual(run("规则差异 0/32、组合 11/32"), [])
 
 
+class RoundLogRangeTests(unittest.TestCase):
+    def test_round_log_range_header_is_exempt(self) -> None:
+        """`第 896–897 轮` 这类区间标题也算回合日志（否则其内的旧值会被误报）。"""
+        import check_stale_numbers as csn
+
+        self.assertIsNotNone(csn.ROUND_LOG.match("> **第 896–897 轮**：收尾"))
+        self.assertIsNotNone(csn.ROUND_LOG.match("> **第 896-897 轮**：收尾"))
+        self.assertIsNotNone(csn.ROUND_LOG.match("> **第 897 轮**：收尾"))
+
+
 if __name__ == "__main__":
     unittest.main()

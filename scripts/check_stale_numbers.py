@@ -52,7 +52,7 @@ STALE: dict[str, tuple[str, str]] = {
 # 这些子串出现时，该行属于「合法残留」
 EXCUSE = ("~~", "已改为", "已改", "原写", "此前写", "上一轮写", "改为", "作废", "实际是", "当时", "现为")
 # 轮次日志行
-ROUND_LOG = re.compile(r"^>?\s*(?:-\s*)?\*\*第 \d+ 轮")
+ROUND_LOG = re.compile(r"^>?\s*(?:-\s*)?\*\*第 \d+(?:[–\-]\d+)? 轮")
 
 
 def violations(path: Path) -> list[tuple[int, str, str, str]]:
