@@ -1306,3 +1306,39 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 | **注释** | **不可信**（5 处错）|
 | **归因（`upstream`/`source`）** | **抽样 4 行里 3 行正确、1 行待改** ⇒ **风险远低于第 820 轮的估计** ✅ |
 | **`native` / `location`** | 可信（代码事实）|
+
+---
+
+## 43 第 825 轮：把语义检查改成**代码级**（不是注释级）——21 行可判、6 行入人工队列
+
+第 821 轮教训是「判据必须用代码」。本轮据此重做：
+
+**方法**：从原生效果步（**跟随一层共享步**）抽 `draw_cards`/`use_virtual_card`/`damage`/`recover`/`to_discard`/`gain`/`lose_hp`/`remove` 调用，
+映射到上游 JS 写法（`draw`/`chooseToUse`/`damage`/`recover`/`discard`/`gain`/`loseHp`/`removeSkill`），
+只在**该行解析到的上游块**内查。
+
+| 结果 | 行数 |
+|---|---:|
+| 有直接调用的行（可判）| **21** |
+| **上游块缺对应写法**（入人工队列）| **6** |
+
+入队 6 行：`SwdLqingcheng`(to_discard)、`SwdMufengHeld`(draw_cards)、`SwdCyxianjiang`(remove)、
+`SwdHuanyin`(to_discard)、`SwdLianda`(use_virtual_card)、`WudianZhucheng`(remove)。
+
+### ⚠ 这仍然是启发式，且**假阳性明显**
+
+已能看出的假阳性：
+
+| 行 | 为什么是假阳性 |
+|---|---|
+| `SwdMufengHeld` | 原生 `draw_cards` ↔ 上游 **`discoverCard()`**（发现 ≠ 摸，语义近但字面不同）|
+| `WudianZhucheng` | 原生 `remove` 可能是 **`Vec::remove`**（容器操作），不是游戏动作 |
+
+⇒ **「字面对不上」≠「语义不符」**（**第 19 次同类教训：比较的粒度不对**）⚠️
+⇒ **这 6 行只作人工复核的排序，不改任何计数** ✅
+
+### 现状
+
+* **代码级可判 21 行**（其余 33 行的效果分散在更多共享步里，工具只跟一层）
+* **归因抽样 4 行：3 行正确** ⇒ **归因层总体可用**
+* **注释层：5 处与实际相反** ⇒ **完全不可用**
