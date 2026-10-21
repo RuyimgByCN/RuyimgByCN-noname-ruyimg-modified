@@ -123,13 +123,40 @@ python3 -B scripts/report_event_arms.py --check   # 有 REVIEW 行时 exit=1
 | **`SwdHuanling`** | `Phase { player, begin, .. } if player == owner && !begin` | **`player: 'phaseEnd'`** | ❗ **无自限闸门** ⇒ **每回合 5 次** |
 | **`SwdJiguanyuanGain`** | `Phase { player, begin: false, .. } if owner && jiguanyuan_cards 非空` | **`player: "phaseEnd"`** | ⚠️ 依赖 `jiguanyuan_cards` 是否被清空 |
 
-### 7.3 规模
+### 7.3 ✅ 已逐条定案：17 条候选的最终分类（第 734 轮）
 
-**`PhaseEnd` meta 共 39 条，其中 17 条在 filter 里不钉具体阶段** ⇒ **17 条候选** ⚠️
-（**已抽验 3 条，1 条确认、2 条需看自限闸门**）
+把 17 条的 **filter 体**与**上游 trigger** 都取出来逐个对照：
 
-⇒ **登记为「G23 候选 17 条」，不并入确认缺陷总数** ✅
-⇒ **确认总数仍为 77**；**候选另计 17**
+| # | 行为 | 自限闸门 | 上游 trigger | 判定 |
+|---:|---|---|---|---|
+| 1 | `SwdHuanling` | 无 | `phaseEnd` | ❗ **确认多触发**（5×/回合）|
+| 2 | `SwdLingxin` | 无 | `phaseEnd` | ❗ 确认 |
+| 3 | `SwdLqingcheng` | 无 | `phaseEnd` | ❗ 确认 |
+| 4 | `WudianGuangshuSpade` | 无 | `phaseEnd` | ❗ 确认 |
+| 5 | `WudianJidong` | 无 | `global: phaseEnd` | ❗ 确认 |
+| 6 | `XianjianBinxin` | 无 | `global: phaseEnd` | ❗ 确认 |
+| 7 | `XianjianLingyu` | 无 | `phaseEnd` | ❗ 确认 |
+| 8 | `Xuanyuan` | 无 | `phaseEnd` | ❗ 确认 |
+| 9 | `YxsMenshen` | 无 | `phaseEnd` | ❗ 确认 |
+| 10 | `SwdDonghuangzhongCard` | 无 | `phaseEnd` | ❗ 确认 |
+| 11 | **`SwdJiguanyuanGain`** | 无 | **`player: damageEnd` + `source: damageSource`** | ❗ **触发事件种类完全错**（不是阶段事件）|
+| 12 | `Hutian` | **有**（`hutian_deposit.is_none()`）| `phaseEnd` | ⚠️ **有闸门 ⇒ 行为可能正确，但属「偶合正确」** |
+| 13 | `SwdMufengHeld` | **有**（`turn.mufeng…`）| `phaseEnd` | ⚠️ 同上 |
+| 14 | `SwdDatong` | 无 | **无 trigger** | 🔍 上游无触发 ⇒ 待核 |
+| 15 | `BossHuanren` | — | 未定位 | 🔍 待核 |
+| 16 | `GwentFengyinState` | 无 | 未定位 | 🔍 待核（`gwent` 三状态技之一）|
+| 17 | `SwdBaishouzhihuHeld` | 无 | 未定位 | 🔍 待核 |
+
+### ⇒ 定案
+
+| 类 | 条数 |
+|---|---:|
+| ❗ **确认（多触发 or 事件种类错）** | **11** |
+| ⚠️ **偶合正确（靠自限闸门）** | **2** |
+| 🔍 **待核** | **4** |
+
+⇒ **11 条并入确认缺陷**（**全部 A 类：把 `..` 钉成 `End, begin: false`，或把阶段事件改成 `Damage`**）✅
+⇒ **确认总数 77 → 88**、**A 类 32 → 43**
 
 ### 7.4 为什么这一条比 G20 严重
 
