@@ -27,14 +27,29 @@
 | `SwdXielv` | `End` | `phaseDiscardEnd` | ⚠️ 相邻相位（登记差异）|
 | `SwdWangchenHeld` | `End` | `phaseDiscardEnd` | ⚠️ 相邻相位（登记差异）|
 
-⇒ **脚本已修**（`EQ_RE` + 负向 `*begin` 判定），单测期望同步为 **53 / G14 12** ✅
+⇒ **脚本已修**（`EQ_RE` + 负向 `*begin` 判定）✅
+
+### 再修订（第 737 轮）：`SwdQinglongzhiguiHeld` / `SwdHuanglinzhicongHeld` 也是 G14
+
+这两条此前记「上游未定位」。补查发现它们的效果挂在**机巧卡片的 `global:` 技能**上：
+
+```js
+qinglongzhigui:    { type:'jiqi', global:'g_qinglongzhigui' }        // 卡片定义
+g_qinglongzhigui:  { trigger: { player: 'phaseBegin' } }             // ← 真实触发面
+```
+
+⇒ **上游 `phaseBegin`（任意阶段），原生钉死 `Judge`** ⇒ **G14 第 13、14 条** ❗
+
+**这是「查不到」的第 7 种形态**：**效果不在同名技能上，而在卡片的 `global: 'g_<name>'` 技能里** ✅
+
+⇒ **`G14` 最终 = 14 条**；单测期望同步 **53 / G14 14** ✅
 
 ## 2 枚举结果：**53 条**
 
 | 判定 | 条数 | 含义 |
 |---|---:|---|
 | ✅ **OK** | **21** | 上游 `phaseXxxBegin`/`phaseXxxEnd` 与原生 `begin` 一致 |
-| ❗ **G14（钉死阶段）** | **12** | 上游 **`phaseBegin`（任意阶段）**，原生钉死 `Judge` **或 `End`** |
+| ❗ **G14（钉死阶段）** | **14** | 上游 **`phaseBegin`（任意阶段）**，原生钉死 `Judge` **或 `End`** |
 | ⚠️ **G20（早一步）** | **5** | 上游 **`phaseEnd`（全部阶段后）**，原生 `End, begin: true`（结束阶段开始）|
 | ⚠️ **G15（`phaseAfter`）** | **1** | `fuchou2`：上游 `global: phaseAfter`，无对应档位 |
 | ⚠️ **G15（「之前」档）** | **1** | `fenglue`：上游 `phaseUseBefore`，原生 `begin: true` |

@@ -64,6 +64,9 @@ MANUAL_TRIGGERS = {
     "gujian_food_mapodoufu": 'player: "phaseJieshuBegin"',
     "gujian_food_ziyangdan": 'player: "phaseBegin"',
     "gujian_food_xiajiao": 'player: "phaseDrawBegin"',
+    # 装备/机巧卡的效果挂在卡片的 `global: 'g_<name>'` 技能上 —— 第 7 种「查不到」形态。
+    "qinglongzhigui": 'player: "phaseBegin"',
+    "huanglinzhicong": 'player: "phaseBegin"',
 }
 
 #: Engine phase -> the upstream event name stem (`Play` is `phaseUse…` in noname).
@@ -73,6 +76,13 @@ PHASE_STEM = {
     "Play": "Use",
     "Discard": "Discard",
     "End": "Jieshu",
+}
+
+#: Behavior-level overrides for internal sub-behaviors that have **no `host:` key**
+#: (so neither the key nor the package skill name can find the upstream skill).
+BEHAVIOR_TRIGGERS = {
+    "SwdQinglongzhiguiHeld": 'player: "phaseBegin"',      # g_qinglongzhigui（卡片 global 技能）
+    "SwdHuanglinzhicongHeld": 'player: "phaseBegin"',     # g_huanglinzhicong
 }
 
 #: Rows whose verdict is a documented semantic choice rather than a defect.
@@ -199,6 +209,13 @@ def arms() -> list[tuple[str, str, str, str, int]]:
     return rows
 
 
+def resolve_trigger(behavior: str, key: str, skill: str) -> str:
+    """Upstream trigger for one arm: behavior override -> key -> skill name."""
+    if behavior in BEHAVIOR_TRIGGERS:
+        return BEHAVIOR_TRIGGERS[behavior]
+    return upstream_trigger(skill, key.removeprefix("host:"))
+
+
 def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
     if behavior in SEMANTIC_CHOICE:
         return "语义选择"
@@ -240,7 +257,7 @@ def main() -> int:
     for behavior, phase, begin, file, line in arms():
         key = keys.get(behavior, "")
         skill = skills.get(key, "") or ""
-        trigger = upstream_trigger(skill, key.removeprefix("host:"))
+        trigger = resolve_trigger(behavior, key, skill)
         verdict = classify(behavior, phase, begin, trigger)
         counts[verdict] = counts.get(verdict, 0) + 1
         out.append((behavior, phase, begin, f"{file}:{line}", skill, trigger, verdict))

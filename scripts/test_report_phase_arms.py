@@ -44,15 +44,17 @@ class ClassificationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mod = load()
+        keys = cls.mod.host_keys()
+        skills = cls.mod.skill_names()
         cls.verdicts = [
-            cls.mod.classify(b, p, bg, cls.mod.upstream_trigger(cls.mod.skill_names().get(cls.mod.host_keys().get(b, ""), ""),
-                                                             cls.mod.host_keys().get(b, "").removeprefix("host:")))
-            for b, p, bg, _f, _l in cls.mod.arms()
+            cls.mod.classify(b, phase, bg, cls.mod.resolve_trigger(b, keys.get(b, ""), skills.get(keys.get(b, ""), "")))
+            for b, phase, bg, _f, _l in cls.mod.arms()
         ]
 
     def test_g14_count_matches_manual_audit(self):
-        # 12 = 11 条 + `SwdHujing`（第 736 轮补上「相等比较」写法后新发现）
-        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 12)
+        # 14 = 11 + `SwdHujing`（相等比较写法）+ `Qinglongzhigui`/`Huanglinzhicong`
+        # （效果挂在卡片 `global: g_<name>` 技能上，第 737 轮补查）
+        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 14)
 
     def test_g20_count_matches_manual_audit(self):
         self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G20")), 5)
