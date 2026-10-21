@@ -1131,3 +1131,32 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 
 对 11 行 `G23` 逐条做**语义确认**（原生注释 ↔ 上游 `content`），
 把「上游确实 `phaseEnd`」与「上游归因错」分开登记 ✅
+
+---
+
+## 38 第 817 轮：**关键词启发式扫出 10 行「归因可疑」的复核队列**
+
+做法：取原生效果步里的注释，抽出中文关键词（翻面/判定/回复/伤害/弃置/摸/护甲/标记…），
+映射成上游常用标识符（`turnOver`/`judge`/`recover`/`damage`/`discard`/`draw`/`hujia`/`mark`…），
+再**只在「该行解析到的上游块」内**查找。**一个都不命中的行**进入复核队列：
+
+| 行 | 行为 | 注释关键词 | 为什么可疑 |
+|---|---|---|---|
+| `G23` | `Hutian` | 伤害 / 转移 / 桃 | 上游块内无 `damage`/`transfer` |
+| `G23` | `SwdMufengHeld` | 翻面 | 上游块内无 `turnOver`（应为 `discoverCard`）|
+| `G23` | `Xuanyuan` | 闪 | 上游块内无 `shan` |
+| `G15` | `WudianFuchou2` | 判定 | 上游块内无 `judge` |
+| `需档` | `SwdCyxianjiang` | 判定 | 同上 |
+| `需档` | `SwdDunxing` | 摸 | 上游块内无 `draw` |
+| `需档` | `SwdJiang` | 伤害 | 无 `damage` |
+| `5b` | `Reguhuo` | 弃置 / 桃 | 无 `discard`/`peach` |
+| `G23` | `SwdDonghuangzhongCard` | 交给 | 无 `give` |
+| `U08c` | `YxsMenshen3` | 杀 | 无 `sha` |
+
+### ⚠ 这是**启发式**，不是判定
+
+**上游可以用完全不同的写法表达同一件事**（如 `get.damageEffect`、`damage2`、`player.hp--`），
+所以**未命中不等于归因错**。本轮只把它当作**人工复核的排序队列** ✅
+
+⇒ 复核队列 **10 行**；已手工确认归因错的有 **3 行**（`SwdHuanling` 已移出、`SwdMufengHeld`、`SwdLqingcheng`）⚠️
+⇒ **下一步**：逐行读上游块全文，判定「归因对/错」并分开登记 ✅
