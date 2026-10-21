@@ -33,19 +33,28 @@ PREFIXES = ("swd_", "xj_", "xianjian_", "wudian_", "hlss_", "gujian_", "yunchou_
             "hearth_", "gwent_", "mtg_", "ow_", "boss_", "huanle_", "longxue_")
 
 
-def _candidates(name: str) -> list[str]:
-    out = [name, f"g_{name}"]
-    for prefix in PREFIXES:
-        if name.startswith(prefix) and len(name) > len(prefix):
-            stripped = name[len(prefix):]
-            out.extend([stripped, f"g_{stripped}"])
+def _candidates(*names: str) -> list[str]:
+    """与 `report_phase_arms.upstream_trigger_with_path` 的候选顺序保持一致。
+
+    顺序不同会导致「工具显示的上游」与「台账解析的上游」不是同一个技能
+    （第 834 轮发现：dumper 显示 `xianjian_ctianfu`，台账解析到 `dieBegin`）。
+    """
+    out: list[str] = []
+    for name in names:
+        if not name:
+            continue
+        out.extend([name, f"g_{name}"])
+        for prefix in PREFIXES:
+            if name.startswith(prefix) and len(name) > len(prefix):
+                stripped = name[len(prefix):]
+                out.extend([stripped, f"g_{stripped}"])
     return out
 
 
-def upstream_block(name: str, width: int) -> str:
+def upstream_block(name: str, width: int, key: str = "") -> str:
     phase = _load_phase()
     sources = phase.upstream_sources()
-    for candidate in _candidates(name):
+    for candidate in _candidates(name, key.removeprefix("host:")):
         patterns = [
             r'\n\s*"?' + re.escape(candidate) + r'"?\s*:\s*\{',
             r"lib\.skill\." + re.escape(candidate) + r"\s*=\s*\{",
@@ -112,7 +121,8 @@ def main() -> int:
         skill = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower().lstrip("_")
 
     print(f"== {args.behavior}（上游 {skill}）")
-    print("上游:", upstream_block(skill, args.width))
+    key = _load_phase().host_keys().get(args.behavior, "")
+    print("上游:", upstream_block(skill, args.width, key))
     print("原生:", native_step(args.behavior, args.width))
     return 0
 
