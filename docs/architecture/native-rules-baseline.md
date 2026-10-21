@@ -5821,3 +5821,26 @@ event.trigger('phaseAfter');
 | **确认缺陷** | **3**（`L27a`、`L27b`、`NewZhixi` 需档）|
 | **一致** | **4**（2 内部 + `new_meibu` + `jishe`）|
 | **可签？** | ❌ **不可** |
+
+### L20 标记补充 —— 定稿：**6 技能 / 4 缺陷 / 2 一致**（2026-10-19，第 753 轮）
+
+| 技能 | 上游 trigger | 原生 meta | 判定 |
+|---|---|---|---|
+| **`xigua_mopaifanbei`** | **`player: "phaseDrawBegin2"`**（摸牌阶段**第 2 次**）| **无 TriggerMeta** | ❗ **不触发** + **需「第 2 次」档** |
+| **`xigua_xueliangfanbei`** | **`global: "gameStart"`** | **`EventKind::PhaseBegin`** | ❗ **事件错**（应为「游戏开始」⇒ 缺档）|
+| `kurou` 苦肉 | **`enable` 主动技** | 无 meta | ✅ **一致** |
+| **`xigua_zhuwanzhongji`** | **`source: "dieBegin"`** | **`EventKind::Death`** | ❗ **死亡前 vs 死亡后** |
+| **`fz_liegong`** | **`player: "useCardToPlayered"`** | **无 TriggerMeta** | ❗ **不触发**（「用牌目标后」幕缺档）|
+| `fz_xinkuanggu` | **`source: "damageSource"`** | **`EventKind::Damage`** | ✅ **相符** |
+
+### 四条缺陷（全部 B 类：缺档 / 无触发）
+
+| id | 缺什么 |
+|---|---|
+| **`L20a`** | **「摸牌阶段第 2 次」幕** |
+| **`L20b`** | **「游戏开始」幕**（`GameStart`）|
+| **`L20c`** | **「死亡前」幕**（`DeathBefore`）|
+| **`L20d`** | **「用牌目标后」幕**（`useCardToPlayered`）|
+
+⇒ **`L20` 修正此前「3 技能缺档」的初查**（**实际 4 条**）⚠️
+⇒ **`L20` 不可签** ❌

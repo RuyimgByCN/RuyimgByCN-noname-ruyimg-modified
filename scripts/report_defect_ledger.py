@@ -65,6 +65,14 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "事件种类完全错（应为死亡后/摸牌后）"),
     ("L27b", "A", "SbZhaXiang", "L27", 'player: "useCard"', "无 TriggerMeta",
      "未挂触发（效果不生效）"),
+    ("L20a", "B", "XiguaMopaiFanbei", "L20", 'player: phaseDrawBegin2', "无 TriggerMeta",
+     "不触发 + 需「摸牌阶段第 2 次」档"),
+    ("L20b", "B", "XiguaXueliangFanbei", "L20", 'global: gameStart', "EventKind::PhaseBegin",
+     "事件错（应为 GameStart，缺档）"),
+    ("L20c", "B", "ZhuWanzhongJi", "L20", 'source: dieBegin', "EventKind::Death",
+     "死亡前 vs 死亡后"),
+    ("L20d", "B", "FzLiegong", "L20", 'player: useCardToPlayered', "无 TriggerMeta",
+     "不触发（用牌目标后幕缺档）"),
     ("B", "B", "Tianxiang", "?" , "player: damageBegin3", "EventKind::DamageBefore", "需第 3 次档"),
 ]
 
