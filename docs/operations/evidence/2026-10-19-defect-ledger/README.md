@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**72 条**）—— 2026-10-19 第 798 轮
+# 缺陷台账（机器可读，**70 条**）—— 2026-10-19 第 803 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -7,9 +7,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **41** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **39** |
 | **B（需扩枚举或引擎能力）** | **31** |
-| **合计** | **72** |
+| **合计** | **70** |
 
 ## 2 按缺陷族
 
@@ -695,7 +695,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **72** |
+| **合计** | **70** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -842,3 +842,25 @@ if has_yueyin && need != 0 && recorded & need != 0 { /* 免除 */ }
 | ④ **效果逻辑等价** | **2 / 72**（`WudianZhucheng`、`SwdBaishouzhihuHeld`）⚠️ |
 
 ⇒ **④ 是剩余 70 条的唯一未核维度**，也是本会话最后能推进的实质工作 ✅
+
+---
+
+## 30 第 803 轮：G19 三行里 **2 行不是缺陷**（上游 filter 隐含排除自己）——台账 72 → 70
+
+`G19` 原记「filter 多加了 `!= owner`，上游没有这个限制」。逐个读上游 `filter` 后：
+
+| 行为 | 上游 trigger | 上游 `filter` 关键条件 | 原生 | 判定 |
+|---|---|---|---|---|
+| **`SwdRexue`** | `global: phaseBegin` | **`targetEnabled({name:'sha'}, player, event.player)`** | `Phase{begin:true}` + `actor != owner` | ✅ **等价**：自己回合时 `targetEnabled(sha, self, self)` **为 false** ⇒ 上游同样不触发 |
+| **`SwdZhuhai`** | `global: phaseJieshuBegin` | **同样有 `targetEnabled(sha, player, event.player)`** | `Phase::End, begin:true` + `t != owner` | ✅ **等价**（同上）|
+| **`SwdTiebi`** | `global: shaBegin` | **没有对自己排除**，只查 `distance(player, event.target) <= 1` | `CardUsed` + `t != owner` | ❌ **真缺陷**：**目标是自己时上游会触发、原生跳过** |
+
+⇒ **撤回 `SwdRexue`、`SwdZhuhai`**（**2 行**），**`G19` 只剩 `SwdTiebi` 1 行** ✅
+⇒ **台账 72 → 70（A 41 → 39 / B 31）**
+
+### 教训（第 12 次）
+
+**「原生多了一个条件」不等于「上游没有这个条件」** —— 上游可能把它写成 **filter 里另一个函数的副作用**
+（`targetEnabled` 对「自己对自己用杀」返回 false，效果等同排除）。
+
+⇒ **比较「条件」时必须比较「行为」，而不是比较「代码里有没有那行」** ⚠️

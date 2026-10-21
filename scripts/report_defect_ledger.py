@@ -46,9 +46,7 @@ event = _load("report_event_arms", ROOT / "scripts" / "report_event_arms.py")
 MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
     # id, class, behavior, upstream, native, note
     ("5b", "A", "Reguhuo", "L10", "reguhuo_phase 标记（每回合一次）", "无标记，可无限次", "EPIC_REGUHUO_KEY 定义未接线"),
-    ("G19", "A", "SwdZhuhai", "U05", "global: phaseEnd", "filter 含 t != owner", "技能主被排除"),
     ("G19", "A", "SwdTiebi", "U05", "global: useCardToBegin", "filter 含 t != owner", "技能主被排除"),
-    ("G19", "A", "SwdRexue", "U05", "global: phaseEnd", "filter 含 actor != owner", "技能主被排除"),
     ("5c", "B", "ShengkeCheck", "L06", "target: useCardToBegin", "EventKind::CardUsed", "需 CardTargeted 档"),
     ("5a", "A", "ShaDamageForceDiscard", "U06", "sha && notLink && countCards>0", "共享行为仅 is_sha_like", "共享行为未含苦无的 2 个条件（待复核）"),
     ("6", "A", "Rangjie", "L10", "分支前无条件 draw()", "仅分支 0 摸牌", "分支 1 不摸牌"),
