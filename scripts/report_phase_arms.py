@@ -155,19 +155,35 @@ def upstream_trigger(skill: str, key: str = "") -> str:
     return ""
 
 
+def package_path_for_key(key: str) -> str:
+    """`host:` 键所属包的 `upstream_path` —— 用于消解「同名技能跨包」的歧义。"""
+    if not key:
+        return ""
+    for path in glob.glob(str(ROOT / "packages" / "extensions" / "*" / "assets" / "*.json")):
+        try:
+            doc = json.loads(Path(path).read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        for skill in doc.get("skills") or []:
+            if isinstance(skill, dict) and skill.get("mapping") == (key if key.startswith("host:") else f"host:{key}"):
+                return (doc.get("upstream_path") or "").strip("/")
+    return ""
+
+
 def upstream_trigger_with_path(skill: str, key: str = "") -> tuple[str, str]:
     """(trigger, 上游文件路径) —— 路径用于把缺陷归到「代码实际所在来源」。"""
     if key in MANUAL_TRIGGERS:
         return MANUAL_TRIGGERS[key], ""
     candidates = [name for name in (skill, key, key.rsplit("_", 1)[-1]) if name]
+    prefer = package_path_for_key(key)
     for candidate in candidates:
-        found = _lookup_trigger_with_path(candidate)
+        found = _lookup_trigger_with_path(candidate, prefer)
         if found[0]:
             return found
     return "", ""
 
 
-def _lookup_trigger_with_path(skill: str) -> tuple[str, str]:
+def _lookup_trigger_with_path(skill: str, prefer: str = "") -> tuple[str, str]:
     if not skill:
         return "", ""
     patterns = [
@@ -176,7 +192,11 @@ def _lookup_trigger_with_path(skill: str) -> tuple[str, str]:
         r"\n\s*_" + re.escape(skill) + r"_\s*:\s*\{",
         r"lib\.skill\._" + re.escape(skill) + r"_\s*=\s*\{",
     ]
-    for path, text in upstream_sources().items():
+    items = list(upstream_sources().items())
+    if prefer:
+        # 优先在「该键所属包」的 upstream_path 下查找（消解同名技能跨包歧义）
+        items.sort(key=lambda kv: 0 if prefer in kv[0].replace("\\", "/") else 1)
+    for path, text in items:
         for pattern in patterns:
             m = re.search(pattern, text)
             if not m:

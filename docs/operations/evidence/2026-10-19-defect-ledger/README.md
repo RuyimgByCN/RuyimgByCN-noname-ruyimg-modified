@@ -92,13 +92,30 @@ python3 -B -m unittest discover -s scripts -p 'test_report_defect_ledger.py'
 
 ⇒ **归因数 17 → 20**（`U06` 2→3、`L10` 1→2、新增 `L03`）✅
 
-### ⚠ 但路径归因有一个已知坑：**同名技能跨包**
+### ❌ 我上一轮怀疑「`WudianJidong` 归因错了」——**是我错了，解析器是对的**（第 745 轮更正）
 
-`jidong` 在 `character/ow.js` 与 `wudian` 包里**都存在**，解析器命中的是前者；
-而 `WudianJidong` 从命名看应属**玩点论杀（U07）** ⇒ **这一条归因可能是错的** ⚠️
+第 744 轮我写道：「`jidong` 在 `character/ow.js` 与 `wudian` 包里都存在……`WudianJidong` 从命名看应属玩点论杀（U07）⇒ 归因可能是错的」。
 
-⇒ **因此**：`source` 列**只作线索，不作结论**；**要断言某来源的缺陷数，仍须逐条人工确认** ⚠️
-⇒ **这也是为什么「按来源验收」不能自动化到底** —— 本会话再次印证 ✅
+**核查结果**：
+
+| 检查 | 结果 |
+|---|---|
+| `packages/extensions/wudian-upstream-noname` 的技能表 | **没有 `jidong`**（其技能为 `wd_wangmeizhike`/`ciqiu`/`shuaiyan`/`zhucheng`…）|
+| `packages/extensions/shaai-ow-upstream-noname` | **`upstream_path = extension/杀海拾遗/character/ow/`** |
+| 上游 `jidong` 定义位置 | **`noname-liuli/noname/character/ow.js`** |
+
+⇒ **`wudian_jidong` 这个 `host:` 键产生的行为，其上游确实在「杀海拾遗 / ow」里** ✅
+⇒ **我拿「`Wudian` 前缀 ⇒ 玩点论杀」去质疑解析器，而前缀本来就不是来源标签** ❌
+
+**这是本会话「前缀/命名 ≠ 归属」的第 3 次教训**（前两次：`Swd` 前缀跨多个子包、`_xigua_*_` 下划线名）。
+
+### ⇒ 修正后的归因口径
+
+| 结论 | 状态 |
+|---|---|
+| **`source` 列（路径型）** | ✅ **可信度高于前缀猜测** —— 它来自「上游定义在哪个文件」+「包的 `upstream_path`」 |
+| **仍标 `?` 的 55 条** | ⚠️ **不是「没有来源」，而是「解析器找不到」**（多为内部子行为，上游措辞与包数据都对不上）|
+| **要断言某来源缺陷数** | ⚠️ **仍须人工**（本会话已人工核过 `U05`/`U07`/`L06`/`L10`/`L19`/`U01` 等）|
 
 ### 其余 55 条归不到来源的原因
 
