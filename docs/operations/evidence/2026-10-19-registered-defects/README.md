@@ -148,14 +148,35 @@
 | `g19_rexue_filter_must_not_exclude_owner` | **G19** | `swd_rexue` 的过滤段**不再含 `actor != owner`** |
 | `reguhuo_must_record_a_per_turn_use_marker` | **5b** | `reguhuo` 的效果步里**出现回合标记**（`reguhuo_phase` 或 `EPIC_REGUHUO_KEY`）|
 
+**第 720 轮再补 9 条 G14 守卫**（同一文件，用 `macro_rules!` 生成）：
+
+| 守卫 | 覆盖 |
+|---|---|
+| `g14_diyguhuo_any_phase` / `g14_yougeng_any_phase` / `g14_xuelunyang_any_phase` / `g14_geju_any_phase` | `filtering/common.rs` 的 4 条 |
+| `g14_hyunshen2_any_phase` / `g14_daixing2_any_phase` / `g14_zhenjiu2_any_phase` / `g14_huanxing_any_phase` | `filtering/swd.rs` 的 4 条 |
+| `g14_qianfang_any_phase` | `filtering/xianjian.rs` 的 1 条 |
+
+**断言**：该 `HostBehavior::X` 的 arm **不再出现 `Phase::Judge`**
+（修正后应照 `SwdJinlin2` 先例写成 `Phase { player, begin: true, .. }`）。
+**切片方式**：从 anchor 切到**下一个 `HostBehavior::`**，避免把邻接 arm 的内容算进来。
+
 ### 关键验证：**去掉 `#[ignore]` 后 4 条全部 FAILED**
 
 ```text
+test g14_daixing2_any_phase ... FAILED
+test g14_diyguhuo_any_phase ... FAILED
+test g14_geju_any_phase ... FAILED
+test g14_huanxing_any_phase ... FAILED
+test g14_hyunshen2_any_phase ... FAILED
+test g14_qianfang_any_phase ... FAILED
+test g14_xuelunyang_any_phase ... FAILED
+test g14_yougeng_any_phase ... FAILED
+test g14_zhenjiu2_any_phase ... FAILED
+test g19_rexue_filter_must_not_exclude_owner ... FAILED
 test g19_tiebi_filter_must_not_exclude_owner ... FAILED
 test g19_zhuhai_filter_must_not_exclude_owner ... FAILED
-test g19_rexue_filter_must_not_exclude_owner ... FAILED
 test reguhuo_must_record_a_per_turn_use_marker ... FAILED
-test result: FAILED. 0 passed; 4 failed; 0 ignored
+test result: FAILED. 0 passed; 13 failed; 0 ignored
 ```
 
 ⇒ **证明缺陷当前仍然存在、守卫不是同义反复** ✅
@@ -165,7 +186,7 @@ test result: FAILED. 0 passed; 4 failed; 0 ignored
 
 | 指标 | 加入前 | 加入后 |
 |---|---:|---:|
-| `engine-native` passed / failed / **ignored** | 1538 / 0 / **21** | **1538 / 0 / 25** |
-| 已登记缺陷守卫 | 21 | **25** |
+| `engine-native` passed / failed / **ignored** | 1538 / 0 / **21** | **1538 / 0 / 34** |
+| 已登记缺陷守卫 | 21 | **34** |
 
-**新增 4 条守卫全部计入 `ignored`（不参与默认运行），默认套件仍 1538 通过、0 失败** ✅
+**新增 13 条守卫全部计入 `ignored`（不参与默认运行），默认套件仍 1538 通过、0 失败** ✅

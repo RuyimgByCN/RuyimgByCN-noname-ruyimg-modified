@@ -104,3 +104,53 @@ fn reguhuo_must_record_a_per_turn_use_marker() {
         "reguhuo 应记录「本回合已用」标记以限制每回合一次；当前效果步无任何标记痕迹：\n{seg}"
     );
 }
+
+// ------------------------------------------------------------ G14 阶段错位
+
+/// Slice one dispatch arm: from `anchor` up to the next `HostBehavior::` arm.
+fn arm_until_next<'a>(src: &'a str, anchor: &str) -> &'a str {
+    let start = src
+        .find(anchor)
+        .unwrap_or_else(|| panic!("找不到 `{anchor}`（宿主分发表可能已重构，请更新本守卫）"));
+    let body_start = start + anchor.len();
+    let rest = &src[body_start..];
+    match rest.find("HostBehavior::") {
+        Some(end) => &src[start..body_start + end],
+        None => &src[start..],
+    }
+}
+
+/// G14 守卫：上游 `trigger.player == "phaseBegin"`（**任意阶段开始**），
+/// 原生把 filter 钉死在**判定阶段**（`Phase::Judge, begin: true`）。
+/// 修正后应照 `SwdJinlin2` 的先例写成 `Phase { player, begin: true, .. }`，
+/// 即该 arm 里**不再出现 `Phase::Judge`**。
+macro_rules! g14_guard {
+    ($fn_name:ident, $variant:literal, $file:literal) => {
+        #[test]
+        #[ignore = "登记缺陷 G14：上游 player phaseBegin，原生钉死 Phase::Judge；\
+                    修复需改未跟踪的 content/host/filtering*"]
+        fn $fn_name() {
+            let src = read($file);
+            let seg = arm_until_next(&src, concat!("HostBehavior::", $variant, " =>"));
+            assert!(
+                !seg.contains("Phase::Judge"),
+                concat!(
+                    $variant,
+                    " 上游为「任意阶段开始」(phaseBegin)，filter 不应钉死判定阶段；",
+                    "当前 arm 仍含 `Phase::Judge`：\n{seg}",
+                ),
+                seg = seg,
+            );
+        }
+    };
+}
+
+g14_guard!(g14_diyguhuo_any_phase, "YunchouDiyguhuo", "filtering/common.rs");
+g14_guard!(g14_yougeng_any_phase, "GujianFoodYougeng", "filtering/common.rs");
+g14_guard!(g14_xuelunyang_any_phase, "HuanleXuelunyangCard", "filtering/common.rs");
+g14_guard!(g14_geju_any_phase, "WudianGeju", "filtering/common.rs");
+g14_guard!(g14_hyunshen2_any_phase, "SwdHyunshen2", "filtering/swd.rs");
+g14_guard!(g14_daixing2_any_phase, "SwdDaixing2", "filtering/swd.rs");
+g14_guard!(g14_zhenjiu2_any_phase, "SwdZhenjiu2", "filtering/swd.rs");
+g14_guard!(g14_huanxing_any_phase, "SwdHuanxing", "filtering/swd.rs");
+g14_guard!(g14_qianfang_any_phase, "XianjianQianfang", "filtering/xianjian.rs");
