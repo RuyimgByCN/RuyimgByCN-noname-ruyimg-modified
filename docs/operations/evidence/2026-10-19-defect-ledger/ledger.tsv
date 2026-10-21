@@ -1,76 +1,76 @@
-id	class	behavior	source	upstream	native	severity	fix	permission
-G14	A	GujianFoodYougeng	?	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	GujianFoodZiyangdan	?	player: "phaseBegin"	End, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	HuanleXuelunyangCard	?	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdDaixing2	?	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHuanglinzhicongHeld	?	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHuanxing	?	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHujing	?	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdHyunshen2	?	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdLexue	?	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	SwdQinglongzhiguiHeld	?	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	WudianGeju	?	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	XianjianQianfang	?	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G14	A	YunchouDiyguhuo	?	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G20	A	GujianFoodLiyutang	?	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-G20	A	WudianPaotaiFire	?	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-G20	A	WudianZhucheng	?	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-G20	A	WudianZiyu	?	global:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-G23	A	Hutian	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	SwdHuanling	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	SwdLingxin	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	SwdLqingcheng	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	SwdMufengHeld	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	WudianGuangshuSpade	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	WudianJidong	?	global:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	XianjianBinxin	?	global:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	XianjianLingyu	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	Xuanyuan	?	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23	A	YxsMenshen	?	player:"phaseEnd",	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-自加分支	A	SwdHuajin2	?	source:'damageBegin'	Judge, begin:true	中	按对照结论修改 filter / 删除分支	blocked
-B	B	Tianxiang	?	player: damageBegin3	EventKind::DamageBefore	中	需第 3 次档	blocked
-G15	B	WudianFuchou2	?	global:'phaseAfter'	End, begin:false	中	按对照结论修改 filter / 删除分支	blocked
-G15	B	XianjianFenglue	?	player:'phaseUseBefore'	Play, begin:true	中	按对照结论修改 filter / 删除分支	blocked
-第3次	B	Tianxiang	?	player:"damageBegin3",	DamageBefore	高	修触发时机/补档位	blocked
-需档	B	SwdCyxianjiang	?	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdDunxing	?	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdGongshen	?	global:'useCard'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdHuanyin	?	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdHyunshen	?	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdJiang	?	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLanzhi	?	player:'useCard'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLingxian	?	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLiuhong	?	player:['useCard']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLuomei	?	player:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdNingshuang	?	target:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdXielei	?	player:['useCard','respondAfter']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdYuchen	?	player:['useCard','respondAfter']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	XianjianChangnian	?	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	XianjianCtianfu3	?	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	XianjianLiefeng	?	player:'useCard'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	XianjianRunxin	?	player:['useCard','respondEnd']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	XianjianXshuangren2	?	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	Yihua	?	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	YunchouDiychanyuan	?	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	YunchouJiaoxia	?	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	Zhenlie	?	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
-凭空	A	BossBaiyi	L03	enable: phaseUse, limited	第 5 轮判定阶段触发	高	凭空新增触发	blocked
-5c	B	ShengkeCheck	L06	target: useCardToBegin	EventKind::CardUsed	中	需 CardTargeted 档	blocked
-5b	A	Reguhuo	L10	reguhuo_phase 标记（每回合一次）	无标记，可无限次	高	EPIC_REGUHUO_KEY 定义未接线	blocked
-6	A	GujianFoodRangjie	L10	分支前无条件 draw()	仅分支 0 摸牌	高	分支 1 不摸牌	blocked
-需档	B	NewZhixi	L27	player: "useCard",	CardUsed	高	修触发时机/补档位	blocked
-G14	A	SwdZhenjiu2	U05	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G16	A	GwentCiguState	U05	phaseDrawBegin 减 event.num	Draw, begin:false	高	摸牌已结束，效果失效	blocked
-G19	A	SwdRexue	U05	global: phaseEnd	filter 含 actor != owner	高	技能主被排除	blocked
-G19	A	SwdTiebi	U05	global: useCardToBegin	filter 含 t != owner	高	技能主被排除	blocked
-G19	A	SwdZhuhai	U05	global: phaseEnd	filter 含 t != owner	高	技能主被排除	blocked
-G23	A	SwdDonghuangzhongCard	U05	player: "phaseEnd"	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
-G23b	A	SwdJiguanyuanGain	U05	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
-失效	A	SwdBaishouzhihuHeld	U05	PhaseEnd(begin:false)	filter 要求 *begin	高	永不触发	blocked
-自加	A	SwdHuajin2	U05	source: damageBegin	Damage OR 判定阶段分支	高	自加分支	blocked
-需档	B	Jifeng	U05	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	XianjianFeixu	U05	global:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	XianjianXjzhimeng2	U05	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
-5a	A	HuanleKuwu	U06	sha && notLink && countCards>0	仅 is_sha_like	高	少 2 个 filter 条件	blocked
-G20	A	PhaseEndRecoverOrDraw	U06	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-需档	B	HuanleMonkeyCard	U06	global: "useCardToBegin",	CardUsed	高	修触发时机/补档位	blocked
+id	class	behavior	source	location	upstream	native	severity	fix	permission
+G14	A	GujianFoodYougeng	?	common.rs:620	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	GujianFoodZiyangdan	?	common.rs:623	player: "phaseBegin"	End, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	HuanleXuelunyangCard	?	common.rs:652	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	SwdDaixing2	?	swd.rs:36	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	SwdHuanglinzhicongHeld	?	swd.rs:465	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	SwdHuanxing	?	swd.rs:701	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	SwdHujing	?	swd.rs:985	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	SwdHyunshen2	?	swd.rs:26	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	SwdLexue	?	swd.rs:671	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	SwdQinglongzhiguiHeld	?	swd.rs:390	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	XianjianQianfang	?	xianjian.rs:236	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G14	A	YunchouDiyguhuo	?	common.rs:467	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G20	A	GujianFoodLiyutang	?	common.rs:605	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+G23	A	Hutian	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	SwdHuanling	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	SwdLingxin	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	SwdLqingcheng	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	SwdMufengHeld	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	WudianGuangshuSpade	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	WudianJidong	?	filtering/*	global:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	XianjianBinxin	?	filtering/*	global:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	Xuanyuan	?	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+自加分支	A	SwdHuajin2	?	swd.rs:821	source:'damageBegin'	Judge, begin:true	中	按对照结论修改 filter / 删除分支	blocked
+B	B	Tianxiang	?	content/host/**	player: damageBegin3	EventKind::DamageBefore	中	需第 3 次档	blocked
+G15	B	WudianFuchou2	?	common.rs:24	global:'phaseAfter'	End, begin:false	中	按对照结论修改 filter / 删除分支	blocked
+G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true	中	按对照结论修改 filter / 删除分支	blocked
+第3次	B	Tianxiang	?	common.rs:390	player:"damageBegin3",	DamageBefore	高	修触发时机/补档位	blocked
+需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdDunxing	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdGongshen	?	meta:0	global:'useCard'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdHuanyin	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdHyunshen	?	meta:0	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdLanzhi	?	meta:0	player:'useCard'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdLingxian	?	meta:0	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdLiuhong	?	meta:0	player:['useCard']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdLuomei	?	meta:0	player:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdNingshuang	?	meta:0	target:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdXielei	?	meta:0	player:['useCard','respondAfter']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	SwdYuchen	?	meta:0	player:['useCard','respondAfter']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	XianjianChangnian	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
+需档	B	XianjianCtianfu3	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
+需档	B	XianjianLiefeng	?	meta:0	player:'useCard'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	XianjianRunxin	?	meta:0	player:['useCard','respondEnd']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	XianjianXshuangren2	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
+需档	B	Yihua	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	YunchouDiychanyuan	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
+需档	B	YunchouJiaoxia	?	meta:0	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	Zhenlie	?	meta:0	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
+凭空	A	BossBaiyi	L03	content/host/**	enable: phaseUse, limited	第 5 轮判定阶段触发	高	凭空新增触发	blocked
+5c	B	ShengkeCheck	L06	content/host/**	target: useCardToBegin	EventKind::CardUsed	中	需 CardTargeted 档	blocked
+5b	A	Reguhuo	L10	content/host/**	reguhuo_phase 标记（每回合一次）	无标记，可无限次	高	EPIC_REGUHUO_KEY 定义未接线	blocked
+6	A	GujianFoodRangjie	L10	content/host/**	分支前无条件 draw()	仅分支 0 摸牌	高	分支 1 不摸牌	blocked
+需档	B	NewZhixi	L27	meta:0	player: "useCard",	CardUsed	高	修触发时机/补档位	blocked
+G14	A	SwdZhenjiu2	U05	swd.rs:675	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G16	A	GwentCiguState	U05	content/host/**	phaseDrawBegin 减 event.num	Draw, begin:false	高	摸牌已结束，效果失效	blocked
+G19	A	SwdRexue	U05	content/host/**	global: phaseEnd	filter 含 actor != owner	高	技能主被排除	blocked
+G19	A	SwdTiebi	U05	content/host/**	global: useCardToBegin	filter 含 t != owner	高	技能主被排除	blocked
+G19	A	SwdZhuhai	U05	content/host/**	global: phaseEnd	filter 含 t != owner	高	技能主被排除	blocked
+G20	A	WudianPaotaiFire	U05	common.rs:795	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+G20	A	WudianZiyu	U05	common.rs:592	global:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+G23	A	SwdDonghuangzhongCard	U05	filtering/*	player: "phaseEnd"	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23	A	XianjianLingyu	U05	filtering/*	player:'phaseEnd'	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked
+G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
+失效	A	SwdBaishouzhihuHeld	U05	content/host/**	PhaseEnd(begin:false)	filter 要求 *begin	高	永不触发	blocked
+自加	A	SwdHuajin2	U05	content/host/**	source: damageBegin	Damage OR 判定阶段分支	高	自加分支	blocked
+需档	B	Jifeng	U05	meta:0	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
+需档	B	XianjianFeixu	U05	meta:0	global:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
+需档	B	XianjianXjzhimeng2	U05	meta:0	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
+5a	A	HuanleKuwu	U06	content/host/**	sha && notLink && countCards>0	仅 is_sha_like	高	少 2 个 filter 条件	blocked
+G20	A	PhaseEndRecoverOrDraw	U06	common.rs:536	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+需档	B	HuanleMonkeyCard	U06	meta:0	global: "useCardToBegin",	CardUsed	高	修触发时机/补档位	blocked
+G14	A	WudianGeju	U07	common.rs:684	player:'phaseBegin'	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G20	A	WudianZhucheng	U07	common.rs:766	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+G23	A	YxsMenshen	U08	filtering/*	player:"phaseEnd",	PhaseEnd, 未钉阶段	高	把 `..` 钉成 End, begin: false	blocked

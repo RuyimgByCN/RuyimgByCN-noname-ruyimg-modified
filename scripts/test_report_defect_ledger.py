@@ -29,7 +29,7 @@ class LedgerTests(unittest.TestCase):
 
     def test_rows_have_all_columns(self):
         for row in self.rows:
-            self.assertEqual(len(row), 9, row)
+            self.assertEqual(len(row), 10, row)
 
     def test_classes_are_a_or_b(self):
         self.assertEqual({r[1] for r in self.rows}, {"A", "B"})
@@ -47,13 +47,19 @@ class LedgerTests(unittest.TestCase):
         for expected in ("SwdZhuhai", "Reguhuo", "BossBaiyi", "SwdHujing"):
             self.assertIn(expected, behaviors)
 
+    def test_location_column_present(self):
+        # 第 746 轮新增：一行缺陷要能直接定位到 file:line 或模块
+        locations = {r[4] for r in self.rows}
+        self.assertTrue(any(":" in loc for loc in locations), "至少应有 file:line 形式")
+        self.assertTrue(all(loc for loc in locations), "location 不得为空")
+
     def test_source_column_present(self):
         # 第 744 轮新增：证据型归因（按上游文件路径匹配包的 upstream_path）
         self.assertIn("U05", {r[3] for r in self.rows})
         self.assertIn("?", {r[3] for r in self.rows})
 
     def test_permission_is_recorded_for_every_row(self):
-        self.assertEqual({r[8] for r in self.rows}, {"blocked"})
+        self.assertEqual({r[9] for r in self.rows}, {"blocked"})
 
 
 if __name__ == "__main__":

@@ -96,7 +96,7 @@ def build() -> list[list[str]]:
     skills = phase.skill_names()
     rows: list[list[str]] = []
 
-    for behavior, p, begin, _loc, _line in phase.arms():
+    for behavior, p, begin, loc, line in phase.arms():
         key = keys.get(behavior, "")
         trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
         verdict = phase.classify(behavior, p, begin, trigger)
@@ -109,11 +109,13 @@ def build() -> list[list[str]]:
         }.get(verdict, "按对照结论修改 filter / 删除分支")
         _t, path = phase.upstream_trigger_with_path(skills.get(key, "") or "", key.removeprefix("host:"))
         src = source_of_path(path) if path else source_of(behavior)
-        rows.append([verdict.split("(")[0], cls, behavior, src, trigger, f"{p}, begin:{begin}", "中", fix, "blocked"])
+        rows.append([verdict.split("(")[0], cls, behavior, src, f"{loc}:{line}", trigger,
+                     f"{p}, begin:{begin}", "中", fix, "blocked"])
 
     for behavior, trigger, note, severity, fix in g23_rows():
         _t, path = phase.upstream_trigger_with_path(skills.get(key_of(behavior), "") or "", key_of(behavior))
-        rows.append(["G23", "A", behavior, source_of_path(path) if path else source_of(behavior), trigger, note, severity, fix, "blocked"])
+        rows.append(["G23", "A", behavior, source_of_path(path) if path else source_of(behavior), "filtering/*",
+                     trigger, note, severity, fix, "blocked"])
 
     for behavior, which, _loc, _skill, trigger, verdict in [
         (b, w, loc, s, t, v) for b, w, loc, s, t, v in event_out()
@@ -121,10 +123,12 @@ def build() -> list[list[str]]:
         if verdict.startswith("OK") or verdict.startswith("REVIEW"):
             continue
         cls = "A" if verdict.startswith("G21") else "B"
-        rows.append([verdict.split("(")[0], cls, behavior, source_of(behavior), trigger, which, "高", "修触发时机/补档位", "blocked"])
+        rows.append([verdict.split("(")[0], cls, behavior, source_of(behavior), _loc,
+                     trigger, which, "高", "修触发时机/补档位", "blocked"])
 
     for rid, cls, behavior, source, upstream, native, note in MANUAL:
-        rows.append([rid, cls, behavior, source, upstream, native, "高" if cls == "A" else "中", note, "blocked"])
+        rows.append([rid, cls, behavior, source, "content/host/**", upstream, native,
+                     "高" if cls == "A" else "中", note, "blocked"])
 
     # 去重：同一 (id, behavior) 只保留一条（相位面与手工表会重复记同一个缺陷）
     seen: set[tuple[str, str]] = set()
@@ -251,7 +255,8 @@ def main() -> int:
     args = ap.parse_args()
 
     rows = build()
-    header = ["id", "class", "behavior", "source", "upstream", "native", "severity", "fix", "permission"]
+    header = ["id", "class", "behavior", "source", "location", "upstream", "native",
+              "severity", "fix", "permission"]
     lines = ["\t".join(header)] + ["\t".join(r) for r in rows]
     text = "\n".join(lines) + "\n"
     if args.write:
