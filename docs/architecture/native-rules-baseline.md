@@ -5755,3 +5755,36 @@ event.trigger('phaseAfter');
 |---|---:|---:|
 | **A（改逻辑/条件）** | 26 | **32**（+5 G20 +1 `ziyangdan`）|
 | **合计** | 43 | **49** |
+
+### L03 boss（`boss-play-upstream-liuli`）差异族：**6 技能 / 1 武将**（2026-10-19，第 750 轮）
+
+**包**：**1 独立技能（`hlss_fengqi2`）+ 1 武将 `boss_zhugeliang`（带 5 技能）**
+
+| 技能 | 上游 trigger | 原生 meta | 判定 |
+|---|---|---|---|
+| `hlss_fengqi2` | **无 trigger** | **无 TriggerMeta** | ✅ **一致** |
+| **`hlss_xiangxing`** | **`player: ['damageEnd','loseHpEnd']`** | **`EventKind::Damage`** | ⚠️ **少「失去体力后」幕** |
+| **`hlss_yueyin`** | **`player: ['damageBegin4','damage']`** | **`EventKind::DamageBefore`** | ⚠️ **上游双幕（第 4 次 + 伤害后），原生单幕** |
+| **`hlss_yueyin2`** | **`player: 'turnOverBefore'`** | **`EventKind::TurnOverBefore`** | ✅ **一致** |
+| **`hlss_fengqi`** | **`player: ['phaseZhunbeiBegin']`** | **`EventKind::PhaseBegin` + `Judge` 钉死** | ❗ **G18（准备阶段缺档）**（已在守卫 `g14_fengqi_any_phase` 覆盖）|
+| **`hlss_gaiming`** | **`player: 'judgeBefore'`** | **无 TriggerMeta** | ❗ **技能完全不触发** |
+
+### 三条新缺陷（+3 B 类）
+
+| id | 缺陷 | 缺的档位 |
+|---|---|---|
+| **`L03a`** | `xiangxing` 少 `loseHpEnd` | **「失去体力后」幕** |
+| **`L03b`** | `yueyin` 双幕变单幕 | **「第 4 次」幕** |
+| **`L03c`** | `gaiming` 无触发 | **「判定前」（`judgeBefore`）幕** |
+
+### `L03` 的状态
+
+| 检查 | 结果 |
+|---|---|
+| 技能数 | **6**（已全部对照）|
+| **确认缺陷** | **4**（`fengqi` G18 + `L03a` + `L03b` + `L03c`）|
+| **一致** | **2**（`fengqi2`、`yueyin2`）|
+| **可签？** | ❌ **不可**（4 条缺陷）|
+
+⇒ **`L03` 与 `L19`（0 缺陷）、`L10`（2 缺陷）形成对比**：
+**同为小内容量来源，`L19` 一条都没有，`L03` 六分之四有缺陷。**

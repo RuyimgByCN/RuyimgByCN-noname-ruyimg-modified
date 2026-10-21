@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**87 条**）—— 2026-10-19 第 749 轮
+# 缺陷台账（机器可读，**90 条**）—— 2026-10-19 第 750 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -8,8 +8,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **47** |
-| **B（需扩枚举或引擎能力）** | **40** |
-| **合计** | **87** |
+| **B（需扩枚举或引擎能力）** | **43** |
+| **合计** | **90** |
 
 ## 2 按缺陷族
 
@@ -193,3 +193,21 @@ python3 -B -m unittest discover -s scripts -p 'test_report_defect_ledger.py'
 （**已读体 2 条，另 2 条按 `enable` 形态推定** ⚠️ —— 保留这条限定）
 
 **修法**：meta 从 `Death` 改成 **`Dying`**（`EventKind::Dying` 已存在）⇒ **A 类**
+
+---
+
+## 9 第 750 轮：`L03` boss 逐个对照，+3 条 B 类（台账 87 → 90）
+
+| id | 行为 | 上游 | 原生 | 缺的档位 |
+|---|---|---|---|---|
+| **`L03a`** | `HlssXiangxing` | `player: [damageEnd, loseHpEnd]` | meta 仅 `Damage` | **「失去体力后」** |
+| **`L03b`** | `HlssYueyin` | `player: [damageBegin4, damage]` | meta 仅 `DamageBefore` | **「第 4 次」+ 伤害后双幕** |
+| **`L03c`** | `HlssGaiming` | `player: judgeBefore` | **无 TriggerMeta** | **「判定前」** |
+
+⇒ **`L03` = 6 技能 / 4 缺陷 / 2 一致**，**不可签** ❌
+⇒ 与 [`L19`（0 缺陷）](../../../architecture/native-rules-baseline.md) 对照：**小来源也能一条不错，问题在实现不在规模** ✅
+
+### 顺带更正一个口径
+
+**`L03` 此前按「1 技能 + 1 武将」计为 2 项**，实际武将 `boss_zhugeliang` **自带 5 个技能**
+⇒ **`L03` 的真实内容是 6 个技能** ⚠️ —— 这也是「按包内 `skills[]` 计」与「按武将挂载计」的差别。
