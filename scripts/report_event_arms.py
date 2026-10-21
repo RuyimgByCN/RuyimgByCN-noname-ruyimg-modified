@@ -125,6 +125,20 @@ CARD_BEFORE = ("useCardToBegin", "useCardToTargeted", "useCardBefore", "useCardB
 SHA_STAGES = ("shaBegin", "shaAfter", "shaBefore", "shaDodged")
 
 
+
+def _is_bare_use_card(trigger: str) -> bool:
+    """上游 trigger 是否**只**由裸 `useCard` 组成（不含 *ToBegin / sha* / respond）。"""
+    core = (
+        trigger.replace("player:", "")
+        .replace("target:", "")
+        .replace("source:", "")
+        .replace("global:", "")
+    )
+    core = core.replace("[", "").replace("]", "").replace(",", " ")
+    tokens = [tok.strip("'\" ") for tok in core.split() if tok.strip("'\" ")]
+    return bool(tokens) and set(tokens) == {"useCard"}
+
+
 def classify_card(which: str, trigger: str) -> str:
     """Card-use surface: native `CardUsed` == after the card resolved."""
     if not trigger:
@@ -135,6 +149,10 @@ def classify_card(which: str, trigger: str) -> str:
         return "OK" if which == "CardUsed" else "REVIEW(After 面却用前置档)"
     if "useCard" in trigger:
         return "需档(使用前/指定目标)" if which == "CardUsed" else "OK"
+    if _is_bare_use_card(trigger):
+        # 上游是裸 `useCard`（使用牌时）——引擎已有 `CardUsed`，**不是缺档**；
+        # 子帧先后（use 瞬间 vs after 窗口）属口径问题，交 D 类判定。
+        return "REVIEW(useCard 子帧需判定)"
     if any(tok in trigger for tok in SHA_STAGES):
         # 上游用【杀】专用事件幕（shaBegin/shaAfter/shaBefore），引擎只有 ShaDodged
         return "需档(sha 幕)"

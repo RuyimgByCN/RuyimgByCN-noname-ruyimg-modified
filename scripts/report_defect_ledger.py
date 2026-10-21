@@ -157,6 +157,13 @@ def build() -> list[list[str]]:
     return unique
 
 
+#: 上游是**裸 `useCard`**（使用牌时）的行为：引擎已有 `CardUsed`，**不是缺档**。
+#: 子帧先后（use 瞬间 vs after 窗口）属于口径问题 ⇒ 交 D 类判定，不计缺陷。
+BARE_USE_CARD_REVIEW = {
+    "SwdGongshen", "SwdLanzhi", "SwdLiuhong", "XianjianLiefeng", "NewZhixi",
+}
+
+
 def event_out():
     keys = phase.host_keys()
     skills = phase.skill_names()
@@ -173,6 +180,8 @@ def event_out():
         else:
             candidates = [(b, e, "meta", 0) for b, e in sorted(meta.items()) if e in {"Death", "Dying"}]
         for behavior, which, loc, line in candidates:
+            if behavior in BARE_USE_CARD_REVIEW:
+                continue
             key = keys.get(behavior, "")
             trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
             # 时序权威是 TriggerMeta（过滤臂的匹配模式会产生假阳性，见枚举证据 §1）

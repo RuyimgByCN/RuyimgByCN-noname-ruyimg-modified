@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**85 条**）—— 2026-10-19 第 788 轮
+# 缺陷台账（机器可读，**80 条**）—— 2026-10-19 第 792 轮
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -8,8 +8,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **41** |
-| **B（需扩枚举或引擎能力）** | **44** |
-| **合计** | **85** |
+| **B（需扩枚举或引擎能力）** | **39** |
+| **合计** | **80** |
 
 ## 2 按缺陷族
 
@@ -645,3 +645,28 @@ matches!(event, EventData::Damage(d) if d.source == Some(owner) && !d.prevented)
 | 凭空/失效→G23b | 1 | 已改并读码 |
 
 ⇒ **台账可信度更新：36 行「族级上游同质」+ 33 行「能力缺口」+ 16 行「待读」= 85** ✅
+
+---
+
+## 24 第 792 轮：33 条 `需档` 里 **5 条不是缺档**（上游是裸 `useCard`）——台账 85 → 80
+
+把 33 条 `需档` 的上游 trigger 全部拆成 token 后分组：
+
+| 上游 trigger | 条数 | 引擎是否有对应槽位 |
+|---|---:|---|
+| `useCardToBefore` / `useCardToBegin` | **8** | ❌ 没有 ⇒ **真缺档** |
+| `dieBegin` | 4 | ❌ 没有 `DeathBefore` ⇒ 真缺档 |
+| `shaBegin` / `shaAfter` | 5 | ❌ 没有 ⇒ 真缺档 |
+| **裸 `useCard`** | **5** | ✅ **有 `CardUsed`** ⇒ **不是缺档** |
+| 其他组合（含 `respond`）| 11 | 需逐个看 |
+
+### 那 5 条为什么不是缺档
+
+`SwdGongshen`、`SwdLanzhi`、`SwdLiuhong`、`XianjianLiefeng`、`NewZhixi`
+—— 上游都是 **`player/global: 'useCard'`**（使用牌时），而**引擎已有 `EventKind::CardUsed`**。
+
+**争议点只剩子帧先后**：native 的 `CardUsed` 按注释是「after 窗口」（`kernel/events.rs` 提到
+「CardUsed after 窗口行为发射」），而上游 `useCard` 是使用瞬间 ⇒ **可能早/晚一帧**。
+这属于**口径判定**（见[待决事项 D10](../2026-10-19-open-decisions/README.md)），**不是「缺枚举」** ⚠️
+
+⇒ **台账 85 → 80（A 41 / B 39）**，并把 5 条移入 D 类清单 ✅

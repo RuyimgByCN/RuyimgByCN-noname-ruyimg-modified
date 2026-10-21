@@ -31,14 +31,11 @@ G18	B	Xiuluo	?	common.rs:219	player: "phaseZhunbeiBegin"	Judge, begin:true	中	�
 需档	B	Liaoyuan	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdDunxing	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdGongshen	?	meta:0	global:'useCard'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdHuanyin	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdHyunshen	?	meta:0	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLanzhi	?	meta:0	player:'useCard'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdLianda	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdLingxian	?	meta:0	player:['respond','useCard']	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdLiuhong	?	meta:0	player:['useCard']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdLuomei	?	meta:0	player:['useCard','respond']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdMojian	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdNingshuang	?	meta:0	target:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
@@ -47,7 +44,6 @@ G18	B	Xiuluo	?	common.rs:219	player: "phaseZhunbeiBegin"	Judge, begin:true	中	�
 需档	B	SwdYuchen	?	meta:0	player:['useCard','respondAfter']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianChangnian	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianCtianfu3	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	XianjianLiefeng	?	meta:0	player:'useCard'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianRunxin	?	meta:0	player:['useCard','respondEnd']	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXjzhimeng2	?	meta:0	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXshuangren2	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
@@ -63,7 +59,6 @@ L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	�
 6	A	Rangjie	L10	content/host/**	分支前无条件 draw()	仅分支 0 摸牌	高	分支 1 不摸牌	blocked
 L20a	B	XiguaMopaiFanbei	L20	content/host/**	player: phaseDrawBegin2	无 TriggerMeta	中	不触发 + 需「摸牌阶段第 2 次」档	blocked
 L20b	B	XiguaXueliangFanbei	L20	content/host/**	global: gameStart	EventKind::PhaseBegin	中	事件错（应为 GameStart，缺档）	blocked
-需档	B	NewZhixi	L27	meta:0	player: "useCard",	CardUsed	高	修触发时机/补档位	blocked
 G14	A	SwdZhenjiu2	U05	swd.rs:675	player: "phaseBegin"	Judge, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
 G19	A	SwdRexue	U05	content/host/**	global: phaseEnd	filter 含 actor != owner	高	技能主被排除	blocked
 G19	A	SwdTiebi	U05	content/host/**	global: useCardToBegin	filter 含 t != owner	高	技能主被排除	blocked
