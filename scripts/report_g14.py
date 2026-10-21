@@ -37,7 +37,9 @@ MANUAL: dict[str, tuple[str, str, str]] = {
     "gujian_food_yougeng": ("yougeng", 'player: "phaseBegin"', "v574 手工核对（卡牌效果宿主）"),
     "huanle_xuelunyang": ("xuelunyang", 'player: "phaseBegin"', "v574 手工核对"),
     "baiyi": ("baiyi", "(无 trigger，enable 主动技)", "v587 手工核对"),
-    "lexue": ("lexue", "(无 trigger)", "v587 手工核对"),
+    # 第 721 轮更正：`lexue` 上游是复合技（`group:["lexue1","lexue2"]`），父技能无
+    # trigger，但子技能 `lexue1: { player: "phaseBegin" }` 才是真实触发面 ⇒ 归 G14。
+    "lexue": ("lexue1", 'player: "phaseBegin"', "v721 更正（复合技，子技能 lexue1）"),
     "zhenjiu2": ("zhenjiu2", 'player: "phaseBegin"', "v587 手工核对"),
     "huajin2": ("huajin2", 'player: "damageBegin"', "v587 手工核对"),
     "hlss_fengqi": ("fengqi", "player: ['phaseZhunbeiBegin','phaseJieshuBegin']", "v608 手工核对（mode/boss.js）"),

@@ -154,3 +154,56 @@ g14_guard!(g14_daixing2_any_phase, "SwdDaixing2", "filtering/swd.rs");
 g14_guard!(g14_zhenjiu2_any_phase, "SwdZhenjiu2", "filtering/swd.rs");
 g14_guard!(g14_huanxing_any_phase, "SwdHuanxing", "filtering/swd.rs");
 g14_guard!(g14_qianfang_any_phase, "XianjianQianfang", "filtering/xianjian.rs");
+
+// ------------------------------------------------- 凭空新增 / 自加分支（A 类）
+
+/// 上游 `baiyi` 是**主动技**（`enable: 'phaseUse'`, `usable: 1`, `limited: true`），
+/// **没有 trigger**。原生却给它挂了一个「第 5 轮判定阶段开始」的 boss 模式触发。
+/// 修正后该 arm 不应再匹配 `EventData::Phase`。
+#[test]
+#[ignore = "登记缺陷（凭空新增触发）：baiyi 上游为 phaseUse 主动技、无 trigger；\
+            修复需改未跟踪的 content/host/filtering/common.rs"]
+fn baiyi_must_not_invent_a_phase_trigger() {
+    let src = read("filtering/common.rs");
+    let seg = arm_until_next(&src, "HostBehavior::BossBaiyi =>");
+    assert!(
+        !seg.contains("EventData::Phase"),
+        "baiyi 上游无 trigger（phaseUse 主动技），不应凭空挂阶段触发；当前 arm：\n{seg}"
+    );
+}
+
+/// 上游 `huajin2` 只有 `trigger: { player: "damageBegin" }`。
+/// 原生在 `Damage` 之外**又 OR 了一条 `Phase::Judge, begin: true` 分支**（自加分支）。
+/// 修正后该 arm 不应含阶段分支。
+#[test]
+#[ignore = "登记缺陷（自加分支）：huajin2 上游仅 damageBegin，原生 OR 了判定阶段分支；\
+            修复需改未跟踪的 content/host/filtering/swd.rs"]
+fn huajin2_must_not_add_a_phase_branch() {
+    let src = read("filtering/swd.rs");
+    let seg = arm_until_next(&src, "HostBehavior::SwdHuajin2 =>");
+    assert!(
+        !seg.contains("EventData::Phase"),
+        "huajin2 上游只有 damageBegin，不应额外挂阶段分支；当前 arm：\n{seg}"
+    );
+}
+
+/// 上游 `lexue` 是复合技，真实触发面在子技能 `lexue1`：`player: "phaseBegin"`
+/// （**任意阶段开始**）。原生钉死 `Phase::Judge, begin: true` 且**未校验 `player == owner`**
+/// ⇒ 会在**其他角色**的判定阶段也触发。修正后应写成 `Phase { player, begin: true, .. }`
+/// 并带 `*player == owner`。
+#[test]
+#[ignore = "登记缺陷 G14：lexue1 上游 player phaseBegin（任意阶段、自己），\
+            原生钉死 Judge 且缺 owner 校验；修复需改未跟踪的 content/host/filtering/swd.rs"]
+fn lexue_any_phase_of_owner_only() {
+    let src = read("filtering/swd.rs");
+    let seg = arm_until_next(&src, "HostBehavior::SwdLexue =>");
+    assert!(
+        !seg.contains("Phase::Judge"),
+        "lexue 上游为任意阶段开始（phaseBegin），不应钉死判定阶段；当前 arm：\n{seg}"
+    );
+    assert!(
+        seg.contains("player == owner") || seg.contains("*player == owner"),
+        "lexue 上游是 `player: phaseBegin`（只在自己阶段触发），过滤条件应校验 player == owner；\
+         当前 arm：\n{seg}"
+    );
+}

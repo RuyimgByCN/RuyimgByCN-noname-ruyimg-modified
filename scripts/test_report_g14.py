@@ -32,11 +32,18 @@ class ManualTableTest(unittest.TestCase):
             self.assertIn(key, beh_by_key, f"MANUAL 里的 {key} 不是任何 filter 的 host 键")
 
     def test_manual_phasebegin_entries(self) -> None:
-        # 人工表只补「自动链路查不到」的：其中 phaseBegin 类 4 条
+        # 人工表只补「自动链路查不到」的：其中 phaseBegin 类 5 条
         # （hyunshen2/daixing2/huanxing/qianfang/geju 由自动链路命中）
+        #
+        # 第 721 轮：`lexue` 由「无 trigger」更正为 `phaseBegin`。它的上游是复合技
+        # （`group:["lexue1","lexue2"]`），真实触发面在子技能 `lexue1` 上；
+        # 只读父技能会误判成「凭空新增触发」。
         g14_keys = {k for k, v in g14.MANUAL.items() if "phaseBegin" in v[1]}
-        self.assertEqual(len(g14_keys), 4)
-        self.assertEqual(g14_keys, {"diyguhuo", "gujian_food_yougeng", "huanle_xuelunyang", "zhenjiu2"})
+        self.assertEqual(len(g14_keys), 5)
+        self.assertEqual(
+            g14_keys,
+            {"diyguhuo", "gujian_food_yougeng", "huanle_xuelunyang", "zhenjiu2", "lexue"},
+        )
 
 
 class TraceTest(unittest.TestCase):
