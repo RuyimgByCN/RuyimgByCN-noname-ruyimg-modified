@@ -36,10 +36,12 @@ CHECKS: list[tuple[str, list[str], bool]] = [
     ("台账↔枚举一致", [PY, "-B", "scripts/check_ledger_consistency.py", "--strict"], True),
     ("守卫引用名存在", [PY, "-B", "scripts/check_guard_references.py", "--strict"], False),
     ("脚本单测", [PY, "-B", "-m", "unittest", "discover", "-s", "scripts"], True),
+    ("文档 file:line 引用（报告）", [PY, "-B", "scripts/check_doc_line_refs.py"], False),
     ("行数门禁", [PY, "-B", "scripts/check-source-lines.py"], False),
 ]
 
 #: 行数门禁目前预期失败（`crates/rule-api/src/effect.rs` 超限，属既有问题）。
+#: 行数门禁是既有问题；文档引用检查只报告不阻塞（22 处失效引用待清理）。
 EXPECTED_FAILURES = {"行数门禁"}
 
 
