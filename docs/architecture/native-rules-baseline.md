@@ -6095,3 +6095,37 @@ event.trigger('phaseAfter');
 
 ⇒ **所以 `U05` 的 201 张卡目前既无法自动对照、也无法人工逐张核对**
 ⇒ **这是本会话留下的最大一块「未验收」** ❗
+
+### U05 卡面**登记与行为**分层：128 个唯一 kind 全部登记，48 个直接出现在行为面（第 773 轮）
+
+**卡片 JSON 只有身份字段**（`name/kind/suit/rank`），**没有 `effect` 字段**：
+
+```json
+{"name": "swd_hufu", "kind": "hufu", "suit": "spade", "rank": 1}
+```
+
+⇒ 效果靠 `kind` 在 Rust 侧分派，登记表是 `crates/engine-native/src/catalog.rs`（`CardKind::X => "kind"`）。
+
+| 层 | 结果 |
+|---|---:|
+| **唯一 kind**（6 子包 201 张卡）| **128** |
+| **`catalog.rs` 已登记** | **128 / 128（100%）** ✅ |
+| **`CardKind::X` 直接出现在 `host/step·factory·support`** | **48（37.5%）** |
+| **`CardKind::X` 出现在 `content/standard`** | **3** |
+| **变体名未出现在上述行为面** | **79** |
+
+### ⚠ 79 不是「未实现」——三种可能都要排除
+
+抽查两个（`aozuzhilei`、`caochuanjiejian`）：只出现在
+
+* `catalog.rs`（登记）
+* **`host/constants.rs`（卡片键常量，如 `GW_AOZU_CARD_KEY = "gw:aozuzhilei"`）**
+* `content/original/ported/shahai/translations.json`（翻译）
+
+⇒ **可能经「卡片键常量」或通用分派实现**，**不能据「变体名没出现」判为未实现** ⚠️
+⇒ **这正是本会话反复犯的第 5 类错误（以「某种写法没出现」代替「功能没有」）** ❌
+
+### 所以卡面能下的结论只有两条
+
+1. **128 个 kind 全部登记 → 「卡牌子包张数完成」这一项成立** ✅
+2. **48 个 kind 能直接指到行为面；其余 79 个待逐类核对**（**需 `gw:`/`swd:` 键常量 → 效果步的对照表**）⚠️
