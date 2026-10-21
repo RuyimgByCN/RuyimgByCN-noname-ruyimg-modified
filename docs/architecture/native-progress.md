@@ -8,7 +8,6 @@
 >
 > ### **最近 20 轮索引**（最新在底部；正文按轮次追加）
 >
-> - **第 872 轮**：**把「守卫覆盖率」旧值纳入 `check_stale_numbers` 门禁 + 修正交接总结** ✅…
 > - **第 873 轮**：**交接总结加「第 873 轮终局核验表」（7 项命令与结果，可直接引用）** ✅——**门禁全量通过（…
 > - **第 874 轮**：**`SwdDunxing`/`SwdNingshuang` 升级为等价（④ → 21）** ✅——**…
 > - **第 875 轮**：**`Zhenlie`/`Yihua` 升级为等价（④ → 23）** ✅——**`Zhenlie`**…
@@ -28,6 +27,7 @@
 > - **第 889 轮**：**守卫数同步为 51，并加旧值门禁** ✅——**SUMMARY 三处守卫计数 50 → 51**（`…
 > - **第 890 轮**：**`Rangjie` 保持形态相符——原生多一个「取消」选项** ✅——**上游**只有「获得牌」/「…
 > - **第 892 轮**：**两条 `GujianFood*` 升级为效果等价（④ → 42）** ✅——**`GujianFoo…
+> - **第 895 轮**：**`XianjianCtianfu3` 升级为等价（④ → 43）** ✅——**上游子技能 `cti…
 >
 > **更早的内容****：按轮次向下检索（`第 N 轮`），或直接读[交接索引](../operations/evidence/2026-10-19-session-handover/README.md)。
 
@@ -1570,7 +1570,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 890 轮**：**`Rangjie` 保持形态相符——原生多一个「取消」选项** ✅——**上游**只有「获得牌」/「移动牌」**两选项**（`choice.push('获得牌')`，`canMoveCard()` 时再 push），**原生 `PickTag` 有 0=获得牌 / 1=移动牌 / 2=取消 三项**（`movable` 为假时退化为 0/2）⚠️ ⇒ **主流程一致但可行动作集不同**，**不判等价**（**多出的选项属需要口径判断的差异**）✓；**维度 ④ 不变：等价 40 / 形态 12 / 效果不符 2 / 待查 1** ✓。
 >
-> **第 892 轮**：**两条 `GujianFood*` 升级为效果等价（④ → 42）** ✅——**`GujianFoodLiyutang`**：上游 `isMinHp() ⇒ changeHujia()` + `markcount--`，原生 `isMinHp ⇒ change_hujia(owner,1)` + `food_tick` ⇒ **效果等价**（**窗口 `phaseEnd` vs 阶段开始已由 G20 记录**）✓；**`GujianFoodZiyangdan`**：上游 `hujia>0 ⇒ changeHujia(-1)` + `storage--` + 归零移除，原生 `change_hujia(-1)` + `food_tick` ⇒ **效果等价**（**窗口 `phaseBegin` vs 结束阶段已由 G14 记录**）✓；**维度 ④：等价 42 / 形态 10 / 效果不符 2 / 待查 1**；**口径**：**「效果等价」与「窗口正确」分开记账，同一差异不重复计** ✓。
+> **第 892 轮**：**两条 `GujianFood*` 升级为效果等价（④ → 42）** ✅——**`GujianFoodLiyutang`**：上游 `isMinHp() ⇒ changeHujia()` + `markcount--`，原生 `isMinHp ⇒ change_hujia(owner,1)` + `food_tick` ⇒ **效果等价**（**窗口 `phaseEnd` vs 阶段开始已由 G20 记录**）✓；**`GujianFoodZiyangdan`**：上游 `hujia>
+> **第 895 轮**：**`XianjianCtianfu3` 升级为等价（④ → 43）** ✅——**上游子技能 `ctianfu3`**：**`dieBegin`** forced ⇒ **`storage.ctianfu2.discard()`** + 清两个 storage + **`removeSkill('ctianfu2')`**；**原生**：`dieBegin` 窗口 **`ctianfu_clear`（挂附闪入弃堆）+ 移除 `ctianfu2`/`ctianfu3` 两实例** ⇒ **等价** ✓；**并解释了第 834 轮解析器/dumper 的分歧**：**它对应子技能 `ctianfu3`（`dieBegin`），而 `xianjian_ctianfu` 是父技能（`use`）——两者都对，只是层级不同** ✅；**维度 ④：等价 43 / 形态 9 / 效果不符 2 / 待查 1** ⇒ **逐分支 19 → 43（80%）** ✓。
+>
+0 ⇒ changeHujia(-1)` + `storage--` + 归零移除，原生 `change_hujia(-1)` + `food_tick` ⇒ **效果等价**（**窗口 `phaseBegin` vs 结束阶段已由 G14 记录**）✓；**维度 ④：等价 42 / 形态 10 / 效果不符 2 / 待查 1**；**口径**：**「效果等价」与「窗口正确」分开记账，同一差异不重复计** ✓。
 >
 
 
