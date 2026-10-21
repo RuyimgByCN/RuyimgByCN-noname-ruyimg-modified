@@ -131,3 +131,41 @@
 | **嵌套结算** | **1** | `luweiyan` |
 
 ⇒ **五类引擎能力覆盖 13 条缺陷** ⚠️ —— **其中「之前/之后」占了 6 条，是最大的一类** ✅
+
+---
+
+## 6 新增 4 条可执行验收守卫（2026-10-19，第 719 轮）
+
+**文件**：`crates/engine-native/tests/nc08_registered_defect_guards.rs`
+
+此前 21 条登记缺陷**都已带 `#[ignore]`**，但 **G19 的三条与 5b 没有** ——
+本轮把它们补成**源码事实守卫**（照 `nc08_upstream_rangjie.rs` 的既有范式）：
+
+| 守卫 | 覆盖缺陷 | 断言（**修正后应成立**）|
+|---|---|---|
+| `g19_zhuhai_filter_must_not_exclude_owner` | **G19** | `swd_zhuhai` 的过滤段**不再含 `t != owner`** |
+| `g19_tiebi_filter_must_not_exclude_owner` | **G19** | `swd_tiebi` 的过滤段**不再含 `t != owner`** |
+| `g19_rexue_filter_must_not_exclude_owner` | **G19** | `swd_rexue` 的过滤段**不再含 `actor != owner`** |
+| `reguhuo_must_record_a_per_turn_use_marker` | **5b** | `reguhuo` 的效果步里**出现回合标记**（`reguhuo_phase` 或 `EPIC_REGUHUO_KEY`）|
+
+### 关键验证：**去掉 `#[ignore]` 后 4 条全部 FAILED**
+
+```text
+test g19_tiebi_filter_must_not_exclude_owner ... FAILED
+test g19_zhuhai_filter_must_not_exclude_owner ... FAILED
+test g19_rexue_filter_must_not_exclude_owner ... FAILED
+test reguhuo_must_record_a_per_turn_use_marker ... FAILED
+test result: FAILED. 0 passed; 4 failed; 0 ignored
+```
+
+⇒ **证明缺陷当前仍然存在、守卫不是同义反复** ✅
+⇒ **修复后去掉 `#[ignore]` 即成为验收条件** ✅
+
+### 全量影响
+
+| 指标 | 加入前 | 加入后 |
+|---|---:|---:|
+| `engine-native` passed / failed / **ignored** | 1538 / 0 / **21** | **1538 / 0 / 25** |
+| 已登记缺陷守卫 | 21 | **25** |
+
+**新增 4 条守卫全部计入 `ignored`（不参与默认运行），默认套件仍 1538 通过、0 失败** ✅
