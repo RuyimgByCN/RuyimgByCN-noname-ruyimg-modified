@@ -923,3 +923,25 @@ Xiuluo     => matches!(event, EventData::Phase { ... Phase::Judge, begin: true .
 **我只改了被指出的那一类**，没有顺手检查相邻的类别 ⚠️
 
 ⇒ **教训（第 14 次）：修好一个类之后，要立刻检查「和它共用同一条证据」的其它类。**
+
+---
+
+## 33 第 808 轮：G23 的 12 行里有 **1 行带每回合标记**；并补齐最后 1 条守卫（98.2%）
+
+逐个读 12 行 `G23` 的过滤臂，看是否有「每回合一次」标记：
+
+| 类 | 行数 | 行为 |
+|---|---:|---|
+| **过滤臂无每回合标记** | **11** | `Hutian`、`SwdHuanling`、`SwdLingxin`、`SwdLqingcheng`、`WudianJidong`、`XianjianBinxin`、`Xuanyuan`、`SwdDonghuangzhongCard`、`WudianGuangshuSpade`、`XianjianLingyu`、`YxsMenshen` |
+| **有每回合标记** | **1** | **`SwdMufengHeld`**（`turn.mufeng_used_basic`）|
+
+⇒ **11 行的「每阶段 5×」描述成立**（若无效果步内标记）✅
+⇒ **`SwdMufengHeld` 是「早一步但只一次」**（标记限制次数，但第一次发生在上一个阶段结束而非回合末）⚠️
+
+### 撤回一条旧判断：`Hutian`/`SwdMufengHeld` 不是「偶合正确」
+
+第 771/794 轮把这两行记为「**偶合正确、无需守卫**」⇒ **错**：
+两者都**未钉 `End`**，`Hutian` 更**没有每回合标记** ⇒ **都是真缺陷**，都应补守卫 ✅
+
+**已补 2 个 `pin_phase_guard!`**（断言过滤臂钉住 `Phase::End`）：**两者实测为红** ✅
+⇒ **守卫 52 → 54**，**覆盖率 54/55 = 98.2%**，**只剩 `SwdBaishouzhihuHeld`**（语义待 D 类判定）✅

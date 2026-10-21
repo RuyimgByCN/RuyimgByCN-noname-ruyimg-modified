@@ -513,3 +513,49 @@ fn guard_rangjie_branch1_draws() {
         "分支 1（移动牌）应同时摸牌",
     );
 }
+
+// ------------------------------------- G23：`PhaseEnd` 未钉阶段（应钉 End）
+
+/// 断言某行为的过滤臂**钉住了指定阶段**（当前未钉 ⇒ 每个阶段结束都触发）。
+macro_rules! pin_phase_guard {
+    ($fn_name:ident, $variant:literal, $phase:literal, $why:literal) => {
+        #[test]
+        #[ignore = "把过滤臂钉到该阶段后本守卫转绿"]
+        fn $fn_name() {
+            use std::path::Path;
+            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/content/host");
+            let mut all = String::new();
+            let mut stack = vec![dir];
+            while let Some(next) = stack.pop() {
+                let Ok(entries) = std::fs::read_dir(&next) else { continue };
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    if path.is_dir() {
+                        stack.push(path);
+                    } else if path.extension().is_some_and(|ext| ext == "rs")
+                        && path
+                            .file_name()
+                            .and_then(|name| name.to_str())
+                            .is_some_and(|name| name.starts_with("filtering"))
+                    {
+                        all.push_str(&std::fs::read_to_string(&path).unwrap_or_default());
+                    }
+                }
+            }
+            let needle = format!("HostBehavior::{} =>", $variant);
+            let start = all.find(&needle).expect("过滤臂里没有该行为");
+            let end = all[start + 10..]
+                .find("HostBehavior::")
+                .map(|offset| start + 10 + offset)
+                .unwrap_or(all.len());
+            let arm = &all[start..end];
+            assert!(
+                arm.contains(concat!("Phase::", $phase)),
+                concat!("应钉 ", $phase, "：", $why),
+            );
+        }
+    };
+}
+
+pin_phase_guard!(guard_hutian_pin_end, "Hutian", "End", "上游 phaseEnd（回合末一次）");
+pin_phase_guard!(guard_mufeng_pin_end, "SwdMufengHeld", "End", "上游 phaseEnd（有每回合标记，但仍应钉 End）");
