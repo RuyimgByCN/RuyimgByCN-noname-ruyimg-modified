@@ -88,3 +88,27 @@ g_qinglongzhigui:  { trigger: { player: 'phaseBegin' } }             // ← 真�
 python3 -B scripts/report_phase_arms.py           # TSV + 汇总
 python3 -B scripts/report_phase_arms.py --check   # 有 REVIEW 行时 exit=1
 ```
+
+---
+
+## 9 ✅ 三条 `gwent` 天气状态技定案（第 738 轮）
+
+上游定义在 `杀海拾遗/card/gwent/skill.js`（**不在 `昆特牌/` 扩展下**，所以首轮「未定位」）：
+
+| 原生行为 | 场景 | 上游 trigger | 语义 | 判定 |
+|---|---|---|---|---|
+| `GwentBirinState` | 蔽日浓雾 | **`player: "phaseUseAfter"`** | 不能用【杀】**直到下一个出牌阶段结束** | ✅ **近似可接受**（`After` 与 `Play, begin: false` 相邻）|
+| `GwentQinpenState` | 倾盆大雨 | **`player: "phaseDiscardAfter"`** | 手牌上限 −1 直到**下一个弃牌阶段结束** | ✅ **近似可接受** |
+| **`GwentCiguState`** | **刺骨寒霜** | **`player: "phaseDrawBegin"`** | **下个摸牌阶段摸牌数 −1** | ❗ **确认缺陷** |
+
+### `GwentCiguState` 为什么是缺陷
+
+- 上游在 **`phaseDrawBegin`（摸牌阶段开始）** 就把 `event.num` 减 1 ⇒ **影响本阶段的摸牌数**；
+- 原生挂在 **`Draw, begin: false`（摸牌阶段结束）** ⇒ **摸牌已经结束**，此时再减 1 **不会影响任何东西** ⇒ **效果实际失效** ❗
+
+⇒ **新增 A 类缺陷 1 条**（**修法：`Draw, begin: true` + 在摸牌数确定前生效**）⇒ **A 47 → 48、总 92 → 93**
+
+### 另两条为什么算「可接受」
+
+`phaseUseAfter` / `phaseDiscardAfter` 是「阶段**之后**」，原生 `begin: false` 是「阶段**结束**」——
+在原生的事件模型里两者是**同一帧**（阶段结束即该阶段之后），**不影响任何结算顺序** ⇒ **登记差异，不计缺陷** ✅

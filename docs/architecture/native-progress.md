@@ -8,7 +8,6 @@
 >
 > ### **最近 20 轮索引**（最新在底部；正文按轮次追加）
 >
-> - **第 718 轮**：**行数门禁唯一的红已量化并给出拆分计划**（[证据](../operations/evidence/2…
 > - **第 719 轮**：**补 4 条可执行验收守卫（G19 ×3 + 5b），并证明它们会红** ✅——**新文件 `test…
 > - **第 720 轮**：**再补 9 条 G14 守卫（`macro_rules!` 生成），13 条守卫全部验证会红** ✅—…
 > - **第 721 轮**：**❗查证时发现 `lexue` 分类错了——它不是「凭空新增」，是 G14** ✅——**上游 `le…
@@ -28,6 +27,7 @@
 > - **第 735 轮**：**反向核查 `PhaseBegin` 未钉阶段 18 条 —— 16 条正确、2 条相邻相位、1 条触…
 > - **第 736 轮**：**❗修好检测器：相位枚举 48 → 53 条，G14 11 → 12（新发现 `SwdHujing`）…
 > - **第 737 轮**：**❗`SwdQinglongzhiguiHeld`/`SwdHuanglinzhicongHeld` …
+> - **第 738 轮**：**✅ 三条 `gwent` 天气状态技定案：2 条近似可接受、1 条确认缺陷**——**上游在 `杀海…
 >
 > **更早的内容****：按轮次向下检索（`第 N 轮`），或直接读[交接索引](../operations/evidence/2026-10-19-session-handover/README.md)。
 
@@ -53,8 +53,8 @@
 > | 目标平台 | **构建级** | iOS 双架构 + WASM 三层；**运行期未验** |
 > | **完成八项** | **0** | **唯一未过项：规则差异** |
 >
-> **缺陷总账（本会话最终分类）**：**92 条 = A 47 / B 41 / 待查 0 / 非缺陷 3 / 范围外 1**（+ G23 待核 4）
-> - **A 类 47**（**改 pattern / 删分支 / 补动作，不需扩枚举**；含 G23 11 + 触发失效 1 + `SwdHujing` 1 + `Qinglongzhigui`/`Huanglinzhicong` 2）
+> **缺陷总账（本会话最终分类）**：**93 条 = A 48 / B 41 / 待查 0 / 非缺陷 3 / 范围外 1**（+ G23 待核 4）
+> - **A 类 48**（**改 pattern / 删分支 / 补动作，不需扩枚举**；含 G23 11 + 触发失效 1 + `SwdHujing` 1 + `Qinglongzhigui`/`Huanglinzhicong` 2 + `GwentCiguState` 1）
 > - **B 类 41**（**需扩枚举或引擎能力**；第 731 轮枚举新增 27）
 > - **引擎缺档已归为七类**（**覆盖约 15 条**）：阶段前后 6 / 准备阶段 3 / 指定目标时 2 / `damageEnd` 后窗口 1 / 嵌套结算 1 / **游戏开始 1** / **死亡前 1**
 > - ⚠ **七类是「已发现集合」不是「完备集合」** —— **只审计 `L20`（6 项）就新增两类**
@@ -1278,7 +1278,10 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 736 轮**：**❗修好检测器：相位枚举 48 → 53 条，G14 11 → 12（新发现 `SwdHujing`）** ✅——**根因**：**第一版只识别「解构绑定」`phase: Phase::Judge, begin: true`，漏了「相等比较」`*phase == Phase::Judge && *begin`** ✗ ⇒ **补上 `EQ_RE` + 负向 `*begin` 判定** ✓；**多出的 5 条**：**`SwdHujing`（钉 `Judge`，上游 `phaseBegin`）⇒ G14 第 12 条** ❗、`SwdQinglongzhiguiHeld`/`SwdHuanglinzhicongHeld`（装备子技，未定位）🔍、`SwdXielv`/`SwdWangchenHeld`（钉 `End`，上游 `phaseDiscardEnd` ⇒ **相邻相位，登记差异**）⚠️；⇒ **A 44 → 45、总 89 → 90** ✓、**单测期望同步 53/G14 12** ✓ ⇒ **这是「检测器比结论更该先修」的第二次印证** ✅。
 >
-> **第 737 轮**：**❗`SwdQinglongzhiguiHeld`/`SwdHuanglinzhicongHeld` 也是 G14 —— 第 13、14 条** ✅——**补查发现效果挂在机巧卡片的 `global:` 技能**：`qinglongzhigui: { type:'jiqi', global:'g_qinglongzhigui' }` ⇒ **真实触发面在 `g_qinglongzhigui: { player: 'phaseBegin' }`** ✓ ⇒ **上游任意阶段、原生钉 `Judge`** ❗；**这是「查不到」的第 7 种形态**：**效果不在同名技能上，而在卡片的 `global: "g_<name>"` 里** ✅；**工具修正**：**抽出 `resolve_trigger()`（行为级 override → host 键 → 技能名），`main` 与单测共用** ✓（**此前单测自己拼路径，导致 override 不生效** ✗）；⇒ **G14 最终 14 条** ✓、**A 45 → 47、总 90 → 92** ✓、**单测期望 53/G14 14** ✓。
+> **第 737 轮**：**❗`SwdQinglongzhiguiHeld`/`SwdHuanglinzhicongHeld` 也是 G14 —— 第 13、14 条** ✅——**补查发现效果挂在机巧卡片的 `global:` 技能**：`qinglongzhigui: { type:'jiqi', global:'g_qinglongzhigui' }` ⇒ **真实触发面在 `g_qinglongzhigui: { player: 'phaseBegin' }`** ✓ ⇒ **上游任意阶段、原生钉 `Judge`** ❗；**这是「查不到」的第 7 种形态**：**效果不在同名技能上，而在卡片的 `global: "g_<name>
+> **第 738 轮**：**✅ 三条 `gwent` 天气状态技定案：2 条近似可接受、1 条确认缺陷**——**上游在 `杀海拾遗/card/gwent/skill.js`**（**不在 `昆特牌/` 扩展下**，故首轮「未定位」）✓；**`GwentBirinState`**（蔽日浓雾，`phaseUseAfter`）✅、**`GwentQinpenState`**（倾盆大雨，`phaseDiscardAfter`）✅ ⇒ **`After` 与 `begin: false` 在原生是同一帧，不影响结算顺序 ⇒ 登记差异** ✓；**`GwentCiguState`（刺骨寒霜）❗确认缺陷**：**上游 `phaseDrawBegin`（摸牌阶段开始就减 `event.num`）**，**原生挂 `Draw, begin: false`（摸牌阶段结束）** ⇒ **减 1 时摸牌已结束，效果实际失效** ❗；⇒ **A 47 → 48、总 92 → 93** ✓。
+>
+"` 里** ✅；**工具修正**：**抽出 `resolve_trigger()`（行为级 override → host 键 → 技能名），`main` 与单测共用** ✓（**此前单测自己拼路径，导致 override 不生效** ✗）；⇒ **G14 最终 14 条** ✓、**A 45 → 47、总 90 → 92** ✓、**单测期望 53/G14 14** ✓。
 >
 
 
