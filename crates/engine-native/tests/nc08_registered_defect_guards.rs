@@ -207,3 +207,50 @@ fn lexue_any_phase_of_owner_only() {
          当前 arm：\n{seg}"
     );
 }
+
+// ------------------------------------------------ G20 `phaseEnd` 偏早一步
+
+/// G20 守卫：上游 `trigger.player == "phaseEnd"`（**全部阶段跑完之后**，见
+/// `game.js:15999-16003`），原生写成 **`Phase::End, begin: true`（结束阶段开始）**
+/// ⇒ 早一步。修正后该 arm 应匹配 **`End, begin: false`**。
+macro_rules! g20_guard {
+    ($fn_name:ident, $variant:literal,) => {
+        #[test]
+        #[ignore = "登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；\
+                    修复需改未跟踪的 content/host/filtering/common.rs"]
+        fn $fn_name() {
+            let src = read("filtering/common.rs");
+            let seg = arm_until_next(&src, concat!("HostBehavior::", $variant, " =>"));
+            assert!(
+                seg.contains("Phase::End, begin: false"),
+                concat!(
+                    $variant,
+                    " 上游为 phaseEnd（全部阶段跑完之后），应匹配 End, begin: false；",
+                    "当前 arm：\n{seg}",
+                ),
+                seg = seg,
+            );
+        }
+    };
+}
+
+g20_guard!(g20_jiuwei_turn_end, "PhaseEndRecoverOrDraw",);
+g20_guard!(g20_liyutang_turn_end, "GujianFoodLiyutang",);
+g20_guard!(g20_zhucheng_turn_end, "WudianZhucheng",);
+g20_guard!(g20_paotai2_turn_end, "WudianPaotaiFire",);
+g20_guard!(g20_ziyu_turn_end, "WudianZiyu",);
+
+/// 上游 `ziyangdan` 是 **`trigger: { player: "phaseBegin" }`（任意阶段开始）**，
+/// 原生却钉死 `Phase::End` ⇒ 归入「钉死单一阶段」家族（G14 的钉 `End` 变体）。
+/// 修正后应写成 `Phase { player, begin: true, .. }`，即该 arm 不再出现 `Phase::End`。
+#[test]
+#[ignore = "登记缺陷（钉死错向）：ziyangdan 上游 phaseBegin（任意阶段），原生钉死 End；\
+            修复需改未跟踪的 content/host/filtering/common.rs"]
+fn ziyangdan_must_not_pin_the_end_phase() {
+    let src = read("filtering/common.rs");
+    let seg = arm_until_next(&src, "HostBehavior::GujianFoodZiyangdan =>");
+    assert!(
+        !seg.contains("Phase::End"),
+        "ziyangdan 上游为任意阶段开始（phaseBegin），不应钉死结束阶段；当前 arm：\n{seg}"
+    );
+}
