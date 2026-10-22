@@ -27,7 +27,8 @@ class ConsistencyTests(unittest.TestCase):
         cls.ledger = cls.mod.ledger()
 
     def test_ledger_has_rows(self):
-        self.assertGreater(len(self.ledger), 40)
+        # 台账从 54 收敛到 26：大量行经上游原文/测试断言复核后移入 FIXED/NON_DEFECT 注册表。
+        self.assertGreater(len(self.ledger), 20)
 
     def test_every_id_is_registered(self):
         registered = cls = self.mod.PHASE_IDS | self.mod.EVENT_IDS | self.mod.HANDWRITTEN | {self.mod.G23_ID}

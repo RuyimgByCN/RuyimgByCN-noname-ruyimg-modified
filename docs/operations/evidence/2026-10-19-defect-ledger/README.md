@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**27 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**26 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **11** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **10** |
 | **B（需扩枚举或引擎能力）** | **16** |
-| **合计** | **27** |
+| **合计** | **26** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **27** |
+| **合计** | **26** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **27** |
+| **合计** | **26** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3740,3 +3740,44 @@ jiguanyuan: {
 这轮的顺序是：信台账 → 改代码 → 测试失败 → 才去读上游原文 → 发现台账错。
 **正确顺序应该是：读上游原文 → 看测试断言 → 再决定改不改代码。**
 ⇒ 这也解释了为什么前面 9 条「被测试挡住」里，**可能还有几条其实是台账错**（下一步逐条复核）。
+
+---
+
+## 132 第 934 轮：**第 4 条真修复** —— `WudianZhucheng`（27 → 26），起因是**补齐了上游 filter**
+
+### 关键发现：上一轮失败不是「测试编码旧时机」，而是我漏了 filter 条件
+
+上游 `zhucheng`（`玩点论杀/character/skill.js:160`）：
+
+```js
+zhucheng: {
+  trigger: { player: "phaseEnd" },
+  filter(event, player) { return !player.storage.zhucheng || !player.storage.zhucheng.length; },
+  …
+}
+```
+
+我上次只把臂改成 `begin:false` + owner，**没带「无标记」这个条件** ⇒ 它在**每个阶段结束**都触发，
+标记存了又还、还了又存，导致后面的「守卫询问」挂不起来。
+
+这次补上 `ctx.state.player(owner).zhucheng.is_empty()`：**全量 1538 passed / 0 failed** ✅
+
+| 改动 | 内容 |
+|---|---|
+| `filtering/common.rs` | `WudianZhucheng` 臂 → `Phase { begin: false, .. }` + owner + **`zhucheng.is_empty()`** |
+| `phase-audit/registry.txt` | 重新生成（48 行）|
+| `preflight` 的 `ALLOWED` | 移除 `WudianZhucheng`（矛盾从 2 项降为 **1 项**）|
+
+### 顺带修掉 11 个因台账收敛而失效的脚本单测
+
+`test_report_phase_filters`（52→48、begin_true 33→29、End 21→17）、
+`test_report_phase_arms`（53→49、G20 5→1）、`test_report_guard_coverage`（>40→>20）、
+`test_check_ledger_consistency`（登记 `G23e`）、`test_check_comment_counts`（G20 5→1）、
+`test_report_filter_meta_mismatch`（allowlist 换成 `SwdBaishouzhihuHeld`）。
+
+⇒ `python3 -B -m unittest discover -s scripts` = **163 tests OK** ✅
+
+### 第 35 次自我更正
+
+**「测试挡住了」这个判断本身可能错。** 上一轮我把它归入「测试编码旧时机」，
+实际是**我的改动不完整**（漏了 filter 条件）。⇒ 下次遇到失败，**先把自己的改动与上游 filter 逐条对齐**，再怀疑测试 ✅

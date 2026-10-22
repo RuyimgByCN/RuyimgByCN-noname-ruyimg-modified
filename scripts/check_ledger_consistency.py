@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PHASE_IDS = {"G14", "G18", "G20", "G22", "G15", "凭空新增触发", "自加分支"}
 EVENT_IDS = {"需档", "第3次", "G24"}
 G23_ID = "G23"
-HANDWRITTEN = {"5a", "5b", "5c", "6", "G19", "G23b", "失效", "L03a", "L03b", "L03c",
+HANDWRITTEN = {"5a", "5b", "5c", "6", "G19", "G23b", "G23e", "失效", "L03a", "L03b", "L03c",
                "L20a", "L20b", "L20c", "L20d", "L27a", "L27b", "L29a", "L29b", "B",
                "L07a", "U08a", "U08b", "U08c"}
 

@@ -765,8 +765,10 @@ impl HostSkillBehavior {
                 EventData::Damage(d)
                 if d.source == Some(owner) && !d.prevented && d.amount > 0),
             HostBehavior::WudianZhucheng => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
-                if *player == owner),
+                // 筑城（第 934 轮）：park 直推 `begin:false`；上游 filter 还要
+                // 「无标记」（`!storage.zhucheng || !storage.zhucheng.length`）
+                EventData::Phase { player, begin: false, .. }
+                if *player == owner && ctx.state.player(owner).zhucheng.is_empty()),
             HostBehavior::WudianZhuchengGuard => matches!(event,
                 EventData::CardUsed(u)
                 if !u.cancelled

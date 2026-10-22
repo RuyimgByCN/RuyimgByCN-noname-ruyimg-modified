@@ -31,7 +31,7 @@ class GuardCoverageTests(unittest.TestCase):
         self.assertIn("SwdTiebi", self.guarded)
 
     def test_ledger_non_empty(self):
-        self.assertGreater(len(self.rows), 40)
+        self.assertGreater(len(self.rows), 20)  # 台账 54→26 收敛后
 
     def test_guard_coverage_recorded(self):
         # 精确匹配（不做事后缀放宽）：2026-10-19 测得 38/101 = 37.6%

@@ -54,7 +54,7 @@ class MismatchTests(unittest.TestCase):
 
 class StrictTests(unittest.TestCase):
     def test_allowed_conflicts_pass(self) -> None:
-        bad = [("WudianZhucheng", "PhaseEnd", "PhaseBegin")]
+        bad = [("SwdBaishouzhihuHeld", "PhaseEnd", "PhaseBegin")]
         unexpected = [row for row in bad if row[0] not in rfm.ALLOWED]
         self.assertEqual(unexpected, [])
 

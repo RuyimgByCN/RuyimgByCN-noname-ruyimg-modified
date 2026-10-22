@@ -23,7 +23,6 @@ WudianGeju	wudian_geju	Judge	true	已核	v607 反查比对
 WudianOwliyong	wudian_owliyong	Draw	true	已核	v607 反查比对
 WudianXiyang	wudian_xiyang	End	false	已核	v607 反查比对
 WudianYuedong	wudian_yuedong	Play	false	已核	基准对应章节
-WudianZhucheng	wudian_zhucheng	End	true	已核	基准对应章节
 BossBaiyi	baiyi	Judge	true	已核	基准对应章节
 SwdHyunshen2	hyunshen2	Judge	true	已核	基准对应章节
 SwdDaixing	daixing	End	false	已核	基准对应章节

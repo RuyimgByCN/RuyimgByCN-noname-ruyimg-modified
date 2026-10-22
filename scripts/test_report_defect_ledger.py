@@ -25,7 +25,8 @@ class LedgerTests(unittest.TestCase):
         cls.rows = cls.mod.build()
 
     def test_ledger_is_populated(self):
-        self.assertGreaterEqual(len(self.rows), 40)
+        # 台账从 54 收敛到 26（复核后移入 FIXED/NON_DEFECT 注册表）。
+        self.assertGreaterEqual(len(self.rows), 20)
 
     def test_rows_have_all_columns(self):
         for row in self.rows:
@@ -52,7 +53,8 @@ class LedgerTests(unittest.TestCase):
 
     def test_known_defects_present(self):
         behaviors = {r[2] for r in self.rows}
-        for expected in ("SwdTiebi", "Reguhuo", "BossBaiyi", "GujianFoodZiyangdan"):
+        # SwdTiebi/BossBaiyi 已复核移出；这里改挑仍在台账里的三行。
+        for expected in ("Reguhuo", "GujianFoodZiyangdan", "WudianFuchou2"):
             self.assertIn(expected, behaviors)
 
     def test_location_column_present(self):
