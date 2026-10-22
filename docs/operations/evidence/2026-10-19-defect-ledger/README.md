@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**10 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**9 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **4** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **3** |
 | **B（需扩枚举或引擎能力）** | **6** |
-| **合计** | **10** |
+| **合计** | **9** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **10** |
+| **合计** | **9** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **10** |
+| **合计** | **9** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -4307,3 +4307,30 @@ HostBehavior::WudianFuchou2 => matches!(event,
 > 还要**给每次询问配对应答策略**（哪些询问属于被测技能、该选什么），否则净效果无法断言。
 
 ⇒ 这解释了为什么 4 行都卡在同一个地方，也说明这项工作**不适合在剩余轮次里赶**。
+
+---
+
+## 150 第 972 轮：`ShaDamageForceDiscard` 归入「已登记差异」（10 → 9）
+
+### 判据
+
+`nc08_upstream_kuwu.rs::upstream_kuwu_filter_gaps` 这条**源码事实测试**明文写着：
+
+```rust
+assert!(!arm.contains("from_chain") && !arm.contains("_notrigger"),
+    "差异 K1/K3：过滤臂缺 notLink/_notrigger 对应条件（**若新增需更新证据**）");
+```
+
+⇒ 缺 `notLink` 这件事**是被测试锁定的有意登记**，不是遗漏。
+（第 944 轮我试着补上 `!d.from_chain`，测试立刻红——那正是这条测试在起作用。）
+
+### 与另外两条的差别
+
+| 行 | 行为臂里的「登记差异」注释 | 与台账行是同一处？|
+|---|---|---|
+| `ShaDamageForceDiscard` | 「差异 K1/K3：过滤臂缺 `notLink`」 | ✅ **是**（本条）|
+| `SwdCyxianjiang` | 「实体发现替代 createCard」 | ❌ 另一处 |
+| `XianjianXunying` | 「再出一张手牌杀对同一目标」 | ❌ 另一处 |
+
+⇒ 只移 1 行；台账 **10 → 9**（A 3 / B 6），`REGISTERED_DIFFERENCE` 2 条
+⇒ `report_ledger_accounting` 仍全绿（移出必留痕）✅

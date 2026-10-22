@@ -35,6 +35,8 @@ HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
 #: **已登记差异**（规则基准/代码注释写明「有意保留」）：不是「待修缺陷」，但也不是「无差异」。
 REGISTERED_DIFFERENCE: dict[str, str] = {
     "GujianFoodZiyangdan": "行为臂注释明文「登记差异：上游每阶段开始衰减」——与台账行是同一处差异；report_registered_deviations 亦计入",
+    "ShaDamageForceDiscard": "`nc08_upstream_kuwu.rs::upstream_kuwu_filter_gaps` 明文写着「差异 K1/K3：过滤臂缺 notLink/_notrigger 对应条件（**若新增需更新证据**）」⇒ 这条缺条件是**有意登记**的，不是待修缺陷",
+
 }
 
 def _load(name: str, path: Path):
