@@ -7,4 +7,3 @@ G15	B	WudianFuchou2	?	common.rs:24	global:'phaseAfter'	End, begin:false	中	按�
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXunying	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
 L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta **且**过滤臂恒 `false`、`step` 只 `Flow::Done`	中	技能**完全未实现**（不是「少一幕」）；需要 judge-before 钩子 + 改判逻辑；道心累加另有 `MbQianlong` 承担，不在此行	blocked
-G23e	B	SwdMufengHeld	U05	content/host/**	`player.discoverCard()`（发现三张选一）	`ctx.draw_cards(owner, 1)`（摸一张）	中	缺 discover 原语 ⇒ 需扩引擎能力；同一行为的触发面经作用域复核已等价	blocked

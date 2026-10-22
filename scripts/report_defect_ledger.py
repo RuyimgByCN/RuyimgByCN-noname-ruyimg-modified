@@ -258,6 +258,7 @@ FIXED: dict[str, str] = {
     "YxsMenshen3": "`TriggerMeta` 声明 `event: PhaseBegin` + **`extra_events: vec![EventKind::Death]`**，过滤臂也直接匹配 `EventData::Death { .. }` ⇒ 上游 `player:['phaseBegin','dieBegin']` 的两幕**都已实现**（台账「少死亡前幕」是误判）",
     "XianjianShenwu": "第 939 轮：过滤臂由 `Phase { End, begin: false }` 改为 `Phase { begin: false, .. }`（**任何玩家的任何阶段结束**），对齐上游 `{global:'phaseEnd'}`；`g1_wudian` 122 项与全量 1538 项全绿",
     "GwentCiguState": "第 938 轮：①`TriggerMeta.event` `PhaseEnd→PhaseBegin`；②臂改 `Draw, begin: true`（上游 `phaseDrawBegin`）；③step 只移除状态（删掉「弃首张」）；④`kernel/phase/draw.rs` 里摸牌数 **-1**（上游 `trigger.num--`）；⑤测试断言改为「摸牌阶段开始：摸牌数 2→1」；全量 1538 passed",
+    "SwdMufengHeld": "第 973 轮：`step/swd_equipment.rs` 把「摸 1」改为真正的 **discover**（亮出牌堆顶最多 3 张 → `ChoiceKind::SelectCards` 选 1 → 余入弃堆），对齐上游 `player.discoverCard()`；全量 1539 passed",
     "SwdBaishouzhihuHeld": "第 935 轮：臂改为 `Phase { phase: Discard, begin: false, .. }` + `*player == owner` + **手牌含 `baishouzhihu` 具名牌**，对齐上游 `{player:'discardEnd'}` + `countCards('h','baishouzhihu')>0`；全量 1538 passed",
     "WudianZhucheng": "第 934 轮：过滤臂由 `begin:true` 改为 `Phase { begin: false, .. }` + `*player == owner` + **`zhucheng.is_empty()`**（上游 filter `!storage.zhucheng || !storage.zhucheng.length`）—— park 直推的就是 `begin:false`，此前臂写成 `begin:true` 是死代码；全量 1538 passed",
     "WudianPaotaiFire": "第 930 轮：`TriggerMeta.event` 改 `PhaseEnd`，臂改 `Phase { begin: false, .. }` + `*player == owner` —— 对齐上游 `player:'phaseEnd'`；全量 1538 passed",

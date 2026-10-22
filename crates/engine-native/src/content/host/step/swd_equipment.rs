@@ -5,11 +5,62 @@ impl HostMachine {
         match self.behavior {
             // 疾影：无效果步（sha_range_free 链查询）
             HostBehavior::SwdJiyingHeld => Flow::Done,
-            // 沐风：确认门后摸 1（discoverCard 确定性=牌堆末摸 1）
-            HostBehavior::SwdMufengHeld => {
-                ctx.draw_cards(self.owner, 1);
-                Flow::Done
-            }
+            // 沐风：确认门后**发现**一张牌（上游 `player.discoverCard()`：亮出 3 张选 1，
+            // 余入弃堆）。第 973 轮由「摸 1」改为真正的 discover。
+            HostBehavior::SwdMufengHeld => match self.stage {
+                HostStage::Act => {
+                    // 亮出牌堆顶最多 3 张，暂存到离场区，等待选择
+                    let mut revealed = Vec::new();
+                    for _ in 0..3 {
+                        let Some(c) = ctx.core.deck.pop() else { break };
+                        revealed.push(c);
+                    }
+                    if revealed.is_empty() {
+                        return Flow::Done;
+                    }
+                    ctx.core.player_mut(self.owner).off_court.extend(revealed.iter().copied());
+                    self.cards = revealed;
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "mufeng_discover",
+                            options: self.cards.iter().copied().map(ChoiceOption::Card).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::SelectCard => {
+                    let picked = match ctx.answer().first().copied() {
+                        Some(ChoiceOption::Card(c)) => c,
+                        _ => {
+                            // 异常：把亮出的牌退回牌堆，结束
+                            for c in std::mem::take(&mut self.cards) {
+                                ctx.core.deck.push(c);
+                            }
+                            return Flow::Done;
+                        }
+                    };
+                    let rest: Vec<_> = self.cards.iter().copied().filter(|&c| c != picked).collect();
+                    self.cards.clear();
+                    // 未选的入弃堆
+                    for c in rest {
+                        if let Some(pos) = ctx.core.player(self.owner).off_court.iter().position(|x| *x == c) {
+                            ctx.core.player_mut(self.owner).off_court.remove(pos);
+                        }
+                        ctx.to_discard(c);
+                    }
+                    if let Some(pos) = ctx.core.player(self.owner).off_court.iter().position(|x| *x == picked) {
+                        ctx.core.player_mut(self.owner).off_court.remove(pos);
+                    }
+                    ctx.core.player_mut(self.owner).hand.push(picked);
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 望尘：确认门后 TargetChoice 选任意角色翻面
             HostBehavior::SwdWangchenHeld => match self.stage {
                 HostStage::Act => {
