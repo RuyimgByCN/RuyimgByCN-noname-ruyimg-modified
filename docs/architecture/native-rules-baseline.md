@@ -6264,3 +6264,28 @@ catalog 之外有源码引用        128  (100.0%)
 
 `docs/architecture/native-convergence-plan.md` 里若仍有「扩 2–3 个事件槽位以解锁 ~24 行」的估算，
 **该估算已被证伪**：至少 **13/24 不需要**。剩余行应逐条按「可观察结果 + 上游原文」复核，而不是先扩枚举。
+
+---
+
+## **判定「技能缺档 / 未实现」必须看四处**（第 948 轮定稿，**方法纪律**）
+
+本会话在这条上错了 5 次（`Hutian`/`Xuanyuan` 判错、`WudianZiyu` 两次、`L20` 两条、`YxsMenshen3`），
+每次都是**只看了一个入口**。结论：
+
+| 入口 | 位置 | 漏看会怎样 |
+|---|---|---|
+| **`TriggerMeta.event`** | `content/host/metadata/*.rs` | 把「挂了别的时机」当成「没挂」|
+| **`TriggerMeta.extra_events`** | 同上 | 多幕技能（如 `YxsMenshen3` 的 `PhaseBegin + Death`）被判「少一幕」|
+| **过滤臂** | `content/host/filtering/**` | 臂恒 `false` 时才是真未实现（如 `HlssGaiming`）；委托臂（`filter_common(`）要追到实现处 |
+| **`step` + 内核钩子** | `content/host/step/**`、`kernel/**` | 效果可能**不需要 `TriggerMeta`**：`L20` 的摸牌 +2 在 `kernel/phase/draw.rs`、`Hutian` 的归还直接写在阶段收束里 |
+
+### 三条可操作的判据
+
+1. **「无 `TriggerMeta`」≠「未实现」**——先查 `step` 与内核钩子（`L20` 就是这样被判错的）；
+2. **臂恒 `false` + step 只 `Flow::Done`** = 真未实现（`HlssGaiming` 目前就是这样）；
+3. **`extra_events` 里列了的事件**也算已实现（`YxsMenshen3`）。
+
+### 配套门禁
+
+`scripts/report_filter_meta_mismatch.py --strict`（preflight 第 20 项）保证**过滤臂与 `TriggerMeta` 不互相矛盾**；
+它不能证明「四处都实现了」，但能挡住「两处声明打架 ⇒ 技能静默不触发」这一最常见形态。
