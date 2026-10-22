@@ -519,11 +519,11 @@ test result: FAILED. 0 passed; 50 failed
 
 ---
 
-## 111 第 963 轮：平台证据全面升级（构建 6/7 + Node 11/11 + **浏览器 4/4**）
+## 111 第 963 轮：平台证据全面升级（构建 **7/7** + Node 11/11 + 浏览器 4/4）
 
 | 层级 | 证据 | 结果 |
 |---|---|---|
-| **构建** | 7 个 target（iOS ×2 / Android ×3 / wasm / aarch64-android）| **6/7**（aarch64-linux-android 缺 NDK）|
+| **构建** | 7 个 target（iOS ×2 / Android ×4 / wasm）| **7/7**（`blake3/pure` 修掉 Android aarch64 的 NDK 依赖）|
 | **Node 运行** | `scripts/native_wasm_smoke.mjs`（wasm-pack release）| **11/11 PASS**（含存档往返、同 seed 重放、双实例确定性）|
 | **浏览器运行** | headless Chrome + 最小 ES-module 页面 | **4/4**（boot / 建局 / 视图 / 自动对局 300 步）|
 
@@ -537,3 +537,20 @@ test result: FAILED. 0 passed; 50 failed
 * 跨设备存档兼容。
 
 ⇒ 「目标平台」**仍未验收完成**；八项完成数**仍为 0**。
+
+---
+
+## 112 第 970 轮：平台构建 **7/7 无缺口**（`blake3/pure` 修掉最后一个 target）
+
+| target | 结果 |
+|---|---|
+| `aarch64-apple-ios` / `aarch64-apple-ios-sim` | ✅ |
+| `x86_64-linux-android` / `armv7-linux-androideabi` / `i686-linux-android` | ✅ |
+| **`aarch64-linux-android`** | ✅ **本轮修好**（`blake3` 默认 C 实现需要 NDK；改 `features=["pure"]` 后纯 Rust 可构建）|
+| `wasm32-unknown-unknown`（`engine-native-wasm`）| ✅ |
+
+**回归**：`cargo test --offline --workspace` = **6251 passed / 0 failed / 72 ignored**；
+WASM 冒烟重建后 **仍 11/11 PASS**（哈希与确定性未受影响）。
+
+⇒ 「目标平台」的**构建层已无缺口**；剩余全部是**运行层**（真机、Firefox/Safari、真实 UI 客户端 + WebWorker + 网络、跨设备存档）。
+⇒ **八项完成数仍为 0**。
