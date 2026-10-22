@@ -26,7 +26,7 @@ L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	�
 6	A	Rangjie	L10	content/host/**	分支前无条件 draw()	仅分支 0 摸牌	高	分支 1 不摸牌	blocked
 L20a	B	XiguaMopaiFanbei	L20	content/host/**	player: phaseDrawBegin2	无 TriggerMeta	中	不触发 + 需「摸牌阶段第 2 次」档	blocked
 L20b	B	XiguaXueliangFanbei	L20	content/host/**	global: gameStart	EventKind::PhaseBegin	中	事件错（应为 GameStart，缺档）	blocked
-G19	A	SwdTiebi	U05	content/host/**	global: useCardToBegin	filter 含 t != owner	高	技能主被排除	blocked
+G19	A	SwdTiebi	U05	content/host/**	`shaBegin`；filter 要「黑手牌 + `!event.target.hujia` + `distance<=1`」	`CardUsed` + sha-like + `targets` 里有非自己者（**缺无护甲/距离两个条件**）	高	补 `!目标护甲 && 距离<=1`；`t != owner` 无害可保留	blocked
 G20	A	WudianPaotaiFire	U05	common.rs:799	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G20	A	WudianZiyu	U05	common.rs:596	global:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G23b	A	SwdBaishouzhihuHeld	U05	content/host/**	player: 'discardEnd'（弃牌阶段结束）	Phase { begin: true } 未钉阶段	高	上游是弃牌阶段结束，原生每个阶段开始都触发	blocked

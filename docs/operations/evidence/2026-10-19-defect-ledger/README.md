@@ -3071,3 +3071,41 @@ comm -13 …                              # 现在有、54 版没有
 
 **并且：台账行数的每一次变动都必须用 `git` 差分核对「移出/新增」清单**——
 **靠手算核对会漏，机器差分不会** ✅
+
+---
+
+## 113 第 913 轮：`SwdTiebi` **同名两行且互相矛盾** —— 一行改正是错的、已按上游原文重写
+
+新工具 `scripts/report_ledger_diff.py` 第一次跑就暴露：**同一行为在台账里有两行**（`需档` 与 `G19`），
+而两行写的**上游出处不一样**：
+
+| 行 | 上游（台账原先写的）| 实际上游（本轮核对）|
+|---|---|---|
+| `需档` | `global:'shaBegin'` | **`global:'shaBegin'`** ✅ 对 |
+| `G19` | `global:'useCardToBegin'` | ❌ **错**（那是另一类事件）|
+
+### 真正的差异是什么
+
+上游 filter 原文：
+
+```js
+filter:function(event,player){
+  return player.countCards('h',{color:'black'}) && !event.target.hujia && get.distance(player,event.target)<=1;
+}
+```
+
+原生（`filtering/swd.rs:233`）：
+
+```rust
+EventData::CardUsed(u) if u.card 是杀 && u.targets.iter().any(|&t| t != owner)
+```
+
+⇒ **原生缺「目标无护甲」与「距离 ≤ 1」两个条件**；而台账原写的「filter 含 `t != owner`」是**多出来的条件**，
+**在杀的目标里不可能是自己** ⇒ 无害，不是缺陷。
+
+⇒ **已把 `G19` 行按上游原文重写**（上游列写全三个条件、原生列写明缺哪两个、修法列写补什么）✅
+
+### 教训（第 29 次）
+
+**同行为多行时，必须核对每行的上游出处是否一致**——不一致就说明至少一行归因错了。
+本轮工具（`report_ledger_diff.py`）本身就是上一轮教训的产物，**第一次跑就抓到了这个** ✅
