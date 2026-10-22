@@ -1,7 +1,7 @@
 id	class	behavior	source	location	upstream	native	severity	fix	permission
-G14	A	GujianFoodZiyangdan	?	common.rs:627	player: "phaseBegin"	End, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
-G20	A	GujianFoodLiyutang	?	common.rs:609	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-G22	A	GwentCiguState	?	common.rs:635	player: "phaseDrawBegin"	Draw, begin:false	中	filter 从 `begin: false` 改为 `begin: true`（须在摸牌数确定前生效）	blocked
+G14	A	GujianFoodZiyangdan	?	common.rs:626	player: "phaseBegin"	End, begin:true	中	filter 改为 `begin: true, ..`（不钉阶段）	blocked
+G20	A	GujianFoodLiyutang	?	common.rs:608	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+G22	A	GwentCiguState	?	common.rs:634	player: "phaseDrawBegin"	Draw, begin:false	中	filter 从 `begin: false` 改为 `begin: true`（须在摸牌数确定前生效）	blocked
 G23	A	XianjianLinghuo	?	filtering/*	global:'phaseEnd'	PhaseEnd(global), 多钉了相位	中	去掉相位钉（上游对任何玩家的任何阶段结束都触发）	blocked
 G23	A	XianjianShenwu	?	filtering/*	global:'phaseEnd'	PhaseEnd(global), 多钉了相位	中	去掉相位钉（上游对任何玩家的任何阶段结束都触发）	blocked
 G23	A	XianjianWangyou	?	filtering/*	global:'phaseEnd'	PhaseEnd(global), 多钉了相位	中	去掉相位钉（上游对任何玩家的任何阶段结束都触发）	blocked
@@ -18,8 +18,7 @@ L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	�
 6	A	Rangjie	L10	content/host/**	分支前无条件 draw()	仅分支 0 摸牌	高	分支 1 不摸牌	blocked
 L20a	B	XiguaMopaiFanbei	L20	content/host/**	player: phaseDrawBegin2	无 TriggerMeta	中	不触发 + 需「摸牌阶段第 2 次」档	blocked
 L20b	B	XiguaXueliangFanbei	L20	content/host/**	global: gameStart	EventKind::PhaseBegin	中	事件错（应为 GameStart，缺档）	blocked
-G20	A	WudianPaotaiFire	U05	common.rs:799	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
-G20	A	WudianZiyu	U05	common.rs:596	global:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+G20	A	WudianPaotaiFire	U05	common.rs:798	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 G23b	A	SwdBaishouzhihuHeld	U05	content/host/**	player: 'discardEnd'（弃牌阶段结束）	Phase { begin: true } 未钉阶段	高	上游是弃牌阶段结束，原生每个阶段开始都触发	blocked
 G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
 G23e	B	SwdMufengHeld	U05	content/host/**	`player.discoverCard()`（发现三张选一）	`ctx.draw_cards(owner, 1)`（摸一张）	中	缺 discover 原语 ⇒ 需扩引擎能力；同一行为的触发面经作用域复核已等价	blocked
@@ -27,6 +26,6 @@ G23e	B	SwdMufengHeld	U05	content/host/**	`player.discoverCard()`（发现三张�
 5a	A	ShaDamageForceDiscard	U06	content/host/**	sha && notLink && countCards>0	共享行为仅 is_sha_like	高	共享行为未含苦无的 2 个条件（待复核）	blocked
 G20	A	PhaseEndRecoverOrDraw	U06	common.rs:540	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 需档	B	HuanleMonkeyCard	U06	meta:0	global: "useCardToBegin",	CardUsed	高	修触发时机/补档位	blocked
-G20	A	WudianZhucheng	U07	common.rs:770	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
+G20	A	WudianZhucheng	U07	common.rs:769	player:'phaseEnd'	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
 需档	B	WudianZhuchengGuard	U07	meta:0	target:'shaBefore'	CardUsed	高	修触发时机/补档位	blocked
 U08c	B	YxsMenshen3	U08	content/host/**	player: ["phaseBegin", "dieBegin"]	EventKind::PhaseBegin	中	少「死亡前」幕	blocked

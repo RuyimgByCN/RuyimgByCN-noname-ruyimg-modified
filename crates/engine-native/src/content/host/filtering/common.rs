@@ -593,9 +593,8 @@ impl HostSkillBehavior {
                     && u.use_as.unwrap_or(ctx.catalog.card_kind(u.card)) == CardKind::Sha
                     && ctx.state.player(owner).baolei_mode == 2),
             HostBehavior::WudianZiyu => matches!(event,
-                EventData::Phase { player: _, phase: crate::event::Phase::End, begin: true }
-                if ctx.state.turn.phase_number > 0
-                    && ctx.state.turn.phase_number % 4 == 0),
+                EventData::Phase { begin: false, .. }
+                if ctx.state.turn.phase_number % 4 == 0),
             HostBehavior::WudianGuangshuSpade => matches!(event,
                 EventData::Phase { player, begin: false, .. } if *player == owner),
             HostBehavior::GujianFoodGudonggeng => matches!(event,

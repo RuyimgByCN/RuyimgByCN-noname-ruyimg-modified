@@ -161,7 +161,7 @@ def build() -> list[list[str]]:
     rows: list[list[str]] = []
 
     for behavior, p, begin, loc, line in phase.arms():
-        if behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
+        if behavior in FIXED or behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
             continue
         key = keys.get(behavior, "")
         trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
@@ -192,7 +192,7 @@ def build() -> list[list[str]]:
 
     for behavior, which, _loc, _skill, trigger, verdict in [
         (b, w, loc, s, t, v) for b, w, loc, s, t, v in event_out()
-        if b not in NON_DEFECT_VERIFIED and b not in NON_DEFECT_BY_CODE
+        if b not in FIXED and b not in NON_DEFECT_VERIFIED and b not in NON_DEFECT_BY_CODE
     ]:
         if verdict.startswith("OK") or verdict.startswith("REVIEW"):
             continue
@@ -202,7 +202,7 @@ def build() -> list[list[str]]:
                      trigger, which, "高", "修触发时机/补档位", "blocked"])
 
     for rid, cls, behavior, source, upstream, native, note in MANUAL:
-        if behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
+        if behavior in FIXED or behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
             continue
         rows.append([rid, cls, behavior, source, "content/host/**", upstream, native,
                      "高" if cls == "A" else "中", note, "blocked"])
@@ -230,6 +230,11 @@ UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
 #: 已由既有行为测试证明「规则层面等价」的行（第 909 轮起）——它们曾按「需档」记入台账，
 #: 但台账的依据是「引擎没有对应的事件槽位」这一**实现细节**；仓库里的测试已断言
 #: 上游描述的可观察结果，故在规则差异层面不是缺陷。
+#: **真正修掉的行**（行为已改、全量测试通过）。
+FIXED: dict[str, str] = {
+    "WudianZiyu": "第 929 轮：`TriggerMeta.event` 由 `PhaseBegin` 改 `PhaseEnd`，过滤臂改 `Phase { begin: false, .. }` + `phase_number % 4 == 0`，对齐上游 `{global:'phaseEnd'}`；`nc08_upstream_ziyu` 4 项 + `g1_wudian` 122 项全绿",
+}
+
 #: 证据等级较低的一类：**「需要新事件槽位」这个前提已被推翻**，且原生与上游的效果
 #: 逐分支读过一致，但**仓库里没有断言该行为的测试**。它们不计入缺陷，也不冒充「测试背书」。
 NON_DEFECT_BY_CODE: dict[str, str] = {

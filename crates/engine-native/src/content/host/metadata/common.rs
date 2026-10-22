@@ -903,7 +903,9 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::WudianZiyu => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                // 上游 `{global:'phaseEnd'}` + `phaseNumber%4==0`（第 929 轮：
+                // 元数据与过滤臂必须同时改，否则永不派发）
+                event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
