@@ -621,7 +621,7 @@ impl HostSkillBehavior {
             HostBehavior::GujianFoodYougeng => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
                 if *player == owner),
-            HostBehavior::GujianFoodZiyangdan => matches!(event,
+                        HostBehavior::GujianFoodZiyangdan => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
                 if *player == owner),
             HostBehavior::GujianYunvyuanshen => matches!(event,

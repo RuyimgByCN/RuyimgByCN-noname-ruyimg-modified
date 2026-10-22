@@ -54,6 +54,15 @@ impl HostSkillBehavior {
                 {
                     return None;
                 }
+                // 蛊惑：**每回合一次**（第 942 轮接线：`vm_aux.once` scope 1 = 本回合）
+                if ctx
+                    .state
+                    .vm_aux
+                    .once
+                    .contains(&(owner, self.name.clone(), 1))
+                {
+                    return None;
+                }
                 Some(Box::new(HostMachine {
                     def_key: self.name.clone(),
                     behavior: self.behavior,

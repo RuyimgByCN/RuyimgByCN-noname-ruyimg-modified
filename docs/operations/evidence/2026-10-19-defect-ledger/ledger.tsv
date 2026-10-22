@@ -8,7 +8,6 @@ G15	B	WudianFuchou2	?	common.rs:24	global:'phaseAfter'	End, begin:false	中	按�
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXunying	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
 L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	技能完全不触发（缺 judge-before 幕）	blocked
-5b	A	Reguhuo	L10	content/host/**	reguhuo_phase 标记（每回合一次）	无标记，可无限次	高	EPIC_REGUHUO_KEY 定义未接线	blocked
 6	A	Rangjie	L10	content/host/**	分支前无条件 draw()	仅分支 0 摸牌	高	分支 1 不摸牌	blocked
 L20a	B	XiguaMopaiFanbei	L20	content/host/**	player: phaseDrawBegin2	无 TriggerMeta	中	不触发 + 需「摸牌阶段第 2 次」档	blocked
 L20b	B	XiguaXueliangFanbei	L20	content/host/**	global: gameStart	EventKind::PhaseBegin	中	事件错（应为 GameStart，缺档）	blocked

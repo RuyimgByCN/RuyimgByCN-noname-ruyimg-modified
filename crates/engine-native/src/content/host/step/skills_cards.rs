@@ -415,6 +415,12 @@ impl HostMachine {
             // 蛊惑：弃一张手牌 → 声明基本/锦囊牌名 → 选目标 → 转化使用
             HostBehavior::Reguhuo => match self.stage {
                 HostStage::Act => {
+                    // 蛊惑：每回合一次（第 942 轮）——进入执行即记账，turn 结束清
+                    // 蛊惑：每回合一次（第 942 轮）——进入执行即记账，turn 结束清
+                    ctx.core
+                        .vm_aux
+                        .once
+                        .insert((self.owner, self.def_key.clone(), 1));
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.owner)

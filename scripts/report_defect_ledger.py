@@ -237,6 +237,7 @@ FIXED: dict[str, str] = {
     "YunchouJiaoxia": "`nc08_upstream_yunchou_jiaoxia.rs` 断言「成为**红色**牌目标应摸 1」「**黑色**牌不触发」⇒ 正是上游 `target:'useCardToTargeted'` 的红/黑分支",
     "Liaoyuan": "`swd_liaoyuan_extra_shan.rs` 断言「直接命中且加伤 2（1+2）」，且弃牌/确认窗都在结算之前 ⇒ 与上游 `player:'shaBegin'` 一致",
     "WudianZhuchengGuard": "`g1_wudian/liufu.rs` 断言「杀无效不掉血」「杀归还使用者手牌」「弃 2 放行：杀照常」，且都由 `trigger_confirm` 询问驱动 ⇒ 守卫判定发生在杀结算**之前**，与上游 `target:'shaBefore'` 一致",
+    "Reguhuo": "第 942 轮：`activation/common.rs` 加「本回合已发动」检查 + `step/skills_cards.rs` 进入执行即 `vm_aux.once.insert(..., scope 1)`；新增 `reguhuo_is_once_per_turn` 断言第二次 `ActivateSkill` 被拒绝（**该断言在修复前为红**）",
     "YxsMenshen3": "`TriggerMeta` 声明 `event: PhaseBegin` + **`extra_events: vec![EventKind::Death]`**，过滤臂也直接匹配 `EventData::Death { .. }` ⇒ 上游 `player:['phaseBegin','dieBegin']` 的两幕**都已实现**（台账「少死亡前幕」是误判）",
     "XianjianShenwu": "第 939 轮：过滤臂由 `Phase { End, begin: false }` 改为 `Phase { begin: false, .. }`（**任何玩家的任何阶段结束**），对齐上游 `{global:'phaseEnd'}`；`g1_wudian` 122 项与全量 1538 项全绿",
     "GwentCiguState": "第 938 轮：①`TriggerMeta.event` `PhaseEnd→PhaseBegin`；②臂改 `Draw, begin: true`（上游 `phaseDrawBegin`）；③step 只移除状态（删掉「弃首张」）；④`kernel/phase/draw.rs` 里摸牌数 **-1**（上游 `trigger.num--`）；⑤测试断言改为「摸牌阶段开始：摸牌数 2→1」；全量 1538 passed",

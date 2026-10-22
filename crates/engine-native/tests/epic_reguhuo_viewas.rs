@@ -220,3 +220,57 @@ fn reguhuo_absent_rejected() {
     });
     assert!(matches!(out, CommandOutcome::Rejected(_)), "未持技拒绝：{out:?}");
 }
+
+/// 蛊惑：**每回合一次**（第 942 轮接线 `vm_aux.once` scope=1）。
+///
+/// 旧实现无任何标记 ⇒ 同一出牌阶段可以反复发动。现在第一次发动后即记账，
+/// 第二次 `ActivateSkill` 必须被拒绝。
+#[test]
+fn reguhuo_is_once_per_turn() {
+    let mut e = engine(132002);
+    e.debug_grant(0, "reguhuo");
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    let c1 = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 0, c1);
+    e.debug_set_hp(0, 2);
+    let def = e.catalog().skill_by_name("reguhuo").expect("蛊惑");
+
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "首次发动应可用：{out:?}"
+    );
+    // 选牌窗出现即说明机器已启动（此时已记账）
+    let pick = e.open_choice().cloned().expect("蛊惑选牌窗");
+    assert_eq!(pick.spec.prompt, "reguhuo_card");
+
+    // 放弃（取消选择）后再次发动应被拒绝
+    let _ = e.submit(GameCommand {
+        actor: pick.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: pick.id,
+            selection: Vec::new(),
+        },
+    });
+    drain(&mut e);
+    let c2 = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 0, c2);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Rejected(_)),
+        "同回合第二次发动应被拒绝：{out:?}"
+    );
+}
