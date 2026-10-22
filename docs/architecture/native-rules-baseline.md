@@ -6368,3 +6368,29 @@ catalog 之外有源码引用        128  (100.0%)
 `SwdCyxianjiang`、`XianjianXunying`、`ShaDamageForceDiscard`（K1/K3）
 
 ⇒ 建议**直接从缺陷台账移出**，改登记到「已登记差异」清单（本轮未做，因为要逐条确认差异描述与台账行是否同一处）。
+
+---
+
+## **`discover` 原语已落地**（第 973–974 轮）
+
+上游 `player.discoverCard()`（「发现」：亮出牌堆顶若干张选 1，余入弃堆）此前**没有对应能力**，
+`swd_mufeng_held` 用「摸 1」近似（台账记为效果不符）。
+
+### 现在的实现（`step/swd_equipment.rs` 的 `SwdMufengHeld`）
+
+| 阶段 | 行为 |
+|---|---|
+| `Act` | 从牌堆顶取最多 **3** 张 → 暂存到该玩家 `off_court` → `ChoiceKind::SelectCards`（`prompt = "mufeng_discover"`，min = max = 1）|
+| `SelectCard` | 选中者入手；**其余入弃堆**（`ctx.to_discard`）；异常路径把亮出的牌退回牌堆 |
+
+### 断言
+
+`g1_shahai_swd::swd_mufeng_uses_discover_not_draw` 断言
+`prompt == "mufeng_discover"`、`min == max == 1`、`options.len() == 3`
+⇒ 在旧实现（直接摸 1、无选择窗）下**必然失败** ⇒ 红先绿后 ✅
+
+### 复用建议
+
+其它需要「发现」的技能（如 `SwdLingxin` 等若上游用 `discoverCard`）可照此模式：
+**取牌到 `off_court` → SelectCards 选 1 → 余 `to_discard`**。
+若要多处复用，建议提取为 `Ctx::discover(owner, n)` helper（当前是单点实现）。
