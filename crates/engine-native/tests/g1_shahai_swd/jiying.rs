@@ -148,3 +148,68 @@ fn swd_generals_b61_jiying_mufeng_wangchen() {
     assert!(saw_flip, "望尘：目标选定");
     assert!(e.state_core().player(1).face_down, "望尘：p1 翻面");
 }
+
+/// 沐风：确认门后是**发现**（上游 `player.discoverCard()`）——
+/// 亮出 3 张、选 1 张入手、其余入弃堆（第 973 轮实现，此前是「摸 1」）。
+#[test]
+fn swd_mufeng_uses_discover_not_draw() {
+    let root =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(90210, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_grant(0, "mufeng");
+    // 本回合用过基本牌（置旗）
+    let sha = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 0, sha);
+    submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: sha,
+            targets: vec![1],
+        },
+    );
+    settle_optional_confirm(&mut e);
+    // 推进到阶段末触发沐风
+    let mut saw_discover = false;
+    for _ in 0..12 {
+        let actor = e.turn().current;
+        submit(&mut e, actor, GameAction::NextPhase);
+        if let Some(ch) = e.open_choice().cloned() {
+            if ch.spec.prompt == "mufeng_discover" {
+                assert_eq!(ch.spec.min, 1, "发现选 1");
+                assert_eq!(ch.spec.max, 1, "发现选 1");
+                assert_eq!(ch.spec.options.len(), 3, "亮出 3 张");
+                saw_discover = true;
+                break;
+            }
+            let sel = vec![ch.spec.options[0].clone()];
+            submit(
+                &mut e,
+                ch.observer,
+                GameAction::Answer {
+                    choice_id: ch.id,
+                    selection: sel,
+                },
+            );
+        }
+    }
+    assert!(saw_discover, "沐风应进入 discover（亮 3 选 1），而不是直接摸 1");
+}
