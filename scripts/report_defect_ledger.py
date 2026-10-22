@@ -32,6 +32,11 @@ ROOT = Path(__file__).resolve().parent.parent
 HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
 
 
+#: **已登记差异**（规则基准/代码注释写明「有意保留」）：不是「待修缺陷」，但也不是「无差异」。
+REGISTERED_DIFFERENCE: dict[str, str] = {
+    "GujianFoodZiyangdan": "行为臂注释明文「登记差异：上游每阶段开始衰减」——与台账行是同一处差异；report_registered_deviations 亦计入",
+}
+
 def _load(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
@@ -165,7 +170,7 @@ def build() -> list[list[str]]:
     rows: list[list[str]] = []
 
     for behavior, p, begin, loc, line in phase.arms():
-        if behavior in FIXED or behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
+        if behavior in FIXED or behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE or behavior in REGISTERED_DIFFERENCE:
             continue
         key = keys.get(behavior, "")
         trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
@@ -196,7 +201,7 @@ def build() -> list[list[str]]:
 
     for behavior, which, _loc, _skill, trigger, verdict in [
         (b, w, loc, s, t, v) for b, w, loc, s, t, v in event_out()
-        if b not in FIXED and b not in NON_DEFECT_VERIFIED and b not in NON_DEFECT_BY_CODE
+        if b not in FIXED and b not in NON_DEFECT_VERIFIED and b not in NON_DEFECT_BY_CODE and b not in REGISTERED_DIFFERENCE
     ]:
         if verdict.startswith("OK") or verdict.startswith("REVIEW"):
             continue
@@ -206,7 +211,7 @@ def build() -> list[list[str]]:
                      trigger, which, "高", "修触发时机/补档位", "blocked"])
 
     for rid, cls, behavior, source, upstream, native, note in MANUAL:
-        if behavior in FIXED or behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
+        if behavior in FIXED or behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE or behavior in REGISTERED_DIFFERENCE:
             continue
         rows.append([rid, cls, behavior, source, "content/host/**", upstream, native,
                      "高" if cls == "A" else "中", note, "blocked"])
