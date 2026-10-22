@@ -426,3 +426,38 @@ Android/Windows 工具链、Linux CI、legacy-vs-native 同机性能数据、D1�
 | 已登记差异（有意保留）| 1 | `ShaDamageForceDiscard`（K1/K3）|
 
 ⇒ **没有一条能靠「改一行」修掉**：要么动测试推进脚本，要么给引擎加能力。
+
+---
+
+## 108 第 954 轮：会话收尾验收（逐条命令与输出）
+
+| 命令 | 输出 | 判定 |
+|---|---|---|
+| `cargo test --offline -p engine-native` | `1539 passed / 0 failed / 71 ignored` | ✅ |
+| `python3 -B -m unittest discover -s scripts` | `Ran 169 tests ... OK` | ✅ |
+| `python3 -B scripts/preflight.py --quick` | 退出码 0（**21 项**）| ✅ |
+| `python3 -B scripts/check_stale_numbers.py` | `残留旧值 0 处` | ✅ |
+| `python3 -B scripts/check_local_links.py --all` | `检查 1758 个文件，坏链 0` | ✅ |
+| `python3 -B scripts/check-source-lines.py` | 退出码 1：`crates/rule-api/src/effect.rs` 超限 | ⚠️ **已知基线红**（非本会话引入）|
+| `git status --short` | 18 处改动**全部属于其他任务** | ✅ 本会话**未触碰**：提交只涉及 `docs/`、`scripts/`、`crates/` |
+
+### 台账当前构成（10 条）
+
+`需档=3`、`G23=2`、`G15=1`、`G20=1`、`G23e=1`、`L03c=1`、`5a=1`
+
+### 本会话的净结果
+
+| 指标 | 会话前 | 现在 |
+|---|---|---|
+| 缺陷台账 | 54 | **10** |
+| 真修复 | 0 | **8** |
+| 门禁项数 | 19 | **21** |
+| 脚本单测 | 146 | **169** |
+| 自我更正 | 24 | **37** |
+
+### 未完成（明确留待办）
+
+NC06 试点、NC10 基线、legacy-vs-native 同机性能、37 来源中 25 个的规则内容转换、
+Android/Windows 工具链与 Linux CI、规则差异 **0/12**、**八项完成数 0**。
+
+⇒ **本会话没有、也不能宣称全部完成**：全部验收门槛需要真实设备与决策，缺一不可。
