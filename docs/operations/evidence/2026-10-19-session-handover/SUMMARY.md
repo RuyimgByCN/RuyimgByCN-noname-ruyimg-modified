@@ -319,3 +319,37 @@ goal 轮次已到上限（900/900）。**未完成的原因不是难度，而是
 1. **7 行「被测试挡住」**：改行为必须同步改 7 处断言（清单见台账 §106、§120-121），需授权；
 2. **D1（规则差异分母）/D2（`L19`）**：规则差异这一维 0/12 的直接原因；
 3. **目标平台**：缺 Android/Windows 工具链与 Linux CI。
+
+---
+
+## 105 第 940 轮：本次会话终态（台账 54 → 18，真修复 7 条）
+
+### 数字
+
+| 项 | 值 |
+|---|---|
+| 缺陷台账 | **18 条（A 7 / B 11）**，会话起点 54 |
+| **真修复** | **7 条**（`WudianZiyu`、`WudianPaotaiFire`、`PhaseEndRecoverOrDraw`、`WudianZhucheng`、`SwdBaishouzhihuHeld`、`GwentCiguState`、`XianjianShenwu`）|
+| 复核后判**非缺陷**移出 | **29 条**（含 13 条「`CardUsed` 单帧等价」、9 条 G23 判据错、3 条死亡窗口、2 条跨包同名、1 条复合技、1 条命名误读）|
+| `engine-native` 全量 | **1538 passed / 0 failed / 71 ignored** |
+| `scripts` 单测 | **163 OK** |
+| `preflight` | **20 项全过**（新增第 20 项「过滤臂↔元数据一致」）|
+| 自我更正 | **35 次**（清单见台账 README 各轮小节）|
+
+### 本会话新增的**工具**（都是被真实缺陷逼出来的）
+
+1. `report_ledger_diff.py` —— 台账版本差分（手算 54→40 对不上账，差分立刻定位到 `SwdMufengHeld` 的效果缺陷曾凭空消失）；
+2. `report_filter_meta_mismatch.py` —— **过滤臂 ↔ `TriggerMeta` 一致性**，已接成 preflight 第 20 道门禁；
+3. `report_phase_arms` 分类器修 3 处（小写无前缀阶段名等）。
+
+### 结论性发现（已写入规则基准）
+
+**不需要为大类用牌事件扩枚举槽位**：`CardUsed` 单帧带 `player`/`card`/`targets`/`cancelled`
+且先于目标结算派发，13 行「需档」实测全部等价。
+**仍成立的真缺口只有**「单帧多目标且需逐目标独立结算」（如 `useCardPlayered`）。
+
+### 仍需外部决定
+
+1. **`XianjianLinghuo` / `XianjianWangyou`**：断言把「阶段结束」写进前置条件，改行为必须重写这两个测试的**推进脚本**（不是改一行数字）；
+2. **`GujianFoodZiyangdan` / `GujianFoodLiyutang`**：同类（`remaining_clusters_batch` / `hujia_primitive_and_food_batch_three` 失败）；
+3. **D1（规则差异分母）/ D2（`L19`）**、**目标平台**（Android/Windows 工具链、Linux CI）——本会话未触及。
