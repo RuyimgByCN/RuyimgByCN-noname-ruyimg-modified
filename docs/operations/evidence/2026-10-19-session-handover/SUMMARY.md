@@ -356,7 +356,7 @@ goal 轮次已到上限（900/900）。**未完成的原因不是难度，而是
 
 ---
 
-## 106 第 946 轮：本会话最终状态（台账 **54 → 14**，真修复 **8** 条）
+## 106 第 946 轮：本会话最终状态（台账 **54 → 10**，真修复 **8** 条）
 
 ### 台账现在 14 条（A 4 / B 10），五类语义分开记
 
@@ -374,8 +374,8 @@ goal 轮次已到上限（900/900）。**未完成的原因不是难度，而是
 | 命令 | 结果 |
 |---|---|
 | `cargo test --offline -p engine-native` | **1539 passed / 0 failed / 71 ignored** |
-| `python3 -B -m unittest discover -s scripts` | **163 OK** |
-| `python3 -B scripts/preflight.py --quick` | **20 项全过** |
+| `python3 -B -m unittest discover -s scripts` | **169 OK** |
+| `python3 -B scripts/preflight.py --quick` | **21 项全过** |
 | `python3 -B scripts/check_stale_numbers.py` | **0 处** |
 | `python3 -B scripts/check_local_links.py --all` | **0 坏链** |
 
@@ -400,3 +400,29 @@ goal 轮次已到上限（900/900）。**未完成的原因不是难度，而是
 
 Android/Windows 工具链、Linux CI、legacy-vs-native 同机性能数据、D1（规则差异分母）/D2（`L19`）。
 ⇒ **八项完成数仍为 0**：没有任何一项有完整验收证据。
+
+---
+
+## 107 第 952 轮：把 §106 的数字校准到当前（台账 10、门禁 21、脚本单测 169）
+
+上一节写的 14/20/163 已过时。**当前**：
+
+| 项 | 值 |
+|---|---|
+| 台账 | **10 条（A 4 / B 6）** |
+| 真修复 | **8 条** |
+| `cargo test -p engine-native` | 1539 passed / 0 failed / 71 ignored |
+| `unittest discover -s scripts` | **169 OK** |
+| `preflight --quick` | **21 项全过**（第 20 项「过滤臂↔元数据」、第 21 项「台账移出必留痕」）|
+
+### 剩下 10 条各卡在哪
+
+| 卡点 | 行数 | 例子 |
+|---|---:|---|
+| 断言把旧时机写进**前置条件**（须重写测试推进脚本）| 4 | `XianjianLinghuo`/`XianjianWangyou`、`GujianFoodLiyutang`、`WudianFuchou2` |
+| 需要**引擎新能力** | 2 | `SwdMufengHeld`（`discover` 原语）、`SwdJiang`（单帧多目标逐目标结算）|
+| 技能**完全未实现** | 1 | `HlssGaiming`（臂恒 `false` + step 空）|
+| 真实差异但**已登记** | 2 | `SwdCyxianjiang`、`XianjianXunying` |
+| 已登记差异（有意保留）| 1 | `ShaDamageForceDiscard`（K1/K3）|
+
+⇒ **没有一条能靠「改一行」修掉**：要么动测试推进脚本，要么给引擎加能力。
