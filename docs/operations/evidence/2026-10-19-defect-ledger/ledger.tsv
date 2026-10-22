@@ -30,7 +30,6 @@ G20	A	WudianZiyu	U05	common.rs:596	global:'phaseEnd'	End, begin:true	中	filter 
 G23b	A	SwdBaishouzhihuHeld	U05	content/host/**	player: 'discardEnd'（弃牌阶段结束）	Phase { begin: true } 未钉阶段	高	上游是弃牌阶段结束，原生每个阶段开始都触发	blocked
 G23b	A	SwdJiguanyuanGain	U05	content/host/**	damageEnd + damageSource	EventKind::PhaseEnd	高	事件种类完全错	blocked
 G23e	B	SwdMufengHeld	U05	content/host/**	`player.discoverCard()`（发现三张选一）	`ctx.draw_cards(owner, 1)`（摸一张）	中	缺 discover 原语 ⇒ 需扩引擎能力；同一行为的触发面经作用域复核已等价	blocked
-需档	B	Jifeng	U05	meta:0	player:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXjzhimeng2	U05	meta:0	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
 5a	A	ShaDamageForceDiscard	U06	content/host/**	sha && notLink && countCards>0	共享行为仅 is_sha_like	高	共享行为未含苦无的 2 个条件（待复核）	blocked
 G20	A	PhaseEndRecoverOrDraw	U06	common.rs:540	player: "phaseEnd"	End, begin:true	中	filter 改为 `Phase::End, begin: false`	blocked
