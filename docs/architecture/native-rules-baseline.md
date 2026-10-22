@@ -6289,3 +6289,36 @@ catalog 之外有源码引用        128  (100.0%)
 
 `scripts/report_filter_meta_mismatch.py --strict`（preflight 第 20 项）保证**过滤臂与 `TriggerMeta` 不互相矛盾**；
 它不能证明「四处都实现了」，但能挡住「两处声明打架 ⇒ 技能静默不触发」这一最常见形态。
+
+---
+
+## **`HlssGaiming` 是唯一「完全未实现」的技能——它需要新的判定事件**（第 953 轮）
+
+### 现状（三处都是空的）
+
+| 位置 | 内容 |
+|---|---|
+| `metadata/common.rs` | 无 `TriggerMeta`（`None`）|
+| `filtering/common.rs:42` | `HostBehavior::HlssGaiming => false`（恒假）|
+| `step/*.rs` | `HostBehavior::HlssGaiming => Flow::Done`（空实现）|
+
+⇒ 它不是「少一幕」，而是**整个技能没有落地**。
+
+### 为什么不能像别的一样「就地接线」
+
+引擎**没有判定事件**：`EventData` / `EventKind` 里没有 `JudgeBefore` / `Judged` 一类的变体，
+判定流程在 `kernel/phase/judge.rs` 里直接跑完，不对外发事件。
+
+⇒ 要实现它必须**新增一个事件种类**，而新增事件种类牵动：
+
+1. `event.rs` 的 `EventData` / `EventKind`；
+2. `archive/values.rs` 的数值编码与 `archive/events.rs` 的往返；
+3. `ARCHIVE_FORMAT_VERSION` 与 golden 哈希（**存档兼容**）；
+4. `kernel/phase/judge.rs` 的发点时机（「判定牌翻开前」还是「翻开后结算前」）。
+
+### 结论
+
+**这是本台账里唯一需要「扩引擎事件」的行**，与本会话已证伪的「用牌事件扩槽位」不同：
+后者能用 `CardUsed` 承载（15 行已证明），而判定流程**没有任何可复用的帧**。
+
+⇒ 若要做，建议单独立项（NC 级），并同步升级存档版本与 golden。
