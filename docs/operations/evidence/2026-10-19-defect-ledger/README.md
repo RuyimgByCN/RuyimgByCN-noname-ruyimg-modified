@@ -4334,3 +4334,40 @@ assert!(!arm.contains("from_chain") && !arm.contains("_notrigger"),
 
 ⇒ 只移 1 行；台账 **10 → 9**（A 3 / B 6），`REGISTERED_DIFFERENCE` 2 条
 ⇒ `report_ledger_accounting` 仍全绿（移出必留痕）✅
+
+---
+
+## 151 第 976 轮：`SwdCyxianjiang` 的上游 filter 已完整抄录（供后续实现）
+
+上游（`character/swd/skill.js:61`）：
+
+```js
+cyxianjiang: {
+  trigger: { player: "useCardToBegin" },
+  init(player) { player.storage.cyxianjiang = []; },
+  filter(event, player) {
+    if (event.target !== player && event.targets && event.targets.length === 1) {
+      if (player.storage.cyxianjiang.includes(event.target)) return false;
+      return event.target.countCards("e", card => !player.countCards("he", card.name));
+    }
+    return false;
+  },
+  direct: true,
+  …
+}
+```
+
+### 三个条件（缺一不可）
+
+1. **单目标**且 `target !== player`；
+2. 该目标**不在** `storage.cyxianjiang` 记录里（**每目标一次**）；
+3. 目标有装备，且该装备**同名牌不在自己手牌/装备里**。
+
+### 与原生现状的差距
+
+原生臂是 `CardUsed` + 「目标含自己以外者」，**没有** ②「每目标一次」的记录，
+③ 的比较是「同名牌」还是「实体牌」也需核对（台账注释提到「实体发现替代 `createCard`」）。
+
+⇒ 实现要点：需要一张 **per-target 记录表**（`vm_aux` 的 `piles`/`flags` 或专用字段），
+并在选中目标后写入；否则同一目标会被重复触发。
+⇒ **本轮只抄录上游，不改代码**（剩余轮次不足以安全实现 + 验证）。
