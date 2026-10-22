@@ -353,3 +353,50 @@ goal 轮次已到上限（900/900）。**未完成的原因不是难度，而是
 1. **`XianjianLinghuo` / `XianjianWangyou`**：断言把「阶段结束」写进前置条件，改行为必须重写这两个测试的**推进脚本**（不是改一行数字）；
 2. **`GujianFoodZiyangdan` / `GujianFoodLiyutang`**：同类（`remaining_clusters_batch` / `hujia_primitive_and_food_batch_three` 失败）；
 3. **D1（规则差异分母）/ D2（`L19`）**、**目标平台**（Android/Windows 工具链、Linux CI）——本会话未触及。
+
+---
+
+## 106 第 946 轮：本会话最终状态（台账 **54 → 14**，真修复 **8** 条）
+
+### 台账现在 14 条（A 4 / B 10），五类语义分开记
+
+| 类 | 条数 | 语义 |
+|---|---:|---|
+| **待修缺陷** | **14** | 尚待处理 |
+| `FIXED` | **8** | 行为已改、全量测试通过 |
+| `NON_DEFECT_VERIFIED` | 15 | 有**测试断言**为证（含 13 条「`CardUsed` 单帧等价」）|
+| `NON_DEFECT_BY_CODE` | 4 | 前提被推翻、两侧读码一致（无测试断言）|
+| `REGISTERED_DIFFERENCE` | 1 | 有意保留的差异（`GujianFoodZiyangdan`）|
+| `UNRESOLVED_ATTRIBUTION` | 2 | 归因不成立（`SwdHuanling`、`Rangjie`）|
+
+### 验证状态（可复现）
+
+| 命令 | 结果 |
+|---|---|
+| `cargo test --offline -p engine-native` | **1539 passed / 0 failed / 71 ignored** |
+| `python3 -B -m unittest discover -s scripts` | **163 OK** |
+| `python3 -B scripts/preflight.py --quick` | **20 项全过** |
+| `python3 -B scripts/check_stale_numbers.py` | **0 处** |
+| `python3 -B scripts/check_local_links.py --all` | **0 坏链** |
+
+### 本会话新增/加固的工具
+
+1. `report_ledger_diff.py`（台账版本差分）；
+2. `report_filter_meta_mismatch.py`（**过滤臂 ↔ `TriggerMeta`**，已接为 preflight 第 20 道门禁，`ALLOWED` 现为空）；
+3. `report_phase_arms` 分类器修 3 处（小写无前缀阶段名等）；
+4. 8 条缺陷守卫新增/更新（`reguhuo_is_once_per_turn` 是唯一「先红后绿」的完整链）。
+
+### 剩下的 14 条各卡在哪（分类）
+
+| 卡点 | 行数 | 例子 |
+|---|---:|---|
+| 断言把旧时机写进**前置条件**（改行为须重写测试推进脚本）| 4 | `XianjianLinghuo`/`Wangyou`、`GujianFoodLiyutang` |
+| 需要**引擎新能力** | 5 | `SwdMufengHeld`（`discover` 原语）、`XiguaXueliangFanbei`（`gameStart` 钩子，引擎只有 boss 专用实现）|
+| 需要**新事件槽位**（单帧多目标逐目标结算）| 1 | `SwdJiang` |
+| 上游**未定位 / 同名不同义** | 2 | `HlssGaiming`（臂恒假，效果在 `MbQianlong`）、`HuanleMonkeyCard` |
+| 真实差异但**已在规则基准登记** | 2 | `SwdCyxianjiang`、`XianjianXunying` |
+
+### 仍然缺的外部条件（本会话未触及）
+
+Android/Windows 工具链、Linux CI、legacy-vs-native 同机性能数据、D1（规则差异分母）/D2（`L19`）。
+⇒ **八项完成数仍为 0**：没有任何一项有完整验收证据。
