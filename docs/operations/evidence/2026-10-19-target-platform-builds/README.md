@@ -195,3 +195,41 @@ error: component download failed for rust-std-x86_64-unknown-linux-gnu
 | `x86_64-unknown-linux-gnu` 构建 | 离线，`rust-std` 无法下载 |
 | Firefox/Safari 运行 | headless Firefox 无截图/无 `--dump-dom` |
 | iOS/Android **真机**运行 | 无设备 |
+
+---
+
+## ✅ 修复：`aarch64-linux-android` 现在也通过（**构建 7/7**）
+
+### 原因
+
+`blake3` 默认走 C 实现（`cc` 构建脚本），Android aarch64 上需要 `aarch64-linux-android-clang`。
+
+### 修法（一行）
+
+```toml
+# Cargo.toml（workspace）
+- blake3 = "1"
++ blake3 = { version = "1", features = ["pure"] }  # 纯 Rust 实现：Android aarch64 无 NDK 也能构建
+```
+
+`blake3` 的 `pure` 特性是**同一算法的纯 Rust 实现**（无 SIMD、无 C），
+**哈希结果不变**——全量测试与 golden 全部通过即为证。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `cargo build -p engine-native --target aarch64-linux-android` | **✅ 通过（20.5s）** |
+| `cargo test --offline -p engine-native` | **1539 passed / 0 failed / 71 ignored** |
+| `cargo test --offline --workspace` | **6251 passed / 0 failed / 72 ignored** |
+| `cargo build -p engine-native-wasm --target wasm32-unknown-unknown` | ✅ 通过（28.5s）|
+
+⇒ **构建级 7/7 全部通过**（iOS ×2 / Android ×4 / wasm），Linux target 仍因离线拿不到 `rust-std`。
+
+### 代价（必须记录）
+
+* `blake3/pure` 比 C 实现**慢**（无 SIMD）——但哈希只用于摘要/指纹，**不在热路径**；
+* 若将来需要 SIMD 性能，可为桌面/服务器单独开默认特性，Android 侧用 `pure`（需要 per-target 特性，
+  Cargo 不支持条件特性 ⇒ 只能全局 `pure` 或引入包装 crate）。
+
+⇒ 「目标平台」的**构建层现在没有缺口**；剩下的缺口全部是**运行层**（真机、浏览器交叉、真实 UI 客户端）。
