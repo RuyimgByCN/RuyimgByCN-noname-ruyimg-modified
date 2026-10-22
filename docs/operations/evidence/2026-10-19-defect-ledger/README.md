@@ -4371,3 +4371,50 @@ cyxianjiang: {
 ⇒ 实现要点：需要一张 **per-target 记录表**（`vm_aux` 的 `piles`/`flags` 或专用字段），
 并在选中目标后写入；否则同一目标会被重复触发。
 ⇒ **本轮只抄录上游，不改代码**（剩余轮次不足以安全实现 + 验证）。
+
+---
+
+## 152 第 982 轮：把「需授权的 3 个测试改写」写成**可直接套用的补丁骨架**
+
+以 `WudianFuchou2` 的 `wudian_generals_batch14_fuchou_cancel_and_settle` 为例（另外两个同构）：
+
+```rust
+// 现在：固定步数推进 + 「取第一个选项」的通用应答
+for _ in 0..200 {
+    if e.turn().current == 1 && e.turn().phase == Phase::End { break; }
+    submit(&mut e, actor, GameAction::NextPhase);
+    if let Some((cid, obs, _)) = pending { /* 取首项 */ }
+}
+let h1 = hand_len_w(&e, 1);              // ← 断言基准在循环之后
+assert_eq!(hand_len_w(&e, 1), h1 + 1);
+
+// 应改为：状态驱动 + 按 prompt 分类应答 + 终态断言
+let h_before = hand_len_w(&e, 1);        // ← 基准移到循环之前
+let mut settled = false;
+for _ in 0..200 {
+    if let Some(ch) = e.open_choice().cloned() {
+        match ch.spec.prompt.as_str() {
+            "fuchou2_settle" | "fuchou2_sha" => { /* 被测技能：选断言需要的项 */ }
+            _ => { /* 其它询问：Pass / 取消 / 首项 */ }
+        }
+        submit(&mut e, ch.observer, GameAction::Answer { choice_id: ch.id, selection: sel });
+        continue;
+    }
+    if e.state_core().players[1].fuchou_marked.is_empty() { settled = true; break; }
+    submit(&mut e, e.turn().current, GameAction::NextPhase);
+}
+assert!(settled, "清算应已发生（标记被消耗）");
+assert_eq!(hand_len_w(&e, 1), h_before + 1, "清算：对标记来源摸 1");
+```
+
+### 三个要点（缺一不可）
+
+1. **基准移到循环前**——清算发生在循环**之内**；
+2. **按 `spec.prompt` 分类应答**——通用「取首项」会把虚拟杀的应答与摸牌混在一起（第 958 轮实测：left=7 vs 8）；
+3. **断言终态**（标记已消耗 + 净手牌 +1），不断言「某一步之后」。
+
+### 需要谁的同意
+
+这 3 个测试分属 `g1_wudian`（`WudianFuchou2`）、`nc08_hujia`（`GujianFoodLiyutang`）、
+`nc08_mingxiu`/`nc08_zixuan`（`XianjianLinghuo`/`Wangyou`）。
+**改写的是「怎么推进」而不是「断言什么」**，但仍在他人用例范围内 ⇒ 需要授权或 owner 参与。
