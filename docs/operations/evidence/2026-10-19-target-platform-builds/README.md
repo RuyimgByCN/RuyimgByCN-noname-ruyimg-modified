@@ -154,3 +154,15 @@ RESULT=PASS
 
 ⇒ 「目标平台」现已覆盖：**构建 6/7 target + Node 运行 11/11 + 浏览器运行 4/4**，
 但**真机与真实 UI 客户端仍未做** ⇒ **八项完成数仍为 0**。
+
+### 交叉浏览器：**未完成**（本轮试过，环境不支持）
+
+尝试用 headless Firefox 截图取证：
+
+```bash
+"/Applications/Firefox.app/Contents/MacOS/firefox" --headless   --screenshot /tmp/ff-shot.png --window-size=900,700 http://127.0.0.1:8899/firefox.html
+```
+
+⇒ 进程启动（打印 `*** You are running in headless mode.`）但**没有产出截图文件**，
+且该版本 Firefox 不提供 Chrome 那样的 `--dump-dom`。
+⇒ **Safari / Firefox 的交叉验证仍为待办**，本轮只证明 **Chrome** 可运行。
