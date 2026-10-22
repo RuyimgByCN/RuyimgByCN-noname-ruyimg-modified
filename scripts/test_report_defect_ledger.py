@@ -54,7 +54,8 @@ class LedgerTests(unittest.TestCase):
     def test_known_defects_present(self):
         behaviors = {r[2] for r in self.rows}
         # SwdTiebi/BossBaiyi 已复核移出；这里改挑仍在台账里的三行。
-        for expected in ("Reguhuo", "GujianFoodZiyangdan", "WudianFuchou2"):
+        # Reguhuo 已于第 942 轮修复移出；改挑仍在台账里的三行。
+        for expected in ("GujianFoodZiyangdan", "WudianFuchou2", "SwdMufengHeld"):
             self.assertIn(expected, behaviors)
 
     def test_location_column_present(self):
