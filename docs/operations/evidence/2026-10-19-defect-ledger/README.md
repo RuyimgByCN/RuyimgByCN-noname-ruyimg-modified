@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**25 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**21 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -28,8 +28,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **9** |
-| **B（需扩枚举或引擎能力）** | **16** |
-| **合计** | **25** |
+| **B（需扩枚举或引擎能力）** | **12** |
+| **合计** | **21** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **25** |
+| **合计** | **21** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **25** |
+| **合计** | **21** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3818,3 +3818,27 @@ g_baishouzhihu: {
 上游常见的 `player:'discardEnd'`（**小写无前缀**）会落到 `REVIEW(非阶段触发)`。
 ⇒ 补上 `'{stem}End'` 分支后 `--check` 归零 ✅
 （`report_phase_filters` 的钉死数字随之为 49 / 50 / Discard 3）
+
+---
+
+## 134 第 936 轮：按「测试断言 + 上游原文」双证据再移 4 行（25 → 21）
+
+| 行 | 测试断言（原文）| 上游 | 为什么等价 |
+|---|---|---|---|
+| `WudianZhuchengGuard` | 「杀无效不掉血」「杀归还使用者手牌」「弃 2 放行：杀照常」| `target:'shaBefore'` | 守卫判定发生在杀结算**之前** |
+| `Liaoyuan` | 「直接命中且加伤 2（1+2）」+ 弃牌窗在结算前 | `player:'shaBegin'` | 同上 |
+| `SwdMojian` | 「墨剑：目标摸 1」「墨剑：自己回 1 至满」| `player:'shaBegin'` | 同上 |
+| `YunchouJiaoxia` | 「成为**红色**牌目标应摸 1」「**黑色**牌不触发」| `target:'useCardToTargeted'` | 红/黑分支逐条对上 |
+
+⇒ 台账 **25 → 21**（A 9 / B 12）；`需档` 族 **9 → 5**；已登记差异 10 → 8
+
+### 这一类现在有 11 行是用同一把尺子移出的
+
+`SwdDunxing`、`SwdNingshuang`、`SwdHuanyin`、`SwdLianda`、`Yihua`、`Zhenlie`、`Jifeng`、`SwdTiebi`、
+`WudianZhuchengGuard`、`Liaoyuan`、`SwdMojian`、`YunchouJiaoxia`（12 行）
+
+**共同结论**：引擎用 `CardUsed` 这一个帧承载了上游 `shaBegin` / `shaAfter` / `useCardToBefore` / `useCardToBegin` / `useCardToTargeted` 的语义，
+**且帧上可改目标、可取消、可写回**，所以这些技能的时序与效果都被既有测试证明正确。
+⇒ **「缺 3 个枚举槽位」这个方案基本可以放弃**（除非出现反例）。
+
+⇒ `python3 -B -m unittest discover -s scripts` = **163 tests OK**；`preflight` 20 项全过 ✅
