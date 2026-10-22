@@ -2714,7 +2714,7 @@ let yxs_fanji2_direct_hit = {
 | 上游 `player:'phaseEnd'` 且**已有** `*player == owner` | **9** | ✅ **本来就等价** |
 | 上游 `global:'phaseEnd'` 且**未**限定自己 | **2**（`WudianJidong`、`XianjianBinxin`）| ✅ **本来就等价** |
 | 上游 `player:'phaseEnd'` 但**没有** owner 限定 | **2**（`Hutian`、`Xuanyuan`）| ❌ **真缺陷，本轮已修** |
-| 上游 `global:'phaseEnd'` 却**钉了** `Phase::End` | **3**（`XianjianLinghuo`/`XianjianShenwu`/`XianjianWangyou`）| ❌ **真缺陷，待修** |
+| 上游 `global:'phaseEnd'` 却**钉了** `Phase::End` | **3**（`XianjianLinghuo`/`XianjianShenwu`/`XianjianWangyou`）| ❌ **真缺陷，暂未修**（见下）|
 
 ⇒ **G23：12 行 → 3 行**（**9 行判为误报**）；**台账 54 → 46**（含 `Hutian`/`Xuanyuan` 两行修好后消解）
 
@@ -2740,3 +2740,25 @@ let yxs_fanji2_direct_hit = {
 1. 臂截断用固定 900 字符窗口 ⇒ 串到相邻臂，把「没钉相位」误判成「钉了」；
 2. 共享 `pinned` 集合让同一行**既被打印为未钉、又走进「已钉」分支**（自相矛盾）
    ⇒ 改为**逐行为现算** `_arm_facts()`。
+
+### 为什么这 3 行**暂不修**
+
+我去掉它们的 `Phase::End` 钉后，**2 个既有测试立刻失败**：
+
+| 测试 | 编码的期望 |
+|---|---|
+| `mingxiu::mingxiu_linghuo_round_cooldown_and_fire` | 灵火在「End 末」触发 |
+| `zixuan::zixuan_wangyou_roundstamp_and_draw` | 忘忧在「End 末」触发 |
+
+而**上游明确是任何玩家的任何阶段结束**：
+
+```js
+// XianjianLinghuo 上游
+{ round:2, trigger:{global:'phaseEnd'}, filter: function(event,player){ return event.player.getStat('damage') && event.player!=player; } }
+```
+
+⇒ **这 2 个测试编码的是当前（有缺陷的）时机**。
+⇒ 修行为就必须同时改这 2 个测试的时序断言——**那属于另外两个套件，需要它们的作者确认**。
+
+⇒ **因此本轮只修了 `Hutian`/`Xuanyuan`（有测试支持、改后全绿），这 3 行保留为已知缺陷** ✅
+⇒ 已在台账里写明「上游是任何阶段结束、原生钉 End 过窄、修复需同步改 2 个测试」。
