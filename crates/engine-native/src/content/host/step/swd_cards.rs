@@ -504,6 +504,11 @@ impl HostMachine {
                         return Flow::Done;
                     };
                     self.target = Some(t);
+                    // 每目标一次（上游 `storage.cyxianjiang`）：整局 once 记账
+                    ctx.core
+                        .vm_aux
+                        .once
+                        .insert((t, format!("cyxianjiang:{}", self.owner), 3));
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(t)

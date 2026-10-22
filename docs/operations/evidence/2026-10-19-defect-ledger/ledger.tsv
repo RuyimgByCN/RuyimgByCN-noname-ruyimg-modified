@@ -3,7 +3,6 @@ G20	A	GujianFoodLiyutang	?	common.rs:607	player: "phaseEnd"	End, begin:true	中	
 G23	A	XianjianLinghuo	?	filtering/*	global:'phaseEnd'	PhaseEnd(global), 多钉了相位	中	去掉相位钉（上游对任何玩家的任何阶段结束都触发）	blocked
 G23	A	XianjianWangyou	?	filtering/*	global:'phaseEnd'	PhaseEnd(global), 多钉了相位	中	去掉相位钉（上游对任何玩家的任何阶段结束都触发）	blocked
 G15	B	WudianFuchou2	?	common.rs:24	global:'phaseAfter'	End, begin:false	中	按对照结论修改 filter / 删除分支	blocked
-需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianXunying	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
 L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta **且**过滤臂恒 `false`、`step` 只 `Flow::Done`	中	技能**完全未实现**（不是「少一幕」）；需要 judge-before 钩子 + 改判逻辑；道心累加另有 `MbQianlong` 承担，不在此行	blocked

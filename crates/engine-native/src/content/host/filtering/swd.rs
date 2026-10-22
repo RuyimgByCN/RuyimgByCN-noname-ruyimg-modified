@@ -855,6 +855,13 @@ impl HostSkillBehavior {
                 if u.player == owner
                     && u.targets.len() == 1
                     && u.targets[0] != owner
+                    // 上游 filter 还有「该目标未被记录过（每目标一次）」：
+                    // `player.storage.cyxianjiang.includes(event.target)` ⇒ 用整局 once 记账
+                    && !ctx.state.vm_aux.once.contains(&(
+                        u.targets[0],
+                        format!("cyxianjiang:{owner}"),
+                        3,
+                    ))
                     && ctx
                         .state
                         .player(u.targets[0])
