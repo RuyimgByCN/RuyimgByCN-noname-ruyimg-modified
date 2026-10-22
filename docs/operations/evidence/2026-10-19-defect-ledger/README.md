@@ -4033,3 +4033,32 @@ jsrgrangjie: {
 
 守卫覆盖率从 33% 降到 **26.7%**（分母缩小的副作用），
 `test_report_guard_coverage` 的下限据此从 30% 校准到 25%，并在用例里注明原因 ✅
+
+---
+
+## 141 第 944 轮：`ShaDamageForceDiscard` 的缺条件是**已登记差异**，不是可修缺陷
+
+### 本轮做的事
+
+发现原生字段 `DamageData.from_chain: bool` 正是上游 `notLink` 的等价物，于是给
+`ShaDamageForceDiscard`（苦无）补上 `&& !d.from_chain`。
+
+### 结果：测试立刻挡下，而且挡得**有道理**
+
+`nc08_upstream_kuwu.rs::upstream_kuwu_filter_gaps` 是一条**源码事实测试**：
+
+```rust
+assert!(!arm.contains("from_chain") && !arm.contains("_notrigger"),
+    "差异 K1/K3：过滤臂缺 notLink/_notrigger 对应条件（**若新增需更新证据**）：{arm}");
+```
+
+⇒ 这条缺条件**是登记过的差异 K1/K3**，测试的作用就是防止它被无声改掉 ⚠️
+⇒ 已 `git checkout` 回退，全量复归 **1539 passed / 0 failed** ✅
+
+### 结论（对台账口径的修正）
+
+`5a ShaDamageForceDiscard` 属于「**已登记差异**」，**不是待修缺陷**。
+它与 `GujianFoodZiyangdan` 那类一样：**规则差异存在、但已在规则基准登记并有意保留**。
+
+⇒ **凡在「已登记差异」注册表里的行，都应从缺陷台账移出**（否则台账把「有意的差异」当「待修的缺陷」）。
+本轮只确认了 1 行，**没有批量移**——下一步应把台账各行与注册表逐条对照（`report_registered_deviations.py` 已有数据）。
