@@ -6394,3 +6394,29 @@ catalog 之外有源码引用        128  (100.0%)
 其它需要「发现」的技能（如 `SwdLingxin` 等若上游用 `discoverCard`）可照此模式：
 **取牌到 `off_court` → SelectCards 选 1 → 余 `to_discard`**。
 若要多处复用，建议提取为 `Ctx::discover(owner, n)` helper（当前是单点实现）。
+
+---
+
+## **`shaAfter` 也没有可复用帧**（第 980 轮）
+
+`XianjianXunying` 上游是 `player:'shaAfter'`（杀**结算后**再出一张手牌杀）。
+`EventKind` 全表（22 个变体）里**没有任何「结算后」事件**：
+
+```text
+DamageBefore / Damage / Recover / CardsDrawn / CardsMoved / CardUsed / CardResponded /
+Dying / Death / PhaseBegin / PhaseEnd / TurnEnded / SkillToggled / Equipped / Linked /
+CardsDiscarded / TurnOverBefore / TurnOvered / LoseHp / DyingSaved / CardsLost / ShaDodged
+```
+
+⇒ 与 `HlssGaiming`（缺 `judgeBefore`）**同一类**：需要**新增事件种类**。
+
+### 因此剩余 7 条的真实分类（最终）
+
+| 类 | 行 | 需要的动作 |
+|---|---|---|
+| **A. 测试推进脚本** | `GujianFoodLiyutang`、`XianjianLinghuo`、`XianjianWangyou`、`WudianFuchou2` | 状态驱动 + 按 prompt 配应答策略（需授权/owner）|
+| **B. 新增事件种类** | `HlssGaiming`（`judgeBefore`）、`XianjianXunying`（`shaAfter`）| 牵动 `event.rs`/`archive`/`ARCHIVE_FORMAT_VERSION`/golden |
+| **C. 单帧多目标逐目标派发** | `SwdJiang` | 在 `CardUsed` 帧上逐 target 派发子帧 |
+
+⇒ **7 条里 3 条是「测试写法」问题、2 条是「引擎缺事件」、1 条是「逐目标派发」、1 条（`WudianFuchou2`）兼有**——
+**没有一条是「改个条件」能解决的**。
