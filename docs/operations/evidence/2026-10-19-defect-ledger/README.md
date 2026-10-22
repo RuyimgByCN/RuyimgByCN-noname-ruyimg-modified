@@ -3337,3 +3337,33 @@ event.trigger('damageBegin4');   // step 3
 
 ⇒ 与 §106 的 5 行同类：**测试编码了当前（晚一步）的时机**。若要修，需同步改这条断言 ⚠️
 ⇒ **「被测试挡住」清单从 5 行增至 6 行** ✅
+
+### 第 921 轮：`GwentCiguState` 的**效果也不对**（不只是时机）
+
+找到上游状态技原文（`card/gwent/skill.js:225`）：
+
+```js
+gw_ciguhanshuang: {
+  trigger: { player: "phaseDrawBegin" },
+  forced: true,
+  filter(event){ return event.num > 0; },
+  content(){ trigger.num--; player.removeSkill("gw_ciguhanshuang"); },
+  intro: { content: "下个摸牌阶段摸牌数-1" },
+}
+```
+
+| 侧 | 时机 | 效果 |
+|---|---|---|
+| **上游** | 摸牌阶段**开始**（`phaseDrawBegin`）| **`event.num--`（摸牌数 -1）** |
+| **原生** | 摸牌阶段**结束**（`Draw, begin:false`）| **弃首张手牌** |
+
+⇒ **两处都不对**：时机晚一步、效果是「弃一张」而不是「少摸一张」⚠️
+⇒ 既有测试 `g1_shahai_gwent.rs:426` 断言的正是「摸牌阶段结束弃首张（净 -1）」——**编码了两处错误**
+
+**修法**（未实施，需同时改测试）：
+1. `filtering/common.rs`：`Draw, begin:false` → `begin:true`；
+2. `step/gwent.rs`：删掉弃牌，只保留状态移除；
+3. `kernel/phase/draw.rs`：在 `base_draw` 里减 1（`event.num > 0` 时才减）；
+4. 测试断言改为「摸牌阶段开始时摸牌数 -1」。
+
+⇒ **「被测试挡住」清单增至 7 行** ⚠️
