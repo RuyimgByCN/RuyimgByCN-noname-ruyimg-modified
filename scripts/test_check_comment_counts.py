@@ -32,12 +32,12 @@ class CommentCountTests(unittest.TestCase):
         # 前缀族计数之和不应超过行数
         prefixed = {k: v for k, v in self.counts.items()}
         self.assertLessEqual(sum(prefixed.values()) if all("(" not in k for k in prefixed) else total, total * 2)
-        self.assertEqual(self.counts.get("需档"), 21)
+        self.assertEqual(self.counts.get("需档"), 19)  # 第 909 轮：2 行移入 NON_DEFECT_VERIFIED
 
     def test_known_family_counts(self):
         self.assertEqual(self.counts.get("G14"), 1)
         self.assertIsNone(self.counts.get("G18"))
-        self.assertEqual(self.counts.get("G23"), 11)  # 第 814 轮：SwdHuanling 归因无效移出
+        self.assertEqual(self.counts.get("G23"), 3)  # 第 903 轮：判据改为「作用域不符」后由 11 降为 3
         self.assertEqual(self.counts.get("G20"), 5)
         self.assertEqual(self.counts.get("G19"), 1)
 

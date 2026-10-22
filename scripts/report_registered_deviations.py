@@ -67,10 +67,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"台账 {len(yes) + len(no)} 行；已登记差异 {len(yes)} 行；未登记 {len(no)} 行")
     if "--check" in args:
         # 门禁口径：总数必须为 54，已登记数必须为 20（否则文档口径需同步更新）
-        if len(yes) + len(no) != 46 or len(yes) != 18:
-            print(f"❌ 口径漂移：总 {len(yes) + len(no)}（应 46）、已登记 {len(yes)}（应 18）")
+        if len(yes) + len(no) != 44 or len(yes) != 17:
+            print(f"❌ 口径漂移：总 {len(yes) + len(no)}（应 44）、已登记 {len(yes)}（应 17）")
             return 1
-        print("✅ 口径一致：46 行 / 已登记 18 行")
+        print("✅ 口径一致：44 行 / 已登记 17 行")
         return 0
     for behavior in yes:
         print(f"  [差异] {behavior}")

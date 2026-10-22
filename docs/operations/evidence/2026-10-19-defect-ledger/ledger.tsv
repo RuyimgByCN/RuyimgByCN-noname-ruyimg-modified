@@ -11,12 +11,10 @@ G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true
 第3次	B	Tianxiang	?	common.rs:394	player:"damageBegin3",	DamageBefore	高	修触发时机/补档位	blocked
 需档	B	Liaoyuan	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdDunxing	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdHuanyin	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdLianda	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdMojian	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	SwdNingshuang	?	meta:0	target:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdTiebi	?	meta:0	global:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	XianjianChangnian	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianCtianfu3	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked

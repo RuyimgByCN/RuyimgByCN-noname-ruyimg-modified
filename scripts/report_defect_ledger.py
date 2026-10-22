@@ -179,6 +179,7 @@ def build() -> list[list[str]]:
 
     for behavior, which, _loc, _skill, trigger, verdict in [
         (b, w, loc, s, t, v) for b, w, loc, s, t, v in event_out()
+        if b not in NON_DEFECT_VERIFIED
     ]:
         if verdict.startswith("OK") or verdict.startswith("REVIEW"):
             continue
@@ -210,6 +211,14 @@ def build() -> list[list[str]]:
 #: 是**另一个技能**（`phaseEnd`）；行为注释写的是「断月」（`duanyue`，主动技）。
 #: ⇒ 无法确定上游，移出缺陷清单待复核（第 813–814 轮）。
 UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
+
+#: 已由既有行为测试证明「规则层面等价」的行（第 909 轮起）——它们曾按「需档」记入台账，
+#: 但台账的依据是「引擎没有对应的事件槽位」这一**实现细节**；仓库里的测试已断言
+#: 上游描述的可观察结果，故在规则差异层面不是缺陷。
+NON_DEFECT_VERIFIED: dict[str, str] = {
+    "SwdDunxing": "g1_shahai_swd/heihuo.rs 断言「非红桃判定 ⇒ 杀被取消（无伤）」⇒ 取消发生在结算前",
+    "SwdNingshuang": "g1_shahai_swd/yulin.rs 断言「使用者横置/未翻面 + 自己摸 1 + 伤害照常」⇒ 与上游一致",
+}
 
 BARE_USE_CARD_REVIEW = {
     "SwdGongshen", "SwdLanzhi", "SwdLiuhong", "XianjianLiefeng", "NewZhixi",

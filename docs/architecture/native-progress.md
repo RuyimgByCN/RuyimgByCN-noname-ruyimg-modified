@@ -53,7 +53,7 @@
 > | 目标平台 | **构建级** | iOS 双架构 + WASM 三层；**运行期未验** |
 > | **完成八项** | **0** | **唯一未过项：规则差异** |
 >
-> **缺陷总账（本会话最终分类）**：**46 条 = A 17 / B 29**（**以[机器可读台账](../operations/evidence/2026-10-19-defect-ledger/README.md)为准**）
+> **缺陷总账（本会话最终分类）**：**44 条 = A 17 / B 27**（**以[机器可读台账](../operations/evidence/2026-10-19-defect-ledger/README.md)为准**）
 > - **B 类 29 = 需档 21 + 其他 8**（**需档 = `useCardTo*` 11 + `sha*` 6 + `dieBegin` 4**）
 > - **A 类 26**：G23 12 / G20 5 / G15 2 / G23b 2 / G14 1 / G19 1 / G22 1 / 单条 1
 > - **四个维度**：**①上游定位 55/55 ✓ ②相位族同质（36 行，第 791 轮）✓ ③效果步存在 55/55 ✓ ④效果逻辑等价 2/55** ⚠️
@@ -1581,6 +1581,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 904–905 轮**：**5 条 timing 修复全部被测试挡下（已回退）；撤回 `Tianxiang` 的效果不符判定** ⚠️✅——**timing 类**：`XianjianLinghuo`/`XianjianWangyou`/`GujianFoodLiyutang`/`GujianFoodZiyangdan`/`WudianFuchou2` 五条改完后分别挂掉 `mingxiu_linghuo`、`zixuan_wangyou`、`hujia_primitive_and_food_batch_three`、`remaining_clusters_batch`、`wudian_generals_batch14` ⇒ **全部回退，全量复归 1538/0** ⇒ **需要授权同步改这 5 个测试的时序断言** ❌；**`Tianxiang`**：既有测试文档头写明上游是 `shenhua.js:6501` 的**标准 `tianxiang`**（`damageBegin3` + 弃红桃手牌 + 转移），与原生**完全一致** ⇒ **第 887 轮判「效果不符」是解析到了 `sbtianxiang`（跨包同名）** ⇒ **改回等价并删除那条错误的守卫**（守卫 51 → 50）✓；**第 26 次自我更正**：**判「效果不符」前必须先确认是同一套牌的同一技能**，**既有测试的文档头可作上游第二信源** ✅。
 >
+> **第 906–909 轮**：**台账 46 → 44：2 行经「既有测试的断言」证明规则等价，移出清单** ✅——新增 `NON_DEFECT_VERIFIED` 注册表（**每条必须写明测试文件与断言**）：**`SwdDunxing`**（`heihuo.rs` 断言「非红桃判定 ⇒ 杀被取消（无伤）」⇒ 取消发生在结算前，时序与上游 `useCardToBefore` 一致）、**`SwdNingshuang`**（`yulin.rs` 断言横置/未翻面/摸 1/伤害照常 ⇒ 与上游 `useCardToBegin` 一致）⇒ **台账 44（A 17 / B 27）** ✓；**并测得「有测试提及」的行 28/46** ⇒ **「需档」类的实际影响可能远小于账面**（**它是实现槽位差异，不等于规则不同**）⚠️；**同步更正**：`check_comment_counts` 的 `需档` 21→19、`G23` 11→3，`report_registered_deviations` 阈值 46/18 → 44/17 ✓。
+>
+
 
 
 
