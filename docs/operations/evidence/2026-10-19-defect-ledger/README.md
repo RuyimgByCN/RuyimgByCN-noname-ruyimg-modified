@@ -3312,3 +3312,28 @@ event.trigger('damageBegin4');   // step 3
 `XianjianFenglue` 的移出**第一次没有生效**——因为它来自 `phase.arms()` 那条生成路径，
 而我只给 `event_out()` 与 `MANUAL` 两条路径加了排除。
 ⇒ **一个排除表必须覆盖所有生成路径**，否则「移出」是假的（本轮把 `phase.arms()` 也接上了）⚠️
+
+---
+
+## 120 第 920 轮：`GwentCiguState` 加入「被测试挡住」清单（第 6 行）；并确认 `phaseAfter` 是**每阶段**
+
+### `phaseAfter` / `phaseEnd` 的作用粒度（源码确认）
+
+`content.ts` 的阶段机：`trigger("phaseBegin")`（4841）跑**每个阶段**，
+阶段收束时 `trigger("phaseEnd")`（4915）紧跟 `trigger("phaseAfter")`（4917）
+⇒ **两者都是「每个阶段一次」**，不是「每回合一次」⚠️
+
+⇒ 这同时确认：
+* `Hutian` 类 `player:'phaseEnd'` = 自己每个阶段结束（第 903 轮的判断正确）；
+* `WudianFuchou2` 的 `global:'phaseAfter'` = **任何玩家、任何阶段**结束后 ⇒ 原生钉在「自己 End 结束」**严重过窄** ⇒ **真缺陷**（保留）✅
+
+### `GwentCiguState` 是第 6 行「被测试挡住」
+
+| 项 | 内容 |
+|---|---|
+| 上游 | `player:'phaseDrawBegin'`（摸牌阶段**开始**）|
+| 原生 | `Draw, begin: false`（摸牌阶段**结束**）⇒ 晚一步 |
+| 挡住它的测试 | `g1_shahai_gwent.rs:426`：`assert_eq!(hand, h0 - 1, "摸牌阶段结束弃首张（净 -1）")` |
+
+⇒ 与 §106 的 5 行同类：**测试编码了当前（晚一步）的时机**。若要修，需同步改这条断言 ⚠️
+⇒ **「被测试挡住」清单从 5 行增至 6 行** ✅
