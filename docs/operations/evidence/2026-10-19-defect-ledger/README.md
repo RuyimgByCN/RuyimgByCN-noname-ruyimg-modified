@@ -3440,3 +3440,27 @@ gw_ciguhanshuang: {
   其中 `G20`/`G23` 一类的窗口差异很可能是真的（如 `XianjianShenwu` 钉 `End` 而上游 `global:'phaseEnd'`）。
 
 ⇒ **台账 31 条（A 15 / B 16）**，口径与生成器、门禁、单测均已同步 ✅
+
+---
+
+## 123 第 924 轮：`WudianZiyu` 试着放宽窗口，**测试揭示计数耦合，已回退**
+
+按上游 `{global:'phaseEnd'}` + `phaseNumber%4==0` 的样子，把过滤臂从
+`End, begin:true` 改成 `begin:false`（任何阶段结束）并保留 `phase_number % 4 == 0`。
+
+**结果**：`g1_wudian/chanyata.rs::chanyata_ziyu_every_four_phases` 立刻失败
+（「12 回合内 %4 门控至少触发一次」没有触发）。
+
+**原因（推断）**：`phase_number` 与「阶段结束」的**采样时刻**耦合——
+在 `phaseEnd` 时该值可能已经推进，导致 `%4==0` 不再对齐到同一个阶段。
+⇒ **已 `git checkout` 回退，全量复归 1538 passed / 0 failed** ✅
+
+### 因此登记为「需先厘清 `phase_number` 的推进时刻」
+
+| 项 | 内容 |
+|---|---|
+| 缺陷本体 | 仍成立（原生钉 `End` 开始，上游是任何玩家的阶段结束）|
+| 卡点 | **不是测试本身**，而是 `phase_number` 在 `phaseBegin`/`phaseEnd` 的取值语义未厘清 |
+| 下一步 | 先写一个断言 `phase_number` 推进时刻的探针测试，再改窗口 |
+
+⇒ 这是「被测试挡住」的**第 8 类**：**不是断言写错，而是我的改动引入了一个未验证的假设** ⚠️
