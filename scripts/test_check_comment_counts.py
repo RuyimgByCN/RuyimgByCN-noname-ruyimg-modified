@@ -32,7 +32,7 @@ class CommentCountTests(unittest.TestCase):
         # 前缀族计数之和不应超过行数
         prefixed = {k: v for k, v in self.counts.items()}
         self.assertLessEqual(sum(prefixed.values()) if all("(" not in k for k in prefixed) else total, total * 2)
-        self.assertEqual(self.counts.get("需档"), 13)  # 第 915 轮：Jifeng 移出后
+        self.assertEqual(self.counts.get("需档"), 12)  # 第 916 轮
 
     def test_known_family_counts(self):
         self.assertEqual(self.counts.get("G14"), 1)

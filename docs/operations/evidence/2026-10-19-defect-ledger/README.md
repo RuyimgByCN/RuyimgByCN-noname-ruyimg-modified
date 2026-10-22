@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**38 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**37 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -28,8 +28,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **16** |
-| **B（需扩枚举或引擎能力）** | **22** |
-| **合计** | **38** |
+| **B（需扩枚举或引擎能力）** | **21** |
+| **合计** | **37** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **38** |
+| **合计** | **37** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **38** |
+| **合计** | **37** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3184,3 +3184,47 @@ assert!(saw_fizzle, "多目标失误（整牌取消）样本出现");
 而**不是**先去做枚举扩展。当前已移 7 条，剩 13 条待逐条核 ✅
 
 ⇒ 台账 **39 → 38**（A 16 / B 22），`需档` 族 14 → 13
+
+---
+
+## 116 第 916 轮：`YunchouDiychanyuan` 移出（38 → 37）；**「需 `DeathBefore` 槽位」这个前提也是错的**
+
+### 证据一：测试断言了上游效果
+
+`nc08_upstream_yunchou_chanyuan.rs`：
+
+```rust
+assert_eq!(max0_after, max0_before - 1,
+    "蝉缘：击杀者（来源）应**失去 1 点体力上限**");
+assert!(p0.hp <= max0_after as i32, "蝉缘：体力应被钳到新上限");
+```
+
+⇒ 正是上游 `trigger.source.loseMaxHp(true)`。
+
+### 证据二：`Death` 本来就是「死亡前」窗口
+
+`kernel/dying.rs:55/147` 在**最终死亡之前**发出 `EventData::Death`：
+
+```rust
+ctx.emit(EventData::Death { player: self.dying, killer: self.source });
+```
+
+⇒ 它承担的就是上游 `dieBegin` 的职责 ✅ ⇒ **台账说的「需 `DeathBefore` 槽位」不成立**。
+
+### 因此这一类 4 行的前提要重判
+
+| 行 | 现状 |
+|---|---|
+| `YunchouDiychanyuan` | ✅ **移出**（测试 + 窗口均成立）|
+| `XianjianChangnian` | 触发面用 `EventData::Death`，效果「移交 `hej`」已有实现；**待补断言级证据** |
+| `XianjianCtianfu3` | **无测试** |
+| `XianjianXshuangren2` | `xuejian.rs` 覆盖的是另一技；**待补** |
+
+⇒ 台账 **38 → 37**（A 16 / B 21），`需档` 族 13 → 12
+
+### 累计已推翻的两个「需要扩枚举」前提
+
+1. **`CardTargeted`**：7 条 `useCardTo*` 行的行为已被测试证明正确（第 915 轮）；
+2. **`DeathBefore`**：`EventData::Death` 就是死亡前窗口（本轮）。
+
+⇒ **「扩 3 个槽位解锁 24 行」的方案，现在至少 8/24 行已被证明不需要** ⚠️
