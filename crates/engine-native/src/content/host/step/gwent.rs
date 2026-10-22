@@ -182,19 +182,13 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::GwentCiguState => {
-                // 摸牌阶段结束：弃首张手牌（若手牌非空，登记差异：
-                // 等价净 -1）并移除状态
-                if let Some(c) = ctx.core.player(self.owner).hand.first().copied() {
-                    ctx.discard_from_hand(self.owner, c);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![c],
-                    });
-                }
-                food_remove(ctx, self.owner, &self.def_key);
-                Flow::Done
-            }
-            HostBehavior::GwentWeatherGrant => {
+        // 上游 `gw_ciguhanshuang` content: `trigger.num--; player.removeSkill(...)`
+        // ⇒ 摸牌数 -1 由 `kernel/phase/draw.rs` 计算，这里**只移除状态**
+        //（第 938 轮修正：原实现是「弃首张手牌」，效果不对）
+        food_remove(ctx, self.owner, &self.def_key);
+        Flow::Done
+    }
+    HostBehavior::GwentWeatherGrant => {
                 // 对 targets（目标 + 距离 1 邻座）逐个安装对应天气状态
                 //（已持有者跳过，对齐上游 filterTarget）
                 let kind = self.card.map(|c| ctx.catalog.card_kind(c));

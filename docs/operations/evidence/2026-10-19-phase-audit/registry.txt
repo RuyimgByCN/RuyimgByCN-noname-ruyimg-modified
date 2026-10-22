@@ -16,7 +16,7 @@ GujianFoodTanhuadong	gujian_food_tanhuadong	Play	false	已核	基准对应章节
 GujianFoodYougeng	gujian_food_yougeng	Judge	true	已核	基准对应章节
 GujianFoodZiyangdan	gujian_food_ziyangdan	End	true	不适用	卡牌效果宿主，上游无 trigger
 GwentBirinState	gwent_birin_state	Play	false	已核	基准对应章节
-GwentCiguState	gwent_cigu_state	Draw	false	已核	基准对应章节
+GwentCiguState	gwent_cigu_state	Draw	true	已核	基准对应章节
 GwentQinpenState	gwent_qinpen_state	Discard	false	已核	基准对应章节
 HuanleXuelunyangCard	huanle_xuelunyang	Judge	true	已核	基准对应章节
 WudianGeju	wudian_geju	Judge	true	已核	v607 反查比对

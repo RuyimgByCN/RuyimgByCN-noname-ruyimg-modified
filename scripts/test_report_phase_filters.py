@@ -20,9 +20,9 @@ class ScanTest(unittest.TestCase):
             self.assertIn(begin, {"true", "false"})
 
     def test_begin_true_count(self) -> None:
-        # 实测值（不得凭记忆填）：begin=true 共 29 条（第 929–934 轮 4 条臂改为 begin:false）
+        # 实测值（不得凭记忆填）：begin=true 共 30 条（第 938 轮 gwent_cigu 改回 begin:true）
         n = sum(1 for r in rp.scan() if r[3] == "true")
-        self.assertEqual(n, 29, "begin=true 的条数变了")
+        self.assertEqual(n, 30, "begin=true 的条数变了")
 
     def test_phase_distribution(self) -> None:
         from collections import Counter

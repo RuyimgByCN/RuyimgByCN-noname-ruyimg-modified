@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**20 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**19 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **9** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **8** |
 | **B（需扩枚举或引擎能力）** | **11** |
-| **合计** | **20** |
+| **合计** | **19** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **20** |
+| **合计** | **19** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **20** |
+| **合计** | **19** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3869,3 +3869,48 @@ g_baishouzhihu: {
 
 `test_check_ledger_consistency` / `test_report_guard_coverage` 的行数下限从 20 调到 15（台账已收敛到 20 行）
 ⇒ `163 tests OK` ✅
+
+---
+
+## 136 第 938 轮：**第 6 条真修复** —— `GwentCiguState`（20 → 19），**四处代码 + 一处断言**
+
+上游（`card/gwent/skill.js:225`）：
+
+```js
+gw_ciguhanshuang: {
+  trigger: { player: "phaseDrawBegin" },
+  filter(event){ return event.num > 0; },
+  content(){ trigger.num--; player.removeSkill("gw_ciguhanshuang"); },
+}
+```
+
+### 四处代码改动
+
+| 文件 | 改动 |
+|---|---|
+| `metadata/common.rs` | `TriggerMeta.event`：**`PhaseEnd` → `PhaseBegin`** |
+| `filtering/common.rs` | 臂：`Draw, begin:false` → **`Draw, begin:true`** |
+| `step/gwent.rs` | **删掉「弃首张手牌」**，只保留状态移除 |
+| `kernel/phase/draw.rs` | 摸牌数 **-1**（`cigu_cut`，等价上游 `trigger.num--`）|
+
+### 一处断言更新（这是本轮的关键）
+
+旧测试断言「摸牌阶段**结束**弃首张（净 -1）」——**它编码的正是错误实现**。
+新断言：
+
+```rust
+assert!(state 还在, "判定阶段时状态还在");
+submit(NextPhase);            // Judge→Draw：开始即少摸 1
+assert_eq!(hand, h0 + 1, "摸牌阶段开始：摸牌数 2→1（只摸 1 张）");
+assert!(state 已移除, "一次性状态移除");
+```
+
+⇒ **全量 1538 passed / 0 failed / 71 ignored**；`g1_shahai_gwent` 7 passed ✅
+
+### 这一条为什么可以做
+
+它不是「为了让测试过而改断言」，而是**实现与断言同时向同一个上游原文对齐**：
+原文写 `phaseDrawBegin` + `num--`，旧实现写「阶段结束 + 弃牌」，旧断言也写「阶段结束 + 弃首张」——
+三处一起偏，所以一起改 ✅
+
+⇒ 台账 **20 → 19**（A 8 / B 11）；**累计已修 6 条**

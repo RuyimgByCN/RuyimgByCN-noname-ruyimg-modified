@@ -630,7 +630,8 @@ impl HostSkillBehavior {
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: false }
                 if *player == owner),
             HostBehavior::GwentCiguState => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Draw, begin: false }
+                // 上游 `phaseDrawBegin`：摸牌阶段**开始**（原为 begin:false，晚一步）
+                EventData::Phase { player, phase: crate::event::Phase::Draw, begin: true }
                 if *player == owner),
             HostBehavior::GwentKunenState => matches!(event,
                 EventData::Damage(d)

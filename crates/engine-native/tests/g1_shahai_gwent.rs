@@ -385,20 +385,20 @@ fn gwent_weather_states() {
     );
     assert_zone_conservation(&e);
 
-    // —— 刺骨寒霜：摸牌阶段结束弃首张（登记差异：等价净 -1） ——
+    // —— 刺骨寒霜：摸牌阶段**开始**时摸牌数 -1（上游 `phaseDrawBegin` + `trigger.num--`） ——
     let (e0, pack) = setup(5306);
     let cgh = find(&e0, "gw_ciguhanshuang");
     let mut e = inject(&e0, &pack, &[cgh], 0);
     let out = submit(&mut e, 0, GameAction::PlayCard { card: cgh, targets: vec![1] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
     pass_window(&mut e);
-    // 0 号自己也有霜（邻座覆盖）→ 0 号下个摸牌阶段结束弃 1：
-    // 推进一个整回合回到 0 号摸牌阶段后结束
+    // 0 号自己也有霜（邻座覆盖）→ 0 号下个摸牌阶段少摸 1：
+    // 推进一个整回合，停在 0 号**判定阶段**（此时状态还在）
     let mut steps = 0;
     loop {
         steps += 1;
         assert!(steps < 96, "未回到 0 号摸牌阶段后");
-        if e.turn().current == 0 && e.turn().phase == Phase::Draw && e.open_choice().is_none() {
+        if e.turn().current == 0 && e.turn().phase == Phase::Judge && e.open_choice().is_none() {
             break;
         }
         if let Some(c) = e.open_choice().cloned() {
@@ -421,9 +421,13 @@ fn gwent_weather_states() {
         .catalog()
         .skill_by_name(engine_native::content::host::GW_CIGU_STATE_KEY)
         .expect("刺骨寒霜状态技在目录");
-    assert!(e.save().core.skills.contains_key(&(0, cigu_def)), "状态在");
-    submit(&mut e, 0, GameAction::NextPhase); // Draw→Judge... 实际为 Draw 结束
-    assert_eq!(e.debug_hand(0).len(), h0 - 1, "摸牌阶段结束弃首张（净 -1）");
+    assert!(e.save().core.skills.contains_key(&(0, cigu_def)), "判定阶段时状态还在");
+    submit(&mut e, 0, GameAction::NextPhase); // Judge→Draw：开始即少摸 1
+    assert_eq!(
+        e.debug_hand(0).len(),
+        h0 + 1,
+        "摸牌阶段开始：摸牌数 2→1（只摸 1 张）"
+    );
     assert!(
         e.save().core.skills.get(&(0, cigu_def)).is_none(),
         "一次性状态移除"

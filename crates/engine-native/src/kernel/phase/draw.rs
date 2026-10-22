@@ -130,7 +130,16 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
             6 => 1,
             _ => 0,
         };
-        let base_draw = (if baiyi_cut { 1i32 } else { 2i32 } + mailun_draw).max(0) as usize;
+        // 刺骨寒霜（gwent，第 938 轮）：上游 `phaseDrawBegin` 时 `trigger.num--`
+        // ⇒ 摸牌数 -1（`event.num > 0` 才减，同上游 filter）
+        let cigu_cut = i32::from(
+            ctx.catalog
+                .skill_by_name(crate::content::host::GW_CIGU_STATE_KEY)
+                .map(|def| ctx.core.has_skill(player, def))
+                .unwrap_or(false),
+        );
+        let base_draw =
+            (if baiyi_cut { 1i32 } else { 2i32 } + mailun_draw - cigu_cut).max(0) as usize;
         ctx.draw_cards(
             player,
             base_draw

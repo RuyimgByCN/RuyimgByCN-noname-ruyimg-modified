@@ -786,7 +786,8 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::GwentCiguState => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // 上游 `gw_ciguhanshuang`: `{player:'phaseDrawBegin'}`（第 938 轮）
+                event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,
