@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**32 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**31 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **16** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **15** |
 | **B（需扩枚举或引擎能力）** | **16** |
-| **合计** | **32** |
+| **合计** | **31** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **32** |
+| **合计** | **31** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **32** |
+| **合计** | **31** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3367,3 +3367,25 @@ gw_ciguhanshuang: {
 4. 测试断言改为「摸牌阶段开始时摸牌数 -1」。
 
 ⇒ **「被测试挡住」清单增至 7 行** ⚠️
+
+---
+
+## 121 第 922 轮：`BossBaiyi` 移出（32 → 31）——复合技子技能，不是「凭空新增触发」
+
+| 侧 | 写法 |
+|---|---|
+| 上游 `boss_baiyi` | **复合技**：`group:['boss_baiyi_draw','boss_baiyi_thunder','boss_baiyi_discard']` + `subSkill`；`_discard` 子技为 `global:'roundStart'` + `roundNumber == 5` |
+| 原生 | `Phase { Judge, begin: true }` + `player == owner` + **`round == 5`** + Boss 方 + **`wing_armed & WING_BAI_5 == 0`（只一次）** |
+
+⇒ **同一轮、同样只发生一次**；差异只是「roundStart」与「第 5 轮 Judge 开始」的**同一轮内位置**
+
+**测试证据**：`native_kernel/d4.rs` 的 `d4_boss_b4_baiyi_discard_thunder_and_draw`
+断言「**第 5 轮敌方弃 2**」且 `wing_armed & (1<<6) == 1<<6`（状态已置）✅
+
+⇒ 台账 **32 → 31**（A 15 / B 16）
+
+### 这是「凭空新增触发」这个标签的**第 5 次**被推翻
+
+前 4 次：`lexue`、`miedao`、`huajin2`、`boss_baiyi`（本轮）。
+共同点：**上游父技能没有顶层 trigger，是被 `group` 拆到子技能里**。
+⇒ **凡看到「上游 (enable 主动技)」或「没有 trigger」，先查 `group` / `subSkill`** ✅
