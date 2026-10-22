@@ -253,6 +253,7 @@ NON_DEFECT_VERIFIED: dict[str, str] = {
     "Yihua": "swd_yihua_bounce.rs 断言「弃 2 张手牌」「1 号未受伤（已反弹）」「0 号受伤」⇒ 反弹发生在结算前，同上游 useCardToBefore",
     "Zhenlie": "swd_zhenlie_target_exclude.rs 断言「失去 1 点体力」「使用者被弃一张牌」「未被杀命中（已移出目标）」⇒ 移出目标生效于结算前",
     "YunchouDiychanyuan": "nc08_upstream_yunchou_chanyuan.rs 断言「击杀者应失去 1 点体力上限」「体力被钳到新上限」⇒ 正是上游 `trigger.source.loseMaxHp(true)`，且发生在死亡窗口内；`EventData::Death` 在 `kernel/dying.rs` 里于最终死亡**之前**发出，等价 `dieBegin`",
+    "SwdJiguanyuanGain": "上游 `card/swd/skill.js:498` 的 `jiguanyuan` 就是 `trigger:{player:'phaseEnd'}` + `forced` + `player.gain(player.storage.jiguanyuan)` ⇒ 原生 `TriggerMeta.event = PhaseEnd` + 过滤臂 `Phase{begin:false}` 一致；台账原写「damageEnd + damageSource」是**归因错误**（第 933 轮核对原文）",
     "BossBaiyi": "上游 `boss_baiyi` 是 `group:['_draw','_thunder','_discard']` 的复合技，`_discard` 子技为 `global:'roundStart'` + `roundNumber==5`；原生过滤臂判 `round == 5` + Boss 方 + `wing_armed & WING_BAI_5 == 0`（只触发一次）⇒ 同一轮内、同样一次；native_kernel/d4.rs 的 `d4_boss_b4_baiyi_discard_thunder_and_draw` 断言「第 5 轮敌方弃 2」且 wing 位已置",
     "XianjianFenglue": "过滤臂是 `Phase { Play, begin: true }` + `*player == owner`，正是上游 `player:'phaseUseBefore'`（自己出牌阶段开始前）的边界时刻；g1_wudian/luozhaoyan.rs 断言「杀/决斗自动使用、非杀不自动、杀+决斗各 1 伤」",
     "Tianxiang": "`damageBegin1/2/3/4` 是**同一次伤害内的四个阶段**（`game.js:20760-20766` 依次 `event.trigger`），不是「第 N 次伤害」⇒ 上游 `damageBegin3` 即「任意伤害、第 3 阶段」，原生单一 `DamageBefore` 窗口等价；`swd_tianxiang_redirect.rs` 断言弃红桃手牌转移伤害且天香·受按失去体力摸牌",

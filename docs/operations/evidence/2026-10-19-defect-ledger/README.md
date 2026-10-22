@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**28 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**27 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **12** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **11** |
 | **B（需扩枚举或引擎能力）** | **16** |
-| **合计** | **28** |
+| **合计** | **27** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **28** |
+| **合计** | **27** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **28** |
+| **合计** | **27** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3705,3 +3705,38 @@ EventData::Phase { player, begin, .. } if *player == owner && *begin
 3. `SwdBaishouzhihuHeld`：臂 `&& *begin` + `PhaseEnd` 元数据（历史不一致）。
 
 ⇒ **「两个地方声明同一件事，就必须有东西保证它们一致」** ✅
+
+---
+
+## 131 第 933 轮：`SwdJiguanyuanGain` 的「damageEnd」是**归因错误**（28 → 27）
+
+### 台账原写
+
+上游「`damageEnd` + `damageSource`」，原生 `EventKind::PhaseEnd` ⇒ 判为「事件种类完全错」。
+
+### 上游原文（`card/swd/skill.js:498`）
+
+```js
+jiguanyuan: {
+  mark: "card",
+  trigger: { player: "phaseEnd" },
+  forced: true,
+  temp: true,
+  popup: false,
+  content() { player.gain(player.storage.jiguanyuan, "gain2"); player.removeSkill("jiguanyuan"); … },
+}
+```
+
+⇒ **上游就是 `player:'phaseEnd'`**，原生 `PhaseEnd` + 臂 `Phase{begin:false}` **完全一致** ✅
+⇒ 台账的「damageEnd + damageSource」**是错的**（且在测试里可以反证：该测试名就叫
+`swd_jiguanyuan_pending_then_gain_at_phase_end`）
+
+⇒ 我已按错误台账改过一次代码（改成 `Damage`），**测试立刻失败**——那正是测试在保护正确行为 ✅
+⇒ 已 `git checkout` 回退，台账 **28 → 27**（A 11 / B 16）
+
+### 第 34 次自我更正 —— 也是本轮最重要的一条
+
+**「台账与测试冲突时，先怀疑台账」。**
+这轮的顺序是：信台账 → 改代码 → 测试失败 → 才去读上游原文 → 发现台账错。
+**正确顺序应该是：读上游原文 → 看测试断言 → 再决定改不改代码。**
+⇒ 这也解释了为什么前面 9 条「被测试挡住」里，**可能还有几条其实是台账错**（下一步逐条复核）。
