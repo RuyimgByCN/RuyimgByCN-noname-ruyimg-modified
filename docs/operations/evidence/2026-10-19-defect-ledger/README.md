@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**14 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**12 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -28,8 +28,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **4** |
-| **B（需扩枚举或引擎能力）** | **10** |
-| **合计** | **14** |
+| **B（需扩枚举或引擎能力）** | **8** |
+| **合计** | **12** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **14** |
+| **合计** | **12** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **14** |
+| **合计** | **12** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -4095,3 +4095,24 @@ assert!(!arm.contains("from_chain") && !arm.contains("_notrigger"),
 | `UNRESOLVED_ATTRIBUTION` | 归因不成立（2 条：`SwdHuanling`、`Rangjie`）|
 
 ⇒ 五类**语义各不相同**，交接时不能混为一谈 ✅
+
+---
+
+## 143 第 947 轮：`L20` 两条「无 TriggerMeta」**不等于未实现**（14 → 12）
+
+`L20` 的两个西瓜技能台账记的是「无 TriggerMeta ⇒ 缺档」。本轮读内核与测试后确认：
+**它们的效果由内核承担，本来就不需要 `TriggerMeta`**。
+
+| 行 | 上游 | 原生实际实现 | 证据 |
+|---|---|---|---|
+| `XiguaMopaiFanbei` | `phaseDrawBegin2` → `trigger.num += 2` | `kernel/phase/draw.rs` 的 `mopai_extra = 2` | `l20_config_mods_batch1.rs`：「正常 2 + 额外 2 = **4**」|
+| `XiguaXueliangFanbei` | `global:'gameStart'` → `gainMaxHp(hp)` + `recover(hp)` | 自己首个阶段开始 + 标记守卫（只一次）| 同一测试：「回复 3（3+3）」「**仅一次**」|
+
+⇒ `L20b` 与上游的差异只是**时点后移**（`gameStart` → 首个阶段开始），代码注释已登记
+⇒ 台账 **14 → 12**（A 4 / B 8）
+
+### 第 37 次教训
+
+**「无 `TriggerMeta`」只说明「不是 TriggerMeta 机制」，不说明「没实现」**——
+内核里（`draw.rs`、`damage.rs`、阶段收束等）直接实现的效果不少。
+⇒ 判「缺档/未实现」必须**同时**看：`TriggerMeta`（含 `extra_events`）、过滤臂、**step**、**内核钩子**。
