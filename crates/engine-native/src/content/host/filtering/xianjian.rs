@@ -273,8 +273,10 @@ impl HostSkillBehavior {
             // 毒刺：自己弃牌含装备 kind+距离 1 内有其他存活角色（登记差
             // 异：仅弃置路径；被获得/替换不触发）,
             HostBehavior::XianjianShenwu => {
+                // 上游 `{global:'phaseEnd'}`：**任何玩家的任何阶段**结束（第 939 轮：
+                // 原臂钉在自己 End 阶段，过窄）
                 matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
+                EventData::Phase { begin: false, .. }
                 if ctx.state.player(owner).shuiyun_count >= 3)
                     && !ctx.state.player(owner).shenwu_awakened
             }
@@ -298,7 +300,7 @@ impl HostSkillBehavior {
                     && !ctx.state.player(owner).off_court.is_empty()
             }
             // 忘忧：他人阶段末+自己有牌+本回合存在受伤标记者,
-            HostBehavior::XianjianWangyou => matches!(event,
+                        HostBehavior::XianjianWangyou => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
                 if *player != owner),
             HostBehavior::XianjianWangyou2 => matches!(event,
