@@ -4241,3 +4241,45 @@ b0008e52: 53 个行为 → 当前 10（移出 45、新增 2）
 不是继续找能「改一行」的行——**已经没有这种行了**——
 而是**把 4 个测试的推进脚本改成状态驱动**，然后一次性修掉这 4 行。
 这属于「改他人测试的推进方式」，需要明确的授权或对应用例的 owner 参与。
+
+---
+
+## 148 第 956 轮：`WudianFuchou2` **还漏了一条 filter 条件**（已记入台账，未修）
+
+### 上游原文（`玩点论杀/character/skill.js:548`）
+
+```js
+fuchou2: {
+  forced: true,
+  trigger: { global: "phaseAfter" },
+  filter(event, player) {
+    for (var i = 0; i < player.storage.fuchou2.length; i++)
+      if (player.storage.fuchou2[i].isAlive()) return true;
+    return false;
+  },
+  …
+}
+```
+
+⇒ 两个特征：**① 任何玩家的任何阶段结束**（`global:'phaseAfter'`）；**② 必须「伏仇名单里有存活者」**。
+
+### 原生现状
+
+```rust
+HostBehavior::WudianFuchou2 => matches!(event,
+    EventData::Phase { player, phase: Phase::End, begin: false }
+    if *player == owner),
+```
+
+⇒ **时机窄**（只自己 End）+ **缺 ②**（没有标记非空条件）。
+
+### 本轮试了什么
+
+把臂改成 `Phase { begin: false, .. }` + 「`fuchou_marked` 里有存活者」——
+**测试仍然失败**（`wudian_generals_batch14`：清算时机提前，摸牌计数 7 ≠ 期望）。
+⇒ 已回退，全量复归 **1539 passed** ✅
+
+### 结论
+
+`WudianFuchou2` 归入「**需要重写测试推进脚本**」这一类（与 `XianjianLinghuo`/`Wangyou`/`GujianFoodLiyutang` 同）。
+台账里该行的「修法」已补上 ② 这一条，下一轮改代码时可以一次做对。
