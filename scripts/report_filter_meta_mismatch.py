@@ -16,6 +16,14 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+#: 已知且已登记的矛盾（`--strict` 只允许这些）：
+#: * `WudianZhucheng`：行为由 `kernel/phase.rs` 手工 park 直推，过滤臂与元数据是死代码；
+#: * `SwdBaishouzhihuHeld`：上游 `player:'discardEnd'`，改正会撞 `daixing` 测试（待授权同步改断言）。
+ALLOWED: dict[str, str] = {
+    "WudianZhucheng": "park 直推，臂与元数据为死代码（第 928 轮登记）",
+    "SwdBaishouzhihuHeld": "上游 discardEnd；改正撞 daixing 测试（第 931 轮登记，待授权）",
+}
 HOST = ROOT / "crates/engine-native/src/content/host"
 
 META_RE = re.compile(
@@ -105,8 +113,12 @@ def main(argv: list[str] | None = None) -> int:
     print(f"元数据声明 {len(metas)} 项，过滤臂 {len(arms)} 项，矛盾 {len(bad)} 项")
     for name, kind, family in bad:
         print(f"  ❌ {name}: meta={kind} filter={family}")
-    if "--strict" in args and bad:
-        return 1
+    if "--strict" in args:
+        unexpected = [row for row in bad if row[0] not in ALLOWED]
+        if unexpected:
+            print(f"❌ 未登记的矛盾 {len(unexpected)} 项（新增矛盾必须登记或修复）")
+            return 1
+        print(f"✅ 矛盾均在登记表内（{len(bad)} 项）")
     return 0
 
 

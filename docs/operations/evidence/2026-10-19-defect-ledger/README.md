@@ -3677,3 +3677,31 @@ EventData::Phase { player, begin, .. } if *player == owner && *begin
 | `WudianZiyu` | meta `PhaseBegin→PhaseEnd` + 臂 `begin:false` | 全量 1538 |
 | `WudianPaotaiFire` | 同上 + owner | 全量 1538 |
 | `PhaseEndRecoverOrDraw` | 同上 + owner | 全量 1538 |
+
+---
+
+## 130 第 932 轮：把「过滤臂 ↔ 元数据」检查**接成门禁**（防止同类缺陷再进来）
+
+### 改动
+
+* `scripts/report_filter_meta_mismatch.py` 增加 `--strict` + `ALLOWED` 登记表；
+* `scripts/preflight.py` 增加第 20 道门禁「**过滤臂↔元数据一致**」；
+* 新增 2 个 `--strict` 单测（共 10 项全绿）。
+
+### 当前登记的矛盾只有 2 项
+
+| 行为 | 为什么允许 |
+|---|---|
+| `WudianZhucheng` | 行为由 `kernel/phase.rs` 手工 park 直推，臂与元数据是**死代码** |
+| `SwdBaishouzhihuHeld` | 上游 `discardEnd`；改正会撞 `daixing` 测试（**待授权同步改断言**）|
+
+⇒ **任何新增的矛盾都会让 `preflight` 失败** —— 第 928–931 轮这类缺陷（元数据与臂打架 ⇒ 技能静默不触发）不会再无声进来 ✅
+
+### 为什么这道门禁值得加
+
+这四轮里它抓到 **3 类**问题：
+1. `WudianZiyu`：`PhaseBegin` 元数据 + 我改成 `begin:false` 的臂（我自己的改动引入）；
+2. `WudianZhucheng`：臂 `begin:true` + park 推 `begin:false`（历史死代码）；
+3. `SwdBaishouzhihuHeld`：臂 `&& *begin` + `PhaseEnd` 元数据（历史不一致）。
+
+⇒ **「两个地方声明同一件事，就必须有东西保证它们一致」** ✅

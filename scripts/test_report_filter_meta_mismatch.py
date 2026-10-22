@@ -52,5 +52,17 @@ class MismatchTests(unittest.TestCase):
         self.assertEqual(rfm.mismatches({"A": "PhaseEnd"}, {}), [])
 
 
+class StrictTests(unittest.TestCase):
+    def test_allowed_conflicts_pass(self) -> None:
+        bad = [("WudianZhucheng", "PhaseEnd", "PhaseBegin")]
+        unexpected = [row for row in bad if row[0] not in rfm.ALLOWED]
+        self.assertEqual(unexpected, [])
+
+    def test_new_conflict_flagged(self) -> None:
+        bad = [("SomethingNew", "PhaseEnd", "PhaseBegin")]
+        unexpected = [row for row in bad if row[0] not in rfm.ALLOWED]
+        self.assertEqual(len(unexpected), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
