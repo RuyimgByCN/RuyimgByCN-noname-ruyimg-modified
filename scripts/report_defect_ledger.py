@@ -161,6 +161,8 @@ def build() -> list[list[str]]:
     rows: list[list[str]] = []
 
     for behavior, p, begin, loc, line in phase.arms():
+        if behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
+            continue
         key = keys.get(behavior, "")
         trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
         verdict = phase.classify(behavior, p, begin, trigger)
@@ -244,6 +246,7 @@ NON_DEFECT_VERIFIED: dict[str, str] = {
     "Yihua": "swd_yihua_bounce.rs 断言「弃 2 张手牌」「1 号未受伤（已反弹）」「0 号受伤」⇒ 反弹发生在结算前，同上游 useCardToBefore",
     "Zhenlie": "swd_zhenlie_target_exclude.rs 断言「失去 1 点体力」「使用者被弃一张牌」「未被杀命中（已移出目标）」⇒ 移出目标生效于结算前",
     "YunchouDiychanyuan": "nc08_upstream_yunchou_chanyuan.rs 断言「击杀者应失去 1 点体力上限」「体力被钳到新上限」⇒ 正是上游 `trigger.source.loseMaxHp(true)`，且发生在死亡窗口内；`EventData::Death` 在 `kernel/dying.rs` 里于最终死亡**之前**发出，等价 `dieBegin`",
+    "XianjianFenglue": "过滤臂是 `Phase { Play, begin: true }` + `*player == owner`，正是上游 `player:'phaseUseBefore'`（自己出牌阶段开始前）的边界时刻；g1_wudian/luozhaoyan.rs 断言「杀/决斗自动使用、非杀不自动、杀+决斗各 1 伤」",
     "Tianxiang": "`damageBegin1/2/3/4` 是**同一次伤害内的四个阶段**（`game.js:20760-20766` 依次 `event.trigger`），不是「第 N 次伤害」⇒ 上游 `damageBegin3` 即「任意伤害、第 3 阶段」，原生单一 `DamageBefore` 窗口等价；`swd_tianxiang_redirect.rs` 断言弃红桃手牌转移伤害且天香·受按失去体力摸牌",
     "Jifeng": "swd_jifeng_multishot.rs 断言「多目标命中样本出现」与「多目标失误（整牌取消）样本出现」⇒ 取消在伤害前生效；ljifeng.rs 另断言范围扩展（对座/双目标均受 1）",
     "SwdTiebi": "filtering/swd.rs 的臂里**已含** `hujia == 0` 与 `seat_distance(t, owner) <= 1`（第 913 轮只读了前 5 行就误判为缺失）；g1_shahai_swd/tiebi.rs 断言「护甲抵 1 伤（hp 不减）」「护甲已消耗」⇒ 触发与效果都成立",
