@@ -408,15 +408,12 @@ impl HostSkillBehavior {
                     && hand_has_kind(ctx, owner, CardKind::Zhuquezhizhang)),
             // 白兽之琥：自己弃牌阶段结束且手持且有红牌
             HostBehavior::SwdBaishouzhihuHeld => matches!(event,
-                EventData::Phase { player, begin, .. }
+                // 上游 `g_baishouzhihu`：`{player:'discardEnd'}` + `countCards('h','baishouzhihu') > 0`
+                //（第 935 轮：原臂写成「任意阶段开始 + 手里有红桃/方块」，两处都不对）
+                EventData::Phase { player, phase: crate::event::Phase::Discard, begin: false, .. }
                 if *player == owner
-                    && *begin
                     && ctx.state.player(owner).hand.iter().any(|c| {
-                        matches!(
-                            ctx.catalog.cards[*c as usize].suit,
-                            crate::catalog::Suit::Heart
-                                | crate::catalog::Suit::Diamond
-                        )
+                        ctx.catalog.cards[*c as usize].name == "baishouzhihu"
                     })
                     && hand_has_kind(ctx, owner, CardKind::Baishouzhihu)),
             // 玄武之璜：自己造成伤害结算后且手持且受伤

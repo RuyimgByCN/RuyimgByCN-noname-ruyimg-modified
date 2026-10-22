@@ -21,7 +21,6 @@ ROOT = Path(__file__).resolve().parent.parent
 #: * `WudianZhucheng`：行为由 `kernel/phase.rs` 手工 park 直推，过滤臂与元数据是死代码；
 #: * `SwdBaishouzhihuHeld`：上游 `player:'discardEnd'`，改正会撞 `daixing` 测试（待授权同步改断言）。
 ALLOWED: dict[str, str] = {
-    "SwdBaishouzhihuHeld": "上游 discardEnd；改正撞 daixing 测试（第 931 轮登记，待授权）",
 }
 HOST = ROOT / "crates/engine-native/src/content/host"
 

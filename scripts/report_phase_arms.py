@@ -382,7 +382,9 @@ def classify(behavior: str, phase: str, begin: str, trigger: str) -> str:
         return "G22(晚一步)"
     if f"phase{stem}Begin" in trigger:
         return "OK" if begin == "true" else "REVIEW(begin 相反)"
-    if f"phase{stem}End" in trigger:
+    if f"phase{stem}End" in trigger or f"'{stem.lower()}End" in trigger:
+        # 上游常把首字母大写的阶段名写成 **小写无前缀**（`discardEnd`/`drawBegin`），
+        # 第 935 轮：`SwdBaishouzhihuHeld` 的 `player:'discardEnd'` 因此曾被判 REVIEW。
         return "OK" if begin == "false" else "REVIEW(begin 相反)"
     if f"phase{stem}After" in trigger or f"phase{stem}End" in trigger:
         # 「阶段之后/结束」与原生 `begin: false` 是同一帧

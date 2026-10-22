@@ -29,6 +29,7 @@ SwdDaixing	daixing	End	false	已核	基准对应章节
 SwdDaixing2	daixing2	Judge	true	已核	基准对应章节
 SwdZhuhai	zhuhai	End	true	已核	基准对应章节
 SwdRumeng	rumeng	Play	true	已核	基准对应章节
+SwdBaishouzhihuHeld		Discard	false	未核	
 SwdReyingzi	reyingzi	Draw	true	已核	基准对应章节
 SwdLexue	lexue	Judge	true	已核	基准对应章节
 SwdZhenjiu2	zhenjiu2	Judge	true	已核	基准对应章节

@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**26 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**25 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **10** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **9** |
 | **B（需扩枚举或引擎能力）** | **16** |
-| **合计** | **26** |
+| **合计** | **25** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **26** |
+| **合计** | **25** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **26** |
+| **合计** | **25** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3781,3 +3781,40 @@ zhucheng: {
 
 **「测试挡住了」这个判断本身可能错。** 上一轮我把它归入「测试编码旧时机」，
 实际是**我的改动不完整**（漏了 filter 条件）。⇒ 下次遇到失败，**先把自己的改动与上游 filter 逐条对齐**，再怀疑测试 ✅
+
+---
+
+## 133 第 935 轮：**第 5 条真修复** —— `SwdBaishouzhihuHeld`（26 → 25），`ALLOWED` 清空
+
+### 上游原文（`card/swd/skill.js:527`）
+
+```js
+g_baishouzhihu: {
+  trigger: { player: "discardEnd" },
+  direct: true,
+  filter(event, player) { return player.countCards("h", "baishouzhihu") > 0; },
+  content() { "step 0" player.chooseTarget([1,1], …, target.countCards('he') > 0) … }
+}
+```
+
+### 原臂错在哪（两处）
+
+| 项 | 上游 | 原臂 |
+|---|---|---|
+| 时机 | `discardEnd`（**弃牌阶段结束**）| `*begin`（任意阶段**开始**）|
+| 条件 | 手里有**具名牌** `baishouzhihu` | 手里有**红桃/方块**（按花色近似）|
+
+⇒ 改成 `Phase { phase: Discard, begin: false, .. }` + `*player == owner` + 手牌 `name == "baishouzhihu"`，
+**全量 1538 passed / 0 failed** ✅
+
+### `preflight` 的 `ALLOWED` 现在**空了**
+
+`report_filter_meta_mismatch.py --strict` ⇒ **矛盾 0 项**，`ALLOWED` 已清空，
+一致性单测改为「任何矛盾都算未登记」⇒ **以后新增一处不一致就会红** ✅
+
+### 顺带修了分类器的**第 3 个工具缺陷**
+
+`report_phase_arms.py` 只认 `phaseDiscardEnd` 这种**带 phase 前缀**的写法，
+上游常见的 `player:'discardEnd'`（**小写无前缀**）会落到 `REVIEW(非阶段触发)`。
+⇒ 补上 `'{stem}End'` 分支后 `--check` 归零 ✅
+（`report_phase_filters` 的钉死数字随之为 49 / 50 / Discard 3）

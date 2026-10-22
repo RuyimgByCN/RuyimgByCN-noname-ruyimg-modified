@@ -232,6 +232,7 @@ UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
 #: 上游描述的可观察结果，故在规则差异层面不是缺陷。
 #: **真正修掉的行**（行为已改、全量测试通过）。
 FIXED: dict[str, str] = {
+    "SwdBaishouzhihuHeld": "第 935 轮：臂改为 `Phase { phase: Discard, begin: false, .. }` + `*player == owner` + **手牌含 `baishouzhihu` 具名牌**，对齐上游 `{player:'discardEnd'}` + `countCards('h','baishouzhihu')>0`；全量 1538 passed",
     "WudianZhucheng": "第 934 轮：过滤臂由 `begin:true` 改为 `Phase { begin: false, .. }` + `*player == owner` + **`zhucheng.is_empty()`**（上游 filter `!storage.zhucheng || !storage.zhucheng.length`）—— park 直推的就是 `begin:false`，此前臂写成 `begin:true` 是死代码；全量 1538 passed",
     "WudianPaotaiFire": "第 930 轮：`TriggerMeta.event` 改 `PhaseEnd`，臂改 `Phase { begin: false, .. }` + `*player == owner` —— 对齐上游 `player:'phaseEnd'`；全量 1538 passed",
     "PhaseEndRecoverOrDraw": "第 930 轮：同上（上游 `player:'phaseEnd'`）；全量 1538 passed",

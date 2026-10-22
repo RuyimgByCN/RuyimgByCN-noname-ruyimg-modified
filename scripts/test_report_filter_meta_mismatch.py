@@ -54,9 +54,10 @@ class MismatchTests(unittest.TestCase):
 
 class StrictTests(unittest.TestCase):
     def test_allowed_conflicts_pass(self) -> None:
-        bad = [("SwdBaishouzhihuHeld", "PhaseEnd", "PhaseBegin")]
+        # 允许表当前为空（第 935 轮最后一个矛盾已修）⇒ 任何矛盾都算未登记。
+        bad = [("AnyName", "PhaseEnd", "PhaseBegin")]
         unexpected = [row for row in bad if row[0] not in rfm.ALLOWED]
-        self.assertEqual(unexpected, [])
+        self.assertEqual(len(unexpected), 1)
 
     def test_new_conflict_flagged(self) -> None:
         bad = [("SomethingNew", "PhaseEnd", "PhaseBegin")]
