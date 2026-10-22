@@ -232,6 +232,7 @@ UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
 #: 上游描述的可观察结果，故在规则差异层面不是缺陷。
 #: **真正修掉的行**（行为已改、全量测试通过）。
 FIXED: dict[str, str] = {
+    "ShengkeCheck": "`nc08_upstream_shengke.rs` 断言「杀命中 1 点」（克）/「被生 ⇒ 摸一张」等分支结果 ⇒ 目标面判定发生在结算前，与上游 `target:'useCardToBegin'` 一致",
     "SwdMojian": "`g1_shahai_swd/liuhong.rs` 断言「墨剑：目标摸 1」「墨剑：自己回 1 至满」⇒ 效果发生在杀结算前，与上游 `player:'shaBegin'` 一致",
     "YunchouJiaoxia": "`nc08_upstream_yunchou_jiaoxia.rs` 断言「成为**红色**牌目标应摸 1」「**黑色**牌不触发」⇒ 正是上游 `target:'useCardToTargeted'` 的红/黑分支",
     "Liaoyuan": "`swd_liaoyuan_extra_shan.rs` 断言「直接命中且加伤 2（1+2）」，且弃牌/确认窗都在结算之前 ⇒ 与上游 `player:'shaBegin'` 一致",
