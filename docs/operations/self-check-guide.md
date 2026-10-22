@@ -19,7 +19,7 @@
 cargo test --offline -p engine-native
 ```
 
-**当前基线（2026-10-19，规则 v322 / 存档 v105）**：**1538 passed / 0 failed / 21 ignored**。
+**当前基线（2026-10-19，规则 v322 / 存档 v105）**：**1538 passed / 0 failed / 71 ignored**（71 为缺陷守卫，全部为红且用 `-- --ignored` 单独跑）。
 **红了**：先判断是 **golden 语义变化** 还是 **回归**；**golden 变化必须先查原因再决定是否重录**，不能只改期望值。
 
 ## 3 已知的「红」（截至 2026-10-19）
@@ -29,6 +29,25 @@ cargo test --offline -p engine-native
 | **`check-source-lines.py`** | ❌ **exit=1** | **`crates/rule-api/src/effect.rs` 10778 行**（限制 2000）——**基线 `72583b2b` 起即红**。**已量化**：枚举体 10573 行 / **815 变体**；除 `resolve`（5513 行）外 14 个桶全部合规；**拆分需改 1069 个未跟踪文件 ⇒ 本会话不可执行**。见[量化分析与拆分计划](evidence/2026-10-19-effect-request-split-plan/README.md) |
 
 ⇒ **除这一条外，其余 4 条应全绿**；**提交信息里必须写明门禁状态**。
+
+## 3.1 preflight：一次跑完全部 20 道门禁
+
+```bash
+python3 -B scripts/preflight.py --quick     # 19–20 项，约 30 秒
+```
+
+**第 20 项是 2026-10-19 新增的「过滤臂↔元数据一致」**——
+`report_filter_meta_mismatch.py --strict` 会比对 `metadata/*.rs` 里每个 `HostBehavior` 声明的
+`TriggerMeta.event` 与 `filtering/**` 里该行为的过滤臂是否**明确互斥**。
+
+> **为什么要有它**：这类不一致会让技能**静默不触发**，而全量测试只表现为「某个测试不对」，看不出根因。
+> 2026-10-19 当天它抓出 3 处（`WudianZiyu` 是我自己改出来的、`WudianZhucheng` 与 `SwdBaishouzhihuHeld` 是历史遗留）。
+
+**台账改动另有两个工具**：
+
+```bash
+python3 -B scripts/report_ledger_diff.py        # 与 HEAD 对比：移出/新增哪些行（手算会漏）
+```
 
 ## 4 为什么这五条要分开
 
