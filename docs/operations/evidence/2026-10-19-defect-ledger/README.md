@@ -3389,3 +3389,54 @@ gw_ciguhanshuang: {
 前 4 次：`lexue`、`miedao`、`huajin2`、`boss_baiyi`（本轮）。
 共同点：**上游父技能没有顶层 trigger，是被 `group` 拆到子技能里**。
 ⇒ **凡看到「上游 (enable 主动技)」或「没有 trigger」，先查 `group` / `subSkill`** ✅
+
+---
+
+## 122 第 923 轮：**31 行的当前状态一览**（截至本轮）
+
+| 分类 | 行数 |
+|---|---:|
+| **被测试挡住**（改行为必须同步改断言，待授权）| **7** |
+| **待逐条核**（还没做「测试断言 / 上游原文」双证据判定）| **24** |
+
+| # | id | 行为 | 上游 | 状态 |
+|---|---|---|---|---|
+| 1 | G14 | `GujianFoodZiyangdan` | player: "phaseBegin" | **被测试挡住** |
+| 2 | G20 | `GujianFoodLiyutang` | player: "phaseEnd" | **被测试挡住** |
+| 3 | G22 | `GwentCiguState` | player: "phaseDrawBegin" | **被测试挡住** |
+| 4 | G23 | `XianjianLinghuo` | global:'phaseEnd' | **被测试挡住** |
+| 5 | G23 | `XianjianShenwu` | global:'phaseEnd' | 待逐条核 |
+| 6 | G23 | `XianjianWangyou` | global:'phaseEnd' | **被测试挡住** |
+| 7 | G15 | `WudianFuchou2` | global:'phaseAfter' | **被测试挡住** |
+| 8 | 需档 | `Liaoyuan` | player:'shaBegin' | 待逐条核 |
+| 9 | 需档 | `SwdCyxianjiang` | player:'useCardToBegin' | 待逐条核 |
+| 10 | 需档 | `SwdJiang` | player:'useCardToPlayered', target:'useCardT | 待逐条核 |
+| 11 | 需档 | `SwdMojian` | player:'shaBegin' | 待逐条核 |
+| 12 | 需档 | `XianjianXunying` | player:'shaAfter' | 待逐条核 |
+| 13 | 需档 | `YunchouJiaoxia` | target:'useCardToTargeted' | 待逐条核 |
+| 14 | L03c | `HlssGaiming` | player: judgeBefore | 待逐条核 |
+| 15 | 5c | `ShengkeCheck` | target: useCardToBegin | 待逐条核 |
+| 16 | 5b | `Reguhuo` | reguhuo_phase 标记（每回合一次） | 待逐条核 |
+| 17 | 6 | `Rangjie` | 分支前无条件 draw() | 待逐条核 |
+| 18 | L20a | `XiguaMopaiFanbei` | player: phaseDrawBegin2 | 待逐条核 |
+| 19 | L20b | `XiguaXueliangFanbei` | global: gameStart | 待逐条核 |
+| 20 | G20 | `WudianPaotaiFire` | player:'phaseEnd' | 待逐条核 |
+| 21 | G20 | `WudianZiyu` | global:'phaseEnd' | 待逐条核 |
+| 22 | G23b | `SwdBaishouzhihuHeld` | player: 'discardEnd'（弃牌阶段结束） | 待逐条核 |
+| 23 | G23b | `SwdJiguanyuanGain` | damageEnd + damageSource | 待逐条核 |
+| 24 | G23e | `SwdMufengHeld` | `player.discoverCard()`（发现三张选一） | **被测试挡住** |
+| 25 | 需档 | `XianjianXjzhimeng2` | target: "useCardToBegin" | 待逐条核 |
+| 26 | 5a | `ShaDamageForceDiscard` | sha && notLink && countCards>0 | 待逐条核 |
+| 27 | G20 | `PhaseEndRecoverOrDraw` | player: "phaseEnd" | 待逐条核 |
+| 28 | 需档 | `HuanleMonkeyCard` | global: "useCardToBegin", | 待逐条核 |
+| 29 | G20 | `WudianZhucheng` | player:'phaseEnd' | 待逐条核 |
+| 30 | 需档 | `WudianZhuchengGuard` | target:'shaBefore' | 待逐条核 |
+| 31 | U08c | `YxsMenshen3` | player: ["phaseBegin", "dieBegin"] | 待逐条核 |
+
+### 说明
+
+* 「被测试挡住」的 7 行**修法都已写明**（§106、§120-121），只差改断言的授权；
+* 其余 24 行**不是「没问题」**，而是**本轮还没走到它们的双证据判定**——
+  其中 `G20`/`G23` 一类的窗口差异很可能是真的（如 `XianjianShenwu` 钉 `End` 而上游 `global:'phaseEnd'`）。
+
+⇒ **台账 31 条（A 15 / B 16）**，口径与生成器、门禁、单测均已同步 ✅
