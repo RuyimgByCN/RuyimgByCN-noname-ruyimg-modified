@@ -3531,3 +3531,44 @@ if begin { ctx.core.turn.phase_number += 1; }
 **要么**：把这些技能的语义改判为「回合末一次」（若上游 `phaseEnd` 在本引擎语义下等价）。
 
 ⇒ **这是引擎层的一个真实缺口**（不是台账口径问题），已登记为 **NC 级待办**，本轮未改代码 ⚠️
+
+---
+
+## 126 第 928 轮：新增「过滤臂 ↔ TriggerMeta」一致性检查器；抓到 1 处真不一致
+
+### 起因
+
+第 924 轮我把 `WudianZiyu` 的臂改成 `begin:false` 后**完全不触发**。本轮查元数据：
+
+```rust
+HostBehavior::WudianZiyu => Some(TriggerMeta { event: EventKind::PhaseBegin, … })
+```
+
+⇒ **元数据声明 `PhaseBegin`**，而我改成 `PhaseEnd` 的臂 ⇒ **两者打架，永远不会派发**。
+**过滤臂必须与 `TriggerMeta.event` 一致**，这条约束此前没有任何检查 ✅
+
+### 新工具
+
+`scripts/report_filter_meta_mismatch.py`（4+4 单测全绿）：
+解析 `metadata/*.rs` 的 `HostBehavior → EventKind` 与 `filtering/**` 的臂，**只报「明确互斥」**
+（`PhaseBegin` 臂 vs `PhaseEnd` 元数据，或反之）；臂未写明 `begin` 时不算矛盾（由元数据决定派发）。
+
+**当前结果**：元数据 275 项、过滤臂 381 项、**矛盾 1 项**
+
+| 行为 | 元数据 | 过滤臂 | 判断 |
+|---|---|---|---|
+| `WudianZhucheng` | `PhaseEnd` | `Phase { End, begin: true }` | **真不一致** |
+
+### 但它的行为其实是好的
+
+`kernel/phase.rs:113-140` 给筑城**手工 park 直推**（`begin:false` 事件 + `OptionalGate`），
+测试 `g1_wudian/liufu.rs` 断言「阶段结束确认挂起」「筑城标记 2 张」⇒ **功能正常**。
+
+⇒ 结论：**筑城的过滤臂与元数据是「死代码」**（park 绕过它们），
+**风险**：谁哪天删掉 park，这个技能会**静默失效**，而且看起来「有 filter、有 metadata」⚠️
+⇒ 已登记；修法是让 park 走元数据派发，或把死代码删掉并注明。
+
+### 顺带确认（第 924/925 轮的推断修正）
+
+`WudianZiyu` 不触发的原因**不是**「计数时序」也不是「通道缺失」，而是**臂与元数据打架**。
+⇒ 前两轮的两条推断**都错了**，本轮用工具一次性定位 ✅（第 32 次自我更正）
