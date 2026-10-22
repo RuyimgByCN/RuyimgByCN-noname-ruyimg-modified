@@ -52,8 +52,8 @@ def arm_bodies(base: Path = HOST) -> dict[str, str]:
 def arm_family(body: str) -> str:
     """把过滤臂归到一个粗粒度事件族。"""
     if "EventData::Phase {" in body:
-        begin = "begin: true" in body
-        begin_false = "begin: false" in body
+        begin = "begin: true" in body or "&& *begin" in body
+        begin_false = "begin: false" in body or "&& !*begin" in body
         if begin and not begin_false:
             return "PhaseBegin"
         if begin_false and not begin:

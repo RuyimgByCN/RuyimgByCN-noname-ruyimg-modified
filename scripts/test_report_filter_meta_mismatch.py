@@ -22,6 +22,12 @@ class FamilyTests(unittest.TestCase):
     def test_card_used(self) -> None:
         self.assertEqual(rfm.arm_family("EventData::CardUsed(u)"), "CardUsed")
 
+    def test_begin_star_positive(self) -> None:
+        self.assertEqual(rfm.arm_family("EventData::Phase { begin, .. } if && *begin"), "PhaseBegin")
+
+    def test_begin_star_negative(self) -> None:
+        self.assertEqual(rfm.arm_family("EventData::Phase { begin, .. } if && !*begin"), "PhaseEnd")
+
     def test_unknown(self) -> None:
         self.assertEqual(rfm.arm_family("false"), "?")
 

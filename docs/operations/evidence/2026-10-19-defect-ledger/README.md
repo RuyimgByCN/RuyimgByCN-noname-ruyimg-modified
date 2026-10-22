@@ -3639,3 +3639,41 @@ liufu::liufu_zhucheng_toggle_and_sha_guard  FAILED（第 59 行「筑城守卫�
 
 我用 `/tmp/a2.bak` 回退时，那个备份是**改动之前**的状态，于是把已经修好的两条**一起回退掉了**；
 重新应用后才恢复。⇒ **每修一条就单独备份/单独验证**，不要用跨多条改动的旧备份回滚 ✅
+
+---
+
+## 129 第 931 轮：检查器升级后**又抓到 1 条同类不一致**；试修被测试挡住（第 9 条）
+
+### 检查器升级
+
+`arm_family()` 原来只认字面量 `begin: true/false`，漏掉了**解构后判断**的写法：
+
+```rust
+EventData::Phase { player, begin, .. } if *player == owner && *begin
+```
+
+⇒ 现在也识别 `&& *begin` / `&& !*begin`（+2 单测，共 8 项全绿）。
+
+**重跑结果**：矛盾从 1 项变 **2 项**
+
+| 行为 | 元数据 | 过滤臂 | 说明 |
+|---|---|---|---|
+| `WudianZhucheng` | `PhaseEnd` | `PhaseBegin`（字面量）| 第 928 轮已登记（park 绕过，死代码）|
+| **`SwdBaishouzhihuHeld`** | `PhaseEnd` | `PhaseBegin`（`&& *begin`）| **本轮新发现** |
+
+### 试修 `SwdBaishouzhihuHeld`
+
+上游 `player:'discardEnd'` ⇒ 应改为 `Phase { phase: Discard, begin: false }`。
+改完后 `daixing::swd_deferred_daixing_hujia_cycle` **失败**（「待行：准备阶段清零 / 护甲移除」）。
+
+⇒ 该测试的阶段推进依赖白首之护的**旧时机**（阶段开始），已 `git checkout` 回退，全量复归 **1538 passed** ✅
+
+⇒ **「被测试挡住」清单增至 9 行**；台账仍 **28 条**（本轮没有净修复）。
+
+### 已修清单（3 条，全部有验证）
+
+| 行 | 改法 | 验证 |
+|---|---|---|
+| `WudianZiyu` | meta `PhaseBegin→PhaseEnd` + 臂 `begin:false` | 全量 1538 |
+| `WudianPaotaiFire` | 同上 + owner | 全量 1538 |
+| `PhaseEndRecoverOrDraw` | 同上 + owner | 全量 1538 |
