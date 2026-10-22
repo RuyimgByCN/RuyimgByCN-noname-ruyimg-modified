@@ -43,3 +43,34 @@ cargo test --offline -p engine-native --test t12_dual_diag -- --nocapture
 4. 若要与历史基线比较，需**同一台机器**的历史数据——本仓库当前没有旧引擎的可运行环境。
 
 ⇒ 本条**保持待办**；本文只作为「原生侧有一个可复现的起点」记录。
+
+---
+
+## 追加：**WASM 侧**数据点（2026-10-19，Node 宿主，release 构建）
+
+```bash
+wasm-pack build crates/engine-native-wasm --target nodejs --release --no-opt --out-dir /tmp/wasm-pkg
+node /tmp/wasm-perf.mjs
+```
+
+**实测（单次采样）**：
+
+```json
+{"initMs":1.637,"steps":400,"playMs":26.371,"perStepMs":0.0659,"viewMs":0.0319}
+```
+
+| 观测 | 值 | 说明 |
+|---|---|---|
+| 建局（`new NativeEngine(4, 4242n)`）| **1.64 ms** | release + wasm-bindgen，Node 宿主 |
+| 自动对局 400 步 | **26.37 ms** | `auto_step` 含 AI 决策与引擎推进 |
+| **单步** | **0.066 ms** | ≈ 15k 步/秒 |
+| 座位视图 `view_json` | **0.032 ms** | 100 次平均 |
+
+### 这仍然**不能**用于性能验收
+
+* **debug/release 混用**：这里是 release，上文原生侧是 debug，**两者不可比**；
+* **单次采样**，无重复与方差；
+* **旧引擎没有同机同负载数据** ⇒ 无法给「提速/劣化」结论；
+* 负载单一（4 人标准局、固定 seed）。
+
+⇒ 性能门槛**仍为待办**。但这条给了一个**可复现的 wasm 侧基线**，供后续同机对照使用。
