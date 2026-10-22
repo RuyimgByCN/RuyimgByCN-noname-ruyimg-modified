@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**30 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**28 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **14** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **12** |
 | **B（需扩枚举或引擎能力）** | **16** |
-| **合计** | **30** |
+| **合计** | **28** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **30** |
+| **合计** | **28** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **30** |
+| **合计** | **28** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3608,3 +3608,34 @@ HostBehavior::WudianZiyu => Some(TriggerMeta { event: EventKind::PhaseBegin, …
 **把「排除」变成了「只保留」**，导致台账从 31 跳到 34 且混入 13 条已移出行。
 ⇒ 已回退重做，并确认差分只剩 `WudianZiyu` 一行 ✅
 ⇒ **教训：改「过滤条件」时必须同时确认它的极性（保留 / 排除）。**
+
+---
+
+## 128 第 930 轮：又修掉 2 条（30 → 28）：`WudianPaotaiFire`、`PhaseEndRecoverOrDraw`
+
+方法是第 929 轮验证过的**同一套**：**元数据 `TriggerMeta.event` 与过滤臂必须一起改**。
+
+| 行 | 元数据 | 过滤臂 | 上游 |
+|---|---|---|---|
+| `WudianPaotaiFire` | `PhaseBegin` → **`PhaseEnd`** | `Phase { End, begin:true }` → **`Phase { begin:false, .. }` + `*player == owner`** | `player:'phaseEnd'`（自己每个阶段结束）|
+| `PhaseEndRecoverOrDraw` | 同上 | 同上（无额外条件） | 同上 |
+
+**验证**：`cargo test --offline -p engine-native` = **1538 passed / 0 failed / 71 ignored** ✅
+
+⇒ 台账 **30 → 28**（A 12 / B 16）；**累计已修 3 条**（含第 929 轮的 `WudianZiyu`）
+
+### 试了但回退的第 4 条：`WudianZhucheng`
+
+它的臂写成 `begin:true` 而 park 直推 `begin:false`（第 928 轮的死代码结论）。改成 `begin:false` 后：
+
+```
+liufu::liufu_zhucheng_toggle_and_sha_guard  FAILED（第 59 行「筑城守卫询问挂起」）
+```
+
+⇒ 筑城的开关时机变化让守卫询问不再挂起 ⇒ **又一条「测试编码旧时机」**，已回退 ✅
+⇒ 它与 §106 的 7 行同类（第 8 条待授权项）。
+
+### 本轮的一个操作教训
+
+我用 `/tmp/a2.bak` 回退时，那个备份是**改动之前**的状态，于是把已经修好的两条**一起回退掉了**；
+重新应用后才恢复。⇒ **每修一条就单独备份/单独验证**，不要用跨多条改动的旧备份回滚 ✅

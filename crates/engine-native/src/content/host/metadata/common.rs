@@ -11,7 +11,8 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::PhaseEndRecoverOrDraw => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                // 上游 `player:'phaseEnd'`（自己每个阶段结束）
+                event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: true,
@@ -915,7 +916,8 @@ impl HostBehavior {
             HostBehavior::WudianDuwen => None,
             HostBehavior::WudianPaotai => None,
             HostBehavior::WudianPaotaiFire => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                // 上游 `player:'phaseEnd'`（自己每个阶段结束）
+                event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,

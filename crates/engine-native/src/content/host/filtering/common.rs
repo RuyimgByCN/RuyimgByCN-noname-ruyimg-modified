@@ -537,8 +537,7 @@ impl HostSkillBehavior {
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)),
             HostBehavior::PhaseEndRecoverOrDraw => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
-                if *player == owner),
+                EventData::Phase { player, begin: false, .. } if *player == owner),
             HostBehavior::TargetDiscardEquipOrDamage => false,
             HostBehavior::ShengkeCheck => matches!(event,
                 EventData::CardUsed(u)
@@ -795,9 +794,7 @@ impl HostSkillBehavior {
                     )
                 })),
             HostBehavior::WudianPaotaiFire => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
-                if *player == owner
-                    && ctx.state.player(owner).paotai_lv > 0),
+                EventData::Phase { player, begin: false, .. } if *player == owner && ctx.state.player(owner).paotai_lv > 0),
             // 四象隐藏链 2/3 + 后援3/4：本人死亡且本人是 Boss
             HostBehavior::BossQingmu2
             | HostBehavior::BossQingmu3
