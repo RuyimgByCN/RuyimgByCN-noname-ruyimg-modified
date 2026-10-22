@@ -2762,3 +2762,21 @@ let yxs_fanji2_direct_hit = {
 
 ⇒ **因此本轮只修了 `Hutian`/`Xuanyuan`（有测试支持、改后全绿），这 3 行保留为已知缺陷** ✅
 ⇒ 已在台账里写明「上游是任何阶段结束、原生钉 End 过窄、修复需同步改 2 个测试」。
+
+### 两条 `GujianFood` 也试过、已回退（第 903 轮下半）
+
+按 G20/G14 的修法改过滤臂（`Liyutang` 改成 `begin:false`、`Ziyangdan` 改成 `begin:true` 不钉 End），
+**2 个既有测试立刻失败**：
+
+| 测试 | 断言的语义 |
+|---|---|
+| `remaining::remaining_clusters_batch` | 「结束阶段衰减 -1」（紫阳丹在 **End** 衰减）|
+| `hujia::hujia_primitive_and_food_batch_three` | 鲤跃堂在 **End 开始** 结算 |
+
+⇒ **已 `git checkout` 回退，全量复归 1538 passed / 0 failed** ✅
+
+**而且 `GujianFoodZiyangdan` 本身就在「已登记差异」名单里**（代码注释明写「上游每阶段开始衰减」）
+⇒ **它的 G14 行是「有意偏离」而不是「漏改」**，与未登记的缺陷不是一回事 ⚠️
+
+⇒ **结论**：这 2 行保留，但在修复前必须先决定「测试编码的旧时机是否要一起改」——
+**这需要各自的作者确认**，不能由核对者单方面改测试。
