@@ -13,9 +13,6 @@ G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true
 需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdMojian	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	XianjianChangnian	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	XianjianCtianfu3	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
-需档	B	XianjianXshuangren2	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianXunying	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	YunchouJiaoxia	?	meta:0	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
 L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	技能完全不触发（缺 judge-before 幕）	blocked

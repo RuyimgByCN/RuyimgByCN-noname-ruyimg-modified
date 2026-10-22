@@ -190,7 +190,7 @@ def build() -> list[list[str]]:
 
     for behavior, which, _loc, _skill, trigger, verdict in [
         (b, w, loc, s, t, v) for b, w, loc, s, t, v in event_out()
-        if b not in NON_DEFECT_VERIFIED
+        if b not in NON_DEFECT_VERIFIED and b not in NON_DEFECT_BY_CODE
     ]:
         if verdict.startswith("OK") or verdict.startswith("REVIEW"):
             continue
@@ -200,7 +200,7 @@ def build() -> list[list[str]]:
                      trigger, which, "高", "修触发时机/补档位", "blocked"])
 
     for rid, cls, behavior, source, upstream, native, note in MANUAL:
-        if behavior in NON_DEFECT_VERIFIED:
+        if behavior in NON_DEFECT_VERIFIED or behavior in NON_DEFECT_BY_CODE:
             continue
         rows.append([rid, cls, behavior, source, "content/host/**", upstream, native,
                      "高" if cls == "A" else "中", note, "blocked"])
@@ -228,6 +228,14 @@ UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
 #: 已由既有行为测试证明「规则层面等价」的行（第 909 轮起）——它们曾按「需档」记入台账，
 #: 但台账的依据是「引擎没有对应的事件槽位」这一**实现细节**；仓库里的测试已断言
 #: 上游描述的可观察结果，故在规则差异层面不是缺陷。
+#: 证据等级较低的一类：**「需要新事件槽位」这个前提已被推翻**，且原生与上游的效果
+#: 逐分支读过一致，但**仓库里没有断言该行为的测试**。它们不计入缺陷，也不冒充「测试背书」。
+NON_DEFECT_BY_CODE: dict[str, str] = {
+    "XianjianChangnian": "触发用 `EventData::Death`（kernel/dying.rs 在最终死亡前发出）＝上游 `dieBegin`；效果「选一名其他角色移交 `hej` 全部牌」与上游 `chooseTarget` + `getCards('hej')` 一致（第 861 轮读码）",
+    "XianjianCtianfu3": "同上窗口；效果「挂附闪入弃堆 + 清挂附 + 移除 ctianfu2/ctianfu3」与上游 `storage.ctianfu2.discard()` + `removeSkill('ctianfu2')` 一致（第 895 轮读码）",
+    "XianjianXshuangren2": "同上窗口；效果「死亡时弃置 `off_court` 全部牌」与上游 `storage.xshuangren.discard()` 一致，差异「一张 → 离场区全部」已登记（第 885 轮读码）",
+}
+
 NON_DEFECT_VERIFIED: dict[str, str] = {
     "SwdDunxing": "g1_shahai_swd/heihuo.rs 断言「非红桃判定 ⇒ 杀被取消（无伤）」⇒ 取消发生在结算前",
     "SwdNingshuang": "g1_shahai_swd/yulin.rs 断言「使用者横置/未翻面 + 自己摸 1 + 伤害照常」⇒ 与上游一致",

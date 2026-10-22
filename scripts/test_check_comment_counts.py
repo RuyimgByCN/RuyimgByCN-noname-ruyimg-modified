@@ -32,14 +32,14 @@ class CommentCountTests(unittest.TestCase):
         # 前缀族计数之和不应超过行数
         prefixed = {k: v for k, v in self.counts.items()}
         self.assertLessEqual(sum(prefixed.values()) if all("(" not in k for k in prefixed) else total, total * 2)
-        self.assertEqual(self.counts.get("需档"), 12)  # 第 916 轮
+        self.assertEqual(self.counts.get("需档"), 9)  # 第 917 轮
 
     def test_known_family_counts(self):
         self.assertEqual(self.counts.get("G14"), 1)
         self.assertIsNone(self.counts.get("G18"))
         self.assertEqual(self.counts.get("G23"), 3)  # 第 903 轮：判据改为「作用域不符」后由 11 降为 3
         self.assertEqual(self.counts.get("G20"), 5)
-        self.assertEqual(self.counts.get("G19"), 1)
+        self.assertIsNone(self.counts.get("G19"))  # 第 917 轮：唯一一行 SwdTiebi 经完整读码移出（条件其实都在）
 
     def test_progress_total_matches_ledger(self):
         # 进度主稿头部的 `N 条 = A x / B y` 必须与台账一致（新增校验）
