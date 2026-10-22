@@ -493,3 +493,26 @@ test result: FAILED. 0 passed; 50 failed
 * 本会话把「缺陷台账」从 54 收敛到 10，并修好 8 条；
 * **没有**推进 37 来源的转换数（那是另一条工作线）；
 * **八项完成数仍是 0**：需要设备、工具链与决策，不是靠更多轮次能补上的。
+
+---
+
+## 110 第 961 轮：「目标平台」从 0 前进到**构建级 6/7**
+
+新证据：[`2026-10-19-target-platform-builds/README.md`](../2026-10-19-target-platform-builds/README.md)
+
+| target | crate | 结果 |
+|---|---|---|
+| `aarch64-apple-ios` | `engine-native` | ✅ |
+| `aarch64-apple-ios-sim` | `engine-native` | ✅ |
+| `x86_64-linux-android` | `engine-native` | ✅ |
+| `armv7-linux-androideabi` | `engine-native` | ✅ |
+| `i686-linux-android` | `engine-native` | ✅ |
+| `wasm32-unknown-unknown` | `engine-native-wasm` | ✅（17 warnings）|
+| `aarch64-linux-android` | `engine-native` | ❌ **缺 Android NDK 的 clang** |
+
+⇒ **6/7 通过**；唯一失败是**缺工具链**（不是代码问题：同 crate 在其他三个 Android target 上都过）。
+
+### 但「目标平台」这项**仍未验收**
+
+构建通过只覆盖「构建级」。**真机/模拟器运行、跨设备存档兼容、平台性能特征，全部为 0**。
+⇒ 八项完成数**仍是 0**，只是这一项的证据从「无」变成「有一层」。
