@@ -4143,3 +4143,45 @@ assert!(!arm.contains("from_chain") && !arm.contains("_notrigger"),
 
 ⇒ **54 − 46 = 8**，但台账是 10 ⇒ **差 2 行**，来自更早的分类收敛（`SwdJiang` 等仍在内）。
 ⇒ **这个差额已记录在此，不再试图凑成整数** ⚠️
+
+---
+
+## 145 第 950 轮：**把 54 → 10 的账真正对上**（并且发现 11 行「无声消失」）
+
+上一轮我写「差 2 行，不再凑整数」。本轮用 `git show b0008e52` 精确对账：
+
+| 项 | 数 |
+|---|---:|
+| **旧版行为数**（54 行里有 1 组重复 id/behavior，去重后）| **53** |
+| 移出 | 45 |
+| 新增（`XianjianLinghuo`/`Wangyou`，G23 判据修正后重新出现）| 2 |
+| **53 − 45 + 2** | **= 10** ✅ **完全对上** |
+
+⇒ **没有「差 2 行」**——差额来自我把「54 行」当成「54 个行为」。**行数 ≠ 行为数**（同一行可能重复计一次）。
+
+### 更重要的发现：**11 行在 G23 判据修正时被移出，却没有留下任何记录**
+
+`comm` 差分列出 45 行移出，其中 **11 行不在任何注册表**里：
+
+`Hutian`、`Rangjie`、`SwdDonghuangzhongCard`、`SwdLingxin`、`SwdLqingcheng`、
+`WudianGuangshuSpade`、`WudianJidong`、`XianjianBinxin`、`XianjianLingyu`、`Xuanyuan`、`YxsMenshen`
+
+⇒ 这正是第 912 轮 `SwdMufengHeld` 的**同一种病**：**移出时没留痕**。
+本轮已全部补记：
+
+| 去处 | 行 |
+|---|---|
+| `NON_DEFECT_VERIFIED`（附 G23 判据理由）| 10 行（`Hutian`/`Xuanyuan` 有测试，其余读码）|
+| `UNRESOLVED_ATTRIBUTION` | `Rangjie` |
+
+⇒ 现在 `未归类 = 0` ✅
+
+### 新增的核对方式（可复用）
+
+```python
+# 移出的每一行都必须能在某个注册表里找到
+bad = [b for b in removed if not any(b in r for r in [FIXED, VERIFIED, BY_CODE, REGDIFF, UNRESOLVED])]
+assert bad == []
+```
+
+⇒ **口径：台账的每一次「移出」，都必须同时写进某个注册表**——否则账目对不上，缺陷会无声消失。

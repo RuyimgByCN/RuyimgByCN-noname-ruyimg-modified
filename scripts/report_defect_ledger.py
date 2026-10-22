@@ -49,9 +49,9 @@ event = _load("report_event_arms", ROOT / "scripts" / "report_event_arms.py")
 
 #: Hand-found defects that no enumeration produces (each with its evidence pointer).
 #: 归因无法确认的行（上游候选不是同一个技能）——不计入缺陷，但不是「已确认无缺陷」。
-#: `Rangjie` 曾在此集合：上游候选 `jsrgrangjie`（`damageEnd` + `moveCard` + 同花色回收）
-#: 与原生实现（选获得/移动/取消 + 选定类型取牌）**不是同一设计**，真实来源技能未定位。
-UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
+#: `Rangjie`：上游候选 `jsrgrangjie`（`damageEnd` + `moveCard` + 同花色回收）与原生实现
+#: （选获得/移动/取消 + 选定类型取牌）**不是同一设计**，真实来源技能未定位。
+UNRESOLVED_ATTRIBUTION = {"SwdHuanling", "Rangjie"}
 
 MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
     # id, class, behavior, upstream, native, note
@@ -272,6 +272,19 @@ NON_DEFECT_BY_CODE: dict[str, str] = {
 }
 
 NON_DEFECT_VERIFIED: dict[str, str] = {
+    # 第 950 轮补记：这 10 行在**第 903 轮 G23 判据修正**时被移出，但当时没有登记到任何
+    # 注册表（`comm` 差分发现）——「移出必须留痕」这条纪律对判据变更同样适用。
+    "Hutian": "G23 判据修正：上游 `{player:'phaseEnd'}` = 自己每个阶段结束，原生过滤臂带 owner 判定；4 个既有测试通过（守卫曾试改，确认本就等价）",
+    "Xuanyuan": "同上（`{player:'phaseEnd'}` + owner）；第 908 轮实测「加不加 owner 限定行为相同」",
+    "SwdDonghuangzhongCard": "G23 判据修正：上游阶段结束语义与原生臂一致（读码，无独立测试）",
+    "SwdLingxin": "同上",
+    "SwdLqingcheng": "同上",
+    "WudianGuangshuSpade": "同上",
+    "WudianJidong": "同上",
+    "XianjianBinxin": "同上",
+    "XianjianLingyu": "同上",
+    "YxsMenshen": "同上（门神本体；清除逻辑在 `YxsMenshen3`）",
+
     "SwdDunxing": "g1_shahai_swd/heihuo.rs 断言「非红桃判定 ⇒ 杀被取消（无伤）」⇒ 取消发生在结算前",
     "SwdNingshuang": "g1_shahai_swd/yulin.rs 断言「使用者横置/未翻面 + 自己摸 1 + 伤害照常」⇒ 与上游一致",
     "SwdHuanyin": "g1_shahai_swd/huanyin.rs 断言「黑桃判定 ⇒ 铁索被取消（不横置）」与「红桃 ⇒ 摸 1 且不取消」⇒ 与上游 useCardToBefore 的取消/加牌两面一致",
