@@ -516,3 +516,24 @@ test result: FAILED. 0 passed; 50 failed
 
 构建通过只覆盖「构建级」。**真机/模拟器运行、跨设备存档兼容、平台性能特征，全部为 0**。
 ⇒ 八项完成数**仍是 0**，只是这一项的证据从「无」变成「有一层」。
+
+---
+
+## 111 第 963 轮：平台证据全面升级（构建 6/7 + Node 11/11 + **浏览器 4/4**）
+
+| 层级 | 证据 | 结果 |
+|---|---|---|
+| **构建** | 7 个 target（iOS ×2 / Android ×3 / wasm / aarch64-android）| **6/7**（aarch64-linux-android 缺 NDK）|
+| **Node 运行** | `scripts/native_wasm_smoke.mjs`（wasm-pack release）| **11/11 PASS**（含存档往返、同 seed 重放、双实例确定性）|
+| **浏览器运行** | headless Chrome + 最小 ES-module 页面 | **4/4**（boot / 建局 / 视图 / 自动对局 300 步）|
+
+证据文件：[`2026-10-19-target-platform-builds/README.md`](../2026-10-19-target-platform-builds/README.md)（含复现命令与最小页面源码）
+
+### 仍未做（不改口径）
+
+* 真实 UI 客户端（`apps/web-client`）+ WebWorker + 网络层；
+* Firefox / Safari 交叉验证（本轮只跑 Chrome）；
+* **iOS/Android 真机**；
+* 跨设备存档兼容。
+
+⇒ 「目标平台」**仍未验收完成**；八项完成数**仍为 0**。

@@ -91,3 +91,66 @@ PASS choice_visibility_own_and_other | own=true other=true
 
 ⇒ **「目标平台」这一项从「构建级」推进到「WASM 运行级」**，
 但**仍缺浏览器与真机** ⇒ **八项完成数仍为 0**。
+
+---
+
+## **浏览器内运行**证据（2026-10-19，本轮实测，headless Chrome）
+
+### 复现步骤
+
+```bash
+wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir /tmp/wasm-web
+cp /tmp/wasm-web/* /tmp/wasm-browser/          # 见下方最小页面
+python3 -m http.server 8899 -d /tmp/wasm-browser &
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new --disable-gpu --no-sandbox --user-data-dir=/tmp/chrome-prof \
+  --virtual-time-budget=15000 --dump-dom http://127.0.0.1:8899/index.html
+```
+
+### 最小页面（`index.html`，31 行）
+
+```html
+<!doctype html><html><head><meta charset="utf-8"><title>wasm-boot</title></head>
+<body><pre id="out">booting</pre>
+<script type="module">
+const log = (k, v) => { document.getElementById("out").textContent += "\n" + k + "=" + v; };
+try {
+  const mod = await import("./engine_native_wasm.js");
+  await mod.default("./engine_native_wasm_bg.wasm");
+  const e = new mod.NativeEngine(4, 4242n);
+  log("boot", "ok");
+  log("view0", e.view_json(0).slice(0, 24));
+  let steps = 0;
+  while (!e.outcome_done && steps < 300) { if (!e.auto_step()) break; steps++; }
+  log("steps", steps);
+  log("RESULT", "PASS");
+} catch (err) { document.getElementById("out").textContent += "\nRESULT=FAIL " + err; }
+</script></body></html>
+```
+
+### 实测输出（headless Chrome）
+
+```text
+boot=ok
+view0={"deckCount":108,"discar
+steps=300
+RESULT=PASS
+```
+
+### 这证明什么
+
+| 维度 | 覆盖 |
+|---|---|
+| **浏览器**内加载 wasm（ES module + `default(wasm)` 初始化）| ✅ |
+| 浏览器内**建局**（`new NativeEngine(4, 4242n)`）| ✅ |
+| 浏览器内**座位视图**（`view_json(0)`）| ✅ |
+| 浏览器内**自动对局**（`auto_step` 跑满 300 步上限，无异常）| ✅ |
+
+### 仍未做
+
+- 真实 UI 客户端（`apps/web-client`）+ WebWorker 线程 + 网络层；
+- Firefox / Safari 的交叉验证（本轮只跑 Chrome）；
+- iOS/Android 真机。
+
+⇒ 「目标平台」现已覆盖：**构建 6/7 target + Node 运行 11/11 + 浏览器运行 4/4**，
+但**真机与真实 UI 客户端仍未做** ⇒ **八项完成数仍为 0**。
