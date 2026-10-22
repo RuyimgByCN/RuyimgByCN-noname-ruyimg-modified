@@ -16,4 +16,3 @@ G23e	B	SwdMufengHeld	U05	content/host/**	`player.discoverCard()`（发现三张�
 需档	B	XianjianXjzhimeng2	U05	meta:0	target: "useCardToBegin"	CardUsed	高	修触发时机/补档位	blocked
 5a	A	ShaDamageForceDiscard	U06	content/host/**	sha && notLink && countCards>0	共享行为仅 is_sha_like	高	共享行为未含苦无的 2 个条件（待复核）	blocked
 需档	B	HuanleMonkeyCard	U06	meta:0	global: "useCardToBegin",	CardUsed	高	修触发时机/补档位	blocked
-U08c	B	YxsMenshen3	U08	content/host/**	player: ["phaseBegin", "dieBegin"]	EventKind::PhaseBegin	中	少「死亡前」幕	blocked
