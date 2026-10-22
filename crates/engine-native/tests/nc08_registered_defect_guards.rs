@@ -312,7 +312,7 @@ fn jiguanyuan_gain_must_trigger_on_damage() {
 
 // ------------------------------------- 能力守卫：缺失的事件/阶段槽位是否已补
 
-/// 5 条 `需档` 缺陷都卡在「引擎缺某个事件槽位」（第 795 轮复核：`useCardTo*` 11 + `sha*` 6 + `dieBegin` 4）。
+/// 3 条 `需档` 缺陷都卡在「引擎缺某个事件槽位」（第 795 轮复核：`useCardTo*` 11 + `sha*` 6 + `dieBegin` 4）。
 /// 这类缺陷的验收条件不是某个行为，
 /// 而是**枚举里出现该槽位** —— 所以守卫直接断言 `event.rs` / `phase` 枚举的内容。
 /// 每个守卫的文档注明它解锁哪些缺陷族。
@@ -335,7 +335,7 @@ macro_rules! capability_guard {
 }
 
 capability_guard!(cap_card_targeted, "CardTargeted", "「用牌前 / 指定目标时」——当前台账里仍有需档行依赖此槽位需档（useCardToBefore/ToBegin/ToTargeted/ToPlayered）");
-capability_guard!(cap_sha_begin, "ShaBegin", "【杀】开始幕——解锁 4 条（lianwu/lingshi/shoulie/yueren；lingyue 见 sha 幕合计 6 条）");
+capability_guard!(cap_sha_begin, "ShaBegin", "【杀】开始幕——条数随台账变动，不在此写死（lianwu/lingshi/shoulie/yueren；lingyue 见 sha 幕合计 6 条）");
 capability_guard!(cap_sha_after, "ShaAfter", "【杀】结束幕——解锁 2 条（SwdLianda、XianjianXunying）");
 capability_guard!(cap_sha_before, "ShaBefore", "【杀】之前幕——解锁 2 条（WudianZhuchengGuard、SwdTiebi）");
 capability_guard!(cap_death_before, "DeathBefore", "「死亡前」——解锁 4+ 条（dieBegin 家族）");

@@ -249,6 +249,8 @@ FIXED: dict[str, str] = {
     "Liaoyuan": "`swd_liaoyuan_extra_shan.rs` 断言「直接命中且加伤 2（1+2）」，且弃牌/确认窗都在结算之前 ⇒ 与上游 `player:'shaBegin'` 一致",
     "WudianZhuchengGuard": "`g1_wudian/liufu.rs` 断言「杀无效不掉血」「杀归还使用者手牌」「弃 2 放行：杀照常」，且都由 `trigger_confirm` 询问驱动 ⇒ 守卫判定发生在杀结算**之前**，与上游 `target:'shaBefore'` 一致",
     "Reguhuo": "第 942 轮：`activation/common.rs` 加「本回合已发动」检查 + `step/skills_cards.rs` 进入执行即 `vm_aux.once.insert(..., scope 1)`；新增 `reguhuo_is_once_per_turn` 断言第二次 `ActivateSkill` 被拒绝（**该断言在修复前为红**）",
+    "HuanleMonkeyCard": "`g1_huanle/huanle.rs` 断言「桃的结算**被取消**：不回血」「桃收为猴子持有者手牌」「猴子入弃堆」⇒ 取消发生在结算前，与上游 `useCardToBegin` 一致",
+    "XianjianXjzhimeng2": "`g1_wudian/liumengli.rs` 断言「无中 2+**织梦·梦** 1」与「异类型：仅无中 2」⇒ 同类型牌触发摸 1、异类型不触发，正是上游 `useCardToBegin` 的判定面",
     "XiguaMopaiFanbei": "效果由**内核**承担（`kernel/phase/draw.rs` 的 `mopai_extra` = +2，不需要 `TriggerMeta`）；`l20_config_mods_batch1.rs` 断言「正常 2 + 额外 2 = 4」⇒ 等价上游 `phaseDrawBegin2` 的 `trigger.num += 2`",
     "XiguaXueliangFanbei": "同一测试断言「回复 3（3+3）」「仅一次」⇒ 上限/回复都翻倍且只生效一次；与上游 `global:'gameStart'` 的差异只是**时点后移**（首个阶段开始），代码注释已登记",
     "YxsMenshen3": "`TriggerMeta` 声明 `event: PhaseBegin` + **`extra_events: vec![EventKind::Death]`**，过滤臂也直接匹配 `EventData::Death { .. }` ⇒ 上游 `player:['phaseBegin','dieBegin']` 的两幕**都已实现**（台账「少死亡前幕」是误判）",
