@@ -49,3 +49,45 @@ error occurred in cc-rs: failed to find tool "aarch64-linux-android-clang": No s
 - 性能与内存特征（与桌面差异）。
 
 ⇒ 「目标平台」这一项**仍为待办**：构建级 7 个 target 已有证据，运行级 **0**。
+
+---
+
+## WASM 目标：**运行级**证据（2026-10-19，本轮实测，Node 宿主）
+
+### 命令
+
+```bash
+wasm-pack build crates/engine-native-wasm --target nodejs --release --no-opt --out-dir /tmp/wasm-pkg
+PKG=/tmp/wasm-pkg node scripts/native_wasm_smoke.mjs
+```
+
+### 结果：**11/11 全部 PASS**
+
+```text
+PASS build | ruleset=v322 players=4
+PASS view_own_hand | own=4
+PASS view_hidden_hand | {"hidden":true}
+PASS view_deck_count_only | deck=108
+PASS view_per_seat
+PASS auto_game_progress | steps=235 finished=true answers=39
+PASS auto_suspended_none_or_resumable | suspended=0
+PASS restore_view_equal | mid-save restore per-view equal
+PASS restore_matches_same_seed | same-seed 60 steps equal restored view
+PASS dual_instance_determinism | hash_equal=true
+PASS choice_visibility_own_and_other | own=true other=true
+{"total":11,"failed":0,...}
+```
+
+### 这证明了什么（按八项的口径）
+
+| 维度 | 是否覆盖 |
+|---|---|
+| WASM **构建**（release + wasm-bindgen）| ✅ |
+| WASM **运行**：建局 / 视图隔离 / 自动对局（235 步）/ 应答（39 次）| ✅ |
+| WASM **存档往返** + 同 seed 重放一致 | ✅ |
+| WASM **双实例确定性**（state hash 相等）| ✅ |
+| **浏览器**内运行（DOM/WebWorker/网络）| ❌ 未做（Node 宿主，非浏览器）|
+| iOS/Android **真机**运行 | ❌ 未做（无设备）|
+
+⇒ **「目标平台」这一项从「构建级」推进到「WASM 运行级」**，
+但**仍缺浏览器与真机** ⇒ **八项完成数仍为 0**。
