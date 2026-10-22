@@ -43,6 +43,11 @@ phase = _load("report_phase_arms", ROOT / "scripts" / "report_phase_arms.py")
 event = _load("report_event_arms", ROOT / "scripts" / "report_event_arms.py")
 
 #: Hand-found defects that no enumeration produces (each with its evidence pointer).
+#: 归因无法确认的行（上游候选不是同一个技能）——不计入缺陷，但不是「已确认无缺陷」。
+#: `Rangjie` 曾在此集合：上游候选 `jsrgrangjie`（`damageEnd` + `moveCard` + 同花色回收）
+#: 与原生实现（选获得/移动/取消 + 选定类型取牌）**不是同一设计**，真实来源技能未定位。
+UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
+
 MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
     # id, class, behavior, upstream, native, note
     ("5b", "A", "Reguhuo", "L10", "reguhuo_phase 标记（每回合一次）", "无标记，可无限次", "EPIC_REGUHUO_KEY 定义未接线"),
@@ -54,7 +59,6 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
      "补 `!目标护甲 && 距离<=1`；`t != owner` 无害可保留"),
     ("5c", "B", "ShengkeCheck", "L06", "target: useCardToBegin", "EventKind::CardUsed", "需 CardTargeted 档"),
     ("5a", "A", "ShaDamageForceDiscard", "U06", "sha && notLink && countCards>0", "共享行为仅 is_sha_like", "共享行为未含苦无的 2 个条件（待复核）"),
-    ("6", "A", "Rangjie", "L10", "分支前无条件 draw()", "仅分支 0 摸牌", "分支 1 不摸牌"),
     ("G23b", "A", "SwdJiguanyuanGain", "U05", "damageEnd + damageSource", "EventKind::PhaseEnd", "事件种类完全错"),
     # 效果面缺陷：G23 的作用域修正把它连同「触发面」一起移出后，**效果差异**必须单独保留
     #（第 912 轮用 54 版与当前版的 `comm` 差分发现这条凭空消失）
@@ -225,7 +229,7 @@ def build() -> list[list[str]]:
 #: 归因无效：包内是**卡牌** `huanling` 映射到 `host:huanling`，而上游同名 `huanling`
 #: 是**另一个技能**（`phaseEnd`）；行为注释写的是「断月」（`duanyue`，主动技）。
 #: ⇒ 无法确定上游，移出缺陷清单待复核（第 813–814 轮）。
-UNRESOLVED_ATTRIBUTION = {"SwdHuanling"}
+#: 归因无法确认的行（上游候选不是同一个技能）——不计入缺陷，但**不是**「已确认无缺陷」
 
 #: 已由既有行为测试证明「规则层面等价」的行（第 909 轮起）——它们曾按「需档」记入台账，
 #: 但台账的依据是「引擎没有对应的事件槽位」这一**实现细节**；仓库里的测试已断言

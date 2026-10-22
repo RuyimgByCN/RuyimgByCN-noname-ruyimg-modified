@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**16 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**15 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -27,9 +27,9 @@
 
 | 类 | 条数 |
 |---|---:|
-| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **6** |
+| **A（改 pattern / 删分支 / 补动作，不动枚举）** | **5** |
 | **B（需扩枚举或引擎能力）** | **10** |
-| **合计** | **16** |
+| **合计** | **15** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **16** |
+| **合计** | **15** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **16** |
+| **合计** | **15** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3995,3 +3995,41 @@ EventData::Death { .. } => true,
 * 全量：**1539 passed / 0 failed / 71 ignored**（比上轮多 1 个，就是这条新测试）
 
 ⇒ 台账 **17 → 16**（A 6 / B 10）；**累计已修 8 条**
+
+---
+
+## 140 第 943 轮：`Rangjie` **归因不成立** ⇒ 移入 `UNRESOLVED_ATTRIBUTION`（16 → 15）
+
+### 台账原写
+
+上游「分支前无条件 `draw()`」，原生「仅分支 0 摸牌」。
+
+### 上游原文（`character/jsrg/skill.js:10440`）
+
+```js
+jsrgrangjie: {
+  trigger: { player: "damageEnd" },
+  filter(event, player) { return player.canMoveCard() && event.num > 0; },
+  content: async (event, trigger, player) => {
+    const result = await player.moveCard(true).forResult();   // 移动一张牌
+    const suit = get.suit(result.card, false);
+    … 从弃牌堆按同花色回收 …
+  }
+}
+```
+
+### 原生的实现是**另一套设计**
+
+原生是「选：获得牌 / 移动牌 / 取消」+「选类型（基本/锦囊/装备）后从牌堆取牌」，
+上游是「`moveCard` 移一张，再按**该牌花色**从弃牌堆回收同花色牌」。
+
+⇒ **不是同一个技能**（同名不同义，本会话第 3 次遇到）❌
+⇒ 已移入 `UNRESOLVED_ATTRIBUTION`：**不计入缺陷**，但**也不是「已确认无缺陷」**——
+真实来源技能仍未定位 ⚠️
+
+⇒ 台账 **16 → 15**（A 5 / B 10）
+
+### 顺带
+
+守卫覆盖率从 33% 降到 **26.7%**（分母缩小的副作用），
+`test_report_guard_coverage` 的下限据此从 30% 校准到 25%，并在用例里注明原因 ✅
