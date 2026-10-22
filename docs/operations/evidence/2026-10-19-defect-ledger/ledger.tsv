@@ -8,7 +8,6 @@ G23	A	XianjianWangyou	?	filtering/*	global:'phaseEnd'	PhaseEnd(global), 多钉�
 凭空新增触发	A	BossBaiyi	?	common.rs:857	(enable 主动技)	Judge, begin:true	中	删除阶段触发（上游是主动技）	blocked
 G15	B	WudianFuchou2	?	common.rs:24	global:'phaseAfter'	End, begin:false	中	按对照结论修改 filter / 删除分支	blocked
 G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true	中	按对照结论修改 filter / 删除分支	blocked
-第3次	B	Tianxiang	?	common.rs:394	player:"damageBegin3",	DamageBefore	高	修触发时机/补档位	blocked
 需档	B	Liaoyuan	?	meta:0	player:'shaBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdCyxianjiang	?	meta:0	player:'useCardToBegin'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	SwdJiang	?	meta:0	player:'useCardToPlayered', target:'useCardToTargeted',	CardUsed	高	修触发时机/补档位	blocked

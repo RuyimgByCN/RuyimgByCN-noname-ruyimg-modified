@@ -1,4 +1,4 @@
-# 缺陷台账（机器可读，**34 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
+# 缺陷台账（机器可读，**33 条**）—— 2026-10-19 第 909 轮（含「已核实非缺陷」排除）
 
 > **这是唯一权威的缺陷计数**。此前的「42 条」「93 条」都是**会话中的增量记账**；
 > 本台账是**脚本生成 + 去重**的结果：`scripts/report_defect_ledger.py --write`。
@@ -28,8 +28,8 @@
 | 类 | 条数 |
 |---|---:|
 | **A（改 pattern / 删分支 / 补动作，不动枚举）** | **16** |
-| **B（需扩枚举或引擎能力）** | **18** |
-| **合计** | **34** |
+| **B（需扩枚举或引擎能力）** | **17** |
+| **合计** | **33** |
 
 ## 2 按缺陷族
 
@@ -715,7 +715,7 @@ D10 的判据是「上游的事件幕在引擎里**有语义对应槽位**，差
 | **`useCardToBefore` / `ToBegin` / `ToTargeted` / `ToPlayered`** | **11** |
 | **`shaBegin` / `shaAfter` / `shaBefore`** | **6** |
 | `dieBegin`（死亡前）| 4 |
-| **合计** | **34** |
+| **合计** | **33** |
 
 ⇒ **台账 73（A 41 / B 32）**，其中 **B 类 21 条是「真缺槽位」**、8 条是其他 B 类（第 3 次等） ✅
 
@@ -3025,7 +3025,7 @@ assert_eq!(e.debug_hp(0), 3, "凝霜：杀伤害照常（免伤面无关）");
 | `Hutian`/`Xuanyuan` 归因后确认本就等价（owner 投递由引擎保证）| **2** |
 | `Tianxiang` 跨包同名（`sbtianxiang`）| **1** |
 | 「缺槽位」但时序敏感结果已有断言（`SwdDunxing`/`SwdNingshuang`/`SwdHuanyin`/`SwdLianda`/`Yihua`/`Zhenlie`）| **6** |
-| **合计** | **34** |
+| **合计** | **33** |
 
 ⇒ **54 − 18 = 36**……但台账是 40，差 4 行来自更早的分类收敛（`SwdHuanling` 归因无效、`G14`/`G18` 撤回等）。
 ⇒ **「54 → 40」的每一段变动都在本 README 里带日期与小节**，可逐段追溯 ✅
@@ -3262,3 +3262,31 @@ ctx.emit(EventData::Death { player: self.dying, killer: self.source });
 
 * `cap_card_targeted` 的注释原写「解锁 11 条」⇒ 已改成不写具体条数（避免再漂移）；
 * `test_check_comment_counts` 的 `G19 == 1` ⇒ 改为 `isNone`（唯一一行已移出）。
+
+---
+
+## 118 第 918 轮：`Tianxiang` 的「第 3 次」是**误读触发名**（34 → 33）
+
+台账原写：上游 `damageBegin3` ⇒「第 3 次伤害」，原生 `DamageBefore` ⇒「每次伤害都触发」。
+
+**但 `damageBegin1/2/3/4` 不是「第 N 次伤害」，而是同一次伤害内的四个阶段**：
+
+```js
+// game.js:20758-20766（damage 机器内）
+event.trigger('damageBegin1');   // step 0
+event.trigger('damageBegin2');   // step 1
+event.trigger('damageBegin3');   // step 2
+event.trigger('damageBegin4');   // step 3
+```
+
+⇒ `{player:'damageBegin3'}` = **任意一次伤害、第 3 阶段**（多数修正已生效、尚未扣血）
+⇒ 原生只有单一 `DamageBefore` 窗口 ⇒ **语义等价** ✅
+⇒ 另有 `swd_tianxiang_redirect.rs` 断言「弃红桃手牌转移伤害 + 天香·受按失去体力摸牌」✅
+
+⇒ 台账 **34 → 33**（A 16 / B 17）
+
+### 第 31 次自我更正
+
+**`damageBegin3` 里的数字是「阶段」不是「次数」。** 台账把它记成「第 3 次」，还据此推断「原生每次都触发 ⇒ 多触发」——
+**这是从命名猜语义**，而源码里四行 `event.trigger` 就摆着 ⚠️
+⇒ 凡是带数字的事件名（`damageBegin1/2/3/4`、`useCardToBefore/After`），**必须去源码确认数字的含义**。
