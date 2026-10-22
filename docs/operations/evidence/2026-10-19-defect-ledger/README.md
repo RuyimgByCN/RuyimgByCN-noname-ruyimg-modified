@@ -3502,3 +3502,32 @@ if begin { ctx.core.turn.phase_number += 1; }
 
 需要给 Wudian 系（`WudianZiyu`/`WudianPaotaiFire`/`PhaseEndRecoverOrDraw`/`WudianZhucheng`）接上 PhaseEnd 通道，
 或确认它们本就该走 End 开始（若上游 `phaseEnd` 在这里等价）。**在本轮只查清了机制，未改代码**。
+
+---
+
+## 125 第 926 轮：**找到 `Phase{begin:false}` 的唯一通用发射点 —— 它依赖显式 `NextPhase` 命令**
+
+第 925 轮我说「阶段结束事件不是统一投递」，本轮把发射点找齐了：
+
+| 位置 | 性质 |
+|---|---|
+| `engine/apply_command.rs:138-150` | **唯一的通用发射点**：处理 `NextPhase` 命令时，先 `push_frame(EventData::Phase { player, phase, begin: false })`（用**当前**阶段与本阶段编号）|
+| `kernel/phase.rs:113-140` | 只给**筑城**手工 `parks.push(...)`（注释：原生无 PhaseEnd 帧——直推）|
+| `content/host/step/swd_cards.rs:1158` | 某个技能内部构造一次 |
+
+### 由此得到的关键结论
+
+> **只有「由 `NextPhase` 命令结束的阶段」才会有 `PhaseEnd` 事件；
+> 自动收束的阶段（摸牌阶段摸完自动进、判定阶段自动结算、被跳过的阶段、插入阶段）都收不到。**
+
+⇒ 这解释了三件事：
+1. `WudianZiyu` 改成 `begin:false` 后**在测试里几乎不触发**（测试推进的多数阶段是自动收束的）；
+2. 台账 G20/G23 那些「原生钉 `End` 开始」的行，**不是实现者写错**，而是**当时没有可靠的阶段结束通道**；
+3. `Hutian` 能工作，是因为它的确认窗走的是 `PhaseEnd` **元数据** + `NextPhase` 路径（测试正是用 `NextPhase` 推进的）。
+
+### 因此这批行的正确修法不是改 filter
+
+**要么**：让引擎在**每个阶段收束时**（含自动收束）都发一次 `Phase{begin:false}`；
+**要么**：把这些技能的语义改判为「回合末一次」（若上游 `phaseEnd` 在本引擎语义下等价）。
+
+⇒ **这是引擎层的一个真实缺口**（不是台账口径问题），已登记为 **NC 级待办**，本轮未改代码 ⚠️
