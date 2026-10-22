@@ -2780,3 +2780,32 @@ let yxs_fanji2_direct_hit = {
 
 ⇒ **结论**：这 2 行保留，但在修复前必须先决定「测试编码的旧时机是否要一起改」——
 **这需要各自的作者确认**，不能由核对者单方面改测试。
+
+---
+
+## 104 第 904 轮：**5 条 timing 类修复都会撞到「编码旧时机」的测试**——需要授权才能继续
+
+本轮把剩下能试的都试了一遍，**5 条全部因既有测试失败而回退**：
+
+| 台账行 | 修改 | 挂掉的测试 | 测试断言的旧语义 |
+|---|---|---|---|
+| `XianjianLinghuo` | 去掉 `Phase::End` 钉 | `mingxiu::mingxiu_linghuo_round_cooldown_and_fire` | 灵火在 **End 末** 触发 |
+| `XianjianWangyou` | 同上 | `zixuan::zixuan_wangyou_roundstamp_and_draw` | 忘忧在 **End 末** 触发 |
+| `GujianFoodLiyutang` | `End,begin:true` → `begin:false` | `hujia::hujia_primitive_and_food_batch_three` | 鲤跃堂在 **End 开始** 结算 |
+| `GujianFoodZiyangdan` | `End,begin:true` → `begin:true` | `remaining::remaining_clusters_batch` | 紫阳丹在 **End** 衰减 |
+| `WudianFuchou2` | `End,begin:false` → 任何阶段结束 | `wudian::wudian_generals_batch14_fuchou_cancel_and_settle` | 复仇·续在 **自己 End 末** 结算 |
+
+⇒ **全部 `git checkout` 回退，全量复归 `1538 passed / 0 failed`** ✅
+
+### 这不是「修不动」，而是「需要一次协同改测试」
+
+这 5 个测试**不是错的**——它们忠实断言了**当前实现**；只是**当前实现比上游窄**。
+修行为必然要动这些断言，而它们分属 `nc08_mingxiu` / `nc08_zixuan` / `nc08_hujia` / `nc08_remaining` / `nc08_wudian` 五个套件。
+
+⇒ **需要维护者确认**：是否允许在修这些行为时同步更新上述 5 个测试的时序断言。
+⇒ **不确认则这 5 行保持为已知缺陷**（已写明上游语义与修法，见上表）✅
+
+### 可复用的判据（本轮新增）
+
+**「改完跑全量测试」是判断「能否安全修」的唯一可靠办法**：
+本轮 5 次尝试全部在 3 分钟内被测试挡下，**没有一次把红树林留在工作区**。
