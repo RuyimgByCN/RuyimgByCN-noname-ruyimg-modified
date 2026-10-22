@@ -1579,6 +1579,9 @@ O1/O2/O3 已分别于 2026-10-07/14/14 完成（见下表）；O4 已于 2026-10
 >
 > **第 903 轮**：**❗G23 判据根本错了——「未钉相位」不等于缺陷；并首次真正修掉 2 条缺陷** —— **发现未跟踪区已被 git 跟踪**（`kernel` 22 / `host` 55 / `ported` 16609 等）⇒ **D9 不再是阻塞**，直接动手 ✓；**修 `Hutian` 时把它钉成 `Phase::End`，4 个既有测试里 2 个立刻失败** ⇒ **反证判据错了**：上游 `{player:'phaseEnd'}` 是**自己回合的每个阶段结束**（5 次/回合），`{global:'phaseEnd'}` 是**任何玩家**的；**钉 `End` 反而更窄** ❌；**全族复查 11 行**：**9 行本来就等价**、**2 行（`WudianJidong`/`XianjianBinxin`）global 作用域下不限定自己本来就对**、**2 行（`Hutian`/`Xuanyuan`）真缺陷已修**、**3 行（`XianjianLinghuo`/`Shenwu`/`Wangyou`）真缺陷待修** ⇒ **G23 12 → 3，台账 54 → 46** ✓；**代码修复实测**：`Hutian` 的 4 个测试全过、`Xuanyuan` 后**全量 1538 passed / 0 failed** ✅；**生成器同修两个 bug**（900 字符窗口串臂、共享集合自相矛盾 ⇒ 改逐行现算 `_arm_facts()`）✓。
 >
+> **第 904–905 轮**：**5 条 timing 修复全部被测试挡下（已回退）；撤回 `Tianxiang` 的效果不符判定** ⚠️✅——**timing 类**：`XianjianLinghuo`/`XianjianWangyou`/`GujianFoodLiyutang`/`GujianFoodZiyangdan`/`WudianFuchou2` 五条改完后分别挂掉 `mingxiu_linghuo`、`zixuan_wangyou`、`hujia_primitive_and_food_batch_three`、`remaining_clusters_batch`、`wudian_generals_batch14` ⇒ **全部回退，全量复归 1538/0** ⇒ **需要授权同步改这 5 个测试的时序断言** ❌；**`Tianxiang`**：既有测试文档头写明上游是 `shenhua.js:6501` 的**标准 `tianxiang`**（`damageBegin3` + 弃红桃手牌 + 转移），与原生**完全一致** ⇒ **第 887 轮判「效果不符」是解析到了 `sbtianxiang`（跨包同名）** ⇒ **改回等价并删除那条错误的守卫**（守卫 51 → 50）✓；**第 26 次自我更正**：**判「效果不符」前必须先确认是同一套牌的同一技能**，**既有测试的文档头可作上游第二信源** ✅。
+>
+
 
 
 
