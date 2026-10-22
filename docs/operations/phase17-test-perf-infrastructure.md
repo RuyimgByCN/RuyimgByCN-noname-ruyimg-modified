@@ -66,7 +66,7 @@
 
 ## 原生单机数据点（2026-10-19，**不可用于验收**）
 
-新增证据：[`2026-10-19-native-perf-datapoint/README.md`](2026-10-19-native-perf-datapoint/README.md)
+新增证据：[`2026-10-19-native-perf-datapoint/README.md`](evidence/2026-10-19-native-perf-datapoint/README.md)
 
 | 观测 | 值 | 限制 |
 |---|---|---|
