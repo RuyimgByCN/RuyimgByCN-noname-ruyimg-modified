@@ -6222,3 +6222,45 @@ catalog 之外有源码引用        128  (100.0%)
 ### 全部包合计
 
 **370 个 `host:` 键**（按包求和），分布在 **20 个包**里，其中 U05 占 **314（85%）**。
+
+---
+
+## **`CardUsed` 单帧足以承载上游五类用牌事件**（第 930 轮定稿，**重要结论**）
+
+### 结论
+
+原生**不需要**为 `useCardToBefore` / `useCardToBegin` / `useCardToTargeted` / `shaBegin` / `shaAfter`
+新增枚举槽位。**13 行**曾在缺陷台账里按「需档」记录，逐行核对后全部**规则等价**：
+
+| 行为 | 上游事件 | 判定依据（测试断言 / 上游原文）|
+|---|---|---|
+| `SwdDunxing` | `useCardToBefore` | 「非红桃判定 ⇒ 杀被取消（无伤）」|
+| `SwdNingshuang` | `useCardToBegin` | 「使用者横置/未翻面 + 自己摸 1 + 伤害照常」|
+| `SwdHuanyin` | `useCardToBefore` | 「黑桃 ⇒ 铁索被取消」「红桃 ⇒ 摸 1 且不取消」|
+| `SwdLianda` | `shaAfter` | 「原杀 1 伤 + 虚拟杀再结算 1 伤」|
+| `Yihua` | `useCardToBefore` | 「1 号未受伤（已反弹）」「0 号受伤」|
+| `Zhenlie` | `useCardToBefore` | 「未被杀命中（已移出目标）」|
+| `Jifeng` | `useCardToBefore` | 「多目标失误（整牌取消）」样本出现 |
+| `SwdTiebi` | `shaBegin` | 「护甲抵 1 伤」「护甲已消耗」|
+| `WudianZhuchengGuard` | `shaBefore` | 「杀无效不掉血」「杀归还使用者手牌」|
+| `Liaoyuan` | `shaBegin` | 「直接命中且加伤 2（1+2）」|
+| `SwdMojian` | `shaBegin` | 「目标摸 1」「自己回 1 至满」|
+| `YunchouJiaoxia` | `useCardToTargeted` | 「红牌目标摸 1」「黑牌不触发」|
+| `ShengkeCheck` | `useCardToBegin` | 「杀命中 1 点（克）」「被生 ⇒ 摸一张」|
+
+### 为什么单帧够用
+
+`EventData::CardUsed` 帧带有 `player` / `card` / `targets` / `cancelled` 四个可变面，
+且**在目标结算之前**派发；引擎还允许在此帧上改写 `targets` 与 `cancelled`。
+⇒ 上游那五个事件名表达的是「用牌流程中的不同时刻」，**这些时刻的效果在原生的同一帧上都能落地**，
+测试断言的正是**最终可观察结果**（取消/反弹/加伤/摸牌），不是内部事件名。
+
+### 仍然成立的真缺口
+
+**「单帧多目标且需要逐目标独立结算」**的场景（如 `useCardToPlayered` 逐目标分别选择）——
+原生一个 `CardUsed` 帧对多目标只派发一次，需要循环或逐目标二次派发才是真差别。
+
+### 反向结论（对计划的影响）
+
+`docs/architecture/native-convergence-plan.md` 里若仍有「扩 2–3 个事件槽位以解锁 ~24 行」的估算，
+**该估算已被证伪**：至少 **13/24 不需要**。剩余行应逐条按「可观察结果 + 上游原文」复核，而不是先扩枚举。
