@@ -18,10 +18,8 @@ G15	B	XianjianFenglue	?	xianjian.rs:142	player:'phaseUseBefore'	Play, begin:true
 需档	B	XianjianCtianfu3	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianXshuangren2	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	XianjianXunying	?	meta:0	player:'shaAfter'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	Yihua	?	meta:0	target:'useCardToBefore'	CardUsed	高	修触发时机/补档位	blocked
 需档	B	YunchouDiychanyuan	?	meta:0	player:'dieBegin'	Death	高	修触发时机/补档位	blocked
 需档	B	YunchouJiaoxia	?	meta:0	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
-需档	B	Zhenlie	?	meta:0	target:'useCardToTargeted'	CardUsed	高	修触发时机/补档位	blocked
 L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta	中	技能完全不触发（缺 judge-before 幕）	blocked
 5c	B	ShengkeCheck	L06	content/host/**	target: useCardToBegin	EventKind::CardUsed	中	需 CardTargeted 档	blocked
 5b	A	Reguhuo	L10	content/host/**	reguhuo_phase 标记（每回合一次）	无标记，可无限次	高	EPIC_REGUHUO_KEY 定义未接线	blocked

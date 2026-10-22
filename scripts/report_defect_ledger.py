@@ -220,6 +220,8 @@ NON_DEFECT_VERIFIED: dict[str, str] = {
     "SwdNingshuang": "g1_shahai_swd/yulin.rs 断言「使用者横置/未翻面 + 自己摸 1 + 伤害照常」⇒ 与上游一致",
     "SwdHuanyin": "g1_shahai_swd/huanyin.rs 断言「黑桃判定 ⇒ 铁索被取消（不横置）」与「红桃 ⇒ 摸 1 且不取消」⇒ 与上游 useCardToBefore 的取消/加牌两面一致",
     "SwdLianda": "g1_shahai_swd/lianda.rs 断言「原杀 1 伤 + 虚拟杀再结算 1 伤」「非杀无窗」⇒ 与上游 shaAfter 的再出一杀一致",
+    "Yihua": "swd_yihua_bounce.rs 断言「弃 2 张手牌」「1 号未受伤（已反弹）」「0 号受伤」⇒ 反弹发生在结算前，同上游 useCardToBefore",
+    "Zhenlie": "swd_zhenlie_target_exclude.rs 断言「失去 1 点体力」「使用者被弃一张牌」「未被杀命中（已移出目标）」⇒ 移出目标生效于结算前",
 }
 
 BARE_USE_CARD_REVIEW = {
