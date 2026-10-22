@@ -3464,3 +3464,41 @@ gw_ciguhanshuang: {
 | 下一步 | 先写一个断言 `phase_number` 推进时刻的探针测试，再改窗口 |
 
 ⇒ 这是「被测试挡住」的**第 8 类**：**不是断言写错，而是我的改动引入了一个未验证的假设** ⚠️
+
+---
+
+## 124 第 925 轮：**「阶段结束事件不是统一投递的」** —— `WudianZiyu` 改不动的真正原因
+
+第 924 轮放宽 `WudianZiyu` 后，它**一次都不触发**。本轮查到原因：
+
+### 证据一：`phase_number` 只在阶段**开始**递增
+
+`kernel/phase.rs:99-101`：
+
+```rust
+if begin { ctx.core.turn.phase_number += 1; }
+```
+
+⇒ 阶段结束时该值等于「当前阶段的编号」，与开始时相同 ⇒ **不是计数时序问题**（推翻我上一轮的推断）。
+
+### 证据二：`Phase { begin: false }` 只对**特定技能**手工构造
+
+`kernel/phase.rs:113-140` 的 PhaseEnd 段，**只给筑城（`WUDIAN_ZHUCHENG_KEY`）**手工 `parks.push(Park{... EventData::Phase{begin:false} ...})`，
+注释明写「**原生无 PhaseEnd 帧——直推**」（169 行同样有类似说明）。
+
+⇒ **通用技能拿不到 `Phase{begin:false}` 事件**，除非它像筑城那样被单独接了一条线。
+
+### 所以三件事同时成立
+
+| 现象 | 解释 |
+|---|---|
+| `Hutian` 的 `begin:false` 臂有 4 个测试通过 | 它**有**单独的接线（`hutian_deposit` 相关路径）|
+| 我把 `WudianZiyu` 改成 `begin:false` 后**完全不触发** | **它没有**这条接线 ⇒ 永远收不到事件 |
+| 台账把 Wudian 系记成「早一步」 | 实际是「**拿不到阶段结束事件** ⇒ 只能在 End 开始时近似」 |
+
+⇒ **这不是「时机早一步」，而是「阶段结束通道缺失」** —— 台账的 G20 描述对这批行**不准确** ⚠️
+
+### 下一步（留给后续轮次）
+
+需要给 Wudian 系（`WudianZiyu`/`WudianPaotaiFire`/`PhaseEndRecoverOrDraw`/`WudianZhucheng`）接上 PhaseEnd 通道，
+或确认它们本就该走 End 开始（若上游 `phaseEnd` 在这里等价）。**在本轮只查清了机制，未改代码**。
