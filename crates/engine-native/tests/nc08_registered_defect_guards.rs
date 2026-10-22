@@ -533,26 +533,43 @@ macro_rules! pin_phase_guard {
                     if path.is_dir() {
                         stack.push(path);
                     } else if path.extension().is_some_and(|ext| ext == "rs")
-                        && path
+                        && (path
                             .file_name()
                             .and_then(|name| name.to_str())
                             .is_some_and(|name| name.starts_with("filtering"))
+                            // `filtering/` 子目录里的实现（如 `filtering/common.rs`）文件名不以
+                            // `filtering` 开头，必须按路径判断，否则只扫到委派臂（第 903 轮发现）。
+                            || path
+                                .components()
+                                .any(|part| part.as_os_str().to_string_lossy() == "filtering"))
                     {
                         all.push_str(&std::fs::read_to_string(&path).unwrap_or_default());
                     }
                 }
             }
             let needle = format!("HostBehavior::{} =>", $variant);
-            let start = all.find(&needle).expect("过滤臂里没有该行为");
-            let end = all[start + 10..]
-                .find("HostBehavior::")
-                .map(|offset| start + 10 + offset)
-                .unwrap_or(all.len());
-            let arm = &all[start..end];
-            assert!(
-                arm.contains(concat!("Phase::", $phase)),
-                concat!("应钉 ", $phase, "：", $why),
-            );
+            // 跳过 `filtering.rs` 里的委派臂（`=> self.filter_common(...)`）——真正的过滤条件在
+            // `filtering/common.rs` 等同名实现里，只查委派臂永远为红（第 903 轮发现）。
+            let mut cursor = 0usize;
+            let mut checked = false;
+            while let Some(rel) = all[cursor..].find(&needle) {
+                let start = cursor + rel;
+                let end = all[start + 10..]
+                    .find("HostBehavior::")
+                    .map(|offset| start + 10 + offset)
+                    .unwrap_or(all.len());
+                let arm = &all[start..end];
+                cursor = end;
+                if arm.contains("filter_common(") {
+                    continue;
+                }
+                checked = true;
+                assert!(
+                    arm.contains(concat!("Phase::", $phase)),
+                    concat!("应钉 ", $phase, "：", $why),
+                );
+            }
+            assert!(checked, "过滤臂里没有该行为的实现（只有委派臂）");
         }
     };
 }

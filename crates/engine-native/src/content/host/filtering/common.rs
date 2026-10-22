@@ -266,9 +266,10 @@ impl HostSkillBehavior {
             // 轩辕剑·反噬：自己是伤害来源且本次加伤生效（标记位）
             HostBehavior::XuanyuanjianBacklash => matches!(event,
                 EventData::Damage(d) if d.source == Some(owner) && ctx.state.turn.xuanyuanjian_marked),
-            // 轩辕：自己结束阶段且有黑桃牌且弃牌堆有【轩辕剑】
+            // 轩辕：**自己回合**的阶段结束、有黑桃牌且弃牌堆有【轩辕剑】
+            //（上游 trigger 为 `{ player: 'phaseEnd' }` ⇒ 只在自己回合的每个阶段结束触发）
             HostBehavior::Xuanyuan => {
-                matches!(event, EventData::Phase { begin: false, .. })
+                matches!(event, EventData::Phase { player, begin: false, .. } if *player == owner)
                     && ctx
                         .state
                         .player(owner)
@@ -380,9 +381,12 @@ impl HostSkillBehavior {
                 }
                 _ => false,
             },
-            // 护天：自己阶段结束、手牌非空且当前无寄存
+            // 护天：**自己回合**的阶段结束、手牌非空且当前无寄存
+            //（上游 trigger 为 `{ player: 'phaseEnd' }` ⇒ 只在自己回合的**每个**阶段结束触发；
+            //  原先未限定 `player == owner`，会在他人的阶段结束也触发）
             HostBehavior::Hutian => {
-                matches!(event, EventData::Phase { begin: false, .. })
+                matches!(event,
+                    EventData::Phase { player, begin: false, .. } if *player == owner)
                     && !ctx.state.player(owner).hand.is_empty()
                     && ctx.state.player(owner).hutian_deposit.is_none()
             }

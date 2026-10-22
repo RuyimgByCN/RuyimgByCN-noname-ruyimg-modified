@@ -63,18 +63,55 @@ MANUAL: list[tuple[str, str, str, str, str, str, str]] = [
 ]
 
 
+def _arm_facts(behavior: str) -> tuple[bool, bool]:
+    """返回该行为过滤臂的（是否限定自己, 是否钉了相位）。
+
+    逐行为现算，不复用循环里的共享集合——`g23_rows` 早先用共享集合时出现过
+    「同一行既被判为未钉、又被判为已钉」的自相矛盾（第 903 轮）。
+    """
+    scoped = False
+    pinned = False
+    pattern = re.compile(r"HostBehavior::" + re.escape(behavior) + r"\s*=>")
+    for path in HOST.rglob("*.rs"):
+        if "filtering" not in str(path):
+            continue
+        text = path.read_text(encoding="utf-8")
+        for m in pattern.finditer(text):
+            end = text.find("HostBehavior::", m.end())
+            body = text[m.end() : end if end > 0 else len(text)]
+            if "*player == owner" in body:
+                scoped = True
+            if re.search(r"phase:\s*crate::event::Phase::\w+", body) or re.search(
+                r"\*phase\s*==\s*crate::event::Phase::\w+", body
+            ):
+                pinned = True
+    return scoped, pinned
+
+
 def g23_rows() -> list[tuple[str, str, str, str, str]]:
-    """PhaseEnd metas without a phase pin, whose upstream is phaseEnd."""
+    """PhaseEnd 触发范围与上游不符的行（第 903 轮修正判据）。
+
+    上游 `trigger` 的**作用域**决定原生过滤臂该不该限定自己：
+      * `player:'phaseEnd'` —— 只有**自己回合**的每个阶段结束 ⇒ 原生必须 `*player == owner`；
+      * `global:'phaseEnd'` —— **任何玩家**的阶段结束 ⇒ 原生**不该**限定自己。
+
+    旧判据是「有没有把相位钉成 End」，**与上游语义无关**：`player:` 与 `global:`
+    作用域都覆盖所有相位，钉 `End` 反而错（第 903 轮由 `Hutian` 的真实测试推翻）。
+    """
     meta = event.metadata_events()
-    pinned = set()
+    scoped = set()   # 过滤臂里限定了 `*player == owner`
+    pinned = set()   # 过滤臂里钉了具体相位
     for path in HOST.rglob("*.rs"):
         if "filtering" not in str(path):
             continue
         text = path.read_text(encoding="utf-8")
         for m in re.finditer(r"HostBehavior::([A-Za-z0-9_]+)\s*=>", text):
-            body = text[m.end() : m.end() + 900]
-            nxt = body.find("HostBehavior::")
-            body = body if nxt < 0 else body[:nxt]
+            # 按「下一个 HostBehavior::」截断；固定 900 字符窗口会串到相邻臂里，
+            # 造成「没钉相位却被判为钉了」（第 903 轮实测：WudianJidong 被误判）。
+            end = text.find("HostBehavior::", m.end())
+            body = text[m.end() : end if end > 0 else len(text)]
+            if "*player == owner" in body:
+                scoped.add(m.group(1))
             if re.search(r"phase:\s*crate::event::Phase::\w+", body) or re.search(
                 r"\*phase\s*==\s*crate::event::Phase::\w+", body
             ):
@@ -83,7 +120,7 @@ def g23_rows() -> list[tuple[str, str, str, str, str]]:
     skills = phase.skill_names()
     rows = []
     for behavior, kind in sorted(meta.items()):
-        if kind != "PhaseEnd" or behavior in pinned:
+        if kind != "PhaseEnd":
             continue
         if behavior in UNRESOLVED_ATTRIBUTION:
             continue
@@ -91,7 +128,19 @@ def g23_rows() -> list[tuple[str, str, str, str, str]]:
         trigger = phase.resolve_trigger(behavior, key, skills.get(key, "") or "")
         if "phaseEnd" not in trigger:
             continue
-        rows.append((behavior, trigger, "PhaseEnd, 未钉阶段", "高", "把 `..` 钉成 End, begin: false"))
+        own_scope = trigger.lstrip().startswith("player")
+        # 逐行重算该行为的臂事实（共享集合在长文件里会串味，第 903 轮踩过）
+        scoped_now, pinned_now = _arm_facts(behavior)
+        if own_scope and scoped_now:
+            continue          # 自己回合的每个阶段结束 ⇒ 已限定自己，与上游一致
+        if not own_scope and not pinned_now:
+            continue          # `global:` ⇒ 任何玩家的阶段结束 ⇒ 不限定自己才对
+        if not own_scope and pinned_now:
+            rows.append((behavior, trigger, "PhaseEnd(global), 多钉了相位", "中",
+                         "去掉相位钉（上游对任何玩家的任何阶段结束都触发）"))
+            continue
+        rows.append((behavior, trigger, "PhaseEnd(player), 未限定自己", "高",
+                     "过滤臂加 `if *player == owner`"))
     return rows
 
 
