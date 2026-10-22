@@ -2849,3 +2849,25 @@ tianxiang:{ trigger:{player:'damageBegin3'}, direct:true,
 
 `swd_tianxiang_redirect.rs` 的文档头与实际上游**逐字对得上**（`damageBegin3`、弃红桃手牌、转移给其他角色）
 ⇒ **既有测试的文档头可以作为上游引用的第二信源**，比注释可靠 ⚠️
+
+---
+
+## 106 第 906 轮：**「修复被既有测试挡住」的完整清单（6 行）**——交维护者一次决定
+
+这 6 行的共同点：**上游语义明确、修法明确，但仓库里有测试断言了当前（较窄/较简）的行为**。
+改行为就要改测试断言；测试分属 6 个套件，**我不单方面改别人的测试**。
+
+| # | 台账行 | 上游（原文要点）| 原生现状 | 挡住它的测试 / 断言的旧语义 |
+|---|---|---|---|---|
+| 1 | `XianjianLinghuo`（G23）| `{round:2, trigger:{global:'phaseEnd'}, filter: event.player!=player}` ⇒ **任何玩家任何阶段**结束 | 钉 `Phase::End` | `nc08_mingxiu::mingxiu_linghuo_round_cooldown_and_fire`（End 末）|
+| 2 | `XianjianWangyou`（G23）| `{global:'phaseEnd'}`，filter `player != event.player` | 钉 `Phase::End` | `nc08_zixuan::zixuan_wangyou_roundstamp_and_draw`（End 末）|
+| 3 | `GujianFoodLiyutang`（G20）| `{player:'phaseEnd'}` ⇒ **自己每个阶段**结束 | `End, begin:true` | `nc08_hujia::hujia_primitive_and_food_batch_three`（End 开始）|
+| 4 | `GujianFoodZiyangdan`（G14）| `{player:'phaseBegin'}` ⇒ **自己每个阶段**开始 | `End, begin:true` | `nc08_remaining::remaining_clusters_batch`（End 衰减）|
+| 5 | `WudianFuchou2`（G15）| `{global:'phaseAfter'}` | `End, begin:false`（仅自己）| `nc08_wudian::wudian_generals_batch14_fuchou_cancel_and_settle`（自己 End 末）|
+| 6 | `SwdMufengHeld`（G23 + 效果）| `{player:'phaseEnd'}` ⇒ 自己每个阶段结束；效果是 **`player.discoverCard()`（发现三选一）** | `Play` 末窗；效果 **`draw_cards(1)`** | `nc08_jiying::swd_generals_b61_jiying_mufeng_wangchen`（Play 末 + 摸 1）|
+
+⇒ **每一条我都实际改过、跑过全量测试、确认失败后 `git checkout` 回退**（不是推测）✅
+⇒ **需要的决定**：**是否允许在修这 6 行时同步更新上述 6 个测试的断言**（把「旧时机/旧效果」改成上游语义）⚠️
+
+**若允许**，预计一次提交可消掉 6 行（台账 46 → 40），且每行都有上游原文与测试改动点。
+**若不允许**，这 6 行保持「已知缺陷、修法明确、待协同」状态 ✅
