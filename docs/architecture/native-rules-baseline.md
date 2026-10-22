@@ -6322,3 +6322,49 @@ catalog 之外有源码引用        128  (100.0%)
 后者能用 `CardUsed` 承载（15 行已证明），而判定流程**没有任何可复用的帧**。
 
 ⇒ 若要做，建议单独立项（NC 级），并同步升级存档版本与 golden。
+
+---
+
+## 剩余 10 条的**执行清单**（第 971 轮整理，供后续直接动手）
+
+> 每条都写到「改哪个文件、改什么、如何验证」，避免下一轮重新调查。
+
+### A. 4 条「断言把旧时机写进前置条件」
+
+`XianjianLinghuo`、`XianjianWangyou`、`GujianFoodLiyutang`、`WudianFuchou2`
+
+**要改的代码**（已在各轮确认）：
+
+| 行 | 过滤臂应改为 | 元数据 |
+|---|---|---|
+| `XianjianLinghuo` | `Phase { begin: false, .. }` + `*player != owner` + 现有伤害/轮次条件 | 已是 `PhaseEnd` ✅ |
+| `XianjianWangyou` | `Phase { begin: false, .. }` + `*player != owner` | 已是 `PhaseEnd` ✅ |
+| `GujianFoodLiyutang` | `Phase { begin: false, .. }` + `*player == owner` | **`PhaseBegin` → `PhaseEnd`** |
+| `WudianFuchou2` | `Phase { begin: false, .. }` + **`fuchou_marked` 里有存活者** | 已是 `PhaseEnd`? 需确认 |
+
+**要改的测试**（这是真正的成本）：
+
+1. 把「固定步数 `NextPhase` 循环」换成**状态驱动**：循环直到目标条件成立；
+2. **给每次 `open_choice()` 配应答策略**——按 `spec.prompt` 分类：
+   * 被测技能的询问 → 选断言需要的选项；
+   * 其他询问 → 统一「取消/Pass/首项」；
+3. 断言**不要**依赖「某一步之后」的中间状态，改为「循环结束后」的终态。
+
+**验证**：`cargo test -p engine-native --test g1_wudian`（覆盖 4 条中的 3 条）与全量。
+
+### B. 2 条需要引擎能力
+
+| 行 | 缺口 | 落点 |
+|---|---|---|
+| `SwdMufengHeld` | `discover` 原语（摸 3 选 1，余入弃堆）| 新 helper：`ctx.discover(owner, n)`；step `swd_equipment.rs` 里 `draw_cards(owner,1)` 换成它；**无既有 helper 可复用** |
+| `SwdJiang` | 单帧多目标逐目标结算 | 需在 `CardUsed` 帧上对每个 target 各派发一次子帧（或循环） |
+
+### C. 1 条完全未实现
+
+`HlssGaiming` —— 需新增判定事件（见上一节），牵动 `event.rs`/`archive`/`ARCHIVE_FORMAT_VERSION`/golden。
+
+### D. 3 条已登记差异（**不是缺陷**）
+
+`SwdCyxianjiang`、`XianjianXunying`、`ShaDamageForceDiscard`（K1/K3）
+
+⇒ 建议**直接从缺陷台账移出**，改登记到「已登记差异」清单（本轮未做，因为要逐条确认差异描述与台账行是否同一处）。
