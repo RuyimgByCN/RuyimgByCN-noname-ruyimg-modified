@@ -166,3 +166,32 @@ RESULT=PASS
 ⇒ 进程启动（打印 `*** You are running in headless mode.`）但**没有产出截图文件**，
 且该版本 Firefox 不提供 Chrome 那样的 `--dump-dom`。
 ⇒ **Safari / Firefox 的交叉验证仍为待办**，本轮只证明 **Chrome** 可运行。
+
+### 补充：`aarch64-linux-android` 失败的**具体依赖**与 Linux target 的阻塞
+
+**失败点定位**（`cargo build -p engine-native --target aarch64-linux-android`）：
+
+```text
+Compiling blake3 v1.8.5
+error occurred in cc-rs: failed to find tool "aarch64-linux-android-clang"
+```
+
+⇒ 需要 C 工具链的是 **`blake3`**（它有 `cc` 构建脚本；其余三个 Android target 走的是无需 clang 的路径）。
+
+**Linux target 也拿不到**（离线环境）：
+
+```bash
+$ rustup target add x86_64-unknown-linux-gnu
+error: component download failed for rust-std-x86_64-unknown-linux-gnu
+```
+
+⇒ **Linux CI 的构建级证据也无法在本环境取得**：`rust-std` 需要联网下载。
+
+### 因此「目标平台」缺的两类东西都是**环境**，不是代码
+
+| 缺什么 | 原因 |
+|---|---|
+| `aarch64-linux-android` 构建 | 缺 Android NDK（`aarch64-linux-android-clang`）|
+| `x86_64-unknown-linux-gnu` 构建 | 离线，`rust-std` 无法下载 |
+| Firefox/Safari 运行 | headless Firefox 无截图/无 `--dump-dom` |
+| iOS/Android **真机**运行 | 无设备 |
