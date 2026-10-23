@@ -4675,3 +4675,16 @@ DBG3 p0 hand kinds=[] equips=[] p1 equips=["Weapon"] kind_w="Weapon"   // 三个
 `per_target_once` 在覆盖清单里保持「**已实现，无独立用例**」⚠️。
 去重的真实机制在 `vm_aux.once` 的 scope-3 通路上，但**触发派发的前置条件尚未查清**，
 所以这条既不能标「已验证」，也不能标「缺陷」。
+
+### 追加探针（同一轮，临时文件已删）
+
+用一次性探针（`tmp_probe_cyx.rs`，跑完即删）测「换一个目标是否还会触发」：
+
+```text
+PROBE target=1 out=Pending{Confirm}  picks=1     // 目标 1 触发 ✓
+PROBE target=2 out=Rejected(DuplicateCommand)    // 目标 2 的提交被判重复，**没测到**
+```
+
+⇒ 连「换目标再触发」这条也没测成（`DuplicateCommand` 的原因未查清）。
+⇒ 因此 `per_target_once` **既没有正向用例也没有反向用例**，只能保持「已实现，无独立用例」。
+⇒ 这条**不是**缺陷（行为本身没被证伪），**也不是**已验证（没有任何断言覆盖）。
