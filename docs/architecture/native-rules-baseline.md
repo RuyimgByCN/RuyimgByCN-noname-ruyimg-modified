@@ -6839,3 +6839,21 @@ let sel = if has_pass { vec![ChoiceOption::Pass] } else if c.spec.allow_cancel {
 ⇒ 所以这条**不只是引擎改动**，还要改用例的应答策略（明确 Confirm）。
 ⇒ 与 `XianjianLinghuo`/`Wangyou` 同属「测试推进脚本与应答策略」类，需 owner 参与。
 ⇒ 已回退，全量复归 **1544 passed** ✅
+
+### `SwdShenyan` 第三次探查（第 1024 轮）：**用例的 drain 实际是「拒绝」**
+
+把用例临时加了一行打印，`optional: true` 下实测：
+
+```text
+DBG hp1 4->3 hp2 4->4 hp3 4->4 hp0 4->4
+```
+
+⇒ **伤害只有 1（+1 没生效）、蔓延也没发生**。
+
+也就是说：`drain` 对 `trigger_confirm` 的应答被引擎当成**拒绝**。
+（第 1023 轮探针里我用 `options.take(min)` 显式选 `Confirm`，那次伤害是 2、是正确的。）
+
+⇒ 结论确定：**引擎侧把 `optional` 改成 `true` 是可行的**（第 1023 轮探针已证），
+但既有用例的**统一 drain 策略会把该确认当成拒绝**，必须改成「对 `trigger_confirm` 明确选 `Confirm`」。
+
+⇒ 这仍然是「测试推进脚本/应答策略」类，需要 owner 参与；本轮已全部回退（元数据与用例），全量复归 **1544 passed**。
