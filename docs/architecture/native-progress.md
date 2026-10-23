@@ -55,7 +55,7 @@
 >
 > **第 1019 轮补记**：本会话在**规则差异**这一项上共完成 **17 条真修复**（`WudianZiyu`/`WudianPaotaiFire`/`PhaseEndRecoverOrDraw`/`WudianZhucheng`/`SwdBaishouzhihuHeld`/`GwentCiguState`/`XianjianShenwu`/`Reguhuo`/`SwdMufengHeld`（新增 `discover` 原语）/`SwdCyxianjiang`/`WudianFuchou2`/`GujianFoodLiyutang`/`SwdJiefen`/`SwdCyxianjiangName`/`Moyan`/`Gongxin`/`SwdShenyan`），其中 **9 条**带「先红后绿」用例；台账由 54 收敛到 **3**（A 2 / B 1）。**八项完成数仍为 0**。
 >
-> **缺陷总账（本会话最终分类）**：**3 条 = A 2 / B 1**（**以[机器可读台账](../operations/evidence/2026-10-19-defect-ledger/README.md)为准**）
+> **缺陷总账（本会话最终分类）**：**2 条 = A 1 / B 1**（**以[机器可读台账](../operations/evidence/2026-10-19-defect-ledger/README.md)为准**）
 > - **B 类 29 = 需档 21 + 其他 8**（**需档 = `useCardTo*` 11 + `sha*` 6 + `dieBegin` 4**）
 > - **A 类 26**：G23 12 / G20 5 / G15 2 / G23b 2 / G14 1 / G19 1 / G22 1 / 单条 1
 > - **四个维度**：**①上游定位 55/55 ✓ ②相位族同质（36 行，第 791 轮）✓ ③效果步存在 55/55 ✓ ④效果逻辑等价 2/55** ⚠️

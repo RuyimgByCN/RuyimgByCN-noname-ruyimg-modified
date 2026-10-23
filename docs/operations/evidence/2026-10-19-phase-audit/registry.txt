@@ -41,7 +41,6 @@ XianjianLinghuo	xj_linghuo	End	false	已核	基准对应章节
 XianjianLingquan	xj_lingquan	End	false	已核	v607 反查比对
 XianjianLonghuo	xj_longhuo	End	false	已核	v607 反查比对
 XianjianQianfang	xj_qianfang	Judge	true	已核	基准对应章节
-XianjianWangyou	xj_wangyou	End	false	已核	基准对应章节
 XianjianXjzhimeng	xj_xjzhimeng	End	false	已核	v607 反查比对
 XianjianShuiyun	xj_shuiyun	End	false	已核	v607 反查比对
 XianjianZhaoyao	xj_zhaoyao	Draw	true	已核	基准对应章节

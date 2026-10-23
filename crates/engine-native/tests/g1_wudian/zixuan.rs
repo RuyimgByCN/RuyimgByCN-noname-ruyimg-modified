@@ -235,9 +235,31 @@ fn zixuan_wangyou_roundstamp_and_draw() {
         "2 号获戳"
     );
     let w2 = e.debug_place(0, "wuzhong");
-    let _ = submit(&mut e, 2, GameAction::NextPhase); // Play→Discard
-    let _ = submit(&mut e, 2, GameAction::NextPhase); // Discard→End
-    let _ = submit(&mut e, 2, GameAction::NextPhase); // End→0 Judge：忘忧询问②
+    // 第 1031 轮：忘忧对齐上游 `global:'phaseEnd'` 后触发点变多，固定「2 号推三步」不再成立。
+    // 改为**状态驱动**：用当前回合玩家推进，先把其它询问取消掉，直到出现带 w2 的忘忧窗。
+    let mut got = false;
+    for _ in 0..40 {
+        if let Some(c) = e.open_choice().cloned() {
+            if c.spec.prompt == engine_native::content::host::WUDIAN_XJ_WANGYOU_CARDS
+                && c.spec.options.contains(&ChoiceOption::Card(w2))
+            {
+                got = true;
+                break;
+            }
+            let _ = submit(
+                &mut e,
+                c.observer,
+                GameAction::Answer {
+                    choice_id: c.id,
+                    selection: Vec::new(),
+                },
+            );
+            continue;
+        }
+        let actor = e.turn().current;
+        let _ = submit(&mut e, actor, GameAction::NextPhase);
+    }
+    assert!(got, "忘忧询问②（带 w2 的弃牌窗）");
     let c = e.open_choice().expect("忘忧弃牌挂起②");
     assert_eq!(c.spec.options, vec![ChoiceOption::Card(w2)]);
     let (cid, obs) = (c.id, c.observer);

@@ -26,7 +26,7 @@ class LedgerTests(unittest.TestCase):
 
     def test_ledger_is_populated(self):
         # 台账从 54 收敛到 26（复核后移入 FIXED/NON_DEFECT 注册表）。
-        self.assertGreaterEqual(len(self.rows), 3)
+        self.assertGreaterEqual(len(self.rows), 2)
 
     def test_rows_have_all_columns(self):
         for row in self.rows:
@@ -55,7 +55,7 @@ class LedgerTests(unittest.TestCase):
         behaviors = {r[2] for r in self.rows}
         # SwdTiebi/BossBaiyi 已复核移出；这里改挑仍在台账里的三行。
         # Reguhuo 已于第 942 轮修复移出；改挑仍在台账里的三行。
-        for expected in ("XianjianLinghuo", "XianjianWangyou", "HlssGaiming"):
+        for expected in ("XianjianLinghuo", "HlssGaiming"):
             self.assertIn(expected, behaviors)
 
     def test_location_column_present(self):

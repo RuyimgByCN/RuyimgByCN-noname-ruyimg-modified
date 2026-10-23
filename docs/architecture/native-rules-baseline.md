@@ -6932,3 +6932,31 @@ DBG2 round=1 turn=1 phase=Discard choice=None
 
 ⇒ 已全部回退，全量复归 **1544 passed**。
 ⇒ 这条与 `XianjianLinghuo` 一样：**实现侧一步可做（上游 filter 已抄全），成本全在测试时序重推**。
+
+---
+
+## **第 18 条真修复：`XianjianWangyou`**（第 1031 轮，第 5 次尝试成功）
+
+### 改动
+
+| 侧 | 改动 |
+|---|---|
+| 过滤臂 | 由 `Phase{End, begin:false}` 放宽到 **`Phase{begin:false, ..}`**（上游 `{global:'phaseEnd'}`）|
+| 过滤条件 | 补全上游三条：①自己有牌（`countCards('he')`）②非自己阶段 ③场上有人持 `wangyou3` |
+| 用例 | 第二段改为**状态驱动**：用 `e.turn().current` 推进、先取消其它询问、直到出现**带目标牌**的忘忧窗 |
+
+### 结果
+
+`zixuan_wangyou_roundstamp_and_draw` 通过；全量 **1544 passed / 0 failed / 71 ignored** ✅
+台账 **3 → 2**（A 1 / B 1）。
+
+### 前四次为什么失败（值得记）
+
+| 次数 | 做法 | 失败原因 |
+|---|---|---|
+| 1–2 | 只改臂 / 只改条件 | 触发点没变，用例仍按旧时序 |
+| 3 | 补条件 + 放宽 | 第一段过、第二段「忘忧窗②」失败 |
+| 4 | 再加「先 drain 再推进」 | 调试显示 `round=1 turn=1` ⇒ **回合归属已变**，`submit(2, NextPhase)` 全被拒 |
+| **5** | **用 `e.turn().current` 推进 + 按「带目标牌」判定窗口** | ✅ 通过 |
+
+⇒ 关键不是「多 drain 几次」，而是**不要写死「现在是几号回合」**。

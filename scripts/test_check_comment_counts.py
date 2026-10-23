@@ -37,7 +37,7 @@ class CommentCountTests(unittest.TestCase):
     def test_known_family_counts(self):
         self.assertIsNone(self.counts.get("G14"))  # 第 945 轮：GujianFoodZiyangdan 归入已登记差异
         self.assertIsNone(self.counts.get("G18"))
-        self.assertEqual(self.counts.get("G23"), 2)  # 第 939 轮：XianjianShenwu 已修，余 Linghuo/Wangyou
+        self.assertEqual(self.counts.get("G23"), 1)  # 第 1031 轮：Wangyou 已修，余 Linghuo
         self.assertIsNone(self.counts.get("G20"))  # 第 991 轮：G20 全部已修，族消失
         self.assertIsNone(self.counts.get("G19"))  # 第 917 轮：唯一一行 SwdTiebi 经完整读码移出（条件其实都在）
 

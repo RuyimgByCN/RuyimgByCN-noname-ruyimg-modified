@@ -301,8 +301,14 @@ impl HostSkillBehavior {
             }
             // 忘忧：他人阶段末+自己有牌+本回合存在受伤标记者,
                         HostBehavior::XianjianWangyou => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
-                if *player != owner),
+                // 上游 `wangyou`: `{global:'phaseEnd'}` + ①自己有牌 ②非自己阶段 ③场上有人持 wangyou3
+                EventData::Phase { player, begin: false, .. }
+                if *player != owner
+                    && (!ctx.state.player(owner).hand.is_empty()
+                        || !ctx.state.player(owner).equips.is_empty())
+                    && ctx.state
+                        .alive_players()
+                        .any(|p| ctx.state.player(p).wangyou3_round != 0)),
             HostBehavior::XianjianWangyou2 => matches!(event,
                 EventData::Damage(d)
                 if !d.prevented && d.amount > 0 && ctx.state.player(d.target).alive),
