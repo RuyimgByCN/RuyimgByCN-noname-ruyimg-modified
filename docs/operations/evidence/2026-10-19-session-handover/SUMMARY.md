@@ -718,3 +718,21 @@ Firefox/Safari（环境无取证手段）、旧引擎同机性能数据、D1/D2 
 
 `cargo test --offline -p engine-native` = **1544 passed / 0 failed / 71 ignored**；
 `preflight` 23 项通过。
+
+---
+
+## 118 第 1020 轮：**全仓回归复验**（不是定向测试）
+
+本会话改过引擎内核（`kinds`/`phase`/`filters`/`metadata`/`step`/`discover` 原语），
+所以在收尾时重跑**整仓**，而不只是 `engine-native`：
+
+| 命令 | 结果 |
+|---|---|
+| `cargo test --offline --workspace` | **6256 passed / 0 failed / 72 ignored** |
+| `wasm-pack build crates/engine-native-wasm --target nodejs --release` | ✅ 重建成功 |
+| `PKG=/tmp/wasm-pkg node scripts/native_wasm_smoke.mjs` | **11/11 PASS（failed=0）** |
+| `python3 -B -m unittest discover -s scripts` | **177 OK** |
+| `python3 -B scripts/preflight.py --quick` | **23 项全过** |
+
+⇒ 本会话的 16 条修复**没有把任何既有测试改坏**（workspace 从 6251 → 6256，新增 5 个用例：
+`discover` 语义、`mufeng` discover、`cyxianjiang` 牌名、`jiefen` 每阶段一次、`moyan` 每阶段一次、`gongxin` 每阶段一次 —— 其中 6 个新增，另 -1 为原用例数变动）。
