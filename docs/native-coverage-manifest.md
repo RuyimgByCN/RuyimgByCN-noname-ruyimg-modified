@@ -32,7 +32,7 @@
 | `optional_trigger` | 已验证 | replay:sancai_nested_chain | OptionalGate 确认闸门 |
 | `phase_end_trigger_global` | **已验证（所测路径）** | `nc08_upstream_ziyu::upstream_ziyu_opens_every_fourth_phase`、`g1_wudian::wudian_generals_batch14_fuchou_cancel_and_settle`、`g1_shahai_gujian::hujia_primitive_and_food_batch_three` | 上游 `{global:'phaseEnd'}` / `{player:'phaseEnd'}` 与原生 `EventKind::PhaseEnd` + `Phase{begin:false}` 的对应（本会话修 5 条：`WudianZiyu`/`WudianPaotaiFire`/`PhaseEndRecoverOrDraw`/`WudianZhucheng`/`XianjianShenwu`/`WudianFuchou2`/`GujianFoodLiyutang`）|
 | `discover_primitive` | **已验证** | `g1_shahai_swd::swd_mufeng_uses_discover_not_draw` | 「发现」：亮出牌堆顶 N 张选 1、余入弃堆（对齐上游 `player.discoverCard()`；本会话新增）|
-| `per_target_once` | **已实现，无独立用例** | `filtering/swd.rs` 的 `SwdCyxianjiang` 臂 + `step/swd_cards.rs` 记账 | 同目标一次（`vm_aux.once` scope 3 = 整局）；本会话补记账，**尚无断言覆盖该去重** ⚠️ |
+| `card_name_vs_kind_compare` | **已验证** | `g1_shahai_swd::swd_cyxianjiang_compares_card_name_not_kind` | 上游 `card.name` 比较**不能**退化成 `card_kind`：装备都归为 `Weapon` ⇒ 「手里有任意武器」就恒假（第 1001 轮修，先红后绿）|
 | `nested_choice` | 已验证 | replay:sancai_nested_chain | 应答只消费一次、跨子事件续行 |
 | `once_per_turn` | 已验证 | replay:suidun_window_matrix、`epic_reguhuo_viewas::reguhuo_is_once_per_turn` | 回合开始重置；`vm_aux.once` scope 1 亦被 `Reguhuo` 使用（本会话接线）|
 | `mid_resolution_disable` | 已验证 | replay:suidun_window_matrix | 队列运行前重查 enabled/alive |

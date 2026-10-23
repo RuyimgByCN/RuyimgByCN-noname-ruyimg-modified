@@ -516,13 +516,14 @@ impl HostMachine {
                         .iter()
                         .copied()
                         .filter(|c| {
-                            let k = ctx.catalog.card_kind(*c);
+                            // 同过滤臂：按**牌名**比较（上游 `card.name`），不是牌种
+                            let name = ctx.catalog.cards[*c as usize].name;
                             !ctx.core
                                 .player(self.owner)
                                 .hand
                                 .iter()
                                 .chain(ctx.core.player(self.owner).equips.iter())
-                                .any(|o| ctx.catalog.card_kind(*o) == k)
+                                .any(|o| ctx.catalog.cards[*o as usize].name == name)
                         })
                         .map(ChoiceOption::Card)
                         .collect();

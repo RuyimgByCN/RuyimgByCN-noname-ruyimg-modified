@@ -165,3 +165,129 @@ fn swd_generals_b89_cyxianjiang() {
         "仙匠：本体仍在 p1"
     );
 }
+
+/// 仙匠的候选比较必须用**牌名**，不是牌种（第 1001 轮修）。
+///
+/// 上游 `countCards("e", card => !player.countCards("he", card.name))` 比的是 `card.name`；
+/// 原生曾用 `card_kind`——装备牌都归为 `CardKind::Weapon`，
+/// 于是「手里有任意一把武器」就会让条件恒假，比上游**严格得多**。
+///
+/// 夹具：p1 装武器 A；p0 手里拿**另一把不同名**的武器 B ⇒ 上游应触发。
+#[test]
+fn swd_cyxianjiang_compares_card_name_not_kind() {
+    let root =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62058, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_grant(0, "cyxianjiang");
+
+    // 两把**不同名**的武器
+    let mut weapons: Vec<u32> = Vec::new();
+    for id in 0..e.catalog().cards.len() as u32 {
+        let c = &e.catalog().cards[id as usize];
+        if c.kind.equip_slot() == Some(engine_native::catalog::EquipSlot::Weapon)
+            && c.kind != CardKind::Zhangba
+            && !weapons
+                .iter()
+                .any(|w| e.catalog().cards[*w as usize].name == c.name)
+        {
+            weapons.push(id);
+        }
+        if weapons.len() == 2 {
+            break;
+        }
+    }
+    assert!(weapons.len() == 2, "需要两把不同名武器");
+    let (a, b) = (weapons[0], weapons[1]);
+    assert_ne!(
+        e.catalog().cards[a as usize].name,
+        e.catalog().cards[b as usize].name,
+        "夹具前提：两把武器不同名"
+    );
+    // 清理并布阵：p1 装备 a；p0 手牌只有 b
+    {
+        let core = e.state_core_mut();
+        for x in [a, b] {
+            core.deck.retain(|y| *y != x);
+            core.discard.retain(|y| *y != x);
+            core.table.retain(|y| *y != x);
+            for pl in core.players.iter_mut() {
+                pl.hand.retain(|y| *y != x);
+                pl.equips.retain(|y| *y != x);
+            }
+        }
+        core.players[1].equips.push(a);
+        core.players[0].hand.push(b);
+    }
+    e.debug_set_hp(1, 8);
+    let sha = e.debug_place(0, "sha");
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: sha,
+            targets: vec![1],
+        },
+    );
+    assert!(
+        matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "p0 杀 p1 {out:?}"
+    );
+    let mut fired = false;
+    for _ in 0..24 {
+        let Some(ch) = e.open_choice() else { break };
+        let (id, obs, prompt, min, options) = (
+            ch.id,
+            ch.observer,
+            ch.spec.prompt.to_string(),
+            ch.spec.min,
+            ch.spec.options.clone(),
+        );
+        if prompt == "cyxianjiang_pick" {
+            fired = true;
+            break;
+        }
+        let sel: Vec<ChoiceOption> = if min == 0
+            || prompt == "sha_ask"
+            || prompt == "shan_ask"
+            || prompt == "nullify_window"
+        {
+            vec![ChoiceOption::Pass]
+        } else {
+            options.iter().take(min.max(1)).copied().collect()
+        };
+        submit(
+            &mut e,
+            obs,
+            GameAction::Answer {
+                choice_id: id,
+                selection: sel,
+            },
+        );
+    }
+    assert!(
+        fired,
+        "仙匠：p1 的武器名不在 p0 手中（p0 拿的是另一把武器）⇒ 应触发；\
+         用 card_kind 比较会因「同为 Weapon」而漏触发"
+    );
+}

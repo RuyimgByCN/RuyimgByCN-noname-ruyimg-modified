@@ -868,13 +868,16 @@ impl HostSkillBehavior {
                         .equips
                         .iter()
                         .any(|c| {
-                            let k = ctx.catalog.card_kind(*c);
+                            // 上游 `countCards("e", card => !player.countCards("he", card.name))`
+                            // 比的是**牌名**；第 1001 轮前误用 `card_kind`（装备都归为 Weapon
+                            // ⇒ 手里有任意武器就永不触发，比上游更严）
+                            let name = ctx.catalog.cards[*c as usize].name;
                             !ctx.state
                                 .player(owner)
                                 .hand
                                 .iter()
                                 .chain(ctx.state.player(owner).equips.iter())
-                                .any(|o| ctx.catalog.card_kind(*o) == k)
+                                .any(|o| ctx.catalog.cards[*o as usize].name == name)
                         }))
             }
             // 幻形·移除面：自己受伤结算后（在位旗标=状态技能实例）
