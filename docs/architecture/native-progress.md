@@ -53,7 +53,7 @@
 > | 目标平台 | **构建级** | iOS 双架构 + WASM 三层；**运行期未验** |
 > | **完成八项** | **0** | **唯一未过项：规则差异** |
 >
-> **第 1019 轮补记**：本会话在**规则差异**这一项上共完成 **18 条真修复**（`WudianZiyu`/`WudianPaotaiFire`/`PhaseEndRecoverOrDraw`/`WudianZhucheng`/`SwdBaishouzhihuHeld`/`GwentCiguState`/`XianjianShenwu`/`Reguhuo`/`SwdMufengHeld`（新增 `discover` 原语）/`SwdCyxianjiang`/`WudianFuchou2`/`GujianFoodLiyutang`/`SwdJiefen`/`SwdCyxianjiangName`/`Moyan`/`Gongxin`/`SwdShenyan`/`XianjianWangyou`），其中 **10 条**带「先红后绿」用例；台账由 54 收敛到 **2**（A 1 / B 1）。**八项完成数仍为 0**。
+> **第 1019 轮补记**：本会话在**规则差异**这一项上共完成 **19 条真修复**（`WudianZiyu`/`WudianPaotaiFire`/`PhaseEndRecoverOrDraw`/`WudianZhucheng`/`SwdBaishouzhihuHeld`/`GwentCiguState`/`XianjianShenwu`/`Reguhuo`/`SwdMufengHeld`（新增 `discover` 原语）/`SwdCyxianjiang`/`WudianFuchou2`/`GujianFoodLiyutang`/`SwdJiefen`/`SwdCyxianjiangName`/`Moyan`/`Gongxin`/`SwdShenyan`/`XianjianWangyou`/`XianjianLinghuo`），其中 **11 条**带「先红后绿」用例；台账由 54 收敛到 **1**（仅 B：`HlssGaiming`）。**八项完成数仍为 0**。
 >
 > **缺陷总账（本会话最终分类）**：**1 条 = A 0 / B 1**（**以[机器可读台账](../operations/evidence/2026-10-19-defect-ledger/README.md)为准**）
 > - **B 类 29 = 需档 21 + 其他 8**（**需档 = `useCardTo*` 11 + `sha*` 6 + `dieBegin` 4**）
