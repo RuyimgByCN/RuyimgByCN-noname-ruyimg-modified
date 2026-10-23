@@ -6883,3 +6883,33 @@ DBG hp1 4->3 hp2 4->4 hp3 4->4 hp0 4->4
 | **1026** | 按定性动手 | **5/5 通过** | ✅ 修复 |
 
 ⇒ 教训：**先做能证伪的最小实验，再动生产代码**。我在 1018 轮直接改了元数据就下结论，读错了用例失败的原因。
+
+---
+
+## 「上游会问、原生强制」是**已登记的设计差异**，不是待修缺陷（第 1027 轮）
+
+### 事实
+
+用检查器逐个核对（`lingxin`、`huajing` 等）：
+
+| 技能 | 上游 | 原生 |
+|---|---|---|
+| `lingxin` | `trigger:{player:'phaseEnd'}` + `frequent:true`，**无** `forced`/`direct` | `PhaseEnd` + `optional: false` |
+| `huajing` | `trigger:{source:'damageEnd'}` + `frequent:true`，**无** `forced`/`direct` | `Damage` + `optional: false` |
+
+同类候选共 **22 个**（`SwdTiebi`/`SwdDatong`/`SwdHuajing`/`SwdLiuhong`/`SwdLuomei`/`SwdYouyin`/
+`SwdAnlianying`/`SwdLingxin`/`SwdHlingbo`/`SwdPojian`/`SwdLexue`/`SwdJqimou`/`SwdLqingcheng`/
+`SwdLanzhi`/`SwdHyunshen`/`SwdDaixing*`/`SwdShenyan`/`Cyqiaoxie`/`Kunlunjing`/`Miedao`/`YxsMenshen3`）。
+
+### 项目里早已这样写（规则基准第 1037 行）
+
+> 登记差异：急冻触发为直发（`optional:false`），上游无 `forced` 会弹确认。
+
+⇒ 也就是说：**「强制触发」是被明确登记过的取舍**，为的是避免给每个频繁触发都弹一个确认窗。
+⇒ 因此这一类**不是缺陷**，而是**待决策项**（要不要为这 22 个补确认窗）。
+
+### 本轮唯一的例外改动
+
+`SwdShenyan`（第 1026 轮）之所以改，是因为它 **`limited: true`（每局一次）**——
+一次性技能弹确认才有意义，而且它的用例已经能承受确认窗（改了 drain 后 5/5 通过）。
+其余 21 个都是 `frequent`（频繁触发），改动会显著改变对局节奏 ⇒ **留给决策**。
