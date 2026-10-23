@@ -6706,3 +6706,24 @@ AST 版审计给出 7 个候选，逐个核对到底：
 | **来源限定 + AST** | **3** | **0（全为 viewAs）** |
 
 ⇒ 「限次」这一类**不再有未解释的候选**。
+
+---
+
+## 审计：**触发事件**上游 `trigger:` vs 原生 `TriggerMeta.event`（第 1015 轮）
+
+### 方法
+
+* 原生侧：把 `metadata/*.rs` 按 `HostBehavior::` **切块**归属（不是整文件正则——那会把邻居算进来）；
+* 上游侧：在同一来源目录下用**大括号配对**取块，读 `trigger: { player/global/...: "X" }`；
+* 映射表：`phaseEnd→PhaseEnd`、`damageBegin1..4→DamageBefore`、`damageEnd→Damage`、
+  `dieBegin/die→Death`、`useCard*/shaBegin/shaAfter→CardUsed`、`phase*→PhaseBegin` 等。
+
+### 结果：**275 个触发元数据里只有 1 个「不一致」**
+
+| 命中 | 上游 | 原生 | 判定 |
+|---|---|---|---|
+| `Gaizao` | `gaizao`: `useCardToBegin`（自己使用装备牌时）| `DamageBefore` + `extra_events:[Equipped]` | **同名不同技**：原生注释写的是「**李香龙：自己的杀被闪避后**（可选）」；上游 `character/swd` 的 `gaizao` 是装备改造。两者只是撞名 |
+
+⇒ **触发事件这一维没有发现真偏差**（唯一命中是撞名）。
+
+⇒ 这条正好与上一节呼应：**撞名是本仓审计的头号假信号来源**，`gaizao`、`baiyi`、`datong` 都踩过。
