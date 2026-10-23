@@ -839,3 +839,29 @@ Firefox/Safari（环境无取证手段）、旧引擎同机性能数据、D1/D2 
 * **来源限定 + 大括号配对取块**（`scripts/audit_upstream_skill_flags.py`）：唯一可靠的逐技能对照方式；
 * **行为探针**：判断「限次/可选性」这类语义缺陷，比读代码快且不会自欺；
 * **红先绿后**：本会话 9 条修复都靠它把「我以为修好了」变成「可复现地修好了」。
+
+---
+
+## 122 第 1034 轮：**最终验收快照**
+
+| 命令 | 结果 |
+|---|---|
+| `cargo test --offline --workspace` | **6256 passed / 0 failed / 72 ignored** |
+| `cargo test --offline -p engine-native` | **1544 passed / 0 failed / 71 ignored** |
+| `python3 -B -m unittest discover -s scripts` | **177 OK** |
+| `python3 -B scripts/preflight.py --quick` | **23 项全过** |
+| `python3 -B scripts/check_local_links.py --all` | 1760 文件，**0 坏链** |
+| `python3 -B scripts/check_stale_numbers.py` | **0 处** |
+| `python3 -B scripts/report_ledger_accounting.py` | ✅ 移出的每一行都能在注册表里找到 |
+| 台账 | **2 条（A 1 / B 1）** |
+| 真修复 | **18 条**（10 条带先红后绿）|
+| 本会话未提交内容 | **0** |
+
+### 剩余 2 条（都写明「差多少」）
+
+| 行 | 差什么 |
+|---|---|
+| `XianjianLinghuo` | 用例从「推进方式」到「尾部断言」全线需重写（第 1033 轮已把确认窗跑出来，只剩尾部「仍不触发」这条旧语义断言）|
+| `HlssGaiming` | 上游 `judgeBefore`（亮 7 选 1）；原生判定流程是**同步**的，需先改成**可挂起**（NC 级）|
+
+⇒ **八项完成数仍为 0。**
