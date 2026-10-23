@@ -6490,3 +6490,27 @@ CardsDiscarded / TurnOverBefore / TurnOvered / LoseHp / DyingSaved / CardsLost /
 
 ⇒ **两次尝试都不足以支撑缺陷判定**，因此**不把 35 条列为缺陷**。
 ⇒ 结论：这类审计需要**结构化 AST + 每技能唯一定位**，属工具建设任务，不是本轮能得出答案的。
+
+### `usable` 审计的**结论（第三次，已定案）**：35 个候选是假信号，这类限制由引擎集中执行
+
+抽样核对：
+
+| 技能 | 上游 | 核对结果 |
+|---|---|---|
+| `datong` | 同名块里**没有** `usable`（我抓到的是另一处同名片技）| 候选为假 |
+| `zhanlu` | `enable:"phaseUse"` + `usable: 1` | **引擎真的拦住了** |
+
+`zhanlu` 的探针（同一出牌阶段连发两次）：
+
+```text
+PROBE round0 activate=Pending{SelectCards}      // 第一次：正常进入弃牌窗
+  PROBE choice prompt=zhanlu_discard min=1
+  PROBE choice prompt=zhanlu_targets min=1
+PROBE round1 activate=Rejected(SkillAlreadyUsed) // 第二次：**被拒**
+```
+
+⇒ 「每阶段限次」**不是**靠每个 behavior 自带旗标，而是由**引擎的主动技使用记录**
+（`RejectReason::SkillAlreadyUsed`）集中执行。
+那些 behavior 块里找不到 `once` 字样是**正常的**，不是缺陷。
+
+⇒ 结论：`usable` 这类限制 **不属于偏差**；本会话的审计到这里闭环。
