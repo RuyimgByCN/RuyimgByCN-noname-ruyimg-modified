@@ -4579,3 +4579,40 @@ assert_eq!(e.debug_hp(1), 4, "两次杀各-1（6→4）");
 ⇒ 已按 `NON_DEFECT_VERIFIED` 登记，并在注释里写明这条限制 ⚠️
 
 ⇒ 台账 **5 → 4**（A 2 / B 2）；`需档` 族降到 **1**（仅剩 `SwdJiang`）
+
+---
+
+## 158 第 993 轮：`XianjianWangyou` 的上游 filter **有三条**，原生只有一条；补全后测试仍需重写
+
+### 上游（`character/xianjian/skill.js:3090`）
+
+```js
+wangyou: {
+  trigger: { global: "phaseEnd" },
+  filter(event, player) {
+    if (!player.countCards("he")) return false;                    // ① 自己有牌
+    if (player === event.player) return false;                      // ② 不是自己的阶段
+    return game.hasPlayer(c => c.hasSkill("wangyou3"));              // ③ 场上有受伤戳持有者
+  },
+  …
+}
+```
+
+### 原生
+
+臂里**只有 ②**（`*player != owner`），缺 ①（自己有牌）与 ③（有人持 `wangyou3`）。
+
+### 试改结果
+
+补上 ①（`hand`/`equips` 非空）与 ③（任一存活者 `wangyou3_round != 0`）+ 放宽到任何阶段结束：
+* 第一段断言通过了（说明 ①③ 确实是对的）；
+* 但**第二段**「忘忧弃牌挂起②」失败——因为放宽后，2 号的 **Judge 结束 / Draw 结束**也会各弹一次询问，
+  测试里 `let _ = submit(NextPhase)` 的固定步数再次错位。
+
+⇒ 已回退，全量复归 **1540 passed** ✅
+
+### 结论
+
+`XianjianWangyou` 与 `XianjianLinghuo` 同属「**触发点变多 ⇒ 测试的固定步数必然错位**」，
+必须改成「**循环处理任意询问直到目标条件成立**」，而不是调几步。
+**上游 filter 三条已完整抄录**，实现侧一步可做；剩下的全是测试工程。
