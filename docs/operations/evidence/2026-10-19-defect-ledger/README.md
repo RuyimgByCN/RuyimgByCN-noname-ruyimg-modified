@@ -4488,3 +4488,42 @@ i=7 round=2 ready=3 td2=1 hp2=4 phase=Judge   choice=None
 `Linghuo`/`Wangyou` 的条件里含**回合计数**与**本回合伤害**，两者会随回合切换变化 ⇒ 时序敏感。
 
 ⇒ 这是「同属 A 类但难度不同」的具体证据。
+
+---
+
+## 155 第 990 轮：`GujianFoodLiyutang` 试改后**测试失败在「护甲=2 vs 1」**（已回退）
+
+### 上游（`card/gujian/skill.js:261`）
+
+```js
+liyutang: {
+  mark: "card",
+  trigger: { player: "phaseEnd" },     // ← 每个阶段结束
+  forced: true,
+  intro: { content: "结束阶段，若你的体力值为全场最少或之一，你获得1点护甲（剩余 N 次）" },
+  …
+}
+```
+
+### 原生
+
+```rust
+// 臂
+Phase { End, begin: true } + owner          // ← End 阶段「开始」，且钉死阶段
+// step
+if 体力为全场最少或之一 { change_hujia(owner, 1); } food_tick(...);
+```
+
+⇒ 既**钉错阶段**（End vs 任何阶段），又**错在 begin**（开始 vs 结束）。
+
+### 改后失败原因
+
+把元数据改 `PhaseEnd` + 臂改 `Phase { begin: false, .. }` 后：
+护甲在**一个回合内被授予两次**（Play 结束、Discard 结束），
+而测试 `g1_shahai_gujian/hujia.rs` 断言的是 `hujia == 1`。
+
+**这不是实现错**：上游 `phaseEnd` + 「剩余 2 次」确实允许一回合内用两次。
+⇒ **测试编码了更窄的行为**（只在 End 开始授予一次）。
+
+⇒ 已回退，全量复归 **1540 passed** ✅
+⇒ 该行归入「需重写测试推进脚本/断言」类；实现侧的改法（元数据 + 臂）已确认。
