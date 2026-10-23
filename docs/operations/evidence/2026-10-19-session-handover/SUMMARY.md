@@ -779,3 +779,35 @@ Firefox/Safari（环境无取证手段）、旧引擎同机性能数据、D1/D2 
 `unittest discover -s scripts` = **177 OK**；`preflight --quick` = **23 项全过**。
 
 ⇒ **八项完成数仍为 0。**
+
+---
+
+## 120 第 1025 轮：收尾（本会话最后一轮工作）
+
+### 数值终态
+
+| 指标 | 会话前 | 终态 |
+|---|---|---|
+| 缺陷台账 | 54 | **3** |
+| 真修复 | 0 | **16**（8 条带先红后绿）|
+| `engine-native` | 1538 | **1544 passed / 0 failed / 71 ignored** |
+| 全仓 | — | **6256 passed / 0 failed / 72 ignored** |
+| 脚本单测 | 146 | **177 OK** |
+| `preflight` | 19 项 | **23 项全过** |
+| 平台 | 无证据 | 构建 **7/7**、Node **11/11**、Chrome **4/4** |
+| 来源维度 | 回放 4 / 存档 4 / 升级 5 包 | **20 / 20 / 22** |
+| 自我更正 | 24 | **39** |
+
+### 未能完成的三条（都写成可交接的待办）
+
+| 待办 | 卡点 | 交接物 |
+|---|---|---|
+| `XianjianLinghuo`、`XianjianWangyou` | 触发条件含回合计数 + 本回合伤害，放宽后测试时序整体错位 | 上游 filter 已完整抄录 |
+| `HlssGaiming` | 上游 `judgeBefore`（亮 7 选 1）；原生判定流程是**同步**的（`draw_judge_card` 直接 pop）| 需把判定改成**可挂起**（NC 级）|
+| `SwdShenyan` 可选择性 | 引擎改 `optional: true` **可行**（探针已证伤害=2），但既有用例的 drain 把 `trigger_confirm` 当**拒绝** | 需把 drain 改成对 `trigger_confirm` 明确选 `Confirm` |
+
+### 环境缺口（非代码）
+
+真机（iOS/Android）、Linux CI（离线装不了 `rust-std`）、Firefox/Safari 取证、旧引擎同机性能数据。
+
+⇒ **八项完成数仍为 0。**
