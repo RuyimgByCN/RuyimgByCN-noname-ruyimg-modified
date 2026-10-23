@@ -686,3 +686,35 @@ Firefox/Safari（环境无取证手段）、旧引擎同机性能数据、D1/D2 
 | `HlssGaiming` | 上游 `judgeBefore`（亮 7 选 1 作判定结果）；原生判定流程是**同步**的（`draw_judge_card` 直接 pop），要接选择必须先把判定流程改成**可挂起**（NC 级）|
 
 ⇒ **八项完成数仍为 0**。
+
+---
+
+## 117 第 1012 轮：**真修复累计 16 条**（台账仍 3 条）
+
+### 本轮新增的 4 条（1007–1011）
+
+| 行 | 缺陷 | 证据 |
+|---|---|---|
+| `SwdJiefen` | 缺每阶段一次（上游 `usable:1`）| 探针 + 红先绿后用例 |
+| `SwdCyxianjiangName` | 用 `card_kind` 当 `card.name` 比较 | 新用例 `swd_cyxianjiang_compares_card_name_not_kind`（先红后绿）|
+| `Moyan` | 缺每阶段一次 | 探针 + `moyan_is_once_per_play_phase`（先红后绿）|
+| `Gongxin` | 缺每阶段一次 | 探针 + `gongxin_is_once_per_play_phase`（先红后绿）|
+
+### 方法沉淀（本会话最值钱的部分）
+
+| 手段 | 适用 | 产出 |
+|---|---|---|
+| **大括号配对取技能块**（不用字符窗口）| 上游 JS 与原生逐条对照 | 候选从 17 降到 7 |
+| **行为探针**（建局 → 二次发动）| 判断「限次」类缺陷 | 4 条确认，2 条排除（`zhanlu` 已限次）|
+| **红先绿后** | 每条修复必须留下可复现的反向证据 | 8 条有完整链 |
+
+### 踩过并记录的坑
+
+* 字符窗口溢出到相邻技能（`datong` 因此被误判两次）
+* `SelectCards` 的取消是**空选**，`Pass` 会被拒（探针 drain 卡住的原因）
+* 探针若从不取消，会看到「重复提示」并误判为死循环（`gongxin`，已回退）
+
+### 验证
+
+`cargo test --offline -p engine-native` = **1544 passed / 0 failed / 71 ignored**；
+`preflight` 23 项通过。
