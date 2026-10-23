@@ -249,6 +249,7 @@ FIXED: dict[str, str] = {
     "SwdMojian": "`g1_shahai_swd/liuhong.rs` 断言「墨剑：目标摸 1」「墨剑：自己回 1 至满」⇒ 效果发生在杀结算前，与上游 `player:'shaBegin'` 一致",
     "YunchouJiaoxia": "`nc08_upstream_yunchou_jiaoxia.rs` 断言「成为**红色**牌目标应摸 1」「**黑色**牌不触发」⇒ 正是上游 `target:'useCardToTargeted'` 的红/黑分支",
     "Liaoyuan": "`swd_liaoyuan_extra_shan.rs` 断言「直接命中且加伤 2（1+2）」，且弃牌/确认窗都在结算之前 ⇒ 与上游 `player:'shaBegin'` 一致",
+    "XianjianLinghuo": "第 1042 轮：①臂由 `Phase{End,begin:false}` 放宽到 **`Phase{begin:false,..}`**（上游 `{global:'phaseEnd'}`）；②用例**整段重写**为状态驱动四步（推进到 round≥3 且非 owner 回合 → 制造伤害 → 等确认窗 → 断言冷却窗口内不触发）；全量 1544 passed",
     "XianjianWangyou": "第 1031 轮：①补全上游 `wangyou` filter 的三条（自己有牌 / 非自己阶段 / 场上有人持 `wangyou3`）；②臂由 `Phase{End,begin:false}` 放宽到 **`Phase{begin:false,..}`**（上游 `{global:'phaseEnd'}`）；③用例第二段改为**状态驱动**（用当前回合玩家推进、先取消其它询问、直到出现带目标牌的忘忧窗）⇒ 用例通过、全量 1544 passed",
     "SwdShenyan": "第 1026 轮：上游 `shenyan` 无 `forced`/`direct`（且 `limited: true`）⇒ 应当**询问**，原生 `optional: false` 强制；改 `optional: true` 并把用例 drain 的 `trigger_confirm` 改为**明确 Confirm**（原先统一策略等同拒绝）⇒ 伤害恢复 +1、蔓延正常，`swd_shenyan_spread` 5/5 通过",
     "Gongxin": "第 1011 轮：上游 `enable:'phaseUse'` + `usable: 1`，`HostBehavior::Gongxin` 不在 `once_per_turn` 允许表 ⇒ 探针实测第二次仍 `Pending`；补入后为 `Rejected(SkillAlreadyUsed)`。（同轮试过把候选限定为红桃，但既有测试断言『非红桃也展示、选非红桃应重开窗』符合上游 `chooseToMove` ⇒ 已回退该改动）",

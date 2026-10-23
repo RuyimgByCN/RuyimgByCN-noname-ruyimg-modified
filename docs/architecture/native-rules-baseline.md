@@ -7016,3 +7016,41 @@ DBG3 got=false round=3 ready=3 turn=1 phase=Discard
 **交接建议**：不要在这条用例上做增量修改，直接按「
 ①推进到指定 round 且指定玩家回合 → ②制造伤害 → ③等确认窗 → ④断言冷却窗口」
 四步重写整段，每一步都用状态（`round`/`turn().current`）而不是步数。
+
+---
+
+## **第 19 条真修复：`XianjianLinghuo`**（第 1042 轮，第 8 次尝试成功）
+
+### 改动
+
+| 侧 | 改动 |
+|---|---|
+| 过滤臂 | `Phase{End, begin:false}` → **`Phase{begin:false, ..}`**（上游 `{global:'phaseEnd'}`）|
+| 用例 | **整段重写**为状态驱动四步 |
+
+四步（每一步都用状态而不是步数）：
+
+1. 推进到「`round ≥ 3` 且 `turn().current != owner`」（owner 的阶段被 filter 排除）；
+2. 由该回合玩家造成伤害（`turn_damage` 只在**本人回合内**有效）；
+3. 等 `observer == 0 && prompt == "trigger_confirm"` 的确认窗；
+4. 断言 `linghuo_ready_round == 触发轮 + 2`，并在**冷却窗口内**（`round < ready`）断言**不出现**确认窗。
+
+### 结果
+
+`mingxiu_linghuo_round_cooldown_and_fire` 通过；全量 **1544 passed / 0 failed / 71 ignored** ✅
+台账 **2 → 1**（只剩 `HlssGaiming`，B 类）。
+
+### 八次尝试的轨迹
+
+| 次数 | 进展 |
+|---|---|
+| 1–2 | 只改臂 / 只改条件 —— 触发点没变 |
+| 3 | 补条件 + 放宽 —— 第一段过 |
+| 4 | 加「drain 后推进」—— 回合归属变了 |
+| 5 | 定位根因：`round` 与 `turn_damage` 在该场景永不同时成立 |
+| 6 | 确认窗出现、伤害者断言改对 |
+| 7 | 尾部仍错位 |
+| **8** | **整段按四步重写 —— 通过** |
+
+⇒ 教训：**当用例的每一处固定步数都与时序绑定时，增量修改的代价会超过重写**。
+⇒ 但重写前必须先弄清「引擎的触发条件到底是什么」——前七次失败正是在攒这个认识。

@@ -205,7 +205,7 @@ impl HostSkillBehavior {
                     })
             }
             HostBehavior::XianjianLinghuo => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
+                EventData::Phase { player, begin: false, .. }
                 if *player != owner
                     && ctx.state.player(*player).turn_damage > 0
                     && ctx.state.turn.round >= ctx.state.player(owner).linghuo_ready_round),

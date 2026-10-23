@@ -27,7 +27,7 @@ class EnumerationTests(unittest.TestCase):
         cls.rows = cls.mod.arms()
 
     def test_counts_every_phase_pinned_arm(self):
-        self.assertEqual(len(self.rows), 46)
+        self.assertEqual(len(self.rows), 45)
 
     def test_every_row_has_a_behavior(self):
         for behavior, *_ in self.rows:
@@ -90,7 +90,7 @@ class CliTests(unittest.TestCase):
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--check"],
                               capture_output=True, text=True, cwd=ROOT)
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertIn("共 46 个相位钉死臂", proc.stderr)
+        self.assertIn("共 45 个相位钉死臂", proc.stderr)
 
 
 if __name__ == "__main__":

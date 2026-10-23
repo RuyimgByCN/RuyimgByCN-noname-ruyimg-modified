@@ -37,7 +37,6 @@ XianjianChangnian2	xj_changnian2	End	false	已核	基准对应章节
 XianjianFenglue	xj_fenglue	Play	true	已核	v607 反查比对
 XianjianHusha	xj_husha	End	false	已核	基准对应章节
 XianjianLiguang	xj_liguang	End	false	已核	基准对应章节
-XianjianLinghuo	xj_linghuo	End	false	已核	基准对应章节
 XianjianLingquan	xj_lingquan	End	false	已核	v607 反查比对
 XianjianLonghuo	xj_longhuo	End	false	已核	v607 反查比对
 XianjianQianfang	xj_qianfang	Judge	true	已核	基准对应章节

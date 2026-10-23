@@ -89,17 +89,60 @@ fn mingxiu_linghuo_round_cooldown_and_fire() {
     let _ = submit(&mut e, 1, GameAction::NextPhase); // End→2 Judge
     assert!(e.open_choice().is_none(), "冷却内第二次不触发");
 
-    // 回合 3：冷却结束——round 3 于 2→0 收束置位；2 号本回合已造成伤
-    // 害 → 其 End 末（round 3）触发确认 → 2 号吃火伤
-    let _ = submit(&mut e, 2, GameAction::NextPhase);
-    let _ = submit(&mut e, 2, GameAction::NextPhase); // 2 Play
-    e.debug_deal_damage(Some(2), 0, 1, engine_native::event::DamageNature::Normal);
-    e.debug_clear_hand(2);
-    let _ = submit(&mut e, 2, GameAction::NextPhase);
-    let _ = submit(&mut e, 2, GameAction::NextPhase);
-    let _ = submit(&mut e, 2, GameAction::NextPhase); // End→0 Judge：round→3 + 灵火确认
-    let c = e.open_choice().expect("灵火 round3 确认挂起");
-    assert_eq!(c.observer, 0);
+    // 第 1042 轮：灵火对齐上游 `global:'phaseEnd'`（任何玩家任何阶段结束）+ 冷却轮门。
+    // 用例改为**状态驱动**：不再写死步数与座位，按四步走。
+    // ① 推进到「round ≥ 3 且当前玩家 ≠ owner」（owner 的阶段被 filter 排除）
+    let mut guard = 0;
+    while (e.state_core().turn.round < 3 || e.turn().current == 0) && guard < 80 {
+        guard += 1;
+        if let Some(c) = e.open_choice().cloned() {
+            let _ = submit(
+                &mut e,
+                c.observer,
+                GameAction::Answer {
+                    choice_id: c.id,
+                    selection: Vec::new(),
+                },
+            );
+            continue;
+        }
+        let a = e.turn().current;
+        let _ = submit(&mut e, a, GameAction::NextPhase);
+    }
+    assert!(e.state_core().turn.round >= 3, "应已推进到 round 3");
+    // ② 该回合玩家造成伤害
+    let actor = e.turn().current;
+    let hp_before = e.debug_hp(actor);
+    e.debug_deal_damage(
+        Some(actor),
+        0,
+        1,
+        engine_native::event::DamageNature::Normal,
+    );
+    e.debug_clear_hand(actor);
+    // ③ 等灵火确认窗（observer = 0）
+    let mut got = false;
+    for _ in 0..24 {
+        if let Some(c) = e.open_choice().cloned() {
+            if c.observer == 0 && c.spec.prompt == "trigger_confirm" {
+                got = true;
+                break;
+            }
+            let _ = submit(
+                &mut e,
+                c.observer,
+                GameAction::Answer {
+                    choice_id: c.id,
+                    selection: Vec::new(),
+                },
+            );
+            continue;
+        }
+        let a = e.turn().current;
+        let _ = submit(&mut e, a, GameAction::NextPhase);
+    }
+    assert!(got, "灵火确认窗应在 round≥3 的伤害后出现");
+    let c = e.open_choice().expect("灵火确认窗");
     let (cid, obs) = (c.id, c.observer);
     submit(
         &mut e,
@@ -109,34 +152,39 @@ fn mingxiu_linghuo_round_cooldown_and_fire() {
             selection: vec![ChoiceOption::Confirm],
         },
     );
+    assert_eq!(e.debug_hp(actor), hp_before - 1, "伤害者吃 1 火伤");
+    // ④ 冷却续置：ready = 触发时的 round + 2；在其之前不应再触发
+    let fired_round = e.state_core().turn.round;
     assert_eq!(
-        e.debug_hp(2),
-        3,
-        "2 号（伤害者）吃 1 火伤（4→3；此前 r1/r2 各吃 1 伤害）"
+        e.state_core().player(0).linghuo_ready_round,
+        fired_round + 2,
+        "冷却续置 = 触发轮 + 2"
     );
-    assert_eq!(e.state_core().player(0).linghuo_ready_round, 5, "冷却续置");
-
-    // round 3 后续：冷却已续置，0/1 号回合不再触发
-    let _ = submit(&mut e, 0, GameAction::NextPhase);
-    let _ = submit(&mut e, 0, GameAction::NextPhase); // 0 Play
-    e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
-    e.debug_clear_hand(0);
-    let _ = submit(&mut e, 0, GameAction::NextPhase);
-    let _ = submit(&mut e, 0, GameAction::NextPhase);
-    let _ = submit(&mut e, 0, GameAction::NextPhase); // End→1 Judge
-    assert!(e.open_choice().is_none(), "续置冷却：不触发");
-    let _ = submit(&mut e, 1, GameAction::NextPhase);
-    let _ = submit(&mut e, 1, GameAction::NextPhase); // 1 Play
-    e.debug_deal_damage(Some(1), 2, 1, engine_native::event::DamageNature::Normal);
-    e.debug_clear_hand(1);
-    let _ = submit(&mut e, 1, GameAction::NextPhase);
-    let _ = submit(&mut e, 1, GameAction::NextPhase);
-    let _ = submit(&mut e, 1, GameAction::NextPhase); // End→2 Judge
-    assert!(e.open_choice().is_none(), "续置冷却：仍不触发");
-    // 终态血量核对：1 号 6-1(r1 0 伤)-1(火)-1(r2 0 伤)-1(r3 0 伤)=2；
-    // 2 号 6-1(r1 1 伤)-1(r2 1 伤)-1(火)-1(r3 1 伤)=2
-    assert_eq!(e.debug_hp(1), 2, "1 号终态血量");
-    assert_eq!(e.debug_hp(2), 2, "2 号终态血量");
+    let mut cooled = 0;
+    while e.state_core().turn.round < fired_round + 2
+        && cooled < 60
+        && e.outcome().is_none()
+    {
+        cooled += 1;
+        if let Some(c) = e.open_choice().cloned() {
+            assert!(
+                !(c.observer == 0 && c.spec.prompt == "trigger_confirm"),
+                "冷却窗口内（round < ready）不应触发灵火"
+            );
+            let _ = submit(
+                &mut e,
+                c.observer,
+                GameAction::Answer {
+                    choice_id: c.id,
+                    selection: Vec::new(),
+                },
+            );
+            continue;
+        }
+        let a = e.turn().current;
+        let _ = submit(&mut e, a, GameAction::NextPhase);
+    }
+    // 对局可能在中途结束（血量耗尽）；关键是**冷却窗口内没有触发**（上面的循环内断言）
 }
 
 /// 归烬：亮 4 张逐张交付（获得者跳下次摸牌阶段）；取消弃置剩余。
