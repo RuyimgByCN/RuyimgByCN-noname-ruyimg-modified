@@ -271,3 +271,79 @@ fn gongxin_absent_and_once_per_turn() {
     });
     assert!(matches!(out, CommandOutcome::Rejected(_)), "未持技拒绝：{out:?}");
 }
+
+/// 攻心是**每阶段一次**（上游 `character/extra/skill.js`：`enable:"phaseUse"` + `usable: 1`）。
+///
+/// 第 1011 轮修：`HostBehavior::Gongxin` 原先不在 `host.rs` 的 `once_per_turn` 允许表里。
+#[test]
+fn gongxin_is_once_per_play_phase() {
+    let mut e = swd_engine(885101);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_grant(0, "gongxin");
+    let spade = place_suit_basic(&mut e, 1, Suit::Spade);
+    assert!(spade > 0 || true);
+    let def = e.catalog().skill_by_name("gongxin").expect("攻心在目录");
+    let first = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(
+        matches!(
+            first,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "攻心第一次应可发动：{first:?}"
+    );
+    // 应答完第一次：先试 Pass（取消路径），被拒就按 min 选首项
+    for _ in 0..10 {
+        let Some(ch) = e.open_choice().cloned() else {
+            break;
+        };
+        // 取消用**空选**（`Pass` 对部分 prompt 不被接受）
+        let out = e.submit(GameCommand {
+            actor: ch.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer {
+                choice_id: ch.id,
+                selection: vec![],
+            },
+        });
+        if matches!(out, CommandOutcome::Rejected(_)) {
+            let sel: Vec<ChoiceOption> = ch
+                .spec
+                .options
+                .iter()
+                .take(ch.spec.min.max(1))
+                .copied()
+                .collect();
+            let _ = e.submit(GameCommand {
+                actor: ch.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: ch.id,
+                    selection: sel,
+                },
+            });
+        }
+    }
+    let second = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(
+        matches!(
+            second,
+            CommandOutcome::Rejected(engine_native::RejectReason::SkillAlreadyUsed)
+        ),
+        "攻心：同一出牌阶段**不应**再次发动（上游 `usable: 1`），实际 {second:?}"
+    );
+}
