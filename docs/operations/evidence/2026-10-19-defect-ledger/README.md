@@ -4453,3 +4453,38 @@ if e.state_core().players[1].fuchou_marked.is_empty() { break; }
 而不是先假定需要授权。
 
 ⇒ 台账 **7 → 6**（A 3 / B 3）；**累计已修 11 条**
+
+---
+
+## 154 第 987 轮：`XianjianLinghuo` 试了两种最小改法，**都不成立**（已回退）
+
+### 试法一：把「固定 3 步」换成「推进到询问出现」
+
+结果：**12 次推进内询问始终不出现**。用调试输出看状态：
+
+```text
+i=0 round=1 ready=3 td2=1 hp2=4 phase=Discard choice=None
+i=2 round=2 ready=3 td2=1 hp2=4 phase=Judge   choice=None
+i=7 round=2 ready=3 td2=1 hp2=4 phase=Judge   choice=None
+```
+
+⇒ `round` 到 3 时，2 号的 `turn_damage` 已被回合切换清零，
+而该测试的伤害是在**更早的回合**打出的 ⇒ 触发条件 `turn_damage > 0 && round >= 3` **不同时成立**。
+
+### 试法二：只把期待点前移
+
+结果：同一断言失败，因为触发点并不在「2 号回合内」。
+
+### 结论
+
+`XianjianLinghuo` 与前两轮试的 `XianjianWangyou` 一样，**不是「改两行」能解决的**：
+需要把整个测试的回合/伤害时序重新推导（谁在哪个回合造成伤害、冷却在第几轮置位、触发落在哪个阶段结束）。
+⇒ 已全部 `git checkout` 回退，全量复归 **1540 passed** ✅
+
+### 与 `WudianFuchou2` 的区别（为什么那条能成）
+
+`WudianFuchou2` 的触发条件只依赖「标记里有存活者」——**与回合数无关**，
+所以「窗口前移 + 状态判断」两行就够了。
+`Linghuo`/`Wangyou` 的条件里含**回合计数**与**本回合伤害**，两者会随回合切换变化 ⇒ 时序敏感。
+
+⇒ 这是「同属 A 类但难度不同」的具体证据。
