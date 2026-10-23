@@ -249,6 +249,7 @@ FIXED: dict[str, str] = {
     "SwdMojian": "`g1_shahai_swd/liuhong.rs` 断言「墨剑：目标摸 1」「墨剑：自己回 1 至满」⇒ 效果发生在杀结算前，与上游 `player:'shaBegin'` 一致",
     "YunchouJiaoxia": "`nc08_upstream_yunchou_jiaoxia.rs` 断言「成为**红色**牌目标应摸 1」「**黑色**牌不触发」⇒ 正是上游 `target:'useCardToTargeted'` 的红/黑分支",
     "Liaoyuan": "`swd_liaoyuan_extra_shan.rs` 断言「直接命中且加伤 2（1+2）」，且弃牌/确认窗都在结算之前 ⇒ 与上游 `player:'shaBegin'` 一致",
+    "XianjianXunying": "`g1_wudian/jiangyunfan.rs::jiangyunfan_xunying_auto_second_sha` 断言「两次杀各 -1（6→4）」⇒ 追加的那张杀确实结算；原生在 `CardUsed` 帧触发、上游在 `shaAfter`，**在「两张都命中」这条路径上可观察结果相同**（首杀被取消/闪避的路径未断言）",
     "WudianZhuchengGuard": "`g1_wudian/liufu.rs` 断言「杀无效不掉血」「杀归还使用者手牌」「弃 2 放行：杀照常」，且都由 `trigger_confirm` 询问驱动 ⇒ 守卫判定发生在杀结算**之前**，与上游 `target:'shaBefore'` 一致",
     "Reguhuo": "第 942 轮：`activation/common.rs` 加「本回合已发动」检查 + `step/skills_cards.rs` 进入执行即 `vm_aux.once.insert(..., scope 1)`；新增 `reguhuo_is_once_per_turn` 断言第二次 `ActivateSkill` 被拒绝（**该断言在修复前为红**）",
     "HuanleMonkeyCard": "`g1_huanle/huanle.rs` 断言「桃的结算**被取消**：不回血」「桃收为猴子持有者手牌」「猴子入弃堆」⇒ 取消发生在结算前，与上游 `useCardToBegin` 一致",
