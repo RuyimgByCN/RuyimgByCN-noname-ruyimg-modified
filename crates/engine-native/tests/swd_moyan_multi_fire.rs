@@ -214,3 +214,48 @@ fn moyan_absent_rejected() {
     });
     assert!(matches!(out, CommandOutcome::Rejected(_)), "未持技拒绝：{out:?}");
 }
+
+/// 魔焰是**每阶段一次**（上游 `enable:"phaseUse"` + `usable: 1`）。
+///
+/// 第 1010 轮修：`HostBehavior::Moyan` 原先不在 `host.rs` 的 `once_per_turn` 允许表里，
+/// 同一出牌阶段可以反复发动。此处钉住「第二次必须被拒」。
+#[test]
+fn moyan_is_once_per_play_phase() {
+    let mut e = swd_engine(884101);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_grant(0, "moyan");
+    e.debug_set_hp(0, 2); // 体力差 2 ⇒ 可选 1..=2 张红牌
+    let _ = place_red_basic(&mut e, 0);
+    let def = e.catalog().skill_by_name("moyan").expect("魔焰在目录");
+    let first = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(
+        matches!(
+            first,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "魔焰第一次应可发动：{first:?}"
+    );
+    // 应答完第一次的全部询问
+    drain(&mut e);
+    let second = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(
+        matches!(
+            second,
+            CommandOutcome::Rejected(engine_native::RejectReason::SkillAlreadyUsed)
+        ),
+        "魔焰：同一出牌阶段**不应**再次发动（上游 `usable: 1`），实际 {second:?}"
+    );
+}

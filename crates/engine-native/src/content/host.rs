@@ -239,6 +239,8 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
         | HostBehavior::SwdJiefen
         // 魔焰（第 1010 轮补）：上游 `enable:'phaseUse'` + `usable: 1`
         | HostBehavior::Moyan
+        // 攻心（第 1011 轮补）：上游 `enable:'phaseUse'` + `usable: 1`
+        | HostBehavior::Gongxin
         | HostBehavior::SwdXianghui
         | HostBehavior::SwdSusheng
         | HostBehavior::SwdSenluo

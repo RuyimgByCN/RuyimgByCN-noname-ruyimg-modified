@@ -6629,3 +6629,42 @@ jiefen: {
 
 第一次发动后有一个 `SelectPlayers` 询问，探针的通用应答没能把它答完
 （第二次提交得到 `ChoicePending`）⇒ **没有测出结论**，不算缺陷也不算已核对。
+
+---
+
+## **第 16 条真修复：`Gongxin`（攻心）缺「每阶段一次」**（第 1011 轮）
+
+### 缺陷
+
+上游（`character/extra/skill.js` 的 `gongxin` 块，大括号配对取出）：
+
+```js
+gongxin: { enable: "phaseUse", usable: 1, … }
+```
+
+`HostBehavior::Gongxin` 不在 `host.rs` 的 `once_per_turn` 允许表 ⇒ 同一出牌阶段可重复发动。
+
+### 证据
+
+```text
+修前: PROBE gongxin #0: Pending{SelectPlayers}
+      PROBE gongxin #1: Pending{SelectPlayers}     // ← 第二次仍接受
+修后: PROBE gongxin #0: Pending{SelectPlayers}
+      PROBE gongxin #1: Rejected(SkillAlreadyUsed)  // ← 正确拒绝
+```
+
+### 同轮**撤回**的一处改动（重要）
+
+探针看到 `gongxin_card` 反复弹出，我一度以为是**死循环**，把候选限定为「只有红桃」并加了「没有红桃就结束」。
+但既有用例 `swd_gongxin_hand_peek::gongxin_discards_target_heart` 立刻红了：
+
+```text
+非红桃也在展示列表：[Card(51)]
+```
+
+**测试是对的**：上游用 `chooseToMove_new`，把目标**全部**手牌展示出来，
+只通过 `filterMove` 限制「只能移动红桃」，并且**允许取消**。
+所谓「死循环」是我的探针**从不取消**造成的（`min=1` 强制选牌）。
+
+⇒ 已 `git checkout` 回退该改动，只保留「每阶段一次」。
+⇒ 全量 **1544 passed**（+2：`moyan` 与既有用例数变化）✅
