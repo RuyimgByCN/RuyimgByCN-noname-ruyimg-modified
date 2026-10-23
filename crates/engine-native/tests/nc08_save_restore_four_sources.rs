@@ -87,11 +87,31 @@ fn run(pkg: &str) {
 /// **单进程往返**：四个来源的包各自「保存 → 恢复 → hash 一致 → 可继续」。
 #[test]
 fn save_restore_roundtrip_four_sources() {
+    // 第 995 轮：由 4 个扩到「12 个已转换来源」+ cardpile 共 23 个包。
     for pkg in [
+        "boss-play-upstream-liuli",
+        "boss-zhugeliang-upstream-liuli",
+        "wuxing-upstream-liuli",
+        "epic-cards-upstream-liuli",
+        "doomsday-brawl-upstream-liuli",
+        "mark-supplement-upstream-liuli",
+        "select-beautify-upstream-liuli",
+        "longxue-upstream-liuli",
+        "d3-upstream-noname",
+        "shaai-ow-upstream-noname",
+        "shaai-xianjian-upstream-noname",
+        "shahai-gujian-upstream-noname",
+        "shahai-gwent-upstream-noname",
+        "shahai-hearth-upstream-noname",
+        "shahai-mtg-upstream-noname",
+        "shahai-swd-upstream-noname",
+        "shahai-yunchou-upstream-noname",
+        "shahai-zhenfa-upstream-noname",
+        "huanle-upstream-noname",
+        "wudian-upstream-noname",
+        "hero-kill-upstream-noname",
         "cardpile-upstream-liuli",
         "cardpile-upstream-noname",
-        "d3-upstream-noname",
-        "wudian-upstream-noname",
     ] {
         run(pkg);
     }

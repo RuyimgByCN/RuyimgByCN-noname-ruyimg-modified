@@ -115,12 +115,31 @@ fn run(pkg: &str) {
 /// **按来源的升级验收**：五来源各取一个真实包，验证「错版拒绝 + 回滚恢复」。
 #[test]
 fn upgrade_per_source_five_sources() {
+    // 第 995 轮：由 5 个扩到「12 个已转换来源」+ cardpile 共 23 个包。
     for pkg in [
-        "cardpile-upstream-liuli",   // L04
-        "d3-upstream-noname",        // U01
-        "cardpile-upstream-noname",  // U03
-        "shahai-swd-upstream-noname",// U05（取 swd 子包）
-        "wudian-upstream-noname",    // U07
+        "boss-play-upstream-liuli",
+        "boss-zhugeliang-upstream-liuli",
+        "wuxing-upstream-liuli",
+        "epic-cards-upstream-liuli",
+        "doomsday-brawl-upstream-liuli",
+        "mark-supplement-upstream-liuli",
+        "select-beautify-upstream-liuli",
+        "longxue-upstream-liuli",
+        "d3-upstream-noname",
+        "shaai-ow-upstream-noname",
+        "shaai-xianjian-upstream-noname",
+        "shahai-gujian-upstream-noname",
+        "shahai-gwent-upstream-noname",
+        "shahai-hearth-upstream-noname",
+        "shahai-mtg-upstream-noname",
+        "shahai-swd-upstream-noname",
+        "shahai-yunchou-upstream-noname",
+        "shahai-zhenfa-upstream-noname",
+        "huanle-upstream-noname",
+        "wudian-upstream-noname",
+        "hero-kill-upstream-noname",
+        "cardpile-upstream-liuli",
+        "cardpile-upstream-noname",
     ] {
         run(pkg);
     }
