@@ -1,5 +1,8 @@
 //! NC08 附加：**回放确定性**（差异 #3「余随机代抽」的 RNG 面验证，2026-10-19）。
 //!
+//! **覆盖范围（第 994 轮扩展）**：由 4 个包扩到「12 个已转换来源」下的 **21 个包**；
+//! 其中 20 个可桥接并通过，`boss-play-upstream-liuli` 只有 `config.json`（模式包，无 `cards.json`）⇒ 按设计跳过。
+//!
 //! 背景：U07 差异 #3 是「守卫弃牌上游一次性选 n 张——**原生首张自选 + 余随机代抽**」。
 //! 「随机」在**同种子**下仍应**完全可复现**（引擎 RNG 为确定性），否则回放会漂移。
 //!
@@ -86,11 +89,29 @@ fn trace(pack: &engine_native::content::extension::ExtensionPack, seed: u64, ste
 /// **回放确定性**：同 seed 同轨迹；不同 seed 不同（反向对照）。
 #[test]
 fn replay_determinism_per_pack() {
+    // 第 994 轮：由 4 个扩到「12 个已转换来源」下的全部 21 个包。
     for pkg in [
-        "cardpile-upstream-noname",
-        "shahai-swd-upstream-noname",
+        "boss-play-upstream-liuli",
+        "boss-zhugeliang-upstream-liuli",
+        "wuxing-upstream-liuli",
+        "epic-cards-upstream-liuli",
+        "doomsday-brawl-upstream-liuli",
+        "mark-supplement-upstream-liuli",
+        "select-beautify-upstream-liuli",
+        "longxue-upstream-liuli",
         "d3-upstream-noname",
+        "shaai-ow-upstream-noname",
+        "shaai-xianjian-upstream-noname",
+        "shahai-gujian-upstream-noname",
+        "shahai-gwent-upstream-noname",
+        "shahai-hearth-upstream-noname",
+        "shahai-mtg-upstream-noname",
+        "shahai-swd-upstream-noname",
+        "shahai-yunchou-upstream-noname",
+        "shahai-zhenfa-upstream-noname",
+        "huanle-upstream-noname",
         "wudian-upstream-noname",
+        "hero-kill-upstream-noname",
     ] {
         let Some(pack) = load(pkg) else {
             eprintln!("NOTE 回放确定性：{pkg} 无法桥接 —— 跳过");

@@ -599,3 +599,31 @@ Android NDK（已用 `blake3/pure` 绕过，但真机仍缺）、Linux CI（离�
 Firefox/Safari（环境无取证手段）、旧引擎同机性能数据、D1/D2 决策、4 个测试推进脚本的授权。
 
 ⇒ **八项完成数仍为 0**：没有任何一项有完整验收证据。
+
+---
+
+## 114 第 994 轮：**回放确定性从 4 个包扩到 20 个包**（37 来源验收的一维）
+
+### 改动
+
+`crates/engine-native/tests/nc08_replay_determinism_five_sources.rs`：
+包列表由 4 个（`cardpile`/`shahai-swd`/`d3`/`wudian`）扩到**「12 个已转换来源」下的全部 21 个包**。
+
+### 实测（`-- --nocapture`）
+
+| 结果 | 数量 |
+|---|---:|
+| **同 seed 一致 + 异 seed 不同（PASS）** | **20** |
+| 无法桥接（跳过）| 1（`boss-play-upstream-liuli`：只有 `config.json`，是模式包，无 `cards.json`）|
+
+覆盖的包：`boss-zhugeliang`、`wuxing`、`epic-cards`、`doomsday-brawl`、`mark-supplement`、
+`select-beautify`、`longxue`（liuli 侧 7 个）+ `d3`、`shaai-ow`、`shaai-xianjian`、`shahai-gujian`、
+`shahai-gwent`、`shahai-hearth`、`shahai-mtg`、`shahai-swd`、`shahai-yunchou`、`shahai-zhenfa`、
+`huanle`、`wudian`、`hero-kill`（noname 侧 13 个）。
+
+⇒ 这是「组合 / 回放」这一维的**真实覆盖面扩大**（4 → 20），
+但**不等于 37 来源验收完成**：另外几维（安装/升级/卸载、规则内容、目标平台）仍按各自台账。
+
+### 验证
+
+`cargo test --offline -p engine-native` = **1540 passed / 0 failed / 71 ignored**（测试数不变，覆盖变宽）✅
