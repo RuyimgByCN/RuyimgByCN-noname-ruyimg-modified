@@ -104,3 +104,78 @@ fn swd_generals_b20_jiefen_multistep() {
     assert_eq!(e.state_core().players[0].hand.len(), 1, "分舵：p0 得 1");
     let _ = (mine, give1);
 }
+
+/// 解纷是**每阶段一次**（上游 `character/swd/skill.js:341`：`enable:"phaseUse"` + `usable: 1`）。
+///
+/// 第 1007 轮修：`HostBehavior::SwdJiefen` 原先不在 `host.rs` 的 `once_per_turn` 允许表里，
+/// 同一出牌阶段可以重复发动。此处用**第二次发动必须被拒**来钉住这条限制。
+#[test]
+fn swd_jiefen_is_once_per_play_phase() {
+    let root =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let dir = tempfile::tempdir().unwrap();
+    let store = PackageStore::open(dir.path().join("store")).unwrap();
+    let report = import_extensions(&store, &root, &options()).expect("import");
+    let meta = report
+        .installed
+        .iter()
+        .find(|m| m.package_id == "shahai-swd")
+        .expect("swd 安装")
+        .clone();
+    let json = std::fs::read_to_string(
+        std::path::PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
+    )
+    .unwrap();
+    let pack = bridge(&json);
+    let mut e = Engine::new_with_extensions(62059, 4, &[&pack]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_grant(0, "jiefen");
+    // 0 号 2 张、1 号 3 张（解纷要求目标手牌比自己多）
+    for _ in 0..2 {
+        let _ = e.debug_place(0, "sha");
+    }
+    for _ in 0..3 {
+        let _ = e.debug_place(1, "sha");
+    }
+    let def = e.catalog().skill_by_name("jiefen").expect("解纷在目录");
+    let first = submit(&mut e, 0, GameAction::ActivateSkill { skill: def });
+    assert!(
+        matches!(
+            first,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "解纷第一次应可发动：{first:?}"
+    );
+    // 应答完第一次的所有询问
+    for _ in 0..8 {
+        let Some(ch) = e.open_choice().cloned() else {
+            break;
+        };
+        let sel: Vec<ChoiceOption> = if ch.spec.min == 0 {
+            vec![ChoiceOption::Pass]
+        } else {
+            ch.spec
+                .options
+                .iter()
+                .take(ch.spec.min.max(1))
+                .copied()
+                .collect()
+        };
+        submit(
+            &mut e,
+            ch.observer,
+            GameAction::Answer {
+                choice_id: ch.id,
+                selection: sel,
+            },
+        );
+    }
+    let second = submit(&mut e, 0, GameAction::ActivateSkill { skill: def });
+    assert!(
+        matches!(second, CommandOutcome::Rejected(RejectReason::SkillAlreadyUsed)),
+        "解纷：同一出牌阶段**不应**再次发动（上游 `usable: 1`），实际 {second:?}"
+    );
+}
