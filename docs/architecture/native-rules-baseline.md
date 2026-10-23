@@ -6420,3 +6420,25 @@ CardsDiscarded / TurnOverBefore / TurnOvered / LoseHp / DyingSaved / CardsLost /
 
 ⇒ **7 条里 3 条是「测试写法」问题、2 条是「引擎缺事件」、1 条是「逐目标派发」、1 条（`WudianFuchou2`）兼有**——
 **没有一条是「改个条件」能解决的**。
+
+---
+
+## 审计：`countCards("he")` vs 只看 `hand`（第 1003 轮）
+
+### 方法
+
+1. 从 `filtering/`、`step/` 里挑出「只用 `hand` 判空/计数且完全不提 `equips`」的臂 —— **46 个**有上游 `host:` 键；
+2. 对每个键到 `archive/upstream` 里取同名技能的 filter，看它用的是 `countCards("he")` 还是 `countCards("h")`；
+3. 只在「上游用 `he`、原生只看 `hand`」时报出 —— **1 处**。
+
+⇒ 这类差异**不是系统性的**（46 个候选里只有 1 个）。
+
+### 唯一一处：`SwdXuanzhou`（旋咒）
+
+| 侧 | 写法 |
+|---|---|
+| 上游 | `countCards("he", { type: "trick" })`；`position: "he"`（费用牌从手牌**或装备区**取）|
+| 原生 | `step/swd_card_targets.rs` 只在 `player.hand` 里找锦囊牌 |
+
+**实际影响很小**：锦囊牌正常不会进入装备区（只有个别效果会把牌移进装备区）。
+⇒ 登记为**已登记差异**（不修）：改动会影响该技能的固定步数用例，而收益仅在「装备区里有锦囊」这种边缘局面。
