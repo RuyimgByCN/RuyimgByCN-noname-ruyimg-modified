@@ -6442,3 +6442,33 @@ CardsDiscarded / TurnOverBefore / TurnOvered / LoseHp / DyingSaved / CardsLost /
 
 **实际影响很小**：锦囊牌正常不会进入装备区（只有个别效果会把牌移进装备区）。
 ⇒ 登记为**已登记差异**（不修）：改动会影响该技能的固定步数用例，而收益仅在「装备区里有锦囊」这种边缘局面。
+
+---
+
+## 审计：本轮的**两类干净结论**与**一类不确定**（第 1004 轮）
+
+### ✅ 干净：`forced` / `optional` / `direct` 三向对照（267 个带 `host:` 键的触发元数据）
+
+| 对照 | 不匹配数 |
+|---|---:|
+| 上游 `forced: true` 但原生 `optional: true` | **0** |
+| 上游 `direct: true` 但原生 `optional: false` | **0** |
+| 上游既不 forced 也不 direct，但原生 `optional: false` | **0** |
+
+⇒ 「该强制的被做成了可选 / 可选被做成强制」这类偏差**不存在**。
+
+### ⚠️ 不确定：`usable: N`（每回合/每阶段限次）
+
+方法：把上游 47 个 `skill.js` 拼成 11.5 MB 文本，提取 715 个带 `usable` 的技能名；
+再对原生 `filtering/step/activation` 的 behavior 块查 `once|_used|usable|per_turn|exhaust` 痕迹。
+报出 **28 个**「上游有 `usable` 而原生块里无痕迹」。
+
+**但这个方法不可靠**，原因：
+
+1. 上游同名技能可能有多处定义（同一个名字在不同包里是不同技能），我按名字取到的不一定是同一个；
+2. 原生的限次可能不在 behavior 块里（例如通过 `ActivateSkill` 通道、`limited` 门、或 `vm_aux.once` 的调用点）；
+3. 抽样看 `SwdXingdian`：注释写的是「弃牌阶段结束（trigger）」——它本来就不是主动技，
+   那条 `usable` 很可能属于另一个同名技能。
+
+⇒ **本轮不把 28 条当作缺陷**，也不当作已核对。结论是：**这个审计方法要重做**（需要按「技能 + 定义文件」而非按名字匹配）。
+⇒ 已登记为**待办方法改进**，不是缺陷清单。
