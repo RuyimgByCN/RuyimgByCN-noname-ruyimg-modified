@@ -654,3 +654,35 @@ Firefox/Safari（环境无取证手段）、旧引擎同机性能数据、D1/D2 
 这三项只覆盖 **12 个已转换来源**下的包；**20 个 `installed-empty` 来源与 5 个 `no-package` 来源**
 在规则内容层面仍是空的（那是另一条工作线）。
 ⇒ **八项完成数仍为 0**。
+
+---
+
+## 116 第 997 轮：会话终态（台账 **54 → 3**，真修复 **12** 条）
+
+| 指标 | 会话前 | 现在 |
+|---|---|---|
+| 缺陷台账 | 54 | **3 条（A 2 / B 1）** |
+| **真修复** | 0 | **12 条** |
+| `engine-native` 全量 | 1538 | **1540 passed / 0 failed / 71 ignored** |
+| `scripts` 单测 | 146 | **169 OK** |
+| `preflight` | 19 项 | **21 项全过** |
+| 平台证据 | 无 | 构建 **7/7**、Node **11/11**、Chrome **4/4** |
+| **来源维度覆盖**（包数） | 回放 4 / 存档 4 / 升级 5 | **回放 20 / 存档 20 / 升级 22** |
+| 自我更正 | 24 | **38** |
+
+### 12 条真修复
+
+`WudianZiyu`、`WudianPaotaiFire`、`PhaseEndRecoverOrDraw`、`WudianZhucheng`、`SwdBaishouzhihuHeld`、
+`GwentCiguState`、`XianjianShenwu`、`Reguhuo`、`SwdMufengHeld`（**新增 `discover` 原语**）、
+`SwdCyxianjiang`、`WudianFuchou2`、`GujianFoodLiyutang`
+
+其中 **3 条**带「新断言先红后绿」（`Reguhuo`、`SwdMufengHeld`，以及 `GwentCiguState` 的断言与实现同向修正）。
+
+### 剩余 3 条（都写清了「为什么动不了」）
+
+| 行 | 卡点 |
+|---|---|
+| `XianjianLinghuo`、`XianjianWangyou` | 触发条件含**回合计数 + 本回合伤害**；放宽后触发点从 1 次变多次，测试的固定步数与时序**整体错位**，需重推场景（上游 filter 已完整抄录）|
+| `HlssGaiming` | 上游 `judgeBefore`（亮 7 选 1 作判定结果）；原生判定流程是**同步**的（`draw_judge_card` 直接 pop），要接选择必须先把判定流程改成**可挂起**（NC 级）|
+
+⇒ **八项完成数仍为 0**。
