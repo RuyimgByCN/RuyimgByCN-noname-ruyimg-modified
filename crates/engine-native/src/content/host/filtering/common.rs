@@ -21,8 +21,13 @@ impl HostSkillBehavior {
             // 复仇·清算：自己 End 阶段结束（登记差异：上游 global
             // phaseAfter，原生自己回合结束）
             HostBehavior::WudianFuchou2 => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
-                if *player == owner),
+                // 上游 `{global:'phaseAfter'}` + filter「`storage.fuchou2` 里有存活者」
+                //（第 986 轮：原臂钉在自己 End 结束，且漏了标记非空条件）
+                EventData::Phase { begin: false, .. }
+                if ctx.state.player(owner)
+                    .fuchou_marked
+                    .iter()
+                    .any(|&t| ctx.state.player(t).alive)),
             HostBehavior::WudianFuchou => false,
             HostBehavior::WudianLiangceRemain => false,
             HostBehavior::WudianGuihan => false,

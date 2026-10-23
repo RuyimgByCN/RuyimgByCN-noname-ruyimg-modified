@@ -464,16 +464,19 @@ fn wudian_generals_batch14_fuchou_cancel_and_settle() {
         "复仇：来源已标记"
     );
 
-    // 清算：p1 回合结束 → 对标记来源摸 1+虚拟杀（p1 掉血或 p0 有闪弃闪）
+    // 清算：**任何玩家的任何阶段结束**（上游 `global:'phaseAfter'`）——
+    // 对标记来源摸 1 + 虚拟杀（p1 掉血或 p0 有闪弃闪）。
+    // 第 986 轮：清算会在下面的推进循环**之内**发生，故在此先记手牌数。
     e.debug_grant(1, "fuchou2");
     e.debug_set_hp(1, 8);
+    let h_before_settle = hand_len_w(&e, 1);
     // 推进到 p1 回合结束（End 阶段结束帧触发）
     for _ in 0..200 {
         if e.outcome().is_some() {
             break;
         }
-        // 到 p1 的 End 阶段后停止推进（End 结束帧在下一 NextPhase）
-        if e.turn().current == 1 && e.turn().phase == Phase::End {
+        // 状态驱动：标记被消耗即清算完成（不再依赖「走到 End 阶段」）
+        if e.state_core().players[1].fuchou_marked.is_empty() {
             break;
         }
         let actor = e.turn().current;
@@ -517,7 +520,7 @@ fn wudian_generals_batch14_fuchou_cancel_and_settle() {
             }
         }
     }
-    let h1 = hand_len_w(&e, 1);
+    let h1 = h_before_settle;
     // 触发 End 结束帧（NextPhase 推进）
     let cur = e.turn().current;
     if cur == 1 && e.turn().phase == Phase::End {

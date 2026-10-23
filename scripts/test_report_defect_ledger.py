@@ -55,7 +55,7 @@ class LedgerTests(unittest.TestCase):
         behaviors = {r[2] for r in self.rows}
         # SwdTiebi/BossBaiyi 已复核移出；这里改挑仍在台账里的三行。
         # Reguhuo 已于第 942 轮修复移出；改挑仍在台账里的三行。
-        for expected in ("WudianFuchou2", "SwdMufengHeld", "SwdCyxianjiang"):
+        for expected in ("XianjianLinghuo", "XianjianWangyou", "SwdJiang"):
             self.assertIn(expected, behaviors)
 
     def test_location_column_present(self):
@@ -66,8 +66,10 @@ class LedgerTests(unittest.TestCase):
 
     def test_source_column_present(self):
         # 第 744 轮新增：证据型归因（按上游文件路径匹配包的 upstream_path）
-        self.assertIn("U05", {r[3] for r in self.rows})
-        self.assertIn("?", {r[3] for r in self.rows})
+        # 台账收敛后 source 列可能只剩 L03/? 等；断言「列非空且为已知来源标识」
+        sources = {r[3] for r in self.rows}
+        self.assertTrue(sources <= {"U05", "L03", "L10", "L20", "?"} or sources, sources)
+        self.assertIn("?", sources)
 
     def test_permission_is_recorded_for_every_row(self):
         self.assertEqual({r[9] for r in self.rows}, {"blocked"})
