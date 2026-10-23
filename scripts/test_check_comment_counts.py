@@ -32,13 +32,13 @@ class CommentCountTests(unittest.TestCase):
         # 前缀族计数之和不应超过行数
         prefixed = {k: v for k, v in self.counts.items()}
         self.assertLessEqual(sum(prefixed.values()) if all("(" not in k for k in prefixed) else total, total * 2)
-        self.assertEqual(self.counts.get("需档"), 2)  # 第 986 轮
+        self.assertEqual(self.counts.get("需档"), 2)  # 第 991 轮
 
     def test_known_family_counts(self):
         self.assertIsNone(self.counts.get("G14"))  # 第 945 轮：GujianFoodZiyangdan 归入已登记差异
         self.assertIsNone(self.counts.get("G18"))
         self.assertEqual(self.counts.get("G23"), 2)  # 第 939 轮：XianjianShenwu 已修，余 Linghuo/Wangyou
-        self.assertEqual(self.counts.get("G20"), 1)  # 第 934 轮：WudianZiyu/PaotaiFire/PhaseEndRecoverOrDraw/Zhucheng 已修
+        self.assertIsNone(self.counts.get("G20"))  # 第 991 轮：G20 全部已修，族消失
         self.assertIsNone(self.counts.get("G19"))  # 第 917 轮：唯一一行 SwdTiebi 经完整读码移出（条件其实都在）
 
     def test_progress_total_matches_ledger(self):

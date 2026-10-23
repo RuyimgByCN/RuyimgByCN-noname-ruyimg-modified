@@ -27,7 +27,7 @@ class EnumerationTests(unittest.TestCase):
         cls.rows = cls.mod.arms()
 
     def test_counts_every_phase_pinned_arm(self):
-        self.assertEqual(len(self.rows), 48)
+        self.assertEqual(len(self.rows), 47)
 
     def test_every_row_has_a_behavior(self):
         for behavior, *_ in self.rows:
@@ -57,7 +57,7 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 1)
 
     def test_g20_count_matches_manual_audit(self):
-        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G20")), 1)  # 第 934 轮：4 条已修
+        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G20")), 0)  # 第 991 轮：G20 全部已修
 
     def test_phase_name_mapping(self):
         m = self.mod.PHASE_STEM
@@ -90,7 +90,7 @@ class CliTests(unittest.TestCase):
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--check"],
                               capture_output=True, text=True, cwd=ROOT)
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertIn("共 48 个相位钉死臂", proc.stderr)
+        self.assertIn("共 47 个相位钉死臂", proc.stderr)
 
 
 if __name__ == "__main__":

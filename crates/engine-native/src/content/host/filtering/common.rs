@@ -609,7 +609,8 @@ impl HostSkillBehavior {
                 EventData::Phase { player, phase: crate::event::Phase::Draw, begin: true }
                 if *player == owner),
             HostBehavior::GujianFoodLiyutang => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
+                // 上游子技 `liyutang`: `{player:'phaseEnd'}` ⇒ 自己每个阶段结束（第 991 轮）
+                EventData::Phase { player, begin: false, .. }
                 if *player == owner),
             HostBehavior::GujianFoodMapodoufu => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: true }

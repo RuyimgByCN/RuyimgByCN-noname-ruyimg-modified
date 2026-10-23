@@ -9,7 +9,6 @@ MbcmQingzheng	mbcmqingzheng	Play	true	已核	基准对应章节
 YunchouDiyguhuo	diyguhuo	Judge	true	已核	基准对应章节
 YunchouXiongzi	xiongzi	Draw	true	已核	基准对应章节
 GujianFoodXiajiao	gujian_food_xiajiao	Draw	true	不适用	卡牌效果宿主，上游无 trigger
-GujianFoodLiyutang	gujian_food_liyutang	End	true	不适用	卡牌效果宿主，上游无 trigger
 GujianFoodMapodoufu	gujian_food_mapodoufu	End	true	不适用	卡牌效果宿主，上游无 trigger
 GujianFoodTanhuadong	gujian_food_tanhuadong	Play	false	已核	基准对应章节
 GujianFoodYougeng	gujian_food_yougeng	Judge	true	已核	基准对应章节

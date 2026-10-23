@@ -716,7 +716,8 @@ impl HostBehavior {
             }),
             HostBehavior::GujianFoodChunbing => None,
             HostBehavior::GujianFoodLiyutang => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                // 上游子技 `liyutang`: `trigger:{player:'phaseEnd'}`（第 991 轮）
+                event: EventKind::PhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 optional: false,

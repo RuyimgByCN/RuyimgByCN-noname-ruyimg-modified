@@ -11,7 +11,7 @@ import report_phase_filters as rp
 class ScanTest(unittest.TestCase):
     def test_scans_phase_filters(self) -> None:
         rows = rp.scan()
-        self.assertEqual(len(rows), 47, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
+        self.assertEqual(len(rows), 46, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
 
     def test_rows_are_well_formed(self) -> None:
         for beh, key, phase, begin in rp.scan():
@@ -20,16 +20,16 @@ class ScanTest(unittest.TestCase):
             self.assertIn(begin, {"true", "false"})
 
     def test_begin_true_count(self) -> None:
-        # 实测值（不得凭记忆填）：begin=true 共 30 条（第 938 轮 gwent_cigu 改回 begin:true）
+        # 实测值（不得凭记忆填）：begin=true 共 29 条（第 991 轮 liyutang 改 begin:false）
         n = sum(1 for r in rp.scan() if r[3] == "true")
-        self.assertEqual(n, 30, "begin=true 的条数变了")
+        self.assertEqual(n, 29, "begin=true 的条数变了")
 
     def test_phase_distribution(self) -> None:
         from collections import Counter
 
         c = Counter(r[2] for r in rp.scan())
-        # 实测分布：End 15 / Judge 14 / Play 8 / Draw 7 / Discard 3 = 47
-        self.assertEqual(dict(c), {"End": 15, "Judge": 14, "Play": 8, "Draw": 7, "Discard": 3})
+        # 实测分布：End 14 / Judge 14 / Play 8 / Draw 7 / Discard 3 = 46
+        self.assertEqual(dict(c), {"End": 14, "Judge": 14, "Play": 8, "Draw": 7, "Discard": 3})
 
 
 class RenderTest(unittest.TestCase):
@@ -37,7 +37,7 @@ class RenderTest(unittest.TestCase):
         text = rp.render(rp.scan())
         lines = text.strip().splitlines()
         self.assertEqual(lines[0], "行为\tkey\tPhase\tbegin\t状态\t依据")
-        self.assertEqual(len(lines), 48)
+        self.assertEqual(len(lines), 47)
         for line in lines[1:]:
             cells = line.split("\t")
             self.assertEqual(len(cells), 6)
@@ -47,7 +47,7 @@ class RenderTest(unittest.TestCase):
         from collections import Counter
 
         c = Counter(line.split("\t")[4] for line in rp.render(rp.scan()).strip().splitlines()[1:])
-        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 47)
+        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 46)
 
 
 if __name__ == "__main__":
@@ -55,11 +55,11 @@ if __name__ == "__main__":
 
 
 class ArmSlicingTest(unittest.TestCase):
-    """钉住「段切片」规则：47 条，且 `Xiefang` 的 Draw 分支必须在。"""
+    """钉住「段切片」规则：46 条，且 `Xiefang` 的 Draw 分支必须在。"""
 
     def test_arms_count_matches(self) -> None:
         rows = rp.scan()
-        self.assertEqual(len(rows), 47)
+        self.assertEqual(len(rows), 46)
 
     def test_xiefang_has_draw_branch(self) -> None:
         got = [(p, b) for beh, _key, p, b in rp.scan() if beh == "Xiefang"]
