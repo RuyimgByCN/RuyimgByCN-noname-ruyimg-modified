@@ -150,11 +150,12 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             // 神焰：伤害前置窗（+1 并记录蔓延目标）+ 伤害结算后（蔓延）
+            // 上游 `shenyan` 无 `forced`/`direct`（且 `limited: true`）⇒ 应当**询问**（第 1026 轮）
             HostBehavior::SwdShenyan => Some(TriggerMeta {
                 event: EventKind::DamageBefore,
                 timing: Timing::Normal,
                 priority: 0,
-                optional: false,
+                optional: true,
                 extra_events: vec![EventKind::Damage],
             }),
             // 灵武：无触发时机（效果内联于阶段收束）

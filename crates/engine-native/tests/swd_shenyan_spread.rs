@@ -31,8 +31,11 @@ fn swd_engine(seed: u64) -> Engine {
 fn drain(e: &mut Engine) {
     for _ in 0..48 {
         let Some(c) = e.open_choice().cloned() else { break };
-        let has_pass = c.spec.options.contains(&engine_native::ChoiceOption::Pass);
-        let sel: Vec<engine_native::ChoiceOption> = if has_pass {
+        // 第 1026 轮：`shenyan` 改为可询问后，`trigger_confirm` 必须**明确确认**；
+        // 原先的统一策略在确认窗上等同于「拒绝」，会让 +1 与蔓延都不发生。
+        let sel: Vec<engine_native::ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            vec![engine_native::ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
             vec![engine_native::ChoiceOption::Pass]
         } else if c.spec.allow_cancel {
             Vec::new()

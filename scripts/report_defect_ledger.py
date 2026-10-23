@@ -249,6 +249,7 @@ FIXED: dict[str, str] = {
     "SwdMojian": "`g1_shahai_swd/liuhong.rs` 断言「墨剑：目标摸 1」「墨剑：自己回 1 至满」⇒ 效果发生在杀结算前，与上游 `player:'shaBegin'` 一致",
     "YunchouJiaoxia": "`nc08_upstream_yunchou_jiaoxia.rs` 断言「成为**红色**牌目标应摸 1」「**黑色**牌不触发」⇒ 正是上游 `target:'useCardToTargeted'` 的红/黑分支",
     "Liaoyuan": "`swd_liaoyuan_extra_shan.rs` 断言「直接命中且加伤 2（1+2）」，且弃牌/确认窗都在结算之前 ⇒ 与上游 `player:'shaBegin'` 一致",
+    "SwdShenyan": "第 1026 轮：上游 `shenyan` 无 `forced`/`direct`（且 `limited: true`）⇒ 应当**询问**，原生 `optional: false` 强制；改 `optional: true` 并把用例 drain 的 `trigger_confirm` 改为**明确 Confirm**（原先统一策略等同拒绝）⇒ 伤害恢复 +1、蔓延正常，`swd_shenyan_spread` 5/5 通过",
     "Gongxin": "第 1011 轮：上游 `enable:'phaseUse'` + `usable: 1`，`HostBehavior::Gongxin` 不在 `once_per_turn` 允许表 ⇒ 探针实测第二次仍 `Pending`；补入后为 `Rejected(SkillAlreadyUsed)`。（同轮试过把候选限定为红桃，但既有测试断言『非红桃也展示、选非红桃应重开窗』符合上游 `chooseToMove` ⇒ 已回退该改动）",
     "Moyan": "第 1010 轮：上游 `enable:'phaseUse'` + `usable: 1`（`archive/.../character/swd/skill.js` 的 `moyan` 块，用大括号配对解析取出），`HostBehavior::Moyan` 不在 `host.rs` 的 `once_per_turn` 允许表 ⇒ 探针实测同一出牌阶段两次都 `Pending`；补入后第二次为 `Rejected(SkillAlreadyUsed)`",
     "SwdJiefen": "第 1007 轮：上游 `enable:'phaseUse'` + **`usable: 1`**，但 `SwdJiefen` 不在 `host.rs` 的 `once_per_turn` 允许表 ⇒ 同一出牌阶段可重复发动（探针实测两次都 `Pending`）；补入允许表后第二次为 `Rejected(SkillAlreadyUsed)`",
