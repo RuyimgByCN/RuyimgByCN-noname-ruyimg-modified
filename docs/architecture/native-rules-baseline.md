@@ -6747,3 +6747,41 @@ AST 版审计给出 7 个候选，逐个核对到底：
 | 触发事件 `trigger:` vs `TriggerMeta.event` | 275 个元数据 | **0 真偏差**（1 撞名）|
 | `usable: 1` | 允许表比对 | **3 条真缺陷（已修）** + 3 个 viewAs 解释 |
 | `limited: true` | 每局守卫 | **0 候选** |
+
+---
+
+## 工具：`scripts/audit_upstream_skill_flags.py`（单技能事实检查器，第 1017 轮）
+
+```bash
+python3 -B scripts/audit_upstream_skill_flags.py jiefen
+```
+
+输出三段**事实**（不下判定）：
+
+```text
+技能: jiefen  来源: U05
+
+--- 上游块 noname/apps/core/extension/杀海拾遗/character/swd/skill.js ---
+jiefen: { enable: "phaseUse", usable: 1, filterTarget(...) { ... } ...
+
+--- 原生 SwdJiefen ---
+  (无显式 TriggerMeta)
+  in once_per_turn 允许表: True
+  原生块长度 5484 字符；含 once/used 痕迹: False
+```
+
+### 为什么只是「事实检查器」而不是门禁
+
+我先把它写成**批量判定**，跑出 22–28 项「上游应询问而原生强制」。
+但那些命中几乎全部来自**同名不同源**（本仓的头号假信号：`gaizao`/`baiyi`/`datong`/`senluo` 都踩过），
+而且我把 `direct: true` 的方向**判反了**（`direct` 表示不询问 ⇒ 原生 `optional=false` 才对）。
+
+⇒ 批量判定在**没有人工核对**的前提下不可信，所以这个脚本只打印事实；
+结论一律由人逐条核对行为后给出。
+
+### 解析逻辑有单测
+
+`scripts/test_audit_upstream_skill_flags.py`（4 个）钉住两件事：
+
+* **括号配对**必须处理嵌套对象，且**块不得溢出**到下一个技能（`skill_a` 的块里不能出现 `skill_b`）；
+* 字符串字面量里的 `{ }` 不能影响配对。
