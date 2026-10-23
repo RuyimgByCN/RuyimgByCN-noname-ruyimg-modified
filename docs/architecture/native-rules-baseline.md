@@ -6785,3 +6785,32 @@ jiefen: { enable: "phaseUse", usable: 1, filterTarget(...) { ... } ...
 
 * **括号配对**必须处理嵌套对象，且**块不得溢出**到下一个技能（`skill_a` 的块里不能出现 `skill_b`）；
 * 字符串字面量里的 `{ }` 不能影响配对。
+
+---
+
+## 待办：`SwdShenyan` 的**可选择性**（第 1018 轮，已回退）
+
+### 事实
+
+| 侧 | 写法 |
+|---|---|
+| 上游 `character/swd/skill.js` 的 `shenyan` | `trigger: { source: "damageBegin" }` + `limited: true`，**没有** `forced`、**没有** `direct` |
+| 原生 | `TriggerMeta { event: DamageBefore, optional: false, extra_events: [Damage], … }` |
+
+⇒ 上游会**询问**玩家，原生**强制**。
+
+### 为什么没修成
+
+把 `optional` 改成 `true` 后，`swd_shenyan_spread` 的断言立刻从「火伤 1 → 2」变成 **3**：
+
+```text
+assertion `left == right` failed: 火伤 1 → 神焰 +1 = 2
+  left: 3
+  right: 2
+```
+
+⇒ 说明这个 behavior 在 **`DamageBefore`** 与 **`extra_events:[Damage]`** 上**各加了一次**；
+改成可询问后多了一个确认窗，两个事件都被应答 ⇒ 叠加成 +2。
+
+⇒ 正确的修法是**先把双事件收成一次**（只在 `DamageBefore` 加成、`Damage` 只做蔓延），再改可选择性。
+本轮已 `git checkout` 回退，**保持待办**，不做半成品。
