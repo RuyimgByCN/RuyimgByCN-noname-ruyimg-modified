@@ -6814,3 +6814,28 @@ assertion `left == right` failed: 火伤 1 → 神焰 +1 = 2
 
 ⇒ 正确的修法是**先把双事件收成一次**（只在 `DamageBefore` 加成、`Damage` 只做蔓延），再改可选择性。
 本轮已 `git checkout` 回退，**保持待办**，不做半成品。
+
+### `SwdShenyan` 可选择性的**第二次探查**（第 1023 轮）
+
+用探针（`optional: true`）逐步打印：
+
+```text
+PROBE choice 0 prompt=trigger_confirm hp1=4 used=false
+PROBE choice 1 prompt=trigger_confirm hp1=2 used=true
+PROBE final hp1=2 (start 4) used=true      // 伤害 2 = 正确
+```
+
+**探针是对的（伤害 2）**，但既有用例 `swd_shenyan_spread` 在同样改法下得到 3。
+差别在**应答策略**：该用例的 `drain` 里
+
+```rust
+let has_pass = c.spec.options.contains(&ChoiceOption::Pass);
+let sel = if has_pass { vec![ChoiceOption::Pass] } else if c.spec.allow_cancel { Vec::new() } else { … };
+```
+
+对 `trigger_confirm` 一律回 **`Pass`**（拒绝），而 `optional: false` 时根本没有这个确认窗。
+⇒ 改成可询问后，用例的「一律拒绝」语义与引擎对该 prompt 的解释叠加，产生了 +2 的结果。
+
+⇒ 所以这条**不只是引擎改动**，还要改用例的应答策略（明确 Confirm）。
+⇒ 与 `XianjianLinghuo`/`Wangyou` 同属「测试推进脚本与应答策略」类，需 owner 参与。
+⇒ 已回退，全量复归 **1544 passed** ✅
