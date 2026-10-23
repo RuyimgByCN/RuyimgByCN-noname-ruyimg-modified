@@ -6594,3 +6594,38 @@ jiefen: {
 或者把上游解析成 AST 后按「技能对象边界」取块（不能按字符窗口）。
 
 ⇒ 本会话到此为止：**`usable` 相关只确认 `jiefen` 一条**，其余 13 条记为待办，不谎报。
+
+---
+
+## **第 15 条真修复：`Moyan`（魔焰）缺「每阶段一次」**（第 1010 轮）
+
+### 方法升级：**大括号配对**取技能块
+
+不再用字符窗口（那会溢到邻居）。改成：从 `
+	<name>: {` 起做**括号深度配对**，
+遇到字符串字面量正确跳过。验证：`datong` 现在取到的就是它自己的块（触发技，`frequent: true`），
+不会再看到下一个技能的 `enable`。
+
+### 审计结果（AST 版）
+
+`character/*/skill.js` + `card/*/skill.js` 共解析 **6208** 个技能块；
+「有 `enable:` 且 `usable: 1`、但不在 `once_per_turn` 允许表」的只剩 **7 个**（此前误报 17 个）。
+
+其中 5 个（`luweiyan`/`huopu`/`yeying`/`fengze`/`baiyi`）在原生**没有主动入口** ⇒ 属于「主动面未实现」，不是限次缺陷；
+剩下 2 个有主动入口：`moyan`、`gongxin`。
+
+### `moyan` 实测
+
+```text
+修前: PROBE moyan #0: Pending{SelectCards}
+      PROBE moyan #1: Pending{SelectCards}       // ← 第二次仍接受
+修后: PROBE moyan #0: Pending{SelectCards}
+      PROBE moyan #1: Rejected(SkillAlreadyUsed) // ← 正确拒绝
+```
+
+修法：把 `HostBehavior::Moyan` 加入 `host.rs` 的 `once_per_turn` 分支。
+
+### `gongxin`（攻心）：**未确认，记待办**
+
+第一次发动后有一个 `SelectPlayers` 询问，探针的通用应答没能把它答完
+（第二次提交得到 `ChoicePending`）⇒ **没有测出结论**，不算缺陷也不算已核对。

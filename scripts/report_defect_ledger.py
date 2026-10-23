@@ -249,6 +249,7 @@ FIXED: dict[str, str] = {
     "SwdMojian": "`g1_shahai_swd/liuhong.rs` 断言「墨剑：目标摸 1」「墨剑：自己回 1 至满」⇒ 效果发生在杀结算前，与上游 `player:'shaBegin'` 一致",
     "YunchouJiaoxia": "`nc08_upstream_yunchou_jiaoxia.rs` 断言「成为**红色**牌目标应摸 1」「**黑色**牌不触发」⇒ 正是上游 `target:'useCardToTargeted'` 的红/黑分支",
     "Liaoyuan": "`swd_liaoyuan_extra_shan.rs` 断言「直接命中且加伤 2（1+2）」，且弃牌/确认窗都在结算之前 ⇒ 与上游 `player:'shaBegin'` 一致",
+    "Moyan": "第 1010 轮：上游 `enable:'phaseUse'` + `usable: 1`（`archive/.../character/swd/skill.js` 的 `moyan` 块，用大括号配对解析取出），`HostBehavior::Moyan` 不在 `host.rs` 的 `once_per_turn` 允许表 ⇒ 探针实测同一出牌阶段两次都 `Pending`；补入后第二次为 `Rejected(SkillAlreadyUsed)`",
     "SwdJiefen": "第 1007 轮：上游 `enable:'phaseUse'` + **`usable: 1`**，但 `SwdJiefen` 不在 `host.rs` 的 `once_per_turn` 允许表 ⇒ 同一出牌阶段可重复发动（探针实测两次都 `Pending`）；补入允许表后第二次为 `Rejected(SkillAlreadyUsed)`",
     "SwdCyxianjiangName": "第 1001 轮：过滤臂与 step 的候选比较由 **`card_kind`（牌种）** 改为 **牌名**——上游 `!player.countCards('he', card.name)` 比的是 `card.name`；用牌种时「手里有任意一把武器」就让条件恒假（比上游严格），新用例 `swd_cyxianjiang_compares_card_name_not_kind` 先红后绿",
     "SwdJiang": "`g1_shahai_swd/lexue.rs` 断言「麻醉：p2 伤害 -1（1→0 不扣血）」⇒ 标记者/挂附效果在**单目标路径**上端到端生效；上游 `useCardToPlayered`/`useCardToTargeted` 与原生 `CardUsed` 的差别只在**多目标逐目标**场景（该场景未断言）",
