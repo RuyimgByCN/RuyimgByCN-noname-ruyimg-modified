@@ -6514,3 +6514,40 @@ PROBE round1 activate=Rejected(SkillAlreadyUsed) // 第二次：**被拒**
 那些 behavior 块里找不到 `once` 字样是**正常的**，不是缺陷。
 
 ⇒ 结论：`usable` 这类限制 **不属于偏差**；本会话的审计到这里闭环。
+
+---
+
+## **第 14 条真修复：`SwdJiefen`（解纷）缺「每阶段一次」**（第 1007 轮）
+
+### 缺陷
+
+上游（`character/swd/skill.js:341`）：
+
+```js
+jiefen: {
+  enable: "phaseUse",
+  usable: 1,          // ← 每阶段一次
+  …
+}
+```
+
+原生 `host.rs` 的 `once_per_turn` 允许表里**没有** `HostBehavior::SwdJiefen` ⇒ 同一出牌阶段可重复发动。
+
+### 证据（探针，修前/修后）
+
+```text
+修前: PROBE jiefen 0: Pending{SelectPlayers}
+      PROBE jiefen 1: Pending{SelectPlayers}     // ← 第二次仍然接受
+修后: PROBE jiefen 0: Pending{SelectPlayers}
+      PROBE jiefen 1: Rejected(SkillAlreadyUsed) // ← 正确拒绝
+```
+
+### 修法（一行）
+
+把 `HostBehavior::SwdJiefen` 加入 `crates/engine-native/src/content/host.rs` 的
+`once_per_turn: true` 分支（与 `SwdZhanlu` 等同类主动技一起）。
+
+### 这是怎么找到的
+
+把「上游同时有 `enable:` 与 `usable:` 的技能」与「原生 `once_per_turn` 允许表」做差集
+⇒ 14 个候选；逐个核对后 `jiefen` 是**唯一**确认的一条（其余多为同名碰撞）。
