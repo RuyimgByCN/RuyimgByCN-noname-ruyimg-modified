@@ -30,6 +30,7 @@ CHECKS: list[tuple[str, list[str], bool]] = [
     ("包→来源映射", [PY, "-B", "scripts/map_package_sources.py", "--check"], False),
     ("规则登记表", [PY, "-B", "scripts/report_phase_filters.py", "--check"], False),
     ("过滤臂↔元数据一致", [PY, "-B", "scripts/report_filter_meta_mismatch.py", "--strict"], False),
+    ("牌名 vs 牌种比较", [PY, "-B", "scripts/check_card_kind_compare.py"], False),
     ("台账账目（移出必留痕）", [PY, "-B", "scripts/report_ledger_accounting.py"], False),
     ("相位枚举（REVIEW=0）", [PY, "-B", "scripts/report_phase_arms.py", "--check"], False),
     ("来源覆盖三分", [PY, "-B", "scripts/report_source_coverage.py", "--check"], False),
