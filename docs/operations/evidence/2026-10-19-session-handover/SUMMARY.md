@@ -736,3 +736,46 @@ Firefox/Safari（环境无取证手段）、旧引擎同机性能数据、D1/D2 
 
 ⇒ 本会话的 16 条修复**没有把任何既有测试改坏**（workspace 从 6251 → 6256，新增 5 个用例：
 `discover` 语义、`mufeng` discover、`cyxianjiang` 牌名、`jiefen` 每阶段一次、`moyan` 每阶段一次、`gongxin` 每阶段一次 —— 其中 6 个新增，另 -1 为原用例数变动）。
+
+---
+
+## 119 第 1021 轮：会话收尾状态（一次看全）
+
+### 规则差异
+
+| 项 | 值 |
+|---|---|
+| 台账 | **3 条（A 2 / B 1）**，会话起点 54 |
+| 真修复 | **16 条**，其中 **8 条**带先红后绿用例 |
+| 剩余 3 条 | `XianjianLinghuo`/`XianjianWangyou`（触发条件含回合计数，测试时序需重推）、`HlssGaiming`（需判定流程可挂起）|
+| 新增待办 | `SwdShenyan` 可选择性（改 `optional` 后双事件各加一次，需先收成一次）|
+| 已核对无差异 | `forced`/`direct`/`optional`（267）、触发事件（275）、`limited: true`（0 候选）、`hand` vs `he`（46 候选→1 已登记）、`card_kind` vs 名字（→1 已登记）|
+
+### 37 来源
+
+| 维度 | 会话前 | 现在 |
+|---|---|---|
+| 来源分类 | 12 转换 / 20 installed-empty / 5 no-package | **不变**（那 20 个属其他任务线）|
+| **回放确定性** | 4 个包 | **20 个包** |
+| **保存恢复** | 4 个包 | **20 个包** |
+| **升级** | 5 个包 | **22 个包** |
+
+### 目标平台
+
+| 项 | 值 |
+|---|---|
+| 构建 target | **7/7**（`blake3/pure` 修掉 Android aarch64 的 NDK 依赖）|
+| Node（wasm）| **11/11** |
+| headless Chrome | **4/4** |
+| 真机 / Linux CI / Firefox-Safari | **缺**（环境）|
+
+### 性能
+
+原生 debug 建局 476 µs；wasm release 建局 1.64 ms、单步 0.066 ms。**缺旧引擎同机数据 ⇒ 不计入验收**。
+
+### 验证
+
+`cargo test --offline --workspace` = **6256 passed / 0 failed / 72 ignored**；
+`unittest discover -s scripts` = **177 OK**；`preflight --quick` = **23 项全过**。
+
+⇒ **八项完成数仍为 0。**
